@@ -19,6 +19,7 @@ class QxrdServerThread : public QThread
 
  signals:
   void serverRunning();
+  void print_message(QString msg);
 
  protected:
   void run();

@@ -23,6 +23,8 @@ void QxrdServerThread::run()
 
   m_Server = new QxrdServer(m_Application, m_AcquisitionThread, "qxrd", NULL);
 
+  connect(m_Server, SIGNAL(print_message(QString)), this, SIGNAL(print_message(QString)));
+
   emit serverRunning();
 
   exec();

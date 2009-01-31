@@ -38,6 +38,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_Window -> setAcquisitionThread(m_AcquisitionThread);
 
+  connect(m_ServerThread, SIGNAL(print_message(QString)), this, SLOT(printMessage(QString)));
+
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
 //   connect(m_Window->acquireButton(), SIGNAL(clicked()), 
