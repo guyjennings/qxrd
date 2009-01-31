@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>qxrd help</title>
+  </head>
+
+  <body>
+    <h1>qxrd help</h1>
+
+    <h2>Scripting Help</h2>
+    <p>
+      Communication between spec and qxrd uses a subset of the spec 'server' protocol.
+      Use the 'remote_cmd' and 'remote_eval' commands from spec, with the remote <b>host</b>
+      argument of the form <b>"remotehost:qavrg"</b> where <b>remotehost</b> is the host name
+      or IP address of the machine on which qavrg is running.
+    </p>
+    <p>
+      Commands sent to qavrg are executed by the qt ECMAScript interpreter, which is 
+      described at http://doc.trolltech.com/4.4/ecmascript.html.  In addition to the
+      commands provided in ECMAScript itself 'qavrg' contains a number of commands
+      designed to access its specific functions.  You can also type script commands
+      into the upper text panel of the 'scripting' tab of the qavrg application itself.
+    </p>
+    <p>
+      As a simple example, you can evaluate simple arithmetic expressions:
+    </p>
+    <p>
+      <samp>111.SPEC> print remote_eval("zaphod:qxrd","42/23")</samp>
+    </p>
+    <p>
+      <samp>1.82608695652174</samp>
+    </p>
+
+    <h2>Scripting Functions</h2>
+    <p>
+      The following functions are intended to be used during scanning:
+    </p>
+    <ul>
+      <li><b>newfile</b>("filename",scannumber)
+	<p>
+	  This command should be used to start a new output file on the qavrg machine
+	  and to specify the initial scan number.  The file format is based on that
+	  used as the standard spec file format, though with an extremely large number
+	  (about 6000!) of data columns.  A file header is written into the file - this
+	  is a subset of the header in a standard spec file.  If the file exists already
+	  the header will be added to the end of the file.
+	</p>
+	<p>
+	  <samp>112.SPEC> remote_eval("zaphod:qavrg","newfile(\"junk\",1)")</samp>
+	</p>
+	<p>
+	  (Note the use of '\' characters to escape the quotes around the string argument)
+	</p>
+      <li><b>newscan</b>("col1","col2",...)
+	<p>
+	  This command should be used at the start of each new scan. The arguments are a
+	  list of 'extra' column headers that will be added to the start of the scan.
+	</p>
+	<p>
+	  <samp>113.SPEC> remote_eval("zaphod:qavrg","newscan(\"c1\",\"i0\")")</samp>
+	</p>
+	<p>
+	  Starts a new scan with two extra columns, 'c1' and 'i0'.
+	</p>
+      <li><b>acquire</b>(countingtime)
+	<p>
+	  This command is used to start the averager for a given integration time. The command
+	  returns immediately and the averaging proceeds independently.  It is expected that
+	  spec would then go and do a 'count' operation of its own, to measure ion chamber signals
+	  etc.
+	</p>
+	<p>
+	  <samp>114.SPEC> remote_eval("zaphod:qavrg","acquire(10)")</samp>
+	</p>
+	<p>
+	  Starts an acquisition of 10 seconds.
+	</p>
+      <li><b>savedata</b>(val1,val2,...)
+	<p>
+	  This command is used after spec has finished counting, and tells qavrg to wait until its
+	  own averaging operation has finished and then to save a new scan point in the data file.
+	  This consists of the values passed as arguments (which should correspond to the column names
+	  passed in the preceding 'newscan' command), followed by the measured parameters from fitting
+	  the averaged signal.  The saving should be relatively quick, a small fraction of a second or
+	  so.
+	</p>
+	<p>
+	  <samp>115.SPEC> remote_eval("zaphod:qavrg",sprintf("savedata(%g,%g)",S[c1],S[i0]))</samp>
+	</p>
+	<p>
+	  Note the use of sprintf to insert the values of two spec counter channels into the
+	  command string.
+	</p>
+      <li><b>readdata</b>(chan,bunch,param)
+	<p>
+	  This command may be used to read back selected fitting results into spec. <b>chan</b> is
+	  the channel number (0..3), <b>bunch</b> is the bunch number and <b>param</b> indicates
+	  which fit parameter you want (0=constant background,1=background slope,2=signal)
+	</p>
+	<p>
+	  <samp>116.SPEC> S[qavg]=remote_eval("zaphod:qavrg","readdata(1,1045,2)")</samp>
+	</p>
+    </ul>
+    <h2>Scripting Objects</h2>
+    <p>
+      In addition to the script functions mentioned above, there are also a couple of script
+      objects that can be used.  These are mostly used to access and set various 'properties'
+      associated with the object.
+    <ul>
+      <li><var>channel(chan)</var>
+	<p>
+	  There is a 'channel' object for each channel (0..3) and it contains the following properties.
+	</p>
+	<ul>
+	  <li><var>startOffset</var>
+	    <p>
+	      Indicates the offset in samples of the start of the fitting region, 
+	      relative to the start of the bunch.
+	    </p>
+	    <p>
+	      <samp>117.SPEC> remote_eval("zaphod:qavrg","channel(2).startOffset = 10")</samp>
+	    </p>
+	    <p>
+	      Sets the start offset for channel 2 to 10 nsec
+	    </p>
+	  <li><var>endOffset</var>
+	    <p>
+	      Indicates the offset ins amples of the end of the fitting region,
+	      relative to the start of the bunch.
+	    </p>
+	    <p>
+	      <samp>118.SPEC> p remote_eval("zaphod:qavrg","channel(0).endOffset")</samp>
+	    </p>
+	    <p>
+	      Reads the end offset for channel 0
+	    </p>
+	  <li><var>edgeOffset</var>
+	    <p>
+	      Indicates the offset in samples of the end of the background region,
+	      relative to the start of the bunch.
+	    </p>
+	    <p>
+	      <samp>119.SPEC> remote_eval("zaphod:qavrg","channel(3).edgeOffset=15")</samp>
+	    </p>
+	    <p>
+	      Sets the edge offset (end of the background region) for channel 3 to 15 nsec
+	    </p>
+	  <li><var>samplesPerOrbit</var>
+	    <p>
+	      Sets the number of averager samples per synchrotron orbit.  You might want to
+	      adjust this to slightly different values for different averager cards to allow
+	      for differences in the sampling clock frequency, but I would expect that it
+	      will not be necessary.
+	    </p>
+	    <p>
+	      <samp>120.SPEC> p remote_eval("zaphod:qavrg","channel(0).samplesPerOrbit")</samp>
+	    </p>
+	    <p>
+	      Reads the number of samples per orbit for channel 0
+	    </p>
+	  <li><var>bunchesPerOrbit</var>
+	    <p>
+	      Sets the number of synchrotron bunches per orbit.  You shouldn't need to change this
+	      parameter unless the synchrotron operating mode changes.
+	    </p>
+	</ul>
+	The channel object also supports a number of functions:
+	<ul>
+	  <li><var>channel(chan).calculateBackground(startpos,edgepos)</var>
+	    <p>
+	      Performs a linear background fit on the given channel using data between samples
+	      <var>startpos</var> and <var>edgepos</var>.  The result is returned as a list of two
+	      values - first the offset and second the gradient.
+	    </p>
+	  <li><var>channel(chan).calculateFittedValues(startpos,endpos)</var>
+	    <p>
+	      Performs a fit consisting of a linear background and the reference function for
+	      a given channel using data between samples <var>startpos</var> and <var>ednpos</var>.
+	      The result is returned as a list of three values - first the offset, second the gradient
+	      and third the reference peak height.
+	    </p>
+	  <li><var>channel(chan).readResult(parm,bin)</var>
+	    <p>
+	      Reads and returns one value from the fitting results after an acquisition operation.
+	      <var>parm</var> indicates which fit parameter you want 
+	      (0=constant background,1=background slope,2=signal). <var>bin</var> indicates which
+	      filled bunch, (numbered up from zero to about 5800 in the 24 bunch fill mode).
+	    </p>
+	  <li><var>channel(chan).readResultAverage(parm,bin,nbins)</var>
+	    <p>
+	      Reads and returns the average value of a range of fitting results after an acquisition operation.
+	      <var>parm</var> indicates which fit parameter you want 
+	      (0=constant background,1=background slope,2=signal). <var>bin</var> indicates which
+	      filled bunch to start from, (numbered up from zero to about 5800 in the 24 bunch fill mode),
+	      and <var>nbins</var> indicates the number of consecutive filled bunches to average over.
+	    </p>
+	  <li><var>channel(chan).readResultBunchAverage(parm,bunch,bin,nbins)</var>
+	    <p>
+	      Reads and returns the average value of a specified bunch over a range of orbits after an acquisition operation.
+	      <var>parm</var> indicates which fit parameter you want 
+	      (0=constant background,1=background slope,2=signal). 
+	      <var>bunch</var> indicates which bunch to use within an orbit, (in the range 0..23 for 24 bunch mode),
+	      <var>orbit</var> indicates which
+	      orbit to start from, (numbered up from zero to about 240),
+	      and <var>norbits</var> indicates the number of consecutive orbits to average over.
+	    </p>
+	</ul>
+      <li><var>parameters</var>
+	<ul>
+	  <li><var>parameters.nChannels</var>
+	    <p>
+	      The number of averager channels available (usually 4)
+	    </p>
+	  <li><var>parameters.nSamples</var>
+	    <p>
+	      The total number of samples to acquire for each channel (usually 900000)
+	    </p>
+	</ul>
+    </ul>
+    <hr>
+    <address><a href="mailto:jennings@weimar.bessrc.aps.anl.gov">Guy Jennings</a></address>
+<!-- Created: Wed Oct  1 15:03:12 CDT 2008 -->
+<!-- hhmts start -->
+Last modified: Mon Jan 26 14:42:30 CST 2009
+<!-- hhmts end -->
+  </body>
+</html>

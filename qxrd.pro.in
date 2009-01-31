@@ -1,0 +1,62 @@
+TEMPLATE = app
+CONFIG += qt
+
+VERSION = @VERSION@
+
+QT += network script
+
+#INCLUDEPATH += /usr/local/lib/spec.d/include/
+
+MOC_DIR = moc
+UI_DIR  = ui
+OBJECTS_DIR = obj
+RCC_DIR = rcc
+
+TARGET = qxrd
+
+RESOURCES += qavrghelptext.qrc 
+
+DISTFILES += qavrghelptext.html
+
+HEADERS = \
+	spec_server.h \
+	qspecserver.h \
+	qxrdapplication.h \
+	qxrdsettings.h \
+	qxrdwindow.h \
+	qxrdserverthread.h \
+	qxrdserver.h \
+	qxrdspecserver.h \
+	qxrdacquisition.h
+
+SOURCES = \
+	qxrd.cpp \
+	qspecserver.cpp \
+	qxrdapplication.cpp \
+	qxrdsettings.cpp \
+	qxrdwindow.cpp \
+	qxrdserverthread.cpp \
+	qxrdserver.cpp \
+	qxrdspecserver.cpp \
+	qxrdacquisition.cpp
+
+FORMS = \
+	qxrdwindow.ui
+
+INCLUDEPATH += /usr/include/qwt/
+LIBS += -lqwt 
+#-lAqDrv4 -lCom -lca
+#QMAKE_CXXFLAGS += -D_LINUX -D_ACQIRIS
+
+QMAKE_EXTRA_TARGETS += dox rpmsource mock
+
+dox.target = docs
+dox.commands += doxygen
+dox.depends = Doxyfile $${SOURCES} $${HEADERS}
+
+rpmsource.commands += make dist ;
+rpmsource.commands += cp qxrd@VERSION@.tar.gz ~/rpmbuild/SOURCES/
+rpmsource.depends = $${DISTFILES} $${SOURCES} $${FORMS} $${HEADERS} $${RESOURCES}
+
+mock.commands += mock-build qxrd.spec
+mock.depends = rpmsource ~/rpmbuild/SOURCES/qxrd@VERSION@.tar.gz qxrd.spec
