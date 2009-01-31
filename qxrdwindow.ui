@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1089</width>
-    <height>947</height>
+    <width>679</width>
+    <height>614</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -15,280 +15,7 @@
   <widget class="QWidget" name="centralwidget" >
    <layout class="QGridLayout" name="gridLayout_5" >
     <item row="0" column="0" >
-     <widget class="QTabWidget" name="tabWidget" >
-      <property name="currentIndex" >
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="tab" >
-       <attribute name="title" >
-        <string>View</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_4" >
-        <item rowspan="3" row="0" column="0" >
-         <widget class="QwtPlot" name="m_Plot" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="MinimumExpanding" hsizetype="MinimumExpanding" >
-            <horstretch>1</horstretch>
-            <verstretch>1</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" >
-         <widget class="QGroupBox" name="groupBox_2" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="MinimumExpanding" hsizetype="Fixed" >
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="title" >
-           <string>View</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_2" >
-           <item row="0" column="0" colspan="2" >
-            <widget class="QComboBox" name="m_XAxisUnits" >
-             <item>
-              <property name="text" >
-               <string>X in (nsec)</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>X in (usec)</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>X in (msec)</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>X in (orbits)</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>X in (bunches)</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="1" column="0" colspan="2" >
-            <widget class="QComboBox" name="m_XViewChoice" >
-             <property name="currentIndex" >
-              <number>1</number>
-             </property>
-             <item>
-              <property name="text" >
-               <string>View all data</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>View 1 orbit</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>View 1 bunch</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>View 1 bunch all orbits</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="2" column="0" >
-            <widget class="QLabel" name="label" >
-             <property name="text" >
-              <string>Orbit:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1" >
-            <widget class="QDoubleSpinBox" name="m_ViewOrbit" />
-           </item>
-           <item row="3" column="0" >
-            <widget class="QLabel" name="label_2" >
-             <property name="text" >
-              <string>Bunch:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1" >
-            <widget class="QDoubleSpinBox" name="m_ViewBunch" />
-           </item>
-           <item row="4" column="0" colspan="2" >
-            <widget class="QPushButton" name="m_ViewAllData" >
-             <property name="text" >
-              <string>View All Data</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0" colspan="2" >
-            <widget class="QPushButton" name="m_AutoScale" >
-             <property name="text" >
-              <string>AutoScale</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0" colspan="2" >
-            <widget class="QWidget" native="1" name="m_GraphChooser" />
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="1" >
-         <widget class="QGroupBox" name="groupBox_3" >
-          <property name="title" >
-           <string>Acquire</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_3" >
-           <item row="0" column="0" >
-            <widget class="QLabel" name="label_3" >
-             <property name="text" >
-              <string>Integration Time:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1" >
-            <widget class="QDoubleSpinBox" name="m_IntegrationTime" >
-             <property name="singleStep" >
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value" >
-              <double>1.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0" >
-            <widget class="QLabel" name="label_4" >
-             <property name="text" >
-              <string>Repetitions</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1" >
-            <widget class="QSpinBox" name="m_NRepetitions" >
-             <property name="minimum" >
-              <number>1</number>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0" colspan="2" >
-            <widget class="QPushButton" name="m_AcquireButton" >
-             <property name="text" >
-              <string>Acquire</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0" colspan="2" >
-            <widget class="QPushButton" name="m_SetReferenceButton" >
-             <property name="text" >
-              <string>Set Reference</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0" colspan="2" >
-            <widget class="QPushButton" name="m_SetDarkButton" >
-             <property name="text" >
-              <string>Set Dark</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="2" column="1" >
-         <spacer name="verticalSpacer" >
-          <property name="orientation" >
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0" >
-           <size>
-            <width>20</width>
-            <height>263</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_4" >
-       <attribute name="title" >
-        <string>Fitting Results</string>
-       </attribute>
-       <layout class="QGridLayout" >
-        <item row="0" column="0" >
-         <widget class="QTableView" name="m_FitResultsTable" >
-          <property name="editTriggers" >
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-          <property name="gridStyle" >
-           <enum>Qt::DotLine</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_3" >
-       <attribute name="title" >
-        <string>Scripting</string>
-       </attribute>
-       <layout class="QGridLayout" >
-        <item row="0" column="0" colspan="2" >
-         <widget class="QLabel" name="label_5" >
-          <property name="text" >
-           <string>Script:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" colspan="2" >
-         <widget class="QSplitter" name="splitter" >
-          <property name="orientation" >
-           <enum>Qt::Vertical</enum>
-          </property>
-          <widget class="QTextEdit" name="m_InputScript" />
-          <widget class="QTextEdit" name="m_OutputResult" />
-         </widget>
-        </item>
-        <item row="2" column="0" >
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0" >
-           <size>
-            <width>801</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="2" column="1" >
-         <widget class="QPushButton" name="m_EvaluateScript" >
-          <property name="text" >
-           <string>Evaluate Script</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_5" >
-       <attribute name="title" >
-        <string>Help</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout" >
-        <item row="0" column="0" >
-         <widget class="QTextEdit" name="m_HelpText" />
-        </item>
-       </layout>
-      </widget>
-     </widget>
+     <widget class="QxrdImagePlot" name="m_Plot" />
     </item>
    </layout>
   </widget>
@@ -297,8 +24,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1089</width>
-     <height>24</height>
+     <width>679</width>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile" >
@@ -321,8 +48,6 @@
      <string>Acquire</string>
     </property>
     <addaction name="m_ActionAcquire" />
-    <addaction name="m_ActionSetReferenceData" />
-    <addaction name="m_ActionSetDarkData" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuEdit" />
@@ -341,8 +66,6 @@
    </attribute>
    <addaction name="m_ActionAcquire" />
    <addaction name="m_ActionEvaluateScript" />
-   <addaction name="m_ActionSetReferenceData" />
-   <addaction name="m_ActionSetDarkData" />
    <addaction name="m_ActionLoadData" />
    <addaction name="m_ActionSaveData" />
    <addaction name="m_ActionAutoScale" />
@@ -383,21 +106,6 @@
     <string>Evaluate Script</string>
    </property>
   </action>
-  <action name="m_ActionViewAllData" >
-   <property name="text" >
-    <string>View All Data</string>
-   </property>
-  </action>
-  <action name="m_ActionSetReferenceData" >
-   <property name="text" >
-    <string>Set Reference Data</string>
-   </property>
-  </action>
-  <action name="m_ActionSetDarkData" >
-   <property name="text" >
-    <string>Set Dark Data</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -406,7 +114,14 @@
    <header>qwt_plot.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>QxrdImagePlot</class>
+   <extends>QwtPlot</extends>
+   <header>qxrdimageplot.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
+ <includes/>
  <resources/>
  <connections/>
 </ui>

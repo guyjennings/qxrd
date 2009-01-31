@@ -1,0 +1,16 @@
+Doxyfile
+Makefile
+aclocal.m4
+autom4te.cache
+config
+config.log
+config.status
+configure
+libtool
+moc
+obj
+qxrd
+qxrd.pro
+qxrd.spec
+rcc
+ui

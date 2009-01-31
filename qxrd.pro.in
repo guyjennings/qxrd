@@ -14,9 +14,9 @@ RCC_DIR = rcc
 
 TARGET = qxrd
 
-RESOURCES += qavrghelptext.qrc 
+RESOURCES += qxrdhelptext.qrc 
 
-DISTFILES += qavrghelptext.html
+DISTFILES += qxrdhelptext.html
 
 HEADERS = \
 	spec_server.h \
@@ -24,9 +24,11 @@ HEADERS = \
 	qxrdapplication.h \
 	qxrdsettings.h \
 	qxrdwindow.h \
+	qxrdimageplot.h \
 	qxrdserverthread.h \
 	qxrdserver.h \
 	qxrdspecserver.h \
+	qxrdacquisitionthread.h \
 	qxrdacquisition.h
 
 SOURCES = \
@@ -35,9 +37,11 @@ SOURCES = \
 	qxrdapplication.cpp \
 	qxrdsettings.cpp \
 	qxrdwindow.cpp \
+	qxrdimageplot.cpp \
 	qxrdserverthread.cpp \
 	qxrdserver.cpp \
 	qxrdspecserver.cpp \
+	qxrdacquisitionthread.cpp \
 	qxrdacquisition.cpp
 
 FORMS = \
