@@ -18,6 +18,7 @@ class QxrdApplication : public QApplication
 
   QxrdAcquisitionThread *acquisitionThread();
   QxrdServerThread      *serverThread();
+  QScriptValue evaluate(QString cmd);
 
  public slots:
   void shutdownThreads();

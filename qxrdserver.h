@@ -13,6 +13,10 @@ class QxrdServer : public QSpecServer
  public:
   QxrdServer(QxrdApplication *app, QxrdAcquisitionThread *acqth, QString name, QObject *parent=0);
 
+ protected:
+  QVariant executeCommand(QString cmd);
+  QVariant readProperty(QString name);
+
  private:
   QxrdApplication          *m_Application;
   QxrdAcquisitionThread    *m_AcquisitionThread;

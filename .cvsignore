@@ -13,4 +13,5 @@ qxrd
 qxrd.pro
 qxrd.spec
 rcc
+spec.mac
 ui

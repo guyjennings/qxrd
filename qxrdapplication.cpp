@@ -83,6 +83,11 @@ void QxrdApplication::executeCommand(QString cmd)
   }
 }
 
+QScriptValue QxrdApplication::evaluate(QString cmd)
+{
+  return m_ScriptEngine.evaluate(cmd);
+}
+
 void QxrdApplication::shutdownThreads()
 {
   m_ServerThread -> shutdown();
