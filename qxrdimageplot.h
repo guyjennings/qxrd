@@ -13,6 +13,9 @@ class QxrdImagePlot : public QwtPlot
  public:
   QxrdImagePlot(QWidget *parent);
 
+ public slots:
+  void autoScale();
+
  private:
   QwtPlotZoomer   *m_Zoomer;
   QwtLegend       *m_Legend;

@@ -18,11 +18,18 @@ RESOURCES += qxrdhelptext.qrc
 
 DISTFILES += qxrdhelptext.html
 
+INCLUDEPATH += ../qceplib/
+
 HEADERS = \
-	spec_server.h \
-	qspecserver.h \
+	../qceplib/spec_server.h \
+	../qceplib/qspecserver.h \
 	qxrdapplication.h \
 	qxrdsettings.h \
+	../qceplib/qcepimagedata.h \
+	../qceplib/qcepimagedataformat.h \
+	../qceplib/qcepimagedataformatfactory.h \
+	qxrdimagedata.h \
+	qxrdrasterdata.h \
 	qxrdwindow.h \
 	qxrdimageplot.h \
 	qxrdserverthread.h \
@@ -33,9 +40,14 @@ HEADERS = \
 
 SOURCES = \
 	qxrd.cpp \
-	qspecserver.cpp \
+	../qceplib/qspecserver.cpp \
 	qxrdapplication.cpp \
 	qxrdsettings.cpp \
+	../qceplib/qcepimagedata.cpp \
+	../qceplib/qcepimagedataformat.cpp \
+	../qceplib/qcepimagedataformatfactory.cpp \
+	qxrdimagedata.cpp \
+	qxrdrasterdata.cpp \
 	qxrdwindow.cpp \
 	qxrdimageplot.cpp \
 	qxrdserverthread.cpp \

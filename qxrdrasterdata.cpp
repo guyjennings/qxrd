@@ -1,0 +1,2 @@
+#include "qxrdrasterdata.h"
+

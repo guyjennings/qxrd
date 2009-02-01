@@ -27,3 +27,12 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   insertLegend(m_Legend, QwtPlot::BottomLegend);
 }
 
+void QxrdImagePlot::autoScale()
+{
+  setAxisAutoScale(QwtPlot::xBottom);
+  setAxisAutoScale(QwtPlot::yLeft);
+  
+  replot();
+
+  m_Zoomer -> setZoomBase();
+}

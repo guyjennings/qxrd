@@ -17,6 +17,9 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
  public slots:
   void setAcquisitionThread(QxrdAcquisitionThread *acq);
 
+  void loadData();
+  void saveData();
+
  private:
   QxrdApplication        *m_Application;
   QxrdAcquisitionThread  *m_AcquisitionThread;

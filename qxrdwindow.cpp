@@ -19,7 +19,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
 {
   setupUi(this);
 
-  connect(m_ActionAutoScale, SIGNAL(triggered()), this, SLOT(autoScale()));
+  connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(quit()));
   connect(m_ActionLoadData, SIGNAL(triggered()), m_Application, SLOT(loadData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), m_Application, SLOT(saveData()));
@@ -38,5 +38,13 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
 void QxrdWindow::setAcquisitionThread(QxrdAcquisitionThread *acq)
 {
   m_AcquisitionThread = acq;
+}
+
+void QxrdWindow::saveData()
+{
+}
+
+void QxrdWindow::loadData()
+{
 }
 
