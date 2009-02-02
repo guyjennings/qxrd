@@ -59,10 +59,43 @@ SOURCES = \
 FORMS = \
 	qxrdwindow.ui
 
+unix{
 INCLUDEPATH += /usr/include/qwt/
 LIBS += -lqwt 
-#-lAqDrv4 -lCom -lca
-#QMAKE_CXXFLAGS += -D_LINUX -D_ACQIRIS
+}
+
+win32{
+  PLATFORM_PREFIX=win32
+  QTBINDIR=C:/Qt/4.4.0/bin/
+  QWT=C:/Qwt-5.1.1/
+  zip.target = zip
+  CONFIG(debug, debug|release) {
+    LIBS += -L$${QWT}/lib/ -lqwt_debug
+    zip.commands = C:/cygwin/bin/zip.exe -j $${TARGET}_debug.zip \
+			debug/$${TARGET}.exe \
+                        $${QTBINDIR}/QtCored4.dll \
+                        $${QTBINDIR}/QtNetworkd4.dll \
+                        $${QTBINDIR}/QtGuid4.dll \
+                        $${QTBINDIR}/QtScriptd4.dll \
+                        $${QWT}/lib/qwt_debug5.dll \
+                        C:/MinGW/bin/mingwm10.dll
+  }else{
+    LIBS += -L$${QWT}/lib/ -lqwt5
+    zip.commands = C:/cygwin/bin/zip.exe -j $${TARGET}.zip \
+			release/$${TARGET}.exe \
+                        $${QTBINDIR}/QtCore4.dll \
+                        $${QTBINDIR}/QtNetwork4.dll \
+                        $${QTBINDIR}/QtGui4.dll \
+                        $${QTBINDIR}/QtScript4.dll \
+						$${QWT}/lib/qwt5.dll \
+                        C:/MinGW/bin/mingwm10.dll
+  }
+  INCLUDEPATH += $${QWT}/include/
+  INCLUDEPATH += .
+
+  QMAKE_EXTRA_TARGETS += zip	
+  QMAKE_LFLAGS += -Wl,--script,nordata.lscript
+}
 
 QMAKE_EXTRA_TARGETS += dox rpmsource mock
 
