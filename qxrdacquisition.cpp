@@ -13,6 +13,8 @@
 #include "Acq.h"
 #include <QThread>
 
+static QxrdAcquisition *g_Acquisition = NULL;
+
 QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *thread)
   : QObject(),
     m_Thread(thread),
@@ -27,6 +29,8 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
     m_NBufferFrames(0)
 {
   printf("Enter QxrdAcquisition::QxrdAcquisition\n");
+
+  g_Acquisition = this;
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -151,6 +155,16 @@ void QxrdAcquisition::acquire(double integ, int nsum, int nframes)
 //   }
 }
 
+void QxrdAcquisition::onEndFrame()
+{
+  emit printMessage("Frame ended\n");
+}
+
+void QxrdAcquisition::onEndAcquisition()
+{
+  emit printMessage("Acquisition ended\n");
+}
+
 void QxrdAcquisition::resultsAvailable(int chan)
 {
   emit resultsChanged();
@@ -174,9 +188,11 @@ void QxrdAcquisition::cancel()
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 {
+  g_Acquisition -> onEndFrame();
 }
 
 static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc)
 {
+  g_Acquisition -> onEndAcquisition();
 }
 

@@ -23,12 +23,15 @@ class QxrdAcquisition : public QObject
   void savingComplete(int chan);
   void cancel();
 
- public:
  signals:
   void newDataAvailable();
   void resultsChanged();
   void acquireComplete();
   void printMessage(QString msg);
+
+ public:
+  void onEndFrame();
+  void onEndAcquisition();
 
  private:
   void acquisitionError(int n);
