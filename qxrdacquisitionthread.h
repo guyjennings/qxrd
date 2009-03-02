@@ -2,6 +2,7 @@
 #define QXRDACQUISITIONTHREAD_H
 
 #include <QThread>
+#include <QVector>
 
 class QxrdAcquisition;
 class QxrdApplication;
@@ -16,6 +17,7 @@ class QxrdAcquisitionThread : public QThread
 
   void shutdown();
   void msleep(int msec);
+  QVector<double> integrationTimes();
 
  signals:
   void acquisitionRunning();

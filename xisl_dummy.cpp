@@ -61,3 +61,19 @@ HIS_RETURN Acquisition_Acquire_Image(HACQDESC pAcqDesc, UINT dwFrames, UINT dwSk
 {
   return HIS_ALL_OK;
 }
+
+HIS_RETURN Acquisition_GetIntTimes(HACQDESC hAcqDesc, double *dblIntTime, int *nIntTimes)
+{
+  if (nIntTimes) *nIntTimes = 8;
+
+  dblIntTime[0] = 0.066;
+  dblIntTime[1] = 0.082;
+  dblIntTime[2] = 0.099;
+  dblIntTime[3] = 0.124;
+  dblIntTime[4] = 0.166;
+  dblIntTime[5] = 0.249;
+  dblIntTime[6] = 0.499;
+  dblIntTime[7] = 0.999;
+
+  return HIS_ALL_OK;
+}

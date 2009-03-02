@@ -77,6 +77,13 @@ void QxrdApplication::serverRunning()
 
 void QxrdApplication::acquisitionRunning()
 {
+  QVector<double> integ = m_AcquisitionThread -> integrationTimes();
+
+  int n = integ.count();
+
+  for (int i=0; i<n; i++) {
+    m_Window -> setIntegrationTime(i, integ[i]);
+  }
 }
 
 void QxrdApplication::executeCommand(QString cmd)

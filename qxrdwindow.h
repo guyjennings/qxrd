@@ -24,6 +24,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 
   void setCancelButton();
   void setAcquireButton();
+  void setIntegrationTime(int n, double t);
 
  private:
   QxrdApplication        *m_Application;

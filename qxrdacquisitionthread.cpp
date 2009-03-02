@@ -26,9 +26,9 @@ void QxrdAcquisitionThread::run()
   connect(m_Acquisition, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
   connect(m_Acquisition, SIGNAL(acquireComplete()), this, SIGNAL(acquireComplete()));
 
-  emit acquisitionRunning();
-
   m_Acquisition -> initialize();
+
+  emit acquisitionRunning();
 
   exec();
 }
@@ -53,4 +53,9 @@ void QxrdAcquisitionThread::msleep(int msec)
 void QxrdAcquisitionThread::cancel()
 {
   m_Acquisition -> cancel();
+}
+
+QVector<double> QxrdAcquisitionThread::integrationTimes()
+{
+  return m_Acquisition -> integrationTimes();
 }

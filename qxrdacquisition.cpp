@@ -26,7 +26,8 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
     m_Exposure(0),
     m_NSums(0),
     m_NFrames(0),
-    m_NBufferFrames(0)
+    m_NBufferFrames(0),
+    m_NIntTimes(0)
 {
   printf("Enter QxrdAcquisition::QxrdAcquisition\n");
 
@@ -84,6 +85,12 @@ void QxrdAcquisition::initialize()
 
   m_NRows = dwRows;
   m_NCols = dwColumns;
+
+  m_NIntTimes = 8;
+  if ((nRet=Acquisition_GetIntTimes(m_AcqDesc, m_IntTimes, &m_NIntTimes)) != HIS_ALL_OK) {
+    acquisitionError(nRet);
+    return;
+  }
 
   emit printMessage(tr("channel type: %1, ChannelNr: %2\n").arg(nChannelType).arg(nChannelNr));
   emit printMessage(tr("frames: %1\n").arg(dwFrames));
@@ -223,3 +230,13 @@ static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc)
   g_Acquisition -> onEndAcquisition();
 }
 
+QVector<double> QxrdAcquisition::integrationTimes()
+{
+  QVector<double> res;
+
+  for (int i=0; i<m_NIntTimes; i++) {
+    res.append(m_IntTimes[i]);
+  }
+
+  return res;
+}

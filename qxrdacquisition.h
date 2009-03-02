@@ -32,6 +32,7 @@ class QxrdAcquisition : public QObject
  public:
   void onEndFrame();
   void onEndAcquisition();
+  QVector<double> integrationTimes();
 
  private:
   void acquisitionError(int n);
@@ -51,6 +52,8 @@ class QxrdAcquisition : public QObject
   int                    m_CurrentFrame;
   QVector<double>        m_AcquiredImage;
   QVector<unsigned short> m_Buffer;
+  double                 m_IntTimes[8];
+  int                    m_NIntTimes;
 };
 
 #endif

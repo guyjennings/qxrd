@@ -36,6 +36,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
 //   QString contents = file.readAll();
 
 //   m_HelpText -> setHtml(contents);
+
+  for (int i=0; i<8; i++) {
+    m_ExposureTime -> addItem(tr("Item %1").arg(i));
+  }
 }
 
 void QxrdWindow::setAcquisitionThread(QxrdAcquisitionThread *acq)
@@ -66,4 +70,13 @@ void QxrdWindow::setAcquireButton()
 {
   m_AcquireButton -> setEnabled(true);
   m_CancelButton -> setEnabled(false);
+}
+
+void QxrdWindow::setIntegrationTime(int n, double t)
+{
+  while (n >= m_ExposureTime->count()) {
+    m_ExposureTime -> addItem("");
+  }
+
+  m_ExposureTime -> setItemText(n, tr("%1: = %2").arg(n).arg(t));
 }
