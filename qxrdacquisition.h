@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMutex>
+#include <QVector>
 
 class QxrdApplication;
 class QxrdAcquisitionThread;
@@ -37,6 +38,16 @@ class QxrdAcquisition : public QObject
   QMutex                 m_Mutex;
   QxrdApplication       *m_Application;
   int                    m_Cancel;
+  int                    m_NRows;
+  int                    m_NCols;
+  double                 m_Exposure;
+  int                    m_NSums;
+  int                    m_NFrames;
+  int                    m_NBufferFrames;
+  int                    m_CurrentSum;
+  int                    m_CurrentFrame;
+  QVector<double>        m_AcquiredImage;
+  QVector<unsigned short> m_Buffer;
 };
 
 #endif

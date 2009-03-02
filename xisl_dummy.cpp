@@ -31,6 +31,9 @@ HIS_RETURN Acquisition_GetConfiguration(HACQDESC hAcqDesc,
 					UINT *dwSortFlags, BOOL *bIRQEnabled, DWORD *dwAcqType, DWORD *dwSystemID,
 					DWORD *dwSyncMode, DWORD *dwHwAccess)
 {
+  if (dwRows) *dwRows = 2048;
+  if (dwColumns) *dwColumns = 2048;
+
   return HIS_ALL_OK;
 }
 
@@ -40,6 +43,21 @@ HIS_RETURN Acquisition_SetCallbacksAndMessages(HACQDESC pAcqDesc,
 					       void (CALLBACK *lpfnEndFrameCallback)(HACQDESC), 
 					       void (CALLBACK *lpfnEndAcqCallback)(HACQDESC)
 					       )
+{
+  return HIS_ALL_OK;
+}
+
+HIS_RETURN Acquisition_Abort(HACQDESC hAcqDesc)
+{
+  return HIS_ALL_OK;
+}
+
+HIS_RETURN Acquisition_DefineDestBuffers(HACQDESC pAcqDesc, unsigned short *pProcessedData, UINT nFrames, UINT nRows, UINT nColumns)
+{
+  return HIS_ALL_OK;
+}
+
+HIS_RETURN Acquisition_Acquire_Image(HACQDESC pAcqDesc, UINT dwFrames, UINT dwSkipFrms, UINT dwOpt, unsigned short *pwOffsetData, DWORD *pdwGainData, DWORD *pdwPxlCorrList)
 {
   return HIS_ALL_OK;
 }
