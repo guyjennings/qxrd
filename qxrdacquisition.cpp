@@ -6,6 +6,10 @@
 #include "AcqLinuxTypes.h"
 #endif
 
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
+
 #include "Acq.h"
 #include <QThread>
 
@@ -30,7 +34,7 @@ void QxrdAcquisition::initialize()
 {
   printf("QxrdAcquisition::initialize()\n");
 
-  HIS_RETURN nRet;
+  int nRet = HIS_ALL_OK;
   UINT nSensors;
   BOOL bEnableIRQ = true;
   ACQDESCPOS Pos = 0;

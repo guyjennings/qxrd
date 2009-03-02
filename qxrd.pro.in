@@ -80,6 +80,7 @@ win32{
                         $${QTBINDIR}/QtGuid4.dll \
                         $${QTBINDIR}/QtScriptd4.dll \
                         $${QWT}/lib/qwt_debug5.dll \
+                        XISL.dll \
                         C:/MinGW/bin/mingwm10.dll
   }else{
     LIBS += -L$${QWT}/lib/ -lqwt5
@@ -90,13 +91,17 @@ win32{
                         $${QTBINDIR}/QtGui4.dll \
                         $${QTBINDIR}/QtScript4.dll \
 						$${QWT}/lib/qwt5.dll \
+						XISL.dll \
                         C:/MinGW/bin/mingwm10.dll
   }
   INCLUDEPATH += $${QWT}/include/
   INCLUDEPATH += .
-
+  INCLUDEPATH += SDK
+  
   QMAKE_EXTRA_TARGETS += zip	
   QMAKE_LFLAGS += -Wl,--script,nordata.lscript
+  
+  LIBS += SDK/XISL.lib
 }
 
 QMAKE_EXTRA_TARGETS += dox rpmsource mock
