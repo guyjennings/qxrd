@@ -128,6 +128,8 @@ void QxrdApplication::doAcquire()
   m_Window -> setCancelButton();
 
   m_AcquisitionThread -> acquire(1.0, 10, 10);
+
+  m_Acquiring = true;
 }
 
 void QxrdApplication::doCancel()
@@ -140,4 +142,6 @@ void QxrdApplication::doCancel()
 void QxrdApplication::acquireComplete()
 {
   m_Window -> setAcquireButton();
+
+  m_Acquiring = false;
 }

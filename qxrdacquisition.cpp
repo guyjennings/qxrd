@@ -157,6 +157,21 @@ void QxrdAcquisition::acquire(double integ, int nsum, int nframes)
 
 void QxrdAcquisition::onEndFrame()
 {
+  m_CurrentSum++;
+
+  // sum current frame
+
+  if (m_CurrentSum >= m_NSums) {
+    m_CurrentSum = 0;
+
+    m_CurrentFrame++;
+
+    if (m_CurrentFrame >= m_NFrames) {
+      Acquisition_Abort(m_AcqDesc);
+      emit acquireComplete();
+    }
+  }
+
   emit printMessage("Frame ended\n");
 }
 
