@@ -111,7 +111,9 @@ void QxrdAcquisition::acquire(double integ, int nsum, int nframes)
     m_NBufferFrames = 10;
 
     m_AcquiredImage.resize(m_NRows*m_NCols*m_NFrames);
+    m_AcquiredImage.fill(0);
     m_Buffer.resize(m_NRows*m_NCols*m_NBufferFrames);
+    m_Buffer.fill(0);
 
     if ((nRet=Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_NBufferFrames, m_NRows, m_NCols)) != HIS_ALL_OK) {
       acquisitionError(nRet);
@@ -161,6 +163,15 @@ void QxrdAcquisition::onEndFrame()
 
   // sum current frame
 
+  double* current = m_AcquiredImage.data();
+  unsigned short* frame = m_Buffer.data();
+  long npixels = m_NRows*m_NCols;
+
+  for (long i=0; i<npixels; i++) {
+    *current += *frame;
+    current++; frame++;
+  }
+
   if (m_CurrentSum >= m_NSums) {
     m_CurrentSum = 0;
 
@@ -168,11 +179,12 @@ void QxrdAcquisition::onEndFrame()
 
     if (m_CurrentFrame >= m_NFrames) {
       Acquisition_Abort(m_AcqDesc);
+      emit printMessage("Acquisition ended\n");
       emit acquireComplete();
     }
   }
 
-  emit printMessage("Frame ended\n");
+  emit printMessage(tr("Frame ended (%1,%2)\n").arg(m_CurrentSum).arg(m_CurrentFrame));
 }
 
 void QxrdAcquisition::onEndAcquisition()
