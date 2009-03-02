@@ -3,6 +3,9 @@ Version:	@VERSION@
 Release:        1%{?dist}
 Summary:        qxrd - a readout and control program for perkin elmer x ray detector
 
+%define libname qceplib
+%define libversion 0.0.1
+
 %if 0%{?fedora} >= 8
 %define qtversion 4.3.4
 %else
@@ -24,7 +27,8 @@ Summary:        qxrd - a readout and control program for perkin elmer x ray dete
 Group:       	Applications/Engineering   
 License:        GPL
 URL:            http://www.bessrc.aps.anl.gov/software/qxrd/index.html
-Source0:        http://www.bessrc.aps.anl.gov/software/qxrd/qavrg%{version}.tar.gz
+Source0:        http://www.bessrc.aps.anl.gov/software/qxrd/%{name}%{version}.tar.gz
+Source1:        http://www.bessrc.aps.anl.gov/software/qceplib/%{libname}%{libversion}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  desktop-file-utils qt4 >= %{qtversion}, qt4-x11 qt4-devel %{qwtlib} %{qwtdevel}
@@ -41,7 +45,7 @@ qxrd is a readout and control program for perkin elmer x ray detector
 %setup -n %{name}%{version}
 
 %build
-/usr/bin/qmake-qt4 qavrg.pro -o Makefile
+/usr/bin/qmake-qt4 %{name}.pro -o Makefile
 make %{?_smp_mflags}
 
 
