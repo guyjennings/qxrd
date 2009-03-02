@@ -28,6 +28,9 @@ class QxrdApplication : public QApplication
   void printMessage(QString msg);
   void executeCommand(QString cmd);
   void newDataAvailable();
+  void doAcquire();
+  void doCancel();
+  void acquireComplete();
 
  signals:
   void finishedCommand(QString cmd);
@@ -37,6 +40,7 @@ class QxrdApplication : public QApplication
   QxrdServerThread              *m_ServerThread;
   QxrdAcquisitionThread         *m_AcquisitionThread;
   QScriptEngine                  m_ScriptEngine;
+  int                            m_Acquiring;
 };
 
 #endif

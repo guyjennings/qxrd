@@ -19,6 +19,11 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 
   void loadData();
   void saveData();
+  
+  void printMessage(QString msg);
+
+  void setCancelButton();
+  void setAcquireButton();
 
  private:
   QxrdApplication        *m_Application;

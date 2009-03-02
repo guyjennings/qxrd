@@ -13,7 +13,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
     m_Window(NULL),
     m_ServerThread(NULL),
-    m_AcquisitionThread(NULL)
+    m_AcquisitionThread(NULL),
+    m_Acquiring(false)
 {
   setObjectName("qxrdapplication");
 
@@ -50,6 +51,12 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(m_AcquisitionThread, SIGNAL(newDataAvailable()),
 	  this, SLOT(newDataAvailable()));
+
+  connect(m_AcquisitionThread, SIGNAL(acquireComplete()),
+	  this, SLOT(acquireComplete()));
+
+  connect(m_AcquisitionThread, SIGNAL(printMessage(QString)),
+	  this, SLOT(printMessage(QString)));
 
   connect(m_Window->m_ActionPreferences, SIGNAL(triggered()),
 	  this, SLOT(doPreferences()));
@@ -106,11 +113,31 @@ QxrdServerThread *QxrdApplication::serverThread()
 
 void QxrdApplication::printMessage(QString msg)
 {
-  printf("%s\n", qPrintable(msg));
+  m_Window -> printMessage(msg);
 }
 
 void QxrdApplication::newDataAvailable()
 {
-  printf("QxrdApplication::newDataAvailable()\n");
+  printMessage("QxrdApplication::newDataAvailable()\n");
 }
 
+void QxrdApplication::doAcquire()
+{
+  printMessage("QxrdApplication::doAcquire()\n");
+
+  m_Window -> setCancelButton();
+
+  m_AcquisitionThread -> acquire(1.0, 10, 10);
+}
+
+void QxrdApplication::doCancel()
+{
+  if (m_Acquiring) {
+    m_AcquisitionThread -> cancel();
+  }
+}
+
+void QxrdApplication::acquireComplete()
+{
+  m_Window -> setAcquireButton();
+}

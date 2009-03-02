@@ -24,6 +24,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
   connect(m_ActionLoadData, SIGNAL(triggered()), m_Application, SLOT(loadData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), m_Application, SLOT(saveData()));
 
+  connect(m_AcquireButton, SIGNAL(clicked()), m_Application, SLOT(doAcquire()));
+  connect(m_CancelButton, SIGNAL(clicked()), m_Application, SLOT(doCancel()));
+
 //   m_HelpText -> setReadOnly(true);
 
 //   QFile file(":/qavrghelptext.html");
@@ -48,3 +51,19 @@ void QxrdWindow::loadData()
 {
 }
 
+void QxrdWindow::printMessage(QString msg)
+{
+  m_Messages -> append(msg);
+}
+
+void QxrdWindow::setCancelButton()
+{
+  m_AcquireButton -> setEnabled(false);
+  m_CancelButton -> setEnabled(true);
+}
+
+void QxrdWindow::setAcquireButton()
+{
+  m_AcquireButton -> setEnabled(true);
+  m_CancelButton -> setEnabled(false);
+}

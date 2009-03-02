@@ -15,10 +15,20 @@ class QxrdAcquisitionThread : public QThread
   ~QxrdAcquisitionThread();
 
   void shutdown();
+  void msleep(int msec);
 
  signals:
   void acquisitionRunning();
   void newDataAvailable();
+  void printMessage(QString msg);
+  void acquireComplete();
+
+ public slots:
+  void acquire(double expos, int nsum, int nframes);
+  void cancel();
+
+ signals:
+  void _acquire(double expos, int nsum, int nframes);
 
  protected:
   void run();
