@@ -182,15 +182,22 @@ void QxrdAcquisition::onEndFrame()
   double* current = m_AcquiredImage.data();
   unsigned short* frame = m_Buffer.data();
   long npixels = m_NRows*m_NCols;
+  unsigned short max=0;
 
   for (int i=0; i<10; i++) {
     emit printMessage(tr("%1 : %2\n").arg(i).arg(frame[i]));
   }
 
   for (long i=0; i<npixels; i++) {
+    if (*frame > max) {
+      max = *frame;
+    }
+
     *current += *frame;
     current++; frame++;
   }
+
+  emit printMessage(tr("Max Value %1\n").arg(max));
 
   m_CurrentSum++;
 
