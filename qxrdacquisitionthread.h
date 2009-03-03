@@ -28,6 +28,7 @@ class QxrdAcquisitionThread : public QThread
  public slots:
   void acquire(int integmode, int nsum, int nframes);
   void cancel();
+  void saveData(QString name);
 
  signals:
   void _acquire(int integmode, int nsum, int nframes);

@@ -22,6 +22,7 @@ class QxrdAcquisition : public QObject
   void resultsAvailable(int chan);
   void savingComplete(int chan);
   void cancel();
+  void saveData(QString name);
 
  signals:
   void newDataAvailable();

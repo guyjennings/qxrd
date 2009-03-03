@@ -6,6 +6,7 @@
 #include <QScriptEngine>
 #include <QTime>
 #include <QtConcurrentRun>
+#include <QFileDialog>
 
 static QxrdApplication* g_Application = NULL;
 
@@ -155,4 +156,13 @@ void QxrdApplication::acquireComplete()
   m_Window -> setAcquireButton();
 
   m_Acquiring = false;
+}
+
+void QxrdApplication::saveData()
+{
+  QString theFile = QFileDialog::getSaveFileName(m_Window, "Save Data in");
+
+  if (theFile.length()) {
+    m_AcquisitionThread -> saveData(theFile);
+  }
 }

@@ -31,6 +31,7 @@ class QxrdApplication : public QApplication
   void doAcquire();
   void doCancel();
   void acquireComplete();
+  void saveData();
 
  signals:
   void finishedCommand(QString cmd);

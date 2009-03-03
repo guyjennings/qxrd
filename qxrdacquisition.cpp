@@ -12,6 +12,7 @@
 
 #include "Acq.h"
 #include <QThread>
+#include <QFile>
 
 static QxrdAcquisition *g_Acquisition = NULL;
 
@@ -260,4 +261,14 @@ QVector<double> QxrdAcquisition::integrationTimes()
   }
 
   return res;
+}
+
+void QxrdAcquisition::saveData(QString name)
+{
+  double* current = m_AcquiredImage.data();
+  long npixels = m_NRows*m_NCols;
+
+  QFile outfile(name);
+  outfile.open(QIODevice::ReadWrite);
+  outfile.write((const char*) current, npixels*sizeof(double));
 }

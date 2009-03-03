@@ -40,6 +40,11 @@ void QxrdAcquisitionThread::shutdown()
   wait(1000);
 }
 
+void QxrdAcquisitionThread::saveData(QString name)
+{
+  m_Acquisition -> saveData(name);
+}
+
 void QxrdAcquisitionThread::acquire(int integmode, int nsum, int nframes)
 {
   emit _acquire(integmode, nsum, nframes);
