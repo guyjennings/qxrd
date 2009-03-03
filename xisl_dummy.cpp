@@ -107,3 +107,9 @@ HIS_RETURN Acquisition_GetIntTimes(HACQDESC hAcqDesc, double *dblIntTime, int *n
 
   return HIS_ALL_OK;
 }
+
+HIS_RETURN Acquisition_GetActFrame(HACQDESC hAcqDesc, DWORD *dwActAcqFrame, DWORD *dwActSecBuffFrame)
+{
+  if (dwActAcqFrame) *dwActAcqFrame = 42;
+  if (dwActSecBuffFrame) *dwActSecBuffFrame=89;
+}

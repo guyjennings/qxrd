@@ -49,6 +49,7 @@ class QxrdAcquisition : public QObject
   int                    m_NSums;
   int                    m_NFrames;
   int                    m_NBufferFrames;
+  int                    m_BufferFrame;
   int                    m_CurrentSum;
   int                    m_CurrentFrame;
   QVector<double>        m_AcquiredImage;

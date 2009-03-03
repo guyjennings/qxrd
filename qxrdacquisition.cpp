@@ -120,6 +120,7 @@ void QxrdAcquisition::acquire(int integmode, int nsum, int nframes)
     m_NSums = nsum;
     m_NFrames = nframes;
     m_NBufferFrames = 10;
+    m_BufferFrame = 0;
 
     m_AcquiredImage.resize(m_NRows*m_NCols*m_NFrames);
     m_AcquiredImage.fill(0);
@@ -180,13 +181,20 @@ void QxrdAcquisition::onEndFrame()
 
   // sum current frame
 
-  double* current = m_AcquiredImage.data();
-  unsigned short* frame = m_Buffer.data();
   long npixels = m_NRows*m_NCols;
+  double* current = m_AcquiredImage.data();
+  unsigned short* frame = m_Buffer.data() + m_BufferFrame*npixels;
   unsigned short max=0;
 
+  DWORD acqFrame, buffFrame;
+  Acquisition_GetActFrame(m_AcqDesc, &acqFrame, &buffFrame);
+
+  emit printMessage(tr("current 0x%1, frame 0x%2, acqFrame 0x%3, buffFrame 0x%4\n")
+		    .arg((long) current,4,16,QChar('0')).arg((long) frame,4,16,QChar('0'))
+		    .arg((long) acqFrame,4,16,QChar('0')).arg((long) buffFrame,4,16,QChar('0')));
+
   for (int i=0; i<10; i++) {
-    emit printMessage(tr("%1 : %2\n").arg(i).arg(frame[i]));
+    emit printMessage(tr("%1 : %2\n").arg(i).arg(frame[i+2048]));
   }
 
   for (long i=0; i<npixels; i++) {
@@ -201,6 +209,11 @@ void QxrdAcquisition::onEndFrame()
   emit printMessage(tr("Max Value %1\n").arg(max));
 
   m_CurrentSum++;
+  m_BufferFrame++;
+
+  if (m_BufferFrame >= m_NBufferFrames) {
+    m_BufferFrame = 0;
+  }
 
   if (m_CurrentSum >= m_NSums) {
     m_CurrentSum = 0;
@@ -213,12 +226,11 @@ void QxrdAcquisition::onEndFrame()
       Acquisition_Abort(m_AcqDesc);
     }
   }
-
 }
 
 void QxrdAcquisition::onEndAcquisition()
 {
-  emit printMessage("Acquisition ended\n");
+  emit printMessage("(CB) Acquisition ended\n");
 }
 
 void QxrdAcquisition::resultsAvailable(int chan)
