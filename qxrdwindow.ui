@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>MainWindow</string>
+   <string>QXRD Readout Software</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
    <layout class="QGridLayout" name="gridLayout_4" >

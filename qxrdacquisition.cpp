@@ -183,6 +183,10 @@ void QxrdAcquisition::onEndFrame()
   unsigned short* frame = m_Buffer.data();
   long npixels = m_NRows*m_NCols;
 
+  for (int i=0; i<10; i++) {
+    emit printMessage(tr("%1 : %2\n").arg(i).arg(frame[i]));
+  }
+
   for (long i=0; i<npixels; i++) {
     *current += *frame;
     current++; frame++;
@@ -196,9 +200,9 @@ void QxrdAcquisition::onEndFrame()
     m_CurrentFrame++;
 
     if (m_CurrentFrame >= m_NFrames) {
-      Acquisition_Abort(m_AcqDesc);
       emit printMessage("Acquisition ended\n");
       emit acquireComplete();
+      Acquisition_Abort(m_AcqDesc);
     }
   }
 
