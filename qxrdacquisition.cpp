@@ -107,7 +107,7 @@ void QxrdAcquisition::initialize()
 void QxrdAcquisition::acquire(int integmode, int nsum, int nframes)
 {
   {
-    QMutexLocker lock(&m_Mutex);
+//     QMutexLocker lock(&m_Mutex);
 
     if (nsum <= 0) nsum = 1;
     if (nframes <= 0) nframes = 1;
@@ -126,6 +126,12 @@ void QxrdAcquisition::acquire(int integmode, int nsum, int nframes)
     m_AcquiredImage.fill(0);
     m_Buffer.resize(m_NRows*m_NCols*m_NBufferFrames);
     m_Buffer.fill(0);
+  
+    if ((nRet=Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
+						  0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
+      acquisitionError(nRet);
+      return;
+    }
 
     if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, integmode)) != HIS_ALL_OK) {
       acquisitionError(nRet);
@@ -190,8 +196,8 @@ void QxrdAcquisition::onEndFrame()
   Acquisition_GetActFrame(m_AcqDesc, &acqFrame, &buffFrame);
 
   emit printMessage(tr("current 0x%1, frame 0x%2, acqFrame 0x%3, buffFrame 0x%4\n")
-		    .arg((long) current,4,16,QChar('0')).arg((long) frame,4,16,QChar('0'))
-		    .arg((long) acqFrame,4,16,QChar('0')).arg((long) buffFrame,4,16,QChar('0')));
+		    .arg((long) current,8,16,QChar('0')).arg((long) frame,8,16,QChar('0'))
+		    .arg((long) acqFrame,8,16,QChar('0')).arg((long) buffFrame,8,16,QChar('0')));
 
   for (int i=0; i<10; i++) {
     emit printMessage(tr("%1 : %2\n").arg(i).arg(frame[i+2048]));
