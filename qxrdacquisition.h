@@ -18,7 +18,7 @@ class QxrdAcquisition : public QObject
 
  public slots:
   void initialize();
-  void acquire(double integ, int nsum, int nframes);
+  void acquire(int integmode, int nsum, int nframes);
   void resultsAvailable(int chan);
   void savingComplete(int chan);
   void cancel();
@@ -44,7 +44,7 @@ class QxrdAcquisition : public QObject
   int                    m_Cancel;
   int                    m_NRows;
   int                    m_NCols;
-  double                 m_Exposure;
+  int                    m_IntegMode;
   int                    m_NSums;
   int                    m_NFrames;
   int                    m_NBufferFrames;

@@ -23,7 +23,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
     m_Cancel(false),
     m_NRows(0),
     m_NCols(0),
-    m_Exposure(0),
+    m_IntegMode(0),
     m_NSums(0),
     m_NFrames(0),
     m_NBufferFrames(0),
@@ -103,16 +103,19 @@ void QxrdAcquisition::initialize()
   }
 }
 
-void QxrdAcquisition::acquire(double integ, int nsum, int nframes)
+void QxrdAcquisition::acquire(int integmode, int nsum, int nframes)
 {
   {
     QMutexLocker lock(&m_Mutex);
 
-    emit printMessage(tr("QxrdAcquisition::acquire(%1,%2,%3)\n").arg(integ).arg(nsum).arg(nframes));
+    if (nsum <= 0) nsum = 1;
+    if (nframes <= 0) nframes = 1;
+
+    emit printMessage(tr("QxrdAcquisition::acquire(%1,%2,%3)\n").arg(integmode).arg(nsum).arg(nframes));
 
     int nRet = HIS_ALL_OK;
 
-    m_Exposure = integ;
+    m_IntegMode = integmode;
     m_NSums = nsum;
     m_NFrames = nframes;
     m_NBufferFrames = 10;
@@ -121,6 +124,11 @@ void QxrdAcquisition::acquire(double integ, int nsum, int nframes)
     m_AcquiredImage.fill(0);
     m_Buffer.resize(m_NRows*m_NCols*m_NBufferFrames);
     m_Buffer.fill(0);
+
+    if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, integmode)) != HIS_ALL_OK) {
+      acquisitionError(nRet);
+      return;
+    }
 
     if ((nRet=Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_NBufferFrames, m_NRows, m_NCols)) != HIS_ALL_OK) {
       acquisitionError(nRet);
@@ -166,7 +174,8 @@ void QxrdAcquisition::acquire(double integ, int nsum, int nframes)
 
 void QxrdAcquisition::onEndFrame()
 {
-  m_CurrentSum++;
+  emit printMessage(tr("Frame ended (%1,%2)\n").arg(m_CurrentSum).arg(m_CurrentFrame));
+  printf("Frame ended %d,%d\n", m_CurrentSum, m_CurrentFrame);
 
   // sum current frame
 
@@ -178,6 +187,8 @@ void QxrdAcquisition::onEndFrame()
     *current += *frame;
     current++; frame++;
   }
+
+  m_CurrentSum++;
 
   if (m_CurrentSum >= m_NSums) {
     m_CurrentSum = 0;
@@ -191,7 +202,6 @@ void QxrdAcquisition::onEndFrame()
     }
   }
 
-  emit printMessage(tr("Frame ended (%1,%2)\n").arg(m_CurrentSum).arg(m_CurrentFrame));
 }
 
 void QxrdAcquisition::onEndAcquisition()

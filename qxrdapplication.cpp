@@ -134,7 +134,11 @@ void QxrdApplication::doAcquire()
 
   m_Window -> setCancelButton();
 
-  m_AcquisitionThread -> acquire(1.0, 10, 10);
+  int    integmode = m_Window -> integrationMode();
+  int    nsum      = m_Window -> nSummed();
+  int    nframes   = m_Window -> nFrames();
+
+  m_AcquisitionThread -> acquire(integmode, nsum, nframes);
 
   m_Acquiring = true;
 }

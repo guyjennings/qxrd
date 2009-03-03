@@ -39,6 +39,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
 
   for (int i=0; i<8; i++) {
     m_ExposureTime -> addItem(tr("Item %1").arg(i));
+    m_Exposures.append(0);
   }
 }
 
@@ -57,7 +58,7 @@ void QxrdWindow::loadData()
 
 void QxrdWindow::printMessage(QString msg)
 {
-  m_Messages -> append(msg);
+  m_Messages -> append(msg.trimmed());
 }
 
 void QxrdWindow::setCancelButton()
@@ -76,7 +77,80 @@ void QxrdWindow::setIntegrationTime(int n, double t)
 {
   while (n >= m_ExposureTime->count()) {
     m_ExposureTime -> addItem("");
+    m_Exposures.append(0);
   }
 
-  m_ExposureTime -> setItemText(n, tr("%1: = %2").arg(n).arg(t));
+  m_ExposureTime -> setItemText(n, tr("%1 msec").arg(t/1e3,0,'f',0));
+  m_Exposures[n] = t;
 }
+
+void QxrdWindow::setExposureTime(double t)
+{
+  int best=0;
+
+  for (int i=1; i<8; i++) {
+    if (fabs(t-m_Exposures.at(i)) < fabs(t-m_Exposures.at(best))) {
+      best = i;
+    }
+  }
+
+  setIntegrationMode(best);
+}
+
+void QxrdWindow::setIntegrationMode(int mode)
+{
+  m_ExposureTime->setCurrentIndex(mode);
+}
+
+void QxrdWindow::setNSummed(int nsummed)
+{
+  m_SummedFrames->setValue(nsummed);
+}
+
+void QxrdWindow::setNFrames(int nframes)
+{
+  m_SequenceFrames->setValue(nframes);
+}
+
+void QxrdWindow::setFileIndex(int index)
+{
+  m_FileIndexNumber->setValue(index);
+}
+
+void QxrdWindow::setFilePattern(QString pattern)
+{
+  m_SaveFilePattern->setText(pattern);
+}
+
+double  QxrdWindow::exposureTime()
+{
+  int choice = m_ExposureTime->currentIndex();
+
+  return m_Exposures.at(choice);
+}
+
+int     QxrdWindow::integrationMode()
+{
+  return m_ExposureTime->currentIndex();
+}
+
+int     QxrdWindow::nSummed()
+{
+  return m_SummedFrames->value();
+}
+
+int     QxrdWindow::nFrames()
+{
+  return m_SequenceFrames->value();
+}
+
+int     QxrdWindow::fileIndex()
+{
+  return m_FileIndexNumber->value();
+}
+
+QString QxrdWindow::filePattern()
+{
+  return m_SaveFilePattern->text();
+}
+

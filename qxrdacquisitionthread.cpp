@@ -22,7 +22,7 @@ void QxrdAcquisitionThread::run()
 
   m_Acquisition = new QxrdAcquisition(m_Application, this);
 
-  connect(this, SIGNAL(_acquire(double,int,int)), m_Acquisition, SLOT(acquire(double,int,int)));
+  connect(this, SIGNAL(_acquire(int,int,int)), m_Acquisition, SLOT(acquire(int,int,int)));
   connect(m_Acquisition, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
   connect(m_Acquisition, SIGNAL(acquireComplete()), this, SIGNAL(acquireComplete()));
 
@@ -40,9 +40,9 @@ void QxrdAcquisitionThread::shutdown()
   wait(1000);
 }
 
-void QxrdAcquisitionThread::acquire(double expos, int nsum, int nframes)
+void QxrdAcquisitionThread::acquire(int integmode, int nsum, int nframes)
 {
-  emit _acquire(expos, nsum, nframes);
+  emit _acquire(integmode, nsum, nframes);
 }
 
 void QxrdAcquisitionThread::msleep(int msec)

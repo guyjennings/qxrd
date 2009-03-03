@@ -26,11 +26,11 @@ class QxrdAcquisitionThread : public QThread
   void acquireComplete();
 
  public slots:
-  void acquire(double expos, int nsum, int nframes);
+  void acquire(int integmode, int nsum, int nframes);
   void cancel();
 
  signals:
-  void _acquire(double expos, int nsum, int nframes);
+  void _acquire(int integmode, int nsum, int nframes);
 
  protected:
   void run();
