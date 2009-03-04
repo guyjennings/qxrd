@@ -33,6 +33,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void setFileIndex(int index);
   void setFilePattern(QString pattern);
 
+  void acquiredFrame(int isum, int nsum, int iframe, int nframe);
+
  public:
   double  exposureTime();
   int     integrationMode();

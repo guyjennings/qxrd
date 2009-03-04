@@ -24,11 +24,16 @@ class QxrdAcquisition : public QObject
   void cancel();
   void saveData(QString name);
 
+ private slots:
+  void _haltAcquire();
+
  signals:
   void newDataAvailable();
   void resultsChanged();
   void acquireComplete();
+  void haltAcquire();
   void printMessage(QString msg);
+  void acquiredFrame(int isum, int nsum, int iframe, int nframe);
 
  public:
   void onEndFrame();
@@ -42,7 +47,7 @@ class QxrdAcquisition : public QObject
   QxrdAcquisitionThread *m_Thread;
   QMutex                 m_Mutex;
   QxrdApplication       *m_Application;
-  int                    m_Cancel;
+//  int                    m_Cancel;
   int                    m_NRows;
   int                    m_NCols;
   int                    m_IntegMode;

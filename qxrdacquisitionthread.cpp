@@ -25,6 +25,7 @@ void QxrdAcquisitionThread::run()
   connect(this, SIGNAL(_acquire(int,int,int)), m_Acquisition, SLOT(acquire(int,int,int)));
   connect(m_Acquisition, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
   connect(m_Acquisition, SIGNAL(acquireComplete()), this, SIGNAL(acquireComplete()));
+  connect(m_Acquisition, SIGNAL(acquiredFrame(int,int,int,int)), this, SIGNAL(acquiredFrame(int,int,int,int)));
 
   m_Acquisition -> initialize();
 

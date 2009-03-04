@@ -154,3 +154,10 @@ QString QxrdWindow::filePattern()
   return m_SaveFilePattern->text();
 }
 
+void QxrdWindow::acquiredFrame(int isum, int nsum, int iframe, int nframe)
+{
+  int totalframes = nsum*nframe;
+  int thisframe = iframe*nsum+isum;
+
+  printf("%d %% progress\n", thisframe*100/totalframes);
+}

@@ -24,6 +24,7 @@ class QxrdAcquisitionThread : public QThread
   void newDataAvailable();
   void printMessage(QString msg);
   void acquireComplete();
+  void acquiredFrame(int isum, int nsum, int iframe, int nframe);
 
  public slots:
   void acquire(int integmode, int nsum, int nframes);

@@ -50,6 +50,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   connect(m_AcquisitionThread, SIGNAL(acquireComplete()),
 	  this, SLOT(acquireComplete()));
 
+  connect(m_AcquisitionThread, SIGNAL(acquiredFrame(int,int,int,int)),
+          m_Window, SLOT(acquiredFrame(int,int,int,int)));
+
   connect(m_AcquisitionThread, SIGNAL(printMessage(QString)),
 	  this, SLOT(printMessage(QString)));
 

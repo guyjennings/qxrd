@@ -21,7 +21,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
     m_Thread(thread),
     m_Mutex(QMutex::Recursive),
     m_Application(app),
-    m_Cancel(false),
+    //m_Cancel(false),
     m_NRows(0),
     m_NCols(0),
     m_IntegMode(0),
@@ -33,6 +33,8 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
   printf("Enter QxrdAcquisition::QxrdAcquisition\n");
 
   g_Acquisition = this;
+
+  connect(this, SIGNAL(haltAcquire()), this, SLOT(_haltAcquire()), Qt::QueuedConnection);
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -185,6 +187,7 @@ void QxrdAcquisition::onEndFrame()
   emit printMessage(tr("Frame ended (%1,%2)\n").arg(m_CurrentSum).arg(m_CurrentFrame));
   printf("Frame ended %d,%d\n", m_CurrentSum, m_CurrentFrame);
 
+  emit acquiredFrame(m_CurrentSum,m_NSums, m_CurrentFrame, m_NFrames);
   // sum current frame
 
   long npixels = m_NRows*m_NCols;
@@ -228,8 +231,8 @@ void QxrdAcquisition::onEndFrame()
 
     if (m_CurrentFrame >= m_NFrames) {
       emit printMessage("Acquisition ended\n");
-      emit acquireComplete();
-      Acquisition_Abort(m_AcqDesc);
+      emit haltAcquire();
+      emit printMessage("Aborted acquisition\n");
     }
   }
 }
@@ -237,6 +240,7 @@ void QxrdAcquisition::onEndFrame()
 void QxrdAcquisition::onEndAcquisition()
 {
   emit printMessage("(CB) Acquisition ended\n");
+  emit acquireComplete();
 }
 
 void QxrdAcquisition::resultsAvailable(int chan)
@@ -253,11 +257,18 @@ void QxrdAcquisition::acquisitionError(int n)
   
 }
 
+void QxrdAcquisition::_haltAcquire()
+{
+    Acquisition_Abort(m_AcqDesc);
+
+    emit acquireComplete();
+}
+
 void QxrdAcquisition::cancel()
 {
-  Acquisition_Abort(m_AcqDesc);
+  _haltAcquire();
 
-  m_Cancel = true;
+  //m_Cancel = true;
 }
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
