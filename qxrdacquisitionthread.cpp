@@ -41,6 +41,16 @@ void QxrdAcquisitionThread::shutdown()
   wait(1000);
 }
 
+void QxrdAcquisitionThread::readSettings()
+{
+  m_Acquisition -> readSettings();
+}
+
+void QxrdAcquisitionThread::saveSettings()
+{
+  m_Acquisition -> saveSettings();
+}
+
 void QxrdAcquisitionThread::saveData(QString name)
 {
   m_Acquisition -> saveData(name);
@@ -64,4 +74,47 @@ void QxrdAcquisitionThread::cancel()
 QVector<double> QxrdAcquisitionThread::integrationTimes()
 {
   return m_Acquisition -> integrationTimes();
+}
+
+int QxrdAcquisitionThread::integrationTime()
+{
+  return m_Acquisition -> integrationTime();
+}
+
+int QxrdAcquisitionThread::nSummed()
+{
+  return m_Acquisition -> nSummed();
+}
+
+int QxrdAcquisitionThread::nFrames()
+{
+  return m_Acquisition -> nFrames();
+}
+
+QString QxrdAcquisitionThread::filePattern()
+{
+}
+
+int QxrdAcquisitionThread::fileIndex()
+{
+}
+
+void QxrdAcquisitionThread::setIntegrationTime(int t)
+{
+}
+
+void QxrdAcquisitionThread::setNSummed(int nsum)
+{
+}
+
+void QxrdAcquisitionThread::setNFrames(int nframes)
+{
+}
+
+void QxrdAcquisitionThread::setFilePattern(QString patt)
+{
+}
+
+void QxrdAcquisitionThread::setFileIndex(int n)
+{
 }

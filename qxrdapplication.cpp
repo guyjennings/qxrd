@@ -56,8 +56,11 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   connect(m_AcquisitionThread, SIGNAL(printMessage(QString)),
 	  this, SLOT(printMessage(QString)));
 
-  connect(m_Window->m_ActionAcquire, SIGNAL(triggered()), 
-	  this, SLOT(doAcquire()));
+  connect(m_Window->m_ActionAcquire, SIGNAL(triggered()),
+          this, SLOT(doAcquire()));
+
+  connect(m_Window->m_ActionCancel, SIGNAL(triggered()),
+          this, SLOT(doCancel()));
 
   connect(m_Window->m_ActionPreferences, SIGNAL(triggered()),
 	  this, SLOT(doPreferences()));
@@ -85,6 +88,8 @@ void QxrdApplication::acquisitionRunning()
   for (int i=0; i<n; i++) {
     m_Window -> setIntegrationTime(i, integ[i]);
   }
+
+  m_Window -> acquisitionReady();
 }
 
 void QxrdApplication::executeCommand(QString cmd)
@@ -133,7 +138,7 @@ void QxrdApplication::doAcquire()
 {
   printMessage("QxrdApplication::doAcquire()\n");
 
-  m_Window -> setCancelButton();
+  m_Window -> acquisitionStarted();
 
   int    integmode = m_Window -> integrationMode();
   int    nsum      = m_Window -> nSummed();
@@ -153,7 +158,7 @@ void QxrdApplication::doCancel()
 
 void QxrdApplication::acquireComplete()
 {
-  m_Window -> setAcquireButton();
+  m_Window -> acquisitionFinished();
 
   m_Acquiring = false;
 }

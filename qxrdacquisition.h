@@ -23,6 +23,8 @@ class QxrdAcquisition : public QObject
   void savingComplete(int chan);
   void cancel();
   void saveData(QString name);
+  void readSettings();
+  void saveSettings();
 
  private slots:
   void _haltAcquire();
@@ -61,6 +63,8 @@ class QxrdAcquisition : public QObject
   QVector<unsigned short> m_Buffer;
   double                 m_IntTimes[8];
   int                    m_NIntTimes;
+  QString                m_FilePattern;
+  int                    m_FileIndex;
 };
 
 #endif

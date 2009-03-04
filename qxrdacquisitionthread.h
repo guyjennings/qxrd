@@ -25,11 +25,27 @@ class QxrdAcquisitionThread : public QThread
   void printMessage(QString msg);
   void acquireComplete();
   void acquiredFrame(int isum, int nsum, int iframe, int nframe);
+  void fileIndexChanged();
 
  public slots:
   void acquire(int integmode, int nsum, int nframes);
   void cancel();
   void saveData(QString name);
+  void readSettings();
+  void saveSettings();
+
+ public:
+  int integrationTime();
+  int nSummed();
+  int nFrames();
+  QString filePattern();
+  int fileIndex();
+
+  void setIntegrationTime(int t);
+  void setNSummed(int nsum);
+  void setNFrames(int nframes);
+  void setFilePattern(QString patt);
+  void setFileIndex(int n);
 
  signals:
   void _acquire(int integmode, int nsum, int nframes);

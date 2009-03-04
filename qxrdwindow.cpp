@@ -68,16 +68,37 @@ void QxrdWindow::printMessage(QString msg)
   m_Messages -> append(msg.trimmed());
 }
 
-void QxrdWindow::setCancelButton()
+void QxrdWindow::acquisitionReady()
+{
+  setIntegrationTime(m_AcquisitionThread -> integrationTime());
+  setNSummed(m_AcquisitionThread -> nSummed());
+  setNFrames(m_AcquisitionThread -> nFrames());
+  setFilePattern(m_AcquisitionThread -> filePattern());
+  setFileIndex(m_AcquisitionThread -> fileIndex());
+
+  m_AcquireButton -> setEnabled(true);
+  m_CancelButton -> setEnabled(false);
+  m_ActionAcquire -> setEnabled(true);
+  m_ActionCancel -> setEnabled(false);
+  m_Progress -> reset();
+}
+
+void QxrdWindow::acquisitionStarted()
 {
   m_AcquireButton -> setEnabled(false);
   m_CancelButton -> setEnabled(true);
+  m_ActionAcquire -> setEnabled(false);
+  m_ActionCancel -> setEnabled(true);
+  m_Progress -> setValue(0);
 }
 
-void QxrdWindow::setAcquireButton()
+void QxrdWindow::acquisitionFinished()
 {
   m_AcquireButton -> setEnabled(true);
   m_CancelButton -> setEnabled(false);
+  m_ActionAcquire -> setEnabled(true);
+  m_ActionCancel -> setEnabled(false);
+  m_Progress -> reset();
 }
 
 void QxrdWindow::setIntegrationTime(int n, double t)
@@ -164,7 +185,7 @@ QString QxrdWindow::filePattern()
 void QxrdWindow::acquiredFrame(int isum, int nsum, int iframe, int nframe)
 {
   int totalframes = nsum*nframe;
-  int thisframe = iframe*nsum+isum;
+  int thisframe = iframe*nsum+isum+1;
 
   //  printf("%d %% progress\n", thisframe*100/totalframes);
 

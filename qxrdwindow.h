@@ -23,8 +23,10 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   
   void printMessage(QString msg);
 
-  void setCancelButton();
-  void setAcquireButton();
+  void acquisitionReady();
+  void acquisitionStarted();
+  void acquisitionFinished();
+
   void setIntegrationTime(int n, double t);
 
   void setExposureTime(double t);

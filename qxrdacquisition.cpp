@@ -1,6 +1,7 @@
 #include "qxrdacquisition.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdapplication.h"
+#include "qxrdsettings.h"
 
 #ifdef Q_OS_UNIX
 #include "AcqLinuxTypes.h"
@@ -39,6 +40,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
 
 QxrdAcquisition::~QxrdAcquisition()
 {
+  saveSettings();
 }
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
@@ -104,6 +106,8 @@ void QxrdAcquisition::initialize()
     acquisitionError(nRet);
     return;
   }
+
+  readSettings();
 }
 
 void QxrdAcquisition::acquire(int integmode, int nsum, int nframes)
@@ -152,41 +156,11 @@ void QxrdAcquisition::acquire(int integmode, int nsum, int nframes)
       acquisitionError(nRet);
       return;
     }
-
-//     for (int i=0; i<nframes; i++) {
-//       emit printMessage(tr("Starting frame %1...\n").arg(i));
-
-//       for (int j=0; j<nsum; j++) {
-// 	emit printMessage(tr("Starting sub-exposure %1...\n").arg(j));
-
-// 	m_Thread -> msleep(integ*1000);
-
-// 	if (m_Cancel) {
-// 	  return;
-// 	}
-//       }
-//     }
-    
-//     emit acquireComplete();
-//     m_Acquisition -> setNAverages((int)(integ*1000));
-//     m_Acquisition -> setNRepetitions(nreps);
   }
-
-//   configureAverager();
-
-//   for (int i=0; i<nreps; i++) {
-//     startAcquisition(i);
-
-//     waitAcquisition(i);
-//     readoutAcquisition(i);
-//   }
 }
 
 void QxrdAcquisition::onEndFrame()
 {
-  emit printMessage(tr("Frame ended (%1,%2)\n").arg(m_CurrentSum).arg(m_CurrentFrame));
-  printf("Frame ended %d,%d\n", m_CurrentSum, m_CurrentFrame);
-
   emit acquiredFrame(m_CurrentSum,m_NSums, m_CurrentFrame, m_NFrames);
   // sum current frame
 
@@ -195,27 +169,10 @@ void QxrdAcquisition::onEndFrame()
   unsigned short* frame = m_Buffer.data() + m_BufferFrame*npixels;
   unsigned short max=0;
 
-  DWORD acqFrame, buffFrame;
-  Acquisition_GetActFrame(m_AcqDesc, &acqFrame, &buffFrame);
-
-  emit printMessage(tr("current 0x%1, frame 0x%2, acqFrame 0x%3, buffFrame 0x%4\n")
-		    .arg((long) current,8,16,QChar('0')).arg((long) frame,8,16,QChar('0'))
-		    .arg((long) acqFrame,8,16,QChar('0')).arg((long) buffFrame,8,16,QChar('0')));
-
-  for (int i=0; i<10; i++) {
-    emit printMessage(tr("%1 : %2\n").arg(i).arg(frame[i+2048]));
-  }
-
   for (long i=0; i<npixels; i++) {
-    if (*frame > max) {
-      max = *frame;
-    }
-
     *current += *frame;
     current++; frame++;
   }
-
-  emit printMessage(tr("Max Value %1\n").arg(max));
 
   m_CurrentSum++;
   m_BufferFrame++;
@@ -300,4 +257,26 @@ void QxrdAcquisition::saveData(QString name)
   QFile outfile(name);
   outfile.open(QIODevice::ReadWrite);
   outfile.write((const char*) current, npixels*sizeof(double));
+}
+
+void QxrdAcquisition::readSettings()
+{
+  QxrdSettings settings;
+
+  m_IntegMode   = settings.value("acq/integ",7).toInt();
+  m_NSums       = settings.value("acq/nsums",1).toInt();
+  m_NFrames     = settings.value("acq/nframes",1).toInt();
+  m_FilePattern = settings.value("acq/filepattern","saveddata").toString();
+  m_FileIndex   = settings.value("acq/fileindex",1).toInt();
+}
+
+void QxrdAcquisition::saveSettings()
+{
+  QxrdSettings settings;
+
+  settings.setValue("acq/integ",m_IntegMode);
+  settings.setValue("acq/nsums",m_NSums);
+  settings.setValue("acq/nframes",m_NFrames);
+  settings.setValue("acq/filepattern",m_FilePattern);
+  settings.setValue("acq/fileindex",m_FileIndex);
 }
