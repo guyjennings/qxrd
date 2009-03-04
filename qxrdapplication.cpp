@@ -44,12 +44,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
-//   connect(m_Window->acquireButton(), SIGNAL(clicked()), 
-// 	  this, SLOT(acquire()));
-
-//   connect(m_Window->acquireAction(), SIGNAL(triggered()), 
-// 	  this, SLOT(acquire()));
-
   connect(m_AcquisitionThread, SIGNAL(newDataAvailable()),
 	  this, SLOT(newDataAvailable()));
 
@@ -58,6 +52,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(m_AcquisitionThread, SIGNAL(printMessage(QString)),
 	  this, SLOT(printMessage(QString)));
+
+  connect(m_Window->m_ActionAcquire, SIGNAL(triggered()), 
+	  this, SLOT(doAcquire()));
 
   connect(m_Window->m_ActionPreferences, SIGNAL(triggered()),
 	  this, SLOT(doPreferences()));
