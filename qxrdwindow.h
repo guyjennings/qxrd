@@ -2,6 +2,7 @@
 #define QXRDWINDOW_H
 
 #include <QMainWindow>
+#include <QProgressBar>
 #include "ui_qxrdwindow.h"
 
 class QxrdApplication;
@@ -47,6 +48,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QxrdApplication        *m_Application;
   QxrdAcquisitionThread  *m_AcquisitionThread;
   QVector<double>         m_Exposures;
+  QProgressBar           *m_Progress;
 };
 
 #endif

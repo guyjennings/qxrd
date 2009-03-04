@@ -15,7 +15,8 @@
 QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
   : QMainWindow(parent),
     m_Application(app),
-    m_AcquisitionThread(NULL)
+    m_AcquisitionThread(NULL),
+    m_Progress(NULL)
 {
   setupUi(this);
 
@@ -41,6 +42,12 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
     m_ExposureTime -> addItem(tr("Item %1").arg(i));
     m_Exposures.append(0);
   }
+
+  m_Progress = new QProgressBar(NULL);
+  m_Progress -> setMinimumWidth(150);
+  m_Progress -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+  statusBar() -> addPermanentWidget(m_Progress);
 }
 
 void QxrdWindow::setAcquisitionThread(QxrdAcquisitionThread *acq)
@@ -159,5 +166,7 @@ void QxrdWindow::acquiredFrame(int isum, int nsum, int iframe, int nframe)
   int totalframes = nsum*nframe;
   int thisframe = iframe*nsum+isum;
 
-  printf("%d %% progress\n", thisframe*100/totalframes);
+  //  printf("%d %% progress\n", thisframe*100/totalframes);
+
+  m_Progress -> setValue(thisframe*100/totalframes);
 }
