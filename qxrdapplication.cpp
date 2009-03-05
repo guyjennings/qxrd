@@ -144,13 +144,14 @@ void QxrdApplication::doAcquire()
 
   m_Window -> acquisitionStarted();
 
+  QString outDir   = m_Window -> outputDirectory();
   QString filePatt = m_Window -> filePattern();
   int    index     = m_Window -> fileIndex();
   int    integmode = m_Window -> integrationMode();
   int    nsum      = m_Window -> nSummed();
   int    nframes   = m_Window -> nFrames();
 
-  m_AcquisitionThread -> acquire(filePatt, index, integmode, nsum, nframes);
+  m_AcquisitionThread -> acquire(outDir, filePatt, index, integmode, nsum, nframes);
 
   m_Acquiring = true;
 }

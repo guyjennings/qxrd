@@ -22,8 +22,8 @@ void QxrdAcquisitionThread::run()
 
   m_Acquisition = new QxrdAcquisition(m_Application, this);
 
-  connect(this, SIGNAL(_acquire(QString,int,int,int,int)), 
-	  m_Acquisition, SLOT(acquire(QString,int,int,int,int)));
+  connect(this, SIGNAL(_acquire(QString,QString,int,int,int,int)),
+          m_Acquisition, SLOT(acquire(QString,QString,int,int,int,int)));
   connect(m_Acquisition, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
   connect(m_Acquisition, SIGNAL(acquireComplete()), this, SIGNAL(acquireComplete()));
   connect(m_Acquisition, SIGNAL(acquiredFrame(QString,int,int,int,int,int)), 
@@ -49,9 +49,9 @@ void QxrdAcquisitionThread::saveData(QString name)
   m_Acquisition -> saveData(name);
 }
 
-void QxrdAcquisitionThread::acquire(QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
+void QxrdAcquisitionThread::acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
 {
-  emit _acquire(filePattern, fileIndex, integmode, nsum, nframes);
+  emit _acquire(outDir, filePattern, fileIndex, integmode, nsum, nframes);
 }
 
 void QxrdAcquisitionThread::msleep(int msec)

@@ -28,12 +28,12 @@ class QxrdAcquisitionThread : public QThread
   void fileIndexChanged(int index);
 
  public slots:
-  void acquire(QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
+  void acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
   void cancel();
   void saveData(QString name);
 
  signals:
-  void _acquire(QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
+  void _acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
 
  protected:
   void run();

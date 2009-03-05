@@ -19,7 +19,7 @@ class QxrdAcquisition : public QObject
 
  public slots:
   void initialize();
-  void acquire(QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
+  void acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
   void resultsAvailable(int chan);
   void savingComplete(int chan);
   void cancel();
@@ -65,6 +65,7 @@ class QxrdAcquisition : public QObject
   QVector< QFuture<int> > m_Saved;
   double                 m_IntTimes[8];
   int                    m_NIntTimes;
+  QString                m_OutputDir;
   QString                m_FilePattern;
   int                    m_FileIndex;
 };

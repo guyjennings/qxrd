@@ -12,6 +12,7 @@
 
 #include "Acq.h"
 #include <QThread>
+#include <QDir>
 #include <QFile>
 #include <QtConcurrentRun>
 
@@ -107,7 +108,7 @@ void QxrdAcquisition::initialize()
   }
 }
 
-void QxrdAcquisition::acquire(QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
+void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
 {
   {
 //     QMutexLocker lock(&m_Mutex);
@@ -115,11 +116,12 @@ void QxrdAcquisition::acquire(QString filePattern, int fileIndex, int integmode,
     if (nsum <= 0) nsum = 1;
     if (nframes <= 0) nframes = 1;
 
-    emit printMessage(tr("QxrdAcquisition::acquire(%1,%2,%3,%4,%5)\n")
-		      .arg(filePattern).arg(fileIndex).arg(integmode).arg(nsum).arg(nframes));
+    emit printMessage(tr("QxrdAcquisition::acquire(\"%1\",\"%2\",%3,%4,%5,%6)\n")
+                      .arg(outDir).arg(filePattern).arg(fileIndex).arg(integmode).arg(nsum).arg(nframes));
 
     int nRet = HIS_ALL_OK;
 
+    m_OutputDir   = outDir;
     m_FilePattern = filePattern;
     m_FileIndex = fileIndex;
     m_IntegMode = integmode;
@@ -163,7 +165,7 @@ void QxrdAcquisition::acquire(QString filePattern, int fileIndex, int integmode,
 
 void QxrdAcquisition::onEndFrame()
 {
-  QString fileName = m_FilePattern+tr("%1").arg(m_FileIndex,5,10,QChar('0'));
+  QString fileName = QDir(m_OutputDir).filePath(m_FilePattern+tr("%1").arg(m_FileIndex,5,10,QChar('0')));
 
   emit acquiredFrame(fileName, m_FileIndex, m_CurrentSum,m_NSums, m_CurrentFrame, m_NFrames);
   // sum current frame
@@ -206,6 +208,13 @@ void QxrdAcquisition::onEndFrame()
 void QxrdAcquisition::onEndAcquisition()
 {
   emit printMessage("(CB) Acquisition ended\n");
+
+  QFuture<int> f;
+
+  foreach(f, m_Saved) {
+    f.waitForFinished();
+  }
+
   emit acquireComplete();
 }
 
@@ -276,5 +285,7 @@ int QxrdAcquisition::saveAcquiredFrame(QString name, int frame)
   QFile outfile(name);
   outfile.open(QIODevice::ReadWrite);
   outfile.write((const char*) current, npixels*sizeof(double));
+
+  return 1;
 }
 
