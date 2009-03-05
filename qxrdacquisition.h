@@ -18,13 +18,11 @@ class QxrdAcquisition : public QObject
 
  public slots:
   void initialize();
-  void acquire(int integmode, int nsum, int nframes);
+  void acquire(QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
   void resultsAvailable(int chan);
   void savingComplete(int chan);
   void cancel();
   void saveData(QString name);
-  void readSettings();
-  void saveSettings();
 
  private slots:
   void _haltAcquire();
@@ -35,7 +33,8 @@ class QxrdAcquisition : public QObject
   void acquireComplete();
   void haltAcquire();
   void printMessage(QString msg);
-  void acquiredFrame(int isum, int nsum, int iframe, int nframe);
+  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
+  void fileIndexChanged(int index);
 
  public:
   void onEndFrame();
@@ -44,6 +43,7 @@ class QxrdAcquisition : public QObject
 
  private:
   void acquisitionError(int n);
+  void saveAcquiredFrame(QString name, int frame);
 
  private:
   QxrdAcquisitionThread *m_Thread;

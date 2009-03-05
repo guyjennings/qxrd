@@ -14,6 +14,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 
  public:
   QxrdWindow(QxrdApplication *app, QWidget *parent=0);
+  virtual ~QxrdWindow();
 
  public slots:
   void setAcquisitionThread(QxrdAcquisitionThread *acq);
@@ -36,7 +37,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void setFileIndex(int index);
   void setFilePattern(QString pattern);
 
-  void acquiredFrame(int isum, int nsum, int iframe, int nframe);
+  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
 
  public:
   double  exposureTime();
@@ -45,6 +46,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   int     nFrames();
   int     fileIndex();
   QString filePattern();
+  void readSettings();
+  void saveSettings();
 
  private:
   QxrdApplication        *m_Application;

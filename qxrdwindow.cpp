@@ -1,6 +1,7 @@
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
 #include "qxrdacquisitionthread.h"
+#include "qxrdsettings.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -50,6 +51,13 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
   statusBar() -> addPermanentWidget(m_Progress);
 }
 
+QxrdWindow::~QxrdWindow()
+{
+  printf("QxrdWindow::~QxrdWindow()\n");
+
+  saveSettings();
+}
+
 void QxrdWindow::setAcquisitionThread(QxrdAcquisitionThread *acq)
 {
   m_AcquisitionThread = acq;
@@ -70,11 +78,7 @@ void QxrdWindow::printMessage(QString msg)
 
 void QxrdWindow::acquisitionReady()
 {
-  setIntegrationTime(m_AcquisitionThread -> integrationTime());
-  setNSummed(m_AcquisitionThread -> nSummed());
-  setNFrames(m_AcquisitionThread -> nFrames());
-  setFilePattern(m_AcquisitionThread -> filePattern());
-  setFileIndex(m_AcquisitionThread -> fileIndex());
+  readSettings();
 
   m_AcquireButton -> setEnabled(true);
   m_CancelButton -> setEnabled(false);
@@ -182,7 +186,7 @@ QString QxrdWindow::filePattern()
   return m_SaveFilePattern->text();
 }
 
-void QxrdWindow::acquiredFrame(int isum, int nsum, int iframe, int nframe)
+void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int nsum, int iframe, int nframe)
 {
   int totalframes = nsum*nframe;
   int thisframe = iframe*nsum+isum+1;
@@ -190,4 +194,26 @@ void QxrdWindow::acquiredFrame(int isum, int nsum, int iframe, int nframe)
   //  printf("%d %% progress\n", thisframe*100/totalframes);
 
   m_Progress -> setValue(thisframe*100/totalframes);
+}
+
+void QxrdWindow::readSettings()
+{
+  QxrdSettings settings;
+
+  setIntegrationMode(settings.value("acq/integ",7).toInt());
+  setNSummed(settings.value("acq/nsums",1).toInt());
+  setNFrames(settings.value("acq/nframes",1).toInt());
+  setFilePattern(settings.value("acq/filepattern","saveddata").toString());
+  setFileIndex(settings.value("acq/fileindex",1).toInt());
+}
+
+void QxrdWindow::saveSettings()
+{
+  QxrdSettings settings;
+
+  settings.setValue("acq/integ",integrationMode());
+  settings.setValue("acq/nsums",nSummed());
+  settings.setValue("acq/nframes",nFrames());
+  settings.setValue("acq/filepattern",filePattern());
+  settings.setValue("acq/fileindex",fileIndex());
 }

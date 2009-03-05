@@ -1,7 +1,6 @@
 #include "qxrdacquisition.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdapplication.h"
-#include "qxrdsettings.h"
 
 #ifdef Q_OS_UNIX
 #include "AcqLinuxTypes.h"
@@ -40,7 +39,6 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
 
 QxrdAcquisition::~QxrdAcquisition()
 {
-  saveSettings();
 }
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
@@ -106,11 +104,9 @@ void QxrdAcquisition::initialize()
     acquisitionError(nRet);
     return;
   }
-
-  readSettings();
 }
 
-void QxrdAcquisition::acquire(int integmode, int nsum, int nframes)
+void QxrdAcquisition::acquire(QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
 {
   {
 //     QMutexLocker lock(&m_Mutex);
@@ -118,10 +114,13 @@ void QxrdAcquisition::acquire(int integmode, int nsum, int nframes)
     if (nsum <= 0) nsum = 1;
     if (nframes <= 0) nframes = 1;
 
-    emit printMessage(tr("QxrdAcquisition::acquire(%1,%2,%3)\n").arg(integmode).arg(nsum).arg(nframes));
+    emit printMessage(tr("QxrdAcquisition::acquire(%1,%2,%3,%4,%5)\n")
+		      .arg(filePattern).arg(fileIndex).arg(integmode).arg(nsum).arg(nframes));
 
     int nRet = HIS_ALL_OK;
 
+    m_FilePattern = filePattern;
+    m_FileIndex = fileIndex;
     m_IntegMode = integmode;
     m_NSums = nsum;
     m_NFrames = nframes;
@@ -161,7 +160,9 @@ void QxrdAcquisition::acquire(int integmode, int nsum, int nframes)
 
 void QxrdAcquisition::onEndFrame()
 {
-  emit acquiredFrame(m_CurrentSum,m_NSums, m_CurrentFrame, m_NFrames);
+  QString fileName = m_FilePattern+tr("%1").arg(m_FileIndex,5,10,QChar('0'));
+
+  emit acquiredFrame(fileName, m_FileIndex, m_CurrentSum,m_NSums, m_CurrentFrame, m_NFrames);
   // sum current frame
 
   long npixels = m_NRows*m_NCols;
@@ -184,6 +185,10 @@ void QxrdAcquisition::onEndFrame()
   if (m_CurrentSum >= m_NSums) {
     m_CurrentSum = 0;
 
+    saveAcquiredFrame(fileName, m_CurrentFrame);
+
+    m_FileIndex++;
+    emit fileIndexChanged(m_FileIndex);
     m_CurrentFrame++;
 
     if (m_CurrentFrame >= m_NFrames) {
@@ -259,24 +264,7 @@ void QxrdAcquisition::saveData(QString name)
   outfile.write((const char*) current, npixels*sizeof(double));
 }
 
-void QxrdAcquisition::readSettings()
+void QxrdAcquisition::saveAcquiredFrame(QString name, int frame)
 {
-  QxrdSettings settings;
-
-  m_IntegMode   = settings.value("acq/integ",7).toInt();
-  m_NSums       = settings.value("acq/nsums",1).toInt();
-  m_NFrames     = settings.value("acq/nframes",1).toInt();
-  m_FilePattern = settings.value("acq/filepattern","saveddata").toString();
-  m_FileIndex   = settings.value("acq/fileindex",1).toInt();
 }
 
-void QxrdAcquisition::saveSettings()
-{
-  QxrdSettings settings;
-
-  settings.setValue("acq/integ",m_IntegMode);
-  settings.setValue("acq/nsums",m_NSums);
-  settings.setValue("acq/nframes",m_NFrames);
-  settings.setValue("acq/filepattern",m_FilePattern);
-  settings.setValue("acq/fileindex",m_FileIndex);
-}

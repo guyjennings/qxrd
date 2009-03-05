@@ -50,8 +50,11 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   connect(m_AcquisitionThread, SIGNAL(acquireComplete()),
 	  this, SLOT(acquireComplete()));
 
-  connect(m_AcquisitionThread, SIGNAL(acquiredFrame(int,int,int,int)),
-          m_Window, SLOT(acquiredFrame(int,int,int,int)));
+  connect(m_AcquisitionThread, SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
+          m_Window, SLOT(acquiredFrame(QString,int,int,int,int,int)));
+
+  connect(m_AcquisitionThread, SIGNAL(fileIndexChanged(int)),
+	  m_Window, SLOT(setFileIndex(int)));
 
   connect(m_AcquisitionThread, SIGNAL(printMessage(QString)),
 	  this, SLOT(printMessage(QString)));
@@ -110,6 +113,7 @@ QScriptValue QxrdApplication::evaluate(QString cmd)
 
 void QxrdApplication::shutdownThreads()
 {
+  m_Window -> saveSettings();
   m_ServerThread -> shutdown();
   m_AcquisitionThread -> shutdown();
 }
@@ -140,11 +144,13 @@ void QxrdApplication::doAcquire()
 
   m_Window -> acquisitionStarted();
 
+  QString filePatt = m_Window -> filePattern();
+  int    index     = m_Window -> fileIndex();
   int    integmode = m_Window -> integrationMode();
   int    nsum      = m_Window -> nSummed();
   int    nframes   = m_Window -> nFrames();
 
-  m_AcquisitionThread -> acquire(integmode, nsum, nframes);
+  m_AcquisitionThread -> acquire(filePatt, index, integmode, nsum, nframes);
 
   m_Acquiring = true;
 }

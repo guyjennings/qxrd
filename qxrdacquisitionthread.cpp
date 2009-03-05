@@ -22,10 +22,13 @@ void QxrdAcquisitionThread::run()
 
   m_Acquisition = new QxrdAcquisition(m_Application, this);
 
-  connect(this, SIGNAL(_acquire(int,int,int)), m_Acquisition, SLOT(acquire(int,int,int)));
+  connect(this, SIGNAL(_acquire(QString,int,int,int,int)), 
+	  m_Acquisition, SLOT(acquire(QString,int,int,int,int)));
   connect(m_Acquisition, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
   connect(m_Acquisition, SIGNAL(acquireComplete()), this, SIGNAL(acquireComplete()));
-  connect(m_Acquisition, SIGNAL(acquiredFrame(int,int,int,int)), this, SIGNAL(acquiredFrame(int,int,int,int)));
+  connect(m_Acquisition, SIGNAL(acquiredFrame(QString,int,int,int,int,int)), 
+	  this, SIGNAL(acquiredFrame(QString,int,int,int,int,int)));
+  connect(m_Acquisition, SIGNAL(fileIndexChanged(int)), this, SIGNAL(fileIndexChanged(int)));
 
   m_Acquisition -> initialize();
 
@@ -41,24 +44,14 @@ void QxrdAcquisitionThread::shutdown()
   wait(1000);
 }
 
-void QxrdAcquisitionThread::readSettings()
-{
-  m_Acquisition -> readSettings();
-}
-
-void QxrdAcquisitionThread::saveSettings()
-{
-  m_Acquisition -> saveSettings();
-}
-
 void QxrdAcquisitionThread::saveData(QString name)
 {
   m_Acquisition -> saveData(name);
 }
 
-void QxrdAcquisitionThread::acquire(int integmode, int nsum, int nframes)
+void QxrdAcquisitionThread::acquire(QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
 {
-  emit _acquire(integmode, nsum, nframes);
+  emit _acquire(filePattern, fileIndex, integmode, nsum, nframes);
 }
 
 void QxrdAcquisitionThread::msleep(int msec)
@@ -76,45 +69,3 @@ QVector<double> QxrdAcquisitionThread::integrationTimes()
   return m_Acquisition -> integrationTimes();
 }
 
-int QxrdAcquisitionThread::integrationTime()
-{
-  return m_Acquisition -> integrationTime();
-}
-
-int QxrdAcquisitionThread::nSummed()
-{
-  return m_Acquisition -> nSummed();
-}
-
-int QxrdAcquisitionThread::nFrames()
-{
-  return m_Acquisition -> nFrames();
-}
-
-QString QxrdAcquisitionThread::filePattern()
-{
-}
-
-int QxrdAcquisitionThread::fileIndex()
-{
-}
-
-void QxrdAcquisitionThread::setIntegrationTime(int t)
-{
-}
-
-void QxrdAcquisitionThread::setNSummed(int nsum)
-{
-}
-
-void QxrdAcquisitionThread::setNFrames(int nframes)
-{
-}
-
-void QxrdAcquisitionThread::setFilePattern(QString patt)
-{
-}
-
-void QxrdAcquisitionThread::setFileIndex(int n)
-{
-}
