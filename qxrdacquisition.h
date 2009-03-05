@@ -36,6 +36,7 @@ class QxrdAcquisition : public QObject
   void printMessage(QString msg);
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
   void fileIndexChanged(int index);
+  void statusMessage(QString msg);
 
  public:
   void onEndFrame();

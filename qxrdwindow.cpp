@@ -46,6 +46,12 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
     m_Exposures.append(0);
   }
 
+  m_StatusMsg = new QLabel(NULL);
+  m_StatusMsg -> setMinimumWidth(200);
+  m_StatusMsg -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+  statusBar() -> addPermanentWidget(m_StatusMsg);
+
   m_Progress = new QProgressBar(NULL);
   m_Progress -> setMinimumWidth(150);
   m_Progress -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -238,4 +244,9 @@ void QxrdWindow::saveSettings()
   settings.setValue("acq/filepattern",filePattern());
   settings.setValue("acq/directory",outputDirectory());
   settings.setValue("acq/fileindex",fileIndex());
+}
+
+void QxrdWindow::statusMessage(QString msg)
+{
+  m_StatusMsg -> setText(msg);
 }

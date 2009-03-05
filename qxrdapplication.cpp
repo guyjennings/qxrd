@@ -55,6 +55,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(m_AcquisitionThread, SIGNAL(fileIndexChanged(int)),
 	  m_Window, SLOT(setFileIndex(int)));
+  connect(m_AcquisitionThread, SIGNAL(statusMessage(QString)),
+          m_Window, SLOT(statusMessage(QString)));
 
   connect(m_AcquisitionThread, SIGNAL(printMessage(QString)),
 	  this, SLOT(printMessage(QString)));

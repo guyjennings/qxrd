@@ -118,6 +118,7 @@ void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex
 
     emit printMessage(tr("QxrdAcquisition::acquire(\"%1\",\"%2\",%3,%4,%5,%6)\n")
                       .arg(outDir).arg(filePattern).arg(fileIndex).arg(integmode).arg(nsum).arg(nframes));
+    emit statusMessage("Starting acquisition");
 
     int nRet = HIS_ALL_OK;
 
@@ -192,6 +193,8 @@ void QxrdAcquisition::onEndFrame()
 
     m_Saved[m_CurrentFrame] =
         QtConcurrent::run(this, &QxrdAcquisition::saveAcquiredFrame, fileName, m_CurrentFrame);
+    emit statusMessage("Saving "+fileName);
+    emit printMessage("Saving """+fileName+"""");
 
     m_FileIndex++;
     emit fileIndexChanged(m_FileIndex);
@@ -211,10 +214,13 @@ void QxrdAcquisition::onEndAcquisition()
 
   QFuture<int> f;
 
+  emit statusMessage("Waiting for saves");
+
   foreach(f, m_Saved) {
     f.waitForFinished();
   }
 
+  emit statusMessage("Acquire Complete");
   emit acquireComplete();
 }
 

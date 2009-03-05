@@ -40,6 +40,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 
   void selectOutputDirectory();
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
+  void statusMessage(QString msg);
 
  public:
   double  exposureTime();
@@ -57,6 +58,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QxrdAcquisitionThread  *m_AcquisitionThread;
   QVector<double>         m_Exposures;
   QProgressBar           *m_Progress;
+  QLabel                 *m_StatusMsg;
 };
 
 #endif

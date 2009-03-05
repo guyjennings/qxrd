@@ -29,6 +29,7 @@ void QxrdAcquisitionThread::run()
   connect(m_Acquisition, SIGNAL(acquiredFrame(QString,int,int,int,int,int)), 
 	  this, SIGNAL(acquiredFrame(QString,int,int,int,int,int)));
   connect(m_Acquisition, SIGNAL(fileIndexChanged(int)), this, SIGNAL(fileIndexChanged(int)));
+  connect(m_Acquisition, SIGNAL(statusMessage(QString)), this, SIGNAL(statusMessage(QString)));
 
   m_Acquisition -> initialize();
 
