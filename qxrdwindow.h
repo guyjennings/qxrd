@@ -36,7 +36,9 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void setNFrames(int nframes);
   void setFileIndex(int index);
   void setFilePattern(QString pattern);
+  void setOutputDirectory(QString path);
 
+  void selectOutputDirectory();
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
 
  public:
@@ -46,6 +48,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   int     nFrames();
   int     fileIndex();
   QString filePattern();
+  QString outputDirectory();
   void readSettings();
   void saveSettings();
 

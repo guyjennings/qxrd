@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QMutex>
 #include <QVector>
+#include <QFuture>
 
 class QxrdApplication;
 class QxrdAcquisitionThread;
@@ -43,7 +44,7 @@ class QxrdAcquisition : public QObject
 
  private:
   void acquisitionError(int n);
-  void saveAcquiredFrame(QString name, int frame);
+  int saveAcquiredFrame(QString name, int frame);
 
  private:
   QxrdAcquisitionThread *m_Thread;
@@ -61,6 +62,7 @@ class QxrdAcquisition : public QObject
   int                    m_CurrentFrame;
   QVector<double>        m_AcquiredImage;
   QVector<unsigned short> m_Buffer;
+  QVector< QFuture<int> > m_Saved;
   double                 m_IntTimes[8];
   int                    m_NIntTimes;
   QString                m_FilePattern;

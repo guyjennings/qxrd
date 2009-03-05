@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QCheckBox>
 #include <QSignalMapper>
+#include <QFileDialog>
 
 QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
   : QMainWindow(parent),
@@ -28,6 +29,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
 
   connect(m_AcquireButton, SIGNAL(clicked()), m_Application, SLOT(doAcquire()));
   connect(m_CancelButton, SIGNAL(clicked()), m_Application, SLOT(doCancel()));
+  connect(m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
 
 //   m_HelpText -> setReadOnly(true);
 
@@ -154,6 +156,11 @@ void QxrdWindow::setFilePattern(QString pattern)
   m_SaveFilePattern->setText(pattern);
 }
 
+void QxrdWindow::setOutputDirectory(QString pattern)
+{
+  m_OutputDirectory->setText(pattern);
+}
+
 double  QxrdWindow::exposureTime()
 {
   int choice = m_ExposureTime->currentIndex();
@@ -186,6 +193,19 @@ QString QxrdWindow::filePattern()
   return m_SaveFilePattern->text();
 }
 
+QString QxrdWindow::outputDirectory()
+{
+  return m_OutputDirectory->text();
+}
+
+void QxrdWindow::selectOutputDirectory()
+{
+  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", outputDirectory());
+  if (dir.length()) {
+    setOutputDirectory(dir);
+  }
+}
+
 void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int nsum, int iframe, int nframe)
 {
   int totalframes = nsum*nframe;
@@ -204,6 +224,7 @@ void QxrdWindow::readSettings()
   setNSummed(settings.value("acq/nsums",1).toInt());
   setNFrames(settings.value("acq/nframes",1).toInt());
   setFilePattern(settings.value("acq/filepattern","saveddata").toString());
+  setOutputDirectory(settings.value("acq/directory","").toString());
   setFileIndex(settings.value("acq/fileindex",1).toInt());
 }
 
@@ -215,5 +236,6 @@ void QxrdWindow::saveSettings()
   settings.setValue("acq/nsums",nSummed());
   settings.setValue("acq/nframes",nFrames());
   settings.setValue("acq/filepattern",filePattern());
+  settings.setValue("acq/directory",outputDirectory());
   settings.setValue("acq/fileindex",fileIndex());
 }

@@ -13,6 +13,7 @@
 #include "Acq.h"
 #include <QThread>
 #include <QFile>
+#include <QtConcurrentRun>
 
 static QxrdAcquisition *g_Acquisition = NULL;
 
@@ -131,7 +132,9 @@ void QxrdAcquisition::acquire(QString filePattern, int fileIndex, int integmode,
     m_AcquiredImage.fill(0);
     m_Buffer.resize(m_NRows*m_NCols*m_NBufferFrames);
     m_Buffer.fill(0);
-  
+    m_Saved.resize(m_NFrames);
+    m_Saved.fill(QFuture<int>());
+
     if ((nRet=Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
 						  0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
       acquisitionError(nRet);
@@ -185,7 +188,8 @@ void QxrdAcquisition::onEndFrame()
   if (m_CurrentSum >= m_NSums) {
     m_CurrentSum = 0;
 
-    saveAcquiredFrame(fileName, m_CurrentFrame);
+    m_Saved[m_CurrentFrame] =
+        QtConcurrent::run(this, &QxrdAcquisition::saveAcquiredFrame, fileName, m_CurrentFrame);
 
     m_FileIndex++;
     emit fileIndexChanged(m_FileIndex);
@@ -264,7 +268,13 @@ void QxrdAcquisition::saveData(QString name)
   outfile.write((const char*) current, npixels*sizeof(double));
 }
 
-void QxrdAcquisition::saveAcquiredFrame(QString name, int frame)
+int QxrdAcquisition::saveAcquiredFrame(QString name, int frame)
 {
+  long npixels = m_NRows*m_NCols;
+  double* current = m_AcquiredImage.data()+frame*npixels;
+
+  QFile outfile(name);
+  outfile.open(QIODevice::ReadWrite);
+  outfile.write((const char*) current, npixels*sizeof(double));
 }
 
