@@ -82,6 +82,8 @@ HIS_RETURN Acquisition_Acquire_Image(HACQDESC pAcqDesc, UINT dwFrames, UINT dwSk
 	endFrameCallback(pAcqDesc);
       }
     }
+
+    endAcqCallback(pAcqDesc);
   }
 
   return HIS_ALL_OK;

@@ -172,9 +172,11 @@ void QxrdAcquisition::onEndFrame()
   // sum current frame
 
   long npixels = m_NRows*m_NCols;
-  double* current = m_AcquiredImage.data();
+  double* current = m_AcquiredImage.data() + m_CurrentFrame*npixels;
   unsigned short* frame = m_Buffer.data() + m_BufferFrame*npixels;
   unsigned short max=0;
+
+//   printf("m_AcquiredImage.data() = %p\n", current);
 
   for (long i=0; i<npixels; i++) {
     *current += *frame;
@@ -298,6 +300,9 @@ int QxrdAcquisition::saveAcquiredFrame(QString name, int frame)
 
 QxrdRasterData QxrdAcquisition::imageRaster(int iframe)
 {
+//   printf("QxrdAcquisition::imageRaster(%d)\n", iframe);
+//   printf("  m_AcquiredImage.data() = %p\n", m_AcquiredImage.data());
+
   if (iframe >= 0 && iframe < m_CurrentFrame) {
     emit printMessage(tr("QxrdAcquisition::imageRaster(%1)=QxrdRasterData(%2,%3,%4,%5)")
                       .arg(iframe)
