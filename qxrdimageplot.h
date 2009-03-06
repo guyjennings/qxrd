@@ -20,9 +20,23 @@ class QxrdImagePlot : public QwtPlot
  public slots:
   void autoScale();
 
+  void set005Range();
+  void set010Range();
+  void set100Range();
+  void setDisplayedRange(double min, double max);
+
+  void setGrayscale();
+  void setInverseGrayscale();
+  void setEarthTones();
+  void setSpectrum();
+  void setFire();
+
  public:
   void setImage(QxrdRasterData data);
   QxrdRasterData* raster();
+
+ private:
+  void changedColorMap();
 
  private:
   QwtPlotZoomer       *m_Zoomer;

@@ -31,6 +31,16 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
   connect(m_CancelButton, SIGNAL(clicked()), m_Application, SLOT(doCancel()));
   connect(m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
 
+  connect(m_Action005Range, SIGNAL(triggered()), m_Plot, SLOT(set005Range()));
+  connect(m_Action010Range, SIGNAL(triggered()), m_Plot, SLOT(set010Range()));
+  connect(m_Action100Range, SIGNAL(triggered()), m_Plot, SLOT(set100Range()));
+
+  connect(m_ActionGrayscale, SIGNAL(triggered()), m_Plot, SLOT(setGrayscale()));
+  connect(m_ActionInverseGrayscale, SIGNAL(triggered()), m_Plot, SLOT(setInverseGrayscale()));
+  connect(m_ActionEarthTones, SIGNAL(triggered()), m_Plot, SLOT(setEarthTones()));
+  connect(m_ActionSpectrum, SIGNAL(triggered()), m_Plot, SLOT(setSpectrum()));
+  connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()));
+
 //   m_HelpText -> setReadOnly(true);
 
 //   QFile file(":/qavrghelptext.html");

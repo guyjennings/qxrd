@@ -48,6 +48,107 @@ void QxrdImagePlot::autoScale()
   m_Zoomer -> setZoomBase();
 }
 
+void QxrdImagePlot::set005Range()
+{
+  double mn = m_Raster.minValue();
+  double mx = m_Raster.maxValue();
+
+  setDisplayedRange(mn, mn+(mx-mn)*0.05);
+}
+
+void QxrdImagePlot::set010Range()
+{
+  double mn = m_Raster.minValue();
+  double mx = m_Raster.maxValue();
+
+  setDisplayedRange(mn, mn+(mx-mn)*0.1);
+}
+
+void QxrdImagePlot::set100Range()
+{
+  double mn = m_Raster.minValue();
+  double mx = m_Raster.maxValue();
+
+  setDisplayedRange(mn, mn+(mx-mn)*1.0);
+}
+
+void QxrdImagePlot::setDisplayedRange(double min, double max)
+{
+  m_Raster.setDisplayedRange(min, max);
+  m_Spectrogram -> setData(m_Raster);
+
+  m_Spectrogram -> invalidateCache();
+  m_Spectrogram -> itemChanged();
+
+  QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
+  setAxisScale(QwtPlot::yRight, min, max);
+  rightAxis -> setColorBarEnabled(true);
+  rightAxis -> setColorMap(m_Spectrogram->data().range(),
+                           m_Spectrogram->colorMap());
+
+  replot();
+}
+
+void QxrdImagePlot::setGrayscale()
+{
+  m_ColorMap.setColorInterval(Qt::black, Qt::white);
+
+  changedColorMap();
+}
+
+void QxrdImagePlot::setInverseGrayscale()
+{
+  m_ColorMap.setColorInterval(Qt::white, Qt::black);
+
+  changedColorMap();
+}
+
+void QxrdImagePlot::setEarthTones()
+{
+  m_ColorMap.setColorInterval(Qt::black, Qt::white);
+  m_ColorMap.addColorStop(0.15, Qt::blue);
+  m_ColorMap.addColorStop(0.25, Qt::gray);
+  m_ColorMap.addColorStop(0.35, Qt::green);
+  m_ColorMap.addColorStop(0.5, Qt::darkYellow);
+  m_ColorMap.addColorStop(0.85, Qt::darkMagenta);
+
+  changedColorMap();
+}
+
+void QxrdImagePlot::setSpectrum()
+{
+  m_ColorMap.setColorInterval(Qt::magenta, Qt::red);
+  m_ColorMap.addColorStop(0.2, Qt::blue);
+  m_ColorMap.addColorStop(0.4, Qt::cyan);
+  m_ColorMap.addColorStop(0.6, Qt::green);
+  m_ColorMap.addColorStop(0.8, Qt::yellow);
+
+  changedColorMap();
+}
+
+void QxrdImagePlot::setFire()
+{
+  m_ColorMap.setColorInterval(Qt::black, Qt::white);
+  m_ColorMap.addColorStop(0.25, Qt::red);
+  m_ColorMap.addColorStop(0.75, Qt::yellow);
+
+  changedColorMap();
+}
+
+void QxrdImagePlot::changedColorMap()
+{
+  m_Spectrogram -> setColorMap(m_ColorMap);
+  m_Spectrogram -> invalidateCache();
+  m_Spectrogram -> itemChanged();
+
+  QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
+  rightAxis -> setColorBarEnabled(true);
+  rightAxis -> setColorMap(m_Spectrogram->data().range(),
+                           m_Spectrogram->colorMap());
+
+  replot();
+}
+
 void QxrdImagePlot::setImage(QxrdRasterData data)
 {
   m_Raster = data;

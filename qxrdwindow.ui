@@ -393,9 +393,26 @@
     </property>
     <addaction name="m_ActionAcquire"/>
    </widget>
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <addaction name="m_ActionAutoScale"/>
+    <addaction name="separator"/>
+    <addaction name="m_Action005Range"/>
+    <addaction name="m_Action010Range"/>
+    <addaction name="m_Action100Range"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionGrayscale"/>
+    <addaction name="m_ActionInverseGrayscale"/>
+    <addaction name="m_ActionEarthTones"/>
+    <addaction name="m_ActionSpectrum"/>
+    <addaction name="m_ActionFire"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuAcquire"/>
+   <addaction name="menuDisplay"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -414,6 +431,7 @@
    <addaction name="m_ActionLoadData"/>
    <addaction name="m_ActionSaveData"/>
    <addaction name="m_ActionAutoScale"/>
+   <addaction name="m_Action010Range"/>
    <addaction name="m_ActionQuit"/>
   </widget>
   <action name="m_ActionQuit">
@@ -454,6 +472,49 @@
   <action name="m_ActionCancel">
    <property name="text">
     <string>Cancel</string>
+   </property>
+  </action>
+  <action name="m_ActionGrayscale">
+   <property name="text">
+    <string>Grayscale</string>
+   </property>
+  </action>
+  <action name="m_ActionInverseGrayscale">
+   <property name="text">
+    <string>Inverse Grayscale</string>
+   </property>
+   <property name="toolTip">
+    <string>Inverse Grayscale</string>
+   </property>
+  </action>
+  <action name="m_ActionEarthTones">
+   <property name="text">
+    <string>Earth Tones</string>
+   </property>
+  </action>
+  <action name="m_ActionSpectrum">
+   <property name="text">
+    <string>Spectrum</string>
+   </property>
+  </action>
+  <action name="m_ActionFire">
+   <property name="text">
+    <string>Fire</string>
+   </property>
+  </action>
+  <action name="m_Action010Range">
+   <property name="text">
+    <string>10 % Range</string>
+   </property>
+  </action>
+  <action name="m_Action005Range">
+   <property name="text">
+    <string>5 % Range</string>
+   </property>
+  </action>
+  <action name="m_Action100Range">
+   <property name="text">
+    <string>100% Range</string>
    </property>
   </action>
  </widget>

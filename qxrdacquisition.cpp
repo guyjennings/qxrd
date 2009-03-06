@@ -309,8 +309,8 @@ QxrdRasterData QxrdAcquisition::imageRaster(int iframe)
                       .arg((long)m_AcquiredImage.data(),8,16,QChar('0'))
                       .arg(iframe*m_NRows*m_NCols).arg(m_NRows).arg(m_NCols));
 
-    return QxrdRasterData(m_AcquiredImage, iframe*m_NRows*m_NCols, m_NRows, m_NCols);
+    return QxrdRasterData(&m_AcquiredImage, iframe*m_NRows*m_NCols, m_NRows, m_NCols);
   } else {
-    return QxrdRasterData(m_AcquiredImage, 0, m_NRows, m_NCols);
+    return QxrdRasterData(&m_AcquiredImage, 0, m_NRows, m_NCols);
   }
 }
