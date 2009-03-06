@@ -129,7 +129,7 @@ win32{
   LIBS += XISL.lib
 }
 
-QMAKE_EXTRA_TARGETS += dox rpmsource mock
+QMAKE_EXTRA_TARGETS += dox rpmsource mock website
 
 dox.target = docs
 dox.commands += doxygen
@@ -141,3 +141,5 @@ rpmsource.depends = $${DISTFILES} $${SOURCES} $${FORMS} $${HEADERS} $${RESOURCES
 
 mock.commands += mock-build qxrd.spec
 mock.depends = rpmsource ~/rpmbuild/SOURCES/qxrd@VERSION@.tar.gz qxrd.spec
+
+website.commands =  rsync -e ssh -avx dox/html/ www12.xor.aps.anl.gov:/var/www/html/software/qxrd/
