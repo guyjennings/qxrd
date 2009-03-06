@@ -2,6 +2,7 @@
 #include "qxrdapplication.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdsettings.h"
+#include "qxrdimageplot.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -16,11 +17,19 @@
 
 QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
   : QMainWindow(parent),
+    m_SettingsLoaded(false),
     m_Application(app),
     m_AcquisitionThread(NULL),
     m_Progress(NULL)
 {
   setupUi(this);
+
+  setupConnections();
+}
+
+void QxrdWindow::setupConnections()
+{
+  m_Plot -> setTitle(tr("Hello m_Plot(%1) m_Application(%2)").arg(long(m_Plot)).arg(long(m_Application)));
 
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(quit()));
@@ -40,7 +49,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
   connect(m_ActionEarthTones, SIGNAL(triggered()), m_Plot, SLOT(setEarthTones()));
   connect(m_ActionSpectrum, SIGNAL(triggered()), m_Plot, SLOT(setSpectrum()));
   connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()));
-
+  connect(m_FireButton, SIGNAL(clicked()), m_Plot, SLOT(setFire()));
+  connect(m_ActionGrayscale, SIGNAL(triggered()), this, SLOT(test()));
 //   m_HelpText -> setReadOnly(true);
 
 //   QFile file(":/qavrghelptext.html");
@@ -73,7 +83,9 @@ QxrdWindow::~QxrdWindow()
 {
   printf("QxrdWindow::~QxrdWindow()\n");
 
-  saveSettings();
+  if (m_SettingsLoaded) {
+    saveSettings();
+  }
 }
 
 void QxrdWindow::setAcquisitionThread(QxrdAcquisitionThread *acq)
@@ -252,6 +264,8 @@ void QxrdWindow::readSettings()
   setFilePattern(settings.value("acq/filepattern","saveddata").toString());
   setOutputDirectory(settings.value("acq/directory","").toString());
   setFileIndex(settings.value("acq/fileindex",1).toInt());
+
+  m_SettingsLoaded = true;
 }
 
 void QxrdWindow::saveSettings()
@@ -269,4 +283,10 @@ void QxrdWindow::saveSettings()
 void QxrdWindow::statusMessage(QString msg)
 {
   m_StatusMsg -> setText(msg);
+}
+
+void QxrdWindow::test()
+{
+  m_Plot -> setTitle("This is a test");
+  m_Plot -> setInverseGrayscale();
 }

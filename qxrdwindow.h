@@ -44,6 +44,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void statusMessage(QString msg);
   void summedFrameCompleted(QString filename, int iframe);
 
+  void test();
+
  public:
   double  exposureTime();
   int     integrationMode();
@@ -56,6 +58,10 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void saveSettings();
 
  private:
+  void setupConnections();
+
+ private:
+  int                     m_SettingsLoaded;
   QxrdApplication        *m_Application;
   QxrdAcquisitionThread  *m_AcquisitionThread;
   QVector<double>         m_Exposures;

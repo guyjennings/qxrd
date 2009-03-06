@@ -74,6 +74,8 @@ void QxrdImagePlot::set100Range()
 
 void QxrdImagePlot::setDisplayedRange(double min, double max)
 {
+  setTitle(tr("Displayed Range %1 to %2").arg(min).arg(max));
+
   m_Raster.setDisplayedRange(min, max);
   m_Spectrogram -> setData(m_Raster);
 
@@ -91,6 +93,8 @@ void QxrdImagePlot::setDisplayedRange(double min, double max)
 
 void QxrdImagePlot::setGrayscale()
 {
+  setTitle("Grayscale");
+
   m_ColorMap.setColorInterval(Qt::black, Qt::white);
 
   changedColorMap();
