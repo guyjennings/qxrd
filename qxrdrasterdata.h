@@ -7,6 +7,7 @@ class QxrdRasterData : public QwtRasterData
 {
  public:
   QxrdRasterData(QVector<double> img, int offset, int nrows, int ncols);
+  QxrdRasterData();
 
   double value(double x, double y) const;
   QxrdRasterData* copy() const;

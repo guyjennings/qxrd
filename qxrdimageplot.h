@@ -8,7 +8,7 @@ class QwtPlotZoomer;
 class QwtLegend;
 class QwtPlotSpectrogram;
 
-class QxrdRasterData;
+#include "qxrdrasterdata.h"
 
 class QxrdImagePlot : public QwtPlot
 {
@@ -22,12 +22,13 @@ class QxrdImagePlot : public QwtPlot
 
  public:
   void setImage(QxrdRasterData data);
+  QxrdRasterData* raster();
 
  private:
   QwtPlotZoomer       *m_Zoomer;
   QwtLegend           *m_Legend;
   QwtPlotSpectrogram  *m_Spectrogram;
-  QxrdRasterData      *m_Raster;
+  QxrdRasterData       m_Raster;
   QwtLinearColorMap    m_ColorMap;
 };
 

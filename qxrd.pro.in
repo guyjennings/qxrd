@@ -32,6 +32,7 @@ HEADERS = \
 	qxrdrasterdata.h \
 	qxrdwindow.h \
 	qxrdimageplot.h \
+        qxrdplotzoomer.h \
 	qxrdserverthread.h \
 	qxrdserver.h \
 	qxrdspecserver.h \
@@ -51,6 +52,7 @@ SOURCES = \
 	qxrdrasterdata.cpp \
 	qxrdwindow.cpp \
 	qxrdimageplot.cpp \
+        qxrdplotzoomer.cpp \
 	qxrdserverthread.cpp \
 	qxrdserver.cpp \
 	qxrdspecserver.cpp \

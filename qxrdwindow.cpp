@@ -225,9 +225,11 @@ void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int ns
 void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
 {
   QxrdRasterData data = m_AcquisitionThread->imageRaster(iframe);
+  QFileInfo fileInfo(fileName);
 
   m_Plot -> setImage(data);
-  m_Plot -> setTitle(fileName);
+  m_Plot -> setTitle(fileInfo.fileName());
+  m_Plot -> autoScale();
 }
 
 void QxrdWindow::readSettings()

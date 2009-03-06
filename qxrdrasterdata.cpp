@@ -1,11 +1,22 @@
 #include "qxrdrasterdata.h"
 
 QxrdRasterData::QxrdRasterData(QVector<double> img, int offset, int nrows, int ncols)
-  : m_Data(img),
+  : QwtRasterData(QwtDoubleRect(0,0,ncols,nrows)),
+    m_Data(img),
     m_Offset(offset),
     m_NRows(nrows),
     m_NCols(ncols),
-    m_Range(0,1000),
+    m_Range(40000,48000),
+    m_Interpolate(0)
+{
+}
+
+QxrdRasterData::QxrdRasterData()
+  : QwtRasterData(),
+    m_Offset(0),
+    m_NRows(0),
+    m_NCols(0),
+    m_Range(0,1),
     m_Interpolate(0)
 {
 }
