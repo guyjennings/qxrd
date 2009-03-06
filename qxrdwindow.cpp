@@ -222,6 +222,14 @@ void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int ns
   m_Progress -> setValue(thisframe*100/totalframes);
 }
 
+void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
+{
+  QxrdRasterData data = m_AcquisitionThread->imageRaster(iframe);
+
+  m_Plot -> setImage(data);
+  m_Plot -> setTitle(fileName);
+}
+
 void QxrdWindow::readSettings()
 {
   QxrdSettings settings;

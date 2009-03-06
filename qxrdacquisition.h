@@ -6,6 +6,8 @@
 #include <QVector>
 #include <QFuture>
 
+#include "qxrdrasterdata.h"
+
 class QxrdApplication;
 class QxrdAcquisitionThread;
 
@@ -37,11 +39,13 @@ class QxrdAcquisition : public QObject
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
   void fileIndexChanged(int index);
   void statusMessage(QString msg);
+  void summedFrameCompleted(QString fileName, int iframe);
 
  public:
   void onEndFrame();
   void onEndAcquisition();
   QVector<double> integrationTimes();
+  QxrdRasterData imageRaster(int iframe);
 
  private:
   void acquisitionError(int n);

@@ -3,18 +3,20 @@
 
 #include <qwt_raster_data.h>
 
-class QxrdImageData;
-
 class QxrdRasterData : public QwtRasterData
 {
  public:
-  QxrdRasterData(QxrdImageData *img);
+  QxrdRasterData(QVector<double> img, int offset, int nrows, int ncols);
 
   double value(double x, double y) const;
-  
+  QxrdRasterData* copy() const;
+  QwtDoubleInterval range() const;
 
  private:
-  QxrdImageData     *m_Image;
+  QVector<double>    m_Data;
+  int                m_Offset;
+  int                m_NRows;
+  int                m_NCols;
   QwtDoubleInterval  m_Range;
   int                m_Interpolate;
 };

@@ -1,12 +1,17 @@
 #include "qxrdimageplot.h"
+#include "qxrdrasterdata.h"
 
 #include <qwt_plot_zoomer.h>
 #include <qwt_legend.h>
+#include <qwt_plot_spectrogram.h>
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QwtPlot(parent),
     m_Zoomer(NULL),
-    m_Legend(NULL)
+    m_Legend(NULL),
+    m_Spectrogram(NULL),
+    m_Raster(NULL),
+    m_ColorMap(Qt::black, Qt::white)
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -25,6 +30,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_Legend -> setItemMode(QwtLegend::CheckableItem);
 
   insertLegend(m_Legend, QwtPlot::BottomLegend);
+
+  m_Spectrogram = new QwtPlotSpectrogram();
+  m_Spectrogram -> attach(this);
 }
 
 void QxrdImagePlot::autoScale()
@@ -35,4 +43,12 @@ void QxrdImagePlot::autoScale()
   replot();
 
   m_Zoomer -> setZoomBase();
+}
+
+void QxrdImagePlot::setImage(QxrdRasterData data)
+{
+  m_Spectrogram -> setData(data);
+  m_Spectrogram -> setColorMap(m_ColorMap);
+  m_Spectrogram -> invalidateCache();
+  m_Spectrogram -> itemChanged();
 }

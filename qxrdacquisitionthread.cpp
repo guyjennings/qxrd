@@ -28,6 +28,8 @@ void QxrdAcquisitionThread::run()
   connect(m_Acquisition, SIGNAL(acquireComplete()), this, SIGNAL(acquireComplete()));
   connect(m_Acquisition, SIGNAL(acquiredFrame(QString,int,int,int,int,int)), 
 	  this, SIGNAL(acquiredFrame(QString,int,int,int,int,int)));
+  connect(m_Acquisition, SIGNAL(summedFrameCompleted(QString,int)),
+	  this, SIGNAL(summedFrameCompleted(QString,int)));
   connect(m_Acquisition, SIGNAL(fileIndexChanged(int)), this, SIGNAL(fileIndexChanged(int)));
   connect(m_Acquisition, SIGNAL(statusMessage(QString)), this, SIGNAL(statusMessage(QString)));
 
@@ -70,3 +72,7 @@ QVector<double> QxrdAcquisitionThread::integrationTimes()
   return m_Acquisition -> integrationTimes();
 }
 
+QxrdRasterData QxrdAcquisitionThread::imageRaster(int iframe)
+{
+  return m_Acquisition -> imageRaster(iframe);
+}

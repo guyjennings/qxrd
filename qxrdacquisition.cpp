@@ -195,6 +195,7 @@ void QxrdAcquisition::onEndFrame()
         QtConcurrent::run(this, &QxrdAcquisition::saveAcquiredFrame, fileName, m_CurrentFrame);
     emit statusMessage("Saving "+fileName);
     emit printMessage("Saving """+fileName+"""");
+    emit summedFrameCompleted(fileName, m_CurrentFrame);
 
     m_FileIndex++;
     emit fileIndexChanged(m_FileIndex);
@@ -295,3 +296,11 @@ int QxrdAcquisition::saveAcquiredFrame(QString name, int frame)
   return 1;
 }
 
+QxrdRasterData QxrdAcquisition::imageRaster(int iframe)
+{
+  if (iframe >= 0 && iframe < m_CurrentFrame) {
+    return QxrdRasterData(m_AcquiredImage, iframe*m_NRows*m_NCols, m_NRows, m_NCols);
+  } else {
+    return QxrdRasterData(m_AcquiredImage, 0, m_NRows, m_NCols);
+  }
+}

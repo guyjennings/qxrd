@@ -7,6 +7,7 @@
 
 class QxrdApplication;
 class QxrdAcquisitionThread;
+class QwtPlotSpectrogram;
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -41,6 +42,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void selectOutputDirectory();
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
   void statusMessage(QString msg);
+  void summedFrameCompleted(QString filename, int iframe);
 
  public:
   double  exposureTime();
