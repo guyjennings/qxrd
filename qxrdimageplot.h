@@ -1,10 +1,15 @@
 #ifndef QXRDIMAGEPLOT_H
 #define QXRDIMAGEPLOT_H
 
+#include <QObject>
+
 #include <qwt_plot.h>
 #include <qwt_color_map.h>
 
-class QwtPlotZoomer;
+class QxrdPlotZoomer;
+class QxrdPlotTracker;
+class QwtPlotPanner;
+class QwtPlotMagnifier;
 class QwtLegend;
 class QwtPlotSpectrogram;
 
@@ -39,7 +44,10 @@ class QxrdImagePlot : public QwtPlot
   void changedColorMap();
 
  private:
-  QwtPlotZoomer       *m_Zoomer;
+  QxrdPlotTracker     *m_Tracker;
+  QxrdPlotZoomer      *m_Zoomer;
+  QwtPlotPanner       *m_Panner;
+  QwtPlotMagnifier    *m_Magnifier;
   QwtLegend           *m_Legend;
   QwtPlotSpectrogram  *m_Spectrogram;
   QxrdRasterData       m_Raster;

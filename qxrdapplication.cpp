@@ -32,6 +32,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_AcquisitionThread = new QxrdAcquisitionThread(this);
   connect(m_AcquisitionThread, SIGNAL(acquisitionRunning()), this, SLOT(acquisitionRunning()));
+  connect(m_AcquisitionThread, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
+
   m_AcquisitionThread -> start();
 
   m_ServerThread = new QxrdServerThread(this, m_AcquisitionThread);
@@ -61,8 +63,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   connect(m_AcquisitionThread, SIGNAL(statusMessage(QString)),
           m_Window, SLOT(statusMessage(QString)));
 
-  connect(m_AcquisitionThread, SIGNAL(printMessage(QString)),
-	  this, SLOT(printMessage(QString)));
 
   connect(m_Window->m_ActionAcquire, SIGNAL(triggered()),
           this, SLOT(doAcquire()));
@@ -181,5 +181,14 @@ void QxrdApplication::saveData()
 
   if (theFile.length()) {
     m_AcquisitionThread -> saveData(theFile);
+  }
+}
+
+void QxrdApplication::loadData()
+{
+  QString theFile = QFileDialog::getOpenFileName(m_Window, "Load Image from...");
+
+  if (theFile.length()) {
+    m_AcquisitionThread -> loadData(theFile);
   }
 }

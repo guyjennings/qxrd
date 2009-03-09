@@ -30,10 +30,10 @@ double QxrdRasterData::value(double x, double y) const
      int ix = x, iy = y;
      double dx = x-ix, dy = y-iy;
 
-     double f00 = m_Data->at(m_Offset+(ix)   + (iy)*m_NCols);
-     double f10 = m_Data->at(m_Offset+(ix+1) + (iy)*m_NCols);
-     double f01 = m_Data->at(m_Offset+(ix)   + (iy+1)*m_NCols);
-     double f11 = m_Data->at(m_Offset+(ix+1) + (iy+1)*m_NCols);
+     double f00 = m_Data->value(m_Offset+(ix)   + (iy)*m_NCols);
+     double f10 = m_Data->value(m_Offset+(ix+1) + (iy)*m_NCols);
+     double f01 = m_Data->value(m_Offset+(ix)   + (iy+1)*m_NCols);
+     double f11 = m_Data->value(m_Offset+(ix+1) + (iy+1)*m_NCols);
 
      double f0 = f00*(1-dx)+f10*dx;
      double f1 = f01*(1-dx)+f11*dx;
@@ -42,7 +42,7 @@ double QxrdRasterData::value(double x, double y) const
 
      return f;
    } else {
-     return m_Data->at(m_Offset+((int) x) + ((int) y)*m_NCols);
+     return m_Data->value(m_Offset+((int) x) + ((int) y)*m_NCols);
    }
 }
 
@@ -63,30 +63,42 @@ void QxrdRasterData::setDisplayedRange(double min, double max)
 
 double QxrdRasterData::minValue()
 {
-  double *data = m_Data->data()+m_Offset;
+  //  double *data = m_Data->data()+m_Offset;
   int npixels = m_NRows*m_NCols;
-  double min=data[0];
 
-  for (int i=1; i<npixels; i++) {
-    if(data[i]<min) {
-      min = data[i];
+  if (m_Data) {
+    double min=m_Data->value(m_Offset);
+
+    for (int i=1; i<npixels; i++) {
+      double val = m_Data->value(m_Offset+i);
+      if(val<min) {
+        min = val;
+      }
     }
-  }
 
-  return min;
+    return min;
+  } else {
+    return 0;
+  }
 }
 
 double QxrdRasterData::maxValue()
 {
-  double *data = m_Data->data()+m_Offset;
+  //  double *data = m_Data->data()+m_Offset;
   int npixels = m_NRows*m_NCols;
-  double max=data[0];
+  if (m_Data) {
+    double max=m_Data->value(m_Offset);
+    //  double max=data[0];
 
-  for (int i=1; i<npixels; i++) {
-    if(data[i]>max) {
-      max = data[i];
+    for (int i=1; i<npixels; i++) {
+      double val = m_Data->value(m_Offset+i);
+      if(val>max) {
+        max = val;
+      }
     }
-  }
 
-  return max;
+    return max;
+  } else {
+    return 0;
+  }
 }

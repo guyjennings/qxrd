@@ -5,7 +5,7 @@ QxrdPlotZoomer::QxrdPlotZoomer(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
   : QwtPlotZoomer(canvas),
     m_Plot(plot)
 {
-  setTrackerMode(QwtPicker::AlwaysOn);
+  setTrackerMode(QwtPicker::ActiveOnly);
   setTrackerPen(QPen(Qt::green));
 }
 

@@ -29,9 +29,17 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
 
 void QxrdWindow::setupConnections()
 {
-  m_Plot -> setTitle(tr("Hello m_Plot(%1) m_Application(%2)").arg(long(m_Plot)).arg(long(m_Application)));
+  m_Plot -> setTitle(tr("Hello this(%1) m_Plot(%2)").arg(long(this->thread())).arg(long(m_Plot->thread())));
 
-  connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
+  /*
+    I would like to connect several of these signals directly to m_Plot,
+    e.g.
+    connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
+    but for some reason this does not work in qt4.4.x/mingw/win32 so I am using
+    a two step call instead.
+    */
+
+  connect(m_ActionAutoScale, SIGNAL(triggered()), this, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(quit()));
   connect(m_ActionLoadData, SIGNAL(triggered()), m_Application, SLOT(loadData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), m_Application, SLOT(saveData()));
@@ -39,6 +47,16 @@ void QxrdWindow::setupConnections()
   connect(m_AcquireButton, SIGNAL(clicked()), m_Application, SLOT(doAcquire()));
   connect(m_CancelButton, SIGNAL(clicked()), m_Application, SLOT(doCancel()));
   connect(m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
+
+//  connect(m_Action005Range, SIGNAL(triggered()), this, SLOT(set005Range()));
+//  connect(m_Action010Range, SIGNAL(triggered()), this, SLOT(set010Range()));
+//  connect(m_Action100Range, SIGNAL(triggered()), this, SLOT(set100Range()));
+//
+//  connect(m_ActionGrayscale, SIGNAL(triggered()), this, SLOT(setGrayscale()));
+//  connect(m_ActionInverseGrayscale, SIGNAL(triggered()), this, SLOT(setInverseGrayscale()));
+//  connect(m_ActionEarthTones, SIGNAL(triggered()), this, SLOT(setEarthTones()));
+//  connect(m_ActionSpectrum, SIGNAL(triggered()), this, SLOT(setSpectrum()));
+//  connect(m_ActionFire, SIGNAL(triggered()), this, SLOT(setFire()), Qt::DirectConnection);
 
   connect(m_Action005Range, SIGNAL(triggered()), m_Plot, SLOT(set005Range()));
   connect(m_Action010Range, SIGNAL(triggered()), m_Plot, SLOT(set010Range()));
@@ -48,10 +66,9 @@ void QxrdWindow::setupConnections()
   connect(m_ActionInverseGrayscale, SIGNAL(triggered()), m_Plot, SLOT(setInverseGrayscale()));
   connect(m_ActionEarthTones, SIGNAL(triggered()), m_Plot, SLOT(setEarthTones()));
   connect(m_ActionSpectrum, SIGNAL(triggered()), m_Plot, SLOT(setSpectrum()));
-  connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()));
-  connect(m_FireButton, SIGNAL(clicked()), m_Plot, SLOT(setFire()));
-  connect(m_ActionGrayscale, SIGNAL(triggered()), this, SLOT(test()));
-//   m_HelpText -> setReadOnly(true);
+  connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()), Qt::DirectConnection);
+
+  //   m_HelpText -> setReadOnly(true);
 
 //   QFile file(":/qavrghelptext.html");
 
@@ -151,7 +168,7 @@ void QxrdWindow::setExposureTime(double t)
   int best=0;
 
   for (int i=1; i<8; i++) {
-    if (fabs(t-m_Exposures.at(i)) < fabs(t-m_Exposures.at(best))) {
+    if (fabs(t-m_Exposures.value(i)) < fabs(t-m_Exposures.value(best))) {
       best = i;
     }
   }
@@ -193,7 +210,7 @@ double  QxrdWindow::exposureTime()
 {
   int choice = m_ExposureTime->currentIndex();
 
-  return m_Exposures.at(choice);
+  return m_Exposures.value(choice);
 }
 
 int     QxrdWindow::integrationMode()
@@ -289,4 +306,58 @@ void QxrdWindow::test()
 {
   m_Plot -> setTitle("This is a test");
   m_Plot -> setInverseGrayscale();
+}
+
+void QxrdWindow::autoScale()
+{
+  m_Plot -> autoScale();
+}
+
+/*
+  The following routines are needed to get round a problem with qt4.4.x on windows.
+*/
+
+void QxrdWindow::set005Range()
+{
+  m_Plot -> set005Range();
+}
+
+void QxrdWindow::set010Range()
+{
+  m_Plot -> set010Range();
+}
+
+void QxrdWindow::set100Range()
+{
+  m_Plot -> set100Range();
+}
+
+void QxrdWindow::setDisplayedRange(double min, double max)
+{
+  m_Plot -> setDisplayedRange(min, max);
+}
+
+void QxrdWindow::setGrayscale()
+{
+  m_Plot -> setGrayscale();
+}
+
+void QxrdWindow::setInverseGrayscale()
+{
+  m_Plot -> setInverseGrayscale();
+}
+
+void QxrdWindow::setEarthTones()
+{
+  m_Plot -> setEarthTones();
+}
+
+void QxrdWindow::setSpectrum()
+{
+  m_Plot -> setSpectrum();
+}
+
+void QxrdWindow::setFire()
+{
+  m_Plot -> setFire();
 }

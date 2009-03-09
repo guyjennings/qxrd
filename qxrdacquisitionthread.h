@@ -35,6 +35,7 @@ class QxrdAcquisitionThread : public QThread
   void acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
   void cancel();
   void saveData(QString name);
+  void loadData(QString name);
 
  public:
   QxrdRasterData imageRaster(int iframe);

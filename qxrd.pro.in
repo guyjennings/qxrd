@@ -1,4 +1,7 @@
 TEMPLATE = app
+
+include("qxrdconfig.pri")
+
 CONFIG += qt
 
 VERSION = @VERSION@
@@ -9,55 +12,109 @@ QT += network script
 
 MOC_DIR = moc
 UI_DIR  = ui
-OBJECTS_DIR = obj
+OBJECTS_DIR = obj$${SUFFIX_STR}
 RCC_DIR = rcc
 
-TARGET = qxrd
+TARGET = qxrd$${SUFFIX_STR}
 
 RESOURCES += qxrdhelptext.qrc 
 
 DISTFILES += qxrdhelptext.html
 
-INCLUDEPATH += ../qceplib/
+INCLUDEPATH += ../qceplib/ tiff-3.8.2/libtiff/
 
-HEADERS = \
+win32 {
+  HEADERS += \
+        tif_config.h \
+        tiffconf.h \
+        tiff-3.8.2/libtiff/tiff.h \
+        tiff-3.8.2/libtiff/tiffio.h \
+        tiff-3.8.2/libtiff/tiffiop.h \
+        tiff-3.8.2/libtiff/tiffvers.h \
+        tiff-3.8.2/libtiff/uvcode.h \
+        tiff-3.8.2/libtiff/tif_dir.h \
+        tiff-3.8.2/libtiff/tif_fax3.h \
+        tiff-3.8.2/libtiff/tif_predict.h
+
+  SOURCES += \
+        tiff-3.8.2/libtiff/tif_aux.c \
+        tiff-3.8.2/libtiff/tif_close.c \
+        tiff-3.8.2/libtiff/tif_codec.c \
+        tiff-3.8.2/libtiff/tif_color.c \
+        tiff-3.8.2/libtiff/tif_compress.c \
+        tiff-3.8.2/libtiff/tif_dir.c \
+        tiff-3.8.2/libtiff/tif_dirinfo.c \
+        tiff-3.8.2/libtiff/tif_dirread.c \
+        tiff-3.8.2/libtiff/tif_dirwrite.c \
+        tiff-3.8.2/libtiff/tif_dumpmode.c \
+        tiff-3.8.2/libtiff/tif_error.c \
+        tiff-3.8.2/libtiff/tif_extension.c \
+        tiff-3.8.2/libtiff/tif_fax3.c \
+        tiff-3.8.2/libtiff/tif_fax3sm.c \
+        tiff-3.8.2/libtiff/tif_flush.c \
+        tiff-3.8.2/libtiff/tif_jpeg.c \
+        tiff-3.8.2/libtiff/tif_luv.c \
+        tiff-3.8.2/libtiff/tif_lzw.c \
+        tiff-3.8.2/libtiff/tif_next.c \
+        tiff-3.8.2/libtiff/tif_ojpeg.c \
+        tiff-3.8.2/libtiff/tif_open.c \
+        tiff-3.8.2/libtiff/tif_packbits.c \
+        tiff-3.8.2/libtiff/tif_pixarlog.c \
+        tiff-3.8.2/libtiff/tif_predict.c \
+        tiff-3.8.2/libtiff/tif_print.c \
+        tiff-3.8.2/libtiff/tif_read.c \
+        tiff-3.8.2/libtiff/tif_strip.c \
+        tiff-3.8.2/libtiff/tif_swab.c \
+        tiff-3.8.2/libtiff/tif_thunder.c \
+        tiff-3.8.2/libtiff/tif_tile.c \
+        tiff-3.8.2/libtiff/tif_version.c \
+        tiff-3.8.2/libtiff/tif_warning.c \
+        tiff-3.8.2/libtiff/tif_win32.c \
+        tiff-3.8.2/libtiff/tif_write.c \
+        tiff-3.8.2/libtiff/tif_zip.c
+}
+
+HEADERS += \
 	../qceplib/spec_server.h \
 	../qceplib/qspecserver.h \
-	qxrdapplication.h \
+        ../qceplib/qcepimagedata.h \
+        ../qceplib/qcepimagedataformat.h \
+        ../qceplib/qcepimagedataformatfactory.h \
+        qxrdapplication.h \
 	qxrdsettings.h \
-	../qceplib/qcepimagedata.h \
-	../qceplib/qcepimagedataformat.h \
-	../qceplib/qcepimagedataformatfactory.h \
 	qxrdimagedata.h \
 	qxrdrasterdata.h \
 	qxrdwindow.h \
 	qxrdimageplot.h \
         qxrdplotzoomer.h \
-	qxrdserverthread.h \
+        qxrdplottracker.h \
+        qxrdserverthread.h \
 	qxrdserver.h \
 	qxrdspecserver.h \
 	qxrdacquisitionthread.h \
 	qxrdacquisition.h \
 	Acq.h
 
-SOURCES = \
+SOURCES += \
 	qxrd.cpp \
 	../qceplib/qspecserver.cpp \
-	qxrdapplication.cpp \
+        ../qceplib/qcepimagedata.cpp \
+        ../qceplib/qcepimagedataformat.cpp \
+        ../qceplib/qcepimagedataformatfactory.cpp \
+        qxrdapplication.cpp \
 	qxrdsettings.cpp \
-	../qceplib/qcepimagedata.cpp \
-	../qceplib/qcepimagedataformat.cpp \
-	../qceplib/qcepimagedataformatfactory.cpp \
 	qxrdimagedata.cpp \
 	qxrdrasterdata.cpp \
 	qxrdwindow.cpp \
 	qxrdimageplot.cpp \
         qxrdplotzoomer.cpp \
-	qxrdserverthread.cpp \
+        qxrdplottracker.cpp \
+        qxrdserverthread.cpp \
 	qxrdserver.cpp \
 	qxrdspecserver.cpp \
 	qxrdacquisitionthread.cpp \
 	qxrdacquisition.cpp
+
 
 FORMS = \
 	qxrdwindow.ui
@@ -65,26 +122,30 @@ FORMS = \
 unix{
   SOURCES += xisl_dummy.cpp
   INCLUDEPATH += /usr/include/qwt/
-  LIBS += -lqwt 
+  LIBS += -lqwt -ltiffs
 }
 
 win32{
   PLATFORM_PREFIX=win32
-  QTBINDIR=C:/Qt/4.4.0/bin/
-  QWT=C:/Qwt-5.1.1/
+  QTBINDIR=C:/Qt/2009.01/qt/bin
+#  QTBINDIR=C:/Qt/4.4.3/bin
+#  QWT=C:/Qwt-5.1.1/
+  QWT=C:/Qwt-5.1.2-svn/
+  MINGW=C:/Qt/2009.01/mingw/bin
+#  MINGW=c:/mingw/bin
   app.target = app
   zip.target = zip
   CONFIG(debug, debug|release) {
-    LIBS += -L$${QWT}/lib/ -lqwt_debug
+    LIBS += -L$${QWT}/lib/ -lqwtd5
 
 	app.commands = C:/cygwin/bin/cp.exe \
                         $${QTBINDIR}/QtCored4.dll \
                         $${QTBINDIR}/QtNetworkd4.dll \
                         $${QTBINDIR}/QtGuid4.dll \
                         $${QTBINDIR}/QtScriptd4.dll \
-                        $${QWT}/lib/qwt_debug5.dll \
+                        $${QWT}/lib/qwtd5.dll \
                         XISL.dll \
-                        C:/MinGW/bin/mingwm10.dll \
+                        $${MINGW}/mingwm10.dll \
                         debug
    
     zip.commands = C:/cygwin/bin/zip.exe -j $${TARGET}_debug.zip \
@@ -93,9 +154,9 @@ win32{
                         $${QTBINDIR}/QtNetworkd4.dll \
                         $${QTBINDIR}/QtGuid4.dll \
                         $${QTBINDIR}/QtScriptd4.dll \
-                        $${QWT}/lib/qwt_debug5.dll \
+                        $${QWT}/lib/qwtd5.dll \
                         XISL.dll \
-                        C:/MinGW/bin/mingwm10.dll
+                        $${MINGW}/mingwm10.dll
   }else{
     LIBS += -L$${QWT}/lib/ -lqwt5
 
@@ -104,9 +165,9 @@ win32{
                         $${QTBINDIR}/QtNetwork4.dll \
                         $${QTBINDIR}/QtGui4.dll \
                         $${QTBINDIR}/QtScript4.dll \
-						$${QWT}/lib/qwt5.dll \
+                        $${QWT}/lib/qwt5.dll \
 						XISL.dll \
-                        C:/MinGW/bin/mingwm10.dll \
+                        $${MINGW}/mingwm10.dll \
                         release
                         
     zip.commands = C:/cygwin/bin/zip.exe -j $${TARGET}.zip \
@@ -115,9 +176,9 @@ win32{
                         $${QTBINDIR}/QtNetwork4.dll \
                         $${QTBINDIR}/QtGui4.dll \
                         $${QTBINDIR}/QtScript4.dll \
-						$${QWT}/lib/qwt5.dll \
-						XISL.dll \
-                        C:/MinGW/bin/mingwm10.dll
+                        $${QWT}/lib/qwt5.dll \
+                        XISL.dll \
+                        $${MINGW}/mingwm10.dll
   }
   INCLUDEPATH += $${QWT}/include/
   INCLUDEPATH += .

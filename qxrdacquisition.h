@@ -26,6 +26,7 @@ class QxrdAcquisition : public QObject
   void savingComplete(int chan);
   void cancel();
   void saveData(QString name);
+  void loadData(QString name);
 
  private slots:
   void _haltAcquire();
@@ -50,6 +51,7 @@ class QxrdAcquisition : public QObject
  private:
   void acquisitionError(int n);
   int saveAcquiredFrame(QString name, int frame);
+  void saveTestTIFF(QString name, int nbits, int isfloat);
 
  private:
   QxrdAcquisitionThread *m_Thread;

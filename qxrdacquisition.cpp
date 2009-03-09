@@ -10,11 +10,15 @@
 #include <windows.h>
 #endif
 
+#include <math.h>
+
 #include "Acq.h"
 #include <QThread>
 #include <QDir>
 #include <QFile>
 #include <QtConcurrentRun>
+
+#include "tiffio.h"
 
 static QxrdAcquisition *g_Acquisition = NULL;
 
@@ -32,7 +36,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
     m_NBufferFrames(0),
     m_NIntTimes(0)
 {
-  printf("Enter QxrdAcquisition::QxrdAcquisition\n");
+  emit printMessage("Enter QxrdAcquisition::QxrdAcquisition\n");
 
   g_Acquisition = this;
 
@@ -50,7 +54,7 @@ static HACQDESC m_AcqDesc = NULL;
 
 void QxrdAcquisition::initialize()
 {
-  printf("QxrdAcquisition::initialize()\n");
+  emit printMessage("QxrdAcquisition::initialize()\n");
 
   int nRet = HIS_ALL_OK;
   UINT nSensors;
@@ -66,10 +70,14 @@ void QxrdAcquisition::initialize()
 
   nRet = Acquisition_EnumSensors(&nSensors, bEnableIRQ, FALSE);
 
+  emit printMessage(tr("Acquisition_EnumSensors = %1\n").arg(nRet));
+
   if (nRet != HIS_ALL_OK) {
     acquisitionError(nRet);
     return;
   }
+
+  emit printMessage(tr("Number of sensors = %1\n").arg(nSensors));
 
   if ((nRet = Acquisition_GetNextSensor(&Pos, &m_AcqDesc))!=HIS_ALL_OK) {
     acquisitionError(nRet);
@@ -238,7 +246,7 @@ void QxrdAcquisition::savingComplete(int chan)
 
 void QxrdAcquisition::acquisitionError(int n)
 {
-  
+  emit printMessage(tr("Acquisition Error %1\n").arg(n));
 }
 
 void QxrdAcquisition::_haltAcquire()
@@ -278,12 +286,104 @@ QVector<double> QxrdAcquisition::integrationTimes()
 
 void QxrdAcquisition::saveData(QString name)
 {
-  double* current = m_AcquiredImage.data();
-  long npixels = m_NRows*m_NCols;
+//  double* current = m_AcquiredImage.data();
+//  long npixels = m_NRows*m_NCols;
 
-  QFile outfile(name);
-  outfile.open(QIODevice::ReadWrite);
-  outfile.write((const char*) current, npixels*sizeof(double));
+//  QFile outfile(name);
+//  outfile.open(QIODevice::ReadWrite);
+//  outfile.write((const char*) current, npixels*sizeof(double));
+
+  saveTestTIFF(name+".int8.tiff", 8, 0);
+  saveTestTIFF(name+".int16.tiff", 16, 0);
+  saveTestTIFF(name+".int32.tiff", 32, 0);
+  saveTestTIFF(name+".float32.tiff", 32, 1);
+  saveTestTIFF(name+".float64.tiff", 64, 1);
+}
+
+void QxrdAcquisition::loadData(QString name)
+{
+  quint32 imageWidth = 0;
+  quint32 imageHeight = 0;
+  quint16 sampleFormat = 0;
+  quint16 samplesPerPixel = 0;
+  quint16 bitsPerSample = 0;
+
+  TIFF* tif = TIFFOpen(qPrintable(name),"r");
+
+  if (tif) {
+    if ((TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGEWIDTH, &imageWidth)==1) &&
+        (TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGELENGTH, &imageHeight)==1) &&
+        (TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel)==1) &&
+        (TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bitsPerSample)==1) &&
+        (TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLEFORMAT, &sampleFormat)==1)) {
+
+      emit printMessage(tr("Image file W(%1),H(%2),SPP(%3),BPS(%4),SF(%5)\n")
+                        .arg(imageWidth).arg(imageHeight).arg(samplesPerPixel).arg(bitsPerSample).arg(sampleFormat));
+
+      m_AcquiredImage.resize(imageWidth*imageHeight);
+      m_AcquiredImage.fill(0);
+      m_NCols = imageWidth;
+      m_NRows = imageHeight;
+      m_NFrames = 1;
+
+      void* buffer = malloc(TIFFScanlineSize(tif));
+
+      for (int y=0; y<m_NRows; y++) {
+        if (TIFFReadScanline(tif, buffer, y)==1) {
+          for (int x=0; x<m_NCols; x++) {
+            switch (sampleFormat) {
+            case SAMPLEFORMAT_INT:
+              switch (bitsPerSample) {
+              case 8:
+                m_AcquiredImage[y*m_NCols+x] = ((qint8*) buffer)[x];
+                break;
+              case 16:
+                m_AcquiredImage[y*m_NCols+x] = ((qint16*) buffer)[x];
+                break;
+              case 32:
+                m_AcquiredImage[y*m_NCols+x] = ((qint32*) buffer)[x];
+                break;
+              }
+              break;
+            case SAMPLEFORMAT_UINT:
+              switch (bitsPerSample) {
+              case 8:
+                m_AcquiredImage[y*m_NCols+x] = ((quint8*) buffer)[x];
+                break;
+              case 16:
+                m_AcquiredImage[y*m_NCols+x] = ((quint16*) buffer)[x];
+                break;
+              case 32:
+                m_AcquiredImage[y*m_NCols+x] = ((quint32*) buffer)[x];
+                break;
+              }
+              break;
+            case SAMPLEFORMAT_IEEEFP:
+              switch (bitsPerSample) {
+              case 32:
+                m_AcquiredImage[y*m_NCols+x] = ((float*) buffer)[x];
+                break;
+              case 64:
+                m_AcquiredImage[y*m_NCols+x] = ((double*) buffer)[x];
+                break;
+              }
+              break;
+            }
+          }
+        }
+      }
+
+      emit summedFrameCompleted(name,0);
+    } else {
+      emit statusMessage("Couldn't open file\n");
+    }
+  } else {
+    emit statusMessage("Bad TIFF File\n");
+  }
+
+  if (tif) {
+    TIFFClose(tif);
+  }
 }
 
 int QxrdAcquisition::saveAcquiredFrame(QString name, int frame)
@@ -291,9 +391,13 @@ int QxrdAcquisition::saveAcquiredFrame(QString name, int frame)
   long npixels = m_NRows*m_NCols;
   double* current = m_AcquiredImage.data()+frame*npixels;
 
-  QFile outfile(name);
-  outfile.open(QIODevice::ReadWrite);
-  outfile.write((const char*) current, npixels*sizeof(double));
+//  QFile outfile(name);
+//  outfile.open(QIODevice::ReadWrite);
+//  outfile.write((const char*) current, npixels*sizeof(double));
+
+  TIFF* tif = TIFFOpen(qPrintable(name),"w");
+
+  TIFFClose(tif);
 
   return 1;
 }
@@ -313,4 +417,86 @@ QxrdRasterData QxrdAcquisition::imageRaster(int iframe)
   } else {
     return QxrdRasterData(&m_AcquiredImage, 0, m_NRows, m_NCols);
   }
+}
+
+void QxrdAcquisition::saveTestTIFF(QString name, int nbits, int isfloat)
+{
+  TIFF* tif = TIFFOpen(qPrintable(name),"w");
+
+  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, 2048);
+  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, 2048);
+  TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
+  TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+  TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+  TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, nbits);
+
+  if (isfloat) {
+    TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
+  } else {
+    TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_INT);
+  }
+
+  switch (nbits+isfloat) {
+  case 8+0:
+    {
+      signed char b[2048];
+      for (int y=0; y<2048; y++) {
+        for (int x=0; x<2048; x++) {
+          b[x] = 100.0*sin(y/100.0)*sin(x/100.0);
+        }
+        TIFFWriteScanline(tif, b, y, 0);
+      }
+    }
+    break;
+
+  case 16+0:
+    {
+      short b[2048];
+      for (int y=0; y<2048; y++) {
+        for (int x=0; x<2048; x++) {
+          b[x] = 100.0*sin(y/100.0)*sin(x/100.0);
+        }
+        TIFFWriteScanline(tif, b, y, 0);
+      }
+    }
+    break;
+
+  case 32+0:
+    {
+      int b[2048];
+      for (int y=0; y<2048; y++) {
+        for (int x=0; x<2048; x++) {
+          b[x] = 100.0*sin(y/100.0)*sin(x/100.0);
+        }
+        TIFFWriteScanline(tif, b, y, 0);
+      }
+    }
+    break;
+
+  case 32+1:
+    {
+      float b[2048];
+      for (int y=0; y<2048; y++) {
+        for (int x=0; x<2048; x++) {
+          b[x] = 100.0*sin(y/100.0)*sin(x/100.0);
+        }
+        TIFFWriteScanline(tif, b, y, 0);
+      }
+    }
+    break;
+
+  case 64+1:
+    {
+      double b[2048];
+      for (int y=0; y<2048; y++) {
+        for (int x=0; x<2048; x++) {
+          b[x] = 100.0*sin(y/100.0)*sin(x/100.0);
+        }
+        TIFFWriteScanline(tif, b, y, 0);
+      }
+    }
+    break;
+  }
+
+  TIFFClose(tif);
 }

@@ -1,8 +1,11 @@
 #include "qxrdimageplot.h"
 #include "qxrdrasterdata.h"
 #include "qxrdplotzoomer.h"
+#include "qxrdplottracker.h"
 
 #include <qwt_plot_zoomer.h>
+#include <qwt_plot_panner.h>
+#include <qwt_plot_magnifier.h>
 #include <qwt_legend.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_scale_widget.h>
@@ -16,17 +19,29 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 {
   setCanvasBackground(QColor(Qt::white));
 
+  m_Tracker = new QxrdPlotTracker(canvas(), this);
+  m_Tracker -> setEnabled(true);
+  m_Tracker -> setSelectionFlags(QwtPicker::PointSelection);
+
   m_Zoomer = new QxrdPlotZoomer(canvas(), this);
   m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
   m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
   m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
 
   m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect2,
-			      Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier);
+                              Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier);
   m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect3,
-			      Qt::LeftButton, Qt::ControlModifier);
+                              Qt::LeftButton, Qt::ControlModifier);
 
   m_Zoomer -> setEnabled(true);
+
+  m_Panner = new QwtPlotPanner(canvas());
+  m_Panner -> setEnabled(true);
+  m_Panner -> setMouseButton(Qt::MidButton);
+
+  m_Magnifier = new QwtPlotMagnifier(canvas());
+  m_Magnifier -> setEnabled(true);
+  m_Magnifier -> setMouseButton(Qt::NoButton);
 
   m_Legend = new QwtLegend;
   m_Legend -> setFrameStyle(QFrame::Box|QFrame::Sunken);
@@ -98,6 +113,8 @@ void QxrdImagePlot::setGrayscale()
   m_ColorMap.setColorInterval(Qt::black, Qt::white);
 
   changedColorMap();
+
+  m_Zoomer -> setTrackerPen(QPen(Qt::red));
 }
 
 void QxrdImagePlot::setInverseGrayscale()
@@ -105,6 +122,8 @@ void QxrdImagePlot::setInverseGrayscale()
   m_ColorMap.setColorInterval(Qt::white, Qt::black);
 
   changedColorMap();
+
+  m_Zoomer -> setTrackerPen(QPen(Qt::red));
 }
 
 void QxrdImagePlot::setEarthTones()
@@ -117,6 +136,8 @@ void QxrdImagePlot::setEarthTones()
   m_ColorMap.addColorStop(0.85, Qt::darkMagenta);
 
   changedColorMap();
+
+  m_Zoomer -> setTrackerPen(QPen(Qt::red));
 }
 
 void QxrdImagePlot::setSpectrum()
@@ -128,15 +149,21 @@ void QxrdImagePlot::setSpectrum()
   m_ColorMap.addColorStop(0.8, Qt::yellow);
 
   changedColorMap();
+
+  m_Zoomer -> setTrackerPen(QPen(Qt::black));
 }
 
 void QxrdImagePlot::setFire()
 {
+    setTitle("Fire");
+
   m_ColorMap.setColorInterval(Qt::black, Qt::white);
   m_ColorMap.addColorStop(0.25, Qt::red);
   m_ColorMap.addColorStop(0.75, Qt::yellow);
 
   changedColorMap();
+
+  m_Zoomer -> setTrackerPen(QPen(Qt::blue));
 }
 
 void QxrdImagePlot::changedColorMap()
