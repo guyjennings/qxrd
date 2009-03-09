@@ -6,6 +6,14 @@ win32 {
   DEBUG_SUFFIX = d
 }
 
+unix {
+  QMAKE_CXXFLAGS += -g
+  QMAKE_CFLAGS += -g
+  QMAKE_LFLAGS += -g
+
+  DEBUG_SUFFIX = d
+}
+
 CONFIG += debug_and_release build_all
 
 CONFIG(debug, debug|release) {

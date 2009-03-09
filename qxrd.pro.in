@@ -21,9 +21,11 @@ RESOURCES += qxrdhelptext.qrc
 
 DISTFILES += qxrdhelptext.html
 
-INCLUDEPATH += ../qceplib/ tiff-3.8.2/libtiff/
+INCLUDEPATH += ../qceplib/
 
 win32 {
+  INCLUDEPATH += tiff-3.8.2/libtiff/
+
   HEADERS += \
         tif_config.h \
         tiffconf.h \
@@ -122,7 +124,7 @@ FORMS = \
 unix{
   SOURCES += xisl_dummy.cpp
   INCLUDEPATH += /usr/include/qwt/
-  LIBS += -lqwt -ltiffs
+  LIBS += -lqwt -ltiff
 }
 
 win32{
