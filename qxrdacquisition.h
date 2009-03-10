@@ -47,6 +47,7 @@ class QxrdAcquisition : public QObject
   void onEndAcquisition();
   QVector<double> integrationTimes();
   QxrdRasterData imageRaster(int iframe);
+  int acquisitionStatus();
 
  private:
   void acquisitionError(int n);

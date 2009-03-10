@@ -81,3 +81,8 @@ QxrdRasterData QxrdAcquisitionThread::imageRaster(int iframe)
 {
   return m_Acquisition -> imageRaster(iframe);
 }
+
+int QxrdAcquisitionThread::acquisitionStatus(double time)
+{
+  return m_Acquisition -> acquisitionStatus();
+}

@@ -39,6 +39,7 @@ class QxrdAcquisitionThread : public QThread
 
  public:
   QxrdRasterData imageRaster(int iframe);
+  int acquisitionStatus(double time);
 
  signals:
   void _acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);

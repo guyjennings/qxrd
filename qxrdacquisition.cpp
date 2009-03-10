@@ -34,6 +34,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
     m_NSums(0),
     m_NFrames(0),
     m_NBufferFrames(0),
+    m_CurrentFrame(0),
     m_NIntTimes(0)
 {
   emit printMessage("Enter QxrdAcquisition::QxrdAcquisition\n");
@@ -235,6 +236,11 @@ void QxrdAcquisition::onEndAcquisition()
   emit acquireComplete();
 }
 
+int QxrdAcquisition::acquisitionStatus()
+{
+  return m_CurrentFrame - 1;
+}
+
 void QxrdAcquisition::resultsAvailable(int chan)
 {
   emit resultsChanged();
@@ -396,6 +402,24 @@ int QxrdAcquisition::saveAcquiredFrame(QString name, int frame)
 //  outfile.write((const char*) current, npixels*sizeof(double));
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
+
+  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, m_NCols);
+  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, m_NRows);
+  TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
+  TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+  TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+  TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32);
+  TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
+
+  float buffer[4096];
+
+  for (int y=0; y<m_NRows; y++) {
+    for (int x=0; x<m_NCols; x++) {
+      buffer[x] = current[y*m_NCols+x];
+    }
+
+    TIFFWriteScanline(tif, buffer, y, 0);
+  }
 
   TIFFClose(tif);
 

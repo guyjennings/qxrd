@@ -151,14 +151,23 @@ void QxrdApplication::newDataAvailable()
 
 int QxrdApplication::acquire()
 {
-  doAcquire();
+  QString outDir   = m_Window -> outputDirectory();
+  QString filePatt = m_Window -> filePattern();
+  int    index     = m_Window -> fileIndex();
+  int    integmode = m_Window -> integrationMode();
+  int    nsum      = m_Window -> nSummed();
+  int    nframes   = m_Window -> nFrames();
+
+  m_AcquisitionThread -> acquire(outDir, filePatt, index, integmode, nsum, nframes);
+
+  m_Acquiring = true;
 
   return 0;
 }
 
 int QxrdApplication::acquisitionStatus(double time)
 {
-  return 0;
+  return m_AcquisitionThread -> acquisitionStatus(time);
 }
 
 void QxrdApplication::doAcquire()
