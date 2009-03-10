@@ -75,6 +75,12 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(m_Window->m_ActionEvaluateScript, SIGNAL(triggered()),
 	  this, SLOT(doScript()));
+
+  m_ScriptEngine.globalObject().setProperty("acquire",
+          m_ScriptEngine.newFunction(QxrdApplication::acquireFunc));
+
+  m_ScriptEngine.globalObject().setProperty("status",
+          m_ScriptEngine.newFunction(QxrdApplication::statusFunc));
 }
 
 QxrdApplication::~QxrdApplication()
@@ -143,6 +149,18 @@ void QxrdApplication::newDataAvailable()
   printMessage("QxrdApplication::newDataAvailable()\n");
 }
 
+int QxrdApplication::acquire()
+{
+  doAcquire();
+
+  return 0;
+}
+
+int QxrdApplication::acquisitionStatus(double time)
+{
+  return 0;
+}
+
 void QxrdApplication::doAcquire()
 {
   printMessage("QxrdApplication::doAcquire()\n");
@@ -192,3 +210,23 @@ void QxrdApplication::loadData()
     m_AcquisitionThread -> loadData(theFile);
   }
 }
+
+QScriptValue QxrdApplication::acquireFunc(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() == 0) {
+      return QScriptValue(engine, g_Application -> acquire());
+    } else {
+      return QScriptValue(engine, -1);
+    }
+}
+
+QScriptValue QxrdApplication::statusFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() == 0) {
+    return QScriptValue(engine, g_Application -> acquisitionStatus(0));
+  } else {
+    double time = context->argument(0).toNumber();
+    return QScriptValue(engine, g_Application -> acquisitionStatus(time));
+  }
+}
+

@@ -34,8 +34,15 @@ class QxrdApplication : public QApplication
   void saveData();
   void loadData();
 
+  int acquire();
+  int acquisitionStatus(double time);
+
  signals:
   void finishedCommand(QString cmd);
+
+ public:
+  static QScriptValue acquireFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue statusFunc(QScriptContext *context, QScriptEngine *engine);
 
  private:
   QxrdWindow                    *m_Window;
