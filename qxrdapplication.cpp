@@ -81,6 +81,24 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_ScriptEngine.globalObject().setProperty("status",
           m_ScriptEngine.newFunction(QxrdApplication::statusFunc));
+
+  m_ScriptEngine.globalObject().setProperty("exposure",
+          m_ScriptEngine.newFunction(QxrdApplication::exposureFunc));
+
+  m_ScriptEngine.globalObject().setProperty("subframes",
+          m_ScriptEngine.newFunction(QxrdApplication::subframesFunc));
+
+  m_ScriptEngine.globalObject().setProperty("frames",
+          m_ScriptEngine.newFunction(QxrdApplication::framesFunc));
+
+  m_ScriptEngine.globalObject().setProperty("filename",
+          m_ScriptEngine.newFunction(QxrdApplication::filenameFunc));
+
+  m_ScriptEngine.globalObject().setProperty("directory",
+          m_ScriptEngine.newFunction(QxrdApplication::directoryFunc));
+
+  m_ScriptEngine.globalObject().setProperty("fileindex",
+          m_ScriptEngine.newFunction(QxrdApplication::fileIndexFunc));
 }
 
 QxrdApplication::~QxrdApplication()
@@ -127,6 +145,11 @@ void QxrdApplication::shutdownThreads()
   m_Window -> saveSettings();
   m_ServerThread -> shutdown();
   m_AcquisitionThread -> shutdown();
+}
+
+QxrdWindow* QxrdApplication::window()
+{
+  return m_Window;
 }
 
 QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
@@ -236,6 +259,66 @@ QScriptValue QxrdApplication::statusFunc(QScriptContext *context, QScriptEngine 
   } else {
     double time = context->argument(0).toNumber();
     return QScriptValue(engine, g_Application -> acquisitionStatus(time));
+  }
+}
+
+QScriptValue QxrdApplication::exposureFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() == 0) {
+    return QScriptValue(engine, g_Application -> window() -> exposureTime());
+  } else {
+    g_Application -> window() -> setExposureTime(context->argument(0).toNumber());
+    return QScriptValue(engine, 0);
+  }
+}
+
+QScriptValue QxrdApplication::subframesFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() == 0) {
+    return QScriptValue(engine, g_Application -> window() -> nSummed());
+  } else {
+    g_Application -> window() -> setNSummed(context->argument(0).toInteger());
+    return QScriptValue(engine, 0);
+  }
+}
+
+QScriptValue QxrdApplication::framesFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() == 0) {
+    return QScriptValue(engine, g_Application -> window() -> nFrames());
+  } else {
+    g_Application -> window() -> setNFrames(context->argument(0).toInteger());
+    return QScriptValue(engine, 0);
+  }
+}
+
+QScriptValue QxrdApplication::filenameFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() == 0) {
+    return QScriptValue(engine, g_Application -> window() -> filePattern());
+  } else {
+    g_Application -> window() -> setFilePattern(context->argument(0).toString());
+    return QScriptValue(engine, 0);
+  }
+}
+
+QScriptValue QxrdApplication::directoryFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() == 0) {
+    return QScriptValue(engine, g_Application -> window() -> outputDirectory());
+  } else {
+    g_Application -> window() -> setOutputDirectory(context->argument(0).toString());
+    return QScriptValue(engine, 0);
+  }
+}
+
+QScriptValue QxrdApplication::fileIndexFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() == 0) {
+    return QScriptValue(engine, g_Application -> window() -> fileIndex());
+  } else {
+    g_Application -> window() -> setFileIndex(context->argument(0).toInteger());
+    return QScriptValue(engine, 0);
   }
 }
 

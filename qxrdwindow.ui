@@ -1,84 +1,85 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>QxrdWindow</class>
- <widget class="QMainWindow" name="QxrdWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="QxrdWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>950</width>
-    <height>804</height>
+    <height>630</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>QXRD Readout Software</string>
   </property>
-  <widget class="QWidget" name="centralwidget" >
-   <layout class="QGridLayout" name="gridLayout_4" >
-    <item row="0" column="0" >
-     <widget class="QTabWidget" name="tabWidget" >
-      <property name="currentIndex" >
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_4">
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab" >
-       <attribute name="title" >
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
         <string>Image</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_6" >
-        <item row="0" column="0" >
-         <widget class="QSplitter" name="splitter" >
-          <property name="orientation" >
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="QWidget" native="1" name="widget_2" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+          <widget class="QWidget" name="widget_2" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>1</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <layout class="QGridLayout" name="gridLayout_5" >
-            <item row="0" column="1" >
-             <widget class="QWidget" native="1" name="widget_3" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="1">
+             <widget class="QWidget" name="widget_3" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="minimumSize" >
+              <property name="minimumSize">
                <size>
                 <width>400</width>
                 <height>0</height>
                </size>
               </property>
-              <layout class="QHBoxLayout" name="horizontalLayout" >
+              <layout class="QHBoxLayout" name="horizontalLayout">
                <item>
-                <widget class="QToolButton" name="m_FireButton" >
-                 <property name="text" >
+                <widget class="QToolButton" name="m_FireButton">
+                 <property name="text">
                   <string>...</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QToolButton" name="toolButton_2" >
-                 <property name="text" >
+                <widget class="QToolButton" name="toolButton_2">
+                 <property name="text">
                   <string>...</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QToolButton" name="toolButton" >
-                 <property name="text" >
+                <widget class="QToolButton" name="toolButton">
+                 <property name="text">
                   <string>...</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <spacer name="horizontalSpacer" >
-                 <property name="orientation" >
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
-                 <property name="sizeHint" stdset="0" >
+                 <property name="sizeHint" stdset="0">
                   <size>
                    <width>40</width>
                    <height>20</height>
@@ -87,8 +88,8 @@
                 </spacer>
                </item>
                <item>
-                <widget class="QLabel" name="label_7" >
-                 <property name="text" >
+                <widget class="QLabel" name="label_7">
+                 <property name="text">
                   <string/>
                  </property>
                 </widget>
@@ -96,186 +97,186 @@
               </layout>
              </widget>
             </item>
-            <item row="1" column="0" colspan="2" >
-             <widget class="QxrdImagePlot" name="m_Plot" />
+            <item row="1" column="0" colspan="2">
+             <widget class="QxrdImagePlot" name="m_Plot"/>
             </item>
            </layout>
           </widget>
-          <widget class="QToolBox" name="toolBox" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+          <widget class="QToolBox" name="toolBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>1</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="currentIndex" >
+           <property name="currentIndex">
             <number>0</number>
            </property>
-           <widget class="QWidget" name="page" >
-            <property name="geometry" >
+           <widget class="QWidget" name="page">
+            <property name="geometry">
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>354</width>
-              <height>593</height>
+              <width>314</width>
+              <height>443</height>
              </rect>
             </property>
-            <attribute name="label" >
+            <attribute name="label">
              <string>Acquire</string>
             </attribute>
-            <layout class="QGridLayout" name="gridLayout_3" >
-             <item row="0" column="0" >
-              <widget class="QWidget" native="1" name="widget" >
-               <property name="sizePolicy" >
-                <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <widget class="QWidget" name="widget" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <layout class="QGridLayout" name="gridLayout_2" >
-                <item rowspan="2" row="0" column="0" >
-                 <widget class="QLabel" name="label" >
-                  <property name="text" >
+               <layout class="QGridLayout" name="gridLayout_2">
+                <item row="0" column="0" rowspan="2">
+                 <widget class="QLabel" name="label">
+                  <property name="text">
                    <string>Exposure Time:</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1" >
-                 <widget class="QComboBox" name="m_ExposureTime" >
-                  <property name="sizePolicy" >
-                   <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="m_ExposureTime">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>1</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
                  </widget>
                 </item>
-                <item rowspan="2" row="1" column="1" >
-                 <widget class="QSpinBox" name="m_SummedFrames" >
-                  <property name="sizePolicy" >
-                   <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                <item row="1" column="1" rowspan="2">
+                 <widget class="QSpinBox" name="m_SummedFrames">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>1</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="maximum" >
+                  <property name="maximum">
                    <number>99999</number>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="0" >
-                 <widget class="QLabel" name="label_2" >
-                  <property name="text" >
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_2">
+                  <property name="text">
                    <string>Summed Frames:</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0" >
-                 <widget class="QLabel" name="label_3" >
-                  <property name="text" >
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
                    <string>Frames in sequence:</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1" >
-                 <widget class="QSpinBox" name="m_SequenceFrames" >
-                  <property name="sizePolicy" >
-                   <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                <item row="3" column="1">
+                 <widget class="QSpinBox" name="m_SequenceFrames">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>1</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="maximum" >
+                  <property name="maximum">
                    <number>99999</number>
                   </property>
                  </widget>
                 </item>
-                <item row="7" column="0" >
-                 <widget class="QLabel" name="label_4" >
-                  <property name="text" >
+                <item row="7" column="0">
+                 <widget class="QLabel" name="label_4">
+                  <property name="text">
                    <string>Save File Pattern:</string>
                   </property>
                  </widget>
                 </item>
-                <item row="7" column="1" >
-                 <widget class="QLineEdit" name="m_SaveFilePattern" >
-                  <property name="sizePolicy" >
-                   <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                <item row="7" column="1">
+                 <widget class="QLineEdit" name="m_SaveFilePattern">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>1</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
                  </widget>
                 </item>
-                <item row="8" column="0" >
-                 <widget class="QLabel" name="label_5" >
-                  <property name="text" >
+                <item row="8" column="0">
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
                    <string>File Index Number:</string>
                   </property>
                  </widget>
                 </item>
-                <item row="8" column="1" >
-                 <widget class="QSpinBox" name="m_FileIndexNumber" >
-                  <property name="sizePolicy" >
-                   <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                <item row="8" column="1">
+                 <widget class="QSpinBox" name="m_FileIndexNumber">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>1</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="maximum" >
+                  <property name="maximum">
                    <number>99999</number>
                   </property>
                  </widget>
                 </item>
-                <item row="9" column="0" >
-                 <widget class="QPushButton" name="m_CancelButton" >
-                  <property name="enabled" >
+                <item row="9" column="0">
+                 <widget class="QPushButton" name="m_CancelButton">
+                  <property name="enabled">
                    <bool>false</bool>
                   </property>
-                  <property name="text" >
+                  <property name="text">
                    <string>Cancel</string>
                   </property>
                  </widget>
                 </item>
-                <item row="9" column="1" >
-                 <widget class="QPushButton" name="m_AcquireButton" >
-                  <property name="enabled" >
+                <item row="9" column="1">
+                 <widget class="QPushButton" name="m_AcquireButton">
+                  <property name="enabled">
                    <bool>false</bool>
                   </property>
-                  <property name="sizePolicy" >
-                   <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>1</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="text" >
+                  <property name="text">
                    <string>Acquire</string>
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="0" >
-                 <widget class="QLabel" name="label_6" >
-                  <property name="text" >
+                <item row="5" column="0">
+                 <widget class="QLabel" name="label_6">
+                  <property name="text">
                    <string>Output Directory:</string>
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="1" >
-                 <widget class="QLineEdit" name="m_OutputDirectory" >
-                  <property name="sizePolicy" >
-                   <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+                <item row="5" column="1">
+                 <widget class="QLineEdit" name="m_OutputDirectory">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                     <horstretch>1</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="readOnly" >
+                  <property name="readOnly">
                    <bool>true</bool>
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="1" >
-                 <widget class="QPushButton" name="m_SelectDirectoryButton" >
-                  <property name="text" >
+                <item row="6" column="1">
+                 <widget class="QPushButton" name="m_SelectDirectoryButton">
+                  <property name="text">
                    <string>Select Output Directory...</string>
                   </property>
                  </widget>
@@ -283,12 +284,12 @@
                </layout>
               </widget>
              </item>
-             <item row="1" column="0" >
-              <spacer name="verticalSpacer" >
-               <property name="orientation" >
+             <item row="1" column="0">
+              <spacer name="verticalSpacer">
+               <property name="orientation">
                 <enum>Qt::Vertical</enum>
                </property>
-               <property name="sizeHint" stdset="0" >
+               <property name="sizeHint" stdset="0">
                 <size>
                  <width>20</width>
                  <height>237</height>
@@ -298,29 +299,29 @@
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="page_3" >
-            <property name="geometry" >
+           <widget class="QWidget" name="page_3">
+            <property name="geometry">
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>354</width>
-              <height>593</height>
+              <width>98</width>
+              <height>28</height>
              </rect>
             </property>
-            <attribute name="label" >
+            <attribute name="label">
              <string>Correction</string>
             </attribute>
            </widget>
-           <widget class="QWidget" name="page_2" >
-            <property name="geometry" >
+           <widget class="QWidget" name="page_2">
+            <property name="geometry">
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>354</width>
-              <height>593</height>
+              <width>98</width>
+              <height>28</height>
              </rect>
             </property>
-            <attribute name="label" >
+            <attribute name="label">
              <string>Display</string>
             </attribute>
            </widget>
@@ -329,13 +330,13 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_2" >
-       <attribute name="title" >
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
         <string>Messages</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout" >
-        <item row="0" column="0" >
-         <widget class="QTextEdit" name="m_Messages" />
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QTextEdit" name="m_Messages"/>
         </item>
        </layout>
       </widget>
@@ -343,8 +344,8 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar" >
-   <property name="geometry" >
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
@@ -352,162 +353,169 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
      <string>File</string>
     </property>
-    <addaction name="m_ActionLoadData" />
-    <addaction name="m_ActionSaveData" />
-    <addaction name="m_ActionEvaluateScript" />
-    <addaction name="m_ActionPreferences" />
-    <addaction name="m_ActionQuit" />
+    <addaction name="m_ActionLoadData"/>
+    <addaction name="m_ActionSaveData"/>
+    <addaction name="m_ActionEvaluateScript"/>
+    <addaction name="m_ActionPreferences"/>
+    <addaction name="m_ActionQuit"/>
    </widget>
-   <widget class="QMenu" name="menuEdit" >
-    <property name="title" >
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
      <string>Edit</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuAcquire" >
-    <property name="title" >
+   <widget class="QMenu" name="menuAcquire">
+    <property name="title">
      <string>Acquire</string>
     </property>
-    <addaction name="m_ActionAcquire" />
+    <addaction name="m_ActionAcquire"/>
    </widget>
-   <widget class="QMenu" name="menuDisplay" >
-    <property name="title" >
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
      <string>Display</string>
     </property>
-    <addaction name="m_ActionAutoScale" />
-    <addaction name="separator" />
-    <addaction name="m_Action005Range" />
-    <addaction name="m_Action010Range" />
-    <addaction name="m_Action100Range" />
-    <addaction name="separator" />
-    <addaction name="m_ActionGrayscale" />
-    <addaction name="m_ActionInverseGrayscale" />
-    <addaction name="m_ActionEarthTones" />
-    <addaction name="m_ActionSpectrum" />
-    <addaction name="m_ActionFire" />
+    <addaction name="m_ActionAutoScale"/>
+    <addaction name="separator"/>
+    <addaction name="m_Action005Range"/>
+    <addaction name="m_Action010Range"/>
+    <addaction name="m_Action100Range"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionGrayscale"/>
+    <addaction name="m_ActionInverseGrayscale"/>
+    <addaction name="m_ActionEarthTones"/>
+    <addaction name="m_ActionSpectrum"/>
+    <addaction name="m_ActionFire"/>
    </widget>
-   <addaction name="menuFile" />
-   <addaction name="menuEdit" />
-   <addaction name="menuAcquire" />
-   <addaction name="menuDisplay" />
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuAcquire"/>
+   <addaction name="menuDisplay"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar" />
-  <widget class="QToolBar" name="toolBar" >
-   <property name="windowTitle" >
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
     <string>toolBar</string>
    </property>
-   <attribute name="toolBarArea" >
-    <enum>TopToolBarArea</enum>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
    </attribute>
-   <attribute name="toolBarBreak" >
+   <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="m_ActionAcquire" />
-   <addaction name="m_ActionCancel" />
-   <addaction name="m_ActionEvaluateScript" />
-   <addaction name="m_ActionLoadData" />
-   <addaction name="m_ActionSaveData" />
-   <addaction name="m_ActionAutoScale" />
-   <addaction name="m_Action010Range" />
-   <addaction name="m_ActionQuit" />
+   <addaction name="m_ActionAcquire"/>
+   <addaction name="m_ActionCancel"/>
+   <addaction name="m_ActionEvaluateScript"/>
+   <addaction name="separator"/>
+   <addaction name="m_ActionLoadData"/>
+   <addaction name="m_ActionSaveData"/>
+   <addaction name="separator"/>
+   <addaction name="m_ActionAutoScale"/>
+   <addaction name="m_Action005Range"/>
+   <addaction name="m_Action010Range"/>
+   <addaction name="m_Action100Range"/>
+   <addaction name="separator"/>
+   <addaction name="m_ActionGrayscale"/>
+   <addaction name="m_ActionInverseGrayscale"/>
+   <addaction name="m_ActionEarthTones"/>
+   <addaction name="m_ActionSpectrum"/>
+   <addaction name="m_ActionFire"/>
+   <addaction name="separator"/>
+   <addaction name="m_ActionQuit"/>
   </widget>
-  <action name="m_ActionQuit" >
-   <property name="text" >
+  <action name="m_ActionQuit">
+   <property name="text">
     <string>Quit</string>
    </property>
   </action>
-  <action name="m_ActionPreferences" >
-   <property name="text" >
+  <action name="m_ActionPreferences">
+   <property name="text">
     <string>Preferences...</string>
    </property>
   </action>
-  <action name="m_ActionAcquire" >
-   <property name="text" >
+  <action name="m_ActionAcquire">
+   <property name="text">
     <string>Acquire</string>
    </property>
   </action>
-  <action name="m_ActionAutoScale" >
-   <property name="text" >
+  <action name="m_ActionAutoScale">
+   <property name="text">
     <string>AutoScale</string>
    </property>
   </action>
-  <action name="m_ActionLoadData" >
-   <property name="text" >
+  <action name="m_ActionLoadData">
+   <property name="text">
     <string>Load Data</string>
    </property>
   </action>
-  <action name="m_ActionSaveData" >
-   <property name="text" >
+  <action name="m_ActionSaveData">
+   <property name="text">
     <string>Save Data</string>
    </property>
   </action>
-  <action name="m_ActionEvaluateScript" >
-   <property name="text" >
+  <action name="m_ActionEvaluateScript">
+   <property name="text">
     <string>Evaluate Script</string>
    </property>
   </action>
-  <action name="m_ActionCancel" >
-   <property name="text" >
+  <action name="m_ActionCancel">
+   <property name="text">
     <string>Cancel</string>
    </property>
   </action>
-  <action name="m_ActionGrayscale" >
-   <property name="text" >
+  <action name="m_ActionGrayscale">
+   <property name="text">
     <string>Grayscale</string>
    </property>
   </action>
-  <action name="m_ActionInverseGrayscale" >
-   <property name="text" >
+  <action name="m_ActionInverseGrayscale">
+   <property name="text">
     <string>Inverse Grayscale</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Inverse Grayscale</string>
    </property>
   </action>
-  <action name="m_ActionEarthTones" >
-   <property name="text" >
+  <action name="m_ActionEarthTones">
+   <property name="text">
     <string>Earth Tones</string>
    </property>
   </action>
-  <action name="m_ActionSpectrum" >
-   <property name="text" >
+  <action name="m_ActionSpectrum">
+   <property name="text">
     <string>Spectrum</string>
    </property>
   </action>
-  <action name="m_ActionFire" >
-   <property name="text" >
+  <action name="m_ActionFire">
+   <property name="text">
     <string>Fire</string>
    </property>
   </action>
-  <action name="m_Action010Range" >
-   <property name="text" >
+  <action name="m_Action010Range">
+   <property name="text">
     <string>10 % Range</string>
    </property>
   </action>
-  <action name="m_Action005Range" >
-   <property name="text" >
+  <action name="m_Action005Range">
+   <property name="text">
     <string>5 % Range</string>
    </property>
   </action>
-  <action name="m_Action100Range" >
-   <property name="text" >
+  <action name="m_Action100Range">
+   <property name="text">
     <string>100% Range</string>
    </property>
   </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QwtPlot</class>
-   <extends>QFrame</extends>
-   <header>qwt_plot.h</header>
-  </customwidget>
-  <customwidget>
    <class>QxrdImagePlot</class>
    <extends>QwtPlot</extends>
    <header>qxrdimageplot.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -401,7 +401,7 @@ int QxrdAcquisition::saveAcquiredFrame(QString name, int frame)
 //  outfile.open(QIODevice::ReadWrite);
 //  outfile.write((const char*) current, npixels*sizeof(double));
 
-  TIFF* tif = TIFFOpen(qPrintable(name),"w");
+  TIFF* tif = TIFFOpen(qPrintable(name+".tif"),"w");
 
   TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, m_NCols);
   TIFFSetField(tif, TIFFTAG_IMAGELENGTH, m_NRows);

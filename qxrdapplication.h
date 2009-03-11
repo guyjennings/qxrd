@@ -19,6 +19,7 @@ class QxrdApplication : public QApplication
   QxrdAcquisitionThread *acquisitionThread();
   QxrdServerThread      *serverThread();
   QScriptValue evaluate(QString cmd);
+  QxrdWindow *window();
 
  public slots:
   void shutdownThreads();
@@ -43,6 +44,12 @@ class QxrdApplication : public QApplication
  public:
   static QScriptValue acquireFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue statusFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue exposureFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue subframesFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue framesFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue filenameFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue directoryFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue fileIndexFunc(QScriptContext *context, QScriptEngine *engine);
 
  private:
   QxrdWindow                    *m_Window;

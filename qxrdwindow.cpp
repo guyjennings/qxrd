@@ -166,9 +166,10 @@ void QxrdWindow::setIntegrationTime(int n, double t)
 void QxrdWindow::setExposureTime(double t)
 {
   int best=0;
+  double t_usec = t*1e6;
 
   for (int i=1; i<8; i++) {
-    if (fabs(t-m_Exposures.value(i)) < fabs(t-m_Exposures.value(best))) {
+    if (fabs(t_usec-m_Exposures.value(i)) < fabs(t_usec-m_Exposures.value(best))) {
       best = i;
     }
   }
@@ -210,7 +211,7 @@ double  QxrdWindow::exposureTime()
 {
   int choice = m_ExposureTime->currentIndex();
 
-  return m_Exposures.value(choice);
+  return m_Exposures.value(choice)/1e6;
 }
 
 int     QxrdWindow::integrationMode()
