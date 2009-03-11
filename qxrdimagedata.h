@@ -4,7 +4,7 @@
 #include <QVector>
 #include "qcepimagedata.h"
 
-class QxrdImageData : public QcepImageData
+class QxrdImageData : public QcepImageDataTemplate<double>
 {
 };
 
