@@ -7,6 +7,7 @@
 #include <QTime>
 #include <QtConcurrentRun>
 #include <QFileDialog>
+#include <QMessageBox>
 
 static QxrdApplication* g_Application = NULL;
 
@@ -38,11 +39,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_ServerThread = new QxrdServerThread(this, m_AcquisitionThread);
   connect(m_ServerThread, SIGNAL(serverRunning()), this, SLOT(serverRunning()));
+  connect(m_ServerThread, SIGNAL(print_message(QString)), this, SLOT(printMessage(QString)));
   m_ServerThread -> start();
 
   m_Window -> setAcquisitionThread(m_AcquisitionThread);
-
-  connect(m_ServerThread, SIGNAL(print_message(QString)), this, SLOT(printMessage(QString)));
 
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
@@ -109,6 +109,20 @@ QxrdApplication::~QxrdApplication()
 
 void QxrdApplication::serverRunning()
 {
+}
+
+void QxrdApplication::possiblyQuit()
+{
+  if (wantToQuit()) {
+    quit();
+  }
+}
+
+bool QxrdApplication::wantToQuit()
+{
+  return QMessageBox::question(m_Window, tr("Really Quit?"),
+                               tr("Do you really want to exit the application?"),
+                                  QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
 void QxrdApplication::acquisitionRunning()
@@ -264,61 +278,55 @@ QScriptValue QxrdApplication::statusFunc(QScriptContext *context, QScriptEngine 
 
 QScriptValue QxrdApplication::exposureFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_Application -> window() -> exposureTime());
-  } else {
+  if (context->argumentCount() != 0) {
     g_Application -> window() -> setExposureTime(context->argument(0).toNumber());
-    return QScriptValue(engine, 0);
   }
+
+  return QScriptValue(engine, g_Application -> window() -> exposureTime());
 }
 
 QScriptValue QxrdApplication::subframesFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_Application -> window() -> nSummed());
-  } else {
-    g_Application -> window() -> setNSummed(context->argument(0).toInteger());
-    return QScriptValue(engine, 0);
+  if (context->argumentCount() != 0) {
+    g_Application -> window() -> setNSummed(context->argument(0).toUInt32());
   }
+
+  return QScriptValue(engine, g_Application -> window() -> nSummed());
 }
 
 QScriptValue QxrdApplication::framesFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_Application -> window() -> nFrames());
-  } else {
-    g_Application -> window() -> setNFrames(context->argument(0).toInteger());
-    return QScriptValue(engine, 0);
+  if (context->argumentCount() != 0) {
+    g_Application -> window() -> setNFrames(context->argument(0).toUInt32());
   }
+
+  return QScriptValue(engine, g_Application -> window() -> nFrames());
 }
 
 QScriptValue QxrdApplication::filenameFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_Application -> window() -> filePattern());
-  } else {
+  if (context->argumentCount() != 0) {
     g_Application -> window() -> setFilePattern(context->argument(0).toString());
-    return QScriptValue(engine, 0);
   }
+
+  return QScriptValue(engine, g_Application -> window() -> filePattern());
 }
 
 QScriptValue QxrdApplication::directoryFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_Application -> window() -> outputDirectory());
-  } else {
+  if (context->argumentCount() != 0) {
     g_Application -> window() -> setOutputDirectory(context->argument(0).toString());
-    return QScriptValue(engine, 0);
   }
+
+  return QScriptValue(engine, g_Application -> window() -> outputDirectory());
 }
 
 QScriptValue QxrdApplication::fileIndexFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_Application -> window() -> fileIndex());
-  } else {
-    g_Application -> window() -> setFileIndex(context->argument(0).toInteger());
-    return QScriptValue(engine, 0);
+  if (context->argumentCount() != 0) {
+    g_Application -> window() -> setFileIndex(context->argument(0).toUInt32());
   }
+
+  return QScriptValue(engine, g_Application -> window() -> fileIndex());
 }
 

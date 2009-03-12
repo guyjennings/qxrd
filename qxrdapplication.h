@@ -26,6 +26,8 @@ class QxrdApplication : public QApplication
   void serverRunning();
   void acquisitionRunning();
 
+  void possiblyQuit();
+
   void printMessage(QString msg);
   void executeCommand(QString cmd);
   void newDataAvailable();
@@ -42,6 +44,8 @@ class QxrdApplication : public QApplication
   void finishedCommand(QString cmd);
 
  public:
+  bool wantToQuit();
+
   static QScriptValue acquireFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue statusFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue exposureFunc(QScriptContext *context, QScriptEngine *engine);

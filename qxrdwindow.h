@@ -8,6 +8,7 @@
 class QxrdApplication;
 class QxrdAcquisitionThread;
 class QwtPlotSpectrogram;
+class QCloseEvent;
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -54,6 +55,9 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QString outputDirectory();
   void readSettings();
   void saveSettings();
+  void possiblyClose();
+  bool wantToClose();
+  void closeEvent (QCloseEvent * event);
 
  private:
   void setupConnections();

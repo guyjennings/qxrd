@@ -9,6 +9,8 @@ QxrdServer::QxrdServer(QxrdApplication *app, QxrdAcquisitionThread *acqth, QStri
     m_Application(app),
     m_AcquisitionThread(acqth)
 {
+  printf("QxrdServer::QxrdServer\n");
+
   startServer(QHostAddress::Any);
 }
 

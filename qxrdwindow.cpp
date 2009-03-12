@@ -14,6 +14,8 @@
 #include <QCheckBox>
 #include <QSignalMapper>
 #include <QFileDialog>
+#include <QMessageBox>
+#include <QCloseEvent>
 
 QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
   : QMainWindow(parent),
@@ -30,7 +32,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
 void QxrdWindow::setupConnections()
 {
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
-  connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(quit()));
+  connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
   connect(m_ActionLoadData, SIGNAL(triggered()), m_Application, SLOT(loadData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), m_Application, SLOT(saveData()));
 
@@ -73,6 +75,30 @@ QxrdWindow::~QxrdWindow()
   if (m_SettingsLoaded) {
     saveSettings();
   }
+}
+
+void QxrdWindow::closeEvent ( QCloseEvent * event )
+{
+  if (wantToClose()) {
+    event -> accept();
+  } else {
+    event -> ignore();
+  }
+}
+
+void QxrdWindow::possiblyClose()
+{
+//   printf("QxrdWindow::possiblyClose()\n");
+  if (wantToClose()) {
+    close();
+  }
+}
+
+bool QxrdWindow::wantToClose()
+{
+  return QMessageBox::question(this, tr("Really Close?"),
+                               tr("Do you really want to close the window?"),
+                                  QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
 void QxrdWindow::setAcquisitionThread(QxrdAcquisitionThread *acq)
