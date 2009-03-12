@@ -4,6 +4,8 @@ win32 {
   QMAKE_LFLAGS += -g
 
   DEBUG_SUFFIX = d
+
+  CONFIG += console
 }
 
 unix {

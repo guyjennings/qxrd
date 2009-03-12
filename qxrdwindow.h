@@ -44,21 +44,6 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void statusMessage(QString msg);
   void summedFrameCompleted(QString filename, int iframe);
 
-  void test();
-
-  void autoScale();
-
-  void set005Range();
-  void set010Range();
-  void set100Range();
-  void setDisplayedRange(double min, double max);
-
-  void setGrayscale();
-  void setInverseGrayscale();
-  void setEarthTones();
-  void setSpectrum();
-  void setFire();
-
  public:
   double  exposureTime();
   int     integrationMode();

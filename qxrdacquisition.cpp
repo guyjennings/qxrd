@@ -292,18 +292,12 @@ QVector<double> QxrdAcquisition::integrationTimes()
 
 void QxrdAcquisition::saveData(QString name)
 {
-//  double* current = m_AcquiredImage.data();
-//  long npixels = m_NRows*m_NCols;
+  for (int i=0; i<m_NFrames; i++) {
+    saveAcquiredFrame(QString(name+"-%1").arg(m_FileIndex,5,10,QChar('0')), i);
+    m_FileIndex++;
+  }
 
-//  QFile outfile(name);
-//  outfile.open(QIODevice::ReadWrite);
-//  outfile.write((const char*) current, npixels*sizeof(double));
-
-  saveTestTIFF(name+".int8.tiff", 8, 0);
-  saveTestTIFF(name+".int16.tiff", 16, 0);
-  saveTestTIFF(name+".int32.tiff", 32, 0);
-  saveTestTIFF(name+".float32.tiff", 32, 1);
-  saveTestTIFF(name+".float64.tiff", 64, 1);
+  emit fileIndexChanged(m_FileIndex);
 }
 
 void QxrdAcquisition::loadData(QString name)
