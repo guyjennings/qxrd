@@ -34,6 +34,9 @@ class QxrdApplication : public QApplication
   void doAcquire();
   void doCancel();
   void acquireComplete();
+  void doAcquireDark();
+  void doCancelDark();
+  void acquireDarkComplete();
   void saveData();
   void loadData();
 
@@ -61,6 +64,7 @@ class QxrdApplication : public QApplication
   QxrdAcquisitionThread         *m_AcquisitionThread;
   QScriptEngine                  m_ScriptEngine;
   int                            m_Acquiring;
+  int                            m_AcquiringDark;
 };
 
 #endif

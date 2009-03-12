@@ -16,7 +16,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    m_Acquiring(false)
+    m_Acquiring(false),
+    m_AcquiringDark(false)
 {
   setObjectName("qxrdapplication");
 
@@ -69,6 +70,12 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(m_Window->m_ActionCancel, SIGNAL(triggered()),
           this, SLOT(doCancel()));
+
+  connect(m_Window->m_ActionAcquireDark, SIGNAL(triggered()),
+          this, SLOT(doAcquireDark()));
+
+  connect(m_Window->m_ActionCancelDark, SIGNAL(triggered()),
+          this, SLOT(doCancelDark()));
 
   connect(m_Window->m_ActionPreferences, SIGNAL(triggered()),
 	  this, SLOT(doPreferences()));
@@ -225,10 +232,32 @@ void QxrdApplication::doAcquire()
   m_Acquiring = true;
 }
 
+void QxrdApplication::doAcquireDark()
+{
+  m_Window -> darkAcquisitionStarted();
+
+  QString outDir   = m_Window -> outputDirectory();
+  QString filePatt = m_Window -> filePattern();
+  int    index     = m_Window -> fileIndex();
+  int    integmode = m_Window -> integrationMode();
+  int     nsum     = m_Window -> darkNSummed();
+
+  m_AcquisitionThread -> acquireDark(outDir, filePatt, index, integmode, nsum);
+
+  m_AcquiringDark = true;
+}
+
 void QxrdApplication::doCancel()
 {
   if (m_Acquiring) {
     m_AcquisitionThread -> cancel();
+  }
+}
+
+void QxrdApplication::doCancelDark()
+{
+  if (m_AcquiringDark) {
+    m_AcquisitionThread -> cancelDark();
   }
 }
 
@@ -237,6 +266,13 @@ void QxrdApplication::acquireComplete()
   m_Window -> acquisitionFinished();
 
   m_Acquiring = false;
+}
+
+void QxrdApplication::acquireDarkComplete()
+{
+  m_Window -> acquisitionFinished();
+
+  m_AcquiringDark = false;
 }
 
 void QxrdApplication::saveData()

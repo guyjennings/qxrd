@@ -30,6 +30,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void acquisitionStarted();
   void acquisitionFinished();
 
+  void darkAcquisitionStarted();
+
   void setIntegrationTime(int n, double t);
 
   void setExposureTime(double t);
@@ -39,6 +41,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void setFileIndex(int index);
   void setFilePattern(QString pattern);
   void setOutputDirectory(QString path);
+  void setDarkNSummed(int nsummed);
 
   void selectOutputDirectory();
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
@@ -53,6 +56,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   int     fileIndex();
   QString filePattern();
   QString outputDirectory();
+  int     darkNSummed();
+
   void readSettings();
   void saveSettings();
   void possiblyClose();

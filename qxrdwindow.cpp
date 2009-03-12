@@ -40,6 +40,12 @@ void QxrdWindow::setupConnections()
   connect(m_CancelButton, SIGNAL(clicked()), m_Application, SLOT(doCancel()));
   connect(m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
 
+  connect(m_DarkAcquireButton, SIGNAL(clicked()), m_ActionAcquireDark, SIGNAL(triggered()));
+  connect(m_DarkCancelButton, SIGNAL(clicked()), m_ActionCancelDark, SIGNAL(triggered()));
+
+  connect(m_ActionAcquireDark, SIGNAL(triggered()), m_Application, SLOT(doAcquireDark()));
+  connect(m_ActionCancelDark, SIGNAL(triggered()), m_Application, SLOT(doCancelDark()));
+
   connect(m_Action005Range, SIGNAL(triggered()), m_Plot, SLOT(set005Range()));
   connect(m_Action010Range, SIGNAL(triggered()), m_Plot, SLOT(set010Range()));
   connect(m_Action100Range, SIGNAL(triggered()), m_Plot, SLOT(set100Range()));
@@ -127,6 +133,10 @@ void QxrdWindow::acquisitionReady()
   m_CancelButton -> setEnabled(false);
   m_ActionAcquire -> setEnabled(true);
   m_ActionCancel -> setEnabled(false);
+  m_DarkAcquireButton -> setEnabled(true);
+  m_DarkCancelButton -> setEnabled(false);
+  m_ActionAcquireDark -> setEnabled(true);
+  m_ActionCancelDark -> setEnabled(false);
   m_Progress -> reset();
 }
 
@@ -136,6 +146,23 @@ void QxrdWindow::acquisitionStarted()
   m_CancelButton -> setEnabled(true);
   m_ActionAcquire -> setEnabled(false);
   m_ActionCancel -> setEnabled(true);
+  m_DarkAcquireButton -> setEnabled(false);
+  m_DarkCancelButton -> setEnabled(false);
+  m_ActionAcquireDark -> setEnabled(false);
+  m_ActionCancelDark -> setEnabled(false);
+  m_Progress -> setValue(0);
+}
+
+void QxrdWindow::darkAcquisitionStarted()
+{
+  m_AcquireButton -> setEnabled(false);
+  m_CancelButton -> setEnabled(false);
+  m_ActionAcquire -> setEnabled(false);
+  m_ActionCancel -> setEnabled(false);
+  m_DarkAcquireButton -> setEnabled(false);
+  m_DarkCancelButton -> setEnabled(true);
+  m_ActionAcquireDark -> setEnabled(false);
+  m_ActionCancelDark -> setEnabled(true);
   m_Progress -> setValue(0);
 }
 
@@ -145,6 +172,10 @@ void QxrdWindow::acquisitionFinished()
   m_CancelButton -> setEnabled(false);
   m_ActionAcquire -> setEnabled(true);
   m_ActionCancel -> setEnabled(false);
+  m_DarkAcquireButton -> setEnabled(true);
+  m_DarkCancelButton -> setEnabled(false);
+  m_ActionAcquireDark -> setEnabled(true);
+  m_ActionCancelDark -> setEnabled(false);
   m_Progress -> reset();
 }
 
@@ -183,6 +214,11 @@ void QxrdWindow::setNSummed(int nsummed)
   m_SummedFrames->setValue(nsummed);
 }
 
+void QxrdWindow::setDarkNSummed(int nsummed)
+{
+  m_DarkSummedFrames->setValue(nsummed);
+}
+
 void QxrdWindow::setNFrames(int nframes)
 {
   m_SequenceFrames->setValue(nframes);
@@ -218,6 +254,11 @@ int     QxrdWindow::integrationMode()
 int     QxrdWindow::nSummed()
 {
   return m_SummedFrames->value();
+}
+
+int     QxrdWindow::darkNSummed()
+{
+  return m_DarkSummedFrames->value();
 }
 
 int     QxrdWindow::nFrames()

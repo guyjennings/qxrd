@@ -173,6 +173,10 @@ void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex
   }
 }
 
+void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum)
+{
+}
+
 void QxrdAcquisition::onEndFrame()
 {
   QString fileName = QDir(m_OutputDir).filePath(m_FilePattern+tr("%1").arg(m_FileIndex,5,10,QChar('0')));
@@ -263,6 +267,13 @@ void QxrdAcquisition::_haltAcquire()
 }
 
 void QxrdAcquisition::cancel()
+{
+  _haltAcquire();
+
+  //m_Cancel = true;
+}
+
+void QxrdAcquisition::cancelDark()
 {
   _haltAcquire();
 

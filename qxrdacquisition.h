@@ -22,9 +22,11 @@ class QxrdAcquisition : public QObject
  public slots:
   void initialize();
   void acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
+  void acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum);
   void resultsAvailable(int chan);
   void savingComplete(int chan);
   void cancel();
+  void cancelDark();
   void saveData(QString name);
   void loadData(QString name);
 

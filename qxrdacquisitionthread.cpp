@@ -24,6 +24,8 @@ void QxrdAcquisitionThread::run()
 
   connect(this, SIGNAL(_acquire(QString,QString,int,int,int,int)),
           m_Acquisition, SLOT(acquire(QString,QString,int,int,int,int)));
+  connect(this, SIGNAL(_acquireDark(QString,QString,int,int,int)),
+          m_Acquisition, SLOT(acquireDark(QString,QString,int,int,int)));
   connect(m_Acquisition, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
   connect(m_Acquisition, SIGNAL(acquireComplete()), this, SIGNAL(acquireComplete()));
   connect(m_Acquisition, SIGNAL(acquiredFrame(QString,int,int,int,int,int)), 
@@ -62,6 +64,11 @@ void QxrdAcquisitionThread::acquire(QString outDir, QString filePattern, int fil
   emit _acquire(outDir, filePattern, fileIndex, integmode, nsum, nframes);
 }
 
+void QxrdAcquisitionThread::acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum)
+{
+  emit _acquireDark(outDir, filePattern, fileIndex, integmode, nsum);
+}
+
 void QxrdAcquisitionThread::msleep(int msec)
 {
   QThread::msleep(msec);
@@ -70,6 +77,11 @@ void QxrdAcquisitionThread::msleep(int msec)
 void QxrdAcquisitionThread::cancel()
 {
   m_Acquisition -> cancel();
+}
+
+void QxrdAcquisitionThread::cancelDark()
+{
+  m_Acquisition -> cancelDark();
 }
 
 QVector<double> QxrdAcquisitionThread::integrationTimes()

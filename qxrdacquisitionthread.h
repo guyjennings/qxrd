@@ -34,6 +34,8 @@ class QxrdAcquisitionThread : public QThread
  public slots:
   void acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
   void cancel();
+  void acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum);
+  void cancelDark();
   void saveData(QString name);
   void loadData(QString name);
 
@@ -43,6 +45,7 @@ class QxrdAcquisitionThread : public QThread
 
  signals:
   void _acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
+  void _acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum);
 
  protected:
   void run();
