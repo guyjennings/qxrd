@@ -1,6 +1,7 @@
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
-#include "qxrdserverthread.h"
+//#include "qxrdserverthread.h"
+#include "qxrdserver.h"
 #include "qxrdacquisitionthread.h"
 
 #include <QScriptEngine>
@@ -14,7 +15,8 @@ static QxrdApplication* g_Application = NULL;
 QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
     m_Window(NULL),
-    m_ServerThread(NULL),
+//    m_ServerThread(NULL),
+    m_Server(NULL),
     m_AcquisitionThread(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false)
@@ -38,10 +40,13 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_AcquisitionThread -> start();
 
-  m_ServerThread = new QxrdServerThread(this, m_AcquisitionThread);
-  connect(m_ServerThread, SIGNAL(serverRunning()), this, SLOT(serverRunning()));
-  connect(m_ServerThread, SIGNAL(print_message(QString)), this, SLOT(printMessage(QString)));
-  m_ServerThread -> start();
+//  m_ServerThread = new QxrdServerThread(this, m_AcquisitionThread);
+//  connect(m_ServerThread, SIGNAL(serverRunning()), this, SLOT(serverRunning()));
+//  connect(m_ServerThread, SIGNAL(print_message(QString)), this, SLOT(printMessage(QString)));
+//  m_ServerThread -> start();
+
+  m_Server = new QxrdServer(this, m_AcquisitionThread, "qxrd", NULL);
+  connect(m_Server, SIGNAL(print_message(QString)), this, SIGNAL(print_message(QString)));
 
   m_Window -> setAcquisitionThread(m_AcquisitionThread);
 
@@ -111,7 +116,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 QxrdApplication::~QxrdApplication()
 {
   delete m_AcquisitionThread;
-  delete m_ServerThread;
+//  delete m_ServerThread;
+  delete m_Server;
 }
 
 void QxrdApplication::serverRunning()
@@ -164,7 +170,7 @@ QScriptValue QxrdApplication::evaluate(QString cmd)
 void QxrdApplication::shutdownThreads()
 {
   m_Window -> saveSettings();
-  m_ServerThread -> shutdown();
+//  m_ServerThread -> shutdown();
   m_AcquisitionThread -> shutdown();
 }
 
@@ -178,10 +184,10 @@ QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
   return m_AcquisitionThread;
 }
 
-QxrdServerThread *QxrdApplication::serverThread()
-{
-  return m_ServerThread;
-}
+//QxrdServerThread *QxrdApplication::serverThread()
+//{
+//  return m_ServerThread;
+//}
 
 void QxrdApplication::printMessage(QString msg)
 {
@@ -195,6 +201,8 @@ void QxrdApplication::newDataAvailable()
 
 int QxrdApplication::acquire()
 {
+  m_Window -> acquisitionStarted();
+
   QString outDir   = m_Window -> outputDirectory();
   QString filePatt = m_Window -> filePattern();
   int    index     = m_Window -> fileIndex();
@@ -295,11 +303,11 @@ void QxrdApplication::loadData()
 
 QScriptValue QxrdApplication::acquireFunc(QScriptContext *context, QScriptEngine *engine)
 {
-    if (context->argumentCount() == 0) {
-      return QScriptValue(engine, g_Application -> acquire());
-    } else {
-      return QScriptValue(engine, -1);
-    }
+  if (context->argumentCount() == 0) {
+    return QScriptValue(engine, g_Application -> acquire());
+  } else {
+    return QScriptValue(engine, -1);
+  }
 }
 
 QScriptValue QxrdApplication::statusFunc(QScriptContext *context, QScriptEngine *engine)
