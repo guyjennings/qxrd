@@ -33,6 +33,7 @@ HEADERS += \
         ../qceplib/qcepimagedata.h \
         ../qceplib/qcepimagedataformat.h \
         ../qceplib/qcepimagedataformatfactory.h \
+        qwt_plot_rescaler.h \
         qxrdapplication.h \
 	qxrdsettings.h \
 	qxrdimagedata.h \
@@ -41,7 +42,6 @@ HEADERS += \
 	qxrdimageplot.h \
         qxrdplotzoomer.h \
         qxrdplottracker.h \
-        qxrdserverthread.h \
 	qxrdserver.h \
 	qxrdspecserver.h \
 	qxrdacquisitionthread.h \
@@ -54,6 +54,7 @@ SOURCES += \
         ../qceplib/qcepimagedata.cpp \
         ../qceplib/qcepimagedataformat.cpp \
         ../qceplib/qcepimagedataformatfactory.cpp \
+        qwt_plot_rescaler.cpp \
         qxrdapplication.cpp \
 	qxrdsettings.cpp \
 	qxrdimagedata.cpp \
@@ -62,7 +63,6 @@ SOURCES += \
 	qxrdimageplot.cpp \
         qxrdplotzoomer.cpp \
         qxrdplottracker.cpp \
-        qxrdserverthread.cpp \
 	qxrdserver.cpp \
 	qxrdspecserver.cpp \
 	qxrdacquisitionthread.cpp \

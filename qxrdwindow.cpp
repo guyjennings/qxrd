@@ -17,12 +17,14 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 
-QxrdWindow::QxrdWindow(QxrdApplication *app, QWidget *parent)
+QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget *parent)
   : QMainWindow(parent),
     m_SettingsLoaded(false),
     m_Application(app),
-    m_AcquisitionThread(NULL),
-    m_Progress(NULL)
+    m_AcquisitionThread(acq),
+    m_Progress(NULL),
+    m_Acquiring(false),
+    m_AcquiringDark(false)
 {
   setupUi(this);
 
@@ -55,6 +57,21 @@ void QxrdWindow::setupConnections()
   connect(m_ActionEarthTones, SIGNAL(triggered()), m_Plot, SLOT(setEarthTones()));
   connect(m_ActionSpectrum, SIGNAL(triggered()), m_Plot, SLOT(setSpectrum()));
   connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()), Qt::DirectConnection);
+
+  connect(m_AcquisitionThread, SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
+          this, SLOT(acquiredFrame(QString,int,int,int,int,int)));
+  connect(m_AcquisitionThread, SIGNAL(summedFrameCompleted(QString,int)),
+          this, SLOT(summedFrameCompleted(QString,int)));
+
+  connect(m_AcquisitionThread, SIGNAL(fileIndexChanged(int)),
+          this, SLOT(setFileIndex(int)));
+  connect(m_AcquisitionThread, SIGNAL(statusMessage(QString)),
+          this, SLOT(statusMessage(QString)));
+
+  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
+  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
+  connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
+  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
 
   for (int i=0; i<8; i++) {
     m_ExposureTime -> addItem(tr("Item %1").arg(i));
@@ -105,11 +122,6 @@ bool QxrdWindow::wantToClose()
   return QMessageBox::question(this, tr("Really Close?"),
                                tr("Do you really want to close the window?"),
                                   QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
-}
-
-void QxrdWindow::setAcquisitionThread(QxrdAcquisitionThread *acq)
-{
-  m_AcquisitionThread = acq;
 }
 
 void QxrdWindow::saveData()
@@ -307,6 +319,90 @@ void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
   m_Plot -> setImage(data);
   m_Plot -> setTitle(fileInfo.fileName());
 //  m_Plot -> autoScale();
+}
+
+int QxrdWindow::acquire()
+{
+  acquisitionStarted();
+
+  QString outDir   = outputDirectory();
+  QString filePatt = filePattern();
+  int    index     = fileIndex();
+  int    integmode = integrationMode();
+  int    nsum      = nSummed();
+  int    nframes   = nFrames();
+
+  m_AcquisitionThread -> acquire(outDir, filePatt, index, integmode, nsum, nframes);
+
+  m_Acquiring = true;
+
+  return 0;
+}
+
+int QxrdWindow::acquisitionStatus(double time)
+{
+  return m_AcquisitionThread -> acquisitionStatus(time);
+}
+
+void QxrdWindow::doAcquire()
+{
+  printMessage("QxrdWindow::doAcquire()\n");
+
+  acquisitionStarted();
+
+  QString outDir   = outputDirectory();
+  QString filePatt = filePattern();
+  int    index     = fileIndex();
+  int    integmode = integrationMode();
+  int    nsum      = nSummed();
+  int    nframes   = nFrames();
+
+  m_AcquisitionThread -> acquire(outDir, filePatt, index, integmode, nsum, nframes);
+
+  m_Acquiring = true;
+}
+
+void QxrdWindow::doAcquireDark()
+{
+  darkAcquisitionStarted();
+
+  QString outDir   = outputDirectory();
+  QString filePatt = filePattern();
+  int    index     = fileIndex();
+  int    integmode = integrationMode();
+  int     nsum     = darkNSummed();
+
+  m_AcquisitionThread -> acquireDark(outDir, filePatt, index, integmode, nsum);
+
+  m_AcquiringDark = true;
+}
+
+void QxrdWindow::doCancel()
+{
+  if (m_Acquiring) {
+    m_AcquisitionThread -> cancel();
+  }
+}
+
+void QxrdWindow::doCancelDark()
+{
+  if (m_AcquiringDark) {
+    m_AcquisitionThread -> cancelDark();
+  }
+}
+
+void QxrdWindow::acquireComplete()
+{
+  acquisitionFinished();
+
+  m_Acquiring = false;
+}
+
+void QxrdWindow::acquireDarkComplete()
+{
+  acquisitionFinished();
+
+  m_AcquiringDark = false;
 }
 
 void QxrdWindow::readSettings()

@@ -5,7 +5,6 @@
 #include <QScriptEngine>
 
 class QxrdWindow;
-//class QxrdServerThread;
 class QxrdServer;
 class QxrdAcquisitionThread;
 
@@ -18,7 +17,6 @@ class QxrdApplication : public QApplication
   ~QxrdApplication();
 
   QxrdAcquisitionThread *acquisitionThread();
-//  QxrdServerThread      *serverThread();
   QScriptValue evaluate(QString cmd);
   QxrdWindow *window();
 
@@ -61,12 +59,9 @@ class QxrdApplication : public QApplication
 
  private:
   QxrdWindow                    *m_Window;
-//  QxrdServerThread              *m_ServerThread;
   QxrdServer                    *m_Server;
   QxrdAcquisitionThread         *m_AcquisitionThread;
   QScriptEngine                  m_ScriptEngine;
-  int                            m_Acquiring;
-  int                            m_AcquiringDark;
 };
 
 #endif

@@ -15,15 +15,20 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   Q_OBJECT;
 
  public:
-  QxrdWindow(QxrdApplication *app, QWidget *parent=0);
+  QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget *parent=0);
   virtual ~QxrdWindow();
 
  public slots:
-  void setAcquisitionThread(QxrdAcquisitionThread *acq);
-
   void loadData();
   void saveData();
-  
+
+  void doAcquire();
+  void doCancel();
+  void acquireComplete();
+  void doAcquireDark();
+  void doCancelDark();
+  void acquireDarkComplete();
+
   void printMessage(QString msg);
 
   void acquisitionReady();
@@ -58,6 +63,9 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QString outputDirectory();
   int     darkNSummed();
 
+  int acquire();
+  int acquisitionStatus(double time);
+
   void readSettings();
   void saveSettings();
   void possiblyClose();
@@ -74,6 +82,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QVector<double>         m_Exposures;
   QProgressBar           *m_Progress;
   QLabel                 *m_StatusMsg;
+  int                     m_Acquiring;
+  int                     m_AcquiringDark;
 };
 
 #endif

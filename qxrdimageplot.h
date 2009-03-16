@@ -12,6 +12,7 @@ class QwtPlotPanner;
 class QwtPlotMagnifier;
 class QwtLegend;
 class QwtPlotSpectrogram;
+class QwtPlotRescaler;
 
 #include "qxrdrasterdata.h"
 
@@ -48,6 +49,7 @@ class QxrdImagePlot : public QwtPlot
   QxrdPlotZoomer      *m_Zoomer;
   QwtPlotPanner       *m_Panner;
   QwtPlotMagnifier    *m_Magnifier;
+  QwtPlotRescaler     *m_Rescaler;
   QwtLegend           *m_Legend;
   QwtPlotSpectrogram  *m_Spectrogram;
   QxrdRasterData       m_Raster;

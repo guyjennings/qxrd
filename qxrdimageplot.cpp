@@ -6,13 +6,17 @@
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
 #include <qwt_plot_magnifier.h>
+#include <qwt_plot_rescaler.h>
 #include <qwt_legend.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_scale_widget.h>
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QwtPlot(parent),
+    m_Tracker(NULL),
     m_Zoomer(NULL),
+    m_Panner(NULL),
+    m_Rescaler(NULL),
     m_Legend(NULL),
     m_Spectrogram(NULL),
     m_ColorMap(Qt::black, Qt::white)
@@ -42,6 +46,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_Magnifier = new QwtPlotMagnifier(canvas());
   m_Magnifier -> setEnabled(true);
   m_Magnifier -> setMouseButton(Qt::NoButton);
+
+  m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::xBottom, QwtPlotRescaler::Expanding);
+  m_Rescaler -> setEnabled(true);
 
   m_Legend = new QwtLegend;
   m_Legend -> setFrameStyle(QFrame::Box|QFrame::Sunken);

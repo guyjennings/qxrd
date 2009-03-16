@@ -1,6 +1,5 @@
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
-//#include "qxrdserverthread.h"
 #include "qxrdserver.h"
 #include "qxrdacquisitionthread.h"
 
@@ -15,11 +14,8 @@ static QxrdApplication* g_Application = NULL;
 QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
     m_Window(NULL),
-//    m_ServerThread(NULL),
     m_Server(NULL),
-    m_AcquisitionThread(NULL),
-    m_Acquiring(false),
-    m_AcquiringDark(false)
+    m_AcquisitionThread(NULL)
 {
   setObjectName("qxrdapplication");
 
@@ -31,24 +27,17 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   setOrganizationDomain("xor.aps.anl.gov");
   setApplicationName("qxrd");
 
-  m_Window = new QxrdWindow(this);
-  m_Window -> show();
-
   m_AcquisitionThread = new QxrdAcquisitionThread(this);
   connect(m_AcquisitionThread, SIGNAL(acquisitionRunning()), this, SLOT(acquisitionRunning()));
   connect(m_AcquisitionThread, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
   m_AcquisitionThread -> start();
 
-//  m_ServerThread = new QxrdServerThread(this, m_AcquisitionThread);
-//  connect(m_ServerThread, SIGNAL(serverRunning()), this, SLOT(serverRunning()));
-//  connect(m_ServerThread, SIGNAL(print_message(QString)), this, SLOT(printMessage(QString)));
-//  m_ServerThread -> start();
-
   m_Server = new QxrdServer(this, m_AcquisitionThread, "qxrd", NULL);
   connect(m_Server, SIGNAL(print_message(QString)), this, SIGNAL(print_message(QString)));
 
-  m_Window -> setAcquisitionThread(m_AcquisitionThread);
+  m_Window = new QxrdWindow(this, m_AcquisitionThread);
+  m_Window -> show();
 
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
@@ -57,30 +46,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(m_AcquisitionThread, SIGNAL(acquireComplete()),
 	  this, SLOT(acquireComplete()));
-
-  connect(m_AcquisitionThread, SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
-          m_Window, SLOT(acquiredFrame(QString,int,int,int,int,int)));
-
-  connect(m_AcquisitionThread, SIGNAL(summedFrameCompleted(QString,int)),
-	  m_Window, SLOT(summedFrameCompleted(QString,int)));
-
-  connect(m_AcquisitionThread, SIGNAL(fileIndexChanged(int)),
-	  m_Window, SLOT(setFileIndex(int)));
-  connect(m_AcquisitionThread, SIGNAL(statusMessage(QString)),
-          m_Window, SLOT(statusMessage(QString)));
-
-
-  connect(m_Window->m_ActionAcquire, SIGNAL(triggered()),
-          this, SLOT(doAcquire()));
-
-  connect(m_Window->m_ActionCancel, SIGNAL(triggered()),
-          this, SLOT(doCancel()));
-
-  connect(m_Window->m_ActionAcquireDark, SIGNAL(triggered()),
-          this, SLOT(doAcquireDark()));
-
-  connect(m_Window->m_ActionCancelDark, SIGNAL(triggered()),
-          this, SLOT(doCancelDark()));
 
   connect(m_Window->m_ActionPreferences, SIGNAL(triggered()),
 	  this, SLOT(doPreferences()));
@@ -116,7 +81,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 QxrdApplication::~QxrdApplication()
 {
   delete m_AcquisitionThread;
-//  delete m_ServerThread;
   delete m_Server;
 }
 
@@ -170,7 +134,6 @@ QScriptValue QxrdApplication::evaluate(QString cmd)
 void QxrdApplication::shutdownThreads()
 {
   m_Window -> saveSettings();
-//  m_ServerThread -> shutdown();
   m_AcquisitionThread -> shutdown();
 }
 
@@ -184,11 +147,6 @@ QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
   return m_AcquisitionThread;
 }
 
-//QxrdServerThread *QxrdApplication::serverThread()
-//{
-//  return m_ServerThread;
-//}
-
 void QxrdApplication::printMessage(QString msg)
 {
   m_Window -> printMessage(msg);
@@ -201,86 +159,44 @@ void QxrdApplication::newDataAvailable()
 
 int QxrdApplication::acquire()
 {
-  m_Window -> acquisitionStarted();
-
-  QString outDir   = m_Window -> outputDirectory();
-  QString filePatt = m_Window -> filePattern();
-  int    index     = m_Window -> fileIndex();
-  int    integmode = m_Window -> integrationMode();
-  int    nsum      = m_Window -> nSummed();
-  int    nframes   = m_Window -> nFrames();
-
-  m_AcquisitionThread -> acquire(outDir, filePatt, index, integmode, nsum, nframes);
-
-  m_Acquiring = true;
-
-  return 0;
+  return m_Window -> acquire();
 }
 
 int QxrdApplication::acquisitionStatus(double time)
 {
-  return m_AcquisitionThread -> acquisitionStatus(time);
+  return m_Window -> acquisitionStatus(time);
 }
 
 void QxrdApplication::doAcquire()
 {
   printMessage("QxrdApplication::doAcquire()\n");
 
-  m_Window -> acquisitionStarted();
-
-  QString outDir   = m_Window -> outputDirectory();
-  QString filePatt = m_Window -> filePattern();
-  int    index     = m_Window -> fileIndex();
-  int    integmode = m_Window -> integrationMode();
-  int    nsum      = m_Window -> nSummed();
-  int    nframes   = m_Window -> nFrames();
-
-  m_AcquisitionThread -> acquire(outDir, filePatt, index, integmode, nsum, nframes);
-
-  m_Acquiring = true;
+  m_Window -> doAcquire();
 }
 
 void QxrdApplication::doAcquireDark()
 {
-  m_Window -> darkAcquisitionStarted();
-
-  QString outDir   = m_Window -> outputDirectory();
-  QString filePatt = m_Window -> filePattern();
-  int    index     = m_Window -> fileIndex();
-  int    integmode = m_Window -> integrationMode();
-  int     nsum     = m_Window -> darkNSummed();
-
-  m_AcquisitionThread -> acquireDark(outDir, filePatt, index, integmode, nsum);
-
-  m_AcquiringDark = true;
+  m_Window -> doAcquireDark();
 }
 
 void QxrdApplication::doCancel()
 {
-  if (m_Acquiring) {
-    m_AcquisitionThread -> cancel();
-  }
+  m_Window -> doCancel();
 }
 
 void QxrdApplication::doCancelDark()
 {
-  if (m_AcquiringDark) {
-    m_AcquisitionThread -> cancelDark();
-  }
+  m_Window -> doCancelDark();
 }
 
 void QxrdApplication::acquireComplete()
 {
-  m_Window -> acquisitionFinished();
-
-  m_Acquiring = false;
+  m_Window -> acquireComplete();
 }
 
 void QxrdApplication::acquireDarkComplete()
 {
-  m_Window -> acquisitionFinished();
-
-  m_AcquiringDark = false;
+  m_Window -> acquireDarkComplete();
 }
 
 void QxrdApplication::saveData()
