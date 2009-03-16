@@ -3,6 +3,7 @@
 #include "qxrdacquisitionthread.h"
 #include "qxrdsettings.h"
 #include "qxrdimageplot.h"
+#include "qxrdimagedata.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -24,7 +25,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_AcquisitionThread(acq),
     m_Progress(NULL),
     m_Acquiring(false),
-    m_AcquiringDark(false)
+    m_AcquiringDark(false),
+    m_DarkFrame(NULL),
+    m_BadPixels(NULL),
+    m_GainFrame(NULL)
 {
   setupUi(this);
 
@@ -38,15 +42,15 @@ void QxrdWindow::setupConnections()
   connect(m_ActionLoadData, SIGNAL(triggered()), m_Application, SLOT(loadData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), m_Application, SLOT(saveData()));
 
-  connect(m_AcquireButton, SIGNAL(clicked()), m_Application, SLOT(doAcquire()));
-  connect(m_CancelButton, SIGNAL(clicked()), m_Application, SLOT(doCancel()));
+  connect(m_AcquireButton, SIGNAL(clicked()), this, SLOT(doAcquire()));
+  connect(m_CancelButton, SIGNAL(clicked()), this, SLOT(doCancel()));
   connect(m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
 
   connect(m_DarkAcquireButton, SIGNAL(clicked()), m_ActionAcquireDark, SIGNAL(triggered()));
   connect(m_DarkCancelButton, SIGNAL(clicked()), m_ActionCancelDark, SIGNAL(triggered()));
 
-  connect(m_ActionAcquireDark, SIGNAL(triggered()), m_Application, SLOT(doAcquireDark()));
-  connect(m_ActionCancelDark, SIGNAL(triggered()), m_Application, SLOT(doCancelDark()));
+  connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
+  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
 
   connect(m_Action005Range, SIGNAL(triggered()), m_Plot, SLOT(set005Range()));
   connect(m_Action010Range, SIGNAL(triggered()), m_Plot, SLOT(set010Range()));
@@ -62,6 +66,8 @@ void QxrdWindow::setupConnections()
           this, SLOT(acquiredFrame(QString,int,int,int,int,int)));
   connect(m_AcquisitionThread, SIGNAL(summedFrameCompleted(QString,int)),
           this, SLOT(summedFrameCompleted(QString,int)));
+  connect(m_AcquisitionThread, SIGNAL(acquireComplete()),
+          this, SLOT(acquireComplete()));
 
   connect(m_AcquisitionThread, SIGNAL(fileIndexChanged(int)),
           this, SLOT(setFileIndex(int)));

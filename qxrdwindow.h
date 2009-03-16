@@ -9,6 +9,7 @@ class QxrdApplication;
 class QxrdAcquisitionThread;
 class QwtPlotSpectrogram;
 class QCloseEvent;
+class QxrdImageData;
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -84,6 +85,10 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QLabel                 *m_StatusMsg;
   int                     m_Acquiring;
   int                     m_AcquiringDark;
+  QList<QxrdImageData*>   m_AcquiredData;
+  QxrdImageData          *m_DarkFrame;
+  QxrdImageData          *m_BadPixels;
+  QxrdImageData          *m_GainFrame;
 };
 
 #endif

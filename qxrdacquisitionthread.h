@@ -8,13 +8,14 @@
 
 class QxrdAcquisition;
 class QxrdApplication;
+class QxrdWindow;
 
 class QxrdAcquisitionThread : public QThread
 {
   Q_OBJECT;
 
  public:
-  QxrdAcquisitionThread(QxrdApplication *app);
+  QxrdAcquisitionThread(QxrdApplication *app, QxrdWindow *win);
   ~QxrdAcquisitionThread();
 
   void shutdown();
@@ -42,6 +43,8 @@ class QxrdAcquisitionThread : public QThread
  public:
   QxrdRasterData imageRaster(int iframe);
   int acquisitionStatus(double time);
+  void setWindow(QxrdWindow *win);
+  QxrdWindow *window();
 
  signals:
   void _acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
@@ -52,6 +55,7 @@ class QxrdAcquisitionThread : public QThread
 
  private:
   QxrdApplication   *m_Application;
+  QxrdWindow        *m_Window;
   QxrdAcquisition   *m_Acquisition;
 };
 

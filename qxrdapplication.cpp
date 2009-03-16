@@ -27,31 +27,21 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   setOrganizationDomain("xor.aps.anl.gov");
   setApplicationName("qxrd");
 
-  m_AcquisitionThread = new QxrdAcquisitionThread(this);
+  m_AcquisitionThread = new QxrdAcquisitionThread(this, NULL);
   connect(m_AcquisitionThread, SIGNAL(acquisitionRunning()), this, SLOT(acquisitionRunning()));
   connect(m_AcquisitionThread, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
   m_AcquisitionThread -> start();
 
   m_Server = new QxrdServer(this, m_AcquisitionThread, "qxrd", NULL);
-  connect(m_Server, SIGNAL(print_message(QString)), this, SIGNAL(print_message(QString)));
+  connect(m_Server, SIGNAL(print_message(QString)), this, SIGNAL(printMessage(QString)));
 
   m_Window = new QxrdWindow(this, m_AcquisitionThread);
   m_Window -> show();
 
+  m_AcquisitionThread -> setWindow(m_Window);
+
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
-
-  connect(m_AcquisitionThread, SIGNAL(newDataAvailable()),
-	  this, SLOT(newDataAvailable()));
-
-  connect(m_AcquisitionThread, SIGNAL(acquireComplete()),
-	  this, SLOT(acquireComplete()));
-
-  connect(m_Window->m_ActionPreferences, SIGNAL(triggered()),
-	  this, SLOT(doPreferences()));
-
-  connect(m_Window->m_ActionEvaluateScript, SIGNAL(triggered()),
-	  this, SLOT(doScript()));
 
   m_ScriptEngine.globalObject().setProperty("acquire",
           m_ScriptEngine.newFunction(QxrdApplication::acquireFunc));
@@ -152,11 +142,6 @@ void QxrdApplication::printMessage(QString msg)
   m_Window -> printMessage(msg);
 }
 
-void QxrdApplication::newDataAvailable()
-{
-  printMessage("QxrdApplication::newDataAvailable()\n");
-}
-
 int QxrdApplication::acquire()
 {
   return m_Window -> acquire();
@@ -165,38 +150,6 @@ int QxrdApplication::acquire()
 int QxrdApplication::acquisitionStatus(double time)
 {
   return m_Window -> acquisitionStatus(time);
-}
-
-void QxrdApplication::doAcquire()
-{
-  printMessage("QxrdApplication::doAcquire()\n");
-
-  m_Window -> doAcquire();
-}
-
-void QxrdApplication::doAcquireDark()
-{
-  m_Window -> doAcquireDark();
-}
-
-void QxrdApplication::doCancel()
-{
-  m_Window -> doCancel();
-}
-
-void QxrdApplication::doCancelDark()
-{
-  m_Window -> doCancelDark();
-}
-
-void QxrdApplication::acquireComplete()
-{
-  m_Window -> acquireComplete();
-}
-
-void QxrdApplication::acquireDarkComplete()
-{
-  m_Window -> acquireDarkComplete();
 }
 
 void QxrdApplication::saveData()
@@ -220,7 +173,7 @@ void QxrdApplication::loadData()
 QScriptValue QxrdApplication::acquireFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_Application -> acquire());
+    return QScriptValue(engine, g_Application -> window() -> acquire());
   } else {
     return QScriptValue(engine, -1);
   }
@@ -229,10 +182,10 @@ QScriptValue QxrdApplication::acquireFunc(QScriptContext *context, QScriptEngine
 QScriptValue QxrdApplication::statusFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_Application -> acquisitionStatus(0));
+    return QScriptValue(engine, g_Application -> window() -> acquisitionStatus(0));
   } else {
     double time = context->argument(0).toNumber();
-    return QScriptValue(engine, g_Application -> acquisitionStatus(time));
+    return QScriptValue(engine, g_Application -> window() -> acquisitionStatus(time));
   }
 }
 

@@ -1,10 +1,12 @@
 #include "qxrdacquisitionthread.h"
 
 #include "qxrdacquisition.h"
+#include "qxrdwindow.h"
 
-QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdApplication *app)
+QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdApplication *app, QxrdWindow *win)
   : QThread(),
     m_Application(app),
+    m_Window(win),
     m_Acquisition(NULL)
 {
 }
@@ -97,4 +99,14 @@ QxrdRasterData QxrdAcquisitionThread::imageRaster(int iframe)
 int QxrdAcquisitionThread::acquisitionStatus(double time)
 {
   return m_Acquisition -> acquisitionStatus();
+}
+
+void QxrdAcquisitionThread::setWindow(QxrdWindow *win)
+{
+  m_Window = win;
+}
+
+QxrdWindow *QxrdAcquisitionThread::window()
+{
+  return m_Window;
 }

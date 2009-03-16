@@ -29,13 +29,6 @@ class QxrdApplication : public QApplication
 
   void printMessage(QString msg);
   void executeCommand(QString cmd);
-  void newDataAvailable();
-  void doAcquire();
-  void doCancel();
-  void acquireComplete();
-  void doAcquireDark();
-  void doCancelDark();
-  void acquireDarkComplete();
   void saveData();
   void loadData();
 
