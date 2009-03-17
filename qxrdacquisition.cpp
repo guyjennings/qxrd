@@ -17,6 +17,7 @@
 #include <QDir>
 #include <QFile>
 #include <QtConcurrentRun>
+#include <QTime>
 
 #include "tiffio.h"
 
@@ -35,7 +36,9 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
     m_NFrames(0),
     m_NBufferFrames(0),
     m_CurrentFrame(0),
-    m_NIntTimes(0)
+    m_NIntTimes(0),
+    m_AcquiredImages(QString("acquired images")),
+    m_AvailableImages(QString("available images"))
 {
   emit printMessage("Enter QxrdAcquisition::QxrdAcquisition\n");
 
@@ -191,6 +194,10 @@ void QxrdAcquisition::onEndFrame()
 
 //   printf("m_AcquiredImage.data() = %p\n", current);
 
+  QTime tic;
+
+  tic.start();
+
   for (long i=0; i<npixels; i++) {
     *current += *frame;
     current++; frame++;
@@ -198,6 +205,8 @@ void QxrdAcquisition::onEndFrame()
 
   m_CurrentSum++;
   m_BufferFrame++;
+
+  printf("Frame sum took %d msec\n", tic.elapsed());
 
   if (m_BufferFrame >= m_NBufferFrames) {
     m_BufferFrame = 0;

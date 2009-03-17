@@ -7,15 +7,76 @@
 
 #include "Acq.h"
 
+#include <QTimer>
+#include "xisl_dummy.h"
+
 /*
   Dummy version of the PE xisl library for development purposes.
 */
 
+static HACQDESC acqDesc;
 static void (*endFrameCallback)(HACQDESC hAcqDesc) = NULL;
 static void (*endAcqCallback)(HACQDESC hAcqDesc) = NULL;
 static int nFrames = 0;
 static int options = 0;
 static int continuous = 0;
+
+static AcquisitionTimer timer;
+
+AcquisitionTimer::AcquisitionTimer()
+  : QObject(NULL),
+    m_Mode(0)
+{
+  connect(&m_Timer, SIGNAL(timeout()), this, SLOT(timeout()));
+}
+
+void AcquisitionTimer::start()
+{
+  printf("AcquisitionTimer::start(), m_Mode = %d\n", m_Mode);
+
+  switch (m_Mode) {
+  case 0:
+    m_Timer.start(67);
+    break;
+  case 1:
+    m_Timer.start(83);
+    break;
+  case 2:
+    m_Timer.start(100);
+    break;
+  case 3:
+    m_Timer.start(125);
+    break;
+  case 4:
+    m_Timer.start(167);
+    break;
+  case 5:
+    m_Timer.start(250);
+    break;
+  case 6:
+    m_Timer.start(500);
+    break;
+  case 7:
+    m_Timer.start(1000);
+    break;
+  default:
+    break;
+  };
+}
+
+void AcquisitionTimer::stop()
+{
+  printf("AcquisitionTimer::stop()\n");
+
+  m_Timer.stop();
+}
+
+void AcquisitionTimer::setmode(int mode)
+{
+  printf("AcquisitionTimer::setmode(%d)\n",mode);
+
+  m_Mode = mode;
+}
 
 HIS_RETURN Acquisition_EnumSensors(UINT *pdwNumSensors, BOOL bEnableIRQ, BOOL bAlwaysOpen)
 {
@@ -52,6 +113,7 @@ HIS_RETURN Acquisition_SetCallbacksAndMessages(HACQDESC pAcqDesc,
 {
   endFrameCallback = lpfnEndFrameCallback;
   endAcqCallback = lpfnEndAcqCallback;
+  acqDesc = pAcqDesc;
 
   return HIS_ALL_OK;
 }
@@ -59,6 +121,12 @@ HIS_RETURN Acquisition_SetCallbacksAndMessages(HACQDESC pAcqDesc,
 HIS_RETURN Acquisition_Abort(HACQDESC hAcqDesc)
 {
   continuous = 0;
+
+  timer.stop();
+
+  if (endAcqCallback) {
+    endAcqCallback(acqDesc);
+  }
 
   return HIS_ALL_OK;
 }
@@ -70,28 +138,42 @@ HIS_RETURN Acquisition_DefineDestBuffers(HACQDESC pAcqDesc, unsigned short *pPro
 
 HIS_RETURN Acquisition_Acquire_Image(HACQDESC pAcqDesc, UINT dwFrames, UINT dwSkipFrms, UINT dwOpt, unsigned short *pwOffsetData, DWORD *pdwGainData, DWORD *pdwPxlCorrList)
 {
+  printf("Acquisition_Acquire_Image dwOpt = %d\n", dwOpt);
+
   nFrames = dwFrames;
   options = dwOpt;
 
   if (dwOpt == HIS_SEQ_CONTINUOUS) {
     continuous = 1;
 
-    while(continuous) {
-      sleep(1);
-      if (endFrameCallback) {
-	endFrameCallback(pAcqDesc);
-      }
-    }
-
-    endAcqCallback(pAcqDesc);
+    timer.start();
   }
 
   return HIS_ALL_OK;
 }
 
+static int s_Mode = 0;
+
 HIS_RETURN Acquisition_SetCameraMode(HACQDESC hAcqDesc, UINT dwMode)
 {
+  timer.setmode(dwMode);
+
   return HIS_ALL_OK;
+}
+
+void AcquisitionTimer::timeout()
+{
+  if (endFrameCallback) {
+    endFrameCallback(acqDesc);
+  }
+
+  if (continuous) {
+    timer.start();
+  } else {
+    if (endAcqCallback) {
+      endAcqCallback(acqDesc);
+    }
+  }
 }
 
 HIS_RETURN Acquisition_GetIntTimes(HACQDESC hAcqDesc, double *dblIntTime, int *nIntTimes)
@@ -114,4 +196,6 @@ HIS_RETURN Acquisition_GetActFrame(HACQDESC hAcqDesc, DWORD *dwActAcqFrame, DWOR
 {
   if (dwActAcqFrame) *dwActAcqFrame = 42;
   if (dwActSecBuffFrame) *dwActSecBuffFrame=89;
+
+  return HIS_ALL_OK;
 }

@@ -37,6 +37,7 @@ HEADERS += \
         qxrdapplication.h \
 	qxrdsettings.h \
 	qxrdimagedata.h \
+	qxrdimagequeue.h \
 	qxrdrasterdata.h \
 	qxrdwindow.h \
 	qxrdimageplot.h \
@@ -58,6 +59,7 @@ SOURCES += \
         qxrdapplication.cpp \
 	qxrdsettings.cpp \
 	qxrdimagedata.cpp \
+	qxrdimagequeue.cpp \
 	qxrdrasterdata.cpp \
 	qxrdwindow.cpp \
 	qxrdimageplot.cpp \
@@ -73,6 +75,7 @@ FORMS = \
 	qxrdwindow.ui
 
 unix{
+  HEADERS += xisl_dummy.h
   SOURCES += xisl_dummy.cpp
   INCLUDEPATH += /usr/include/qwt/
   LIBS += -lqwt -ltiff

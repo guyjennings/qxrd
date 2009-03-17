@@ -7,6 +7,7 @@
 #include <QFuture>
 
 #include "qxrdrasterdata.h"
+#include "qxrdimagequeue.h"
 
 class QxrdApplication;
 class QxrdAcquisitionThread;
@@ -78,6 +79,8 @@ class QxrdAcquisition : public QObject
   QString                m_OutputDir;
   QString                m_FilePattern;
   int                    m_FileIndex;
+  QxrdImageQueue         m_AcquiredImages;
+  QxrdImageQueue         m_AvailableImages;
 };
 
 #endif
