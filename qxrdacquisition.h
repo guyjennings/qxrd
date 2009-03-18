@@ -11,13 +11,14 @@
 
 class QxrdApplication;
 class QxrdAcquisitionThread;
+class QxrdWindow;
 
 class QxrdAcquisition : public QObject
 {
   Q_OBJECT;
 
  public:
-  QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *thread);
+  QxrdAcquisition(QxrdApplication *app, QxrdWindow *win, QxrdAcquisitionThread *thread);
   ~QxrdAcquisition();
 
  public slots:
@@ -48,8 +49,9 @@ class QxrdAcquisition : public QObject
   void onEndAcquisition();
   QVector<double> integrationTimes();
   int acquisitionStatus();
-
+  void setWindow(QxrdWindow *win);
   QxrdImageData *nextAvailableImage();
+  void enqueue(QxrdImageData *img);
 
  private:
   void acquisitionError(int n);
@@ -68,7 +70,7 @@ class QxrdAcquisition : public QObject
   int                    m_BufferFrame;
   int                    m_CurrentSum;
   int                    m_CurrentFrame;
-  QxrdImageData         *m_AcquiredImage;
+  QxrdImageData         *m_AcquiredData;
   QVector<unsigned short> m_Buffer;
   QVector< QFuture<int> > m_Saved;
   double                 m_IntTimes[8];
@@ -78,6 +80,7 @@ class QxrdAcquisition : public QObject
   int                    m_FileIndex;
   QxrdImageQueue         m_AcquiredImages;
   QxrdImageQueue         m_AvailableImages;
+  QxrdWindow            *m_Window;
 };
 
 #endif

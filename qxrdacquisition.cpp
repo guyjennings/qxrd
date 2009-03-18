@@ -2,6 +2,7 @@
 #include "qxrdacquisitionthread.h"
 #include "qxrdapplication.h"
 #include "qxrdimagedata.h"
+#include "qxrdwindow.h"
 
 #ifdef Q_OS_UNIX
 #include "AcqLinuxTypes.h"
@@ -22,7 +23,7 @@
 
 static QxrdAcquisition *g_Acquisition = NULL;
 
-QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *thread)
+QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdWindow *win, QxrdAcquisitionThread *thread)
   : QObject(),
     m_Thread(thread),
     m_Mutex(QMutex::Recursive),
@@ -35,9 +36,11 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
     m_NFrames(0),
     m_NBufferFrames(0),
     m_CurrentFrame(0),
+    m_AcquiredData(NULL),
     m_NIntTimes(0),
-    m_AcquiredImages(QString("acquired images")),
-    m_AvailableImages(QString("available images"))
+    m_AcquiredImages(QString("QxrdAcquisition acquired images")),
+    m_AvailableImages(QString("QxrdAcquisition available images")),
+    m_Window(win)
 {
   emit printMessage("Enter QxrdAcquisition::QxrdAcquisition\n");
 
@@ -48,6 +51,9 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdAcquisitionThread *th
 
 QxrdAcquisition::~QxrdAcquisition()
 {
+  if (m_AcquiredData) {
+    delete m_AcquiredData;
+  }
 }
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
@@ -117,6 +123,15 @@ void QxrdAcquisition::initialize()
     acquisitionError(nRet);
     return;
   }
+
+  for (int i=0; i<10; i++) {
+    m_AvailableImages.enqueue(new QxrdImageData(m_NCols, m_NRows));
+  }
+}
+
+void QxrdAcquisition::setWindow(QxrdWindow *win)
+{
+  m_Window = win;
 }
 
 void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
@@ -142,10 +157,10 @@ void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex
     m_NBufferFrames = 10;
     m_BufferFrame = 0;
 
-    m_AcquiredImage = nextAvailableImage();
+    m_AcquiredData = nextAvailableImage();
 
-    m_AcquiredImage->resize(m_NRows, m_NCols);
-    m_AcquiredImage->clear();
+    m_AcquiredData->resize(m_NCols, m_NRows);
+    m_AcquiredData->clear();
 
     m_Buffer.resize(m_NRows*m_NCols*m_NBufferFrames);
     m_Buffer.fill(0);
@@ -191,7 +206,7 @@ void QxrdAcquisition::onEndFrame()
   // sum current frame
 
   long npixels = m_NRows*m_NCols;
-  double* current = m_AcquiredImage->data();
+  double* current = m_AcquiredData->data();
   unsigned short* frame = m_Buffer.data() + m_BufferFrame*npixels;
   unsigned short max=0;
 
@@ -218,8 +233,15 @@ void QxrdAcquisition::onEndFrame()
   if (m_CurrentSum >= m_NSums) {
     m_CurrentSum = 0;
 
-    m_Saved[m_CurrentFrame] =
-        QtConcurrent::run(this, &QxrdAcquisition::saveAcquiredFrame, fileName, m_CurrentFrame);
+    m_AcquiredData -> setFilename(fileName);
+    m_AcquiredData -> setTitle(fileName);
+
+    m_Window -> enqueue(m_AcquiredData);
+
+    m_AcquiredData = nextAvailableImage();
+    m_AcquiredData -> resize(m_NCols, m_NRows);
+    m_AcquiredData -> clear();
+
     emit statusMessage("Saving "+fileName);
     emit printMessage("Saving """+fileName+"""");
     emit summedFrameCompleted(fileName, m_CurrentFrame);
@@ -322,3 +344,7 @@ QVector<double> QxrdAcquisition::integrationTimes()
   return res;
 }
 
+void QxrdAcquisition::enqueue(QxrdImageData *img)
+{
+  m_AvailableImages.enqueue(img);
+}

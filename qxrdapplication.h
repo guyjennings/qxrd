@@ -29,8 +29,6 @@ class QxrdApplication : public QApplication
 
   void printMessage(QString msg);
   void executeCommand(QString cmd);
-  void saveData();
-  void loadData();
 
   int acquire();
   int acquisitionStatus(double time);

@@ -152,24 +152,6 @@ int QxrdApplication::acquisitionStatus(double time)
   return m_Window -> acquisitionStatus(time);
 }
 
-void QxrdApplication::saveData()
-{
-  QString theFile = QFileDialog::getSaveFileName(m_Window, "Save Data in");
-
-  if (theFile.length()) {
-    m_Window -> saveData(theFile);
-  }
-}
-
-void QxrdApplication::loadData()
-{
-  QString theFile = QFileDialog::getOpenFileName(m_Window, "Load Image from...");
-
-  if (theFile.length()) {
-    m_Window -> loadData(theFile);
-  }
-}
-
 QScriptValue QxrdApplication::acquireFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() == 0) {

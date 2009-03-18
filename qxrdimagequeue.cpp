@@ -1,8 +1,20 @@
 #include "qxrdimagequeue.h"
+#include "qxrdimagedata.h"
 
 QxrdImageQueue::QxrdImageQueue(QString name)
   : m_Name(name)
 {
+}
+
+QxrdImageQueue::~QxrdImageQueue()
+{
+  QWriteLocker lock(&m_Lock);
+
+  while (!isEmpty()) {
+    QxrdImageData *img = inherited::dequeue();
+
+    delete img;
+  }
 }
 
 QxrdImageData* QxrdImageQueue::dequeue()

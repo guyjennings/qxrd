@@ -22,7 +22,7 @@ void QxrdAcquisitionThread::run()
 {
   emit printMessage(tr("Acquisition thread %1\n").arg((long) QThread::currentThread()));
 
-  m_Acquisition = new QxrdAcquisition(m_Application, this);
+  m_Acquisition = new QxrdAcquisition(m_Application, m_Window, this);
 
   connect(this, SIGNAL(_acquire(QString,QString,int,int,int,int)),
           m_Acquisition, SLOT(acquire(QString,QString,int,int,int,int)));
@@ -91,11 +91,6 @@ QVector<double> QxrdAcquisitionThread::integrationTimes()
   return m_Acquisition -> integrationTimes();
 }
 
-QxrdRasterData QxrdAcquisitionThread::imageRaster(int iframe)
-{
-  return m_Acquisition -> imageRaster(iframe);
-}
-
 int QxrdAcquisitionThread::acquisitionStatus(double time)
 {
   return m_Acquisition -> acquisitionStatus();
@@ -104,9 +99,16 @@ int QxrdAcquisitionThread::acquisitionStatus(double time)
 void QxrdAcquisitionThread::setWindow(QxrdWindow *win)
 {
   m_Window = win;
+
+  m_Acquisition -> setWindow(win);
 }
 
 QxrdWindow *QxrdAcquisitionThread::window()
 {
   return m_Window;
+}
+
+void QxrdAcquisitionThread::enqueue(QxrdImageData *img)
+{
+  m_Acquisition -> enqueue(img);
 }

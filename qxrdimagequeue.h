@@ -11,6 +11,8 @@ class QxrdImageQueue : private QQueue<QxrdImageData*>
 {
  public:
   QxrdImageQueue(QString name="");
+  ~QxrdImageQueue();
+
   typedef QQueue<QxrdImageData*> inherited;
 
   QxrdImageData* dequeue();

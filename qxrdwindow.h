@@ -11,6 +11,8 @@ class QwtPlotSpectrogram;
 class QCloseEvent;
 class QxrdImageData;
 
+#include "qxrdimagequeue.h"
+
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
   Q_OBJECT;
@@ -20,6 +22,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   virtual ~QxrdWindow();
 
  public slots:
+  void doSaveData();
+  void doLoadData();
   void loadData(QString name);
   void saveData(QString name);
 
@@ -73,11 +77,11 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
-  QxrdRasterData imageRaster(int iframe);
+  void enqueue(QxrdImageData *image);
+  QxrdImageData* dequeue();
 
  private:
   void setupConnections();
-  int saveAcquiredFrame(QString name, int frame);
   void saveTestTIFF(QString name, int nbits, int isfloat);
 
  private:
@@ -89,7 +93,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QLabel                 *m_StatusMsg;
   int                     m_Acquiring;
   int                     m_AcquiringDark;
-  QList<QxrdImageData*>   m_AcquiredData;
+  QxrdImageQueue          m_AcquiredImages;
+  QxrdImageData          *m_Data;
   QxrdImageData          *m_DarkFrame;
   QxrdImageData          *m_BadPixels;
   QxrdImageData          *m_GainFrame;

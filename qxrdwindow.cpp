@@ -28,6 +28,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
+    m_AcquiredImages(QString("QxrdWindow acquired images")),
+    m_Data(new QxrdImageData(2048,2048)),
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL)
@@ -41,8 +43,8 @@ void QxrdWindow::setupConnections()
 {
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
-  connect(m_ActionLoadData, SIGNAL(triggered()), m_Application, SLOT(loadData()));
-  connect(m_ActionSaveData, SIGNAL(triggered()), m_Application, SLOT(saveData()));
+  connect(m_ActionLoadData, SIGNAL(triggered()), this, SLOT(doLoadData()));
+  connect(m_ActionSaveData, SIGNAL(triggered()), this, SLOT(doSaveData()));
 
   connect(m_AcquireButton, SIGNAL(clicked()), this, SLOT(doAcquire()));
   connect(m_CancelButton, SIGNAL(clicked()), this, SLOT(doCancel()));
@@ -321,12 +323,29 @@ void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int ns
 
 void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
 {
-  QxrdRasterData data = m_AcquisitionThread->imageRaster(iframe);
+  QxrdImageData *latest = dequeue();
+  QxrdImageData *current = m_Data;
+
+  m_AcquisitionThread -> enqueue(current);
+
+  m_Data = latest;
+  QxrdRasterData data(m_Data);
+
   QFileInfo fileInfo(fileName);
 
   m_Plot -> setImage(data);
   m_Plot -> setTitle(fileInfo.fileName());
 //  m_Plot -> autoScale();
+}
+
+void QxrdWindow::enqueue(QxrdImageData *image)
+{
+  m_AcquiredImages.enqueue(image);
+}
+
+QxrdImageData* QxrdWindow::dequeue()
+{
+  return m_AcquiredImages.dequeue();
 }
 
 int QxrdWindow::acquire()
@@ -444,14 +463,22 @@ void QxrdWindow::statusMessage(QString msg)
   m_StatusMsg -> setText(msg);
 }
 
-void QxrdWindow::saveData(QString name)
+void QxrdWindow::doSaveData()
 {
-  for (int i=0; i<m_NFrames; i++) {
-    saveAcquiredFrame(QString(name+"-%1").arg(m_FileIndex,5,10,QChar('0')), i);
-    m_FileIndex++;
-  }
+  QString theFile = QFileDialog::getSaveFileName(this, "Save Data in");
 
-  emit fileIndexChanged(m_FileIndex);
+  if (theFile.length()) {
+    saveData(theFile);
+  }
+}
+
+void QxrdWindow::doLoadData()
+{
+  QString theFile = QFileDialog::getOpenFileName(this, "Load Image from...");
+
+  if (theFile.length()) {
+    loadData(theFile);
+  }
 }
 
 void QxrdWindow::loadData(QString name)
@@ -474,52 +501,48 @@ void QxrdWindow::loadData(QString name)
       emit printMessage(tr("Image file W(%1),H(%2),SPP(%3),BPS(%4),SF(%5)\n")
                         .arg(imageWidth).arg(imageHeight).arg(samplesPerPixel).arg(bitsPerSample).arg(sampleFormat));
 
-      m_AcquiredImage -> resize(imageWidth, imageHeight);
-      m_AcquiredImage -> clear();
-      m_NCols = imageWidth;
-      m_NRows = imageHeight;
-      m_NFrames = 1;
-      double* dataBuffer = m_AcquiredImage -> data();
+      m_Data -> resize(imageWidth, imageHeight);
+      m_Data -> clear();
 
       void* buffer = malloc(TIFFScanlineSize(tif));
 
-      for (int y=0; y<m_NRows; y++) {
+      for (int y=0; y<imageHeight; y++) {
         if (TIFFReadScanline(tif, buffer, y)==1) {
-          for (int x=0; x<m_NCols; x++) {
+          for (int x=0; x<imageWidth; x++) {
             switch (sampleFormat) {
             case SAMPLEFORMAT_INT:
               switch (bitsPerSample) {
               case 8:
-                dataBuffer[y*m_NCols+x] = ((qint8*) buffer)[x];
+                m_Data -> setValue(x,y, ((qint8*) buffer)[x]);
                 break;
               case 16:
-                dataBuffer[y*m_NCols+x] = ((qint16*) buffer)[x];
+                m_Data -> setValue(x,y, ((qint16*) buffer)[x]);
                 break;
               case 32:
-                dataBuffer[y*m_NCols+x] = ((qint32*) buffer)[x];
+                m_Data -> setValue(x,y, ((qint32*) buffer)[x]);
                 break;
               }
               break;
             case SAMPLEFORMAT_UINT:
               switch (bitsPerSample) {
               case 8:
-                dataBuffer[y*m_NCols+x] = ((quint8*) buffer)[x];
+                m_Data -> setValue(x,y, ((quint8*) buffer)[x]);
                 break;
               case 16:
-                dataBuffer[y*m_NCols+x] = ((quint16*) buffer)[x];
+                m_Data -> setValue(x,y, ((quint16*) buffer)[x]);
                 break;
               case 32:
-                dataBuffer[y*m_NCols+x] = ((quint32*) buffer)[x];
+                m_Data -> setValue(x,y, ((quint32*) buffer)[x]);
                 break;
               }
               break;
             case SAMPLEFORMAT_IEEEFP:
               switch (bitsPerSample) {
               case 32:
-                dataBuffer[y*m_NCols+x] = ((float*) buffer)[x];
+                m_Data -> setValue(x,y, ((float*) buffer)[x]);
                 break;
               case 64:
-                dataBuffer[y*m_NCols+x] = ((double*) buffer)[x];
+                m_Data -> setValue(x,y, ((double*) buffer)[x]);
                 break;
               }
               break;
@@ -541,19 +564,15 @@ void QxrdWindow::loadData(QString name)
   }
 }
 
-int QxrdWindow::saveAcquiredFrame(QString name, int frame)
+void QxrdWindow::saveData(QString name)
 {
-  long npixels = m_NRows*m_NCols;
-  double* current = m_AcquiredImage->data();
-
-//  QFile outfile(name);
-//  outfile.open(QIODevice::ReadWrite);
-//  outfile.write((const char*) current, npixels*sizeof(double));
+  int nrows = m_Data -> height();
+  int ncols = m_Data -> width();
 
   TIFF* tif = TIFFOpen(qPrintable(name+".tif"),"w");
 
-  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, m_NCols);
-  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, m_NRows);
+  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
+  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows);
   TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
   TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
   TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
@@ -562,36 +581,15 @@ int QxrdWindow::saveAcquiredFrame(QString name, int frame)
 
   float buffer[4096];
 
-  for (int y=0; y<m_NRows; y++) {
-    for (int x=0; x<m_NCols; x++) {
-      buffer[x] = current[y*m_NCols+x];
+  for (int y=0; y<nrows; y++) {
+    for (int x=0; x<ncols; x++) {
+      buffer[x] = m_Data->value(x,y);
     }
 
     TIFFWriteScanline(tif, buffer, y, 0);
   }
 
   TIFFClose(tif);
-
-  return 1;
-}
-
-QxrdRasterData QxrdWindow::imageRaster(int iframe)
-{
-//   printf("QxrdWindow::imageRaster(%d)\n", iframe);
-//   printf("  m_AcquiredImage -> data() = %p\n", m_AcquiredImage -> data());
-
-//  if (iframe >= 0 && iframe < m_CurrentFrame) {
-//    emit printMessage(tr("QxrdWindow::imageRaster(%1)=QxrdRasterData(%2,%3,%4,%5)")
-//                      .arg(iframe)
-//                      .arg((long)m_AcquiredImage->data(),8,16,QChar('0'))
-//                      .arg(iframe*m_NRows*m_NCols).arg(m_NRows).arg(m_NCols));
-//
-//    return QxrdRasterData(m_AcquiredImage, iframe*m_NRows*m_NCols, m_NRows, m_NCols);
-//  } else {
-//    return QxrdRasterData(&m_AcquiredImage, 0, m_NRows, m_NCols);
-//  }
-
-  return QxrdRasterData(m_AcquiredImage);
 }
 
 void QxrdWindow::saveTestTIFF(QString name, int nbits, int isfloat)
