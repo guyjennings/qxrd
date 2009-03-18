@@ -5,6 +5,8 @@
 
 class QxrdImageData : public QcepImageData<double>
 {
+  public:
+    QxrdImageData(int width=0, int height=0);
 };
 
 #endif

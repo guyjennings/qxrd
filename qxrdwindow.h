@@ -20,8 +20,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   virtual ~QxrdWindow();
 
  public slots:
-  void loadData();
-  void saveData();
+  void loadData(QString name);
+  void saveData(QString name);
 
   void doAcquire();
   void doCancel();
@@ -73,8 +73,12 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
+  QxrdRasterData imageRaster(int iframe);
+
  private:
   void setupConnections();
+  int saveAcquiredFrame(QString name, int frame);
+  void saveTestTIFF(QString name, int nbits, int isfloat);
 
  private:
   int                     m_SettingsLoaded;

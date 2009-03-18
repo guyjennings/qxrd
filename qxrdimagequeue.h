@@ -15,9 +15,10 @@ class QxrdImageQueue : private QQueue<QxrdImageData*>
 
   QxrdImageData* dequeue();
   void enqueue(QxrdImageData *data);
+  int size() const;
 
  private:
-  QReadWriteLock m_Lock;
+  mutable QReadWriteLock m_Lock;
   QString        m_Name;
 };
 

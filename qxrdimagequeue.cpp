@@ -24,3 +24,9 @@ void QxrdImageQueue::enqueue(QxrdImageData *data)
   inherited::enqueue(data);
 }
 
+int QxrdImageQueue::size() const
+{
+  QReadLocker lock(&m_Lock);
+
+  return inherited::size();
+}

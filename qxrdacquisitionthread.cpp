@@ -51,15 +51,15 @@ void QxrdAcquisitionThread::shutdown()
   wait(1000);
 }
 
-void QxrdAcquisitionThread::saveData(QString name)
-{
-  m_Acquisition -> saveData(name);
-}
-
-void QxrdAcquisitionThread::loadData(QString name)
-{
-  m_Acquisition -> loadData(name);
-}
+//void QxrdAcquisitionThread::saveData(QString name)
+//{
+//  m_Acquisition -> saveData(name);
+//}
+//
+//void QxrdAcquisitionThread::loadData(QString name)
+//{
+//  m_Acquisition -> loadData(name);
+//}
 
 void QxrdAcquisitionThread::acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
 {

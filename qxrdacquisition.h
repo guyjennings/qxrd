@@ -28,8 +28,6 @@ class QxrdAcquisition : public QObject
   void savingComplete(int chan);
   void cancel();
   void cancelDark();
-  void saveData(QString name);
-  void loadData(QString name);
 
  private slots:
   void _haltAcquire();
@@ -49,13 +47,12 @@ class QxrdAcquisition : public QObject
   void onEndFrame();
   void onEndAcquisition();
   QVector<double> integrationTimes();
-  QxrdRasterData imageRaster(int iframe);
   int acquisitionStatus();
+
+  QxrdImageData *nextAvailableImage();
 
  private:
   void acquisitionError(int n);
-  int saveAcquiredFrame(QString name, int frame);
-  void saveTestTIFF(QString name, int nbits, int isfloat);
 
  private:
   QxrdAcquisitionThread *m_Thread;
@@ -71,7 +68,7 @@ class QxrdAcquisition : public QObject
   int                    m_BufferFrame;
   int                    m_CurrentSum;
   int                    m_CurrentFrame;
-  QVector<double>        m_AcquiredImage;
+  QxrdImageData         *m_AcquiredImage;
   QVector<unsigned short> m_Buffer;
   QVector< QFuture<int> > m_Saved;
   double                 m_IntTimes[8];

@@ -157,7 +157,7 @@ void QxrdApplication::saveData()
   QString theFile = QFileDialog::getSaveFileName(m_Window, "Save Data in");
 
   if (theFile.length()) {
-    m_AcquisitionThread -> saveData(theFile);
+    m_Window -> saveData(theFile);
   }
 }
 
@@ -166,7 +166,7 @@ void QxrdApplication::loadData()
   QString theFile = QFileDialog::getOpenFileName(m_Window, "Load Image from...");
 
   if (theFile.length()) {
-    m_AcquisitionThread -> loadData(theFile);
+    m_Window -> loadData(theFile);
   }
 }
 

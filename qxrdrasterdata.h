@@ -2,11 +2,12 @@
 #define QXRDRASTERDATA_H
 
 #include <qwt_raster_data.h>
+#include "qxrdimagedata.h"
 
 class QxrdRasterData : public QwtRasterData
 {
  public:
-  QxrdRasterData(QVector<double> *img, int offset, int nrows, int ncols);
+  QxrdRasterData(QxrdImageData *img);
   QxrdRasterData();
 
   double value(double x, double y) const;
@@ -18,8 +19,8 @@ class QxrdRasterData : public QwtRasterData
   double maxValue();
 
  private:
-  QVector<double>   *m_Data;
-  int                m_Offset;
+  QxrdImageData     *m_Data;
+//  int                m_Offset;
   int                m_NRows;
   int                m_NCols;
   QwtDoubleInterval  m_Range;

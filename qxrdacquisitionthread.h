@@ -37,8 +37,8 @@ class QxrdAcquisitionThread : public QThread
   void cancel();
   void acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum);
   void cancelDark();
-  void saveData(QString name);
-  void loadData(QString name);
+//  void saveData(QString name);
+//  void loadData(QString name);
 
  public:
   QxrdRasterData imageRaster(int iframe);
