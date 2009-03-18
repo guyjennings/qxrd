@@ -313,6 +313,9 @@ void QxrdWindow::selectOutputDirectory()
 
 void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int nsum, int iframe, int nframe)
 {
+//   printf("QxrdWindow::acquiredFrame(\"%s\",%d,%d,%d,%d,%d)\n",
+// 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
+
   int totalframes = nsum*nframe;
   int thisframe = iframe*nsum+isum+1;
 
@@ -323,6 +326,8 @@ void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int ns
 
 void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
 {
+  printf("QxrdWindow::summedFrameCompleted(\"%s\",%d)\n", qPrintable(fileName), iframe);
+
   QxrdImageData *latest = dequeue();
   QxrdImageData *current = m_Data;
 
@@ -336,6 +341,10 @@ void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
   m_Plot -> setImage(data);
   m_Plot -> setTitle(fileInfo.fileName());
 //  m_Plot -> autoScale();
+
+  saveData(fileName);
+
+  //  QtConcurrent::run insert processing step here...
 }
 
 void QxrdWindow::enqueue(QxrdImageData *image)
@@ -550,8 +559,6 @@ void QxrdWindow::loadData(QString name)
           }
         }
       }
-
-      emit summedFrameCompleted(name,0);
     } else {
       emit statusMessage("Couldn't open file\n");
     }
@@ -583,7 +590,8 @@ void QxrdWindow::saveData(QString name)
 
   for (int y=0; y<nrows; y++) {
     for (int x=0; x<ncols; x++) {
-      buffer[x] = m_Data->value(x,y);
+      buffer[x] = 0// m_Data->value(x,y)
+	;
     }
 
     TIFFWriteScanline(tif, buffer, y, 0);

@@ -32,7 +32,7 @@ AcquisitionTimer::AcquisitionTimer()
 
 void AcquisitionTimer::start()
 {
-  printf("AcquisitionTimer::start(), m_Mode = %d\n", m_Mode);
+//   printf("AcquisitionTimer::start(), m_Mode = %d\n", m_Mode);
 
   switch (m_Mode) {
   case 0:
@@ -66,14 +66,14 @@ void AcquisitionTimer::start()
 
 void AcquisitionTimer::stop()
 {
-  printf("AcquisitionTimer::stop()\n");
+//   printf("AcquisitionTimer::stop()\n");
 
   m_Timer.stop();
 }
 
 void AcquisitionTimer::setmode(int mode)
 {
-  printf("AcquisitionTimer::setmode(%d)\n",mode);
+//   printf("AcquisitionTimer::setmode(%d)\n",mode);
 
   m_Mode = mode;
 }
@@ -138,7 +138,7 @@ HIS_RETURN Acquisition_DefineDestBuffers(HACQDESC pAcqDesc, unsigned short *pPro
 
 HIS_RETURN Acquisition_Acquire_Image(HACQDESC pAcqDesc, UINT dwFrames, UINT dwSkipFrms, UINT dwOpt, unsigned short *pwOffsetData, DWORD *pdwGainData, DWORD *pdwPxlCorrList)
 {
-  printf("Acquisition_Acquire_Image dwOpt = %d\n", dwOpt);
+//   printf("Acquisition_Acquire_Image dwOpt = %d\n", dwOpt);
 
   nFrames = dwFrames;
   options = dwOpt;

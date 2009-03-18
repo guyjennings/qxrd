@@ -212,9 +212,9 @@ void QxrdAcquisition::onEndFrame()
 
 //   printf("m_AcquiredImage.data() = %p\n", current);
 
-  QTime tic;
+//   QTime tic;
 
-  tic.start();
+//   tic.start();
 
   for (long i=0; i<npixels; i++) {
     *current += *frame;
@@ -224,7 +224,7 @@ void QxrdAcquisition::onEndFrame()
   m_CurrentSum++;
   m_BufferFrame++;
 
-  printf("Frame sum took %d msec\n", tic.elapsed());
+//   printf("Frame sum took %d msec\n", tic.elapsed());
 
   if (m_BufferFrame >= m_NBufferFrames) {
     m_BufferFrame = 0;
