@@ -1,7 +1,7 @@
 #ifndef QXRDIMAGEDATA_H
 #define QXRDIMAGEDATA_H
 
-#include <QReadWriteLock.h>
+#include <QReadWriteLock>
 #include "qcepimagedata.h"
 
 class QxrdImageData : public QcepImageData<double>
