@@ -17,6 +17,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <QTime>
 
 #include "tiffio.h"
 
@@ -328,23 +329,41 @@ void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
 {
   printf("QxrdWindow::summedFrameCompleted(\"%s\",%d)\n", qPrintable(fileName), iframe);
 
-  QxrdImageData *latest = dequeue();
-  QxrdImageData *current = m_Data;
+  if (m_Acquiring) {
+    QxrdImageData *latest = dequeue();
+    QxrdImageData *current = m_Data;
 
-  m_AcquisitionThread -> enqueue(current);
+    m_AcquisitionThread -> enqueue(current);
 
-  m_Data = latest;
-  QxrdRasterData data(m_Data);
+    m_Data = latest;
 
-  QFileInfo fileInfo(fileName);
+    performImageCorrections(m_Data);
 
-  m_Plot -> setImage(data);
-  m_Plot -> setTitle(fileInfo.fileName());
-//  m_Plot -> autoScale();
+    QxrdRasterData data(m_Data);
 
-  saveData(fileName);
+    QFileInfo fileInfo(fileName);
 
-  //  QtConcurrent::run insert processing step here...
+    m_Plot -> setImage(data);
+    m_Plot -> setTitle(fileInfo.fileName());
+    //  m_Plot -> autoScale();
+
+    saveData(fileName);
+
+    //  QtConcurrent::run insert processing step here...
+  }
+}
+
+void QxrdWindow::newDarkImage(QxrdImageData *image)
+{
+  QxrdImageData *olddark = m_DarkFrame;
+
+  m_DarkFrame = image;
+
+  if (olddark) {
+    m_AcquisitionThread -> enqueue(olddark);
+  }
+
+  saveImageData(m_DarkFrame);
 }
 
 void QxrdWindow::enqueue(QxrdImageData *image)
@@ -357,23 +376,23 @@ QxrdImageData* QxrdWindow::dequeue()
   return m_AcquiredImages.dequeue();
 }
 
-int QxrdWindow::acquire()
-{
-  acquisitionStarted();
-
-  QString outDir   = outputDirectory();
-  QString filePatt = filePattern();
-  int    index     = fileIndex();
-  int    integmode = integrationMode();
-  int    nsum      = nSummed();
-  int    nframes   = nFrames();
-
-  m_AcquisitionThread -> acquire(outDir, filePatt, index, integmode, nsum, nframes);
-
-  m_Acquiring = true;
-
-  return 0;
-}
+//int QxrdWindow::acquire()
+//{
+//  acquisitionStarted();
+//
+//  QString outDir   = outputDirectory();
+//  QString filePatt = filePattern();
+//  int    index     = fileIndex();
+//  int    integmode = integrationMode();
+//  int    nsum      = nSummed();
+//  int    nframes   = nFrames();
+//
+//  m_AcquisitionThread -> acquire(outDir, filePatt, index, integmode, nsum, nframes);
+//
+//  m_Acquiring = true;
+//
+//  return 0;
+//}
 
 int QxrdWindow::acquisitionStatus(double time)
 {
@@ -393,9 +412,9 @@ void QxrdWindow::doAcquire()
   int    nsum      = nSummed();
   int    nframes   = nFrames();
 
-  m_AcquisitionThread -> acquire(outDir, filePatt, index, integmode, nsum, nframes);
-
   m_Acquiring = true;
+
+  m_AcquisitionThread -> acquire(outDir, filePatt, index, integmode, nsum, nframes);
 }
 
 void QxrdWindow::doAcquireDark()
@@ -408,9 +427,9 @@ void QxrdWindow::doAcquireDark()
   int    integmode = integrationMode();
   int     nsum     = darkNSummed();
 
-  m_AcquisitionThread -> acquireDark(outDir, filePatt, index, integmode, nsum);
-
   m_AcquiringDark = true;
+
+  m_AcquisitionThread -> acquireDark(outDir, filePatt, index, integmode, nsum);
 }
 
 void QxrdWindow::doCancel()
@@ -447,6 +466,7 @@ void QxrdWindow::readSettings()
 
   setIntegrationMode(settings.value("acq/integ",7).toInt());
   setNSummed(settings.value("acq/nsums",1).toInt());
+  setDarkNSummed(settings.value("acq/dknsums",1).toInt());
   setNFrames(settings.value("acq/nframes",1).toInt());
   setFilePattern(settings.value("acq/filepattern","saveddata").toString());
   setOutputDirectory(settings.value("acq/directory","").toString());
@@ -461,6 +481,7 @@ void QxrdWindow::saveSettings()
 
   settings.setValue("acq/integ",integrationMode());
   settings.setValue("acq/nsums",nSummed());
+  settings.setValue("acq/dknsums",darkNSummed());
   settings.setValue("acq/nframes",nFrames());
   settings.setValue("acq/filepattern",filePattern());
   settings.setValue("acq/directory",outputDirectory());
@@ -573,10 +594,18 @@ void QxrdWindow::loadData(QString name)
 
 void QxrdWindow::saveData(QString name)
 {
-  int nrows = m_Data -> height();
-  int ncols = m_Data -> width();
+  m_Data -> setFilename(name);
 
-  TIFF* tif = TIFFOpen(qPrintable(name+".tif"),"w");
+  saveImageData(m_Data);
+}
+
+void QxrdWindow::saveImageData(QxrdImageData *image)
+{
+  int nrows = image -> height();
+  int ncols = image -> width();
+  QString name = image -> filename();
+
+  TIFF* tif = TIFFOpen(qPrintable(name),"w");
 
   TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
   TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows);
@@ -586,12 +615,12 @@ void QxrdWindow::saveData(QString name)
   TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32);
   TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
 
-  float buffer[4096];
+  QVector<float> buffvec(4096);
+  float* buffer = buffvec.data();
 
   for (int y=0; y<nrows; y++) {
     for (int x=0; x<ncols; x++) {
-      buffer[x] = 0// m_Data->value(x,y)
-	;
+      buffer[x] = image->value(x,y);
     }
 
     TIFFWriteScanline(tif, buffer, y, 0);
@@ -680,4 +709,74 @@ void QxrdWindow::saveTestTIFF(QString name, int nbits, int isfloat)
   }
 
   TIFFClose(tif);
+}
+
+void QxrdWindow::performImageCorrections(QxrdImageData *image)
+{
+  correctBadPixels(image);
+  subtractDarkImage(image);
+  correctImageGains(image);
+}
+
+void QxrdWindow::subtractDarkImage(QxrdImageData *image)
+{
+  if (m_DarkFrame && image) {
+    if (m_DarkFrame->integrationMode() != image->integrationMode()) {
+      if (QMessageBox::question(this, "Integration times differ",
+                                "Integration times of acquired data and dark image are different\nSubtract anyway?",
+                                QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
+        return;
+      }
+    }
+
+    if (m_DarkFrame->width() != image->width() ||
+        m_DarkFrame->height() != image->height()) {
+      if (QMessageBox::question(this, "Image dimensions differ",
+                                "Dimensions of acquired data and dark image are different\nSkip subtraction",
+                                QMessageBox::Yes) == QMessageBox::Yes) {
+        return;
+      }
+    }
+
+    int height = image->height();
+    int width  = image->width();
+    int nres = image->nSummed();
+    int ndrk = m_DarkFrame -> nSummed();
+    int npixels = width*height;
+
+    double ratio = ((double) nres)/((double) ndrk);
+
+    printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
+           nres, ndrk, npixels, ratio);
+
+    QTime tic;
+    tic.start();
+
+    double *result = image->data();
+    double *dark   = m_DarkFrame->data();
+
+    for (int i=0; i<npixels; i++) {
+      result[i] = result[i]-ratio*dark[i];
+    }
+
+//    for (int y=0; y<height; y++) {
+//      for (int x=0; x<width; x++) {
+//        image->setValue(x,y, image->value(x,y)-ratio*m_DarkFrame->value(x,y));
+//      }
+//    }
+
+    printf("Dark subtraction took %d msec\n", tic.elapsed());
+  }
+}
+
+void QxrdWindow::correctBadPixels(QxrdImageData *image)
+{
+  if (m_BadPixels) {
+  }
+}
+
+void QxrdWindow::correctImageGains(QxrdImageData *image)
+{
+  if (m_GainFrame) {
+  }
 }

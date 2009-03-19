@@ -30,8 +30,8 @@ class QxrdApplication : public QApplication
   void printMessage(QString msg);
   void executeCommand(QString cmd);
 
-  int acquire();
-  int acquisitionStatus(double time);
+//  int acquire();
+//  int acquisitionStatus(double time);
 
  signals:
   void finishedCommand(QString cmd);
@@ -40,9 +40,11 @@ class QxrdApplication : public QApplication
   bool wantToQuit();
 
   static QScriptValue acquireFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue acquireDarkFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue statusFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue exposureFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue subframesFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue darkSubframesFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue framesFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue filenameFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue directoryFunc(QScriptContext *context, QScriptEngine *engine);

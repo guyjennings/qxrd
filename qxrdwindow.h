@@ -26,6 +26,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void doLoadData();
   void loadData(QString name);
   void saveData(QString name);
+  void saveImageData(QxrdImageData *image);
 
   void doAcquire();
   void doCancel();
@@ -58,6 +59,11 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void statusMessage(QString msg);
   void summedFrameCompleted(QString filename, int iframe);
 
+  void subtractDarkImage(QxrdImageData *image);
+  void correctBadPixels(QxrdImageData *image);
+  void correctImageGains(QxrdImageData *image);
+  void performImageCorrections(QxrdImageData *image);
+
  public:
   double  exposureTime();
   int     integrationMode();
@@ -68,7 +74,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QString outputDirectory();
   int     darkNSummed();
 
-  int acquire();
+//  int acquire();
+//  int acquireDark();
   int acquisitionStatus(double time);
 
   void readSettings();
@@ -79,6 +86,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 
   void enqueue(QxrdImageData *image);
   QxrdImageData* dequeue();
+
+  void newDarkImage(QxrdImageData *image);
 
  private:
   void setupConnections();

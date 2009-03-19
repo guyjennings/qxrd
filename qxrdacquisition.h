@@ -70,6 +70,7 @@ class QxrdAcquisition : public QObject
   int                    m_BufferFrame;
   int                    m_CurrentSum;
   int                    m_CurrentFrame;
+  int                    m_AcquiringDark;
   QxrdImageData         *m_AcquiredData;
   QVector<unsigned short> m_Buffer;
   QVector< QFuture<int> > m_Saved;

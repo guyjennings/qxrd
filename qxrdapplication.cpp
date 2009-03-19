@@ -46,6 +46,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   m_ScriptEngine.globalObject().setProperty("acquire",
           m_ScriptEngine.newFunction(QxrdApplication::acquireFunc));
 
+  m_ScriptEngine.globalObject().setProperty("acquiredark",
+          m_ScriptEngine.newFunction(QxrdApplication::acquireDarkFunc));
+
   m_ScriptEngine.globalObject().setProperty("status",
           m_ScriptEngine.newFunction(QxrdApplication::statusFunc));
 
@@ -54,6 +57,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_ScriptEngine.globalObject().setProperty("subframes",
           m_ScriptEngine.newFunction(QxrdApplication::subframesFunc));
+
+  m_ScriptEngine.globalObject().setProperty("darksubframes",
+          m_ScriptEngine.newFunction(QxrdApplication::darkSubframesFunc));
 
   m_ScriptEngine.globalObject().setProperty("frames",
           m_ScriptEngine.newFunction(QxrdApplication::framesFunc));
@@ -142,20 +148,31 @@ void QxrdApplication::printMessage(QString msg)
   m_Window -> printMessage(msg);
 }
 
-int QxrdApplication::acquire()
-{
-  return m_Window -> acquire();
-}
-
-int QxrdApplication::acquisitionStatus(double time)
-{
-  return m_Window -> acquisitionStatus(time);
-}
+//int QxrdApplication::acquire()
+//{
+//  return m_Window -> acquire();
+//}
+//
+//int QxrdApplication::acquisitionStatus(double time)
+//{
+//  return m_Window -> acquisitionStatus(time);
+//}
 
 QScriptValue QxrdApplication::acquireFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_Application -> window() -> acquire());
+    g_Application -> window() -> doAcquire();
+    return QScriptValue(engine, 1);
+  } else {
+    return QScriptValue(engine, -1);
+  }
+}
+
+QScriptValue QxrdApplication::acquireDarkFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() == 0) {
+    g_Application -> window() -> doAcquireDark();
+    return QScriptValue(engine, 1);
   } else {
     return QScriptValue(engine, -1);
   }
@@ -187,6 +204,15 @@ QScriptValue QxrdApplication::subframesFunc(QScriptContext *context, QScriptEngi
   }
 
   return QScriptValue(engine, g_Application -> window() -> nSummed());
+}
+
+QScriptValue QxrdApplication::darkSubframesFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Application -> window() -> setDarkNSummed(context->argument(0).toUInt32());
+  }
+
+  return QScriptValue(engine, g_Application -> window() -> darkNSummed());
 }
 
 QScriptValue QxrdApplication::framesFunc(QScriptContext *context, QScriptEngine *engine)

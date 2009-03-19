@@ -31,7 +31,7 @@ void QxrdImageQueue::enqueue(QxrdImageData *data)
 {
   QWriteLocker lock(&m_Lock);
 
-  printf("QxrdImageQueue::enqueue(%p) from %s\n", data, qPrintable(m_Name));
+  printf("QxrdImageQueue::enqueue(%p) into %s\n", data, qPrintable(m_Name));
 
   inherited::enqueue(data);
 }
