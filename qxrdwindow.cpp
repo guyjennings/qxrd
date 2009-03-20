@@ -135,14 +135,6 @@ bool QxrdWindow::wantToClose()
                                   QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
-//void QxrdWindow::saveData()
-//{
-//}
-//
-//void QxrdWindow::loadData()
-//{
-//}
-
 void QxrdWindow::printMessage(QString msg)
 {
   m_Messages -> append(msg.trimmed());
@@ -376,24 +368,6 @@ QxrdImageData* QxrdWindow::dequeue()
   return m_AcquiredImages.dequeue();
 }
 
-//int QxrdWindow::acquire()
-//{
-//  acquisitionStarted();
-//
-//  QString outDir   = outputDirectory();
-//  QString filePatt = filePattern();
-//  int    index     = fileIndex();
-//  int    integmode = integrationMode();
-//  int    nsum      = nSummed();
-//  int    nframes   = nFrames();
-//
-//  m_AcquisitionThread -> acquire(outDir, filePatt, index, integmode, nsum, nframes);
-//
-//  m_Acquiring = true;
-//
-//  return 0;
-//}
-
 int QxrdWindow::acquisitionStatus(double time)
 {
   return m_AcquisitionThread -> acquisitionStatus(time);
@@ -513,6 +487,8 @@ void QxrdWindow::doLoadData()
 
 void QxrdWindow::loadData(QString name)
 {
+  QWriteLocker lock(m_Data->rwLock());
+
   quint32 imageWidth = 0;
   quint32 imageHeight = 0;
   quint16 sampleFormat = 0;
@@ -601,6 +577,8 @@ void QxrdWindow::saveData(QString name)
 
 void QxrdWindow::saveImageData(QxrdImageData *image)
 {
+  QReadLocker lock(image->rwLock());
+
   int nrows = image -> height();
   int ncols = image -> width();
   QString name = image -> filename();
@@ -738,6 +716,9 @@ void QxrdWindow::subtractDarkImage(QxrdImageData *image)
       }
     }
 
+    QReadLocker lock1(m_DarkFrame->rwLock());
+    QWriteLocker lock2(image->rwLock());
+
     int height = image->height();
     int width  = image->width();
     int nres = image->nSummed();
@@ -758,12 +739,6 @@ void QxrdWindow::subtractDarkImage(QxrdImageData *image)
     for (int i=0; i<npixels; i++) {
       result[i] = result[i]-ratio*dark[i];
     }
-
-//    for (int y=0; y<height; y++) {
-//      for (int x=0; x<width; x++) {
-//        image->setValue(x,y, image->value(x,y)-ratio*m_DarkFrame->value(x,y));
-//      }
-//    }
 
     printf("Dark subtraction took %d msec\n", tic.elapsed());
   }

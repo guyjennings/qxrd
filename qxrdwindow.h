@@ -74,8 +74,6 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QString outputDirectory();
   int     darkNSummed();
 
-//  int acquire();
-//  int acquireDark();
   int acquisitionStatus(double time);
 
   void readSettings();
