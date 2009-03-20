@@ -43,6 +43,7 @@ class QxrdAcquisitionThread : public QThread
   void setWindow(QxrdWindow *win);
   QxrdWindow *window();
   void enqueue(QxrdImageData *img);
+  QxrdImageData *nextAvailableImage();
 
  signals:
   void _acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);

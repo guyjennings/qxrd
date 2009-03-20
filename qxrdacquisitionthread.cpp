@@ -112,3 +112,8 @@ void QxrdAcquisitionThread::enqueue(QxrdImageData *img)
 {
   m_Acquisition -> enqueue(img);
 }
+
+QxrdImageData *QxrdAcquisitionThread::nextAvailableImage()
+{
+  return m_Acquisition -> nextAvailableImage();
+}

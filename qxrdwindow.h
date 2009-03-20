@@ -109,6 +109,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 
   void enqueue(QxrdImageData *image);
   QxrdImageData* dequeue();
+  QxrdImageData* nextAvailableImage();
   QxrdImageData* loadNewImage(QString name);
 
   void darkImageAcquired(QxrdImageData *image);

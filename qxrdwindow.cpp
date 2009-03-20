@@ -366,6 +366,11 @@ QxrdImageData* QxrdWindow::dequeue()
   return m_AcquiredImages.dequeue();
 }
 
+QxrdImageData* QxrdWindow::nextAvailableImage()
+{
+  return m_AcquisitionThread -> nextAvailableImage();
+}
+
 int QxrdWindow::acquisitionStatus(double time)
 {
   return m_AcquisitionThread -> acquisitionStatus(time);
@@ -512,7 +517,7 @@ void QxrdWindow::loadData(QString name)
 
 QxrdImageData* QxrdWindow::loadNewImage(QString name)
 {
-  QxrdImageData* res = dequeue();
+  QxrdImageData* res = nextAvailableImage();
 
   QWriteLocker lock(res->rwLock());
 
