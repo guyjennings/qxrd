@@ -60,7 +60,6 @@ class QxrdAcquisition : public QObject
   QxrdAcquisitionThread *m_Thread;
   QMutex                 m_Mutex;
   QxrdApplication       *m_Application;
-//  int                    m_Cancel;
   int                    m_NRows;
   int                    m_NCols;
   int                    m_IntegMode;
@@ -79,7 +78,6 @@ class QxrdAcquisition : public QObject
   QString                m_OutputDir;
   QString                m_FilePattern;
   int                    m_FileIndex;
-  QxrdImageQueue         m_AcquiredImages;
   QxrdImageQueue         m_AvailableImages;
   QxrdWindow            *m_Window;
 };

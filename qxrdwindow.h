@@ -27,6 +27,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void loadData(QString name);
   void saveData(QString name);
   void saveImageData(QxrdImageData *image);
+  void saveRawData(QxrdImageData *image);
+  void saveNamedImageData(QString name, QxrdImageData *image);
 
   void doAcquire();
   void doCancel();
@@ -64,6 +66,29 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void correctImageGains(QxrdImageData *image);
   void performImageCorrections(QxrdImageData *image);
 
+  int performDarkSubtraction();
+  void setPerformDarkSubtraction(int subt);
+  int saveRawImages();
+  void setSaveRawImages(int sav);
+  void doLoadDarkImage();
+  void loadDarkImage(QString name);
+  QString darkImagePath();
+  void setDarkImagePath(QString path);
+
+  int performBadPixels();
+  void setPerformBadPixels(int corr);
+  void doLoadBadPixels();
+  void loadBadPixels(QString name);
+  QString badPixelsPath();
+  void setBadPixelsPath(QString path);
+
+  int performGainCorrection();
+  void setPerformGainCorrection(int corr);
+  void doLoadGainMap();
+  void loadGainMap(QString name);
+  QString gainMapPath();
+  void setGainMapPath(QString path);
+
  public:
   double  exposureTime();
   int     integrationMode();
@@ -84,8 +109,13 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 
   void enqueue(QxrdImageData *image);
   QxrdImageData* dequeue();
+  QxrdImageData* loadNewImage(QString name);
 
+  void darkImageAcquired(QxrdImageData *image);
+  void newData(QxrdImageData *image);
   void newDarkImage(QxrdImageData *image);
+  void newBadPixelsImage(QxrdImageData *image);
+  void newGainMapImage(QxrdImageData *image);
 
  private:
   void setupConnections();
@@ -105,6 +135,13 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QxrdImageData          *m_DarkFrame;
   QxrdImageData          *m_BadPixels;
   QxrdImageData          *m_GainFrame;
+//  int                     m_PerformDarkSubtraction;
+//  int                     m_SaveRawImages;
+//  QString                 m_DarkImagePath;
+//  int                     m_PerformBadPixels;
+//  QString                 m_BadPixelsPath;
+//  int                     m_PerformGainCorrection;
+//  QString                 m_GainMapPath;
 };
 
 #endif

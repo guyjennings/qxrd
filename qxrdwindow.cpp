@@ -51,6 +51,10 @@ void QxrdWindow::setupConnections()
   connect(m_CancelButton, SIGNAL(clicked()), this, SLOT(doCancel()));
   connect(m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
 
+  connect(m_LoadDarkButton, SIGNAL(clicked()), this, SLOT(doLoadDarkImage()));
+  connect(m_LoadBadPixelsButton, SIGNAL(clicked()), this, SLOT(doLoadBadPixels()));
+  connect(m_LoadGainCorrection, SIGNAL(clicked()), this, SLOT(doLoadGainMap()));
+
   connect(m_DarkAcquireButton, SIGNAL(clicked()), m_ActionAcquireDark, SIGNAL(triggered()));
   connect(m_DarkCancelButton, SIGNAL(clicked()), m_ActionCancelDark, SIGNAL(triggered()));
 
@@ -345,15 +349,9 @@ void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
   }
 }
 
-void QxrdWindow::newDarkImage(QxrdImageData *image)
+void QxrdWindow::darkImageAcquired(QxrdImageData *image)
 {
-  QxrdImageData *olddark = m_DarkFrame;
-
-  m_DarkFrame = image;
-
-  if (olddark) {
-    m_AcquisitionThread -> enqueue(olddark);
-  }
+  newDarkImage(image);
 
   saveImageData(m_DarkFrame);
 }
@@ -446,6 +444,16 @@ void QxrdWindow::readSettings()
   setOutputDirectory(settings.value("acq/directory","").toString());
   setFileIndex(settings.value("acq/fileindex",1).toInt());
 
+  setPerformDarkSubtraction(settings.value("acq/subtractdark",1).toInt());
+  setSaveRawImages(settings.value("acq/saveraw",0).toInt());
+  setDarkImagePath(settings.value("acq/darkpath","").toString());
+
+  setPerformBadPixels(settings.value("acq/performbadpixels",0).toInt());
+  setBadPixelsPath(settings.value("acq/badpixelspath","").toString());
+
+  setPerformGainCorrection(settings.value("acq/gaincorrect",0).toInt());
+  setGainMapPath(settings.value("acq/gaincorrectpath","").toString());
+
   m_SettingsLoaded = true;
 }
 
@@ -460,6 +468,16 @@ void QxrdWindow::saveSettings()
   settings.setValue("acq/filepattern",filePattern());
   settings.setValue("acq/directory",outputDirectory());
   settings.setValue("acq/fileindex",fileIndex());
+
+  settings.setValue("acq/subtractdark", performDarkSubtraction());
+  settings.setValue("acq/saveraw", saveRawImages());
+  settings.setValue("acq/darkpath", darkImagePath());
+
+  settings.setValue("acq/performbadpixels", performBadPixels());
+  settings.setValue("acq/badpixelspath", badPixelsPath());
+
+  settings.setValue("acq/gaincorrect", performGainCorrection());
+  settings.setValue("acq/gaincorrectpath", gainMapPath());
 }
 
 void QxrdWindow::statusMessage(QString msg)
@@ -487,7 +505,16 @@ void QxrdWindow::doLoadData()
 
 void QxrdWindow::loadData(QString name)
 {
-  QWriteLocker lock(m_Data->rwLock());
+  QxrdImageData* res = loadNewImage(name);
+
+  newData(res);
+}
+
+QxrdImageData* QxrdWindow::loadNewImage(QString name)
+{
+  QxrdImageData* res = dequeue();
+
+  QWriteLocker lock(res->rwLock());
 
   quint32 imageWidth = 0;
   quint32 imageHeight = 0;
@@ -507,8 +534,8 @@ void QxrdWindow::loadData(QString name)
       emit printMessage(tr("Image file W(%1),H(%2),SPP(%3),BPS(%4),SF(%5)\n")
                         .arg(imageWidth).arg(imageHeight).arg(samplesPerPixel).arg(bitsPerSample).arg(sampleFormat));
 
-      m_Data -> resize(imageWidth, imageHeight);
-      m_Data -> clear();
+      res -> resize(imageWidth, imageHeight);
+      res -> clear();
 
       void* buffer = malloc(TIFFScanlineSize(tif));
 
@@ -519,36 +546,36 @@ void QxrdWindow::loadData(QString name)
             case SAMPLEFORMAT_INT:
               switch (bitsPerSample) {
               case 8:
-                m_Data -> setValue(x,y, ((qint8*) buffer)[x]);
+                res -> setValue(x,y, ((qint8*) buffer)[x]);
                 break;
               case 16:
-                m_Data -> setValue(x,y, ((qint16*) buffer)[x]);
+                res -> setValue(x,y, ((qint16*) buffer)[x]);
                 break;
               case 32:
-                m_Data -> setValue(x,y, ((qint32*) buffer)[x]);
+                res -> setValue(x,y, ((qint32*) buffer)[x]);
                 break;
               }
               break;
             case SAMPLEFORMAT_UINT:
               switch (bitsPerSample) {
               case 8:
-                m_Data -> setValue(x,y, ((quint8*) buffer)[x]);
+                res -> setValue(x,y, ((quint8*) buffer)[x]);
                 break;
               case 16:
-                m_Data -> setValue(x,y, ((quint16*) buffer)[x]);
+                res -> setValue(x,y, ((quint16*) buffer)[x]);
                 break;
               case 32:
-                m_Data -> setValue(x,y, ((quint32*) buffer)[x]);
+                res -> setValue(x,y, ((quint32*) buffer)[x]);
                 break;
               }
               break;
             case SAMPLEFORMAT_IEEEFP:
               switch (bitsPerSample) {
               case 32:
-                m_Data -> setValue(x,y, ((float*) buffer)[x]);
+                res -> setValue(x,y, ((float*) buffer)[x]);
                 break;
               case 64:
-                m_Data -> setValue(x,y, ((double*) buffer)[x]);
+                res -> setValue(x,y, ((double*) buffer)[x]);
                 break;
               }
               break;
@@ -556,6 +583,8 @@ void QxrdWindow::loadData(QString name)
           }
         }
       }
+
+      free(buffer);
     } else {
       emit statusMessage("Couldn't open file\n");
     }
@@ -566,6 +595,8 @@ void QxrdWindow::loadData(QString name)
   if (tif) {
     TIFFClose(tif);
   }
+
+  return res;
 }
 
 void QxrdWindow::saveData(QString name)
@@ -577,11 +608,24 @@ void QxrdWindow::saveData(QString name)
 
 void QxrdWindow::saveImageData(QxrdImageData *image)
 {
+  saveNamedImageData(image->filename(), image);
+}
+
+void QxrdWindow::saveRawData(QxrdImageData *image)
+{
+  QFileInfo info(image->filename());
+
+  QString name = info.completeBaseName()+".raw.tif";
+
+  saveNamedImageData(name, image);
+}
+
+void QxrdWindow::saveNamedImageData(QString name, QxrdImageData *image)
+{
   QReadLocker lock(image->rwLock());
 
   int nrows = image -> height();
   int ncols = image -> width();
-  QString name = image -> filename();
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
 
@@ -698,49 +742,55 @@ void QxrdWindow::performImageCorrections(QxrdImageData *image)
 
 void QxrdWindow::subtractDarkImage(QxrdImageData *image)
 {
-  if (m_DarkFrame && image) {
-    if (m_DarkFrame->integrationMode() != image->integrationMode()) {
-      if (QMessageBox::question(this, "Integration times differ",
-                                "Integration times of acquired data and dark image are different\nSubtract anyway?",
-                                QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
-        return;
+  if (performDarkSubtraction()) {
+    if (saveRawImages()) {
+      saveRawData(image);
+    }
+
+    if (m_DarkFrame && image) {
+      if (m_DarkFrame->integrationMode() != image->integrationMode()) {
+        if (QMessageBox::question(this, "Integration times differ",
+                                  "Integration times of acquired data and dark image are different\nSubtract anyway?",
+                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
+          return;
+        }
       }
-    }
 
-    if (m_DarkFrame->width() != image->width() ||
-        m_DarkFrame->height() != image->height()) {
-      if (QMessageBox::question(this, "Image dimensions differ",
-                                "Dimensions of acquired data and dark image are different\nSkip subtraction",
-                                QMessageBox::Yes) == QMessageBox::Yes) {
-        return;
+      if (m_DarkFrame->width() != image->width() ||
+          m_DarkFrame->height() != image->height()) {
+        if (QMessageBox::question(this, "Image dimensions differ",
+                                  "Dimensions of acquired data and dark image are different\nSkip subtraction",
+                                  QMessageBox::Yes) == QMessageBox::Yes) {
+          return;
+        }
       }
+
+      QReadLocker lock1(m_DarkFrame->rwLock());
+      QWriteLocker lock2(image->rwLock());
+
+      int height = image->height();
+      int width  = image->width();
+      int nres = image->nSummed();
+      int ndrk = m_DarkFrame -> nSummed();
+      int npixels = width*height;
+
+      double ratio = ((double) nres)/((double) ndrk);
+
+      printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
+             nres, ndrk, npixels, ratio);
+
+      QTime tic;
+      tic.start();
+
+      double *result = image->data();
+      double *dark   = m_DarkFrame->data();
+
+      for (int i=0; i<npixels; i++) {
+        result[i] = result[i]-ratio*dark[i];
+      }
+
+      printf("Dark subtraction took %d msec\n", tic.elapsed());
     }
-
-    QReadLocker lock1(m_DarkFrame->rwLock());
-    QWriteLocker lock2(image->rwLock());
-
-    int height = image->height();
-    int width  = image->width();
-    int nres = image->nSummed();
-    int ndrk = m_DarkFrame -> nSummed();
-    int npixels = width*height;
-
-    double ratio = ((double) nres)/((double) ndrk);
-
-    printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
-           nres, ndrk, npixels, ratio);
-
-    QTime tic;
-    tic.start();
-
-    double *result = image->data();
-    double *dark   = m_DarkFrame->data();
-
-    for (int i=0; i<npixels; i++) {
-      result[i] = result[i]-ratio*dark[i];
-    }
-
-    printf("Dark subtraction took %d msec\n", tic.elapsed());
   }
 }
 
@@ -753,5 +803,173 @@ void QxrdWindow::correctBadPixels(QxrdImageData *image)
 void QxrdWindow::correctImageGains(QxrdImageData *image)
 {
   if (m_GainFrame) {
+  }
+}
+
+int QxrdWindow::performDarkSubtraction()
+{
+  return m_PerformDark->checkState();
+}
+
+void QxrdWindow::setPerformDarkSubtraction(int subt)
+{
+  m_PerformDark->setChecked(subt);
+}
+
+int QxrdWindow::saveRawImages()
+{
+  return m_SaveRaw->checkState();
+}
+
+void QxrdWindow::setSaveRawImages(int sav)
+{
+  m_SaveRaw->setChecked(sav);
+}
+
+void QxrdWindow::doLoadDarkImage()
+{
+  QString theFile = QFileDialog::getOpenFileName(this, "Load Dark Image from...");
+
+  if (theFile.length()) {
+    loadDarkImage(theFile);
+  }
+}
+
+void QxrdWindow::loadDarkImage(QString name)
+{
+  QxrdImageData* img = loadNewImage(name);
+
+  setDarkImagePath(name);
+
+  newDarkImage(img);
+}
+
+QString QxrdWindow::darkImagePath()
+{
+  return m_DarkImageName->text();
+}
+
+void QxrdWindow::setDarkImagePath(QString path)
+{
+  m_DarkImageName -> setText(path);
+}
+
+int QxrdWindow::performBadPixels()
+{
+  return m_PerformBadPixels -> checkState();
+}
+
+void QxrdWindow::setPerformBadPixels(int corr)
+{
+  m_PerformBadPixels->setChecked(corr);
+}
+
+void QxrdWindow::doLoadBadPixels()
+{
+  QString theFile = QFileDialog::getOpenFileName(this, "Load Bad Pixel Map from...");
+
+  if (theFile.length()) {
+    loadBadPixels(theFile);
+  }
+}
+
+void QxrdWindow::loadBadPixels(QString name)
+{
+  QxrdImageData* img = loadNewImage(name);
+
+  setBadPixelsPath(name);
+
+  newBadPixelsImage(img);
+}
+
+QString QxrdWindow::badPixelsPath()
+{
+  return m_BadPixelsFileName->text();
+}
+
+void QxrdWindow::setBadPixelsPath(QString path)
+{
+  m_BadPixelsFileName->setText(path);
+}
+
+int QxrdWindow::performGainCorrection()
+{
+  return m_PerformGainCorrection->checkState();
+}
+
+void QxrdWindow::setPerformGainCorrection(int corr)
+{
+  m_PerformGainCorrection->setChecked(corr);
+}
+
+void QxrdWindow::doLoadGainMap()
+{
+  QString theFile = QFileDialog::getOpenFileName(this, "Load Pixel Gain Map from...");
+
+  if (theFile.length()) {
+    loadGainMap(theFile);
+  }
+}
+
+void QxrdWindow::loadGainMap(QString name)
+{
+  QxrdImageData* img = loadNewImage(name);
+
+  setGainMapPath(name);
+
+  newGainMapImage(img);
+}
+
+QString QxrdWindow::gainMapPath()
+{
+  return m_GainCorrectionFileName -> text();
+}
+
+void QxrdWindow::setGainMapPath(QString path)
+{
+  m_GainCorrectionFileName -> setText(path);
+}
+
+void QxrdWindow::newData(QxrdImageData *image)
+{
+  if (m_Data != image) {
+    if (m_Data) {
+      enqueue(m_Data);
+    }
+
+    m_Data = image;
+  }
+}
+
+void QxrdWindow::newDarkImage(QxrdImageData *image)
+{
+  if (m_DarkFrame != image) {
+    if (m_DarkFrame) {
+      enqueue(m_DarkFrame);
+    }
+
+    m_DarkFrame = image;
+  }
+}
+
+void QxrdWindow::newBadPixelsImage(QxrdImageData *image)
+{
+  if (m_BadPixels != image) {
+    if (m_BadPixels) {
+      enqueue(m_BadPixels);
+    }
+
+    m_BadPixels = image;
+  }
+}
+
+void QxrdWindow::newGainMapImage(QxrdImageData *image)
+{
+  if (m_GainFrame != image) {
+    if (m_GainFrame) {
+      enqueue(m_GainFrame);
+    }
+
+    m_GainFrame = image;
   }
 }

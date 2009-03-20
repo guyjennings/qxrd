@@ -28,7 +28,6 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdWindow *win, QxrdAcqu
     m_Thread(thread),
     m_Mutex(QMutex::Recursive),
     m_Application(app),
-    //m_Cancel(false),
     m_NRows(0),
     m_NCols(0),
     m_IntegMode(0),
@@ -39,7 +38,6 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdWindow *win, QxrdAcqu
     m_AcquiringDark(0),
     m_AcquiredData(NULL),
     m_NIntTimes(0),
-    m_AcquiredImages(QString("QxrdAcquisition acquired images")),
     m_AvailableImages(QString("QxrdAcquisition available images")),
     m_Window(win)
 {
@@ -298,7 +296,7 @@ void QxrdAcquisition::onEndFrame()
     m_AcquiredData -> setNSummed(m_NSums);
 
     if (m_AcquiringDark) {
-      m_Window -> newDarkImage(m_AcquiredData);
+      m_Window -> darkImageAcquired(m_AcquiredData);
     } else {
       m_Window -> enqueue(m_AcquiredData);
     }
