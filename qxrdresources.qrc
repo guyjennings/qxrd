@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/images" >
+        <file>images/zoom-out.png</file>
+        <file>images/earthtones.png</file>
+        <file>images/fileopen.png</file>
+        <file>images/fire.png</file>
+        <file>images/go-down.png</file>
+        <file>images/go-down-left.png</file>
+        <file>images/go-down-right.png</file>
+        <file>images/go-left.png</file>
+        <file>images/go-right.png</file>
+        <file>images/go-up.png</file>
+        <file>images/go-up-left.png</file>
+        <file>images/go-up-right.png</file>
+        <file>images/grayscale.png</file>
+        <file>images/inversegrayscale.png</file>
+        <file>images/zoom-all.png</file>
+        <file>images/zoom-in.png</file>
+    </qresource>
+</RCC>

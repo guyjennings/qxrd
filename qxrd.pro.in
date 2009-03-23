@@ -17,7 +17,8 @@ RCC_DIR = rcc
 
 TARGET = qxrd$${SUFFIX_STR}
 
-RESOURCES += qxrdhelptext.qrc 
+RESOURCES += qxrdhelptext.qrc \
+	qxrdresources.qrc
 
 DISTFILES += qxrdhelptext.html
 
