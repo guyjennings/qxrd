@@ -249,7 +249,7 @@ void QxrdImagePlot::setIce()
 {
   m_ColorMap.setColorInterval(Qt::black, Qt::white);
 //  m_ColorMap.addColorStop(0.25, Qt::darkblue);
-  m_ColorMap.addColorStop(0.5, Qt::blue);
+  m_ColorMap.addColorStop(0.25, Qt::blue);
   m_ColorMap.addColorStop(0.75, Qt::cyan);
 
   changedColorMap();
