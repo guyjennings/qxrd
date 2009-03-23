@@ -19,7 +19,11 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Rescaler(NULL),
     m_Legend(NULL),
     m_Spectrogram(NULL),
-    m_ColorMap(Qt::black, Qt::white)
+    m_ColorMap(Qt::black, Qt::white),
+    m_MinDisplayed(-10),
+    m_MaxDisplayed(110),
+    m_Interpolate(1),
+    m_MaintainAspect(1)
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -58,6 +62,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 
   m_Spectrogram = new QwtPlotSpectrogram();
   m_Spectrogram -> attach(this);
+
+  setDisplayedRange(0,100);
+  setGrayscale();
 }
 
 void QxrdImagePlot::autoScale()
@@ -70,45 +77,111 @@ void QxrdImagePlot::autoScale()
   m_Zoomer -> setZoomBase();
 }
 
+void QxrdImagePlot::setAutoRange()
+{
+  printf("To do...\n");
+}
+
 void QxrdImagePlot::set005Range()
 {
-  double mn = m_Raster.minValue();
-  double mx = m_Raster.maxValue();
-
-  setDisplayedRange(mn, mn+(mx-mn)*0.05);
+  setDisplayedRange(0, 5);
 }
 
 void QxrdImagePlot::set010Range()
 {
-  double mn = m_Raster.minValue();
-  double mx = m_Raster.maxValue();
-
-  setDisplayedRange(mn, mn+(mx-mn)*0.1);
+  setDisplayedRange(0, 10);
 }
 
 void QxrdImagePlot::set100Range()
 {
-  double mn = m_Raster.minValue();
-  double mx = m_Raster.maxValue();
-
-  setDisplayedRange(mn, mn+(mx-mn)*1.0);
+  setDisplayedRange(0, 100);
 }
 
 void QxrdImagePlot::setDisplayedRange(double min, double max)
 {
-  m_Raster.setDisplayedRange(min, max);
+  if (min != m_MinDisplayed) {
+//    printf("QxrdImagePlot::setDisplayedRange emit minimum_changed(%g)\n", min);
+
+    emit minimum_changed(min);
+    m_MinDisplayed = min;
+  }
+
+  if (max != m_MaxDisplayed) {
+//    printf("QxrdImagePlot::setDisplayedRange emit maximum_changed(%g)\n", max);
+
+    emit maximum_changed(max);
+    m_MaxDisplayed = max;
+  }
+
+  recalculateDisplayedRange();
+}
+
+void QxrdImagePlot::recalculateDisplayedRange()
+{
+  double minv = m_Raster.minValue();
+  double maxv = m_Raster.maxValue();
+  double del = maxv-minv;
+
+  double mindis = minv+del*m_MinDisplayed/100.0;
+  double maxdis = minv+del*m_MaxDisplayed/100.0;
+
+  m_Raster.setDisplayedRange(mindis, maxdis);
+
+  QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
+  setAxisScale(QwtPlot::yRight, mindis, maxdis);
+  rightAxis -> setColorBarEnabled(true);
+  rightAxis -> setColorMap(m_Spectrogram->data().range(),
+                           m_Spectrogram->colorMap());
+
+  replotImage();
+}
+
+void QxrdImagePlot::replotImage()
+{
   m_Spectrogram -> setData(m_Raster);
 
   m_Spectrogram -> invalidateCache();
   m_Spectrogram -> itemChanged();
 
-  QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
-  setAxisScale(QwtPlot::yRight, min, max);
-  rightAxis -> setColorBarEnabled(true);
-  rightAxis -> setColorMap(m_Spectrogram->data().range(),
-                           m_Spectrogram->colorMap());
-
   replot();
+}
+
+void QxrdImagePlot::on_minimum_changed(double min)
+{
+//  printf("QxrdImagePlot::on_minimum_changed(%g)\n", min);
+
+  setDisplayedRange(min, m_MaxDisplayed);
+}
+
+void QxrdImagePlot::on_maximum_changed(double max)
+{
+//  printf("QxrdImagePlot::on_maximum_changed(%g)\n", max);
+
+  setDisplayedRange(m_MinDisplayed, max);
+}
+
+void QxrdImagePlot::on_interpolate_changed(int interp)
+{
+//  printf("QxrdImagePlot::on_interpolate_changed(%d)\n", interp);
+
+  m_Raster.setInterpolate(interp);
+
+  replotImage();
+}
+
+void QxrdImagePlot::on_maintain_aspect_changed(int interp)
+{
+//  printf("QxrdImagePlot::on_maintain_aspect_changed(%d)\n", interp);
+
+  m_Rescaler -> setEnabled(interp);
+}
+
+void QxrdImagePlot::setTrackerPen(const QPen &pen)
+{
+   m_Tracker -> setTrackerPen(pen);
+   m_Tracker -> setRubberBandPen(pen);
+   m_Zoomer -> setTrackerPen(pen);
+   m_Zoomer -> setRubberBandPen(pen);
 }
 
 void QxrdImagePlot::setGrayscale()
@@ -117,7 +190,7 @@ void QxrdImagePlot::setGrayscale()
 
   changedColorMap();
 
-  m_Zoomer -> setTrackerPen(QPen(Qt::red));
+  setTrackerPen(QPen(Qt::red));
 }
 
 void QxrdImagePlot::setInverseGrayscale()
@@ -126,7 +199,7 @@ void QxrdImagePlot::setInverseGrayscale()
 
   changedColorMap();
 
-  m_Zoomer -> setTrackerPen(QPen(Qt::red));
+  setTrackerPen(QPen(Qt::red));
 }
 
 void QxrdImagePlot::setEarthTones()
@@ -140,7 +213,7 @@ void QxrdImagePlot::setEarthTones()
 
   changedColorMap();
 
-  m_Zoomer -> setTrackerPen(QPen(Qt::red));
+  setTrackerPen(QPen(Qt::red));
 }
 
 void QxrdImagePlot::setSpectrum()
@@ -153,7 +226,7 @@ void QxrdImagePlot::setSpectrum()
 
   changedColorMap();
 
-  m_Zoomer -> setTrackerPen(QPen(Qt::black));
+  setTrackerPen(QPen(Qt::black));
 }
 
 void QxrdImagePlot::setFire()
@@ -164,7 +237,19 @@ void QxrdImagePlot::setFire()
 
   changedColorMap();
 
-  m_Zoomer -> setTrackerPen(QPen(Qt::blue));
+  setTrackerPen(QPen(Qt::blue));
+}
+
+void QxrdImagePlot::setIce()
+{
+  m_ColorMap.setColorInterval(Qt::black, Qt::white);
+//  m_ColorMap.addColorStop(0.25, Qt::darkblue);
+  m_ColorMap.addColorStop(0.5, Qt::blue);
+  m_ColorMap.addColorStop(0.75, Qt::cyan);
+
+  changedColorMap();
+
+  setTrackerPen(QPen(Qt::red));
 }
 
 void QxrdImagePlot::changedColorMap()
@@ -194,6 +279,9 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
   rightAxis -> setColorBarEnabled(true);
   rightAxis -> setColorMap(m_Spectrogram->data().range(),
                            m_Spectrogram->colorMap());
+
+  recalculateDisplayedRange();
+  replot();
 }
 
 QxrdRasterData* QxrdImagePlot::raster()
