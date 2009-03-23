@@ -89,6 +89,15 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QString gainMapPath();
   void setGainMapPath(QString path);
 
+  double displayMinimumPct();
+  void setDisplayMinimumPct(double pct);
+  double displayMaximumPct();
+  void setDisplayMaximumPct(double pct);
+  int interpolatePixels();
+  void setInterpolatePixels(int interp);
+  int maintainAspectRatio();
+  void setMaintainAspectRatio(int prsrv);
+
  public:
   double  exposureTime();
   int     integrationMode();
@@ -110,6 +119,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void enqueue(QxrdImageData *image);
   QxrdImageData* dequeue();
   QxrdImageData* nextAvailableImage();
+  void returnImageToPool(QxrdImageData *img);
   QxrdImageData* loadNewImage(QString name);
 
   void darkImageAcquired(QxrdImageData *image);
@@ -119,7 +129,6 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void newGainMapImage(QxrdImageData *image);
 
  private:
-  void setupConnections();
   void saveTestTIFF(QString name, int nbits, int isfloat);
 
  private:
@@ -136,13 +145,6 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QxrdImageData          *m_DarkFrame;
   QxrdImageData          *m_BadPixels;
   QxrdImageData          *m_GainFrame;
-//  int                     m_PerformDarkSubtraction;
-//  int                     m_SaveRawImages;
-//  QString                 m_DarkImagePath;
-//  int                     m_PerformBadPixels;
-//  QString                 m_BadPixelsPath;
-//  int                     m_PerformGainCorrection;
-//  QString                 m_GainMapPath;
 };
 
 #endif

@@ -18,6 +18,7 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QTime>
+#include <QDirModel>
 
 #include "tiffio.h"
 
@@ -37,11 +38,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
 {
   setupUi(this);
 
-  setupConnections();
-}
+  QDirModel *model = new QDirModel();
+  m_FileBrowser -> setModel(model);
+  m_FileBrowser -> setRootIndex(model->index(QDir::currentPath()));
 
-void QxrdWindow::setupConnections()
-{
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
   connect(m_ActionLoadData, SIGNAL(triggered()), this, SLOT(doLoadData()));
@@ -61,15 +61,38 @@ void QxrdWindow::setupConnections()
   connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
   connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
 
+  connect(m_DisplayMinimum, SIGNAL(valueChanged(double)), m_Plot, SLOT(on_minimum_changed(double)));
+  connect(m_DisplayMaximum, SIGNAL(valueChanged(double)), m_Plot, SLOT(on_maximum_changed(double)));
+
+  connect(m_InterpolatePixels, SIGNAL(stateChanged(int)), m_Plot, SLOT(on_interpolate_changed(int)));
+  connect(m_MaintainAspectRatio, SIGNAL(stateChanged(int)), m_Plot, SLOT(on_maintain_aspect_changed(int)));
+
+  connect(m_Plot, SIGNAL(minimum_changed(double)), m_DisplayMinimum, SLOT(setValue(double)));
+  connect(m_Plot, SIGNAL(maximum_changed(double)), m_DisplayMaximum, SLOT(setValue(double)));
+
+  connect(m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));
+  connect(m_Display_5pct, SIGNAL(clicked()), m_Action005Range, SIGNAL(triggered()));
+  connect(m_Display_10pct, SIGNAL(clicked()), m_Action010Range, SIGNAL(triggered()));
+  connect(m_Display_100pct, SIGNAL(clicked()), m_Action100Range, SIGNAL(triggered()));
+
   connect(m_Action005Range, SIGNAL(triggered()), m_Plot, SLOT(set005Range()));
   connect(m_Action010Range, SIGNAL(triggered()), m_Plot, SLOT(set010Range()));
   connect(m_Action100Range, SIGNAL(triggered()), m_Plot, SLOT(set100Range()));
+  connect(m_ActionAutoRange, SIGNAL(triggered()), m_Plot, SLOT(setAutoRange()));
+
+  connect(m_GrayscaleButton, SIGNAL(clicked()), m_ActionGrayscale, SIGNAL(triggered()));
+  connect(m_InvGrayscaleButton, SIGNAL(clicked()), m_ActionInverseGrayscale, SIGNAL(triggered()));
+  connect(m_EarthTonesButton, SIGNAL(clicked()), m_ActionEarthTones, SIGNAL(triggered()));
+  connect(m_SpectrumButton, SIGNAL(clicked()), m_ActionSpectrum, SIGNAL(triggered()));
+  connect(m_FireButton, SIGNAL(clicked()), m_ActionFire, SIGNAL(triggered()));
+  connect(m_IceButton, SIGNAL(clicked()), m_ActionIce, SIGNAL(triggered()));
 
   connect(m_ActionGrayscale, SIGNAL(triggered()), m_Plot, SLOT(setGrayscale()));
   connect(m_ActionInverseGrayscale, SIGNAL(triggered()), m_Plot, SLOT(setInverseGrayscale()));
   connect(m_ActionEarthTones, SIGNAL(triggered()), m_Plot, SLOT(setEarthTones()));
   connect(m_ActionSpectrum, SIGNAL(triggered()), m_Plot, SLOT(setSpectrum()));
-  connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()), Qt::DirectConnection);
+  connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()));
+  connect(m_ActionIce, SIGNAL(triggered()), m_Plot, SLOT(setIce()));
 
   connect(m_AcquisitionThread, SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
           this, SLOT(acquiredFrame(QString,int,int,int,int,int)));
@@ -323,7 +346,7 @@ void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int ns
 
 void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
 {
-  printf("QxrdWindow::summedFrameCompleted(\"%s\",%d)\n", qPrintable(fileName), iframe);
+//  printf("QxrdWindow::summedFrameCompleted(\"%s\",%d)\n", qPrintable(fileName), iframe);
 
   if (m_Acquiring) {
     QxrdImageData *latest = dequeue();
@@ -335,7 +358,7 @@ void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
 
     performImageCorrections(m_Data);
 
-    QxrdRasterData data(m_Data);
+    QxrdRasterData data(m_Data, interpolatePixels());
 
     QFileInfo fileInfo(fileName);
 
@@ -371,6 +394,11 @@ QxrdImageData* QxrdWindow::nextAvailableImage()
   return m_AcquisitionThread -> nextAvailableImage();
 }
 
+void QxrdWindow::returnImageToPool(QxrdImageData *img)
+{
+  m_AcquisitionThread -> returnImageToPool(img);
+}
+
 int QxrdWindow::acquisitionStatus(double time)
 {
   return m_AcquisitionThread -> acquisitionStatus(time);
@@ -378,7 +406,7 @@ int QxrdWindow::acquisitionStatus(double time)
 
 void QxrdWindow::doAcquire()
 {
-  printMessage("QxrdWindow::doAcquire()\n");
+//  printMessage("QxrdWindow::doAcquire()\n");
 
   acquisitionStarted();
 
@@ -459,6 +487,11 @@ void QxrdWindow::readSettings()
   setPerformGainCorrection(settings.value("acq/gaincorrect",0).toInt());
   setGainMapPath(settings.value("acq/gaincorrectpath","").toString());
 
+  setDisplayMinimumPct(settings.value("disp/minimumpct",0).toDouble());
+  setDisplayMaximumPct(settings.value("disp/maximumpct",100).toDouble());
+  setInterpolatePixels(settings.value("disp/interpolate",1).toInt());
+  setMaintainAspectRatio(settings.value("disp/maintainaspect",1).toInt());
+
   m_SettingsLoaded = true;
 }
 
@@ -483,6 +516,11 @@ void QxrdWindow::saveSettings()
 
   settings.setValue("acq/gaincorrect", performGainCorrection());
   settings.setValue("acq/gaincorrectpath", gainMapPath());
+
+  settings.setValue("disp/minimumpct", displayMinimumPct());
+  settings.setValue("disp/maximumpct", displayMaximumPct());
+  settings.setValue("disp/interpolate", interpolatePixels());
+  settings.setValue("disp/maintainaspect", maintainAspectRatio());
 }
 
 void QxrdWindow::statusMessage(QString msg)
@@ -544,9 +582,9 @@ QxrdImageData* QxrdWindow::loadNewImage(QString name)
 
       void* buffer = malloc(TIFFScanlineSize(tif));
 
-      for (int y=0; y<imageHeight; y++) {
+      for (quint32 y=0; y<imageHeight; y++) {
         if (TIFFReadScanline(tif, buffer, y)==1) {
-          for (int x=0; x<imageWidth; x++) {
+          for (quint32 x=0; x<imageWidth; x++) {
             switch (sampleFormat) {
             case SAMPLEFORMAT_INT:
               switch (bitsPerSample) {
@@ -600,6 +638,11 @@ QxrdImageData* QxrdWindow::loadNewImage(QString name)
   if (tif) {
     TIFFClose(tif);
   }
+
+  QFileInfo info(name);
+
+  res -> setFilename(name);
+  res -> setTitle(info.fileName());
 
   return res;
 }
@@ -679,7 +722,7 @@ void QxrdWindow::saveTestTIFF(QString name, int nbits, int isfloat)
       signed char b[2048];
       for (int y=0; y<2048; y++) {
         for (int x=0; x<2048; x++) {
-          b[x] = 100.0*sin(y/100.0)*sin(x/100.0);
+          b[x] = (signed char) (100.0*sin(y/100.0)*sin(x/100.0));
         }
         TIFFWriteScanline(tif, b, y, 0);
       }
@@ -691,7 +734,7 @@ void QxrdWindow::saveTestTIFF(QString name, int nbits, int isfloat)
       short b[2048];
       for (int y=0; y<2048; y++) {
         for (int x=0; x<2048; x++) {
-          b[x] = 100.0*sin(y/100.0)*sin(x/100.0);
+          b[x] = (short) (100.0*sin(y/100.0)*sin(x/100.0));
         }
         TIFFWriteScanline(tif, b, y, 0);
       }
@@ -703,7 +746,7 @@ void QxrdWindow::saveTestTIFF(QString name, int nbits, int isfloat)
       int b[2048];
       for (int y=0; y<2048; y++) {
         for (int x=0; x<2048; x++) {
-          b[x] = 100.0*sin(y/100.0)*sin(x/100.0);
+          b[x] = (int) (100.0*sin(y/100.0)*sin(x/100.0));
         }
         TIFFWriteScanline(tif, b, y, 0);
       }
@@ -939,18 +982,24 @@ void QxrdWindow::newData(QxrdImageData *image)
 {
   if (m_Data != image) {
     if (m_Data) {
-      enqueue(m_Data);
+      returnImageToPool(m_Data);
     }
 
     m_Data = image;
   }
+
+  QxrdRasterData data(m_Data, interpolatePixels());
+
+  m_Plot -> setImage(data);
+  m_Plot -> setTitle(m_Data -> title());
+  m_Plot -> replot();
 }
 
 void QxrdWindow::newDarkImage(QxrdImageData *image)
 {
   if (m_DarkFrame != image) {
     if (m_DarkFrame) {
-      enqueue(m_DarkFrame);
+      returnImageToPool(m_DarkFrame);
     }
 
     m_DarkFrame = image;
@@ -961,7 +1010,7 @@ void QxrdWindow::newBadPixelsImage(QxrdImageData *image)
 {
   if (m_BadPixels != image) {
     if (m_BadPixels) {
-      enqueue(m_BadPixels);
+      returnImageToPool(m_BadPixels);
     }
 
     m_BadPixels = image;
@@ -972,9 +1021,50 @@ void QxrdWindow::newGainMapImage(QxrdImageData *image)
 {
   if (m_GainFrame != image) {
     if (m_GainFrame) {
-      enqueue(m_GainFrame);
+      returnImageToPool(m_GainFrame);
     }
 
     m_GainFrame = image;
   }
 }
+
+double QxrdWindow::displayMinimumPct()
+{
+  return m_DisplayMinimum -> value();
+}
+
+void QxrdWindow::setDisplayMinimumPct(double pct)
+{
+  m_DisplayMinimum -> setValue(pct);
+}
+
+double QxrdWindow::displayMaximumPct()
+{
+  return m_DisplayMaximum -> value();
+}
+
+void QxrdWindow::setDisplayMaximumPct(double pct)
+{
+  m_DisplayMaximum -> setValue(pct);
+}
+
+int QxrdWindow::interpolatePixels()
+{
+  return m_InterpolatePixels -> checkState();
+}
+
+void QxrdWindow::setInterpolatePixels(int interp)
+{
+  m_InterpolatePixels -> setChecked(interp);
+}
+
+int QxrdWindow::maintainAspectRatio()
+{
+  return m_MaintainAspectRatio -> checkState();
+}
+
+void QxrdWindow::setMaintainAspectRatio(int prsrv)
+{
+  m_MaintainAspectRatio -> setChecked(prsrv);
+}
+
