@@ -51,6 +51,7 @@ class QxrdAcquisition : public QObject
   int acquisitionStatus();
   void setWindow(QxrdWindow *win);
   QxrdImageData *nextAvailableImage();
+  void returnImageToPool(QxrdImageData *img);
   void enqueue(QxrdImageData *img);
 
  private:
@@ -72,7 +73,6 @@ class QxrdAcquisition : public QObject
   int                    m_AcquiringDark;
   QxrdImageData         *m_AcquiredData;
   QVector<unsigned short> m_Buffer;
-  QVector< QFuture<int> > m_Saved;
   double                 m_IntTimes[8];
   int                    m_NIntTimes;
   QString                m_OutputDir;

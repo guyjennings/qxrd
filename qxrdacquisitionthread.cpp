@@ -117,3 +117,8 @@ QxrdImageData *QxrdAcquisitionThread::nextAvailableImage()
 {
   return m_Acquisition -> nextAvailableImage();
 }
+
+void QxrdAcquisitionThread::returnImageToPool(QxrdImageData *img)
+{
+  m_Acquisition -> returnImageToPool(img);
+}

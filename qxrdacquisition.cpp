@@ -18,7 +18,6 @@
 #include <QThread>
 #include <QDir>
 #include <QFile>
-#include <QtConcurrentRun>
 #include <QTime>
 
 static QxrdAcquisition *g_Acquisition = NULL;
@@ -71,10 +70,7 @@ void QxrdAcquisition::initialize()
   UINT nChannelType;
   int nChannelNr;
   UINT dwSortFlags, dwDataType, dwRows, dwColumns, dwFrames;
-  DWORD 
-    dwAcqType, dwSystemID, dwSyncMode, dwHwAccess,
-    dwNumSensors;
-  char strBuffer[1000];
+  DWORD dwAcqType, dwSystemID, dwSyncMode, dwHwAccess;
 
   nRet = Acquisition_EnumSensors(&nSensors, bEnableIRQ, FALSE);
 
@@ -154,16 +150,16 @@ void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex
   m_BufferFrame = 0;
 
   m_AcquiringDark = 0;
-  m_AcquiredData = nextAvailableImage();
+
+  if (m_AcquiredData==NULL) {
+    m_AcquiredData = nextAvailableImage();
+  }
 
   m_AcquiredData->resize(m_NCols, m_NRows);
   m_AcquiredData->clear();
 
   m_Buffer.resize(m_NRows*m_NCols*m_NBufferFrames);
   m_Buffer.fill(0);
-
-  m_Saved.resize(m_NFrames);
-  m_Saved.fill(QFuture<int>());
 
   if ((nRet=Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
                                                 0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
@@ -210,7 +206,10 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
   m_BufferFrame = 0;
 
   m_AcquiringDark= 1;
-  m_AcquiredData = nextAvailableImage();
+
+  if (m_AcquiredData == NULL) {
+    m_AcquiredData = nextAvailableImage();
+  }
 
   m_AcquiredData->resize(m_NCols, m_NRows);
   m_AcquiredData->clear();
@@ -218,8 +217,8 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
   m_Buffer.resize(m_NRows*m_NCols*m_NBufferFrames);
   m_Buffer.fill(0);
 
-  m_Saved.resize(m_NFrames);
-  m_Saved.fill(QFuture<int>());
+//  m_Saved.resize(m_NFrames);
+//  m_Saved.fill(QFuture<int>());
 
   if ((nRet=Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
                                                 0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
@@ -263,7 +262,6 @@ void QxrdAcquisition::onEndFrame()
   double* current = m_AcquiredData->data();
 
   unsigned short* frame = m_Buffer.data() + m_BufferFrame*npixels;
-  unsigned short max=0;
 
 //   printf("m_AcquiredImage.data() = %p\n", current);
 
@@ -287,7 +285,6 @@ void QxrdAcquisition::onEndFrame()
   if (m_CurrentSum >= m_NSums) {
     m_CurrentSum = 0;
 
-    QxrdImageData *frame;
     QFileInfo finfo(fileName);
 
     m_AcquiredData -> setFilename(fileName);
@@ -325,13 +322,7 @@ void QxrdAcquisition::onEndAcquisition()
 {
   emit printMessage("(CB) Acquisition ended\n");
 
-  QFuture<int> f;
-
   emit statusMessage("Waiting for saves");
-
-  foreach(f, m_Saved) {
-    f.waitForFinished();
-  }
 
   emit statusMessage("Acquire Complete");
   emit acquireComplete();
@@ -345,9 +336,19 @@ int QxrdAcquisition::acquisitionStatus()
 QxrdImageData *QxrdAcquisition::nextAvailableImage()
 {
   if (m_AvailableImages.size() == 0) {
+    printf("Allocate new image\n");
     return new QxrdImageData(m_NCols, m_NRows);
   } else {
     return m_AvailableImages.dequeue();
+  }
+}
+
+void QxrdAcquisition::returnImageToPool(QxrdImageData *img)
+{
+  if (img) {
+    m_AvailableImages.enqueue(img);
+  } else {
+    printf("Error: return NULL image to pool\n");
   }
 }
 
