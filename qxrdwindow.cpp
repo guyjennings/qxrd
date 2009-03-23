@@ -887,8 +887,6 @@ void QxrdWindow::loadDarkImage(QString name)
 {
   QxrdImageData* img = loadNewImage(name);
 
-  setDarkImagePath(name);
-
   newDarkImage(img);
 }
 
@@ -925,8 +923,6 @@ void QxrdWindow::loadBadPixels(QString name)
 {
   QxrdImageData* img = loadNewImage(name);
 
-  setBadPixelsPath(name);
-
   newBadPixelsImage(img);
 }
 
@@ -962,8 +958,6 @@ void QxrdWindow::doLoadGainMap()
 void QxrdWindow::loadGainMap(QString name)
 {
   QxrdImageData* img = loadNewImage(name);
-
-  setGainMapPath(name);
 
   newGainMapImage(img);
 }
@@ -1004,6 +998,8 @@ void QxrdWindow::newDarkImage(QxrdImageData *image)
 
     m_DarkFrame = image;
   }
+
+  setDarkImagePath(image->filename());
 }
 
 void QxrdWindow::newBadPixelsImage(QxrdImageData *image)
@@ -1015,6 +1011,8 @@ void QxrdWindow::newBadPixelsImage(QxrdImageData *image)
 
     m_BadPixels = image;
   }
+
+  setBadPixelsPath(image->filename());
 }
 
 void QxrdWindow::newGainMapImage(QxrdImageData *image)
@@ -1026,6 +1024,8 @@ void QxrdWindow::newGainMapImage(QxrdImageData *image)
 
     m_GainFrame = image;
   }
+
+  setGainMapPath(image->filename());
 }
 
 double QxrdWindow::displayMinimumPct()

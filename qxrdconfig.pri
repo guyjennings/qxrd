@@ -5,7 +5,7 @@ win32 {
 
   DEBUG_SUFFIX = d
 
-  CONFIG += console
+#  CONFIG += console
 }
 
 unix {
