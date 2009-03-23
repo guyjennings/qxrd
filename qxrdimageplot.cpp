@@ -30,6 +30,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_Tracker = new QxrdPlotTracker(canvas(), this);
   m_Tracker -> setEnabled(true);
   m_Tracker -> setSelectionFlags(QwtPicker::PointSelection);
+//   m_Tracker -> setAxisEnabled(QwtPlot::yRight, false);
 
   m_Zoomer = new QxrdPlotZoomer(canvas(), this);
   m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
@@ -42,17 +43,21 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
                               Qt::LeftButton, Qt::ControlModifier);
 
   m_Zoomer -> setEnabled(true);
+//   m_Zoomer -> setAxisEnabled(QwtPlot::yRight, false);
 
   m_Panner = new QwtPlotPanner(canvas());
   m_Panner -> setEnabled(true);
   m_Panner -> setMouseButton(Qt::MidButton);
+  m_Panner -> setAxisEnabled(QwtPlot::yRight, false);
 
   m_Magnifier = new QwtPlotMagnifier(canvas());
   m_Magnifier -> setEnabled(true);
   m_Magnifier -> setMouseButton(Qt::NoButton);
+  m_Magnifier -> setAxisEnabled(QwtPlot::yRight, false);
 
   m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::xBottom, QwtPlotRescaler::Expanding);
   m_Rescaler -> setEnabled(true);
+//   m_Rescaler -> setAxisEnabled(QwtPlot::yRight, false);
 
   m_Legend = new QwtLegend;
   m_Legend -> setFrameStyle(QFrame::Box|QFrame::Sunken);
@@ -277,16 +282,16 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
 
   QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
   rightAxis -> setColorBarEnabled(true);
-  rightAxis -> setColorMap(QwtDoubleInterval(0,100),
+  rightAxis -> setColorMap(QwtDoubleInterval(0,1),
                            m_Spectrogram->colorMap());
 
-  enableAxis(QwtPlot::yRight);
+//   enableAxis(QwtPlot::yRight);
 
   QwtDoubleInterval range = m_Raster.range();
 
   setAxisScale(QwtPlot::yRight, m_Raster.minValue(), m_Raster.maxValue());
 
-  setDisplayedRange(0,100);
+//   setDisplayedRange(0,100);
 
   recalculateDisplayedRange();
   replot();

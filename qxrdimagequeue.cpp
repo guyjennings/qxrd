@@ -22,7 +22,7 @@ QxrdImageData* QxrdImageQueue::dequeue()
   QWriteLocker lock(&m_Lock);
   QxrdImageData* res = inherited::dequeue();
 
-  printf("QxrdImageQueue::dequeue() = %p from %s\n", res, qPrintable(m_Name));
+//   printf("QxrdImageQueue::dequeue() = %p from %s\n", res, qPrintable(m_Name));
 
   return res;
 }
@@ -31,7 +31,7 @@ void QxrdImageQueue::enqueue(QxrdImageData *data)
 {
   QWriteLocker lock(&m_Lock);
 
-  printf("QxrdImageQueue::enqueue(%p) into %s\n", data, qPrintable(m_Name));
+//   printf("QxrdImageQueue::enqueue(%p) into %s\n", data, qPrintable(m_Name));
 
   inherited::enqueue(data);
 }
