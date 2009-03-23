@@ -1,19 +1,18 @@
 #include "qxrdrasterdata.h"
 
-QxrdRasterData::QxrdRasterData(QxrdImageData *img)
+QxrdRasterData::QxrdRasterData(QxrdImageData *img, int interp)
   : QwtRasterData(QwtDoubleRect(0,0,img->width(),img->height())),
     m_Data(img),
-//    m_Offset(offset),
-    m_NRows(img->width()),
-    m_NCols(img->height()),
+    m_NRows((img ? img->width(): 0)),
+    m_NCols((img ? img->height() : 0)),
     m_Range(40000,48000),
-    m_Interpolate(1)
+    m_Interpolate(interp)
 {
 }
 
 QxrdRasterData::QxrdRasterData()
   : QwtRasterData(),
-//    m_Offset(0),
+    m_Data(0),
     m_NRows(0),
     m_NCols(0),
     m_Range(0,1),
@@ -21,29 +20,45 @@ QxrdRasterData::QxrdRasterData()
 {
 }
 
+void QxrdRasterData::setInterpolate(int interp)
+{
+//  printf("%p->QxrdRasterData::setInterpolate(%d)\n", this, interp);
+
+  m_Interpolate = interp;
+}
+
+int QxrdRasterData::interpolate()
+{
+  return m_Interpolate;
+}
+
 double QxrdRasterData::value(double x, double y) const
 {
-  if (x < 0 || x > m_NCols) return 0;
-  if (y < 0 || y > m_NRows) return 0;
+  if (m_Data) {
+    if (x < 0 || x > m_NCols) return 0;
+    if (y < 0 || y > m_NRows) return 0;
 
-  if (m_Interpolate) {
-     int ix = x, iy = y;
-     double dx = x-ix, dy = y-iy;
+    if (m_Interpolate) {
+      int ix = ((int) x), iy = ((int) y);
+      double dx = x-ix, dy = y-iy;
 
-     double f00 = m_Data->value((ix)   , (iy));
-     double f10 = m_Data->value((ix+1) , (iy));
-     double f01 = m_Data->value((ix)   , (iy+1));
-     double f11 = m_Data->value((ix+1) , (iy+1));
+      double f00 = m_Data->value((ix)   , (iy));
+      double f10 = m_Data->value((ix+1) , (iy));
+      double f01 = m_Data->value((ix)   , (iy+1));
+      double f11 = m_Data->value((ix+1) , (iy+1));
 
-     double f0 = f00*(1-dx)+f10*dx;
-     double f1 = f01*(1-dx)+f11*dx;
+      double f0 = f00*(1-dx)+f10*dx;
+      double f1 = f01*(1-dx)+f11*dx;
 
-     double f = f0*(1-dy)+f1*dy;
+      double f = f0*(1-dy)+f1*dy;
 
-     return f;
-   } else {
-     return m_Data->value(((int) x) , ((int) y));
-   }
+      return f;
+    } else {
+      return m_Data->value(((int) round(x)) , ((int) round(y)));
+    }
+  } else {
+    return 0;
+  }
 }
 
 QxrdRasterData* QxrdRasterData::copy() const

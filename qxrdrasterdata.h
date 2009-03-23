@@ -7,7 +7,7 @@
 class QxrdRasterData : public QwtRasterData
 {
  public:
-  QxrdRasterData(QxrdImageData *img);
+  QxrdRasterData(QxrdImageData *img, int interp);
   QxrdRasterData();
 
   double value(double x, double y) const;
@@ -17,6 +17,9 @@ class QxrdRasterData : public QwtRasterData
 
   double minValue();
   double maxValue();
+
+  void setInterpolate(int interp);
+  int interpolate();
 
  private:
   QxrdImageData     *m_Data;
