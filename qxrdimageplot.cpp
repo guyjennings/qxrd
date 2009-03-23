@@ -277,8 +277,16 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
 
   QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
   rightAxis -> setColorBarEnabled(true);
-  rightAxis -> setColorMap(m_Spectrogram->data().range(),
+  rightAxis -> setColorMap(QwtDoubleInterval(0,100),
                            m_Spectrogram->colorMap());
+
+  enableAxis(QwtPlot::yRight);
+
+  QwtDoubleInterval range = m_Raster.range();
+
+  setAxisScale(QwtPlot::yRight, m_Raster.minValue(), m_Raster.maxValue());
+
+  setDisplayedRange(0,100);
 
   recalculateDisplayedRange();
   replot();
