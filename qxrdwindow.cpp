@@ -34,13 +34,19 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_Data(new QxrdImageData(2048,2048)),
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
-    m_GainFrame(NULL)
+    m_GainFrame(NULL),
+    m_FileBrowserModel(NULL),
+    m_FileBrowserTimer()
 {
   setupUi(this);
 
-  QDirModel *model = new QDirModel();
-  m_FileBrowser -> setModel(model);
-  m_FileBrowser -> setRootIndex(model->index(QDir::currentPath()));
+  m_FileBrowserModel = new QDirModel();
+  m_FileBrowser -> setModel(m_FileBrowserModel);
+  m_FileBrowser -> setRootIndex(m_FileBrowserModel->index(QDir::currentPath()));
+
+  connect(&m_FileBrowserTimer, SIGNAL(timeout()), this, SLOT(refreshFileBrowser()));
+  m_FileBrowserTimer.start(5000);
+  connect(m_OutputDirectory, SIGNAL(textChanged(QString)), this, SLOT(setFileBrowserDirectory(QString)));
 
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
@@ -530,7 +536,8 @@ void QxrdWindow::statusMessage(QString msg)
 
 void QxrdWindow::doSaveData()
 {
-  QString theFile = QFileDialog::getSaveFileName(this, "Save Data in");
+  QString theFile = QFileDialog::getSaveFileName(
+      this, "Save Data in", outputDirectory());
 
   if (theFile.length()) {
     saveData(theFile);
@@ -539,7 +546,8 @@ void QxrdWindow::doSaveData()
 
 void QxrdWindow::doLoadData()
 {
-  QString theFile = QFileDialog::getOpenFileName(this, "Load Image from...");
+  QString theFile = QFileDialog::getOpenFileName(
+      this, "Load Image from...", outputDirectory());
 
   if (theFile.length()) {
     loadData(theFile);
@@ -876,7 +884,8 @@ void QxrdWindow::setSaveRawImages(int sav)
 
 void QxrdWindow::doLoadDarkImage()
 {
-  QString theFile = QFileDialog::getOpenFileName(this, "Load Dark Image from...");
+  QString theFile = QFileDialog::getOpenFileName(
+      this, "Load Dark Image from...", darkImagePath());
 
   if (theFile.length()) {
     loadDarkImage(theFile);
@@ -912,7 +921,8 @@ void QxrdWindow::setPerformBadPixels(int corr)
 
 void QxrdWindow::doLoadBadPixels()
 {
-  QString theFile = QFileDialog::getOpenFileName(this, "Load Bad Pixel Map from...");
+  QString theFile = QFileDialog::getOpenFileName(
+      this, "Load Bad Pixel Map from...", badPixelsPath());
 
   if (theFile.length()) {
     loadBadPixels(theFile);
@@ -948,7 +958,8 @@ void QxrdWindow::setPerformGainCorrection(int corr)
 
 void QxrdWindow::doLoadGainMap()
 {
-  QString theFile = QFileDialog::getOpenFileName(this, "Load Pixel Gain Map from...");
+  QString theFile = QFileDialog::getOpenFileName(
+      this, "Load Pixel Gain Map from...", gainMapPath());
 
   if (theFile.length()) {
     loadGainMap(theFile);
@@ -1068,3 +1079,14 @@ void QxrdWindow::setMaintainAspectRatio(int prsrv)
   m_MaintainAspectRatio -> setChecked(prsrv);
 }
 
+void QxrdWindow::setFileBrowserDirectory(QString dir)
+{
+  m_FileBrowser -> setRootIndex(m_FileBrowserModel->index(dir));
+}
+
+void QxrdWindow::refreshFileBrowser()
+{
+  printf("Refresh file browser\n");
+
+  m_FileBrowserModel -> refresh();
+}

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QProgressBar>
+#include <QTimer>
 #include "ui_qxrdwindow.h"
 
 class QxrdApplication;
@@ -10,6 +11,7 @@ class QxrdAcquisitionThread;
 class QwtPlotSpectrogram;
 class QCloseEvent;
 class QxrdImageData;
+class QDirModel;
 
 #include "qxrdimagequeue.h"
 
@@ -98,6 +100,9 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   int maintainAspectRatio();
   void setMaintainAspectRatio(int prsrv);
 
+  void setFileBrowserDirectory(QString dir);
+  void refreshFileBrowser();
+
  public:
   double  exposureTime();
   int     integrationMode();
@@ -145,6 +150,9 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QxrdImageData          *m_DarkFrame;
   QxrdImageData          *m_BadPixels;
   QxrdImageData          *m_GainFrame;
+
+  QDirModel              *m_FileBrowserModel;
+  QTimer                  m_FileBrowserTimer;
 };
 
 #endif
