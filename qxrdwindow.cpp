@@ -352,13 +352,15 @@ void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int ns
 
 void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
 {
-//  printf("QxrdWindow::summedFrameCompleted(\"%s\",%d)\n", qPrintable(fileName), iframe);
+  printf("QxrdWindow::summedFrameCompleted(\"%s\",%d)\n", qPrintable(fileName), iframe);
 
   if (m_Acquiring) {
     QxrdImageData *latest = dequeue();
     QxrdImageData *current = m_Data;
 
-    m_AcquisitionThread -> enqueue(current);
+    if (current != latest && current) {
+      returnImageToPool(current);
+    }
 
     m_Data = latest;
 
@@ -678,6 +680,8 @@ void QxrdWindow::saveRawData(QxrdImageData *image)
 
 void QxrdWindow::saveNamedImageData(QString name, QxrdImageData *image)
 {
+  emit printMessage(tr("Saved \"%1\")").arg(name));
+
   QReadLocker lock(image->rwLock());
 
   int nrows = image -> height();
@@ -1086,7 +1090,7 @@ void QxrdWindow::setFileBrowserDirectory(QString dir)
 
 void QxrdWindow::refreshFileBrowser()
 {
-  printf("Refresh file browser\n");
+//   printf("Refresh file browser\n");
 
   m_FileBrowserModel -> refresh();
 }
