@@ -673,7 +673,8 @@ void QxrdWindow::saveRawData(QxrdImageData *image)
 {
   QFileInfo info(image->filename());
 
-  QString name = info.path()+info.completeBaseName()+".raw.tif";
+  QString name = info.dir().filePath(
+      info.completeBaseName()+".raw.tif");
 
   saveNamedImageData(name, image);
 }
