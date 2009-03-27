@@ -39,6 +39,7 @@ HEADERS += \
 	qxrdsettings.h \
 	qxrdimagedata.h \
 	qxrdimagequeue.h \
+	qxrdimagedataformathis.h \
 	qxrdrasterdata.h \
 	qxrdwindow.h \
 	qxrdimageplot.h \
@@ -61,6 +62,7 @@ SOURCES += \
 	qxrdsettings.cpp \
 	qxrdimagedata.cpp \
 	qxrdimagequeue.cpp \
+	qxrdimagedataformathis.cpp \
 	qxrdrasterdata.cpp \
 	qxrdwindow.cpp \
 	qxrdimageplot.cpp \
