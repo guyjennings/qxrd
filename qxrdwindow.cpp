@@ -117,6 +117,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
   connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
 
+  connect(m_DataProcessor, SIGNAL(processedImageAvailable()), this, SLOT(onProcessedImageAvailable()));
+  connect(m_DataProcessor, SIGNAL(darkImageAvailable()), this, SLOT(onDarkImageAvailable()));
+
   for (int i=0; i<8; i++) {
     m_ExposureTime -> addItem(tr("Item %1").arg(i));
     m_Exposures.append(0);
@@ -914,4 +917,26 @@ void QxrdWindow::refreshFileBrowser()
 //   printf("Refresh file browser\n");
 
   m_FileBrowserModel -> refresh();
+}
+
+void QxrdWindow::onProcessedImageAvailable()
+{
+  printf("onProcessedImageAvailable()\n");
+
+  QxrdImageData* img = m_DataProcessor -> takeLatestProcessedImage();
+
+  if (img) {
+    newData(img);
+  }
+}
+
+void QxrdWindow::onDarkImageAvailable()
+{
+  printf("onDarkImageAvailable()\n");
+
+  QxrdImageData* img = m_DataProcessor -> takeNextDarkImage();
+
+  if (img) {
+    newDarkImage(img);
+  }
 }

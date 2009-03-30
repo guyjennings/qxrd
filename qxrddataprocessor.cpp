@@ -10,7 +10,9 @@ QxrdDataProcessor::QxrdDataProcessor
   : QObject(parent),
     m_Window(win),
     m_AcquisitionThread(acq),
-    m_DarkUsage(QReadWriteLock::Recursive)
+    m_DarkUsage(QReadWriteLock::Recursive),
+    m_ProcessedImages("QxrdDataProcessor Processed Images"),
+    m_DarkImages("QxrdDataProcessor Dark Images")
 {
   connect(m_AcquisitionThread, SIGNAL(acquiredImageAvailable()), this, SLOT(on_acquired_image_available()));
 }
@@ -26,9 +28,41 @@ void QxrdDataProcessor::on_acquired_image_available()
       QtConcurrent::run(this, &QxrdDataProcessor::processAcquiredImage, image);
     } else {
       QWriteLocker wl(&m_DarkUsage);
-      m_Window -> newDarkImage(image);
+
+      m_DarkImages.enqueue(image);
+
+      emit darkImageAvailable();
     }
   }
+}
+
+QxrdImageData *QxrdDataProcessor::takeNextProcessedImage()
+{
+  return m_ProcessedImages.dequeue();
+}
+
+QxrdImageData *QxrdDataProcessor::takeLatestProcessedImage()
+{
+  int n = m_ProcessedImages.size();
+
+  QxrdImageData *res = NULL;
+
+  for (int i=0; i<n; i++) {
+    QxrdImageData *img = m_ProcessedImages.dequeue();
+
+    if (res) {
+      m_AcquisitionThread -> returnImageToPool(res);
+    }
+
+    res = img;
+  }
+
+  return res;
+}
+
+QxrdImageData *QxrdDataProcessor::takeNextDarkImage()
+{
+  return m_DarkImages.dequeue();
 }
 
 void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
@@ -44,7 +78,11 @@ void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
     correctBadPixels(img);
     correctImageGains(img);
 
-    m_Window -> newData(img);
+    m_Window -> saveImageData(img);
+
+    m_ProcessedImages.enqueue(img);
+
+    emit processedImageAvailable();
   }
 
   m_Processing.unlock();

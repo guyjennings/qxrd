@@ -100,6 +100,9 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void setFileBrowserDirectory(QString dir);
   void refreshFileBrowser();
 
+  void onProcessedImageAvailable();
+  void onDarkImageAvailable();
+
  public:
   double  exposureTime();
   int     integrationMode();
