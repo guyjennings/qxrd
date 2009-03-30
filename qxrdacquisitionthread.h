@@ -4,18 +4,16 @@
 #include <QThread>
 #include <QVector>
 
-#include "qxrdrasterdata.h"
+#include "qxrdimagequeue.h"
 
 class QxrdAcquisition;
-class QxrdApplication;
-class QxrdWindow;
 
 class QxrdAcquisitionThread : public QThread
 {
   Q_OBJECT;
 
  public:
-  QxrdAcquisitionThread(QxrdApplication *app, QxrdWindow *win);
+  QxrdAcquisitionThread();
   ~QxrdAcquisitionThread();
 
   void shutdown();
@@ -24,13 +22,14 @@ class QxrdAcquisitionThread : public QThread
 
  signals:
   void acquisitionRunning();
-  void newDataAvailable();
   void printMessage(QString msg);
+  void statusMessage(QString msg);
+
   void acquireComplete();
   void acquiredFrame(QString fileName, int fileIndex, int isum, int nsum, int iframe, int nframe);
   void fileIndexChanged(int index);
-  void statusMessage(QString msg);
-  void summedFrameCompleted(QString fileName, int iframe);
+
+  void acquiredImageAvailable();
 
  public slots:
   void acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
@@ -40,11 +39,12 @@ class QxrdAcquisitionThread : public QThread
 
  public:
   int acquisitionStatus(double time);
-  void setWindow(QxrdWindow *win);
-  QxrdWindow *window();
-  void enqueue(QxrdImageData *img);
-  QxrdImageData *nextAvailableImage();
+
+  QxrdImageData *takeNextFreeImage();
+  QxrdImageData *takeNextAcquiredImage();
+
   void returnImageToPool(QxrdImageData *img);
+  void newAcquiredImage(QxrdImageData *img);
 
  signals:
   void _acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes);
@@ -54,9 +54,9 @@ class QxrdAcquisitionThread : public QThread
   void run();
 
  private:
-  QxrdApplication   *m_Application;
-  QxrdWindow        *m_Window;
-  QxrdAcquisition   *m_Acquisition;
+  QxrdAcquisition       *m_Acquisition;
+  QxrdImageQueue         m_FreeImages;
+  QxrdImageQueue         m_AcquiredImages;
 };
 
 #endif

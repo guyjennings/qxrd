@@ -4,7 +4,8 @@ QxrdImageData::QxrdImageData(int width, int height)
   : QcepImageData<double>(width, height),
     m_Lock(QReadWriteLock::Recursive),
     m_IntegrationMode(0),
-    m_NSummed(0)
+    m_NSummed(0),
+    m_FrameNumber(0)
 {
 }
 
@@ -31,4 +32,14 @@ void QxrdImageData::setNSummed(int n)
 QReadWriteLock *QxrdImageData::rwLock()
 {
   return &m_Lock;
+}
+
+int QxrdImageData::frameNumber()
+{
+  return m_FrameNumber;
+}
+
+void QxrdImageData::setFrameNumber(int n)
+{
+  m_FrameNumber = n;
 }

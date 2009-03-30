@@ -4,6 +4,7 @@
 #include "qxrdsettings.h"
 #include "qxrdimageplot.h"
 #include "qxrdimagedata.h"
+#include "qxrddataprocessor.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -27,10 +28,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_SettingsLoaded(false),
     m_Application(app),
     m_AcquisitionThread(acq),
+    m_DataProcessor(new QxrdDataProcessor(this, acq, this)),
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    m_AcquiredImages(QString("QxrdWindow acquired images")),
     m_Data(new QxrdImageData(2048,2048)),
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
@@ -51,6 +52,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
   connect(m_ActionLoadData, SIGNAL(triggered()), this, SLOT(doLoadData()));
+  connect(m_ActionImportData, SIGNAL(triggered()), this, SLOT(doImportData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), this, SLOT(doSaveData()));
 
   connect(m_AcquireButton, SIGNAL(clicked()), this, SLOT(doAcquire()));
@@ -102,8 +104,6 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
 
   connect(m_AcquisitionThread, SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
           this, SLOT(acquiredFrame(QString,int,int,int,int,int)));
-  connect(m_AcquisitionThread, SIGNAL(summedFrameCompleted(QString,int)),
-          this, SLOT(summedFrameCompleted(QString,int)));
   connect(m_AcquisitionThread, SIGNAL(acquireComplete()),
           this, SLOT(acquireComplete()));
 
@@ -350,61 +350,11 @@ void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int ns
   m_Progress -> setValue(thisframe*100/totalframes);
 }
 
-void QxrdWindow::summedFrameCompleted(QString fileName, int iframe)
-{
-  printf("QxrdWindow::summedFrameCompleted(\"%s\",%d)\n", qPrintable(fileName), iframe);
-
-  if (m_Acquiring) {
-    QxrdImageData *latest = dequeue();
-    QxrdImageData *current = m_Data;
-
-    if (current != latest && current) {
-      returnImageToPool(current);
-    }
-
-    m_Data = latest;
-
-    performImageCorrections(m_Data);
-
-    QxrdRasterData data(m_Data, interpolatePixels());
-
-    QFileInfo fileInfo(fileName);
-
-    m_Plot -> setImage(data);
-    m_Plot -> setTitle(fileInfo.fileName());
-    //  m_Plot -> autoScale();
-
-    saveData(fileName);
-
-    //  QtConcurrent::run insert processing step here...
-  }
-}
-
 void QxrdWindow::darkImageAcquired(QxrdImageData *image)
 {
   newDarkImage(image);
 
   saveImageData(m_DarkFrame);
-}
-
-void QxrdWindow::enqueue(QxrdImageData *image)
-{
-  m_AcquiredImages.enqueue(image);
-}
-
-QxrdImageData* QxrdWindow::dequeue()
-{
-  return m_AcquiredImages.dequeue();
-}
-
-QxrdImageData* QxrdWindow::nextAvailableImage()
-{
-  return m_AcquisitionThread -> nextAvailableImage();
-}
-
-void QxrdWindow::returnImageToPool(QxrdImageData *img)
-{
-  m_AcquisitionThread -> returnImageToPool(img);
 }
 
 int QxrdWindow::acquisitionStatus(double time)
@@ -546,6 +496,25 @@ void QxrdWindow::doSaveData()
   }
 }
 
+void QxrdWindow::doImportData()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+      this, "Import Image from...", outputDirectory());
+
+  if (theFile.length()) {
+    importData(theFile);
+  }
+}
+
+void QxrdWindow::importData(QString name)
+{
+    QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
+
+    res -> readImage(name);
+
+    newData(res);
+}
+
 void QxrdWindow::doLoadData()
 {
   QString theFile = QFileDialog::getOpenFileName(
@@ -565,7 +534,7 @@ void QxrdWindow::loadData(QString name)
 
 QxrdImageData* QxrdWindow::loadNewImage(QString name)
 {
-  QxrdImageData* res = nextAvailableImage();
+  QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
 
   QWriteLocker lock(res->rwLock());
 
@@ -712,160 +681,6 @@ void QxrdWindow::saveNamedImageData(QString name, QxrdImageData *image)
   TIFFClose(tif);
 }
 
-void QxrdWindow::saveTestTIFF(QString name, int nbits, int isfloat)
-{
-  TIFF* tif = TIFFOpen(qPrintable(name),"w");
-
-  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, 2048);
-  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, 2048);
-  TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
-  TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-  TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-  TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, nbits);
-
-  if (isfloat) {
-    TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
-  } else {
-    TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_INT);
-  }
-
-  switch (nbits+isfloat) {
-  case 8+0:
-    {
-      signed char b[2048];
-      for (int y=0; y<2048; y++) {
-        for (int x=0; x<2048; x++) {
-          b[x] = (signed char) (100.0*sin(y/100.0)*sin(x/100.0));
-        }
-        TIFFWriteScanline(tif, b, y, 0);
-      }
-    }
-    break;
-
-  case 16+0:
-    {
-      short b[2048];
-      for (int y=0; y<2048; y++) {
-        for (int x=0; x<2048; x++) {
-          b[x] = (short) (100.0*sin(y/100.0)*sin(x/100.0));
-        }
-        TIFFWriteScanline(tif, b, y, 0);
-      }
-    }
-    break;
-
-  case 32+0:
-    {
-      int b[2048];
-      for (int y=0; y<2048; y++) {
-        for (int x=0; x<2048; x++) {
-          b[x] = (int) (100.0*sin(y/100.0)*sin(x/100.0));
-        }
-        TIFFWriteScanline(tif, b, y, 0);
-      }
-    }
-    break;
-
-  case 32+1:
-    {
-      float b[2048];
-      for (int y=0; y<2048; y++) {
-        for (int x=0; x<2048; x++) {
-          b[x] = 100.0*sin(y/100.0)*sin(x/100.0);
-        }
-        TIFFWriteScanline(tif, b, y, 0);
-      }
-    }
-    break;
-
-  case 64+1:
-    {
-      double b[2048];
-      for (int y=0; y<2048; y++) {
-        for (int x=0; x<2048; x++) {
-          b[x] = 100.0*sin(y/100.0)*sin(x/100.0);
-        }
-        TIFFWriteScanline(tif, b, y, 0);
-      }
-    }
-    break;
-  }
-
-  TIFFClose(tif);
-}
-
-void QxrdWindow::performImageCorrections(QxrdImageData *image)
-{
-  correctBadPixels(image);
-  subtractDarkImage(image);
-  correctImageGains(image);
-}
-
-void QxrdWindow::subtractDarkImage(QxrdImageData *image)
-{
-  if (performDarkSubtraction()) {
-    if (saveRawImages()) {
-      saveRawData(image);
-    }
-
-    if (m_DarkFrame && image) {
-      if (m_DarkFrame->integrationMode() != image->integrationMode()) {
-        if (QMessageBox::question(this, "Integration times differ",
-                                  "Integration times of acquired data and dark image are different\nSubtract anyway?",
-                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
-          return;
-        }
-      }
-
-      if (m_DarkFrame->width() != image->width() ||
-          m_DarkFrame->height() != image->height()) {
-        if (QMessageBox::question(this, "Image dimensions differ",
-                                  "Dimensions of acquired data and dark image are different\nSkip subtraction",
-                                  QMessageBox::Yes) == QMessageBox::Yes) {
-          return;
-        }
-      }
-
-      QReadLocker lock1(m_DarkFrame->rwLock());
-      QWriteLocker lock2(image->rwLock());
-
-      int height = image->height();
-      int width  = image->width();
-      int nres = image->nSummed();
-      int ndrk = m_DarkFrame -> nSummed();
-      int npixels = width*height;
-
-      double ratio = ((double) nres)/((double) ndrk);
-
-      printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
-             nres, ndrk, npixels, ratio);
-
-      QTime tic;
-      tic.start();
-
-      double *result = image->data();
-      double *dark   = m_DarkFrame->data();
-
-      for (int i=0; i<npixels; i++) {
-        result[i] = result[i]-ratio*dark[i];
-      }
-
-      printf("Dark subtraction took %d msec\n", tic.elapsed());
-    }
-  }
-}
-
-void QxrdWindow::correctBadPixels(QxrdImageData *image)
-{
-  if (m_BadPixels) {
-  }
-}
-
-void QxrdWindow::correctImageGains(QxrdImageData *image)
-{
-  if (m_GainFrame) {
-  }
-}
 
 int QxrdWindow::performDarkSubtraction()
 {
@@ -992,7 +807,7 @@ void QxrdWindow::newData(QxrdImageData *image)
 {
   if (m_Data != image) {
     if (m_Data) {
-      returnImageToPool(m_Data);
+      m_AcquisitionThread -> returnImageToPool(m_Data);
     }
 
     m_Data = image;
@@ -1009,7 +824,7 @@ void QxrdWindow::newDarkImage(QxrdImageData *image)
 {
   if (m_DarkFrame != image) {
     if (m_DarkFrame) {
-      returnImageToPool(m_DarkFrame);
+      m_AcquisitionThread -> returnImageToPool(m_DarkFrame);
     }
 
     m_DarkFrame = image;
@@ -1018,11 +833,16 @@ void QxrdWindow::newDarkImage(QxrdImageData *image)
   setDarkImagePath(image->filename());
 }
 
+QxrdImageData *QxrdWindow::darkImage()
+{
+  return m_DarkFrame;
+}
+
 void QxrdWindow::newBadPixelsImage(QxrdImageData *image)
 {
   if (m_BadPixels != image) {
     if (m_BadPixels) {
-      returnImageToPool(m_BadPixels);
+      m_AcquisitionThread -> returnImageToPool(m_BadPixels);
     }
 
     m_BadPixels = image;
@@ -1035,7 +855,7 @@ void QxrdWindow::newGainMapImage(QxrdImageData *image)
 {
   if (m_GainFrame != image) {
     if (m_GainFrame) {
-      returnImageToPool(m_GainFrame);
+      m_AcquisitionThread -> returnImageToPool(m_GainFrame);
     }
 
     m_GainFrame = image;

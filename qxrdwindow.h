@@ -12,6 +12,7 @@ class QwtPlotSpectrogram;
 class QCloseEvent;
 class QxrdImageData;
 class QDirModel;
+class QxrdDataProcessor;
 
 #include "qxrdimagequeue.h"
 
@@ -26,7 +27,9 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
  public slots:
   void doSaveData();
   void doLoadData();
+  void doImportData();
   void loadData(QString name);
+  void importData(QString name);
   void saveData(QString name);
   void saveImageData(QxrdImageData *image);
   void saveRawData(QxrdImageData *image);
@@ -61,12 +64,6 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void selectOutputDirectory();
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
   void statusMessage(QString msg);
-  void summedFrameCompleted(QString filename, int iframe);
-
-  void subtractDarkImage(QxrdImageData *image);
-  void correctBadPixels(QxrdImageData *image);
-  void correctImageGains(QxrdImageData *image);
-  void performImageCorrections(QxrdImageData *image);
 
   int performDarkSubtraction();
   void setPerformDarkSubtraction(int subt);
@@ -121,10 +118,10 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
-  void enqueue(QxrdImageData *image);
-  QxrdImageData* dequeue();
-  QxrdImageData* nextAvailableImage();
-  void returnImageToPool(QxrdImageData *img);
+//  void enqueue(QxrdImageData *image);
+//  QxrdImageData* dequeue();
+//  QxrdImageData* nextAvailableImage();
+//  void returnImageToPool(QxrdImageData *img);
   QxrdImageData* loadNewImage(QString name);
 
   void darkImageAcquired(QxrdImageData *image);
@@ -133,19 +130,19 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void newBadPixelsImage(QxrdImageData *image);
   void newGainMapImage(QxrdImageData *image);
 
- private:
-  void saveTestTIFF(QString name, int nbits, int isfloat);
+  QxrdImageData* darkImage();
 
  private:
   int                     m_SettingsLoaded;
   QxrdApplication        *m_Application;
   QxrdAcquisitionThread  *m_AcquisitionThread;
+  QxrdDataProcessor      *m_DataProcessor;
   QVector<double>         m_Exposures;
   QProgressBar           *m_Progress;
   QLabel                 *m_StatusMsg;
   int                     m_Acquiring;
   int                     m_AcquiringDark;
-  QxrdImageQueue          m_AcquiredImages;
+//  QxrdImageQueue          m_AcquiredImages;
   QxrdImageData          *m_Data;
   QxrdImageData          *m_DarkFrame;
   QxrdImageData          *m_BadPixels;

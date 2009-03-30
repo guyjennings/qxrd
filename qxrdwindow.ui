@@ -384,8 +384,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>673</height>
+          <width>200</width>
+          <height>441</height>
          </rect>
         </property>
         <attribute name="label">
@@ -552,7 +552,7 @@
           <x>0</x>
           <y>0</y>
           <width>242</width>
-          <height>656</height>
+          <height>308</height>
          </rect>
         </property>
         <attribute name="label">
@@ -724,8 +724,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>673</height>
+          <width>137</width>
+          <height>196</height>
          </rect>
         </property>
         <attribute name="label">
@@ -991,6 +991,7 @@
      <string>File</string>
     </property>
     <addaction name="m_ActionLoadData"/>
+    <addaction name="m_ActionImportData"/>
     <addaction name="m_ActionSaveData"/>
     <addaction name="m_ActionEvaluateScript"/>
     <addaction name="m_ActionPreferences"/>
@@ -1034,6 +1035,9 @@
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
    <attribute name="toolBarArea">
     <enum>LeftToolBarArea</enum>
    </attribute>
@@ -1047,6 +1051,7 @@
    <addaction name="m_ActionEvaluateScript"/>
    <addaction name="separator"/>
    <addaction name="m_ActionLoadData"/>
+   <addaction name="m_ActionImportData"/>
    <addaction name="m_ActionSaveData"/>
    <addaction name="separator"/>
    <addaction name="m_ActionAutoScale"/>
@@ -1168,6 +1173,15 @@
   <action name="m_ActionAutoRange">
    <property name="text">
     <string>AutoRange</string>
+   </property>
+  </action>
+  <action name="m_ActionImportData">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Import Data...</string>
    </property>
   </action>
  </widget>

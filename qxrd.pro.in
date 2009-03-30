@@ -33,6 +33,8 @@ HEADERS += \
 	../qceplib/qspecserver.h \
         ../qceplib/qcepimagedata.h \
         ../qceplib/qcepimagedataformat.h \
+        ../qceplib/qcepimagedataformattiff.h \
+        ../qceplib/qcepimagedataformatmar345.h \
         ../qceplib/qcepimagedataformatfactory.h \
         qwt_plot_rescaler.h \
         qxrdapplication.h \
@@ -40,8 +42,11 @@ HEADERS += \
 	qxrdimagedata.h \
 	qxrdimagequeue.h \
 	qxrdimagedataformathis.h \
+	qxrdimagedataformattiff.h \
+	qxrdimagedataformatmar345.h \
 	qxrdrasterdata.h \
 	qxrdwindow.h \
+        qxrddataprocessor.h \
 	qxrdimageplot.h \
         qxrdplotzoomer.h \
         qxrdplottracker.h \
@@ -56,6 +61,8 @@ SOURCES += \
 	../qceplib/qspecserver.cpp \
         ../qceplib/qcepimagedata.cpp \
         ../qceplib/qcepimagedataformat.cpp \
+        ../qceplib/qcepimagedataformattiff.cpp \
+        ../qceplib/qcepimagedataformatmar345.cpp \
         ../qceplib/qcepimagedataformatfactory.cpp \
         qwt_plot_rescaler.cpp \
         qxrdapplication.cpp \
@@ -63,8 +70,11 @@ SOURCES += \
 	qxrdimagedata.cpp \
 	qxrdimagequeue.cpp \
 	qxrdimagedataformathis.cpp \
+	qxrdimagedataformattiff.cpp \
+	qxrdimagedataformatmar345.cpp \
 	qxrdrasterdata.cpp \
 	qxrdwindow.cpp \
+        qxrddataprocessor.cpp \
 	qxrdimageplot.cpp \
         qxrdplotzoomer.cpp \
         qxrdplottracker.cpp \

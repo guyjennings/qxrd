@@ -7,7 +7,7 @@
 class QxrdImageDataFormatHis : public QcepImageDataFormat<double>
 {
  public:
-  QxrdImageDataFormatHis(QObject *parent=0);
+  QxrdImageDataFormatHis(QString name = "his");
 
   QxrdImageDataFormatHis* canLoadFile(QString path);
   QxrdImageDataFormatHis* loadFile(QString path, QcepImageData<double> *img);

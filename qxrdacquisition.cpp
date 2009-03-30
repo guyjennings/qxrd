@@ -22,11 +22,9 @@
 
 static QxrdAcquisition *g_Acquisition = NULL;
 
-QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdWindow *win, QxrdAcquisitionThread *thread)
+QxrdAcquisition::QxrdAcquisition(QxrdAcquisitionThread *thread)
   : QObject(),
-    m_Thread(thread),
-    m_Mutex(QMutex::Recursive),
-    m_Application(app),
+    m_AcquisitionThread(thread),
     m_NRows(0),
     m_NCols(0),
     m_IntegMode(0),
@@ -36,15 +34,11 @@ QxrdAcquisition::QxrdAcquisition(QxrdApplication *app, QxrdWindow *win, QxrdAcqu
     m_CurrentFrame(0),
     m_AcquiringDark(0),
     m_AcquiredData(NULL),
-    m_NIntTimes(0),
-    m_AvailableImages(QString("QxrdAcquisition available images")),
-    m_Window(win)
+    m_NIntTimes(0)
 {
   emit printMessage("Enter QxrdAcquisition::QxrdAcquisition\n");
 
   g_Acquisition = this;
-
-  connect(this, SIGNAL(haltAcquire()), this, SLOT(_haltAcquire()), Qt::QueuedConnection);
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -120,13 +114,8 @@ void QxrdAcquisition::initialize()
   }
 
   for (int i=0; i<10; i++) {
-    m_AvailableImages.enqueue(new QxrdImageData(m_NCols, m_NRows));
+    m_AcquisitionThread -> returnImageToPool(new QxrdImageData(m_NCols, m_NRows));
   }
-}
-
-void QxrdAcquisition::setWindow(QxrdWindow *win)
-{
-  m_Window = win;
 }
 
 void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
@@ -152,7 +141,7 @@ void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex
   m_AcquiringDark = 0;
 
   if (m_AcquiredData==NULL) {
-    m_AcquiredData = nextAvailableImage();
+    m_AcquiredData = m_AcquisitionThread -> takeNextFreeImage();
   }
 
   m_AcquiredData->resize(m_NCols, m_NRows);
@@ -208,7 +197,7 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
   m_AcquiringDark= 1;
 
   if (m_AcquiredData == NULL) {
-    m_AcquiredData = nextAvailableImage();
+    m_AcquiredData = m_AcquisitionThread -> takeNextFreeImage();
   }
 
   m_AcquiredData->resize(m_NCols, m_NRows);
@@ -216,9 +205,6 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
 
   m_Buffer.resize(m_NRows*m_NCols*m_NBufferFrames);
   m_Buffer.fill(0);
-
-//  m_Saved.resize(m_NFrames);
-//  m_Saved.fill(QFuture<int>());
 
   if ((nRet=Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
                                                 0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
@@ -293,18 +279,19 @@ void QxrdAcquisition::onEndFrame()
     m_AcquiredData -> setNSummed(m_NSums);
 
     if (m_AcquiringDark) {
-      m_Window -> darkImageAcquired(m_AcquiredData);
+      m_AcquiredData -> setFrameNumber(-1);
     } else {
-      m_Window -> enqueue(m_AcquiredData);
+      m_AcquiredData -> setFrameNumber(m_CurrentFrame);
     }
 
-    m_AcquiredData = nextAvailableImage();
+    m_AcquisitionThread -> newAcquiredImage(m_AcquiredData);
+
+    m_AcquiredData = m_AcquisitionThread -> takeNextFreeImage();
     m_AcquiredData -> resize(m_NCols, m_NRows);
     m_AcquiredData -> clear();
 
     emit statusMessage("Saving "+fileName);
     emit printMessage("Saving """+fileName+"""");
-    emit summedFrameCompleted(fileName, m_CurrentFrame);
 
     m_FileIndex++;
     emit fileIndexChanged(m_FileIndex);
@@ -312,8 +299,9 @@ void QxrdAcquisition::onEndFrame()
 
     if (m_CurrentFrame >= m_NFrames) {
       emit printMessage("Acquisition ended\n");
-      emit haltAcquire();
       emit printMessage("Aborted acquisition\n");
+
+      haltAcquire();
     }
   }
 }
@@ -333,40 +321,12 @@ int QxrdAcquisition::acquisitionStatus()
   return m_CurrentFrame - 1;
 }
 
-QxrdImageData *QxrdAcquisition::nextAvailableImage()
-{
-  if (m_AvailableImages.size() == 0) {
-    printf("Allocate new image\n");
-    return new QxrdImageData(m_NCols, m_NRows);
-  } else {
-    return m_AvailableImages.dequeue();
-  }
-}
-
-void QxrdAcquisition::returnImageToPool(QxrdImageData *img)
-{
-  if (img) {
-    m_AvailableImages.enqueue(img);
-  } else {
-    printf("Error: return NULL image to pool\n");
-  }
-}
-
-void QxrdAcquisition::resultsAvailable(int chan)
-{
-  emit resultsChanged();
-}
-
-void QxrdAcquisition::savingComplete(int chan)
-{
-}
-
 void QxrdAcquisition::acquisitionError(int n)
 {
   emit printMessage(tr("Acquisition Error %1\n").arg(n));
 }
 
-void QxrdAcquisition::_haltAcquire()
+void QxrdAcquisition::haltAcquire()
 {
     Acquisition_Abort(m_AcqDesc);
 
@@ -375,16 +335,12 @@ void QxrdAcquisition::_haltAcquire()
 
 void QxrdAcquisition::cancel()
 {
-  _haltAcquire();
-
-  //m_Cancel = true;
+  haltAcquire();
 }
 
 void QxrdAcquisition::cancelDark()
 {
-  _haltAcquire();
-
-  //m_Cancel = true;
+  haltAcquire();
 }
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
@@ -406,9 +362,4 @@ QVector<double> QxrdAcquisition::integrationTimes()
   }
 
   return res;
-}
-
-void QxrdAcquisition::enqueue(QxrdImageData *img)
-{
-  m_AvailableImages.enqueue(img);
 }

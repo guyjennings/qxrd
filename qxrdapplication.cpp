@@ -27,7 +27,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   setOrganizationDomain("xor.aps.anl.gov");
   setApplicationName("qxrd");
 
-  m_AcquisitionThread = new QxrdAcquisitionThread(this, NULL);
+  m_AcquisitionThread = new QxrdAcquisitionThread(/*this, NULL*/);
   connect(m_AcquisitionThread, SIGNAL(acquisitionRunning()), this, SLOT(acquisitionRunning()));
   connect(m_AcquisitionThread, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
@@ -39,7 +39,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   m_Window = new QxrdWindow(this, m_AcquisitionThread);
   m_Window -> show();
 
-  m_AcquisitionThread -> setWindow(m_Window);
+//  m_AcquisitionThread -> setWindow(m_Window);
 
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 

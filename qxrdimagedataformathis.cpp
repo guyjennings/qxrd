@@ -4,8 +4,8 @@
 
 static QxrdImageDataFormatHis fmt;
 
-QxrdImageDataFormatHis::QxrdImageDataFormatHis(QObject *parent)
-  : QcepImageDataFormat<double>(parent)
+QxrdImageDataFormatHis::QxrdImageDataFormatHis(QString name)
+  : QcepImageDataFormat<double>(name)
 {
 }
 
@@ -29,6 +29,8 @@ typedef struct {
 
 QxrdImageDataFormatHis* QxrdImageDataFormatHis::canLoadFile(QString path)
 {
+//  printf("QxrdImageDataFormatHis::canLoadFile(%s)\n", qPrintable(path));
+
   QxrdImageDataFormatHis* res = NULL;
 
   FILE *file = fopen(qPrintable(path), "rb");
@@ -63,6 +65,8 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::canLoadFile(QString path)
 
 QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImageData<double> *img)
 {
+//  printf("QxrdImageDataFormatHis::loadFile(%s)\n", qPrintable(path));
+
   FILE *file = fopen(qPrintable(path), "rb");
 
   HISHeader h;

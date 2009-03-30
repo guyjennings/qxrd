@@ -1,13 +1,12 @@
 #include "qxrdacquisitionthread.h"
 
 #include "qxrdacquisition.h"
-#include "qxrdwindow.h"
 
-QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdApplication *app, QxrdWindow *win)
+QxrdAcquisitionThread::QxrdAcquisitionThread()
   : QThread(),
-    m_Application(app),
-    m_Window(win),
-    m_Acquisition(NULL)
+    m_Acquisition(NULL),
+    m_FreeImages("Free Image Pool"),
+    m_AcquiredImages("Acquired Images")
 {
 }
 
@@ -22,7 +21,7 @@ void QxrdAcquisitionThread::run()
 {
   emit printMessage(tr("Acquisition thread %1\n").arg((long) QThread::currentThread()));
 
-  m_Acquisition = new QxrdAcquisition(m_Application, m_Window, this);
+  m_Acquisition = new QxrdAcquisition(this);
 
   connect(this, SIGNAL(_acquire(QString,QString,int,int,int,int)),
           m_Acquisition, SLOT(acquire(QString,QString,int,int,int,int)));
@@ -32,8 +31,6 @@ void QxrdAcquisitionThread::run()
   connect(m_Acquisition, SIGNAL(acquireComplete()), this, SIGNAL(acquireComplete()));
   connect(m_Acquisition, SIGNAL(acquiredFrame(QString,int,int,int,int,int)), 
 	  this, SIGNAL(acquiredFrame(QString,int,int,int,int,int)));
-  connect(m_Acquisition, SIGNAL(summedFrameCompleted(QString,int)),
-	  this, SIGNAL(summedFrameCompleted(QString,int)));
   connect(m_Acquisition, SIGNAL(fileIndexChanged(int)), this, SIGNAL(fileIndexChanged(int)));
   connect(m_Acquisition, SIGNAL(statusMessage(QString)), this, SIGNAL(statusMessage(QString)));
 
@@ -50,16 +47,6 @@ void QxrdAcquisitionThread::shutdown()
 
   wait(1000);
 }
-
-//void QxrdAcquisitionThread::saveData(QString name)
-//{
-//  m_Acquisition -> saveData(name);
-//}
-//
-//void QxrdAcquisitionThread::loadData(QString name)
-//{
-//  m_Acquisition -> loadData(name);
-//}
 
 void QxrdAcquisitionThread::acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
 {
@@ -96,29 +83,29 @@ int QxrdAcquisitionThread::acquisitionStatus(double time)
   return m_Acquisition -> acquisitionStatus();
 }
 
-void QxrdAcquisitionThread::setWindow(QxrdWindow *win)
+QxrdImageData *QxrdAcquisitionThread::takeNextFreeImage()
 {
-  m_Window = win;
-
-  m_Acquisition -> setWindow(win);
+  if (m_FreeImages.size() == 0) {
+    printf("Allocate new image\n");
+    return new QxrdImageData(2048, 2048);
+  } else {
+    return m_FreeImages.dequeue();
+  }
 }
 
-QxrdWindow *QxrdAcquisitionThread::window()
+QxrdImageData *QxrdAcquisitionThread::takeNextAcquiredImage()
 {
-  return m_Window;
+  return m_AcquiredImages.dequeue();
 }
 
-void QxrdAcquisitionThread::enqueue(QxrdImageData *img)
+void QxrdAcquisitionThread::newAcquiredImage(QxrdImageData *img)
 {
-  m_Acquisition -> enqueue(img);
-}
+  m_AcquiredImages.enqueue(img);
 
-QxrdImageData *QxrdAcquisitionThread::nextAvailableImage()
-{
-  return m_Acquisition -> nextAvailableImage();
+  emit acquiredImageAvailable();
 }
 
 void QxrdAcquisitionThread::returnImageToPool(QxrdImageData *img)
 {
-  m_Acquisition -> returnImageToPool(img);
+  m_FreeImages.enqueue(img);
 }
