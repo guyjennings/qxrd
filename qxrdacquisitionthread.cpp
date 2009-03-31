@@ -80,7 +80,7 @@ QVector<double> QxrdAcquisitionThread::integrationTimes()
 
 int QxrdAcquisitionThread::acquisitionStatus(double time)
 {
-  return m_Acquisition -> acquisitionStatus();
+  return m_Acquisition -> acquisitionStatus(time);
 }
 
 QxrdImageData *QxrdAcquisitionThread::takeNextFreeImage()

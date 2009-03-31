@@ -42,6 +42,8 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void doCancelDark();
   void acquireDarkComplete();
 
+  void doTest();
+
   void printMessage(QString msg);
 
   void acquisitionReady();

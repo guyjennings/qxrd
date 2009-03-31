@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMutex>
+#include <QWaitCondition>
 #include <QVector>
 #include <QFuture>
 
@@ -39,13 +40,15 @@ class QxrdAcquisition : public QObject
   void onEndFrame();
   void onEndAcquisition();
   QVector<double> integrationTimes();
-  int acquisitionStatus();
+  int acquisitionStatus(double time);
 
  private:
   void acquisitionError(int n);
   void haltAcquire();
 
  private:
+  QMutex                 m_Acquiring;
+  QWaitCondition         m_AcquisitionWaiting;
   QxrdAcquisitionThread *m_AcquisitionThread;
   QxrdApplication       *m_Application;
   int                    m_NRows;

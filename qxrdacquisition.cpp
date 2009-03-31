@@ -19,6 +19,7 @@
 #include <QDir>
 #include <QFile>
 #include <QTime>
+#include <QMutexLocker>
 
 static QxrdAcquisition *g_Acquisition = NULL;
 
@@ -120,6 +121,10 @@ void QxrdAcquisition::initialize()
 
 void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
 {
+//  printf("QxrdAcquisition::acquire (thread=%p)\n", QThread::currentThread());
+
+  QMutexLocker lock(&m_Acquiring);
+
   if (nsum <= 0) nsum = 1;
   if (nframes <= 0) nframes = 1;
 
@@ -173,10 +178,16 @@ void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex
     acquisitionError(nRet);
     return;
   }
+
+  m_AcquisitionWaiting.wait(&m_Acquiring);
 }
 
 void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum)
 {
+//  printf("QxrdAcquisition::acquireDark (thread=%p)\n", QThread::currentThread());
+
+  QMutexLocker lock(&m_Acquiring);
+
   if (nsum <= 0) nsum = 1;
 
   emit printMessage(tr("QxrdAcquisition::acquireDark(\"%1\",\"%2\",%3,%4,%5)\n")
@@ -229,6 +240,8 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
     acquisitionError(nRet);
     return;
   }
+
+  m_AcquisitionWaiting.wait(&m_Acquiring);
 }
 
 void QxrdAcquisition::onEndFrame()
@@ -316,9 +329,22 @@ void QxrdAcquisition::onEndAcquisition()
   emit acquireComplete();
 }
 
-int QxrdAcquisition::acquisitionStatus()
+int QxrdAcquisition::acquisitionStatus(double time)
 {
-  return m_CurrentFrame - 1;
+  if (m_Acquiring.tryLock()) {
+    m_Acquiring.unlock();
+
+    return 1;
+  }
+
+  QMutex mutex;
+  QMutexLocker lock(&mutex);
+
+  if (m_AcquisitionWaiting.wait(&mutex, (int)(time*1000))) {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
 void QxrdAcquisition::acquisitionError(int n)
@@ -328,9 +354,13 @@ void QxrdAcquisition::acquisitionError(int n)
 
 void QxrdAcquisition::haltAcquire()
 {
-    Acquisition_Abort(m_AcqDesc);
+//  printf("QxrdAcquisition::haltAcquire (thread = %p)\n", QThread::currentThread());
 
-    emit acquireComplete();
+  Acquisition_Abort(m_AcqDesc);
+
+  emit acquireComplete();
+
+  m_AcquisitionWaiting.wakeAll();
 }
 
 void QxrdAcquisition::cancel()

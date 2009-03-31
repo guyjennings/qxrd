@@ -1067,6 +1067,7 @@
    <addaction name="m_ActionFire"/>
    <addaction name="m_ActionIce"/>
    <addaction name="separator"/>
+   <addaction name="m_ActionTest"/>
    <addaction name="m_ActionQuit"/>
   </widget>
   <action name="m_ActionQuit">
@@ -1182,6 +1183,15 @@
    </property>
    <property name="text">
     <string>Import Data...</string>
+   </property>
+  </action>
+  <action name="m_ActionTest">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
+   </property>
+   <property name="text">
+    <string>Test</string>
    </property>
   </action>
  </widget>

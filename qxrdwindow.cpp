@@ -120,6 +120,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_DataProcessor, SIGNAL(processedImageAvailable()), this, SLOT(onProcessedImageAvailable()));
   connect(m_DataProcessor, SIGNAL(darkImageAvailable()), this, SLOT(onDarkImageAvailable()));
 
+  connect(m_ActionTest, SIGNAL(triggered()), this, SLOT(doTest()));
+
   for (int i=0; i<8; i++) {
     m_ExposureTime -> addItem(tr("Item %1").arg(i));
     m_Exposures.append(0);
@@ -939,4 +941,13 @@ void QxrdWindow::onDarkImageAvailable()
   if (img) {
     newDarkImage(img);
   }
+}
+
+void QxrdWindow::doTest()
+{
+  int status = m_AcquisitionThread -> acquisitionStatus(1.0);
+
+  printf("QxrdWindow::doTest : m_AcquisitionThread -> acquisitionStatus(1.0) = %d\n", status);
+
+  emit printMessage(tr("QxrdWindow::doTest : m_AcquisitionThread -> acquisitionStatus(1.0) = %1").arg(status));
 }
