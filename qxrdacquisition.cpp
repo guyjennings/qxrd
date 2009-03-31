@@ -119,11 +119,14 @@ void QxrdAcquisition::initialize()
   }
 }
 
+bool QxrdAcquisition::canStart()
+{
+  return m_Acquiring.tryLock();
+}
+
 void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
 {
 //  printf("QxrdAcquisition::acquire (thread=%p)\n", QThread::currentThread());
-
-  QMutexLocker lock(&m_Acquiring);
 
   if (nsum <= 0) nsum = 1;
   if (nframes <= 0) nframes = 1;
@@ -178,15 +181,11 @@ void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex
     acquisitionError(nRet);
     return;
   }
-
-  m_AcquisitionWaiting.wait(&m_Acquiring);
 }
 
 void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum)
 {
 //  printf("QxrdAcquisition::acquireDark (thread=%p)\n", QThread::currentThread());
-
-  QMutexLocker lock(&m_Acquiring);
 
   if (nsum <= 0) nsum = 1;
 
@@ -240,8 +239,6 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
     acquisitionError(nRet);
     return;
   }
-
-  m_AcquisitionWaiting.wait(&m_Acquiring);
 }
 
 void QxrdAcquisition::onEndFrame()
@@ -334,15 +331,19 @@ int QxrdAcquisition::acquisitionStatus(double time)
   if (m_Acquiring.tryLock()) {
     m_Acquiring.unlock();
 
+    printf("m_Acquiring.tryLock() succeeded\n");
+
     return 1;
   }
 
-  QMutex mutex;
-  QMutexLocker lock(&mutex);
+//   QMutex mutex;
+//   QMutexLocker lock(&mutex);
 
-  if (m_AcquisitionWaiting.wait(&mutex, (int)(time*1000))) {
+  if (m_AcquisitionWaiting.wait(&m_Acquiring, (int)(time*1000))) {
+    printf("m_AcquisitionWaiting.wait succeeded\n");
     return 1;
   } else {
+    printf("m_AcquisitionWaiting.wait failed\n");
     return 0;
   }
 }
@@ -361,6 +362,8 @@ void QxrdAcquisition::haltAcquire()
   emit acquireComplete();
 
   m_AcquisitionWaiting.wakeAll();
+
+  m_Acquiring.unlock();
 }
 
 void QxrdAcquisition::cancel()

@@ -41,6 +41,7 @@ class QxrdAcquisition : public QObject
   void onEndAcquisition();
   QVector<double> integrationTimes();
   int acquisitionStatus(double time);
+  bool canStart();
 
  private:
   void acquisitionError(int n);

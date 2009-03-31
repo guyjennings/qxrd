@@ -50,12 +50,21 @@ void QxrdAcquisitionThread::shutdown()
 
 void QxrdAcquisitionThread::acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
 {
-  emit _acquire(outDir, filePattern, fileIndex, integmode, nsum, nframes);
+  if (m_Acquisition -> canStart()) {
+    emit _acquire(outDir, filePattern, fileIndex, integmode, nsum, nframes);
+  } else {
+    printf("Attempting to start acquisition while it is already running..\n");
+  }
 }
 
 void QxrdAcquisitionThread::acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum)
 {
-  emit _acquireDark(outDir, filePattern, fileIndex, integmode, nsum);
+  if (m_Acquisition -> canStart()) {
+    emit _acquireDark(outDir, filePattern, fileIndex, integmode, nsum);
+  } else {
+    printf("Attempting to start acquisition while it is already running..\n");
+  }
+
 }
 
 void QxrdAcquisitionThread::msleep(int msec)
