@@ -121,6 +121,8 @@ void QxrdAcquisition::initialize()
 
 bool QxrdAcquisition::canStart()
 {
+  return true;
+
   return m_Acquiring.tryLock();
 }
 
@@ -243,6 +245,18 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
 
 void QxrdAcquisition::onEndFrame()
 {
+  printf("QxrdAcquisition::onEndFrame()\n");
+
+//  CHwHeaderInfo info;
+//  CHwHeaderInfoEx infoEx;
+//
+//  if (Acquisition_GetHwHeaderInfoEx(m_AcqDesc, &info, &infoEx) == 0) {
+//    if (info.dwHeaderID == 14) {
+//      printf("Frame %d\n", infoEx.wFrameCnt);
+//      emit printMessage(tr("Frame %1").arg(infoEx.wFrameCnt));
+//    }
+//  }
+
   QString fileName;
 
   if (m_AcquiringDark) {
@@ -360,10 +374,10 @@ void QxrdAcquisition::haltAcquire()
   Acquisition_Abort(m_AcqDesc);
 
   emit acquireComplete();
-
-  m_AcquisitionWaiting.wakeAll();
-
-  m_Acquiring.unlock();
+//
+//  m_AcquisitionWaiting.wakeAll();
+//
+//  m_Acquiring.unlock();
 }
 
 void QxrdAcquisition::cancel()

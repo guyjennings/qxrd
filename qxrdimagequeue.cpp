@@ -2,7 +2,8 @@
 #include "qxrdimagedata.h"
 
 QxrdImageQueue::QxrdImageQueue(QString name)
-  : m_Name(name)
+  : m_Name(name),
+    m_Debug(1)
 {
 }
 
@@ -22,7 +23,9 @@ QxrdImageData* QxrdImageQueue::dequeue()
   QWriteLocker lock(&m_Lock);
   QxrdImageData* res = inherited::dequeue();
 
-//   printf("QxrdImageQueue::dequeue() = %p from %s\n", res, qPrintable(m_Name));
+  if (m_Debug) {
+    printf("QxrdImageQueue::dequeue() = %p from %s\n", res, qPrintable(m_Name));
+  }
 
   return res;
 }
@@ -31,7 +34,9 @@ void QxrdImageQueue::enqueue(QxrdImageData *data)
 {
   QWriteLocker lock(&m_Lock);
 
-//   printf("QxrdImageQueue::enqueue(%p) into %s\n", data, qPrintable(m_Name));
+  if (m_Debug) {
+    printf("QxrdImageQueue::enqueue(%p) into %s\n", data, qPrintable(m_Name));
+  }
 
   inherited::enqueue(data);
 }
@@ -39,6 +44,10 @@ void QxrdImageQueue::enqueue(QxrdImageData *data)
 int QxrdImageQueue::size() const
 {
   QReadLocker lock(&m_Lock);
+
+  if (m_Debug) {
+    printf("QxrdImageQueue::size() = %d for %s\n", inherited::size(), qPrintable(m_Name));
+  }
 
   return inherited::size();
 }

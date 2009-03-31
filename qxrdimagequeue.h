@@ -22,6 +22,7 @@ class QxrdImageQueue : private QQueue<QxrdImageData*>
  private:
   mutable QReadWriteLock m_Lock;
   QString        m_Name;
+  int            m_Debug;
 };
 
 #endif

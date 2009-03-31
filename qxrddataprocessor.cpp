@@ -19,9 +19,13 @@ QxrdDataProcessor::QxrdDataProcessor
 
 void QxrdDataProcessor::on_acquired_image_available()
 {
+  printf("QxrdDataProcessor::on_acquired_image_available()\n");
+
   QxrdImageData *image = m_AcquisitionThread -> takeNextAcquiredImage();
 
   if (image) {
+    printf("Frame Number %d\n", image -> frameNumber());
+
     if ((image -> frameNumber()) >= 0) {
       m_DarkUsage.lockForRead();
       m_Processing.lockForRead();
