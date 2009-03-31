@@ -55,17 +55,19 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionImportData, SIGNAL(triggered()), this, SLOT(doImportData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), this, SLOT(doSaveData()));
 
-  connect(m_AcquireButton, SIGNAL(clicked()), this, SLOT(doAcquire()));
-  connect(m_CancelButton, SIGNAL(clicked()), this, SLOT(doCancel()));
   connect(m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
 
   connect(m_LoadDarkButton, SIGNAL(clicked()), this, SLOT(doLoadDarkImage()));
   connect(m_LoadBadPixelsButton, SIGNAL(clicked()), this, SLOT(doLoadBadPixels()));
   connect(m_LoadGainCorrection, SIGNAL(clicked()), this, SLOT(doLoadGainMap()));
 
+  connect(m_AcquireButton, SIGNAL(clicked()), m_ActionAcquire, SIGNAL(triggered()));
+  connect(m_CancelButton, SIGNAL(clicked()), m_ActionCancel, SIGNAL(triggered()));
   connect(m_DarkAcquireButton, SIGNAL(clicked()), m_ActionAcquireDark, SIGNAL(triggered()));
   connect(m_DarkCancelButton, SIGNAL(clicked()), m_ActionCancelDark, SIGNAL(triggered()));
 
+  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
+  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
   connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
   connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
 
@@ -111,11 +113,6 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
           this, SLOT(setFileIndex(int)));
   connect(m_AcquisitionThread, SIGNAL(statusMessage(QString)),
           this, SLOT(statusMessage(QString)));
-
-  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
-  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
-  connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
-  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
 
   connect(m_DataProcessor, SIGNAL(processedImageAvailable()), this, SLOT(onProcessedImageAvailable()));
   connect(m_DataProcessor, SIGNAL(darkImageAvailable()), this, SLOT(onDarkImageAvailable()));
