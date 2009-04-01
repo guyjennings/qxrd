@@ -1,5 +1,8 @@
 #include "qxrdimagedata.h"
 
+#include <QDir>
+#include <QFileInfo>
+
 QxrdImageData::QxrdImageData(int width, int height)
   : QcepImageData<double>(width, height),
     m_Lock(QReadWriteLock::Recursive),
@@ -42,4 +45,14 @@ int QxrdImageData::frameNumber()
 void QxrdImageData::setFrameNumber(int n)
 {
   m_FrameNumber = n;
+}
+
+QString QxrdImageData::rawFileName()
+{
+  QFileInfo info(filename());
+
+  QString name = info.dir().filePath(
+      info.completeBaseName()+".raw.tif");
+
+  return name;
 }

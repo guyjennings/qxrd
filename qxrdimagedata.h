@@ -20,6 +20,8 @@ class QxrdImageData : public QcepImageData<double>
     int frameNumber();
     void setFrameNumber(int n);
 
+    QString rawFileName();
+
   private:
     mutable QReadWriteLock m_Lock;
     int m_IntegrationMode;
