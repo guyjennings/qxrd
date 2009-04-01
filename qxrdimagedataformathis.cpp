@@ -98,7 +98,7 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
       for (int y=0; y<height; y++) {
 	for (int x=0; x<width; x++) {
 	  fread(&pix, 2, 1, file);
-	  img -> setValue(x,y,pix);
+          img -> setValue(x,(height-y-1),pix);
 	}
       }
     } else if (h.TypeOfNumbers == 32) {
@@ -106,7 +106,7 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
       for (int y=0; y<height; y++) {
 	for (int x=0; x<width; x++) {
 	  fread(&pix, 2, 1, file);
-	  img -> setValue(x,y,pix);
+          img -> setValue(x,(height-y-1),pix);
 	}
       }
     }

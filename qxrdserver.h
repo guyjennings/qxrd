@@ -10,14 +10,17 @@ class QxrdServer : public QSpecServer
 {
   Q_OBJECT;
 
- public:
+public:
   QxrdServer(QxrdApplication *app, QxrdAcquisitionThread *acqth, QString name, QObject *parent=0);
 
- protected:
+signals:
+  void printMessage(QString msg);
+
+protected:
   QVariant executeCommand(QString cmd);
   QVariant readProperty(QString name);
 
- private:
+private:
   QxrdApplication          *m_Application;
   QxrdAcquisitionThread    *m_AcquisitionThread;
 };

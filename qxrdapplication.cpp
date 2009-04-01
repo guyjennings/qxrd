@@ -29,15 +29,17 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_AcquisitionThread = new QxrdAcquisitionThread(/*this, NULL*/);
   connect(m_AcquisitionThread, SIGNAL(acquisitionRunning()), this, SLOT(acquisitionRunning()));
-  connect(m_AcquisitionThread, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
+  connect(m_AcquisitionThread, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
 
   m_AcquisitionThread -> start();
 
   m_Server = new QxrdServer(this, m_AcquisitionThread, "qxrd", NULL);
-  connect(m_Server, SIGNAL(print_message(QString)), this, SIGNAL(printMessage(QString)));
+  connect(m_Server, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
 
   m_Window = new QxrdWindow(this, m_AcquisitionThread);
   m_Window -> show();
+
+  connect(this, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
 
 //  m_AcquisitionThread -> setWindow(m_Window);
 
@@ -143,10 +145,10 @@ QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
   return m_AcquisitionThread;
 }
 
-void QxrdApplication::printMessage(QString msg)
-{
-  m_Window -> printMessage(msg);
-}
+//void QxrdApplication::printMessage(QString msg)
+//{
+//  m_Window -> printMessage(msg);
+//}
 
 //int QxrdApplication::acquire()
 //{

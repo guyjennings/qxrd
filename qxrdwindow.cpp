@@ -170,9 +170,14 @@ bool QxrdWindow::wantToClose()
                                   QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
+QString QxrdWindow::timeStamp()
+{
+  return QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss ");
+}
+
 void QxrdWindow::printMessage(QString msg)
 {
-  m_Messages -> append(msg.trimmed());
+  m_Messages -> append(timeStamp()+msg.trimmed());
 }
 
 void QxrdWindow::acquisitionReady()

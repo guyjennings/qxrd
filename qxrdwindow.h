@@ -44,6 +44,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 
   void doTest();
 
+  QString timeStamp();
   void printMessage(QString msg);
 
   void acquisitionReady();

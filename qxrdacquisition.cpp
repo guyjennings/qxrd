@@ -26,6 +26,7 @@ static QxrdAcquisition *g_Acquisition = NULL;
 QxrdAcquisition::QxrdAcquisition(QxrdAcquisitionThread *thread)
   : QObject(),
     m_AcquisitionThread(thread),
+    m_Cancelling(0),
     m_NRows(0),
     m_NCols(0),
     m_IntegMode(0),
@@ -129,6 +130,7 @@ bool QxrdAcquisition::canStart()
 void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
 {
 //  printf("QxrdAcquisition::acquire (thread=%p)\n", QThread::currentThread());
+  QMutexLocker lock(&m_Acquiring);
 
   if (nsum <= 0) nsum = 1;
   if (nframes <= 0) nframes = 1;
@@ -136,8 +138,6 @@ void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex
   emit printMessage(tr("QxrdAcquisition::acquire(\"%1\",\"%2\",%3,%4,%5,%6)\n")
                     .arg(outDir).arg(filePattern).arg(fileIndex).arg(integmode).arg(nsum).arg(nframes));
   emit statusMessage("Starting acquisition");
-
-  int nRet = HIS_ALL_OK;
 
   m_OutputDir   = outDir;
   m_FilePattern = filePattern;
@@ -150,52 +150,19 @@ void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex
 
   m_AcquiringDark = 0;
 
-  if (m_AcquiredData==NULL) {
-    m_AcquiredData = m_AcquisitionThread -> takeNextFreeImage();
-  }
-
-  m_AcquiredData->resize(m_NCols, m_NRows);
-  m_AcquiredData->clear();
-
-  m_Buffer.resize(m_NRows*m_NCols*m_NBufferFrames);
-  m_Buffer.fill(0);
-
-  if ((nRet=Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
-                                                0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
-    acquisitionError(nRet);
-    return;
-  }
-
-  if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, integmode)) != HIS_ALL_OK) {
-    acquisitionError(nRet);
-    return;
-  }
-
-  if ((nRet=Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_NBufferFrames, m_NRows, m_NCols)) != HIS_ALL_OK) {
-    acquisitionError(nRet);
-    return;
-  }
-
-  m_CurrentSum = 0;
-  m_CurrentFrame = 0;
-
-  if ((nRet=Acquisition_Acquire_Image(m_AcqDesc, m_NBufferFrames, 0, HIS_SEQ_CONTINUOUS, NULL, NULL, NULL)) != HIS_ALL_OK) {
-    acquisitionError(nRet);
-    return;
-  }
+  acquisition();
 }
 
 void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum)
 {
 //  printf("QxrdAcquisition::acquireDark (thread=%p)\n", QThread::currentThread());
+  QMutexLocker lock(&m_Acquiring);
 
   if (nsum <= 0) nsum = 1;
 
   emit printMessage(tr("QxrdAcquisition::acquireDark(\"%1\",\"%2\",%3,%4,%5)\n")
                     .arg(outDir).arg(filePattern).arg(fileIndex).arg(integmode).arg(nsum));
   emit statusMessage("Starting dark acquisition");
-
-  int nRet = HIS_ALL_OK;
 
   m_OutputDir   = outDir;
   m_FilePattern = filePattern;
@@ -207,6 +174,13 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
   m_BufferFrame = 0;
 
   m_AcquiringDark= 1;
+
+  acquisition();
+}
+
+void QxrdAcquisition::acquisition()
+{
+  int nRet = HIS_ALL_OK;
 
   if (m_AcquiredData == NULL) {
     m_AcquiredData = m_AcquisitionThread -> takeNextFreeImage();
@@ -224,7 +198,7 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
     return;
   }
 
-  if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, integmode)) != HIS_ALL_OK) {
+  if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, m_IntegMode)) != HIS_ALL_OK) {
     acquisitionError(nRet);
     return;
   }
@@ -241,21 +215,35 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
     acquisitionError(nRet);
     return;
   }
+
+  forever {
+    if (m_AcquisitionWaiting.wait(&m_Acquiring, 5000)) {
+      if (onEndFrame()) {
+        break;
+      }
+    } else {
+      break;
+    }
+  }
+
+  onEndAcquisition();
 }
 
-void QxrdAcquisition::onEndFrame()
+bool QxrdAcquisition::onEndFrame()
 {
   printf("QxrdAcquisition::onEndFrame()\n");
 
-//  CHwHeaderInfo info;
-//  CHwHeaderInfoEx infoEx;
-//
-//  if (Acquisition_GetHwHeaderInfoEx(m_AcqDesc, &info, &infoEx) == 0) {
-//    if (info.dwHeaderID == 14) {
-//      printf("Frame %d\n", infoEx.wFrameCnt);
-//      emit printMessage(tr("Frame %1").arg(infoEx.wFrameCnt));
-//    }
-//  }
+  if (m_Cancelling) return true;
+
+  CHwHeaderInfo info;
+  CHwHeaderInfoEx infoEx;
+
+  if (Acquisition_GetHwHeaderInfoEx(m_AcqDesc, &info, &infoEx) == 0) {
+    if (info.dwHeaderID == 14) {
+      printf("Frame %d\n", infoEx.wFrameCnt);
+      emit printMessage(tr("Frame %1").arg(infoEx.wFrameCnt));
+    }
+  }
 
   QString fileName;
 
@@ -326,12 +314,20 @@ void QxrdAcquisition::onEndFrame()
       emit printMessage("Aborted acquisition\n");
 
       haltAcquire();
+
+      return true;
     }
   }
+
+  return false;
 }
 
 void QxrdAcquisition::onEndAcquisition()
 {
+  m_Cancelling = false;
+
+  m_StatusWaiting.wakeAll();
+
   emit printMessage("(CB) Acquisition ended\n");
 
   emit statusMessage("Waiting for saves");
@@ -350,14 +346,14 @@ int QxrdAcquisition::acquisitionStatus(double time)
     return 1;
   }
 
-//   QMutex mutex;
-//   QMutexLocker lock(&mutex);
+  QMutex mutex;
+  QMutexLocker lock(&mutex);
 
-  if (m_AcquisitionWaiting.wait(&m_Acquiring, (int)(time*1000))) {
-    printf("m_AcquisitionWaiting.wait succeeded\n");
+  if (m_StatusWaiting.wait(&mutex, (int)(time*1000))) {
+    printf("m_StatusWaiting.wait succeeded\n");
     return 1;
   } else {
-    printf("m_AcquisitionWaiting.wait failed\n");
+    printf("m_StatusWaiting.wait failed\n");
     return 0;
   }
 }
@@ -370,12 +366,11 @@ void QxrdAcquisition::acquisitionError(int n)
 void QxrdAcquisition::haltAcquire()
 {
 //  printf("QxrdAcquisition::haltAcquire (thread = %p)\n", QThread::currentThread());
+  m_Cancelling = true;
 
   Acquisition_Abort(m_AcqDesc);
 
   emit acquireComplete();
-//
-//  m_AcquisitionWaiting.wakeAll();
 //
 //  m_Acquiring.unlock();
 }
@@ -390,14 +385,18 @@ void QxrdAcquisition::cancelDark()
   haltAcquire();
 }
 
+void QxrdAcquisition::onEndFrameCallback()
+{
+  m_AcquisitionWaiting.wakeAll();
+}
+
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 {
-  g_Acquisition -> onEndFrame();
+  g_Acquisition -> onEndFrameCallback();
 }
 
 static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc)
 {
-  g_Acquisition -> onEndAcquisition();
 }
 
 QVector<double> QxrdAcquisition::integrationTimes()

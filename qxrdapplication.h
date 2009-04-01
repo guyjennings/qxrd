@@ -27,7 +27,6 @@ class QxrdApplication : public QApplication
 
   void possiblyQuit();
 
-  void printMessage(QString msg);
   void executeCommand(QString cmd);
 
 //  int acquire();
@@ -35,6 +34,7 @@ class QxrdApplication : public QApplication
 
  signals:
   void finishedCommand(QString cmd);
+  void printMessage(QString msg);
 
  public:
   bool wantToQuit();

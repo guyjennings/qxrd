@@ -37,21 +37,25 @@ class QxrdAcquisition : public QObject
   void statusMessage(QString msg);
 
  public:
-  void onEndFrame();
+  bool onEndFrame();
   void onEndAcquisition();
   QVector<double> integrationTimes();
   int acquisitionStatus(double time);
   bool canStart();
+  void onEndFrameCallback();
 
  private:
+  void acquisition();
   void acquisitionError(int n);
   void haltAcquire();
 
  private:
-  QMutex                 m_Acquiring;
-  QWaitCondition         m_AcquisitionWaiting;
   QxrdAcquisitionThread *m_AcquisitionThread;
   QxrdApplication       *m_Application;
+  QMutex                 m_Acquiring;
+  QWaitCondition         m_AcquisitionWaiting;
+  QWaitCondition         m_StatusWaiting;
+  int                    m_Cancelling;
   int                    m_NRows;
   int                    m_NCols;
   int                    m_IntegMode;
@@ -63,7 +67,7 @@ class QxrdAcquisition : public QObject
   int                    m_CurrentFrame;
   int                    m_AcquiringDark;
   QxrdImageData         *m_AcquiredData;
-  QVector<unsigned short> m_Buffer;
+  QVector<quint16>       m_Buffer;
   double                 m_IntTimes[8];
   int                    m_NIntTimes;
   QString                m_OutputDir;
