@@ -162,22 +162,57 @@ QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
 
 QScriptValue QxrdApplication::acquireFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() == 0) {
-    g_Application -> window() -> doAcquire();
-    return QScriptValue(engine, 1);
-  } else {
-    return QScriptValue(engine, -1);
+  QxrdWindow *win = g_Application -> window();
+
+  if (!win) return QScriptValue(engine, -1);
+
+  int nArgs = context->argumentCount();
+
+  switch (nArgs) {
+  default:
+  case 4:
+    win -> setNFrames(context -> argument(3).toUInt32());
+
+  case 3:
+    win -> setNSummed(context -> argument(2).toUInt32());
+
+  case 2:
+    win -> setExposureTime(context -> argument(1).toNumber());
+
+  case 1:
+    win -> setFilePattern(context -> argument(0).toString());
+
+  case 0:
+    win -> doAcquire();
   }
+
+  return QScriptValue(engine, 1);
 }
 
 QScriptValue QxrdApplication::acquireDarkFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() == 0) {
-    g_Application -> window() -> doAcquireDark();
-    return QScriptValue(engine, 1);
-  } else {
-    return QScriptValue(engine, -1);
+  QxrdWindow *win = g_Application -> window();
+
+  if (!win) return QScriptValue(engine, -1);
+
+  int nArgs = context->argumentCount();
+
+  switch (nArgs) {
+  default:
+  case 3:
+    win -> setDarkNSummed(context -> argument(2).toUInt32());
+
+  case 2:
+    win -> setExposureTime(context -> argument(1).toNumber());
+
+  case 1:
+    win -> setFilePattern(context -> argument(0).toString());
+
+  case 0:
+    win -> doAcquireDark();
   }
+
+  return QScriptValue(engine, 1);
 }
 
 QScriptValue QxrdApplication::statusFunc(QScriptContext *context, QScriptEngine *engine)
