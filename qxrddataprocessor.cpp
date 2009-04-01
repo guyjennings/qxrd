@@ -33,6 +33,10 @@ void QxrdDataProcessor::on_acquired_image_available()
     } else {
       QWriteLocker wl(&m_DarkUsage);
 
+      emit printMessage(tr("Saving dark image \"%1\"").arg(image->filename()));
+
+      m_Window -> saveImageData(image);
+
       m_DarkImages.enqueue(image);
 
       emit darkImageAvailable();
@@ -76,17 +80,25 @@ void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
   QxrdImageData *dark   = m_Window -> darkImage();
 
   if (img) {
+    QTime tic;
+    tic.start();
+
     subtractDarkImage(img, dark);
+    emit printMessage(tr("Dark subtraction took %1 msec").arg(tic.elapsed()));
     m_DarkUsage.unlock();
 
     correctBadPixels(img);
     correctImageGains(img);
+
+    emit printMessage(tr("Saving processed image in file \"%1\"").arg(img->filename()));
 
     m_Window -> saveImageData(img);
 
     m_ProcessedImages.enqueue(img);
 
     emit processedImageAvailable();
+
+    emit printMessage(tr("Processing took %1 msec").arg(tic.elapsed()));
   }
 
   m_Processing.unlock();
@@ -95,19 +107,21 @@ void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
 void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *dark)
 {
   if (m_Window -> performDarkSubtraction()) {
-    if (m_Window -> saveRawImages()) {
+    if (dark && m_Window -> saveRawImages()) {
+      emit printMessage(tr("Saving raw data in file \"%1\"").arg(image->rawFileName()));
+
       m_Window -> saveRawData(image);
     }
 
     if (dark && image) {
       if (dark->integrationMode() != image->integrationMode()) {
-        printf("Integration times of acquired data and dark image are different, skipping\n");
+        emit printMessage("Integration times of acquired data and dark image are different, skipping");
         return;
       }
 
       if (dark->width() != image->width() ||
           dark->height() != image->height()) {
-        printf("Dimensions of acquired data and dark image are different, skipping\n");
+        emit printMessage("Dimensions of acquired data and dark image are different, skipping");
         return;
       }
 
@@ -125,17 +139,12 @@ void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *d
       printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
              nres, ndrk, npixels, ratio);
 
-      QTime tic;
-      tic.start();
-
       double *result = image->data();
       double *dk     = dark->data();
 
       for (int i=0; i<npixels; i++) {
         result[i] = result[i]-ratio*dk[i];
       }
-
-      printf("Dark subtraction took %d msec\n", tic.elapsed());
     }
   }
 }

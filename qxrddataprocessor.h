@@ -20,6 +20,7 @@ public:
 signals:
   void processedImageAvailable();
   void darkImageAvailable();
+  void printMessage(QString msg);
 
 public:
   QxrdImageData *takeLatestProcessedImage();
