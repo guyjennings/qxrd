@@ -217,7 +217,9 @@ void QxrdAcquisition::acquisition()
   }
 
   forever {
-    if (m_AcquisitionWaiting.wait(&m_Acquiring, 5000)) {
+    QMutex mutex;
+    QMutexLocker lock(&mutex);
+    if (m_AcquisitionWaiting.wait(&mutex, 5000)) {
       if (onEndFrame()) {
         break;
       }
@@ -235,15 +237,15 @@ bool QxrdAcquisition::onEndFrame()
 
   if (m_Cancelling) return true;
 
-  CHwHeaderInfo info;
-  CHwHeaderInfoEx infoEx;
-
-  if (Acquisition_GetHwHeaderInfoEx(m_AcqDesc, &info, &infoEx) == 0) {
-    if (info.dwHeaderID == 14) {
-      printf("Frame %d\n", infoEx.wFrameCnt);
-      emit printMessage(tr("Frame %1").arg(infoEx.wFrameCnt));
-    }
-  }
+//  CHwHeaderInfo info;
+//  CHwHeaderInfoEx infoEx;
+//
+//  if (Acquisition_GetHwHeaderInfoEx(m_AcqDesc, &info, &infoEx) == 0) {
+//    if (info.dwHeaderID == 14) {
+//      printf("Frame %d\n", infoEx.wFrameCnt);
+//      emit printMessage(tr("Frame %1").arg(infoEx.wFrameCnt));
+//    }
+//  }
 
   QString fileName;
 
@@ -279,6 +281,8 @@ bool QxrdAcquisition::onEndFrame()
   if (m_BufferFrame >= m_NBufferFrames) {
     m_BufferFrame = 0;
   }
+
+//  Acquisition_SetReady(m_AcqDesc, true);
 
   if (m_CurrentSum >= m_NSums) {
     m_CurrentSum = 0;
@@ -392,6 +396,8 @@ void QxrdAcquisition::onEndFrameCallback()
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 {
+  printf("OnEndFrameCallback\n");
+
   g_Acquisition -> onEndFrameCallback();
 }
 
