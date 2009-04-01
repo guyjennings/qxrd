@@ -116,6 +116,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
 
   connect(m_DataProcessor, SIGNAL(processedImageAvailable()), this, SLOT(onProcessedImageAvailable()));
   connect(m_DataProcessor, SIGNAL(darkImageAvailable()), this, SLOT(onDarkImageAvailable()));
+  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
   connect(m_ActionTest, SIGNAL(triggered()), this, SLOT(doTest()));
 
@@ -647,17 +648,12 @@ void QxrdWindow::saveImageData(QxrdImageData *image)
 
 void QxrdWindow::saveRawData(QxrdImageData *image)
 {
-  QFileInfo info(image->filename());
-
-  QString name = info.dir().filePath(
-      info.completeBaseName()+".raw.tif");
-
-  saveNamedImageData(name, image);
+  saveNamedImageData(image->rawFileName(), image);
 }
 
 void QxrdWindow::saveNamedImageData(QString name, QxrdImageData *image)
 {
-  emit printMessage(tr("Saved \"%1\")").arg(name));
+//  emit printMessage(tr("Saved \"%1\")").arg(name));
 
   QReadLocker lock(image->rwLock());
 
