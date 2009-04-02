@@ -45,8 +45,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   m_FileBrowser -> setModel(m_FileBrowserModel);
   m_FileBrowser -> setRootIndex(m_FileBrowserModel->index(QDir::currentPath()));
 
-  connect(&m_FileBrowserTimer, SIGNAL(timeout()), this, SLOT(refreshFileBrowser()));
-  m_FileBrowserTimer.start(5000);
+//  connect(&m_FileBrowserTimer, SIGNAL(timeout()), this, SLOT(refreshFileBrowser()));
+//  m_FileBrowserTimer.start(5000);
   connect(m_OutputDirectory, SIGNAL(textChanged(QString)), this, SLOT(setFileBrowserDirectory(QString)));
 
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
