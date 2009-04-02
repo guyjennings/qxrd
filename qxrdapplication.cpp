@@ -1,9 +1,8 @@
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
-#include "qxrdserver.h"
+#include "qxrdserverthread.h"
 #include "qxrdacquisitionthread.h"
 
-#include <QScriptEngine>
 #include <QTime>
 #include <QtConcurrentRun>
 #include <QFileDialog>
@@ -14,7 +13,7 @@ static QxrdApplication* g_Application = NULL;
 QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
     m_Window(NULL),
-    m_Server(NULL),
+    m_ServerThread(NULL),
     m_AcquisitionThread(NULL)
 {
   setObjectName("qxrdapplication");
@@ -33,8 +32,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_AcquisitionThread -> start();
 
-  m_Server = new QxrdServer(this, m_AcquisitionThread, "qxrd", NULL);
-  connect(m_Server, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
+  m_ServerThread = new QxrdServerThread(m_AcquisitionThread, "qxrd");
+  connect(m_ServerThread, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
+
+  m_ServerThread -> start();
 
   m_Window = new QxrdWindow(this, m_AcquisitionThread);
   m_Window -> show();
@@ -44,42 +45,12 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 //  m_AcquisitionThread -> setWindow(m_Window);
 
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
-
-  m_ScriptEngine.globalObject().setProperty("acquire",
-          m_ScriptEngine.newFunction(QxrdApplication::acquireFunc));
-
-  m_ScriptEngine.globalObject().setProperty("acquiredark",
-          m_ScriptEngine.newFunction(QxrdApplication::acquireDarkFunc));
-
-  m_ScriptEngine.globalObject().setProperty("status",
-          m_ScriptEngine.newFunction(QxrdApplication::statusFunc));
-
-  m_ScriptEngine.globalObject().setProperty("exposure",
-          m_ScriptEngine.newFunction(QxrdApplication::exposureFunc));
-
-  m_ScriptEngine.globalObject().setProperty("subframes",
-          m_ScriptEngine.newFunction(QxrdApplication::subframesFunc));
-
-  m_ScriptEngine.globalObject().setProperty("darksubframes",
-          m_ScriptEngine.newFunction(QxrdApplication::darkSubframesFunc));
-
-  m_ScriptEngine.globalObject().setProperty("frames",
-          m_ScriptEngine.newFunction(QxrdApplication::framesFunc));
-
-  m_ScriptEngine.globalObject().setProperty("filename",
-          m_ScriptEngine.newFunction(QxrdApplication::filenameFunc));
-
-  m_ScriptEngine.globalObject().setProperty("directory",
-          m_ScriptEngine.newFunction(QxrdApplication::directoryFunc));
-
-  m_ScriptEngine.globalObject().setProperty("fileindex",
-          m_ScriptEngine.newFunction(QxrdApplication::fileIndexFunc));
 }
 
 QxrdApplication::~QxrdApplication()
 {
   delete m_AcquisitionThread;
-  delete m_Server;
+  delete m_ServerThread;
 }
 
 void QxrdApplication::serverRunning()
@@ -113,26 +84,11 @@ void QxrdApplication::acquisitionRunning()
   m_Window -> acquisitionReady();
 }
 
-void QxrdApplication::executeCommand(QString cmd)
-{
-  QScriptValue result = m_ScriptEngine.evaluate(cmd);
-
-  if (m_ScriptEngine.hasUncaughtException()) {
-    emit finishedCommand(tr("Error: ") + m_ScriptEngine.uncaughtException().toString());
-  } else {
-    emit finishedCommand(result.toString());
-  }
-}
-
-QScriptValue QxrdApplication::evaluate(QString cmd)
-{
-  return m_ScriptEngine.evaluate(cmd);
-}
-
 void QxrdApplication::shutdownThreads()
 {
   m_Window -> saveSettings();
   m_AcquisitionThread -> shutdown();
+  m_ServerThread -> shutdown();
 }
 
 QxrdWindow* QxrdApplication::window()
@@ -159,132 +115,4 @@ QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
 //{
 //  return m_Window -> acquisitionStatus(time);
 //}
-
-QScriptValue QxrdApplication::acquireFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  QxrdWindow *win = g_Application -> window();
-
-  if (!win) return QScriptValue(engine, -1);
-
-  int nArgs = context->argumentCount();
-
-  switch (nArgs) {
-  default:
-  case 4:
-    win -> setNFrames(context -> argument(3).toUInt32());
-
-  case 3:
-    win -> setNSummed(context -> argument(2).toUInt32());
-
-  case 2:
-    win -> setExposureTime(context -> argument(1).toNumber());
-
-  case 1:
-    win -> setFilePattern(context -> argument(0).toString());
-
-  case 0:
-    win -> doAcquire();
-  }
-
-  return QScriptValue(engine, 1);
-}
-
-QScriptValue QxrdApplication::acquireDarkFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  QxrdWindow *win = g_Application -> window();
-
-  if (!win) return QScriptValue(engine, -1);
-
-  int nArgs = context->argumentCount();
-
-  switch (nArgs) {
-  default:
-  case 3:
-    win -> setDarkNSummed(context -> argument(2).toUInt32());
-
-  case 2:
-    win -> setExposureTime(context -> argument(1).toNumber());
-
-  case 1:
-    win -> setFilePattern(context -> argument(0).toString());
-
-  case 0:
-    win -> doAcquireDark();
-  }
-
-  return QScriptValue(engine, 1);
-}
-
-QScriptValue QxrdApplication::statusFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_Application -> window() -> acquisitionStatus(0));
-  } else {
-    double time = context->argument(0).toNumber();
-    return QScriptValue(engine, g_Application -> window() -> acquisitionStatus(time));
-  }
-}
-
-QScriptValue QxrdApplication::exposureFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  if (context->argumentCount() != 0) {
-    g_Application -> window() -> setExposureTime(context->argument(0).toNumber());
-  }
-
-  return QScriptValue(engine, g_Application -> window() -> exposureTime());
-}
-
-QScriptValue QxrdApplication::subframesFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  if (context->argumentCount() != 0) {
-    g_Application -> window() -> setNSummed(context->argument(0).toUInt32());
-  }
-
-  return QScriptValue(engine, g_Application -> window() -> nSummed());
-}
-
-QScriptValue QxrdApplication::darkSubframesFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  if (context->argumentCount() != 0) {
-    g_Application -> window() -> setDarkNSummed(context->argument(0).toUInt32());
-  }
-
-  return QScriptValue(engine, g_Application -> window() -> darkNSummed());
-}
-
-QScriptValue QxrdApplication::framesFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  if (context->argumentCount() != 0) {
-    g_Application -> window() -> setNFrames(context->argument(0).toUInt32());
-  }
-
-  return QScriptValue(engine, g_Application -> window() -> nFrames());
-}
-
-QScriptValue QxrdApplication::filenameFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  if (context->argumentCount() != 0) {
-    g_Application -> window() -> setFilePattern(context->argument(0).toString());
-  }
-
-  return QScriptValue(engine, g_Application -> window() -> filePattern());
-}
-
-QScriptValue QxrdApplication::directoryFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  if (context->argumentCount() != 0) {
-    g_Application -> window() -> setOutputDirectory(context->argument(0).toString());
-  }
-
-  return QScriptValue(engine, g_Application -> window() -> outputDirectory());
-}
-
-QScriptValue QxrdApplication::fileIndexFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  if (context->argumentCount() != 0) {
-    g_Application -> window() -> setFileIndex(context->argument(0).toUInt32());
-  }
-
-  return QScriptValue(engine, g_Application -> window() -> fileIndex());
-}
 
