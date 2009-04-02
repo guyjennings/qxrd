@@ -20,11 +20,11 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
   Q_OBJECT;
 
- public:
+public:
   QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget *parent=0);
   virtual ~QxrdWindow();
 
- public slots:
+public slots:
   void doSaveData();
   void doLoadData();
   void doImportData();
@@ -106,7 +106,17 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   void onProcessedImageAvailable();
   void onDarkImageAvailable();
 
- public:
+signals:
+  void exposureTimeChanged(double t);
+  void integrationModeChanged(int mode);
+  void nSummedChanged(int nsummed);
+  void nFramesChanged(int nframes);
+  void fileIndexChanged(int index);
+  void filePatternChanged(QString pattern);
+  void outputDirectoryChanged(QString path);
+  void darkNSummedChanged(int nsummed);
+
+public:
   double  exposureTime();
   int     integrationMode();
   int     nSummed();
@@ -124,10 +134,10 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
-//  void enqueue(QxrdImageData *image);
-//  QxrdImageData* dequeue();
-//  QxrdImageData* nextAvailableImage();
-//  void returnImageToPool(QxrdImageData *img);
+  //  void enqueue(QxrdImageData *image);
+  //  QxrdImageData* dequeue();
+  //  QxrdImageData* nextAvailableImage();
+  //  void returnImageToPool(QxrdImageData *img);
   QxrdImageData* loadNewImage(QString name);
 
   void darkImageAcquired(QxrdImageData *image);
@@ -138,7 +148,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 
   QxrdImageData* darkImage();
 
- private:
+private:
   int                     m_SettingsLoaded;
   QxrdApplication        *m_Application;
   QxrdAcquisitionThread  *m_AcquisitionThread;
@@ -148,7 +158,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   QLabel                 *m_StatusMsg;
   int                     m_Acquiring;
   int                     m_AcquiringDark;
-//  QxrdImageQueue          m_AcquiredImages;
+  //  QxrdImageQueue          m_AcquiredImages;
   QxrdImageData          *m_Data;
   QxrdImageData          *m_DarkFrame;
   QxrdImageData          *m_BadPixels;
