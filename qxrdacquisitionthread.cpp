@@ -48,6 +48,18 @@ void QxrdAcquisitionThread::shutdown()
   wait(1000);
 }
 
+void QxrdAcquisitionThread::doAcquire()
+{
+  QString outDir   = outputDirectory();
+  QString filePatt = filePattern();
+  int    index     = fileIndex();
+  int    integmode = integrationMode();
+  int    nsum      = nSummed();
+  int    nframes   = nFrames();
+
+  acquire(outDir, filePatt, index, integmode, nsum, nframes);
+}
+
 void QxrdAcquisitionThread::acquire(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum, int nframes)
 {
   if (m_Acquisition -> canStart()) {
@@ -55,6 +67,17 @@ void QxrdAcquisitionThread::acquire(QString outDir, QString filePattern, int fil
   } else {
     printf("Attempting to start acquisition while it is already running..\n");
   }
+}
+
+void QxrdAcquisitionThread::doAcquireDark()
+{
+  QString outDir   = outputDirectory();
+  QString filePatt = filePattern();
+  int    index     = fileIndex();
+  int    integmode = integrationMode();
+  int     nsum     = darkNSummed();
+
+  acquireDark(outDir, filePatt, index, integmode, nsum);
 }
 
 void QxrdAcquisitionThread::acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum)
@@ -118,3 +141,148 @@ void QxrdAcquisitionThread::returnImageToPool(QxrdImageData *img)
 {
   m_FreeImages.enqueue(img);
 }
+
+void QxrdAcquisitionThread::setExposureTime(double t)
+{
+  QWriteLocker lock(&m_Lock);
+
+  if (m_ExposureTime != t) {
+    m_ExposureTime = t;
+
+    emit exposureTimeChanged(t);
+  }
+}
+
+void QxrdAcquisitionThread::setIntegrationMode(int mode)
+{
+  QWriteLocker lock(&m_Lock);
+
+  if (m_IntegrationMode != mode) {
+    m_IntegrationMode = mode;
+
+    emit integrationModeChanged(mode);
+  }
+}
+
+void QxrdAcquisitionThread::setNSummed(int nsummed)
+{
+  QWriteLocker lock(&m_Lock);
+
+  if (m_NSummed != nsummed) {
+    m_NSummed = nsummed;
+
+    emit nSummedChanged(nsummed);
+  }
+}
+
+void QxrdAcquisitionThread::setNFrames(int nframes)
+{
+  QWriteLocker lock(&m_Lock);
+
+  if (m_NFrames != nframes) {
+    m_NFrames = nframes;
+
+    emit nFramesChanged(nframes);
+  }
+}
+
+void QxrdAcquisitionThread::setFileIndex(int index)
+{
+  QWriteLocker lock(&m_Lock);
+
+  if (m_FileIndex != index) {
+    m_FileIndex = index;
+
+    emit fileIndexChanged(index);
+  }
+}
+
+void QxrdAcquisitionThread::setFilePattern(QString pattern)
+{
+  QWriteLocker lock(&m_Lock);
+
+  if (m_FilePattern != pattern) {
+    m_FilePattern = pattern;
+
+    emit filePatternChanged(pattern);
+  }
+}
+
+void QxrdAcquisitionThread::setOutputDirectory(QString path)
+{
+  QWriteLocker lock(&m_Lock);
+
+  if (m_OutputDirectory != path) {
+    m_OutputDirectory = path;
+
+    emit outputDirectoryChanged(path);
+  }
+}
+
+void QxrdAcquisitionThread::setDarkNSummed(int nsummed)
+{
+  QWriteLocker lock(&m_Lock);
+
+  if (m_DarkNSummed != nsummed) {
+    m_DarkNSummed = nsummed;
+
+    emit darkNSummedChanged(nsummed);
+  }
+}
+
+double  QxrdAcquisitionThread::exposureTime()
+{
+  QReadLocker lock(&m_Lock);
+
+  return m_ExposureTime;
+}
+
+int     QxrdAcquisitionThread::integrationMode()
+{
+  QReadLocker lock(&m_Lock);
+
+  return m_IntegrationMode;
+}
+
+int     QxrdAcquisitionThread::nSummed()
+{
+  QReadLocker lock(&m_Lock);
+
+  return m_NSummed;
+}
+
+int     QxrdAcquisitionThread::nFrames()
+{
+  QReadLocker lock(&m_Lock);
+
+  return m_NFrames;
+}
+
+int     QxrdAcquisitionThread::fileIndex()
+{
+  QReadLocker lock(&m_Lock);
+
+  return m_FileIndex;
+}
+
+QString QxrdAcquisitionThread::filePattern()
+{
+  QReadLocker lock(&m_Lock);
+
+  return m_FilePattern;
+}
+
+QString QxrdAcquisitionThread::outputDirectory()
+{
+  QReadLocker lock(&m_Lock);
+
+  return m_OutputDirectory;
+}
+
+int     QxrdAcquisitionThread::darkNSummed()
+{
+  QReadLocker lock(&m_Lock);
+
+  return m_DarkNSummed;
+}
+
