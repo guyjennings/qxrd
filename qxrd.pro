@@ -51,6 +51,7 @@ HEADERS += \
         qxrdplotzoomer.h \
         qxrdplottracker.h \
 	qxrdserver.h \
+	qxrdserverthread.h \
 	qxrdspecserver.h \
 	qxrdacquisitionthread.h \
 	qxrdacquisition.h \
@@ -79,6 +80,7 @@ SOURCES += \
         qxrdplotzoomer.cpp \
         qxrdplottracker.cpp \
 	qxrdserver.cpp \
+	qxrdserverthread.cpp \
 	qxrdspecserver.cpp \
 	qxrdacquisitionthread.cpp \
 	qxrdacquisition.cpp
