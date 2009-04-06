@@ -45,6 +45,8 @@ HEADERS += \
 	qxrdimagedataformattiff.h \
 	qxrdimagedataformatmar345.h \
 	qxrdrasterdata.h \
+	qxrdmaskrasterdata.h \
+	qxrdmaskcolormap.h \
 	qxrdwindow.h \
         qxrddataprocessor.h \
 	qxrdimageplot.h \
@@ -74,6 +76,8 @@ SOURCES += \
 	qxrdimagedataformattiff.cpp \
 	qxrdimagedataformatmar345.cpp \
 	qxrdrasterdata.cpp \
+	qxrdmaskrasterdata.cpp \
+	qxrdmaskcolormap.cpp \
 	qxrdwindow.cpp \
         qxrddataprocessor.cpp \
 	qxrdimageplot.cpp \

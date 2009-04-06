@@ -19,7 +19,11 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Rescaler(NULL),
     m_Legend(NULL),
     m_Spectrogram(NULL),
+    m_MaskImage(NULL),
     m_ColorMap(Qt::black, Qt::white),
+    m_MaskColorMap(Qt::red, QColor(0,0,0,0)),
+    m_RasterShown(1),
+    m_MaskShown(1),
     m_MinDisplayed(-10),
     m_MaxDisplayed(110),
     m_Interpolate(1),
@@ -67,6 +71,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 
   m_Spectrogram = new QwtPlotSpectrogram();
   m_Spectrogram -> attach(this);
+
+  m_MaskImage = new QwtPlotSpectrogram();
+  m_MaskImage -> attach(this);
 
   setDisplayedRange(0,100);
   setGrayscale();
@@ -257,6 +264,33 @@ void QxrdImagePlot::setIce()
   setTrackerPen(QPen(Qt::red));
 }
 
+
+void QxrdImagePlot::toggleShowImage()
+{
+  m_RasterShown = !m_RasterShown;
+
+  if (m_Spectrogram) {
+    m_Spectrogram -> setAlpha(m_RasterShown ? 255 : 0);
+    m_Spectrogram -> invalidateCache();
+    m_Spectrogram -> itemChanged();
+
+    replot();
+  }
+}
+
+void QxrdImagePlot::toggleShowMask()
+{
+  m_MaskShown = !m_MaskShown;
+
+  if (m_MaskImage) {
+    m_MaskImage -> setAlpha(m_MaskShown ? 255 : 0);
+    m_MaskImage -> invalidateCache();
+    m_MaskImage -> itemChanged();
+
+    replot();
+  }
+}
+
 void QxrdImagePlot::changedColorMap()
 {
   m_Spectrogram -> setColorMap(m_ColorMap);
@@ -277,6 +311,7 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
 
   m_Spectrogram -> setData(data);
   m_Spectrogram -> setColorMap(m_ColorMap);
+  m_Spectrogram -> setAlpha(m_RasterShown ? 255 : 0);
   m_Spectrogram -> invalidateCache();
   m_Spectrogram -> itemChanged();
 
@@ -294,6 +329,19 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
 //   setDisplayedRange(0,100);
 
   recalculateDisplayedRange();
+  replot();
+}
+
+void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
+{
+  m_MaskRaster = mask;
+
+  m_MaskImage -> setData(mask);
+  m_MaskImage -> setColorMap(m_MaskColorMap);
+  m_MaskImage -> setAlpha(m_MaskShown ? 255 : 0);
+  m_MaskImage -> invalidateCache();
+  m_MaskImage -> itemChanged();
+
   replot();
 }
 

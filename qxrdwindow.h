@@ -106,6 +106,9 @@ public slots:
   void onProcessedImageAvailable();
   void onDarkImageAvailable();
 
+  void doClearMaskRange();
+  void doSetMaskRange();
+
 signals:
   void exposureTimeChanged(double t);
   void integrationModeChanged(int mode);

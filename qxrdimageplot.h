@@ -15,6 +15,8 @@ class QwtPlotSpectrogram;
 class QwtPlotRescaler;
 
 #include "qxrdrasterdata.h"
+#include "qxrdmaskrasterdata.h"
+#include "qxrdmaskcolormap.h"
 
 class QxrdImagePlot : public QwtPlot
 {
@@ -40,6 +42,9 @@ class QxrdImagePlot : public QwtPlot
   void setFire();
   void setIce();
 
+  void toggleShowImage();
+  void toggleShowMask();
+
   void on_minimum_changed(double min);
   void on_maximum_changed(double max);
   void on_interpolate_changed(int interp);
@@ -51,6 +56,7 @@ class QxrdImagePlot : public QwtPlot
 
  public:
   void setImage(QxrdRasterData data);
+  void setMask(QxrdMaskRasterData data);
   QxrdRasterData* raster();
   void replotImage();
 
@@ -66,8 +72,13 @@ class QxrdImagePlot : public QwtPlot
   QwtPlotRescaler     *m_Rescaler;
   QwtLegend           *m_Legend;
   QwtPlotSpectrogram  *m_Spectrogram;
+  QwtPlotSpectrogram  *m_MaskImage;
   QxrdRasterData       m_Raster;
+  QxrdMaskRasterData   m_MaskRaster;
   QwtLinearColorMap    m_ColorMap;
+  QxrdMaskColorMap     m_MaskColorMap;
+  int                  m_RasterShown;
+  int                  m_MaskShown;
   double               m_MinDisplayed;
   double               m_MaxDisplayed;
   int                  m_Interpolate;

@@ -104,6 +104,14 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()));
   connect(m_ActionIce, SIGNAL(triggered()), m_Plot, SLOT(setIce()));
 
+  connect(m_SetMaskRange, SIGNAL(clicked()), m_ActionSetMaskRange, SIGNAL(triggered()));
+  connect(m_ClearMaskRange, SIGNAL(clicked()), m_ActionClearMaskRange, SIGNAL(triggered()));
+
+  connect(m_ActionShowImage, SIGNAL(triggered()), m_Plot, SLOT(toggleShowImage()));
+  connect(m_ActionShowMask, SIGNAL(triggered()), m_Plot, SLOT(toggleShowMask()));
+  connect(m_ActionSetMaskRange, SIGNAL(triggered()), this, SLOT(doSetMaskRange()));
+  connect(m_ActionClearMaskRange, SIGNAL(triggered()), this, SLOT(doClearMaskRange()));
+
   connect(m_AcquisitionThread, SIGNAL(acquireStarted(int)),
           this, SLOT(onAcquireStarted(int)));
   connect(m_AcquisitionThread, SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
@@ -848,9 +856,11 @@ void QxrdWindow::newData(QxrdImageData *image)
     m_Data = image;
   }
 
-  QxrdRasterData data(m_Data, interpolatePixels());
+  QxrdRasterData     data(m_Data, interpolatePixels());
+  QxrdMaskRasterData mask(m_Data, interpolatePixels());
 
   m_Plot -> setImage(data);
+  m_Plot -> setMask(mask);
   m_Plot -> setTitle(m_Data -> title());
   m_Plot -> replot();
 }
@@ -975,9 +985,36 @@ void QxrdWindow::onDarkImageAvailable()
 
 void QxrdWindow::doTest()
 {
-  int status = m_AcquisitionThread -> acquisitionStatus(1.0);
+//   int status = m_AcquisitionThread -> acquisitionStatus(1.0);
 
-  printf("QxrdWindow::doTest : m_AcquisitionThread -> acquisitionStatus(1.0) = %d\n", status);
+//   printf("QxrdWindow::doTest : m_AcquisitionThread -> acquisitionStatus(1.0) = %d\n", status);
 
-  emit printMessage(tr("QxrdWindow::doTest : m_AcquisitionThread -> acquisitionStatus(1.0) = %1").arg(status));
+//   emit printMessage(tr("QxrdWindow::doTest : m_AcquisitionThread -> acquisitionStatus(1.0) = %1").arg(status));
+
+  m_Data -> setCircularMask();
 }
+
+void QxrdWindow::doClearMaskRange()
+{
+  double min = m_MaskMinimum -> value();
+  double max = m_MaskMaximum -> value();
+
+  if (m_Data) {
+    printf ("clearMaskRange(%g,%g)\n", min, max);
+
+    m_Data -> clearMaskRange(min, max);
+  }
+}
+
+void QxrdWindow::doSetMaskRange()
+{
+  double min = m_MaskMinimum -> value();
+  double max = m_MaskMaximum -> value();
+
+  if (m_Data) {
+    printf ("setMaskRange(%g,%g)\n", min, max);
+
+    m_Data -> setMaskRange(min, max);
+  }
+}
+
