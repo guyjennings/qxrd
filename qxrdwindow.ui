@@ -78,32 +78,6 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_3">
-        <attribute name="title">
-         <string>Files</string>
-        </attribute>
-        <layout class="QGridLayout" name="gridLayout_10">
-         <item row="0" column="0">
-          <widget class="QTreeView" name="m_FileBrowser">
-           <property name="dragDropMode">
-            <enum>QAbstractItemView::NoDragDrop</enum>
-           </property>
-           <property name="alternatingRowColors">
-            <bool>true</bool>
-           </property>
-           <property name="selectionMode">
-            <enum>QAbstractItemView::ExtendedSelection</enum>
-           </property>
-           <property name="textElideMode">
-            <enum>Qt::ElideMiddle</enum>
-           </property>
-           <property name="sortingEnabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
          <string>Messages</string>

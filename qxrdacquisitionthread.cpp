@@ -4,6 +4,7 @@
 
 QxrdAcquisitionThread::QxrdAcquisitionThread()
   : QThread(),
+    m_Debug(true),
     m_Acquisition(NULL),
     m_FreeImages("Free Image Pool"),
     m_AcquiredImages("Acquired Images")
@@ -28,8 +29,9 @@ void QxrdAcquisitionThread::run()
   connect(this, SIGNAL(_acquireDark(QString,QString,int,int,int)),
           m_Acquisition, SLOT(acquireDark(QString,QString,int,int,int)));
   connect(m_Acquisition, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
-  connect(m_Acquisition, SIGNAL(acquireComplete()), this, SIGNAL(acquireComplete()));
-  connect(m_Acquisition, SIGNAL(acquiredFrame(QString,int,int,int,int,int)), 
+  connect(m_Acquisition, SIGNAL(acquireStarted(int)), this, SIGNAL(acquireStarted(int)));
+  connect(m_Acquisition, SIGNAL(acquireComplete(int)), this, SIGNAL(acquireComplete(int)));
+  connect(m_Acquisition, SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
 	  this, SIGNAL(acquiredFrame(QString,int,int,int,int,int)));
   connect(m_Acquisition, SIGNAL(fileIndexChanged(int)), this, SIGNAL(fileIndexChanged(int)));
   connect(m_Acquisition, SIGNAL(statusMessage(QString)), this, SIGNAL(statusMessage(QString)));
@@ -146,6 +148,10 @@ void QxrdAcquisitionThread::setExposureTime(double t)
 {
   QWriteLocker lock(&m_Lock);
 
+  if (m_Debug) {
+    printf("QxrdAcquisitionThread::setExposureTime(%g->%g)\n", m_ExposureTime, t);
+  }
+
   if (m_ExposureTime != t) {
     m_ExposureTime = t;
 
@@ -156,6 +162,10 @@ void QxrdAcquisitionThread::setExposureTime(double t)
 void QxrdAcquisitionThread::setIntegrationMode(int mode)
 {
   QWriteLocker lock(&m_Lock);
+
+  if (m_Debug) {
+    printf("QxrdAcquisitionThread::setIntegrationMode(%d->%d)\n", m_IntegrationMode, mode);
+  }
 
   if (m_IntegrationMode != mode) {
     m_IntegrationMode = mode;
@@ -168,6 +178,10 @@ void QxrdAcquisitionThread::setNSummed(int nsummed)
 {
   QWriteLocker lock(&m_Lock);
 
+  if (m_Debug) {
+    printf("QxrdAcquisitionThread::setNSummed(%d->%d)\n", m_NSummed, nsummed);
+  }
+
   if (m_NSummed != nsummed) {
     m_NSummed = nsummed;
 
@@ -178,6 +192,10 @@ void QxrdAcquisitionThread::setNSummed(int nsummed)
 void QxrdAcquisitionThread::setNFrames(int nframes)
 {
   QWriteLocker lock(&m_Lock);
+
+  if (m_Debug) {
+    printf("QxrdAcquisitionThread::setNFrames(%d->%d)\n", m_NFrames, nframes);
+  }
 
   if (m_NFrames != nframes) {
     m_NFrames = nframes;
@@ -190,6 +208,10 @@ void QxrdAcquisitionThread::setFileIndex(int index)
 {
   QWriteLocker lock(&m_Lock);
 
+  if (m_Debug) {
+    printf("QxrdAcquisitionThread::setFileIndex(%d->%d)\n", m_FileIndex, index);
+  }
+
   if (m_FileIndex != index) {
     m_FileIndex = index;
 
@@ -200,6 +222,10 @@ void QxrdAcquisitionThread::setFileIndex(int index)
 void QxrdAcquisitionThread::setFilePattern(QString pattern)
 {
   QWriteLocker lock(&m_Lock);
+
+  if (m_Debug) {
+    printf("QxrdAcquisitionThread::setFilePattern(%s->%s)\n", qPrintable(m_FilePattern), qPrintable(pattern));
+  }
 
   if (m_FilePattern != pattern) {
     m_FilePattern = pattern;
@@ -212,6 +238,10 @@ void QxrdAcquisitionThread::setOutputDirectory(QString path)
 {
   QWriteLocker lock(&m_Lock);
 
+  if (m_Debug) {
+    printf("QxrdAcquisitionThread::setOutputDirectory(%s->%s)\n", qPrintable(m_OutputDirectory), qPrintable(path));
+  }
+
   if (m_OutputDirectory != path) {
     m_OutputDirectory = path;
 
@@ -222,6 +252,10 @@ void QxrdAcquisitionThread::setOutputDirectory(QString path)
 void QxrdAcquisitionThread::setDarkNSummed(int nsummed)
 {
   QWriteLocker lock(&m_Lock);
+
+  if (m_Debug) {
+    printf("QxrdAcquisitionThread::setDarkNSummed(%d->%d)\n", m_DarkNSummed, nsummed);
+  }
 
   if (m_DarkNSummed != nsummed) {
     m_DarkNSummed = nsummed;

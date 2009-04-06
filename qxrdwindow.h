@@ -11,7 +11,7 @@ class QxrdAcquisitionThread;
 class QwtPlotSpectrogram;
 class QCloseEvent;
 class QxrdImageData;
-class QDirModel;
+//class QDirModel;
 class QxrdDataProcessor;
 
 #include "qxrdimagequeue.h"
@@ -37,10 +37,11 @@ public slots:
 
   void doAcquire();
   void doCancel();
-  void acquireComplete();
+  void onAcquireStarted(int dark);
+  void onAcquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
+  void onAcquireComplete(int dark);
   void doAcquireDark();
   void doCancelDark();
-  void acquireDarkComplete();
 
   void doTest();
 
@@ -65,7 +66,6 @@ public slots:
   void setDarkNSummed(int nsummed);
 
   void selectOutputDirectory();
-  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
   void statusMessage(QString msg);
 
   int performDarkSubtraction();
@@ -100,8 +100,8 @@ public slots:
   int maintainAspectRatio();
   void setMaintainAspectRatio(int prsrv);
 
-  void setFileBrowserDirectory(QString dir);
-  void refreshFileBrowser();
+//  void setFileBrowserDirectory(QString dir);
+//  void refreshFileBrowser();
 
   void onProcessedImageAvailable();
   void onDarkImageAvailable();
@@ -163,9 +163,9 @@ private:
   QxrdImageData          *m_DarkFrame;
   QxrdImageData          *m_BadPixels;
   QxrdImageData          *m_GainFrame;
-
-  QDirModel              *m_FileBrowserModel;
-  QTimer                  m_FileBrowserTimer;
+//
+//  QDirModel              *m_FileBrowserModel;
+//  QTimer                  m_FileBrowserTimer;
 };
 
 #endif

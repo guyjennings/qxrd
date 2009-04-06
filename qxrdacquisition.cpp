@@ -138,6 +138,7 @@ void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex
   emit printMessage(tr("QxrdAcquisition::acquire(\"%1\",\"%2\",%3,%4,%5,%6)\n")
                     .arg(outDir).arg(filePattern).arg(fileIndex).arg(integmode).arg(nsum).arg(nframes));
   emit statusMessage("Starting acquisition");
+  emit acquireStarted(0);
 
   m_OutputDir   = outDir;
   m_FilePattern = filePattern;
@@ -163,6 +164,7 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
   emit printMessage(tr("QxrdAcquisition::acquireDark(\"%1\",\"%2\",%3,%4,%5)\n")
                     .arg(outDir).arg(filePattern).arg(fileIndex).arg(integmode).arg(nsum));
   emit statusMessage("Starting dark acquisition");
+  emit acquireStarted(1);
 
   m_OutputDir   = outDir;
   m_FilePattern = filePattern;
@@ -337,7 +339,7 @@ void QxrdAcquisition::onEndAcquisition()
   emit statusMessage("Waiting for saves");
 
   emit statusMessage("Acquire Complete");
-  emit acquireComplete();
+  emit acquireComplete(m_AcquiringDark);
 }
 
 int QxrdAcquisition::acquisitionStatus(double time)
@@ -374,7 +376,7 @@ void QxrdAcquisition::haltAcquire()
 
   Acquisition_Abort(m_AcqDesc);
 
-  emit acquireComplete();
+  emit acquireComplete(m_AcquiringDark);
 //
 //  m_Acquiring.unlock();
 }

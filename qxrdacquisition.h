@@ -30,7 +30,8 @@ class QxrdAcquisition : public QObject
   void cancelDark();
 
  signals:
-  void acquireComplete();
+  void acquireStarted(int dark);
+  void acquireComplete(int dark);
   void printMessage(QString msg);
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
   void fileIndexChanged(int index);

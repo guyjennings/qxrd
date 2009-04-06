@@ -61,7 +61,8 @@ signals:
   void printMessage(QString msg);
   void statusMessage(QString msg);
 
-  void acquireComplete();
+  void acquireStarted(int dark);
+  void acquireComplete(int dark);
   void acquiredFrame(QString fileName, int fileIndex, int isum, int nsum, int iframe, int nframe);
   void acquiredImageAvailable();
 
@@ -82,6 +83,7 @@ signals:
 
  private:
   QReadWriteLock         m_Lock;
+  int                    m_Debug;
   QxrdAcquisition       *m_Acquisition;
   QxrdImageQueue         m_FreeImages;
   QxrdImageQueue         m_AcquiredImages;

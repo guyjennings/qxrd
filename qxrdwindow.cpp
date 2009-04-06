@@ -35,19 +35,19 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_Data(new QxrdImageData(2048,2048)),
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
-    m_GainFrame(NULL),
+    m_GainFrame(NULL)/*,
     m_FileBrowserModel(NULL),
-    m_FileBrowserTimer()
+    m_FileBrowserTimer()*/
 {
   setupUi(this);
 
-  m_FileBrowserModel = new QDirModel();
-  m_FileBrowser -> setModel(m_FileBrowserModel);
-  m_FileBrowser -> setRootIndex(m_FileBrowserModel->index(QDir::currentPath()));
+//  m_FileBrowserModel = new QDirModel();
+//  m_FileBrowser -> setModel(m_FileBrowserModel);
+//  m_FileBrowser -> setRootIndex(m_FileBrowserModel->index(QDir::currentPath()));
 
 //  connect(&m_FileBrowserTimer, SIGNAL(timeout()), this, SLOT(refreshFileBrowser()));
 //  m_FileBrowserTimer.start(5000);
-  connect(m_OutputDirectory, SIGNAL(textChanged(QString)), this, SLOT(setFileBrowserDirectory(QString)));
+//  connect(m_OutputDirectory, SIGNAL(textChanged(QString)), this, SLOT(setFileBrowserDirectory(QString)));
 
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
@@ -104,10 +104,12 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()));
   connect(m_ActionIce, SIGNAL(triggered()), m_Plot, SLOT(setIce()));
 
+  connect(m_AcquisitionThread, SIGNAL(acquireStarted(int)),
+          this, SLOT(onAcquireStarted(int)));
   connect(m_AcquisitionThread, SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
-          this, SLOT(acquiredFrame(QString,int,int,int,int,int)));
-  connect(m_AcquisitionThread, SIGNAL(acquireComplete()),
-          this, SLOT(acquireComplete()));
+          this, SLOT(onAcquiredFrame(QString,int,int,int,int,int)));
+  connect(m_AcquisitionThread, SIGNAL(acquireComplete(int)),
+          this, SLOT(onAcquireComplete(int)));
 
   connect(m_AcquisitionThread, SIGNAL(fileIndexChanged(int)), this, SLOT(setFileIndex(int)));
   connect(m_AcquisitionThread, SIGNAL(exposureTimeChanged(double)), this, SLOT(setExposureTime(double)));
@@ -286,6 +288,8 @@ void QxrdWindow::setIntegrationMode(int mode)
 
 void QxrdWindow::setNSummed(int nsummed)
 {
+  printf("QxrdWindow::setNSummed(%d->%d)\n", nSummed(), nsummed);
+
   if (nsummed != nSummed()) {
     m_SummedFrames->setValue(nsummed);
     emit nSummedChanged(nsummed);
@@ -382,7 +386,18 @@ void QxrdWindow::selectOutputDirectory()
   }
 }
 
-void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int nsum, int iframe, int nframe)
+void QxrdWindow::onAcquireStarted(int dark)
+{
+  if (dark) {
+    darkAcquisitionStarted();
+  } else {
+    acquisitionStarted();
+  }
+
+  m_Acquiring = true;
+}
+
+void QxrdWindow::onAcquiredFrame(QString fileName, int fileIndex, int isum, int nsum, int iframe, int nframe)
 {
 //   printf("QxrdWindow::acquiredFrame(\"%s\",%d,%d,%d,%d,%d)\n",
 // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
@@ -393,6 +408,13 @@ void QxrdWindow::acquiredFrame(QString fileName, int fileIndex, int isum, int ns
   //  printf("%d %% progress\n", thisframe*100/totalframes);
 
   m_Progress -> setValue(thisframe*100/totalframes);
+}
+
+void QxrdWindow::onAcquireComplete(int dark)
+{
+  acquisitionFinished();
+
+  m_Acquiring = false;
 }
 
 void QxrdWindow::darkImageAcquired(QxrdImageData *image)
@@ -439,20 +461,6 @@ void QxrdWindow::doCancelDark()
   if (m_AcquiringDark) {
     m_AcquisitionThread -> cancelDark();
   }
-}
-
-void QxrdWindow::acquireComplete()
-{
-  acquisitionFinished();
-
-  m_Acquiring = false;
-}
-
-void QxrdWindow::acquireDarkComplete()
-{
-  acquisitionFinished();
-
-  m_AcquiringDark = false;
 }
 
 void QxrdWindow::readSettings()
@@ -931,17 +939,17 @@ void QxrdWindow::setMaintainAspectRatio(int prsrv)
   m_MaintainAspectRatio -> setChecked(prsrv);
 }
 
-void QxrdWindow::setFileBrowserDirectory(QString dir)
-{
-  m_FileBrowser -> setRootIndex(m_FileBrowserModel->index(dir));
-}
-
-void QxrdWindow::refreshFileBrowser()
-{
-//   printf("Refresh file browser\n");
-
-  m_FileBrowserModel -> refresh();
-}
+//void QxrdWindow::setFileBrowserDirectory(QString dir)
+//{
+//  m_FileBrowser -> setRootIndex(m_FileBrowserModel->index(dir));
+//}
+//
+//void QxrdWindow::refreshFileBrowser()
+//{
+////   printf("Refresh file browser\n");
+//
+//  m_FileBrowserModel -> refresh();
+//}
 
 void QxrdWindow::onProcessedImageAvailable()
 {
