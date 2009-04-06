@@ -102,7 +102,7 @@
         </size>
        </property>
        <property name="currentIndex" >
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page" >
         <property name="geometry" >
@@ -582,7 +582,7 @@
           <x>0</x>
           <y>0</y>
           <width>251</width>
-          <height>644</height>
+          <height>342</height>
          </rect>
         </property>
         <attribute name="label" >
@@ -754,8 +754,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>659</height>
+          <width>123</width>
+          <height>220</height>
          </rect>
         </property>
         <attribute name="label" >
