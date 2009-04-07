@@ -49,6 +49,12 @@ HEADERS += \
 	qxrdmaskcolormap.h \
 	qxrdwindow.h \
         qxrddataprocessor.h \
+	qxrdcenterfinder.h \
+	qxrdcenterfinderplot.h \
+	qxrdcenterfinderdialog.h \
+	qxrdintegrator.h \
+	qxrdintegratorplot.h \
+	qxrdintegratordialog.h \
 	qxrdimageplot.h \
         qxrdplotzoomer.h \
         qxrdplottracker.h \
@@ -80,6 +86,12 @@ SOURCES += \
 	qxrdmaskcolormap.cpp \
 	qxrdwindow.cpp \
         qxrddataprocessor.cpp \
+	qxrdcenterfinder.cpp \
+	qxrdcenterfinderplot.cpp \
+	qxrdcenterfinderdialog.cpp \
+	qxrdintegrator.cpp \
+	qxrdintegratorplot.cpp \
+	qxrdintegratordialog.cpp \
 	qxrdimageplot.cpp \
         qxrdplotzoomer.cpp \
         qxrdplottracker.cpp \
@@ -91,7 +103,9 @@ SOURCES += \
 
 
 FORMS = \
-	qxrdwindow.ui
+	qxrdwindow.ui \
+	qxrdcenterfinderdialog.ui \
+	qxrdintegratordialog.ui
 
 unix{
   HEADERS += xisl_dummy.h

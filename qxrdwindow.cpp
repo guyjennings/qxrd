@@ -5,6 +5,10 @@
 #include "qxrdimageplot.h"
 #include "qxrdimagedata.h"
 #include "qxrddataprocessor.h"
+#include "qxrdcenterfinderdialog.h"
+#include "qxrdcenterfinder.h"
+#include "qxrdintegratordialog.h"
+#include "qxrdintegrator.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -29,6 +33,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_Application(app),
     m_AcquisitionThread(acq),
     m_DataProcessor(new QxrdDataProcessor(this, acq, this)),
+    m_CenterFinderDialog(NULL),
+    m_CenterFinder(NULL),
+    m_IntegratorDialog(NULL),
+    m_Integrator(NULL),
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
@@ -40,6 +48,31 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_FileBrowserTimer()*/
 {
   setupUi(this);
+
+  m_CenterFinderDialog = new QxrdCenterFinderDialog();
+
+  QLayout *l = m_CenteringPage -> layout();
+
+  if (l) {
+    l -> addWidget(m_CenterFinderDialog);
+    l -> addItem(new QSpacerItem(20, 372, QSizePolicy::Minimum, QSizePolicy::Expanding));
+  }
+
+  m_CenterFinder = new QxrdCenterFinder(m_Plot, m_CenterFinderPlot, m_CenterFinderDialog, this);
+
+  m_IntegratorDialog = new QxrdIntegratorDialog();
+
+  QLayout *ll = m_IntegratorPage -> layout();
+
+  if (ll) {
+    ll -> addWidget(m_IntegratorDialog);
+    ll -> addItem(new QSpacerItem(20, 372, QSizePolicy::Minimum, QSizePolicy::Expanding));
+  }
+
+  m_Integrator = new QxrdIntegrator(this);
+
+  connect(m_ControlToolBox, SIGNAL(currentChanged(int)), this, SLOT(onToolBoxPageChanged(int)));
+  connect(m_XRDTabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabWidgetPageChanged(int)));
 
 //  m_FileBrowserModel = new QDirModel();
 //  m_FileBrowser -> setModel(m_FileBrowserModel);
@@ -1000,9 +1033,11 @@ void QxrdWindow::doClearMaskRange()
   double max = m_MaskMaximum -> value();
 
   if (m_Data) {
-    printf ("clearMaskRange(%g,%g)\n", min, max);
+//    printf ("clearMaskRange(%g,%g)\n", min, max);
 
     m_Data -> clearMaskRange(min, max);
+
+    newData(m_Data);
   }
 }
 
@@ -1012,9 +1047,21 @@ void QxrdWindow::doSetMaskRange()
   double max = m_MaskMaximum -> value();
 
   if (m_Data) {
-    printf ("setMaskRange(%g,%g)\n", min, max);
+//    printf ("setMaskRange(%g,%g)\n", min, max);
 
     m_Data -> setMaskRange(min, max);
+
+    newData(m_Data);
   }
+}
+
+void QxrdWindow::onToolBoxPageChanged(int page)
+{
+  printf("QxrdWindow::onToolBoxPageChanged(%d)\n", page);
+}
+
+void QxrdWindow::onTabWidgetPageChanged(int page)
+{
+  printf("QxrdWindow::onTabWidgetPageChanged(%d)\n", page);
 }
 

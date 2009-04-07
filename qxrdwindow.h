@@ -13,6 +13,10 @@ class QCloseEvent;
 class QxrdImageData;
 //class QDirModel;
 class QxrdDataProcessor;
+class QxrdCenterFinder;
+class QxrdCenterFinderDialog;
+class QxrdIntegrator;
+class QxrdIntegratorDialog;
 
 #include "qxrdimagequeue.h"
 
@@ -109,6 +113,9 @@ public slots:
   void doClearMaskRange();
   void doSetMaskRange();
 
+  void onToolBoxPageChanged(int);
+  void onTabWidgetPageChanged(int);
+
 signals:
   void exposureTimeChanged(double t);
   void integrationModeChanged(int mode);
@@ -156,6 +163,10 @@ private:
   QxrdApplication        *m_Application;
   QxrdAcquisitionThread  *m_AcquisitionThread;
   QxrdDataProcessor      *m_DataProcessor;
+  QxrdCenterFinderDialog *m_CenterFinderDialog;
+  QxrdCenterFinder       *m_CenterFinder;
+  QxrdIntegratorDialog   *m_IntegratorDialog;
+  QxrdIntegrator         *m_Integrator;
   QVector<double>         m_Exposures;
   QProgressBar           *m_Progress;
   QLabel                 *m_StatusMsg;

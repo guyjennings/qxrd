@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>QxrdWindow</class>
- <widget class="QMainWindow" name="QxrdWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="QxrdWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,44 +10,44 @@
     <height>843</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>QXRD Readout Software</string>
   </property>
-  <widget class="QWidget" name="centralwidget" >
-   <layout class="QVBoxLayout" name="verticalLayout_6" >
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_6">
     <item>
-     <widget class="QSplitter" name="splitter_2" >
-      <property name="orientation" >
+     <widget class="QSplitter" name="splitter_2">
+      <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTabWidget" name="m_XRDTabWidget" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+      <widget class="QTabWidget" name="m_XRDTabWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>3</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="currentIndex" >
+       <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="tab" >
-        <attribute name="title" >
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
          <string>Image</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout_4" >
-         <item row="0" column="0" >
-          <widget class="QSplitter" name="splitter" >
-           <property name="orientation" >
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="0">
+          <widget class="QSplitter" name="splitter">
+           <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <widget class="QxrdImagePlot" name="m_Plot" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+           <widget class="QxrdImagePlot" name="m_Plot">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>2</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="minimumSize" >
+            <property name="minimumSize">
              <size>
               <width>500</width>
               <height>500</height>
@@ -57,83 +58,83 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_4" >
-        <attribute name="title" >
+       <widget class="QWidget" name="tab_4">
+        <attribute name="title">
          <string>Centering</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout_7" >
-         <item row="0" column="0" >
-          <widget class="QwtPlot" name="m_CenteringPlot" />
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0">
+          <widget class="QxrdCenterFinderPlot" name="m_CenterFinderPlot" native="true"/>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_5" >
-        <attribute name="title" >
+       <widget class="QWidget" name="tab_5">
+        <attribute name="title">
          <string>Az Avg</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout_9" >
-         <item row="0" column="0" >
-          <widget class="QwtPlot" name="m_AzAveragePlot_2" />
+        <layout class="QGridLayout" name="gridLayout_9">
+         <item row="0" column="0">
+          <widget class="QxrdIntegratorPlot" name="m_IntegratorPlot"/>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_2" >
-        <attribute name="title" >
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
          <string>Messages</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout" >
-         <item row="0" column="0" >
-          <widget class="QTextEdit" name="m_Messages" />
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QTextEdit" name="m_Messages"/>
          </item>
         </layout>
        </widget>
       </widget>
-      <widget class="QToolBox" name="toolBox" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
+      <widget class="QToolBox" name="m_ControlToolBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
          <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>240</width>
          <height>300</height>
         </size>
        </property>
-       <property name="currentIndex" >
+       <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="page" >
-        <property name="geometry" >
+       <widget class="QWidget" name="page">
+        <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>250</width>
-          <height>644</height>
+          <width>240</width>
+          <height>645</height>
          </rect>
         </property>
-        <attribute name="label" >
+        <attribute name="label">
          <string>Acquire</string>
         </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_7" >
+        <layout class="QVBoxLayout" name="verticalLayout_7">
          <item>
-          <widget class="QGroupBox" name="groupBox_4" >
-           <property name="title" >
+          <widget class="QGroupBox" name="groupBox_4">
+           <property name="title">
             <string>Exposure</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout" >
+           <layout class="QVBoxLayout" name="verticalLayout">
             <item>
-             <widget class="QLabel" name="label" >
-              <property name="text" >
+             <widget class="QLabel" name="label">
+              <property name="text">
                <string>Exposure Time:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="m_ExposureTime" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+             <widget class="QComboBox" name="m_ExposureTime">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -141,41 +142,41 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_2" >
-              <property name="text" >
+             <widget class="QLabel" name="label_2">
+              <property name="text">
                <string>Summed Frames:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="m_SummedFrames" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+             <widget class="QSpinBox" name="m_SummedFrames">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <number>99999</number>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_3" >
-              <property name="text" >
+             <widget class="QLabel" name="label_3">
+              <property name="text">
                <string>Frames in sequence:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="m_SequenceFrames" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+             <widget class="QSpinBox" name="m_SequenceFrames">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <number>99999</number>
               </property>
              </widget>
@@ -184,97 +185,97 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_5" >
-           <property name="title" >
+          <widget class="QGroupBox" name="groupBox_5">
+           <property name="title">
             <string>Output</string>
            </property>
-           <layout class="QGridLayout" name="gridLayout_3" >
-            <item row="0" column="0" colspan="2" >
-             <widget class="QLabel" name="label_6" >
-              <property name="text" >
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0" colspan="2">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
                <string>Output Directory:</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0" colspan="2" >
-             <widget class="QLineEdit" name="m_OutputDirectory" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+            <item row="1" column="0" colspan="2">
+             <widget class="QLineEdit" name="m_OutputDirectory">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="readOnly" >
+              <property name="readOnly">
                <bool>true</bool>
               </property>
              </widget>
             </item>
-            <item row="2" column="0" colspan="2" >
-             <widget class="QPushButton" name="m_SelectDirectoryButton" >
-              <property name="text" >
+            <item row="2" column="0" colspan="2">
+             <widget class="QPushButton" name="m_SelectDirectoryButton">
+              <property name="text">
                <string>Select Output Directory...</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="0" colspan="2" >
-             <widget class="QLabel" name="label_4" >
-              <property name="text" >
+            <item row="3" column="0" colspan="2">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
                <string>Save File Pattern:</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="0" colspan="2" >
-             <widget class="QLineEdit" name="m_SaveFilePattern" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+            <item row="4" column="0" colspan="2">
+             <widget class="QLineEdit" name="m_SaveFilePattern">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
              </widget>
             </item>
-            <item row="5" column="0" colspan="2" >
-             <widget class="QLabel" name="label_5" >
-              <property name="text" >
+            <item row="5" column="0" colspan="2">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
                <string>File Index Number:</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="0" colspan="2" >
-             <widget class="QSpinBox" name="m_FileIndexNumber" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+            <item row="6" column="0" colspan="2">
+             <widget class="QSpinBox" name="m_FileIndexNumber">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <number>99999</number>
               </property>
              </widget>
             </item>
-            <item row="7" column="0" >
-             <widget class="QPushButton" name="m_CancelButton" >
-              <property name="enabled" >
+            <item row="7" column="0">
+             <widget class="QPushButton" name="m_CancelButton">
+              <property name="enabled">
                <bool>false</bool>
               </property>
-              <property name="text" >
+              <property name="text">
                <string>Cancel</string>
               </property>
              </widget>
             </item>
-            <item row="7" column="1" >
-             <widget class="QPushButton" name="m_AcquireButton" >
-              <property name="enabled" >
+            <item row="7" column="1">
+             <widget class="QPushButton" name="m_AcquireButton">
+              <property name="enabled">
                <bool>false</bool>
               </property>
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="text" >
+              <property name="text">
                <string>Acquire</string>
               </property>
              </widget>
@@ -283,53 +284,53 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_6" >
-           <property name="title" >
+          <widget class="QGroupBox" name="groupBox_6">
+           <property name="title">
             <string>Dark Measurement</string>
            </property>
-           <layout class="QGridLayout" name="gridLayout_2" >
-            <item row="0" column="0" colspan="2" >
-             <widget class="QLabel" name="label_7" >
-              <property name="text" >
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0" colspan="2">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
                <string>Summed Frames for Dark Measurement:</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0" colspan="2" >
-             <widget class="QSpinBox" name="m_DarkSummedFrames" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+            <item row="1" column="0" colspan="2">
+             <widget class="QSpinBox" name="m_DarkSummedFrames">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <number>99999</number>
               </property>
              </widget>
             </item>
-            <item row="2" column="0" >
-             <widget class="QPushButton" name="m_DarkCancelButton" >
-              <property name="enabled" >
+            <item row="2" column="0">
+             <widget class="QPushButton" name="m_DarkCancelButton">
+              <property name="enabled">
                <bool>false</bool>
               </property>
-              <property name="text" >
+              <property name="text">
                <string>Cancel</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1" >
-             <widget class="QPushButton" name="m_DarkAcquireButton" >
-              <property name="enabled" >
+            <item row="2" column="1">
+             <widget class="QPushButton" name="m_DarkAcquireButton">
+              <property name="enabled">
                <bool>false</bool>
               </property>
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="text" >
+              <property name="text">
                <string>Dark</string>
               </property>
              </widget>
@@ -338,11 +339,11 @@
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer" >
-           <property name="orientation" >
+          <spacer name="verticalSpacer">
+           <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
              <height>237</height>
@@ -352,62 +353,62 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="page_3" >
-        <property name="geometry" >
+       <widget class="QWidget" name="page_3">
+        <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>659</height>
+          <width>220</width>
+          <height>556</height>
          </rect>
         </property>
-        <attribute name="label" >
+        <attribute name="label">
          <string>Correction</string>
         </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_5" >
+        <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
-          <widget class="QGroupBox" name="groupBox" >
-           <property name="title" >
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
             <string>Dark Subtraction</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_3" >
+           <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <widget class="QCheckBox" name="m_PerformDark" >
-              <property name="text" >
+             <widget class="QCheckBox" name="m_PerformDark">
+              <property name="text">
                <string>Perform Dark Subtraction </string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="m_SaveRaw" >
-              <property name="text" >
+             <widget class="QCheckBox" name="m_SaveRaw">
+              <property name="text">
                <string>Save 'raw' images</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_8" >
-              <property name="text" >
+             <widget class="QLabel" name="label_8">
+              <property name="text">
                <string>Dark Image file name:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="m_DarkImageName" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+             <widget class="QLineEdit" name="m_DarkImageName">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="readOnly" >
+              <property name="readOnly">
                <bool>true</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="m_LoadDarkButton" >
-              <property name="text" >
+             <widget class="QPushButton" name="m_LoadDarkButton">
+              <property name="text">
                <string>Load Dark</string>
               </property>
              </widget>
@@ -416,55 +417,55 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_9" >
-           <property name="title" >
+          <widget class="QGroupBox" name="groupBox_9">
+           <property name="title">
             <string>Masking</string>
            </property>
-           <layout class="QFormLayout" name="formLayout_2" >
-            <item row="0" column="0" >
-             <widget class="QLabel" name="label_17" >
-              <property name="text" >
+           <layout class="QFormLayout" name="formLayout_2">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_17">
+              <property name="text">
                <string>Min</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1" >
-             <widget class="QDoubleSpinBox" name="m_MaskMinimum" >
-              <property name="minimum" >
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="m_MaskMinimum">
+              <property name="minimum">
                <double>-1000000000.000000000000000</double>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <double>1000000000.000000000000000</double>
               </property>
              </widget>
             </item>
-            <item row="1" column="0" >
-             <widget class="QLabel" name="label_18" >
-              <property name="text" >
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_18">
+              <property name="text">
                <string>Max</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1" >
-             <widget class="QDoubleSpinBox" name="m_MaskMaximum" >
-              <property name="minimum" >
+            <item row="1" column="1">
+             <widget class="QDoubleSpinBox" name="m_MaskMaximum">
+              <property name="minimum">
                <double>-1000000000.000000000000000</double>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <double>1000000000.000000000000000</double>
               </property>
              </widget>
             </item>
-            <item row="2" column="0" >
-             <widget class="QPushButton" name="m_SetMaskRange" >
-              <property name="text" >
+            <item row="2" column="0">
+             <widget class="QPushButton" name="m_SetMaskRange">
+              <property name="text">
                <string>Set Range</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1" >
-             <widget class="QPushButton" name="m_ClearMaskRange" >
-              <property name="text" >
+            <item row="2" column="1">
+             <widget class="QPushButton" name="m_ClearMaskRange">
+              <property name="text">
                <string>Clear Range</string>
               </property>
              </widget>
@@ -473,41 +474,41 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_2" >
-           <property name="title" >
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="title">
             <string>Bad Pixel Correction</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_2" >
+           <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
-             <widget class="QCheckBox" name="m_PerformBadPixels" >
-              <property name="text" >
+             <widget class="QCheckBox" name="m_PerformBadPixels">
+              <property name="text">
                <string>Perform Bad Pixel Correction</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_9" >
-              <property name="text" >
+             <widget class="QLabel" name="label_9">
+              <property name="text">
                <string>Bad Pixel file name:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="m_BadPixelsFileName" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+             <widget class="QLineEdit" name="m_BadPixelsFileName">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="readOnly" >
+              <property name="readOnly">
                <bool>true</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="m_LoadBadPixelsButton" >
-              <property name="text" >
+             <widget class="QPushButton" name="m_LoadBadPixelsButton">
+              <property name="text">
                <string>Load Bad Pixels</string>
               </property>
              </widget>
@@ -516,44 +517,44 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_3" >
-           <property name="title" >
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="title">
             <string>Gain Correction</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_4" >
+           <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
-             <widget class="QCheckBox" name="m_PerformGainCorrection" >
-              <property name="text" >
+             <widget class="QCheckBox" name="m_PerformGainCorrection">
+              <property name="text">
                <string>Perform Gain Correction</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_10" >
-              <property name="text" >
+             <widget class="QLabel" name="label_10">
+              <property name="text">
                <string>Gain correction file name:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="m_GainCorrectionFileName" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+             <widget class="QLineEdit" name="m_GainCorrectionFileName">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="frame" >
+              <property name="frame">
                <bool>true</bool>
               </property>
-              <property name="readOnly" >
+              <property name="readOnly">
                <bool>true</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="m_LoadGainCorrection" >
-              <property name="text" >
+             <widget class="QPushButton" name="m_LoadGainCorrection">
+              <property name="text">
                <string>Load Gain Map</string>
               </property>
              </widget>
@@ -562,11 +563,11 @@
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer_2" >
-           <property name="orientation" >
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
              <height>212</height>
@@ -576,92 +577,92 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="page_2" >
-        <property name="geometry" >
+       <widget class="QWidget" name="page_2">
+        <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>251</width>
-          <height>342</height>
+          <width>242</width>
+          <height>308</height>
          </rect>
         </property>
-        <attribute name="label" >
+        <attribute name="label">
          <string>Display</string>
         </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_8" >
+        <layout class="QVBoxLayout" name="verticalLayout_8">
          <item>
-          <widget class="QGroupBox" name="groupBox_7" >
-           <property name="title" >
+          <widget class="QGroupBox" name="groupBox_7">
+           <property name="title">
             <string>Displayed Intensity Range</string>
            </property>
-           <layout class="QGridLayout" name="gridLayout_5" >
-            <item row="0" column="0" >
-             <widget class="QLabel" name="label_11" >
-              <property name="text" >
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_11">
+              <property name="text">
                <string>Minimum:</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1" >
-             <widget class="QDoubleSpinBox" name="m_DisplayMinimum" >
-              <property name="suffix" >
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="m_DisplayMinimum">
+              <property name="suffix">
                <string> %</string>
               </property>
-              <property name="minimum" >
+              <property name="minimum">
                <double>-20.000000000000000</double>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <double>120.000000000000000</double>
               </property>
              </widget>
             </item>
-            <item row="0" column="2" >
-             <widget class="QPushButton" name="m_Display_5pct" >
-              <property name="text" >
+            <item row="0" column="2">
+             <widget class="QPushButton" name="m_Display_5pct">
+              <property name="text">
                <string>5% Range</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0" >
-             <widget class="QLabel" name="label_12" >
-              <property name="text" >
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
                <string>Maximum:</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1" >
-             <widget class="QDoubleSpinBox" name="m_DisplayMaximum" >
-              <property name="suffix" >
+            <item row="1" column="1">
+             <widget class="QDoubleSpinBox" name="m_DisplayMaximum">
+              <property name="suffix">
                <string> %</string>
               </property>
-              <property name="minimum" >
+              <property name="minimum">
                <double>-20.000000000000000</double>
               </property>
-              <property name="maximum" >
+              <property name="maximum">
                <double>120.000000000000000</double>
               </property>
              </widget>
             </item>
-            <item row="1" column="2" >
-             <widget class="QPushButton" name="m_Display_10pct" >
-              <property name="text" >
+            <item row="1" column="2">
+             <widget class="QPushButton" name="m_Display_10pct">
+              <property name="text">
                <string>10% Range</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="0" colspan="2" >
-             <widget class="QPushButton" name="m_AutoRange" >
-              <property name="enabled" >
+            <item row="2" column="0" colspan="2">
+             <widget class="QPushButton" name="m_AutoRange">
+              <property name="enabled">
                <bool>false</bool>
               </property>
-              <property name="text" >
+              <property name="text">
                <string>Auto Range</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="2" >
-             <widget class="QPushButton" name="m_Display_100pct" >
-              <property name="text" >
+            <item row="2" column="2">
+             <widget class="QPushButton" name="m_Display_100pct">
+              <property name="text">
                <string>100% Range</string>
               </property>
              </widget>
@@ -670,63 +671,63 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_8" >
-           <property name="title" >
+          <widget class="QGroupBox" name="groupBox_8">
+           <property name="title">
             <string>Image Display</string>
            </property>
-           <layout class="QGridLayout" name="gridLayout_6" >
-            <item row="0" column="0" colspan="2" >
-             <widget class="QCheckBox" name="m_InterpolatePixels" >
-              <property name="text" >
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0" colspan="2">
+             <widget class="QCheckBox" name="m_InterpolatePixels">
+              <property name="text">
                <string>Interpolate Pixel Values</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0" colspan="2" >
-             <widget class="QCheckBox" name="m_MaintainAspectRatio" >
-              <property name="text" >
+            <item row="1" column="0" colspan="2">
+             <widget class="QCheckBox" name="m_MaintainAspectRatio">
+              <property name="text">
                <string>Maintain Aspect Ratio</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="0" >
-             <widget class="QPushButton" name="m_GrayscaleButton" >
-              <property name="text" >
+            <item row="2" column="0">
+             <widget class="QPushButton" name="m_GrayscaleButton">
+              <property name="text">
                <string>Grayscale</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1" >
-             <widget class="QPushButton" name="m_InvGrayscaleButton" >
-              <property name="text" >
+            <item row="2" column="1">
+             <widget class="QPushButton" name="m_InvGrayscaleButton">
+              <property name="text">
                <string>Inv Gray</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="0" >
-             <widget class="QPushButton" name="m_EarthTonesButton" >
-              <property name="text" >
+            <item row="3" column="0">
+             <widget class="QPushButton" name="m_EarthTonesButton">
+              <property name="text">
                <string>Earth</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1" >
-             <widget class="QPushButton" name="m_SpectrumButton" >
-              <property name="text" >
+            <item row="3" column="1">
+             <widget class="QPushButton" name="m_SpectrumButton">
+              <property name="text">
                <string>Spectrum</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="0" >
-             <widget class="QPushButton" name="m_FireButton" >
-              <property name="text" >
+            <item row="4" column="0">
+             <widget class="QPushButton" name="m_FireButton">
+              <property name="text">
                <string>Fire</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1" >
-             <widget class="QPushButton" name="m_IceButton" >
-              <property name="text" >
+            <item row="4" column="1">
+             <widget class="QPushButton" name="m_IceButton">
+              <property name="text">
                <string>Ice</string>
               </property>
              </widget>
@@ -735,11 +736,11 @@
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer_3" >
-           <property name="orientation" >
+          <spacer name="verticalSpacer_3">
+           <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
-           <property name="sizeHint" stdset="0" >
+           <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
              <height>373</height>
@@ -749,518 +750,298 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="page_4" >
-        <property name="geometry" >
+       <widget class="QWidget" name="m_CenteringPage">
+        <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>123</width>
-          <height>220</height>
+          <width>240</width>
+          <height>645</height>
          </rect>
         </property>
-        <attribute name="label" >
+        <attribute name="label">
          <string>Centering</string>
         </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_9" >
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout" >
-           <item>
-            <spacer name="horizontalSpacer" >
-             <property name="orientation" >
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0" >
-              <size>
-               <width>13</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QWidget" native="1" name="widget" >
-             <property name="sizePolicy" >
-              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_8" >
-              <item row="0" column="0" >
-               <widget class="QToolButton" name="m_CenterMoveUpLeft" >
-                <property name="text" >
-                 <string>...</string>
-                </property>
-                <property name="icon" >
-                 <iconset resource="qxrdresources.qrc" >
-                  <normaloff>:/images/images/go-up-left.png</normaloff>:/images/images/go-up-left.png</iconset>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1" >
-               <widget class="QToolButton" name="m_CenterMoveUp" >
-                <property name="text" >
-                 <string>...</string>
-                </property>
-                <property name="icon" >
-                 <iconset resource="qxrdresources.qrc" >
-                  <normaloff>:/images/images/go-up.png</normaloff>:/images/images/go-up.png</iconset>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2" >
-               <widget class="QToolButton" name="m_CenterMoveUpRight" >
-                <property name="text" >
-                 <string>...</string>
-                </property>
-                <property name="icon" >
-                 <iconset resource="qxrdresources.qrc" >
-                  <normaloff>:/images/images/go-up-right.png</normaloff>:/images/images/go-up-right.png</iconset>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0" >
-               <widget class="QToolButton" name="m_CenterMoveLeft" >
-                <property name="text" >
-                 <string>...</string>
-                </property>
-                <property name="icon" >
-                 <iconset resource="qxrdresources.qrc" >
-                  <normaloff>:/images/images/go-left.png</normaloff>:/images/images/go-left.png</iconset>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1" >
-               <widget class="QLabel" name="label_13" >
-                <property name="text" >
-                 <string/>
-                </property>
-                <property name="pixmap" >
-                 <pixmap resource="qxrdresources.qrc" >:/images/images/color-wheel.png</pixmap>
-                </property>
-                <property name="alignment" >
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2" >
-               <widget class="QToolButton" name="m_CenterMoveRight" >
-                <property name="text" >
-                 <string>...</string>
-                </property>
-                <property name="icon" >
-                 <iconset resource="qxrdresources.qrc" >
-                  <normaloff>:/images/images/go-right.png</normaloff>:/images/images/go-right.png</iconset>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0" >
-               <widget class="QToolButton" name="m_CenterMoveDownLeft" >
-                <property name="text" >
-                 <string>...</string>
-                </property>
-                <property name="icon" >
-                 <iconset resource="qxrdresources.qrc" >
-                  <normaloff>:/images/images/go-down-left.png</normaloff>:/images/images/go-down-left.png</iconset>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1" >
-               <widget class="QToolButton" name="m_CenterMoveDown" >
-                <property name="text" >
-                 <string>...</string>
-                </property>
-                <property name="icon" >
-                 <iconset resource="qxrdresources.qrc" >
-                  <normaloff>:/images/images/go-down.png</normaloff>:/images/images/go-down.png</iconset>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="2" >
-               <widget class="QToolButton" name="m_CenterMoveDownRight" >
-                <property name="text" >
-                 <string>...</string>
-                </property>
-                <property name="icon" >
-                 <iconset resource="qxrdresources.qrc" >
-                  <normaloff>:/images/images/go-down-right.png</normaloff>:/images/images/go-down-right.png</iconset>
-                </property>
-                <property name="iconSize" >
-                 <size>
-                  <width>48</width>
-                  <height>48</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_2" >
-             <property name="orientation" >
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0" >
-              <size>
-               <width>13</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QFormLayout" name="formLayout" >
-           <item row="0" column="0" >
-            <widget class="QLabel" name="label_14" >
-             <property name="text" >
-              <string>X Center:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1" >
-            <widget class="QDoubleSpinBox" name="m_CenterX" />
-           </item>
-           <item row="1" column="0" >
-            <widget class="QLabel" name="label_15" >
-             <property name="text" >
-              <string>Y Center:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1" >
-            <widget class="QDoubleSpinBox" name="m_CenterY" />
-           </item>
-           <item row="2" column="0" >
-            <widget class="QLabel" name="label_16" >
-             <property name="text" >
-              <string>Step Size:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1" >
-            <widget class="QDoubleSpinBox" name="m_CenterStep" />
-           </item>
-          </layout>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_4" >
-           <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0" >
-            <size>
-             <width>20</width>
-             <height>372</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+        <layout class="QVBoxLayout" name="verticalLayout_9"/>
+       </widget>
+       <widget class="QWidget" name="m_IntegratorPage">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>240</width>
+          <height>645</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Integration</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_8"/>
        </widget>
       </widget>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar" >
-   <property name="geometry" >
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>1029</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
      <string>File</string>
     </property>
-    <addaction name="m_ActionLoadData" />
-    <addaction name="m_ActionImportData" />
-    <addaction name="m_ActionSaveData" />
-    <addaction name="m_ActionEvaluateScript" />
-    <addaction name="m_ActionPreferences" />
-    <addaction name="m_ActionQuit" />
+    <addaction name="m_ActionLoadData"/>
+    <addaction name="m_ActionImportData"/>
+    <addaction name="m_ActionSaveData"/>
+    <addaction name="m_ActionEvaluateScript"/>
+    <addaction name="m_ActionPreferences"/>
+    <addaction name="m_ActionQuit"/>
    </widget>
-   <widget class="QMenu" name="menuEdit" >
-    <property name="title" >
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
      <string>Edit</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuAcquire" >
-    <property name="title" >
+   <widget class="QMenu" name="menuAcquire">
+    <property name="title">
      <string>Acquire</string>
     </property>
-    <addaction name="m_ActionAcquire" />
-    <addaction name="m_ActionAcquireDark" />
+    <addaction name="m_ActionAcquire"/>
+    <addaction name="m_ActionAcquireDark"/>
    </widget>
-   <widget class="QMenu" name="menuDisplay" >
-    <property name="title" >
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
      <string>Display</string>
     </property>
-    <addaction name="m_ActionAutoScale" />
-    <addaction name="separator" />
-    <addaction name="m_Action005Range" />
-    <addaction name="m_Action010Range" />
-    <addaction name="m_Action100Range" />
-    <addaction name="separator" />
-    <addaction name="m_ActionGrayscale" />
-    <addaction name="m_ActionInverseGrayscale" />
-    <addaction name="m_ActionEarthTones" />
-    <addaction name="m_ActionSpectrum" />
-    <addaction name="m_ActionFire" />
-    <addaction name="separator" />
-    <addaction name="m_ActionShowImage" />
-    <addaction name="m_ActionShowMask" />
+    <addaction name="m_ActionAutoScale"/>
+    <addaction name="separator"/>
+    <addaction name="m_Action005Range"/>
+    <addaction name="m_Action010Range"/>
+    <addaction name="m_Action100Range"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionGrayscale"/>
+    <addaction name="m_ActionInverseGrayscale"/>
+    <addaction name="m_ActionEarthTones"/>
+    <addaction name="m_ActionSpectrum"/>
+    <addaction name="m_ActionFire"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionShowImage"/>
+    <addaction name="m_ActionShowMask"/>
    </widget>
-   <addaction name="menuFile" />
-   <addaction name="menuEdit" />
-   <addaction name="menuAcquire" />
-   <addaction name="menuDisplay" />
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuAcquire"/>
+   <addaction name="menuDisplay"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar" />
-  <widget class="QToolBar" name="toolBar" >
-   <property name="windowTitle" >
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
     <string>toolBar</string>
    </property>
-   <property name="toolButtonStyle" >
+   <property name="toolButtonStyle">
     <enum>Qt::ToolButtonTextBesideIcon</enum>
    </property>
-   <attribute name="toolBarArea" >
+   <attribute name="toolBarArea">
     <enum>LeftToolBarArea</enum>
    </attribute>
-   <attribute name="toolBarBreak" >
+   <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="m_ActionAcquire" />
-   <addaction name="m_ActionCancel" />
-   <addaction name="m_ActionAcquireDark" />
-   <addaction name="m_ActionCancelDark" />
-   <addaction name="m_ActionEvaluateScript" />
-   <addaction name="separator" />
-   <addaction name="m_ActionLoadData" />
-   <addaction name="m_ActionImportData" />
-   <addaction name="m_ActionSaveData" />
-   <addaction name="separator" />
-   <addaction name="m_ActionAutoScale" />
-   <addaction name="m_Action005Range" />
-   <addaction name="m_Action010Range" />
-   <addaction name="m_Action100Range" />
-   <addaction name="m_ActionAutoRange" />
-   <addaction name="separator" />
-   <addaction name="m_ActionGrayscale" />
-   <addaction name="m_ActionInverseGrayscale" />
-   <addaction name="m_ActionEarthTones" />
-   <addaction name="m_ActionSpectrum" />
-   <addaction name="m_ActionFire" />
-   <addaction name="m_ActionIce" />
-   <addaction name="separator" />
-   <addaction name="m_ActionShowImage" />
-   <addaction name="m_ActionShowMask" />
-   <addaction name="separator" />
-   <addaction name="m_ActionTest" />
-   <addaction name="m_ActionQuit" />
+   <addaction name="m_ActionAcquire"/>
+   <addaction name="m_ActionCancel"/>
+   <addaction name="m_ActionAcquireDark"/>
+   <addaction name="m_ActionCancelDark"/>
+   <addaction name="m_ActionEvaluateScript"/>
+   <addaction name="separator"/>
+   <addaction name="m_ActionLoadData"/>
+   <addaction name="m_ActionImportData"/>
+   <addaction name="m_ActionSaveData"/>
+   <addaction name="separator"/>
+   <addaction name="m_ActionAutoScale"/>
+   <addaction name="m_Action005Range"/>
+   <addaction name="m_Action010Range"/>
+   <addaction name="m_Action100Range"/>
+   <addaction name="m_ActionAutoRange"/>
+   <addaction name="separator"/>
+   <addaction name="m_ActionGrayscale"/>
+   <addaction name="m_ActionInverseGrayscale"/>
+   <addaction name="m_ActionEarthTones"/>
+   <addaction name="m_ActionSpectrum"/>
+   <addaction name="m_ActionFire"/>
+   <addaction name="m_ActionIce"/>
+   <addaction name="separator"/>
+   <addaction name="m_ActionShowImage"/>
+   <addaction name="m_ActionShowMask"/>
+   <addaction name="separator"/>
+   <addaction name="m_ActionTest"/>
+   <addaction name="m_ActionQuit"/>
   </widget>
-  <action name="m_ActionQuit" >
-   <property name="text" >
+  <action name="m_ActionQuit">
+   <property name="text">
     <string>Quit</string>
    </property>
   </action>
-  <action name="m_ActionPreferences" >
-   <property name="text" >
+  <action name="m_ActionPreferences">
+   <property name="text">
     <string>Preferences...</string>
    </property>
   </action>
-  <action name="m_ActionAcquire" >
-   <property name="text" >
+  <action name="m_ActionAcquire">
+   <property name="text">
     <string>Acquire</string>
    </property>
   </action>
-  <action name="m_ActionAutoScale" >
-   <property name="text" >
+  <action name="m_ActionAutoScale">
+   <property name="text">
     <string>AutoScale</string>
    </property>
   </action>
-  <action name="m_ActionLoadData" >
-   <property name="text" >
+  <action name="m_ActionLoadData">
+   <property name="text">
     <string>Load Data</string>
    </property>
   </action>
-  <action name="m_ActionSaveData" >
-   <property name="text" >
+  <action name="m_ActionSaveData">
+   <property name="text">
     <string>Save Data</string>
    </property>
   </action>
-  <action name="m_ActionEvaluateScript" >
-   <property name="text" >
+  <action name="m_ActionEvaluateScript">
+   <property name="text">
     <string>Evaluate Script</string>
    </property>
   </action>
-  <action name="m_ActionCancel" >
-   <property name="text" >
+  <action name="m_ActionCancel">
+   <property name="text">
     <string>Cancel</string>
    </property>
   </action>
-  <action name="m_ActionGrayscale" >
-   <property name="text" >
+  <action name="m_ActionGrayscale">
+   <property name="text">
     <string>Grayscale</string>
    </property>
   </action>
-  <action name="m_ActionInverseGrayscale" >
-   <property name="text" >
+  <action name="m_ActionInverseGrayscale">
+   <property name="text">
     <string>Inverse Grayscale</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Inverse Grayscale</string>
    </property>
   </action>
-  <action name="m_ActionEarthTones" >
-   <property name="text" >
+  <action name="m_ActionEarthTones">
+   <property name="text">
     <string>Earth Tones</string>
    </property>
   </action>
-  <action name="m_ActionSpectrum" >
-   <property name="text" >
+  <action name="m_ActionSpectrum">
+   <property name="text">
     <string>Spectrum</string>
    </property>
   </action>
-  <action name="m_ActionFire" >
-   <property name="text" >
+  <action name="m_ActionFire">
+   <property name="text">
     <string>Fire</string>
    </property>
   </action>
-  <action name="m_Action010Range" >
-   <property name="text" >
+  <action name="m_Action010Range">
+   <property name="text">
     <string>10 % Range</string>
    </property>
   </action>
-  <action name="m_Action005Range" >
-   <property name="text" >
+  <action name="m_Action005Range">
+   <property name="text">
     <string>5 % Range</string>
    </property>
   </action>
-  <action name="m_Action100Range" >
-   <property name="text" >
+  <action name="m_Action100Range">
+   <property name="text">
     <string>100% Range</string>
    </property>
   </action>
-  <action name="m_ActionAcquireDark" >
-   <property name="text" >
+  <action name="m_ActionAcquireDark">
+   <property name="text">
     <string>Dark</string>
    </property>
   </action>
-  <action name="m_ActionCancelDark" >
-   <property name="text" >
+  <action name="m_ActionCancelDark">
+   <property name="text">
     <string>Cancel Dark</string>
    </property>
   </action>
-  <action name="m_ActionIce" >
-   <property name="text" >
+  <action name="m_ActionIce">
+   <property name="text">
     <string>Ice</string>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Select 'icy' color palette</string>
    </property>
   </action>
-  <action name="m_ActionAutoRange" >
-   <property name="text" >
+  <action name="m_ActionAutoRange">
+   <property name="text">
     <string>AutoRange</string>
    </property>
   </action>
-  <action name="m_ActionImportData" >
-   <property name="icon" >
-    <iconset resource="qxrdresources.qrc" >
+  <action name="m_ActionImportData">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Import Data...</string>
    </property>
   </action>
-  <action name="m_ActionTest" >
-   <property name="icon" >
-    <iconset resource="qxrdresources.qrc" >
+  <action name="m_ActionTest">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Test</string>
    </property>
   </action>
-  <action name="m_ActionShowImage" >
-   <property name="text" >
+  <action name="m_ActionShowImage">
+   <property name="text">
     <string>Show Image</string>
    </property>
   </action>
-  <action name="m_ActionShowMask" >
-   <property name="text" >
+  <action name="m_ActionShowMask">
+   <property name="text">
     <string>Show Mask</string>
    </property>
   </action>
-  <action name="m_ActionSetMaskRange" >
-   <property name="text" >
+  <action name="m_ActionSetMaskRange">
+   <property name="text">
     <string>Set Mask Range</string>
    </property>
   </action>
-  <action name="m_ActionClearMaskRange" >
-   <property name="text" >
+  <action name="m_ActionClearMaskRange">
+   <property name="text">
     <string>Clear Mask Range</string>
    </property>
   </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QwtPlot</class>
-   <extends>QFrame</extends>
-   <header>qwt_plot.h</header>
-  </customwidget>
-  <customwidget>
    <class>QxrdImagePlot</class>
    <extends>QwtPlot</extends>
    <header>qxrdimageplot.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QxrdCenterFinderPlot</class>
+   <extends>QWidget</extends>
+   <header>qxrdcenterfinderplot.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QxrdIntegratorPlot</class>
+   <extends>QwtPlot</extends>
+   <header>qxrdintegratorplot.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -1268,8 +1049,8 @@
   <tabstop>m_Messages</tabstop>
  </tabstops>
  <resources>
-  <include location="qxrdhelptext.qrc" />
-  <include location="qxrdresources.qrc" />
+  <include location="qxrdhelptext.qrc"/>
+  <include location="qxrdresources.qrc"/>
  </resources>
  <connections/>
 </ui>
