@@ -755,8 +755,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>645</height>
+          <width>100</width>
+          <height>30</height>
          </rect>
         </property>
         <attribute name="label">
@@ -769,8 +769,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>645</height>
+          <width>100</width>
+          <height>30</height>
          </rect>
         </property>
         <attribute name="label">
@@ -830,6 +830,7 @@
     <addaction name="m_ActionEarthTones"/>
     <addaction name="m_ActionSpectrum"/>
     <addaction name="m_ActionFire"/>
+    <addaction name="m_ActionIce"/>
     <addaction name="separator"/>
     <addaction name="m_ActionShowImage"/>
     <addaction name="m_ActionShowMask"/>

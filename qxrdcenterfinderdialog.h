@@ -9,7 +9,12 @@ class QxrdCenterFinderDialog : public QGroupBox, public Ui::QxrdCenterFinderDial
   Q_OBJECT;
 
 public:
-    QxrdCenterFinderDialog(QWidget *parent=0);
+  QxrdCenterFinderDialog(QWidget *parent=0);
+
+public slots:
+  void onCenterChanged(double cx, double cy);
+
+private:
 };
 
 #endif // QXRDCENTERFINDERDIALOG_H
