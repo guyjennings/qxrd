@@ -1,9 +1,11 @@
 #include "qxrdcenterfinder.h"
 #include "qxrdcenterfinderdialog.h"
+#include "qxrdwindow.h"
 
 QxrdCenterFinder::QxrdCenterFinder
-    (QxrdImagePlot *imgplot, QxrdCenterFinderPlot *cntplot, QxrdCenterFinderDialog *cfdialog, QObject *parent)
+    (QxrdWindow *win, QxrdImagePlot *imgplot, QxrdCenterFinderPlot *cntplot, QxrdCenterFinderDialog *cfdialog, QObject *parent)
   : QObject(parent),
+    m_Window(win),
     m_Imageplot(imgplot),
     m_CenterFinderPlot(cntplot),
     m_CenterFinderDialog(cfdialog),
@@ -22,8 +24,11 @@ QxrdCenterFinder::QxrdCenterFinder
 
   connect(m_CenterFinderDialog -> m_CenterX, SIGNAL(valueChanged(double)), this, SLOT(onCenterXChanged(double)));
   connect(m_CenterFinderDialog -> m_CenterY, SIGNAL(valueChanged(double)), this, SLOT(onCenterYChanged(double)));
+  connect(m_CenterFinderDialog -> m_CenterStep, SIGNAL(valueChanged(double)), this, SLOT(onCenterStepChanged(double)));
+  connect(m_CenterFinderDialog -> m_AutoScaleButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(autoScale()));
 
   connect(this, SIGNAL(centerChanged(double,double)), m_CenterFinderDialog, SLOT(onCenterChanged(double,double)));
+  connect(this, SIGNAL(centerChanged(double,double)), this, SLOT(onCenterChanged(double,double)));
 }
 
 void QxrdCenterFinder::onCenterXChanged(double cx)
@@ -42,6 +47,18 @@ void QxrdCenterFinder::onCenterYChanged(double cy)
 
     emit centerChanged(m_CenterX, m_CenterY);
   }
+}
+
+void QxrdCenterFinder::onCenterChanged(double cx, double cy)
+{
+  QxrdImageData *data = m_Window -> data();
+
+  m_CenterFinderPlot -> onCenterChanged(data, cx, cy);
+}
+
+void QxrdCenterFinder::onCenterStepChanged(double stp)
+{
+  m_StepSize = stp;
 }
 
 void QxrdCenterFinder::moveCenter(int dx, int dy)

@@ -3,12 +3,30 @@
 
 #include <qwt_plot.h>
 
+class QxrdImageData;
+class QwtPlotPicker;
+class QwtPlotZoomer;
+class QwtPlotPanner;
+class QwtPlotMagnifier;
+
 class QxrdCenterFinderPlot : public QwtPlot
 {
   Q_OBJECT;
 
 public:
-    QxrdCenterFinderPlot(QWidget *parent=0);
+  QxrdCenterFinderPlot(QWidget *parent=0);
+
+  void onCenterChanged(QxrdImageData *img, double cx, double cy);
+
+public slots:
+  void autoScale();
+
+private:
+  QwtPlotPicker       *m_Tracker;
+  QwtPlotPanner       *m_Panner;
+  QwtPlotZoomer       *m_Zoomer;
+  QwtPlotMagnifier    *m_Magnifier;
+  QVector<double>      m_XData, m_YData;
 };
 
 #endif // QXRDCENTERFINDERPLOT_H

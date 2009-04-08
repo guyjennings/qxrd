@@ -58,7 +58,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     l -> addItem(new QSpacerItem(20, 372, QSizePolicy::Minimum, QSizePolicy::Expanding));
   }
 
-  m_CenterFinder = new QxrdCenterFinder(m_Plot, m_CenterFinderPlot, m_CenterFinderDialog, this);
+  m_CenterFinder = new QxrdCenterFinder(this, m_Plot, m_CenterFinderPlot, m_CenterFinderDialog, this);
 
   m_IntegratorDialog = new QxrdIntegratorDialog();
 
@@ -911,6 +911,10 @@ void QxrdWindow::newDarkImage(QxrdImageData *image)
   setDarkImagePath(image->filename());
 }
 
+QxrdImageData *QxrdWindow::data()
+{
+  return m_Data;
+}
 QxrdImageData *QxrdWindow::darkImage()
 {
   return m_DarkFrame;

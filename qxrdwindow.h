@@ -156,6 +156,7 @@ public:
   void newBadPixelsImage(QxrdImageData *image);
   void newGainMapImage(QxrdImageData *image);
 
+  QxrdImageData* data();
   QxrdImageData* darkImage();
 
 private:
