@@ -82,12 +82,20 @@ double QxrdRasterData::minValue()
 
   if (m_Data) {
     double *data = m_Data->data();
-    double min=data[0];
+    bool *mask = m_Data->mask();
+    bool first = 1;
+    double min = 0;
 
     for (int i=1; i<npixels; i++) {
-      double val = data[i];
-      if(val<min) {
-        min = val;
+      bool msk = mask[i];
+      if (msk) {
+        double val = data[i];
+        if (first) {
+          min = val;
+          first = 0;
+        } else if (val<min) {
+          min = val;
+        }
       }
     }
 
@@ -103,12 +111,20 @@ double QxrdRasterData::maxValue()
 
   if (m_Data) {
     double *data = m_Data->data();
-    double max=data[0];
+    bool *mask = m_Data->mask();
+    bool first = 1;
+    double max = 0;
 
     for (int i=1; i<npixels; i++) {
-      double val = data[i];
-      if(val>max) {
-        max = val;
+      bool msk = mask[i];
+      if (msk) {
+        double val = data[i];
+        if (first) {
+          max = val;
+          first = 0;
+        } else if(val>max) {
+          max = val;
+        }
       }
     }
 

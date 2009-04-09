@@ -27,6 +27,9 @@ class QxrdImagePlot : public QwtPlot
 
  public slots:
   void autoScale();
+  void doZoomIn();
+  void doZoomOut();
+  void doZoomAll();
 
   void set005Range();
   void set010Range();

@@ -8,6 +8,7 @@ class QwtPlotPicker;
 class QwtPlotZoomer;
 class QwtPlotPanner;
 class QwtPlotMagnifier;
+class QwtLegend;
 
 class QxrdCenterFinderPlot : public QwtPlot
 {
@@ -19,6 +20,9 @@ public:
   void onCenterChanged(QxrdImageData *img, double cx, double cy);
 
 public slots:
+  void doZoomIn();
+  void doZoomOut();
+  void doZoomAll();
   void autoScale();
 
 private:
@@ -26,6 +30,7 @@ private:
   QwtPlotPanner       *m_Panner;
   QwtPlotZoomer       *m_Zoomer;
   QwtPlotMagnifier    *m_Magnifier;
+  QwtLegend           *m_Legend;
   QVector<double>      m_XData, m_YData;
 };
 

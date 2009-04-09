@@ -7,13 +7,16 @@
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
 #include <qwt_plot_magnifier.h>
+#include <qwt_symbol.h>
+#include <qwt_legend.h>
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   : QwtPlot(parent),
     m_Tracker(NULL),
     m_Panner(NULL),
     m_Zoomer(NULL),
-    m_Magnifier(NULL)
+    m_Magnifier(NULL),
+    m_Legend(NULL)
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -44,6 +47,11 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   m_Magnifier -> setEnabled(true);
   m_Magnifier -> setMouseButton(Qt::NoButton);
   m_Magnifier -> setAxisEnabled(QwtPlot::yRight, false);
+
+  m_Legend = new QwtLegend();
+  m_Legend -> setItemMode(QwtLegend::CheckableItem);
+
+  insertLegend(m_Legend, QwtPlot::RightLegend);
 
   autoScale();
 }
@@ -108,6 +116,13 @@ void QxrdCenterFinderPlot::onCenterChanged(QxrdImageData *img, double cx, double
     pc->setData(m_XData, m_YData);
 //    pc->setStyle(QwtPlotCurve::Dots);
     pen.setColor(QColor::fromHsv((int) angdeg, 255, 255));
+
+    QwtSymbol s;
+    s.setStyle(QwtSymbol::Rect);
+    s.setSize(3,3);
+    s.setPen(pen);
+
+    pc->setSymbol(s);
     pc->setPen(pen);
     pc->attach(this);
   }
@@ -122,3 +137,17 @@ void QxrdCenterFinderPlot::onCenterChanged(QxrdImageData *img, double cx, double
   replot();
 }
 
+void QxrdCenterFinderPlot::doZoomIn()
+{
+  m_Zoomer -> zoom(1);
+}
+
+void QxrdCenterFinderPlot::doZoomOut()
+{
+  m_Zoomer -> zoom(-1);
+}
+
+void QxrdCenterFinderPlot::doZoomAll()
+{
+  m_Zoomer -> zoom(0);
+}

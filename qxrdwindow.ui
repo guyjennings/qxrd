@@ -35,7 +35,7 @@
          <string>Image</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="0">
+         <item row="0" column="1">
           <widget class="QSplitter" name="splitter">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -56,6 +56,79 @@
            </widget>
           </widget>
          </item>
+         <item row="0" column="0">
+          <widget class="QWidget" name="widget" native="true">
+           <layout class="QGridLayout" name="gridLayout_10">
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <item row="0" column="1">
+             <widget class="QToolButton" name="m_ImageZoomInButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QToolButton" name="m_ImageZoomOutButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="1">
+             <widget class="QToolButton" name="m_ImageZoomAllButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="tab_4">
@@ -64,7 +137,87 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_7">
          <item row="0" column="0">
-          <widget class="QxrdCenterFinderPlot" name="m_CenterFinderPlot" native="true"/>
+          <widget class="QWidget" name="widget_2" native="true">
+           <layout class="QGridLayout" name="gridLayout_11">
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <item row="0" column="1">
+             <widget class="QToolButton" name="m_CenteringZoomInButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QToolButton" name="m_CenteringZoomOutButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <spacer name="verticalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="1">
+             <widget class="QToolButton" name="m_CenteringZoomAllButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QxrdCenterFinderPlot" name="m_CenterFinderPlot">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -74,6 +227,79 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_9">
          <item row="0" column="0">
+          <widget class="QWidget" name="widget_3" native="true">
+           <layout class="QGridLayout" name="gridLayout_12">
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <item row="0" column="1">
+             <widget class="QToolButton" name="m_IntegratorZoomInButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QToolButton" name="m_IntegratorZoomOutButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <spacer name="verticalSpacer_6">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="1">
+             <widget class="QToolButton" name="m_IntegratorZoomAllButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="1">
           <widget class="QxrdIntegratorPlot" name="m_IntegratorPlot"/>
          </item>
         </layout>
@@ -358,8 +584,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>220</width>
-          <height>556</height>
+          <width>240</width>
+          <height>645</height>
          </rect>
         </property>
         <attribute name="label">
@@ -583,7 +809,7 @@
           <x>0</x>
           <y>0</y>
           <width>242</width>
-          <height>308</height>
+          <height>628</height>
          </rect>
         </property>
         <attribute name="label">
@@ -755,8 +981,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>100</width>
-          <height>30</height>
+          <width>240</width>
+          <height>645</height>
          </rect>
         </property>
         <attribute name="label">
@@ -769,8 +995,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>100</width>
-          <height>30</height>
+          <width>240</width>
+          <height>645</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1036,7 +1262,7 @@
   </customwidget>
   <customwidget>
    <class>QxrdCenterFinderPlot</class>
-   <extends>QWidget</extends>
+   <extends>QwtPlot</extends>
    <header>qxrdcenterfinderplot.h</header>
   </customwidget>
   <customwidget>

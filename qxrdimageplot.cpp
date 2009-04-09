@@ -349,3 +349,18 @@ QxrdRasterData* QxrdImagePlot::raster()
 {
   return &m_Raster;
 }
+
+void QxrdImagePlot::doZoomIn()
+{
+  m_Zoomer -> zoom(1);
+}
+
+void QxrdImagePlot::doZoomOut()
+{
+  m_Zoomer -> zoom(-1);
+}
+
+void QxrdImagePlot::doZoomAll()
+{
+  m_Zoomer -> zoom(0);
+}
