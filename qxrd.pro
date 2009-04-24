@@ -4,7 +4,7 @@ include("qxrdconfig.pri")
 
 CONFIG += qt
 
-VERSION = 0.0.1
+VERSION = 0.0.3
 
 QT += network script
 
@@ -20,22 +20,26 @@ TARGET = qxrd$${SUFFIX_STR}
 RESOURCES += qxrdhelptext.qrc \
 	qxrdresources.qrc
 
-DISTFILES += qxrdhelptext.html
-
-INCLUDEPATH += ../qceplib/
+DISTFILES += qxrdhelptext.html \
+	images/*.png
 
 win32 {
   include("../qxrd/qt-libtiff-win32.pri")
 }
 
-HEADERS += \
+win32 {
+  INCLUDEPATH += ../qceplib/
+  HEADERS += \
 	../qceplib/spec_server.h \
 	../qceplib/qspecserver.h \
         ../qceplib/qcepimagedata.h \
         ../qceplib/qcepimagedataformat.h \
         ../qceplib/qcepimagedataformattiff.h \
         ../qceplib/qcepimagedataformatmar345.h \
-        ../qceplib/qcepimagedataformatfactory.h \
+        ../qceplib/qcepimagedataformatfactory.h
+}
+
+HEADERS += \
         qwt_plot_rescaler.h \
         qxrdapplication.h \
 	qxrdsettings.h \
@@ -65,14 +69,23 @@ HEADERS += \
 	qxrdacquisition.h \
 	Acq.h
 
+unix {
+  HEADERS += \
+	AcqLinuxTypes.h
+}
+
+win32 {
 SOURCES += \
-	qxrd.cpp \
 	../qceplib/qspecserver.cpp \
         ../qceplib/qcepimagedata.cpp \
         ../qceplib/qcepimagedataformat.cpp \
         ../qceplib/qcepimagedataformattiff.cpp \
         ../qceplib/qcepimagedataformatmar345.cpp \
-        ../qceplib/qcepimagedataformatfactory.cpp \
+        ../qceplib/qcepimagedataformatfactory.cpp
+}
+
+SOURCES += \
+	qxrd.cpp \
         qwt_plot_rescaler.cpp \
         qxrdapplication.cpp \
 	qxrdsettings.cpp \
@@ -111,7 +124,7 @@ unix{
   HEADERS += xisl_dummy.h
   SOURCES += xisl_dummy.cpp
   INCLUDEPATH += /usr/include/qwt/
-  LIBS += -lqwt -ltiff
+  LIBS += -lqwt -ltiff -lqceplib
 }
 
 win32{
@@ -186,10 +199,10 @@ dox.commands += doxygen
 dox.depends = Doxyfile $${SOURCES} $${HEADERS}
 
 rpmsource.commands += make dist ;
-rpmsource.commands += cp qxrd0.0.1.tar.gz ~/rpmbuild/SOURCES/
+rpmsource.commands += cp qxrd0.0.3.tar.gz ~/rpmbuild/SOURCES/
 rpmsource.depends = $${DISTFILES} $${SOURCES} $${FORMS} $${HEADERS} $${RESOURCES}
 
 mock.commands += mock-build qxrd.spec
-mock.depends = rpmsource ~/rpmbuild/SOURCES/qxrd0.0.1.tar.gz qxrd.spec
+mock.depends = rpmsource ~/rpmbuild/SOURCES/qxrd0.0.3.tar.gz qxrd.spec
 
 website.commands =  rsync -e ssh -avx dox/html/ www12.xor.aps.anl.gov:/var/www/html/software/qxrd/

@@ -32,8 +32,9 @@ Source1:        http://www.bessrc.aps.anl.gov/software/qceplib/%{libname}%{libve
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  desktop-file-utils qt4 >= %{qtversion}, qt4-x11 qt4-devel %{qwtlib} %{qwtdevel}
+BuildRequires:  qceplib-devel >= 0.0.4, libtiff-devel
 #BuildRequires:  epics-base-devel, epics-base, acqiris
-Requires:       qt4 >= %{qtversion}, qt4-x11 %{qwtlib}
+Requires:       qt4 >= %{qtversion}, qt4-x11 %{qwtlib}, qceplib >= 0.0.4, libtiff
 #Requires:       epics-base, acqiris
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
