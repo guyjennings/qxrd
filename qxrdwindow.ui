@@ -1023,9 +1023,7 @@
      <string>File</string>
     </property>
     <addaction name="m_ActionLoadData"/>
-    <addaction name="m_ActionImportData"/>
     <addaction name="m_ActionSaveData"/>
-    <addaction name="m_ActionEvaluateScript"/>
     <addaction name="m_ActionPreferences"/>
     <addaction name="m_ActionQuit"/>
    </widget>
@@ -1084,10 +1082,8 @@
    <addaction name="m_ActionCancel"/>
    <addaction name="m_ActionAcquireDark"/>
    <addaction name="m_ActionCancelDark"/>
-   <addaction name="m_ActionEvaluateScript"/>
    <addaction name="separator"/>
    <addaction name="m_ActionLoadData"/>
-   <addaction name="m_ActionImportData"/>
    <addaction name="m_ActionSaveData"/>
    <addaction name="separator"/>
    <addaction name="m_ActionAutoScale"/>
@@ -1130,6 +1126,10 @@
    </property>
   </action>
   <action name="m_ActionLoadData">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
+   </property>
    <property name="text">
     <string>Load Data</string>
    </property>

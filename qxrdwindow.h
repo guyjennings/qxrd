@@ -31,9 +31,9 @@ public:
 public slots:
   void doSaveData();
   void doLoadData();
-  void doImportData();
+//  void doImportData();
   void loadData(QString name);
-  void importData(QString name);
+//  void importData(QString name);
   void saveData(QString name);
   void saveImageData(QxrdImageData *image);
   void saveRawData(QxrdImageData *image);

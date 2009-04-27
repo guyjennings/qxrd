@@ -85,7 +85,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
   connect(m_ActionLoadData, SIGNAL(triggered()), this, SLOT(doLoadData()));
-  connect(m_ActionImportData, SIGNAL(triggered()), this, SLOT(doImportData()));
+//  connect(m_ActionImportData, SIGNAL(triggered()), this, SLOT(doImportData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), this, SLOT(doSaveData()));
 
   connect(m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
@@ -588,25 +588,6 @@ void QxrdWindow::doSaveData()
   }
 }
 
-void QxrdWindow::doImportData()
-{
-  QString theFile = QFileDialog::getOpenFileName(
-      this, "Import Image from...", outputDirectory());
-
-  if (theFile.length()) {
-    importData(theFile);
-  }
-}
-
-void QxrdWindow::importData(QString name)
-{
-    QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
-
-    res -> readImage(name);
-
-    newData(res);
-}
-
 void QxrdWindow::doLoadData()
 {
   QString theFile = QFileDialog::getOpenFileName(
@@ -619,104 +600,123 @@ void QxrdWindow::doLoadData()
 
 void QxrdWindow::loadData(QString name)
 {
-  QxrdImageData* res = loadNewImage(name);
+    QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
 
-  newData(res);
+    res -> readImage(name);
+
+    newData(res);
 }
 
-QxrdImageData* QxrdWindow::loadNewImage(QString name)
-{
-  QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
-
-  QWriteLocker lock(res->rwLock());
-
-  quint32 imageWidth = 0;
-  quint32 imageHeight = 0;
-  quint16 sampleFormat = 0;
-  quint16 samplesPerPixel = 0;
-  quint16 bitsPerSample = 0;
-
-  TIFF* tif = TIFFOpen(qPrintable(name),"r");
-
-  if (tif) {
-    if ((TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGEWIDTH, &imageWidth)==1) &&
-        (TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGELENGTH, &imageHeight)==1) &&
-        (TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel)==1) &&
-        (TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bitsPerSample)==1) &&
-        (TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLEFORMAT, &sampleFormat)==1)) {
-
-      emit printMessage(tr("Image file W(%1),H(%2),SPP(%3),BPS(%4),SF(%5)\n")
-                        .arg(imageWidth).arg(imageHeight).arg(samplesPerPixel).arg(bitsPerSample).arg(sampleFormat));
-
-      res -> resize(imageWidth, imageHeight);
-      res -> clear();
-
-      void* buffer = malloc(TIFFScanlineSize(tif));
-
-      for (quint32 y=0; y<imageHeight; y++) {
-        if (TIFFReadScanline(tif, buffer, y)==1) {
-          for (quint32 x=0; x<imageWidth; x++) {
-            switch (sampleFormat) {
-            case SAMPLEFORMAT_INT:
-              switch (bitsPerSample) {
-              case 8:
-                res -> setValue(x,y, ((qint8*) buffer)[x]);
-                break;
-              case 16:
-                res -> setValue(x,y, ((qint16*) buffer)[x]);
-                break;
-              case 32:
-                res -> setValue(x,y, ((qint32*) buffer)[x]);
-                break;
-              }
-              break;
-            case SAMPLEFORMAT_UINT:
-              switch (bitsPerSample) {
-              case 8:
-                res -> setValue(x,y, ((quint8*) buffer)[x]);
-                break;
-              case 16:
-                res -> setValue(x,y, ((quint16*) buffer)[x]);
-                break;
-              case 32:
-                res -> setValue(x,y, ((quint32*) buffer)[x]);
-                break;
-              }
-              break;
-            case SAMPLEFORMAT_IEEEFP:
-              switch (bitsPerSample) {
-              case 32:
-                res -> setValue(x,y, ((float*) buffer)[x]);
-                break;
-              case 64:
-                res -> setValue(x,y, ((double*) buffer)[x]);
-                break;
-              }
-              break;
-            }
-          }
-        }
-      }
-
-      free(buffer);
-    } else {
-      emit statusMessage("Couldn't open file\n");
-    }
-  } else {
-    emit statusMessage("Bad TIFF File\n");
-  }
-
-  if (tif) {
-    TIFFClose(tif);
-  }
-
-  QFileInfo info(name);
-
-  res -> setFilename(name);
-  res -> setTitle(info.fileName());
-
-  return res;
-}
+//void QxrdWindow::doLoadData()
+//{
+//  QString theFile = QFileDialog::getOpenFileName(
+//      this, "Load Image from...", outputDirectory());
+//
+//  if (theFile.length()) {
+//    loadData(theFile);
+//  }
+//}
+//
+//void QxrdWindow::loadData(QString name)
+//{
+//  QxrdImageData* res = loadNewImage(name);
+//
+//  newData(res);
+//}
+//
+//QxrdImageData* QxrdWindow::loadNewImage(QString name)
+//{
+//  QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
+//
+//  QWriteLocker lock(res->rwLock());
+//
+//  quint32 imageWidth = 0;
+//  quint32 imageHeight = 0;
+//  quint16 sampleFormat = 0;
+//  quint16 samplesPerPixel = 0;
+//  quint16 bitsPerSample = 0;
+//
+//  TIFF* tif = TIFFOpen(qPrintable(name),"r");
+//
+//  if (tif) {
+//    if ((TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGEWIDTH, &imageWidth)==1) &&
+//        (TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGELENGTH, &imageHeight)==1) &&
+//        (TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel)==1) &&
+//        (TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bitsPerSample)==1) &&
+//        (TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLEFORMAT, &sampleFormat)==1)) {
+//
+//      emit printMessage(tr("Image file W(%1),H(%2),SPP(%3),BPS(%4),SF(%5)\n")
+//                        .arg(imageWidth).arg(imageHeight).arg(samplesPerPixel).arg(bitsPerSample).arg(sampleFormat));
+//
+//      res -> resize(imageWidth, imageHeight);
+//      res -> clear();
+//
+//      void* buffer = malloc(TIFFScanlineSize(tif));
+//
+//      for (quint32 y=0; y<imageHeight; y++) {
+//        if (TIFFReadScanline(tif, buffer, y)==1) {
+//          for (quint32 x=0; x<imageWidth; x++) {
+//            switch (sampleFormat) {
+//            case SAMPLEFORMAT_INT:
+//              switch (bitsPerSample) {
+//              case 8:
+//                res -> setValue(x,y, ((qint8*) buffer)[x]);
+//                break;
+//              case 16:
+//                res -> setValue(x,y, ((qint16*) buffer)[x]);
+//                break;
+//              case 32:
+//                res -> setValue(x,y, ((qint32*) buffer)[x]);
+//                break;
+//              }
+//              break;
+//            case SAMPLEFORMAT_UINT:
+//              switch (bitsPerSample) {
+//              case 8:
+//                res -> setValue(x,y, ((quint8*) buffer)[x]);
+//                break;
+//              case 16:
+//                res -> setValue(x,y, ((quint16*) buffer)[x]);
+//                break;
+//              case 32:
+//                res -> setValue(x,y, ((quint32*) buffer)[x]);
+//                break;
+//              }
+//              break;
+//            case SAMPLEFORMAT_IEEEFP:
+//              switch (bitsPerSample) {
+//              case 32:
+//                res -> setValue(x,y, ((float*) buffer)[x]);
+//                break;
+//              case 64:
+//                res -> setValue(x,y, ((double*) buffer)[x]);
+//                break;
+//              }
+//              break;
+//            }
+//          }
+//        }
+//      }
+//
+//      free(buffer);
+//    } else {
+//      emit statusMessage("Couldn't open file\n");
+//    }
+//  } else {
+//    emit statusMessage("Bad TIFF File\n");
+//  }
+//
+//  if (tif) {
+//    TIFFClose(tif);
+//  }
+//
+//  QFileInfo info(name);
+//
+//  res -> setFilename(name);
+//  res -> setTitle(info.fileName());
+//
+//  return res;
+//}
 
 void QxrdWindow::saveData(QString name)
 {
@@ -801,7 +801,9 @@ void QxrdWindow::doLoadDarkImage()
 
 void QxrdWindow::loadDarkImage(QString name)
 {
-  QxrdImageData* img = loadNewImage(name);
+  QxrdImageData* img = m_AcquisitionThread -> takeNextFreeImage();
+
+  img -> readImage(name);
 
   newDarkImage(img);
 }
@@ -838,9 +840,11 @@ void QxrdWindow::doLoadBadPixels()
 
 void QxrdWindow::loadBadPixels(QString name)
 {
-  QxrdImageData* img = loadNewImage(name);
+  QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
 
-  newBadPixelsImage(img);
+  res -> readImage(name);
+
+  newBadPixelsImage(res);
 }
 
 QString QxrdWindow::badPixelsPath()
@@ -875,9 +879,11 @@ void QxrdWindow::doLoadGainMap()
 
 void QxrdWindow::loadGainMap(QString name)
 {
-  QxrdImageData* img = loadNewImage(name);
+  QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
 
-  newGainMapImage(img);
+  res -> readImage(name);
+
+  newGainMapImage(res);
 }
 
 QString QxrdWindow::gainMapPath()

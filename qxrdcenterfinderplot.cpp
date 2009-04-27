@@ -52,8 +52,8 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   m_Legend -> setItemMode(QwtLegend::CheckableItem);
 
   insertLegend(m_Legend, QwtPlot::RightLegend);
-
-  autoScale();
+//
+//  autoScale();
 }
 
 void QxrdCenterFinderPlot::autoScale()
