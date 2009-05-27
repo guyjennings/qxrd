@@ -129,11 +129,11 @@ unix{
 
 win32{
   PLATFORM_PREFIX=win32
-  QTBINDIR=C:/Qt/2009.01/qt/bin
+  QTBINDIR=C:/Qt/2009.02/qt/bin
 #  QTBINDIR=C:/Qt/4.4.3/bin
 #  QWT=C:/Qwt-5.1.1/
   QWT=C:/Qwt-5.1.2-svn/
-  MINGW=C:/Qt/2009.01/mingw/bin
+  MINGW=C:/Qt/2009.02/mingw/bin
 #  MINGW=c:/mingw/bin
   app.target = app
   zip.target = zip
