@@ -25,6 +25,12 @@ void QxrdServerThread::run()
   m_Server = new QxrdServer(m_AcquisitionThread, m_Name);
 
   connect(m_Server, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
+  connect(this, SIGNAL(execute(QString)), m_Server, SLOT(executeCommand(QString)));
 
   exec();
+}
+
+void QxrdServerThread::executeScript(QString cmd)
+{
+  emit execute(cmd);
 }

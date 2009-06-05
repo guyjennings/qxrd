@@ -19,6 +19,8 @@ class QxrdApplication : public QApplication
   QxrdAcquisitionThread *acquisitionThread();
   QxrdWindow *window();
 
+  void executeScript(QString cmd);
+
  public slots:
   void shutdownThreads();
   void serverRunning();

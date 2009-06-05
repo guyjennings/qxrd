@@ -36,11 +36,67 @@ QxrdAcquisition::QxrdAcquisition(QxrdAcquisitionThread *thread)
     m_CurrentFrame(0),
     m_AcquiringDark(0),
     m_AcquiredData(NULL),
-    m_NIntTimes(0)
+    m_NIntTimes(0),
+    m_CameraMode(0),
+    m_FrameSyncMode(HIS_SYNCMODE_FREE_RUNNING),
+    m_TimerSync(0),
+    m_CameraGain(0),
+    m_ExposureTime(5),
+    m_IntegrationMode(0),
+    m_NSummed(1),
+    m_DarkNSummed(1)
 {
   emit printMessage("Enter QxrdAcquisition::QxrdAcquisition\n");
 
   g_Acquisition = this;
+
+  m_ScriptEngine.globalObject().setProperty("acquisition",
+          m_ScriptEngine.newQObject(this));
+
+  m_ScriptEngine.globalObject().setProperty("acquire",
+          m_ScriptEngine.newFunction(QxrdAcquisition::acquireFunc));
+
+  m_ScriptEngine.globalObject().setProperty("acquiredark",
+          m_ScriptEngine.newFunction(QxrdAcquisition::acquireDarkFunc));
+
+  m_ScriptEngine.globalObject().setProperty("status",
+          m_ScriptEngine.newFunction(QxrdAcquisition::statusFunc));
+
+  m_ScriptEngine.globalObject().setProperty("exposure",
+          m_ScriptEngine.newFunction(QxrdAcquisition::exposureFunc));
+
+  m_ScriptEngine.globalObject().setProperty("integrationmode",
+          m_ScriptEngine.newFunction(QxrdAcquisition::integrationModeFunc));
+
+  m_ScriptEngine.globalObject().setProperty("subframes",
+          m_ScriptEngine.newFunction(QxrdAcquisition::subframesFunc));
+
+  m_ScriptEngine.globalObject().setProperty("darksubframes",
+          m_ScriptEngine.newFunction(QxrdAcquisition::darkSubframesFunc));
+
+  m_ScriptEngine.globalObject().setProperty("frames",
+          m_ScriptEngine.newFunction(QxrdAcquisition::framesFunc));
+
+  m_ScriptEngine.globalObject().setProperty("filename",
+          m_ScriptEngine.newFunction(QxrdAcquisition::filenameFunc));
+
+  m_ScriptEngine.globalObject().setProperty("directory",
+          m_ScriptEngine.newFunction(QxrdAcquisition::directoryFunc));
+
+  m_ScriptEngine.globalObject().setProperty("fileindex",
+          m_ScriptEngine.newFunction(QxrdAcquisition::fileIndexFunc));
+
+  m_ScriptEngine.globalObject().setProperty("SetCameraMode",
+          m_ScriptEngine.newFunction(QxrdAcquisition::setCameraModeFunc));
+
+  m_ScriptEngine.globalObject().setProperty("SetFrameSyncMode",
+          m_ScriptEngine.newFunction(QxrdAcquisition::setFrameSyncModeFunc));
+
+  m_ScriptEngine.globalObject().setProperty("SetTimerSync",
+          m_ScriptEngine.newFunction(QxrdAcquisition::setTimerSyncFunc));
+
+  m_ScriptEngine.globalObject().setProperty("SetCameraGain",
+          m_ScriptEngine.newFunction(QxrdAcquisition::setCameraGainFunc));
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -140,11 +196,12 @@ void QxrdAcquisition::acquire(QString outDir, QString filePattern, int fileIndex
   emit statusMessage("Starting acquisition");
   emit acquireStarted(0);
 
-  m_OutputDir   = outDir;
-  m_FilePattern = filePattern;
-  m_FileIndex = fileIndex;
-  m_IntegMode = integmode;
-  m_NSums = nsum;
+  setOutputDirectory(outDir);
+  setFilePattern(filePattern);
+  setFileIndex(fileIndex);
+  setIntegrationMode(integmode);
+
+  setNSummed(nsum);
   m_NFrames = nframes;
   m_NBufferFrames = 10;
   m_BufferFrame = 0;
@@ -166,10 +223,10 @@ void QxrdAcquisition::acquireDark(QString outDir, QString filePattern, int fileI
   emit statusMessage("Starting dark acquisition");
   emit acquireStarted(1);
 
-  m_OutputDir   = outDir;
-  m_FilePattern = filePattern;
-  m_FileIndex = fileIndex;
-  m_IntegMode = integmode;
+  setOutputDirectory(outDir);
+  setFilePattern(filePattern);
+  setFileIndex(fileIndex);
+  setIntegrationMode(integmode);
   m_NSums = nsum;
   m_NFrames = 1;
   m_NBufferFrames = 10;
@@ -203,6 +260,24 @@ void QxrdAcquisition::acquisition()
   if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, m_IntegMode)) != HIS_ALL_OK) {
     acquisitionError(nRet);
     return;
+  }
+
+  if ((nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, m_FrameSyncMode)) != HIS_ALL_OK) {
+    acquisitionError(nRet);
+  }
+
+  if (m_FrameSyncMode == HIS_SYNCMODE_INTERNAL_TIMER) {
+    DWORD tmp = m_TimerSync;
+
+    if ((nRet=Acquisition_SetTimerSync(m_AcqDesc, &tmp)) != HIS_ALL_OK) {
+      acquisitionError(nRet);
+    }
+
+    m_TimerSync = tmp;
+  }
+
+  if ((nRet=Acquisition_SetCameraGain(m_AcqDesc, m_CameraGain)) != HIS_ALL_OK) {
+    acquisitionError(nRet);
   }
 
   if ((nRet=Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_NBufferFrames, m_NRows, m_NCols)) != HIS_ALL_OK) {
@@ -252,9 +327,9 @@ bool QxrdAcquisition::onEndFrame()
   QString fileName;
 
   if (m_AcquiringDark) {
-    fileName = QDir(m_OutputDir).filePath(m_FilePattern+tr("-%1.dark.tif").arg(m_FileIndex,5,10,QChar('0')));
+    fileName = QDir(m_OutputDirectory).filePath(m_FilePattern+tr("-%1.dark.tif").arg(m_FileIndex,5,10,QChar('0')));
   } else {
-    fileName = QDir(m_OutputDir).filePath(m_FilePattern+tr("-%1.tif").arg(m_FileIndex,5,10,QChar('0')));
+    fileName = QDir(m_OutputDirectory).filePath(m_FilePattern+tr("-%1.tif").arg(m_FileIndex,5,10,QChar('0')));
   }
 
   emit acquiredFrame(fileName, m_FileIndex, m_CurrentSum,m_NSums, m_CurrentFrame, m_NFrames);
@@ -417,3 +492,431 @@ QVector<double> QxrdAcquisition::integrationTimes()
 
   return res;
 }
+
+void QxrdAcquisition::setCameraMode(int mode)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_CameraMode = mode;
+}
+
+int QxrdAcquisition::cameraMode() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_CameraMode;
+}
+
+void QxrdAcquisition::setFrameSyncMode(int mode)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_FrameSyncMode = mode;
+}
+
+int QxrdAcquisition::frameSyncMode() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_FrameSyncMode;
+}
+
+void QxrdAcquisition::setTimerSync(int mode)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_TimerSync = mode;
+}
+
+int QxrdAcquisition::timerSync() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_TimerSync;
+}
+
+void QxrdAcquisition::setCameraGain(int mode)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_CameraGain = mode;
+}
+
+int QxrdAcquisition::cameraGain() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_CameraGain;
+}
+
+void QxrdAcquisition::setExposureTime(double t)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_Debug) {
+    printf("QxrdAcquisition::setExposureTime(%g->%g)\n", m_ExposureTime, t);
+  }
+
+  if (m_ExposureTime != t) {
+    m_ExposureTime = t;
+
+    emit exposureTimeChanged(t);
+  }
+}
+
+void QxrdAcquisition::setIntegrationMode(int mode)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_Debug) {
+    printf("QxrdAcquisition::setIntegrationMode(%d->%d)\n", m_IntegrationMode, mode);
+  }
+
+  if (m_IntegrationMode != mode) {
+    m_IntegrationMode = mode;
+
+    emit integrationModeChanged(mode);
+  }
+}
+
+void QxrdAcquisition::setNSummed(int nsummed)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_Debug) {
+    printf("QxrdAcquisition::setNSummed(%d->%d)\n", m_NSummed, nsummed);
+  }
+
+  if (m_NSummed != nsummed) {
+    m_NSummed = nsummed;
+
+    emit nSummedChanged(nsummed);
+  }
+}
+
+void QxrdAcquisition::setNFrames(int nframes)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_Debug) {
+    printf("QxrdAcquisition::setNFrames(%d->%d)\n", m_NFrames, nframes);
+  }
+
+  if (m_NFrames != nframes) {
+    m_NFrames = nframes;
+
+    emit nFramesChanged(nframes);
+  }
+}
+
+void QxrdAcquisition::setFileIndex(int index)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_Debug) {
+    emit printMessage(tr("QxrdAcquisition::setFileIndex(%1->%2)")
+                      .arg(m_FileIndex).arg(index));
+  }
+
+  if (m_FileIndex != index) {
+    m_FileIndex = index;
+
+    emit fileIndexChanged(index);
+  }
+}
+
+void QxrdAcquisition::setFilePattern(QString pattern)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_Debug) {
+    printf("QxrdAcquisition::setFilePattern(%s->%s)\n", qPrintable(m_FilePattern), qPrintable(pattern));
+  }
+
+  if (m_FilePattern != pattern) {
+    m_FilePattern = pattern;
+
+    emit filePatternChanged(pattern);
+  }
+}
+
+void QxrdAcquisition::setOutputDirectory(QString path)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_Debug) {
+    printf("QxrdAcquisition::setOutputDirectory(%s->%s)\n", qPrintable(m_OutputDirectory), qPrintable(path));
+  }
+
+  if (m_OutputDirectory != path) {
+    m_OutputDirectory = path;
+
+    emit outputDirectoryChanged(path);
+  }
+}
+
+void QxrdAcquisition::setDarkNSummed(int nsummed)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_Debug) {
+    printf("QxrdAcquisition::setDarkNSummed(%d->%d)\n", m_DarkNSummed, nsummed);
+  }
+
+  if (m_DarkNSummed != nsummed) {
+    m_DarkNSummed = nsummed;
+
+    emit darkNSummedChanged(nsummed);
+  }
+}
+
+double  QxrdAcquisition::exposureTime() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_ExposureTime;
+}
+
+int     QxrdAcquisition::integrationMode() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_IntegrationMode;
+}
+
+int     QxrdAcquisition::nSummed() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_NSummed;
+}
+
+int     QxrdAcquisition::nFrames() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_NFrames;
+}
+
+int     QxrdAcquisition::fileIndex() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_FileIndex;
+}
+
+QString QxrdAcquisition::filePattern() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_FilePattern;
+}
+
+QString QxrdAcquisition::outputDirectory() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_OutputDirectory;
+}
+
+int     QxrdAcquisition::darkNSummed() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_DarkNSummed;
+}
+
+int     QxrdAcquisition::debug() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Debug;
+}
+
+void QxrdAcquisition::setDebug(int dbg)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_Debug = dbg;
+}
+
+QScriptValue QxrdAcquisition::acquireFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (!g_Acquisition) return QScriptValue(engine, -1);
+
+  int nArgs = context->argumentCount();
+
+  switch (nArgs) {
+  default:
+  case 4:
+    g_Acquisition -> setNFrames(context -> argument(3).toUInt32());
+
+  case 3:
+    g_Acquisition -> setNSummed(context -> argument(2).toUInt32());
+
+  case 2:
+    g_Acquisition -> setExposureTime(context -> argument(1).toNumber());
+
+  case 1:
+    g_Acquisition -> setFilePattern(context -> argument(0).toString());
+
+  case 0:
+//    g_Acquisition -> acquire()
+    ;
+  }
+
+  return QScriptValue(engine, 1);
+}
+
+QScriptValue QxrdAcquisition::acquireDarkFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (!g_Acquisition) return QScriptValue(engine, -1);
+
+  int nArgs = context->argumentCount();
+
+  switch (nArgs) {
+  default:
+  case 3:
+    g_Acquisition -> setDarkNSummed(context -> argument(2).toUInt32());
+
+  case 2:
+    g_Acquisition -> setExposureTime(context -> argument(1).toNumber());
+
+  case 1:
+    g_Acquisition -> setFilePattern(context -> argument(0).toString());
+
+  case 0:
+//    g_Acquisition -> acquireDark()
+    ;
+  }
+
+  return QScriptValue(engine, 1);
+}
+
+QScriptValue QxrdAcquisition::statusFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() == 0) {
+    return QScriptValue(engine, g_Acquisition -> acquisitionStatus(0));
+  } else {
+    double time = context->argument(0).toNumber();
+    return QScriptValue(engine, g_Acquisition -> acquisitionStatus(time));
+  }
+}
+
+QScriptValue QxrdAcquisition::integrationModeFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setIntegrationMode(context->argument(0).toInt32());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> integrationMode());
+}
+
+QScriptValue QxrdAcquisition::exposureFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setExposureTime(context->argument(0).toNumber());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> exposureTime());
+}
+
+QScriptValue QxrdAcquisition::subframesFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setNSummed(context->argument(0).toUInt32());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> nSummed());
+}
+
+QScriptValue QxrdAcquisition::darkSubframesFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setDarkNSummed(context->argument(0).toUInt32());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> darkNSummed());
+}
+
+QScriptValue QxrdAcquisition::framesFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setNFrames(context->argument(0).toUInt32());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> nFrames());
+}
+
+QScriptValue QxrdAcquisition::filenameFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setFilePattern(context->argument(0).toString());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> filePattern());
+}
+
+QScriptValue QxrdAcquisition::directoryFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setOutputDirectory(context->argument(0).toString());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> outputDirectory());
+}
+
+QScriptValue QxrdAcquisition::fileIndexFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setFileIndex(context->argument(0).toUInt32());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> fileIndex());
+}
+
+QScriptValue QxrdAcquisition::setCameraModeFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setCameraMode(context->argument(0).toInt32());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> cameraMode());
+}
+
+QScriptValue QxrdAcquisition::setFrameSyncModeFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setFrameSyncMode(context->argument(0).toInt32());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> frameSyncMode());
+}
+
+QScriptValue QxrdAcquisition::setTimerSyncFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setTimerSync(context->argument(0).toInt32());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> timerSync());
+}
+
+QScriptValue QxrdAcquisition::setCameraGainFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> setCameraGain(context->argument(0).toInt32());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> cameraGain());
+}
+
+void QxrdAcquisition::evaluate(QString cmd)
+{
+  emit printMessage(tr("Evaluate %1").arg(cmd));
+
+  QScriptValue res = m_ScriptEngine.evaluate(cmd);
+
+  emit printMessage(tr("Result = %1").arg(res.toString()));
+}
+

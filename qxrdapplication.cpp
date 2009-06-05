@@ -73,6 +73,8 @@ bool QxrdApplication::wantToQuit()
 
 void QxrdApplication::acquisitionRunning()
 {
+  m_Window -> onAcquisitionRunning();
+
   QVector<double> integ = m_AcquisitionThread -> integrationTimes();
 
   int n = integ.count();
@@ -116,3 +118,7 @@ QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
 //  return m_Window -> acquisitionStatus(time);
 //}
 
+void QxrdApplication::executeScript(QString cmd)
+{
+  m_ServerThread -> executeScript(cmd);
+}

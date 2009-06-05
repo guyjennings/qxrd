@@ -10,6 +10,7 @@
 #include <qwt_legend.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_scale_widget.h>
+#include <QMetaMethod>
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QwtPlot(parent),
@@ -185,7 +186,9 @@ void QxrdImagePlot::on_maintain_aspect_changed(int interp)
 {
 //  printf("QxrdImagePlot::on_maintain_aspect_changed(%d)\n", interp);
 
-  m_Rescaler -> setEnabled(interp);
+  if (m_Rescaler) {
+    m_Rescaler -> setEnabled(interp);
+  }
 }
 
 void QxrdImagePlot::setTrackerPen(const QPen &pen)

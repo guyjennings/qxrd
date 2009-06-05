@@ -9,6 +9,7 @@
 #include <qwt_plot_magnifier.h>
 #include <qwt_symbol.h>
 #include <qwt_legend.h>
+#include <QMetaMethod>
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   : QwtPlot(parent),
@@ -52,8 +53,6 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   m_Legend -> setItemMode(QwtLegend::CheckableItem);
 
   insertLegend(m_Legend, QwtPlot::RightLegend);
-//
-//  autoScale();
 }
 
 void QxrdCenterFinderPlot::autoScale()

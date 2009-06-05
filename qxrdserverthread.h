@@ -15,9 +15,11 @@ public:
   ~QxrdServerThread();
 
   void shutdown();
+  void executeScript(QString cmd);
 
 signals:
   void printMessage(QString msg);
+  void execute(QString cmd);
 
 protected:
   void run();

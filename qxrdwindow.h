@@ -8,6 +8,7 @@
 
 class QxrdApplication;
 class QxrdAcquisitionThread;
+class QxrdAcquisition;
 class QwtPlotSpectrogram;
 class QCloseEvent;
 class QxrdImageData;
@@ -39,6 +40,8 @@ public slots:
   void saveRawData(QxrdImageData *image);
   void saveNamedImageData(QString name, QxrdImageData *image);
 
+  void onAcquisitionRunning();
+
   void doAcquire();
   void doCancel();
   void onAcquireStarted(int dark);
@@ -46,6 +49,7 @@ public slots:
   void onAcquireComplete(int dark);
   void doAcquireDark();
   void doCancelDark();
+  void executeScript();
 
   void doTest();
 
@@ -163,6 +167,7 @@ private:
   int                     m_SettingsLoaded;
   QxrdApplication        *m_Application;
   QxrdAcquisitionThread  *m_AcquisitionThread;
+  QxrdAcquisition        *m_Acquisition;
   QxrdDataProcessor      *m_DataProcessor;
   QxrdCenterFinderDialog *m_CenterFinderDialog;
   QxrdCenterFinder       *m_CenterFinder;

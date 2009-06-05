@@ -23,7 +23,7 @@ class QxrdImagePlot : public QwtPlot
   Q_OBJECT;
 
  public:
-  QxrdImagePlot(QWidget *parent);
+  QxrdImagePlot(QWidget *parent = 0);
 
  public slots:
   void autoScale();

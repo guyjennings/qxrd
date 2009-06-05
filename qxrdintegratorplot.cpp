@@ -1,6 +1,7 @@
 #include "qxrdintegratorplot.h"
 
 #include <qwt_plot_zoomer.h>
+#include <QMetaMethod>
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   : QwtPlot(parent),

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>298</width>
-    <height>296</height>
+    <height>337</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -219,6 +219,9 @@
      </item>
      <item row="0" column="1">
       <widget class="QDoubleSpinBox" name="m_CenterX">
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
        <property name="minimum">
         <double>-10000.000000000000000</double>
        </property>
@@ -236,6 +239,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="m_CenterY">
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
        <property name="minimum">
         <double>-10000.000000000000000</double>
        </property>
@@ -252,7 +258,11 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QDoubleSpinBox" name="m_CenterStep"/>
+      <widget class="QDoubleSpinBox" name="m_CenterStep">
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
