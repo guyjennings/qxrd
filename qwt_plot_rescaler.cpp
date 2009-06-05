@@ -492,8 +492,8 @@ QwtDoubleInterval QwtPlotRescaler::interval(int axis) const
 
     const QwtPlot *plt = plot();
 
-    const double v1 = plt->axisScaleDiv(axis)->lBound();
-    const double v2 = plt->axisScaleDiv(axis)->hBound();
+    const double v1 = plt->axisScaleDiv(axis)->lowerBound();
+    const double v2 = plt->axisScaleDiv(axis)->upperBound();
 
     return QwtDoubleInterval(v1, v2).normalized();
 }
@@ -585,8 +585,8 @@ void QwtPlotRescaler::updateScales(
             double v1 = intervals[axis].minValue();
             double v2 = intervals[axis].maxValue();
 
-            if ( plt->axisScaleDiv(axis)->lBound() >
-                plt->axisScaleDiv(axis)->hBound() )
+            if ( plt->axisScaleDiv(axis)->lowerBound() >
+                plt->axisScaleDiv(axis)->upperBound() )
             {
                 qSwap(v1, v2);
             }
