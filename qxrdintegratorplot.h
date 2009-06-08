@@ -1,11 +1,11 @@
 #ifndef QXRDINTEGRATORPLOT_H
 #define QXRDINTEGRATORPLOT_H
 
-#include <qwt_plot.h>
+#include "qxrdplot.h"
 
 class QwtPlotZoomer;
 
-class QxrdIntegratorPlot : public QwtPlot
+class QxrdIntegratorPlot : public QxrdPlot
 {
   Q_OBJECT;
 

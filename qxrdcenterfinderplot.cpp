@@ -12,7 +12,7 @@
 #include <QMetaMethod>
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
-  : QwtPlot(parent),
+  : QxrdPlot(parent),
     m_Tracker(NULL),
     m_Panner(NULL),
     m_Zoomer(NULL),
@@ -53,12 +53,16 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   m_Legend -> setItemMode(QwtLegend::CheckableItem);
 
   insertLegend(m_Legend, QwtPlot::RightLegend);
+
+  autoScale();
 }
 
 void QxrdCenterFinderPlot::autoScale()
 {
-  setAxisAutoScale(QwtPlot::xBottom);
+  m_Zoomer -> zoom(0);
+
   setAxisAutoScale(QwtPlot::yLeft);
+  setAxisAutoScale(QwtPlot::xBottom);
 
   replot();
 
@@ -149,4 +153,6 @@ void QxrdCenterFinderPlot::doZoomOut()
 void QxrdCenterFinderPlot::doZoomAll()
 {
   m_Zoomer -> zoom(0);
+
+  autoScale();
 }

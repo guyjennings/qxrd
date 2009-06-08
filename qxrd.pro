@@ -17,7 +17,7 @@ DISTFILES += qxrdhelptext.html \
     images/*.png
 win32:include("../qxrd/qt-libtiff-win32.pri")
 win32:include("../qxrd/qwt-5.2-win32.pri")
-win32 {
+win32 { 
     INCLUDEPATH += ../qceplib/
     HEADERS += ../qceplib/spec_server.h \
         ../qceplib/qspecserver.h \
@@ -27,8 +27,7 @@ win32 {
         ../qceplib/qcepimagedataformatmar345.h \
         ../qceplib/qcepimagedataformatfactory.h
 }
-HEADERS += \
-    qxrdapplication.h \
+HEADERS += qxrdapplication.h \
     qxrdsettings.h \
     qxrdimagedata.h \
     qxrdimagequeue.h \
@@ -43,6 +42,7 @@ HEADERS += \
     qxrdcenterfinder.h \
     qxrdcenterfinderplot.h \
     qxrdcenterfinderdialog.h \
+    qxrdcenterfinderpicker.h \
     qxrdintegrator.h \
     qxrdintegratorplot.h \
     qxrdintegratordialog.h \
@@ -54,7 +54,14 @@ HEADERS += \
     qxrdspecserver.h \
     qxrdacquisitionthread.h \
     qxrdacquisition.h \
-    Acq.h
+    Acq.h \
+    qxrdacquisitionparameters.h \
+    qxrdacquisitionscripting.h \
+    qxrdacquisitionoperations.h \
+    qxrdacquisitionperkinelmer.h \
+    qxrdplot.h \
+    qxrdplotslicer.h \
+    qxrdplotmeasurer.h
 unix:HEADERS += AcqLinuxTypes.h
 win32:SOURCES += ../qceplib/qspecserver.cpp \
     ../qceplib/qcepimagedata.cpp \
@@ -78,6 +85,7 @@ SOURCES += qxrd.cpp \
     qxrdcenterfinder.cpp \
     qxrdcenterfinderplot.cpp \
     qxrdcenterfinderdialog.cpp \
+    qxrdcenterfinderpicker.cpp \
     qxrdintegrator.cpp \
     qxrdintegratorplot.cpp \
     qxrdintegratordialog.cpp \
@@ -88,7 +96,14 @@ SOURCES += qxrd.cpp \
     qxrdserverthread.cpp \
     qxrdspecserver.cpp \
     qxrdacquisitionthread.cpp \
-    qxrdacquisition.cpp
+    qxrdacquisition.cpp \
+    qxrdacquisitionparameters.cpp \
+    qxrdacquisitionscripting.cpp \
+    qxrdacquisitionoperations.cpp \
+    qxrdacquisitionperkinelmer.cpp \
+    qxrdplot.cpp \
+    qxrdplotslicer.cpp \
+    qxrdplotmeasurer.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui
@@ -103,7 +118,6 @@ unix {
 win32 { 
     PLATFORM_PREFIX = win32
     QTBINDIR = C:/Qt/2009.02/qt/bin
-
     MINGW = c:/mingw/bin
     app.target = app
     zip.target = zip
@@ -189,4 +203,4 @@ website.commands = rsync \
     -avx \
     dox/html/ \
     www12.xor.aps.anl.gov:/var/www/html/software/qxrd/
-OTHER_FILES += qwt-5.2-win32.pri
+OTHER_FILES += 

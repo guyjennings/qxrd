@@ -1,32 +1,32 @@
 #include "qxrddataprocessor.h"
 #include <QtConcurrentRun>
 #include "qxrdwindow.h"
-#include "qxrdacquisitionthread.h"
+#include "qxrdacquisition.h"
 
 #include <QTime>
 
 QxrdDataProcessor::QxrdDataProcessor
-    (QxrdWindow *win, QxrdAcquisitionThread *acq, QObject *parent)
+    (QxrdWindow *win, QxrdAcquisition *acq, QObject *parent)
   : QObject(parent),
     m_Window(win),
-    m_AcquisitionThread(acq),
+    m_Acquisition(acq),
     m_DarkUsage(QReadWriteLock::Recursive),
     m_ProcessedImages("QxrdDataProcessor Processed Images"),
     m_DarkImages("QxrdDataProcessor Dark Images")
 {
-  connect(m_AcquisitionThread, SIGNAL(acquiredImageAvailable()), this, SLOT(on_acquired_image_available()));
+  connect(m_Acquisition, SIGNAL(acquiredImageAvailable()), this, SLOT(on_acquired_image_available()));
 }
 
 void QxrdDataProcessor::on_acquired_image_available()
 {
   printf("QxrdDataProcessor::on_acquired_image_available()\n");
 
-  QxrdImageData *image = m_AcquisitionThread -> takeNextAcquiredImage();
+  QxrdImageData *image = m_Acquisition -> takeNextAcquiredImage();
 
   if (image) {
-    printf("Frame Number %d\n", image -> frameNumber());
+    printf("Image Number %d\n", image -> imageNumber());
 
-    if ((image -> frameNumber()) >= 0) {
+    if ((image -> imageNumber()) >= 0) {
       m_DarkUsage.lockForRead();
       m_Processing.lockForRead();
       QtConcurrent::run(this, &QxrdDataProcessor::processAcquiredImage, image);
@@ -59,7 +59,7 @@ QxrdImageData *QxrdDataProcessor::takeLatestProcessedImage()
     QxrdImageData *img = m_ProcessedImages.dequeue();
 
     if (res) {
-      m_AcquisitionThread -> returnImageToPool(res);
+      m_Acquisition -> returnImageToPool(res);
     }
 
     res = img;
@@ -114,8 +114,13 @@ void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *d
     }
 
     if (dark && image) {
-      if (dark->integrationMode() != image->integrationMode()) {
-        emit printMessage("Integration times of acquired data and dark image are different, skipping");
+      if (dark->readoutMode() != image->readoutMode()) {
+        emit printMessage("Readout modes of acquired data and dark image are different, skipping");
+        return;
+      }
+
+      if (dark->exposureTime() != image->exposureTime()) {
+        emit printMessage("Exposure times of acquired data and dark image are different, skipping");
         return;
       }
 
@@ -130,8 +135,8 @@ void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *d
 
       int height = image->height();
       int width  = image->width();
-      int nres = image->nSummed();
-      int ndrk = dark -> nSummed();
+      int nres = image-> summedExposures();
+      int ndrk = dark -> summedExposures();
       int npixels = width*height;
 
       double ratio = ((double) nres)/((double) ndrk);

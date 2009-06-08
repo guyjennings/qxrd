@@ -4,6 +4,8 @@
 #include <QGroupBox>
 #include "ui_qxrdcenterfinderdialog.h"
 
+#include <qwt_double_rect.h>
+
 class QxrdCenterFinderDialog : public QGroupBox, public Ui::QxrdCenterFinderDialog
 {
   Q_OBJECT;

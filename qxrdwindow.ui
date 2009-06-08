@@ -80,6 +80,12 @@
                 <height>24</height>
                </size>
               </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="autoExclusive">
+               <bool>true</bool>
+              </property>
              </widget>
             </item>
             <item row="1" column="1">
@@ -102,7 +108,7 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="6" column="1">
              <spacer name="verticalSpacer_4">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -132,6 +138,81 @@
                 <width>24</width>
                 <height>24</height>
                </size>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QToolButton" name="m_ImageSetCenterButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/ringfinder.png</normaloff>:/images/images/ringfinder.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="autoExclusive">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QToolButton" name="m_ImageSliceButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/slice.png</normaloff>:/images/images/slice.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="autoExclusive">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QToolButton" name="m_ImageMeasureButton">
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/images/measure.png</normaloff>:/images/images/measure.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="autoExclusive">
+               <bool>true</bool>
+              </property>
+              <property name="autoRaise">
+               <bool>false</bool>
+              </property>
+              <property name="arrowType">
+               <enum>Qt::NoArrow</enum>
               </property>
              </widget>
             </item>
@@ -337,79 +418,82 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_14">
          <item row="0" column="0">
-          <widget class="QGroupBox" name="groupBox_11">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>5</verstretch>
-            </sizepolicy>
+          <widget class="QSplitter" name="splitter_3">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-           <property name="title">
-            <string>Output Messages</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_13">
-            <item row="0" column="0">
-             <widget class="QTextEdit" name="m_Messages">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>5</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string>Output messages during program execution appear here</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QGroupBox" name="groupBox_10">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>1</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="title">
-            <string>Script</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout">
-            <item row="0" column="0" colspan="2">
-             <widget class="QTextEdit" name="m_ScriptEdit">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>1</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="toolTip">
-               <string>Enter script commands here</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>532</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="1" column="1">
-             <widget class="QPushButton" name="m_ExecuteScriptButton">
-              <property name="text">
-               <string>Execute Script</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QGroupBox" name="groupBox_11">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>5</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>Output Messages</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_13">
+             <item row="0" column="0">
+              <widget class="QTextEdit" name="m_Messages">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>5</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Output messages during program execution appear here</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QGroupBox" name="groupBox_10">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>Script</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="0" column="0" colspan="2">
+              <widget class="QTextEdit" name="m_ScriptEdit">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>1</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Enter script commands here</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>532</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="m_ExecuteScriptButton">
+               <property name="text">
+                <string>Execute Script</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
         </layout>
@@ -453,12 +537,12 @@
             <item row="0" column="0">
              <widget class="QLabel" name="label_13">
               <property name="text">
-               <string>Detector Integration Mode</string>
+               <string>Readout Mode</string>
               </property>
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QComboBox" name="m_IntegrationMode">
+             <widget class="QComboBox" name="m_ReadoutMode">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
@@ -466,9 +550,9 @@
                </sizepolicy>
               </property>
               <property name="toolTip">
-               <string>Detector integration mode (0..7)
-Script Property: &quot;acquisition.integrationMode&quot;
-Script Function: integrationmode()</string>
+               <string>Detector readout mode (0..7)
+Script Property: &quot;acquisition.readoutMode&quot;
+Script Function: readoutMode()</string>
               </property>
              </widget>
             </item>
@@ -482,12 +566,12 @@ Script Function: integrationmode()</string>
             <item row="4" column="0">
              <widget class="QLabel" name="label_2">
               <property name="text">
-               <string>Summed Frames:</string>
+               <string>Summed Exposures:</string>
               </property>
              </widget>
             </item>
             <item row="5" column="0">
-             <widget class="QSpinBox" name="m_SummedFrames">
+             <widget class="QSpinBox" name="m_SummedExposures">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
@@ -496,8 +580,8 @@ Script Function: integrationmode()</string>
               </property>
               <property name="toolTip">
                <string>Number of exposures to sum for each saved image
-Script Property: &quot;acquisition.nSummed&quot;
-Script Function: subframes()</string>
+Script Property: &quot;acquisition.summedExposures&quot;
+Script Function: summedExposures()</string>
               </property>
               <property name="keyboardTracking">
                <bool>false</bool>
@@ -510,12 +594,12 @@ Script Function: subframes()</string>
             <item row="6" column="0">
              <widget class="QLabel" name="label_3">
               <property name="text">
-               <string>Frames in sequence:</string>
+               <string>Files in sequence:</string>
               </property>
              </widget>
             </item>
             <item row="7" column="0">
-             <widget class="QSpinBox" name="m_SequenceFrames">
+             <widget class="QSpinBox" name="m_FilesInSequence">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
@@ -523,9 +607,9 @@ Script Function: subframes()</string>
                </sizepolicy>
               </property>
               <property name="toolTip">
-               <string>Total number of images to take in sequence
-Script: &quot;acquisition.nFrames&quot;
-Script Function: frames()</string>
+               <string>Total number of files to take in sequence
+Script: &quot;acquisition.filesInSequence&quot;
+Script Function: filesInSequence()</string>
               </property>
               <property name="keyboardTracking">
                <bool>false</bool>
@@ -547,7 +631,7 @@ Script Function: frames()</string>
                <string>Exposure Time
 (&gt;= integration mode, up to 5 secs)
 Script Property: &quot;acquisition.exposureTime&quot;
-Script Function: exposure()</string>
+Script Function: exposureTime()</string>
               </property>
               <property name="keyboardTracking">
                <bool>false</bool>
@@ -587,7 +671,7 @@ Script Function: exposure()</string>
               <property name="toolTip">
                <string>The directory where data files will be saved
 Script Property: &quot;acquisition.outputDirectory&quot;
-Script Function: directory()</string>
+Script Function: outputDirectory()</string>
               </property>
               <property name="readOnly">
                <bool>true</bool>
@@ -604,12 +688,12 @@ Script Function: directory()</string>
             <item row="3" column="0" colspan="2">
              <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>Save File Pattern:</string>
+               <string>File Pattern:</string>
               </property>
              </widget>
             </item>
             <item row="4" column="0" colspan="2">
-             <widget class="QLineEdit" name="m_SaveFilePattern">
+             <widget class="QLineEdit" name="m_FilePattern">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
@@ -619,7 +703,7 @@ Script Function: directory()</string>
               <property name="toolTip">
                <string>Base File Name Pattern
 Script Property: &quot;acquisition.filePattern&quot;
-Script Function: filename()
+Script Function: filePattern()
 Files: &lt;pattern&gt;-&lt;nnnnn&gt;.tif
 Dark: &lt;pattern&gt;-&lt;nnnnn&gt;.dark.tif
 Raw: &lt;pattern&gt;-&lt;nnnnn&gt;.raw.tif</string>
@@ -629,12 +713,12 @@ Raw: &lt;pattern&gt;-&lt;nnnnn&gt;.raw.tif</string>
             <item row="5" column="0" colspan="2">
              <widget class="QLabel" name="label_5">
               <property name="text">
-               <string>File Index Number:</string>
+               <string>File Index:</string>
               </property>
              </widget>
             </item>
             <item row="6" column="0" colspan="2">
-             <widget class="QSpinBox" name="m_FileIndexNumber">
+             <widget class="QSpinBox" name="m_FileIndex">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
@@ -696,12 +780,12 @@ Script Function: acquire()</string>
             <item row="0" column="0" colspan="2">
              <widget class="QLabel" name="label_7">
               <property name="text">
-               <string>Summed Frames for Dark Measurement:</string>
+               <string>Dark Summed Exposures:</string>
               </property>
              </widget>
             </item>
             <item row="1" column="0" colspan="2">
-             <widget class="QSpinBox" name="m_DarkSummedFrames">
+             <widget class="QSpinBox" name="m_DarkSummedExposures">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>1</horstretch>
@@ -709,9 +793,9 @@ Script Function: acquire()</string>
                </sizepolicy>
               </property>
               <property name="toolTip">
-               <string>Number of frames to sum for dark measurement
-Script Property: acquisition.darkNSummed
-Script Function: darksubframes()</string>
+               <string>Number of exposures to sum for dark image
+Script Property: acquisition.darkSummedExposures
+Script Function: darkSummedExposures()</string>
               </property>
               <property name="keyboardTracking">
                <bool>false</bool>
@@ -1466,6 +1550,15 @@ Script Function: acquiredark()</string>
     <string>Clear Mask Range</string>
    </property>
   </action>
+  <action name="m_ActionSetCenter">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/images/ringfinder.png</normaloff>:/images/images/ringfinder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Set Center</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1474,18 +1567,23 @@ Script Function: acquiredark()</string>
    <header>qwt_plot.h</header>
   </customwidget>
   <customwidget>
-   <class>QxrdImagePlot</class>
+   <class>QxrdPlot</class>
    <extends>QwtPlot</extends>
+   <header>qxrdplot.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QxrdImagePlot</class>
+   <extends>QxrdPlot</extends>
    <header>qxrdimageplot.h</header>
   </customwidget>
   <customwidget>
    <class>QxrdCenterFinderPlot</class>
-   <extends>QwtPlot</extends>
+   <extends>QxrdPlot</extends>
    <header>qxrdcenterfinderplot.h</header>
   </customwidget>
   <customwidget>
    <class>QxrdIntegratorPlot</class>
-   <extends>QwtPlot</extends>
+   <extends>QxrdPlot</extends>
    <header>qxrdintegratorplot.h</header>
   </customwidget>
  </customwidgets>

@@ -1,13 +1,13 @@
 #include "qxrdacquisitionthread.h"
 
 #include "qxrdacquisition.h"
+#include <QFuture>
+#include <QVariant>
 
 QxrdAcquisitionThread::QxrdAcquisitionThread()
   : QThread(),
     m_Debug(true),
-    m_Acquisition(NULL),
-    m_FreeImages("Free Image Pool"),
-    m_AcquiredImages("Acquired Images")
+    m_Acquisition(NULL)
 {
 }
 
@@ -20,23 +20,10 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 
 void QxrdAcquisitionThread::run()
 {
-  emit printMessage(tr("Acquisition thread %1\n").arg((long) QThread::currentThread()));
-
   m_Acquisition = new QxrdAcquisition(this);
 
-  connect(this, SIGNAL(_evaluate(QString)), m_Acquisition, SLOT(evaluate(QString)));
-
-//  connect(this, SIGNAL(_acquire(QString,QString,int,int,int,int)),
-//          m_Acquisition, SLOT(acquire(QString,QString,int,int,int,int)));
-//  connect(this, SIGNAL(_acquireDark(QString,QString,int,int,int)),
-//          m_Acquisition, SLOT(acquireDark(QString,QString,int,int,int)));
-  connect(m_Acquisition, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
-  connect(m_Acquisition, SIGNAL(acquireStarted(int)), this, SIGNAL(acquireStarted(int)));
-  connect(m_Acquisition, SIGNAL(acquireComplete(int)), this, SIGNAL(acquireComplete(int)));
-  connect(m_Acquisition, SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
-	  this, SIGNAL(acquiredFrame(QString,int,int,int,int,int)));
-//  connect(m_Acquisition, SIGNAL(fileIndexChanged(int)), this, SIGNAL(fileIndexChanged(int)));
-  connect(m_Acquisition, SIGNAL(statusMessage(QString)), this, SIGNAL(statusMessage(QString)));
+  connect(this,          SIGNAL(_evaluate(QString)),
+          m_Acquisition, SLOT(_evaluate(QString)));
 
   m_Acquisition -> initialize();
 
@@ -62,26 +49,6 @@ void QxrdAcquisitionThread::doAcquireDark()
   evaluate("acquiredark()");
 }
 
-//{
-//  QString outDir   = outputDirectory();
-//  QString filePatt = filePattern();
-//  int    index     = fileIndex();
-//  int    integmode = integrationMode();
-//  int     nsum     = darkNSummed();
-//
-//  acquireDark(outDir, filePatt, index, integmode, nsum);
-//}
-//
-//void QxrdAcquisitionThread::acquireDark(QString outDir, QString filePattern, int fileIndex, int integmode, int nsum)
-//{
-//  if (m_Acquisition -> canStart()) {
-//    emit _acquireDark(outDir, filePattern, fileIndex, integmode, nsum);
-//  } else {
-//    printf("Attempting to start acquisition while it is already running..\n");
-//  }
-//
-//}
-
 void QxrdAcquisitionThread::msleep(int msec)
 {
   QThread::msleep(msec);
@@ -97,51 +64,40 @@ void QxrdAcquisitionThread::cancelDark()
   m_Acquisition -> cancelDark();
 }
 
-QVector<double> QxrdAcquisitionThread::integrationTimes()
+QVector<double> QxrdAcquisitionThread::readoutTimes()
 {
-  return m_Acquisition -> integrationTimes();
-}
-
-int QxrdAcquisitionThread::acquisitionStatus(double time)
-{
-  return m_Acquisition -> acquisitionStatus(time);
-}
-
-QxrdImageData *QxrdAcquisitionThread::takeNextFreeImage()
-{
-  if (m_FreeImages.size() == 0) {
-    printf("Allocate new image\n");
-    return new QxrdImageData(2048, 2048);
-  } else {
-    return m_FreeImages.dequeue();
-  }
-}
-
-QxrdImageData *QxrdAcquisitionThread::takeNextAcquiredImage()
-{
-  return m_AcquiredImages.dequeue();
-}
-
-void QxrdAcquisitionThread::newAcquiredImage(QxrdImageData *img)
-{
-  m_AcquiredImages.enqueue(img);
-
-  emit acquiredImageAvailable();
-}
-
-void QxrdAcquisitionThread::returnImageToPool(QxrdImageData *img)
-{
-  m_FreeImages.enqueue(img);
+  return m_Acquisition -> readoutTimes();
 }
 
 QVariant QxrdAcquisitionThread::evaluate(QString cmd)
 {
+  QMutexLocker lock(&m_EvalMutex);
+
   emit _evaluate(cmd);
 
-  return "";
+  waitForResult();
+
+  return m_EvalResult;
+}
+
+void QxrdAcquisitionThread::waitForResult()
+{
+  m_EvalWaitCondition.wait(&m_EvalMutex, 10000);
+}
+
+void QxrdAcquisitionThread::setResult(QVariant res)
+{
+  m_EvalResult = res;
+
+  m_EvalWaitCondition.wakeAll();
 }
 
 QxrdAcquisition *QxrdAcquisitionThread::acquisition() const
 {
   return m_Acquisition;
+}
+
+void QxrdAcquisitionThread::sleep(double time)
+{
+  QThread::usleep((int)(time*1e6));
 }

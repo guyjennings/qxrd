@@ -1,7 +1,7 @@
 #ifndef QXRDCENTERFINDERPLOT_H
 #define QXRDCENTERFINDERPLOT_H
 
-#include <qwt_plot.h>
+#include "qxrdplot.h"
 
 class QxrdImageData;
 class QwtPlotPicker;
@@ -10,7 +10,7 @@ class QwtPlotPanner;
 class QwtPlotMagnifier;
 class QwtLegend;
 
-class QxrdCenterFinderPlot : public QwtPlot
+class QxrdCenterFinderPlot : public QxrdPlot
 {
   Q_OBJECT;
 

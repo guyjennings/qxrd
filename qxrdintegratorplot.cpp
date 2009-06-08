@@ -4,7 +4,7 @@
 #include <QMetaMethod>
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
-  : QwtPlot(parent),
+  : QxrdPlot(parent),
     m_Zoomer(NULL)
 {
   m_Zoomer = new QwtPlotZoomer(canvas());

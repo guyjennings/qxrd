@@ -38,7 +38,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_Application(app),
     m_AcquisitionThread(acq),
     m_Acquisition(NULL),
-    m_DataProcessor(new QxrdDataProcessor(this, acq, this)),
+    m_DataProcessor(NULL),
     m_CenterFinderDialog(NULL),
     m_CenterFinder(NULL),
     m_IntegratorDialog(NULL),
@@ -65,6 +65,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   }
 
   m_CenterFinder = new QxrdCenterFinder(this, m_Plot, m_CenterFinderPlot, m_CenterFinderDialog, this);
+  m_CenterFinder -> setEnabled(false, true);
 
   m_IntegratorDialog = new QxrdIntegratorDialog();
 
@@ -145,23 +146,14 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionSetMaskRange, SIGNAL(triggered()), this, SLOT(doSetMaskRange()));
   connect(m_ActionClearMaskRange, SIGNAL(triggered()), this, SLOT(doClearMaskRange()));
 
-  connect(m_AcquisitionThread, SIGNAL(acquireStarted(int)),
-          this, SLOT(onAcquireStarted(int)));
-  connect(m_AcquisitionThread, SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
-          this, SLOT(onAcquiredFrame(QString,int,int,int,int,int)));
-  connect(m_AcquisitionThread, SIGNAL(acquireComplete(int)),
-          this, SLOT(onAcquireComplete(int)));
-  connect(m_AcquisitionThread, SIGNAL(statusMessage(QString)), this, SLOT(statusMessage(QString)));
-
-  connect(m_DataProcessor, SIGNAL(processedImageAvailable()), this, SLOT(onProcessedImageAvailable()));
-  connect(m_DataProcessor, SIGNAL(darkImageAvailable()), this, SLOT(onDarkImageAvailable()));
-  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
-
   connect(m_ActionTest, SIGNAL(triggered()), this, SLOT(doTest()));
 
   connect(m_ImageZoomInButton, SIGNAL(clicked()), m_Plot, SLOT(doZoomIn()));
   connect(m_ImageZoomOutButton, SIGNAL(clicked()), m_Plot, SLOT(doZoomOut()));
   connect(m_ImageZoomAllButton, SIGNAL(clicked()), m_Plot, SLOT(doZoomAll()));
+  connect(m_ImageSetCenterButton, SIGNAL(clicked()), m_Plot, SLOT(doSetCenter()));
+  connect(m_ImageSliceButton, SIGNAL(clicked()), m_Plot, SLOT(doSlice()));
+  connect(m_ImageMeasureButton, SIGNAL(clicked()), m_Plot, SLOT(doMeasure()));
 
   connect(m_CenteringZoomInButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(doZoomIn()));
   connect(m_CenteringZoomOutButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(doZoomOut()));
@@ -171,32 +163,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_IntegratorZoomOutButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(doZoomOut()));
   connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(doZoomAll()));
 
-  connect(m_IntegrationMode, SIGNAL(currentIndexChanged(int)),
-          this,              SLOT(setIntegrationMode(int)));
-
-  connect(m_ExposureTime,    SIGNAL(valueChanged(double)),
-          this,              SLOT(setExposureTime(double)));
-
-  connect(m_SummedFrames,    SIGNAL(valueChanged(int)),
-          this,              SLOT(setNSummed(int)));
-
-  connect(m_DarkSummedFrames,SIGNAL(valueChanged(int)),
-          this,              SLOT(setDarkNSummed(int)));
-
-  connect(m_SequenceFrames,  SIGNAL(valueChanged(int)),
-          this,              SLOT(setNFrames(int)));
-
-  connect(m_OutputDirectory, SIGNAL(valueChanged(QString)),
-          this,              SLOT(setOutputDirectory(QString)));
-
-  connect(m_SaveFilePattern, SIGNAL(valueChanged(QString)),
-          this,              SLOT(setFilePattern(QString)));
-
-  connect(m_FileIndexNumber, SIGNAL(valueChanged(int)),
-          this,              SLOT(setFileIndex(int)));
-
   for (int i=0; i<8; i++) {
-    m_IntegrationMode -> addItem(tr("Item %1").arg(i));
+    m_ReadoutMode -> addItem(tr("Item %1").arg(i));
     m_Exposures.append(0);
   }
 
@@ -226,23 +194,64 @@ void QxrdWindow::onAcquisitionRunning()
 {
   m_Acquisition = m_AcquisitionThread -> acquisition();
 
-  connect(m_Acquisition, SIGNAL(fileIndexChanged(int)), this, SLOT(setFileIndex(int)));
-  connect(m_Acquisition, SIGNAL(exposureTimeChanged(double)), this, SLOT(setExposureTime(double)));
-  connect(m_Acquisition, SIGNAL(darkNSummedChanged(int)), this, SLOT(setDarkNSummed(int)));
-  connect(m_Acquisition, SIGNAL(filePatternChanged(QString)), this, SLOT(setFilePattern(QString)));
-  connect(m_Acquisition, SIGNAL(integrationModeChanged(int)), this, SLOT(setIntegrationMode(int)));
-  connect(m_Acquisition, SIGNAL(nFramesChanged(int)), this, SLOT(setNFrames(int)));
-  connect(m_Acquisition, SIGNAL(nSummedChanged(int)), this, SLOT(setNSummed(int)));
-  connect(m_Acquisition, SIGNAL(outputDirectoryChanged(QString)), this, SLOT(setOutputDirectory(QString)));
 
-  connect(this, SIGNAL(fileIndexChanged(int)), m_Acquisition, SLOT(setFileIndex(int)));
-  connect(this, SIGNAL(exposureTimeChanged(double)), m_Acquisition, SLOT(setExposureTime(double)));
-  connect(this, SIGNAL(darkNSummedChanged(int)), m_Acquisition, SLOT(setDarkNSummed(int)));
-  connect(this, SIGNAL(filePatternChanged(QString)), m_Acquisition, SLOT(setFilePattern(QString)));
-  connect(this, SIGNAL(integrationModeChanged(int)), m_Acquisition, SLOT(setIntegrationMode(int)));
-  connect(this, SIGNAL(nFramesChanged(int)), m_Acquisition, SLOT(setNFrames(int)));
-  connect(this, SIGNAL(nSummedChanged(int)), m_Acquisition, SLOT(setNSummed(int)));
-  connect(this, SIGNAL(outputDirectoryChanged(QString)), m_Acquisition, SLOT(setOutputDirectory(QString)));
+  connect(m_Acquisition,     SIGNAL(statusMessage(QString)),
+          this,              SLOT(statusMessage(QString)));
+  connect(m_Acquisition,     SIGNAL(printMessage(QString)),
+          this,              SLOT(printMessage(QString)));
+
+  connect(m_Acquisition,     SIGNAL(acquireStarted(int)),
+          this,              SLOT(onAcquireStarted(int)));
+  connect(m_Acquisition,     SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
+          this,              SLOT(onAcquiredFrame(QString,int,int,int,int,int)));
+  connect(m_Acquisition,     SIGNAL(acquireComplete(int)),
+          this,              SLOT(onAcquireComplete(int)));
+
+  connect(m_ReadoutMode,     SIGNAL(currentIndexChanged(int)),
+          m_Acquisition,     SLOT(setReadoutMode(int)));
+  connect(m_Acquisition,     SIGNAL(readoutModeChanged(int)),
+          m_ReadoutMode,     SLOT(setCurrentIndex(int)));
+
+  connect(m_ExposureTime,    SIGNAL(valueChanged(double)),
+          m_Acquisition,     SLOT(setExposureTime(double)));
+  connect(m_Acquisition,     SIGNAL(exposureTimeChanged(double)),
+          m_ExposureTime,    SLOT(setValue(double)));
+
+  connect(m_SummedExposures, SIGNAL(valueChanged(int)),
+          m_Acquisition,     SLOT(setSummedExposures(int)));
+  connect(m_Acquisition,     SIGNAL(summedExposuresChanged(int)),
+          m_SummedExposures, SLOT(setValue(int)));
+
+  connect(m_DarkSummedExposures,SIGNAL(valueChanged(int)),
+          m_Acquisition,     SLOT(setDarkSummedExposures(int)));
+  connect(m_Acquisition,     SIGNAL(darkSummedExposuresChanged(int)),
+          m_DarkSummedExposures,SLOT(setValue(int)));
+
+  connect(m_FilesInSequence, SIGNAL(valueChanged(int)),
+          m_Acquisition,     SLOT(setFilesInSequence(int)));
+  connect(m_Acquisition,     SIGNAL(filesInSequenceChanged(int)),
+          m_FilesInSequence, SLOT(setValue(int)));
+
+  connect(m_OutputDirectory, SIGNAL(textChanged(QString)),
+          m_Acquisition,     SLOT(setOutputDirectory(QString)));
+  connect(m_Acquisition,     SIGNAL(outputDirectoryChanged(QString)),
+          m_OutputDirectory, SLOT(setText(QString)));
+
+  connect(m_FilePattern,     SIGNAL(textChanged(QString)),
+          m_Acquisition,     SLOT(setFilePattern(QString)));
+  connect(m_Acquisition,     SIGNAL(filePatternChanged(QString)),
+          m_FilePattern,     SLOT(setText(QString)));
+
+  connect(m_FileIndex,       SIGNAL(valueChanged(int)),
+          m_Acquisition,     SLOT(setFileIndex(int)));
+  connect(m_Acquisition,     SIGNAL(fileIndexChanged(int)),
+          m_FileIndex,       SLOT(setValue(int)));
+
+  m_DataProcessor = new QxrdDataProcessor(this, m_Acquisition, this);
+
+  connect(m_DataProcessor, SIGNAL(processedImageAvailable()), this, SLOT(onProcessedImageAvailable()));
+  connect(m_DataProcessor, SIGNAL(darkImageAvailable()), this, SLOT(onDarkImageAvailable()));
+  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 }
 
 void QxrdWindow::closeEvent ( QCloseEvent * event )
@@ -333,139 +342,23 @@ void QxrdWindow::acquisitionFinished()
   m_Progress -> reset();
 }
 
-void QxrdWindow::setIntegrationTime(int n, double t)
+void QxrdWindow::setReadoutTime(int n, double t)
 {
-  while (n >= m_IntegrationMode->count()) {
-    m_IntegrationMode -> addItem("");
+  while (n >= m_ReadoutMode->count()) {
+    m_ReadoutMode -> addItem("");
     m_Exposures.append(0);
   }
 
-  m_IntegrationMode -> setItemText(n, tr("%1 msec").arg(t/1e3,0,'f',0));
+  m_ReadoutMode -> setItemText(n, tr("%1 msec").arg(t/1e3,0,'f',0));
   m_Exposures[n] = t;
-}
-
-void QxrdWindow::setExposureTime(double t)
-{
-  if (t != exposureTime()) {
-    m_ExposureTime->setValue(t);
-  }
-
-  emit exposureTimeChanged(t);
-}
-
-void QxrdWindow::setIntegrationMode(int mode)
-{
-  if (mode != integrationMode()) {
-    m_IntegrationMode->setCurrentIndex(mode);
-  }
-
-  emit integrationModeChanged(mode);
-}
-
-void QxrdWindow::setNSummed(int nsummed)
-{
-  printf("QxrdWindow::setNSummed(%d->%d)\n", nSummed(), nsummed);
-
-  if (nsummed != nSummed()) {
-    m_SummedFrames->setValue(nsummed);
-  }
-
-  emit nSummedChanged(nsummed);
-}
-
-void QxrdWindow::setDarkNSummed(int nsummed)
-{
-  if (nsummed != darkNSummed()) {
-    m_DarkSummedFrames->setValue(nsummed);
-  }
-
-  emit darkNSummedChanged(nsummed);
-}
-
-void QxrdWindow::setNFrames(int nframes)
-{
-  if (nframes != nFrames()) {
-    m_SequenceFrames->setValue(nframes);
-  }
-
-  emit nFramesChanged(nframes);
-}
-
-void QxrdWindow::setFileIndex(int index)
-{
-  emit printMessage(tr("QxrdWindow::setFileIndex(%1->%2)")
-                    .arg(fileIndex()).arg(index));
-
-  if (index != fileIndex()) {
-    m_FileIndexNumber->setValue(index);
-  }
-
-  emit fileIndexChanged(index);
-}
-
-void QxrdWindow::setFilePattern(QString pattern)
-{
-  if (pattern != filePattern()) {
-    m_SaveFilePattern->setText(pattern);
-  }
-
-  emit filePatternChanged(pattern);
-}
-
-void QxrdWindow::setOutputDirectory(QString pattern)
-{
-  if (pattern != outputDirectory()) {
-    m_OutputDirectory->setText(pattern);
-  }
-
-  emit outputDirectoryChanged(pattern);
-}
-
-double  QxrdWindow::exposureTime()
-{
-  return m_ExposureTime->value();
-}
-
-int     QxrdWindow::integrationMode()
-{
-  return m_IntegrationMode->currentIndex();
-}
-
-int     QxrdWindow::nSummed()
-{
-  return m_SummedFrames->value();
-}
-
-int     QxrdWindow::darkNSummed()
-{
-  return m_DarkSummedFrames->value();
-}
-
-int     QxrdWindow::nFrames()
-{
-  return m_SequenceFrames->value();
-}
-
-int     QxrdWindow::fileIndex()
-{
-  return m_FileIndexNumber->value();
-}
-
-QString QxrdWindow::filePattern()
-{
-  return m_SaveFilePattern->text();
-}
-
-QString QxrdWindow::outputDirectory()
-{
-  return m_OutputDirectory->text();
 }
 
 void QxrdWindow::selectOutputDirectory()
 {
-  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", outputDirectory());
+  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory",
+                                                  m_Acquisition -> outputDirectory());
   if (dir.length()) {
-    setOutputDirectory(dir);
+    m_Acquisition -> setOutputDirectory(dir);
   }
 }
 
@@ -507,11 +400,6 @@ void QxrdWindow::darkImageAcquired(QxrdImageData *image)
   saveImageData(m_DarkFrame);
 }
 
-int QxrdWindow::acquisitionStatus(double time)
-{
-  return m_AcquisitionThread -> acquisitionStatus(time);
-}
-
 void QxrdWindow::doAcquire()
 {
 //  printMessage("QxrdWindow::doAcquire()\n");
@@ -550,13 +438,7 @@ void QxrdWindow::readSettings()
 {
   QxrdSettings settings;
 
-  setIntegrationMode(settings.value("acq/integ",7).toInt());
-  setNSummed(settings.value("acq/nsums",1).toInt());
-  setDarkNSummed(settings.value("acq/dknsums",1).toInt());
-  setNFrames(settings.value("acq/nframes",1).toInt());
-  setFilePattern(settings.value("acq/filepattern","saveddata").toString());
-  setOutputDirectory(settings.value("acq/directory","").toString());
-  setFileIndex(settings.value("acq/fileindex",1).toInt());
+  m_Acquisition -> readSettings(&settings, "acquire");
 
   setPerformDarkSubtraction(settings.value("acq/subtractdark",1).toInt());
   setSaveRawImages(settings.value("acq/saveraw",0).toInt());
@@ -580,13 +462,7 @@ void QxrdWindow::saveSettings()
 {
   QxrdSettings settings;
 
-  settings.setValue("acq/integ",integrationMode());
-  settings.setValue("acq/nsums",nSummed());
-  settings.setValue("acq/dknsums",darkNSummed());
-  settings.setValue("acq/nframes",nFrames());
-  settings.setValue("acq/filepattern",filePattern());
-  settings.setValue("acq/directory",outputDirectory());
-  settings.setValue("acq/fileindex",fileIndex());
+  m_Acquisition -> saveSettings(&settings, "acquire");
 
   settings.setValue("acq/subtractdark", performDarkSubtraction());
   settings.setValue("acq/saveraw", saveRawImages());
@@ -612,7 +488,7 @@ void QxrdWindow::statusMessage(QString msg)
 void QxrdWindow::doSaveData()
 {
   QString theFile = QFileDialog::getSaveFileName(
-      this, "Save Data in", outputDirectory());
+      this, "Save Data in", m_Acquisition -> outputDirectory());
 
   if (theFile.length()) {
     saveData(theFile);
@@ -622,7 +498,7 @@ void QxrdWindow::doSaveData()
 void QxrdWindow::doLoadData()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Image from...", outputDirectory());
+      this, "Load Image from...", m_Acquisition -> outputDirectory());
 
   if (theFile.length()) {
     loadData(theFile);
@@ -631,123 +507,12 @@ void QxrdWindow::doLoadData()
 
 void QxrdWindow::loadData(QString name)
 {
-    QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
+    QxrdImageData* res = m_Acquisition -> takeNextFreeImage();
 
     res -> readImage(name);
 
     newData(res);
 }
-
-//void QxrdWindow::doLoadData()
-//{
-//  QString theFile = QFileDialog::getOpenFileName(
-//      this, "Load Image from...", outputDirectory());
-//
-//  if (theFile.length()) {
-//    loadData(theFile);
-//  }
-//}
-//
-//void QxrdWindow::loadData(QString name)
-//{
-//  QxrdImageData* res = loadNewImage(name);
-//
-//  newData(res);
-//}
-//
-//QxrdImageData* QxrdWindow::loadNewImage(QString name)
-//{
-//  QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
-//
-//  QWriteLocker lock(res->rwLock());
-//
-//  quint32 imageWidth = 0;
-//  quint32 imageHeight = 0;
-//  quint16 sampleFormat = 0;
-//  quint16 samplesPerPixel = 0;
-//  quint16 bitsPerSample = 0;
-//
-//  TIFF* tif = TIFFOpen(qPrintable(name),"r");
-//
-//  if (tif) {
-//    if ((TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGEWIDTH, &imageWidth)==1) &&
-//        (TIFFGetFieldDefaulted(tif, TIFFTAG_IMAGELENGTH, &imageHeight)==1) &&
-//        (TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel)==1) &&
-//        (TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bitsPerSample)==1) &&
-//        (TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLEFORMAT, &sampleFormat)==1)) {
-//
-//      emit printMessage(tr("Image file W(%1),H(%2),SPP(%3),BPS(%4),SF(%5)\n")
-//                        .arg(imageWidth).arg(imageHeight).arg(samplesPerPixel).arg(bitsPerSample).arg(sampleFormat));
-//
-//      res -> resize(imageWidth, imageHeight);
-//      res -> clear();
-//
-//      void* buffer = malloc(TIFFScanlineSize(tif));
-//
-//      for (quint32 y=0; y<imageHeight; y++) {
-//        if (TIFFReadScanline(tif, buffer, y)==1) {
-//          for (quint32 x=0; x<imageWidth; x++) {
-//            switch (sampleFormat) {
-//            case SAMPLEFORMAT_INT:
-//              switch (bitsPerSample) {
-//              case 8:
-//                res -> setValue(x,y, ((qint8*) buffer)[x]);
-//                break;
-//              case 16:
-//                res -> setValue(x,y, ((qint16*) buffer)[x]);
-//                break;
-//              case 32:
-//                res -> setValue(x,y, ((qint32*) buffer)[x]);
-//                break;
-//              }
-//              break;
-//            case SAMPLEFORMAT_UINT:
-//              switch (bitsPerSample) {
-//              case 8:
-//                res -> setValue(x,y, ((quint8*) buffer)[x]);
-//                break;
-//              case 16:
-//                res -> setValue(x,y, ((quint16*) buffer)[x]);
-//                break;
-//              case 32:
-//                res -> setValue(x,y, ((quint32*) buffer)[x]);
-//                break;
-//              }
-//              break;
-//            case SAMPLEFORMAT_IEEEFP:
-//              switch (bitsPerSample) {
-//              case 32:
-//                res -> setValue(x,y, ((float*) buffer)[x]);
-//                break;
-//              case 64:
-//                res -> setValue(x,y, ((double*) buffer)[x]);
-//                break;
-//              }
-//              break;
-//            }
-//          }
-//        }
-//      }
-//
-//      free(buffer);
-//    } else {
-//      emit statusMessage("Couldn't open file\n");
-//    }
-//  } else {
-//    emit statusMessage("Bad TIFF File\n");
-//  }
-//
-//  if (tif) {
-//    TIFFClose(tif);
-//  }
-//
-//  QFileInfo info(name);
-//
-//  res -> setFilename(name);
-//  res -> setTitle(info.fileName());
-//
-//  return res;
-//}
 
 void QxrdWindow::saveData(QString name)
 {
@@ -832,7 +597,7 @@ void QxrdWindow::doLoadDarkImage()
 
 void QxrdWindow::loadDarkImage(QString name)
 {
-  QxrdImageData* img = m_AcquisitionThread -> takeNextFreeImage();
+  QxrdImageData* img = m_Acquisition -> takeNextFreeImage();
 
   img -> readImage(name);
 
@@ -871,7 +636,7 @@ void QxrdWindow::doLoadBadPixels()
 
 void QxrdWindow::loadBadPixels(QString name)
 {
-  QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
+  QxrdImageData* res = m_Acquisition -> takeNextFreeImage();
 
   res -> readImage(name);
 
@@ -910,7 +675,7 @@ void QxrdWindow::doLoadGainMap()
 
 void QxrdWindow::loadGainMap(QString name)
 {
-  QxrdImageData* res = m_AcquisitionThread -> takeNextFreeImage();
+  QxrdImageData* res = m_Acquisition -> takeNextFreeImage();
 
   res -> readImage(name);
 
@@ -931,7 +696,7 @@ void QxrdWindow::newData(QxrdImageData *image)
 {
   if (m_Data != image) {
     if (m_Data) {
-      m_AcquisitionThread -> returnImageToPool(m_Data);
+      m_Acquisition -> returnImageToPool(m_Data);
     }
 
     m_Data = image;
@@ -950,7 +715,7 @@ void QxrdWindow::newDarkImage(QxrdImageData *image)
 {
   if (m_DarkFrame != image) {
     if (m_DarkFrame) {
-      m_AcquisitionThread -> returnImageToPool(m_DarkFrame);
+      m_Acquisition -> returnImageToPool(m_DarkFrame);
     }
 
     m_DarkFrame = image;
@@ -972,7 +737,7 @@ void QxrdWindow::newBadPixelsImage(QxrdImageData *image)
 {
   if (m_BadPixels != image) {
     if (m_BadPixels) {
-      m_AcquisitionThread -> returnImageToPool(m_BadPixels);
+      m_Acquisition -> returnImageToPool(m_BadPixels);
     }
 
     m_BadPixels = image;
@@ -985,7 +750,7 @@ void QxrdWindow::newGainMapImage(QxrdImageData *image)
 {
   if (m_GainFrame != image) {
     if (m_GainFrame) {
-      m_AcquisitionThread -> returnImageToPool(m_GainFrame);
+      m_Acquisition -> returnImageToPool(m_GainFrame);
     }
 
     m_GainFrame = image;
@@ -1034,18 +799,6 @@ void QxrdWindow::setMaintainAspectRatio(int prsrv)
   m_MaintainAspectRatio -> setChecked(prsrv);
 }
 
-//void QxrdWindow::setFileBrowserDirectory(QString dir)
-//{
-//  m_FileBrowser -> setRootIndex(m_FileBrowserModel->index(dir));
-//}
-//
-//void QxrdWindow::refreshFileBrowser()
-//{
-////   printf("Refresh file browser\n");
-//
-//  m_FileBrowserModel -> refresh();
-//}
-
 void QxrdWindow::onProcessedImageAvailable()
 {
   printf("onProcessedImageAvailable()\n");
@@ -1070,11 +823,6 @@ void QxrdWindow::onDarkImageAvailable()
 
 void QxrdWindow::doTest()
 {
-//   int status = m_AcquisitionThread -> acquisitionStatus(1.0);
-
-//   printf("QxrdWindow::doTest : m_AcquisitionThread -> acquisitionStatus(1.0) = %d\n", status);
-
-//   emit printMessage(tr("QxrdWindow::doTest : m_AcquisitionThread -> acquisitionStatus(1.0) = %1").arg(status));
 
   m_Data -> setCircularMask();
 }

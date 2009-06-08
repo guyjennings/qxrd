@@ -13,4 +13,3 @@ void QxrdCenterFinderDialog::onCenterChanged(double cx, double cy)
 
   printf("QxrdCenterFinderDialog::onCenterChanged(%g,%g)\n", cx, cy);
 }
-

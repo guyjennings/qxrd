@@ -23,9 +23,6 @@ class QxrdApplication : public QApplication
 
  public slots:
   void shutdownThreads();
-  void serverRunning();
-  void acquisitionRunning();
-
   void possiblyQuit();
 
  signals:

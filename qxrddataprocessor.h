@@ -6,7 +6,7 @@
 
 #include "qxrdimagequeue.h"
 
-class QxrdAcquisitionThread;
+class QxrdAcquisition;
 class QxrdWindow;
 class QxrdImageData;
 
@@ -15,7 +15,7 @@ class QxrdDataProcessor : public QObject
   Q_OBJECT;
 
 public:
-  QxrdDataProcessor(QxrdWindow *win, QxrdAcquisitionThread *acq, QObject *parent=0);
+  QxrdDataProcessor(QxrdWindow *win, QxrdAcquisition *acq, QObject *parent=0);
 
 signals:
   void processedImageAvailable();
@@ -40,7 +40,7 @@ private:
 
 private:
   QxrdWindow               *m_Window;
-  QxrdAcquisitionThread    *m_AcquisitionThread;
+  QxrdAcquisition          *m_Acquisition;
   QReadWriteLock            m_DarkUsage;
   QReadWriteLock            m_Processing;
   QxrdImageQueue            m_ProcessedImages;

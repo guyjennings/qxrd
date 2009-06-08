@@ -3,22 +3,26 @@
 
 #include <QObject>
 
-#include <qwt_plot.h>
+#include "qxrdplot.h"
 #include <qwt_color_map.h>
 
 class QxrdPlotZoomer;
 class QxrdPlotTracker;
+class QxrdPlotCenterer;
+class QxrdPlotSlicer;
+class QxrdPlotMeasurer;
 class QwtPlotPanner;
 class QwtPlotMagnifier;
 class QwtLegend;
 class QwtPlotSpectrogram;
 class QwtPlotRescaler;
+class QxrdCenterFinder;
 
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
 #include "qxrdmaskcolormap.h"
 
-class QxrdImagePlot : public QwtPlot
+class QxrdImagePlot : public QxrdPlot
 {
   Q_OBJECT;
 
@@ -30,6 +34,9 @@ class QxrdImagePlot : public QwtPlot
   void doZoomIn();
   void doZoomOut();
   void doZoomAll();
+  void doSetCenter();
+  void doSlice();
+  void doMeasure();
 
   void set005Range();
   void set010Range();
@@ -53,6 +60,11 @@ class QxrdImagePlot : public QwtPlot
   void on_interpolate_changed(int interp);
   void on_maintain_aspect_changed(int interp);
 
+  void enableZooming();
+  void enableCentering();
+  void enableSlicing();
+  void enableMeasuring();
+
  signals:
   void minimum_changed(double min);
   void maximum_changed(double max);\
@@ -62,6 +74,7 @@ class QxrdImagePlot : public QwtPlot
   void setMask(QxrdMaskRasterData data);
   QxrdRasterData* raster();
   void replotImage();
+  void setCenterFinder(QxrdCenterFinder *f);
 
  private:
   void changedColorMap();
@@ -73,6 +86,9 @@ class QxrdImagePlot : public QwtPlot
   QwtPlotPanner       *m_Panner;
   QwtPlotMagnifier    *m_Magnifier;
   QwtPlotRescaler     *m_Rescaler;
+  QxrdCenterFinder    *m_CenterFinder;
+  QxrdPlotSlicer      *m_Slicer;
+  QxrdPlotMeasurer    *m_Measurer;
   QwtLegend           *m_Legend;
   QwtPlotSpectrogram  *m_Spectrogram;
   QwtPlotSpectrogram  *m_MaskImage;

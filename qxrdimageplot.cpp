@@ -2,6 +2,10 @@
 #include "qxrdrasterdata.h"
 #include "qxrdplotzoomer.h"
 #include "qxrdplottracker.h"
+#include "qxrdplotcenterer.h"
+#include "qxrdplotslicer.h"
+#include "qxrdplotmeasurer.h"
+#include "qxrdcenterfinder.h"
 
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
@@ -13,11 +17,14 @@
 #include <QMetaMethod>
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
-  : QwtPlot(parent),
+  : QxrdPlot(parent),
     m_Tracker(NULL),
     m_Zoomer(NULL),
     m_Panner(NULL),
     m_Rescaler(NULL),
+    m_CenterFinder(NULL),
+    m_Slicer(NULL),
+    m_Measurer(NULL),
     m_Legend(NULL),
     m_Spectrogram(NULL),
     m_MaskImage(NULL),
@@ -63,6 +70,12 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::xBottom, QwtPlotRescaler::Expanding);
   m_Rescaler -> setEnabled(true);
 //   m_Rescaler -> setAxisEnabled(QwtPlot::yRight, false);
+
+  m_Slicer = new QxrdPlotSlicer(canvas(), this);
+  m_Slicer -> setEnabled(false);
+
+  m_Measurer = new QxrdPlotMeasurer(canvas(), this);
+  m_Measurer -> setEnabled(false);
 
   m_Legend = new QwtLegend;
   m_Legend -> setFrameStyle(QFrame::Box|QFrame::Sunken);
@@ -193,10 +206,14 @@ void QxrdImagePlot::on_maintain_aspect_changed(int interp)
 
 void QxrdImagePlot::setTrackerPen(const QPen &pen)
 {
-   m_Tracker -> setTrackerPen(pen);
-   m_Tracker -> setRubberBandPen(pen);
-   m_Zoomer -> setTrackerPen(pen);
-   m_Zoomer -> setRubberBandPen(pen);
+  m_Tracker -> setTrackerPen(pen);
+  m_Tracker -> setRubberBandPen(pen);
+  m_Zoomer -> setTrackerPen(pen);
+  m_Zoomer -> setRubberBandPen(pen);
+
+  if (m_CenterFinder) {
+    m_CenterFinder -> setPen(pen);
+  }
 }
 
 void QxrdImagePlot::setGrayscale()
@@ -353,8 +370,51 @@ QxrdRasterData* QxrdImagePlot::raster()
   return &m_Raster;
 }
 
+void QxrdImagePlot::setCenterFinder(QxrdCenterFinder *f)
+{
+  m_CenterFinder = f;
+}
+
+void QxrdImagePlot::enableZooming()
+{
+  m_Tracker      -> setEnabled(true);
+  m_Zoomer       -> setEnabled(true);
+  m_CenterFinder -> setEnabled(false, true);
+  m_Slicer       -> setEnabled(false);
+  m_Measurer     -> setEnabled(false);
+}
+
+void QxrdImagePlot::enableCentering()
+{
+  m_Tracker  -> setEnabled(false);
+  m_Zoomer   -> setEnabled(false);
+  m_CenterFinder -> setEnabled(true, true);
+  m_Slicer   -> setEnabled(false);
+  m_Measurer -> setEnabled(false);
+}
+
+void QxrdImagePlot::enableSlicing()
+{
+  m_Tracker  -> setEnabled(false);
+  m_Zoomer   -> setEnabled(false);
+  m_CenterFinder -> setEnabled(false, true);
+  m_Slicer   -> setEnabled(true);
+  m_Measurer -> setEnabled(false);
+}
+
+void QxrdImagePlot::enableMeasuring()
+{
+  m_Tracker  -> setEnabled(false);
+  m_Zoomer   -> setEnabled(false);
+  m_CenterFinder -> setEnabled(false, true);
+  m_Slicer   -> setEnabled(false);
+  m_Measurer -> setEnabled(true);
+}
+
 void QxrdImagePlot::doZoomIn()
 {
+  enableZooming();
+
   m_Zoomer -> zoom(1);
 }
 
@@ -366,4 +426,21 @@ void QxrdImagePlot::doZoomOut()
 void QxrdImagePlot::doZoomAll()
 {
   m_Zoomer -> zoom(0);
+
+  autoScalePlot();
+}
+
+void QxrdImagePlot::doSetCenter()
+{
+  enableCentering();
+}
+
+void QxrdImagePlot::doSlice()
+{
+  enableSlicing();
+}
+
+void QxrdImagePlot::doMeasure()
+{
+  enableMeasuring();
 }

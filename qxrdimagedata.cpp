@@ -6,30 +6,41 @@
 QxrdImageData::QxrdImageData(int width, int height)
   : QcepImageData<double>(width, height),
     m_Lock(QReadWriteLock::Recursive),
-    m_IntegrationMode(0),
-    m_NSummed(0),
-    m_FrameNumber(0)
+    m_ReadoutMode(0),
+    m_ExposureTime(0),
+    m_SummedExposures(0),
+    m_ImageNumber(0)
 {
 }
 
-int QxrdImageData::integrationMode()
+int QxrdImageData::readoutMode()
 {
-  return m_IntegrationMode;
+  return m_ReadoutMode;
 }
 
-void QxrdImageData::setIntegrationMode(int mode)
+void QxrdImageData::setReadoutMode(int mode)
 {
-  m_IntegrationMode = mode;
+  m_ReadoutMode = mode;
 }
 
-int QxrdImageData::nSummed()
+double QxrdImageData::exposureTime() const
 {
-  return m_NSummed;
+  return m_ExposureTime;
 }
 
-void QxrdImageData::setNSummed(int n)
+void QxrdImageData::setExposureTime(double t)
 {
-  m_NSummed = n;
+  m_ExposureTime = t;
+}
+
+int QxrdImageData::summedExposures()
+{
+  return m_SummedExposures;
+}
+
+void QxrdImageData::setSummedExposures(int n)
+{
+  m_SummedExposures = n;
 }
 
 QReadWriteLock *QxrdImageData::rwLock()
@@ -37,14 +48,14 @@ QReadWriteLock *QxrdImageData::rwLock()
   return &m_Lock;
 }
 
-int QxrdImageData::frameNumber()
+int QxrdImageData::imageNumber()
 {
-  return m_FrameNumber;
+  return m_ImageNumber;
 }
 
-void QxrdImageData::setFrameNumber(int n)
+void QxrdImageData::setImageNumber(int n)
 {
-  m_FrameNumber = n;
+  m_ImageNumber = n;
 }
 
 QString QxrdImageData::rawFileName()

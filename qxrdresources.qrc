@@ -1,5 +1,11 @@
 <RCC>
   <qresource prefix="/images" >
+    <file>images/slice.png</file>
+    <file>images/print.png</file>
+    <file>images/measure.png</file>
+    <file>images/preferences.png</file>
+    <file>images/hilo.png</file>
+    <file>images/ringfinder.png</file>
     <file>images/zoom-out.png</file>
     <file>images/color-wheel.png</file>
     <file>images/earthtones.png</file>

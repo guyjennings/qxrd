@@ -62,16 +62,7 @@ public slots:
 
   void darkAcquisitionStarted();
 
-  void setIntegrationTime(int n, double t);
-
-  void setExposureTime(double t);
-  void setIntegrationMode(int mode);
-  void setNSummed(int nsummed);
-  void setNFrames(int nframes);
-  void setFileIndex(int index);
-  void setFilePattern(QString pattern);
-  void setOutputDirectory(QString path);
-  void setDarkNSummed(int nsummed);
+  void setReadoutTime(int n, double t);
 
   void selectOutputDirectory();
   void statusMessage(QString msg);
@@ -108,9 +99,6 @@ public slots:
   int maintainAspectRatio();
   void setMaintainAspectRatio(int prsrv);
 
-//  void setFileBrowserDirectory(QString dir);
-//  void refreshFileBrowser();
-
   void onProcessedImageAvailable();
   void onDarkImageAvailable();
 
@@ -120,38 +108,13 @@ public slots:
   void onToolBoxPageChanged(int);
   void onTabWidgetPageChanged(int);
 
-signals:
-  void exposureTimeChanged(double t);
-  void integrationModeChanged(int mode);
-  void nSummedChanged(int nsummed);
-  void nFramesChanged(int nframes);
-  void fileIndexChanged(int index);
-  void filePatternChanged(QString pattern);
-  void outputDirectoryChanged(QString path);
-  void darkNSummedChanged(int nsummed);
-
 public:
-  double  exposureTime();
-  int     integrationMode();
-  int     nSummed();
-  int     nFrames();
-  int     fileIndex();
-  QString filePattern();
-  QString outputDirectory();
-  int     darkNSummed();
-
-  int acquisitionStatus(double time);
-
   void readSettings();
   void saveSettings();
   void possiblyClose();
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
-  //  void enqueue(QxrdImageData *image);
-  //  QxrdImageData* dequeue();
-  //  QxrdImageData* nextAvailableImage();
-  //  void returnImageToPool(QxrdImageData *img);
   QxrdImageData* loadNewImage(QString name);
 
   void darkImageAcquired(QxrdImageData *image);

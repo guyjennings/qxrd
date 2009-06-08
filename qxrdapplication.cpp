@@ -27,18 +27,20 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   setApplicationName("qxrd");
 
   m_AcquisitionThread = new QxrdAcquisitionThread(/*this, NULL*/);
-  connect(m_AcquisitionThread, SIGNAL(acquisitionRunning()), this, SLOT(acquisitionRunning()));
-  connect(m_AcquisitionThread, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
+
+  m_Window = new QxrdWindow(this, m_AcquisitionThread);
+  m_Window -> show();
+
+  connect(m_AcquisitionThread, SIGNAL(acquisitionRunning()),
+          m_Window,            SLOT(onAcquisitionRunning()));
 
   m_AcquisitionThread -> start();
 
   m_ServerThread = new QxrdServerThread(m_AcquisitionThread, "qxrd");
-  connect(m_ServerThread, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
+  connect(m_ServerThread,      SIGNAL(printMessage(QString)),
+          m_Window,            SLOT(printMessage(QString)));
 
   m_ServerThread -> start();
-
-  m_Window = new QxrdWindow(this, m_AcquisitionThread);
-  m_Window -> show();
 
   connect(this, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
 
@@ -53,10 +55,6 @@ QxrdApplication::~QxrdApplication()
   delete m_ServerThread;
 }
 
-void QxrdApplication::serverRunning()
-{
-}
-
 void QxrdApplication::possiblyQuit()
 {
   if (wantToQuit()) {
@@ -69,21 +67,6 @@ bool QxrdApplication::wantToQuit()
   return QMessageBox::question(m_Window, tr("Really Quit?"),
                                tr("Do you really want to exit the application?"),
                                   QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
-}
-
-void QxrdApplication::acquisitionRunning()
-{
-  m_Window -> onAcquisitionRunning();
-
-  QVector<double> integ = m_AcquisitionThread -> integrationTimes();
-
-  int n = integ.count();
-
-  for (int i=0; i<n; i++) {
-    m_Window -> setIntegrationTime(i, integ[i]);
-  }
-
-  m_Window -> acquisitionReady();
 }
 
 void QxrdApplication::shutdownThreads()
@@ -102,21 +85,6 @@ QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
 {
   return m_AcquisitionThread;
 }
-
-//void QxrdApplication::printMessage(QString msg)
-//{
-//  m_Window -> printMessage(msg);
-//}
-
-//int QxrdApplication::acquire()
-//{
-//  return m_Window -> acquire();
-//}
-//
-//int QxrdApplication::acquisitionStatus(double time)
-//{
-//  return m_Window -> acquisitionStatus(time);
-//}
 
 void QxrdApplication::executeScript(QString cmd)
 {
