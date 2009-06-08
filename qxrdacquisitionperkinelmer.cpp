@@ -233,7 +233,9 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
   forever {
     QMutex mutex;
     QMutexLocker lock(&mutex);
-    if (m_AcquisitionWaiting.wait(&mutex, 5000)) {
+    printf("Start Waiting...\n");
+    if (m_AcquisitionWaiting.wait(&mutex, 10000)) {
+      printf("Done Waiting...\n");
       if (onEndFrame()) {
         break;
       }

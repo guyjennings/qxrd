@@ -2,7 +2,6 @@
 #include "qxrdrasterdata.h"
 #include "qxrdplotzoomer.h"
 #include "qxrdplottracker.h"
-#include "qxrdplotcenterer.h"
 #include "qxrdplotslicer.h"
 #include "qxrdplotmeasurer.h"
 #include "qxrdcenterfinder.h"

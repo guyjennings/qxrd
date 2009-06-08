@@ -40,7 +40,7 @@
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <widget class="QxrdImagePlot" name="m_Plot">
+           <widget class="QxrdImagePlot" name="m_Plot" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>2</horstretch>
@@ -309,7 +309,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QxrdCenterFinderPlot" name="m_CenterFinderPlot">
+          <widget class="QxrdCenterFinderPlot" name="m_CenterFinderPlot" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>1</horstretch>
@@ -408,7 +408,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QxrdIntegratorPlot" name="m_IntegratorPlot"/>
+          <widget class="QxrdIntegratorPlot" name="m_IntegratorPlot" native="true"/>
          </item>
         </layout>
        </widget>
@@ -520,8 +520,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>645</height>
+          <width>225</width>
+          <height>638</height>
          </rect>
         </property>
         <attribute name="label">
@@ -586,6 +586,9 @@ Script Function: summedExposures()</string>
               <property name="keyboardTracking">
                <bool>false</bool>
               </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
               <property name="maximum">
                <number>99999</number>
               </property>
@@ -613,6 +616,9 @@ Script Function: filesInSequence()</string>
               </property>
               <property name="keyboardTracking">
                <bool>false</bool>
+              </property>
+              <property name="minimum">
+               <number>1</number>
               </property>
               <property name="maximum">
                <number>99999</number>
@@ -751,7 +757,7 @@ Script Function: fileindex()</string>
             <item row="7" column="1">
              <widget class="QPushButton" name="m_AcquireButton">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -800,6 +806,9 @@ Script Function: darkSummedExposures()</string>
               <property name="keyboardTracking">
                <bool>false</bool>
               </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
               <property name="maximum">
                <number>99999</number>
               </property>
@@ -818,7 +827,7 @@ Script Function: darkSummedExposures()</string>
             <item row="2" column="1">
              <widget class="QPushButton" name="m_DarkAcquireButton">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -858,8 +867,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>645</height>
+          <width>218</width>
+          <height>616</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1094,8 +1103,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>242</width>
-          <height>628</height>
+          <width>251</width>
+          <height>332</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1273,8 +1282,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>645</height>
+          <width>96</width>
+          <height>26</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1287,8 +1296,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>645</height>
+          <width>96</width>
+          <height>26</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1307,7 +1316,7 @@ Script Function: acquiredark()</string>
      <x>0</x>
      <y>0</y>
      <width>1029</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1562,28 +1571,18 @@ Script Function: acquiredark()</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QwtPlot</class>
-   <extends>QFrame</extends>
-   <header>qwt_plot.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QxrdPlot</class>
-   <extends>QwtPlot</extends>
-   <header>qxrdplot.h</header>
-  </customwidget>
-  <customwidget>
    <class>QxrdImagePlot</class>
-   <extends>QxrdPlot</extends>
+   <extends>QWidget</extends>
    <header>qxrdimageplot.h</header>
   </customwidget>
   <customwidget>
    <class>QxrdCenterFinderPlot</class>
-   <extends>QxrdPlot</extends>
+   <extends>QWidget</extends>
    <header>qxrdcenterfinderplot.h</header>
   </customwidget>
   <customwidget>
    <class>QxrdIntegratorPlot</class>
-   <extends>QxrdPlot</extends>
+   <extends>QWidget</extends>
    <header>qxrdintegratorplot.h</header>
   </customwidget>
  </customwidgets>

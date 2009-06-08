@@ -93,7 +93,27 @@ HIS_RETURN Acquisition_GetCommChannel(HACQDESC pAcqDesc, UINT *pdwChannelType, i
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_GetConfiguration(HACQDESC hAcqDesc, 
+HIS_RETURN Acquisition_SetFrameSync(HACQDESC hAcqDesc)
+{
+  return HIS_ALL_OK;
+}
+
+HIS_RETURN Acquisition_SetFrameSyncMode(HACQDESC hAcqDesc, DWORD dwMode)
+{
+  return HIS_ALL_OK;
+}
+
+HIS_RETURN Acquisition_SetTimerSync(HACQDESC hAcqDesc, DWORD *dwCycleTime)
+{
+  return HIS_ALL_OK;
+}
+
+HIS_RETURN Acquisition_SetCameraGain(HACQDESC hAcqDesc, WORD wMode)
+{
+  return HIS_ALL_OK;
+}
+
+HIS_RETURN Acquisition_GetConfiguration(HACQDESC hAcqDesc,
 					UINT *dwFrames, UINT *dwRows, UINT *dwColumns, UINT *dwDataType,
 					UINT *dwSortFlags, BOOL *bIRQEnabled, DWORD *dwAcqType, DWORD *dwSystemID,
 					DWORD *dwSyncMode, DWORD *dwHwAccess)

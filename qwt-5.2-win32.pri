@@ -1,4 +1,3 @@
-win32 {
   INCLUDEPATH += ../qxrd/qwt-5.2/src/
 
   HEADERS += \
@@ -148,5 +147,3 @@ win32 {
         ../qxrd/qwt-5.2/src/qwt_slider.cpp \
         ../qxrd/qwt-5.2/src/qwt_thermo.cpp \
         ../qxrd/qwt-5.2/src/qwt_wheel.cpp
-
-}

@@ -252,6 +252,8 @@ void QxrdWindow::onAcquisitionRunning()
   connect(m_DataProcessor, SIGNAL(processedImageAvailable()), this, SLOT(onProcessedImageAvailable()));
   connect(m_DataProcessor, SIGNAL(darkImageAvailable()), this, SLOT(onDarkImageAvailable()));
   connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
+
+  readSettings();
 }
 
 void QxrdWindow::closeEvent ( QCloseEvent * event )

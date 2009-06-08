@@ -16,7 +16,7 @@ RESOURCES += qxrdhelptext.qrc \
 DISTFILES += qxrdhelptext.html \
     images/*.png
 win32:include("../qxrd/qt-libtiff-win32.pri")
-win32:include("../qxrd/qwt-5.2-win32.pri")
+include("../qxrd/qwt-5.2-win32.pri")
 win32 { 
     INCLUDEPATH += ../qceplib/
     HEADERS += ../qceplib/spec_server.h \

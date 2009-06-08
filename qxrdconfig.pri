@@ -18,6 +18,8 @@ unix {
   QMAKE_LFLAGS += -g
 
   DEBUG_SUFFIX = d
+
+  CONFIG += debug_and_release build_all
 }
 
 CONFIG(debug, debug|release) {
