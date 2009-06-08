@@ -58,71 +58,45 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >BASH_ENV=/home/jennings/.bashrc</value>
-    <value type="QString" >COLORTERM=gnome-terminal</value>
-    <value type="QString" >CVSROOT=/home/jennings/cvs</value>
-    <value type="QString" >CVS_RSH=ssh</value>
-    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-xHueo97KBK,guid=457e7a6f158883c72219fd434a1d56df</value>
-    <value type="QString" >DESKTOP_SESSION=gnome</value>
-    <value type="QString" >DESKTOP_STARTUP_ID=</value>
-    <value type="QString" >DISPLAY=:0.0</value>
-    <value type="QString" >GDL_PATH=+/usr/share/gdl</value>
-    <value type="QString" >GDMSESSION=gnome</value>
-    <value type="QString" >GDM_LANG=en_US.utf8</value>
-    <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString" >GNOME_KEYRING_PID=32372</value>
-    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-0CUp1N/socket</value>
-    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/jennings/.gtkrc-1.2-gnome2</value>
-    <value type="QString" >G_BROKEN_FILENAMES=1</value>
-    <value type="QString" >HISTSIZE=1000</value>
-    <value type="QString" >HOME=/home/jennings</value>
-    <value type="QString" >HOSTNAME=weimar.xor.aps.anl.gov</value>
-    <value type="QString" >HOST_ARCH=Linux</value>
-    <value type="QString" >KDEDIRS=/usr</value>
-    <value type="QString" >LANG=en_US.utf8</value>
-    <value type="QString" >LD_LIBRARY_PATH=/usr/lib64/qtcreator:</value>
-    <value type="QString" >LESSOPEN=|/usr/bin/lesspipe.sh %s</value>
-    <value type="QString" >LOADEDMODULES=</value>
-    <value type="QString" >LOGNAME=jennings</value>
-    <value type="QString" >LS_COLORS=no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:do=00;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=00;32:*.tar=00;31:*.tgz=00;31:*.svgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.lzma=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.dz=00;31:*.gz=00;31:*.bz2=00;31:*.tbz2=00;31:*.bz=00;31:*.tz=00;31:*.deb=00;31:*.rpm=00;31:*.jar=00;31:*.rar=00;31:*.ace=00;31:*.zoo=00;31:*.cpio=00;31:*.7z=00;31:*.rz=00;31:*.jpg=00;35:*.jpeg=00;35:*.gif=00;35:*.bmp=00;35:*.pbm=00;35:*.pgm=00;35:*.ppm=00;35:*.tga=00;35:*.xbm=00;35:*.xpm=00;35:*.tif=00;35:*.tiff=00;35:*.png=00;35:*.mng=00;35:*.pcx=00;35:*.mov=00;35:*.mpg=00;35:*.mpeg=00;35:*.m2v=00;35:*.mkv=00;35:*.ogm=00;35:*.mp4=00;35:*.m4v=00;35:*.mp4v=00;35:*.vob=00;35:*.qt=00;35:*.nuv=00;35:*.wmv=00;35:*.asf=00;35:*.rm=00;35:*.rmvb=00;35:*.flc=00;35:*.avi=00;35:*.fli=00;35:*.gl=00;35:*.dl=00;35:*.xcf=00;35:*.xwd=00;35:*.yuv=00;35:*.svg=00;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:</value>
-    <value type="QString" >MAIL=/var/spool/mail/jennings</value>
-    <value type="QString" >MODULEPATH=/usr/share/Modules/modulefiles:/etc/modulefiles:</value>
-    <value type="QString" >MODULESHOME=/usr/share/Modules</value>
-    <value type="QString" >NCARG_LIB=/usr/lib64/ncarg</value>
-    <value type="QString" >NCARG_ROOT=/usr</value>
-    <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-jennings</value>
-    <value type="QString" >PATH=/usr/lib64/qt4/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/libexec/sdcc:/home/jennings/bin:/usr/local/epics/bin:/usr/java/j2re1.4.2_02/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin/Linux:/home/jennings/synApps_R3.13.1.1_R4.1/share/bin/Linux:/usr/libexec/sdcc</value>
-    <value type="QString" >PSPRINTER=lj4000</value>
-    <value type="QString" >PWD=/home/jennings/development/qxrd</value>
+    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
+    <value type="QString" >APPDATA=C:\Documents and Settings\jennings\Application Data</value>
+    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
+    <value type="QString" >COMPUTERNAME=CEP-C08CA44D782</value>
+    <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
+    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
+    <value type="QString" >HOMEDRIVE=C:</value>
+    <value type="QString" >HOMEPATH=\Documents and Settings\jennings</value>
+    <value type="QString" >LOGONSERVER=\\CEP-C08CA44D782</value>
+    <value type="QString" >NUMBER_OF_PROCESSORS=8</value>
+    <value type="QString" >OS=Windows_NT</value>
+    <value type="QString" >PATH=C:\Qt\2009.02\mingw\bin;C:\Qt\2009.02\qt\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Program Files\Intel\DMIX</value>
+    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 23 Stepping 10, GenuineIntel</value>
+    <value type="QString" >PROCESSOR_LEVEL=6</value>
+    <value type="QString" >PROCESSOR_REVISION=170a</value>
+    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
     <value type="QString" >QTDIR=c:/Qt/2009.01/qt</value>
-    <value type="QString" >QTINC=/usr/lib64/qt-3.3/include</value>
-    <value type="QString" >QTLIB=/usr/lib64/qt-3.3/lib</value>
-    <value type="QString" >QT_PLUGIN_PATH=/home/jennings/.kde/lib64/kde4/plugins/:/usr/lib64/kde4/plugins/</value>
-    <value type="QString" >SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/32374,unix/unix:/tmp/.ICE-unix/32374</value>
-    <value type="QString" >SHARE_DIR=/home/jennings/synApps_R3.13.1.1_R4.1/share</value>
-    <value type="QString" >SHELL=/bin/bash</value>
-    <value type="QString" >SHLVL=2</value>
-    <value type="QString" >SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-0CUp1N/ssh</value>
-    <value type="QString" >SYNAPPS=/home/jennings/synApps_R3.13.1.1_R4.1</value>
-    <value type="QString" >TERM=xterm</value>
-    <value type="QString" >USER=jennings</value>
-    <value type="QString" >USERNAME=</value>
-    <value type="QString" >USER_DIR=/home/jennings/xxx</value>
-    <value type="QString" >WINDOWID=29393789</value>
-    <value type="QString" >WISECONFIGDIR=/usr/share/wise2/</value>
-    <value type="QString" >XAUTHORITY=/var/run/gdm/auth-for-jennings-1mtCTx/database</value>
-    <value type="QString" >XDG_SESSION_COOKIE=a1cb685e464c450ef0e456004577027a-1243436766.606146-1595575820</value>
+    <value type="QString" >SESSIONNAME=Console</value>
+    <value type="QString" >SYSTEMDRIVE=C:</value>
+    <value type="QString" >SYSTEMROOT=C:\WINDOWS</value>
+    <value type="QString" >TEMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
+    <value type="QString" >TMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
+    <value type="QString" >USERDOMAIN=CEP-C08CA44D782</value>
+    <value type="QString" >USERNAME=jennings</value>
+    <value type="QString" >USERPROFILE=C:\Documents and Settings\jennings</value>
+    <value type="QString" >WINDIR=C:\WINDOWS</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >/home/jennings/development/qxrd/qxrd.pro</value>
+    <value type="QString" >E:/qxrd/qxrd.pro</value>
     <value type="QString" >-spec</value>
-    <value type="QString" >/usr/lib64/qt4/mkspecs/linux-g++-64</value>
+    <value type="QString" >win32-g++</value>
     <value type="QString" >-r</value>
+    <value type="QString" >CONFIG+=release</value>
    </valuelist>
-   <value key="abstractProcess.command" type="QString" >/usr/bin/qmake-qt4</value>
+   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.02/qt/bin/qmake.exe</value>
    <value key="abstractProcess.enabled" type="bool" >false</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >/home/jennings/development/qxrd</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >E:/qxrd</value>
    <value key="buildConfiguration" type="int" >0</value>
   </valuemap>
  </data>
@@ -131,68 +105,41 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >BASH_ENV=/home/jennings/.bashrc</value>
-    <value type="QString" >COLORTERM=gnome-terminal</value>
-    <value type="QString" >CVSROOT=/home/jennings/cvs</value>
-    <value type="QString" >CVS_RSH=ssh</value>
-    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-xHueo97KBK,guid=457e7a6f158883c72219fd434a1d56df</value>
-    <value type="QString" >DESKTOP_SESSION=gnome</value>
-    <value type="QString" >DESKTOP_STARTUP_ID=</value>
-    <value type="QString" >DISPLAY=:0.0</value>
-    <value type="QString" >GDL_PATH=+/usr/share/gdl</value>
-    <value type="QString" >GDMSESSION=gnome</value>
-    <value type="QString" >GDM_LANG=en_US.utf8</value>
-    <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString" >GNOME_KEYRING_PID=32372</value>
-    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-0CUp1N/socket</value>
-    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/jennings/.gtkrc-1.2-gnome2</value>
-    <value type="QString" >G_BROKEN_FILENAMES=1</value>
-    <value type="QString" >HISTSIZE=1000</value>
-    <value type="QString" >HOME=/home/jennings</value>
-    <value type="QString" >HOSTNAME=weimar.xor.aps.anl.gov</value>
-    <value type="QString" >HOST_ARCH=Linux</value>
-    <value type="QString" >KDEDIRS=/usr</value>
-    <value type="QString" >LANG=en_US.utf8</value>
-    <value type="QString" >LD_LIBRARY_PATH=/usr/lib64/qtcreator:</value>
-    <value type="QString" >LESSOPEN=|/usr/bin/lesspipe.sh %s</value>
-    <value type="QString" >LOADEDMODULES=</value>
-    <value type="QString" >LOGNAME=jennings</value>
-    <value type="QString" >LS_COLORS=no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:do=00;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=00;32:*.tar=00;31:*.tgz=00;31:*.svgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.lzma=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.dz=00;31:*.gz=00;31:*.bz2=00;31:*.tbz2=00;31:*.bz=00;31:*.tz=00;31:*.deb=00;31:*.rpm=00;31:*.jar=00;31:*.rar=00;31:*.ace=00;31:*.zoo=00;31:*.cpio=00;31:*.7z=00;31:*.rz=00;31:*.jpg=00;35:*.jpeg=00;35:*.gif=00;35:*.bmp=00;35:*.pbm=00;35:*.pgm=00;35:*.ppm=00;35:*.tga=00;35:*.xbm=00;35:*.xpm=00;35:*.tif=00;35:*.tiff=00;35:*.png=00;35:*.mng=00;35:*.pcx=00;35:*.mov=00;35:*.mpg=00;35:*.mpeg=00;35:*.m2v=00;35:*.mkv=00;35:*.ogm=00;35:*.mp4=00;35:*.m4v=00;35:*.mp4v=00;35:*.vob=00;35:*.qt=00;35:*.nuv=00;35:*.wmv=00;35:*.asf=00;35:*.rm=00;35:*.rmvb=00;35:*.flc=00;35:*.avi=00;35:*.fli=00;35:*.gl=00;35:*.dl=00;35:*.xcf=00;35:*.xwd=00;35:*.yuv=00;35:*.svg=00;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:</value>
-    <value type="QString" >MAIL=/var/spool/mail/jennings</value>
-    <value type="QString" >MODULEPATH=/usr/share/Modules/modulefiles:/etc/modulefiles:</value>
-    <value type="QString" >MODULESHOME=/usr/share/Modules</value>
-    <value type="QString" >NCARG_LIB=/usr/lib64/ncarg</value>
-    <value type="QString" >NCARG_ROOT=/usr</value>
-    <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-jennings</value>
-    <value type="QString" >PATH=/usr/lib64/qt4/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/libexec/sdcc:/home/jennings/bin:/usr/local/epics/bin:/usr/java/j2re1.4.2_02/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin/Linux:/home/jennings/synApps_R3.13.1.1_R4.1/share/bin/Linux:/usr/libexec/sdcc</value>
-    <value type="QString" >PSPRINTER=lj4000</value>
-    <value type="QString" >PWD=/home/jennings/development/qxrd</value>
+    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
+    <value type="QString" >APPDATA=C:\Documents and Settings\jennings\Application Data</value>
+    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
+    <value type="QString" >COMPUTERNAME=CEP-C08CA44D782</value>
+    <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
+    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
+    <value type="QString" >HOMEDRIVE=C:</value>
+    <value type="QString" >HOMEPATH=\Documents and Settings\jennings</value>
+    <value type="QString" >LOGONSERVER=\\CEP-C08CA44D782</value>
+    <value type="QString" >NUMBER_OF_PROCESSORS=8</value>
+    <value type="QString" >OS=Windows_NT</value>
+    <value type="QString" >PATH=C:\Qt\2009.02\mingw\bin;C:\Qt\2009.02\qt\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Program Files\Intel\DMIX</value>
+    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH</value>
+    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 23 Stepping 10, GenuineIntel</value>
+    <value type="QString" >PROCESSOR_LEVEL=6</value>
+    <value type="QString" >PROCESSOR_REVISION=170a</value>
+    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
     <value type="QString" >QTDIR=c:/Qt/2009.01/qt</value>
-    <value type="QString" >QTINC=/usr/lib64/qt-3.3/include</value>
-    <value type="QString" >QTLIB=/usr/lib64/qt-3.3/lib</value>
-    <value type="QString" >QT_PLUGIN_PATH=/home/jennings/.kde/lib64/kde4/plugins/:/usr/lib64/kde4/plugins/</value>
-    <value type="QString" >SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/32374,unix/unix:/tmp/.ICE-unix/32374</value>
-    <value type="QString" >SHARE_DIR=/home/jennings/synApps_R3.13.1.1_R4.1/share</value>
-    <value type="QString" >SHELL=/bin/bash</value>
-    <value type="QString" >SHLVL=2</value>
-    <value type="QString" >SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-0CUp1N/ssh</value>
-    <value type="QString" >SYNAPPS=/home/jennings/synApps_R3.13.1.1_R4.1</value>
-    <value type="QString" >TERM=xterm</value>
-    <value type="QString" >USER=jennings</value>
-    <value type="QString" >USERNAME=</value>
-    <value type="QString" >USER_DIR=/home/jennings/xxx</value>
-    <value type="QString" >WINDOWID=29393789</value>
-    <value type="QString" >WISECONFIGDIR=/usr/share/wise2/</value>
-    <value type="QString" >XAUTHORITY=/var/run/gdm/auth-for-jennings-1mtCTx/database</value>
-    <value type="QString" >XDG_SESSION_COOKIE=a1cb685e464c450ef0e456004577027a-1243436766.606146-1595575820</value>
+    <value type="QString" >SESSIONNAME=Console</value>
+    <value type="QString" >SYSTEMDRIVE=C:</value>
+    <value type="QString" >SYSTEMROOT=C:\WINDOWS</value>
+    <value type="QString" >TEMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
+    <value type="QString" >TMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
+    <value type="QString" >USERDOMAIN=CEP-C08CA44D782</value>
+    <value type="QString" >USERNAME=jennings</value>
+    <value type="QString" >USERPROFILE=C:\Documents and Settings\jennings</value>
+    <value type="QString" >WINDIR=C:\WINDOWS</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
     <value type="QString" >-w</value>
    </valuelist>
-   <value key="abstractProcess.command" type="QString" >/usr/bin/make</value>
+   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.02/mingw/bin/mingw32-make.exe</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >/home/jennings/development/qxrd</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >E:/qxrd</value>
    <value key="buildConfiguration" type="int" >0</value>
   </valuemap>
  </data>
@@ -201,69 +148,50 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >BASH_ENV=/home/jennings/.bashrc</value>
-    <value type="QString" >COLORTERM=gnome-terminal</value>
-    <value type="QString" >CVSROOT=/home/jennings/cvs</value>
-    <value type="QString" >CVS_RSH=ssh</value>
-    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-xHueo97KBK,guid=457e7a6f158883c72219fd434a1d56df</value>
-    <value type="QString" >DESKTOP_SESSION=gnome</value>
-    <value type="QString" >DESKTOP_STARTUP_ID=</value>
-    <value type="QString" >DISPLAY=:0.0</value>
-    <value type="QString" >GDL_PATH=+/usr/share/gdl</value>
-    <value type="QString" >GDMSESSION=gnome</value>
-    <value type="QString" >GDM_LANG=en_US.utf8</value>
-    <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString" >GNOME_KEYRING_PID=32372</value>
-    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-0CUp1N/socket</value>
-    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/jennings/.gtkrc-1.2-gnome2</value>
-    <value type="QString" >G_BROKEN_FILENAMES=1</value>
-    <value type="QString" >HISTSIZE=1000</value>
-    <value type="QString" >HOME=/home/jennings</value>
-    <value type="QString" >HOSTNAME=weimar.xor.aps.anl.gov</value>
-    <value type="QString" >HOST_ARCH=Linux</value>
-    <value type="QString" >KDEDIRS=/usr</value>
-    <value type="QString" >LANG=en_US.utf8</value>
-    <value type="QString" >LD_LIBRARY_PATH=/usr/lib64/qtcreator:</value>
-    <value type="QString" >LESSOPEN=|/usr/bin/lesspipe.sh %s</value>
-    <value type="QString" >LOADEDMODULES=</value>
-    <value type="QString" >LOGNAME=jennings</value>
-    <value type="QString" >LS_COLORS=no=00:fi=00:di=00;34:ln=00;36:pi=40;33:so=00;35:do=00;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=00;32:*.tar=00;31:*.tgz=00;31:*.svgz=00;31:*.arj=00;31:*.taz=00;31:*.lzh=00;31:*.lzma=00;31:*.zip=00;31:*.z=00;31:*.Z=00;31:*.dz=00;31:*.gz=00;31:*.bz2=00;31:*.tbz2=00;31:*.bz=00;31:*.tz=00;31:*.deb=00;31:*.rpm=00;31:*.jar=00;31:*.rar=00;31:*.ace=00;31:*.zoo=00;31:*.cpio=00;31:*.7z=00;31:*.rz=00;31:*.jpg=00;35:*.jpeg=00;35:*.gif=00;35:*.bmp=00;35:*.pbm=00;35:*.pgm=00;35:*.ppm=00;35:*.tga=00;35:*.xbm=00;35:*.xpm=00;35:*.tif=00;35:*.tiff=00;35:*.png=00;35:*.mng=00;35:*.pcx=00;35:*.mov=00;35:*.mpg=00;35:*.mpeg=00;35:*.m2v=00;35:*.mkv=00;35:*.ogm=00;35:*.mp4=00;35:*.m4v=00;35:*.mp4v=00;35:*.vob=00;35:*.qt=00;35:*.nuv=00;35:*.wmv=00;35:*.asf=00;35:*.rm=00;35:*.rmvb=00;35:*.flc=00;35:*.avi=00;35:*.fli=00;35:*.gl=00;35:*.dl=00;35:*.xcf=00;35:*.xwd=00;35:*.yuv=00;35:*.svg=00;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:</value>
-    <value type="QString" >MAIL=/var/spool/mail/jennings</value>
-    <value type="QString" >MODULEPATH=/usr/share/Modules/modulefiles:/etc/modulefiles:</value>
-    <value type="QString" >MODULESHOME=/usr/share/Modules</value>
-    <value type="QString" >NCARG_LIB=/usr/lib64/ncarg</value>
-    <value type="QString" >NCARG_ROOT=/usr</value>
-    <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-jennings</value>
-    <value type="QString" >PATH=/usr/lib64/qt4/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/libexec/sdcc:/home/jennings/bin:/usr/local/epics/bin:/usr/java/j2re1.4.2_02/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin/Linux:/home/jennings/synApps_R3.13.1.1_R4.1/share/bin/Linux:/usr/libexec/sdcc</value>
-    <value type="QString" >PSPRINTER=lj4000</value>
-    <value type="QString" >PWD=/home/jennings/development/qxrd</value>
+    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
+    <value type="QString" >APPDATA=C:\Documents and Settings\jennings\Application Data</value>
+    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
+    <value type="QString" >COMPUTERNAME=JENNINGSXP</value>
+    <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
+    <value type="QString" >CUDA_BIN_PATH=C:\CUDA\bin</value>
+    <value type="QString" >CUDA_INC_PATH=C:\CUDA\include</value>
+    <value type="QString" >CUDA_LIB_PATH=C:\CUDA\lib</value>
+    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
+    <value type="QString" >HOMEDRIVE=C:</value>
+    <value type="QString" >HOMEPATH=\Documents and Settings\jennings</value>
+    <value type="QString" >INNOVATIVECOMMON=C:\Innovative</value>
+    <value type="QString" >LOGONSERVER=\\JENNINGSXP</value>
+    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
+    <value type="QString" >NVSDKCUDA_ROOT=C:\Documents and Settings\All Users\Application Data\NVIDIA Corporation\NVIDIA CUDA SDK</value>
+    <value type="QString" >OS=Windows_NT</value>
+    <value type="QString" >PATH=C:\Qt\2009.02\qt\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;c:\Program Files\Microsoft SQL Server\90\Tools\binn\;C:\CUDA\bin;C:\Innovative\lib\ipp;C:\Innovative\lib\ipp\win32;C:\Innovative\lib\dll;C:\Innovative\dll;;C:\WINDOWS\system32\WindowsPowerShell\v1.0;C:\Program Files\CMake 2.6\bin;c:\qwt-5.2.0-svn\lib;c:\qt\2009.02\mingw\bin;c:\qt\2009.02\qt\bin</value>
+    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.PSC1</value>
+    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
+    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 2, GenuineIntel</value>
+    <value type="QString" >PROCESSOR_LEVEL=6</value>
+    <value type="QString" >PROCESSOR_REVISION=0f02</value>
+    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
     <value type="QString" >QTDIR=c:/Qt/2009.01/qt</value>
-    <value type="QString" >QTINC=/usr/lib64/qt-3.3/include</value>
-    <value type="QString" >QTLIB=/usr/lib64/qt-3.3/lib</value>
-    <value type="QString" >QT_PLUGIN_PATH=/home/jennings/.kde/lib64/kde4/plugins/:/usr/lib64/kde4/plugins/</value>
-    <value type="QString" >SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/32374,unix/unix:/tmp/.ICE-unix/32374</value>
-    <value type="QString" >SHARE_DIR=/home/jennings/synApps_R3.13.1.1_R4.1/share</value>
-    <value type="QString" >SHELL=/bin/bash</value>
-    <value type="QString" >SHLVL=2</value>
-    <value type="QString" >SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-0CUp1N/ssh</value>
-    <value type="QString" >SYNAPPS=/home/jennings/synApps_R3.13.1.1_R4.1</value>
-    <value type="QString" >TERM=xterm</value>
-    <value type="QString" >USER=jennings</value>
-    <value type="QString" >USERNAME=</value>
-    <value type="QString" >USER_DIR=/home/jennings/xxx</value>
-    <value type="QString" >WINDOWID=29393789</value>
-    <value type="QString" >WISECONFIGDIR=/usr/share/wise2/</value>
-    <value type="QString" >XAUTHORITY=/var/run/gdm/auth-for-jennings-1mtCTx/database</value>
-    <value type="QString" >XDG_SESSION_COOKIE=a1cb685e464c450ef0e456004577027a-1243436766.606146-1595575820</value>
+    <value type="QString" >SESSIONNAME=Console</value>
+    <value type="QString" >SYSTEMDRIVE=C:</value>
+    <value type="QString" >SYSTEMROOT=C:\WINDOWS</value>
+    <value type="QString" >TEMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
+    <value type="QString" >TMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
+    <value type="QString" >USERDOMAIN=JENNINGSXP</value>
+    <value type="QString" >USERNAME=jennings</value>
+    <value type="QString" >USERPROFILE=C:\Documents and Settings\jennings</value>
+    <value type="QString" >VS80COMNTOOLS=C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
+    <value type="QString" >VS90COMNTOOLS=C:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools\</value>
+    <value type="QString" >WINDIR=C:\WINDOWS</value>
+    <value type="QString" >XPCDRIVE=D:\</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
     <value type="QString" >clean</value>
     <value type="QString" >-w</value>
    </valuelist>
-   <value key="abstractProcess.command" type="QString" >/usr/bin/make</value>
+   <value key="abstractProcess.command" type="QString" >C:/qt/2009.02/mingw/bin/mingw32-make.exe</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >/home/jennings/development/qxrd</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >G:/qxrd</value>
   </valuemap>
  </data>
  <data>

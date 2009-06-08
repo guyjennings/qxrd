@@ -193,20 +193,28 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
     return;
   }
 
+  emit printMessage(tr("Readout time = %1, Exposure Time = %2")
+                    .arg(readoutTime()).arg(exposureTime()));
+
   if (readoutTime() >= exposureTime()) {
+    emit printMessage("SetFrameSyncMode HIS_SYNCMODE_FREE_RUNNING");
     if ((nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING)) != HIS_ALL_OK) {
       acquisitionError(nRet);
     }
   } else {
+    emit printMessage("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER");
     if ((nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
       acquisitionError(nRet);
     }
 
     DWORD tmp = (int)(exposureTime()*1e6);
+    emit printMessage(tr("SetTimerSync %1").arg(tmp));
 
     if ((nRet=Acquisition_SetTimerSync(m_AcqDesc, &tmp)) != HIS_ALL_OK) {
       acquisitionError(nRet);
     }
+
+    emit printMessage(tr("TimerSync = %1").arg(tmp));
 
     setExposureTime(tmp/1.0e6);
   }
@@ -233,9 +241,9 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
   forever {
     QMutex mutex;
     QMutexLocker lock(&mutex);
-    printf("Start Waiting...\n");
+    emit printMessage("Start Waiting...\n");
     if (m_AcquisitionWaiting.wait(&mutex, 10000)) {
-      printf("Done Waiting...\n");
+      emit printMessage("Done Waiting...\n");
       if (onEndFrame()) {
         break;
       }
@@ -249,7 +257,7 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
 
 bool QxrdAcquisitionPerkinElmer::onEndFrame()
 {
-  printf("QxrdAcquisitionPerkinElmer::onEndFrame()\n");
+  emit printMessage("QxrdAcquisitionPerkinElmer::onEndFrame()");
 
   if (m_Cancelling) return true;
 
@@ -415,7 +423,7 @@ double QxrdAcquisitionPerkinElmer::readoutTime() const
 {
   int n = readoutMode();
 
-  return m_ReadoutTimes.value(n);
+  return m_ReadoutTimes.value(n)/1e6;
 }
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)

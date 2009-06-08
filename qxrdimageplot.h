@@ -8,7 +8,6 @@
 
 class QxrdPlotZoomer;
 class QxrdPlotTracker;
-class QxrdPlotCenterer;
 class QxrdPlotSlicer;
 class QxrdPlotMeasurer;
 class QwtPlotPanner;

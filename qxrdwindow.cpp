@@ -254,6 +254,12 @@ void QxrdWindow::onAcquisitionRunning()
   connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
   readSettings();
+
+  QVector<double> times = m_Acquisition -> readoutTimes();
+
+  for (int i=0; i<times.count(); i++) {
+    setReadoutTime(i, times.value(i));
+  }
 }
 
 void QxrdWindow::closeEvent ( QCloseEvent * event )
