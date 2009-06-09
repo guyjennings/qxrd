@@ -12,8 +12,8 @@ QxrdAcquisitionScripting::QxrdAcquisitionScripting(QxrdAcquisitionThread *thread
 {
   g_Acquisition = this;
 
-  printf("QxrdAcquisitionScripting::QxrdAcquisitionScripting g_Acquisition = %p\n",
-         g_Acquisition);
+//  printf("QxrdAcquisitionScripting::QxrdAcquisitionScripting g_Acquisition = %p\n",
+//         g_Acquisition);
 
   m_ScriptEngine.globalObject().setProperty("acquisition",
           m_ScriptEngine.newQObject(this));
@@ -21,7 +21,7 @@ QxrdAcquisitionScripting::QxrdAcquisitionScripting(QxrdAcquisitionThread *thread
   m_ScriptEngine.globalObject().setProperty("acquire",
           m_ScriptEngine.newFunction(QxrdAcquisitionScripting::acquireFunc));
 
-  m_ScriptEngine.globalObject().setProperty("acquiredark",
+  m_ScriptEngine.globalObject().setProperty("acquireDark",
           m_ScriptEngine.newFunction(QxrdAcquisitionScripting::acquireDarkFunc));
 
   m_ScriptEngine.globalObject().setProperty("status",
@@ -240,15 +240,17 @@ QScriptValue QxrdAcquisitionScripting::fileIndexFunc(QScriptContext *context, QS
 //  return QScriptValue(engine, g_Acquisition -> cameraGain());
 //}
 
-void QxrdAcquisitionScripting::_evaluate(QString cmd)
+QVariant QxrdAcquisitionScripting::evaluate(QString cmd)
 {
-  emit printMessage(tr("Evaluate %1").arg(cmd));
+//  emit printMessage(tr("Evaluate %1").arg(cmd));
 
   QScriptValue res = m_ScriptEngine.evaluate(cmd);
 
-  emit printMessage(tr("Result = %1").arg(res.toString()));
+//  emit printMessage(tr("Result = %1").arg(res.toString()));
 
   m_AcquisitionThread -> setResult(res.toVariant());
+
+  return res.toVariant();
 }
 
 double QxrdAcquisitionScripting::sleep(double time)
@@ -258,6 +260,12 @@ double QxrdAcquisitionScripting::sleep(double time)
   return 42;
 }
 
+void QxrdAcquisitionScripting::message(QString msg)
+{
+  emit printMessage(msg);
+  emit statusMessage(msg);
+}
+
 void QxrdAcquisitionScripting::propertyList()
 {
   QMutexLocker lock(&m_Mutex);
@@ -265,7 +273,7 @@ void QxrdAcquisitionScripting::propertyList()
   const QMetaObject *meta = metaObject();
 
   int count = meta->propertyCount();
-  int offset = meta->propertyOffset();
+  int offset = 1; /*meta->propertyOffset();*/
 
   for (int i=offset; i<count; i++) {
     QMetaProperty metaproperty = meta->property(i);

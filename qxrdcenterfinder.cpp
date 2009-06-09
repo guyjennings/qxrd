@@ -125,7 +125,7 @@ void QxrdCenterFinder::moveCenter(int dx, int dy)
   m_CenterY += m_StepSize*dy;
 
   if (dx != 0 || dy != 0) {
-    printf("QxrdCenterFinder::moveCenter -> %g, %g\n", m_CenterX, m_CenterY);
+//    printf("QxrdCenterFinder::moveCenter -> %g, %g\n", m_CenterX, m_CenterY);
 
     emit centerChanged(m_CenterX, m_CenterY);
   }

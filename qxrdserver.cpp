@@ -10,14 +10,14 @@ QxrdServer::QxrdServer(QxrdAcquisitionThread *acqth, QString name, QObject *pare
   : QSpecServer(name, parent),
     m_AcquisitionThread(acqth)
 {
-  printf("QxrdServer::QxrdServer\n");
+//  printf("QxrdServer::QxrdServer\n");
 
   startServer(QHostAddress::Any);
 }
 
 QVariant QxrdServer::executeCommand(QString cmd)
 {
-  printf("QxrdServer::executeCommand(%s)\n", qPrintable(cmd));
+//  printf("QxrdServer::executeCommand(%s)\n", qPrintable(cmd));
 
   QVariant result = m_AcquisitionThread->evaluate(cmd);
 

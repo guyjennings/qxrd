@@ -11,7 +11,7 @@ QxrdAcquisitionOperations::QxrdAcquisitionOperations(QxrdAcquisitionThread *thre
 QxrdImageData *QxrdAcquisitionOperations::takeNextFreeImage()
 {
   if (m_FreeImages.size() == 0) {
-    printf("Allocate new image\n");
+//    printf("Allocate new image\n");
     return new QxrdImageData(2048, 2048);
   } else {
     return m_FreeImages.dequeue();

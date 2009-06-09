@@ -41,8 +41,8 @@ public:
 public:
   QVariant evaluate(QString cmd);
   void setResult(QVariant res);
-signals:
-  void _evaluate(QString cmd);
+//signals:
+//  void _evaluate(QString cmd);
 private:
   QMutex         m_EvalMutex;
   QWaitCondition m_EvalWaitCondition;

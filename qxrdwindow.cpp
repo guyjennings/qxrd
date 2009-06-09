@@ -163,6 +163,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_IntegratorZoomOutButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(doZoomOut()));
   connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(doZoomAll()));
 
+  connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
+
   for (int i=0; i<8; i++) {
     m_ReadoutMode -> addItem(tr("Item %1").arg(i));
     m_Exposures.append(0);
@@ -183,7 +185,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
 
 QxrdWindow::~QxrdWindow()
 {
-  printf("QxrdWindow::~QxrdWindow()\n");
+//  printf("QxrdWindow::~QxrdWindow()\n");
 
   if (m_SettingsLoaded) {
     saveSettings();
@@ -199,6 +201,8 @@ void QxrdWindow::onAcquisitionRunning()
           this,              SLOT(statusMessage(QString)));
   connect(m_Acquisition,     SIGNAL(printMessage(QString)),
           this,              SLOT(printMessage(QString)));
+  connect(m_Acquisition,     SIGNAL(criticalMessage(QString)),
+          this,              SLOT(criticalMessage(QString)));
 
   connect(m_Acquisition,     SIGNAL(acquireStarted(int)),
           this,              SLOT(onAcquireStarted(int)));
@@ -232,12 +236,12 @@ void QxrdWindow::onAcquisitionRunning()
   connect(m_Acquisition,     SIGNAL(filesInSequenceChanged(int)),
           m_FilesInSequence, SLOT(setValue(int)));
 
-  connect(m_OutputDirectory, SIGNAL(textChanged(QString)),
+  connect(m_OutputDirectory, SIGNAL(textEdited(QString)),
           m_Acquisition,     SLOT(setOutputDirectory(QString)));
   connect(m_Acquisition,     SIGNAL(outputDirectoryChanged(QString)),
           m_OutputDirectory, SLOT(setText(QString)));
 
-  connect(m_FilePattern,     SIGNAL(textChanged(QString)),
+  connect(m_FilePattern,     SIGNAL(textEdited(QString)),
           m_Acquisition,     SLOT(setFilePattern(QString)));
   connect(m_Acquisition,     SIGNAL(filePatternChanged(QString)),
           m_FilePattern,     SLOT(setText(QString)));
@@ -254,6 +258,8 @@ void QxrdWindow::onAcquisitionRunning()
   connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
   readSettings();
+
+  m_Acquisition -> initialize();
 
   QVector<double> times = m_Acquisition -> readoutTimes();
 
@@ -294,6 +300,11 @@ QString QxrdWindow::timeStamp()
 void QxrdWindow::printMessage(QString msg)
 {
   m_Messages -> append(timeStamp()+msg.trimmed());
+}
+
+void QxrdWindow::criticalMessage(QString msg)
+{
+  QMessageBox::critical(this, "Error", msg);
 }
 
 void QxrdWindow::acquisitionReady()
@@ -381,7 +392,8 @@ void QxrdWindow::onAcquireStarted(int dark)
   m_Acquiring = true;
 }
 
-void QxrdWindow::onAcquiredFrame(QString fileName, int fileIndex, int isum, int nsum, int iframe, int nframe)
+void QxrdWindow::onAcquiredFrame(
+    QString fileName, int fileIndex, int isum, int nsum, int iframe, int nframe)
 {
 //   printf("QxrdWindow::acquiredFrame(\"%s\",%d,%d,%d,%d,%d)\n",
 // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
@@ -390,6 +402,9 @@ void QxrdWindow::onAcquiredFrame(QString fileName, int fileIndex, int isum, int 
   int thisframe = iframe*nsum+isum+1;
 
   //  printf("%d %% progress\n", thisframe*100/totalframes);
+
+  statusMessage(tr("Exposure %1 of %2, File %3 of %4")
+                .arg(isum).arg(nsum).arg(iframe).arg(nframe));
 
   m_Progress -> setValue(thisframe*100/totalframes);
 }
@@ -491,6 +506,26 @@ void QxrdWindow::saveSettings()
 void QxrdWindow::statusMessage(QString msg)
 {
   m_StatusMsg -> setText(msg);
+
+  m_StatusTimer.start(5000);
+}
+
+void QxrdWindow::clearStatusMessage()
+{
+//  if (!m_StatusMessages.isEmpty()) {
+//    QString msg = m_StatusMessages.takeFirst();
+//
+//
+//    if (m_StatusMessages.count() > 10) {
+//      QTimer::singleShot(50, this, SLOT(displayStatusMessage()));
+//    } else if (m_StatusMessages.count() > 2) {
+//      QTimer::singleShot(1000, this, SLOT(displayStatusMessage()));
+//    } else {
+//      QTimer::singleShot(5000, this, SLOT(displayStatusMessage()));
+//    }
+//  } else {
+  m_StatusMsg -> setText("");
+//  }
 }
 
 void QxrdWindow::doSaveData()
@@ -809,7 +844,7 @@ void QxrdWindow::setMaintainAspectRatio(int prsrv)
 
 void QxrdWindow::onProcessedImageAvailable()
 {
-  printf("onProcessedImageAvailable()\n");
+//  printf("onProcessedImageAvailable()\n");
 
   QxrdImageData* img = m_DataProcessor -> takeLatestProcessedImage();
 
@@ -820,7 +855,7 @@ void QxrdWindow::onProcessedImageAvailable()
 
 void QxrdWindow::onDarkImageAvailable()
 {
-  printf("onDarkImageAvailable()\n");
+//  printf("onDarkImageAvailable()\n");
 
   QxrdImageData* img = m_DataProcessor -> takeNextDarkImage();
 
@@ -865,12 +900,12 @@ void QxrdWindow::doSetMaskRange()
 
 void QxrdWindow::onToolBoxPageChanged(int page)
 {
-  printf("QxrdWindow::onToolBoxPageChanged(%d)\n", page);
+//  printf("QxrdWindow::onToolBoxPageChanged(%d)\n", page);
 }
 
 void QxrdWindow::onTabWidgetPageChanged(int page)
 {
-  printf("QxrdWindow::onTabWidgetPageChanged(%d)\n", page);
+//  printf("QxrdWindow::onTabWidgetPageChanged(%d)\n", page);
 }
 
 void QxrdWindow::executeScript()

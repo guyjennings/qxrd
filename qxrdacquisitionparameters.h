@@ -15,6 +15,8 @@ public:
 
 signals:
   void printMessage(QString msg);
+  void statusMessage(QString msg);
+  void criticalMessage(QString msg);
 
   void fileIndexChanged(int index);
   void exposureTimeChanged(double t);

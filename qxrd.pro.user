@@ -60,6 +60,7 @@
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
     <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
     <value type="QString" >APPDATA=C:\Documents and Settings\jennings\Application Data</value>
+    <value type="QString" >CLIENTNAME=Console</value>
     <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
     <value type="QString" >COMPUTERNAME=CEP-C08CA44D782</value>
     <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
@@ -107,6 +108,7 @@
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
     <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
     <value type="QString" >APPDATA=C:\Documents and Settings\jennings\Application Data</value>
+    <value type="QString" >CLIENTNAME=Console</value>
     <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
     <value type="QString" >COMPUTERNAME=CEP-C08CA44D782</value>
     <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>

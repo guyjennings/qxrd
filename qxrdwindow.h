@@ -55,6 +55,7 @@ public slots:
 
   QString timeStamp();
   void printMessage(QString msg);
+  void criticalMessage(QString msg);
 
   void acquisitionReady();
   void acquisitionStarted();
@@ -66,6 +67,7 @@ public slots:
 
   void selectOutputDirectory();
   void statusMessage(QString msg);
+  void clearStatusMessage();
 
   int performDarkSubtraction();
   void setPerformDarkSubtraction(int subt);
@@ -146,6 +148,8 @@ private:
   QxrdImageData          *m_DarkFrame;
   QxrdImageData          *m_BadPixels;
   QxrdImageData          *m_GainFrame;
+  QTimer                  m_StatusTimer;
+//  QStringList             m_StatusMessages;
 //
 //  QDirModel              *m_FileBrowserModel;
 //  QTimer                  m_FileBrowserTimer;

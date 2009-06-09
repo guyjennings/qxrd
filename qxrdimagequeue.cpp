@@ -3,7 +3,7 @@
 
 QxrdImageQueue::QxrdImageQueue(QString name)
   : m_Name(name),
-    m_Debug(1)
+    m_Debug(0)
 {
 }
 

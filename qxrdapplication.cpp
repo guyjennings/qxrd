@@ -18,7 +18,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 {
   setObjectName("qxrdapplication");
 
-  printf("application thread %p\n", thread());
+//  printf("application thread %p\n", thread());
 
   g_Application = this;
 

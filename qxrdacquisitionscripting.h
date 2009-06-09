@@ -18,7 +18,8 @@ public:
 public slots:
   double sleep(double time);
   void propertyList();
-  void _evaluate(QString cmd);
+  QVariant evaluate(QString cmd);
+  void message(QString cmd);\
 
 protected:
   virtual void acquire() = 0;

@@ -3,6 +3,7 @@
 #include "qxrdacquisition.h"
 #include <QFuture>
 #include <QVariant>
+#include <QMetaObject>
 
 QxrdAcquisitionThread::QxrdAcquisitionThread()
   : QThread(),
@@ -22,10 +23,8 @@ void QxrdAcquisitionThread::run()
 {
   m_Acquisition = new QxrdAcquisition(this);
 
-  connect(this,          SIGNAL(_evaluate(QString)),
-          m_Acquisition, SLOT(_evaluate(QString)));
-
-  m_Acquisition -> initialize();
+//  connect(this,          SIGNAL(_evaluate(QString)),
+//          m_Acquisition, SLOT(_evaluate(QString)));
 
   emit acquisitionRunning();
 
@@ -41,12 +40,12 @@ void QxrdAcquisitionThread::shutdown()
 
 void QxrdAcquisitionThread::doAcquire()
 {
-  evaluate("acquire()");
+  QMetaObject::invokeMethod(m_Acquisition, "acquire", Qt::QueuedConnection);
 }
 
 void QxrdAcquisitionThread::doAcquireDark()
 {
-  evaluate("acquiredark()");
+  QMetaObject::invokeMethod(m_Acquisition, "acquireDark", Qt::QueuedConnection);
 }
 
 void QxrdAcquisitionThread::msleep(int msec)
@@ -56,12 +55,12 @@ void QxrdAcquisitionThread::msleep(int msec)
 
 void QxrdAcquisitionThread::cancel()
 {
-  m_Acquisition -> cancel();
+  QMetaObject::invokeMethod(m_Acquisition, "cancel", Qt::QueuedConnection);
 }
 
 void QxrdAcquisitionThread::cancelDark()
 {
-  m_Acquisition -> cancelDark();
+  QMetaObject::invokeMethod(m_Acquisition, "cancelDark", Qt::QueuedConnection);
 }
 
 QVector<double> QxrdAcquisitionThread::readoutTimes()
@@ -73,7 +72,9 @@ QVariant QxrdAcquisitionThread::evaluate(QString cmd)
 {
   QMutexLocker lock(&m_EvalMutex);
 
-  emit _evaluate(cmd);
+  QMetaObject::invokeMethod(m_Acquisition, "evaluate",
+                            Qt::QueuedConnection,
+                            Q_ARG(QString, cmd));
 
   waitForResult();
 

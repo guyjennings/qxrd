@@ -520,8 +520,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>225</width>
-          <height>638</height>
+          <width>240</width>
+          <height>645</height>
          </rect>
         </property>
         <attribute name="label">
@@ -639,11 +639,14 @@ Script Function: filesInSequence()</string>
 Script Property: &quot;acquisition.exposureTime&quot;
 Script Function: exposureTime()</string>
               </property>
+              <property name="specialValueText">
+               <string>From Readout Mode</string>
+              </property>
               <property name="keyboardTracking">
                <bool>false</bool>
               </property>
               <property name="maximum">
-               <double>5.000000000000000</double>
+               <double>8.500000000000000</double>
               </property>
               <property name="singleStep">
                <double>0.100000000000000</double>
@@ -867,8 +870,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>218</width>
-          <height>616</height>
+          <width>220</width>
+          <height>556</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1103,8 +1106,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>251</width>
-          <height>332</height>
+          <width>242</width>
+          <height>308</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1282,8 +1285,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>96</width>
-          <height>26</height>
+          <width>98</width>
+          <height>28</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1296,8 +1299,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>96</width>
-          <height>26</height>
+          <width>98</width>
+          <height>28</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1316,7 +1319,7 @@ Script Function: acquiredark()</string>
      <x>0</x>
      <y>0</y>
      <width>1029</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

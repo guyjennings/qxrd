@@ -27,11 +27,10 @@ signals:
   void acquireStarted(int dark);
   void acquireComplete(int dark);
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
-  void statusMessage(QString msg);
 
 public:
   void initialize();
-  bool onEndFrame();
+//  bool onEndFrame();
   void onEndAcquisition();
   QVector<double> readoutTimes();
   double  readoutTime() const;
@@ -42,13 +41,17 @@ protected:
   void acquisition(int isDark);
   void haltAcquire();
 
+private slots:
+  void onEndFrame();
+
 private:
   void acquisitionError(int n);
+  void acquisitionInitError(int n);
+  void acquisitionNSensorsError(int n);
 
 private:
   mutable QMutex         m_Mutex;
   QMutex                 m_Acquiring;
-  QWaitCondition         m_AcquisitionWaiting;
   QWaitCondition         m_StatusWaiting;
   int                    m_Cancelling;
   int                    m_AcquireDark;

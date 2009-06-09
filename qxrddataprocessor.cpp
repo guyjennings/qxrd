@@ -19,12 +19,12 @@ QxrdDataProcessor::QxrdDataProcessor
 
 void QxrdDataProcessor::on_acquired_image_available()
 {
-  printf("QxrdDataProcessor::on_acquired_image_available()\n");
+//  printf("QxrdDataProcessor::on_acquired_image_available()\n");
 
   QxrdImageData *image = m_Acquisition -> takeNextAcquiredImage();
 
   if (image) {
-    printf("Image Number %d\n", image -> imageNumber());
+//    printf("Image Number %d\n", image -> imageNumber());
 
     if ((image -> imageNumber()) >= 0) {
       m_DarkUsage.lockForRead();
@@ -75,7 +75,7 @@ QxrdImageData *QxrdDataProcessor::takeNextDarkImage()
 
 void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
 {
-  printf("QxrdDataProcessor::processAcquiredImage\n");
+//  printf("QxrdDataProcessor::processAcquiredImage\n");
 
   QxrdImageData *dark   = m_Window -> darkImage();
 
@@ -141,8 +141,8 @@ void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *d
 
       double ratio = ((double) nres)/((double) ndrk);
 
-      printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
-             nres, ndrk, npixels, ratio);
+//      printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
+//             nres, ndrk, npixels, ratio);
 
       double *result = image->data();
       double *dk     = dark->data();

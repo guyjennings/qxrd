@@ -20,6 +20,7 @@
 #include <QFile>
 #include <QTime>
 #include <QMutexLocker>
+#include <QMetaObject>
 #include <QMetaProperty>
 
 static QxrdAcquisitionPerkinElmer * g_Acquisition = NULL;
@@ -49,7 +50,7 @@ void QxrdAcquisitionPerkinElmer::acquire()
 {
 //  printf("QxrdAcquisitionPerkinElmer::acquire (thread()=%p, currentThread()=%p)\n",
 //         thread(), QThread::currentThread());
-  QMutexLocker lock(&m_Acquiring);
+  m_Acquiring.lock();
 
   emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquire()"));
   emit statusMessage("Starting acquisition");
@@ -62,7 +63,7 @@ void QxrdAcquisitionPerkinElmer::acquireDark()
 {
 //  printf("QxrdAcquisitionPerkinElmer::acquireDark (thread()=%p, currentThread()=%p)\n",
 //         thread(), QThread::currentThread());
-  QMutexLocker lock(&m_Acquiring);
+  m_Acquiring.lock();
 
   emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquireDark()\n"));
   emit statusMessage("Starting dark acquisition");
@@ -104,14 +105,19 @@ void QxrdAcquisitionPerkinElmer::initialize()
   emit printMessage(tr("Acquisition_EnumSensors = %1\n").arg(nRet));
 
   if (nRet != HIS_ALL_OK) {
-    acquisitionError(nRet);
+    acquisitionInitError(nRet);
     return;
   }
 
   emit printMessage(tr("Number of sensors = %1\n").arg(nSensors));
 
+  if (nSensors != 1) {
+    acquisitionNSensorsError(nRet);
+    return;
+  }
+
   if ((nRet = Acquisition_GetNextSensor(&Pos, &m_AcqDesc))!=HIS_ALL_OK) {
-    acquisitionError(nRet);
+    acquisitionNSensorsError(nRet);
     return;
   }
 
@@ -163,6 +169,7 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
   m_AcquireDark = isDark;
   m_BufferSize = 10;
   m_BufferIndex = 0;
+  m_Cancelling = 0;
 
   if (m_AcquireDark) {
     m_ExposuresToSum = darkSummedExposures();
@@ -200,11 +207,13 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
     emit printMessage("SetFrameSyncMode HIS_SYNCMODE_FREE_RUNNING");
     if ((nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING)) != HIS_ALL_OK) {
       acquisitionError(nRet);
+      return;
     }
   } else {
     emit printMessage("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER");
     if ((nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
       acquisitionError(nRet);
+      return;
     }
 
     DWORD tmp = (int)(exposureTime()*1e6);
@@ -212,6 +221,7 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
 
     if ((nRet=Acquisition_SetTimerSync(m_AcqDesc, &tmp)) != HIS_ALL_OK) {
       acquisitionError(nRet);
+      return;
     }
 
     emit printMessage(tr("TimerSync = %1").arg(tmp));
@@ -221,6 +231,7 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
 
   if ((nRet=Acquisition_SetCameraGain(m_AcqDesc, cameraGain())) != HIS_ALL_OK) {
     acquisitionError(nRet);
+    return;
   }
 
   if ((nRet=Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_BufferSize,
@@ -237,39 +248,16 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
     acquisitionError(nRet);
     return;
   }
-
-  forever {
-    QMutex mutex;
-    QMutexLocker lock(&mutex);
-    emit printMessage("Start Waiting...\n");
-    if (m_AcquisitionWaiting.wait(&mutex, 10000)) {
-      emit printMessage("Done Waiting...\n");
-      if (onEndFrame()) {
-        break;
-      }
-    } else {
-      break;
-    }
-  }
-
-  onEndAcquisition();
 }
 
-bool QxrdAcquisitionPerkinElmer::onEndFrame()
+void QxrdAcquisitionPerkinElmer::onEndFrame()
 {
-  emit printMessage("QxrdAcquisitionPerkinElmer::onEndFrame()");
-
-  if (m_Cancelling) return true;
-
-//  CHwHeaderInfo info;
-//  CHwHeaderInfoEx infoEx;
+//  emit printMessage("QxrdAcquisitionPerkinElmer::onEndFrame()");
 //
-//  if (Acquisition_GetHwHeaderInfoEx(m_AcqDesc, &info, &infoEx) == 0) {
-//    if (info.dwHeaderID == 14) {
-//      printf("Frame %d\n", infoEx.wFrameCnt);
-//      emit printMessage(tr("Frame %1").arg(infoEx.wFrameCnt));
-//    }
-//  }
+  if (m_Cancelling) {
+    m_Cancelling = false;
+    return /*true*/;
+  }
 
   QString fileName;
 
@@ -282,6 +270,11 @@ bool QxrdAcquisitionPerkinElmer::onEndFrame()
                .filePath(filePattern()+tr("-%1.tif")
                          .arg(fileIndex(),5,10,QChar('0')));
   }
+
+//  emit printMessage(tr("Fn: %1, Fi: %2, Exp: %3, Nexp %4, Fil: %5, NFil: %6")
+//                    .arg(fileName).arg(fileIndex())
+//                    .arg(m_CurrentExposure).arg(m_ExposuresToSum)
+//                    .arg(m_CurrentFile).arg(m_FilesInSequence));
 
   emit acquiredFrame(fileName, fileIndex(),
                      m_CurrentExposure,m_ExposuresToSum,
@@ -349,25 +342,25 @@ bool QxrdAcquisitionPerkinElmer::onEndFrame()
 
       haltAcquire();
 
-      return true;
+//      return true;
     }
   }
 
-  return false;
+//  return false;
 }
 
-void QxrdAcquisitionPerkinElmer::onEndAcquisition()
+void QxrdAcquisitionPerkinElmer::haltAcquire()
 {
-  m_Cancelling = false;
+  m_Cancelling = true;
 
-  m_StatusWaiting.wakeAll();
-
-  emit printMessage("(CB) Acquisition ended\n");
-
-  emit statusMessage("Waiting for saves");
+  Acquisition_Abort(m_AcqDesc);
 
   emit statusMessage("Acquire Complete");
   emit acquireComplete(m_AcquireDark);
+
+  m_Acquiring.unlock();
+
+  m_StatusWaiting.wakeAll();
 }
 
 int QxrdAcquisitionPerkinElmer::acquisitionStatus(double time)
@@ -375,7 +368,7 @@ int QxrdAcquisitionPerkinElmer::acquisitionStatus(double time)
   if (m_Acquiring.tryLock()) {
     m_Acquiring.unlock();
 
-    printf("m_Acquiring.tryLock() succeeded\n");
+//    printf("m_Acquiring.tryLock() succeeded\n");
 
     return 1;
   }
@@ -384,34 +377,39 @@ int QxrdAcquisitionPerkinElmer::acquisitionStatus(double time)
   QMutexLocker lock(&mutex);
 
   if (m_StatusWaiting.wait(&mutex, (int)(time*1000))) {
-    printf("m_StatusWaiting.wait succeeded\n");
+//    printf("m_StatusWaiting.wait succeeded\n");
     return 1;
   } else {
-    printf("m_StatusWaiting.wait failed\n");
+//    printf("m_StatusWaiting.wait failed\n");
     return 0;
   }
 }
 
 void QxrdAcquisitionPerkinElmer::acquisitionError(int n)
 {
+  haltAcquire();
+
   emit printMessage(tr("Acquisition Error %1\n").arg(n));
+  emit statusMessage(tr("Acquisition Error %1\n").arg(n));
 }
 
-void QxrdAcquisitionPerkinElmer::haltAcquire()
+void QxrdAcquisitionPerkinElmer::acquisitionInitError(int n)
 {
-//  printf("QxrdAcquisitionPerkinElmer::haltAcquire (thread = %p)\n", QThread::currentThread());
-  m_Cancelling = true;
+  acquisitionError(n);
 
-  Acquisition_Abort(m_AcqDesc);
+  emit criticalMessage("Detector Initialization Failed");
+}
 
-  emit acquireComplete(m_AcquireDark);
-//
-//  m_Acquiring.unlock();
+void QxrdAcquisitionPerkinElmer::acquisitionNSensorsError(int n)
+{
+  acquisitionError(n);
+
+  emit criticalMessage("Detector Initialization Failed");
 }
 
 void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 {
-  m_AcquisitionWaiting.wakeAll();
+//  m_AcquisitionWaiting.wakeAll();
 }
 
 QVector<double> QxrdAcquisitionPerkinElmer::readoutTimes()
@@ -428,9 +426,12 @@ double QxrdAcquisitionPerkinElmer::readoutTime() const
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 {
-  printf("OnEndFrameCallback\n");
+//  printf("OnEndFrameCallback\n");
 
-  g_Acquisition -> onEndFrameCallback();
+//  g_Acquisition -> onEndFrameCallback();
+
+  QMetaObject::invokeMethod(g_Acquisition, "onEndFrame", Qt::QueuedConnection);
+//  QTimer::singleShot(0, , SLOT(onEndFrame()));
 }
 
 static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc)
