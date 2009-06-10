@@ -181,6 +181,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   m_Progress -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
   statusBar() -> addPermanentWidget(m_Progress);
+
+  onAcquisitionRunning();
 }
 
 QxrdWindow::~QxrdWindow()
@@ -196,6 +198,12 @@ void QxrdWindow::onAcquisitionRunning()
 {
   m_Acquisition = m_AcquisitionThread -> acquisition();
 
+  if (m_Acquisition == NULL) {
+    printf("Oh no...\n");
+  }
+
+  connect(m_AcquisitionThread, SIGNAL(printMessage(QString)),
+          this,              SLOT(printMessage(QString)));
 
   connect(m_Acquisition,     SIGNAL(statusMessage(QString)),
           this,              SLOT(statusMessage(QString)));
@@ -212,42 +220,42 @@ void QxrdWindow::onAcquisitionRunning()
           this,              SLOT(onAcquireComplete(int)));
 
   connect(m_ReadoutMode,     SIGNAL(currentIndexChanged(int)),
-          m_Acquisition,     SLOT(setReadoutMode(int)));
+          m_Acquisition,     SLOT(changeReadoutMode(int)));
   connect(m_Acquisition,     SIGNAL(readoutModeChanged(int)),
           m_ReadoutMode,     SLOT(setCurrentIndex(int)));
 
   connect(m_ExposureTime,    SIGNAL(valueChanged(double)),
-          m_Acquisition,     SLOT(setExposureTime(double)));
+          m_Acquisition,     SLOT(changeExposureTime(double)));
   connect(m_Acquisition,     SIGNAL(exposureTimeChanged(double)),
           m_ExposureTime,    SLOT(setValue(double)));
 
   connect(m_SummedExposures, SIGNAL(valueChanged(int)),
-          m_Acquisition,     SLOT(setSummedExposures(int)));
+          m_Acquisition,     SLOT(changeSummedExposures(int)));
   connect(m_Acquisition,     SIGNAL(summedExposuresChanged(int)),
           m_SummedExposures, SLOT(setValue(int)));
 
   connect(m_DarkSummedExposures,SIGNAL(valueChanged(int)),
-          m_Acquisition,     SLOT(setDarkSummedExposures(int)));
+          m_Acquisition,     SLOT(changeDarkSummedExposures(int)));
   connect(m_Acquisition,     SIGNAL(darkSummedExposuresChanged(int)),
           m_DarkSummedExposures,SLOT(setValue(int)));
 
   connect(m_FilesInSequence, SIGNAL(valueChanged(int)),
-          m_Acquisition,     SLOT(setFilesInSequence(int)));
+          m_Acquisition,     SLOT(changeFilesInSequence(int)));
   connect(m_Acquisition,     SIGNAL(filesInSequenceChanged(int)),
           m_FilesInSequence, SLOT(setValue(int)));
 
   connect(m_OutputDirectory, SIGNAL(textEdited(QString)),
-          m_Acquisition,     SLOT(setOutputDirectory(QString)));
+          m_Acquisition,     SLOT(changeOutputDirectory(QString)));
   connect(m_Acquisition,     SIGNAL(outputDirectoryChanged(QString)),
           m_OutputDirectory, SLOT(setText(QString)));
 
   connect(m_FilePattern,     SIGNAL(textEdited(QString)),
-          m_Acquisition,     SLOT(setFilePattern(QString)));
+          m_Acquisition,     SLOT(changeFilePattern(QString)));
   connect(m_Acquisition,     SIGNAL(filePatternChanged(QString)),
           m_FilePattern,     SLOT(setText(QString)));
 
   connect(m_FileIndex,       SIGNAL(valueChanged(int)),
-          m_Acquisition,     SLOT(setFileIndex(int)));
+          m_Acquisition,     SLOT(changeFileIndex(int)));
   connect(m_Acquisition,     SIGNAL(fileIndexChanged(int)),
           m_FileIndex,       SLOT(setValue(int)));
 
@@ -259,13 +267,10 @@ void QxrdWindow::onAcquisitionRunning()
 
   readSettings();
 
-  m_Acquisition -> initialize();
-
-  QVector<double> times = m_Acquisition -> readoutTimes();
-
-  for (int i=0; i<times.count(); i++) {
-    setReadoutTime(i, times.value(i));
-  }
+  connect(m_Acquisition, SIGNAL(oneReadoutModeChanged(int,double)),
+          this,          SLOT(setReadoutTime(int, double)));
+//
+//  QMetaObject::invokeMethod(m_Acquisition, "initialize", Qt::QueuedConnection);
 }
 
 void QxrdWindow::closeEvent ( QCloseEvent * event )
