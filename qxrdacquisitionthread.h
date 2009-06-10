@@ -28,12 +28,11 @@ class QxrdAcquisitionThread : public QThread
   void doAcquireDark();
   void cancelDark();
 
-
- public:
-  QxrdAcquisition* acquisition() const;
-
 signals:
-  void acquisitionRunning();
+  void printMessage(QString msg);
+
+public:
+  QxrdAcquisition* acquisition() const;
 
 public:
   void sleep(double time);

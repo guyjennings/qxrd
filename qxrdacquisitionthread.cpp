@@ -10,6 +10,8 @@ QxrdAcquisitionThread::QxrdAcquisitionThread()
     m_Debug(true),
     m_Acquisition(NULL)
 {
+  m_Acquisition = new QxrdAcquisition(this);
+  m_Acquisition -> moveToThread(this);
 }
 
 QxrdAcquisitionThread::~QxrdAcquisitionThread()
@@ -21,12 +23,11 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 
 void QxrdAcquisitionThread::run()
 {
-  m_Acquisition = new QxrdAcquisition(this);
+  if (QThread::currentThread() != m_Acquisition -> thread()) {
+    printf("Oh no...\n");
+  }
 
-//  connect(this,          SIGNAL(_evaluate(QString)),
-//          m_Acquisition, SLOT(_evaluate(QString)));
-
-  emit acquisitionRunning();
+  m_Acquisition -> initialize();
 
   exec();
 }
@@ -77,6 +78,8 @@ QVariant QxrdAcquisitionThread::evaluate(QString cmd)
                             Q_ARG(QString, cmd));
 
   waitForResult();
+
+  emit printMessage(tr("%1 = %2").arg(cmd).arg(m_EvalResult.toString()));
 
   return m_EvalResult;
 }
