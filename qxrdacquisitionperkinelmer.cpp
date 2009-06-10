@@ -146,6 +146,8 @@ void QxrdAcquisitionPerkinElmer::initialize()
 
   for (int i=0; i<nReadoutTimes; i++) {
     m_ReadoutTimes.append(readoutTimes[i]);
+
+    emit oneReadoutModeChanged(i, readoutTimes[i]);
   }
 
   emit printMessage(tr("channel type: %1, ChannelNr: %2\n").arg(nChannelType).arg(nChannelNr));
@@ -351,6 +353,10 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
 void QxrdAcquisitionPerkinElmer::haltAcquire()
 {
+  if (QThread::currentThread() != thread()) {
+    printf("Ooops...\n");
+  }
+
   m_Cancelling = true;
 
   Acquisition_Abort(m_AcqDesc);
@@ -358,6 +364,7 @@ void QxrdAcquisitionPerkinElmer::haltAcquire()
   emit statusMessage("Acquire Complete");
   emit acquireComplete(m_AcquireDark);
 
+  m_Acquiring.tryLock();
   m_Acquiring.unlock();
 
   m_StatusWaiting.wakeAll();

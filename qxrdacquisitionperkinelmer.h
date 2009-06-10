@@ -22,14 +22,15 @@ public slots:
   void acquireDark();
   void cancel();
   void cancelDark();
+  void initialize();
 
 signals:
   void acquireStarted(int dark);
   void acquireComplete(int dark);
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
+  void oneReadoutModeChanged(int mode, double value);
 
 public:
-  void initialize();
 //  bool onEndFrame();
   void onEndAcquisition();
   QVector<double> readoutTimes();
