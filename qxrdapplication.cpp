@@ -31,9 +31,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   m_Window = new QxrdWindow(this, m_AcquisitionThread);
   m_Window -> show();
 
-  connect(m_AcquisitionThread, SIGNAL(acquisitionRunning()),
-          m_Window,            SLOT(onAcquisitionRunning()));
-
   m_AcquisitionThread -> start();
 
   m_ServerThread = new QxrdServerThread(m_AcquisitionThread, "qxrd");
