@@ -26,16 +26,27 @@ signals:
   void filePatternChanged(QString pattern);
   void outputDirectoryChanged(QString path);
   void darkSummedExposuresChanged(int nsummed);
+  void cameraGainChanged(int gain);
 
 public slots:
   void    setFileIndex(int index);
+  void    changeFileIndex(int index);
   void    setFilesInSequence(int nframes);
+  void    changeFilesInSequence(int nframes);
   void    setSummedExposures(int nsummed);
+  void    changeSummedExposures(int nsummed);
   void    setReadoutMode(int mode);
+  void    changeReadoutMode(int mode);
   void    setExposureTime(double t);
+  void    changeExposureTime(double t);
   void    setFilePattern(QString pattern);
+  void    changeFilePattern(QString pattern);
   void    setOutputDirectory(QString path);
+  void    changeOutputDirectory(QString path);
   void    setDarkSummedExposures(int nsummed);
+  void    changeDarkSummedExposures(int nsummed);
+  void    setCameraGain(int mode);
+  void    changeCameraGain(int mode);
 
 public:
   void readSettings(QxrdSettings *settings, QString section);
@@ -49,12 +60,11 @@ public:
   QString filePattern() const;
   QString outputDirectory() const;
   int     darkSummedExposures() const;
+  int     cameraGain() const;
 
   void    setDebug(int dbg);
   int     debug() const;
 
-  void    setCameraGain(int mode);
-  int     cameraGain() const;
 
 //  void    setCameraMode(int mode);
 //  int     cameraMode() const;

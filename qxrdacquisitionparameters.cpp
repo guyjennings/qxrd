@@ -66,11 +66,22 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
   settings -> endGroup();
 }
 
-void QxrdAcquisitionParameters::setCameraGain(int mode)
+void QxrdAcquisitionParameters::changeCameraGain(int mode)
 {
   QMutexLocker lock(&m_Mutex);
 
   m_CameraGain = mode;
+}
+
+void QxrdAcquisitionParameters::setCameraGain(int mode)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_CameraGain != mode) {
+    changeCameraGain(mode);
+
+    emit cameraGainChanged(mode);
+  }
 }
 
 int QxrdAcquisitionParameters::cameraGain() const
@@ -78,6 +89,13 @@ int QxrdAcquisitionParameters::cameraGain() const
   QMutexLocker lock(&m_Mutex);
 
   return m_CameraGain;
+}
+
+void QxrdAcquisitionParameters::changeExposureTime(double t)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_ExposureTime = t;
 }
 
 void QxrdAcquisitionParameters::setExposureTime(double t)
@@ -90,10 +108,17 @@ void QxrdAcquisitionParameters::setExposureTime(double t)
   }
 
   if (m_ExposureTime != t) {
-    m_ExposureTime = t;
+    changeExposureTime(t);
 
     emit exposureTimeChanged(t);
   }
+}
+
+void QxrdAcquisitionParameters::changeReadoutMode(int mode)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_ReadoutMode = mode;
 }
 
 void QxrdAcquisitionParameters::setReadoutMode(int mode)
@@ -106,10 +131,17 @@ void QxrdAcquisitionParameters::setReadoutMode(int mode)
   }
 
   if (m_ReadoutMode != mode) {
-    m_ReadoutMode = mode;
+    changeReadoutMode(mode);
 
     emit readoutModeChanged(mode);
   }
+}
+
+void QxrdAcquisitionParameters::changeSummedExposures(int nsummed)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_SummedExposures = nsummed;
 }
 
 void QxrdAcquisitionParameters::setSummedExposures(int nsummed)
@@ -122,10 +154,17 @@ void QxrdAcquisitionParameters::setSummedExposures(int nsummed)
   }
 
   if (m_SummedExposures != nsummed) {
-    m_SummedExposures = nsummed;
+    changeSummedExposures(nsummed);
 
     emit summedExposuresChanged(nsummed);
   }
+}
+
+void QxrdAcquisitionParameters::changeFilesInSequence(int nframes)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_FilesInSequence = nframes;
 }
 
 void QxrdAcquisitionParameters::setFilesInSequence(int nframes)
@@ -138,10 +177,17 @@ void QxrdAcquisitionParameters::setFilesInSequence(int nframes)
   }
 
   if (m_FilesInSequence != nframes) {
-    m_FilesInSequence = nframes;
+    changeFilesInSequence(nframes);
 
     emit filesInSequenceChanged(nframes);
   }
+}
+
+void QxrdAcquisitionParameters::changeFileIndex(int index)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_FileIndex = index;
 }
 
 void QxrdAcquisitionParameters::setFileIndex(int index)
@@ -154,10 +200,17 @@ void QxrdAcquisitionParameters::setFileIndex(int index)
   }
 
   if (m_FileIndex != index) {
-    m_FileIndex = index;
+    changeFileIndex(index);
 
     emit fileIndexChanged(index);
   }
+}
+
+void QxrdAcquisitionParameters::changeFilePattern(QString pattern)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_FilePattern = pattern;
 }
 
 void QxrdAcquisitionParameters::setFilePattern(QString pattern)
@@ -170,10 +223,17 @@ void QxrdAcquisitionParameters::setFilePattern(QString pattern)
   }
 
   if (m_FilePattern != pattern) {
-    m_FilePattern = pattern;
+    changeFilePattern(pattern);
 
     emit filePatternChanged(pattern);
   }
+}
+
+void QxrdAcquisitionParameters::changeOutputDirectory(QString path)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_OutputDirectory = path;
 }
 
 void QxrdAcquisitionParameters::setOutputDirectory(QString path)
@@ -186,10 +246,17 @@ void QxrdAcquisitionParameters::setOutputDirectory(QString path)
   }
 
   if (m_OutputDirectory != path) {
-    m_OutputDirectory = path;
+    changeOutputDirectory(path);
 
     emit outputDirectoryChanged(path);
   }
+}
+
+void QxrdAcquisitionParameters::changeDarkSummedExposures(int nsummed)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_DarkSummedExposures = nsummed;
 }
 
 void QxrdAcquisitionParameters::setDarkSummedExposures(int nsummed)
@@ -202,7 +269,7 @@ void QxrdAcquisitionParameters::setDarkSummedExposures(int nsummed)
   }
 
   if (m_DarkSummedExposures != nsummed) {
-    m_DarkSummedExposures = nsummed;
+    changeDarkSummedExposures(nsummed);
 
     emit darkSummedExposuresChanged(nsummed);
   }
