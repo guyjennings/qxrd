@@ -30,7 +30,8 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_ColorMap(Qt::black, Qt::white),
     m_MaskColorMap(Qt::red, QColor(0,0,0,0)),
     m_RasterShown(1),
-    m_MaskShown(1),
+    m_MaskShown(0),
+    m_MaskAlpha(80),
     m_MinDisplayed(-10),
     m_MaxDisplayed(110),
     m_Interpolate(1),
@@ -86,6 +87,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_Spectrogram -> attach(this);
 
   m_MaskImage = new QwtPlotSpectrogram();
+  m_MaskImage -> setAlpha(m_MaskShown ? m_MaskAlpha : 0);
   m_MaskImage -> attach(this);
 
   setDisplayedRange(0,100);
@@ -302,7 +304,7 @@ void QxrdImagePlot::toggleShowMask()
   m_MaskShown = !m_MaskShown;
 
   if (m_MaskImage) {
-    m_MaskImage -> setAlpha(m_MaskShown ? 255 : 0);
+    m_MaskImage -> setAlpha(m_MaskShown ? m_MaskAlpha : 0);
     m_MaskImage -> invalidateCache();
     m_MaskImage -> itemChanged();
 
@@ -357,7 +359,7 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
 
   m_MaskImage -> setData(mask);
   m_MaskImage -> setColorMap(m_MaskColorMap);
-  m_MaskImage -> setAlpha(m_MaskShown ? 255 : 0);
+  m_MaskImage -> setAlpha(m_MaskShown ? m_MaskAlpha : 0);
   m_MaskImage -> invalidateCache();
   m_MaskImage -> itemChanged();
 

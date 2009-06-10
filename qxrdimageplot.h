@@ -97,6 +97,7 @@ class QxrdImagePlot : public QxrdPlot
   QxrdMaskColorMap     m_MaskColorMap;
   int                  m_RasterShown;
   int                  m_MaskShown;
+  int                  m_MaskAlpha;
   double               m_MinDisplayed;
   double               m_MaxDisplayed;
   int                  m_Interpolate;
