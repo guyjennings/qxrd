@@ -1,6 +1,7 @@
 #include "qxrdserverthread.h"
 
 #include "qxrdserver.h"
+#include <QMetaObject>
 
 QxrdServerThread::QxrdServerThread(QxrdAcquisitionThread *acq, QString name)
   : m_AcquisitionThread(acq),
@@ -18,6 +19,11 @@ QxrdServerThread::~QxrdServerThread()
 
 void QxrdServerThread::shutdown()
 {
+  QMetaObject::invokeMethod(m_Server, "shutdown", Qt::QueuedConnection);
+
+  exit();
+
+  wait(1000);
 }
 
 void QxrdServerThread::run()

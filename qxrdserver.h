@@ -21,6 +21,7 @@ signals:
 public slots:
   QVariant executeCommand(QString cmd);
   QVariant readProperty(QString name);
+  void shutdown();
 
 private:
   QxrdAcquisitionThread    *m_AcquisitionThread;

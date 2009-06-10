@@ -35,3 +35,7 @@ QVariant QxrdServer::readProperty(QString name)
   return QSpecServer::readProperty(name);
 }
 
+void QxrdServer::shutdown()
+{
+  close();
+}
