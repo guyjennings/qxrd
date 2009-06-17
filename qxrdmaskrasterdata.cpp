@@ -18,7 +18,7 @@ double QxrdMaskRasterData::value(double x, double y) const
 {
   if (m_Image) {
     if (m_Interpolate) {
-      int ix = x, iy = y;
+      int ix = (int) x, iy = (int) y;
       double dx = x-ix, dy = y-iy;
 
       double f00 = m_Image->maskValue(ix,iy);

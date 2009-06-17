@@ -31,7 +31,7 @@ QRgb QxrdMaskColorMap::rgb(const QwtDoubleInterval &inter, double value) const
 //     return m_DeselectedColor;
 //   }
 
-  int v = (1-value)*255.0;
+  int v = (int)((1.0-value)*255.0);
   if (v<0) v=0;
   if (v>255) v=255;
 

@@ -117,7 +117,7 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
     fclose(file);
 
     img -> calculateRange();
-    img -> setFullyUnmasked();
+    img -> showMaskAll();
   }
 
   return NULL;
