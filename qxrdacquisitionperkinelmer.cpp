@@ -181,6 +181,10 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
     m_FilesInSequence = filesInSequence();
   }
 
+  if (m_FilesInSequence <= 0) {
+    m_FilesInSequence = 1;
+  }
+
   if (m_AcquiredData == NULL) {
     m_AcquiredData = takeNextFreeImage();
   }
@@ -262,12 +266,15 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
   }
 
   QString fileName;
+  QString fileBase;
 
   if (m_AcquireDark) {
+    fileBase = filePattern()+tr("-%1.dark.tif").arg(fileIndex(),5,10,QChar('0'));
     fileName = QDir(outputDirectory())
                .filePath(filePattern()+tr("-%1.dark.tif")
                          .arg(fileIndex(),5,10,QChar('0')));
   } else {
+    fileBase = filePattern()+tr("-%1.tif").arg(fileIndex(),5,10,QChar('0'));
     fileName = QDir(outputDirectory())
                .filePath(filePattern()+tr("-%1.tif")
                          .arg(fileIndex(),5,10,QChar('0')));
@@ -277,6 +284,9 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 //                    .arg(fileName).arg(fileIndex())
 //                    .arg(m_CurrentExposure).arg(m_ExposuresToSum)
 //                    .arg(m_CurrentFile).arg(m_FilesInSequence));
+
+  setFileBase(fileBase);
+  setFileName(fileName);
 
   emit acquiredFrame(fileName, fileIndex(),
                      m_CurrentExposure,m_ExposuresToSum,

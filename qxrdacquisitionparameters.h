@@ -25,6 +25,8 @@ signals:
   void filesInSequenceChanged(int nframes);
   void filePatternChanged(QString pattern);
   void outputDirectoryChanged(QString path);
+  void fileNameChanged(QString path);
+  void fileBaseChanged(QString path);
   void darkSummedExposuresChanged(int nsummed);
   void cameraGainChanged(int gain);
 
@@ -43,6 +45,10 @@ public slots:
   void    changeFilePattern(QString pattern);
   void    setOutputDirectory(QString path);
   void    changeOutputDirectory(QString path);
+  void    setFileName(QString path);
+  void    changeFileName(QString path);
+  void    setFileBase(QString path);
+  void    changeFileBase(QString path);
   void    setDarkSummedExposures(int nsummed);
   void    changeDarkSummedExposures(int nsummed);
   void    setCameraGain(int mode);
@@ -59,6 +65,8 @@ public:
   int     fileIndex() const;
   QString filePattern() const;
   QString outputDirectory() const;
+  QString fileName() const;
+  QString fileBase() const;
   int     darkSummedExposures() const;
   int     cameraGain() const;
 
@@ -85,6 +93,8 @@ public:
   Q_PROPERTY(QString outputDirectory READ outputDirectory WRITE setOutputDirectory);
   Q_PROPERTY(int     darkSummedExposures READ darkSummedExposures WRITE setDarkSummedExposures);
   Q_PROPERTY(int     cameraGain      READ cameraGain WRITE setCameraGain);
+  Q_PROPERTY(QString fileName        READ fileName WRITE setFileName);
+  Q_PROPERTY(QString fileBase        READ fileBase WRITE setFileBase);
 
 //  Q_PROPERTY(int     cameraMode      READ cameraMode WRITE setCameraMode);
 //  Q_PROPERTY(int     frameSyncMode   READ frameSyncMode WRITE setFrameSyncMode);
@@ -94,6 +104,8 @@ private:
   mutable QMutex         m_Mutex;
   int                    m_Debug;
   QString                m_OutputDirectory;
+  QString                m_FileName;
+  QString                m_FileBase;
   QString                m_FilePattern;
   int                    m_FileIndex;
 //  int                    m_CameraMode;

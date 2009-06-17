@@ -10,6 +10,8 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters()
     m_Mutex(QMutex::Recursive),
     m_Debug(0),
     m_OutputDirectory(""),
+    m_FileName(""),
+    m_FileBase(""),
     m_FilePattern(""),
     m_FileIndex(0),
     // m_CameraMode(0),
@@ -252,6 +254,52 @@ void QxrdAcquisitionParameters::setOutputDirectory(QString path)
   }
 }
 
+void QxrdAcquisitionParameters::changeFileName(QString path)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_FileName = path;
+}
+
+void QxrdAcquisitionParameters::setFileName(QString path)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_Debug) {
+    emit printMessage(tr("QxrdAcquisitionParameters::setFileName(%1->%2)")
+                      .arg(m_FileName).arg(path));
+  }
+
+  if (m_FileName != path) {
+    changeFileName(path);
+
+    emit fileNameChanged(path);
+  }
+}
+
+void QxrdAcquisitionParameters::changeFileBase(QString path)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_FileBase = path;
+}
+
+void QxrdAcquisitionParameters::setFileBase(QString path)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_Debug) {
+    emit printMessage(tr("QxrdAcquisitionParameters::setFileBase(%1->%2)")
+                      .arg(m_FileName).arg(path));
+  }
+
+  if (m_FileBase != path) {
+    changeFileBase(path);
+
+    emit fileBaseChanged(path);
+  }
+}
+
 void QxrdAcquisitionParameters::changeDarkSummedExposures(int nsummed)
 {
   QMutexLocker lock(&m_Mutex);
@@ -322,6 +370,20 @@ QString QxrdAcquisitionParameters::outputDirectory() const
   QMutexLocker lock(&m_Mutex);
 
   return m_OutputDirectory;
+}
+
+QString QxrdAcquisitionParameters::fileName() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_FileName;
+}
+
+QString QxrdAcquisitionParameters::fileBase() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_FileBase;
 }
 
 int     QxrdAcquisitionParameters::darkSummedExposures() const
