@@ -50,6 +50,9 @@ QxrdAcquisitionScripting::QxrdAcquisitionScripting(QxrdAcquisitionThread *thread
 
   m_ScriptEngine.globalObject().setProperty("fileIndex",
           m_ScriptEngine.newFunction(QxrdAcquisitionScripting::fileIndexFunc));
+
+  m_ScriptEngine.globalObject().setProperty("print",
+          m_ScriptEngine.newFunction(QxrdAcquisitionScripting::printFunc));
 //
 //  m_ScriptEngine.globalObject().setProperty("SetCameraMode",
 //          m_ScriptEngine.newFunction(QxrdAcquisitionScripting::setCameraModeFunc));
@@ -69,6 +72,26 @@ QxrdAcquisitionThread *QxrdAcquisitionScripting::acquisitionThread() const
   QMutexLocker lock(&m_Mutex);
 
   return m_AcquisitionThread;
+}
+
+QScriptValue QxrdAcquisitionScripting::printFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (!g_Acquisition) return QScriptValue(engine, -1);
+
+  int nArgs = context->argumentCount();
+  QString msg;
+
+  for (int i=0; i<nArgs; i++) {
+    if (i != 0) {
+      msg += " ";
+    }
+
+    msg += context -> argument(i).toString();
+  }
+
+  emit g_Acquisition -> printMessage(msg);
+
+  return QScriptValue(engine, 1);
 }
 
 QScriptValue QxrdAcquisitionScripting::acquireFunc(QScriptContext *context, QScriptEngine *engine)

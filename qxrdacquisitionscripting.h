@@ -31,6 +31,7 @@ private:
   QxrdAcquisitionThread *m_AcquisitionThread;
   QScriptEngine          m_ScriptEngine;
 
+  static QScriptValue printFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue acquireFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue acquireDarkFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue statusFunc(QScriptContext *context, QScriptEngine *engine);
