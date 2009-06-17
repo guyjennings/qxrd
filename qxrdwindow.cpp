@@ -138,13 +138,18 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()));
   connect(m_ActionIce, SIGNAL(triggered()), m_Plot, SLOT(setIce()));
 
-  connect(m_SetMaskRange, SIGNAL(clicked()), m_ActionSetMaskRange, SIGNAL(triggered()));
-  connect(m_ClearMaskRange, SIGNAL(clicked()), m_ActionClearMaskRange, SIGNAL(triggered()));
+  connect(m_HideMaskRange, SIGNAL(clicked()), m_ActionHideMaskRange, SIGNAL(triggered()));
+  connect(m_ShowMaskRange, SIGNAL(clicked()), m_ActionShowMaskRange, SIGNAL(triggered()));
+
+  connect(m_HideMaskAll, SIGNAL(clicked()), m_ActionHideMaskAll, SIGNAL(triggered()));
+  connect(m_ShowMaskAll, SIGNAL(clicked()), m_ActionShowMaskAll, SIGNAL(triggered()));
 
   connect(m_ActionShowImage, SIGNAL(triggered()), m_Plot, SLOT(toggleShowImage()));
   connect(m_ActionShowMask, SIGNAL(triggered()), m_Plot, SLOT(toggleShowMask()));
-  connect(m_ActionSetMaskRange, SIGNAL(triggered()), this, SLOT(doSetMaskRange()));
-  connect(m_ActionClearMaskRange, SIGNAL(triggered()), this, SLOT(doClearMaskRange()));
+  connect(m_ActionShowMaskRange, SIGNAL(triggered()), this, SLOT(showMaskRange()));
+  connect(m_ActionHideMaskRange, SIGNAL(triggered()), this, SLOT(hideMaskRange()));
+  connect(m_ActionShowMaskAll, SIGNAL(triggered()), this, SLOT(showMaskAll()));
+  connect(m_ActionHideMaskAll, SIGNAL(triggered()), this, SLOT(hideMaskAll()));
 
   connect(m_ActionTest, SIGNAL(triggered()), this, SLOT(doTest()));
 
@@ -403,13 +408,13 @@ void QxrdWindow::onAcquiredFrame(
 //   printf("QxrdWindow::acquiredFrame(\"%s\",%d,%d,%d,%d,%d)\n",
 // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
 
-  int totalframes = nsum*nframe;
+  int totalframes = (nsum*nframe <= 0 ? 1 : nsum*nframe);
   int thisframe = iframe*nsum+isum+1;
 
   //  printf("%d %% progress\n", thisframe*100/totalframes);
 
   statusMessage(tr("Exposure %1 of %2, File %3 of %4")
-                .arg(isum).arg(nsum).arg(iframe).arg(nframe));
+                .arg(isum+1).arg(nsum).arg(iframe+1).arg(nframe));
 
   m_Progress -> setValue(thisframe*100/totalframes);
 }
@@ -743,6 +748,8 @@ void QxrdWindow::setGainMapPath(QString path)
 void QxrdWindow::newData(QxrdImageData *image)
 {
   if (m_Data != image) {
+    image -> copyMask(m_Data);
+
     if (m_Data) {
       m_Acquisition -> returnImageToPool(m_Data);
     }
@@ -875,7 +882,7 @@ void QxrdWindow::doTest()
   m_Data -> setCircularMask();
 }
 
-void QxrdWindow::doClearMaskRange()
+void QxrdWindow::showMaskRange()
 {
   double min = m_MaskMinimum -> value();
   double max = m_MaskMaximum -> value();
@@ -883,13 +890,35 @@ void QxrdWindow::doClearMaskRange()
   if (m_Data) {
 //    printf ("clearMaskRange(%g,%g)\n", min, max);
 
-    m_Data -> clearMaskRange(min, max);
+    m_Data -> showMaskRange(min, max);
 
     newData(m_Data);
   }
 }
 
-void QxrdWindow::doSetMaskRange()
+void QxrdWindow::hideMaskAll()
+{
+  if (m_Data) {
+//    printf ("setMaskRange(%g,%g)\n", min, max);
+
+    m_Data -> hideMaskAll();
+
+    newData(m_Data);
+  }
+}
+
+void QxrdWindow::showMaskAll()
+{
+  if (m_Data) {
+//    printf ("clearMaskRange(%g,%g)\n", min, max);
+
+    m_Data -> showMaskAll();
+
+    newData(m_Data);
+  }
+}
+
+void QxrdWindow::hideMaskRange()
 {
   double min = m_MaskMinimum -> value();
   double max = m_MaskMaximum -> value();
@@ -897,7 +926,7 @@ void QxrdWindow::doSetMaskRange()
   if (m_Data) {
 //    printf ("setMaskRange(%g,%g)\n", min, max);
 
-    m_Data -> setMaskRange(min, max);
+    m_Data -> hideMaskRange(min, max);
 
     newData(m_Data);
   }

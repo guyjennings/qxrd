@@ -870,8 +870,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>220</width>
-          <height>556</height>
+          <width>240</width>
+          <height>645</height>
          </rect>
         </property>
         <attribute name="label">
@@ -913,6 +913,9 @@ Script Function: acquiredark()</string>
             </item>
             <item>
              <widget class="QLineEdit" name="m_DarkImageName">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -926,6 +929,9 @@ Script Function: acquiredark()</string>
             </item>
             <item>
              <widget class="QPushButton" name="m_LoadDarkButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Load Dark</string>
               </property>
@@ -939,7 +945,7 @@ Script Function: acquiredark()</string>
            <property name="title">
             <string>Masking</string>
            </property>
-           <layout class="QFormLayout" name="formLayout_2">
+           <layout class="QFormLayout" name="formLayout">
             <item row="0" column="0">
              <widget class="QLabel" name="label_17">
               <property name="text">
@@ -975,16 +981,30 @@ Script Function: acquiredark()</string>
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QPushButton" name="m_SetMaskRange">
+             <widget class="QPushButton" name="m_HideMaskAll">
               <property name="text">
-               <string>Set Range</string>
+               <string>Hide All</string>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QPushButton" name="m_ClearMaskRange">
+             <widget class="QPushButton" name="m_HideMaskRange">
               <property name="text">
-               <string>Clear Range</string>
+               <string>Hide Pixels in Range</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="m_ShowMaskAll">
+              <property name="text">
+               <string>Show All</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QPushButton" name="m_ShowMaskRange">
+              <property name="text">
+               <string>Show Pixels In Range</string>
               </property>
              </widget>
             </item>
@@ -1002,6 +1022,9 @@ Script Function: acquiredark()</string>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <widget class="QCheckBox" name="m_PerformBadPixels">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Perform Bad Pixel Correction</string>
               </property>
@@ -1016,6 +1039,9 @@ Script Function: acquiredark()</string>
             </item>
             <item>
              <widget class="QLineEdit" name="m_BadPixelsFileName">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1029,6 +1055,9 @@ Script Function: acquiredark()</string>
             </item>
             <item>
              <widget class="QPushButton" name="m_LoadBadPixelsButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Load Bad Pixels</string>
               </property>
@@ -1048,6 +1077,9 @@ Script Function: acquiredark()</string>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
              <widget class="QCheckBox" name="m_PerformGainCorrection">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Perform Gain Correction</string>
               </property>
@@ -1062,6 +1094,9 @@ Script Function: acquiredark()</string>
             </item>
             <item>
              <widget class="QLineEdit" name="m_GainCorrectionFileName">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1078,6 +1113,9 @@ Script Function: acquiredark()</string>
             </item>
             <item>
              <widget class="QPushButton" name="m_LoadGainCorrection">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Load Gain Map</string>
               </property>
@@ -1543,23 +1581,35 @@ Script Function: acquiredark()</string>
    </property>
   </action>
   <action name="m_ActionShowImage">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Show Image</string>
    </property>
   </action>
   <action name="m_ActionShowMask">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Show Mask</string>
    </property>
   </action>
-  <action name="m_ActionSetMaskRange">
+  <action name="m_ActionShowMaskRange">
    <property name="text">
-    <string>Set Mask Range</string>
+    <string>Show Pixels in Range</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Pixels in Range</string>
    </property>
   </action>
-  <action name="m_ActionClearMaskRange">
+  <action name="m_ActionHideMaskRange">
    <property name="text">
-    <string>Clear Mask Range</string>
+    <string>Hide Pixels in Range</string>
+   </property>
+   <property name="toolTip">
+    <string>Hide Pixels in Range</string>
    </property>
   </action>
   <action name="m_ActionSetCenter">
@@ -1569,6 +1619,22 @@ Script Function: acquiredark()</string>
    </property>
    <property name="text">
     <string>Set Center</string>
+   </property>
+  </action>
+  <action name="m_ActionShowMaskAll">
+   <property name="text">
+    <string>Show All Pixels</string>
+   </property>
+   <property name="toolTip">
+    <string>Show All Pixels</string>
+   </property>
+  </action>
+  <action name="m_ActionHideMaskAll">
+   <property name="text">
+    <string>Hide All Pixels</string>
+   </property>
+   <property name="toolTip">
+    <string>Hide All Pixels</string>
    </property>
   </action>
  </widget>

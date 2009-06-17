@@ -104,8 +104,10 @@ public slots:
   void onProcessedImageAvailable();
   void onDarkImageAvailable();
 
-  void doClearMaskRange();
-  void doSetMaskRange();
+  void showMaskRange();
+  void hideMaskRange();
+  void showMaskAll();
+  void hideMaskAll();
 
   void onToolBoxPageChanged(int);
   void onTabWidgetPageChanged(int);
