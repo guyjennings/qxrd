@@ -139,6 +139,9 @@ void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *d
       int ndrk = dark -> summedExposures();
       int npixels = width*height;
 
+      if (nres <= 0) nres = 1;
+      if (ndrk <= 0) ndrk = 1;
+
       double ratio = ((double) nres)/((double) ndrk);
 
 //      printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
