@@ -1,10 +1,17 @@
+/******************************************************************
+*
+*  $Id: qxrdmaskrasterdata.cpp,v 1.3 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdmaskrasterdata.h"
 
 #include "qxrdrasterdata.h"
 
 QxrdMaskRasterData::QxrdMaskRasterData(QxrdImageData *img, int interp)
   : m_Image(img),
-    m_Interpolate(interp)
+    m_Interpolate(interp),
+    SOURCE_IDENT("$Id: qxrdmaskrasterdata.cpp,v 1.3 2009/06/27 22:50:32 jennings Exp $")
 {
 }
 
@@ -51,4 +58,15 @@ QxrdMaskRasterData* QxrdMaskRasterData::copy() const
 
   return n;
 }
+
+/******************************************************************
+*
+*  $Log: qxrdmaskrasterdata.cpp,v $
+*  Revision 1.3  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+
 

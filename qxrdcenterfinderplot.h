@@ -1,5 +1,13 @@
+/******************************************************************
+*
+*  $Id: qxrdcenterfinderplot.h,v 1.5 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #ifndef QXRDCENTERFINDERPLOT_H
 #define QXRDCENTERFINDERPLOT_H
+
+#include "qcepmacros.h"
 
 #include "qxrdplot.h"
 
@@ -32,6 +40,18 @@ private:
   QwtPlotMagnifier    *m_Magnifier;
   QwtLegend           *m_Legend;
   QVector<double>      m_XData, m_YData;
+  HEADER_IDENT("$Id: qxrdcenterfinderplot.h,v 1.5 2009/06/27 22:50:32 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDERPLOT_H
+
+/******************************************************************
+*
+*  $Log: qxrdcenterfinderplot.h,v $
+*  Revision 1.5  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

@@ -1,5 +1,13 @@
+/******************************************************************
+*
+*  $Id: qxrdimageplot.h,v 1.15 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #ifndef QXRDIMAGEPLOT_H
 #define QXRDIMAGEPLOT_H
+
+#include "qcepmacros.h"
 
 #include <QObject>
 
@@ -102,6 +110,18 @@ class QxrdImagePlot : public QxrdPlot
   double               m_MaxDisplayed;
   int                  m_Interpolate;
   int                  m_MaintainAspect;
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.15 2009/06/27 22:50:32 jennings Exp $");
 };
 
 #endif
+
+/******************************************************************
+*
+*  $Log: qxrdimageplot.h,v $
+*  Revision 1.15  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

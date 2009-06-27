@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.7 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdacquisitionperkinelmer.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdapplication.h"
@@ -26,7 +32,7 @@
 static QxrdAcquisitionPerkinElmer * g_Acquisition = NULL;
 
 QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdAcquisitionThread *thread)
-  : inherited(thread),
+  : QxrdAcquisitionOperations(thread),
     m_Cancelling(0),
     m_AcquireDark(0),
     m_NRows(0),
@@ -34,7 +40,8 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdAcquisitionThread *th
     m_ExposuresToSum(0),
     m_CurrentFile(0),
     m_BufferSize(0),
-    m_AcquiredData(NULL)
+    m_AcquiredData(NULL),
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.7 2009/06/27 22:50:32 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -174,11 +181,11 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
   m_Cancelling = 0;
 
   if (m_AcquireDark) {
-    m_ExposuresToSum = darkSummedExposures();
+    m_ExposuresToSum = get_DarkSummedExposures();
     m_FilesInSequence = 1;
   } else {
-    m_ExposuresToSum = summedExposures();
-    m_FilesInSequence = filesInSequence();
+    m_ExposuresToSum = get_SummedExposures();
+    m_FilesInSequence = get_FilesInSequence();
   }
 
   if (m_FilesInSequence <= 0) {
@@ -201,15 +208,15 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
     return;
   }
 
-  if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, readoutMode())) != HIS_ALL_OK) {
+  if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, get_ReadoutMode())) != HIS_ALL_OK) {
     acquisitionError(nRet);
     return;
   }
 
   emit printMessage(tr("Readout time = %1, Exposure Time = %2")
-                    .arg(readoutTime()).arg(exposureTime()));
+                    .arg(readoutTime()).arg(get_ExposureTime()));
 
-  if (readoutTime() >= exposureTime()) {
+  if (readoutTime() >= get_ExposureTime()) {
     emit printMessage("SetFrameSyncMode HIS_SYNCMODE_FREE_RUNNING");
     if ((nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING)) != HIS_ALL_OK) {
       acquisitionError(nRet);
@@ -222,7 +229,7 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
       return;
     }
 
-    DWORD tmp = (int)(exposureTime()*1e6);
+    DWORD tmp = (int)(get_ExposureTime()*1e6);
     emit printMessage(tr("SetTimerSync %1").arg(tmp));
 
     if ((nRet=Acquisition_SetTimerSync(m_AcqDesc, &tmp)) != HIS_ALL_OK) {
@@ -232,10 +239,10 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
 
     emit printMessage(tr("TimerSync = %1").arg(tmp));
 
-    setExposureTime(tmp/1.0e6);
+    set_ExposureTime(tmp/1.0e6);
   }
 
-  if ((nRet=Acquisition_SetCameraGain(m_AcqDesc, cameraGain())) != HIS_ALL_OK) {
+  if ((nRet=Acquisition_SetCameraGain(m_AcqDesc, get_CameraGain())) != HIS_ALL_OK) {
     acquisitionError(nRet);
     return;
   }
@@ -269,15 +276,15 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
   QString fileBase;
 
   if (m_AcquireDark) {
-    fileBase = filePattern()+tr("-%1.dark.tif").arg(fileIndex(),5,10,QChar('0'));
-    fileName = QDir(outputDirectory())
-               .filePath(filePattern()+tr("-%1.dark.tif")
-                         .arg(fileIndex(),5,10,QChar('0')));
+    fileBase = get_FilePattern()+tr("-%1.dark.tif").arg(get_FileIndex(),5,10,QChar('0'));
+    fileName = QDir(get_OutputDirectory())
+               .filePath(get_FilePattern()+tr("-%1.dark.tif")
+                         .arg(get_FileIndex(),5,10,QChar('0')));
   } else {
-    fileBase = filePattern()+tr("-%1.tif").arg(fileIndex(),5,10,QChar('0'));
-    fileName = QDir(outputDirectory())
-               .filePath(filePattern()+tr("-%1.tif")
-                         .arg(fileIndex(),5,10,QChar('0')));
+    fileBase = get_FilePattern()+tr("-%1.tif").arg(get_FileIndex(),5,10,QChar('0'));
+    fileName = QDir(get_OutputDirectory())
+               .filePath(get_FilePattern()+tr("-%1.tif")
+                         .arg(get_FileIndex(),5,10,QChar('0')));
   }
 
 //  emit printMessage(tr("Fn: %1, Fi: %2, Exp: %3, Nexp %4, Fil: %5, NFil: %6")
@@ -285,10 +292,10 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 //                    .arg(m_CurrentExposure).arg(m_ExposuresToSum)
 //                    .arg(m_CurrentFile).arg(m_FilesInSequence));
 
-  setFileBase(fileBase);
-  setFileName(fileName);
+  set_FileBase(fileBase);
+  set_FileName(fileName);
 
-  emit acquiredFrame(fileName, fileIndex(),
+  emit acquiredFrame(fileName, get_FileIndex(),
                      m_CurrentExposure,m_ExposuresToSum,
                      m_CurrentFile, m_FilesInSequence);
   // sum current frame
@@ -324,16 +331,16 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
     QFileInfo finfo(fileName);
 
-    m_AcquiredData -> setFilename(fileName);
-    m_AcquiredData -> setTitle(finfo.fileName());
-    m_AcquiredData -> setReadoutMode(readoutMode());
-    m_AcquiredData -> setExposureTime(exposureTime());
-    m_AcquiredData -> setSummedExposures(m_ExposuresToSum);
+    m_AcquiredData -> set_FileName(fileName);
+    m_AcquiredData -> set_Title(finfo.fileName());
+    m_AcquiredData -> set_ReadoutMode(get_ReadoutMode());
+    m_AcquiredData -> set_ExposureTime(get_ExposureTime());
+    m_AcquiredData -> set_SummedExposures(m_ExposuresToSum);
 
     if (m_AcquireDark) {
-      m_AcquiredData -> setImageNumber(-1);
+      m_AcquiredData -> set_ImageNumber(-1);
     } else {
-      m_AcquiredData -> setImageNumber(m_CurrentFile);
+      m_AcquiredData -> set_ImageNumber(m_CurrentFile);
     }
 
     newAcquiredImage(m_AcquiredData);
@@ -345,7 +352,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
     emit statusMessage("Saving "+fileName);
     emit printMessage("Saving """+fileName+"""");
 
-    setFileIndex(fileIndex()+1);
+    set_FileIndex(get_FileIndex()+1);
     m_CurrentFile++;
 
     if (m_CurrentFile >= m_FilesInSequence) {
@@ -436,7 +443,7 @@ QVector<double> QxrdAcquisitionPerkinElmer::readoutTimes()
 
 double QxrdAcquisitionPerkinElmer::readoutTime() const
 {
-  int n = readoutMode();
+  int n = get_ReadoutMode();
 
   return m_ReadoutTimes.value(n)/1e6;
 }
@@ -454,4 +461,15 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc)
 {
 }
+
+
+/******************************************************************
+*
+*  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.7  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
 

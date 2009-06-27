@@ -1,12 +1,19 @@
+/******************************************************************
+*
+*  $Id: qxrdrasterdata.cpp,v 1.11 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdrasterdata.h"
 
 QxrdRasterData::QxrdRasterData(QxrdImageData *img, int interp)
-  : QwtRasterData(QwtDoubleRect(0,0,img->width(),img->height())),
+  : QwtRasterData(QwtDoubleRect(0,0,img->get_Width(),img->get_Height())),
     m_Data(img),
-    m_NRows((img ? img->width(): 0)),
-    m_NCols((img ? img->height() : 0)),
+    m_NRows((img ? img->get_Width(): 0)),
+    m_NCols((img ? img->get_Height() : 0)),
     m_Range(40000,48000),
-    m_Interpolate(interp)
+    m_Interpolate(interp),
+    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.11 2009/06/27 22:50:32 jennings Exp $")
 {
 }
 
@@ -133,3 +140,14 @@ double QxrdRasterData::maxValue()
     return 0;
   }
 }
+
+/******************************************************************
+*
+*  $Log: qxrdrasterdata.cpp,v $
+*  Revision 1.11  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

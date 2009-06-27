@@ -1,5 +1,13 @@
+/******************************************************************
+*
+*  $Id: qxrdacquisitionthread.h,v 1.27 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #ifndef QXRDACQUISITIONTHREAD_H
 #define QXRDACQUISITIONTHREAD_H
+
+#include "qcepmacros.h"
 
 #include <QThread>
 #include <QVector>
@@ -54,6 +62,18 @@ protected:
  private:
   int                    m_Debug;
   QxrdAcquisition       *m_Acquisition;
+  HEADER_IDENT("$Id: qxrdacquisitionthread.h,v 1.27 2009/06/27 22:50:32 jennings Exp $");
 };
 
 #endif
+
+/******************************************************************
+*
+*  $Log: qxrdacquisitionthread.h,v $
+*  Revision 1.27  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

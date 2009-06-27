@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: xisl_dummy.cpp,v 1.10 2009/06/27 22:50:33 jennings Exp $
+*
+*******************************************************************/
+
 #include <QObject>
 
 
@@ -25,7 +31,8 @@ static AcquisitionTimer timer;
 
 AcquisitionTimer::AcquisitionTimer()
   : QObject(NULL),
-    m_Mode(0)
+    m_Mode(0),
+    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.10 2009/06/27 22:50:33 jennings Exp $")
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
@@ -219,3 +226,14 @@ HIS_RETURN Acquisition_GetActFrame(HACQDESC hAcqDesc, DWORD *dwActAcqFrame, DWOR
 
   return HIS_ALL_OK;
 }
+
+/******************************************************************
+*
+*  $Log: xisl_dummy.cpp,v $
+*  Revision 1.10  2009/06/27 22:50:33  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

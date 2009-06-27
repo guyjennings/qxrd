@@ -1,7 +1,4 @@
 win32 {
-  QMAKE_CXXFLAGS += -g
-  QMAKE_CFLAGS += -g
-  QMAKE_LFLAGS += -g
 
   DEBUG_SUFFIX = d
 

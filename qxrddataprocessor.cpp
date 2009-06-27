@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrddataprocessor.cpp,v 1.8 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrddataprocessor.h"
 #include <QtConcurrentRun>
 #include "qxrdwindow.h"
@@ -12,7 +18,8 @@ QxrdDataProcessor::QxrdDataProcessor
     m_Acquisition(acq),
     m_DarkUsage(QReadWriteLock::Recursive),
     m_ProcessedImages("QxrdDataProcessor Processed Images"),
-    m_DarkImages("QxrdDataProcessor Dark Images")
+    m_DarkImages("QxrdDataProcessor Dark Images"),
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.8 2009/06/27 22:50:32 jennings Exp $")
 {
   connect(m_Acquisition, SIGNAL(acquiredImageAvailable()), this, SLOT(on_acquired_image_available()));
 }
@@ -26,14 +33,14 @@ void QxrdDataProcessor::on_acquired_image_available()
   if (image) {
 //    printf("Image Number %d\n", image -> imageNumber());
 
-    if ((image -> imageNumber()) >= 0) {
+    if ((image -> get_ImageNumber()) >= 0) {
       m_DarkUsage.lockForRead();
       m_Processing.lockForRead();
       QtConcurrent::run(this, &QxrdDataProcessor::processAcquiredImage, image);
     } else {
       QWriteLocker wl(&m_DarkUsage);
 
-      emit printMessage(tr("Saving dark image \"%1\"").arg(image->filename()));
+      emit printMessage(tr("Saving dark image \"%1\"").arg(image->get_FileName()));
 
       m_Window -> saveImageData(image);
 
@@ -90,7 +97,7 @@ void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
     correctBadPixels(img);
     correctImageGains(img);
 
-    emit printMessage(tr("Saving processed image in file \"%1\"").arg(img->filename()));
+    emit printMessage(tr("Saving processed image in file \"%1\"").arg(img->get_FileName()));
 
     m_Window -> saveImageData(img);
 
@@ -114,18 +121,18 @@ void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *d
     }
 
     if (dark && image) {
-      if (dark->readoutMode() != image->readoutMode()) {
+      if (dark->get_ReadoutMode() != image->get_ReadoutMode()) {
         emit printMessage("Readout modes of acquired data and dark image are different, skipping");
         return;
       }
 
-      if (dark->exposureTime() != image->exposureTime()) {
+      if (dark->get_ExposureTime() != image->get_ExposureTime()) {
         emit printMessage("Exposure times of acquired data and dark image are different, skipping");
         return;
       }
 
-      if (dark->width() != image->width() ||
-          dark->height() != image->height()) {
+      if (dark->get_Width() != image->get_Width() ||
+          dark->get_Height() != image->get_Height()) {
         emit printMessage("Dimensions of acquired data and dark image are different, skipping");
         return;
       }
@@ -133,10 +140,10 @@ void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *d
       QReadLocker lock1(dark->rwLock());
       QWriteLocker lock2(image->rwLock());
 
-      int height = image->height();
-      int width  = image->width();
-      int nres = image-> summedExposures();
-      int ndrk = dark -> summedExposures();
+      int height = image->get_Height();
+      int width  = image->get_Width();
+      int nres = image-> get_SummedExposures();
+      int ndrk = dark -> get_SummedExposures();
       int npixels = width*height;
 
       if (nres <= 0) nres = 1;
@@ -164,3 +171,14 @@ void QxrdDataProcessor::correctBadPixels(QxrdImageData *image)
 void QxrdDataProcessor::correctImageGains(QxrdImageData *image)
 {
 }
+
+/******************************************************************
+*
+*  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.8  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

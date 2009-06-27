@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdacquisitionthread.cpp,v 1.29 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdacquisitionthread.h"
 
 #include "qxrdacquisition.h"
@@ -8,7 +14,8 @@
 QxrdAcquisitionThread::QxrdAcquisitionThread()
   : QThread(),
     m_Debug(true),
-    m_Acquisition(NULL)
+    m_Acquisition(NULL),
+    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.29 2009/06/27 22:50:32 jennings Exp $")
 {
   m_Acquisition = new QxrdAcquisition(this);
   m_Acquisition -> moveToThread(this);
@@ -105,3 +112,14 @@ void QxrdAcquisitionThread::sleep(double time)
 {
   QThread::usleep((int)(time*1e6));
 }
+
+/******************************************************************
+*
+*  $Log: qxrdacquisitionthread.cpp,v $
+*  Revision 1.29  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

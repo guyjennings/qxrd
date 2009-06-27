@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdimagedata.cpp,v 1.8 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdimagedata.h"
 
 #include <QDir>
@@ -5,42 +11,13 @@
 
 QxrdImageData::QxrdImageData(int width, int height)
   : QcepImageData<double>(width, height),
+    m_ReadoutMode(this, "readoutMode", 0),
+    m_ExposureTime(this, "exposureTime", 0),
+    m_SummedExposures(this, "summedExposures", 0),
+    m_ImageNumber(this, "imageNumber", 0),
     m_Lock(QReadWriteLock::Recursive),
-    m_ReadoutMode(0),
-    m_ExposureTime(0),
-    m_SummedExposures(0),
-    m_ImageNumber(0)
+    SOURCE_IDENT("$Id: qxrdimagedata.cpp,v 1.8 2009/06/27 22:50:32 jennings Exp $")
 {
-}
-
-int QxrdImageData::readoutMode()
-{
-  return m_ReadoutMode;
-}
-
-void QxrdImageData::setReadoutMode(int mode)
-{
-  m_ReadoutMode = mode;
-}
-
-double QxrdImageData::exposureTime() const
-{
-  return m_ExposureTime;
-}
-
-void QxrdImageData::setExposureTime(double t)
-{
-  m_ExposureTime = t;
-}
-
-int QxrdImageData::summedExposures()
-{
-  return m_SummedExposures;
-}
-
-void QxrdImageData::setSummedExposures(int n)
-{
-  m_SummedExposures = n;
 }
 
 QReadWriteLock *QxrdImageData::rwLock()
@@ -48,22 +25,23 @@ QReadWriteLock *QxrdImageData::rwLock()
   return &m_Lock;
 }
 
-int QxrdImageData::imageNumber()
-{
-  return m_ImageNumber;
-}
-
-void QxrdImageData::setImageNumber(int n)
-{
-  m_ImageNumber = n;
-}
-
 QString QxrdImageData::rawFileName()
 {
-  QFileInfo info(filename());
+  QFileInfo info(get_FileName());
 
   QString name = info.dir().filePath(
       info.completeBaseName()+".raw.tif");
 
   return name;
 }
+
+/******************************************************************
+*
+*  $Log: qxrdimagedata.cpp,v $
+*  Revision 1.8  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

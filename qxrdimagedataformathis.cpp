@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdimagedataformathis.cpp,v 1.5 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdimagedataformathis.h"
 #include "qxrdimagedata.h"
 #include <QFileInfo>
@@ -5,7 +11,8 @@
 static QxrdImageDataFormatHis fmt;
 
 QxrdImageDataFormatHis::QxrdImageDataFormatHis(QString name)
-  : QcepImageDataFormat<double>(name)
+  : QcepImageDataFormat<double>(name),
+    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.5 2009/06/27 22:50:32 jennings Exp $")
 {
 }
 
@@ -111,8 +118,8 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
       }
     }
 
-    img -> setFilename(path);
-    img -> setTitle(QFileInfo(path).fileName());
+    img -> set_FileName(path);
+    img -> set_Title(QFileInfo(path).fileName());
 
     fclose(file);
 
@@ -127,5 +134,16 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::saveFile(QString /*path*/, QcepI
 {
   return NULL;
 }
+
+
+/******************************************************************
+*
+*  $Log: qxrdimagedataformathis.cpp,v $
+*  Revision 1.5  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
 
 

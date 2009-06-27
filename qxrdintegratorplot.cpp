@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdintegratorplot.cpp,v 1.5 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdintegratorplot.h"
 
 #include <qwt_plot_zoomer.h>
@@ -5,7 +11,8 @@
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   : QxrdPlot(parent),
-    m_Zoomer(NULL)
+    m_Zoomer(NULL),
+    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.5 2009/06/27 22:50:32 jennings Exp $")
 {
   m_Zoomer = new QwtPlotZoomer(canvas());
   m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
@@ -34,3 +41,14 @@ void QxrdIntegratorPlot::doZoomAll()
 {
   m_Zoomer -> zoom(0);
 }
+
+/******************************************************************
+*
+*  $Log: qxrdintegratorplot.cpp,v $
+*  Revision 1.5  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

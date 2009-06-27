@@ -1,5 +1,13 @@
+/******************************************************************
+*
+*  $Id: qxrdcenterfinder.h,v 1.5 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #ifndef QXRDCENTERFINDER_H
 #define QXRDCENTERFINDER_H
+
+#include "qcepmacros.h"
 
 #include <QObject>
 #include <QPen>
@@ -56,6 +64,18 @@ private:
   QwtPlotMarker             *m_CenterMarker;
 
   QPen                       m_Pen;
+  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.5 2009/06/27 22:50:32 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDER_H
+
+/******************************************************************
+*
+*  $Log: qxrdcenterfinder.h,v $
+*  Revision 1.5  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

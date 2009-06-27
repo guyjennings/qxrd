@@ -1,5 +1,13 @@
+/******************************************************************
+*
+*  $Id: qxrddataprocessor.h,v 1.5 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #ifndef QXRDDATAPROCESSOR_H
 #define QXRDDATAPROCESSOR_H
+
+#include "qcepmacros.h"
 
 #include <QObject>
 #include <QReadWriteLock>
@@ -45,6 +53,18 @@ private:
   QReadWriteLock            m_Processing;
   QxrdImageQueue            m_ProcessedImages;
   QxrdImageQueue            m_DarkImages;
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.5 2009/06/27 22:50:32 jennings Exp $");
 };
 
 #endif
+
+/******************************************************************
+*
+*  $Log: qxrddataprocessor.h,v $
+*  Revision 1.5  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

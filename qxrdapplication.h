@@ -1,5 +1,13 @@
+/******************************************************************
+*
+*  $Id: qxrdapplication.h,v 1.20 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #ifndef QXRDAPPLICATION_H
 #define QXRDAPPLICATION_H
+
+#include "qcepmacros.h"
 
 #include <QApplication>
 #include <QScriptEngine>
@@ -35,6 +43,18 @@ class QxrdApplication : public QApplication
   QxrdWindow                    *m_Window;
   QxrdServerThread              *m_ServerThread;
   QxrdAcquisitionThread         *m_AcquisitionThread;
+  HEADER_IDENT("$Id: qxrdapplication.h,v 1.20 2009/06/27 22:50:32 jennings Exp $");
 };
 
 #endif
+
+/******************************************************************
+*
+*  $Log: qxrdapplication.h,v $
+*  Revision 1.20  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

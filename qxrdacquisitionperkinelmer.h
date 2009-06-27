@@ -1,5 +1,13 @@
+/******************************************************************
+*
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.4 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #ifndef QXRDACQUISITIONPERKINELMER_H
 #define QXRDACQUISITIONPERKINELMER_H
+
+#include "qcepmacros.h"
 
 #include "qxrdacquisitionoperations.h"
 
@@ -15,7 +23,6 @@ class QxrdAcquisitionPerkinElmer : public QxrdAcquisitionOperations
 public:
   QxrdAcquisitionPerkinElmer(QxrdAcquisitionThread *thread);
   ~QxrdAcquisitionPerkinElmer();
-  typedef QxrdAcquisitionOperations inherited;
 
 public slots:
   void acquire();
@@ -67,6 +74,18 @@ private:
   QVector<quint16>       m_Buffer;
   QxrdImageData         *m_AcquiredData;
   QVector<double>        m_ReadoutTimes;
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.4 2009/06/27 22:50:32 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
+
+/******************************************************************
+*
+*  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.4  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

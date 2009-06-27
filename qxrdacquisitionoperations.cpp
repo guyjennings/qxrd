@@ -1,10 +1,17 @@
+/******************************************************************
+*
+*  $Id: qxrdacquisitionoperations.cpp,v 1.3 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdacquisitionoperations.h"
 #include "qxrdimagedata.h"
 
 QxrdAcquisitionOperations::QxrdAcquisitionOperations(QxrdAcquisitionThread *thread)
-  : inherited(thread),
+  : QxrdAcquisitionScripting(thread),
     m_FreeImages("Free Image Pool"),
-    m_AcquiredImages("Acquired Images")
+    m_AcquiredImages("Acquired Images"),
+    SOURCE_IDENT("$Id: qxrdacquisitionoperations.cpp,v 1.3 2009/06/27 22:50:32 jennings Exp $")
 {
 }
 
@@ -34,4 +41,15 @@ void QxrdAcquisitionOperations::returnImageToPool(QxrdImageData *img)
 {
   m_FreeImages.enqueue(img);
 }
+
+
+/******************************************************************
+*
+*  $Log: qxrdacquisitionoperations.cpp,v $
+*  Revision 1.3  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
 

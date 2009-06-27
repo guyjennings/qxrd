@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdcenterfinderplot.cpp,v 1.7 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdcenterfinderplot.h"
 #include "qxrdimagedata.h"
 
@@ -17,7 +23,8 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_Panner(NULL),
     m_Zoomer(NULL),
     m_Magnifier(NULL),
-    m_Legend(NULL)
+    m_Legend(NULL),
+    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.7 2009/06/27 22:50:32 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -71,8 +78,8 @@ void QxrdCenterFinderPlot::autoScale()
 
 void QxrdCenterFinderPlot::onCenterChanged(QxrdImageData *img, double cx, double cy)
 {
-  int width =img->width();
-  int height=img->height();
+  int width =img->get_Width();
+  int height=img->get_Height();
 
   int len = (int) sqrt(pow(width,2)+pow(height,2));
 
@@ -130,7 +137,7 @@ void QxrdCenterFinderPlot::onCenterChanged(QxrdImageData *img, double cx, double
     pc->attach(this);
   }
 
-  QString title = QString("Center:%1:").arg(img->title());
+  QString title = QString("Center:%1:").arg(img->get_Title());
   title += QString("(%1,%2):").arg(cx).arg(cy);
 
   setTitle(title);
@@ -156,3 +163,14 @@ void QxrdCenterFinderPlot::doZoomAll()
 
   autoScale();
 }
+
+/******************************************************************
+*
+*  $Log: qxrdcenterfinderplot.cpp,v $
+*  Revision 1.7  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

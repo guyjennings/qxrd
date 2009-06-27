@@ -1,5 +1,13 @@
+/******************************************************************
+*
+*  $Id: qxrdrasterdata.h,v 1.7 2009/06/27 22:50:33 jennings Exp $
+*
+*******************************************************************/
+
 #ifndef QXRDRASTERDATA_H
 #define QXRDRASTERDATA_H
+
+#include "qcepmacros.h"
 
 #include <qwt_raster_data.h>
 #include "qxrdimagedata.h"
@@ -28,6 +36,18 @@ class QxrdRasterData : public QwtRasterData
   int                m_NCols;
   QwtDoubleInterval  m_Range;
   int                m_Interpolate;
+  HEADER_IDENT("$Id: qxrdrasterdata.h,v 1.7 2009/06/27 22:50:33 jennings Exp $");
 };
 
 #endif
+
+/******************************************************************
+*
+*  $Log: qxrdrasterdata.h,v $
+*  Revision 1.7  2009/06/27 22:50:33  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

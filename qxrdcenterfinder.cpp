@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdcenterfinder.cpp,v 1.6 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdcenterfinder.h"
 #include "qxrdcenterfinderdialog.h"
 #include "qxrdcenterfinderpicker.h"
@@ -15,7 +21,8 @@ QxrdCenterFinder::QxrdCenterFinder
     m_CenterY(0),
     m_StepSize(1),
     m_CenterFinderPicker(NULL),
-    m_CenterMarker(NULL)
+    m_CenterMarker(NULL),
+    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.6 2009/06/27 22:50:32 jennings Exp $")
 {
   m_CenterFinderPicker = new QxrdCenterFinderPicker(imgplot->canvas(), imgplot, cfdialog);
 
@@ -170,4 +177,15 @@ void QxrdCenterFinder::centerMoveLeft()
 {
   moveCenter(-1,0);
 }
+
+
+/******************************************************************
+*
+*  $Log: qxrdcenterfinder.cpp,v $
+*  Revision 1.6  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
 

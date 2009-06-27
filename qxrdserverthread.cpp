@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdserverthread.cpp,v 1.9 2009/06/27 22:50:33 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdserverthread.h"
 
 #include "qxrdserver.h"
@@ -6,7 +12,8 @@
 QxrdServerThread::QxrdServerThread(QxrdAcquisitionThread *acq, QString name)
   : m_AcquisitionThread(acq),
     m_Name(name),
-    m_Server(NULL)
+    m_Server(NULL),
+    SOURCE_IDENT("$Id: qxrdserverthread.cpp,v 1.9 2009/06/27 22:50:33 jennings Exp $")
 {
 }
 
@@ -40,3 +47,14 @@ void QxrdServerThread::executeScript(QString cmd)
 {
   emit execute(cmd);
 }
+
+/******************************************************************
+*
+*  $Log: qxrdserverthread.cpp,v $
+*  Revision 1.9  2009/06/27 22:50:33  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdimageplot.cpp,v 1.20 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdimageplot.h"
 #include "qxrdrasterdata.h"
 #include "qxrdplotzoomer.h"
@@ -35,7 +41,8 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_MinDisplayed(-10),
     m_MaxDisplayed(110),
     m_Interpolate(1),
-    m_MaintainAspect(1)
+    m_MaintainAspect(1),
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.20 2009/06/27 22:50:32 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -445,3 +452,14 @@ void QxrdImagePlot::doMeasure()
 {
   enableMeasuring();
 }
+
+/******************************************************************
+*
+*  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.20  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

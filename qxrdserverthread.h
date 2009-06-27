@@ -1,5 +1,13 @@
+/******************************************************************
+*
+*  $Id: qxrdserverthread.h,v 1.7 2009/06/27 22:50:33 jennings Exp $
+*
+*******************************************************************/
+
 #ifndef QXRDSERVERTHREAD_H
 #define QXRDSERVERTHREAD_H
+
+#include "qcepmacros.h"
 
 #include <QThread>
 
@@ -28,6 +36,18 @@ private:
   QxrdAcquisitionThread *m_AcquisitionThread;
   QString                m_Name;
   QxrdServer            *m_Server;
+  HEADER_IDENT("$Id: qxrdserverthread.h,v 1.7 2009/06/27 22:50:33 jennings Exp $");
 };
 
 #endif // QXRDSERVERTHREAD_H
+
+/******************************************************************
+*
+*  $Log: qxrdserverthread.h,v $
+*  Revision 1.7  2009/06/27 22:50:33  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

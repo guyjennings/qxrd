@@ -1,5 +1,13 @@
+/******************************************************************
+*
+*  $Id: qxrdwindow.h,v 1.43 2009/06/27 22:50:33 jennings Exp $
+*
+*******************************************************************/
+
 #ifndef QXRDWINDOW_H
 #define QXRDWINDOW_H
+
+#include "qcepmacros.h"
 
 #include <QMainWindow>
 #include <QProgressBar>
@@ -114,7 +122,7 @@ public slots:
 
 public:
   void readSettings();
-  void saveSettings();
+  void writeSettings();
   void possiblyClose();
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
@@ -155,6 +163,18 @@ private:
 //
 //  QDirModel              *m_FileBrowserModel;
 //  QTimer                  m_FileBrowserTimer;
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.43 2009/06/27 22:50:33 jennings Exp $");
 };
 
 #endif
+
+/******************************************************************
+*
+*  $Log: qxrdwindow.h,v $
+*  Revision 1.43  2009/06/27 22:50:33  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

@@ -1,100 +1,71 @@
+/******************************************************************
+*
+*  $Id: qxrdacquisitionparameters.h,v 1.5 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #ifndef QXRDACQUISITIONPARAMETERS_H
 #define QXRDACQUISITIONPARAMETERS_H
+
+#include "qcepmacros.h"
 
 #include <QObject>
 #include <QMutex>
 
 class QxrdSettings;
 
+#include "qcepproperty.h"
+
 class QxrdAcquisitionParameters : public QObject
 {
   Q_OBJECT;
 public:
   QxrdAcquisitionParameters();
-  typedef QObject inherited;
 
 signals:
   void printMessage(QString msg);
   void statusMessage(QString msg);
   void criticalMessage(QString msg);
 
-  void fileIndexChanged(int index);
-  void exposureTimeChanged(double t);
-  void readoutModeChanged(int mode);
-  void summedExposuresChanged(int nsummed);
-  void filesInSequenceChanged(int nframes);
-  void filePatternChanged(QString pattern);
-  void outputDirectoryChanged(QString path);
-  void fileNameChanged(QString path);
-  void fileBaseChanged(QString path);
-  void darkSummedExposuresChanged(int nsummed);
-  void cameraGainChanged(int gain);
-
-public slots:
-  void    setFileIndex(int index);
-  void    changeFileIndex(int index);
-  void    setFilesInSequence(int nframes);
-  void    changeFilesInSequence(int nframes);
-  void    setSummedExposures(int nsummed);
-  void    changeSummedExposures(int nsummed);
-  void    setReadoutMode(int mode);
-  void    changeReadoutMode(int mode);
-  void    setExposureTime(double t);
-  void    changeExposureTime(double t);
-  void    setFilePattern(QString pattern);
-  void    changeFilePattern(QString pattern);
-  void    setOutputDirectory(QString path);
-  void    changeOutputDirectory(QString path);
-  void    setFileName(QString path);
-  void    changeFileName(QString path);
-  void    setFileBase(QString path);
-  void    changeFileBase(QString path);
-  void    setDarkSummedExposures(int nsummed);
-  void    changeDarkSummedExposures(int nsummed);
-  void    setCameraGain(int mode);
-  void    changeCameraGain(int mode);
-
 public:
   void readSettings(QxrdSettings *settings, QString section);
-  void saveSettings(QxrdSettings *settings, QString section);
+  void writeSettings(QxrdSettings *settings, QString section);
 
-  double  exposureTime() const;
-  int     readoutMode() const;
-  int     summedExposures() const;
-  int     filesInSequence() const;
-  int     fileIndex() const;
-  QString filePattern() const;
-  QString outputDirectory() const;
-  QString fileName() const;
-  QString fileBase() const;
-  int     darkSummedExposures() const;
-  int     cameraGain() const;
+  Q_PROPERTY(int    debug            READ get_Debug WRITE set_Debug);
+  QCEP_INTEGER_PROPERTY(Debug);
 
-  void    setDebug(int dbg);
-  int     debug() const;
+  Q_PROPERTY(double exposureTime     READ get_ExposureTime WRITE set_ExposureTime);
+  QCEP_DOUBLE_PROPERTY(ExposureTime);
 
+  Q_PROPERTY(int    readoutMode      READ get_ReadoutMode WRITE set_ReadoutMode);
+  QCEP_INTEGER_PROPERTY(ReadoutMode);
 
-//  void    setCameraMode(int mode);
-//  int     cameraMode() const;
-//
-//  void    setFrameSyncMode(int mode);
-//  int     frameSyncMode() const;
-//
-//  void    setTimerSync(int mode);
-//  int     timerSync() const;
+  Q_PROPERTY(int    summedExposures  READ get_SummedExposures WRITE set_SummedExposures);
+  QCEP_INTEGER_PROPERTY(SummedExposures);
 
-  Q_PROPERTY(int    debug            READ debug WRITE setDebug);
-  Q_PROPERTY(double exposureTime     READ exposureTime WRITE setExposureTime);
-  Q_PROPERTY(int    readoutMode      READ readoutMode WRITE setReadoutMode);
-  Q_PROPERTY(int    summedExposures  READ summedExposures WRITE setSummedExposures);
-  Q_PROPERTY(int    filesInSequence  READ filesInSequence WRITE setFilesInSequence);
-  Q_PROPERTY(int    fileIndex        READ fileIndex WRITE setFileIndex);
-  Q_PROPERTY(QString filePattern     READ filePattern WRITE setFilePattern);
-  Q_PROPERTY(QString outputDirectory READ outputDirectory WRITE setOutputDirectory);
-  Q_PROPERTY(int     darkSummedExposures READ darkSummedExposures WRITE setDarkSummedExposures);
-  Q_PROPERTY(int     cameraGain      READ cameraGain WRITE setCameraGain);
-  Q_PROPERTY(QString fileName        READ fileName WRITE setFileName);
-  Q_PROPERTY(QString fileBase        READ fileBase WRITE setFileBase);
+  Q_PROPERTY(int    filesInSequence  READ get_FilesInSequence WRITE set_FilesInSequence);
+  QCEP_INTEGER_PROPERTY(FilesInSequence);
+
+  Q_PROPERTY(int    fileIndex        READ get_FileIndex WRITE set_FileIndex);
+  QCEP_INTEGER_PROPERTY(FileIndex);
+
+  Q_PROPERTY(QString filePattern     READ get_FilePattern WRITE set_FilePattern);
+  QCEP_STRING_PROPERTY(FilePattern);
+
+  Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory);
+  QCEP_STRING_PROPERTY(OutputDirectory);
+
+  Q_PROPERTY(int     darkSummedExposures READ get_DarkSummedExposures WRITE set_DarkSummedExposures);
+  QCEP_INTEGER_PROPERTY(DarkSummedExposures);
+
+  Q_PROPERTY(int     cameraGain      READ get_CameraGain WRITE set_CameraGain);
+  QCEP_INTEGER_PROPERTY(CameraGain);
+
+  Q_PROPERTY(QString fileName        READ get_FileName WRITE set_FileName);
+  QCEP_STRING_PROPERTY(FileName);
+
+  Q_PROPERTY(QString fileBase        READ get_FileBase WRITE set_FileBase);
+  QCEP_STRING_PROPERTY(FileBase);
 
 //  Q_PROPERTY(int     cameraMode      READ cameraMode WRITE setCameraMode);
 //  Q_PROPERTY(int     frameSyncMode   READ frameSyncMode WRITE setFrameSyncMode);
@@ -102,21 +73,18 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  int                    m_Debug;
-  QString                m_OutputDirectory;
-  QString                m_FileName;
-  QString                m_FileBase;
-  QString                m_FilePattern;
-  int                    m_FileIndex;
-//  int                    m_CameraMode;
-//  int                    m_FrameSyncMode;
-//  int                    m_TimerSync;
-  int                    m_CameraGain;
-  double                 m_ExposureTime;
-  int                    m_ReadoutMode;
-  int                    m_SummedExposures;
-  int                    m_DarkSummedExposures;
-  int                    m_FilesInSequence;
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.5 2009/06/27 22:50:32 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
+
+/******************************************************************
+*
+*  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.5  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

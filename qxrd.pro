@@ -1,33 +1,29 @@
 TEMPLATE = app
-include("qxrdconfig.pri")
 CONFIG += qt
-VERSION = 0.0.3
+include("qxrd.version.pri")
 QT += network \
     script
+
+QMAKE_CXXFLAGS += -g -msse3
+QMAKE_CFLAGS += -g -msse3
+QMAKE_LFLAGS += -g
 
 # INCLUDEPATH += /usr/local/lib/spec.d/include/
 MOC_DIR = moc
 UI_DIR = ui
-OBJECTS_DIR = obj$${SUFFIX_STR}
+OBJECTS_DIR = obj
 RCC_DIR = rcc
-TARGET = qxrd$${SUFFIX_STR}
+TARGET = qxrd
 RESOURCES += qxrdhelptext.qrc \
     qxrdresources.qrc
 DISTFILES += qxrdhelptext.html \
     images/*.png
-win32:include("../qxrd/qt-libtiff-win32.pri")
-include("../qxrd/qwt-5.2-win32.pri")
-win32 { 
-    INCLUDEPATH += ../qceplib/
-    HEADERS += ../qceplib/spec_server.h \
-        ../qceplib/qspecserver.h \
-        ../qceplib/qcepimagedata.h \
-        ../qceplib/qcepimagedataformat.h \
-        ../qceplib/qcepimagedataformattiff.h \
-        ../qceplib/qcepimagedataformatmar345.h \
-        ../qceplib/qcepimagedataformatfactory.h
-}
-HEADERS += qxrdapplication.h \
+win32:include("qt-libtiff-win32.pri")
+include("qwt-5.2.pri")
+include("qceplib.pri")
+HEADERS += \
+    TODO.h \
+    qxrdapplication.h \
     qxrdsettings.h \
     qxrdimagedata.h \
     qxrdimagequeue.h \
@@ -63,12 +59,6 @@ HEADERS += qxrdapplication.h \
     qxrdplotslicer.h \
     qxrdplotmeasurer.h
 unix:HEADERS += AcqLinuxTypes.h
-win32:SOURCES += ../qceplib/qspecserver.cpp \
-    ../qceplib/qcepimagedata.cpp \
-    ../qceplib/qcepimagedataformat.cpp \
-    ../qceplib/qcepimagedataformattiff.cpp \
-    ../qceplib/qcepimagedataformatmar345.cpp \
-    ../qceplib/qcepimagedataformatfactory.cpp
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
     qxrdsettings.cpp \
@@ -110,10 +100,9 @@ FORMS = qxrdwindow.ui \
 unix { 
     HEADERS += xisl_dummy.h
     SOURCES += xisl_dummy.cpp
-    INCLUDEPATH += /usr/include/qwt/
-    LIBS += -lqwt \
-        -ltiff \
-        -lqceplib
+    
+    # INCLUDEPATH += /usr/include/qwt/
+    LIBS += -ltiff
 }
 win32 { 
     PLATFORM_PREFIX = win32
@@ -203,4 +192,4 @@ website.commands = rsync \
     -avx \
     dox/html/ \
     www12.xor.aps.anl.gov:/var/www/html/software/qxrd/
-OTHER_FILES += 
+OTHER_FILES += qceplib.pri

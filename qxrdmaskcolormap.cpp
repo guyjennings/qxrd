@@ -1,9 +1,16 @@
+/******************************************************************
+*
+*  $Id: qxrdmaskcolormap.cpp,v 1.3 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdmaskcolormap.h"
 
 QxrdMaskColorMap::QxrdMaskColorMap(const QColor &deselcol, const QColor &selcol)
   : QwtColorMap(QwtColorMap::RGB),
     m_DeselectedColor(deselcol.rgba()),
-    m_SelectedColor(selcol.rgba())
+    m_SelectedColor(selcol.rgba()),
+    SOURCE_IDENT("$Id: qxrdmaskcolormap.cpp,v 1.3 2009/06/27 22:50:32 jennings Exp $")
 {
 }
 
@@ -42,3 +49,14 @@ unsigned char QxrdMaskColorMap::colorIndex(const QwtDoubleInterval &inter, doubl
 {
   return 0;
 }
+
+/******************************************************************
+*
+*  $Log: qxrdmaskcolormap.cpp,v $
+*  Revision 1.3  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

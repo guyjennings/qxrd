@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdserver.cpp,v 1.10 2009/06/27 22:50:33 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdserver.h"
 
 #include <QHostAddress>
@@ -8,7 +14,8 @@
 
 QxrdServer::QxrdServer(QxrdAcquisitionThread *acqth, QString name, QObject *parent)
   : QSpecServer(name, parent),
-    m_AcquisitionThread(acqth)
+    m_AcquisitionThread(acqth),
+    SOURCE_IDENT("$Id: qxrdserver.cpp,v 1.10 2009/06/27 22:50:33 jennings Exp $")
 {
 //  printf("QxrdServer::QxrdServer\n");
 
@@ -39,3 +46,14 @@ void QxrdServer::shutdown()
 {
   close();
 }
+
+/******************************************************************
+*
+*  $Log: qxrdserver.cpp,v $
+*  Revision 1.10  2009/06/27 22:50:33  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

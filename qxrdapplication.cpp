@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdapplication.cpp,v 1.37 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
 #include "qxrdserverthread.h"
@@ -14,7 +20,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
     m_Window(NULL),
     m_ServerThread(NULL),
-    m_AcquisitionThread(NULL)
+    m_AcquisitionThread(NULL),
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.37 2009/06/27 22:50:32 jennings Exp $")
 {
   setObjectName("qxrdapplication");
 
@@ -68,7 +75,7 @@ bool QxrdApplication::wantToQuit()
 
 void QxrdApplication::shutdownThreads()
 {
-  m_Window -> saveSettings();
+  m_Window -> writeSettings();
   m_AcquisitionThread -> shutdown();
   m_ServerThread -> shutdown();
 }
@@ -87,3 +94,14 @@ void QxrdApplication::executeScript(QString cmd)
 {
   m_ServerThread -> executeScript(cmd);
 }
+
+/******************************************************************
+*
+*  $Log: qxrdapplication.cpp,v $
+*  Revision 1.37  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

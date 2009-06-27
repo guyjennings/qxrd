@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdwindow.cpp,v 1.58 2009/06/27 22:50:33 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
 #include "qxrdacquisitionthread.h"
@@ -49,9 +55,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_Data(new QxrdImageData(2048,2048)),
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
-    m_GainFrame(NULL)/*,
-    m_FileBrowserModel(NULL),
-    m_FileBrowserTimer()*/
+    m_GainFrame(NULL),
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.58 2009/06/27 22:50:33 jennings Exp $")
 {
   setupUi(this);
 
@@ -195,7 +200,7 @@ QxrdWindow::~QxrdWindow()
 //  printf("QxrdWindow::~QxrdWindow()\n");
 
   if (m_SettingsLoaded) {
-    saveSettings();
+    writeSettings();
   }
 }
 
@@ -385,9 +390,9 @@ void QxrdWindow::setReadoutTime(int n, double t)
 void QxrdWindow::selectOutputDirectory()
 {
   QString dir = QFileDialog::getExistingDirectory(this, "Output Directory",
-                                                  m_Acquisition -> outputDirectory());
+                                                  m_Acquisition -> get_OutputDirectory());
   if (dir.length()) {
-    m_Acquisition -> setOutputDirectory(dir);
+    m_Acquisition -> set_OutputDirectory(dir);
   }
 }
 
@@ -491,11 +496,11 @@ void QxrdWindow::readSettings()
   m_SettingsLoaded = true;
 }
 
-void QxrdWindow::saveSettings()
+void QxrdWindow::writeSettings()
 {
   QxrdSettings settings;
 
-  m_Acquisition -> saveSettings(&settings, "acquire");
+  m_Acquisition -> writeSettings(&settings, "acquire");
 
   settings.setValue("acq/subtractdark", performDarkSubtraction());
   settings.setValue("acq/saveraw", saveRawImages());
@@ -541,7 +546,7 @@ void QxrdWindow::clearStatusMessage()
 void QxrdWindow::doSaveData()
 {
   QString theFile = QFileDialog::getSaveFileName(
-      this, "Save Data in", m_Acquisition -> outputDirectory());
+      this, "Save Data in", m_Acquisition -> get_OutputDirectory());
 
   if (theFile.length()) {
     saveData(theFile);
@@ -551,7 +556,7 @@ void QxrdWindow::doSaveData()
 void QxrdWindow::doLoadData()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Image from...", m_Acquisition -> outputDirectory());
+      this, "Load Image from...", m_Acquisition -> get_OutputDirectory());
 
   if (theFile.length()) {
     loadData(theFile);
@@ -569,14 +574,14 @@ void QxrdWindow::loadData(QString name)
 
 void QxrdWindow::saveData(QString name)
 {
-  m_Data -> setFilename(name);
+  m_Data -> set_FileName(name);
 
   saveImageData(m_Data);
 }
 
 void QxrdWindow::saveImageData(QxrdImageData *image)
 {
-  saveNamedImageData(image->filename(), image);
+  saveNamedImageData(image->get_FileName(), image);
 }
 
 void QxrdWindow::saveRawData(QxrdImageData *image)
@@ -590,8 +595,8 @@ void QxrdWindow::saveNamedImageData(QString name, QxrdImageData *image)
 
   QReadLocker lock(image->rwLock());
 
-  int nrows = image -> height();
-  int ncols = image -> width();
+  int nrows = image -> get_Height();
+  int ncols = image -> get_Width();
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
 
@@ -762,7 +767,7 @@ void QxrdWindow::newData(QxrdImageData *image)
 
   m_Plot -> setImage(data);
   m_Plot -> setMask(mask);
-  m_Plot -> setTitle(m_Data -> title());
+  m_Plot -> setTitle(m_Data -> get_Title());
   m_Plot -> replot();
 }
 
@@ -776,7 +781,7 @@ void QxrdWindow::newDarkImage(QxrdImageData *image)
     m_DarkFrame = image;
   }
 
-  setDarkImagePath(image->filename());
+  setDarkImagePath(image->get_FileName());
 }
 
 QxrdImageData *QxrdWindow::data()
@@ -798,7 +803,7 @@ void QxrdWindow::newBadPixelsImage(QxrdImageData *image)
     m_BadPixels = image;
   }
 
-  setBadPixelsPath(image->filename());
+  setBadPixelsPath(image->get_FileName());
 }
 
 void QxrdWindow::newGainMapImage(QxrdImageData *image)
@@ -811,7 +816,7 @@ void QxrdWindow::newGainMapImage(QxrdImageData *image)
     m_GainFrame = image;
   }
 
-  setGainMapPath(image->filename());
+  setGainMapPath(image->get_FileName());
 }
 
 double QxrdWindow::displayMinimumPct()
@@ -946,3 +951,14 @@ void QxrdWindow::executeScript()
 {
   m_Application -> executeScript(m_ScriptEdit -> toPlainText());
 }
+
+/******************************************************************
+*
+*  $Log: qxrdwindow.cpp,v $
+*  Revision 1.58  2009/06/27 22:50:33  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+

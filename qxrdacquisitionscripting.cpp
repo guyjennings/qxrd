@@ -1,3 +1,9 @@
+/******************************************************************
+*
+*  $Id: qxrdacquisitionscripting.cpp,v 1.4 2009/06/27 22:50:32 jennings Exp $
+*
+*******************************************************************/
+
 #include "qxrdacquisitionscripting.h"
 
 #include "qxrdacquisitionthread.h"
@@ -6,9 +12,10 @@
 QxrdAcquisitionScripting *QxrdAcquisitionScripting::g_Acquisition = NULL;
 
 QxrdAcquisitionScripting::QxrdAcquisitionScripting(QxrdAcquisitionThread *thread)
-  : inherited(),
+  : QxrdAcquisitionParameters(),
     m_Mutex(QMutex::Recursive),
-    m_AcquisitionThread(thread)
+    m_AcquisitionThread(thread),
+    SOURCE_IDENT("$Id: qxrdacquisitionscripting.cpp,v 1.4 2009/06/27 22:50:32 jennings Exp $")
 {
   g_Acquisition = this;
 
@@ -103,16 +110,16 @@ QScriptValue QxrdAcquisitionScripting::acquireFunc(QScriptContext *context, QScr
   switch (nArgs) {
   default:
   case 4:
-    g_Acquisition -> setFilesInSequence(context -> argument(3).toUInt32());
+    g_Acquisition -> set_FilesInSequence(context -> argument(3).toUInt32());
 
   case 3:
-    g_Acquisition -> setSummedExposures(context -> argument(2).toUInt32());
+    g_Acquisition -> set_SummedExposures(context -> argument(2).toUInt32());
 
   case 2:
-    g_Acquisition -> setExposureTime(context -> argument(1).toNumber());
+    g_Acquisition -> set_ExposureTime(context -> argument(1).toNumber());
 
   case 1:
-    g_Acquisition -> setFilePattern(context -> argument(0).toString());
+    g_Acquisition -> set_FilePattern(context -> argument(0).toString());
 
   case 0:
     g_Acquisition -> acquire();
@@ -130,13 +137,13 @@ QScriptValue QxrdAcquisitionScripting::acquireDarkFunc(QScriptContext *context, 
   switch (nArgs) {
   default:
   case 3:
-    g_Acquisition -> setDarkSummedExposures(context -> argument(2).toUInt32());
+    g_Acquisition -> set_DarkSummedExposures(context -> argument(2).toUInt32());
 
   case 2:
-    g_Acquisition -> setExposureTime(context -> argument(1).toNumber());
+    g_Acquisition -> set_ExposureTime(context -> argument(1).toNumber());
 
   case 1:
-    g_Acquisition -> setFilePattern(context -> argument(0).toString());
+    g_Acquisition -> set_FilePattern(context -> argument(0).toString());
 
   case 0:
     g_Acquisition -> acquireDark();
@@ -158,110 +165,74 @@ QScriptValue QxrdAcquisitionScripting::statusFunc(QScriptContext *context, QScri
 QScriptValue QxrdAcquisitionScripting::readoutModeFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> setReadoutMode(context->argument(0).toInt32());
+    g_Acquisition -> set_ReadoutMode(context->argument(0).toInt32());
   }
 
-  return QScriptValue(engine, g_Acquisition -> readoutMode());
+  return QScriptValue(engine, g_Acquisition -> get_ReadoutMode());
 }
 
 QScriptValue QxrdAcquisitionScripting::exposureTimeFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> setExposureTime(context->argument(0).toNumber());
+    g_Acquisition -> set_ExposureTime(context->argument(0).toNumber());
   }
 
-  return QScriptValue(engine, g_Acquisition -> exposureTime());
+  return QScriptValue(engine, g_Acquisition -> get_ExposureTime());
 }
 
 QScriptValue QxrdAcquisitionScripting::summedExposuresFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> setSummedExposures(context->argument(0).toUInt32());
+    g_Acquisition -> set_SummedExposures(context->argument(0).toUInt32());
   }
 
-  return QScriptValue(engine, g_Acquisition -> summedExposures());
+  return QScriptValue(engine, g_Acquisition -> get_SummedExposures());
 }
 
 QScriptValue QxrdAcquisitionScripting::darkSummedExposuresFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> setDarkSummedExposures(context->argument(0).toUInt32());
+    g_Acquisition -> set_DarkSummedExposures(context->argument(0).toUInt32());
   }
 
-  return QScriptValue(engine, g_Acquisition -> darkSummedExposures());
+  return QScriptValue(engine, g_Acquisition -> get_DarkSummedExposures());
 }
 
 QScriptValue QxrdAcquisitionScripting::filesInSequenceFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> setFilesInSequence(context->argument(0).toUInt32());
+    g_Acquisition -> set_FilesInSequence(context->argument(0).toUInt32());
   }
 
-  return QScriptValue(engine, g_Acquisition -> filesInSequence());
+  return QScriptValue(engine, g_Acquisition -> get_FilesInSequence());
 }
 
 QScriptValue QxrdAcquisitionScripting::filePatternFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> setFilePattern(context->argument(0).toString());
+    g_Acquisition -> set_FilePattern(context->argument(0).toString());
   }
 
-  return QScriptValue(engine, g_Acquisition -> filePattern());
+  return QScriptValue(engine, g_Acquisition -> get_FilePattern());
 }
 
 QScriptValue QxrdAcquisitionScripting::outputDirectoryFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> setOutputDirectory(context->argument(0).toString());
+    g_Acquisition -> set_OutputDirectory(context->argument(0).toString());
   }
 
-  return QScriptValue(engine, g_Acquisition -> outputDirectory());
+  return QScriptValue(engine, g_Acquisition -> get_OutputDirectory());
 }
 
 QScriptValue QxrdAcquisitionScripting::fileIndexFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> setFileIndex(context->argument(0).toUInt32());
+    g_Acquisition -> set_FileIndex(context->argument(0).toUInt32());
   }
 
-  return QScriptValue(engine, g_Acquisition -> fileIndex());
+  return QScriptValue(engine, g_Acquisition -> get_FileIndex());
 }
-
-//QScriptValue QxrdAcquisitionScripting::setCameraModeFunc(QScriptContext *context, QScriptEngine *engine)
-//{
-//  if (context->argumentCount() != 0) {
-//    g_Acquisition -> setCameraMode(context->argument(0).toInt32());
-//  }
-//
-//  return QScriptValue(engine, g_Acquisition -> cameraMode());
-//}
-//
-//QScriptValue QxrdAcquisitionScripting::setFrameSyncModeFunc(QScriptContext *context, QScriptEngine *engine)
-//{
-//  if (context->argumentCount() != 0) {
-//    g_Acquisition -> setFrameSyncMode(context->argument(0).toInt32());
-//  }
-//
-//  return QScriptValue(engine, g_Acquisition -> frameSyncMode());
-//}
-//
-//QScriptValue QxrdAcquisitionScripting::setTimerSyncFunc(QScriptContext *context, QScriptEngine *engine)
-//{
-//  if (context->argumentCount() != 0) {
-//    g_Acquisition -> setTimerSync(context->argument(0).toInt32());
-//  }
-//
-//  return QScriptValue(engine, g_Acquisition -> timerSync());
-//}
-//
-//QScriptValue QxrdAcquisitionScripting::setCameraGainFunc(QScriptContext *context, QScriptEngine *engine)
-//{
-//  if (context->argumentCount() != 0) {
-//    g_Acquisition -> setCameraGain(context->argument(0).toInt32());
-//  }
-//
-//  return QScriptValue(engine, g_Acquisition -> cameraGain());
-//}
 
 QVariant QxrdAcquisitionScripting::evaluate(QString cmd)
 {
@@ -307,3 +278,14 @@ void QxrdAcquisitionScripting::propertyList()
     emit printMessage(tr("Property %1: %2 = %3").arg(i).arg(name).arg(value.toString()));
   }
 }
+
+/******************************************************************
+*
+*  $Log: qxrdacquisitionscripting.cpp,v $
+*  Revision 1.4  2009/06/27 22:50:32  jennings
+*  Added standard log entries and ident macros
+*  Used standard property macros for acquisition parameters and image properties
+*
+*
+*******************************************************************/
+
