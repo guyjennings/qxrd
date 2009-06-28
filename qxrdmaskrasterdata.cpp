@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskrasterdata.cpp,v 1.3 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdmaskrasterdata.cpp,v 1.4 2009/06/28 16:34:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,9 +9,10 @@
 #include "qxrdrasterdata.h"
 
 QxrdMaskRasterData::QxrdMaskRasterData(QxrdImageData *img, int interp)
-  : m_Image(img),
+  : QwtRasterData(QwtDoubleRect(0,0,img->get_Width(),img->get_Height())),
+    m_Image(img),
     m_Interpolate(interp),
-    SOURCE_IDENT("$Id: qxrdmaskrasterdata.cpp,v 1.3 2009/06/27 22:50:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdmaskrasterdata.cpp,v 1.4 2009/06/28 16:34:27 jennings Exp $")
 {
 }
 
@@ -62,6 +63,9 @@ QxrdMaskRasterData* QxrdMaskRasterData::copy() const
 /******************************************************************
 *
 *  $Log: qxrdmaskrasterdata.cpp,v $
+*  Revision 1.4  2009/06/28 16:34:27  jennings
+*  Fixed problems with copyMask which could result in image and mask dimensions getting out of sync.
+*
 *  Revision 1.3  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties
