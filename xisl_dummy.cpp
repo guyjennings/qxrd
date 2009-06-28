@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: xisl_dummy.cpp,v 1.10 2009/06/27 22:50:33 jennings Exp $
+*  $Id: xisl_dummy.cpp,v 1.11 2009/06/28 16:33:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,7 +32,7 @@ static AcquisitionTimer timer;
 AcquisitionTimer::AcquisitionTimer()
   : QObject(NULL),
     m_Mode(0),
-    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.10 2009/06/27 22:50:33 jennings Exp $")
+    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.11 2009/06/28 16:33:20 jennings Exp $")
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
@@ -85,45 +85,45 @@ void AcquisitionTimer::setmode(int mode)
   m_Mode = mode;
 }
 
-HIS_RETURN Acquisition_EnumSensors(UINT *pdwNumSensors, BOOL bEnableIRQ, BOOL bAlwaysOpen)
+HIS_RETURN Acquisition_EnumSensors(UINT */*pdwNumSensors*/, BOOL /*bEnableIRQ*/, BOOL /*bAlwaysOpen*/)
 {
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_GetNextSensor(ACQDESCPOS *Pos,  HACQDESC *phAcqDesc)
+HIS_RETURN Acquisition_GetNextSensor(ACQDESCPOS */*Pos*/,  HACQDESC */*phAcqDesc*/)
 {
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_GetCommChannel(HACQDESC pAcqDesc, UINT *pdwChannelType, int *pnChannelNr)
+HIS_RETURN Acquisition_GetCommChannel(HACQDESC /*pAcqDesc*/, UINT */*pdwChannelType*/, int */*pnChannelNr*/)
 {
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_SetFrameSync(HACQDESC hAcqDesc)
+HIS_RETURN Acquisition_SetFrameSync(HACQDESC /*hAcqDesc*/)
 {
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_SetFrameSyncMode(HACQDESC hAcqDesc, DWORD dwMode)
+HIS_RETURN Acquisition_SetFrameSyncMode(HACQDESC /*hAcqDesc*/, DWORD /*dwMode*/)
 {
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_SetTimerSync(HACQDESC hAcqDesc, DWORD *dwCycleTime)
+HIS_RETURN Acquisition_SetTimerSync(HACQDESC /*hAcqDesc*/, DWORD */*dwCycleTime*/)
 {
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_SetCameraGain(HACQDESC hAcqDesc, WORD wMode)
+HIS_RETURN Acquisition_SetCameraGain(HACQDESC /*hAcqDesc*/, WORD /*wMode*/)
 {
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_GetConfiguration(HACQDESC hAcqDesc,
-					UINT *dwFrames, UINT *dwRows, UINT *dwColumns, UINT *dwDataType,
-					UINT *dwSortFlags, BOOL *bIRQEnabled, DWORD *dwAcqType, DWORD *dwSystemID,
-					DWORD *dwSyncMode, DWORD *dwHwAccess)
+HIS_RETURN Acquisition_GetConfiguration(HACQDESC /*hAcqDesc*/,
+                                        UINT */*dwFrames*/, UINT *dwRows, UINT *dwColumns, UINT */*dwDataType*/,
+                                        UINT */*dwSortFlags*/, BOOL */*bIRQEnabled*/, DWORD */*dwAcqType*/, DWORD */*dwSystemID*/,
+                                        DWORD */*dwSyncMode*/, DWORD */*dwHwAccess*/)
 {
   if (dwRows) *dwRows = 2048;
   if (dwColumns) *dwColumns = 2048;
@@ -132,8 +132,8 @@ HIS_RETURN Acquisition_GetConfiguration(HACQDESC hAcqDesc,
 }
 
 HIS_RETURN Acquisition_SetCallbacksAndMessages(HACQDESC pAcqDesc,
-					       HWND hWnd,
-					       UINT dwErrorMsg, UINT dwLoosingFramesMsg,
+                                               HWND /*hWnd*/,
+                                               UINT /*dwErrorMsg*/, UINT /*dwLoosingFramesMsg*/,
 					       void (CALLBACK *lpfnEndFrameCallback)(HACQDESC), 
 					       void (CALLBACK *lpfnEndAcqCallback)(HACQDESC)
 					       )
@@ -145,7 +145,7 @@ HIS_RETURN Acquisition_SetCallbacksAndMessages(HACQDESC pAcqDesc,
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_Abort(HACQDESC hAcqDesc)
+HIS_RETURN Acquisition_Abort(HACQDESC /*hAcqDesc*/)
 {
   continuous = 0;
 
@@ -158,12 +158,12 @@ HIS_RETURN Acquisition_Abort(HACQDESC hAcqDesc)
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_DefineDestBuffers(HACQDESC pAcqDesc, unsigned short *pProcessedData, UINT nFrames, UINT nRows, UINT nColumns)
+HIS_RETURN Acquisition_DefineDestBuffers(HACQDESC /*pAcqDesc*/, unsigned short */*pProcessedData*/, UINT /*nFrames*/, UINT /*nRows*/, UINT /*nColumns*/)
 {
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_Acquire_Image(HACQDESC pAcqDesc, UINT dwFrames, UINT dwSkipFrms, UINT dwOpt, unsigned short *pwOffsetData, DWORD *pdwGainData, DWORD *pdwPxlCorrList)
+HIS_RETURN Acquisition_Acquire_Image(HACQDESC /*pAcqDesc*/, UINT dwFrames, UINT /*dwSkipFrms*/, UINT dwOpt, unsigned short */*pwOffsetData*/, DWORD */*pdwGainData*/, DWORD */*pdwPxlCorrList*/)
 {
 //   printf("Acquisition_Acquire_Image dwOpt = %d\n", dwOpt);
 
@@ -179,9 +179,7 @@ HIS_RETURN Acquisition_Acquire_Image(HACQDESC pAcqDesc, UINT dwFrames, UINT dwSk
   return HIS_ALL_OK;
 }
 
-static int s_Mode = 0;
-
-HIS_RETURN Acquisition_SetCameraMode(HACQDESC hAcqDesc, UINT dwMode)
+HIS_RETURN Acquisition_SetCameraMode(HACQDESC /*hAcqDesc*/, UINT dwMode)
 {
   timer.setmode(dwMode);
 
@@ -203,7 +201,7 @@ void AcquisitionTimer::timeout()
   }
 }
 
-HIS_RETURN Acquisition_GetIntTimes(HACQDESC hAcqDesc, double *dblIntTime, int *nIntTimes)
+HIS_RETURN Acquisition_GetIntTimes(HACQDESC /*hAcqDesc*/, double *dblIntTime, int *nIntTimes)
 {
   if (nIntTimes) *nIntTimes = 8;
 
@@ -219,7 +217,7 @@ HIS_RETURN Acquisition_GetIntTimes(HACQDESC hAcqDesc, double *dblIntTime, int *n
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_GetActFrame(HACQDESC hAcqDesc, DWORD *dwActAcqFrame, DWORD *dwActSecBuffFrame)
+HIS_RETURN Acquisition_GetActFrame(HACQDESC /*hAcqDesc*/, DWORD *dwActAcqFrame, DWORD *dwActSecBuffFrame)
 {
   if (dwActAcqFrame) *dwActAcqFrame = 42;
   if (dwActSecBuffFrame) *dwActSecBuffFrame=89;
@@ -230,6 +228,9 @@ HIS_RETURN Acquisition_GetActFrame(HACQDESC hAcqDesc, DWORD *dwActAcqFrame, DWOR
 /******************************************************************
 *
 *  $Log: xisl_dummy.cpp,v $
+*  Revision 1.11  2009/06/28 16:33:20  jennings
+*  Eliminated compiler warnings
+*
 *  Revision 1.10  2009/06/27 22:50:33  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

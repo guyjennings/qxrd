@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.7 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.8 2009/06/28 16:33:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -41,7 +41,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdAcquisitionThread *th
     m_CurrentFile(0),
     m_BufferSize(0),
     m_AcquiredData(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.7 2009/06/27 22:50:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.8 2009/06/28 16:33:20 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -55,6 +55,8 @@ QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()
 
 void QxrdAcquisitionPerkinElmer::acquire()
 {
+  THREAD_CHECK;
+
 //  printf("QxrdAcquisitionPerkinElmer::acquire (thread()=%p, currentThread()=%p)\n",
 //         thread(), QThread::currentThread());
   m_Acquiring.lock();
@@ -68,6 +70,8 @@ void QxrdAcquisitionPerkinElmer::acquire()
 
 void QxrdAcquisitionPerkinElmer::acquireDark()
 {
+  THREAD_CHECK;
+
 //  printf("QxrdAcquisitionPerkinElmer::acquireDark (thread()=%p, currentThread()=%p)\n",
 //         thread(), QThread::currentThread());
   m_Acquiring.lock();
@@ -448,7 +452,7 @@ double QxrdAcquisitionPerkinElmer::readoutTime() const
   return m_ReadoutTimes.value(n)/1e6;
 }
 
-static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
+static void CALLBACK OnEndFrameCallback(HACQDESC /*hAcqDesc*/)
 {
 //  printf("OnEndFrameCallback\n");
 
@@ -458,7 +462,7 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 //  QTimer::singleShot(0, , SLOT(onEndFrame()));
 }
 
-static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc)
+static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 {
 }
 
@@ -466,6 +470,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.8  2009/06/28 16:33:20  jennings
+*  Eliminated compiler warnings
+*
 *  Revision 1.7  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

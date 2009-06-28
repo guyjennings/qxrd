@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.8 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.9 2009/06/28 16:33:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -19,7 +19,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_DarkUsage(QReadWriteLock::Recursive),
     m_ProcessedImages("QxrdDataProcessor Processed Images"),
     m_DarkImages("QxrdDataProcessor Dark Images"),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.8 2009/06/27 22:50:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.9 2009/06/28 16:33:20 jennings Exp $")
 {
   connect(m_Acquisition, SIGNAL(acquiredImageAvailable()), this, SLOT(on_acquired_image_available()));
 }
@@ -164,17 +164,20 @@ void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *d
   }
 }
 
-void QxrdDataProcessor::correctBadPixels(QxrdImageData *image)
+void QxrdDataProcessor::correctBadPixels(QxrdImageData */*image*/)
 {
 }
 
-void QxrdDataProcessor::correctImageGains(QxrdImageData *image)
+void QxrdDataProcessor::correctImageGains(QxrdImageData */*image*/)
 {
 }
 
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.9  2009/06/28 16:33:20  jennings
+*  Eliminated compiler warnings
+*
 *  Revision 1.8  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

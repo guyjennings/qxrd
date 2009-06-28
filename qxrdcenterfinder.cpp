@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.cpp,v 1.6 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdcenterfinder.cpp,v 1.7 2009/06/28 16:33:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -22,7 +22,7 @@ QxrdCenterFinder::QxrdCenterFinder
     m_StepSize(1),
     m_CenterFinderPicker(NULL),
     m_CenterMarker(NULL),
-    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.6 2009/06/27 22:50:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.7 2009/06/28 16:33:20 jennings Exp $")
 {
   m_CenterFinderPicker = new QxrdCenterFinderPicker(imgplot->canvas(), imgplot, cfdialog);
 
@@ -52,7 +52,7 @@ QxrdCenterFinder::QxrdCenterFinder
   imgplot -> setCenterFinder(this);
 }
 
-void QxrdCenterFinder::setEnabled(bool imgenabled, bool cntrenabled)
+void QxrdCenterFinder::setEnabled(bool imgenabled, bool /*cntrenabled*/)
 {
   m_CenterFinderPicker -> setEnabled(imgenabled);
 
@@ -182,6 +182,9 @@ void QxrdCenterFinder::centerMoveLeft()
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.cpp,v $
+*  Revision 1.7  2009/06/28 16:33:20  jennings
+*  Eliminated compiler warnings
+*
 *  Revision 1.6  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

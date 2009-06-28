@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.61 2009/06/28 11:21:58 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.62 2009/06/28 16:33:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -58,7 +58,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.61 2009/06/28 11:21:58 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.62 2009/06/28 16:33:20 jennings Exp $")
 {
   setupUi(this);
 
@@ -379,7 +379,7 @@ void QxrdWindow::onAcquireStarted(int dark)
 }
 
 void QxrdWindow::onAcquiredFrame(
-    QString fileName, int fileIndex, int isum, int nsum, int iframe, int nframe)
+    QString /*fileName*/, int /*fileIndex*/, int isum, int nsum, int iframe, int nframe)
 {
 //   printf("QxrdWindow::acquiredFrame(\"%s\",%d,%d,%d,%d,%d)\n",
 // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
@@ -395,7 +395,7 @@ void QxrdWindow::onAcquiredFrame(
   m_Progress -> setValue(thisframe*100/totalframes);
 }
 
-void QxrdWindow::onAcquireComplete(int dark)
+void QxrdWindow::onAcquireComplete(int /*dark*/)
 {
   acquisitionFinished();
 
@@ -908,12 +908,12 @@ void QxrdWindow::hideMaskRange()
   }
 }
 
-void QxrdWindow::onToolBoxPageChanged(int page)
+void QxrdWindow::onToolBoxPageChanged(int /*page*/)
 {
 //  printf("QxrdWindow::onToolBoxPageChanged(%d)\n", page);
 }
 
-void QxrdWindow::onTabWidgetPageChanged(int page)
+void QxrdWindow::onTabWidgetPageChanged(int /*page*/)
 {
 //  printf("QxrdWindow::onTabWidgetPageChanged(%d)\n", page);
 }
@@ -963,6 +963,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.62  2009/06/28 16:33:20  jennings
+*  Eliminated compiler warnings
+*
 *  Revision 1.61  2009/06/28 11:21:58  jennings
 *  Implemented app scripting engine connections
 *
