@@ -1,13 +1,17 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.37 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.38 2009/06/28 04:00:39 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
 #include "qxrdserverthread.h"
+#include "qxrdserver.h"
 #include "qxrdacquisitionthread.h"
+#include "qxrdacquisition.h"
+#include "qxrdscriptenginethread.h"
+#include "qxrdscriptengine.h"
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -21,7 +25,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.37 2009/06/27 22:50:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.38 2009/06/28 04:00:39 jennings Exp $")
 {
   setObjectName("qxrdapplication");
 
@@ -34,19 +38,39 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   setApplicationName("qxrd");
 
   m_AcquisitionThread = new QxrdAcquisitionThread(/*this, NULL*/);
+  m_Acquisition = m_AcquisitionThread -> acquisition();
 
   m_Window = new QxrdWindow(this, m_AcquisitionThread);
   m_Window -> show();
 
+  connect(this, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
+  emit printMessage("window shown");
+
   m_AcquisitionThread -> start();
 
   m_ServerThread = new QxrdServerThread(m_AcquisitionThread, "qxrd");
-  connect(m_ServerThread,      SIGNAL(printMessage(QString)),
-          m_Window,            SLOT(printMessage(QString)));
+  m_Server = m_ServerThread -> server();
+
+  emit printMessage("server thread created");
+
+  connect(m_ServerThread,       SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
+  connect(m_Server,             SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
 
   m_ServerThread -> start();
 
-  connect(this, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
+  emit printMessage("server thread started");
+
+  m_ScriptEngineThread = new QxrdScriptEngineThread(this, m_Window, m_Acquisition);
+  m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
+
+  emit printMessage("script thread created");
+
+  connect(m_ScriptEngineThread, SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
+  connect(m_ScriptEngine,       SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
+
+  m_ScriptEngineThread -> start();
+
+  emit printMessage("script thread started");
 
 //  m_AcquisitionThread -> setWindow(m_Window);
 
@@ -98,6 +122,9 @@ void QxrdApplication::executeScript(QString cmd)
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.38  2009/06/28 04:00:39  jennings
+*  Partial implementation of separate thread for script engine
+*
 *  Revision 1.37  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

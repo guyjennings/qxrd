@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.h,v 1.20 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdapplication.h,v 1.21 2009/06/28 04:00:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -14,7 +14,11 @@
 
 class QxrdWindow;
 class QxrdServerThread;
+class QxrdServer;
 class QxrdAcquisitionThread;
+class QxrdAcquisition;
+class QxrdScriptEngineThread;
+class QxrdScriptEngine;
 
 class QxrdApplication : public QApplication
 {
@@ -42,8 +46,12 @@ class QxrdApplication : public QApplication
  private:
   QxrdWindow                    *m_Window;
   QxrdServerThread              *m_ServerThread;
+  QxrdServer                    *m_Server;
   QxrdAcquisitionThread         *m_AcquisitionThread;
-  HEADER_IDENT("$Id: qxrdapplication.h,v 1.20 2009/06/27 22:50:32 jennings Exp $");
+  QxrdAcquisition               *m_Acquisition;
+  QxrdScriptEngineThread        *m_ScriptEngineThread;
+  QxrdScriptEngine              *m_ScriptEngine;
+  HEADER_IDENT("$Id: qxrdapplication.h,v 1.21 2009/06/28 04:00:39 jennings Exp $");
 };
 
 #endif
@@ -51,6 +59,9 @@ class QxrdApplication : public QApplication
 /******************************************************************
 *
 *  $Log: qxrdapplication.h,v $
+*  Revision 1.21  2009/06/28 04:00:39  jennings
+*  Partial implementation of separate thread for script engine
+*
 *  Revision 1.20  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

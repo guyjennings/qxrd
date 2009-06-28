@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdserverthread.cpp,v 1.9 2009/06/27 22:50:33 jennings Exp $
+*  $Id: qxrdserverthread.cpp,v 1.10 2009/06/28 04:00:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,8 +13,11 @@ QxrdServerThread::QxrdServerThread(QxrdAcquisitionThread *acq, QString name)
   : m_AcquisitionThread(acq),
     m_Name(name),
     m_Server(NULL),
-    SOURCE_IDENT("$Id: qxrdserverthread.cpp,v 1.9 2009/06/27 22:50:33 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdserverthread.cpp,v 1.10 2009/06/28 04:00:39 jennings Exp $")
 {
+  m_Server = new QxrdServer(NULL, m_Name);
+
+  m_Server -> moveToThread(this);
 }
 
 QxrdServerThread::~QxrdServerThread()
@@ -22,6 +25,11 @@ QxrdServerThread::~QxrdServerThread()
   shutdown();
 
   delete m_Server;
+}
+
+QxrdServer *QxrdServerThread::server() const
+{
+  return m_Server;
 }
 
 void QxrdServerThread::shutdown()
@@ -35,10 +43,9 @@ void QxrdServerThread::shutdown()
 
 void QxrdServerThread::run()
 {
-  m_Server = new QxrdServer(m_AcquisitionThread, m_Name);
+  printf("start server\n");
 
-  connect(m_Server, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
-  connect(this, SIGNAL(execute(QString)), m_Server, SLOT(executeCommand(QString)));
+  m_Server -> startServer(QHostAddress::Any);
 
   exec();
 }
@@ -51,6 +58,9 @@ void QxrdServerThread::executeScript(QString cmd)
 /******************************************************************
 *
 *  $Log: qxrdserverthread.cpp,v $
+*  Revision 1.10  2009/06/28 04:00:39  jennings
+*  Partial implementation of separate thread for script engine
+*
 *  Revision 1.9  2009/06/27 22:50:33  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

@@ -12,7 +12,15 @@ Adopt the same threading model as qavrg
 
 -------------------------------------------------------
 
+Run script engine in separate thread
+
+-------------------------------------------------------
+
 Correct signal/slot corrections to use new properties
+
+-------------------------------------------------------
+
+Cut down the number of warnings - currently 96!
 
 -------------------------------------------------------
 

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionthread.cpp,v 1.29 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdacquisitionthread.cpp,v 1.30 2009/06/28 04:00:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,7 +15,7 @@ QxrdAcquisitionThread::QxrdAcquisitionThread()
   : QThread(),
     m_Debug(true),
     m_Acquisition(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.29 2009/06/27 22:50:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.30 2009/06/28 04:00:39 jennings Exp $")
 {
   m_Acquisition = new QxrdAcquisition(this);
   m_Acquisition -> moveToThread(this);
@@ -30,10 +30,6 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 
 void QxrdAcquisitionThread::run()
 {
-  if (QThread::currentThread() != m_Acquisition -> thread()) {
-    printf("Oh no...\n");
-  }
-
   m_Acquisition -> initialize();
 
   exec();
@@ -116,6 +112,9 @@ void QxrdAcquisitionThread::sleep(double time)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionthread.cpp,v $
+*  Revision 1.30  2009/06/28 04:00:39  jennings
+*  Partial implementation of separate thread for script engine
+*
 *  Revision 1.29  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

@@ -3,9 +3,8 @@ CONFIG += qt
 include("qxrd.version.pri")
 QT += network \
     script
-
-QMAKE_CXXFLAGS += -g -msse3
-QMAKE_CFLAGS += -g -msse3
+QMAKE_CXXFLAGS += -g
+QMAKE_CFLAGS += -g
 QMAKE_LFLAGS += -g
 
 # INCLUDEPATH += /usr/local/lib/spec.d/include/
@@ -21,8 +20,7 @@ DISTFILES += qxrdhelptext.html \
 win32:include("qt-libtiff-win32.pri")
 include("qwt-5.2.pri")
 include("qceplib.pri")
-HEADERS += \
-    TODO.h \
+HEADERS += TODO.h \
     qxrdapplication.h \
     qxrdsettings.h \
     qxrdimagedata.h \
@@ -57,7 +55,9 @@ HEADERS += \
     qxrdacquisitionperkinelmer.h \
     qxrdplot.h \
     qxrdplotslicer.h \
-    qxrdplotmeasurer.h
+    qxrdplotmeasurer.h \
+    qxrdscriptengine.h \
+    qxrdscriptenginethread.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -93,7 +93,9 @@ SOURCES += qxrd.cpp \
     qxrdacquisitionperkinelmer.cpp \
     qxrdplot.cpp \
     qxrdplotslicer.cpp \
-    qxrdplotmeasurer.cpp
+    qxrdplotmeasurer.cpp \
+    qxrdscriptengine.cpp \
+    qxrdscriptenginethread.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui
@@ -192,4 +194,4 @@ website.commands = rsync \
     -avx \
     dox/html/ \
     www12.xor.aps.anl.gov:/var/www/html/software/qxrd/
-OTHER_FILES += qceplib.pri
+OTHER_FILES += 

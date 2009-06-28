@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdserver.cpp,v 1.10 2009/06/27 22:50:33 jennings Exp $
+*  $Id: qxrdserver.cpp,v 1.11 2009/06/28 04:00:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,11 +15,9 @@
 QxrdServer::QxrdServer(QxrdAcquisitionThread *acqth, QString name, QObject *parent)
   : QSpecServer(name, parent),
     m_AcquisitionThread(acqth),
-    SOURCE_IDENT("$Id: qxrdserver.cpp,v 1.10 2009/06/27 22:50:33 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdserver.cpp,v 1.11 2009/06/28 04:00:39 jennings Exp $")
 {
-//  printf("QxrdServer::QxrdServer\n");
-
-  startServer(QHostAddress::Any);
+  emit printMessage("QxrdServer::QxrdServer");
 }
 
 QVariant QxrdServer::executeCommand(QString cmd)
@@ -50,6 +48,9 @@ void QxrdServer::shutdown()
 /******************************************************************
 *
 *  $Log: qxrdserver.cpp,v $
+*  Revision 1.11  2009/06/28 04:00:39  jennings
+*  Partial implementation of separate thread for script engine
+*
 *  Revision 1.10  2009/06/27 22:50:33  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

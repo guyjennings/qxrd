@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.58 2009/06/27 22:50:33 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.59 2009/06/28 04:00:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -56,7 +56,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.58 2009/06/27 22:50:33 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.59 2009/06/28 04:00:39 jennings Exp $")
 {
   setupUi(this);
 
@@ -229,45 +229,14 @@ void QxrdWindow::onAcquisitionRunning()
   connect(m_Acquisition,     SIGNAL(acquireComplete(int)),
           this,              SLOT(onAcquireComplete(int)));
 
-  connect(m_ReadoutMode,     SIGNAL(currentIndexChanged(int)),
-          m_Acquisition,     SLOT(changeReadoutMode(int)));
-  connect(m_Acquisition,     SIGNAL(readoutModeChanged(int)),
-          m_ReadoutMode,     SLOT(setCurrentIndex(int)));
-
-  connect(m_ExposureTime,    SIGNAL(valueChanged(double)),
-          m_Acquisition,     SLOT(changeExposureTime(double)));
-  connect(m_Acquisition,     SIGNAL(exposureTimeChanged(double)),
-          m_ExposureTime,    SLOT(setValue(double)));
-
-  connect(m_SummedExposures, SIGNAL(valueChanged(int)),
-          m_Acquisition,     SLOT(changeSummedExposures(int)));
-  connect(m_Acquisition,     SIGNAL(summedExposuresChanged(int)),
-          m_SummedExposures, SLOT(setValue(int)));
-
-  connect(m_DarkSummedExposures,SIGNAL(valueChanged(int)),
-          m_Acquisition,     SLOT(changeDarkSummedExposures(int)));
-  connect(m_Acquisition,     SIGNAL(darkSummedExposuresChanged(int)),
-          m_DarkSummedExposures,SLOT(setValue(int)));
-
-  connect(m_FilesInSequence, SIGNAL(valueChanged(int)),
-          m_Acquisition,     SLOT(changeFilesInSequence(int)));
-  connect(m_Acquisition,     SIGNAL(filesInSequenceChanged(int)),
-          m_FilesInSequence, SLOT(setValue(int)));
-
-  connect(m_OutputDirectory, SIGNAL(textEdited(QString)),
-          m_Acquisition,     SLOT(changeOutputDirectory(QString)));
-  connect(m_Acquisition,     SIGNAL(outputDirectoryChanged(QString)),
-          m_OutputDirectory, SLOT(setText(QString)));
-
-  connect(m_FilePattern,     SIGNAL(textEdited(QString)),
-          m_Acquisition,     SLOT(changeFilePattern(QString)));
-  connect(m_Acquisition,     SIGNAL(filePatternChanged(QString)),
-          m_FilePattern,     SLOT(setText(QString)));
-
-  connect(m_FileIndex,       SIGNAL(valueChanged(int)),
-          m_Acquisition,     SLOT(changeFileIndex(int)));
-  connect(m_Acquisition,     SIGNAL(fileIndexChanged(int)),
-          m_FileIndex,       SLOT(setValue(int)));
+  m_Acquisition -> prop_ReadoutMode() -> linkTo(m_ReadoutMode);
+  m_Acquisition -> prop_ExposureTime() -> linkTo(m_ExposureTime);
+  m_Acquisition -> prop_SummedExposures() -> linkTo(m_SummedExposures);
+  m_Acquisition -> prop_DarkSummedExposures() -> linkTo(m_DarkSummedExposures);
+  m_Acquisition -> prop_FilesInSequence() -> linkTo(m_FilesInSequence);
+  m_Acquisition -> prop_OutputDirectory() -> linkTo(m_OutputDirectory);
+  m_Acquisition -> prop_FilePattern() -> linkTo(m_FilePattern);
+  m_Acquisition -> prop_FileIndex() -> linkTo(m_FileIndex);
 
   m_DataProcessor = new QxrdDataProcessor(this, m_Acquisition, this);
 
@@ -314,6 +283,8 @@ QString QxrdWindow::timeStamp()
 
 void QxrdWindow::printMessage(QString msg)
 {
+  printf("%s\n", qPrintable(msg));
+
   m_Messages -> append(timeStamp()+msg.trimmed());
 }
 
@@ -955,6 +926,9 @@ void QxrdWindow::executeScript()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.59  2009/06/28 04:00:39  jennings
+*  Partial implementation of separate thread for script engine
+*
 *  Revision 1.58  2009/06/27 22:50:33  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties
