@@ -18,9 +18,14 @@ Run script engine in separate thread
 
 Correct signal/slot corrections to use new properties
 
+//-------------------------------------------------------
+//
+//Cut down the number of warnings - currently 96!
+//Reduced to 7, 6 of those within qwt code
+//
 -------------------------------------------------------
 
-Cut down the number of warnings - currently 96!
+Add a plausible simulation mode
 
 -------------------------------------------------------
 
