@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.59 2009/06/28 04:00:39 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.60 2009/06/28 04:04:52 jennings Exp $
 *
 *******************************************************************/
 
@@ -56,7 +56,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.59 2009/06/28 04:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.60 2009/06/28 04:04:52 jennings Exp $")
 {
   setupUi(this);
 
@@ -283,8 +283,8 @@ QString QxrdWindow::timeStamp()
 
 void QxrdWindow::printMessage(QString msg)
 {
-  printf("%s\n", qPrintable(msg));
-
+//  printf("%s\n", qPrintable(msg));
+//
   m_Messages -> append(timeStamp()+msg.trimmed());
 }
 
@@ -926,6 +926,9 @@ void QxrdWindow::executeScript()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.60  2009/06/28 04:04:52  jennings
+*  Partial implementation of separate thread for script engine
+*
 *  Revision 1.59  2009/06/28 04:00:39  jennings
 *  Partial implementation of separate thread for script engine
 *
