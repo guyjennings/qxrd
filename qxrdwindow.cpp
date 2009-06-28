@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.60 2009/06/28 04:04:52 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.61 2009/06/28 11:21:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,6 +17,7 @@
 #include "qxrdintegratordialog.h"
 #include "qxrdintegrator.h"
 #include "qxrdplotzoomer.h"
+#include "qxrdscriptengine.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -44,6 +45,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_Application(app),
     m_AcquisitionThread(acq),
     m_Acquisition(NULL),
+    m_ScriptEngine(NULL),
     m_DataProcessor(NULL),
     m_CenterFinderDialog(NULL),
     m_CenterFinder(NULL),
@@ -56,7 +58,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.60 2009/06/28 04:04:52 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.61 2009/06/28 11:21:58 jennings Exp $")
 {
   setupUi(this);
 
@@ -88,6 +90,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
 
   connect(m_ExecuteScriptButton, SIGNAL(clicked()), m_ActionExecuteScript, SIGNAL(triggered()));
   connect(m_ActionExecuteScript, SIGNAL(triggered()), this, SLOT(executeScript()));
+  connect(m_CancelScriptButton, SIGNAL(clicked()), m_ActionCancelScript, SIGNAL(triggered()));
+  connect(m_ActionCancelScript, SIGNAL(triggered()), this, SLOT(cancelScript()));
+
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
   connect(m_ActionLoadData, SIGNAL(triggered()), this, SLOT(doLoadData()));
@@ -192,20 +197,6 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
 
   statusBar() -> addPermanentWidget(m_Progress);
 
-  onAcquisitionRunning();
-}
-
-QxrdWindow::~QxrdWindow()
-{
-//  printf("QxrdWindow::~QxrdWindow()\n");
-
-  if (m_SettingsLoaded) {
-    writeSettings();
-  }
-}
-
-void QxrdWindow::onAcquisitionRunning()
-{
   m_Acquisition = m_AcquisitionThread -> acquisition();
 
   if (m_Acquisition == NULL) {
@@ -250,6 +241,15 @@ void QxrdWindow::onAcquisitionRunning()
           this,          SLOT(setReadoutTime(int, double)));
 //
 //  QMetaObject::invokeMethod(m_Acquisition, "initialize", Qt::QueuedConnection);
+}
+
+QxrdWindow::~QxrdWindow()
+{
+//  printf("QxrdWindow::~QxrdWindow()\n");
+
+  if (m_SettingsLoaded) {
+    writeSettings();
+  }
 }
 
 void QxrdWindow::closeEvent ( QCloseEvent * event )
@@ -920,12 +920,52 @@ void QxrdWindow::onTabWidgetPageChanged(int page)
 
 void QxrdWindow::executeScript()
 {
-  m_Application -> executeScript(m_ScriptEdit -> toPlainText());
+  emit executeCommand(m_ScriptEdit -> toPlainText());
+
+  m_CancelScriptButton  -> setEnabled(true);
+  m_ActionCancelScript  -> setEnabled(true);
+  m_ExecuteScriptButton -> setEnabled(false);
+  m_ActionExecuteScript -> setEnabled(false);
+}
+
+void QxrdWindow::cancelScript()
+{
+  m_ScriptEngine -> cancelCommand();
+}
+
+void QxrdWindow::finishedCommand(QScriptValue result)
+{
+  if (result.isError()) {
+    int line = result.property("lineNumber").toInteger();
+
+    m_Messages -> append(tr("Error in line %1").arg(line));
+    m_Messages -> append(result.property("message").toString());
+  } else {
+    m_Messages -> append(result.toString());
+  }
+
+  m_CancelScriptButton  -> setEnabled(false);
+  m_ActionCancelScript  -> setEnabled(false);
+  m_ExecuteScriptButton -> setEnabled(true);
+  m_ActionExecuteScript -> setEnabled(true);
+}
+
+QxrdScriptEngine *QxrdWindow::scriptEngine() const
+{
+  return m_ScriptEngine;
+}
+
+void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
+{
+  m_ScriptEngine = engine;
 }
 
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.61  2009/06/28 11:21:58  jennings
+*  Implemented app scripting engine connections
+*
 *  Revision 1.60  2009/06/28 04:04:52  jennings
 *  Partial implementation of separate thread for script engine
 *

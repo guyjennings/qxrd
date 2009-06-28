@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.43 2009/06/27 22:50:33 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.44 2009/06/28 11:21:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,6 +12,7 @@
 #include <QMainWindow>
 #include <QProgressBar>
 #include <QTimer>
+#include <QScriptValue>
 #include "ui_qxrdwindow.h"
 
 class QxrdApplication;
@@ -26,6 +27,7 @@ class QxrdCenterFinder;
 class QxrdCenterFinderDialog;
 class QxrdIntegrator;
 class QxrdIntegratorDialog;
+class QxrdScriptEngine;
 
 #include "qxrdimagequeue.h"
 
@@ -48,8 +50,6 @@ public slots:
   void saveRawData(QxrdImageData *image);
   void saveNamedImageData(QString name, QxrdImageData *image);
 
-  void onAcquisitionRunning();
-
   void doAcquire();
   void doCancel();
   void onAcquireStarted(int dark);
@@ -57,7 +57,10 @@ public slots:
   void onAcquireComplete(int dark);
   void doAcquireDark();
   void doCancelDark();
+
   void executeScript();
+  void finishedCommand(QScriptValue result);
+  void cancelScript();
 
   void doTest();
 
@@ -120,6 +123,9 @@ public slots:
   void onToolBoxPageChanged(int);
   void onTabWidgetPageChanged(int);
 
+signals:
+  void executeCommand(QString cmd);
+
 public:
   void readSettings();
   void writeSettings();
@@ -138,11 +144,15 @@ public:
   QxrdImageData* data();
   QxrdImageData* darkImage();
 
+  QxrdScriptEngine *scriptEngine() const;
+  void setScriptEngine(QxrdScriptEngine *engine);
+
 private:
   int                     m_SettingsLoaded;
   QxrdApplication        *m_Application;
   QxrdAcquisitionThread  *m_AcquisitionThread;
   QxrdAcquisition        *m_Acquisition;
+  QxrdScriptEngine       *m_ScriptEngine;
   QxrdDataProcessor      *m_DataProcessor;
   QxrdCenterFinderDialog *m_CenterFinderDialog;
   QxrdCenterFinder       *m_CenterFinder;
@@ -163,7 +173,7 @@ private:
 //
 //  QDirModel              *m_FileBrowserModel;
 //  QTimer                  m_FileBrowserTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.43 2009/06/27 22:50:33 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.44 2009/06/28 11:21:58 jennings Exp $");
 };
 
 #endif
@@ -171,6 +181,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.44  2009/06/28 11:21:58  jennings
+*  Implemented app scripting engine connections
+*
 *  Revision 1.43  2009/06/27 22:50:33  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

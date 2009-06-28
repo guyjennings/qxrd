@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.1 2009/06/28 04:00:39 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.2 2009/06/28 11:21:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -22,7 +22,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.1 2009/06/28 04:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.2 2009/06/28 11:21:58 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -42,7 +42,9 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterSequenceMetaType< QVector<double> >(m_ScriptEngine);
   qScriptRegisterSequenceMetaType< QVector<QString> >(m_ScriptEngine);
 
-  m_ScriptEngine -> globalObject().setProperty("acquisition", m_ScriptEngine -> newQObject(this));
+  m_ScriptEngine -> globalObject().setProperty("acquisition", m_ScriptEngine -> newQObject(m_Acquisition));
+  m_ScriptEngine -> globalObject().setProperty("application", m_ScriptEngine -> newQObject(m_Application));
+  m_ScriptEngine -> globalObject().setProperty("window", m_ScriptEngine -> newQObject(m_Window));
   m_ScriptEngine -> globalObject().setProperty("acquire", m_ScriptEngine -> newFunction(acquireFunc));
   m_ScriptEngine -> globalObject().setProperty("acquireDark", m_ScriptEngine -> newFunction(acquireDarkFunc));
   m_ScriptEngine -> globalObject().setProperty("status", m_ScriptEngine -> newFunction(statusFunc));
@@ -62,7 +64,7 @@ void QxrdScriptEngine::evaluateAppCommand(QString expr)
 {
   QMutexLocker lock(&m_Mutex);
 
-//  printf("QavrgScriptingEngine::evaluateAppCommand(%s)\n", qPrintable(expr));
+//  printf("QxrdScriptingEngine::evaluateAppCommand(%s)\n", qPrintable(expr));
 
   QMetaObject::invokeMethod(this, "evaluate", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(QString, expr));
 }
@@ -71,7 +73,7 @@ void QxrdScriptEngine::evaluateServerCommand(QString expr)
 {
   QMutexLocker lock(&m_Mutex);
 
-//  printf("QavrgScriptingEngine::evaluateServerCommand(%s)\n", qPrintable(expr));
+//  printf("QxrdScriptingEngine::evaluateServerCommand(%s)\n", qPrintable(expr));
 
   QMetaObject::invokeMethod(this, "evaluate", Qt::QueuedConnection, Q_ARG(int, 1), Q_ARG(QString, expr));
 }
@@ -80,7 +82,7 @@ void QxrdScriptEngine::evaluateSpecCommand(QString expr)
 {
   QMutexLocker lock(&m_Mutex);
 
-//  printf("QavrgScriptingEngine::evaluateSpecCommand(%s)\n", qPrintable(expr));
+//  printf("QxrdScriptingEngine::evaluateSpecCommand(%s)\n", qPrintable(expr));
 
   QMetaObject::invokeMethod(this, "evaluate", Qt::QueuedConnection, Q_ARG(int, 2), Q_ARG(QString, expr));
 }
@@ -89,7 +91,7 @@ void QxrdScriptEngine::evaluate(int src, QString expr)
 {
   THREAD_CHECK;
 
-//  printf("QavrgScriptingEngine::evaluate(%s)\n", qPrintable(expr));
+//  printf("QxrdScriptingEngine::evaluate(%s)\n", qPrintable(expr));
 
   QScriptValue result = m_ScriptEngine -> evaluate(expr);
 
@@ -286,6 +288,9 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.2  2009/06/28 11:21:58  jennings
+*  Implemented app scripting engine connections
+*
 *  Revision 1.1  2009/06/28 04:00:39  jennings
 *  Partial implementation of separate thread for script engine
 *

@@ -459,7 +459,7 @@
              <string>Script</string>
             </property>
             <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="0" colspan="2">
+             <item row="0" column="0" colspan="3">
               <widget class="QTextEdit" name="m_ScriptEdit">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -485,10 +485,20 @@
                </property>
               </spacer>
              </item>
-             <item row="1" column="1">
+             <item row="1" column="2">
               <widget class="QPushButton" name="m_ExecuteScriptButton">
                <property name="text">
                 <string>Execute Script</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="m_CancelScriptButton">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Cancel Script</string>
                </property>
               </widget>
              </item>
@@ -513,15 +523,15 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="page">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>645</height>
+          <width>224</width>
+          <height>687</height>
          </rect>
         </property>
         <attribute name="label">
@@ -870,8 +880,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>240</width>
-          <height>645</height>
+          <width>293</width>
+          <height>684</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1144,8 +1154,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>242</width>
-          <height>308</height>
+          <width>314</width>
+          <height>352</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1323,8 +1333,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>98</width>
-          <height>28</height>
+          <width>96</width>
+          <height>26</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1337,8 +1347,8 @@ Script Function: acquiredark()</string>
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>98</width>
-          <height>28</height>
+          <width>240</width>
+          <height>617</height>
          </rect>
         </property>
         <attribute name="label">
@@ -1357,7 +1367,7 @@ Script Function: acquiredark()</string>
      <x>0</x>
      <y>0</y>
      <width>1029</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1635,6 +1645,14 @@ Script Function: acquiredark()</string>
    </property>
    <property name="toolTip">
     <string>Hide All Pixels</string>
+   </property>
+  </action>
+  <action name="m_ActionCancelScript">
+   <property name="text">
+    <string>Cancel Script</string>
+   </property>
+   <property name="toolTip">
+    <string>Cancel Script</string>
    </property>
   </action>
  </widget>

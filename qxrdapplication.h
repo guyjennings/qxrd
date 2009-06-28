@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.h,v 1.21 2009/06/28 04:00:39 jennings Exp $
+*  $Id: qxrdapplication.h,v 1.22 2009/06/28 11:21:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -31,8 +31,6 @@ class QxrdApplication : public QApplication
   QxrdAcquisitionThread *acquisitionThread();
   QxrdWindow *window();
 
-  void executeScript(QString cmd);
-
  public slots:
   void shutdownThreads();
   void possiblyQuit();
@@ -51,7 +49,7 @@ class QxrdApplication : public QApplication
   QxrdAcquisition               *m_Acquisition;
   QxrdScriptEngineThread        *m_ScriptEngineThread;
   QxrdScriptEngine              *m_ScriptEngine;
-  HEADER_IDENT("$Id: qxrdapplication.h,v 1.21 2009/06/28 04:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdapplication.h,v 1.22 2009/06/28 11:21:58 jennings Exp $");
 };
 
 #endif
@@ -59,6 +57,9 @@ class QxrdApplication : public QApplication
 /******************************************************************
 *
 *  $Log: qxrdapplication.h,v $
+*  Revision 1.22  2009/06/28 11:21:58  jennings
+*  Implemented app scripting engine connections
+*
 *  Revision 1.21  2009/06/28 04:00:39  jennings
 *  Partial implementation of separate thread for script engine
 *

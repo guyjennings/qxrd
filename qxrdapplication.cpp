@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.38 2009/06/28 04:00:39 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.39 2009/06/28 11:21:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -25,7 +25,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.38 2009/06/28 04:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.39 2009/06/28 11:21:58 jennings Exp $")
 {
   setObjectName("qxrdapplication");
 
@@ -67,6 +67,14 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(m_ScriptEngineThread, SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
   connect(m_ScriptEngine,       SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
+
+  connect(m_Server,         SIGNAL(executeCommand(QString)),           m_ScriptEngine,    SLOT(evaluateSpecCommand(QString)));
+  connect(m_ScriptEngine,   SIGNAL(specResultAvailable(QScriptValue)), m_Server,          SLOT(finishedCommand(QScriptValue)));
+
+  connect(m_Window,         SIGNAL(executeCommand(QString)),           m_ScriptEngine,    SLOT(evaluateAppCommand(QString)));
+  connect(m_ScriptEngine,   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
+
+  m_Window -> setScriptEngine(m_ScriptEngine);
 
   m_ScriptEngineThread -> start();
 
@@ -114,14 +122,12 @@ QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
   return m_AcquisitionThread;
 }
 
-void QxrdApplication::executeScript(QString cmd)
-{
-  m_ServerThread -> executeScript(cmd);
-}
-
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.39  2009/06/28 11:21:58  jennings
+*  Implemented app scripting engine connections
+*
 *  Revision 1.38  2009/06/28 04:00:39  jennings
 *  Partial implementation of separate thread for script engine
 *
