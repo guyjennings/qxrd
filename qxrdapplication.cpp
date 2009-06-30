@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.39 2009/06/28 11:21:58 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.40 2009/06/30 21:34:41 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,6 +12,7 @@
 #include "qxrdacquisition.h"
 #include "qxrdscriptenginethread.h"
 #include "qxrdscriptengine.h"
+#include "qcepproperty.h"
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -25,8 +26,13 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.39 2009/06/28 11:21:58 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.40 2009/06/30 21:34:41 jennings Exp $")
 {
+//  QcepProperty::dumpMetaData(&QxrdApplication::staticMetaObject);
+//  QcepProperty::dumpMetaData(&QxrdWindow::staticMetaObject);
+//  QcepProperty::dumpMetaData(&QxrdAcquisition::staticMetaObject);
+//  QcepProperty::dumpMetaData(&QxrdScriptEngine::staticMetaObject);
+
   setObjectName("qxrdapplication");
 
 //  printf("application thread %p\n", thread());
@@ -125,6 +131,9 @@ QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.40  2009/06/30 21:34:41  jennings
+*  Debugging meta data static init problems
+*
 *  Revision 1.39  2009/06/28 11:21:58  jennings
 *  Implemented app scripting engine connections
 *

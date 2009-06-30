@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.9 2009/06/28 16:33:20 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.10 2009/06/30 21:35:05 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,6 +8,7 @@
 #include <QtConcurrentRun>
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
+#include "qxrdimagedata.h"
 
 #include <QTime>
 
@@ -19,7 +20,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_DarkUsage(QReadWriteLock::Recursive),
     m_ProcessedImages("QxrdDataProcessor Processed Images"),
     m_DarkImages("QxrdDataProcessor Dark Images"),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.9 2009/06/28 16:33:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.10 2009/06/30 21:35:05 jennings Exp $")
 {
   connect(m_Acquisition, SIGNAL(acquiredImageAvailable()), this, SLOT(on_acquired_image_available()));
 }
@@ -175,6 +176,9 @@ void QxrdDataProcessor::correctImageGains(QxrdImageData */*image*/)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.10  2009/06/30 21:35:05  jennings
+*  Debugging meta data static init problems
+*
 *  Revision 1.9  2009/06/28 16:33:20  jennings
 *  Eliminated compiler warnings
 *
