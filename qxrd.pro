@@ -13,6 +13,18 @@ UI_DIR = ui
 OBJECTS_DIR = obj
 RCC_DIR = rcc
 TARGET = qxrd
+
+win32 {
+  CONFIG(debug, debug|release) {
+    OBJECTS_DIR = objd
+    TARGET      = qxrdd
+    CONFIG     += console
+  } else {
+    OBJECTS_DIR = obj
+    TARGET      = qxrd
+  }
+}
+
 RESOURCES += qxrdhelptext.qrc \
     qxrdresources.qrc
 DISTFILES += qxrdhelptext.html \
@@ -108,7 +120,7 @@ unix {
 }
 win32 { 
     PLATFORM_PREFIX = win32
-    QTBINDIR = C:/Qt/2009.02/qt/bin
+    QTBINDIR = C:/Qt/2009.03/qt/bin
     MINGW = c:/mingw/bin
     app.target = app
     zip.target = zip
