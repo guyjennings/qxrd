@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.62 2009/06/28 16:33:20 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.63 2009/06/30 21:36:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -41,6 +41,9 @@
 
 QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget *parent)
   : QMainWindow(parent),
+    m_DarkImagePath(this, "darkImagePath", ""),
+    m_BadPixelsPath(this, "badPixelsPath", ""),
+    m_GainMapPath(this, "gainMapPath", ""),
     m_SettingsLoaded(false),
     m_Application(app),
     m_AcquisitionThread(acq),
@@ -58,34 +61,38 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.62 2009/06/28 16:33:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.63 2009/06/30 21:36:17 jennings Exp $")
 {
   setupUi(this);
 
   m_CenterFinderDialog = new QxrdCenterFinderDialog();
 
-  QLayout *l = m_CenteringPage -> layout();
+//  QLayout *l = m_CenteringDockWidget -> layout();
+//
+//  if (l) {
+//    l -> addWidget(m_CenterFinderDialog);
+//    l -> addItem(new QSpacerItem(20, 372, QSizePolicy::Minimum, QSizePolicy::Expanding));
+//  }
 
-  if (l) {
-    l -> addWidget(m_CenterFinderDialog);
-    l -> addItem(new QSpacerItem(20, 372, QSizePolicy::Minimum, QSizePolicy::Expanding));
-  }
+  m_CenteringDockWidget -> setWidget(m_CenterFinderDialog);
 
   m_CenterFinder = new QxrdCenterFinder(this, m_Plot, m_CenterFinderPlot, m_CenterFinderDialog, this);
   m_CenterFinder -> setEnabled(false, true);
 
   m_IntegratorDialog = new QxrdIntegratorDialog();
 
-  QLayout *ll = m_IntegratorPage -> layout();
+//  QLayout *ll = m_IntegratorDockWidget -> layout();
+//
+//  if (ll) {
+//    ll -> addWidget(m_IntegratorDialog);
+//    ll -> addItem(new QSpacerItem(20, 372, QSizePolicy::Minimum, QSizePolicy::Expanding));
+//  }
 
-  if (ll) {
-    ll -> addWidget(m_IntegratorDialog);
-    ll -> addItem(new QSpacerItem(20, 372, QSizePolicy::Minimum, QSizePolicy::Expanding));
-  }
+  m_IntegratorDockWidget -> setWidget(m_IntegratorDialog);
 
   m_Integrator = new QxrdIntegrator(this);
 
-  connect(m_ControlToolBox, SIGNAL(currentChanged(int)), this, SLOT(onToolBoxPageChanged(int)));
+//  connect(m_ControlToolBox, SIGNAL(currentChanged(int)), this, SLOT(onToolBoxPageChanged(int)));
   connect(m_XRDTabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabWidgetPageChanged(int)));
 
   connect(m_ExecuteScriptButton, SIGNAL(clicked()), m_ActionExecuteScript, SIGNAL(triggered()));
@@ -451,13 +458,13 @@ void QxrdWindow::readSettings()
 
   setPerformDarkSubtraction(settings.value("acq/subtractdark",1).toInt());
   setSaveRawImages(settings.value("acq/saveraw",0).toInt());
-  setDarkImagePath(settings.value("acq/darkpath","").toString());
+//  setDarkImagePath(settings.value("acq/darkpath","").toString());
 
   setPerformBadPixels(settings.value("acq/performbadpixels",0).toInt());
-  setBadPixelsPath(settings.value("acq/badpixelspath","").toString());
+//  setBadPixelsPath(settings.value("acq/badpixelspath","").toString());
 
   setPerformGainCorrection(settings.value("acq/gaincorrect",0).toInt());
-  setGainMapPath(settings.value("acq/gaincorrectpath","").toString());
+//  setGainMapPath(settings.value("acq/gaincorrectpath","").toString());
 
   setDisplayMinimumPct(settings.value("disp/minimumpct",0).toDouble());
   setDisplayMaximumPct(settings.value("disp/maximumpct",100).toDouble());
@@ -475,13 +482,13 @@ void QxrdWindow::writeSettings()
 
   settings.setValue("acq/subtractdark", performDarkSubtraction());
   settings.setValue("acq/saveraw", saveRawImages());
-  settings.setValue("acq/darkpath", darkImagePath());
+//  settings.setValue("acq/darkpath", darkImagePath());
 
   settings.setValue("acq/performbadpixels", performBadPixels());
-  settings.setValue("acq/badpixelspath", badPixelsPath());
+//  settings.setValue("acq/badpixelspath", badPixelsPath());
 
   settings.setValue("acq/gaincorrect", performGainCorrection());
-  settings.setValue("acq/gaincorrectpath", gainMapPath());
+//  settings.setValue("acq/gaincorrectpath", gainMapPath());
 
   settings.setValue("disp/minimumpct", displayMinimumPct());
   settings.setValue("disp/maximumpct", displayMaximumPct());
@@ -617,7 +624,7 @@ void QxrdWindow::setSaveRawImages(int sav)
 void QxrdWindow::doLoadDarkImage()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Dark Image from...", darkImagePath());
+      this, "Load Dark Image from...", get_DarkImagePath());
 
   if (theFile.length()) {
     loadDarkImage(theFile);
@@ -633,16 +640,16 @@ void QxrdWindow::loadDarkImage(QString name)
   newDarkImage(img);
 }
 
-QString QxrdWindow::darkImagePath()
-{
-  return m_DarkImageName->text();
-}
-
-void QxrdWindow::setDarkImagePath(QString path)
-{
-  m_DarkImageName -> setText(path);
-}
-
+//QString QxrdWindow::darkImagePath()
+//{
+//  return m_DarkImageName->text();
+//}
+//
+//void QxrdWindow::setDarkImagePath(QString path)
+//{
+//  m_DarkImageName -> setText(path);
+//}
+//
 int QxrdWindow::performBadPixels()
 {
   return m_PerformBadPixels -> checkState();
@@ -656,7 +663,7 @@ void QxrdWindow::setPerformBadPixels(int corr)
 void QxrdWindow::doLoadBadPixels()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Bad Pixel Map from...", badPixelsPath());
+      this, "Load Bad Pixel Map from...", get_BadPixelsPath());
 
   if (theFile.length()) {
     loadBadPixels(theFile);
@@ -672,15 +679,15 @@ void QxrdWindow::loadBadPixels(QString name)
   newBadPixelsImage(res);
 }
 
-QString QxrdWindow::badPixelsPath()
-{
-  return m_BadPixelsFileName->text();
-}
-
-void QxrdWindow::setBadPixelsPath(QString path)
-{
-  m_BadPixelsFileName->setText(path);
-}
+//QString QxrdWindow::badPixelsPath()
+//{
+//  return m_BadPixelsFileName->text();
+//}
+//
+//void QxrdWindow::setBadPixelsPath(QString path)
+//{
+//  m_BadPixelsFileName->setText(path);
+//}
 
 int QxrdWindow::performGainCorrection()
 {
@@ -695,7 +702,7 @@ void QxrdWindow::setPerformGainCorrection(int corr)
 void QxrdWindow::doLoadGainMap()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Pixel Gain Map from...", gainMapPath());
+      this, "Load Pixel Gain Map from...", get_GainMapPath());
 
   if (theFile.length()) {
     loadGainMap(theFile);
@@ -711,15 +718,15 @@ void QxrdWindow::loadGainMap(QString name)
   newGainMapImage(res);
 }
 
-QString QxrdWindow::gainMapPath()
-{
-  return m_GainCorrectionFileName -> text();
-}
-
-void QxrdWindow::setGainMapPath(QString path)
-{
-  m_GainCorrectionFileName -> setText(path);
-}
+//QString QxrdWindow::gainMapPath()
+//{
+//  return m_GainCorrectionFileName -> text();
+//}
+//
+//void QxrdWindow::setGainMapPath(QString path)
+//{
+//  m_GainCorrectionFileName -> setText(path);
+//}
 
 void QxrdWindow::newData(QxrdImageData *image)
 {
@@ -752,7 +759,7 @@ void QxrdWindow::newDarkImage(QxrdImageData *image)
     m_DarkFrame = image;
   }
 
-  setDarkImagePath(image->get_FileName());
+  set_DarkImagePath(image->get_FileName());
 }
 
 QxrdImageData *QxrdWindow::data()
@@ -774,7 +781,7 @@ void QxrdWindow::newBadPixelsImage(QxrdImageData *image)
     m_BadPixels = image;
   }
 
-  setBadPixelsPath(image->get_FileName());
+  set_BadPixelsPath(image->get_FileName());
 }
 
 void QxrdWindow::newGainMapImage(QxrdImageData *image)
@@ -787,7 +794,7 @@ void QxrdWindow::newGainMapImage(QxrdImageData *image)
     m_GainFrame = image;
   }
 
-  setGainMapPath(image->get_FileName());
+  set_GainMapPath(image->get_FileName());
 }
 
 double QxrdWindow::displayMinimumPct()
@@ -963,6 +970,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.63  2009/06/30 21:36:17  jennings
+*  Modified user interface to use tool box widgets
+*
 *  Revision 1.62  2009/06/28 16:33:20  jennings
 *  Eliminated compiler warnings
 *

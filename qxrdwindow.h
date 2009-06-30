@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.44 2009/06/28 11:21:58 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.45 2009/06/30 21:36:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -38,6 +38,16 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 public:
   QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget *parent=0);
   virtual ~QxrdWindow();
+
+public:
+  Q_PROPERTY(QString darkImagePath READ get_DarkImagePath WRITE set_DarkImagePath);
+  QCEP_STRING_PROPERTY(DarkImagePath);
+
+  Q_PROPERTY(QString badPixelsPath READ get_BadPixelsPath WRITE set_BadPixelsPath);
+  QCEP_STRING_PROPERTY(BadPixelsPath);
+
+  Q_PROPERTY(QString gainMapPath READ get_GainMapPath WRITE set_GainMapPath);
+  QCEP_STRING_PROPERTY(GainMapPath);
 
 public slots:
   void doSaveData();
@@ -86,22 +96,22 @@ public slots:
   void setSaveRawImages(int sav);
   void doLoadDarkImage();
   void loadDarkImage(QString name);
-  QString darkImagePath();
-  void setDarkImagePath(QString path);
+//  QString darkImagePath();
+//  void setDarkImagePath(QString path);
 
   int performBadPixels();
   void setPerformBadPixels(int corr);
   void doLoadBadPixels();
   void loadBadPixels(QString name);
-  QString badPixelsPath();
-  void setBadPixelsPath(QString path);
+//  QString badPixelsPath();
+//  void setBadPixelsPath(QString path);
 
   int performGainCorrection();
   void setPerformGainCorrection(int corr);
   void doLoadGainMap();
   void loadGainMap(QString name);
-  QString gainMapPath();
-  void setGainMapPath(QString path);
+//  QString gainMapPath();
+//  void setGainMapPath(QString path);
 
   double displayMinimumPct();
   void setDisplayMinimumPct(double pct);
@@ -173,7 +183,7 @@ private:
 //
 //  QDirModel              *m_FileBrowserModel;
 //  QTimer                  m_FileBrowserTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.44 2009/06/28 11:21:58 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.45 2009/06/30 21:36:17 jennings Exp $");
 };
 
 #endif
@@ -181,6 +191,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.45  2009/06/30 21:36:17  jennings
+*  Modified user interface to use tool box widgets
+*
 *  Revision 1.44  2009/06/28 11:21:58  jennings
 *  Implemented app scripting engine connections
 *
