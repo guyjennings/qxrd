@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.4 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.5 2009/07/07 22:05:25 jennings Exp $
 *
 *******************************************************************/
 
@@ -26,7 +26,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters()
     m_FileName(this,"fileName",""),
     m_FileBase(this,"fileBase",""),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.4 2009/06/27 22:50:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.5 2009/07/07 22:05:25 jennings Exp $")
 {
 }
 
@@ -47,6 +47,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.5  2009/07/07 22:05:25  jennings
+*  *** empty log message ***
+*
 *  Revision 1.4  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

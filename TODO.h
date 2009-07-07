@@ -29,4 +29,9 @@ Add a plausible simulation mode
 
 -------------------------------------------------------
 
+Add window position/state saving.
+Load and save settings for everything...
+
+-------------------------------------------------------
+
 #endif // TODO_H
