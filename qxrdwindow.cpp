@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.63 2009/06/30 21:36:17 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.64 2009/07/07 22:04:55 jennings Exp $
 *
 *******************************************************************/
 
@@ -61,7 +61,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.63 2009/06/30 21:36:17 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.64 2009/07/07 22:04:55 jennings Exp $")
 {
   setupUi(this);
 
@@ -226,6 +226,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
           this,              SLOT(onAcquiredFrame(QString,int,int,int,int,int)));
   connect(m_Acquisition,     SIGNAL(acquireComplete(int)),
           this,              SLOT(onAcquireComplete(int)));
+
+//  show();
 
   m_Acquisition -> prop_ReadoutMode() -> linkTo(m_ReadoutMode);
   m_Acquisition -> prop_ExposureTime() -> linkTo(m_ExposureTime);
@@ -472,6 +474,12 @@ void QxrdWindow::readSettings()
   setMaintainAspectRatio(settings.value("disp/maintainaspect",1).toInt());
 
   m_SettingsLoaded = true;
+
+  QByteArray geometry = settings.value("window/geometry").toByteArray();
+  QByteArray winstate = settings.value("window/state").toByteArray();
+
+  restoreGeometry(geometry);
+  restoreState(winstate,1);
 }
 
 void QxrdWindow::writeSettings()
@@ -494,6 +502,9 @@ void QxrdWindow::writeSettings()
   settings.setValue("disp/maximumpct", displayMaximumPct());
   settings.setValue("disp/interpolate", interpolatePixels());
   settings.setValue("disp/maintainaspect", maintainAspectRatio());
+
+  settings.setValue("window/geometry", saveGeometry());
+  settings.setValue("window/state", saveState(1));
 }
 
 void QxrdWindow::statusMessage(QString msg)
@@ -970,6 +981,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.64  2009/07/07 22:04:55  jennings
+*  Save window size and position in settings
+*
 *  Revision 1.63  2009/06/30 21:36:17  jennings
 *  Modified user interface to use tool box widgets
 *
