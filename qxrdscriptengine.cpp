@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.2 2009/06/28 11:21:58 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.3 2009/07/08 19:06:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,6 +9,10 @@
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
+#include "qxrdcenterfinder.h"
+#include "qxrddataprocessor.h"
+#include "qxrdintegrator.h"
+
 #include <QThread>
 
 static QxrdScriptEngine    *g_ScriptEngine;
@@ -22,7 +26,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.2 2009/06/28 11:21:58 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.3 2009/07/08 19:06:27 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -45,6 +49,10 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("acquisition", m_ScriptEngine -> newQObject(m_Acquisition));
   m_ScriptEngine -> globalObject().setProperty("application", m_ScriptEngine -> newQObject(m_Application));
   m_ScriptEngine -> globalObject().setProperty("window", m_ScriptEngine -> newQObject(m_Window));
+  m_ScriptEngine -> globalObject().setProperty("centering", m_ScriptEngine -> newQObject(m_Window->centerFinder()));
+  m_ScriptEngine -> globalObject().setProperty("processor", m_ScriptEngine -> newQObject(m_Window->processor()));
+  m_ScriptEngine -> globalObject().setProperty("integrator", m_ScriptEngine -> newQObject(m_Window->integrator()));
+
   m_ScriptEngine -> globalObject().setProperty("acquire", m_ScriptEngine -> newFunction(acquireFunc));
   m_ScriptEngine -> globalObject().setProperty("acquireDark", m_ScriptEngine -> newFunction(acquireDarkFunc));
   m_ScriptEngine -> globalObject().setProperty("status", m_ScriptEngine -> newFunction(statusFunc));
@@ -288,6 +296,10 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.3  2009/07/08 19:06:27  jennings
+*  Made centering parameters into Q_PROPERTYs
+*  Saved centering, integrator and data processor settings
+*
 *  Revision 1.2  2009/06/28 11:21:58  jennings
 *  Implemented app scripting engine connections
 *

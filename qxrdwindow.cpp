@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.64 2009/07/07 22:04:55 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.65 2009/07/08 19:06:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -61,7 +61,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.64 2009/07/07 22:04:55 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.65 2009/07/08 19:06:27 jennings Exp $")
 {
   setupUi(this);
 
@@ -456,7 +456,10 @@ void QxrdWindow::readSettings()
 {
   QxrdSettings settings;
 
-  m_Acquisition -> readSettings(&settings, "acquire");
+  m_Acquisition  -> readSettings(&settings, "acquire");
+  m_CenterFinder -> readSettings(&settings, "centerfinder");
+  m_DataProcessor-> readSettings(&settings, "processor");
+  m_Integrator   -> readSettings(&settings, "integrator");
 
   setPerformDarkSubtraction(settings.value("acq/subtractdark",1).toInt());
   setSaveRawImages(settings.value("acq/saveraw",0).toInt());
@@ -486,7 +489,10 @@ void QxrdWindow::writeSettings()
 {
   QxrdSettings settings;
 
-  m_Acquisition -> writeSettings(&settings, "acquire");
+  m_Acquisition  -> writeSettings(&settings, "acquire");
+  m_CenterFinder -> writeSettings(&settings, "centerfinder");
+  m_DataProcessor-> writeSettings(&settings, "processor");
+  m_Integrator   -> writeSettings(&settings, "integrator");
 
   settings.setValue("acq/subtractdark", performDarkSubtraction());
   settings.setValue("acq/saveraw", saveRawImages());
@@ -978,9 +984,34 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   m_ScriptEngine = engine;
 }
 
-/******************************************************************
+QxrdDataProcessor *QxrdWindow::processor() const
+{
+  QMutexLocker  lock(&m_Mutex);
+
+  return m_DataProcessor;
+}
+
+QxrdCenterFinder  *QxrdWindow::centerFinder() const
+{
+  QMutexLocker  lock(&m_Mutex);
+
+  return m_CenterFinder;
+}
+
+QxrdIntegrator    *QxrdWindow::integrator() const
+{
+  QMutexLocker  lock(&m_Mutex);
+
+  return m_Integrator;
+}
+
+  /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.65  2009/07/08 19:06:27  jennings
+*  Made centering parameters into Q_PROPERTYs
+*  Saved centering, integrator and data processor settings
+*
 *  Revision 1.64  2009/07/07 22:04:55  jennings
 *  Save window size and position in settings
 *

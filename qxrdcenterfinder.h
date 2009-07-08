@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.h,v 1.5 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdcenterfinder.h,v 1.6 2009/07/08 19:06:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,6 +11,8 @@
 
 #include <QObject>
 #include <QPen>
+#include "qcepproperty.h"
+#include "qxrdsettings.h"
 
 class QxrdWindow;
 class QxrdImagePlot;
@@ -26,6 +28,16 @@ class QxrdCenterFinder : public QObject
 
 public:
   QxrdCenterFinder(QxrdWindow *win, QxrdImagePlot *imgplot, QxrdCenterFinderPlot *cntplot, QxrdCenterFinderDialog *cfdialog, QObject *parent=0);
+
+public:
+  Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX);
+  QCEP_DOUBLE_PROPERTY(CenterX);
+
+  Q_PROPERTY(double centerY READ get_CenterY WRITE set_CenterY);
+  QCEP_DOUBLE_PROPERTY(CenterY);
+
+  Q_PROPERTY(double centerStep READ get_CenterStep WRITE set_CenterStep);
+  QCEP_DOUBLE_PROPERTY(CenterStep);
 
 public slots:
   void moveCenter(int dx, int dy);
@@ -47,24 +59,28 @@ public:
   void setEnabled(bool imgenabled, bool cntrenabled);
   void setPen(const QPen &pen);
 
+  void readSettings(QxrdSettings *settings, QString section);
+  void writeSettings(QxrdSettings *settings, QString section);
+
 signals:
   void centerChanged(double cx, double cy);
 
 private:
+  mutable QMutex             m_Mutex;
   QxrdWindow                *m_Window;
   QxrdImagePlot             *m_ImagePlot;
   QxrdCenterFinderPlot      *m_CenterFinderPlot;
   QxrdCenterFinderDialog    *m_CenterFinderDialog;
 
-  double                     m_CenterX;
-  double                     m_CenterY;
-  double                     m_StepSize;
+//  double                     m_CenterX;
+//  double                     m_CenterY;
+//  double                     m_StepSize;
 
   QxrdCenterFinderPicker    *m_CenterFinderPicker;
   QwtPlotMarker             *m_CenterMarker;
 
   QPen                       m_Pen;
-  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.5 2009/06/27 22:50:32 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.6 2009/07/08 19:06:27 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDER_H
@@ -72,6 +88,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.h,v $
+*  Revision 1.6  2009/07/08 19:06:27  jennings
+*  Made centering parameters into Q_PROPERTYs
+*  Saved centering, integrator and data processor settings
+*
 *  Revision 1.5  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.10 2009/06/30 21:35:05 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.11 2009/07/08 19:06:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -20,9 +20,23 @@ QxrdDataProcessor::QxrdDataProcessor
     m_DarkUsage(QReadWriteLock::Recursive),
     m_ProcessedImages("QxrdDataProcessor Processed Images"),
     m_DarkImages("QxrdDataProcessor Dark Images"),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.10 2009/06/30 21:35:05 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.11 2009/07/08 19:06:27 jennings Exp $")
 {
   connect(m_Acquisition, SIGNAL(acquiredImageAvailable()), this, SLOT(on_acquired_image_available()));
+}
+
+void QxrdDataProcessor::writeSettings(QxrdSettings *settings, QString section)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdDataProcessor::readSettings(QxrdSettings *settings, QString section)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdDataProcessor::on_acquired_image_available()
@@ -176,6 +190,10 @@ void QxrdDataProcessor::correctImageGains(QxrdImageData */*image*/)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.11  2009/07/08 19:06:27  jennings
+*  Made centering parameters into Q_PROPERTYs
+*  Saved centering, integrator and data processor settings
+*
 *  Revision 1.10  2009/06/30 21:35:05  jennings
 *  Debugging meta data static init problems
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.cpp,v 1.7 2009/06/28 16:33:20 jennings Exp $
+*  $Id: qxrdcenterfinder.cpp,v 1.8 2009/07/08 19:06:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,16 +13,16 @@
 QxrdCenterFinder::QxrdCenterFinder
     (QxrdWindow *win, QxrdImagePlot *imgplot, QxrdCenterFinderPlot *cntplot, QxrdCenterFinderDialog *cfdialog, QObject *parent)
   : QObject(parent),
+    m_CenterX(this, "centerX", 0),
+    m_CenterY(this, "centerY", 0),
+    m_CenterStep(this, "centerStep", 1),
     m_Window(win),
     m_ImagePlot(imgplot),
     m_CenterFinderPlot(cntplot),
     m_CenterFinderDialog(cfdialog),
-    m_CenterX(0),
-    m_CenterY(0),
-    m_StepSize(1),
     m_CenterFinderPicker(NULL),
     m_CenterMarker(NULL),
-    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.7 2009/06/28 16:33:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.8 2009/07/08 19:06:27 jennings Exp $")
 {
   m_CenterFinderPicker = new QxrdCenterFinderPicker(imgplot->canvas(), imgplot, cfdialog);
 
@@ -41,15 +41,33 @@ QxrdCenterFinder::QxrdCenterFinder
   connect(m_CenterFinderDialog -> m_CenterMoveDownLeft, SIGNAL(clicked()), this, SLOT(centerMoveDownLeft()));
   connect(m_CenterFinderDialog -> m_CenterMoveLeft, SIGNAL(clicked()), this, SLOT(centerMoveLeft()));
 
-  connect(m_CenterFinderDialog -> m_CenterX, SIGNAL(valueChanged(double)), this, SLOT(onCenterXChanged(double)));
-  connect(m_CenterFinderDialog -> m_CenterY, SIGNAL(valueChanged(double)), this, SLOT(onCenterYChanged(double)));
-  connect(m_CenterFinderDialog -> m_CenterStep, SIGNAL(valueChanged(double)), this, SLOT(onCenterStepChanged(double)));
+  m_CenterX.linkTo(m_CenterFinderDialog -> m_CenterX);
+  m_CenterY.linkTo(m_CenterFinderDialog -> m_CenterY);
+  m_CenterStep.linkTo(m_CenterFinderDialog -> m_CenterStep);
+
+  connect(prop_CenterX(), SIGNAL(changedValue(double)), this, SLOT(onCenterXChanged(double)));
+  connect(prop_CenterY(), SIGNAL(changedValue(double)), this, SLOT(onCenterYChanged(double)));
+
   connect(m_CenterFinderDialog -> m_AutoScaleButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(autoScale()));
 
   connect(this, SIGNAL(centerChanged(double,double)), m_CenterFinderDialog, SLOT(onCenterChanged(double,double)));
   connect(this, SIGNAL(centerChanged(double,double)), this, SLOT(onCenterChanged(double,double)));
 
   imgplot -> setCenterFinder(this);
+}
+
+void QxrdCenterFinder::writeSettings(QxrdSettings *settings, QString section)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdCenterFinder::readSettings(QxrdSettings *settings, QString section)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdCenterFinder::setEnabled(bool imgenabled, bool /*cntrenabled*/)
@@ -79,38 +97,38 @@ void QxrdCenterFinder::setPen(const QPen &pen)
 
 void QxrdCenterFinder::onCenterXChanged(double cx)
 {
-  if (m_CenterX != cx) {
-    m_CenterX = cx;
+  if (get_CenterX() != cx) {
+    set_CenterX(cx);
     m_CenterMarker -> setXValue(cx);
 
     m_ImagePlot -> replot();
 
-    emit centerChanged(m_CenterX, m_CenterY);
+    emit centerChanged(get_CenterX(), get_CenterY());
   }
 }
 
 void QxrdCenterFinder::onCenterYChanged(double cy)
 {
-  if (m_CenterY != cy) {
-    m_CenterY = cy;
+  if (get_CenterY() != cy) {
+    set_CenterY(cy);
     m_CenterMarker -> setYValue(cy);
 
     m_ImagePlot -> replot();
 
-    emit centerChanged(m_CenterX, m_CenterY);
+    emit centerChanged(get_CenterX(), get_CenterY());
   }
 }
 
 void QxrdCenterFinder::onCenterChanged(QwtDoublePoint pt)
 {
-  if (m_CenterX != pt.x() || m_CenterY != pt.y()) {
-    m_CenterX = pt.x();
-    m_CenterY = pt.y();
+  if (get_CenterX() != pt.x() || get_CenterY() != pt.y()) {
+    set_CenterX(pt.x());
+    set_CenterY(pt.y());
     m_CenterMarker -> setValue(pt);
 
     m_ImagePlot -> replot();
 
-    emit centerChanged(m_CenterX, m_CenterY);
+    emit centerChanged(get_CenterX(), get_CenterY());
   }
 }
 
@@ -123,18 +141,18 @@ void QxrdCenterFinder::onCenterChanged(double cx, double cy)
 
 void QxrdCenterFinder::onCenterStepChanged(double stp)
 {
-  m_StepSize = stp;
+  set_CenterStep(stp);
 }
 
 void QxrdCenterFinder::moveCenter(int dx, int dy)
 {
-  m_CenterX += m_StepSize*dx;
-  m_CenterY += m_StepSize*dy;
+  set_CenterX(get_CenterX() + get_CenterStep()*dx);
+  set_CenterY(get_CenterY() + get_CenterStep()*dy);
 
   if (dx != 0 || dy != 0) {
 //    printf("QxrdCenterFinder::moveCenter -> %g, %g\n", m_CenterX, m_CenterY);
 
-    emit centerChanged(m_CenterX, m_CenterY);
+    emit centerChanged(get_CenterX(), get_CenterY());
   }
 }
 
@@ -182,6 +200,10 @@ void QxrdCenterFinder::centerMoveLeft()
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.cpp,v $
+*  Revision 1.8  2009/07/08 19:06:27  jennings
+*  Made centering parameters into Q_PROPERTYs
+*  Saved centering, integrator and data processor settings
+*
 *  Revision 1.7  2009/06/28 16:33:20  jennings
 *  Eliminated compiler warnings
 *

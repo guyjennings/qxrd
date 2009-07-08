@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.45 2009/06/30 21:36:17 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.46 2009/07/08 19:06:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -157,7 +157,12 @@ public:
   QxrdScriptEngine *scriptEngine() const;
   void setScriptEngine(QxrdScriptEngine *engine);
 
+  QxrdDataProcessor *processor() const;
+  QxrdCenterFinder  *centerFinder() const;
+  QxrdIntegrator    *integrator() const;
+
 private:
+  mutable QMutex          m_Mutex;
   int                     m_SettingsLoaded;
   QxrdApplication        *m_Application;
   QxrdAcquisitionThread  *m_AcquisitionThread;
@@ -183,7 +188,7 @@ private:
 //
 //  QDirModel              *m_FileBrowserModel;
 //  QTimer                  m_FileBrowserTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.45 2009/06/30 21:36:17 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.46 2009/07/08 19:06:27 jennings Exp $");
 };
 
 #endif
@@ -191,6 +196,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.46  2009/07/08 19:06:27  jennings
+*  Made centering parameters into Q_PROPERTYs
+*  Saved centering, integrator and data processor settings
+*
 *  Revision 1.45  2009/06/30 21:36:17  jennings
 *  Modified user interface to use tool box widgets
 *
