@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimagedataformathis.cpp,v 1.5 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdimagedataformathis.cpp,v 1.6 2009/07/08 00:35:33 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,7 +12,7 @@ static QxrdImageDataFormatHis fmt;
 
 QxrdImageDataFormatHis::QxrdImageDataFormatHis(QString name)
   : QcepImageDataFormat<double>(name),
-    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.5 2009/06/27 22:50:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.6 2009/07/08 00:35:33 jennings Exp $")
 {
 }
 
@@ -22,16 +22,16 @@ QxrdImageDataFormatHis::Priority QxrdImageDataFormatHis::priority() const
 }
 
 typedef struct {
-  uint16_t FileType;
-  uint16_t unk;
-  uint16_t HeaderSize;		        // Size of this file header in Bytes
-  uint32_t FileSize;			// Size of the whole file in Bytes
-  uint16_t ImageHeaderSize;	        // Size of the image header in Bytes
-  uint16_t ULX, ULY, BRX, BRY;          // bounding rectangle of the image
-  uint16_t NrOfFrames;		        // self explanatory
-  uint16_t Correction;	  	        // 0 = none, 1 = offset, 2 = gain, 4 = bad pixel, (ored)
+  quint16 FileType;
+  quint16 unk;
+  quint16 HeaderSize;		        // Size of this file header in Bytes
+  quint32 FileSize;			// Size of the whole file in Bytes
+  quint16 ImageHeaderSize;	        // Size of the image header in Bytes
+  quint16 ULX, ULY, BRX, BRY;          // bounding rectangle of the image
+  quint16 NrOfFrames;		        // self explanatory
+  quint16 Correction;	  	        // 0 = none, 1 = offset, 2 = gain, 4 = bad pixel, (ored)
   double IntegrationTime;	        // frame time in microseconds
-  uint16_t TypeOfNumbers;		// short, long integer, float, signed/u};
+  quint16 TypeOfNumbers;		// short, long integer, float, signed/u};
 } HISHeader;
 
 QxrdImageDataFormatHis* QxrdImageDataFormatHis::canLoadFile(QString path)
@@ -139,6 +139,9 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::saveFile(QString /*path*/, QcepI
 /******************************************************************
 *
 *  $Log: qxrdimagedataformathis.cpp,v $
+*  Revision 1.6  2009/07/08 00:35:33  jennings
+*  *** empty log message ***
+*
 *  Revision 1.5  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

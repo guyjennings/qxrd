@@ -1,12 +1,13 @@
 /******************************************************************
 *
-*  $Id: qxrd.cpp,v 1.3 2009/06/28 04:04:52 jennings Exp $
+*  $Id: qxrd.cpp,v 1.4 2009/07/08 00:35:33 jennings Exp $
 *
 *******************************************************************/
 
 #include <QApplication>
 
 #include "qxrdapplication.h"
+#include <stdio.h>
 
 int main(int argc, char *argv[])
 {
@@ -22,6 +23,9 @@ int main(int argc, char *argv[])
 /******************************************************************
 *
 *  $Log: qxrd.cpp,v $
+*  Revision 1.4  2009/07/08 00:35:33  jennings
+*  *** empty log message ***
+*
 *  Revision 1.3  2009/06/28 04:04:52  jennings
 *  Partial implementation of separate thread for script engine
 *

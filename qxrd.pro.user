@@ -1,257 +1,46 @@
 <!DOCTYPE QtCreatorProject>
 <qtcreator>
  <data>
-  <variable>RunConfiguration0-Arguments</variable>
+  <variable>RunConfiguration0-CommandLineArguments</variable>
   <valuelist type="QVariantList" />
  </data>
  <data>
-  <variable>RunConfiguration0-Executable</variable>
-  <value type="QString" >g:\qxrd\debug\qxrdd.exe</value>
+  <variable>RunConfiguration0-ProFile</variable>
+  <value type="QString" >qxrd.pro</value>
  </data>
  <data>
   <variable>RunConfiguration0-RunConfiguration.name</variable>
-  <value type="QString" >Run g:\qxrd\debug\qxrdd.exe</value>
+  <value type="QString" >qxrd</value>
+ </data>
+ <data>
+  <variable>RunConfiguration0-UseDyldImageSuffix</variable>
+  <value type="bool" >false</value>
  </data>
  <data>
   <variable>RunConfiguration0-UseTerminal</variable>
   <value type="bool" >false</value>
  </data>
  <data>
-  <variable>RunConfiguration0-UserEnvironmentChanges</variable>
-  <valuelist type="QVariantList" />
- </data>
- <data>
-  <variable>RunConfiguration0-UserName</variable>
-  <value type="QString" ></value>
- </data>
- <data>
   <variable>RunConfiguration0-UserSetName</variable>
   <value type="bool" >false</value>
  </data>
  <data>
-  <variable>RunConfiguration0-WorkingDirectory</variable>
-  <value type="QString" >g:\qxrd</value>
- </data>
- <data>
   <variable>RunConfiguration0-type</variable>
-  <value type="QString" >ProjectExplorer.CustomExecutableRunConfiguration</value>
- </data>
- <data>
-  <variable>RunConfiguration1-CommandLineArguments</variable>
-  <valuelist type="QVariantList" />
- </data>
- <data>
-  <variable>RunConfiguration1-ProFile</variable>
-  <value type="QString" >qxrd.pro</value>
- </data>
- <data>
-  <variable>RunConfiguration1-RunConfiguration.name</variable>
-  <value type="QString" >qxrd</value>
- </data>
- <data>
-  <variable>RunConfiguration1-UseDyldImageSuffix</variable>
-  <value type="bool" >false</value>
- </data>
- <data>
-  <variable>RunConfiguration1-UseTerminal</variable>
-  <value type="bool" >false</value>
- </data>
- <data>
-  <variable>RunConfiguration1-UserEnvironmentChanges</variable>
-  <valuelist type="QVariantList" />
- </data>
- <data>
-  <variable>RunConfiguration1-UserSetName</variable>
-  <value type="bool" >false</value>
- </data>
- <data>
-  <variable>RunConfiguration1-type</variable>
   <value type="QString" >Qt4ProjectManager.Qt4RunConfiguration</value>
  </data>
  <data>
   <variable>activeRunConfiguration</variable>
-  <value type="int" >1</value>
+  <value type="int" >0</value>
  </data>
  <data>
   <variable>activebuildconfiguration</variable>
-  <value type="QString" >Debug</value>
- </data>
- <data>
-  <variable>buildConfiguration-Debug</variable>
-  <valuemap type="QVariantMap" >
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
-   <value key="QtVersionId" type="int" >8</value>
-   <value key="addQDumper" type="" ></value>
-   <value key="buildDirectory" type="QString" >H:\qxrd-win</value>
-   <valuelist key="userEnvironmentChanges" type="QVariantList" >
-    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\CUDA\bin;C:\WINDOWS\system32\WindowsPowerShell\v1.0</value>
-   </valuelist>
-  </valuemap>
+  <value type="QString" >Release</value>
  </data>
  <data>
   <variable>buildConfiguration-Release</variable>
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
-   <value key="QtVersionId" type="int" >8</value>
-   <value key="addQDumper" type="" ></value>
-   <value key="buildDirectory" type="QString" >G:\qxrd-win</value>
-   <value key="useShadowBuild" type="bool" >false</value>
-   <valuelist key="userEnvironmentChanges" type="QVariantList" >
-    <value type="QString" >QTDIR=c:/Qt/2009.01/qt</value>
-   </valuelist>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Debug-buildstep0</variable>
-  <valuemap type="QVariantMap" >
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
-   <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
-    <value type="QString" >APPDATA=C:\Documents and Settings\jennings\Application Data</value>
-    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
-    <value type="QString" >COMPUTERNAME=JENNINGSXP</value>
-    <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
-    <value type="QString" >CUDA_BIN_PATH=C:\CUDA\bin</value>
-    <value type="QString" >CUDA_INC_PATH=C:\CUDA\include</value>
-    <value type="QString" >CUDA_LIB_PATH=C:\CUDA\lib</value>
-    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
-    <value type="QString" >HOMEDRIVE=C:</value>
-    <value type="QString" >HOMEPATH=\Documents and Settings\jennings</value>
-    <value type="QString" >INNOVATIVECOMMON=C:\Innovative</value>
-    <value type="QString" >LOGONSERVER=\\JENNINGSXP</value>
-    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
-    <value type="QString" >NVSDKCUDA_ROOT=C:\Documents and Settings\All Users\Application Data\NVIDIA Corporation\NVIDIA CUDA SDK</value>
-    <value type="QString" >OS=Windows_NT</value>
-    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\CUDA\bin;C:\WINDOWS\system32\WindowsPowerShell\v1.0</value>
-    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.PSC1</value>
-    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
-    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 2, GenuineIntel</value>
-    <value type="QString" >PROCESSOR_LEVEL=6</value>
-    <value type="QString" >PROCESSOR_REVISION=0f02</value>
-    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
-    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
-    <value type="QString" >SESSIONNAME=Console</value>
-    <value type="QString" >SYSTEMDRIVE=C:</value>
-    <value type="QString" >SYSTEMROOT=C:\WINDOWS</value>
-    <value type="QString" >TEMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >TMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >USERDOMAIN=JENNINGSXP</value>
-    <value type="QString" >USERNAME=jennings</value>
-    <value type="QString" >USERPROFILE=C:\Documents and Settings\jennings</value>
-    <value type="QString" >VS80COMNTOOLS=C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
-    <value type="QString" >VS90COMNTOOLS=C:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools\</value>
-    <value type="QString" >WINDIR=C:\WINDOWS</value>
-    <value type="QString" >XPCDRIVE=D:\</value>
-   </valuelist>
-   <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >G:/qxrd-win/qxrd.pro</value>
-    <value type="QString" >-spec</value>
-    <value type="QString" >win32-g++</value>
-    <value type="QString" >-r</value>
-   </valuelist>
-   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/qt/bin/qmake.exe</value>
-   <value key="abstractProcess.enabled" type="bool" >false</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >G:/qxrd-win</value>
-   <value key="buildConfiguration" type="int" >2</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Debug-buildstep1</variable>
-  <valuemap type="QVariantMap" >
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
-   <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
-    <value type="QString" >APPDATA=C:\Documents and Settings\jennings\Application Data</value>
-    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
-    <value type="QString" >COMPUTERNAME=JENNINGSXP</value>
-    <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
-    <value type="QString" >CUDA_BIN_PATH=C:\CUDA\bin</value>
-    <value type="QString" >CUDA_INC_PATH=C:\CUDA\include</value>
-    <value type="QString" >CUDA_LIB_PATH=C:\CUDA\lib</value>
-    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
-    <value type="QString" >HOMEDRIVE=C:</value>
-    <value type="QString" >HOMEPATH=\Documents and Settings\jennings</value>
-    <value type="QString" >INNOVATIVECOMMON=C:\Innovative</value>
-    <value type="QString" >LOGONSERVER=\\JENNINGSXP</value>
-    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
-    <value type="QString" >NVSDKCUDA_ROOT=C:\Documents and Settings\All Users\Application Data\NVIDIA Corporation\NVIDIA CUDA SDK</value>
-    <value type="QString" >OS=Windows_NT</value>
-    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\CUDA\bin;C:\WINDOWS\system32\WindowsPowerShell\v1.0</value>
-    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.PSC1</value>
-    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
-    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 2, GenuineIntel</value>
-    <value type="QString" >PROCESSOR_LEVEL=6</value>
-    <value type="QString" >PROCESSOR_REVISION=0f02</value>
-    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
-    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
-    <value type="QString" >SESSIONNAME=Console</value>
-    <value type="QString" >SYSTEMDRIVE=C:</value>
-    <value type="QString" >SYSTEMROOT=C:\WINDOWS</value>
-    <value type="QString" >TEMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >TMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >USERDOMAIN=JENNINGSXP</value>
-    <value type="QString" >USERNAME=jennings</value>
-    <value type="QString" >USERPROFILE=C:\Documents and Settings\jennings</value>
-    <value type="QString" >VS80COMNTOOLS=C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
-    <value type="QString" >VS90COMNTOOLS=C:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools\</value>
-    <value type="QString" >WINDIR=C:\WINDOWS</value>
-    <value type="QString" >XPCDRIVE=D:\</value>
-   </valuelist>
-   <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >-w</value>
-   </valuelist>
-   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/mingw/bin/mingw32-make.exe</value>
-   <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >G:/qxrd-win</value>
-  </valuemap>
- </data>
- <data>
-  <variable>buildconfiguration-Debug-cleanstep0</variable>
-  <valuemap type="QVariantMap" >
-   <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Debug</value>
-   <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
-    <value type="QString" >APPDATA=C:\Documents and Settings\jennings\Application Data</value>
-    <value type="QString" >CLIENTNAME=Console</value>
-    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
-    <value type="QString" >COMPUTERNAME=WINQUAD</value>
-    <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
-    <value type="QString" >CUDA_BIN_PATH=C:\CUDA\bin</value>
-    <value type="QString" >CUDA_INC_PATH=C:\CUDA\include</value>
-    <value type="QString" >CUDA_LIB_PATH=C:\CUDA\lib</value>
-    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
-    <value type="QString" >HOMEDRIVE=C:</value>
-    <value type="QString" >HOMEPATH=\Documents and Settings\jennings</value>
-    <value type="QString" >LOGONSERVER=\\WINQUAD</value>
-    <value type="QString" >NUMBER_OF_PROCESSORS=4</value>
-    <value type="QString" >NVSDKCUDA_ROOT=C:\Program Files\NVIDIA Corporation\NVIDIA CUDA SDK</value>
-    <value type="QString" >OS=Windows_NT</value>
-    <value type="QString" >PATH=C:\Qt\2009.03\mingw\bin;C:\Qt\2009.03\qt\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\CUDA\bin;C:\WINDOWS\system32\WindowsPowerShell\v1.0</value>
-    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.PSC1</value>
-    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
-    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 11, GenuineIntel</value>
-    <value type="QString" >PROCESSOR_LEVEL=6</value>
-    <value type="QString" >PROCESSOR_REVISION=0f0b</value>
-    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
-    <value type="QString" >QTDIR=C:/Qt/2009.03/qt</value>
-    <value type="QString" >SESSIONNAME=Console</value>
-    <value type="QString" >SYSTEMDRIVE=C:</value>
-    <value type="QString" >SYSTEMROOT=C:\WINDOWS</value>
-    <value type="QString" >TEMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >TMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >USERDOMAIN=WINQUAD</value>
-    <value type="QString" >USERNAME=jennings</value>
-    <value type="QString" >USERPROFILE=C:\Documents and Settings\jennings</value>
-    <value type="QString" >VS90COMNTOOLS=C:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools\</value>
-    <value type="QString" >WINDIR=C:\WINDOWS</value>
-   </valuelist>
-   <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >clean</value>
-    <value type="QString" >-w</value>
-   </valuelist>
-   <value key="abstractProcess.command" type="QString" >C:/Qt/2009.03/mingw/bin/mingw32-make.exe</value>
-   <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >H:/qxrd-win</value>
+   <value key="QtVersionId" type="int" >2</value>
   </valuemap>
  </data>
  <data>
@@ -259,53 +48,71 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
-    <value type="QString" >APPDATA=C:\Documents and Settings\jennings\Application Data</value>
-    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
-    <value type="QString" >COMPUTERNAME=JENNINGSXP</value>
-    <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
-    <value type="QString" >CUDA_BIN_PATH=C:\CUDA\bin</value>
-    <value type="QString" >CUDA_INC_PATH=C:\CUDA\include</value>
-    <value type="QString" >CUDA_LIB_PATH=C:\CUDA\lib</value>
-    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
-    <value type="QString" >HOMEDRIVE=C:</value>
-    <value type="QString" >HOMEPATH=\Documents and Settings\jennings</value>
-    <value type="QString" >INNOVATIVECOMMON=C:\Innovative</value>
-    <value type="QString" >LOGONSERVER=\\JENNINGSXP</value>
-    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
-    <value type="QString" >NVSDKCUDA_ROOT=C:\Documents and Settings\All Users\Application Data\NVIDIA Corporation\NVIDIA CUDA SDK</value>
-    <value type="QString" >OS=Windows_NT</value>
-    <value type="QString" >PATH=C:\Qt\2009.02\qt\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;c:\Program Files\Microsoft SQL Server\90\Tools\binn\;C:\CUDA\bin;C:\Innovative\lib\ipp;C:\Innovative\lib\ipp\win32;C:\Innovative\lib\dll;C:\Innovative\dll;;C:\WINDOWS\system32\WindowsPowerShell\v1.0;C:\Program Files\CMake 2.6\bin;c:\qwt-5.2.0-svn\lib;c:\qt\2009.02\mingw\bin;c:\qt\2009.02\qt\bin</value>
-    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.PSC1</value>
-    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
-    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 2, GenuineIntel</value>
-    <value type="QString" >PROCESSOR_LEVEL=6</value>
-    <value type="QString" >PROCESSOR_REVISION=0f02</value>
-    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
-    <value type="QString" >QTDIR=c:/Qt/2009.01/qt</value>
-    <value type="QString" >SESSIONNAME=Console</value>
-    <value type="QString" >SYSTEMDRIVE=C:</value>
-    <value type="QString" >SYSTEMROOT=C:\WINDOWS</value>
-    <value type="QString" >TEMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >TMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >USERDOMAIN=JENNINGSXP</value>
-    <value type="QString" >USERNAME=jennings</value>
-    <value type="QString" >USERPROFILE=C:\Documents and Settings\jennings</value>
-    <value type="QString" >VS80COMNTOOLS=C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
-    <value type="QString" >VS90COMNTOOLS=C:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools\</value>
-    <value type="QString" >WINDIR=C:\WINDOWS</value>
-    <value type="QString" >XPCDRIVE=D:\</value>
+    <value type="QString" >AcqirisDxDir=/usr/lib/acqiris</value>
+    <value type="QString" >BASH_ENV=/home/jennings/.bashrc</value>
+    <value type="QString" >CVSROOT=/home/jennings/cvs</value>
+    <value type="QString" >CVS_RSH=ssh</value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-Wi4NHWGvDy,guid=a4c435129206e1050855dba34a536f24</value>
+    <value type="QString" >DESKTOP_SESSION=gnome</value>
+    <value type="QString" >DESKTOP_STARTUP_ID=</value>
+    <value type="QString" >DISPLAY=:0.0</value>
+    <value type="QString" >GDL_PATH=+/usr/share/gdl</value>
+    <value type="QString" >GDMSESSION=gnome</value>
+    <value type="QString" >GDM_LANG=en_US.utf8</value>
+    <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
+    <value type="QString" >GNOME_KEYRING_PID=2785</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-zLVIUf/socket</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/jennings/.gtkrc-1.2-gnome2</value>
+    <value type="QString" >G_BROKEN_FILENAMES=1</value>
+    <value type="QString" >HISTSIZE=1000</value>
+    <value type="QString" >HOME=/home/jennings</value>
+    <value type="QString" >HOSTNAME=weimar.xor.aps.anl.gov</value>
+    <value type="QString" >HOST_ARCH=Linux</value>
+    <value type="QString" >KDEDIRS=/usr</value>
+    <value type="QString" >LANG=en_US.utf8</value>
+    <value type="QString" >LD_LIBRARY_PATH=/usr/lib64/qtcreator:</value>
+    <value type="QString" >LESSOPEN=|/usr/bin/lesspipe.sh %s</value>
+    <value type="QString" >LOADEDMODULES=</value>
+    <value type="QString" >LOGNAME=jennings</value>
+    <value type="QString" >MAIL=/var/spool/mail/jennings</value>
+    <value type="QString" >MODULEPATH=/usr/share/Modules/modulefiles:/etc/modulefiles:</value>
+    <value type="QString" >MODULESHOME=/usr/share/Modules</value>
+    <value type="QString" >NCARG_DATABASE=/usr/lib64/ncarg/database</value>
+    <value type="QString" >NCARG_FONTCAPS=/usr/lib64/ncarg/fontcaps</value>
+    <value type="QString" >NCARG_GRAPHCAPS=/usr/lib64/ncarg/graphcaps</value>
+    <value type="QString" >NCARG_LIB=/usr/lib64/ncarg</value>
+    <value type="QString" >NCARG_NCARG=/usr/share/ncarg</value>
+    <value type="QString" >NCARG_ROOT=/usr</value>
+    <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-jennings</value>
+    <value type="QString" >PATH=/usr/lib64/qt4/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/libexec/sdcc:/home/jennings/bin:/usr/local/epics/bin:/usr/java/j2re1.4.2_02/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin/Linux:/home/jennings/synApps_R3.13.1.1_R4.1/share/bin/Linux</value>
+    <value type="QString" >PSPRINTER=lj4000</value>
+    <value type="QString" >PWD=/home/jennings</value>
+    <value type="QString" >QTDIR=/usr</value>
+    <value type="QString" >QTINC=/usr/lib64/qt-3.3/include</value>
+    <value type="QString" >QTLIB=/usr/lib64/qt-3.3/lib</value>
+    <value type="QString" >SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/2801,unix/unix:/tmp/.ICE-unix/2801</value>
+    <value type="QString" >SHARE_DIR=/home/jennings/synApps_R3.13.1.1_R4.1/share</value>
+    <value type="QString" >SHELL=/bin/bash</value>
+    <value type="QString" >SHLVL=1</value>
+    <value type="QString" >SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-zLVIUf/socket.ssh</value>
+    <value type="QString" >SYNAPPS=/home/jennings/synApps_R3.13.1.1_R4.1</value>
+    <value type="QString" >USER=jennings</value>
+    <value type="QString" >USERNAME=</value>
+    <value type="QString" >USER_DIR=/home/jennings/xxx</value>
+    <value type="QString" >WISECONFIGDIR=/usr/share/wise2/</value>
+    <value type="QString" >XAUTHORITY=/var/run/gdm/auth-for-jennings-fGMEWN/database</value>
+    <value type="QString" >XDG_SESSION_COOKIE=a1cb685e464c450ef0e456004577027a-1246981924.252631-1099238295</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >G:/qxrd-win/qxrd.pro</value>
+    <value type="QString" >/home/jennings/development/qxrd/qxrd.pro</value>
     <value type="QString" >-spec</value>
-    <value type="QString" >C:/Qt/2009.02/qt/mkspecs/win32-g++</value>
+    <value type="QString" >/usr/lib64/qt4/mkspecs/linux-g++-64</value>
     <value type="QString" >-r</value>
-    <value type="QString" >CONFIG+=release</value>
    </valuelist>
-   <value key="abstractProcess.command" type="QString" >C:/qt/2009.02/qt/bin/qmake.exe</value>
+   <value key="abstractProcess.command" type="QString" >/usr/bin/qmake-qt4</value>
    <value key="abstractProcess.enabled" type="bool" >false</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >G:/qxrd-win</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/jennings/development/qxrd</value>
    <value key="buildConfiguration" type="int" >0</value>
   </valuemap>
  </data>
@@ -314,121 +121,93 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
    <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
-    <value type="QString" >APPDATA=C:\Documents and Settings\jennings\Application Data</value>
-    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
-    <value type="QString" >COMPUTERNAME=JENNINGSXP</value>
-    <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
-    <value type="QString" >CUDA_BIN_PATH=C:\CUDA\bin</value>
-    <value type="QString" >CUDA_INC_PATH=C:\CUDA\include</value>
-    <value type="QString" >CUDA_LIB_PATH=C:\CUDA\lib</value>
-    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
-    <value type="QString" >HOMEDRIVE=C:</value>
-    <value type="QString" >HOMEPATH=\Documents and Settings\jennings</value>
-    <value type="QString" >INNOVATIVECOMMON=C:\Innovative</value>
-    <value type="QString" >LOGONSERVER=\\JENNINGSXP</value>
-    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
-    <value type="QString" >NVSDKCUDA_ROOT=C:\Documents and Settings\All Users\Application Data\NVIDIA Corporation\NVIDIA CUDA SDK</value>
-    <value type="QString" >OS=Windows_NT</value>
-    <value type="QString" >PATH=C:\Qt\2009.02\qt\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;c:\Program Files\Microsoft SQL Server\90\Tools\binn\;C:\CUDA\bin;C:\Innovative\lib\ipp;C:\Innovative\lib\ipp\win32;C:\Innovative\lib\dll;C:\Innovative\dll;;C:\WINDOWS\system32\WindowsPowerShell\v1.0;C:\Program Files\CMake 2.6\bin;c:\qwt-5.2.0-svn\lib;c:\qt\2009.02\mingw\bin;c:\qt\2009.02\qt\bin</value>
-    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.PSC1</value>
-    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
-    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 2, GenuineIntel</value>
-    <value type="QString" >PROCESSOR_LEVEL=6</value>
-    <value type="QString" >PROCESSOR_REVISION=0f02</value>
-    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
-    <value type="QString" >QTDIR=c:/Qt/2009.01/qt</value>
-    <value type="QString" >SESSIONNAME=Console</value>
-    <value type="QString" >SYSTEMDRIVE=C:</value>
-    <value type="QString" >SYSTEMROOT=C:\WINDOWS</value>
-    <value type="QString" >TEMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >TMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >USERDOMAIN=JENNINGSXP</value>
-    <value type="QString" >USERNAME=jennings</value>
-    <value type="QString" >USERPROFILE=C:\Documents and Settings\jennings</value>
-    <value type="QString" >VS80COMNTOOLS=C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
-    <value type="QString" >VS90COMNTOOLS=C:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools\</value>
-    <value type="QString" >WINDIR=C:\WINDOWS</value>
-    <value type="QString" >XPCDRIVE=D:\</value>
+    <value type="QString" >AcqirisDxDir=/usr/lib/acqiris</value>
+    <value type="QString" >BASH_ENV=/home/jennings/.bashrc</value>
+    <value type="QString" >CVSROOT=/home/jennings/cvs</value>
+    <value type="QString" >CVS_RSH=ssh</value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-Wi4NHWGvDy,guid=a4c435129206e1050855dba34a536f24</value>
+    <value type="QString" >DESKTOP_SESSION=gnome</value>
+    <value type="QString" >DESKTOP_STARTUP_ID=</value>
+    <value type="QString" >DISPLAY=:0.0</value>
+    <value type="QString" >GDL_PATH=+/usr/share/gdl</value>
+    <value type="QString" >GDMSESSION=gnome</value>
+    <value type="QString" >GDM_LANG=en_US.utf8</value>
+    <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
+    <value type="QString" >GNOME_KEYRING_PID=2785</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-zLVIUf/socket</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/jennings/.gtkrc-1.2-gnome2</value>
+    <value type="QString" >G_BROKEN_FILENAMES=1</value>
+    <value type="QString" >HISTSIZE=1000</value>
+    <value type="QString" >HOME=/home/jennings</value>
+    <value type="QString" >HOSTNAME=weimar.xor.aps.anl.gov</value>
+    <value type="QString" >HOST_ARCH=Linux</value>
+    <value type="QString" >KDEDIRS=/usr</value>
+    <value type="QString" >LANG=en_US.utf8</value>
+    <value type="QString" >LD_LIBRARY_PATH=/usr/lib64/qtcreator:</value>
+    <value type="QString" >LESSOPEN=|/usr/bin/lesspipe.sh %s</value>
+    <value type="QString" >LOADEDMODULES=</value>
+    <value type="QString" >LOGNAME=jennings</value>
+    <value type="QString" >MAIL=/var/spool/mail/jennings</value>
+    <value type="QString" >MODULEPATH=/usr/share/Modules/modulefiles:/etc/modulefiles:</value>
+    <value type="QString" >MODULESHOME=/usr/share/Modules</value>
+    <value type="QString" >NCARG_DATABASE=/usr/lib64/ncarg/database</value>
+    <value type="QString" >NCARG_FONTCAPS=/usr/lib64/ncarg/fontcaps</value>
+    <value type="QString" >NCARG_GRAPHCAPS=/usr/lib64/ncarg/graphcaps</value>
+    <value type="QString" >NCARG_LIB=/usr/lib64/ncarg</value>
+    <value type="QString" >NCARG_NCARG=/usr/share/ncarg</value>
+    <value type="QString" >NCARG_ROOT=/usr</value>
+    <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-jennings</value>
+    <value type="QString" >PATH=/usr/lib64/qt4/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/libexec/sdcc:/home/jennings/bin:/usr/local/epics/bin:/usr/java/j2re1.4.2_02/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin/Linux:/home/jennings/synApps_R3.13.1.1_R4.1/share/bin/Linux</value>
+    <value type="QString" >PSPRINTER=lj4000</value>
+    <value type="QString" >PWD=/home/jennings</value>
+    <value type="QString" >QTDIR=/usr</value>
+    <value type="QString" >QTINC=/usr/lib64/qt-3.3/include</value>
+    <value type="QString" >QTLIB=/usr/lib64/qt-3.3/lib</value>
+    <value type="QString" >SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/2801,unix/unix:/tmp/.ICE-unix/2801</value>
+    <value type="QString" >SHARE_DIR=/home/jennings/synApps_R3.13.1.1_R4.1/share</value>
+    <value type="QString" >SHELL=/bin/bash</value>
+    <value type="QString" >SHLVL=1</value>
+    <value type="QString" >SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-zLVIUf/socket.ssh</value>
+    <value type="QString" >SYNAPPS=/home/jennings/synApps_R3.13.1.1_R4.1</value>
+    <value type="QString" >USER=jennings</value>
+    <value type="QString" >USERNAME=</value>
+    <value type="QString" >USER_DIR=/home/jennings/xxx</value>
+    <value type="QString" >WISECONFIGDIR=/usr/share/wise2/</value>
+    <value type="QString" >XAUTHORITY=/var/run/gdm/auth-for-jennings-fGMEWN/database</value>
+    <value type="QString" >XDG_SESSION_COOKIE=a1cb685e464c450ef0e456004577027a-1246981924.252631-1099238295</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
     <value type="QString" >-w</value>
    </valuelist>
-   <value key="abstractProcess.command" type="QString" >C:/qt/2009.02/mingw/bin/mingw32-make.exe</value>
+   <value key="abstractProcess.command" type="QString" >/usr/bin/make</value>
    <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >G:/qxrd-win</value>
-   <value key="buildConfiguration" type="int" >0</value>
+   <value key="abstractProcess.workingDirectory" type="QString" >/home/jennings/development/qxrd</value>
   </valuemap>
  </data>
  <data>
   <variable>buildconfiguration-Release-cleanstep0</variable>
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
-   <valuelist key="abstractProcess.Environment" type="QVariantList" >
-    <value type="QString" >ALLUSERSPROFILE=C:\Documents and Settings\All Users</value>
-    <value type="QString" >APPDATA=C:\Documents and Settings\jennings\Application Data</value>
-    <value type="QString" >COMMONPROGRAMFILES=C:\Program Files\Common Files</value>
-    <value type="QString" >COMPUTERNAME=JENNINGSXP</value>
-    <value type="QString" >COMSPEC=C:\WINDOWS\system32\cmd.exe</value>
-    <value type="QString" >CUDA_BIN_PATH=C:\CUDA\bin</value>
-    <value type="QString" >CUDA_INC_PATH=C:\CUDA\include</value>
-    <value type="QString" >CUDA_LIB_PATH=C:\CUDA\lib</value>
-    <value type="QString" >FP_NO_HOST_CHECK=NO</value>
-    <value type="QString" >HOMEDRIVE=C:</value>
-    <value type="QString" >HOMEPATH=\Documents and Settings\jennings</value>
-    <value type="QString" >INNOVATIVECOMMON=C:\Innovative</value>
-    <value type="QString" >LOGONSERVER=\\JENNINGSXP</value>
-    <value type="QString" >NUMBER_OF_PROCESSORS=2</value>
-    <value type="QString" >NVSDKCUDA_ROOT=C:\Documents and Settings\All Users\Application Data\NVIDIA Corporation\NVIDIA CUDA SDK</value>
-    <value type="QString" >OS=Windows_NT</value>
-    <value type="QString" >PATH=C:\Qt\2009.02\qt\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;c:\Program Files\Microsoft SQL Server\90\Tools\binn\;C:\CUDA\bin;C:\Innovative\lib\ipp;C:\Innovative\lib\ipp\win32;C:\Innovative\lib\dll;C:\Innovative\dll;;C:\WINDOWS\system32\WindowsPowerShell\v1.0;C:\Program Files\CMake 2.6\bin;c:\qwt-5.2.0-svn\lib;c:\qt\2009.02\mingw\bin;c:\qt\2009.02\qt\bin</value>
-    <value type="QString" >PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.PSC1</value>
-    <value type="QString" >PROCESSOR_ARCHITECTURE=x86</value>
-    <value type="QString" >PROCESSOR_IDENTIFIER=x86 Family 6 Model 15 Stepping 2, GenuineIntel</value>
-    <value type="QString" >PROCESSOR_LEVEL=6</value>
-    <value type="QString" >PROCESSOR_REVISION=0f02</value>
-    <value type="QString" >PROGRAMFILES=C:\Program Files</value>
-    <value type="QString" >QTDIR=c:/Qt/2009.01/qt</value>
-    <value type="QString" >SESSIONNAME=Console</value>
-    <value type="QString" >SYSTEMDRIVE=C:</value>
-    <value type="QString" >SYSTEMROOT=C:\WINDOWS</value>
-    <value type="QString" >TEMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >TMP=C:\DOCUME~1\jennings\LOCALS~1\Temp</value>
-    <value type="QString" >USERDOMAIN=JENNINGSXP</value>
-    <value type="QString" >USERNAME=jennings</value>
-    <value type="QString" >USERPROFILE=C:\Documents and Settings\jennings</value>
-    <value type="QString" >VS80COMNTOOLS=C:\Program Files\Microsoft Visual Studio 8\Common7\Tools\</value>
-    <value type="QString" >VS90COMNTOOLS=C:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools\</value>
-    <value type="QString" >WINDIR=C:\WINDOWS</value>
-    <value type="QString" >XPCDRIVE=D:\</value>
-   </valuelist>
-   <valuelist key="abstractProcess.arguments" type="QVariantList" >
-    <value type="QString" >clean</value>
-    <value type="QString" >-w</value>
-   </valuelist>
-   <value key="abstractProcess.command" type="QString" >C:/qt/2009.02/mingw/bin/mingw32-make.exe</value>
-   <value key="abstractProcess.enabled" type="bool" >true</value>
-   <value key="abstractProcess.workingDirectory" type="QString" >G:/qxrd-win</value>
   </valuemap>
  </data>
  <data>
   <variable>buildconfigurations</variable>
   <valuelist type="QVariantList" >
    <value type="QString" >Release</value>
-   <value type="QString" >Debug</value>
   </valuelist>
  </data>
  <data>
   <variable>buildstep0</variable>
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" ></value>
+   <value key="mkspec" type="QString" ></value>
   </valuemap>
  </data>
  <data>
   <variable>buildstep1</variable>
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" ></value>
-   <value key="mkspec" type="QString" ></value>
   </valuemap>
  </data>
  <data>
