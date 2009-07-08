@@ -10,10 +10,10 @@ Check that settings are not being saved twice (in QxrdWindow destructor):
 Check thread correctness of acquisition
 Adopt the same threading model as qavrg
 
--------------------------------------------------------
-
-Run script engine in separate thread
-
+//-------------------------------------------------------
+//
+//Run script engine in separate thread
+//
 -------------------------------------------------------
 
 Correct signal/slot corrections to use new properties

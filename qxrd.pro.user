@@ -41,6 +41,7 @@
   <valuemap type="QVariantMap" >
    <value key="ProjectExplorer.BuildConfiguration.DisplayName" type="QString" >Release</value>
    <value key="QtVersionId" type="int" >2</value>
+   <value key="addQDumper" type="" ></value>
   </valuemap>
  </data>
  <data>
@@ -52,24 +53,31 @@
     <value type="QString" >BASH_ENV=/home/jennings/.bashrc</value>
     <value type="QString" >CVSROOT=/home/jennings/cvs</value>
     <value type="QString" >CVS_RSH=ssh</value>
-    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-Wi4NHWGvDy,guid=a4c435129206e1050855dba34a536f24</value>
-    <value type="QString" >DESKTOP_SESSION=gnome</value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-lTlKop5MsN,guid=7f33b56330932ca775de75b74a54cbb7</value>
+    <value type="QString" >DESKTOP_SESSION=kde</value>
     <value type="QString" >DESKTOP_STARTUP_ID=</value>
     <value type="QString" >DISPLAY=:0.0</value>
     <value type="QString" >GDL_PATH=+/usr/share/gdl</value>
-    <value type="QString" >GDMSESSION=gnome</value>
+    <value type="QString" >GDMSESSION=kde</value>
     <value type="QString" >GDM_LANG=en_US.utf8</value>
-    <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString" >GNOME_KEYRING_PID=2785</value>
-    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-zLVIUf/socket</value>
-    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/jennings/.gtkrc-1.2-gnome2</value>
+    <value type="QString" >GNOME_KEYRING_PID=3170</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-NAprpA/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/gpg-EMs66m/S.gpg-agent:3288:1</value>
+    <value type="QString" >GS_LIB=</value>
+    <value type="QString" >GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/jennings/.gtkrc-2.0::/home/jennings/.kde/share/config/gtkrc-2.0</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/jennings/.gtkrc::/home/jennings/.kde/share/config/gtkrc</value>
     <value type="QString" >G_BROKEN_FILENAMES=1</value>
     <value type="QString" >HISTSIZE=1000</value>
     <value type="QString" >HOME=/home/jennings</value>
     <value type="QString" >HOSTNAME=weimar.xor.aps.anl.gov</value>
     <value type="QString" >HOST_ARCH=Linux</value>
     <value type="QString" >KDEDIRS=/usr</value>
+    <value type="QString" >KDE_FULL_SESSION=true</value>
+    <value type="QString" >KDE_MULTIHEAD=false</value>
+    <value type="QString" >KDE_SESSION_UID=500</value>
+    <value type="QString" >KDE_SESSION_VERSION=4</value>
     <value type="QString" >LANG=en_US.utf8</value>
+    <value type="QString" >LANGUAGE=</value>
     <value type="QString" >LD_LIBRARY_PATH=/usr/lib64/qtcreator:</value>
     <value type="QString" >LESSOPEN=|/usr/bin/lesspipe.sh %s</value>
     <value type="QString" >LOADEDMODULES=</value>
@@ -84,25 +92,30 @@
     <value type="QString" >NCARG_NCARG=/usr/share/ncarg</value>
     <value type="QString" >NCARG_ROOT=/usr</value>
     <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-jennings</value>
-    <value type="QString" >PATH=/usr/lib64/qt4/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/libexec/sdcc:/home/jennings/bin:/usr/local/epics/bin:/usr/java/j2re1.4.2_02/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin/Linux:/home/jennings/synApps_R3.13.1.1_R4.1/share/bin/Linux</value>
+    <value type="QString" >PATH=/usr/lib64/qt4/bin:/usr/local/cuda/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/libexec/sdcc:/home/jennings/bin:/usr/local/epics/bin:/usr/java/j2re1.4.2_02/bin</value>
     <value type="QString" >PSPRINTER=lj4000</value>
-    <value type="QString" >PWD=/home/jennings</value>
+    <value type="QString" >PWD=/home/jennings/Documents</value>
     <value type="QString" >QTDIR=/usr</value>
     <value type="QString" >QTINC=/usr/lib64/qt-3.3/include</value>
     <value type="QString" >QTLIB=/usr/lib64/qt-3.3/lib</value>
-    <value type="QString" >SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/2801,unix/unix:/tmp/.ICE-unix/2801</value>
+    <value type="QString" >QT_PLUGIN_PATH=/home/jennings/.kde/lib64/kde4/plugins/:/usr/lib64/kde4/plugins/</value>
+    <value type="QString" >SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/3333,unix/unix:/tmp/.ICE-unix/3333</value>
     <value type="QString" >SHARE_DIR=/home/jennings/synApps_R3.13.1.1_R4.1/share</value>
     <value type="QString" >SHELL=/bin/bash</value>
-    <value type="QString" >SHLVL=1</value>
-    <value type="QString" >SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-zLVIUf/socket.ssh</value>
+    <value type="QString" >SHLVL=2</value>
+    <value type="QString" >SSH_AGENT_PID=3209</value>
+    <value type="QString" >SSH_ASKPASS=/usr/bin/ksshaskpass</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/ssh-rpecOb3176/agent.3176</value>
     <value type="QString" >SYNAPPS=/home/jennings/synApps_R3.13.1.1_R4.1</value>
     <value type="QString" >USER=jennings</value>
     <value type="QString" >USERNAME=</value>
     <value type="QString" >USER_DIR=/home/jennings/xxx</value>
     <value type="QString" >WISECONFIGDIR=/usr/share/wise2/</value>
-    <value type="QString" >XAUTHORITY=/var/run/gdm/auth-for-jennings-fGMEWN/database</value>
-    <value type="QString" >XDG_SESSION_COOKIE=a1cb685e464c450ef0e456004577027a-1246981924.252631-1099238295</value>
+    <value type="QString" >XAUTHORITY=/var/run/gdm/auth-for-jennings-eSya0M/database</value>
+    <value type="QString" >XCURSOR_THEME=default</value>
+    <value type="QString" >XDG_DATA_DIRS=/usr/share/kde-settings/kde-profile/default/share:/usr/local/share:/usr/share</value>
+    <value type="QString" >XDG_MENU_PREFIX=kde4-</value>
+    <value type="QString" >XDG_SESSION_COOKIE=a1cb685e464c450ef0e456004577027a-1247071159.417713-274158255</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
     <value type="QString" >/home/jennings/development/qxrd/qxrd.pro</value>
@@ -125,24 +138,31 @@
     <value type="QString" >BASH_ENV=/home/jennings/.bashrc</value>
     <value type="QString" >CVSROOT=/home/jennings/cvs</value>
     <value type="QString" >CVS_RSH=ssh</value>
-    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-Wi4NHWGvDy,guid=a4c435129206e1050855dba34a536f24</value>
-    <value type="QString" >DESKTOP_SESSION=gnome</value>
+    <value type="QString" >DBUS_SESSION_BUS_ADDRESS=unix:abstract=/tmp/dbus-lTlKop5MsN,guid=7f33b56330932ca775de75b74a54cbb7</value>
+    <value type="QString" >DESKTOP_SESSION=kde</value>
     <value type="QString" >DESKTOP_STARTUP_ID=</value>
     <value type="QString" >DISPLAY=:0.0</value>
     <value type="QString" >GDL_PATH=+/usr/share/gdl</value>
-    <value type="QString" >GDMSESSION=gnome</value>
+    <value type="QString" >GDMSESSION=kde</value>
     <value type="QString" >GDM_LANG=en_US.utf8</value>
-    <value type="QString" >GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
-    <value type="QString" >GNOME_KEYRING_PID=2785</value>
-    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-zLVIUf/socket</value>
-    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/jennings/.gtkrc-1.2-gnome2</value>
+    <value type="QString" >GNOME_KEYRING_PID=3170</value>
+    <value type="QString" >GNOME_KEYRING_SOCKET=/tmp/keyring-NAprpA/socket</value>
+    <value type="QString" >GPG_AGENT_INFO=/tmp/gpg-EMs66m/S.gpg-agent:3288:1</value>
+    <value type="QString" >GS_LIB=</value>
+    <value type="QString" >GTK2_RC_FILES=/etc/gtk-2.0/gtkrc:/home/jennings/.gtkrc-2.0::/home/jennings/.kde/share/config/gtkrc-2.0</value>
+    <value type="QString" >GTK_RC_FILES=/etc/gtk/gtkrc:/home/jennings/.gtkrc::/home/jennings/.kde/share/config/gtkrc</value>
     <value type="QString" >G_BROKEN_FILENAMES=1</value>
     <value type="QString" >HISTSIZE=1000</value>
     <value type="QString" >HOME=/home/jennings</value>
     <value type="QString" >HOSTNAME=weimar.xor.aps.anl.gov</value>
     <value type="QString" >HOST_ARCH=Linux</value>
     <value type="QString" >KDEDIRS=/usr</value>
+    <value type="QString" >KDE_FULL_SESSION=true</value>
+    <value type="QString" >KDE_MULTIHEAD=false</value>
+    <value type="QString" >KDE_SESSION_UID=500</value>
+    <value type="QString" >KDE_SESSION_VERSION=4</value>
     <value type="QString" >LANG=en_US.utf8</value>
+    <value type="QString" >LANGUAGE=</value>
     <value type="QString" >LD_LIBRARY_PATH=/usr/lib64/qtcreator:</value>
     <value type="QString" >LESSOPEN=|/usr/bin/lesspipe.sh %s</value>
     <value type="QString" >LOADEDMODULES=</value>
@@ -157,25 +177,30 @@
     <value type="QString" >NCARG_NCARG=/usr/share/ncarg</value>
     <value type="QString" >NCARG_ROOT=/usr</value>
     <value type="QString" >ORBIT_SOCKETDIR=/tmp/orbit-jennings</value>
-    <value type="QString" >PATH=/usr/lib64/qt4/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/libexec/sdcc:/home/jennings/bin:/usr/local/epics/bin:/usr/java/j2re1.4.2_02/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin:/home/jennings/synApps_R3.13.1.1_R4.1/bin/Linux:/home/jennings/synApps_R3.13.1.1_R4.1/share/bin/Linux</value>
+    <value type="QString" >PATH=/usr/lib64/qt4/bin:/usr/local/cuda/bin:/usr/lib64/qt-3.3/bin:/usr/kerberos/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/libexec/sdcc:/home/jennings/bin:/usr/local/epics/bin:/usr/java/j2re1.4.2_02/bin</value>
     <value type="QString" >PSPRINTER=lj4000</value>
-    <value type="QString" >PWD=/home/jennings</value>
+    <value type="QString" >PWD=/home/jennings/Documents</value>
     <value type="QString" >QTDIR=/usr</value>
     <value type="QString" >QTINC=/usr/lib64/qt-3.3/include</value>
     <value type="QString" >QTLIB=/usr/lib64/qt-3.3/lib</value>
-    <value type="QString" >SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/2801,unix/unix:/tmp/.ICE-unix/2801</value>
+    <value type="QString" >QT_PLUGIN_PATH=/home/jennings/.kde/lib64/kde4/plugins/:/usr/lib64/kde4/plugins/</value>
+    <value type="QString" >SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/3333,unix/unix:/tmp/.ICE-unix/3333</value>
     <value type="QString" >SHARE_DIR=/home/jennings/synApps_R3.13.1.1_R4.1/share</value>
     <value type="QString" >SHELL=/bin/bash</value>
-    <value type="QString" >SHLVL=1</value>
-    <value type="QString" >SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass</value>
-    <value type="QString" >SSH_AUTH_SOCK=/tmp/keyring-zLVIUf/socket.ssh</value>
+    <value type="QString" >SHLVL=2</value>
+    <value type="QString" >SSH_AGENT_PID=3209</value>
+    <value type="QString" >SSH_ASKPASS=/usr/bin/ksshaskpass</value>
+    <value type="QString" >SSH_AUTH_SOCK=/tmp/ssh-rpecOb3176/agent.3176</value>
     <value type="QString" >SYNAPPS=/home/jennings/synApps_R3.13.1.1_R4.1</value>
     <value type="QString" >USER=jennings</value>
     <value type="QString" >USERNAME=</value>
     <value type="QString" >USER_DIR=/home/jennings/xxx</value>
     <value type="QString" >WISECONFIGDIR=/usr/share/wise2/</value>
-    <value type="QString" >XAUTHORITY=/var/run/gdm/auth-for-jennings-fGMEWN/database</value>
-    <value type="QString" >XDG_SESSION_COOKIE=a1cb685e464c450ef0e456004577027a-1246981924.252631-1099238295</value>
+    <value type="QString" >XAUTHORITY=/var/run/gdm/auth-for-jennings-eSya0M/database</value>
+    <value type="QString" >XCURSOR_THEME=default</value>
+    <value type="QString" >XDG_DATA_DIRS=/usr/share/kde-settings/kde-profile/default/share:/usr/local/share:/usr/share</value>
+    <value type="QString" >XDG_MENU_PREFIX=kde4-</value>
+    <value type="QString" >XDG_SESSION_COOKIE=a1cb685e464c450ef0e456004577027a-1247071159.417713-274158255</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList" >
     <value type="QString" >-w</value>
