@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.8 2009/06/28 16:33:20 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.9 2009/07/09 01:15:09 jennings Exp $
 *
 *******************************************************************/
 
@@ -33,6 +33,7 @@ static QxrdAcquisitionPerkinElmer * g_Acquisition = NULL;
 
 QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdAcquisitionThread *thread)
   : QxrdAcquisitionOperations(thread),
+    m_Mutex(QMutex::Recursive),
     m_Cancelling(0),
     m_AcquireDark(0),
     m_NRows(0),
@@ -41,7 +42,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdAcquisitionThread *th
     m_CurrentFile(0),
     m_BufferSize(0),
     m_AcquiredData(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.8 2009/06/28 16:33:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.9 2009/07/09 01:15:09 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -100,6 +101,8 @@ static HACQDESC m_AcqDesc = NULL;
 
 void QxrdAcquisitionPerkinElmer::initialize()
 {
+  THREAD_CHECK;
+
   emit printMessage("QxrdAcquisitionPerkinElmer::initialize()\n");
 
   int nRet = HIS_ALL_OK;
@@ -178,6 +181,8 @@ void QxrdAcquisitionPerkinElmer::initialize()
 
 void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
 {
+  QMutexLocker lock(&m_Mutex);
+
   int nRet = HIS_ALL_OK;
   m_AcquireDark = isDark;
   m_BufferSize = 10;
@@ -271,6 +276,8 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 {
 //  emit printMessage("QxrdAcquisitionPerkinElmer::onEndFrame()");
 //
+  QMutexLocker lock(&m_Mutex);
+
   if (m_Cancelling) {
     m_Cancelling = false;
     return /*true*/;
@@ -442,11 +449,15 @@ void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 
 QVector<double> QxrdAcquisitionPerkinElmer::readoutTimes()
 {
+  QMutexLocker lock(&m_Mutex);
+
   return m_ReadoutTimes;
 }
 
 double QxrdAcquisitionPerkinElmer::readoutTime() const
 {
+  QMutexLocker lock(&m_Mutex);
+
   int n = get_ReadoutMode();
 
   return m_ReadoutTimes.value(n)/1e6;
@@ -470,6 +481,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.9  2009/07/09 01:15:09  jennings
+*  Added some locks
+*
 *  Revision 1.8  2009/06/28 16:33:20  jennings
 *  Eliminated compiler warnings
 *

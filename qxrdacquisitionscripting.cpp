@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionscripting.cpp,v 1.5 2009/06/28 04:00:39 jennings Exp $
+*  $Id: qxrdacquisitionscripting.cpp,v 1.6 2009/07/09 01:15:09 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,7 +15,7 @@ QxrdAcquisitionScripting::QxrdAcquisitionScripting(QxrdAcquisitionThread *thread
   : QxrdAcquisitionParameters(),
     m_Mutex(QMutex::Recursive),
     m_AcquisitionThread(thread),
-    SOURCE_IDENT("$Id: qxrdacquisitionscripting.cpp,v 1.5 2009/06/28 04:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionscripting.cpp,v 1.6 2009/07/09 01:15:09 jennings Exp $")
 {
   g_Acquisition = this;
 
@@ -32,6 +32,8 @@ QxrdAcquisitionThread *QxrdAcquisitionScripting::acquisitionThread() const
 
 QVariant QxrdAcquisitionScripting::evaluate(QString cmd)
 {
+  QMutexLocker lock(&m_Mutex);
+
 //  emit printMessage(tr("Evaluate %1").arg(cmd));
 
   QScriptValue res = m_ScriptEngine.evaluate(cmd);
@@ -78,6 +80,9 @@ void QxrdAcquisitionScripting::propertyList()
 /******************************************************************
 *
 *  $Log: qxrdacquisitionscripting.cpp,v $
+*  Revision 1.6  2009/07/09 01:15:09  jennings
+*  Added some locks
+*
 *  Revision 1.5  2009/06/28 04:00:39  jennings
 *  Partial implementation of separate thread for script engine
 *
