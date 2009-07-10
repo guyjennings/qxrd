@@ -34,4 +34,12 @@ Load and save settings for everything...
 
 -------------------------------------------------------
 
+Automatically reload dark, bad pixel and gain images when program restarts
+
+-------------------------------------------------------
+
+Eliminate the duplicate script engine object from QxrdAcquisitionScripting
+
+-------------------------------------------------------
+
 #endif // TODO_H

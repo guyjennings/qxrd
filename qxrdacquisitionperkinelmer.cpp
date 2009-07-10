@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.9 2009/07/09 01:15:09 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.10 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -31,8 +31,8 @@
 
 static QxrdAcquisitionPerkinElmer * g_Acquisition = NULL;
 
-QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdAcquisitionThread *thread)
-  : QxrdAcquisitionOperations(thread),
+QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdAcquisitionThread *thread, QxrdDataProcessor *proc)
+  : QxrdAcquisitionOperations(thread, proc),
     m_Mutex(QMutex::Recursive),
     m_Cancelling(0),
     m_AcquireDark(0),
@@ -42,7 +42,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdAcquisitionThread *th
     m_CurrentFile(0),
     m_BufferSize(0),
     m_AcquiredData(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.9 2009/07/09 01:15:09 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.10 2009/07/10 22:54:23 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -481,6 +481,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.10  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.9  2009/07/09 01:15:09  jennings
 *  Added some locks
 *

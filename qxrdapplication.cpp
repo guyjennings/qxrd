@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.40 2009/06/30 21:34:41 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.41 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,11 +8,14 @@
 #include "qxrdwindow.h"
 #include "qxrdserverthread.h"
 #include "qxrdserver.h"
+#include "qxrddataprocessorthread.h"
+#include "qxrddataprocessor.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
 #include "qxrdscriptenginethread.h"
 #include "qxrdscriptengine.h"
 #include "qcepproperty.h"
+#include "qxrdsettings.h"
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -26,7 +29,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.40 2009/06/30 21:34:41 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.41 2009/07/10 22:54:23 jennings Exp $")
 {
 //  QcepProperty::dumpMetaData(&QxrdApplication::staticMetaObject);
 //  QcepProperty::dumpMetaData(&QxrdWindow::staticMetaObject);
@@ -43,11 +46,23 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   setOrganizationDomain("xor.aps.anl.gov");
   setApplicationName("qxrd");
 
-  m_AcquisitionThread = new QxrdAcquisitionThread(/*this, NULL*/);
+  m_DataProcessorThread = new QxrdDataProcessorThread(NULL, NULL);
+  m_DataProcessor = m_DataProcessorThread -> dataProcessor();
+
+  connect(m_DataProcessorThread, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
+  connect(m_DataProcessor, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
+
+  m_DataProcessorThread -> start();
+
+  m_AcquisitionThread = new QxrdAcquisitionThread(m_DataProcessor);
   m_Acquisition = m_AcquisitionThread -> acquisition();
+
+  m_DataProcessor -> setAcquisition(m_Acquisition);
 
   m_Window = new QxrdWindow(this, m_AcquisitionThread);
   m_Window -> show();
+
+  m_DataProcessor -> setWindow(m_Window);
 
   connect(this, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
   emit printMessage("window shown");
@@ -89,12 +104,32 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 //  m_AcquisitionThread -> setWindow(m_Window);
 
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
+
+  readSettings();
 }
 
 QxrdApplication::~QxrdApplication()
 {
   delete m_AcquisitionThread;
   delete m_ServerThread;
+}
+
+void QxrdApplication::readSettings()
+{
+  QxrdSettings settings;
+
+  m_Window       -> readSettings(&settings, "window");
+  m_Acquisition  -> readSettings(&settings, "acquire");
+  m_DataProcessor-> readSettings(&settings, "processor");
+}
+
+void QxrdApplication::writeSettings()
+{
+  QxrdSettings settings;
+
+  m_Window       -> writeSettings(&settings, "window");
+  m_Acquisition  -> writeSettings(&settings, "acquire");
+  m_DataProcessor-> writeSettings(&settings, "processor");
 }
 
 void QxrdApplication::possiblyQuit()
@@ -113,7 +148,8 @@ bool QxrdApplication::wantToQuit()
 
 void QxrdApplication::shutdownThreads()
 {
-  m_Window -> writeSettings();
+  writeSettings();
+  m_DataProcessorThread -> shutdown();
   m_AcquisitionThread -> shutdown();
   m_ServerThread -> shutdown();
 }
@@ -128,9 +164,17 @@ QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
   return m_AcquisitionThread;
 }
 
+QxrdDataProcessor *QxrdApplication::dataProcessor() const
+{
+  return m_DataProcessor;
+}
+
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.41  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.40  2009/06/30 21:34:41  jennings
 *  Debugging meta data static init problems
 *

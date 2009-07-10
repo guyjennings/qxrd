@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.65 2009/07/08 19:06:27 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.66 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -37,19 +37,21 @@
 #include <QMetaObject>
 #include <QMetaMethod>
 
-#include "tiffio.h"
-
 QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget *parent)
   : QMainWindow(parent),
-    m_DarkImagePath(this, "darkImagePath", ""),
-    m_BadPixelsPath(this, "badPixelsPath", ""),
-    m_GainMapPath(this, "gainMapPath", ""),
+    m_DisplayMinimumPct(this, "displayMinimumPct", 0),
+    m_DisplayMaximumPct(this, "displayMaximumPct", 100),
+    m_DisplayMinimumVal(this, "displayMinimumVal", 0),
+    m_DisplayMaximumVal(this, "displayMaximumVal", 10000),
+    m_DisplayScalingMode(this, "displayScalingMode", 0),
+    m_InterpolatePixels(this, "interpolatePixels", 1),
+    m_MaintainAspectRatio(this, "maintainAspectRatio", 1),
+    m_DisplayColorMap(this, "displayColorMap", 0),
     m_SettingsLoaded(false),
     m_Application(app),
     m_AcquisitionThread(acq),
     m_Acquisition(NULL),
     m_ScriptEngine(NULL),
-    m_DataProcessor(NULL),
     m_CenterFinderDialog(NULL),
     m_CenterFinder(NULL),
     m_IntegratorDialog(NULL),
@@ -57,11 +59,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    m_Data(new QxrdImageData(2048,2048)),
-    m_DarkFrame(NULL),
-    m_BadPixels(NULL),
-    m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.65 2009/07/08 19:06:27 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.66 2009/07/10 22:54:23 jennings Exp $")
 {
   setupUi(this);
 
@@ -122,14 +120,17 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
   connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
 
-  connect(m_DisplayMinimum, SIGNAL(valueChanged(double)), m_Plot, SLOT(on_minimum_changed(double)));
-  connect(m_DisplayMaximum, SIGNAL(valueChanged(double)), m_Plot, SLOT(on_maximum_changed(double)));
+  connect(prop_DisplayMinimumPct(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_minimum_pct_changed(double)));
+  connect(prop_DisplayMaximumPct(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_maximum_pct_changed(double)));
 
-  connect(m_InterpolatePixels, SIGNAL(stateChanged(int)), m_Plot, SLOT(on_interpolate_changed(int)));
-  connect(m_MaintainAspectRatio, SIGNAL(stateChanged(int)), m_Plot, SLOT(on_maintain_aspect_changed(int)));
+  connect(prop_DisplayMinimumVal(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_minimum_val_changed(double)));
+  connect(prop_DisplayMaximumVal(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_maximum_val_changed(double)));
 
-  connect(m_Plot, SIGNAL(minimum_changed(double)), m_DisplayMinimum, SLOT(setValue(double)));
-  connect(m_Plot, SIGNAL(maximum_changed(double)), m_DisplayMaximum, SLOT(setValue(double)));
+  connect(prop_InterpolatePixels(), SIGNAL(changedValue(int)), m_Plot, SLOT(on_interpolate_changed(int)));
+  connect(prop_MaintainAspectRatio(), SIGNAL(changedValue(int)), m_Plot, SLOT(on_maintain_aspect_changed(int)));
+
+//  connect(m_Plot, SIGNAL(minimum_changed(double)), prop_DisplayMinimum, SLOT(setValue(double)));
+//  connect(m_Plot, SIGNAL(maximum_changed(double)), m_DisplayMaximum, SLOT(setValue(double)));
 
   connect(m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));
   connect(m_Display_5pct, SIGNAL(clicked()), m_Action005Range, SIGNAL(triggered()));
@@ -141,12 +142,12 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_Action100Range, SIGNAL(triggered()), m_Plot, SLOT(set100Range()));
   connect(m_ActionAutoRange, SIGNAL(triggered()), m_Plot, SLOT(setAutoRange()));
 
-  connect(m_GrayscaleButton, SIGNAL(clicked()), m_ActionGrayscale, SIGNAL(triggered()));
-  connect(m_InvGrayscaleButton, SIGNAL(clicked()), m_ActionInverseGrayscale, SIGNAL(triggered()));
-  connect(m_EarthTonesButton, SIGNAL(clicked()), m_ActionEarthTones, SIGNAL(triggered()));
-  connect(m_SpectrumButton, SIGNAL(clicked()), m_ActionSpectrum, SIGNAL(triggered()));
-  connect(m_FireButton, SIGNAL(clicked()), m_ActionFire, SIGNAL(triggered()));
-  connect(m_IceButton, SIGNAL(clicked()), m_ActionIce, SIGNAL(triggered()));
+//  connect(m_GrayscaleButton, SIGNAL(clicked()), m_ActionGrayscale, SIGNAL(triggered()));
+//  connect(m_InvGrayscaleButton, SIGNAL(clicked()), m_ActionInverseGrayscale, SIGNAL(triggered()));
+//  connect(m_EarthTonesButton, SIGNAL(clicked()), m_ActionEarthTones, SIGNAL(triggered()));
+//  connect(m_SpectrumButton, SIGNAL(clicked()), m_ActionSpectrum, SIGNAL(triggered()));
+//  connect(m_FireButton, SIGNAL(clicked()), m_ActionFire, SIGNAL(triggered()));
+//  connect(m_IceButton, SIGNAL(clicked()), m_ActionIce, SIGNAL(triggered()));
 
   connect(m_ActionGrayscale, SIGNAL(triggered()), m_Plot, SLOT(setGrayscale()));
   connect(m_ActionInverseGrayscale, SIGNAL(triggered()), m_Plot, SLOT(setInverseGrayscale()));
@@ -154,6 +155,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionSpectrum, SIGNAL(triggered()), m_Plot, SLOT(setSpectrum()));
   connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()));
   connect(m_ActionIce, SIGNAL(triggered()), m_Plot, SLOT(setIce()));
+
+  connect(prop_DisplayColorMap(), SIGNAL(changedValue(int)), m_Plot, SLOT(setColorMap(int)));
 
   connect(m_HideMaskRange, SIGNAL(clicked()), m_ActionHideMaskRange, SIGNAL(triggered()));
   connect(m_ShowMaskRange, SIGNAL(clicked()), m_ActionShowMaskRange, SIGNAL(triggered()));
@@ -238,13 +241,25 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   m_Acquisition -> prop_FilePattern() -> linkTo(m_FilePattern);
   m_Acquisition -> prop_FileIndex() -> linkTo(m_FileIndex);
 
-  m_DataProcessor = new QxrdDataProcessor(this, m_Acquisition, this);
+  m_Acquisition -> prop_PerformDarkSubtraction() -> linkTo(m_PerformDark);
+  m_Acquisition -> prop_SaveRawImages() -> linkTo(m_SaveRaw);
+  m_Acquisition -> prop_PerformBadPixels() -> linkTo(m_PerformBadPixels);
+  m_Acquisition -> prop_PerformGainCorrection() -> linkTo(m_PerformGainCorrection);
 
-  connect(m_DataProcessor, SIGNAL(processedImageAvailable()), this, SLOT(onProcessedImageAvailable()));
-  connect(m_DataProcessor, SIGNAL(darkImageAvailable()), this, SLOT(onDarkImageAvailable()));
-  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
+  m_Acquisition -> prop_DarkImagePath() -> linkTo(m_DarkImagePath);
+  m_Acquisition -> prop_BadPixelsPath() -> linkTo(m_BadPixelsPath);
+  m_Acquisition -> prop_GainMapPath() -> linkTo(m_GainMapPath);
 
-  readSettings();
+  prop_DisplayMinimumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumPct);
+  prop_DisplayMaximumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumPct);
+  prop_DisplayMinimumVal() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumVal);
+  prop_DisplayMaximumVal() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumVal);
+
+//  connect(m_DataProcessor, SIGNAL(processedImageAvailable()), this, SLOT(onProcessedImageAvailable()));
+//  connect(m_DataProcessor, SIGNAL(darkImageAvailable()), this, SLOT(onDarkImageAvailable()));
+//  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
+
+//  readSettings();
 
   connect(m_Acquisition, SIGNAL(oneReadoutModeChanged(int,double)),
           this,          SLOT(setReadoutTime(int, double)));
@@ -256,9 +271,9 @@ QxrdWindow::~QxrdWindow()
 {
 //  printf("QxrdWindow::~QxrdWindow()\n");
 
-  if (m_SettingsLoaded) {
-    writeSettings();
-  }
+//  if (m_SettingsLoaded) {
+//    writeSettings();
+//  }
 }
 
 void QxrdWindow::closeEvent ( QCloseEvent * event )
@@ -304,7 +319,7 @@ void QxrdWindow::criticalMessage(QString msg)
 
 void QxrdWindow::acquisitionReady()
 {
-  readSettings();
+//  readSettings();
 
   m_AcquireButton -> setEnabled(true);
   m_CancelButton -> setEnabled(false);
@@ -411,13 +426,13 @@ void QxrdWindow::onAcquireComplete(int /*dark*/)
   m_Acquiring = false;
 }
 
-void QxrdWindow::darkImageAcquired(QxrdImageData *image)
-{
-  newDarkImage(image);
-
-  saveImageData(m_DarkFrame);
-}
-
+//void QxrdWindow::darkImageAcquired(QxrdImageData *image)
+//{
+//  newDarkImage(image);
+//
+//  saveImageData(m_DarkFrame);
+//}
+//
 void QxrdWindow::doAcquire()
 {
 //  printMessage("QxrdWindow::doAcquire()\n");
@@ -452,65 +467,27 @@ void QxrdWindow::doCancelDark()
   }
 }
 
-void QxrdWindow::readSettings()
+void QxrdWindow::readSettings(QxrdSettings *settings, QString section)
 {
-  QxrdSettings settings;
-
-  m_Acquisition  -> readSettings(&settings, "acquire");
-  m_CenterFinder -> readSettings(&settings, "centerfinder");
-  m_DataProcessor-> readSettings(&settings, "processor");
-  m_Integrator   -> readSettings(&settings, "integrator");
-
-  setPerformDarkSubtraction(settings.value("acq/subtractdark",1).toInt());
-  setSaveRawImages(settings.value("acq/saveraw",0).toInt());
-//  setDarkImagePath(settings.value("acq/darkpath","").toString());
-
-  setPerformBadPixels(settings.value("acq/performbadpixels",0).toInt());
-//  setBadPixelsPath(settings.value("acq/badpixelspath","").toString());
-
-  setPerformGainCorrection(settings.value("acq/gaincorrect",0).toInt());
-//  setGainMapPath(settings.value("acq/gaincorrectpath","").toString());
-
-  setDisplayMinimumPct(settings.value("disp/minimumpct",0).toDouble());
-  setDisplayMaximumPct(settings.value("disp/maximumpct",100).toDouble());
-  setInterpolatePixels(settings.value("disp/interpolate",1).toInt());
-  setMaintainAspectRatio(settings.value("disp/maintainaspect",1).toInt());
+  m_CenterFinder -> readSettings(settings, section+"/centerfinder");
+  m_Integrator   -> readSettings(settings, section+"/integrator");
 
   m_SettingsLoaded = true;
 
-  QByteArray geometry = settings.value("window/geometry").toByteArray();
-  QByteArray winstate = settings.value("window/state").toByteArray();
+  QByteArray geometry = settings -> value(section+"/geometry").toByteArray();
+  QByteArray winstate = settings -> value(section+"/state").toByteArray();
 
   restoreGeometry(geometry);
   restoreState(winstate,1);
 }
 
-void QxrdWindow::writeSettings()
+void QxrdWindow::writeSettings(QxrdSettings *settings, QString section)
 {
-  QxrdSettings settings;
+  m_CenterFinder -> writeSettings(settings, section+"/centerfinder");
+  m_Integrator   -> writeSettings(settings, section+"/integrator");
 
-  m_Acquisition  -> writeSettings(&settings, "acquire");
-  m_CenterFinder -> writeSettings(&settings, "centerfinder");
-  m_DataProcessor-> writeSettings(&settings, "processor");
-  m_Integrator   -> writeSettings(&settings, "integrator");
-
-  settings.setValue("acq/subtractdark", performDarkSubtraction());
-  settings.setValue("acq/saveraw", saveRawImages());
-//  settings.setValue("acq/darkpath", darkImagePath());
-
-  settings.setValue("acq/performbadpixels", performBadPixels());
-//  settings.setValue("acq/badpixelspath", badPixelsPath());
-
-  settings.setValue("acq/gaincorrect", performGainCorrection());
-//  settings.setValue("acq/gaincorrectpath", gainMapPath());
-
-  settings.setValue("disp/minimumpct", displayMinimumPct());
-  settings.setValue("disp/maximumpct", displayMaximumPct());
-  settings.setValue("disp/interpolate", interpolatePixels());
-  settings.setValue("disp/maintainaspect", maintainAspectRatio());
-
-  settings.setValue("window/geometry", saveGeometry());
-  settings.setValue("window/state", saveState(1));
+  settings -> setValue(section+"/geometry", saveGeometry());
+  settings -> setValue(section+"/state", saveState(1));
 }
 
 void QxrdWindow::statusMessage(QString msg)
@@ -544,7 +521,7 @@ void QxrdWindow::doSaveData()
       this, "Save Data in", m_Acquisition -> get_OutputDirectory());
 
   if (theFile.length()) {
-    saveData(theFile);
+    m_Acquisition -> saveData(theFile);
   }
 }
 
@@ -554,107 +531,39 @@ void QxrdWindow::doLoadData()
       this, "Load Image from...", m_Acquisition -> get_OutputDirectory());
 
   if (theFile.length()) {
-    loadData(theFile);
+    m_Acquisition -> loadData(theFile);
   }
 }
 
-void QxrdWindow::loadData(QString name)
-{
-    QxrdImageData* res = m_Acquisition -> takeNextFreeImage();
 
-    res -> readImage(name);
+//int QxrdWindow::performDarkSubtraction()
+//{
+//  return m_PerformDark->checkState();
+//}
+//
+//void QxrdWindow::setPerformDarkSubtraction(int subt)
+//{
+//  m_PerformDark->setChecked(subt);
+//}
 
-    newData(res);
-}
-
-void QxrdWindow::saveData(QString name)
-{
-  m_Data -> set_FileName(name);
-
-  saveImageData(m_Data);
-}
-
-void QxrdWindow::saveImageData(QxrdImageData *image)
-{
-  saveNamedImageData(image->get_FileName(), image);
-}
-
-void QxrdWindow::saveRawData(QxrdImageData *image)
-{
-  saveNamedImageData(image->rawFileName(), image);
-}
-
-void QxrdWindow::saveNamedImageData(QString name, QxrdImageData *image)
-{
-//  emit printMessage(tr("Saved \"%1\")").arg(name));
-
-  QReadLocker lock(image->rwLock());
-
-  int nrows = image -> get_Height();
-  int ncols = image -> get_Width();
-
-  TIFF* tif = TIFFOpen(qPrintable(name),"w");
-
-  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
-  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows);
-  TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
-  TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-  TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-  TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32);
-  TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
-
-  QVector<float> buffvec(4096);
-  float* buffer = buffvec.data();
-
-  for (int y=0; y<nrows; y++) {
-    for (int x=0; x<ncols; x++) {
-      buffer[x] = image->value(x,y);
-    }
-
-    TIFFWriteScanline(tif, buffer, y, 0);
-  }
-
-  TIFFClose(tif);
-}
-
-
-int QxrdWindow::performDarkSubtraction()
-{
-  return m_PerformDark->checkState();
-}
-
-void QxrdWindow::setPerformDarkSubtraction(int subt)
-{
-  m_PerformDark->setChecked(subt);
-}
-
-int QxrdWindow::saveRawImages()
-{
-  return m_SaveRaw->checkState();
-}
-
-void QxrdWindow::setSaveRawImages(int sav)
-{
-  m_SaveRaw->setChecked(sav);
-}
+//int QxrdWindow::saveRawImages()
+//{
+//  return m_SaveRaw->checkState();
+//}
+//
+//void QxrdWindow::setSaveRawImages(int sav)
+//{
+//  m_SaveRaw->setChecked(sav);
+//}
 
 void QxrdWindow::doLoadDarkImage()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Dark Image from...", get_DarkImagePath());
+      this, "Load Dark Image from...", m_Acquisition -> get_DarkImagePath());
 
   if (theFile.length()) {
-    loadDarkImage(theFile);
+    m_Acquisition -> loadDarkImage(theFile);
   }
-}
-
-void QxrdWindow::loadDarkImage(QString name)
-{
-  QxrdImageData* img = m_Acquisition -> takeNextFreeImage();
-
-  img -> readImage(name);
-
-  newDarkImage(img);
 }
 
 //QString QxrdWindow::darkImagePath()
@@ -667,33 +576,24 @@ void QxrdWindow::loadDarkImage(QString name)
 //  m_DarkImageName -> setText(path);
 //}
 //
-int QxrdWindow::performBadPixels()
-{
-  return m_PerformBadPixels -> checkState();
-}
-
-void QxrdWindow::setPerformBadPixels(int corr)
-{
-  m_PerformBadPixels->setChecked(corr);
-}
+//int QxrdWindow::performBadPixels()
+//{
+//  return m_PerformBadPixels -> checkState();
+//}
+//
+//void QxrdWindow::setPerformBadPixels(int corr)
+//{
+//  m_PerformBadPixels->setChecked(corr);
+//}
 
 void QxrdWindow::doLoadBadPixels()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Bad Pixel Map from...", get_BadPixelsPath());
+      this, "Load Bad Pixel Map from...", m_Acquisition -> get_BadPixelsPath());
 
   if (theFile.length()) {
-    loadBadPixels(theFile);
+    m_Acquisition -> loadBadPixels(theFile);
   }
-}
-
-void QxrdWindow::loadBadPixels(QString name)
-{
-  QxrdImageData* res = m_Acquisition -> takeNextFreeImage();
-
-  res -> readImage(name);
-
-  newBadPixelsImage(res);
 }
 
 //QString QxrdWindow::badPixelsPath()
@@ -706,33 +606,24 @@ void QxrdWindow::loadBadPixels(QString name)
 //  m_BadPixelsFileName->setText(path);
 //}
 
-int QxrdWindow::performGainCorrection()
-{
-  return m_PerformGainCorrection->checkState();
-}
-
-void QxrdWindow::setPerformGainCorrection(int corr)
-{
-  m_PerformGainCorrection->setChecked(corr);
-}
-
+//int QxrdWindow::performGainCorrection()
+//{
+//  return m_PerformGainCorrection->checkState();
+//}
+//
+//void QxrdWindow::setPerformGainCorrection(int corr)
+//{
+//  m_PerformGainCorrection->setChecked(corr);
+//}
+//
 void QxrdWindow::doLoadGainMap()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Pixel Gain Map from...", get_GainMapPath());
+      this, "Load Pixel Gain Map from...", m_Acquisition -> get_GainMapPath());
 
   if (theFile.length()) {
-    loadGainMap(theFile);
+    m_Acquisition -> loadGainMap(theFile);
   }
-}
-
-void QxrdWindow::loadGainMap(QString name)
-{
-  QxrdImageData* res = m_Acquisition -> takeNextFreeImage();
-
-  res -> readImage(name);
-
-  newGainMapImage(res);
 }
 
 //QString QxrdWindow::gainMapPath()
@@ -745,191 +636,59 @@ void QxrdWindow::loadGainMap(QString name)
 //  m_GainCorrectionFileName -> setText(path);
 //}
 
-void QxrdWindow::newData(QxrdImageData *image)
-{
-  if (m_Data != image) {
-    image -> copyMask(m_Data);
-
-    if (m_Data) {
-      m_Acquisition -> returnImageToPool(m_Data);
-    }
-
-    m_Data = image;
-  }
-
-  QxrdRasterData     data(m_Data, interpolatePixels());
-  QxrdMaskRasterData mask(m_Data, interpolatePixels());
-
-  m_Plot -> setImage(data);
-  m_Plot -> setMask(mask);
-  m_Plot -> setTitle(m_Data -> get_Title());
-  m_Plot -> replot();
-}
-
-void QxrdWindow::newDarkImage(QxrdImageData *image)
-{
-  if (m_DarkFrame != image) {
-    if (m_DarkFrame) {
-      m_Acquisition -> returnImageToPool(m_DarkFrame);
-    }
-
-    m_DarkFrame = image;
-  }
-
-  set_DarkImagePath(image->get_FileName());
-}
-
-QxrdImageData *QxrdWindow::data()
-{
-  return m_Data;
-}
-QxrdImageData *QxrdWindow::darkImage()
-{
-  return m_DarkFrame;
-}
-
-void QxrdWindow::newBadPixelsImage(QxrdImageData *image)
-{
-  if (m_BadPixels != image) {
-    if (m_BadPixels) {
-      m_Acquisition -> returnImageToPool(m_BadPixels);
-    }
-
-    m_BadPixels = image;
-  }
-
-  set_BadPixelsPath(image->get_FileName());
-}
-
-void QxrdWindow::newGainMapImage(QxrdImageData *image)
-{
-  if (m_GainFrame != image) {
-    if (m_GainFrame) {
-      m_Acquisition -> returnImageToPool(m_GainFrame);
-    }
-
-    m_GainFrame = image;
-  }
-
-  set_GainMapPath(image->get_FileName());
-}
-
-double QxrdWindow::displayMinimumPct()
-{
-  return m_DisplayMinimum -> value();
-}
-
-void QxrdWindow::setDisplayMinimumPct(double pct)
-{
-  m_DisplayMinimum -> setValue(pct);
-}
-
-double QxrdWindow::displayMaximumPct()
-{
-  return m_DisplayMaximum -> value();
-}
-
-void QxrdWindow::setDisplayMaximumPct(double pct)
-{
-  m_DisplayMaximum -> setValue(pct);
-}
-
-int QxrdWindow::interpolatePixels()
-{
-  return m_InterpolatePixels -> checkState();
-}
-
-void QxrdWindow::setInterpolatePixels(int interp)
-{
-  m_InterpolatePixels -> setChecked(interp);
-}
-
-int QxrdWindow::maintainAspectRatio()
-{
-  return m_MaintainAspectRatio -> checkState();
-}
-
-void QxrdWindow::setMaintainAspectRatio(int prsrv)
-{
-  m_MaintainAspectRatio -> setChecked(prsrv);
-}
-
-void QxrdWindow::onProcessedImageAvailable()
-{
-//  printf("onProcessedImageAvailable()\n");
-
-  QxrdImageData* img = m_DataProcessor -> takeLatestProcessedImage();
-
-  if (img) {
-    newData(img);
-  }
-}
-
-void QxrdWindow::onDarkImageAvailable()
-{
-//  printf("onDarkImageAvailable()\n");
-
-  QxrdImageData* img = m_DataProcessor -> takeNextDarkImage();
-
-  if (img) {
-    newDarkImage(img);
-  }
-}
+//QxrdImageData *QxrdWindow::data()
+//{
+//  return m_Data;
+//}
+//QxrdImageData *QxrdWindow::darkImage()
+//{
+//  return m_DarkFrame;
+//}
+//
+//double QxrdWindow::displayMinimumPct()
+//{
+//  return m_DisplayMinimum -> value();
+//}
+//
+//void QxrdWindow::setDisplayMinimumPct(double pct)
+//{
+//  m_DisplayMinimum -> setValue(pct);
+//}
+//
+//double QxrdWindow::displayMaximumPct()
+//{
+//  return m_DisplayMaximum -> value();
+//}
+//
+//void QxrdWindow::setDisplayMaximumPct(double pct)
+//{
+//  m_DisplayMaximum -> setValue(pct);
+//}
+//
+//int QxrdWindow::interpolatePixels()
+//{
+//  return m_InterpolatePixels -> checkState();
+//}
+//
+//void QxrdWindow::setInterpolatePixels(int interp)
+//{
+//  m_InterpolatePixels -> setChecked(interp);
+//}
+//
+//int QxrdWindow::maintainAspectRatio()
+//{
+//  return m_MaintainAspectRatio -> checkState();
+//}
+//
+//void QxrdWindow::setMaintainAspectRatio(int prsrv)
+//{
+//  m_MaintainAspectRatio -> setChecked(prsrv);
+//}
 
 void QxrdWindow::doTest()
 {
 
-  m_Data -> setCircularMask();
-}
-
-void QxrdWindow::showMaskRange()
-{
-  double min = m_MaskMinimum -> value();
-  double max = m_MaskMaximum -> value();
-
-  if (m_Data) {
-//    printf ("clearMaskRange(%g,%g)\n", min, max);
-
-    m_Data -> showMaskRange(min, max);
-
-    newData(m_Data);
-  }
-}
-
-void QxrdWindow::hideMaskAll()
-{
-  if (m_Data) {
-//    printf ("setMaskRange(%g,%g)\n", min, max);
-
-    m_Data -> hideMaskAll();
-
-    newData(m_Data);
-  }
-}
-
-void QxrdWindow::showMaskAll()
-{
-  if (m_Data) {
-//    printf ("clearMaskRange(%g,%g)\n", min, max);
-
-    m_Data -> showMaskAll();
-
-    newData(m_Data);
-  }
-}
-
-void QxrdWindow::hideMaskRange()
-{
-  double min = m_MaskMinimum -> value();
-  double max = m_MaskMaximum -> value();
-
-  if (m_Data) {
-//    printf ("setMaskRange(%g,%g)\n", min, max);
-
-    m_Data -> hideMaskRange(min, max);
-
-    newData(m_Data);
-  }
+//  m_Data -> setCircularMask();
 }
 
 void QxrdWindow::onToolBoxPageChanged(int /*page*/)
@@ -984,13 +743,13 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   m_ScriptEngine = engine;
 }
 
-QxrdDataProcessor *QxrdWindow::processor() const
-{
-  QMutexLocker  lock(&m_Mutex);
-
-  return m_DataProcessor;
-}
-
+//QxrdDataProcessor *QxrdWindow::processor() const
+//{
+//  QMutexLocker  lock(&m_Mutex);
+//
+//  return m_DataProcessor;
+//}
+//
 QxrdCenterFinder  *QxrdWindow::centerFinder() const
 {
   QMutexLocker  lock(&m_Mutex);
@@ -1008,6 +767,9 @@ QxrdIntegrator    *QxrdWindow::integrator() const
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.66  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.65  2009/07/08 19:06:27  jennings
 *  Made centering parameters into Q_PROPERTYs
 *  Saved centering, integrator and data processor settings

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.11 2009/07/08 19:06:27 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.12 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -20,9 +20,19 @@ QxrdDataProcessor::QxrdDataProcessor
     m_DarkUsage(QReadWriteLock::Recursive),
     m_ProcessedImages("QxrdDataProcessor Processed Images"),
     m_DarkImages("QxrdDataProcessor Dark Images"),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.11 2009/07/08 19:06:27 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.12 2009/07/10 22:54:23 jennings Exp $")
 {
   connect(m_Acquisition, SIGNAL(acquiredImageAvailable()), this, SLOT(on_acquired_image_available()));
+}
+
+void QxrdDataProcessor::setWindow(QxrdWindow *win)
+{
+  m_Window = win;
+}
+
+void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
+{
+  m_Acquisition = acq;
 }
 
 void QxrdDataProcessor::writeSettings(QxrdSettings *settings, QString section)
@@ -57,7 +67,7 @@ void QxrdDataProcessor::on_acquired_image_available()
 
       emit printMessage(tr("Saving dark image \"%1\"").arg(image->get_FileName()));
 
-      m_Window -> saveImageData(image);
+      m_Acquisition -> saveImageData(image);
 
       m_DarkImages.enqueue(image);
 
@@ -99,7 +109,7 @@ void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
 {
 //  printf("QxrdDataProcessor::processAcquiredImage\n");
 
-  QxrdImageData *dark   = m_Window -> darkImage();
+  QxrdImageData *dark   = m_Acquisition -> darkImage();
 
   if (img) {
     QTime tic;
@@ -114,7 +124,7 @@ void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
 
     emit printMessage(tr("Saving processed image in file \"%1\"").arg(img->get_FileName()));
 
-    m_Window -> saveImageData(img);
+    m_Acquisition -> saveImageData(img);
 
     m_ProcessedImages.enqueue(img);
 
@@ -128,11 +138,11 @@ void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
 
 void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *dark)
 {
-  if (m_Window -> performDarkSubtraction()) {
-    if (dark && m_Window -> saveRawImages()) {
+  if (m_Acquisition -> get_PerformDarkSubtraction()) {
+    if (dark && m_Acquisition -> get_SaveRawImages()) {
       emit printMessage(tr("Saving raw data in file \"%1\"").arg(image->rawFileName()));
 
-      m_Window -> saveRawData(image);
+      m_Acquisition -> saveRawData(image);
     }
 
     if (dark && image) {
@@ -190,6 +200,9 @@ void QxrdDataProcessor::correctImageGains(QxrdImageData */*image*/)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.12  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.11  2009/07/08 19:06:27  jennings
 *  Made centering parameters into Q_PROPERTYs
 *  Saved centering, integrator and data processor settings

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.5 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.6 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -67,13 +67,34 @@ public:
   Q_PROPERTY(QString fileBase        READ get_FileBase WRITE set_FileBase);
   QCEP_STRING_PROPERTY(FileBase);
 
+  Q_PROPERTY(QString darkImagePath   READ get_DarkImagePath WRITE set_DarkImagePath);
+  QCEP_STRING_PROPERTY(DarkImagePath);
+
+  Q_PROPERTY(QString badPixelsPath   READ get_BadPixelsPath WRITE set_BadPixelsPath);
+  QCEP_STRING_PROPERTY(BadPixelsPath);
+
+  Q_PROPERTY(QString gainMapPath     READ get_GainMapPath WRITE set_GainMapPath);
+  QCEP_STRING_PROPERTY(GainMapPath);
+
+  Q_PROPERTY(bool performDarkSubtraction READ get_PerformDarkSubtraction WRITE set_PerformDarkSubtraction);
+  QCEP_BOOLEAN_PROPERTY(PerformDarkSubtraction);
+
+  Q_PROPERTY(bool saveRawImages READ get_SaveRawImages WRITE set_SaveRawImages);
+  QCEP_BOOLEAN_PROPERTY(SaveRawImages);
+
+  Q_PROPERTY(bool performBadPixels READ get_PerformBadPixels WRITE set_PerformBadPixels);
+  QCEP_BOOLEAN_PROPERTY(PerformBadPixels);
+
+  Q_PROPERTY(bool performGainCorrection READ get_PerformGainCorrection WRITE set_PerformGainCorrection);
+  QCEP_BOOLEAN_PROPERTY(PerformGainCorrection);
+
 //  Q_PROPERTY(int     cameraMode      READ cameraMode WRITE setCameraMode);
 //  Q_PROPERTY(int     frameSyncMode   READ frameSyncMode WRITE setFrameSyncMode);
 //  Q_PROPERTY(int     timerSync       READ timerSync WRITE setTimerSync);
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.5 2009/06/27 22:50:32 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.6 2009/07/10 22:54:23 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -81,6 +102,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.6  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.5  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

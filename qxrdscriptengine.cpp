@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.3 2009/07/08 19:06:27 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.4 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -26,7 +26,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.3 2009/07/08 19:06:27 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.4 2009/07/10 22:54:23 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -50,7 +50,7 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("application", m_ScriptEngine -> newQObject(m_Application));
   m_ScriptEngine -> globalObject().setProperty("window", m_ScriptEngine -> newQObject(m_Window));
   m_ScriptEngine -> globalObject().setProperty("centering", m_ScriptEngine -> newQObject(m_Window->centerFinder()));
-  m_ScriptEngine -> globalObject().setProperty("processor", m_ScriptEngine -> newQObject(m_Window->processor()));
+  m_ScriptEngine -> globalObject().setProperty("processor", m_ScriptEngine -> newQObject(m_Application->dataProcessor()));
   m_ScriptEngine -> globalObject().setProperty("integrator", m_ScriptEngine -> newQObject(m_Window->integrator()));
 
   m_ScriptEngine -> globalObject().setProperty("acquire", m_ScriptEngine -> newFunction(acquireFunc));
@@ -296,6 +296,9 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.4  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.3  2009/07/08 19:06:27  jennings
 *  Made centering parameters into Q_PROPERTYs
 *  Saved centering, integrator and data processor settings

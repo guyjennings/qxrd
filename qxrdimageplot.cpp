@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.20 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.21 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -42,7 +42,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_MaxDisplayed(110),
     m_Interpolate(1),
     m_MaintainAspect(1),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.20 2009/06/27 22:50:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.21 2009/07/10 22:54:23 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -292,6 +292,34 @@ void QxrdImagePlot::setIce()
   setTrackerPen(QPen(Qt::red));
 }
 
+void QxrdImagePlot::setColorMap(int n)
+{
+  switch(n) {
+  case 0:
+    setGrayscale();
+    break;
+
+  case 1:
+    setInverseGrayscale();
+    break;
+
+  case 2:
+    setEarthTones();
+    break;
+
+  case 3:
+    setSpectrum();
+    break;
+
+  case 4:
+    setFire();
+    break;
+
+  case 5:
+    setIce();
+    break;
+  }
+}
 
 void QxrdImagePlot::toggleShowImage()
 {
@@ -456,6 +484,9 @@ void QxrdImagePlot::doMeasure()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.21  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.20  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

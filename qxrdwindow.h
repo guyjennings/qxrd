@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.46 2009/07/08 19:06:27 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.47 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -28,6 +28,7 @@ class QxrdCenterFinderDialog;
 class QxrdIntegrator;
 class QxrdIntegratorDialog;
 class QxrdScriptEngine;
+class QxrdSettings;
 
 #include "qxrdimagequeue.h"
 
@@ -40,25 +41,33 @@ public:
   virtual ~QxrdWindow();
 
 public:
-  Q_PROPERTY(QString darkImagePath READ get_DarkImagePath WRITE set_DarkImagePath);
-  QCEP_STRING_PROPERTY(DarkImagePath);
+  Q_PROPERTY(double displayMinimumPct     READ get_DisplayMinimumPct WRITE set_DisplayMinimumPct);
+  QCEP_DOUBLE_PROPERTY(DisplayMinimumPct);
 
-  Q_PROPERTY(QString badPixelsPath READ get_BadPixelsPath WRITE set_BadPixelsPath);
-  QCEP_STRING_PROPERTY(BadPixelsPath);
+  Q_PROPERTY(double displayMaximumPct     READ get_DisplayMaximumPct WRITE set_DisplayMaximumPct);
+  QCEP_DOUBLE_PROPERTY(DisplayMaximumPct);
 
-  Q_PROPERTY(QString gainMapPath READ get_GainMapPath WRITE set_GainMapPath);
-  QCEP_STRING_PROPERTY(GainMapPath);
+  Q_PROPERTY(double displayMinimumVal     READ get_DisplayMinimumVal WRITE set_DisplayMinimumVal);
+  QCEP_DOUBLE_PROPERTY(DisplayMinimumVal);
+
+  Q_PROPERTY(double displayMaximumVal     READ get_DisplayMaximumVal WRITE set_DisplayMaximumVal);
+  QCEP_DOUBLE_PROPERTY(DisplayMaximumVal);
+
+  Q_PROPERTY(int displayScalingMode        READ get_DisplayScalingMode WRITE set_DisplayScalingMode);
+  QCEP_INTEGER_PROPERTY(DisplayScalingMode);
+
+  Q_PROPERTY(bool interpolatePixels        READ get_InterpolatePixels WRITE set_InterpolatePixels);
+  QCEP_BOOLEAN_PROPERTY(InterpolatePixels);
+
+  Q_PROPERTY(bool maintainAspectRatio        READ get_MaintainAspectRatio WRITE set_MaintainAspectRatio);
+  QCEP_BOOLEAN_PROPERTY(MaintainAspectRatio);
+
+  Q_PROPERTY(bool displayColorMap        READ get_DisplayColorMap WRITE set_DisplayColorMap);
+  QCEP_BOOLEAN_PROPERTY(DisplayColorMap);
 
 public slots:
   void doSaveData();
   void doLoadData();
-//  void doImportData();
-  void loadData(QString name);
-//  void importData(QString name);
-  void saveData(QString name);
-  void saveImageData(QxrdImageData *image);
-  void saveRawData(QxrdImageData *image);
-  void saveNamedImageData(QString name, QxrdImageData *image);
 
   void doAcquire();
   void doCancel();
@@ -90,45 +99,9 @@ public slots:
   void statusMessage(QString msg);
   void clearStatusMessage();
 
-  int performDarkSubtraction();
-  void setPerformDarkSubtraction(int subt);
-  int saveRawImages();
-  void setSaveRawImages(int sav);
   void doLoadDarkImage();
-  void loadDarkImage(QString name);
-//  QString darkImagePath();
-//  void setDarkImagePath(QString path);
-
-  int performBadPixels();
-  void setPerformBadPixels(int corr);
   void doLoadBadPixels();
-  void loadBadPixels(QString name);
-//  QString badPixelsPath();
-//  void setBadPixelsPath(QString path);
-
-  int performGainCorrection();
-  void setPerformGainCorrection(int corr);
   void doLoadGainMap();
-  void loadGainMap(QString name);
-//  QString gainMapPath();
-//  void setGainMapPath(QString path);
-
-  double displayMinimumPct();
-  void setDisplayMinimumPct(double pct);
-  double displayMaximumPct();
-  void setDisplayMaximumPct(double pct);
-  int interpolatePixels();
-  void setInterpolatePixels(int interp);
-  int maintainAspectRatio();
-  void setMaintainAspectRatio(int prsrv);
-
-  void onProcessedImageAvailable();
-  void onDarkImageAvailable();
-
-  void showMaskRange();
-  void hideMaskRange();
-  void showMaskAll();
-  void hideMaskAll();
 
   void onToolBoxPageChanged(int);
   void onTabWidgetPageChanged(int);
@@ -137,27 +110,18 @@ signals:
   void executeCommand(QString cmd);
 
 public:
-  void readSettings();
-  void writeSettings();
+  void readSettings(QxrdSettings *settings, QString section);
+  void writeSettings(QxrdSettings *settings, QString section);
   void possiblyClose();
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
   QxrdImageData* loadNewImage(QString name);
 
-  void darkImageAcquired(QxrdImageData *image);
-  void newData(QxrdImageData *image);
-  void newDarkImage(QxrdImageData *image);
-  void newBadPixelsImage(QxrdImageData *image);
-  void newGainMapImage(QxrdImageData *image);
-
-  QxrdImageData* data();
-  QxrdImageData* darkImage();
-
   QxrdScriptEngine *scriptEngine() const;
   void setScriptEngine(QxrdScriptEngine *engine);
 
-  QxrdDataProcessor *processor() const;
+//  QxrdDataProcessor *processor() const;
   QxrdCenterFinder  *centerFinder() const;
   QxrdIntegrator    *integrator() const;
 
@@ -168,7 +132,6 @@ private:
   QxrdAcquisitionThread  *m_AcquisitionThread;
   QxrdAcquisition        *m_Acquisition;
   QxrdScriptEngine       *m_ScriptEngine;
-  QxrdDataProcessor      *m_DataProcessor;
   QxrdCenterFinderDialog *m_CenterFinderDialog;
   QxrdCenterFinder       *m_CenterFinder;
   QxrdIntegratorDialog   *m_IntegratorDialog;
@@ -178,17 +141,8 @@ private:
   QLabel                 *m_StatusMsg;
   int                     m_Acquiring;
   int                     m_AcquiringDark;
-  //  QxrdImageQueue          m_AcquiredImages;
-  QxrdImageData          *m_Data;
-  QxrdImageData          *m_DarkFrame;
-  QxrdImageData          *m_BadPixels;
-  QxrdImageData          *m_GainFrame;
   QTimer                  m_StatusTimer;
-//  QStringList             m_StatusMessages;
-//
-//  QDirModel              *m_FileBrowserModel;
-//  QTimer                  m_FileBrowserTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.46 2009/07/08 19:06:27 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.47 2009/07/10 22:54:23 jennings Exp $");
 };
 
 #endif
@@ -196,6 +150,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.47  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.46  2009/07/08 19:06:27  jennings
 *  Made centering parameters into Q_PROPERTYs
 *  Saved centering, integrator and data processor settings

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.5 2009/07/07 22:05:25 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.6 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -25,8 +25,15 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters()
     m_CameraGain(this,"cameraGain",0),
     m_FileName(this,"fileName",""),
     m_FileBase(this,"fileBase",""),
+    m_DarkImagePath(this, "darkImagePath", ""),
+    m_BadPixelsPath(this, "badPixelsPath", ""),
+    m_GainMapPath(this, "gainMapPath", ""),
+    m_PerformDarkSubtraction(this, "performDarkSubtraction", true),
+    m_SaveRawImages(this, "saveRawImages", true),
+    m_PerformBadPixels(this, "performBadPixels", true),
+    m_PerformGainCorrection(this, "performGainCorrection", true),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.5 2009/07/07 22:05:25 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.6 2009/07/10 22:54:23 jennings Exp $")
 {
 }
 
@@ -47,6 +54,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.6  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.5  2009/07/07 22:05:25  jennings
 *  *** empty log message ***
 *

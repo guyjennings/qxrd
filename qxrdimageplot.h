@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.15 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.16 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -58,6 +58,7 @@ class QxrdImagePlot : public QxrdPlot
   void setSpectrum();
   void setFire();
   void setIce();
+  void setColorMap(int index);
 
   void toggleShowImage();
   void toggleShowMask();
@@ -110,7 +111,7 @@ class QxrdImagePlot : public QxrdPlot
   double               m_MaxDisplayed;
   int                  m_Interpolate;
   int                  m_MaintainAspect;
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.15 2009/06/27 22:50:32 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.16 2009/07/10 22:54:23 jennings Exp $");
 };
 
 #endif
@@ -118,6 +119,9 @@ class QxrdImagePlot : public QxrdPlot
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.16  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.15  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

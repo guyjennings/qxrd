@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionthread.cpp,v 1.30 2009/06/28 04:00:39 jennings Exp $
+*  $Id: qxrdacquisitionthread.cpp,v 1.31 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,13 +11,13 @@
 #include <QVariant>
 #include <QMetaObject>
 
-QxrdAcquisitionThread::QxrdAcquisitionThread()
+QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessor *proc)
   : QThread(),
     m_Debug(true),
     m_Acquisition(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.30 2009/06/28 04:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.31 2009/07/10 22:54:23 jennings Exp $")
 {
-  m_Acquisition = new QxrdAcquisition(this);
+  m_Acquisition = new QxrdAcquisition(this, proc);
   m_Acquisition -> moveToThread(this);
 }
 
@@ -112,6 +112,9 @@ void QxrdAcquisitionThread::sleep(double time)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionthread.cpp,v $
+*  Revision 1.31  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.30  2009/06/28 04:00:39  jennings
 *  Partial implementation of separate thread for script engine
 *

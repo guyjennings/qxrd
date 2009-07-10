@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.cpp,v 1.8 2009/07/08 19:06:27 jennings Exp $
+*  $Id: qxrdcenterfinder.cpp,v 1.9 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -22,7 +22,7 @@ QxrdCenterFinder::QxrdCenterFinder
     m_CenterFinderDialog(cfdialog),
     m_CenterFinderPicker(NULL),
     m_CenterMarker(NULL),
-    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.8 2009/07/08 19:06:27 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.9 2009/07/10 22:54:23 jennings Exp $")
 {
   m_CenterFinderPicker = new QxrdCenterFinderPicker(imgplot->canvas(), imgplot, cfdialog);
 
@@ -134,9 +134,9 @@ void QxrdCenterFinder::onCenterChanged(QwtDoublePoint pt)
 
 void QxrdCenterFinder::onCenterChanged(double cx, double cy)
 {
-  QxrdImageData *data = m_Window -> data();
-
-  m_CenterFinderPlot -> onCenterChanged(data, cx, cy);
+//  QxrdImageData *data = m_Acquisition -> data();
+//
+//  m_CenterFinderPlot -> onCenterChanged(data, cx, cy);
 }
 
 void QxrdCenterFinder::onCenterStepChanged(double stp)
@@ -200,6 +200,9 @@ void QxrdCenterFinder::centerMoveLeft()
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.cpp,v $
+*  Revision 1.9  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.8  2009/07/08 19:06:27  jennings
 *  Made centering parameters into Q_PROPERTYs
 *  Saved centering, integrator and data processor settings

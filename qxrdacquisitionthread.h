@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionthread.h,v 1.27 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdacquisitionthread.h,v 1.28 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,13 +16,14 @@
 #include <QWaitCondition>
 
 class QxrdAcquisition;
+class QxrdDataProcessor;
 
 class QxrdAcquisitionThread : public QThread
 {
   Q_OBJECT;
 
  public:
-  QxrdAcquisitionThread();
+  QxrdAcquisitionThread(QxrdDataProcessor *proc);
   ~QxrdAcquisitionThread();
 
   void shutdown();
@@ -48,8 +49,8 @@ public:
 public:
   QVariant evaluate(QString cmd);
   void setResult(QVariant res);
-//signals:
-//  void _evaluate(QString cmd);
+  //signals:
+  //  void _evaluate(QString cmd);
 private:
   QMutex         m_EvalMutex;
   QWaitCondition m_EvalWaitCondition;
@@ -59,10 +60,10 @@ private:
 protected:
   void run();
 
- private:
+private:
   int                    m_Debug;
   QxrdAcquisition       *m_Acquisition;
-  HEADER_IDENT("$Id: qxrdacquisitionthread.h,v 1.27 2009/06/27 22:50:32 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionthread.h,v 1.28 2009/07/10 22:54:23 jennings Exp $");
 };
 
 #endif
@@ -70,6 +71,9 @@ protected:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionthread.h,v $
+*  Revision 1.28  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.27  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

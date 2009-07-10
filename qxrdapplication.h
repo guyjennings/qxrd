@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.h,v 1.22 2009/06/28 11:21:58 jennings Exp $
+*  $Id: qxrdapplication.h,v 1.23 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,6 +15,8 @@
 class QxrdWindow;
 class QxrdServerThread;
 class QxrdServer;
+class QxrdDataProcessorThread;
+class QxrdDataProcessor;
 class QxrdAcquisitionThread;
 class QxrdAcquisition;
 class QxrdScriptEngineThread;
@@ -30,6 +32,10 @@ class QxrdApplication : public QApplication
 
   QxrdAcquisitionThread *acquisitionThread();
   QxrdWindow *window();
+  QxrdDataProcessor *dataProcessor() const;
+
+  void readSettings();
+  void writeSettings();
 
  public slots:
   void shutdownThreads();
@@ -45,11 +51,13 @@ class QxrdApplication : public QApplication
   QxrdWindow                    *m_Window;
   QxrdServerThread              *m_ServerThread;
   QxrdServer                    *m_Server;
+  QxrdDataProcessorThread       *m_DataProcessorThread;
+  QxrdDataProcessor             *m_DataProcessor;
   QxrdAcquisitionThread         *m_AcquisitionThread;
   QxrdAcquisition               *m_Acquisition;
   QxrdScriptEngineThread        *m_ScriptEngineThread;
   QxrdScriptEngine              *m_ScriptEngine;
-  HEADER_IDENT("$Id: qxrdapplication.h,v 1.22 2009/06/28 11:21:58 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdapplication.h,v 1.23 2009/07/10 22:54:23 jennings Exp $");
 };
 
 #endif
@@ -57,6 +65,9 @@ class QxrdApplication : public QApplication
 /******************************************************************
 *
 *  $Log: qxrdapplication.h,v $
+*  Revision 1.23  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.22  2009/06/28 11:21:58  jennings
 *  Implemented app scripting engine connections
 *

@@ -71,7 +71,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -97,7 +97,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -130,7 +130,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -147,7 +147,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/ringfinder.png</normaloff>:/images/images/ringfinder.png</iconset>
               </property>
               <property name="iconSize">
@@ -170,7 +170,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/slice.png</normaloff>:/images/images/slice.png</iconset>
               </property>
               <property name="iconSize">
@@ -193,7 +193,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/measure.png</normaloff>:/images/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -241,7 +241,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -261,7 +261,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -294,7 +294,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -340,7 +340,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -360,7 +360,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -393,7 +393,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -526,7 +526,7 @@
      <x>0</x>
      <y>0</y>
      <width>1243</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -972,6 +972,13 @@ Script Function: fileindex()</string>
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="m_DarkImagePath">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="m_LoadDarkButton">
        <property name="enabled">
         <bool>false</bool>
@@ -982,12 +989,26 @@ Script Function: fileindex()</string>
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="m_BadPixelsPath">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="m_LoadBadPixelsButton">
        <property name="enabled">
         <bool>false</bool>
        </property>
        <property name="text">
         <string>Load Bad Pixels</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_GainMapPath">
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </item>
@@ -1116,12 +1137,12 @@ Script Function: fileindex()</string>
      <item row="0" column="0">
       <widget class="QLabel" name="label_11">
        <property name="text">
-        <string>Minimum:</string>
+        <string>Min (%):</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1" colspan="2">
-      <widget class="QDoubleSpinBox" name="m_DisplayMinimum">
+      <widget class="QDoubleSpinBox" name="m_DisplayMinimumPct">
        <property name="suffix">
         <string> %</string>
        </property>
@@ -1143,12 +1164,12 @@ Script Function: fileindex()</string>
      <item row="1" column="0">
       <widget class="QLabel" name="label_12">
        <property name="text">
-        <string>Maximum:</string>
+        <string>Max (%):</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1" colspan="2">
-      <widget class="QDoubleSpinBox" name="m_DisplayMaximum">
+      <widget class="QDoubleSpinBox" name="m_DisplayMaximumPct">
        <property name="suffix">
         <string> %</string>
        </property>
@@ -1167,24 +1188,7 @@ Script Function: fileindex()</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="3">
-      <widget class="QPushButton" name="m_AutoRange">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Auto Range</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="3">
-      <widget class="QPushButton" name="m_Display_100pct">
-       <property name="text">
-        <string>100% Range</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="4">
+     <item row="7" column="0" colspan="4">
       <widget class="QCheckBox" name="m_InterpolatePixels">
        <property name="toolTip">
         <string>Gives a smoother display when zoomed in</string>
@@ -1194,7 +1198,7 @@ Script Function: fileindex()</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0" colspan="4">
+     <item row="8" column="0" colspan="4">
       <widget class="QCheckBox" name="m_MaintainAspectRatio">
        <property name="toolTip">
         <string>Try to maintain the aspect ratio of the image as it is zoomed and resized</string>
@@ -1204,49 +1208,7 @@ Script Function: fileindex()</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="2">
-      <widget class="QPushButton" name="m_GrayscaleButton">
-       <property name="text">
-        <string>Grayscale</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="2" colspan="2">
-      <widget class="QPushButton" name="m_InvGrayscaleButton">
-       <property name="text">
-        <string>Inv Gray</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0" colspan="2">
-      <widget class="QPushButton" name="m_EarthTonesButton">
-       <property name="text">
-        <string>Earth</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="2" colspan="2">
-      <widget class="QPushButton" name="m_SpectrumButton">
-       <property name="text">
-        <string>Spectrum</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="2">
-      <widget class="QPushButton" name="m_FireButton">
-       <property name="text">
-        <string>Fire</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="2" colspan="2">
-      <widget class="QPushButton" name="m_IceButton">
-       <property name="text">
-        <string>Ice</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0" colspan="4">
+     <item row="10" column="0" colspan="4">
       <spacer name="verticalSpacer_3">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -1258,6 +1220,111 @@ Script Function: fileindex()</string>
         </size>
        </property>
       </spacer>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_14">
+       <property name="text">
+        <string>Minimum:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" colspan="2">
+      <widget class="QDoubleSpinBox" name="m_DisplayMinimumVal">
+       <property name="suffix">
+        <string/>
+       </property>
+       <property name="minimum">
+        <double>-20.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>100000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_15">
+       <property name="text">
+        <string>Maximum:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1" colspan="2">
+      <widget class="QDoubleSpinBox" name="m_DisplayMaximumVal">
+       <property name="suffix">
+        <string/>
+       </property>
+       <property name="minimum">
+        <double>-20.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>100000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3">
+      <widget class="QPushButton" name="m_Display_100pct">
+       <property name="text">
+        <string>100% Range</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="3">
+      <widget class="QPushButton" name="m_AutoRange">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Auto Range</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0" colspan="4">
+      <widget class="QComboBox" name="m_DisplayScalingMode">
+       <item>
+        <property name="text">
+         <string>Display based on percentages</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Display based on abs. values</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="9" column="0" colspan="4">
+      <widget class="QComboBox" name="m_DisplayColorMap">
+       <item>
+        <property name="text">
+         <string>Grayscale</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Inverted grayscale</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Earth</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Spectrum</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Fire</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Ice</string>
+        </property>
+       </item>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -1306,7 +1373,7 @@ Script Function: fileindex()</string>
   </action>
   <action name="m_ActionLoadData">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -1399,7 +1466,7 @@ Script Function: fileindex()</string>
   </action>
   <action name="m_ActionImportData">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -1408,7 +1475,7 @@ Script Function: fileindex()</string>
   </action>
   <action name="m_ActionTest">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
    </property>
    <property name="text">
@@ -1449,7 +1516,7 @@ Script Function: fileindex()</string>
   </action>
   <action name="m_ActionSetCenter">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/ringfinder.png</normaloff>:/images/images/ringfinder.png</iconset>
    </property>
    <property name="text">
@@ -1502,8 +1569,6 @@ Script Function: fileindex()</string>
   <tabstop>m_XRDTabWidget</tabstop>
   <tabstop>m_Messages</tabstop>
  </tabstops>
- <resources>
-  <include location="qxrdresources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

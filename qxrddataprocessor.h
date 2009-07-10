@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.6 2009/07/08 19:06:27 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.7 2009/07/10 22:54:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -40,6 +40,9 @@ public:
   void readSettings(QxrdSettings *settings, QString section);
   void writeSettings(QxrdSettings *settings, QString section);
 
+  void setAcquisition(QxrdAcquisition *acq);
+  void setWindow(QxrdWindow *win);
+
 private slots:
   void on_acquired_image_available();
 
@@ -59,7 +62,8 @@ private:
   QReadWriteLock            m_Processing;
   QxrdImageQueue            m_ProcessedImages;
   QxrdImageQueue            m_DarkImages;
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.6 2009/07/08 19:06:27 jennings Exp $");
+
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.7 2009/07/10 22:54:23 jennings Exp $");
 };
 
 #endif
@@ -67,6 +71,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.7  2009/07/10 22:54:23  jennings
+*  Some rearrangement of data
+*
 *  Revision 1.6  2009/07/08 19:06:27  jennings
 *  Made centering parameters into Q_PROPERTYs
 *  Saved centering, integrator and data processor settings
