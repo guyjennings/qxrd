@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionoperations.h,v 1.4 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdacquisitionoperations.h,v 1.5 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -19,7 +19,7 @@ class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
   Q_OBJECT;
 public:
-  QxrdAcquisitionOperations(QxrdAcquisitionThread *thread, QxrdDataProcessor *proc);
+  QxrdAcquisitionOperations(QxrdDataProcessor *proc);
 
   QxrdImageData *takeNextFreeImage();
   QxrdImageData *takeNextAcquiredImage();
@@ -69,7 +69,7 @@ private:
   QxrdImageData         *m_BadPixels;
   QxrdImageData         *m_GainFrame;
 
-  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.4 2009/07/10 22:54:23 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.5 2009/07/13 23:19:37 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONOPERATIONS_H
@@ -77,6 +77,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionoperations.h,v $
+*  Revision 1.5  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.4  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

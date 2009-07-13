@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionthread.cpp,v 1.31 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdacquisitionthread.cpp,v 1.32 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,9 +15,9 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessor *proc)
   : QThread(),
     m_Debug(true),
     m_Acquisition(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.31 2009/07/10 22:54:23 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.32 2009/07/13 23:19:37 jennings Exp $")
 {
-  m_Acquisition = new QxrdAcquisition(this, proc);
+  m_Acquisition = new QxrdAcquisition(/*this, */proc);
   m_Acquisition -> moveToThread(this);
 }
 
@@ -72,32 +72,32 @@ QVector<double> QxrdAcquisitionThread::readoutTimes()
   return m_Acquisition -> readoutTimes();
 }
 
-QVariant QxrdAcquisitionThread::evaluate(QString cmd)
-{
-  QMutexLocker lock(&m_EvalMutex);
+//QVariant QxrdAcquisitionThread::evaluate(QString cmd)
+//{
+//  QMutexLocker lock(&m_EvalMutex);
+//
+//  QMetaObject::invokeMethod(m_Acquisition, "evaluate",
+//                            Qt::QueuedConnection,
+//                            Q_ARG(QString, cmd));
+//
+//  waitForResult();
+//
+//  emit printMessage(tr("%1 = %2").arg(cmd).arg(m_EvalResult.toString()));
+//
+//  return m_EvalResult;
+//}
 
-  QMetaObject::invokeMethod(m_Acquisition, "evaluate",
-                            Qt::QueuedConnection,
-                            Q_ARG(QString, cmd));
-
-  waitForResult();
-
-  emit printMessage(tr("%1 = %2").arg(cmd).arg(m_EvalResult.toString()));
-
-  return m_EvalResult;
-}
-
-void QxrdAcquisitionThread::waitForResult()
-{
-  m_EvalWaitCondition.wait(&m_EvalMutex, 10000);
-}
-
-void QxrdAcquisitionThread::setResult(QVariant res)
-{
-  m_EvalResult = res;
-
-  m_EvalWaitCondition.wakeAll();
-}
+//void QxrdAcquisitionThread::waitForResult()
+//{
+//  m_EvalWaitCondition.wait(&m_EvalMutex, 10000);
+//}
+//
+//void QxrdAcquisitionThread::setResult(QVariant res)
+//{
+//  m_EvalResult = res;
+//
+//  m_EvalWaitCondition.wakeAll();
+//}
 
 QxrdAcquisition *QxrdAcquisitionThread::acquisition() const
 {
@@ -112,6 +112,9 @@ void QxrdAcquisitionThread::sleep(double time)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionthread.cpp,v $
+*  Revision 1.32  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.31  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

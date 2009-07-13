@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdserver.cpp,v 1.11 2009/06/28 04:00:39 jennings Exp $
+*  $Id: qxrdserver.cpp,v 1.12 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,7 +15,7 @@
 QxrdServer::QxrdServer(QxrdAcquisitionThread *acqth, QString name, QObject *parent)
   : QSpecServer(name, parent),
     m_AcquisitionThread(acqth),
-    SOURCE_IDENT("$Id: qxrdserver.cpp,v 1.11 2009/06/28 04:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdserver.cpp,v 1.12 2009/07/13 23:19:37 jennings Exp $")
 {
   emit printMessage("QxrdServer::QxrdServer");
 }
@@ -24,9 +24,9 @@ QVariant QxrdServer::executeCommand(QString cmd)
 {
 //  printf("QxrdServer::executeCommand(%s)\n", qPrintable(cmd));
 
-  QVariant result = m_AcquisitionThread->evaluate(cmd);
+//  QVariant result = m_AcquisitionThread->evaluate(cmd);
 
-  return result;
+  return 42;
 }
 
 QVariant QxrdServer::readProperty(QString name)
@@ -48,6 +48,9 @@ void QxrdServer::shutdown()
 /******************************************************************
 *
 *  $Log: qxrdserver.cpp,v $
+*  Revision 1.12  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.11  2009/06/28 04:00:39  jennings
 *  Partial implementation of separate thread for script engine
 *

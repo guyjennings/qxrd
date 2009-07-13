@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorthread.h,v 1.1 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrddataprocessorthread.h,v 1.2 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,7 +12,7 @@
 #include <QThread>
 
 class QxrdDataProcessor;
-class QxrdWindow;
+//class QxrdWindow;
 class QxrdAcquisition;
 
 class QxrdDataProcessorThread : public QThread
@@ -20,7 +20,7 @@ class QxrdDataProcessorThread : public QThread
   Q_OBJECT;
 
 public:
-  QxrdDataProcessorThread(QxrdWindow *win, QxrdAcquisition *acq);
+  QxrdDataProcessorThread(/*QxrdWindow *win, */QxrdAcquisition *acq);
   ~QxrdDataProcessorThread();
 
   void shutdown();
@@ -35,7 +35,7 @@ protected:
 
 private:
   QxrdDataProcessor   *m_DataProcessor;
-  HEADER_IDENT("$Id: qxrddataprocessorthread.h,v 1.1 2009/07/10 22:54:23 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessorthread.h,v 1.2 2009/07/13 23:19:37 jennings Exp $");
 };
 
 #endif // QXRDDATAPROCESSORTHREAD_H
@@ -43,6 +43,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessorthread.h,v $
+*  Revision 1.2  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.1  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionscripting.h,v 1.5 2009/06/28 04:00:39 jennings Exp $
+*  $Id: qxrdacquisitionscripting.h,v 1.6 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,20 +12,17 @@
 #include "qxrdacquisitionparameters.h"
 
 #include <QScriptEngine>
-class QxrdAcquisitionThread;
+
+class QxrdDataProcessor;
 
 class QxrdAcquisitionScripting : public QxrdAcquisitionParameters
 {
   Q_OBJECT;
 public:
-  QxrdAcquisitionScripting(QxrdAcquisitionThread *thread);
-
-  QxrdAcquisitionThread *acquisitionThread() const;
+  QxrdAcquisitionScripting(QxrdDataProcessor *proc);
 
 public slots:
-  double sleep(double time);
   void propertyList();
-  QVariant evaluate(QString cmd);
   void message(QString cmd);\
 
 protected:
@@ -35,16 +32,7 @@ protected:
 
 private:
   mutable QMutex         m_Mutex;
-  QxrdAcquisitionThread *m_AcquisitionThread;
-  QScriptEngine          m_ScriptEngine;
-
-  static QxrdAcquisitionScripting *g_Acquisition;
-
-//  static QScriptValue setCameraModeFunc(QScriptContext *context, QScriptEngine *engine);
-//  static QScriptValue setFrameSyncModeFunc(QScriptContext *context, QScriptEngine *engine);
-//  static QScriptValue setTimerSyncFunc(QScriptContext *context, QScriptEngine *engine);
-//  static QScriptValue setCameraGainFunc(QScriptContext *context, QScriptEngine *engine);
-  HEADER_IDENT("$Id: qxrdacquisitionscripting.h,v 1.5 2009/06/28 04:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionscripting.h,v 1.6 2009/07/13 23:19:37 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONSCRIPTING_H
@@ -52,6 +40,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionscripting.h,v $
+*  Revision 1.6  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.5  2009/06/28 04:00:39  jennings
 *  Partial implementation of separate thread for script engine
 *

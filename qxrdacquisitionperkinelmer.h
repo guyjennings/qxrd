@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.5 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.6 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,7 +9,7 @@
 
 #include "qcepmacros.h"
 
-#include "qxrdacquisitionoperations.h"
+#include "qxrdacquisitionsimulated.h"
 
 #include <QMutex>
 #include <QWaitCondition>
@@ -17,11 +17,11 @@
 
 class QxrdAcquisitionThread;
 
-class QxrdAcquisitionPerkinElmer : public QxrdAcquisitionOperations
+class QxrdAcquisitionPerkinElmer : public QxrdAcquisitionSimulated
 {
   Q_OBJECT;
 public:
-  QxrdAcquisitionPerkinElmer(QxrdAcquisitionThread *thread, QxrdDataProcessor *proc);
+  QxrdAcquisitionPerkinElmer(/*QxrdAcquisitionThread *thread,*/ QxrdDataProcessor *proc);
   ~QxrdAcquisitionPerkinElmer();
 
 public slots:
@@ -74,7 +74,7 @@ private:
   QVector<quint16>       m_Buffer;
   QxrdImageData         *m_AcquiredData;
   QVector<double>        m_ReadoutTimes;
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.5 2009/07/10 22:54:23 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.6 2009/07/13 23:19:37 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -82,6 +82,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.6  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.5  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

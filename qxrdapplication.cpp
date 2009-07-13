@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.41 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.42 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,7 +29,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.41 2009/07/10 22:54:23 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.42 2009/07/13 23:19:37 jennings Exp $")
 {
 //  QcepProperty::dumpMetaData(&QxrdApplication::staticMetaObject);
 //  QcepProperty::dumpMetaData(&QxrdWindow::staticMetaObject);
@@ -46,11 +46,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   setOrganizationDomain("xor.aps.anl.gov");
   setApplicationName("qxrd");
 
-  m_DataProcessorThread = new QxrdDataProcessorThread(NULL, NULL);
+  m_DataProcessorThread = new QxrdDataProcessorThread(NULL);
   m_DataProcessor = m_DataProcessorThread -> dataProcessor();
-
-  connect(m_DataProcessorThread, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
-  connect(m_DataProcessor, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
 
   m_DataProcessorThread -> start();
 
@@ -62,12 +59,14 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   m_Window = new QxrdWindow(this, m_AcquisitionThread);
   m_Window -> show();
 
-  m_DataProcessor -> setWindow(m_Window);
+//  m_DataProcessor -> setWindow(m_Window);
 
   connect(this, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
   emit printMessage("window shown");
 
   m_AcquisitionThread -> start();
+
+  connect(m_Acquisition, SIGNAL(acquiredImageAvailable()), m_DataProcessor, SLOT(on_acquired_image_available()));
 
   m_ServerThread = new QxrdServerThread(m_AcquisitionThread, "qxrd");
   m_Server = m_ServerThread -> server();
@@ -94,6 +93,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(m_Window,         SIGNAL(executeCommand(QString)),           m_ScriptEngine,    SLOT(evaluateAppCommand(QString)));
   connect(m_ScriptEngine,   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
+
+  connect(m_DataProcessorThread, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
+  connect(m_DataProcessor, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
 
   m_Window -> setScriptEngine(m_ScriptEngine);
 
@@ -172,6 +174,9 @@ QxrdDataProcessor *QxrdApplication::dataProcessor() const
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.42  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.41  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.7 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.8 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@
 #include "qxrdimagequeue.h"
 
 class QxrdAcquisition;
-class QxrdWindow;
+//class QxrdWindow;
 class QxrdImageData;
 
 class QxrdDataProcessor : public QObject
@@ -25,7 +25,7 @@ class QxrdDataProcessor : public QObject
   Q_OBJECT;
 
 public:
-  QxrdDataProcessor(QxrdWindow *win, QxrdAcquisition *acq, QObject *parent=0);
+  QxrdDataProcessor(/*QxrdWindow *win, */QxrdAcquisition *acq, QObject *parent=0);
 
 signals:
   void processedImageAvailable();
@@ -41,7 +41,7 @@ public:
   void writeSettings(QxrdSettings *settings, QString section);
 
   void setAcquisition(QxrdAcquisition *acq);
-  void setWindow(QxrdWindow *win);
+//  void setWindow(QxrdWindow *win);
 
 private slots:
   void on_acquired_image_available();
@@ -56,14 +56,14 @@ private:
 
 private:
   mutable QMutex            m_Mutex;
-  QxrdWindow               *m_Window;
+//  QxrdWindow               *m_Window;
   QxrdAcquisition          *m_Acquisition;
   QReadWriteLock            m_DarkUsage;
   QReadWriteLock            m_Processing;
   QxrdImageQueue            m_ProcessedImages;
   QxrdImageQueue            m_DarkImages;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.7 2009/07/10 22:54:23 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.8 2009/07/13 23:19:37 jennings Exp $");
 };
 
 #endif
@@ -71,6 +71,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.8  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.7  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

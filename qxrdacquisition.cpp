@@ -1,14 +1,14 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisition.cpp,v 1.49 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdacquisition.cpp,v 1.50 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdacquisition.h"
 
-QxrdAcquisition::QxrdAcquisition(QxrdAcquisitionThread *thread, QxrdDataProcessor *proc)
-  : inherited(thread, proc),
-    SOURCE_IDENT("$Id: qxrdacquisition.cpp,v 1.49 2009/07/10 22:54:23 jennings Exp $")
+QxrdAcquisition::QxrdAcquisition(/*QxrdAcquisitionThread *thread,*/ QxrdDataProcessor *proc)
+  : QxrdAcquisitionPerkinElmer(/*thread,*/ proc),
+    SOURCE_IDENT("$Id: qxrdacquisition.cpp,v 1.50 2009/07/13 23:19:37 jennings Exp $")
 {
   emit printMessage("Enter QxrdAcquisition::QxrdAcquisition\n");
 }
@@ -18,6 +18,9 @@ QxrdAcquisition::QxrdAcquisition(QxrdAcquisitionThread *thread, QxrdDataProcesso
 /******************************************************************
 *
 *  $Log: qxrdacquisition.cpp,v $
+*  Revision 1.50  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.49  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

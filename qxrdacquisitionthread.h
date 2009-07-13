@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionthread.h,v 1.28 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdacquisitionthread.h,v 1.29 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -46,24 +46,23 @@ public:
 public:
   void sleep(double time);
 
-public:
-  QVariant evaluate(QString cmd);
-  void setResult(QVariant res);
-  //signals:
-  //  void _evaluate(QString cmd);
-private:
-  QMutex         m_EvalMutex;
-  QWaitCondition m_EvalWaitCondition;
-  void waitForResult();
-  QVariant       m_EvalResult;
+//public:
+//  QVariant evaluate(QString cmd);
+//  void setResult(QVariant res);
+//
+//private:
+//  void waitForResult();
 
 protected:
   void run();
 
 private:
+  QMutex                 m_EvalMutex;
+  QWaitCondition         m_EvalWaitCondition;
+  QVariant               m_EvalResult;
   int                    m_Debug;
   QxrdAcquisition       *m_Acquisition;
-  HEADER_IDENT("$Id: qxrdacquisitionthread.h,v 1.28 2009/07/10 22:54:23 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionthread.h,v 1.29 2009/07/13 23:19:37 jennings Exp $");
 };
 
 #endif
@@ -71,6 +70,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionthread.h,v $
+*  Revision 1.29  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.28  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

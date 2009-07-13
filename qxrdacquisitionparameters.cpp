@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.6 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.7 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,7 +11,7 @@
 #include <QMetaProperty>
 #include <QStringList>
 
-QxrdAcquisitionParameters::QxrdAcquisitionParameters()
+QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
   : QObject(),
     m_Debug(this,"debug", 0),
     m_ExposureTime(this,"exposureTime",0),
@@ -33,7 +33,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters()
     m_PerformBadPixels(this, "performBadPixels", true),
     m_PerformGainCorrection(this, "performGainCorrection", true),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.6 2009/07/10 22:54:23 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.7 2009/07/13 23:19:37 jennings Exp $")
 {
 }
 
@@ -54,6 +54,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.7  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.6  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

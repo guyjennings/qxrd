@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionscripting.cpp,v 1.6 2009/07/09 01:15:09 jennings Exp $
+*  $Id: qxrdacquisitionscripting.cpp,v 1.7 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,47 +9,11 @@
 #include "qxrdacquisitionthread.h"
 #include <QMetaProperty>
 
-QxrdAcquisitionScripting *QxrdAcquisitionScripting::g_Acquisition = NULL;
-
-QxrdAcquisitionScripting::QxrdAcquisitionScripting(QxrdAcquisitionThread *thread)
-  : QxrdAcquisitionParameters(),
+QxrdAcquisitionScripting::QxrdAcquisitionScripting(QxrdDataProcessor *proc)
+  : QxrdAcquisitionParameters(proc),
     m_Mutex(QMutex::Recursive),
-    m_AcquisitionThread(thread),
-    SOURCE_IDENT("$Id: qxrdacquisitionscripting.cpp,v 1.6 2009/07/09 01:15:09 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionscripting.cpp,v 1.7 2009/07/13 23:19:37 jennings Exp $")
 {
-  g_Acquisition = this;
-
-//  printf("QxrdAcquisitionScripting::QxrdAcquisitionScripting g_Acquisition = %p\n",
-//         g_Acquisition);
-}
-
-QxrdAcquisitionThread *QxrdAcquisitionScripting::acquisitionThread() const
-{
-  QMutexLocker lock(&m_Mutex);
-
-  return m_AcquisitionThread;
-}
-
-QVariant QxrdAcquisitionScripting::evaluate(QString cmd)
-{
-  QMutexLocker lock(&m_Mutex);
-
-//  emit printMessage(tr("Evaluate %1").arg(cmd));
-
-  QScriptValue res = m_ScriptEngine.evaluate(cmd);
-
-//  emit printMessage(tr("Result = %1").arg(res.toString()));
-
-  m_AcquisitionThread -> setResult(res.toVariant());
-
-  return res.toVariant();
-}
-
-double QxrdAcquisitionScripting::sleep(double time)
-{
-  acquisitionThread() -> sleep(time);
-
-  return 42;
 }
 
 void QxrdAcquisitionScripting::message(QString msg)
@@ -80,6 +44,9 @@ void QxrdAcquisitionScripting::propertyList()
 /******************************************************************
 *
 *  $Log: qxrdacquisitionscripting.cpp,v $
+*  Revision 1.7  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.6  2009/07/09 01:15:09  jennings
 *  Added some locks
 *

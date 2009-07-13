@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.12 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.13 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,23 +13,22 @@
 #include <QTime>
 
 QxrdDataProcessor::QxrdDataProcessor
-    (QxrdWindow *win, QxrdAcquisition *acq, QObject *parent)
+    (/*QxrdWindow *win, */QxrdAcquisition *acq, QObject *parent)
   : QObject(parent),
-    m_Window(win),
+//    m_Window(win),
     m_Acquisition(acq),
     m_DarkUsage(QReadWriteLock::Recursive),
     m_ProcessedImages("QxrdDataProcessor Processed Images"),
     m_DarkImages("QxrdDataProcessor Dark Images"),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.12 2009/07/10 22:54:23 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.13 2009/07/13 23:19:37 jennings Exp $")
 {
-  connect(m_Acquisition, SIGNAL(acquiredImageAvailable()), this, SLOT(on_acquired_image_available()));
 }
 
-void QxrdDataProcessor::setWindow(QxrdWindow *win)
-{
-  m_Window = win;
-}
-
+//void QxrdDataProcessor::setWindow(QxrdWindow *win)
+//{
+//  m_Window = win;
+//}
+//
 void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
 {
   m_Acquisition = acq;
@@ -200,6 +199,9 @@ void QxrdDataProcessor::correctImageGains(QxrdImageData */*image*/)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.13  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.12  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

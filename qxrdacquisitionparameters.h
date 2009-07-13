@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.6 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.7 2009/07/13 23:19:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,6 +13,7 @@
 #include <QMutex>
 
 class QxrdSettings;
+class QxrdDataProcessor;
 
 #include "qcepproperty.h"
 
@@ -20,7 +21,7 @@ class QxrdAcquisitionParameters : public QObject
 {
   Q_OBJECT;
 public:
-  QxrdAcquisitionParameters();
+  QxrdAcquisitionParameters(QxrdDataProcessor *proc);
 
 signals:
   void printMessage(QString msg);
@@ -94,7 +95,7 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.6 2009/07/10 22:54:23 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.7 2009/07/13 23:19:37 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -102,6 +103,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.7  2009/07/13 23:19:37  jennings
+*  More acquisition rearrangement
+*
 *  Revision 1.6  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

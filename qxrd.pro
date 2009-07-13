@@ -69,7 +69,8 @@ HEADERS += TODO.h \
     qxrdplotmeasurer.h \
     qxrdscriptengine.h \
     qxrdscriptenginethread.h \
-    qxrddataprocessorthread.h
+    qxrddataprocessorthread.h \
+    qxrdacquisitionsimulated.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -108,7 +109,8 @@ SOURCES += qxrd.cpp \
     qxrdplotmeasurer.cpp \
     qxrdscriptengine.cpp \
     qxrdscriptenginethread.cpp \
-    qxrddataprocessorthread.cpp
+    qxrddataprocessorthread.cpp \
+    qxrdacquisitionsimulated.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui
