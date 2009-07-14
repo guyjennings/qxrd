@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.6 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.7 2009/07/14 05:36:14 jennings Exp $
 *
 *******************************************************************/
 
@@ -21,7 +21,7 @@ class QxrdAcquisitionPerkinElmer : public QxrdAcquisitionSimulated
 {
   Q_OBJECT;
 public:
-  QxrdAcquisitionPerkinElmer(/*QxrdAcquisitionThread *thread,*/ QxrdDataProcessor *proc);
+  QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc);
   ~QxrdAcquisitionPerkinElmer();
 
 public slots:
@@ -74,7 +74,7 @@ private:
   QVector<quint16>       m_Buffer;
   QxrdImageData         *m_AcquiredData;
   QVector<double>        m_ReadoutTimes;
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.6 2009/07/13 23:19:37 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.7 2009/07/14 05:36:14 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -82,6 +82,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.7  2009/07/14 05:36:14  jennings
+*  Moved data storage into individual channel objects, accelerated fitting (somewhat)
+*
 *  Revision 1.6  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *

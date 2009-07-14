@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionoperations.cpp,v 1.6 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdacquisitionoperations.cpp,v 1.7 2009/07/14 05:36:14 jennings Exp $
 *
 *******************************************************************/
 
@@ -10,7 +10,7 @@
 
 #include "tiffio.h"
 
-QxrdAcquisitionOperations::QxrdAcquisitionOperations(/*QxrdAcquisitionThread *thread,*/ QxrdDataProcessor *proc)
+QxrdAcquisitionOperations::QxrdAcquisitionOperations(QxrdDataProcessor *proc)
   : QxrdAcquisitionScripting(proc),
     m_DataProcessor(proc),
     m_FreeImages("Free Image Pool"),
@@ -19,7 +19,7 @@ QxrdAcquisitionOperations::QxrdAcquisitionOperations(/*QxrdAcquisitionThread *th
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionoperations.cpp,v 1.6 2009/07/13 23:19:37 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionoperations.cpp,v 1.7 2009/07/14 05:36:14 jennings Exp $")
 {
 }
 
@@ -297,6 +297,9 @@ QxrdImageData *QxrdAcquisitionOperations::darkImage() const
 /******************************************************************
 *
 *  $Log: qxrdacquisitionoperations.cpp,v $
+*  Revision 1.7  2009/07/14 05:36:14  jennings
+*  Moved data storage into individual channel objects, accelerated fitting (somewhat)
+*
 *  Revision 1.6  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *
