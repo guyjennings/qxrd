@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.7 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.8 2009/07/14 20:07:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -44,7 +44,7 @@ public:
   Q_PROPERTY(int    summedExposures  READ get_SummedExposures WRITE set_SummedExposures);
   QCEP_INTEGER_PROPERTY(SummedExposures);
 
-  Q_PROPERTY(int    filesInSequence  READ get_FilesInSequence WRITE set_FilesInSequence);
+  Q_PROPERTY(int    filesInSequence  READ get_FilesInSequence WRITE set_FilesInSequence STORED false);
   QCEP_INTEGER_PROPERTY(FilesInSequence);
 
   Q_PROPERTY(int    fileIndex        READ get_FileIndex WRITE set_FileIndex);
@@ -89,13 +89,34 @@ public:
   Q_PROPERTY(bool performGainCorrection READ get_PerformGainCorrection WRITE set_PerformGainCorrection);
   QCEP_BOOLEAN_PROPERTY(PerformGainCorrection);
 
+  Q_PROPERTY(int     simulationMode      READ get_SimulationMode WRITE set_SimulationMode STORED false);
+  QCEP_INTEGER_PROPERTY(SimulationMode);
+
+  Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows);
+  QCEP_INTEGER_PROPERTY(NRows);
+
+  Q_PROPERTY(int     nCols      READ get_NCols WRITE set_NCols);
+  QCEP_INTEGER_PROPERTY(NCols);
+
+  Q_PROPERTY(int     acquireDark      READ get_AcquireDark WRITE set_AcquireDark STORED false);
+  QCEP_INTEGER_PROPERTY(AcquireDark);
+
+  Q_PROPERTY(int     cancelling      READ get_Cancelling WRITE set_Cancelling STORED false);
+  QCEP_INTEGER_PROPERTY(Cancelling);
+
+  Q_PROPERTY(int     exposuresToSum      READ get_ExposuresToSum WRITE set_ExposuresToSum STORED false);
+  QCEP_INTEGER_PROPERTY(ExposuresToSum);
+
+  Q_PROPERTY(int     filesInAcquiredSequence      READ get_FilesInAcquiredSequence WRITE set_FilesInAcquiredSequence STORED false);
+  QCEP_INTEGER_PROPERTY(FilesInAcquiredSequence);
+
 //  Q_PROPERTY(int     cameraMode      READ cameraMode WRITE setCameraMode);
 //  Q_PROPERTY(int     frameSyncMode   READ frameSyncMode WRITE setFrameSyncMode);
 //  Q_PROPERTY(int     timerSync       READ timerSync WRITE setTimerSync);
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.7 2009/07/13 23:19:37 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.8 2009/07/14 20:07:00 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -103,6 +124,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.8  2009/07/14 20:07:00  jennings
+*  Implemented simple simulated acquisition
+*
 *  Revision 1.7  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *

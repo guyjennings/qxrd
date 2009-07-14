@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.7 2009/07/14 05:36:14 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.8 2009/07/14 20:07:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -34,7 +34,6 @@ public slots:
 signals:
   void acquireStarted(int dark);
   void acquireComplete(int dark);
-  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
   void oneReadoutModeChanged(int mode, double value);
 
 public:
@@ -61,12 +60,12 @@ private:
   mutable QMutex         m_Mutex;
   QMutex                 m_Acquiring;
   QWaitCondition         m_StatusWaiting;
-  int                    m_Cancelling;
-  int                    m_AcquireDark;
-  int                    m_NRows;
-  int                    m_NCols;
-  int                    m_ExposuresToSum;
-  int                    m_FilesInSequence;
+//  int                    m_Cancelling;
+//  int                    m_AcquireDark;
+//  int                    m_NRows;
+//  int                    m_NCols;
+//  int                    m_ExposuresToSum;
+//  int                    m_FilesInSequence;
   int                    m_CurrentExposure;
   int                    m_CurrentFile;
   int                    m_BufferSize;
@@ -74,7 +73,7 @@ private:
   QVector<quint16>       m_Buffer;
   QxrdImageData         *m_AcquiredData;
   QVector<double>        m_ReadoutTimes;
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.7 2009/07/14 05:36:14 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.8 2009/07/14 20:07:00 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -82,6 +81,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.8  2009/07/14 20:07:00  jennings
+*  Implemented simple simulated acquisition
+*
 *  Revision 1.7  2009/07/14 05:36:14  jennings
 *  Moved data storage into individual channel objects, accelerated fitting (somewhat)
 *

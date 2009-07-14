@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.11 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.12 2009/07/14 20:07:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -34,15 +34,15 @@ static QxrdAcquisitionPerkinElmer * g_Acquisition = NULL;
 QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
   : QxrdAcquisitionSimulated(proc),
     m_Mutex(QMutex::Recursive),
-    m_Cancelling(0),
-    m_AcquireDark(0),
-    m_NRows(0),
-    m_NCols(0),
-    m_ExposuresToSum(0),
+//    m_Cancelling(0),
+//    m_AcquireDark(0),
+//    m_NRows(0),
+//    m_NCols(0),
+//    m_ExposuresToSum(0),
     m_CurrentFile(0),
     m_BufferSize(0),
     m_AcquiredData(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.11 2009/07/13 23:19:37 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.12 2009/07/14 20:07:00 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -120,6 +120,8 @@ void QxrdAcquisitionPerkinElmer::initialize()
 
   if (nRet != HIS_ALL_OK) {
     acquisitionInitError(nRet);
+    set_SimulationMode(true);
+    simulatedInitialize();
     return;
   }
 
@@ -127,11 +129,15 @@ void QxrdAcquisitionPerkinElmer::initialize()
 
   if (nSensors != 1) {
     acquisitionNSensorsError(nRet);
+    set_SimulationMode(true);
+    simulatedInitialize();
     return;
   }
 
   if ((nRet = Acquisition_GetNextSensor(&Pos, &m_AcqDesc))!=HIS_ALL_OK) {
     acquisitionNSensorsError(nRet);
+    set_SimulationMode(true);
+    simulatedInitialize();
     return;
   }
 
@@ -147,8 +153,8 @@ void QxrdAcquisitionPerkinElmer::initialize()
     return;
   }
 
-  m_NRows = dwRows;
-  m_NCols = dwColumns;
+  set_NRows(dwRows);
+  set_NCols(dwColumns);
 
   int nReadoutTimes = 8;
   double readoutTimes[8];
@@ -175,100 +181,109 @@ void QxrdAcquisitionPerkinElmer::initialize()
   }
 
   for (int i=0; i<10; i++) {
-    returnImageToPool(new QxrdImageData(m_NCols, m_NRows));
+    returnImageToPool(new QxrdImageData(get_NCols(), get_NRows()));
   }
 }
 
 void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
 {
-  QMutexLocker lock(&m_Mutex);
+  THREAD_CHECK;
 
-  int nRet = HIS_ALL_OK;
-  m_AcquireDark = isDark;
-  m_BufferSize = 10;
-  m_BufferIndex = 0;
-  m_Cancelling = 0;
-
-  if (m_AcquireDark) {
-    m_ExposuresToSum = get_DarkSummedExposures();
-    m_FilesInSequence = 1;
+  if (get_SimulationMode()) {
+    simulatedAcquisition(isDark);
   } else {
-    m_ExposuresToSum = get_SummedExposures();
-    m_FilesInSequence = get_FilesInSequence();
-  }
+    QMutexLocker lock(&m_Mutex);
 
-  if (m_FilesInSequence <= 0) {
-    m_FilesInSequence = 1;
-  }
+    int nRet = HIS_ALL_OK;
 
-  if (m_AcquiredData == NULL) {
-    m_AcquiredData = takeNextFreeImage();
-  }
+    set_AcquireDark(isDark);
 
-  m_AcquiredData->resize(m_NCols, m_NRows);
-  m_AcquiredData->clear();
+    m_BufferSize = 10;
+    m_BufferIndex = 0;
 
-  m_Buffer.resize(m_NRows*m_NCols*m_BufferSize);
-  m_Buffer.fill(0);
+    set_Cancelling(0);
 
-  if ((nRet=Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
-                                                0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
-    acquisitionError(nRet);
-    return;
-  }
-
-  if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, get_ReadoutMode())) != HIS_ALL_OK) {
-    acquisitionError(nRet);
-    return;
-  }
-
-  emit printMessage(tr("Readout time = %1, Exposure Time = %2")
-                    .arg(readoutTime()).arg(get_ExposureTime()));
-
-  if (readoutTime() >= get_ExposureTime()) {
-    emit printMessage("SetFrameSyncMode HIS_SYNCMODE_FREE_RUNNING");
-    if ((nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING)) != HIS_ALL_OK) {
-      acquisitionError(nRet);
-      return;
+    if (get_AcquireDark()) {
+      set_ExposuresToSum(get_DarkSummedExposures());
+      set_FilesInAcquiredSequence(1);
+    } else {
+      set_ExposuresToSum(get_SummedExposures());
+      set_FilesInAcquiredSequence(get_FilesInSequence());
     }
-  } else {
-    emit printMessage("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER");
-    if ((nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
+
+    if (get_FilesInAcquiredSequence ()<= 0) {
+      set_FilesInAcquiredSequence(1);
+    }
+
+    if (m_AcquiredData == NULL) {
+      m_AcquiredData = takeNextFreeImage();
+    }
+
+    m_AcquiredData->resize(get_NCols(), get_NRows());
+    m_AcquiredData->clear();
+
+    m_Buffer.resize(get_NRows()*get_NCols()*m_BufferSize);
+    m_Buffer.fill(0);
+
+    if ((nRet=Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
+                                                  0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
       acquisitionError(nRet);
       return;
     }
 
-    DWORD tmp = (int)(get_ExposureTime()*1e6);
-    emit printMessage(tr("SetTimerSync %1").arg(tmp));
-
-    if ((nRet=Acquisition_SetTimerSync(m_AcqDesc, &tmp)) != HIS_ALL_OK) {
+    if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, get_ReadoutMode())) != HIS_ALL_OK) {
       acquisitionError(nRet);
       return;
     }
 
-    emit printMessage(tr("TimerSync = %1").arg(tmp));
+    emit printMessage(tr("Readout time = %1, Exposure Time = %2")
+                      .arg(readoutTime()).arg(get_ExposureTime()));
 
-    set_ExposureTime(tmp/1.0e6);
-  }
+    if (readoutTime() >= get_ExposureTime()) {
+      emit printMessage("SetFrameSyncMode HIS_SYNCMODE_FREE_RUNNING");
+      if ((nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING)) != HIS_ALL_OK) {
+        acquisitionError(nRet);
+        return;
+      }
+    } else {
+      emit printMessage("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER");
+      if ((nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
+        acquisitionError(nRet);
+        return;
+      }
 
-  if ((nRet=Acquisition_SetCameraGain(m_AcqDesc, get_CameraGain())) != HIS_ALL_OK) {
-    acquisitionError(nRet);
-    return;
-  }
+      DWORD tmp = (int)(get_ExposureTime()*1e6);
+      emit printMessage(tr("SetTimerSync %1").arg(tmp));
 
-  if ((nRet=Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_BufferSize,
-                                          m_NRows, m_NCols)) != HIS_ALL_OK) {
-    acquisitionError(nRet);
-    return;
-  }
+      if ((nRet=Acquisition_SetTimerSync(m_AcqDesc, &tmp)) != HIS_ALL_OK) {
+        acquisitionError(nRet);
+        return;
+      }
 
-  m_CurrentExposure = 0;
-  m_CurrentFile = 0;
+      emit printMessage(tr("TimerSync = %1").arg(tmp));
 
-  if ((nRet=Acquisition_Acquire_Image(m_AcqDesc, m_BufferSize,
-                                      0, HIS_SEQ_CONTINUOUS, NULL, NULL, NULL)) != HIS_ALL_OK) {
-    acquisitionError(nRet);
-    return;
+      set_ExposureTime(tmp/1.0e6);
+    }
+
+    if ((nRet=Acquisition_SetCameraGain(m_AcqDesc, get_CameraGain())) != HIS_ALL_OK) {
+      acquisitionError(nRet);
+      return;
+    }
+
+    if ((nRet=Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_BufferSize,
+                                            get_NRows(), get_NCols())) != HIS_ALL_OK) {
+      acquisitionError(nRet);
+      return;
+    }
+
+    m_CurrentExposure = 0;
+    m_CurrentFile = 0;
+
+    if ((nRet=Acquisition_Acquire_Image(m_AcqDesc, m_BufferSize,
+                                        0, HIS_SEQ_CONTINUOUS, NULL, NULL, NULL)) != HIS_ALL_OK) {
+      acquisitionError(nRet);
+      return;
+    }
   }
 }
 
@@ -278,15 +293,15 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 //
   QMutexLocker lock(&m_Mutex);
 
-  if (m_Cancelling) {
-    m_Cancelling = false;
+  if (get_Cancelling()) {
+    set_Cancelling(false);
     return /*true*/;
   }
 
   QString fileName;
   QString fileBase;
 
-  if (m_AcquireDark) {
+  if (get_AcquireDark()) {
     fileBase = get_FilePattern()+tr("-%1.dark.tif").arg(get_FileIndex(),5,10,QChar('0'));
     fileName = QDir(get_OutputDirectory())
                .filePath(get_FilePattern()+tr("-%1.dark.tif")
@@ -307,11 +322,11 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
   set_FileName(fileName);
 
   emit acquiredFrame(fileName, get_FileIndex(),
-                     m_CurrentExposure,m_ExposuresToSum,
-                     m_CurrentFile, m_FilesInSequence);
+                     m_CurrentExposure,get_ExposuresToSum(),
+                     m_CurrentFile, get_FilesInAcquiredSequence());
   // sum current frame
 
-  long npixels = m_NRows*m_NCols;
+  long npixels = get_NRows()*get_NCols();
   double* current = m_AcquiredData->data();
 
   unsigned short* frame = m_Buffer.data() + m_BufferIndex*npixels;
@@ -337,7 +352,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
 //  Acquisition_SetReady(m_AcqDesc, true);
 
-  if (m_CurrentExposure >= m_ExposuresToSum) {
+  if (m_CurrentExposure >= get_ExposuresToSum()) {
     m_CurrentExposure = 0;
 
     QFileInfo finfo(fileName);
@@ -346,9 +361,9 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
     m_AcquiredData -> set_Title(finfo.fileName());
     m_AcquiredData -> set_ReadoutMode(get_ReadoutMode());
     m_AcquiredData -> set_ExposureTime(get_ExposureTime());
-    m_AcquiredData -> set_SummedExposures(m_ExposuresToSum);
+    m_AcquiredData -> set_SummedExposures(get_ExposuresToSum());
 
-    if (m_AcquireDark) {
+    if (get_AcquireDark()) {
       m_AcquiredData -> set_ImageNumber(-1);
     } else {
       m_AcquiredData -> set_ImageNumber(m_CurrentFile);
@@ -357,7 +372,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
     newAcquiredImage(m_AcquiredData);
 
     m_AcquiredData = takeNextFreeImage();
-    m_AcquiredData -> resize(m_NCols, m_NRows);
+    m_AcquiredData -> resize(get_NCols(), get_NRows());
     m_AcquiredData -> clear();
 
     emit statusMessage("Saving "+fileName);
@@ -366,7 +381,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
     set_FileIndex(get_FileIndex()+1);
     m_CurrentFile++;
 
-    if (m_CurrentFile >= m_FilesInSequence) {
+    if (m_CurrentFile >= get_FilesInAcquiredSequence()) {
       emit printMessage("Acquisition ended\n");
       emit printMessage("Aborted acquisition\n");
 
@@ -385,12 +400,12 @@ void QxrdAcquisitionPerkinElmer::haltAcquire()
     printf("Ooops...\n");
   }
 
-  m_Cancelling = true;
+  set_Cancelling(true);
 
   Acquisition_Abort(m_AcqDesc);
 
   emit statusMessage("Acquire Complete");
-  emit acquireComplete(m_AcquireDark);
+  emit acquireComplete(get_AcquireDark());
 
   m_Acquiring.tryLock();
   m_Acquiring.unlock();
@@ -481,6 +496,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.12  2009/07/14 20:07:00  jennings
+*  Implemented simple simulated acquisition
+*
 *  Revision 1.11  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionscripting.h,v 1.6 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdacquisitionscripting.h,v 1.7 2009/07/14 20:07:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,10 +29,11 @@ protected:
   virtual void acquire() = 0;
   virtual void acquireDark() = 0;
   virtual int acquisitionStatus(double time) = 0;
+  virtual void haltAcquire() = 0;
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionscripting.h,v 1.6 2009/07/13 23:19:37 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionscripting.h,v 1.7 2009/07/14 20:07:00 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONSCRIPTING_H
@@ -40,6 +41,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionscripting.h,v $
+*  Revision 1.7  2009/07/14 20:07:00  jennings
+*  Implemented simple simulated acquisition
+*
 *  Revision 1.6  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *

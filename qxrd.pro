@@ -1,5 +1,5 @@
 TEMPLATE = app
-CONFIG += qt
+CONFIG += qt debug
 include("qxrd.version.pri")
 QT += network \
     script

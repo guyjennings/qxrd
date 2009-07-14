@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.7 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.8 2009/07/14 20:07:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,8 +32,15 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_SaveRawImages(this, "saveRawImages", true),
     m_PerformBadPixels(this, "performBadPixels", true),
     m_PerformGainCorrection(this, "performGainCorrection", true),
+    m_SimulationMode(this, "simulationMode", false),
+    m_NRows(this, "nRows", 2048),
+    m_NCols(this, "nCols", 2048),
+    m_AcquireDark(this, "acquireDark", 0),
+    m_Cancelling(this, "cancelling", 0),
+    m_ExposuresToSum(this, "exposuresToSum", 1),
+    m_FilesInAcquiredSequence(this, "filesInAcquiredSequence", 1),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.7 2009/07/13 23:19:37 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.8 2009/07/14 20:07:00 jennings Exp $")
 {
 }
 
@@ -54,6 +61,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.8  2009/07/14 20:07:00  jennings
+*  Implemented simple simulated acquisition
+*
 *  Revision 1.7  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *
