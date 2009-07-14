@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisition.h,v 1.35 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdacquisition.h,v 1.36 2009/07/14 05:36:14 jennings Exp $
 *
 *******************************************************************/
 
@@ -20,10 +20,10 @@ class QxrdAcquisition : public QxrdAcquisitionPerkinElmer
   Q_OBJECT;
 
 public:
-  QxrdAcquisition(/*QxrdAcquisitionThread *thread,*/ QxrdDataProcessor *proc);
+  QxrdAcquisition(QxrdDataProcessor *proc);
 
 private:
-  HEADER_IDENT("$Id: qxrdacquisition.h,v 1.35 2009/07/13 23:19:37 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisition.h,v 1.36 2009/07/14 05:36:14 jennings Exp $");
 };
 
 #endif
@@ -31,6 +31,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisition.h,v $
+*  Revision 1.36  2009/07/14 05:36:14  jennings
+*  *** empty log message ***
+*
 *  Revision 1.35  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *
