@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.2 2009/07/14 20:07:00 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.3 2009/07/16 20:09:55 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,7 +12,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.2 2009/07/14 20:07:00 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.3 2009/07/16 20:09:55 jennings Exp $")
 {
 }
 
@@ -59,6 +59,21 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 
     acquiredData -> resize(get_NCols(), get_NRows());
     acquiredData -> clear();
+
+    int nRows = get_NRows();
+    int nCols = get_NCols();
+
+    for (int j=0; j<nCols; j++) {
+      for (int i=0; i<nRows; i++) {
+        double r=sqrt(pow(i-nRows/2,2)+pow(j-nCols/2,2));
+
+        if (r > 0) {
+          acquiredData -> setValue(i, j, sin(r/100.0)/r);
+        } else {
+          acquiredData -> setValue(i, j, 1);
+        }
+      }
+    }
 
     QString fileName;
     QString fileBase;
@@ -108,6 +123,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.3  2009/07/16 20:09:55  jennings
+*  Set values in simulated data images
+*
 *  Revision 1.2  2009/07/14 20:07:00  jennings
 *  Implemented simple simulated acquisition
 *
