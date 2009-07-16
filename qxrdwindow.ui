@@ -71,7 +71,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -97,7 +97,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -130,7 +130,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -147,7 +147,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/ringfinder.png</normaloff>:/images/images/ringfinder.png</iconset>
               </property>
               <property name="iconSize">
@@ -170,7 +170,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/slice.png</normaloff>:/images/images/slice.png</iconset>
               </property>
               <property name="iconSize">
@@ -193,7 +193,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/measure.png</normaloff>:/images/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -241,7 +241,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -261,7 +261,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -294,7 +294,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -340,7 +340,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -360,7 +360,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -393,7 +393,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -1208,7 +1208,7 @@ Script Function: fileindex()</string>
        </property>
       </widget>
      </item>
-     <item row="10" column="0" colspan="4">
+     <item row="13" column="0" colspan="4">
       <spacer name="verticalSpacer_3">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -1292,7 +1292,7 @@ Script Function: fileindex()</string>
        </item>
       </widget>
      </item>
-     <item row="9" column="0" colspan="4">
+     <item row="10" column="0" colspan="4">
       <widget class="QComboBox" name="m_DisplayColorMap">
        <item>
         <property name="text">
@@ -1324,6 +1324,33 @@ Script Function: fileindex()</string>
          <string>Ice</string>
         </property>
        </item>
+      </widget>
+     </item>
+     <item row="11" column="0" colspan="4">
+      <widget class="QCheckBox" name="m_DisplayImage">
+       <property name="toolTip">
+        <string>Gives a smoother display when zoomed in</string>
+       </property>
+       <property name="text">
+        <string>Display Image</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0" colspan="4">
+      <widget class="QCheckBox" name="m_DisplayMask">
+       <property name="toolTip">
+        <string>Gives a smoother display when zoomed in</string>
+       </property>
+       <property name="text">
+        <string>Display Mask</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0" colspan="2">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Color Map</string>
+       </property>
       </widget>
      </item>
     </layout>
@@ -1373,7 +1400,7 @@ Script Function: fileindex()</string>
   </action>
   <action name="m_ActionLoadData">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -1466,7 +1493,7 @@ Script Function: fileindex()</string>
   </action>
   <action name="m_ActionImportData">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -1475,7 +1502,7 @@ Script Function: fileindex()</string>
   </action>
   <action name="m_ActionTest">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
    </property>
    <property name="text">
@@ -1516,7 +1543,7 @@ Script Function: fileindex()</string>
   </action>
   <action name="m_ActionSetCenter">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/ringfinder.png</normaloff>:/images/images/ringfinder.png</iconset>
    </property>
    <property name="text">
@@ -1569,6 +1596,8 @@ Script Function: fileindex()</string>
   <tabstop>m_XRDTabWidget</tabstop>
   <tabstop>m_Messages</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="qxrdresources.qrc"/>
+ </resources>
  <connections/>
 </ui>

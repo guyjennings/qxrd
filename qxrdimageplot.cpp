@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.21 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.22 2009/07/16 20:10:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -23,6 +23,16 @@
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QxrdPlot(parent),
+    m_DisplayMinimumPct(this, "displayMinimumPct", 0),
+    m_DisplayMaximumPct(this, "displayMaximumPct", 100),
+    m_DisplayMinimumVal(this, "displayMinimumVal", 0),
+    m_DisplayMaximumVal(this, "displayMaximumVal", 10000),
+    m_DisplayScalingMode(this, "displayScalingMode", 0),
+    m_DisplayColorMap(this, "displayColorMap", 0),
+    m_ImageShown(this, "imageShown", 1),
+    m_MaskShown(this, "maskShown", 0),
+    m_InterpolatePixels(this, "interpolatePixels", 1),
+    m_MaintainAspectRatio(this, "maintainAspectRatio", 1),
     m_Tracker(NULL),
     m_Zoomer(NULL),
     m_Panner(NULL),
@@ -35,14 +45,14 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_MaskImage(NULL),
     m_ColorMap(Qt::black, Qt::white),
     m_MaskColorMap(Qt::red, QColor(0,0,0,0)),
-    m_RasterShown(1),
-    m_MaskShown(0),
+//    m_RasterShown(1),
+//    m_MaskShown(0),
     m_MaskAlpha(80),
     m_MinDisplayed(-10),
     m_MaxDisplayed(110),
-    m_Interpolate(1),
-    m_MaintainAspect(1),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.21 2009/07/10 22:54:23 jennings Exp $")
+//    m_Interpolate(1),
+//    m_MaintainAspect(1),
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.22 2009/07/16 20:10:43 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -94,11 +104,24 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_Spectrogram -> attach(this);
 
   m_MaskImage = new QwtPlotSpectrogram();
-  m_MaskImage -> setAlpha(m_MaskShown ? m_MaskAlpha : 0);
+  m_MaskImage -> setAlpha(get_MaskShown() ? m_MaskAlpha : 0);
   m_MaskImage -> attach(this);
 
   setDisplayedRange(0,100);
   setGrayscale();
+
+  connect(prop_ImageShown(), SIGNAL(changedValue(bool)), this, SLOT(changeImageShown(bool)));
+  connect(prop_MaskShown(), SIGNAL(changedValue(bool)), this, SLOT(changeMaskShown(bool)));
+}
+
+void QxrdImagePlot::readSettings(QxrdSettings *settings, QString section)
+{
+  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdImagePlot::writeSettings(QxrdSettings *settings, QString section)
+{
+  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdImagePlot::autoScale()
@@ -323,10 +346,15 @@ void QxrdImagePlot::setColorMap(int n)
 
 void QxrdImagePlot::toggleShowImage()
 {
-  m_RasterShown = !m_RasterShown;
+  changeImageShown(!get_ImageShown());
+}
+
+void QxrdImagePlot::changeImageShown(bool shown)
+{
+  set_ImageShown(shown);
 
   if (m_Spectrogram) {
-    m_Spectrogram -> setAlpha(m_RasterShown ? 255 : 0);
+    m_Spectrogram -> setAlpha(get_ImageShown() ? 255 : 0);
     m_Spectrogram -> invalidateCache();
     m_Spectrogram -> itemChanged();
 
@@ -336,10 +364,15 @@ void QxrdImagePlot::toggleShowImage()
 
 void QxrdImagePlot::toggleShowMask()
 {
-  m_MaskShown = !m_MaskShown;
+  changeMaskShown(!get_MaskShown());
+}
+
+void QxrdImagePlot::changeMaskShown(bool shown)
+{
+  set_MaskShown(shown);
 
   if (m_MaskImage) {
-    m_MaskImage -> setAlpha(m_MaskShown ? m_MaskAlpha : 0);
+    m_MaskImage -> setAlpha(get_MaskShown() ? m_MaskAlpha : 0);
     m_MaskImage -> invalidateCache();
     m_MaskImage -> itemChanged();
 
@@ -367,7 +400,7 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
 
   m_Spectrogram -> setData(data);
   m_Spectrogram -> setColorMap(m_ColorMap);
-  m_Spectrogram -> setAlpha(m_RasterShown ? 255 : 0);
+  m_Spectrogram -> setAlpha(get_ImageShown() ? 255 : 0);
   m_Spectrogram -> invalidateCache();
   m_Spectrogram -> itemChanged();
 
@@ -394,7 +427,7 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
 
   m_MaskImage -> setData(mask);
   m_MaskImage -> setColorMap(m_MaskColorMap);
-  m_MaskImage -> setAlpha(m_MaskShown ? m_MaskAlpha : 0);
+  m_MaskImage -> setAlpha(get_MaskShown() ? m_MaskAlpha : 0);
   m_MaskImage -> invalidateCache();
   m_MaskImage -> itemChanged();
 
@@ -484,6 +517,9 @@ void QxrdImagePlot::doMeasure()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.22  2009/07/16 20:10:43  jennings
+*  Made various image display variables into properties
+*
 *  Revision 1.21  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.66 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.67 2009/07/16 20:10:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -39,14 +39,6 @@
 
 QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget *parent)
   : QMainWindow(parent),
-    m_DisplayMinimumPct(this, "displayMinimumPct", 0),
-    m_DisplayMaximumPct(this, "displayMaximumPct", 100),
-    m_DisplayMinimumVal(this, "displayMinimumVal", 0),
-    m_DisplayMaximumVal(this, "displayMaximumVal", 10000),
-    m_DisplayScalingMode(this, "displayScalingMode", 0),
-    m_InterpolatePixels(this, "interpolatePixels", 1),
-    m_MaintainAspectRatio(this, "maintainAspectRatio", 1),
-    m_DisplayColorMap(this, "displayColorMap", 0),
     m_SettingsLoaded(false),
     m_Application(app),
     m_AcquisitionThread(acq),
@@ -59,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.66 2009/07/10 22:54:23 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.67 2009/07/16 20:10:43 jennings Exp $")
 {
   setupUi(this);
 
@@ -120,14 +112,14 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
   connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
 
-  connect(prop_DisplayMinimumPct(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_minimum_pct_changed(double)));
-  connect(prop_DisplayMaximumPct(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_maximum_pct_changed(double)));
+  connect(m_Plot -> prop_DisplayMinimumPct(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_minimum_pct_changed(double)));
+  connect(m_Plot -> prop_DisplayMaximumPct(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_maximum_pct_changed(double)));
 
-  connect(prop_DisplayMinimumVal(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_minimum_val_changed(double)));
-  connect(prop_DisplayMaximumVal(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_maximum_val_changed(double)));
+  connect(m_Plot -> prop_DisplayMinimumVal(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_minimum_val_changed(double)));
+  connect(m_Plot -> prop_DisplayMaximumVal(), SIGNAL(changedValue(double)), m_Plot, SLOT(on_maximum_val_changed(double)));
 
-  connect(prop_InterpolatePixels(), SIGNAL(changedValue(int)), m_Plot, SLOT(on_interpolate_changed(int)));
-  connect(prop_MaintainAspectRatio(), SIGNAL(changedValue(int)), m_Plot, SLOT(on_maintain_aspect_changed(int)));
+  connect(m_Plot -> prop_InterpolatePixels(), SIGNAL(changedValue(int)), m_Plot, SLOT(on_interpolate_changed(int)));
+  connect(m_Plot -> prop_MaintainAspectRatio(), SIGNAL(changedValue(int)), m_Plot, SLOT(on_maintain_aspect_changed(int)));
 
 //  connect(m_Plot, SIGNAL(minimum_changed(double)), prop_DisplayMinimum, SLOT(setValue(double)));
 //  connect(m_Plot, SIGNAL(maximum_changed(double)), m_DisplayMaximum, SLOT(setValue(double)));
@@ -156,7 +148,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()));
   connect(m_ActionIce, SIGNAL(triggered()), m_Plot, SLOT(setIce()));
 
-  connect(prop_DisplayColorMap(), SIGNAL(changedValue(int)), m_Plot, SLOT(setColorMap(int)));
+  connect(m_Plot -> prop_DisplayColorMap(), SIGNAL(changedValue(int)), m_Plot, SLOT(setColorMap(int)));
 
   connect(m_HideMaskRange, SIGNAL(clicked()), m_ActionHideMaskRange, SIGNAL(triggered()));
   connect(m_ShowMaskRange, SIGNAL(clicked()), m_ActionShowMaskRange, SIGNAL(triggered()));
@@ -250,10 +242,18 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   m_Acquisition -> prop_BadPixelsPath() -> linkTo(m_BadPixelsPath);
   m_Acquisition -> prop_GainMapPath() -> linkTo(m_GainMapPath);
 
-  prop_DisplayMinimumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumPct);
-  prop_DisplayMaximumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumPct);
-  prop_DisplayMinimumVal() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumVal);
-  prop_DisplayMaximumVal() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumVal);
+  m_Plot -> prop_DisplayMinimumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumPct);
+  m_Plot -> prop_DisplayMaximumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumPct);
+  m_Plot -> prop_DisplayMinimumVal() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumVal);
+  m_Plot -> prop_DisplayMaximumVal() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumVal);
+
+  m_Plot -> prop_DisplayScalingMode() -> linkTo(Ui::QxrdWindow::m_DisplayScalingMode);
+  m_Plot -> prop_DisplayColorMap() -> linkTo(Ui::QxrdWindow::m_DisplayColorMap);
+
+  m_Plot -> prop_ImageShown() -> linkTo(Ui::QxrdWindow::m_DisplayImage);
+  m_Plot -> prop_MaskShown() -> linkTo(Ui::QxrdWindow::m_DisplayMask);
+  m_Plot -> prop_InterpolatePixels() -> linkTo(Ui::QxrdWindow::m_InterpolatePixels);
+  m_Plot -> prop_MaintainAspectRatio() -> linkTo(Ui::QxrdWindow::m_MaintainAspectRatio);
 
 //  connect(m_DataProcessor, SIGNAL(processedImageAvailable()), this, SLOT(onProcessedImageAvailable()));
 //  connect(m_DataProcessor, SIGNAL(darkImageAvailable()), this, SLOT(onDarkImageAvailable()));
@@ -471,6 +471,7 @@ void QxrdWindow::readSettings(QxrdSettings *settings, QString section)
 {
   m_CenterFinder -> readSettings(settings, section+"/centerfinder");
   m_Integrator   -> readSettings(settings, section+"/integrator");
+  m_Plot         -> readSettings(settings, section+"/plot");
 
   m_SettingsLoaded = true;
 
@@ -479,15 +480,20 @@ void QxrdWindow::readSettings(QxrdSettings *settings, QString section)
 
   restoreGeometry(geometry);
   restoreState(winstate,1);
+
+  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdWindow::writeSettings(QxrdSettings *settings, QString section)
 {
   m_CenterFinder -> writeSettings(settings, section+"/centerfinder");
   m_Integrator   -> writeSettings(settings, section+"/integrator");
+  m_Plot         -> writeSettings(settings, section+"/plot");
 
   settings -> setValue(section+"/geometry", saveGeometry());
   settings -> setValue(section+"/state", saveState(1));
+
+  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdWindow::statusMessage(QString msg)
@@ -767,6 +773,9 @@ QxrdIntegrator    *QxrdWindow::integrator() const
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.67  2009/07/16 20:10:43  jennings
+*  Made various image display variables into properties
+*
 *  Revision 1.66  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

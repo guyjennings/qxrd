@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.47 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.48 2009/07/16 20:10:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -39,31 +39,6 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 public:
   QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget *parent=0);
   virtual ~QxrdWindow();
-
-public:
-  Q_PROPERTY(double displayMinimumPct     READ get_DisplayMinimumPct WRITE set_DisplayMinimumPct);
-  QCEP_DOUBLE_PROPERTY(DisplayMinimumPct);
-
-  Q_PROPERTY(double displayMaximumPct     READ get_DisplayMaximumPct WRITE set_DisplayMaximumPct);
-  QCEP_DOUBLE_PROPERTY(DisplayMaximumPct);
-
-  Q_PROPERTY(double displayMinimumVal     READ get_DisplayMinimumVal WRITE set_DisplayMinimumVal);
-  QCEP_DOUBLE_PROPERTY(DisplayMinimumVal);
-
-  Q_PROPERTY(double displayMaximumVal     READ get_DisplayMaximumVal WRITE set_DisplayMaximumVal);
-  QCEP_DOUBLE_PROPERTY(DisplayMaximumVal);
-
-  Q_PROPERTY(int displayScalingMode        READ get_DisplayScalingMode WRITE set_DisplayScalingMode);
-  QCEP_INTEGER_PROPERTY(DisplayScalingMode);
-
-  Q_PROPERTY(bool interpolatePixels        READ get_InterpolatePixels WRITE set_InterpolatePixels);
-  QCEP_BOOLEAN_PROPERTY(InterpolatePixels);
-
-  Q_PROPERTY(bool maintainAspectRatio        READ get_MaintainAspectRatio WRITE set_MaintainAspectRatio);
-  QCEP_BOOLEAN_PROPERTY(MaintainAspectRatio);
-
-  Q_PROPERTY(bool displayColorMap        READ get_DisplayColorMap WRITE set_DisplayColorMap);
-  QCEP_BOOLEAN_PROPERTY(DisplayColorMap);
 
 public slots:
   void doSaveData();
@@ -142,7 +117,7 @@ private:
   int                     m_Acquiring;
   int                     m_AcquiringDark;
   QTimer                  m_StatusTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.47 2009/07/10 22:54:23 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.48 2009/07/16 20:10:43 jennings Exp $");
 };
 
 #endif
@@ -150,6 +125,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.48  2009/07/16 20:10:43  jennings
+*  Made various image display variables into properties
+*
 *  Revision 1.47  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *
