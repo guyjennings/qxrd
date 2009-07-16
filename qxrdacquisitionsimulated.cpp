@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.3 2009/07/16 20:09:55 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.4 2009/07/16 22:06:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,7 +12,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.3 2009/07/16 20:09:55 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.4 2009/07/16 22:06:00 jennings Exp $")
 {
 }
 
@@ -68,7 +68,7 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
         double r=sqrt(pow(i-nRows/2,2)+pow(j-nCols/2,2));
 
         if (r > 0) {
-          acquiredData -> setValue(i, j, sin(r/100.0)/r);
+          acquiredData -> setValue(i, j, sin(r/100.0)/(r/100.0));
         } else {
           acquiredData -> setValue(i, j, 1);
         }
@@ -123,6 +123,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.4  2009/07/16 22:06:00  jennings
+*  Made various image display variables into properties
+*
 *  Revision 1.3  2009/07/16 20:09:55  jennings
 *  Set values in simulated data images
 *
