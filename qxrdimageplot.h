@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.17 2009/07/16 20:10:43 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.18 2009/07/16 21:26:25 jennings Exp $
 *
 *******************************************************************/
 
@@ -80,7 +80,6 @@ public slots:
   void set005Range();
   void set010Range();
   void set100Range();
-  void setDisplayedRange(double min, double max);
   void recalculateDisplayedRange();
   void setAutoRange();
 
@@ -98,10 +97,10 @@ public slots:
   void changeImageShown(bool shown);
   void changeMaskShown(bool shown);
 
-  void on_minimum_changed(double min);
-  void on_maximum_changed(double max);
-  void on_interpolate_changed(int interp);
-  void on_maintain_aspect_changed(int interp);
+//  void on_minimum_changed(double min);
+//  void on_maximum_changed(double max);
+  void on_interpolate_changed(bool interp);
+  void on_maintain_aspect_changed(bool interp);
 
   void enableZooming();
   void enableCentering();
@@ -126,6 +125,11 @@ private:
   void changedColorMap();
   void setTrackerPen(const QPen &pen);
 
+  enum {
+    PercentageMode,
+    AbsoluteMode
+  };
+
 private:
   QxrdPlotTracker     *m_Tracker;
   QxrdPlotZoomer      *m_Zoomer;
@@ -145,11 +149,11 @@ private:
 //  int                  m_RasterShown;
 //  int                  m_MaskShown;
   int                  m_MaskAlpha;
-  double               m_MinDisplayed;
-  double               m_MaxDisplayed;
+//  double               m_MinDisplayed;
+//  double               m_MaxDisplayed;
 //  int                  m_Interpolate;
 //  int                  m_MaintainAspect;
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.17 2009/07/16 20:10:43 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.18 2009/07/16 21:26:25 jennings Exp $");
 };
 
 #endif
@@ -157,6 +161,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.18  2009/07/16 21:26:25  jennings
+*  Made various image display variables into properties
+*
 *  Revision 1.17  2009/07/16 20:10:43  jennings
 *  Made various image display variables into properties
 *

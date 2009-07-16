@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.48 2009/07/16 20:10:43 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.49 2009/07/16 21:26:25 jennings Exp $
 *
 *******************************************************************/
 
@@ -78,9 +78,6 @@ public slots:
   void doLoadBadPixels();
   void doLoadGainMap();
 
-  void onToolBoxPageChanged(int);
-  void onTabWidgetPageChanged(int);
-
 signals:
   void executeCommand(QString cmd);
 
@@ -117,7 +114,7 @@ private:
   int                     m_Acquiring;
   int                     m_AcquiringDark;
   QTimer                  m_StatusTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.48 2009/07/16 20:10:43 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.49 2009/07/16 21:26:25 jennings Exp $");
 };
 
 #endif
@@ -125,6 +122,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.49  2009/07/16 21:26:25  jennings
+*  Made various image display variables into properties
+*
 *  Revision 1.48  2009/07/16 20:10:43  jennings
 *  Made various image display variables into properties
 *

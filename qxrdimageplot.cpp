@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.22 2009/07/16 20:10:43 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.23 2009/07/16 21:26:25 jennings Exp $
 *
 *******************************************************************/
 
@@ -48,11 +48,11 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 //    m_RasterShown(1),
 //    m_MaskShown(0),
     m_MaskAlpha(80),
-    m_MinDisplayed(-10),
-    m_MaxDisplayed(110),
+//    m_MinDisplayed(-10),
+//    m_MaxDisplayed(110),
 //    m_Interpolate(1),
 //    m_MaintainAspect(1),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.22 2009/07/16 20:10:43 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.23 2009/07/16 21:26:25 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -107,11 +107,19 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_MaskImage -> setAlpha(get_MaskShown() ? m_MaskAlpha : 0);
   m_MaskImage -> attach(this);
 
-  setDisplayedRange(0,100);
+  set100Range();
   setGrayscale();
 
   connect(prop_ImageShown(), SIGNAL(changedValue(bool)), this, SLOT(changeImageShown(bool)));
   connect(prop_MaskShown(), SIGNAL(changedValue(bool)), this, SLOT(changeMaskShown(bool)));
+  connect(prop_DisplayMinimumPct(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
+  connect(prop_DisplayMaximumPct(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
+  connect(prop_DisplayMinimumVal(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
+  connect(prop_DisplayMaximumVal(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
+  connect(prop_DisplayScalingMode(), SIGNAL(changedValue(int)), this, SLOT(recalculateDisplayedRange()));
+  connect(prop_InterpolatePixels(), SIGNAL(changedValue(bool)), this, SLOT(on_interpolate_changed(bool)));
+  connect(prop_MaintainAspectRatio(), SIGNAL(changedValue(bool)), this, SLOT(on_maintain_aspect_changed(bool)));
+  connect(prop_DisplayColorMap(), SIGNAL(changedValue(int)), this, SLOT(setColorMap(int)));
 }
 
 void QxrdImagePlot::readSettings(QxrdSettings *settings, QString section)
@@ -141,46 +149,37 @@ void QxrdImagePlot::setAutoRange()
 
 void QxrdImagePlot::set005Range()
 {
-  setDisplayedRange(0, 5);
+  set_DisplayMinimumPct(0);
+  set_DisplayMaximumPct(5);
 }
 
 void QxrdImagePlot::set010Range()
 {
-  setDisplayedRange(0, 10);
+  set_DisplayMinimumPct(0);
+  set_DisplayMaximumPct(10);
 }
 
 void QxrdImagePlot::set100Range()
 {
-  setDisplayedRange(0, 100);
-}
-
-void QxrdImagePlot::setDisplayedRange(double min, double max)
-{
-  if (min != m_MinDisplayed) {
-//    printf("QxrdImagePlot::setDisplayedRange emit minimum_changed(%g)\n", min);
-
-    emit minimum_changed(min);
-    m_MinDisplayed = min;
-  }
-
-  if (max != m_MaxDisplayed) {
-//    printf("QxrdImagePlot::setDisplayedRange emit maximum_changed(%g)\n", max);
-
-    emit maximum_changed(max);
-    m_MaxDisplayed = max;
-  }
-
-  recalculateDisplayedRange();
+  set_DisplayMinimumPct(0);
+  set_DisplayMaximumPct(100);
 }
 
 void QxrdImagePlot::recalculateDisplayedRange()
 {
-  double minv = m_Raster.minValue();
-  double maxv = m_Raster.maxValue();
-  double del = maxv-minv;
+  double mindis, maxdis;
 
-  double mindis = minv+del*m_MinDisplayed/100.0;
-  double maxdis = minv+del*m_MaxDisplayed/100.0;
+  if (get_DisplayScalingMode() == PercentageMode) {
+    double minv = m_Raster.minValue();
+    double maxv = m_Raster.maxValue();
+    double del = maxv-minv;
+
+    mindis = minv+del*get_DisplayMinimumPct()/100.0;
+    maxdis = minv+del*get_DisplayMaximumPct()/100.0;
+  } else {
+    mindis = get_DisplayMinimumVal();
+    maxdis = get_DisplayMaximumVal();
+  }
 
   m_Raster.setDisplayedRange(mindis, maxdis);
 
@@ -203,21 +202,21 @@ void QxrdImagePlot::replotImage()
   replot();
 }
 
-void QxrdImagePlot::on_minimum_changed(double min)
-{
-//  printf("QxrdImagePlot::on_minimum_changed(%g)\n", min);
-
-  setDisplayedRange(min, m_MaxDisplayed);
-}
-
-void QxrdImagePlot::on_maximum_changed(double max)
-{
-//  printf("QxrdImagePlot::on_maximum_changed(%g)\n", max);
-
-  setDisplayedRange(m_MinDisplayed, max);
-}
-
-void QxrdImagePlot::on_interpolate_changed(int interp)
+//void QxrdImagePlot::on_minimum_changed(double min)
+//{
+////  printf("QxrdImagePlot::on_minimum_changed(%g)\n", min);
+//
+//  setDisplayedRange(min, m_MaxDisplayed);
+//}
+//
+//void QxrdImagePlot::on_maximum_changed(double max)
+//{
+////  printf("QxrdImagePlot::on_maximum_changed(%g)\n", max);
+//
+//  setDisplayedRange(m_MinDisplayed, max);
+//}
+//
+void QxrdImagePlot::on_interpolate_changed(bool interp)
 {
 //  printf("QxrdImagePlot::on_interpolate_changed(%d)\n", interp);
 
@@ -226,7 +225,7 @@ void QxrdImagePlot::on_interpolate_changed(int interp)
   replotImage();
 }
 
-void QxrdImagePlot::on_maintain_aspect_changed(int interp)
+void QxrdImagePlot::on_maintain_aspect_changed(bool interp)
 {
 //  printf("QxrdImagePlot::on_maintain_aspect_changed(%d)\n", interp);
 
@@ -517,6 +516,9 @@ void QxrdImagePlot::doMeasure()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.23  2009/07/16 21:26:25  jennings
+*  Made various image display variables into properties
+*
 *  Revision 1.22  2009/07/16 20:10:43  jennings
 *  Made various image display variables into properties
 *
