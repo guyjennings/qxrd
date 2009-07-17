@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptenginethread.cpp,v 1.2 2009/06/28 11:21:58 jennings Exp $
+*  $Id: qxrdscriptenginethread.cpp,v 1.3 2009/07/17 14:00:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,15 +8,16 @@
 
 #include "qxrdscriptengine.h"
 
-QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq)
+QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc)
   : QThread(NULL),
     m_ScriptEngine(NULL),
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptenginethread.cpp,v 1.2 2009/06/28 11:21:58 jennings Exp $")
+    m_DataProcessor(proc),
+    SOURCE_IDENT("$Id: qxrdscriptenginethread.cpp,v 1.3 2009/07/17 14:00:59 jennings Exp $")
 {
-  m_ScriptEngine = new QxrdScriptEngine(m_Application, m_Window, m_Acquisition);
+  m_ScriptEngine = new QxrdScriptEngine(m_Application, m_Window, m_Acquisition, m_DataProcessor);
 
   m_ScriptEngine -> moveToThread(this);
 }
@@ -50,6 +51,9 @@ void QxrdScriptEngineThread::run()
 /******************************************************************
 *
 *  $Log: qxrdscriptenginethread.cpp,v $
+*  Revision 1.3  2009/07/17 14:00:59  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.2  2009/06/28 11:21:58  jennings
 *  Implemented app scripting engine connections
 *

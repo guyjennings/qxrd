@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.4 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.5 2009/07/17 14:00:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -18,19 +18,21 @@
 static QxrdScriptEngine    *g_ScriptEngine;
 static QxrdAcquisition     *g_Acquisition;
 static QxrdApplication     *g_Application;
+static QxrdDataProcessor   *g_DataProcessor;
 
-QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq)
+QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc)
   : QObject(),
     m_Mutex(QMutex::Recursive),
     m_ScriptEngine(NULL),
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.4 2009/07/10 22:54:23 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.5 2009/07/17 14:00:59 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
   g_Application     = app;
+  g_DataProcessor   = proc;
 }
 
 void QxrdScriptEngine::initialize()
@@ -278,10 +280,10 @@ QScriptValue QxrdScriptEngine::filePatternFunc(QScriptContext *context, QScriptE
 QScriptValue QxrdScriptEngine::outputDirectoryFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> set_OutputDirectory(context->argument(0).toString());
+    g_DataProcessor -> set_OutputDirectory(context->argument(0).toString());
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_OutputDirectory());
+  return QScriptValue(engine, g_DataProcessor -> get_OutputDirectory());
 }
 
 QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEngine *engine)
@@ -296,6 +298,9 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.5  2009/07/17 14:00:59  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.4  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *

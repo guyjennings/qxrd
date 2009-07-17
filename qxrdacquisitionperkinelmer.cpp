@@ -1,11 +1,12 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.12 2009/07/14 20:07:00 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.13 2009/07/17 14:00:59 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdacquisitionperkinelmer.h"
-#include "qxrdacquisitionthread.h"
+//#include "qxrdacquisitionthread.h"
+#include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 #include "qxrdimagedata.h"
 #include "qxrdwindow.h"
@@ -42,7 +43,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CurrentFile(0),
     m_BufferSize(0),
     m_AcquiredData(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.12 2009/07/14 20:07:00 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.13 2009/07/17 14:00:59 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -181,7 +182,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
   }
 
   for (int i=0; i<10; i++) {
-    returnImageToPool(new QxrdImageData(get_NCols(), get_NRows()));
+    m_DataProcessor -> returnImageToPool(new QxrdImageData(get_NCols(), get_NRows()));
   }
 }
 
@@ -216,7 +217,7 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
     }
 
     if (m_AcquiredData == NULL) {
-      m_AcquiredData = takeNextFreeImage();
+      m_AcquiredData = m_DataProcessor -> takeNextFreeImage();
     }
 
     m_AcquiredData->resize(get_NCols(), get_NRows());
@@ -303,12 +304,12 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
   if (get_AcquireDark()) {
     fileBase = get_FilePattern()+tr("-%1.dark.tif").arg(get_FileIndex(),5,10,QChar('0'));
-    fileName = QDir(get_OutputDirectory())
+    fileName = QDir(m_DataProcessor -> get_OutputDirectory())
                .filePath(get_FilePattern()+tr("-%1.dark.tif")
                          .arg(get_FileIndex(),5,10,QChar('0')));
   } else {
     fileBase = get_FilePattern()+tr("-%1.tif").arg(get_FileIndex(),5,10,QChar('0'));
-    fileName = QDir(get_OutputDirectory())
+    fileName = QDir(m_DataProcessor -> get_OutputDirectory())
                .filePath(get_FilePattern()+tr("-%1.tif")
                          .arg(get_FileIndex(),5,10,QChar('0')));
   }
@@ -319,7 +320,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 //                    .arg(m_CurrentFile).arg(m_FilesInSequence));
 
   set_FileBase(fileBase);
-  set_FileName(fileName);
+  m_DataProcessor -> set_FileName(fileName);
 
   emit acquiredFrame(fileName, get_FileIndex(),
                      m_CurrentExposure,get_ExposuresToSum(),
@@ -371,7 +372,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
     newAcquiredImage(m_AcquiredData);
 
-    m_AcquiredData = takeNextFreeImage();
+    m_AcquiredData = m_DataProcessor -> takeNextFreeImage();
     m_AcquiredData -> resize(get_NCols(), get_NRows());
     m_AcquiredData -> clear();
 
@@ -496,6 +497,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.13  2009/07/17 14:00:59  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.12  2009/07/14 20:07:00  jennings
 *  Implemented simple simulated acquisition
 *

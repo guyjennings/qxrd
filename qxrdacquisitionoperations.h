@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionoperations.h,v 1.6 2009/07/17 12:41:33 jennings Exp $
+*  $Id: qxrdacquisitionoperations.h,v 1.7 2009/07/17 14:00:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,12 +29,12 @@ public:
 signals:
   void acquiredImageAvailable(QxrdImageData *image);
 
-private:
+protected:
   mutable QMutex         m_Mutex;
   QxrdDataProcessor     *m_DataProcessor;
   QxrdImageQueue         m_AcquiredImages;
 
-  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.6 2009/07/17 12:41:33 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.7 2009/07/17 14:00:59 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONOPERATIONS_H
@@ -42,6 +42,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionoperations.h,v $
+*  Revision 1.7  2009/07/17 14:00:59  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.6  2009/07/17 12:41:33  jennings
 *  Rearranging acquisition and data processor
 *

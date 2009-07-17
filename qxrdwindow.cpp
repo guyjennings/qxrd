@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.69 2009/07/17 12:41:33 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.70 2009/07/17 14:00:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.69 2009/07/17 12:41:33 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.70 2009/07/17 14:00:59 jennings Exp $")
 {
   setupUi(this);
 
@@ -381,7 +381,7 @@ void QxrdWindow::doAcquire()
 
   m_Acquiring = true;
 
-  QMetaObject::invokeMethod(m_Acquisition, "doAcquire");
+  QMetaObject::invokeMethod(m_Acquisition, "acquire");
 }
 
 void QxrdWindow::doAcquireDark()
@@ -390,7 +390,7 @@ void QxrdWindow::doAcquireDark()
 
   m_AcquiringDark = true;
 
-  QMetaObject::invokeMethod(m_Acquisition, "doAcquireDark");
+  QMetaObject::invokeMethod(m_Acquisition, "acquireDark");
 }
 
 void QxrdWindow::doCancel()
@@ -563,6 +563,9 @@ QxrdIntegrator    *QxrdWindow::integrator() const
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.70  2009/07/17 14:00:59  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.69  2009/07/17 12:41:33  jennings
 *  Rearranging acquisition and data processor
 *

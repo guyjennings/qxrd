@@ -1,18 +1,19 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.4 2009/07/16 22:06:00 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.5 2009/07/17 14:00:59 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdacquisitionsimulated.h"
 #include "qxrdimagedata.h"
+#include "qxrddataprocessor.h"
 
 #include <QDir>
 #include <QThread>
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.4 2009/07/16 22:06:00 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.5 2009/07/17 14:00:59 jennings Exp $")
 {
 }
 
@@ -24,7 +25,7 @@ void QxrdAcquisitionSimulated::simulatedInitialize()
   set_NCols(2048);
 
   for (int i=0; i<10; i++) {
-    returnImageToPool(new QxrdImageData(get_NCols(), get_NRows()));
+    m_DataProcessor -> returnImageToPool(new QxrdImageData(get_NCols(), get_NRows()));
   }
 }
 
@@ -55,7 +56,7 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
       return /*true*/;
     }
 
-    QxrdImageData *acquiredData = takeNextFreeImage();
+    QxrdImageData *acquiredData = m_DataProcessor -> takeNextFreeImage();
 
     acquiredData -> resize(get_NCols(), get_NRows());
     acquiredData -> clear();
@@ -80,18 +81,18 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 
     if (get_AcquireDark()) {
       fileBase = get_FilePattern()+tr("-%1.dark.tif").arg(get_FileIndex(),5,10,QChar('0'));
-      fileName = QDir(get_OutputDirectory())
+      fileName = QDir(m_DataProcessor -> get_OutputDirectory())
                  .filePath(get_FilePattern()+tr("-%1.dark.tif")
                            .arg(get_FileIndex(),5,10,QChar('0')));
     } else {
       fileBase = get_FilePattern()+tr("-%1.tif").arg(get_FileIndex(),5,10,QChar('0'));
-      fileName = QDir(get_OutputDirectory())
+      fileName = QDir(m_DataProcessor -> get_OutputDirectory())
                  .filePath(get_FilePattern()+tr("-%1.tif")
                            .arg(get_FileIndex(),5,10,QChar('0')));
     }
 
     set_FileBase(fileBase);
-    set_FileName(fileName);
+    m_DataProcessor -> set_FileName(fileName);
 
     emit acquiredFrame(fileName, get_FileIndex(),
                        0, get_ExposuresToSum(),
@@ -123,6 +124,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.5  2009/07/17 14:00:59  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.4  2009/07/16 22:06:00  jennings
 *  Made various image display variables into properties
 *

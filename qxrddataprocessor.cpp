@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.14 2009/07/17 12:41:33 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.15 2009/07/17 14:00:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -35,7 +35,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.14 2009/07/17 12:41:33 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.15 2009/07/17 14:00:59 jennings Exp $")
 {
 }
 
@@ -47,6 +47,8 @@ QxrdDataProcessor::QxrdDataProcessor
 void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
 {
   m_Acquisition = acq;
+
+  connect(m_Acquisition, SIGNAL(acquiredImageAvailable(QxrdImageData*)), this, SLOT(onAcquiredImageAvailable(QxrdImageData*)));
 }
 
 void QxrdDataProcessor::writeSettings(QxrdSettings *settings, QString section)
@@ -63,7 +65,7 @@ void QxrdDataProcessor::readSettings(QxrdSettings *settings, QString section)
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdDataProcessor::on_acquired_image_available()
+void QxrdDataProcessor::onAcquiredImageAvailable(QxrdImageData *img)
 {
 //  printf("QxrdDataProcessor::on_acquired_image_available()\n");
 
@@ -199,7 +201,7 @@ void QxrdDataProcessor::newGainMapImage(QxrdImageData *image)
 }
 
 
-void QxrdDataProcessor::onProcessedImageAvailable()
+void QxrdDataProcessor::onProcessedImageAvailable(QxrdImageData *image)
 {
 //  printf("onProcessedImageAvailable()\n");
 
@@ -210,7 +212,7 @@ void QxrdDataProcessor::onProcessedImageAvailable()
   }
 }
 
-void QxrdDataProcessor::onDarkImageAvailable()
+void QxrdDataProcessor::onDarkImageAvailable(QxrdImageData *image)
 {
 //  printf("onDarkImageAvailable()\n");
 
@@ -468,6 +470,9 @@ QxrdImageData *QxrdDataProcessor::darkImage() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.15  2009/07/17 14:00:59  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.14  2009/07/17 12:41:33  jennings
 *  Rearranging acquisition and data processor
 *

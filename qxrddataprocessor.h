@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.9 2009/07/17 12:41:33 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.10 2009/07/17 14:00:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -93,7 +93,9 @@ public:
   QxrdImageData *darkImage() const;
 
 private slots:
-  void on_acquired_image_available();
+  void onAcquiredImageAvailable(QxrdImageData *image);
+  void onProcessedImageAvailable(QxrdImageData *image);
+  void onDarkImageAvailable(QxrdImageData *image);
 
 private:
   void processAcquiredImage(QxrdImageData *image);
@@ -124,7 +126,7 @@ private:
   QxrdImageData            *m_BadPixels;
   QxrdImageData            *m_GainFrame;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.9 2009/07/17 12:41:33 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.10 2009/07/17 14:00:59 jennings Exp $");
 };
 
 #endif
@@ -132,6 +134,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.10  2009/07/17 14:00:59  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.9  2009/07/17 12:41:33  jennings
 *  Rearranging acquisition and data processor
 *

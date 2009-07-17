@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.43 2009/07/17 12:41:33 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.44 2009/07/17 14:00:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,7 +29,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.43 2009/07/17 12:41:33 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.44 2009/07/17 14:00:59 jennings Exp $")
 {
 //  QcepProperty::dumpMetaData(&QxrdApplication::staticMetaObject);
 //  QcepProperty::dumpMetaData(&QxrdWindow::staticMetaObject);
@@ -66,8 +66,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_AcquisitionThread -> start();
 
-  connect(m_Acquisition, SIGNAL(acquiredImageAvailable()), m_DataProcessor, SLOT(on_acquired_image_available()));
-
   m_ServerThread = new QxrdServerThread(m_AcquisitionThread, "qxrd");
   m_Server = m_ServerThread -> server();
 
@@ -80,7 +78,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   emit printMessage("server thread started");
 
-  m_ScriptEngineThread = new QxrdScriptEngineThread(this, m_Window, m_Acquisition);
+  m_ScriptEngineThread = new QxrdScriptEngineThread(this, m_Window, m_Acquisition, m_DataProcessor);
   m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
 
   emit printMessage("script thread created");
@@ -174,6 +172,9 @@ QxrdDataProcessor *QxrdApplication::dataProcessor() const
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.44  2009/07/17 14:00:59  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.43  2009/07/17 12:41:33  jennings
 *  Rearranging acquisition and data processor
 *

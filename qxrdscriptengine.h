@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.h,v 1.1 2009/06/28 04:00:39 jennings Exp $
+*  $Id: qxrdscriptengine.h,v 1.2 2009/07/17 14:00:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,13 +16,14 @@
 class QxrdApplication;
 class QxrdWindow;
 class QxrdAcquisition;
+class QxrdDataProcessor;
 
 class QxrdScriptEngine : public QObject
 {
   Q_OBJECT;
 
 public:
-  QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq);
+  QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc);
   void initialize();
 
 public slots:
@@ -66,7 +67,7 @@ private:
   QxrdWindow            *m_Window;
   QxrdAcquisition       *m_Acquisition;
 
-  HEADER_IDENT("$Id: qxrdscriptengine.h,v 1.1 2009/06/28 04:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdscriptengine.h,v 1.2 2009/07/17 14:00:59 jennings Exp $");
 };
 
 #endif // QXRDSCRIPTENGINE_H
@@ -74,6 +75,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.h,v $
+*  Revision 1.2  2009/07/17 14:00:59  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.1  2009/06/28 04:00:39  jennings
 *  Partial implementation of separate thread for script engine
 *
