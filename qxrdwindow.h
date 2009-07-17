@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.49 2009/07/16 21:26:25 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.50 2009/07/17 12:41:33 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,8 +16,8 @@
 #include "ui_qxrdwindow.h"
 
 class QxrdApplication;
-class QxrdAcquisitionThread;
 class QxrdAcquisition;
+class QxrdDataProcessor;
 class QwtPlotSpectrogram;
 class QCloseEvent;
 class QxrdImageData;
@@ -37,7 +37,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   Q_OBJECT;
 
 public:
-  QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget *parent=0);
+  QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProcessor *proc, QWidget *parent=0);
   virtual ~QxrdWindow();
 
 public slots:
@@ -101,8 +101,8 @@ private:
   mutable QMutex          m_Mutex;
   int                     m_SettingsLoaded;
   QxrdApplication        *m_Application;
-  QxrdAcquisitionThread  *m_AcquisitionThread;
   QxrdAcquisition        *m_Acquisition;
+  QxrdDataProcessor      *m_DataProcessor;
   QxrdScriptEngine       *m_ScriptEngine;
   QxrdCenterFinderDialog *m_CenterFinderDialog;
   QxrdCenterFinder       *m_CenterFinder;
@@ -114,7 +114,7 @@ private:
   int                     m_Acquiring;
   int                     m_AcquiringDark;
   QTimer                  m_StatusTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.49 2009/07/16 21:26:25 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.50 2009/07/17 12:41:33 jennings Exp $");
 };
 
 #endif
@@ -122,6 +122,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.50  2009/07/17 12:41:33  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.49  2009/07/16 21:26:25  jennings
 *  Made various image display variables into properties
 *

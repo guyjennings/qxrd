@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.68 2009/07/16 21:26:25 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.69 2009/07/17 12:41:33 jennings Exp $
 *
 *******************************************************************/
 
@@ -37,13 +37,13 @@
 #include <QMetaObject>
 #include <QMetaMethod>
 
-QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget *parent)
+QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProcessor *proc, QWidget *parent)
   : QMainWindow(parent),
     m_SettingsLoaded(false),
     m_Application(app),
-    m_AcquisitionThread(acq),
-    m_Acquisition(NULL),
-    m_ScriptEngine(NULL),
+    m_Acquisition(acq),
+    m_DataProcessor(proc),
+//    m_ScriptEngine(NULL),
     m_CenterFinderDialog(NULL),
     m_CenterFinder(NULL),
     m_IntegratorDialog(NULL),
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.68 2009/07/16 21:26:25 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.69 2009/07/17 12:41:33 jennings Exp $")
 {
   setupUi(this);
 
@@ -158,14 +158,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
 
   statusBar() -> addPermanentWidget(m_Progress);
 
-  m_Acquisition = m_AcquisitionThread -> acquisition();
-
   if (m_Acquisition == NULL) {
     printf("Oh no...\n");
   }
-
-  connect(m_AcquisitionThread, SIGNAL(printMessage(QString)),
-          this,              SLOT(printMessage(QString)));
 
   connect(m_Acquisition,     SIGNAL(statusMessage(QString)),
           this,              SLOT(statusMessage(QString)));
@@ -188,18 +183,18 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisitionThread *acq, QWidget
   m_Acquisition -> prop_SummedExposures() -> linkTo(m_SummedExposures);
   m_Acquisition -> prop_DarkSummedExposures() -> linkTo(m_DarkSummedExposures);
   m_Acquisition -> prop_FilesInSequence() -> linkTo(m_FilesInSequence);
-  m_Acquisition -> prop_OutputDirectory() -> linkTo(m_OutputDirectory);
   m_Acquisition -> prop_FilePattern() -> linkTo(m_FilePattern);
   m_Acquisition -> prop_FileIndex() -> linkTo(m_FileIndex);
 
-  m_Acquisition -> prop_PerformDarkSubtraction() -> linkTo(m_PerformDark);
-  m_Acquisition -> prop_SaveRawImages() -> linkTo(m_SaveRaw);
-  m_Acquisition -> prop_PerformBadPixels() -> linkTo(m_PerformBadPixels);
-  m_Acquisition -> prop_PerformGainCorrection() -> linkTo(m_PerformGainCorrection);
+  m_DataProcessor -> prop_OutputDirectory() -> linkTo(m_OutputDirectory);
+  m_DataProcessor -> prop_PerformDarkSubtraction() -> linkTo(m_PerformDark);
+  m_DataProcessor -> prop_SaveRawImages() -> linkTo(m_SaveRaw);
+  m_DataProcessor -> prop_PerformBadPixels() -> linkTo(m_PerformBadPixels);
+  m_DataProcessor -> prop_PerformGainCorrection() -> linkTo(m_PerformGainCorrection);
 
-  m_Acquisition -> prop_DarkImagePath() -> linkTo(m_DarkImagePath);
-  m_Acquisition -> prop_BadPixelsPath() -> linkTo(m_BadPixelsPath);
-  m_Acquisition -> prop_GainMapPath() -> linkTo(m_GainMapPath);
+  m_DataProcessor -> prop_DarkImagePath() -> linkTo(m_DarkImagePath);
+  m_DataProcessor -> prop_BadPixelsPath() -> linkTo(m_BadPixelsPath);
+  m_DataProcessor -> prop_GainMapPath() -> linkTo(m_GainMapPath);
 
   m_Plot -> prop_DisplayMinimumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumPct);
   m_Plot -> prop_DisplayMaximumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumPct);
@@ -337,9 +332,9 @@ void QxrdWindow::setReadoutTime(int n, double t)
 void QxrdWindow::selectOutputDirectory()
 {
   QString dir = QFileDialog::getExistingDirectory(this, "Output Directory",
-                                                  m_Acquisition -> get_OutputDirectory());
+                                                  m_DataProcessor -> get_OutputDirectory());
   if (dir.length()) {
-    m_Acquisition -> set_OutputDirectory(dir);
+    m_DataProcessor -> set_OutputDirectory(dir);
   }
 }
 
@@ -386,7 +381,7 @@ void QxrdWindow::doAcquire()
 
   m_Acquiring = true;
 
-  m_AcquisitionThread -> doAcquire();
+  QMetaObject::invokeMethod(m_Acquisition, "doAcquire");
 }
 
 void QxrdWindow::doAcquireDark()
@@ -395,20 +390,20 @@ void QxrdWindow::doAcquireDark()
 
   m_AcquiringDark = true;
 
-  m_AcquisitionThread -> doAcquireDark();
+  QMetaObject::invokeMethod(m_Acquisition, "doAcquireDark");
 }
 
 void QxrdWindow::doCancel()
 {
   if (m_Acquiring) {
-    m_AcquisitionThread -> cancel();
+    QMetaObject::invokeMethod(m_Acquisition, "cancel");
   }
 }
 
 void QxrdWindow::doCancelDark()
 {
   if (m_AcquiringDark) {
-    m_AcquisitionThread -> cancelDark();
+    QMetaObject::invokeMethod(m_Acquisition, "cancelDark");
   }
 }
 
@@ -456,50 +451,50 @@ void QxrdWindow::clearStatusMessage()
 void QxrdWindow::doSaveData()
 {
   QString theFile = QFileDialog::getSaveFileName(
-      this, "Save Data in", m_Acquisition -> get_OutputDirectory());
+      this, "Save Data in", m_DataProcessor -> get_OutputDirectory());
 
   if (theFile.length()) {
-    m_Acquisition -> saveData(theFile);
+    QMetaObject::invokeMethod(m_DataProcessor, "saveData", Q_ARG(QString, theFile));
   }
 }
 
 void QxrdWindow::doLoadData()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Image from...", m_Acquisition -> get_OutputDirectory());
+      this, "Load Image from...", m_DataProcessor -> get_OutputDirectory());
 
   if (theFile.length()) {
-    m_Acquisition -> loadData(theFile);
+    QMetaObject::invokeMethod(m_DataProcessor, "loadData", Q_ARG(QString, theFile));
   }
 }
 
 void QxrdWindow::doLoadDarkImage()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Dark Image from...", m_Acquisition -> get_DarkImagePath());
+      this, "Load Dark Image from...", m_DataProcessor -> get_DarkImagePath());
 
   if (theFile.length()) {
-    m_Acquisition -> loadDarkImage(theFile);
+    QMetaObject::invokeMethod(m_DataProcessor, "loadDarkImage", Q_ARG(QString, theFile));
   }
 }
 
 void QxrdWindow::doLoadBadPixels()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Bad Pixel Map from...", m_Acquisition -> get_BadPixelsPath());
+      this, "Load Bad Pixel Map from...", m_DataProcessor -> get_BadPixelsPath());
 
   if (theFile.length()) {
-    m_Acquisition -> loadBadPixels(theFile);
+    QMetaObject::invokeMethod(m_DataProcessor, "loadBadPixels", Q_ARG(QString, theFile));
   }
 }
 
 void QxrdWindow::doLoadGainMap()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Pixel Gain Map from...", m_Acquisition -> get_GainMapPath());
+      this, "Load Pixel Gain Map from...", m_DataProcessor -> get_GainMapPath());
 
   if (theFile.length()) {
-    m_Acquisition -> loadGainMap(theFile);
+    QMetaObject::invokeMethod(m_DataProcessor, "loadGainMap", Q_ARG(QString, theFile));
   }
 }
 
@@ -568,6 +563,9 @@ QxrdIntegrator    *QxrdWindow::integrator() const
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.69  2009/07/17 12:41:33  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.68  2009/07/16 21:26:25  jennings
 *  Made various image display variables into properties
 *

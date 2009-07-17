@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.42 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.43 2009/07/17 12:41:33 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,7 +29,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.42 2009/07/13 23:19:37 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.43 2009/07/17 12:41:33 jennings Exp $")
 {
 //  QcepProperty::dumpMetaData(&QxrdApplication::staticMetaObject);
 //  QcepProperty::dumpMetaData(&QxrdWindow::staticMetaObject);
@@ -56,7 +56,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_DataProcessor -> setAcquisition(m_Acquisition);
 
-  m_Window = new QxrdWindow(this, m_AcquisitionThread);
+  m_Window = new QxrdWindow(this, m_Acquisition, m_DataProcessor);
   m_Window -> show();
 
 //  m_DataProcessor -> setWindow(m_Window);
@@ -174,6 +174,9 @@ QxrdDataProcessor *QxrdApplication::dataProcessor() const
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.43  2009/07/17 12:41:33  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.42  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *

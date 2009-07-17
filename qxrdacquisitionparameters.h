@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.8 2009/07/14 20:07:00 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.9 2009/07/17 12:41:33 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,41 +53,14 @@ public:
   Q_PROPERTY(QString filePattern     READ get_FilePattern WRITE set_FilePattern);
   QCEP_STRING_PROPERTY(FilePattern);
 
-  Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory);
-  QCEP_STRING_PROPERTY(OutputDirectory);
-
   Q_PROPERTY(int     darkSummedExposures READ get_DarkSummedExposures WRITE set_DarkSummedExposures);
   QCEP_INTEGER_PROPERTY(DarkSummedExposures);
 
   Q_PROPERTY(int     cameraGain      READ get_CameraGain WRITE set_CameraGain);
   QCEP_INTEGER_PROPERTY(CameraGain);
 
-  Q_PROPERTY(QString fileName        READ get_FileName WRITE set_FileName);
-  QCEP_STRING_PROPERTY(FileName);
-
   Q_PROPERTY(QString fileBase        READ get_FileBase WRITE set_FileBase);
   QCEP_STRING_PROPERTY(FileBase);
-
-  Q_PROPERTY(QString darkImagePath   READ get_DarkImagePath WRITE set_DarkImagePath);
-  QCEP_STRING_PROPERTY(DarkImagePath);
-
-  Q_PROPERTY(QString badPixelsPath   READ get_BadPixelsPath WRITE set_BadPixelsPath);
-  QCEP_STRING_PROPERTY(BadPixelsPath);
-
-  Q_PROPERTY(QString gainMapPath     READ get_GainMapPath WRITE set_GainMapPath);
-  QCEP_STRING_PROPERTY(GainMapPath);
-
-  Q_PROPERTY(bool performDarkSubtraction READ get_PerformDarkSubtraction WRITE set_PerformDarkSubtraction);
-  QCEP_BOOLEAN_PROPERTY(PerformDarkSubtraction);
-
-  Q_PROPERTY(bool saveRawImages READ get_SaveRawImages WRITE set_SaveRawImages);
-  QCEP_BOOLEAN_PROPERTY(SaveRawImages);
-
-  Q_PROPERTY(bool performBadPixels READ get_PerformBadPixels WRITE set_PerformBadPixels);
-  QCEP_BOOLEAN_PROPERTY(PerformBadPixels);
-
-  Q_PROPERTY(bool performGainCorrection READ get_PerformGainCorrection WRITE set_PerformGainCorrection);
-  QCEP_BOOLEAN_PROPERTY(PerformGainCorrection);
 
   Q_PROPERTY(int     simulationMode      READ get_SimulationMode WRITE set_SimulationMode STORED false);
   QCEP_INTEGER_PROPERTY(SimulationMode);
@@ -116,7 +89,7 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.8 2009/07/14 20:07:00 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.9 2009/07/17 12:41:33 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -124,6 +97,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.9  2009/07/17 12:41:33  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.8  2009/07/14 20:07:00  jennings
 *  Implemented simple simulated acquisition
 *

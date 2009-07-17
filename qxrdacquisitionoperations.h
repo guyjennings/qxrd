@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionoperations.h,v 1.5 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdacquisitionoperations.h,v 1.6 2009/07/17 12:41:33 jennings Exp $
 *
 *******************************************************************/
 
@@ -21,55 +21,20 @@ class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 public:
   QxrdAcquisitionOperations(QxrdDataProcessor *proc);
 
-  QxrdImageData *takeNextFreeImage();
   QxrdImageData *takeNextAcquiredImage();
 
-  void returnImageToPool(QxrdImageData *img);
   void newAcquiredImage(QxrdImageData *img);
 
-  void loadData(QString name);
-  void saveData(QString name);
-
-  void saveImageData(QxrdImageData *image);
-  void saveRawData(QxrdImageData *image);
-  void saveNamedImageData(QString name, QxrdImageData *image);
-
-  void loadDarkImage(QString name);
-  void loadBadPixels(QString name);
-  void loadGainMap(QString name);
-
-  void newData(QxrdImageData *image);
-  void newDarkImage(QxrdImageData *image);
-  void newBadPixelsImage(QxrdImageData *image);
-  void newGainMapImage(QxrdImageData *image);
-
-  void showMaskRange(double min, double max);
-  void hideMaskRange(double min, double max);
-  void showMaskAll();
-  void hideMaskAll();
-
-  QxrdImageData *data() const;
-  QxrdImageData *darkImage() const;
-
-public slots:
-  void onProcessedImageAvailable();
-  void onDarkImageAvailable();
 
 signals:
-  void acquiredImageAvailable();
+  void acquiredImageAvailable(QxrdImageData *image);
 
 private:
   mutable QMutex         m_Mutex;
   QxrdDataProcessor     *m_DataProcessor;
-  QxrdImageQueue         m_FreeImages;
   QxrdImageQueue         m_AcquiredImages;
 
-  QxrdImageData         *m_Data;
-  QxrdImageData         *m_DarkFrame;
-  QxrdImageData         *m_BadPixels;
-  QxrdImageData         *m_GainFrame;
-
-  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.5 2009/07/13 23:19:37 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.6 2009/07/17 12:41:33 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONOPERATIONS_H
@@ -77,6 +42,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionoperations.h,v $
+*  Revision 1.6  2009/07/17 12:41:33  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.5  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *

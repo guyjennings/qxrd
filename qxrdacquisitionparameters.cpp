@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.8 2009/07/14 20:07:00 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.9 2009/07/17 12:41:33 jennings Exp $
 *
 *******************************************************************/
 
@@ -20,18 +20,9 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_FilesInSequence(this,"filesInSequence",1),
     m_FileIndex(this,"fileIndex",0),
     m_FilePattern(this,"filePattern",""),
-    m_OutputDirectory(this,"outputDirectory", ""),
     m_DarkSummedExposures(this,"darkSummedExposures",1),
     m_CameraGain(this,"cameraGain",0),
-    m_FileName(this,"fileName",""),
     m_FileBase(this,"fileBase",""),
-    m_DarkImagePath(this, "darkImagePath", ""),
-    m_BadPixelsPath(this, "badPixelsPath", ""),
-    m_GainMapPath(this, "gainMapPath", ""),
-    m_PerformDarkSubtraction(this, "performDarkSubtraction", true),
-    m_SaveRawImages(this, "saveRawImages", true),
-    m_PerformBadPixels(this, "performBadPixels", true),
-    m_PerformGainCorrection(this, "performGainCorrection", true),
     m_SimulationMode(this, "simulationMode", false),
     m_NRows(this, "nRows", 2048),
     m_NCols(this, "nCols", 2048),
@@ -40,7 +31,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_ExposuresToSum(this, "exposuresToSum", 1),
     m_FilesInAcquiredSequence(this, "filesInAcquiredSequence", 1),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.8 2009/07/14 20:07:00 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.9 2009/07/17 12:41:33 jennings Exp $")
 {
 }
 
@@ -61,6 +52,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.9  2009/07/17 12:41:33  jennings
+*  Rearranging acquisition and data processor
+*
 *  Revision 1.8  2009/07/14 20:07:00  jennings
 *  Implemented simple simulated acquisition
 *
