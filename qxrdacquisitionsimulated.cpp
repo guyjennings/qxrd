@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.5 2009/07/17 14:00:59 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.6 2009/07/17 19:25:57 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,7 +13,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.5 2009/07/17 14:00:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.6 2009/07/17 19:25:57 jennings Exp $")
 {
 }
 
@@ -76,6 +76,8 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
       }
     }
 
+    acquiredData -> calculateRange();
+
     QString fileName;
     QString fileBase;
 
@@ -124,6 +126,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.6  2009/07/17 19:25:57  jennings
+*  Calculate range of data in simulated image
+*
 *  Revision 1.5  2009/07/17 14:00:59  jennings
 *  Rearranging acquisition and data processor
 *
