@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.6 2009/07/17 19:25:57 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.7 2009/07/17 21:10:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,7 +13,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.6 2009/07/17 19:25:57 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.7 2009/07/17 21:10:39 jennings Exp $")
 {
 }
 
@@ -76,6 +76,7 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
       }
     }
 
+    acquiredData -> showMaskAll();
     acquiredData -> calculateRange();
 
     QString fileName;
@@ -126,6 +127,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.7  2009/07/17 21:10:39  jennings
+*  Modifications related to mask display
+*
 *  Revision 1.6  2009/07/17 19:25:57  jennings
 *  Calculate range of data in simulated image
 *

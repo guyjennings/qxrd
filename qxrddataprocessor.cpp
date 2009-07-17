@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.16 2009/07/17 20:41:20 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.17 2009/07/17 21:10:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -36,7 +36,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.16 2009/07/17 20:41:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.17 2009/07/17 21:10:39 jennings Exp $")
 {
 }
 
@@ -339,7 +339,7 @@ void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
 
     m_ProcessedImages.enqueue(img);
 
-    emit processedImageAvailable(img);
+    newData(img);
 
     emit printMessage(tr("Processing took %1 msec").arg(tic.elapsed()));
   }
@@ -475,6 +475,9 @@ QxrdImageData *QxrdDataProcessor::darkImage() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.17  2009/07/17 21:10:39  jennings
+*  Modifications related to mask display
+*
 *  Revision 1.16  2009/07/17 20:41:20  jennings
 *  Modifications related to mask display
 *
