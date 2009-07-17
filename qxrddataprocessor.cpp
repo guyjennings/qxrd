@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.15 2009/07/17 14:00:59 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.16 2009/07/17 20:41:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,9 +15,8 @@
 #include <QTime>
 
 QxrdDataProcessor::QxrdDataProcessor
-    (/*QxrdWindow *win, */QxrdAcquisition *acq, QObject *parent)
+    (QxrdAcquisition *acq, QObject *parent)
   : QObject(parent),
-//    m_Window(win),
     m_OutputDirectory(this,"outputDirectory", ""),
     m_DarkImagePath(this, "darkImagePath", ""),
     m_BadPixelsPath(this, "badPixelsPath", ""),
@@ -27,6 +26,8 @@ QxrdDataProcessor::QxrdDataProcessor
     m_PerformBadPixels(this, "performBadPixels", true),
     m_PerformGainCorrection(this, "performGainCorrection", true),
     m_FileName(this,"fileName",""),
+    m_MaskMinimumValue(this, "maskMinimumValue", 0),
+    m_MaskMaximumValue(this, "maskMaximumValue", 20000),
     m_Acquisition(acq),
     m_DarkUsage(QReadWriteLock::Recursive),
     m_ProcessedImages("QxrdDataProcessor Processed Images"),
@@ -35,20 +36,16 @@ QxrdDataProcessor::QxrdDataProcessor
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.15 2009/07/17 14:00:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.16 2009/07/17 20:41:20 jennings Exp $")
 {
 }
 
-//void QxrdDataProcessor::setWindow(QxrdWindow *win)
-//{
-//  m_Window = win;
-//}
-//
 void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
 {
   m_Acquisition = acq;
 
   connect(m_Acquisition, SIGNAL(acquiredImageAvailable(QxrdImageData*)), this, SLOT(onAcquiredImageAvailable(QxrdImageData*)));
+//  connect(m_Acquisition, SIGNAL(darkImageAvailable(QxrdImageData*)), this, SLOT(onDarkImageAvailable(QxrdImageData*)));
 }
 
 void QxrdDataProcessor::writeSettings(QxrdSettings *settings, QString section)
@@ -159,6 +156,8 @@ void QxrdDataProcessor::newData(QxrdImageData *image)
 //  m_Plot -> replot();
 
   set_FileName(image->get_FileName());
+
+  emit newDataAvailable(m_Data);
 }
 
 void QxrdDataProcessor::newDarkImage(QxrdImageData *image)
@@ -172,6 +171,8 @@ void QxrdDataProcessor::newDarkImage(QxrdImageData *image)
   }
 
   set_DarkImagePath(image->get_FileName());
+
+  emit newDarkImageAvailable(m_DarkFrame);
 }
 
 void QxrdDataProcessor::newBadPixelsImage(QxrdImageData *image)
@@ -225,9 +226,13 @@ void QxrdDataProcessor::onDarkImageAvailable(QxrdImageData *image)
 
 void QxrdDataProcessor::loadData(QString name)
 {
+//  printf("QxrdDataProcessor::loadData(%s)\n", qPrintable(name));
+
   QxrdImageData* res = takeNextFreeImage();
 
   res -> readImage(name);
+
+//  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
   newData(res);
 }
@@ -403,10 +408,10 @@ void QxrdDataProcessor::correctImageGains(QxrdImageData */*image*/)
 {
 }
 
-void QxrdDataProcessor::showMaskRange(double min, double max)
+void QxrdDataProcessor::showMaskRange(/*double min, double max*/)
 {
-//  double min = m_MaskMinimum -> value();
-//  double max = m_MaskMaximum -> value();
+  double min = get_MaskMinimumValue();
+  double max = get_MaskMaximumValue();
 
   if (m_Data) {
 //    printf ("clearMaskRange(%g,%g)\n", min, max);
@@ -439,10 +444,10 @@ void QxrdDataProcessor::showMaskAll()
   }
 }
 
-void QxrdDataProcessor::hideMaskRange(double min, double max)
+void QxrdDataProcessor::hideMaskRange(/*double min, double max*/)
 {
-//  double min = m_MaskMinimum -> value();
-//  double max = m_MaskMaximum -> value();
+  double min = get_MaskMinimumValue();
+  double max = get_MaskMaximumValue();
 
   if (m_Data) {
 //    printf ("setMaskRange(%g,%g)\n", min, max);
@@ -470,6 +475,9 @@ QxrdImageData *QxrdDataProcessor::darkImage() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.16  2009/07/17 20:41:20  jennings
+*  Modifications related to mask display
+*
 *  Revision 1.15  2009/07/17 14:00:59  jennings
 *  Rearranging acquisition and data processor
 *

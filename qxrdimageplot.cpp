@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.23 2009/07/16 21:26:25 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.24 2009/07/17 20:41:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -52,7 +52,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 //    m_MaxDisplayed(110),
 //    m_Interpolate(1),
 //    m_MaintainAspect(1),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.23 2009/07/16 21:26:25 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.24 2009/07/17 20:41:20 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -117,8 +117,8 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   connect(prop_DisplayMinimumVal(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
   connect(prop_DisplayMaximumVal(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
   connect(prop_DisplayScalingMode(), SIGNAL(changedValue(int)), this, SLOT(recalculateDisplayedRange()));
-  connect(prop_InterpolatePixels(), SIGNAL(changedValue(bool)), this, SLOT(on_interpolate_changed(bool)));
-  connect(prop_MaintainAspectRatio(), SIGNAL(changedValue(bool)), this, SLOT(on_maintain_aspect_changed(bool)));
+  connect(prop_InterpolatePixels(), SIGNAL(changedValue(bool)), this, SLOT(onInterpolateChanged(bool)));
+  connect(prop_MaintainAspectRatio(), SIGNAL(changedValue(bool)), this, SLOT(onMaintainAspectChanged(bool)));
   connect(prop_DisplayColorMap(), SIGNAL(changedValue(int)), this, SLOT(setColorMap(int)));
 }
 
@@ -216,18 +216,18 @@ void QxrdImagePlot::replotImage()
 //  setDisplayedRange(m_MinDisplayed, max);
 //}
 //
-void QxrdImagePlot::on_interpolate_changed(bool interp)
+void QxrdImagePlot::onInterpolateChanged(bool interp)
 {
-//  printf("QxrdImagePlot::on_interpolate_changed(%d)\n", interp);
+//  printf("QxrdImagePlot::onInterpolateChanged(%d)\n", interp);
 
   m_Raster.setInterpolate(interp);
 
   replotImage();
 }
 
-void QxrdImagePlot::on_maintain_aspect_changed(bool interp)
+void QxrdImagePlot::onMaintainAspectChanged(bool interp)
 {
-//  printf("QxrdImagePlot::on_maintain_aspect_changed(%d)\n", interp);
+//  printf("QxrdImagePlot::onMaintainAspectChanged(%d)\n", interp);
 
   if (m_Rescaler) {
     m_Rescaler -> setEnabled(interp);
@@ -433,6 +433,22 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
   replot();
 }
 
+void QxrdImagePlot::onProcessedImageAvailable(QxrdImageData *image)
+{
+  QxrdRasterData data(image, get_InterpolatePixels());
+  QxrdMaskRasterData mask(image, get_InterpolatePixels());
+
+  setImage(data);
+  setMask(mask);
+
+  setTitle(image -> get_Title());
+  replot();
+}
+
+void QxrdImagePlot::onDarkImageAvailable(QxrdImageData *image)
+{
+}
+
 QxrdRasterData* QxrdImagePlot::raster()
 {
   return &m_Raster;
@@ -516,6 +532,9 @@ void QxrdImagePlot::doMeasure()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.24  2009/07/17 20:41:20  jennings
+*  Modifications related to mask display
+*
 *  Revision 1.23  2009/07/16 21:26:25  jennings
 *  Made various image display variables into properties
 *

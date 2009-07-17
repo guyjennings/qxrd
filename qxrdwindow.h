@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.50 2009/07/17 12:41:33 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.51 2009/07/17 20:41:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -88,7 +88,7 @@ public:
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
-  QxrdImageData* loadNewImage(QString name);
+//  QxrdImageData* loadNewImage(QString name);
 
   QxrdScriptEngine *scriptEngine() const;
   void setScriptEngine(QxrdScriptEngine *engine);
@@ -114,7 +114,7 @@ private:
   int                     m_Acquiring;
   int                     m_AcquiringDark;
   QTimer                  m_StatusTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.50 2009/07/17 12:41:33 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.51 2009/07/17 20:41:20 jennings Exp $");
 };
 
 #endif
@@ -122,6 +122,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.51  2009/07/17 20:41:20  jennings
+*  Modifications related to mask display
+*
 *  Revision 1.50  2009/07/17 12:41:33  jennings
 *  Rearranging acquisition and data processor
 *

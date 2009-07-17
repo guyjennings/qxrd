@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.18 2009/07/16 21:26:25 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.19 2009/07/17 20:41:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -99,8 +99,11 @@ public slots:
 
 //  void on_minimum_changed(double min);
 //  void on_maximum_changed(double max);
-  void on_interpolate_changed(bool interp);
-  void on_maintain_aspect_changed(bool interp);
+  void onInterpolateChanged(bool interp);
+  void onMaintainAspectChanged(bool interp);
+
+  void onProcessedImageAvailable(QxrdImageData *image);
+  void onDarkImageAvailable(QxrdImageData *image);
 
   void enableZooming();
   void enableCentering();
@@ -153,7 +156,7 @@ private:
 //  double               m_MaxDisplayed;
 //  int                  m_Interpolate;
 //  int                  m_MaintainAspect;
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.18 2009/07/16 21:26:25 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.19 2009/07/17 20:41:20 jennings Exp $");
 };
 
 #endif
@@ -161,6 +164,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.19  2009/07/17 20:41:20  jennings
+*  Modifications related to mask display
+*
 *  Revision 1.18  2009/07/16 21:26:25  jennings
 *  Made various image display variables into properties
 *

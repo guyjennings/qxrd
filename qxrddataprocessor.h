@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.10 2009/07/17 14:00:59 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.11 2009/07/17 20:41:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -54,10 +54,31 @@ public:
   Q_PROPERTY(QString fileName        READ get_FileName WRITE set_FileName);
   QCEP_STRING_PROPERTY(FileName);
 
+  Q_PROPERTY(double maskMinimumValue READ get_MaskMinimumValue WRITE set_MaskMinimumValue);
+  QCEP_DOUBLE_PROPERTY(MaskMinimumValue);
+
+  Q_PROPERTY(double maskMaximumValue READ get_MaskMaximumValue WRITE set_MaskMaximumValue);
+  QCEP_DOUBLE_PROPERTY(MaskMaximumValue);
+
 signals:
+  void printMessage(QString msg);
+  void newDataAvailable(QxrdImageData *);
+  void newDarkImageAvailable(QxrdImageData *);
+
   void processedImageAvailable(QxrdImageData *);
   void darkImageAvailable(QxrdImageData *);
-  void printMessage(QString msg);
+
+public slots:
+  void showMaskRange(/*double min, double max*/);
+  void hideMaskRange(/*double min, double max*/);
+  void showMaskAll();
+  void hideMaskAll();
+
+  void loadData(QString name);
+  void saveData(QString name);
+  void loadDarkImage(QString name);
+  void loadBadPixels(QString name);
+  void loadGainMap(QString name);
 
 public:
   QxrdImageData *takeNextFreeImage();
@@ -73,21 +94,10 @@ public:
   void setAcquisition(QxrdAcquisition *acq);
 //  void setWindow(QxrdWindow *win);
 
-  void loadData(QString name);
-  void saveData(QString name);
 
   void saveImageData(QxrdImageData *image);
   void saveRawData(QxrdImageData *image);
   void saveNamedImageData(QString name, QxrdImageData *image);
-
-  void loadDarkImage(QString name);
-  void loadBadPixels(QString name);
-  void loadGainMap(QString name);
-
-  void showMaskRange(double min, double max);
-  void hideMaskRange(double min, double max);
-  void showMaskAll();
-  void hideMaskAll();
 
   QxrdImageData *data() const;
   QxrdImageData *darkImage() const;
@@ -126,7 +136,7 @@ private:
   QxrdImageData            *m_BadPixels;
   QxrdImageData            *m_GainFrame;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.10 2009/07/17 14:00:59 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.11 2009/07/17 20:41:20 jennings Exp $");
 };
 
 #endif
@@ -134,6 +144,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.11  2009/07/17 20:41:20  jennings
+*  Modifications related to mask display
+*
 *  Revision 1.10  2009/07/17 14:00:59  jennings
 *  Rearranging acquisition and data processor
 *

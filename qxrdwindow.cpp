@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.70 2009/07/17 14:00:59 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.71 2009/07/17 20:41:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.70 2009/07/17 14:00:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.71 2009/07/17 20:41:20 jennings Exp $")
 {
   setupUi(this);
 
@@ -117,10 +117,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   connect(m_ActionShowImage, SIGNAL(triggered()), m_Plot, SLOT(toggleShowImage()));
   connect(m_ActionShowMask, SIGNAL(triggered()), m_Plot, SLOT(toggleShowMask()));
-  connect(m_ActionShowMaskRange, SIGNAL(triggered()), this, SLOT(showMaskRange()));
-  connect(m_ActionHideMaskRange, SIGNAL(triggered()), this, SLOT(hideMaskRange()));
-  connect(m_ActionShowMaskAll, SIGNAL(triggered()), this, SLOT(showMaskAll()));
-  connect(m_ActionHideMaskAll, SIGNAL(triggered()), this, SLOT(hideMaskAll()));
+  connect(m_ActionShowMaskRange, SIGNAL(triggered()), m_DataProcessor, SLOT(showMaskRange()));
+  connect(m_ActionHideMaskRange, SIGNAL(triggered()), m_DataProcessor, SLOT(hideMaskRange()));
+  connect(m_ActionShowMaskAll, SIGNAL(triggered()), m_DataProcessor, SLOT(showMaskAll()));
+  connect(m_ActionHideMaskAll, SIGNAL(triggered()), m_DataProcessor, SLOT(hideMaskAll()));
 
   connect(m_ActionTest, SIGNAL(triggered()), this, SLOT(doTest()));
 
@@ -196,6 +196,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_DataProcessor -> prop_BadPixelsPath() -> linkTo(m_BadPixelsPath);
   m_DataProcessor -> prop_GainMapPath() -> linkTo(m_GainMapPath);
 
+  m_DataProcessor -> prop_MaskMinimumValue() -> linkTo(Ui::QxrdWindow::m_MaskMinimum);
+  m_DataProcessor -> prop_MaskMaximumValue() -> linkTo(Ui::QxrdWindow::m_MaskMaximum);
+
   m_Plot -> prop_DisplayMinimumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumPct);
   m_Plot -> prop_DisplayMaximumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumPct);
   m_Plot -> prop_DisplayMinimumVal() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumVal);
@@ -209,8 +212,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_Plot -> prop_InterpolatePixels() -> linkTo(Ui::QxrdWindow::m_InterpolatePixels);
   m_Plot -> prop_MaintainAspectRatio() -> linkTo(Ui::QxrdWindow::m_MaintainAspectRatio);
 
-//  connect(m_DataProcessor, SIGNAL(processedImageAvailable()), this, SLOT(onProcessedImageAvailable()));
-//  connect(m_DataProcessor, SIGNAL(darkImageAvailable()), this, SLOT(onDarkImageAvailable()));
+  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdImageData *)), m_Plot, SLOT(onProcessedImageAvailable(QxrdImageData *)));
+  connect(m_DataProcessor, SIGNAL(darkImageAvailable(QxrdImageData *)), m_Plot, SLOT(onDarkImageAvailable(QxrdImageData *)));
 //  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
 //  readSettings();
@@ -563,6 +566,9 @@ QxrdIntegrator    *QxrdWindow::integrator() const
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.71  2009/07/17 20:41:20  jennings
+*  Modifications related to mask display
+*
 *  Revision 1.70  2009/07/17 14:00:59  jennings
 *  Rearranging acquisition and data processor
 *
