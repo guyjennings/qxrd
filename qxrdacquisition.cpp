@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisition.cpp,v 1.51 2009/07/14 05:36:14 jennings Exp $
+*  $Id: qxrdacquisition.cpp,v 1.52 2009/07/20 00:32:04 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,9 +8,9 @@
 
 QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc)
   : QxrdAcquisitionPerkinElmer(proc),
-    SOURCE_IDENT("$Id: qxrdacquisition.cpp,v 1.51 2009/07/14 05:36:14 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisition.cpp,v 1.52 2009/07/20 00:32:04 jennings Exp $")
 {
-  emit printMessage("Enter QxrdAcquisition::QxrdAcquisition\n");
+//  emit printMessage("Enter QxrdAcquisition::QxrdAcquisition\n");
 }
 
 
@@ -18,6 +18,9 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc)
 /******************************************************************
 *
 *  $Log: qxrdacquisition.cpp,v $
+*  Revision 1.52  2009/07/20 00:32:04  jennings
+*  Removed image queues for acquired and dark images - use 'connect' args instead
+*
 *  Revision 1.51  2009/07/14 05:36:14  jennings
 *  Moved data storage into individual channel objects, accelerated fitting (somewhat)
 *

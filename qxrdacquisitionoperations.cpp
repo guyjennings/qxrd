@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionoperations.cpp,v 1.8 2009/07/17 12:41:33 jennings Exp $
+*  $Id: qxrdacquisitionoperations.cpp,v 1.9 2009/07/20 00:32:04 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,30 +12,33 @@ QxrdAcquisitionOperations::QxrdAcquisitionOperations(QxrdDataProcessor *proc)
   : QxrdAcquisitionScripting(proc),
     m_DataProcessor(proc),
 //    m_FreeImages("Free Image Pool"),
-    m_AcquiredImages("Acquired Images"),
-    SOURCE_IDENT("$Id: qxrdacquisitionoperations.cpp,v 1.8 2009/07/17 12:41:33 jennings Exp $")
+//    m_AcquiredImages("Acquired Images"),
+    SOURCE_IDENT("$Id: qxrdacquisitionoperations.cpp,v 1.9 2009/07/20 00:32:04 jennings Exp $")
 {
 }
 
-QxrdImageData *QxrdAcquisitionOperations::takeNextAcquiredImage()
-{
-  QMutexLocker lock(&m_Mutex);
-
-  return m_AcquiredImages.dequeue();
-}
-
-void QxrdAcquisitionOperations::newAcquiredImage(QxrdImageData *img)
-{
-  QMutexLocker lock(&m_Mutex);
-
-  m_AcquiredImages.enqueue(img);
-
-  emit acquiredImageAvailable(img);
-}
+//QxrdImageData *QxrdAcquisitionOperations::takeNextAcquiredImage()
+//{
+//  QMutexLocker lock(&m_Mutex);
+//
+//  return m_AcquiredImages.dequeue();
+//}
+//
+//void QxrdAcquisitionOperations::newAcquiredImage(QxrdImageData *img)
+//{
+//  QMutexLocker lock(&m_Mutex);
+//
+//  m_AcquiredImages.enqueue(img);
+//
+//  emit acquiredImageAvailable(img);
+//}
 
 /******************************************************************
 *
 *  $Log: qxrdacquisitionoperations.cpp,v $
+*  Revision 1.9  2009/07/20 00:32:04  jennings
+*  Removed image queues for acquired and dark images - use 'connect' args instead
+*
 *  Revision 1.8  2009/07/17 12:41:33  jennings
 *  Rearranging acquisition and data processor
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.11 2009/07/17 20:41:20 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.12 2009/07/20 00:31:31 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,6 +11,7 @@
 
 #include <QObject>
 #include <QReadWriteLock>
+#include <QAtomicInt>
 
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
@@ -65,9 +66,6 @@ signals:
   void newDataAvailable(QxrdImageData *);
   void newDarkImageAvailable(QxrdImageData *);
 
-  void processedImageAvailable(QxrdImageData *);
-  void darkImageAvailable(QxrdImageData *);
-
 public slots:
   void showMaskRange(/*double min, double max*/);
   void hideMaskRange(/*double min, double max*/);
@@ -82,9 +80,9 @@ public slots:
 
 public:
   QxrdImageData *takeNextFreeImage();
-  QxrdImageData *takeLatestProcessedImage();
-  QxrdImageData *takeNextProcessedImage();
-  QxrdImageData *takeNextDarkImage();
+//  QxrdImageData *takeLatestProcessedImage();
+//  QxrdImageData *takeNextProcessedImage();
+//  QxrdImageData *takeNextDarkImage();
 
   void returnImageToPool(QxrdImageData *img);
 
@@ -102,10 +100,18 @@ public:
   QxrdImageData *data() const;
   QxrdImageData *darkImage() const;
 
+  int incrementAcquiredCount();
+  int decrementAcquiredCount();
+  int getAcquiredCount();
+
+  int incrementProcessedCount();
+  int decrementProcessedCount();
+  int getProcessedCount();
+
 private slots:
   void onAcquiredImageAvailable(QxrdImageData *image);
-  void onProcessedImageAvailable(QxrdImageData *image);
-  void onDarkImageAvailable(QxrdImageData *image);
+//  void onProcessedImageAvailable(QxrdImageData *image);
+//  void onDarkImageAvailable(QxrdImageData *image);
 
 private:
   void processAcquiredImage(QxrdImageData *image);
@@ -128,15 +134,18 @@ private:
   QReadWriteLock            m_Processing;
 
   QxrdImageQueue            m_FreeImages;
-  QxrdImageQueue            m_ProcessedImages;
-  QxrdImageQueue            m_DarkImages;
+//  QxrdImageQueue            m_ProcessedImages;
+//  QxrdImageQueue            m_DarkImages;
 
   QxrdImageData            *m_Data;
   QxrdImageData            *m_DarkFrame;
   QxrdImageData            *m_BadPixels;
   QxrdImageData            *m_GainFrame;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.11 2009/07/17 20:41:20 jennings Exp $");
+  QAtomicInt                m_AcquiredCount;
+  QAtomicInt                m_ProcessedCount;
+
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.12 2009/07/20 00:31:31 jennings Exp $");
 };
 
 #endif
@@ -144,6 +153,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.12  2009/07/20 00:31:31  jennings
+*  Removed image queues for acquired and dark images - use 'connect' args instead
+*
 *  Revision 1.11  2009/07/17 20:41:20  jennings
 *  Modifications related to mask display
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionoperations.h,v 1.7 2009/07/17 14:00:59 jennings Exp $
+*  $Id: qxrdacquisitionoperations.h,v 1.8 2009/07/20 00:32:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,9 +32,9 @@ signals:
 protected:
   mutable QMutex         m_Mutex;
   QxrdDataProcessor     *m_DataProcessor;
-  QxrdImageQueue         m_AcquiredImages;
+//  QxrdImageQueue         m_AcquiredImages;
 
-  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.7 2009/07/17 14:00:59 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.8 2009/07/20 00:32:17 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONOPERATIONS_H
@@ -42,6 +42,9 @@ protected:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionoperations.h,v $
+*  Revision 1.8  2009/07/20 00:32:17  jennings
+*  Removed image queues for acquired and dark images - use 'connect' args instead
+*
 *  Revision 1.7  2009/07/17 14:00:59  jennings
 *  Rearranging acquisition and data processor
 *
