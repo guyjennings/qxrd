@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.9 2009/07/17 12:41:33 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.10 2009/07/20 00:29:49 jennings Exp $
 *
 *******************************************************************/
 
@@ -44,7 +44,7 @@ public:
   Q_PROPERTY(int    summedExposures  READ get_SummedExposures WRITE set_SummedExposures);
   QCEP_INTEGER_PROPERTY(SummedExposures);
 
-  Q_PROPERTY(int    filesInSequence  READ get_FilesInSequence WRITE set_FilesInSequence STORED false);
+  Q_PROPERTY(int    filesInSequence  READ get_FilesInSequence WRITE set_FilesInSequence);
   QCEP_INTEGER_PROPERTY(FilesInSequence);
 
   Q_PROPERTY(int    fileIndex        READ get_FileIndex WRITE set_FileIndex);
@@ -89,7 +89,7 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.9 2009/07/17 12:41:33 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.10 2009/07/20 00:29:49 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -97,6 +97,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.10  2009/07/20 00:29:49  jennings
+*  filesInSequence property should be saved
+*
 *  Revision 1.9  2009/07/17 12:41:33  jennings
 *  Rearranging acquisition and data processor
 *
