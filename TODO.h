@@ -47,4 +47,9 @@ a rigorous reorganisation and layering of code to ensure this.
 
 -------------------------------------------------------
 
+Ensure that program will not overwrite files without warning.  Use modified
+file names where necessary.
+
+-------------------------------------------------------
+
 #endif // TODO_H
