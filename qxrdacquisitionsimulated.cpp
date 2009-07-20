@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.7 2009/07/17 21:10:39 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.8 2009/07/20 00:33:02 jennings Exp $
 *
 *******************************************************************/
 
@@ -10,10 +10,11 @@
 
 #include <QDir>
 #include <QThread>
+#include <QTime>
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.7 2009/07/17 21:10:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.8 2009/07/20 00:33:02 jennings Exp $")
 {
 }
 
@@ -51,6 +52,12 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
   int n = get_FilesInSequence();
 
   for (int i=0; i<n; i++) {
+    QTime tic;
+
+    tic.start();
+
+    emit printMessage(tr("Started acquisition %1\n").arg(i));
+
     if (get_Cancelling()) {
       set_Cancelling(false);
       return /*true*/;
@@ -61,23 +68,30 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
     acquiredData -> resize(get_NCols(), get_NRows());
     acquiredData -> clear();
 
+    emit printMessage(tr("Cleared data after %1\n").arg(tic.restart()));
+
     int nRows = get_NRows();
     int nCols = get_NCols();
 
     for (int j=0; j<nCols; j++) {
       for (int i=0; i<nRows; i++) {
-        double r=sqrt(pow(i-nRows/2,2)+pow(j-nCols/2,2));
-
-        if (r > 0) {
-          acquiredData -> setValue(i, j, sin(r/100.0)/(r/100.0));
-        } else {
-          acquiredData -> setValue(i, j, 1);
-        }
+        acquiredData -> setValue(i, j, i+j);
+//        double r=sqrt(pow(i-nRows/2,2)+pow(j-nCols/2,2));
+//
+//        if (r > 0) {
+//          acquiredData -> setValue(i, j, 1/r/*sin(r/100.0)/(r/100.0)*/);
+//        } else {
+//          acquiredData -> setValue(i, j, 1);
+//        }
       }
     }
 
+    emit printMessage(tr("Simulated data after %1\n").arg(tic.restart()));
+
     acquiredData -> showMaskAll();
     acquiredData -> calculateRange();
+
+    emit printMessage(tr("Initialize mask and range after %1\n").arg(tic.restart()));
 
     QString fileName;
     QString fileBase;
@@ -115,7 +129,11 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
       acquiredData -> set_ImageNumber(i);
     }
 
-    newAcquiredImage(acquiredData);
+    m_DataProcessor -> incrementAcquiredCount();
+
+    emit printMessage(tr("Acquired image complete after %1\n").arg(tic.restart()));
+
+    emit acquiredImageAvailable(acquiredData);
 
     set_FileIndex(get_FileIndex()+1);
   }
@@ -127,6 +145,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.8  2009/07/20 00:33:02  jennings
+*  Simulated data calculation simplified
+*
 *  Revision 1.7  2009/07/17 21:10:39  jennings
 *  Modifications related to mask display
 *
