@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.13 2009/07/17 14:00:59 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.14 2009/07/20 00:34:49 jennings Exp $
 *
 *******************************************************************/
 
@@ -43,7 +43,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CurrentFile(0),
     m_BufferSize(0),
     m_AcquiredData(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.13 2009/07/17 14:00:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.14 2009/07/20 00:34:49 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -370,7 +370,9 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_AcquiredData -> set_ImageNumber(m_CurrentFile);
     }
 
-    newAcquiredImage(m_AcquiredData);
+    m_DataProcessor -> incrementAcquiredCount();
+
+    emit acquiredImageAvailable(m_AcquiredData);
 
     m_AcquiredData = m_DataProcessor -> takeNextFreeImage();
     m_AcquiredData -> resize(get_NCols(), get_NRows());
@@ -497,6 +499,10 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.14  2009/07/20 00:34:49  jennings
+*  Send data between acquisition and data processor via signal/slot args, rather
+*  than image queues
+*
 *  Revision 1.13  2009/07/17 14:00:59  jennings
 *  Rearranging acquisition and data processor
 *

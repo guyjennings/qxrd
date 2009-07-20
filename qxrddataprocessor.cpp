@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.17 2009/07/17 21:10:39 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.18 2009/07/20 00:34:49 jennings Exp $
 *
 *******************************************************************/
 
@@ -30,13 +30,15 @@ QxrdDataProcessor::QxrdDataProcessor
     m_MaskMaximumValue(this, "maskMaximumValue", 20000),
     m_Acquisition(acq),
     m_DarkUsage(QReadWriteLock::Recursive),
-    m_ProcessedImages("QxrdDataProcessor Processed Images"),
-    m_DarkImages("QxrdDataProcessor Dark Images"),
+//    m_ProcessedImages("QxrdDataProcessor Processed Images"),
+//    m_DarkImages("QxrdDataProcessor Dark Images"),
     m_Data(new QxrdImageData(2048,2048)),
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.17 2009/07/17 21:10:39 jennings Exp $")
+    m_AcquiredCount(0),
+    m_ProcessedCount(0),
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.18 2009/07/20 00:34:49 jennings Exp $")
 {
 }
 
@@ -62,11 +64,13 @@ void QxrdDataProcessor::readSettings(QxrdSettings *settings, QString section)
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdDataProcessor::onAcquiredImageAvailable(QxrdImageData *img)
+void QxrdDataProcessor::onAcquiredImageAvailable(QxrdImageData *image)
 {
-//  printf("QxrdDataProcessor::on_acquired_image_available()\n");
+  int navail = decrementAcquiredCount();
 
-  QxrdImageData *image = m_Acquisition -> takeNextAcquiredImage();
+  printf("QxrdDataProcessor::on_acquired_image_available(), navail = %d\n", navail);
+
+//  QxrdImageData *image = m_Acquisition -> takeNextAcquiredImage();
 
   if (image) {
 //    printf("Image Number %d\n", image -> imageNumber());
@@ -82,9 +86,9 @@ void QxrdDataProcessor::onAcquiredImageAvailable(QxrdImageData *img)
 
       saveImageData(image);
 
-      m_DarkImages.enqueue(image);
+//      m_DarkImages.enqueue(image);
 
-      emit darkImageAvailable(image);
+      newDarkImage(image);
     }
   }
 }
@@ -99,35 +103,35 @@ QxrdImageData *QxrdDataProcessor::takeNextFreeImage()
   }
 }
 
-QxrdImageData *QxrdDataProcessor::takeNextProcessedImage()
-{
-  return m_ProcessedImages.dequeue();
-}
-
-QxrdImageData *QxrdDataProcessor::takeLatestProcessedImage()
-{
-  int n = m_ProcessedImages.size();
-
-  QxrdImageData *res = NULL;
-
-  for (int i=0; i<n; i++) {
-    QxrdImageData *img = m_ProcessedImages.dequeue();
-
-    if (res) {
-      returnImageToPool(res);
-    }
-
-    res = img;
-  }
-
-  return res;
-}
-
-QxrdImageData *QxrdDataProcessor::takeNextDarkImage()
-{
-  return m_DarkImages.dequeue();
-}
-
+//QxrdImageData *QxrdDataProcessor::takeNextProcessedImage()
+//{
+//  return m_ProcessedImages.dequeue();
+//}
+//
+//QxrdImageData *QxrdDataProcessor::takeLatestProcessedImage()
+//{
+//  int n = m_ProcessedImages.size();
+//
+//  QxrdImageData *res = NULL;
+//
+//  for (int i=0; i<n; i++) {
+//    QxrdImageData *img = m_ProcessedImages.dequeue();
+//
+//    if (res) {
+//      returnImageToPool(res);
+//    }
+//
+//    res = img;
+//  }
+//
+//  return res;
+//}
+//
+//QxrdImageData *QxrdDataProcessor::takeNextDarkImage()
+//{
+//  return m_DarkImages.dequeue();
+//}
+//
 void QxrdDataProcessor::returnImageToPool(QxrdImageData *img)
 {
   QMutexLocker lock(&m_Mutex);
@@ -156,6 +160,8 @@ void QxrdDataProcessor::newData(QxrdImageData *image)
 //  m_Plot -> replot();
 
   set_FileName(image->get_FileName());
+
+  incrementProcessedCount();
 
   emit newDataAvailable(m_Data);
 }
@@ -202,28 +208,28 @@ void QxrdDataProcessor::newGainMapImage(QxrdImageData *image)
 }
 
 
-void QxrdDataProcessor::onProcessedImageAvailable(QxrdImageData *image)
-{
-//  printf("onProcessedImageAvailable()\n");
-
-  QxrdImageData* img = takeLatestProcessedImage();
-
-  if (img) {
-    newData(img);
-  }
-}
-
-void QxrdDataProcessor::onDarkImageAvailable(QxrdImageData *image)
-{
-//  printf("onDarkImageAvailable()\n");
-
-  QxrdImageData* img = takeNextDarkImage();
-
-  if (img) {
-    newDarkImage(img);
-  }
-}
-
+//void QxrdDataProcessor::onProcessedImageAvailable(QxrdImageData *image)
+//{
+////  printf("onProcessedImageAvailable()\n");
+//
+//  QxrdImageData* img = takeLatestProcessedImage();
+//
+//  if (img) {
+//    newData(img);
+//  }
+//}
+//
+//void QxrdDataProcessor::onDarkImageAvailable(QxrdImageData *image)
+//{
+////  printf("onDarkImageAvailable()\n");
+//
+//  QxrdImageData* img = takeNextDarkImage();
+//
+//  if (img) {
+//    newDarkImage(img);
+//  }
+//}
+//
 void QxrdDataProcessor::loadData(QString name)
 {
 //  printf("QxrdDataProcessor::loadData(%s)\n", qPrintable(name));
@@ -337,7 +343,7 @@ void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
 
     saveImageData(img);
 
-    m_ProcessedImages.enqueue(img);
+//    m_ProcessedImages.enqueue(img);
 
     newData(img);
 
@@ -472,9 +478,51 @@ QxrdImageData *QxrdDataProcessor::darkImage() const
   return m_DarkFrame;
 }
 
+int QxrdDataProcessor::incrementAcquiredCount()
+{
+  emit printMessage(tr("QxrdDataProcessor::incrementAcquiredCount m_AcquiredCount = %1").arg(m_AcquiredCount));
+
+  return m_AcquiredCount.fetchAndAddOrdered(+1);
+}
+
+int QxrdDataProcessor::decrementAcquiredCount()
+{
+  emit printMessage(tr("QxrdDataProcessor::decrementAcquiredCount m_AcquiredCount = %1").arg(m_AcquiredCount));
+
+  return m_AcquiredCount.fetchAndAddOrdered(-1);
+}
+
+int QxrdDataProcessor::getAcquiredCount()
+{
+  return m_AcquiredCount.fetchAndAddOrdered(0);
+}
+
+int QxrdDataProcessor::incrementProcessedCount()
+{
+  emit printMessage(tr("QxrdDataProcessor::incrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
+
+  return m_ProcessedCount.fetchAndAddOrdered(+1);
+}
+
+int QxrdDataProcessor::decrementProcessedCount()
+{
+  emit printMessage(tr("QxrdDataProcessor::decrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
+
+  return m_ProcessedCount.fetchAndAddOrdered(-1);
+}
+
+int QxrdDataProcessor::getProcessedCount()
+{
+  return m_ProcessedCount.fetchAndAddOrdered(0);
+}
+
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.18  2009/07/20 00:34:49  jennings
+*  Send data between acquisition and data processor via signal/slot args, rather
+*  than image queues
+*
 *  Revision 1.17  2009/07/17 21:10:39  jennings
 *  Modifications related to mask display
 *
