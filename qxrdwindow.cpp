@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.71 2009/07/17 20:41:20 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.72 2009/07/20 00:35:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.71 2009/07/17 20:41:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.72 2009/07/20 00:35:23 jennings Exp $")
 {
   setupUi(this);
 
@@ -212,8 +212,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_Plot -> prop_InterpolatePixels() -> linkTo(Ui::QxrdWindow::m_InterpolatePixels);
   m_Plot -> prop_MaintainAspectRatio() -> linkTo(Ui::QxrdWindow::m_MaintainAspectRatio);
 
+  m_Plot -> setDataProcessor(m_DataProcessor);
+
   connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdImageData *)), m_Plot, SLOT(onProcessedImageAvailable(QxrdImageData *)));
-  connect(m_DataProcessor, SIGNAL(darkImageAvailable(QxrdImageData *)), m_Plot, SLOT(onDarkImageAvailable(QxrdImageData *)));
+  connect(m_DataProcessor, SIGNAL(newDarkImageAvailable(QxrdImageData *)), m_Plot, SLOT(onDarkImageAvailable(QxrdImageData *)));
 //  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
 //  readSettings();
@@ -566,6 +568,9 @@ QxrdIntegrator    *QxrdWindow::integrator() const
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.72  2009/07/20 00:35:23  jennings
+*  Trying to optimise screen redraws
+*
 *  Revision 1.71  2009/07/17 20:41:20  jennings
 *  Modifications related to mask display
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.24 2009/07/17 20:41:20 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.25 2009/07/20 00:35:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,6 +11,7 @@
 #include "qxrdplotslicer.h"
 #include "qxrdplotmeasurer.h"
 #include "qxrdcenterfinder.h"
+#include "qxrddataprocessor.h"
 
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
@@ -19,7 +20,8 @@
 #include <qwt_legend.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_scale_widget.h>
-#include <QMetaMethod>
+//#include <QMetaMethod>
+#include <QTime>
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QxrdPlot(parent),
@@ -45,14 +47,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_MaskImage(NULL),
     m_ColorMap(Qt::black, Qt::white),
     m_MaskColorMap(Qt::red, QColor(0,0,0,0)),
-//    m_RasterShown(1),
-//    m_MaskShown(0),
     m_MaskAlpha(80),
-//    m_MinDisplayed(-10),
-//    m_MaxDisplayed(110),
-//    m_Interpolate(1),
-//    m_MaintainAspect(1),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.24 2009/07/17 20:41:20 jennings Exp $")
+    m_DataProcessor(NULL),
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.25 2009/07/20 00:35:23 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -122,6 +119,11 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   connect(prop_DisplayColorMap(), SIGNAL(changedValue(int)), this, SLOT(setColorMap(int)));
 }
 
+void QxrdImagePlot::setDataProcessor(QxrdDataProcessor *proc)
+{
+  m_DataProcessor = proc;
+}
+
 void QxrdImagePlot::readSettings(QxrdSettings *settings, QString section)
 {
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
@@ -188,8 +190,8 @@ void QxrdImagePlot::recalculateDisplayedRange()
   rightAxis -> setColorBarEnabled(true);
   rightAxis -> setColorMap(m_Spectrogram->data().range(),
                            m_Spectrogram->colorMap());
-
-  replotImage();
+//
+//  replotImage();
 }
 
 void QxrdImagePlot::replotImage()
@@ -202,20 +204,6 @@ void QxrdImagePlot::replotImage()
   replot();
 }
 
-//void QxrdImagePlot::on_minimum_changed(double min)
-//{
-////  printf("QxrdImagePlot::on_minimum_changed(%g)\n", min);
-//
-//  setDisplayedRange(min, m_MaxDisplayed);
-//}
-//
-//void QxrdImagePlot::on_maximum_changed(double max)
-//{
-////  printf("QxrdImagePlot::on_maximum_changed(%g)\n", max);
-//
-//  setDisplayedRange(m_MinDisplayed, max);
-//}
-//
 void QxrdImagePlot::onInterpolateChanged(bool interp)
 {
 //  printf("QxrdImagePlot::onInterpolateChanged(%d)\n", interp);
@@ -232,6 +220,8 @@ void QxrdImagePlot::onMaintainAspectChanged(bool interp)
   if (m_Rescaler) {
     m_Rescaler -> setEnabled(interp);
   }
+
+  replotImage();
 }
 
 void QxrdImagePlot::setTrackerPen(const QPen &pen)
@@ -250,18 +240,18 @@ void QxrdImagePlot::setGrayscale()
 {
   m_ColorMap.setColorInterval(Qt::black, Qt::white);
 
-  changedColorMap();
-
   setTrackerPen(QPen(Qt::red));
+
+  changedColorMap();
 }
 
 void QxrdImagePlot::setInverseGrayscale()
 {
   m_ColorMap.setColorInterval(Qt::white, Qt::black);
 
-  changedColorMap();
-
   setTrackerPen(QPen(Qt::red));
+
+  changedColorMap();
 }
 
 void QxrdImagePlot::setEarthTones()
@@ -273,9 +263,9 @@ void QxrdImagePlot::setEarthTones()
   m_ColorMap.addColorStop(0.5, Qt::darkYellow);
   m_ColorMap.addColorStop(0.85, Qt::darkMagenta);
 
-  changedColorMap();
-
   setTrackerPen(QPen(Qt::red));
+
+  changedColorMap();
 }
 
 void QxrdImagePlot::setSpectrum()
@@ -286,9 +276,9 @@ void QxrdImagePlot::setSpectrum()
   m_ColorMap.addColorStop(0.6, Qt::green);
   m_ColorMap.addColorStop(0.8, Qt::yellow);
 
-  changedColorMap();
-
   setTrackerPen(QPen(Qt::black));
+
+  changedColorMap();
 }
 
 void QxrdImagePlot::setFire()
@@ -297,9 +287,9 @@ void QxrdImagePlot::setFire()
   m_ColorMap.addColorStop(0.25, Qt::red);
   m_ColorMap.addColorStop(0.75, Qt::yellow);
 
-  changedColorMap();
-
   setTrackerPen(QPen(Qt::blue));
+
+  changedColorMap();
 }
 
 void QxrdImagePlot::setIce()
@@ -309,9 +299,9 @@ void QxrdImagePlot::setIce()
   m_ColorMap.addColorStop(0.25, Qt::blue);
   m_ColorMap.addColorStop(0.75, Qt::cyan);
 
-  changedColorMap();
-
   setTrackerPen(QPen(Qt::red));
+
+  changedColorMap();
 }
 
 void QxrdImagePlot::setColorMap(int n)
@@ -398,8 +388,8 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
   m_Raster = data;
 
   m_Spectrogram -> setData(data);
-  m_Spectrogram -> setColorMap(m_ColorMap);
-  m_Spectrogram -> setAlpha(get_ImageShown() ? 255 : 0);
+//  m_Spectrogram -> setColorMap(m_ColorMap);
+//  m_Spectrogram -> setAlpha(get_ImageShown() ? 255 : 0);
   m_Spectrogram -> invalidateCache();
   m_Spectrogram -> itemChanged();
 
@@ -408,7 +398,7 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
   rightAxis -> setColorMap(QwtDoubleInterval(0,1),
                            m_Spectrogram->colorMap());
 
-//   enableAxis(QwtPlot::yRight);
+   enableAxis(QwtPlot::yRight);
 
   QwtDoubleInterval range = m_Raster.range();
 
@@ -417,7 +407,8 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
 //   setDisplayedRange(0,100);
 
   recalculateDisplayedRange();
-  replot();
+
+//  replot();
 }
 
 void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
@@ -425,16 +416,18 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
   m_MaskRaster = mask;
 
   m_MaskImage -> setData(mask);
-  m_MaskImage -> setColorMap(m_MaskColorMap);
-  m_MaskImage -> setAlpha(get_MaskShown() ? m_MaskAlpha : 0);
+//  m_MaskImage -> setColorMap(m_MaskColorMap);
+//  m_MaskImage -> setAlpha(get_MaskShown() ? m_MaskAlpha : 0);
   m_MaskImage -> invalidateCache();
   m_MaskImage -> itemChanged();
-
-  replot();
+//
+//  replot();
 }
 
 void QxrdImagePlot::onProcessedImageAvailable(QxrdImageData *image)
 {
+  m_DataProcessor -> decrementProcessedCount();
+
   QxrdRasterData data(image, get_InterpolatePixels());
   QxrdMaskRasterData mask(image, get_InterpolatePixels());
 
@@ -442,6 +435,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdImageData *image)
   setMask(mask);
 
   setTitle(image -> get_Title());
+
   replot();
 }
 
@@ -497,9 +491,13 @@ void QxrdImagePlot::enableMeasuring()
 
 void QxrdImagePlot::doZoomIn()
 {
+  bool wasEnabled = m_Zoomer->isEnabled();
+
   enableZooming();
 
-  m_Zoomer -> zoom(1);
+  if (wasEnabled) {
+    m_Zoomer -> zoom(1);
+  }
 }
 
 void QxrdImagePlot::doZoomOut()
@@ -529,9 +527,22 @@ void QxrdImagePlot::doMeasure()
   enableMeasuring();
 }
 
+void QxrdImagePlot::replot()
+{
+  QTime tic;
+  tic.start();
+
+  QxrdPlot::replot();
+
+  printf("QxrdImagePlot::replot took %d msec\n", tic.restart());
+}
+
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.25  2009/07/20 00:35:23  jennings
+*  Trying to optimise screen redraws
+*
 *  Revision 1.24  2009/07/17 20:41:20  jennings
 *  Modifications related to mask display
 *

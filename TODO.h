@@ -42,4 +42,9 @@ Eliminate the duplicate script engine object from QxrdAcquisitionScripting
 
 -------------------------------------------------------
 
+Optimise screen redrawing to eliminate redundant replot calls - will need
+a rigorous reorganisation and layering of code to ensure this.
+
+-------------------------------------------------------
+
 #endif // TODO_H

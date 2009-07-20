@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.19 2009/07/17 20:41:20 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.20 2009/07/20 00:35:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -25,6 +25,7 @@ class QwtPlotSpectrogram;
 class QwtPlotRescaler;
 class QxrdCenterFinder;
 class QxrdSettings;
+class QxrdDataProcessor;
 
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
@@ -97,8 +98,6 @@ public slots:
   void changeImageShown(bool shown);
   void changeMaskShown(bool shown);
 
-//  void on_minimum_changed(double min);
-//  void on_maximum_changed(double max);
   void onInterpolateChanged(bool interp);
   void onMaintainAspectChanged(bool interp);
 
@@ -123,6 +122,10 @@ public:
   QxrdRasterData* raster();
   void replotImage();
   void setCenterFinder(QxrdCenterFinder *f);
+
+  void setDataProcessor(QxrdDataProcessor *proc);
+
+  void replot();
 
 private:
   void changedColorMap();
@@ -149,14 +152,10 @@ private:
   QxrdMaskRasterData   m_MaskRaster;
   QwtLinearColorMap    m_ColorMap;
   QxrdMaskColorMap     m_MaskColorMap;
-//  int                  m_RasterShown;
-//  int                  m_MaskShown;
   int                  m_MaskAlpha;
-//  double               m_MinDisplayed;
-//  double               m_MaxDisplayed;
-//  int                  m_Interpolate;
-//  int                  m_MaintainAspect;
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.19 2009/07/17 20:41:20 jennings Exp $");
+  QxrdDataProcessor   *m_DataProcessor;
+
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.20 2009/07/20 00:35:23 jennings Exp $");
 };
 
 #endif
@@ -164,6 +163,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.20  2009/07/20 00:35:23  jennings
+*  Trying to optimise screen redraws
+*
 *  Revision 1.19  2009/07/17 20:41:20  jennings
 *  Modifications related to mask display
 *
