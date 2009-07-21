@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.h,v 1.6 2009/07/08 19:06:27 jennings Exp $
+*  $Id: qxrdcenterfinder.h,v 1.7 2009/07/21 22:55:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -14,20 +14,12 @@
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
 
-class QxrdWindow;
-class QxrdImagePlot;
-class QxrdCenterFinderPlot;
-class QxrdCenterFinderDialog;
-class QxrdCenterFinderPicker;
-class QwtPlotMarker;
-#include <qwt_double_rect.h>
-
 class QxrdCenterFinder : public QObject
 {
   Q_OBJECT;
 
 public:
-  QxrdCenterFinder(QxrdWindow *win, QxrdImagePlot *imgplot, QxrdCenterFinderPlot *cntplot, QxrdCenterFinderDialog *cfdialog, QObject *parent=0);
+  QxrdCenterFinder(QObject *parent=0);
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX);
@@ -39,48 +31,30 @@ public:
   Q_PROPERTY(double centerStep READ get_CenterStep WRITE set_CenterStep);
   QCEP_DOUBLE_PROPERTY(CenterStep);
 
-public slots:
-  void moveCenter(int dx, int dy);
-  void centerMoveUpLeft();
-  void centerMoveUp();
-  void centerMoveUpRight();
-  void centerMoveRight();
-  void centerMoveDownRight();
-  void centerMoveDown();
-  void centerMoveDownLeft();
-  void centerMoveLeft();
-  void onCenterXChanged(double cx);
-  void onCenterYChanged(double cy);
-  void onCenterChanged(double cx, double cy);
-  void onCenterChanged(QwtDoublePoint pt);
-  void onCenterStepChanged(double stp);
+//public slots:
+//  void onCenterXChanged(double cx);
+//  void onCenterYChanged(double cy);
+//  void onCenterChanged(double cx, double cy);
+//  void onCenterChanged(QwtDoublePoint pt);
+//  void onCenterStepChanged(double stp);
 
 public:
-  void setEnabled(bool imgenabled, bool cntrenabled);
-  void setPen(const QPen &pen);
+//  void setEnabled(bool imgenabled, bool cntrenabled);
+//  void setPen(const QPen &pen);
 
   void readSettings(QxrdSettings *settings, QString section);
   void writeSettings(QxrdSettings *settings, QString section);
 
-signals:
-  void centerChanged(double cx, double cy);
-
+//signals:
+////  void centerChanged(double cx, double cy);
+//
+//private:
+////
+//
 private:
   mutable QMutex             m_Mutex;
-  QxrdWindow                *m_Window;
-  QxrdImagePlot             *m_ImagePlot;
-  QxrdCenterFinderPlot      *m_CenterFinderPlot;
-  QxrdCenterFinderDialog    *m_CenterFinderDialog;
 
-//  double                     m_CenterX;
-//  double                     m_CenterY;
-//  double                     m_StepSize;
-
-  QxrdCenterFinderPicker    *m_CenterFinderPicker;
-  QwtPlotMarker             *m_CenterMarker;
-
-  QPen                       m_Pen;
-  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.6 2009/07/08 19:06:27 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.7 2009/07/21 22:55:48 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDER_H
@@ -88,6 +62,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.h,v $
+*  Revision 1.7  2009/07/21 22:55:48  jennings
+*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
+*
 *  Revision 1.6  2009/07/08 19:06:27  jennings
 *  Made centering parameters into Q_PROPERTYs
 *  Saved centering, integrator and data processor settings

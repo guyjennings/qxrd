@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.72 2009/07/20 00:35:23 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.73 2009/07/21 22:55:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -45,26 +45,26 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_DataProcessor(proc),
 //    m_ScriptEngine(NULL),
     m_CenterFinderDialog(NULL),
-    m_CenterFinder(NULL),
+//    m_CenterFinder(NULL),
     m_IntegratorDialog(NULL),
-    m_Integrator(NULL),
+//    m_Integrator(NULL),
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.72 2009/07/20 00:35:23 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.73 2009/07/21 22:55:48 jennings Exp $")
 {
   setupUi(this);
 
-  m_CenterFinderDialog = new QxrdCenterFinderDialog();
+  m_CenterFinderDialog = new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder());
   m_CenteringDockWidget -> setWidget(m_CenterFinderDialog);
 
-  m_CenterFinder = new QxrdCenterFinder(this, m_Plot, m_CenterFinderPlot, m_CenterFinderDialog, this);
-  m_CenterFinder -> setEnabled(false, true);
-
-  m_IntegratorDialog = new QxrdIntegratorDialog();
+//  m_CenterFinder = new QxrdCenterFinder(this, m_Plot, m_CenterFinderPlot, m_CenterFinderDialog, this);
+//  m_CenterFinder -> setEnabled(false, true);
+//
+  m_IntegratorDialog = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
   m_IntegratorDockWidget -> setWidget(m_IntegratorDialog);
 
-  m_Integrator = new QxrdIntegrator(this);
+//  m_Integrator = new QxrdIntegrator(this);
 
   connect(m_ExecuteScriptButton, SIGNAL(clicked()), m_ActionExecuteScript, SIGNAL(triggered()));
   connect(m_ActionExecuteScript, SIGNAL(triggered()), this, SLOT(executeScript()));
@@ -414,8 +414,6 @@ void QxrdWindow::doCancelDark()
 
 void QxrdWindow::readSettings(QxrdSettings *settings, QString section)
 {
-  m_CenterFinder -> readSettings(settings, section+"/centerfinder");
-  m_Integrator   -> readSettings(settings, section+"/integrator");
   m_Plot         -> readSettings(settings, section+"/plot");
 
   m_SettingsLoaded = true;
@@ -431,8 +429,6 @@ void QxrdWindow::readSettings(QxrdSettings *settings, QString section)
 
 void QxrdWindow::writeSettings(QxrdSettings *settings, QString section)
 {
-  m_CenterFinder -> writeSettings(settings, section+"/centerfinder");
-  m_Integrator   -> writeSettings(settings, section+"/integrator");
   m_Plot         -> writeSettings(settings, section+"/plot");
 
   settings -> setValue(section+"-geometry", saveGeometry());
@@ -551,23 +547,12 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   m_ScriptEngine = engine;
 }
 
-QxrdCenterFinder  *QxrdWindow::centerFinder() const
-{
-  QMutexLocker  lock(&m_Mutex);
-
-  return m_CenterFinder;
-}
-
-QxrdIntegrator    *QxrdWindow::integrator() const
-{
-  QMutexLocker  lock(&m_Mutex);
-
-  return m_Integrator;
-}
-
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.73  2009/07/21 22:55:48  jennings
+*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
+*
 *  Revision 1.72  2009/07/20 00:35:23  jennings
 *  Trying to optimise screen redraws
 *

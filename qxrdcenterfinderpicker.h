@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderpicker.h,v 1.2 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdcenterfinderpicker.h,v 1.3 2009/07/21 22:55:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -18,11 +18,9 @@ class QxrdCenterFinderPicker : public QwtPlotPicker
 {
 public:
   QxrdCenterFinderPicker
-      (QwtPlotCanvas *canvas, QxrdImagePlot *plot, QxrdCenterFinderDialog *dlog);
+      (QwtPlotCanvas *canvas);
 private:
-  QxrdImagePlot          *m_Plot;
-  QxrdCenterFinderDialog *m_Dialog;
-  HEADER_IDENT("$Id: qxrdcenterfinderpicker.h,v 1.2 2009/06/27 22:50:32 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinderpicker.h,v 1.3 2009/07/21 22:55:48 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDERPICKER_H
@@ -30,6 +28,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderpicker.h,v $
+*  Revision 1.3  2009/07/21 22:55:48  jennings
+*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
+*
 *  Revision 1.2  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

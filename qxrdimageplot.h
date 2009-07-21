@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.20 2009/07/20 00:35:23 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.21 2009/07/21 22:55:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -26,6 +26,8 @@ class QwtPlotRescaler;
 class QxrdCenterFinder;
 class QxrdSettings;
 class QxrdDataProcessor;
+class QxrdCenterFinderPicker;
+class QwtPlotMarker;
 
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
@@ -155,7 +157,11 @@ private:
   int                  m_MaskAlpha;
   QxrdDataProcessor   *m_DataProcessor;
 
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.20 2009/07/20 00:35:23 jennings Exp $");
+  QxrdCenterFinderPicker    *m_CenterFinderPicker;
+  QwtPlotMarker             *m_CenterMarker;
+//  QPen                       m_Pen;
+
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.21 2009/07/21 22:55:48 jennings Exp $");
 };
 
 #endif
@@ -163,6 +169,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.21  2009/07/21 22:55:48  jennings
+*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
+*
 *  Revision 1.20  2009/07/20 00:35:23  jennings
 *  Trying to optimise screen redraws
 *

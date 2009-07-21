@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.25 2009/07/20 00:35:23 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.26 2009/07/21 22:55:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,12 +11,14 @@
 #include "qxrdplotslicer.h"
 #include "qxrdplotmeasurer.h"
 #include "qxrdcenterfinder.h"
+#include "qxrdcenterfinderpicker.h"
 #include "qxrddataprocessor.h"
 
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
 #include <qwt_plot_magnifier.h>
 #include <qwt_plot_rescaler.h>
+#include <qwt_plot_marker.h>
 #include <qwt_legend.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_scale_widget.h>
@@ -49,7 +51,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_MaskColorMap(Qt::red, QColor(0,0,0,0)),
     m_MaskAlpha(80),
     m_DataProcessor(NULL),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.25 2009/07/20 00:35:23 jennings Exp $")
+    m_CenterFinderPicker(NULL),
+    m_CenterMarker(NULL),
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.26 2009/07/21 22:55:48 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -104,6 +108,11 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_MaskImage -> setAlpha(get_MaskShown() ? m_MaskAlpha : 0);
   m_MaskImage -> attach(this);
 
+  m_CenterFinderPicker = new QxrdCenterFinderPicker(canvas());
+
+  m_CenterMarker = new QwtPlotMarker();
+  m_CenterMarker -> setLineStyle(QwtPlotMarker::Cross);
+
   set100Range();
   setGrayscale();
 
@@ -117,6 +126,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   connect(prop_InterpolatePixels(), SIGNAL(changedValue(bool)), this, SLOT(onInterpolateChanged(bool)));
   connect(prop_MaintainAspectRatio(), SIGNAL(changedValue(bool)), this, SLOT(onMaintainAspectChanged(bool)));
   connect(prop_DisplayColorMap(), SIGNAL(changedValue(int)), this, SLOT(setColorMap(int)));
+
+  connect(m_CenterFinderPicker, SIGNAL(selected(QwtDoublePoint)),
+          this,                 SLOT(onCenterChanged(QwtDoublePoint)));
 }
 
 void QxrdImagePlot::setDataProcessor(QxrdDataProcessor *proc)
@@ -231,8 +243,8 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
   m_Zoomer -> setTrackerPen(pen);
   m_Zoomer -> setRubberBandPen(pen);
 
-  if (m_CenterFinder) {
-    m_CenterFinder -> setPen(pen);
+  if (m_CenterMarker) {
+    m_CenterMarker -> setLinePen(pen);
   }
 }
 
@@ -457,7 +469,7 @@ void QxrdImagePlot::enableZooming()
 {
   m_Tracker      -> setEnabled(true);
   m_Zoomer       -> setEnabled(true);
-  m_CenterFinder -> setEnabled(false, true);
+  m_CenterFinderPicker -> setEnabled(false);
   m_Slicer       -> setEnabled(false);
   m_Measurer     -> setEnabled(false);
 }
@@ -466,7 +478,7 @@ void QxrdImagePlot::enableCentering()
 {
   m_Tracker  -> setEnabled(false);
   m_Zoomer   -> setEnabled(false);
-  m_CenterFinder -> setEnabled(true, true);
+  m_CenterFinderPicker -> setEnabled(true);
   m_Slicer   -> setEnabled(false);
   m_Measurer -> setEnabled(false);
 }
@@ -475,7 +487,7 @@ void QxrdImagePlot::enableSlicing()
 {
   m_Tracker  -> setEnabled(false);
   m_Zoomer   -> setEnabled(false);
-  m_CenterFinder -> setEnabled(false, true);
+  m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(true);
   m_Measurer -> setEnabled(false);
 }
@@ -484,7 +496,7 @@ void QxrdImagePlot::enableMeasuring()
 {
   m_Tracker  -> setEnabled(false);
   m_Zoomer   -> setEnabled(false);
-  m_CenterFinder -> setEnabled(false, true);
+  m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(false);
   m_Measurer -> setEnabled(true);
 }
@@ -540,6 +552,9 @@ void QxrdImagePlot::replot()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.26  2009/07/21 22:55:48  jennings
+*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
+*
 *  Revision 1.25  2009/07/20 00:35:23  jennings
 *  Trying to optimise screen redraws
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.18 2009/07/20 00:34:49 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.19 2009/07/21 22:55:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,6 +9,8 @@
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
 #include "qxrdimagedata.h"
+#include "qxrdcenterfinder.h"
+#include "qxrdintegrator.h"
 
 #include "tiffio.h"
 
@@ -38,8 +40,12 @@ QxrdDataProcessor::QxrdDataProcessor
     m_GainFrame(NULL),
     m_AcquiredCount(0),
     m_ProcessedCount(0),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.18 2009/07/20 00:34:49 jennings Exp $")
+    m_CenterFinder(NULL),
+    m_Integrator(NULL),
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.19 2009/07/21 22:55:48 jennings Exp $")
 {
+  m_CenterFinder = new QxrdCenterFinder(this);
+  m_Integrator   = new QxrdIntegrator(this);
 }
 
 void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
@@ -55,6 +61,9 @@ void QxrdDataProcessor::writeSettings(QxrdSettings *settings, QString section)
   QMutexLocker lock(&m_Mutex);
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+
+  m_CenterFinder -> writeSettings(settings, section+"/centerfinder");
+  m_Integrator   -> writeSettings(settings, section+"/integrator");
 }
 
 void QxrdDataProcessor::readSettings(QxrdSettings *settings, QString section)
@@ -62,6 +71,9 @@ void QxrdDataProcessor::readSettings(QxrdSettings *settings, QString section)
   QMutexLocker lock(&m_Mutex);
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+
+  m_CenterFinder -> readSettings(settings, section+"/centerfinder");
+  m_Integrator   -> readSettings(settings, section+"/integrator");
 }
 
 void QxrdDataProcessor::onAcquiredImageAvailable(QxrdImageData *image)
@@ -516,9 +528,26 @@ int QxrdDataProcessor::getProcessedCount()
   return m_ProcessedCount.fetchAndAddOrdered(0);
 }
 
+QxrdCenterFinder  *QxrdDataProcessor::centerFinder() const
+{
+  QMutexLocker  lock(&m_Mutex);
+
+  return m_CenterFinder;
+}
+
+QxrdIntegrator    *QxrdDataProcessor::integrator() const
+{
+  QMutexLocker  lock(&m_Mutex);
+
+  return m_Integrator;
+}
+
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.19  2009/07/21 22:55:48  jennings
+*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
+*
 *  Revision 1.18  2009/07/20 00:34:49  jennings
 *  Send data between acquisition and data processor via signal/slot args, rather
 *  than image queues

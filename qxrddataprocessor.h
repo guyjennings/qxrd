@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.12 2009/07/20 00:31:31 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.13 2009/07/21 22:55:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -19,6 +19,8 @@
 
 class QxrdAcquisition;
 class QxrdImageData;
+class QxrdCenterFinder;
+class QxrdIntegrator;
 
 class QxrdDataProcessor : public QObject
 {
@@ -108,6 +110,9 @@ public:
   int decrementProcessedCount();
   int getProcessedCount();
 
+  QxrdCenterFinder  *centerFinder() const;
+  QxrdIntegrator    *integrator() const;
+
 private slots:
   void onAcquiredImageAvailable(QxrdImageData *image);
 //  void onProcessedImageAvailable(QxrdImageData *image);
@@ -145,7 +150,10 @@ private:
   QAtomicInt                m_AcquiredCount;
   QAtomicInt                m_ProcessedCount;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.12 2009/07/20 00:31:31 jennings Exp $");
+  QxrdCenterFinder         *m_CenterFinder;
+  QxrdIntegrator           *m_Integrator;
+
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.13 2009/07/21 22:55:48 jennings Exp $");
 };
 
 #endif
@@ -153,6 +161,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.13  2009/07/21 22:55:48  jennings
+*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
+*
 *  Revision 1.12  2009/07/20 00:31:31  jennings
 *  Removed image queues for acquired and dark images - use 'connect' args instead
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.5 2009/07/17 14:00:59 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.6 2009/07/21 22:55:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,7 +27,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.5 2009/07/17 14:00:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.6 2009/07/21 22:55:48 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -51,9 +51,9 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("acquisition", m_ScriptEngine -> newQObject(m_Acquisition));
   m_ScriptEngine -> globalObject().setProperty("application", m_ScriptEngine -> newQObject(m_Application));
   m_ScriptEngine -> globalObject().setProperty("window", m_ScriptEngine -> newQObject(m_Window));
-  m_ScriptEngine -> globalObject().setProperty("centering", m_ScriptEngine -> newQObject(m_Window->centerFinder()));
   m_ScriptEngine -> globalObject().setProperty("processor", m_ScriptEngine -> newQObject(m_Application->dataProcessor()));
-  m_ScriptEngine -> globalObject().setProperty("integrator", m_ScriptEngine -> newQObject(m_Window->integrator()));
+  m_ScriptEngine -> globalObject().setProperty("centering", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->centerFinder()));
+  m_ScriptEngine -> globalObject().setProperty("integrator", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->integrator()));
 
   m_ScriptEngine -> globalObject().setProperty("acquire", m_ScriptEngine -> newFunction(acquireFunc));
   m_ScriptEngine -> globalObject().setProperty("acquireDark", m_ScriptEngine -> newFunction(acquireDarkFunc));
@@ -298,6 +298,9 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.6  2009/07/21 22:55:48  jennings
+*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
+*
 *  Revision 1.5  2009/07/17 14:00:59  jennings
 *  Rearranging acquisition and data processor
 *

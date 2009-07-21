@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.51 2009/07/17 20:41:20 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.52 2009/07/21 22:55:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -94,8 +94,6 @@ public:
   void setScriptEngine(QxrdScriptEngine *engine);
 
 //  QxrdDataProcessor *processor() const;
-  QxrdCenterFinder  *centerFinder() const;
-  QxrdIntegrator    *integrator() const;
 
 private:
   mutable QMutex          m_Mutex;
@@ -105,16 +103,16 @@ private:
   QxrdDataProcessor      *m_DataProcessor;
   QxrdScriptEngine       *m_ScriptEngine;
   QxrdCenterFinderDialog *m_CenterFinderDialog;
-  QxrdCenterFinder       *m_CenterFinder;
+//  QxrdCenterFinder       *m_CenterFinder;
   QxrdIntegratorDialog   *m_IntegratorDialog;
-  QxrdIntegrator         *m_Integrator;
+//  QxrdIntegrator         *m_Integrator;
   QVector<double>         m_Exposures;
   QProgressBar           *m_Progress;
   QLabel                 *m_StatusMsg;
   int                     m_Acquiring;
   int                     m_AcquiringDark;
   QTimer                  m_StatusTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.51 2009/07/17 20:41:20 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.52 2009/07/21 22:55:48 jennings Exp $");
 };
 
 #endif
@@ -122,6 +120,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.52  2009/07/21 22:55:48  jennings
+*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
+*
 *  Revision 1.51  2009/07/17 20:41:20  jennings
 *  Modifications related to mask display
 *
