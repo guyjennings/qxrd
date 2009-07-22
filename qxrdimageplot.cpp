@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.26 2009/07/21 22:55:48 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.27 2009/07/22 11:55:34 jennings Exp $
 *
 *******************************************************************/
 
@@ -41,7 +41,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Zoomer(NULL),
     m_Panner(NULL),
     m_Rescaler(NULL),
-    m_CenterFinder(NULL),
+//    m_CenterFinder(NULL),
     m_Slicer(NULL),
     m_Measurer(NULL),
     m_Legend(NULL),
@@ -53,7 +53,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_DataProcessor(NULL),
     m_CenterFinderPicker(NULL),
     m_CenterMarker(NULL),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.26 2009/07/21 22:55:48 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.27 2009/07/22 11:55:34 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -108,10 +108,11 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_MaskImage -> setAlpha(get_MaskShown() ? m_MaskAlpha : 0);
   m_MaskImage -> attach(this);
 
-  m_CenterFinderPicker = new QxrdCenterFinderPicker(canvas());
+  m_CenterFinderPicker = new QxrdCenterFinderPicker(this);
 
   m_CenterMarker = new QwtPlotMarker();
   m_CenterMarker -> setLineStyle(QwtPlotMarker::Cross);
+  m_CenterMarker -> attach(this);
 
   set100Range();
   setGrayscale();
@@ -126,16 +127,21 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   connect(prop_InterpolatePixels(), SIGNAL(changedValue(bool)), this, SLOT(onInterpolateChanged(bool)));
   connect(prop_MaintainAspectRatio(), SIGNAL(changedValue(bool)), this, SLOT(onMaintainAspectChanged(bool)));
   connect(prop_DisplayColorMap(), SIGNAL(changedValue(int)), this, SLOT(setColorMap(int)));
-
-  connect(m_CenterFinderPicker, SIGNAL(selected(QwtDoublePoint)),
-          this,                 SLOT(onCenterChanged(QwtDoublePoint)));
 }
 
 void QxrdImagePlot::setDataProcessor(QxrdDataProcessor *proc)
 {
   m_DataProcessor = proc;
+
+  connect(m_CenterFinderPicker, SIGNAL(selected(QwtDoublePoint)),
+          m_DataProcessor -> centerFinder(), SLOT(onCenterChanged(QwtDoublePoint)));
 }
 
+//void QxrdImagePlot::setCenterFinder(QxrdCenterFinder *f)
+//{
+//  m_CenterFinder = f;
+//}
+//
 void QxrdImagePlot::readSettings(QxrdSettings *settings, QString section)
 {
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
@@ -242,6 +248,8 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
   m_Tracker -> setRubberBandPen(pen);
   m_Zoomer -> setTrackerPen(pen);
   m_Zoomer -> setRubberBandPen(pen);
+  m_CenterFinderPicker -> setTrackerPen(pen);
+  m_CenterFinderPicker -> setRubberBandPen(pen);
 
   if (m_CenterMarker) {
     m_CenterMarker -> setLinePen(pen);
@@ -455,14 +463,21 @@ void QxrdImagePlot::onDarkImageAvailable(QxrdImageData *image)
 {
 }
 
+void QxrdImagePlot::onCenterXChanged(double cx)
+{
+  m_CenterMarker -> setXValue(cx);
+  replot();
+}
+
+void QxrdImagePlot::onCenterYChanged(double cy)
+{
+  m_CenterMarker -> setYValue(cy);
+  replot();
+}
+
 QxrdRasterData* QxrdImagePlot::raster()
 {
   return &m_Raster;
-}
-
-void QxrdImagePlot::setCenterFinder(QxrdCenterFinder *f)
-{
-  m_CenterFinder = f;
 }
 
 void QxrdImagePlot::enableZooming()
@@ -552,6 +567,9 @@ void QxrdImagePlot::replot()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.27  2009/07/22 11:55:34  jennings
+*  Center finder modifications
+*
 *  Revision 1.26  2009/07/21 22:55:48  jennings
 *  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
 *

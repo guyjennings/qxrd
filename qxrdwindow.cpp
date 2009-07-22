@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.73 2009/07/21 22:55:48 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.74 2009/07/22 11:55:34 jennings Exp $
 *
 *******************************************************************/
 
@@ -43,28 +43,20 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Application(app),
     m_Acquisition(acq),
     m_DataProcessor(proc),
-//    m_ScriptEngine(NULL),
     m_CenterFinderDialog(NULL),
-//    m_CenterFinder(NULL),
     m_IntegratorDialog(NULL),
-//    m_Integrator(NULL),
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.73 2009/07/21 22:55:48 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.74 2009/07/22 11:55:34 jennings Exp $")
 {
   setupUi(this);
 
   m_CenterFinderDialog = new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder());
   m_CenteringDockWidget -> setWidget(m_CenterFinderDialog);
 
-//  m_CenterFinder = new QxrdCenterFinder(this, m_Plot, m_CenterFinderPlot, m_CenterFinderDialog, this);
-//  m_CenterFinder -> setEnabled(false, true);
-//
   m_IntegratorDialog = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
   m_IntegratorDockWidget -> setWidget(m_IntegratorDialog);
-
-//  m_Integrator = new QxrdIntegrator(this);
 
   connect(m_ExecuteScriptButton, SIGNAL(clicked()), m_ActionExecuteScript, SIGNAL(triggered()));
   connect(m_ActionExecuteScript, SIGNAL(triggered()), this, SLOT(executeScript()));
@@ -213,15 +205,29 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_Plot -> prop_MaintainAspectRatio() -> linkTo(Ui::QxrdWindow::m_MaintainAspectRatio);
 
   m_Plot -> setDataProcessor(m_DataProcessor);
+  m_CenterFinderPlot -> setDataProcessor(m_DataProcessor);
 
   connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdImageData *)), m_Plot, SLOT(onProcessedImageAvailable(QxrdImageData *)));
   connect(m_DataProcessor, SIGNAL(newDarkImageAvailable(QxrdImageData *)), m_Plot, SLOT(onDarkImageAvailable(QxrdImageData *)));
+  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdImageData *)), m_CenterFinderPlot, SLOT(onProcessedImageAvailable(QxrdImageData *)));
 //  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
 //  readSettings();
 
   connect(m_Acquisition, SIGNAL(oneReadoutModeChanged(int,double)),
           this,          SLOT(setReadoutTime(int, double)));
+
+  connect(m_DataProcessor -> centerFinder() -> prop_CenterX(), SIGNAL(changedValue(double)),
+          m_Plot, SLOT(onCenterXChanged(double)));
+
+  connect(m_DataProcessor -> centerFinder() -> prop_CenterY(), SIGNAL(changedValue(double)),
+          m_Plot, SLOT(onCenterYChanged(double)));
+
+  connect(m_DataProcessor -> centerFinder() -> prop_CenterX(), SIGNAL(changedValue(double)),
+          m_CenterFinderPlot, SLOT(onCenterXChanged(double)));
+
+  connect(m_DataProcessor -> centerFinder() -> prop_CenterY(), SIGNAL(changedValue(double)),
+          m_CenterFinderPlot, SLOT(onCenterYChanged(double)));
 }
 
 QxrdWindow::~QxrdWindow()
@@ -550,6 +556,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.74  2009/07/22 11:55:34  jennings
+*  Center finder modifications
+*
 *  Revision 1.73  2009/07/21 22:55:48  jennings
 *  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
 *

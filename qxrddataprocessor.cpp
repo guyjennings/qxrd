@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.19 2009/07/21 22:55:48 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.20 2009/07/22 11:55:34 jennings Exp $
 *
 *******************************************************************/
 
@@ -30,6 +30,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_FileName(this,"fileName",""),
     m_MaskMinimumValue(this, "maskMinimumValue", 0),
     m_MaskMaximumValue(this, "maskMaximumValue", 20000),
+    m_Mutex(QMutex::Recursive),
     m_Acquisition(acq),
     m_DarkUsage(QReadWriteLock::Recursive),
 //    m_ProcessedImages("QxrdDataProcessor Processed Images"),
@@ -42,7 +43,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.19 2009/07/21 22:55:48 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.20 2009/07/22 11:55:34 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this);
@@ -532,6 +533,10 @@ QxrdCenterFinder  *QxrdDataProcessor::centerFinder() const
 {
   QMutexLocker  lock(&m_Mutex);
 
+  if (m_CenterFinder == NULL) {
+    printf("Problem QxrdDataProcessor::centerFinder == NULL\n");
+  }
+
   return m_CenterFinder;
 }
 
@@ -539,12 +544,20 @@ QxrdIntegrator    *QxrdDataProcessor::integrator() const
 {
   QMutexLocker  lock(&m_Mutex);
 
+  if (m_Integrator == NULL) {
+    printf("Problem QxrdDataProcessor::integrator == NULL\n");
+  }
+
+
   return m_Integrator;
 }
 
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.20  2009/07/22 11:55:34  jennings
+*  Center finder modifications
+*
 *  Revision 1.19  2009/07/21 22:55:48  jennings
 *  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
 *

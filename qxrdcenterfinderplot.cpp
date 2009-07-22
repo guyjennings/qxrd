@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.cpp,v 1.7 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdcenterfinderplot.cpp,v 1.8 2009/07/22 11:55:34 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,6 +16,8 @@
 #include <qwt_symbol.h>
 #include <qwt_legend.h>
 #include <QMetaMethod>
+#include "qxrddataprocessor.h"
+#include "qxrdcenterfinder.h"
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   : QxrdPlot(parent),
@@ -24,7 +26,9 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_Zoomer(NULL),
     m_Magnifier(NULL),
     m_Legend(NULL),
-    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.7 2009/06/27 22:50:32 jennings Exp $")
+    m_DataProcessor(NULL),
+    m_CenterFinder(NULL),
+    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.8 2009/07/22 11:55:34 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -64,6 +68,12 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   autoScale();
 }
 
+void QxrdCenterFinderPlot::setDataProcessor(QxrdDataProcessor *proc)
+{
+  m_DataProcessor = proc;
+  m_CenterFinder = m_DataProcessor -> centerFinder();
+}
+
 void QxrdCenterFinderPlot::autoScale()
 {
   m_Zoomer -> zoom(0);
@@ -76,8 +86,25 @@ void QxrdCenterFinderPlot::autoScale()
   m_Zoomer -> setZoomBase();
 }
 
-void QxrdCenterFinderPlot::onCenterChanged(QxrdImageData *img, double cx, double cy)
+void QxrdCenterFinderPlot::onProcessedImageAvailable(QxrdImageData *image)
 {
+  onCenterChanged(m_CenterFinder -> get_CenterX(), m_CenterFinder -> get_CenterY());
+}
+
+void QxrdCenterFinderPlot::onCenterXChanged(double cx)
+{
+  onCenterChanged(cx, m_CenterFinder -> get_CenterY());
+}
+
+void QxrdCenterFinderPlot::onCenterYChanged(double cy)
+{
+  onCenterChanged(m_CenterFinder -> get_CenterX(), cy);
+}
+
+void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
+{
+  QxrdImageData *img = m_DataProcessor -> data();
+
   int width =img->get_Width();
   int height=img->get_Height();
 
@@ -167,6 +194,9 @@ void QxrdCenterFinderPlot::doZoomAll()
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.cpp,v $
+*  Revision 1.8  2009/07/22 11:55:34  jennings
+*  Center finder modifications
+*
 *  Revision 1.7  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

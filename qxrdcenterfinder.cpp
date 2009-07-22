@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.cpp,v 1.10 2009/07/21 22:55:48 jennings Exp $
+*  $Id: qxrdcenterfinder.cpp,v 1.11 2009/07/22 11:55:34 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,8 +16,9 @@ QxrdCenterFinder::QxrdCenterFinder
     m_CenterX(this, "centerX", 0),
     m_CenterY(this, "centerY", 0),
     m_CenterStep(this, "centerStep", 1),
-    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.10 2009/07/21 22:55:48 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.11 2009/07/22 11:55:34 jennings Exp $")
 {
+  qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 }
 
 void QxrdCenterFinder::writeSettings(QxrdSettings *settings, QString section)
@@ -96,12 +97,11 @@ void QxrdCenterFinder::readSettings(QxrdSettings *settings, QString section)
 //  }
 //}
 //
-//void QxrdCenterFinder::onCenterChanged(double cx, double cy)
-//{
-////  QxrdImageData *data = m_Acquisition -> data();
-////
-////  m_CenterFinderPlot -> onCenterChanged(data, cx, cy);
-//}
+void QxrdCenterFinder::onCenterChanged(QwtDoublePoint pt)
+{
+  set_CenterX(pt.x());
+  set_CenterY(pt.y());
+}
 //
 //void QxrdCenterFinder::onCenterStepChanged(double stp)
 //{
@@ -111,6 +111,9 @@ void QxrdCenterFinder::readSettings(QxrdSettings *settings, QString section)
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.cpp,v $
+*  Revision 1.11  2009/07/22 11:55:34  jennings
+*  Center finder modifications
+*
 *  Revision 1.10  2009/07/21 22:55:48  jennings
 *  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
 *

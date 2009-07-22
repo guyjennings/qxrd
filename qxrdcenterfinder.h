@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.h,v 1.7 2009/07/21 22:55:48 jennings Exp $
+*  $Id: qxrdcenterfinder.h,v 1.8 2009/07/22 11:55:34 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,6 +13,7 @@
 #include <QPen>
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
+#include <qwt_double_rect.h>
 
 class QxrdCenterFinder : public QObject
 {
@@ -34,9 +35,12 @@ public:
 //public slots:
 //  void onCenterXChanged(double cx);
 //  void onCenterYChanged(double cy);
-//  void onCenterChanged(double cx, double cy);
+//  void onCenterChanged(QwtDoublePoint pt);
 //  void onCenterChanged(QwtDoublePoint pt);
 //  void onCenterStepChanged(double stp);
+
+public slots:
+  void onCenterChanged(QwtDoublePoint pt);
 
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);
@@ -54,7 +58,7 @@ public:
 private:
   mutable QMutex             m_Mutex;
 
-  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.7 2009/07/21 22:55:48 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.8 2009/07/22 11:55:34 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDER_H
@@ -62,6 +66,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.h,v $
+*  Revision 1.8  2009/07/22 11:55:34  jennings
+*  Center finder modifications
+*
 *  Revision 1.7  2009/07/21 22:55:48  jennings
 *  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
 *

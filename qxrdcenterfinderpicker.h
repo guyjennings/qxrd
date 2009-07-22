@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderpicker.h,v 1.3 2009/07/21 22:55:48 jennings Exp $
+*  $Id: qxrdcenterfinderpicker.h,v 1.4 2009/07/22 11:55:34 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,10 +17,15 @@ class QxrdCenterFinderDialog;
 class QxrdCenterFinderPicker : public QwtPlotPicker
 {
 public:
-  QxrdCenterFinderPicker
-      (QwtPlotCanvas *canvas);
+  QxrdCenterFinderPicker(QxrdImagePlot *plot);
+
+public:
+  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
+
 private:
-  HEADER_IDENT("$Id: qxrdcenterfinderpicker.h,v 1.3 2009/07/21 22:55:48 jennings Exp $");
+  QxrdImagePlot  *m_Plot;
+
+  HEADER_IDENT("$Id: qxrdcenterfinderpicker.h,v 1.4 2009/07/22 11:55:34 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDERPICKER_H
@@ -28,6 +33,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderpicker.h,v $
+*  Revision 1.4  2009/07/22 11:55:34  jennings
+*  Center finder modifications
+*
 *  Revision 1.3  2009/07/21 22:55:48  jennings
 *  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
 *

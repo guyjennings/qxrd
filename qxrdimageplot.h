@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.21 2009/07/21 22:55:48 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.22 2009/07/22 11:55:34 jennings Exp $
 *
 *******************************************************************/
 
@@ -105,15 +105,13 @@ public slots:
 
   void onProcessedImageAvailable(QxrdImageData *image);
   void onDarkImageAvailable(QxrdImageData *image);
+  void onCenterXChanged(double cx);
+  void onCenterYChanged(double cy);
 
   void enableZooming();
   void enableCentering();
   void enableSlicing();
   void enableMeasuring();
-
-signals:
-  void minimum_changed(double min);
-  void maximum_changed(double max);\
 
 public:
   void readSettings(QxrdSettings *settings, QString section);
@@ -123,7 +121,7 @@ public:
   void setMask(QxrdMaskRasterData data);
   QxrdRasterData* raster();
   void replotImage();
-  void setCenterFinder(QxrdCenterFinder *f);
+//  void setCenterFinder(QxrdCenterFinder *f);
 
   void setDataProcessor(QxrdDataProcessor *proc);
 
@@ -144,7 +142,7 @@ private:
   QwtPlotPanner       *m_Panner;
   QwtPlotMagnifier    *m_Magnifier;
   QwtPlotRescaler     *m_Rescaler;
-  QxrdCenterFinder    *m_CenterFinder;
+//  QxrdCenterFinder    *m_CenterFinder;
   QxrdPlotSlicer      *m_Slicer;
   QxrdPlotMeasurer    *m_Measurer;
   QwtLegend           *m_Legend;
@@ -161,7 +159,7 @@ private:
   QwtPlotMarker             *m_CenterMarker;
 //  QPen                       m_Pen;
 
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.21 2009/07/21 22:55:48 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.22 2009/07/22 11:55:34 jennings Exp $");
 };
 
 #endif
@@ -169,6 +167,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.22  2009/07/22 11:55:34  jennings
+*  Center finder modifications
+*
 *  Revision 1.21  2009/07/21 22:55:48  jennings
 *  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
 *
