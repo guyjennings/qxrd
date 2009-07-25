@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskcolormap.h,v 1.2 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdmaskcolormap.h,v 1.3 2009/07/25 15:16:57 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,7 +11,7 @@
 
 #include <qwt_color_map.h>
 
-class QxrdMaskColorMap : public QwtColorMap
+class QxrdMaskColorMap : public QwtLinearColorMap
 {
  public:
   QxrdMaskColorMap(const QColor &deselcol, const QColor &selcol);
@@ -25,7 +25,7 @@ class QxrdMaskColorMap : public QwtColorMap
  private:
   QRgb  m_DeselectedColor;
   QRgb  m_SelectedColor;
-  HEADER_IDENT("$Id: qxrdmaskcolormap.h,v 1.2 2009/06/27 22:50:32 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdmaskcolormap.h,v 1.3 2009/07/25 15:16:57 jennings Exp $");
 };
 
 #endif
@@ -33,6 +33,9 @@ class QxrdMaskColorMap : public QwtColorMap
 /******************************************************************
 *
 *  $Log: qxrdmaskcolormap.h,v $
+*  Revision 1.3  2009/07/25 15:16:57  jennings
+*  Made QxrdMaskColorMap descend from QwtLinearColorMap
+*
 *  Revision 1.2  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

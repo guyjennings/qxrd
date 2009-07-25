@@ -1,21 +1,21 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskcolormap.cpp,v 1.4 2009/06/28 16:33:20 jennings Exp $
+*  $Id: qxrdmaskcolormap.cpp,v 1.5 2009/07/25 15:16:57 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdmaskcolormap.h"
 
 QxrdMaskColorMap::QxrdMaskColorMap(const QColor &deselcol, const QColor &selcol)
-  : QwtColorMap(QwtColorMap::RGB),
+  : QwtLinearColorMap(QwtColorMap::RGB),
     m_DeselectedColor(deselcol.rgba()),
     m_SelectedColor(selcol.rgba()),
-    SOURCE_IDENT("$Id: qxrdmaskcolormap.cpp,v 1.4 2009/06/28 16:33:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdmaskcolormap.cpp,v 1.5 2009/07/25 15:16:57 jennings Exp $")
 {
 }
 
 QxrdMaskColorMap::QxrdMaskColorMap()
-  : QwtColorMap(QwtColorMap::RGB),
+  : QwtLinearColorMap(QwtColorMap::RGB),
     m_DeselectedColor(qRgba(255,0,0,255)),
     m_SelectedColor(qRgba(255,0,0,0))
 {
@@ -53,6 +53,9 @@ unsigned char QxrdMaskColorMap::colorIndex(const QwtDoubleInterval &/*inter*/, d
 /******************************************************************
 *
 *  $Log: qxrdmaskcolormap.cpp,v $
+*  Revision 1.5  2009/07/25 15:16:57  jennings
+*  Made QxrdMaskColorMap descend from QwtLinearColorMap
+*
 *  Revision 1.4  2009/06/28 16:33:20  jennings
 *  Eliminated compiler warnings
 *
