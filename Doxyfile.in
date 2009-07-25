@@ -1238,7 +1238,7 @@ UML_LOOK               = NO
 # If set to YES, the inheritance and collaboration graphs will show the 
 # relations between templates and their instances.
 
-TEMPLATE_RELATIONS     = NO
+TEMPLATE_RELATIONS     = YES
 
 # If the ENABLE_PREPROCESSING, SEARCH_INCLUDES, INCLUDE_GRAPH, and HAVE_DOT 
 # tags are set to YES then doxygen will generate a graph for each documented 
@@ -1332,7 +1332,7 @@ DOT_TRANSPARENT        = YES
 # makes dot run faster, but since only newer versions of dot (>1.8.10) 
 # support this, this feature is disabled by default.
 
-DOT_MULTI_TARGETS      = NO
+DOT_MULTI_TARGETS      = YES
 
 # If the GENERATE_LEGEND tag is set to YES (the default) Doxygen will 
 # generate a legend page explaining the meaning of the various boxes and 
