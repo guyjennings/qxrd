@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.28 2009/07/25 15:18:39 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.29 2009/07/25 17:03:40 jennings Exp $
 *
 *******************************************************************/
 
@@ -24,6 +24,11 @@
 #include <qwt_scale_widget.h>
 //#include <QMetaMethod>
 #include <QTime>
+
+//#define replot() { \
+//  printf("replot() called from %s:%d\n", __FILE__, __LINE__); \
+//  re##plot(); \
+//}
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QxrdPlot(true, true, parent),
@@ -50,7 +55,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_CenterFinderPicker(NULL),
     m_CenterMarker(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.28 2009/07/25 15:18:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.29 2009/07/25 17:03:40 jennings Exp $")
 {
   setCustomTracker(new QxrdPlotTracker(canvas(), this));
   setCustomZoomer(new QxrdPlotZoomer(canvas(), this));
@@ -175,7 +180,12 @@ void QxrdImagePlot::replotImage()
   m_Spectrogram -> invalidateCache();
   m_Spectrogram -> itemChanged();
 
-  replot();
+  if (m_FirstTime) {
+    autoScale();
+    m_FirstTime = false;
+  } else {
+    replot();
+  }
 }
 
 void QxrdImagePlot::onInterpolateChanged(bool interp)
@@ -325,7 +335,7 @@ void QxrdImagePlot::changeImageShown(bool shown)
     m_Spectrogram -> invalidateCache();
     m_Spectrogram -> itemChanged();
 
-    replot();
+    replotImage();
   }
 }
 
@@ -343,7 +353,7 @@ void QxrdImagePlot::changeMaskShown(bool shown)
     m_MaskImage -> invalidateCache();
     m_MaskImage -> itemChanged();
 
-    replot();
+    replotImage();
   }
 }
 
@@ -362,7 +372,7 @@ void QxrdImagePlot::changedColorMap()
   rightAxis -> setColorMap(m_Spectrogram->data().range(),
                            m_Spectrogram->colorMap());
 
-  replot();
+  replotImage();
 }
 
 void QxrdImagePlot::setImage(QxrdRasterData data)
@@ -408,6 +418,12 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
 
 void QxrdImagePlot::onProcessedImageAvailable(QxrdImageData *image)
 {
+  if (!image ||
+      image->get_Width() != m_Raster.width() ||
+      image->get_Height() != m_Raster.height()) {
+    m_FirstTime = true;
+  }
+
   m_DataProcessor -> decrementProcessedCount();
 
   QxrdRasterData data(image, get_InterpolatePixels());
@@ -418,12 +434,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdImageData *image)
 
   setTitle(image -> get_Title());
 
-  if (m_FirstTime) {
-    autoScale();
-    m_FirstTime = false;
-  } else {
-    replot();
-  }
+  replotImage();
 }
 
 void QxrdImagePlot::onDarkImageAvailable(QxrdImageData *image)
@@ -483,6 +494,8 @@ void QxrdImagePlot::enableMeasuring()
   m_Measurer -> setEnabled(true);
 }
 
+//#undef replot
+
 void QxrdImagePlot::replot()
 {
   QTime tic;
@@ -496,6 +509,9 @@ void QxrdImagePlot::replot()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.29  2009/07/25 17:03:40  jennings
+*  More improvements to image plotting code
+*
 *  Revision 1.28  2009/07/25 15:18:39  jennings
 *  Moved graph zooming code into QxrdPlot - a common base class
 *  Made QxrdMaskColorMap descend from QwtLinearColorMap

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdrasterdata.h,v 1.7 2009/06/27 22:50:33 jennings Exp $
+*  $Id: qxrdrasterdata.h,v 1.8 2009/07/25 17:03:40 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,6 +29,9 @@ class QxrdRasterData : public QwtRasterData
   void setInterpolate(int interp);
   int interpolate();
 
+  int width() const;
+  int height() const;
+
  private:
   QxrdImageData     *m_Data;
 //  int                m_Offset;
@@ -36,7 +39,7 @@ class QxrdRasterData : public QwtRasterData
   int                m_NCols;
   QwtDoubleInterval  m_Range;
   int                m_Interpolate;
-  HEADER_IDENT("$Id: qxrdrasterdata.h,v 1.7 2009/06/27 22:50:33 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdrasterdata.h,v 1.8 2009/07/25 17:03:40 jennings Exp $");
 };
 
 #endif
@@ -44,6 +47,9 @@ class QxrdRasterData : public QwtRasterData
 /******************************************************************
 *
 *  $Log: qxrdrasterdata.h,v $
+*  Revision 1.8  2009/07/25 17:03:40  jennings
+*  More improvements to image plotting code
+*
 *  Revision 1.7  2009/06/27 22:50:33  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

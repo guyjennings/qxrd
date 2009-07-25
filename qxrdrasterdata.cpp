@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdrasterdata.cpp,v 1.11 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdrasterdata.cpp,v 1.12 2009/07/25 17:03:40 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,7 +13,7 @@ QxrdRasterData::QxrdRasterData(QxrdImageData *img, int interp)
     m_NCols((img ? img->get_Height() : 0)),
     m_Range(40000,48000),
     m_Interpolate(interp),
-    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.11 2009/06/27 22:50:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.12 2009/07/25 17:03:40 jennings Exp $")
 {
 }
 
@@ -141,9 +141,22 @@ double QxrdRasterData::maxValue()
   }
 }
 
+int QxrdRasterData::width() const
+{
+  return m_NCols;
+}
+
+int QxrdRasterData::height() const
+{
+  return m_NRows;
+}
+
 /******************************************************************
 *
 *  $Log: qxrdrasterdata.cpp,v $
+*  Revision 1.12  2009/07/25 17:03:40  jennings
+*  More improvements to image plotting code
+*
 *  Revision 1.11  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties
