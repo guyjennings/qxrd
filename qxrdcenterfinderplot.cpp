@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.cpp,v 1.8 2009/07/22 11:55:34 jennings Exp $
+*  $Id: qxrdcenterfinderplot.cpp,v 1.9 2009/07/25 15:18:19 jennings Exp $
 *
 *******************************************************************/
 
@@ -20,70 +20,25 @@
 #include "qxrdcenterfinder.h"
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
-  : QxrdPlot(parent),
-    m_Tracker(NULL),
-    m_Panner(NULL),
-    m_Zoomer(NULL),
-    m_Magnifier(NULL),
+  : QxrdPlot(false, false, parent),
     m_Legend(NULL),
     m_DataProcessor(NULL),
     m_CenterFinder(NULL),
-    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.8 2009/07/22 11:55:34 jennings Exp $")
+    m_FirstTime(true),
+    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.9 2009/07/25 15:18:19 jennings Exp $")
 {
-  setCanvasBackground(QColor(Qt::white));
-
-  m_Tracker = new QwtPlotPicker(canvas());
-  m_Tracker -> setEnabled(true);
-  m_Tracker -> setSelectionFlags(QwtPicker::PointSelection);
-//   m_Tracker -> setAxisEnabled(QwtPlot::yRight, false);
-
-  m_Zoomer = new QwtPlotZoomer(canvas());
-  m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
-  m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
-  m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
-
-  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect2,
-                              Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier);
-  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect3,
-                              Qt::LeftButton, Qt::ControlModifier);
-
-  m_Zoomer -> setEnabled(true);
-//   m_Zoomer -> setAxisEnabled(QwtPlot::yRight, false);
-
-  m_Panner = new QwtPlotPanner(canvas());
-  m_Panner -> setEnabled(true);
-  m_Panner -> setMouseButton(Qt::MidButton);
-  m_Panner -> setAxisEnabled(QwtPlot::yRight, false);
-
-  m_Magnifier = new QwtPlotMagnifier(canvas());
-  m_Magnifier -> setEnabled(true);
-  m_Magnifier -> setMouseButton(Qt::NoButton);
-  m_Magnifier -> setAxisEnabled(QwtPlot::yRight, false);
-
   m_Legend = new QwtLegend();
   m_Legend -> setItemMode(QwtLegend::CheckableItem);
 
   insertLegend(m_Legend, QwtPlot::RightLegend);
 
-  autoScale();
+//  autoScale();
 }
 
 void QxrdCenterFinderPlot::setDataProcessor(QxrdDataProcessor *proc)
 {
   m_DataProcessor = proc;
   m_CenterFinder = m_DataProcessor -> centerFinder();
-}
-
-void QxrdCenterFinderPlot::autoScale()
-{
-  m_Zoomer -> zoom(0);
-
-  setAxisAutoScale(QwtPlot::yLeft);
-  setAxisAutoScale(QwtPlot::xBottom);
-
-  replot();
-
-  m_Zoomer -> setZoomBase();
 }
 
 void QxrdCenterFinderPlot::onProcessedImageAvailable(QxrdImageData *image)
@@ -171,29 +126,20 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
   setAxisTitle(xBottom, "r");
 
-  replot();
-}
-
-void QxrdCenterFinderPlot::doZoomIn()
-{
-  m_Zoomer -> zoom(1);
-}
-
-void QxrdCenterFinderPlot::doZoomOut()
-{
-  m_Zoomer -> zoom(-1);
-}
-
-void QxrdCenterFinderPlot::doZoomAll()
-{
-  m_Zoomer -> zoom(0);
-
-  autoScale();
+  if (m_FirstTime) {
+    autoScale();
+    m_FirstTime = false;
+  } else {
+    replot();
+  }
 }
 
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.cpp,v $
+*  Revision 1.9  2009/07/25 15:18:19  jennings
+*  Moved graph zooming code into QxrdPlot - a common base class
+*
 *  Revision 1.8  2009/07/22 11:55:34  jennings
 *  Center finder modifications
 *

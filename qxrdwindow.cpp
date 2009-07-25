@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.74 2009/07/22 11:55:34 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.75 2009/07/25 15:18:19 jennings Exp $
 *
 *******************************************************************/
 
@@ -48,7 +48,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.74 2009/07/22 11:55:34 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.75 2009/07/25 15:18:19 jennings Exp $")
 {
   setupUi(this);
 
@@ -116,20 +116,20 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   connect(m_ActionTest, SIGNAL(triggered()), this, SLOT(doTest()));
 
-  connect(m_ImageZoomInButton, SIGNAL(clicked()), m_Plot, SLOT(doZoomIn()));
-  connect(m_ImageZoomOutButton, SIGNAL(clicked()), m_Plot, SLOT(doZoomOut()));
-  connect(m_ImageZoomAllButton, SIGNAL(clicked()), m_Plot, SLOT(doZoomAll()));
-  connect(m_ImageSetCenterButton, SIGNAL(clicked()), m_Plot, SLOT(doSetCenter()));
-  connect(m_ImageSliceButton, SIGNAL(clicked()), m_Plot, SLOT(doSlice()));
-  connect(m_ImageMeasureButton, SIGNAL(clicked()), m_Plot, SLOT(doMeasure()));
+  connect(m_ImageZoomInButton, SIGNAL(clicked()), m_Plot, SLOT(enableZooming()));
+  connect(m_ImageZoomOutButton, SIGNAL(clicked()), m_Plot, SLOT(zoomOut()));
+  connect(m_ImageZoomAllButton, SIGNAL(clicked()), m_Plot, SLOT(autoScale()));
+  connect(m_ImageSetCenterButton, SIGNAL(clicked()), m_Plot, SLOT(enableCentering()));
+  connect(m_ImageSliceButton, SIGNAL(clicked()), m_Plot, SLOT(enableSlicing()));
+  connect(m_ImageMeasureButton, SIGNAL(clicked()), m_Plot, SLOT(enableMeasuring()));
 
-  connect(m_CenteringZoomInButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(doZoomIn()));
-  connect(m_CenteringZoomOutButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(doZoomOut()));
-  connect(m_CenteringZoomAllButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(doZoomAll()));
+  connect(m_CenteringZoomInButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(zoomIn()));
+  connect(m_CenteringZoomOutButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(zoomOut()));
+  connect(m_CenteringZoomAllButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(autoScale()));
 
-  connect(m_IntegratorZoomInButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(doZoomIn()));
-  connect(m_IntegratorZoomOutButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(doZoomOut()));
-  connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(doZoomAll()));
+  connect(m_IntegratorZoomInButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(zoomIn()));
+  connect(m_IntegratorZoomOutButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(zoomOut()));
+  connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(autoScale()));
 
   connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
 
@@ -556,6 +556,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.75  2009/07/25 15:18:19  jennings
+*  Moved graph zooming code into QxrdPlot - a common base class
+*
 *  Revision 1.74  2009/07/22 11:55:34  jennings
 *  Center finder modifications
 *
