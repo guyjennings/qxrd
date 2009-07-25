@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.22 2009/07/22 11:55:34 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.23 2009/07/25 15:18:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -72,14 +72,6 @@ public:
   QCEP_BOOLEAN_PROPERTY(MaintainAspectRatio);
 
 public slots:
-  void autoScale();
-  void doZoomIn();
-  void doZoomOut();
-  void doZoomAll();
-  void doSetCenter();
-  void doSlice();
-  void doMeasure();
-
   void set005Range();
   void set010Range();
   void set100Range();
@@ -117,17 +109,16 @@ public:
   void readSettings(QxrdSettings *settings, QString section);
   void writeSettings(QxrdSettings *settings, QString section);
 
-  void setImage(QxrdRasterData data);
-  void setMask(QxrdMaskRasterData data);
   QxrdRasterData* raster();
-  void replotImage();
-//  void setCenterFinder(QxrdCenterFinder *f);
 
   void setDataProcessor(QxrdDataProcessor *proc);
 
   void replot();
 
 private:
+  void replotImage();
+  void setImage(QxrdRasterData data);
+  void setMask(QxrdMaskRasterData data);
   void changedColorMap();
   void setTrackerPen(const QPen &pen);
 
@@ -137,10 +128,6 @@ private:
   };
 
 private:
-  QxrdPlotTracker     *m_Tracker;
-  QxrdPlotZoomer      *m_Zoomer;
-  QwtPlotPanner       *m_Panner;
-  QwtPlotMagnifier    *m_Magnifier;
   QwtPlotRescaler     *m_Rescaler;
 //  QxrdCenterFinder    *m_CenterFinder;
   QxrdPlotSlicer      *m_Slicer;
@@ -158,8 +145,9 @@ private:
   QxrdCenterFinderPicker    *m_CenterFinderPicker;
   QwtPlotMarker             *m_CenterMarker;
 //  QPen                       m_Pen;
+  bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.22 2009/07/22 11:55:34 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.23 2009/07/25 15:18:39 jennings Exp $");
 };
 
 #endif
@@ -167,6 +155,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.23  2009/07/25 15:18:39  jennings
+*  Moved graph zooming code into QxrdPlot - a common base class
+*  Made QxrdMaskColorMap descend from QwtLinearColorMap
+*
 *  Revision 1.22  2009/07/22 11:55:34  jennings
 *  Center finder modifications
 *

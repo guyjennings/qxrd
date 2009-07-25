@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.27 2009/07/22 11:55:34 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.28 2009/07/25 15:18:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -14,9 +14,9 @@
 #include "qxrdcenterfinderpicker.h"
 #include "qxrddataprocessor.h"
 
-#include <qwt_plot_zoomer.h>
-#include <qwt_plot_panner.h>
-#include <qwt_plot_magnifier.h>
+//#include <qwt_plot_zoomer.h>
+//#include <qwt_plot_panner.h>
+//#include <qwt_plot_magnifier.h>
 #include <qwt_plot_rescaler.h>
 #include <qwt_plot_marker.h>
 #include <qwt_legend.h>
@@ -26,7 +26,7 @@
 #include <QTime>
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
-  : QxrdPlot(parent),
+  : QxrdPlot(true, true, parent),
     m_DisplayMinimumPct(this, "displayMinimumPct", 0),
     m_DisplayMaximumPct(this, "displayMaximumPct", 100),
     m_DisplayMinimumVal(this, "displayMinimumVal", 0),
@@ -37,11 +37,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_MaskShown(this, "maskShown", 0),
     m_InterpolatePixels(this, "interpolatePixels", 1),
     m_MaintainAspectRatio(this, "maintainAspectRatio", 1),
-    m_Tracker(NULL),
-    m_Zoomer(NULL),
-    m_Panner(NULL),
     m_Rescaler(NULL),
-//    m_CenterFinder(NULL),
     m_Slicer(NULL),
     m_Measurer(NULL),
     m_Legend(NULL),
@@ -53,41 +49,14 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_DataProcessor(NULL),
     m_CenterFinderPicker(NULL),
     m_CenterMarker(NULL),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.27 2009/07/22 11:55:34 jennings Exp $")
+    m_FirstTime(true),
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.28 2009/07/25 15:18:39 jennings Exp $")
 {
-  setCanvasBackground(QColor(Qt::white));
-
-  m_Tracker = new QxrdPlotTracker(canvas(), this);
-  m_Tracker -> setEnabled(true);
-  m_Tracker -> setSelectionFlags(QwtPicker::PointSelection);
-//   m_Tracker -> setAxisEnabled(QwtPlot::yRight, false);
-
-  m_Zoomer = new QxrdPlotZoomer(canvas(), this);
-  m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
-  m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
-  m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
-
-  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect2,
-                              Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier);
-  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect3,
-                              Qt::LeftButton, Qt::ControlModifier);
-
-  m_Zoomer -> setEnabled(true);
-//   m_Zoomer -> setAxisEnabled(QwtPlot::yRight, false);
-
-  m_Panner = new QwtPlotPanner(canvas());
-  m_Panner -> setEnabled(true);
-  m_Panner -> setMouseButton(Qt::MidButton);
-  m_Panner -> setAxisEnabled(QwtPlot::yRight, false);
-
-  m_Magnifier = new QwtPlotMagnifier(canvas());
-  m_Magnifier -> setEnabled(true);
-  m_Magnifier -> setMouseButton(Qt::NoButton);
-  m_Magnifier -> setAxisEnabled(QwtPlot::yRight, false);
+  setCustomTracker(new QxrdPlotTracker(canvas(), this));
+  setCustomZoomer(new QxrdPlotZoomer(canvas(), this));
 
   m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::xBottom, QwtPlotRescaler::Expanding);
   m_Rescaler -> setEnabled(true);
-//   m_Rescaler -> setAxisEnabled(QwtPlot::yRight, false);
 
   m_Slicer = new QxrdPlotSlicer(canvas(), this);
   m_Slicer -> setEnabled(false);
@@ -127,6 +96,8 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   connect(prop_InterpolatePixels(), SIGNAL(changedValue(bool)), this, SLOT(onInterpolateChanged(bool)));
   connect(prop_MaintainAspectRatio(), SIGNAL(changedValue(bool)), this, SLOT(onMaintainAspectChanged(bool)));
   connect(prop_DisplayColorMap(), SIGNAL(changedValue(int)), this, SLOT(setColorMap(int)));
+
+  enableZooming();
 }
 
 void QxrdImagePlot::setDataProcessor(QxrdDataProcessor *proc)
@@ -137,11 +108,6 @@ void QxrdImagePlot::setDataProcessor(QxrdDataProcessor *proc)
           m_DataProcessor -> centerFinder(), SLOT(onCenterChanged(QwtDoublePoint)));
 }
 
-//void QxrdImagePlot::setCenterFinder(QxrdCenterFinder *f)
-//{
-//  m_CenterFinder = f;
-//}
-//
 void QxrdImagePlot::readSettings(QxrdSettings *settings, QString section)
 {
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
@@ -150,16 +116,6 @@ void QxrdImagePlot::readSettings(QxrdSettings *settings, QString section)
 void QxrdImagePlot::writeSettings(QxrdSettings *settings, QString section)
 {
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
-}
-
-void QxrdImagePlot::autoScale()
-{
-  setAxisAutoScale(QwtPlot::xBottom);
-  setAxisAutoScale(QwtPlot::yLeft);
-  
-  replot();
-
-  m_Zoomer -> setZoomBase();
 }
 
 void QxrdImagePlot::setAutoRange()
@@ -254,6 +210,8 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
   if (m_CenterMarker) {
     m_CenterMarker -> setLinePen(pen);
   }
+
+  m_MaskColorMap.setColorInterval(pen.color(), QColor(0,0,0,0));
 }
 
 void QxrdImagePlot::setGrayscale()
@@ -395,6 +353,10 @@ void QxrdImagePlot::changedColorMap()
   m_Spectrogram -> invalidateCache();
   m_Spectrogram -> itemChanged();
 
+  m_MaskImage   -> setColorMap(m_MaskColorMap);
+  m_MaskImage   -> invalidateCache();
+  m_MaskImage   -> itemChanged();
+
   QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
   rightAxis -> setColorBarEnabled(true);
   rightAxis -> setColorMap(m_Spectrogram->data().range(),
@@ -456,7 +418,12 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdImageData *image)
 
   setTitle(image -> get_Title());
 
-  replot();
+  if (m_FirstTime) {
+    autoScale();
+    m_FirstTime = false;
+  } else {
+    replot();
+  }
 }
 
 void QxrdImagePlot::onDarkImageAvailable(QxrdImageData *image)
@@ -516,44 +483,6 @@ void QxrdImagePlot::enableMeasuring()
   m_Measurer -> setEnabled(true);
 }
 
-void QxrdImagePlot::doZoomIn()
-{
-  bool wasEnabled = m_Zoomer->isEnabled();
-
-  enableZooming();
-
-  if (wasEnabled) {
-    m_Zoomer -> zoom(1);
-  }
-}
-
-void QxrdImagePlot::doZoomOut()
-{
-  m_Zoomer -> zoom(-1);
-}
-
-void QxrdImagePlot::doZoomAll()
-{
-  m_Zoomer -> zoom(0);
-
-  autoScalePlot();
-}
-
-void QxrdImagePlot::doSetCenter()
-{
-  enableCentering();
-}
-
-void QxrdImagePlot::doSlice()
-{
-  enableSlicing();
-}
-
-void QxrdImagePlot::doMeasure()
-{
-  enableMeasuring();
-}
-
 void QxrdImagePlot::replot()
 {
   QTime tic;
@@ -567,6 +496,10 @@ void QxrdImagePlot::replot()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.28  2009/07/25 15:18:39  jennings
+*  Moved graph zooming code into QxrdPlot - a common base class
+*  Made QxrdMaskColorMap descend from QwtLinearColorMap
+*
 *  Revision 1.27  2009/07/22 11:55:34  jennings
 *  Center finder modifications
 *
