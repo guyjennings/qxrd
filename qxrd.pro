@@ -70,7 +70,8 @@ HEADERS += TODO.h \
     qxrdscriptengine.h \
     qxrdscriptenginethread.h \
     qxrddataprocessorthread.h \
-    qxrdacquisitionsimulated.h
+    qxrdacquisitionsimulated.h \
+    qxrdmaskpicker.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -110,7 +111,8 @@ SOURCES += qxrd.cpp \
     qxrdscriptengine.cpp \
     qxrdscriptenginethread.cpp \
     qxrddataprocessorthread.cpp \
-    qxrdacquisitionsimulated.cpp
+    qxrdacquisitionsimulated.cpp \
+    qxrdmaskpicker.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui

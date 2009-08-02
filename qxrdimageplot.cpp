@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.29 2009/07/25 17:03:40 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.30 2009/08/02 18:02:42 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,6 +13,7 @@
 #include "qxrdcenterfinder.h"
 #include "qxrdcenterfinderpicker.h"
 #include "qxrddataprocessor.h"
+#include "qxrdmaskpicker.h"
 
 //#include <qwt_plot_zoomer.h>
 //#include <qwt_plot_panner.h>
@@ -54,8 +55,10 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_DataProcessor(NULL),
     m_CenterFinderPicker(NULL),
     m_CenterMarker(NULL),
+    m_Circles(NULL),
+    m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.29 2009/07/25 17:03:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.30 2009/08/02 18:02:42 jennings Exp $")
 {
   setCustomTracker(new QxrdPlotTracker(canvas(), this));
   setCustomZoomer(new QxrdPlotZoomer(canvas(), this));
@@ -87,6 +90,12 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_CenterMarker = new QwtPlotMarker();
   m_CenterMarker -> setLineStyle(QwtPlotMarker::Cross);
   m_CenterMarker -> attach(this);
+
+  m_Circles = new QxrdCircularMaskPicker(canvas(), this);
+  m_Circles -> setEnabled(false);
+
+  m_Polygons = new QxrdPolygonalMaskPicker(canvas(), this);
+  m_Polygons -> setEnabled(false);
 
   set100Range();
   setGrayscale();
@@ -216,6 +225,10 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
   m_Zoomer -> setRubberBandPen(pen);
   m_CenterFinderPicker -> setTrackerPen(pen);
   m_CenterFinderPicker -> setRubberBandPen(pen);
+  m_Circles  -> setTrackerPen(pen);
+  m_Circles  -> setRubberBandPen(pen);
+  m_Polygons -> setTrackerPen(pen);
+  m_Polygons -> setRubberBandPen(pen);
 
   if (m_CenterMarker) {
     m_CenterMarker -> setLinePen(pen);
@@ -465,6 +478,8 @@ void QxrdImagePlot::enableZooming()
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer       -> setEnabled(false);
   m_Measurer     -> setEnabled(false);
+  m_Circles  -> setEnabled(false);
+  m_Polygons -> setEnabled(false);
 }
 
 void QxrdImagePlot::enableCentering()
@@ -474,6 +489,8 @@ void QxrdImagePlot::enableCentering()
   m_CenterFinderPicker -> setEnabled(true);
   m_Slicer   -> setEnabled(false);
   m_Measurer -> setEnabled(false);
+  m_Circles  -> setEnabled(false);
+  m_Polygons -> setEnabled(false);
 }
 
 void QxrdImagePlot::enableSlicing()
@@ -483,6 +500,8 @@ void QxrdImagePlot::enableSlicing()
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(true);
   m_Measurer -> setEnabled(false);
+  m_Circles  -> setEnabled(false);
+  m_Polygons -> setEnabled(false);
 }
 
 void QxrdImagePlot::enableMeasuring()
@@ -492,6 +511,30 @@ void QxrdImagePlot::enableMeasuring()
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(false);
   m_Measurer -> setEnabled(true);
+  m_Circles  -> setEnabled(false);
+  m_Polygons -> setEnabled(false);
+}
+
+void QxrdImagePlot::enableMaskCircles()
+{
+  m_Tracker  -> setEnabled(false);
+  m_Zoomer   -> setEnabled(false);
+  m_CenterFinderPicker -> setEnabled(false);
+  m_Slicer   -> setEnabled(false);
+  m_Measurer -> setEnabled(false);
+  m_Circles  -> setEnabled(true);
+  m_Polygons -> setEnabled(false);
+}
+
+void QxrdImagePlot::enableMaskPolygons()
+{
+  m_Tracker  -> setEnabled(false);
+  m_Zoomer   -> setEnabled(false);
+  m_CenterFinderPicker -> setEnabled(false);
+  m_Slicer   -> setEnabled(false);
+  m_Measurer -> setEnabled(false);
+  m_Circles  -> setEnabled(false);
+  m_Polygons -> setEnabled(true);
 }
 
 //#undef replot
@@ -509,6 +552,9 @@ void QxrdImagePlot::replot()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.30  2009/08/02 18:02:42  jennings
+*  Added a number of masking operations to the UI - no actual implementation yet
+*
 *  Revision 1.29  2009/07/25 17:03:40  jennings
 *  More improvements to image plotting code
 *

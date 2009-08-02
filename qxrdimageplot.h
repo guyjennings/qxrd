@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.23 2009/07/25 15:18:39 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.24 2009/08/02 18:02:42 jennings Exp $
 *
 *******************************************************************/
 
@@ -28,6 +28,7 @@ class QxrdSettings;
 class QxrdDataProcessor;
 class QxrdCenterFinderPicker;
 class QwtPlotMarker;
+class QxrdMaskPicker;
 
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
@@ -104,6 +105,8 @@ public slots:
   void enableCentering();
   void enableSlicing();
   void enableMeasuring();
+  void enableMaskCircles();
+  void enableMaskPolygons();
 
 public:
   void readSettings(QxrdSettings *settings, QString section);
@@ -144,10 +147,14 @@ private:
 
   QxrdCenterFinderPicker    *m_CenterFinderPicker;
   QwtPlotMarker             *m_CenterMarker;
+
+  QxrdMaskPicker      *m_Circles;
+  QxrdMaskPicker      *m_Polygons;
+
 //  QPen                       m_Pen;
   bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.23 2009/07/25 15:18:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.24 2009/08/02 18:02:42 jennings Exp $");
 };
 
 #endif
@@ -155,6 +162,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.24  2009/08/02 18:02:42  jennings
+*  Added a number of masking operations to the UI - no actual implementation yet
+*
 *  Revision 1.23  2009/07/25 15:18:39  jennings
 *  Moved graph zooming code into QxrdPlot - a common base class
 *  Made QxrdMaskColorMap descend from QwtLinearColorMap
