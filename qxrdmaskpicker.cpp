@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskpicker.cpp,v 1.1 2009/08/02 18:02:42 jennings Exp $
+*  $Id: qxrdmaskpicker.cpp,v 1.2 2009/08/02 21:14:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,10 +11,9 @@
 QxrdMaskPicker::QxrdMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
   : QwtPlotPicker(canvas),
     m_Plot(plot),
-    SOURCE_IDENT("$Id: qxrdmaskpicker.cpp,v 1.1 2009/08/02 18:02:42 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdmaskpicker.cpp,v 1.2 2009/08/02 21:14:16 jennings Exp $")
 {
   setTrackerMode(QwtPicker::AlwaysOn);
-  setRubberBand(QwtPicker::CrossRubberBand);
 }
 
 QwtText QxrdMaskPicker::trackerText(const QwtDoublePoint &pos) const
@@ -31,18 +30,27 @@ QwtText QxrdMaskPicker::trackerText(const QwtDoublePoint &pos) const
 QxrdCircularMaskPicker::QxrdCircularMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
   : QxrdMaskPicker(canvas, plot)
 {
-  setSelectionFlags(QwtPicker::PointSelection);
+  qRegisterMetaType<QwtDoubleRect>("QwtDoubleRect");
+
+  setSelectionFlags(QwtPicker::RectSelection | QwtPicker::CenterToRadius );
+  setRubberBand(QwtPicker::EllipseRubberBand);
 }
 
 QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
   : QxrdMaskPicker(canvas, plot)
 {
+  qRegisterMetaType< QwtArray<QwtDoublePoint> >("QwtArray<QwtDoublePoint>");
+
   setSelectionFlags(QwtPicker::PolygonSelection);
+  setRubberBand(QwtPicker::PolygonRubberBand);
 }
 
 /******************************************************************
 *
 *  $Log: qxrdmaskpicker.cpp,v $
+*  Revision 1.2  2009/08/02 21:14:16  jennings
+*  *** empty log message ***
+*
 *  Revision 1.1  2009/08/02 18:02:42  jennings
 *  Added a number of masking operations to the UI - no actual implementation yet
 *
