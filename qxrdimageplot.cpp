@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.30 2009/08/02 18:02:42 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.31 2009/08/02 21:14:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -58,7 +58,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.30 2009/08/02 18:02:42 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.31 2009/08/02 21:14:16 jennings Exp $")
 {
   setCustomTracker(new QxrdPlotTracker(canvas(), this));
   setCustomZoomer(new QxrdPlotZoomer(canvas(), this));
@@ -120,6 +120,12 @@ void QxrdImagePlot::setDataProcessor(QxrdDataProcessor *proc)
 
   connect(m_CenterFinderPicker, SIGNAL(selected(QwtDoublePoint)),
           m_DataProcessor -> centerFinder(), SLOT(onCenterChanged(QwtDoublePoint)));
+
+  connect(m_Circles, SIGNAL(selected(QwtDoubleRect)),
+          m_DataProcessor, SLOT(maskCircle(QwtDoubleRect)));
+
+  connect(m_Polygons, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+          m_DataProcessor, SLOT(maskPolygon(QwtArray<QwtDoublePoint>)));
 }
 
 void QxrdImagePlot::readSettings(QxrdSettings *settings, QString section)
@@ -552,6 +558,9 @@ void QxrdImagePlot::replot()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.31  2009/08/02 21:14:16  jennings
+*  Added masking dummy routines
+*
 *  Revision 1.30  2009/08/02 18:02:42  jennings
 *  Added a number of masking operations to the UI - no actual implementation yet
 *

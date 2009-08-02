@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.20 2009/07/22 11:55:34 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.21 2009/08/02 21:14:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -43,7 +43,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.20 2009/07/22 11:55:34 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.21 2009/08/02 21:14:16 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this);
@@ -477,6 +477,16 @@ void QxrdDataProcessor::hideMaskRange(/*double min, double max*/)
   }
 }
 
+void QxrdDataProcessor::maskCircle(QwtDoubleRect rect)
+{
+  printf("QxrdDataProcessor::maskCircle(%g,%g,%g,%g)\n", rect.left(), rect.bottom(), rect.right(), rect.top());
+}
+
+void QxrdDataProcessor::maskPolygon(QVector<QwtDoublePoint> poly)
+{
+  printf("QxrdDataProcessor::maskPolygon(%d points ...)\n", poly.size());
+}
+
 QxrdImageData *QxrdDataProcessor::data() const
 {
   QMutexLocker lock(&m_Mutex);
@@ -555,6 +565,9 @@ QxrdIntegrator    *QxrdDataProcessor::integrator() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.21  2009/08/02 21:14:16  jennings
+*  Added masking dummy routines
+*
 *  Revision 1.20  2009/07/22 11:55:34  jennings
 *  Center finder modifications
 *

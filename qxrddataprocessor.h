@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.13 2009/07/21 22:55:48 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.14 2009/08/02 21:14:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,6 +16,8 @@
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
 #include "qxrdimagequeue.h"
+
+#include <qwt_double_rect.h>
 
 class QxrdAcquisition;
 class QxrdImageData;
@@ -73,6 +75,8 @@ public slots:
   void hideMaskRange(/*double min, double max*/);
   void showMaskAll();
   void hideMaskAll();
+  void maskCircle(QwtDoubleRect pt);
+  void maskPolygon(QwtArray<QwtDoublePoint> poly);
 
   void loadData(QString name);
   void saveData(QString name);
@@ -153,7 +157,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.13 2009/07/21 22:55:48 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.14 2009/08/02 21:14:16 jennings Exp $");
 };
 
 #endif
@@ -161,6 +165,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.14  2009/08/02 21:14:16  jennings
+*  Added masking dummy routines
+*
 *  Revision 1.13  2009/07/21 22:55:48  jennings
 *  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
 *
