@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.14 2009/08/02 21:14:16 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.15 2009/08/03 13:26:25 jennings Exp $
 *
 *******************************************************************/
 
@@ -65,6 +65,12 @@ public:
   Q_PROPERTY(double maskMaximumValue READ get_MaskMaximumValue WRITE set_MaskMaximumValue);
   QCEP_DOUBLE_PROPERTY(MaskMaximumValue);
 
+  Q_PROPERTY(double maskCircleRadius READ get_MaskCircleRadius WRITE set_MaskCircleRadius);
+  QCEP_DOUBLE_PROPERTY(MaskCircleRadius);
+
+  Q_PROPERTY(bool maskSetPixels READ get_MaskSetPixels WRITE set_MaskSetPixels);
+  QCEP_BOOLEAN_PROPERTY(MaskSetPixels);
+
 signals:
   void printMessage(QString msg);
   void newDataAvailable(QxrdImageData *);
@@ -75,6 +81,7 @@ public slots:
   void hideMaskRange(/*double min, double max*/);
   void showMaskAll();
   void hideMaskAll();
+  void invertMask();
   void maskCircle(QwtDoubleRect pt);
   void maskPolygon(QwtArray<QwtDoublePoint> poly);
 
@@ -157,7 +164,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.14 2009/08/02 21:14:16 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.15 2009/08/03 13:26:25 jennings Exp $");
 };
 
 #endif
@@ -165,6 +172,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.15  2009/08/03 13:26:25  jennings
+*  Added option to set/clear mask pixels
+*
 *  Revision 1.14  2009/08/02 21:14:16  jennings
 *  Added masking dummy routines
 *

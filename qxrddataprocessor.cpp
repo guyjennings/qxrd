@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.21 2009/08/02 21:14:16 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.22 2009/08/03 13:26:25 jennings Exp $
 *
 *******************************************************************/
 
@@ -30,6 +30,8 @@ QxrdDataProcessor::QxrdDataProcessor
     m_FileName(this,"fileName",""),
     m_MaskMinimumValue(this, "maskMinimumValue", 0),
     m_MaskMaximumValue(this, "maskMaximumValue", 20000),
+    m_MaskCircleRadius(this, "maskCircleRadius", 10),
+    m_MaskSetPixels(this, "maskSetPixels", true),
     m_Mutex(QMutex::Recursive),
     m_Acquisition(acq),
     m_DarkUsage(QReadWriteLock::Recursive),
@@ -43,7 +45,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.21 2009/08/02 21:14:16 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.22 2009/08/03 13:26:25 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this);
@@ -477,9 +479,28 @@ void QxrdDataProcessor::hideMaskRange(/*double min, double max*/)
   }
 }
 
-void QxrdDataProcessor::maskCircle(QwtDoubleRect rect)
+void QxrdDataProcessor::invertMask()
 {
-  printf("QxrdDataProcessor::maskCircle(%g,%g,%g,%g)\n", rect.left(), rect.bottom(), rect.right(), rect.top());
+  if (m_Data) {
+    m_Data -> invertMask();
+
+    newData(m_Data);
+  }
+}
+
+void QxrdDataProcessor::maskCircle(QwtDoubleRect rect)
+{ 
+  if ((rect.left() == rect.right()) && (rect.bottom() == rect.top())) {
+    m_Data -> maskCircle(rect.left(), rect.top(), get_MaskCircleRadius(), get_MaskSetPixels());
+  } else {
+    double cx = rect.center().x();
+    double cy = rect.center().y();
+    double rad = rect.width()/2;
+
+    m_Data -> maskCircle(cx, cy, rad, get_MaskSetPixels());
+  }
+
+  newData(m_Data);
 }
 
 void QxrdDataProcessor::maskPolygon(QVector<QwtDoublePoint> poly)
@@ -565,6 +586,9 @@ QxrdIntegrator    *QxrdDataProcessor::integrator() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.22  2009/08/03 13:26:25  jennings
+*  Added option to set/clear mask pixels
+*
 *  Revision 1.21  2009/08/02 21:14:16  jennings
 *  Added masking dummy routines
 *
