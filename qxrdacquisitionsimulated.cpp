@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.9 2009/08/02 18:01:16 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.10 2009/08/03 20:58:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.9 2009/08/02 18:01:16 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.10 2009/08/03 20:58:59 jennings Exp $")
 {
 }
 
@@ -77,10 +77,10 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
     int nCols = get_NCols();
 
     if (false) {
-      for (int j=0; j<nCols; j++) {
-        for (int i=0; i<nRows; i++) {
+      for (int j=0; j<nRows; j++) {
+        for (int i=0; i<nCols; i++) {
           acquiredData -> setValue(i, j, i+j);
-          //        double r=sqrt(pow(i-nRows/2,2)+pow(j-nCols/2,2));
+          //        double r=sqrt(pow(i-nCols/2,2)+pow(j-nRows/2,2));
           //
           //        if (r > 0) {
           //          acquiredData -> setValue(i, j, 1/r/*sin(r/100.0)/(r/100.0)*/);
@@ -100,12 +100,12 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 //      painter.setBackgroundMode(Qt::OpaqueMode);
       painter.setPen(Qt::white);
       painter.setFont(QFont("Times", 260, QFont::Bold, true));
-      painter.drawText(nRows/4, nCols/4, "Hello");
+      painter.drawText(nCols/4, nRows/4, "Hello");
 
       painter.fillRect(0,0,nCols/4,nRows/4, Qt::lightGray);
 
-      for (int j=0; j<(nCols/4); j++) {
-        for (int i=0; i<(nRows/4); i++) {
+      for (int j=0; j<(nRows/4); j++) {
+        for (int i=0; i<(nCols/4); i++) {
           sampleImage.setPixel(i,j,qRgb(20,20,20));
         }
       }
@@ -119,8 +119,8 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 
       QImage newImage = sampleImage/*.mirrored(false, true)*/;
 
-      for (int j=0; j<nCols; j++) {
-        for (int i=0; i<nRows; i++) {
+      for (int j=0; j<nRows; j++) {
+        for (int i=0; i<nCols; i++) {
           acquiredData -> setValue(i,j, qGray(newImage.pixel/*Index*/(i,j)));
         }
       }
@@ -185,6 +185,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.10  2009/08/03 20:58:59  jennings
+*  Minor fixups
+*
 *  Revision 1.9  2009/08/02 18:01:16  jennings
 *  Draw stuff into simulated images with a QPainter
 *

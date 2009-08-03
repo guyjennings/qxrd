@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.22 2009/08/03 13:26:25 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.23 2009/08/03 20:58:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,6 +15,7 @@
 #include "tiffio.h"
 
 #include <QTime>
+#include <QPainter>
 
 QxrdDataProcessor::QxrdDataProcessor
     (QxrdAcquisition *acq, QObject *parent)
@@ -45,7 +46,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.22 2009/08/03 13:26:25 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.23 2009/08/03 20:58:59 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this);
@@ -118,35 +119,6 @@ QxrdImageData *QxrdDataProcessor::takeNextFreeImage()
   }
 }
 
-//QxrdImageData *QxrdDataProcessor::takeNextProcessedImage()
-//{
-//  return m_ProcessedImages.dequeue();
-//}
-//
-//QxrdImageData *QxrdDataProcessor::takeLatestProcessedImage()
-//{
-//  int n = m_ProcessedImages.size();
-//
-//  QxrdImageData *res = NULL;
-//
-//  for (int i=0; i<n; i++) {
-//    QxrdImageData *img = m_ProcessedImages.dequeue();
-//
-//    if (res) {
-//      returnImageToPool(res);
-//    }
-//
-//    res = img;
-//  }
-//
-//  return res;
-//}
-//
-//QxrdImageData *QxrdDataProcessor::takeNextDarkImage()
-//{
-//  return m_DarkImages.dequeue();
-//}
-//
 void QxrdDataProcessor::returnImageToPool(QxrdImageData *img)
 {
   QMutexLocker lock(&m_Mutex);
@@ -165,14 +137,6 @@ void QxrdDataProcessor::newData(QxrdImageData *image)
 
     m_Data = image;
   }
-//
-//  QxrdRasterData     data(m_Data, interpolatePixels());
-//  QxrdMaskRasterData mask(m_Data, interpolatePixels());
-//
-//  m_Plot -> setImage(data);
-//  m_Plot -> setMask(mask);
-//  m_Plot -> setTitle(m_Data -> get_Title());
-//  m_Plot -> replot();
 
   set_FileName(image->get_FileName());
 
@@ -223,28 +187,7 @@ void QxrdDataProcessor::newGainMapImage(QxrdImageData *image)
 }
 
 
-//void QxrdDataProcessor::onProcessedImageAvailable(QxrdImageData *image)
-//{
-////  printf("onProcessedImageAvailable()\n");
-//
-//  QxrdImageData* img = takeLatestProcessedImage();
-//
-//  if (img) {
-//    newData(img);
-//  }
-//}
-//
-//void QxrdDataProcessor::onDarkImageAvailable(QxrdImageData *image)
-//{
-////  printf("onDarkImageAvailable()\n");
-//
-//  QxrdImageData* img = takeNextDarkImage();
-//
-//  if (img) {
-//    newDarkImage(img);
-//  }
-//}
-//
+
 void QxrdDataProcessor::loadData(QString name)
 {
 //  printf("QxrdDataProcessor::loadData(%s)\n", qPrintable(name));
@@ -506,6 +449,34 @@ void QxrdDataProcessor::maskCircle(QwtDoubleRect rect)
 void QxrdDataProcessor::maskPolygon(QVector<QwtDoublePoint> poly)
 {
   printf("QxrdDataProcessor::maskPolygon(%d points ...)\n", poly.size());
+
+  int nRows = m_Data -> get_Height();
+  int nCols = m_Data -> get_Width();
+
+  QImage polyImage(nCols, nRows, QImage::Format_RGB32);
+  QPainter polyPainter(&polyImage);
+  QPolygonF polygon;
+
+  foreach(QwtDoublePoint pt, poly) {
+    polygon.append(pt);
+  }
+
+  polyPainter.setPen(Qt::white);
+  polyPainter.fillRect(0,0,nCols,nRows,Qt::black);
+  polyPainter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
+  polyPainter.drawPolygon(poly);
+
+  bool newval = get_MaskSetPixels();
+
+  for (int j=0; j<nRows; j++) {
+    for (int i=0; i<nCols; i++) {
+      if (qGray(polyImage.pixel(i,j))) {
+        m_Data -> setMaskValue(i, j, newval);
+      }
+    }
+  }
+
+  newData(m_Data);
 }
 
 QxrdImageData *QxrdDataProcessor::data() const
@@ -586,6 +557,9 @@ QxrdIntegrator    *QxrdDataProcessor::integrator() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.23  2009/08/03 20:58:59  jennings
+*  Minor fixups
+*
 *  Revision 1.22  2009/08/03 13:26:25  jennings
 *  Added option to set/clear mask pixels
 *
