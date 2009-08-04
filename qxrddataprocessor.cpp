@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.24 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.25 2009/08/04 20:42:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -47,10 +47,10 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.24 2009/08/04 16:45:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.25 2009/08/04 20:42:53 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
-  m_Integrator   = new QxrdIntegrator(this);
+  m_Integrator   = new QxrdIntegrator(this, this);
 }
 
 void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
@@ -571,13 +571,15 @@ QxrdIntegrator    *QxrdDataProcessor::integrator() const
     printf("Problem QxrdDataProcessor::integrator == NULL\n");
   }
 
-
   return m_Integrator;
 }
 
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.25  2009/08/04 20:42:53  jennings
+*  Simple, initial, implementation of integration
+*
 *  Revision 1.24  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *

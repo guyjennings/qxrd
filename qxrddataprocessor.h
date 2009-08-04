@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.16 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.17 2009/08/04 20:42:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -169,7 +169,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.16 2009/08/04 16:45:20 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.17 2009/08/04 20:42:53 jennings Exp $");
 };
 
 #endif
@@ -177,6 +177,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.17  2009/08/04 20:42:53  jennings
+*  Simple, initial, implementation of integration
+*
 *  Revision 1.16  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *

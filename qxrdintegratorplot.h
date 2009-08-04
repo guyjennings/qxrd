@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.h,v 1.5 2009/07/25 15:18:19 jennings Exp $
+*  $Id: qxrdintegratorplot.h,v 1.6 2009/08/04 20:42:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -20,8 +20,11 @@ class QxrdIntegratorPlot : public QxrdPlot
 public:
   QxrdIntegratorPlot(QWidget *parent=0);
 
+public slots:
+  void onNewIntegrationAvailable(QVector<double> x, QVector<double> y);
+
 private:
-  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.5 2009/07/25 15:18:19 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.6 2009/08/04 20:42:53 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATORPLOT_H
@@ -29,6 +32,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.h,v $
+*  Revision 1.6  2009/08/04 20:42:53  jennings
+*  Simple, initial, implementation of integration
+*
 *  Revision 1.5  2009/07/25 15:18:19  jennings
 *  Moved graph zooming code into QxrdPlot - a common base class
 *

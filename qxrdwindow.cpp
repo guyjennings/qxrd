@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.78 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.79 2009/08/04 20:42:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -49,7 +49,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.78 2009/08/04 16:45:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.79 2009/08/04 20:42:53 jennings Exp $")
 {
   setupUi(this);
 
@@ -251,6 +251,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   connect(m_DataProcessor -> centerFinder() -> prop_CenterY(), SIGNAL(changedValue(double)),
           m_CenterFinderPlot, SLOT(onCenterYChanged(double)));
+
+  connect(m_DataProcessor -> integrator(), SIGNAL(newIntegrationAvailable(QVector<double>, QVector<double>)),
+          m_IntegratorPlot, SLOT(onNewIntegrationAvailable(QVector<double>,QVector<double>)));
 }
 
 QxrdWindow::~QxrdWindow()
@@ -579,6 +582,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.79  2009/08/04 20:42:53  jennings
+*  Simple, initial, implementation of integration
+*
 *  Revision 1.78  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *
