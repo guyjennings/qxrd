@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.h,v 1.6 2009/08/04 20:42:53 jennings Exp $
+*  $Id: qxrdintegratorplot.h,v 1.7 2009/08/04 22:03:31 jennings Exp $
 *
 *******************************************************************/
 
@@ -24,7 +24,9 @@ public slots:
   void onNewIntegrationAvailable(QVector<double> x, QVector<double> y);
 
 private:
-  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.6 2009/08/04 20:42:53 jennings Exp $");
+  QwtLegend           *m_Legend;
+
+  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.7 2009/08/04 22:03:31 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATORPLOT_H
@@ -32,6 +34,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.h,v $
+*  Revision 1.7  2009/08/04 22:03:31  jennings
+*  Moved integration code into QxrdIntegrator, added oversampling option
+*  Add each integration result to the az-avg plot panel
+*
 *  Revision 1.6  2009/08/04 20:42:53  jennings
 *  Simple, initial, implementation of integration
 *

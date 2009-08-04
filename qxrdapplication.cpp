@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.45 2009/08/03 20:58:59 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.46 2009/08/04 22:03:31 jennings Exp $
 *
 *******************************************************************/
 
@@ -10,6 +10,7 @@
 #include "qxrdserver.h"
 #include "qxrddataprocessorthread.h"
 #include "qxrddataprocessor.h"
+#include "qxrdintegrator.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
 #include "qxrdscriptenginethread.h"
@@ -29,7 +30,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.45 2009/08/03 20:58:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.46 2009/08/04 22:03:31 jennings Exp $")
 {
 //  QcepProperty::dumpMetaData(&QxrdApplication::staticMetaObject);
 //  QcepProperty::dumpMetaData(&QxrdWindow::staticMetaObject);
@@ -94,6 +95,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(m_DataProcessorThread, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
   connect(m_DataProcessor, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
+  connect(m_DataProcessor -> integrator(), SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
 
   m_Window -> setScriptEngine(m_ScriptEngine);
 
@@ -174,6 +176,10 @@ QxrdDataProcessor *QxrdApplication::dataProcessor() const
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.46  2009/08/04 22:03:31  jennings
+*  Moved integration code into QxrdIntegrator, added oversampling option
+*  Add each integration result to the az-avg plot panel
+*
 *  Revision 1.45  2009/08/03 20:58:59  jennings
 *  Minor fixups
 *

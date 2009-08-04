@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.h,v 1.4 2009/08/04 20:42:53 jennings Exp $
+*  $Id: qxrdintegrator.h,v 1.5 2009/08/04 22:03:31 jennings Exp $
 *
 *******************************************************************/
 
@@ -24,11 +24,17 @@ class QxrdIntegrator : public QObject
 public:
   QxrdIntegrator(QxrdDataProcessor *proc, QObject *parent=0);
 
+public:
+  Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample);
+  QCEP_INTEGER_PROPERTY(Oversample);
+
+public:
   void readSettings(QxrdSettings *settings, QString section);
   void writeSettings(QxrdSettings *settings, QString section);
 
 signals:
   void newIntegrationAvailable(QVector<double> x, QVector<double> y);
+  void printMessage(QString);
 
 public slots:
   void performIntegration();
@@ -40,7 +46,7 @@ private:
   mutable QMutex            m_Mutex;
   QxrdDataProcessor        *m_DataProcessor;
 
-  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.4 2009/08/04 20:42:53 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.5 2009/08/04 22:03:31 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATOR_H
@@ -48,6 +54,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegrator.h,v $
+*  Revision 1.5  2009/08/04 22:03:31  jennings
+*  Moved integration code into QxrdIntegrator, added oversampling option
+*  Add each integration result to the az-avg plot panel
+*
 *  Revision 1.4  2009/08/04 20:42:53  jennings
 *  Simple, initial, implementation of integration
 *
