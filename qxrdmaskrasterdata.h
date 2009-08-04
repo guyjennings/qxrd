@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskrasterdata.h,v 1.2 2009/06/27 22:50:32 jennings Exp $
+*  $Id: qxrdmaskrasterdata.h,v 1.3 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,12 +11,12 @@
 
 #include <qwt_raster_data.h>
 
-class QxrdImageData;
+class QxrdMaskData;
 
 class QxrdMaskRasterData : public QwtRasterData
 {
 public:
-  QxrdMaskRasterData(QxrdImageData *img, int interp);
+  QxrdMaskRasterData(QxrdMaskData *mask, int interp);
   QxrdMaskRasterData();
 
   double value(double x, double y) const;
@@ -28,9 +28,9 @@ public:
   /*   QxrdMaskRasterData(const QxrdMaskRasterData&); */
 
 private:
-  QxrdImageData *m_Image;
+  QxrdMaskData  *m_Mask;
   int            m_Interpolate;
-  HEADER_IDENT("$Id: qxrdmaskrasterdata.h,v 1.2 2009/06/27 22:50:32 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdmaskrasterdata.h,v 1.3 2009/08/04 16:45:20 jennings Exp $");
 };
 
 #endif
@@ -38,6 +38,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdmaskrasterdata.h,v $
+*  Revision 1.3  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.2  2009/06/27 22:50:32  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

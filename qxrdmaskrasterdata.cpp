@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskrasterdata.cpp,v 1.4 2009/06/28 16:34:27 jennings Exp $
+*  $Id: qxrdmaskrasterdata.cpp,v 1.5 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,31 +8,31 @@
 
 #include "qxrdrasterdata.h"
 
-QxrdMaskRasterData::QxrdMaskRasterData(QxrdImageData *img, int interp)
-  : QwtRasterData(QwtDoubleRect(0,0,img->get_Width(),img->get_Height())),
-    m_Image(img),
+QxrdMaskRasterData::QxrdMaskRasterData(QxrdMaskData *mask, int interp)
+  : QwtRasterData(QwtDoubleRect(0,0,mask->get_Width(),mask->get_Height())),
+    m_Mask(mask),
     m_Interpolate(interp),
-    SOURCE_IDENT("$Id: qxrdmaskrasterdata.cpp,v 1.4 2009/06/28 16:34:27 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdmaskrasterdata.cpp,v 1.5 2009/08/04 16:45:20 jennings Exp $")
 {
 }
 
 QxrdMaskRasterData::QxrdMaskRasterData()
-  : m_Image(NULL),
+  : m_Mask(NULL),
     m_Interpolate(0)
 {
 }
 
 double QxrdMaskRasterData::value(double x, double y) const
 {
-  if (m_Image) {
+  if (m_Mask) {
     if (m_Interpolate) {
       int ix = (int) x, iy = (int) y;
       double dx = x-ix, dy = y-iy;
 
-      double f00 = m_Image->maskValue(ix,iy);
-      double f10 = m_Image->maskValue(ix+1,iy);
-      double f01 = m_Image->maskValue(ix,iy+1);
-      double f11 = m_Image->maskValue(ix+1,iy+1);
+      double f00 = m_Mask->maskValue(ix,iy);
+      double f10 = m_Mask->maskValue(ix+1,iy);
+      double f01 = m_Mask->maskValue(ix,iy+1);
+      double f11 = m_Mask->maskValue(ix+1,iy+1);
       
       double f0 = f00*(1-dx)+f10*dx;
       double f1 = f01*(1-dx)+f11*dx;
@@ -41,7 +41,7 @@ double QxrdMaskRasterData::value(double x, double y) const
       
       return f;
     } else {
-      return m_Image->maskValue(((int) round(x)), ((int) round(y)));
+      return m_Mask->maskValue(((int) round(x)), ((int) round(y)));
     }
   } else {
     return 1;
@@ -63,6 +63,9 @@ QxrdMaskRasterData* QxrdMaskRasterData::copy() const
 /******************************************************************
 *
 *  $Log: qxrdmaskrasterdata.cpp,v $
+*  Revision 1.5  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.4  2009/06/28 16:34:27  jennings
 *  Fixed problems with copyMask which could result in image and mask dimensions getting out of sync.
 *

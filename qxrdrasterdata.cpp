@@ -1,25 +1,27 @@
 /******************************************************************
 *
-*  $Id: qxrdrasterdata.cpp,v 1.12 2009/07/25 17:03:40 jennings Exp $
+*  $Id: qxrdrasterdata.cpp,v 1.13 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdrasterdata.h"
 
-QxrdRasterData::QxrdRasterData(QxrdImageData *img, int interp)
+QxrdRasterData::QxrdRasterData(QxrdImageData *img, int interp, QxrdMaskData *mask)
   : QwtRasterData(QwtDoubleRect(0,0,img->get_Width(),img->get_Height())),
     m_Data(img),
+    m_Mask(mask),
     m_NRows((img ? img->get_Width(): 0)),
     m_NCols((img ? img->get_Height() : 0)),
     m_Range(40000,48000),
     m_Interpolate(interp),
-    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.12 2009/07/25 17:03:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.13 2009/08/04 16:45:20 jennings Exp $")
 {
 }
 
 QxrdRasterData::QxrdRasterData()
   : QwtRasterData(),
-    m_Data(0),
+    m_Data(NULL),
+    m_Mask(NULL),
     m_NRows(0),
     m_NCols(0),
     m_Range(0,1),
@@ -89,19 +91,32 @@ double QxrdRasterData::minValue()
 
   if (m_Data) {
     double *data = m_Data->data();
-    bool *mask = m_Data->mask();
     bool first = 1;
     double min = 0;
 
-    for (int i=1; i<npixels; i++) {
-      bool msk = mask[i];
-      if (msk) {
+    if (m_Mask == NULL) {
+      for (int i=1; i<npixels; i++) {
         double val = data[i];
         if (first) {
           min = val;
           first = 0;
         } else if (val<min) {
           min = val;
+        }
+      }
+    } else {
+      bool *mask = m_Mask->mask();
+
+      for (int i=1; i<npixels; i++) {
+        bool msk = mask[i];
+        if (msk) {
+          double val = data[i];
+          if (first) {
+            min = val;
+            first = 0;
+          } else if (val<min) {
+            min = val;
+          }
         }
       }
     }
@@ -118,19 +133,32 @@ double QxrdRasterData::maxValue()
 
   if (m_Data) {
     double *data = m_Data->data();
-    bool *mask = m_Data->mask();
     bool first = 1;
     double max = 0;
 
-    for (int i=1; i<npixels; i++) {
-      bool msk = mask[i];
-      if (msk) {
+    if (m_Mask == NULL) {
+      for (int i=1; i<npixels; i++) {
         double val = data[i];
         if (first) {
           max = val;
           first = 0;
-        } else if(val>max) {
+        } else if (val>max) {
           max = val;
+        }
+      }
+    } else {
+      bool *mask = m_Mask->mask();
+
+      for (int i=1; i<npixels; i++) {
+        bool msk = mask[i];
+        if (msk) {
+          double val = data[i];
+          if (first) {
+            max = val;
+            first = 0;
+          } else if (val>max) {
+            max = val;
+          }
         }
       }
     }
@@ -154,6 +182,9 @@ int QxrdRasterData::height() const
 /******************************************************************
 *
 *  $Log: qxrdrasterdata.cpp,v $
+*  Revision 1.13  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.12  2009/07/25 17:03:40  jennings
 *  More improvements to image plotting code
 *

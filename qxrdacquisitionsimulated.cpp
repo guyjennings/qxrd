@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.10 2009/08/03 20:58:59 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.11 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.10 2009/08/03 20:58:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.11 2009/08/04 16:45:20 jennings Exp $")
 {
 }
 
@@ -128,7 +128,7 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 
     emit printMessage(tr("Simulated data after %1\n").arg(tic.restart()));
 
-    acquiredData -> showMaskAll();
+//    acquiredData -> showMaskAll();
     acquiredData -> calculateRange();
 
     emit printMessage(tr("Initialize mask and range after %1\n").arg(tic.restart()));
@@ -185,6 +185,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.11  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.10  2009/08/03 20:58:59  jennings
 *  Minor fixups
 *

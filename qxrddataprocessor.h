@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.15 2009/08/03 13:26:25 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.16 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,6 +16,7 @@
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
 #include "qxrdimagequeue.h"
+#include "qxrdmaskdata.h"
 
 #include <qwt_double_rect.h>
 
@@ -74,6 +75,7 @@ public:
 signals:
   void printMessage(QString msg);
   void newDataAvailable(QxrdImageData *);
+  void newMaskAvailable(QxrdImageData *, QxrdMaskData *);
   void newDarkImageAvailable(QxrdImageData *);
 
 public slots:
@@ -112,6 +114,7 @@ public:
 
   QxrdImageData *data() const;
   QxrdImageData *darkImage() const;
+  QxrdMaskData  *mask() const;
 
   int incrementAcquiredCount();
   int decrementAcquiredCount();
@@ -141,6 +144,7 @@ private:
   void newDarkImage(QxrdImageData *image);
   void newBadPixelsImage(QxrdImageData *image);
   void newGainMapImage(QxrdImageData *image);
+  void newMask(QxrdMaskData *mask);
 
 private:
   mutable QMutex            m_Mutex;
@@ -157,6 +161,7 @@ private:
   QxrdImageData            *m_DarkFrame;
   QxrdImageData            *m_BadPixels;
   QxrdImageData            *m_GainFrame;
+  QxrdMaskData             *m_Mask;
 
   QAtomicInt                m_AcquiredCount;
   QAtomicInt                m_ProcessedCount;
@@ -164,7 +169,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.15 2009/08/03 13:26:25 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.16 2009/08/04 16:45:20 jennings Exp $");
 };
 
 #endif
@@ -172,6 +177,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.16  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.15  2009/08/03 13:26:25  jennings
 *  Added option to set/clear mask pixels
 *

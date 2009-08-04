@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.23 2009/08/03 20:58:59 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.24 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -42,11 +42,12 @@ QxrdDataProcessor::QxrdDataProcessor
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
+    m_Mask(new QxrdMaskData(2048, 2048)),
     m_AcquiredCount(0),
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.23 2009/08/03 20:58:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.24 2009/08/04 16:45:20 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this);
@@ -129,7 +130,7 @@ void QxrdDataProcessor::returnImageToPool(QxrdImageData *img)
 void QxrdDataProcessor::newData(QxrdImageData *image)
 {
   if (m_Data != image) {
-    image -> copyMask(m_Data);
+//    image -> copyMask(m_Data);
 
     if (m_Data) {
       returnImageToPool(m_Data);
@@ -186,7 +187,16 @@ void QxrdDataProcessor::newGainMapImage(QxrdImageData *image)
   set_GainMapPath(image->get_FileName());
 }
 
+void QxrdDataProcessor::newMask(QxrdMaskData *mask)
+{
+  if (m_Mask != mask) {
+    delete m_Mask;
 
+    m_Mask = mask;
+  }
+
+  emit newMaskAvailable(m_Data, m_Mask);
+}
 
 void QxrdDataProcessor::loadData(QString name)
 {
@@ -377,34 +387,34 @@ void QxrdDataProcessor::showMaskRange(/*double min, double max*/)
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
 
-  if (m_Data) {
+  if (m_Data && m_Mask) {
 //    printf ("clearMaskRange(%g,%g)\n", min, max);
 
-    m_Data -> showMaskRange(min, max);
+    m_Mask -> showMaskRange(m_Data, min, max);
 
-    newData(m_Data);
+    newMask(m_Mask);
   }
 }
 
 void QxrdDataProcessor::hideMaskAll()
 {
-  if (m_Data) {
+  if (m_Mask) {
 //    printf ("setMaskRange(%g,%g)\n", min, max);
 
-    m_Data -> hideMaskAll();
+    m_Mask -> hideMaskAll();
 
-    newData(m_Data);
+    newMask(m_Mask);
   }
 }
 
 void QxrdDataProcessor::showMaskAll()
 {
-  if (m_Data) {
+  if (m_Mask) {
 //    printf ("clearMaskRange(%g,%g)\n", min, max);
 
-    m_Data -> showMaskAll();
+    m_Mask -> showMaskAll();
 
-    newData(m_Data);
+    newMask(m_Mask);
   }
 }
 
@@ -413,70 +423,74 @@ void QxrdDataProcessor::hideMaskRange(/*double min, double max*/)
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
 
-  if (m_Data) {
+  if (m_Data && m_Mask) {
 //    printf ("setMaskRange(%g,%g)\n", min, max);
 
-    m_Data -> hideMaskRange(min, max);
+    m_Mask -> hideMaskRange(m_Data, min, max);
 
-    newData(m_Data);
+    newMask(m_Mask);
   }
 }
 
 void QxrdDataProcessor::invertMask()
 {
-  if (m_Data) {
-    m_Data -> invertMask();
+  if (m_Mask) {
+    m_Mask -> invertMask();
 
-    newData(m_Data);
+    newMask(m_Mask);
   }
 }
 
 void QxrdDataProcessor::maskCircle(QwtDoubleRect rect)
 { 
-  if ((rect.left() == rect.right()) && (rect.bottom() == rect.top())) {
-    m_Data -> maskCircle(rect.left(), rect.top(), get_MaskCircleRadius(), get_MaskSetPixels());
-  } else {
-    double cx = rect.center().x();
-    double cy = rect.center().y();
-    double rad = rect.width()/2;
+  if (m_Mask) {
+    if ((rect.left() == rect.right()) && (rect.bottom() == rect.top())) {
+      m_Mask -> maskCircle(rect.left(), rect.top(), get_MaskCircleRadius(), get_MaskSetPixels());
+    } else {
+      double cx = rect.center().x();
+      double cy = rect.center().y();
+      double rad = rect.width()/2;
 
-    m_Data -> maskCircle(cx, cy, rad, get_MaskSetPixels());
+      m_Mask -> maskCircle(cx, cy, rad, get_MaskSetPixels());
+    }
+
+    newMask(m_Mask);
   }
-
-  newData(m_Data);
 }
 
 void QxrdDataProcessor::maskPolygon(QVector<QwtDoublePoint> poly)
 {
-  printf("QxrdDataProcessor::maskPolygon(%d points ...)\n", poly.size());
+  if (m_Mask) {
+    //  printf("QxrdDataProcessor::maskPolygon(%d points ...)\n", poly.size());
 
-  int nRows = m_Data -> get_Height();
-  int nCols = m_Data -> get_Width();
+    int nRows = m_Mask -> get_Height();
+    int nCols = m_Mask -> get_Width();
 
-  QImage polyImage(nCols, nRows, QImage::Format_RGB32);
-  QPainter polyPainter(&polyImage);
-  QPolygonF polygon;
+    QImage polyImage(nCols, nRows, QImage::Format_RGB32);
+    QPainter polyPainter(&polyImage);
+    QPolygonF polygon;
 
-  foreach(QwtDoublePoint pt, poly) {
-    polygon.append(pt);
-  }
+    foreach(QwtDoublePoint pt, poly) {
+      polygon.append(pt);
+    }
 
-  polyPainter.setPen(Qt::white);
-  polyPainter.fillRect(0,0,nCols,nRows,Qt::black);
-  polyPainter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
-  polyPainter.drawPolygon(poly);
+    polyPainter.setPen(Qt::white);
+    polyPainter.fillRect(0,0,nCols,nRows,Qt::black);
+    polyPainter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
+    polyPainter.drawPolygon(poly);
 
-  bool newval = get_MaskSetPixels();
+    bool newval = get_MaskSetPixels();
 
-  for (int j=0; j<nRows; j++) {
-    for (int i=0; i<nCols; i++) {
-      if (qGray(polyImage.pixel(i,j))) {
-        m_Data -> setMaskValue(i, j, newval);
+    for (int j=0; j<nRows; j++) {
+      for (int i=0; i<nCols; i++) {
+        if (qGray(polyImage.pixel(i,j))) {
+          m_Mask -> setMaskValue(i, j, newval);
+        }
       }
     }
-  }
 
-  newData(m_Data);
+    newMask(m_Mask);
+  }
 }
 
 QxrdImageData *QxrdDataProcessor::data() const
@@ -491,6 +505,13 @@ QxrdImageData *QxrdDataProcessor::darkImage() const
   QMutexLocker lock(&m_Mutex);
 
   return m_DarkFrame;
+}
+
+QxrdMaskData *QxrdDataProcessor::mask() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Mask;
 }
 
 int QxrdDataProcessor::incrementAcquiredCount()
@@ -557,6 +578,9 @@ QxrdIntegrator    *QxrdDataProcessor::integrator() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.24  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.23  2009/08/03 20:58:59  jennings
 *  Minor fixups
 *

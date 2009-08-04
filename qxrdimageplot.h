@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.24 2009/08/02 18:02:42 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.25 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -97,6 +97,7 @@ public slots:
   void onMaintainAspectChanged(bool interp);
 
   void onProcessedImageAvailable(QxrdImageData *image);
+  void onMaskedImageAvailable(QxrdImageData *image, QxrdMaskData *mask);
   void onDarkImageAvailable(QxrdImageData *image);
   void onCenterXChanged(double cx);
   void onCenterYChanged(double cy);
@@ -154,7 +155,7 @@ private:
 //  QPen                       m_Pen;
   bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.24 2009/08/02 18:02:42 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.25 2009/08/04 16:45:20 jennings Exp $");
 };
 
 #endif
@@ -162,6 +163,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.25  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.24  2009/08/02 18:02:42  jennings
 *  Added a number of masking operations to the UI - no actual implementation yet
 *

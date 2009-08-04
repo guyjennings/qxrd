@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimagedataformathis.cpp,v 1.6 2009/07/08 00:35:33 jennings Exp $
+*  $Id: qxrdimagedataformathis.cpp,v 1.7 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,7 +12,7 @@ static QxrdImageDataFormatHis fmt;
 
 QxrdImageDataFormatHis::QxrdImageDataFormatHis(QString name)
   : QcepImageDataFormat<double>(name),
-    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.6 2009/07/08 00:35:33 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.7 2009/08/04 16:45:20 jennings Exp $")
 {
 }
 
@@ -124,7 +124,6 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
     fclose(file);
 
     img -> calculateRange();
-    img -> showMaskAll();
   }
 
   return NULL;
@@ -139,6 +138,9 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::saveFile(QString /*path*/, QcepI
 /******************************************************************
 *
 *  $Log: qxrdimagedataformathis.cpp,v $
+*  Revision 1.7  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.6  2009/07/08 00:35:33  jennings
 *  *** empty log message ***
 *

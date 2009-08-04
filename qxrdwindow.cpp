@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.77 2009/08/03 13:26:25 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.78 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,6 +11,7 @@
 #include "qxrdsettings.h"
 #include "qxrdimageplot.h"
 #include "qxrdimagedata.h"
+#include "qxrdmaskdata.h"
 #include "qxrddataprocessor.h"
 #include "qxrdcenterfinderdialog.h"
 #include "qxrdcenterfinder.h"
@@ -48,7 +49,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.77 2009/08/03 13:26:25 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.78 2009/08/04 16:45:20 jennings Exp $")
 {
   setupUi(this);
 
@@ -218,9 +219,20 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_Plot -> setDataProcessor(m_DataProcessor);
   m_CenterFinderPlot -> setDataProcessor(m_DataProcessor);
 
-  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdImageData *)), m_Plot, SLOT(onProcessedImageAvailable(QxrdImageData *)));
-  connect(m_DataProcessor, SIGNAL(newDarkImageAvailable(QxrdImageData *)), m_Plot, SLOT(onDarkImageAvailable(QxrdImageData *)));
-  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdImageData *)), m_CenterFinderPlot, SLOT(onProcessedImageAvailable(QxrdImageData *)));
+  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdImageData *)),
+          m_Plot, SLOT(onProcessedImageAvailable(QxrdImageData *)));
+  connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdImageData *, QxrdMaskData *)),
+          m_Plot, SLOT(onMaskedImageAvailable(QxrdImageData *, QxrdMaskData *)));
+
+  connect(m_DataProcessor, SIGNAL(newDarkImageAvailable(QxrdImageData *)),
+          m_Plot, SLOT(onDarkImageAvailable(QxrdImageData *)));
+
+  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdImageData *)),
+          m_CenterFinderPlot, SLOT(onProcessedImageAvailable(QxrdImageData *)));
+
+  connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdImageData *, QxrdMaskData *)),
+          m_CenterFinderPlot, SLOT(onMaskedImageAvailable(QxrdImageData *, QxrdMaskData *)));
+
 //  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
 //  readSettings();
@@ -567,6 +579,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.78  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.77  2009/08/03 13:26:25  jennings
 *  Added option to set/clear mask pixels
 *

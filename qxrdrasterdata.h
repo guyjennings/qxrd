@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdrasterdata.h,v 1.8 2009/07/25 17:03:40 jennings Exp $
+*  $Id: qxrdrasterdata.h,v 1.9 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,11 +11,12 @@
 
 #include <qwt_raster_data.h>
 #include "qxrdimagedata.h"
+#include "qxrdmaskdata.h"
 
 class QxrdRasterData : public QwtRasterData
 {
  public:
-  QxrdRasterData(QxrdImageData *img, int interp);
+  QxrdRasterData(QxrdImageData *img, int interp, QxrdMaskData *msk=NULL);
   QxrdRasterData();
 
   double value(double x, double y) const;
@@ -34,12 +35,12 @@ class QxrdRasterData : public QwtRasterData
 
  private:
   QxrdImageData     *m_Data;
-//  int                m_Offset;
+  QxrdMaskData      *m_Mask;
   int                m_NRows;
   int                m_NCols;
   QwtDoubleInterval  m_Range;
   int                m_Interpolate;
-  HEADER_IDENT("$Id: qxrdrasterdata.h,v 1.8 2009/07/25 17:03:40 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdrasterdata.h,v 1.9 2009/08/04 16:45:20 jennings Exp $");
 };
 
 #endif
@@ -47,6 +48,9 @@ class QxrdRasterData : public QwtRasterData
 /******************************************************************
 *
 *  $Log: qxrdrasterdata.h,v $
+*  Revision 1.9  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.8  2009/07/25 17:03:40  jennings
 *  More improvements to image plotting code
 *

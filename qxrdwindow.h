@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.52 2009/07/21 22:55:48 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.53 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -21,6 +21,7 @@ class QxrdDataProcessor;
 class QwtPlotSpectrogram;
 class QCloseEvent;
 class QxrdImageData;
+class QxrdMaskData;
 //class QDirModel;
 class QxrdDataProcessor;
 class QxrdCenterFinder;
@@ -112,7 +113,7 @@ private:
   int                     m_Acquiring;
   int                     m_AcquiringDark;
   QTimer                  m_StatusTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.52 2009/07/21 22:55:48 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.53 2009/08/04 16:45:20 jennings Exp $");
 };
 
 #endif
@@ -120,6 +121,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.53  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.52  2009/07/21 22:55:48  jennings
 *  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
 *

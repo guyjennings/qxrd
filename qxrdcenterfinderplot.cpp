@@ -1,11 +1,12 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.cpp,v 1.9 2009/07/25 15:18:19 jennings Exp $
+*  $Id: qxrdcenterfinderplot.cpp,v 1.10 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdcenterfinderplot.h"
 #include "qxrdimagedata.h"
+#include "qxrdmaskdata.h"
 
 #include <QPen>
 #include <qwt_plot_curve.h>
@@ -25,7 +26,7 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_DataProcessor(NULL),
     m_CenterFinder(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.9 2009/07/25 15:18:19 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.10 2009/08/04 16:45:20 jennings Exp $")
 {
   m_Legend = new QwtLegend();
   m_Legend -> setItemMode(QwtLegend::CheckableItem);
@@ -46,6 +47,11 @@ void QxrdCenterFinderPlot::onProcessedImageAvailable(QxrdImageData *image)
   onCenterChanged(m_CenterFinder -> get_CenterX(), m_CenterFinder -> get_CenterY());
 }
 
+void QxrdCenterFinderPlot::onMaskedImageAvailable(QxrdImageData *image, QxrdMaskData *mask)
+{
+  onCenterChanged(m_CenterFinder -> get_CenterX(), m_CenterFinder -> get_CenterY());
+}
+
 void QxrdCenterFinderPlot::onCenterXChanged(double cx)
 {
   onCenterChanged(cx, m_CenterFinder -> get_CenterY());
@@ -59,6 +65,7 @@ void QxrdCenterFinderPlot::onCenterYChanged(double cy)
 void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 {
   QxrdImageData *img = m_DataProcessor -> data();
+  QxrdMaskData  *mask = m_DataProcessor -> mask();
 
   int width =img->get_Width();
   int height=img->get_Height();
@@ -84,7 +91,7 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
       if (ix >= 0 && iy >= 0 && ix < width && iy < height) {
         double v = img->value(ix,iy);
-        bool mv = img->maskValue(ix,iy);
+        bool mv = mask->maskValue(ix,iy);
 
         if (mv) {
           m_XData[nn] = n;
@@ -137,6 +144,9 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.cpp,v $
+*  Revision 1.10  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.9  2009/07/25 15:18:19  jennings
 *  Moved graph zooming code into QxrdPlot - a common base class
 *

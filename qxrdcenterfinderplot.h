@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.h,v 1.7 2009/07/25 15:18:19 jennings Exp $
+*  $Id: qxrdcenterfinderplot.h,v 1.8 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,6 +12,7 @@
 #include "qxrdplot.h"
 
 class QxrdImageData;
+class QxrdMaskData;
 class QwtLegend;
 class QxrdDataProcessor;
 class QxrdCenterFinder;
@@ -30,6 +31,7 @@ public slots:
   void onCenterYChanged(double cy);
   void onCenterChanged(double cx, double cy);
   void onProcessedImageAvailable(QxrdImageData *image);
+  void onMaskedImageAvailable(QxrdImageData *image, QxrdMaskData *mask);
 
 private:
   QwtLegend           *m_Legend;
@@ -38,7 +40,7 @@ private:
   QxrdCenterFinder    *m_CenterFinder;
   bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdcenterfinderplot.h,v 1.7 2009/07/25 15:18:19 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinderplot.h,v 1.8 2009/08/04 16:45:20 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDERPLOT_H
@@ -46,6 +48,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.h,v $
+*  Revision 1.8  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.7  2009/07/25 15:18:19  jennings
 *  Moved graph zooming code into QxrdPlot - a common base class
 *

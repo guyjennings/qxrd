@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.31 2009/08/02 21:14:16 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.32 2009/08/04 16:45:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -58,7 +58,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.31 2009/08/02 21:14:16 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.32 2009/08/04 16:45:20 jennings Exp $")
 {
   setCustomTracker(new QxrdPlotTracker(canvas(), this));
   setCustomZoomer(new QxrdPlotZoomer(canvas(), this));
@@ -446,10 +446,29 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdImageData *image)
   m_DataProcessor -> decrementProcessedCount();
 
   QxrdRasterData data(image, get_InterpolatePixels());
-  QxrdMaskRasterData mask(image, get_InterpolatePixels());
 
   setImage(data);
-  setMask(mask);
+
+  setTitle(image -> get_Title());
+
+  replotImage();
+}
+
+void QxrdImagePlot::onMaskedImageAvailable(QxrdImageData *image, QxrdMaskData *mask)
+{
+  if (!image ||
+      image->get_Width() != m_Raster.width() ||
+      image->get_Height() != m_Raster.height()) {
+    m_FirstTime = true;
+  }
+
+  m_DataProcessor -> decrementProcessedCount();
+
+  QxrdRasterData data(image, get_InterpolatePixels());
+  QxrdMaskRasterData msk(mask, get_InterpolatePixels());
+
+  setImage(data);
+  setMask(msk);
 
   setTitle(image -> get_Title());
 
@@ -558,6 +577,9 @@ void QxrdImagePlot::replot()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.32  2009/08/04 16:45:20  jennings
+*  Moved mask data into separate class
+*
 *  Revision 1.31  2009/08/02 21:14:16  jennings
 *  Added masking dummy routines
 *
