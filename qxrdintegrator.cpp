@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.5 2009/08/04 22:03:31 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.6 2009/08/05 16:44:08 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,7 +16,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessor *proc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_DataProcessor(proc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.5 2009/08/04 22:03:31 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.6 2009/08/05 16:44:08 jennings Exp $")
 {
 }
 
@@ -48,12 +48,22 @@ void QxrdIntegrator::performIntegration(QxrdImageData *image, QxrdMaskData *mask
   int nCols = image -> get_Width();
   double cx = m_DataProcessor -> centerFinder() -> get_CenterX();
   double cy = m_DataProcessor -> centerFinder() -> get_CenterY();
-  int imax  = 0;
-  int irmax = (int) sqrt(nRows*nRows+nCols*nCols) + 2;
   int oversample = get_Oversample();
-  double oversampleStep = 1.0/oversample;
 
-  QVector<double> integral(irmax*oversample), sumvalue(irmax*oversample);
+  if (oversample < 1) {
+    oversample = 1;
+    set_Oversample(1);
+  } else if (oversample > 16) {
+    oversample = 16;
+    set_Oversample(16);
+  }
+
+  double oversampleStep = 1.0/oversample;
+  double halfOversampleStep = oversampleStep/2.0;
+
+  int imax  = 0;
+  int irmax = (int) (oversample*sqrt(nRows*nRows+nCols*nCols)) + 2;
+  QVector<double> integral(irmax), sumvalue(irmax);
 
   integral.fill(0);
   sumvalue.fill(0);
@@ -63,17 +73,19 @@ void QxrdIntegrator::performIntegration(QxrdImageData *image, QxrdMaskData *mask
       if (mask->value(x, y)) {
         double val = image->value(x, y);
         for (double oversampley = 0; oversampley < 1; oversampley += oversampleStep) {
-          double yy = y+oversampley;
+          double yy = y+oversampley+halfOversampleStep;
           double cy2= (yy - cy)*(yy - cy);
           for (double oversamplex = 0; oversamplex < 1; oversamplex += oversampleStep) {
-            double xx = x+oversamplex;
+            double xx = x+oversamplex+halfOversampleStep;
             double r = sqrt(cy2 + (xx-cx)*(xx-cx));
             int ir = (int) (r * oversample);
 
-            if (ir > irmax) irmax = ir;
+            if (ir > imax) imax = ir;
 
-            integral[ir] += val;
-            sumvalue[ir] += 1;
+            if (ir >= 0 && ir < irmax) {
+              integral[ir] += val;
+              sumvalue[ir] += 1;
+            }
           }
         }
       }
@@ -93,12 +105,15 @@ void QxrdIntegrator::performIntegration(QxrdImageData *image, QxrdMaskData *mask
 
   emit newIntegrationAvailable(x,y);
 
-  emit printMessage(tr("Integration took %1 msec").arg(tic.msec()));
+  emit printMessage(tr("Integration took %1 msec").arg(tic.restart()));
 }
 
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.6  2009/08/05 16:44:08  jennings
+*  More changes to oversampling code for integration
+*
 *  Revision 1.5  2009/08/04 22:03:31  jennings
 *  Moved integration code into QxrdIntegrator, added oversampling option
 *  Add each integration result to the az-avg plot panel

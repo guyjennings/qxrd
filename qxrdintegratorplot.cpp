@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.cpp,v 1.8 2009/08/04 22:03:31 jennings Exp $
+*  $Id: qxrdintegratorplot.cpp,v 1.9 2009/08/05 16:44:08 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,11 +11,12 @@
 #include <QMetaMethod>
 #include <qwt_legend.h>
 #include <stdio.h>
+//#include <QTime>
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   : QxrdPlot(false, false, parent),
     m_Legend(NULL),
-    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.8 2009/08/04 22:03:31 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.9 2009/08/05 16:44:08 jennings Exp $")
 {
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
@@ -29,18 +30,26 @@ static int plotIndex=0;
 
 void QxrdIntegratorPlot::onNewIntegrationAvailable(QVector<double> x, QVector<double> y)
 {
-  printf("New integration available, %d, %d points\n", x.size(), y.size());
+//  QTime tic;
+//  tic.start();
+
+//  printf("New integration available, %d, %d points\n", x.size(), y.size());
 
   QwtPlotCurve *pc = new QwtPlotCurve(tr("Plot %1").arg(plotIndex++));
   pc -> setData(x.data(), y.data(), x.size());
   pc -> setPen(QPen(QColor::fromHsv(plotIndex*67, 255, 255)));
   pc -> attach(this);
   replot();
+//
+//  printf("Plotting took %d msec\n", tic.restart());
 }
 
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.cpp,v $
+*  Revision 1.9  2009/08/05 16:44:08  jennings
+*  More changes to oversampling code for integration
+*
 *  Revision 1.8  2009/08/04 22:03:31  jennings
 *  Moved integration code into QxrdIntegrator, added oversampling option
 *  Add each integration result to the az-avg plot panel
