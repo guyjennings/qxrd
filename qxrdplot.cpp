@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.cpp,v 1.3 2009/07/25 15:18:19 jennings Exp $
+*  $Id: qxrdplot.cpp,v 1.4 2009/08/05 14:04:33 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@ QxrdPlot::QxrdPlot(bool customTracker, bool customZoomer, QWidget *parent)
     m_Zoomer(NULL),
     m_Panner(NULL),
     m_Magnifier(NULL),
-    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.3 2009/07/25 15:18:19 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.4 2009/08/05 14:04:33 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -38,6 +38,9 @@ QxrdPlot::QxrdPlot(bool customTracker, bool customZoomer, QWidget *parent)
   m_Magnifier -> setEnabled(true);
   m_Magnifier -> setMouseButton(Qt::NoButton);
   m_Magnifier -> setAxisEnabled(QwtPlot::yRight, false);
+
+  setAxisLabelRotation(QwtPlot::yLeft, -90);
+  setAxisLabelAlignment(QwtPlot::yLeft, Qt::AlignVCenter);
 }
 
 void QxrdPlot::setCustomTracker(QwtPlotPicker *tracker)
@@ -96,6 +99,10 @@ void QxrdPlot::zoomOut()
 /******************************************************************
 *
 *  $Log: qxrdplot.cpp,v $
+*  Revision 1.4  2009/08/05 14:04:33  jennings
+*  Turned off right hand color bar
+*  Rotated left axis labels
+*
 *  Revision 1.3  2009/07/25 15:18:19  jennings
 *  Moved graph zooming code into QxrdPlot - a common base class
 *

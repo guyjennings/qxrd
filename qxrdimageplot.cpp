@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.32 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.33 2009/08/05 14:04:25 jennings Exp $
 *
 *******************************************************************/
 
@@ -58,7 +58,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.32 2009/08/04 16:45:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.33 2009/08/05 14:04:25 jennings Exp $")
 {
   setCustomTracker(new QxrdPlotTracker(canvas(), this));
   setCustomZoomer(new QxrdPlotZoomer(canvas(), this));
@@ -179,11 +179,11 @@ void QxrdImagePlot::recalculateDisplayedRange()
 
   m_Raster.setDisplayedRange(mindis, maxdis);
 
-  QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
-  setAxisScale(QwtPlot::yRight, mindis, maxdis);
-  rightAxis -> setColorBarEnabled(true);
-  rightAxis -> setColorMap(m_Spectrogram->data().range(),
-                           m_Spectrogram->colorMap());
+//  QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
+//  setAxisScale(QwtPlot::yRight, mindis, maxdis);
+//  rightAxis -> setColorBarEnabled(true);
+//  rightAxis -> setColorMap(m_Spectrogram->data().range(),
+//                           m_Spectrogram->colorMap());
 //
 //  replotImage();
 }
@@ -386,10 +386,10 @@ void QxrdImagePlot::changedColorMap()
   m_MaskImage   -> invalidateCache();
   m_MaskImage   -> itemChanged();
 
-  QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
-  rightAxis -> setColorBarEnabled(true);
-  rightAxis -> setColorMap(m_Spectrogram->data().range(),
-                           m_Spectrogram->colorMap());
+//  QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
+//  rightAxis -> setColorBarEnabled(true);
+//  rightAxis -> setColorMap(m_Spectrogram->data().range(),
+//                           m_Spectrogram->colorMap());
 
   replotImage();
 }
@@ -404,10 +404,10 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
   m_Spectrogram -> invalidateCache();
   m_Spectrogram -> itemChanged();
 
-  QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
-  rightAxis -> setColorBarEnabled(true);
-  rightAxis -> setColorMap(QwtDoubleInterval(0,1),
-                           m_Spectrogram->colorMap());
+//  QwtScaleWidget *rightAxis = axisWidget(QwtPlot::yRight);
+//  rightAxis -> setColorBarEnabled(true);
+//  rightAxis -> setColorMap(QwtDoubleInterval(0,1),
+//                           m_Spectrogram->colorMap());
 
    enableAxis(QwtPlot::yRight);
 
@@ -577,6 +577,10 @@ void QxrdImagePlot::replot()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.33  2009/08/05 14:04:25  jennings
+*  Turned off right hand color bar
+*  Rotated left axis labels
+*
 *  Revision 1.32  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *
