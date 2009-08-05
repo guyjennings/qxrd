@@ -7,6 +7,9 @@ QMAKE_CXXFLAGS += -g
 QMAKE_CFLAGS += -g
 QMAKE_LFLAGS += -g
 
+QMAKE_CXXFLAGS +=  -msse2 -ftree-vectorize -ftree-vectorizer-verbose=5
+QMAKE_CFLAGS +=  -msse2 -ftree-vectorize -ftree-vectorizer-verbose=5
+
 # INCLUDEPATH += /usr/local/lib/spec.d/include/
 MOC_DIR = moc
 UI_DIR = ui
