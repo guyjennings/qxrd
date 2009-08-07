@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.17 2009/08/04 20:42:53 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.18 2009/08/07 22:21:56 jennings Exp $
 *
 *******************************************************************/
 
@@ -93,6 +93,11 @@ public slots:
   void loadBadPixels(QString name);
   void loadGainMap(QString name);
 
+  void newImage(int ncols, int nrows);
+  void exponentialTail(double cx, double cy, double width, int oversample);
+  void reciprocalTail(double cx, double cy, double strength, int oversample);
+  void powderRing(double cx, double cy, double width, double strength, int oversample);
+
 public:
   QxrdImageData *takeNextFreeImage();
 //  QxrdImageData *takeLatestProcessedImage();
@@ -169,7 +174,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.17 2009/08/04 20:42:53 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.18 2009/08/07 22:21:56 jennings Exp $");
 };
 
 #endif
@@ -177,6 +182,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.18  2009/08/07 22:21:56  jennings
+*  Added a number of sample data creation routines to QxrdDataProcessor
+*  Added a parallelized integration routine to QxrdIntegrator
+*
 *  Revision 1.17  2009/08/04 20:42:53  jennings
 *  Simple, initial, implementation of integration
 *

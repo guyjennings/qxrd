@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.h,v 1.5 2009/08/04 22:03:31 jennings Exp $
+*  $Id: qxrdintegrator.h,v 1.6 2009/08/07 22:21:56 jennings Exp $
 *
 *******************************************************************/
 
@@ -38,15 +38,17 @@ signals:
 
 public slots:
   void performIntegration();
+  void integrate(double cx, double cy, int oversample, int normalize);
+  void parallelIntegrate(int nthreads, double cx, double cy, int oversample, int normalize);
 
 private:
-  void performIntegration(QxrdImageData *image, QxrdMaskData *mask);
+  void parallelIntegrateMap(int thread, int nthreads, double cx, double cy, int oversample/*, int normalize*/);
 
 private:
   mutable QMutex            m_Mutex;
   QxrdDataProcessor        *m_DataProcessor;
 
-  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.5 2009/08/04 22:03:31 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.6 2009/08/07 22:21:56 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATOR_H
@@ -54,6 +56,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegrator.h,v $
+*  Revision 1.6  2009/08/07 22:21:56  jennings
+*  Added a number of sample data creation routines to QxrdDataProcessor
+*  Added a parallelized integration routine to QxrdIntegrator
+*
 *  Revision 1.5  2009/08/04 22:03:31  jennings
 *  Moved integration code into QxrdIntegrator, added oversampling option
 *  Add each integration result to the az-avg plot panel

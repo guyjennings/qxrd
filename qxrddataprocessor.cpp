@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.25 2009/08/04 20:42:53 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.26 2009/08/07 22:21:56 jennings Exp $
 *
 *******************************************************************/
 
@@ -47,7 +47,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.25 2009/08/04 20:42:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.26 2009/08/07 22:21:56 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -574,9 +574,79 @@ QxrdIntegrator    *QxrdDataProcessor::integrator() const
   return m_Integrator;
 }
 
+void QxrdDataProcessor::newImage(int ncols, int nrows)
+{
+  m_Data -> resize(ncols, nrows);
+  m_Data -> fill(0);
+
+  newData(m_Data);
+}
+
+void QxrdDataProcessor::exponentialTail(double cx, double cy, double width, int oversample)
+{
+  int nr = m_Data -> get_Height();
+  int nc = m_Data -> get_Width();
+
+  for (int y=0; y<nr; y++) {
+    for (int x=0; x<nc; x++) {
+      double sum = 0;
+
+      for (int iy = 0; iy < oversample; iy++) {
+        double yy = (double) y + ((double) iy)/((double) oversample) - cy;
+        double yy2 = yy*yy;
+        for (int ix = 0; ix < oversample; ix++) {
+          double xx = (double) x + ((double) ix)/((double) oversample) - cx;
+          double xx2 = xx*xx;
+          double r = sqrt(yy2 + xx2);
+          sum += exp(-r/width);
+        }
+      }
+
+      m_Data -> setValue(x, y, m_Data -> value(x,y) + sum/(oversample*oversample));
+    }
+  }
+
+  newData(m_Data);
+}
+
+void QxrdDataProcessor::reciprocalTail(double cx, double cy, double strength, int oversample)
+{
+  int nr = m_Data -> get_Height();
+  int nc = m_Data -> get_Width();
+
+  for (int y=0; y<nr; y++) {
+    for (int x=0; x<nc; x++) {
+      double sum = 0;
+
+      for (int iy = 0; iy < oversample; iy++) {
+        double yy = (double) y + ((double) iy)/((double) oversample) - cy;
+        double yy2 = yy*yy;
+        for (int ix = 0; ix < oversample; ix++) {
+          double xx = (double) x + ((double) ix)/((double) oversample) - cx;
+          double xx2 = xx*xx;
+          double r = sqrt(yy2 + xx2);
+          sum += strength/r;
+        }
+      }
+
+      m_Data -> setValue(x, y, m_Data -> value(x,y) + sum/(oversample*oversample));
+    }
+  }
+
+  newData(m_Data);
+}
+
+void QxrdDataProcessor::powderRing(double cx, double cy, double width, double strength, int oversample)
+{
+}
+
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.26  2009/08/07 22:21:56  jennings
+*  Added a number of sample data creation routines to QxrdDataProcessor
+*  Added a parallelized integration routine to QxrdIntegrator
+*
 *  Revision 1.25  2009/08/04 20:42:53  jennings
 *  Simple, initial, implementation of integration
 *
