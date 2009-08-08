@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.11 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.12 2009/08/08 20:09:45 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.11 2009/08/04 16:45:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.12 2009/08/08 20:09:45 jennings Exp $")
 {
 }
 
@@ -99,8 +99,8 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 
 //      painter.setBackgroundMode(Qt::OpaqueMode);
       painter.setPen(Qt::white);
-      painter.setFont(QFont("Times", 260, QFont::Bold, true));
-      painter.drawText(nCols/4, nRows/4, "Hello");
+      painter.setFont(QFont("Times", 80, QFont::Bold, true));
+      painter.drawText(nCols/4, nRows/12, QDateTime::currentDateTime().toString("yyyyMMdd:hhmmss.zzz"));
 
       painter.fillRect(0,0,nCols/4,nRows/4, Qt::lightGray);
 
@@ -117,7 +117,7 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 //      painter.setBackground(Qt::white);
       painter.drawEllipse(nCols/4, nRows/8, nCols/2, nRows/2);
 
-      QImage newImage = sampleImage/*.mirrored(false, true)*/;
+      QImage newImage = sampleImage.mirrored(false, true);
 
       for (int j=0; j<nRows; j++) {
         for (int i=0; i<nCols; i++) {
@@ -185,6 +185,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.12  2009/08/08 20:09:45  jennings
+*  Added timestamp to simulated images
+*
 *  Revision 1.11  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *
