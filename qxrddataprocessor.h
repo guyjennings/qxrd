@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.18 2009/08/07 22:21:56 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.19 2009/08/08 20:14:55 jennings Exp $
 *
 *******************************************************************/
 
@@ -96,7 +96,7 @@ public slots:
   void newImage(int ncols, int nrows);
   void exponentialTail(double cx, double cy, double width, int oversample);
   void reciprocalTail(double cx, double cy, double strength, int oversample);
-  void powderRing(double cx, double cy, double width, double strength, int oversample);
+  void powderRing(double cx, double cy, double radius, double width, double strength, int oversample);
 
 public:
   QxrdImageData *takeNextFreeImage();
@@ -174,7 +174,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.18 2009/08/07 22:21:56 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.19 2009/08/08 20:14:55 jennings Exp $");
 };
 
 #endif
@@ -182,6 +182,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.19  2009/08/08 20:14:55  jennings
+*  Added powder ring calculation operations
+*
 *  Revision 1.18  2009/08/07 22:21:56  jennings
 *  Added a number of sample data creation routines to QxrdDataProcessor
 *  Added a parallelized integration routine to QxrdIntegrator
