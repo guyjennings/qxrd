@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.h,v 1.6 2009/08/07 22:21:56 jennings Exp $
+*  $Id: qxrdintegrator.h,v 1.7 2009/08/08 20:15:36 jennings Exp $
 *
 *******************************************************************/
 
@@ -40,15 +40,24 @@ public slots:
   void performIntegration();
   void integrate(double cx, double cy, int oversample, int normalize);
   void parallelIntegrate(int nthreads, double cx, double cy, int oversample, int normalize);
+  void integrate2(double cx, double cy, int oversample, int normalize);
+  void tableIntegrate(int nthreads, double cx, double cy, int oversample, int normalize);
 
 private:
   void parallelIntegrateMap(int thread, int nthreads, double cx, double cy, int oversample/*, int normalize*/);
+  void tableIntegrateSetup(int nthreads, double cx, double cy, int oversample, int normalize);
+  void tableIntegrateMap(int thread, int nthreads, double cx, double cy, int oversample/*, int normalize*/);
 
 private:
   mutable QMutex            m_Mutex;
   QxrdDataProcessor        *m_DataProcessor;
+  QVector<int>              m_TableData;
+  int                       m_TableStride;
+  QVector<double>           m_OutputData;
+  QVector<double>           m_OutputSums;
+  int                       m_OutputStride;
 
-  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.6 2009/08/07 22:21:56 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.7 2009/08/08 20:15:36 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATOR_H
@@ -56,6 +65,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegrator.h,v $
+*  Revision 1.7  2009/08/08 20:15:36  jennings
+*  Added some more integration routines
+*
 *  Revision 1.6  2009/08/07 22:21:56  jennings
 *  Added a number of sample data creation routines to QxrdDataProcessor
 *  Added a parallelized integration routine to QxrdIntegrator
