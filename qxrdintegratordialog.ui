@@ -14,14 +14,25 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>5</number>
+   </property>
+   <property name="spacing">
+    <number>2</number>
+   </property>
    <item row="1" column="0" colspan="2">
     <widget class="QPushButton" name="m_IntegrateButton">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Integrate</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="2" column="0" colspan="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -36,6 +47,11 @@
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Oversampling Factor</string>
      </property>
@@ -43,6 +59,11 @@
    </item>
    <item row="0" column="1">
     <widget class="QSpinBox" name="m_OversampleFactor">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="toolTip">
       <string>Specify oversampling factor for angular integration</string>
      </property>
