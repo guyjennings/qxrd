@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorthread.cpp,v 1.2 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrddataprocessorthread.cpp,v 1.3 2009/08/09 14:38:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,7 +11,7 @@
 QxrdDataProcessorThread::QxrdDataProcessorThread(/*QxrdWindow *win, */QxrdAcquisition *acq)
   : QThread(),
     m_DataProcessor(NULL),
-    SOURCE_IDENT("$id$")
+    SOURCE_IDENT("$Id: qxrddataprocessorthread.cpp,v 1.3 2009/08/09 14:38:27 jennings Exp $")
 {
   m_DataProcessor = new QxrdDataProcessor(/*win, */acq, NULL);
   m_DataProcessor -> moveToThread(this);
@@ -47,6 +47,9 @@ QxrdDataProcessor *QxrdDataProcessorThread::dataProcessor() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessorthread.cpp,v $
+*  Revision 1.3  2009/08/09 14:38:27  jennings
+*  Fixed a couple of cvs Id keyword typos
+*
 *  Revision 1.2  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *
