@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.h,v 1.3 2009/07/25 15:18:19 jennings Exp $
+*  $Id: qxrdplot.h,v 1.4 2009/08/09 15:40:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,6 +15,7 @@ class QwtPlotPicker;
 class QwtPlotZoomer;
 class QwtPlotPanner;
 class QwtPlotMagnifier;
+class QxrdPlotMeasurer;
 
 class QxrdPlot : public QwtPlot
 {
@@ -27,6 +28,9 @@ public slots:
   void zoomIn();
   void zoomOut();
 
+  void enableZooming();
+  void enableMeasuring();
+
 protected:
   void setCustomTracker(QwtPlotPicker *tracker);
   void setCustomZoomer(QwtPlotZoomer *zoomer);
@@ -36,9 +40,10 @@ protected:
   QwtPlotZoomer       *m_Zoomer;
   QwtPlotPanner       *m_Panner;
   QwtPlotMagnifier    *m_Magnifier;
+  QxrdPlotMeasurer    *m_Measurer;
 
 private:
-  HEADER_IDENT("$Id: qxrdplot.h,v 1.3 2009/07/25 15:18:19 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdplot.h,v 1.4 2009/08/09 15:40:32 jennings Exp $");
 };
 
 #endif // QXRDPLOT_H
@@ -46,6 +51,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdplot.h,v $
+*  Revision 1.4  2009/08/09 15:40:32  jennings
+*  Added measurer tool to all graphs
+*
 *  Revision 1.3  2009/07/25 15:18:19  jennings
 *  Moved graph zooming code into QxrdPlot - a common base class
 *

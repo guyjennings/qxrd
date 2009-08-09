@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.27 2009/08/08 20:14:55 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.28 2009/08/09 15:40:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -48,7 +48,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.27 2009/08/08 20:14:55 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.28 2009/08/09 15:40:32 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -494,6 +494,25 @@ void QxrdDataProcessor::maskPolygon(QVector<QwtDoublePoint> poly)
   }
 }
 
+void QxrdDataProcessor::measurePolygon(QVector<QwtDoublePoint> poly)
+{
+  foreach(QwtDoublePoint pt, poly) {
+    emit printMessage(tr("Measure pt (%1,%2) = %3").arg(pt.x()).arg(pt.y())
+                      .arg(m_Data -> value(pt.x(),pt.y())));
+  }
+}
+
+void QxrdDataProcessor::printMeasuredPolygon(QVector<QwtDoublePoint> poly)
+{
+  foreach(QwtDoublePoint pt, poly) {
+    emit printMessage(tr("Measure pt (%1,%2)").arg(pt.x()).arg(pt.y()));
+  }
+}
+
+void QxrdDataProcessor::slicePolygon(QVector<QwtDoublePoint> poly)
+{
+}
+
 QxrdImageData *QxrdDataProcessor::data() const
 {
   QMutexLocker lock(&m_Mutex);
@@ -673,6 +692,9 @@ void QxrdDataProcessor::powderRing(double cx, double cy, double radius, double w
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.28  2009/08/09 15:40:32  jennings
+*  Added measurer tool to all graphs
+*
 *  Revision 1.27  2009/08/08 20:14:55  jennings
 *  Added powder ring calculation operations
 *

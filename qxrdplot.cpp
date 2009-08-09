@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.cpp,v 1.4 2009/08/05 14:04:33 jennings Exp $
+*  $Id: qxrdplot.cpp,v 1.5 2009/08/09 15:40:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -10,6 +10,7 @@
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
 #include <qwt_plot_magnifier.h>
+#include "qxrdplotmeasurer.h"
 
 QxrdPlot::QxrdPlot(bool customTracker, bool customZoomer, QWidget *parent)
   : QwtPlot(parent),
@@ -17,7 +18,8 @@ QxrdPlot::QxrdPlot(bool customTracker, bool customZoomer, QWidget *parent)
     m_Zoomer(NULL),
     m_Panner(NULL),
     m_Magnifier(NULL),
-    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.4 2009/08/05 14:04:33 jennings Exp $")
+    m_Measurer(NULL),
+    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.5 2009/08/09 15:40:32 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -38,6 +40,9 @@ QxrdPlot::QxrdPlot(bool customTracker, bool customZoomer, QWidget *parent)
   m_Magnifier -> setEnabled(true);
   m_Magnifier -> setMouseButton(Qt::NoButton);
   m_Magnifier -> setAxisEnabled(QwtPlot::yRight, false);
+
+  m_Measurer = new QxrdPlotMeasurer(canvas(), this);
+  m_Measurer -> setEnabled(false);
 
   setAxisLabelRotation(QwtPlot::yLeft, -90);
   setAxisLabelAlignment(QwtPlot::yLeft, Qt::AlignVCenter);
@@ -96,9 +101,26 @@ void QxrdPlot::zoomOut()
   m_Zoomer -> zoom(-1);
 }
 
+void QxrdPlot::enableZooming()
+{
+  m_Tracker      -> setEnabled(true);
+  m_Zoomer       -> setEnabled(true);
+  m_Measurer     -> setEnabled(false);
+}
+
+void QxrdPlot::enableMeasuring()
+{
+  m_Tracker  -> setEnabled(false);
+  m_Zoomer   -> setEnabled(false);
+  m_Measurer -> setEnabled(true);
+}
+
 /******************************************************************
 *
 *  $Log: qxrdplot.cpp,v $
+*  Revision 1.5  2009/08/09 15:40:32  jennings
+*  Added measurer tool to all graphs
+*
 *  Revision 1.4  2009/08/05 14:04:33  jennings
 *  Turned off right hand color bar
 *  Rotated left axis labels

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplotslicer.h,v 1.3 2009/08/02 18:03:34 jennings Exp $
+*  $Id: qxrdplotslicer.h,v 1.4 2009/08/09 15:40:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,9 +17,12 @@ class QxrdPlotSlicer : public QwtPlotPicker
 {
 public:
   QxrdPlotSlicer(QwtPlotCanvas *canvas, QxrdImagePlot *plot);
+
+  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
+
 private:
   QxrdImagePlot   *m_Plot;
-  HEADER_IDENT("$Id: qxrdplotslicer.h,v 1.3 2009/08/02 18:03:34 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdplotslicer.h,v 1.4 2009/08/09 15:40:32 jennings Exp $");
 };
 
 #endif // QXRDPLOTSLICER_H
@@ -27,6 +30,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdplotslicer.h,v $
+*  Revision 1.4  2009/08/09 15:40:32  jennings
+*  Added measurer tool to all graphs
+*
 *  Revision 1.3  2009/08/02 18:03:34  jennings
 *  Minor formatting change
 *

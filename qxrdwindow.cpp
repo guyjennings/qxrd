@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.79 2009/08/04 20:42:53 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.80 2009/08/09 15:40:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -49,7 +49,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.79 2009/08/04 20:42:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.80 2009/08/09 15:40:32 jennings Exp $")
 {
   setupUi(this);
 
@@ -133,13 +133,15 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ImageMaskCirclesButton, SIGNAL(clicked()), m_Plot, SLOT(enableMaskCircles()));
   connect(m_ImageMaskPolygonsButton, SIGNAL(clicked()), m_Plot, SLOT(enableMaskPolygons()));
 
-  connect(m_CenteringZoomInButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(zoomIn()));
+  connect(m_CenteringZoomInButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(enableZooming()));
   connect(m_CenteringZoomOutButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(zoomOut()));
   connect(m_CenteringZoomAllButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(autoScale()));
+  connect(m_CenteringMeasureButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(enableMeasuring()));
 
-  connect(m_IntegratorZoomInButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(zoomIn()));
+  connect(m_IntegratorZoomInButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableZooming()));
   connect(m_IntegratorZoomOutButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(zoomOut()));
   connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(autoScale()));
+  connect(m_IntegratorMeasureButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableMeasuring()));
 
   connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
 
@@ -218,6 +220,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   m_Plot -> setDataProcessor(m_DataProcessor);
   m_CenterFinderPlot -> setDataProcessor(m_DataProcessor);
+  m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
   connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdImageData *)),
           m_Plot, SLOT(onProcessedImageAvailable(QxrdImageData *)));
@@ -582,6 +585,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.80  2009/08/09 15:40:32  jennings
+*  Added measurer tool to all graphs
+*
 *  Revision 1.79  2009/08/04 20:42:53  jennings
 *  Simple, initial, implementation of integration
 *

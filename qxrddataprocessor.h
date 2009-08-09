@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.19 2009/08/08 20:14:55 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.20 2009/08/09 15:40:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -86,6 +86,10 @@ public slots:
   void invertMask();
   void maskCircle(QwtDoubleRect pt);
   void maskPolygon(QwtArray<QwtDoublePoint> poly);
+
+  void measurePolygon(QwtArray<QwtDoublePoint> poly);
+  void slicePolygon(QwtArray<QwtDoublePoint> poly);
+  void printMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
 
   void loadData(QString name);
   void saveData(QString name);
@@ -174,7 +178,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.19 2009/08/08 20:14:55 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.20 2009/08/09 15:40:32 jennings Exp $");
 };
 
 #endif
@@ -182,6 +186,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.20  2009/08/09 15:40:32  jennings
+*  Added measurer tool to all graphs
+*
 *  Revision 1.19  2009/08/08 20:14:55  jennings
 *  Added powder ring calculation operations
 *
