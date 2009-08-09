@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.cpp,v 1.10 2009/08/09 15:39:10 jennings Exp $
+*  $Id: qxrdintegratorplot.cpp,v 1.11 2009/08/09 18:00:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -21,7 +21,7 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
     m_Legend(NULL),
     m_DataProcessor(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.10 2009/08/09 15:39:10 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.11 2009/08/09 18:00:00 jennings Exp $")
 {
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
@@ -58,9 +58,18 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QVector<double> x, QVector<do
 //  printf("Plotting took %d msec\n", tic.restart());
 }
 
+void QxrdIntegratorPlot::clearGraph()
+{
+  clear();
+  replot();
+}
+
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.cpp,v $
+*  Revision 1.11  2009/08/09 18:00:00  jennings
+*  Added graph clearing button to integrator dialog
+*
 *  Revision 1.10  2009/08/09 15:39:10  jennings
 *  Added a separate QxrdImagePlotMeasurer class
 *

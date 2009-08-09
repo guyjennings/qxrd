@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.80 2009/08/09 15:40:32 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.81 2009/08/09 18:00:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -49,7 +49,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.80 2009/08/09 15:40:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.81 2009/08/09 18:00:00 jennings Exp $")
 {
   setupUi(this);
 
@@ -142,6 +142,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_IntegratorZoomOutButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(zoomOut()));
   connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(autoScale()));
   connect(m_IntegratorMeasureButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableMeasuring()));
+
+  connect(m_IntegratorDialog -> m_ClearGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearGraph()));
 
   connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
 
@@ -585,6 +587,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.81  2009/08/09 18:00:00  jennings
+*  Added graph clearing button to integrator dialog
+*
 *  Revision 1.80  2009/08/09 15:40:32  jennings
 *  Added measurer tool to all graphs
 *

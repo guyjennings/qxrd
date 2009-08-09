@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.h,v 1.8 2009/08/09 15:39:10 jennings Exp $
+*  $Id: qxrdintegratorplot.h,v 1.9 2009/08/09 18:00:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -26,13 +26,14 @@ public:
 
 public slots:
   void onNewIntegrationAvailable(QVector<double> x, QVector<double> y);
+  void clearGraph();
 
 private:
   QwtLegend           *m_Legend;
   QxrdDataProcessor   *m_DataProcessor;
   QxrdIntegrator      *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.8 2009/08/09 15:39:10 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.9 2009/08/09 18:00:00 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATORPLOT_H
@@ -40,6 +41,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.h,v $
+*  Revision 1.9  2009/08/09 18:00:00  jennings
+*  Added graph clearing button to integrator dialog
+*
 *  Revision 1.8  2009/08/09 15:39:10  jennings
 *  Added a separate QxrdImagePlotMeasurer class
 *

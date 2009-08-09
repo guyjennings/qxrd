@@ -52,4 +52,21 @@ file names where necessary.
 
 -------------------------------------------------------
 
+Load/save mask and dark images when program starts/exits
+
+-------------------------------------------------------
+
+Investigate why the vertical window increases each time program is run
+
+-------------------------------------------------------
+
+Implement generalized image slicing routine - integrate over a rectangular
+region, rather than along a line.
+
+-------------------------------------------------------
+
+Re-implement center finder plot to use routine above.
+
+-------------------------------------------------------
+
 #endif // TODO_H
