@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.33 2009/08/05 14:04:25 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.34 2009/08/09 15:39:10 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,7 +9,7 @@
 #include "qxrdplotzoomer.h"
 #include "qxrdplottracker.h"
 #include "qxrdplotslicer.h"
-#include "qxrdplotmeasurer.h"
+#include "qxrdimageplotmeasurer.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdcenterfinderpicker.h"
 #include "qxrddataprocessor.h"
@@ -58,7 +58,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.33 2009/08/05 14:04:25 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.34 2009/08/09 15:39:10 jennings Exp $")
 {
   setCustomTracker(new QxrdPlotTracker(canvas(), this));
   setCustomZoomer(new QxrdPlotZoomer(canvas(), this));
@@ -69,7 +69,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_Slicer = new QxrdPlotSlicer(canvas(), this);
   m_Slicer -> setEnabled(false);
 
-  m_Measurer = new QxrdPlotMeasurer(canvas(), this);
+  m_Measurer = new QxrdImagePlotMeasurer(canvas(), this);
   m_Measurer -> setEnabled(false);
 
   m_Legend = new QwtLegend;
@@ -126,6 +126,12 @@ void QxrdImagePlot::setDataProcessor(QxrdDataProcessor *proc)
 
   connect(m_Polygons, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
           m_DataProcessor, SLOT(maskPolygon(QwtArray<QwtDoublePoint>)));
+
+  connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+          m_DataProcessor, SLOT(measurePolygon(QwtArray<QwtDoublePoint>)));
+
+  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+          m_DataProcessor, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
 }
 
 void QxrdImagePlot::readSettings(QxrdSettings *settings, QString section)
@@ -235,6 +241,10 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
   m_Circles  -> setRubberBandPen(pen);
   m_Polygons -> setTrackerPen(pen);
   m_Polygons -> setRubberBandPen(pen);
+  m_Measurer -> setTrackerPen(pen);
+  m_Measurer -> setRubberBandPen(pen);
+  m_Slicer   -> setTrackerPen(pen);
+  m_Slicer   -> setRubberBandPen(pen);
 
   if (m_CenterMarker) {
     m_CenterMarker -> setLinePen(pen);
@@ -577,6 +587,9 @@ void QxrdImagePlot::replot()
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.34  2009/08/09 15:39:10  jennings
+*  Added a separate QxrdImagePlotMeasurer class
+*
 *  Revision 1.33  2009/08/05 14:04:25  jennings
 *  Turned off right hand color bar
 *  Rotated left axis labels

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.cpp,v 1.10 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdcenterfinderplot.cpp,v 1.11 2009/08/09 15:39:10 jennings Exp $
 *
 *******************************************************************/
 
@@ -19,6 +19,7 @@
 #include <QMetaMethod>
 #include "qxrddataprocessor.h"
 #include "qxrdcenterfinder.h"
+#include "qxrdplotmeasurer.h"
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   : QxrdPlot(false, false, parent),
@@ -26,7 +27,7 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_DataProcessor(NULL),
     m_CenterFinder(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.10 2009/08/04 16:45:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.11 2009/08/09 15:39:10 jennings Exp $")
 {
   m_Legend = new QwtLegend();
   m_Legend -> setItemMode(QwtLegend::CheckableItem);
@@ -40,6 +41,9 @@ void QxrdCenterFinderPlot::setDataProcessor(QxrdDataProcessor *proc)
 {
   m_DataProcessor = proc;
   m_CenterFinder = m_DataProcessor -> centerFinder();
+
+  connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+          m_DataProcessor, SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
 }
 
 void QxrdCenterFinderPlot::onProcessedImageAvailable(QxrdImageData *image)
@@ -144,6 +148,9 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.cpp,v $
+*  Revision 1.11  2009/08/09 15:39:10  jennings
+*  Added a separate QxrdImagePlotMeasurer class
+*
 *  Revision 1.10  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *

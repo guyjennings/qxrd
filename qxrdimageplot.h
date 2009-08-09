@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.25 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.26 2009/08/09 15:39:10 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@
 class QxrdPlotZoomer;
 class QxrdPlotTracker;
 class QxrdPlotSlicer;
-class QxrdPlotMeasurer;
+class QxrdImagePlotMeasurer;
 class QwtPlotPanner;
 class QwtPlotMagnifier;
 class QwtLegend;
@@ -135,7 +135,7 @@ private:
   QwtPlotRescaler     *m_Rescaler;
 //  QxrdCenterFinder    *m_CenterFinder;
   QxrdPlotSlicer      *m_Slicer;
-  QxrdPlotMeasurer    *m_Measurer;
+  QxrdImagePlotMeasurer    *m_Measurer;
   QwtLegend           *m_Legend;
   QwtPlotSpectrogram  *m_Spectrogram;
   QwtPlotSpectrogram  *m_MaskImage;
@@ -155,7 +155,7 @@ private:
 //  QPen                       m_Pen;
   bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.25 2009/08/04 16:45:20 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.26 2009/08/09 15:39:10 jennings Exp $");
 };
 
 #endif
@@ -163,6 +163,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.26  2009/08/09 15:39:10  jennings
+*  Added a separate QxrdImagePlotMeasurer class
+*
 *  Revision 1.25  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *

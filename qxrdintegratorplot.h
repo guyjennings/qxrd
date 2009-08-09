@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.h,v 1.7 2009/08/04 22:03:31 jennings Exp $
+*  $Id: qxrdintegratorplot.h,v 1.8 2009/08/09 15:39:10 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,6 +12,8 @@
 #include "qxrdplot.h"
 
 class QwtPlotZoomer;
+class QxrdDataProcessor;
+class QxrdIntegrator;
 
 class QxrdIntegratorPlot : public QxrdPlot
 {
@@ -20,13 +22,17 @@ class QxrdIntegratorPlot : public QxrdPlot
 public:
   QxrdIntegratorPlot(QWidget *parent=0);
 
+  void setDataProcessor(QxrdDataProcessor *proc);
+
 public slots:
   void onNewIntegrationAvailable(QVector<double> x, QVector<double> y);
 
 private:
   QwtLegend           *m_Legend;
+  QxrdDataProcessor   *m_DataProcessor;
+  QxrdIntegrator      *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.7 2009/08/04 22:03:31 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.8 2009/08/09 15:39:10 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATORPLOT_H
@@ -34,6 +40,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.h,v $
+*  Revision 1.8  2009/08/09 15:39:10  jennings
+*  Added a separate QxrdImagePlotMeasurer class
+*
 *  Revision 1.7  2009/08/04 22:03:31  jennings
 *  Moved integration code into QxrdIntegrator, added oversampling option
 *  Add each integration result to the az-avg plot panel

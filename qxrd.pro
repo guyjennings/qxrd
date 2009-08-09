@@ -6,10 +6,13 @@ QT += network \
 QMAKE_CXXFLAGS += -g
 QMAKE_CFLAGS += -g
 QMAKE_LFLAGS += -g
-
-vectorize {
-  QMAKE_CXXFLAGS +=  -msse2 -ftree-vectorize -ftree-vectorizer-verbose=5
-  QMAKE_CFLAGS +=  -msse2 -ftree-vectorize -ftree-vectorizer-verbose=5
+vectorize { 
+    QMAKE_CXXFLAGS += -msse2 \
+        -ftree-vectorize \
+        -ftree-vectorizer-verbose=5
+    QMAKE_CFLAGS += -msse2 \
+        -ftree-vectorize \
+        -ftree-vectorizer-verbose=5
 }
 
 # INCLUDEPATH += /usr/local/lib/spec.d/include/
@@ -77,7 +80,8 @@ HEADERS += TODO.h \
     qxrddataprocessorthread.h \
     qxrdacquisitionsimulated.h \
     qxrdmaskpicker.h \
-    qxrdmaskdata.h
+    qxrdmaskdata.h \
+    qxrdimageplotmeasurer.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -119,7 +123,8 @@ SOURCES += qxrd.cpp \
     qxrddataprocessorthread.cpp \
     qxrdacquisitionsimulated.cpp \
     qxrdmaskpicker.cpp \
-    qxrdmaskdata.cpp
+    qxrdmaskdata.cpp \
+    qxrdimageplotmeasurer.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.cpp,v 1.9 2009/08/05 16:44:08 jennings Exp $
+*  $Id: qxrdintegratorplot.cpp,v 1.10 2009/08/09 15:39:10 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,11 +12,16 @@
 #include <qwt_legend.h>
 #include <stdio.h>
 //#include <QTime>
+#include "qxrddataprocessor.h"
+#include "qxrdintegrator.h"
+#include "qxrdplotmeasurer.h"
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   : QxrdPlot(false, false, parent),
     m_Legend(NULL),
-    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.9 2009/08/05 16:44:08 jennings Exp $")
+    m_DataProcessor(NULL),
+    m_Integrator(NULL),
+    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.10 2009/08/09 15:39:10 jennings Exp $")
 {
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
@@ -24,6 +29,15 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   m_Legend -> setItemMode(QwtLegend::CheckableItem);
 
   insertLegend(m_Legend, QwtPlot::BottomLegend);
+}
+
+void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessor *proc)
+{
+  m_DataProcessor = proc;
+  m_Integrator = m_DataProcessor -> integrator();
+
+  connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+          m_DataProcessor, SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
 }
 
 static int plotIndex=0;
@@ -47,6 +61,9 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QVector<double> x, QVector<do
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.cpp,v $
+*  Revision 1.10  2009/08/09 15:39:10  jennings
+*  Added a separate QxrdImagePlotMeasurer class
+*
 *  Revision 1.9  2009/08/05 16:44:08  jennings
 *  More changes to oversampling code for integration
 *

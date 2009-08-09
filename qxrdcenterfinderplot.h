@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.h,v 1.8 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdcenterfinderplot.h,v 1.9 2009/08/09 15:39:10 jennings Exp $
 *
 *******************************************************************/
 
@@ -40,7 +40,7 @@ private:
   QxrdCenterFinder    *m_CenterFinder;
   bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdcenterfinderplot.h,v 1.8 2009/08/04 16:45:20 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinderplot.h,v 1.9 2009/08/09 15:39:10 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDERPLOT_H
@@ -48,6 +48,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.h,v $
+*  Revision 1.9  2009/08/09 15:39:10  jennings
+*  Added a separate QxrdImagePlotMeasurer class
+*
 *  Revision 1.8  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *
