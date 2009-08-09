@@ -20,7 +20,7 @@
    <property name="spacing">
     <number>2</number>
    </property>
-   <item row="1" column="0" colspan="2">
+   <item row="1" column="1">
     <widget class="QPushButton" name="m_IntegrateButton">
      <property name="font">
       <font>
@@ -75,6 +75,18 @@
      </property>
      <property name="maximum">
       <number>16</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="m_ClearGraphButton">
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Clear Graph</string>
      </property>
     </widget>
    </item>
