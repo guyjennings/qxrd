@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.8 2009/08/08 20:15:36 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.9 2009/08/11 20:53:42 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessor *proc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_DataProcessor(proc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.8 2009/08/08 20:15:36 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.9 2009/08/11 20:53:42 jennings Exp $")
 {
 }
 
@@ -315,6 +315,10 @@ void QxrdIntegrator::tableIntegrateSetup(int nThreads, double cx, double cy, int
   int nWarnings1 = 0;
   int nWarnings2 = 0;
 
+  int idrmax = m_TableStride+2;
+  QVector<int> stats(idrmax+2);
+  stats.fill(0);
+
   for (int y=0; y<nRows; y++) {
     for (int x=0; x<nCols; x++) {
       if (*msk) {
@@ -352,6 +356,14 @@ void QxrdIntegrator::tableIntegrateSetup(int nThreads, double cx, double cy, int
             } else {
               table[(y*nCols+x)*m_TableStride + 1+idr] += 1;
             }
+
+            if (idr < 0) {
+              stats[0] += 1;
+            } else if (idr < idrmax) {
+              stats[idr+1] += 1;
+            } else {
+              stats[idrmax+1] += 1;
+            }
           }
         }
 
@@ -373,6 +385,10 @@ void QxrdIntegrator::tableIntegrateSetup(int nThreads, double cx, double cy, int
       msk++;
       img++;
     }
+  }
+
+  for (int i=0; i < (idrmax+2); i++) {
+    printf("%d : %d\n", i-1, stats[i]);
   }
 }
 
@@ -411,6 +427,8 @@ void QxrdIntegrator::tableIntegrateMap(int thread, int nThreads, double cx, doub
             if (nr > 0) {
               output[thread*m_OutputStride+irmin+i-1] += nr*val;
               outsum[thread*m_OutputStride+irmin+i-1] += nr;
+            } else if (nr == -1) {
+              break;
             }
           }
         }
@@ -488,6 +506,9 @@ void QxrdIntegrator::tableIntegrate(int nThreads, double cx, double cy, int over
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.9  2009/08/11 20:53:42  jennings
+*  Added automatic plot style options to plot curves
+*
 *  Revision 1.8  2009/08/08 20:15:36  jennings
 *  Added some more integration routines
 *

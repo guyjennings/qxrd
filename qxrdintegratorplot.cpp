@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.cpp,v 1.11 2009/08/09 18:00:00 jennings Exp $
+*  $Id: qxrdintegratorplot.cpp,v 1.12 2009/08/11 20:53:42 jennings Exp $
 *
 *******************************************************************/
 
@@ -21,7 +21,8 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
     m_Legend(NULL),
     m_DataProcessor(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.11 2009/08/09 18:00:00 jennings Exp $")
+    m_PlotIndex(0),
+    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.12 2009/08/11 20:53:42 jennings Exp $")
 {
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
@@ -40,8 +41,6 @@ void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessor *proc)
           m_DataProcessor, SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
 }
 
-static int plotIndex=0;
-
 void QxrdIntegratorPlot::onNewIntegrationAvailable(QVector<double> x, QVector<double> y)
 {
 //  QTime tic;
@@ -49,17 +48,21 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QVector<double> x, QVector<do
 
 //  printf("New integration available, %d, %d points\n", x.size(), y.size());
 
-  QwtPlotCurve *pc = new QwtPlotCurve(tr("Plot %1").arg(plotIndex++));
+  QwtPlotCurve *pc = new QwtPlotCurve(tr("Plot %1").arg(m_PlotIndex));
   pc -> setData(x.data(), y.data(), x.size());
-  pc -> setPen(QPen(QColor::fromHsv(plotIndex*67, 255, 255)));
+  setPlotCurveStyle(m_PlotIndex, pc);
   pc -> attach(this);
   replot();
+
+  m_PlotIndex++;
 //
 //  printf("Plotting took %d msec\n", tic.restart());
 }
 
 void QxrdIntegratorPlot::clearGraph()
 {
+  m_PlotIndex = 0;
+
   clear();
   replot();
 }
@@ -67,6 +70,9 @@ void QxrdIntegratorPlot::clearGraph()
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.cpp,v $
+*  Revision 1.12  2009/08/11 20:53:42  jennings
+*  Added automatic plot style options to plot curves
+*
 *  Revision 1.11  2009/08/09 18:00:00  jennings
 *  Added graph clearing button to integrator dialog
 *

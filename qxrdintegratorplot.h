@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.h,v 1.9 2009/08/09 18:00:00 jennings Exp $
+*  $Id: qxrdintegratorplot.h,v 1.10 2009/08/11 20:53:42 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,8 +32,9 @@ private:
   QwtLegend           *m_Legend;
   QxrdDataProcessor   *m_DataProcessor;
   QxrdIntegrator      *m_Integrator;
+  int                  m_PlotIndex;
 
-  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.9 2009/08/09 18:00:00 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.10 2009/08/11 20:53:42 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATORPLOT_H
@@ -41,6 +42,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.h,v $
+*  Revision 1.10  2009/08/11 20:53:42  jennings
+*  Added automatic plot style options to plot curves
+*
 *  Revision 1.9  2009/08/09 18:00:00  jennings
 *  Added graph clearing button to integrator dialog
 *

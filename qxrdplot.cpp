@@ -1,15 +1,17 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.cpp,v 1.5 2009/08/09 15:40:32 jennings Exp $
+*  $Id: qxrdplot.cpp,v 1.6 2009/08/11 20:53:42 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdplot.h"
 
+#include <qwt_plot_curve.h>
 #include <qwt_plot_picker.h>
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
 #include <qwt_plot_magnifier.h>
+#include <qwt_symbol.h>
 #include "qxrdplotmeasurer.h"
 
 QxrdPlot::QxrdPlot(bool customTracker, bool customZoomer, QWidget *parent)
@@ -19,7 +21,7 @@ QxrdPlot::QxrdPlot(bool customTracker, bool customZoomer, QWidget *parent)
     m_Panner(NULL),
     m_Magnifier(NULL),
     m_Measurer(NULL),
-    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.5 2009/08/09 15:40:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.6 2009/08/11 20:53:42 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -46,6 +48,85 @@ QxrdPlot::QxrdPlot(bool customTracker, bool customZoomer, QWidget *parent)
 
   setAxisLabelRotation(QwtPlot::yLeft, -90);
   setAxisLabelAlignment(QwtPlot::yLeft, Qt::AlignVCenter);
+}
+
+void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
+{
+  const int nColors = 6;
+  const int nSymbols = 4;
+  const int nStyles = 3;
+
+  int colorIndex = index % nColors;
+  int symbolIndex = (index / nColors) % nSymbols;
+  int styleIndex = (index / (nColors * nSymbols)) % nStyles;
+
+  QPen pen;
+  QwtSymbol symb;
+  QBrush brush;
+
+  switch (colorIndex) {
+  case 0:
+    pen = QPen(Qt::black);
+    break;
+  case 1:
+    pen = QPen(Qt::red);
+    break;
+  case 2:
+    pen = QPen(Qt::green);
+    break;
+  case 3:
+    pen = QPen(Qt::blue);
+    break;
+  case 4:
+    pen = QPen(Qt::cyan);
+    break;
+  case 5:
+    pen = QPen(Qt::magenta);
+    break;
+  case 6:
+    pen = QPen(Qt::darkRed);
+    break;
+  case 7:
+    pen = QPen(Qt::darkGreen);
+    break;
+  }
+
+  switch (styleIndex) {
+  case 0:
+    pen.setStyle(Qt::SolidLine);
+    break;
+  case 1:
+    pen.setStyle(Qt::DashLine);
+    break;
+  case 2:
+    pen.setStyle(Qt::DotLine);
+    break;
+  case 3:
+    pen.setStyle(Qt::DashDotLine);
+    break;
+  }
+
+  symb.setPen(pen);
+  symb.setBrush(QBrush(pen.color()));
+  symb.setSize(7,7);
+
+  switch (symbolIndex) {
+  case 0:
+    symb.setStyle(QwtSymbol::Ellipse);
+    break;
+  case 1:
+    symb.setStyle(QwtSymbol::Rect);
+    break;
+  case 2:
+    symb.setStyle(QwtSymbol::XCross);
+    break;
+  case 3:
+    symb.setStyle(QwtSymbol::Cross);
+    break;
+  }
+
+  curve -> setPen(pen);
+  curve -> setSymbol(symb);
 }
 
 void QxrdPlot::setCustomTracker(QwtPlotPicker *tracker)
@@ -118,6 +199,9 @@ void QxrdPlot::enableMeasuring()
 /******************************************************************
 *
 *  $Log: qxrdplot.cpp,v $
+*  Revision 1.6  2009/08/11 20:53:42  jennings
+*  Added automatic plot style options to plot curves
+*
 *  Revision 1.5  2009/08/09 15:40:32  jennings
 *  Added measurer tool to all graphs
 *
