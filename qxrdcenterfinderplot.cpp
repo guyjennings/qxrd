@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.cpp,v 1.11 2009/08/09 15:39:10 jennings Exp $
+*  $Id: qxrdcenterfinderplot.cpp,v 1.12 2009/08/12 19:44:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -22,19 +22,13 @@
 #include "qxrdplotmeasurer.h"
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
-  : QxrdPlot(false, false, parent),
-    m_Legend(NULL),
+  : QxrdPlot(parent),
     m_DataProcessor(NULL),
     m_CenterFinder(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.11 2009/08/09 15:39:10 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.12 2009/08/12 19:44:58 jennings Exp $")
 {
-  m_Legend = new QwtLegend();
-  m_Legend -> setItemMode(QwtLegend::CheckableItem);
-
   insertLegend(m_Legend, QwtPlot::RightLegend);
-
-//  autoScale();
 }
 
 void QxrdCenterFinderPlot::setDataProcessor(QxrdDataProcessor *proc)
@@ -148,6 +142,10 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.cpp,v $
+*  Revision 1.12  2009/08/12 19:44:58  jennings
+*  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
+*  takes its tracker text from a QxrdPlot virtual member function
+*
 *  Revision 1.11  2009/08/09 15:39:10  jennings
 *  Added a separate QxrdImagePlotMeasurer class
 *

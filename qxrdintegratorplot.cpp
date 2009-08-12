@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.cpp,v 1.12 2009/08/11 20:53:42 jennings Exp $
+*  $Id: qxrdintegratorplot.cpp,v 1.13 2009/08/12 19:44:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,19 +17,18 @@
 #include "qxrdplotmeasurer.h"
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
-  : QxrdPlot(false, false, parent),
-    m_Legend(NULL),
+  : QxrdPlot(parent),
     m_DataProcessor(NULL),
     m_Integrator(NULL),
     m_PlotIndex(0),
-    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.12 2009/08/11 20:53:42 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.13 2009/08/12 19:44:59 jennings Exp $")
 {
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
-  m_Legend = new QwtLegend();
-  m_Legend -> setItemMode(QwtLegend::CheckableItem);
-
   insertLegend(m_Legend, QwtPlot::BottomLegend);
+
+  connect(this, SIGNAL(legendClicked(QwtPlotItem*)), this, SLOT(onLegendClicked(QwtPlotItem*)));
+  connect(this, SIGNAL(legendChecked(QwtPlotItem*,bool)), this, SLOT(onLegendChecked(QwtPlotItem*,bool)));
 }
 
 void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessor *proc)
@@ -70,6 +69,10 @@ void QxrdIntegratorPlot::clearGraph()
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.cpp,v $
+*  Revision 1.13  2009/08/12 19:44:59  jennings
+*  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
+*  takes its tracker text from a QxrdPlot virtual member function
+*
 *  Revision 1.12  2009/08/11 20:53:42  jennings
 *  Added automatic plot style options to plot curves
 *

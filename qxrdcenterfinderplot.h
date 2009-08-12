@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.h,v 1.9 2009/08/09 15:39:10 jennings Exp $
+*  $Id: qxrdcenterfinderplot.h,v 1.10 2009/08/12 19:44:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -34,13 +34,12 @@ public slots:
   void onMaskedImageAvailable(QxrdImageData *image, QxrdMaskData *mask);
 
 private:
-  QwtLegend           *m_Legend;
   QVector<double>      m_XData, m_YData;
   QxrdDataProcessor   *m_DataProcessor;
   QxrdCenterFinder    *m_CenterFinder;
   bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdcenterfinderplot.h,v 1.9 2009/08/09 15:39:10 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinderplot.h,v 1.10 2009/08/12 19:44:58 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDERPLOT_H
@@ -48,6 +47,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.h,v $
+*  Revision 1.10  2009/08/12 19:44:58  jennings
+*  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
+*  takes its tracker text from a QxrdPlot virtual member function
+*
 *  Revision 1.9  2009/08/09 15:39:10  jennings
 *  Added a separate QxrdImagePlotMeasurer class
 *

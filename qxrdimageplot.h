@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.26 2009/08/09 15:39:10 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.27 2009/08/12 19:44:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,7 +15,6 @@
 #include <qwt_color_map.h>
 
 class QxrdPlotZoomer;
-class QxrdPlotTracker;
 class QxrdPlotSlicer;
 class QxrdImagePlotMeasurer;
 class QwtPlotPanner;
@@ -113,11 +112,14 @@ public:
   void readSettings(QxrdSettings *settings, QString section);
   void writeSettings(QxrdSettings *settings, QString section);
 
+  const QxrdRasterData* raster() const;
   QxrdRasterData* raster();
 
   void setDataProcessor(QxrdDataProcessor *proc);
 
   void replot();
+
+  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
 
 private:
   void replotImage();
@@ -155,7 +157,7 @@ private:
 //  QPen                       m_Pen;
   bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.26 2009/08/09 15:39:10 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.27 2009/08/12 19:44:59 jennings Exp $");
 };
 
 #endif
@@ -163,6 +165,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.27  2009/08/12 19:44:59  jennings
+*  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
+*  takes its tracker text from a QxrdPlot virtual member function
+*
 *  Revision 1.26  2009/08/09 15:39:10  jennings
 *  Added a separate QxrdImagePlotMeasurer class
 *

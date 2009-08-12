@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.h,v 1.5 2009/08/11 20:53:42 jennings Exp $
+*  $Id: qxrdplot.h,v 1.6 2009/08/12 19:44:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -22,10 +22,11 @@ class QxrdPlot : public QwtPlot
 {
   Q_OBJECT;
 public:
-  QxrdPlot(bool customTracker, bool customZoomer, QWidget *parent = 0);
+  QxrdPlot(QWidget *parent = 0);
 
 public:
   void setPlotCurveStyle(int index, QwtPlotCurve *curve);
+  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
 
 public slots:
   void autoScale();
@@ -35,19 +36,22 @@ public slots:
   void enableZooming();
   void enableMeasuring();
 
-protected:
-  void setCustomTracker(QwtPlotPicker *tracker);
-  void setCustomZoomer(QwtPlotZoomer *zoomer);
+  void onLegendClicked(QwtPlotItem *item);
+  void onLegendChecked(QwtPlotItem *item, bool checked);
+
+//  void setCustomTracker(QwtPlotPicker *tracker);
+//  void setCustomZoomer(QwtPlotZoomer *zoomer);
 
 protected:
-  QwtPlotPicker       *m_Tracker;
+  QwtLegend           *m_Legend;
+//  QwtPlotPicker       *m_Tracker;
   QwtPlotZoomer       *m_Zoomer;
   QwtPlotPanner       *m_Panner;
   QwtPlotMagnifier    *m_Magnifier;
   QxrdPlotMeasurer    *m_Measurer;
 
 private:
-  HEADER_IDENT("$Id: qxrdplot.h,v 1.5 2009/08/11 20:53:42 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdplot.h,v 1.6 2009/08/12 19:44:59 jennings Exp $");
 };
 
 #endif // QXRDPLOT_H
@@ -55,6 +59,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdplot.h,v $
+*  Revision 1.6  2009/08/12 19:44:59  jennings
+*  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
+*  takes its tracker text from a QxrdPlot virtual member function
+*
 *  Revision 1.5  2009/08/11 20:53:42  jennings
 *  Added automatic plot style options to plot curves
 *

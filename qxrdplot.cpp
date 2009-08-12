@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.cpp,v 1.6 2009/08/11 20:53:42 jennings Exp $
+*  $Id: qxrdplot.cpp,v 1.7 2009/08/12 19:44:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,26 +12,36 @@
 #include <qwt_plot_panner.h>
 #include <qwt_plot_magnifier.h>
 #include <qwt_symbol.h>
+#include <qwt_legend.h>
 #include "qxrdplotmeasurer.h"
+#include "qxrdplotzoomer.h"
+#include <stdio.h>
 
-QxrdPlot::QxrdPlot(bool customTracker, bool customZoomer, QWidget *parent)
+QxrdPlot::QxrdPlot(QWidget *parent)
   : QwtPlot(parent),
-    m_Tracker(NULL),
+    m_Legend(NULL),
     m_Zoomer(NULL),
     m_Panner(NULL),
     m_Magnifier(NULL),
     m_Measurer(NULL),
-    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.6 2009/08/11 20:53:42 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.7 2009/08/12 19:44:59 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
-  if (!customTracker) {
-    setCustomTracker(NULL);
-  }
+  m_Zoomer = new QxrdPlotZoomer(canvas(), this);
+  m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
+  m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
+  m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
 
-  if (!customZoomer) {
-    setCustomZoomer(NULL);
-  }
+  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect2,
+                              Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier);
+  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect3,
+                              Qt::LeftButton, Qt::ControlModifier);
+
+  m_Zoomer -> setEnabled(true);
+
+  m_Legend = new QwtLegend();
+  m_Legend -> setItemMode(QwtLegend::CheckableItem);
 
   m_Panner = new QwtPlotPanner(canvas());
   m_Panner -> setEnabled(true);
@@ -129,38 +139,6 @@ void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
   curve -> setSymbol(symb);
 }
 
-void QxrdPlot::setCustomTracker(QwtPlotPicker *tracker)
-{
-  if (tracker == NULL) {
-    m_Tracker = new QwtPlotPicker(canvas());
-  } else {
-    m_Tracker = tracker;
-  }
-
-  m_Tracker -> setSelectionFlags(QwtPicker::PointSelection);
-  m_Tracker -> setEnabled(true);
-}
-
-void QxrdPlot::setCustomZoomer(QwtPlotZoomer *zoomer)
-{
-  if (zoomer == NULL) {
-    m_Zoomer = new QwtPlotZoomer(canvas(), this);
-  } else {
-    m_Zoomer = zoomer;
-  }
-
-  m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
-//  m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
-  m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
-
-  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect2,
-                              Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier);
-  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect3,
-                              Qt::LeftButton, Qt::ControlModifier);
-
-  m_Zoomer -> setEnabled(true);
-}
-
 void QxrdPlot::autoScale()
 {
   setAxisAutoScale(QwtPlot::yLeft);
@@ -184,21 +162,38 @@ void QxrdPlot::zoomOut()
 
 void QxrdPlot::enableZooming()
 {
-  m_Tracker      -> setEnabled(true);
   m_Zoomer       -> setEnabled(true);
   m_Measurer     -> setEnabled(false);
 }
 
 void QxrdPlot::enableMeasuring()
 {
-  m_Tracker  -> setEnabled(false);
   m_Zoomer   -> setEnabled(false);
   m_Measurer -> setEnabled(true);
+}
+
+void QxrdPlot::onLegendClicked(QwtPlotItem *item)
+{
+  printf("QxrdPlot::onLegendClicked(%p)\n", item);
+}
+
+void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
+{
+  printf("QxrdPlot::onLegendChecked(%p,%d)\n", item, checked);
+}
+
+QwtText QxrdPlot::trackerText(const QwtDoublePoint &pos) const
+{
+  return tr("%1, %2").arg(pos.x()).arg(pos.y());
 }
 
 /******************************************************************
 *
 *  $Log: qxrdplot.cpp,v $
+*  Revision 1.7  2009/08/12 19:44:59  jennings
+*  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
+*  takes its tracker text from a QxrdPlot virtual member function
+*
 *  Revision 1.6  2009/08/11 20:53:42  jennings
 *  Added automatic plot style options to plot curves
 *

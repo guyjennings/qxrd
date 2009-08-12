@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.34 2009/08/09 15:39:10 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.35 2009/08/12 19:44:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,7 +32,7 @@
 //}
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
-  : QxrdPlot(true, true, parent),
+  : QxrdPlot(parent),
     m_DisplayMinimumPct(this, "displayMinimumPct", 0),
     m_DisplayMaximumPct(this, "displayMaximumPct", 100),
     m_DisplayMinimumVal(this, "displayMinimumVal", 0),
@@ -58,10 +58,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.34 2009/08/09 15:39:10 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.35 2009/08/12 19:44:59 jennings Exp $")
 {
-  setCustomTracker(new QxrdPlotTracker(canvas(), this));
-  setCustomZoomer(new QxrdPlotZoomer(canvas(), this));
+  m_Zoomer -> setEnabled(true);
 
   m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::xBottom, QwtPlotRescaler::Expanding);
   m_Rescaler -> setEnabled(true);
@@ -231,8 +230,6 @@ void QxrdImagePlot::onMaintainAspectChanged(bool interp)
 
 void QxrdImagePlot::setTrackerPen(const QPen &pen)
 {
-  m_Tracker -> setTrackerPen(pen);
-  m_Tracker -> setRubberBandPen(pen);
   m_Zoomer -> setTrackerPen(pen);
   m_Zoomer -> setRubberBandPen(pen);
   m_CenterFinderPicker -> setTrackerPen(pen);
@@ -501,6 +498,11 @@ void QxrdImagePlot::onCenterYChanged(double cy)
   replot();
 }
 
+const QxrdRasterData* QxrdImagePlot::raster() const
+{
+  return &m_Raster;
+}
+
 QxrdRasterData* QxrdImagePlot::raster()
 {
   return &m_Raster;
@@ -508,7 +510,6 @@ QxrdRasterData* QxrdImagePlot::raster()
 
 void QxrdImagePlot::enableZooming()
 {
-  m_Tracker      -> setEnabled(true);
   m_Zoomer       -> setEnabled(true);
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer       -> setEnabled(false);
@@ -519,7 +520,6 @@ void QxrdImagePlot::enableZooming()
 
 void QxrdImagePlot::enableCentering()
 {
-  m_Tracker  -> setEnabled(false);
   m_Zoomer   -> setEnabled(false);
   m_CenterFinderPicker -> setEnabled(true);
   m_Slicer   -> setEnabled(false);
@@ -530,7 +530,6 @@ void QxrdImagePlot::enableCentering()
 
 void QxrdImagePlot::enableSlicing()
 {
-  m_Tracker  -> setEnabled(false);
   m_Zoomer   -> setEnabled(false);
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(true);
@@ -541,7 +540,6 @@ void QxrdImagePlot::enableSlicing()
 
 void QxrdImagePlot::enableMeasuring()
 {
-  m_Tracker  -> setEnabled(false);
   m_Zoomer   -> setEnabled(false);
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(false);
@@ -552,7 +550,6 @@ void QxrdImagePlot::enableMeasuring()
 
 void QxrdImagePlot::enableMaskCircles()
 {
-  m_Tracker  -> setEnabled(false);
   m_Zoomer   -> setEnabled(false);
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(false);
@@ -563,7 +560,6 @@ void QxrdImagePlot::enableMaskCircles()
 
 void QxrdImagePlot::enableMaskPolygons()
 {
-  m_Tracker  -> setEnabled(false);
   m_Zoomer   -> setEnabled(false);
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(false);
@@ -584,9 +580,22 @@ void QxrdImagePlot::replot()
   printf("QxrdImagePlot::replot took %d msec\n", tic.restart());
 }
 
+QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
+{
+  if (raster()) {
+    return tr("%1, %2, %3").arg(pos.x()).arg(pos.y()).arg(raster()->value(pos.x(),pos.y()));
+  } else {
+    return tr("%1, %2").arg(pos.x()).arg(pos.y());
+  }
+}
+
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.35  2009/08/12 19:44:59  jennings
+*  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
+*  takes its tracker text from a QxrdPlot virtual member function
+*
 *  Revision 1.34  2009/08/09 15:39:10  jennings
 *  Added a separate QxrdImagePlotMeasurer class
 *

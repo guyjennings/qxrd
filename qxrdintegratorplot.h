@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.h,v 1.10 2009/08/11 20:53:42 jennings Exp $
+*  $Id: qxrdintegratorplot.h,v 1.11 2009/08/12 19:44:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,12 +29,11 @@ public slots:
   void clearGraph();
 
 private:
-  QwtLegend           *m_Legend;
   QxrdDataProcessor   *m_DataProcessor;
   QxrdIntegrator      *m_Integrator;
   int                  m_PlotIndex;
 
-  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.10 2009/08/11 20:53:42 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.11 2009/08/12 19:44:59 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATORPLOT_H
@@ -42,6 +41,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.h,v $
+*  Revision 1.11  2009/08/12 19:44:59  jennings
+*  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
+*  takes its tracker text from a QxrdPlot virtual member function
+*
 *  Revision 1.10  2009/08/11 20:53:42  jennings
 *  Added automatic plot style options to plot curves
 *
