@@ -78,4 +78,25 @@ kind of cancel operation.
 
 -------------------------------------------------------
 
+Allow cancelling to happen sooner - especially during long exposures
+
+-------------------------------------------------------
+
+Zooming on graphs does not work properly when program first starts - graphs need
+an autoscale operation before they start zooming properly
+
+-------------------------------------------------------
+
+Add menu commands to show/hide toolbox windows
+
+-------------------------------------------------------
+
+Automatically add integrated graphs to output panel.
+
+-------------------------------------------------------
+
+Display range choosing doesn't work very well
+
+-------------------------------------------------------
+
 #endif // TODO_H
