@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.cpp,v 1.12 2009/08/12 19:44:58 jennings Exp $
+*  $Id: qxrdcenterfinderplot.cpp,v 1.13 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -26,7 +26,7 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_DataProcessor(NULL),
     m_CenterFinder(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.12 2009/08/12 19:44:58 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.13 2009/08/25 18:43:03 jennings Exp $")
 {
   insertLegend(m_Legend, QwtPlot::RightLegend);
 }
@@ -40,12 +40,12 @@ void QxrdCenterFinderPlot::setDataProcessor(QxrdDataProcessor *proc)
           m_DataProcessor, SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
 }
 
-void QxrdCenterFinderPlot::onProcessedImageAvailable(QxrdImageData *image)
+void QxrdCenterFinderPlot::onProcessedImageAvailable(QxrdDoubleImageData *image)
 {
   onCenterChanged(m_CenterFinder -> get_CenterX(), m_CenterFinder -> get_CenterY());
 }
 
-void QxrdCenterFinderPlot::onMaskedImageAvailable(QxrdImageData *image, QxrdMaskData *mask)
+void QxrdCenterFinderPlot::onMaskedImageAvailable(QxrdDoubleImageData *image, QxrdMaskData *mask)
 {
   onCenterChanged(m_CenterFinder -> get_CenterX(), m_CenterFinder -> get_CenterY());
 }
@@ -62,7 +62,7 @@ void QxrdCenterFinderPlot::onCenterYChanged(double cy)
 
 void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 {
-  QxrdImageData *img = m_DataProcessor -> data();
+  QxrdDoubleImageData *img = m_DataProcessor -> data();
   QxrdMaskData  *mask = m_DataProcessor -> mask();
 
   int width =img->get_Width();
@@ -142,6 +142,9 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.cpp,v $
+*  Revision 1.13  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.12  2009/08/12 19:44:58  jennings
 *  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
 *  takes its tracker text from a QxrdPlot virtual member function

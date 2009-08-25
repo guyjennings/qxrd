@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.9 2009/08/11 20:53:42 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.10 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessor *proc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_DataProcessor(proc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.9 2009/08/11 20:53:42 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.10 2009/08/25 18:43:03 jennings Exp $")
 {
 }
 
@@ -47,7 +47,7 @@ void QxrdIntegrator::integrate(double cx, double cy, int oversample, int normali
   QTime tic;
   tic.start();
 
-  QxrdImageData *image = m_DataProcessor -> data();
+  QxrdDoubleImageData *image = m_DataProcessor -> data();
   QxrdMaskData  *mask  = m_DataProcessor -> mask();
 
   int nRows = image -> get_Height();
@@ -121,7 +121,7 @@ void QxrdIntegrator::integrate2(double cx, double cy, int oversample, int normal
   QTime tic;
   tic.start();
 
-  QxrdImageData *image = m_DataProcessor -> data();
+  QxrdDoubleImageData *image = m_DataProcessor -> data();
   QxrdMaskData  *mask  = m_DataProcessor -> mask();
 
   int nRows = image -> get_Height();
@@ -200,7 +200,7 @@ void QxrdIntegrator::integrate2(double cx, double cy, int oversample, int normal
 void QxrdIntegrator::parallelIntegrateMap
     (int thread, int nThreads, double cx, double cy, int oversample/*, int normalize*/)
 {
-  QxrdImageData *image = m_DataProcessor -> data();
+  QxrdDoubleImageData *image = m_DataProcessor -> data();
   QxrdMaskData  *mask  = m_DataProcessor -> mask();
 
   int nRows = image -> get_Height();
@@ -272,7 +272,7 @@ void QxrdIntegrator::parallelIntegrate(int nThreads, double cx, double cy, int o
 
 void QxrdIntegrator::tableIntegrateSetup(int nThreads, double cx, double cy, int oversample, int normalize)
 {
-  QxrdImageData *image = m_DataProcessor -> data();
+  QxrdDoubleImageData *image = m_DataProcessor -> data();
   QxrdMaskData  *mask  = m_DataProcessor -> mask();
 
   int nRows = image -> get_Height();
@@ -394,7 +394,7 @@ void QxrdIntegrator::tableIntegrateSetup(int nThreads, double cx, double cy, int
 
 void QxrdIntegrator::tableIntegrateMap(int thread, int nThreads, double cx, double cy, int oversample/*, int normalize*/)
 {
-  QxrdImageData *image = m_DataProcessor -> data();
+  QxrdDoubleImageData *image = m_DataProcessor -> data();
 
   int nRows = image -> get_Height();
   int nCols = image -> get_Width();
@@ -506,6 +506,9 @@ void QxrdIntegrator::tableIntegrate(int nThreads, double cx, double cy, int over
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.10  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.9  2009/08/11 20:53:42  jennings
 *  Added automatic plot style options to plot curves
 *

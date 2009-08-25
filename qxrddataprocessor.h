@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.20 2009/08/09 15:40:32 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.21 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,12 +16,12 @@
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
 #include "qxrdimagequeue.h"
+#include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
 
 #include <qwt_double_rect.h>
 
 class QxrdAcquisition;
-class QxrdImageData;
 class QxrdCenterFinder;
 class QxrdIntegrator;
 
@@ -74,9 +74,9 @@ public:
 
 signals:
   void printMessage(QString msg);
-  void newDataAvailable(QxrdImageData *);
-  void newMaskAvailable(QxrdImageData *, QxrdMaskData *);
-  void newDarkImageAvailable(QxrdImageData *);
+  void newDataAvailable(QxrdDoubleImageData *);
+  void newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *);
+  void newDarkImageAvailable(QxrdDoubleImageData *);
 
 public slots:
   void showMaskRange(/*double min, double max*/);
@@ -103,12 +103,12 @@ public slots:
   void powderRing(double cx, double cy, double radius, double width, double strength, int oversample);
 
 public:
-  QxrdImageData *takeNextFreeImage();
-//  QxrdImageData *takeLatestProcessedImage();
-//  QxrdImageData *takeNextProcessedImage();
-//  QxrdImageData *takeNextDarkImage();
+  QxrdDoubleImageData *takeNextFreeImage();
+//  QxrdDoubleImageData *takeLatestProcessedImage();
+//  QxrdDoubleImageData *takeNextProcessedImage();
+//  QxrdDoubleImageData *takeNextDarkImage();
 
-  void returnImageToPool(QxrdImageData *img);
+  void returnImageToPool(QxrdDoubleImageData *img);
 
   void readSettings(QxrdSettings *settings, QString section);
   void writeSettings(QxrdSettings *settings, QString section);
@@ -117,12 +117,12 @@ public:
 //  void setWindow(QxrdWindow *win);
 
 
-  void saveImageData(QxrdImageData *image);
-  void saveRawData(QxrdImageData *image);
-  void saveNamedImageData(QString name, QxrdImageData *image);
+  void saveImageData(QxrdDoubleImageData *image);
+  void saveRawData(QxrdDoubleImageData *image);
+  void saveNamedImageData(QString name, QxrdDoubleImageData *image);
 
-  QxrdImageData *data() const;
-  QxrdImageData *darkImage() const;
+  QxrdDoubleImageData *data() const;
+  QxrdDoubleImageData *darkImage() const;
   QxrdMaskData  *mask() const;
 
   int incrementAcquiredCount();
@@ -137,22 +137,22 @@ public:
   QxrdIntegrator    *integrator() const;
 
 private slots:
-  void onAcquiredImageAvailable(QxrdImageData *image);
+  void onAcquiredImageAvailable(QxrdDoubleImageData *image);
 //  void onProcessedImageAvailable(QxrdImageData *image);
 //  void onDarkImageAvailable(QxrdImageData *image);
 
 private:
-  void processAcquiredImage(QxrdImageData *image);
+  void processAcquiredImage(QxrdDoubleImageData *image);
 
-  void subtractDarkImage(QxrdImageData *image, QxrdImageData *dark);
-  void correctBadPixels(QxrdImageData *image);
-  void correctImageGains(QxrdImageData *image);
-  void performImageCorrections(QxrdImageData *image);
+  void subtractDarkImage(QxrdDoubleImageData *image, QxrdDoubleImageData *dark);
+  void correctBadPixels(QxrdDoubleImageData *image);
+  void correctImageGains(QxrdDoubleImageData *image);
+  void performImageCorrections(QxrdDoubleImageData *image);
 
-  void newData(QxrdImageData *image);
-  void newDarkImage(QxrdImageData *image);
-  void newBadPixelsImage(QxrdImageData *image);
-  void newGainMapImage(QxrdImageData *image);
+  void newData(QxrdDoubleImageData *image);
+  void newDarkImage(QxrdDoubleImageData *image);
+  void newBadPixelsImage(QxrdDoubleImageData *image);
+  void newGainMapImage(QxrdDoubleImageData *image);
   void newMask(QxrdMaskData *mask);
 
 private:
@@ -162,14 +162,14 @@ private:
   QReadWriteLock            m_DarkUsage;
   QReadWriteLock            m_Processing;
 
-  QxrdImageQueue            m_FreeImages;
+  QxrdDoubleImageQueue            m_FreeImages;
 //  QxrdImageQueue            m_ProcessedImages;
 //  QxrdImageQueue            m_DarkImages;
 
-  QxrdImageData            *m_Data;
-  QxrdImageData            *m_DarkFrame;
-  QxrdImageData            *m_BadPixels;
-  QxrdImageData            *m_GainFrame;
+  QxrdDoubleImageData            *m_Data;
+  QxrdDoubleImageData            *m_DarkFrame;
+  QxrdDoubleImageData            *m_BadPixels;
+  QxrdDoubleImageData            *m_GainFrame;
   QxrdMaskData             *m_Mask;
 
   QAtomicInt                m_AcquiredCount;
@@ -178,7 +178,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.20 2009/08/09 15:40:32 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.21 2009/08/25 18:43:03 jennings Exp $");
 };
 
 #endif
@@ -186,6 +186,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.21  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.20  2009/08/09 15:40:32  jennings
 *  Added measurer tool to all graphs
 *

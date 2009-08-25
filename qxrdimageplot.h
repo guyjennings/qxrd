@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.27 2009/08/12 19:44:59 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.28 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -95,9 +95,9 @@ public slots:
   void onInterpolateChanged(bool interp);
   void onMaintainAspectChanged(bool interp);
 
-  void onProcessedImageAvailable(QxrdImageData *image);
-  void onMaskedImageAvailable(QxrdImageData *image, QxrdMaskData *mask);
-  void onDarkImageAvailable(QxrdImageData *image);
+  void onProcessedImageAvailable(QxrdDoubleImageData *image);
+  void onMaskedImageAvailable(QxrdDoubleImageData *image, QxrdMaskData *mask);
+  void onDarkImageAvailable(QxrdDoubleImageData *image);
   void onCenterXChanged(double cx);
   void onCenterYChanged(double cy);
 
@@ -157,7 +157,7 @@ private:
 //  QPen                       m_Pen;
   bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.27 2009/08/12 19:44:59 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.28 2009/08/25 18:43:03 jennings Exp $");
 };
 
 #endif
@@ -165,6 +165,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.28  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.27  2009/08/12 19:44:59  jennings
 *  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
 *  takes its tracker text from a QxrdPlot virtual member function

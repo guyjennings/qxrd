@@ -1,12 +1,12 @@
 /******************************************************************
 *
-*  $Id: qxrdrasterdata.cpp,v 1.13 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdrasterdata.cpp,v 1.14 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdrasterdata.h"
 
-QxrdRasterData::QxrdRasterData(QxrdImageData *img, int interp, QxrdMaskData *mask)
+QxrdRasterData::QxrdRasterData(QxrdDoubleImageData *img, int interp, QxrdMaskData *mask)
   : QwtRasterData(QwtDoubleRect(0,0,img->get_Width(),img->get_Height())),
     m_Data(img),
     m_Mask(mask),
@@ -14,7 +14,7 @@ QxrdRasterData::QxrdRasterData(QxrdImageData *img, int interp, QxrdMaskData *mas
     m_NCols((img ? img->get_Height() : 0)),
     m_Range(40000,48000),
     m_Interpolate(interp),
-    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.13 2009/08/04 16:45:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.14 2009/08/25 18:43:03 jennings Exp $")
 {
 }
 
@@ -182,6 +182,9 @@ int QxrdRasterData::height() const
 /******************************************************************
 *
 *  $Log: qxrdrasterdata.cpp,v $
+*  Revision 1.14  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.13  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *

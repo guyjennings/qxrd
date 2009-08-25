@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.12 2009/08/08 20:09:45 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.13 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.12 2009/08/08 20:09:45 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.13 2009/08/25 18:43:03 jennings Exp $")
 {
 }
 
@@ -29,7 +29,7 @@ void QxrdAcquisitionSimulated::simulatedInitialize()
   set_NCols(2048);
 
   for (int i=0; i<10; i++) {
-    m_DataProcessor -> returnImageToPool(new QxrdImageData(get_NCols(), get_NRows()));
+    m_DataProcessor -> returnImageToPool(new QxrdDoubleImageData(get_NCols(), get_NRows()));
   }
 }
 
@@ -66,7 +66,7 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
       return /*true*/;
     }
 
-    QxrdImageData *acquiredData = m_DataProcessor -> takeNextFreeImage();
+    QxrdDoubleImageData *acquiredData = m_DataProcessor -> takeNextFreeImage();
 
     acquiredData -> resize(get_NCols(), get_NRows());
     acquiredData -> clear();
@@ -185,6 +185,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.13  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.12  2009/08/08 20:09:45  jennings
 *  Added timestamp to simulated images
 *

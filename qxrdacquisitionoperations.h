@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionoperations.h,v 1.8 2009/07/20 00:32:17 jennings Exp $
+*  $Id: qxrdacquisitionoperations.h,v 1.9 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -21,20 +21,20 @@ class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 public:
   QxrdAcquisitionOperations(QxrdDataProcessor *proc);
 
-  QxrdImageData *takeNextAcquiredImage();
+  QxrdDoubleImageData *takeNextAcquiredImage();
 
-  void newAcquiredImage(QxrdImageData *img);
+  void newAcquiredImage(QxrdDoubleImageData *img);
 
 
 signals:
-  void acquiredImageAvailable(QxrdImageData *image);
+  void acquiredImageAvailable(QxrdDoubleImageData *image);
 
 protected:
   mutable QMutex         m_Mutex;
   QxrdDataProcessor     *m_DataProcessor;
 //  QxrdImageQueue         m_AcquiredImages;
 
-  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.8 2009/07/20 00:32:17 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.9 2009/08/25 18:43:03 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONOPERATIONS_H
@@ -42,6 +42,9 @@ protected:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionoperations.h,v $
+*  Revision 1.9  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.8  2009/07/20 00:32:17  jennings
 *  Removed image queues for acquired and dark images - use 'connect' args instead
 *

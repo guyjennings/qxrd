@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.28 2009/08/09 15:40:32 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.29 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -39,7 +39,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_DarkUsage(QReadWriteLock::Recursive),
 //    m_ProcessedImages("QxrdDataProcessor Processed Images"),
 //    m_DarkImages("QxrdDataProcessor Dark Images"),
-    m_Data(new QxrdImageData(2048,2048)),
+    m_Data(new QxrdDoubleImageData(2048,2048)),
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainFrame(NULL),
@@ -48,7 +48,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.28 2009/08/09 15:40:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.29 2009/08/25 18:43:03 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -82,7 +82,7 @@ void QxrdDataProcessor::readSettings(QxrdSettings *settings, QString section)
   m_Integrator   -> readSettings(settings, section+"/integrator");
 }
 
-void QxrdDataProcessor::onAcquiredImageAvailable(QxrdImageData *image)
+void QxrdDataProcessor::onAcquiredImageAvailable(QxrdDoubleImageData *image)
 {
   int navail = decrementAcquiredCount();
 
@@ -111,24 +111,24 @@ void QxrdDataProcessor::onAcquiredImageAvailable(QxrdImageData *image)
   }
 }
 
-QxrdImageData *QxrdDataProcessor::takeNextFreeImage()
+QxrdDoubleImageData *QxrdDataProcessor::takeNextFreeImage()
 {
   if (m_FreeImages.size() == 0) {
 //    printf("Allocate new image\n");
-    return new QxrdImageData(2048, 2048);
+    return new QxrdDoubleImageData(2048, 2048);
   } else {
     return m_FreeImages.dequeue();
   }
 }
 
-void QxrdDataProcessor::returnImageToPool(QxrdImageData *img)
+void QxrdDataProcessor::returnImageToPool(QxrdDoubleImageData *img)
 {
   QMutexLocker lock(&m_Mutex);
 
   m_FreeImages.enqueue(img);
 }
 
-void QxrdDataProcessor::newData(QxrdImageData *image)
+void QxrdDataProcessor::newData(QxrdDoubleImageData *image)
 {
   if (m_Data != image) {
 //    image -> copyMask(m_Data);
@@ -147,7 +147,7 @@ void QxrdDataProcessor::newData(QxrdImageData *image)
   emit newDataAvailable(m_Data);
 }
 
-void QxrdDataProcessor::newDarkImage(QxrdImageData *image)
+void QxrdDataProcessor::newDarkImage(QxrdDoubleImageData *image)
 {
   if (m_DarkFrame != image) {
     if (m_DarkFrame) {
@@ -162,7 +162,7 @@ void QxrdDataProcessor::newDarkImage(QxrdImageData *image)
   emit newDarkImageAvailable(m_DarkFrame);
 }
 
-void QxrdDataProcessor::newBadPixelsImage(QxrdImageData *image)
+void QxrdDataProcessor::newBadPixelsImage(QxrdDoubleImageData *image)
 {
   if (m_BadPixels != image) {
     if (m_BadPixels) {
@@ -175,7 +175,7 @@ void QxrdDataProcessor::newBadPixelsImage(QxrdImageData *image)
   set_BadPixelsPath(image->get_FileName());
 }
 
-void QxrdDataProcessor::newGainMapImage(QxrdImageData *image)
+void QxrdDataProcessor::newGainMapImage(QxrdDoubleImageData *image)
 {
   if (m_GainFrame != image) {
     if (m_GainFrame) {
@@ -203,7 +203,7 @@ void QxrdDataProcessor::loadData(QString name)
 {
 //  printf("QxrdDataProcessor::loadData(%s)\n", qPrintable(name));
 
-  QxrdImageData* res = takeNextFreeImage();
+  QxrdDoubleImageData* res = takeNextFreeImage();
 
   res -> readImage(name);
 
@@ -221,17 +221,17 @@ void QxrdDataProcessor::saveData(QString name)
   saveImageData(m_Data);
 }
 
-void QxrdDataProcessor::saveImageData(QxrdImageData *image)
+void QxrdDataProcessor::saveImageData(QxrdDoubleImageData *image)
 {
   saveNamedImageData(image->get_FileName(), image);
 }
 
-void QxrdDataProcessor::saveRawData(QxrdImageData *image)
+void QxrdDataProcessor::saveRawData(QxrdDoubleImageData *image)
 {
   saveNamedImageData(image->rawFileName(), image);
 }
 
-void QxrdDataProcessor::saveNamedImageData(QString name, QxrdImageData *image)
+void QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *image)
 {
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
@@ -266,7 +266,7 @@ void QxrdDataProcessor::saveNamedImageData(QString name, QxrdImageData *image)
 
 void QxrdDataProcessor::loadDarkImage(QString name)
 {
-  QxrdImageData* img = takeNextFreeImage();
+  QxrdDoubleImageData* img = takeNextFreeImage();
 
   img -> readImage(name);
 
@@ -275,7 +275,7 @@ void QxrdDataProcessor::loadDarkImage(QString name)
 
 void QxrdDataProcessor::loadBadPixels(QString name)
 {
-  QxrdImageData* res = takeNextFreeImage();
+  QxrdDoubleImageData* res = takeNextFreeImage();
 
   res -> readImage(name);
 
@@ -284,18 +284,18 @@ void QxrdDataProcessor::loadBadPixels(QString name)
 
 void QxrdDataProcessor::loadGainMap(QString name)
 {
-  QxrdImageData* res = takeNextFreeImage();
+  QxrdDoubleImageData* res = takeNextFreeImage();
 
   res -> readImage(name);
 
   newGainMapImage(res);
 }
 
-void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
+void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *img)
 {
 //  printf("QxrdDataProcessor::processAcquiredImage\n");
 
-  QxrdImageData *dark   = darkImage();
+  QxrdDoubleImageData *dark   = darkImage();
 
   if (img) {
     QTime tic;
@@ -322,7 +322,7 @@ void QxrdDataProcessor::processAcquiredImage(QxrdImageData *img)
   m_Processing.unlock();
 }
 
-void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *dark)
+void QxrdDataProcessor::subtractDarkImage(QxrdDoubleImageData *image, QxrdDoubleImageData *dark)
 {
   if (get_PerformDarkSubtraction()) {
     if (dark && get_SaveRawImages()) {
@@ -375,11 +375,11 @@ void QxrdDataProcessor::subtractDarkImage(QxrdImageData *image, QxrdImageData *d
   }
 }
 
-void QxrdDataProcessor::correctBadPixels(QxrdImageData */*image*/)
+void QxrdDataProcessor::correctBadPixels(QxrdDoubleImageData */*image*/)
 {
 }
 
-void QxrdDataProcessor::correctImageGains(QxrdImageData */*image*/)
+void QxrdDataProcessor::correctImageGains(QxrdDoubleImageData */*image*/)
 {
 }
 
@@ -513,14 +513,14 @@ void QxrdDataProcessor::slicePolygon(QVector<QwtDoublePoint> poly)
 {
 }
 
-QxrdImageData *QxrdDataProcessor::data() const
+QxrdDoubleImageData *QxrdDataProcessor::data() const
 {
   QMutexLocker lock(&m_Mutex);
 
   return m_Data;
 }
 
-QxrdImageData *QxrdDataProcessor::darkImage() const
+QxrdDoubleImageData *QxrdDataProcessor::darkImage() const
 {
   QMutexLocker lock(&m_Mutex);
 
@@ -692,6 +692,9 @@ void QxrdDataProcessor::powderRing(double cx, double cy, double radius, double w
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.29  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.28  2009/08/09 15:40:32  jennings
 *  Added measurer tool to all graphs
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.h,v 1.7 2009/08/08 20:15:36 jennings Exp $
+*  $Id: qxrdintegrator.h,v 1.8 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -14,7 +14,7 @@
 #include "qxrdsettings.h"
 
 class QxrdDataProcessor;
-class QxrdImageData;
+//class QxrdImageData;
 class QxrdMaskData;
 
 class QxrdIntegrator : public QObject
@@ -57,7 +57,7 @@ private:
   QVector<double>           m_OutputSums;
   int                       m_OutputStride;
 
-  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.7 2009/08/08 20:15:36 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.8 2009/08/25 18:43:03 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATOR_H
@@ -65,6 +65,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegrator.h,v $
+*  Revision 1.8  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.7  2009/08/08 20:15:36  jennings
 *  Added some more integration routines
 *

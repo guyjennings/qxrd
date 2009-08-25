@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.35 2009/08/12 19:44:59 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.36 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -58,7 +58,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.35 2009/08/12 19:44:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.36 2009/08/25 18:43:03 jennings Exp $")
 {
   m_Zoomer -> setEnabled(true);
 
@@ -442,7 +442,7 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
 //  replot();
 }
 
-void QxrdImagePlot::onProcessedImageAvailable(QxrdImageData *image)
+void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageData *image)
 {
   if (!image ||
       image->get_Width() != m_Raster.width() ||
@@ -461,7 +461,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdImageData *image)
   replotImage();
 }
 
-void QxrdImagePlot::onMaskedImageAvailable(QxrdImageData *image, QxrdMaskData *mask)
+void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageData *image, QxrdMaskData *mask)
 {
   if (!image ||
       image->get_Width() != m_Raster.width() ||
@@ -482,7 +482,7 @@ void QxrdImagePlot::onMaskedImageAvailable(QxrdImageData *image, QxrdMaskData *m
   replotImage();
 }
 
-void QxrdImagePlot::onDarkImageAvailable(QxrdImageData *image)
+void QxrdImagePlot::onDarkImageAvailable(QxrdDoubleImageData *image)
 {
 }
 
@@ -592,6 +592,9 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.36  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.35  2009/08/12 19:44:59  jennings
 *  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
 *  takes its tracker text from a QxrdPlot virtual member function

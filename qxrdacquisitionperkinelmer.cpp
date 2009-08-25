@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.14 2009/07/20 00:34:49 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.15 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -43,7 +43,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CurrentFile(0),
     m_BufferSize(0),
     m_AcquiredData(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.14 2009/07/20 00:34:49 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.15 2009/08/25 18:43:03 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -182,7 +182,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
   }
 
   for (int i=0; i<10; i++) {
-    m_DataProcessor -> returnImageToPool(new QxrdImageData(get_NCols(), get_NRows()));
+    m_DataProcessor -> returnImageToPool(new QxrdDoubleImageData(get_NCols(), get_NRows()));
   }
 }
 
@@ -499,6 +499,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.15  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.14  2009/07/20 00:34:49  jennings
 *  Send data between acquisition and data processor via signal/slot args, rather
 *  than image queues

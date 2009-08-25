@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.53 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.54 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -20,7 +20,7 @@ class QxrdAcquisition;
 class QxrdDataProcessor;
 class QwtPlotSpectrogram;
 class QCloseEvent;
-class QxrdImageData;
+template <typename T> class QxrdImageData;
 class QxrdMaskData;
 //class QDirModel;
 class QxrdDataProcessor;
@@ -113,7 +113,7 @@ private:
   int                     m_Acquiring;
   int                     m_AcquiringDark;
   QTimer                  m_StatusTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.53 2009/08/04 16:45:20 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.54 2009/08/25 18:43:03 jennings Exp $");
 };
 
 #endif
@@ -121,6 +121,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.54  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.53  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *

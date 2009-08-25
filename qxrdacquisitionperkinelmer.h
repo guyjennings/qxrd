@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.8 2009/07/14 20:07:00 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.9 2009/08/25 18:43:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -71,9 +71,9 @@ private:
   int                    m_BufferSize;
   int                    m_BufferIndex;
   QVector<quint16>       m_Buffer;
-  QxrdImageData         *m_AcquiredData;
+  QxrdDoubleImageData   *m_AcquiredData;
   QVector<double>        m_ReadoutTimes;
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.8 2009/07/14 20:07:00 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.9 2009/08/25 18:43:03 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -81,6 +81,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.9  2009/08/25 18:43:03  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.8  2009/07/14 20:07:00  jennings
 *  Implemented simple simulated acquisition
 *
