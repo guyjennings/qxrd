@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.16 2009/08/25 20:07:00 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.17 2009/08/25 21:01:29 jennings Exp $
 *
 *******************************************************************/
 
@@ -43,7 +43,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CurrentFile(0),
     m_BufferSize(0),
     m_AcquiredData(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.16 2009/08/25 20:07:00 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.17 2009/08/25 21:01:29 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -199,7 +199,7 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
 
     set_AcquireDark(isDark);
 
-    m_BufferSize = 10;
+    m_BufferSize = 4;
     m_BufferIndex = 0;
 
     set_Cancelling(0);
@@ -330,14 +330,14 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
   long npixels = get_NRows()*get_NCols();
   double* current = m_AcquiredData->data();
 
+  unsigned short* frame = m_Buffer.data() + m_BufferIndex*npixels;
+
   DWORD actualFrame, actSecFrame;
 
   Acquisition_GetActFrame(m_AcqDesc, &actualFrame, &actSecFrame);
 
-  unsigned short* frame = m_Buffer.data() + m_BufferIndex*npixels;
-
-  if (actualFrame != m_BufferIndex) {
-    printf("Actual frame %d, m_BufferIndex %d\n", actualFrame, m_BufferIndex);
+  if (((actSecFrame-1)%m_BufferSize) != m_BufferIndex) {
+    printf("actSecFrame %d, m_BufferIndex %d\n", actSecFrame, m_BufferIndex);
   }
 
 //   printf("m_AcquiredImage.data() = %p\n", current);
@@ -489,8 +489,14 @@ double QxrdAcquisitionPerkinElmer::readoutTime() const
   return m_ReadoutTimes.value(n)/1e6;
 }
 
-static void CALLBACK OnEndFrameCallback(HACQDESC /*hAcqDesc*/)
+static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 {
+//  DWORD actualFrame, actSecFrame;
+//
+//  Acquisition_GetActFrame(hAcqDesc, &actualFrame, &actSecFrame);
+//
+//  printf("Actual frame %d, sec frame %d\n", actualFrame, actSecFrame);
+//
 //  printf("OnEndFrameCallback\n");
 
 //  g_Acquisition -> onEndFrameCallback();
@@ -507,6 +513,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.17  2009/08/25 21:01:29  jennings
+*  Added routine to check frame numbers to ensure that frames are not lost
+*
 *  Revision 1.16  2009/08/25 20:07:00  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *

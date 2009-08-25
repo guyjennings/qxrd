@@ -99,4 +99,8 @@ Display range choosing doesn't work very well
 
 -------------------------------------------------------
 
+Provide a user interface to the camera gain setting
+
+-------------------------------------------------------
+
 #endif // TODO_H
