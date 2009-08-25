@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.21 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.22 2009/08/25 20:07:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -162,14 +162,15 @@ private:
   QReadWriteLock            m_DarkUsage;
   QReadWriteLock            m_Processing;
 
-  QxrdDoubleImageQueue            m_FreeImages;
+  QxrdDoubleImageQueue      m_FreeImages;
 //  QxrdImageQueue            m_ProcessedImages;
 //  QxrdImageQueue            m_DarkImages;
-
-  QxrdDoubleImageData            *m_Data;
-  QxrdDoubleImageData            *m_DarkFrame;
-  QxrdDoubleImageData            *m_BadPixels;
-  QxrdDoubleImageData            *m_GainFrame;
+  QxrdInt16ImageQueue       m_AcquiredInt16Images;
+  QxrdInt32ImageQueue       m_AcquiredInt32Images;
+  QxrdDoubleImageData      *m_Data;
+  QxrdDoubleImageData      *m_DarkFrame;
+  QxrdDoubleImageData      *m_BadPixels;
+  QxrdDoubleImageData      *m_GainFrame;
   QxrdMaskData             *m_Mask;
 
   QAtomicInt                m_AcquiredCount;
@@ -178,7 +179,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.21 2009/08/25 18:43:03 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.22 2009/08/25 20:07:00 jennings Exp $");
 };
 
 #endif
@@ -186,6 +187,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.22  2009/08/25 20:07:00  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.21  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *

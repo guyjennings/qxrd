@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.15 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.16 2009/08/25 20:07:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -43,7 +43,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CurrentFile(0),
     m_BufferSize(0),
     m_AcquiredData(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.15 2009/08/25 18:43:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.16 2009/08/25 20:07:00 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -330,7 +330,15 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
   long npixels = get_NRows()*get_NCols();
   double* current = m_AcquiredData->data();
 
+  DWORD actualFrame, actSecFrame;
+
+  Acquisition_GetActFrame(m_AcqDesc, &actualFrame, &actSecFrame);
+
   unsigned short* frame = m_Buffer.data() + m_BufferIndex*npixels;
+
+  if (actualFrame != m_BufferIndex) {
+    printf("Actual frame %d, m_BufferIndex %d\n", actualFrame, m_BufferIndex);
+  }
 
 //   printf("m_AcquiredImage.data() = %p\n", current);
 
@@ -499,6 +507,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.16  2009/08/25 20:07:00  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.15  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *
