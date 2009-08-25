@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.81 2009/08/09 18:00:00 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.82 2009/08/25 18:49:19 jennings Exp $
 *
 *******************************************************************/
 
@@ -49,7 +49,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.81 2009/08/09 18:00:00 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.82 2009/08/25 18:49:19 jennings Exp $")
 {
   setupUi(this);
 
@@ -224,19 +224,19 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_CenterFinderPlot -> setDataProcessor(m_DataProcessor);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
-  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdImageData *)),
-          m_Plot, SLOT(onProcessedImageAvailable(QxrdImageData *)));
-  connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdImageData *, QxrdMaskData *)),
-          m_Plot, SLOT(onMaskedImageAvailable(QxrdImageData *, QxrdMaskData *)));
+  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdDoubleImageData *)),
+          m_Plot, SLOT(onProcessedImageAvailable(QxrdDoubleImageData *)));
+  connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *)),
+          m_Plot, SLOT(onMaskedImageAvailable(QxrdDoubleImageData *, QxrdMaskData *)));
 
-  connect(m_DataProcessor, SIGNAL(newDarkImageAvailable(QxrdImageData *)),
-          m_Plot, SLOT(onDarkImageAvailable(QxrdImageData *)));
+  connect(m_DataProcessor, SIGNAL(newDarkImageAvailable(QxrdDoubleImageData *)),
+          m_Plot, SLOT(onDarkImageAvailable(QxrdDoubleImageData *)));
 
-  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdImageData *)),
-          m_CenterFinderPlot, SLOT(onProcessedImageAvailable(QxrdImageData *)));
+  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdDoubleImageData *)),
+          m_CenterFinderPlot, SLOT(onProcessedImageAvailable(QxrdDoubleImageData *)));
 
-  connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdImageData *, QxrdMaskData *)),
-          m_CenterFinderPlot, SLOT(onMaskedImageAvailable(QxrdImageData *, QxrdMaskData *)));
+  connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *)),
+          m_CenterFinderPlot, SLOT(onMaskedImageAvailable(QxrdDoubleImageData *, QxrdMaskData *)));
 
 //  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
@@ -587,6 +587,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.82  2009/08/25 18:49:19  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.81  2009/08/09 18:00:00  jennings
 *  Added graph clearing button to integrator dialog
 *

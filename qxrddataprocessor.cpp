@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.29 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.30 2009/08/25 18:49:19 jennings Exp $
 *
 *******************************************************************/
 
@@ -48,7 +48,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.29 2009/08/25 18:43:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.30 2009/08/25 18:49:19 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -58,8 +58,10 @@ void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
 {
   m_Acquisition = acq;
 
-  connect(m_Acquisition, SIGNAL(acquiredImageAvailable(QxrdImageData*)), this, SLOT(onAcquiredImageAvailable(QxrdImageData*)));
-//  connect(m_Acquisition, SIGNAL(darkImageAvailable(QxrdImageData*)), this, SLOT(onDarkImageAvailable(QxrdImageData*)));
+  connect(m_Acquisition, SIGNAL(acquiredImageAvailable(QxrdDoubleImageData*)),
+          this, SLOT(onAcquiredImageAvailable(QxrdDoubleImageData*)));
+/*  connect(m_Acquisition, SIGNAL(darkImageAvailable(QxrdDoubleImageData*)),
+          this, SLOT(onDarkImageAvailable(QxrdDoubleImageData*))); */
 }
 
 void QxrdDataProcessor::writeSettings(QxrdSettings *settings, QString section)
@@ -692,6 +694,9 @@ void QxrdDataProcessor::powderRing(double cx, double cy, double radius, double w
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.30  2009/08/25 18:49:19  jennings
+*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
+*
 *  Revision 1.29  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *
