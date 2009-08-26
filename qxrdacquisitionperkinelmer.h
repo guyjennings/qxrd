@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.11 2009/08/26 16:58:53 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.12 2009/08/26 20:56:15 jennings Exp $
 *
 *******************************************************************/
 
@@ -47,6 +47,9 @@ public:
   int acquisitionStatus(double time);
   void onEndFrameCallback();
 
+  void returnImageToPool(QxrdInt16ImageData *img);
+  void returnImageToPool(QxrdInt32ImageData *img);
+
 protected:
   void acquisition(int isDark);
   void haltAcquire();
@@ -81,7 +84,7 @@ private:
   QVector<double>        m_ReadoutTimes;
   QxrdInt16ImageQueue    m_FreeInt16Images;
   QxrdInt32ImageQueue    m_FreeInt32Images;
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.11 2009/08/26 16:58:53 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.12 2009/08/26 20:56:15 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -89,6 +92,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.12  2009/08/26 20:56:15  jennings
+*  More Int16 and Int32 implementation
+*
 *  Revision 1.11  2009/08/26 16:58:53  jennings
 *  Partial implementation of the separate Int16 and Int32 acquisition paths
 *

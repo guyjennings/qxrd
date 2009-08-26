@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.18 2009/08/26 16:58:53 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.19 2009/08/26 20:56:15 jennings Exp $
 *
 *******************************************************************/
 
@@ -45,7 +45,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
 //    m_AcquiredData(NULL),
     m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.18 2009/08/26 16:58:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.19 2009/08/26 20:56:15 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -194,34 +194,42 @@ void QxrdAcquisitionPerkinElmer::initialize()
   }
 }
 
+void QxrdAcquisitionPerkinElmer::returnImageToPool(QxrdInt16ImageData *img)
+{
+  m_FreeInt16Images.enqueue(img);
+}
+
+void QxrdAcquisitionPerkinElmer::returnImageToPool(QxrdInt32ImageData *img)
+{
+  m_FreeInt32Images.enqueue(img);
+}
+
 void QxrdAcquisitionPerkinElmer::allocateMemoryForAcquisition()
 {
+  THREAD_CHECK;
+
   if (get_ExposuresToSum() == 1) {
     m_FreeInt32Images.deallocate();
     delete m_AcquiredInt32Data; m_AcquiredInt32Data = NULL;
+    delete m_AcquiredInt16Data; m_AcquiredInt16Data = NULL;
 
-    int nFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(quint16));
+    int nMaxFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(quint16));
+    int nFrames = qMin(get_FilesInAcquiredSequence(), nMaxFrames);
 
     m_FreeInt16Images.preallocate(nFrames, get_NCols(), get_NRows());
 
-    if (m_AcquiredInt16Data == NULL) {
-      m_AcquiredInt16Data = m_FreeInt16Images.dequeue();
-    } else {
-      m_AcquiredInt16Data -> resize(get_NCols(), get_NRows());
-    }
+    printf("Preallocate %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
   } else {
     m_FreeInt16Images.deallocate();
+    delete m_AcquiredInt32Data; m_AcquiredInt32Data = NULL;
     delete m_AcquiredInt16Data; m_AcquiredInt16Data = NULL;
 
-    int nFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(qint32));
+    int nMaxFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(qint32));
+    int nFrames = qMin(get_FilesInAcquiredSequence(), nMaxFrames);
 
     m_FreeInt32Images.preallocate(nFrames, get_NCols(), get_NRows());
 
-    if (m_AcquiredInt32Data == NULL) {
-      m_AcquiredInt32Data = m_FreeInt32Images.dequeue();
-    } else {
-      m_AcquiredInt32Data -> resize(get_NCols(), get_NRows());
-    }
+    printf("Preallocate %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
   }
 }
 
@@ -592,6 +600,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.19  2009/08/26 20:56:15  jennings
+*  More Int16 and Int32 implementation
+*
 *  Revision 1.18  2009/08/26 16:58:53  jennings
 *  Partial implementation of the separate Int16 and Int32 acquisition paths
 *
