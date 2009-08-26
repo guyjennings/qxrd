@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.22 2009/08/25 20:07:00 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.23 2009/08/26 20:57:13 jennings Exp $
 *
 *******************************************************************/
 
@@ -109,6 +109,8 @@ public:
 //  QxrdDoubleImageData *takeNextDarkImage();
 
   void returnImageToPool(QxrdDoubleImageData *img);
+  void returnInt16ImageToPool(QxrdInt16ImageData *img);
+  void returnInt32ImageToPool(QxrdInt32ImageData *img);
 
   void readSettings(QxrdSettings *settings, QString section);
   void writeSettings(QxrdSettings *settings, QString section);
@@ -118,8 +120,13 @@ public:
 
 
   void saveImageData(QxrdDoubleImageData *image);
-  void saveRawData(QxrdDoubleImageData *image);
+  void saveImageData(QxrdInt16ImageData *image);
+  void saveImageData(QxrdInt32ImageData *image);
+  void saveRawData(QxrdInt16ImageData *image);
+  void saveRawData(QxrdInt32ImageData *image);
   void saveNamedImageData(QString name, QxrdDoubleImageData *image);
+  void saveNamedImageData(QString name, QxrdInt16ImageData *image);
+  void saveNamedImageData(QString name, QxrdInt32ImageData *image);
 
   QxrdDoubleImageData *data() const;
   QxrdDoubleImageData *darkImage() const;
@@ -137,13 +144,19 @@ public:
   QxrdIntegrator    *integrator() const;
 
 private slots:
-  void onAcquiredImageAvailable(QxrdDoubleImageData *image);
+//  void onAcquiredImageAvailable(QxrdDoubleImageData *image);
+  void onAcquiredInt16ImageAvailable(QxrdInt16ImageData *image);
+  void onAcquiredInt32ImageAvailable(QxrdInt32ImageData *image);
 //  void onProcessedImageAvailable(QxrdImageData *image);
 //  void onDarkImageAvailable(QxrdImageData *image);
 
 private:
-  void processAcquiredImage(QxrdDoubleImageData *image);
+//  void processAcquiredImage(QxrdDoubleImageData *image);
+  void processAcquiredInt16Image(QxrdInt16ImageData *image);
+  void processAcquiredInt32Image(QxrdInt32ImageData *image);
 
+  void convertImage(QxrdInt16ImageData *src, QxrdDoubleImageData *dest);
+  void convertImage(QxrdInt32ImageData *src, QxrdDoubleImageData *dest);
   void subtractDarkImage(QxrdDoubleImageData *image, QxrdDoubleImageData *dark);
   void correctBadPixels(QxrdDoubleImageData *image);
   void correctImageGains(QxrdDoubleImageData *image);
@@ -151,6 +164,8 @@ private:
 
   void newData(QxrdDoubleImageData *image);
   void newDarkImage(QxrdDoubleImageData *image);
+  void newDarkImage(QxrdInt16ImageData *image);
+  void newDarkImage(QxrdInt32ImageData *image);
   void newBadPixelsImage(QxrdDoubleImageData *image);
   void newGainMapImage(QxrdDoubleImageData *image);
   void newMask(QxrdMaskData *mask);
@@ -179,7 +194,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.22 2009/08/25 20:07:00 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.23 2009/08/26 20:57:13 jennings Exp $");
 };
 
 #endif
@@ -187,6 +202,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.23  2009/08/26 20:57:13  jennings
+*  Starting to implement separate Double Int16 and Int32 processing chains
+*
 *  Revision 1.22  2009/08/25 20:07:00  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *
