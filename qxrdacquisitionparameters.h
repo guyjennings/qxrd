@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.10 2009/07/20 00:29:49 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.11 2009/08/26 16:58:13 jennings Exp $
 *
 *******************************************************************/
 
@@ -83,13 +83,16 @@ public:
   Q_PROPERTY(int     filesInAcquiredSequence      READ get_FilesInAcquiredSequence WRITE set_FilesInAcquiredSequence STORED false);
   QCEP_INTEGER_PROPERTY(FilesInAcquiredSequence);
 
+  Q_PROPERTY(int     totalBufferSize    READ get_TotalBufferSize WRITE set_TotalBufferSize);
+  QCEP_INTEGER_PROPERTY(TotalBufferSize);
+
 //  Q_PROPERTY(int     cameraMode      READ cameraMode WRITE setCameraMode);
 //  Q_PROPERTY(int     frameSyncMode   READ frameSyncMode WRITE setFrameSyncMode);
 //  Q_PROPERTY(int     timerSync       READ timerSync WRITE setTimerSync);
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.10 2009/07/20 00:29:49 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.11 2009/08/26 16:58:13 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -97,6 +100,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.11  2009/08/26 16:58:13  jennings
+*  Added TotalBufferSize property to specify the amount of memory to use for acquisition buffers
+*
 *  Revision 1.10  2009/07/20 00:29:49  jennings
 *  filesInSequence property should be saved
 *

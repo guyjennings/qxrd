@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.9 2009/07/17 12:41:33 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.10 2009/08/26 16:58:13 jennings Exp $
 *
 *******************************************************************/
 
@@ -30,8 +30,9 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_Cancelling(this, "cancelling", 0),
     m_ExposuresToSum(this, "exposuresToSum", 1),
     m_FilesInAcquiredSequence(this, "filesInAcquiredSequence", 1),
+    m_TotalBufferSize(this,"totalBufferSize", 1500000000),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.9 2009/07/17 12:41:33 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.10 2009/08/26 16:58:13 jennings Exp $")
 {
 }
 
@@ -52,6 +53,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.10  2009/08/26 16:58:13  jennings
+*  Added TotalBufferSize property to specify the amount of memory to use for acquisition buffers
+*
 *  Revision 1.9  2009/07/17 12:41:33  jennings
 *  Rearranging acquisition and data processor
 *
