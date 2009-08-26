@@ -103,4 +103,13 @@ Provide a user interface to the camera gain setting
 
 -------------------------------------------------------
 
+Dark subtraction doesn't seem to be working at the moment
+
+-------------------------------------------------------
+
+Simplify the interactions between the various processing options and
+perform a simple sanity check before starting acquisition
+
+-------------------------------------------------------
+
 #endif // TODO_H
