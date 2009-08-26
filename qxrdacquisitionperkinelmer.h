@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.10 2009/08/25 20:07:00 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.11 2009/08/26 16:58:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -36,6 +36,9 @@ signals:
   void acquireComplete(int dark);
   void oneReadoutModeChanged(int mode, double value);
 
+  void acquiredInt16ImageAvailable(QxrdInt16ImageData *img);
+  void acquiredInt32ImageAvailable(QxrdInt32ImageData *img);
+
 public:
 //  bool onEndFrame();
   void onEndAcquisition();
@@ -55,6 +58,7 @@ private:
   void acquisitionError(int n);
   void acquisitionInitError(int n);
   void acquisitionNSensorsError(int n);
+  void allocateMemoryForAcquisition();
 
 private:
   mutable QMutex         m_Mutex;
@@ -71,11 +75,13 @@ private:
   int                    m_BufferSize;
   int                    m_BufferIndex;
   QVector<quint16>       m_Buffer;
-  QxrdDoubleImageData   *m_AcquiredData;
+//  QxrdDoubleImageData   *m_AcquiredData;
+  QxrdInt16ImageData    *m_AcquiredInt16Data;
+  QxrdInt32ImageData    *m_AcquiredInt32Data;
   QVector<double>        m_ReadoutTimes;
   QxrdInt16ImageQueue    m_FreeInt16Images;
   QxrdInt32ImageQueue    m_FreeInt32Images;
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.10 2009/08/25 20:07:00 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.11 2009/08/26 16:58:53 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -83,6 +89,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.11  2009/08/26 16:58:53  jennings
+*  Partial implementation of the separate Int16 and Int32 acquisition paths
+*
 *  Revision 1.10  2009/08/25 20:07:00  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *

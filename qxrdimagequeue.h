@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimagequeue.h,v 1.6 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdimagequeue.h,v 1.7 2009/08/26 16:58:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -25,12 +25,15 @@ public:
   void enqueue(T *data);
   int size() const;
 
+  void deallocate();
+  void preallocate(int nFrames, int nCols, int nRows);
+
 private:
   mutable QReadWriteLock m_Lock;
   QQueue<T*>     m_Queue;
   QString        m_Name;
   int            m_Debug;
-  HEADER_IDENT("$Id: qxrdimagequeue.h,v 1.6 2009/08/25 18:43:03 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimagequeue.h,v 1.7 2009/08/26 16:58:53 jennings Exp $");
 };
 
 typedef QxrdImageQueue<QxrdInt16ImageData>  QxrdInt16ImageQueue;
@@ -42,12 +45,18 @@ template <typename T>
 QxrdImageQueue<T>::QxrdImageQueue(QString name)
   : m_Name(name),
     m_Debug(0),
-    SOURCE_IDENT("$Id: qxrdimagequeue.h,v 1.6 2009/08/25 18:43:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimagequeue.h,v 1.7 2009/08/26 16:58:53 jennings Exp $")
 {
 }
 
 template <typename T>
 QxrdImageQueue<T>::~QxrdImageQueue()
+{
+  deallocate();
+}
+
+template <typename T>
+void QxrdImageQueue<T>::deallocate()
 {
   QWriteLocker lock(&m_Lock);
 
@@ -59,9 +68,34 @@ QxrdImageQueue<T>::~QxrdImageQueue()
 }
 
 template <typename T>
+void QxrdImageQueue<T>::preallocate(int nFrames, int nCols, int nRows)
+{
+  QWriteLocker lock(&m_Lock);
+
+  int sz = size();
+
+  for (int i=nFrames; i<sz; i++) {
+    T *img = m_Queue.dequeue();
+
+    delete img;
+  }
+
+  for (int i=0; i<size(); i++) {
+    m_Queue[i]->resize(nCols, nRows);
+  }
+
+  for (int i=size(); i<nFrames; i++) {
+    T *img = new T(nCols, nRows);
+
+    m_Queue.enqueue(img);
+  }
+}
+
+template <typename T>
 T* QxrdImageQueue<T>::dequeue()
 {
   QWriteLocker lock(&m_Lock);
+
   T* res = m_Queue.dequeue();
 
   if (m_Debug) {
@@ -100,6 +134,9 @@ int QxrdImageQueue<T>::size() const
 /******************************************************************
 *
 *  $Log: qxrdimagequeue.h,v $
+*  Revision 1.7  2009/08/26 16:58:53  jennings
+*  Partial implementation of the separate Int16 and Int32 acquisition paths
+*
 *  Revision 1.6  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *

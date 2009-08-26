@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.17 2009/08/25 21:01:29 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.18 2009/08/26 16:58:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -42,17 +42,25 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
 //    m_ExposuresToSum(0),
     m_CurrentFile(0),
     m_BufferSize(0),
-    m_AcquiredData(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.17 2009/08/25 21:01:29 jennings Exp $")
+//    m_AcquiredData(NULL),
+    m_AcquiredInt16Data(NULL),
+    m_AcquiredInt32Data(NULL),
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.18 2009/08/26 16:58:53 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
 
 QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()
 {
-  if (m_AcquiredData) {
-    delete m_AcquiredData;
+  if (m_AcquiredInt16Data) {
+    delete m_AcquiredInt16Data;
   }
+
+  if (m_AcquiredInt32Data) {
+    delete m_AcquiredInt32Data;
+  }
+
+
 }
 
 void QxrdAcquisitionPerkinElmer::acquire()
@@ -186,6 +194,37 @@ void QxrdAcquisitionPerkinElmer::initialize()
   }
 }
 
+void QxrdAcquisitionPerkinElmer::allocateMemoryForAcquisition()
+{
+  if (get_ExposuresToSum() == 1) {
+    m_FreeInt32Images.deallocate();
+    delete m_AcquiredInt32Data; m_AcquiredInt32Data = NULL;
+
+    int nFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(quint16));
+
+    m_FreeInt16Images.preallocate(nFrames, get_NCols(), get_NRows());
+
+    if (m_AcquiredInt16Data == NULL) {
+      m_AcquiredInt16Data = m_FreeInt16Images.dequeue();
+    } else {
+      m_AcquiredInt16Data -> resize(get_NCols(), get_NRows());
+    }
+  } else {
+    m_FreeInt16Images.deallocate();
+    delete m_AcquiredInt16Data; m_AcquiredInt16Data = NULL;
+
+    int nFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(qint32));
+
+    m_FreeInt32Images.preallocate(nFrames, get_NCols(), get_NRows());
+
+    if (m_AcquiredInt32Data == NULL) {
+      m_AcquiredInt32Data = m_FreeInt32Images.dequeue();
+    } else {
+      m_AcquiredInt32Data -> resize(get_NCols(), get_NRows());
+    }
+  }
+}
+
 void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
 {
   THREAD_CHECK;
@@ -216,12 +255,7 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
       set_FilesInAcquiredSequence(1);
     }
 
-    if (m_AcquiredData == NULL) {
-      m_AcquiredData = m_DataProcessor -> takeNextFreeImage();
-    }
-
-    m_AcquiredData->resize(get_NCols(), get_NRows());
-    m_AcquiredData->clear();
+    allocateMemoryForAcquisition();
 
     m_Buffer.resize(get_NRows()*get_NCols()*m_BufferSize);
     m_Buffer.fill(0);
@@ -328,7 +362,6 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
   // sum current frame
 
   long npixels = get_NRows()*get_NCols();
-  double* current = m_AcquiredData->data();
 
   unsigned short* frame = m_Buffer.data() + m_BufferIndex*npixels;
 
@@ -345,12 +378,40 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 //   QTime tic;
 //   tic.start();
 
-  for (long i=0; i<npixels; i++) {
-    *current += *frame;
-    current++; frame++;
+  if (get_ExposuresToSum() == 1) {
+    if (m_AcquiredInt16Data == NULL) {
+      m_AcquiredInt16Data = m_FreeInt16Images.dequeue();
+    }
+
+    if (m_AcquiredInt16Data != NULL) {
+      quint16* current = m_AcquiredInt16Data->data();
+      for (long i=0; i<npixels; i++) {
+        *current = *frame;
+        current++; frame++;
+      }
+
+      m_CurrentExposure++;
+    } else {
+      printf("Frame dropped\n");
+    }
+  } else {
+    if (m_AcquiredInt32Data == NULL) {
+      m_AcquiredInt32Data = m_FreeInt32Images.dequeue();
+    }
+
+    if (m_AcquiredInt32Data != NULL) {
+      quint32* current = m_AcquiredInt32Data->data();
+      for (long i=0; i<npixels; i++) {
+        *current += *frame;
+        current++; frame++;
+      }
+
+      m_CurrentExposure++;
+    } else {
+      printf("Frame dropped\n");
+    }
   }
 
-  m_CurrentExposure++;
   m_BufferIndex++;
 
 //    printf("Frame sum took %d msec\n", tic.elapsed());
@@ -366,25 +427,43 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
     QFileInfo finfo(fileName);
 
-    m_AcquiredData -> set_FileName(fileName);
-    m_AcquiredData -> set_Title(finfo.fileName());
-    m_AcquiredData -> set_ReadoutMode(get_ReadoutMode());
-    m_AcquiredData -> set_ExposureTime(get_ExposureTime());
-    m_AcquiredData -> set_SummedExposures(get_ExposuresToSum());
+    if (get_ExposuresToSum() == 1) {
+      m_AcquiredInt16Data -> set_FileName(fileName);
+      m_AcquiredInt16Data -> set_Title(finfo.fileName());
+      m_AcquiredInt16Data -> set_ReadoutMode(get_ReadoutMode());
+      m_AcquiredInt16Data -> set_ExposureTime(get_ExposureTime());
+      m_AcquiredInt16Data -> set_SummedExposures(get_ExposuresToSum());
 
-    if (get_AcquireDark()) {
-      m_AcquiredData -> set_ImageNumber(-1);
+      if (get_AcquireDark()) {
+        m_AcquiredInt16Data -> set_ImageNumber(-1);
+      } else {
+        m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile);
+      }
+
+      m_DataProcessor -> incrementAcquiredCount();
+
+      emit acquiredInt16ImageAvailable(m_AcquiredInt16Data);
+
+      m_AcquiredInt16Data = NULL;
     } else {
-      m_AcquiredData -> set_ImageNumber(m_CurrentFile);
+      m_AcquiredInt32Data -> set_FileName(fileName);
+      m_AcquiredInt32Data -> set_Title(finfo.fileName());
+      m_AcquiredInt32Data -> set_ReadoutMode(get_ReadoutMode());
+      m_AcquiredInt32Data -> set_ExposureTime(get_ExposureTime());
+      m_AcquiredInt32Data -> set_SummedExposures(get_ExposuresToSum());
+
+      if (get_AcquireDark()) {
+        m_AcquiredInt32Data -> set_ImageNumber(-1);
+      } else {
+        m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile);
+      }
+
+      m_DataProcessor -> incrementAcquiredCount();
+
+      emit acquiredInt32ImageAvailable(m_AcquiredInt32Data);
+
+      m_AcquiredInt32Data = NULL;
     }
-
-    m_DataProcessor -> incrementAcquiredCount();
-
-    emit acquiredImageAvailable(m_AcquiredData);
-
-    m_AcquiredData = m_DataProcessor -> takeNextFreeImage();
-    m_AcquiredData -> resize(get_NCols(), get_NRows());
-    m_AcquiredData -> clear();
 
     emit statusMessage("Saving "+fileName);
     emit printMessage("Saving """+fileName+"""");
@@ -513,6 +592,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.18  2009/08/26 16:58:53  jennings
+*  Partial implementation of the separate Int16 and Int32 acquisition paths
+*
 *  Revision 1.17  2009/08/25 21:01:29  jennings
 *  Added routine to check frame numbers to ensure that frames are not lost
 *
