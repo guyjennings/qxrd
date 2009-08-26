@@ -52,7 +52,8 @@ file names where necessary.
 
 -------------------------------------------------------
 
-Load/save mask and dark images when program starts/exits
+Load/save mask and dark images when program starts/exits, make default mask
+all visible.
 
 -------------------------------------------------------
 
@@ -112,4 +113,15 @@ perform a simple sanity check before starting acquisition
 
 -------------------------------------------------------
 
+Improve GUI performance when doing rapid acquisition sequences
+
+-------------------------------------------------------
+
+Optimize processing routines
+
+-------------------------------------------------------
+
+Make processing single-threaded
+
+-------------------------------------------------------
 #endif // TODO_H
