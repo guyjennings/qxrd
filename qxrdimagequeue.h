@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimagequeue.h,v 1.7 2009/08/26 16:58:53 jennings Exp $
+*  $Id: qxrdimagequeue.h,v 1.8 2009/08/26 20:54:34 jennings Exp $
 *
 *******************************************************************/
 
@@ -33,7 +33,7 @@ private:
   QQueue<T*>     m_Queue;
   QString        m_Name;
   int            m_Debug;
-  HEADER_IDENT("$Id: qxrdimagequeue.h,v 1.7 2009/08/26 16:58:53 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimagequeue.h,v 1.8 2009/08/26 20:54:34 jennings Exp $");
 };
 
 typedef QxrdImageQueue<QxrdInt16ImageData>  QxrdInt16ImageQueue;
@@ -45,7 +45,7 @@ template <typename T>
 QxrdImageQueue<T>::QxrdImageQueue(QString name)
   : m_Name(name),
     m_Debug(0),
-    SOURCE_IDENT("$Id: qxrdimagequeue.h,v 1.7 2009/08/26 16:58:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimagequeue.h,v 1.8 2009/08/26 20:54:34 jennings Exp $")
 {
 }
 
@@ -72,7 +72,7 @@ void QxrdImageQueue<T>::preallocate(int nFrames, int nCols, int nRows)
 {
   QWriteLocker lock(&m_Lock);
 
-  int sz = size();
+  int sz = m_Queue.size();
 
   for (int i=nFrames; i<sz; i++) {
     T *img = m_Queue.dequeue();
@@ -80,11 +80,11 @@ void QxrdImageQueue<T>::preallocate(int nFrames, int nCols, int nRows)
     delete img;
   }
 
-  for (int i=0; i<size(); i++) {
+  for (int i=0; i<m_Queue.size(); i++) {
     m_Queue[i]->resize(nCols, nRows);
   }
 
-  for (int i=size(); i<nFrames; i++) {
+  for (int i=m_Queue.size(); i<nFrames; i++) {
     T *img = new T(nCols, nRows);
 
     m_Queue.enqueue(img);
@@ -96,13 +96,18 @@ T* QxrdImageQueue<T>::dequeue()
 {
   QWriteLocker lock(&m_Lock);
 
-  T* res = m_Queue.dequeue();
+  if (m_Queue.isEmpty()) {
+    printf("QxrdImageQueue::dequeue() = NULL from %s\n", qPrintable(m_Name));
+    return NULL;
+  } else {
+    T* res = m_Queue.dequeue();
 
-  if (m_Debug) {
-    printf("QxrdImageQueue::dequeue() = %p from %s\n", res, qPrintable(m_Name));
+    if (m_Debug) {
+      printf("QxrdImageQueue::dequeue() = %p from %s\n", res, qPrintable(m_Name));
+    }
+
+    return res;
   }
-
-  return res;
 }
 
 template <typename T>
@@ -134,6 +139,9 @@ int QxrdImageQueue<T>::size() const
 /******************************************************************
 *
 *  $Log: qxrdimagequeue.h,v $
+*  Revision 1.8  2009/08/26 20:54:34  jennings
+*  *** empty log message ***
+*
 *  Revision 1.7  2009/08/26 16:58:53  jennings
 *  Partial implementation of the separate Int16 and Int32 acquisition paths
 *
