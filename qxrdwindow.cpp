@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.82 2009/08/25 18:49:19 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.83 2009/08/27 17:04:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -49,7 +49,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.82 2009/08/25 18:49:19 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.83 2009/08/27 17:04:16 jennings Exp $")
 {
   setupUi(this);
 
@@ -68,6 +68,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
   connect(m_ActionLoadData, SIGNAL(triggered()), this, SLOT(doLoadData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), this, SLOT(doSaveData()));
+  connect(m_ActionLoadDark, SIGNAL(triggered()), this, SLOT(doLoadDark()));
+  connect(m_ActionSaveDark, SIGNAL(triggered()), this, SLOT(doSaveDark()));
+  connect(m_ActionLoadMask, SIGNAL(triggered()), this, SLOT(doLoadMask()));
+  connect(m_ActionSaveMask, SIGNAL(triggered()), this, SLOT(doSaveMask()));
 
   connect(m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
 
@@ -506,6 +510,46 @@ void QxrdWindow::doLoadData()
   }
 }
 
+void QxrdWindow::doSaveDark()
+{
+  QString theFile = QFileDialog::getSaveFileName(
+      this, "Save Dark Data in", m_DataProcessor -> get_OutputDirectory());
+
+  if (theFile.length()) {
+    QMetaObject::invokeMethod(m_DataProcessor, "saveDark", Q_ARG(QString, theFile));
+  }
+}
+
+void QxrdWindow::doLoadDark()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+      this, "Load Dark Data from...", m_DataProcessor -> get_OutputDirectory());
+
+  if (theFile.length()) {
+    QMetaObject::invokeMethod(m_DataProcessor, "loadDark", Q_ARG(QString, theFile));
+  }
+}
+
+void QxrdWindow::doSaveMask()
+{
+  QString theFile = QFileDialog::getSaveFileName(
+      this, "Save Mask in", m_DataProcessor -> get_OutputDirectory());
+
+  if (theFile.length()) {
+    QMetaObject::invokeMethod(m_DataProcessor, "saveMask", Q_ARG(QString, theFile));
+  }
+}
+
+void QxrdWindow::doLoadMask()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+      this, "Load Mask from...", m_DataProcessor -> get_OutputDirectory());
+
+  if (theFile.length()) {
+    QMetaObject::invokeMethod(m_DataProcessor, "loadMask", Q_ARG(QString, theFile));
+  }
+}
+
 void QxrdWindow::doLoadDarkImage()
 {
   QString theFile = QFileDialog::getOpenFileName(
@@ -587,6 +631,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.83  2009/08/27 17:04:16  jennings
+*  Added load/save commands for dark and mask
+*
 *  Revision 1.82  2009/08/25 18:49:19  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *

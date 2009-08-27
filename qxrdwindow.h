@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.54 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.55 2009/08/27 17:04:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -44,6 +44,10 @@ public:
 public slots:
   void doSaveData();
   void doLoadData();
+  void doSaveDark();
+  void doLoadDark();
+  void doSaveMask();
+  void doLoadMask();
 
   void doAcquire();
   void doCancel();
@@ -113,7 +117,7 @@ private:
   int                     m_Acquiring;
   int                     m_AcquiringDark;
   QTimer                  m_StatusTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.54 2009/08/25 18:43:03 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.55 2009/08/27 17:04:16 jennings Exp $");
 };
 
 #endif
@@ -121,6 +125,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.55  2009/08/27 17:04:16  jennings
+*  Added load/save commands for dark and mask
+*
 *  Revision 1.54  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *

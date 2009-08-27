@@ -665,7 +665,7 @@
      <x>0</x>
      <y>0</y>
      <width>1243</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -674,6 +674,13 @@
     </property>
     <addaction name="m_ActionLoadData"/>
     <addaction name="m_ActionSaveData"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionLoadDark"/>
+    <addaction name="m_ActionSaveDark"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionLoadMask"/>
+    <addaction name="m_ActionSaveMask"/>
+    <addaction name="separator"/>
     <addaction name="m_ActionPreferences"/>
     <addaction name="m_ActionQuit"/>
    </widget>
@@ -1956,6 +1963,9 @@ Script Function: fileindex()</string>
    <property name="text">
     <string>Quit</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
   </action>
   <action name="m_ActionPreferences">
    <property name="text">
@@ -1978,12 +1988,18 @@ Script Function: fileindex()</string>
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
-    <string>Load Data</string>
+    <string>Load Data...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="m_ActionSaveData">
    <property name="text">
-    <string>Save Data</string>
+    <string>Save Data...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="m_ActionExecuteScript">
@@ -2182,6 +2198,51 @@ Script Function: fileindex()</string>
    </property>
    <property name="toolTip">
     <string>Invert Mask</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadDark">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Load Dark Data...</string>
+   </property>
+   <property name="toolTip">
+    <string>Load Dark Data</string>
+   </property>
+  </action>
+  <action name="m_ActionSaveDark">
+   <property name="text">
+    <string>Save Dark Data...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Dark Data</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadMask">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Load Mask...</string>
+   </property>
+   <property name="toolTip">
+    <string>Load Mask</string>
+   </property>
+  </action>
+  <action name="m_ActionSaveMask">
+   <property name="text">
+    <string>Save Mask...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Mask</string>
+   </property>
+  </action>
+  <action name="actionLoad">
+   <property name="text">
+    <string>Load</string>
    </property>
   </action>
  </widget>
