@@ -36,10 +36,10 @@ Load and save settings for everything...
 
 Automatically reload dark, bad pixel and gain images when program restarts
 
--------------------------------------------------------
-
-Eliminate the duplicate script engine object from QxrdAcquisitionScripting
-
+//-------------------------------------------------------
+//
+//Eliminate the duplicate script engine object from QxrdAcquisitionScripting
+//
 -------------------------------------------------------
 
 Optimise screen redrawing to eliminate redundant replot calls - will need
@@ -57,7 +57,8 @@ all visible.
 
 -------------------------------------------------------
 
-Investigate why the vertical window increases each time program is run
+Investigate why the vertical window size increases each time program is run
+(Only happens on linux...)
 
 -------------------------------------------------------
 
@@ -77,10 +78,10 @@ Add some kind of beam presence detection threshold
 Make it possible to interrupt spec more gracefully - add some
 kind of cancel operation.
 
--------------------------------------------------------
-
-Allow cancelling to happen sooner - especially during long exposures
-
+//-------------------------------------------------------
+//
+//Allow cancelling to happen sooner - especially during long exposures
+//
 -------------------------------------------------------
 
 Zooming on graphs does not work properly when program first starts - graphs need
@@ -92,7 +93,7 @@ Add menu commands to show/hide toolbox windows
 
 -------------------------------------------------------
 
-Automatically add integrated graphs to output panel.
+Automatically add integrated curves to output panel.
 
 -------------------------------------------------------
 
@@ -113,7 +114,9 @@ perform a simple sanity check before starting acquisition
 
 -------------------------------------------------------
 
-Improve GUI performance when doing rapid acquisition sequences
+Improve GUI performance when doing rapid acquisition sequences -
+don't queue processed output images for display - have a current and alternate image
+and swap as appropriate.
 
 -------------------------------------------------------
 
@@ -124,4 +127,32 @@ Optimize processing routines
 Make processing single-threaded
 
 -------------------------------------------------------
+
+Flag dropped frames more obviously.
+
+-------------------------------------------------------
+
+Add timestamps and other metadata to saved files
+
+-------------------------------------------------------
+
+Provide facility to save integrated scans
+
+-------------------------------------------------------
+
+Leak check...
+
+-------------------------------------------------------
+
+Coalesce controls from the 'output' panel into the 'acquire' panel
+
+-------------------------------------------------------
+
+Do camera model number check...
+Check more hardware settings when entering program...
+Support binning modes...
+Is not calling Acquisition_Init a problem?
+
+-------------------------------------------------------
+
 #endif // TODO_H
