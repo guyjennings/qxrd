@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.31 2009/08/26 20:57:13 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.32 2009/08/27 17:06:52 jennings Exp $
 *
 *******************************************************************/
 
@@ -48,7 +48,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.31 2009/08/26 20:57:13 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.32 2009/08/27 17:06:52 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -125,7 +125,8 @@ void QxrdDataProcessor::onAcquiredInt16ImageAvailable(QxrdInt16ImageData *image)
     if ((image -> get_ImageNumber()) >= 0) {
       m_DarkUsage.lockForRead();
       m_Processing.lockForRead();
-      QtConcurrent::run(this, &QxrdDataProcessor::processAcquiredInt16Image, image);
+//      QtConcurrent::run(this, &QxrdDataProcessor::processAcquiredInt16Image, image);
+      processAcquiredInt16Image(image);
     } else {
       QWriteLocker wl(&m_DarkUsage);
 
@@ -150,7 +151,8 @@ void QxrdDataProcessor::onAcquiredInt32ImageAvailable(QxrdInt32ImageData *image)
     if ((image -> get_ImageNumber()) >= 0) {
       m_DarkUsage.lockForRead();
       m_Processing.lockForRead();
-      QtConcurrent::run(this, &QxrdDataProcessor::processAcquiredInt32Image, image);
+//      QtConcurrent::run(this, &QxrdDataProcessor::processAcquiredInt32Image, image);
+      processAcquiredInt32Image(image);
     } else {
       QWriteLocker wl(&m_DarkUsage);
 
@@ -313,6 +315,50 @@ void QxrdDataProcessor::saveData(QString name)
   saveImageData(m_Data);
 }
 
+void QxrdDataProcessor::loadDark(QString name)
+{
+//  printf("QxrdDataProcessor::loadDark(%s)\n", qPrintable(name));
+
+  QxrdDoubleImageData* res = takeNextFreeImage();
+
+  res -> readImage(name);
+
+//  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+  newData(res);
+}
+
+void QxrdDataProcessor::saveDark(QString name)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_Data -> set_FileName(name);
+
+  saveImageData(m_Data);
+}
+
+void QxrdDataProcessor::loadMask(QString name)
+{
+//  printf("QxrdDataProcessor::loadData(%s)\n", qPrintable(name));
+
+  QxrdMaskData* res = new QxrdMaskData();
+
+  res -> readImage(name);
+
+//  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+  newMask(res);
+}
+
+void QxrdDataProcessor::saveMask(QString name)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_Mask -> set_FileName(name);
+
+  saveNamedMaskData(name, m_Mask);
+}
+
 void QxrdDataProcessor::saveImageData(QxrdDoubleImageData *image)
 {
   saveNamedImageData(image->get_FileName(), image);
@@ -425,6 +471,39 @@ void QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *ima
 
   QVector<quint32> buffvec(ncols);
   quint32* buffer = buffvec.data();
+
+  for (int y=0; y<nrows; y++) {
+    for (int x=0; x<ncols; x++) {
+      buffer[x] = image->value(x,y);
+    }
+
+    TIFFWriteScanline(tif, buffer, y, 0);
+  }
+
+  TIFFClose(tif);
+}
+
+void QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
+{
+//  emit printMessage(tr("Saved \"%1\")").arg(name));
+
+  QReadLocker lock(image->rwLock());
+
+  int nrows = image -> get_Height();
+  int ncols = image -> get_Width();
+
+  TIFF* tif = TIFFOpen(qPrintable(name),"w");
+
+  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
+  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows);
+  TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
+  TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+  TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+  TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
+  TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
+
+  QVector<quint8> buffvec(ncols);
+  quint8* buffer = buffvec.data();
 
   for (int y=0; y<nrows; y++) {
     for (int x=0; x<ncols; x++) {
@@ -573,16 +652,17 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
       correctBadPixels(dimg);
       correctImageGains(dimg);
 
-      emit printMessage(tr("Saving processed image in file \"%1\"").arg(dimg->get_FileName()));
-
       saveImageData(dimg);
+
+      emit printMessage(tr("Saved processed image in file \"%1\" after %2 msec").
+                        arg(dimg->get_FileName()).arg(tic.elapsed()));
     }
 
 //    m_ProcessedImages.enqueue(img);
 
     newData(dimg);
 
-    emit printMessage(tr("Processing took %1 msec").arg(tic.elapsed()));
+    emit printMessage(tr("Processing complete after %1 msec").arg(tic.elapsed()));
   }
 
   m_Processing.unlock();
@@ -997,6 +1077,9 @@ void QxrdDataProcessor::powderRing(double cx, double cy, double radius, double w
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.32  2009/08/27 17:06:52  jennings
+*  Added code to load/save dark and mask data
+*
 *  Revision 1.31  2009/08/26 20:57:13  jennings
 *  Starting to implement separate Double Int16 and Int32 processing chains
 *

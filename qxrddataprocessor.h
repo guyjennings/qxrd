@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.23 2009/08/26 20:57:13 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.24 2009/08/27 17:06:52 jennings Exp $
 *
 *******************************************************************/
 
@@ -93,6 +93,10 @@ public slots:
 
   void loadData(QString name);
   void saveData(QString name);
+  void loadDark(QString name);
+  void saveDark(QString name);
+  void loadMask(QString name);
+  void saveMask(QString name);
   void loadDarkImage(QString name);
   void loadBadPixels(QString name);
   void loadGainMap(QString name);
@@ -127,6 +131,7 @@ public:
   void saveNamedImageData(QString name, QxrdDoubleImageData *image);
   void saveNamedImageData(QString name, QxrdInt16ImageData *image);
   void saveNamedImageData(QString name, QxrdInt32ImageData *image);
+  void saveNamedMaskData(QString name, QxrdMaskData *mask);
 
   QxrdDoubleImageData *data() const;
   QxrdDoubleImageData *darkImage() const;
@@ -194,7 +199,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.23 2009/08/26 20:57:13 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.24 2009/08/27 17:06:52 jennings Exp $");
 };
 
 #endif
@@ -202,6 +207,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.24  2009/08/27 17:06:52  jennings
+*  Added code to load/save dark and mask data
+*
 *  Revision 1.23  2009/08/26 20:57:13  jennings
 *  Starting to implement separate Double Int16 and Int32 processing chains
 *
