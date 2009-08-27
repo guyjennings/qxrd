@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.19 2009/08/26 20:56:15 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.20 2009/08/27 17:05:11 jennings Exp $
 *
 *******************************************************************/
 
@@ -45,7 +45,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
 //    m_AcquiredData(NULL),
     m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.19 2009/08/26 20:56:15 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.20 2009/08/27 17:05:11 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -164,6 +164,28 @@ void QxrdAcquisitionPerkinElmer::initialize()
 
   set_NRows(dwRows);
   set_NCols(dwColumns);
+
+  CHwHeaderInfo hwHeaderInfo;
+
+  if ((nRet=Acquisition_GetHwHeaderInfo(m_AcqDesc, &hwHeaderInfo)) != HIS_ALL_OK) {
+    acquisitionError(nRet);
+    return;
+  }
+
+  emit printMessage(tr("Prom ID %1, Header ID %2")
+                    .arg(hwHeaderInfo.dwPROMID)
+                    .arg(hwHeaderInfo.dwHeaderID));
+
+  if (hwHeaderInfo.dwHeaderID >= 14) {
+    CHwHeaderInfoEx hdrx;
+
+    if ((nRet = Acquisition_GetHwHeaderInfoEx(m_AcqDesc, &hwHeaderInfo, &hdrx)) != HIS_ALL_OK) {
+      acquisitionError(nRet);
+      return;
+    }
+
+    emit printMessage(tr("Camera Type %1").arg(hdrx.wCameratype));
+  }
 
   int nReadoutTimes = 8;
   double readoutTimes[8];
@@ -600,6 +622,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.20  2009/08/27 17:05:11  jennings
+*  Added some model number detection code
+*
 *  Revision 1.19  2009/08/26 20:56:15  jennings
 *  More Int16 and Int32 implementation
 *
