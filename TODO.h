@@ -1,10 +1,10 @@
 #ifndef TODO_H
 #define TODO_H
 
--------------------------------------------------------
-
-Check that settings are not being saved twice (in QxrdWindow destructor):
-
+//-------------------------------------------------------
+//
+//Check that settings are not being saved twice (in QxrdWindow destructor):
+//
 -------------------------------------------------------
 
 Check thread correctness of acquisition
@@ -27,15 +27,11 @@ Correct signal/slot corrections to use new properties
 
 Add a plausible simulation mode
 
--------------------------------------------------------
-
-Add window position/state saving.
-Load and save settings for everything...
-
--------------------------------------------------------
-
-Automatically reload dark, bad pixel and gain images when program restarts
-
+//-------------------------------------------------------
+//
+//Add window position/state saving.
+//Load and save settings for everything...
+//
 //-------------------------------------------------------
 //
 //Eliminate the duplicate script engine object from QxrdAcquisitionScripting
@@ -47,11 +43,15 @@ a rigorous reorganisation and layering of code to ensure this.
 
 -------------------------------------------------------
 
+BLOCKER
 Ensure that program will not overwrite files without warning.  Use modified
-file names where necessary.
+file names where necessary.   Only do this for programmatic saves, saves
+after a dialog box will already have been given a confirmation dialog
 
 -------------------------------------------------------
 
+BLOCKER
+Automatically reload dark, bad pixel and gain images when program restarts
 Load/save mask and dark images when program starts/exits, make default mask
 all visible.
 
@@ -105,37 +105,45 @@ Provide a user interface to the camera gain setting
 
 -------------------------------------------------------
 
+BLOCKER
 Dark subtraction doesn't seem to be working at the moment
 
 -------------------------------------------------------
 
+BLOCKER
 Simplify the interactions between the various processing options and
 perform a simple sanity check before starting acquisition
 
 -------------------------------------------------------
 
+BLOCKER
 Improve GUI performance when doing rapid acquisition sequences -
 don't queue processed output images for display - have a current and alternate image
 and swap as appropriate.
 
 -------------------------------------------------------
 
+BLOCKER
 Optimize processing routines
 
 -------------------------------------------------------
 
+BLOCKER
 Make processing single-threaded
 
 -------------------------------------------------------
 
+BLOCKER
 Flag dropped frames more obviously.
 
 -------------------------------------------------------
 
+BLOCKER
 Add timestamps and other metadata to saved files
 
 -------------------------------------------------------
 
+BLOCKER
 Provide facility to save integrated scans
 
 -------------------------------------------------------
@@ -152,6 +160,11 @@ Do camera model number check...
 Check more hardware settings when entering program...
 Support binning modes...
 Is not calling Acquisition_Init a problem?
+
+-------------------------------------------------------
+
+BLOCKER
+Allow finer-grained control of the processing chain
 
 -------------------------------------------------------
 
