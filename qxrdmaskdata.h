@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskdata.h,v 1.2 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdmaskdata.h,v 1.3 2009/08/27 17:05:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,9 +8,9 @@
 #define QXRDMASKDATA_H
 
 #include "qcepmacros.h"
-#include "qcepimagedata.h"
+#include "qxrdimagedata.h"
 
-class QxrdMaskData : public QcepImageData<bool>
+class QxrdMaskData : public QxrdImageData<bool>
 {
   Q_OBJECT;
 
@@ -35,7 +35,7 @@ public:
   template <typename T> void hideMaskRange(QcepImageData<T> *image, T min, T max);
 
 private:
-  HEADER_IDENT("$Id: qxrdmaskdata.h,v 1.2 2009/08/04 16:45:20 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdmaskdata.h,v 1.3 2009/08/27 17:05:59 jennings Exp $");
 };
 
 template <typename T>
@@ -72,6 +72,9 @@ void QxrdMaskData::showMaskRange(QcepImageData<T> *image, T min, T max)
 /******************************************************************
 *
 *  $Log: qxrdmaskdata.h,v $
+*  Revision 1.3  2009/08/27 17:05:59  jennings
+*  Made mask data descend from QxrdImageData<bool>
+*
 *  Revision 1.2  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *

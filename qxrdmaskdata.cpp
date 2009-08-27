@@ -1,14 +1,14 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskdata.cpp,v 1.2 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdmaskdata.cpp,v 1.3 2009/08/27 17:05:59 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdmaskdata.h"
 
 QxrdMaskData::QxrdMaskData(int width, int height)
-  : QcepImageData<bool>(width, height),
-    SOURCE_IDENT("$Id: qxrdmaskdata.cpp,v 1.2 2009/08/04 16:45:20 jennings Exp $")
+  : QxrdImageData<bool>(width, height),
+    SOURCE_IDENT("$Id: qxrdmaskdata.cpp,v 1.3 2009/08/27 17:05:59 jennings Exp $")
 {
 }
 
@@ -112,6 +112,9 @@ void QxrdMaskData::maskCircle(double cx, double cy, double r, bool val)
 /******************************************************************
 *
 *  $Log: qxrdmaskdata.cpp,v $
+*  Revision 1.3  2009/08/27 17:05:59  jennings
+*  Made mask data descend from QxrdImageData<bool>
+*
 *  Revision 1.2  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *
