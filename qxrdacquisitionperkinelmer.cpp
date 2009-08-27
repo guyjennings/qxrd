@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.20 2009/08/27 17:05:11 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.21 2009/08/27 21:02:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -45,7 +45,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
 //    m_AcquiredData(NULL),
     m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.20 2009/08/27 17:05:11 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.21 2009/08/27 21:02:17 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -231,27 +231,33 @@ void QxrdAcquisitionPerkinElmer::allocateMemoryForAcquisition()
   THREAD_CHECK;
 
   if (get_ExposuresToSum() == 1) {
+    int nMaxFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(quint16));
+    int nFrames = qMin(get_FilesInAcquiredSequence(), nMaxFrames);
+
+    printf("Preallocating %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
+
     m_FreeInt32Images.deallocate();
     delete m_AcquiredInt32Data; m_AcquiredInt32Data = NULL;
     delete m_AcquiredInt16Data; m_AcquiredInt16Data = NULL;
 
-    int nMaxFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(quint16));
-    int nFrames = qMin(get_FilesInAcquiredSequence(), nMaxFrames);
 
     m_FreeInt16Images.preallocate(nFrames, get_NCols(), get_NRows());
 
-    printf("Preallocate %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
+    printf("Preallocated %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
   } else {
+    int nMaxFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(qint32));
+    int nFrames = qMin(get_FilesInAcquiredSequence(), nMaxFrames);
+
+    printf("Preallocating %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
+
     m_FreeInt16Images.deallocate();
     delete m_AcquiredInt32Data; m_AcquiredInt32Data = NULL;
     delete m_AcquiredInt16Data; m_AcquiredInt16Data = NULL;
 
-    int nMaxFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(qint32));
-    int nFrames = qMin(get_FilesInAcquiredSequence(), nMaxFrames);
 
     m_FreeInt32Images.preallocate(nFrames, get_NCols(), get_NRows());
 
-    printf("Preallocate %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
+    printf("Preallocated %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
   }
 }
 
@@ -622,6 +628,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.21  2009/08/27 21:02:17  jennings
+*  Partial implementation of lazy plotting
+*
 *  Revision 1.20  2009/08/27 17:05:11  jennings
 *  Added some model number detection code
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.32 2009/08/27 17:06:52 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.33 2009/08/27 21:02:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -19,7 +19,7 @@
 #include <math.h>
 
 QxrdDataProcessor::QxrdDataProcessor
-    (QxrdAcquisition *acq, QObject *parent)
+    (QxrdWindow *win, QxrdAcquisition *acq, QObject *parent)
   : QObject(parent),
     m_OutputDirectory(this,"outputDirectory", ""),
     m_DarkImagePath(this, "darkImagePath", ""),
@@ -35,6 +35,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_MaskCircleRadius(this, "maskCircleRadius", 10),
     m_MaskSetPixels(this, "maskSetPixels", true),
     m_Mutex(QMutex::Recursive),
+    m_Window(win),
     m_Acquisition(acq),
     m_DarkUsage(QReadWriteLock::Recursive),
 //    m_ProcessedImages("QxrdDataProcessor Processed Images"),
@@ -48,7 +49,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.32 2009/08/27 17:06:52 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.33 2009/08/27 21:02:17 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -66,6 +67,11 @@ void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
           this, SLOT(onAcquiredInt32ImageAvailable(QxrdInt32ImageData*)));
 /*  connect(m_Acquisition, SIGNAL(darkImageAvailable(QxrdDoubleImageData*)),
           this, SLOT(onDarkImageAvailable(QxrdDoubleImageData*))); */
+}
+
+void QxrdDataProcessor::setWindow(QxrdWindow *win)
+{
+  m_Window = win;
 }
 
 void QxrdDataProcessor::writeSettings(QxrdSettings *settings, QString section)
@@ -198,6 +204,7 @@ void QxrdDataProcessor::returnInt32ImageToPool(QxrdInt32ImageData *img)
 
 void QxrdDataProcessor::newData(QxrdDoubleImageData *image)
 {
+
   if (m_Data != image) {
 //    image -> copyMask(m_Data);
 
@@ -212,7 +219,7 @@ void QxrdDataProcessor::newData(QxrdDoubleImageData *image)
 
   incrementProcessedCount();
 
-  emit newDataAvailable(m_Data);
+  m_Data = m_Window -> newDataAvailable(m_Data);
 }
 
 void QxrdDataProcessor::newDarkImage(QxrdDoubleImageData *image)
@@ -921,14 +928,14 @@ QxrdMaskData *QxrdDataProcessor::mask() const
 
 int QxrdDataProcessor::incrementAcquiredCount()
 {
-  emit printMessage(tr("QxrdDataProcessor::incrementAcquiredCount m_AcquiredCount = %1").arg(m_AcquiredCount));
+//  emit printMessage(tr("QxrdDataProcessor::incrementAcquiredCount m_AcquiredCount = %1").arg(m_AcquiredCount));
 
   return m_AcquiredCount.fetchAndAddOrdered(+1);
 }
 
 int QxrdDataProcessor::decrementAcquiredCount()
 {
-  emit printMessage(tr("QxrdDataProcessor::decrementAcquiredCount m_AcquiredCount = %1").arg(m_AcquiredCount));
+//  emit printMessage(tr("QxrdDataProcessor::decrementAcquiredCount m_AcquiredCount = %1").arg(m_AcquiredCount));
 
   return m_AcquiredCount.fetchAndAddOrdered(-1);
 }
@@ -940,14 +947,14 @@ int QxrdDataProcessor::getAcquiredCount()
 
 int QxrdDataProcessor::incrementProcessedCount()
 {
-  emit printMessage(tr("QxrdDataProcessor::incrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
+//  emit printMessage(tr("QxrdDataProcessor::incrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
 
   return m_ProcessedCount.fetchAndAddOrdered(+1);
 }
 
 int QxrdDataProcessor::decrementProcessedCount()
 {
-  emit printMessage(tr("QxrdDataProcessor::decrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
+//  emit printMessage(tr("QxrdDataProcessor::decrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
 
   return m_ProcessedCount.fetchAndAddOrdered(-1);
 }
@@ -1077,6 +1084,9 @@ void QxrdDataProcessor::powderRing(double cx, double cy, double radius, double w
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.33  2009/08/27 21:02:17  jennings
+*  Partial implementation of lazy plotting
+*
 *  Revision 1.32  2009/08/27 17:06:52  jennings
 *  Added code to load/save dark and mask data
 *

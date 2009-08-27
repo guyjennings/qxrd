@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.46 2009/08/04 22:03:31 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.47 2009/08/27 21:02:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -30,7 +30,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.46 2009/08/04 22:03:31 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.47 2009/08/27 21:02:17 jennings Exp $")
 {
 //  QcepProperty::dumpMetaData(&QxrdApplication::staticMetaObject);
 //  QcepProperty::dumpMetaData(&QxrdWindow::staticMetaObject);
@@ -60,7 +60,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   m_Window = new QxrdWindow(this, m_Acquisition, m_DataProcessor);
   m_Window -> show();
 
-//  m_DataProcessor -> setWindow(m_Window);
+  m_DataProcessor -> setWindow(m_Window);
 
   connect(this, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
   emit printMessage("window shown");
@@ -176,6 +176,9 @@ QxrdDataProcessor *QxrdApplication::dataProcessor() const
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.47  2009/08/27 21:02:17  jennings
+*  Partial implementation of lazy plotting
+*
 *  Revision 1.46  2009/08/04 22:03:31  jennings
 *  Moved integration code into QxrdIntegrator, added oversampling option
 *  Add each integration result to the az-avg plot panel

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.24 2009/08/27 17:06:52 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.25 2009/08/27 21:02:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -24,13 +24,14 @@
 class QxrdAcquisition;
 class QxrdCenterFinder;
 class QxrdIntegrator;
+class QxrdWindow;
 
 class QxrdDataProcessor : public QObject
 {
   Q_OBJECT;
 
 public:
-  QxrdDataProcessor(QxrdAcquisition *acq, QObject *parent=0);
+  QxrdDataProcessor(QxrdWindow *win, QxrdAcquisition *acq, QObject *parent=0);
 
 public:
   Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory);
@@ -74,7 +75,7 @@ public:
 
 signals:
   void printMessage(QString msg);
-  void newDataAvailable(QxrdDoubleImageData *);
+//  void newDataAvailable(QxrdDoubleImageData *);
   void newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *);
   void newDarkImageAvailable(QxrdDoubleImageData *);
 
@@ -120,7 +121,7 @@ public:
   void writeSettings(QxrdSettings *settings, QString section);
 
   void setAcquisition(QxrdAcquisition *acq);
-//  void setWindow(QxrdWindow *win);
+  void setWindow(QxrdWindow *win);
 
 
   void saveImageData(QxrdDoubleImageData *image);
@@ -178,6 +179,7 @@ private:
 private:
   mutable QMutex            m_Mutex;
 
+  QxrdWindow               *m_Window;
   QxrdAcquisition          *m_Acquisition;
   QReadWriteLock            m_DarkUsage;
   QReadWriteLock            m_Processing;
@@ -199,7 +201,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.24 2009/08/27 17:06:52 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.25 2009/08/27 21:02:17 jennings Exp $");
 };
 
 #endif
@@ -207,6 +209,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.25  2009/08/27 21:02:17  jennings
+*  Partial implementation of lazy plotting
+*
 *  Revision 1.24  2009/08/27 17:06:52  jennings
 *  Added code to load/save dark and mask data
 *

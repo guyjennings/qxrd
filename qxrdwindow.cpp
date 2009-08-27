@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.83 2009/08/27 17:04:16 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.84 2009/08/27 21:02:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -49,7 +49,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.83 2009/08/27 17:04:16 jennings Exp $")
+    m_Data(new QxrdDoubleImageData(2048,2048)),
+    m_SpareData(new QxrdDoubleImageData(2048,2048)),
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.84 2009/08/27 21:02:17 jennings Exp $")
 {
   setupUi(this);
 
@@ -490,6 +492,71 @@ void QxrdWindow::clearStatusMessage()
   m_StatusMsg -> setText("");
 }
 
+QxrdDoubleImageData *QxrdWindow::newDataAvailable(QxrdDoubleImageData *image)
+{
+  QMutexLocker lock(&m_NewDataMutex);
+  QxrdDoubleImageData *res;
+
+  if (m_Plotting) {
+    printf("Already plotting...\n");
+
+    res = m_SpareData;
+    m_SpareData = image;
+
+    if (!m_SpareDataAvailable) {
+      QMetaObject::invokeMethod(this, "spareData", Qt::QueuedConnection);
+    }
+
+    m_SpareDataAvailable = true;
+  } else {
+    printf("Not already plotting...\n");
+
+    res = m_Data;
+    m_Data = image;
+    QMetaObject::invokeMethod(this, "newData", Qt::QueuedConnection);
+  }
+
+  return res;
+}
+
+void QxrdWindow::newData()
+{
+  if (m_Plotting.testAndSetOrdered(0,1)) {
+    printf("QxrdWindow::newData called, not already plotting\n");
+    m_Plot -> onProcessedImageAvailable(m_Data);
+    m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
+    m_Plotting = 0;
+    printf("plotting completed\n");
+  } else {
+    printf("QxrdWindow::newData called, but already plotting\n");
+  }
+}
+
+void QxrdWindow::spareData()
+{
+  bool canDo;
+
+  {
+    QMutexLocker lock(&m_NewDataMutex);
+
+    canDo = m_Plotting == 0;
+
+    if (canDo) {
+      printf("QxrdWindow swap data & spare\n");
+
+      QxrdDoubleImageData *tmp = m_Data;
+      m_Data = m_SpareData;
+      m_SpareData = tmp;
+    }
+  }
+
+  if (canDo) {
+    newData();
+  }
+
+  printf("QxrdWindow::spareData\n");
+}
+
 void QxrdWindow::doSaveData()
 {
   QString theFile = QFileDialog::getSaveFileName(
@@ -631,6 +698,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.84  2009/08/27 21:02:17  jennings
+*  Partial implementation of lazy plotting
+*
 *  Revision 1.83  2009/08/27 17:04:16  jennings
 *  Added load/save commands for dark and mask
 *

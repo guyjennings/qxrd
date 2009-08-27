@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.55 2009/08/27 17:04:16 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.56 2009/08/27 21:02:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -86,6 +86,10 @@ public slots:
 signals:
   void executeCommand(QString cmd);
 
+private slots:
+  void newData();
+  void spareData();
+
 public:
   void readSettings(QxrdSettings *settings, QString section);
   void writeSettings(QxrdSettings *settings, QString section);
@@ -97,6 +101,8 @@ public:
 
   QxrdScriptEngine *scriptEngine() const;
   void setScriptEngine(QxrdScriptEngine *engine);
+
+  QxrdDoubleImageData *newDataAvailable(QxrdDoubleImageData *img);
 
 //  QxrdDataProcessor *processor() const;
 
@@ -117,7 +123,13 @@ private:
   int                     m_Acquiring;
   int                     m_AcquiringDark;
   QTimer                  m_StatusTimer;
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.55 2009/08/27 17:04:16 jennings Exp $");
+  mutable QMutex          m_NewDataMutex;
+  QxrdDoubleImageData    *m_Data;
+  QxrdDoubleImageData    *m_SpareData;
+  QAtomicInt              m_Plotting;
+  QAtomicInt              m_SpareDataAvailable;
+
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.56 2009/08/27 21:02:17 jennings Exp $");
 };
 
 #endif
@@ -125,6 +137,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.56  2009/08/27 21:02:17  jennings
+*  Partial implementation of lazy plotting
+*
 *  Revision 1.55  2009/08/27 17:04:16  jennings
 *  Added load/save commands for dark and mask
 *
