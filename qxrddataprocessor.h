@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.25 2009/08/27 21:02:17 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.26 2009/08/27 21:55:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -107,6 +107,8 @@ public slots:
   void reciprocalTail(double cx, double cy, double strength, int oversample);
   void powderRing(double cx, double cy, double radius, double width, double strength, int oversample);
 
+  QString uniqueFileName(QString name);
+
 public:
   QxrdDoubleImageData *takeNextFreeImage();
 //  QxrdDoubleImageData *takeLatestProcessedImage();
@@ -176,6 +178,7 @@ private:
   void newGainMapImage(QxrdDoubleImageData *image);
   void newMask(QxrdMaskData *mask);
 
+
 private:
   mutable QMutex            m_Mutex;
 
@@ -201,7 +204,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.25 2009/08/27 21:02:17 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.26 2009/08/27 21:55:43 jennings Exp $");
 };
 
 #endif
@@ -209,6 +212,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.26  2009/08/27 21:55:43  jennings
+*  Added code to make sure file saving routines will not overwrite data
+*
 *  Revision 1.25  2009/08/27 21:02:17  jennings
 *  Partial implementation of lazy plotting
 *

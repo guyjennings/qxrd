@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.33 2009/08/27 21:02:17 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.34 2009/08/27 21:55:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -49,7 +49,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.33 2009/08/27 21:02:17 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.34 2009/08/27 21:55:43 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -400,6 +400,8 @@ void QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *im
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
 
+  name = uniqueFileName(name);
+
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
 
   TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
@@ -432,6 +434,8 @@ void QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *ima
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
+
+  name = uniqueFileName(name);
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
 
@@ -466,6 +470,8 @@ void QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *ima
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
 
+  name = uniqueFileName(name);
+
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
 
   TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
@@ -499,6 +505,8 @@ void QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
 
+  name = uniqueFileName(name);
+
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
 
   TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
@@ -521,6 +529,28 @@ void QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
   }
 
   TIFFClose(tif);
+}
+
+QString QxrdDataProcessor::uniqueFileName(QString name)
+{
+  QFileInfo f(name);
+
+  if (f.exists()) {
+    QDir dir = f.dir();
+    QString base = f.baseName();
+    QString suff = f.completeSuffix();
+
+    for (int i=1; ; i++) {
+      QString newname = dir.filePath(base+QString().sprintf("-%0.5d.",i)+suff);
+      QFileInfo f(newname);
+
+      if (!f.exists()) {
+        return newname;
+      }
+    }
+  } else {
+    return name;
+  }
 }
 
 void QxrdDataProcessor::loadDarkImage(QString name)
@@ -1084,6 +1114,9 @@ void QxrdDataProcessor::powderRing(double cx, double cy, double radius, double w
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.34  2009/08/27 21:55:43  jennings
+*  Added code to make sure file saving routines will not overwrite data
+*
 *  Revision 1.33  2009/08/27 21:02:17  jennings
 *  Partial implementation of lazy plotting
 *
