@@ -75,6 +75,7 @@ Add some kind of beam presence detection threshold
 
 -------------------------------------------------------
 
+BLOCKER
 Make it possible to interrupt spec more gracefully - add some
 kind of cancel operation.
 
@@ -140,6 +141,9 @@ Flag dropped frames more obviously.
 
 BLOCKER
 Add timestamps and other metadata to saved files
+e.g.  TIFFTAG_ORIENTATION, TIFFTAG_DOCUMENTNAME
+TIFFTAG_IMAGEDESCRIPTION, TIFFTAG_DATETIME
+TIFFTAG_FRAMECOUNT?, TIFFTAG_UNIQUECAMERAMODEL?
 
 -------------------------------------------------------
 
@@ -148,6 +152,7 @@ Provide facility to save integrated scans
 
 -------------------------------------------------------
 
+BLOCKER
 Leak check...
 
 -------------------------------------------------------
@@ -165,6 +170,35 @@ Is not calling Acquisition_Init a problem?
 
 BLOCKER
 Allow finer-grained control of the processing chain
+
+-------------------------------------------------------
+
+Remove the g_Acquisition global and replace it with
+acquisition handle passed via Acquire_SetAcqData
+
+-------------------------------------------------------
+
+Rearrange the QxrdAcquisition hierarchy so that
+QxrdAcquisition becomes a base class and
+QxrdAcquisitionPerkinElmer the 'leaf' class that
+is instantiated.  Will simplify working with multiple
+detector types.
+
+-------------------------------------------------------
+
+BLOCKER
+Check that the load/save data, dark and mask routines
+actually work!
+
+-------------------------------------------------------
+
+BLOCKER
+Check handling of image dimensions for mask, acquisition
+etc.
+
+-------------------------------------------------------
+
+Try LZW encoding images to see how it affects performance
 
 -------------------------------------------------------
 
