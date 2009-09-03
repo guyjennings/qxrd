@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.h,v 1.2 2009/07/17 14:00:59 jennings Exp $
+*  $Id: qxrdscriptengine.h,v 1.3 2009/09/03 21:16:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -55,7 +55,9 @@ private:
   static QScriptValue exposureTimeFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue summedExposuresFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue darkSummedExposuresFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue filesInSequenceFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue preTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue postTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue triggerFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue filePatternFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue outputDirectoryFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue fileIndexFunc(QScriptContext *context, QScriptEngine *engine);
@@ -67,7 +69,7 @@ private:
   QxrdWindow            *m_Window;
   QxrdAcquisition       *m_Acquisition;
 
-  HEADER_IDENT("$Id: qxrdscriptengine.h,v 1.2 2009/07/17 14:00:59 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdscriptengine.h,v 1.3 2009/09/03 21:16:24 jennings Exp $");
 };
 
 #endif // QXRDSCRIPTENGINE_H
@@ -75,6 +77,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.h,v $
+*  Revision 1.3  2009/09/03 21:16:24  jennings
+*  Added properties and user interface elements for pre- and post- trigger counts
+*  Added properties and user interface elements for fine-grained control of processing chain
+*
 *  Revision 1.2  2009/07/17 14:00:59  jennings
 *  Rearranging acquisition and data processor
 *

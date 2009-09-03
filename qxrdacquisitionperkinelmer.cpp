@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.21 2009/08/27 21:02:17 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.22 2009/09/03 21:16:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -45,7 +45,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
 //    m_AcquiredData(NULL),
     m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.21 2009/08/27 21:02:17 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.22 2009/09/03 21:16:24 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -101,6 +101,11 @@ void QxrdAcquisitionPerkinElmer::cancel()
 void QxrdAcquisitionPerkinElmer::cancelDark()
 {
   haltAcquire();
+}
+
+void QxrdAcquisitionPerkinElmer::trigger()
+{
+  set_Trigger(true);
 }
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
@@ -237,6 +242,8 @@ void QxrdAcquisitionPerkinElmer::allocateMemoryForAcquisition()
     printf("Preallocating %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
 
     m_FreeInt32Images.deallocate();
+    m_PreTriggerInt32Images.deallocate();
+    m_PreTriggerInt16Images.deallocate();
     delete m_AcquiredInt32Data; m_AcquiredInt32Data = NULL;
     delete m_AcquiredInt16Data; m_AcquiredInt16Data = NULL;
 
@@ -251,6 +258,8 @@ void QxrdAcquisitionPerkinElmer::allocateMemoryForAcquisition()
     printf("Preallocating %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
 
     m_FreeInt16Images.deallocate();
+    m_PreTriggerInt32Images.deallocate();
+    m_PreTriggerInt16Images.deallocate();
     delete m_AcquiredInt32Data; m_AcquiredInt32Data = NULL;
     delete m_AcquiredInt16Data; m_AcquiredInt16Data = NULL;
 
@@ -273,6 +282,7 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
     int nRet = HIS_ALL_OK;
 
     set_AcquireDark(isDark);
+    set_Trigger(0);
 
     m_BufferSize = 4;
     m_BufferIndex = 0;
@@ -284,7 +294,7 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
       set_FilesInAcquiredSequence(1);
     } else {
       set_ExposuresToSum(get_SummedExposures());
-      set_FilesInAcquiredSequence(get_FilesInSequence());
+      set_FilesInAcquiredSequence(get_PostTriggerFiles());
     }
 
     if (get_FilesInAcquiredSequence ()<= 0) {
@@ -628,6 +638,10 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.22  2009/09/03 21:16:24  jennings
+*  Added properties and user interface elements for pre- and post- trigger counts
+*  Added properties and user interface elements for fine-grained control of processing chain
+*
 *  Revision 1.21  2009/08/27 21:02:17  jennings
 *  Partial implementation of lazy plotting
 *

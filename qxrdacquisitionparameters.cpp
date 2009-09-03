@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.10 2009/08/26 16:58:13 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.11 2009/09/03 21:16:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,9 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_ExposureTime(this,"exposureTime",0),
     m_ReadoutMode(this,"readoutMode",0),
     m_SummedExposures(this,"summedExposures",1),
-    m_FilesInSequence(this,"filesInSequence",1),
+    m_PreTriggerFiles(this,"preTriggerFiles", 0),
+    m_PostTriggerFiles(this,"postTriggerFiles",1),
+    m_Trigger(this,"triggered",0),
     m_FileIndex(this,"fileIndex",0),
     m_FilePattern(this,"filePattern",""),
     m_DarkSummedExposures(this,"darkSummedExposures",1),
@@ -31,8 +33,10 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_ExposuresToSum(this, "exposuresToSum", 1),
     m_FilesInAcquiredSequence(this, "filesInAcquiredSequence", 1),
     m_TotalBufferSize(this,"totalBufferSize", 1500000000),
+    m_Raw16SaveTime(this,"raw16SaveTime", 0.1),
+    m_Raw32SaveTime(this,"raw32SaveTime", 0.2),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.10 2009/08/26 16:58:13 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.11 2009/09/03 21:16:24 jennings Exp $")
 {
 }
 
@@ -53,6 +57,10 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.11  2009/09/03 21:16:24  jennings
+*  Added properties and user interface elements for pre- and post- trigger counts
+*  Added properties and user interface elements for fine-grained control of processing chain
+*
 *  Revision 1.10  2009/08/26 16:58:13  jennings
 *  Added TotalBufferSize property to specify the amount of memory to use for acquisition buffers
 *

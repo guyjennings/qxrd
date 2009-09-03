@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.12 2009/08/26 20:56:15 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.13 2009/09/03 21:16:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -30,6 +30,7 @@ public slots:
   void cancel();
   void cancelDark();
   void initialize();
+  void trigger();
 
 signals:
   void acquireStarted(int dark);
@@ -84,7 +85,10 @@ private:
   QVector<double>        m_ReadoutTimes;
   QxrdInt16ImageQueue    m_FreeInt16Images;
   QxrdInt32ImageQueue    m_FreeInt32Images;
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.12 2009/08/26 20:56:15 jennings Exp $");
+  QxrdInt16ImageQueue    m_PreTriggerInt16Images;
+  QxrdInt32ImageQueue    m_PreTriggerInt32Images;
+
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.13 2009/09/03 21:16:24 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -92,6 +96,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.13  2009/09/03 21:16:24  jennings
+*  Added properties and user interface elements for pre- and post- trigger counts
+*  Added properties and user interface elements for fine-grained control of processing chain
+*
 *  Revision 1.12  2009/08/26 20:56:15  jennings
 *  More Int16 and Int32 implementation
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.84 2009/08/27 21:02:17 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.85 2009/09/03 21:16:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.84 2009/08/27 21:02:17 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.85 2009/09/03 21:16:24 jennings Exp $")
 {
   setupUi(this);
 
@@ -77,19 +77,21 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   connect(m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
 
-  connect(m_LoadDarkButton, SIGNAL(clicked()), this, SLOT(doLoadDarkImage()));
-  connect(m_LoadBadPixelsButton, SIGNAL(clicked()), this, SLOT(doLoadBadPixels()));
-  connect(m_LoadGainCorrection, SIGNAL(clicked()), this, SLOT(doLoadGainMap()));
+//  connect(m_LoadDarkButton, SIGNAL(clicked()), this, SLOT(doLoadDarkImage()));
+//  connect(m_LoadBadPixelsButton, SIGNAL(clicked()), this, SLOT(doLoadBadPixels()));
+//  connect(m_LoadGainCorrection, SIGNAL(clicked()), this, SLOT(doLoadGainMap()));
 
   connect(m_AcquireButton, SIGNAL(clicked()), m_ActionAcquire, SIGNAL(triggered()));
   connect(m_CancelButton, SIGNAL(clicked()), m_ActionCancel, SIGNAL(triggered()));
   connect(m_DarkAcquireButton, SIGNAL(clicked()), m_ActionAcquireDark, SIGNAL(triggered()));
   connect(m_DarkCancelButton, SIGNAL(clicked()), m_ActionCancelDark, SIGNAL(triggered()));
+  connect(m_TriggerButton, SIGNAL(clicked()), m_ActionTrigger, SIGNAL(triggered()));
 
   connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
   connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
   connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
   connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
+  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
 
   connect(m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));
   connect(m_Display_5pct, SIGNAL(clicked()), m_Action005Range, SIGNAL(triggered()));
@@ -194,19 +196,25 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_Acquisition -> prop_ExposureTime() -> linkTo(m_ExposureTime);
   m_Acquisition -> prop_SummedExposures() -> linkTo(m_SummedExposures);
   m_Acquisition -> prop_DarkSummedExposures() -> linkTo(m_DarkSummedExposures);
-  m_Acquisition -> prop_FilesInSequence() -> linkTo(m_FilesInSequence);
   m_Acquisition -> prop_FilePattern() -> linkTo(m_FilePattern);
   m_Acquisition -> prop_FileIndex() -> linkTo(m_FileIndex);
+  m_Acquisition -> prop_PreTriggerFiles() -> linkTo(m_PreTriggerFiles);
+  m_Acquisition -> prop_PostTriggerFiles() -> linkTo(m_PostTriggerFiles);
 
   m_DataProcessor -> prop_OutputDirectory() -> linkTo(m_OutputDirectory);
   m_DataProcessor -> prop_PerformDarkSubtraction() -> linkTo(m_PerformDark);
   m_DataProcessor -> prop_SaveRawImages() -> linkTo(m_SaveRaw);
   m_DataProcessor -> prop_PerformBadPixels() -> linkTo(m_PerformBadPixels);
   m_DataProcessor -> prop_PerformGainCorrection() -> linkTo(m_PerformGainCorrection);
+  m_DataProcessor -> prop_SaveSubtracted() -> linkTo(m_SaveSubtracted);
+  m_DataProcessor -> prop_PerformIntegration() -> linkTo(m_PerformIntegration);
+  m_DataProcessor -> prop_DisplayIntegratedData() -> linkTo(m_DisplayIntegratedData);
+  m_DataProcessor -> prop_SaveIntegratedData() -> linkTo(m_SaveIntegratedData);
+  m_DataProcessor -> prop_EstimatedProcessingTime() -> linkTo(m_EstimatedProcessingTime);
 
-  m_DataProcessor -> prop_DarkImagePath() -> linkTo(m_DarkImagePath);
-  m_DataProcessor -> prop_BadPixelsPath() -> linkTo(m_BadPixelsPath);
-  m_DataProcessor -> prop_GainMapPath() -> linkTo(m_GainMapPath);
+//  m_DataProcessor -> prop_DarkImagePath() -> linkTo(m_DarkImagePath);
+//  m_DataProcessor -> prop_BadPixelsPath() -> linkTo(m_BadPixelsPath);
+//  m_DataProcessor -> prop_GainMapPath() -> linkTo(m_GainMapPath);
 
   m_DataProcessor -> prop_MaskMinimumValue() -> linkTo(Ui::QxrdWindow::m_MaskMinimum);
   m_DataProcessor -> prop_MaskMaximumValue() -> linkTo(Ui::QxrdWindow::m_MaskMaximum);
@@ -317,6 +325,7 @@ void QxrdWindow::acquisitionReady()
 //  readSettings();
 
   m_AcquireButton -> setEnabled(true);
+  m_TriggerButton -> setEnabled(false);
   m_CancelButton -> setEnabled(false);
   m_ActionAcquire -> setEnabled(true);
   m_ActionCancel -> setEnabled(false);
@@ -329,6 +338,12 @@ void QxrdWindow::acquisitionReady()
 
 void QxrdWindow::acquisitionStarted()
 {
+  if (m_Acquisition -> get_PreTriggerFiles() > 0) {
+    m_TriggerButton -> setEnabled(true);
+  } else {
+    m_TriggerButton -> setEnabled(false);
+  }
+
   m_AcquireButton -> setEnabled(false);
   m_CancelButton -> setEnabled(true);
   m_ActionAcquire -> setEnabled(false);
@@ -343,6 +358,7 @@ void QxrdWindow::acquisitionStarted()
 void QxrdWindow::darkAcquisitionStarted()
 {
   m_AcquireButton -> setEnabled(false);
+  m_TriggerButton -> setEnabled(false);
   m_CancelButton -> setEnabled(false);
   m_ActionAcquire -> setEnabled(false);
   m_ActionCancel -> setEnabled(false);
@@ -698,6 +714,10 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.85  2009/09/03 21:16:24  jennings
+*  Added properties and user interface elements for pre- and post- trigger counts
+*  Added properties and user interface elements for fine-grained control of processing chain
+*
 *  Revision 1.84  2009/08/27 21:02:17  jennings
 *  Partial implementation of lazy plotting
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.13 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.14 2009/09/03 21:16:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.13 2009/08/25 18:43:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.14 2009/09/03 21:16:24 jennings Exp $")
 {
 }
 
@@ -45,14 +45,14 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
     set_FilesInAcquiredSequence(1);
   } else {
     set_ExposuresToSum(get_SummedExposures());
-    set_FilesInAcquiredSequence(get_FilesInSequence());
+    set_FilesInAcquiredSequence(get_PostTriggerFiles());
   }
 
   if (get_FilesInAcquiredSequence ()<= 0) {
     set_FilesInAcquiredSequence(1);
   }
 
-  int n = get_FilesInSequence();
+  int n = get_PostTriggerFiles();
 
   for (int i=0; i<n; i++) {
     QTime tic;
@@ -185,6 +185,10 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.14  2009/09/03 21:16:24  jennings
+*  Added properties and user interface elements for pre- and post- trigger counts
+*  Added properties and user interface elements for fine-grained control of processing chain
+*
 *  Revision 1.13  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *

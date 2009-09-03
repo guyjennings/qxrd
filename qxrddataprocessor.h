@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.26 2009/08/27 21:55:43 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.27 2009/09/03 21:16:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -58,6 +58,42 @@ public:
   Q_PROPERTY(bool performGainCorrection READ get_PerformGainCorrection WRITE set_PerformGainCorrection);
   QCEP_BOOLEAN_PROPERTY(PerformGainCorrection);
 
+  Q_PROPERTY(bool saveSubracted READ get_SaveSubtracted WRITE set_SaveSubtracted);
+  QCEP_BOOLEAN_PROPERTY(SaveSubtracted);
+
+  Q_PROPERTY(bool performIntegration READ get_PerformIntegration WRITE set_PerformIntegration);
+  QCEP_BOOLEAN_PROPERTY(PerformIntegration);
+
+  Q_PROPERTY(bool displayIntegratedData READ get_DisplayIntegratedData WRITE set_DisplayIntegratedData);
+  QCEP_BOOLEAN_PROPERTY(DisplayIntegratedData);
+
+  Q_PROPERTY(bool saveIntegratedData READ get_SaveIntegratedData WRITE set_SaveIntegratedData);
+  QCEP_BOOLEAN_PROPERTY(SaveIntegratedData);
+
+  Q_PROPERTY(double performDarkSubtractionTime READ get_PerformDarkSubtractionTime WRITE set_PerformDarkSubtractionTime);
+  QCEP_DOUBLE_PROPERTY(PerformDarkSubtractionTime);
+
+  Q_PROPERTY(double performBadPixelsTime READ get_PerformBadPixelsTime WRITE set_PerformBadPixelsTime);
+  QCEP_DOUBLE_PROPERTY(PerformBadPixelsTime);
+
+  Q_PROPERTY(double performGainCorrectionTime READ get_PerformGainCorrectionTime WRITE set_PerformGainCorrectionTime);
+  QCEP_DOUBLE_PROPERTY(PerformGainCorrectionTime);
+
+  Q_PROPERTY(double saveSubractedTime READ get_SaveSubtractedTime WRITE set_SaveSubtractedTime);
+  QCEP_DOUBLE_PROPERTY(SaveSubtractedTime);
+
+  Q_PROPERTY(double performIntegrationTime READ get_PerformIntegrationTime WRITE set_PerformIntegrationTime);
+  QCEP_DOUBLE_PROPERTY(PerformIntegrationTime);
+
+  Q_PROPERTY(double displayIntegratedDataTime READ get_DisplayIntegratedDataTime WRITE set_DisplayIntegratedDataTime);
+  QCEP_DOUBLE_PROPERTY(DisplayIntegratedDataTime);
+
+  Q_PROPERTY(double saveIntegratedDataTime READ get_SaveIntegratedDataTime WRITE set_SaveIntegratedDataTime);
+  QCEP_DOUBLE_PROPERTY(SaveIntegratedDataTime);
+
+  Q_PROPERTY(double estimatedProcessingTime READ get_EstimatedProcessingTime WRITE set_EstimatedProcessingTime);
+  QCEP_DOUBLE_PROPERTY(EstimatedProcessingTime);
+
   Q_PROPERTY(QString fileName        READ get_FileName WRITE set_FileName);
   QCEP_STRING_PROPERTY(FileName);
 
@@ -108,6 +144,8 @@ public slots:
   void powderRing(double cx, double cy, double radius, double width, double strength, int oversample);
 
   QString uniqueFileName(QString name);
+
+  void updateEstimatedProcessingTime();
 
 public:
   QxrdDoubleImageData *takeNextFreeImage();
@@ -204,7 +242,7 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.26 2009/08/27 21:55:43 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.27 2009/09/03 21:16:24 jennings Exp $");
 };
 
 #endif
@@ -212,6 +250,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.27  2009/09/03 21:16:24  jennings
+*  Added properties and user interface elements for pre- and post- trigger counts
+*  Added properties and user interface elements for fine-grained control of processing chain
+*
 *  Revision 1.26  2009/08/27 21:55:43  jennings
 *  Added code to make sure file saving routines will not overwrite data
 *

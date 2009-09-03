@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.6 2009/07/21 22:55:48 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.7 2009/09/03 21:16:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,7 +27,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.6 2009/07/21 22:55:48 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.7 2009/09/03 21:16:24 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -62,7 +62,9 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("readoutMode", m_ScriptEngine -> newFunction(readoutModeFunc));
   m_ScriptEngine -> globalObject().setProperty("summedExposures", m_ScriptEngine -> newFunction(summedExposuresFunc));
   m_ScriptEngine -> globalObject().setProperty("darkSummedExposures", m_ScriptEngine -> newFunction(darkSummedExposuresFunc));
-  m_ScriptEngine -> globalObject().setProperty("filesInSequence", m_ScriptEngine -> newFunction(filesInSequenceFunc));
+  m_ScriptEngine -> globalObject().setProperty("preTriggerFiles", m_ScriptEngine -> newFunction(preTriggerFilesFunc));
+  m_ScriptEngine -> globalObject().setProperty("postTriggerFiles", m_ScriptEngine -> newFunction(postTriggerFilesFunc));
+  m_ScriptEngine -> globalObject().setProperty("trigger", m_ScriptEngine -> newFunction(triggerFunc));
   m_ScriptEngine -> globalObject().setProperty("filePattern", m_ScriptEngine -> newFunction(filePatternFunc));
   m_ScriptEngine -> globalObject().setProperty("outputDirectory", m_ScriptEngine -> newFunction(outputDirectoryFunc));
   m_ScriptEngine -> globalObject().setProperty("fileIndex", m_ScriptEngine -> newFunction(fileIndexFunc));
@@ -170,8 +172,12 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
 
   switch (nArgs) {
   default:
+
+  case 5:
+    g_Acquisition -> set_PreTriggerFiles(context -> argument(4).toUInt32());
+
   case 4:
-    g_Acquisition -> set_FilesInSequence(context -> argument(3).toUInt32());
+    g_Acquisition -> set_PostTriggerFiles(context -> argument(3).toUInt32());
 
   case 3:
     g_Acquisition -> set_SummedExposures(context -> argument(2).toUInt32());
@@ -259,13 +265,31 @@ QScriptValue QxrdScriptEngine::darkSummedExposuresFunc(QScriptContext *context, 
   return QScriptValue(engine, g_Acquisition -> get_DarkSummedExposures());
 }
 
-QScriptValue QxrdScriptEngine::filesInSequenceFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::preTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> set_FilesInSequence(context->argument(0).toUInt32());
+    g_Acquisition -> set_PreTriggerFiles(context->argument(0).toUInt32());
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_FilesInSequence());
+  return QScriptValue(engine, g_Acquisition -> get_PreTriggerFiles());
+}
+
+QScriptValue QxrdScriptEngine::postTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> set_PostTriggerFiles(context->argument(0).toUInt32());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> get_PostTriggerFiles());
+}
+
+QScriptValue QxrdScriptEngine::triggerFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    g_Acquisition -> set_Trigger(context->argument(0).toUInt32());
+  }
+
+  return QScriptValue(engine, g_Acquisition -> get_Trigger());
 }
 
 QScriptValue QxrdScriptEngine::filePatternFunc(QScriptContext *context, QScriptEngine *engine)
@@ -298,6 +322,10 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.7  2009/09/03 21:16:24  jennings
+*  Added properties and user interface elements for pre- and post- trigger counts
+*  Added properties and user interface elements for fine-grained control of processing chain
+*
 *  Revision 1.6  2009/07/21 22:55:48  jennings
 *  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
 *

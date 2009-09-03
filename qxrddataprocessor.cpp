@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.34 2009/08/27 21:55:43 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.35 2009/09/03 21:16:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,6 +29,18 @@ QxrdDataProcessor::QxrdDataProcessor
     m_SaveRawImages(this, "saveRawImages", true),
     m_PerformBadPixels(this, "performBadPixels", true),
     m_PerformGainCorrection(this, "performGainCorrection", true),
+    m_SaveSubtracted(this, "saveSubtracted", true),
+    m_PerformIntegration(this, "performIntegration", true),
+    m_DisplayIntegratedData(this, "displayIntegratedData", true),
+    m_SaveIntegratedData(this, "saveIntegratedData", true),
+    m_PerformDarkSubtractionTime(this, "performDarkSubtractionTime", 0.01),
+    m_PerformBadPixelsTime(this, "performBadPixelsTime", 0.01),
+    m_PerformGainCorrectionTime(this, "performGainCorrectionTime", 0.01),
+    m_SaveSubtractedTime(this, "saveSubractedTime", 0.1),
+    m_PerformIntegrationTime(this, "performIntegrationTime", 0.05),
+    m_DisplayIntegratedDataTime(this, "displayIntegratedDataTime", 0.2),
+    m_SaveIntegratedDataTime(this, "saveIntegratedDataTime", 0.01),
+    m_EstimatedProcessingTime(this, "estimatedProcessingTime", 0.1),
     m_FileName(this,"fileName",""),
     m_MaskMinimumValue(this, "maskMinimumValue", 0),
     m_MaskMaximumValue(this, "maskMaximumValue", 20000),
@@ -49,7 +61,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.34 2009/08/27 21:55:43 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.35 2009/09/03 21:16:24 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -67,6 +79,25 @@ void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
           this, SLOT(onAcquiredInt32ImageAvailable(QxrdInt32ImageData*)));
 /*  connect(m_Acquisition, SIGNAL(darkImageAvailable(QxrdDoubleImageData*)),
           this, SLOT(onDarkImageAvailable(QxrdDoubleImageData*))); */
+
+  connect(prop_SaveRawImages(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_PerformDarkSubtraction(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_PerformBadPixels(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_PerformGainCorrection(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_SaveSubtracted(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_PerformIntegration(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_DisplayIntegratedData(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_SaveIntegratedData(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_PerformDarkSubtractionTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_PerformBadPixelsTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_PerformGainCorrectionTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_SaveSubtractedTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_PerformIntegrationTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_DisplayIntegratedDataTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_SaveIntegratedDataTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(m_Acquisition -> prop_SummedExposures(), SIGNAL(changedValue(int)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(m_Acquisition -> prop_Raw16SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(m_Acquisition -> prop_Raw32SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
 }
 
 void QxrdDataProcessor::setWindow(QxrdWindow *win)
@@ -239,7 +270,7 @@ void QxrdDataProcessor::newDarkImage(QxrdDoubleImageData *image)
 
 void QxrdDataProcessor::newDarkImage(QxrdInt16ImageData *image)
 {
-  if (m_DarkFrame = NULL) {
+  if (m_DarkFrame == NULL) {
     m_DarkFrame = new QxrdDoubleImageData();
   }
 
@@ -252,7 +283,7 @@ void QxrdDataProcessor::newDarkImage(QxrdInt16ImageData *image)
 
 void QxrdDataProcessor::newDarkImage(QxrdInt32ImageData *image)
 {
-  if (m_DarkFrame = NULL) {
+  if (m_DarkFrame == NULL) {
     m_DarkFrame = new QxrdDoubleImageData();
   }
 
@@ -805,6 +836,49 @@ void QxrdDataProcessor::correctImageGains(QxrdDoubleImageData */*image*/)
 {
 }
 
+void QxrdDataProcessor::updateEstimatedProcessingTime()
+{
+  double estTime = 0;
+
+  if (get_SaveRawImages()) {
+    if (m_Acquisition -> get_SummedExposures() > 1) {
+      estTime += m_Acquisition -> get_Raw32SaveTime();
+    } else {
+      estTime += m_Acquisition -> get_Raw16SaveTime();
+    }
+  }
+
+  if (get_PerformDarkSubtraction()) {
+    estTime += get_PerformDarkSubtractionTime();
+  }
+
+  if (get_PerformBadPixels()) {
+    estTime += get_PerformBadPixelsTime();
+  }
+
+  if (get_PerformGainCorrection()) {
+    estTime += get_PerformGainCorrectionTime();
+  }
+
+  if (get_SaveSubtracted()) {
+    estTime += get_SaveSubtractedTime();
+  }
+
+  if (get_PerformIntegration()) {
+    estTime += get_PerformIntegrationTime();
+  }
+
+  if (get_DisplayIntegratedData()) {
+    estTime += get_DisplayIntegratedDataTime();
+  }
+
+  if (get_SaveIntegratedData()) {
+    estTime += get_SaveIntegratedDataTime();
+  }
+
+  set_EstimatedProcessingTime(estTime);
+}
+
 void QxrdDataProcessor::showMaskRange(/*double min, double max*/)
 {
   double min = get_MaskMinimumValue();
@@ -1114,6 +1188,10 @@ void QxrdDataProcessor::powderRing(double cx, double cy, double radius, double w
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.35  2009/09/03 21:16:24  jennings
+*  Added properties and user interface elements for pre- and post- trigger counts
+*  Added properties and user interface elements for fine-grained control of processing chain
+*
 *  Revision 1.34  2009/08/27 21:55:43  jennings
 *  Added code to make sure file saving routines will not overwrite data
 *

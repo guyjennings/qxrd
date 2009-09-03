@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.11 2009/08/26 16:58:13 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.12 2009/09/03 21:16:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -44,8 +44,14 @@ public:
   Q_PROPERTY(int    summedExposures  READ get_SummedExposures WRITE set_SummedExposures);
   QCEP_INTEGER_PROPERTY(SummedExposures);
 
-  Q_PROPERTY(int    filesInSequence  READ get_FilesInSequence WRITE set_FilesInSequence);
-  QCEP_INTEGER_PROPERTY(FilesInSequence);
+  Q_PROPERTY(int     preTriggerFiles    READ get_PreTriggerFiles WRITE set_PreTriggerFiles);
+  QCEP_INTEGER_PROPERTY(PreTriggerFiles);
+
+  Q_PROPERTY(int    postTriggerFiles  READ get_PostTriggerFiles WRITE set_PostTriggerFiles);
+  QCEP_INTEGER_PROPERTY(PostTriggerFiles);
+
+  Q_PROPERTY(int    trigger  READ get_Trigger WRITE set_Trigger);
+  QCEP_INTEGER_PROPERTY(Trigger);
 
   Q_PROPERTY(int    fileIndex        READ get_FileIndex WRITE set_FileIndex);
   QCEP_INTEGER_PROPERTY(FileIndex);
@@ -86,13 +92,19 @@ public:
   Q_PROPERTY(int     totalBufferSize    READ get_TotalBufferSize WRITE set_TotalBufferSize);
   QCEP_INTEGER_PROPERTY(TotalBufferSize);
 
+  Q_PROPERTY(double     raw16SaveTime    READ get_Raw16SaveTime WRITE set_Raw16SaveTime);
+  QCEP_DOUBLE_PROPERTY(Raw16SaveTime);
+
+  Q_PROPERTY(double     raw32SaveTime    READ get_Raw32SaveTime WRITE set_Raw32SaveTime);
+  QCEP_DOUBLE_PROPERTY(Raw32SaveTime);
+
 //  Q_PROPERTY(int     cameraMode      READ cameraMode WRITE setCameraMode);
 //  Q_PROPERTY(int     frameSyncMode   READ frameSyncMode WRITE setFrameSyncMode);
 //  Q_PROPERTY(int     timerSync       READ timerSync WRITE setTimerSync);
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.11 2009/08/26 16:58:13 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.12 2009/09/03 21:16:24 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -100,6 +112,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.12  2009/09/03 21:16:24  jennings
+*  Added properties and user interface elements for pre- and post- trigger counts
+*  Added properties and user interface elements for fine-grained control of processing chain
+*
 *  Revision 1.11  2009/08/26 16:58:13  jennings
 *  Added TotalBufferSize property to specify the amount of memory to use for acquisition buffers
 *
