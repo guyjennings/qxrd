@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: xisl_dummy.cpp,v 1.11 2009/06/28 16:33:20 jennings Exp $
+*  $Id: xisl_dummy.cpp,v 1.12 2009/09/03 21:14:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,7 +32,7 @@ static AcquisitionTimer timer;
 AcquisitionTimer::AcquisitionTimer()
   : QObject(NULL),
     m_Mode(0),
-    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.11 2009/06/28 16:33:20 jennings Exp $")
+    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.12 2009/09/03 21:14:48 jennings Exp $")
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
@@ -225,9 +225,22 @@ HIS_RETURN Acquisition_GetActFrame(HACQDESC /*hAcqDesc*/, DWORD *dwActAcqFrame, 
   return HIS_ALL_OK;
 }
 
+HIS_RETURN Acquisition_GetHwHeaderInfoEx(HACQDESC hAcqDesc, CHwHeaderInfo *pInfo ,CHwHeaderInfoEx *pInfoEx)
+{
+  return HIS_ALL_OK;
+}
+
+HIS_RETURN Acquisition_GetHwHeaderInfo(HACQDESC hAcqDesc, CHwHeaderInfo *pInfo)
+{
+  return HIS_ALL_OK;
+}
+
 /******************************************************************
 *
 *  $Log: xisl_dummy.cpp,v $
+*  Revision 1.12  2009/09/03 21:14:48  jennings
+*  Added dummy Acquire_GetHwHeaderInfo{,Ex} routines
+*
 *  Revision 1.11  2009/06/28 16:33:20  jennings
 *  Eliminated compiler warnings
 *
