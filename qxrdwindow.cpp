@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.86 2009/09/04 12:46:35 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.87 2009/09/04 15:15:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.86 2009/09/04 12:46:35 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.87 2009/09/04 15:15:43 jennings Exp $")
 {
   setupUi(this);
 
@@ -318,6 +318,8 @@ void QxrdWindow::printMessage(QString msg)
 //  printf("%s\n", qPrintable(msg));
 //
   m_Messages -> append(timeStamp()+msg.trimmed());
+
+  m_DataProcessor -> logMessage(msg);
 }
 
 void QxrdWindow::criticalMessage(QString msg)
@@ -444,7 +446,7 @@ void QxrdWindow::onAcquireComplete(int /*dark*/)
 
 void QxrdWindow::doAcquire()
 {
-//  printMessage("QxrdWindow::doAcquire()\n");
+//  printMessage("QxrdWindow::doAcquire()");
 
   acquisitionStarted();
 
@@ -719,6 +721,10 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.87  2009/09/04 15:15:43  jennings
+*  Added log file routines
+*  Removed newlines from any printMessage calls.
+*
 *  Revision 1.86  2009/09/04 12:46:35  jennings
 *  Added binning mode parameter
 *  Added camera gain and binning mode user interfaces

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.35 2009/09/03 21:16:24 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.36 2009/09/04 15:15:42 jennings Exp $
 *
 *******************************************************************/
 
@@ -25,6 +25,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_DarkImagePath(this, "darkImagePath", ""),
     m_BadPixelsPath(this, "badPixelsPath", ""),
     m_GainMapPath(this, "gainMapPath", ""),
+    m_LogFilePath(this, "logFilePath", "qxrd.log"),
     m_PerformDarkSubtraction(this, "performDarkSubtraction", true),
     m_SaveRawImages(this, "saveRawImages", true),
     m_PerformBadPixels(this, "performBadPixels", true),
@@ -61,7 +62,8 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.35 2009/09/03 21:16:24 jennings Exp $")
+    m_LogFile(NULL),
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.36 2009/09/04 15:15:42 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -123,6 +125,8 @@ void QxrdDataProcessor::readSettings(QxrdSettings *settings, QString section)
 
   m_CenterFinder -> readSettings(settings, section+"/centerfinder");
   m_Integrator   -> readSettings(settings, section+"/integrator");
+
+  newLogFile(get_LogFilePath());
 }
 
 //void QxrdDataProcessor::onAcquiredImageAvailable(QxrdDoubleImageData *image)
@@ -1185,9 +1189,54 @@ void QxrdDataProcessor::powderRing(double cx, double cy, double radius, double w
   newData(m_Data);
 }
 
+void QxrdDataProcessor::openLogFile()
+{
+  if (m_LogFile == NULL) {
+    m_LogFile = fopen(qPrintable(get_LogFilePath()), "a");
+
+    if (m_LogFile) {
+      writeLogHeader();
+    }
+  }
+}
+
+void QxrdDataProcessor::newLogFile(QString path)
+{
+  if (m_LogFile) {
+    fclose(m_LogFile);
+    m_LogFile = NULL;
+  }
+
+  set_LogFilePath(path);
+
+  openLogFile();
+}
+
+void QxrdDataProcessor::writeLogHeader()
+{
+  if (m_LogFile) {
+    fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFilePath()));
+    fprintf(m_LogFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
+    fprintf(m_LogFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
+  }
+}
+
+void QxrdDataProcessor::logMessage(QString msg)
+{
+  openLogFile();
+
+  if (m_LogFile) {
+    fprintf(m_LogFile, "#CX %s\n", qPrintable(msg));
+  }
+}
+
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.36  2009/09/04 15:15:42  jennings
+*  Added log file routines
+*  Removed newlines from any printMessage calls.
+*
 *  Revision 1.35  2009/09/03 21:16:24  jennings
 *  Added properties and user interface elements for pre- and post- trigger counts
 *  Added properties and user interface elements for fine-grained control of processing chain

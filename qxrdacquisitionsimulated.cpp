@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.14 2009/09/03 21:16:24 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.15 2009/09/04 15:15:42 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.14 2009/09/03 21:16:24 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.15 2009/09/04 15:15:42 jennings Exp $")
 {
 }
 
@@ -59,7 +59,7 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 
     tic.start();
 
-    emit printMessage(tr("Started acquisition %1\n").arg(i));
+    emit printMessage(tr("Started acquisition %1").arg(i));
 
     if (get_Cancelling()) {
       set_Cancelling(false);
@@ -71,7 +71,7 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
     acquiredData -> resize(get_NCols(), get_NRows());
     acquiredData -> clear();
 
-    emit printMessage(tr("Cleared data after %1\n").arg(tic.restart()));
+    emit printMessage(tr("Cleared data after %1").arg(tic.restart()));
 
     int nRows = get_NRows();
     int nCols = get_NCols();
@@ -126,12 +126,12 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
       }
     }
 
-    emit printMessage(tr("Simulated data after %1\n").arg(tic.restart()));
+    emit printMessage(tr("Simulated data after %1").arg(tic.restart()));
 
 //    acquiredData -> showMaskAll();
     acquiredData -> calculateRange();
 
-    emit printMessage(tr("Initialize mask and range after %1\n").arg(tic.restart()));
+    emit printMessage(tr("Initialize mask and range after %1").arg(tic.restart()));
 
     QString fileName;
     QString fileBase;
@@ -171,7 +171,7 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 
     m_DataProcessor -> incrementAcquiredCount();
 
-    emit printMessage(tr("Acquired image complete after %1\n").arg(tic.restart()));
+    emit printMessage(tr("Acquired image complete after %1").arg(tic.restart()));
 
     emit acquiredImageAvailable(acquiredData);
 
@@ -185,6 +185,10 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.15  2009/09/04 15:15:42  jennings
+*  Added log file routines
+*  Removed newlines from any printMessage calls.
+*
 *  Revision 1.14  2009/09/03 21:16:24  jennings
 *  Added properties and user interface elements for pre- and post- trigger counts
 *  Added properties and user interface elements for fine-grained control of processing chain

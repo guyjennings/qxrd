@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.27 2009/09/03 21:16:24 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.28 2009/09/04 15:15:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -45,6 +45,9 @@ public:
 
   Q_PROPERTY(QString gainMapPath     READ get_GainMapPath WRITE set_GainMapPath);
   QCEP_STRING_PROPERTY(GainMapPath);
+
+  Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath);
+  QCEP_STRING_PROPERTY(LogFilePath);
 
   Q_PROPERTY(bool performDarkSubtraction READ get_PerformDarkSubtraction WRITE set_PerformDarkSubtraction);
   QCEP_BOOLEAN_PROPERTY(PerformDarkSubtraction);
@@ -147,6 +150,9 @@ public slots:
 
   void updateEstimatedProcessingTime();
 
+  void newLogFile(QString path);
+  void logMessage(QString msg);
+
 public:
   QxrdDoubleImageData *takeNextFreeImage();
 //  QxrdDoubleImageData *takeLatestProcessedImage();
@@ -216,6 +222,8 @@ private:
   void newGainMapImage(QxrdDoubleImageData *image);
   void newMask(QxrdMaskData *mask);
 
+  void openLogFile();
+  void writeLogHeader();
 
 private:
   mutable QMutex            m_Mutex;
@@ -242,7 +250,9 @@ private:
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.27 2009/09/03 21:16:24 jennings Exp $");
+  FILE                     *m_LogFile;
+
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.28 2009/09/04 15:15:43 jennings Exp $");
 };
 
 #endif
@@ -250,6 +260,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.28  2009/09/04 15:15:43  jennings
+*  Added log file routines
+*  Removed newlines from any printMessage calls.
+*
 *  Revision 1.27  2009/09/03 21:16:24  jennings
 *  Added properties and user interface elements for pre- and post- trigger counts
 *  Added properties and user interface elements for fine-grained control of processing chain

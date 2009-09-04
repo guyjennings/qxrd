@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.24 2009/09/04 12:46:35 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.25 2009/09/04 15:15:42 jennings Exp $
 *
 *******************************************************************/
 
@@ -49,7 +49,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_HeaderID(-1),
     m_CameraType(-1),
     m_CameraModel(""),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.24 2009/09/04 12:46:35 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.25 2009/09/04 15:15:42 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -90,7 +90,7 @@ void QxrdAcquisitionPerkinElmer::acquireDark()
 //         thread(), QThread::currentThread());
   m_Acquiring.lock();
 
-  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquireDark()\n"));
+  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquireDark()"));
   emit statusMessage("Starting dark acquisition");
   emit acquireStarted(1);
 
@@ -121,7 +121,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
 {
   THREAD_CHECK;
 
-  emit printMessage("QxrdAcquisitionPerkinElmer::initialize()\n");
+  emit printMessage("QxrdAcquisitionPerkinElmer::initialize()");
 
   int nRet = HIS_ALL_OK;
   UINT nSensors;
@@ -134,7 +134,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
 
   nRet = Acquisition_EnumSensors(&nSensors, bEnableIRQ, FALSE);
 
-  emit printMessage(tr("Acquisition_EnumSensors = %1\n").arg(nRet));
+  emit printMessage(tr("Acquisition_EnumSensors = %1").arg(nRet));
 
   if (nRet != HIS_ALL_OK) {
     acquisitionInitError(nRet);
@@ -143,7 +143,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     return;
   }
 
-  emit printMessage(tr("Number of sensors = %1\n").arg(nSensors));
+  emit printMessage(tr("Number of sensors = %1").arg(nSensors));
 
   if (nSensors != 1) {
     acquisitionNSensorsError(nRet);
@@ -215,9 +215,9 @@ void QxrdAcquisitionPerkinElmer::initialize()
     emit oneReadoutModeChanged(i, readoutTimes[i]);
   }
 
-  emit printMessage(tr("channel type: %1, ChannelNr: %2\n").arg(nChannelType).arg(nChannelNr));
-  emit printMessage(tr("frames: %1\n").arg(dwFrames));
-  emit printMessage(tr("rows: %1\ncolumns: %2\n").arg(dwRows).arg(dwColumns));
+  emit printMessage(tr("channel type: %1, ChannelNr: %2").arg(nChannelType).arg(nChannelNr));
+  emit printMessage(tr("frames: %1").arg(dwFrames));
+  emit printMessage(tr("rows: %1, columns: %2").arg(dwRows).arg(dwColumns));
 
   if ((nRet=Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
                                                 0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
@@ -248,7 +248,7 @@ void QxrdAcquisitionPerkinElmer::allocateMemoryForAcquisition()
     int nMaxFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(quint16));
     int nFrames = qMin(get_FilesInAcquiredSequence(), nMaxFrames);
 
-    printf("Preallocating %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
+    emit printMessage(tr("Preallocating %1 %2 x %3 16 bit images").arg(nFrames).arg(get_NCols()).arg(get_NRows()));
 
     m_FreeInt32Images.deallocate();
     m_PreTriggerInt32Images.deallocate();
@@ -259,12 +259,12 @@ void QxrdAcquisitionPerkinElmer::allocateMemoryForAcquisition()
 
     m_FreeInt16Images.preallocate(nFrames, get_NCols(), get_NRows());
 
-    printf("Preallocated %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
+    emit printMessage(tr("Preallocated %1 %2 x %3 16 bit images").arg(nFrames).arg(get_NCols()).arg(get_NRows()));
   } else {
     int nMaxFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(qint32));
     int nFrames = qMin(get_FilesInAcquiredSequence(), nMaxFrames);
 
-    printf("Preallocating %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
+    emit printMessage(tr("Preallocating %1 %2 x %3 32 bit images").arg(nFrames).arg(get_NCols()).arg(get_NRows()));
 
     m_FreeInt16Images.deallocate();
     m_PreTriggerInt32Images.deallocate();
@@ -275,7 +275,7 @@ void QxrdAcquisitionPerkinElmer::allocateMemoryForAcquisition()
 
     m_FreeInt32Images.preallocate(nFrames, get_NCols(), get_NRows());
 
-    printf("Preallocated %d %d x %d 16 bit images\n", nFrames, get_NCols(), get_NRows());
+    emit printMessage(tr("Preallocated %1 %2 x %3 32 bit images").arg(nFrames).arg(get_NCols()).arg(get_NRows()));
   }
 }
 
@@ -430,7 +430,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
   Acquisition_GetActFrame(m_AcqDesc, &actualFrame, &actSecFrame);
 
   if (((actSecFrame-1)%m_BufferSize) != m_BufferIndex) {
-    printf("actSecFrame %d, m_BufferIndex %d\n", actSecFrame, m_BufferIndex);
+    emit printMessage(tr("actSecFrame %1, m_BufferIndex %2").arg(actSecFrame).arg(m_BufferIndex));
   }
 
 //   printf("m_AcquiredImage.data() = %p\n", current);
@@ -456,7 +456,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
       m_CurrentExposure++;
     } else {
-      printf("Frame dropped\n");
+      emit printMessage("Frame dropped");
     }
   } else {
     if (m_AcquiredInt32Data == NULL) {
@@ -476,7 +476,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
       m_CurrentExposure++;
     } else {
-      printf("Frame dropped\n");
+      emit printMessage("Frame dropped");
     }
   }
 
@@ -565,8 +565,8 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
     set_FileIndex(get_FileIndex()+1);
 
     if (m_CurrentFile >= (get_FilesInAcquiredSequence() + get_PreTriggerFiles())) {
-      emit printMessage("Acquisition ended\n");
-      emit printMessage("Aborted acquisition\n");
+      emit printMessage("Acquisition ended");
+      emit printMessage("Halted acquisition");
 
       haltAcquire();
 
@@ -640,8 +640,8 @@ void QxrdAcquisitionPerkinElmer::acquisitionError(int n)
 {
   haltAcquire();
 
-  emit printMessage(tr("Acquisition Error %1\n").arg(n));
-  emit statusMessage(tr("Acquisition Error %1\n").arg(n));
+  emit printMessage(tr("Acquisition Error %1").arg(n));
+  emit statusMessage(tr("Acquisition Error %1").arg(n));
 }
 
 void QxrdAcquisitionPerkinElmer::acquisitionInitError(int n)
@@ -719,6 +719,10 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.25  2009/09/04 15:15:42  jennings
+*  Added log file routines
+*  Removed newlines from any printMessage calls.
+*
 *  Revision 1.24  2009/09/04 12:46:35  jennings
 *  Added binning mode parameter
 *  Added camera gain and binning mode user interfaces
