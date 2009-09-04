@@ -102,10 +102,6 @@ Display range choosing doesn't work very well
 
 -------------------------------------------------------
 
-Provide a user interface to the camera gain setting
-
--------------------------------------------------------
-
 BLOCKER
 Dark subtraction doesn't seem to be working at the moment
 
@@ -161,10 +157,16 @@ Coalesce controls from the 'output' panel into the 'acquire' panel
 
 -------------------------------------------------------
 
+BLOCKER
 Do camera model number check...
 Check more hardware settings when entering program...
 Support binning modes...
 Is not calling Acquisition_Init a problem?
+
+-------------------------------------------------------
+
+BLOCKER
+Provide a user interface to the camera gain setting
 
 -------------------------------------------------------
 
