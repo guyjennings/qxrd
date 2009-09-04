@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.13 2009/09/03 21:16:24 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.14 2009/09/04 02:44:15 jennings Exp $
 *
 *******************************************************************/
 
@@ -63,6 +63,8 @@ private:
   void acquisitionInitError(int n);
   void acquisitionNSensorsError(int n);
   void allocateMemoryForAcquisition();
+  void acquiredInt16Image();
+  void acquiredInt32Image();
 
 private:
   mutable QMutex         m_Mutex;
@@ -88,7 +90,7 @@ private:
   QxrdInt16ImageQueue    m_PreTriggerInt16Images;
   QxrdInt32ImageQueue    m_PreTriggerInt32Images;
 
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.13 2009/09/03 21:16:24 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.14 2009/09/04 02:44:15 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -96,6 +98,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.14  2009/09/04 02:44:15  jennings
+*  Implement pre-trigger acquisition
+*
 *  Revision 1.13  2009/09/03 21:16:24  jennings
 *  Added properties and user interface elements for pre- and post- trigger counts
 *  Added properties and user interface elements for fine-grained control of processing chain

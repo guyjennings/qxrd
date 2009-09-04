@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.22 2009/09/03 21:16:24 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.23 2009/09/04 02:44:15 jennings Exp $
 *
 *******************************************************************/
 
@@ -45,7 +45,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
 //    m_AcquiredData(NULL),
     m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.22 2009/09/03 21:16:24 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.23 2009/09/04 02:44:15 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -426,7 +426,11 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
   if (get_ExposuresToSum() == 1) {
     if (m_AcquiredInt16Data == NULL) {
-      m_AcquiredInt16Data = m_FreeInt16Images.dequeue();
+      if (m_PreTriggerInt16Images.size() > get_PreTriggerFiles()) {
+        m_AcquiredInt16Data = m_PreTriggerInt16Images.dequeue();
+      } else {
+        m_AcquiredInt16Data = m_FreeInt16Images.dequeue();
+      }
     }
 
     if (m_AcquiredInt16Data != NULL) {
@@ -442,7 +446,11 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
     }
   } else {
     if (m_AcquiredInt32Data == NULL) {
-      m_AcquiredInt32Data = m_FreeInt32Images.dequeue();
+      if (m_PreTriggerInt32Images.size() > get_PreTriggerFiles()) {
+        m_AcquiredInt32Data = m_PreTriggerInt32Images.dequeue();
+      } else {
+        m_AcquiredInt32Data = m_FreeInt32Images.dequeue();
+      }
     }
 
     if (m_AcquiredInt32Data != NULL) {
@@ -482,15 +490,28 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
       if (get_AcquireDark()) {
         m_AcquiredInt16Data -> set_ImageNumber(-1);
-      } else {
-        m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile);
+        acquiredInt16Image();
+      } else {        
+        if (get_PreTriggerFiles() > 0) {
+          if (get_Trigger()) {
+            while (m_PreTriggerInt16Images.size() > 0) {
+              QxrdInt16ImageData *img = m_PreTriggerInt16Images.dequeue();
+
+              img -> set_ImageNumber(m_CurrentFile++);
+
+              m_DataProcessor -> incrementAcquiredCount();
+              emit acquiredInt16ImageAvailable(img);
+            }
+            acquiredInt16Image();
+          } else {
+            m_PreTriggerInt16Images.enqueue(m_AcquiredInt16Data);
+          }
+        } else {
+          m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile++);
+
+          acquiredInt16Image();
+        }
       }
-
-      m_DataProcessor -> incrementAcquiredCount();
-
-      emit acquiredInt16ImageAvailable(m_AcquiredInt16Data);
-
-      m_AcquiredInt16Data = NULL;
     } else {
       m_AcquiredInt32Data -> set_FileName(fileName);
       m_AcquiredInt32Data -> set_Title(finfo.fileName());
@@ -500,24 +521,36 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
       if (get_AcquireDark()) {
         m_AcquiredInt32Data -> set_ImageNumber(-1);
+        acquiredInt32Image();
       } else {
-        m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile);
+        if (get_PreTriggerFiles() > 0) {
+          if (get_Trigger()) {
+            while (m_PreTriggerInt32Images.size() > 0) {
+              QxrdInt32ImageData *img = m_PreTriggerInt32Images.dequeue();
+
+              img -> set_ImageNumber(m_CurrentFile++);
+
+              m_DataProcessor -> incrementAcquiredCount();
+              emit acquiredInt32ImageAvailable(img);
+            }
+            acquiredInt32Image();
+          } else {
+            m_PreTriggerInt32Images.enqueue(m_AcquiredInt32Data);
+          }
+        } else {
+          m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile++);
+
+          acquiredInt32Image();
+        }
       }
-
-      m_DataProcessor -> incrementAcquiredCount();
-
-      emit acquiredInt32ImageAvailable(m_AcquiredInt32Data);
-
-      m_AcquiredInt32Data = NULL;
     }
 
     emit statusMessage("Saving "+fileName);
     emit printMessage("Saving """+fileName+"""");
 
     set_FileIndex(get_FileIndex()+1);
-    m_CurrentFile++;
 
-    if (m_CurrentFile >= get_FilesInAcquiredSequence()) {
+    if (m_CurrentFile >= (get_FilesInAcquiredSequence() + get_PreTriggerFiles())) {
       emit printMessage("Acquisition ended\n");
       emit printMessage("Aborted acquisition\n");
 
@@ -528,6 +561,24 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
   }
 
 //  return false;
+}
+
+void QxrdAcquisitionPerkinElmer::acquiredInt16Image()
+{
+  m_DataProcessor -> incrementAcquiredCount();
+
+  emit acquiredInt16ImageAvailable(m_AcquiredInt16Data);
+
+  m_AcquiredInt16Data = NULL;
+}
+
+void QxrdAcquisitionPerkinElmer::acquiredInt32Image()
+{
+  m_DataProcessor -> incrementAcquiredCount();
+
+  emit acquiredInt32ImageAvailable(m_AcquiredInt32Data);
+
+  m_AcquiredInt32Data = NULL;
 }
 
 void QxrdAcquisitionPerkinElmer::haltAcquire()
@@ -638,6 +689,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.23  2009/09/04 02:44:15  jennings
+*  Implement pre-trigger acquisition
+*
 *  Revision 1.22  2009/09/03 21:16:24  jennings
 *  Added properties and user interface elements for pre- and post- trigger counts
 *  Added properties and user interface elements for fine-grained control of processing chain
