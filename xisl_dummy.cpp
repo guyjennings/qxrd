@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: xisl_dummy.cpp,v 1.12 2009/09/03 21:14:48 jennings Exp $
+*  $Id: xisl_dummy.cpp,v 1.13 2009/09/04 12:47:09 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,7 +32,7 @@ static AcquisitionTimer timer;
 AcquisitionTimer::AcquisitionTimer()
   : QObject(NULL),
     m_Mode(0),
-    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.12 2009/09/03 21:14:48 jennings Exp $")
+    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.13 2009/09/04 12:47:09 jennings Exp $")
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
@@ -186,6 +186,11 @@ HIS_RETURN Acquisition_SetCameraMode(HACQDESC /*hAcqDesc*/, UINT dwMode)
   return HIS_ALL_OK;
 }
 
+HIS_RETURN Acquisition_SetCameraBinningMode(HACQDESC /*hAcqDesc*/, WORD dwMode)
+{
+  return HIS_ALL_OK;
+}
+
 void AcquisitionTimer::timeout()
 {
   if (endFrameCallback) {
@@ -238,6 +243,9 @@ HIS_RETURN Acquisition_GetHwHeaderInfo(HACQDESC hAcqDesc, CHwHeaderInfo *pInfo)
 /******************************************************************
 *
 *  $Log: xisl_dummy.cpp,v $
+*  Revision 1.13  2009/09/04 12:47:09  jennings
+*  Added binning mode dummy routine
+*
 *  Revision 1.12  2009/09/03 21:14:48  jennings
 *  Added dummy Acquire_GetHwHeaderInfo{,Ex} routines
 *
