@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.12 2009/09/03 21:16:24 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.13 2009/09/04 12:45:38 jennings Exp $
 *
 *******************************************************************/
 
@@ -65,6 +65,9 @@ public:
   Q_PROPERTY(int     cameraGain      READ get_CameraGain WRITE set_CameraGain);
   QCEP_INTEGER_PROPERTY(CameraGain);
 
+  Q_PROPERTY(int     binningMode      READ get_BinningMode WRITE set_BinningMode);
+  QCEP_INTEGER_PROPERTY(BinningMode);
+
   Q_PROPERTY(QString fileBase        READ get_FileBase WRITE set_FileBase);
   QCEP_STRING_PROPERTY(FileBase);
 
@@ -104,7 +107,7 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.12 2009/09/03 21:16:24 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.13 2009/09/04 12:45:38 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -112,6 +115,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.13  2009/09/04 12:45:38  jennings
+*  Added binning mode parameter
+*
 *  Revision 1.12  2009/09/03 21:16:24  jennings
 *  Added properties and user interface elements for pre- and post- trigger counts
 *  Added properties and user interface elements for fine-grained control of processing chain

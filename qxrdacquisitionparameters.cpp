@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.11 2009/09/03 21:16:24 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.12 2009/09/04 12:45:38 jennings Exp $
 *
 *******************************************************************/
 
@@ -24,6 +24,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_FilePattern(this,"filePattern",""),
     m_DarkSummedExposures(this,"darkSummedExposures",1),
     m_CameraGain(this,"cameraGain",0),
+    m_BinningMode(this,"binningMode",0),
     m_FileBase(this,"fileBase",""),
     m_SimulationMode(this, "simulationMode", false),
     m_NRows(this, "nRows", 2048),
@@ -36,7 +37,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_Raw16SaveTime(this,"raw16SaveTime", 0.1),
     m_Raw32SaveTime(this,"raw32SaveTime", 0.2),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.11 2009/09/03 21:16:24 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.12 2009/09/04 12:45:38 jennings Exp $")
 {
 }
 
@@ -57,6 +58,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.12  2009/09/04 12:45:38  jennings
+*  Added binning mode parameter
+*
 *  Revision 1.11  2009/09/03 21:16:24  jennings
 *  Added properties and user interface elements for pre- and post- trigger counts
 *  Added properties and user interface elements for fine-grained control of processing chain
