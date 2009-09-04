@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.36 2009/09/04 15:15:42 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.37 2009/09/04 20:04:31 jennings Exp $
 *
 *******************************************************************/
 
@@ -63,7 +63,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.36 2009/09/04 15:15:42 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.37 2009/09/04 20:04:31 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -697,7 +697,7 @@ void QxrdDataProcessor::convertImage(QxrdInt32ImageData *src, QxrdDoubleImageDat
 void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
 {
 //  printf("QxrdDataProcessor::processAcquiredImage\n");
-
+  emit printMessage(tr("processing acquired 16 bit image, %1 remaining").arg(getAcquiredCount()));
   QxrdDoubleImageData *dark   = darkImage();
 
   if (img) {
@@ -743,6 +743,7 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
 void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
 {
 //  printf("QxrdDataProcessor::processAcquiredImage\n");
+  emit printMessage(tr("processing acquired 32 bit image, %1 remaining").arg(getAcquiredCount()));
 
   QxrdDoubleImageData *dark   = darkImage();
 
@@ -1233,6 +1234,9 @@ void QxrdDataProcessor::logMessage(QString msg)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.37  2009/09/04 20:04:31  jennings
+*  Debugging pre-trigger acquisition
+*
 *  Revision 1.36  2009/09/04 15:15:42  jennings
 *  Added log file routines
 *  Removed newlines from any printMessage calls.

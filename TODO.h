@@ -100,11 +100,14 @@ Automatically add integrated curves to output panel.
 
 Display range choosing doesn't work very well
 
--------------------------------------------------------
-
-BLOCKER
-Dark subtraction doesn't seem to be working at the moment
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Dark subtraction doesn't seem to be working at the moment
+//
+// caused by typing 'if (m_DarkFrame = NULL) {'
+// instead of       'if (m_DarkFrame == NULL) {'
+// spotted by following up compiler warnings
 -------------------------------------------------------
 
 BLOCKER
@@ -201,6 +204,12 @@ etc.
 -------------------------------------------------------
 
 Try LZW encoding images to see how it affects performance
+
+-------------------------------------------------------
+
+BLOCKER
+Don't allow program to quit or start a new acquisition
+until outstanding processing has completed.
 
 -------------------------------------------------------
 

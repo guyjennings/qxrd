@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.87 2009/09/04 15:15:43 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.88 2009/09/04 20:04:31 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.87 2009/09/04 15:15:43 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.88 2009/09/04 20:04:31 jennings Exp $")
 {
   setupUi(this);
 
@@ -379,6 +379,7 @@ void QxrdWindow::darkAcquisitionStarted()
 void QxrdWindow::acquisitionFinished()
 {
   m_AcquireButton -> setEnabled(true);
+  m_TriggerButton -> setEnabled(false);
   m_CancelButton -> setEnabled(false);
   m_ActionAcquire -> setEnabled(true);
   m_ActionCancel -> setEnabled(false);
@@ -721,6 +722,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.88  2009/09/04 20:04:31  jennings
+*  Debugging pre-trigger acquisition
+*
 *  Revision 1.87  2009/09/04 15:15:43  jennings
 *  Added log file routines
 *  Removed newlines from any printMessage calls.
