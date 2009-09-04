@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.28 2009/09/04 15:15:43 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.29 2009/09/04 21:11:41 jennings Exp $
 *
 *******************************************************************/
 
@@ -153,6 +153,8 @@ public slots:
   void newLogFile(QString path);
   void logMessage(QString msg);
 
+  void fileWriteTest(int dim, QString path);
+
 public:
   QxrdDoubleImageData *takeNextFreeImage();
 //  QxrdDoubleImageData *takeLatestProcessedImage();
@@ -252,7 +254,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.28 2009/09/04 15:15:43 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.29 2009/09/04 21:11:41 jennings Exp $");
 };
 
 #endif
@@ -260,6 +262,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.29  2009/09/04 21:11:41  jennings
+*  Support for file write timing tests
+*
 *  Revision 1.28  2009/09/04 15:15:43  jennings
 *  Added log file routines
 *  Removed newlines from any printMessage calls.

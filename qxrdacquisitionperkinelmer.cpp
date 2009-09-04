@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.26 2009/09/04 20:04:31 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.27 2009/09/04 21:11:41 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_HeaderID(-1),
     m_CameraType(-1),
     m_CameraModel(""),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.26 2009/09/04 20:04:31 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.27 2009/09/04 21:11:41 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -521,12 +521,20 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
               QxrdInt16ImageData *img = m_PreTriggerInt16Images.dequeue();
 
               img -> set_ImageNumber(m_CurrentFile++);
+              fileName = QDir(m_DataProcessor -> get_OutputDirectory())
+                         .filePath(get_FilePattern()+tr("-%1.tif")
+                         .arg(get_FileIndex(),5,10,QChar('0')));
+              img -> set_FileName(fileName);
 
               m_DataProcessor -> incrementAcquiredCount();
               emit acquiredInt16ImageAvailable(img);
               set_FileIndex(get_FileIndex()+1);
             }
 
+            fileName = QDir(m_DataProcessor -> get_OutputDirectory())
+                       .filePath(get_FilePattern()+tr("-%1.tif")
+                       .arg(get_FileIndex(),5,10,QChar('0')));
+            m_AcquiredInt16Data -> set_FileName(fileName);
             m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile++);
             acquiredInt16Image();
           } else {
@@ -557,12 +565,20 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
               QxrdInt32ImageData *img = m_PreTriggerInt32Images.dequeue();
 
               img -> set_ImageNumber(m_CurrentFile++);
+              fileName = QDir(m_DataProcessor -> get_OutputDirectory())
+                         .filePath(get_FilePattern()+tr("-%1.tif")
+                         .arg(get_FileIndex(),5,10,QChar('0')));
+              img -> set_FileName(fileName);
 
               m_DataProcessor -> incrementAcquiredCount();
               emit acquiredInt32ImageAvailable(img);
               set_FileIndex(get_FileIndex()+1);
             }
 
+            fileName = QDir(m_DataProcessor -> get_OutputDirectory())
+                       .filePath(get_FilePattern()+tr("-%1.tif")
+                       .arg(get_FileIndex(),5,10,QChar('0')));
+            m_AcquiredInt32Data -> set_FileName(fileName);
             m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile++);
             acquiredInt32Image();
           } else {
@@ -739,6 +755,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.27  2009/09/04 21:11:41  jennings
+*  Support for file write timing tests
+*
 *  Revision 1.26  2009/09/04 20:04:31  jennings
 *  Debugging pre-trigger acquisition
 *

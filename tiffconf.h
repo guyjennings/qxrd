@@ -8,6 +8,8 @@
 #ifndef _TIFFCONF_
 #define _TIFFCONF_
 
+#define USE_WIN32_FILEIO 1
+
 /* Define to 1 if the system has the type `int16'. */
 /* #undef HAVE_INT16 */
 
@@ -46,7 +48,7 @@
 #define LOGLUV_SUPPORT 1
 
 /* Support LZW algorithm */
-/* #define LZW_SUPPORT 1 */
+#define LZW_SUPPORT 1
 
 /* Support NeXT 2-bit RLE algorithm */
 #define NEXT_SUPPORT 1

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.37 2009/09/04 20:04:31 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.38 2009/09/04 21:11:41 jennings Exp $
 *
 *******************************************************************/
 
@@ -63,7 +63,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.37 2009/09/04 20:04:31 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.38 2009/09/04 21:11:41 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -707,7 +707,7 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
     if (get_SaveRawImages()) {
       saveRawData(img);
       emit printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
-                        arg(img->rawFileName()).arg(tic.elapsed()));
+                        arg(img->rawFileName()).arg(tic.restart()));
     }
 
     QxrdDoubleImageData *dimg = takeNextFreeImage();
@@ -718,7 +718,7 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
 
     if (get_PerformDarkSubtraction()) {
       subtractDarkImage(dimg, dark);
-      emit printMessage(tr("Dark subtraction took %1 msec").arg(tic.elapsed()));
+      emit printMessage(tr("Dark subtraction took %1 msec").arg(tic.restart()));
       m_DarkUsage.unlock();
 
       correctBadPixels(dimg);
@@ -727,14 +727,14 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
       saveImageData(dimg);
 
       emit printMessage(tr("Saved processed image in file \"%1\" after %2 msec").
-                        arg(dimg->get_FileName()).arg(tic.elapsed()));
+                        arg(dimg->get_FileName()).arg(tic.restart()));
     }
 
 //    m_ProcessedImages.enqueue(img);
 
     newData(dimg);
 
-    emit printMessage(tr("Processing complete after %1 msec").arg(tic.elapsed()));
+    emit printMessage(tr("Processing complete after %1 msec").arg(tic.restart()));
   }
 
   m_Processing.unlock();
@@ -754,7 +754,7 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
     if (get_SaveRawImages()) {
       saveRawData(img);
       emit printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
-                        arg(img->rawFileName()).arg(tic.elapsed()));
+                        arg(img->rawFileName()).arg(tic.restart()));
     }
 
     QxrdDoubleImageData *dimg = takeNextFreeImage();
@@ -765,7 +765,7 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
 
     if (get_PerformDarkSubtraction()) {
       subtractDarkImage(dimg, dark);
-      emit printMessage(tr("Dark subtraction took %1 msec").arg(tic.elapsed()));
+      emit printMessage(tr("Dark subtraction took %1 msec").arg(tic.restart()));
       m_DarkUsage.unlock();
 
       correctBadPixels(dimg);
@@ -780,7 +780,7 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
 
     newData(dimg);
 
-    emit printMessage(tr("Processing took %1 msec").arg(tic.elapsed()));
+    emit printMessage(tr("Processing took %1 msec").arg(tic.restart()));
   }
 
   m_Processing.unlock();
@@ -1231,9 +1231,40 @@ void QxrdDataProcessor::logMessage(QString msg)
   }
 }
 
+void QxrdDataProcessor::fileWriteTest(int dim, QString path)
+{
+  long sz = dim*dim;
+  quint32 *buff = new quint32[sz];
+
+  QTime tic;
+  tic.start();
+  int totalt = 0;
+
+  for (int i=0; i<10; i++) {
+    QString fileName = path+tr("%1.junk").arg(i,5,10,QChar('0'));
+
+    FILE *f = fopen(qPrintable(fileName), "w");
+
+    if (f) {
+      fwrite(buff, sz, sizeof(quint32), f);
+      fclose(f);
+
+      int dt = tic.restart();
+      totalt += dt;
+      emit printMessage(tr("file %1 written in %2 msec").arg(fileName).arg(dt));
+    }
+  }
+
+  emit printMessage(tr("average write speed %1 MB/sec").arg(((double) sz)*40.0*1000.0/(1e6*((double) totalt))));
+  delete [] buff;
+}
+
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.38  2009/09/04 21:11:41  jennings
+*  Support for file write timing tests
+*
 *  Revision 1.37  2009/09/04 20:04:31  jennings
 *  Debugging pre-trigger acquisition
 *
