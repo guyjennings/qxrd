@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisition.cpp,v 1.52 2009/07/20 00:32:04 jennings Exp $
+*  $Id: qxrdacquisition.cpp,v 1.53 2009/09/04 15:15:42 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,9 +8,9 @@
 
 QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc)
   : QxrdAcquisitionPerkinElmer(proc),
-    SOURCE_IDENT("$Id: qxrdacquisition.cpp,v 1.52 2009/07/20 00:32:04 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisition.cpp,v 1.53 2009/09/04 15:15:42 jennings Exp $")
 {
-//  emit printMessage("Enter QxrdAcquisition::QxrdAcquisition\n");
+//  emit printMessage("Enter QxrdAcquisition::QxrdAcquisition");
 }
 
 
@@ -18,6 +18,9 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc)
 /******************************************************************
 *
 *  $Log: qxrdacquisition.cpp,v $
+*  Revision 1.53  2009/09/04 15:15:42  jennings
+*  *** empty log message ***
+*
 *  Revision 1.52  2009/07/20 00:32:04  jennings
 *  Removed image queues for acquired and dark images - use 'connect' args instead
 *
