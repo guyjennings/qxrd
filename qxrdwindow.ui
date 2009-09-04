@@ -79,7 +79,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -108,7 +108,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -141,7 +141,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -158,7 +158,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/ringfinder.png</normaloff>:/images/images/ringfinder.png</iconset>
               </property>
               <property name="iconSize">
@@ -181,7 +181,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/slice.png</normaloff>:/images/images/slice.png</iconset>
               </property>
               <property name="iconSize">
@@ -204,7 +204,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/measure.png</normaloff>:/images/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -233,7 +233,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/mask_circles.png</normaloff>:/images/images/mask_circles.png</iconset>
               </property>
               <property name="iconSize">
@@ -256,7 +256,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/mask_polygon.png</normaloff>:/images/images/mask_polygon.png</iconset>
               </property>
               <property name="iconSize">
@@ -301,7 +301,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -330,7 +330,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -363,7 +363,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -380,7 +380,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/measure.png</normaloff>:/images/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -441,7 +441,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -470,7 +470,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -503,7 +503,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -520,7 +520,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset>
+               <iconset resource="qxrdresources.qrc">
                 <normaloff>:/images/images/measure.png</normaloff>:/images/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -916,6 +916,9 @@ Script Function: postTriggerFiles()</string>
          <pointsize>8</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Cancel an acquisition</string>
+       </property>
        <property name="text">
         <string>Cancel</string>
        </property>
@@ -997,6 +1000,9 @@ Script Function: darkSummedExposures()</string>
          <pointsize>8</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Cancel acquisition</string>
+       </property>
        <property name="text">
         <string>Cancel</string>
        </property>
@@ -1019,7 +1025,7 @@ Script Function: darkSummedExposures()</string>
         </font>
        </property>
        <property name="toolTip">
-        <string>Do Drak Acquisition
+        <string>Do Dark Acquisition
 Script Function: acquiredark()</string>
        </property>
        <property name="text">
@@ -1057,8 +1063,8 @@ Script Function: acquiredark()</string>
         </font>
        </property>
        <property name="toolTip">
-        <string>Do regular acquisition
-Script Function: acquire()</string>
+        <string>Trigger acquisition
+Script Function: trigger()</string>
        </property>
        <property name="text">
         <string>Trigger</string>
@@ -1265,9 +1271,8 @@ Script Function: fileindex()</string>
         </font>
        </property>
        <property name="toolTip">
-        <string>Detector readout mode (0..7)
-Script Property: &quot;acquisition.readoutMode&quot;
-Script Function: readoutMode()</string>
+        <string>Detector Gain (0..5)
+Script Property: &quot;acquisition.cameraGain&quot;</string>
        </property>
       </widget>
      </item>
@@ -1297,9 +1302,8 @@ Script Function: readoutMode()</string>
         </font>
        </property>
        <property name="toolTip">
-        <string>Detector readout mode (0..7)
-Script Property: &quot;acquisition.readoutMode&quot;
-Script Function: readoutMode()</string>
+        <string>Detector binning mode (0..1)
+Script Property: &quot;acquisition.binningMode&quot;</string>
        </property>
       </widget>
      </item>
@@ -2115,7 +2119,7 @@ Script Function: readoutMode()</string>
   </action>
   <action name="m_ActionLoadData">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2214,7 +2218,7 @@ Script Function: readoutMode()</string>
   </action>
   <action name="m_ActionImportData">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2223,7 +2227,7 @@ Script Function: readoutMode()</string>
   </action>
   <action name="m_ActionTest">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
    </property>
    <property name="text">
@@ -2264,7 +2268,7 @@ Script Function: readoutMode()</string>
   </action>
   <action name="m_ActionSetCenter">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/ringfinder.png</normaloff>:/images/images/ringfinder.png</iconset>
    </property>
    <property name="text">
@@ -2297,7 +2301,7 @@ Script Function: readoutMode()</string>
   </action>
   <action name="m_ActionMaskCircles">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/mask_circles.png</normaloff>:/images/images/mask_circles.png</iconset>
    </property>
    <property name="text">
@@ -2309,7 +2313,7 @@ Script Function: readoutMode()</string>
   </action>
   <action name="m_ActionMaskPolygons">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/mask_polygon.png</normaloff>:/images/images/mask_polygon.png</iconset>
    </property>
    <property name="text">
@@ -2321,7 +2325,7 @@ Script Function: readoutMode()</string>
   </action>
   <action name="m_ActionInvertMask">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/mask_invert.png</normaloff>:/images/images/mask_invert.png</iconset>
    </property>
    <property name="text">
@@ -2333,7 +2337,7 @@ Script Function: readoutMode()</string>
   </action>
   <action name="m_ActionLoadDark">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2353,7 +2357,7 @@ Script Function: readoutMode()</string>
   </action>
   <action name="m_ActionLoadMask">
    <property name="icon">
-    <iconset>
+    <iconset resource="qxrdresources.qrc">
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2401,6 +2405,8 @@ Script Function: readoutMode()</string>
   <tabstop>m_XRDTabWidget</tabstop>
   <tabstop>m_Messages</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="qxrdresources.qrc"/>
+ </resources>
  <connections/>
 </ui>
