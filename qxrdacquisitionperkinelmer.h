@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.14 2009/09/04 02:44:15 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.15 2009/09/04 12:46:35 jennings Exp $
 *
 *******************************************************************/
 
@@ -50,6 +50,8 @@ public:
 
   void returnImageToPool(QxrdInt16ImageData *img);
   void returnImageToPool(QxrdInt32ImageData *img);
+  void setupCameraGainMenu(QComboBox *cb);
+  void setupCameraBinningModeMenu(QComboBox *cb);
 
 protected:
   void acquisition(int isDark);
@@ -90,7 +92,12 @@ private:
   QxrdInt16ImageQueue    m_PreTriggerInt16Images;
   QxrdInt32ImageQueue    m_PreTriggerInt32Images;
 
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.14 2009/09/04 02:44:15 jennings Exp $");
+  int                    m_PROMID;
+  int                    m_HeaderID;
+  int                    m_CameraType;
+  QString                m_CameraModel;
+
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.15 2009/09/04 12:46:35 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -98,6 +105,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.15  2009/09/04 12:46:35  jennings
+*  Added binning mode parameter
+*  Added camera gain and binning mode user interfaces
+*
 *  Revision 1.14  2009/09/04 02:44:15  jennings
 *  Implement pre-trigger acquisition
 *

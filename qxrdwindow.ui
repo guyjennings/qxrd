@@ -665,7 +665,7 @@
      <x>0</x>
      <y>0</y>
      <width>1243</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -821,7 +821,7 @@ Script Function: exposureTime()</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="3">
+     <item row="4" column="0" colspan="3">
       <widget class="QLabel" name="label_2">
        <property name="font">
         <font>
@@ -833,7 +833,7 @@ Script Function: exposureTime()</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="3">
+     <item row="4" column="3">
       <widget class="QSpinBox" name="m_SummedExposures">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -862,7 +862,7 @@ Script Function: summedExposures()</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0" colspan="3">
+     <item row="6" column="0" colspan="3">
       <widget class="QLabel" name="label_3">
        <property name="font">
         <font>
@@ -874,7 +874,7 @@ Script Function: summedExposures()</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="3">
+     <item row="6" column="3">
       <widget class="QSpinBox" name="m_PostTriggerFiles">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -906,7 +906,7 @@ Script Function: postTriggerFiles()</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="0" colspan="2">
+     <item row="9" column="0" colspan="2">
       <widget class="QPushButton" name="m_CancelButton">
        <property name="enabled">
         <bool>false</bool>
@@ -921,7 +921,7 @@ Script Function: postTriggerFiles()</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="2" colspan="2">
+     <item row="9" column="2" colspan="2">
       <widget class="QPushButton" name="m_AcquireButton">
        <property name="enabled">
         <bool>true</bool>
@@ -946,7 +946,7 @@ Script Function: acquire()</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="0" colspan="4">
+     <item row="11" column="0" colspan="4">
       <widget class="QLabel" name="label_7">
        <property name="font">
         <font>
@@ -958,7 +958,7 @@ Script Function: acquire()</string>
        </property>
       </widget>
      </item>
-     <item row="10" column="2" colspan="2">
+     <item row="12" column="2" colspan="2">
       <widget class="QSpinBox" name="m_DarkSummedExposures">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -987,7 +987,7 @@ Script Function: darkSummedExposures()</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="0" colspan="2">
+     <item row="13" column="0" colspan="2">
       <widget class="QPushButton" name="m_DarkCancelButton">
        <property name="enabled">
         <bool>false</bool>
@@ -1002,7 +1002,7 @@ Script Function: darkSummedExposures()</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="2" colspan="2">
+     <item row="13" column="2" colspan="2">
       <widget class="QPushButton" name="m_DarkAcquireButton">
        <property name="enabled">
         <bool>true</bool>
@@ -1027,7 +1027,7 @@ Script Function: acquiredark()</string>
        </property>
       </widget>
      </item>
-     <item row="18" column="1" colspan="2">
+     <item row="20" column="1" colspan="2">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -1040,7 +1040,7 @@ Script Function: acquiredark()</string>
        </property>
       </spacer>
      </item>
-     <item row="8" column="2" colspan="2">
+     <item row="10" column="2" colspan="2">
       <widget class="QPushButton" name="m_TriggerButton">
        <property name="enabled">
         <bool>false</bool>
@@ -1065,7 +1065,7 @@ Script Function: acquire()</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="0" colspan="3">
+     <item row="5" column="0" colspan="3">
       <widget class="QLabel" name="label_9">
        <property name="font">
         <font>
@@ -1077,7 +1077,7 @@ Script Function: acquire()</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="3">
+     <item row="5" column="3">
       <widget class="QSpinBox" name="m_PreTriggerFiles">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1112,7 +1112,7 @@ Script Function: preTriggerFiles()</string>
        </property>
       </widget>
      </item>
-     <item row="13" column="0">
+     <item row="15" column="0">
       <widget class="QLabel" name="label_6">
        <property name="font">
         <font>
@@ -1124,7 +1124,7 @@ Script Function: preTriggerFiles()</string>
        </property>
       </widget>
      </item>
-     <item row="13" column="2" colspan="2">
+     <item row="15" column="2" colspan="2">
       <widget class="QLineEdit" name="m_OutputDirectory">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1147,7 +1147,7 @@ Script Function: outputDirectory()</string>
        </property>
       </widget>
      </item>
-     <item row="14" column="2" colspan="2">
+     <item row="16" column="2" colspan="2">
       <widget class="QPushButton" name="m_SelectDirectoryButton">
        <property name="font">
         <font>
@@ -1159,7 +1159,7 @@ Script Function: outputDirectory()</string>
        </property>
       </widget>
      </item>
-     <item row="15" column="0">
+     <item row="17" column="0">
       <widget class="QLabel" name="label_4">
        <property name="font">
         <font>
@@ -1171,7 +1171,7 @@ Script Function: outputDirectory()</string>
        </property>
       </widget>
      </item>
-     <item row="15" column="2" colspan="2">
+     <item row="17" column="2" colspan="2">
       <widget class="QLineEdit" name="m_FilePattern">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1194,7 +1194,7 @@ Raw: &lt;pattern&gt;-&lt;nnnnn&gt;.raw.tif</string>
        </property>
       </widget>
      </item>
-     <item row="16" column="0">
+     <item row="18" column="0">
       <widget class="QLabel" name="label_5">
        <property name="font">
         <font>
@@ -1206,7 +1206,7 @@ Raw: &lt;pattern&gt;-&lt;nnnnn&gt;.raw.tif</string>
        </property>
       </widget>
      </item>
-     <item row="16" column="2" colspan="2">
+     <item row="18" column="2" colspan="2">
       <widget class="QSpinBox" name="m_FileIndex">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1232,10 +1232,74 @@ Script Function: fileindex()</string>
        </property>
       </widget>
      </item>
-     <item row="12" column="0" colspan="4">
+     <item row="14" column="0" colspan="4">
       <widget class="QLabel" name="label_10">
        <property name="text">
         <string>Output:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_20">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Camera Gain:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2" colspan="2">
+      <widget class="QComboBox" name="m_CameraGain">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Detector readout mode (0..7)
+Script Property: &quot;acquisition.readoutMode&quot;
+Script Function: readoutMode()</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_21">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Binning:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2" colspan="2">
+      <widget class="QComboBox" name="m_BinningMode">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Detector readout mode (0..7)
+Script Property: &quot;acquisition.readoutMode&quot;
+Script Function: readoutMode()</string>
        </property>
       </widget>
      </item>

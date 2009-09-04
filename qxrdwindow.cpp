@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.85 2009/09/03 21:16:24 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.86 2009/09/04 12:46:35 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.85 2009/09/03 21:16:24 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.86 2009/09/04 12:46:35 jennings Exp $")
 {
   setupUi(this);
 
@@ -192,6 +192,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
 //  show();
 
+  m_Acquisition -> setupCameraGainMenu(m_CameraGain);
+  m_Acquisition -> setupCameraBinningModeMenu(m_BinningMode);
+
   m_Acquisition -> prop_ReadoutMode() -> linkTo(m_ReadoutMode);
   m_Acquisition -> prop_ExposureTime() -> linkTo(m_ExposureTime);
   m_Acquisition -> prop_SummedExposures() -> linkTo(m_SummedExposures);
@@ -200,6 +203,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_Acquisition -> prop_FileIndex() -> linkTo(m_FileIndex);
   m_Acquisition -> prop_PreTriggerFiles() -> linkTo(m_PreTriggerFiles);
   m_Acquisition -> prop_PostTriggerFiles() -> linkTo(m_PostTriggerFiles);
+  m_Acquisition -> prop_CameraGain() -> linkTo(m_CameraGain);
+  m_Acquisition -> prop_BinningMode() -> linkTo(m_BinningMode);
 
   m_DataProcessor -> prop_OutputDirectory() -> linkTo(m_OutputDirectory);
   m_DataProcessor -> prop_PerformDarkSubtraction() -> linkTo(m_PerformDark);
@@ -714,6 +719,10 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.86  2009/09/04 12:46:35  jennings
+*  Added binning mode parameter
+*  Added camera gain and binning mode user interfaces
+*
 *  Revision 1.85  2009/09/03 21:16:24  jennings
 *  Added properties and user interface elements for pre- and post- trigger counts
 *  Added properties and user interface elements for fine-grained control of processing chain

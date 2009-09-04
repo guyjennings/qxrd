@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.23 2009/09/04 02:44:15 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.24 2009/09/04 12:46:35 jennings Exp $
 *
 *******************************************************************/
 
@@ -45,7 +45,11 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
 //    m_AcquiredData(NULL),
     m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.23 2009/09/04 02:44:15 jennings Exp $")
+    m_PROMID(-1),
+    m_HeaderID(-1),
+    m_CameraType(-1),
+    m_CameraModel(""),
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.24 2009/09/04 12:46:35 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -181,6 +185,9 @@ void QxrdAcquisitionPerkinElmer::initialize()
                     .arg(hwHeaderInfo.dwPROMID)
                     .arg(hwHeaderInfo.dwHeaderID));
 
+  m_PROMID = hwHeaderInfo.dwPROMID;
+  m_HeaderID = hwHeaderInfo.dwHeaderID;
+
   if (hwHeaderInfo.dwHeaderID >= 14) {
     CHwHeaderInfoEx hdrx;
 
@@ -190,6 +197,8 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     emit printMessage(tr("Camera Type %1").arg(hdrx.wCameratype));
+
+    m_CameraType = hdrx.wCameratype;
   }
 
   int nReadoutTimes = 8;
@@ -299,6 +308,11 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
 
     if (get_FilesInAcquiredSequence ()<= 0) {
       set_FilesInAcquiredSequence(1);
+    }
+
+    if ((nRet=Acquisition_SetCameraBinningMode(m_AcqDesc, get_BinningMode())) != HIS_ALL_OK) {
+      acquisitionError(nRet);
+      return;
     }
 
     allocateMemoryForAcquisition();
@@ -665,6 +679,22 @@ double QxrdAcquisitionPerkinElmer::readoutTime() const
   return m_ReadoutTimes.value(n)/1e6;
 }
 
+void QxrdAcquisitionPerkinElmer::setupCameraGainMenu(QComboBox *cb)
+{
+  cb -> addItem(tr("0.25 pF - Highest Gain"));
+  cb -> addItem(tr("0.5 pF"));
+  cb -> addItem(tr("1 pF"));
+  cb -> addItem(tr("2 pF"));
+  cb -> addItem(tr("4 pF"));
+  cb -> addItem(tr("8 pF - Lowest Gain"));
+}
+
+void QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb)
+{
+  cb -> addItem(tr("1x1 - 2048x2048 pixels"));
+  cb -> addItem(tr("2x2 - 1024x1024 pixels"));
+}
+
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 {
 //  DWORD actualFrame, actSecFrame;
@@ -689,6 +719,10 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.24  2009/09/04 12:46:35  jennings
+*  Added binning mode parameter
+*  Added camera gain and binning mode user interfaces
+*
 *  Revision 1.23  2009/09/04 02:44:15  jennings
 *  Implement pre-trigger acquisition
 *
