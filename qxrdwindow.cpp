@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.88 2009/09/04 20:04:31 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.89 2009/09/07 22:10:14 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.88 2009/09/04 20:04:31 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.89 2009/09/07 22:10:14 jennings Exp $")
 {
   setupUi(this);
 
@@ -584,7 +584,7 @@ void QxrdWindow::spareData()
 void QxrdWindow::doSaveData()
 {
   QString theFile = QFileDialog::getSaveFileName(
-      this, "Save Data in", m_DataProcessor -> get_OutputDirectory());
+      this, "Save Data in", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
     QMetaObject::invokeMethod(m_DataProcessor, "saveData", Q_ARG(QString, theFile));
@@ -594,7 +594,7 @@ void QxrdWindow::doSaveData()
 void QxrdWindow::doLoadData()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Image from...", m_DataProcessor -> get_OutputDirectory());
+      this, "Load Data from...", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
     QMetaObject::invokeMethod(m_DataProcessor, "loadData", Q_ARG(QString, theFile));
@@ -604,7 +604,7 @@ void QxrdWindow::doLoadData()
 void QxrdWindow::doSaveDark()
 {
   QString theFile = QFileDialog::getSaveFileName(
-      this, "Save Dark Data in", m_DataProcessor -> get_OutputDirectory());
+      this, "Save Dark Data in", m_DataProcessor -> get_DarkImagePath());
 
   if (theFile.length()) {
     QMetaObject::invokeMethod(m_DataProcessor, "saveDark", Q_ARG(QString, theFile));
@@ -614,7 +614,7 @@ void QxrdWindow::doSaveDark()
 void QxrdWindow::doLoadDark()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Dark Data from...", m_DataProcessor -> get_OutputDirectory());
+      this, "Load Dark Data from...", m_DataProcessor -> get_DarkImagePath());
 
   if (theFile.length()) {
     QMetaObject::invokeMethod(m_DataProcessor, "loadDark", Q_ARG(QString, theFile));
@@ -624,7 +624,7 @@ void QxrdWindow::doLoadDark()
 void QxrdWindow::doSaveMask()
 {
   QString theFile = QFileDialog::getSaveFileName(
-      this, "Save Mask in", m_DataProcessor -> get_OutputDirectory());
+      this, "Save Mask in", m_DataProcessor -> get_MaskPath());
 
   if (theFile.length()) {
     QMetaObject::invokeMethod(m_DataProcessor, "saveMask", Q_ARG(QString, theFile));
@@ -634,20 +634,30 @@ void QxrdWindow::doSaveMask()
 void QxrdWindow::doLoadMask()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Mask from...", m_DataProcessor -> get_OutputDirectory());
+      this, "Load Mask from...", m_DataProcessor -> get_MaskPath());
 
   if (theFile.length()) {
     QMetaObject::invokeMethod(m_DataProcessor, "loadMask", Q_ARG(QString, theFile));
   }
 }
 
-void QxrdWindow::doLoadDarkImage()
+//void QxrdWindow::doLoadDarkImage()
+//{
+//  QString theFile = QFileDialog::getOpenFileName(
+//      this, "Load Dark Image from...", m_DataProcessor -> get_DarkImagePath());
+//
+//  if (theFile.length()) {
+//    QMetaObject::invokeMethod(m_DataProcessor, "loadDarkImage", Q_ARG(QString, theFile));
+//  }
+//}
+//
+void QxrdWindow::doSaveBadPixels()
 {
-  QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Dark Image from...", m_DataProcessor -> get_DarkImagePath());
+  QString theFile = QFileDialog::getSaveFileName(
+      this, "Save Bad Pixels in", m_DataProcessor -> get_BadPixelsPath());
 
   if (theFile.length()) {
-    QMetaObject::invokeMethod(m_DataProcessor, "loadDarkImage", Q_ARG(QString, theFile));
+    QMetaObject::invokeMethod(m_DataProcessor, "saveBadPixels", Q_ARG(QString, theFile));
   }
 }
 
@@ -658,6 +668,16 @@ void QxrdWindow::doLoadBadPixels()
 
   if (theFile.length()) {
     QMetaObject::invokeMethod(m_DataProcessor, "loadBadPixels", Q_ARG(QString, theFile));
+  }
+}
+
+void QxrdWindow::doSaveGainMap()
+{
+  QString theFile = QFileDialog::getSaveFileName(
+      this, "Save Gain Map in", m_DataProcessor -> get_GainMapPath());
+
+  if (theFile.length()) {
+    QMetaObject::invokeMethod(m_DataProcessor, "saveGainMap", Q_ARG(QString, theFile));
   }
 }
 
@@ -722,6 +742,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.89  2009/09/07 22:10:14  jennings
+*  Allow NULL mask
+*
 *  Revision 1.88  2009/09/04 20:04:31  jennings
 *  Debugging pre-trigger acquisition
 *

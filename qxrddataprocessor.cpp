@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.38 2009/09/04 21:11:41 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.39 2009/09/07 22:10:14 jennings Exp $
 *
 *******************************************************************/
 
@@ -22,9 +22,11 @@ QxrdDataProcessor::QxrdDataProcessor
     (QxrdWindow *win, QxrdAcquisition *acq, QObject *parent)
   : QObject(parent),
     m_OutputDirectory(this,"outputDirectory", ""),
+    m_DataPath(this,"dataPath", ""),
     m_DarkImagePath(this, "darkImagePath", ""),
     m_BadPixelsPath(this, "badPixelsPath", ""),
     m_GainMapPath(this, "gainMapPath", ""),
+    m_MaskPath(this, "maskPath", ""),
     m_LogFilePath(this, "logFilePath", "qxrd.log"),
     m_PerformDarkSubtraction(this, "performDarkSubtraction", true),
     m_SaveRawImages(this, "saveRawImages", true),
@@ -42,11 +44,13 @@ QxrdDataProcessor::QxrdDataProcessor
     m_DisplayIntegratedDataTime(this, "displayIntegratedDataTime", 0.2),
     m_SaveIntegratedDataTime(this, "saveIntegratedDataTime", 0.01),
     m_EstimatedProcessingTime(this, "estimatedProcessingTime", 0.1),
+    m_AveragingRatio(this, "averagingRatio", 0.1),
     m_FileName(this,"fileName",""),
     m_MaskMinimumValue(this, "maskMinimumValue", 0),
     m_MaskMaximumValue(this, "maskMaximumValue", 20000),
     m_MaskCircleRadius(this, "maskCircleRadius", 10),
     m_MaskSetPixels(this, "maskSetPixels", true),
+    m_CompressImages(this, "compressImages", false),
     m_Mutex(QMutex::Recursive),
     m_Window(win),
     m_Acquisition(acq),
@@ -56,17 +60,19 @@ QxrdDataProcessor::QxrdDataProcessor
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
-    m_GainFrame(NULL),
+    m_GainMap(NULL),
     m_Mask(new QxrdMaskData(2048, 2048)),
     m_AcquiredCount(0),
     m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.38 2009/09/04 21:11:41 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.39 2009/09/07 22:10:14 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
+
+  m_DarkImagePath.setDebug(10);
 }
 
 void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
@@ -171,9 +177,11 @@ void QxrdDataProcessor::onAcquiredInt16ImageAvailable(QxrdInt16ImageData *image)
     } else {
       QWriteLocker wl(&m_DarkUsage);
 
-      emit printMessage(tr("Saving dark image \"%1\"").arg(image->get_FileName()));
+      saveNamedImageData(image->get_FileName(), image);
 
-      saveImageData(image);
+      set_DarkImagePath(image->get_FileName());
+
+      emit printMessage(tr("Saved dark image \"%1\"").arg(image->get_FileName()));
 
 //      m_DarkImages.enqueue(image);
 
@@ -197,9 +205,11 @@ void QxrdDataProcessor::onAcquiredInt32ImageAvailable(QxrdInt32ImageData *image)
     } else {
       QWriteLocker wl(&m_DarkUsage);
 
-      emit printMessage(tr("Saving dark image \"%1\"").arg(image->get_FileName()));
+      saveNamedImageData(image->get_FileName(), image);
 
-      saveImageData(image);
+      set_DarkImagePath(image->get_FileName());
+
+      emit printMessage(tr("Saved dark image \"%1\"").arg(image->get_FileName()));
 
 //      m_DarkImages.enqueue(image);
 
@@ -278,9 +288,9 @@ void QxrdDataProcessor::newDarkImage(QxrdInt16ImageData *image)
     m_DarkFrame = new QxrdDoubleImageData();
   }
 
-  set_DarkImagePath(image->get_FileName());
-
   convertImage(image, m_DarkFrame);
+
+  set_DarkImagePath(m_DarkFrame -> get_FileName());
 
   emit newDarkImageAvailable(m_DarkFrame);
 }
@@ -291,9 +301,9 @@ void QxrdDataProcessor::newDarkImage(QxrdInt32ImageData *image)
     m_DarkFrame = new QxrdDoubleImageData();
   }
 
-  set_DarkImagePath(image->get_FileName());
-
   convertImage(image, m_DarkFrame);
+
+  set_DarkImagePath(m_DarkFrame -> get_FileName());
 
   emit newDarkImageAvailable(m_DarkFrame);
 }
@@ -313,12 +323,12 @@ void QxrdDataProcessor::newBadPixelsImage(QxrdDoubleImageData *image)
 
 void QxrdDataProcessor::newGainMapImage(QxrdDoubleImageData *image)
 {
-  if (m_GainFrame != image) {
-    if (m_GainFrame) {
-      returnImageToPool(m_GainFrame);
+  if (m_GainMap != image) {
+    if (m_GainMap) {
+      returnImageToPool(m_GainMap);
     }
 
-    m_GainFrame = image;
+    m_GainMap = image;
   }
 
   set_GainMapPath(image->get_FileName());
@@ -335,26 +345,62 @@ void QxrdDataProcessor::newMask(QxrdMaskData *mask)
   emit newMaskAvailable(m_Data, m_Mask);
 }
 
+void QxrdDataProcessor::loadDefaultImages()
+{
+  QString fileName = get_MaskPath();
+  QFileInfo fileInfo(fileName);
+
+  if (fileInfo.exists() && fileInfo.isFile()) {
+    loadMask(fileName);
+  }
+
+  fileName = get_DarkImagePath();
+  fileInfo.setFile(fileName);
+
+  if (fileInfo.exists() && fileInfo.isFile()) {
+    loadDark(fileName);
+  }
+
+  fileName = get_BadPixelsPath();
+  fileInfo.setFile(fileName);
+
+  if (fileInfo.exists() && fileInfo.isFile()) {
+    loadBadPixels(fileName);
+  }
+
+  fileName = get_GainMapPath();
+  fileInfo.setFile(fileName);
+
+  if (fileInfo.exists() && fileInfo.isFile()) {
+    loadGainMap(fileName);
+  }
+}
+
 void QxrdDataProcessor::loadData(QString name)
 {
 //  printf("QxrdDataProcessor::loadData(%s)\n", qPrintable(name));
 
   QxrdDoubleImageData* res = takeNextFreeImage();
 
-  res -> readImage(name);
+  if (res -> readImage(name)) {
 
-//  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-  newData(res);
+    newData(res);
+
+    set_DataPath(res -> get_FileName());
+  } else {
+    delete res;
+  }
 }
 
 void QxrdDataProcessor::saveData(QString name)
 {
   QMutexLocker lock(&m_Mutex);
 
-  m_Data -> set_FileName(name);
-
-  saveImageData(m_Data);
+  if (saveNamedImageData(name, m_Data)) {
+    set_DataPath(m_Data -> get_FileName());
+  }
 }
 
 void QxrdDataProcessor::loadDark(QString name)
@@ -363,20 +409,79 @@ void QxrdDataProcessor::loadDark(QString name)
 
   QxrdDoubleImageData* res = takeNextFreeImage();
 
-  res -> readImage(name);
+  if (res -> readImage(name)) {
 
-//  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-  newData(res);
+    newDarkImage(res);
+
+    set_DarkImagePath(res -> get_FileName());
+  } else {
+    delete res;
+  }
 }
 
 void QxrdDataProcessor::saveDark(QString name)
 {
   QMutexLocker lock(&m_Mutex);
 
-  m_Data -> set_FileName(name);
+  if (saveNamedImageData(name, m_DarkFrame)) {
+    set_DarkImagePath(m_DarkFrame -> get_FileName());
+  }
+}
 
-  saveImageData(m_Data);
+void QxrdDataProcessor::loadBadPixels(QString name)
+{
+//  printf("QxrdDataProcessor::loadDark(%s)\n", qPrintable(name));
+
+  QxrdDoubleImageData* res = takeNextFreeImage();
+
+  if (res -> readImage(name)) {
+
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+    newBadPixelsImage(res);
+
+    set_BadPixelsPath(res -> get_FileName());
+  } else {
+    delete res;
+  }
+}
+
+void QxrdDataProcessor::saveBadPixels(QString name)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (saveNamedImageData(name, m_BadPixels)) {
+    set_BadPixelsPath(m_BadPixels -> get_FileName());
+  }
+}
+
+void QxrdDataProcessor::loadGainMap(QString name)
+{
+//  printf("QxrdDataProcessor::loadGainMap(%s)\n", qPrintable(name));
+
+  QxrdDoubleImageData* res = takeNextFreeImage();
+
+  if (res -> readImage(name)) {
+
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+    newGainMapImage(res);
+
+    set_GainMapPath(res -> get_FileName());
+  } else {
+    delete res;
+  }
+}
+
+void QxrdDataProcessor::saveGainMap(QString name)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (saveNamedImageData(name, m_GainMap)) {
+    set_GainMapPath(m_GainMap -> get_FileName());
+  }
 }
 
 void QxrdDataProcessor::loadMask(QString name)
@@ -385,48 +490,75 @@ void QxrdDataProcessor::loadMask(QString name)
 
   QxrdMaskData* res = new QxrdMaskData();
 
-  res -> readImage(name);
+  if (res -> readImage(name)) {
 
-//  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-  newMask(res);
+    newMask(res);
+
+    set_MaskPath(res -> get_FileName());
+  } else {
+    delete res;
+  }
 }
 
 void QxrdDataProcessor::saveMask(QString name)
 {
   QMutexLocker lock(&m_Mutex);
 
-  m_Mask -> set_FileName(name);
-
-  saveNamedMaskData(name, m_Mask);
+  if (saveNamedMaskData(name, m_Mask)) {
+    set_MaskPath(m_Mask -> get_FileName());
+  }
 }
 
-void QxrdDataProcessor::saveImageData(QxrdDoubleImageData *image)
-{
-  saveNamedImageData(image->get_FileName(), image);
-}
-
-void QxrdDataProcessor::saveImageData(QxrdInt16ImageData *image)
-{
-  saveNamedImageData(image->get_FileName(), image);
-}
-
-void QxrdDataProcessor::saveImageData(QxrdInt32ImageData *image)
-{
-  saveNamedImageData(image->get_FileName(), image);
-}
-
-void QxrdDataProcessor::saveRawData(QxrdInt16ImageData *image)
-{
-  saveNamedImageData(image->rawFileName(), image);
-}
-
-void QxrdDataProcessor::saveRawData(QxrdInt32ImageData *image)
-{
-  saveNamedImageData(image->rawFileName(), image);
-}
-
-void QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *image)
+//void QxrdDataProcessor::loadBadPixels(QString name)
+//{
+//  QxrdDoubleImageData* res = takeNextFreeImage();
+//
+//  if (res -> readImage(name)) {
+//    newBadPixelsImage(res);
+//
+//    set_BadPixelsPath(res -> get_FileName());
+//  } else {
+//    delete res;
+//  }
+//}
+//
+//void QxrdDataProcessor::loadGainMap(QString name)
+//{
+//  QxrdDoubleImageData* res = takeNextFreeImage();
+//
+//  res -> readImage(name);
+//
+//  newGainMapImage(res);
+//}
+//
+//void QxrdDataProcessor::saveImageData(QxrdDoubleImageData *image)
+//{
+//  saveNamedImageData(image->get_FileName(), image);
+//}
+//
+//void QxrdDataProcessor::saveImageData(QxrdInt16ImageData *image)
+//{
+//  saveNamedImageData(image->get_FileName(), image);
+//}
+//
+//void QxrdDataProcessor::saveImageData(QxrdInt32ImageData *image)
+//{
+//  saveNamedImageData(image->get_FileName(), image);
+//}
+//
+//void QxrdDataProcessor::saveRawData(QxrdInt16ImageData *image)
+//{
+//  saveNamedImageData(image->rawFileName(), image);
+//}
+//
+//void QxrdDataProcessor::saveRawData(QxrdInt32ImageData *image)
+//{
+//  saveNamedImageData(image->rawFileName(), image);
+//}
+//
+bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *image)
 {
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
@@ -442,10 +574,17 @@ void QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *im
   TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
   TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows);
   TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
-  TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+
+  if (get_CompressImages()) {
+    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
+  } else {
+    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+  }
+
   TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
   TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32);
   TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
+
 
   QVector<float> buffvec(ncols);
   float* buffer = buffvec.data();
@@ -459,9 +598,24 @@ void QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *im
   }
 
   TIFFClose(tif);
+
+  image -> set_FileName(name);
+
+  return true;
 }
 
-void QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *image)
+bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *image)
+{
+  bool res = saveNamedRawImageData(name, image);
+
+  if (res) {
+    image -> set_FileName(name);
+  }
+
+  return res;
+}
+
+bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *image)
 {
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
@@ -477,7 +631,13 @@ void QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *ima
   TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
   TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows);
   TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
-  TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+
+  if (get_CompressImages()) {
+    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
+  } else {
+    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+  }
+
   TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
   TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16);
   TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
@@ -494,9 +654,22 @@ void QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *ima
   }
 
   TIFFClose(tif);
+
+  return true;
 }
 
-void QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *image)
+bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *image)
+{
+  bool res = saveNamedRawImageData(name, image);
+
+  if (res) {
+    image -> set_FileName(name);
+  }
+
+  return res;
+}
+
+bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *image)
 {
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
@@ -512,7 +685,13 @@ void QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *ima
   TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
   TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows);
   TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
-  TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+
+  if (get_CompressImages()) {
+    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
+  } else {
+    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+  }
+
   TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
   TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32);
   TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
@@ -529,9 +708,11 @@ void QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *ima
   }
 
   TIFFClose(tif);
+
+  return true;
 }
 
-void QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
+bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
 {
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
@@ -564,6 +745,10 @@ void QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
   }
 
   TIFFClose(tif);
+
+  image -> set_FileName(name);
+
+  return true;
 }
 
 QString QxrdDataProcessor::uniqueFileName(QString name)
@@ -588,33 +773,43 @@ QString QxrdDataProcessor::uniqueFileName(QString name)
   }
 }
 
-void QxrdDataProcessor::loadDarkImage(QString name)
+void QxrdDataProcessor::clearDark()
 {
-  QxrdDoubleImageData* img = takeNextFreeImage();
+  newDarkImage((QxrdDoubleImageData*) NULL);
 
-  img -> readImage(name);
-
-  newDarkImage(img);
+  set_DarkImagePath("");
 }
 
-void QxrdDataProcessor::loadBadPixels(QString name)
+void QxrdDataProcessor::clearBadPixels()
 {
-  QxrdDoubleImageData* res = takeNextFreeImage();
+  newBadPixelsImage(NULL);
 
-  res -> readImage(name);
-
-  newBadPixelsImage(res);
+  set_BadPixelsPath("");
 }
 
-void QxrdDataProcessor::loadGainMap(QString name)
+void QxrdDataProcessor::clearGainMap()
 {
-  QxrdDoubleImageData* res = takeNextFreeImage();
+  newGainMapImage(NULL);
 
-  res -> readImage(name);
-
-  newGainMapImage(res);
+  set_GainMapPath("");
 }
 
+void QxrdDataProcessor::clearMask()
+{
+  newMask(NULL);
+
+  set_MaskPath("");
+}
+
+//void QxrdDataProcessor::loadDarkImage(QString name)
+//{
+//  QxrdDoubleImageData* img = takeNextFreeImage();
+//
+//  img -> readImage(name);
+//
+//  newDarkImage(img);
+//}
+//
 void QxrdDataProcessor::convertImage(QxrdInt16ImageData *src, QxrdDoubleImageData *dest)
 {
   if (src && dest) {
@@ -698,14 +893,16 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
 {
 //  printf("QxrdDataProcessor::processAcquiredImage\n");
   emit printMessage(tr("processing acquired 16 bit image, %1 remaining").arg(getAcquiredCount()));
-  QxrdDoubleImageData *dark   = darkImage();
 
   if (img) {
     QTime tic;
     tic.start();
 
     if (get_SaveRawImages()) {
-      saveRawData(img);
+      saveNamedRawImageData(img->rawFileName(), img);
+
+      updateEstimatedTime(m_Acquisition -> prop_Raw16SaveTime(), tic.elapsed());
+
       emit printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
                         arg(img->rawFileName()).arg(tic.restart()));
     }
@@ -716,25 +913,7 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
 
     returnInt16ImageToPool(img);
 
-    if (get_PerformDarkSubtraction()) {
-      subtractDarkImage(dimg, dark);
-      emit printMessage(tr("Dark subtraction took %1 msec").arg(tic.restart()));
-      m_DarkUsage.unlock();
-
-      correctBadPixels(dimg);
-      correctImageGains(dimg);
-
-      saveImageData(dimg);
-
-      emit printMessage(tr("Saved processed image in file \"%1\" after %2 msec").
-                        arg(dimg->get_FileName()).arg(tic.restart()));
-    }
-
-//    m_ProcessedImages.enqueue(img);
-
-    newData(dimg);
-
-    emit printMessage(tr("Processing complete after %1 msec").arg(tic.restart()));
+    processAcquiredImage(dimg);
   }
 
   m_Processing.unlock();
@@ -745,14 +924,15 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
 //  printf("QxrdDataProcessor::processAcquiredImage\n");
   emit printMessage(tr("processing acquired 32 bit image, %1 remaining").arg(getAcquiredCount()));
 
-  QxrdDoubleImageData *dark   = darkImage();
-
   if (img) {
     QTime tic;
     tic.start();
 
     if (get_SaveRawImages()) {
-      saveRawData(img);
+      saveNamedRawImageData(img->rawFileName(), img);
+
+      updateEstimatedTime(m_Acquisition -> prop_Raw32SaveTime(), tic.elapsed());
+
       emit printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
                         arg(img->rawFileName()).arg(tic.restart()));
     }
@@ -763,17 +943,59 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
 
     returnInt32ImageToPool(img);
 
+    processAcquiredImage(dimg);
+  }
+
+  m_Processing.unlock();
+}
+
+void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
+{
+  if (dimg) {
+    QTime tic;
+    tic.start();
+
     if (get_PerformDarkSubtraction()) {
+      QxrdDoubleImageData *dark   = darkImage();
+
       subtractDarkImage(dimg, dark);
+
+      updateEstimatedTime(prop_PerformDarkSubtractionTime(), tic.elapsed());
+
       emit printMessage(tr("Dark subtraction took %1 msec").arg(tic.restart()));
       m_DarkUsage.unlock();
+    }
 
+    if (get_PerformBadPixels()) {
       correctBadPixels(dimg);
+
+      updateEstimatedTime(prop_PerformBadPixelsTime(), tic.restart());
+    }
+
+    if (get_PerformGainCorrection()) {
       correctImageGains(dimg);
 
-      emit printMessage(tr("Saving processed image in file \"%1\"").arg(dimg->get_FileName()));
+      updateEstimatedTime(prop_PerformGainCorrectionTime(), tic.restart());
+    }
 
-      saveImageData(dimg);
+    if (get_SaveSubtracted()) {
+      saveNamedImageData(dimg->get_FileName(), dimg);
+
+      updateEstimatedTime(prop_SaveSubtractedTime(), tic.elapsed());
+
+      emit printMessage(tr("Saved processed image in file \"%1\" after %2 msec").arg(dimg->get_FileName()).arg(tic.restart()));
+    }
+
+    if (get_PerformIntegration()) {
+      updateEstimatedTime(prop_PerformIntegrationTime(), tic.restart());
+    }
+
+    if (get_SaveIntegratedData()) {
+      updateEstimatedTime(prop_SaveIntegratedDataTime(), tic.restart());
+    }
+
+    if (get_DisplayIntegratedData()) {
+      updateEstimatedTime(prop_DisplayIntegratedDataTime(), tic.restart());
     }
 
 //    m_ProcessedImages.enqueue(img);
@@ -782,8 +1004,11 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
 
     emit printMessage(tr("Processing took %1 msec").arg(tic.restart()));
   }
+}
 
-  m_Processing.unlock();
+void QxrdDataProcessor::updateEstimatedTime(QcepDoubleProperty *prop, int msec)
+{
+  double newVal = prop -> value() * (1.0 - get_AveragingRatio()) + ((double) msec)/1000.0* get_AveragingRatio();
 }
 
 void QxrdDataProcessor::subtractDarkImage(QxrdDoubleImageData *image, QxrdDoubleImageData *dark)
@@ -1262,6 +1487,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.39  2009/09/07 22:10:14  jennings
+*  Allow NULL mask
+*
 *  Revision 1.38  2009/09/04 21:11:41  jennings
 *  Support for file write timing tests
 *

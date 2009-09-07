@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.29 2009/09/04 21:11:41 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.30 2009/09/07 22:10:14 jennings Exp $
 *
 *******************************************************************/
 
@@ -37,6 +37,9 @@ public:
   Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory);
   QCEP_STRING_PROPERTY(OutputDirectory);
 
+  Q_PROPERTY(QString dataPath   READ get_DataPath WRITE set_DataPath);
+  QCEP_STRING_PROPERTY(DataPath);
+
   Q_PROPERTY(QString darkImagePath   READ get_DarkImagePath WRITE set_DarkImagePath);
   QCEP_STRING_PROPERTY(DarkImagePath);
 
@@ -45,6 +48,9 @@ public:
 
   Q_PROPERTY(QString gainMapPath     READ get_GainMapPath WRITE set_GainMapPath);
   QCEP_STRING_PROPERTY(GainMapPath);
+
+  Q_PROPERTY(QString maskPath     READ get_MaskPath WRITE set_MaskPath);
+  QCEP_STRING_PROPERTY(MaskPath);
 
   Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath);
   QCEP_STRING_PROPERTY(LogFilePath);
@@ -97,6 +103,9 @@ public:
   Q_PROPERTY(double estimatedProcessingTime READ get_EstimatedProcessingTime WRITE set_EstimatedProcessingTime);
   QCEP_DOUBLE_PROPERTY(EstimatedProcessingTime);
 
+  Q_PROPERTY(double averagingRatio READ get_AveragingRatio WRITE set_AveragingRatio);
+  QCEP_DOUBLE_PROPERTY(AveragingRatio);
+
   Q_PROPERTY(QString fileName        READ get_FileName WRITE set_FileName);
   QCEP_STRING_PROPERTY(FileName);
 
@@ -111,6 +120,9 @@ public:
 
   Q_PROPERTY(bool maskSetPixels READ get_MaskSetPixels WRITE set_MaskSetPixels);
   QCEP_BOOLEAN_PROPERTY(MaskSetPixels);
+
+  Q_PROPERTY(bool compressImages READ get_CompressImages WRITE set_CompressImages);
+  QCEP_BOOLEAN_PROPERTY(CompressImages);
 
 signals:
   void printMessage(QString msg);
@@ -137,9 +149,15 @@ public slots:
   void saveDark(QString name);
   void loadMask(QString name);
   void saveMask(QString name);
-  void loadDarkImage(QString name);
+//  void loadDarkImage(QString name);
   void loadBadPixels(QString name);
+  void saveBadPixels(QString name);
   void loadGainMap(QString name);
+  void saveGainMap(QString name);
+  void clearDark();
+  void clearBadPixels();
+  void clearGainMap();
+  void clearMask();
 
   void newImage(int ncols, int nrows);
   void exponentialTail(double cx, double cy, double width, int oversample);
@@ -156,6 +174,8 @@ public slots:
   void fileWriteTest(int dim, QString path);
 
 public:
+  void loadDefaultImages();
+
   QxrdDoubleImageData *takeNextFreeImage();
 //  QxrdDoubleImageData *takeLatestProcessedImage();
 //  QxrdDoubleImageData *takeNextProcessedImage();
@@ -172,15 +192,17 @@ public:
   void setWindow(QxrdWindow *win);
 
 
-  void saveImageData(QxrdDoubleImageData *image);
-  void saveImageData(QxrdInt16ImageData *image);
-  void saveImageData(QxrdInt32ImageData *image);
-  void saveRawData(QxrdInt16ImageData *image);
-  void saveRawData(QxrdInt32ImageData *image);
-  void saveNamedImageData(QString name, QxrdDoubleImageData *image);
-  void saveNamedImageData(QString name, QxrdInt16ImageData *image);
-  void saveNamedImageData(QString name, QxrdInt32ImageData *image);
-  void saveNamedMaskData(QString name, QxrdMaskData *mask);
+//  void saveImageData(QxrdDoubleImageData *image);
+//  void saveImageData(QxrdInt16ImageData *image);
+//  void saveImageData(QxrdInt32ImageData *image);
+//  void saveRawData(QxrdInt16ImageData *image);
+//  void saveRawData(QxrdInt32ImageData *image);
+  bool saveNamedImageData(QString name, QxrdDoubleImageData *image);
+  bool saveNamedImageData(QString name, QxrdInt16ImageData *image);
+  bool saveNamedImageData(QString name, QxrdInt32ImageData *image);
+  bool saveNamedRawImageData(QString name, QxrdInt16ImageData *image);
+  bool saveNamedRawImageData(QString name, QxrdInt32ImageData *image);
+  bool saveNamedMaskData(QString name, QxrdMaskData *mask);
 
   QxrdDoubleImageData *data() const;
   QxrdDoubleImageData *darkImage() const;
@@ -208,6 +230,7 @@ private:
 //  void processAcquiredImage(QxrdDoubleImageData *image);
   void processAcquiredInt16Image(QxrdInt16ImageData *image);
   void processAcquiredInt32Image(QxrdInt32ImageData *image);
+  void processAcquiredImage(QxrdDoubleImageData *dimg);
 
   void convertImage(QxrdInt16ImageData *src, QxrdDoubleImageData *dest);
   void convertImage(QxrdInt32ImageData *src, QxrdDoubleImageData *dest);
@@ -227,6 +250,8 @@ private:
   void openLogFile();
   void writeLogHeader();
 
+  void updateEstimatedTime(QcepDoubleProperty *prop, int msec);
+
 private:
   mutable QMutex            m_Mutex;
 
@@ -243,7 +268,7 @@ private:
   QxrdDoubleImageData      *m_Data;
   QxrdDoubleImageData      *m_DarkFrame;
   QxrdDoubleImageData      *m_BadPixels;
-  QxrdDoubleImageData      *m_GainFrame;
+  QxrdDoubleImageData      *m_GainMap;
   QxrdMaskData             *m_Mask;
 
   QAtomicInt                m_AcquiredCount;
@@ -254,7 +279,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.29 2009/09/04 21:11:41 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.30 2009/09/07 22:10:14 jennings Exp $");
 };
 
 #endif
@@ -262,6 +287,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.30  2009/09/07 22:10:14  jennings
+*  Allow NULL mask
+*
 *  Revision 1.29  2009/09/04 21:11:41  jennings
 *  Support for file write timing tests
 *

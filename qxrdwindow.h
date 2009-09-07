@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.56 2009/08/27 21:02:17 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.57 2009/09/07 22:10:14 jennings Exp $
 *
 *******************************************************************/
 
@@ -48,6 +48,11 @@ public slots:
   void doLoadDark();
   void doSaveMask();
   void doLoadMask();
+  void doSaveBadPixels();
+  void doLoadBadPixels();
+  void doSaveGainMap();
+  void doLoadGainMap();
+
 
   void doAcquire();
   void doCancel();
@@ -78,10 +83,6 @@ public slots:
   void selectOutputDirectory();
   void statusMessage(QString msg);
   void clearStatusMessage();
-
-  void doLoadDarkImage();
-  void doLoadBadPixels();
-  void doLoadGainMap();
 
 signals:
   void executeCommand(QString cmd);
@@ -129,7 +130,7 @@ private:
   QAtomicInt              m_Plotting;
   QAtomicInt              m_SpareDataAvailable;
 
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.56 2009/08/27 21:02:17 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.57 2009/09/07 22:10:14 jennings Exp $");
 };
 
 #endif
@@ -137,6 +138,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.57  2009/09/07 22:10:14  jennings
+*  Allow NULL mask
+*
 *  Revision 1.56  2009/08/27 21:02:17  jennings
 *  Partial implementation of lazy plotting
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.10 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.11 2009/09/07 22:10:14 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessor *proc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_DataProcessor(proc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.10 2009/08/25 18:43:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.11 2009/09/07 22:10:14 jennings Exp $")
 {
 }
 
@@ -73,7 +73,7 @@ void QxrdIntegrator::integrate(double cx, double cy, int oversample, int normali
 
   for (int y=0; y<nRows; y++) {
     for (int x=0; x<nCols; x++) {
-      if (mask->value(x, y)) {
+      if ((mask == NULL) || (mask->value(x, y))) {
         double val = image->value(x, y);
         for (double oversampley = 0; oversampley < 1; oversampley += oversampleStep) {
           double yy = y+oversampley+halfOversampleStep;
@@ -146,13 +146,13 @@ void QxrdIntegrator::integrate2(double cx, double cy, int oversample, int normal
   sumvalue.fill(0);
 
   double *img = image->data();
-  bool   *msk = mask ->data();
+  bool   *msk = (mask == NULL ? NULL : mask ->data());
   double *integ = integral.data();
   double *sumvl = sumvalue.data();
 
   for (int y=0; y<nRows; y++) {
     for (int x=0; x<nCols; x++) {
-      if (*msk) {
+      if ((mask == NULL) || (*msk++)) {
         double val = *img;
         for (double oversampley = 0; oversampley < 1; oversampley += oversampleStep) {
           double yy = y+oversampley+halfOversampleStep;
@@ -172,7 +172,6 @@ void QxrdIntegrator::integrate2(double cx, double cy, int oversample, int normal
         }
       }
 
-      msk++;
       img++;
     }
   }
@@ -225,7 +224,7 @@ void QxrdIntegrator::parallelIntegrateMap
   for (int y=0; y<nRows; y++) {
     for (int x=0; x<nCols; x++) {
       if ((x % nThreads) == thread) {
-        if (mask->value(x, y)) {
+        if ((mask == NULL) || (mask->value(x, y))) {
           double val = image->value(x, y);
           for (double oversampley = 0; oversampley < 1; oversampley += oversampleStep) {
             double yy = y+oversampley+halfOversampleStep;
@@ -307,7 +306,7 @@ void QxrdIntegrator::tableIntegrateSetup(int nThreads, double cx, double cy, int
   m_TableData.fill(-1);
 
   double *img = image->data();
-  bool   *msk = mask ->data();
+  bool   *msk = (mask == NULL ? NULL : mask ->data());
 //  double *integ = integral.data();
 //  double *sumvl = sumvalue.data();
   int *table = m_TableData.data();
@@ -321,7 +320,7 @@ void QxrdIntegrator::tableIntegrateSetup(int nThreads, double cx, double cy, int
 
   for (int y=0; y<nRows; y++) {
     for (int x=0; x<nCols; x++) {
-      if (*msk) {
+      if ((mask == NULL) || (*msk++)) {
         double val = *img;
         int irpxlmin = 10000000;
         int irpxlmax = 0;
@@ -382,7 +381,6 @@ void QxrdIntegrator::tableIntegrateSetup(int nThreads, double cx, double cy, int
         }
       }
 
-      msk++;
       img++;
     }
   }
@@ -506,6 +504,9 @@ void QxrdIntegrator::tableIntegrate(int nThreads, double cx, double cy, int over
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.11  2009/09/07 22:10:14  jennings
+*  Allow NULL mask
+*
 *  Revision 1.10  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *
