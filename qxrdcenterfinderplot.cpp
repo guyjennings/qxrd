@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.cpp,v 1.13 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdcenterfinderplot.cpp,v 1.14 2009/09/07 22:03:46 jennings Exp $
 *
 *******************************************************************/
 
@@ -26,7 +26,7 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_DataProcessor(NULL),
     m_CenterFinder(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.13 2009/08/25 18:43:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.14 2009/09/07 22:03:46 jennings Exp $")
 {
   insertLegend(m_Legend, QwtPlot::RightLegend);
 }
@@ -89,7 +89,12 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
       if (ix >= 0 && iy >= 0 && ix < width && iy < height) {
         double v = img->value(ix,iy);
-        bool mv = mask->maskValue(ix,iy);
+
+        bool mv = true;
+
+        if (mask) {
+          mv = mask->maskValue(ix,iy);
+        }
 
         if (mv) {
           m_XData[nn] = n;
@@ -142,6 +147,9 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.cpp,v $
+*  Revision 1.14  2009/09/07 22:03:46  jennings
+*  Allow NULL mask
+*
 *  Revision 1.13  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *
