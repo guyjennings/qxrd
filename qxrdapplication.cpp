@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.47 2009/08/27 21:02:17 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.48 2009/09/07 21:56:55 jennings Exp $
 *
 *******************************************************************/
 
@@ -30,7 +30,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.47 2009/08/27 21:02:17 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.48 2009/09/07 21:56:55 jennings Exp $")
 {
 //  QcepProperty::dumpMetaData(&QxrdApplication::staticMetaObject);
 //  QcepProperty::dumpMetaData(&QxrdWindow::staticMetaObject);
@@ -110,6 +110,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   readSettings();
 
   printf("Optimal thread count = %d\n", QThread::idealThreadCount());
+
+  m_DataProcessor -> loadDefaultImages();
 }
 
 QxrdApplication::~QxrdApplication()
@@ -176,6 +178,9 @@ QxrdDataProcessor *QxrdApplication::dataProcessor() const
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.48  2009/09/07 21:56:55  jennings
+*  Load previous dark, gain, bad pixels and mas images at startup
+*
 *  Revision 1.47  2009/08/27 21:02:17  jennings
 *  Partial implementation of lazy plotting
 *
