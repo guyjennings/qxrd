@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.15 2009/09/04 15:15:42 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.16 2009/09/07 21:44:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.15 2009/09/04 15:15:42 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.16 2009/09/07 21:44:00 jennings Exp $")
 {
 }
 
@@ -66,7 +66,7 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
       return /*true*/;
     }
 
-    QxrdDoubleImageData *acquiredData = m_DataProcessor -> takeNextFreeImage();
+    QxrdInt16ImageData *acquiredData = new QxrdInt16ImageData(get_NCols(), get_NRows());
 
     acquiredData -> resize(get_NCols(), get_NRows());
     acquiredData -> clear();
@@ -171,9 +171,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 
     m_DataProcessor -> incrementAcquiredCount();
 
-    emit printMessage(tr("Acquired image complete after %1").arg(tic.restart()));
+    emit printMessage(tr("Simulated image available after %1").arg(tic.restart()));
 
-    emit acquiredImageAvailable(acquiredData);
+    emit acquiredInt16ImageAvailable(acquiredData);
 
     set_FileIndex(get_FileIndex()+1);
   }
@@ -185,6 +185,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.16  2009/09/07 21:44:00  jennings
+*  imulated acquisition
+*
 *  Revision 1.15  2009/09/04 15:15:42  jennings
 *  Added log file routines
 *  Removed newlines from any printMessage calls.
