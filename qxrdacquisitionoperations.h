@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionoperations.h,v 1.9 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdacquisitionoperations.h,v 1.10 2009/09/07 21:38:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,14 +27,16 @@ public:
 
 
 signals:
-  void acquiredImageAvailable(QxrdDoubleImageData *image);
+//  void acquiredImageAvailable(QxrdDoubleImageData *image);
+  void acquiredInt16ImageAvailable(QxrdInt16ImageData *img);
+  void acquiredInt32ImageAvailable(QxrdInt32ImageData *img);
 
 protected:
   mutable QMutex         m_Mutex;
   QxrdDataProcessor     *m_DataProcessor;
 //  QxrdImageQueue         m_AcquiredImages;
 
-  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.9 2009/08/25 18:43:03 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionoperations.h,v 1.10 2009/09/07 21:38:32 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONOPERATIONS_H
@@ -42,6 +44,9 @@ protected:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionoperations.h,v $
+*  Revision 1.10  2009/09/07 21:38:32  jennings
+*  Moved acquiredInt{16,32]ImageAvailable signals into base class
+*
 *  Revision 1.9  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *

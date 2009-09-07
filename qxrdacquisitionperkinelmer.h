@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.15 2009/09/04 12:46:35 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.16 2009/09/07 21:38:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -36,9 +36,6 @@ signals:
   void acquireStarted(int dark);
   void acquireComplete(int dark);
   void oneReadoutModeChanged(int mode, double value);
-
-  void acquiredInt16ImageAvailable(QxrdInt16ImageData *img);
-  void acquiredInt32ImageAvailable(QxrdInt32ImageData *img);
 
 public:
 //  bool onEndFrame();
@@ -97,7 +94,7 @@ private:
   int                    m_CameraType;
   QString                m_CameraModel;
 
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.15 2009/09/04 12:46:35 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.16 2009/09/07 21:38:32 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -105,6 +102,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.16  2009/09/07 21:38:32  jennings
+*  Moved acquiredInt{16,32]ImageAvailable signals into base class
+*
 *  Revision 1.15  2009/09/04 12:46:35  jennings
 *  Added binning mode parameter
 *  Added camera gain and binning mode user interfaces
