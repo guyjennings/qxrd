@@ -213,4 +213,21 @@ until outstanding processing has completed.
 
 -------------------------------------------------------
 
+BLOCKER
+Combine the tails of QxrdDataProcessor::processAcquiredInt{16,32}Image to eliminate
+duplicated code.
+
+-------------------------------------------------------
+
+BLOCKER
+Provide a means to remove dark image, gain map, mask etc.
+(and put them back again!)
+
+-------------------------------------------------------
+
+BLOCKER
+Add frame skip option in acquisition
+
+-------------------------------------------------------
+
 #endif // TODO_H
