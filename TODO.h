@@ -54,6 +54,7 @@ BLOCKER
 Automatically reload dark, bad pixel and gain images when program restarts
 Load/save mask and dark images when program starts/exits, make default mask
 all visible.
+(Will need to load/save more metadata before this will work well).
 
 -------------------------------------------------------
 
@@ -227,6 +228,26 @@ Provide a means to remove dark image, gain map, mask etc.
 
 BLOCKER
 Add frame skip option in acquisition
+
+-------------------------------------------------------
+
+BLOCKER
+The script:
+for (i=0; i<512; i++) {
+   print("Binning mode = ",i);
+   acquisition.binningMode = i;
+   acquire("z:/junk-test/testing",0.1,1,1,0)
+   while (status(0.5) != 1) {}
+}
+gets deadlocked
+
+-------------------------------------------------------
+
+If acquisition is triggered before sufficient pre-trigger
+images have been taken, then post-triggered acquisition
+will continue until a total of pre- plus post- images
+have been taken - i.e. extra post-trigger images will be
+taken.
 
 -------------------------------------------------------
 

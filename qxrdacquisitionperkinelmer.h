@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.16 2009/09/07 21:38:32 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.17 2009/09/08 21:42:34 jennings Exp $
 *
 *******************************************************************/
 
@@ -59,6 +59,7 @@ private slots:
 
 private:
   void acquisitionError(int n);
+  void acquisitionError(int ln, int n);
   void acquisitionInitError(int n);
   void acquisitionNSensorsError(int n);
   void allocateMemoryForAcquisition();
@@ -94,7 +95,7 @@ private:
   int                    m_CameraType;
   QString                m_CameraModel;
 
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.16 2009/09/07 21:38:32 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.17 2009/09/08 21:42:34 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -102,6 +103,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.17  2009/09/08 21:42:34  jennings
+*  Added line numbers to acquisition error messages
+*
 *  Revision 1.16  2009/09/07 21:38:32  jennings
 *  Moved acquiredInt{16,32]ImageAvailable signals into base class
 *
