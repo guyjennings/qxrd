@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.39 2009/09/07 22:10:14 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.40 2009/09/08 21:41:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -67,7 +67,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.39 2009/09/07 22:10:14 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.40 2009/09/08 21:41:59 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -1009,6 +1009,8 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
 void QxrdDataProcessor::updateEstimatedTime(QcepDoubleProperty *prop, int msec)
 {
   double newVal = prop -> value() * (1.0 - get_AveragingRatio()) + ((double) msec)/1000.0* get_AveragingRatio();
+
+  prop -> setValue(newVal);
 }
 
 void QxrdDataProcessor::subtractDarkImage(QxrdDoubleImageData *image, QxrdDoubleImageData *dark)
@@ -1487,6 +1489,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.40  2009/09/08 21:41:59  jennings
+*  Update estimated processing time accumulators
+*
 *  Revision 1.39  2009/09/07 22:10:14  jennings
 *  Allow NULL mask
 *
