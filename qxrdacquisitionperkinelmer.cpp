@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.28 2009/09/08 21:42:34 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.29 2009/09/09 22:32:12 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_HeaderID(-1),
     m_CameraType(-1),
     m_CameraModel(""),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.28 2009/09/08 21:42:34 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.29 2009/09/09 22:32:12 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -521,6 +521,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_AcquiredInt16Data -> set_ReadoutMode(get_ReadoutMode());
       m_AcquiredInt16Data -> set_ExposureTime(get_ExposureTime());
       m_AcquiredInt16Data -> set_SummedExposures(get_ExposuresToSum());
+      m_AcquiredInt16Data -> set_DateTime(QDateTime::currentDateTime());
 
       if (get_AcquireDark()) {
         m_AcquiredInt16Data -> set_ImageNumber(-1);
@@ -565,6 +566,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_AcquiredInt32Data -> set_ReadoutMode(get_ReadoutMode());
       m_AcquiredInt32Data -> set_ExposureTime(get_ExposureTime());
       m_AcquiredInt32Data -> set_SummedExposures(get_ExposuresToSum());
+      m_AcquiredInt32Data -> set_DateTime(QDateTime::currentDateTime());
 
       if (get_AcquireDark()) {
         m_AcquiredInt32Data -> set_ImageNumber(-1);
@@ -775,6 +777,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.29  2009/09/09 22:32:12  jennings
+*  Started to add TIFF metadata support
+*
 *  Revision 1.28  2009/09/08 21:42:34  jennings
 *  Added line numbers to acquisition error messages
 *

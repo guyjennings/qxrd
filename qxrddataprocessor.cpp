@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.40 2009/09/08 21:41:59 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.41 2009/09/09 22:32:12 jennings Exp $
 *
 *******************************************************************/
 
@@ -67,7 +67,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.40 2009/09/08 21:41:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.41 2009/09/09 22:32:12 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -585,6 +585,7 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *im
   TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32);
   TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
 
+  image -> setTiffMetaData(tif);
 
   QVector<float> buffvec(ncols);
   float* buffer = buffvec.data();
@@ -642,6 +643,8 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *
   TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16);
   TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
 
+  image -> setTiffMetaData(tif);
+
   QVector<quint16> buffvec(ncols);
   quint16* buffer = buffvec.data();
 
@@ -696,6 +699,8 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *
   TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32);
   TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
 
+  image -> setTiffMetaData(tif);
+
   QVector<quint32> buffvec(ncols);
   quint32* buffer = buffvec.data();
 
@@ -732,6 +737,8 @@ bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
   TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
   TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
   TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
+
+  image -> setTiffMetaData(tif);
 
   QVector<quint8> buffvec(ncols);
   quint8* buffer = buffvec.data();
@@ -913,6 +920,8 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
 
     returnInt16ImageToPool(img);
 
+    dimg -> set_DateTime(QDateTime::currentDateTime());
+
     processAcquiredImage(dimg);
   }
 
@@ -942,6 +951,8 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
     convertImage(img, dimg);
 
     returnInt32ImageToPool(img);
+
+    dimg -> set_DateTime(QDateTime::currentDateTime());
 
     processAcquiredImage(dimg);
   }
@@ -1489,6 +1500,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.41  2009/09/09 22:32:12  jennings
+*  Started to add TIFF metadata support
+*
 *  Revision 1.40  2009/09/08 21:41:59  jennings
 *  Update estimated processing time accumulators
 *
