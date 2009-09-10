@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimagedataformathis.cpp,v 1.7 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdimagedataformathis.cpp,v 1.8 2009/09/10 13:53:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,7 +12,7 @@ static QxrdImageDataFormatHis fmt;
 
 QxrdImageDataFormatHis::QxrdImageDataFormatHis(QString name)
   : QcepImageDataFormat<double>(name),
-    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.7 2009/08/04 16:45:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.8 2009/09/10 13:53:23 jennings Exp $")
 {
 }
 
@@ -63,9 +63,9 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::canLoadFile(QString path)
 	(h.TypeOfNumbers == 4 || h.TypeOfNumbers == 32)) {
       res = this;
     }
-  }
 
-  fclose(file);
+    fclose(file);
+  }
 
   return res;
 }
@@ -138,6 +138,9 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::saveFile(QString /*path*/, QcepI
 /******************************************************************
 *
 *  $Log: qxrdimagedataformathis.cpp,v $
+*  Revision 1.8  2009/09/10 13:53:23  jennings
+*  Removed possibilitity of fclose(NULL)
+*
 *  Revision 1.7  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *
