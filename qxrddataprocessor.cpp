@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.41 2009/09/09 22:32:12 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.42 2009/09/10 21:33:30 jennings Exp $
 *
 *******************************************************************/
 
@@ -67,7 +67,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.41 2009/09/09 22:32:12 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.42 2009/09/10 21:33:30 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -558,6 +558,9 @@ void QxrdDataProcessor::saveMask(QString name)
 //  saveNamedImageData(image->rawFileName(), image);
 //}
 //
+
+#define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
+
 bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *image)
 {
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
@@ -570,39 +573,42 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *im
   name = uniqueFileName(name);
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
+  int res = 1;
 
-  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
-  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows);
-  TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
+  if (tif) {
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
 
-  if (get_CompressImages()) {
-    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
-  } else {
-    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-  }
-
-  TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-  TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32);
-  TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
-
-  image -> setTiffMetaData(tif);
-
-  QVector<float> buffvec(ncols);
-  float* buffer = buffvec.data();
-
-  for (int y=0; y<nrows; y++) {
-    for (int x=0; x<ncols; x++) {
-      buffer[x] = image->value(x,y);
+    if (get_CompressImages()) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW));
+    } else {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE));
     }
 
-    TIFFWriteScanline(tif, buffer, y, 0);
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP));
+
+    image -> setTiffMetaData(tif);
+
+    QVector<float> buffvec(ncols);
+    float* buffer = buffvec.data();
+
+    for (int y=0; y<nrows; y++) {
+      for (int x=0; x<ncols; x++) {
+        buffer[x] = image->value(x,y);
+      }
+
+      TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+    }
+
+    TIFFClose(tif);
+
+    image -> set_FileName(name);
   }
 
-  TIFFClose(tif);
-
-  image -> set_FileName(name);
-
-  return true;
+  return res;
 }
 
 bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *image)
@@ -628,37 +634,41 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *
   name = uniqueFileName(name);
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
+  int res = 1;
 
-  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
-  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows);
-  TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
+  if (tif) {
 
-  if (get_CompressImages()) {
-    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
-  } else {
-    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-  }
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
 
-  TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-  TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16);
-  TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
-
-  image -> setTiffMetaData(tif);
-
-  QVector<quint16> buffvec(ncols);
-  quint16* buffer = buffvec.data();
-
-  for (int y=0; y<nrows; y++) {
-    for (int x=0; x<ncols; x++) {
-      buffer[x] = image->value(x,y);
+    if (get_CompressImages()) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW));
+    } else {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE));
     }
 
-    TIFFWriteScanline(tif, buffer, y, 0);
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
+
+    image -> setTiffMetaData(tif);
+
+    QVector<quint16> buffvec(ncols);
+    quint16* buffer = buffvec.data();
+
+    for (int y=0; y<nrows; y++) {
+      for (int x=0; x<ncols; x++) {
+        buffer[x] = image->value(x,y);
+      }
+
+      TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+    }
+
+    TIFFClose(tif);
   }
 
-  TIFFClose(tif);
-
-  return true;
+  return res;
 }
 
 bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *image)
@@ -684,37 +694,41 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *
   name = uniqueFileName(name);
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
+  int res = 1;
 
-  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
-  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows);
-  TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
+  if (tif) {
 
-  if (get_CompressImages()) {
-    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
-  } else {
-    TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-  }
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
 
-  TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-  TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32);
-  TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
-
-  image -> setTiffMetaData(tif);
-
-  QVector<quint32> buffvec(ncols);
-  quint32* buffer = buffvec.data();
-
-  for (int y=0; y<nrows; y++) {
-    for (int x=0; x<ncols; x++) {
-      buffer[x] = image->value(x,y);
+    if (get_CompressImages()) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW));
+    } else {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE));
     }
 
-    TIFFWriteScanline(tif, buffer, y, 0);
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
+
+    image -> setTiffMetaData(tif);
+
+    QVector<quint32> buffvec(ncols);
+    quint32* buffer = buffvec.data();
+
+    for (int y=0; y<nrows; y++) {
+      for (int x=0; x<ncols; x++) {
+        buffer[x] = image->value(x,y);
+      }
+
+      TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+    }
+
+    TIFFClose(tif);
   }
 
-  TIFFClose(tif);
-
-  return true;
+  return res;
 }
 
 bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
@@ -729,33 +743,37 @@ bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
   name = uniqueFileName(name);
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
+  int res = 1;
 
-  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols);
-  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows);
-  TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
-  TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-  TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-  TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
-  TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT);
+  if (tif) {
 
-  image -> setTiffMetaData(tif);
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
 
-  QVector<quint8> buffvec(ncols);
-  quint8* buffer = buffvec.data();
+    image -> setTiffMetaData(tif);
 
-  for (int y=0; y<nrows; y++) {
-    for (int x=0; x<ncols; x++) {
-      buffer[x] = image->value(x,y);
+    QVector<quint8> buffvec(ncols);
+    quint8* buffer = buffvec.data();
+
+    for (int y=0; y<nrows; y++) {
+      for (int x=0; x<ncols; x++) {
+        buffer[x] = image->value(x,y);
+      }
+
+      TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
     }
 
-    TIFFWriteScanline(tif, buffer, y, 0);
+    TIFFClose(tif);
+
+    image -> set_FileName(name);
   }
 
-  TIFFClose(tif);
-
-  image -> set_FileName(name);
-
-  return true;
+  return res;
 }
 
 QString QxrdDataProcessor::uniqueFileName(QString name)
@@ -1500,6 +1518,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.42  2009/09/10 21:33:30  jennings
+*  Added TIFF error handling
+*
 *  Revision 1.41  2009/09/09 22:32:12  jennings
 *  Started to add TIFF metadata support
 *

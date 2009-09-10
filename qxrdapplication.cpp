@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.48 2009/09/07 21:56:55 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.49 2009/09/10 21:33:30 jennings Exp $
 *
 *******************************************************************/
 
@@ -22,6 +22,8 @@
 #include <QtConcurrentRun>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QString>
+#include <tiffio.h>
 
 static QxrdApplication* g_Application = NULL;
 
@@ -30,8 +32,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.48 2009/09/07 21:56:55 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.49 2009/09/10 21:33:30 jennings Exp $")
 {
+  setupTiffHandlers();
+
 //  QcepProperty::dumpMetaData(&QxrdApplication::staticMetaObject);
 //  QcepProperty::dumpMetaData(&QxrdWindow::staticMetaObject);
 //  QcepProperty::dumpMetaData(&QxrdAcquisition::staticMetaObject);
@@ -175,9 +179,74 @@ QxrdDataProcessor *QxrdApplication::dataProcessor() const
   return m_DataProcessor;
 }
 
+static void qxrdTIFFWarningHandler(const char* module, const char* fmt, va_list ap)
+{
+  char msg[100];
+
+  vsnprintf(msg, sizeof(msg), fmt, ap);
+
+  g_Application -> tiffWarning(module, msg);
+}
+
+static void qxrdTIFFWarningHandlerExt(thandle_t fd, const char* module, const char* fmt, va_list ap)
+{
+  char msg[100];
+
+  vsnprintf(msg, sizeof(msg), fmt, ap);
+
+  g_Application -> tiffWarning(module, msg);
+}
+
+static void qxrdTIFFErrorHandler(const char* module, const char* fmt, va_list ap)
+{
+  char msg[100];
+
+  vsnprintf(msg, sizeof(msg), fmt, ap);
+
+  g_Application -> tiffError(module, msg);
+}
+
+static void qxrdTIFFErrorHandlerExt(thandle_t fd, const char* module, const char* fmt, va_list ap)
+{
+  char msg[100];
+
+  vsnprintf(msg, sizeof(msg), fmt, ap);
+
+  g_Application -> tiffError(module, msg);
+}
+
+void QxrdApplication::setupTiffHandlers()
+{
+  TIFFSetErrorHandler      (&qxrdTIFFErrorHandler);
+  TIFFSetErrorHandlerExt   (NULL);
+  TIFFSetWarningHandler    (&qxrdTIFFWarningHandler);
+  TIFFSetWarningHandlerExt (NULL);
+}
+
+void QxrdApplication::tiffWarning(const char *module, const char *msg)
+{
+  if (m_Window) {
+    m_Window -> criticalMessage(tr("TIFF Warning from %1 : %2").arg(module).arg(msg));
+  } else {
+    printf("TIFF Warning from %s : %s\n", module, msg);
+  }
+}
+
+void QxrdApplication::tiffError(const char *module, const char *msg)
+{
+  if (m_Window) {
+    m_Window -> criticalMessage(tr("TIFF Error from %1 : %2").arg(module).arg(msg));
+  } else {
+    printf("TIFF Error from %s : %s\n", module, msg);
+  }
+}
+
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.49  2009/09/10 21:33:30  jennings
+*  Added TIFF error handling
+*
 *  Revision 1.48  2009/09/07 21:56:55  jennings
 *  Load previous dark, gain, bad pixels and mas images at startup
 *

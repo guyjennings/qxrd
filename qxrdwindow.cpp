@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.89 2009/09/07 22:10:14 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.90 2009/09/10 21:33:30 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.89 2009/09/07 22:10:14 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.90 2009/09/10 21:33:30 jennings Exp $")
 {
   setupUi(this);
 
@@ -303,6 +303,8 @@ void QxrdWindow::possiblyClose()
 
 bool QxrdWindow::wantToClose()
 {
+  THREAD_CHECK;
+
   return QMessageBox::question(this, tr("Really Close?"),
                                tr("Do you really want to close the window?"),
                                   QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
@@ -315,21 +317,32 @@ QString QxrdWindow::timeStamp()
 
 void QxrdWindow::printMessage(QString msg)
 {
-//  printf("%s\n", qPrintable(msg));
-//
-  m_Messages -> append(timeStamp()+msg.trimmed());
+//  printf("print message %s\n", qPrintable(msg));
 
-  m_DataProcessor -> logMessage(msg);
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "printMessage", Qt::QueuedConnection, Q_ARG(QString, msg));
+  } else {
+    m_Messages -> append(timeStamp()+msg.trimmed());
+
+    m_DataProcessor -> logMessage(msg);
+  }
 }
 
 void QxrdWindow::criticalMessage(QString msg)
 {
-  QMessageBox::critical(this, "Error", msg);
+//  printf("critical message %s\n", qPrintable(msg));
+
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "criticalMessage", Qt::QueuedConnection, Q_ARG(QString, msg));
+  } else {
+    QMessageBox::critical(this, "Error", msg);
+  }
 }
 
 void QxrdWindow::acquisitionReady()
 {
 //  readSettings();
+  THREAD_CHECK;
 
   m_AcquireButton -> setEnabled(true);
   m_TriggerButton -> setEnabled(false);
@@ -345,6 +358,8 @@ void QxrdWindow::acquisitionReady()
 
 void QxrdWindow::acquisitionStarted()
 {
+  THREAD_CHECK;
+
   if (m_Acquisition -> get_PreTriggerFiles() > 0) {
     m_TriggerButton -> setEnabled(true);
   } else {
@@ -364,6 +379,8 @@ void QxrdWindow::acquisitionStarted()
 
 void QxrdWindow::darkAcquisitionStarted()
 {
+  THREAD_CHECK;
+
   m_AcquireButton -> setEnabled(false);
   m_TriggerButton -> setEnabled(false);
   m_CancelButton -> setEnabled(false);
@@ -378,6 +395,8 @@ void QxrdWindow::darkAcquisitionStarted()
 
 void QxrdWindow::acquisitionFinished()
 {
+  THREAD_CHECK;
+
   m_AcquireButton -> setEnabled(true);
   m_TriggerButton -> setEnabled(false);
   m_CancelButton -> setEnabled(false);
@@ -392,6 +411,8 @@ void QxrdWindow::acquisitionFinished()
 
 void QxrdWindow::setReadoutTime(int n, double t)
 {
+  THREAD_CHECK;
+
   while (n >= m_ReadoutMode->count()) {
     m_ReadoutMode -> addItem("");
     m_Exposures.append(0);
@@ -403,6 +424,8 @@ void QxrdWindow::setReadoutTime(int n, double t)
 
 void QxrdWindow::selectOutputDirectory()
 {
+  THREAD_CHECK;
+
   QString dir = QFileDialog::getExistingDirectory(this, "Output Directory",
                                                   m_DataProcessor -> get_OutputDirectory());
   if (dir.length()) {
@@ -742,6 +765,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.90  2009/09/10 21:33:30  jennings
+*  Added TIFF error handling
+*
 *  Revision 1.89  2009/09/07 22:10:14  jennings
 *  Allow NULL mask
 *

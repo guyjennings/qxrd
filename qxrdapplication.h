@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.h,v 1.23 2009/07/10 22:54:23 jennings Exp $
+*  $Id: qxrdapplication.h,v 1.24 2009/09/10 21:33:30 jennings Exp $
 *
 *******************************************************************/
 
@@ -26,7 +26,7 @@ class QxrdApplication : public QApplication
 {
   Q_OBJECT;
 
- public:
+public:
   QxrdApplication(int &argc, char **argv);
   ~QxrdApplication();
 
@@ -37,17 +37,23 @@ class QxrdApplication : public QApplication
   void readSettings();
   void writeSettings();
 
- public slots:
+  void tiffWarning(const char* module, const char *msg);
+  void tiffError(const char* module, const char *msg);
+
+public slots:
   void shutdownThreads();
   void possiblyQuit();
 
- signals:
+signals:
   void printMessage(QString msg);
 
- public:
+public:
   bool wantToQuit();
 
- private:
+private:
+  void setupTiffHandlers();
+
+private:
   QxrdWindow                    *m_Window;
   QxrdServerThread              *m_ServerThread;
   QxrdServer                    *m_Server;
@@ -57,7 +63,7 @@ class QxrdApplication : public QApplication
   QxrdAcquisition               *m_Acquisition;
   QxrdScriptEngineThread        *m_ScriptEngineThread;
   QxrdScriptEngine              *m_ScriptEngine;
-  HEADER_IDENT("$Id: qxrdapplication.h,v 1.23 2009/07/10 22:54:23 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdapplication.h,v 1.24 2009/09/10 21:33:30 jennings Exp $");
 };
 
 #endif
@@ -65,6 +71,9 @@ class QxrdApplication : public QApplication
 /******************************************************************
 *
 *  $Log: qxrdapplication.h,v $
+*  Revision 1.24  2009/09/10 21:33:30  jennings
+*  Added TIFF error handling
+*
 *  Revision 1.23  2009/07/10 22:54:23  jennings
 *  Some rearrangement of data
 *
