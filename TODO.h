@@ -254,6 +254,7 @@ taken.
 BLOCKER
 Add error return checking wherever appropriate -
 particularly in TIFF, Acquire_ and file i/o routines
+Check output directory exists before starting acquisition sequence.
 
 -------------------------------------------------------
 
