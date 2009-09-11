@@ -127,11 +127,11 @@ and swap as appropriate.
 BLOCKER
 Optimize processing routines
 
--------------------------------------------------------
-
-BLOCKER
-Make processing single-threaded
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Make processing single-threaded
+//
 -------------------------------------------------------
 
 BLOCKER
@@ -155,10 +155,10 @@ Provide facility to save integrated scans
 BLOCKER
 Leak check...
 
--------------------------------------------------------
-
-Coalesce controls from the 'output' panel into the 'acquire' panel
-
+//-------------------------------------------------------
+//
+//Coalesce controls from the 'output' panel into the 'acquire' panel
+//
 -------------------------------------------------------
 
 BLOCKER
@@ -190,12 +190,14 @@ QxrdAcquisitionPerkinElmer the 'leaf' class that
 is instantiated.  Will simplify working with multiple
 detector types.
 
--------------------------------------------------------
-
-BLOCKER
-Check that the load/save data, dark and mask routines
-actually work!
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Check that the load/save data, dark and mask routines
+//actually work!
+//The problem was that the file conversion factories for raw and mask data
+//were not initialized.
+//
 -------------------------------------------------------
 
 BLOCKER
@@ -212,12 +214,12 @@ BLOCKER
 Don't allow program to quit or start a new acquisition
 until outstanding processing has completed.
 
--------------------------------------------------------
-
-BLOCKER
-Combine the tails of QxrdDataProcessor::processAcquiredInt{16,32}Image to eliminate
-duplicated code.
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Combine the tails of QxrdDataProcessor::processAcquiredInt{16,32}Image to eliminate
+//duplicated code.
+//
 -------------------------------------------------------
 
 BLOCKER
@@ -236,7 +238,7 @@ The script:
 for (i=0; i<512; i++) {
    print("Binning mode = ",i);
    acquisition.binningMode = i;
-   acquire("z:/junk-test/testing",0.1,1,1,0)
+   acquire("h:/junk-test/testing",0.1,1,1,0)
    while (status(0.5) != 1) {}
 }
 gets deadlocked
