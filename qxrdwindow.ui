@@ -665,7 +665,7 @@
      <x>0</x>
      <y>0</y>
      <width>1243</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -808,7 +808,7 @@ Script Property: &quot;acquisition.exposureTime&quot;
 Script Function: exposureTime()</string>
        </property>
        <property name="specialValueText">
-        <string>From Readout Mode</string>
+        <string/>
        </property>
        <property name="keyboardTracking">
         <bool>false</bool>
@@ -893,7 +893,7 @@ Script: &quot;acquisition.postTriggerFiles&quot;
 Script Function: postTriggerFiles()</string>
        </property>
        <property name="specialValueText">
-        <string>None</string>
+        <string/>
        </property>
        <property name="keyboardTracking">
         <bool>false</bool>
@@ -1102,7 +1102,7 @@ Script: &quot;acquisition.preTriggerFiles&quot;
 Script Function: preTriggerFiles()</string>
        </property>
        <property name="specialValueText">
-        <string>None</string>
+        <string/>
        </property>
        <property name="keyboardTracking">
         <bool>false</bool>
@@ -1468,8 +1468,14 @@ Script Property: &quot;acquisition.binningMode&quot;</string>
        <property name="toolTip">
         <string>Estimated processing time</string>
        </property>
+       <property name="frame">
+        <bool>false</bool>
+       </property>
        <property name="readOnly">
         <bool>true</bool>
+       </property>
+       <property name="buttonSymbols">
+        <enum>QAbstractSpinBox::NoButtons</enum>
        </property>
        <property name="suffix">
         <string> seconds</string>
@@ -1881,7 +1887,7 @@ Script Property: &quot;acquisition.binningMode&quot;</string>
         <string/>
        </property>
        <property name="minimum">
-        <double>-20.000000000000000</double>
+        <double>-100000.000000000000000</double>
        </property>
        <property name="maximum">
         <double>100000.000000000000000</double>
@@ -1911,7 +1917,7 @@ Script Property: &quot;acquisition.binningMode&quot;</string>
         <string/>
        </property>
        <property name="minimum">
-        <double>-20.000000000000000</double>
+        <double>-100000.000000000000000</double>
        </property>
        <property name="maximum">
         <double>100000.000000000000000</double>
