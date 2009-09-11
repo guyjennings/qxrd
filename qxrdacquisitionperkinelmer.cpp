@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.30 2009/09/10 21:33:02 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.31 2009/09/11 19:39:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_HeaderID(-1),
     m_CameraType(-1),
     m_CameraModel(""),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.30 2009/09/10 21:33:02 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.31 2009/09/11 19:39:27 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -701,7 +701,7 @@ void QxrdAcquisitionPerkinElmer::acquisitionError(int ln, int n)
 
   emit printMessage(tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
   emit statusMessage(tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
-  emit criticalMessage(tr("Acquisition Error %1 at line %2").arg(n));
+  emit criticalMessage(tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
 }
 
 void QxrdAcquisitionPerkinElmer::acquisitionInitError(int n)
@@ -779,6 +779,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.31  2009/09/11 19:39:27  jennings
+*  Fixed missing line number substitution in acquisition error dialog
+*
 *  Revision 1.30  2009/09/10 21:33:02  jennings
 *  Made acquisition errors show error dialog
 *
