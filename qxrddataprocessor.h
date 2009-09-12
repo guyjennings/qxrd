@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.31 2009/09/12 13:44:37 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.32 2009/09/12 14:44:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -255,6 +255,7 @@ private:
 
 private:
   mutable QMutex            m_Mutex;
+  mutable QMutex            m_LogFileMutex;
 
   QxrdWindow               *m_Window;
   QxrdAcquisition          *m_Acquisition;
@@ -280,7 +281,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.31 2009/09/12 13:44:37 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.32 2009/09/12 14:44:20 jennings Exp $");
 };
 
 #endif
@@ -288,6 +289,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.32  2009/09/12 14:44:20  jennings
+*  Moved lock to base class, made into mutex
+*
 *  Revision 1.31  2009/09/12 13:44:37  jennings
 *  Renamed convertImage to copyImage, added double->double version of copyImage,
 *  added timer to copyImage

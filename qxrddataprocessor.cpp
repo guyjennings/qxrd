@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.44 2009/09/12 13:44:37 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.45 2009/09/12 14:44:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -52,6 +52,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_MaskSetPixels(this, "maskSetPixels", true),
     m_CompressImages(this, "compressImages", false),
     m_Mutex(QMutex::Recursive),
+    m_LogFileMutex(QMutex::Recursive),
     m_Window(win),
     m_Acquisition(acq),
     m_DarkUsage(QReadWriteLock::Recursive),
@@ -67,7 +68,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.44 2009/09/12 13:44:37 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.45 2009/09/12 14:44:20 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -413,6 +414,8 @@ void QxrdDataProcessor::loadData(QString name)
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
+    res -> loadMetaData();
+
     newData(res);
 
     set_DataPath(res -> get_FileName());
@@ -441,6 +444,9 @@ void QxrdDataProcessor::loadDark(QString name)
   if (res -> readImage(name)) {
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+    res -> loadMetaData();
+    res -> set_DataType(QxrdDoubleImageData::DarkData);
 
     newDarkImage(res);
 
@@ -471,6 +477,9 @@ void QxrdDataProcessor::loadBadPixels(QString name)
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
+    res -> loadMetaData();
+    res -> set_DataType(QxrdDoubleImageData::BadPixelsData);
+
     newBadPixelsImage(res);
 
     set_BadPixelsPath(res -> get_FileName());
@@ -499,6 +508,9 @@ void QxrdDataProcessor::loadGainMap(QString name)
   if (res -> readImage(name)) {
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+    res -> loadMetaData();
+    res -> set_DataType(QxrdDoubleImageData::GainData);
 
     newGainMapImage(res);
 
@@ -529,6 +541,9 @@ void QxrdDataProcessor::loadMask(QString name)
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
+    res -> loadMetaData();
+    res -> set_DataType(QxrdMaskData::MaskData);
+
     newMask(res);
 
     set_MaskPath(res -> get_FileName());
@@ -546,54 +561,6 @@ void QxrdDataProcessor::saveMask(QString name)
   }
 }
 
-//void QxrdDataProcessor::loadBadPixels(QString name)
-//{
-//  QxrdDoubleImageData* res = takeNextFreeImage();
-//
-//  if (res -> readImage(name)) {
-//    newBadPixelsImage(res);
-//
-//    set_BadPixelsPath(res -> get_FileName());
-//  } else {
-//    delete res;
-//  }
-//}
-//
-//void QxrdDataProcessor::loadGainMap(QString name)
-//{
-//  QxrdDoubleImageData* res = takeNextFreeImage();
-//
-//  res -> readImage(name);
-//
-//  newGainMapImage(res);
-//}
-//
-//void QxrdDataProcessor::saveImageData(QxrdDoubleImageData *image)
-//{
-//  saveNamedImageData(image->get_FileName(), image);
-//}
-//
-//void QxrdDataProcessor::saveImageData(QxrdInt16ImageData *image)
-//{
-//  saveNamedImageData(image->get_FileName(), image);
-//}
-//
-//void QxrdDataProcessor::saveImageData(QxrdInt32ImageData *image)
-//{
-//  saveNamedImageData(image->get_FileName(), image);
-//}
-//
-//void QxrdDataProcessor::saveRawData(QxrdInt16ImageData *image)
-//{
-//  saveNamedImageData(image->rawFileName(), image);
-//}
-//
-//void QxrdDataProcessor::saveRawData(QxrdInt32ImageData *image)
-//{
-//  saveNamedImageData(image->rawFileName(), image);
-//}
-//
-
 #define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
 
 bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *image)
@@ -602,7 +569,7 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *im
 
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
-  QReadLocker lockr(image->rwLock());
+  QMutexLocker lockr(image->mutex());
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
@@ -643,6 +610,8 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *im
     TIFFClose(tif);
 
     image -> set_FileName(name);
+
+    image -> saveMetaData();
   }
 
   return res;
@@ -656,6 +625,8 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *ima
 
   if (res) {
     image -> set_FileName(name);
+
+    image -> saveMetaData();
   }
 
   return res;
@@ -667,7 +638,7 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *
 
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
-  QReadLocker lockr(image->rwLock());
+  QMutexLocker lockr(image->mutex());
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
@@ -720,6 +691,8 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *ima
 
   if (res) {
     image -> set_FileName(name);
+
+    image -> saveMetaData();
   }
 
   return res;
@@ -731,7 +704,7 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *
 
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
-  QReadLocker lockr(image->rwLock());
+  QMutexLocker lockr(image->mutex());
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
@@ -782,7 +755,7 @@ bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
 
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
-  QReadLocker lockr(image->rwLock());
+  QMutexLocker lockr(image->mutex());
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
@@ -818,6 +791,8 @@ bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
     TIFFClose(tif);
 
     image -> set_FileName(name);
+
+    image -> saveMetaData();
   }
 
   return res;
@@ -1170,8 +1145,8 @@ void QxrdDataProcessor::subtractDarkImage(QxrdDoubleImageData *image, QxrdDouble
         return;
       }
 
-      QReadLocker lock1(dark->rwLock());
-      QWriteLocker lock2(image->rwLock());
+      QMutexLocker lock1(dark->mutex());
+      QMutexLocker lock2(image->mutex());
 
       int height = image->get_Height();
       int width  = image->get_Width();
@@ -1590,7 +1565,7 @@ void QxrdDataProcessor::powderRing(double cx, double cy, double radius, double w
 
 void QxrdDataProcessor::openLogFile()
 {
-  QMutexLocker lock(&m_Mutex);
+  QMutexLocker lock(&m_LogFileMutex);
 
   if (m_LogFile == NULL) {
     m_LogFile = fopen(qPrintable(get_LogFilePath()), "a");
@@ -1603,7 +1578,7 @@ void QxrdDataProcessor::openLogFile()
 
 void QxrdDataProcessor::newLogFile(QString path)
 {
-  QMutexLocker lock(&m_Mutex);
+  QMutexLocker lock(&m_LogFileMutex);
 
   if (m_LogFile) {
     fclose(m_LogFile);
@@ -1617,7 +1592,7 @@ void QxrdDataProcessor::newLogFile(QString path)
 
 void QxrdDataProcessor::writeLogHeader()
 {
-  QMutexLocker lock(&m_Mutex);
+  QMutexLocker lock(&m_LogFileMutex);
 
   if (m_LogFile) {
     fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFilePath()));
@@ -1628,7 +1603,7 @@ void QxrdDataProcessor::writeLogHeader()
 
 void QxrdDataProcessor::logMessage(QString msg)
 {
-  QMutexLocker lock(&m_Mutex);
+  QMutexLocker lock(&m_LogFileMutex);
 
   openLogFile();
 
@@ -1670,6 +1645,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.45  2009/09/12 14:44:20  jennings
+*  Moved lock to base class, made into mutex
+*
 *  Revision 1.44  2009/09/12 13:44:37  jennings
 *  Renamed convertImage to copyImage, added double->double version of copyImage,
 *  added timer to copyImage
