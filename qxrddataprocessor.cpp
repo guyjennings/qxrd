@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.43 2009/09/12 13:36:19 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.44 2009/09/12 13:44:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -67,7 +67,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.43 2009/09/12 13:36:19 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.44 2009/09/12 13:44:37 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -303,7 +303,7 @@ void QxrdDataProcessor::newDarkImage(QxrdInt16ImageData *image)
     m_DarkFrame = new QxrdDoubleImageData();
   }
 
-  convertImage(image, m_DarkFrame);
+  copyImage(image, m_DarkFrame);
 
   set_DarkImagePath(m_DarkFrame -> get_FileName());
 
@@ -318,7 +318,7 @@ void QxrdDataProcessor::newDarkImage(QxrdInt32ImageData *image)
     m_DarkFrame = new QxrdDoubleImageData();
   }
 
-  convertImage(image, m_DarkFrame);
+  copyImage(image, m_DarkFrame);
 
   set_DarkImagePath(m_DarkFrame -> get_FileName());
 
@@ -892,9 +892,12 @@ void QxrdDataProcessor::clearMask()
 //  newDarkImage(img);
 //}
 //
-void QxrdDataProcessor::convertImage(QxrdInt16ImageData *src, QxrdDoubleImageData *dest)
+void QxrdDataProcessor::copyImage(QxrdInt16ImageData *src, QxrdDoubleImageData *dest)
 {
   QMutexLocker lock(&m_Mutex);
+
+  QTime tic;
+  tic.start();
 
   if (src && dest) {
     int ncols = src -> get_Width();
@@ -912,11 +915,16 @@ void QxrdDataProcessor::convertImage(QxrdInt16ImageData *src, QxrdDoubleImageDat
       *destp++ = *srcp++;
     }
   }
+
+  emit printMessage(tr("copy image took %1 msec").arg(tic.elapsed()));
 }
 
-void QxrdDataProcessor::convertImage(QxrdInt32ImageData *src, QxrdDoubleImageData *dest)
+void QxrdDataProcessor::copyImage(QxrdInt32ImageData *src, QxrdDoubleImageData *dest)
 {
   QMutexLocker lock(&m_Mutex);
+
+  QTime tic;
+  tic.start();
 
   if (src && dest) {
     int ncols = src -> get_Width();
@@ -934,6 +942,35 @@ void QxrdDataProcessor::convertImage(QxrdInt32ImageData *src, QxrdDoubleImageDat
       *destp++ = *srcp++;
     }
   }
+
+  emit printMessage(tr("copy image took %1 msec").arg(tic.elapsed()));
+}
+
+void QxrdDataProcessor::copyImage(QxrdDoubleImageData *src, QxrdDoubleImageData *dest)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  QTime tic;
+  tic.start();
+
+  if (src && dest) {
+    int ncols = src -> get_Width();
+    int nrows = src -> get_Height();
+    int npix = ncols*nrows;
+
+    dest -> resize(ncols, nrows);
+
+    src -> copyProperties(dest);
+
+    double  *srcp  = src -> data();
+    double  *destp = dest -> data();
+
+    for (int i=0; i<npix; i++) {
+      *destp++ = *srcp++;
+    }
+  }
+
+  emit printMessage(tr("copy image took %1 msec").arg(tic.elapsed()));
 }
 
 //void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *img)
@@ -997,7 +1034,7 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
 
     QxrdDoubleImageData *dimg = takeNextFreeImage();
 
-    convertImage(img, dimg);
+    copyImage(img, dimg);
 
     returnInt16ImageToPool(img);
 
@@ -1031,7 +1068,7 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
 
     QxrdDoubleImageData *dimg = takeNextFreeImage();
 
-    convertImage(img, dimg);
+    copyImage(img, dimg);
 
     returnInt32ImageToPool(img);
 
@@ -1633,6 +1670,10 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.44  2009/09/12 13:44:37  jennings
+*  Renamed convertImage to copyImage, added double->double version of copyImage,
+*  added timer to copyImage
+*
 *  Revision 1.43  2009/09/12 13:36:19  jennings
 *  Added more locks to QxrdDataProcessor
 *

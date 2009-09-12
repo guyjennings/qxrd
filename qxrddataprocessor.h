@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.30 2009/09/07 22:10:14 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.31 2009/09/12 13:44:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -232,8 +232,9 @@ private:
   void processAcquiredInt32Image(QxrdInt32ImageData *image);
   void processAcquiredImage(QxrdDoubleImageData *dimg);
 
-  void convertImage(QxrdInt16ImageData *src, QxrdDoubleImageData *dest);
-  void convertImage(QxrdInt32ImageData *src, QxrdDoubleImageData *dest);
+  void copyImage(QxrdInt16ImageData *src, QxrdDoubleImageData *dest);
+  void copyImage(QxrdInt32ImageData *src, QxrdDoubleImageData *dest);
+  void copyImage(QxrdDoubleImageData *src, QxrdDoubleImageData *dest);
   void subtractDarkImage(QxrdDoubleImageData *image, QxrdDoubleImageData *dark);
   void correctBadPixels(QxrdDoubleImageData *image);
   void correctImageGains(QxrdDoubleImageData *image);
@@ -279,7 +280,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.30 2009/09/07 22:10:14 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.31 2009/09/12 13:44:37 jennings Exp $");
 };
 
 #endif
@@ -287,6 +288,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.31  2009/09/12 13:44:37  jennings
+*  Renamed convertImage to copyImage, added double->double version of copyImage,
+*  added timer to copyImage
+*
 *  Revision 1.30  2009/09/07 22:10:14  jennings
 *  Allow NULL mask
 *
