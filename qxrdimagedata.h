@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimagedata.h,v 1.11 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdimagedata.h,v 1.12 2009/09/12 14:44:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,7 +9,6 @@
 
 #include "qcepmacros.h"
 
-#include <QReadWriteLock>
 #include <QDir>
 #include <QFileInfo>
 #include "qcepimagedata.h"
@@ -22,13 +21,10 @@ class QxrdImageData : public QcepImageData<T>
 public:
   QxrdImageData(int width=0, int height=0);
 
-  QReadWriteLock *rwLock();
-
   QString rawFileName();
 
 private:
-  mutable QReadWriteLock m_Lock;
-  HEADER_IDENT("$Id: qxrdimagedata.h,v 1.11 2009/08/25 18:43:03 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimagedata.h,v 1.12 2009/09/12 14:44:20 jennings Exp $");
 };
 
 typedef QxrdImageData<quint16> QxrdInt16ImageData;
@@ -38,15 +34,8 @@ typedef QxrdImageData<double>  QxrdDoubleImageData;
 template <typename T>
 QxrdImageData<T>::QxrdImageData(int width, int height)
   : QcepImageData<T>(width, height),
-    m_Lock(QReadWriteLock::Recursive),
-    SOURCE_IDENT("$Id: qxrdimagedata.h,v 1.11 2009/08/25 18:43:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimagedata.h,v 1.12 2009/09/12 14:44:20 jennings Exp $")
 {
-}
-
-template <typename T>
-QReadWriteLock *QxrdImageData<T>::rwLock()
-{
-  return &m_Lock;
 }
 
 template <typename T>
@@ -65,6 +54,9 @@ QString QxrdImageData<T>::rawFileName()
 /******************************************************************
 *
 *  $Log: qxrdimagedata.h,v $
+*  Revision 1.12  2009/09/12 14:44:20  jennings
+*  *** empty log message ***
+*
 *  Revision 1.11  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *
