@@ -14,10 +14,10 @@ Adopt the same threading model as qavrg
 //
 //Run script engine in separate thread
 //
--------------------------------------------------------
-
-Correct signal/slot corrections to use new properties
-
+//-------------------------------------------------------
+//
+//Correct signal/slot corrections to use new properties
+//
 //-------------------------------------------------------
 //
 //Cut down the number of warnings - currently 96!
@@ -41,12 +41,15 @@ Add a plausible simulation mode
 Optimise screen redrawing to eliminate redundant replot calls - will need
 a rigorous reorganisation and layering of code to ensure this.
 
--------------------------------------------------------
+//-------------------------------------------------------
+//
+//BLOCKER
+//Ensure that program will not overwrite files without warning.  Use modified
+//file names where necessary.   Only do this for programmatic saves, saves
+//after a dialog box will already have been given a confirmation dialog
 
-BLOCKER
-Ensure that program will not overwrite files without warning.  Use modified
-file names where necessary.   Only do this for programmatic saves, saves
-after a dialog box will already have been given a confirmation dialog
+Done, but there is a bug on linux which stops the file overwrite confirmation
+dialog from being shown.
 
 -------------------------------------------------------
 

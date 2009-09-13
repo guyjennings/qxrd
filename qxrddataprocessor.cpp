@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.45 2009/09/12 14:44:20 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.46 2009/09/13 13:59:47 jennings Exp $
 *
 *******************************************************************/
 
@@ -68,7 +68,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.45 2009/09/12 14:44:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.46 2009/09/13 13:59:47 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -424,11 +424,11 @@ void QxrdDataProcessor::loadData(QString name)
   }
 }
 
-void QxrdDataProcessor::saveData(QString name)
+void QxrdDataProcessor::saveData(QString name, int canOverwrite)
 {
   QMutexLocker lock(&m_Mutex);
 
-  if (saveNamedImageData(name, m_Data)) {
+  if (saveNamedImageData(name, m_Data, canOverwrite)) {
     set_DataPath(m_Data -> get_FileName());
   }
 }
@@ -456,11 +456,11 @@ void QxrdDataProcessor::loadDark(QString name)
   }
 }
 
-void QxrdDataProcessor::saveDark(QString name)
+void QxrdDataProcessor::saveDark(QString name, int canOverwrite)
 {
   QMutexLocker lock(&m_Mutex);
 
-  if (saveNamedImageData(name, m_DarkFrame)) {
+  if (saveNamedImageData(name, m_DarkFrame, canOverwrite)) {
     set_DarkImagePath(m_DarkFrame -> get_FileName());
   }
 }
@@ -488,11 +488,11 @@ void QxrdDataProcessor::loadBadPixels(QString name)
   }
 }
 
-void QxrdDataProcessor::saveBadPixels(QString name)
+void QxrdDataProcessor::saveBadPixels(QString name, int canOverwrite)
 {
   QMutexLocker lock(&m_Mutex);
 
-  if (saveNamedImageData(name, m_BadPixels)) {
+  if (saveNamedImageData(name, m_BadPixels, canOverwrite)) {
     set_BadPixelsPath(m_BadPixels -> get_FileName());
   }
 }
@@ -520,11 +520,11 @@ void QxrdDataProcessor::loadGainMap(QString name)
   }
 }
 
-void QxrdDataProcessor::saveGainMap(QString name)
+void QxrdDataProcessor::saveGainMap(QString name, int canOverwrite)
 {
   QMutexLocker lock(&m_Mutex);
 
-  if (saveNamedImageData(name, m_GainMap)) {
+  if (saveNamedImageData(name, m_GainMap, canOverwrite)) {
     set_GainMapPath(m_GainMap -> get_FileName());
   }
 }
@@ -552,18 +552,18 @@ void QxrdDataProcessor::loadMask(QString name)
   }
 }
 
-void QxrdDataProcessor::saveMask(QString name)
+void QxrdDataProcessor::saveMask(QString name, int canOverwrite)
 {
   QMutexLocker lock(&m_Mutex);
 
-  if (saveNamedMaskData(name, m_Mask)) {
+  if (saveNamedMaskData(name, m_Mask, canOverwrite)) {
     set_MaskPath(m_Mask -> get_FileName());
   }
 }
 
 #define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
 
-bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *image)
+bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *image, int canOverwrite)
 {
   QMutexLocker lock(&m_Mutex);
 
@@ -574,7 +574,9 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *im
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
 
-  name = uniqueFileName(name);
+  if (canOverwrite == NoOverwrite) {
+    name = uniqueFileName(name);
+  }
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
   int res = 1;
@@ -617,11 +619,11 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *im
   return res;
 }
 
-bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *image)
+bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *image, int canOverwrite)
 {
   QMutexLocker lock(&m_Mutex);
 
-  bool res = saveNamedRawImageData(name, image);
+  bool res = saveNamedRawImageData(name, image, canOverwrite);
 
   if (res) {
     image -> set_FileName(name);
@@ -632,7 +634,7 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *ima
   return res;
 }
 
-bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *image)
+bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *image, int canOverwrite)
 {
   QMutexLocker lock(&m_Mutex);
 
@@ -643,7 +645,9 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
 
-  name = uniqueFileName(name);
+  if (canOverwrite == NoOverwrite) {
+    name = uniqueFileName(name);
+  }
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
   int res = 1;
@@ -683,11 +687,11 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *
   return res;
 }
 
-bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *image)
+bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *image, int canOverwrite)
 {
   QMutexLocker lock(&m_Mutex);
 
-  bool res = saveNamedRawImageData(name, image);
+  bool res = saveNamedRawImageData(name, image, canOverwrite);
 
   if (res) {
     image -> set_FileName(name);
@@ -698,7 +702,7 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *ima
   return res;
 }
 
-bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *image)
+bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *image, int canOverwrite)
 {
   QMutexLocker lock(&m_Mutex);
 
@@ -709,7 +713,9 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
 
-  name = uniqueFileName(name);
+  if (canOverwrite == NoOverwrite) {
+    name = uniqueFileName(name);
+  }
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
   int res = 1;
@@ -749,7 +755,7 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *
   return res;
 }
 
-bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
+bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image, int canOverwrite)
 {
   QMutexLocker lock(&m_Mutex);
 
@@ -760,7 +766,9 @@ bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image)
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
 
-  name = uniqueFileName(name);
+  if (canOverwrite == NoOverwrite) {
+    name = uniqueFileName(name);
+  }
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
   int res = 1;
@@ -1645,6 +1653,11 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.46  2009/09/13 13:59:47  jennings
+*  Added 'canOverwrite' argument to data saving routines and arrange
+*  that saves via file dialogs can overwrite, programmatic saves use
+*  unique file names
+*
 *  Revision 1.45  2009/09/12 14:44:20  jennings
 *  Moved lock to base class, made into mutex
 *

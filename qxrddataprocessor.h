@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.32 2009/09/12 14:44:20 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.33 2009/09/13 13:59:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -130,6 +130,12 @@ signals:
   void newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *);
   void newDarkImageAvailable(QxrdDoubleImageData *);
 
+public:
+  enum {
+    NoOverwrite,
+    CanOverwrite
+  };
+
 public slots:
   void showMaskRange(/*double min, double max*/);
   void hideMaskRange(/*double min, double max*/);
@@ -144,16 +150,16 @@ public slots:
   void printMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
 
   void loadData(QString name);
-  void saveData(QString name);
+  void saveData(QString name, int canOverwrite=NoOverwrite);
   void loadDark(QString name);
-  void saveDark(QString name);
+  void saveDark(QString name, int canOverwrite=NoOverwrite);
   void loadMask(QString name);
-  void saveMask(QString name);
+  void saveMask(QString name, int canOverwrite=NoOverwrite);
 //  void loadDarkImage(QString name);
   void loadBadPixels(QString name);
-  void saveBadPixels(QString name);
+  void saveBadPixels(QString name, int canOverwrite=NoOverwrite);
   void loadGainMap(QString name);
-  void saveGainMap(QString name);
+  void saveGainMap(QString name, int canOverwrite=NoOverwrite);
   void clearDark();
   void clearBadPixels();
   void clearGainMap();
@@ -197,12 +203,12 @@ public:
 //  void saveImageData(QxrdInt32ImageData *image);
 //  void saveRawData(QxrdInt16ImageData *image);
 //  void saveRawData(QxrdInt32ImageData *image);
-  bool saveNamedImageData(QString name, QxrdDoubleImageData *image);
-  bool saveNamedImageData(QString name, QxrdInt16ImageData *image);
-  bool saveNamedImageData(QString name, QxrdInt32ImageData *image);
-  bool saveNamedRawImageData(QString name, QxrdInt16ImageData *image);
-  bool saveNamedRawImageData(QString name, QxrdInt32ImageData *image);
-  bool saveNamedMaskData(QString name, QxrdMaskData *mask);
+  bool saveNamedImageData(QString name, QxrdDoubleImageData *image, int canOverwrite=NoOverwrite);
+  bool saveNamedImageData(QString name, QxrdInt16ImageData *image, int canOverwrite=NoOverwrite);
+  bool saveNamedImageData(QString name, QxrdInt32ImageData *image, int canOverwrite=NoOverwrite);
+  bool saveNamedRawImageData(QString name, QxrdInt16ImageData *image, int canOverwrite=NoOverwrite);
+  bool saveNamedRawImageData(QString name, QxrdInt32ImageData *image, int canOverwrite=NoOverwrite);
+  bool saveNamedMaskData(QString name, QxrdMaskData *mask, int canOverwrite=NoOverwrite);
 
   QxrdDoubleImageData *data() const;
   QxrdDoubleImageData *darkImage() const;
@@ -281,7 +287,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.32 2009/09/12 14:44:20 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.33 2009/09/13 13:59:48 jennings Exp $");
 };
 
 #endif
@@ -289,6 +295,11 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.33  2009/09/13 13:59:48  jennings
+*  Added 'canOverwrite' argument to data saving routines and arrange
+*  that saves via file dialogs can overwrite, programmatic saves use
+*  unique file names
+*
 *  Revision 1.32  2009/09/12 14:44:20  jennings
 *  Moved lock to base class, made into mutex
 *

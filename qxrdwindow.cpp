@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.90 2009/09/10 21:33:30 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.91 2009/09/13 13:59:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.90 2009/09/10 21:33:30 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.91 2009/09/13 13:59:48 jennings Exp $")
 {
   setupUi(this);
 
@@ -610,7 +610,7 @@ void QxrdWindow::doSaveData()
       this, "Save Data in", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
-    QMetaObject::invokeMethod(m_DataProcessor, "saveData", Q_ARG(QString, theFile));
+    m_DataProcessor->saveData(theFile, QxrdDataProcessor::CanOverwrite);
   }
 }
 
@@ -620,7 +620,7 @@ void QxrdWindow::doLoadData()
       this, "Load Data from...", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
-    QMetaObject::invokeMethod(m_DataProcessor, "loadData", Q_ARG(QString, theFile));
+    m_DataProcessor->loadData(theFile);
   }
 }
 
@@ -630,7 +630,7 @@ void QxrdWindow::doSaveDark()
       this, "Save Dark Data in", m_DataProcessor -> get_DarkImagePath());
 
   if (theFile.length()) {
-    QMetaObject::invokeMethod(m_DataProcessor, "saveDark", Q_ARG(QString, theFile));
+    m_DataProcessor->saveDark(theFile, QxrdDataProcessor::CanOverwrite);
   }
 }
 
@@ -640,7 +640,7 @@ void QxrdWindow::doLoadDark()
       this, "Load Dark Data from...", m_DataProcessor -> get_DarkImagePath());
 
   if (theFile.length()) {
-    QMetaObject::invokeMethod(m_DataProcessor, "loadDark", Q_ARG(QString, theFile));
+    m_DataProcessor->loadDark(theFile);
   }
 }
 
@@ -650,7 +650,7 @@ void QxrdWindow::doSaveMask()
       this, "Save Mask in", m_DataProcessor -> get_MaskPath());
 
   if (theFile.length()) {
-    QMetaObject::invokeMethod(m_DataProcessor, "saveMask", Q_ARG(QString, theFile));
+    m_DataProcessor->saveMask(theFile, QxrdDataProcessor::CanOverwrite);
   }
 }
 
@@ -660,27 +660,17 @@ void QxrdWindow::doLoadMask()
       this, "Load Mask from...", m_DataProcessor -> get_MaskPath());
 
   if (theFile.length()) {
-    QMetaObject::invokeMethod(m_DataProcessor, "loadMask", Q_ARG(QString, theFile));
+    m_DataProcessor->loadMask(theFile);
   }
 }
 
-//void QxrdWindow::doLoadDarkImage()
-//{
-//  QString theFile = QFileDialog::getOpenFileName(
-//      this, "Load Dark Image from...", m_DataProcessor -> get_DarkImagePath());
-//
-//  if (theFile.length()) {
-//    QMetaObject::invokeMethod(m_DataProcessor, "loadDarkImage", Q_ARG(QString, theFile));
-//  }
-//}
-//
 void QxrdWindow::doSaveBadPixels()
 {
   QString theFile = QFileDialog::getSaveFileName(
       this, "Save Bad Pixels in", m_DataProcessor -> get_BadPixelsPath());
 
   if (theFile.length()) {
-    QMetaObject::invokeMethod(m_DataProcessor, "saveBadPixels", Q_ARG(QString, theFile));
+    m_DataProcessor->saveBadPixels(theFile, QxrdDataProcessor::CanOverwrite);
   }
 }
 
@@ -690,7 +680,7 @@ void QxrdWindow::doLoadBadPixels()
       this, "Load Bad Pixel Map from...", m_DataProcessor -> get_BadPixelsPath());
 
   if (theFile.length()) {
-    QMetaObject::invokeMethod(m_DataProcessor, "loadBadPixels", Q_ARG(QString, theFile));
+    m_DataProcessor->loadBadPixels(theFile);
   }
 }
 
@@ -700,7 +690,7 @@ void QxrdWindow::doSaveGainMap()
       this, "Save Gain Map in", m_DataProcessor -> get_GainMapPath());
 
   if (theFile.length()) {
-    QMetaObject::invokeMethod(m_DataProcessor, "saveGainMap", Q_ARG(QString, theFile));
+    m_DataProcessor->saveGainMap(theFile, QxrdDataProcessor::CanOverwrite);
   }
 }
 
@@ -710,7 +700,7 @@ void QxrdWindow::doLoadGainMap()
       this, "Load Pixel Gain Map from...", m_DataProcessor -> get_GainMapPath());
 
   if (theFile.length()) {
-    QMetaObject::invokeMethod(m_DataProcessor, "loadGainMap", Q_ARG(QString, theFile));
+    m_DataProcessor->loadGainMap(theFile);
   }
 }
 
@@ -765,6 +755,11 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.91  2009/09/13 13:59:48  jennings
+*  Added 'canOverwrite' argument to data saving routines and arrange
+*  that saves via file dialogs can overwrite, programmatic saves use
+*  unique file names
+*
 *  Revision 1.90  2009/09/10 21:33:30  jennings
 *  Added TIFF error handling
 *
