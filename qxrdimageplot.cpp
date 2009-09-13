@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.36 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.37 2009/09/13 13:58:09 jennings Exp $
 *
 *******************************************************************/
 
@@ -25,11 +25,6 @@
 #include <qwt_scale_widget.h>
 //#include <QMetaMethod>
 #include <QTime>
-
-//#define replot() { \
-//  printf("replot() called from %s:%d\n", __FILE__, __LINE__); \
-//  re##plot(); \
-//}
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QxrdPlot(parent),
@@ -58,7 +53,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.36 2009/08/25 18:43:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.37 2009/09/13 13:58:09 jennings Exp $")
 {
   m_Zoomer -> setEnabled(true);
 
@@ -592,6 +587,9 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.37  2009/09/13 13:58:09  jennings
+*  Removed multi-line comment
+*
 *  Revision 1.36  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *
