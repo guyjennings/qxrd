@@ -51,14 +51,14 @@ a rigorous reorganisation and layering of code to ensure this.
 Done, but there is a bug on linux which stops the file overwrite confirmation
 dialog from being shown.
 
--------------------------------------------------------
-
-BLOCKER
-Automatically reload dark, bad pixel and gain images when program restarts
-Load/save mask and dark images when program starts/exits, make default mask
-all visible.
-(Will need to load/save more metadata before this will work well).
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Automatically reload dark, bad pixel and gain images when program restarts
+//Load/save mask and dark images when program starts/exits, make default mask
+//all visible.
+//(Will need to load/save more metadata before this will work well).
+//
 -------------------------------------------------------
 
 Investigate why the vertical window size increases each time program is run
@@ -92,10 +92,10 @@ kind of cancel operation.
 Zooming on graphs does not work properly when program first starts - graphs need
 an autoscale operation before they start zooming properly
 
--------------------------------------------------------
-
-Add menu commands to show/hide toolbox windows
-
+//-------------------------------------------------------
+//
+//Add menu commands to show/hide toolbox windows
+//
 -------------------------------------------------------
 
 Automatically add integrated curves to output panel.
