@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.91 2009/09/13 13:59:48 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.92 2009/09/14 19:07:55 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.91 2009/09/13 13:59:48 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.92 2009/09/14 19:07:55 jennings Exp $")
 {
   setupUi(this);
 
@@ -278,6 +278,13 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   connect(m_DataProcessor -> integrator(), SIGNAL(newIntegrationAvailable(QVector<double>, QVector<double>)),
           m_IntegratorPlot, SLOT(onNewIntegrationAvailable(QVector<double>,QVector<double>)));
+
+  m_WindowsMenu -> addAction(m_AcquireDockWidget -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_CorrectionDockWidget -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_MaskingDockWidget -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_DisplayDockWidget -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_CenteringDockWidget -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_IntegratorDockWidget -> toggleViewAction());
 }
 
 QxrdWindow::~QxrdWindow()
@@ -755,6 +762,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.92  2009/09/14 19:07:55  jennings
+*  Added menu commands to show/hide toolbox widgets
+*
 *  Revision 1.91  2009/09/13 13:59:48  jennings
 *  Added 'canOverwrite' argument to data saving routines and arrange
 *  that saves via file dialogs can overwrite, programmatic saves use

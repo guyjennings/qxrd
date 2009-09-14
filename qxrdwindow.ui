@@ -718,10 +718,16 @@
     <addaction name="m_ActionShowImage"/>
     <addaction name="m_ActionShowMask"/>
    </widget>
+   <widget class="QMenu" name="m_WindowsMenu">
+    <property name="title">
+     <string>Windows</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuAcquire"/>
    <addaction name="menuDisplay"/>
+   <addaction name="m_WindowsMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="m_AcquireDockWidget">
