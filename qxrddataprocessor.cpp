@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.46 2009/09/13 13:59:47 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.47 2009/09/14 19:08:57 jennings Exp $
 *
 *******************************************************************/
 
@@ -68,7 +68,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.46 2009/09/13 13:59:47 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.47 2009/09/14 19:08:57 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -627,8 +627,6 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *ima
 
   if (res) {
     image -> set_FileName(name);
-
-    image -> saveMetaData();
   }
 
   return res;
@@ -682,6 +680,8 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *
     }
 
     TIFFClose(tif);
+
+    image -> saveMetaData(name);
   }
 
   return res;
@@ -695,8 +695,6 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *ima
 
   if (res) {
     image -> set_FileName(name);
-
-    image -> saveMetaData();
   }
 
   return res;
@@ -750,6 +748,8 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *
     }
 
     TIFFClose(tif);
+
+    image -> saveMetaData(name);
   }
 
   return res;
@@ -1153,6 +1153,17 @@ void QxrdDataProcessor::subtractDarkImage(QxrdDoubleImageData *image, QxrdDouble
         return;
       }
 
+      if (dark->get_CameraGain() != image->get_CameraGain()) {
+        emit printMessage("Gains of acquired data and dark image are different, skipping");
+        return;
+      }
+
+      if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
+            image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
+        emit printMessage("Acquired data is not a raw image, skipping background subtraction");
+        return;
+      }
+
       QMutexLocker lock1(dark->mutex());
       QMutexLocker lock2(image->mutex());
 
@@ -1176,6 +1187,8 @@ void QxrdDataProcessor::subtractDarkImage(QxrdDoubleImageData *image, QxrdDouble
       for (int i=0; i<npixels; i++) {
         result[i] = result[i]-ratio*dk[i];
       }
+
+      image -> set_DataType(QxrdDoubleImageData::SubtractedData);
     }
   }
 }
@@ -1653,6 +1666,10 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.47  2009/09/14 19:08:57  jennings
+*  Added more checks for appropriate data type / exposure etc. before subtracting
+*  backgrounds
+*
 *  Revision 1.46  2009/09/13 13:59:47  jennings
 *  Added 'canOverwrite' argument to data saving routines and arrange
 *  that saves via file dialogs can overwrite, programmatic saves use

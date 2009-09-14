@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.33 2009/09/13 13:59:48 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.34 2009/09/14 19:08:57 jennings Exp $
 *
 *******************************************************************/
 
@@ -287,7 +287,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.33 2009/09/13 13:59:48 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.34 2009/09/14 19:08:57 jennings Exp $");
 };
 
 #endif
@@ -295,6 +295,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.34  2009/09/14 19:08:57  jennings
+*  Added more checks for appropriate data type / exposure etc. before subtracting
+*  backgrounds
+*
 *  Revision 1.33  2009/09/13 13:59:48  jennings
 *  Added 'canOverwrite' argument to data saving routines and arrange
 *  that saves via file dialogs can overwrite, programmatic saves use

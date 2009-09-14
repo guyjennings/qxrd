@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.31 2009/09/11 19:39:27 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.32 2009/09/14 19:08:57 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_HeaderID(-1),
     m_CameraType(-1),
     m_CameraModel(""),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.31 2009/09/11 19:39:27 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.32 2009/09/14 19:08:57 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -522,6 +522,10 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_AcquiredInt16Data -> set_ExposureTime(get_ExposureTime());
       m_AcquiredInt16Data -> set_SummedExposures(get_ExposuresToSum());
       m_AcquiredInt16Data -> set_DateTime(QDateTime::currentDateTime());
+      m_AcquiredInt16Data -> set_HBinning(1);
+      m_AcquiredInt16Data -> set_VBinning(1);
+      m_AcquiredInt16Data -> set_CameraGain(get_CameraGain());
+      m_AcquiredInt16Data -> set_DataType(QxrdInt16ImageData::Raw16Data);
 
       if (get_AcquireDark()) {
         m_AcquiredInt16Data -> set_ImageNumber(-1);
@@ -567,6 +571,10 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_AcquiredInt32Data -> set_ExposureTime(get_ExposureTime());
       m_AcquiredInt32Data -> set_SummedExposures(get_ExposuresToSum());
       m_AcquiredInt32Data -> set_DateTime(QDateTime::currentDateTime());
+      m_AcquiredInt32Data -> set_HBinning(1);
+      m_AcquiredInt32Data -> set_VBinning(1);
+      m_AcquiredInt32Data -> set_CameraGain(get_CameraGain());
+      m_AcquiredInt32Data -> set_DataType(QxrdInt32ImageData::Raw32Data);
 
       if (get_AcquireDark()) {
         m_AcquiredInt32Data -> set_ImageNumber(-1);
@@ -779,6 +787,10 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.32  2009/09/14 19:08:57  jennings
+*  Added more checks for appropriate data type / exposure etc. before subtracting
+*  backgrounds
+*
 *  Revision 1.31  2009/09/11 19:39:27  jennings
 *  Fixed missing line number substitution in acquisition error dialog
 *
