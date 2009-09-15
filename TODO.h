@@ -77,12 +77,12 @@ Re-implement center finder plot to use routine above.
 
 Add some kind of beam presence detection threshold
 
--------------------------------------------------------
-
-BLOCKER
-Make it possible to interrupt spec more gracefully - add some
-kind of cancel operation.
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Make it possible to interrupt spec more gracefully - add some
+//kind of cancel operation.
+//
 //-------------------------------------------------------
 //
 //Allow cancelling to happen sooner - especially during long exposures

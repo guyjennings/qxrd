@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.7 2009/09/03 21:16:24 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.8 2009/09/15 20:18:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,7 +27,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.7 2009/09/03 21:16:24 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.8 2009/09/15 20:18:39 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -58,6 +58,7 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("acquire", m_ScriptEngine -> newFunction(acquireFunc));
   m_ScriptEngine -> globalObject().setProperty("acquireDark", m_ScriptEngine -> newFunction(acquireDarkFunc));
   m_ScriptEngine -> globalObject().setProperty("status", m_ScriptEngine -> newFunction(statusFunc));
+  m_ScriptEngine -> globalObject().setProperty("acquireCancel", m_ScriptEngine -> newFunction(acquireCancelFunc));
   m_ScriptEngine -> globalObject().setProperty("exposureTime", m_ScriptEngine -> newFunction(exposureTimeFunc));
   m_ScriptEngine -> globalObject().setProperty("readoutMode", m_ScriptEngine -> newFunction(readoutModeFunc));
   m_ScriptEngine -> globalObject().setProperty("summedExposures", m_ScriptEngine -> newFunction(summedExposuresFunc));
@@ -229,6 +230,11 @@ QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine
   }
 }
 
+QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  return QScriptValue(engine, g_Acquisition -> acquisitionCancel());
+}
+
 QScriptValue QxrdScriptEngine::readoutModeFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
@@ -322,6 +328,9 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.8  2009/09/15 20:18:39  jennings
+*  Added acquireCancel scripting command
+*
 *  Revision 1.7  2009/09/03 21:16:24  jennings
 *  Added properties and user interface elements for pre- and post- trigger counts
 *  Added properties and user interface elements for fine-grained control of processing chain

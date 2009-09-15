@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.h,v 1.3 2009/09/03 21:16:24 jennings Exp $
+*  $Id: qxrdscriptengine.h,v 1.4 2009/09/15 20:18:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,6 +51,7 @@ private:
   static QScriptValue acquireFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue acquireDarkFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue statusFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue acquireCancelFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue readoutModeFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue exposureTimeFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue summedExposuresFunc(QScriptContext *context, QScriptEngine *engine);
@@ -69,7 +70,7 @@ private:
   QxrdWindow            *m_Window;
   QxrdAcquisition       *m_Acquisition;
 
-  HEADER_IDENT("$Id: qxrdscriptengine.h,v 1.3 2009/09/03 21:16:24 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdscriptengine.h,v 1.4 2009/09/15 20:18:39 jennings Exp $");
 };
 
 #endif // QXRDSCRIPTENGINE_H
@@ -77,6 +78,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.h,v $
+*  Revision 1.4  2009/09/15 20:18:39  jennings
+*  Added acquireCancel scripting command
+*
 *  Revision 1.3  2009/09/03 21:16:24  jennings
 *  Added properties and user interface elements for pre- and post- trigger counts
 *  Added properties and user interface elements for fine-grained control of processing chain

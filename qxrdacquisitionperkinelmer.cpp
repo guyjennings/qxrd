@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.32 2009/09/14 19:08:57 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.33 2009/09/15 20:18:39 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_HeaderID(-1),
     m_CameraType(-1),
     m_CameraModel(""),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.32 2009/09/14 19:08:57 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.33 2009/09/15 20:18:39 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -694,6 +694,13 @@ int QxrdAcquisitionPerkinElmer::acquisitionStatus(double time)
   }
 }
 
+int QxrdAcquisitionPerkinElmer::acquisitionCancel()
+{
+  haltAcquire();
+
+  return 1;
+}
+
 void QxrdAcquisitionPerkinElmer::acquisitionError(int n)
 {
   haltAcquire();
@@ -787,6 +794,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.33  2009/09/15 20:18:39  jennings
+*  Added acquireCancel scripting command
+*
 *  Revision 1.32  2009/09/14 19:08:57  jennings
 *  Added more checks for appropriate data type / exposure etc. before subtracting
 *  backgrounds
