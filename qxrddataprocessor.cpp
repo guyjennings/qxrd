@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.47 2009/09/14 19:08:57 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.48 2009/09/18 20:44:49 jennings Exp $
 *
 *******************************************************************/
 
@@ -68,7 +68,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.47 2009/09/14 19:08:57 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.48 2009/09/18 20:44:49 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -1440,6 +1440,18 @@ int QxrdDataProcessor::getAcquiredCount()
   return m_AcquiredCount.fetchAndAddOrdered(0);
 }
 
+int QxrdDataProcessor::status(double time)
+{
+  QMutex mutex;
+  QMutexLocker lock(&mutex);
+
+  if (m_ProcessWaiting.wait(&mutex, (int)(time*1000))) {
+    return getProcessedCount();
+  } else {
+    return 0;
+  }
+}
+
 int QxrdDataProcessor::incrementProcessedCount()
 {
 //  emit printMessage(tr("QxrdDataProcessor::incrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
@@ -1451,7 +1463,13 @@ int QxrdDataProcessor::decrementProcessedCount()
 {
 //  emit printMessage(tr("QxrdDataProcessor::decrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
 
-  return m_ProcessedCount.fetchAndAddOrdered(-1);
+  int res = m_ProcessedCount.fetchAndAddOrdered(-1);
+
+  if (res == 0) {
+    m_ProcessWaiting.wakeAll();
+  }
+
+  return res;
 }
 
 int QxrdDataProcessor::getProcessedCount()
@@ -1666,6 +1684,10 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.48  2009/09/18 20:44:49  jennings
+*  Add separate status functions for acquisition and processing, as well as an aggregated function
+*  combining the status of the two.
+*
 *  Revision 1.47  2009/09/14 19:08:57  jennings
 *  Added more checks for appropriate data type / exposure etc. before subtracting
 *  backgrounds

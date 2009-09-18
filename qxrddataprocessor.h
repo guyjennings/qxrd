@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.34 2009/09/14 19:08:57 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.35 2009/09/18 20:44:49 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,6 +12,7 @@
 #include <QObject>
 #include <QReadWriteLock>
 #include <QAtomicInt>
+#include <QWaitCondition>
 
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
@@ -178,6 +179,7 @@ public slots:
   void logMessage(QString msg);
 
   void fileWriteTest(int dim, QString path);
+  int status(double delay);
 
 public:
   void loadDefaultImages();
@@ -267,7 +269,7 @@ private:
   QxrdAcquisition          *m_Acquisition;
   QReadWriteLock            m_DarkUsage;
   QReadWriteLock            m_Processing;
-
+  QWaitCondition            m_ProcessWaiting;
   QxrdDoubleImageQueue      m_FreeImages;
 //  QxrdImageQueue            m_ProcessedImages;
 //  QxrdImageQueue            m_DarkImages;
@@ -287,7 +289,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.34 2009/09/14 19:08:57 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.35 2009/09/18 20:44:49 jennings Exp $");
 };
 
 #endif
@@ -295,6 +297,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.35  2009/09/18 20:44:49  jennings
+*  Add separate status functions for acquisition and processing, as well as an aggregated function
+*  combining the status of the two.
+*
 *  Revision 1.34  2009/09/14 19:08:57  jennings
 *  Added more checks for appropriate data type / exposure etc. before subtracting
 *  backgrounds

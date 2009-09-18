@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.18 2009/09/15 20:18:39 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.19 2009/09/18 20:44:49 jennings Exp $
 *
 *******************************************************************/
 
@@ -31,6 +31,7 @@ public slots:
   void cancelDark();
   void initialize();
   void trigger();
+  int  status(double delay);
 
 signals:
   void acquireStarted(int dark);
@@ -96,7 +97,7 @@ private:
   int                    m_CameraType;
   QString                m_CameraModel;
 
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.18 2009/09/15 20:18:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.19 2009/09/18 20:44:49 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -104,6 +105,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.19  2009/09/18 20:44:49  jennings
+*  Add separate status functions for acquisition and processing, as well as an aggregated function
+*  combining the status of the two.
+*
 *  Revision 1.18  2009/09/15 20:18:39  jennings
 *  Added acquireCancel scripting command
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.33 2009/09/15 20:18:39 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.34 2009/09/18 20:44:49 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_HeaderID(-1),
     m_CameraType(-1),
     m_CameraModel(""),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.33 2009/09/15 20:18:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.34 2009/09/18 20:44:49 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -672,6 +672,11 @@ void QxrdAcquisitionPerkinElmer::haltAcquire()
   m_StatusWaiting.wakeAll();
 }
 
+int QxrdAcquisitionPerkinElmer::status(double time)
+{
+  return acquisitionStatus(time);
+}
+
 int QxrdAcquisitionPerkinElmer::acquisitionStatus(double time)
 {
   if (m_Acquiring.tryLock()) {
@@ -794,6 +799,10 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.34  2009/09/18 20:44:49  jennings
+*  Add separate status functions for acquisition and processing, as well as an aggregated function
+*  combining the status of the two.
+*
 *  Revision 1.33  2009/09/15 20:18:39  jennings
 *  Added acquireCancel scripting command
 *

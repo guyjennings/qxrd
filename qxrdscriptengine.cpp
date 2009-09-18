@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.8 2009/09/15 20:18:39 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.9 2009/09/18 20:44:49 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,7 +27,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.8 2009/09/15 20:18:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.9 2009/09/18 20:44:49 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -58,6 +58,8 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("acquire", m_ScriptEngine -> newFunction(acquireFunc));
   m_ScriptEngine -> globalObject().setProperty("acquireDark", m_ScriptEngine -> newFunction(acquireDarkFunc));
   m_ScriptEngine -> globalObject().setProperty("status", m_ScriptEngine -> newFunction(statusFunc));
+  m_ScriptEngine -> globalObject().setProperty("acquireStatus", m_ScriptEngine -> newFunction(acquireStatusFunc));
+  m_ScriptEngine -> globalObject().setProperty("processStatus", m_ScriptEngine -> newFunction(processStatusFunc));
   m_ScriptEngine -> globalObject().setProperty("acquireCancel", m_ScriptEngine -> newFunction(acquireCancelFunc));
   m_ScriptEngine -> globalObject().setProperty("exposureTime", m_ScriptEngine -> newFunction(exposureTimeFunc));
   m_ScriptEngine -> globalObject().setProperty("readoutMode", m_ScriptEngine -> newFunction(readoutModeFunc));
@@ -222,11 +224,39 @@ QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptE
 
 QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine *engine)
 {
+  double time=0;
+  int status=0;
+
+  if (context->argumentCount() > 0) {
+    time = context->argument(0).toNumber();
+  }
+
+  status = g_Acquisition -> acquisitionStatus(time);
+
+  if (status != 0) {
+    status = g_DataProcessor -> status(0);
+  }
+
+  return QScriptValue(engine, status);
+}
+
+QScriptValue QxrdScriptEngine::acquireStatusFunc(QScriptContext *context, QScriptEngine *engine)
+{
   if (context->argumentCount() == 0) {
     return QScriptValue(engine, g_Acquisition -> acquisitionStatus(0));
   } else {
     double time = context->argument(0).toNumber();
     return QScriptValue(engine, g_Acquisition -> acquisitionStatus(time));
+  }
+}
+
+QScriptValue QxrdScriptEngine::processStatusFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() == 0) {
+    return QScriptValue(engine, g_DataProcessor -> status(0));
+  } else {
+    double time = context->argument(0).toNumber();
+    return QScriptValue(engine, g_DataProcessor -> status(time));
   }
 }
 
@@ -328,6 +358,10 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.9  2009/09/18 20:44:49  jennings
+*  Add separate status functions for acquisition and processing, as well as an aggregated function
+*  combining the status of the two.
+*
 *  Revision 1.8  2009/09/15 20:18:39  jennings
 *  Added acquireCancel scripting command
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.h,v 1.4 2009/09/15 20:18:39 jennings Exp $
+*  $Id: qxrdscriptengine.h,v 1.5 2009/09/18 20:44:49 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,6 +51,8 @@ private:
   static QScriptValue acquireFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue acquireDarkFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue statusFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue acquireStatusFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue processStatusFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue acquireCancelFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue readoutModeFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue exposureTimeFunc(QScriptContext *context, QScriptEngine *engine);
@@ -70,7 +72,7 @@ private:
   QxrdWindow            *m_Window;
   QxrdAcquisition       *m_Acquisition;
 
-  HEADER_IDENT("$Id: qxrdscriptengine.h,v 1.4 2009/09/15 20:18:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdscriptengine.h,v 1.5 2009/09/18 20:44:49 jennings Exp $");
 };
 
 #endif // QXRDSCRIPTENGINE_H
@@ -78,6 +80,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.h,v $
+*  Revision 1.5  2009/09/18 20:44:49  jennings
+*  Add separate status functions for acquisition and processing, as well as an aggregated function
+*  combining the status of the two.
+*
 *  Revision 1.4  2009/09/15 20:18:39  jennings
 *  Added acquireCancel scripting command
 *
