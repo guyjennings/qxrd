@@ -263,4 +263,11 @@ Check output directory exists before starting acquisition sequence.
 
 -------------------------------------------------------
 
+BLOCKER
+Add acquireStatus and processStatus functions and
+processor.status() and acquisition.status() methods
+which test status of acquisition and processing operations
+
+-------------------------------------------------------
+
 #endif // TODO_H
