@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.92 2009/09/14 19:07:55 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.93 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.92 2009/09/14 19:07:55 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.93 2009/09/20 21:18:53 jennings Exp $")
 {
   setupUi(this);
 
@@ -173,7 +173,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   statusBar() -> addPermanentWidget(m_Progress);
 
   if (m_Acquisition == NULL) {
-    printf("Oh no...\n");
+    emit criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
   }
 
   connect(m_Acquisition,     SIGNAL(statusMessage(QString)),
@@ -243,19 +243,29 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_CenterFinderPlot -> setDataProcessor(m_DataProcessor);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
-  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdDoubleImageData *)),
-          m_Plot, SLOT(onProcessedImageAvailable(QxrdDoubleImageData *)));
+//  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdDoubleImageData *)),
+//          m_Plot, SLOT(onProcessedImageAvailable(QxrdDoubleImageData *)));
   connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *)),
           m_Plot, SLOT(onMaskedImageAvailable(QxrdDoubleImageData *, QxrdMaskData *)));
 
   connect(m_DataProcessor, SIGNAL(newDarkImageAvailable(QxrdDoubleImageData *)),
           m_Plot, SLOT(onDarkImageAvailable(QxrdDoubleImageData *)));
 
-  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdDoubleImageData *)),
-          m_CenterFinderPlot, SLOT(onProcessedImageAvailable(QxrdDoubleImageData *)));
+//  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdDoubleImageData *)),
+//          m_CenterFinderPlot, SLOT(onProcessedImageAvailable(QxrdDoubleImageData *)));
 
   connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *)),
           m_CenterFinderPlot, SLOT(onMaskedImageAvailable(QxrdDoubleImageData *, QxrdMaskData *)));
+
+  connect(m_Plot, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
+  connect(m_CenterFinderPlot, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
+  connect(m_IntegratorPlot, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
+  connect(m_Plot, SIGNAL(statusMessage(QString)), this, SLOT(statusMessage(QString)));
+  connect(m_CenterFinderPlot, SIGNAL(statusMessage(QString)), this, SLOT(statusMessage(QString)));
+  connect(m_IntegratorPlot, SIGNAL(statusMessage(QString)), this, SLOT(statusMessage(QString)));
+  connect(m_Plot, SIGNAL(criticalMessage(QString)), this, SLOT(criticalMessage(QString)));
+  connect(m_CenterFinderPlot, SIGNAL(criticalMessage(QString)), this, SLOT(criticalMessage(QString)));
+  connect(m_IntegratorPlot, SIGNAL(criticalMessage(QString)), this, SLOT(criticalMessage(QString)));
 
 //  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
 
@@ -552,7 +562,7 @@ QxrdDoubleImageData *QxrdWindow::newDataAvailable(QxrdDoubleImageData *image)
   QxrdDoubleImageData *res;
 
   if (m_Plotting) {
-    printf("Already plotting...\n");
+    emit printMessage("Already plotting...");
 
     res = m_SpareData;
     m_SpareData = image;
@@ -563,7 +573,7 @@ QxrdDoubleImageData *QxrdWindow::newDataAvailable(QxrdDoubleImageData *image)
 
     m_SpareDataAvailable = true;
   } else {
-    printf("Not already plotting...\n");
+    emit printMessage("Not already plotting...");
 
     res = m_Data;
     m_Data = image;
@@ -576,13 +586,13 @@ QxrdDoubleImageData *QxrdWindow::newDataAvailable(QxrdDoubleImageData *image)
 void QxrdWindow::newData()
 {
   if (m_Plotting.testAndSetOrdered(0,1)) {
-    printf("QxrdWindow::newData called, not already plotting\n");
+    emit printMessage("QxrdWindow::newData called, not already plotting");
     m_Plot -> onProcessedImageAvailable(m_Data);
     m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
     m_Plotting = 0;
-    printf("plotting completed\n");
+    emit printMessage("plotting completed");
   } else {
-    printf("QxrdWindow::newData called, but already plotting\n");
+    emit printMessage("QxrdWindow::newData called, but already plotting");
   }
 }
 
@@ -596,7 +606,7 @@ void QxrdWindow::spareData()
     canDo = m_Plotting == 0;
 
     if (canDo) {
-      printf("QxrdWindow swap data & spare\n");
+      emit printMessage("QxrdWindow swap data & spare");
 
       QxrdDoubleImageData *tmp = m_Data;
       m_Data = m_SpareData;
@@ -608,7 +618,7 @@ void QxrdWindow::spareData()
     newData();
   }
 
-  printf("QxrdWindow::spareData\n");
+  emit printMessage("QxrdWindow::spareData");
 }
 
 void QxrdWindow::doSaveData()
@@ -762,6 +772,10 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.93  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.92  2009/09/14 19:07:55  jennings
 *  Added menu commands to show/hide toolbox widgets
 *

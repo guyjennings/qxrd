@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.37 2009/09/13 13:58:09 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.38 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.37 2009/09/13 13:58:09 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.38 2009/09/20 21:18:53 jennings Exp $")
 {
   m_Zoomer -> setEnabled(true);
 
@@ -140,7 +140,7 @@ void QxrdImagePlot::writeSettings(QxrdSettings *settings, QString section)
 
 void QxrdImagePlot::setAutoRange()
 {
-  printf("To do...\n");
+  emit criticalMessage("QxrdImagePlot::setAutoRange To do...");
 }
 
 void QxrdImagePlot::set005Range()
@@ -572,7 +572,7 @@ void QxrdImagePlot::replot()
 
   QxrdPlot::replot();
 
-  printf("QxrdImagePlot::replot took %d msec\n", tic.restart());
+  emit printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
 }
 
 QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
@@ -587,6 +587,10 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.38  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.37  2009/09/13 13:58:09  jennings
 *  Removed multi-line comment
 *

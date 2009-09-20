@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.11 2009/09/07 22:10:14 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.12 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessor *proc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_DataProcessor(proc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.11 2009/09/07 22:10:14 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.12 2009/09/20 21:18:53 jennings Exp $")
 {
 }
 
@@ -368,14 +368,14 @@ void QxrdIntegrator::tableIntegrateSetup(int nThreads, double cx, double cy, int
 
         if ((irpxlmax - irpxlmin) >= m_TableStride) {
           if (nWarnings1++ < 10) {
-            printf("Problem at %d,%d, min %d, max %d\n", x,y, irpxlmin, irpxlmax);
+            emit printMessage(tr("Problem at %1,%2, min %3, max %4").arg(x).arg(y).arg(irpxlmin).arg(irpxlmax));
           }
         }
 
         for (int i=0; i<(irpxlmax - irpxlmin); i++) {
           if (table[(y*nCols+x)*m_TableStride + 1+i] < 0) {
             if (nWarnings2++ < 10) {
-              printf("Zero at %d,%d,%d\n", x,y, i);
+              emit printMessage(tr("Zero at %1,%2,%3").arg(x).arg(y).arg(i));
             }
           }
         }
@@ -386,7 +386,7 @@ void QxrdIntegrator::tableIntegrateSetup(int nThreads, double cx, double cy, int
   }
 
   for (int i=0; i < (idrmax+2); i++) {
-    printf("%d : %d\n", i-1, stats[i]);
+    emit printMessage(tr("%1 : %2").arg(i-1).arg(stats[i]));
   }
 }
 
@@ -504,6 +504,10 @@ void QxrdIntegrator::tableIntegrate(int nThreads, double cx, double cy, int over
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.12  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.11  2009/09/07 22:10:14  jennings
 *  Allow NULL mask
 *

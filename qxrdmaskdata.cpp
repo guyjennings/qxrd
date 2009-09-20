@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskdata.cpp,v 1.3 2009/08/27 17:05:59 jennings Exp $
+*  $Id: qxrdmaskdata.cpp,v 1.4 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,7 +8,7 @@
 
 QxrdMaskData::QxrdMaskData(int width, int height)
   : QxrdImageData<bool>(width, height),
-    SOURCE_IDENT("$Id: qxrdmaskdata.cpp,v 1.3 2009/08/27 17:05:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdmaskdata.cpp,v 1.4 2009/09/20 21:18:53 jennings Exp $")
 {
 }
 
@@ -82,8 +82,6 @@ void QxrdMaskData::showMaskAll()
 
 void QxrdMaskData::invertMask()
 {
-  printf("QcepImageDataBase::invertMask\n");
-
   int total = m_Image.count();
 //  bool *msk = m_Mask.data();
 
@@ -112,6 +110,10 @@ void QxrdMaskData::maskCircle(double cx, double cy, double r, bool val)
 /******************************************************************
 *
 *  $Log: qxrdmaskdata.cpp,v $
+*  Revision 1.4  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.3  2009/08/27 17:05:59  jennings
 *  Made mask data descend from QxrdImageData<bool>
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.h,v 1.8 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdintegrator.h,v 1.9 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -34,7 +34,9 @@ public:
 
 signals:
   void newIntegrationAvailable(QVector<double> x, QVector<double> y);
-  void printMessage(QString);
+  void printMessage(QString msg);
+  void statusMessage(QString msg);
+  void criticalMessage(QString msg);
 
 public slots:
   void performIntegration();
@@ -57,7 +59,7 @@ private:
   QVector<double>           m_OutputSums;
   int                       m_OutputStride;
 
-  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.8 2009/08/25 18:43:03 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.9 2009/09/20 21:18:53 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATOR_H
@@ -65,6 +67,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegrator.h,v $
+*  Revision 1.9  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.8  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *

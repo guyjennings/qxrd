@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptenginethread.h,v 1.2 2009/07/17 14:00:59 jennings Exp $
+*  $Id: qxrdscriptenginethread.h,v 1.3 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -33,6 +33,8 @@ protected:
 
 signals:
   void printMessage(QString msg);
+  void statusMessage(QString msg);
+  void criticalMessage(QString msg);
 
 private:
   QxrdScriptEngine    *m_ScriptEngine;
@@ -41,7 +43,7 @@ private:
   QxrdAcquisition     *m_Acquisition;
   QxrdDataProcessor   *m_DataProcessor;
 
-  HEADER_IDENT("$Id: qxrdscriptenginethread.h,v 1.2 2009/07/17 14:00:59 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdscriptenginethread.h,v 1.3 2009/09/20 21:18:53 jennings Exp $");
 };
 
 #endif // QXRDSCRIPTENGINETHREAD_H
@@ -49,6 +51,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdscriptenginethread.h,v $
+*  Revision 1.3  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.2  2009/07/17 14:00:59  jennings
 *  Rearranging acquisition and data processor
 *

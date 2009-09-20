@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.h,v 1.5 2009/09/18 20:44:49 jennings Exp $
+*  $Id: qxrdscriptengine.h,v 1.6 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -36,6 +36,8 @@ signals:
   void serverResultAvailable(QScriptValue cmd);
   void specResultAvailable(QScriptValue cmd);
   void printMessage(QString msg);
+  void statusMessage(QString msg);
+  void criticalMessage(QString msg);
 
 public:
   bool hasUncaughtException() const;
@@ -72,7 +74,7 @@ private:
   QxrdWindow            *m_Window;
   QxrdAcquisition       *m_Acquisition;
 
-  HEADER_IDENT("$Id: qxrdscriptengine.h,v 1.5 2009/09/18 20:44:49 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdscriptengine.h,v 1.6 2009/09/20 21:18:53 jennings Exp $");
 };
 
 #endif // QXRDSCRIPTENGINE_H
@@ -80,6 +82,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.h,v $
+*  Revision 1.6  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.5  2009/09/18 20:44:49  jennings
 *  Add separate status functions for acquisition and processing, as well as an aggregated function
 *  combining the status of the two.

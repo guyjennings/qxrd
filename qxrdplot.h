@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.h,v 1.6 2009/08/12 19:44:59 jennings Exp $
+*  $Id: qxrdplot.h,v 1.7 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -28,6 +28,11 @@ public:
   void setPlotCurveStyle(int index, QwtPlotCurve *curve);
   virtual QwtText trackerText(const QwtDoublePoint &pos) const;
 
+signals:
+  void printMessage(QString msg);
+  void statusMessage(QString msg);
+  void criticalMessage(QString msg);
+
 public slots:
   void autoScale();
   void zoomIn();
@@ -51,7 +56,7 @@ protected:
   QxrdPlotMeasurer    *m_Measurer;
 
 private:
-  HEADER_IDENT("$Id: qxrdplot.h,v 1.6 2009/08/12 19:44:59 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdplot.h,v 1.7 2009/09/20 21:18:53 jennings Exp $");
 };
 
 #endif // QXRDPLOT_H
@@ -59,6 +64,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdplot.h,v $
+*  Revision 1.7  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.6  2009/08/12 19:44:59  jennings
 *  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
 *  takes its tracker text from a QxrdPlot virtual member function

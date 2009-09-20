@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdserver.h,v 1.8 2009/06/27 22:50:33 jennings Exp $
+*  $Id: qxrdserver.h,v 1.9 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -25,6 +25,8 @@ public:
 
 signals:
   void printMessage(QString msg);
+  void statusMessage(QString msg);
+  void criticalMessage(QString msg);
 
 public slots:
   QVariant executeCommand(QString cmd);
@@ -33,7 +35,7 @@ public slots:
 
 private:
   QxrdAcquisitionThread    *m_AcquisitionThread;
-  HEADER_IDENT("$Id: qxrdserver.h,v 1.8 2009/06/27 22:50:33 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdserver.h,v 1.9 2009/09/20 21:18:53 jennings Exp $");
 };
 
 #endif
@@ -41,6 +43,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdserver.h,v $
+*  Revision 1.9  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.8  2009/06/27 22:50:33  jennings
 *  Added standard log entries and ident macros
 *  Used standard property macros for acquisition parameters and image properties

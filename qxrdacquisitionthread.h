@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionthread.h,v 1.29 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdacquisitionthread.h,v 1.30 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -39,6 +39,8 @@ class QxrdAcquisitionThread : public QThread
 
 signals:
   void printMessage(QString msg);
+  void statusMessage(QString msg);
+  void criticalMessage(QString msg);
 
 public:
   QxrdAcquisition* acquisition() const;
@@ -62,7 +64,7 @@ private:
   QVariant               m_EvalResult;
   int                    m_Debug;
   QxrdAcquisition       *m_Acquisition;
-  HEADER_IDENT("$Id: qxrdacquisitionthread.h,v 1.29 2009/07/13 23:19:37 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionthread.h,v 1.30 2009/09/20 21:18:53 jennings Exp $");
 };
 
 #endif
@@ -70,6 +72,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionthread.h,v $
+*  Revision 1.30  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.29  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *

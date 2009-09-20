@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.cpp,v 1.7 2009/08/12 19:44:59 jennings Exp $
+*  $Id: qxrdplot.cpp,v 1.8 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -24,7 +24,7 @@ QxrdPlot::QxrdPlot(QWidget *parent)
     m_Panner(NULL),
     m_Magnifier(NULL),
     m_Measurer(NULL),
-    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.7 2009/08/12 19:44:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.8 2009/09/20 21:18:53 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -174,12 +174,12 @@ void QxrdPlot::enableMeasuring()
 
 void QxrdPlot::onLegendClicked(QwtPlotItem *item)
 {
-  printf("QxrdPlot::onLegendClicked(%p)\n", item);
+  emit printMessage(tr("QxrdPlot::onLegendClicked(%1)").arg(item->title().text()));
 }
 
 void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
 {
-  printf("QxrdPlot::onLegendChecked(%p,%d)\n", item, checked);
+  emit printMessage(tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
 }
 
 QwtText QxrdPlot::trackerText(const QwtDoublePoint &pos) const
@@ -190,6 +190,10 @@ QwtText QxrdPlot::trackerText(const QwtDoublePoint &pos) const
 /******************************************************************
 *
 *  $Log: qxrdplot.cpp,v $
+*  Revision 1.8  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.7  2009/08/12 19:44:59  jennings
 *  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
 *  takes its tracker text from a QxrdPlot virtual member function

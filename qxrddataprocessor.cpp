@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.48 2009/09/18 20:44:49 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.49 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -68,20 +68,20 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.48 2009/09/18 20:44:49 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.49 2009/09/20 21:18:53 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
 
-  m_DarkImagePath.setDebug(10);
+//  m_DarkImagePath.setDebug(10);
 }
 
 void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
 {
   m_Acquisition = acq;
 
-  connect(m_Acquisition, SIGNAL(acquiredImageAvailable(QxrdDoubleImageData*)),
-          this, SLOT(onAcquiredImageAvailable(QxrdDoubleImageData*)));
+//  connect(m_Acquisition, SIGNAL(acquiredImageAvailable(QxrdDoubleImageData*)),
+//          this, SLOT(onAcquiredImageAvailable(QxrdDoubleImageData*)));
   connect(m_Acquisition, SIGNAL(acquiredInt16ImageAvailable(QxrdInt16ImageData*)),
           this, SLOT(onAcquiredInt16ImageAvailable(QxrdInt16ImageData*)));
   connect(m_Acquisition, SIGNAL(acquiredInt32ImageAvailable(QxrdInt32ImageData*)),
@@ -1482,7 +1482,7 @@ QxrdCenterFinder  *QxrdDataProcessor::centerFinder() const
   QMutexLocker  lock(&m_Mutex);
 
   if (m_CenterFinder == NULL) {
-    printf("Problem QxrdDataProcessor::centerFinder == NULL\n");
+    emit printMessage("Problem QxrdDataProcessor::centerFinder == NULL");
   }
 
   return m_CenterFinder;
@@ -1493,7 +1493,7 @@ QxrdIntegrator    *QxrdDataProcessor::integrator() const
   QMutexLocker  lock(&m_Mutex);
 
   if (m_Integrator == NULL) {
-    printf("Problem QxrdDataProcessor::integrator == NULL\n");
+    emit printMessage("Problem QxrdDataProcessor::integrator == NULL");
   }
 
   return m_Integrator;
@@ -1684,6 +1684,10 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.49  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.48  2009/09/18 20:44:49  jennings
 *  Add separate status functions for acquisition and processing, as well as an aggregated function
 *  combining the status of the two.

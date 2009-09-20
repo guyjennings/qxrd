@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.49 2009/09/10 21:33:30 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.50 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,7 +32,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.49 2009/09/10 21:33:30 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.50 2009/09/20 21:18:53 jennings Exp $")
 {
   setupTiffHandlers();
 
@@ -78,6 +78,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(m_ServerThread,       SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
   connect(m_Server,             SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
+  connect(m_ServerThread,       SIGNAL(statusMessage(QString)), m_Window,            SLOT(statusMessage(QString)));
+  connect(m_Server,             SIGNAL(statusMessage(QString)), m_Window,            SLOT(statusMessage(QString)));
+  connect(m_ServerThread,       SIGNAL(criticalMessage(QString)), m_Window,            SLOT(criticalMessage(QString)));
+  connect(m_Server,             SIGNAL(criticalMessage(QString)), m_Window,            SLOT(criticalMessage(QString)));
 
   m_ServerThread -> start();
 
@@ -90,6 +94,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(m_ScriptEngineThread, SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
   connect(m_ScriptEngine,       SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
+  connect(m_ScriptEngineThread, SIGNAL(statusMessage(QString)), m_Window,            SLOT(statusMessage(QString)));
+  connect(m_ScriptEngine,       SIGNAL(statusMessage(QString)), m_Window,            SLOT(statusMessage(QString)));
+  connect(m_ScriptEngineThread, SIGNAL(criticalMessage(QString)), m_Window,            SLOT(criticalMessage(QString)));
+  connect(m_ScriptEngine,       SIGNAL(criticalMessage(QString)), m_Window,            SLOT(criticalMessage(QString)));
 
   connect(m_Server,         SIGNAL(executeCommand(QString)),           m_ScriptEngine,    SLOT(evaluateSpecCommand(QString)));
   connect(m_ScriptEngine,   SIGNAL(specResultAvailable(QScriptValue)), m_Server,          SLOT(finishedCommand(QScriptValue)));
@@ -100,6 +108,12 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   connect(m_DataProcessorThread, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
   connect(m_DataProcessor, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
   connect(m_DataProcessor -> integrator(), SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
+  connect(m_DataProcessorThread, SIGNAL(statusMessage(QString)), m_Window, SLOT(statusMessage(QString)));
+  connect(m_DataProcessor, SIGNAL(statusMessage(QString)), m_Window, SLOT(statusMessage(QString)));
+  connect(m_DataProcessor -> integrator(), SIGNAL(statusMessage(QString)), m_Window, SLOT(statusMessage(QString)));
+  connect(m_DataProcessorThread, SIGNAL(criticalMessage(QString)), m_Window, SLOT(criticalMessage(QString)));
+  connect(m_DataProcessor, SIGNAL(criticalMessage(QString)), m_Window, SLOT(criticalMessage(QString)));
+  connect(m_DataProcessor -> integrator(), SIGNAL(criticalMessage(QString)), m_Window, SLOT(criticalMessage(QString)));
 
   m_Window -> setScriptEngine(m_ScriptEngine);
 
@@ -113,7 +127,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   readSettings();
 
-  printf("Optimal thread count = %d\n", QThread::idealThreadCount());
+  emit printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
   m_DataProcessor -> loadDefaultImages();
 }
@@ -225,25 +239,21 @@ void QxrdApplication::setupTiffHandlers()
 
 void QxrdApplication::tiffWarning(const char *module, const char *msg)
 {
-  if (m_Window) {
-    m_Window -> criticalMessage(tr("TIFF Warning from %1 : %2").arg(module).arg(msg));
-  } else {
-    printf("TIFF Warning from %s : %s\n", module, msg);
-  }
+  emit criticalMessage(tr("TIFF Warning from %1 : %2").arg(module).arg(msg));
 }
 
 void QxrdApplication::tiffError(const char *module, const char *msg)
 {
-  if (m_Window) {
-    m_Window -> criticalMessage(tr("TIFF Error from %1 : %2").arg(module).arg(msg));
-  } else {
-    printf("TIFF Error from %s : %s\n", module, msg);
-  }
+  emit criticalMessage(tr("TIFF Error from %1 : %2").arg(module).arg(msg));
 }
 
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.50  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.49  2009/09/10 21:33:30  jennings
 *  Added TIFF error handling
 *

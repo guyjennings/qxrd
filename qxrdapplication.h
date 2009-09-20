@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.h,v 1.24 2009/09/10 21:33:30 jennings Exp $
+*  $Id: qxrdapplication.h,v 1.25 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -46,6 +46,8 @@ public slots:
 
 signals:
   void printMessage(QString msg);
+  void statusMessage(QString msg);
+  void criticalMessage(QString msg);
 
 public:
   bool wantToQuit();
@@ -63,7 +65,7 @@ private:
   QxrdAcquisition               *m_Acquisition;
   QxrdScriptEngineThread        *m_ScriptEngineThread;
   QxrdScriptEngine              *m_ScriptEngine;
-  HEADER_IDENT("$Id: qxrdapplication.h,v 1.24 2009/09/10 21:33:30 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdapplication.h,v 1.25 2009/09/20 21:18:53 jennings Exp $");
 };
 
 #endif
@@ -71,6 +73,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdapplication.h,v $
+*  Revision 1.25  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.24  2009/09/10 21:33:30  jennings
 *  Added TIFF error handling
 *

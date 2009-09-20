@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.9 2009/09/18 20:44:49 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.10 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,7 +27,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.9 2009/09/18 20:44:49 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.10 2009/09/20 21:18:53 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -233,8 +233,8 @@ QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine
 
   status = g_Acquisition -> acquisitionStatus(time);
 
-  if (status != 0) {
-    status = g_DataProcessor -> status(0);
+  if (status == 0) {
+    status = g_DataProcessor -> status(time);
   }
 
   return QScriptValue(engine, status);
@@ -260,7 +260,7 @@ QScriptValue QxrdScriptEngine::processStatusFunc(QScriptContext *context, QScrip
   }
 }
 
-QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext */*context*/, QScriptEngine *engine)
 {
   return QScriptValue(engine, g_Acquisition -> acquisitionCancel());
 }
@@ -358,6 +358,10 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.10  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.9  2009/09/18 20:44:49  jennings
 *  Add separate status functions for acquisition and processing, as well as an aggregated function
 *  combining the status of the two.

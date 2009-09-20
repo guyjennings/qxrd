@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdserverthread.h,v 1.8 2009/06/28 04:00:39 jennings Exp $
+*  $Id: qxrdserverthread.h,v 1.9 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,6 +29,8 @@ public:
 
 signals:
   void printMessage(QString msg);
+  void statusMessage(QString msg);
+  void criticalMessage(QString msg);
   void execute(QString cmd);
 
 protected:
@@ -38,7 +40,7 @@ private:
   QxrdAcquisitionThread *m_AcquisitionThread;
   QString                m_Name;
   QxrdServer            *m_Server;
-  HEADER_IDENT("$Id: qxrdserverthread.h,v 1.8 2009/06/28 04:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdserverthread.h,v 1.9 2009/09/20 21:18:53 jennings Exp $");
 };
 
 #endif // QXRDSERVERTHREAD_H
@@ -46,6 +48,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdserverthread.h,v $
+*  Revision 1.9  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.8  2009/06/28 04:00:39  jennings
 *  Partial implementation of separate thread for script engine
 *

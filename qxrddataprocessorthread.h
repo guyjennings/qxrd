@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorthread.h,v 1.2 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrddataprocessorthread.h,v 1.3 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,13 +29,15 @@ public:
 
 signals:
   void printMessage(QString msg);
+  void statusMessage(QString msg);
+  void criticalMessage(QString msg);
 
 protected:
   void run();
 
 private:
   QxrdDataProcessor   *m_DataProcessor;
-  HEADER_IDENT("$Id: qxrddataprocessorthread.h,v 1.2 2009/07/13 23:19:37 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessorthread.h,v 1.3 2009/09/20 21:18:53 jennings Exp $");
 };
 
 #endif // QXRDDATAPROCESSORTHREAD_H
@@ -43,6 +45,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessorthread.h,v $
+*  Revision 1.3  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.2  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *

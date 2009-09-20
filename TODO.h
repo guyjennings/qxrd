@@ -270,4 +270,16 @@ which test status of acquisition and processing operations
 
 -------------------------------------------------------
 
+BLOCKER
+Separate printMessage, warnMessage and errorMessage signals
+Color code in output.
+
+//-------------------------------------------------------
+//
+//BLOCKER
+//Binning mode not working
+//Disabled
+//
+-------------------------------------------------------
+
 #endif // TODO_H

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrd.cpp,v 1.4 2009/07/08 00:35:33 jennings Exp $
+*  $Id: qxrd.cpp,v 1.5 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,11 +11,11 @@
 
 int main(int argc, char *argv[])
 {
-  printf("App starts\n");
+//  printf("App starts\n");
 
   QxrdApplication app(argc, argv);
 
-  printf("App Constructed\n");
+//  printf("App Constructed\n");
 
   return app.exec();
 }
@@ -23,6 +23,10 @@ int main(int argc, char *argv[])
 /******************************************************************
 *
 *  $Log: qxrd.cpp,v $
+*  Revision 1.5  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.4  2009/07/08 00:35:33  jennings
 *  *** empty log message ***
 *

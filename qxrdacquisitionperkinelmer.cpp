@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.34 2009/09/18 20:44:49 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.35 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_HeaderID(-1),
     m_CameraType(-1),
     m_CameraModel(""),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.34 2009/09/18 20:44:49 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.35 2009/09/20 21:18:53 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -125,7 +125,9 @@ void QxrdAcquisitionPerkinElmer::initialize()
 {
   THREAD_CHECK;
 
-  prop_BinningMode() -> setDebug(1);
+//  prop_BinningMode() -> setDebug(1);
+
+  set_BinningMode(0);
 
   emit printMessage("QxrdAcquisitionPerkinElmer::initialize()");
 
@@ -322,20 +324,20 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
       return;
     }
 
-    WORD binningMode = get_BinningMode();
-    emit printMessage(tr("Setting binning mode = %1").arg(binningMode));
-
-    if ((nRet=Acquisition_SetCameraBinningMode(m_AcqDesc, binningMode)) != HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
-      return;
-    }
-
-    if ((nRet=Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
-      return;
-    }
-
-    emit printMessage(tr("Binning mode was set to %1").arg(binningMode));
+//    WORD binningMode = get_BinningMode();
+//    emit printMessage(tr("Setting binning mode = %1").arg(binningMode));
+//
+//    if ((nRet=Acquisition_SetCameraBinningMode(m_AcqDesc, binningMode)) != HIS_ALL_OK) {
+//      acquisitionError(__LINE__, nRet);
+//      return;
+//    }
+//
+//    if ((nRet=Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
+//      acquisitionError(__LINE__, nRet);
+//      return;
+//    }
+//
+//    emit printMessage(tr("Binning mode was set to %1").arg(binningMode));
 
     allocateMemoryForAcquisition();
 
@@ -474,6 +476,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
       m_CurrentExposure++;
     } else {
+      emit statusMessage("Frame dropped");
       emit printMessage("Frame dropped");
     }
   } else {
@@ -496,8 +499,9 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
       m_CurrentExposure++;
     } else {
+      emit statusMessage("Frame dropped");
       emit printMessage("Frame dropped");
-    }
+   }
   }
 
   m_BufferIndex++;
@@ -556,6 +560,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
             acquiredInt16Image();
           } else {
             m_PreTriggerInt16Images.enqueue(m_AcquiredInt16Data);
+            emit statusMessage(tr("%1 pre trigger 16 bit images queued").arg(m_PreTriggerInt16Images.size()));
             emit printMessage(tr("%1 pre trigger 16 bit images queued").arg(m_PreTriggerInt16Images.size()));
             m_AcquiredInt16Data = NULL;
           }
@@ -605,6 +610,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
             acquiredInt32Image();
           } else {
             m_PreTriggerInt32Images.enqueue(m_AcquiredInt32Data);
+            emit statusMessage(tr("%1 pre trigger 32 bit images queued").arg(m_PreTriggerInt32Images.size()));
             emit printMessage(tr("%1 pre trigger 32 bit images queued").arg(m_PreTriggerInt32Images.size()));
             m_AcquiredInt32Data = NULL;
           }
@@ -655,9 +661,9 @@ void QxrdAcquisitionPerkinElmer::acquiredInt32Image()
 
 void QxrdAcquisitionPerkinElmer::haltAcquire()
 {
-  if (QThread::currentThread() != thread()) {
-    printf("Ooops...\n");
-  }
+//  if (QThread::currentThread() != thread()) {
+//    printf("Ooops...\n");
+//  }
 
   set_Cancelling(true);
 
@@ -799,6 +805,10 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.35  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.34  2009/09/18 20:44:49  jennings
 *  Add separate status functions for acquisition and processing, as well as an aggregated function
 *  combining the status of the two.

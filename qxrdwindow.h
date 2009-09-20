@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.57 2009/09/07 22:10:14 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.58 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -70,6 +70,7 @@ public slots:
 
   QString timeStamp();
   void printMessage(QString msg);
+  void statusMessage(QString msg);
   void criticalMessage(QString msg);
 
   void acquisitionReady();
@@ -81,7 +82,6 @@ public slots:
   void setReadoutTime(int n, double t);
 
   void selectOutputDirectory();
-  void statusMessage(QString msg);
   void clearStatusMessage();
 
 signals:
@@ -130,7 +130,7 @@ private:
   QAtomicInt              m_Plotting;
   QAtomicInt              m_SpareDataAvailable;
 
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.57 2009/09/07 22:10:14 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.58 2009/09/20 21:18:53 jennings Exp $");
 };
 
 #endif
@@ -138,6 +138,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.58  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.57  2009/09/07 22:10:14  jennings
 *  Allow NULL mask
 *

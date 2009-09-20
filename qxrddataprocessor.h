@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.35 2009/09/18 20:44:49 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.36 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -126,7 +126,9 @@ public:
   QCEP_BOOLEAN_PROPERTY(CompressImages);
 
 signals:
-  void printMessage(QString msg);
+  void printMessage(QString msg) const;
+  void statusMessage(QString msg) const;
+  void criticalMessage(QString msg) const;
 //  void newDataAvailable(QxrdDoubleImageData *);
   void newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *);
   void newDarkImageAvailable(QxrdDoubleImageData *);
@@ -289,7 +291,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.35 2009/09/18 20:44:49 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.36 2009/09/20 21:18:53 jennings Exp $");
 };
 
 #endif
@@ -297,6 +299,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.36  2009/09/20 21:18:53  jennings
+*  Removed 'printf' messages
+*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
+*
 *  Revision 1.35  2009/09/18 20:44:49  jennings
 *  Add separate status functions for acquisition and processing, as well as an aggregated function
 *  combining the status of the two.
