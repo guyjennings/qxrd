@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdserverthread.cpp,v 1.10 2009/06/28 04:00:39 jennings Exp $
+*  $Id: qxrdserverthread.cpp,v 1.11 2009/09/20 21:18:53 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,7 +13,7 @@ QxrdServerThread::QxrdServerThread(QxrdAcquisitionThread *acq, QString name)
   : m_AcquisitionThread(acq),
     m_Name(name),
     m_Server(NULL),
-    SOURCE_IDENT("$Id: qxrdserverthread.cpp,v 1.10 2009/06/28 04:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdserverthread.cpp,v 1.11 2009/09/20 21:18:53 jennings Exp $")
 {
   m_Server = new QxrdServer(NULL, m_Name);
 
@@ -43,7 +43,7 @@ void QxrdServerThread::shutdown()
 
 void QxrdServerThread::run()
 {
-  printf("start server\n");
+//  printf("start server\n");
 
   m_Server -> startServer(QHostAddress::Any);
 
@@ -58,6 +58,9 @@ void QxrdServerThread::executeScript(QString cmd)
 /******************************************************************
 *
 *  $Log: qxrdserverthread.cpp,v $
+*  Revision 1.11  2009/09/20 21:18:53  jennings
+*  *** empty log message ***
+*
 *  Revision 1.10  2009/06/28 04:00:39  jennings
 *  Partial implementation of separate thread for script engine
 *
