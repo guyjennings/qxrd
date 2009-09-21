@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: xisl_dummy.cpp,v 1.14 2009/09/10 13:54:21 jennings Exp $
+*  $Id: xisl_dummy.cpp,v 1.15 2009/09/21 19:51:11 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,7 +32,7 @@ static AcquisitionTimer timer;
 AcquisitionTimer::AcquisitionTimer()
   : QObject(NULL),
     m_Mode(0),
-    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.14 2009/09/10 13:54:21 jennings Exp $")
+    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.15 2009/09/21 19:51:11 jennings Exp $")
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
@@ -85,8 +85,12 @@ void AcquisitionTimer::setmode(int mode)
   m_Mode = mode;
 }
 
-HIS_RETURN Acquisition_EnumSensors(UINT */*pdwNumSensors*/, BOOL /*bEnableIRQ*/, BOOL /*bAlwaysOpen*/)
+HIS_RETURN Acquisition_EnumSensors(UINT *pdwNumSensors, BOOL /*bEnableIRQ*/, BOOL /*bAlwaysOpen*/)
 {
+  if (pdwNumSensors) {
+    *pdwNumSensors = 0;
+  }
+
   return HIS_ALL_OK;
 }
 
@@ -248,6 +252,9 @@ HIS_RETURN Acquisition_GetHwHeaderInfo(HACQDESC hAcqDesc, CHwHeaderInfo *pInfo)
 /******************************************************************
 *
 *  $Log: xisl_dummy.cpp,v $
+*  Revision 1.15  2009/09/21 19:51:11  jennings
+*  Added call to statusMessage to criticalMessage and call printMessage from statusMessage
+*
 *  Revision 1.14  2009/09/10 13:54:21  jennings
 *  Added Acquisition_GetCameraBinningMode to dimmy xisl library
 *

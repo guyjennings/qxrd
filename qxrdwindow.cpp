@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.96 2009/09/21 19:40:46 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.97 2009/09/21 19:51:11 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.96 2009/09/21 19:40:46 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.97 2009/09/21 19:51:11 jennings Exp $")
 {
   setupUi(this);
 
@@ -356,6 +356,7 @@ void QxrdWindow::criticalMessage(QString msg)
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "criticalMessage", Qt::QueuedConnection, Q_ARG(QString, msg));
   } else {
+    statusMessage(msg);
     QMessageBox::critical(this, "Error", msg);
   }
 }
@@ -551,6 +552,8 @@ void QxrdWindow::writeSettings(QxrdSettings *settings, QString section)
 void QxrdWindow::statusMessage(QString msg)
 {
   m_StatusMsg -> setText(msg);
+
+  printMessage(msg);
 
   m_StatusTimer.start(5000);
 }
@@ -786,6 +789,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.97  2009/09/21 19:51:11  jennings
+*  Added call to statusMessage to criticalMessage and call printMessage from statusMessage
+*
 *  Revision 1.96  2009/09/21 19:40:46  jennings
 *  Added version number to window title, added more measurement output
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionscripting.cpp,v 1.7 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdacquisitionscripting.cpp,v 1.8 2009/09/21 19:51:11 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,13 +12,12 @@
 QxrdAcquisitionScripting::QxrdAcquisitionScripting(QxrdDataProcessor *proc)
   : QxrdAcquisitionParameters(proc),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionscripting.cpp,v 1.7 2009/07/13 23:19:37 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionscripting.cpp,v 1.8 2009/09/21 19:51:11 jennings Exp $")
 {
 }
 
 void QxrdAcquisitionScripting::message(QString msg)
 {
-  emit printMessage(msg);
   emit statusMessage(msg);
 }
 
@@ -44,6 +43,9 @@ void QxrdAcquisitionScripting::propertyList()
 /******************************************************************
 *
 *  $Log: qxrdacquisitionscripting.cpp,v $
+*  Revision 1.8  2009/09/21 19:51:11  jennings
+*  Added call to statusMessage to criticalMessage and call printMessage from statusMessage
+*
 *  Revision 1.7  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *

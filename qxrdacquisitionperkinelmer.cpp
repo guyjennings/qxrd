@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.37 2009/09/21 18:49:24 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.38 2009/09/21 19:51:11 jennings Exp $
 *
 *******************************************************************/
 
@@ -55,7 +55,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CameraModel(""),
     m_CurrentMode(-1),
     m_CurrentGain(-1),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.37 2009/09/21 18:49:24 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.38 2009/09/21 19:51:11 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -81,7 +81,7 @@ void QxrdAcquisitionPerkinElmer::acquire()
 //         thread(), QThread::currentThread());
   m_Acquiring.lock();
 
-  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquire()"));
+//  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquire()"));
   emit statusMessage("Starting acquisition");
   emit acquireStarted(0);
 
@@ -96,7 +96,7 @@ void QxrdAcquisitionPerkinElmer::acquireDark()
 //         thread(), QThread::currentThread());
   m_Acquiring.lock();
 
-  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquireDark()"));
+//  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquireDark()"));
   emit statusMessage("Starting dark acquisition");
   emit acquireStarted(1);
 
@@ -494,7 +494,6 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_CurrentExposure++;
     } else {
       emit statusMessage("Frame dropped");
-      emit printMessage("Frame dropped");
     }
   } else {
     if (m_AcquiredInt32Data == NULL) {
@@ -517,7 +516,6 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_CurrentExposure++;
     } else {
       emit statusMessage("Frame dropped");
-      emit printMessage("Frame dropped");
    }
   }
 
@@ -585,7 +583,6 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
           } else {
             m_PreTriggerInt16Images.enqueue(m_AcquiredInt16Data);
             emit statusMessage(tr("%1 pre trigger 16 bit images queued").arg(m_PreTriggerInt16Images.size()));
-            emit printMessage(tr("%1 pre trigger 16 bit images queued").arg(m_PreTriggerInt16Images.size()));
             m_AcquiredInt16Data = NULL;
           }
         } else {
@@ -640,7 +637,6 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
           } else {
             m_PreTriggerInt32Images.enqueue(m_AcquiredInt32Data);
             emit statusMessage(tr("%1 pre trigger 32 bit images queued").arg(m_PreTriggerInt32Images.size()));
-            emit printMessage(tr("%1 pre trigger 32 bit images queued").arg(m_PreTriggerInt32Images.size()));
             m_AcquiredInt32Data = NULL;
           }
         } else {
@@ -650,8 +646,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       }
     }
 
-    emit statusMessage("Acquiring "+fileName);
-    emit printMessage("Acquiring """+fileName+"""");
+    emit statusMessage("Acquiring """+fileName+"""");
 
     if (m_CurrentFile >= (get_FilesInAcquiredSequence() + get_PreTriggerFiles())) {
       emit printMessage("Acquisition ended");
@@ -745,8 +740,6 @@ void QxrdAcquisitionPerkinElmer::acquisitionError(int n)
 {
   haltAcquire();
 
-  emit printMessage(tr("Acquisition Error %1").arg(n));
-  emit statusMessage(tr("Acquisition Error %1").arg(n));
   emit criticalMessage(tr("Acquisition Error %1").arg(n));
 }
 
@@ -754,8 +747,6 @@ void QxrdAcquisitionPerkinElmer::acquisitionError(int ln, int n)
 {
   haltAcquire();
 
-  emit printMessage(tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
-  emit statusMessage(tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
   emit criticalMessage(tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
 }
 
@@ -834,6 +825,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.38  2009/09/21 19:51:11  jennings
+*  Added call to statusMessage to criticalMessage and call printMessage from statusMessage
+*
 *  Revision 1.37  2009/09/21 18:49:24  jennings
 *  Accelerate readout by only calling 'SetCameraMode' and 'SetCameraGain' if they change
 *
