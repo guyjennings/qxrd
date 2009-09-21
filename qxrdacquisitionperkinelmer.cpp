@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.36 2009/09/21 18:12:55 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.37 2009/09/21 18:49:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,9 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_HeaderID(-1),
     m_CameraType(-1),
     m_CameraModel(""),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.36 2009/09/21 18:12:55 jennings Exp $")
+    m_CurrentMode(-1),
+    m_CurrentGain(-1),
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.37 2009/09/21 18:49:24 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -344,9 +346,13 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
     m_Buffer.resize(get_NRows()*get_NCols()*m_BufferSize);
     m_Buffer.fill(0);
 
-    if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, get_ReadoutMode())) != HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
-      return;
+    if (m_CurrentMode != get_ReadoutMode()) {
+      if ((nRet=Acquisition_SetCameraMode(m_AcqDesc, get_ReadoutMode())) != HIS_ALL_OK) {
+        acquisitionError(__LINE__, nRet);
+        return;
+      }
+
+      m_CurrentMode = get_ReadoutMode();
     }
 
     emit printMessage(tr("Readout time = %1, Exposure Time = %2")
@@ -378,16 +384,25 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
       set_ExposureTime(tmp/1.0e6);
     }
 
-    if ((nRet=Acquisition_SetCameraGain(m_AcqDesc, get_CameraGain())) != HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
-      return;
+    emit printMessage("Setting camera gain");
+
+    if (m_CurrentGain != get_CameraGain()) {
+      if ((nRet=Acquisition_SetCameraGain(m_AcqDesc, get_CameraGain())) != HIS_ALL_OK) {
+        acquisitionError(__LINE__, nRet);
+        return;
+      }
+      m_CurrentGain = get_CameraGain();
     }
+
+    emit printMessage("Set camera gain");
 
     if ((nRet=Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_BufferSize,
                                             get_NRows(), get_NCols())) != HIS_ALL_OK) {
       acquisitionError(__LINE__, nRet);
       return;
     }
+
+    emit printMessage("Define Dest Buffers");
 
     m_CurrentExposure = 0;
     m_CurrentFile = 0;
@@ -397,13 +412,15 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
       acquisitionError(__LINE__, nRet);
       return;
     }
+
+    emit printMessage("Acquire");
   }
 }
 
 void QxrdAcquisitionPerkinElmer::onEndFrame()
 {
-//  emit printMessage("QxrdAcquisitionPerkinElmer::onEndFrame()");
-//
+  emit printMessage("QxrdAcquisitionPerkinElmer::onEndFrame()");
+
   QMutexLocker lock(&m_Mutex);
 
   if (get_Cancelling()) {
@@ -513,6 +530,8 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
   }
 
 //  Acquisition_SetReady(m_AcqDesc, true);
+
+  emit printMessage("Frame summed");
 
   if (m_CurrentExposure >= get_ExposuresToSum()) {
     m_CurrentExposure = 0;
@@ -815,6 +834,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.37  2009/09/21 18:49:24  jennings
+*  Accelerate readout by only calling 'SetCameraMode' and 'SetCameraGain' if they change
+*
 *  Revision 1.36  2009/09/21 18:12:55  jennings
 *  Added 'triggered', 'usercomment{1-4}' properties to data
 *

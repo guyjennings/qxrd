@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.19 2009/09/18 20:44:49 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.20 2009/09/21 18:49:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -96,8 +96,10 @@ private:
   int                    m_HeaderID;
   int                    m_CameraType;
   QString                m_CameraModel;
+  int                    m_CurrentMode;
+  int                    m_CurrentGain;
 
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.19 2009/09/18 20:44:49 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.20 2009/09/21 18:49:24 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -105,6 +107,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.20  2009/09/21 18:49:24  jennings
+*  Accelerate readout by only calling 'SetCameraMode' and 'SetCameraGain' if they change
+*
 *  Revision 1.19  2009/09/18 20:44:49  jennings
 *  Add separate status functions for acquisition and processing, as well as an aggregated function
 *  combining the status of the two.
