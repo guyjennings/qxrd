@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.49 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.50 2009/09/21 16:27:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -68,7 +68,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.49 2009/09/20 21:18:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.50 2009/09/21 16:27:58 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -1684,6 +1684,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.50  2009/09/21 16:27:58  jennings
+*  Added user interface to log file path
+*
 *  Revision 1.49  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.

@@ -280,6 +280,10 @@ Color code in output.
 //Binning mode not working
 //Disabled
 //
+//-------------------------------------------------------
+//
+//Added user interface to log file choosing
+//
 -------------------------------------------------------
 
 #endif // TODO_H

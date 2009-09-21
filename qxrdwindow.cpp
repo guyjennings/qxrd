@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.93 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.94 2009/09/21 16:27:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.93 2009/09/20 21:18:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.94 2009/09/21 16:27:58 jennings Exp $")
 {
   setupUi(this);
 
@@ -74,7 +74,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionSaveDark, SIGNAL(triggered()), this, SLOT(doSaveDark()));
   connect(m_ActionLoadMask, SIGNAL(triggered()), this, SLOT(doLoadMask()));
   connect(m_ActionSaveMask, SIGNAL(triggered()), this, SLOT(doSaveMask()));
-
+  connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
+  connect(m_SelectLogFileButton, SIGNAL(clicked()), this, SLOT(selectLogFile()));
   connect(m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
 
 //  connect(m_LoadDarkButton, SIGNAL(clicked()), this, SLOT(doLoadDarkImage()));
@@ -216,6 +217,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_DataProcessor -> prop_DisplayIntegratedData() -> linkTo(m_DisplayIntegratedData);
   m_DataProcessor -> prop_SaveIntegratedData() -> linkTo(m_SaveIntegratedData);
   m_DataProcessor -> prop_EstimatedProcessingTime() -> linkTo(m_EstimatedProcessingTime);
+  m_DataProcessor -> prop_LogFilePath() -> linkTo(m_LogFilePath);
 
 //  m_DataProcessor -> prop_DarkImagePath() -> linkTo(m_DarkImagePath);
 //  m_DataProcessor -> prop_BadPixelsPath() -> linkTo(m_BadPixelsPath);
@@ -721,6 +723,16 @@ void QxrdWindow::doLoadGainMap()
   }
 }
 
+void QxrdWindow::selectLogFile()
+{
+  QString theFile = QFileDialog::getSaveFileName(
+      this, "Save Log File in", m_DataProcessor -> get_LogFilePath());
+
+  if (theFile.length()) {
+    m_DataProcessor->newLogFile(theFile);
+  }
+}
+
 void QxrdWindow::doTest()
 {
 
@@ -772,6 +784,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.94  2009/09/21 16:27:58  jennings
+*  Added user interface to log file path
+*
 *  Revision 1.93  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.58 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.59 2009/09/21 16:27:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -52,7 +52,7 @@ public slots:
   void doLoadBadPixels();
   void doSaveGainMap();
   void doLoadGainMap();
-
+  void selectLogFile();
 
   void doAcquire();
   void doCancel();
@@ -130,7 +130,7 @@ private:
   QAtomicInt              m_Plotting;
   QAtomicInt              m_SpareDataAvailable;
 
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.58 2009/09/20 21:18:53 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.59 2009/09/21 16:27:58 jennings Exp $");
 };
 
 #endif
@@ -138,6 +138,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.59  2009/09/21 16:27:58  jennings
+*  Added user interface to log file path
+*
 *  Revision 1.58  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
