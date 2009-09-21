@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.94 2009/09/21 16:27:58 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.95 2009/09/21 18:49:49 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.94 2009/09/21 16:27:58 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.95 2009/09/21 18:49:49 jennings Exp $")
 {
   setupUi(this);
 
@@ -331,7 +331,7 @@ bool QxrdWindow::wantToClose()
 
 QString QxrdWindow::timeStamp()
 {
-  return QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss ");
+  return QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ");
 }
 
 void QxrdWindow::printMessage(QString msg)
@@ -784,6 +784,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.95  2009/09/21 18:49:49  jennings
+*  Display msecs in log file timestamps
+*
 *  Revision 1.94  2009/09/21 16:27:58  jennings
 *  Added user interface to log file path
 *
