@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.50 2009/09/21 16:27:58 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.51 2009/09/21 19:40:46 jennings Exp $
 *
 *******************************************************************/
 
@@ -68,7 +68,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.50 2009/09/21 16:27:58 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.51 2009/09/21 19:40:46 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -1383,6 +1383,8 @@ void QxrdDataProcessor::measurePolygon(QVector<QwtDoublePoint> poly)
     emit printMessage(tr("Measure pt (%1,%2) = %3").arg(pt.x()).arg(pt.y())
                       .arg(m_Data -> value(pt.x(),pt.y())));
   }
+
+  summarizeMeasuredPolygon(poly);
 }
 
 void QxrdDataProcessor::printMeasuredPolygon(QVector<QwtDoublePoint> poly)
@@ -1391,6 +1393,40 @@ void QxrdDataProcessor::printMeasuredPolygon(QVector<QwtDoublePoint> poly)
 
   foreach(QwtDoublePoint pt, poly) {
     emit printMessage(tr("Measure pt (%1,%2)").arg(pt.x()).arg(pt.y()));
+  }
+
+  summarizeMeasuredPolygon(poly);
+}
+
+void QxrdDataProcessor::summarizeMeasuredPolygon(QVector<QwtDoublePoint> poly)
+{
+  if (poly.size() >= 3) {
+    double x0 = poly[0].x();
+    double y0 = poly[0].y();
+    double x1 = poly[1].x();
+    double y1 = poly[1].y();
+    double x2 = poly[2].x();
+    double y2 = poly[2].y();
+    double dx1 = x0-x1, dy1 = y0-y1, dx2 = x2-x1, dy2 = y2-y1;
+    double a1 = atan2(dy1,dx1), a2 = atan2(dy2,dx2);
+
+    emit statusMessage(tr("Angle: @ %1,%2, ang %3 deg").arg(x1).arg(y1).arg((a2-a1)/M_PI*180.0));
+  } else if (poly.size() == 2) {
+    double x0 = poly[0].x();
+    double y0 = poly[0].y();
+    double x1 = poly[1].x();
+    double y1 = poly[1].y();
+    double dx = x1-x0;
+    double dy = y1-y0;
+    double ang = atan2(dy,dx);
+    double len = sqrt(dx*dx+dy*dy);
+
+    emit statusMessage(tr("Line: %1,%2 - %3,%4 : D %5,%6 : L %7 : Ang %8").
+                       arg(x0).arg(y0).arg(x1).arg(y1).
+                       arg(dx).arg(dy).arg(len).arg(ang/M_PI*180.0));
+
+  } else if (poly.size() == 1) {
+    emit statusMessage(tr("Point: %1,%2").arg(poly[0].x()).arg(poly[0].y()));
   }
 }
 
@@ -1684,6 +1720,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.51  2009/09/21 19:40:46  jennings
+*  Added version number to window title, added more measurement output
+*
 *  Revision 1.50  2009/09/21 16:27:58  jennings
 *  Added user interface to log file path
 *

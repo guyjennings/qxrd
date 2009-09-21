@@ -3,7 +3,7 @@ CONFIG += qt
 include("qxrd.version.pri")
 QT += network \
     script
-QMAKE_CXXFLAGS += -g
+QMAKE_CXXFLAGS += -g -DVERSION=\"\\\"$$VERSION\\\"\"
 QMAKE_CFLAGS += -g
 QMAKE_LFLAGS += -g
 vectorize { 

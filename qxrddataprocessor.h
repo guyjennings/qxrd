@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.36 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.37 2009/09/21 19:40:46 jennings Exp $
 *
 *******************************************************************/
 
@@ -151,6 +151,7 @@ public slots:
   void measurePolygon(QwtArray<QwtDoublePoint> poly);
   void slicePolygon(QwtArray<QwtDoublePoint> poly);
   void printMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
+  void summarizeMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
 
   void loadData(QString name);
   void saveData(QString name, int canOverwrite=NoOverwrite);
@@ -291,7 +292,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.36 2009/09/20 21:18:53 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.37 2009/09/21 19:40:46 jennings Exp $");
 };
 
 #endif
@@ -299,6 +300,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.37  2009/09/21 19:40:46  jennings
+*  Added version number to window title, added more measurement output
+*
 *  Revision 1.36  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.

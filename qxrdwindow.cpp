@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.95 2009/09/21 18:49:49 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.96 2009/09/21 19:40:46 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,9 +51,11 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.95 2009/09/21 18:49:49 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.96 2009/09/21 19:40:46 jennings Exp $")
 {
   setupUi(this);
+
+  setWindowTitle(windowTitle()+" - v"+VERSION);
 
   m_CenterFinderDialog = new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder());
   m_CenteringDockWidget -> setWidget(m_CenterFinderDialog);
@@ -784,6 +786,9 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.96  2009/09/21 19:40:46  jennings
+*  Added version number to window title, added more measurement output
+*
 *  Revision 1.95  2009/09/21 18:49:49  jennings
 *  Display msecs in log file timestamps
 *
