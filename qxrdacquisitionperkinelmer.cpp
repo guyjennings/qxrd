@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.35 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.36 2009/09/21 18:12:55 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_HeaderID(-1),
     m_CameraType(-1),
     m_CameraModel(""),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.35 2009/09/20 21:18:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.36 2009/09/21 18:12:55 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -254,7 +254,7 @@ void QxrdAcquisitionPerkinElmer::allocateMemoryForAcquisition()
 
   if (get_ExposuresToSum() == 1) {
     int nMaxFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(quint16));
-    int nFrames = qMin(get_FilesInAcquiredSequence()+get_PreTriggerFiles()+10, nMaxFrames);
+    int nFrames = qMin(get_FilesInAcquiredSequence()+get_PreTriggerFiles(), nMaxFrames);
 
     emit printMessage(tr("Preallocating %1 %2 x %3 16 bit images").arg(nFrames).arg(get_NCols()).arg(get_NRows()));
 
@@ -270,7 +270,7 @@ void QxrdAcquisitionPerkinElmer::allocateMemoryForAcquisition()
     emit printMessage(tr("Preallocated %1 %2 x %3 16 bit images").arg(nFrames).arg(get_NCols()).arg(get_NRows()));
   } else {
     int nMaxFrames = get_TotalBufferSize()/(get_NCols()*get_NRows()*sizeof(qint32));
-    int nFrames = qMin(get_FilesInAcquiredSequence()+get_PreTriggerFiles()+10, nMaxFrames);
+    int nFrames = qMin(get_FilesInAcquiredSequence()+get_PreTriggerFiles(), nMaxFrames);
 
     emit printMessage(tr("Preallocating %1 %2 x %3 32 bit images").arg(nFrames).arg(get_NCols()).arg(get_NRows()));
 
@@ -530,6 +530,11 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_AcquiredInt16Data -> set_VBinning(1);
       m_AcquiredInt16Data -> set_CameraGain(get_CameraGain());
       m_AcquiredInt16Data -> set_DataType(QxrdInt16ImageData::Raw16Data);
+      m_AcquiredInt16Data -> set_Triggered(get_Trigger());
+      m_AcquiredInt16Data -> set_UserComment1(get_UserComment1());
+      m_AcquiredInt16Data -> set_UserComment2(get_UserComment2());
+      m_AcquiredInt16Data -> set_UserComment3(get_UserComment3());
+      m_AcquiredInt16Data -> set_UserComment4(get_UserComment4());
 
       if (get_AcquireDark()) {
         m_AcquiredInt16Data -> set_ImageNumber(-1);
@@ -580,6 +585,11 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_AcquiredInt32Data -> set_VBinning(1);
       m_AcquiredInt32Data -> set_CameraGain(get_CameraGain());
       m_AcquiredInt32Data -> set_DataType(QxrdInt32ImageData::Raw32Data);
+      m_AcquiredInt32Data -> set_Triggered(get_Trigger());
+      m_AcquiredInt32Data -> set_UserComment1(get_UserComment1());
+      m_AcquiredInt32Data -> set_UserComment2(get_UserComment2());
+      m_AcquiredInt32Data -> set_UserComment3(get_UserComment3());
+      m_AcquiredInt32Data -> set_UserComment4(get_UserComment4());
 
       if (get_AcquireDark()) {
         m_AcquiredInt32Data -> set_ImageNumber(-1);
@@ -805,6 +815,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.36  2009/09/21 18:12:55  jennings
+*  Added 'triggered', 'usercomment{1-4}' properties to data
+*
 *  Revision 1.35  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.

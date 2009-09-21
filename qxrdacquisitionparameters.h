@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.13 2009/09/04 12:45:38 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.14 2009/09/21 18:12:55 jennings Exp $
 *
 *******************************************************************/
 
@@ -101,13 +101,25 @@ public:
   Q_PROPERTY(double     raw32SaveTime    READ get_Raw32SaveTime WRITE set_Raw32SaveTime);
   QCEP_DOUBLE_PROPERTY(Raw32SaveTime);
 
+  Q_PROPERTY(QString userComment1 READ get_UserComment1 WRITE set_UserComment1);
+  QCEP_STRING_PROPERTY(UserComment1);
+
+  Q_PROPERTY(QString userComment2 READ get_UserComment2 WRITE set_UserComment2);
+  QCEP_STRING_PROPERTY(UserComment2);
+
+  Q_PROPERTY(QString userComment3 READ get_UserComment3 WRITE set_UserComment3);
+  QCEP_STRING_PROPERTY(UserComment3);
+
+  Q_PROPERTY(QString userComment4 READ get_UserComment4 WRITE set_UserComment4);
+  QCEP_STRING_PROPERTY(UserComment4);
+
 //  Q_PROPERTY(int     cameraMode      READ cameraMode WRITE setCameraMode);
 //  Q_PROPERTY(int     frameSyncMode   READ frameSyncMode WRITE setFrameSyncMode);
 //  Q_PROPERTY(int     timerSync       READ timerSync WRITE setTimerSync);
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.13 2009/09/04 12:45:38 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.14 2009/09/21 18:12:55 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -115,6 +127,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.14  2009/09/21 18:12:55  jennings
+*  Added 'triggered', 'usercomment{1-4}' properties to data
+*
 *  Revision 1.13  2009/09/04 12:45:38  jennings
 *  Added binning mode parameter
 *

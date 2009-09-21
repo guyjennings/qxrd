@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.12 2009/09/04 12:45:38 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.13 2009/09/21 18:12:54 jennings Exp $
 *
 *******************************************************************/
 
@@ -36,8 +36,12 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_TotalBufferSize(this,"totalBufferSize", 1500000000),
     m_Raw16SaveTime(this,"raw16SaveTime", 0.1),
     m_Raw32SaveTime(this,"raw32SaveTime", 0.2),
+    m_UserComment1(this,"userComment1",""),
+    m_UserComment2(this,"userComment2",""),
+    m_UserComment3(this,"userComment3",""),
+    m_UserComment4(this,"userComment4",""),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.12 2009/09/04 12:45:38 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.13 2009/09/21 18:12:54 jennings Exp $")
 {
 }
 
@@ -58,6 +62,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.13  2009/09/21 18:12:54  jennings
+*  Added 'triggered', 'usercomment{1-4}' properties to data
+*
 *  Revision 1.12  2009/09/04 12:45:38  jennings
 *  Added binning mode parameter
 *
