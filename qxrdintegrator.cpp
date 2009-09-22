@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.12 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.13 2009/09/22 18:19:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessor *proc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_DataProcessor(proc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.12 2009/09/20 21:18:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.13 2009/09/22 18:19:00 jennings Exp $")
 {
 }
 
@@ -110,7 +110,7 @@ void QxrdIntegrator::integrate(double cx, double cy, int oversample, int normali
     }
   }
 
-  emit newIntegrationAvailable(x,y);
+  emit newIntegrationAvailable(image->get_Title(), x,y);
 
   emit printMessage(tr("Integration took %1 msec").arg(tic.restart()));
 }
@@ -191,7 +191,7 @@ void QxrdIntegrator::integrate2(double cx, double cy, int oversample, int normal
     }
   }
 
-  emit newIntegrationAvailable(x,y);
+  emit newIntegrationAvailable(image -> get_Title(), x,y);
 
   emit printMessage(tr("Integration took %1 msec").arg(tic.restart()));
 }
@@ -440,6 +440,8 @@ void QxrdIntegrator::tableIntegrateMap(int thread, int nThreads, double cx, doub
 
 void QxrdIntegrator::tableIntegrate(int nThreads, double cx, double cy, int oversample, int normalize)
 {
+  QxrdDoubleImageData *image = m_DataProcessor -> data();
+
   QTime tic;
   tic.start();
 
@@ -496,14 +498,78 @@ void QxrdIntegrator::tableIntegrate(int nThreads, double cx, double cy, int over
     }
   }
 
-  emit newIntegrationAvailable(x,y);
+  emit newIntegrationAvailable(image->get_Title(),x,y);
 
   emit printMessage(tr("Table-based integration took %1 msec with %2 threads").arg(tic.restart()).arg(nThreads));
 }
 
+void QxrdIntegrator::sliceLine(double x0, double y0, double x1, double y1, double width)
+{
+  QwtArray<QwtDoublePoint> poly;
+  poly.append(QwtDoublePoint(x0,y0));
+  poly.append(QwtDoublePoint(x1,y1));
+
+  slicePolygon(poly, width);
+}
+
+void QxrdIntegrator::slicePolygon(QwtArray<QwtDoublePoint> poly, double width)
+{
+  QxrdDoubleImageData *image = m_DataProcessor -> data();
+  double length = 0;
+
+  if (poly.size() >= 2) {
+    QwtDoublePoint p0 = poly[0];
+
+    for (int i=1; i<poly.size(); i++) {
+      QwtDoublePoint p1 = poly[i];
+      double dx = p1.x() - p0.x();
+      double dy = p1.y() - p0.y();
+      length += sqrt(dx*dx + dy*dy);
+      p0=p1;
+    }
+
+    p0 = poly[0];
+    double r = 0;
+    double r0 = 0;
+
+    QVector<double> xs,ys;
+
+    for (int i=1; i<poly.size(); i++) {
+      QwtDoublePoint p1 = poly[i];
+      double dx = p1.x() - p0.x();
+      double dy = p1.y() - p0.y();
+      double len = sqrt(dx*dx + dy*dy);
+
+      if (len > 0) {
+        for (; r<len; r+=1) {
+          double x = p0.x() + r*dx/len;
+          double y = p0.y() + r*dy/len;
+
+          xs.append(r+r0);
+          ys.append(image->value((int) x, (int) y));
+        }
+      }
+
+      p0 = p1;
+      r0 += len;
+      r  -= len;
+    }
+
+    emit newIntegrationAvailable(image->get_Title(),xs,ys);
+  }
+}
+
+//void QxrdIntegrator::appendToGraph()
+//{
+//}
+//
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.13  2009/09/22 18:19:00  jennings
+*  Added slicing routines
+*  Set title for traces in avg data graph
+*
 *  Revision 1.12  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.

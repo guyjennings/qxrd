@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.97 2009/09/21 19:51:11 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.98 2009/09/22 18:19:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AcquiringDark(false),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.97 2009/09/21 19:51:11 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.98 2009/09/22 18:19:00 jennings Exp $")
 {
   setupUi(this);
 
@@ -290,8 +290,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_DataProcessor -> centerFinder() -> prop_CenterY(), SIGNAL(changedValue(double)),
           m_CenterFinderPlot, SLOT(onCenterYChanged(double)));
 
-  connect(m_DataProcessor -> integrator(), SIGNAL(newIntegrationAvailable(QVector<double>, QVector<double>)),
-          m_IntegratorPlot, SLOT(onNewIntegrationAvailable(QVector<double>,QVector<double>)));
+  connect(m_DataProcessor -> integrator(), SIGNAL(newIntegrationAvailable(QString,QVector<double>, QVector<double>)),
+          m_IntegratorPlot, SLOT(onNewIntegrationAvailable(QString,QVector<double>,QVector<double>)));
 
   m_WindowsMenu -> addAction(m_AcquireDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CorrectionDockWidget -> toggleViewAction());
@@ -789,6 +789,10 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.98  2009/09/22 18:19:00  jennings
+*  Added slicing routines
+*  Set title for traces in avg data graph
+*
 *  Revision 1.97  2009/09/21 19:51:11  jennings
 *  Added call to statusMessage to criticalMessage and call printMessage from statusMessage
 *

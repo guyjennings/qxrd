@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.51 2009/09/21 19:40:46 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.52 2009/09/22 18:19:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -68,7 +68,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.51 2009/09/21 19:40:46 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.52 2009/09/22 18:19:00 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -1434,6 +1434,7 @@ void QxrdDataProcessor::slicePolygon(QVector<QwtDoublePoint> poly)
 {
   QMutexLocker lock(&m_Mutex);
 
+  m_Integrator -> slicePolygon(poly,0);
 }
 
 QxrdDoubleImageData *QxrdDataProcessor::data() const
@@ -1720,6 +1721,10 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.52  2009/09/22 18:19:00  jennings
+*  Added slicing routines
+*  Set title for traces in avg data graph
+*
 *  Revision 1.51  2009/09/21 19:40:46  jennings
 *  Added version number to window title, added more measurement output
 *

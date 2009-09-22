@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.h,v 1.11 2009/08/12 19:44:59 jennings Exp $
+*  $Id: qxrdintegratorplot.h,v 1.12 2009/09/22 18:19:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -25,7 +25,7 @@ public:
   void setDataProcessor(QxrdDataProcessor *proc);
 
 public slots:
-  void onNewIntegrationAvailable(QVector<double> x, QVector<double> y);
+  void onNewIntegrationAvailable(QString title, QVector<double> x, QVector<double> y);
   void clearGraph();
 
 private:
@@ -33,7 +33,7 @@ private:
   QxrdIntegrator      *m_Integrator;
   int                  m_PlotIndex;
 
-  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.11 2009/08/12 19:44:59 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegratorplot.h,v 1.12 2009/09/22 18:19:00 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATORPLOT_H
@@ -41,6 +41,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.h,v $
+*  Revision 1.12  2009/09/22 18:19:00  jennings
+*  Added slicing routines
+*  Set title for traces in avg data graph
+*
 *  Revision 1.11  2009/08/12 19:44:59  jennings
 *  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
 *  takes its tracker text from a QxrdPlot virtual member function

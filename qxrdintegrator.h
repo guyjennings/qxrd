@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.h,v 1.9 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrdintegrator.h,v 1.10 2009/09/22 18:19:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,6 +12,7 @@
 #include <QObject>
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
+#include <qwt_double_rect.h>
 
 class QxrdDataProcessor;
 //class QxrdImageData;
@@ -33,7 +34,7 @@ public:
   void writeSettings(QxrdSettings *settings, QString section);
 
 signals:
-  void newIntegrationAvailable(QVector<double> x, QVector<double> y);
+  void newIntegrationAvailable(QString title, QVector<double> x, QVector<double> y);
   void printMessage(QString msg);
   void statusMessage(QString msg);
   void criticalMessage(QString msg);
@@ -45,6 +46,11 @@ public slots:
   void integrate2(double cx, double cy, int oversample, int normalize);
   void tableIntegrate(int nthreads, double cx, double cy, int oversample, int normalize);
 
+  void sliceLine(double x0, double y0, double x1, double y1, double width);
+  void slicePolygon(QwtArray<QwtDoublePoint> poly, double width);
+
+//  void appendToGraph();
+//
 private:
   void parallelIntegrateMap(int thread, int nthreads, double cx, double cy, int oversample/*, int normalize*/);
   void tableIntegrateSetup(int nthreads, double cx, double cy, int oversample, int normalize);
@@ -59,7 +65,7 @@ private:
   QVector<double>           m_OutputSums;
   int                       m_OutputStride;
 
-  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.9 2009/09/20 21:18:53 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.10 2009/09/22 18:19:00 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATOR_H
@@ -67,6 +73,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegrator.h,v $
+*  Revision 1.10  2009/09/22 18:19:00  jennings
+*  Added slicing routines
+*  Set title for traces in avg data graph
+*
 *  Revision 1.9  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
