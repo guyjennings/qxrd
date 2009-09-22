@@ -590,6 +590,12 @@
                <property name="toolTip">
                 <string>Output messages during program execution appear here</string>
                </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="acceptRichText">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
             </layout>

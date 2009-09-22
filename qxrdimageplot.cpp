@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.39 2009/09/22 19:45:33 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.40 2009/09/22 21:34:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.39 2009/09/22 19:45:33 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.40 2009/09/22 21:34:03 jennings Exp $")
 {
   m_Zoomer -> setEnabled(true);
 
@@ -567,12 +567,12 @@ void QxrdImagePlot::enableMaskPolygons()
 
 void QxrdImagePlot::replot()
 {
-  QTime tic;
-  tic.start();
+//  QTime tic;
+//  tic.start();
 
   QxrdPlot::replot();
 
-  emit printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
+//  emit printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
 }
 
 QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
@@ -587,6 +587,9 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.40  2009/09/22 21:34:03  jennings
+*  Made message pane read-only
+*
 *  Revision 1.39  2009/09/22 19:45:33  jennings
 *  Small changes to range calculating code for image data
 *
