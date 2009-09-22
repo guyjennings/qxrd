@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.39 2009/09/22 20:37:23 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.40 2009/09/22 21:42:12 jennings Exp $
 *
 *******************************************************************/
 
@@ -55,7 +55,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CameraModel(""),
     m_CurrentMode(-1),
     m_CurrentGain(-1),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.39 2009/09/22 20:37:23 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.40 2009/09/22 21:42:12 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -570,6 +570,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
                          .filePath(get_FilePattern()+tr("-%1.tif")
                          .arg(get_FileIndex(),5,10,QChar('0')));
               img -> set_FileName(fileName);
+              img -> set_Title(QFileInfo(fileName).fileName());
 
               m_DataProcessor -> incrementAcquiredCount();
               emit acquiredInt16ImageAvailable(img);
@@ -580,6 +581,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
                        .filePath(get_FilePattern()+tr("-%1.tif")
                        .arg(get_FileIndex(),5,10,QChar('0')));
             m_AcquiredInt16Data -> set_FileName(fileName);
+            m_AcquiredInt16Data -> set_Title(QFileInfo(fileName).fileName());
             m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile++);
             acquiredInt16Image();
           } else {
@@ -626,6 +628,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
                          .filePath(get_FilePattern()+tr("-%1.tif")
                          .arg(get_FileIndex(),5,10,QChar('0')));
               img -> set_FileName(fileName);
+              img -> set_Title(QFileInfo(fileName).fileName());
 
               m_DataProcessor -> incrementAcquiredCount();
               emit acquiredInt32ImageAvailable(img);
@@ -636,6 +639,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
                        .filePath(get_FilePattern()+tr("-%1.tif")
                        .arg(get_FileIndex(),5,10,QChar('0')));
             m_AcquiredInt32Data -> set_FileName(fileName);
+            m_AcquiredInt32Data -> set_Title(QFileInfo(fileName).fileName());
             m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile++);
             acquiredInt32Image();
           } else {
@@ -829,6 +833,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.40  2009/09/22 21:42:12  jennings
+*  Set image title as well a s filename property during acquisition
+*
 *  Revision 1.39  2009/09/22 20:37:23  jennings
 *  Dynamic properties attached to the acquisition object are propagated through to saved images
 *
