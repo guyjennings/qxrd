@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.13 2009/09/21 18:12:54 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.14 2009/09/22 13:48:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -41,8 +41,17 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_UserComment3(this,"userComment3",""),
     m_UserComment4(this,"userComment4",""),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.13 2009/09/21 18:12:54 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.14 2009/09/22 13:48:17 jennings Exp $")
 {
+}
+
+void QxrdAcquisitionParameters::dynamicProperties()
+{
+  QByteArray name;
+
+  foreach(name, dynamicPropertyNames()) {
+    emit printMessage(tr("acquisition.%1\n").arg(name.data()));
+  }
 }
 
 void QxrdAcquisitionParameters::writeSettings(QxrdSettings *settings, QString section)
@@ -62,6 +71,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.14  2009/09/22 13:48:17  jennings
+*  Some support for dynamic properties during acquisition
+*
 *  Revision 1.13  2009/09/21 18:12:54  jennings
 *  Added 'triggered', 'usercomment{1-4}' properties to data
 *

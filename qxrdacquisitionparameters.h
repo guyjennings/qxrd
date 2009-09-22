@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.14 2009/09/21 18:12:55 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.15 2009/09/22 13:48:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,6 +27,9 @@ signals:
   void printMessage(QString msg);
   void statusMessage(QString msg);
   void criticalMessage(QString msg);
+
+public slots:
+  void dynamicProperties();
 
 public:
   void readSettings(QxrdSettings *settings, QString section);
@@ -119,7 +122,7 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.14 2009/09/21 18:12:55 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.15 2009/09/22 13:48:17 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -127,6 +130,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.15  2009/09/22 13:48:17  jennings
+*  Some support for dynamic properties during acquisition
+*
 *  Revision 1.14  2009/09/21 18:12:55  jennings
 *  Added 'triggered', 'usercomment{1-4}' properties to data
 *

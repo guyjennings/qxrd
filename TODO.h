@@ -286,4 +286,16 @@ Color code in output.
 //
 -------------------------------------------------------
 
+BLOCKER
+Copy acquisition dynamic properties into acquired images
+Copy processor dynamic properties into processed images
+
+-------------------------------------------------------
+
+BLOCKER
+Provide a means of saving raw data files in separate
+sub-directories
+
+-------------------------------------------------------
+
 #endif // TODO_H
