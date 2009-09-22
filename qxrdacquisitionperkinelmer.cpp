@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.38 2009/09/21 19:51:11 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.39 2009/09/22 20:37:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -55,7 +55,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CameraModel(""),
     m_CurrentMode(-1),
     m_CurrentGain(-1),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.38 2009/09/21 19:51:11 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.39 2009/09/22 20:37:23 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -553,6 +553,8 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_AcquiredInt16Data -> set_UserComment3(get_UserComment3());
       m_AcquiredInt16Data -> set_UserComment4(get_UserComment4());
 
+      copyDynamicProperties(m_AcquiredInt16Data);
+
       if (get_AcquireDark()) {
         m_AcquiredInt16Data -> set_ImageNumber(-1);
         acquiredInt16Image();
@@ -606,6 +608,8 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_AcquiredInt32Data -> set_UserComment2(get_UserComment2());
       m_AcquiredInt32Data -> set_UserComment3(get_UserComment3());
       m_AcquiredInt32Data -> set_UserComment4(get_UserComment4());
+
+      copyDynamicProperties(m_AcquiredInt32Data);
 
       if (get_AcquireDark()) {
         m_AcquiredInt32Data -> set_ImageNumber(-1);
@@ -825,6 +829,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.39  2009/09/22 20:37:23  jennings
+*  Dynamic properties attached to the acquisition object are propagated through to saved images
+*
 *  Revision 1.38  2009/09/21 19:51:11  jennings
 *  Added call to statusMessage to criticalMessage and call printMessage from statusMessage
 *

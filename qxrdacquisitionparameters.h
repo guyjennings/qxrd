@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.15 2009/09/22 13:48:17 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.16 2009/09/22 20:37:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -34,6 +34,8 @@ public slots:
 public:
   void readSettings(QxrdSettings *settings, QString section);
   void writeSettings(QxrdSettings *settings, QString section);
+
+  void copyDynamicProperties(QObject *dest);
 
   Q_PROPERTY(int    debug            READ get_Debug WRITE set_Debug);
   QCEP_INTEGER_PROPERTY(Debug);
@@ -122,7 +124,7 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.15 2009/09/22 13:48:17 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.16 2009/09/22 20:37:23 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -130,6 +132,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.16  2009/09/22 20:37:23  jennings
+*  Dynamic properties attached to the acquisition object are propagated through to saved images
+*
 *  Revision 1.15  2009/09/22 13:48:17  jennings
 *  Some support for dynamic properties during acquisition
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionsimulated.cpp,v 1.16 2009/09/07 21:44:00 jennings Exp $
+*  $Id: qxrdacquisitionsimulated.cpp,v 1.17 2009/09/22 20:37:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@
 
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc)
   : QxrdAcquisitionOperations(proc),
-    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.16 2009/09/07 21:44:00 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionsimulated.cpp,v 1.17 2009/09/22 20:37:23 jennings Exp $")
 {
 }
 
@@ -162,6 +162,18 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
     acquiredData -> set_ReadoutMode(get_ReadoutMode());
     acquiredData -> set_ExposureTime(get_ExposureTime());
     acquiredData -> set_SummedExposures(get_ExposuresToSum());
+    acquiredData -> set_DateTime(QDateTime::currentDateTime());
+    acquiredData -> set_HBinning(1);
+    acquiredData -> set_VBinning(1);
+    acquiredData -> set_CameraGain(get_CameraGain());
+    acquiredData -> set_DataType(QxrdInt32ImageData::Raw32Data);
+    acquiredData -> set_Triggered(get_Trigger());
+    acquiredData -> set_UserComment1(get_UserComment1());
+    acquiredData -> set_UserComment2(get_UserComment2());
+    acquiredData -> set_UserComment3(get_UserComment3());
+    acquiredData -> set_UserComment4(get_UserComment4());
+
+    copyDynamicProperties(acquiredData);
 
     if (get_AcquireDark()) {
       acquiredData -> set_ImageNumber(-1);
@@ -185,6 +197,9 @@ void QxrdAcquisitionSimulated::simulatedAcquisition(int isDark)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionsimulated.cpp,v $
+*  Revision 1.17  2009/09/22 20:37:23  jennings
+*  Dynamic properties attached to the acquisition object are propagated through to saved images
+*
 *  Revision 1.16  2009/09/07 21:44:00  jennings
 *  imulated acquisition
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.14 2009/09/22 13:48:17 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.15 2009/09/22 20:37:23 jennings Exp $
 *
 *******************************************************************/
 
@@ -41,7 +41,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_UserComment3(this,"userComment3",""),
     m_UserComment4(this,"userComment4",""),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.14 2009/09/22 13:48:17 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.15 2009/09/22 20:37:23 jennings Exp $")
 {
 }
 
@@ -51,6 +51,17 @@ void QxrdAcquisitionParameters::dynamicProperties()
 
   foreach(name, dynamicPropertyNames()) {
     emit printMessage(tr("acquisition.%1\n").arg(name.data()));
+  }
+}
+
+void QxrdAcquisitionParameters::copyDynamicProperties(QObject *dest)
+{
+  if (dest) {
+    QByteArray name;
+
+    foreach(name, dynamicPropertyNames()) {
+      dest -> setProperty(name.data(), property(name.data()));
+    }
   }
 }
 
@@ -71,6 +82,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.15  2009/09/22 20:37:23  jennings
+*  Dynamic properties attached to the acquisition object are propagated through to saved images
+*
 *  Revision 1.14  2009/09/22 13:48:17  jennings
 *  Some support for dynamic properties during acquisition
 *
