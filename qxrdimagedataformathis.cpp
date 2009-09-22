@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimagedataformathis.cpp,v 1.8 2009/09/10 13:53:23 jennings Exp $
+*  $Id: qxrdimagedataformathis.cpp,v 1.9 2009/09/22 20:41:07 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,7 +12,7 @@ static QxrdImageDataFormatHis fmt;
 
 QxrdImageDataFormatHis::QxrdImageDataFormatHis(QString name)
   : QcepImageDataFormat<double>(name),
-    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.8 2009/09/10 13:53:23 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.9 2009/09/22 20:41:07 jennings Exp $")
 {
 }
 
@@ -118,12 +118,11 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
       }
     }
 
-    img -> set_FileName(path);
-    img -> set_Title(QFileInfo(path).fileName());
-
     fclose(file);
 
     img -> calculateRange();
+
+    img -> setDefaultFileName(path);
   }
 
   return NULL;
@@ -138,6 +137,9 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::saveFile(QString /*path*/, QcepI
 /******************************************************************
 *
 *  $Log: qxrdimagedataformathis.cpp,v $
+*  Revision 1.9  2009/09/22 20:41:07  jennings
+*  Set filename and title properties when loading data files
+*
 *  Revision 1.8  2009/09/10 13:53:23  jennings
 *  Removed possibilitity of fclose(NULL)
 *
