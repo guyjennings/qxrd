@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskdata.cpp,v 1.4 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrdmaskdata.cpp,v 1.5 2009/09/22 19:45:33 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,8 +8,9 @@
 
 QxrdMaskData::QxrdMaskData(int width, int height)
   : QxrdImageData<bool>(width, height),
-    SOURCE_IDENT("$Id: qxrdmaskdata.cpp,v 1.4 2009/09/20 21:18:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdmaskdata.cpp,v 1.5 2009/09/22 19:45:33 jennings Exp $")
 {
+  fill(1);
 }
 
 bool *QxrdMaskData::mask()
@@ -110,6 +111,9 @@ void QxrdMaskData::maskCircle(double cx, double cy, double r, bool val)
 /******************************************************************
 *
 *  $Log: qxrdmaskdata.cpp,v $
+*  Revision 1.5  2009/09/22 19:45:33  jennings
+*  Small changes to range calculating code for image data
+*
 *  Revision 1.4  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.

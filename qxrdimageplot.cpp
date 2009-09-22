@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.38 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.39 2009/09/22 19:45:33 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.38 2009/09/20 21:18:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.39 2009/09/22 19:45:33 jennings Exp $")
 {
   m_Zoomer -> setEnabled(true);
 
@@ -411,12 +411,12 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
 //  rightAxis -> setColorMap(QwtDoubleInterval(0,1),
 //                           m_Spectrogram->colorMap());
 
-   enableAxis(QwtPlot::yRight);
-
-  QwtDoubleInterval range = m_Raster.range();
-
-  setAxisScale(QwtPlot::yRight, m_Raster.minValue(), m_Raster.maxValue());
-
+//   enableAxis(QwtPlot::yRight);
+//
+//  QwtDoubleInterval range = m_Raster.range();
+//
+//  setAxisScale(QwtPlot::yRight, m_Raster.minValue(), m_Raster.maxValue());
+//
 //   setDisplayedRange(0,100);
 
   recalculateDisplayedRange();
@@ -587,6 +587,9 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.39  2009/09/22 19:45:33  jennings
+*  Small changes to range calculating code for image data
+*
 *  Revision 1.38  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
