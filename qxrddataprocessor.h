@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.37 2009/09/21 19:40:46 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.38 2009/09/23 21:16:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -276,8 +276,8 @@ private:
   QxrdDoubleImageQueue      m_FreeImages;
 //  QxrdImageQueue            m_ProcessedImages;
 //  QxrdImageQueue            m_DarkImages;
-  QxrdInt16ImageQueue       m_AcquiredInt16Images;
-  QxrdInt32ImageQueue       m_AcquiredInt32Images;
+//  QxrdInt16ImageQueue       m_AcquiredInt16Images;
+//  QxrdInt32ImageQueue       m_AcquiredInt32Images;
   QxrdDoubleImageData      *m_Data;
   QxrdDoubleImageData      *m_DarkFrame;
   QxrdDoubleImageData      *m_BadPixels;
@@ -292,7 +292,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.37 2009/09/21 19:40:46 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.38 2009/09/23 21:16:26 jennings Exp $");
 };
 
 #endif
@@ -300,6 +300,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.38  2009/09/23 21:16:26  jennings
+*  Removed acquiredInt{16,32}Image queues from data processor
+*
 *  Revision 1.37  2009/09/21 19:40:46  jennings
 *  Added version number to window title, added more measurement output
 *
