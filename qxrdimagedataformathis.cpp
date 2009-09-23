@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimagedataformathis.cpp,v 1.9 2009/09/22 20:41:07 jennings Exp $
+*  $Id: qxrdimagedataformathis.cpp,v 1.10 2009/09/23 21:16:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,7 +12,7 @@ static QxrdImageDataFormatHis fmt;
 
 QxrdImageDataFormatHis::QxrdImageDataFormatHis(QString name)
   : QcepImageDataFormat<double>(name),
-    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.9 2009/09/22 20:41:07 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.10 2009/09/23 21:16:58 jennings Exp $")
 {
 }
 
@@ -123,6 +123,8 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
     img -> calculateRange();
 
     img -> setDefaultFileName(path);
+
+    return this;
   }
 
   return NULL;
@@ -137,6 +139,9 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::saveFile(QString /*path*/, QcepI
 /******************************************************************
 *
 *  $Log: qxrdimagedataformathis.cpp,v $
+*  Revision 1.10  2009/09/23 21:16:58  jennings
+*  .his files can be loaded again
+*
 *  Revision 1.9  2009/09/22 20:41:07  jennings
 *  Set filename and title properties when loading data files
 *
