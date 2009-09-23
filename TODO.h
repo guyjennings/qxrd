@@ -284,12 +284,13 @@ Color code in output.
 //
 //Added user interface to log file choosing
 //
--------------------------------------------------------
-
-BLOCKER
-Copy acquisition dynamic properties into acquired images
-Copy processor dynamic properties into processed images
-
+//-------------------------------------------------------
+//
+//BLOCKER - DEFERRED
+//Copy acquisition dynamic properties into acquired images
+//Copy processor dynamic properties into processed images
+//Doesn't work at present because setProperty is not thread-safe
+//
 -------------------------------------------------------
 
 BLOCKER

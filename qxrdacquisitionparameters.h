@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.16 2009/09/22 20:37:23 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.17 2009/09/23 19:00:36 jennings Exp $
 *
 *******************************************************************/
 
@@ -30,6 +30,8 @@ signals:
 
 public slots:
   void dynamicProperties();
+//  void setDynamicProperty(QString name, QVariant value);
+//  QVariant dynamicProperty(QString name);
 
 public:
   void readSettings(QxrdSettings *settings, QString section);
@@ -124,7 +126,7 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.16 2009/09/22 20:37:23 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.17 2009/09/23 19:00:36 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -132,6 +134,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.17  2009/09/23 19:00:36  jennings
+*  Removed dynamic property support - it's not thread-safe and doesn't work
+*  under windows
+*
 *  Revision 1.16  2009/09/22 20:37:23  jennings
 *  Dynamic properties attached to the acquisition object are propagated through to saved images
 *

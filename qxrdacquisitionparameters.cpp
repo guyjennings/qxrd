@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.15 2009/09/22 20:37:23 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.16 2009/09/23 19:00:36 jennings Exp $
 *
 *******************************************************************/
 
@@ -10,6 +10,7 @@
 #include "qxrdsettings.h"
 #include <QMetaProperty>
 #include <QStringList>
+#include <QThread>
 
 QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
   : QObject(),
@@ -41,7 +42,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_UserComment3(this,"userComment3",""),
     m_UserComment4(this,"userComment4",""),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.15 2009/09/22 20:37:23 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.16 2009/09/23 19:00:36 jennings Exp $")
 {
 }
 
@@ -79,9 +80,28 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
+//void QxrdAcquisitionParameters::setDynamicProperty(QString name, QVariant value)
+//{
+//  if (QThread::currentThread() == thread()) {
+//    setProperty(qPrintable(name), value);
+//  } else {
+//    QTimer::singleShot
+//    QMetaObject::invokeMethod(this, "setDynamicProperty", Qt::QueuedConnection, Q_ARG(QString,name), Q_ARG(QVariant,value));
+//  }
+//}
+//
+//QVariant QxrdAcquisitionParameters::dynamicProperty(QString name)
+//{
+//  return property(qPrintable(name));
+//}
+//
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.16  2009/09/23 19:00:36  jennings
+*  Removed dynamic property support - it's not thread-safe and doesn't work
+*  under windows
+*
 *  Revision 1.15  2009/09/22 20:37:23  jennings
 *  Dynamic properties attached to the acquisition object are propagated through to saved images
 *
