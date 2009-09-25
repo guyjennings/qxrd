@@ -299,4 +299,10 @@ sub-directories
 
 -------------------------------------------------------
 
+BLOCKER
+the ProcessedCount variable should not depend on the display progress, only
+on the Processor progress.
+
+-------------------------------------------------------
+
 #endif // TODO_H

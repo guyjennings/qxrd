@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.98 2009/09/22 18:19:00 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.99 2009/09/25 14:22:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -40,6 +40,7 @@
 
 QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProcessor *proc, QWidget *parent)
   : QMainWindow(parent),
+    m_Mutex(QMutex::Recursive),
     m_SettingsLoaded(false),
     m_Application(app),
     m_Acquisition(acq),
@@ -49,9 +50,14 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
+    m_NewDataMutex(QMutex::Recursive),
     m_Data(new QxrdDoubleImageData(2048,2048)),
-    m_SpareData(new QxrdDoubleImageData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.98 2009/09/22 18:19:00 jennings Exp $")
+    m_NewData(new QxrdDoubleImageData(2048,2048)),
+    m_NewDataAvailable(false),
+    m_NewMaskMutex(QMutex::Recursive),
+    m_Mask(new QxrdMaskData(2048,2048)),
+    m_NewMask(new QxrdMaskData(2048,2048)),
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.99 2009/09/25 14:22:16 jennings Exp $")
 {
   setupUi(this);
 
@@ -244,7 +250,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_Plot -> prop_MaintainAspectRatio() -> linkTo(Ui::QxrdWindow::m_MaintainAspectRatio);
 
   m_Plot -> setDataProcessor(m_DataProcessor);
-  m_CenterFinderPlot -> setDataProcessor(m_DataProcessor);
+  m_CenterFinderPlot -> setWindow(this);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
 //  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdDoubleImageData *)),
@@ -303,6 +309,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
 QxrdWindow::~QxrdWindow()
 {
+  delete m_Data;
+  delete m_NewData;
+  delete m_Mask;
+  delete m_NewMask;
 }
 
 void QxrdWindow::closeEvent ( QCloseEvent * event )
@@ -563,71 +573,87 @@ void QxrdWindow::clearStatusMessage()
   m_StatusMsg -> setText("");
 }
 
-QxrdDoubleImageData *QxrdWindow::newDataAvailable(QxrdDoubleImageData *image)
+void QxrdWindow::newDataAvailable(QxrdDoubleImageData *image)
 {
   QMutexLocker lock(&m_NewDataMutex);
-  QxrdDoubleImageData *res;
 
-  if (m_Plotting) {
-    emit printMessage("Already plotting...");
+  image -> copyImage(m_NewData);
 
-    res = m_SpareData;
-    m_SpareData = image;
+  m_NewDataAvailable += 1;
 
-    if (!m_SpareDataAvailable) {
-      QMetaObject::invokeMethod(this, "spareData", Qt::QueuedConnection);
-    }
+  QMetaObject::invokeMethod(this, "newData", Qt::QueuedConnection);
+}
 
-    m_SpareDataAvailable = true;
-  } else {
-    emit printMessage("Not already plotting...");
+void QxrdWindow::newMaskAvailable(QxrdMaskData *mask)
+{
+  QMutexLocker lock(&m_NewMaskMutex);
 
-    res = m_Data;
-    m_Data = image;
-    QMetaObject::invokeMethod(this, "newData", Qt::QueuedConnection);
-  }
+  mask -> copyMask(m_NewMask);
 
-  return res;
+  m_NewMaskAvailable += 1;
+
+  QMetaObject::invokeMethod(this, "newMask", Qt::QueuedConnection);
 }
 
 void QxrdWindow::newData()
 {
-  if (m_Plotting.testAndSetOrdered(0,1)) {
-    emit printMessage("QxrdWindow::newData called, not already plotting");
-    m_Plot -> onProcessedImageAvailable(m_Data);
+  QMutexLocker lock(&m_NewDataMutex);
+
+  if (m_NewDataAvailable) {
+    QMutexLocker lock(&m_Mutex);
+
+    QxrdDoubleImageData *tmp = m_Data;
+    m_Data = m_NewData;
+    m_NewData = tmp;
+    m_NewDataAvailable = 0;
+
+    m_Plot             -> onProcessedImageAvailable(m_Data);
     m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
-    m_Plotting = 0;
-    emit printMessage("plotting completed");
-  } else {
-    emit printMessage("QxrdWindow::newData called, but already plotting");
   }
 }
 
-void QxrdWindow::spareData()
+void QxrdWindow::newMask()
 {
-  bool canDo;
+  QMutexLocker lock(&m_NewMaskMutex);
 
-  {
-    QMutexLocker lock(&m_NewDataMutex);
+  if (m_NewMaskAvailable) {
+    QMutexLocker lock(&m_Mutex);
 
-    canDo = m_Plotting == 0;
+    QxrdMaskData *tmp = m_Mask;
+    m_Mask = m_NewMask;
+    m_NewMask = tmp;
+    m_NewMaskAvailable = 0;
 
-    if (canDo) {
-      emit printMessage("QxrdWindow swap data & spare");
-
-      QxrdDoubleImageData *tmp = m_Data;
-      m_Data = m_SpareData;
-      m_SpareData = tmp;
-    }
+    m_Plot             -> onProcessedImageAvailable(m_Data);
+    m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
   }
-
-  if (canDo) {
-    newData();
-  }
-
-  emit printMessage("QxrdWindow::spareData");
 }
 
+//void QxrdWindow::spareData()
+//{
+//  bool canDo;
+//
+//  {
+//    QMutexLocker lock(&m_NewDataMutex);
+//
+//    canDo = m_Plotting == 0;
+//
+//    if (canDo) {
+//      emit printMessage("QxrdWindow swap data & spare");
+//
+//      QxrdDoubleImageData *tmp = m_Data;
+//      m_Data = m_SpareData;
+//      m_SpareData = tmp;
+//    }
+//  }
+//
+//  if (canDo) {
+//    newData();
+//  }
+//
+//  emit printMessage("QxrdWindow::spareData");
+//}
+//
 void QxrdWindow::doSaveData()
 {
   QString theFile = QFileDialog::getSaveFileName(
@@ -786,9 +812,34 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
   m_ScriptEngine = engine;
 }
 
+QxrdDataProcessor *QxrdWindow::dataProcessor() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_DataProcessor;
+}
+
+QxrdDoubleImageData *QxrdWindow::data()
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Data;
+}
+
+QxrdMaskData *QxrdWindow::mask()
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Mask;
+}
+
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.99  2009/09/25 14:22:16  jennings
+*  Simplified double-buffering for plotted data - there is now a separate copy of data and mask
+*  in QxrdWindow
+*
 *  Revision 1.98  2009/09/22 18:19:00  jennings
 *  Added slicing routines
 *  Set title for traces in avg data graph

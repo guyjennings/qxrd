@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.52 2009/09/22 18:19:00 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.53 2009/09/25 14:22:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -68,7 +68,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.52 2009/09/22 18:19:00 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.53 2009/09/25 14:22:16 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -276,7 +276,7 @@ void QxrdDataProcessor::newData(QxrdDoubleImageData *image)
 
   incrementProcessedCount();
 
-  m_Data = m_Window -> newDataAvailable(m_Data);
+  m_Window -> newDataAvailable(m_Data);
 }
 
 void QxrdDataProcessor::newDarkImage(QxrdDoubleImageData *image)
@@ -367,6 +367,8 @@ void QxrdDataProcessor::newMask(QxrdMaskData *mask)
   }
 
   emit newMaskAvailable(m_Data, m_Mask);
+
+  m_Window -> newMaskAvailable(m_Mask);
 }
 
 void QxrdDataProcessor::loadDefaultImages()
@@ -1721,6 +1723,10 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.53  2009/09/25 14:22:16  jennings
+*  Simplified double-buffering for plotted data - there is now a separate copy of data and mask
+*  in QxrdWindow
+*
 *  Revision 1.52  2009/09/22 18:19:00  jennings
 *  Added slicing routines
 *  Set title for traces in avg data graph

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.59 2009/09/21 16:27:58 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.60 2009/09/25 14:22:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -89,7 +89,7 @@ signals:
 
 private slots:
   void newData();
-  void spareData();
+  void newMask();
 
 public:
   void readSettings(QxrdSettings *settings, QString section);
@@ -102,8 +102,13 @@ public:
 
   QxrdScriptEngine *scriptEngine() const;
   void setScriptEngine(QxrdScriptEngine *engine);
+  QxrdDataProcessor *dataProcessor() const;
 
-  QxrdDoubleImageData *newDataAvailable(QxrdDoubleImageData *img);
+  void newDataAvailable(QxrdDoubleImageData *img);
+  void newMaskAvailable(QxrdMaskData *img);
+
+  QxrdDoubleImageData *data();
+  QxrdMaskData *mask();
 
 //  QxrdDataProcessor *processor() const;
 
@@ -124,13 +129,21 @@ private:
   int                     m_Acquiring;
   int                     m_AcquiringDark;
   QTimer                  m_StatusTimer;
+
   mutable QMutex          m_NewDataMutex;
   QxrdDoubleImageData    *m_Data;
-  QxrdDoubleImageData    *m_SpareData;
-  QAtomicInt              m_Plotting;
-  QAtomicInt              m_SpareDataAvailable;
+  QxrdDoubleImageData    *m_NewData;
+  int                     m_NewDataAvailable;
 
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.59 2009/09/21 16:27:58 jennings Exp $");
+  mutable QMutex          m_NewMaskMutex;
+  QxrdMaskData           *m_Mask;
+  QxrdMaskData           *m_NewMask;
+  int                     m_NewMaskAvailable;
+
+//  QAtomicInt              m_Plotting;
+//  QAtomicInt              m_SpareDataAvailable;
+
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.60 2009/09/25 14:22:16 jennings Exp $");
 };
 
 #endif
@@ -138,6 +151,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.60  2009/09/25 14:22:16  jennings
+*  Simplified double-buffering for plotted data - there is now a separate copy of data and mask
+*  in QxrdWindow
+*
 *  Revision 1.59  2009/09/21 16:27:58  jennings
 *  Added user interface to log file path
 *

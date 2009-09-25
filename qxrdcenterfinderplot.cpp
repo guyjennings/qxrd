@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.cpp,v 1.14 2009/09/07 22:03:46 jennings Exp $
+*  $Id: qxrdcenterfinderplot.cpp,v 1.15 2009/09/25 14:22:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,23 +17,26 @@
 #include <qwt_symbol.h>
 #include <qwt_legend.h>
 #include <QMetaMethod>
+#include "qxrdwindow.h"
 #include "qxrddataprocessor.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdplotmeasurer.h"
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   : QxrdPlot(parent),
+    m_Window(NULL),
     m_DataProcessor(NULL),
     m_CenterFinder(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.14 2009/09/07 22:03:46 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.15 2009/09/25 14:22:16 jennings Exp $")
 {
   insertLegend(m_Legend, QwtPlot::RightLegend);
 }
 
-void QxrdCenterFinderPlot::setDataProcessor(QxrdDataProcessor *proc)
+void QxrdCenterFinderPlot::setWindow(QxrdWindow *win)
 {
-  m_DataProcessor = proc;
+  m_Window = win;
+  m_DataProcessor = m_Window -> dataProcessor();
   m_CenterFinder = m_DataProcessor -> centerFinder();
 
   connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
@@ -62,8 +65,8 @@ void QxrdCenterFinderPlot::onCenterYChanged(double cy)
 
 void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 {
-  QxrdDoubleImageData *img = m_DataProcessor -> data();
-  QxrdMaskData  *mask = m_DataProcessor -> mask();
+  QxrdDoubleImageData *img = m_Window -> data();
+  QxrdMaskData  *mask = m_Window -> mask();
 
   int width =img->get_Width();
   int height=img->get_Height();
@@ -147,6 +150,10 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.cpp,v $
+*  Revision 1.15  2009/09/25 14:22:16  jennings
+*  Simplified double-buffering for plotted data - there is now a separate copy of data and mask
+*  in QxrdWindow
+*
 *  Revision 1.14  2009/09/07 22:03:46  jennings
 *  Allow NULL mask
 *

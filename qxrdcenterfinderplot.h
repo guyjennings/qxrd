@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.h,v 1.11 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdcenterfinderplot.h,v 1.12 2009/09/25 14:22:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,6 +15,7 @@
 
 class QxrdMaskData;
 class QwtLegend;
+class QxrdWindow;
 class QxrdDataProcessor;
 class QxrdCenterFinder;
 
@@ -25,7 +26,7 @@ class QxrdCenterFinderPlot : public QxrdPlot
 public:
   QxrdCenterFinderPlot(QWidget *parent=0);
 
-  void setDataProcessor(QxrdDataProcessor *proc);
+  void setWindow(QxrdWindow *win);
 
 public slots:
   void onCenterXChanged(double cx);
@@ -36,11 +37,12 @@ public slots:
 
 private:
   QVector<double>      m_XData, m_YData;
+  QxrdWindow          *m_Window;
   QxrdDataProcessor   *m_DataProcessor;
   QxrdCenterFinder    *m_CenterFinder;
   bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdcenterfinderplot.h,v 1.11 2009/08/25 18:43:03 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinderplot.h,v 1.12 2009/09/25 14:22:16 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDERPLOT_H
@@ -48,6 +50,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.h,v $
+*  Revision 1.12  2009/09/25 14:22:16  jennings
+*  Simplified double-buffering for plotted data - there is now a separate copy of data and mask
+*  in QxrdWindow
+*
 *  Revision 1.11  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *
