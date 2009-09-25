@@ -311,4 +311,7 @@ on the Processor progress.
 //
 -------------------------------------------------------
 
+BLOCKER
+Masking operations don't seem to work.
+
 #endif // TODO_H
