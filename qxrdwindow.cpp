@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.99 2009/09/25 14:22:16 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.100 2009/09/25 22:42:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -57,7 +57,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.99 2009/09/25 14:22:16 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.100 2009/09/25 22:42:48 jennings Exp $")
 {
   setupUi(this);
 
@@ -255,17 +255,17 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
 //  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdDoubleImageData *)),
 //          m_Plot, SLOT(onProcessedImageAvailable(QxrdDoubleImageData *)));
-  connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *)),
-          m_Plot, SLOT(onMaskedImageAvailable(QxrdDoubleImageData *, QxrdMaskData *)));
-
-  connect(m_DataProcessor, SIGNAL(newDarkImageAvailable(QxrdDoubleImageData *)),
-          m_Plot, SLOT(onDarkImageAvailable(QxrdDoubleImageData *)));
+//  connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *)),
+//          m_Plot, SLOT(onMaskedImageAvailable(QxrdDoubleImageData *, QxrdMaskData *)));
+//
+//  connect(m_DataProcessor, SIGNAL(newDarkImageAvailable(QxrdDoubleImageData *)),
+//          m_Plot, SLOT(onDarkImageAvailable(QxrdDoubleImageData *)));
 
 //  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdDoubleImageData *)),
 //          m_CenterFinderPlot, SLOT(onProcessedImageAvailable(QxrdDoubleImageData *)));
 
-  connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *)),
-          m_CenterFinderPlot, SLOT(onMaskedImageAvailable(QxrdDoubleImageData *, QxrdMaskData *)));
+//  connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *)),
+//          m_CenterFinderPlot, SLOT(onMaskedImageAvailable(QxrdDoubleImageData *, QxrdMaskData *)));
 
   connect(m_Plot, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
   connect(m_CenterFinderPlot, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
@@ -624,8 +624,8 @@ void QxrdWindow::newMask()
     m_NewMask = tmp;
     m_NewMaskAvailable = 0;
 
-    m_Plot             -> onProcessedImageAvailable(m_Data);
-    m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
+    m_Plot             -> onMaskedImageAvailable(m_Data, m_Mask);
+    m_CenterFinderPlot -> onMaskedImageAvailable(m_Data, m_Mask);
   }
 }
 
@@ -836,6 +836,9 @@ QxrdMaskData *QxrdWindow::mask()
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.100  2009/09/25 22:42:48  jennings
+*  Masking changes
+*
 *  Revision 1.99  2009/09/25 14:22:16  jennings
 *  Simplified double-buffering for plotted data - there is now a separate copy of data and mask
 *  in QxrdWindow

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.12 2009/09/23 19:00:36 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.13 2009/09/25 22:42:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,7 +27,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.12 2009/09/23 19:00:36 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.13 2009/09/25 22:42:48 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -54,6 +54,9 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("processor", m_ScriptEngine -> newQObject(m_Application->dataProcessor()/*,QScriptEngine::QtOwnership,QScriptEngine::AutoCreateDynamicProperties*/));
   m_ScriptEngine -> globalObject().setProperty("centering", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->centerFinder()));
   m_ScriptEngine -> globalObject().setProperty("integrator", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->integrator()));
+  m_ScriptEngine -> globalObject().setProperty("data", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->data()));
+  m_ScriptEngine -> globalObject().setProperty("dark", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->darkImage()));
+  m_ScriptEngine -> globalObject().setProperty("mask", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->mask()));
 
   m_ScriptEngine -> globalObject().setProperty("acquire", m_ScriptEngine -> newFunction(acquireFunc));
   m_ScriptEngine -> globalObject().setProperty("acquireDark", m_ScriptEngine -> newFunction(acquireDarkFunc));
@@ -358,6 +361,9 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.13  2009/09/25 22:42:48  jennings
+*  Masking changes
+*
 *  Revision 1.12  2009/09/23 19:00:36  jennings
 *  Removed dynamic property support - it's not thread-safe and doesn't work
 *  under windows

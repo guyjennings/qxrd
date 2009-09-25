@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.53 2009/09/25 14:22:16 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.54 2009/09/25 22:42:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -68,7 +68,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.53 2009/09/25 14:22:16 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.54 2009/09/25 22:42:48 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -292,8 +292,8 @@ void QxrdDataProcessor::newDarkImage(QxrdDoubleImageData *image)
   }
 
   set_DarkImagePath(image->get_FileName());
-
-  emit newDarkImageAvailable(m_DarkFrame);
+//
+//  emit newDarkImageAvailable(m_DarkFrame);
 }
 
 void QxrdDataProcessor::newDarkImage(QxrdInt16ImageData *image)
@@ -307,8 +307,8 @@ void QxrdDataProcessor::newDarkImage(QxrdInt16ImageData *image)
   copyImage(image, m_DarkFrame);
 
   set_DarkImagePath(m_DarkFrame -> get_FileName());
-
-  emit newDarkImageAvailable(m_DarkFrame);
+//
+//  emit newDarkImageAvailable(m_DarkFrame);
 }
 
 void QxrdDataProcessor::newDarkImage(QxrdInt32ImageData *image)
@@ -322,8 +322,8 @@ void QxrdDataProcessor::newDarkImage(QxrdInt32ImageData *image)
   copyImage(image, m_DarkFrame);
 
   set_DarkImagePath(m_DarkFrame -> get_FileName());
-
-  emit newDarkImageAvailable(m_DarkFrame);
+//
+//  emit newDarkImageAvailable(m_DarkFrame);
 }
 
 void QxrdDataProcessor::newBadPixelsImage(QxrdDoubleImageData *image)
@@ -356,18 +356,18 @@ void QxrdDataProcessor::newGainMapImage(QxrdDoubleImageData *image)
   set_GainMapPath(image->get_FileName());
 }
 
-void QxrdDataProcessor::newMask(QxrdMaskData *mask)
+void QxrdDataProcessor::newMask()
 {
-  QMutexLocker lock(&m_Mutex);
-
-  if (m_Mask != mask) {
-    delete m_Mask;
-
-    m_Mask = mask;
-  }
-
-  emit newMaskAvailable(m_Data, m_Mask);
-
+//  QMutexLocker lock(&m_Mutex);
+//
+//  if (m_Mask != mask) {
+//    delete m_Mask;
+//
+//    m_Mask = mask;
+//  }
+//
+//  emit newMaskAvailable(m_Data, m_Mask);
+//
   m_Window -> newMaskAvailable(m_Mask);
 }
 
@@ -422,7 +422,7 @@ void QxrdDataProcessor::loadData(QString name)
 
     set_DataPath(res -> get_FileName());
   } else {
-    delete res;
+    returnImageToPool(res);
   }
 }
 
@@ -454,7 +454,7 @@ void QxrdDataProcessor::loadDark(QString name)
 
     set_DarkImagePath(res -> get_FileName());
   } else {
-    delete res;
+    returnImageToPool(res);
   }
 }
 
@@ -486,7 +486,7 @@ void QxrdDataProcessor::loadBadPixels(QString name)
 
     set_BadPixelsPath(res -> get_FileName());
   } else {
-    delete res;
+    returnImageToPool(res);
   }
 }
 
@@ -518,7 +518,7 @@ void QxrdDataProcessor::loadGainMap(QString name)
 
     set_GainMapPath(res -> get_FileName());
   } else {
-    delete res;
+    returnImageToPool(res);
   }
 }
 
@@ -546,12 +546,14 @@ void QxrdDataProcessor::loadMask(QString name)
     res -> loadMetaData();
     res -> set_DataType(QxrdMaskData::MaskData);
 
-    newMask(res);
+    res -> copyMask(m_Mask);
 
-    set_MaskPath(res -> get_FileName());
-  } else {
-    delete res;
+    newMask();
+
+    set_MaskPath(m_Mask -> get_FileName());
   }
+
+  delete res;
 }
 
 void QxrdDataProcessor::saveMask(QString name, int canOverwrite)
@@ -863,7 +865,9 @@ void QxrdDataProcessor::clearMask()
 {
   QMutexLocker lock(&m_Mutex);
 
-  newMask(NULL);
+  m_Mask -> clear();
+
+  newMask();
 
   set_MaskPath("");
 }
@@ -1264,7 +1268,7 @@ void QxrdDataProcessor::showMaskRange(/*double min, double max*/)
 
     m_Mask -> showMaskRange(m_Data, min, max);
 
-    newMask(m_Mask);
+    newMask();
   }
 }
 
@@ -1277,7 +1281,7 @@ void QxrdDataProcessor::hideMaskAll()
 
     m_Mask -> hideMaskAll();
 
-    newMask(m_Mask);
+    newMask();
   }
 }
 
@@ -1290,7 +1294,7 @@ void QxrdDataProcessor::showMaskAll()
 
     m_Mask -> showMaskAll();
 
-    newMask(m_Mask);
+    newMask();
   }
 }
 
@@ -1306,7 +1310,7 @@ void QxrdDataProcessor::hideMaskRange(/*double min, double max*/)
 
     m_Mask -> hideMaskRange(m_Data, min, max);
 
-    newMask(m_Mask);
+    newMask();
   }
 }
 
@@ -1317,7 +1321,7 @@ void QxrdDataProcessor::invertMask()
   if (m_Mask) {
     m_Mask -> invertMask();
 
-    newMask(m_Mask);
+    newMask();
   }
 }
 
@@ -1336,7 +1340,7 @@ void QxrdDataProcessor::maskCircle(QwtDoubleRect rect)
       m_Mask -> maskCircle(cx, cy, rad, get_MaskSetPixels());
     }
 
-    newMask(m_Mask);
+    newMask();
   }
 }
 
@@ -1373,7 +1377,7 @@ void QxrdDataProcessor::maskPolygon(QVector<QwtDoublePoint> poly)
       }
     }
 
-    newMask(m_Mask);
+    newMask();
   }
 }
 
@@ -1723,6 +1727,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.54  2009/09/25 22:42:48  jennings
+*  Masking changes
+*
 *  Revision 1.53  2009/09/25 14:22:16  jennings
 *  Simplified double-buffering for plotted data - there is now a separate copy of data and mask
 *  in QxrdWindow

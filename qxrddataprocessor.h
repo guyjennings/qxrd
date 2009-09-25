@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.38 2009/09/23 21:16:26 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.39 2009/09/25 22:42:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -130,8 +130,8 @@ signals:
   void statusMessage(QString msg) const;
   void criticalMessage(QString msg) const;
 //  void newDataAvailable(QxrdDoubleImageData *);
-  void newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *);
-  void newDarkImageAvailable(QxrdDoubleImageData *);
+//  void newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *);
+//  void newDarkImageAvailable(QxrdDoubleImageData *);
 
 public:
   enum {
@@ -257,7 +257,7 @@ private:
   void newDarkImage(QxrdInt32ImageData *image);
   void newBadPixelsImage(QxrdDoubleImageData *image);
   void newGainMapImage(QxrdDoubleImageData *image);
-  void newMask(QxrdMaskData *mask);
+  void newMask();
 
   void openLogFile();
   void writeLogHeader();
@@ -292,7 +292,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.38 2009/09/23 21:16:26 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.39 2009/09/25 22:42:48 jennings Exp $");
 };
 
 #endif
@@ -300,6 +300,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.39  2009/09/25 22:42:48  jennings
+*  Masking changes
+*
 *  Revision 1.38  2009/09/23 21:16:26  jennings
 *  Removed acquiredInt{16,32}Image queues from data processor
 *

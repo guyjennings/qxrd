@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskdata.h,v 1.3 2009/08/27 17:05:59 jennings Exp $
+*  $Id: qxrdmaskdata.h,v 1.4 2009/09/25 22:42:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,9 +17,9 @@ class QxrdMaskData : public QxrdImageData<bool>
 public:
   QxrdMaskData(int width=0, int height=0);
 
+public slots:
   bool maskValue(int x, int y) const;
   void setMaskValue(int x, int y, bool mval);
-  bool* mask();
 
   void setCircularMask();
   void showMaskAll();
@@ -28,14 +28,17 @@ public:
 
   void maskCircle(double cx, double cy, double r, bool val);
 
+public:
   void copyMask(QxrdMaskData *data);
+
+  bool* mask();
 
   template <typename T> void setMaskRange(QcepImageData<T> *image,  T min, T max, bool inRange, bool setTo);
   template <typename T> void showMaskRange(QcepImageData<T> *image, T min, T max);
   template <typename T> void hideMaskRange(QcepImageData<T> *image, T min, T max);
 
 private:
-  HEADER_IDENT("$Id: qxrdmaskdata.h,v 1.3 2009/08/27 17:05:59 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdmaskdata.h,v 1.4 2009/09/25 22:42:48 jennings Exp $");
 };
 
 template <typename T>
@@ -72,6 +75,9 @@ void QxrdMaskData::showMaskRange(QcepImageData<T> *image, T min, T max)
 /******************************************************************
 *
 *  $Log: qxrdmaskdata.h,v $
+*  Revision 1.4  2009/09/25 22:42:48  jennings
+*  Masking changes
+*
 *  Revision 1.3  2009/08/27 17:05:59  jennings
 *  Made mask data descend from QxrdImageData<bool>
 *
