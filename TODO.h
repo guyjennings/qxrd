@@ -303,6 +303,12 @@ BLOCKER
 the ProcessedCount variable should not depend on the display progress, only
 on the Processor progress.
 
+//-------------------------------------------------------
+//
+//BLOCKER
+//Something wrong with acquired data summation (16-32 bit problem?)
+//Actually caused by forgetting to clear image before summation.
+//
 -------------------------------------------------------
 
 #endif // TODO_H

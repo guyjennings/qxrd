@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.40 2009/09/22 21:42:12 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.41 2009/09/25 19:57:48 jennings Exp $
 *
 *******************************************************************/
 
@@ -55,7 +55,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CameraModel(""),
     m_CurrentMode(-1),
     m_CurrentGain(-1),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.40 2009/09/22 21:42:12 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.41 2009/09/25 19:57:48 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -504,6 +504,8 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       if (m_AcquiredInt32Data == NULL) {
         m_AcquiredInt32Data = m_FreeInt32Images.dequeue();
       }
+
+      m_AcquiredInt32Data -> clear();
     }
 
     if (m_AcquiredInt32Data != NULL) {
@@ -833,6 +835,10 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.41  2009/09/25 19:57:48  jennings
+*  Corrected a problem with acquired image summation caused by forgetting to clear
+*  images before starting summation.
+*
 *  Revision 1.40  2009/09/22 21:42:12  jennings
 *  Set image title as well a s filename property during acquisition
 *
