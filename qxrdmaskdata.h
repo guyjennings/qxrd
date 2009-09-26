@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskdata.h,v 1.4 2009/09/25 22:42:48 jennings Exp $
+*  $Id: qxrdmaskdata.h,v 1.5 2009/09/26 04:56:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,7 +29,7 @@ public slots:
   void maskCircle(double cx, double cy, double r, bool val);
 
 public:
-  void copyMask(QxrdMaskData *data);
+  void copyMask(QxrdMaskData *dest);
 
   bool* mask();
 
@@ -38,7 +38,7 @@ public:
   template <typename T> void hideMaskRange(QcepImageData<T> *image, T min, T max);
 
 private:
-  HEADER_IDENT("$Id: qxrdmaskdata.h,v 1.4 2009/09/25 22:42:48 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdmaskdata.h,v 1.5 2009/09/26 04:56:37 jennings Exp $");
 };
 
 template <typename T>
@@ -75,6 +75,9 @@ void QxrdMaskData::showMaskRange(QcepImageData<T> *image, T min, T max)
 /******************************************************************
 *
 *  $Log: qxrdmaskdata.h,v $
+*  Revision 1.5  2009/09/26 04:56:37  jennings
+*  Reversed direction of copyMask operation to match copyImage
+*
 *  Revision 1.4  2009/09/25 22:42:48  jennings
 *  Masking changes
 *
