@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.39 2009/09/25 22:42:48 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.40 2009/09/26 04:55:46 jennings Exp $
 *
 *******************************************************************/
 
@@ -129,9 +129,6 @@ signals:
   void printMessage(QString msg) const;
   void statusMessage(QString msg) const;
   void criticalMessage(QString msg) const;
-//  void newDataAvailable(QxrdDoubleImageData *);
-//  void newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *);
-//  void newDarkImageAvailable(QxrdDoubleImageData *);
 
 public:
   enum {
@@ -188,9 +185,6 @@ public:
   void loadDefaultImages();
 
   QxrdDoubleImageData *takeNextFreeImage();
-//  QxrdDoubleImageData *takeLatestProcessedImage();
-//  QxrdDoubleImageData *takeNextProcessedImage();
-//  QxrdDoubleImageData *takeNextDarkImage();
 
   void returnImageToPool(QxrdDoubleImageData *img);
   void returnInt16ImageToPool(QxrdInt16ImageData *img);
@@ -202,12 +196,6 @@ public:
   void setAcquisition(QxrdAcquisition *acq);
   void setWindow(QxrdWindow *win);
 
-
-//  void saveImageData(QxrdDoubleImageData *image);
-//  void saveImageData(QxrdInt16ImageData *image);
-//  void saveImageData(QxrdInt32ImageData *image);
-//  void saveRawData(QxrdInt16ImageData *image);
-//  void saveRawData(QxrdInt32ImageData *image);
   bool saveNamedImageData(QString name, QxrdDoubleImageData *image, int canOverwrite=NoOverwrite);
   bool saveNamedImageData(QString name, QxrdInt16ImageData *image, int canOverwrite=NoOverwrite);
   bool saveNamedImageData(QString name, QxrdInt32ImageData *image, int canOverwrite=NoOverwrite);
@@ -243,9 +231,6 @@ private:
   void processAcquiredInt32Image(QxrdInt32ImageData *image);
   void processAcquiredImage(QxrdDoubleImageData *dimg);
 
-  void copyImage(QxrdInt16ImageData *src, QxrdDoubleImageData *dest);
-  void copyImage(QxrdInt32ImageData *src, QxrdDoubleImageData *dest);
-  void copyImage(QxrdDoubleImageData *src, QxrdDoubleImageData *dest);
   void subtractDarkImage(QxrdDoubleImageData *image, QxrdDoubleImageData *dark);
   void correctBadPixels(QxrdDoubleImageData *image);
   void correctImageGains(QxrdDoubleImageData *image);
@@ -292,7 +277,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.39 2009/09/25 22:42:48 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.40 2009/09/26 04:55:46 jennings Exp $");
 };
 
 #endif
@@ -300,6 +285,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.40  2009/09/26 04:55:46  jennings
+*  Removed some commented-out sections
+*  Removed QxrdDataProcessor::copyImage(src,dst), replaced with templatized image member fn
+*
 *  Revision 1.39  2009/09/25 22:42:48  jennings
 *  Masking changes
 *

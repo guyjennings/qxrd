@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.54 2009/09/25 22:42:48 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.55 2009/09/26 04:55:46 jennings Exp $
 *
 *******************************************************************/
 
@@ -56,8 +56,6 @@ QxrdDataProcessor::QxrdDataProcessor
     m_Window(win),
     m_Acquisition(acq),
     m_DarkUsage(QReadWriteLock::Recursive),
-//    m_ProcessedImages("QxrdDataProcessor Processed Images"),
-//    m_DarkImages("QxrdDataProcessor Dark Images"),
     m_Data(new QxrdDoubleImageData(2048,2048)),
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
@@ -68,7 +66,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.54 2009/09/25 22:42:48 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.55 2009/09/26 04:55:46 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -80,14 +78,10 @@ void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
 {
   m_Acquisition = acq;
 
-//  connect(m_Acquisition, SIGNAL(acquiredImageAvailable(QxrdDoubleImageData*)),
-//          this, SLOT(onAcquiredImageAvailable(QxrdDoubleImageData*)));
   connect(m_Acquisition, SIGNAL(acquiredInt16ImageAvailable(QxrdInt16ImageData*)),
           this, SLOT(onAcquiredInt16ImageAvailable(QxrdInt16ImageData*)));
   connect(m_Acquisition, SIGNAL(acquiredInt32ImageAvailable(QxrdInt32ImageData*)),
           this, SLOT(onAcquiredInt32ImageAvailable(QxrdInt32ImageData*)));
-/*  connect(m_Acquisition, SIGNAL(darkImageAvailable(QxrdDoubleImageData*)),
-          this, SLOT(onDarkImageAvailable(QxrdDoubleImageData*))); */
 
   connect(prop_SaveRawImages(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_PerformDarkSubtraction(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
@@ -136,35 +130,6 @@ void QxrdDataProcessor::readSettings(QxrdSettings *settings, QString section)
   newLogFile(get_LogFilePath());
 }
 
-//void QxrdDataProcessor::onAcquiredImageAvailable(QxrdDoubleImageData *image)
-//{
-//  int navail = decrementAcquiredCount();
-//
-//  printf("QxrdDataProcessor::on_acquired_image_available(), navail = %d\n", navail);
-//
-////  QxrdImageData *image = m_Acquisition -> takeNextAcquiredImage();
-//
-//  if (image) {
-////    printf("Image Number %d\n", image -> imageNumber());
-//
-//    if ((image -> get_ImageNumber()) >= 0) {
-//      m_DarkUsage.lockForRead();
-//      m_Processing.lockForRead();
-//      QtConcurrent::run(this, &QxrdDataProcessor::processAcquiredImage, image);
-//    } else {
-//      QWriteLocker wl(&m_DarkUsage);
-//
-//      emit printMessage(tr("Saving dark image \"%1\"").arg(image->get_FileName()));
-//
-//      saveImageData(image);
-//
-////      m_DarkImages.enqueue(image);
-//
-//      newDarkImage(image);
-//    }
-//  }
-//}
-
 void QxrdDataProcessor::onAcquiredInt16ImageAvailable(QxrdInt16ImageData *image)
 {
   QMutexLocker lock(&m_Mutex);
@@ -175,7 +140,6 @@ void QxrdDataProcessor::onAcquiredInt16ImageAvailable(QxrdInt16ImageData *image)
     if ((image -> get_ImageNumber()) >= 0) {
       m_DarkUsage.lockForRead();
       m_Processing.lockForRead();
-//      QtConcurrent::run(this, &QxrdDataProcessor::processAcquiredInt16Image, image);
       processAcquiredInt16Image(image);
     } else {
       QWriteLocker wl(&m_DarkUsage);
@@ -185,8 +149,6 @@ void QxrdDataProcessor::onAcquiredInt16ImageAvailable(QxrdInt16ImageData *image)
       set_DarkImagePath(image->get_FileName());
 
       emit printMessage(tr("Saved dark image \"%1\"").arg(image->get_FileName()));
-
-//      m_DarkImages.enqueue(image);
 
       newDarkImage(image);
 
@@ -205,7 +167,6 @@ void QxrdDataProcessor::onAcquiredInt32ImageAvailable(QxrdInt32ImageData *image)
     if ((image -> get_ImageNumber()) >= 0) {
       m_DarkUsage.lockForRead();
       m_Processing.lockForRead();
-//      QtConcurrent::run(this, &QxrdDataProcessor::processAcquiredInt32Image, image);
       processAcquiredInt32Image(image);
     } else {
       QWriteLocker wl(&m_DarkUsage);
@@ -215,8 +176,6 @@ void QxrdDataProcessor::onAcquiredInt32ImageAvailable(QxrdInt32ImageData *image)
       set_DarkImagePath(image->get_FileName());
 
       emit printMessage(tr("Saved dark image \"%1\"").arg(image->get_FileName()));
-
-//      m_DarkImages.enqueue(image);
 
       newDarkImage(image);
 
@@ -292,8 +251,6 @@ void QxrdDataProcessor::newDarkImage(QxrdDoubleImageData *image)
   }
 
   set_DarkImagePath(image->get_FileName());
-//
-//  emit newDarkImageAvailable(m_DarkFrame);
 }
 
 void QxrdDataProcessor::newDarkImage(QxrdInt16ImageData *image)
@@ -304,11 +261,9 @@ void QxrdDataProcessor::newDarkImage(QxrdInt16ImageData *image)
     m_DarkFrame = new QxrdDoubleImageData();
   }
 
-  copyImage(image, m_DarkFrame);
+  image -> copyImage(m_DarkFrame);
 
   set_DarkImagePath(m_DarkFrame -> get_FileName());
-//
-//  emit newDarkImageAvailable(m_DarkFrame);
 }
 
 void QxrdDataProcessor::newDarkImage(QxrdInt32ImageData *image)
@@ -319,11 +274,9 @@ void QxrdDataProcessor::newDarkImage(QxrdInt32ImageData *image)
     m_DarkFrame = new QxrdDoubleImageData();
   }
 
-  copyImage(image, m_DarkFrame);
+  image -> copyImage(m_DarkFrame);
 
   set_DarkImagePath(m_DarkFrame -> get_FileName());
-//
-//  emit newDarkImageAvailable(m_DarkFrame);
 }
 
 void QxrdDataProcessor::newBadPixelsImage(QxrdDoubleImageData *image)
@@ -358,16 +311,6 @@ void QxrdDataProcessor::newGainMapImage(QxrdDoubleImageData *image)
 
 void QxrdDataProcessor::newMask()
 {
-//  QMutexLocker lock(&m_Mutex);
-//
-//  if (m_Mask != mask) {
-//    delete m_Mask;
-//
-//    m_Mask = mask;
-//  }
-//
-//  emit newMaskAvailable(m_Data, m_Mask);
-//
   m_Window -> newMaskAvailable(m_Mask);
 }
 
@@ -872,135 +815,6 @@ void QxrdDataProcessor::clearMask()
   set_MaskPath("");
 }
 
-//void QxrdDataProcessor::loadDarkImage(QString name)
-//{
-//  QxrdDoubleImageData* img = takeNextFreeImage();
-//
-//  img -> readImage(name);
-//
-//  newDarkImage(img);
-//}
-//
-void QxrdDataProcessor::copyImage(QxrdInt16ImageData *src, QxrdDoubleImageData *dest)
-{
-  QMutexLocker lock(&m_Mutex);
-
-  QTime tic;
-  tic.start();
-
-  if (src && dest) {
-    int ncols = src -> get_Width();
-    int nrows = src -> get_Height();
-    int npix = ncols*nrows;
-
-    dest -> resize(ncols, nrows);
-
-    src -> copyProperties(dest);
-
-    quint16 *srcp = src -> data();
-    double  *destp = dest -> data();
-
-    for (int i=0; i<npix; i++) {
-      *destp++ = *srcp++;
-    }
-  }
-
-  emit printMessage(tr("copy image took %1 msec").arg(tic.elapsed()));
-}
-
-void QxrdDataProcessor::copyImage(QxrdInt32ImageData *src, QxrdDoubleImageData *dest)
-{
-  QMutexLocker lock(&m_Mutex);
-
-  QTime tic;
-  tic.start();
-
-  if (src && dest) {
-    int ncols = src -> get_Width();
-    int nrows = src -> get_Height();
-    int npix = ncols*nrows;
-
-    dest -> resize(ncols, nrows);
-
-    src -> copyProperties(dest);
-
-    quint32 *srcp = src -> data();
-    double  *destp = dest -> data();
-
-    for (int i=0; i<npix; i++) {
-      *destp++ = *srcp++;
-    }
-  }
-
-  emit printMessage(tr("copy image took %1 msec").arg(tic.elapsed()));
-}
-
-void QxrdDataProcessor::copyImage(QxrdDoubleImageData *src, QxrdDoubleImageData *dest)
-{
-  QMutexLocker lock(&m_Mutex);
-
-  QTime tic;
-  tic.start();
-
-  if (src && dest) {
-    int ncols = src -> get_Width();
-    int nrows = src -> get_Height();
-    int npix = ncols*nrows;
-
-    dest -> resize(ncols, nrows);
-
-    src -> copyProperties(dest);
-
-    double  *srcp  = src -> data();
-    double  *destp = dest -> data();
-
-    for (int i=0; i<npix; i++) {
-      *destp++ = *srcp++;
-    }
-  }
-
-  emit printMessage(tr("copy image took %1 msec").arg(tic.elapsed()));
-}
-
-//void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *img)
-//{
-////  printf("QxrdDataProcessor::processAcquiredImage\n");
-//
-//  QxrdDoubleImageData *dark   = darkImage();
-//
-//  if (img) {
-//    QTime tic;
-//    tic.start();
-//
-//    if (get_PerformDarkSubtraction()) {
-//      if (dark && get_SaveRawImages()) {
-//        emit printMessage(tr("Saving raw data in file \"%1\"").arg(img->rawFileName()));
-//
-//        saveRawData(img);
-//      }
-//    }
-//
-//    subtractDarkImage(img, dark);
-//    emit printMessage(tr("Dark subtraction took %1 msec").arg(tic.elapsed()));
-//    m_DarkUsage.unlock();
-//
-//    correctBadPixels(img);
-//    correctImageGains(img);
-//
-//    emit printMessage(tr("Saving processed image in file \"%1\"").arg(img->get_FileName()));
-//
-//    saveImageData(img);
-//
-////    m_ProcessedImages.enqueue(img);
-//
-//    newData(img);
-//
-//    emit printMessage(tr("Processing took %1 msec").arg(tic.elapsed()));
-//  }
-//
-//  m_Processing.unlock();
-//}
-
 void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
 {
   QMutexLocker lock(&m_Mutex);
@@ -1023,7 +837,7 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
 
     QxrdDoubleImageData *dimg = takeNextFreeImage();
 
-    copyImage(img, dimg);
+    img -> copyImage(dimg);
 
     returnInt16ImageToPool(img);
 
@@ -1057,7 +871,7 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
 
     QxrdDoubleImageData *dimg = takeNextFreeImage();
 
-    copyImage(img, dimg);
+    img -> copyImage(dimg);
 
     returnInt32ImageToPool(img);
 
@@ -1727,6 +1541,10 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.55  2009/09/26 04:55:46  jennings
+*  Removed some commented-out sections
+*  Removed QxrdDataProcessor::copyImage(src,dst), replaced with templatized image member fn
+*
 *  Revision 1.54  2009/09/25 22:42:48  jennings
 *  Masking changes
 *
