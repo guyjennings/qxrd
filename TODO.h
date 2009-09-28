@@ -118,13 +118,13 @@ BLOCKER
 Simplify the interactions between the various processing options and
 perform a simple sanity check before starting acquisition
 
--------------------------------------------------------
-
-BLOCKER
-Improve GUI performance when doing rapid acquisition sequences -
-don't queue processed output images for display - have a current and alternate image
-and swap as appropriate.
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Improve GUI performance when doing rapid acquisition sequences -
+//don't queue processed output images for display - have a current and alternate image
+//and swap as appropriate.
+//
 -------------------------------------------------------
 
 BLOCKER
@@ -140,14 +140,14 @@ Optimize processing routines
 BLOCKER
 Flag dropped frames more obviously.
 
--------------------------------------------------------
-
-BLOCKER
-Add timestamps and other metadata to saved files
-e.g.  TIFFTAG_ORIENTATION, TIFFTAG_DOCUMENTNAME
-TIFFTAG_IMAGEDESCRIPTION, TIFFTAG_DATETIME
-TIFFTAG_FRAMECOUNT?, TIFFTAG_UNIQUECAMERAMODEL?
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Add timestamps and other metadata to saved files
+//e.g.  TIFFTAG_ORIENTATION, TIFFTAG_DOCUMENTNAME
+//TIFFTAG_IMAGEDESCRIPTION, TIFFTAG_DATETIME
+//TIFFTAG_FRAMECOUNT?, TIFFTAG_UNIQUECAMERAMODEL?
+//
 -------------------------------------------------------
 
 BLOCKER
@@ -162,24 +162,24 @@ Leak check...
 //
 //Coalesce controls from the 'output' panel into the 'acquire' panel
 //
--------------------------------------------------------
-
-BLOCKER
-Do camera model number check...
-Check more hardware settings when entering program...
-Support binning modes...
-Is not calling Acquisition_Init a problem?
-
--------------------------------------------------------
-
-BLOCKER
-Provide a user interface to the camera gain setting
-
--------------------------------------------------------
-
-BLOCKER
-Allow finer-grained control of the processing chain
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Do camera model number check...
+//Check more hardware settings when entering program...
+//Support binning modes...
+//Is not calling Acquisition_Init a problem?
+//
+//-------------------------------------------------------
+//
+//BLOCKER
+//Provide a user interface to the camera gain setting
+//
+//-------------------------------------------------------
+//
+//BLOCKER
+//Allow finer-grained control of the processing chain
+//
 -------------------------------------------------------
 
 Remove the g_Acquisition global and replace it with
@@ -238,11 +238,13 @@ Add frame skip option in acquisition
 
 BLOCKER
 The script:
-for (i=0; i<512; i++) {
-   print("Binning mode = ",i);
-   acquisition.binningMode = i;
+for (i=0; i<6; i++) {
+   print("Camera Gain = ",i);
+   acquisition.cameraGain = i;
    acquire("h:/junk-test/testing",0.1,1,1,0)
-   while (status(0.5) != 1) {}
+   while (status(0.5) != 1) {
+     print("Waiting")
+   }
 }
 gets deadlocked
 
@@ -254,13 +256,13 @@ will continue until a total of pre- plus post- images
 have been taken - i.e. extra post-trigger images will be
 taken.
 
--------------------------------------------------------
-
-BLOCKER
-Add error return checking wherever appropriate -
-particularly in TIFF, Acquire_ and file i/o routines
-Check output directory exists before starting acquisition sequence.
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Add error return checking wherever appropriate -
+//particularly in TIFF, Acquire_ and file i/o routines
+//Check output directory exists before starting acquisition sequence.
+//
 -------------------------------------------------------
 
 BLOCKER
@@ -297,21 +299,32 @@ BLOCKER
 Provide a means of saving raw data files in separate
 sub-directories
 
--------------------------------------------------------
-
-BLOCKER
-the ProcessedCount variable should not depend on the display progress, only
-on the Processor progress.
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//the ProcessedCount variable should not depend on the display progress, only
+//on the Processor progress.
+//
 //-------------------------------------------------------
 //
 //BLOCKER
 //Something wrong with acquired data summation (16-32 bit problem?)
 //Actually caused by forgetting to clear image before summation.
 //
+//-------------------------------------------------------
+//
+//BLOCKER
+//Masking operations don't seem to work.
+//copyMask operations were other way round
+//
 -------------------------------------------------------
 
 BLOCKER
-Masking operations don't seem to work.
+Image doesn't update when display parameters are changed.
+
+-------------------------------------------------------
+
+BLOCKER
+There's some kind of deadlock in the acquisition process
 
 #endif // TODO_H

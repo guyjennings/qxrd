@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.55 2009/09/26 04:55:46 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.56 2009/09/28 22:06:55 jennings Exp $
 *
 *******************************************************************/
 
@@ -66,7 +66,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.55 2009/09/26 04:55:46 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.56 2009/09/28 22:06:55 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -923,6 +923,8 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
     }
 
     if (get_PerformIntegration()) {
+      m_Integrator -> performIntegration();
+
       updateEstimatedTime(prop_PerformIntegrationTime(), tic.restart());
     }
 
@@ -1541,6 +1543,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.56  2009/09/28 22:06:55  jennings
+*  Added circular integration to processing steps
+*
 *  Revision 1.55  2009/09/26 04:55:46  jennings
 *  Removed some commented-out sections
 *  Removed QxrdDataProcessor::copyImage(src,dst), replaced with templatized image member fn
