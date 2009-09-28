@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.41 2009/09/25 19:57:48 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.42 2009/09/28 22:06:09 jennings Exp $
 *
 *******************************************************************/
 
@@ -55,7 +55,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CameraModel(""),
     m_CurrentMode(-1),
     m_CurrentGain(-1),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.41 2009/09/25 19:57:48 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.42 2009/09/28 22:06:09 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -712,11 +712,11 @@ void QxrdAcquisitionPerkinElmer::haltAcquire()
   m_StatusWaiting.wakeAll();
 }
 
-int QxrdAcquisitionPerkinElmer::status(double time)
-{
-  return acquisitionStatus(time);
-}
-
+//int QxrdAcquisitionPerkinElmer::status(double time)
+//{
+//  return acquisitionStatus(time);
+//}
+//
 int QxrdAcquisitionPerkinElmer::acquisitionStatus(double time)
 {
   if (m_Acquiring.tryLock()) {
@@ -835,6 +835,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.42  2009/09/28 22:06:09  jennings
+*  Removed QxrdAcquisitionPerkinElmer::status
+*
 *  Revision 1.41  2009/09/25 19:57:48  jennings
 *  Corrected a problem with acquired image summation caused by forgetting to clear
 *  images before starting summation.

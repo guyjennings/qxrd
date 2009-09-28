@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.20 2009/09/21 18:49:24 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.21 2009/09/28 22:06:09 jennings Exp $
 *
 *******************************************************************/
 
@@ -31,7 +31,7 @@ public slots:
   void cancelDark();
   void initialize();
   void trigger();
-  int  status(double delay);
+//  int  status(double delay);
 
 signals:
   void acquireStarted(int dark);
@@ -99,7 +99,7 @@ private:
   int                    m_CurrentMode;
   int                    m_CurrentGain;
 
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.20 2009/09/21 18:49:24 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.21 2009/09/28 22:06:09 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -107,6 +107,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.21  2009/09/28 22:06:09  jennings
+*  Removed QxrdAcquisitionPerkinElmer::status
+*
 *  Revision 1.20  2009/09/21 18:49:24  jennings
 *  Accelerate readout by only calling 'SetCameraMode' and 'SetCameraGain' if they change
 *
