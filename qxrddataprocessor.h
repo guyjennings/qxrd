@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.40 2009/09/26 04:55:46 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.41 2009/09/29 18:39:47 jennings Exp $
 *
 *******************************************************************/
 
@@ -211,10 +211,10 @@ public:
   int decrementAcquiredCount();
   int getAcquiredCount();
 
-  int incrementProcessedCount();
-  int decrementProcessedCount();
-  int getProcessedCount();
-
+//  int incrementProcessedCount();
+//  int decrementProcessedCount();
+//  int getProcessedCount();
+//
   QxrdCenterFinder  *centerFinder() const;
   QxrdIntegrator    *integrator() const;
 
@@ -270,14 +270,14 @@ private:
   QxrdMaskData             *m_Mask;
 
   QAtomicInt                m_AcquiredCount;
-  QAtomicInt                m_ProcessedCount;
+//  QAtomicInt                m_ProcessedCount;
 
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.40 2009/09/26 04:55:46 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.41 2009/09/29 18:39:47 jennings Exp $");
 };
 
 #endif
@@ -285,6 +285,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.41  2009/09/29 18:39:47  jennings
+*  Removed references to 'QxrdDataProcessor::processedCount'
+*  Fixed up the various 'status' scripting functions so that they work properly
+*
 *  Revision 1.40  2009/09/26 04:55:46  jennings
 *  Removed some commented-out sections
 *  Removed QxrdDataProcessor::copyImage(src,dst), replaced with templatized image member fn

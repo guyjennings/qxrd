@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.56 2009/09/28 22:06:55 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.57 2009/09/29 18:39:46 jennings Exp $
 *
 *******************************************************************/
 
@@ -62,11 +62,11 @@ QxrdDataProcessor::QxrdDataProcessor
     m_GainMap(NULL),
     m_Mask(new QxrdMaskData(2048, 2048)),
     m_AcquiredCount(0),
-    m_ProcessedCount(0),
+//    m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.56 2009/09/28 22:06:55 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.57 2009/09/29 18:39:46 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -233,7 +233,7 @@ void QxrdDataProcessor::newData(QxrdDoubleImageData *image)
 
   set_FileName(image->get_FileName());
 
-  incrementProcessedCount();
+//  incrementProcessedCount();
 
   m_Window -> newDataAvailable(m_Data);
 }
@@ -891,6 +891,8 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
     QTime tic;
     tic.start();
 
+    emit printMessage(tr("Processing Image \"%1\", count %2").arg(dimg->get_FileName()).arg(getAcquiredCount()));
+
     if (get_PerformDarkSubtraction()) {
       QxrdDoubleImageData *dark   = darkImage();
 
@@ -1291,7 +1293,13 @@ int QxrdDataProcessor::decrementAcquiredCount()
 {
 //  emit printMessage(tr("QxrdDataProcessor::decrementAcquiredCount m_AcquiredCount = %1").arg(m_AcquiredCount));
 
-  return m_AcquiredCount.fetchAndAddOrdered(-1);
+  int res = m_AcquiredCount.fetchAndAddOrdered(-1);
+
+  if (res == 0) {
+    m_ProcessWaiting.wakeAll();
+  }
+
+  return res;
 }
 
 int QxrdDataProcessor::getAcquiredCount()
@@ -1304,38 +1312,42 @@ int QxrdDataProcessor::status(double time)
   QMutex mutex;
   QMutexLocker lock(&mutex);
 
+  if (getAcquiredCount() == 0) {
+    return 1;
+  }
+
   if (m_ProcessWaiting.wait(&mutex, (int)(time*1000))) {
-    return getProcessedCount();
+    return getAcquiredCount()==0;
   } else {
     return 0;
   }
 }
 
-int QxrdDataProcessor::incrementProcessedCount()
-{
-//  emit printMessage(tr("QxrdDataProcessor::incrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
-
-  return m_ProcessedCount.fetchAndAddOrdered(+1);
-}
-
-int QxrdDataProcessor::decrementProcessedCount()
-{
-//  emit printMessage(tr("QxrdDataProcessor::decrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
-
-  int res = m_ProcessedCount.fetchAndAddOrdered(-1);
-
-  if (res == 0) {
-    m_ProcessWaiting.wakeAll();
-  }
-
-  return res;
-}
-
-int QxrdDataProcessor::getProcessedCount()
-{
-  return m_ProcessedCount.fetchAndAddOrdered(0);
-}
-
+//int QxrdDataProcessor::incrementProcessedCount()
+//{
+////  emit printMessage(tr("QxrdDataProcessor::incrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
+//
+//  return m_ProcessedCount.fetchAndAddOrdered(+1);
+//}
+//
+//int QxrdDataProcessor::decrementProcessedCount()
+//{
+////  emit printMessage(tr("QxrdDataProcessor::decrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
+//
+//  int res = m_ProcessedCount.fetchAndAddOrdered(-1);
+//
+//  if (res == 0) {
+//    m_ProcessWaiting.wakeAll();
+//  }
+//
+//  return res;
+//}
+//
+//int QxrdDataProcessor::getProcessedCount()
+//{
+//  return m_ProcessedCount.fetchAndAddOrdered(0);
+//}
+//
 QxrdCenterFinder  *QxrdDataProcessor::centerFinder() const
 {
   QMutexLocker  lock(&m_Mutex);
@@ -1543,6 +1555,10 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.57  2009/09/29 18:39:46  jennings
+*  Removed references to 'QxrdDataProcessor::processedCount'
+*  Fixed up the various 'status' scripting functions so that they work properly
+*
 *  Revision 1.56  2009/09/28 22:06:55  jennings
 *  Added circular integration to processing steps
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.13 2009/09/25 22:42:48 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.14 2009/09/29 18:39:47 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,7 +27,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.13 2009/09/25 22:42:48 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.14 2009/09/29 18:39:47 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -236,7 +236,7 @@ QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine
 
   status = g_Acquisition -> acquisitionStatus(time);
 
-  if (status == 0) {
+  if (status == 1) {
     status = g_DataProcessor -> status(time);
   }
 
@@ -361,6 +361,10 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.14  2009/09/29 18:39:47  jennings
+*  Removed references to 'QxrdDataProcessor::processedCount'
+*  Fixed up the various 'status' scripting functions so that they work properly
+*
 *  Revision 1.13  2009/09/25 22:42:48  jennings
 *  Masking changes
 *

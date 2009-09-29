@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.40 2009/09/22 21:34:03 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.41 2009/09/29 18:39:47 jennings Exp $
 *
 *******************************************************************/
 
@@ -53,7 +53,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.40 2009/09/22 21:34:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.41 2009/09/29 18:39:47 jennings Exp $")
 {
   m_Zoomer -> setEnabled(true);
 
@@ -445,7 +445,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageData *image)
     m_FirstTime = true;
   }
 
-  m_DataProcessor -> decrementProcessedCount();
+//  m_DataProcessor -> decrementProcessedCount();
 
   QxrdRasterData data(image, get_InterpolatePixels());
 
@@ -464,7 +464,7 @@ void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageData *image, QxrdMaskD
     m_FirstTime = true;
   }
 
-  m_DataProcessor -> decrementProcessedCount();
+//  m_DataProcessor -> decrementProcessedCount();
 
   QxrdRasterData data(image, get_InterpolatePixels());
   QxrdMaskRasterData msk(mask, get_InterpolatePixels());
@@ -587,6 +587,10 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.41  2009/09/29 18:39:47  jennings
+*  Removed references to 'QxrdDataProcessor::processedCount'
+*  Fixed up the various 'status' scripting functions so that they work properly
+*
 *  Revision 1.40  2009/09/22 21:34:03  jennings
 *  Made message pane read-only
 *
