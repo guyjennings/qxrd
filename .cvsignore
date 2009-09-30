@@ -15,3 +15,6 @@ qxrd.spec
 rcc
 spec.mac
 ui
+*.tif
+*.metadata
+
