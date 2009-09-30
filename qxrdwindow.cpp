@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.100 2009/09/25 22:42:48 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.101 2009/09/30 16:50:29 jennings Exp $
 *
 *******************************************************************/
 
@@ -57,7 +57,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.100 2009/09/25 22:42:48 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.101 2009/09/30 16:50:29 jennings Exp $")
 {
   setupUi(this);
 
@@ -523,14 +523,16 @@ void QxrdWindow::doAcquireDark()
 void QxrdWindow::doCancel()
 {
   if (m_Acquiring) {
-    QMetaObject::invokeMethod(m_Acquisition, "cancel");
+    m_Acquisition -> cancel();
+//    QMetaObject::invokeMethod(m_Acquisition, "cancel");
   }
 }
 
 void QxrdWindow::doCancelDark()
 {
   if (m_AcquiringDark) {
-    QMetaObject::invokeMethod(m_Acquisition, "cancelDark");
+    m_Acquisition -> cancelDark();
+//    QMetaObject::invokeMethod(m_Acquisition, "cancelDark");
   }
 }
 
@@ -836,6 +838,9 @@ QxrdMaskData *QxrdWindow::mask()
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.101  2009/09/30 16:50:29  jennings
+*  Make acquisition interruptable when it was started from the command line
+*
 *  Revision 1.100  2009/09/25 22:42:48  jennings
 *  Masking changes
 *

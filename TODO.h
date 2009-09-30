@@ -5,11 +5,11 @@
 //
 //Check that settings are not being saved twice (in QxrdWindow destructor):
 //
--------------------------------------------------------
-
-Check thread correctness of acquisition
-Adopt the same threading model as qavrg
-
+//-------------------------------------------------------
+//
+//Check thread correctness of acquisition
+//Adopt the same threading model as qavrg
+//
 //-------------------------------------------------------
 //
 //Run script engine in separate thread
@@ -96,10 +96,10 @@ an autoscale operation before they start zooming properly
 //
 //Add menu commands to show/hide toolbox windows
 //
--------------------------------------------------------
-
-Automatically add integrated curves to output panel.
-
+//-------------------------------------------------------
+//
+//Automatically add integrated curves to output panel.
+//
 -------------------------------------------------------
 
 Display range choosing doesn't work very well
@@ -234,19 +234,19 @@ Provide a means to remove dark image, gain map, mask etc.
 BLOCKER
 Add frame skip option in acquisition
 
--------------------------------------------------------
-
-BLOCKER
-The script:
-for (i=0; i<6; i++) {
-   print("Camera Gain = ",i);
-   acquisition.cameraGain = i;
-   acquire("h:/junk-test/testing",0.1,1,1,0)
-   while (status(0.5) != 1) {
-     print("Waiting")
-   }
-}
-gets deadlocked
+//-------------------------------------------------------
+//
+//BLOCKER
+//The script:
+//for (i=0; i<6; i++) {
+//   print("Camera Gain = ",i);
+//   acquisition.cameraGain = i;
+//   acquire("h:/junk-test/testing",0.1,1,1,0)
+//   while (status(0.5) != 1) {
+//     print("Waiting")
+//   }
+//}
+//gets deadlocked
 
 -------------------------------------------------------
 
@@ -263,13 +263,13 @@ taken.
 //particularly in TIFF, Acquire_ and file i/o routines
 //Check output directory exists before starting acquisition sequence.
 //
--------------------------------------------------------
-
-BLOCKER
-Add acquireStatus and processStatus functions and
-processor.status() and acquisition.status() methods
-which test status of acquisition and processing operations
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Add acquireStatus and processStatus functions and
+//processor.status() and acquisition.status() methods
+//which test status of acquisition and processing operations
+//
 -------------------------------------------------------
 
 BLOCKER
@@ -327,4 +327,11 @@ Image doesn't update when display parameters are changed.
 BLOCKER
 There's some kind of deadlock in the acquisition process
 
+//-------------------------------------------------------
+//
+//BLOCKER
+//Can't interrupt acquisition from GUI if it was started from script
+//The GUI cancel calls should call the acquisition object directly, rather
+//than via invokeMethod
+//
 #endif // TODO_H
