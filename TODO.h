@@ -334,4 +334,27 @@ There's some kind of deadlock in the acquisition process
 //The GUI cancel calls should call the acquisition object directly, rather
 //than via invokeMethod
 //
+-------------------------------------------------------
+
+BLOCKER
+Need to limit the number of curves that can be added to the az avg window
+Need to implement saving the az avg data
+
+-------------------------------------------------------
+
+BLOCKER
+Allow for acquired but not yet processed images when calculating number of
+buffered images.
+
+-------------------------------------------------------
+
+Investigate whether the intensities would be more stable if the acquisition
+was running continuously rather than being started and stopped during each
+acquisition sequence. - could also include some kind of continuously updating
+display.
+
+-------------------------------------------------------
+
+Provide commands for printing graphs.
+
 #endif // TODO_H
