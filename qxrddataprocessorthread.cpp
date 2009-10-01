@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorthread.cpp,v 1.4 2009/08/27 21:02:17 jennings Exp $
+*  $Id: qxrddataprocessorthread.cpp,v 1.5 2009/10/01 21:43:44 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,7 +11,7 @@
 QxrdDataProcessorThread::QxrdDataProcessorThread(/*QxrdWindow *win, */QxrdAcquisition *acq)
   : QThread(),
     m_DataProcessor(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessorthread.cpp,v 1.4 2009/08/27 21:02:17 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessorthread.cpp,v 1.5 2009/10/01 21:43:44 jennings Exp $")
 {
   m_DataProcessor = new QxrdDataProcessor(NULL, acq, NULL);
   m_DataProcessor -> moveToThread(this);
@@ -20,9 +20,6 @@ QxrdDataProcessorThread::QxrdDataProcessorThread(/*QxrdWindow *win, */QxrdAcquis
 QxrdDataProcessorThread::~QxrdDataProcessorThread()
 {
   shutdown();
-
-
-  delete m_DataProcessor;
 }
 
 void QxrdDataProcessorThread::run()
@@ -37,6 +34,8 @@ void QxrdDataProcessorThread::shutdown()
   exit();
 
   wait(1000);
+
+  delete m_DataProcessor;
 }
 
 QxrdDataProcessor *QxrdDataProcessorThread::dataProcessor() const
@@ -47,6 +46,9 @@ QxrdDataProcessor *QxrdDataProcessorThread::dataProcessor() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessorthread.cpp,v $
+*  Revision 1.5  2009/10/01 21:43:44  jennings
+*  Delete QxrdDataProcessor object at program exit
+*
 *  Revision 1.4  2009/08/27 21:02:17  jennings
 *  Partial implementation of lazy plotting
 *
