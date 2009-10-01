@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.101 2009/09/30 16:50:29 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.102 2009/10/01 21:43:09 jennings Exp $
 *
 *******************************************************************/
 
@@ -57,7 +57,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.101 2009/09/30 16:50:29 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.102 2009/10/01 21:43:09 jennings Exp $")
 {
   setupUi(this);
 
@@ -353,9 +353,10 @@ void QxrdWindow::printMessage(QString msg)
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "printMessage", Qt::QueuedConnection, Q_ARG(QString, msg));
   } else {
-    m_Messages -> append(timeStamp()+msg.trimmed());
+    QString message = timeStamp()+msg.trimmed();
 
-    m_DataProcessor -> logMessage(msg);
+    m_Messages -> append(message);
+    m_DataProcessor -> logMessage(message);
   }
 }
 
@@ -838,6 +839,9 @@ QxrdMaskData *QxrdWindow::mask()
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.102  2009/10/01 21:43:09  jennings
+*  Added time stamp to log file output
+*
 *  Revision 1.101  2009/09/30 16:50:29  jennings
 *  Make acquisition interruptable when it was started from the command line
 *
