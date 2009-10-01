@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.57 2009/09/29 18:39:46 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.58 2009/10/01 21:44:05 jennings Exp $
 *
 *******************************************************************/
 
@@ -62,16 +62,28 @@ QxrdDataProcessor::QxrdDataProcessor
     m_GainMap(NULL),
     m_Mask(new QxrdMaskData(2048, 2048)),
     m_AcquiredCount(0),
-//    m_ProcessedCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.57 2009/09/29 18:39:46 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.58 2009/10/01 21:44:05 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
 
 //  m_DarkImagePath.setDebug(10);
+}
+
+QxrdDataProcessor::~QxrdDataProcessor()
+{
+  closeLogFile();
+
+  delete m_Data;
+  delete m_DarkFrame;
+  delete m_BadPixels;
+  delete m_GainMap;
+  delete m_Mask;
+  delete m_CenterFinder;
+  delete m_Integrator;
 }
 
 void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
@@ -1323,31 +1335,6 @@ int QxrdDataProcessor::status(double time)
   }
 }
 
-//int QxrdDataProcessor::incrementProcessedCount()
-//{
-////  emit printMessage(tr("QxrdDataProcessor::incrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
-//
-//  return m_ProcessedCount.fetchAndAddOrdered(+1);
-//}
-//
-//int QxrdDataProcessor::decrementProcessedCount()
-//{
-////  emit printMessage(tr("QxrdDataProcessor::decrementProcessedCount m_ProcessedCount = %1").arg(m_ProcessedCount));
-//
-//  int res = m_ProcessedCount.fetchAndAddOrdered(-1);
-//
-//  if (res == 0) {
-//    m_ProcessWaiting.wakeAll();
-//  }
-//
-//  return res;
-//}
-//
-//int QxrdDataProcessor::getProcessedCount()
-//{
-//  return m_ProcessedCount.fetchAndAddOrdered(0);
-//}
-//
 QxrdCenterFinder  *QxrdDataProcessor::centerFinder() const
 {
   QMutexLocker  lock(&m_Mutex);
@@ -1522,6 +1509,18 @@ void QxrdDataProcessor::logMessage(QString msg)
   }
 }
 
+void QxrdDataProcessor::closeLogFile()
+{
+  QMutexLocker lock(&m_LogFileMutex);
+
+  if (m_LogFile) {
+    logMessage(tr("%1 ------- shutdown --------").
+               arg(QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ")));
+    fclose(m_LogFile);
+    m_LogFile = NULL;
+  }
+}
+
 void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 {
   QMutexLocker lock(&m_Mutex);
@@ -1555,6 +1554,10 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.58  2009/10/01 21:44:05  jennings
+*  Delete QxrdDataProcessor object at program exit
+*  Removed some commented out dead wood
+*
 *  Revision 1.57  2009/09/29 18:39:46  jennings
 *  Removed references to 'QxrdDataProcessor::processedCount'
 *  Fixed up the various 'status' scripting functions so that they work properly

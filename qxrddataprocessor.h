@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.41 2009/09/29 18:39:47 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.42 2009/10/01 21:44:05 jennings Exp $
 *
 *******************************************************************/
 
@@ -33,6 +33,7 @@ class QxrdDataProcessor : public QObject
 
 public:
   QxrdDataProcessor(QxrdWindow *win, QxrdAcquisition *acq, QObject *parent=0);
+  ~QxrdDataProcessor();
 
 public:
   Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory);
@@ -177,6 +178,7 @@ public slots:
 
   void newLogFile(QString path);
   void logMessage(QString msg);
+  void closeLogFile();
 
   void fileWriteTest(int dim, QString path);
   int status(double delay);
@@ -211,22 +213,14 @@ public:
   int decrementAcquiredCount();
   int getAcquiredCount();
 
-//  int incrementProcessedCount();
-//  int decrementProcessedCount();
-//  int getProcessedCount();
-//
   QxrdCenterFinder  *centerFinder() const;
   QxrdIntegrator    *integrator() const;
 
 private slots:
-//  void onAcquiredImageAvailable(QxrdDoubleImageData *image);
   void onAcquiredInt16ImageAvailable(QxrdInt16ImageData *image);
   void onAcquiredInt32ImageAvailable(QxrdInt32ImageData *image);
-//  void onProcessedImageAvailable(QxrdImageData *image);
-//  void onDarkImageAvailable(QxrdImageData *image);
 
 private:
-//  void processAcquiredImage(QxrdDoubleImageData *image);
   void processAcquiredInt16Image(QxrdInt16ImageData *image);
   void processAcquiredInt32Image(QxrdInt32ImageData *image);
   void processAcquiredImage(QxrdDoubleImageData *dimg);
@@ -259,10 +253,6 @@ private:
   QReadWriteLock            m_Processing;
   QWaitCondition            m_ProcessWaiting;
   QxrdDoubleImageQueue      m_FreeImages;
-//  QxrdImageQueue            m_ProcessedImages;
-//  QxrdImageQueue            m_DarkImages;
-//  QxrdInt16ImageQueue       m_AcquiredInt16Images;
-//  QxrdInt32ImageQueue       m_AcquiredInt32Images;
   QxrdDoubleImageData      *m_Data;
   QxrdDoubleImageData      *m_DarkFrame;
   QxrdDoubleImageData      *m_BadPixels;
@@ -270,14 +260,13 @@ private:
   QxrdMaskData             *m_Mask;
 
   QAtomicInt                m_AcquiredCount;
-//  QAtomicInt                m_ProcessedCount;
 
   QxrdCenterFinder         *m_CenterFinder;
   QxrdIntegrator           *m_Integrator;
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.41 2009/09/29 18:39:47 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.42 2009/10/01 21:44:05 jennings Exp $");
 };
 
 #endif
@@ -285,6 +274,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.42  2009/10/01 21:44:05  jennings
+*  Delete QxrdDataProcessor object at program exit
+*  Removed some commented out dead wood
+*
 *  Revision 1.41  2009/09/29 18:39:47  jennings
 *  Removed references to 'QxrdDataProcessor::processedCount'
 *  Fixed up the various 'status' scripting functions so that they work properly
