@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.59 2009/10/02 20:11:02 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.60 2009/10/02 20:18:35 jennings Exp $
 *
 *******************************************************************/
 
@@ -65,7 +65,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.59 2009/10/02 20:11:02 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.60 2009/10/02 20:18:35 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -1560,7 +1560,7 @@ void QxrdDataProcessor::writeOutputScan(QVector<double> x, QVector<double> y)
   QMutexLocker lock(&m_LogFileMutex);
 
   if (m_LogFile) {
-    fprintf(m_LogFile, "#S %d qxrd.integrate \"%s\" %g %g",
+    fprintf(m_LogFile, "#S %d qxrd.integrate \"%s\" %g %g\n",
                               m_Data -> get_ImageNumber(),
                               qPrintable(m_Data -> get_FileName()),
                               m_CenterFinder -> get_CenterX(),
@@ -1608,6 +1608,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.60  2009/10/02 20:18:35  jennings
+*  Added support for (optionally) saving and/or displaying integrated data
+*
 *  Revision 1.59  2009/10/02 20:11:02  jennings
 *  Added support for (optionally) saving and/or displaying integrated data
 *

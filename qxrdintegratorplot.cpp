@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.cpp,v 1.14 2009/09/22 18:19:00 jennings Exp $
+*  $Id: qxrdintegratorplot.cpp,v 1.15 2009/10/02 20:18:35 jennings Exp $
 *
 *******************************************************************/
 
@@ -21,7 +21,7 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
     m_DataProcessor(NULL),
     m_Integrator(NULL),
     m_PlotIndex(0),
-    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.14 2009/09/22 18:19:00 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.15 2009/10/02 20:18:35 jennings Exp $")
 {
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
@@ -47,11 +47,13 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QString title, QVector<double
 
 //  printf("New integration available, %d, %d points\n", x.size(), y.size());
 
-  QwtPlotCurve *pc = new QwtPlotCurve(title/*tr("Plot %1").arg(m_PlotIndex)*/);
-  pc -> setData(x.data(), y.data(), x.size());
-  setPlotCurveStyle(m_PlotIndex, pc);
-  pc -> attach(this);
-  replot();
+  if (m_PlotIndex < 40) {
+    QwtPlotCurve *pc = new QwtPlotCurve(title/*tr("Plot %1").arg(m_PlotIndex)*/);
+    pc -> setData(x.data(), y.data(), x.size());
+    setPlotCurveStyle(m_PlotIndex, pc);
+    pc -> attach(this);
+    replot();
+  }
 
   m_PlotIndex++;
 //
@@ -69,6 +71,9 @@ void QxrdIntegratorPlot::clearGraph()
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.cpp,v $
+*  Revision 1.15  2009/10/02 20:18:35  jennings
+*  Added support for (optionally) saving and/or displaying integrated data
+*
 *  Revision 1.14  2009/09/22 18:19:00  jennings
 *  Added slicing routines
 *  Set title for traces in avg data graph
