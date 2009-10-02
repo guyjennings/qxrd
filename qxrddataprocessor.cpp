@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.58 2009/10/01 21:44:05 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.59 2009/10/02 20:11:02 jennings Exp $
 *
 *******************************************************************/
 
@@ -65,7 +65,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.58 2009/10/01 21:44:05 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.59 2009/10/02 20:11:02 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -379,6 +379,36 @@ void QxrdDataProcessor::loadData(QString name)
   } else {
     returnImageToPool(res);
   }
+}
+
+void QxrdDataProcessor::processData(QString name)
+{
+  QMutexLocker lock(&m_Mutex);
+
+//  printf("QxrdDataProcessor::loadData(%s)\n", qPrintable(name));
+
+  QxrdDoubleImageData* res = takeNextFreeImage();
+
+  if (res -> readImage(name)) {
+
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+    res -> loadMetaData();
+
+    processAcquiredImage(res);
+
+    set_DataPath(res -> get_FileName());
+  } else {
+    returnImageToPool(res);
+  }
+}
+
+void QxrdDataProcessor::processDataSequence(QString wc)
+{
+}
+
+void QxrdDataProcessor::processDataSequence(QRegExp re)
+{
 }
 
 void QxrdDataProcessor::saveData(QString name, int canOverwrite)
@@ -940,14 +970,18 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
       m_Integrator -> performIntegration();
 
       updateEstimatedTime(prop_PerformIntegrationTime(), tic.restart());
-    }
 
-    if (get_SaveIntegratedData()) {
-      updateEstimatedTime(prop_SaveIntegratedDataTime(), tic.restart());
-    }
+      if (get_SaveIntegratedData()) {
+        m_Integrator -> saveIntegratedData();
 
-    if (get_DisplayIntegratedData()) {
-      updateEstimatedTime(prop_DisplayIntegratedDataTime(), tic.restart());
+        updateEstimatedTime(prop_SaveIntegratedDataTime(), tic.restart());
+      }
+
+      if (get_DisplayIntegratedData()) {
+        m_Integrator -> displayIntegratedData();
+
+        updateEstimatedTime(prop_DisplayIntegratedDataTime(), tic.restart());
+      }
     }
 
 //    m_ProcessedImages.enqueue(img);
@@ -1521,6 +1555,26 @@ void QxrdDataProcessor::closeLogFile()
   }
 }
 
+void QxrdDataProcessor::writeOutputScan(QVector<double> x, QVector<double> y)
+{
+  QMutexLocker lock(&m_LogFileMutex);
+
+  if (m_LogFile) {
+    fprintf(m_LogFile, "#S %d qxrd.integrate \"%s\" %g %g",
+                              m_Data -> get_ImageNumber(),
+                              qPrintable(m_Data -> get_FileName()),
+                              m_CenterFinder -> get_CenterX(),
+                              m_CenterFinder -> get_CenterY());
+    fprintf(m_LogFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
+    fprintf(m_LogFile, "#N 2\n");
+    fprintf(m_LogFile, "#L x  y\n");
+
+    for (int i=0; i<x.size(); i++) {
+      fprintf(m_LogFile, "%g %g\n", x.value(i), y.value(i));
+    }
+  }
+}
+
 void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 {
   QMutexLocker lock(&m_Mutex);
@@ -1554,6 +1608,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.59  2009/10/02 20:11:02  jennings
+*  Added support for (optionally) saving and/or displaying integrated data
+*
 *  Revision 1.58  2009/10/01 21:44:05  jennings
 *  Delete QxrdDataProcessor object at program exit
 *  Removed some commented out dead wood

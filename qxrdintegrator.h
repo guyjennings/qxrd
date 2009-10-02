@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.h,v 1.10 2009/09/22 18:19:00 jennings Exp $
+*  $Id: qxrdintegrator.h,v 1.11 2009/10/02 20:11:02 jennings Exp $
 *
 *******************************************************************/
 
@@ -41,6 +41,8 @@ signals:
 
 public slots:
   void performIntegration();
+  void saveIntegratedData();
+  void displayIntegratedData();
   void integrate(double cx, double cy, int oversample, int normalize);
   void parallelIntegrate(int nthreads, double cx, double cy, int oversample, int normalize);
   void integrate2(double cx, double cy, int oversample, int normalize);
@@ -61,11 +63,13 @@ private:
   QxrdDataProcessor        *m_DataProcessor;
   QVector<int>              m_TableData;
   int                       m_TableStride;
+  QVector<double>           m_OutputX;
+  QVector<double>           m_OutputY;
   QVector<double>           m_OutputData;
   QVector<double>           m_OutputSums;
   int                       m_OutputStride;
 
-  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.10 2009/09/22 18:19:00 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.11 2009/10/02 20:11:02 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATOR_H
@@ -73,6 +77,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegrator.h,v $
+*  Revision 1.11  2009/10/02 20:11:02  jennings
+*  Added support for (optionally) saving and/or displaying integrated data
+*
 *  Revision 1.10  2009/09/22 18:19:00  jennings
 *  Added slicing routines
 *  Set title for traces in avg data graph

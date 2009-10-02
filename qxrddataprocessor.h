@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.42 2009/10/01 21:44:05 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.43 2009/10/02 20:11:02 jennings Exp $
 *
 *******************************************************************/
 
@@ -151,6 +151,10 @@ public slots:
   void printMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
   void summarizeMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
 
+  void processData(QString name);
+  void processDataSequence(QString wc);
+  void processDataSequence(QRegExp re);
+
   void loadData(QString name);
   void saveData(QString name, int canOverwrite=NoOverwrite);
   void loadDark(QString name);
@@ -204,6 +208,8 @@ public:
   bool saveNamedRawImageData(QString name, QxrdInt16ImageData *image, int canOverwrite=NoOverwrite);
   bool saveNamedRawImageData(QString name, QxrdInt32ImageData *image, int canOverwrite=NoOverwrite);
   bool saveNamedMaskData(QString name, QxrdMaskData *mask, int canOverwrite=NoOverwrite);
+
+  void writeOutputScan(QVector<double> x, QVector<double> y);
 
   QxrdDoubleImageData *data() const;
   QxrdDoubleImageData *darkImage() const;
@@ -266,7 +272,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.42 2009/10/01 21:44:05 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.43 2009/10/02 20:11:02 jennings Exp $");
 };
 
 #endif
@@ -274,6 +280,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.43  2009/10/02 20:11:02  jennings
+*  Added support for (optionally) saving and/or displaying integrated data
+*
 *  Revision 1.42  2009/10/01 21:44:05  jennings
 *  Delete QxrdDataProcessor object at program exit
 *  Removed some commented out dead wood

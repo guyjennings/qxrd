@@ -1627,7 +1627,7 @@ Script Function: outputDirectory()</string>
      <item row="7" column="0">
       <widget class="QCheckBox" name="m_DisplayIntegratedData">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="font">
         <font>
@@ -1667,7 +1667,7 @@ Script Function: outputDirectory()</string>
      <item row="8" column="0">
       <widget class="QCheckBox" name="m_SaveIntegratedData">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="font">
         <font>
