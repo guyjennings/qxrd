@@ -361,4 +361,15 @@ Provide commands for printing graphs.
 
 The first average after the program has been started, is always zero
 
+-------------------------------------------------------
+
+BLOCKER
+Need to re-enable adding sliced data to az avg graph
+
+-------------------------------------------------------
+
+Implement processor.processDataSequence
+
+-------------------------------------------------------
+
 #endif // TODO_H
