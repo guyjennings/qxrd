@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.60 2009/10/02 20:18:35 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.61 2009/10/02 21:03:11 jennings Exp $
 *
 *******************************************************************/
 
@@ -65,7 +65,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.60 2009/10/02 20:18:35 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.61 2009/10/02 21:03:11 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -1529,6 +1529,7 @@ void QxrdDataProcessor::writeLogHeader()
     fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFilePath()));
     fprintf(m_LogFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
     fprintf(m_LogFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
+    fflush(m_LogFile);
   }
 }
 
@@ -1540,6 +1541,7 @@ void QxrdDataProcessor::logMessage(QString msg)
 
   if (m_LogFile) {
     fprintf(m_LogFile, "#CX %s\n", qPrintable(msg));
+    fflush(m_LogFile);
   }
 }
 
@@ -1572,6 +1574,8 @@ void QxrdDataProcessor::writeOutputScan(QVector<double> x, QVector<double> y)
     for (int i=0; i<x.size(); i++) {
       fprintf(m_LogFile, "%g %g\n", x.value(i), y.value(i));
     }
+
+    fflush(m_LogFile);
   }
 }
 
@@ -1608,6 +1612,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.61  2009/10/02 21:03:11  jennings
+*  Call fflush at strategic places during log file output
+*
 *  Revision 1.60  2009/10/02 20:18:35  jennings
 *  Added support for (optionally) saving and/or displaying integrated data
 *

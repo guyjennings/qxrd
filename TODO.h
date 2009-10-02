@@ -322,11 +322,11 @@ sub-directories
 BLOCKER
 Image doesn't update when display parameters are changed.
 
--------------------------------------------------------
-
-BLOCKER
-There's some kind of deadlock in the acquisition process
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//There's some kind of deadlock in the acquisition process
+//
 //-------------------------------------------------------
 //
 //BLOCKER
@@ -334,12 +334,12 @@ There's some kind of deadlock in the acquisition process
 //The GUI cancel calls should call the acquisition object directly, rather
 //than via invokeMethod
 //
--------------------------------------------------------
-
-BLOCKER
-Need to limit the number of curves that can be added to the az avg window
-Need to implement saving the az avg data
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Need to limit the number of curves that can be added to the az avg window
+//Need to implement saving the az avg data
+//
 -------------------------------------------------------
 
 BLOCKER
@@ -356,5 +356,9 @@ display.
 -------------------------------------------------------
 
 Provide commands for printing graphs.
+
+-------------------------------------------------------
+
+The first average after the program has been started, is always zero
 
 #endif // TODO_H
