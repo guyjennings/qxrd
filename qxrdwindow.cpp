@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.102 2009/10/01 21:43:09 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.103 2009/10/02 18:51:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -57,7 +57,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.102 2009/10/01 21:43:09 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.103 2009/10/02 18:51:43 jennings Exp $")
 {
   setupUi(this);
 
@@ -217,13 +217,21 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   m_DataProcessor -> prop_OutputDirectory() -> linkTo(m_OutputDirectory);
   m_DataProcessor -> prop_PerformDarkSubtraction() -> linkTo(m_PerformDark);
+  m_DataProcessor -> prop_PerformDarkSubtractionTime() -> linkTo(m_PerformDarkTime);
   m_DataProcessor -> prop_SaveRawImages() -> linkTo(m_SaveRaw);
+  m_Acquisition   -> prop_Raw32SaveTime() -> linkTo(m_SaveRawTime);
   m_DataProcessor -> prop_PerformBadPixels() -> linkTo(m_PerformBadPixels);
+  m_DataProcessor -> prop_PerformBadPixelsTime() -> linkTo(m_PerformBadPixelsTime);
   m_DataProcessor -> prop_PerformGainCorrection() -> linkTo(m_PerformGainCorrection);
+  m_DataProcessor -> prop_PerformGainCorrectionTime() -> linkTo(m_PerformGainCorrectionTime);
   m_DataProcessor -> prop_SaveSubtracted() -> linkTo(m_SaveSubtracted);
+  m_DataProcessor -> prop_SaveSubtractedTime() -> linkTo(m_SaveSubtractedTime);
   m_DataProcessor -> prop_PerformIntegration() -> linkTo(m_PerformIntegration);
+  m_DataProcessor -> prop_PerformIntegrationTime() -> linkTo(m_PerformIntegrationTime);
   m_DataProcessor -> prop_DisplayIntegratedData() -> linkTo(m_DisplayIntegratedData);
+  m_DataProcessor -> prop_DisplayIntegratedDataTime() -> linkTo(m_DisplayIntegratedDataTime);
   m_DataProcessor -> prop_SaveIntegratedData() -> linkTo(m_SaveIntegratedData);
+  m_DataProcessor -> prop_SaveIntegratedDataTime() -> linkTo(m_SaveIntegratedDataTime);
   m_DataProcessor -> prop_EstimatedProcessingTime() -> linkTo(m_EstimatedProcessingTime);
   m_DataProcessor -> prop_LogFilePath() -> linkTo(m_LogFilePath);
 
@@ -839,6 +847,9 @@ QxrdMaskData *QxrdWindow::mask()
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.103  2009/10/02 18:51:43  jennings
+*  Display estimated times of individual processing steps
+*
 *  Revision 1.102  2009/10/01 21:43:09  jennings
 *  Added time stamp to log file output
 *
