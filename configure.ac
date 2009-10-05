@@ -1,5 +1,5 @@
 AC_PREREQ(2.59)
-AC_INIT(qxrd, 0.2.1, jennings@anl.gov)
+AC_INIT(qxrd, 0.2.2, jennings@anl.gov)
 AC_CONFIG_SRCDIR([qxrd.cpp])
 AC_CONFIG_AUX_DIR(config)
 
