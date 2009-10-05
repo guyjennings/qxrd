@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.h,v 1.11 2009/10/02 20:11:02 jennings Exp $
+*  $Id: qxrdintegrator.h,v 1.12 2009/10/05 21:17:46 jennings Exp $
 *
 *******************************************************************/
 
@@ -40,6 +40,7 @@ signals:
   void criticalMessage(QString msg);
 
 public slots:
+  void integrateSaveAndDisplay();
   void performIntegration();
   void saveIntegratedData();
   void displayIntegratedData();
@@ -69,7 +70,7 @@ private:
   QVector<double>           m_OutputSums;
   int                       m_OutputStride;
 
-  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.11 2009/10/02 20:11:02 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.12 2009/10/05 21:17:46 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATOR_H
@@ -77,6 +78,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegrator.h,v $
+*  Revision 1.12  2009/10/05 21:17:46  jennings
+*  Integrate button now causes integrated curve to be saved and plotted, as well
+*
 *  Revision 1.11  2009/10/02 20:11:02  jennings
 *  Added support for (optionally) saving and/or displaying integrated data
 *

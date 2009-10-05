@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.14 2009/10/02 20:11:02 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.15 2009/10/05 21:17:46 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessor *proc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_DataProcessor(proc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.14 2009/10/02 20:11:02 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.15 2009/10/05 21:17:46 jennings Exp $")
 {
 }
 
@@ -33,6 +33,13 @@ void QxrdIntegrator::readSettings(QxrdSettings *settings, QString section)
   QMutexLocker lock(&m_Mutex);
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdIntegrator::integrateSaveAndDisplay()
+{
+  performIntegration();
+  saveIntegratedData();
+  displayIntegratedData();
 }
 
 void QxrdIntegrator::performIntegration()
@@ -587,6 +594,9 @@ void QxrdIntegrator::slicePolygon(QwtArray<QwtDoublePoint> poly, double width)
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.15  2009/10/05 21:17:46  jennings
+*  Integrate button now causes integrated curve to be saved and plotted, as well
+*
 *  Revision 1.14  2009/10/02 20:11:02  jennings
 *  Added support for (optionally) saving and/or displaying integrated data
 *

@@ -370,6 +370,11 @@ Need to re-enable adding sliced data to az avg graph
 
 Implement processor.processDataSequence
 
+//-------------------------------------------------------
+//
+//BLOCKER
+//Manual integration should update graph and/or save integrated data
+//
 -------------------------------------------------------
 
 #endif // TODO_H
