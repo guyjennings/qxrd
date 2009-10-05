@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratordialog.cpp,v 1.5 2009/08/04 22:03:31 jennings Exp $
+*  $Id: qxrdintegratordialog.cpp,v 1.6 2009/10/05 21:17:46 jennings Exp $
 *
 *******************************************************************/
 
@@ -10,11 +10,11 @@
 QxrdIntegratorDialog::QxrdIntegratorDialog(QxrdIntegrator *integ, QWidget *parent)
   : QWidget(parent),
     m_Integrator(integ),
-    SOURCE_IDENT("$Id: qxrdintegratordialog.cpp,v 1.5 2009/08/04 22:03:31 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegratordialog.cpp,v 1.6 2009/10/05 21:17:46 jennings Exp $")
 {
   setupUi(this);
 
-  connect(m_IntegrateButton, SIGNAL(clicked()), m_Integrator, SLOT(performIntegration()));
+  connect(m_IntegrateButton, SIGNAL(clicked()), m_Integrator, SLOT(integrateSaveAndDisplay()));
 
   m_Integrator -> prop_Oversample() -> linkTo(m_OversampleFactor);
 }
@@ -22,6 +22,9 @@ QxrdIntegratorDialog::QxrdIntegratorDialog(QxrdIntegrator *integ, QWidget *paren
 /******************************************************************
 *
 *  $Log: qxrdintegratordialog.cpp,v $
+*  Revision 1.6  2009/10/05 21:17:46  jennings
+*  *** empty log message ***
+*
 *  Revision 1.5  2009/08/04 22:03:31  jennings
 *  Moved integration code into QxrdIntegrator, added oversampling option
 *  Add each integration result to the az-avg plot panel
