@@ -377,4 +377,8 @@ Implement processor.processDataSequence
 //
 -------------------------------------------------------
 
+Memory handling is still poor, at least in simulation mode.  If you do a 1000 frame
+acquisition the memory usage may reach ~10GB, regardless of the memory usage limit
+
+-------------------------------------------------------
 #endif // TODO_H
