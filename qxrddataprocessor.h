@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.43 2009/10/02 20:11:02 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.44 2009/10/16 21:54:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -152,8 +152,9 @@ public slots:
   void summarizeMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
 
   void processData(QString name);
-  void processDataSequence(QString wc);
-  void processDataSequence(QRegExp re);
+  void processDataSequence(QString path, QString filter="*.tif");
+  void processDataSequence(QStringList paths);
+  void processDataSequence(QString path, QStringList filter);
 
   void loadData(QString name);
   void saveData(QString name, int canOverwrite=NoOverwrite);
@@ -272,7 +273,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.43 2009/10/02 20:11:02 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.44 2009/10/16 21:54:17 jennings Exp $");
 };
 
 #endif
@@ -280,6 +281,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.44  2009/10/16 21:54:17  jennings
+*  Implemented various processDataSequence commands
+*
 *  Revision 1.43  2009/10/02 20:11:02  jennings
 *  Added support for (optionally) saving and/or displaying integrated data
 *

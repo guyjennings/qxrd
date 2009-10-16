@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.61 2009/10/02 21:03:11 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.62 2009/10/16 21:54:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,6 +16,7 @@
 
 #include <QTime>
 #include <QPainter>
+#include <QDirIterator>
 #include <math.h>
 
 QxrdDataProcessor::QxrdDataProcessor
@@ -65,7 +66,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.61 2009/10/02 21:03:11 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.62 2009/10/16 21:54:17 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -403,12 +404,41 @@ void QxrdDataProcessor::processData(QString name)
   }
 }
 
-void QxrdDataProcessor::processDataSequence(QString wc)
+void QxrdDataProcessor::processDataSequence(QString path, QString filter)
 {
+  QDirIterator iter(path, QStringList(filter));
+
+  while (iter.hasNext()) {
+    QString path = iter.next();
+
+    emit printMessage(path);
+
+    processData(path);
+  }
 }
 
-void QxrdDataProcessor::processDataSequence(QRegExp re)
+void QxrdDataProcessor::processDataSequence(QStringList paths)
 {
+  QString path;
+
+  foreach(path, paths) {
+    emit printMessage(path);
+
+    processData(path);
+  }
+}
+
+void QxrdDataProcessor::processDataSequence(QString path, QStringList filters)
+{
+  QDirIterator iter(path, filters);
+
+  while (iter.hasNext()) {
+    QString path = iter.next();
+
+    emit printMessage(path);
+
+    processData(path);
+  }
 }
 
 void QxrdDataProcessor::saveData(QString name, int canOverwrite)
@@ -1612,6 +1642,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.62  2009/10/16 21:54:17  jennings
+*  Implemented various processDataSequence commands
+*
 *  Revision 1.61  2009/10/02 21:03:11  jennings
 *  Call fflush at strategic places during log file output
 *

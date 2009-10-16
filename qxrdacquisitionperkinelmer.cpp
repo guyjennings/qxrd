@@ -1,6 +1,6 @@
-/******************************************************************
+ /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.42 2009/09/28 22:06:09 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.43 2009/10/16 21:54:17 jennings Exp $
 *
 *******************************************************************/
 
@@ -55,7 +55,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CameraModel(""),
     m_CurrentMode(-1),
     m_CurrentGain(-1),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.42 2009/09/28 22:06:09 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.43 2009/10/16 21:54:17 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -835,6 +835,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.43  2009/10/16 21:54:17  jennings
+*  Implemented various processDataSequence commands
+*
 *  Revision 1.42  2009/09/28 22:06:09  jennings
 *  Removed QxrdAcquisitionPerkinElmer::status
 *
