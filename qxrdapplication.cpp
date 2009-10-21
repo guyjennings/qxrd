@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.50 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.51 2009/10/21 21:28:30 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,7 +32,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.50 2009/09/20 21:18:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.51 2009/10/21 21:28:30 jennings Exp $")
 {
   setupTiffHandlers();
 
@@ -130,6 +130,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   emit printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
   m_DataProcessor -> loadDefaultImages();
+
+  QDir::setCurrent(QDir::homePath());
+
+  emit printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 }
 
 QxrdApplication::~QxrdApplication()
@@ -250,6 +254,9 @@ void QxrdApplication::tiffError(const char *module, const char *msg)
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.51  2009/10/21 21:28:30  jennings
+*  Made default working directory home directory
+*
 *  Revision 1.50  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
