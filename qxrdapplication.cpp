@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.51 2009/10/21 21:28:30 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.52 2009/10/21 21:32:20 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,7 +32,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_Window(NULL),
     m_ServerThread(NULL),
     m_AcquisitionThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.51 2009/10/21 21:28:30 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.52 2009/10/21 21:32:20 jennings Exp $")
 {
   setupTiffHandlers();
 
@@ -131,7 +131,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_DataProcessor -> loadDefaultImages();
 
+#ifdef Q_OS_WIN32
   QDir::setCurrent(QDir::homePath());
+#endif
 
   emit printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 }
@@ -254,6 +256,9 @@ void QxrdApplication::tiffError(const char *module, const char *msg)
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.52  2009/10/21 21:32:20  jennings
+*  *** empty log message ***
+*
 *  Revision 1.51  2009/10/21 21:28:30  jennings
 *  Made default working directory home directory
 *
