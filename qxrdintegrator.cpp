@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.15 2009/10/05 21:17:46 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.16 2009/10/21 20:31:55 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessor *proc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_DataProcessor(proc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.15 2009/10/05 21:17:46 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.16 2009/10/21 20:31:55 jennings Exp $")
 {
 }
 
@@ -584,6 +584,9 @@ void QxrdIntegrator::slicePolygon(QwtArray<QwtDoublePoint> poly, double width)
     }
 //
 //    emit newIntegrationAvailable(image->get_Title(),xs,ys);
+
+    saveIntegratedData();
+    displayIntegratedData();
   }
 }
 
@@ -594,6 +597,9 @@ void QxrdIntegrator::slicePolygon(QwtArray<QwtDoublePoint> poly, double width)
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.16  2009/10/21 20:31:55  jennings
+*  Slices are automatically saved and plotted.
+*
 *  Revision 1.15  2009/10/05 21:17:46  jennings
 *  Integrate button now causes integrated curve to be saved and plotted, as well
 *

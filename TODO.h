@@ -361,11 +361,11 @@ Provide commands for printing graphs.
 
 The first average after the program has been started, is always zero
 
--------------------------------------------------------
-
-BLOCKER
-Need to re-enable adding sliced data to az avg graph
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Need to re-enable adding sliced data to az avg graph
+//
 -------------------------------------------------------
 
 Implement processor.processDataSequence
@@ -375,10 +375,13 @@ Implement processor.processDataSequence
 //BLOCKER
 //Manual integration should update graph and/or save integrated data
 //
--------------------------------------------------------
-
-Memory handling is still poor, at least in simulation mode.  If you do a 1000 frame
-acquisition the memory usage may reach ~10GB, regardless of the memory usage limit
+//-------------------------------------------------------
+//
+//Memory handling is still poor, at least in simulation mode.  If you do a 1000 frame
+//acquisition the memory usage may reach ~10GB, regardless of the memory usage limit
+//
+//Simulation mode allocates images via new, the PE driver does not, so the memory
+//handling is only a problem for simulation mode.
 
 -------------------------------------------------------
 #endif // TODO_H
