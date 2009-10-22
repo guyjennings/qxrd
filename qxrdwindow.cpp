@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.103 2009/10/02 18:51:43 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.104 2009/10/22 19:22:28 jennings Exp $
 *
 *******************************************************************/
 
@@ -19,6 +19,7 @@
 #include "qxrdintegrator.h"
 #include "qxrdplotzoomer.h"
 #include "qxrdscriptengine.h"
+#include "qxrdfilebrowser.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -47,6 +48,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_DataProcessor(proc),
     m_CenterFinderDialog(NULL),
     m_IntegratorDialog(NULL),
+    m_FileBrowser(NULL),
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
@@ -57,7 +59,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.103 2009/10/02 18:51:43 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.104 2009/10/22 19:22:28 jennings Exp $")
 {
   setupUi(this);
 
@@ -68,6 +70,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   m_IntegratorDialog = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
   m_IntegratorDockWidget -> setWidget(m_IntegratorDialog);
+
+  m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
+  m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
 
   connect(m_ExecuteScriptButton, SIGNAL(clicked()), m_ActionExecuteScript, SIGNAL(triggered()));
   connect(m_ActionExecuteScript, SIGNAL(triggered()), this, SLOT(executeScript()));
@@ -847,6 +852,9 @@ QxrdMaskData *QxrdWindow::mask()
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.104  2009/10/22 19:22:28  jennings
+*  Initial file browser
+*
 *  Revision 1.103  2009/10/02 18:51:43  jennings
 *  Display estimated times of individual processing steps
 *

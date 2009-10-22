@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.60 2009/09/25 14:22:16 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.61 2009/10/22 19:22:28 jennings Exp $
 *
 *******************************************************************/
 
@@ -30,6 +30,7 @@ class QxrdIntegrator;
 class QxrdIntegratorDialog;
 class QxrdScriptEngine;
 class QxrdSettings;
+class QxrdFileBrowser;
 
 #include "qxrdimagequeue.h"
 
@@ -123,6 +124,7 @@ private:
 //  QxrdCenterFinder       *m_CenterFinder;
   QxrdIntegratorDialog   *m_IntegratorDialog;
 //  QxrdIntegrator         *m_Integrator;
+  QxrdFileBrowser        *m_FileBrowser;
   QVector<double>         m_Exposures;
   QProgressBar           *m_Progress;
   QLabel                 *m_StatusMsg;
@@ -143,7 +145,7 @@ private:
 //  QAtomicInt              m_Plotting;
 //  QAtomicInt              m_SpareDataAvailable;
 
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.60 2009/09/25 14:22:16 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.61 2009/10/22 19:22:28 jennings Exp $");
 };
 
 #endif
@@ -151,6 +153,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.61  2009/10/22 19:22:28  jennings
+*  Initial file browser
+*
 *  Revision 1.60  2009/09/25 14:22:16  jennings
 *  Simplified double-buffering for plotted data - there is now a separate copy of data and mask
 *  in QxrdWindow

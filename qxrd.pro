@@ -3,7 +3,8 @@ CONFIG += qt
 include("qxrd.version.pri")
 QT += network \
     script
-QMAKE_CXXFLAGS += -g -DVERSION=\"\\\"$$VERSION\\\"\"
+QMAKE_CXXFLAGS += -g \
+    -DVERSION=\"\\\"$$VERSION\\\"\"
 QMAKE_CFLAGS += -g
 QMAKE_LFLAGS += -g
 vectorize { 
@@ -81,7 +82,8 @@ HEADERS += TODO.h \
     qxrdacquisitionsimulated.h \
     qxrdmaskpicker.h \
     qxrdmaskdata.h \
-    qxrdimageplotmeasurer.h
+    qxrdimageplotmeasurer.h \
+    qxrdfilebrowser.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -124,10 +126,12 @@ SOURCES += qxrd.cpp \
     qxrdacquisitionsimulated.cpp \
     qxrdmaskpicker.cpp \
     qxrdmaskdata.cpp \
-    qxrdimageplotmeasurer.cpp
+    qxrdimageplotmeasurer.cpp \
+    qxrdfilebrowser.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
-    qxrdintegratordialog.ui
+    qxrdintegratordialog.ui \
+    qxrdfilebrowser.ui
 unix { 
     HEADERS += xisl_dummy.h
     SOURCES += xisl_dummy.cpp
@@ -138,7 +142,7 @@ unix {
 win32 { 
     PLATFORM_PREFIX = win32
     QTBINDIR = C:/Qt/2009.03/qt/bin
-    MINGW    = C:/Qt/2009.03/qt/bin
+    MINGW = C:/Qt/2009.03/qt/bin
     app.target = app
     zip.target = zip
     CONFIG(debug, debug|release) { 

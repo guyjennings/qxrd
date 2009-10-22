@@ -383,5 +383,12 @@ Implement processor.processDataSequence
 //Simulation mode allocates images via new, the PE driver does not, so the memory
 //handling is only a problem for simulation mode.
 
+//-------------------------------------------------------
+//
+//Initial choice of 'home' directory under windows is the application directory - a poor place
+//to save data!
+//
+//Added code (in windows only) to set the current directory to QDir::homePath() at startup.
+//
 -------------------------------------------------------
 #endif // TODO_H
