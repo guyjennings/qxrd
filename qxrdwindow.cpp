@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.104 2009/10/22 19:22:28 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.105 2009/10/22 21:50:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -59,7 +59,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.104 2009/10/22 19:22:28 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.105 2009/10/22 21:50:58 jennings Exp $")
 {
   setupUi(this);
 
@@ -553,6 +553,7 @@ void QxrdWindow::doCancelDark()
 void QxrdWindow::readSettings(QxrdSettings *settings, QString section)
 {
   m_Plot         -> readSettings(settings, section+"/plot");
+  m_FileBrowser  -> readSettings(settings, section+"/fileBrowser");
 
   m_SettingsLoaded = true;
 
@@ -568,6 +569,7 @@ void QxrdWindow::readSettings(QxrdSettings *settings, QString section)
 void QxrdWindow::writeSettings(QxrdSettings *settings, QString section)
 {
   m_Plot         -> writeSettings(settings, section+"/plot");
+  m_FileBrowser  -> writeSettings(settings, section+"/fileBrowser");
 
   settings -> setValue(section+"-geometry", saveGeometry());
   settings -> setValue(section+"-state", saveState(1));
@@ -852,6 +854,9 @@ QxrdMaskData *QxrdWindow::mask()
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.105  2009/10/22 21:50:58  jennings
+*  More code for file browser, basic operation now works
+*
 *  Revision 1.104  2009/10/22 19:22:28  jennings
 *  Initial file browser
 *

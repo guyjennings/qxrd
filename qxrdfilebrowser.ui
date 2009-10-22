@@ -14,8 +14,58 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="m_GridLayout">
-   <item row="0" column="0">
-    <widget class="QTreeView" name="m_FileBrowser"/>
+   <item row="0" column="0" colspan="2">
+    <widget class="QTreeView" name="m_FileBrowser">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QComboBox" name="m_FilterChoices">
+     <item>
+      <property name="text">
+       <string>Image Files (*.tif)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Processed Files (*nnnnn.tif)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Raw Image Files (*.raw.tif)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Dark Image Files (*.dark.tif)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>All Files (*)</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QLineEdit" name="m_FileSelector"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QPushButton" name="m_OpenButton">
+     <property name="text">
+      <string>Open</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="m_ProcessButton">
+     <property name="text">
+      <string>Process</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

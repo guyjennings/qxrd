@@ -390,5 +390,11 @@ Implement processor.processDataSequence
 //
 //Added code (in windows only) to set the current directory to QDir::homePath() at startup.
 //
+
 -------------------------------------------------------
+
+File browser should automatically switch to the output data directory when this is changed.
+
+-------------------------------------------------------
+
 #endif // TODO_H
