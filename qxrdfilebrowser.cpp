@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdfilebrowser.cpp,v 1.2 2009/10/22 21:50:58 jennings Exp $
+*  $Id: qxrdfilebrowser.cpp,v 1.3 2009/10/23 04:39:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,7 +15,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
     m_BrowserSelector(this, "BrowserSelector",""),
     m_Processor(processor),
     m_Model(NULL),
-    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.2 2009/10/22 21:50:58 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.3 2009/10/23 04:39:58 jennings Exp $")
 {
   setupUi(this);
 
@@ -29,6 +29,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
   m_FileBrowser -> setColumnHidden(3,true);
 
   m_Model -> setNameFilters(QStringList("*.tif"));
+  m_Model -> setNameFilterDisables(false);
 
   connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
   connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
@@ -109,6 +110,9 @@ void QxrdFileBrowser::readSettings(QxrdSettings *settings, QString section)
 /******************************************************************
 *
 *  $Log: qxrdfilebrowser.cpp,v $
+*  Revision 1.3  2009/10/23 04:39:58  jennings
+*  Unfiltered files hidden, rather than dimmed
+*
 *  Revision 1.2  2009/10/22 21:50:58  jennings
 *  More code for file browser, basic operation now works
 *
