@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdfilebrowser.cpp,v 1.3 2009/10/23 04:39:58 jennings Exp $
+*  $Id: qxrdfilebrowser.cpp,v 1.4 2009/10/23 19:42:01 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,7 +15,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
     m_BrowserSelector(this, "BrowserSelector",""),
     m_Processor(processor),
     m_Model(NULL),
-    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.3 2009/10/23 04:39:58 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.4 2009/10/23 19:42:01 jennings Exp $")
 {
   setupUi(this);
 
@@ -31,10 +31,15 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
   m_Model -> setNameFilters(QStringList("*.tif"));
   m_Model -> setNameFilterDisables(false);
 
+  connect(this, SIGNAL(printMessage(QString)), m_Processor, SIGNAL(printMessage(QString)));
+  connect(this, SIGNAL(statusMessage(QString)), m_Processor, SIGNAL(statusMessage(QString)));
+  connect(this, SIGNAL(criticalMessage(QString)), m_Processor, SIGNAL(criticalMessage(QString)));
+
   connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
   connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
   connect(m_OpenButton, SIGNAL(clicked()), this, SLOT(doOpen()));
   connect(m_ProcessButton, SIGNAL(clicked()), this, SLOT(doProcess()));
+  connect(m_Processor -> prop_OutputDirectory(), SIGNAL(changedValue(QString)), this, SLOT(onRootDirectoryChanged(QString)));
 
   prop_BrowserFilter() -> linkTo(m_FilterChoices);
   prop_BrowserSelector() -> linkTo(m_FileSelector);
@@ -65,8 +70,37 @@ void QxrdFileBrowser::onFilterChanged(int newfilter)
   }
 }
 
-void QxrdFileBrowser::onSelectorChanged(QString str)
+void QxrdFileBrowser::onSelectorChanged(QString str, QModelIndex parent)
 {
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QRegExp pattern(str, Qt::CaseSensitive, QRegExp::Wildcard);
+
+  int rows = m_Model -> rowCount(parent);
+
+  for (int i=0; i<rows; i++) {
+    QModelIndex index = m_Model -> index(i,0, parent);
+
+    QString path = m_Model->fileName(index);
+//    emit printMessage(tr("Testing %1").arg(path));
+
+    if (pattern.exactMatch(path)) {
+      sel -> select(index, QItemSelectionModel::Rows | QItemSelectionModel::Select);
+    } else {
+      sel -> select(index, QItemSelectionModel::Rows | QItemSelectionModel::Deselect);
+    }
+
+    if (m_Model -> hasChildren(index)) {
+//      emit printMessage(tr("%1 has children").arg(path));
+
+      onSelectorChanged(str, index);
+    }
+  }
+}
+
+void QxrdFileBrowser::onRootDirectoryChanged(QString str)
+{
+  m_Model -> setRootPath(str);
+  m_FileBrowser -> setRootIndex(m_Model->index(str));
 }
 
 void QxrdFileBrowser::doOpen()
@@ -110,6 +144,9 @@ void QxrdFileBrowser::readSettings(QxrdSettings *settings, QString section)
 /******************************************************************
 *
 *  $Log: qxrdfilebrowser.cpp,v $
+*  Revision 1.4  2009/10/23 19:42:01  jennings
+*  Implement file selector box for file browser, change file browser root when output directory is changed
+*
 *  Revision 1.3  2009/10/23 04:39:58  jennings
 *  Unfiltered files hidden, rather than dimmed
 *

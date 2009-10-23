@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdfilebrowser.h,v 1.2 2009/10/22 21:50:58 jennings Exp $
+*  $Id: qxrdfilebrowser.h,v 1.3 2009/10/23 19:42:01 jennings Exp $
 *
 *******************************************************************/
 
@@ -37,15 +37,21 @@ public:
 
 public slots:
   void onFilterChanged(int newfilter);
-  void onSelectorChanged(QString str);
+  void onSelectorChanged(QString str, QModelIndex = QModelIndex());
   void doOpen();
   void doProcess();
+  void onRootDirectoryChanged(QString dir);
+
+signals:
+  void printMessage(QString msg) const;
+  void statusMessage(QString msg) const;
+  void criticalMessage(QString msg) const;
 
 private:
   mutable QMutex     m_Mutex;
   QxrdDataProcessor *m_Processor;
   QFileSystemModel  *m_Model;
-  HEADER_IDENT("$Id: qxrdfilebrowser.h,v 1.2 2009/10/22 21:50:58 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdfilebrowser.h,v 1.3 2009/10/23 19:42:01 jennings Exp $");
 };
 
 #endif // QXRDFILEBROWSER_H
@@ -53,6 +59,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdfilebrowser.h,v $
+*  Revision 1.3  2009/10/23 19:42:01  jennings
+*  Implement file selector box for file browser, change file browser root when output directory is changed
+*
 *  Revision 1.2  2009/10/22 21:50:58  jennings
 *  More code for file browser, basic operation now works
 *
