@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.105 2009/10/22 21:50:58 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.106 2009/10/23 19:42:30 jennings Exp $
 *
 *******************************************************************/
 
@@ -59,7 +59,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.105 2009/10/22 21:50:58 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.106 2009/10/23 19:42:30 jennings Exp $")
 {
   setupUi(this);
 
@@ -318,6 +318,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_WindowsMenu -> addAction(m_DisplayDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CenteringDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDockWidget -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
 }
 
 QxrdWindow::~QxrdWindow()
@@ -854,6 +855,9 @@ QxrdMaskData *QxrdWindow::mask()
   /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.106  2009/10/23 19:42:30  jennings
+*  Add file browser entry to windows menu
+*
 *  Revision 1.105  2009/10/22 21:50:58  jennings
 *  More code for file browser, basic operation now works
 *
