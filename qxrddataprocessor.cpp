@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.62 2009/10/16 21:54:17 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.63 2009/10/24 05:23:55 jennings Exp $
 *
 *******************************************************************/
 
@@ -66,7 +66,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.62 2009/10/16 21:54:17 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.63 2009/10/24 05:23:55 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -996,6 +996,10 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
       emit printMessage(tr("Saved processed image in file \"%1\" after %2 msec").arg(dimg->get_FileName()).arg(tic.restart()));
     }
 
+ //    m_ProcessedImages.enqueue(img);
+
+    newData(dimg);
+
     if (get_PerformIntegration()) {
       m_Integrator -> performIntegration();
 
@@ -1014,9 +1018,6 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
       }
     }
 
-//    m_ProcessedImages.enqueue(img);
-
-    newData(dimg);
 
     emit printMessage(tr("Processing took %1 msec").arg(tic.restart()));
   }
@@ -1642,6 +1643,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.63  2009/10/24 05:23:55  jennings
+*  Fixed problem with integrated curves coming in wrong order
+*
 *  Revision 1.62  2009/10/16 21:54:17  jennings
 *  Implemented various processDataSequence commands
 *
