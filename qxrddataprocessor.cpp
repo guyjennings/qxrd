@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.63 2009/10/24 05:23:55 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.64 2009/10/26 02:40:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -66,7 +66,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.63 2009/10/24 05:23:55 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.64 2009/10/26 02:40:24 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -119,6 +119,8 @@ void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
 void QxrdDataProcessor::setWindow(QxrdWindow *win)
 {
   m_Window = win;
+  newData(m_Data);
+  newMask();
 }
 
 void QxrdDataProcessor::writeSettings(QxrdSettings *settings, QString section)
@@ -1643,6 +1645,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.64  2009/10/26 02:40:24  jennings
+*  Fixed initial mask display state
+*
 *  Revision 1.63  2009/10/24 05:23:55  jennings
 *  Fixed problem with integrated curves coming in wrong order
 *
