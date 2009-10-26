@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdfilebrowser.h,v 1.3 2009/10/23 19:42:01 jennings Exp $
+*  $Id: qxrdfilebrowser.h,v 1.4 2009/10/26 02:39:12 jennings Exp $
 *
 *******************************************************************/
 
@@ -41,6 +41,7 @@ public slots:
   void doOpen();
   void doProcess();
   void onRootDirectoryChanged(QString dir);
+  void mousePressed(QModelIndex index);
 
 signals:
   void printMessage(QString msg) const;
@@ -51,7 +52,7 @@ private:
   mutable QMutex     m_Mutex;
   QxrdDataProcessor *m_Processor;
   QFileSystemModel  *m_Model;
-  HEADER_IDENT("$Id: qxrdfilebrowser.h,v 1.3 2009/10/23 19:42:01 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdfilebrowser.h,v 1.4 2009/10/26 02:39:12 jennings Exp $");
 };
 
 #endif // QXRDFILEBROWSER_H
@@ -59,6 +60,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdfilebrowser.h,v $
+*  Revision 1.4  2009/10/26 02:39:12  jennings
+*  Added right click menu routine for file browser
+*
 *  Revision 1.3  2009/10/23 19:42:01  jennings
 *  Implement file selector box for file browser, change file browser root when output directory is changed
 *

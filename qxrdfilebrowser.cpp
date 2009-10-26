@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdfilebrowser.cpp,v 1.4 2009/10/23 19:42:01 jennings Exp $
+*  $Id: qxrdfilebrowser.cpp,v 1.5 2009/10/26 02:39:12 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,6 +8,7 @@
 #include "qxrddataprocessor.h"
 #include <QFileSystemModel>
 #include <QFileDialog>
+#include <QMenu>
 
 QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
   : QWidget(parent),
@@ -15,7 +16,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
     m_BrowserSelector(this, "BrowserSelector",""),
     m_Processor(processor),
     m_Model(NULL),
-    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.4 2009/10/23 19:42:01 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.5 2009/10/26 02:39:12 jennings Exp $")
 {
   setupUi(this);
 
@@ -40,6 +41,8 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
   connect(m_OpenButton, SIGNAL(clicked()), this, SLOT(doOpen()));
   connect(m_ProcessButton, SIGNAL(clicked()), this, SLOT(doProcess()));
   connect(m_Processor -> prop_OutputDirectory(), SIGNAL(changedValue(QString)), this, SLOT(onRootDirectoryChanged(QString)));
+
+  connect(m_FileBrowser, SIGNAL(pressed(QModelIndex)), this, SLOT(mousePressed(QModelIndex)));
 
   prop_BrowserFilter() -> linkTo(m_FilterChoices);
   prop_BrowserSelector() -> linkTo(m_FileSelector);
@@ -141,9 +144,24 @@ void QxrdFileBrowser::readSettings(QxrdSettings *settings, QString section)
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
+void QxrdFileBrowser::mousePressed(QModelIndex index)
+{
+  if (QApplication::mouseButtons() & Qt::RightButton) {
+    emit printMessage("Right mouse pressed");
+
+    QMenu *actions = new QMenu(this);
+    actions->addAction("Action 1");
+
+    actions->exec(QCursor::pos());
+  }
+}
+
 /******************************************************************
 *
 *  $Log: qxrdfilebrowser.cpp,v $
+*  Revision 1.5  2009/10/26 02:39:12  jennings
+*  Added right click menu routine for file browser
+*
 *  Revision 1.4  2009/10/23 19:42:01  jennings
 *  Implement file selector box for file browser, change file browser root when output directory is changed
 *
