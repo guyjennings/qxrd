@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.h,v 1.12 2009/09/25 14:22:16 jennings Exp $
+*  $Id: qxrdcenterfinderplot.h,v 1.13 2009/11/02 20:16:22 jennings Exp $
 *
 *******************************************************************/
 
@@ -42,7 +42,7 @@ private:
   QxrdCenterFinder    *m_CenterFinder;
   bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdcenterfinderplot.h,v 1.12 2009/09/25 14:22:16 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinderplot.h,v 1.13 2009/11/02 20:16:22 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDERPLOT_H
@@ -50,6 +50,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.h,v $
+*  Revision 1.13  2009/11/02 20:16:22  jennings
+*  Changes to make it work with VC compiler
+*
 *  Revision 1.12  2009/09/25 14:22:16  jennings
 *  Simplified double-buffering for plotted data - there is now a separate copy of data and mask
 *  in QxrdWindow

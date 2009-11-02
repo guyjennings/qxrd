@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.h,v 1.7 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrdplot.h,v 1.8 2009/11/02 20:19:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -56,7 +56,7 @@ protected:
   QxrdPlotMeasurer    *m_Measurer;
 
 private:
-  HEADER_IDENT("$Id: qxrdplot.h,v 1.7 2009/09/20 21:18:53 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdplot.h,v 1.8 2009/11/02 20:19:27 jennings Exp $");
 };
 
 #endif // QXRDPLOT_H
@@ -64,6 +64,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdplot.h,v $
+*  Revision 1.8  2009/11/02 20:19:27  jennings
+*  Changes to make it work with VC compiler
+*
 *  Revision 1.7  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.

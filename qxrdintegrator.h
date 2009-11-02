@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.h,v 1.12 2009/10/05 21:17:46 jennings Exp $
+*  $Id: qxrdintegrator.h,v 1.13 2009/11/02 20:19:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -70,7 +70,7 @@ private:
   QVector<double>           m_OutputSums;
   int                       m_OutputStride;
 
-  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.12 2009/10/05 21:17:46 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdintegrator.h,v 1.13 2009/11/02 20:19:27 jennings Exp $");
 };
 
 #endif // QXRDINTEGRATOR_H
@@ -78,6 +78,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdintegrator.h,v $
+*  Revision 1.13  2009/11/02 20:19:27  jennings
+*  Changes to make it work with VC compiler
+*
 *  Revision 1.12  2009/10/05 21:17:46  jennings
 *  Integrate button now causes integrated curve to be saved and plotted, as well
 *

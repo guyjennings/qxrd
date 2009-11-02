@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdrasterdata.cpp,v 1.14 2009/08/25 18:43:03 jennings Exp $
+*  $Id: qxrdrasterdata.cpp,v 1.15 2009/11/02 20:19:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -14,7 +14,7 @@ QxrdRasterData::QxrdRasterData(QxrdDoubleImageData *img, int interp, QxrdMaskDat
     m_NCols((img ? img->get_Height() : 0)),
     m_Range(40000,48000),
     m_Interpolate(interp),
-    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.14 2009/08/25 18:43:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.15 2009/11/02 20:19:27 jennings Exp $")
 {
 }
 
@@ -63,7 +63,7 @@ double QxrdRasterData::value(double x, double y) const
 
       return f;
     } else {
-      return m_Data->value(((int) round(x)) , ((int) round(y)));
+      return m_Data->value(((int) qRound(x)) , ((int) qRound(y)));
     }
   } else {
     return 0;
@@ -182,6 +182,9 @@ int QxrdRasterData::height() const
 /******************************************************************
 *
 *  $Log: qxrdrasterdata.cpp,v $
+*  Revision 1.15  2009/11/02 20:19:27  jennings
+*  Changes to make it work with VC compiler
+*
 *  Revision 1.14  2009/08/25 18:43:03  jennings
 *  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
 *

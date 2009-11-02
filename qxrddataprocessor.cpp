@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.64 2009/10/26 02:40:24 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.65 2009/11/02 20:16:22 jennings Exp $
 *
 *******************************************************************/
 
@@ -66,7 +66,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.64 2009/10/26 02:40:24 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.65 2009/11/02 20:16:22 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -1096,13 +1096,13 @@ void QxrdDataProcessor::subtractDarkImage(QxrdDoubleImageData *image, QxrdDouble
   }
 }
 
-void QxrdDataProcessor::correctBadPixels(QxrdDoubleImageData */*image*/)
+void QxrdDataProcessor::correctBadPixels(QxrdDoubleImageData * /*image*/)
 {
   QMutexLocker lock(&m_Mutex);
 
 }
 
-void QxrdDataProcessor::correctImageGains(QxrdDoubleImageData */*image*/)
+void QxrdDataProcessor::correctImageGains(QxrdDoubleImageData * /*image*/)
 {
   QMutexLocker lock(&m_Mutex);
 
@@ -1645,6 +1645,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.65  2009/11/02 20:16:22  jennings
+*  Changes to make it work with VC compiler
+*
 *  Revision 1.64  2009/10/26 02:40:24  jennings
 *  Fixed initial mask display state
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.16 2009/10/21 20:31:55 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.17 2009/11/02 20:19:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,7 +17,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessor *proc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_DataProcessor(proc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.16 2009/10/21 20:31:55 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.17 2009/11/02 20:19:27 jennings Exp $")
 {
 }
 
@@ -84,7 +84,7 @@ void QxrdIntegrator::integrate(double cx, double cy, int oversample, int normali
   double halfOversampleStep = oversampleStep/2.0;
 
   int imax  = 0;
-  int irmax = (int) (oversample*sqrt(nRows*nRows+nCols*nCols)) + 2;
+  int irmax = (int) (oversample*sqrt((double)(nRows*nRows+nCols*nCols))) + 2;
   QVector<double> integral(irmax), sumvalue(irmax);
 
   integral.fill(0);
@@ -161,7 +161,7 @@ void QxrdIntegrator::integrate2(double cx, double cy, int oversample, int normal
   double halfOversampleStep = oversampleStep/2.0;
 
   int imax  = 0;
-  int irmax = (int) (oversample*sqrt(nRows*nRows+nCols*nCols)) + 2;
+  int irmax = (int) (oversample*sqrt((double)(nRows*nRows+nCols*nCols))) + 2;
   QVector<double> integral(irmax), sumvalue(irmax);
 
   integral.fill(0);
@@ -239,7 +239,7 @@ void QxrdIntegrator::parallelIntegrateMap
   double halfOversampleStep = oversampleStep/2.0;
 
   int imax  = 0;
-  int irmax = (int) (oversample*sqrt(nRows*nRows+nCols*nCols)) + 2;
+  int irmax = (int) (oversample*sqrt((double)(nRows*nRows+nCols*nCols))) + 2;
   QVector<double> integral(irmax), sumvalue(irmax);
 
   integral.fill(0);
@@ -313,7 +313,7 @@ void QxrdIntegrator::tableIntegrateSetup(int nThreads, double cx, double cy, int
   double halfOversampleStep = oversampleStep/2.0;
 
 //  int imax  = 0;
-  int irmax = (int) (oversample*sqrt(nRows*nRows+nCols*nCols)) + 2;
+  int irmax = (int) (oversample*sqrt((double)(nRows*nRows+nCols*nCols))) + 2;
   m_OutputData.resize(nThreads*irmax);
   m_OutputData.fill(0);
   m_OutputSums.resize(nThreads*irmax);
@@ -597,6 +597,9 @@ void QxrdIntegrator::slicePolygon(QwtArray<QwtDoublePoint> poly, double width)
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.17  2009/11/02 20:19:27  jennings
+*  Changes to make it work with VC compiler
+*
 *  Revision 1.16  2009/10/21 20:31:55  jennings
 *  Slices are automatically saved and plotted.
 *

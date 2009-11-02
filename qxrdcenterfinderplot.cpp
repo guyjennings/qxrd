@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.cpp,v 1.15 2009/09/25 14:22:16 jennings Exp $
+*  $Id: qxrdcenterfinderplot.cpp,v 1.16 2009/11/02 20:16:22 jennings Exp $
 *
 *******************************************************************/
 
@@ -28,7 +28,7 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_DataProcessor(NULL),
     m_CenterFinder(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.15 2009/09/25 14:22:16 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.16 2009/11/02 20:16:22 jennings Exp $")
 {
   insertLegend(m_Legend, QwtPlot::RightLegend);
 }
@@ -71,7 +71,7 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
   int width =img->get_Width();
   int height=img->get_Height();
 
-  int len = (int) sqrt(pow(width,2)+pow(height,2));
+  int len = (int) sqrt((double)(width*width+height*height));
 
   clear();
 
@@ -87,8 +87,8 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
     m_YData.resize(len);
 
     for (int n = 0; n<=len; n++) {
-      int ix = (int)round(x);
-      int iy = (int)round(y);
+      int ix = (int)qRound(x);
+      int iy = (int)qRound(y);
 
       if (ix >= 0 && iy >= 0 && ix < width && iy < height) {
         double v = img->value(ix,iy);
@@ -150,6 +150,9 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.cpp,v $
+*  Revision 1.16  2009/11/02 20:16:22  jennings
+*  Changes to make it work with VC compiler
+*
 *  Revision 1.15  2009/09/25 14:22:16  jennings
 *  Simplified double-buffering for plotted data - there is now a separate copy of data and mask
 *  in QxrdWindow

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.14 2009/09/29 18:39:47 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.15 2009/11/02 20:19:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,7 +27,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.14 2009/09/29 18:39:47 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.15 2009/11/02 20:19:27 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -263,7 +263,7 @@ QScriptValue QxrdScriptEngine::processStatusFunc(QScriptContext *context, QScrip
   }
 }
 
-QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext */*context*/, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   return QScriptValue(engine, g_Acquisition -> acquisitionCancel());
 }
@@ -361,6 +361,9 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.15  2009/11/02 20:19:27  jennings
+*  Changes to make it work with VC compiler
+*
 *  Revision 1.14  2009/09/29 18:39:47  jennings
 *  Removed references to 'QxrdDataProcessor::processedCount'
 *  Fixed up the various 'status' scripting functions so that they work properly

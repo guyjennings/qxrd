@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskrasterdata.cpp,v 1.5 2009/08/04 16:45:20 jennings Exp $
+*  $Id: qxrdmaskrasterdata.cpp,v 1.6 2009/11/02 20:19:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,7 +12,7 @@ QxrdMaskRasterData::QxrdMaskRasterData(QxrdMaskData *mask, int interp)
   : QwtRasterData(QwtDoubleRect(0,0,mask->get_Width(),mask->get_Height())),
     m_Mask(mask),
     m_Interpolate(interp),
-    SOURCE_IDENT("$Id: qxrdmaskrasterdata.cpp,v 1.5 2009/08/04 16:45:20 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdmaskrasterdata.cpp,v 1.6 2009/11/02 20:19:27 jennings Exp $")
 {
 }
 
@@ -41,7 +41,7 @@ double QxrdMaskRasterData::value(double x, double y) const
       
       return f;
     } else {
-      return m_Mask->maskValue(((int) round(x)), ((int) round(y)));
+      return m_Mask->maskValue(((int) qRound(x)), ((int) qRound(y)));
     }
   } else {
     return 1;
@@ -63,6 +63,9 @@ QxrdMaskRasterData* QxrdMaskRasterData::copy() const
 /******************************************************************
 *
 *  $Log: qxrdmaskrasterdata.cpp,v $
+*  Revision 1.6  2009/11/02 20:19:27  jennings
+*  Changes to make it work with VC compiler
+*
 *  Revision 1.5  2009/08/04 16:45:20  jennings
 *  Moved mask data into separate class
 *
