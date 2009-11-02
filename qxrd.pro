@@ -3,10 +3,10 @@ CONFIG += qt
 include("qxrd.version.pri")
 QT += network \
     script
-QMAKE_CXXFLAGS += -g \
-    -DVERSION=\"\\\"$$VERSION\\\"\"
-QMAKE_CFLAGS += -g
-QMAKE_LFLAGS += -g
+#QMAKE_CXXFLAGS += -g
+QMAKE_CXXFLAGS += -DVERSION=\"\\\"$$VERSION\\\"\"
+#QMAKE_CFLAGS += -g
+#QMAKE_LFLAGS += -g
 vectorize { 
     QMAKE_CXXFLAGS += -msse2 \
         -ftree-vectorize \
@@ -141,7 +141,8 @@ unix {
 }
 win32 { 
     PLATFORM_PREFIX = win32
-    QTBINDIR = C:/Qt/2009.03/qt/bin
+#    QTBINDIR = C:/Qt/2009.03/qt/bin
+    QTBINDIR = C:/Qt/qt-all-opensource-src-4.5.3/bin
     MINGW = C:/Qt/2009.03/qt/bin
     app.target = app
     zip.target = zip
@@ -189,7 +190,7 @@ win32 {
     INCLUDEPATH += SDK
     QMAKE_EXTRA_TARGETS += zip \
         app
-    QMAKE_LFLAGS += -Wl,--script,nordata.lscript
+    #QMAKE_LFLAGS += -Wl,--script,nordata.lscript
     
     # QMAKE_LFLAGS += -Wl,--disable-auto-import
     QMAKE_CFLAGS += -g
