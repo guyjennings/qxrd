@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.106 2009/10/23 19:42:30 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.107 2009/11/03 19:57:56 jennings Exp $
 *
 *******************************************************************/
 
@@ -38,6 +38,8 @@
 #include <QString>
 #include <QMetaObject>
 #include <QMetaMethod>
+#include <QDesktopServices>
+#include <QUrl>
 
 QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProcessor *proc, QWidget *parent)
   : QMainWindow(parent),
@@ -59,7 +61,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.106 2009/10/23 19:42:30 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.107 2009/11/03 19:57:56 jennings Exp $")
 {
   setupUi(this);
 
@@ -166,6 +168,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_IntegratorMeasureButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableMeasuring()));
 
   connect(m_IntegratorDialog -> m_ClearGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearGraph()));
+
+  connect(m_ActionAboutQXRD, SIGNAL(triggered()), this, SLOT(doAboutQxrd()));
+  connect(m_ActionOpenQXRDWebPage, SIGNAL(triggered()), this, SLOT(doOpenQXRDWebPage()));
 
   connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
 
@@ -852,9 +857,22 @@ QxrdMaskData *QxrdWindow::mask()
   return m_Mask;
 }
 
-  /******************************************************************
+void QxrdWindow::doAboutQxrd()
+{
+  QMessageBox::about(this, "QXRD", "QXRD Data Acquisition for PE Area Detectors\nVersion " VERSION);
+}
+
+void QxrdWindow::doOpenQXRDWebPage()
+{
+  QDesktopServices::openUrl(QUrl("http://cep.xor.aps.anl.gov/software/qxrd"));
+}
+
+/******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.107  2009/11/03 19:57:56  jennings
+*  Added help menu with an about dialog and a link to the documentation web site
+*
 *  Revision 1.106  2009/10/23 19:42:30  jennings
 *  Add file browser entry to windows menu
 *

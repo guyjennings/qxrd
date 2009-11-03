@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.61 2009/10/22 19:22:28 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.62 2009/11/03 19:57:56 jennings Exp $
 *
 *******************************************************************/
 
@@ -43,6 +43,8 @@ public:
   virtual ~QxrdWindow();
 
 public slots:
+  void doAboutQxrd();
+  void doOpenQXRDWebPage();
   void doSaveData();
   void doLoadData();
   void doSaveDark();
@@ -145,7 +147,7 @@ private:
 //  QAtomicInt              m_Plotting;
 //  QAtomicInt              m_SpareDataAvailable;
 
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.61 2009/10/22 19:22:28 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.62 2009/11/03 19:57:56 jennings Exp $");
 };
 
 #endif
@@ -153,6 +155,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.62  2009/11/03 19:57:56  jennings
+*  Added help menu with an about dialog and a link to the documentation web site
+*
 *  Revision 1.61  2009/10/22 19:22:28  jennings
 *  Initial file browser
 *

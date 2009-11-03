@@ -730,11 +730,19 @@
      <string>Windows</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="m_ActionAboutQXRD"/>
+    <addaction name="m_ActionOpenQXRDWebPage"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuAcquire"/>
    <addaction name="menuDisplay"/>
    <addaction name="m_WindowsMenu"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="m_AcquireDockWidget">
@@ -2660,6 +2668,16 @@ Script Function: outputDirectory()</string>
    </property>
    <property name="toolTip">
     <string>Choose log file location</string>
+   </property>
+  </action>
+  <action name="m_ActionAboutQXRD">
+   <property name="text">
+    <string>About QXRD</string>
+   </property>
+  </action>
+  <action name="m_ActionOpenQXRDWebPage">
+   <property name="text">
+    <string>Open QXRD web page</string>
    </property>
   </action>
  </widget>
