@@ -36,6 +36,7 @@ win32 {
 RESOURCES += qxrdhelptext.qrc \
     qxrdresources.qrc
 DISTFILES += qxrdhelptext.html \
+    qxrd.dox \
     images/*.png
 win32:include("qt-libtiff-win32.pri")
 include("qwt-5.2.pri")

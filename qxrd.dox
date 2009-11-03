@@ -1,0 +1,82 @@
+/* -*- mode: C++ ; c-file-style: "stroustrup" -*- *****************************
+ * QXRD Readout Software
+ * Copyrigth (C) 2009   Guy Jennings
+ *
+ *****************************************************************************/
+
+/*!
+\mainpage QXRD - Readout Software for Flat Panel X-Ray Detectors
+
+QXRD is an application designed to control the readout of an amorphous
+silicon flat panel X-ray detector made by Perkin Elmer, and is intended
+for use at a synchrotron light source beamline.
+
+QXRD acts as a bridge between the dynamic link library provided by Perkin
+Elmer and the beamline data acquisition software 'spec' and also provides
+a convenient GUI interface to the detector.
+
+The QXRD project page is hosted at
+<a href="http://cep.xor.aps.anl.gov/software/qxrd/" target="_top">
+http://cep.xor.aps.anl.gov/software/qxrd/</a>
+\section license License
+
+QXRD is distributed under the terms of the 
+<a href="http://www.gnu.org/licenses/gpl.html" target="_top">GNU General Public License (GPL)</a>
+
+\ref systemRequirements\n
+\ref installation\n
+\ref gettingStarted\n
+\ref documentation\n
+
+\page systemRequirements System Requirements
+
+QXRD requires a Windows XP system with the Perkin Elmer frame grabber card, drivers and readout software already
+installed.  
+
+At least 1GB of memory is recommended, preferably 2-4GB.  
+
+QXRD will take advantage of a multicore processor, if present.  We recommend at least four cores.
+
+\page installation Installation Instructions
+
+\page gettingStarted Getting Started
+
+\section paletteArrangement Arranging the QXRD Control Panels
+
+When you first run qxrd you'll see the (rather overwhelming) 'default' screen layout, shown below
+
+\image html initial-screen.png "Default Screen Layout"
+
+The first thing you'll probably want to do is to rearrange the QXRD control panels into a more efficient
+arrangement.  You can do this by clicking and dragging on the title bars of the individual control panels
+and stacking them all in two main groups on the right hand side of the screen, as shown below.  You can drag 
+each panel into any of four areas around the border of the qxrd window, on top of another panel 
+(the panels will stack), alongside another panel in the same border area, or as a floating window.
+You can also hide a panel by clicking its close button.
+If you hide a panel you can re-show it by choosing the corresponding command from the QXRD 'Windows' menu.
+
+\image html image-screen.png "Suggested Panel Arrangement"
+
+QXRD will remember the panel arrangement and window size between runs.
+
+\section simpleAcquisition Acquiring Test Images
+
+Two control panels are important for data acquisition, the 'Acquire' panel and the 'Correction' panel.
+The acquire panel is concerned with the data acquisition process itself, with parameters such as the
+exposure time, number of images to acquire and output directory choice. The correction panel is used
+to control what post processing steps are applied to the data after acquisition.   On a sufficiently
+fast system the correction steps are performed entirely in parallel with the acquisition steps, but
+on slower systems it may be desirable to omit some post processing steps to allow the acquisition to
+proceed at the maximum speed.
+
+\section acquirePanel "The 'Acquire' Panel"
+
+\image html acquire-panel.png "The 'Acquire' Panel" 
+
+\section correctionPanel "The 'Correction' Panel"
+
+\image html correction-panel.png "The 'Correction' Panel"
+ 
+\page documentation Documentation
+
+*/
