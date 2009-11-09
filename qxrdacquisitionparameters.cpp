@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.16 2009/09/23 19:00:36 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.17 2009/11/09 16:44:38 jennings Exp $
 *
 *******************************************************************/
 
@@ -34,7 +34,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_Cancelling(this, "cancelling", 0),
     m_ExposuresToSum(this, "exposuresToSum", 1),
     m_FilesInAcquiredSequence(this, "filesInAcquiredSequence", 1),
-    m_TotalBufferSize(this,"totalBufferSize", 1500000000),
+    m_TotalBufferSize(this,"totalBufferSize", 500000000),
     m_Raw16SaveTime(this,"raw16SaveTime", 0.1),
     m_Raw32SaveTime(this,"raw32SaveTime", 0.2),
     m_UserComment1(this,"userComment1",""),
@@ -42,7 +42,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_UserComment3(this,"userComment3",""),
     m_UserComment4(this,"userComment4",""),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.16 2009/09/23 19:00:36 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.17 2009/11/09 16:44:38 jennings Exp $")
 {
 }
 
@@ -98,6 +98,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.17  2009/11/09 16:44:38  jennings
+*  Reduced initial buffer size to 500M, fixed problem loading 32-bit his files
+*
 *  Revision 1.16  2009/09/23 19:00:36  jennings
 *  Removed dynamic property support - it's not thread-safe and doesn't work
 *  under windows

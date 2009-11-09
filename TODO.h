@@ -397,4 +397,9 @@ File browser should automatically switch to the output data directory when this 
 
 -------------------------------------------------------
 
+Check that the image buffer memory allocation works before trying
+to use the allocated buffers.  (Exception handler needed?)
+
+-------------------------------------------------------
+
 #endif // TODO_H

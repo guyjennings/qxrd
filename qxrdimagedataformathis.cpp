@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimagedataformathis.cpp,v 1.10 2009/09/23 21:16:58 jennings Exp $
+*  $Id: qxrdimagedataformathis.cpp,v 1.11 2009/11/09 16:44:38 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,7 +12,7 @@ static QxrdImageDataFormatHis fmt;
 
 QxrdImageDataFormatHis::QxrdImageDataFormatHis(QString name)
   : QcepImageDataFormat<double>(name),
-    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.10 2009/09/23 21:16:58 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.11 2009/11/09 16:44:38 jennings Exp $")
 {
 }
 
@@ -112,7 +112,7 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
       quint32 pix;
       for (int y=0; y<height; y++) {
 	for (int x=0; x<width; x++) {
-	  fread(&pix, 2, 1, file);
+          fread(&pix, 4, 1, file);
           img -> setValue(x,(height-y-1),pix);
 	}
       }
@@ -139,6 +139,9 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::saveFile(QString /*path*/, QcepI
 /******************************************************************
 *
 *  $Log: qxrdimagedataformathis.cpp,v $
+*  Revision 1.11  2009/11/09 16:44:38  jennings
+*  Reduced initial buffer size to 500M, fixed problem loading 32-bit his files
+*
 *  Revision 1.10  2009/09/23 21:16:58  jennings
 *  .his files can be loaded again
 *

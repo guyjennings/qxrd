@@ -142,9 +142,9 @@ unix {
 }
 win32 { 
     PLATFORM_PREFIX = win32
-#    QTBINDIR = C:/Qt/2009.03/qt/bin
-    QTBINDIR = C:/Qt/qt-all-opensource-src-4.5.3/bin
-    MINGW = C:/Qt/2009.03/qt/bin
+    QTBINDIR = C:/Qt/2009.04/qt/bin
+#    QTBINDIR = C:/Qt/qt-all-opensource-src-4.5.3/bin
+    MINGW = C:/Qt/2009.04/qt/bin
     app.target = app
     zip.target = zip
     CONFIG(debug, debug|release) { 
