@@ -1,4 +1,4 @@
-/* $Id: tif_win32.c,v 1.1 2009/03/09 16:14:42 jennings Exp $ */
+/* $Id: tif_win32.c,v 1.2 2009/11/09 18:00:39 jennings Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -349,7 +349,7 @@ Win32WarningHandler(const char* module, const char* fmt, va_list ap)
 	sprintf(szTitle, szTitleText, szTmpModule);
 	szTmp = szTitle + (strlen(szTitle)+2)*sizeof(char);
 	vsprintf(szTmp, fmt, ap);
-	MessageBoxA(GetFocus(), szTmp, szTitle, MB_OK | MB_ICONINFORMATION);
+//	MessageBoxA(GetFocus(), szTmp, szTitle, MB_OK | MB_ICONINFORMATION);
 	LocalFree(szTitle);
 	return;
 #else
@@ -377,7 +377,7 @@ Win32ErrorHandler(const char* module, const char* fmt, va_list ap)
 	sprintf(szTitle, szTitleText, szTmpModule);
 	szTmp = szTitle + (strlen(szTitle)+2)*sizeof(char);
 	vsprintf(szTmp, fmt, ap);
-	MessageBoxA(GetFocus(), szTmp, szTitle, MB_OK | MB_ICONEXCLAMATION);
+//	MessageBoxA(GetFocus(), szTmp, szTitle, MB_OK | MB_ICONEXCLAMATION);
 	LocalFree(szTitle);
 	return;
 #else
