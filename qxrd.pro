@@ -3,10 +3,12 @@ CONFIG += qt
 include("qxrd.version.pri")
 QT += network \
     script
-#QMAKE_CXXFLAGS += -g
+
+# QMAKE_CXXFLAGS += -g
 QMAKE_CXXFLAGS += -DVERSION=\"\\\"$$VERSION\\\"\"
-#QMAKE_CFLAGS += -g
-#QMAKE_LFLAGS += -g
+
+# QMAKE_CFLAGS += -g
+# QMAKE_LFLAGS += -g
 vectorize { 
     QMAKE_CXXFLAGS += -msse2 \
         -ftree-vectorize \
@@ -37,6 +39,7 @@ RESOURCES += qxrdhelptext.qrc \
     qxrdresources.qrc
 DISTFILES += qxrdhelptext.html \
     qxrd.dox \
+    download/index.php \
     images/*.png
 win32:include("qt-libtiff-win32.pri")
 include("qwt-5.2.pri")
@@ -191,8 +194,8 @@ win32 {
     INCLUDEPATH += SDK
     QMAKE_EXTRA_TARGETS += zip \
         app
-    #QMAKE_LFLAGS += -Wl,--script,nordata.lscript
     
+    # QMAKE_LFLAGS += -Wl,--script,nordata.lscript
     # QMAKE_LFLAGS += -Wl,--disable-auto-import
     QMAKE_CFLAGS += -g
     QMAKE_CXXFLAGS += -g
@@ -228,5 +231,5 @@ website.commands = rsync \
     ssh \
     -avx \
     dox/html/ \
+    download \
     www12.xor.aps.anl.gov:/var/www/html/software/qxrd/
-OTHER_FILES += 

@@ -23,10 +23,15 @@ http://cep.xor.aps.anl.gov/software/qxrd/</a>
 QXRD is distributed under the terms of the 
 <a href="http://www.gnu.org/licenses/gpl.html" target="_top">GNU General Public License (GPL)</a>
 
+\section downloads QXRD Downloads
+Downloads are available from
+<a href="http://cep.xor.aps.anl.gov/software/qxrd/download/index.php">QXRD Downloads</a>
+
 \ref systemRequirements\n
 \ref installation\n
 \ref gettingStarted\n
 \ref documentation\n
+\ref downloads\n
 
 \page systemRequirements System Requirements
 
