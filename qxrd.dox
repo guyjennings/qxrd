@@ -35,14 +35,42 @@ Downloads are available from
 
 \page systemRequirements System Requirements
 
-QXRD requires a Windows XP system with the Perkin Elmer frame grabber card, drivers and readout software already
+QXRD requires a 32 bit Windows XP system with the Perkin Elmer frame grabber card, drivers and readout software already
 installed.  
 
 At least 1GB of memory is recommended, preferably 2-4GB.  
 
 QXRD will take advantage of a multicore processor, if present.  We recommend at least four cores.
 
+QXRD can also run on 32 and 64 bit linux systems, with the caveat that there is (currently) no detector support.  It can still
+be used for processing and visualising data acquired by other means.
+
 \page installation Installation Instructions
+
+\section windowsInstall  Installation under Windows
+
+Download the latest zipped binary version from the
+<a href="http://cep.xor.aps.anl.gov/software/qxrd/download/index.php">download page</a>.
+The zip file contains the qxrd executable and a number of dll files.  Extract the files to
+a convenient place and create appropriate shortcuts to the 'qxrd.exe' file.  Run the .exe file
+to start.
+
+\section linuxInstall  Installation under linux
+RPM packages are provided for recent versions of the Fedora distribution, currently fc11 and fc10,
+in both 32 and 64 bit variants.  Install the appropriate package with a command such as:
+\verbatim
+ sudo rpm -ivh http://cep.xor.aps.anl.gov/software/qxrd/download/qxrd-0.3.2-2.fc11.i386.rpm
+\endverbatim
+You will need to have the 'libtiff' package installed and 'qt' at version 4.5 or greater.
+
+\section sourceInstall Building from source
+You'll need to have the 'qt' SDK installed with a version 4.5 or greater.  This can be obtained
+from the qt download page <a href="http://qt.nokia.com/downloads">http://qt.nokia.com/downloads</a>
+The LGPL/Free version is suitable.
+
+Download the qxrd sources from the qxrd download page and extract them into a new directory.  Open
+'qt creator' and navigate to the directory containing the qxrd sources and open the qxrd project
+ file 'qxrd.pro'.  Then choose 'Clean Project' and 'Build Project' from the Qt Creator 'build' menu.
 
 \page gettingStarted Getting Started
 
