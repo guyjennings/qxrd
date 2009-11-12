@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.h,v 1.8 2009/11/02 20:19:27 jennings Exp $
+*  $Id: qxrdplot.h,v 1.9 2009/11/12 20:17:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -23,6 +23,7 @@ class QxrdPlot : public QwtPlot
   Q_OBJECT;
 public:
   QxrdPlot(QWidget *parent = 0);
+  typedef QwtPlot inherited;
 
 public:
   void setPlotCurveStyle(int index, QwtPlotCurve *curve);
@@ -56,7 +57,7 @@ protected:
   QxrdPlotMeasurer    *m_Measurer;
 
 private:
-  HEADER_IDENT("$Id: qxrdplot.h,v 1.8 2009/11/02 20:19:27 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdplot.h,v 1.9 2009/11/12 20:17:43 jennings Exp $");
 };
 
 #endif // QXRDPLOT_H
@@ -64,6 +65,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdplot.h,v $
+*  Revision 1.9  2009/11/12 20:17:43  jennings
+*  Version 0.3.5, fix problems with first-time zooming of graphs
+*
 *  Revision 1.8  2009/11/02 20:19:27  jennings
 *  Changes to make it work with VC compiler
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.cpp,v 1.8 2009/09/20 21:18:53 jennings Exp $
+*  $Id: qxrdplot.cpp,v 1.9 2009/11/12 20:17:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -24,7 +24,7 @@ QxrdPlot::QxrdPlot(QWidget *parent)
     m_Panner(NULL),
     m_Magnifier(NULL),
     m_Measurer(NULL),
-    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.8 2009/09/20 21:18:53 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.9 2009/11/12 20:17:43 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -58,6 +58,8 @@ QxrdPlot::QxrdPlot(QWidget *parent)
 
   setAxisLabelRotation(QwtPlot::yLeft, -90);
   setAxisLabelAlignment(QwtPlot::yLeft, Qt::AlignVCenter);
+
+  autoScale();
 }
 
 void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
@@ -190,6 +192,9 @@ QwtText QxrdPlot::trackerText(const QwtDoublePoint &pos) const
 /******************************************************************
 *
 *  $Log: qxrdplot.cpp,v $
+*  Revision 1.9  2009/11/12 20:17:43  jennings
+*  Version 0.3.5, fix problems with first-time zooming of graphs
+*
 *  Revision 1.8  2009/09/20 21:18:53  jennings
 *  Removed 'printf' messages
 *  Added printMessage, statusMessage and criticalMessage functiosn for major classes.

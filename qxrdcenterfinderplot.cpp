@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderplot.cpp,v 1.16 2009/11/02 20:16:22 jennings Exp $
+*  $Id: qxrdcenterfinderplot.cpp,v 1.17 2009/11/12 20:17:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -28,7 +28,7 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_DataProcessor(NULL),
     m_CenterFinder(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.16 2009/11/02 20:16:22 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.17 2009/11/12 20:17:43 jennings Exp $")
 {
   insertLegend(m_Legend, QwtPlot::RightLegend);
 }
@@ -139,6 +139,10 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
   setAxisTitle(xBottom, "r");
 
+  if (m_Zoomer && m_Zoomer -> zoomRectIndex() == 0) {
+    m_Zoomer -> setZoomBase();
+  }
+
   if (m_FirstTime) {
     autoScale();
     m_FirstTime = false;
@@ -150,6 +154,9 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderplot.cpp,v $
+*  Revision 1.17  2009/11/12 20:17:43  jennings
+*  Version 0.3.5, fix problems with first-time zooming of graphs
+*
 *  Revision 1.16  2009/11/02 20:16:22  jennings
 *  Changes to make it work with VC compiler
 *
