@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegratorplot.cpp,v 1.15 2009/10/02 20:18:35 jennings Exp $
+*  $Id: qxrdintegratorplot.cpp,v 1.16 2009/11/12 20:17:43 jennings Exp $
 *
 *******************************************************************/
 
@@ -21,7 +21,7 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
     m_DataProcessor(NULL),
     m_Integrator(NULL),
     m_PlotIndex(0),
-    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.15 2009/10/02 20:18:35 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegratorplot.cpp,v 1.16 2009/11/12 20:17:43 jennings Exp $")
 {
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
@@ -52,6 +52,11 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QString title, QVector<double
     pc -> setData(x.data(), y.data(), x.size());
     setPlotCurveStyle(m_PlotIndex, pc);
     pc -> attach(this);
+
+    if (m_Zoomer && m_Zoomer -> zoomRectIndex() == 0) {
+      m_Zoomer -> setZoomBase();
+    }
+
     replot();
   }
 
@@ -71,6 +76,9 @@ void QxrdIntegratorPlot::clearGraph()
 /******************************************************************
 *
 *  $Log: qxrdintegratorplot.cpp,v $
+*  Revision 1.16  2009/11/12 20:17:43  jennings
+*  *** empty log message ***
+*
 *  Revision 1.15  2009/10/02 20:18:35  jennings
 *  Added support for (optionally) saving and/or displaying integrated data
 *
