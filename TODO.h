@@ -25,7 +25,8 @@
 //
 -------------------------------------------------------
 
-Add a plausible simulation mode
+Add a plausible simulation mode - this should accurately mimic
+the real acquisition.
 
 //-------------------------------------------------------
 //
@@ -87,11 +88,11 @@ Add some kind of beam presence detection threshold
 //
 //Allow cancelling to happen sooner - especially during long exposures
 //
--------------------------------------------------------
-
-Zooming on graphs does not work properly when program first starts - graphs need
-an autoscale operation before they start zooming properly
-
+//-------------------------------------------------------
+//
+//Zooming on graphs does not work properly when program first starts - graphs need
+//an autoscale operation before they start zooming properly
+//
 //-------------------------------------------------------
 //
 //Add menu commands to show/hide toolbox windows
@@ -317,11 +318,11 @@ sub-directories
 //Masking operations don't seem to work.
 //copyMask operations were other way round
 //
--------------------------------------------------------
-
-BLOCKER
-Image doesn't update when display parameters are changed.
-
+//-------------------------------------------------------
+//
+//BLOCKER
+//Image doesn't update when display parameters are changed.
+//
 //-------------------------------------------------------
 //
 //BLOCKER
@@ -357,10 +358,10 @@ display.
 
 Provide commands for printing graphs.
 
--------------------------------------------------------
-
-The first average after the program has been started, is always zero
-
+//-------------------------------------------------------
+//
+//The first average after the program has been started, is always zero
+//
 //-------------------------------------------------------
 //
 //BLOCKER
@@ -399,6 +400,35 @@ File browser should automatically switch to the output data directory when this 
 
 Check that the image buffer memory allocation works before trying
 to use the allocated buffers.  (Exception handler needed?)
+
+-------------------------------------------------------
+
+Investigate a situation which can arise (twice now) where the GUI becomes unresponsive even
+though acquisition and processing continues to run.  Presumably some kind of race condition?
+
+-------------------------------------------------------
+
+Display some progress indication when angular integration is taking place.
+
+-------------------------------------------------------
+
+Complete implementation of file browser panel
+
+-------------------------------------------------------
+
+Implement an image statistics panel
+
+-------------------------------------------------------
+
+Implement an image slice panel ?
+
+-------------------------------------------------------
+
+Implement an image histogram panel ?
+
+-------------------------------------------------------
+
+Implement an image calculator panel ?
 
 -------------------------------------------------------
 

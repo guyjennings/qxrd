@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.107 2009/11/03 19:57:56 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.108 2009/11/13 20:15:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -20,6 +20,7 @@
 #include "qxrdplotzoomer.h"
 #include "qxrdscriptengine.h"
 #include "qxrdfilebrowser.h"
+#include "qxrdimagecalculator.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -51,6 +52,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_CenterFinderDialog(NULL),
     m_IntegratorDialog(NULL),
     m_FileBrowser(NULL),
+    m_Calculator(NULL),
     m_Progress(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
@@ -61,7 +63,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.107 2009/11/03 19:57:56 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.108 2009/11/13 20:15:58 jennings Exp $")
 {
   setupUi(this);
 
@@ -75,6 +77,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
   m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
+
+  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
+  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
 
   connect(m_ExecuteScriptButton, SIGNAL(clicked()), m_ActionExecuteScript, SIGNAL(triggered()));
   connect(m_ActionExecuteScript, SIGNAL(triggered()), this, SLOT(executeScript()));
@@ -870,6 +875,9 @@ void QxrdWindow::doOpenQXRDWebPage()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.108  2009/11/13 20:15:58  jennings
+*  *** empty log message ***
+*
 *  Revision 1.107  2009/11/03 19:57:56  jennings
 *  Added help menu with an about dialog and a link to the documentation web site
 *

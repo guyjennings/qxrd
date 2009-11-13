@@ -87,7 +87,8 @@ HEADERS += TODO.h \
     qxrdmaskpicker.h \
     qxrdmaskdata.h \
     qxrdimageplotmeasurer.h \
-    qxrdfilebrowser.h
+    qxrdfilebrowser.h \
+    qxrdimagecalculator.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -131,11 +132,13 @@ SOURCES += qxrd.cpp \
     qxrdmaskpicker.cpp \
     qxrdmaskdata.cpp \
     qxrdimageplotmeasurer.cpp \
-    qxrdfilebrowser.cpp
+    qxrdfilebrowser.cpp \
+    qxrdimagecalculator.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
-    qxrdfilebrowser.ui
+    qxrdfilebrowser.ui \
+    qxrdimagecalculator.ui
 unix { 
     HEADERS += xisl_dummy.h
     SOURCES += xisl_dummy.cpp
@@ -146,7 +149,8 @@ unix {
 win32 { 
     PLATFORM_PREFIX = win32
     QTBINDIR = C:/Qt/2009.04/qt/bin
-#    QTBINDIR = C:/Qt/qt-all-opensource-src-4.5.3/bin
+    
+    # QTBINDIR = C:/Qt/qt-all-opensource-src-4.5.3/bin
     MINGW = C:/Qt/2009.04/qt/bin
     app.target = app
     zip.target = zip

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.62 2009/11/03 19:57:56 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.63 2009/11/13 20:15:58 jennings Exp $
 *
 *******************************************************************/
 
@@ -31,6 +31,7 @@ class QxrdIntegratorDialog;
 class QxrdScriptEngine;
 class QxrdSettings;
 class QxrdFileBrowser;
+class QxrdImageCalculator;
 
 #include "qxrdimagequeue.h"
 
@@ -127,6 +128,7 @@ private:
   QxrdIntegratorDialog   *m_IntegratorDialog;
 //  QxrdIntegrator         *m_Integrator;
   QxrdFileBrowser        *m_FileBrowser;
+  QxrdImageCalculator    *m_Calculator;
   QVector<double>         m_Exposures;
   QProgressBar           *m_Progress;
   QLabel                 *m_StatusMsg;
@@ -147,7 +149,7 @@ private:
 //  QAtomicInt              m_Plotting;
 //  QAtomicInt              m_SpareDataAvailable;
 
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.62 2009/11/03 19:57:56 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.63 2009/11/13 20:15:58 jennings Exp $");
 };
 
 #endif
@@ -155,6 +157,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.63  2009/11/13 20:15:58  jennings
+*  *** empty log message ***
+*
 *  Revision 1.62  2009/11/03 19:57:56  jennings
 *  Added help menu with an about dialog and a link to the documentation web site
 *
