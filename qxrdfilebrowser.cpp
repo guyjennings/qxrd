@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdfilebrowser.cpp,v 1.5 2009/10/26 02:39:12 jennings Exp $
+*  $Id: qxrdfilebrowser.cpp,v 1.6 2009/11/16 22:31:08 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,12 +16,12 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
     m_BrowserSelector(this, "BrowserSelector",""),
     m_Processor(processor),
     m_Model(NULL),
-    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.5 2009/10/26 02:39:12 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.6 2009/11/16 22:31:08 jennings Exp $")
 {
   setupUi(this);
 
   m_Model = new QFileSystemModel();
-  m_Model -> setRootPath(QDir::currentPath());
+//  m_Model -> setRootPath(QDir::currentPath());
   m_FileBrowser -> setModel(m_Model);
   m_FileBrowser -> setRootIndex(m_Model->index(QDir::currentPath()));
 
@@ -102,7 +102,7 @@ void QxrdFileBrowser::onSelectorChanged(QString str, QModelIndex parent)
 
 void QxrdFileBrowser::onRootDirectoryChanged(QString str)
 {
-  m_Model -> setRootPath(str);
+//  m_Model -> setRootPath(str);
   m_FileBrowser -> setRootIndex(m_Model->index(str));
 }
 
@@ -159,6 +159,9 @@ void QxrdFileBrowser::mousePressed(QModelIndex index)
 /******************************************************************
 *
 *  $Log: qxrdfilebrowser.cpp,v $
+*  Revision 1.6  2009/11/16 22:31:08  jennings
+*  Disabled file browser file system model - it takes too long to run on network disks
+*
 *  Revision 1.5  2009/10/26 02:39:12  jennings
 *  Added right click menu routine for file browser
 *
