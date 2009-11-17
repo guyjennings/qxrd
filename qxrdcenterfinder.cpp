@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.cpp,v 1.12 2009/07/25 17:03:40 jennings Exp $
+*  $Id: qxrdcenterfinder.cpp,v 1.13 2009/11/17 20:42:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,6 +9,7 @@
 #include "qxrdcenterfinderpicker.h"
 #include "qxrdwindow.h"
 #include <qwt_plot_marker.h>
+#include "qxrdmutexlocker.h"
 
 QxrdCenterFinder::QxrdCenterFinder
     (QObject *parent)
@@ -16,7 +17,7 @@ QxrdCenterFinder::QxrdCenterFinder
     m_CenterX(this, "centerX", 0),
     m_CenterY(this, "centerY", 0),
     m_CenterStep(this, "centerStep", 1),
-    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.12 2009/07/25 17:03:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.13 2009/11/17 20:42:59 jennings Exp $")
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 
@@ -26,14 +27,14 @@ QxrdCenterFinder::QxrdCenterFinder
 
 void QxrdCenterFinder::writeSettings(QxrdSettings *settings, QString section)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdCenterFinder::readSettings(QxrdSettings *settings, QString section)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
@@ -47,6 +48,10 @@ void QxrdCenterFinder::onCenterChanged(QwtDoublePoint pt)
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.cpp,v $
+*  Revision 1.13  2009/11/17 20:42:59  jennings
+*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
+*  info about any held for more than 100 msec
+*
 *  Revision 1.12  2009/07/25 17:03:40  jennings
 *  More improvements to image plotting code
 *

@@ -1,6 +1,6 @@
  /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.43 2009/10/16 21:54:17 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.44 2009/11/17 20:42:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -26,7 +26,8 @@
 #include <QDir>
 #include <QFile>
 #include <QTime>
-#include <QMutexLocker>
+//#include <QMutexLocker>
+#include "qxrdmutexlocker.h"
 #include <QMetaObject>
 #include <QMetaProperty>
 
@@ -55,7 +56,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CameraModel(""),
     m_CurrentMode(-1),
     m_CurrentGain(-1),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.43 2009/10/16 21:54:17 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.44 2009/11/17 20:42:59 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -296,7 +297,7 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
   if (get_SimulationMode()) {
     simulatedAcquisition(isDark);
   } else {
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     int nRet = HIS_ALL_OK;
 
@@ -421,7 +422,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 {
   emit printMessage("QxrdAcquisitionPerkinElmer::onEndFrame()");
 
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (get_Cancelling()) {
     set_Cancelling(false);
@@ -728,7 +729,7 @@ int QxrdAcquisitionPerkinElmer::acquisitionStatus(double time)
   }
 
   QMutex mutex;
-  QMutexLocker lock(&mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &mutex);
 
   if (m_StatusWaiting.wait(&mutex, (int)(time*1000))) {
 //    printf("m_StatusWaiting.wait succeeded\n");
@@ -781,14 +782,14 @@ void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 
 QVector<double> QxrdAcquisitionPerkinElmer::readoutTimes()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_ReadoutTimes;
 }
 
 double QxrdAcquisitionPerkinElmer::readoutTime() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   int n = get_ReadoutMode();
 
@@ -835,6 +836,10 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.44  2009/11/17 20:42:59  jennings
+*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
+*  info about any held for more than 100 msec
+*
 *  Revision 1.43  2009/10/16 21:54:17  jennings
 *  Implemented various processDataSequence commands
 *

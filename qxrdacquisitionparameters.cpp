@@ -1,12 +1,13 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.17 2009/11/09 16:44:38 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.18 2009/11/17 20:42:59 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdacquisitionparameters.h"
 
-#include <QMutexLocker>
+//#include <QMutexLocker>
+#include "qxrdmutexlocker.h"
 #include "qxrdsettings.h"
 #include <QMetaProperty>
 #include <QStringList>
@@ -42,7 +43,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdDataProcessor *proc)
     m_UserComment3(this,"userComment3",""),
     m_UserComment4(this,"userComment4",""),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.17 2009/11/09 16:44:38 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.18 2009/11/17 20:42:59 jennings Exp $")
 {
 }
 
@@ -68,14 +69,14 @@ void QxrdAcquisitionParameters::copyDynamicProperties(QObject *dest)
 
 void QxrdAcquisitionParameters::writeSettings(QxrdSettings *settings, QString section)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString section)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
@@ -98,6 +99,10 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings *settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.18  2009/11/17 20:42:59  jennings
+*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
+*  info about any held for more than 100 msec
+*
 *  Revision 1.17  2009/11/09 16:44:38  jennings
 *  Reduced initial buffer size to 500M, fixed problem loading 32-bit his files
 *

@@ -401,11 +401,13 @@ File browser should automatically switch to the output data directory when this 
 Check that the image buffer memory allocation works before trying
 to use the allocated buffers.  (Exception handler needed?)
 
--------------------------------------------------------
-
-Investigate a situation which can arise (twice now) where the GUI becomes unresponsive even
-though acquisition and processing continues to run.  Presumably some kind of race condition?
-
+//-------------------------------------------------------
+//
+//Investigate a situation which can arise (twice now) where the GUI becomes unresponsive even
+//though acquisition and processing continues to run.  Presumably some kind of race condition?
+//This is caused by poor performance of file browser window.  I have disabled the file browser
+//for the moment.
+//
 -------------------------------------------------------
 
 Display some progress indication when angular integration is taking place.
@@ -429,6 +431,22 @@ Implement an image histogram panel ?
 -------------------------------------------------------
 
 Implement an image calculator panel ?
+
+-------------------------------------------------------
+
+Additional acquisition features requested:
+Allow skipping frames at start of acquisition,
+Allow skipping frames between frames of acquisition,
+Allow saving of intermediate frames as an insurance during long acquisitions - alternatively save an 'accumulated' image
+at the end of an acquisition.
+Provide some kind of beam intensity monitoring facility and pause acquisition when beam is not present.
+
+-------------------------------------------------------
+
+If qxrd crashes the TCP/IP server socket gets left in CLOSE_WAIT state.  If you then restart qxrd it will
+automatically use the next socket in sequence - unfortunately spec will still try to use the original socket
+when searching for host:qxrd and will fail to connect.
+Could try to use SO_REUSEADDR, perhaps.
 
 -------------------------------------------------------
 

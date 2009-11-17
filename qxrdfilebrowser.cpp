@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdfilebrowser.cpp,v 1.6 2009/11/16 22:31:08 jennings Exp $
+*  $Id: qxrdfilebrowser.cpp,v 1.7 2009/11/17 20:42:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,6 +9,7 @@
 #include <QFileSystemModel>
 #include <QFileDialog>
 #include <QMenu>
+#include "qxrdmutexlocker.h"
 
 QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
   : QWidget(parent),
@@ -16,7 +17,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
     m_BrowserSelector(this, "BrowserSelector",""),
     m_Processor(processor),
     m_Model(NULL),
-    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.6 2009/11/16 22:31:08 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.7 2009/11/17 20:42:59 jennings Exp $")
 {
   setupUi(this);
 
@@ -132,14 +133,14 @@ void QxrdFileBrowser::doProcess()
 
 void QxrdFileBrowser::writeSettings(QxrdSettings *settings, QString section)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdFileBrowser::readSettings(QxrdSettings *settings, QString section)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
@@ -159,6 +160,10 @@ void QxrdFileBrowser::mousePressed(QModelIndex index)
 /******************************************************************
 *
 *  $Log: qxrdfilebrowser.cpp,v $
+*  Revision 1.7  2009/11/17 20:42:59  jennings
+*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
+*  info about any held for more than 100 msec
+*
 *  Revision 1.6  2009/11/16 22:31:08  jennings
 *  Disabled file browser file system model - it takes too long to run on network disks
 *

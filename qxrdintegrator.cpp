@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.17 2009/11/02 20:19:27 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.18 2009/11/17 20:42:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,25 +12,26 @@
 
 #include <QTime>
 #include <QtConcurrentRun>
+#include "qxrdmutexlocker.h"
 
 QxrdIntegrator::QxrdIntegrator(QxrdDataProcessor *proc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_DataProcessor(proc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.17 2009/11/02 20:19:27 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.18 2009/11/17 20:42:59 jennings Exp $")
 {
 }
 
 void QxrdIntegrator::writeSettings(QxrdSettings *settings, QString section)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdIntegrator::readSettings(QxrdSettings *settings, QString section)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
@@ -597,6 +598,10 @@ void QxrdIntegrator::slicePolygon(QwtArray<QwtDoublePoint> poly, double width)
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.18  2009/11/17 20:42:59  jennings
+*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
+*  info about any held for more than 100 msec
+*
 *  Revision 1.17  2009/11/02 20:19:27  jennings
 *  Changes to make it work with VC compiler
 *

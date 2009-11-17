@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionscripting.cpp,v 1.8 2009/09/21 19:51:11 jennings Exp $
+*  $Id: qxrdacquisitionscripting.cpp,v 1.9 2009/11/17 20:42:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,11 +8,12 @@
 
 #include "qxrdacquisitionthread.h"
 #include <QMetaProperty>
+#include "qxrdmutexlocker.h"
 
 QxrdAcquisitionScripting::QxrdAcquisitionScripting(QxrdDataProcessor *proc)
   : QxrdAcquisitionParameters(proc),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionscripting.cpp,v 1.8 2009/09/21 19:51:11 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionscripting.cpp,v 1.9 2009/11/17 20:42:59 jennings Exp $")
 {
 }
 
@@ -23,7 +24,7 @@ void QxrdAcquisitionScripting::message(QString msg)
 
 void QxrdAcquisitionScripting::propertyList()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   const QMetaObject *meta = metaObject();
 
@@ -43,6 +44,10 @@ void QxrdAcquisitionScripting::propertyList()
 /******************************************************************
 *
 *  $Log: qxrdacquisitionscripting.cpp,v $
+*  Revision 1.9  2009/11/17 20:42:59  jennings
+*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
+*  info about any held for more than 100 msec
+*
 *  Revision 1.8  2009/09/21 19:51:11  jennings
 *  Added call to statusMessage to criticalMessage and call printMessage from statusMessage
 *

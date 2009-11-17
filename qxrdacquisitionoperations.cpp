@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionoperations.cpp,v 1.9 2009/07/20 00:32:04 jennings Exp $
+*  $Id: qxrdacquisitionoperations.cpp,v 1.10 2009/11/17 20:42:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,20 +13,20 @@ QxrdAcquisitionOperations::QxrdAcquisitionOperations(QxrdDataProcessor *proc)
     m_DataProcessor(proc),
 //    m_FreeImages("Free Image Pool"),
 //    m_AcquiredImages("Acquired Images"),
-    SOURCE_IDENT("$Id: qxrdacquisitionoperations.cpp,v 1.9 2009/07/20 00:32:04 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionoperations.cpp,v 1.10 2009/11/17 20:42:59 jennings Exp $")
 {
 }
 
 //QxrdImageData *QxrdAcquisitionOperations::takeNextAcquiredImage()
 //{
-//  QMutexLocker lock(&m_Mutex);
+//  QxrdMutexLocker lock(&m_Mutex);
 //
 //  return m_AcquiredImages.dequeue();
 //}
 //
 //void QxrdAcquisitionOperations::newAcquiredImage(QxrdImageData *img)
 //{
-//  QMutexLocker lock(&m_Mutex);
+//  QxrdMutexLocker lock(&m_Mutex);
 //
 //  m_AcquiredImages.enqueue(img);
 //
@@ -36,6 +36,10 @@ QxrdAcquisitionOperations::QxrdAcquisitionOperations(QxrdDataProcessor *proc)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionoperations.cpp,v $
+*  Revision 1.10  2009/11/17 20:42:59  jennings
+*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
+*  info about any held for more than 100 msec
+*
 *  Revision 1.9  2009/07/20 00:32:04  jennings
 *  Removed image queues for acquired and dark images - use 'connect' args instead
 *

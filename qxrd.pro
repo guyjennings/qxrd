@@ -88,7 +88,8 @@ HEADERS += TODO.h \
     qxrdmaskdata.h \
     qxrdimageplotmeasurer.h \
     qxrdfilebrowser.h \
-    qxrdimagecalculator.h
+    qxrdimagecalculator.h \
+    qxrdmutexlocker.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -133,7 +134,8 @@ SOURCES += qxrd.cpp \
     qxrdmaskdata.cpp \
     qxrdimageplotmeasurer.cpp \
     qxrdfilebrowser.cpp \
-    qxrdimagecalculator.cpp
+    qxrdimagecalculator.cpp \
+    qxrdmutexlocker.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \

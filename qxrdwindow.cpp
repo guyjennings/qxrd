@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.108 2009/11/13 20:15:58 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.109 2009/11/17 20:43:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -21,6 +21,7 @@
 #include "qxrdscriptengine.h"
 #include "qxrdfilebrowser.h"
 #include "qxrdimagecalculator.h"
+#include "qxrdmutexlocker.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -63,7 +64,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.108 2009/11/13 20:15:58 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.109 2009/11/17 20:43:00 jennings Exp $")
 {
   setupUi(this);
 
@@ -604,7 +605,7 @@ void QxrdWindow::clearStatusMessage()
 
 void QxrdWindow::newDataAvailable(QxrdDoubleImageData *image)
 {
-  QMutexLocker lock(&m_NewDataMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
 
   image -> copyImage(m_NewData);
 
@@ -615,7 +616,7 @@ void QxrdWindow::newDataAvailable(QxrdDoubleImageData *image)
 
 void QxrdWindow::newMaskAvailable(QxrdMaskData *mask)
 {
-  QMutexLocker lock(&m_NewMaskMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewMaskMutex);
 
   mask -> copyMask(m_NewMask);
 
@@ -626,10 +627,10 @@ void QxrdWindow::newMaskAvailable(QxrdMaskData *mask)
 
 void QxrdWindow::newData()
 {
-  QMutexLocker lock(&m_NewDataMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
 
   if (m_NewDataAvailable) {
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     QxrdDoubleImageData *tmp = m_Data;
     m_Data = m_NewData;
@@ -643,10 +644,10 @@ void QxrdWindow::newData()
 
 void QxrdWindow::newMask()
 {
-  QMutexLocker lock(&m_NewMaskMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewMaskMutex);
 
   if (m_NewMaskAvailable) {
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     QxrdMaskData *tmp = m_Mask;
     m_Mask = m_NewMask;
@@ -663,7 +664,7 @@ void QxrdWindow::newMask()
 //  bool canDo;
 //
 //  {
-//    QMutexLocker lock(&m_NewDataMutex);
+//    QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
 //
 //    canDo = m_Plotting == 0;
 //
@@ -843,21 +844,21 @@ void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
 
 QxrdDataProcessor *QxrdWindow::dataProcessor() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_DataProcessor;
 }
 
 QxrdDoubleImageData *QxrdWindow::data()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Data;
 }
 
 QxrdMaskData *QxrdWindow::mask()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Mask;
 }
@@ -875,6 +876,10 @@ void QxrdWindow::doOpenQXRDWebPage()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.109  2009/11/17 20:43:00  jennings
+*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
+*  info about any held for more than 100 msec
+*
 *  Revision 1.108  2009/11/13 20:15:58  jennings
 *  *** empty log message ***
 *

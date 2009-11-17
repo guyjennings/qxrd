@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.65 2009/11/02 20:16:22 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.66 2009/11/17 20:42:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -11,6 +11,7 @@
 #include "qxrdimagedata.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdintegrator.h"
+#include "qxrdmutexlocker.h"
 
 #include "tiffio.h"
 
@@ -66,7 +67,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.65 2009/11/02 20:16:22 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.66 2009/11/17 20:42:59 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -125,7 +126,7 @@ void QxrdDataProcessor::setWindow(QxrdWindow *win)
 
 void QxrdDataProcessor::writeSettings(QxrdSettings *settings, QString section)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 
@@ -135,7 +136,7 @@ void QxrdDataProcessor::writeSettings(QxrdSettings *settings, QString section)
 
 void QxrdDataProcessor::readSettings(QxrdSettings *settings, QString section)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
@@ -147,7 +148,7 @@ void QxrdDataProcessor::readSettings(QxrdSettings *settings, QString section)
 
 void QxrdDataProcessor::onAcquiredInt16ImageAvailable(QxrdInt16ImageData *image)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   int navail = decrementAcquiredCount();
 
@@ -174,7 +175,7 @@ void QxrdDataProcessor::onAcquiredInt16ImageAvailable(QxrdInt16ImageData *image)
 
 void QxrdDataProcessor::onAcquiredInt32ImageAvailable(QxrdInt32ImageData *image)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   int navail = decrementAcquiredCount();
 
@@ -201,7 +202,7 @@ void QxrdDataProcessor::onAcquiredInt32ImageAvailable(QxrdInt32ImageData *image)
 
 QxrdDoubleImageData *QxrdDataProcessor::takeNextFreeImage()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_FreeImages.size() == 0) {
 //    printf("Allocate new image\n");
@@ -213,28 +214,28 @@ QxrdDoubleImageData *QxrdDataProcessor::takeNextFreeImage()
 
 void QxrdDataProcessor::returnImageToPool(QxrdDoubleImageData *img)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_FreeImages.enqueue(img);
 }
 
 void QxrdDataProcessor::returnInt16ImageToPool(QxrdInt16ImageData *img)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Acquisition -> returnImageToPool(img);
 }
 
 void QxrdDataProcessor::returnInt32ImageToPool(QxrdInt32ImageData *img)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Acquisition -> returnImageToPool(img);
 }
 
 void QxrdDataProcessor::newData(QxrdDoubleImageData *image)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_Data != image) {
 //    image -> copyMask(m_Data);
@@ -255,7 +256,7 @@ void QxrdDataProcessor::newData(QxrdDoubleImageData *image)
 
 void QxrdDataProcessor::newDarkImage(QxrdDoubleImageData *image)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_DarkFrame != image) {
     if (m_DarkFrame) {
@@ -270,7 +271,7 @@ void QxrdDataProcessor::newDarkImage(QxrdDoubleImageData *image)
 
 void QxrdDataProcessor::newDarkImage(QxrdInt16ImageData *image)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_DarkFrame == NULL) {
     m_DarkFrame = new QxrdDoubleImageData();
@@ -283,7 +284,7 @@ void QxrdDataProcessor::newDarkImage(QxrdInt16ImageData *image)
 
 void QxrdDataProcessor::newDarkImage(QxrdInt32ImageData *image)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_DarkFrame == NULL) {
     m_DarkFrame = new QxrdDoubleImageData();
@@ -296,7 +297,7 @@ void QxrdDataProcessor::newDarkImage(QxrdInt32ImageData *image)
 
 void QxrdDataProcessor::newBadPixelsImage(QxrdDoubleImageData *image)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_BadPixels != image) {
     if (m_BadPixels) {
@@ -311,7 +312,7 @@ void QxrdDataProcessor::newBadPixelsImage(QxrdDoubleImageData *image)
 
 void QxrdDataProcessor::newGainMapImage(QxrdDoubleImageData *image)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_GainMap != image) {
     if (m_GainMap) {
@@ -331,7 +332,7 @@ void QxrdDataProcessor::newMask()
 
 void QxrdDataProcessor::loadDefaultImages()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QString fileName = get_MaskPath();
   QFileInfo fileInfo(fileName);
@@ -364,7 +365,7 @@ void QxrdDataProcessor::loadDefaultImages()
 
 void QxrdDataProcessor::loadData(QString name)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  printf("QxrdDataProcessor::loadData(%s)\n", qPrintable(name));
 
@@ -386,7 +387,7 @@ void QxrdDataProcessor::loadData(QString name)
 
 void QxrdDataProcessor::processData(QString name)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  printf("QxrdDataProcessor::loadData(%s)\n", qPrintable(name));
 
@@ -445,7 +446,7 @@ void QxrdDataProcessor::processDataSequence(QString path, QStringList filters)
 
 void QxrdDataProcessor::saveData(QString name, int canOverwrite)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (saveNamedImageData(name, m_Data, canOverwrite)) {
     set_DataPath(m_Data -> get_FileName());
@@ -454,7 +455,7 @@ void QxrdDataProcessor::saveData(QString name, int canOverwrite)
 
 void QxrdDataProcessor::loadDark(QString name)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  printf("QxrdDataProcessor::loadDark(%s)\n", qPrintable(name));
 
@@ -477,7 +478,7 @@ void QxrdDataProcessor::loadDark(QString name)
 
 void QxrdDataProcessor::saveDark(QString name, int canOverwrite)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (saveNamedImageData(name, m_DarkFrame, canOverwrite)) {
     set_DarkImagePath(m_DarkFrame -> get_FileName());
@@ -486,7 +487,7 @@ void QxrdDataProcessor::saveDark(QString name, int canOverwrite)
 
 void QxrdDataProcessor::loadBadPixels(QString name)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  printf("QxrdDataProcessor::loadDark(%s)\n", qPrintable(name));
 
@@ -509,7 +510,7 @@ void QxrdDataProcessor::loadBadPixels(QString name)
 
 void QxrdDataProcessor::saveBadPixels(QString name, int canOverwrite)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (saveNamedImageData(name, m_BadPixels, canOverwrite)) {
     set_BadPixelsPath(m_BadPixels -> get_FileName());
@@ -518,7 +519,7 @@ void QxrdDataProcessor::saveBadPixels(QString name, int canOverwrite)
 
 void QxrdDataProcessor::loadGainMap(QString name)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  printf("QxrdDataProcessor::loadGainMap(%s)\n", qPrintable(name));
 
@@ -541,7 +542,7 @@ void QxrdDataProcessor::loadGainMap(QString name)
 
 void QxrdDataProcessor::saveGainMap(QString name, int canOverwrite)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (saveNamedImageData(name, m_GainMap, canOverwrite)) {
     set_GainMapPath(m_GainMap -> get_FileName());
@@ -550,7 +551,7 @@ void QxrdDataProcessor::saveGainMap(QString name, int canOverwrite)
 
 void QxrdDataProcessor::loadMask(QString name)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  printf("QxrdDataProcessor::loadData(%s)\n", qPrintable(name));
 
@@ -575,7 +576,7 @@ void QxrdDataProcessor::loadMask(QString name)
 
 void QxrdDataProcessor::saveMask(QString name, int canOverwrite)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (saveNamedMaskData(name, m_Mask, canOverwrite)) {
     set_MaskPath(m_Mask -> get_FileName());
@@ -586,11 +587,11 @@ void QxrdDataProcessor::saveMask(QString name, int canOverwrite)
 
 bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *image, int canOverwrite)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
-  QMutexLocker lockr(image->mutex());
+  QxrdMutexLocker lockr(__FILE__, __LINE__, image->mutex());
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
@@ -642,7 +643,7 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *im
 
 bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *image, int canOverwrite)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   bool res = saveNamedRawImageData(name, image, canOverwrite);
 
@@ -655,11 +656,11 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt16ImageData *ima
 
 bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *image, int canOverwrite)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
-  QMutexLocker lockr(image->mutex());
+  QxrdMutexLocker lockr(__FILE__, __LINE__, image->mutex());
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
@@ -710,7 +711,7 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *
 
 bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *image, int canOverwrite)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   bool res = saveNamedRawImageData(name, image, canOverwrite);
 
@@ -723,11 +724,11 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdInt32ImageData *ima
 
 bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *image, int canOverwrite)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
-  QMutexLocker lockr(image->mutex());
+  QxrdMutexLocker lockr(__FILE__, __LINE__, image->mutex());
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
@@ -778,11 +779,11 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *
 
 bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image, int canOverwrite)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  emit printMessage(tr("Saved \"%1\")").arg(name));
 
-  QMutexLocker lockr(image->mutex());
+  QxrdMutexLocker lockr(__FILE__, __LINE__, image->mutex());
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
@@ -829,7 +830,7 @@ bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image, int
 
 QString QxrdDataProcessor::uniqueFileName(QString name)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QFileInfo f(name);
 
@@ -853,7 +854,7 @@ QString QxrdDataProcessor::uniqueFileName(QString name)
 
 void QxrdDataProcessor::clearDark()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   newDarkImage((QxrdDoubleImageData*) NULL);
 
@@ -862,7 +863,7 @@ void QxrdDataProcessor::clearDark()
 
 void QxrdDataProcessor::clearBadPixels()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   newBadPixelsImage(NULL);
 
@@ -871,7 +872,7 @@ void QxrdDataProcessor::clearBadPixels()
 
 void QxrdDataProcessor::clearGainMap()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   newGainMapImage(NULL);
 
@@ -880,7 +881,7 @@ void QxrdDataProcessor::clearGainMap()
 
 void QxrdDataProcessor::clearMask()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Mask -> clear();
 
@@ -891,7 +892,7 @@ void QxrdDataProcessor::clearMask()
 
 void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  printf("QxrdDataProcessor::processAcquiredImage\n");
   emit printMessage(tr("processing acquired 16 bit image, %1 remaining").arg(getAcquiredCount()));
@@ -925,7 +926,7 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
 
 void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  printf("QxrdDataProcessor::processAcquiredImage\n");
   emit printMessage(tr("processing acquired 32 bit image, %1 remaining").arg(getAcquiredCount()));
@@ -959,7 +960,7 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
 
 void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (dimg) {
     QTime tic;
@@ -1027,7 +1028,7 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
 
 void QxrdDataProcessor::updateEstimatedTime(QcepDoubleProperty *prop, int msec)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   double newVal = prop -> value() * (1.0 - get_AveragingRatio()) + ((double) msec)/1000.0* get_AveragingRatio();
 
@@ -1036,7 +1037,7 @@ void QxrdDataProcessor::updateEstimatedTime(QcepDoubleProperty *prop, int msec)
 
 void QxrdDataProcessor::subtractDarkImage(QxrdDoubleImageData *image, QxrdDoubleImageData *dark)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (get_PerformDarkSubtraction()) {
     if (dark && image) {
@@ -1067,8 +1068,8 @@ void QxrdDataProcessor::subtractDarkImage(QxrdDoubleImageData *image, QxrdDouble
         return;
       }
 
-      QMutexLocker lock1(dark->mutex());
-      QMutexLocker lock2(image->mutex());
+      QxrdMutexLocker lock1(__FILE__, __LINE__, dark->mutex());
+      QxrdMutexLocker lock2(__FILE__, __LINE__, image->mutex());
 
       int height = image->get_Height();
       int width  = image->get_Width();
@@ -1098,19 +1099,19 @@ void QxrdDataProcessor::subtractDarkImage(QxrdDoubleImageData *image, QxrdDouble
 
 void QxrdDataProcessor::correctBadPixels(QxrdDoubleImageData * /*image*/)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 }
 
 void QxrdDataProcessor::correctImageGains(QxrdDoubleImageData * /*image*/)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 }
 
 void QxrdDataProcessor::updateEstimatedProcessingTime()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   double estTime = 0;
 
@@ -1155,7 +1156,7 @@ void QxrdDataProcessor::updateEstimatedProcessingTime()
 
 void QxrdDataProcessor::showMaskRange(/*double min, double max*/)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
@@ -1171,7 +1172,7 @@ void QxrdDataProcessor::showMaskRange(/*double min, double max*/)
 
 void QxrdDataProcessor::hideMaskAll()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_Mask) {
 //    printf ("setMaskRange(%g,%g)\n", min, max);
@@ -1184,7 +1185,7 @@ void QxrdDataProcessor::hideMaskAll()
 
 void QxrdDataProcessor::showMaskAll()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_Mask) {
 //    printf ("clearMaskRange(%g,%g)\n", min, max);
@@ -1197,7 +1198,7 @@ void QxrdDataProcessor::showMaskAll()
 
 void QxrdDataProcessor::hideMaskRange(/*double min, double max*/)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
@@ -1213,7 +1214,7 @@ void QxrdDataProcessor::hideMaskRange(/*double min, double max*/)
 
 void QxrdDataProcessor::invertMask()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_Mask) {
     m_Mask -> invertMask();
@@ -1224,7 +1225,7 @@ void QxrdDataProcessor::invertMask()
 
 void QxrdDataProcessor::maskCircle(QwtDoubleRect rect)
 { 
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_Mask) {
     if ((rect.left() == rect.right()) && (rect.bottom() == rect.top())) {
@@ -1243,7 +1244,7 @@ void QxrdDataProcessor::maskCircle(QwtDoubleRect rect)
 
 void QxrdDataProcessor::maskPolygon(QVector<QwtDoublePoint> poly)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_Mask) {
     //  printf("QxrdDataProcessor::maskPolygon(%d points ...)\n", poly.size());
@@ -1280,7 +1281,7 @@ void QxrdDataProcessor::maskPolygon(QVector<QwtDoublePoint> poly)
 
 void QxrdDataProcessor::measurePolygon(QVector<QwtDoublePoint> poly)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   foreach(QwtDoublePoint pt, poly) {
     emit printMessage(tr("Measure pt (%1,%2) = %3").arg(pt.x()).arg(pt.y())
@@ -1292,7 +1293,7 @@ void QxrdDataProcessor::measurePolygon(QVector<QwtDoublePoint> poly)
 
 void QxrdDataProcessor::printMeasuredPolygon(QVector<QwtDoublePoint> poly)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   foreach(QwtDoublePoint pt, poly) {
     emit printMessage(tr("Measure pt (%1,%2)").arg(pt.x()).arg(pt.y()));
@@ -1335,28 +1336,28 @@ void QxrdDataProcessor::summarizeMeasuredPolygon(QVector<QwtDoublePoint> poly)
 
 void QxrdDataProcessor::slicePolygon(QVector<QwtDoublePoint> poly)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Integrator -> slicePolygon(poly,0);
 }
 
 QxrdDoubleImageData *QxrdDataProcessor::data() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Data;
 }
 
 QxrdDoubleImageData *QxrdDataProcessor::darkImage() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_DarkFrame;
 }
 
 QxrdMaskData *QxrdDataProcessor::mask() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Mask;
 }
@@ -1389,7 +1390,7 @@ int QxrdDataProcessor::getAcquiredCount()
 int QxrdDataProcessor::status(double time)
 {
   QMutex mutex;
-  QMutexLocker lock(&mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &mutex);
 
   if (getAcquiredCount() == 0) {
     return 1;
@@ -1404,7 +1405,7 @@ int QxrdDataProcessor::status(double time)
 
 QxrdCenterFinder  *QxrdDataProcessor::centerFinder() const
 {
-  QMutexLocker  lock(&m_Mutex);
+  QxrdMutexLocker  lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_CenterFinder == NULL) {
     emit printMessage("Problem QxrdDataProcessor::centerFinder == NULL");
@@ -1415,7 +1416,7 @@ QxrdCenterFinder  *QxrdDataProcessor::centerFinder() const
 
 QxrdIntegrator    *QxrdDataProcessor::integrator() const
 {
-  QMutexLocker  lock(&m_Mutex);
+  QxrdMutexLocker  lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_Integrator == NULL) {
     emit printMessage("Problem QxrdDataProcessor::integrator == NULL");
@@ -1426,7 +1427,7 @@ QxrdIntegrator    *QxrdDataProcessor::integrator() const
 
 void QxrdDataProcessor::newImage(int ncols, int nrows)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Data -> resize(ncols, nrows);
   m_Data -> fill(0);
@@ -1436,7 +1437,7 @@ void QxrdDataProcessor::newImage(int ncols, int nrows)
 
 void QxrdDataProcessor::exponentialTail(double cx, double cy, double width, int oversample)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   int nr = m_Data -> get_Height();
   int nc = m_Data -> get_Width();
@@ -1465,7 +1466,7 @@ void QxrdDataProcessor::exponentialTail(double cx, double cy, double width, int 
 
 void QxrdDataProcessor::reciprocalTail(double cx, double cy, double strength, int oversample)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   int nr = m_Data -> get_Height();
   int nc = m_Data -> get_Width();
@@ -1494,7 +1495,7 @@ void QxrdDataProcessor::reciprocalTail(double cx, double cy, double strength, in
 
 void QxrdDataProcessor::powderRing(double cx, double cy, double radius, double width, double strength, int oversample)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   int nr = m_Data -> get_Height();
   int nc = m_Data -> get_Width();
@@ -1529,7 +1530,7 @@ void QxrdDataProcessor::powderRing(double cx, double cy, double radius, double w
 
 void QxrdDataProcessor::openLogFile()
 {
-  QMutexLocker lock(&m_LogFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   if (m_LogFile == NULL) {
     m_LogFile = fopen(qPrintable(get_LogFilePath()), "a");
@@ -1542,7 +1543,7 @@ void QxrdDataProcessor::openLogFile()
 
 void QxrdDataProcessor::newLogFile(QString path)
 {
-  QMutexLocker lock(&m_LogFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   if (m_LogFile) {
     fclose(m_LogFile);
@@ -1556,7 +1557,7 @@ void QxrdDataProcessor::newLogFile(QString path)
 
 void QxrdDataProcessor::writeLogHeader()
 {
-  QMutexLocker lock(&m_LogFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   if (m_LogFile) {
     fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFilePath()));
@@ -1568,7 +1569,7 @@ void QxrdDataProcessor::writeLogHeader()
 
 void QxrdDataProcessor::logMessage(QString msg)
 {
-  QMutexLocker lock(&m_LogFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   openLogFile();
 
@@ -1580,7 +1581,7 @@ void QxrdDataProcessor::logMessage(QString msg)
 
 void QxrdDataProcessor::closeLogFile()
 {
-  QMutexLocker lock(&m_LogFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   if (m_LogFile) {
     logMessage(tr("%1 ------- shutdown --------").
@@ -1592,7 +1593,7 @@ void QxrdDataProcessor::closeLogFile()
 
 void QxrdDataProcessor::writeOutputScan(QVector<double> x, QVector<double> y)
 {
-  QMutexLocker lock(&m_LogFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   if (m_LogFile) {
     fprintf(m_LogFile, "#S %d qxrd.integrate \"%s\" %g %g\n",
@@ -1614,7 +1615,7 @@ void QxrdDataProcessor::writeOutputScan(QVector<double> x, QVector<double> y)
 
 void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   long sz = dim*dim;
   quint32 *buff = new quint32[sz];
@@ -1645,6 +1646,10 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.66  2009/11/17 20:42:59  jennings
+*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
+*  info about any held for more than 100 msec
+*
 *  Revision 1.65  2009/11/02 20:16:22  jennings
 *  Changes to make it work with VC compiler
 *
