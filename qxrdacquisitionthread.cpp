@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionthread.cpp,v 1.32 2009/07/13 23:19:37 jennings Exp $
+*  $Id: qxrdacquisitionthread.cpp,v 1.33 2009/11/17 20:42:59 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,7 +15,7 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessor *proc)
   : QThread(),
     m_Debug(true),
     m_Acquisition(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.32 2009/07/13 23:19:37 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.33 2009/11/17 20:42:59 jennings Exp $")
 {
   m_Acquisition = new QxrdAcquisition(/*this, */proc);
   m_Acquisition -> moveToThread(this);
@@ -74,7 +74,7 @@ QVector<double> QxrdAcquisitionThread::readoutTimes()
 
 //QVariant QxrdAcquisitionThread::evaluate(QString cmd)
 //{
-//  QMutexLocker lock(&m_EvalMutex);
+//  QxrdMutexLocker lock(&m_EvalMutex);
 //
 //  QMetaObject::invokeMethod(m_Acquisition, "evaluate",
 //                            Qt::QueuedConnection,
@@ -112,6 +112,9 @@ void QxrdAcquisitionThread::sleep(double time)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionthread.cpp,v $
+*  Revision 1.33  2009/11/17 20:42:59  jennings
+*  *** empty log message ***
+*
 *  Revision 1.32  2009/07/13 23:19:37  jennings
 *  More acquisition rearrangement
 *

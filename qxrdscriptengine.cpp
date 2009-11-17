@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.15 2009/11/02 20:19:27 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.16 2009/11/17 20:43:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,6 +12,7 @@
 #include "qxrdcenterfinder.h"
 #include "qxrddataprocessor.h"
 #include "qxrdintegrator.h"
+#include "qxrdmutexlocker.h"
 
 #include <QThread>
 
@@ -27,7 +28,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAc
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.15 2009/11/02 20:19:27 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.16 2009/11/17 20:43:00 jennings Exp $")
 {
   g_ScriptEngine    = this;
   g_Acquisition     = acq;
@@ -80,7 +81,7 @@ void QxrdScriptEngine::initialize()
 
 void QxrdScriptEngine::evaluateAppCommand(QString expr)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  printf("QxrdScriptingEngine::evaluateAppCommand(%s)\n", qPrintable(expr));
 
@@ -89,7 +90,7 @@ void QxrdScriptEngine::evaluateAppCommand(QString expr)
 
 void QxrdScriptEngine::evaluateServerCommand(QString expr)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  printf("QxrdScriptingEngine::evaluateServerCommand(%s)\n", qPrintable(expr));
 
@@ -98,7 +99,7 @@ void QxrdScriptEngine::evaluateServerCommand(QString expr)
 
 void QxrdScriptEngine::evaluateSpecCommand(QString expr)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //  printf("QxrdScriptingEngine::evaluateSpecCommand(%s)\n", qPrintable(expr));
 
@@ -133,21 +134,21 @@ void QxrdScriptEngine::cancelCommand()
 
 bool QxrdScriptEngine::hasUncaughtException() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_ScriptEngine -> hasUncaughtException();
 }
 
 int  QxrdScriptEngine::uncaughtExceptionLineNumber() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_ScriptEngine -> uncaughtExceptionLineNumber();
 }
 
 QString QxrdScriptEngine::uncaughtExceptionString() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_ScriptEngine -> uncaughtException().toString();
 }
@@ -361,6 +362,9 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.16  2009/11/17 20:43:00  jennings
+*  *** empty log message ***
+*
 *  Revision 1.15  2009/11/02 20:19:27  jennings
 *  Changes to make it work with VC compiler
 *
