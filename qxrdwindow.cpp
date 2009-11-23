@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.109 2009/11/17 20:43:00 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.110 2009/11/23 23:37:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -64,7 +64,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.109 2009/11/17 20:43:00 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.110 2009/11/23 23:37:27 jennings Exp $")
 {
   setupUi(this);
 
@@ -870,12 +870,15 @@ void QxrdWindow::doAboutQxrd()
 
 void QxrdWindow::doOpenQXRDWebPage()
 {
-  QDesktopServices::openUrl(QUrl("http://cep.xor.aps.anl.gov/software/qxrd"));
+  QDesktopServices::openUrl(QUrl("http://cep.xor.aps.anl.gov/software/qxrd/index.html"));
 }
 
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.110  2009/11/23 23:37:27  jennings
+*  Corrected URL to qxrd website
+*
 *  Revision 1.109  2009/11/17 20:43:00  jennings
 *  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
 *  info about any held for more than 100 msec
