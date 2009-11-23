@@ -16,8 +16,8 @@ Elmer and the beamline data acquisition software 'spec' and also provides
 a convenient GUI interface to the detector.
 
 The QXRD project page is hosted at
-<a href="http://cep.xor.aps.anl.gov/software/qxrd/" target="_top">
-http://cep.xor.aps.anl.gov/software/qxrd/</a>
+<a href="http://cep.xor.aps.anl.gov/software/qxrd/index.html" target="_top">
+http://cep.xor.aps.anl.gov/software/qxrd/index.html</a>
 \section license License
 
 QXRD is distributed under the terms of the 
@@ -27,12 +27,6 @@ QXRD is distributed under the terms of the
 Downloads are available from
 <a href="http://cep.xor.aps.anl.gov/software/qxrd/download/index.php">QXRD Downloads</a>
 
-\ref systemRequirements\n
-\ref installation\n
-\ref gettingStarted\n
-\ref documentation\n
-\ref downloads\n
-
 \page systemRequirements System Requirements
 
 QXRD requires a 32 bit Windows XP system with the Perkin Elmer frame grabber card, drivers and readout software already
@@ -40,7 +34,14 @@ installed.
 
 At least 1GB of memory is recommended, preferably 2-4GB.  
 
-QXRD will take advantage of a multicore processor, if present.  We recommend at least four cores.
+QXRD will take advantage of a multicore processor, if present.  I recommend at least four cores.
+
+At maximum readout rate the detector can produce 15 2k x 2k x 2byte images per second, corresponding to a data rate
+of 120MB per second.  If you intend to use the detector at maximum rate for long sequences of images you'll need
+a fast disk drive - I would recommend either a RAID-0 setup or a solid state disk.
+
+I'd recommend a monitor with at least 1600x1200 pixel resolution - while the QXRD display can be squeezed onto a smaller
+display it is significantly more convenient on a higher resolution display.
 
 QXRD can also run on 32 and 64 bit linux systems, with the caveat that there is (currently) no detector support.  It can still
 be used for processing and visualising data acquired by other means.
@@ -104,12 +105,93 @@ proceed at the maximum speed.
 
 \section acquirePanel "The 'Acquire' Panel"
 
-\image html acquire-panel.png "The 'Acquire' Panel" 
+<table border=0 cellpadding=5>
+ <tr>
+  <td>
+\image html acquire-panel.png "The 'Acquire' Panel"
+</td>
+  <td>
+The acquire panel is where you enter parameters related to the basic acquisition operation.  The
+result of an individual acquisition operation consists of a sequence of image files, each containing
+the sum of a number of individual exposures.  The 'Readout Mode' and 'Exposure Time' controls
+specify the individual exposure (or integration) time.  'Readout Mode' lets you choose from a set
+of 8 pre-set exposure times and 'Exposure Time' lets you specify an arbitrary exposure time.  The two
+controls are redundant to a certain extent and in practice it is sufficient to keep the 'Readout Mode'
+control set to the fastest rate and control the exposure entirely with the 'Exposure Time' control.
+The maximum 'supported' time for the Exposure Time is 5 seconds, but you may find that (depending on
+which model of detector you have) you can specify longer exposure times, perhaps as high as 8 seconds.
+
+The 'Camera Gain' control specifies the analog gain of the camera readout electronics, the highest
+gain setting is probably the one to choose here.  If you have strong signals and want to perform
+long exposures it may be advantageous to reduce the analog gain to avoid saturating pixels.
+
+If you change the exposure time or camera gain you should always measure a new 'dark' image.
+
+The 'Binning' control is intended to allow you to choose between various binning options for the
+images - it doesn't work yet, however.
+
+The 'Summed Exposures' control lets you specify the number of individual exposures to add together
+into each saved file.  If you choose a 'Summed Exposures' value of 1, then the individual raw images
+are saved as 16 bit integer TIFF files - about 8MB each.  If you choose a larger value for the summed
+exposures the raw images will be saved as 32 bit integer TIFF files - about 16MB each.  The choice of
+data types implies that you can sum as many as 65535 exposures without losing information - this should
+be sufficient for all reasonable circumstances!
+
+The 'Files before Trigger' and 'Files After Trigger' controls are used to specify the number of image
+files to save.  In most cases you won't want to use the 'Trigger' option so you should set the 'Files
+before Trigger' control to zero.  In this case acquisition and image saving will start as soon as you
+press the 'Acquire' button and will continue until 'Files After Trigger' images have been saved.
+If 'Files before Trigger' is non-zero then the acquisition is a little different - acquisition starts immediately
+but summed image files are not saved to disk, only to the computer memory.  Only the most recent 'Files before Trigger'
+images are saved in this way but acquisition will continue by discarding earlier images from memory.  To start
+saving files, click on the 'Trigger' button.  At this point the pre-trigger images will start to be saved to disk,
+and an additional 'Files After Trigger' images will be acquired and saved to disk.
+
+'Dark Summed Exposures' controls the number of exposures to add together for the 'Dark' image.  The individual
+ exposure time is controlled by the same controls used for the Acquire operation.   The number of exposures
+ for a dark exposure need not match that used during acquisition - the values will be scaled appropriately.
+
+'Output Directory' displays the path to the directory where data files will be saved, to change to a new directory
+ click the 'Select..' button and choose a new output directory.
+
+The 'File Pattern' and 'File Index' controls are used to specify the file names used to save files.  The actual
+file names used to save a file will be of the form "<filePattern>-<fileIndex>.tif", "<filePattern>-<fileIndex>.dark.tif"
+or "<filePattern>-<fileIndex>.raw.tif".  The file index is automatically incremented each time an image is acquired.
+QXRD will never overwrite an exisiting file - if this is attempted the new file will be saved with a name along the
+lines of "<filePattern>-<fileIndex>-<duplicateIndex>.tif" where duplicateIndex will be incremented from one until
+a unique file name results.
+
+Finally, the 'Log File' indicator displays the path name to a 'log' file which will contain all the messages that appear
+in the 'Messages' tab, together with the results of any slices and/or integrations of the images.  Click 'Select...' to
+choose a different log file.   The log file format is basically the same format as that used by 'spec'.
+</td>
+  </tr>
+    </table>
 
 \section correctionPanel "The 'Correction' Panel"
 
+<table border=0 cellpadding=5>
+ <tr>
+  <td>
 \image html correction-panel.png "The 'Correction' Panel"
- 
+  </td>
+  <td>
+The 'Correction' panel is used to control which of the available automatic processing steps are performed when images
+are acquired.  Alongside each step is an estimate of how long it is likely to take, averaged over the last 10 or so
+images - you can use these estimates to determine if you may need to skip some processing steps in order to maintain
+the desired acquisition data rate.
+
+The estimated times are measured when you run an acquire operation and a running average value is displayed in the
+panel.  Do an acquisition of 20 or so images to get decent values for the timings.
+
+Be careful which steps you choose - you probably don't want to perform measurements where nothing is saved, so you'll
+probably want at least one of the 'Save' steps.  A safe choice would be to choose all steps - this should give a total
+processing time of about 0.5 seconds.  The best choice for rapid data acquisition would be to save the 'raw' images
+and nothing else - you would then do the dark subtraction and integration in subsequent analysis.
+
+</td>
+  </tr>
+    </table>
 \page documentation Documentation
 
 */
