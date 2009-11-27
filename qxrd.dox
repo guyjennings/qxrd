@@ -18,12 +18,21 @@ a convenient GUI interface to the detector.
 The QXRD project page is hosted at
 <a href="http://cep.xor.aps.anl.gov/software/qxrd/index.html" target="_top">
 http://cep.xor.aps.anl.gov/software/qxrd/index.html</a>
-\section license License
 
-QXRD is distributed under the terms of the 
+\ref license
+
+\ref downloads
+
+\ref systemRequirements
+
+\ref gettingStarted
+
+\page license QXRD License
+
+QXRD is distributed under the terms of the
 <a href="http://www.gnu.org/licenses/gpl.html" target="_top">GNU General Public License (GPL)</a>
 
-\section downloads QXRD Downloads
+\page downloads QXRD Downloads
 Downloads are available from
 <a href="http://cep.xor.aps.anl.gov/software/qxrd/download/index.php">QXRD Downloads</a>
 
@@ -103,7 +112,7 @@ fast system the correction steps are performed entirely in parallel with the acq
 on slower systems it may be desirable to omit some post processing steps to allow the acquisition to
 proceed at the maximum speed.
 
-\section acquirePanel "The 'Acquire' Panel"
+\section acquirePanel The 'Acquire' Panel
 
 <table border=0 cellpadding=5>
  <tr>
@@ -168,7 +177,7 @@ choose a different log file.   The log file format is basically the same format 
   </tr>
     </table>
 
-\section correctionPanel "The 'Correction' Panel"
+\section correctionPanel The 'Correction' Panel
 
 <table border=0 cellpadding=5>
  <tr>
@@ -184,14 +193,67 @@ the desired acquisition data rate.
 The estimated times are measured when you run an acquire operation and a running average value is displayed in the
 panel.  Do an acquisition of 20 or so images to get decent values for the timings.
 
-Be careful which steps you choose - you probably don't want to perform measurements where nothing is saved, so you'll
-probably want at least one of the 'Save' steps.  A safe choice would be to choose all steps - this should give a total
+Be careful which steps you choose to omit - you probably don't want to perform measurements where nothing is saved, so you'll
+probably want to keep at least one of the 'Save' steps.  A safe choice would be to choose all steps - this should give a total
 processing time of about 0.5 seconds.  The best choice for rapid data acquisition would be to save the 'raw' images
 and nothing else - you would then do the dark subtraction and integration in subsequent analysis.
 
 </td>
-  </tr>
-    </table>
+</tr>
+</table>
+  \dot
+  digraph example   {
+   graph [fontsize=10]
+   node  [fontsize=8]
+   edge  [fontsize=8]
+
+   start -> s0
+   start -> s5
+
+   s4 -> s5 [style = dashed constraint=false label="Copy"]
+
+   subgraph cluster_0 {
+      label="Acquire"
+      color=blue
+
+      s0 [label = "Take Free Image" shape=box]
+      s1 [label = "Acquire" shape=box]
+      s2 [label = "Accumulate" shape=box]
+
+      s0 -> s1
+      s1 -> s2 [label = "n1 times"]
+      s2 -> s1
+
+      s3 [label = "Acquired" shape=box]
+      s2 -> s3 [label = "n2 times"]
+      s3 -> s4
+
+      s4 [label = "Save Raw?" shape=box]
+      s4 -> s0 [style=dotted color=blue]
+   }
+
+   subgraph cluster_1 {
+      label="Process"
+
+      s5 [label = "Take Free Image" shape=box]
+      s6 [label = "Subtract Dark" shape=box]
+      s7 [label = "Save Subtracted" shape=box]
+      s8 [label = "Perform Integration" shape=box]
+      s9 [label = "Display Integrated Data" shape=box]
+      s10 [label = "Save Integrated Data" shape=box]
+
+      s5 -> s6
+      s6 -> s7
+      s7 -> s8
+      s8 -> s9
+      s9 -> s10
+      s10-> s5 [style=dotted color=blue]
+   }
+ }
+  \enddot
+
+\section remoteControl The Remote Control Interface
+
 \page documentation Documentation
 
 */
