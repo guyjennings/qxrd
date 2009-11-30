@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: xisl_dummy.cpp,v 1.16 2009/11/09 18:00:25 jennings Exp $
+*  $Id: xisl_dummy.cpp,v 1.17 2009/11/30 19:32:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,6 +15,7 @@
 
 #include <QTimer>
 #include "xisl_dummy.h"
+#include <stdio.h>
 
 /*
   Dummy version of the PE xisl library for development purposes.
@@ -32,7 +33,13 @@ static AcquisitionTimer timer;
 AcquisitionTimer::AcquisitionTimer()
   : QObject(NULL),
     m_Mode(0),
-    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.16 2009/11/09 18:00:25 jennings Exp $")
+    m_IntegrationTime(0),
+    m_Buffer(0),
+    m_NFrames(0),
+    m_NRows(0),
+    m_NColumns(0),
+    m_CurrentFrame(0),
+    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.17 2009/11/30 19:32:00 jennings Exp $")
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
@@ -40,35 +47,38 @@ AcquisitionTimer::AcquisitionTimer()
 void AcquisitionTimer::start()
 {
 //   printf("AcquisitionTimer::start(), m_Mode = %d\n", m_Mode);
-
-  switch (m_Mode) {
-  case 0:
-    m_Timer.start(67);
-    break;
-  case 1:
-    m_Timer.start(83);
-    break;
-  case 2:
-    m_Timer.start(100);
-    break;
-  case 3:
-    m_Timer.start(125);
-    break;
-  case 4:
-    m_Timer.start(167);
-    break;
-  case 5:
-    m_Timer.start(250);
-    break;
-  case 6:
-    m_Timer.start(500);
-    break;
-  case 7:
-    m_Timer.start(1000);
-    break;
-  default:
-    break;
-  };
+  if (m_IntegrationTime) {
+    m_Timer.start(m_IntegrationTime);
+  } else {
+    switch (m_Mode) {
+    case 0:
+      m_Timer.start(67);
+      break;
+    case 1:
+      m_Timer.start(83);
+      break;
+    case 2:
+      m_Timer.start(100);
+      break;
+    case 3:
+      m_Timer.start(125);
+      break;
+    case 4:
+      m_Timer.start(167);
+      break;
+    case 5:
+      m_Timer.start(250);
+      break;
+    case 6:
+      m_Timer.start(500);
+      break;
+    case 7:
+      m_Timer.start(1000);
+      break;
+    default:
+      break;
+    };
+  }
 }
 
 void AcquisitionTimer::stop()
@@ -85,10 +95,24 @@ void AcquisitionTimer::setmode(int mode)
   m_Mode = mode;
 }
 
+void AcquisitionTimer::setintegration(int time)
+{
+  m_IntegrationTime = time;
+}
+
+void AcquisitionTimer::setBuffers(unsigned short *buffer, int nFrames, int nRows, int nColumns)
+{
+  m_Buffer = buffer;
+  m_NFrames = nFrames;
+  m_NRows = nRows;
+  m_NColumns = nColumns;
+  m_CurrentFrame = 0;
+}
+
 HIS_RETURN Acquisition_EnumSensors(UINT *pdwNumSensors, BOOL /*bEnableIRQ*/, BOOL /*bAlwaysOpen*/)
 {
   if (pdwNumSensors) {
-    *pdwNumSensors = 0;
+    *pdwNumSensors = 1;
   }
 
   return HIS_ALL_OK;
@@ -109,13 +133,20 @@ HIS_RETURN Acquisition_SetFrameSync(HACQDESC /*hAcqDesc*/)
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_SetFrameSyncMode(HACQDESC /*hAcqDesc*/, DWORD /*dwMode*/)
+HIS_RETURN Acquisition_SetFrameSyncMode(HACQDESC /*hAcqDesc*/, DWORD dwMode)
 {
+  if (dwMode == HIS_SYNCMODE_FREE_RUNNING) {
+    timer.setintegration(0);
+  } else if (dwMode == HIS_SYNCMODE_INTERNAL_TIMER) {
+  }
+
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_SetTimerSync(HACQDESC /*hAcqDesc*/, DWORD * /*dwCycleTime*/)
+HIS_RETURN Acquisition_SetTimerSync(HACQDESC /*hAcqDesc*/, DWORD * dwCycleTime)
 {
+  timer.setintegration(*dwCycleTime/1000);
+
   return HIS_ALL_OK;
 }
 
@@ -162,8 +193,10 @@ HIS_RETURN Acquisition_Abort(HACQDESC /*hAcqDesc*/)
   return HIS_ALL_OK;
 }
 
-HIS_RETURN Acquisition_DefineDestBuffers(HACQDESC /*pAcqDesc*/, unsigned short * /*pProcessedData*/, UINT /*nFrames*/, UINT /*nRows*/, UINT /*nColumns*/)
+HIS_RETURN Acquisition_DefineDestBuffers(HACQDESC /*pAcqDesc*/, unsigned short * pProcessedData, UINT nFrames, UINT nRows, UINT nColumns)
 {
+  timer.setBuffers(pProcessedData, nFrames, nRows, nColumns);
+
   return HIS_ALL_OK;
 }
 
@@ -202,17 +235,36 @@ HIS_RETURN Acquisition_GetCameraBinningMode(HACQDESC /*hAcqDesc*/, WORD *dwMode)
 
 void AcquisitionTimer::timeout()
 {
-  if (endFrameCallback) {
-    endFrameCallback(acqDesc);
-  }
+  if (m_Buffer) {
+    int npixels = m_NRows*m_NColumns;
+    int frame   = (m_CurrentFrame % m_NFrames);
+    unsigned short *p = m_Buffer + frame*npixels;
 
-  if (continuous) {
-    timer.start();
-  } else {
-    if (endAcqCallback) {
-      endAcqCallback(acqDesc);
+    for (int i=0; i<npixels; i++) {
+      *p++ = abs(10000+m_CurrentFrame + noiseValue(512));
     }
+
+    if (endFrameCallback) {
+      endFrameCallback(acqDesc);
+    }
+
+    if (continuous) {
+      timer.start();
+    } else {
+      if (endAcqCallback) {
+        endAcqCallback(acqDesc);
+      }
+    }
+
+    m_CurrentFrame++;
+  } else {
+    printf("Acquisition buffer == NULL\n");
   }
+}
+
+int AcquisitionTimer::noiseValue(int maxVal)
+{
+  return (qrand()%maxVal)-(qrand()%maxVal);
 }
 
 HIS_RETURN Acquisition_GetIntTimes(HACQDESC /*hAcqDesc*/, double *dblIntTime, int *nIntTimes)
@@ -252,6 +304,9 @@ HIS_RETURN Acquisition_GetHwHeaderInfo(HACQDESC hAcqDesc, CHwHeaderInfo *pInfo)
 /******************************************************************
 *
 *  $Log: xisl_dummy.cpp,v $
+*  Revision 1.17  2009/11/30 19:32:00  jennings
+*  Implement a little bit more of the dummy XISL routines
+*
 *  Revision 1.16  2009/11/09 18:00:25  jennings
 *  *** empty log message ***
 *
