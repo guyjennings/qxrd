@@ -1,6 +1,6 @@
  /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.44 2009/11/17 20:42:59 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.45 2009/12/03 21:36:16 jennings Exp $
 *
 *******************************************************************/
 
@@ -56,7 +56,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CameraModel(""),
     m_CurrentMode(-1),
     m_CurrentGain(-1),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.44 2009/11/17 20:42:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.45 2009/12/03 21:36:16 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -420,6 +420,9 @@ void QxrdAcquisitionPerkinElmer::acquisition(int isDark)
 
 void QxrdAcquisitionPerkinElmer::onEndFrame()
 {
+  QTime tic;
+  tic.start();
+
   emit printMessage("QxrdAcquisitionPerkinElmer::onEndFrame()");
 
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -471,9 +474,6 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
 //   printf("m_AcquiredImage.data() = %p\n", current);
 
-//   QTime tic;
-//   tic.start();
-
   if (get_ExposuresToSum() == 1) {
     if (m_AcquiredInt16Data == NULL) {
       if (m_PreTriggerInt16Images.size() > get_PreTriggerFiles()) {
@@ -524,7 +524,6 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
 
   m_BufferIndex++;
 
-//    printf("Frame sum took %d msec\n", tic.elapsed());
 
   if (m_BufferIndex >= m_BufferSize) {
     m_BufferIndex = 0;
@@ -669,6 +668,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
     }
   }
 
+  emit printMessage(tr("QxrdAcquisitionPerkinElmer::onEndFrame %1 msec").arg(tic.elapsed()));
 //  return false;
 }
 
@@ -836,6 +836,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.45  2009/12/03 21:36:16  jennings
+*  More output messages during acquisition
+*
 *  Revision 1.44  2009/11/17 20:42:59  jennings
 *  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
 *  info about any held for more than 100 msec
