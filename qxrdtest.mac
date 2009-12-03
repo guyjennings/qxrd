@@ -1,0 +1,14 @@
+def qxrdtest '{
+   for (i=0; i<100; i++) {
+      printf("Acquiring dark %d...\n", i)
+
+      remote_eval("localhost:6510","acquireDark(\"torture\",0.5,10)")
+      while(remote_eval("localhost:6510","status(2.0)")==0) {}
+
+      printf("Acquiring data %d...\n", i)
+
+      remote_eval("localhost:6510","acquire(\"torture\",0.5,10,20)")
+      while(remote_eval("localhost:6510","status(2.0)")==0) {}
+   }
+}'
+
