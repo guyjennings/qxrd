@@ -18,6 +18,12 @@ vectorize {
         -ftree-vectorizer-verbose=5
 }
 
+profile {
+  QMAKE_CXXFLAGS += -pg
+  QMAKE_CFLAGS   += -pg
+  QMAKE_LFLAGS   += -pg
+}
+
 # INCLUDEPATH += /usr/local/lib/spec.d/include/
 MOC_DIR = moc
 UI_DIR = ui
