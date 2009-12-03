@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.110 2009/11/23 23:37:27 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.111 2009/12/03 22:31:51 jennings Exp $
 *
 *******************************************************************/
 
@@ -64,7 +64,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.110 2009/11/23 23:37:27 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.111 2009/12/03 22:31:51 jennings Exp $")
 {
   setupUi(this);
 
@@ -330,6 +330,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_WindowsMenu -> addAction(m_CenteringDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
+
+  m_Messages -> document() -> setMaximumBlockCount(100);
 }
 
 QxrdWindow::~QxrdWindow()
@@ -379,6 +381,11 @@ void QxrdWindow::printMessage(QString msg)
     QMetaObject::invokeMethod(this, "printMessage", Qt::QueuedConnection, Q_ARG(QString, msg));
   } else {
     QString message = timeStamp()+msg.trimmed();
+
+    int msgSize = m_Messages->document()->characterCount();
+    int blkCount = m_Messages->document()->blockCount();
+
+    printf("msgSize = %d, blkCount=%d\n", msgSize, blkCount);
 
     m_Messages -> append(message);
     m_DataProcessor -> logMessage(message);
@@ -876,6 +883,9 @@ void QxrdWindow::doOpenQXRDWebPage()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.111  2009/12/03 22:31:51  jennings
+*  Set upper limit on number of lines in 'messages' box - set to 100 lines for testing
+*
 *  Revision 1.110  2009/11/23 23:37:27  jennings
 *  Corrected URL to qxrd website
 *
