@@ -456,4 +456,12 @@ Errors during acquisition (e.g. file save errors) are handled extremely poorly!
 
 Implement some kind of control of the maximum size of the text in the messages window
 
+-------------------------------------------------------
+
+Rename 'Correction' panel to 'Processing' ?
+
+-------------------------------------------------------
+
+Provide control of whether dark images are saved - probably via the Save 'raw' images option.
+
 #endif // TODO_H
