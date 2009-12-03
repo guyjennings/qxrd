@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.66 2009/11/17 20:42:59 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.67 2009/12/03 21:35:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -67,7 +67,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.66 2009/11/17 20:42:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.67 2009/12/03 21:35:37 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -154,8 +154,8 @@ void QxrdDataProcessor::onAcquiredInt16ImageAvailable(QxrdInt16ImageData *image)
 
   if (image) {
     if ((image -> get_ImageNumber()) >= 0) {
-      m_DarkUsage.lockForRead();
-      m_Processing.lockForRead();
+//      m_DarkUsage.lockForRead();
+//      m_Processing.lockForRead();
       processAcquiredInt16Image(image);
     } else {
       QWriteLocker wl(&m_DarkUsage);
@@ -181,8 +181,8 @@ void QxrdDataProcessor::onAcquiredInt32ImageAvailable(QxrdInt32ImageData *image)
 
   if (image) {
     if ((image -> get_ImageNumber()) >= 0) {
-      m_DarkUsage.lockForRead();
-      m_Processing.lockForRead();
+//      m_DarkUsage.lockForRead();
+//      m_Processing.lockForRead();
       processAcquiredInt32Image(image);
     } else {
       QWriteLocker wl(&m_DarkUsage);
@@ -921,7 +921,7 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
     processAcquiredImage(dimg);
   }
 
-  m_Processing.unlock();
+//  m_Processing.unlock();
 }
 
 void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
@@ -955,7 +955,7 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
     processAcquiredImage(dimg);
   }
 
-  m_Processing.unlock();
+//  m_Processing.unlock();
 }
 
 void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
@@ -969,6 +969,8 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
     emit printMessage(tr("Processing Image \"%1\", count %2").arg(dimg->get_FileName()).arg(getAcquiredCount()));
 
     if (get_PerformDarkSubtraction()) {
+      QReadLocker rl(&m_DarkUsage);
+
       QxrdDoubleImageData *dark   = darkImage();
 
       subtractDarkImage(dimg, dark);
@@ -976,7 +978,7 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
       updateEstimatedTime(prop_PerformDarkSubtractionTime(), tic.elapsed());
 
       emit printMessage(tr("Dark subtraction took %1 msec").arg(tic.restart()));
-      m_DarkUsage.unlock();
+//      m_DarkUsage.unlock();
     }
 
     if (get_PerformBadPixels()) {
@@ -1646,6 +1648,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.67  2009/12/03 21:35:37  jennings
+*  Corrected locking problem with dark image
+*
 *  Revision 1.66  2009/11/17 20:42:59  jennings
 *  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
 *  info about any held for more than 100 msec

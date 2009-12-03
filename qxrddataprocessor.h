@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.44 2009/10/16 21:54:17 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.45 2009/12/03 21:35:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -257,7 +257,7 @@ private:
   QxrdWindow               *m_Window;
   QxrdAcquisition          *m_Acquisition;
   QReadWriteLock            m_DarkUsage;
-  QReadWriteLock            m_Processing;
+//  QReadWriteLock            m_Processing;
   QWaitCondition            m_ProcessWaiting;
   QxrdDoubleImageQueue      m_FreeImages;
   QxrdDoubleImageData      *m_Data;
@@ -273,7 +273,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.44 2009/10/16 21:54:17 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.45 2009/12/03 21:35:37 jennings Exp $");
 };
 
 #endif
@@ -281,6 +281,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.45  2009/12/03 21:35:37  jennings
+*  Corrected locking problem with dark image
+*
 *  Revision 1.44  2009/10/16 21:54:17  jennings
 *  Implemented various processDataSequence commands
 *
