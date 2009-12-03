@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdfilebrowser.cpp,v 1.7 2009/11/17 20:42:59 jennings Exp $
+*  $Id: qxrdfilebrowser.cpp,v 1.8 2009/12/03 21:35:06 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,12 +17,12 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
     m_BrowserSelector(this, "BrowserSelector",""),
     m_Processor(processor),
     m_Model(NULL),
-    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.7 2009/11/17 20:42:59 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.8 2009/12/03 21:35:06 jennings Exp $")
 {
   setupUi(this);
 
   m_Model = new QFileSystemModel();
-//  m_Model -> setRootPath(QDir::currentPath());
+  m_Model -> setRootPath(QDir::currentPath());
   m_FileBrowser -> setModel(m_Model);
   m_FileBrowser -> setRootIndex(m_Model->index(QDir::currentPath()));
 
@@ -103,7 +103,7 @@ void QxrdFileBrowser::onSelectorChanged(QString str, QModelIndex parent)
 
 void QxrdFileBrowser::onRootDirectoryChanged(QString str)
 {
-//  m_Model -> setRootPath(str);
+  m_Model -> setRootPath(str);
   m_FileBrowser -> setRootIndex(m_Model->index(str));
 }
 
@@ -160,6 +160,9 @@ void QxrdFileBrowser::mousePressed(QModelIndex index)
 /******************************************************************
 *
 *  $Log: qxrdfilebrowser.cpp,v $
+*  Revision 1.8  2009/12/03 21:35:06  jennings
+*  (Temporarily) reinstated file browser
+*
 *  Revision 1.7  2009/11/17 20:42:59  jennings
 *  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
 *  info about any held for more than 100 msec
