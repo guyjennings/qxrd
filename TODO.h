@@ -450,4 +450,10 @@ Could try to use SO_REUSEADDR, perhaps.
 
 -------------------------------------------------------
 
+Errors during acquisition (e.g. file save errors) are handled extremely poorly!
+
+-------------------------------------------------------
+
+Implement some kind of control of the maximum size of the text in the messages window
+
 #endif // TODO_H
