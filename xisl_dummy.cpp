@@ -1,11 +1,11 @@
 /******************************************************************
 *
-*  $Id: xisl_dummy.cpp,v 1.17 2009/11/30 19:32:00 jennings Exp $
+*  $Id: xisl_dummy.cpp,v 1.18 2009/12/03 21:34:16 jennings Exp $
 *
 *******************************************************************/
 
 #include <QObject>
-
+#include <QThread>
 
 #ifdef Q_OS_UNIX
 #include "AcqLinuxTypes.h"
@@ -16,6 +16,7 @@
 #include <QTimer>
 #include "xisl_dummy.h"
 #include <stdio.h>
+#include <QTime>
 
 /*
   Dummy version of the PE xisl library for development purposes.
@@ -28,7 +29,18 @@ static int nFrames = 0;
 static int options = 0;
 static int continuous = 0;
 
-static AcquisitionTimer timer;
+static AcquisitionTimer *timer = NULL;
+
+static void allocateTimerIfNeeded()
+{
+  if (timer == NULL) {
+    timer = new AcquisitionTimer();
+  }
+
+  if (QThread::currentThread() != timer->thread()) {
+    printf("Timer called from different thread : current %p, timer %p\n", QThread::currentThread(), timer->thread());
+  }
+}
 
 AcquisitionTimer::AcquisitionTimer()
   : QObject(NULL),
@@ -39,7 +51,7 @@ AcquisitionTimer::AcquisitionTimer()
     m_NRows(0),
     m_NColumns(0),
     m_CurrentFrame(0),
-    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.17 2009/11/30 19:32:00 jennings Exp $")
+    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.18 2009/12/03 21:34:16 jennings Exp $")
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
@@ -135,8 +147,10 @@ HIS_RETURN Acquisition_SetFrameSync(HACQDESC /*hAcqDesc*/)
 
 HIS_RETURN Acquisition_SetFrameSyncMode(HACQDESC /*hAcqDesc*/, DWORD dwMode)
 {
+  allocateTimerIfNeeded();
+
   if (dwMode == HIS_SYNCMODE_FREE_RUNNING) {
-    timer.setintegration(0);
+    timer -> setintegration(0);
   } else if (dwMode == HIS_SYNCMODE_INTERNAL_TIMER) {
   }
 
@@ -145,7 +159,9 @@ HIS_RETURN Acquisition_SetFrameSyncMode(HACQDESC /*hAcqDesc*/, DWORD dwMode)
 
 HIS_RETURN Acquisition_SetTimerSync(HACQDESC /*hAcqDesc*/, DWORD * dwCycleTime)
 {
-  timer.setintegration(*dwCycleTime/1000);
+  allocateTimerIfNeeded();
+
+  timer->setintegration(*dwCycleTime/1000);
 
   return HIS_ALL_OK;
 }
@@ -173,6 +189,7 @@ HIS_RETURN Acquisition_SetCallbacksAndMessages(HACQDESC pAcqDesc,
 					       void (CALLBACK *lpfnEndAcqCallback)(HACQDESC)
 					       )
 {
+
   endFrameCallback = lpfnEndFrameCallback;
   endAcqCallback = lpfnEndAcqCallback;
   acqDesc = pAcqDesc;
@@ -182,9 +199,11 @@ HIS_RETURN Acquisition_SetCallbacksAndMessages(HACQDESC pAcqDesc,
 
 HIS_RETURN Acquisition_Abort(HACQDESC /*hAcqDesc*/)
 {
+  allocateTimerIfNeeded();
+
   continuous = 0;
 
-  timer.stop();
+  timer->stop();
 
   if (endAcqCallback) {
     endAcqCallback(acqDesc);
@@ -195,13 +214,16 @@ HIS_RETURN Acquisition_Abort(HACQDESC /*hAcqDesc*/)
 
 HIS_RETURN Acquisition_DefineDestBuffers(HACQDESC /*pAcqDesc*/, unsigned short * pProcessedData, UINT nFrames, UINT nRows, UINT nColumns)
 {
-  timer.setBuffers(pProcessedData, nFrames, nRows, nColumns);
+  allocateTimerIfNeeded();
+
+  timer->setBuffers(pProcessedData, nFrames, nRows, nColumns);
 
   return HIS_ALL_OK;
 }
 
 HIS_RETURN Acquisition_Acquire_Image(HACQDESC /*pAcqDesc*/, UINT dwFrames, UINT /*dwSkipFrms*/, UINT dwOpt, unsigned short * /*pwOffsetData*/, DWORD * /*pdwGainData*/, DWORD * /*pdwPxlCorrList*/)
 {
+  allocateTimerIfNeeded();
 //   printf("Acquisition_Acquire_Image dwOpt = %d\n", dwOpt);
 
   nFrames = dwFrames;
@@ -210,7 +232,7 @@ HIS_RETURN Acquisition_Acquire_Image(HACQDESC /*pAcqDesc*/, UINT dwFrames, UINT 
   if (dwOpt == HIS_SEQ_CONTINUOUS) {
     continuous = 1;
 
-    timer.start();
+    timer->start();
   }
 
   return HIS_ALL_OK;
@@ -218,7 +240,9 @@ HIS_RETURN Acquisition_Acquire_Image(HACQDESC /*pAcqDesc*/, UINT dwFrames, UINT 
 
 HIS_RETURN Acquisition_SetCameraMode(HACQDESC /*hAcqDesc*/, UINT dwMode)
 {
-  timer.setmode(dwMode);
+  allocateTimerIfNeeded();
+
+  timer->setmode(dwMode);
 
   return HIS_ALL_OK;
 }
@@ -240,6 +264,8 @@ void AcquisitionTimer::timeout()
     int frame   = (m_CurrentFrame % m_NFrames);
     unsigned short *p = m_Buffer + frame*npixels;
 
+    qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
+
     for (int i=0; i<npixels; i++) {
       *p++ = abs(10000+m_CurrentFrame + noiseValue(512));
     }
@@ -249,7 +275,7 @@ void AcquisitionTimer::timeout()
     }
 
     if (continuous) {
-      timer.start();
+      timer->start();
     } else {
       if (endAcqCallback) {
         endAcqCallback(acqDesc);
@@ -304,6 +330,9 @@ HIS_RETURN Acquisition_GetHwHeaderInfo(HACQDESC hAcqDesc, CHwHeaderInfo *pInfo)
 /******************************************************************
 *
 *  $Log: xisl_dummy.cpp,v $
+*  Revision 1.18  2009/12/03 21:34:16  jennings
+*  Moved dummy acquisition timer to 'acquire' thread so it doesn't block the UI thread so much
+*
 *  Revision 1.17  2009/11/30 19:32:00  jennings
 *  Implement a little bit more of the dummy XISL routines
 *
