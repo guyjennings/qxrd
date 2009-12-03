@@ -464,4 +464,8 @@ Rename 'Correction' panel to 'Processing' ?
 
 Provide control of whether dark images are saved - probably via the Save 'raw' images option.
 
+-------------------------------------------------------
+
+Better handling of cancellation would be desirable
+
 #endif // TODO_H
