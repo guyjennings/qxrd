@@ -17,11 +17,10 @@ vectorize {
         -ftree-vectorize \
         -ftree-vectorizer-verbose=5
 }
-
-profile {
-  QMAKE_CXXFLAGS += -pg
-  QMAKE_CFLAGS   += -pg
-  QMAKE_LFLAGS   += -pg
+profile { 
+    QMAKE_CXXFLAGS += -pg
+    QMAKE_CFLAGS += -pg
+    QMAKE_LFLAGS += -pg
 }
 
 # INCLUDEPATH += /usr/local/lib/spec.d/include/
@@ -30,6 +29,7 @@ UI_DIR = ui
 OBJECTS_DIR = obj
 RCC_DIR = rcc
 TARGET = qxrd
+RC_FILE=qxrd.rc
 win32 { 
     CONFIG(debug, debug|release) { 
         OBJECTS_DIR = objd
@@ -245,3 +245,4 @@ website.commands = rsync \
     dox/html/ \
     download \
     www12.xor.aps.anl.gov:/var/www/html/software/qxrd/
+OTHER_FILES += qxrd.rc

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.46+devel"
+   sodipodi:docname="qxrd-icon.svg">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective3717"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="202.59288"
+     inkscape:cy="442.45552"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1453"
+     inkscape:window-height="1025"
+     inkscape:window-x="124"
+     inkscape:window-y="104"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#000080;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="rect2818"
+       width="80"
+       height="80"
+       x="74.493866"
+       y="751.40692" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1"
+       id="path3627"
+       sodipodi:cx="119.78614"
+       sodipodi:cy="582.15686"
+       sodipodi:rx="29.201599"
+       sodipodi:ry="43.504421"
+       d="m 119.78614,538.65244 a 29.201599,43.504421 0 1 1 -0.21863,87.00762 l 0.21863,-43.5032 z"
+       sodipodi:start="4.7123891"
+       sodipodi:end="7.8614686"
+       transform="matrix(1.3210082,0,0,0.91384629,206.55312,217.60079)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1"
+       id="path3639"
+       sodipodi:cx="119.78614"
+       sodipodi:cy="582.15686"
+       sodipodi:rx="29.201599"
+       sodipodi:ry="43.504421"
+       d="m 119.78614,538.65244 a 29.201599,43.504421 0 1 1 -0.21863,87.00762 l 0.21863,-43.5032 z"
+       sodipodi:start="4.7123891"
+       sodipodi:end="7.8614686"
+       transform="matrix(1.3210082,0,0,0.91384629,129.07949,255.74166)" />
+    <g
+       id="g3742"
+       inkscape:export-filename="/home/jennings/development/qxrd/images/qxrd-icon.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         ry="10"
+         rx="10"
+         y="445.08817"
+         x="183.98218"
+         height="170"
+         width="170"
+         id="rect3723"
+         style="fill:#000000;fill-opacity:1" />
+      <g
+         transform="translate(-8.2145698,-17.282578)"
+         id="g3725">
+        <g
+           id="g3631"
+           transform="translate(28.605646,79.401211)">
+          <rect
+             style="fill:#00ff00;fill-rule:evenodd;stroke:#000000;stroke-width:0.69682866px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             id="rect3625"
+             width="39.305176"
+             height="79.064629"
+             x="210.58858"
+             y="467.14478" />
+          <path
+             sodipodi:nodetypes="ccccc"
+             id="path2826"
+             d="m 212.21692,466.89391 37.68914,79.32779 c 0,0 -39.87401,0 -39.32779,0 l 38.78157,-79.32779 -37.14292,0 z"
+             style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.67220819px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        </g>
+        <g
+           id="g3643"
+           transform="translate(0,-0.59930692)">
+          <rect
+             style="fill:#00ff00;fill-rule:evenodd;stroke:#000000;stroke-width:0.69682866px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             id="rect3637"
+             width="39.305176"
+             height="79.064629"
+             x="199.13855"
+             y="546.90674" />
+          <g
+             style="fill:#000000"
+             transform="matrix(0.99539687,0,0,1.0032898,0.91506287,-82.323939)"
+             id="g3610">
+            <path
+               style="fill:#000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.63154674px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               d="m 238.66058,666.68811 c 0,21.84475 -8.85433,39.55343 -19.77671,39.55343 -10.92238,0 -19.77672,-17.70868 -19.77672,-39.55343 0,-21.84476 8.85434,-39.55343 19.77672,-39.55343 10.92238,0 19.77671,17.70867 19.77671,39.55343 z"
+               id="path2816" />
+            <path
+               style="fill:#000000;fill-opacity:1"
+               d="m 218.71401,666.62859 20.26234,0 0,39.92872 -20.26234,0 0,-39.92872 z"
+               id="rect3600" />
+          </g>
+        </g>
+        <g
+           id="g3619"
+           transform="matrix(0.9826294,0,0,0.98830783,-31.410531,-75.331834)">
+          <rect
+             y="629.237"
+             x="353.50082"
+             height="80"
+             width="40"
+             id="rect2822"
+             style="fill:#00ff00;fill-rule:evenodd;stroke:#000000;stroke-width:0.70710677px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+          <path
+             sodipodi:type="arc"
+             style="fill:#000000;fill-opacity:1"
+             id="path3606"
+             sodipodi:cx="119.78614"
+             sodipodi:cy="582.15686"
+             sodipodi:rx="29.201599"
+             sodipodi:ry="43.504421"
+             d="m 119.78614,538.65244 c 16.1276,0 29.2016,19.4776 29.2016,43.50443 0,24.02682 -13.07401,43.50441 -29.2016,43.50441 -0.0729,0 -0.14575,-4e-4 -0.21863,-0.001 l 0.21863,-43.5032 z"
+             sodipodi:start="4.7123891"
+             sodipodi:end="7.8614686"
+             transform="matrix(1.3443606,0,0,0.92465754,192.43844,130.57199)" />
+        </g>
+        <g
+           id="g3614"
+           transform="matrix(0.95528644,0,0,0.98836088,-20.782177,-75.365184)">
+          <rect
+             style="fill:#00ff00;fill-rule:evenodd;stroke:#000000;stroke-width:0.70710677px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             id="rect2820"
+             width="40"
+             height="80"
+             x="312.97617"
+             y="629.237" />
+          <path
+             transform="matrix(1.3443606,0,0,0.47260276,152.50973,374.0724)"
+             sodipodi:end="7.8614686"
+             sodipodi:start="4.7123891"
+             d="m 119.78614,538.65244 c 16.1276,0 29.2016,19.4776 29.2016,43.50443 0,24.02682 -13.07401,43.50441 -29.2016,43.50441 -0.0729,0 -0.14575,-4e-4 -0.21863,-0.001 l 0.21863,-43.5032 z"
+             sodipodi:ry="43.504421"
+             sodipodi:rx="29.201599"
+             sodipodi:cy="582.15686"
+             sodipodi:cx="119.78614"
+             id="path3604"
+             style="fill:#000000;fill-opacity:1"
+             sodipodi:type="arc" />
+          <path
+             id="path3608"
+             d="m 314.06615,669.16572 0,39.92871 39.92872,0 -39.92872,-39.92871 z"
+             style="fill:#2b0000;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        </g>
+      </g>
+      <image
+         xlink:href="file:///home/jennings/development/qxrd/images/qxrd-screenshot-crop.png"
+         width="140"
+         height="70"
+         id="image3719"
+         x="198.98218"
+         y="455.72772" />
+    </g>
+  </g>
+</svg>
