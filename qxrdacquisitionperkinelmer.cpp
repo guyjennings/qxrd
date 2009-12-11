@@ -1,6 +1,6 @@
  /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.45 2009/12/03 21:36:16 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.46 2009/12/11 17:49:04 jennings Exp $
 *
 *******************************************************************/
 
@@ -56,7 +56,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CameraModel(""),
     m_CurrentMode(-1),
     m_CurrentGain(-1),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.45 2009/12/03 21:36:16 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.46 2009/12/11 17:49:04 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -554,6 +554,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_AcquiredInt16Data -> set_UserComment2(get_UserComment2());
       m_AcquiredInt16Data -> set_UserComment3(get_UserComment3());
       m_AcquiredInt16Data -> set_UserComment4(get_UserComment4());
+      m_AcquiredInt16Data -> set_ImageSaved(false);
 
       copyDynamicProperties(m_AcquiredInt16Data);
 
@@ -612,6 +613,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame()
       m_AcquiredInt32Data -> set_UserComment2(get_UserComment2());
       m_AcquiredInt32Data -> set_UserComment3(get_UserComment3());
       m_AcquiredInt32Data -> set_UserComment4(get_UserComment4());
+      m_AcquiredInt32Data -> set_ImageSaved(false);
 
       copyDynamicProperties(m_AcquiredInt32Data);
 
@@ -836,6 +838,10 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.46  2009/12/11 17:49:04  jennings
+*  Added 'ImageSaved' property to image data and used this to avoid double-saving raw data when
+*  processing data off-line
+*
 *  Revision 1.45  2009/12/03 21:36:16  jennings
 *  More output messages during acquisition
 *

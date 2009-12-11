@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.67 2009/12/03 21:35:37 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.68 2009/12/11 17:49:04 jennings Exp $
 *
 *******************************************************************/
 
@@ -67,7 +67,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.67 2009/12/03 21:35:37 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.68 2009/12/11 17:49:04 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -634,6 +634,7 @@ bool QxrdDataProcessor::saveNamedImageData(QString name, QxrdDoubleImageData *im
     TIFFClose(tif);
 
     image -> set_FileName(name);
+    image -> set_ImageSaved(true);
 
     image -> saveMetaData();
   }
@@ -703,6 +704,8 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt16ImageData *
 
     TIFFClose(tif);
 
+    image -> set_ImageSaved(true);
+
     image -> saveMetaData(name);
   }
 
@@ -771,6 +774,7 @@ bool QxrdDataProcessor::saveNamedRawImageData(QString name, QxrdInt32ImageData *
 
     TIFFClose(tif);
 
+    image -> set_ImageSaved(true);
     image -> saveMetaData(name);
   }
 
@@ -821,6 +825,7 @@ bool QxrdDataProcessor::saveNamedMaskData(QString name, QxrdMaskData *image, int
     TIFFClose(tif);
 
     image -> set_FileName(name);
+    image -> set_ImageSaved(true);
 
     image -> saveMetaData();
   }
@@ -902,7 +907,11 @@ void QxrdDataProcessor::processAcquiredInt16Image(QxrdInt16ImageData *img)
     tic.start();
 
     if (get_SaveRawImages()) {
-      saveNamedRawImageData(img->rawFileName(), img);
+      if (img->get_ImageSaved()) {
+        emit printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
+      } else {
+        saveNamedRawImageData(img->rawFileName(), img);
+      }
 
       updateEstimatedTime(m_Acquisition -> prop_Raw16SaveTime(), tic.elapsed());
 
@@ -936,7 +945,11 @@ void QxrdDataProcessor::processAcquiredInt32Image(QxrdInt32ImageData *img)
     tic.start();
 
     if (get_SaveRawImages()) {
-      saveNamedRawImageData(img->rawFileName(), img);
+      if (img->get_ImageSaved()) {
+        emit printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
+      } else {
+        saveNamedRawImageData(img->rawFileName(), img);
+      }
 
       updateEstimatedTime(m_Acquisition -> prop_Raw32SaveTime(), tic.elapsed());
 
@@ -974,6 +987,7 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
       QxrdDoubleImageData *dark   = darkImage();
 
       subtractDarkImage(dimg, dark);
+      dimg -> set_ImageSaved(false);
 
       updateEstimatedTime(prop_PerformDarkSubtractionTime(), tic.elapsed());
 
@@ -983,18 +997,24 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
 
     if (get_PerformBadPixels()) {
       correctBadPixels(dimg);
+      dimg -> set_ImageSaved(false);
 
       updateEstimatedTime(prop_PerformBadPixelsTime(), tic.restart());
     }
 
     if (get_PerformGainCorrection()) {
       correctImageGains(dimg);
+      dimg -> set_ImageSaved(false);
 
       updateEstimatedTime(prop_PerformGainCorrectionTime(), tic.restart());
     }
 
     if (get_SaveSubtracted()) {
-      saveNamedImageData(dimg->get_FileName(), dimg);
+      if (dimg->get_ImageSaved()) {
+        emit printMessage(tr("Image \"%1\" is already saved").arg(dimg->rawFileName()));
+      } else {
+        saveNamedImageData(dimg->get_FileName(), dimg);
+      }
 
       updateEstimatedTime(prop_SaveSubtractedTime(), tic.elapsed());
 
@@ -1648,6 +1668,10 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.68  2009/12/11 17:49:04  jennings
+*  Added 'ImageSaved' property to image data and used this to avoid double-saving raw data when
+*  processing data off-line
+*
 *  Revision 1.67  2009/12/03 21:35:37  jennings
 *  Corrected locking problem with dark image
 *
