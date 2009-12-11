@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.111 2009/12/03 22:31:51 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.112 2009/12/11 17:50:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -64,7 +64,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.111 2009/12/03 22:31:51 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.112 2009/12/11 17:50:24 jennings Exp $")
 {
   setupUi(this);
 
@@ -79,8 +79,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
   m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
 
-  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
-  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
+//  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
+//  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
 
   connect(m_ExecuteScriptButton, SIGNAL(clicked()), m_ActionExecuteScript, SIGNAL(triggered()));
   connect(m_ActionExecuteScript, SIGNAL(triggered()), this, SLOT(executeScript()));
@@ -331,7 +331,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_WindowsMenu -> addAction(m_IntegratorDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
 
-  m_Messages -> document() -> setMaximumBlockCount(100);
+  m_Messages -> document() -> setMaximumBlockCount(20000);
 }
 
 QxrdWindow::~QxrdWindow()
@@ -883,6 +883,10 @@ void QxrdWindow::doOpenQXRDWebPage()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.112  2009/12/11 17:50:24  jennings
+*  Disable calculator window
+*  Set messages window limit to 20000 lines
+*
 *  Revision 1.111  2009/12/03 22:31:51  jennings
 *  Set upper limit on number of lines in 'messages' box - set to 100 lines for testing
 *
