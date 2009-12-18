@@ -468,4 +468,9 @@ Provide control of whether dark images are saved - probably via the Save 'raw' i
 
 Better handling of cancellation would be desirable
 
+-------------------------------------------------------
+
+Modify handling of file index numbers during acquisition so that dark measurements do not increment the file index.
+This is to simplify subsequent processing of image sequences with embedded dark measurements.
+
 #endif // TODO_H
