@@ -1,3 +1,17 @@
+message(Qt version: $$[QT_VERSION])
+ message(Qt is installed in $$[QT_INSTALL_PREFIX])
+ message(Qt resources can be found in the following locations:)
+ message(Documentation: $$[QT_INSTALL_DOCS])
+ message(Header files: $$[QT_INSTALL_HEADERS])
+ message(Libraries: $$[QT_INSTALL_LIBS])
+ message(Binary files (executables): $$[QT_INSTALL_BINS])
+ message(Plugins: $$[QT_INSTALL_PLUGINS])
+ message(Data files: $$[QT_INSTALL_DATA])
+ message(Translation files: $$[QT_INSTALL_TRANSLATIONS])
+ message(Settings: $$[QT_INSTALL_SETTINGS])
+ message(Examples: $$[QT_INSTALL_EXAMPLES])
+ message(Demonstrations: $$[QT_INSTALL_DEMOS])
+
 TEMPLATE = app
 CONFIG += qt
 include("qxrd.version.pri")
@@ -156,51 +170,64 @@ unix {
 }
 win32 { 
     PLATFORM_PREFIX = win32
-    QTBINDIR = C:/Qt/2009.04/qt/bin
-    
-    # QTBINDIR = C:/Qt/qt-all-opensource-src-4.5.3/bin
-    MINGW = C:/Qt/2009.04/qt/bin
+    QTBINDIR = $$[QT_INSTALL_BINS]
+    QTBASEDIR= $$[QT_INSTALL_PREFIX]
+
+    exists($${QTBINDIR}) {
+      LIBDIR = $${QTBINDIR}
+      message("LIBDIR = $${LIBDIR}")
+    }
+
+    exists($${QTBASEDIR}/../mingw/bin/libgcc_s_dw2-1.dll) {
+      message("MINGW found in $${QTBASEDIR}/../mingw/bin/libgcc_s_dw2-1.dll")
+      MINGWRT = $${QTBASEDIR}/../mingw/bin/libgcc_s_dw2-1.dll
+    }
+    else:exists($${QTBASEDIR}/../mingw/bin/mingwm10.dll) {
+      message("MINGW found in $${QTBASEDIR}/../mingw/bin/mingwm10.dll")
+      MINGWRT = $${QTBASEDIR}/../mingw/bin/mingwm10.dll
+    }
+    else {
+      error("MINGW Not Found")
+    }
     app.target = app
     zip.target = zip
     CONFIG(debug, debug|release) { 
-        app.commands = C:/cygwin/bin/cp.exe \
-            $${QTBINDIR}/QtCored4.dll \
-            $${QTBINDIR}/QtNetworkd4.dll \
-            $${QTBINDIR}/QtGuid4.dll \
-            $${QTBINDIR}/QtScriptd4.dll \
-            XISL.dll \
-            $${MINGW}/mingwm10.dll \
+        app.commands = c:\cygwin\bin\cp.exe  \
+            $${LIBDIR}/QtCored4.dll \
+            $${LIBDIR}/QtNetworkd4.dll \
+            $${LIBDIR}/QtGuid4.dll \
+            $${LIBDIR}/QtScriptd4.dll \
+            xisl.dll \
+            $${MINGWRT} \
             debug
-        zip.commands = C:/cygwin/bin/zip.exe \
-            -j \
+        zip.commands = c:\cygwin\bin\zip.exe \
             $${TARGET}_debug.zip \
             debug/$${TARGET}.exe \
-            $${QTBINDIR}/QtCored4.dll \
-            $${QTBINDIR}/QtNetworkd4.dll \
-            $${QTBINDIR}/QtGuid4.dll \
-            $${QTBINDIR}/QtScriptd4.dll \
-            XISL.dll \
-            $${MINGW}/mingwm10.dll
+            $${LIBDIR}/QtCored4.dll \
+            $${LIBDIR}/QtNetworkd4.dll \
+            $${LIBDIR}/QtGuid4.dll \
+            $${LIBDIR}/QtScriptd4.dll \
+            xisl.dll \
+            $${MINGWRT}
     }
     else { 
-        app.commands = C:/cygwin/bin/cp.exe \
-            $${QTBINDIR}/QtCore4.dll \
-            $${QTBINDIR}/QtNetwork4.dll \
-            $${QTBINDIR}/QtGui4.dll \
-            $${QTBINDIR}/QtScript4.dll \
-            XISL.dll \
-            $${MINGW}/mingwm10.dll \
+        app.commands = c:\cygwin\bin\cp.exe \
+            $${LIBDIR}/QtCore4.dll \
+            $${LIBDIR}/QtNetwork4.dll \
+            $${LIBDIR}/QtGui4.dll \
+            $${LIBDIR}/QtScript4.dll \
+            xisl.dll \
+            $${MINGWRT} \
             release
-        zip.commands = C:/cygwin/bin/zip.exe \
-            -j \
+        zip.commands = c:\cygwin\bin\zip.exe \
             $${TARGET}.zip \
             release/$${TARGET}.exe \
-            $${QTBINDIR}/QtCore4.dll \
-            $${QTBINDIR}/QtNetwork4.dll \
-            $${QTBINDIR}/QtGui4.dll \
-            $${QTBINDIR}/QtScript4.dll \
-            XISL.dll \
-            $${MINGW}/mingwm10.dll
+            $${LIBDIR}/QtCore4.dll \
+            $${LIBDIR}/QtNetwork4.dll \
+            $${LIBDIR}/QtGui4.dll \
+            $${LIBDIR}/QtScript4.dll \
+            xisl.dll \
+            $${MINGWRT}
     }
     INCLUDEPATH += .
     INCLUDEPATH += SDK
