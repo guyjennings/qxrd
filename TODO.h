@@ -452,10 +452,12 @@ Could try to use SO_REUSEADDR, perhaps.
 
 Errors during acquisition (e.g. file save errors) are handled extremely poorly!
 
--------------------------------------------------------
-
-Implement some kind of control of the maximum size of the text in the messages window
-
+//-------------------------------------------------------
+//
+//Implement some kind of control of the maximum size of the text in the messages window
+//
+//Limited to 20000 lines
+//
 -------------------------------------------------------
 
 Rename 'Correction' panel to 'Processing' ?
@@ -468,9 +470,10 @@ Provide control of whether dark images are saved - probably via the Save 'raw' i
 
 Better handling of cancellation would be desirable
 
--------------------------------------------------------
-
-Modify handling of file index numbers during acquisition so that dark measurements do not increment the file index.
-This is to simplify subsequent processing of image sequences with embedded dark measurements.
+//-------------------------------------------------------
+//
+//Modify handling of file index numbers during acquisition so that dark measurements do not increment the file index.
+//This is to simplify subsequent processing of image sequences with embedded dark measurements.
+// Done
 
 #endif // TODO_H
