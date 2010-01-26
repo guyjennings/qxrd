@@ -1,6 +1,6 @@
  /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.46 2009/12/11 17:49:04 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.47 2010/01/26 21:26:19 jennings Exp $
 *
 *******************************************************************/
 
@@ -56,7 +56,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CameraModel(""),
     m_CurrentMode(-1),
     m_CurrentGain(-1),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.46 2009/12/11 17:49:04 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.47 2010/01/26 21:26:19 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -682,7 +682,9 @@ void QxrdAcquisitionPerkinElmer::acquiredInt16Image()
 
   m_AcquiredInt16Data = NULL;
 
-  set_FileIndex(get_FileIndex()+1);
+  if (!get_AcquireDark()) {
+    set_FileIndex(get_FileIndex()+1);
+  }
 }
 
 void QxrdAcquisitionPerkinElmer::acquiredInt32Image()
@@ -693,7 +695,9 @@ void QxrdAcquisitionPerkinElmer::acquiredInt32Image()
 
   m_AcquiredInt32Data = NULL;
 
-  set_FileIndex(get_FileIndex()+1);
+  if (!get_AcquireDark()) {
+    set_FileIndex(get_FileIndex()+1);
+  }
 }
 
 void QxrdAcquisitionPerkinElmer::haltAcquire()
@@ -838,6 +842,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.47  2010/01/26 21:26:19  jennings
+*  Don't increment file index when taking dark image
+*
 *  Revision 1.46  2009/12/11 17:49:04  jennings
 *  Added 'ImageSaved' property to image data and used this to avoid double-saving raw data when
 *  processing data off-line
