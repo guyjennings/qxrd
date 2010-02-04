@@ -470,6 +470,14 @@ Provide control of whether dark images are saved - probably via the Save 'raw' i
 
 Better handling of cancellation would be desirable
 
+-------------------------------------------------------
+
+Try to find cause of a problem where acquisition stalls during long sequence.  Seen twice
+now, application was still responsive afterwards but acquisition stopped.  On attempting
+to cancel there were two different results - 1: when acquiring dark frame, cancel button
+did not operate, 2: when acquiring data, cancel button did operate, but application
+crashed imediately.
+
 //-------------------------------------------------------
 //
 //Modify handling of file index numbers during acquisition so that dark measurements do not increment the file index.
