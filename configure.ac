@@ -16,5 +16,5 @@ AC_PROG_LIBTOOL
 AC_HEADER_STDBOOL
 AC_C_CONST
 
-AC_CONFIG_FILES([qxrd.spec qxrd.version.pri Doxyfile])
+AC_CONFIG_FILES([qxrd.spec qxrd.version.pri Doxyfile qxrd.nsi])
 AC_OUTPUT

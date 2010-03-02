@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.112 2009/12/11 17:50:24 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.113 2010/03/02 22:15:31 jennings Exp $
 *
 *******************************************************************/
 
@@ -64,7 +64,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.112 2009/12/11 17:50:24 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.113 2010/03/02 22:15:31 jennings Exp $")
 {
   setupUi(this);
 
@@ -382,10 +382,10 @@ void QxrdWindow::printMessage(QString msg)
   } else {
     QString message = timeStamp()+msg.trimmed();
 
-    int msgSize = m_Messages->document()->characterCount();
-    int blkCount = m_Messages->document()->blockCount();
+    //int msgSize = m_Messages->document()->characterCount();
+    //int blkCount = m_Messages->document()->blockCount();
 
-    printf("msgSize = %d, blkCount=%d\n", msgSize, blkCount);
+    //printf("msgSize = %d, blkCount=%d\n", msgSize, blkCount);
 
     m_Messages -> append(message);
     m_DataProcessor -> logMessage(message);
@@ -883,6 +883,9 @@ void QxrdWindow::doOpenQXRDWebPage()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.113  2010/03/02 22:15:31  jennings
+*  Removed some debug output, files for windows installer
+*
 *  Revision 1.112  2009/12/11 17:50:24  jennings
 *  Disable calculator window
 *  Set messages window limit to 20000 lines

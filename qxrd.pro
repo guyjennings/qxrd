@@ -272,4 +272,4 @@ website.commands = rsync \
     dox/html/ \
     download \
     www12.xor.aps.anl.gov:/var/www/html/software/qxrd/
-OTHER_FILES += qxrd.rc
+OTHER_FILES += qxrd.rc qxrd.nsi
