@@ -200,8 +200,8 @@ win32 {
             xisl.dll \
             $${MINGWRT} \
             debug
-        zip.commands = c:\cygwin\bin\zip.exe \
-            $${TARGET}_debug.zip \
+        zip.commands = c:\cygwin\bin\zip.exe -j \
+            $${TARGET}_debug-$${VERSION}.zip \
             debug/$${TARGET}.exe \
             $${LIBDIR}/QtCored4.dll \
             $${LIBDIR}/QtNetworkd4.dll \
@@ -219,8 +219,8 @@ win32 {
             xisl.dll \
             $${MINGWRT} \
             release
-        zip.commands = c:\cygwin\bin\zip.exe \
-            $${TARGET}.zip \
+        zip.commands = c:\cygwin\bin\zip.exe -j \
+            $${TARGET}-$${VERSION}.zip \
             release/$${TARGET}.exe \
             $${LIBDIR}/QtCore4.dll \
             $${LIBDIR}/QtNetwork4.dll \
