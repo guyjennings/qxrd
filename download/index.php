@@ -30,24 +30,45 @@
   <body link="#000000" alink="#000000" vlink="#000000" bgcolor="#ffffff">
    <h1>QXRD Downloads</h1>
      <table>
-       <tr><td colspan="3"><h2>Zipped Windows Executables</h2></td></tr>
+       <tr><td colspan="3"><h2>Windows Installers</h2></td></tr>
        <th>File</th><th>Date</th><th>Size</th>
       <?php
-       foreach(glob("qxrd*.zip") as $filename) {
+       $files=glob("qxrd-setup*.exe");
+       rsort($files);
+       foreach($files as $filename) {
           echo "<tr><td><a href=\"$filename\">$filename</a></td><td>".date("M d Y H:i", filemtime($filename))."</td><td>".filesize($filename)."</td></tr>\n";
        }
      ?>
+       <tr><td colspan="3">&nbsp;</td></tr>
+       
+        <tr><td colspan="3"><h2>Zipped Windows Executables</h2></td></tr>
+       <th>File</th><th>Date</th><th>Size</th>
+      <?php
+       $files=glob("qxrd*.zip");
+       rsort($files);
+       foreach($files as $filename) {
+          echo "<tr><td><a href=\"$filename\">$filename</a></td><td>".date("M d Y H:i", filemtime($filename))."</td><td>".filesize($filename)."</td></tr>\n";
+       }
+     ?>
+       <tr><td colspan="3">&nbsp;</td></tr>
+       
        <tr><td colspan="3"><h2>Source Tarballs</h2></td></tr>
        <th>File</th><th>Date</th><th>Size</th>
      <?php
-       foreach(glob("qxrd*.tar.gz") as $filename) {
+       $files=glob("qxrd*.tar.gz");
+       rsort($files);
+       foreach($files as $filename) {
           echo "<tr><td><a href=\"$filename\">$filename</a></td><td>".date("M d Y H:i", filemtime($filename))."</td><td>".filesize($filename)."</td></tr>\n";
        }
      ?>
+       <tr><td colspan="3">&nbsp;</td></tr>
+       
        <tr><td colspan="3"><h2>RPM Packages</h2></td></tr>
        <th>File</th><th>Date</th><th>Size</th>
      <?php
-       foreach(glob("qxrd*.rpm") as $filename) {
+       $files=glob("qxrd*.rpm");
+       rsort($files);
+       foreach($files as $filename) {
           echo "<tr><td><a href=\"$filename\">$filename</a></td><td>".date("M d Y H:i", filemtime($filename))."</td><td>".filesize($filename)."</td></tr>\n";
        }
      ?>
