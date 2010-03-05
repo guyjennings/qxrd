@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.70 2010/03/05 23:06:27 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.71 2010/03/05 23:45:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -71,7 +71,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.70 2010/03/05 23:06:27 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.71 2010/03/05 23:45:00 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -889,7 +889,9 @@ bool QxrdDataProcessor::saveNamedImageDataAsText(QString name, QxrdDoubleImageDa
 
   FILE* file = fopen(qPrintable(name),"a");
   QString separator = get_SaveAsTextSeparator();
-  const char* sep = qPrintable(separator);
+  char sep[10];
+  strncpy(sep,qPrintable(separator),10);
+  sep[9]=0;
   int nperline = get_SaveAsTextPerLine();
 
   for (int y=0; y<nrows; y++) {
@@ -1734,6 +1736,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.71  2010/03/05 23:45:00  jennings
+*  Fixed problems with text output separators
+*
 *  Revision 1.70  2010/03/05 23:06:27  jennings
 *  Modified text saving
 *
