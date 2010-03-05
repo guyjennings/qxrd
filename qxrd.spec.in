@@ -35,6 +35,7 @@ qxrd is a readout and control program for perkin elmer x ray detector
 
 %build
 /usr/bin/qmake-qt4 %{name}.pro -o Makefile
+make clean
 make %{?_smp_mflags}
 
 
