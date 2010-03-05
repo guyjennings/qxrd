@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.68 2009/12/11 17:49:04 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.69 2010/03/05 22:32:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -35,6 +35,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_PerformBadPixels(this, "performBadPixels", true),
     m_PerformGainCorrection(this, "performGainCorrection", true),
     m_SaveSubtracted(this, "saveSubtracted", true),
+    m_SaveAsText(this, "saveAsText", true),
     m_PerformIntegration(this, "performIntegration", true),
     m_DisplayIntegratedData(this, "displayIntegratedData", true),
     m_SaveIntegratedData(this, "saveIntegratedData", true),
@@ -42,6 +43,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_PerformBadPixelsTime(this, "performBadPixelsTime", 0.01),
     m_PerformGainCorrectionTime(this, "performGainCorrectionTime", 0.01),
     m_SaveSubtractedTime(this, "saveSubractedTime", 0.1),
+    m_SaveAsTextTime(this, "saveAsTextTime", 0.1),
     m_PerformIntegrationTime(this, "performIntegrationTime", 0.05),
     m_DisplayIntegratedDataTime(this, "displayIntegratedDataTime", 0.2),
     m_SaveIntegratedDataTime(this, "saveIntegratedDataTime", 0.01),
@@ -67,7 +69,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.68 2009/12/11 17:49:04 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.69 2010/03/05 22:32:03 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -102,6 +104,7 @@ void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
   connect(prop_PerformBadPixels(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_PerformGainCorrection(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_SaveSubtracted(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_SaveAsText(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_PerformIntegration(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_DisplayIntegratedData(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_SaveIntegratedData(), SIGNAL(changedValue(bool)), this, SLOT(updateEstimatedProcessingTime()));
@@ -109,6 +112,7 @@ void QxrdDataProcessor::setAcquisition(QxrdAcquisition*acq)
   connect(prop_PerformBadPixelsTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_PerformGainCorrectionTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_SaveSubtractedTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_SaveAsTextTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_PerformIntegrationTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_DisplayIntegratedDataTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_SaveIntegratedDataTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
@@ -857,6 +861,52 @@ QString QxrdDataProcessor::uniqueFileName(QString name)
   }
 }
 
+bool QxrdDataProcessor::saveNamedImageDataAsText(QString name, QxrdDoubleImageData *image, int canOverwrite)
+{
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+//  emit printMessage(tr("Saved \"%1\")").arg(name));
+
+  QxrdMutexLocker lockr(__FILE__, __LINE__, image->mutex());
+
+  int nrows = image -> get_Height();
+  int ncols = image -> get_Width();
+
+  QFileInfo f(name);
+  QDir dir = f.dir();
+  QString  base = f.completeBaseName();
+  QString  suff = f.suffix();
+
+  if (suff == "tif") {
+    name = dir.filePath(base+".txt");
+  }
+
+  if (canOverwrite == NoOverwrite) {
+    name = uniqueFileName(name);
+  }
+
+  FILE* file = fopen(qPrintable(name),"a");
+
+  for (int y=0; y<nrows; y++) {
+    for (int x=0; x<ncols; x++) {
+      if (x!=0) {
+        fprintf(file,"\t");
+      }
+      fprintf(file,"%g",image->value(x,y));
+    }
+    fprintf(file,"\n");
+  }
+
+  fclose(file);
+
+  image -> set_FileName(name);
+  image -> set_ImageSaved(true);
+
+  image -> saveMetaData();
+
+  return true;
+}
+
 void QxrdDataProcessor::clearDark()
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -1021,6 +1071,11 @@ void QxrdDataProcessor::processAcquiredImage(QxrdDoubleImageData *dimg)
       emit printMessage(tr("Saved processed image in file \"%1\" after %2 msec").arg(dimg->get_FileName()).arg(tic.restart()));
     }
 
+    if (get_SaveAsText()) {
+      saveNamedImageDataAsText(dimg->get_FileName(), dimg);
+
+      updateEstimatedTime(prop_SaveAsTextTime(), tic.elapsed());
+    }
  //    m_ProcessedImages.enqueue(img);
 
     newData(dimg);
@@ -1159,6 +1214,10 @@ void QxrdDataProcessor::updateEstimatedProcessingTime()
 
   if (get_SaveSubtracted()) {
     estTime += get_SaveSubtractedTime();
+  }
+
+  if (get_SaveAsText()) {
+    estTime += get_SaveAsTextTime();
   }
 
   if (get_PerformIntegration()) {
@@ -1668,6 +1727,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.69  2010/03/05 22:32:03  jennings
+*  Version 0.3.9 adds text file output and conversion
+*
 *  Revision 1.68  2009/12/11 17:49:04  jennings
 *  Added 'ImageSaved' property to image data and used this to avoid double-saving raw data when
 *  processing data off-line

@@ -1,11 +1,11 @@
 # Modern UI example script
 !include MUI2.nsh
 
-Name "QXRD 0.3.8"
+Name "QXRD 0.3.9"
 
-OutFile "qxrd-setup-0.3.8.exe"
-InstallDir "$PROGRAMFILES\qxrd-0.3.8"
-InstallDirRegKey HKCU "Software\qxrd-0.3.8" ""
+OutFile "qxrd-setup-0.3.9.exe"
+InstallDir "$PROGRAMFILES\qxrd-0.3.9"
+InstallDirRegKey HKCU "Software\qxrd-0.3.9" ""
 RequestExecutionLevel user
 
 Var StartMenuFolder
@@ -19,7 +19,7 @@ Var StartMenuFolder
 !insertmacro MUI_PAGE_DIRECTORY
 
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\qxrd-0.3.8"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\qxrd-0.3.9"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
 !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
@@ -34,13 +34,13 @@ Section "Extract qxrd"
   File release\qxrd.exe
   File release\*.dll
 
-  WriteRegStr HKCU "Sofware\qxrd-0.3.8" "" $INSTDIR
+  WriteRegStr HKCU "Sofware\qxrd-0.3.9" "" $INSTDIR
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD 0.3.8.lnk" "$INSTDIR\qxrd.exe"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\Uninstall QXRD 0.3.8.lnk" "$INSTDIR\uninstall.exe"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD 0.3.9.lnk" "$INSTDIR\qxrd.exe"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\Uninstall QXRD 0.3.9.lnk" "$INSTDIR\uninstall.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -52,10 +52,10 @@ Section "Uninstall"
   RMDir  "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
-  Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall QXRD 0.3.8.lnk"
-  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD 0.3.8.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall QXRD 0.3.9.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD 0.3.9.lnk"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
-  DeleteRegKey /ifempty HKCU "Software\qxrd-0.3.8"
+  DeleteRegKey /ifempty HKCU "Software\qxrd-0.3.9"
 
 SectionEnd

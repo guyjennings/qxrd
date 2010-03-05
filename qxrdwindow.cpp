@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.113 2010/03/02 22:15:31 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.114 2010/03/05 22:32:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -64,7 +64,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.113 2010/03/02 22:15:31 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.114 2010/03/05 22:32:03 jennings Exp $")
 {
   setupUi(this);
 
@@ -242,6 +242,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_DataProcessor -> prop_PerformGainCorrectionTime() -> linkTo(m_PerformGainCorrectionTime);
   m_DataProcessor -> prop_SaveSubtracted() -> linkTo(m_SaveSubtracted);
   m_DataProcessor -> prop_SaveSubtractedTime() -> linkTo(m_SaveSubtractedTime);
+  m_DataProcessor -> prop_SaveAsText() -> linkTo(m_SaveAsText);
+  m_DataProcessor -> prop_SaveAsTextTime() -> linkTo(m_SaveAsTextTime);
   m_DataProcessor -> prop_PerformIntegration() -> linkTo(m_PerformIntegration);
   m_DataProcessor -> prop_PerformIntegrationTime() -> linkTo(m_PerformIntegrationTime);
   m_DataProcessor -> prop_DisplayIntegratedData() -> linkTo(m_DisplayIntegratedData);
@@ -883,6 +885,9 @@ void QxrdWindow::doOpenQXRDWebPage()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.114  2010/03/05 22:32:03  jennings
+*  Version 0.3.9 adds text file output and conversion
+*
 *  Revision 1.113  2010/03/02 22:15:31  jennings
 *  Removed some debug output, files for windows installer
 *

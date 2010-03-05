@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.45 2009/12/03 21:35:37 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.46 2010/03/05 22:32:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -69,8 +69,11 @@ public:
   Q_PROPERTY(bool performGainCorrection READ get_PerformGainCorrection WRITE set_PerformGainCorrection);
   QCEP_BOOLEAN_PROPERTY(PerformGainCorrection);
 
-  Q_PROPERTY(bool saveSubracted READ get_SaveSubtracted WRITE set_SaveSubtracted);
+  Q_PROPERTY(bool saveSubtracted READ get_SaveSubtracted WRITE set_SaveSubtracted);
   QCEP_BOOLEAN_PROPERTY(SaveSubtracted);
+
+  Q_PROPERTY(bool saveAsText READ get_SaveAsText WRITE set_SaveAsText);
+  QCEP_BOOLEAN_PROPERTY(SaveAsText);
 
   Q_PROPERTY(bool performIntegration READ get_PerformIntegration WRITE set_PerformIntegration);
   QCEP_BOOLEAN_PROPERTY(PerformIntegration);
@@ -90,8 +93,11 @@ public:
   Q_PROPERTY(double performGainCorrectionTime READ get_PerformGainCorrectionTime WRITE set_PerformGainCorrectionTime);
   QCEP_DOUBLE_PROPERTY(PerformGainCorrectionTime);
 
-  Q_PROPERTY(double saveSubractedTime READ get_SaveSubtractedTime WRITE set_SaveSubtractedTime);
+  Q_PROPERTY(double saveSubtractedTime READ get_SaveSubtractedTime WRITE set_SaveSubtractedTime);
   QCEP_DOUBLE_PROPERTY(SaveSubtractedTime);
+
+  Q_PROPERTY(double saveAsTextTime READ get_SaveAsTextTime WRITE set_SaveAsTextTime);
+  QCEP_DOUBLE_PROPERTY(SaveAsTextTime);
 
   Q_PROPERTY(double performIntegrationTime READ get_PerformIntegrationTime WRITE set_PerformIntegrationTime);
   QCEP_DOUBLE_PROPERTY(PerformIntegrationTime);
@@ -209,6 +215,7 @@ public:
   bool saveNamedRawImageData(QString name, QxrdInt16ImageData *image, int canOverwrite=NoOverwrite);
   bool saveNamedRawImageData(QString name, QxrdInt32ImageData *image, int canOverwrite=NoOverwrite);
   bool saveNamedMaskData(QString name, QxrdMaskData *mask, int canOverwrite=NoOverwrite);
+  bool saveNamedImageDataAsText(QString name, QxrdDoubleImageData *image, int canOverwrite=NoOverwrite);
 
   void writeOutputScan(QVector<double> x, QVector<double> y);
 
@@ -273,7 +280,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.45 2009/12/03 21:35:37 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.46 2010/03/05 22:32:03 jennings Exp $");
 };
 
 #endif
@@ -281,6 +288,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.46  2010/03/05 22:32:03  jennings
+*  Version 0.3.9 adds text file output and conversion
+*
 *  Revision 1.45  2009/12/03 21:35:37  jennings
 *  Corrected locking problem with dark image
 *
