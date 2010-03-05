@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.46 2010/03/05 22:32:03 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.47 2010/03/05 23:06:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -74,6 +74,12 @@ public:
 
   Q_PROPERTY(bool saveAsText READ get_SaveAsText WRITE set_SaveAsText);
   QCEP_BOOLEAN_PROPERTY(SaveAsText);
+
+  Q_PROPERTY(QString saveAsTextSeparator READ get_SaveAsTextSeparator WRITE set_SaveAsTextSeparator);
+  QCEP_STRING_PROPERTY(SaveAsTextSeparator);
+
+  Q_PROPERTY(int saveAsTextPerLine READ get_SaveAsTextPerLine WRITE set_SaveAsTextPerLine);
+  QCEP_INTEGER_PROPERTY(SaveAsTextPerLine);
 
   Q_PROPERTY(bool performIntegration READ get_PerformIntegration WRITE set_PerformIntegration);
   QCEP_BOOLEAN_PROPERTY(PerformIntegration);
@@ -280,7 +286,7 @@ private:
 
   FILE                     *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.46 2010/03/05 22:32:03 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.47 2010/03/05 23:06:27 jennings Exp $");
 };
 
 #endif
@@ -288,6 +294,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.47  2010/03/05 23:06:27  jennings
+*  Modified text saving
+*
 *  Revision 1.46  2010/03/05 22:32:03  jennings
 *  Version 0.3.9 adds text file output and conversion
 *

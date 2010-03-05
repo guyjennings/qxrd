@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.69 2010/03/05 22:32:03 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.70 2010/03/05 23:06:27 jennings Exp $
 *
 *******************************************************************/
 
@@ -36,6 +36,8 @@ QxrdDataProcessor::QxrdDataProcessor
     m_PerformGainCorrection(this, "performGainCorrection", true),
     m_SaveSubtracted(this, "saveSubtracted", true),
     m_SaveAsText(this, "saveAsText", true),
+    m_SaveAsTextSeparator(this, "saveAsTextSeparator", " "),
+    m_SaveAsTextPerLine(this,"saveAsTextPerLine",16),
     m_PerformIntegration(this, "performIntegration", true),
     m_DisplayIntegratedData(this, "displayIntegratedData", true),
     m_SaveIntegratedData(this, "saveIntegratedData", true),
@@ -69,7 +71,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_CenterFinder(NULL),
     m_Integrator(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.69 2010/03/05 22:32:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.70 2010/03/05 23:06:27 jennings Exp $")
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, this);
@@ -886,16 +888,21 @@ bool QxrdDataProcessor::saveNamedImageDataAsText(QString name, QxrdDoubleImageDa
   }
 
   FILE* file = fopen(qPrintable(name),"a");
+  QString separator = get_SaveAsTextSeparator();
+  const char* sep = qPrintable(separator);
+  int nperline = get_SaveAsTextPerLine();
 
   for (int y=0; y<nrows; y++) {
     for (int x=0; x<ncols; x++) {
-      if (x!=0) {
-        fprintf(file,"\t");
+      if (nperline && ((x % nperline)==0)) {
+        fputs("\n",file);
+      } else if (x!=0) {
+        fputs(sep,file);
       }
       fprintf(file,"%g",image->value(x,y));
     }
-    fprintf(file,"\n");
   }
+  fprintf(file,"\n");
 
   fclose(file);
 
@@ -1727,6 +1734,9 @@ void QxrdDataProcessor::fileWriteTest(int dim, QString path)
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.70  2010/03/05 23:06:27  jennings
+*  Modified text saving
+*
 *  Revision 1.69  2010/03/05 22:32:03  jennings
 *  Version 0.3.9 adds text file output and conversion
 *
