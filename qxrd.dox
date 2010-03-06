@@ -15,10 +15,6 @@ QXRD acts as a bridge between the dynamic link library provided by Perkin
 Elmer and the beamline data acquisition software 'spec' and also provides
 a convenient GUI interface to the detector.
 
-The QXRD project page is hosted at
-<a href="http://cep.xor.aps.anl.gov/software/qxrd/index.html" target="_top">
-http://cep.xor.aps.anl.gov/software/qxrd/index.html</a>
-
 \ref license
 
 \ref downloads
@@ -34,7 +30,7 @@ QXRD is distributed under the terms of the
 
 \page downloads QXRD Downloads
 Downloads are available from
-<a href="http://cep.xor.aps.anl.gov/software/qxrd/download/index.php">QXRD Downloads</a>
+<a href="download/index.php">QXRD Downloads</a>
 
 \page systemRequirements System Requirements
 
@@ -60,7 +56,7 @@ be used for processing and visualising data acquired by other means.
 \section windowsInstall  Installation under Windows
 
 Download the latest zipped binary version from the
-<a href="http://cep.xor.aps.anl.gov/software/qxrd/download/index.php">download page</a>.
+<a href="download/index.php">download page</a>.
 The zip file contains the qxrd executable and a number of dll files.  Extract the files to
 a convenient place and create appropriate shortcuts to the 'qxrd.exe' file.  Run the .exe file
 to start.
