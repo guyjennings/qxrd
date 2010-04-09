@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionscripting.h,v 1.7 2009/07/14 20:07:00 jennings Exp $
+*  $Id: qxrdacquisitionscripting.h,v 1.8 2010/04/09 22:29:38 jennings Exp $
 *
 *******************************************************************/
 
@@ -33,7 +33,7 @@ protected:
 
 private:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionscripting.h,v 1.7 2009/07/14 20:07:00 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionscripting.h,v 1.8 2010/04/09 22:29:38 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONSCRIPTING_H
@@ -41,6 +41,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionscripting.h,v $
+*  Revision 1.8  2010/04/09 22:29:38  jennings
+*  Removed file browser, added CMake support, build under VC
+*
 *  Revision 1.7  2009/07/14 20:07:00  jennings
 *  Implemented simple simulated acquisition
 *

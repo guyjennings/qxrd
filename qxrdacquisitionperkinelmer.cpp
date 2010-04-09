@@ -1,6 +1,6 @@
  /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.47 2010/01/26 21:26:19 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.48 2010/04/09 22:29:38 jennings Exp $
 *
 *******************************************************************/
 
@@ -56,7 +56,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc)
     m_CameraModel(""),
     m_CurrentMode(-1),
     m_CurrentGain(-1),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.47 2010/01/26 21:26:19 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.48 2010/04/09 22:29:38 jennings Exp $")
 {
   ::g_Acquisition = this;
 }
@@ -838,10 +838,69 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 {
 }
 
+void QxrdAcquisitionPerkinElmer::doRawSaveBenchmark()
+{
+    THREAD_CHECK;
+
+    int nImages = get_PostTriggerFiles();
+
+    m_FreeInt16Images.preallocate(10, get_NCols(), get_NRows());
+    m_AcquiredInt16Data = m_FreeInt16Images.dequeue();
+
+    m_Acquiring.lock();
+
+    emit statusMessage("Raw Save Benchmark starting");
+    emit acquireStarted(0);
+
+    for (int i=0; i<nImages; i++) {
+        QString fileBase = get_FilePattern()+tr("-%1.raw.tif").arg(get_FileIndex(),5,10,QChar('0'));
+        QString fileName = QDir(m_DataProcessor -> get_OutputDirectory())
+                           .filePath(get_FilePattern()+tr("-%1.raw.tif")
+                                     .arg(get_FileIndex(),5,10,QChar('0')));
+
+        emit printMessage(tr("Image %1").arg(fileBase));
+
+        m_AcquiredInt16Data -> set_FileName(fileName);
+        m_AcquiredInt16Data -> set_Title(fileBase);
+        m_AcquiredInt16Data -> set_ReadoutMode(get_ReadoutMode());
+        m_AcquiredInt16Data -> set_ExposureTime(get_ExposureTime());
+        m_AcquiredInt16Data -> set_SummedExposures(get_ExposuresToSum());
+        m_AcquiredInt16Data -> set_DateTime(QDateTime::currentDateTime());
+        m_AcquiredInt16Data -> set_HBinning(1);
+        m_AcquiredInt16Data -> set_VBinning(1);
+        m_AcquiredInt16Data -> set_CameraGain(get_CameraGain());
+        m_AcquiredInt16Data -> set_DataType(QxrdInt16ImageData::Raw16Data);
+        m_AcquiredInt16Data -> set_Triggered(get_Trigger());
+        m_AcquiredInt16Data -> set_UserComment1(get_UserComment1());
+        m_AcquiredInt16Data -> set_UserComment2(get_UserComment2());
+        m_AcquiredInt16Data -> set_UserComment3(get_UserComment3());
+        m_AcquiredInt16Data -> set_UserComment4(get_UserComment4());
+        m_AcquiredInt16Data -> set_ImageSaved(false);
+
+        m_DataProcessor -> saveNamedImageData(fileName, m_AcquiredInt16Data, false);
+
+        set_FileIndex(get_FileIndex()+1);
+    }
+
+    m_FreeInt16Images.enqueue(m_AcquiredInt16Data);
+
+    haltAcquire();
+}
+
+void QxrdAcquisitionPerkinElmer::doSubtractedSaveBenchmark()
+{
+}
+
+void QxrdAcquisitionPerkinElmer::doRawSubtractedSaveBenchmark()
+{
+}
 
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.48  2010/04/09 22:29:38  jennings
+*  Removed file browser, added CMake support, build under VC
+*
 *  Revision 1.47  2010/01/26 21:26:19  jennings
 *  Don't increment file index when taking dark image
 *

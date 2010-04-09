@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: xisl_dummy.cpp,v 1.18 2009/12/03 21:34:16 jennings Exp $
+*  $Id: xisl_dummy.cpp,v 1.19 2010/04/09 22:29:38 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,6 +9,9 @@
 
 #ifdef Q_OS_UNIX
 #include "AcqLinuxTypes.h"
+#else
+#include <Windows.h>
+#define _DLL_EXPORT
 #endif
 
 #include "Acq.h"
@@ -51,7 +54,7 @@ AcquisitionTimer::AcquisitionTimer()
     m_NRows(0),
     m_NColumns(0),
     m_CurrentFrame(0),
-    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.18 2009/12/03 21:34:16 jennings Exp $")
+    SOURCE_IDENT("$Id: xisl_dummy.cpp,v 1.19 2010/04/09 22:29:38 jennings Exp $")
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
@@ -330,6 +333,9 @@ HIS_RETURN Acquisition_GetHwHeaderInfo(HACQDESC hAcqDesc, CHwHeaderInfo *pInfo)
 /******************************************************************
 *
 *  $Log: xisl_dummy.cpp,v $
+*  Revision 1.19  2010/04/09 22:29:38  jennings
+*  Removed file browser, added CMake support, build under VC
+*
 *  Revision 1.18  2009/12/03 21:34:16  jennings
 *  Moved dummy acquisition timer to 'acquire' thread so it doesn't block the UI thread so much
 *

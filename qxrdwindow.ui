@@ -79,7 +79,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -108,7 +108,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -141,7 +141,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -158,7 +158,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/ringfinder.png</normaloff>:/images/images/ringfinder.png</iconset>
               </property>
               <property name="iconSize">
@@ -181,7 +181,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/slice.png</normaloff>:/images/images/slice.png</iconset>
               </property>
               <property name="iconSize">
@@ -204,7 +204,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/measure.png</normaloff>:/images/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -233,7 +233,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/mask_circles.png</normaloff>:/images/images/mask_circles.png</iconset>
               </property>
               <property name="iconSize">
@@ -256,7 +256,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/mask_polygon.png</normaloff>:/images/images/mask_polygon.png</iconset>
               </property>
               <property name="iconSize">
@@ -301,7 +301,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -330,7 +330,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -363,7 +363,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -380,7 +380,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/measure.png</normaloff>:/images/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -441,7 +441,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -470,7 +470,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-out.png</normaloff>:/images/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -503,7 +503,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/zoom-all.png</normaloff>:/images/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -520,7 +520,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/images/measure.png</normaloff>:/images/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -671,7 +671,7 @@
      <x>0</x>
      <y>0</y>
      <width>1243</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -737,12 +737,21 @@
     <addaction name="m_ActionAboutQXRD"/>
     <addaction name="m_ActionOpenQXRDWebPage"/>
    </widget>
+   <widget class="QMenu" name="menuBenchmarks">
+    <property name="title">
+     <string>Benchmarks</string>
+    </property>
+    <addaction name="m_ActionRawSaveBenchmark"/>
+    <addaction name="m_ActionSubtractedSaveBenchmark"/>
+    <addaction name="m_ActionRawSubtractedSaveBenchmark"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuAcquire"/>
    <addaction name="menuDisplay"/>
    <addaction name="m_WindowsMenu"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuBenchmarks"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="m_AcquireDockWidget">
@@ -2435,7 +2444,7 @@ Script Function: outputDirectory()</string>
   </action>
   <action name="m_ActionLoadData">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2534,7 +2543,7 @@ Script Function: outputDirectory()</string>
   </action>
   <action name="m_ActionImportData">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2543,7 +2552,7 @@ Script Function: outputDirectory()</string>
   </action>
   <action name="m_ActionTest">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/zoom-in.png</normaloff>:/images/images/zoom-in.png</iconset>
    </property>
    <property name="text">
@@ -2584,7 +2593,7 @@ Script Function: outputDirectory()</string>
   </action>
   <action name="m_ActionSetCenter">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/ringfinder.png</normaloff>:/images/images/ringfinder.png</iconset>
    </property>
    <property name="text">
@@ -2617,7 +2626,7 @@ Script Function: outputDirectory()</string>
   </action>
   <action name="m_ActionMaskCircles">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/mask_circles.png</normaloff>:/images/images/mask_circles.png</iconset>
    </property>
    <property name="text">
@@ -2629,7 +2638,7 @@ Script Function: outputDirectory()</string>
   </action>
   <action name="m_ActionMaskPolygons">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/mask_polygon.png</normaloff>:/images/images/mask_polygon.png</iconset>
    </property>
    <property name="text">
@@ -2641,7 +2650,7 @@ Script Function: outputDirectory()</string>
   </action>
   <action name="m_ActionInvertMask">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/mask_invert.png</normaloff>:/images/images/mask_invert.png</iconset>
    </property>
    <property name="text">
@@ -2653,7 +2662,7 @@ Script Function: outputDirectory()</string>
   </action>
   <action name="m_ActionLoadDark">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2673,7 +2682,7 @@ Script Function: outputDirectory()</string>
   </action>
   <action name="m_ActionLoadMask">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/images/fileopen.png</normaloff>:/images/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2717,6 +2726,21 @@ Script Function: outputDirectory()</string>
     <string>Open QXRD web page</string>
    </property>
   </action>
+  <action name="m_ActionRawSaveBenchmark">
+   <property name="text">
+    <string>Raw Save Benchmark</string>
+   </property>
+  </action>
+  <action name="m_ActionSubtractedSaveBenchmark">
+   <property name="text">
+    <string>Subtracted Save Benchmark</string>
+   </property>
+  </action>
+  <action name="m_ActionRawSubtractedSaveBenchmark">
+   <property name="text">
+    <string>Raw+Subtracted Save Benchmark</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -2739,8 +2763,6 @@ Script Function: outputDirectory()</string>
   <tabstop>m_XRDTabWidget</tabstop>
   <tabstop>m_Messages</tabstop>
  </tabstops>
- <resources>
-  <include location="qxrdresources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

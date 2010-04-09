@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.63 2009/11/13 20:15:58 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.64 2010/04/09 22:29:38 jennings Exp $
 *
 *******************************************************************/
 
@@ -30,7 +30,7 @@ class QxrdIntegrator;
 class QxrdIntegratorDialog;
 class QxrdScriptEngine;
 class QxrdSettings;
-class QxrdFileBrowser;
+//class QxrdFileBrowser;
 class QxrdImageCalculator;
 
 #include "qxrdimagequeue.h"
@@ -127,7 +127,7 @@ private:
 //  QxrdCenterFinder       *m_CenterFinder;
   QxrdIntegratorDialog   *m_IntegratorDialog;
 //  QxrdIntegrator         *m_Integrator;
-  QxrdFileBrowser        *m_FileBrowser;
+//  QxrdFileBrowser        *m_FileBrowser;
   QxrdImageCalculator    *m_Calculator;
   QVector<double>         m_Exposures;
   QProgressBar           *m_Progress;
@@ -149,7 +149,7 @@ private:
 //  QAtomicInt              m_Plotting;
 //  QAtomicInt              m_SpareDataAvailable;
 
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.63 2009/11/13 20:15:58 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.64 2010/04/09 22:29:38 jennings Exp $");
 };
 
 #endif
@@ -157,6 +157,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.64  2010/04/09 22:29:38  jennings
+*  Removed file browser, added CMake support, build under VC
+*
 *  Revision 1.63  2009/11/13 20:15:58  jennings
 *  *** empty log message ***
 *

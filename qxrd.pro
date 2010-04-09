@@ -1,16 +1,16 @@
 message(Qt version: $$[QT_VERSION])
- message(Qt is installed in $$[QT_INSTALL_PREFIX])
- message(Qt resources can be found in the following locations:)
- message(Documentation: $$[QT_INSTALL_DOCS])
- message(Header files: $$[QT_INSTALL_HEADERS])
- message(Libraries: $$[QT_INSTALL_LIBS])
- message(Binary files (executables): $$[QT_INSTALL_BINS])
- message(Plugins: $$[QT_INSTALL_PLUGINS])
- message(Data files: $$[QT_INSTALL_DATA])
- message(Translation files: $$[QT_INSTALL_TRANSLATIONS])
- message(Settings: $$[QT_INSTALL_SETTINGS])
- message(Examples: $$[QT_INSTALL_EXAMPLES])
- message(Demonstrations: $$[QT_INSTALL_DEMOS])
+message(Qt is installed in $$[QT_INSTALL_PREFIX])
+message(Qt resources can be found in the following locations:)
+message(Documentation: $$[QT_INSTALL_DOCS])
+message(Header files: $$[QT_INSTALL_HEADERS])
+message(Libraries: $$[QT_INSTALL_LIBS])
+message(Binary files (executables): $$[QT_INSTALL_BINS])
+message(Plugins: $$[QT_INSTALL_PLUGINS])
+message(Data files: $$[QT_INSTALL_DATA])
+message(Translation files: $$[QT_INSTALL_TRANSLATIONS])
+message(Settings: $$[QT_INSTALL_SETTINGS])
+message(Examples: $$[QT_INSTALL_EXAMPLES])
+message(Demonstrations: $$[QT_INSTALL_DEMOS])
 
 TEMPLATE = app
 CONFIG += qt
@@ -45,14 +45,26 @@ RCC_DIR = rcc
 TARGET = qxrd
 RC_FILE=qxrd.rc
 win32 { 
-    CONFIG(debug, debug|release) { 
-        OBJECTS_DIR = objd
-        TARGET = qxrdd
-        CONFIG += console
-    }
-    else { 
-        OBJECTS_DIR = obj
-        TARGET = qxrd
+    contains(QMAKE_HOST.arch,x86_64) {
+        CONFIG(debug, debug|release) {
+            OBJECTS_DIR = objd-64
+            TARGET = qxrdd
+            CONFIG += console
+        }
+        else {
+            OBJECTS_DIR = obj-64
+            TARGET = qxrd
+        }
+    } else {
+        CONFIG(debug, debug|release) {
+            OBJECTS_DIR = objd
+            TARGET = qxrdd
+            CONFIG += console
+        }
+        else {
+            OBJECTS_DIR = obj
+            TARGET = qxrd
+        }
     }
 }
 RESOURCES += qxrdhelptext.qrc \
@@ -169,6 +181,11 @@ unix {
     LIBS += -ltiff
 }
 win32 { 
+contains(QMAKE_HOST.arch,x86_64) {
+    HEADERS += xisl_dummy.h
+    SOURCES += xisl_dummy.cpp
+}
+
     PLATFORM_PREFIX = win32
     QTBINDIR = $$[QT_INSTALL_BINS]
     QTBASEDIR= $$[QT_INSTALL_PREFIX]
@@ -187,7 +204,7 @@ win32 {
       MINGWRT = $${QTBASEDIR}/../mingw/bin/mingwm10.dll
     }
     else {
-      error("MINGW Not Found")
+      message("MINGW Not Found")
     }
     app.target = app
     zip.target = zip

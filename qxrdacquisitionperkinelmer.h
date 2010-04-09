@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.21 2009/09/28 22:06:09 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.22 2010/04/09 22:29:38 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,6 +32,10 @@ public slots:
   void initialize();
   void trigger();
 //  int  status(double delay);
+
+  void doRawSaveBenchmark();
+  void doSubtractedSaveBenchmark();
+  void doRawSubtractedSaveBenchmark();
 
 signals:
   void acquireStarted(int dark);
@@ -99,7 +103,7 @@ private:
   int                    m_CurrentMode;
   int                    m_CurrentGain;
 
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.21 2009/09/28 22:06:09 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.22 2010/04/09 22:29:38 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPERKINELMER_H
@@ -107,6 +111,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.22  2010/04/09 22:29:38  jennings
+*  Removed file browser, added CMake support, build under VC
+*
 *  Revision 1.21  2009/09/28 22:06:09  jennings
 *  Removed QxrdAcquisitionPerkinElmer::status
 *
