@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.114 2010/03/05 22:32:03 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.115 2010/04/09 22:29:38 jennings Exp $
 *
 *******************************************************************/
 
@@ -19,7 +19,7 @@
 #include "qxrdintegrator.h"
 #include "qxrdplotzoomer.h"
 #include "qxrdscriptengine.h"
-#include "qxrdfilebrowser.h"
+//#include "qxrdfilebrowser.h"
 #include "qxrdimagecalculator.h"
 #include "qxrdmutexlocker.h"
 
@@ -52,7 +52,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_DataProcessor(proc),
     m_CenterFinderDialog(NULL),
     m_IntegratorDialog(NULL),
-    m_FileBrowser(NULL),
+//    m_FileBrowser(NULL),
     m_Calculator(NULL),
     m_Progress(NULL),
     m_Acquiring(false),
@@ -64,7 +64,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_NewMaskMutex(QMutex::Recursive),
     m_Mask(new QxrdMaskData(2048,2048)),
     m_NewMask(new QxrdMaskData(2048,2048)),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.114 2010/03/05 22:32:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.115 2010/04/09 22:29:38 jennings Exp $")
 {
   setupUi(this);
 
@@ -76,8 +76,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_IntegratorDialog = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
   m_IntegratorDockWidget -> setWidget(m_IntegratorDialog);
 
-  m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
-  m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
+//  m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
+//  m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
 
 //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
 //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
@@ -217,6 +217,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
 //  show();
 
+  connect(m_ActionRawSaveBenchmark, SIGNAL(triggered()), m_Acquisition, SLOT(doRawSaveBenchmark()));
+  connect(m_ActionSubtractedSaveBenchmark, SIGNAL(triggered()), m_Acquisition, SLOT(doSubtractedSaveBenchmark()));
+  connect(m_ActionRawSubtractedSaveBenchmark, SIGNAL(triggered()), m_Acquisition, SLOT(doRawSubtractedSaveBenchmark()));
+
   m_Acquisition -> setupCameraGainMenu(m_CameraGain);
   m_Acquisition -> setupCameraBinningModeMenu(m_BinningMode);
 
@@ -331,7 +335,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_WindowsMenu -> addAction(m_DisplayDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CenteringDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDockWidget -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
 
   m_Messages -> document() -> setMaximumBlockCount(20000);
 }
@@ -574,7 +578,7 @@ void QxrdWindow::doCancelDark()
 void QxrdWindow::readSettings(QxrdSettings *settings, QString section)
 {
   m_Plot         -> readSettings(settings, section+"/plot");
-  m_FileBrowser  -> readSettings(settings, section+"/fileBrowser");
+//  m_FileBrowser  -> readSettings(settings, section+"/fileBrowser");
 
   m_SettingsLoaded = true;
 
@@ -590,7 +594,7 @@ void QxrdWindow::readSettings(QxrdSettings *settings, QString section)
 void QxrdWindow::writeSettings(QxrdSettings *settings, QString section)
 {
   m_Plot         -> writeSettings(settings, section+"/plot");
-  m_FileBrowser  -> writeSettings(settings, section+"/fileBrowser");
+//  m_FileBrowser  -> writeSettings(settings, section+"/fileBrowser");
 
   settings -> setValue(section+"-geometry", saveGeometry());
   settings -> setValue(section+"-state", saveState(1));
@@ -885,6 +889,9 @@ void QxrdWindow::doOpenQXRDWebPage()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.115  2010/04/09 22:29:38  jennings
+*  *** empty log message ***
+*
 *  Revision 1.114  2010/03/05 22:32:03  jennings
 *  Version 0.3.9 adds text file output and conversion
 *
