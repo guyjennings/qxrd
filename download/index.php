@@ -33,8 +33,15 @@
        <tr><td colspan="3"><h2>Windows Installers</h2></td></tr>
        <th>File</th><th>Date</th><th>Size</th>
       <?php
+       function cmp($a,$b)
+       {
+         if($a == $b) {
+            return 0;
+         }
+         return (filemtime($a)>filemtime($b)) ? -1 : 1;
+       }
        $files=glob("qxrd-setup*.exe");
-       rsort($files);
+       usort($files, "cmp");
        foreach($files as $filename) {
           echo "<tr><td><a href=\"$filename\">$filename</a></td><td>".date("M d Y H:i", filemtime($filename))."</td><td>".filesize($filename)."</td></tr>\n";
        }
@@ -45,7 +52,7 @@
        <th>File</th><th>Date</th><th>Size</th>
       <?php
        $files=glob("qxrd*.zip");
-       rsort($files);
+       usort($files,"cmp");
        foreach($files as $filename) {
           echo "<tr><td><a href=\"$filename\">$filename</a></td><td>".date("M d Y H:i", filemtime($filename))."</td><td>".filesize($filename)."</td></tr>\n";
        }
@@ -56,7 +63,7 @@
        <th>File</th><th>Date</th><th>Size</th>
      <?php
        $files=glob("qxrd*.tar.gz");
-       rsort($files);
+       usort($files,"cmp");
        foreach($files as $filename) {
           echo "<tr><td><a href=\"$filename\">$filename</a></td><td>".date("M d Y H:i", filemtime($filename))."</td><td>".filesize($filename)."</td></tr>\n";
        }
@@ -67,7 +74,7 @@
        <th>File</th><th>Date</th><th>Size</th>
      <?php
        $files=glob("qxrd*.rpm");
-       rsort($files);
+       usort($files,"cmp");
        foreach($files as $filename) {
           echo "<tr><td><a href=\"$filename\">$filename</a></td><td>".date("M d Y H:i", filemtime($filename))."</td><td>".filesize($filename)."</td></tr>\n";
        }

@@ -74,7 +74,7 @@ DISTFILES += qxrdhelptext.html \
     download/index.php \
     images/*.png \
     tif_config.h \
-    tifconf.h
+    tiffconf.h
 win32:include("qt-libtiff-win32.pri")
 include("qwt-5.2.pri")
 include("qceplib.pri")
