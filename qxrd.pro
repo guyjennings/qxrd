@@ -72,7 +72,9 @@ RESOURCES += qxrdhelptext.qrc \
 DISTFILES += qxrdhelptext.html \
     qxrd.dox \
     download/index.php \
-    images/*.png
+    images/*.png \
+    tif_config.h \
+    tifconf.h
 win32:include("qt-libtiff-win32.pri")
 include("qwt-5.2.pri")
 include("qceplib.pri")
@@ -197,7 +199,7 @@ contains(QMAKE_HOST.arch,x86_64) {
 
     exists($${QTBASEDIR}/../mingw/bin/libgcc_s_dw2-1.dll) {
       message("MINGW found in $${QTBASEDIR}/../mingw/bin/libgcc_s_dw2-1.dll")
-      MINGWRT = $${QTBASEDIR}/../mingw/bin/libgcc_s_dw2-1.dll
+      MINGWRT = $${QTBASEDIR}/../mingw/bin/libgcc_s_dw2-1.dll $${QTBASEDIR}/../mingw/bin/mingwm10.dll
     }
     else:exists($${QTBASEDIR}/../mingw/bin/mingwm10.dll) {
       message("MINGW found in $${QTBASEDIR}/../mingw/bin/mingwm10.dll")
