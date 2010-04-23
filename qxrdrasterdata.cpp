@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdrasterdata.cpp,v 1.15 2009/11/02 20:19:27 jennings Exp $
+*  $Id: qxrdrasterdata.cpp,v 1.16 2010/04/23 20:18:31 jennings Exp $
 *
 *******************************************************************/
 
@@ -10,11 +10,11 @@ QxrdRasterData::QxrdRasterData(QxrdDoubleImageData *img, int interp, QxrdMaskDat
   : QwtRasterData(QwtDoubleRect(0,0,img->get_Width(),img->get_Height())),
     m_Data(img),
     m_Mask(mask),
-    m_NRows((img ? img->get_Width(): 0)),
-    m_NCols((img ? img->get_Height() : 0)),
+    m_NRows((img ? img->get_Height(): 0)),
+    m_NCols((img ? img->get_Width() : 0)),
     m_Range(40000,48000),
     m_Interpolate(interp),
-    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.15 2009/11/02 20:19:27 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.16 2010/04/23 20:18:31 jennings Exp $")
 {
 }
 
@@ -182,6 +182,9 @@ int QxrdRasterData::height() const
 /******************************************************************
 *
 *  $Log: qxrdrasterdata.cpp,v $
+*  Revision 1.16  2010/04/23 20:18:31  jennings
+*  Fixed problem with swapped width and height in QxrdRasterData constructor
+*
 *  Revision 1.15  2009/11/02 20:19:27  jennings
 *  Changes to make it work with VC compiler
 *
