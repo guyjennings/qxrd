@@ -1,12 +1,12 @@
 # Modern UI example script
 !include MUI2.nsh
 
-Name "QXRD 0.3.10"
+Name "QXRD"
 
 OutFile "qxrd-setup-0.3.10.exe"
-InstallDir "$PROGRAMFILES\qxrd-0.3.10"
-InstallDirRegKey HKCU "Software\qxrd-0.3.10" ""
-RequestExecutionLevel user
+InstallDir "$PROGRAMFILES\qxrd\qxrd-0.3.10"
+InstallDirRegKey HKLM "Software\qxrd\qxrd-0.3.10" "install_dir"
+RequestExecutionLevel admin
 
 Var StartMenuFolder
 
@@ -18,8 +18,8 @@ Var StartMenuFolder
 !insertmacro MUI_PAGE_LICENSE "gpl.txt"
 !insertmacro MUI_PAGE_DIRECTORY
 
-!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\qxrd-0.3.10"
+!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\qxrd\qxrd-0.3.10"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
 !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
@@ -34,13 +34,14 @@ Section "Extract qxrd"
   File release\qxrd.exe
   File release\*.dll
 
-  WriteRegStr HKCU "Sofware\qxrd-0.3.10" "" $INSTDIR
+  WriteRegStr HKLM "Software\qxrd\qxrd-0.3.10" "install_dir" $INSTDIR
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD 0.3.10.lnk" "$INSTDIR\qxrd.exe"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\Uninstall QXRD 0.3.10.lnk" "$INSTDIR\uninstall.exe"
+  CreateDirectory "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10\QXRD 0.3.10.lnk" "$INSTDIR\qxrd.exe"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10\Uninstall QXRD 0.3.10.lnk" "$INSTDIR\uninstall.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
@@ -52,10 +53,12 @@ Section "Uninstall"
   RMDir  "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
-  Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall QXRD 0.3.10.lnk"
-  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD 0.3.10.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10\Uninstall QXRD 0.3.10.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10\QXRD 0.3.10.lnk"
+  RMDir "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
-  DeleteRegKey /ifempty HKCU "Software\qxrd-0.3.10"
+  DeleteRegKey /ifempty HKLM "Software\qxrd\qxrd-0.3.10"
+  DeleteRegKey /ifempty HKLM "Software\qxrd"
 
 SectionEnd

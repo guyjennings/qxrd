@@ -45,30 +45,10 @@ RCC_DIR = rcc
 TARGET = qxrd
 RC_FILE=qxrd.rc
 win32 { 
-    contains(QMAKE_HOST.arch,x86_64) {
-        CONFIG(debug, debug|release) {
-            OBJECTS_DIR = objd-64
-            TARGET = qxrdd
-            CONFIG += console
-        }
-        else {
-            OBJECTS_DIR = obj-64
-            TARGET = qxrd
-        }
-    } else {
-        CONFIG(debug, debug|release) {
-            OBJECTS_DIR = objd
-            TARGET = qxrdd
-            CONFIG += console
-        }
-        else {
-            OBJECTS_DIR = obj
-            TARGET = qxrd
-        }
-    }
+    CONFIG(debug, debug|release):CONFIG += console
 }
-RESOURCES += qxrdhelptext.qrc \
-    qxrdresources.qrc
+RESOURCES += $${PWD}/qxrdhelptext.qrc \
+    $${PWD}/qxrdresources.qrc
 DISTFILES += qxrdhelptext.html \
     qxrd.dox \
     download/index.php \
@@ -191,6 +171,7 @@ contains(QMAKE_HOST.arch,x86_64) {
     PLATFORM_PREFIX = win32
     QTBINDIR = $$[QT_INSTALL_BINS]
     QTBASEDIR= $$[QT_INSTALL_PREFIX]
+    POST_TARGETDEPS += app
 
     exists($${QTBINDIR}) {
       LIBDIR = $${QTBINDIR}
@@ -216,17 +197,17 @@ contains(QMAKE_HOST.arch,x86_64) {
             $${LIBDIR}/QtNetworkd4.dll \
             $${LIBDIR}/QtGuid4.dll \
             $${LIBDIR}/QtScriptd4.dll \
-            xisl.dll \
+            $${PWD}/xisl.dll \
             $${MINGWRT} \
-            debug
+            .
         zip.commands = c:\cygwin\bin\zip.exe -j \
             $${TARGET}_debug-$${VERSION}.zip \
-            debug/$${TARGET}.exe \
+            $${DESTDIR}/$${TARGET}.exe \
             $${LIBDIR}/QtCored4.dll \
             $${LIBDIR}/QtNetworkd4.dll \
             $${LIBDIR}/QtGuid4.dll \
             $${LIBDIR}/QtScriptd4.dll \
-            xisl.dll \
+            $${PWD}/xisl.dll \
             $${MINGWRT}
     }
     else { 
@@ -235,17 +216,17 @@ contains(QMAKE_HOST.arch,x86_64) {
             $${LIBDIR}/QtNetwork4.dll \
             $${LIBDIR}/QtGui4.dll \
             $${LIBDIR}/QtScript4.dll \
-            xisl.dll \
+            $${PWD}/xisl.dll \
             $${MINGWRT} \
-            release
+            .
         zip.commands = c:\cygwin\bin\zip.exe -j \
             $${TARGET}-$${VERSION}.zip \
-            release/$${TARGET}.exe \
+            $${DESTDIR}/$${TARGET}.exe \
             $${LIBDIR}/QtCore4.dll \
             $${LIBDIR}/QtNetwork4.dll \
             $${LIBDIR}/QtGui4.dll \
             $${LIBDIR}/QtScript4.dll \
-            xisl.dll \
+            $${PWD}/xisl.dll \
             $${MINGWRT}
     }
     INCLUDEPATH += .
@@ -257,33 +238,15 @@ contains(QMAKE_HOST.arch,x86_64) {
     # QMAKE_LFLAGS += -Wl,--disable-auto-import
     QMAKE_CFLAGS += -g
     QMAKE_CXXFLAGS += -g
-    LIBS += XISL.lib
+    LIBS += $${PWD}/XISL.lib
 }
 QMAKE_EXTRA_TARGETS += dox \
-    rpmsource \
-    mock \
     website
 dox.target = docs
 dox.commands += doxygen
 dox.depends = Doxyfile \
     $${SOURCES} \
     $${HEADERS}
-rpmsource.commands += make \
-    dist \
-    ;
-rpmsource.commands += cp \
-    qxrd0.0.3.tar.gz \
-    ~/rpmbuild/SOURCES/
-rpmsource.depends = $${DISTFILES} \
-    $${SOURCES} \
-    $${FORMS} \
-    $${HEADERS} \
-    $${RESOURCES}
-mock.commands += mock-build \
-    qxrd.spec
-mock.depends = rpmsource \
-    ~/rpmbuild/SOURCES/qxrd0.0.3.tar.gz \
-    qxrd.spec
 website.commands = rsync \
     -e \
     ssh \
