@@ -7,6 +7,12 @@
 /*!
 \mainpage QXRD - Readout Software for Flat Panel X-Ray Detectors
 
+\author Guy Jennings
+\author Structural Science Group
+\author Advanced Photon Source
+\author Argonne National Laboratory
+\author jennings at anl.gov
+
 QXRD is an application designed to control the readout of an amorphous
 silicon flat panel X-ray detector made by Perkin Elmer, and is intended
 for use at a synchrotron light source beamline.
