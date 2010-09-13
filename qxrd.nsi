@@ -1,25 +1,36 @@
-# Modern UI example script
+!ifndef VERSION
+!define VERSION 0.4.x
+!endif
+
+!ifndef PREFIX
+!define PREFIX ""
+!endif
+
+!ifndef PREFIXSTR
+!define PREFIXSTR ""
+!endif
+
 !include MUI2.nsh
 
 Name "QXRD"
 
-OutFile "qxrd-setup-0.3.10.exe"
-InstallDir "$PROGRAMFILES\qxrd\qxrd-0.3.10"
-InstallDirRegKey HKLM "Software\qxrd\qxrd-0.3.10" "install_dir"
+OutFile "qxrd-setup${PREFIX}-${VERSION}.exe"
+InstallDir "$PROGRAMFILES\qxrd\qxrd${PREFIX}-${VERSION}"
+InstallDirRegKey HKLM "Software\qxrd\qxrd${PREFIX}-${VERSION}" "install_dir"
 RequestExecutionLevel admin
 
 Var StartMenuFolder
 
 !define MUI_ABORTWARNING
-!define MUI_ICON "images\qxrd-icon.ico"
-!define MUI_UNICON "images\qxrd-icon.ico"
+!define MUI_ICON "source\images\qxrd-icon.ico"
+!define MUI_UNICON "source\images\qxrd-icon.ico"
 
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "gpl.txt"
 !insertmacro MUI_PAGE_DIRECTORY
 
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\qxrd\qxrd-0.3.10"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\qxrd\qxrd${PREFIX}-${VERSION}"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
 !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
@@ -31,34 +42,41 @@ Var StartMenuFolder
 
 Section "Extract qxrd"
   SetOutPath $INSTDIR
-  File release\qxrd.exe
-  File release\*.dll
+  File app\qxrd.exe
+  File app\*.dll
 
-  WriteRegStr HKLM "Software\qxrd\qxrd-0.3.10" "install_dir" $INSTDIR
+  SetOutPath $INSTDIR\plugins
+
+  File app\plugins\*.dll
+
+  SetOutPath $INSTDIR
+
+  WriteRegStr HKLM "Software\qxrd\qxrd${PREFIX}-${VERSION}" "install_dir" $INSTDIR
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-  CreateDirectory "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10\QXRD 0.3.10.lnk" "$INSTDIR\qxrd.exe"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10\Uninstall QXRD 0.3.10.lnk" "$INSTDIR\uninstall.exe"
+  CreateDirectory "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\qxrd.exe"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Uninstall QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\uninstall.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
 
 Section "Uninstall"
-
+  Delete "$INSTDIR\plugins\*.*"
+  RMDir  "$INSTDIR\plugins"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\qxrd.exe"
   RMDir  "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
-  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10\Uninstall QXRD 0.3.10.lnk"
-  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10\QXRD 0.3.10.lnk"
-  RMDir "$SMPROGRAMS\$StartMenuFolder\QXRD-0.3.10"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Uninstall QXRD${PREFIXSTR} ${VERSION}.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\QXRD${PREFIXSTR} ${VERSION}.lnk"
+  RMDir "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
-  DeleteRegKey /ifempty HKLM "Software\qxrd\qxrd-0.3.10"
+  DeleteRegKey /ifempty HKLM "Software\qxrd\qxrd${PREFIX}-${VERSION}"
   DeleteRegKey /ifempty HKLM "Software\qxrd"
 
 SectionEnd

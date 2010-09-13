@@ -1,0 +1,21 @@
+[metadata]
+width=2048
+height=2048
+dataType=5
+fileName=D:/data/x18user/alumina14_40-00100.tif
+title=alumina14_40-00100.tif
+readoutMode=7
+exposureTime=4
+summedExposures=1
+imageNumber=0
+dateTime=@Variant(\0\0\0\x10\0%v\xf7\x2\xa2v\x99\xff)
+dateString=2010.03.31 : 12:16:41.625
+hBinning=1
+vBinning=1
+cameraGain=1
+triggered=0
+userComment1=
+userComment2=
+userComment3=
+userComment4=
+imageSaved=1

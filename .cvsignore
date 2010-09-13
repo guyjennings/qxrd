@@ -1,15 +1,15 @@
-Doxyfile
+*.gz
+*.zip
+*.metadata
+*.tif
 Makefile
 aclocal.m4
+app
 autom4te.cache
 config.log
 config.status
 configure
 libtool
 qxrd
-qxrd.pro
-qxrd.spec
 spec.mac
-*.tif
-*.metadata
 

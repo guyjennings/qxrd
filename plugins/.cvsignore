@@ -1,0 +1,6 @@
+Makefile
+Makefile.areadetector
+Makefile.cudaprocessor
+Makefile.perkinelmer
+Makefile.pilatus
+plugins.pro.user

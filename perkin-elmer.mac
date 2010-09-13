@@ -1,0 +1,93 @@
+def PEeval(cmd) '{
+  return remote_eval(PEHOST,cmd)
+}'
+
+def PEexp(filename,exposure,subframes,frames) '{
+  remote_eval(PEHOST, \
+     sprintf("acquire(\"%s\",%g,%d,%d,0)",filename,exposure,subframes,frames));
+
+  PEwait()
+}'
+
+def PEexpd(filename, exposure, subframes) '{
+  remote_eval(PEHOST, \
+     sprintf("acquireDark(\"%s\",%g,%d)",filename,exposure,subframes));
+
+  PEwait()
+}'
+
+def PEexppretrig(filename,exposure,subframes,frames,pretrigger) '{
+  PEeval(sprintf("acquire(\"%s\",%g,%d,%d,%d)",filename,exposure,subframes,frames,pretrigger))
+}'
+
+
+def PEtrigger() '{
+  PEeval("trigger(1)");
+}'
+
+def PEwait() '{
+  while(remote_eval(PEHOST,"status(1.0)")==0) {
+  }
+}'
+
+def PEcancel() '{
+  PEeval("acquireCancel()")
+}'
+
+#def PEexpDark(filename,exposure,subframes) '{
+#	shutter11IDB_close
+#	sleep(2)
+#	PEexpd(filename,exposure,subframes)
+#}'
+
+#def PEexpData(filename,exposure,subframes,frames) '{
+#	local i00_0
+#	shutter11IDB_open
+#	sleep(2)
+#		wait_for_beam
+#		ct(1)
+#        get_counts
+#        i00_0 = S[i00]
+#        PEexp(filename,exposure,subframes,frames)
+#        ct(1)
+#        get_counts
+#	 	ond ; ont
+#		printf("#U Saved: %s at %s, before i00=%g after i00=%g\n", filename, date(), i00_0, S[i00])
+#		printf("\n");
+#		offd ; offt
+#}'
+
+def PEstatus(waittime) '{
+	return remote_eval(PEHOST,sprintf("status(%g)",waittime));
+}'
+
+def PEfileBase() '{
+	return remote_eval(PEHOST,"acquisition.fileBase");
+}'
+
+def PEstartExposure(filename,exposure,subframes,frames) '{
+  remote_eval(PEHOST, \
+     sprintf("acquire(\"%s\",%g,%d,%d)",filename,exposure,subframes,frames));
+}'
+
+
+
+
+def test_for_beam() '{
+	ct 1
+	return (S[i00]>10000)
+}'
+
+def wait_for_beam '{
+	while(1) {
+		ct 1
+		if (S[i00] > 10000) {
+			break
+		}
+		ond; ont
+		printf("#U Beam not present at %s, i00=%g, sleep 30 secs\n", date(), S[i00])
+		offd; offt
+		sleep(30)
+	}
+}'
+

@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- $Id: qxrdhelpscript.html,v 1.2 2010/09/13 20:00:47 jennings Exp $ -->
+<html>
+  <head>
+    <title>qxrd help</title>
+  </head>
+
+  <body>
+    <h1>qxrd help</h1>
+    <h2>Scripting Help</h2>
+    <p>
+      Communication between spec and qxrd uses a subset of the spec 'server' protocol.
+      Use the 'remote_cmd' and 'remote_eval' commands from spec, with the remote <b>host</b>
+      argument of the form <b>"remotehost:qxrd"</b> where <b>remotehost</b> is the host name
+      or IP address of the machine on which qxrd is running.
+    </p>
+    <p>
+      Commands sent to qxrd are executed by the qt ECMAScript interpreter, which is
+      described at <a href="http://doc.trolltech.com/4.6/ecmascript.html">http://doc.trolltech.com/4.6/ecmascript.html</a>.
+      In addition to the commands provided in ECMAScript itself 'qxrd' contains a number of commands
+      designed to access its specific functions.  You can also type script commands
+      into the lower text panel of the 'Messages' tab of the qxrd application itself.
+    </p>
+    <p>
+      As a simple example, you can evaluate simple arithmetic expressions:
+    </p>
+    <p>
+      <samp>111.SPEC> print remote_eval("zaphod:qxrd","42/23")</samp>
+    </p>
+    <p>
+      <samp>1.82608695652174</samp>
+    </p>
+
+    <h2>Scripting Functions</h2>
+    <p>
+      The following script functions are implemented:
+    </p>
+    <dl>
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#acquire"><b>acquire</b>([fileName[, exposure[, summedExposures[, postTriggerFiles[, preTriggerFiles]]]]])</a>
+      <dd>
+	<p>Start acquisition of a sequence of images</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#acquireDark"><b>acquireDark</b>([fileName[, exposure[, summedExposures]]])</a>
+      <dd>
+	<p>Start acquisition of a dark image</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#status"><b>status</b>([time])</a>
+      <dd>
+	<p>Test if acquisition and processing have finished</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#acquireStatus"><b>acquireStatus</b>([time])</a>
+      <dd>
+	<p>Test if acquisition has finished</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#processStatus"><b>processStatus</b>([time])</a>
+      <dd>
+	<p>Test if processing has finished</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#acquireCancel"><b>acquireCancel</b>()</a>
+      <dd>
+	<p>Cancel the current acquisition operation</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#exposureTime"><b>exposureTime</b>([time])</a>
+      <dd>
+	<p>Set/get the exposure time for acquisitions (also for dark acquisition)</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#summedExposures"><b>summedExposures</b>([n])</a>
+      <dd>
+	<p>Set/get the number of summed exposures for acquisition</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#skippedExposures"><b>skippedExposures</b>([n])</a>
+      <dd>
+	<p>Set/get the number of skipped exposures between acquisition images</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#darkSummedExposures"><b>darkSummedExposures</b>([n])</a>
+      <dd>
+	<p>Set/get the number of summed exposures for dark image acquisition</p>
+
+     
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#preTriggerFiles"><b>preTriggerFiles</b>([n])</a>
+      <dd>
+	<p>Set/get the number of pre-trigger image files to acquire</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#postTriggerFiles"><b>postTriggerFiles</b>([n])</a>
+      <dd>
+	<p>Set/get the number of post-trigger image files to acquire</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#trigger"><b>trigger</b>([n])</a>
+      <dd>
+	<p>Set/get the triggering status of an acquisition operation</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#filePattern"><b>filePattern</b>([fileName])</a>
+      <dd>
+	<p>Set/get the acquisition data file name pattern</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#outputDirectory"><b>outputDirectory</b>([directory])</a>
+      <dd>
+	<p>Set/get the acquisition file output directory</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#fileIndex"><b>fileIndex</b>([n])</a>
+      <dd>
+	<p>Set/get the acquisition index number</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#print"><b>print</b>([expr]...)</a>
+      <dd>
+	<p>Send messages to the screen and log file</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#printMessage"><b>printMessage</b>([expr]...)</a>
+      <dd>
+	<p>Send messages to the screen and log file</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#data"><b>data</b>()</a>
+      <dd>
+	<p>A reference to the most recently acquired data image</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#dark"><b>dark</b>()</a>
+      <dd>
+	<p>A reference to the most recently acquired dark image</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#mask"><b>mask</b>()</a>
+      <dd>
+	<p>A reference to the current mask image</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptfunctions.html#help"><b>help</b>()</a>
+      <dd>
+	<p>Display help messages</p>
+	
+    </dl>
+
+    
+    <h2>Scripting Objects</h2>
+    <p>
+      In addition to the script functions mentioned above, there are also a number of script
+      objects that can be used.  These are frequently used to access and set various 'properties'
+      associated with the object, but there are also various functions available.   To see
+      a list of the properties and functions of an object, execute a script something like:
+    </p>
+    <p>
+      <code>
+	for(i in acquisition) print(i)
+      </code>
+    </p>
+
+    <dl>
+      <dt><a href="qrc:/help/qxrdhelpscriptobjects.html#acquisition"><var>acquisition</var></a>
+      <dd>
+	<p>A scripting object concerned with acquisition operations</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptobjects.html#application"><var>application</var></a>
+      <dd>
+	<p>A scripting object concerned with the qxrd application itself</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptobjects.html#window"><var>window</var></a>
+      <dd>
+	<p>A scripting object concerned with the main qxrd window</p>
+    
+      <dt><a href="qrc:/help/qxrdhelpscriptobjects.html#processor"><var>processor</var></a>
+      <dd>
+	<p>A scripting object concerned with processing operations</p>
+    
+      <dt><a href="qrc:/help/qxrdhelpscriptobjects.html#centering"><var>centering</var></a>
+      <dd>
+	<p>A scripting object concerned with centering and calibration</p>
+    
+      <dt><a href="qrc:/help/qxrdhelpscriptobjects.html#integrator"><var>integrator</var></a>
+      <dd>
+        <p>A scripting object concerned with azimuthal averaging operations</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptobjects.html#rings"><var>rings</var></a>
+      <dd>
+        <p>A scripting object representing a refined fitting to a set of powder rings</p>
+
+      <dt><a href="qrc:/help/qxrdhelpscriptobjects.html#ringData"><var>ringData</var></a>
+      <dd>
+        <p>A scripting object representing a set of points sampling a set of powder rings</p>
+    </dl>
+  </body>
+</html>
+<!-- $Log: qxrdhelpscript.html,v $
+<!-- Revision 1.2  2010/09/13 20:00:47  jennings
+<!-- Merged
+<!--
+<!-- Revision 1.1.2.3  2010/08/12 19:37:13  jennings
+<!-- New version 0.4.10
+<!-- -->

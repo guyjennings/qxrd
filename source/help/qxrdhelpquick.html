@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- $Id: qxrdhelpquick.html,v 1.2 2010/09/13 20:00:47 jennings Exp $ -->
+<html>
+  <head>
+    <title>QXRD Quick Help</title>
+  </head>
+
+  <body>
+    <h1>QXRD Quick Help : Getting Started</h1>
+
+    <h2>Selecting the Detector Type</h2>
+
+    <p>Before you do anything else - open the "Preferences" dialog and check that the detector type
+      is selected correctly - it should be set to "Perkin Elmer Flat Panel".  If it is not set correctly,
+      change it in the preferences dialog and click OK.  You'll see a message that you need to restart
+      QXRD before the chnages take effect.</p>
+
+    <h2>Arranging the QXRD Control Panels</h2>
+
+    <p>When you first run qxrd you'll see the (rather overwhelming) 'default' screen layout, shown below</p>
+    <p><img src="qrc:/help/images/initial-screen.png"></p>
+    <p>The first thing you'll probably want to do is to rearrange the QXRD control panels into a more efficient
+      arrangement.  You can do this by clicking and dragging on the title bars of the individual control panels
+      and stacking them all in two main groups on the right hand side of the screen, as shown below.  You can drag 
+      each panel into any of four areas around the border of the qxrd window, on top of another panel 
+      (the panels will stack), alongside another panel in the same border area, or as a floating window.</p>
+    <p>
+      You can also hide a panel by clicking its close button.
+      If you hide a panel you can re-show it by choosing the corresponding command from the QXRD 'Windows' menu.</p>
+
+    <h2>Suggested Panel Arrangement</h2>
+    <p><img src="qrc:/help/images/qxrd-layout-scaled.png"></p>
+    <p>QXRD will remember the panel arrangement and window size between runs.</p>
+
+    <h2>Acquiring Test Images</h2>
+    <p>Two control panels are important for data acquisition, the 'Acquire' panel and the 'Correction' panel.
+      The acquire panel is concerned with the data acquisition process itself, with parameters such as the
+      exposure time, number of images to acquire and output directory choice. The correction panel is used
+      to control what post processing steps are applied to the data after acquisition.   On a sufficiently
+      fast system the correction steps are performed entirely in parallel with the acquisition steps, but
+      on slower systems it may be desirable to omit some post processing steps to allow the acquisition to
+      proceed at the maximum speed.</p>
+
+    <h2>The Acquire Panel</h2>
+    <table border=0 cellpadding=5>
+	<tr>
+	  <td>
+	    <img src="qrc:/help/images/acquire-panel.png">
+	    <p>
+	      The 'Acquire' Panel
+	    </p>
+	  </td>
+	  <td>
+	    <p>
+	      The acquire panel is where you enter parameters related to the basic acquisition operation.  The
+	      result of an individual acquisition operation consists of a sequence of image files, each containing
+	      the sum of a number of individual exposures.  The 'Exposure Time' control lets you
+	      specify the individual exposure (or integration) time.  You can choose from a set
+	      of 8 pre-set exposure times by clicking the up and down arrows, or choose an arbitrary exposure time by
+	      typing values directly into the text box.
+	      The maximum 'supported' time for the Exposure Time is 5 seconds, but you may find that (depending on
+	      which model of detector you have) you can specify longer exposure times, perhaps as high as 8 seconds.
+	    </p>
+
+	    <p>
+	      The 'Camera Gain' control specifies the analog gain of the camera readout electronics, the highest
+	      gain setting is probably the one to choose here.  If you have strong signals and want to perform
+	      long exposures it may be advantageous to reduce the analog gain to avoid saturating pixels.
+	    </p>
+
+	    <p>
+	      If you change the exposure time or camera gain you should always measure a new 'dark' image.
+	    </p>
+
+	    <p>
+	      The 'Binning' control is intended to allow you to choose between various binning options for the
+	      images - it doesn't work yet, however.
+	    </p>
+
+	    <p>
+	      The 'Skipped at Start' control lets you specify a number of exposures to skip at the start of a readout
+	      sequence.  This is mainly needed because the operating mode of the detector is such that it is continually
+	      reading out all the time (as you should see from the updates to the 'Avg. Value' control).  When an acquisition
+	      operation is started the detector readout timing is not adjusted, the software just starts to accumulate the
+	      data that is being acquired in any case. The upshot of this is that the first exposure in a sequence will
+	      include a partial exposure from before the start of the acquisition. In the case where you are taking a sequence
+	      of images with the shutter open this may not be a problem and it should be okay to set a 'Skipped at Start' value
+	      of zero.  Alternatively, set 'Skipped at Start' to one and the acquisition will skip the frame that was being
+	      exposed when the acquire operation was started.  The program automatically sets 'Skipped at Start' to one when
+	      dark frames are measured.
+	    </p>
+
+	    <p>
+              The 'Summed' control lets you specify the number of individual exposures to add together
+	      into each saved file.  If you choose a 'Summed Exposures' value of 1, then the individual raw images
+	      are saved as 16 bit integer TIFF files - about 8MB each.  If you choose a larger value for the summed
+	      exposures the raw images will be saved as 32 bit integer TIFF files - about 16MB each.  The choice of
+	      data types implies that you can sum as many as 65535 exposures without losing information - this should
+	      be sufficient for all reasonable circumstances!
+	    </p>
+
+	    <p>
+              The 'Skipped' control lets you specify a number of exposures to skip between each acquired file.
+	      This is something like a 'time-lapse' control for  amovie camera.
+	    </p>
+
+	    <p>
+              The 'Files Before' and 'Files After' controls are used to specify the number of image
+	      files to save.  In most cases you won't want to use the 'Trigger' option so you should set the 'Files
+	      before Trigger' control to zero.  In this case acquisition and image saving will start as soon as you
+              press the 'Acquire' button and will continue until 'Files After' images have been saved.
+              If 'Files Before' is non-zero then the acquisition is a little different - acquisition starts immediately
+              but summed image files are not saved to disk, only to the computer memory.  Only the most recent 'Files Before'
+	      images are saved in this way but acquisition will continue by discarding earlier images from memory.  To start
+	      saving files, click on the 'Trigger' button.  At this point the pre-trigger images will start to be saved to disk,
+	      and an additional 'Files After Trigger' images will be acquired and saved to disk.
+	    </p>
+
+	    <p>
+	      After each frame is captured the average value is calculated and displayed - this is useful to show if the
+	      readout has stabilised after changing exposure time or camera gain.
+	    </p>
+
+	    <p>
+	      The 'Dropped Frames' counter keeps track of how many frames were dropped because the computer was unable to
+	      process data sufficiently quickly.  Ideally, the dropped frames counter should stay at zero, but if you have
+	      an exceptionally slow disk, or try to perform too much processing - you may see the dropped frames count 
+	      increase.  If this happens, either increase the exposure time, or turn off some superfluous processing
+	      option, or increase the amount of image memory in the "Preferences..." dialog.  There is a memory usage
+	      indicator at the bottom right of the main window which shows the amount of available image memory during
+	      operations.
+	    </p>
+
+	    <p>
+	      'Dark Summed Exposures' controls the number of exposures to add together for the 'Dark' image.  The individual
+	      exposure time is controlled by the same controls used for the Acquire operation.   The number of exposures
+	      for a dark exposure need not match that used during acquisition - the values will be scaled appropriately.
+	    </p>
+
+	    <p>
+	      'Output Directory' displays the path to the directory where data files will be saved, to change to a new directory
+	      click the 'Select..' button and choose a new output directory.
+	    </p>
+
+	    <p>
+	      The 'File Pattern' and 'File Index' controls are used to specify the file names used to save files.  The actual
+	      file names used to save a file will be of the form "&lt;filePattern&gt;-&lt;fileIndex&gt;.tif", "&lt;filePattern&gt;-&lt;fileIndex&gt;.dark.tif"
+	      or "&lt;filePattern&gt;-&lt;fileIndex&gt;.raw.tif".  The file index is automatically incremented each time an image is acquired.
+	      QXRD will never overwrite an exisiting file - if this is attempted the new file will be saved with a name along the
+	      lines of "&lt;filePattern&gt;-&lt;fileIndex&gt;-&lt;duplicateIndex&gt;.tif" where duplicateIndex will be incremented from one until
+	      a unique file name results.
+	    </p>
+
+	    <p>
+	      Finally, the 'Log File' indicator displays the path name to a 'log' file which will contain all the messages that appear
+	      in the 'Messages' tab, together with the results of any slices and/or integrations of the images.  Click 'Select...' to
+	      choose a different log file.   The log file format is basically the same format as that used by 'spec'.
+	    </p>
+	  </td>
+	</tr>
+    </table> 
+
+    <h2>The Correction Panel</h2>
+    <table border=0 cellpadding=5>
+	<tr>
+	  <td>
+	    <img src="qrc:/help/images/correction-panel.png"> 
+	    <p>
+	      The 'Correction' Panel
+	    </p>
+	  </td>
+	  <td>
+	    <p>
+	      The 'Correction' panel is used to control which of the available automatic processing steps are performed when images
+	      are acquired.  Alongside each step is an estimate of how long it is likely to take, averaged over the last 10 or so
+	      images - you can use these estimates to determine if you may need to skip some processing steps in order to maintain
+	      the desired acquisition data rate.
+	    </p>
+
+	    <p>
+	      The estimated times are measured when you run an acquire operation and a running average value is displayed in the
+	      panel.  Do an acquisition of 20 or so images to get decent values for the timings.   The timings may depend
+	      on other application parameters - for example the 'Oversampling Factor' strongly affects the integration time.
+	      The estimated time per image attempts to allow for the number of CPU cores being used simultaneously, but may not be a very accurate estimate.
+	    </p>
+
+	    <p>
+	      Be careful which steps you choose to omit - you probably don't want to perform measurements where nothing is saved, so you'll
+	      probably want to keep at least one of the 'Save' steps.  A safe choice would be to choose all steps except the "Save images as text" step
+	      - this should give a total processing time of about 0.5 seconds.  The best choice for rapid data acquisition would be to save the 'raw' images
+	      and nothing else - you would then do the dark subtraction and integration in subsequent analysis.
+	    </p>
+
+	    <p>
+	      With a fast computer and fast disks it should be possible to acquire, save and integrate data at the maximum
+	      frame rate of 15 frames/second.
+	    </p>
+	  </td>
+	</tr>
+    </table>
+  </body>
+</html>
+<!-- $Log: qxrdhelpquick.html,v $
+<!-- Revision 1.2  2010/09/13 20:00:47  jennings
+<!-- Merged
+<!--
+<!-- Revision 1.1.2.5  2010/09/09 20:11:49  jennings
+<!-- Updated help file to show new acquire dialog.  Added help section about choosing detector type.
+<!--
+<!-- Revision 1.1.2.4  2010/08/12 22:45:07  jennings
+<!-- Updated help files to match version 0.4.10 features
+<!--
+<!-- Revision 1.1.2.3  2010/08/12 21:59:48  jennings
+<!-- *** empty log message ***
+<!--
+<!-- Revision 1.1.2.2  2010/08/12 19:37:13  jennings
+<!-- New version 0.4.10
+<!-- -->
