@@ -1,16 +1,19 @@
 /******************************************************************
 *
-*  $Id: qxrdplotzoomer.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $
+*  $Id: qxrdplotzoomer.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdplotzoomer.h"
 #include "qxrdplot.h"
+#include "qxrdrasterdata.h"
+#include "qxrdimageplot.h"
+#include "qxrdcenterfinder.h"
 
 QxrdPlotZoomer::QxrdPlotZoomer(QwtPlotCanvasPtr canvas, QxrdPlotPtr plot)
   : QwtPlotZoomer(canvas),
     m_Plot(plot),
-    SOURCE_IDENT("$Id: qxrdplotzoomer.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdplotzoomer.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $")
 {
   setTrackerMode(QwtPicker::AlwaysOn);
   setTrackerPen(QPen(Qt::green));
@@ -18,16 +21,48 @@ QxrdPlotZoomer::QxrdPlotZoomer(QwtPlotCanvasPtr canvas, QxrdPlotPtr plot)
 
 QwtText QxrdPlotZoomer::trackerText(const QwtDoublePoint &pos) const
 {
-  if (m_Plot) {
-    return m_Plot -> trackerText(pos);
-  } else {
-    return tr("(NULL)");
+  QString res = tr("%1, %2").arg(pos.x()).arg(pos.y());
+
+  return res;
+}
+
+QxrdImagePlotZoomer::QxrdImagePlotZoomer(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
+  : QxrdPlotZoomer(canvas, plot),
+    m_ImagePlot(plot)
+{
+  setTrackerMode(QwtPicker::AlwaysOn);
+  setTrackerPen(QPen(Qt::green));
+}
+
+QwtText QxrdImagePlotZoomer::trackerText(const QwtDoublePoint &pos) const
+{
+  QxrdRasterData *raster = m_ImagePlot->raster();
+  QxrdDataProcessorPtr processor = m_ImagePlot->processor();
+  QxrdCenterFinderPtr centerFinder = NULL;
+
+  if (processor) {
+    centerFinder = processor->centerFinder();
   }
+
+  QString res = tr("%1, %2").arg(pos.x()).arg(pos.y());
+
+  if (raster) {
+    res += tr(", %1").arg(raster->value(pos.x(),pos.y()));
+  }
+
+  if (centerFinder) {
+    res += tr(", TTH%1").arg(centerFinder->getTTH(pos));
+  }
+
+  return res;
 }
 
 /******************************************************************
 *
 *  $Log: qxrdplotzoomer.cpp,v $
+*  Revision 1.3  2010/09/17 16:21:51  jennings
+*  Rationalised the trackerText implementations
+*
 *  Revision 1.2  2010/09/13 20:00:41  jennings
 *  Merged
 *

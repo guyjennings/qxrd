@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplotslicer.h,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdplotslicer.h,v 1.3 2010/09/17 16:21:51 jennings Exp $
 *
 *******************************************************************/
 
@@ -10,18 +10,18 @@
 #include "qcepmacros.h"
 
 #include "qxrdforwardtypes.h"
-#include <qwt_plot_picker.h>
+#include "qxrdimageplotmeasurer.h"
 
-class QxrdPlotSlicer : public QwtPlotPicker
+class QxrdPlotSlicer : public QxrdImagePlotMeasurer
 {
 public:
   QxrdPlotSlicer(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot);
 
-  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
+//  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
 
 private:
   QxrdImagePlotPtr m_Plot;
-  HEADER_IDENT("$Id: qxrdplotslicer.h,v 1.2 2010/09/13 20:00:40 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdplotslicer.h,v 1.3 2010/09/17 16:21:51 jennings Exp $");
 };
 
 #endif // QXRDPLOTSLICER_H
@@ -29,6 +29,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdplotslicer.h,v $
+*  Revision 1.3  2010/09/17 16:21:51  jennings
+*  Rationalised the trackerText implementations
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

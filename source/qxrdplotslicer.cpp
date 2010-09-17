@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplotslicer.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdplotslicer.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,9 +9,9 @@
 #include "qxrdimageplot.h"
 
 QxrdPlotSlicer::QxrdPlotSlicer(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
-  : QwtPlotPicker(canvas),
+  : QxrdImagePlotMeasurer(canvas, plot),
     m_Plot(plot),
-    SOURCE_IDENT("$Id: qxrdplotslicer.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdplotslicer.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $")
 {
   qRegisterMetaType< QwtArray<QwtDoublePoint> >("QwtArray<QwtDoublePoint>");
 
@@ -20,20 +20,23 @@ QxrdPlotSlicer::QxrdPlotSlicer(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
   setRubberBand(QwtPicker::PolygonRubberBand);
 }
 
-QwtText QxrdPlotSlicer::trackerText(const QwtDoublePoint &pos) const
-{
-  QxrdRasterData *raster = m_Plot->raster();
-
-  if (raster) {
-    return tr("%1, %2, %3").arg(pos.x()).arg(pos.y()).arg(raster->value(pos.x(),pos.y()));
-  } else {
-    return tr("%1, %2").arg(pos.x()).arg(pos.y());
-  }
-}
+//QwtText QxrdPlotSlicer::trackerText(const QwtDoublePoint &pos) const
+//{
+//  QxrdRasterData *raster = m_Plot->raster();
+//
+//  if (raster) {
+//    return tr("%1, %2, %3").arg(pos.x()).arg(pos.y()).arg(raster->value(pos.x(),pos.y()));
+//  } else {
+//    return tr("%1, %2").arg(pos.x()).arg(pos.y());
+//  }
+//}
 
 /******************************************************************
 *
 *  $Log: qxrdplotslicer.cpp,v $
+*  Revision 1.3  2010/09/17 16:21:51  jennings
+*  Rationalised the trackerText implementations
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

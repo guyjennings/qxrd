@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $
 *
 *******************************************************************/
 
@@ -57,8 +57,20 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $")
 {
+  delete m_Zoomer;
+
+  m_Zoomer = QxrdPlotZoomerPtr(new QxrdImagePlotZoomer(QwtPlotCanvasPtr(canvas()), QxrdImagePlotPtr(this)));
+  m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
+  m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
+  m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
+
+  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect2,
+                              Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier);
+  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect3,
+                              Qt::LeftButton, Qt::ControlModifier);
+
   m_Zoomer -> setEnabled(true);
 
   m_Rescaler = QwtPlotRescalerPtr(new QwtPlotRescaler(canvas(), QwtPlot::xBottom, QwtPlotRescaler::Expanding));
@@ -609,16 +621,33 @@ void QxrdImagePlot::replot()
 
 QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
 {
-  if (raster()) {
-    return tr("%1, %2, %3").arg(pos.x()).arg(pos.y()).arg(raster()->value(pos.x(),pos.y()));
-  } else {
-    return tr("%1, %2").arg(pos.x()).arg(pos.y());
+  const QxrdRasterData *ras = this->raster();
+  QxrdDataProcessorPtr processor = this->processor();
+  QxrdCenterFinderPtr centerFinder = NULL;
+
+  if (processor) {
+    centerFinder = processor->centerFinder();
   }
+
+  QString res = tr("%1, %2").arg(pos.x()).arg(pos.y());
+
+  if (ras) {
+    res += tr(", %1").arg(ras->value(pos.x(),pos.y()));
+  }
+
+  if (centerFinder) {
+    res += tr(", TTH %1").arg(centerFinder->getTTH(pos));
+  }
+
+  return res;
 }
 
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.3  2010/09/17 16:21:51  jennings
+*  Rationalised the trackerText implementations
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

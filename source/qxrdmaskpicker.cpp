@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskpicker.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdmaskpicker.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,23 +9,23 @@
 #include "qxrdrasterdata.h"
 
 QxrdMaskPicker::QxrdMaskPicker(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
-  : QwtPlotPicker(canvas),
+  : QxrdImagePlotMeasurer(canvas, plot),
     m_Plot(plot),
-    SOURCE_IDENT("$Id: qxrdmaskpicker.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdmaskpicker.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $")
 {
   setTrackerMode(QwtPicker::AlwaysOn);
 }
 
-QwtText QxrdMaskPicker::trackerText(const QwtDoublePoint &pos) const
-{
-  QxrdRasterData *raster = m_Plot->raster();
-
-  if (raster) {
-    return tr("%1, %2, %3").arg(pos.x()).arg(pos.y()).arg(raster->value(pos.x(),pos.y()));
-  } else {
-    return tr("%1, %2").arg(pos.x()).arg(pos.y());
-  }
-}
+//QwtText QxrdMaskPicker::trackerText(const QwtDoublePoint &pos) const
+//{
+//  QxrdRasterData *raster = m_Plot->raster();
+//
+//  if (raster) {
+//    return tr("%1, %2, %3").arg(pos.x()).arg(pos.y()).arg(raster->value(pos.x(),pos.y()));
+//  } else {
+//    return tr("%1, %2").arg(pos.x()).arg(pos.y());
+//  }
+//}
 
 QxrdCircularMaskPicker::QxrdCircularMaskPicker(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
   : QxrdMaskPicker(canvas, plot)
@@ -48,6 +48,9 @@ QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QwtPlotCanvasPtr canvas, QxrdIm
 /******************************************************************
 *
 *  $Log: qxrdmaskpicker.cpp,v $
+*  Revision 1.3  2010/09/17 16:21:51  jennings
+*  Rationalised the trackerText implementations
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

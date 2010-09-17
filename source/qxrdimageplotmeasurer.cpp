@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplotmeasurer.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdimageplotmeasurer.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $
 *
 *******************************************************************/
 
@@ -14,7 +14,7 @@
 QxrdImagePlotMeasurer::QxrdImagePlotMeasurer(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
   : QxrdPlotMeasurer(canvas, plot),
     m_Plot(plot),
-    SOURCE_IDENT("$Id: qxrdimageplotmeasurer.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplotmeasurer.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $")
 {
   qRegisterMetaType< QwtArray<QwtDoublePoint> >("QwtArray<QwtDoublePoint>");
 
@@ -42,7 +42,6 @@ QwtText QxrdImagePlotMeasurer::trackerText(const QwtDoublePoint &pos) const
 
   if (centerFinder) {
     res += tr(", TTH%1").arg(centerFinder->getTTH(pos));
-    res += tr(", 2th%1").arg(centerFinder->get2th(pos));
   }
 
   return res;
@@ -51,6 +50,9 @@ QwtText QxrdImagePlotMeasurer::trackerText(const QwtDoublePoint &pos) const
 /******************************************************************
 *
 *  $Log: qxrdimageplotmeasurer.cpp,v $
+*  Revision 1.3  2010/09/17 16:21:51  jennings
+*  Rationalised the trackerText implementations
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

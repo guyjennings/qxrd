@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderpicker.h,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrdcenterfinderpicker.h,v 1.3 2010/09/17 16:21:51 jennings Exp $
 *
 *******************************************************************/
 
@@ -9,20 +9,20 @@
 
 #include "qcepmacros.h"
 #include "qxrdforwardtypes.h"
-#include <qwt_plot_picker.h>
+#include "qxrdimageplotmeasurer.h"
 
-class QxrdCenterFinderPicker : public QwtPlotPicker
+class QxrdCenterFinderPicker : public QxrdImagePlotMeasurer
 {
 public:
   QxrdCenterFinderPicker(QxrdImagePlotPtr plot);
 
 public:
-  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
+//  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
 
 private:
   QxrdImagePlotPtr m_Plot;
 
-  HEADER_IDENT("$Id: qxrdcenterfinderpicker.h,v 1.2 2010/09/13 20:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinderpicker.h,v 1.3 2010/09/17 16:21:51 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDERPICKER_H
@@ -30,6 +30,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderpicker.h,v $
+*  Revision 1.3  2010/09/17 16:21:51  jennings
+*  Rationalised the trackerText implementations
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *
