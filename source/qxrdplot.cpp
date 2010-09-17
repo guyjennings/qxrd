@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdplot.cpp,v 1.3 2010/09/17 16:23:06 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,6 +16,7 @@
 #include "qxrdplotmeasurer.h"
 #include "qxrdplotzoomer.h"
 #include <stdio.h>
+#include <qwt_scale_engine.h>
 
 QxrdPlot::QxrdPlot(QWidget *parent)
   : QwtPlot(parent),
@@ -24,7 +25,7 @@ QxrdPlot::QxrdPlot(QWidget *parent)
     m_Panner(NULL),
     m_Magnifier(NULL),
     m_Measurer(NULL),
-    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdplot.cpp,v 1.3 2010/09/17 16:23:06 jennings Exp $")
 {
   setCanvasBackground(QColor(Qt::white));
 
@@ -194,6 +195,17 @@ void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
   emit printMessage(tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
 }
 
+void QxrdPlot::setLogAxis(int axis, int isLog)
+{
+  if (isLog) {
+    setAxisScaleEngine(axis, new QwtLog10ScaleEngine);
+  } else {
+    setAxisScaleEngine(axis, new QwtLinearScaleEngine);
+  }
+
+  replot();
+}
+
 QwtText QxrdPlot::trackerText(const QwtDoublePoint &pos) const
 {
   return tr("%1, %2").arg(pos.x()).arg(pos.y());
@@ -202,6 +214,9 @@ QwtText QxrdPlot::trackerText(const QwtDoublePoint &pos) const
 /******************************************************************
 *
 *  $Log: qxrdplot.cpp,v $
+*  Revision 1.3  2010/09/17 16:23:06  jennings
+*  Added log axis command for scripting purposes
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

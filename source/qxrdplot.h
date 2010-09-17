@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdplot.h,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdplot.h,v 1.3 2010/09/17 16:23:06 jennings Exp $
 *
 *******************************************************************/
 
@@ -40,6 +40,8 @@ public slots:
   void onLegendClicked(QwtPlotItem *item);
   void onLegendChecked(QwtPlotItem *item, bool checked);
 
+  void setLogAxis(int axis, int isLog);
+
 //  void setCustomTracker(QwtPlotPicker *tracker);
 //  void setCustomZoomer(QwtPlotZoomer *zoomer);
 
@@ -51,7 +53,7 @@ protected:
   QxrdPlotMeasurerPtr m_Measurer;
 
 private:
-  HEADER_IDENT("$Id: qxrdplot.h,v 1.2 2010/09/13 20:00:40 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdplot.h,v 1.3 2010/09/17 16:23:06 jennings Exp $");
 };
 
 #endif // QXRDPLOT_H
@@ -59,6 +61,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdplot.h,v $
+*  Revision 1.3  2010/09/17 16:23:06  jennings
+*  Added log axis command for scripting purposes
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *
