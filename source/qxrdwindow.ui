@@ -1329,109 +1329,7 @@
      <property name="spacing">
       <number>2</number>
      </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_17">
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Min</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="m_MaskMinimum">
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-        </font>
-       </property>
-       <property name="minimum">
-        <double>-1000000000.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1000000000.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_18">
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Max</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="m_MaskMaximum">
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-        </font>
-       </property>
-       <property name="minimum">
-        <double>-1000000000.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1000000000.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="m_HideMaskAll">
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Hide All</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="m_HideMaskRange">
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Hide Pixels in Range</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QPushButton" name="m_ShowMaskAll">
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Show All</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QPushButton" name="m_ShowMaskRange">
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Show Pixels In Range</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0" colspan="2">
+     <item row="14" column="0" colspan="3">
       <spacer name="verticalSpacer_8">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -1444,7 +1342,7 @@
        </property>
       </spacer>
      </item>
-     <item row="5" column="0">
+     <item row="9" column="0">
       <widget class="QRadioButton" name="m_MaskCirclesRadio">
        <property name="font">
         <font>
@@ -1459,7 +1357,19 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
+     <item row="12" column="0">
+      <widget class="QRadioButton" name="m_MaskPolygonsRadio">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Mask Polygons</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
       <widget class="QLabel" name="label_19">
        <property name="font">
         <font>
@@ -1469,9 +1379,12 @@
        <property name="text">
         <string>Circle radius</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
-     <item row="7" column="1">
+     <item row="9" column="2">
       <widget class="QDoubleSpinBox" name="m_MaskCircleRadius">
        <property name="font">
         <font>
@@ -1486,19 +1399,115 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
-      <widget class="QRadioButton" name="m_MaskPolygonsRadio">
+     <item row="1" column="0">
+      <widget class="QPushButton" name="m_HideMaskAll">
        <property name="font">
         <font>
          <pointsize>8</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>Mask Polygons</string>
+        <string>Hide All</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="3" column="0">
+      <widget class="QPushButton" name="m_HideMaskRange">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Hide Pixels in Range</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QPushButton" name="m_ShowMaskRange">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Show Pixels In Range</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLabel" name="label_18">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Max</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QDoubleSpinBox" name="m_MaskMaximum">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="minimum">
+        <double>-1000000000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>1000000000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="label_17">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Min</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QDoubleSpinBox" name="m_MaskMinimum">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="minimum">
+        <double>-1000000000.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>1000000000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="m_ShowMaskAll">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Show All</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
       <widget class="QPushButton" name="m_InvertMask">
        <property name="font">
         <font>
@@ -1510,15 +1519,19 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="8" column="0" colspan="3">
       <widget class="QCheckBox" name="m_MaskSetPixels">
        <property name="font">
         <font>
          <pointsize>8</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>If selected, image pixels are unmasked by the masking tools
+If unselected, image pixels are masked out</string>
+       </property>
        <property name="text">
-        <string>Mask Pixels</string>
+        <string>Tools Unmask Pixels</string>
        </property>
       </widget>
      </item>
@@ -1676,6 +1689,9 @@
            <property name="text">
             <string>Min (%):</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
           </widget>
          </item>
          <item row="0" column="1" colspan="2">
@@ -1708,6 +1724,9 @@
            </property>
            <property name="text">
             <string>Max (%):</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -2407,17 +2426,7 @@
   <tabstop>m_DisplayMaximumVal</tabstop>
   <tabstop>m_AutoRange</tabstop>
   <tabstop>m_DisplayImage</tabstop>
-  <tabstop>m_MaskMinimum</tabstop>
-  <tabstop>m_MaskMaximum</tabstop>
-  <tabstop>m_HideMaskAll</tabstop>
-  <tabstop>m_HideMaskRange</tabstop>
-  <tabstop>m_ShowMaskAll</tabstop>
-  <tabstop>m_ShowMaskRange</tabstop>
-  <tabstop>m_InvertMask</tabstop>
-  <tabstop>m_MaskSetPixels</tabstop>
   <tabstop>m_MaskCirclesRadio</tabstop>
-  <tabstop>m_MaskPolygonsRadio</tabstop>
-  <tabstop>m_MaskCircleRadius</tabstop>
   <tabstop>m_IntegratorZoomOutButton</tabstop>
   <tabstop>m_IntegratorZoomAllButton</tabstop>
   <tabstop>m_CancelScriptButton</tabstop>

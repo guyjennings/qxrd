@@ -55,6 +55,9 @@
      <property name="text">
       <string>Oversampling Factor</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="0" column="1">
@@ -102,6 +105,9 @@
      </property>
      <property name="text">
       <string>2Theta Step Size</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>

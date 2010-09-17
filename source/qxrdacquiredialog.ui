@@ -28,6 +28,9 @@
      <property name="text">
       <string>Camera Gain:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="1" column="1">
@@ -62,6 +65,9 @@ Script Property: &quot;acquisition.cameraGain&quot;</string>
      <property name="text">
       <string>Binning:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="1" column="3">
@@ -95,6 +101,9 @@ Script Property: &quot;acquisition.binningMode&quot;</string>
      </property>
      <property name="text">
       <string>Exposure Time:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -136,6 +145,9 @@ Script Function: summedExposures()</string>
      </property>
      <property name="text">
       <string>Skipped at start:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -180,6 +192,9 @@ Script Property: &quot;acquisition.skippedExposuresAtStart&quot;</string>
      <property name="text">
       <string>Summed:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="3" column="1">
@@ -220,6 +235,9 @@ Script Function: summedExposures()</string>
      </property>
      <property name="text">
       <string>Skipped:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -265,6 +283,9 @@ Script Function: skippedExposures()</string>
      <property name="text">
       <string>Files after:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="4" column="1">
@@ -308,6 +329,9 @@ Script Function: postTriggerFiles()</string>
      </property>
      <property name="text">
       <string>Files Before</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -356,6 +380,9 @@ Script Function: preTriggerFiles()</string>
      <property name="text">
       <string>File Index:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="5" column="1">
@@ -393,6 +420,9 @@ Script Function: fileindex()</string>
      </property>
      <property name="text">
       <string>Dark Summed:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -528,6 +558,9 @@ Script Function: acquiredark()</string>
      <property name="text">
       <string>Output Directory:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="7" column="1" colspan="2">
@@ -578,6 +611,9 @@ Script Function: outputDirectory()</string>
      <property name="text">
       <string>File Pattern:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="8" column="1" colspan="2">
@@ -626,6 +662,9 @@ Raw: &lt;pattern&gt;-&lt;nnnnn&gt;.raw.tif</string>
      <property name="text">
       <string>Log File:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="9" column="1" colspan="2">
@@ -670,6 +709,9 @@ Script Property: &quot;processor.logFilePath&quot;</string>
      <property name="text">
       <string>Avg. Value</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="10" column="1">
@@ -683,6 +725,9 @@ Script Property: &quot;processor.logFilePath&quot;</string>
     <widget class="QLabel" name="label_23">
      <property name="text">
       <string>Dropped Frames</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>

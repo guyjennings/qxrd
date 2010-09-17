@@ -39,6 +39,9 @@
          <property name="text">
           <string>Detector Type:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item row="0" column="1">
@@ -188,6 +191,9 @@
            <property name="text">
             <string>On Port:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
           </widget>
          </item>
          <item>
@@ -212,6 +218,9 @@
           <widget class="QLabel" name="label_16">
            <property name="text">
             <string>On Port:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
@@ -278,6 +287,9 @@
         <widget class="QLabel" name="label_3">
          <property name="text">
           <string>Debug Level</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
