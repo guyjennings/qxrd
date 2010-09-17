@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.2 2010/09/13 20:00:42 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.3 2010/09/17 16:22:35 jennings Exp $
 *
 *******************************************************************/
 
@@ -33,7 +33,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationPtr app, QxrdWindowPtr win, Qx
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.2 2010/09/13 20:00:42 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.3 2010/09/17 16:22:35 jennings Exp $")
 {
   g_ScriptEngine    = QxrdScriptEnginePtr(this);
   g_Acquisition     = acq;
@@ -75,6 +75,9 @@ void QxrdScriptEngine::initialize()
 //  m_ScriptEngine -> globalObject().setProperty("mask", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->mask().data()));
   m_ScriptEngine -> globalObject().setProperty("testImage", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->generateTestImage()));
   m_ScriptEngine -> globalObject().setProperty("global", m_ScriptEngine -> newQObject(m_ScriptEngine -> globalObject().toQObject()));
+  m_ScriptEngine -> globalObject().setProperty("imageGraph", m_ScriptEngine -> newQObject(m_Application->window()->m_Plot));
+  m_ScriptEngine -> globalObject().setProperty("centeringGraph", m_ScriptEngine -> newQObject(m_Application->window()->m_CenterFinderPlot));
+  m_ScriptEngine -> globalObject().setProperty("integratorGraph", m_ScriptEngine -> newQObject(m_Application->window()->m_IntegratorPlot));
 
   m_ScriptEngine -> globalObject().setProperty("acquire", m_ScriptEngine -> newFunction(acquireFunc));
   m_ScriptEngine -> globalObject().setProperty("acquireDark", m_ScriptEngine -> newFunction(acquireDarkFunc));
@@ -410,6 +413,9 @@ QScriptValue QxrdScriptEngine::helpFunc(QScriptContext *context, QScriptEngine *
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.3  2010/09/17 16:22:35  jennings
+*  Added graph objects to the scripting engine
+*
 *  Revision 1.2  2010/09/13 20:00:42  jennings
 *  Merged
 *
