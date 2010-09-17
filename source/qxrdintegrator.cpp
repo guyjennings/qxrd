@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.3 2010/09/17 16:23:57 jennings Exp $
 *
 *******************************************************************/
 
@@ -22,7 +22,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc
     m_IntegrationStep(this, "integrationStep", 0.001),
     m_DataProcessor(proc),
     m_Allocator(alloc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.3 2010/09/17 16:23:57 jennings Exp $")
 {
 }
 
@@ -124,6 +124,11 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
       double beta = cf->get_DetectorTilt()*M_PI/180.0;
       double rot  = cf->get_TiltPlaneRotation()*M_PI/180.0;
       double dist = cf->get_DetectorDistance();
+
+      if (!cf->get_ImplementTilt()) {
+        beta = 0;
+        rot = 0;
+      }
 
       double cosbeta = cos(beta);
       double sinbeta = sin(beta);
@@ -343,6 +348,9 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image,
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.3  2010/09/17 16:23:57  jennings
+*  Made integrator algorithm honor the 'implementTilt' parameter
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

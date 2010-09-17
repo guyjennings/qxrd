@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.h,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrdcenterfinder.h,v 1.3 2010/09/17 16:24:31 jennings Exp $
 *
 *******************************************************************/
 
@@ -64,15 +64,15 @@ signals:
 public slots:
   void onCenterChanged(QwtDoublePoint pt);
 
+  double getTTH(double x, double y);
+  double getTTH(QwtDoublePoint pt);
+
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);
 //  void setPen(const QPen &pen);
 
   void readSettings(QxrdSettings &settings, QString section);
   void writeSettings(QxrdSettings &settings, QString section);
-
-  double getTTH(QwtDoublePoint pt);
-  double get2th(QwtDoublePoint pt);
 
 //signals:
 ////  void centerChanged(double cx, double cy);
@@ -83,7 +83,7 @@ public:
 private:
   mutable QMutex             m_Mutex;
 
-  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.2 2010/09/13 20:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.3 2010/09/17 16:24:31 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDER_H
@@ -91,6 +91,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.h,v $
+*  Revision 1.3  2010/09/17 16:24:31  jennings
+*  Made integrator algorithm honor the 'implementTilt' parameter
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

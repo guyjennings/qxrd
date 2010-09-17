@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrdcenterfinder.cpp,v 1.3 2010/09/17 16:24:31 jennings Exp $
 *
 *******************************************************************/
 
@@ -23,7 +23,7 @@ QxrdCenterFinder::QxrdCenterFinder
     m_ImplementTilt(this,"implementTilt", false),
     m_DetectorTilt(this, "detectorTilt", 0),
     m_TiltPlaneRotation(this, "tiltPlaneRotation", 90),
-    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.3 2010/09/17 16:24:31 jennings Exp $")
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 
@@ -62,30 +62,27 @@ void QxrdCenterFinder::onCenterChanged(QwtDoublePoint pt)
 
 double QxrdCenterFinder::getTTH(QwtDoublePoint pt)
 {
-  double beta = get_DetectorTilt()*M_PI/180.0;
-  double rot  = get_TiltPlaneRotation()*M_PI/180.0;
-
-  return getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(), pt.x(), pt.y(), get_DetectorXPixelSize(), get_DetectorYPixelSize(), cos(beta), sin(beta), cos(rot), sin(rot));
+  return getTTH(pt.x(), pt.y());
 }
 
-double QxrdCenterFinder::get2th(QwtDoublePoint pt)
+double QxrdCenterFinder::getTTH(double x, double y)
 {
   double beta = get_DetectorTilt()*M_PI/180.0;
   double rot  = get_TiltPlaneRotation()*M_PI/180.0;
-  double tth, chi;
 
-  getTwoThetaChi(get_CenterX(), get_CenterY(),
-                 get_DetectorDistance(), pt.x(), pt.y(),
-                 get_DetectorXPixelSize(), get_DetectorYPixelSize(),
-                 get_TiltPlaneRotation(), cos(beta), sin(beta),
-                 1.0, 0.0, cos(rot), sin(rot), &tth, &chi);
-
-  return tth;
+  if (get_ImplementTilt()) {
+    return getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(), x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(), cos(beta), sin(beta), cos(rot), sin(rot));
+  } else {
+    return getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(), x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(), 1.0, 0.0, 1.0, 0.0);
+  }
 }
 
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.cpp,v $
+*  Revision 1.3  2010/09/17 16:24:31  jennings
+*  Made integrator algorithm honor the 'implementTilt' parameter
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *
