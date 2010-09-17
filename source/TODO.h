@@ -1,7 +1,7 @@
 #ifndef TODO_H
 #define TODO_H
 
-/* $Id: TODO.h,v 1.2 2010/09/13 20:00:38 jennings Exp $ */
+/* $Id: TODO.h,v 1.3 2010/09/17 23:12:18 jennings Exp $ */
 
 //-------------------------------------------------------
 //
@@ -567,10 +567,11 @@ Need to make the allocator algorithm more optimal.
 //
 //Add detector tilt, distance and rotation parameters to center finder window
 //
--------------------------------------------------------
-
-Update center finder slicing and integration routines to use tilt parameters where appropriate
-
+//-------------------------------------------------------
+//
+//Update center finder slicing and integration routines to use tilt parameters where appropriate
+//
+// not sure what to do for polygon slicing - will ignore for now
 //-------------------------------------------------------
 //
 //Disable ring fitting dialog

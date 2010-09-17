@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdserverthread.cpp,v 1.2 2010/09/13 20:00:42 jennings Exp $
+*  $Id: qxrdserverthread.cpp,v 1.3 2010/09/17 23:12:18 jennings Exp $
 *
 *******************************************************************/
 
@@ -14,7 +14,7 @@ QxrdServerThread::QxrdServerThread(QxrdAcquisitionThreadPtr acq, QString name, i
     m_Name(name),
     m_Port(port),
     m_Server(NULL),
-    SOURCE_IDENT("$Id: qxrdserverthread.cpp,v 1.2 2010/09/13 20:00:42 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdserverthread.cpp,v 1.3 2010/09/17 23:12:18 jennings Exp $")
 {
 }
 
@@ -48,9 +48,15 @@ void QxrdServerThread::run()
 //  printf("start server\n");
   m_Server = QxrdServerPtr(new QxrdServer(QxrdAcquisitionThreadPtr(NULL), m_Name, m_Port));
 
+  connect(m_Server,             SIGNAL(printMessage(QString)), this,            SIGNAL(printMessage(QString)));
+  connect(m_Server,             SIGNAL(statusMessage(QString)), this,            SIGNAL(statusMessage(QString)));
+  connect(m_Server,             SIGNAL(criticalMessage(QString)), this,            SIGNAL(criticalMessage(QString)));
+
   m_Server -> startServer(QHostAddress::Any, m_Port);
 
   int rc = exec();
+
+  emit printMessage(tr("spec server started on port %1").arg(m_Server->serverPort()));
 
 //  printf("Server thread terminated with rc %d\n", rc);
 }
@@ -63,6 +69,10 @@ void QxrdServerThread::executeScript(QString cmd)
 /******************************************************************
 *
 *  $Log: qxrdserverthread.cpp,v $
+*  Revision 1.3  2010/09/17 23:12:18  jennings
+*  Display port numbers when servers start up
+*  Rearrange help files
+*
 *  Revision 1.2  2010/09/13 20:00:42  jennings
 *  Merged
 *

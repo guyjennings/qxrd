@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- $Id: qxrdhelpquick.html,v 1.2 2010/09/13 20:00:47 jennings Exp $ -->
+<!-- $Id: qxrdhelpquick.html,v 1.3 2010/09/17 23:12:18 jennings Exp $ -->
 <html>
   <head>
     <title>QXRD Quick Help</title>
@@ -144,8 +144,9 @@
 
 	    <p>
 	      The 'File Pattern' and 'File Index' controls are used to specify the file names used to save files.  The actual
-	      file names used to save a file will be of the form "&lt;filePattern&gt;-&lt;fileIndex&gt;.tif", "&lt;filePattern&gt;-&lt;fileIndex&gt;.dark.tif"
-	      or "&lt;filePattern&gt;-&lt;fileIndex&gt;.raw.tif".  The file index is automatically incremented each time an image is acquired.
+	      file names used to save a file will be of the form "&lt;filePattern&gt;-&lt;fileIndex&gt;.tif", 
+	      "&lt;filePattern&gt;-&lt;fileIndex&gt;.dark.tif" or "&lt;filePattern&gt;-&lt;fileIndex&gt;.raw.tif".  
+	      The file index is automatically incremented each time an image is acquired.
 	      QXRD will never overwrite an exisiting file - if this is attempted the new file will be saved with a name along the
 	      lines of "&lt;filePattern&gt;-&lt;fileIndex&gt;-&lt;duplicateIndex&gt;.tif" where duplicateIndex will be incremented from one until
 	      a unique file name results.
@@ -181,13 +182,15 @@
 	      The estimated times are measured when you run an acquire operation and a running average value is displayed in the
 	      panel.  Do an acquisition of 20 or so images to get decent values for the timings.   The timings may depend
 	      on other application parameters - for example the 'Oversampling Factor' strongly affects the integration time.
-	      The estimated time per image attempts to allow for the number of CPU cores being used simultaneously, but may not be a very accurate estimate.
+	      The estimated time per image attempts to allow for the number of CPU cores being used simultaneously,
+	      but may not be a very accurate estimate.
 	    </p>
 
 	    <p>
 	      Be careful which steps you choose to omit - you probably don't want to perform measurements where nothing is saved, so you'll
-	      probably want to keep at least one of the 'Save' steps.  A safe choice would be to choose all steps except the "Save images as text" step
-	      - this should give a total processing time of about 0.5 seconds.  The best choice for rapid data acquisition would be to save the 'raw' images
+	      probably want to keep at least one of the 'Save' steps.  A safe choice would be to choose all steps except the
+	      "Save images as text" step - this should give a total processing time of about 0.5 seconds. 
+	      The best choice for rapid data acquisition would be to save the 'raw' images
 	      and nothing else - you would then do the dark subtraction and integration in subsequent analysis.
 	    </p>
 
@@ -201,6 +204,10 @@
   </body>
 </html>
 <!-- $Log: qxrdhelpquick.html,v $
+<!-- Revision 1.3  2010/09/17 23:12:18  jennings
+<!-- Display port numbers when servers start up
+<!-- Rearrange help files
+<!--
 <!-- Revision 1.2  2010/09/13 20:00:47  jennings
 <!-- Merged
 <!--

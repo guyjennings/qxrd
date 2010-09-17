@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.3 2010/09/17 23:12:18 jennings Exp $
 *
 *******************************************************************/
 
@@ -58,7 +58,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_AcquisitionThread(NULL),
     m_AllocatorThread(NULL),
     m_FileSaverThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.3 2010/09/17 23:12:18 jennings Exp $")
 {
   setupTiffHandlers();
 
@@ -160,35 +160,30 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   if (specServer) {
     m_ServerThread = QxrdServerThreadPtr(new QxrdServerThread(m_AcquisitionThread, "qxrd", specServerPort));
-    m_ServerThread -> start();
-    m_Server = m_ServerThread -> server();
-
-    //  emit printMessage("server thread created");
 
     connect(m_ServerThread,       SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
     connect(m_ServerThread,       SIGNAL(statusMessage(QString)), m_Window,            SLOT(statusMessage(QString)));
     connect(m_ServerThread,       SIGNAL(criticalMessage(QString)), m_Window,            SLOT(criticalMessage(QString)));
 
-    connect(m_Server,             SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
-    connect(m_Server,             SIGNAL(statusMessage(QString)), m_Window,            SLOT(statusMessage(QString)));
-    connect(m_Server,             SIGNAL(criticalMessage(QString)), m_Window,            SLOT(criticalMessage(QString)));
+    m_ServerThread -> start();
+    m_Server = m_ServerThread -> server();
+
+    emit printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
   }
 
   if (simpleServer) {
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(new QxrdSimpleServerThread(m_AcquisitionThread, "simpleserver", simpleServerPort));
-    m_SimpleServerThread -> start();
-    m_SimpleServer = m_SimpleServerThread -> server();
 
     connect(m_SimpleServerThread,       SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
     connect(m_SimpleServerThread,       SIGNAL(statusMessage(QString)), m_Window,            SLOT(statusMessage(QString)));
     connect(m_SimpleServerThread,       SIGNAL(criticalMessage(QString)), m_Window,            SLOT(criticalMessage(QString)));
 
-    connect(m_SimpleServer,             SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
-    connect(m_SimpleServer,             SIGNAL(statusMessage(QString)), m_Window,            SLOT(statusMessage(QString)));
-    connect(m_SimpleServer,             SIGNAL(criticalMessage(QString)), m_Window,            SLOT(criticalMessage(QString)));
+    m_SimpleServerThread -> start();
+    m_SimpleServer = m_SimpleServerThread -> server();
+
+    emit printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
   }
 
-    //  emit printMessage("server thread started");
 
   m_ScriptEngineThread = QxrdScriptEngineThreadPtr(new QxrdScriptEngineThread(QxrdApplicationPtr(this), m_Window, m_Acquisition, m_DataProcessor));
   m_ScriptEngineThread -> start();
@@ -196,7 +191,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
 //  m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
 //  m_ScriptEngineDebugger -> attachTo(m_ScriptEngine->scriptEngine());
-//  m_ScriptEngineDebugger -> setAutoShowStandardWindow(false);
+//  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
 
 //  emit printMessage("script thread created");
 
@@ -456,6 +451,10 @@ void QxrdApplication::tiffError(const char *module, const char *msg)
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.3  2010/09/17 23:12:18  jennings
+*  Display port numbers when servers start up
+*  Rearrange help files
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *
