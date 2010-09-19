@@ -80,6 +80,7 @@ win32 {
     }
 }
 RESOURCES += qxrdresources.qrc
+#RESOURCES.depends += help/*.html
 OTHER_FILES += help/qxrdhelptext.html \
     help/qxrdhelpscript.html \
     help/qxrdhelpscriptfunctions.html \
@@ -94,6 +95,7 @@ DISTFILES += qxrd.dox \
     download/index.php \
     images/*.* \
     help/*.html \
+    help/images/*.* \
     tiffconfig/win32/tif_config.h \
     tiffconfig/win32/tiffconf.h \
     tiffconfig/macx/tif_config.h \
