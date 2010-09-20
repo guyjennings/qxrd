@@ -49,5 +49,13 @@
         <file>help/images/image-screen.png</file>
         <file>help/images/correction-panel.png</file>
         <file>help/images/qxrd-layout-scaled.png</file>
+        <file>help/images/center-found.png</file>
+        <file>help/images/center-finding.png</file>
+        <file>help/images/centering-panel.png</file>
+        <file>help/images/display-panel.png</file>
+        <file>help/images/image-panel.png</file>
+        <file>help/images/integrated-window.png</file>
+        <file>help/images/integration-panel.png</file>
+        <file>help/images/masking-panel.png</file>
     </qresource>
 </RCC>
