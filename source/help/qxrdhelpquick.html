@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"> <!--
-$Id: qxrdhelpquick.html,v 1.6 2010/09/20 04:10:02 jennings Exp $ -->
+$Id: qxrdhelpquick.html,v 1.7 2010/09/21 05:06:58 jennings Exp $ -->
 <html>
   <head>
     <title>QXRD Quick Help</title>
@@ -87,6 +87,44 @@ $Id: qxrdhelpquick.html,v 1.6 2010/09/20 04:10:02 jennings Exp $ -->
 	    </p>
 	  </td>
     </table>
+    <p>
+      To acquire a test image set 'Skipped at Start', 'Skipped' and 
+      'Files Before' to zero, 'Summed' and 'Files After' to one. Set
+      the camera gain to the highest setting ('High 0.25 pF') and
+      choose a value for the 'Exposure Time' (try 0.5 secs initially).
+    </p>
+    <p>
+      Click the 'Select' button alongside the 'Output Directory'
+      to open a file selection dialog - choose the directory where
+      the test images should be stored.  Enter a test name in the
+      'File Pattern' box - 'testing', perhaps.
+    </p>
+    <p>
+      Close the X-ray shutter and measure a dark image by clicking
+      the 'Dark' button, then open the shutter and measure a test
+      image by clicking the 'Acquire' button.
+    </p>
+
+    <h2><a name="Display">The Display Panel</h2>
+    <table border=0 cellpadding=5 width="100%" align="center">
+	<tr>
+	  <td align="center">
+	    <img src="images/display-panel.png">
+	  </td>
+	</tr>
+	<tr>
+	  <td align="center">
+	    <p>
+	      The 'Display' Panel
+	    </p>
+	  </td>
+    </table>
+    <p>
+      To set the program to automatically choose settings to display
+      images choose 'Display based on percentiles of pixel counts' in
+      the 'Display' panel.  Set 'Min (Percentile)' to 1% and 
+      'Max (Percentile}' to 98%.
+    </p>
 
     <h2><a name="Correction">The Correction Panel</h2>
     <table border=0 cellpadding=5 width="100%" align="center">
@@ -144,6 +182,9 @@ $Id: qxrdhelpquick.html,v 1.6 2010/09/20 04:10:02 jennings Exp $ -->
   </body>
 </html>
 <!-- $Log: qxrdhelpquick.html,v $
+<!-- Revision 1.7  2010/09/21 05:06:58  jennings
+<!-- *** empty log message ***
+<!--
 <!-- Revision 1.6  2010/09/20 04:10:02  jennings
 <!-- *** empty log message ***
 <!--
