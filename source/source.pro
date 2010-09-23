@@ -15,6 +15,8 @@ message(Binary files (executables): $$[QT_INSTALL_BINS])
 message(Destdir = $${DESTDIR})
 TEMPLATE = app
 
+DESTDIR = ../app/
+
 # POST_TARGETDEPS += install
 target.path = ../app
 INSTALLS += target
@@ -143,7 +145,6 @@ HEADERS += TODO.h \
     qxrdserverthread.h \
     qxrdacquisitionthread.h \
     qxrdacquisition.h \
-    Acq.h \
     qxrdacquisitionparameters.h \
     qxrdacquisitionscripting.h \
     qxrdacquisitionoperations.h \
@@ -297,20 +298,26 @@ FORMS = qxrdwindow.ui \
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 
-    contains(QMAKE_HOST.arch,x86_64)::WIN64 = 1
-    
-    # HEADERS += xisl_dummy.h
-    # SOURCES += xisl_dummy.cpp
-    else { 
-        WIN64 = 0
-        message("32 bit windows - include PE")
-        DEFINES += HAVE_PERKIN_ELMER
-        SOURCES += qxrdacquisitionperkinelmer.cpp \
-            qxrdxislinterface.cpp
-        HEADERS += qxrdacquisitionperkinelmer.h \
-            qxrdxislinterface.h
+    contains(QMAKE_HOST.arch,x86_64) {
+      WIN64 = 1
+      PE_SDK="c:/XIS/SDK64/"
+    } else {
+      WIN64 = 0
+      PE_SDK="c:/XIS/SDK32/"
     }
+    DEFINES += HAVE_PERKIN_ELMER
+
+    INCLUDEPATH += $${PE_SDK}
+
+    SOURCES += \
+      qxrdacquisitionperkinelmer.cpp \
+      qxrdperkinelmerplugininterface.cpp
+
+    HEADERS += \
+      qxrdacquisitionperkinelmer.h \
+      qxrdperkinelmerplugininterface.h
 }
+
 QTBINDIR = $$[QT_INSTALL_BINS]
 QTBASEDIR = $$[QT_INSTALL_PREFIX]
 win32 { 

@@ -1,22 +1,22 @@
 /******************************************************************
 *
-*  $Id: qxrdcudaprocessorplugin.cpp,v 1.3 2010/09/23 15:30:52 jennings Exp $
+*  $Id: qxrdcudaprocessorplugin.cpp,v 1.4 2010/09/23 19:57:32 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdcudaprocessorplugin.h"
 #include <stdio.h>
-#include <cuda_runtime_api.h>
+//#include <cuda_runtime_api.h>
 
 QxrdCudaProcessorPlugin::QxrdCudaProcessorPlugin()
 {
-  printf("Cuda Processor Plugin\n");
+//  printf("Cuda Processor Plugin\n");
 
-  int nDevices;
+//  int nDevices;
 
-  cudaGetDeviceCount(&nDevices);
+//  cudaGetDeviceCount(&nDevices);
 
-  printf("%d CUDA devices found\n", nDevices);
+//  printf("%d CUDA devices found\n", nDevices);
 }
 
 QString QxrdCudaProcessorPlugin::name() const
@@ -29,6 +29,9 @@ Q_EXPORT_PLUGIN2(qxrdcudaprocessorplugin, QxrdCudaProcessorPlugin);
 /******************************************************************
 *
 *  $Log: qxrdcudaprocessorplugin.cpp,v $
+*  Revision 1.4  2010/09/23 19:57:32  jennings
+*  Modified plugins for perkin elmer - now works in 64 bit mode
+*
 *  Revision 1.3  2010/09/23 15:30:52  jennings
 *  Beginning CUDA support
 *

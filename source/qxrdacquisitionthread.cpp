@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionthread.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrdacquisitionthread.cpp,v 1.3 2010/09/23 19:57:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -35,7 +35,7 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessorPtr proc, QxrdAllo
     m_Acquisition(NULL),
     m_Processor(NULL),
     m_DetectorType(detectorType),
-    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.3 2010/09/23 19:57:32 jennings Exp $")
 {
   m_Allocator.fetchAndStoreOrdered(allocator);
   m_Processor.fetchAndStoreOrdered(proc);
@@ -98,9 +98,6 @@ void QxrdAcquisitionThread::run()
 #endif
   }
 
-  p -> initialize();
-  p -> set_DetectorType(g_DetectorType);
-  p -> set_DetectorTypeName(detectorTypeNames()[g_DetectorType]);
 
 //  m_Processor -> setAcquisition(m_Acquisition);
 
@@ -110,6 +107,15 @@ void QxrdAcquisitionThread::run()
   int rc = exec();
 
   printf("Acquisition thread terminated with rc %d\n", rc);
+}
+
+void QxrdAcquisitionThread::initialize()
+{
+  if (m_Acquisition) {
+    m_Acquisition -> initialize();
+    m_Acquisition -> set_DetectorType(g_DetectorType);
+    m_Acquisition -> set_DetectorTypeName(detectorTypeNames()[g_DetectorType]);
+  }
 }
 
 void QxrdAcquisitionThread::shutdown()
@@ -178,6 +184,9 @@ int QxrdAcquisitionThread::detectorType()
 /******************************************************************
 *
 *  $Log: qxrdacquisitionthread.cpp,v $
+*  Revision 1.3  2010/09/23 19:57:32  jennings
+*  Modified plugins for perkin elmer - now works in 64 bit mode
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdscriptengine.cpp,v 1.3 2010/09/17 16:22:35 jennings Exp $
+*  $Id: qxrdscriptengine.cpp,v 1.4 2010/09/23 19:57:33 jennings Exp $
 *
 *******************************************************************/
 
@@ -23,7 +23,7 @@
 
 static QxrdScriptEnginePtr  g_ScriptEngine;
 static QxrdAcquisitionPtr   g_Acquisition;
-static QxrdApplicationPtr   g_Application;
+//static QxrdApplicationPtr   g_Application;
 static QxrdDataProcessorPtr g_DataProcessor;
 
 QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationPtr app, QxrdWindowPtr win, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc)
@@ -33,7 +33,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationPtr app, QxrdWindowPtr win, Qx
     m_Application(app),
     m_Window(win),
     m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.3 2010/09/17 16:22:35 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.4 2010/09/23 19:57:33 jennings Exp $")
 {
   g_ScriptEngine    = QxrdScriptEnginePtr(this);
   g_Acquisition     = acq;
@@ -413,6 +413,9 @@ QScriptValue QxrdScriptEngine::helpFunc(QScriptContext *context, QScriptEngine *
 /******************************************************************
 *
 *  $Log: qxrdscriptengine.cpp,v $
+*  Revision 1.4  2010/09/23 19:57:33  jennings
+*  Modified plugins for perkin elmer - now works in 64 bit mode
+*
 *  Revision 1.3  2010/09/17 16:22:35  jennings
 *  Added graph objects to the scripting engine
 *

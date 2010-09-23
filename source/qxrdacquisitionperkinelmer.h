@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.3 2010/09/23 19:57:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,14 +12,14 @@
 #include "qcepmacros.h"
 
 #include "qxrdacquisition.h"
-#include "qxrdxislinterface.h"
+#include "qxrdperkinelmerplugininterface.h"
 
 #include <QMutex>
 #include <QVector>
 
 class QxrdAcquisitionThread;
 
-class QxrdAcquisitionPerkinElmer : public QxrdAcquisition, private QxrdXISLInterface
+class QxrdAcquisitionPerkinElmer : public QxrdAcquisition
 {
   Q_OBJECT;
 public:
@@ -37,6 +37,7 @@ private:
   void setupExposureMenu(QDoubleSpinBox *cb);
   void setupCameraGainMenu(QComboBox *cb);
   void setupCameraBinningModeMenu(QComboBox *cb);
+  bool checkPluginAvailable();
 
 public slots:
   void onEndFrame(int counter, unsigned int n1, unsigned int n2);
@@ -61,7 +62,9 @@ private:
 
   QAtomicInt             m_Counter;
 
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.2 2010/09/13 20:00:39 jennings Exp $");
+  QxrdPerkinElmerPluginInterface *m_PerkinElmer;
+
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.3 2010/09/23 19:57:32 jennings Exp $");
 };
 
 //#endif // HAVE_PERKIN_ELMER
@@ -71,6 +74,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.3  2010/09/23 19:57:32  jennings
+*  Modified plugins for perkin elmer - now works in 64 bit mode
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

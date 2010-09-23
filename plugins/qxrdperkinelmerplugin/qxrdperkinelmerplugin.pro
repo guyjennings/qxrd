@@ -1,11 +1,20 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-target.path = ../../app/plugins/
+win32 {
+  contains(QMAKE_HOST.arch,x86_64) {
+    PE_SDK = c:/XIS/SDK64/
+  } else {
+    PE_SDK = c:/XIS/SDK32/
+  }
 
-INSTALLS += target
+  LIBS += $${PE_SDK}/XISL.lib
+}
+
+DESTDIR = ../../app/plugins/
 
 INCLUDEPATH += ../../source/
+INCLUDEPATH += $$PE_SDK/
 
 HEADERS += \
     qxrdperkinelmerplugin.h

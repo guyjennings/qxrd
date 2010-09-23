@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionthread.h,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrdacquisitionthread.h,v 1.3 2010/09/23 19:57:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -26,6 +26,7 @@ class QxrdAcquisitionThread : public QThread
   QxrdAcquisitionThread(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator, int detectorType);
   ~QxrdAcquisitionThread();
 
+  void initialize();
   void shutdown();
   void msleep(int msec);
 
@@ -60,7 +61,7 @@ private:
   QAtomicPointer<QxrdDataProcessor>   m_Processor;
   int                    m_DetectorType;
 
-  HEADER_IDENT("$Id: qxrdacquisitionthread.h,v 1.2 2010/09/13 20:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionthread.h,v 1.3 2010/09/23 19:57:32 jennings Exp $");
 };
 
 #endif
@@ -68,6 +69,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionthread.h,v $
+*  Revision 1.3  2010/09/23 19:57:32  jennings
+*  Modified plugins for perkin elmer - now works in 64 bit mode
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdintegrator.cpp,v 1.3 2010/09/17 16:23:57 jennings Exp $
+*  $Id: qxrdintegrator.cpp,v 1.4 2010/09/23 19:57:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,13 +16,17 @@
 #include <QtConcurrentRun>
 #include "qxrdmutexlocker.h"
 
+#define _USE_MATH_DEFINES
+
+#include <cmath>
+
 QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_IntegrationStep(this, "integrationStep", 0.001),
     m_DataProcessor(proc),
     m_Allocator(alloc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.3 2010/09/17 16:23:57 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.4 2010/09/23 19:57:32 jennings Exp $")
 {
 }
 
@@ -168,7 +172,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
         int sv = sumvalue[ir];
 
         if (sv > 0) {
-          double xv = (ir+0.5)*/*oversampleStep+halfOversampleStep**/rStep;
+          double xv = (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
 
           if (normalize) {
             res -> append(xv, integral[ir]/sv);
@@ -348,6 +352,9 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image,
 /******************************************************************
 *
 *  $Log: qxrdintegrator.cpp,v $
+*  Revision 1.4  2010/09/23 19:57:32  jennings
+*  Modified plugins for perkin elmer - now works in 64 bit mode
+*
 *  Revision 1.3  2010/09/17 16:23:57  jennings
 *  Made integrator algorithm honor the 'implementTilt' parameter
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.h,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrdapplication.h,v 1.3 2010/09/23 19:57:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,6 +16,12 @@
 #include "qxrdforwardtypes.h"
 #include "qxrddataprocessor.h"
 
+#ifdef HAVE_PERKIN_ELMER
+#include "qxrdperkinelmerplugininterface.h"
+#endif
+
+extern QxrdApplication *g_Application;
+
 class QxrdApplication : public QApplication
 {
   Q_OBJECT;
@@ -28,6 +34,10 @@ public:
   QxrdAcquisitionPtr acquisition() const;
   QxrdWindowPtr window();
   QxrdDataProcessorPtr dataProcessor() const;
+
+#ifdef HAVE_PERKIN_ELMER
+  QxrdPerkinElmerPluginInterface *perkinElmerPlugin();
+#endif
 
   void loadPlugins();
 
@@ -95,7 +105,11 @@ private:
   QxrdScriptEnginePtr             m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
-  HEADER_IDENT("$Id: qxrdapplication.h,v 1.2 2010/09/13 20:00:39 jennings Exp $");
+#ifdef HAVE_PERKIN_ELMER
+  QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;
+#endif
+
+  HEADER_IDENT("$Id: qxrdapplication.h,v 1.3 2010/09/23 19:57:32 jennings Exp $");
 };
 
 #endif
@@ -103,6 +117,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdapplication.h,v $
+*  Revision 1.3  2010/09/23 19:57:32  jennings
+*  Modified plugins for perkin elmer - now works in 64 bit mode
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

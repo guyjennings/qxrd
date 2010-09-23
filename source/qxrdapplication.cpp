@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.3 2010/09/17 23:12:18 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.4 2010/09/23 19:57:32 jennings Exp $
 *
 *******************************************************************/
 
@@ -37,9 +37,8 @@
 #include <tiffio.h>
 #include <QPluginLoader>
 
-static QxrdApplication* g_Application = NULL;
-
 int gCEPDebug = 0;
+QxrdApplication *g_Application = 0;
 
 QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
@@ -58,7 +57,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_AcquisitionThread(NULL),
     m_AllocatorThread(NULL),
     m_FileSaverThread(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.3 2010/09/17 23:12:18 jennings Exp $")
+    m_PerkinElmerPluginInterface(NULL),
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.4 2010/09/23 19:57:32 jennings Exp $")
 {
   setupTiffHandlers();
 
@@ -134,6 +134,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   emit printMessage("about to load plugins");
 
   loadPlugins();
+
+  m_AcquisitionThread -> initialize();
 
   connect(m_DataProcessorThread, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
   connect(m_DataProcessorThread, SIGNAL(statusMessage(QString)), m_Window, SLOT(statusMessage(QString)));
@@ -268,43 +270,67 @@ QxrdApplication* QxrdApplication::application()
   return g_Application;
 }
 
+#ifdef HAVE_PERKIN_ELMER
+
+QxrdPerkinElmerPluginInterface* QxrdApplication::perkinElmerPlugin()
+{
+  return m_PerkinElmerPluginInterface;
+}
+
+#endif
+
 #define xstr(s) str(s)
 #define str(s) #s
 
 void QxrdApplication::loadPlugins()
 {
+  QList<QDir> pluginsDirList;
+
 #ifdef QXRD_PLUGIN_PATH
-  QDir pluginsDir = QDir(xstr(QXRD_PLUGIN_PATH));
+  pluginsDirList.append(QDir(xstr(QXRD_PLUGIN_PATH)));
 #else
   QDir pluginsDir = QDir(qApp->applicationDirPath());
   pluginsDir.cd("plugins");
+  pluginsDirList.append(pluginsDir);
 #endif
 
-  foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
-    QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
-    QObject *plugin = loader.instance();
-    if (plugin) {
-      QString pluginName = "";
+  foreach (QDir pluginsDir, pluginsDirList) {
+    foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
+      QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+      QObject *plugin = loader.instance();
+      if (plugin) {
+        QString pluginName = "";
 
-      QxrdDetectorPluginInterface* detector = qobject_cast<QxrdDetectorPluginInterface*>(plugin);
+        QxrdDetectorPluginInterface* detector = qobject_cast<QxrdDetectorPluginInterface*>(plugin);
 
-      if (detector) {
-        pluginName = detector -> name();
+        if (detector) {
+          pluginName = detector -> name();
+        }
+
+        QxrdProcessorInterface* processor = qobject_cast<QxrdProcessorInterface*>(plugin);
+
+        if (processor) {
+          pluginName = processor -> name();
+        }
+
+#ifdef HAVE_PERKIN_ELMER
+        QxrdPerkinElmerPluginInterface *perkinElmer = qobject_cast<QxrdPerkinElmerPluginInterface*>(plugin);
+
+        if (perkinElmer) {
+          pluginName = perkinElmer -> name();
+
+          m_PerkinElmerPluginInterface = perkinElmer;
+        }
+#endif
+
+        emit printMessage(tr("Loaded plugin \"%1\" from %2")
+                          .arg(pluginName)
+                          .arg(pluginsDir.absoluteFilePath(fileName)));
+      } else {
+        emit printMessage(tr("Failed to load plugin %1 : %2")
+                          .arg(pluginsDir.absoluteFilePath(fileName))
+                          .arg(loader.errorString()));
       }
-
-      QxrdProcessorInterface* processor = qobject_cast<QxrdProcessorInterface*>(plugin);
-
-      if (processor) {
-        pluginName = processor -> name();
-      }
-
-      emit printMessage(tr("Loaded plugin \"%1\" from %2")
-                        .arg(pluginName)
-                        .arg(pluginsDir.absoluteFilePath(fileName)));
-    } else {
-      emit printMessage(tr("Failed to load plugin %1 : %2")
-                        .arg(pluginsDir.absoluteFilePath(fileName))
-                        .arg(loader.errorString()));
     }
   }
 }
@@ -451,6 +477,9 @@ void QxrdApplication::tiffError(const char *module, const char *msg)
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.4  2010/09/23 19:57:32  jennings
+*  Modified plugins for perkin elmer - now works in 64 bit mode
+*
 *  Revision 1.3  2010/09/17 23:12:18  jennings
 *  Display port numbers when servers start up
 *  Rearrange help files

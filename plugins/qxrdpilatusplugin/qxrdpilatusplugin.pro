@@ -1,9 +1,7 @@
 TEMPLATE = lib
 CONFIG += plugin
 
-target.path = ../../app/plugins/
-
-INSTALLS += target
+DESTDIR = ../../app/plugins/
 
 INCLUDEPATH += ../../source/
 
