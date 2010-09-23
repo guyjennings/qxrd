@@ -1,7 +1,7 @@
 #ifndef TODO_H
 #define TODO_H
 
-/* $Id: TODO.h,v 1.3 2010/09/17 23:12:18 jennings Exp $ */
+/* $Id: TODO.h,v 1.4 2010/09/23 20:26:52 jennings Exp $ */
 
 //-------------------------------------------------------
 //
@@ -604,6 +604,19 @@ Update help documentation to reflect changes
 -------------------------------------------------------
 
 Add AB image acquisition mode
+
+-------------------------------------------------------
+
+Test 64 bit readout mode
+
+-------------------------------------------------------
+
+Improve behaviour when plugins do not load
+
+-------------------------------------------------------
+
+Track integrated graph update time to suppress updates during
+rapid acquisition
 
 -------------------------------------------------------
 
