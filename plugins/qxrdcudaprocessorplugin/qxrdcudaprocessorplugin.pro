@@ -1,6 +1,8 @@
 TEMPLATE = lib
 CONFIG += plugin
 
+include("cuda.pri")
+
 target.path = ../../app/plugins/
 
 INSTALLS += target
@@ -12,3 +14,9 @@ HEADERS += \
 
 SOURCES += \
     qxrdcudaprocessorplugin.cpp
+
+OTHER_FILES += qxrdcudakernel.cu
+
+CUDA_SOURCES += \
+  qxrdcudakernel.cu
+
