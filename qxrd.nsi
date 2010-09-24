@@ -14,8 +14,12 @@
 
 Name "QXRD"
 
-OutFile "qxrd-setup${PREFIX}-${VERSION}.exe"
+OutFile "${APPDIR}\qxrd-setup${PREFIX}-${VERSION}.exe"
+!ifdef WIN64
+InstallDir "$PROGRAMFILES64\qxrd\qxrd${PREFIX}-${VERSION}"
+!else
 InstallDir "$PROGRAMFILES\qxrd\qxrd${PREFIX}-${VERSION}"
+!endif
 InstallDirRegKey HKLM "Software\qxrd\qxrd${PREFIX}-${VERSION}" "install_dir"
 RequestExecutionLevel admin
 
@@ -42,12 +46,12 @@ Var StartMenuFolder
 
 Section "Extract qxrd"
   SetOutPath $INSTDIR
-  File app\qxrd.exe
-  File app\*.dll
+  File ${APPDIR}\app\qxrd.exe
+  File ${APPDIR}\app\*.dll
 
   SetOutPath $INSTDIR\plugins
 
-  File app\plugins\*.dll
+  File ${APPDIR}\app\plugins\*.dll
 
   SetOutPath $INSTDIR
 

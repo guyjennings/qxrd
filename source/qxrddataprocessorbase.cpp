@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorbase.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrddataprocessorbase.cpp,v 1.3 2010/09/24 22:29:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -49,7 +49,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase
     m_RefinedRingSetData(NULL),
     m_GenerateTestImage(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessorbase.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessorbase.cpp,v 1.3 2010/09/24 22:29:37 jennings Exp $")
 {
   m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(this));
   m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(QxrdDataProcessorPtr(this), m_Allocator, this));
@@ -238,8 +238,9 @@ void QxrdDataProcessorBase::newDarkImage(QxrdInt16ImageDataPtr image)
   }
 
   m_DarkFrame -> copyFrom(image);
+  newDarkImage(m_DarkFrame);
 
-  set_DarkImagePath(m_DarkFrame -> get_FileName());
+//  set_DarkImagePath(m_DarkFrame -> get_FileName());
 }
 
 void QxrdDataProcessorBase::newDarkImage(QxrdInt32ImageDataPtr image)
@@ -249,8 +250,9 @@ void QxrdDataProcessorBase::newDarkImage(QxrdInt32ImageDataPtr image)
   }
 
   m_DarkFrame -> copyFrom(image);
+  newDarkImage(m_DarkFrame);
 
-  set_DarkImagePath(m_DarkFrame -> get_FileName());
+//  set_DarkImagePath(m_DarkFrame -> get_FileName());
 }
 
 void QxrdDataProcessorBase::newBadPixelsImage(QxrdDoubleImageDataPtr image)
@@ -1359,6 +1361,10 @@ QxrdGenerateTestImagePtr QxrdDataProcessorBase::generateTestImage() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessorbase.cpp,v $
+*  Revision 1.3  2010/09/24 22:29:37  jennings
+*  Work on NSIS installer
+*  Fixed startup problem on debug builds when calling QxrdAcquisitionThread->initialize()
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

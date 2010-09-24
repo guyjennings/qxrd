@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionthread.cpp,v 1.3 2010/09/23 19:57:32 jennings Exp $
+*  $Id: qxrdacquisitionthread.cpp,v 1.4 2010/09/24 22:29:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -35,7 +35,7 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessorPtr proc, QxrdAllo
     m_Acquisition(NULL),
     m_Processor(NULL),
     m_DetectorType(detectorType),
-    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.3 2010/09/23 19:57:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionthread.cpp,v 1.4 2010/09/24 22:29:37 jennings Exp $")
 {
   m_Allocator.fetchAndStoreOrdered(allocator);
   m_Processor.fetchAndStoreOrdered(proc);
@@ -112,9 +112,9 @@ void QxrdAcquisitionThread::run()
 void QxrdAcquisitionThread::initialize()
 {
   if (m_Acquisition) {
-    m_Acquisition -> initialize();
-    m_Acquisition -> set_DetectorType(g_DetectorType);
-    m_Acquisition -> set_DetectorTypeName(detectorTypeNames()[g_DetectorType]);
+    INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition,"initialize",Qt::BlockingQueuedConnection));
+    m_Acquisition->set_DetectorType(g_DetectorType);
+    m_Acquisition->set_DetectorTypeName(detectorTypeNames()[g_DetectorType]);
   }
 }
 
@@ -184,6 +184,10 @@ int QxrdAcquisitionThread::detectorType()
 /******************************************************************
 *
 *  $Log: qxrdacquisitionthread.cpp,v $
+*  Revision 1.4  2010/09/24 22:29:37  jennings
+*  Work on NSIS installer
+*  Fixed startup problem on debug builds when calling QxrdAcquisitionThread->initialize()
+*
 *  Revision 1.3  2010/09/23 19:57:32  jennings
 *  Modified plugins for perkin elmer - now works in 64 bit mode
 *

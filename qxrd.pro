@@ -8,6 +8,11 @@ TEMPLATE = subdirs
 
 SUBDIRS = source plugins
 
+win32 {
+  include("qxrd.app.pri")
+  include("qxrd.nsis.pri")
+}
+
 DISTFILES += source plugins
 
 OTHER_FILES += qxrd.nsi
@@ -31,10 +36,6 @@ dist.commands += \
 
 dist.commands += \
 tar -czf qxrd-$${VERSION}.tar.gz qxrd-$${VERSION} ; rm -rf qxrd-$${VERSION}
-
-win32 {
-   include("qxrd.nsis.pri")
-}
 
 QMAKE_EXTRA_TARGETS += dox \
     rpmsource \

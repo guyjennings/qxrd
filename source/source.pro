@@ -318,38 +318,6 @@ else:win32 {
       qxrdperkinelmerplugininterface.h
 }
 
-QTBINDIR = $$[QT_INSTALL_BINS]
-QTBASEDIR = $$[QT_INSTALL_PREFIX]
-win32 { 
-    PLATFORM_PREFIX = win32
-    exists($${QTBINDIR}) { 
-        LIBDIR = $${QTBINDIR}
-        message("LIBDIR = $${LIBDIR}")
-    }
-    exists($${LIBDIR}/libgcc_s_dw2-1.dll) { 
-        message("MINGW found in $${LIBDIR}/libgcc_s_dw2-1.dll")
-        mingw.files += $${LIBDIR}/libgcc_s_dw2-1.dll
-    }
-    exists($${LIBDIR}/mingwm10.dll) { 
-        message("MINGW found in $${LIBDIR}/mingwm10.dll")
-        mingw.files += $${LIBDIR}/mingwm10.dll
-    }
-    CONFIG(debug, debug|release):qtlibs.files = $${LIBDIR}/QtCored4.dll \
-        $${LIBDIR}/QtNetworkd4.dll \
-        $${LIBDIR}/QtGuid4.dll \
-        $${LIBDIR}/QtScriptd4.dll
-    else:qtlibs.files = $${LIBDIR}/QtCore4.dll \
-        $${LIBDIR}/QtNetwork4.dll \
-        $${LIBDIR}/QtGui4.dll \
-        $${LIBDIR}/QtScript4.dll
-    INCLUDEPATH += .
-    INCLUDEPATH += SDK
-    mingw.path = ../app
-    qtlibs.path = ../app
-    INSTALLS += mingw \
-        qtlibs
-}
-
 # QMAKE_LFLAGS += -Wl,--script,nordata.lscript
 # QMAKE_LFLAGS += -Wl,--disable-auto-import
 # QMAKE_CFLAGS += -g

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.h,v 1.3 2010/09/23 19:57:32 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.h,v 1.4 2010/09/24 22:29:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,8 +27,6 @@ public:
 //  ~QxrdAcquisitionPerkinElmer();
 
 private slots:
-  void initialize();
-
   void onExposureTimeChanged(double newTime);
   void onBinningModeChanged(int newMode);
   void onCameraGainChanged(int newGain);
@@ -40,6 +38,7 @@ private:
   bool checkPluginAvailable();
 
 public slots:
+  void initialize();
   void onEndFrame(int counter, unsigned int n1, unsigned int n2);
   void onEndFrameCallback();
 
@@ -64,7 +63,7 @@ private:
 
   QxrdPerkinElmerPluginInterface *m_PerkinElmer;
 
-  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.3 2010/09/23 19:57:32 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionperkinelmer.h,v 1.4 2010/09/24 22:29:37 jennings Exp $");
 };
 
 //#endif // HAVE_PERKIN_ELMER
@@ -74,6 +73,10 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.h,v $
+*  Revision 1.4  2010/09/24 22:29:37  jennings
+*  Work on NSIS installer
+*  Fixed startup problem on debug builds when calling QxrdAcquisitionThread->initialize()
+*
 *  Revision 1.3  2010/09/23 19:57:32  jennings
 *  Modified plugins for perkin elmer - now works in 64 bit mode
 *

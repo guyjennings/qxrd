@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.5 2010/09/24 04:31:50 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.6 2010/09/24 22:29:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -60,7 +60,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 #ifdef HAVE_PERKIN_ELMER
     m_PerkinElmerPluginInterface(NULL),
 #endif
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.5 2010/09/24 04:31:50 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.6 2010/09/24 22:29:37 jennings Exp $")
 {
   setupTiffHandlers();
 
@@ -137,7 +137,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   loadPlugins();
 
-  m_AcquisitionThread -> initialize();
+  m_AcquisitionThread->initialize();
 
   connect(m_DataProcessorThread, SIGNAL(printMessage(QString)), m_Window, SLOT(printMessage(QString)));
   connect(m_DataProcessorThread, SIGNAL(statusMessage(QString)), m_Window, SLOT(statusMessage(QString)));
@@ -479,6 +479,10 @@ void QxrdApplication::tiffError(const char *module, const char *msg)
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.6  2010/09/24 22:29:37  jennings
+*  Work on NSIS installer
+*  Fixed startup problem on debug builds when calling QxrdAcquisitionThread->initialize()
+*
 *  Revision 1.5  2010/09/24 04:31:50  jennings
 *  *** empty log message ***
 *

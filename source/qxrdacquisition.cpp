@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisition.cpp,v 1.2 2010/09/13 20:00:38 jennings Exp $
+*  $Id: qxrdacquisition.cpp,v 1.3 2010/09/24 22:29:37 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,7 +16,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
     m_PreTriggerInt32Images("preTriggerInt32Images"),
     m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisition.cpp,v 1.2 2010/09/13 20:00:38 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisition.cpp,v 1.3 2010/09/24 22:29:37 jennings Exp $")
 {
   connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
   connect(prop_BinningMode(), SIGNAL(changedValue(int)), this, SLOT(onBinningModeChanged(int)));
@@ -254,7 +254,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
     m_Acquiring.unlock();
 
     if (m_AcquiredInt16Data) {
-      updateInterval = 3.0/get_ExposureTime();
+      updateInterval = 1.0/get_ExposureTime();
 
       if (updateInterval < 1) {
         updateInterval = 1;
@@ -568,6 +568,10 @@ void QxrdAcquisition::acquisitionError(int ln, int n)
 /******************************************************************
 *
 *  $Log: qxrdacquisition.cpp,v $
+*  Revision 1.3  2010/09/24 22:29:37  jennings
+*  Work on NSIS installer
+*  Fixed startup problem on debug builds when calling QxrdAcquisitionThread->initialize()
+*
 *  Revision 1.2  2010/09/13 20:00:38  jennings
 *  Merged
 *
