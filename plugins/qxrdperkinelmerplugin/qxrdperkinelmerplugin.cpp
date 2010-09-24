@@ -1,8 +1,10 @@
 /******************************************************************
 *
-*  $Id: qxrdperkinelmerplugin.cpp,v 1.3 2010/09/23 19:57:32 jennings Exp $
+*  $Id: qxrdperkinelmerplugin.cpp,v 1.4 2010/09/24 04:31:45 jennings Exp $
 *
 *******************************************************************/
+
+#ifdef HAVE_PERKIN_ELMER
 
 #include "qxrdperkinelmerplugin.h"
 
@@ -127,9 +129,14 @@ UINT QxrdPerkinElmerPlugin::Acquisition_GetHwHeaderInfoEx(
 
 Q_EXPORT_PLUGIN2(qxrdperkinelmerplugin, QxrdPerkinElmerPlugin);
 
+#endif HAVE_PERKIN_ELMER
+
 /******************************************************************
 *
 *  $Log: qxrdperkinelmerplugin.cpp,v $
+*  Revision 1.4  2010/09/24 04:31:45  jennings
+*  *** empty log message ***
+*
 *  Revision 1.3  2010/09/23 19:57:32  jennings
 *  Modified plugins for perkin elmer - now works in 64 bit mode
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.4 2010/09/23 19:57:32 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.5 2010/09/24 04:31:50 jennings Exp $
 *
 *******************************************************************/
 
@@ -57,8 +57,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_AcquisitionThread(NULL),
     m_AllocatorThread(NULL),
     m_FileSaverThread(NULL),
+#ifdef HAVE_PERKIN_ELMER
     m_PerkinElmerPluginInterface(NULL),
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.4 2010/09/23 19:57:32 jennings Exp $")
+#endif
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.5 2010/09/24 04:31:50 jennings Exp $")
 {
   setupTiffHandlers();
 
@@ -477,6 +479,9 @@ void QxrdApplication::tiffError(const char *module, const char *msg)
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.5  2010/09/24 04:31:50  jennings
+*  *** empty log message ***
+*
 *  Revision 1.4  2010/09/23 19:57:32  jennings
 *  Modified plugins for perkin elmer - now works in 64 bit mode
 *

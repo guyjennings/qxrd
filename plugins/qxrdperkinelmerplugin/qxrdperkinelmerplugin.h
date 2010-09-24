@@ -1,11 +1,13 @@
 /******************************************************************
 *
-*  $Id: qxrdperkinelmerplugin.h,v 1.3 2010/09/23 19:57:32 jennings Exp $
+*  $Id: qxrdperkinelmerplugin.h,v 1.4 2010/09/24 04:31:45 jennings Exp $
 *
 *******************************************************************/
 
 #ifndef QXRDPERKINELMERPLUGIN_H
 #define QXRDPERKINELMERPLUGIN_H
+
+#ifdef HAVE_PERKIN_ELMER
 
 #include <QObject>
 #include "qxrdperkinelmerplugininterface.h"
@@ -76,11 +78,16 @@ public:
         HACQDESC hAcqDesc, CHwHeaderInfo *pInfo, CHwHeaderInfoEx *pInfoEx);
 };
 
+#endif // HAVE_PERKIN_ELMER
+
 #endif // QXRDPERKINELMERPLUGIN_H
 
 /******************************************************************
 *
 *  $Log: qxrdperkinelmerplugin.h,v $
+*  Revision 1.4  2010/09/24 04:31:45  jennings
+*  *** empty log message ***
+*
 *  Revision 1.3  2010/09/23 19:57:32  jennings
 *  Modified plugins for perkin elmer - now works in 64 bit mode
 *

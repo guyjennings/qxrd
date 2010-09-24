@@ -9,6 +9,7 @@ win32 {
   }
 
   LIBS += $${PE_SDK}/XISL.lib
+  DEFINES += HAVE_PERKIN_ELMER
 }
 
 DESTDIR = ../../app/plugins/
