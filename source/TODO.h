@@ -1,7 +1,7 @@
 #ifndef TODO_H
 #define TODO_H
 
-/* $Id: TODO.h,v 1.4 2010/09/23 20:26:52 jennings Exp $ */
+/* $Id: TODO.h,v 1.5 2010/09/28 19:24:52 jennings Exp $ */
 
 //-------------------------------------------------------
 //
@@ -617,6 +617,21 @@ Improve behaviour when plugins do not load
 
 Track integrated graph update time to suppress updates during
 rapid acquisition
+
+-------------------------------------------------------
+
+Find threading problem when quitting debug build - QNativeSocketEngine
+
+-------------------------------------------------------
+
+Make proxy script objects for GUI script so that they can be called
+from different threads. - or maybe look at putting the script engine
+in the main thread.
+
+-------------------------------------------------------
+
+Be more aggressive about memory preallocation on 64 bit systems -
+or possibly have another go at recycling images.
 
 -------------------------------------------------------
 
