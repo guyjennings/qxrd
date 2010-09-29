@@ -15,11 +15,11 @@ macx{
 
 win32-msvc* {
   contains(QMAKE_HOST.arch,x86_64) {
-    QXRDSUFFIX = -vc64
-    QXRDSUFFIXSTR = " (VS 64 bit)"
+    QXRDSUFFIX = -msvc-x64
+    QXRDSUFFIXSTR = " (MSVC 64 bit)"
   } else {
-    QXRDSUFFIX = -vc32
-    QXRDSUFFIXSTR = " (VS 32 bit)"
+    QXRDSUFFIX = -msvc-x86
+    QXRDSUFFIXSTR = " (MSVC 32 bit)"
   }
 
   message("Visual C++ Build")

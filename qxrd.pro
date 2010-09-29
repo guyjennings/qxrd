@@ -9,8 +9,10 @@ TEMPLATE = subdirs
 SUBDIRS = source plugins
 
 win32 {
-  include("qxrd.app.pri")
-  include("qxrd.nsis.pri")
+#  include("qxrd.app.pri")
+#  include("qxrd.nsis.pri")
+
+  SUBDIRS += qxrd.app.pro qxrd.nsis.pro
 }
 
 DISTFILES += source plugins

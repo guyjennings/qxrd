@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.3 2010/09/23 19:57:32 jennings Exp $
+*  $Id: qxrdacquisitionperkinelmer.cpp,v 1.4 2010/09/29 21:02:47 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,7 +32,7 @@
 #include "qxrdmutexlocker.h"
 #include <QMetaObject>
 #include <QMetaProperty>
-#include "qxrdxislinterface.h"
+//#include "qxrdxislinterface.h"
 
 static QxrdAcquisitionPerkinElmer * g_Acquisition = NULL;
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
@@ -50,7 +50,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessorPtr proc
     m_CurrentGain(-1),
     m_Counter(0),
     m_PerkinElmer(0),
-    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.3 2010/09/23 19:57:32 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionperkinelmer.cpp,v 1.4 2010/09/29 21:02:47 jennings Exp $")
 {
   QCEP_DEBUG(DEBUG_PERKINELMER,
              printf("QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer\n");
@@ -451,6 +451,9 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 /******************************************************************
 *
 *  $Log: qxrdacquisitionperkinelmer.cpp,v $
+*  Revision 1.4  2010/09/29 21:02:47  jennings
+*  More tweaks to build system to try to get 'app' and 'nsis' targets to build
+*
 *  Revision 1.3  2010/09/23 19:57:32  jennings
 *  Modified plugins for perkin elmer - now works in 64 bit mode
 *
