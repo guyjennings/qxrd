@@ -57,15 +57,23 @@ rpmsource.commands += cp \
 rpmsource.commands += perl -pi -e '\'s/Version:.*/Version: $${VERSION}/\'' qxrd.spec
 
 mock.commands += mock-build qxrd.spec
-mock.commands += ; cp /var/lib/mock/*/result/qxrd*.rpm download
+mock.commands += && cp /var/lib/mock/*/result/qxrd*.rpm download
+mock.depends = FORCE
 
-mock.depends = rpmsource \
-    ~/rpmbuild/SOURCES/qxrd0.0.3.tar.gz \
-    qxrd.spec
 website.commands = rsync \
     -e \
     ssh \
     -avx \
     dox/html/ \
     download \
-    www12.xor.aps.anl.gov:/var/www/html/software/qxrd-$${VERSION}/
+    www12.xor.aps.anl.gov:/var/www/html/software/qxrd/qxrd-$${VERSION}/
+
+website.commands += && rsync \
+    -e \
+    ssh \
+    -avx \
+    download \
+    www12.xor.aps.anl.gov:/var/www/html/software/qxrd/download/
+
+website.commands += && \
+    ssh www12.xor.aps.anl.gov ln -s

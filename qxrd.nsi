@@ -45,6 +45,7 @@ Var StartMenuFolder
 !insertmacro MUI_LANGUAGE "English"
 
 Section "Extract qxrd"
+  SetShellVarContext all
   SetOutPath $INSTDIR
   File ${APPDIR}\app\qxrd.exe
   File ${APPDIR}\app\*.dll
@@ -68,6 +69,7 @@ Section "Extract qxrd"
 SectionEnd
 
 Section "Uninstall"
+  SetShellVarContext all
   Delete "$INSTDIR\plugins\*.*"
   RMDir  "$INSTDIR\plugins"
   Delete "$INSTDIR\*.dll"
