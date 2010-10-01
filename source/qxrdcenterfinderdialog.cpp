@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinderdialog.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrdcenterfinderdialog.cpp,v 1.3 2010/10/01 22:28:45 jennings Exp $
 *
 *******************************************************************/
 
@@ -10,7 +10,7 @@
 QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget *parent)
   : QGroupBox(parent),
     m_CenterFinder(cen),
-    SOURCE_IDENT("$Id: qxrdcenterfinderdialog.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinderdialog.cpp,v 1.3 2010/10/01 22:28:45 jennings Exp $")
 {
   setupUi(this);
 
@@ -30,6 +30,8 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   m_CenterFinder -> prop_DetectorDistance() -> linkTo(m_DetectorDistance);
   m_CenterFinder -> prop_DetectorTilt() -> linkTo(m_DetectorTilt);
   m_CenterFinder -> prop_TiltPlaneRotation() -> linkTo(m_TiltPlaneRotation);
+  m_CenterFinder -> prop_DetectorXPixelSize() -> linkTo(m_DetectorXPixelSize);
+  m_CenterFinder -> prop_DetectorYPixelSize() -> linkTo(m_DetectorYPixelSize);
 
   connect(m_CenterFinder -> prop_ImplementTilt(), SIGNAL(changedValue(bool)), this, SLOT(onImplementTiltChanged(bool)));
 
@@ -100,6 +102,9 @@ void QxrdCenterFinderDialog::centerMoveLeft()
 /******************************************************************
 *
 *  $Log: qxrdcenterfinderdialog.cpp,v $
+*  Revision 1.3  2010/10/01 22:28:45  jennings
+*  Added more tooltips, added pixel size editing widgets
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

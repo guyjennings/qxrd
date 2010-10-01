@@ -716,6 +716,9 @@ Script Property: &quot;processor.logFilePath&quot;</string>
    </item>
    <item row="10" column="1">
     <widget class="QLabel" name="m_AverageDisplay">
+     <property name="toolTip">
+      <string>Average value of acquired frames</string>
+     </property>
      <property name="text">
       <string>TextLabel</string>
      </property>

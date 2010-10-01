@@ -68,7 +68,8 @@
       </font>
      </property>
      <property name="toolTip">
-      <string>Specify oversampling factor for angular integration</string>
+      <string>Specify oversampling factor for angular integration
+script property integrator.oversample</string>
      </property>
      <property name="specialValueText">
       <string>No oversampling</string>
@@ -94,7 +95,12 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QxrdCenterStepSpinner" name="m_IntegratorStepSize"/>
+    <widget class="QxrdCenterStepSpinner" name="m_IntegratorStepSize">
+     <property name="toolTip">
+      <string>2Theta step size for integration
+script property integrator.integrationStep</string>
+     </property>
+    </widget>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">

@@ -154,6 +154,9 @@
             </item>
             <item row="5" column="1">
              <widget class="QToolButton" name="m_ImageSetCenterButton">
+              <property name="toolTip">
+               <string>Set Beam Center</string>
+              </property>
               <property name="text">
                <string>...</string>
               </property>
@@ -177,6 +180,9 @@
             </item>
             <item row="6" column="1">
              <widget class="QToolButton" name="m_ImageSliceButton">
+              <property name="toolTip">
+               <string>Slice Image Path</string>
+              </property>
               <property name="text">
                <string>...</string>
               </property>
@@ -200,6 +206,9 @@
             </item>
             <item row="9" column="1">
              <widget class="QToolButton" name="m_ImageMeasureButton">
+              <property name="toolTip">
+               <string>Measure Distances on Image</string>
+              </property>
               <property name="text">
                <string>...</string>
               </property>
@@ -229,6 +238,9 @@
             </item>
             <item row="3" column="1">
              <widget class="QToolButton" name="m_ImageMaskCirclesButton">
+              <property name="toolTip">
+               <string>Circular Mask Regions</string>
+              </property>
               <property name="text">
                <string>...</string>
               </property>
@@ -252,6 +264,9 @@
             </item>
             <item row="4" column="1">
              <widget class="QToolButton" name="m_ImageMaskPolygonsButton">
+              <property name="toolTip">
+               <string>Polygon Mask Regions</string>
+              </property>
               <property name="text">
                <string>...</string>
               </property>
@@ -376,6 +391,9 @@
             </item>
             <item row="3" column="1">
              <widget class="QToolButton" name="m_CenteringMeasureButton">
+              <property name="toolTip">
+               <string>Measure Distances</string>
+              </property>
               <property name="text">
                <string>...</string>
               </property>
@@ -516,6 +534,9 @@
             </item>
             <item row="3" column="1">
              <widget class="QToolButton" name="m_IntegratorMeasureButton">
+              <property name="toolTip">
+               <string>Measure Distances</string>
+              </property>
               <property name="text">
                <string>...</string>
               </property>
@@ -743,7 +764,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1349,6 +1370,9 @@
          <pointsize>8</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Mask drawing operations draw circles</string>
+       </property>
        <property name="text">
         <string>Mask Circles</string>
        </property>
@@ -1363,6 +1387,9 @@
         <font>
          <pointsize>8</pointsize>
         </font>
+       </property>
+       <property name="toolTip">
+        <string>Mask drawing operations draw polygons</string>
        </property>
        <property name="text">
         <string>Mask Polygons</string>
@@ -1391,6 +1418,9 @@
          <pointsize>8</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Default circular mask radius (pixels)</string>
+       </property>
        <property name="minimum">
         <double>-1000000000.000000000000000</double>
        </property>
@@ -1406,6 +1436,9 @@
          <pointsize>8</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Set mask so all pixels are ignored</string>
+       </property>
        <property name="text">
         <string>Hide All</string>
        </property>
@@ -1418,6 +1451,9 @@
          <pointsize>8</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Ignore pixels whose value lies within the given range</string>
+       </property>
        <property name="text">
         <string>Hide Pixels in Range</string>
        </property>
@@ -1429,6 +1465,9 @@
         <font>
          <pointsize>8</pointsize>
         </font>
+       </property>
+       <property name="toolTip">
+        <string>Set pixels whose values are in the given range to be used</string>
        </property>
        <property name="text">
         <string>Show Pixels In Range</string>
@@ -1456,6 +1495,9 @@
         <font>
          <pointsize>8</pointsize>
         </font>
+       </property>
+       <property name="toolTip">
+        <string>Maximum value for masking range</string>
        </property>
        <property name="minimum">
         <double>-1000000000.000000000000000</double>
@@ -1487,6 +1529,9 @@
          <pointsize>8</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Minimum value for masking range</string>
+       </property>
        <property name="minimum">
         <double>-1000000000.000000000000000</double>
        </property>
@@ -1502,6 +1547,9 @@
          <pointsize>8</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Set mask so all pixels are used</string>
+       </property>
        <property name="text">
         <string>Show All</string>
        </property>
@@ -1513,6 +1561,9 @@
         <font>
          <pointsize>8</pointsize>
         </font>
+       </property>
+       <property name="toolTip">
+        <string>Invert each pixel mask</string>
        </property>
        <property name="text">
         <string>Invert Mask</string>
@@ -1601,6 +1652,9 @@ If unselected, image pixels are masked out</string>
          <pointsize>8</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Choose the color map for image display</string>
+       </property>
        <item>
         <property name="text">
          <string>Grayscale</string>
@@ -1641,7 +1695,7 @@ If unselected, image pixels are masked out</string>
         </font>
        </property>
        <property name="toolTip">
-        <string>Gives a smoother display when zoomed in</string>
+        <string>Display image data</string>
        </property>
        <property name="text">
         <string>Display Image</string>
@@ -1654,6 +1708,9 @@ If unselected, image pixels are masked out</string>
         <font>
          <pointsize>8</pointsize>
         </font>
+       </property>
+       <property name="toolTip">
+        <string>Image display intensity scaling mode</string>
        </property>
        <item>
         <property name="text">
@@ -1993,7 +2050,7 @@ If unselected, image pixels are masked out</string>
         </font>
        </property>
        <property name="toolTip">
-        <string>Gives a smoother display when zoomed in</string>
+        <string>Display Mask</string>
        </property>
        <property name="text">
         <string>Display Mask</string>

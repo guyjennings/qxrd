@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.cpp,v 1.3 2010/09/17 16:24:31 jennings Exp $
+*  $Id: qxrdcenterfinder.cpp,v 1.4 2010/10/01 22:28:45 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,13 +17,13 @@ QxrdCenterFinder::QxrdCenterFinder
     m_CenterX(this, "centerX", 0),
     m_CenterY(this, "centerY", 0),
     m_CenterStep(this, "centerStep", 1),
-    m_DetectorXPixelSize(this, "detectorXPixelSize", 100),
-    m_DetectorYPixelSize(this, "detectorYPixelSize", 100),
+    m_DetectorXPixelSize(this, "detectorXPixelSize", 200),
+    m_DetectorYPixelSize(this, "detectorYPixelSize", 200),
     m_DetectorDistance(this, "detectorDistance", 1000),
     m_ImplementTilt(this,"implementTilt", false),
     m_DetectorTilt(this, "detectorTilt", 0),
     m_TiltPlaneRotation(this, "tiltPlaneRotation", 90),
-    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.3 2010/09/17 16:24:31 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdcenterfinder.cpp,v 1.4 2010/10/01 22:28:45 jennings Exp $")
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 
@@ -80,6 +80,9 @@ double QxrdCenterFinder::getTTH(double x, double y)
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.cpp,v $
+*  Revision 1.4  2010/10/01 22:28:45  jennings
+*  Added more tooltips, added pixel size editing widgets
+*
 *  Revision 1.3  2010/09/17 16:24:31  jennings
 *  Made integrator algorithm honor the 'implementTilt' parameter
 *

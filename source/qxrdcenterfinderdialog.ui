@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>233</width>
-    <height>371</height>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,11 +52,14 @@
         </property>
         <item row="0" column="0">
          <widget class="QToolButton" name="m_CenterMoveUpLeft">
+          <property name="toolTip">
+           <string>Move Center Up and Left</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="qxrdresources.qrc">
             <normaloff>:/images/go-up-left.png</normaloff>:/images/go-up-left.png</iconset>
           </property>
           <property name="iconSize">
@@ -69,11 +72,14 @@
         </item>
         <item row="0" column="1">
          <widget class="QToolButton" name="m_CenterMoveUp">
+          <property name="toolTip">
+           <string>Move Center Up</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="qxrdresources.qrc">
             <normaloff>:/images/go-up.png</normaloff>:/images/go-up.png</iconset>
           </property>
           <property name="iconSize">
@@ -86,11 +92,14 @@
         </item>
         <item row="0" column="2">
          <widget class="QToolButton" name="m_CenterMoveUpRight">
+          <property name="toolTip">
+           <string>Move Center Up and Right</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="qxrdresources.qrc">
             <normaloff>:/images/go-up-right.png</normaloff>:/images/go-up-right.png</iconset>
           </property>
           <property name="iconSize">
@@ -103,11 +112,14 @@
         </item>
         <item row="1" column="0">
          <widget class="QToolButton" name="m_CenterMoveLeft">
+          <property name="toolTip">
+           <string>Move Center Left</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="qxrdresources.qrc">
             <normaloff>:/images/go-left.png</normaloff>:/images/go-left.png</iconset>
           </property>
           <property name="iconSize">
@@ -120,11 +132,17 @@
         </item>
         <item row="1" column="1">
          <widget class="QLabel" name="label_13">
+          <property name="toolTip">
+           <string>Color wheel - if beam is not properly centered
+find the color on the right of the group of peaks
+and click the corresponding button to move the
+center in the right direction</string>
+          </property>
           <property name="text">
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap>:/images/color-wheel.png</pixmap>
+           <pixmap resource="qxrdresources.qrc">:/images/color-wheel.png</pixmap>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -133,11 +151,14 @@
         </item>
         <item row="1" column="2">
          <widget class="QToolButton" name="m_CenterMoveRight">
+          <property name="toolTip">
+           <string>Move Center Right</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="qxrdresources.qrc">
             <normaloff>:/images/go-right.png</normaloff>:/images/go-right.png</iconset>
           </property>
           <property name="iconSize">
@@ -150,11 +171,14 @@
         </item>
         <item row="2" column="0">
          <widget class="QToolButton" name="m_CenterMoveDownLeft">
+          <property name="toolTip">
+           <string>Move Center Down and Left</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="qxrdresources.qrc">
             <normaloff>:/images/go-down-left.png</normaloff>:/images/go-down-left.png</iconset>
           </property>
           <property name="iconSize">
@@ -167,11 +191,14 @@
         </item>
         <item row="2" column="1">
          <widget class="QToolButton" name="m_CenterMoveDown">
+          <property name="toolTip">
+           <string>Move Center Down</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="qxrdresources.qrc">
             <normaloff>:/images/go-down.png</normaloff>:/images/go-down.png</iconset>
           </property>
           <property name="iconSize">
@@ -184,11 +211,14 @@
         </item>
         <item row="2" column="2">
          <widget class="QToolButton" name="m_CenterMoveDownRight">
+          <property name="toolTip">
+           <string>Move Center Down and Right</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="qxrdresources.qrc">
             <normaloff>:/images/go-down-right.png</normaloff>:/images/go-down-right.png</iconset>
           </property>
           <property name="iconSize">
@@ -245,7 +275,8 @@
         </font>
        </property>
        <property name="toolTip">
-        <string>X Center in pixels</string>
+        <string>X Center in pixels
+script property centering.centerX</string>
        </property>
        <property name="keyboardTracking">
         <bool>false</bool>
@@ -278,7 +309,8 @@
         </font>
        </property>
        <property name="toolTip">
-        <string>Y Center in Pixels</string>
+        <string>Y Center in Pixels
+script property centering.centerY</string>
        </property>
        <property name="keyboardTracking">
         <bool>false</bool>
@@ -310,6 +342,10 @@
          <pointsize>8</pointsize>
         </font>
        </property>
+       <property name="toolTip">
+        <string>Step Size for Center moves
+script property centering.centerStep</string>
+       </property>
        <property name="keyboardTracking">
         <bool>false</bool>
        </property>
@@ -318,7 +354,8 @@
      <item row="3" column="0" colspan="2">
       <widget class="QCheckBox" name="m_ImplementTilt">
        <property name="toolTip">
-        <string>Enable Advanced Tilt Geometry?</string>
+        <string>Enable Advanced Tilt Geometry?
+script property centering.implementTilt</string>
        </property>
        <property name="text">
         <string>Implement Tilt</string>
@@ -345,7 +382,8 @@
         </font>
        </property>
        <property name="toolTip">
-        <string>Sample-Detector Distance (mm)</string>
+        <string>Sample-Detector Distance (mm)
+script property centering.detectorDistance</string>
        </property>
        <property name="keyboardTracking">
         <bool>false</bool>
@@ -355,7 +393,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="7" column="0">
       <widget class="QLabel" name="label_18">
        <property name="font">
         <font>
@@ -367,7 +405,7 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
+     <item row="8" column="0">
       <widget class="QLabel" name="label_19">
        <property name="font">
         <font>
@@ -379,7 +417,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item row="7" column="1">
       <widget class="QDoubleSpinBox" name="m_DetectorTilt">
        <property name="font">
         <font>
@@ -387,7 +425,8 @@
         </font>
        </property>
        <property name="toolTip">
-        <string>Tilt angle of detector plane (deg)</string>
+        <string>Tilt angle of detector plane (deg)Enable Advanced Tilt Geometry?
+script property centering.detectorTiltTilt</string>
        </property>
        <property name="keyboardTracking">
         <bool>false</bool>
@@ -403,7 +442,7 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item row="8" column="1">
       <widget class="QDoubleSpinBox" name="m_TiltPlaneRotation">
        <property name="font">
         <font>
@@ -411,7 +450,8 @@
         </font>
        </property>
        <property name="toolTip">
-        <string>Rotation of tilt plane (deg) 0=horizontal</string>
+        <string>Rotation of tilt plane (deg) 0=horizontalEnable Advanced Tilt Geometry?
+script property centering.tiltPlaneRotation</string>
        </property>
        <property name="keyboardTracking">
         <bool>false</bool>
@@ -421,6 +461,68 @@
        </property>
        <property name="maximum">
         <double>360.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_20">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>X Pixel Size:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_21">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Y Pixel Size:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QDoubleSpinBox" name="m_DetectorXPixelSize">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Detector X Pixel Size (micrometer)
+script property centering.detectorXPixelSize</string>
+       </property>
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
+       <property name="maximum">
+        <double>10000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QDoubleSpinBox" name="m_DetectorYPixelSize">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Detector Y Pixel Size (micrometer)
+script property centering.detectorYPixelSize</string>
+       </property>
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
+       <property name="maximum">
+        <double>10000.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -448,6 +550,8 @@
    <header>qxrdcenterstepspinner.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="qxrdresources.qrc"/>
+ </resources>
  <connections/>
 </ui>
