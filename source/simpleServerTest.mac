@@ -1,0 +1,10 @@
+def simpleServerTest(t) '{
+  sock_put(PESIMPLE, sprintf("acquire(\"junk\",%g,1,1)\n",t))
+  ret1 = sock_get(PESIMPLE)
+
+  while (1) {
+     sock_put(PESIMPLE, "status(2.0)\n");
+     ret2 = sock_get(PESIMPLE)
+     if (ret2) break;
+  }
+}'

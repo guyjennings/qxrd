@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrddataprocessor.cpp,v 1.3 2010/10/06 20:29:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -26,6 +26,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_ProcessorType(this,"processorType",0),
     m_ProcessorTypeName(this,"processorTypeName","processorType"),
     m_OutputDirectory(this,"outputDirectory", ""),
+    m_FileName(this,"fileName",""),
     m_DataPath(this,"dataPath", ""),
     m_DarkImagePath(this, "darkImagePath", ""),
     m_BadPixelsPath(this, "badPixelsPath", ""),
@@ -63,7 +64,7 @@ QxrdDataProcessor::QxrdDataProcessor
     m_Average(this,"average",0.0),
     m_AverageDark(this,"averageDark",0.0),
     m_AverageRaw(this,"averageRaw",0.0),
-    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessor.cpp,v 1.3 2010/10/06 20:29:00 jennings Exp $")
 {
 }
 
@@ -74,6 +75,9 @@ QxrdDataProcessor::~QxrdDataProcessor()
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.cpp,v $
+*  Revision 1.3  2010/10/06 20:29:00  jennings
+*  Added processor.fileName property, set default detector type to PE
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

@@ -14,7 +14,6 @@ message(Binary files (executables): $$[QT_INSTALL_BINS])
 # message(Demonstrations: $$[QT_INSTALL_DEMOS])
 message(Destdir = $${DESTDIR})
 TEMPLATE = app
-
 DESTDIR = ../app/
 
 # POST_TARGETDEPS += install
@@ -82,7 +81,8 @@ win32 {
     }
 }
 RESOURCES += qxrdresources.qrc
-#RESOURCES.depends += help/*.html
+
+# RESOURCES.depends += help/*.html
 OTHER_FILES += help/qxrdhelptext.html \
     help/qxrdhelpscript.html \
     help/qxrdhelpscriptfunctions.html \
@@ -92,7 +92,8 @@ OTHER_FILES += help/qxrdhelptext.html \
     help/qxrdreleasenotes.html \
     help/qxrdpowderfitidentifyhelp.html \
     help/qxrdpowderfitrefinehelp.html \
-    help/qxrdpowderfitresultshelp.html
+    help/qxrdpowderfitresultshelp.html \
+    simpleServerTest.mac
 DISTFILES += qxrd.dox \
     download/index.php \
     images/*.* \
@@ -298,24 +299,20 @@ FORMS = qxrdwindow.ui \
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 
-    contains(QMAKE_HOST.arch,x86_64) {
-      WIN64 = 1
-      PE_SDK="c:/XIS/SDK64/"
-    } else {
-      WIN64 = 0
-      PE_SDK="c:/XIS/SDK32/"
+    contains(QMAKE_HOST.arch,x86_64) { 
+        WIN64 = 1
+        PE_SDK = "c:/XIS/SDK64/"
+    }
+    else { 
+        WIN64 = 0
+        PE_SDK = "c:/XIS/SDK32/"
     }
     DEFINES += HAVE_PERKIN_ELMER
-
     INCLUDEPATH += $${PE_SDK}
-
-    SOURCES += \
-      qxrdacquisitionperkinelmer.cpp \
-      qxrdperkinelmerplugininterface.cpp
-
-    HEADERS += \
-      qxrdacquisitionperkinelmer.h \
-      qxrdperkinelmerplugininterface.h
+    SOURCES += qxrdacquisitionperkinelmer.cpp \
+        qxrdperkinelmerplugininterface.cpp
+    HEADERS += qxrdacquisitionperkinelmer.h \
+        qxrdperkinelmerplugininterface.h
 }
 
 # QMAKE_LFLAGS += -Wl,--script,nordata.lscript

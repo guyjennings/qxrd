@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdfilesaver.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrdfilesaver.cpp,v 1.3 2010/10/06 20:29:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,7 +16,7 @@ QxrdFileSaver::QxrdFileSaver
     m_Processor(NULL),
     m_Allocator(allocator),
     m_Acquisition(NULL),
-    SOURCE_IDENT("$Id: qxrdfilesaver.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdfilesaver.cpp,v 1.3 2010/10/06 20:29:00 jennings Exp $")
 {
 }
 
@@ -116,6 +116,7 @@ void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, int can
     image -> saveMetaData();
 
     processor() -> updateEstimatedTime(processor() -> prop_SaveSubtractedTime(), tic.elapsed());
+    processor() -> set_FileName(name);
 
     emit printMessage(tr("Saved subtracted data in file \"%1\" after %2 msec").
                       arg(name).arg(tic.restart()));
@@ -240,6 +241,7 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, int c
     image -> saveMetaData(name);
 
     processor() -> updateEstimatedTime(m_Acquisition -> prop_Raw32SaveTime(), tic.elapsed());
+    processor() -> set_FileName(name);
 
     emit printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
                       arg(name).arg(tic.restart()));
@@ -300,6 +302,7 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, int c
     image -> saveMetaData(name);
 
     processor() -> updateEstimatedTime(m_Acquisition -> prop_Raw16SaveTime(), tic.elapsed());
+    processor() -> set_FileName(name);
 
     emit printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
                       arg(name).arg(tic.restart()));
@@ -357,6 +360,8 @@ void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, int
   image -> set_ImageSaved(true);
 
   image -> saveMetaData();
+
+  processor() -> set_FileName(name);
 }
 
 void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data)
@@ -395,6 +400,9 @@ void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data)
 /******************************************************************
 *
 *  $Log: qxrdfilesaver.cpp,v $
+*  Revision 1.3  2010/10/06 20:29:00  jennings
+*  Added processor.fileName property, set default detector type to PE
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

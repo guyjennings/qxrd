@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.6 2010/09/24 22:29:37 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.7 2010/10/06 20:29:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -42,7 +42,7 @@ QxrdApplication *g_Application = 0;
 
 QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
-    m_DetectorType(this,"detectorType", 0),
+    m_DetectorType(this,"detectorType", 1),
     m_ProcessorType(this,"processorType", 0),
     m_Debug(this,"debug", 0),
     m_RunSpecServer(this,"specServer", 1),
@@ -60,7 +60,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 #ifdef HAVE_PERKIN_ELMER
     m_PerkinElmerPluginInterface(NULL),
 #endif
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.6 2010/09/24 22:29:37 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.7 2010/10/06 20:29:00 jennings Exp $")
 {
   setupTiffHandlers();
 
@@ -479,6 +479,9 @@ void QxrdApplication::tiffError(const char *module, const char *msg)
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.7  2010/10/06 20:29:00  jennings
+*  Added processor.fileName property, set default detector type to PE
+*
 *  Revision 1.6  2010/09/24 22:29:37  jennings
 *  Work on NSIS installer
 *  Fixed startup problem on debug builds when calling QxrdAcquisitionThread->initialize()

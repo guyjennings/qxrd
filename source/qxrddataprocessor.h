@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.3 2010/10/06 20:29:00 jennings Exp $
 *
 *******************************************************************/
 
@@ -47,6 +47,9 @@ public:
 
   Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory);
   QCEP_STRING_PROPERTY(OutputDirectory);
+
+  Q_PROPERTY(QString fileName READ get_FileName WRITE set_FileName STORED false);
+  QCEP_STRING_PROPERTY(FileName);
 
   Q_PROPERTY(QString dataPath   READ get_DataPath WRITE set_DataPath);
   QCEP_STRING_PROPERTY(DataPath);
@@ -221,7 +224,7 @@ public:
 
 private:
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.2 2010/09/13 20:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.3 2010/10/06 20:29:00 jennings Exp $");
 };
 
 #endif
@@ -229,6 +232,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.3  2010/10/06 20:29:00  jennings
+*  Added processor.fileName property, set default detector type to PE
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *
