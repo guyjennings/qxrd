@@ -308,7 +308,7 @@ else:win32 {
         PE_SDK = "c:/XIS/SDK32/"
     }
     DEFINES += HAVE_PERKIN_ELMER
-    INCLUDEPATH += $${PE_SDK}
+    INCLUDEPATH += $${PE_SDK} .
     SOURCES += qxrdacquisitionperkinelmer.cpp \
         qxrdperkinelmerplugininterface.cpp
     HEADERS += qxrdacquisitionperkinelmer.h \

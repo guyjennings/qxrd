@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.2 2010/09/13 20:00:42 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.3 2010/10/15 20:56:31 jennings Exp $
 *
 *******************************************************************/
 
@@ -70,7 +70,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     m_Mask(NULL/*new QxrdMaskData(NULL,2048,2048)*/),
     m_NewMask(NULL/*new QxrdMaskData(2048,2048)*/),
     m_NewMaskAvailable(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.2 2010/09/13 20:00:42 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.3 2010/10/15 20:56:31 jennings Exp $")
 {
   setupUi(this);
 
@@ -671,6 +671,7 @@ void QxrdWindow::newDataAvailable(QxrdDoubleImageDataPtr image)
 //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
 
 //  image -> copyImage(m_NewData);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_NewData = image;
 
@@ -684,6 +685,7 @@ void QxrdWindow::newMaskAvailable(QxrdMaskDataPtr mask)
 //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewMaskMutex);
 
 //  mask -> copyMask(m_NewMask);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_NewMask = mask;
   m_NewMaskAvailable.fetchAndAddOrdered(1);
@@ -956,6 +958,9 @@ void QxrdWindow::doRefineCenterTilt()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.3  2010/10/15 20:56:31  jennings
+*  Added extra locking when updating image display
+*
 *  Revision 1.2  2010/09/13 20:00:42  jennings
 *  Merged
 *
