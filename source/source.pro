@@ -198,7 +198,9 @@ HEADERS += TODO.h \
     qxrdpowderfitresultspage.h \
     qxrdpowderfitdialog.h \
     qxrdacquiredialog.h \
-    qxrdcenterstepspinner.h
+    qxrdcenterstepspinner.h \
+    qxrdsettingssaver.h \
+    qxrdsettingssaverthread.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -287,7 +289,9 @@ SOURCES += qxrd.cpp \
     qxrdpowderfitresultspage.cpp \
     qxrdpowderfitdialog.cpp \
     qxrdacquiredialog.cpp \
-    qxrdcenterstepspinner.cpp
+    qxrdcenterstepspinner.cpp \
+    qxrdsettingssaver.cpp \
+    qxrdsettingssaverthread.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
