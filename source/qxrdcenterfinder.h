@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdcenterfinder.h,v 1.3 2010/09/17 16:24:31 jennings Exp $
+*  $Id: qxrdcenterfinder.h,v 1.4 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -83,7 +83,7 @@ public:
 private:
   mutable QMutex             m_Mutex;
 
-  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.3 2010/09/17 16:24:31 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.4 2010/10/21 16:31:24 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDER_H
@@ -91,6 +91,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdcenterfinder.h,v $
+*  Revision 1.4  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.3  2010/09/17 16:24:31  jennings
 *  Made integrator algorithm honor the 'implementTilt' parameter
 *

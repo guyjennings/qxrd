@@ -17,6 +17,9 @@ class QxrdAllocator;               typedef QxrdAllocator *QxrdAllocatorPtr;
 class QxrdFileSaverThread;         typedef QxrdFileSaverThread *QxrdFileSaverThreadPtr;
 class QxrdFileSaver;               typedef QxrdFileSaver *QxrdFileSaverPtr;
 
+class QxrdSettingsSaverThread;     typedef QxrdSettingsSaverThread *QxrdSettingsSaverThreadPtr;
+class QxrdSettingsSaver;           typedef QxrdSettingsSaver *QxrdSettingsSaverPtr;
+
 class QxrdServerThread;            typedef QxrdServerThread *QxrdServerThreadPtr;
 class QxrdServer;                  typedef QxrdServer *QxrdServerPtr;
 

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.3 2010/10/06 20:29:00 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.4 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -224,7 +224,7 @@ public:
 
 private:
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.3 2010/10/06 20:29:00 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.4 2010/10/21 16:31:24 jennings Exp $");
 };
 
 #endif
@@ -232,6 +232,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.4  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.3  2010/10/06 20:29:00  jennings
 *  Added processor.fileName property, set default detector type to PE
 *

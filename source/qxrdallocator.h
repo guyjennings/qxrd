@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdallocator.h,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrdallocator.h,v 1.3 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -112,7 +112,7 @@ private:
   Q_PROPERTY(int     height      READ get_Height WRITE set_Height);
   QCEP_INTEGER_PROPERTY(Height);
 
-  HEADER_IDENT("$Id: qxrdallocator.h,v 1.2 2010/09/13 20:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdallocator.h,v 1.3 2010/10/21 16:31:24 jennings Exp $");
 };
 
 #endif
@@ -120,6 +120,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdallocator.h,v $
+*  Revision 1.3  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

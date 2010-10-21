@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.2 2010/09/13 20:00:38 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.3 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -147,7 +147,7 @@ public:
 
 protected:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.2 2010/09/13 20:00:38 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.3 2010/10/21 16:31:24 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -155,6 +155,9 @@ protected:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.3  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.2  2010/09/13 20:00:38  jennings
 *  Merged
 *

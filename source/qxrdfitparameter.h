@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdfitparameter.h,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdfitparameter.h,v 1.3 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,7 +13,7 @@ class QxrdFitParameter : public QcepDoubleProperty
 {
   Q_OBJECT;
 public:
-  QxrdFitParameter(QObject *parent, QString name, QVariant value);
+  QxrdFitParameter(QObject *parent, const char *name, QVariant value);
 
   double lowerLimit() const;
   double upperLimit() const;
@@ -33,7 +33,7 @@ private:
   double  m_UpperLimit;
   int     m_IsFitted;
   int     m_IsLimited;
-  HEADER_IDENT("$Id: qxrdfitparameter.h,v 1.2 2010/09/13 20:00:40 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdfitparameter.h,v 1.3 2010/10/21 16:31:24 jennings Exp $");
 };
 
 typedef QSharedPointer<QxrdFitParameter> QxrdFitParameterPtr;
@@ -79,6 +79,9 @@ private: \
 /******************************************************************
 *
 *  $Log: qxrdfitparameter.h,v $
+*  Revision 1.3  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

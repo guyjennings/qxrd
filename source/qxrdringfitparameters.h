@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdringfitparameters.h,v 1.2 2010/09/13 20:00:41 jennings Exp $
+*  $Id: qxrdringfitparameters.h,v 1.3 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -23,10 +23,6 @@ public:
   Q_PROPERTY(double twoTheta READ get_TwoTheta WRITE set_TwoTheta);
   QXRD_FIT_PARAMETER(TwoTheta);
 
-signals:
-
-public slots:
-
 public:
   void readSettings(QxrdSettings &settings, QString section);
   void writeSettings(QxrdSettings &settings, QString section);
@@ -36,7 +32,7 @@ private:
 
   QxrdRingSetFitParameters *m_RingSet;
 
-  HEADER_IDENT("$Id: qxrdringfitparameters.h,v 1.2 2010/09/13 20:00:41 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdringfitparameters.h,v 1.3 2010/10/21 16:31:24 jennings Exp $");
 };
 
 typedef QSharedPointer<QxrdRingFitParameters> QxrdRingFitParametersPtr;
@@ -52,6 +48,9 @@ void QxrdRingFitFromScriptValue(const QScriptValue &object, QxrdRingFitParameter
 /******************************************************************
 *
 *  $Log: qxrdringfitparameters.h,v $
+*  Revision 1.3  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.2  2010/09/13 20:00:41  jennings
 *  Merged
 *

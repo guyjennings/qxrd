@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.7 2010/10/06 20:29:00 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.8 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -57,10 +57,12 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_AcquisitionThread(NULL),
     m_AllocatorThread(NULL),
     m_FileSaverThread(NULL),
+    m_SettingsSaverThread(NULL),
+    m_SettingsSaver(NULL),
 #ifdef HAVE_PERKIN_ELMER
     m_PerkinElmerPluginInterface(NULL),
 #endif
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.7 2010/10/06 20:29:00 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.8 2010/10/21 16:31:24 jennings Exp $")
 {
   setupTiffHandlers();
 
@@ -232,6 +234,15 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   connect(prop_Debug(), SIGNAL(changedValue(int)), this, SLOT(debugChanged(int)));
 
   readSettings();
+
+  m_SettingsSaverThread = new QxrdSettingsSaverThread(this);
+
+  connect(m_SettingsSaverThread, SIGNAL(printMessage(QString)), m_Window,            SLOT(printMessage(QString)));
+  connect(m_SettingsSaverThread, SIGNAL(statusMessage(QString)), m_Window,            SLOT(statusMessage(QString)));
+  connect(m_SettingsSaverThread, SIGNAL(criticalMessage(QString)), m_Window,            SLOT(criticalMessage(QString)));
+
+  m_SettingsSaverThread -> start();
+  m_SettingsSaver = m_SettingsSaverThread -> settingsSaver();
 
   emit printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
@@ -479,6 +490,9 @@ void QxrdApplication::tiffError(const char *module, const char *msg)
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.8  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.7  2010/10/06 20:29:00  jennings
 *  Added processor.fileName property, set default detector type to PE
 *

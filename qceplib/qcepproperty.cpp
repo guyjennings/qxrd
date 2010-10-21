@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qcepproperty.cpp,v 1.2 2010/09/13 20:00:25 jennings Exp $
+*  $Id: qcepproperty.cpp,v 1.3 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -17,15 +17,33 @@
 #include <QSettings>
 #include <stdio.h>
 
-QcepProperty::QcepProperty(QObject *parent, QString name, QVariant value)
-  : QObject(),
+QcepProperty::QcepProperty(QObject *parent, const char *name, QVariant value)
+  : QObject(parent),
     m_Mutex(QMutex::Recursive),
     m_NQueuedUpdates(0),
+    m_IsStored(false),
     m_Parent(parent),
     m_Name(name),
     m_Variant(value),
-    SOURCE_IDENT("$Id: qcepproperty.cpp,v 1.2 2010/09/13 20:00:25 jennings Exp $")
+    SOURCE_IDENT("$Id: qcepproperty.cpp,v 1.3 2010/10/21 16:31:24 jennings Exp $")
 {
+  if (parent) {
+    const QMetaObject   *metaObj = parent->metaObject();
+
+    if (metaObj) {
+      int i =  metaObj->indexOfProperty(name);
+
+      if (i>=0) {
+        QMetaProperty metaProperty = metaObj->property(i);
+
+        if (metaProperty.isStored()) {
+          m_IsStored = true;
+        } else {
+          m_IsStored = false;
+        }
+      }
+    }
+  }
 }
 
 QVariant QcepProperty::variant() const
@@ -51,6 +69,10 @@ void QcepProperty::changeVariant(QVariant val)
   );
 
   m_Variant = val;
+
+  if (m_IsStored) {
+    m_ChangeCount.fetchAndAddOrdered(1);
+  }
 }
 
 template <typename T>
@@ -59,6 +81,17 @@ void QcepProperty::changeVariant(T val)
   QMutexLocker lock(&m_Mutex);
 
   m_Variant.setValue(val);
+
+  if (m_IsStored) {
+    m_ChangeCount.fetchAndAddOrdered(1);
+  }
+}
+
+QAtomicInt QcepProperty::m_ChangeCount = 0;
+
+int QcepProperty::getChangeCount()
+{
+  return m_ChangeCount.fetchAndStoreOrdered(0);
 }
 
 void QcepProperty::registerMetaTypes()
@@ -186,7 +219,7 @@ void QcepProperty::dumpMetaData(const QMetaObject *meta)
   }
 }
 
-QcepDoubleProperty::QcepDoubleProperty(QObject *parent, QString name, double value)
+QcepDoubleProperty::QcepDoubleProperty(QObject *parent, const char *name, double value)
   : QcepProperty(parent, name, value),
     m_Default(value),
     m_Value(value)
@@ -336,7 +369,7 @@ void QcepDoubleProperty::linkTo(QLabel *label)
   }
 }
 
-QcepIntProperty::QcepIntProperty(QObject *parent, QString name, int value)
+QcepIntProperty::QcepIntProperty(QObject *parent, const char *name, int value)
   : QcepProperty(parent, name, value),
     m_Default(value),
     m_Value(value)
@@ -476,7 +509,7 @@ void QcepIntProperty::linkTo(QLabel *label)
   }
 }
 
-QcepBoolProperty::QcepBoolProperty(QObject *parent, QString name, bool value)
+QcepBoolProperty::QcepBoolProperty(QObject *parent, const char *name, bool value)
   : QcepProperty(parent, name, value),
     m_Default(value),
     m_Value(value)
@@ -567,7 +600,7 @@ void QcepBoolProperty::linkTo(QAbstractButton *button)
   }
 }
 
-QcepStringProperty::QcepStringProperty(QObject *parent, QString name, QString value)
+QcepStringProperty::QcepStringProperty(QObject *parent, const char *name, QString value)
   : QcepProperty(parent, name, value),
     m_Default(value),
     m_Value(value)
@@ -672,7 +705,7 @@ void QcepStringProperty::linkTo(QLabel *label)
   }
 }
 
-QcepDateTimeProperty::QcepDateTimeProperty(QObject *parent, QString name, QDateTime value)
+QcepDateTimeProperty::QcepDateTimeProperty(QObject *parent, const char *name, QDateTime value)
   : QcepProperty(parent, name, value),
     m_Default(value),
     m_Value(value)
@@ -745,7 +778,7 @@ void QcepDateTimeProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepDoubleListProperty::QcepDoubleListProperty(QObject *parent, QString name, QcepDoubleList value)
+QcepDoubleListProperty::QcepDoubleListProperty(QObject *parent, const char *name, QcepDoubleList value)
   : QcepProperty(parent, name, 0),
     m_Default(value),
     m_Value(value)
@@ -916,6 +949,9 @@ void QcepDoubleListProperty::resetValue()
 /******************************************************************
 *
 *  $Log: qcepproperty.cpp,v $
+*  Revision 1.3  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.2  2010/09/13 20:00:25  jennings
 *  Merged
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.h,v 1.3 2010/09/23 19:57:32 jennings Exp $
+*  $Id: qxrdapplication.h,v 1.4 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -15,6 +15,7 @@
 
 #include "qxrdforwardtypes.h"
 #include "qxrddataprocessor.h"
+#include "qxrdsettingssaverthread.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -41,9 +42,6 @@ public:
 
   void loadPlugins();
 
-  void readSettings();
-  void writeSettings();
-
   void tiffWarning(const char* module, const char *msg);
   void tiffError(const char* module, const char *msg);
 
@@ -54,6 +52,9 @@ public slots:
   void possiblyQuit();
   void editPreferences();
   void debugChanged(int newValue);
+
+  void readSettings();
+  void writeSettings();
 
 signals:
   void printMessage(QString msg);
@@ -104,12 +105,14 @@ private:
   QxrdScriptEngineThreadPtr       m_ScriptEngineThread;
   QxrdScriptEnginePtr             m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
+  QxrdSettingsSaverThreadPtr      m_SettingsSaverThread;
+  QxrdSettingsSaverPtr            m_SettingsSaver;
 
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;
 #endif
 
-  HEADER_IDENT("$Id: qxrdapplication.h,v 1.3 2010/09/23 19:57:32 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdapplication.h,v 1.4 2010/10/21 16:31:24 jennings Exp $");
 };
 
 #endif
@@ -117,6 +120,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdapplication.h,v $
+*  Revision 1.4  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.3  2010/09/23 19:57:32  jennings
 *  Modified plugins for perkin elmer - now works in 64 bit mode
 *

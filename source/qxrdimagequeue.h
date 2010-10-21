@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimagequeue.h,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdimagequeue.h,v 1.3 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -42,7 +42,7 @@ private:
   mutable QReadWriteLock m_Lock;
   QQueue< QSharedPointer<T> >     m_Queue;
   QString        m_Name;
-  HEADER_IDENT("$Id: qxrdimagequeue.h,v 1.2 2010/09/13 20:00:40 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimagequeue.h,v 1.3 2010/10/21 16:31:24 jennings Exp $");
 };
 
 typedef QxrdImageQueue<QxrdInt16ImageData>   QxrdInt16ImageQueue;
@@ -58,10 +58,10 @@ typedef QSharedPointer<QxrdMaskQueue>        QxrdMaskQueuePtr;
 
 template <typename T>
 QxrdImageQueue<T>::QxrdImageQueue(QString name)
-  : m_NRows(this, "nRows", 2048),
-    m_NCols(this, "nCols", 2048),
+  : m_NRows(NULL, "nRows", 2048),
+    m_NCols(NULL, "nCols", 2048),
     m_Name(name),
-    SOURCE_IDENT("$Id: qxrdimagequeue.h,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimagequeue.h,v 1.3 2010/10/21 16:31:24 jennings Exp $")
 {
 }
 
@@ -184,6 +184,9 @@ int QxrdImageQueue<T>::size() const
 /******************************************************************
 *
 *  $Log: qxrdimagequeue.h,v $
+*  Revision 1.3  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

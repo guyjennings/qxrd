@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qcepproperty.h,v 1.2 2010/09/13 20:00:25 jennings Exp $
+*  $Id: qcepproperty.h,v 1.3 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
@@ -29,7 +29,8 @@ class QSettings;
 class QcepProperty : public QObject {
   Q_OBJECT;
 public:
-  QcepProperty(QObject *parent, QString name, QVariant value);
+  QcepProperty(QObject *parent, const char *name, QVariant value);
+
   QVariant variant() const;
   QString name() const;
   static void registerMetaTypes();
@@ -40,6 +41,7 @@ public:
   static void writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings &settings);
   static void readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings &settings);
   static void dumpMetaData(const QMetaObject *meta);
+  static int  getChangeCount();
 
 //  virtual void readSettings(QSettings &settings, QString section);
 //  virtual void writeSettings(QSettings &settings, QString section);
@@ -56,17 +58,19 @@ protected:
 
 private:
 //  int                      m_Debug;
+  int                      m_IsStored;
   QObject                 *m_Parent;
-  QString                  m_Name;
+  const char              *m_Name;
   QVariant                 m_Variant;
+  static QAtomicInt        m_ChangeCount;
 
-  HEADER_IDENT("$Id: qcepproperty.h,v 1.2 2010/09/13 20:00:25 jennings Exp $");
+  HEADER_IDENT("$Id: qcepproperty.h,v 1.3 2010/10/21 16:31:24 jennings Exp $");
 };
 
 class QcepDoubleProperty : public QcepProperty {
   Q_OBJECT;
 public:
-  QcepDoubleProperty(QObject *parent, QString name, double value);
+  QcepDoubleProperty(QObject *parent, const char *name, double value);
 
   double value() const;
   double defaultValue() const;
@@ -96,7 +100,7 @@ private:
 class QcepIntProperty : public QcepProperty {
   Q_OBJECT;
 public:
-  QcepIntProperty(QObject *parent, QString name, int value);
+  QcepIntProperty(QObject *parent, const char *name, int value);
 
   int value() const;
   int defaultValue() const;
@@ -125,7 +129,7 @@ private:
 class QcepBoolProperty : public QcepProperty {
   Q_OBJECT;
 public:
-  QcepBoolProperty(QObject *parent, QString name, bool value);
+  QcepBoolProperty(QObject *parent, const char *name, bool value);
 
   bool value() const;
   bool defaultValue() const;
@@ -150,7 +154,7 @@ private:
 class QcepStringProperty : public QcepProperty {
   Q_OBJECT;
 public:
-  QcepStringProperty(QObject *parent, QString name, QString value);
+  QcepStringProperty(QObject *parent, const char *name, QString value);
 
   QString value() const;
   QString defaultValue() const;
@@ -177,7 +181,7 @@ private:
 class QcepDateTimeProperty : public QcepProperty {
   Q_OBJECT;
 public:
-  QcepDateTimeProperty(QObject *parent, QString name, QDateTime value);
+  QcepDateTimeProperty(QObject *parent, const char *name, QDateTime value);
 
   QDateTime value() const;
   QDateTime defaultValue() const;
@@ -201,7 +205,7 @@ private:
 class QcepDoubleListProperty : public QcepProperty {
   Q_OBJECT;
 public:
-  QcepDoubleListProperty(QObject *parent, QString name, QcepDoubleList value);
+  QcepDoubleListProperty(QObject *parent, const char *name, QcepDoubleList value);
 
   QcepDoubleList value() const;
   QcepDoubleList defaultValue() const;
@@ -435,6 +439,9 @@ QcepDoubleListProperty m_##propname;
 /******************************************************************
 *
 *  $Log: qcepproperty.h,v $
+*  Revision 1.3  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.2  2010/09/13 20:00:25  jennings
 *  Merged
 *

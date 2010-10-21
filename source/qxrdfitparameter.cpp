@@ -1,19 +1,19 @@
 /******************************************************************
 *
-*  $Id: qxrdfitparameter.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdfitparameter.cpp,v 1.3 2010/10/21 16:31:24 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrdfitparameter.h"
 #include "qxrdsettings.h"
 
-QxrdFitParameter::QxrdFitParameter(QObject *parent, QString name, QVariant value) :
+QxrdFitParameter::QxrdFitParameter(QObject *parent, const char *name, QVariant value) :
     QcepDoubleProperty(parent, name, value.toDouble()),
     m_LowerLimit(0),
     m_UpperLimit(0),
     m_IsFitted(true),
     m_IsLimited(false),
-    SOURCE_IDENT("$Id: qxrdfitparameter.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdfitparameter.cpp,v 1.3 2010/10/21 16:31:24 jennings Exp $")
 {
 }
 
@@ -86,6 +86,9 @@ void QxrdFitParameter::readSettings(QSettings &settings, QString section)
 /******************************************************************
 *
 *  $Log: qxrdfitparameter.cpp,v $
+*  Revision 1.3  2010/10/21 16:31:24  jennings
+*  Implemented saving of settings soon after they change, rather than at program exit
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *
