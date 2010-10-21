@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddoubleimagedata.h,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrddoubleimagedata.h,v 1.3 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -20,8 +20,9 @@ public:
 
   typedef QxrdImageData<double> inherited;
 
-  void setMask(QxrdMaskDataPtr mask);
+  void setMask(QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
   QxrdMaskDataPtr mask() const;
+  QxrdMaskDataPtr overflow() const;
 
   template <typename T>
       void copyFrom(const QSharedPointer< QxrdImageData<T> > img);
@@ -35,7 +36,8 @@ public slots:
 
 private:
   QxrdMaskDataPtr m_Mask;
-  HEADER_IDENT("$Id: qxrddoubleimagedata.h,v 1.2 2010/09/13 20:00:39 jennings Exp $");
+  QxrdMaskDataPtr m_Overflow;
+  HEADER_IDENT("$Id: qxrddoubleimagedata.h,v 1.3 2010/10/21 19:44:03 jennings Exp $");
 };
 
 template <typename T>
@@ -66,6 +68,9 @@ typedef QSharedPointer<QxrdDoubleImageData> QxrdDoubleImageDataPtr;
 /******************************************************************
 *
 *  $Log: qxrddoubleimagedata.h,v $
+*  Revision 1.3  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

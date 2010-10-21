@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisition.h,v 1.2 2010/09/13 20:00:38 jennings Exp $
+*  $Id: qxrdacquisition.h,v 1.3 2010/10/21 19:44:02 jennings Exp $
 *
 *******************************************************************/
 
@@ -84,6 +84,7 @@ protected:
   QxrdInt32ImageQueue    m_PreTriggerInt32Images;
   QxrdInt16ImageDataPtr  m_AcquiredInt16Data;
   QxrdInt32ImageDataPtr  m_AcquiredInt32Data;
+  QxrdMaskDataPtr        m_OverflowMask;
 
   QAtomicInt             m_AcquireDark;
   QAtomicInt             m_NFramesStillToSkip;
@@ -93,7 +94,7 @@ protected:
   QAtomicInt             m_CurrentExposure;
   QAtomicInt             m_CurrentFile;
 
-  HEADER_IDENT("$Id: qxrdacquisition.h,v 1.2 2010/09/13 20:00:38 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisition.h,v 1.3 2010/10/21 19:44:02 jennings Exp $");
 };
 
 #endif
@@ -101,6 +102,9 @@ protected:
 /******************************************************************
 *
 *  $Log: qxrdacquisition.h,v $
+*  Revision 1.3  2010/10/21 19:44:02  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:38  jennings
 *  Merged
 *

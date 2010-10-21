@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisition.cpp,v 1.3 2010/09/24 22:29:37 jennings Exp $
+*  $Id: qxrdacquisition.cpp,v 1.4 2010/10/21 19:44:02 jennings Exp $
 *
 *******************************************************************/
 
@@ -16,7 +16,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
     m_PreTriggerInt32Images("preTriggerInt32Images"),
     m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisition.cpp,v 1.3 2010/09/24 22:29:37 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisition.cpp,v 1.4 2010/10/21 19:44:02 jennings Exp $")
 {
   connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
   connect(prop_BinningMode(), SIGNAL(changedValue(int)), this, SLOT(onBinningModeChanged(int)));
@@ -292,23 +292,43 @@ void QxrdAcquisition::acquiredFrameAvailable()
       }
     } else {
       if (m_CurrentExposure <= get_ExposuresToSum()) {
+        m_OverflowMask = m_Allocator -> newMask();
+
         long nPixels = get_NRows()*get_NCols();
+        int ovflwlvl = get_OverflowLevel();
         quint16* src = m_AcquiredInt16Data->data();
         quint32* dst = m_AcquiredInt32Data->data();
+        short int* ovf = m_OverflowMask->data();
 
         if (m_CurrentExposure == 1) {
           QCEP_DEBUG(DEBUG_ACQUIRE,
                      emit printMessage(tr("Frame %1 saved").arg(m_CurrentExposure));
           );
           for (long i=0; i<nPixels; i++) {
-            *dst++ = *src++;
+            quint16 val = *src++;
+
+            if (val>ovflwlvl) {
+              *ovf++ = 2;
+            } else {
+              *ovf++ = 0;
+            }
+
+            *dst++ = val;
           }
         } else {
           QCEP_DEBUG(DEBUG_ACQUIRE,
                      emit printMessage(tr("Frame %1 summed").arg(m_CurrentExposure));
           );
           for (long i=0; i<nPixels; i++) {
-            *dst++ += *src++;
+            quint16 val = *src++;
+
+            if (val>ovflwlvl) {
+              *ovf++ |= 2;
+            } else {
+              ovf++;
+            }
+
+            *dst++ += val;
           }
         }
       }
@@ -370,7 +390,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
             QCEP_DEBUG(DEBUG_ACQUIRE,
                        emit printMessage(tr("16 Bit Dark Image acquired"));
             );
-            m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data);
+            m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
 //            replaceImageFromPool(m_AcquiredInt16Data);
             m_AcquiredInt16Data = m_Allocator -> newInt16Image();
             haltAcquisition();
@@ -390,7 +410,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
                   img -> set_FileName(fileName);
                   img -> set_Title(QFileInfo(fileName).fileName());
 
-                  m_DataProcessor -> acquiredInt16Image(img);
+                  m_DataProcessor -> acquiredInt16Image(img, m_OverflowMask);
 //                  returnImageToPool(img);
                   set_FileIndex(get_FileIndex()+1);
                 }
@@ -404,7 +424,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
                            emit printMessage(tr("16 bit Image %1 acquired").arg(m_CurrentFile));
                 );
                 m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-                m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data);
+                m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
 //                replaceImageFromPool(m_AcquiredInt16Data);
                 m_AcquiredInt16Data = m_Allocator -> newInt16Image();
                 set_FileIndex(get_FileIndex()+1);
@@ -426,7 +446,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
                          emit printMessage(tr("16 bit Image %1 acquired").arg(m_CurrentFile));
               );
               m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-              m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data);
+              m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
 //              replaceImageFromPool(m_AcquiredInt16Data);
               m_AcquiredInt16Data = m_Allocator -> newInt16Image();
               set_FileIndex(get_FileIndex()+1);
@@ -456,7 +476,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
             QCEP_DEBUG(DEBUG_ACQUIRE,
                        emit printMessage(tr("32 bit Dark Image acquired"));
             );
-            m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data);
+            m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
 //            replaceImageFromPool(m_AcquiredInt32Data);
             m_AcquiredInt32Data = m_Allocator -> newInt32Image();
             haltAcquisition();
@@ -476,7 +496,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
                   img -> set_FileName(fileName);
                   img -> set_Title(QFileInfo(fileName).fileName());
 
-                  m_DataProcessor -> acquiredInt32Image(img);
+                  m_DataProcessor -> acquiredInt32Image(img, m_OverflowMask);
 //                  returnImageToPool(img);
                   set_FileIndex(get_FileIndex()+1);
                 }
@@ -490,7 +510,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
                            emit printMessage(tr("32 bit Image %1 acquired").arg(m_CurrentFile));
                 );
                 m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-                m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data);
+                m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
 //                replaceImageFromPool(m_AcquiredInt32Data);
                 m_AcquiredInt32Data = m_Allocator -> newInt32Image();
                 set_FileIndex(get_FileIndex()+1);
@@ -512,7 +532,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
                          emit printMessage(tr("32 bit Image %1 acquired").arg(m_CurrentFile));
               );
               m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-              m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data);
+              m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
 //              replaceImageFromPool(m_AcquiredInt32Data);
               m_AcquiredInt32Data = m_Allocator -> newInt32Image();
               set_FileIndex(get_FileIndex()+1);
@@ -568,6 +588,9 @@ void QxrdAcquisition::acquisitionError(int ln, int n)
 /******************************************************************
 *
 *  $Log: qxrdacquisition.cpp,v $
+*  Revision 1.4  2010/10/21 19:44:02  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.3  2010/09/24 22:29:37  jennings
 *  Work on NSIS installer
 *  Fixed startup problem on debug builds when calling QxrdAcquisitionThread->initialize()

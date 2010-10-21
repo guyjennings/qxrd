@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorthread.h,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrddataprocessorthread.h,v 1.3 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -18,15 +18,13 @@ class QxrdDataProcessorThread : public QThread
   Q_OBJECT;
 
 public:
-  QxrdDataProcessorThread(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver, int processorType);
+  QxrdDataProcessorThread(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver);
   ~QxrdDataProcessorThread();
 
   void shutdown();
 
   QxrdDataProcessorPtr dataProcessor() const;
 
-  static QStringList processorTypeNames();
-  static int processorType();
   static void msleep(long unsigned int);
 
 signals:
@@ -42,8 +40,7 @@ private:
   QAtomicPointer<QxrdFileSaverThread> m_FileSaverThread;
   QAtomicPointer<QxrdDataProcessor>   m_DataProcessor;
   QAtomicPointer<QxrdAcquisition>     m_Acquisition;
-//  int                  m_ProcessorType;
-  HEADER_IDENT("$Id: qxrddataprocessorthread.h,v 1.2 2010/09/13 20:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessorthread.h,v 1.3 2010/10/21 19:44:03 jennings Exp $");
 };
 
 #endif // QXRDDATAPROCESSORTHREAD_H
@@ -51,6 +48,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessorthread.h,v $
+*  Revision 1.3  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

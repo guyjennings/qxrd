@@ -125,9 +125,7 @@ HEADERS += TODO.h \
     qxrddataprocessorthread.h \
     qxrddataprocessor.h \
     qxrddataprocessorbase.h \
-    qxrddataprocessorsimple.h \
     qxrddataprocessorthreaded.h \
-    qxrddataprocessorcuda.h \
     qxrdallocatorthread.h \
     qxrdallocator.h \
     qxrdfilesaverthread.h \
@@ -216,9 +214,7 @@ SOURCES += qxrd.cpp \
     qxrdwindow.cpp \
     qxrddataprocessor.cpp \
     qxrddataprocessorbase.cpp \
-    qxrddataprocessorsimple.cpp \
     qxrddataprocessorthreaded.cpp \
-    qxrddataprocessorcuda.cpp \
     qxrdallocatorthread.cpp \
     qxrdallocator.cpp \
     qxrdfilesaverthread.cpp \
@@ -312,7 +308,8 @@ else:win32 {
         PE_SDK = "c:/XIS/SDK32/"
     }
     DEFINES += HAVE_PERKIN_ELMER
-    INCLUDEPATH += $${PE_SDK} .
+    INCLUDEPATH += $${PE_SDK} \
+        .
     SOURCES += qxrdacquisitionperkinelmer.cpp \
         qxrdperkinelmerplugininterface.cpp
     HEADERS += qxrdacquisitionperkinelmer.h \

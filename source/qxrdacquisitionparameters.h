@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.h,v 1.3 2010/10/21 16:31:24 jennings Exp $
+*  $Id: qxrdacquisitionparameters.h,v 1.4 2010/10/21 19:44:02 jennings Exp $
 *
 *******************************************************************/
 
@@ -96,6 +96,9 @@ public:
   Q_PROPERTY(int     nCols      READ get_NCols WRITE set_NCols);
   QCEP_INTEGER_PROPERTY(NCols);
 
+  Q_PROPERTY(int     overflowLevel      READ get_OverflowLevel WRITE set_OverflowLevel);
+  QCEP_INTEGER_PROPERTY(OverflowLevel);
+
   Q_PROPERTY(int     acquireDark      READ get_AcquireDark WRITE set_AcquireDark STORED false);
   QCEP_INTEGER_PROPERTY(AcquireDark);
 
@@ -147,7 +150,7 @@ public:
 
 protected:
   mutable QMutex         m_Mutex;
-  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.3 2010/10/21 16:31:24 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdacquisitionparameters.h,v 1.4 2010/10/21 19:44:02 jennings Exp $");
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
@@ -155,6 +158,9 @@ protected:
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.h,v $
+*  Revision 1.4  2010/10/21 19:44:02  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.3  2010/10/21 16:31:24  jennings
 *  Implemented saving of settings soon after they change, rather than at program exit
 *

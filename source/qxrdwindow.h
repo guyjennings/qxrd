@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.h,v 1.2 2010/09/13 20:00:42 jennings Exp $
+*  $Id: qxrdwindow.h,v 1.3 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -93,7 +93,7 @@ public:
   void setScriptEngine(QxrdScriptEnginePtr engine);
   QxrdDataProcessorPtr dataProcessor() const;
 
-  void newDataAvailable(QxrdDoubleImageDataPtr img);
+  void newDataAvailable(QxrdDoubleImageDataPtr img, QxrdMaskDataPtr overflow);
   void newMaskAvailable(QxrdMaskDataPtr img);
 
   QxrdDoubleImageDataPtr data();
@@ -124,14 +124,16 @@ private:
   QTimer                                 m_UpdateTimer;
 
   QxrdDoubleImageDataPtr                 m_Data;
+  QxrdMaskDataPtr                        m_Overflow;
   QxrdDoubleImageDataPtr                 m_NewData;
+  QxrdMaskDataPtr                        m_NewOverflow;
   QAtomicInt                             m_NewDataAvailable;
 
   QxrdMaskDataPtr                        m_Mask;
   QxrdMaskDataPtr                        m_NewMask;
   QAtomicInt                             m_NewMaskAvailable;
 
-  HEADER_IDENT("$Id: qxrdwindow.h,v 1.2 2010/09/13 20:00:42 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdwindow.h,v 1.3 2010/10/21 19:44:03 jennings Exp $");
 };
 
 #endif
@@ -139,6 +141,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdwindow.h,v $
+*  Revision 1.3  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:42  jennings
 *  Merged
 *

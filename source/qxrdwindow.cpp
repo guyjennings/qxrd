@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.3 2010/10/15 20:56:31 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.4 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -64,13 +64,15 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     m_AcquiringDark(false),
 //    m_NewDataMutex(QMutex::Recursive),
     m_Data(NULL/*new QxrdDoubleImageData(NULL,2048,2048)*/),
+    m_Overflow(NULL),
     m_NewData(NULL/*new QxrdDoubleImageData(NULL,2048,2048)*/),
+    m_NewOverflow(NULL),
     m_NewDataAvailable(false),
 //    m_NewMaskMutex(QMutex::Recursive),
     m_Mask(NULL/*new QxrdMaskData(NULL,2048,2048)*/),
     m_NewMask(NULL/*new QxrdMaskData(2048,2048)*/),
     m_NewMaskAvailable(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.3 2010/10/15 20:56:31 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.4 2010/10/21 19:44:03 jennings Exp $")
 {
   setupUi(this);
 
@@ -264,7 +266,6 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_Acquisition -> prop_BinningMode() -> linkTo(m_AcquireDialog -> m_BinningMode);
   m_Acquisition -> prop_DroppedFrames() -> linkTo(m_AcquireDialog -> m_DroppedFrames);
 
-  m_DataProcessor -> prop_ProcessorTypeName() -> linkTo(m_ProcessorTypeNameLabel);
   m_DataProcessor -> prop_OutputDirectory() -> linkTo(m_AcquireDialog -> m_OutputDirectory);
   m_DataProcessor -> prop_PerformDarkSubtraction() -> linkTo(m_PerformDark);
   m_DataProcessor -> prop_PerformDarkSubtractionTime() -> linkTo(m_PerformDarkTime);
@@ -666,7 +667,7 @@ void QxrdWindow::clearStatusMessage()
   m_StatusMsg -> setText("");
 }
 
-void QxrdWindow::newDataAvailable(QxrdDoubleImageDataPtr image)
+void QxrdWindow::newDataAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
 {
 //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
 
@@ -674,6 +675,7 @@ void QxrdWindow::newDataAvailable(QxrdDoubleImageDataPtr image)
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_NewData = image;
+  m_NewOverflow = overflow;
 
   m_NewDataAvailable.fetchAndAddOrdered(1);
 
@@ -958,6 +960,9 @@ void QxrdWindow::doRefineCenterTilt()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.4  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.3  2010/10/15 20:56:31  jennings
 *  Added extra locking when updating image display
 *

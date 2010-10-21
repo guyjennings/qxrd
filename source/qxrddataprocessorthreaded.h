@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorthreaded.h,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrddataprocessorthreaded.h,v 1.3 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -21,8 +21,8 @@ public:
 public:
   void beginAcquisition(int isDark);
   void idleInt16Image(QxrdInt16ImageDataPtr image);
-  void acquiredInt16Image(QxrdInt16ImageDataPtr image);
-  void acquiredInt32Image(QxrdInt32ImageDataPtr image);
+  void acquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow);
+  void acquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
 
 private slots:
   void onCorrectedImageAvailable();
@@ -31,8 +31,8 @@ private slots:
   void onHistogramDataAvailable();
 
 private:
-  QxrdDoubleImageDataPtr correctInt16Image(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask);
-  QxrdDoubleImageDataPtr correctInt32Image(QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask);
+  QxrdDoubleImageDataPtr correctInt16Image(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
+  QxrdDoubleImageDataPtr correctInt32Image(QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
   QxrdIntegratedDataPtr  integrateImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double cx, double cy);
   QxrdROIDataPtr         calculateROI(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
   QxrdHistogramDataPtr   calculateHistogram(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
@@ -46,7 +46,7 @@ private:
 protected:
   double estimatedProcessingTime(double estSerTime, double estParallelTime);
 
-  HEADER_IDENT("$Id: qxrddataprocessorthreaded.h,v 1.2 2010/09/13 20:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessorthreaded.h,v 1.3 2010/10/21 19:44:03 jennings Exp $");
 };
 
 #endif // QXRDDATAPROCESSORTHREADED_H
@@ -54,6 +54,9 @@ protected:
 /******************************************************************
 *
 *  $Log: qxrddataprocessorthreaded.h,v $
+*  Revision 1.3  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorthreaded.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrddataprocessorthreaded.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,7 +13,7 @@
 
 QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver, QObject *parent)
   : QxrdDataProcessorBase(acq, allocator, saver, parent),
-    SOURCE_IDENT("$Id: qxrddataprocessorthreaded.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessorthreaded.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $")
 {
   connect(&m_CorrectedImages, SIGNAL(resultAvailable()), this, SLOT(onCorrectedImageAvailable()));
   connect(&m_IntegratedData,  SIGNAL(resultAvailable()), this, SLOT(onIntegratedDataAvailable()));
@@ -44,22 +44,22 @@ void QxrdDataProcessorThreaded::idleInt16Image(QxrdInt16ImageDataPtr image)
   set_Average(get_AverageRaw() - get_AverageDark());
 }
 
-void QxrdDataProcessorThreaded::acquiredInt16Image(QxrdInt16ImageDataPtr image)
+void QxrdDataProcessorThreaded::acquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
-  typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdInt16ImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr);
+  typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdInt16ImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QxrdMaskDataPtr);
   MFType p = &QxrdDataProcessorThreaded::correctInt16Image;
-  m_CorrectedImages.enqueue(QtConcurrent::run(this, p, image, darkImage(), mask()));
+  m_CorrectedImages.enqueue(QtConcurrent::run(this, p, image, darkImage(), mask(), overflow));
 }
 
-void QxrdDataProcessorThreaded::acquiredInt32Image(QxrdInt32ImageDataPtr image)
+void QxrdDataProcessorThreaded::acquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
-  typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdInt32ImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr);
+  typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdInt32ImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QxrdMaskDataPtr);
   MFType p = &QxrdDataProcessorThreaded::correctInt32Image;
-  m_CorrectedImages.enqueue(QtConcurrent::run(this, p, image, darkImage(), mask()));
+  m_CorrectedImages.enqueue(QtConcurrent::run(this, p, image, darkImage(), mask(), overflow));
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
-    (QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask)
+    (QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
              emit printMessage(tr("QxrdDataProcessorThreaded::correctInt16Image"));
@@ -67,7 +67,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
 
   if (image) {
     if ((image -> get_ImageNumber()) >= 0) {
-      return processAcquiredInt16Image(image, dark, mask);
+      return processAcquiredInt16Image(image, dark, mask, overflow);
     } else {
       if (get_SaveDarkImages()) {
         saveNamedImageData(image->get_FileName(), image);
@@ -82,7 +82,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
-    (QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask)
+    (QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
              emit printMessage(tr("QxrdDataProcessorThreaded::correctInt32Image"));
@@ -90,7 +90,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
 
   if (image) {
     if ((image -> get_ImageNumber()) >= 0) {
-      return processAcquiredInt32Image(image, dark, mask);
+      return processAcquiredInt32Image(image, dark, mask, overflow);
     } else {
       if (get_SaveDarkImages()) {
         saveNamedImageData(image->get_FileName(), image);
@@ -216,6 +216,9 @@ double QxrdDataProcessorThreaded::estimatedProcessingTime(double estSerialTime, 
 /******************************************************************
 *
 *  $Log: qxrddataprocessorthreaded.cpp,v $
+*  Revision 1.3  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorbase.h,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrddataprocessorbase.h,v 1.3 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -130,9 +130,9 @@ protected:
   void saveNamedImageDataAsText(QString name, QxrdDoubleImageDataPtr image, int canOverwrite=NoOverwrite);
   void writeOutputScan(QVector<double> x, QVector<double> y);
 
-  QxrdDoubleImageDataPtr processAcquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask);
-  QxrdDoubleImageDataPtr processAcquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask);
-  QxrdDoubleImageDataPtr processAcquiredImage(QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask);
+  QxrdDoubleImageDataPtr processAcquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
+  QxrdDoubleImageDataPtr processAcquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
+  QxrdDoubleImageDataPtr processAcquiredImage(QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
 
   void newDarkImage(QxrdInt16ImageDataPtr image);
   void newDarkImage(QxrdInt32ImageDataPtr image);
@@ -140,14 +140,8 @@ protected:
   void updateEstimatedTime(QcepDoubleProperty *prop, int msec);
   double estimatedProcessingTime(double estSerTime, double estParallelTime);
 
-protected slots:
-  void onAcquiredInt16ImageAvailable();
-  void onAcquiredInt32ImageAvailable();
-  void onAcquiredInt16ImageAvailable(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask);
-  void onAcquiredInt32ImageAvailable(QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask);
-
 protected:
-  void newData(QxrdDoubleImageDataPtr image);
+  void newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
   void newDarkImage(QxrdDoubleImageDataPtr image);
   void newBadPixelsImage(QxrdDoubleImageDataPtr image);
   void newGainMapImage(QxrdDoubleImageDataPtr image);
@@ -202,7 +196,7 @@ protected:
 
   FILE                  *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessorbase.h,v 1.2 2010/09/13 20:00:39 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessorbase.h,v 1.3 2010/10/21 19:44:03 jennings Exp $");
 };
 
 #endif
@@ -210,6 +204,9 @@ protected:
 /******************************************************************
 *
 *  $Log: qxrddataprocessorbase.h,v $
+*  Revision 1.3  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

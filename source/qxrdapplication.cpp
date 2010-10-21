@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.8 2010/10/21 16:31:24 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.9 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,7 +13,6 @@
 #include "qxrdsimpleserver.h"
 #include "qxrddataprocessorthread.h"
 #include "qxrddataprocessor.h"
-#include "qxrddataprocessorcuda.h"
 #include "qxrdintegrator.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
@@ -62,7 +61,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 #ifdef HAVE_PERKIN_ELMER
     m_PerkinElmerPluginInterface(NULL),
 #endif
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.8 2010/10/21 16:31:24 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.9 2010/10/21 19:44:03 jennings Exp $")
 {
   setupTiffHandlers();
 
@@ -82,7 +81,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   setApplicationName("qxrd");
 
   int detectorType = 0;
-  int processorType = 0;
 
   int specServer = 0;
   int specServerPort = 0;
@@ -93,7 +91,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
      QxrdSettings settings;
 
      detectorType = settings.value("application/detectorType").toInt();
-     processorType = settings.value("application/processorType").toInt();
      gCEPDebug = settings.value("application/debug").toInt();
      specServer = settings.value("application/runSpecServer").toInt();
      specServerPort = settings.value("application/specServerPort").toInt();
@@ -110,8 +107,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_DataProcessorThread = QxrdDataProcessorThreadPtr(new QxrdDataProcessorThread(QxrdAcquisitionPtr(NULL),
                                                                                  QxrdAllocatorPtr(m_Allocator),
-                                                                                 QxrdFileSaverThreadPtr(m_FileSaverThread),
-                                                                                 processorType));
+                                                                                 QxrdFileSaverThreadPtr(m_FileSaverThread)));
 
   m_DataProcessorThread -> start();
   m_DataProcessor = m_DataProcessorThread -> dataProcessor();
@@ -255,8 +251,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   emit printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 
   m_Window -> show();
-
-  printf("Number of CUDA devices = %d\n", QxrdDataProcessorCuda::available());
 }
 
 QxrdApplication::~QxrdApplication()
@@ -490,6 +484,9 @@ void QxrdApplication::tiffError(const char *module, const char *msg)
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.9  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.8  2010/10/21 16:31:24  jennings
 *  Implemented saving of settings soon after they change, rather than at program exit
 *

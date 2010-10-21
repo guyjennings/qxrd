@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessor.h,v 1.4 2010/10/21 16:31:24 jennings Exp $
+*  $Id: qxrddataprocessor.h,v 1.5 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -39,12 +39,6 @@ public:
   ~QxrdDataProcessor();
 
 public:
-  Q_PROPERTY(int    processorType     READ get_ProcessorType WRITE set_ProcessorType STORED false);
-  QCEP_INTEGER_PROPERTY(ProcessorType);
-
-  Q_PROPERTY(QString processorTypeName READ get_ProcessorTypeName WRITE set_ProcessorTypeName STORED false);
-  QCEP_STRING_PROPERTY(ProcessorTypeName);
-
   Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory);
   QCEP_STRING_PROPERTY(OutputDirectory);
 
@@ -165,8 +159,8 @@ public:
 public:
   virtual void beginAcquisition(int isDark) = 0;
   virtual void idleInt16Image(QxrdInt16ImageDataPtr image) = 0;
-  virtual void acquiredInt16Image(QxrdInt16ImageDataPtr image) = 0;
-  virtual void acquiredInt32Image(QxrdInt32ImageDataPtr image) = 0;
+  virtual void acquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow) = 0;
+  virtual void acquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow) = 0;
   virtual void updateEstimatedTime(QcepDoubleProperty *prop, int msec) = 0;
 
 public:
@@ -187,7 +181,7 @@ public:
   virtual void loadGainMap(QString name) = 0;
   virtual void saveGainMap(QString name, int canOverwrite=NoOverwrite) = 0;
 
-  virtual void newData(QxrdDoubleImageDataPtr image) = 0;
+  virtual void newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow) = 0;
   virtual void newDarkImage(QxrdDoubleImageDataPtr image) = 0;
   virtual void newBadPixelsImage(QxrdDoubleImageDataPtr image) = 0;
   virtual void newGainMapImage(QxrdDoubleImageDataPtr image) = 0;
@@ -224,7 +218,7 @@ public:
 
 private:
 
-  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.4 2010/10/21 16:31:24 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessor.h,v 1.5 2010/10/21 19:44:03 jennings Exp $");
 };
 
 #endif
@@ -232,6 +226,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrddataprocessor.h,v $
+*  Revision 1.5  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.4  2010/10/21 16:31:24  jennings
 *  Implemented saving of settings soon after they change, rather than at program exit
 *

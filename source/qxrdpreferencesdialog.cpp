@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdpreferencesdialog.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $
+*  $Id: qxrdpreferencesdialog.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -14,12 +14,11 @@
 QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QxrdPreferencesDialog),
-    SOURCE_IDENT("$Id: qxrdpreferencesdialog.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdpreferencesdialog.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $")
 {
   ui->setupUi(this);
 
   connect(ui -> m_DetectorTypeCombo, SIGNAL(currentIndexChanged(int)), ui->m_DetectorPrefsStack, SLOT(setCurrentIndex(int)));
-//  connect(ui -> m_ProcessorTypeCombo, SIGNAL(currentIndexChanged(int)), ui->m_ProcessorPrefsStack, SLOT(setCurrentIndex(int)));
 
   QxrdSettings settings;
   QxrdApplication *app = QxrdApplication::application();
@@ -35,12 +34,9 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   int simpleServerPort = app -> get_SimpleServerPort();
 
   QStringList detectorTypes = QxrdAcquisitionThread::detectorTypeNames();
-  QStringList processorTypes = QxrdDataProcessorThread::processorTypeNames();
 
   ui -> m_DetectorTypeCombo -> addItems(detectorTypes);
   ui -> m_DetectorTypeCombo -> setCurrentIndex(detectorType);
-//  ui -> m_ProcessorTypeCombo -> addItems(processorTypes);
-//  ui -> m_ProcessorTypeCombo -> setCurrentIndex(processorType);
   ui -> m_DebugLevelSpinBox -> setRange(0,65535);
   ui -> m_DebugLevelSpinBox -> setValue(debugLevel);
   ui -> m_ReservedMemory -> setRange(100, 20000);
@@ -131,6 +127,9 @@ void QxrdPreferencesDialog::accept()
 /******************************************************************
 *
 *  $Log: qxrdpreferencesdialog.cpp,v $
+*  Revision 1.3  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:41  jennings
 *  Merged
 *

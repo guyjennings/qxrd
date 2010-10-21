@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdgeneratetestimage.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdgeneratetestimage.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -31,7 +31,7 @@ QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdDataProcessor *proc, QxrdAlloca
     m_RingTTH(this, "ringTTH", QcepDoubleList()),
     m_RingIntensity(this, "ringIntensity", QcepDoubleList()),
     m_RingWidth(this, "ringWidth", QcepDoubleList()),
-    SOURCE_IDENT("$Id: qxrdgeneratetestimage.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdgeneratetestimage.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $")
 {
 }
 
@@ -144,7 +144,7 @@ void QxrdGenerateTestImage::generateImage()
     }
   }
 
-  m_Processor -> newData(img);
+  m_Processor -> newData(img, QxrdMaskDataPtr());
 }
 
 void QxrdGenerateTestImage::generateTTHImage()
@@ -184,7 +184,7 @@ void QxrdGenerateTestImage::generateTTHImage()
       img->setValue(col,row,twoTheta);
     }
   }
-  m_Processor -> newData(img);
+  m_Processor -> newData(img, QxrdMaskDataPtr());
 }
 
 void QxrdGenerateTestImage::generateChiImage()
@@ -224,12 +224,15 @@ void QxrdGenerateTestImage::generateChiImage()
       img->setValue(col,row,chi);
     }
   }
-  m_Processor -> newData(img);
+  m_Processor -> newData(img, QxrdMaskDataPtr());
 }
 
 /******************************************************************
 *
 *  $Log: qxrdgeneratetestimage.cpp,v $
+*  Revision 1.3  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

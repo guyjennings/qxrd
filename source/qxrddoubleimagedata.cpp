@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddoubleimagedata.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrddoubleimagedata.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -8,18 +8,26 @@
 
 QxrdDoubleImageData::QxrdDoubleImageData(QxrdAllocatorInterface *allocator, int width, int height)
   : QxrdImageData<double>(allocator, width, height),
-  SOURCE_IDENT("$Id: qxrddoubleimagedata.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+  m_Mask(NULL),
+  m_Overflow(NULL),
+  SOURCE_IDENT("$Id: qxrddoubleimagedata.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $")
 {
 }
 
-void QxrdDoubleImageData::setMask(QxrdMaskDataPtr mask)
+void QxrdDoubleImageData::setMask(QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
-  m_Mask = mask;
+  m_Mask     = mask;
+  m_Overflow = overflow;
 }
 
 QxrdMaskDataPtr QxrdDoubleImageData::mask() const
 {
   return m_Mask;
+}
+
+QxrdMaskDataPtr QxrdDoubleImageData::overflow() const
+{
+  return m_Overflow;
 }
 
 double QxrdDoubleImageData::findMin() const
@@ -99,6 +107,9 @@ double QxrdDoubleImageData::findAverage() const
 /******************************************************************
 *
 *  $Log: qxrddoubleimagedata.cpp,v $
+*  Revision 1.3  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

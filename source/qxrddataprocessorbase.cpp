@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorbase.cpp,v 1.3 2010/09/24 22:29:37 jennings Exp $
+*  $Id: qxrddataprocessorbase.cpp,v 1.4 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
@@ -49,7 +49,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase
     m_RefinedRingSetData(NULL),
     m_GenerateTestImage(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessorbase.cpp,v 1.3 2010/09/24 22:29:37 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessorbase.cpp,v 1.4 2010/10/21 19:44:03 jennings Exp $")
 {
   m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(this));
   m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(QxrdDataProcessorPtr(this), m_Allocator, this));
@@ -99,7 +99,7 @@ void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionPtr acq)
 void QxrdDataProcessorBase::setWindow(QxrdWindowPtr win)
 {
   m_Window = win;
-  newData(m_Data);
+  newData(m_Data, QxrdMaskDataPtr());
   newMask();
 }
 
@@ -134,58 +134,6 @@ void QxrdDataProcessorBase::readSettings(QxrdSettings &settings, QString section
   newLogFile(get_LogFilePath());
 }
 
-void QxrdDataProcessorBase::onAcquiredInt16ImageAvailable()
-{
-  while (m_AcquiredInt16Images.size() > 0) {
-    onAcquiredInt16ImageAvailable(m_AcquiredInt16Images.dequeue(), darkImage(), mask());
-  }
-}
-
-void QxrdDataProcessorBase::onAcquiredInt16ImageAvailable(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask)
-{
-  if (image) {
-    if ((image -> get_ImageNumber()) >= 0) {
-      processAcquiredInt16Image(image, dark, mask);
-    } else {
-      QWriteLocker wl(&m_DarkUsage);
-
-      saveNamedImageData(image->get_FileName(), image);
-
-      set_DarkImagePath(image->get_FileName());
-
-      emit printMessage(tr("Saved dark image \"%1\"").arg(image->get_FileName()));
-
-      newDarkImage(image);
-    }
-  }
-}
-
-void QxrdDataProcessorBase::onAcquiredInt32ImageAvailable()
-{
-  while (m_AcquiredInt32Images.size() > 0) {
-    onAcquiredInt32ImageAvailable(m_AcquiredInt32Images.dequeue(), darkImage(), mask());
-  }
-}
-
-void QxrdDataProcessorBase::onAcquiredInt32ImageAvailable(QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask)
-{
-  if (image) {
-    if ((image -> get_ImageNumber()) >= 0) {
-      processAcquiredInt32Image(image, dark, mask);
-    } else {
-      QWriteLocker wl(&m_DarkUsage);
-
-      saveNamedImageData(image->get_FileName(), image);
-
-      set_DarkImagePath(image->get_FileName());
-
-      emit printMessage(tr("Saved dark image \"%1\"").arg(image->get_FileName()));
-
-      newDarkImage(image);
-    }
-  }
-}
-
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage()
 {
   QxrdDoubleImageDataPtr res = m_Allocator -> newDoubleImage();
@@ -201,13 +149,13 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage()
   return res;
 }
 
-void QxrdDataProcessorBase::newData(QxrdDoubleImageDataPtr image)
+void QxrdDataProcessorBase::newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   m_Data = image;
 
-  m_Data -> setMask(m_Mask);
+  m_Data -> setMask(m_Mask, overflow);
 
-  m_Window -> newDataAvailable(m_Data);
+  m_Window -> newDataAvailable(m_Data, overflow);
 }
 
 void QxrdDataProcessorBase::newDarkImage(QxrdDoubleImageDataPtr image)
@@ -315,7 +263,7 @@ void QxrdDataProcessorBase::loadData(QString name)
 
     res -> loadMetaData();
 
-    newData(res);
+    newData(res, QxrdMaskDataPtr());
 
     set_DataPath(res -> get_FileName());
   }
@@ -331,7 +279,7 @@ void QxrdDataProcessorBase::processData(QString name)
 
     res -> loadMetaData();
 
-    processAcquiredImage(res, darkImage(), mask());
+    processAcquiredImage(res, darkImage(), mask(), QxrdMaskDataPtr());
 
     set_DataPath(res -> get_FileName());
   }
@@ -551,7 +499,7 @@ void QxrdDataProcessorBase::clearMask()
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image
-    (QxrdInt16ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask)
+    (QxrdInt16ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
              emit printMessage(tr("processing acquired 16 bit image, %1 remaining").arg(getAcquiredCount()));
@@ -571,7 +519,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image
     dimg -> copyFrom(img);
     dimg -> set_DateTime(QDateTime::currentDateTime());
 
-    processAcquiredImage(dimg, dark, mask);
+    processAcquiredImage(dimg, dark, mask, overflow);
 
     return dimg;
   } else {
@@ -580,7 +528,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image
-    (QxrdInt32ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask)
+    (QxrdInt32ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
              emit printMessage(tr("processing acquired 32 bit image, %1 remaining").arg(getAcquiredCount()));
@@ -600,7 +548,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image
     dimg -> copyFrom(img);
     dimg -> set_DateTime(QDateTime::currentDateTime());
 
-    processAcquiredImage(dimg, dark, mask);
+    processAcquiredImage(dimg, dark, mask, overflow);
 
     return dimg;
   } else {
@@ -608,7 +556,8 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image
   }
 }
 
-QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage(QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask)
+QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
+    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   if (dimg) {
     QTime tic;
@@ -661,7 +610,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage(QxrdDoubleIma
       updateEstimatedTime(prop_SaveAsTextTime(), tic.elapsed());
     }
 
-    newData(dimg);
+    newData(dimg, overflow);
 
     QCEP_DEBUG(DEBUG_PROCESS,
                emit printMessage(tr("Processing took %1 msec").arg(tic.restart()));
@@ -1070,7 +1019,7 @@ void QxrdDataProcessorBase::newImage(int ncols, int nrows)
   m_Data -> resize(ncols, nrows);
   m_Data -> fill(0);
 
-  newData(m_Data);
+  newData(m_Data, QxrdMaskDataPtr());
 }
 
 void QxrdDataProcessorBase::exponentialTail(double cx, double cy, double width, int oversample)
@@ -1097,7 +1046,7 @@ void QxrdDataProcessorBase::exponentialTail(double cx, double cy, double width, 
     }
   }
 
-  newData(m_Data);
+  newData(m_Data, QxrdMaskDataPtr());
 }
 
 void QxrdDataProcessorBase::reciprocalTail(double cx, double cy, double strength, int oversample)
@@ -1124,7 +1073,7 @@ void QxrdDataProcessorBase::reciprocalTail(double cx, double cy, double strength
     }
   }
 
-  newData(m_Data);
+  newData(m_Data, QxrdMaskDataPtr());
 }
 
 void QxrdDataProcessorBase::powderRing(double cx, double cy, double radius, double width, double strength, int oversample)
@@ -1157,7 +1106,7 @@ void QxrdDataProcessorBase::powderRing(double cx, double cy, double radius, doub
     }
   }
 
-  newData(m_Data);
+  newData(m_Data, QxrdMaskDataPtr());
 }
 
 void QxrdDataProcessorBase::ellipse(double cx, double cy, double a, double e, double ang, double width, double strength, int oversample)
@@ -1191,7 +1140,7 @@ void QxrdDataProcessorBase::ellipse(double cx, double cy, double a, double e, do
     }
   }
 
-  newData(m_Data);
+  newData(m_Data, QxrdMaskDataPtr());
 }
 
 void QxrdDataProcessorBase::openLogFile()
@@ -1361,6 +1310,9 @@ QxrdGenerateTestImagePtr QxrdDataProcessorBase::generateTestImage() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessorbase.cpp,v $
+*  Revision 1.4  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.3  2010/09/24 22:29:37  jennings
 *  Work on NSIS installer
 *  Fixed startup problem on debug builds when calling QxrdAcquisitionThread->initialize()

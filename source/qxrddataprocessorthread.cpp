@@ -1,25 +1,20 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorthread.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
+*  $Id: qxrddataprocessorthread.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $
 *
 *******************************************************************/
 
 #include "qxrddataprocessorthread.h"
 
-#include "qxrddataprocessorsimple.h"
-#include "qxrddataprocessorcuda.h"
 #include "qxrddataprocessorthreaded.h"
 
-static int g_ProcessorType = -1;
-
-QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver, int processorType)
+QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver)
   : QThread(),
     m_Allocator(allocator),
     m_FileSaverThread(saver),
     m_DataProcessor(NULL),
     m_Acquisition(acq),
-//    m_ProcessorType(processorType),
-    SOURCE_IDENT("$Id: qxrddataprocessorthread.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessorthread.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $")
 {
 }
 
@@ -34,32 +29,7 @@ void QxrdDataProcessorThread::run()
 {
   QxrdDataProcessorPtr p;
 
-//  m_DataProcessor -> initialize();
-//  switch (m_ProcessorType) {
-//  case 0:
-//  default:
-//    p = new QxrdDataProcessorSimple(m_Acquisition, m_Allocator, m_FileSaverThread, NULL);
-//    g_ProcessorType = 0;
-//    break;
-//
-//  case 1:
-//    if (QxrdDataProcessorCuda::available()) {
-//      p = QxrdDataProcessorPtr(new QxrdDataProcessorCuda(m_Acquisition, m_Allocator, m_FileSaverThread, NULL));
-//      g_ProcessorType = 1;
-//    } else {
-//      p = QxrdDataProcessorPtr(new QxrdDataProcessorThreaded(m_Acquisition, m_Allocator, m_FileSaverThread, NULL));
-//      g_ProcessorType = 2;
-//    }
-//    break;
-//
-//  case 2:
-    p = QxrdDataProcessorPtr(new QxrdDataProcessorThreaded(m_Acquisition, m_Allocator, m_FileSaverThread, NULL));
-    g_ProcessorType = 2;
-//    break;
-//  }
-
-  p -> set_ProcessorType(g_ProcessorType);
-  p -> set_ProcessorTypeName(processorTypeNames()[g_ProcessorType]);
+  p = QxrdDataProcessorPtr(new QxrdDataProcessorThreaded(m_Acquisition, m_Allocator, m_FileSaverThread, NULL));
 
   m_DataProcessor.fetchAndStoreOrdered(p);
 
@@ -84,22 +54,6 @@ QxrdDataProcessorPtr QxrdDataProcessorThread::dataProcessor() const
   return m_DataProcessor;
 }
 
-QStringList QxrdDataProcessorThread::processorTypeNames()
-{
-  QStringList res;
-
-  res << "Simple Single Threaded"
-      << "CUDA GPU Based"
-      << "Multi Threaded";
-
-  return res;
-}
-
-int QxrdDataProcessorThread::processorType()
-{
-  return g_ProcessorType;
-}
-
 void QxrdDataProcessorThread::msleep(unsigned long t)
 {
   QThread::msleep(t);
@@ -108,6 +62,9 @@ void QxrdDataProcessorThread::msleep(unsigned long t)
 /******************************************************************
 *
 *  $Log: qxrddataprocessorthread.cpp,v $
+*  Revision 1.3  2010/10/21 19:44:03  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:39  jennings
 *  Merged
 *

@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdacquisitionparameters.cpp,v 1.2 2010/09/13 20:00:38 jennings Exp $
+*  $Id: qxrdacquisitionparameters.cpp,v 1.3 2010/10/21 19:44:02 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,6 +32,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(/*QxrdDataProcessor *proc*/
     m_FileBase(this,"fileBase",""),
     m_NRows(this, "nRows", 2048),
     m_NCols(this, "nCols", 2048),
+    m_OverflowLevel(this, "overflowLevel", 65500),
     m_AcquireDark(this, "acquireDark", 0),
     m_Cancelling(this, "cancelling", 0),
     m_ExposuresToSum(this, "exposuresToSum", 1),
@@ -48,7 +49,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(/*QxrdDataProcessor *proc*/
     m_UserComment4(this,"userComment4",""),
     m_DroppedFrames(this,"droppedFrames",0),
     m_Mutex(QMutex::Recursive),
-    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.2 2010/09/13 20:00:38 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdacquisitionparameters.cpp,v 1.3 2010/10/21 19:44:02 jennings Exp $")
 {
   connect(prop_Raw16SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateSaveTimes()));
   connect(prop_Raw32SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateSaveTimes()));
@@ -127,6 +128,9 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings &settings, QString sec
 /******************************************************************
 *
 *  $Log: qxrdacquisitionparameters.cpp,v $
+*  Revision 1.3  2010/10/21 19:44:02  jennings
+*  Adding code to display overflow pixels, removed cuda and simple processors
+*
 *  Revision 1.2  2010/09/13 20:00:38  jennings
 *  Merged
 *
