@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorbase.cpp,v 1.4 2010/10/21 19:44:03 jennings Exp $
+*  $Id: qxrddataprocessorbase.cpp,v 1.5 2010/10/22 21:44:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -32,7 +32,6 @@ QxrdDataProcessorBase::QxrdDataProcessorBase
     m_Allocator(allocator),
     m_FileSaverThread(saver),
     m_Acquisition(acq),
-    m_DarkUsage(QReadWriteLock::Recursive),
     m_AcquiredInt16Images("acquiredInt16Images"),
     m_AcquiredInt32Images("acquiredInt32Images"),
     m_Data(allocator -> newDoubleImage()),
@@ -49,7 +48,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase
     m_RefinedRingSetData(NULL),
     m_GenerateTestImage(NULL),
     m_LogFile(NULL),
-    SOURCE_IDENT("$Id: qxrddataprocessorbase.cpp,v 1.4 2010/10/21 19:44:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrddataprocessorbase.cpp,v 1.5 2010/10/22 21:44:26 jennings Exp $")
 {
   m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(this));
   m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(QxrdDataProcessorPtr(this), m_Allocator, this));
@@ -568,8 +567,6 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
     );
 
     if (get_PerformDarkSubtraction()) {
-      QReadLocker rl(&m_DarkUsage);
-
       subtractDarkImage(dimg, dark);
       dimg -> set_ImageSaved(false);
 
@@ -1310,6 +1307,9 @@ QxrdGenerateTestImagePtr QxrdDataProcessorBase::generateTestImage() const
 /******************************************************************
 *
 *  $Log: qxrddataprocessorbase.cpp,v $
+*  Revision 1.5  2010/10/22 21:44:26  jennings
+*  *** empty log message ***
+*
 *  Revision 1.4  2010/10/21 19:44:03  jennings
 *  Adding code to display overflow pixels, removed cuda and simple processors
 *

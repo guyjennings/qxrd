@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qcepimagedataformattiff.h,v 1.2 2010/09/13 20:00:25 jennings Exp $
+*  $Id: qcepimagedataformattiff.h,v 1.3 2010/10/22 21:44:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -26,7 +26,7 @@ public:
   QcepImageDataFormatBase::Priority priority() const;
 
 private:
-  HEADER_IDENT("$Id: qcepimagedataformattiff.h,v 1.2 2010/09/13 20:00:25 jennings Exp $");
+  HEADER_IDENT("$Id: qcepimagedataformattiff.h,v 1.3 2010/10/22 21:44:26 jennings Exp $");
 };
 
 extern void qceptiff_warningHandler(const char *module, const char *fmt, va_list ap);
@@ -35,7 +35,7 @@ template <typename T>
 QcepImageDataFormatTiff<T>::QcepImageDataFormatTiff(QString name)
   : QcepImageDataFormat<T>(name)
 {
-//  TIFFSetWarningHandler(&qceptiff_warningHandler);
+  TIFFSetWarningHandler(&qceptiff_warningHandler);
 }
 
 template <typename T>
@@ -170,6 +170,9 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::saveFile(QString /*path*/, Q
 /******************************************************************
 *
 *  $Log: qcepimagedataformattiff.h,v $
+*  Revision 1.3  2010/10/22 21:44:26  jennings
+*  *** empty log message ***
+*
 *  Revision 1.2  2010/09/13 20:00:25  jennings
 *  Merged
 *

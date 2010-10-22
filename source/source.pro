@@ -198,7 +198,8 @@ HEADERS += TODO.h \
     qxrdacquiredialog.h \
     qxrdcenterstepspinner.h \
     qxrdsettingssaver.h \
-    qxrdsettingssaverthread.h
+    qxrdsettingssaverthread.h \
+    qxrdplotimage.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -287,7 +288,8 @@ SOURCES += qxrd.cpp \
     qxrdacquiredialog.cpp \
     qxrdcenterstepspinner.cpp \
     qxrdsettingssaver.cpp \
-    qxrdsettingssaverthread.cpp
+    qxrdsettingssaverthread.cpp \
+    qxrdplotimage.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \

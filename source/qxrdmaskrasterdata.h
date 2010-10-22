@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskrasterdata.h,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdmaskrasterdata.h,v 1.3 2010/10/22 21:44:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -27,6 +27,10 @@ public:
 
   QxrdMaskRasterData* copy() const;
 
+  short int *data() const;
+
+  void mask_combine(QxrdMaskRasterData *a);
+
   const QxrdMaskDataPtr mask() const { return m_Mask; }
   int interp() const                 { return m_Interpolate; }
 
@@ -36,7 +40,7 @@ public:
 private:
   QxrdMaskDataPtr  m_Mask;
   int              m_Interpolate;
-  HEADER_IDENT("$Id: qxrdmaskrasterdata.h,v 1.2 2010/09/13 20:00:40 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdmaskrasterdata.h,v 1.3 2010/10/22 21:44:26 jennings Exp $");
 };
 
 #endif
@@ -44,6 +48,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdmaskrasterdata.h,v $
+*  Revision 1.3  2010/10/22 21:44:26  jennings
+*  *** empty log message ***
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

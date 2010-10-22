@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdapplication.cpp,v 1.9 2010/10/21 19:44:03 jennings Exp $
+*  $Id: qxrdapplication.cpp,v 1.10 2010/10/22 21:44:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -61,7 +61,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 #ifdef HAVE_PERKIN_ELMER
     m_PerkinElmerPluginInterface(NULL),
 #endif
-    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.9 2010/10/21 19:44:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdapplication.cpp,v 1.10 2010/10/22 21:44:26 jennings Exp $")
 {
   setupTiffHandlers();
 
@@ -429,11 +429,11 @@ void QxrdApplication::debugChanged(int newValue)
 
 static void qxrdTIFFWarningHandler(const char* module, const char* fmt, va_list ap)
 {
-  char msg[100];
-
-  vsnprintf(msg, sizeof(msg), fmt, ap);
-
-  g_Application -> tiffWarning(module, msg);
+//  char msg[100];
+//
+//  vsnprintf(msg, sizeof(msg), fmt, ap);
+//
+//  g_Application -> tiffWarning(module, msg);
 }
 
 //static void qxrdTIFFWarningHandlerExt(thandle_t fd, const char* module, const char* fmt, va_list ap)
@@ -484,6 +484,9 @@ void QxrdApplication::tiffError(const char *module, const char *msg)
 /******************************************************************
 *
 *  $Log: qxrdapplication.cpp,v $
+*  Revision 1.10  2010/10/22 21:44:26  jennings
+*  *** empty log message ***
+*
 *  Revision 1.9  2010/10/21 19:44:03  jennings
 *  Adding code to display overflow pixels, removed cuda and simple processors
 *

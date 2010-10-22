@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskrasterdata.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdmaskrasterdata.cpp,v 1.3 2010/10/22 21:44:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -12,7 +12,7 @@ QxrdMaskRasterData::QxrdMaskRasterData(QxrdMaskDataPtr mask, int interp)
   : QwtRasterData(QwtDoubleRect(0,0,(mask?mask->get_Width():0),(mask?mask->get_Height():0))),
     m_Mask(mask),
     m_Interpolate(interp),
-    SOURCE_IDENT("$Id: qxrdmaskrasterdata.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdmaskrasterdata.cpp,v 1.3 2010/10/22 21:44:26 jennings Exp $")
 {
   QCEP_DEBUG(DEBUG_IMAGES,
              printf("QxrdMaskRasterData::QxrdMaskRasterData(%p,%d) [%p]\n",
@@ -56,9 +56,33 @@ double QxrdMaskRasterData::value(double x, double y) const
   }
 }
 
+short int *QxrdMaskRasterData::data() const
+{
+  return m_Mask->data();
+}
+
+void QxrdMaskRasterData::mask_combine(QxrdMaskRasterData *a)
+{
+  if (m_Mask && a) {
+    int nrow = m_Mask->get_Height();
+    int ncol = m_Mask->get_Width();
+    long npix = nrow*ncol;
+
+    short int *dst = m_Mask->data();
+    short int *src = a->data();
+
+    for (long i=0; i<npix; i++) {
+      int sv = *src;
+      int dv = *dst++;
+
+      *src++ = i & 0x03;/*(sv & 0x0002) | (dv & 0x0001);*/
+    }
+  }
+}
+
 QwtDoubleInterval QxrdMaskRasterData::range() const
 {
-  return QwtDoubleInterval(0.0, 1.0);
+  return QwtDoubleInterval(0.0, 3.0);
 }
 
 QxrdMaskRasterData* QxrdMaskRasterData::copy() const
@@ -75,6 +99,9 @@ QxrdMaskRasterData* QxrdMaskRasterData::copy() const
 /******************************************************************
 *
 *  $Log: qxrdmaskrasterdata.cpp,v $
+*  Revision 1.3  2010/10/22 21:44:26  jennings
+*  *** empty log message ***
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

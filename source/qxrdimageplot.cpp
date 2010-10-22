@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $
+*  $Id: qxrdimageplot.cpp,v 1.4 2010/10/22 21:44:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -48,6 +48,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 //    m_Legend(NULL),
     m_Spectrogram(NULL),
     m_MaskImage(NULL),
+    m_PlotImage(NULL),
     m_ColorMap(Qt::black, Qt::white),
     m_MaskColorMap(Qt::red, QColor(0,0,0,0)),
     m_MaskAlpha(80),
@@ -57,7 +58,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.3 2010/09/17 16:21:51 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdimageplot.cpp,v 1.4 2010/10/22 21:44:26 jennings Exp $")
 {
   delete m_Zoomer;
 
@@ -94,6 +95,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_MaskImage = QwtPlotSpectrogramPtr(new QwtPlotSpectrogram());
   m_MaskImage -> setAlpha(get_MaskShown() ? m_MaskAlpha : 0);
   m_MaskImage -> attach(this);
+
+  m_PlotImage = QxrdPlotImagePtr(new QxrdPlotImage());
+  m_PlotImage -> attach(this);
 
   m_CenterFinderPicker = QxrdCenterFinderPickerPtr(new QxrdCenterFinderPicker(QxrdImagePlotPtr(this)));
 
@@ -467,8 +471,11 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
   replot();
 }
 
-void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image)
+void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
 {
+  QTime tic;
+  tic.start();
+
   if (!image ||
       image->get_Width() != m_Raster.width() ||
       image->get_Height() != m_Raster.height()) {
@@ -479,7 +486,14 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image)
 
   QxrdRasterData data(image, get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
 
-  setImage(data);
+  if (overflow == NULL) {
+    setImage(data);
+  } else {
+//    QxrdMaskRasterData ovf(overflow, false);
+//    ovf.mask_combine(&m_MaskRaster);
+    setImage(data);
+//    setMask(ovf);
+  }
 
   if (image) {
     setTitle(image -> get_Title());
@@ -488,6 +502,8 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image)
   }
 
   replotImage();
+
+  emit printMessage(tr("plot image took %1 msec").arg(tic.elapsed()));
 }
 
 void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)
@@ -501,7 +517,7 @@ void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMas
 //  m_DataProcessor -> decrementProcessedCount();
 
   QxrdRasterData data(image, get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
-  QxrdMaskRasterData msk(mask, get_InterpolatePixels());
+  QxrdMaskRasterData msk(mask, false);
 
   setImage(data);
   setMask(msk);
@@ -645,6 +661,9 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
 /******************************************************************
 *
 *  $Log: qxrdimageplot.cpp,v $
+*  Revision 1.4  2010/10/22 21:44:26  jennings
+*  *** empty log message ***
+*
 *  Revision 1.3  2010/09/17 16:21:51  jennings
 *  Rationalised the trackerText implementations
 *

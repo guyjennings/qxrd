@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdimageplot.h,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdimageplot.h,v 1.3 2010/10/22 21:44:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -20,6 +20,7 @@
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
 #include "qxrdmaskcolormap.h"
+#include "qxrdplotimage.h"
 
 class QxrdImagePlot : public QxrdPlot
 {
@@ -89,7 +90,7 @@ public slots:
   void onInterpolateChanged(bool interp);
   void onMaintainAspectChanged(bool interp);
 
-  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image);
+  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
   void onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
   void onDarkImageAvailable(QxrdDoubleImageDataPtr image);
   void onCenterXChanged(double cx);
@@ -138,6 +139,7 @@ private:
 //  QwtLegendPtr               m_Legend;
   QwtPlotSpectrogramPtr      m_Spectrogram;
   QwtPlotSpectrogramPtr      m_MaskImage;
+  QxrdPlotImagePtr           m_PlotImage;
   QxrdRasterData             m_Raster;
   QxrdMaskRasterData         m_MaskRaster;
   QwtLinearColorMap          m_ColorMap;
@@ -154,7 +156,7 @@ private:
 //  QPen                       m_Pen;
   bool                 m_FirstTime;
 
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.2 2010/09/13 20:00:40 jennings Exp $");
+  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.3 2010/10/22 21:44:26 jennings Exp $");
 };
 
 #endif
@@ -162,6 +164,9 @@ private:
 /******************************************************************
 *
 *  $Log: qxrdimageplot.h,v $
+*  Revision 1.3  2010/10/22 21:44:26  jennings
+*  *** empty log message ***
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

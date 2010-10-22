@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrddataprocessorbase.h,v 1.3 2010/10/21 19:44:03 jennings Exp $
+*  $Id: qxrddataprocessorbase.h,v 1.4 2010/10/22 21:44:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -171,7 +171,6 @@ protected:
   QxrdAllocatorPtr       m_Allocator;
   QxrdFileSaverThreadPtr m_FileSaverThread;
   QxrdAcquisitionPtr     m_Acquisition;
-  QReadWriteLock         m_DarkUsage;
   QWaitCondition         m_ProcessWaiting;
   QxrdInt16ImageQueue    m_AcquiredInt16Images;
   QxrdInt32ImageQueue    m_AcquiredInt32Images;
@@ -196,7 +195,7 @@ protected:
 
   FILE                  *m_LogFile;
 
-  HEADER_IDENT("$Id: qxrddataprocessorbase.h,v 1.3 2010/10/21 19:44:03 jennings Exp $");
+  HEADER_IDENT("$Id: qxrddataprocessorbase.h,v 1.4 2010/10/22 21:44:26 jennings Exp $");
 };
 
 #endif
@@ -204,6 +203,9 @@ protected:
 /******************************************************************
 *
 *  $Log: qxrddataprocessorbase.h,v $
+*  Revision 1.4  2010/10/22 21:44:26  jennings
+*  *** empty log message ***
+*
 *  Revision 1.3  2010/10/21 19:44:03  jennings
 *  Adding code to display overflow pixels, removed cuda and simple processors
 *

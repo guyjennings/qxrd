@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdmaskcolormap.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
+*  $Id: qxrdmaskcolormap.cpp,v 1.3 2010/10/22 21:44:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -10,7 +10,7 @@ QxrdMaskColorMap::QxrdMaskColorMap(const QColor &deselcol, const QColor &selcol)
   : QwtLinearColorMap(QwtColorMap::RGB),
     m_DeselectedColor(deselcol.rgba()),
     m_SelectedColor(selcol.rgba()),
-    SOURCE_IDENT("$Id: qxrdmaskcolormap.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdmaskcolormap.cpp,v 1.3 2010/10/22 21:44:26 jennings Exp $")
 {
 }
 
@@ -38,11 +38,20 @@ QRgb QxrdMaskColorMap::rgb(const QwtDoubleInterval &/*inter*/, double value) con
 //     return m_DeselectedColor;
 //   }
 
-  int v = (int)((1.0-value)*255.0);
-  if (v<0) v=0;
-  if (v>255) v=255;
+  int v = value;
 
-  return qRgba(255,0,0, v);
+  if (v & 1) {
+    return qRgba(255,0,0,0);
+  } else if (v & 2) {
+    return qRgba(0,255,0,255);
+  } else {
+    return qRgba(255,0,0,255);
+  }
+//  int v = (int)((1.0-value)*255.0);
+//  if (v<0) v=0;
+//  if (v>255) v=255;
+//
+//  return qRgba(255,0,0, v);
 }
 
 unsigned char QxrdMaskColorMap::colorIndex(const QwtDoubleInterval &/*inter*/, double /*value*/) const
@@ -53,6 +62,9 @@ unsigned char QxrdMaskColorMap::colorIndex(const QwtDoubleInterval &/*inter*/, d
 /******************************************************************
 *
 *  $Log: qxrdmaskcolormap.cpp,v $
+*  Revision 1.3  2010/10/22 21:44:26  jennings
+*  *** empty log message ***
+*
 *  Revision 1.2  2010/09/13 20:00:40  jennings
 *  Merged
 *

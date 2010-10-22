@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdwindow.cpp,v 1.4 2010/10/21 19:44:03 jennings Exp $
+*  $Id: qxrdwindow.cpp,v 1.5 2010/10/22 21:44:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -72,7 +72,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     m_Mask(NULL/*new QxrdMaskData(NULL,2048,2048)*/),
     m_NewMask(NULL/*new QxrdMaskData(2048,2048)*/),
     m_NewMaskAvailable(false),
-    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.4 2010/10/21 19:44:03 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdwindow.cpp,v 1.5 2010/10/22 21:44:26 jennings Exp $")
 {
   setupUi(this);
 
@@ -699,15 +699,17 @@ void QxrdWindow::newData()
 {
 //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
 
-  if (m_NewDataAvailable.fetchAndAddOrdered(0)) {
+  if (m_NewDataAvailable.fetchAndStoreOrdered(0)) {
     QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
 //    QxrdDoubleImageDataPtr tmp = m_Data;
     m_Data = m_NewData;
     m_NewData = QxrdDoubleImageDataPtr(NULL);
-    m_NewDataAvailable.fetchAndStoreOrdered(0);
 
-    m_Plot             -> onProcessedImageAvailable(m_Data);
+    m_Overflow = m_NewOverflow;
+    m_NewOverflow = QxrdMaskDataPtr(NULL);
+
+    m_Plot             -> onProcessedImageAvailable(m_Data, m_Overflow);
     m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
   }
 }
@@ -960,6 +962,9 @@ void QxrdWindow::doRefineCenterTilt()
 /******************************************************************
 *
 *  $Log: qxrdwindow.cpp,v $
+*  Revision 1.5  2010/10/22 21:44:26  jennings
+*  *** empty log message ***
+*
 *  Revision 1.4  2010/10/21 19:44:03  jennings
 *  Adding code to display overflow pixels, removed cuda and simple processors
 *

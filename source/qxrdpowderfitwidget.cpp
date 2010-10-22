@@ -1,6 +1,6 @@
 /******************************************************************
 *
-*  $Id: qxrdpowderfitwidget.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $
+*  $Id: qxrdpowderfitwidget.cpp,v 1.3 2010/10/22 21:44:26 jennings Exp $
 *
 *******************************************************************/
 
@@ -13,7 +13,7 @@
 QxrdPowderFitWidget::QxrdPowderFitWidget(QxrdDataProcessorPtr proc, QWidget *parent) :
     QDialog(parent),
     m_Processor(proc),
-    SOURCE_IDENT("$Id: qxrdpowderfitwidget.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $")
+    SOURCE_IDENT("$Id: qxrdpowderfitwidget.cpp,v 1.3 2010/10/22 21:44:26 jennings Exp $")
 {
   setupUi(this);
 
@@ -24,7 +24,7 @@ QxrdPowderFitWidget::QxrdPowderFitWidget(QxrdDataProcessorPtr proc, QWidget *par
   connect(m_CancelFitButton, SIGNAL(clicked()), this, SLOT(cancelFit()));
   connect(m_UndoFitButton, SIGNAL(clicked()), this, SLOT(undoFit()));
 
-  m_ImagePlot->onProcessedImageAvailable(m_Processor->data());
+  m_ImagePlot->onProcessedImageAvailable(m_Processor->data(), QxrdMaskDataPtr(NULL));
 }
 
 QxrdPowderFitWidget::~QxrdPowderFitWidget()
@@ -86,6 +86,9 @@ void QxrdPowderFitWidget::appendGraphMarker(int n, QwtDoublePoint pt)
 /******************************************************************
 *
 *  $Log: qxrdpowderfitwidget.cpp,v $
+*  Revision 1.3  2010/10/22 21:44:26  jennings
+*  *** empty log message ***
+*
 *  Revision 1.2  2010/09/13 20:00:41  jennings
 *  Merged
 *
