@@ -18,17 +18,6 @@ QxrdCenterFinderPicker::QxrdCenterFinderPicker(QxrdImagePlotPtr plot)
   setSelectionFlags(QwtPicker::PointSelection);
   setRubberBand(QwtPicker::CrossRubberBand);
 }
-//
-//QwtText QxrdCenterFinderPicker::trackerText(const QwtDoublePoint &pos) const
-//{
-//  QxrdRasterData* raster = m_Plot->raster();
-//
-//  if (raster) {
-//    return tr("%1, %2, %3").arg(pos.x()).arg(pos.y()).arg(raster->value(pos.x(),pos.y()));
-//  } else {
-//    return tr("%1, %2").arg(pos.x()).arg(pos.y());
-//  }
-//}
 
 /******************************************************************
 *

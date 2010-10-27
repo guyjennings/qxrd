@@ -17,9 +17,6 @@ class QxrdMaskPicker : public QxrdImagePlotMeasurer
 public:
   QxrdMaskPicker(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot);
 
-public:
-//  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
-
 private:
   QxrdImagePlotPtr m_Plot;
   HEADER_IDENT("$Id: qxrdmaskpicker.h,v 1.3 2010/09/17 16:21:51 jennings Exp $");

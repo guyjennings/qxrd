@@ -60,6 +60,9 @@ public:
   Q_PROPERTY(bool maskShown  READ get_MaskShown WRITE set_MaskShown);
   QCEP_BOOLEAN_PROPERTY(MaskShown);
 
+  Q_PROPERTY(bool overflowShown  READ get_OverflowShown WRITE set_OverflowShown);
+  QCEP_BOOLEAN_PROPERTY(OverflowShown);
+
   Q_PROPERTY(bool interpolatePixels        READ get_InterpolatePixels WRITE set_InterpolatePixels);
   QCEP_BOOLEAN_PROPERTY(InterpolatePixels);
 
@@ -83,9 +86,11 @@ public slots:
 
   void toggleShowImage();
   void toggleShowMask();
+  void toggleShowOverflow();
 
   void changeImageShown(bool shown);
   void changeMaskShown(bool shown);
+  void changeOverflowShown(bool shown);
 
   void onInterpolateChanged(bool interp);
   void onMaintainAspectChanged(bool interp);
@@ -111,6 +116,9 @@ public:
   const QxrdRasterData* raster() const;
   QxrdRasterData* raster();
 
+  const QxrdMaskRasterData* maskRaster() const;
+  QxrdMaskRasterData* maskRaster();
+
   QxrdDataProcessorPtr processor() const;
   void setDataProcessor(QxrdDataProcessorPtr proc);
 
@@ -122,6 +130,7 @@ private:
   void replotImage();
   void setImage(QxrdRasterData data);
   void setMask(QxrdMaskRasterData data);
+  void setOverflows(QxrdMaskDataPtr overflow);
   void changedColorMap();
   void setTrackerPen(const QPen &pen);
 
@@ -137,14 +146,27 @@ private:
   QxrdPlotSlicerPtr          m_Slicer;
   QxrdImagePlotMeasurerPtr   m_Measurer;
 //  QwtLegendPtr               m_Legend;
-  QwtPlotSpectrogramPtr      m_Spectrogram;
-  QwtPlotSpectrogramPtr      m_MaskImage;
-//  QxrdPlotImagePtr           m_PlotImage;
-  QxrdRasterData             m_Raster;
+
+  QxrdDoubleImageDataPtr     m_Data;
+  QxrdMaskDataPtr            m_Mask;
+  QxrdMaskDataPtr            m_Overflow;
+
+  QxrdRasterData             m_DataRaster;
   QxrdMaskRasterData         m_MaskRaster;
+  QxrdMaskRasterData         m_OverflowRaster;
+
+  QwtPlotSpectrogramPtr      m_DataImage;
+  QwtPlotSpectrogramPtr      m_MaskImage;
+  QwtPlotSpectrogramPtr      m_OverflowImage;
+//  QxrdPlotImagePtr           m_PlotImage;
   QwtLinearColorMap          m_ColorMap;
+
   QxrdMaskColorMap           m_MaskColorMap;
   int                        m_MaskAlpha;
+
+  QxrdMaskColorMap           m_OverflowColorMap;
+  int                        m_OverflowAlpha;
+
   QxrdDataProcessorPtr       m_DataProcessor;
 
   QxrdCenterFinderPickerPtr  m_CenterFinderPicker;

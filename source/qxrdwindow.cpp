@@ -156,6 +156,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 
   connect(m_ActionShowImage, SIGNAL(triggered()), m_Plot, SLOT(toggleShowImage()));
   connect(m_ActionShowMask, SIGNAL(triggered()), m_Plot, SLOT(toggleShowMask()));
+  connect(m_ActionShowOverflow, SIGNAL(triggered()), m_Plot, SLOT(toggleShowOverflow()));
   connect(m_ActionShowMaskRange, SIGNAL(triggered()), m_DataProcessor, SLOT(showMaskRange()));
   connect(m_ActionHideMaskRange, SIGNAL(triggered()), m_DataProcessor, SLOT(hideMaskRange()));
   connect(m_ActionShowMaskAll, SIGNAL(triggered()), m_DataProcessor, SLOT(showMaskAll()));
@@ -265,7 +266,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_Acquisition -> prop_CameraGain() -> linkTo(m_AcquireDialog -> m_CameraGain);
   m_Acquisition -> prop_BinningMode() -> linkTo(m_AcquireDialog -> m_BinningMode);
   m_Acquisition -> prop_DroppedFrames() -> linkTo(m_AcquireDialog -> m_DroppedFrames);
-
+  m_Acquisition -> prop_OverflowLevel() -> linkTo(m_OverflowLevel);
   m_DataProcessor -> prop_OutputDirectory() -> linkTo(m_AcquireDialog -> m_OutputDirectory);
   m_DataProcessor -> prop_PerformDarkSubtraction() -> linkTo(m_PerformDark);
   m_DataProcessor -> prop_PerformDarkSubtractionTime() -> linkTo(m_PerformDarkTime);
@@ -318,6 +319,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 
   m_Plot -> prop_ImageShown() -> linkTo(Ui::QxrdWindow::m_DisplayImage);
   m_Plot -> prop_MaskShown() -> linkTo(Ui::QxrdWindow::m_DisplayMask);
+  m_Plot -> prop_OverflowShown() -> linkTo(Ui::QxrdWindow::m_DisplayOverflow);
   m_Plot -> prop_InterpolatePixels() -> linkTo(Ui::QxrdWindow::m_InterpolatePixels);
   m_Plot -> prop_MaintainAspectRatio() -> linkTo(Ui::QxrdWindow::m_MaintainAspectRatio);
 

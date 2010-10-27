@@ -16,9 +16,6 @@ class QxrdCenterFinderPicker : public QxrdImagePlotMeasurer
 public:
   QxrdCenterFinderPicker(QxrdImagePlotPtr plot);
 
-public:
-//  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
-
 private:
   QxrdImagePlotPtr m_Plot;
 

@@ -27,6 +27,8 @@ QxrdImagePlotMeasurer::QxrdImagePlotMeasurer(QwtPlotCanvasPtr canvas, QxrdImageP
 QwtText QxrdImagePlotMeasurer::trackerText(const QwtDoublePoint &pos) const
 {
   QxrdRasterData *raster = m_Plot->raster();
+  QxrdMaskRasterData *mask = m_Plot->maskRaster();
+
   QxrdDataProcessorPtr processor = m_Plot->processor();
   QxrdCenterFinderPtr centerFinder = NULL;
 
@@ -40,8 +42,12 @@ QwtText QxrdImagePlotMeasurer::trackerText(const QwtDoublePoint &pos) const
     res += tr(", %1").arg(raster->value(pos.x(),pos.y()));
   }
 
+  if (mask) {
+    res += tr(", %1").arg(mask->value(pos.x(),pos.y()));
+  }
+
   if (centerFinder) {
-    res += tr(", TTH%1").arg(centerFinder->getTTH(pos));
+    res += tr(", TTH %1").arg(centerFinder->getTTH(pos));
   }
 
   return res;

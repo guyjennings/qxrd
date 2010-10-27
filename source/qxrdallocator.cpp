@@ -28,11 +28,11 @@ QxrdAllocator::QxrdAllocator
              printf("allocator %p constructed\n", this);
   );
 
-  connect(&m_Timer, SIGNAL(timeout()), this, SLOT(allocatorHeartbeat()));
+//  connect(&m_Timer, SIGNAL(timeout()), this, SLOT(allocatorHeartbeat()));
 
-  m_Timer.start(100);
+//  m_Timer.start(100);
 
-  allocatorHeartbeat();
+//  allocatorHeartbeat();
 }
 
 QxrdAllocator::~QxrdAllocator()
@@ -196,17 +196,17 @@ int QxrdAllocator::nFreeDouble()
 
 int QxrdAllocator::int16SizeMB()
 {
-  return /*2*/sizeof(double)*get_Width()*get_Height();
+  return sizeof(quint16)*get_Width()*get_Height()/MegaBytes;
 }
 
 int QxrdAllocator::int32SizeMB()
 {
-  return /*4*/sizeof(double)*get_Width()*get_Height();
+  return sizeof(quint32)*get_Width()*get_Height()/MegaBytes;
 }
 
 int QxrdAllocator::doubleSizeMB()
 {
-  return sizeof(double)*get_Width()*get_Height();
+  return sizeof(double)*get_Width()*get_Height()/MegaBytes;
 }
 
 void QxrdAllocator::allocatorHeartbeat()

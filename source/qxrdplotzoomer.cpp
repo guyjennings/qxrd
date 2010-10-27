@@ -37,6 +37,7 @@ QxrdImagePlotZoomer::QxrdImagePlotZoomer(QwtPlotCanvasPtr canvas, QxrdImagePlotP
 QwtText QxrdImagePlotZoomer::trackerText(const QwtDoublePoint &pos) const
 {
   QxrdRasterData *raster = m_ImagePlot->raster();
+  QxrdMaskRasterData *mask = m_ImagePlot->maskRaster();
   QxrdDataProcessorPtr processor = m_ImagePlot->processor();
   QxrdCenterFinderPtr centerFinder = NULL;
 
@@ -50,8 +51,12 @@ QwtText QxrdImagePlotZoomer::trackerText(const QwtDoublePoint &pos) const
     res += tr(", %1").arg(raster->value(pos.x(),pos.y()));
   }
 
+  if (mask) {
+    res += tr(", %1").arg(mask->value(pos.x(),pos.y()));
+  }
+
   if (centerFinder) {
-    res += tr(", TTH%1").arg(centerFinder->getTTH(pos));
+    res += tr(", TTH %1").arg(centerFinder->getTTH(pos));
   }
 
   return res;
