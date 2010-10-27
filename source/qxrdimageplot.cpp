@@ -48,7 +48,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 //    m_Legend(NULL),
     m_Spectrogram(NULL),
     m_MaskImage(NULL),
-    m_PlotImage(NULL),
+//    m_PlotImage(NULL),
     m_ColorMap(Qt::black, Qt::white),
     m_MaskColorMap(Qt::red, QColor(0,0,0,0)),
     m_MaskAlpha(80),
@@ -96,8 +96,8 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   m_MaskImage -> setAlpha(get_MaskShown() ? m_MaskAlpha : 0);
   m_MaskImage -> attach(this);
 
-  m_PlotImage = QxrdPlotImagePtr(new QxrdPlotImage());
-  m_PlotImage -> attach(this);
+//  m_PlotImage = QxrdPlotImagePtr(new QxrdPlotImage());
+//  m_PlotImage -> attach(this);
 
   m_CenterFinderPicker = QxrdCenterFinderPickerPtr(new QxrdCenterFinderPicker(QxrdImagePlotPtr(this)));
 

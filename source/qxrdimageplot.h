@@ -139,7 +139,7 @@ private:
 //  QwtLegendPtr               m_Legend;
   QwtPlotSpectrogramPtr      m_Spectrogram;
   QwtPlotSpectrogramPtr      m_MaskImage;
-  QxrdPlotImagePtr           m_PlotImage;
+//  QxrdPlotImagePtr           m_PlotImage;
   QxrdRasterData             m_Raster;
   QxrdMaskRasterData         m_MaskRaster;
   QwtLinearColorMap          m_ColorMap;
