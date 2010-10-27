@@ -28,11 +28,11 @@ QxrdAllocator::QxrdAllocator
              printf("allocator %p constructed\n", this);
   );
 
-//  connect(&m_Timer, SIGNAL(timeout()), this, SLOT(allocatorHeartbeat()));
+  connect(&m_Timer, SIGNAL(timeout()), this, SLOT(allocatorHeartbeat()));
 
-//  m_Timer.start(100);
+  m_Timer.start(100);
 
-//  allocatorHeartbeat();
+  allocatorHeartbeat();
 }
 
 QxrdAllocator::~QxrdAllocator()
@@ -241,60 +241,60 @@ void QxrdAllocator::allocatorHeartbeat()
                                .arg(n16needed).arg(n32needed).arg(ndblneeded));
   );
 
-  for (int i=ndbl; i<ndblneeded; i++) {
-    if (m_AllocatedMemory/MegaBytes < get_Max()) {
-      try {
-        m_FreeDoubleImages.enqueue(QxrdDoubleImageDataPtr(new QxrdDoubleImageData(this, get_Width(), get_Height()), &QxrdAllocator::doubleDeleter));
-      }
-      catch (...) {
-        return;
-      }
-    }
-  }
+//  for (int i=ndbl; i<ndblneeded; i++) {
+//    if (m_AllocatedMemory/MegaBytes < get_Max()) {
+//      try {
+//        m_FreeDoubleImages.enqueue(QxrdDoubleImageDataPtr(new QxrdDoubleImageData(this, get_Width(), get_Height()), &QxrdAllocator::doubleDeleter));
+//      }
+//      catch (...) {
+//        return;
+//      }
+//    }
+//  }
 
-  for (int i=n32; i<n32needed; i++) {
-    if (m_AllocatedMemory/MegaBytes < get_Max()) {
-      try {
-        m_FreeInt32Images.enqueue(QxrdInt32ImageDataPtr(new QxrdInt32ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int32Deleter));
-      }
-      catch (...) {
-        return;
-      }
-    }
-  }
+//  for (int i=n32; i<n32needed; i++) {
+//    if (m_AllocatedMemory/MegaBytes < get_Max()) {
+//      try {
+//        m_FreeInt32Images.enqueue(QxrdInt32ImageDataPtr(new QxrdInt32ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int32Deleter));
+//      }
+//      catch (...) {
+//        return;
+//      }
+//    }
+//  }
 
-  for (int i=n16; i<n16needed; i++) {
-    if (m_AllocatedMemory/MegaBytes < get_Max()) {
-      try {
-        m_FreeInt16Images.enqueue(QxrdInt16ImageDataPtr(new QxrdInt16ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int16Deleter));
-      }
-      catch (...) {
-        return;
-      }
-    }
-  }
+//  for (int i=n16; i<n16needed; i++) {
+//    if (m_AllocatedMemory/MegaBytes < get_Max()) {
+//      try {
+//        m_FreeInt16Images.enqueue(QxrdInt16ImageDataPtr(new QxrdInt16ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int16Deleter));
+//      }
+//      catch (...) {
+//        return;
+//      }
+//    }
+//  }
 
-  for (int i=nmsk; i<4; i++) {
-    if (m_AllocatedMemory/MegaBytes < get_Max()) {
-      try {
-        m_FreeMasks.enqueue(QxrdMaskDataPtr(new QxrdMaskData(this, get_Width(), get_Height()), &QxrdAllocator::maskDeleter));
-      }
-      catch (...) {
-        return;
-      }
-    }
-  }
+//  for (int i=nmsk; i<4; i++) {
+//    if (m_AllocatedMemory/MegaBytes < get_Max()) {
+//      try {
+//        m_FreeMasks.enqueue(QxrdMaskDataPtr(new QxrdMaskData(this, get_Width(), get_Height()), &QxrdAllocator::maskDeleter));
+//      }
+//      catch (...) {
+//        return;
+//      }
+//    }
+//  }
 
-  for (int i=nint; i<4; i++) {
-    if (m_AllocatedMemory/MegaBytes < get_Max()) {
-      try {
-        m_FreeIntegratedData.enqueue(QxrdIntegratedDataPtr(new QxrdIntegratedData(this, QxrdDoubleImageDataPtr(), 10000), &QxrdAllocator::integratedDeleter));
-      }
-      catch (...) {
-        return;
-      }
-    }
-  }
+//  for (int i=nint; i<4; i++) {
+//    if (m_AllocatedMemory/MegaBytes < get_Max()) {
+//      try {
+//        m_FreeIntegratedData.enqueue(QxrdIntegratedDataPtr(new QxrdIntegratedData(this, QxrdDoubleImageDataPtr(), 10000), &QxrdAllocator::integratedDeleter));
+//      }
+//      catch (...) {
+//        return;
+//      }
+//    }
+//  }
 
   set_Allocated(m_AllocatedMemory/MegaBytes);
 }
