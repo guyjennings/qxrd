@@ -18,7 +18,7 @@ QxrdAllocator::QxrdAllocator
     m_FreeDoubleImages("double allocator"),
     m_FreeMasks("mask allocator"),
     m_FreeIntegratedData("integrated allocator"),
-    m_Max(this, "max", 500),
+    m_Max(this, "max", 800),
     m_Allocated(this, "allocated", 0),
     m_Width(this, "width", 2048),
     m_Height(this, "height", 2048),
@@ -156,32 +156,32 @@ void QxrdAllocator::deallocate(int sz, int width, int height)
 
 void QxrdAllocator::maskDeleter(QxrdMaskData *mask)
 {
-  //  delete mask;
-  mask->deleteLater();
+    delete mask;
+//  mask->deleteLater();
 }
 
 void QxrdAllocator::int16Deleter(QxrdInt16ImageData *img)
 {
-  //  delete img;
-  img->deleteLater();
+    delete img;
+//  img->deleteLater();
 }
 
 void QxrdAllocator::int32Deleter(QxrdInt32ImageData *img)
 {
-  //  delete img;
-  img->deleteLater();
+    delete img;
+//  img->deleteLater();
 }
 
 void QxrdAllocator::doubleDeleter(QxrdDoubleImageData *img)
 {
-  //  delete img;
-  img->deleteLater();
+    delete img;
+//  img->deleteLater();
 }
 
 void QxrdAllocator::integratedDeleter(QxrdIntegratedData *img)
 {
-  //  delete img;
-  img->deleteLater();
+    delete img;
+//  img->deleteLater();
 }
 
 int QxrdAllocator::nFreeInt16()

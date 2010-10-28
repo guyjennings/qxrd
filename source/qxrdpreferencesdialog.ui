@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>522</width>
+    <height>417</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -256,14 +256,14 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_14">
          <property name="text">
-          <string>Memory to reserve for images (MB):</string>
+          <string>Memory to reserve for images in 32 bit systems (MB):</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QSpinBox" name="m_ReservedMemory"/>
+        <widget class="QSpinBox" name="m_ReservedMemory32"/>
        </item>
-       <item row="1" column="1">
+       <item row="2" column="1">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -275,6 +275,16 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="m_ReservedMemory64"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_17">
+         <property name="text">
+          <string>Memory to reserve for images in 64 bit systems (MB):</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

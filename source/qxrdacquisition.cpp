@@ -21,7 +21,12 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
   connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
   connect(prop_BinningMode(), SIGNAL(changedValue(int)), this, SLOT(onBinningModeChanged(int)));
   connect(prop_CameraGain(), SIGNAL(changedValue(int)), this, SLOT(onCameraGainChanged(int)));
-  connect(prop_TotalBufferSizeMB(), SIGNAL(changedValue(int)), this, SLOT(onBufferSizeChanged(int)));
+
+  if (sizeof(void*) == 4) {
+    connect(prop_TotalBufferSizeMB32(), SIGNAL(changedValue(int)), this, SLOT(onBufferSizeChanged(int)));
+  } else {
+    connect(prop_TotalBufferSizeMB64(), SIGNAL(changedValue(int)), this, SLOT(onBufferSizeChanged(int)));
+  }
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -52,7 +57,7 @@ void QxrdAcquisition::allocateMemoryForAcquisition()
   int nRows = get_NRows(), nCols = get_NCols();
   int nSum = get_ExposuresToSum(), nPre = get_PreTriggerFiles();
   int optInt16 = 2, optInt32 = 1, optDbl = 2;
-  double avail = get_TotalBufferSizeMB()*MegaBytes;
+//  double avail = get_TotalBufferSizeMB()*MegaBytes;
   double szInt16 = nRows*nCols*sizeof(quint16);
   double szInt32 = nRows*nCols*sizeof(quint32);
   double szDbl   = nRows*nCols*sizeof(double);
@@ -66,10 +71,10 @@ void QxrdAcquisition::allocateMemoryForAcquisition()
     szAcq = szInt32;
   }
 
-  double avail1 = avail - optInt16*szInt16 - optInt32*szInt32;
-  double optNTh = floor(avail1/(szAcq + szDbl));
+//  double avail1 = avail - optInt16*szInt16 - optInt32*szInt32;
+//  double optNTh = floor(avail1/(szAcq + szDbl));
 
-  emit printMessage(tr("optInt16 = %1, optInt32 = %2, optThread = %3").arg(optInt16).arg(optInt32).arg(optNTh));
+//  emit printMessage(tr("optInt16 = %1, optInt32 = %2, optThread = %3").arg(optInt16).arg(optInt32).arg(optNTh));
 
   m_PreTriggerInt32Images.deallocate();
   m_PreTriggerInt16Images.deallocate();

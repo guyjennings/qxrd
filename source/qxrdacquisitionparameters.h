@@ -114,8 +114,11 @@ public:
   Q_PROPERTY(int     filesInAcquiredSequence      READ get_FilesInAcquiredSequence WRITE set_FilesInAcquiredSequence STORED false);
   QCEP_INTEGER_PROPERTY(FilesInAcquiredSequence);
 
-  Q_PROPERTY(int     totalBufferSizeMB    READ get_TotalBufferSizeMB WRITE set_TotalBufferSizeMB);
-  QCEP_INTEGER_PROPERTY(TotalBufferSizeMB);
+  Q_PROPERTY(int     totalBufferSizeMB32    READ get_TotalBufferSizeMB32 WRITE set_TotalBufferSizeMB32);
+  QCEP_INTEGER_PROPERTY(TotalBufferSizeMB32);
+
+  Q_PROPERTY(int     totalBufferSizeMB64    READ get_TotalBufferSizeMB64 WRITE set_TotalBufferSizeMB64);
+  QCEP_INTEGER_PROPERTY(TotalBufferSizeMB64);
 
   Q_PROPERTY(double     raw16SaveTime    READ get_Raw16SaveTime WRITE set_Raw16SaveTime);
   QCEP_DOUBLE_PROPERTY(Raw16SaveTime);

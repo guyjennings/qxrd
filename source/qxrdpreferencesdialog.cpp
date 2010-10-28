@@ -39,8 +39,10 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   ui -> m_DetectorTypeCombo -> setCurrentIndex(detectorType);
   ui -> m_DebugLevelSpinBox -> setRange(0,65535);
   ui -> m_DebugLevelSpinBox -> setValue(debugLevel);
-  ui -> m_ReservedMemory -> setRange(100, 20000);
-  ui -> m_ReservedMemory -> setValue(acq->get_TotalBufferSizeMB());
+  ui -> m_ReservedMemory32 -> setRange(500, 3000);
+  ui -> m_ReservedMemory32 -> setValue(acq->get_TotalBufferSizeMB32());
+  ui -> m_ReservedMemory64 -> setRange(500, 60000);
+  ui -> m_ReservedMemory64 -> setValue(acq->get_TotalBufferSizeMB64());
 
   ui -> m_RunSpecServer -> setChecked(runSpecServer);
   ui -> m_RunSimpleServer -> setChecked(runSimpleServer);
@@ -73,7 +75,8 @@ void QxrdPreferencesDialog::accept()
   int detectorType = ui -> m_DetectorTypeCombo -> currentIndex();
 //  int processorType = ui -> m_ProcessorTypeCombo -> currentIndex();
   int debugLevel = ui -> m_DebugLevelSpinBox -> value();
-  int bufferSize = ui -> m_ReservedMemory -> value();
+  int bufferSize32 = ui -> m_ReservedMemory32 -> value();
+  int bufferSize64 = ui -> m_ReservedMemory64 -> value();
   int runSpecServer = ui -> m_RunSpecServer -> isChecked();
   int runSimpleServer = ui -> m_RunSimpleServer -> isChecked();
   int specServerPort = ui -> m_SpecServerPort -> value();
@@ -115,7 +118,8 @@ void QxrdPreferencesDialog::accept()
   app -> set_DetectorType(detectorType);
 //  app -> set_ProcessorType(processorType);
   app -> set_Debug(debugLevel);
-  acq -> set_TotalBufferSizeMB(bufferSize);
+  acq -> set_TotalBufferSizeMB32(bufferSize32);
+  acq -> set_TotalBufferSizeMB64(bufferSize64);
   app -> set_RunSpecServer(runSpecServer);
   app -> set_SpecServerPort(specServerPort);
   app -> set_RunSimpleServer(runSimpleServer);

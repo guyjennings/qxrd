@@ -100,16 +100,16 @@ private:
 
   enum { MegaBytes = 0x100000 };
 
-  Q_PROPERTY(int     max        READ get_Max   WRITE set_Max);
+  Q_PROPERTY(int     max        READ get_Max   WRITE set_Max STORED false);
   QCEP_INTEGER_PROPERTY(Max);
 
-  Q_PROPERTY(int     allocated        READ get_Allocated   WRITE set_Allocated);
+  Q_PROPERTY(int     allocated        READ get_Allocated   WRITE set_Allocated STORED false);
   QCEP_INTEGER_PROPERTY(Allocated);
 
-  Q_PROPERTY(int     width      READ get_Width WRITE set_Width);
+  Q_PROPERTY(int     width      READ get_Width WRITE set_Width STORED false);
   QCEP_INTEGER_PROPERTY(Width);
 
-  Q_PROPERTY(int     height      READ get_Height WRITE set_Height);
+  Q_PROPERTY(int     height      READ get_Height WRITE set_Height STORED false);
   QCEP_INTEGER_PROPERTY(Height);
 
   HEADER_IDENT("$Id: qxrdallocator.h,v 1.3 2010/10/21 16:31:24 jennings Exp $");

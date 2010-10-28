@@ -38,7 +38,8 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(/*QxrdDataProcessor *proc*/
     m_ExposuresToSum(this, "exposuresToSum", 1),
     m_ExposuresToSkip(this, "exposuresToSkip", 1),
     m_FilesInAcquiredSequence(this, "filesInAcquiredSequence", 1),
-    m_TotalBufferSizeMB(this,"totalBufferSizeMB", 500),
+    m_TotalBufferSizeMB32(this,"totalBufferSizeMB32", 800),
+    m_TotalBufferSizeMB64(this,"totalBufferSizeMB64", 2000),
     m_Raw16SaveTime(this,"raw16SaveTime", 0.1),
     m_Raw32SaveTime(this,"raw32SaveTime", 0.2),
     m_RawSaveTime(this,"rawSaveTime", 0.2),
@@ -105,8 +106,12 @@ void QxrdAcquisitionParameters::readSettings(QxrdSettings &settings, QString sec
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
-  if (get_TotalBufferSizeMB() > 100000000) {
-    set_TotalBufferSizeMB(get_TotalBufferSizeMB()/MegaBytes);
+  if (get_TotalBufferSizeMB32() > 100000000) {
+    set_TotalBufferSizeMB32(get_TotalBufferSizeMB32()/MegaBytes);
+  }
+
+  if (get_TotalBufferSizeMB64() > 100000000) {
+    set_TotalBufferSizeMB64(get_TotalBufferSizeMB64()/MegaBytes);
   }
 }
 
