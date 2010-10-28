@@ -76,7 +76,11 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 {
   setupUi(this);
 
-  setWindowTitle(windowTitle()+" - v"+QXRD_VERSION);
+  if (sizeof(void*) == 4) {
+    setWindowTitle(windowTitle()+" - 32 bit - v"+QXRD_VERSION);
+  } else {
+    setWindowTitle(windowTitle()+" - 64 bit - v"+QXRD_VERSION);
+  }
 
   m_AcquireDialog = QxrdAcquireDialogPtr(new QxrdAcquireDialog(this));
   m_AcquireDockWidget -> setWidget(m_AcquireDialog);
@@ -938,12 +942,22 @@ QxrdMaskDataPtr QxrdWindow::mask()
 
 void QxrdWindow::doAboutQxrd()
 {
-  QMessageBox::about(this, "QXRD", "QXRD Data Acquisition for PE Area Detectors\nVersion " QXRD_VERSION);
+  QString about = "QXRD Data Acquisition for PE Area Detectors\nVersion " QXRD_VERSION;
+
+  if (sizeof(void*) == 4) {
+    about += " - 32 Bit\n";
+  } else {
+    about += " - 64 Bit\n";
+  }
+
+  about += tr("Qt Version %1").arg(qVersion());
+
+  QMessageBox::about(this, "QXRD", about);
 }
 
 void QxrdWindow::doOpenQXRDWebPage()
 {
-  QDesktopServices::openUrl(QUrl("http://cep.xor.aps.anl.gov/software/qxrd/index.html"));
+  QDesktopServices::openUrl(QUrl("http://qxrd.sourceforge.net/"));
 }
 
 void QxrdWindow::allocatedMemoryChanged()
