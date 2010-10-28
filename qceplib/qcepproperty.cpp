@@ -18,7 +18,7 @@
 #include <stdio.h>
 
 QcepProperty::QcepProperty(QObject *parent, const char *name, QVariant value)
-  : QObject(parent),
+  : QObject(/*parent*/),
     m_Mutex(QMutex::Recursive),
     m_NQueuedUpdates(0),
     m_IsStored(false),
