@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qcepimagedataformatmar345.h,v 1.2 2010/09/13 20:00:25 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QCEPIMAGEDATAFORMATMAR345_H
 #define QCEPIMAGEDATAFORMATMAR345_H
 
@@ -29,7 +23,6 @@ class QcepImageDataFormatMar345 : public QcepImageDataFormat<T>
   QcepImageDataFormat<T>* checkMar345Header(FILE *f);
   QcepImageDataFormat<T>* readMar345Header(FILE *f, QcepImageData<T> *img);
   QcepImageDataFormat<T>* readMar345Image(FILE *f, QcepImageData<T> *img);
-  HEADER_IDENT("$Id: qcepimagedataformatmar345.h,v 1.2 2010/09/13 20:00:25 jennings Exp $");
 };
 
 
@@ -379,33 +372,3 @@ QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::checkMar345Header(FILE *fi
 }
 
 #endif
-
-/******************************************************************
-*
-*  $Log: qcepimagedataformatmar345.h,v $
-*  Revision 1.2  2010/09/13 20:00:25  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/04/13 19:29:12  jennings
-*  Added qceplib to cvs
-*
-*  Revision 1.6  2009/09/22 20:41:07  jennings
-*  Set filename and title properties when loading data files
-*
-*  Revision 1.5  2009/09/10 13:53:23  jennings
-*  Removed possibilitity of fclose(NULL)
-*
-*  Revision 1.4  2009/08/04 16:45:20  jennings
-*  Moved mask data into separate class
-*
-*  Revision 1.3  2009/06/27 22:54:38  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*  Revision 1.2  2009/06/27 22:50:33  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-

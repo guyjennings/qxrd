@@ -1,16 +1,9 @@
-/******************************************************************
-*
-*  $Id: qxrdsettingssaverthread.cpp,v 1.2 2010/10/21 16:31:24 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdsettingssaverthread.h"
 
 QxrdSettingsSaverThread::QxrdSettingsSaverThread(QxrdApplicationPtr app) :
     QThread(),
     m_Application(app),
-    m_SettingsSaver(NULL),
-    SOURCE_IDENT("$Id: qxrdsettingssaverthread.cpp,v 1.2 2010/10/21 16:31:24 jennings Exp $")
+    m_SettingsSaver(NULL)
 {
 }
 
@@ -33,16 +26,3 @@ void QxrdSettingsSaverThread::run()
 
   exec();
 }
-
-/******************************************************************
-*
-*  $Log: qxrdsettingssaverthread.cpp,v $
-*  Revision 1.2  2010/10/21 16:31:24  jennings
-*  Implemented saving of settings soon after they change, rather than at program exit
-*
-*  Revision 1.1  2010/10/19 18:23:38  jennings
-*  *** empty log message ***
-*
-*
-*******************************************************************/
-

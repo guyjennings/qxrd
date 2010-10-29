@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qcepimagedataformatfactory.h,v 1.2 2010/09/13 20:00:25 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QCEPIMAGEDATAFORMATFACTORY_H
 #define QCEPIMAGEDATAFORMATFACTORY_H
 
@@ -33,7 +27,6 @@ class QcepImageDataFormatFactory
 
  private:
   QList<QcepImageDataFormat<T>*> m_Formats;
-  HEADER_IDENT("$Id: qcepimagedataformatfactory.h,v 1.2 2010/09/13 20:00:25 jennings Exp $");
 };
 
 template <typename T>
@@ -90,20 +83,3 @@ QcepImageDataFormat<T>* QcepImageDataFormatFactory<T>::canLoad(QString path)
 }
 
 #endif
-
-/******************************************************************
-*
-*  $Log: qcepimagedataformatfactory.h,v $
-*  Revision 1.2  2010/09/13 20:00:25  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/04/13 19:29:12  jennings
-*  Added qceplib to cvs
-*
-*  Revision 1.5  2009/06/27 22:50:33  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-

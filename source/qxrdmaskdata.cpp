@@ -1,14 +1,7 @@
-/******************************************************************
-*
-*  $Id: qxrdmaskdata.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdmaskdata.h"
 
 QxrdMaskData::QxrdMaskData(QxrdAllocatorInterface *allocator, int width, int height)
-  : QxrdImageData<short>(allocator, width, height),
-    SOURCE_IDENT("$Id: qxrdmaskdata.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+  : QxrdImageData<short>(allocator, width, height)
 {
   fill(1);
 }
@@ -107,52 +100,3 @@ void QxrdMaskData::maskCircle(double cx, double cy, double r, bool val)
     }
   }
 }
-
-/******************************************************************
-*
-*  $Log: qxrdmaskdata.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:40  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:40  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.6.4.5  2010/05/24 21:02:39  jennings
-*  Moved all image data allocation into allocator object
-*  Added partial handling for insufficient memory available when allocating data
-*  Reordered program initialization so that allocator and file saver are created first
-*
-*  Revision 1.6.4.4  2010/05/02 16:56:50  jennings
-*  Removed embedded C comments from commit log
-*
-*  Revision 1.6.4.3  2010/05/02 08:12:06  jennings
-*  Replaced 'returnImageToPool' and 'replaceImageFromPool' by
-*  equivalent smart pointer assignments
-*
-*  Revision 1.6.4.2  2010/04/26 00:37:11  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.6.4.1  2010/04/21 21:45:03  jennings
-*  Changed mask values to shorts instead of bools.  Added ROI and histogram calculation tests.
-*
-*  Revision 1.6  2009/09/26 04:56:37  jennings
-*  Reversed direction of copyMask operation to match copyImage
-*
-*  Revision 1.5  2009/09/22 19:45:33  jennings
-*  Small changes to range calculating code for image data
-*
-*  Revision 1.4  2009/09/20 21:18:53  jennings
-*  Removed 'printf' messages
-*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
-*
-*  Revision 1.3  2009/08/27 17:05:59  jennings
-*  Made mask data descend from QxrdImageData<bool>
-*
-*  Revision 1.2  2009/08/04 16:45:20  jennings
-*  Moved mask data into separate class
-*
-*  Revision 1.1  2009/08/03 20:58:59  jennings
-*  Minor fixups
-*
-*
-*******************************************************************/

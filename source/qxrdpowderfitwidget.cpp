@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdpowderfitwidget.cpp,v 1.3 2010/10/22 21:44:26 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdpowderfitwidget.h"
 #include "qxrddataprocessor.h"
 #include "qwt_symbol.h"
@@ -12,8 +6,7 @@
 
 QxrdPowderFitWidget::QxrdPowderFitWidget(QxrdDataProcessorPtr proc, QWidget *parent) :
     QDialog(parent),
-    m_Processor(proc),
-    SOURCE_IDENT("$Id: qxrdpowderfitwidget.cpp,v 1.3 2010/10/22 21:44:26 jennings Exp $")
+    m_Processor(proc)
 {
   setupUi(this);
 
@@ -82,36 +75,3 @@ void QxrdPowderFitWidget::appendGraphMarker(int n, QwtDoublePoint pt)
 
   marker -> attach(m_ImagePlot);
 }
-
-/******************************************************************
-*
-*  $Log: qxrdpowderfitwidget.cpp,v $
-*  Revision 1.3  2010/10/22 21:44:26  jennings
-*  *** empty log message ***
-*
-*  Revision 1.2  2010/09/13 20:00:41  jennings
-*  Merged
-*
-*  Revision 1.1.2.7  2010/09/11 21:44:04  jennings
-*  Work on powder ring fitting
-*
-*  Revision 1.1.2.6  2010/08/10 20:41:56  jennings
-*  Split powder fit dialog into separate sub classes to handle each 'wizard' step
-*
-*  Revision 1.1.2.5  2010/08/09 21:58:14  jennings
-*  *** empty log message ***
-*
-*  Revision 1.1.2.4  2010/08/09 21:53:58  jennings
-*  Made center and fit refiner into a modal dialog, partial implementation
-*
-*  Revision 1.1.2.3  2010/08/09 17:01:36  jennings
-*  Initial partial implementation of powder ring fitting widget
-*
-*  Revision 1.1.2.2  2010/08/09 02:45:38  jennings
-*  *** empty log message ***
-*
-*  Revision 1.1.2.1  2010/08/06 21:09:34  jennings
-*  Initial partial implementation of powder ring fitting widget
-*
-*
-*******************************************************************/

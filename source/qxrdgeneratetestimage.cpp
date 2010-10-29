@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdgeneratetestimage.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdgeneratetestimage.h"
 
 #define _USE_MATH_DEFINES
@@ -30,8 +24,7 @@ QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdDataProcessor *proc, QxrdAlloca
     m_ChiMax(this, "chiMax", 360),
     m_RingTTH(this, "ringTTH", QcepDoubleList()),
     m_RingIntensity(this, "ringIntensity", QcepDoubleList()),
-    m_RingWidth(this, "ringWidth", QcepDoubleList()),
-    SOURCE_IDENT("$Id: qxrdgeneratetestimage.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $")
+    m_RingWidth(this, "ringWidth", QcepDoubleList())
 {
 }
 
@@ -226,31 +219,3 @@ void QxrdGenerateTestImage::generateChiImage()
   }
   m_Processor -> newData(img, QxrdMaskDataPtr());
 }
-
-/******************************************************************
-*
-*  $Log: qxrdgeneratetestimage.cpp,v $
-*  Revision 1.3  2010/10/21 19:44:03  jennings
-*  Adding code to display overflow pixels, removed cuda and simple processors
-*
-*  Revision 1.2  2010/09/13 20:00:40  jennings
-*  Merged
-*
-*  Revision 1.1.2.4  2010/07/28 20:57:35  jennings
-*  *** empty log message ***
-*
-*  Revision 1.1.2.3  2010/07/28 19:29:45  jennings
-*  Modified script output for void function results - no output in window
-*  Added 'ellipse' command to processor
-*  Implemented QxrdGenerateTestImage.generateImage
-*
-*  Revision 1.1.2.2  2010/07/28 04:01:16  jennings
-*  Generate test image
-*
-*  Revision 1.1.2.1  2010/07/27 21:53:03  jennings
-*  Added double list property type
-*  Added 'testImage' script object, interface to QxrdGenerateTestImage
-*  Added QxrdDetectorGeometry class
-*
-*
-*******************************************************************/

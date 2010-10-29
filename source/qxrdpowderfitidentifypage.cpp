@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdpowderfitidentifypage.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdpowderfitidentifypage.h"
 #include "qwt_symbol.h"
 #include "qwt_double_rect.h"
@@ -14,8 +8,7 @@ QxrdPowderFitIdentifyPage::QxrdPowderFitIdentifyPage(QxrdDataProcessorPtr proc, 
     QxrdPowderFitWidget(proc, parent),
     m_IdCurrentRing(this,"idCurrentRing",0),
     m_Picker(NULL),
-    m_SampledData(proc -> initialRingSetData()),
-    SOURCE_IDENT("$Id: qxrdpowderfitidentifypage.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $")
+    m_SampledData(proc -> initialRingSetData())
 {
   m_Picker = new QwtPlotPicker(m_ImagePlot->canvas());
   m_Picker -> setEnabled(true);
@@ -237,34 +230,3 @@ void QxrdPowderFitIdentifyPage::evaluateFit(double *parm, double *x, int np, int
     m_FittedParameters[i]->setValue(saved[i]);
   }
 }
-
-/******************************************************************
-*
-*  $Log: qxrdpowderfitidentifypage.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:41  jennings
-*  Merged
-*
-*  Revision 1.1.2.7  2010/09/11 21:44:03  jennings
-*  Work on powder ring fitting
-*
-*  Revision 1.1.2.6  2010/08/19 16:16:32  jennings
-*  Support for fit parameter 'isFitted' flag
-*
-*  Revision 1.1.2.5  2010/08/17 19:22:08  jennings
-*  More ring fitting stuff
-*
-*  Revision 1.1.2.4  2010/08/16 21:45:27  jennings
-*  Distinguish between initial and refined fit parameters and data in powder ring fitting
-*  Add read/write settings routines for powder ring fitting data
-*
-*  Revision 1.1.2.3  2010/08/15 20:53:34  jennings
-*  Added evaluateFit function for initial ring fitting
-*
-*  Revision 1.1.2.2  2010/08/13 21:57:36  jennings
-*  A little more powder fit implementation
-*
-*  Revision 1.1.2.1  2010/08/10 20:41:55  jennings
-*  Split powder fit dialog into separate sub classes to handle each 'wizard' step
-*
-*
-*******************************************************************/

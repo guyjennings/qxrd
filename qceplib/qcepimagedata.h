@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qcepimagedata.h,v 1.2 2010/09/13 20:00:25 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QCEPIMAGEDATA_H
 #define QCEPIMAGEDATA_H
 
@@ -152,7 +146,6 @@ protected:
 
 private:
   mutable QMutex m_Mutex;
-  HEADER_IDENT("$Id: qcepimagedata.h,v 1.2 2010/09/13 20:00:25 jennings Exp $");
 };
 
 template <typename T>
@@ -388,95 +381,3 @@ bool QcepImageData<T>::readImage(QString path)
 }
 
 #endif
-
-/******************************************************************
-*
-*  $Log: qcepimagedata.h,v $
-*  Revision 1.2  2010/09/13 20:00:25  jennings
-*  Merged
-*
-*  Revision 1.1.2.3  2010/06/17 18:35:33  jennings
-*  Added copyPropertiesFrom method
-*
-*  Revision 1.1.2.2  2010/04/26 00:37:11  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.1.2.1  2010/04/13 19:29:12  jennings
-*  Added qceplib to cvs
-*
-*  Revision 1.35  2009/12/11 17:53:09  jennings
-*  Added ImageSaved property to image data
-*
-*  Revision 1.34  2009/12/01 14:10:37  jennings
-*  Added interpolating T value(double x, double y) method to QcepImageData
-*  Changed center finder plot to use interpolating value routine
-*
-*  Revision 1.33  2009/11/13 20:16:05  jennings
-*  *** empty log message ***
-*
-*  Revision 1.32  2009/10/21 21:33:45  jennings
-*  Added string format date property
-*
-*  Revision 1.31  2009/09/26 04:57:31  jennings
-*  Removed some commented out sections
-*
-*  Revision 1.30  2009/09/25 16:09:02  jennings
-*  Added copyImage function to QcepImageData<>
-*
-*  Revision 1.29  2009/09/22 20:41:07  jennings
-*  Set filename and title properties when loading data files
-*
-*  Revision 1.28  2009/09/22 19:45:33  jennings
-*  Small changes to range calculating code for image data
-*
-*  Revision 1.27  2009/09/21 18:12:55  jennings
-*  Added 'triggered', 'usercomment{1-4}' properties to data
-*
-*  Revision 1.26  2009/09/14 19:09:33  jennings
-*  Added hBinning, vBinning and cameraGain properties to images
-*
-*  Revision 1.25  2009/09/12 14:44:53  jennings
-*  Moved lock to base class, made into mutex
-*  Added DataType property
-*
-*  Revision 1.24  2009/09/12 13:35:45  jennings
-*  Removed 'threshold' from QcepImageData
-*
-*  Revision 1.23  2009/09/09 22:32:12  jennings
-*  Started to add TIFF metadata support
-*
-*  Revision 1.22  2009/09/08 12:26:04  jennings
-*  Added error return value to loadImage
-*
-*  Revision 1.21  2009/08/26 20:53:04  jennings
-*  Added copyProperties function to facilitate conversion between image data types
-*
-*  Revision 1.20  2009/08/25 18:49:19  jennings
-*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
-*
-*  Revision 1.19  2009/08/08 00:16:24  jennings
-*  Added fill operation
-*
-*  Revision 1.18  2009/08/04 16:45:20  jennings
-*  Moved mask data into separate class
-*
-*  Revision 1.17  2009/08/03 13:27:25  jennings
-*  Moved mask-related routines into non-templated base class
-*  Added maskCircle routine
-*
-*  Revision 1.16  2009/06/28 16:40:18  jennings
-*  Removed setData and setMask operations as they can make the image and/or mask the wrong size
-*
-*  Revision 1.15  2009/06/28 16:34:27  jennings
-*  Fixed problems with copyMask which could result in image and mask dimensions getting out of sync.
-*
-*  Revision 1.14  2009/06/28 11:52:49  jennings
-*  Optimized image operations by special case handling of width and height properties
-*
-*  Revision 1.13  2009/06/27 22:50:33  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-

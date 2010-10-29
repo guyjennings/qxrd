@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdfilebrowser.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdfilebrowser.h"
 #include "qxrddataprocessor.h"
 #include <QFileSystemModel>
@@ -16,8 +10,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent
     m_BrowserFilter(this, "BrowserFilter",1),
     m_BrowserSelector(this, "BrowserSelector",""),
     m_Processor(processor),
-    m_Model(NULL),
-    SOURCE_IDENT("$Id: qxrdfilebrowser.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    m_Model(NULL)
 {
   setupUi(this);
 
@@ -156,59 +149,3 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
     actions->exec(QCursor::pos());
   }
 }
-
-/******************************************************************
-*
-*  $Log: qxrdfilebrowser.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:39  jennings
-*  Merged
-*
-*  Revision 1.1.2.2  2010/08/17 19:20:50  jennings
-*  Added INVOKE_CHECK macro to check returned result QMetaObject::invokeMethod calls
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:38  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.8.2.5  2010/05/02 16:56:50  jennings
-*  Removed embedded C comments from commit log
-*
-*  Revision 1.8.2.4  2010/05/02 08:12:06  jennings
-*  Replaced 'returnImageToPool' and 'replaceImageFromPool' by
-*  equivalent smart pointer assignments
-*
-*  Revision 1.8.2.3  2010/04/26 23:46:13  jennings
-*  *** empty log message ***
-*
-*  Revision 1.8.2.2  2010/04/26 20:53:26  jennings
-*  More attempts to get QSharedPointers to work...
-*
-*  Revision 1.8.2.1  2010/04/26 00:37:10  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.8  2009/12/03 21:35:06  jennings
-*  (Temporarily) reinstated file browser
-*
-*  Revision 1.7  2009/11/17 20:42:59  jennings
-*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
-*  info about any held for more than 100 msec
-*
-*  Revision 1.6  2009/11/16 22:31:08  jennings
-*  Disabled file browser file system model - it takes too long to run on network disks
-*
-*  Revision 1.5  2009/10/26 02:39:12  jennings
-*  Added right click menu routine for file browser
-*
-*  Revision 1.4  2009/10/23 19:42:01  jennings
-*  Implement file selector box for file browser, change file browser root when output directory is changed
-*
-*  Revision 1.3  2009/10/23 04:39:58  jennings
-*  Unfiltered files hidden, rather than dimmed
-*
-*  Revision 1.2  2009/10/22 21:50:58  jennings
-*  More code for file browser, basic operation now works
-*
-*  Revision 1.1  2009/10/22 19:22:28  jennings
-*  Initial file browser
-*
-*
-*******************************************************************/

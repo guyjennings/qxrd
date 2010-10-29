@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdringsetsampleddata.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdringsetsampleddata.h"
 #include "qxrdmutexlocker.h"
 #include "qcepproperty.h"
@@ -107,29 +101,3 @@ void QxrdRingSetSampledData::remove(int n)
 {
   m_Rings.removeAt(n);
 }
-
-/******************************************************************
-*
-*  $Log: qxrdringsetsampleddata.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:41  jennings
-*  Merged
-*
-*  Revision 1.1.2.5  2010/08/17 19:22:09  jennings
-*  More ring fitting stuff
-*
-*  Revision 1.1.2.4  2010/08/16 21:45:27  jennings
-*  Distinguish between initial and refined fit parameters and data in powder ring fitting
-*  Add read/write settings routines for powder ring fitting data
-*
-*  Revision 1.1.2.3  2010/08/13 21:57:36  jennings
-*  A little more powder fit implementation
-*
-*  Revision 1.1.2.2  2010/08/10 20:42:25  jennings
-*  Initial implementation of sampled data types
-*
-*  Revision 1.1.2.1  2010/08/03 19:24:19  jennings
-*  Added data types to hold sampled powder ring coordinates
-*
-*
-*******************************************************************/
-

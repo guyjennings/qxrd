@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qspecserver.h,v 1.2 2010/09/13 20:00:25 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QSPECSERVER_H
 #define QSPECSERVER_H
 
@@ -80,26 +74,6 @@ private:
   QByteArray           m_Data;
   struct svr_head      m_Reply;
   QByteArray           m_ReplyData;
-
-  HEADER_IDENT("$Id: qspecserver.h,v 1.2 2010/09/13 20:00:25 jennings Exp $");
 };
 
 #endif
-
-/******************************************************************
-*
-*  $Log: qspecserver.h,v $
-*  Revision 1.2  2010/09/13 20:00:25  jennings
-*  Merged
-*
-*  Revision 1.1.2.2  2010/08/04 20:22:58  jennings
-*  Added simple socket server, and prefs to control which servers are run, and on which ports
-*
-*  Revision 1.1.2.1  2010/04/13 19:29:13  jennings
-*  Added qceplib to cvs
-*
-*  Revision 1.3  2009/06/27 05:05:43  jennings
-*  Merged branched versions from qavrg/qspecserver.* and qceplib/qspecserver.*
-*
-*
-*******************************************************************/

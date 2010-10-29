@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdscriptengine.cpp,v 1.4 2010/09/23 19:57:33 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdscriptengine.h"
 
 #include "qxrdapplication.h"
@@ -32,8 +26,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationPtr app, QxrdWindowPtr win, Qx
     m_ScriptEngine(NULL),
     m_Application(app),
     m_Window(win),
-    m_Acquisition(acq),
-    SOURCE_IDENT("$Id: qxrdscriptengine.cpp,v 1.4 2010/09/23 19:57:33 jennings Exp $")
+    m_Acquisition(acq)
 {
   g_ScriptEngine    = QxrdScriptEnginePtr(this);
   g_Acquisition     = acq;
@@ -409,137 +402,3 @@ QScriptValue QxrdScriptEngine::helpFunc(QScriptContext *context, QScriptEngine *
 {
   return "Not yet implemented";
 }
-
-/******************************************************************
-*
-*  $Log: qxrdscriptengine.cpp,v $
-*  Revision 1.4  2010/09/23 19:57:33  jennings
-*  Modified plugins for perkin elmer - now works in 64 bit mode
-*
-*  Revision 1.3  2010/09/17 16:22:35  jennings
-*  Added graph objects to the scripting engine
-*
-*  Revision 1.2  2010/09/13 20:00:42  jennings
-*  Merged
-*
-*  Revision 1.1.2.9  2010/08/17 19:20:50  jennings
-*  Added INVOKE_CHECK macro to check returned result QMetaObject::invokeMethod calls
-*
-*  Revision 1.1.2.8  2010/08/16 21:45:28  jennings
-*  Distinguish between initial and refined fit parameters and data in powder ring fitting
-*  Add read/write settings routines for powder ring fitting data
-*
-*  Revision 1.1.2.7  2010/08/04 20:22:58  jennings
-*  Added simple socket server, and prefs to control which servers are run, and on which ports
-*
-*  Revision 1.1.2.6  2010/08/03 19:24:19  jennings
-*  Added data types to hold sampled powder ring coordinates
-*
-*  Revision 1.1.2.5  2010/08/02 21:51:03  jennings
-*  Better integration of powder ring parameter objects to script system
-*
-*  Revision 1.1.2.4  2010/08/02 21:11:02  jennings
-*  Added "rings" object to script engine
-*
-*  Revision 1.1.2.3  2010/07/28 20:50:15  jennings
-*  Implementing routines to access image data from scripts
-*  Implement min max and average routines for data
-*  Changed 'data', 'dark' and 'mask' script functions to
-*  dynamically return correct objects
-*
-*  Revision 1.1.2.2  2010/07/27 21:53:03  jennings
-*  Added double list property type
-*  Added 'testImage' script object, interface to QxrdGenerateTestImage
-*  Added QxrdDetectorGeometry class
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:41  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.16.2.10  2010/05/02 16:56:50  jennings
-*  Removed embedded C comments from commit log
-*
-*  Revision 1.16.2.9  2010/05/02 08:12:07  jennings
-*  Replaced 'returnImageToPool' and 'replaceImageFromPool' by
-*  equivalent smart pointer assignments
-*
-*  Revision 1.16.2.8  2010/04/26 23:46:13  jennings
-*  *** empty log message ***
-*
-*  Revision 1.16.2.7  2010/04/26 20:53:26  jennings
-*  More attempts to get QSharedPointers to work...
-*
-*  Revision 1.16.2.6  2010/04/26 00:37:11  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.16.2.5  2010/04/21 20:06:21  jennings
-*  Corrected the skippedExposures scripting function
-*
-*  Revision 1.16.2.4  2010/04/20 21:20:26  jennings
-*  Added script support for skippedExposures parameter
-*
-*  Revision 1.16.2.3  2010/04/19 21:48:27  jennings
-*  More rearrangement
-*
-*  Revision 1.16.2.2  2010/04/18 17:20:48  jennings
-*  Further updates
-*
-*  Revision 1.16.2.1  2010/04/15 19:33:25  jennings
-*  Eliminated acquisitionCancel(), replace by cancel()
-*
-*  Revision 1.16  2009/11/17 20:43:00  jennings
-*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
-*  info about any held for more than 100 msec
-*
-*  Revision 1.15  2009/11/02 20:19:27  jennings
-*  Changes to make it work with VC compiler
-*
-*  Revision 1.14  2009/09/29 18:39:47  jennings
-*  Removed references to 'QxrdDataProcessor::processedCount'
-*  Fixed up the various 'status' scripting functions so that they work properly
-*
-*  Revision 1.13  2009/09/25 22:42:48  jennings
-*  Masking changes
-*
-*  Revision 1.12  2009/09/23 19:00:36  jennings
-*  Removed dynamic property support - it's not thread-safe and doesn't work
-*  under windows
-*
-*  Revision 1.11  2009/09/22 13:48:17  jennings
-*  Some support for dynamic properties during acquisition
-*
-*  Revision 1.10  2009/09/20 21:18:53  jennings
-*  Removed 'printf' messages
-*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
-*
-*  Revision 1.9  2009/09/18 20:44:49  jennings
-*  Add separate status functions for acquisition and processing, as well as an aggregated function
-*  combining the status of the two.
-*
-*  Revision 1.8  2009/09/15 20:18:39  jennings
-*  Added acquireCancel scripting command
-*
-*  Revision 1.7  2009/09/03 21:16:24  jennings
-*  Added properties and user interface elements for pre- and post- trigger counts
-*  Added properties and user interface elements for fine-grained control of processing chain
-*
-*  Revision 1.6  2009/07/21 22:55:48  jennings
-*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
-*
-*  Revision 1.5  2009/07/17 14:00:59  jennings
-*  Rearranging acquisition and data processor
-*
-*  Revision 1.4  2009/07/10 22:54:23  jennings
-*  Some rearrangement of data
-*
-*  Revision 1.3  2009/07/08 19:06:27  jennings
-*  Made centering parameters into Q_PROPERTYs
-*  Saved centering, integrator and data processor settings
-*
-*  Revision 1.2  2009/06/28 11:21:58  jennings
-*  Implemented app scripting engine connections
-*
-*  Revision 1.1  2009/06/28 04:00:39  jennings
-*  Partial implementation of separate thread for script engine
-*
-*
-*******************************************************************/

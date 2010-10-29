@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdpreferencesdialog.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdpreferencesdialog.h"
 #include "ui_qxrdpreferencesdialog.h"
 #include "qxrdacquisitionthread.h"
@@ -13,8 +7,7 @@
 
 QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::QxrdPreferencesDialog),
-    SOURCE_IDENT("$Id: qxrdpreferencesdialog.cpp,v 1.3 2010/10/21 19:44:03 jennings Exp $")
+    ui(new Ui::QxrdPreferencesDialog)
 {
   ui->setupUi(this);
 
@@ -127,39 +120,3 @@ void QxrdPreferencesDialog::accept()
 
   QDialog::accept();
 }
-
-/******************************************************************
-*
-*  $Log: qxrdpreferencesdialog.cpp,v $
-*  Revision 1.3  2010/10/21 19:44:03  jennings
-*  Adding code to display overflow pixels, removed cuda and simple processors
-*
-*  Revision 1.2  2010/09/13 20:00:41  jennings
-*  Merged
-*
-*  Revision 1.1.2.3  2010/09/09 16:45:29  jennings
-*  Always use threaded data processor
-*
-*  Revision 1.1.2.2  2010/08/04 20:22:58  jennings
-*  Added simple socket server, and prefs to control which servers are run, and on which ports
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:41  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.1.2.4  2010/05/27 21:47:51  jennings
-*  Renamed totalBufferSize parameter to totalBufferSizeMB to avoid conflicts with qxrd 0.3.x which interprets
-*  totalBufferSize in bytes, rather than MB
-*
-*  Revision 1.1.2.3  2010/05/21 20:02:15  jennings
-*  Adopt tabbed format for preferences dialog, with sub pages for different detector and processor types
-*
-*  Revision 1.1.2.2  2010/05/21 18:30:32  jennings
-*  Implemented preferences dialog allowing choise of detector type, processor type and debug level
-*
-*  Revision 1.1.2.1  2010/04/21 19:48:41  jennings
-*  Added QxrdAcquisitionAreaDetector, QxrdAcquisitionPilatus, QxrdDataProcessorCuda, QxrdDataProcessorThreaded
-*  and QxrdPreferencesDialog - they don't do much yet, though.
-*
-*
-*******************************************************************/
-

@@ -1,16 +1,9 @@
-/******************************************************************
-*
-*  $Id: qxrdcenterstepspinner.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdcenterstepspinner.h"
 #include <math.h>
 #include <stdio.h>
 
 QxrdCenterStepSpinner::QxrdCenterStepSpinner(QWidget *parent) :
-    QDoubleSpinBox(parent),
-    SOURCE_IDENT("$Id: qxrdcenterstepspinner.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    QDoubleSpinBox(parent)
 {
   setDecimals(5);
 }
@@ -47,16 +40,3 @@ void QxrdCenterStepSpinner::stepBy(int steps)
 //
 //  emit valueChanged(newVal);
 }
-
-/******************************************************************
-*
-*  $Log: qxrdcenterstepspinner.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:39  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/09/10 18:53:32  jennings
-*  1:2:5 step spinner
-*
-*
-*******************************************************************/
-

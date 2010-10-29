@@ -1,8 +1,6 @@
 #ifndef TODO_H
 #define TODO_H
 
-/* $Id: TODO.h,v 1.5 2010/09/28 19:24:52 jennings Exp $ */
-
 //-------------------------------------------------------
 //
 //Check that settings are not being saved twice (in QxrdWindow destructor):

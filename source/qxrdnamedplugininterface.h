@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdnamedplugininterface.h,v 1.2 2010/09/13 20:00:40 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QXRDNAMEDPLUGININTERFACE_H
 #define QXRDNAMEDPLUGININTERFACE_H
 

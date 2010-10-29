@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdimagedataformathis.h,v 1.2 2010/09/13 20:00:40 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QIMGIMAGEDATAFORMATHIS_H
 #define QIMGIMAGEDATAFORMATHIS_H
 
@@ -21,26 +15,6 @@ class QxrdImageDataFormatHis : public QcepImageDataFormat<double>
   QxrdImageDataFormatHis* loadFile(QString path, QcepImageData<double> *img);
   QxrdImageDataFormatHis* saveFile(QString path, QcepImageData<double> *img);
   Priority priority() const;
-
-private:
-  HEADER_IDENT("$Id: qxrdimagedataformathis.h,v 1.2 2010/09/13 20:00:40 jennings Exp $");
 };
 
 #endif
-
-/******************************************************************
-*
-*  $Log: qxrdimagedataformathis.h,v $
-*  Revision 1.2  2010/09/13 20:00:40  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:39  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.3  2009/06/27 22:50:32  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-

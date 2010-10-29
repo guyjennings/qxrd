@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qcepproperty.h,v 1.3 2010/10/21 16:31:24 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QCEPPROPERTY_H
 #define QCEPPROPERTY_H
 
@@ -63,8 +57,6 @@ private:
   const char              *m_Name;
   QVariant                 m_Variant;
   static QAtomicInt        m_ChangeCount;
-
-  HEADER_IDENT("$Id: qcepproperty.h,v 1.3 2010/10/21 16:31:24 jennings Exp $");
 };
 
 class QcepDoubleProperty : public QcepProperty {
@@ -435,105 +427,3 @@ private: \
 QcepDoubleListProperty m_##propname;
 
 #endif // QCEPPROPERTY_H
-
-/******************************************************************
-*
-*  $Log: qcepproperty.h,v $
-*  Revision 1.3  2010/10/21 16:31:24  jennings
-*  Implemented saving of settings soon after they change, rather than at program exit
-*
-*  Revision 1.2  2010/09/13 20:00:25  jennings
-*  Merged
-*
-*  Revision 1.1.2.8  2010/08/16 21:43:58  jennings
-*  *** empty log message ***
-*
-*  Revision 1.1.2.7  2010/07/27 21:53:03  jennings
-*  Added double list property type
-*  Added 'testImage' script object, interface to QxrdGenerateTestImage
-*  Added QxrdDetectorGeometry class
-*
-*  Revision 1.1.2.6  2010/06/17 18:36:32  jennings
-*  Added incValue method to QxrdIntProperty and QxrdDoubleProperty
-*  Added QxrdIntProperty -> linkTo(QLabel)
-*
-*  Revision 1.1.2.5  2010/05/17 15:59:53  jennings
-*  Changed debugging output to use QCEP_DEBUG macro
-*
-*  Revision 1.1.2.4  2010/04/26 00:37:11  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.1.2.3  2010/04/19 19:20:50  jennings
-*  Added link between QcepDoubleProperty and a QComboBox
-*
-*  Revision 1.1.2.2  2010/04/17 05:14:06  jennings
-*  Partially working
-*
-*  Revision 1.1.2.1  2010/04/13 19:29:13  jennings
-*  Added qceplib to cvs
-*
-*  Revision 1.6  2009/10/02 18:51:14  jennings
-*  Added option to link double property to a label - needs more work, though
-*
-*  Revision 1.5  2009/09/09 22:32:12  jennings
-*  Started to add TIFF metadata support
-*
-*  Revision 1.4  2009/07/03 17:25:53  jennings
-*  Found a workable solution for the property widget update loops
-*  by keeping track of the number of queued updates to the property
-*  and not passing on the update events when the number of queued updates
-*  is greater than one.
-*
-*  Revision 1.3  2009/07/01 03:24:33  jennings
-*  Another attempt at making linked properties and widgets in different threads stable,
-*  Made sure to have plenty of mutexes, making the property thread-safe
-*  Then link widget signals to property slots with direct connection
-*  and property signals to widget slots with queued connections
-*
-*  Revision 1.2  2009/06/30 21:35:31  jennings
-*  Debugging meta data static init problems
-*
-*  Revision 1.1  2009/06/27 19:21:08  jennings
-*  qavrgproperty renamed to qcepproperty
-*
-*  Revision 1.15  2009/06/27 05:03:15  jennings
-*  Changed qavrgmacros.h to qceplib/qcepmacros.h
-*
-*  Revision 1.14  2009/06/27 01:19:36  jennings
-*  Regsitered remaining container property types
-*
-*  Revision 1.13  2009/06/26 03:59:15  jennings
-*  Added code for different fill pattern handling modes
-*
-*  Revision 1.12  2009/06/25 12:42:03  jennings
-*  Implemented default values for properties - accessed by reset_xxx
-*
-*  Revision 1.11  2009/06/25 12:01:44  jennings
-*  Implemented default values for properties - accessed by reset_xxx
-*
-*  Revision 1.10  2009/06/22 00:03:34  jennings
-*  Implemented saving display settings
-*
-*  Revision 1.9  2009/06/21 19:02:03  jennings
-*  Consolidated property saving into one place
-*  Implemented load/save settings routines
-*
-*  Revision 1.8  2009/06/21 00:30:52  jennings
-*  Made graph update properly during acquisition
-*  Made dark and reference data acquire directly into correct destination
-*  Only perform fitting for AcquireData and AcquireOnce
-*
-*  Revision 1.7  2009/06/20 05:41:20  jennings
-*  Added IDENT macros, moved log comments to end of files
-*
-*  Revision 1.6  2009/06/19 03:58:57  jennings
-*  Changed QReadWriteLock to QMutex
-*
-*  Revision 1.5  2009/06/17 05:12:13  jennings
-*  Made property m_xx member variables private.
-*
-*  Revision 1.4  2009/06/16 15:37:44  jennings
-*  Added CVS log and ID entries
-*
-*
-*******************************************************************/

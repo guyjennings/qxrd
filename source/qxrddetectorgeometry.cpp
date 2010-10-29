@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrddetectorgeometry.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrddetectorgeometry.h"
 
 #define _USE_MATH_DEFINES
@@ -11,8 +5,7 @@
 #include <cmath>
 
 QxrdDetectorGeometry::QxrdDetectorGeometry(QObject *parent) :
-    QObject(parent),
-    SOURCE_IDENT("$Id: qxrddetectorgeometry.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    QObject(parent)
 {
 }
 
@@ -288,28 +281,3 @@ void QxrdDetectorGeometry::getXY(double xCenter,double yCenter,double distance,
   *xPixel = xMeasured/pixelLength_mm + xCenter;
   *yPixel = yMeasured/pixelHeight_mm + yCenter;
 }
-
-
-/******************************************************************
-*
-*  $Log: qxrddetectorgeometry.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:39  jennings
-*  Merged
-*
-*  Revision 1.1.2.4  2010/09/10 18:54:10  jennings
-*  Partial implement tilt in center finder dialog
-*
-*  Revision 1.1.2.3  2010/07/28 20:57:35  jennings
-*  *** empty log message ***
-*
-*  Revision 1.1.2.2  2010/07/28 19:59:45  jennings
-*  Updated math includes for windows so that M_PI is defined
-*
-*  Revision 1.1.2.1  2010/07/27 21:53:03  jennings
-*  Added double list property type
-*  Added 'testImage' script object, interface to QxrdGenerateTestImage
-*  Added QxrdDetectorGeometry class
-*
-*
-*******************************************************************/
-

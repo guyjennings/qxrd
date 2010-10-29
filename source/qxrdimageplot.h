@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdimageplot.h,v 1.3 2010/10/22 21:44:26 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QXRDIMAGEPLOT_H
 #define QXRDIMAGEPLOT_H
 
@@ -186,96 +180,6 @@ private:
 
 //  QPen                       m_Pen;
   bool                 m_FirstTime;
-
-  HEADER_IDENT("$Id: qxrdimageplot.h,v 1.3 2010/10/22 21:44:26 jennings Exp $");
 };
 
 #endif
-
-/******************************************************************
-*
-*  $Log: qxrdimageplot.h,v $
-*  Revision 1.3  2010/10/22 21:44:26  jennings
-*  *** empty log message ***
-*
-*  Revision 1.2  2010/09/13 20:00:40  jennings
-*  Merged
-*
-*  Revision 1.1.2.5  2010/09/10 21:09:52  jennings
-*  Tilt and powder fitting modifications
-*
-*  Revision 1.1.2.4  2010/09/09 16:45:00  jennings
-*  Added separate parameters for percentile display mode, changed display control
-*  to only show relevent parameters
-*
-*  Revision 1.1.2.3  2010/09/08 19:40:57  jennings
-*  Added tilt controls to center finder
-*  Disabled fit refine command (for now)
-*  Added percentile display mode
-*
-*  Revision 1.1.2.2  2010/08/11 15:58:27  jennings
-*  Added changedValue(QwtDoublePoint) slots
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:39  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.28.4.4  2010/05/09 13:42:37  jennings
-*  Eliminated spurious legend on image plot caused by duplicate definition of m_Legend in QxrdImagePlot and QxrdPlot
-*
-*  Revision 1.28.4.3  2010/04/26 23:46:13  jennings
-*  *** empty log message ***
-*
-*  Revision 1.28.4.2  2010/04/26 20:53:26  jennings
-*  More attempts to get QSharedPointers to work...
-*
-*  Revision 1.28.4.1  2010/04/26 00:37:10  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.28  2009/08/25 18:43:03  jennings
-*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
-*
-*  Revision 1.27  2009/08/12 19:44:59  jennings
-*  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
-*  takes its tracker text from a QxrdPlot virtual member function
-*
-*  Revision 1.26  2009/08/09 15:39:10  jennings
-*  Added a separate QxrdImagePlotMeasurer class
-*
-*  Revision 1.25  2009/08/04 16:45:20  jennings
-*  Moved mask data into separate class
-*
-*  Revision 1.24  2009/08/02 18:02:42  jennings
-*  Added a number of masking operations to the UI - no actual implementation yet
-*
-*  Revision 1.23  2009/07/25 15:18:39  jennings
-*  Moved graph zooming code into QxrdPlot - a common base class
-*  Made QxrdMaskColorMap descend from QwtLinearColorMap
-*
-*  Revision 1.22  2009/07/22 11:55:34  jennings
-*  Center finder modifications
-*
-*  Revision 1.21  2009/07/21 22:55:48  jennings
-*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
-*
-*  Revision 1.20  2009/07/20 00:35:23  jennings
-*  Trying to optimise screen redraws
-*
-*  Revision 1.19  2009/07/17 20:41:20  jennings
-*  Modifications related to mask display
-*
-*  Revision 1.18  2009/07/16 21:26:25  jennings
-*  Made various image display variables into properties
-*
-*  Revision 1.17  2009/07/16 20:10:43  jennings
-*  Made various image display variables into properties
-*
-*  Revision 1.16  2009/07/10 22:54:23  jennings
-*  Some rearrangement of data
-*
-*  Revision 1.15  2009/06/27 22:50:32  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-

@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdpowderfitrefinepage.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdpowderfitrefinepage.h"
 #include <QDoubleSpinBox>
 #include <QCheckBox>
@@ -12,8 +6,7 @@ QxrdPowderFitRefinePage::QxrdPowderFitRefinePage(QxrdDataProcessorPtr proc, QWid
     QxrdPowderFitIdentifyPage(proc, parent),
     m_RingSet(NULL),
     m_NStatic(0),
-    m_NRings(0),
-    SOURCE_IDENT("$Id: qxrdpowderfitrefinepage.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $")
+    m_NRings(0)
 {
   if (proc) {
     m_RingSet = proc -> refinedRingSetFitParameters();
@@ -145,25 +138,3 @@ void QxrdPowderFitRefinePage::removeRingFit()
 
   m_DeleteRingButton -> setEnabled(m_NRings);
 }
-
-/******************************************************************
-*
-*  $Log: qxrdpowderfitrefinepage.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:41  jennings
-*  Merged
-*
-*  Revision 1.1.2.4  2010/09/11 21:44:03  jennings
-*  Work on powder ring fitting
-*
-*  Revision 1.1.2.3  2010/08/17 19:22:09  jennings
-*  More ring fitting stuff
-*
-*  Revision 1.1.2.2  2010/08/16 21:45:27  jennings
-*  Distinguish between initial and refined fit parameters and data in powder ring fitting
-*  Add read/write settings routines for powder ring fitting data
-*
-*  Revision 1.1.2.1  2010/08/10 20:41:56  jennings
-*  Split powder fit dialog into separate sub classes to handle each 'wizard' step
-*
-*
-*******************************************************************/

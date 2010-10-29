@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdsimpleserverthread.cpp,v 1.3 2010/09/17 23:12:18 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdsimpleserver.h"
 #include "qxrdsimpleserverthread.h"
 
@@ -11,8 +5,7 @@ QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdAcquisitionThreadPtr acq, QSt
     m_AcquisitionThread(acq),
     m_Name(name),
     m_Port(port),
-    m_Server(NULL),
-    SOURCE_IDENT("$Id: qxrdsimpleserverthread.cpp,v 1.3 2010/09/17 23:12:18 jennings Exp $")
+    m_Server(NULL)
 {
 }
 
@@ -56,26 +49,3 @@ void QxrdSimpleServerThread::run()
 
 //  printf("Server thread terminated with rc %d\n", rc);
 }
-
-/******************************************************************
-*
-*  $Log: qxrdsimpleserverthread.cpp,v $
-*  Revision 1.3  2010/09/17 23:12:18  jennings
-*  Display port numbers when servers start up
-*  Rearrange help files
-*
-*  Revision 1.2  2010/09/13 20:00:42  jennings
-*  Merged
-*
-*  Revision 1.1.2.3  2010/08/17 19:20:51  jennings
-*  Added INVOKE_CHECK macro to check returned result QMetaObject::invokeMethod calls
-*
-*  Revision 1.1.2.2  2010/08/05 19:29:42  jennings
-*  Removed some gratuitous output when starting/stopping socket servers
-*
-*  Revision 1.1.2.1  2010/08/04 20:22:58  jennings
-*  Added simple socket server, and prefs to control which servers are run, and on which ports
-*
-*
-*******************************************************************/
-

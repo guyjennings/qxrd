@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdimagedataformathis.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdimagedataformathis.h"
 #include "qxrdimagedata.h"
 #include <QFileInfo>
@@ -11,8 +5,7 @@
 static QxrdImageDataFormatHis fmt;
 
 QxrdImageDataFormatHis::QxrdImageDataFormatHis(QString name)
-  : QcepImageDataFormat<double>(name),
-    SOURCE_IDENT("$Id: qxrdimagedataformathis.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+  : QcepImageDataFormat<double>(name)
 {
 }
 
@@ -134,40 +127,3 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::saveFile(QString /*path*/, QcepI
 {
   return NULL;
 }
-
-
-/******************************************************************
-*
-*  $Log: qxrdimagedataformathis.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:40  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:39  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.11  2009/11/09 16:44:38  jennings
-*  Reduced initial buffer size to 500M, fixed problem loading 32-bit his files
-*
-*  Revision 1.10  2009/09/23 21:16:58  jennings
-*  .his files can be loaded again
-*
-*  Revision 1.9  2009/09/22 20:41:07  jennings
-*  Set filename and title properties when loading data files
-*
-*  Revision 1.8  2009/09/10 13:53:23  jennings
-*  Removed possibilitity of fclose(NULL)
-*
-*  Revision 1.7  2009/08/04 16:45:20  jennings
-*  Moved mask data into separate class
-*
-*  Revision 1.6  2009/07/08 00:35:33  jennings
-*  *** empty log message ***
-*
-*  Revision 1.5  2009/06/27 22:50:32  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-
-

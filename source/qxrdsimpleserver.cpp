@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdsimpleserver.cpp,v 1.2 2010/09/13 20:00:42 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdsimpleserver.h"
 #include <QTextStream>
 
@@ -11,8 +5,7 @@ QxrdSimpleServer::QxrdSimpleServer(QxrdAcquisitionThreadPtr acqth, QString name,
     QTcpServer(parent),
     m_AcquisitionThread(acqth),
     m_Name(name),
-    m_Port(port),
-    SOURCE_IDENT("$Id: qxrdsimpleserver.cpp,v 1.2 2010/09/13 20:00:42 jennings Exp $")
+    m_Port(port)
 {
   connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));
 }
@@ -73,16 +66,3 @@ void QxrdSimpleServer::shutdown()
 {
   close();
 }
-
-/******************************************************************
-*
-*  $Log: qxrdsimpleserver.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:42  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/08/04 20:22:58  jennings
-*  Added simple socket server, and prefs to control which servers are run, and on which ports
-*
-*
-*******************************************************************/
-

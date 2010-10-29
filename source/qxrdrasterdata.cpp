@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdrasterdata.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdrasterdata.h"
 
 QxrdRasterData::QxrdRasterData(QxrdDoubleImageDataPtr img, int interp, QxrdMaskDataPtr mask, QwtDoubleInterval range)
@@ -13,8 +7,7 @@ QxrdRasterData::QxrdRasterData(QxrdDoubleImageDataPtr img, int interp, QxrdMaskD
     m_NRows((img ? img->get_Height(): 0)),
     m_NCols((img ? img->get_Width() : 0)),
     m_Range(range),
-    m_Interpolate(interp),
-    SOURCE_IDENT("$Id: qxrdrasterdata.cpp,v 1.2 2010/09/13 20:00:41 jennings Exp $")
+    m_Interpolate(interp)
 {
   QCEP_DEBUG(DEBUG_IMAGES,
              printf("QxrdRasterData::QxrdRasterData(%p,%d,%p) [%p]\n",
@@ -313,67 +306,3 @@ int QxrdRasterData::height() const
 {
   return m_NRows;
 }
-
-/******************************************************************
-*
-*  $Log: qxrdrasterdata.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:41  jennings
-*  Merged
-*
-*  Revision 1.1.2.5  2010/09/09 21:29:23  jennings
-*  Improved behaviour of percentile scaling when there is no data or no data range
-*
-*  Revision 1.1.2.4  2010/09/08 20:15:56  jennings
-*  Improved percentile display mode
-*
-*  Revision 1.1.2.3  2010/09/08 20:11:57  jennings
-*  Improved percentile display mode
-*
-*  Revision 1.1.2.2  2010/09/08 19:40:57  jennings
-*  Added tilt controls to center finder
-*  Disabled fit refine command (for now)
-*  Added percentile display mode
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:41  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.15.2.7  2010/05/25 20:43:37  jennings
-*  Added try catch blocks around various memory allocations
-*
-*  Revision 1.15.2.6  2010/05/17 15:59:53  jennings
-*  Changed debugging output to use QCEP_DEBUG macro
-*
-*  Revision 1.15.2.5  2010/05/09 13:23:05  jennings
-*  Fixed image display bug caused by incomplete implementation of QxrdRasterData::copy
-*
-*  Revision 1.15.2.4  2010/05/06 18:51:03  jennings
-*  Removed some raster data constructors - replaced with default arguments to main constructor
-*
-*  Revision 1.15.2.3  2010/04/26 00:37:11  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.15.2.2  2010/04/23 20:14:54  jennings
-*  Fixed bug with displaying rectangular images - width and height were swapped in QxrdRasterData::QxrdRasterData
-*
-*  Revision 1.15.2.1  2010/04/21 21:45:03  jennings
-*  Changed mask values to shorts instead of bools.  Added ROI and histogram calculation tests.
-*
-*  Revision 1.15  2009/11/02 20:19:27  jennings
-*  Changes to make it work with VC compiler
-*
-*  Revision 1.14  2009/08/25 18:43:03  jennings
-*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
-*
-*  Revision 1.13  2009/08/04 16:45:20  jennings
-*  Moved mask data into separate class
-*
-*  Revision 1.12  2009/07/25 17:03:40  jennings
-*  More improvements to image plotting code
-*
-*  Revision 1.11  2009/06/27 22:50:32  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-

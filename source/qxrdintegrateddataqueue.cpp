@@ -1,14 +1,7 @@
-/******************************************************************
-*
-*  $Id: qxrdintegrateddataqueue.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdintegrateddataqueue.h"
 
 QxrdIntegratedDataQueue::QxrdIntegratedDataQueue(QString name) :
-    m_Name(name),
-    SOURCE_IDENT("$Id: qxrdintegrateddataqueue.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    m_Name(name)
 {
 }
 
@@ -90,18 +83,3 @@ void QxrdIntegratedDataQueue::deallocate()
     );
   }
 }
-
-/******************************************************************
-*
-*  $Log: qxrdintegrateddataqueue.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:40  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:39  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.1.2.1  2010/06/11 21:20:40  jennings
-*  Added QxrdSharedPointer, QxrdIntegratedData and QxrdIntegratedDataQueue
-*
-*
-*******************************************************************/

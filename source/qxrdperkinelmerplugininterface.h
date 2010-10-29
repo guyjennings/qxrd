@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdperkinelmerplugininterface.h,v 1.1 2010/09/23 20:36:19 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QXRDPERKINELMERPLUGININTERFACE_H
 #define QXRDPERKINELMERPLUGININTERFACE_H
 
@@ -77,12 +71,3 @@ public:
 Q_DECLARE_INTERFACE(QxrdPerkinElmerPluginInterface, "gov.anl.aps.cep.Qxrd.PerkinElmerInterface/1.0");
 
 #endif // QXRDPERKINELMERPLUGININTERFACE_H
-
-/******************************************************************
-*
-*  $Log: qxrdperkinelmerplugininterface.h,v $
-*  Revision 1.1  2010/09/23 20:36:19  jennings
-*  Abstract interface for perkin elmer readout plugin
-*
-*
-*******************************************************************/

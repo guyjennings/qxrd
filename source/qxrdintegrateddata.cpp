@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdintegrateddata.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdintegrateddata.h"
 
 QxrdIntegratedData::QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDoubleImageDataPtr image, int maxSize, QObject *parent) :
@@ -16,8 +10,7 @@ QxrdIntegratedData::QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDouble
     m_X(maxSize),
     m_Y(maxSize),
     m_cx(0),
-    m_cy(0),
-    SOURCE_IDENT("$Id: qxrdintegrateddata.cpp,v 1.2 2010/09/13 20:00:40 jennings Exp $")
+    m_cy(0)
 {
 }
 
@@ -81,24 +74,3 @@ QxrdDoubleImageDataPtr QxrdIntegratedData::get_Image() const
 {
   return m_Image;
 }
-
-/******************************************************************
-*
-*  $Log: qxrdintegrateddata.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:40  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:39  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.1.2.3  2010/06/14 20:18:00  jennings
-*  Implemented plotting and saving of integrated data - still need some kind of 'serializer' to maintain order of saving and plotting
-*
-*  Revision 1.1.2.2  2010/06/14 14:18:37  jennings
-*  Simple implementation of QxrdIntegratedData
-*
-*  Revision 1.1.2.1  2010/06/11 21:20:40  jennings
-*  Added QxrdSharedPointer, QxrdIntegratedData and QxrdIntegratedDataQueue
-*
-*
-*******************************************************************/

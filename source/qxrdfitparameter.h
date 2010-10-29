@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdfitparameter.h,v 1.3 2010/10/21 16:31:24 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QXRDFITPARAMETER_H
 #define QXRDFITPARAMETER_H
 
@@ -33,7 +27,6 @@ private:
   double  m_UpperLimit;
   int     m_IsFitted;
   int     m_IsLimited;
-  HEADER_IDENT("$Id: qxrdfitparameter.h,v 1.3 2010/10/21 16:31:24 jennings Exp $");
 };
 
 typedef QSharedPointer<QxrdFitParameter> QxrdFitParameterPtr;
@@ -75,27 +68,3 @@ private: \
   QxrdFitParameter m_##propname;
 
 #endif // QXRDFITPARAMETER_H
-
-/******************************************************************
-*
-*  $Log: qxrdfitparameter.h,v $
-*  Revision 1.3  2010/10/21 16:31:24  jennings
-*  Implemented saving of settings soon after they change, rather than at program exit
-*
-*  Revision 1.2  2010/09/13 20:00:40  jennings
-*  Merged
-*
-*  Revision 1.1.2.4  2010/08/17 20:19:26  jennings
-*  QxrdFitParameter readSettings and writeSettings - saves value, limits and flags
-*
-*  Revision 1.1.2.3  2010/08/09 02:45:38  jennings
-*  *** empty log message ***
-*
-*  Revision 1.1.2.2  2010/08/06 21:09:34  jennings
-*  Initial partial implementation of powder ring fitting widget
-*
-*  Revision 1.1.2.1  2010/08/02 21:11:58  jennings
-*  Added classes defining fitting parameters for a set of powder rings
-*
-*
-*******************************************************************/

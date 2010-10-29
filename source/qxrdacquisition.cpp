@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdacquisition.cpp,v 1.4 2010/10/21 19:44:02 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdacquisition.h"
 #include "qxrdmutexlocker.h"
 #include "qxrddataprocessor.h"
@@ -15,8 +9,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
     m_PreTriggerInt16Images("preTriggerInt16Images"),
     m_PreTriggerInt32Images("preTriggerInt32Images"),
     m_AcquiredInt16Data(NULL),
-    m_AcquiredInt32Data(NULL),
-    SOURCE_IDENT("$Id: qxrdacquisition.cpp,v 1.4 2010/10/21 19:44:02 jennings Exp $")
+    m_AcquiredInt32Data(NULL)
 {
   connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
   connect(prop_BinningMode(), SIGNAL(changedValue(int)), this, SLOT(onBinningModeChanged(int)));
@@ -588,129 +581,3 @@ void QxrdAcquisition::acquisitionError(int ln, int n)
 
   emit criticalMessage(tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
 }
-
-
-/******************************************************************
-*
-*  $Log: qxrdacquisition.cpp,v $
-*  Revision 1.4  2010/10/21 19:44:02  jennings
-*  Adding code to display overflow pixels, removed cuda and simple processors
-*
-*  Revision 1.3  2010/09/24 22:29:37  jennings
-*  Work on NSIS installer
-*  Fixed startup problem on debug builds when calling QxrdAcquisitionThread->initialize()
-*
-*  Revision 1.2  2010/09/13 20:00:38  jennings
-*  Merged
-*
-*  Revision 1.1.2.3  2010/09/09 16:54:24  jennings
-*  Only call idle image calculations at most every 3 seconds
-*
-*  Revision 1.1.2.2  2010/08/17 19:20:50  jennings
-*  Added INVOKE_CHECK macro to check returned result QMetaObject::invokeMethod calls
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:36  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.53.4.25  2010/07/09 21:32:18  jennings
-*  Tried to improve memory management by predicting memory requirements better
-*
-*  Revision 1.53.4.24  2010/06/23 21:42:36  jennings
-*  Added clear dropped frames counter slot,
-*
-*  Revision 1.53.4.23  2010/06/22 23:37:33  jennings
-*  Made most acquisition and processing output conditional
-*
-*  Revision 1.53.4.22  2010/06/17 19:19:59  jennings
-*  Added 'save dark' and 'skip at start' options
-*
-*  Revision 1.53.4.21  2010/06/17 18:37:13  jennings
-*  Added dropped frames counter to display window
-*
-*  Revision 1.53.4.20  2010/06/10 20:55:22  jennings
-*  Improved behaviour when acquisition is interrupted - if acquisition is already running when a new acquire operation is started, give an error message
-*
-*  Revision 1.53.4.19  2010/05/28 21:44:08  jennings
-*  Fixed problems with cancelling acquisition
-*
-*  Revision 1.53.4.18  2010/05/27 21:47:50  jennings
-*  Renamed totalBufferSize parameter to totalBufferSizeMB to avoid conflicts with qxrd 0.3.x which interprets
-*  totalBufferSize in bytes, rather than MB
-*
-*  Revision 1.53.4.17  2010/05/25 18:47:15  jennings
-*  Added memory limit handling
-*
-*  Revision 1.53.4.16  2010/05/24 21:02:37  jennings
-*  Moved all image data allocation into allocator object
-*  Added partial handling for insufficient memory available when allocating data
-*  Reordered program initialization so that allocator and file saver are created first
-*
-*  Revision 1.53.4.15  2010/05/21 20:03:06  jennings
-*  Memory size parameter units changed to MB
-*
-*  Revision 1.53.4.14  2010/05/19 21:15:34  jennings
-*  PE acquisition debugging
-*
-*  Revision 1.53.4.13  2010/05/17 15:59:52  jennings
-*  Changed debugging output to use QCEP_DEBUG macro
-*
-*  Revision 1.53.4.12  2010/05/02 16:56:50  jennings
-*  Removed embedded C comments from commit log
-*
-*  Revision 1.53.4.11  2010/05/02 08:12:06  jennings
-*  Replaced 'returnImageToPool' and 'replaceImageFromPool' by
-*  equivalent smart pointer assignments
-*
-*  Revision 1.53.4.10  2010/04/26 00:37:09  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.53.4.9  2010/04/23 21:26:32  jennings
-*  Rearranged message output
-*
-*  Revision 1.53.4.8  2010/04/22 20:56:25  jennings
-*  Simulated acquisition is beginning to work
-*
-*  Revision 1.53.4.7  2010/04/22 19:40:33  jennings
-*  Further rearrangement of acquisition code
-*
-*  Revision 1.53.4.6  2010/04/20 21:18:33  jennings
-*  More rearrangement
-*
-*  Revision 1.53.4.5  2010/04/19 21:48:26  jennings
-*  More rearrangement
-*
-*  Revision 1.53.4.4  2010/04/19 19:20:16  jennings
-*  More reorganization of acquisition code
-*
-*  Revision 1.53.4.3  2010/04/17 05:13:58  jennings
-*  Partially working
-*
-*  Revision 1.53.4.2  2010/04/15 19:34:24  jennings
-*  Reorganization of acquisition object classes
-*
-*  Revision 1.53.4.1  2010/04/12 21:21:46  jennings
-*  Version 0.4.0, some rearrangement of the Acquisition classes
-*
-*  Revision 1.53  2009/09/04 15:15:42  jennings
-*  Added log file routines
-*  Removed newlines from any printMessage calls.
-*
-*  Revision 1.52  2009/07/20 00:32:04  jennings
-*  Removed image queues for acquired and dark images - use 'connect' args instead
-*
-*  Revision 1.51  2009/07/14 05:36:14  jennings
-*  Moved data storage into individual channel objects, accelerated fitting (somewhat)
-*
-*  Revision 1.50  2009/07/13 23:19:37  jennings
-*  More acquisition rearrangement
-*
-*  Revision 1.49  2009/07/10 22:54:23  jennings
-*  Some rearrangement of data
-*
-*  Revision 1.48  2009/06/27 22:50:32  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-

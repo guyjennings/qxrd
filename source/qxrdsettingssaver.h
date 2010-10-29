@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdsettingssaver.h,v 1.2 2010/10/21 16:31:24 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QXRDSETTINGSSAVER_H
 #define QXRDSETTINGSSAVER_H
 
@@ -34,21 +28,6 @@ private:
   QAtomicInt         m_UpdateCount;
   QTimer             m_Timer;
   int                m_SaveDelay;
-
-  HEADER_IDENT("$Id: qxrdsettingssaver.h,v 1.2 2010/10/21 16:31:24 jennings Exp $");
 };
 
 #endif // QXRDSETTINGSSAVER_H
-
-/******************************************************************
-*
-*  $Log: qxrdsettingssaver.h,v $
-*  Revision 1.2  2010/10/21 16:31:24  jennings
-*  Implemented saving of settings soon after they change, rather than at program exit
-*
-*  Revision 1.1  2010/10/19 18:23:38  jennings
-*  *** empty log message ***
-*
-*
-*******************************************************************/
-

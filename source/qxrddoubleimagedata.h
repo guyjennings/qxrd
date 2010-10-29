@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrddoubleimagedata.h,v 1.3 2010/10/21 19:44:03 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QXRDDOUBLEIMAGEDATA_H
 #define QXRDDOUBLEIMAGEDATA_H
 
@@ -37,7 +31,6 @@ public slots:
 private:
   QxrdMaskDataPtr m_Mask;
   QxrdMaskDataPtr m_Overflow;
-  HEADER_IDENT("$Id: qxrddoubleimagedata.h,v 1.3 2010/10/21 19:44:03 jennings Exp $");
 };
 
 template <typename T>
@@ -64,29 +57,3 @@ void QxrdDoubleImageData::copyFrom(QSharedPointer< QxrdImageData<T> > img)
 typedef QSharedPointer<QxrdDoubleImageData> QxrdDoubleImageDataPtr;
 
 #endif // QXRDDOUBLEIMAGEDATA_H
-
-/******************************************************************
-*
-*  $Log: qxrddoubleimagedata.h,v $
-*  Revision 1.3  2010/10/21 19:44:03  jennings
-*  Adding code to display overflow pixels, removed cuda and simple processors
-*
-*  Revision 1.2  2010/09/13 20:00:39  jennings
-*  Merged
-*
-*  Revision 1.1.2.2  2010/07/28 20:50:15  jennings
-*  Implementing routines to access image data from scripts
-*  Implement min max and average routines for data
-*  Changed 'data', 'dark' and 'mask' script functions to
-*  dynamically return correct objects
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:38  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.1.2.1  2010/06/17 16:02:35  jennings
-*  Skeleton code to support result serialization during crucial points in processing
-*  Separate QxrdDoubleImageData class which can hold a reference to a mask
-*
-*
-*******************************************************************/
-

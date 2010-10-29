@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdimagequeue.h,v 1.3 2010/10/21 16:31:24 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QXRDIMAGEQUEUE_H
 #define QXRDIMAGEQUEUE_H
 
@@ -42,7 +36,6 @@ private:
   mutable QReadWriteLock m_Lock;
   QQueue< QSharedPointer<T> >     m_Queue;
   QString        m_Name;
-  HEADER_IDENT("$Id: qxrdimagequeue.h,v 1.3 2010/10/21 16:31:24 jennings Exp $");
 };
 
 typedef QxrdImageQueue<QxrdInt16ImageData>   QxrdInt16ImageQueue;
@@ -60,8 +53,7 @@ template <typename T>
 QxrdImageQueue<T>::QxrdImageQueue(QString name)
   : m_NRows(NULL, "nRows", 2048),
     m_NCols(NULL, "nCols", 2048),
-    m_Name(name),
-    SOURCE_IDENT("$Id: qxrdimagequeue.h,v 1.3 2010/10/21 16:31:24 jennings Exp $")
+    m_Name(name)
 {
 }
 
@@ -180,72 +172,3 @@ int QxrdImageQueue<T>::size() const
 }
 
 #endif
-
-/******************************************************************
-*
-*  $Log: qxrdimagequeue.h,v $
-*  Revision 1.3  2010/10/21 16:31:24  jennings
-*  Implemented saving of settings soon after they change, rather than at program exit
-*
-*  Revision 1.2  2010/09/13 20:00:40  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:39  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.8.4.12  2010/06/17 16:02:36  jennings
-*  Skeleton code to support result serialization during crucial points in processing
-*  Separate QxrdDoubleImageData class which can hold a reference to a mask
-*
-*  Revision 1.8.4.11  2010/06/11 21:23:30  jennings
-*  When calling integrator, pass data, dark and mask images explicitly.
-*
-*  Revision 1.8.4.10  2010/05/25 18:47:15  jennings
-*  Added memory limit handling
-*
-*  Revision 1.8.4.9  2010/05/24 21:02:39  jennings
-*  Moved all image data allocation into allocator object
-*  Added partial handling for insufficient memory available when allocating data
-*  Reordered program initialization so that allocator and file saver are created first
-*
-*  Revision 1.8.4.8  2010/05/17 15:59:53  jennings
-*  Changed debugging output to use QCEP_DEBUG macro
-*
-*  Revision 1.8.4.7  2010/05/02 16:56:50  jennings
-*  Removed embedded C comments from commit log
-*
-*  Revision 1.8.4.6  2010/05/02 08:12:06  jennings
-*  Replaced 'returnImageToPool' and 'replaceImageFromPool' by
-*  equivalent smart pointer assignments
-*
-*  Revision 1.8.4.5  2010/04/27 19:39:18  jennings
-*  More debugging output when deleting image queues
-*
-*  Revision 1.8.4.4  2010/04/27 15:19:42  jennings
-*  More changes to help using QSharedPointer
-*
-*  Revision 1.8.4.3  2010/04/26 00:37:10  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.8.4.2  2010/04/25 03:38:40  jennings
-*  Added scrolling area to acquire dialog.  Instrument image queues.
-*
-*  Revision 1.8.4.1  2010/04/22 19:40:33  jennings
-*  Further rearrangement of acquisition code
-*
-*  Revision 1.8  2009/08/26 20:54:34  jennings
-*  Fixed deadlocks in preallocate
-*
-*  Revision 1.7  2009/08/26 16:58:53  jennings
-*  Partial implementation of the separate Int16 and Int32 acquisition paths
-*
-*  Revision 1.6  2009/08/25 18:43:03  jennings
-*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
-*
-*  Revision 1.5  2009/06/27 22:50:32  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-

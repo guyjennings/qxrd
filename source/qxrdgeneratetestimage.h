@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdgeneratetestimage.h,v 1.2 2010/09/13 20:00:40 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QXRDGENERATETESTIMAGE_H
 #define QXRDGENERATETESTIMAGE_H
 
@@ -88,26 +82,6 @@ public:
 
   Q_PROPERTY(QcepDoubleList ringWidth READ get_RingWidth WRITE set_RingWidth);
   QCEP_DOUBLE_LIST_PROPERTY(RingWidth);
-
-private:
-  HEADER_IDENT("$Id: qxrdgeneratetestimage.h,v 1.2 2010/09/13 20:00:40 jennings Exp $");
 };
 
 #endif // QXRDGENERATETESTIMAGE_H
-
-/******************************************************************
-*
-*  $Log: qxrdgeneratetestimage.h,v $
-*  Revision 1.2  2010/09/13 20:00:40  jennings
-*  Merged
-*
-*  Revision 1.1.2.2  2010/07/28 04:01:16  jennings
-*  Generate test image
-*
-*  Revision 1.1.2.1  2010/07/27 21:53:03  jennings
-*  Added double list property type
-*  Added 'testImage' script object, interface to QxrdGenerateTestImage
-*  Added QxrdDetectorGeometry class
-*
-*
-*******************************************************************/

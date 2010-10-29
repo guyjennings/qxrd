@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdallocator.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdallocator.h"
 #include "qxrdmutexlocker.h"
 
@@ -21,8 +15,7 @@ QxrdAllocator::QxrdAllocator
     m_Max(this, "max", 800),
     m_Allocated(this, "allocated", 0),
     m_Width(this, "width", 2048),
-    m_Height(this, "height", 2048),
-    SOURCE_IDENT("$Id: qxrdallocator.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    m_Height(this, "height", 2048)
 {
   QCEP_DEBUG(DEBUG_ALLOCATOR,
              printf("allocator %p constructed\n", this);
@@ -328,55 +321,3 @@ void QxrdAllocator::changedSizeMB(int newMB)
 {
   set_Max(newMB);
 }
-
-/******************************************************************
-*
-*  $Log: qxrdallocator.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:39  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:37  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.1.2.11  2010/07/20 20:30:25  jennings
-*  Added memory usage display to status bar
-*  Improved calculation of processing timings
-*
-*  Revision 1.1.2.10  2010/07/09 21:33:22  jennings
-*  Tried to improve memory management by predicting memory requirements better
-*  The allocators are more accurate in limiting allocated memory
-*
-*  Revision 1.1.2.9  2010/06/23 21:49:35  jennings
-*  Made allocator strategy more sophisticated, called it more often
-*
-*  Revision 1.1.2.8  2010/06/18 16:28:22  jennings
-*  Added debugging output to QxrdAllocator constructor/destructor
-*
-*  Revision 1.1.2.7  2010/06/11 21:21:39  jennings
-*  Added integrator data to allocator
-*
-*  Revision 1.1.2.6  2010/05/27 21:13:14  jennings
-*  Added more debug flags
-*  Tried to detect when processing is too slow for acquisition
-*
-*  Revision 1.1.2.5  2010/05/25 20:42:54  jennings
-*  Added mutex to allocator object
-*
-*  Revision 1.1.2.4  2010/05/25 18:47:15  jennings
-*  Added memory limit handling
-*
-*  Revision 1.1.2.3  2010/05/24 21:02:38  jennings
-*  Moved all image data allocation into allocator object
-*  Added partial handling for insufficient memory available when allocating data
-*  Reordered program initialization so that allocator and file saver are created first
-*
-*  Revision 1.1.2.2  2010/05/22 03:43:03  jennings
-*  APIs for allocator
-*
-*  Revision 1.1.2.1  2010/05/20 20:15:54  jennings
-*  Initial files for QxrdAllocator and QxrdFileSaver threads
-*
-*
-*
-*******************************************************************/
-

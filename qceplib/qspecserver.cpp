@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qspecserver.cpp,v 1.2 2010/09/13 20:00:25 jennings Exp $
-*
-*******************************************************************/
-
 #include "qspecserver.h"
 
 #include <QTcpSocket>
@@ -16,8 +10,7 @@ QSpecServer::QSpecServer(QString name, int port, QObject *parent)
   : QTcpServer(parent),
     m_ServerName(name),
     m_Port(port),
-    m_Socket(NULL),
-    SOURCE_IDENT("$Id: qspecserver.cpp,v 1.2 2010/09/13 20:00:25 jennings Exp $")
+    m_Socket(NULL)
 {
   connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));
 }
@@ -565,27 +558,3 @@ QVariant QSpecServer::readProperty(QString /*name*/)
 {
   return QVariant();
 }
-
-/******************************************************************
-*
-*  $Log: qspecserver.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:25  jennings
-*  Merged
-*
-*  Revision 1.1.2.4  2010/08/04 20:22:58  jennings
-*  Added simple socket server, and prefs to control which servers are run, and on which ports
-*
-*  Revision 1.1.2.3  2010/07/09 21:34:40  jennings
-*  Better handling of script errors - should now be reported by spec
-*
-*  Revision 1.1.2.2  2010/04/26 00:37:11  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.1.2.1  2010/04/13 19:29:13  jennings
-*  Added qceplib to cvs
-*
-*  Revision 1.6  2009/06/27 05:05:43  jennings
-*  Merged branched versions from qavrg/qspecserver.* and qceplib/qspecserver.*
-*
-*
-*******************************************************************/

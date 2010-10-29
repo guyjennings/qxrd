@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdintegrator.cpp,v 1.4 2010/09/23 19:57:32 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdintegrator.h"
 #include "qxrddataprocessor.h"
 #include "qxrdimagedata.h"
@@ -25,8 +19,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc
     m_Oversample(this, "oversample", 1),
     m_IntegrationStep(this, "integrationStep", 0.001),
     m_DataProcessor(proc),
-    m_Allocator(alloc),
-    SOURCE_IDENT("$Id: qxrdintegrator.cpp,v 1.4 2010/09/23 19:57:32 jennings Exp $")
+    m_Allocator(alloc)
 {
 }
 
@@ -348,99 +341,3 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image,
 
   return res;
 }
-
-/******************************************************************
-*
-*  $Log: qxrdintegrator.cpp,v $
-*  Revision 1.4  2010/09/23 19:57:32  jennings
-*  Modified plugins for perkin elmer - now works in 64 bit mode
-*
-*  Revision 1.3  2010/09/17 16:23:57  jennings
-*  Made integrator algorithm honor the 'implementTilt' parameter
-*
-*  Revision 1.2  2010/09/13 20:00:40  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:39  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.18.2.6  2010/07/21 19:39:31  jennings
-*  Removed some commented out code
-*
-*  Revision 1.18.2.5  2010/06/14 20:18:00  jennings
-*  Implemented plotting and saving of integrated data - still need some kind of 'serializer' to maintain order of saving and plotting
-*
-*  Revision 1.18.2.4  2010/06/11 21:21:07  jennings
-*  Added QxrdSharedPointer, QxrdIntegratedData and QxrdIntegratedDataQueue
-*  Made integrator more thread-safe
-*
-*  Revision 1.18.2.3  2010/05/25 20:43:37  jennings
-*  Added try catch blocks around various memory allocations
-*
-*  Revision 1.18.2.2  2010/04/26 00:37:10  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.18.2.1  2010/04/21 21:45:03  jennings
-*  Changed mask values to shorts instead of bools.  Added ROI and histogram calculation tests.
-*
-*  Revision 1.18  2009/11/17 20:42:59  jennings
-*  Added instrumented QxrdMutexLocker which tracks how long locks are held, and prints
-*  info about any held for more than 100 msec
-*
-*  Revision 1.17  2009/11/02 20:19:27  jennings
-*  Changes to make it work with VC compiler
-*
-*  Revision 1.16  2009/10/21 20:31:55  jennings
-*  Slices are automatically saved and plotted.
-*
-*  Revision 1.15  2009/10/05 21:17:46  jennings
-*  Integrate button now causes integrated curve to be saved and plotted, as well
-*
-*  Revision 1.14  2009/10/02 20:11:02  jennings
-*  Added support for (optionally) saving and/or displaying integrated data
-*
-*  Revision 1.13  2009/09/22 18:19:00  jennings
-*  Added slicing routines
-*  Set title for traces in avg data graph
-*
-*  Revision 1.12  2009/09/20 21:18:53  jennings
-*  Removed 'printf' messages
-*  Added printMessage, statusMessage and criticalMessage functiosn for major classes.
-*
-*  Revision 1.11  2009/09/07 22:10:14  jennings
-*  Allow NULL mask
-*
-*  Revision 1.10  2009/08/25 18:43:03  jennings
-*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
-*
-*  Revision 1.9  2009/08/11 20:53:42  jennings
-*  Added automatic plot style options to plot curves
-*
-*  Revision 1.8  2009/08/08 20:15:36  jennings
-*  Added some more integration routines
-*
-*  Revision 1.7  2009/08/07 22:21:56  jennings
-*  Added a number of sample data creation routines to QxrdDataProcessor
-*  Added a parallelized integration routine to QxrdIntegrator
-*
-*  Revision 1.6  2009/08/05 16:44:08  jennings
-*  More changes to oversampling code for integration
-*
-*  Revision 1.5  2009/08/04 22:03:31  jennings
-*  Moved integration code into QxrdIntegrator, added oversampling option
-*  Add each integration result to the az-avg plot panel
-*
-*  Revision 1.4  2009/08/04 20:42:53  jennings
-*  Simple, initial, implementation of integration
-*
-*  Revision 1.3  2009/07/08 19:06:27  jennings
-*  Made centering parameters into Q_PROPERTYs
-*  Saved centering, integrator and data processor settings
-*
-*  Revision 1.2  2009/06/27 22:50:32  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-

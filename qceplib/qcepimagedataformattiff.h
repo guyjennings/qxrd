@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qcepimagedataformattiff.h,v 1.3 2010/10/22 21:44:26 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QCEPIMAGEDATAFORMATTIF_H
 #define QCEPIMAGEDATAFORATTIFF_H
 
@@ -24,9 +18,6 @@ public:
   QcepImageDataFormat<T>* loadFile(QString path, QcepImageData<T> *img);
   QcepImageDataFormat<T>* saveFile(QString path, QcepImageData<T> *img);
   QcepImageDataFormatBase::Priority priority() const;
-
-private:
-  HEADER_IDENT("$Id: qcepimagedataformattiff.h,v 1.3 2010/10/22 21:44:26 jennings Exp $");
 };
 
 extern void qceptiff_warningHandler(const char *module, const char *fmt, va_list ap);
@@ -166,50 +157,3 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::saveFile(QString /*path*/, Q
   return NULL;
 }
 #endif
-
-/******************************************************************
-*
-*  $Log: qcepimagedataformattiff.h,v $
-*  Revision 1.3  2010/10/22 21:44:26  jennings
-*  *** empty log message ***
-*
-*  Revision 1.2  2010/09/13 20:00:25  jennings
-*  Merged
-*
-*  Revision 1.1.2.2  2010/04/23 20:14:54  jennings
-*  Fixed bug with displaying rectangular images - width and height were swapped in QxrdRasterData::QxrdRasterData
-*
-*  Revision 1.1.2.1  2010/04/13 19:29:12  jennings
-*  Added qceplib to cvs
-*
-*  Revision 1.12  2009/11/09 18:00:35  jennings
-*  *** empty log message ***
-*
-*  Revision 1.11  2009/09/22 20:41:07  jennings
-*  Set filename and title properties when loading data files
-*
-*  Revision 1.10  2009/09/22 18:34:14  jennings
-*  Set filename and title properties when loading tiff file
-*
-*  Revision 1.9  2009/09/11 19:37:51  jennings
-*  Added type casts to remove some compiler warnings
-*
-*  Revision 1.8  2009/09/10 21:36:43  jennings
-*  Moved TIFF error handling into main program
-*
-*  Revision 1.7  2009/09/09 22:32:12  jennings
-*  Started to add TIFF metadata support
-*
-*  Revision 1.6  2009/08/04 16:45:20  jennings
-*  Moved mask data into separate class
-*
-*  Revision 1.5  2009/06/28 16:33:20  jennings
-*  Eliminated compiler warnings
-*
-*  Revision 1.4  2009/06/27 22:50:33  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-

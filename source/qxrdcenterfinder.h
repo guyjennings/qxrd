@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdcenterfinder.h,v 1.4 2010/10/21 16:31:24 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QXRDCENTERFINDER_H
 #define QXRDCENTERFINDER_H
 
@@ -82,61 +76,6 @@ public:
 //
 private:
   mutable QMutex             m_Mutex;
-
-  HEADER_IDENT("$Id: qxrdcenterfinder.h,v 1.4 2010/10/21 16:31:24 jennings Exp $");
 };
 
 #endif // QXRDCENTERFINDER_H
-
-/******************************************************************
-*
-*  $Log: qxrdcenterfinder.h,v $
-*  Revision 1.4  2010/10/21 16:31:24  jennings
-*  Implemented saving of settings soon after they change, rather than at program exit
-*
-*  Revision 1.3  2010/09/17 16:24:31  jennings
-*  Made integrator algorithm honor the 'implementTilt' parameter
-*
-*  Revision 1.2  2010/09/13 20:00:39  jennings
-*  Merged
-*
-*  Revision 1.1.2.5  2010/09/10 21:09:52  jennings
-*  Tilt and powder fitting modifications
-*
-*  Revision 1.1.2.4  2010/09/10 18:54:10  jennings
-*  Partial implement tilt in center finder dialog
-*
-*  Revision 1.1.2.3  2010/09/09 21:36:31  jennings
-*  Made QxrdCenterFinder descend from QxrdDetectorGeometry
-*
-*  Revision 1.1.2.2  2010/09/08 19:40:57  jennings
-*  Added tilt controls to center finder
-*  Disabled fit refine command (for now)
-*  Added percentile display mode
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:37  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.8.4.2  2010/04/26 23:46:12  jennings
-*  *** empty log message ***
-*
-*  Revision 1.8.4.1  2010/04/26 00:37:10  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.8  2009/07/22 11:55:34  jennings
-*  Center finder modifications
-*
-*  Revision 1.7  2009/07/21 22:55:48  jennings
-*  Rearranged center finder and integrator code so that the center finder and integrator objects go into the data processor thread, and the GUI stuff goes in the GUI thread
-*
-*  Revision 1.6  2009/07/08 19:06:27  jennings
-*  Made centering parameters into Q_PROPERTYs
-*  Saved centering, integrator and data processor settings
-*
-*  Revision 1.5  2009/06/27 22:50:32  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-

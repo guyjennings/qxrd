@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdresultserializer.h,v 1.2 2010/09/13 20:00:41 jennings Exp $
-*
-*******************************************************************/
-
 #ifndef QXRDRESULTSERIALIZER_H
 #define QXRDRESULTSERIALIZER_H
 
@@ -28,9 +22,6 @@ signals:
 
 protected:
   mutable QMutex m_Mutex;
-
-private:
-  HEADER_IDENT("$Id: qxrdresultserializer.h,v 1.2 2010/09/13 20:00:41 jennings Exp $");
 };
 
 template <typename T>
@@ -85,20 +76,3 @@ T QxrdResultSerializer<T>::dequeue()
 }
 
 #endif // QXRDRESULTSERIALIZER_H
-
-/******************************************************************
-*
-*  $Log: qxrdresultserializer.h,v $
-*  Revision 1.2  2010/09/13 20:00:41  jennings
-*  Merged
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:41  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.1.2.1  2010/06/17 16:02:36  jennings
-*  Skeleton code to support result serialization during crucial points in processing
-*  Separate QxrdDoubleImageData class which can hold a reference to a mask
-*
-*
-*******************************************************************/
-

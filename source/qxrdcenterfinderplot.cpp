@@ -1,9 +1,3 @@
-/******************************************************************
-*
-*  $Id: qxrdcenterfinderplot.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $
-*
-*******************************************************************/
-
 #include "qxrdcenterfinderplot.h"
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
@@ -28,8 +22,7 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_Window(NULL),
     m_DataProcessor(NULL),
     m_CenterFinder(NULL),
-    m_FirstTime(true),
-    SOURCE_IDENT("$Id: qxrdcenterfinderplot.cpp,v 1.2 2010/09/13 20:00:39 jennings Exp $")
+    m_FirstTime(true)
 {
   insertLegend(m_Legend, QwtPlot::RightLegend);
 }
@@ -220,84 +213,3 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
     printf("QxrdCenterFinderPlot::onCenterChanged failed\n");
   }
 }
-
-/******************************************************************
-*
-*  $Log: qxrdcenterfinderplot.cpp,v $
-*  Revision 1.2  2010/09/13 20:00:39  jennings
-*  Merged
-*
-*  Revision 1.1.2.3  2010/09/10 18:54:10  jennings
-*  Partial implement tilt in center finder dialog
-*
-*  Revision 1.1.2.2  2010/08/11 15:58:27  jennings
-*  Added changedValue(QwtDoublePoint) slots
-*
-*  Revision 1.1.2.1  2010/07/22 18:39:38  jennings
-*  Moving files into source subdirectory
-*
-*  Revision 1.18.2.7  2010/06/23 21:47:26  jennings
-*  Eliminated crashing problem if image/mask was NULL
-*
-*  Revision 1.18.2.6  2010/05/25 20:43:37  jennings
-*  Added try catch blocks around various memory allocations
-*
-*  Revision 1.18.2.5  2010/05/02 16:56:50  jennings
-*  Removed embedded C comments from commit log
-*
-*  Revision 1.18.2.4  2010/05/02 08:12:06  jennings
-*  Replaced 'returnImageToPool' and 'replaceImageFromPool' by
-*  equivalent smart pointer assignments
-*
-*  Revision 1.18.2.3  2010/04/26 23:46:13  jennings
-*  *** empty log message ***
-*
-*  Revision 1.18.2.2  2010/04/26 20:53:25  jennings
-*  More attempts to get QSharedPointers to work...
-*
-*  Revision 1.18.2.1  2010/04/26 00:37:10  jennings
-*  Attempting to convert to using QSharedPointers
-*
-*  Revision 1.18  2009/12/01 14:10:37  jennings
-*  Added interpolating T value(double x, double y) method to QcepImageData
-*  Changed center finder plot to use interpolating value routine
-*
-*  Revision 1.17  2009/11/12 20:17:43  jennings
-*  Version 0.3.5, fix problems with first-time zooming of graphs
-*
-*  Revision 1.16  2009/11/02 20:16:22  jennings
-*  Changes to make it work with VC compiler
-*
-*  Revision 1.15  2009/09/25 14:22:16  jennings
-*  Simplified double-buffering for plotted data - there is now a separate copy of data and mask
-*  in QxrdWindow
-*
-*  Revision 1.14  2009/09/07 22:03:46  jennings
-*  Allow NULL mask
-*
-*  Revision 1.13  2009/08/25 18:43:03  jennings
-*  Templatized QxrdImageData and QxrdImageQueue, and added int16, int32 and double variants as typedefs
-*
-*  Revision 1.12  2009/08/12 19:44:58  jennings
-*  Reorganized plot zoomers into a single class, initialized in QxrdPlot, which
-*  takes its tracker text from a QxrdPlot virtual member function
-*
-*  Revision 1.11  2009/08/09 15:39:10  jennings
-*  Added a separate QxrdImagePlotMeasurer class
-*
-*  Revision 1.10  2009/08/04 16:45:20  jennings
-*  Moved mask data into separate class
-*
-*  Revision 1.9  2009/07/25 15:18:19  jennings
-*  Moved graph zooming code into QxrdPlot - a common base class
-*
-*  Revision 1.8  2009/07/22 11:55:34  jennings
-*  Center finder modifications
-*
-*  Revision 1.7  2009/06/27 22:50:32  jennings
-*  Added standard log entries and ident macros
-*  Used standard property macros for acquisition parameters and image properties
-*
-*
-*******************************************************************/
-
