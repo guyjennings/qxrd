@@ -207,6 +207,11 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
   connect(&m_UpdateTimer, SIGNAL(timeout()), this, SLOT(newData()));
 
+  m_Plot->prop_XMouse()->linkTo(m_XMouse);
+  m_Plot->prop_YMouse()->linkTo(m_YMouse);
+  m_Plot->prop_ValMouse()->linkTo(m_ValMouse);
+  m_Plot->prop_TTHMouse()->linkTo(m_TTHMouse);
+
   m_StatusMsg = QLabelPtr(new QLabel(NULL));
   m_StatusMsg -> setMinimumWidth(200);
   m_StatusMsg -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);

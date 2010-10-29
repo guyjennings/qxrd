@@ -69,12 +69,6 @@ public:
   Q_PROPERTY(bool maintainAspectRatio        READ get_MaintainAspectRatio WRITE set_MaintainAspectRatio);
   QCEP_BOOLEAN_PROPERTY(MaintainAspectRatio);
 
-  Q_PROPERTY(double xMouse READ get_XMouse WRITE set_XMouse STORED false);
-  QCEP_DOUBLE_PROPERTY(XMouse);
-
-  Q_PROPERTY(double yMouse READ get_YMouse WRITE set_YMouse STORED false);
-  QCEP_DOUBLE_PROPERTY(YMouse);
-
   Q_PROPERTY(double tthMouse READ get_TTHMouse WRITE set_TTHMouse STORED false);
   QCEP_DOUBLE_PROPERTY(TTHMouse);
 
@@ -139,7 +133,7 @@ public:
 
   void replot();
 
-  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
+  virtual QwtText trackerText(const QwtDoublePoint &pos);
 
 private:
   void replotImage();

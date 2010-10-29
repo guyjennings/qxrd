@@ -38,8 +38,6 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_OverflowShown(this, "overflowShown", 0),
     m_InterpolatePixels(this, "interpolatePixels", 1),
     m_MaintainAspectRatio(this, "maintainAspectRatio", 1),
-    m_XMouse(this,"xMouse",0),
-    m_YMouse(this,"yMouse",0),
     m_TTHMouse(this,"tthMouse",0),
     m_ValMouse(this,"valMouse",0),
     m_MaskMouse(this,"maskMouse",0),
@@ -658,7 +656,7 @@ void QxrdImagePlot::replot()
 //  emit printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
 }
 
-QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
+QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
 {
   const QxrdRasterData *ras = this->raster();
 
@@ -671,25 +669,25 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos) const
 
   QString res = tr("%1, %2").arg(pos.x()).arg(pos.y());
 
-  ((QxrdImagePlot*) this)->set_XMouse(pos.x());
-  ((QxrdImagePlot*) this)->set_YMouse(pos.y());
+  set_XMouse(pos.x());
+  set_YMouse(pos.y());
 
   if (ras) {
     double val = ras->value(pos.x(),pos.y());
     res += tr(", %1").arg(val);
-    ((QxrdImagePlot*) this)->set_ValMouse(val);
+    set_ValMouse(val);
   }
 
   if (m_MaskRaster.data()) {
     double mask = m_MaskRaster.value(pos.x(),pos.y());
     res += tr(", %1").arg(mask);
-    ((QxrdImagePlot*) this)->set_MaskMouse(mask);
+    set_MaskMouse(mask);
   }
 
   if (centerFinder) {
     double tth = centerFinder->getTTH(pos);
     res += tr(", TTH %1").arg(tth);
-    ((QxrdImagePlot*) this)->set_TTHMouse(tth);
+    set_TTHMouse(tth);
   }
 
   return res;
