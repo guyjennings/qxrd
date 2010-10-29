@@ -43,7 +43,6 @@ class QxrdPlotMeasurer;            typedef QxrdPlotMeasurer *QxrdPlotMeasurerPtr
 class QxrdPlotSlicer;              typedef QxrdPlotSlicer *QxrdPlotSlicerPtr;
 class QwtPlotZoomer;               typedef QwtPlotZoomer *QwtPlotZoomerPtr;
 class QxrdPlotZoomer;              typedef QxrdPlotZoomer *QxrdPlotZoomerPtr;
-class QxrdPlotTracker;             typedef QxrdPlotTracker *QxrdPlotTrackerPtr;
 
 class QwtPlotPanner;               typedef QwtPlotPanner *QwtPlotPannerPtr;
 class QwtPlotMagnifier;            typedef QwtPlotMagnifier *QwtPlotMagnifierPtr;

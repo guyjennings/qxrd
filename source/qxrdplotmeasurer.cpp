@@ -22,7 +22,7 @@ QxrdPlotMeasurer::QxrdPlotMeasurer(QwtPlotCanvasPtr canvas, QxrdPlotPtr plot)
 
 QwtText QxrdPlotMeasurer::trackerText(const QwtDoublePoint &pos) const
 {
-  return tr("%1, %2").arg(pos.x()).arg(pos.y());
+  return (m_Plot ? m_Plot->trackerText(pos) : tr("%1, %2").arg(pos.x()).arg(pos.y()));
 }
 
 /******************************************************************

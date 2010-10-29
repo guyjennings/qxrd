@@ -21,9 +21,7 @@ QxrdPlotZoomer::QxrdPlotZoomer(QwtPlotCanvasPtr canvas, QxrdPlotPtr plot)
 
 QwtText QxrdPlotZoomer::trackerText(const QwtDoublePoint &pos) const
 {
-  QString res = tr("%1, %2").arg(pos.x()).arg(pos.y());
-
-  return res;
+  return (m_Plot ? m_Plot->trackerText(pos) : tr("%1, %2").arg(pos.x()).arg(pos.y()));
 }
 
 QxrdImagePlotZoomer::QxrdImagePlotZoomer(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
