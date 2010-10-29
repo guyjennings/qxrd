@@ -1,0 +1,7 @@
+Makefile
+app
+moc
+ui
+obj
+*.o
+rcc
