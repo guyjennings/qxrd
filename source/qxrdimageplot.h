@@ -69,6 +69,21 @@ public:
   Q_PROPERTY(bool maintainAspectRatio        READ get_MaintainAspectRatio WRITE set_MaintainAspectRatio);
   QCEP_BOOLEAN_PROPERTY(MaintainAspectRatio);
 
+  Q_PROPERTY(double xMouse READ get_XMouse WRITE set_XMouse STORED false);
+  QCEP_DOUBLE_PROPERTY(XMouse);
+
+  Q_PROPERTY(double yMouse READ get_YMouse WRITE set_YMouse STORED false);
+  QCEP_DOUBLE_PROPERTY(YMouse);
+
+  Q_PROPERTY(double tthMouse READ get_TTHMouse WRITE set_TTHMouse STORED false);
+  QCEP_DOUBLE_PROPERTY(TTHMouse);
+
+  Q_PROPERTY(double valMouse READ get_ValMouse WRITE set_ValMouse STORED false);
+  QCEP_DOUBLE_PROPERTY(ValMouse);
+
+  Q_PROPERTY(double maskMouse READ get_MaskMouse WRITE set_MaskMouse STORED false);
+  QCEP_DOUBLE_PROPERTY(MaskMouse);
+
 public slots:
   void set005Range();
   void set010Range();
