@@ -139,7 +139,6 @@ HEADERS += TODO.h \
     qxrdintegratordialog.h \
     qxrdimageplot.h \
     qxrdplotzoomer.h \
-    qxrdplottracker.h \
     qxrdserver.h \
     qxrdserverthread.h \
     qxrdacquisitionthread.h \
@@ -229,7 +228,6 @@ SOURCES += qxrd.cpp \
     qxrdintegratordialog.cpp \
     qxrdimageplot.cpp \
     qxrdplotzoomer.cpp \
-    qxrdplottracker.cpp \
     qxrdserver.cpp \
     qxrdserverthread.cpp \
     qxrdacquisitionthread.cpp \
