@@ -13,6 +13,7 @@
 #include "qxrdforwardtypes.h"
 #include "qxrdimagequeue.h"
 #include "qxrddataprocessor.h"
+#include "qxrdimagedisplaywidget.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -126,6 +127,8 @@ private:
   QxrdMaskDataPtr                        m_Mask;
   QxrdMaskDataPtr                        m_NewMask;
   QAtomicInt                             m_NewMaskAvailable;
+
+  QxrdImageDisplayWidget                *m_ImageDisplay;
 };
 
 #endif
