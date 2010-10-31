@@ -36,9 +36,9 @@ void QxrdImageDisplayWidget::paintEvent(QPaintEvent *event)
   QVector<QRect> rects = rgn.rects();
 
   foreach(QRect rect, rects) {
-    printf("paint rect %d,%d,%d,%d\n",
-           rect.left(), rect.top(),
-           rect.right(), rect.bottom());
+//    printf("paint rect %d,%d,%d,%d\n",
+//           rect.left(), rect.top(),
+//           rect.right(), rect.bottom());
 
     QRect  srcRect(rect.left()/m_DisplayScale, rect.top()/m_DisplayScale,
                    rect.width()/m_DisplayScale+1, rect.height()/m_DisplayScale+1);
@@ -52,7 +52,7 @@ void QxrdImageDisplayWidget::paintEvent(QPaintEvent *event)
 //
 //  painter.drawImage(rect(), m_DataImage, m_DataImage.rect());
 
-  painter.fillRect(QRect(10,10,40,40), Qt::red);
+//  painter.fillRect(QRect(10,10,40,40), Qt::red);
 }
 
 void QxrdImageDisplayWidget::updateImage
