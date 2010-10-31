@@ -19,6 +19,7 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdallocator.h"
 #include "qxrdpowderfitdialog.h"
+#include "qxrdimagedisplaywidget.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -65,7 +66,8 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 //    m_NewMaskMutex(QMutex::Recursive),
     m_Mask(NULL/*new QxrdMaskData(NULL,2048,2048)*/),
     m_NewMask(NULL/*new QxrdMaskData(2048,2048)*/),
-    m_NewMaskAvailable(false)
+    m_NewMaskAvailable(false),
+    m_ImageDisplay(NULL)
 {
   setupUi(this);
 
@@ -389,6 +391,10 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 #ifdef QT_NO_DEBUG
   m_ActionRefineCenterTilt->setEnabled(false);
 #endif
+
+//#ifndef QT_NO_DEBUG
+  m_ImageDisplay = QxrdImageDisplayWidget::insertNew(m_XRDTabWidget);
+//#endif
 
   m_UpdateTimer.start(1500);
 }
@@ -715,6 +721,10 @@ void QxrdWindow::newData()
 
     m_Plot             -> onProcessedImageAvailable(m_Data, m_Overflow);
     m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
+
+    if (m_ImageDisplay) {
+      m_ImageDisplay -> updateImage(m_Data, m_Overflow);
+    }
   }
 }
 
@@ -732,6 +742,10 @@ void QxrdWindow::newMask()
 
     m_Plot             -> onMaskedImageAvailable(m_Data, m_Mask);
     m_CenterFinderPlot -> onMaskedImageAvailable(m_Data, m_Mask);
+
+    if (m_ImageDisplay) {
+      m_ImageDisplay->updateImage(QxrdDoubleImageDataPtr(), QxrdMaskDataPtr(), m_Mask);
+    }
   }
 }
 
