@@ -123,4 +123,4 @@ UINT QxrdPerkinElmerPlugin::Acquisition_GetHwHeaderInfoEx(
 
 Q_EXPORT_PLUGIN2(qxrdperkinelmerplugin, QxrdPerkinElmerPlugin);
 
-#endif HAVE_PERKIN_ELMER
+#endif // HAVE_PERKIN_ELMER
