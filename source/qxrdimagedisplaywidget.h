@@ -8,6 +8,7 @@
 
 #include "qxrddoubleimagedata.h"
 #include "qxrdmaskdata.h"
+#include "qxrdforwardtypes.h"
 
 class QxrdImageDisplayWidget : public QWidget
 {
@@ -20,9 +21,12 @@ public:
   void paintEvent(QPaintEvent *event);
   QSize	sizeHint () const;
 
-  static QxrdImageDisplayWidget* insertNew(QTabWidget *tw);
+  static QxrdImageDisplayWidget* insertNew(QxrdApplication *app, QTabWidget *tw);
 
 signals:
+  void printMessage(QString msg);
+  void statusMessage(QString msg);
+  void criticalMessage(QString msg);
 
 public slots:
   void updateImage(QxrdDoubleImageDataPtr img,

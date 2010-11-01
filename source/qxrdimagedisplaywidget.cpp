@@ -3,6 +3,7 @@
 #include <QTime>
 #include <QScrollArea>
 #include <QPaintEvent>
+#include "qxrdapplication.h"
 
 QxrdImageDisplayWidget::QxrdImageDisplayWidget(QWidget *parent) :
     QWidget(parent),
@@ -10,11 +11,11 @@ QxrdImageDisplayWidget::QxrdImageDisplayWidget(QWidget *parent) :
     m_Mask(NULL),
     m_Overflow(NULL),
     m_Minimum(0),
-    m_Maximum(2550),
-    m_StepSize(10),
+    m_Maximum(25.5),
+    m_StepSize(0.1),
     m_TableMax(255),
     m_ColorTable(256),
-    m_DisplayScale(1.0)
+    m_DisplayScale(0.5)
 {
   setGrayscale();
 }
@@ -78,9 +79,9 @@ void QxrdImageDisplayWidget::updateImage
   rebuildImage();
 
   adjustSize();
-  update();
+  repaint();
 
-  printf("Image rebuilt after %d msec\n", tic.elapsed());
+  emit printMessage(tr("Image rebuilt after %1 msec").arg(tic.elapsed()));
 }
 
 QSize QxrdImageDisplayWidget::sizeHint() const
@@ -122,7 +123,7 @@ void QxrdImageDisplayWidget::rebuildImage()
   }
 }
 
-QxrdImageDisplayWidget* QxrdImageDisplayWidget::insertNew(QTabWidget *tw)
+QxrdImageDisplayWidget* QxrdImageDisplayWidget::insertNew(QxrdApplication *app, QTabWidget *tw)
 {
   QxrdImageDisplayWidget *res = NULL;
 
@@ -134,6 +135,10 @@ QxrdImageDisplayWidget* QxrdImageDisplayWidget::insertNew(QTabWidget *tw)
     sa -> setWidget(res);
 
     tw->insertTab(1, sa, "Image");
+
+    connect(res, SIGNAL(printMessage(QString)), app, SIGNAL(printMessage(QString)));
+    connect(res, SIGNAL(statusMessage(QString)), app, SIGNAL(statusMessage(QString)));
+    connect(res, SIGNAL(criticalMessage(QString)), app, SIGNAL(criticalMessage(QString)));
   }
 
   return res;
