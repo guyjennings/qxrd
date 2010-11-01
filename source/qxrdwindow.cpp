@@ -393,10 +393,10 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 #endif
 
 //#ifndef QT_NO_DEBUG
-  m_ImageDisplay = QxrdImageDisplayWidget::insertNew(m_XRDTabWidget);
+  m_ImageDisplay = QxrdImageDisplayWidget::insertNew(app, m_XRDTabWidget);
 //#endif
 
-  m_UpdateTimer.start(1500);
+  m_UpdateTimer.start(100);
 }
 
 QxrdWindow::~QxrdWindow()
@@ -577,7 +577,7 @@ void QxrdWindow::onAcquireStarted(int dark)
 }
 
 void QxrdWindow::onAcquiredFrame(
-    QString /*fileName*/, int /*fileIndex*/, int isum, int nsum, int iframe, int nframe)
+    QString fileName, int fileIndex, int isum, int nsum, int iframe, int nframe)
 {
 //   printf("QxrdWindow::acquiredFrame(\"%s\",%d,%d,%d,%d,%d)\n",
 // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
@@ -587,8 +587,9 @@ void QxrdWindow::onAcquiredFrame(
 
   //  printf("%d %% progress\n", thisframe*100/totalframes);
 
-  statusMessage(tr("Exposure %1 of %2, File %3 of %4")
-                .arg(isum+1).arg(nsum).arg(iframe+1).arg(nframe));
+  statusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
+                .arg(fileName)
+                .arg(isum+1).arg(nsum).arg(iframe).arg(nframe));
 
   m_Progress -> setValue(thisframe*100/totalframes);
 }
@@ -667,7 +668,7 @@ void QxrdWindow::statusMessage(QString msg)
 {
   m_StatusMsg -> setText(msg);
 
-  printMessage(msg);
+//  printMessage(msg);
 
   m_StatusTimer.start(5000);
 }
@@ -957,10 +958,24 @@ void QxrdWindow::doAboutQxrd()
   QString about = "QXRD Data Acquisition for PE Area Detectors\nVersion " QXRD_VERSION;
 
   if (sizeof(void*) == 4) {
-    about += " - 32 Bit\n";
+    about += " - 32 Bit";
   } else {
-    about += " - 64 Bit\n";
+    about += " - 64 Bit";
   }
+
+#ifdef Q_CC_MSVC
+  about += " MSVC";
+#endif
+
+#ifdef Q_CC_GNU
+  about += " gcc";
+#endif
+
+#ifdef QT_NO_DEBUG
+  about += " Release\n";
+#else
+  about += " Debug\n"
+#endif
 
   about += tr("Qt Version %1").arg(qVersion());
 
