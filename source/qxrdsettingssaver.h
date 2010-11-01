@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QMutex>
-
+#include <QDateTime>
 #include "qxrdforwardtypes.h"
 
 class QxrdSettingsSaver : public QObject
@@ -15,9 +15,9 @@ public:
   explicit QxrdSettingsSaver(QObject *parent, QxrdApplicationPtr app);
 
 signals:
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 public slots:
   void performSave();

@@ -4,6 +4,8 @@
 #include "qcepmacros.h"
 #include <QThread>
 #include "qxrdforwardtypes.h"
+#include <QDateTime>
+
 //#include "qxrdsimpleserver.h"
 //#include "qxrdscriptengine.h"
 
@@ -19,9 +21,9 @@ public:
   QxrdSimpleServerPtr server() const;
 
 signals:
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 protected:
   void run();

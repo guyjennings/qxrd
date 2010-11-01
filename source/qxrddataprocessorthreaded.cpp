@@ -55,7 +55,8 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
     (QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::correctInt16Image"));
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("QxrdDataProcessorThreaded::correctInt16Image"));
   );
 
   if (image) {
@@ -78,7 +79,8 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
     (QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::correctInt32Image"));
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("QxrdDataProcessorThreaded::correctInt32Image"));
   );
 
   if (image) {
@@ -121,7 +123,8 @@ QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
     (QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double cx, double cy)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::integrateImage"));
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("QxrdDataProcessorThreaded::integrateImage"));
   );
 
   if (image && get_PerformIntegration()) {
@@ -141,7 +144,8 @@ QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
 void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
   );
 
   QxrdIntegratedDataPtr integ = m_IntegratedData.dequeue();
@@ -161,7 +165,8 @@ QxrdROIDataPtr QxrdDataProcessorThreaded::calculateROI
     (QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::calculateROI"));
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("QxrdDataProcessorThreaded::calculateROI"));
   );
 
   return QxrdROIDataPtr();
@@ -170,7 +175,8 @@ QxrdROIDataPtr QxrdDataProcessorThreaded::calculateROI
 void QxrdDataProcessorThreaded::onROIDataAvailable()
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::onROIDataAvailable"));
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("QxrdDataProcessorThreaded::onROIDataAvailable"));
   );
 
   QxrdROIDataPtr roiData = m_ROIData.dequeue();
@@ -180,7 +186,8 @@ QxrdHistogramDataPtr QxrdDataProcessorThreaded::calculateHistogram
     (QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::calculateHistogram"));
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("QxrdDataProcessorThreaded::calculateHistogram"));
   );
 
   return QxrdHistogramDataPtr();
@@ -189,7 +196,8 @@ QxrdHistogramDataPtr QxrdDataProcessorThreaded::calculateHistogram
 void QxrdDataProcessorThreaded::onHistogramDataAvailable()
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::onHistogramDataAvailable"));
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("QxrdDataProcessorThreaded::onHistogramDataAvailable"));
   );
 
   QxrdHistogramDataPtr histData = m_HistogramData.dequeue();

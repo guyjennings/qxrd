@@ -37,9 +37,9 @@ public slots:
   void mousePressed(QModelIndex index);
 
 signals:
-  void printMessage(QString msg) const;
-  void statusMessage(QString msg) const;
-  void criticalMessage(QString msg) const;
+  void printMessage(QDateTime ts, QString msg) const;
+  void statusMessage(QDateTime ts, QString msg) const;
+  void criticalMessage(QDateTime ts, QString msg) const;
 
 private:
   mutable QMutex       m_Mutex;

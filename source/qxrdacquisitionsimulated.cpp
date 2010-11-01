@@ -18,19 +18,22 @@ QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessorPtr proc, Qx
 
 void QxrdAcquisitionSimulated::onExposureTimeChanged(double newTime)
 {
-  emit printMessage(tr("Exposure time changed to %1").arg(newTime));
+  emit printMessage(QDateTime::currentDateTime(),
+                    tr("Exposure time changed to %1").arg(newTime));
 
   m_Timer.start(get_ExposureTime()*1000);
 }
 
 void QxrdAcquisitionSimulated::onBinningModeChanged(int newMode)
 {
-  emit printMessage(tr("Binning mode changed to %1").arg(newMode));
+  emit printMessage(QDateTime::currentDateTime(),
+                    tr("Binning mode changed to %1").arg(newMode));
 }
 
 void QxrdAcquisitionSimulated::onCameraGainChanged(int newGain)
 {
-  emit printMessage(tr("Camera Gain Changed to %1").arg(newGain));
+  emit printMessage(QDateTime::currentDateTime(),
+                    tr("Camera Gain Changed to %1").arg(newGain));
 }
 
 void QxrdAcquisitionSimulated::setupExposureMenu(QDoubleSpinBox *cb)
@@ -91,18 +94,18 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
 //  painter.setFont(QFont("Times", 80, QFont::Bold, true));
 //  painter.drawText(nCols/4, nRows/12, QDateTime::currentDateTime().toString("yyyyMMdd:hhmmss.zzz"));
 //
-//  emit printMessage(tr("simulated data generated after %1 msec").arg(tic.elapsed()));
+//  emit printMessage(QDateTime::currentDateTime(), tr("simulated data generated after %1 msec").arg(tic.elapsed()));
 //
 //  painter.fillRect(0,0,nCols/4,nRows/4, Qt::lightGray);
 //  painter.fillRect(1020,20,50,50, Qt::darkGray);
 //
-//  emit printMessage(tr("simulated data generated after %1 msec").arg(tic.elapsed()));
+//  emit printMessage(QDateTime::currentDateTime(), tr("simulated data generated after %1 msec").arg(tic.elapsed()));
 //
 //  painter.setPen(Qt::gray);
 //  painter.setBrush(QBrush(QColor(40,40,40,240),Qt::SolidPattern));
 //  painter.drawEllipse(nCols/4, nRows/8, nCols/2, nRows/2);
 //
-//  emit printMessage(tr("simulated data generated after %1 msec").arg(tic.elapsed()));
+//  emit printMessage(QDateTime::currentDateTime(), tr("simulated data generated after %1 msec").arg(tic.elapsed()));
 //
 //  if (m_AcquiredInt16Data) {
 //    quint16 *ptr = m_AcquiredInt16Data->data();
@@ -129,7 +132,7 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
       }
     }
   }
-//  emit printMessage(tr("simulated data generation took %1 msec").arg(tic.elapsed()));
+//  emit printMessage(QDateTime::currentDateTime(), tr("simulated data generation took %1 msec").arg(tic.elapsed()));
 
   acquiredFrameAvailable();
 }

@@ -4,6 +4,8 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QScriptValue>
+#include <QDateTime>
+
 #include "qcepmacros.h"
 #include "qxrdforwardtypes.h"
 
@@ -22,9 +24,9 @@ public slots:
   void shutdown();
 
 signals:
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 signals:
   void executeCommand(QString cmd);

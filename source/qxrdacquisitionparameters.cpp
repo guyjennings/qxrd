@@ -71,7 +71,8 @@ void QxrdAcquisitionParameters::dynamicProperties()
   QByteArray name;
 
   foreach(name, dynamicPropertyNames()) {
-    emit printMessage(tr("acquisition.%1\n").arg(name.data()));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("acquisition.%1\n").arg(name.data()));
   }
 }
 

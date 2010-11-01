@@ -234,7 +234,8 @@ void QxrdAllocator::allocatorHeartbeat()
   if (ndblneeded < 4) ndblneeded = 4;
 
   QCEP_DEBUG(DEBUG_ALLOCATOR,
-             emit printMessage(tr("Allocator heartbeat, %1 out of %2, [%3,%4,%5,%6] [%7,%8,%9]\n")
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("Allocator heartbeat, %1 out of %2, [%3,%4,%5,%6] [%7,%8,%9]\n")
                                .arg(m_AllocatedMemory/MegaBytes).arg(get_Max()).arg(n16).arg(n32).arg(ndbl).arg(nmsk)
                                .arg(n16needed).arg(n32needed).arg(ndblneeded));
   );

@@ -31,9 +31,9 @@ void QxrdFileSaverThread::run()
 {
   m_FileSaver.fetchAndStoreOrdered(new QxrdFileSaver(m_Allocator));
 
-  connect(m_FileSaver, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
-  connect(m_FileSaver, SIGNAL(statusMessage(QString)), this, SIGNAL(statusMessage(QString)));
-  connect(m_FileSaver, SIGNAL(criticalMessage(QString)), this, SIGNAL(criticalMessage(QString)));
+  connect(m_FileSaver, SIGNAL(printMessage(QDateTime,QString)), this, SIGNAL(printMessage(QDateTime,QString)));
+  connect(m_FileSaver, SIGNAL(statusMessage(QDateTime,QString)), this, SIGNAL(statusMessage(QDateTime,QString)));
+  connect(m_FileSaver, SIGNAL(criticalMessage(QDateTime,QString)), this, SIGNAL(criticalMessage(QDateTime,QString)));
 
   int rc = exec();
 

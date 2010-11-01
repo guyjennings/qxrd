@@ -60,9 +60,9 @@ public:
   void changedSizeMB(int newMB);
 
 signals:
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 private slots:
   void allocatorHeartbeat();

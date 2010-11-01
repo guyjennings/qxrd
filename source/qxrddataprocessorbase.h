@@ -27,9 +27,9 @@ public:
   ~QxrdDataProcessorBase();
 
 signals:
-  void printMessage(QString msg) const;
-  void statusMessage(QString msg) const;
-  void criticalMessage(QString msg) const;
+  void printMessage(QDateTime ts, QString msg) const;
+  void statusMessage(QDateTime ts, QString msg) const;
+  void criticalMessage(QDateTime ts, QString msg) const;
 
   void newIntegrationAvailable(QxrdIntegratedDataPtr data);
 

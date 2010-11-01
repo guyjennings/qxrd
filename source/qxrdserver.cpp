@@ -10,7 +10,7 @@ QxrdServer::QxrdServer(QxrdAcquisitionThreadPtr acqth, QString name, int port, Q
   : QSpecServer(name, port, parent),
     m_AcquisitionThread(acqth)
 {
-  emit printMessage("QxrdServer::QxrdServer");
+//  emit printMessage(QDateTime::currentDateTime(), "QxrdServer::QxrdServer");
 }
 
 QVariant QxrdServer::executeCommand(QString /*cmd*/)

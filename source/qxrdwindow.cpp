@@ -243,7 +243,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   statusBar() -> addPermanentWidget(m_AllocationStatus);
 
   if (m_Acquisition == NULL) {
-    emit criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
+    emit criticalMessage(QDateTime::currentDateTime(), "Oh no, QxrdWindow::m_Acquisition == NULL");
   }
 
   connect(m_Acquisition,     SIGNAL(acquireStarted(int)),
@@ -345,17 +345,17 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 //  connect(m_DataProcessor, SIGNAL(newMaskAvailable(QxrdDoubleImageData *, QxrdMaskData *)),
 //          m_CenterFinderPlot, SLOT(onMaskedImageAvailable(QxrdDoubleImageData *, QxrdMaskData *)));
 
-  connect(m_Plot, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
-  connect(m_CenterFinderPlot, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
-  connect(m_IntegratorPlot, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
-  connect(m_Plot, SIGNAL(statusMessage(QString)), this, SLOT(statusMessage(QString)));
-  connect(m_CenterFinderPlot, SIGNAL(statusMessage(QString)), this, SLOT(statusMessage(QString)));
-  connect(m_IntegratorPlot, SIGNAL(statusMessage(QString)), this, SLOT(statusMessage(QString)));
-  connect(m_Plot, SIGNAL(criticalMessage(QString)), this, SLOT(criticalMessage(QString)));
-  connect(m_CenterFinderPlot, SIGNAL(criticalMessage(QString)), this, SLOT(criticalMessage(QString)));
-  connect(m_IntegratorPlot, SIGNAL(criticalMessage(QString)), this, SLOT(criticalMessage(QString)));
+  connect(m_Plot, SIGNAL(printMessage(QDateTime,QString)), this, SLOT(printMessage(QDateTime,QString)));
+  connect(m_CenterFinderPlot, SIGNAL(printMessage(QDateTime,QString)), this, SLOT(printMessage(QDateTime,QString)));
+  connect(m_IntegratorPlot, SIGNAL(printMessage(QDateTime,QString)), this, SLOT(printMessage(QDateTime,QString)));
+  connect(m_Plot, SIGNAL(statusMessage(QDateTime,QString)), this, SLOT(statusMessage(QDateTime,QString)));
+  connect(m_CenterFinderPlot, SIGNAL(statusMessage(QDateTime,QString)), this, SLOT(statusMessage(QDateTime,QString)));
+  connect(m_IntegratorPlot, SIGNAL(statusMessage(QDateTime,QString)), this, SLOT(statusMessage(QDateTime,QString)));
+  connect(m_Plot, SIGNAL(criticalMessage(QDateTime,QString)), this, SLOT(criticalMessage(QDateTime,QString)));
+  connect(m_CenterFinderPlot, SIGNAL(criticalMessage(QDateTime,QString)), this, SLOT(criticalMessage(QDateTime,QString)));
+  connect(m_IntegratorPlot, SIGNAL(criticalMessage(QDateTime,QString)), this, SLOT(criticalMessage(QDateTime,QString)));
 
-//  connect(m_DataProcessor, SIGNAL(printMessage(QString)), this, SLOT(printMessage(QString)));
+//  connect(m_DataProcessor, SIGNAL(printMessage(QDateTime,QString)), this, SLOT(printMessage(QDateTime,QString)));
 
 //  readSettings();
 
@@ -446,14 +446,15 @@ QString QxrdWindow::timeStamp()
   return QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ");
 }
 
-void QxrdWindow::printMessage(QString msg)
+void QxrdWindow::printMessage(QDateTime ts, QString msg)
 {
 //  printf("print message %s\n", qPrintable(msg));
 
   if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "printMessage", Qt::QueuedConnection, Q_ARG(QString, msg)));
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "printMessage", Qt::QueuedConnection,
+                                           Q_ARG(QDateTime, ts), Q_ARG(QString, msg)));
   } else {
-    QString message = timeStamp()+msg.trimmed();
+    QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+msg.trimmed();
 
     //int msgSize = m_Messages->document()->characterCount();
     //int blkCount = m_Messages->document()->blockCount();
@@ -465,16 +466,17 @@ void QxrdWindow::printMessage(QString msg)
   }
 }
 
-void QxrdWindow::criticalMessage(QString msg)
+void QxrdWindow::criticalMessage(QDateTime ts, QString msg)
 {
   static int dialogCount = 0;
 
   printf("critical message %s, count = %d\n", qPrintable(msg), dialogCount);
 
   if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "criticalMessage", Qt::QueuedConnection, Q_ARG(QString, msg)));
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "criticalMessage", Qt::QueuedConnection,
+                                           Q_ARG(QDateTime, ts), Q_ARG(QString, msg)));
   } else {
-    statusMessage(msg);
+    statusMessage(ts, msg);
 
     dialogCount++;
     if (dialogCount <= 1) {
@@ -587,7 +589,8 @@ void QxrdWindow::onAcquiredFrame(
 
   //  printf("%d %% progress\n", thisframe*100/totalframes);
 
-  statusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
+  statusMessage(QDateTime::currentDateTime(),
+                tr("%1: Exposure %2 of %3, File %4 of %5")
                 .arg(fileName)
                 .arg(isum+1).arg(nsum).arg(iframe).arg(nframe));
 
@@ -664,7 +667,7 @@ void QxrdWindow::writeSettings(QxrdSettings &settings, QString section)
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdWindow::statusMessage(QString msg)
+void QxrdWindow::statusMessage(QDateTime ts, QString msg)
 {
   m_StatusMsg -> setText(msg);
 
@@ -974,7 +977,7 @@ void QxrdWindow::doAboutQxrd()
 #ifdef QT_NO_DEBUG
   about += " Release\n";
 #else
-  about += " Debug\n"
+  about += " Debug\n";
 #endif
 
   about += tr("Qt Version %1").arg(qVersion());

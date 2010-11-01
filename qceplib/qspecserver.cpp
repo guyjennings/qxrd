@@ -27,7 +27,7 @@ QSpecServer::startServer(QHostAddress a, int p)
   if (p < 0) {
     for (int p=6510; p<=6530; p++) {
       if (listen(a,p)) {
-        emit printMessage(tr("Bound to port %1").arg(p));
+        emit printMessage(QDateTime::currentDateTime(), tr("Bound to port %1").arg(p));
 	return;
       }
     }
@@ -51,7 +51,8 @@ QSpecServer::openNewConnection()
   connect(m_Socket, SIGNAL(readyRead()),
 	  this,     SLOT(clientRead()));
 
-  emit printMessage(QString("New connection from %1")
+  emit printMessage(QDateTime::currentDateTime(),
+                    QString("New connection from %1")
 		     .arg(m_Socket->peerAddress().toString()) );
 
   connect(m_Socket, SIGNAL(disconnected()),
@@ -61,7 +62,7 @@ QSpecServer::openNewConnection()
 void
 QSpecServer::connectionClosed()
 {
-  emit printMessage("Client closed connection");
+  emit printMessage(QDateTime::currentDateTime(), "Client closed connection");
 }
 
 void
@@ -69,7 +70,7 @@ QSpecServer::clientRead()
 {
   quint64 avail = m_Socket -> bytesAvailable();
 
-//   emit printMessage(tr("QSpecServer::clientRead, %1 bytes available").arg(avail));
+//   emit printMessage(QDateTime::currentDateTime(), tr("QSpecServer::clientRead, %1 bytes available").arg(avail));
 
   if (avail >= sizeof(struct svr_head)) {
     m_Socket -> read((char*) &m_Packet, sizeof(struct svr_head));
@@ -77,7 +78,7 @@ QSpecServer::clientRead()
 
     avail -= sizeof(struct svr_head);
 
-//     emit printMessage(tr("QSpecServer::clientRead, %1 bytes available").arg(avail));
+//     emit printMessage(QDateTime::currentDateTime(), tr("QSpecServer::clientRead, %1 bytes available").arg(avail));
 
     readPacketData();
   }
@@ -91,7 +92,7 @@ QSpecServer::readPacketData()
   } else if (m_Packet.magic == swapUInt32(SV_SPEC_MAGIC)) {
     m_SwapBytes = 1;
   } else {
-    emit printMessage(tr("Bad packet\n"));
+    emit printMessage(QDateTime::currentDateTime(), tr("Bad packet\n"));
     return 0;
   }
 

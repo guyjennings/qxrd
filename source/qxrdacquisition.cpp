@@ -107,12 +107,12 @@ void QxrdAcquisition::acquire()
 
   if (m_Acquiring.tryLock()) {
     //  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquire()"));
-    emit statusMessage("Starting acquisition");
+    emit statusMessage(QDateTime::currentDateTime(), "Starting acquisition");
     emit acquireStarted(0);
 
     acquisition(0);
   } else {
-    emit statusMessage("Acquisition is already in progress");
+    emit statusMessage(QDateTime::currentDateTime(), "Acquisition is already in progress");
   }
 }
 
@@ -125,12 +125,12 @@ void QxrdAcquisition::acquireDark()
   if (m_Acquiring.tryLock()) {
 
     //  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquireDark()"));
-    emit statusMessage("Starting dark acquisition");
+    emit statusMessage(QDateTime::currentDateTime(), "Starting dark acquisition");
     emit acquireStarted(1);
 
     acquisition(1);
   } else {
-    emit statusMessage("Acquisition is already in progress");
+    emit statusMessage(QDateTime::currentDateTime(), "Acquisition is already in progress");
   }
 }
 
@@ -198,8 +198,8 @@ void QxrdAcquisition::indicateDroppedFrame()
                   .arg(m_Allocator->allocatedMemoryMB())
                   .arg(m_Allocator->maximumMemoryMB());
 
-  emit statusMessage(msg);
-  emit printMessage(msg);
+  emit statusMessage(QDateTime::currentDateTime(), msg);
+  emit printMessage(QDateTime::currentDateTime(), msg);
 
   prop_DroppedFrames() -> incValue(1);
 }
@@ -279,7 +279,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
 
     if (m_CurrentExposure <= get_ExposuresToSkip()) {
       QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(tr("Frame %1 skipped").arg(m_CurrentExposure));
+                 emit printMessage(QDateTime::currentDateTime(),
+                                   tr("Frame %1 skipped").arg(m_CurrentExposure));
       );
       m_DataProcessor -> idleInt16Image(m_AcquiredInt16Data);
 //      replaceImageFromPool(m_AcquiredInt16Data);
@@ -300,7 +301,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
 
         if (m_CurrentExposure == 1) {
           QCEP_DEBUG(DEBUG_ACQUIRE,
-                     emit printMessage(tr("Frame %1 saved").arg(m_CurrentExposure));
+                     emit printMessage(QDateTime::currentDateTime(),
+                                       tr("Frame %1 saved").arg(m_CurrentExposure));
           );
           for (long i=0; i<nPixels; i++) {
             quint16 val = *src++;
@@ -315,7 +317,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
           }
         } else {
           QCEP_DEBUG(DEBUG_ACQUIRE,
-                     emit printMessage(tr("Frame %1 summed").arg(m_CurrentExposure));
+                     emit printMessage(QDateTime::currentDateTime(),
+                                       tr("Frame %1 summed").arg(m_CurrentExposure));
           );
           for (long i=0; i<nPixels; i++) {
             quint16 val = *src++;
@@ -351,7 +354,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
                                .arg(get_FileIndex(),5,10,QChar('0')));
         }
 
-        //  emit printMessage(tr("Fn: %1, Fi: %2, Exp: %3, Nexp %4, Fil: %5, NFil: %6")
+        //  emit printMessage(QDateTime::currentDateTime(),
+        //                    tr("Fn: %1, Fi: %2, Exp: %3, Nexp %4, Fil: %5, NFil: %6")
         //                    .arg(fileName).arg(fileIndex())
         //                    .arg(m_CurrentExposure).arg(m_ExposuresToSum)
         //                    .arg(m_CurrentFile).arg(m_FilesInSequence));
@@ -383,7 +387,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
           if (get_AcquireDark()) {
             m_AcquiredInt16Data -> set_ImageNumber(-1);
             QCEP_DEBUG(DEBUG_ACQUIRE,
-                       emit printMessage(tr("16 Bit Dark Image acquired"));
+                       emit printMessage(QDateTime::currentDateTime(), tr("16 Bit Dark Image acquired"));
             );
             m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
 //            replaceImageFromPool(m_AcquiredInt16Data);
@@ -396,7 +400,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
                   QxrdInt16ImageDataPtr img = m_PreTriggerInt16Images.dequeue();
 
                   QCEP_DEBUG(DEBUG_ACQUIRE,
-                             emit printMessage(tr("16 bit Pretrigger Image %1 acquired").arg(m_CurrentFile));
+                             emit printMessage(QDateTime::currentDateTime(),
+                                               tr("16 bit Pretrigger Image %1 acquired").arg(m_CurrentFile));
                   );
                   img -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
                   fileName = QDir(m_DataProcessor -> get_OutputDirectory())
@@ -416,7 +421,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
                 m_AcquiredInt16Data -> set_FileName(fileName);
                 m_AcquiredInt16Data -> set_Title(QFileInfo(fileName).fileName());
                 QCEP_DEBUG(DEBUG_ACQUIRE,
-                           emit printMessage(tr("16 bit Image %1 acquired").arg(m_CurrentFile));
+                           emit printMessage(QDateTime::currentDateTime(),
+                                             tr("16 bit Image %1 acquired").arg(m_CurrentFile));
                 );
                 m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
                 m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
@@ -426,8 +432,11 @@ void QxrdAcquisition::acquiredFrameAvailable()
               } else {
                 m_PreTriggerInt16Images.enqueue(m_AcquiredInt16Data);
                 QCEP_DEBUG(DEBUG_ACQUIRE,
-                           emit printMessage(tr("16 bit Pretrigger Image buffered"));
-                           emit statusMessage(tr("%1 pre trigger 16 bit images queued").arg(m_PreTriggerInt16Images.size()));
+                           emit printMessage(QDateTime::currentDateTime(),
+                                             tr("16 bit Pretrigger Image buffered"));
+                           emit statusMessage(QDateTime::currentDateTime(),
+                                              tr("%1 pre trigger 16 bit images queued")
+                                              .arg(m_PreTriggerInt16Images.size()));
                 );
 //                replaceImageFromPool(m_AcquiredInt16Data);
 
@@ -438,7 +447,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
               }
             } else {
               QCEP_DEBUG(DEBUG_ACQUIRE,
-                         emit printMessage(tr("16 bit Image %1 acquired").arg(m_CurrentFile));
+                         emit printMessage(QDateTime::currentDateTime(),
+                                           tr("16 bit Image %1 acquired").arg(m_CurrentFile));
               );
               m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
               m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
@@ -469,7 +479,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
           if (get_AcquireDark()) {
             m_AcquiredInt32Data -> set_ImageNumber(-1);
             QCEP_DEBUG(DEBUG_ACQUIRE,
-                       emit printMessage(tr("32 bit Dark Image acquired"));
+                       emit printMessage(QDateTime::currentDateTime(),
+                                         tr("32 bit Dark Image acquired"));
             );
             m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
 //            replaceImageFromPool(m_AcquiredInt32Data);
@@ -482,7 +493,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
                   QxrdInt32ImageDataPtr img = m_PreTriggerInt32Images.dequeue();
 
                   QCEP_DEBUG(DEBUG_ACQUIRE,
-                             emit printMessage(tr("32 bit Pretrigger Image %1 acquired").arg(m_CurrentFile));
+                             emit printMessage(QDateTime::currentDateTime(),
+                                               tr("32 bit Pretrigger Image %1 acquired").arg(m_CurrentFile));
                   );
                   img -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
                   fileName = QDir(m_DataProcessor -> get_OutputDirectory())
@@ -502,7 +514,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
                 m_AcquiredInt32Data -> set_FileName(fileName);
                 m_AcquiredInt32Data -> set_Title(QFileInfo(fileName).fileName());
                 QCEP_DEBUG(DEBUG_ACQUIRE,
-                           emit printMessage(tr("32 bit Image %1 acquired").arg(m_CurrentFile));
+                           emit printMessage(QDateTime::currentDateTime(),
+                                             tr("32 bit Image %1 acquired").arg(m_CurrentFile));
                 );
                 m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
                 m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
@@ -512,8 +525,11 @@ void QxrdAcquisition::acquiredFrameAvailable()
               } else {
                 m_PreTriggerInt32Images.enqueue(m_AcquiredInt32Data);
                 QCEP_DEBUG(DEBUG_ACQUIRE,
-                           emit printMessage(tr("32 bit Pretrigger Image buffered"));
-                           emit statusMessage(tr("%1 pre trigger 32 bit images queued").arg(m_PreTriggerInt32Images.size()));
+                           emit printMessage(QDateTime::currentDateTime(),
+                                             tr("32 bit Pretrigger Image buffered"));
+                           emit statusMessage(QDateTime::currentDateTime(),
+                                              tr("%1 pre trigger 32 bit images queued")
+                                              .arg(m_PreTriggerInt32Images.size()));
                 );
 //                replaceImageFromPool(m_AcquiredInt32Data);
 
@@ -524,7 +540,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
               }
             } else {
               QCEP_DEBUG(DEBUG_ACQUIRE,
-                         emit printMessage(tr("32 bit Image %1 acquired").arg(m_CurrentFile));
+                         emit printMessage(QDateTime::currentDateTime(),
+                                           tr("32 bit Image %1 acquired").arg(m_CurrentFile));
               );
               m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
               m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
@@ -535,15 +552,16 @@ void QxrdAcquisition::acquiredFrameAvailable()
           }
         }
 
-        emit statusMessage(tr("Acquiring ""%1"" (%2 i16, %3 i32, %4 dbl)").arg(fileName)
+        emit statusMessage(QDateTime::currentDateTime(),
+                           tr("Acquiring ""%1"" (%2 i16, %3 i32, %4 dbl)").arg(fileName)
                            .arg(m_Allocator->nFreeInt16())
                            .arg(m_Allocator->nFreeInt32())
                            .arg(m_Allocator->nFreeDouble())
                             );
 
         if (m_CurrentFile >= (get_FilesInAcquiredSequence() + get_PreTriggerFiles())) {
-          emit printMessage("Acquisition ended");
-          emit printMessage("Halted acquisition");
+          emit printMessage(QDateTime::currentDateTime(), "Acquisition ended");
+          emit printMessage(QDateTime::currentDateTime(), "Halted acquisition");
 
           haltAcquisition();
         }
@@ -560,7 +578,7 @@ void QxrdAcquisition::haltAcquisition()
 {
   set_Cancelling(true);
 
-  emit statusMessage("Acquire Complete");
+  emit statusMessage(QDateTime::currentDateTime(), "Acquire Complete");
   emit acquireComplete(get_AcquireDark());
 
   m_Acquiring.tryLock();
@@ -573,12 +591,12 @@ void QxrdAcquisition::acquisitionError(int n)
 {
   haltAcquisition();
 
-  emit criticalMessage(tr("Acquisition Error %1").arg(n));
+  emit criticalMessage(QDateTime::currentDateTime(), tr("Acquisition Error %1").arg(n));
 }
 
 void QxrdAcquisition::acquisitionError(int ln, int n)
 {
   haltAcquisition();
 
-  emit criticalMessage(tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
+  emit criticalMessage(QDateTime::currentDateTime(), tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
 }

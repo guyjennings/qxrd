@@ -5,6 +5,7 @@
 
 #include <QThread>
 #include "qxrdforwardtypes.h"
+#include <QDateTime>
 
 class QxrdServerThread : public QThread
 {
@@ -20,9 +21,9 @@ public:
   void executeScript(QString cmd);
 
 signals:
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
   void execute(QString cmd);
 
 protected:

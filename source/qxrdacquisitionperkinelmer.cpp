@@ -63,7 +63,8 @@ bool QxrdAcquisitionPerkinElmer::checkPluginAvailable()
   }
 
   if (m_PerkinElmer == NULL) {
-    emit criticalMessage("No perkin elmer plugin available\n");
+    emit criticalMessage(QDateTime::currentDateTime(),
+                         "No perkin elmer plugin available\n");
   }
 
   return m_PerkinElmer;
@@ -77,11 +78,13 @@ void QxrdAcquisitionPerkinElmer::onExposureTimeChanged(double newTime)
                printf("Exposure time changed to %g\n", newTime);
     );
 
-    emit printMessage(tr("Exposure time changed to %1").arg(newTime));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Exposure time changed to %1").arg(newTime));
 
     DWORD tmp = (int)(get_ExposureTime()*1e6);
 
-    emit printMessage(tr("SetTimerSync %1").arg(tmp));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("SetTimerSync %1").arg(tmp));
 
     int nRet;
 
@@ -90,7 +93,8 @@ void QxrdAcquisitionPerkinElmer::onExposureTimeChanged(double newTime)
       return;
     }
 
-    emit printMessage(tr("TimerSync = %1").arg(tmp));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("TimerSync = %1").arg(tmp));
 
     set_ExposureTime(tmp/1.0e6);
   }
@@ -104,7 +108,8 @@ void QxrdAcquisitionPerkinElmer::onBinningModeChanged(int newMode)
                printf("Binning mode changed to %d\n", newMode);
     );
 
-    emit printMessage(tr("Binning mode changed to %1").arg(newMode));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Binning mode changed to %1").arg(newMode));
 
     //    WORD binningMode = get_BinningMode();
     //    emit printMessage(tr("Setting binning mode = %1").arg(binningMode));
@@ -131,9 +136,10 @@ void QxrdAcquisitionPerkinElmer::onCameraGainChanged(int newGain)
                printf("Camera gain changed to %d\n", newGain);
     );
 
-    emit printMessage(tr("Camera Gain Changed to %1").arg(newGain));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Camera Gain Changed to %1").arg(newGain));
 
-    emit printMessage("Setting camera gain");
+    emit printMessage(QDateTime::currentDateTime(), "Setting camera gain");
 
     int nRet;
 
@@ -145,7 +151,7 @@ void QxrdAcquisitionPerkinElmer::onCameraGainChanged(int newGain)
       m_CurrentGain = get_CameraGain();
     }
 
-    emit printMessage("Set camera gain");
+    emit printMessage(QDateTime::currentDateTime(), "Set camera gain");
   }
 }
 
@@ -315,7 +321,8 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
     tic.start();
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
-               emit printMessage("QxrdAcquisitionPerkinElmer::onEndFrame()");
+               emit printMessage(QDateTime::currentDateTime(),
+                                 "QxrdAcquisitionPerkinElmer::onEndFrame()");
     );
 
     QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -347,7 +354,8 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 
     if (((actSecFrame-1)%m_BufferSize) != m_BufferIndex) {
       QCEP_DEBUG(DEBUG_PERKINELMER,
-                 emit printMessage(tr("actSecFrame %1, m_BufferIndex %2").arg(actSecFrame).arg(m_BufferIndex));
+                 emit printMessage(QDateTime::currentDateTime(),
+                                   tr("actSecFrame %1, m_BufferIndex %2").arg(actSecFrame).arg(m_BufferIndex));
       )
     }
 
@@ -367,7 +375,8 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
   //  set_Average(avg/npixels);
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
-               emit printMessage(tr("Frame checksum 0x%1, avg %2\n").arg(cksum,8,16,QChar('0')).arg(avg/npixels));
+               emit printMessage(QDateTime::currentDateTime(),
+                                 tr("Frame checksum 0x%1, avg %2\n").arg(cksum,8,16,QChar('0')).arg(avg/npixels));
     );
 
     m_BufferIndex = (m_BufferIndex+1)%m_BufferSize;
@@ -380,14 +389,14 @@ void QxrdAcquisitionPerkinElmer::acquisitionInitError(int n)
 {
   acquisitionError(n);
 
-  emit criticalMessage("Detector Initialization Failed");
+  emit criticalMessage(QDateTime::currentDateTime(), "Detector Initialization Failed");
 }
 
 void QxrdAcquisitionPerkinElmer::acquisitionNSensorsError(int n)
 {
   acquisitionError(n);
 
-  emit criticalMessage("Detector Initialization Failed");
+  emit criticalMessage(QDateTime::currentDateTime(), "Detector Initialization Failed");
 }
 
 void QxrdAcquisitionPerkinElmer::setupExposureMenu(QDoubleSpinBox *cb)

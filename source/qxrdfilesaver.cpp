@@ -111,14 +111,15 @@ void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, int can
     processor() -> updateEstimatedTime(processor() -> prop_SaveSubtractedTime(), tic.elapsed());
     processor() -> set_FileName(name);
 
-    emit printMessage(tr("Saved subtracted data in file \"%1\" after %2 msec").
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Saved subtracted data in file \"%1\" after %2 msec").
                       arg(name).arg(tic.restart()));
   } else {
     res = 0;
   }
 
   if (res == 0) {
-    emit printMessage("Error saving file");
+    emit printMessage(QDateTime::currentDateTime(), "Error saving file");
   }
 }
 
@@ -184,7 +185,7 @@ void QxrdFileSaver::saveData(QString name, QxrdMaskDataPtr image, int canOverwri
   }
 
   if (res == 0) {
-    emit printMessage("Error saving file");
+    emit printMessage(QDateTime::currentDateTime(), "Error saving file");
   }
 }
 
@@ -236,14 +237,15 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, int c
     processor() -> updateEstimatedTime(m_Acquisition -> prop_Raw32SaveTime(), tic.elapsed());
     processor() -> set_FileName(name);
 
-    emit printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Saved raw data in file \"%1\" after %2 msec").
                       arg(name).arg(tic.restart()));
   } else {
     res = 0;
   }
 
   if (res == 0) {
-    emit printMessage("Error saving file");
+    emit printMessage(QDateTime::currentDateTime(), "Error saving file");
   }
 }
 
@@ -297,14 +299,15 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, int c
     processor() -> updateEstimatedTime(m_Acquisition -> prop_Raw16SaveTime(), tic.elapsed());
     processor() -> set_FileName(name);
 
-    emit printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Saved raw data in file \"%1\" after %2 msec").
                       arg(name).arg(tic.restart()));
   } else {
     res = 0;
   }
 
   if (res == 0) {
-    emit printMessage("Error saving file");
+    emit printMessage(QDateTime::currentDateTime(), "Error saving file");
   }
 }
 

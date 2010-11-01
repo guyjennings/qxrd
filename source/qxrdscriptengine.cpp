@@ -188,7 +188,7 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
     msg += context -> argument(i).toString();
   }
 
-  emit g_ScriptEngine -> printMessage(msg);
+  emit g_ScriptEngine -> printMessage(QDateTime::currentDateTime(), msg);
 
   return QScriptValue(engine, 1);
 }
