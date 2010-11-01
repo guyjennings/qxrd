@@ -331,12 +331,13 @@ void QxrdAcquisition::acquiredFrameAvailable()
         }
       }
 
+      QString fileName;
+      QString fileBase;
+
       if (m_CurrentExposure == get_ExposuresToSum()) {
         set_ExposuresToSkip(get_SkippedExposures());
         m_CurrentExposure.fetchAndStoreOrdered(0);
 
-        QString fileName;
-        QString fileBase;
 
         if (get_AcquireDark()) {
           fileBase = get_FilePattern()+tr("-%1.dark.tif").arg(get_FileIndex(),5,10,QChar('0'));
@@ -357,10 +358,6 @@ void QxrdAcquisition::acquiredFrameAvailable()
 
         set_FileBase(fileBase);
 //        m_DataProcessor -> set_FileName(fileName);
-
-        emit acquiredFrame(fileName, get_FileIndex(),
-                           m_CurrentExposure,get_ExposuresToSum(),
-                           m_CurrentFile, get_FilesInAcquiredSequence());
 
         QFileInfo finfo(fileName);
 
@@ -551,6 +548,10 @@ void QxrdAcquisition::acquiredFrameAvailable()
           haltAcquisition();
         }
       }
+
+      emit acquiredFrame(fileName, get_FileIndex(),
+                         m_CurrentExposure,get_ExposuresToSum(),
+                         m_CurrentFile, get_FilesInAcquiredSequence());
     }
   }
 }
