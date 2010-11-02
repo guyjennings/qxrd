@@ -392,9 +392,9 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_ActionRefineCenterTilt->setEnabled(false);
 #endif
 
-#ifndef QT_NO_DEBUG
-  m_ImageDisplay = QxrdImageDisplayWidget::insertNew(app, m_XRDTabWidget);
-#endif
+//#ifndef QT_NO_DEBUG
+//  m_ImageDisplay = QxrdImageDisplayWidget::insertNew(app, m_XRDTabWidget);
+//#endif
 
   m_UpdateTimer.start(100);
 }
