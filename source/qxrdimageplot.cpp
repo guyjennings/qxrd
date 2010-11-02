@@ -118,6 +118,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 
   connect(prop_ImageShown(), SIGNAL(changedValue(bool)), this, SLOT(changeImageShown(bool)));
   connect(prop_MaskShown(), SIGNAL(changedValue(bool)), this, SLOT(changeMaskShown(bool)));
+  connect(prop_OverflowShown(), SIGNAL(changedValue(bool)), this, SLOT(changeOverflowShown(bool)));
   connect(prop_DisplayMinimumPct(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
   connect(prop_DisplayMaximumPct(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
   connect(prop_DisplayMinimumVal(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
@@ -416,7 +417,7 @@ void QxrdImagePlot::changeOverflowShown(bool shown)
   set_OverflowShown(shown);
 
   if (m_OverflowImage) {
-    m_OverflowImage -> setAlpha(get_ImageShown() ? m_OverflowAlpha : 0);
+    m_OverflowImage -> setAlpha(get_OverflowShown() ? m_OverflowAlpha : 0);
     m_OverflowImage -> invalidateCache();
     m_OverflowImage -> itemChanged();
 
@@ -433,6 +434,10 @@ void QxrdImagePlot::changedColorMap()
   m_MaskImage   -> setColorMap(m_MaskColorMap);
   m_MaskImage   -> invalidateCache();
   m_MaskImage   -> itemChanged();
+
+  m_OverflowImage   -> setColorMap(m_OverflowColorMap);
+  m_OverflowImage   -> invalidateCache();
+  m_OverflowImage   -> itemChanged();
 
   replotImage();
 }
@@ -459,20 +464,15 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
   replot();
 }
 
-void QxrdImagePlot::setOverflows(QxrdMaskDataPtr overflow)
+void QxrdImagePlot::setOverflows(QxrdMaskRasterData overflow)
 {
-  short int *ov = overflow->data();
-  short int *msk = m_MaskRaster.data();
+  m_OverflowRaster = overflow;
 
-  int npix=overflow->get_Width()*overflow->get_Height();
+  m_OverflowImage -> setData(overflow);
+  m_OverflowImage -> invalidateCache();
+  m_OverflowImage -> itemChanged();
 
-  for (int i=0; i<npix; i++) {
-    msk[i] = (msk[i] & (~2)) | (ov[i] & 2);
-  }
-
-  m_MaskImage -> setData(m_MaskRaster);
-  m_MaskImage -> invalidateCache();
-  m_MaskImage -> itemChanged();
+  replot();
 }
 
 void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)

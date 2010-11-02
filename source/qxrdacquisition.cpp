@@ -308,7 +308,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
             quint16 val = *src++;
 
             if (val>ovflwlvl) {
-              *ovf++ = 2;
+              *ovf++ = 1;
             } else {
               *ovf++ = 0;
             }
@@ -324,7 +324,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
             quint16 val = *src++;
 
             if (val>ovflwlvl) {
-              *ovf++ |= 2;
+              *ovf++ |= 1;
             } else {
               ovf++;
             }

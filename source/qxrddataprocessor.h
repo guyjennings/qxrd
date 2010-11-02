@@ -200,6 +200,7 @@ public:
   virtual QxrdDoubleImageDataPtr data() const = 0;
   virtual QxrdDoubleImageDataPtr darkImage() const = 0;
   virtual QxrdMaskDataPtr        mask() const = 0;
+  virtual QxrdMaskDataPtr        overflow() const = 0;
 
   virtual QxrdCenterFinderPtr    centerFinder() const = 0;
   virtual QxrdIntegratorPtr      integrator() const = 0;

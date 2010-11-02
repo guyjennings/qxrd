@@ -2,15 +2,15 @@
 
 QxrdMaskColorMap::QxrdMaskColorMap(const QColor &deselcol, const QColor &selcol)
   : QwtLinearColorMap(QwtColorMap::RGB),
-    m_DeselectedColor(deselcol.rgba()),
-    m_SelectedColor(selcol.rgba())
+  m_DeselectedColor(deselcol.rgba()),
+  m_SelectedColor(selcol.rgba())
 {
 }
 
 QxrdMaskColorMap::QxrdMaskColorMap()
   : QwtLinearColorMap(QwtColorMap::RGB),
-    m_DeselectedColor(qRgba(255,0,0,255)),
-    m_SelectedColor(qRgba(255,0,0,0))
+  m_DeselectedColor(qRgba(255,0,0,255)),
+  m_SelectedColor(qRgba(255,0,0,0))
 {
 }
 
@@ -25,26 +25,26 @@ QxrdMaskColorMap* QxrdMaskColorMap::copy() const
 
 QRgb QxrdMaskColorMap::rgb(const QwtDoubleInterval &/*inter*/, double value) const
 {
-//   if (value > 0.5) {
-//     return m_SelectedColor;
-//   } else {
-//     return m_DeselectedColor;
-//   }
-
-  int v = value;
-
-  if (v & 1) {
-    return qRgba(255,0,0,0);
-  } else if (v & 2) {
-    return qRgba(0,255,0,255);
+  if (value > 0.5) {
+    return m_SelectedColor;
   } else {
-    return qRgba(255,0,0,255);
+    return m_DeselectedColor;
   }
-//  int v = (int)((1.0-value)*255.0);
-//  if (v<0) v=0;
-//  if (v>255) v=255;
-//
-//  return qRgba(255,0,0, v);
+
+  //  int v = value;
+
+  //  if (v & 1) {
+  //    return qRgba(255,0,0,0);
+  //  } else if (v & 2) {
+  //    return qRgba(0,255,0,255);
+  //  } else {
+  //    return qRgba(255,0,0,255);
+  //  }
+  //  int v = (int)((1.0-value)*255.0);
+  //  if (v<0) v=0;
+  //  if (v>255) v=255;
+  //
+  //  return qRgba(255,0,0, v);
 }
 
 unsigned char QxrdMaskColorMap::colorIndex(const QwtDoubleInterval &/*inter*/, double /*value*/) const
