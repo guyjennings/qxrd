@@ -102,6 +102,7 @@ public:
   QxrdDoubleImageDataPtr data() const;
   QxrdDoubleImageDataPtr darkImage() const;
   QxrdMaskDataPtr        mask() const;
+  QxrdMaskDataPtr        overflow() const;
 
   QxrdCenterFinderPtr    centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
@@ -173,6 +174,7 @@ protected:
   QxrdDoubleImageDataPtr m_BadPixels;
   QxrdDoubleImageDataPtr m_GainMap;
   QxrdMaskDataPtr        m_Mask;
+  QxrdMaskDataPtr        m_Overflow;
 
   QAtomicInt             m_AcquiredCount;
 

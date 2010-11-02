@@ -144,8 +144,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage()
 void QxrdDataProcessorBase::newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   m_Data = image;
-
-  m_Data -> setMask(m_Mask, overflow);
+  m_Overflow = overflow;
 
   m_Window -> newDataAvailable(m_Data, overflow);
 }
@@ -929,6 +928,11 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::darkImage() const
 QxrdMaskDataPtr QxrdDataProcessorBase::mask() const
 {
   return m_Mask;
+}
+
+QxrdMaskDataPtr QxrdDataProcessorBase::overflow() const
+{
+  return m_Overflow;
 }
 
 int QxrdDataProcessorBase::incrementAcquiredCount()
