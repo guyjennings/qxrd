@@ -47,3 +47,8 @@ QxrdAllocatorPtr QxrdAllocatorThread::allocator() const
 
   return m_Allocator;
 }
+
+void QxrdAllocatorThread::msleep(unsigned long t)
+{
+  QThread::msleep(t);
+}

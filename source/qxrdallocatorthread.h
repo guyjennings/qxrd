@@ -19,6 +19,8 @@ public:
 
   QxrdAllocatorPtr allocator() const;
 
+  static void msleep(long unsigned int);
+
 signals:
   void printMessage(QDateTime ts, QString msg);
   void statusMessage(QDateTime ts, QString msg);

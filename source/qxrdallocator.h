@@ -51,6 +51,7 @@ public:
   int int16SizeMB();
   int int32SizeMB();
   int doubleSizeMB();
+  int maskSizeMB();
 
   double allocatedMemoryMB();
   double allocatedMemory();

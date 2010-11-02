@@ -1,5 +1,6 @@
 #include "qxrdallocator.h"
 #include "qxrdmutexlocker.h"
+#include "qxrdallocatorthread.h"
 
 //#include "qxrdacquisition.h"
 
@@ -78,8 +79,11 @@ QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage()
   if (m_FreeDoubleImages.size() > 0) {
     return m_FreeDoubleImages.dequeue();
   } else {
-//    if ((m_AllocatedMemory/MegaBytes + doubleSizeMB()) < get_Max()) {
-      return QxrdDoubleImageDataPtr(new QxrdDoubleImageData(this, get_Width(), get_Height()), &QxrdAllocator::doubleDeleter);
+    while ((m_AllocatedMemory/MegaBytes + doubleSizeMB()) > get_Max()) {
+      QxrdAllocatorThread::msleep(100);
+    }
+
+    return QxrdDoubleImageDataPtr(new QxrdDoubleImageData(this, get_Width(), get_Height()), &QxrdAllocator::doubleDeleter);
 //    } else {
 //      return QxrdDoubleImageDataPtr(NULL);
 //    }
@@ -93,6 +97,10 @@ QxrdMaskDataPtr QxrdAllocator::newMask()
   if (m_FreeMasks.size() > 0) {
     return m_FreeMasks.dequeue();
   } else {
+    while ((m_AllocatedMemory/MegaBytes + maskSizeMB()) > get_Max()) {
+      QxrdAllocatorThread::msleep(100);
+    }
+
     return QxrdMaskDataPtr(new QxrdMaskData(this, get_Width(), get_Height()), &QxrdAllocator::maskDeleter);
   }
 }
@@ -205,6 +213,11 @@ int QxrdAllocator::int32SizeMB()
 int QxrdAllocator::doubleSizeMB()
 {
   return sizeof(double)*get_Width()*get_Height()/MegaBytes;
+}
+
+int QxrdAllocator::maskSizeMB()
+{
+  return sizeof(quint16)*get_Width()*get_Height()/MegaBytes;
 }
 
 void QxrdAllocator::allocatorHeartbeat()
