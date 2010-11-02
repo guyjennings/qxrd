@@ -93,6 +93,7 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("data", m_ScriptEngine -> newFunction(dataFunc));
   m_ScriptEngine -> globalObject().setProperty("dark", m_ScriptEngine -> newFunction(darkFunc));
   m_ScriptEngine -> globalObject().setProperty("mask", m_ScriptEngine -> newFunction(maskFunc));
+  m_ScriptEngine -> globalObject().setProperty("overflow", m_ScriptEngine -> newFunction(overflowFunc));
   m_ScriptEngine -> globalObject().setProperty("help", m_ScriptEngine -> newFunction(helpFunc));
 }
 
@@ -396,6 +397,11 @@ QScriptValue QxrdScriptEngine::darkFunc(QScriptContext *context, QScriptEngine *
 QScriptValue QxrdScriptEngine::maskFunc(QScriptContext *context, QScriptEngine *engine)
 {
   return engine -> newQObject(g_DataProcessor -> mask().data());
+}
+
+QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  return engine -> newQObject(g_DataProcessor -> overflow().data());
 }
 
 QScriptValue QxrdScriptEngine::helpFunc(QScriptContext *context, QScriptEngine *engine)

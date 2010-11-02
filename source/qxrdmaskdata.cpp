@@ -100,3 +100,19 @@ void QxrdMaskData::maskCircle(double cx, double cy, double r, bool val)
     }
   }
 }
+
+QString QxrdMaskData::summary()
+{
+  QString res;
+
+  int total = m_Image.count();
+  int totalSet = 0;
+
+  for (int i=0; i<total; i++) {
+    if (m_Image[i]) {
+      totalSet++;
+    }
+  }
+
+  return tr("%1/%2 pixels set").arg(totalSet).arg(total);
+}

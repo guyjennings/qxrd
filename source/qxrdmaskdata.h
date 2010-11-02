@@ -27,6 +27,8 @@ public slots:
 
   void maskCircle(double cx, double cy, double r, bool val);
 
+  QString summary();
+
 public:
   void copyMask(QxrdMaskDataPtr dest);
 
