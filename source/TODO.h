@@ -633,4 +633,20 @@ or possibly have another go at recycling images.
 
 -------------------------------------------------------
 
+Investigate file naming problems when acquiring - sometimes
+data seem to be saved in wrong file names, also metadata not
+always saved.
+
+-------------------------------------------------------
+
+'trigger()' script command doesnt work - blocks, while
+'acquisition.triggered=1' does work.
+
+-------------------------------------------------------
+
+Make 'preTriggerFiles' default to zero if not given
+explicitly.
+
+-------------------------------------------------------
+
 #endif // TODO_H
