@@ -33,7 +33,7 @@ public:
   QxrdInt16ImageDataPtr newInt16Image();
   QxrdInt32ImageDataPtr newInt32Image();
   QxrdDoubleImageDataPtr newDoubleImage();
-  QxrdMaskDataPtr newMask();
+  QxrdMaskDataPtr newMask(int def=1);
   QxrdIntegratedDataPtr newIntegratedData(QxrdDoubleImageDataPtr image);
 
   void dimension(int width, int height);

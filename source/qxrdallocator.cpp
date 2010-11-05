@@ -90,19 +90,19 @@ QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage()
   }
 }
 
-QxrdMaskDataPtr QxrdAllocator::newMask()
+QxrdMaskDataPtr QxrdAllocator::newMask(int def)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  if (m_FreeMasks.size() > 0) {
-    return m_FreeMasks.dequeue();
-  } else {
+//  if (m_FreeMasks.size() > 0) {
+//    return m_FreeMasks.dequeue();
+//  } else {
     while ((m_AllocatedMemory/MegaBytes + maskSizeMB()) > get_Max()) {
       QxrdAllocatorThread::msleep(100);
     }
 
-    return QxrdMaskDataPtr(new QxrdMaskData(this, get_Width(), get_Height()), &QxrdAllocator::maskDeleter);
-  }
+    return QxrdMaskDataPtr(new QxrdMaskData(this, get_Width(), get_Height(), def), &QxrdAllocator::maskDeleter);
+//  }
 }
 
 QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(QxrdDoubleImageDataPtr data)
