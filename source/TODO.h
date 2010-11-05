@@ -659,4 +659,15 @@ always saved.
 //
 -------------------------------------------------------
 
+Add a status function which waits until sufficient
+pre-trigger files have been acquired.
+
+-------------------------------------------------------
+
+Start thinking about how to synchronise acquisition with
+external processes - possible support for running a
+National Instruments MIO card in sync with acquisition
+
+-------------------------------------------------------
+
 #endif // TODO_H
