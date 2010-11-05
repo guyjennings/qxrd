@@ -200,6 +200,10 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
 
   int nArgs = context->argumentCount();
 
+  if (nArgs < 5) {
+    g_Acquisition -> set_PreTriggerFiles(0);
+  }
+
   switch (nArgs) {
   default:
 
@@ -352,6 +356,8 @@ QScriptValue QxrdScriptEngine::triggerFunc(QScriptContext *context, QScriptEngin
 {
   if (context->argumentCount() != 0) {
     g_Acquisition -> set_Trigger(context->argument(0).toUInt32());
+  } else {
+    g_Acquisition -> set_Trigger(1);
   }
 
   return QScriptValue(engine, g_Acquisition -> get_Trigger());
