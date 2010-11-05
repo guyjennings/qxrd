@@ -152,7 +152,7 @@ template <typename T>
     class QcepImageData : public QcepImageDataBase
 {
 public:
-  QcepImageData(int width=0, int height=0);
+  QcepImageData(int width=0, int height=0, T def=0);
 
 public:
   bool readImage(QString filename);
@@ -179,18 +179,23 @@ public:
   void setValue(int x, int y, T val);
   void fill(T val);
 
+  T defaultValue() const;
+  void setDefaultValue(T def);
+
 protected:
   QVector<T> m_Image;
   T m_MinValue;
   T m_MaxValue;
+  T m_Default;
 };
 
 template <typename T>
-QcepImageData<T>::QcepImageData(int width, int height)
+QcepImageData<T>::QcepImageData(int width, int height, T def)
   : QcepImageDataBase(width, height),
-    m_Image(width*height),
+    m_Image(width*height, def),
     m_MinValue(0),
-    m_MaxValue(0)
+    m_MaxValue(0),
+    m_Default(def)
 {
 }
 
@@ -207,7 +212,7 @@ T QcepImageData<T>::value(int x, int y) const
     return m_Image.value((get_Height()-y-1)*get_Width()+x);
   }
 
-  return 0;
+  return m_Default;
 }
 
 template <typename T>
@@ -357,7 +362,19 @@ void QcepImageData<T>::resize(int width, int height)
 template <typename T>
 void QcepImageData<T>::clear()
 {
-  m_Image.fill(0);
+  m_Image.fill(m_Default);
+}
+
+template <typename T>
+T QcepImageData<T>::defaultValue() const
+{
+  return m_Default;
+}
+
+template <typename T>
+void QcepImageData<T>::setDefaultValue(T def)
+{
+  m_Default = def;
 }
 
 template <typename T>

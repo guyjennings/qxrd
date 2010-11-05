@@ -45,7 +45,7 @@ double QxrdMaskRasterData::value(double x, double y) const
       return m_Mask->maskValue(((int) qRound(x)), ((int) qRound(y)));
     }
   } else {
-    return 1;
+    return m_Mask->defaultValue();
   }
 }
 

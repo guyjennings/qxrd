@@ -1,9 +1,8 @@
 #include "qxrdmaskdata.h"
 
-QxrdMaskData::QxrdMaskData(QxrdAllocatorInterface *allocator, int width, int height)
-  : QxrdImageData<short>(allocator, width, height)
+QxrdMaskData::QxrdMaskData(QxrdAllocatorInterface *allocator, int width, int height, int def)
+  : QxrdImageData<short>(allocator, width, height, def)
 {
-  fill(1);
 }
 
 short *QxrdMaskData::mask()
@@ -31,7 +30,7 @@ bool QxrdMaskData::maskValue(int x, int y) const
     return m_Image.value((get_Height()-y-1)*get_Width()+x);
   }
 
-  return 1;
+  return defaultValue();
 }
 
 void QxrdMaskData::setMaskValue(int x, int y, bool mval)
