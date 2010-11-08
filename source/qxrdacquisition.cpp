@@ -291,7 +291,9 @@ void QxrdAcquisition::acquiredFrameAvailable()
       }
     } else {
       if (m_CurrentExposure <= get_ExposuresToSum()) {
-        m_OverflowMask = m_Allocator -> newMask();
+        if (m_CurrentExposure == 1) {
+          m_OverflowMask = m_Allocator -> newMask(0);
+        }
 
         long nPixels = get_NRows()*get_NCols();
         int ovflwlvl = get_OverflowLevel();

@@ -33,7 +33,7 @@ class QxrdImageData : public QcepImageData<T>
 //  Q_OBJECT;
 //
 public:
-  QxrdImageData(QxrdAllocatorInterface *allocator, int width=0, int height=0);
+  QxrdImageData(QxrdAllocatorInterface *allocator, int width=0, int height=0, T def=0);
   ~QxrdImageData();
 
   QString rawFileName();
@@ -54,8 +54,8 @@ typedef QSharedPointer<QxrdInt16ImageData> QxrdInt16ImageDataPtr;
 typedef QSharedPointer<QxrdInt32ImageData> QxrdInt32ImageDataPtr;
 
 template <typename T>
-QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, /*QxrdImageQueue< QxrdImageData<T> > *pool,*/ int width, int height)
-  : QcepImageData<T>(width, height),
+QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, /*QxrdImageQueue< QxrdImageData<T> > *pool,*/ int width, int height, T def)
+  : QcepImageData<T>(width, height, def),
     m_Allocator(allocator)
 {
   int count = m_ImageDataObjectCounter.value();
