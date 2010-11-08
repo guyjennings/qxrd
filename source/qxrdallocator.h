@@ -79,7 +79,7 @@ private:
 //  QxrdAcquisitionPtr    m_Acquisition;
   QMutex                m_Mutex;
   QTimer                m_Timer;
-  QAtomicInt            m_AllocatedMemory;
+  QAtomicInt            m_AllocatedMemoryMB;
   QAtomicInt            m_CountInt16;
   QAtomicInt            m_CountInt32;
   QAtomicInt            m_CountDouble;
