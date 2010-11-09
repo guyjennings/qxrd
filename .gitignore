@@ -4,5 +4,5 @@ moc
 ui
 obj
 *.o
-qxrd.user.pro
+qxrd.pro.user
 
