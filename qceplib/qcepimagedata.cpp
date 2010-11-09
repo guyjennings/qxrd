@@ -131,7 +131,7 @@ void QcepImageDataBase::saveMetaData()
 
 void QcepImageDataBase::saveMetaData(QString name)
 {
-//  printf("QcepImageDataBase::saveMetaData for file %s\n", qPrintable(name));
+  printf("QcepImageDataBase::saveMetaData for file %s\n", qPrintable(name));
 
   QTime tic;
   tic.start();
@@ -141,7 +141,7 @@ void QcepImageDataBase::saveMetaData(QString name)
 
     QSettings settings(name+".metadata", QSettings::IniFormat);
 
-    QcepProperty::writeSettings(this, metaObject(), "metadata", settings);
+    QcepProperty::writeSettings(this, &staticMetaObject/*metaObject()*/, "metadata", settings);
   }
 //
 //  printf("QcepImageDataBase::saveMetaData for file %s took %d msec\n",  qPrintable(name), tic.elapsed());
