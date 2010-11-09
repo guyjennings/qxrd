@@ -670,4 +670,9 @@ National Instruments MIO card in sync with acquisition
 
 -------------------------------------------------------
 
+Metadata is not saved for QxrdDoubleImageData, because
+the metadata saving stuff doesn't know about inheritance
+
+-------------------------------------------------------
+
 #endif // TODO_H
