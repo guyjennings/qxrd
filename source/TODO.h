@@ -668,10 +668,13 @@ Start thinking about how to synchronise acquisition with
 external processes - possible support for running a
 National Instruments MIO card in sync with acquisition
 
--------------------------------------------------------
+//-------------------------------------------------------
 
-Metadata is not saved for QxrdDoubleImageData, because
-the metadata saving stuff doesn't know about inheritance
+//Metadata is not saved for QxrdDoubleImageData, because
+//the metadata saving stuff doesn't know about inheritance
+
+//Changed QcepImageData::writeSettings to use staticMetaObject
+//rather than metaObject()
 
 -------------------------------------------------------
 
