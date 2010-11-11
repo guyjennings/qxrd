@@ -11,6 +11,7 @@
 #include "qxrdallocator.h"
 #include "qxrdfilesaverthread.h"
 #include "qxrdgeneratetestimage.h"
+#include "qxrddataprocessoroptionsdialog.h"
 
 #include <QTime>
 #include <QPainter>
@@ -1328,4 +1329,11 @@ void QxrdDataProcessorBase::calculateHistogram()
 QxrdGenerateTestImagePtr QxrdDataProcessorBase::generateTestImage() const
 {
   return m_GenerateTestImage;
+}
+
+void QxrdDataProcessorBase::processorOptionsDialog()
+{
+  QxrdDataProcessorOptionsDialog options(this);
+
+  options.exec();
 }

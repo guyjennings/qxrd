@@ -210,6 +210,9 @@ public:
   virtual QxrdRingSetSampledDataPtr   initialRingSetData() const = 0;
   virtual QxrdRingSetFitParametersPtr refinedRingSetFitParameters() const = 0;
   virtual QxrdRingSetSampledDataPtr   refinedRingSetData() const = 0;
+
+public slots:
+  virtual void processorOptionsDialog() = 0;
 };
 
 #endif

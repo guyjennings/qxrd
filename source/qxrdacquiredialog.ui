@@ -782,6 +782,34 @@ Script Property: &quot;processor.logFilePath&quot;</string>
     </spacer>
    </item>
   </layout>
+  <action name="m_ActionAcquire">
+   <property name="text">
+    <string>Acquire</string>
+   </property>
+  </action>
+  <action name="m_ActionAcquireDark">
+   <property name="text">
+    <string>Dark</string>
+   </property>
+  </action>
+  <action name="m_ActionCancelDark">
+   <property name="text">
+    <string>Cancel Dark</string>
+   </property>
+  </action>
+  <action name="m_ActionCancel">
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </action>
+  <action name="m_ActionTrigger">
+   <property name="text">
+    <string>Trigger</string>
+   </property>
+   <property name="toolTip">
+    <string>Trigger Acquisition</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

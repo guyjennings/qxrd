@@ -38,6 +38,7 @@ public slots:
   void doLoadGainMap();
   void selectLogFile();
   void doRefineCenterTilt();
+  void doProcessorOptionsDialog();
 
   void doAcquire();
   void doCancel();
@@ -104,7 +105,7 @@ private:
   QxrdDataProcessorPtr                   m_DataProcessor;
   QxrdAllocatorPtr                       m_Allocator;
   QxrdScriptEnginePtr                    m_ScriptEngine;
-  QxrdAcquireDialogPtr                   m_AcquireDialog;
+  QWidget                               *m_AcquireDialog;
   QxrdCenterFinderDialogPtr              m_CenterFinderDialog;
   QxrdIntegratorDialogPtr                m_IntegratorDialog;
   QxrdImageCalculatorPtr                 m_Calculator;

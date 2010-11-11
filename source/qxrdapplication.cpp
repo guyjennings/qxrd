@@ -114,6 +114,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 //  m_Window -> show();
 
   m_DataProcessor -> setWindow(m_Window);
+  m_Acquisition -> setWindow(m_Window);
 
   connect(this, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
   connect(this, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));

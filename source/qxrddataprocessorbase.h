@@ -88,6 +88,8 @@ public slots:
   void displayIntegratedData(QxrdIntegratedDataPtr d);
   void writeOutputScan(QxrdIntegratedDataPtr d);
 
+  void processorOptionsDialog();
+
 public:
   void loadDefaultImages();
 

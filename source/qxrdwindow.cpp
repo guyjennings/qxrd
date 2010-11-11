@@ -77,7 +77,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     setWindowTitle(windowTitle()+" - 64 bit - v"+QXRD_VERSION);
   }
 
-  m_AcquireDialog = QxrdAcquireDialogPtr(new QxrdAcquireDialog(this));
+  m_AcquireDialog = m_Acquisition -> controlPanel(this);
   m_AcquireDockWidget -> setWidget(m_AcquireDialog);
 
   m_CenterFinderDialog = QxrdCenterFinderDialogPtr(new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder()));
@@ -108,23 +108,6 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(m_ActionSaveMask, SIGNAL(triggered()), this, SLOT(doSaveMask()));
   connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
 
-  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
-  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
-  connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
-  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
-  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
-
-  connect(m_AcquireDialog -> m_SelectLogFileButton, SIGNAL(clicked()), this, SLOT(selectLogFile()));
-  connect(m_AcquireDialog -> m_SelectDirectoryButton, SIGNAL(clicked()), this, SLOT(selectOutputDirectory()));
-
-  connect(m_AcquireDialog -> m_AcquireButton, SIGNAL(clicked()), m_ActionAcquire, SIGNAL(triggered()));
-  connect(m_AcquireDialog -> m_CancelButton, SIGNAL(clicked()), m_ActionCancel, SIGNAL(triggered()));
-  connect(m_AcquireDialog -> m_DarkAcquireButton, SIGNAL(clicked()), m_ActionAcquireDark, SIGNAL(triggered()));
-//  connect(m_AcquireDialog -> m_DarkCancelButton, SIGNAL(clicked()), m_ActionCancelDark, SIGNAL(triggered()));
-  connect(m_AcquireDialog -> m_TriggerButton, SIGNAL(clicked()), m_ActionTrigger, SIGNAL(triggered()));
-
-  connect(m_AcquireDialog -> m_ClearDroppedButton, SIGNAL(clicked()), m_Acquisition, SLOT(clearDropped()));
-
   connect(m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));
   connect(m_Display_5pct, SIGNAL(clicked()), m_Action005Range, SIGNAL(triggered()));
   connect(m_Display_10pct, SIGNAL(clicked()), m_Action010Range, SIGNAL(triggered()));
@@ -152,6 +135,12 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 
   connect(m_MaskCirclesRadio, SIGNAL(clicked()), m_ImageMaskCirclesButton, SLOT(click()));
   connect(m_MaskPolygonsRadio, SIGNAL(clicked()), m_ImageMaskPolygonsButton, SLOT(click()));
+
+  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
+  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
+  connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
+  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
+  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
 
   connect(m_ActionShowImage, SIGNAL(triggered()), m_Plot, SLOT(toggleShowImage()));
   connect(m_ActionShowMask, SIGNAL(triggered()), m_Plot, SLOT(toggleShowMask()));
@@ -201,6 +190,8 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 
   connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
   connect(&m_UpdateTimer, SIGNAL(timeout()), this, SLOT(newData()));
+
+  connect(m_SaveDarkOptions, SIGNAL(clicked()), this, SLOT(doProcessorOptionsDialog()));
 
   m_Plot->prop_XMouse()->linkTo(m_XMouse);
   m_Plot->prop_YMouse()->linkTo(m_YMouse);
@@ -254,24 +245,8 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
           this,              SLOT(onAcquireComplete(int)));
 
 
-  m_Acquisition -> setupExposureMenu(m_AcquireDialog -> m_ExposureTime);
-  m_Acquisition -> setupCameraGainMenu(m_AcquireDialog -> m_CameraGain);
-  m_Acquisition -> setupCameraBinningModeMenu(m_AcquireDialog -> m_BinningMode);
-
-  m_Acquisition -> prop_DetectorTypeName() -> linkTo(m_AcquireDialog -> m_DetectorTypeNameLabel);
-  m_Acquisition -> prop_ExposureTime() -> linkTo(m_AcquireDialog -> m_ExposureTime);
-  m_Acquisition -> prop_SummedExposures() -> linkTo(m_AcquireDialog -> m_SummedExposures);
-  m_Acquisition -> prop_SkippedExposures() -> linkTo(m_AcquireDialog -> m_SkippedExposures);
-  m_Acquisition -> prop_DarkSummedExposures() -> linkTo(m_AcquireDialog -> m_DarkSummedExposures);
-  m_Acquisition -> prop_FilePattern() -> linkTo(m_AcquireDialog -> m_FilePattern);
-  m_Acquisition -> prop_FileIndex() -> linkTo(m_AcquireDialog -> m_FileIndex);
-  m_Acquisition -> prop_PreTriggerFiles() -> linkTo(m_AcquireDialog -> m_PreTriggerFiles);
-  m_Acquisition -> prop_PostTriggerFiles() -> linkTo(m_AcquireDialog -> m_PostTriggerFiles);
-  m_Acquisition -> prop_CameraGain() -> linkTo(m_AcquireDialog -> m_CameraGain);
-  m_Acquisition -> prop_BinningMode() -> linkTo(m_AcquireDialog -> m_BinningMode);
-  m_Acquisition -> prop_DroppedFrames() -> linkTo(m_AcquireDialog -> m_DroppedFrames);
   m_Acquisition -> prop_OverflowLevel() -> linkTo(m_OverflowLevel);
-  m_DataProcessor -> prop_OutputDirectory() -> linkTo(m_AcquireDialog -> m_OutputDirectory);
+
   m_DataProcessor -> prop_PerformDarkSubtraction() -> linkTo(m_PerformDark);
   m_DataProcessor -> prop_PerformDarkSubtractionTime() -> linkTo(m_PerformDarkTime);
   m_DataProcessor -> prop_SaveRawImages() -> linkTo(m_SaveRaw);
@@ -295,7 +270,6 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 //  m_DataProcessor -> prop_CorrectedTime() -> linkTo(m_CorrectedTime);
 //  m_DataProcessor -> prop_IntegratedTime() -> linkTo(m_IntegratedTime);
   m_DataProcessor -> prop_EstimatedProcessingTime() -> linkTo(m_EstimatedProcessingTime);
-  m_DataProcessor -> prop_LogFilePath() -> linkTo(m_AcquireDialog -> m_LogFilePath);
 
 //  m_DataProcessor -> prop_DarkImagePath() -> linkTo(m_DarkImagePath);
 //  m_DataProcessor -> prop_BadPixelsPath() -> linkTo(m_BadPixelsPath);
@@ -305,8 +279,6 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_DataProcessor -> prop_MaskMaximumValue() -> linkTo(Ui::QxrdWindow::m_MaskMaximum);
   m_DataProcessor -> prop_MaskCircleRadius() -> linkTo(Ui::QxrdWindow::m_MaskCircleRadius);
   m_DataProcessor -> prop_MaskSetPixels() -> linkTo(Ui::QxrdWindow::m_MaskSetPixels);
-
-  m_DataProcessor -> prop_Average() -> linkTo(m_AcquireDialog -> m_AverageDisplay);
 
   m_Plot -> prop_DisplayMinimumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumPct);
   m_Plot -> prop_DisplayMaximumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumPct);
@@ -491,15 +463,8 @@ void QxrdWindow::acquisitionReady()
 //  readSettings();
   THREAD_CHECK;
 
-  m_AcquireDialog -> m_AcquireButton -> setEnabled(true);
-  m_AcquireDialog -> m_TriggerButton -> setEnabled(false);
-  m_AcquireDialog -> m_CancelButton -> setEnabled(false);
-  m_ActionAcquire -> setEnabled(true);
-  m_ActionCancel -> setEnabled(false);
-  m_AcquireDialog -> m_DarkAcquireButton -> setEnabled(true);
-//  m_AcquireDialog -> m_DarkCancelButton -> setEnabled(false);
-  m_ActionAcquireDark -> setEnabled(true);
-  m_ActionCancelDark -> setEnabled(false);
+  m_Acquisition -> acquisitionReady();
+
   m_Progress -> reset();
 }
 
@@ -507,20 +472,8 @@ void QxrdWindow::acquisitionStarted()
 {
   THREAD_CHECK;
 
-  if (m_Acquisition -> get_PreTriggerFiles() > 0) {
-    m_AcquireDialog -> m_TriggerButton -> setEnabled(true);
-  } else {
-    m_AcquireDialog -> m_TriggerButton -> setEnabled(false);
-  }
+  m_Acquisition -> acquisitionStarted();
 
-  m_AcquireDialog -> m_AcquireButton -> setEnabled(false);
-  m_AcquireDialog -> m_CancelButton -> setEnabled(true);
-  m_ActionAcquire -> setEnabled(false);
-  m_ActionCancel -> setEnabled(true);
-  m_AcquireDialog -> m_DarkAcquireButton -> setEnabled(false);
-//  m_AcquireDialog -> m_DarkCancelButton -> setEnabled(false);
-  m_ActionAcquireDark -> setEnabled(false);
-  m_ActionCancelDark -> setEnabled(false);
   m_Progress -> setValue(0);
 }
 
@@ -528,15 +481,8 @@ void QxrdWindow::darkAcquisitionStarted()
 {
   THREAD_CHECK;
 
-  m_AcquireDialog -> m_AcquireButton -> setEnabled(false);
-  m_AcquireDialog -> m_TriggerButton -> setEnabled(false);
-  m_AcquireDialog -> m_CancelButton -> setEnabled(/*false*/ true);
-  m_ActionAcquire -> setEnabled(false);
-  m_ActionCancel -> setEnabled(false);
-  m_AcquireDialog -> m_DarkAcquireButton -> setEnabled(false);
-//  m_AcquireDialog -> m_DarkCancelButton -> setEnabled(true);
-  m_ActionAcquireDark -> setEnabled(false);
-  m_ActionCancelDark -> setEnabled(true);
+  m_Acquisition -> darkAcquisitionStarted();
+
   m_Progress -> setValue(0);
 }
 
@@ -544,15 +490,8 @@ void QxrdWindow::acquisitionFinished()
 {
   THREAD_CHECK;
 
-  m_AcquireDialog -> m_AcquireButton -> setEnabled(true);
-  m_AcquireDialog -> m_TriggerButton -> setEnabled(false);
-  m_AcquireDialog -> m_CancelButton -> setEnabled(false);
-  m_ActionAcquire -> setEnabled(true);
-  m_ActionCancel -> setEnabled(false);
-  m_AcquireDialog -> m_DarkAcquireButton -> setEnabled(true);
-//  m_AcquireDialog -> m_DarkCancelButton -> setEnabled(false);
-  m_ActionAcquireDark -> setEnabled(true);
-  m_ActionCancelDark -> setEnabled(false);
+  m_Acquisition -> acquisitionFinished();
+
   m_Progress -> reset();
 }
 
@@ -886,6 +825,11 @@ void QxrdWindow::selectLogFile()
   if (theFile.length()) {
     m_DataProcessor->newLogFile(theFile);
   }
+}
+
+void QxrdWindow::doProcessorOptionsDialog()
+{
+  m_DataProcessor->processorOptionsDialog();
 }
 
 void QxrdWindow::doTest()

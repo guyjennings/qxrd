@@ -31,6 +31,12 @@ public slots:
   void trigger();
   void clearDropped();
 
+  void acquisitionReady();
+  void acquisitionStarted();
+  void acquisitionFinished();
+
+  void darkAcquisitionStarted();
+
   int acquisitionStatus(double time);
 
   virtual void onExposureTimeChanged(double newTime) = 0;
@@ -54,6 +60,7 @@ public:
 //  void replaceImageFromPool(QxrdInt32ImageDataPtr &ptr);
 
   void indicateDroppedFrame();
+  virtual QWidget* controlPanel(QxrdWindowPtr win);
 
 protected:
   void allocateMemoryForAcquisition();
@@ -87,6 +94,8 @@ protected:
   QAtomicInt             m_NPostTriggerAcquired;
   QAtomicInt             m_CurrentExposure;
   QAtomicInt             m_CurrentFile;
+
+  QxrdAcquireDialog     *m_ControlPanel;
 };
 
 #endif
