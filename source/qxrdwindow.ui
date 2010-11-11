@@ -79,7 +79,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -108,7 +108,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -141,7 +141,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -161,7 +161,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/ringfinder.png</normaloff>:/images/ringfinder.png</iconset>
               </property>
               <property name="iconSize">
@@ -187,7 +187,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/slice.png</normaloff>:/images/slice.png</iconset>
               </property>
               <property name="iconSize">
@@ -213,7 +213,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -245,7 +245,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/mask_circles.png</normaloff>:/images/mask_circles.png</iconset>
               </property>
               <property name="iconSize">
@@ -271,7 +271,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/mask_polygon.png</normaloff>:/images/mask_polygon.png</iconset>
               </property>
               <property name="iconSize">
@@ -391,7 +391,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -420,7 +420,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -453,7 +453,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -473,7 +473,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -534,7 +534,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -563,7 +563,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -596,7 +596,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -616,7 +616,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset>
                 <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -769,7 +769,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/go-home.png</normaloff>:/images/go-home.png</iconset>
              </property>
             </widget>
@@ -780,7 +780,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/go-previous.png</normaloff>:/images/go-previous.png</iconset>
              </property>
             </widget>
@@ -791,7 +791,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/go-next.png</normaloff>:/images/go-next.png</iconset>
              </property>
             </widget>
@@ -839,7 +839,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1393,6 +1393,62 @@
        </property>
        <property name="decimals">
         <number>3</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="m_SaveRawOptions">
+       <property name="text">
+        <string>Options...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="m_PerformDarkOptions">
+       <property name="text">
+        <string>Options...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="m_SaveDarkOptions">
+       <property name="text">
+        <string>Options...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QPushButton" name="m_SaveSubtractedOptions">
+       <property name="text">
+        <string>Options...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QPushButton" name="m_SaveAsTextOptions">
+       <property name="text">
+        <string>Options...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QPushButton" name="m_PerformIntegrationOptions">
+       <property name="text">
+        <string>Options...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="1">
+      <widget class="QPushButton" name="m_DisplayIntegratedDataOptions">
+       <property name="text">
+        <string>Options...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="1">
+      <widget class="QPushButton" name="m_SaveIntegratedDataOptions">
+       <property name="text">
+        <string>Options...</string>
        </property>
       </widget>
      </item>
@@ -2242,7 +2298,7 @@ If unselected, image pixels are masked out</string>
   </action>
   <action name="m_ActionLoadData">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2341,7 +2397,7 @@ If unselected, image pixels are masked out</string>
   </action>
   <action name="m_ActionImportData">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2350,7 +2406,7 @@ If unselected, image pixels are masked out</string>
   </action>
   <action name="m_ActionTest">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
    </property>
    <property name="text">
@@ -2391,7 +2447,7 @@ If unselected, image pixels are masked out</string>
   </action>
   <action name="m_ActionSetCenter">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/ringfinder.png</normaloff>:/images/ringfinder.png</iconset>
    </property>
    <property name="text">
@@ -2424,7 +2480,7 @@ If unselected, image pixels are masked out</string>
   </action>
   <action name="m_ActionMaskCircles">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/mask_circles.png</normaloff>:/images/mask_circles.png</iconset>
    </property>
    <property name="text">
@@ -2436,7 +2492,7 @@ If unselected, image pixels are masked out</string>
   </action>
   <action name="m_ActionMaskPolygons">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/mask_polygon.png</normaloff>:/images/mask_polygon.png</iconset>
    </property>
    <property name="text">
@@ -2448,7 +2504,7 @@ If unselected, image pixels are masked out</string>
   </action>
   <action name="m_ActionInvertMask">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/mask_invert.png</normaloff>:/images/mask_invert.png</iconset>
    </property>
    <property name="text">
@@ -2460,7 +2516,7 @@ If unselected, image pixels are masked out</string>
   </action>
   <action name="m_ActionLoadDark">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2480,7 +2536,7 @@ If unselected, image pixels are masked out</string>
   </action>
   <action name="m_ActionLoadMask">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
    </property>
    <property name="text">
@@ -2619,8 +2675,6 @@ If unselected, image pixels are masked out</string>
   <tabstop>m_CenteringZoomOutButton</tabstop>
   <tabstop>m_IntegratorZoomInButton</tabstop>
  </tabstops>
- <resources>
-  <include location="qxrdresources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

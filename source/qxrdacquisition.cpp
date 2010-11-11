@@ -2,6 +2,8 @@
 #include "qxrdmutexlocker.h"
 #include "qxrddataprocessor.h"
 #include "qxrdallocator.h"
+#include "qxrdacquiredialog.h"
+
 #include <QThreadPool>
 
 QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator)
@@ -9,7 +11,8 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
     m_PreTriggerInt16Images("preTriggerInt16Images"),
     m_PreTriggerInt32Images("preTriggerInt32Images"),
     m_AcquiredInt16Data(NULL),
-    m_AcquiredInt32Data(NULL)
+    m_AcquiredInt32Data(NULL),
+    m_ControlPanel(NULL)
 {
   connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
   connect(prop_BinningMode(), SIGNAL(changedValue(int)), this, SLOT(onBinningModeChanged(int)));
@@ -601,4 +604,45 @@ void QxrdAcquisition::acquisitionError(int ln, int n)
   haltAcquisition();
 
   emit criticalMessage(QDateTime::currentDateTime(), tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
+}
+
+QWidget *QxrdAcquisition::controlPanel(QxrdWindowPtr win)
+{
+  if (win) {
+    m_Window = win;
+
+    m_ControlPanel = new QxrdAcquireDialog(m_Window, this, m_DataProcessor);
+
+    return m_ControlPanel;
+  } else {
+    return NULL;
+  }
+}
+
+void QxrdAcquisition::acquisitionReady()
+{
+  if (m_ControlPanel) {
+    m_ControlPanel -> acquisitionReady();
+  }
+}
+
+void QxrdAcquisition::acquisitionStarted()
+{
+  if (m_ControlPanel) {
+    m_ControlPanel -> acquisitionStarted();
+  }
+}
+
+void QxrdAcquisition::acquisitionFinished()
+{
+  if (m_ControlPanel) {
+    m_ControlPanel -> acquisitionFinished();
+  }
+}
+
+void QxrdAcquisition::darkAcquisitionStarted()
+{
+  if (m_ControlPanel) {
+    m_ControlPanel -> darkAcquisitionStarted();
+  }
 }

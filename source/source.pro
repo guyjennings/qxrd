@@ -199,7 +199,8 @@ HEADERS += TODO.h \
     qxrdsettingssaver.h \
     qxrdsettingssaverthread.h \
     qxrdplotimage.h \
-    qxrdimagedisplaywidget.h
+    qxrdimagedisplaywidget.h \
+    qxrddataprocessoroptionsdialog.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -289,7 +290,8 @@ SOURCES += qxrd.cpp \
     qxrdsettingssaver.cpp \
     qxrdsettingssaverthread.cpp \
     qxrdplotimage.cpp \
-    qxrdimagedisplaywidget.cpp
+    qxrdimagedisplaywidget.cpp \
+    qxrddataprocessoroptionsdialog.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -297,7 +299,8 @@ FORMS = qxrdwindow.ui \
     qxrdimagecalculator.ui \
     qxrdpreferencesdialog.ui \
     qxrdpowderfitwidget.ui \
-    qxrdacquiredialog.ui
+    qxrdacquiredialog.ui \
+    qxrddataprocessoroptionsdialog.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 
