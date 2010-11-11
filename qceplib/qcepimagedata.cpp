@@ -131,7 +131,7 @@ void QcepImageDataBase::saveMetaData()
 
 void QcepImageDataBase::saveMetaData(QString name)
 {
-  printf("QcepImageDataBase::saveMetaData for file %s\n", qPrintable(name));
+//  printf("QcepImageDataBase::saveMetaData for file %s\n", qPrintable(name));
 
   QTime tic;
   tic.start();
