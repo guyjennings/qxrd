@@ -20,8 +20,10 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
 
   if (sizeof(void*) == 4) {
     connect(prop_TotalBufferSizeMB32(), SIGNAL(changedValue(int)), this, SLOT(onBufferSizeChanged(int)));
+    onBufferSizeChanged(get_TotalBufferSizeMB32());
   } else {
     connect(prop_TotalBufferSizeMB64(), SIGNAL(changedValue(int)), this, SLOT(onBufferSizeChanged(int)));
+    onBufferSizeChanged(get_TotalBufferSizeMB64());
   }
 }
 
