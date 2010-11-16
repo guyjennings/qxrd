@@ -30,8 +30,12 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
 
   ui -> m_DetectorTypeCombo -> addItems(detectorTypes);
   ui -> m_DetectorTypeCombo -> setCurrentIndex(detectorType);
+
+  ui -> m_SaveDarkInSubdir  -> setChecked(acq->get_SaveDarkInSubdirectory());
+//  ui ->m_SaveDarkSubdir ->se
   ui -> m_DebugLevelSpinBox -> setRange(0,65535);
   ui -> m_DebugLevelSpinBox -> setValue(debugLevel);
+
   ui -> m_ReservedMemory32 -> setRange(500, 3000);
   ui -> m_ReservedMemory32 -> setValue(acq->get_TotalBufferSizeMB32());
   ui -> m_ReservedMemory64 -> setRange(500, 60000);

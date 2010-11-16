@@ -145,6 +145,33 @@ public:
 //  Q_PROPERTY(int     frameSyncMode   READ frameSyncMode WRITE setFrameSyncMode);
 //  Q_PROPERTY(int     timerSync       READ timerSync WRITE setTimerSync);
 
+  Q_PROPERTY(bool saveDarkInSubdirectory READ get_SaveDarkInSubdirectory WRITE set_SaveDarkInSubdirectory);
+  QCEP_BOOLEAN_PROPERTY(SaveDarkInSubdirectory);
+
+  Q_PROPERTY(QString saveDarkSubdirectory READ get_SaveDarkSubdirectory WRITE set_SaveDarkSubdirectory);
+  QCEP_STRING_PROPERTY(SaveDarkSubdirectory);
+
+  Q_PROPERTY(bool saveRawInSubdirectory READ get_SaveRawInSubdirectory WRITE set_SaveRawInSubdirectory);
+  QCEP_BOOLEAN_PROPERTY(SaveRawInSubdirectory);
+
+  Q_PROPERTY(QString saveRawSubdirectory READ get_SaveRawSubdirectory WRITE set_SaveRawSubdirectory);
+  QCEP_STRING_PROPERTY(SaveRawSubdirectory);
+
+  Q_PROPERTY(bool saveSubtractedInSubdirectory READ get_SaveSubtractedInSubdirectory WRITE set_SaveSubtractedInSubdirectory);
+  QCEP_BOOLEAN_PROPERTY(SaveSubtractedInSubdirectory);
+
+  Q_PROPERTY(QString saveSubtractedSubdirectory READ get_SaveSubtractedSubdirectory WRITE set_SaveSubtractedSubdirectory);
+  QCEP_STRING_PROPERTY(SaveSubtractedSubdirectory);
+
+  Q_PROPERTY(bool saveIntegratedInSeparateFiles READ get_SaveIntegratedInSeparateFiles WRITE set_SaveIntegratedInSeparateFiles);
+  QCEP_BOOLEAN_PROPERTY(SaveIntegratedInSeparateFiles);
+
+  Q_PROPERTY(bool saveIntegratedInSubdirectory READ get_SaveIntegratedInSubdirectory WRITE set_SaveIntegratedInSubdirectory);
+  QCEP_BOOLEAN_PROPERTY(SaveIntegratedInSubdirectory);
+
+  Q_PROPERTY(QString saveIntegratedSubdirectory READ get_SaveIntegratedSubdirectory WRITE set_SaveIntegratedSubdirectory);
+  QCEP_STRING_PROPERTY(SaveIntegratedSubdirectory);
+
 protected:
   mutable QMutex         m_Mutex;
 };

@@ -24,8 +24,8 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QTabWidget" name="tabWidget">
+   <item row="0" column="0">
+    <widget class="QTabWidget" name="Saving">
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -50,7 +50,7 @@
        <item row="1" column="0" colspan="2">
         <widget class="QStackedWidget" name="m_DetectorPrefsStack">
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="m_SimulatedDetectorPrefs">
           <widget class="QLabel" name="label_4">
@@ -138,6 +138,114 @@
            </property>
           </widget>
          </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Saving</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="0" colspan="2">
+        <widget class="QCheckBox" name="m_SaveRawInSubdir">
+         <property name="text">
+          <string>Save Raw Data in Subdirectory?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" colspan="2">
+        <widget class="QLineEdit" name="m_SaveRawSubdir"/>
+       </item>
+       <item row="0" column="4">
+        <widget class="QPushButton" name="m_SaveRawBrowse">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QCheckBox" name="m_SaveDarkInSubdir">
+         <property name="text">
+          <string>Save Dark Data in Subdirectory?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" colspan="2">
+        <widget class="QLineEdit" name="m_SaveDarkSubdir"/>
+       </item>
+       <item row="1" column="4">
+        <widget class="QPushButton" name="m_SaveDarkBrowse">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QCheckBox" name="m_SaveSubtractedInSubdir">
+         <property name="text">
+          <string>Save Subtracted Data in Subdirectory?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" colspan="2">
+        <widget class="QLineEdit" name="m_SaveSubtractedSubdir"/>
+       </item>
+       <item row="2" column="4">
+        <widget class="QPushButton" name="m_SaveSubtractedBrowse">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="4">
+        <widget class="QCheckBox" name="m_SaveIntegratedSeparately">
+         <property name="text">
+          <string>Save Integrated Data in Separate Files?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QCheckBox" name="m_SaveIntegratedinSubdir">
+         <property name="text">
+          <string>Save Integrated Data in Subdirectory?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2" colspan="2">
+        <widget class="QLineEdit" name="m_SaveIntegratedSubdir"/>
+       </item>
+       <item row="4" column="4">
+        <widget class="QPushButton" name="m_SaveIntegratedBrowse">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>108</width>
+           <height>139</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="5" column="0" colspan="5">
+        <widget class="QCheckBox" name="m_AccumulateIntegrated2D">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Accumulated Integrated Data into 2-D Dataset?</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
