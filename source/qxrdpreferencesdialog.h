@@ -4,6 +4,7 @@
 #include "qcepmacros.h"
 
 #include <QDialog>
+#include <QLineEdit>
 
 namespace Ui {
   class QxrdPreferencesDialog;
@@ -18,8 +19,19 @@ public:
 public slots:
   void accept();
 
+private slots:
+  void currentOutputBrowse();
+  void currentLogfileBrowse();
+  void saveRawBrowse();
+  void saveDarkBrowse();
+  void saveSubtractedBrowse();
+  void saveIntegratedBrowse();
+
 protected:
   void changeEvent(QEvent *e);
+
+private:
+  void getRelativeDirectoryPath(QLineEdit *edit);
 
 private:
   Ui::QxrdPreferencesDialog *ui;

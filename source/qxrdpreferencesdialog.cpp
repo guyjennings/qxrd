@@ -4,6 +4,7 @@
 #include "qxrddataprocessorthread.h"
 #include "qxrdapplication.h"
 #include <QMessageBox>
+#include <QFileDialog>
 
 QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
     QDialog(parent),
@@ -16,6 +17,7 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   QxrdSettings settings;
   QxrdApplication *app = QxrdApplication::application();
   QxrdAcquisition *acq = app -> acquisition();
+  QxrdDataProcessor *proc = app->dataProcessor();
 
   int detectorType = app -> get_DetectorType();
   int processorType = app -> get_ProcessorType();
@@ -31,8 +33,29 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   ui -> m_DetectorTypeCombo -> addItems(detectorTypes);
   ui -> m_DetectorTypeCombo -> setCurrentIndex(detectorType);
 
+  connect(ui->m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
+  ui ->m_CurrentOutputDirectory -> setText(proc->get_OutputDirectory());
+
+  connect(ui->m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
+  ui ->m_CurrentLogFile -> setText(proc->get_LogFilePath());
+
+  connect(ui->m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
+  ui -> m_SaveRawInSubdir  -> setChecked(acq->get_SaveRawInSubdirectory());
+  ui -> m_SaveRawSubdir    -> setText  (acq->get_SaveRawSubdirectory());
+
+  connect(ui->m_SaveDarkBrowse, SIGNAL(clicked()), this, SLOT(saveDarkBrowse()));
   ui -> m_SaveDarkInSubdir  -> setChecked(acq->get_SaveDarkInSubdirectory());
-//  ui ->m_SaveDarkSubdir ->se
+  ui -> m_SaveDarkSubdir    -> setText  (acq->get_SaveDarkSubdirectory());
+
+  connect(ui->m_SaveSubtractedBrowse, SIGNAL(clicked()), this, SLOT(saveSubtractedBrowse()));
+  ui -> m_SaveSubtractedInSubdir  -> setChecked(acq->get_SaveSubtractedInSubdirectory());
+  ui -> m_SaveSubtractedSubdir    -> setText  (acq->get_SaveSubtractedSubdirectory());
+
+  connect(ui->m_SaveIntegratedBrowse, SIGNAL(clicked()), this, SLOT(saveIntegratedBrowse()));
+  ui -> m_SaveIntegratedSeparately  -> setChecked(acq->get_SaveIntegratedInSeparateFiles());
+  ui -> m_SaveIntegratedInSubdir  -> setChecked(acq->get_SaveIntegratedInSubdirectory());
+  ui -> m_SaveIntegratedSubdir    -> setText  (acq->get_SaveIntegratedSubdirectory());
+
   ui -> m_DebugLevelSpinBox -> setRange(0,65535);
   ui -> m_DebugLevelSpinBox -> setValue(debugLevel);
 
@@ -53,6 +76,59 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
 QxrdPreferencesDialog::~QxrdPreferencesDialog()
 {
   delete ui;
+}
+
+void QxrdPreferencesDialog::getRelativeDirectoryPath(QLineEdit *edit)
+{
+  QDir pwd(ui ->m_CurrentOutputDirectory->text());
+  QFileInfo initial(pwd, edit->text());
+
+  QString dir = QFileDialog::getExistingDirectory(this, "", initial.absolutePath(), QFileDialog::ShowDirsOnly);
+
+  if (dir != "") {
+    edit -> setText(pwd.relativeFilePath(dir));
+  }
+}
+
+void QxrdPreferencesDialog::saveRawBrowse()
+{
+  getRelativeDirectoryPath(ui->m_SaveRawSubdir);
+}
+
+void QxrdPreferencesDialog::saveDarkBrowse()
+{
+  getRelativeDirectoryPath(ui->m_SaveDarkSubdir);
+}
+
+void QxrdPreferencesDialog::saveSubtractedBrowse()
+{
+  getRelativeDirectoryPath(ui->m_SaveSubtractedSubdir);
+}
+
+void QxrdPreferencesDialog::saveIntegratedBrowse()
+{
+  getRelativeDirectoryPath(ui->m_SaveIntegratedSubdir);
+}
+
+void QxrdPreferencesDialog::currentOutputBrowse()
+{
+  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", ui->m_CurrentOutputDirectory->text(), QFileDialog::ShowDirsOnly);
+
+  if (dir != "") {
+    ui->m_CurrentOutputDirectory->setText(dir);
+  }
+}
+
+void QxrdPreferencesDialog::currentLogfileBrowse()
+{
+  QDir pwd(ui ->m_CurrentOutputDirectory->text());
+  QFileInfo initial(pwd, ui->m_CurrentLogFile->text());
+
+  QString file = QFileDialog::getSaveFileName(this, "Log File", initial.absoluteFilePath());
+
+  if (file != "") {
+    ui->m_CurrentLogFile->setText(pwd.relativeFilePath(file));
+  }
 }
 
 void QxrdPreferencesDialog::changeEvent(QEvent *e)
@@ -91,6 +167,7 @@ void QxrdPreferencesDialog::accept()
 
   QxrdApplication *app = QxrdApplication::application();
   QxrdAcquisition *acq = app -> acquisition();
+  QxrdDataProcessor *proc = app->dataProcessor();
 
   if (runSpecServer != app -> get_RunSpecServer()) {
     restartNeeded = true;
@@ -121,6 +198,22 @@ void QxrdPreferencesDialog::accept()
   app -> set_SpecServerPort(specServerPort);
   app -> set_RunSimpleServer(runSimpleServer);
   app -> set_SimpleServerPort(simpleServerPort);
+
+  acq -> set_SaveRawInSubdirectory(ui -> m_SaveRawInSubdir -> isChecked());
+  acq -> set_SaveRawSubdirectory  (ui -> m_SaveRawSubdir   -> text());
+
+  acq -> set_SaveDarkInSubdirectory(ui -> m_SaveDarkInSubdir  -> isChecked());
+  acq -> set_SaveDarkSubdirectory  (ui -> m_SaveDarkSubdir    -> text());
+
+  acq -> set_SaveSubtractedInSubdirectory(ui -> m_SaveSubtractedInSubdir -> isChecked());
+  acq -> set_SaveSubtractedSubdirectory  (ui -> m_SaveSubtractedSubdir   -> text());
+
+  acq -> set_SaveIntegratedInSeparateFiles(ui -> m_SaveIntegratedSeparately -> isChecked());
+  acq -> set_SaveIntegratedInSubdirectory (ui -> m_SaveIntegratedInSubdir  -> isChecked());
+  acq -> set_SaveIntegratedSubdirectory   (ui -> m_SaveIntegratedSubdir    -> text());
+
+  proc-> set_OutputDirectory(ui -> m_CurrentOutputDirectory -> text());
+  proc-> set_LogFilePath    (ui -> m_CurrentLogFile -> text());
 
   QDialog::accept();
 }
