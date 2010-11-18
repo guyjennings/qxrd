@@ -598,7 +598,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
         emit printMessage(QDateTime::currentDateTime(),
                           tr("Image \"%1\" is already saved").arg(dimg->rawFileName()));
       } else {
-        saveNamedImageData(dimg->get_FileName(), dimg);
+        saveNamedImageData(QDir(subtractedOutputDirectory()).filePath(dimg->get_FileBase()), dimg);
       }
     }
 
@@ -1217,7 +1217,13 @@ void QxrdDataProcessorBase::closeLogFile()
 
 void QxrdDataProcessorBase::writeOutputScan(QxrdIntegratedDataPtr data)
 {
-  fileSaverThread()->writeOutputScan(m_LogFile, data);
+  if (this->get_SaveIntegratedData()) {
+    fileSaverThread()->writeOutputScan(m_LogFile, data);
+  }
+
+  if (this->get_SaveIntegratedInSeparateFiles()) {
+    fileSaverThread()->writeOutputScan(integratedOutputDirectory(), data);
+  }
 }
 
 void QxrdDataProcessorBase::displayIntegratedData(QxrdIntegratedDataPtr data)

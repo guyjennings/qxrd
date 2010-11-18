@@ -39,6 +39,15 @@ QxrdDataProcessor::QxrdDataProcessor
     m_PerformIntegration(this, "performIntegration", true),
     m_DisplayIntegratedData(this, "displayIntegratedData", true),
     m_SaveIntegratedData(this, "saveIntegratedData", true),
+    m_SaveDarkInSubdirectory(this,"saveDarkInSubdirectory",0),
+    m_SaveDarkSubdirectory(this,"saveDarkSubdirectory",""),
+    m_SaveRawInSubdirectory(this,"saveRawInSubdirectory",0),
+    m_SaveRawSubdirectory(this,"saveRawSubdirectory",""),
+    m_SaveSubtractedInSubdirectory(this,"saveSubtractedInSubdirectory",0),
+    m_SaveSubtractedSubdirectory(this,"saveSubtractedSubdirectory",""),
+    m_SaveIntegratedInSeparateFiles(this,"saveIntegratedInSeparateFiles",0),
+    m_SaveIntegratedInSubdirectory(this,"saveIntegratedInSubdirectory",0),
+    m_SaveIntegratedSubdirectory(this,"saveIntegratedSubdirectory",""),
     m_PerformDarkSubtractionTime(this, "performDarkSubtractionTime", 0.01),
     m_PerformBadPixelsTime(this, "performBadPixelsTime", 0.01),
     m_PerformGainCorrectionTime(this, "performGainCorrectionTime", 0.01),
@@ -63,4 +72,45 @@ QxrdDataProcessor::QxrdDataProcessor
 
 QxrdDataProcessor::~QxrdDataProcessor()
 {
+}
+
+QString QxrdDataProcessor::existingOutputDirectory(QString dir, QString subdir)
+{
+  return QDir(dir).filePath(subdir);
+}
+
+QString QxrdDataProcessor::darkOutputDirectory()
+{
+  if (get_SaveDarkInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveDarkSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
+}
+
+QString QxrdDataProcessor::rawOutputDirectory()
+{
+  if (get_SaveRawInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveRawSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
+}
+
+QString QxrdDataProcessor::subtractedOutputDirectory()
+{
+  if (get_SaveSubtractedInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveSubtractedSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
+}
+
+QString QxrdDataProcessor::integratedOutputDirectory()
+{
+  if (get_SaveIntegratedInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveIntegratedSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
 }

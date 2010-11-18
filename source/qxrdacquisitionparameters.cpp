@@ -43,15 +43,6 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(/*QxrdDataProcessor *proc*/
     m_UserComment3(this,"userComment3",""),
     m_UserComment4(this,"userComment4",""),
     m_DroppedFrames(this,"droppedFrames",0),
-    m_SaveDarkInSubdirectory(this,"saveDarkInSubdirectory",0),
-    m_SaveDarkSubdirectory(this,"saveDarkSubdirectory",""),
-    m_SaveRawInSubdirectory(this,"saveRawInSubdirectory",0),
-    m_SaveRawSubdirectory(this,"saveRawSubdirectory",""),
-    m_SaveSubtractedInSubdirectory(this,"saveSubtractedInSubdirectory",0),
-    m_SaveSubtractedSubdirectory(this,"saveSubtractedSubdirectory",""),
-    m_SaveIntegratedInSeparateFiles(this,"saveIntegratedInSeparateFiles",0),
-    m_SaveIntegratedInSubdirectory(this,"saveIntegratedInSubdirectory",0),
-    m_SaveIntegratedSubdirectory(this,"saveIntegratedSubdirectory",""),
     m_Mutex(QMutex::Recursive)
 {
   connect(prop_Raw16SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateSaveTimes()));

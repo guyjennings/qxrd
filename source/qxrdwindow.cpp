@@ -267,6 +267,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_DataProcessor -> prop_DisplayIntegratedDataTime() -> linkTo(m_DisplayIntegratedDataTime);
   m_DataProcessor -> prop_SaveIntegratedData() -> linkTo(m_SaveIntegratedData);
   m_DataProcessor -> prop_SaveIntegratedDataTime() -> linkTo(m_SaveIntegratedDataTime);
+  m_DataProcessor -> prop_SaveIntegratedInSeparateFiles() -> linkTo(m_SaveIntegratedInSeparateFiles);
 //  m_DataProcessor -> prop_CorrectedTime() -> linkTo(m_CorrectedTime);
 //  m_DataProcessor -> prop_IntegratedTime() -> linkTo(m_IntegratedTime);
   m_DataProcessor -> prop_EstimatedProcessingTime() -> linkTo(m_EstimatedProcessingTime);

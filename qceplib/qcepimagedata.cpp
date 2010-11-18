@@ -9,6 +9,7 @@
 QcepImageDataBase::QcepImageDataBase(int width, int height)
   : QObject(),
     m_DataType(this, "dataType", UndefinedData),
+    m_FileBase(this, "fileBase", ""),
     m_FileName(this, "fileName", ""),
     m_Title(this, "title", ""),
     m_ReadoutMode(this, "readoutMode", 0),
@@ -45,6 +46,7 @@ QMutex *QcepImageDataBase::mutex()
 void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 {
   dest -> set_DataType(get_DataType());
+  dest -> set_FileBase(get_FileBase());
   dest -> set_FileName(get_FileName());
   dest -> set_Title(get_Title());
   dest -> set_ReadoutMode(get_ReadoutMode());
@@ -72,6 +74,7 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src)
 {
   set_DataType(src -> get_DataType());
+  set_FileBase(src -> get_FileBase());
   set_FileName(src -> get_FileName());
   set_Title(src -> get_Title());
   set_ReadoutMode(src -> get_ReadoutMode());

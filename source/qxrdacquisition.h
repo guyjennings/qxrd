@@ -54,11 +54,6 @@ public:
   virtual void setupCameraGainMenu(QComboBox *cb) = 0;
   virtual void setupCameraBinningModeMenu(QComboBox *cb) = 0;
 
-//  void returnImageToPool(QxrdInt16ImageDataPtr img);
-//  void returnImageToPool(QxrdInt32ImageDataPtr img);
-//  void replaceImageFromPool(QxrdInt16ImageDataPtr &ptr);
-//  void replaceImageFromPool(QxrdInt32ImageDataPtr &ptr);
-
   void indicateDroppedFrame();
   virtual QWidget* controlPanel(QxrdWindowPtr win);
 

@@ -129,3 +129,11 @@ void QxrdFileSaverThread::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr d
     printf("QxrdFileSaverThread::writeOutputScan failed\n");
   }
 }
+
+void QxrdFileSaverThread::writeOutputScan(QString dir, QxrdIntegratedDataPtr data)
+{
+  if (!QMetaObject::invokeMethod(fileSaver(), "writeOutputScan",
+                                 Q_ARG(QString, dir), Q_ARG(QxrdIntegratedDataPtr, data))) {
+    printf("QxrdFileSaverThread::writeOutputScan failed\n");
+  }
+}

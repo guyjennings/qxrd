@@ -40,21 +40,22 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   ui ->m_CurrentLogFile -> setText(proc->get_LogFilePath());
 
   connect(ui->m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
-  ui -> m_SaveRawInSubdir  -> setChecked(acq->get_SaveRawInSubdirectory());
-  ui -> m_SaveRawSubdir    -> setText  (acq->get_SaveRawSubdirectory());
+  ui -> m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
+  ui -> m_SaveRawSubdir    -> setText  (proc->get_SaveRawSubdirectory());
 
   connect(ui->m_SaveDarkBrowse, SIGNAL(clicked()), this, SLOT(saveDarkBrowse()));
-  ui -> m_SaveDarkInSubdir  -> setChecked(acq->get_SaveDarkInSubdirectory());
-  ui -> m_SaveDarkSubdir    -> setText  (acq->get_SaveDarkSubdirectory());
+  ui -> m_SaveDarkInSubdir  -> setChecked(proc->get_SaveDarkInSubdirectory());
+  ui -> m_SaveDarkSubdir    -> setText  (proc->get_SaveDarkSubdirectory());
 
   connect(ui->m_SaveSubtractedBrowse, SIGNAL(clicked()), this, SLOT(saveSubtractedBrowse()));
-  ui -> m_SaveSubtractedInSubdir  -> setChecked(acq->get_SaveSubtractedInSubdirectory());
-  ui -> m_SaveSubtractedSubdir    -> setText  (acq->get_SaveSubtractedSubdirectory());
+  ui -> m_SaveSubtractedInSubdir  -> setChecked(proc->get_SaveSubtractedInSubdirectory());
+  ui -> m_SaveSubtractedSubdir    -> setText  (proc->get_SaveSubtractedSubdirectory());
 
   connect(ui->m_SaveIntegratedBrowse, SIGNAL(clicked()), this, SLOT(saveIntegratedBrowse()));
-  ui -> m_SaveIntegratedSeparately  -> setChecked(acq->get_SaveIntegratedInSeparateFiles());
-  ui -> m_SaveIntegratedInSubdir  -> setChecked(acq->get_SaveIntegratedInSubdirectory());
-  ui -> m_SaveIntegratedSubdir    -> setText  (acq->get_SaveIntegratedSubdirectory());
+  ui -> m_SaveIntegratedInLogFile  -> setChecked(proc->get_SaveIntegratedData());
+  ui -> m_SaveIntegratedInSeparateFiles  -> setChecked(proc->get_SaveIntegratedInSeparateFiles());
+  ui -> m_SaveIntegratedInSubdir  -> setChecked(proc->get_SaveIntegratedInSubdirectory());
+  ui -> m_SaveIntegratedSubdir    -> setText  (proc->get_SaveIntegratedSubdirectory());
 
   ui -> m_DebugLevelSpinBox -> setRange(0,65535);
   ui -> m_DebugLevelSpinBox -> setValue(debugLevel);
@@ -199,21 +200,22 @@ void QxrdPreferencesDialog::accept()
   app -> set_RunSimpleServer(runSimpleServer);
   app -> set_SimpleServerPort(simpleServerPort);
 
-  acq -> set_SaveRawInSubdirectory(ui -> m_SaveRawInSubdir -> isChecked());
-  acq -> set_SaveRawSubdirectory  (ui -> m_SaveRawSubdir   -> text());
+  proc -> set_SaveRawInSubdirectory(ui -> m_SaveRawInSubdir -> isChecked());
+  proc -> set_SaveRawSubdirectory  (ui -> m_SaveRawSubdir   -> text());
 
-  acq -> set_SaveDarkInSubdirectory(ui -> m_SaveDarkInSubdir  -> isChecked());
-  acq -> set_SaveDarkSubdirectory  (ui -> m_SaveDarkSubdir    -> text());
+  proc -> set_SaveDarkInSubdirectory(ui -> m_SaveDarkInSubdir  -> isChecked());
+  proc -> set_SaveDarkSubdirectory  (ui -> m_SaveDarkSubdir    -> text());
 
-  acq -> set_SaveSubtractedInSubdirectory(ui -> m_SaveSubtractedInSubdir -> isChecked());
-  acq -> set_SaveSubtractedSubdirectory  (ui -> m_SaveSubtractedSubdir   -> text());
+  proc -> set_SaveSubtractedInSubdirectory(ui -> m_SaveSubtractedInSubdir -> isChecked());
+  proc -> set_SaveSubtractedSubdirectory  (ui -> m_SaveSubtractedSubdir   -> text());
 
-  acq -> set_SaveIntegratedInSeparateFiles(ui -> m_SaveIntegratedSeparately -> isChecked());
-  acq -> set_SaveIntegratedInSubdirectory (ui -> m_SaveIntegratedInSubdir  -> isChecked());
-  acq -> set_SaveIntegratedSubdirectory   (ui -> m_SaveIntegratedSubdir    -> text());
+  proc -> set_SaveIntegratedData(ui -> m_SaveIntegratedInLogFile  -> isChecked());
+  proc -> set_SaveIntegratedInSeparateFiles(ui -> m_SaveIntegratedInSeparateFiles -> isChecked());
+  proc -> set_SaveIntegratedInSubdirectory (ui -> m_SaveIntegratedInSubdir  -> isChecked());
+  proc -> set_SaveIntegratedSubdirectory   (ui -> m_SaveIntegratedSubdir    -> text());
 
-  proc-> set_OutputDirectory(ui -> m_CurrentOutputDirectory -> text());
-  proc-> set_LogFilePath    (ui -> m_CurrentLogFile -> text());
+  proc -> set_OutputDirectory(ui -> m_CurrentOutputDirectory -> text());
+  proc -> set_LogFilePath    (ui -> m_CurrentLogFile -> text());
 
   QDialog::accept();
 }

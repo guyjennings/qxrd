@@ -38,6 +38,9 @@ public:
   Q_PROPERTY(int dataType READ get_DataType WRITE set_DataType);
   QCEP_INTEGER_PROPERTY(DataType);
 
+  Q_PROPERTY(QString fileBase READ get_FileBase WRITE set_FileBase);
+  QCEP_STRING_PROPERTY(FileBase);
+
   Q_PROPERTY(QString fileName READ get_FileName WRITE set_FileName);
   QCEP_STRING_PROPERTY(FileName);
 

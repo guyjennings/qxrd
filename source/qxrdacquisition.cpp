@@ -243,8 +243,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
     // A new frame of data has been acquired, it is in m_AcquiredInt16Data.
     // If summation is required, it should be added to m_AcquiredInt32Data.
     // If a summed exposure has been completed, either the 16 or 32 bit data
-    // frame should be passed to the data processor, and replaced with a new
-    // image drawn from the free pool.
+    // frame should be passed to the data processor, and replaced with a newly
+    // allocated image.
     // If m_AcquiredInt16Data is NULL, then the program has run out of free memory
     // and acquisition should drop frames until memory is available
 {
@@ -288,7 +288,6 @@ void QxrdAcquisition::acquiredFrameAvailable()
                                    tr("Frame %1 skipped").arg(m_CurrentExposure));
       );
       m_DataProcessor -> idleInt16Image(m_AcquiredInt16Data);
-//      replaceImageFromPool(m_AcquiredInt16Data);
       m_AcquiredInt16Data = m_Allocator -> newInt16Image();
       if (m_CurrentExposure == get_ExposuresToSkip()) {
         set_ExposuresToSkip(0);
@@ -351,14 +350,10 @@ void QxrdAcquisition::acquiredFrameAvailable()
 
         if (get_AcquireDark()) {
           fileBase = get_FilePattern()+tr("-%1.dark.tif").arg(get_FileIndex(),5,10,QChar('0'));
-          fileName = QDir(m_DataProcessor -> get_OutputDirectory())
-                     .filePath(get_FilePattern()+tr("-%1.dark.tif")
-                               .arg(get_FileIndex(),5,10,QChar('0')));
+          fileName = QDir(m_DataProcessor -> darkOutputDirectory()).filePath(fileBase);
         } else {
           fileBase = get_FilePattern()+tr("-%1.tif").arg(get_FileIndex(),5,10,QChar('0'));
-          fileName = QDir(m_DataProcessor -> get_OutputDirectory())
-                     .filePath(get_FilePattern()+tr("-%1.tif")
-                               .arg(get_FileIndex(),5,10,QChar('0')));
+          fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
         }
 
         //  emit printMessage(QDateTime::currentDateTime(),
@@ -373,6 +368,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
         QFileInfo finfo(fileName);
 
         if (get_ExposuresToSum() == 1) {
+          m_AcquiredInt16Data -> set_FileBase(fileBase);
           m_AcquiredInt16Data -> set_FileName(fileName);
           m_AcquiredInt16Data -> set_Title(finfo.fileName());
           m_AcquiredInt16Data -> set_ExposureTime(get_ExposureTime());
@@ -397,7 +393,6 @@ void QxrdAcquisition::acquiredFrameAvailable()
                        emit printMessage(QDateTime::currentDateTime(), tr("16 Bit Dark Image acquired"));
             );
             m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
-//            replaceImageFromPool(m_AcquiredInt16Data);
             m_AcquiredInt16Data = m_Allocator -> newInt16Image();
             haltAcquisition();
           } else {
@@ -410,30 +405,29 @@ void QxrdAcquisition::acquiredFrameAvailable()
                              emit printMessage(QDateTime::currentDateTime(),
                                                tr("16 bit Pretrigger Image %1 acquired").arg(m_CurrentFile));
                   );
+
                   img -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-                  fileName = QDir(m_DataProcessor -> get_OutputDirectory())
-                             .filePath(get_FilePattern()+tr("-%1.tif")
-                                       .arg(get_FileIndex(),5,10,QChar('0')));
+                  img -> set_FileBase(fileBase);
                   img -> set_FileName(fileName);
-                  img -> set_Title(QFileInfo(fileName).fileName());
+                  img -> set_Title(fileBase);
 
                   m_DataProcessor -> acquiredInt16Image(img, m_OverflowMask);
-//                  returnImageToPool(img);
+
                   set_FileIndex(get_FileIndex()+1);
+
+                  fileBase = get_FilePattern()+tr("-%1.tif").arg(get_FileIndex(),5,10,QChar('0'));
+                  fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
                 }
 
-                fileName = QDir(m_DataProcessor -> get_OutputDirectory())
-                           .filePath(get_FilePattern()+tr("-%1.tif")
-                                     .arg(get_FileIndex(),5,10,QChar('0')));
+                m_AcquiredInt16Data -> set_FileBase(fileBase);
                 m_AcquiredInt16Data -> set_FileName(fileName);
-                m_AcquiredInt16Data -> set_Title(QFileInfo(fileName).fileName());
+                m_AcquiredInt16Data -> set_Title(fileBase);
                 QCEP_DEBUG(DEBUG_ACQUIRE,
                            emit printMessage(QDateTime::currentDateTime(),
                                              tr("16 bit Image %1 acquired").arg(m_CurrentFile));
                 );
                 m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
                 m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
-//                replaceImageFromPool(m_AcquiredInt16Data);
                 m_AcquiredInt16Data = m_Allocator -> newInt16Image();
                 set_FileIndex(get_FileIndex()+1);
               } else {
@@ -445,7 +439,6 @@ void QxrdAcquisition::acquiredFrameAvailable()
                                               tr("%1 pre trigger 16 bit images queued")
                                               .arg(m_PreTriggerInt16Images.size()));
                 );
-//                replaceImageFromPool(m_AcquiredInt16Data);
 
                 while (m_PreTriggerInt16Images.size() > get_PreTriggerFiles()) {
                   m_PreTriggerInt16Images.dequeue();
@@ -459,12 +452,12 @@ void QxrdAcquisition::acquiredFrameAvailable()
               );
               m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
               m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
-//              replaceImageFromPool(m_AcquiredInt16Data);
               m_AcquiredInt16Data = m_Allocator -> newInt16Image();
               set_FileIndex(get_FileIndex()+1);
             }
           }
         } else {
+          m_AcquiredInt32Data -> set_FileBase(fileBase);
           m_AcquiredInt32Data -> set_FileName(fileName);
           m_AcquiredInt32Data -> set_Title(finfo.fileName());
           m_AcquiredInt32Data -> set_ExposureTime(get_ExposureTime());
@@ -490,7 +483,6 @@ void QxrdAcquisition::acquiredFrameAvailable()
                                          tr("32 bit Dark Image acquired"));
             );
             m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
-//            replaceImageFromPool(m_AcquiredInt32Data);
             m_AcquiredInt32Data = m_Allocator -> newInt32Image();
             haltAcquisition();
           } else {
@@ -503,30 +495,31 @@ void QxrdAcquisition::acquiredFrameAvailable()
                              emit printMessage(QDateTime::currentDateTime(),
                                                tr("32 bit Pretrigger Image %1 acquired").arg(m_CurrentFile));
                   );
+
                   img -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-                  fileName = QDir(m_DataProcessor -> get_OutputDirectory())
-                             .filePath(get_FilePattern()+tr("-%1.tif")
-                                       .arg(get_FileIndex(),5,10,QChar('0')));
+                  img -> set_FileBase(fileBase);
                   img -> set_FileName(fileName);
-                  img -> set_Title(QFileInfo(fileName).fileName());
+                  img -> set_Title(fileBase);
 
                   m_DataProcessor -> acquiredInt32Image(img, m_OverflowMask);
-//                  returnImageToPool(img);
+
                   set_FileIndex(get_FileIndex()+1);
+
+                  fileBase = get_FilePattern()+tr("-%1.tif").arg(get_FileIndex(),5,10,QChar('0'));
+                  fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
                 }
 
-                fileName = QDir(m_DataProcessor -> get_OutputDirectory())
-                           .filePath(get_FilePattern()+tr("-%1.tif")
-                                     .arg(get_FileIndex(),5,10,QChar('0')));
+                m_AcquiredInt32Data -> set_FileBase(fileBase);
                 m_AcquiredInt32Data -> set_FileName(fileName);
-                m_AcquiredInt32Data -> set_Title(QFileInfo(fileName).fileName());
+                m_AcquiredInt32Data -> set_Title(fileBase);
+
                 QCEP_DEBUG(DEBUG_ACQUIRE,
                            emit printMessage(QDateTime::currentDateTime(),
                                              tr("32 bit Image %1 acquired").arg(m_CurrentFile));
                 );
+
                 m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
                 m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
-//                replaceImageFromPool(m_AcquiredInt32Data);
                 m_AcquiredInt32Data = m_Allocator -> newInt32Image();
                 set_FileIndex(get_FileIndex()+1);
               } else {
@@ -538,7 +531,6 @@ void QxrdAcquisition::acquiredFrameAvailable()
                                               tr("%1 pre trigger 32 bit images queued")
                                               .arg(m_PreTriggerInt32Images.size()));
                 );
-//                replaceImageFromPool(m_AcquiredInt32Data);
 
                 while (m_PreTriggerInt32Images.size() > get_PreTriggerFiles()) {
                   m_PreTriggerInt32Images.dequeue();
@@ -552,7 +544,6 @@ void QxrdAcquisition::acquiredFrameAvailable()
               );
               m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
               m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
-//              replaceImageFromPool(m_AcquiredInt32Data);
               m_AcquiredInt32Data = m_Allocator -> newInt32Image();
               set_FileIndex(get_FileIndex()+1);
             }

@@ -36,6 +36,16 @@ QxrdDataProcessorPtr QxrdFileSaver::processor() const
   return m_Processor;
 }
 
+void QxrdFileSaver::mkPath(QString filePath)
+{
+  QFileInfo f(filePath);
+  QDir dir = f.dir();
+
+  if (!dir.exists()) {
+    dir.mkpath(dir.absolutePath());
+  }
+}
+
 QString QxrdFileSaver::uniqueFileName(QString name)
 {
   THREAD_CHECK;
@@ -71,6 +81,8 @@ void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, int can
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
+
+  mkPath(name);
 
   if (canOverwrite == NoOverwrite) {
     name = uniqueFileName(name);
@@ -144,6 +156,8 @@ void QxrdFileSaver::saveData(QString name, QxrdMaskDataPtr image, int canOverwri
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
 
+  mkPath(name);
+
   if (canOverwrite == NoOverwrite) {
     name = uniqueFileName(name);
   }
@@ -198,6 +212,8 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, int c
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
+
+  mkPath(name);
 
   if (canOverwrite == NoOverwrite) {
     name = uniqueFileName(name);
@@ -258,6 +274,8 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, int c
 
   int nrows = image -> get_Height();
   int ncols = image -> get_Width();
+
+  mkPath(name);
 
   if (canOverwrite == NoOverwrite) {
     name = uniqueFileName(name);
@@ -327,6 +345,8 @@ void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, int
     name = dir.filePath(base+".txt");
   }
 
+  mkPath(name);
+
   if (canOverwrite == NoOverwrite) {
     name = uniqueFileName(name);
   }
@@ -358,6 +378,29 @@ void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, int
   image -> saveMetaData();
 
   processor() -> set_FileName(name);
+}
+
+void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data)
+{
+  THREAD_CHECK;
+
+  mkPath(dir);
+
+  QxrdDoubleImageDataPtr image = data -> get_Image();
+
+  QFileInfo fi(image->get_FileBase());
+
+  QString fileBase = fi.completeBaseName();
+
+  QString name = QDir(dir).filePath(fileBase+".avg");
+
+  name = uniqueFileName(name);
+
+  FILE *f = fopen(qPrintable(name),"a");
+
+  writeOutputScan(f, data);
+
+  fclose(f);
 }
 
 void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data)

@@ -48,8 +48,10 @@ public slots:
   void saveRawData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite);
   void saveTextData(QString name, QxrdDoubleImageDataPtr image, int canOverwrite);
   void writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data);
+  void writeOutputScan(QString dir, QxrdIntegratedDataPtr data);
 
 private:
+  void mkPath(QString filePath);
   QString uniqueFileName(QString name);
   QxrdDataProcessorPtr processor() const;
 

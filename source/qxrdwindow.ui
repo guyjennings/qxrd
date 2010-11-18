@@ -1199,7 +1199,7 @@
         <string>Save each integration as it is calculated</string>
        </property>
        <property name="text">
-        <string>Save Integrated Data</string>
+        <string>Save Integrated Data in Log File</string>
        </property>
       </widget>
      </item>
@@ -1225,14 +1225,14 @@
        </property>
       </widget>
      </item>
-     <item row="14" column="0">
+     <item row="15" column="0">
       <widget class="QLabel" name="label_16">
        <property name="text">
         <string>Estimated time per image</string>
        </property>
       </widget>
      </item>
-     <item row="14" column="1" colspan="2">
+     <item row="15" column="1" colspan="2">
       <widget class="QDoubleSpinBox" name="m_EstimatedProcessingTime">
        <property name="toolTip">
         <string>Estimated processing time</string>
@@ -1257,7 +1257,7 @@
        </property>
       </widget>
      </item>
-     <item row="15" column="0" colspan="3">
+     <item row="16" column="0" colspan="3">
       <spacer name="verticalSpacer_2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -1393,6 +1393,24 @@
        </property>
        <property name="decimals">
         <number>3</number>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="0" colspan="3">
+      <widget class="QCheckBox" name="m_SaveIntegratedInSeparateFiles">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>Save each integration in a separate file as it is calculated</string>
+       </property>
+       <property name="text">
+        <string>Save Integrated Data in separate files</string>
        </property>
       </widget>
      </item>

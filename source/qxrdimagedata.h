@@ -54,7 +54,7 @@ typedef QSharedPointer<QxrdInt16ImageData> QxrdInt16ImageDataPtr;
 typedef QSharedPointer<QxrdInt32ImageData> QxrdInt32ImageDataPtr;
 
 template <typename T>
-QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, /*QxrdImageQueue< QxrdImageData<T> > *pool,*/ int width, int height, T def)
+QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, int width, int height, T def)
   : QcepImageData<T>(width, height, def),
     m_Allocator(allocator)
 {

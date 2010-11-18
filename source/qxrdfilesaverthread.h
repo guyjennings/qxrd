@@ -28,6 +28,7 @@ public:
   void saveRawData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite);
   void saveTextData(QString name, QxrdDoubleImageDataPtr image, int canOverwrite);
   void writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data);
+  void writeOutputScan(QString dir, QxrdIntegratedDataPtr data);
 
 signals:
   void printMessage(QDateTime ts, QString msg);
