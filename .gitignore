@@ -3,6 +3,7 @@ app
 moc
 ui
 obj
+dox
 *.o
 qxrd.pro.user
 

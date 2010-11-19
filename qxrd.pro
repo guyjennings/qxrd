@@ -17,7 +17,7 @@ win32 {
 
 DISTFILES += source plugins
 
-OTHER_FILES += qxrd.nsi
+OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile
 
 QMAKE_EXTRA_TARGETS += dist
 
@@ -77,3 +77,5 @@ website.commands += && rsync \
 
 website.commands += && \
     ssh www12.xor.aps.anl.gov ln -s
+
+# rsync -avP -e ssh dox/html/ guyjennings,qxrd@web.sourceforge.net:htdocs/
