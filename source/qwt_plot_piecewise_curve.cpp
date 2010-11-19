@@ -9,59 +9,79 @@
 
 #include "qwt_plot_piecewise_curve.h"
 
+int QwtPlotPiecewiseCurve::ignorePoint(double x, double y) const
+{
+  if (isNaN(x)) return true;
+
+  if (isNaN(y)) return true;
+
+  if (m_IsLog) {
+    if (x <= 0) return true;
+    if (y <= 0) return true;
+  }
+
+  return false;
+}
 
 // This is a slow implementation: it might be worth to cache valid data ranges.
 void QwtPlotPiecewiseCurve::draw(QPainter *painter,
-    const QwtScaleMap &xMap, const QwtScaleMap &yMap, 
-    int from, int to) const
+                                 const QwtScaleMap &xMap, const QwtScaleMap &yMap,
+                                 int from, int to) const
 {
-	if (to < 0)
-		to = dataSize() - 1;
+  if (to < 0) {
+    to = dataSize() - 1;
+  }
 
-	int first, last = from;
-	while (last <= to)
-	{
-		first = last;
-		while (first <= to && (isNaN(x(first)) || isNaN(y(first))))
-			++first;
-		last = first;
-		while (last <= to && !isNaN(x(last)) && !isNaN(y(last)))
-			++last;
-		if (first <= to)
-			QwtPlotCurve::draw(painter, xMap, yMap, first, last - 1);
-	}
+  int first, last = from;
+  while (last <= to) {
+    first = last;
+    while (first <= to && ignorePoint(x(first),y(first))) {
+      ++first;
+    }
+
+    last = first;
+    while (last <= to && !ignorePoint(x(last),y(last))) {
+      ++last;
+    }
+
+    if (first <= to) {
+      QwtPlotCurve::draw(painter, xMap, yMap, first, last - 1);
+    }
+  }
 }
 
 // This overload is needed when using autoscale. It is a slow implementation:
 // it might be worth to cache valid data ranges.
 QwtDoubleRect QwtPlotPiecewiseCurve::boundingRect() const
 {
-	if (dataSize() <= 0)
-		return QwtDoubleRect(1.0, 1.0, -2.0, -2.0); // Empty data.
+  if (dataSize() <= 0) {
+    return QwtDoubleRect(1.0, 1.0, 2.0, 2.0); // Empty data.
+  }
 
-	int first = 0;
-	while (first < dataSize() && (isNaN(x(first)) || isNaN(y(first))))
-		++first;
+  int first = 0;
+  while (first < dataSize() && ignorePoint(x(first),y(first))) {
+    ++first;
+  }
 
-	if (first == dataSize())
-		return QwtDoubleRect(1.0, 1.0, -2.0, -2.0); // Empty data.
+  if (first == dataSize()) {
+    return QwtDoubleRect(1.0, 1.0, 2.0, 2.0); // Empty data.
+  }
 
-	double minX, maxX, minY, maxY;
-	minX = maxX = x(first);
-	minY = maxY = y(first);
-	for (int i = first + 1; i < dataSize(); ++i)
-	{
-		const double xv = x(i);
-		if (xv < minX)
-			minX = xv;
-		if (xv > maxX)
-			maxX = xv;
-		const double yv = y(i);
-		if (yv < minY)
-			minY = yv;
-		if (yv > maxY)
-			maxY = yv;
-	}
+  double minX, maxX, minY, maxY;
+  minX = maxX = x(first);
+  minY = maxY = y(first);
+  for (int i = first + 1; i < dataSize(); ++i) {
+    const double xv = x(i);
+    if (xv < minX)
+      minX = xv;
+    if (xv > maxX)
+      maxX = xv;
+    const double yv = y(i);
+    if (yv < minY)
+      minY = yv;
+    if (yv > maxY)
+      maxY = yv;
+  }
 
-	return QwtDoubleRect(minX, minY, maxX - minX, maxY - minY);
+  return QwtDoubleRect(minX, minY, maxX - minX, maxY - minY);
 }

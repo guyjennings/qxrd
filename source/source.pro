@@ -200,7 +200,8 @@ HEADERS += TODO.h \
     qxrdsettingssaverthread.h \
     qxrdplotimage.h \
     qxrdimagedisplaywidget.h \
-    qxrddataprocessoroptionsdialog.h
+    qxrddataprocessoroptionsdialog.h \
+    qwt_plot_piecewise_curve.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -291,7 +292,8 @@ SOURCES += qxrd.cpp \
     qxrdsettingssaverthread.cpp \
     qxrdplotimage.cpp \
     qxrdimagedisplaywidget.cpp \
-    qxrddataprocessoroptionsdialog.cpp
+    qxrddataprocessoroptionsdialog.cpp \
+    qwt_plot_piecewise_curve.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \

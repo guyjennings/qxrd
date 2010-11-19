@@ -21,37 +21,42 @@
 class QWT_EXPORT QwtPlotPiecewiseCurve: public QwtPlotCurve
 {
 public:
-    explicit QwtPlotPiecewiseCurve();
-    explicit QwtPlotPiecewiseCurve(const QwtText &title);
-    explicit QwtPlotPiecewiseCurve(const QString &title);
+  explicit QwtPlotPiecewiseCurve();
+  explicit QwtPlotPiecewiseCurve(const QwtText &title, int isLog=1);
+  explicit QwtPlotPiecewiseCurve(const QString &title, int isLog=1);
 
-    virtual QwtDoubleRect boundingRect() const;
+  virtual QwtDoubleRect boundingRect() const;
 
-    virtual void draw(QPainter *p, 
-        const QwtScaleMap &xMap, const QwtScaleMap &yMap,
-        int from, int to) const;
+  virtual void draw(QPainter *p,
+                    const QwtScaleMap &xMap, const QwtScaleMap &yMap,
+                    int from, int to) const;
 
 private:
-	static bool isNaN(double x);
+  static bool isNaN(double x);
+  int ignorePoint(double x, double y) const;
+  int m_IsLog;
 };
 
-inline QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(): QwtPlotCurve()
+inline QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(): QwtPlotCurve(),
+    m_IsLog(1)
 {
 }
 
-inline QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(const QwtText &title):
-	QwtPlotCurve(title)
+inline QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(const QwtText &title, int isLog):
+    QwtPlotCurve(title),
+    m_IsLog(isLog)
 {
 }
 
-inline QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(const QString &title):
-	QwtPlotCurve(title)
+inline QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(const QString &title, int isLog):
+    QwtPlotCurve(title),
+    m_IsLog(isLog)
 {
 }
 
 inline bool QwtPlotPiecewiseCurve::isNaN(double x)
 {
-	return x != x;
+  return x != x;
 }
 
 #endif
