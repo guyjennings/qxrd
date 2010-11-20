@@ -72,15 +72,18 @@ QwtDoubleRect QwtPlotPiecewiseCurve::boundingRect() const
   minY = maxY = y(first);
   for (int i = first + 1; i < dataSize(); ++i) {
     const double xv = x(i);
-    if (xv < minX)
-      minX = xv;
-    if (xv > maxX)
-      maxX = xv;
     const double yv = y(i);
-    if (yv < minY)
-      minY = yv;
-    if (yv > maxY)
-      maxY = yv;
+
+    if (!ignorePoint(xv,yv)) {
+      if (xv < minX)
+        minX = xv;
+      if (xv > maxX)
+        maxX = xv;
+      if (yv < minY)
+        minY = yv;
+      if (yv > maxY)
+        maxY = yv;
+    }
   }
 
   return QwtDoubleRect(minX, minY, maxX - minX, maxY - minY);
