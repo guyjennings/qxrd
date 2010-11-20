@@ -39,8 +39,8 @@ bool QwtPlotPiecewiseCurve::ignorePoint(double x, double y) const
   if (isNaN(y)) return true;
 
   if (m_Plot) {
-    if (m_Plot->logAxis(QxrdPlot::xBottom) && (x <= 0)) return true;
-    if (m_Plot->logAxis(QxrdPlot::yLeft)   && (y <= 0)) return true;
+    if (m_Plot->logAxis(xAxis()) && (x <= 0)) return true;
+    if (m_Plot->logAxis(yAxis()) && (y <= 0)) return true;
   }
 
   return false;
