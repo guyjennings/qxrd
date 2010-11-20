@@ -42,6 +42,7 @@ public slots:
   void onLegendChecked(QwtPlotItem *item, bool checked);
 
   void setLogAxis(int axis, int isLog);
+  int logAxis(int axis);
 
 //  void setCustomTracker(QwtPlotPicker *tracker);
 //  void setCustomZoomer(QwtPlotZoomer *zoomer);
@@ -52,6 +53,8 @@ protected:
   QwtPlotPannerPtr    m_Panner;
   QwtPlotMagnifierPtr m_Magnifier;
   QxrdPlotMeasurerPtr m_Measurer;
+
+  int                 m_IsLog[QwtPlot::axisCnt];
 };
 
 #endif // QXRDPLOT_H

@@ -22,6 +22,10 @@ QxrdPlot::QxrdPlot(QWidget *parent)
   m_Magnifier(NULL),
   m_Measurer(NULL)
 {
+  for (int i=0; i<QwtPlot::axisCnt; i++) {
+    m_IsLog[i] = 0;
+  }
+
   setCanvasBackground(QColor(Qt::white));
 
   m_Zoomer = QxrdPlotZoomerPtr(new QxrdPlotZoomer(QwtPlotCanvasPtr(canvas()), QxrdPlotPtr(this)));
@@ -194,13 +198,33 @@ void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
 
 void QxrdPlot::setLogAxis(int axis, int isLog)
 {
-  if (isLog) {
-    setAxisScaleEngine(axis, new QwtLog10ScaleEngine);
-  } else {
-    setAxisScaleEngine(axis, new QwtLinearScaleEngine);
-  }
+  if (axis >= 0 && axis < QwtPlot::axisCnt) {
+    m_IsLog[axis] = isLog;
 
-  replot();
+    if (isLog) {
+      setAxisScaleEngine(axis, new QwtLog10ScaleEngine);
+    } else {
+      setAxisScaleEngine(axis, new QwtLinearScaleEngine);
+    }
+
+    replot();
+  }
+}
+
+int QxrdPlot::logAxis(int axis)
+{
+  return m_IsLog[axis];
+//  QwtScaleEngine *se = axisScaleEngine(axis);
+
+//  if (se) {
+//    QSharedPointer<QwtScaleTransformation> tr(se->transformation());
+
+//    if (tr) {
+//      return tr->type() == QwtScaleTransformation::Log10;
+//    }
+//  }
+
+//  return false;
 }
 
 QwtText QxrdPlot::trackerText(const QwtDoublePoint &pos)

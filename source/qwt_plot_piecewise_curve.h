@@ -12,6 +12,8 @@
 
 #include "qwt_plot_curve.h"
 
+class QxrdPlot;
+
 /*!
   \brief A class which draws piecewise curves
 
@@ -22,8 +24,8 @@ class QWT_EXPORT QwtPlotPiecewiseCurve: public QwtPlotCurve
 {
 public:
   explicit QwtPlotPiecewiseCurve();
-  explicit QwtPlotPiecewiseCurve(const QwtText &title, int isLog=1);
-  explicit QwtPlotPiecewiseCurve(const QString &title, int isLog=1);
+  explicit QwtPlotPiecewiseCurve(QxrdPlot *plot, const QwtText &title);
+  explicit QwtPlotPiecewiseCurve(QxrdPlot *plot, const QString &title);
 
   virtual QwtDoubleRect boundingRect() const;
 
@@ -33,30 +35,8 @@ public:
 
 private:
   static bool isNaN(double x);
-  int ignorePoint(double x, double y) const;
-  int m_IsLog;
+  bool ignorePoint(double x, double y) const;
+  QxrdPlot *m_Plot;
 };
-
-inline QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(): QwtPlotCurve(),
-    m_IsLog(1)
-{
-}
-
-inline QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(const QwtText &title, int isLog):
-    QwtPlotCurve(title),
-    m_IsLog(isLog)
-{
-}
-
-inline QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(const QString &title, int isLog):
-    QwtPlotCurve(title),
-    m_IsLog(isLog)
-{
-}
-
-inline bool QwtPlotPiecewiseCurve::isNaN(double x)
-{
-  return x != x;
-}
 
 #endif

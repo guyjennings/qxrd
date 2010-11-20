@@ -8,16 +8,39 @@
  *****************************************************************************/
 
 #include "qwt_plot_piecewise_curve.h"
+#include "qxrdplot.h"
 
-int QwtPlotPiecewiseCurve::ignorePoint(double x, double y) const
+QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(): QwtPlotCurve(),
+    m_Plot(NULL)
+{
+}
+
+QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(QxrdPlot *plot, const QwtText &title):
+    QwtPlotCurve(title),
+    m_Plot(plot)
+{
+}
+
+QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(QxrdPlot *plot, const QString &title):
+    QwtPlotCurve(title),
+    m_Plot(plot)
+{
+}
+
+bool QwtPlotPiecewiseCurve::isNaN(double x)
+{
+  return x != x;
+}
+
+bool QwtPlotPiecewiseCurve::ignorePoint(double x, double y) const
 {
   if (isNaN(x)) return true;
 
   if (isNaN(y)) return true;
 
-  if (m_IsLog) {
-    if (x <= 0) return true;
-    if (y <= 0) return true;
+  if (m_Plot) {
+    if (m_Plot->logAxis(QxrdPlot::xBottom) && (x <= 0)) return true;
+    if (m_Plot->logAxis(QxrdPlot::yLeft)   && (y <= 0)) return true;
   }
 
   return false;

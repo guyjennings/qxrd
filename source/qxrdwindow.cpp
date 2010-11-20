@@ -301,9 +301,11 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_Plot -> prop_MaintainAspectRatio() -> linkTo(Ui::QxrdWindow::m_MaintainAspectRatio);
 
   m_Plot -> setDataProcessor(m_DataProcessor);
-  m_CenterFinderPlot -> setWindow(QxrdWindowPtr(this));
-  m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
+  m_CenterFinderPlot -> setWindow(QxrdWindowPtr(this));
+  m_CenterFinderPlot -> setLogAxis(QwtPlot::yLeft, true);
+
+  m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
   m_IntegratorPlot -> setLogAxis(QwtPlot::yLeft, true);
 
 //  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdDoubleImageData *)),

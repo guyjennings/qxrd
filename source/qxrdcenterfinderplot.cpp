@@ -16,6 +16,7 @@
 #include "qxrdcenterfinder.h"
 #include "qxrdplotmeasurer.h"
 #include "qwt_double_rect.h"
+#include "qwt_plot_piecewise_curve.h"
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   : QxrdPlot(parent),
@@ -173,7 +174,7 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
         double angdeg = 180*(ang)/M_PI;
 
-        QwtPlotCurve *pc = new QwtPlotCurve(QString("%1").arg(180*(ang)/M_PI));
+        QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(this,QString("%1").arg(180*(ang)/M_PI));
 
         pc->setData(m_XData, m_YData);
         //    pc->setStyle(QwtPlotCurve::Dots);
