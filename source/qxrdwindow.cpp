@@ -303,10 +303,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_Plot -> setDataProcessor(m_DataProcessor);
 
   m_CenterFinderPlot -> setWindow(QxrdWindowPtr(this));
-  m_CenterFinderPlot -> setLogAxis(QwtPlot::yLeft, true);
-
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
-  m_IntegratorPlot -> setLogAxis(QwtPlot::yLeft, true);
 
 //  connect(m_DataProcessor, SIGNAL(newDataAvailable(QxrdDoubleImageData *)),
 //          m_Plot, SLOT(onProcessedImageAvailable(QxrdDoubleImageData *)));
@@ -586,7 +583,9 @@ void QxrdWindow::doCancelDark()
 
 void QxrdWindow::readSettings(QxrdSettings &settings, QString section)
 {
-  m_Plot         -> readSettings(settings, section+"/plot");
+  m_Plot             -> readSettings(settings, section+"/plot");
+  m_CenterFinderPlot -> readSettings(settings, section+"/centerFinderPlot");
+  m_IntegratorPlot   -> readSettings(settings, section+"/integratorPlot");
 //  m_FileBrowser  -> readSettings(settings, section+"/fileBrowser");
 
   m_SettingsLoaded = true;
@@ -602,7 +601,9 @@ void QxrdWindow::readSettings(QxrdSettings &settings, QString section)
 
 void QxrdWindow::writeSettings(QxrdSettings &settings, QString section)
 {
-  m_Plot         -> writeSettings(settings, section+"/plot");
+  m_Plot             -> writeSettings(settings, section+"/plot");
+  m_CenterFinderPlot -> writeSettings(settings, section+"/centerFinderPlot");
+  m_IntegratorPlot   -> writeSettings(settings, section+"/integratorPlot");
 //  m_FileBrowser  -> writeSettings(settings, section+"/fileBrowser");
 
   settings.setValue(section+"-geometry", saveGeometry());

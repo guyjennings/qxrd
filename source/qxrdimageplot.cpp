@@ -16,6 +16,8 @@
 #include <qwt_double_range.h>
 
 #include <QTime>
+#include <QMenu>
+#include <QContextMenuEvent>
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QxrdPlot(parent),
@@ -160,11 +162,13 @@ QxrdDataProcessorPtr QxrdImagePlot::processor() const
 
 void QxrdImagePlot::readSettings(QxrdSettings &settings, QString section)
 {
+  QxrdPlot::readSettings(settings, section);
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdImagePlot::writeSettings(QxrdSettings &settings, QString section)
 {
+  QxrdPlot::writeSettings(settings, section);
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
@@ -685,4 +689,30 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
   }
 
   return res;
+}
+
+void QxrdImagePlot::contextMenuEvent(QContextMenuEvent *event)
+{
+  QMenu plotMenu(NULL, NULL);
+
+//  QAction *xLog = plotMenu.addAction("Log X Axis");
+//  QAction *yLog = plotMenu.addAction("Log Y Axis");
+  QAction *auSc = plotMenu.addAction("Autoscale");
+
+//  xLog->setCheckable(true);
+//  yLog->setCheckable(true);
+//  xLog->setChecked(get_XAxisLog());
+//  yLog->setChecked(get_YAxisLog());
+
+  QAction *action = plotMenu.exec(event->globalPos());
+
+//  if (action == xLog) {
+//    set_XAxisLog(!get_XAxisLog());
+//  } else if (action == yLog) {
+//    set_YAxisLog(!get_YAxisLog());
+/*  } else*/ if (action == auSc) {
+    autoScale();
+  }
+
+  event->accept();
 }

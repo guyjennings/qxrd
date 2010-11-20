@@ -11,11 +11,17 @@
 #include "qxrdplotzoomer.h"
 #include <stdio.h>
 #include <qwt_scale_engine.h>
+#include <QMenu>
+#include <QContextMenuEvent>
 
 QxrdPlot::QxrdPlot(QWidget *parent)
   : QwtPlot(parent),
   m_XMouse(this,"xMouse",0),
   m_YMouse(this,"yMouse",0),
+  m_XAxisLog(this,"xAxisLog",0),
+  m_YAxisLog(this,"yAxisLog",0),
+  m_X2AxisLog(this,"x2AxisLog",0),
+  m_Y2AxisLog(this,"y2AxisLog",0),
   m_Legend(NULL),
   m_Zoomer(NULL),
   m_Panner(NULL),
@@ -60,10 +66,25 @@ QxrdPlot::QxrdPlot(QWidget *parent)
   setAxisLabelAlignment(QwtPlot::yLeft, Qt::AlignVCenter);
 
   autoScale();
+
+  connect(prop_XAxisLog(), SIGNAL(changedValue(int)), this, SLOT(setXAxisLog(int)));
+  connect(prop_YAxisLog(), SIGNAL(changedValue(int)), this, SLOT(setYAxisLog(int)));
+  connect(prop_X2AxisLog(), SIGNAL(changedValue(int)), this, SLOT(setX2AxisLog(int)));
+  connect(prop_Y2AxisLog(), SIGNAL(changedValue(int)), this, SLOT(setY2AxisLog(int)));
 }
 
 QxrdPlot::~QxrdPlot()
 {
+}
+
+void QxrdPlot::readSettings(QxrdSettings &settings, QString section)
+{
+  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdPlot::writeSettings(QxrdSettings &settings, QString section)
+{
+  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurvePtr curve)
@@ -196,6 +217,26 @@ void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
                     tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
 }
 
+void QxrdPlot::setXAxisLog(int isLog)
+{
+  setLogAxis(QwtPlot::xBottom, isLog);
+}
+
+void QxrdPlot::setYAxisLog(int isLog)
+{
+  setLogAxis(QwtPlot::yLeft, isLog);
+}
+
+void QxrdPlot::setX2AxisLog(int isLog)
+{
+  setLogAxis(QwtPlot::xTop, isLog);
+}
+
+void QxrdPlot::setY2AxisLog(int isLog)
+{
+  setLogAxis(QwtPlot::yRight, isLog);
+}
+
 void QxrdPlot::setLogAxis(int axis, int isLog)
 {
   if (axis >= 0 && axis < QwtPlot::axisCnt) {
@@ -209,6 +250,32 @@ void QxrdPlot::setLogAxis(int axis, int isLog)
 
     replot();
   }
+}
+
+void QxrdPlot::contextMenuEvent(QContextMenuEvent *event)
+{
+  QMenu plotMenu(NULL, NULL);
+
+  QAction *xLog = plotMenu.addAction("Log X Axis");
+  QAction *yLog = plotMenu.addAction("Log Y Axis");
+  QAction *auSc = plotMenu.addAction("Autoscale");
+
+  xLog->setCheckable(true);
+  yLog->setCheckable(true);
+  xLog->setChecked(get_XAxisLog());
+  yLog->setChecked(get_YAxisLog());
+
+  QAction *action = plotMenu.exec(event->globalPos());
+
+  if (action == xLog) {
+    set_XAxisLog(!get_XAxisLog());
+  } else if (action == yLog) {
+    set_YAxisLog(!get_YAxisLog());
+  } else if (action == auSc) {
+    autoScale();
+  }
+
+  event->accept();
 }
 
 int QxrdPlot::logAxis(int axis)

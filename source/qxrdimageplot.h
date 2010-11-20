@@ -129,6 +129,8 @@ public:
 
   virtual QwtText trackerText(const QwtDoublePoint &pos);
 
+  void contextMenuEvent(QContextMenuEvent *event);
+
 private:
   void replotImage();
   void setImage(QxrdRasterData data);
