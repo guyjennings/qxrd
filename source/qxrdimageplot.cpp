@@ -693,26 +693,26 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
 
 void QxrdImagePlot::contextMenuEvent(QContextMenuEvent *event)
 {
-  QMenu plotMenu(NULL, NULL);
+//  QMenu plotMenu(NULL, NULL);
 
-//  QAction *xLog = plotMenu.addAction("Log X Axis");
-//  QAction *yLog = plotMenu.addAction("Log Y Axis");
-  QAction *auSc = plotMenu.addAction("Autoscale");
+////  QAction *xLog = plotMenu.addAction("Log X Axis");
+////  QAction *yLog = plotMenu.addAction("Log Y Axis");
+//  QAction *auSc = plotMenu.addAction("Autoscale");
 
-//  xLog->setCheckable(true);
-//  yLog->setCheckable(true);
-//  xLog->setChecked(get_XAxisLog());
-//  yLog->setChecked(get_YAxisLog());
+////  xLog->setCheckable(true);
+////  yLog->setCheckable(true);
+////  xLog->setChecked(get_XAxisLog());
+////  yLog->setChecked(get_YAxisLog());
 
-  QAction *action = plotMenu.exec(event->globalPos());
+//  QAction *action = plotMenu.exec(event->globalPos());
 
-//  if (action == xLog) {
-//    set_XAxisLog(!get_XAxisLog());
-//  } else if (action == yLog) {
-//    set_YAxisLog(!get_YAxisLog());
-/*  } else*/ if (action == auSc) {
-    autoScale();
-  }
+////  if (action == xLog) {
+////    set_XAxisLog(!get_XAxisLog());
+////  } else if (action == yLog) {
+////    set_YAxisLog(!get_YAxisLog());
+///*  } else*/ if (action == auSc) {
+//    autoScale();
+//  }
 
-  event->accept();
+//  event->accept();
 }
