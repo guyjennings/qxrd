@@ -2235,6 +2235,15 @@ If unselected, image pixels are masked out</string>
     </layout>
    </widget>
   </widget>
+  <widget class="QDockWidget" name="m_FileBrowserDockWidget">
+   <property name="windowTitle">
+    <string>File Browser</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2"/>
+  </widget>
   <action name="m_ActionQuit">
    <property name="text">
     <string>Quit</string>

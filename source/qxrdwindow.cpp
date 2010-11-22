@@ -14,7 +14,7 @@
 #include "qxrdintegrator.h"
 #include "qxrdplotzoomer.h"
 #include "qxrdscriptengine.h"
-//#include "qxrdfilebrowser.h"
+#include "qxrdfilebrowser.h"
 #include "qxrdimagecalculator.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdallocator.h"
@@ -51,7 +51,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     m_Allocator(alloc),
     m_CenterFinderDialog(NULL),
     m_IntegratorDialog(NULL),
-//    m_FileBrowser(NULL),
+    m_FileBrowser(NULL),
     m_Calculator(NULL),
     m_Progress(NULL),
     m_AllocationStatus(NULL),
@@ -86,8 +86,8 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_IntegratorDialog = QxrdIntegratorDialogPtr(new QxrdIntegratorDialog(m_DataProcessor -> integrator()));
   m_IntegratorDockWidget -> setWidget(m_IntegratorDialog);
 
-//  m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
-//  m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
+  m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
+  m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
 
 //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
 //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
