@@ -358,12 +358,12 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_WindowsMenu -> addAction(m_CenteringDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDockWidget -> toggleViewAction());
 
-  if (m_Acquisition->get_DetectorType() != 1) { // No file browser for PE detector...
-    m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
-    m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
+//  if (m_Acquisition->get_DetectorType() != 1) { // No file browser for PE detector...
+//    m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
+//    m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
 
-    m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
-  }
+//    m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
+//  }
 
 //  m_WindowsMenu -> addAction(m_PowderFitWidget -> toggleViewAction());
 
