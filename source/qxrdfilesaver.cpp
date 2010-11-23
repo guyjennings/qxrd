@@ -388,7 +388,7 @@ void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data)
 
   QxrdDoubleImageDataPtr image = data -> get_Image();
 
-  QFileInfo fi(image->get_FileBase());
+  QFileInfo fi(image->get_FileName());
 
   QString fileBase = fi.completeBaseName();
 
@@ -401,6 +401,9 @@ void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data)
   writeOutputScan(f, data);
 
   fclose(f);
+
+  emit printMessage(QDateTime::currentDateTime(),
+                    tr("Integrated data saved in %1").arg(name));
 }
 
 void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data)

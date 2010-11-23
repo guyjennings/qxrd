@@ -40,6 +40,8 @@ public slots:
   void selectLogFile();
   void doRefineCenterTilt();
   void doProcessorOptionsDialog();
+  void doIntegrateSequence();
+  void doProcessSequence();
 
   void doAcquire();
   void doCancel();

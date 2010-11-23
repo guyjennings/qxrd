@@ -257,9 +257,10 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
 
     res -> loadMetaData();
 
-    acquiredDoubleImage(res, /*darkImage(), mask(),*/ QxrdMaskDataPtr());
-
-    set_DataPath(res -> get_FileName());
+    m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessorThreaded::integrateImage,
+                                               res, mask(),
+                                               centerFinder() -> get_CenterX(),
+                                               centerFinder() -> get_CenterY()));
   }
 }
 

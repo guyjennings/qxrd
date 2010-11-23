@@ -390,6 +390,10 @@ bool QcepImageData<T>::readImage(QString path)
     bool res = loader -> loadFile(path, this);
 
     if (res) {
+      QString fileBase = QFileInfo(path).fileName();
+
+      set_FileBase(fileBase);
+      set_Title(fileBase);
       set_FileName(path);
       set_ImageSaved(true);
     }

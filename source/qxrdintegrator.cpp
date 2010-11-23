@@ -67,7 +67,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
 
   if (res) {
     emit printMessage(QDateTime::currentDateTime(),
-                      tr("Integrating image %1").arg(image->get_Title()));
+                      tr("Integrating image %1 from %2").arg(image->get_Title()).arg(image->get_FileName()));
 
     QTime tic;
     tic.start();

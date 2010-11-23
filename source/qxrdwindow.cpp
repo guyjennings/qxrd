@@ -105,6 +105,9 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(m_ActionSaveMask, SIGNAL(triggered()), this, SLOT(doSaveMask()));
   connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
 
+  connect(m_ActionIntegrate, SIGNAL(triggered()), this, SLOT(doIntegrateSequence()));
+  connect(m_ActionProcessData, SIGNAL(triggered()), this, SLOT(doProcessSequence()));
+
   connect(m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));
   connect(m_Display_5pct, SIGNAL(clicked()), m_Action005Range, SIGNAL(triggered()));
   connect(m_Display_10pct, SIGNAL(clicked()), m_Action010Range, SIGNAL(triggered()));
@@ -957,4 +960,26 @@ void QxrdWindow::doRefineCenterTilt()
 {
   m_PowderFitDialog = QxrdPowderFitDialogPtr(new QxrdPowderFitDialog(m_DataProcessor, this));
   m_PowderFitDialog -> exec();
+}
+
+void QxrdWindow::doIntegrateSequence()
+{
+  QStringList files = QFileDialog::getOpenFileNames(this,
+                                                    "Select data files to integrate...",
+                                                    m_DataProcessor -> get_DataPath());
+
+  foreach (QString file, files) {
+    m_DataProcessor->integrateData(file);
+  }
+}
+
+void QxrdWindow::doProcessSequence()
+{
+  QStringList files = QFileDialog::getOpenFileNames(this,
+                                                    "Select data files to process...",
+                                                    m_DataProcessor -> get_DataPath());
+
+  foreach (QString file, files) {
+    m_DataProcessor->processData(file);
+  }
 }

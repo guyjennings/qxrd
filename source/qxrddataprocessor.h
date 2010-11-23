@@ -246,6 +246,8 @@ public:
 
 public slots:
   virtual void processorOptionsDialog() = 0;
+  virtual void integrateData(QString name) = 0;
+  virtual void processData(QString name) = 0;
 };
 
 #endif

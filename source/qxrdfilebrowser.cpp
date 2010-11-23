@@ -153,7 +153,7 @@ void QxrdFileBrowser::readSettings(QxrdSettings &settings, QString section)
 void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
 {
   if (QApplication::mouseButtons() & Qt::RightButton) {
-    emit printMessage(QDateTime::currentDateTime(), "Right mouse pressed");
+//    emit printMessage(QDateTime::currentDateTime(), "Right mouse pressed");
 
     QMenu *actions = new QMenu(this);
     QAction *integrate = actions->addAction("Integrate");
