@@ -34,6 +34,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent
   connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
   connect(m_OpenButton, SIGNAL(clicked()), this, SLOT(doOpen()));
   connect(m_ProcessButton, SIGNAL(clicked()), this, SLOT(doProcess()));
+  connect(m_IntegrateButton, SIGNAL(clicked()), this, SLOT(doIntegrate()));
   connect(m_Processor -> prop_OutputDirectory(), SIGNAL(changedValue(QString)), this, SLOT(onRootDirectoryChanged(QString)));
 
   connect(m_FileBrowser, SIGNAL(pressed(QModelIndex)), this, SLOT(mousePressed(QModelIndex)));
