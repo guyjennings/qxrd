@@ -86,9 +86,6 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_IntegratorDialog = QxrdIntegratorDialogPtr(new QxrdIntegratorDialog(m_DataProcessor -> integrator()));
   m_IntegratorDockWidget -> setWidget(m_IntegratorDialog);
 
-  m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
-  m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
-
 //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
 //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
 
@@ -357,7 +354,14 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_WindowsMenu -> addAction(m_DisplayDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CenteringDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDockWidget -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
+
+  if (m_Acquisition->get_DetectorType() != 1) { // No file browser for PE detector...
+    m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
+    m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
+
+    m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
+  }
+
 //  m_WindowsMenu -> addAction(m_PowderFitWidget -> toggleViewAction());
 
   m_Messages -> document() -> setMaximumBlockCount(20000);
