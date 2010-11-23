@@ -593,7 +593,10 @@ void QxrdWindow::readSettings(QxrdSettings &settings, QString section)
   m_Plot             -> readSettings(settings, section+"/plot");
   m_CenterFinderPlot -> readSettings(settings, section+"/centerFinderPlot");
   m_IntegratorPlot   -> readSettings(settings, section+"/integratorPlot");
-  m_FileBrowser  -> readSettings(settings, section+"/fileBrowser");
+
+  if (m_FileBrowser) {
+    m_FileBrowser  -> readSettings(settings, section+"/fileBrowser");
+  }
 
   m_SettingsLoaded = true;
 
@@ -611,7 +614,10 @@ void QxrdWindow::writeSettings(QxrdSettings &settings, QString section)
   m_Plot             -> writeSettings(settings, section+"/plot");
   m_CenterFinderPlot -> writeSettings(settings, section+"/centerFinderPlot");
   m_IntegratorPlot   -> writeSettings(settings, section+"/integratorPlot");
-  m_FileBrowser  -> writeSettings(settings, section+"/fileBrowser");
+
+  if (m_FileBrowser) {
+    m_FileBrowser  -> writeSettings(settings, section+"/fileBrowser");
+  }
 
   settings.setValue(section+"-geometry", saveGeometry());
   settings.setValue(section+"-state", saveState(1));
