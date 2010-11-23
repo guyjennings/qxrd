@@ -124,6 +124,18 @@ void QxrdFileBrowser::doProcess()
   }
 }
 
+void QxrdFileBrowser::doIntegrate()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+
+  foreach(index, rows) {
+//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+    INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "integrateData", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+  }
+}
+
 void QxrdFileBrowser::writeSettings(QxrdSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -144,8 +156,15 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
     emit printMessage(QDateTime::currentDateTime(), "Right mouse pressed");
 
     QMenu *actions = new QMenu(this);
-    actions->addAction("Action 1");
+    QAction *integrate = actions->addAction("Integrate");
+    QAction *process = actions->addAction("Process");
 
-    actions->exec(QCursor::pos());
+    QAction *action = actions->exec(QCursor::pos());
+
+    if (action == integrate) {
+      doIntegrate();
+    } else if (action == process) {
+      doProcess();
+    }
   }
 }

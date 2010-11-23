@@ -357,7 +357,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_WindowsMenu -> addAction(m_DisplayDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CenteringDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDockWidget -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_PowderFitWidget -> toggleViewAction());
 
   m_Messages -> document() -> setMaximumBlockCount(20000);
@@ -586,7 +586,7 @@ void QxrdWindow::readSettings(QxrdSettings &settings, QString section)
   m_Plot             -> readSettings(settings, section+"/plot");
   m_CenterFinderPlot -> readSettings(settings, section+"/centerFinderPlot");
   m_IntegratorPlot   -> readSettings(settings, section+"/integratorPlot");
-//  m_FileBrowser  -> readSettings(settings, section+"/fileBrowser");
+  m_FileBrowser  -> readSettings(settings, section+"/fileBrowser");
 
   m_SettingsLoaded = true;
 
@@ -604,7 +604,7 @@ void QxrdWindow::writeSettings(QxrdSettings &settings, QString section)
   m_Plot             -> writeSettings(settings, section+"/plot");
   m_CenterFinderPlot -> writeSettings(settings, section+"/centerFinderPlot");
   m_IntegratorPlot   -> writeSettings(settings, section+"/integratorPlot");
-//  m_FileBrowser  -> writeSettings(settings, section+"/fileBrowser");
+  m_FileBrowser  -> writeSettings(settings, section+"/fileBrowser");
 
   settings.setValue(section+"-geometry", saveGeometry());
   settings.setValue(section+"-state", saveState(1));

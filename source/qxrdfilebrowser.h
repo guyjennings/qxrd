@@ -33,6 +33,7 @@ public slots:
   void onSelectorChanged(QString str, QModelIndex = QModelIndex());
   void doOpen();
   void doProcess();
+  void doIntegrate();
   void onRootDirectoryChanged(QString dir);
   void mousePressed(QModelIndex index);
 

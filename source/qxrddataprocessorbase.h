@@ -47,11 +47,6 @@ public slots:
   void printMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
   void summarizeMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
 
-  void processData(QString name);
-  void processDataSequence(QString path, QString filter="*.tif");
-  void processDataSequence(QStringList paths);
-  void processDataSequence(QString path, QStringList filter);
-
   void loadData(QString name);
   void saveData(QString name, int canOverwrite=NoOverwrite);
   void loadDark(QString name);
@@ -129,6 +124,7 @@ protected:
 
   QxrdDoubleImageDataPtr processAcquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
   QxrdDoubleImageDataPtr processAcquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
+  QxrdDoubleImageDataPtr processAcquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
   QxrdDoubleImageDataPtr processAcquiredImage(QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
 
   void newDarkImage(QxrdInt16ImageDataPtr image);

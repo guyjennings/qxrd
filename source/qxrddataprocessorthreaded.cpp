@@ -4,6 +4,7 @@
 #include "qxrdcenterfinder.h"
 
 #include <QtConcurrentRun>
+#include <QDirIterator>
 
 QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver, QObject *parent)
   : QxrdDataProcessorBase(acq, allocator, saver, parent)
@@ -51,6 +52,13 @@ void QxrdDataProcessorThreaded::acquiredInt32Image(QxrdInt32ImageDataPtr image, 
   m_CorrectedImages.enqueue(QtConcurrent::run(this, p, image, darkImage(), mask(), overflow));
 }
 
+void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
+{
+  typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QxrdMaskDataPtr);
+  MFType p = &QxrdDataProcessorThreaded::correctDoubleImage;
+  m_CorrectedImages.enqueue(QtConcurrent::run(this, p, image, darkImage(), mask(), overflow));
+}
+
 QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
     (QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
@@ -86,6 +94,31 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
   if (image) {
     if ((image -> get_ImageNumber()) >= 0) {
       return processAcquiredInt32Image(image, dark, mask, overflow);
+    } else {
+      if (get_SaveDarkImages()) {
+        saveNamedImageData(image->get_FileName(), image);
+
+        set_DarkImagePath(image->get_FileName());
+      }
+
+      newDarkImage(image);
+    }
+  }
+
+  return QxrdDoubleImageDataPtr();
+}
+
+QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
+    (QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
+{
+  QCEP_DEBUG(DEBUG_PROCESS,
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("QxrdDataProcessorThreaded::correctDoubleImage"));
+  );
+
+  if (image) {
+    if ((image -> get_ImageNumber()) >= 0) {
+      return processAcquiredDoubleImage(image, dark, mask, overflow);
     } else {
       if (get_SaveDarkImages()) {
         saveNamedImageData(image->get_FileName(), image);
@@ -211,5 +244,74 @@ double QxrdDataProcessorThreaded::estimatedProcessingTime(double estSerialTime, 
     return qMax(estSerialTime, estParallelTime/((double)nThreads));
   } else {
     return estSerialTime + estParallelTime;
+  }
+}
+
+void QxrdDataProcessorThreaded::integrateData(QString name)
+{
+  QxrdDoubleImageDataPtr res = takeNextFreeImage();
+
+  if (res -> readImage(name)) {
+
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+    res -> loadMetaData();
+
+    acquiredDoubleImage(res, /*darkImage(), mask(),*/ QxrdMaskDataPtr());
+
+    set_DataPath(res -> get_FileName());
+  }
+}
+
+void QxrdDataProcessorThreaded::processData(QString name)
+{
+  QxrdDoubleImageDataPtr res = takeNextFreeImage();
+
+  if (res -> readImage(name)) {
+
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+    res -> loadMetaData();
+
+    acquiredDoubleImage(res, /*darkImage(), mask(),*/ QxrdMaskDataPtr());
+
+    set_DataPath(res -> get_FileName());
+  }
+}
+
+void QxrdDataProcessorThreaded::processDataSequence(QString path, QString filter)
+{
+  QDirIterator iter(path, QStringList(filter));
+
+  while (iter.hasNext()) {
+    QString path = iter.next();
+
+    emit printMessage(QDateTime::currentDateTime(), path);
+
+    processData(path);
+  }
+}
+
+void QxrdDataProcessorThreaded::processDataSequence(QStringList paths)
+{
+  QString path;
+
+  foreach(path, paths) {
+    emit printMessage(QDateTime::currentDateTime(), path);
+
+    processData(path);
+  }
+}
+
+void QxrdDataProcessorThreaded::processDataSequence(QString path, QStringList filters)
+{
+  QDirIterator iter(path, filters);
+
+  while (iter.hasNext()) {
+    QString path = iter.next();
+
+    emit printMessage(QDateTime::currentDateTime(), path);
+
+    processData(path);
   }
 }

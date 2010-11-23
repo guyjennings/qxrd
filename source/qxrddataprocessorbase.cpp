@@ -15,7 +15,6 @@
 
 #include <QTime>
 #include <QPainter>
-#include <QDirIterator>
 #include <math.h>
 
 QxrdDataProcessorBase::QxrdDataProcessorBase
@@ -261,59 +260,6 @@ void QxrdDataProcessorBase::loadData(QString name)
   }
 }
 
-void QxrdDataProcessorBase::processData(QString name)
-{
-  QxrdDoubleImageDataPtr res = takeNextFreeImage();
-
-  if (res -> readImage(name)) {
-
-    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
-
-    res -> loadMetaData();
-
-    processAcquiredImage(res, darkImage(), mask(), QxrdMaskDataPtr());
-
-    set_DataPath(res -> get_FileName());
-  }
-}
-
-void QxrdDataProcessorBase::processDataSequence(QString path, QString filter)
-{
-  QDirIterator iter(path, QStringList(filter));
-
-  while (iter.hasNext()) {
-    QString path = iter.next();
-
-    emit printMessage(QDateTime::currentDateTime(), path);
-
-    processData(path);
-  }
-}
-
-void QxrdDataProcessorBase::processDataSequence(QStringList paths)
-{
-  QString path;
-
-  foreach(path, paths) {
-    emit printMessage(QDateTime::currentDateTime(), path);
-
-    processData(path);
-  }
-}
-
-void QxrdDataProcessorBase::processDataSequence(QString path, QStringList filters)
-{
-  QDirIterator iter(path, filters);
-
-  while (iter.hasNext()) {
-    QString path = iter.next();
-
-    emit printMessage(QDateTime::currentDateTime(), path);
-
-    processData(path);
-  }
-}
-
 void QxrdDataProcessorBase::saveData(QString name, int canOverwrite)
 {
   saveNamedImageData(name, m_Data, canOverwrite);
@@ -551,6 +497,12 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image
   } else {
     return QxrdDoubleImageDataPtr();
   }
+}
+
+QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredDoubleImage
+    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
+{
+  return processAcquiredImage(dimg, dark, mask, overflow);
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
