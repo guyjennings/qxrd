@@ -25,6 +25,7 @@ private slots:
   void onROIDataAvailable();
   void onHistogramDataAvailable();
 
+public slots:
   void integrateData(QString name);
 
   void processData(QString name);
