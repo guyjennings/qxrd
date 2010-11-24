@@ -18,6 +18,10 @@ public:
   QcepImageDataFormat<T>* loadFile(QString path, QcepImageData<T> *img);
   QcepImageDataFormat<T>* saveFile(QString path, QcepImageData<T> *img);
   QcepImageDataFormatBase::Priority priority() const;
+
+private:
+  T unpackSignedBitField(void *buffer, int bitsPerSample, int x);
+  T unpackUnsignedBitField(void *buffer, int bitsPerSample, int x);
 };
 
 extern void qceptiff_warningHandler(const char *module, const char *fmt, va_list ap);
@@ -61,6 +65,61 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::canLoadFile(QString path)
 }
 
 template <typename T>
+T QcepImageDataFormatTiff<T>::unpackSignedBitField(void *buffer, int bitsPerSample, int x)
+{
+  int val=0;
+  int samplesPerByte = 8/bitsPerSample;
+  int byteIndex = x / samplesPerByte;
+  int bitIndex  = x % samplesPerByte;
+
+  switch (bitsPerSample) {
+  case 1:
+    val = (((quint8*)buffer)[byteIndex] >> bitIndex) & 1;
+    if (val >= 1) {
+      val = val - 2;
+    }
+    break;
+  case 2:
+    val = (((quint8*)buffer)[byteIndex] >> bitIndex) & 3;
+    if (val >= 2) {
+      val = val - 4;
+    }
+    break;
+  case 4:
+    val = (((quint8*)buffer)[byteIndex] >> bitIndex) & 15;
+    if (val >= 8) {
+      val = val - 16;
+    }
+    break;
+  }
+
+  return val;
+}
+
+template <typename T>
+T QcepImageDataFormatTiff<T>::unpackUnsignedBitField(void *buffer, int bitsPerSample, int x)
+{
+  int val=0;
+  int samplesPerByte = 8/bitsPerSample;
+  int byteIndex = x / samplesPerByte;
+  int bitIndex  = x % samplesPerByte;
+
+  switch (bitsPerSample) {
+  case 1:
+    val = (((quint8*)buffer)[byteIndex] >> bitIndex) & 1;
+    break;
+  case 2:
+    val = (((quint8*)buffer)[byteIndex] >> bitIndex) & 3;
+    break;
+  case 4:
+    val = (((quint8*)buffer)[byteIndex] >> bitIndex) & 15;
+    break;
+  }
+
+  return val;
+}
+
+template <typename T>
 QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::loadFile(QString path, QcepImageData<T> *img)
 {
   if (img) {
@@ -86,7 +145,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::loadFile(QString path, QcepI
 
         size_t scanlineSize = TIFFScanlineSize(file);
 //        printf("Scan line size = %d, imageHeight = %d, imageWidth = %d\n", scanlineSize, imageHeight, imageWidth);
-        void* buffer = malloc(scanlineSize);
+        quint8* buffer = (quint8*) malloc(scanlineSize);
 
         for (quint32 y=0; y<imageHeight; y++) {
           if (TIFFReadScanline(file, buffer, y)==1) {
@@ -94,6 +153,11 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::loadFile(QString path, QcepI
               switch (sampleFormat) {
               case SAMPLEFORMAT_INT:
                 switch (bitsPerSample) {
+                case 1:
+                case 2:
+                case 4:
+                  img -> setValue(x,y, unpackSignedBitField(buffer, bitsPerSample, x));
+                  break;
                 case 8:
                   img -> setValue(x,y, (T)((qint8*) buffer)[x]);
                   break;
@@ -107,6 +171,11 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::loadFile(QString path, QcepI
                 break;
               case SAMPLEFORMAT_UINT:
                 switch (bitsPerSample) {
+                case 1:
+                case 2:
+                case 4:
+                  img -> setValue(x,y, unpackUnsignedBitField(buffer, bitsPerSample, x));
+                  break;
                 case 8:
                   img -> setValue(x,y, (T)((quint8*) buffer)[x]);
                   break;
