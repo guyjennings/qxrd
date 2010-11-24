@@ -184,13 +184,8 @@ void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
   QxrdIntegratedDataPtr integ = m_IntegratedData.dequeue();
 
   if (integ) {
-    if (get_SaveIntegratedData()) {
-      m_Integrator -> saveIntegratedData(integ);
-    }
-
-    if (get_DisplayIntegratedData()) {
-      m_Integrator -> displayIntegratedData(integ);
-    }
+    writeOutputScan(integ);
+    displayIntegratedData(integ);
   }
 }
 
@@ -252,6 +247,8 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
   QxrdDoubleImageDataPtr res = takeNextFreeImage();
 
   if (res -> readImage(name)) {
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Load image from %1").arg(name));
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -261,6 +258,9 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
                                                res, mask(),
                                                centerFinder() -> get_CenterX(),
                                                centerFinder() -> get_CenterY()));
+  } else {
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Couldn't load %1").arg(name));
   }
 }
 
@@ -277,6 +277,9 @@ void QxrdDataProcessorThreaded::processData(QString name)
     acquiredDoubleImage(res, /*darkImage(), mask(),*/ QxrdMaskDataPtr());
 
     set_DataPath(res -> get_FileName());
+  } else {
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Couldn't load %1").arg(name));
   }
 }
 
@@ -316,3 +319,20 @@ void QxrdDataProcessorThreaded::processDataSequence(QString path, QStringList fi
     processData(path);
   }
 }
+
+void QxrdDataProcessorThreaded::slicePolygon(QVector<QwtDoublePoint> poly)
+{
+  m_IntegratedData.enqueue(
+      QtConcurrent::run(m_Integrator,
+                        &QxrdIntegrator::slicePolygon,
+                        m_Data, poly, 0));
+}
+
+void QxrdDataProcessorThreaded::integrateSaveAndDisplay()
+{
+  m_IntegratedData.enqueue(
+      QtConcurrent::run(m_Integrator,
+                        &QxrdIntegrator::performIntegration,
+                        data(), mask()));
+}
+

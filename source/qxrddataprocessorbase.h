@@ -43,9 +43,10 @@ public slots:
   void maskPolygon(QwtArray<QwtDoublePoint> poly);
 
   void measurePolygon(QwtArray<QwtDoublePoint> poly);
-  void slicePolygon(QwtArray<QwtDoublePoint> poly);
+  virtual void slicePolygon(QwtArray<QwtDoublePoint> poly) = 0;
   void printMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
   void summarizeMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
+  virtual void integrateSaveAndDisplay() = 0;
 
   void loadData(QString name);
   void saveData(QString name, int canOverwrite=NoOverwrite);

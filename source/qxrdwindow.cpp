@@ -711,31 +711,6 @@ void QxrdWindow::newMask()
   }
 }
 
-//void QxrdWindow::spareData()
-//{
-//  bool canDo;
-//
-//  {
-//    QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
-//
-//    canDo = m_Plotting == 0;
-//
-//    if (canDo) {
-//      emit printMessage("QxrdWindow swap data & spare");
-//
-//      QxrdDoubleImageData *tmp = m_Data;
-//      m_Data = m_SpareData;
-//      m_SpareData = tmp;
-//    }
-//  }
-//
-//  if (canDo) {
-//    newData();
-//  }
-//
-//  emit printMessage("QxrdWindow::spareData");
-//}
-//
 void QxrdWindow::doSaveData()
 {
   QString theFile = QFileDialog::getSaveFileName(
@@ -759,7 +734,7 @@ void QxrdWindow::doLoadData()
 void QxrdWindow::doSaveDark()
 {
   QString theFile = QFileDialog::getSaveFileName(
-      this, "Save Dark Data in", m_DataProcessor -> get_DarkImagePath());
+      this, "Save Dark Data in", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
     m_DataProcessor->saveDark(theFile, QxrdDataProcessor::CanOverwrite);
@@ -769,7 +744,7 @@ void QxrdWindow::doSaveDark()
 void QxrdWindow::doLoadDark()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Dark Data from...", m_DataProcessor -> get_DarkImagePath());
+      this, "Load Dark Data from...", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
     m_DataProcessor->loadDark(theFile);
@@ -779,7 +754,7 @@ void QxrdWindow::doLoadDark()
 void QxrdWindow::doSaveMask()
 {
   QString theFile = QFileDialog::getSaveFileName(
-      this, "Save Mask in", m_DataProcessor -> get_MaskPath());
+      this, "Save Mask in", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
     m_DataProcessor->saveMask(theFile, QxrdDataProcessor::CanOverwrite);
@@ -789,7 +764,7 @@ void QxrdWindow::doSaveMask()
 void QxrdWindow::doLoadMask()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Mask from...", m_DataProcessor -> get_MaskPath());
+      this, "Load Mask from...", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
     m_DataProcessor->loadMask(theFile);
@@ -799,7 +774,7 @@ void QxrdWindow::doLoadMask()
 void QxrdWindow::doSaveBadPixels()
 {
   QString theFile = QFileDialog::getSaveFileName(
-      this, "Save Bad Pixels in", m_DataProcessor -> get_BadPixelsPath());
+      this, "Save Bad Pixels in", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
     m_DataProcessor->saveBadPixels(theFile, QxrdDataProcessor::CanOverwrite);
@@ -809,7 +784,7 @@ void QxrdWindow::doSaveBadPixels()
 void QxrdWindow::doLoadBadPixels()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Bad Pixel Map from...", m_DataProcessor -> get_BadPixelsPath());
+      this, "Load Bad Pixel Map from...", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
     m_DataProcessor->loadBadPixels(theFile);
@@ -819,7 +794,7 @@ void QxrdWindow::doLoadBadPixels()
 void QxrdWindow::doSaveGainMap()
 {
   QString theFile = QFileDialog::getSaveFileName(
-      this, "Save Gain Map in", m_DataProcessor -> get_GainMapPath());
+      this, "Save Gain Map in", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
     m_DataProcessor->saveGainMap(theFile, QxrdDataProcessor::CanOverwrite);
@@ -829,7 +804,7 @@ void QxrdWindow::doSaveGainMap()
 void QxrdWindow::doLoadGainMap()
 {
   QString theFile = QFileDialog::getOpenFileName(
-      this, "Load Pixel Gain Map from...", m_DataProcessor -> get_GainMapPath());
+      this, "Load Pixel Gain Map from...", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
     m_DataProcessor->loadGainMap(theFile);
@@ -839,7 +814,7 @@ void QxrdWindow::doLoadGainMap()
 void QxrdWindow::selectLogFile()
 {
   QString theFile = QFileDialog::getSaveFileName(
-      this, "Save Log File in", m_DataProcessor -> get_LogFilePath());
+      this, "Save Log File in", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
     m_DataProcessor->newLogFile(theFile);

@@ -7,7 +7,8 @@ QxrdIntegratorDialog::QxrdIntegratorDialog(QxrdIntegratorPtr integ, QWidget *par
 {
   setupUi(this);
 
-  connect(m_IntegrateButton, SIGNAL(clicked()), m_Integrator, SLOT(integrateSaveAndDisplay()));
+  connect(m_IntegrateButton, SIGNAL(clicked()),
+          m_Integrator -> dataProcessor(), SLOT(integrateSaveAndDisplay()));
 
   m_Integrator -> prop_Oversample()      -> linkTo(m_OversampleFactor);
   m_Integrator -> prop_IntegrationStep() -> linkTo(m_IntegratorStepSize);

@@ -33,6 +33,9 @@ public slots:
   void processDataSequence(QStringList paths);
   void processDataSequence(QString path, QStringList filter);
 
+  void slicePolygon(QwtArray<QwtDoublePoint> poly);
+  void integrateSaveAndDisplay();
+
 private:
   QxrdDoubleImageDataPtr correctInt16Image(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
   QxrdDoubleImageDataPtr correctInt32Image(QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);

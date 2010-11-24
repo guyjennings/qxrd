@@ -7,6 +7,7 @@
 #include <QString>
 #include <QVector>
 #include <QSharedPointer>
+#include <QFileInfo>
 #include <math.h>
 #include <stdio.h>
 

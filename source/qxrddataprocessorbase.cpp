@@ -863,11 +863,6 @@ void QxrdDataProcessorBase::summarizeMeasuredPolygon(QVector<QwtDoublePoint> pol
   }
 }
 
-void QxrdDataProcessorBase::slicePolygon(QVector<QwtDoublePoint> poly)
-{
-  m_Integrator -> slicePolygon(m_Data, poly, 0);
-}
-
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::data() const
 {
   return m_Data;

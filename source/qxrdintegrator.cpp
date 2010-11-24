@@ -23,6 +23,11 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc
 {
 }
 
+QxrdDataProcessorPtr QxrdIntegrator::dataProcessor() const
+{
+  return m_DataProcessor;
+}
+
 void QxrdIntegrator::writeSettings(QxrdSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -37,28 +42,11 @@ void QxrdIntegrator::readSettings(QxrdSettings &settings, QString section)
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdIntegrator::integrateSaveAndDisplay()
-{
-  QxrdIntegratedDataPtr integ = performIntegration(m_DataProcessor -> data(), m_DataProcessor -> mask());
-  saveIntegratedData(integ);
-  displayIntegratedData(integ);
-}
-
 QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
 {
   return integrate(dimg, mask, /*m_DataProcessor -> centerFinder() -> get_CenterX(),
                    m_DataProcessor -> centerFinder() -> get_CenterY(),*/
                    get_Oversample(), true);
-}
-
-void QxrdIntegrator::saveIntegratedData(QxrdIntegratedDataPtr data)
-{
-  m_DataProcessor -> writeOutputScan(data);
-}
-
-void QxrdIntegrator::displayIntegratedData(QxrdIntegratedDataPtr data)
-{
-  m_DataProcessor -> displayIntegratedData(data);
 }
 
 QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, int oversample, int normalize)
@@ -336,9 +324,6 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image,
       }
       //
       //    emit newIntegrationAvailable(image->get_Title(),xs,ys);
-
-      saveIntegratedData(res);
-      displayIntegratedData(res);
     }
   } else {
     printf("QxrdIntegrator::slicePolygon failed\n");
