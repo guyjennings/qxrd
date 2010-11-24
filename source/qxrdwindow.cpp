@@ -40,6 +40,7 @@
 #include <QMetaMethod>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QMenu>
 
 QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc, QWidget *parent)
   : QMainWindow(parent),
@@ -126,12 +127,25 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(m_ActionIce, SIGNAL(triggered()), m_Plot, SLOT(setIce()));
 
   connect(m_ActionRefineCenterTilt, SIGNAL(triggered()), this, SLOT(doRefineCenterTilt()));
-  connect(m_HideMaskRange, SIGNAL(clicked()), m_ActionHideMaskRange, SIGNAL(triggered()));
-  connect(m_ShowMaskRange, SIGNAL(clicked()), m_ActionShowMaskRange, SIGNAL(triggered()));
 
-  connect(m_HideMaskAll, SIGNAL(clicked()), m_ActionHideMaskAll, SIGNAL(triggered()));
-  connect(m_ShowMaskAll, SIGNAL(clicked()), m_ActionShowMaskAll, SIGNAL(triggered()));
-  connect(m_InvertMask, SIGNAL(clicked()), m_ActionInvertMask, SIGNAL(triggered()));
+  connect(m_HideMaskRange, SIGNAL(clicked()), this, SLOT(doHideMaskRange()));
+  connect(m_ShowMaskRange, SIGNAL(clicked()), this, SLOT(doShowMaskRange()));
+
+  connect(m_HideMaskAll, SIGNAL(clicked()), this, SLOT(doHideMaskAll()));
+  connect(m_ShowMaskAll, SIGNAL(clicked()), this, SLOT(doShowMaskAll()));
+  connect(m_InvertMask, SIGNAL(clicked()), this, SLOT(doInvertMask()));
+  connect(m_AndMask, SIGNAL(clicked()), this, SLOT(doAndMask()));
+  connect(m_OrMask, SIGNAL(clicked()), this, SLOT(doOrMask()));
+  connect(m_XorMask, SIGNAL(clicked()), this, SLOT(doXorMask()));
+  connect(m_AndNotMask, SIGNAL(clicked()), this, SLOT(doAndNotMask()));
+  connect(m_OrNotMask, SIGNAL(clicked()), this, SLOT(doOrNotMask()));
+  connect(m_XorNotMask, SIGNAL(clicked()), this, SLOT(doXorNotMask()));
+  connect(m_ExchangeMask, SIGNAL(clicked()), this, SLOT(doExchangeMask()));
+  connect(m_RollUpMask, SIGNAL(clicked()), this, SLOT(doRollUpMask()));
+  connect(m_RollDownMask, SIGNAL(clicked()), this, SLOT(doRollDownMask()));
+  connect(m_PushMask, SIGNAL(clicked()), this, SLOT(doPushMask()));
+  connect(m_ClearMask, SIGNAL(clicked()), this, SLOT(doClearMask()));
+  connect(m_UndoMask, SIGNAL(clicked()), this, SLOT(doUndoMask()));
 
   connect(m_MaskCirclesRadio, SIGNAL(clicked()), m_ImageMaskCirclesButton, SLOT(click()));
   connect(m_MaskPolygonsRadio, SIGNAL(clicked()), m_ImageMaskPolygonsButton, SLOT(click()));
@@ -963,4 +977,183 @@ void QxrdWindow::doProcessSequence()
   foreach (QString file, files) {
     m_DataProcessor->processData(file);
   }
+}
+
+int QxrdWindow::maskStackSelectPopup()
+{
+  QMenu actions;
+
+  actions.addAction("Current Mask")->setData(0);
+
+  int nmasks = m_DataProcessor->maskStackSize();
+
+  for (int i=1; i<=nmasks; i++) {
+    actions.addAction(tr("Stack %1").arg(i))->setData(i);;
+  }
+
+  QAction *selected = actions.exec(QCursor::pos());
+
+  if (selected) {
+    return selected->data().toInt();
+  } else {
+    return -1;
+  }
+}
+
+void QxrdWindow::doHideMaskAll()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->hideMaskAllStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Hide All");
+  }
+}
+
+void QxrdWindow::doShowMaskAll()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->showMaskAllStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Show All");
+  }
+}
+
+void QxrdWindow::doHideMaskRange()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->hideMaskRangeStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Hide All");
+  }
+}
+
+void QxrdWindow::doShowMaskRange()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->showMaskRangeStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Show All");
+  }
+}
+
+void QxrdWindow::doInvertMask()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->invertMaskStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Invert");
+  }
+}
+
+void QxrdWindow::doAndMask()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->andMaskStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack AND");
+  }
+}
+
+void QxrdWindow::doOrMask()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->orMaskStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack OR");
+  }
+}
+
+void QxrdWindow::doXorMask()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->xorMaskStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack XOR");
+  }
+}
+
+void QxrdWindow::doAndNotMask()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->andNotMaskStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack AND NOT");
+  }
+}
+
+void QxrdWindow::doOrNotMask()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->orNotMaskStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack OR NOT");
+  }
+}
+
+void QxrdWindow::doXorNotMask()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->xorNotMaskStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack XOR NOT");
+  }
+}
+
+void QxrdWindow::doExchangeMask()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->exchangeMaskStack(n);
+    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Exchanged");
+  }
+}
+
+void QxrdWindow::doRollMask()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    m_DataProcessor->rollMaskStack(n);
+  }
+}
+
+void QxrdWindow::doRollUpMask()
+{
+  m_DataProcessor->rollMaskStack(-1);
+  emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Rolled Up");
+}
+
+void QxrdWindow::doRollDownMask()
+{
+  m_DataProcessor->rollMaskStack(1);
+  emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Rolled Down");
+}
+
+void QxrdWindow::doClearMask()
+{
+  m_DataProcessor->clearMaskStack();
+  emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Cleared");
+}
+
+void QxrdWindow::doPushMask()
+{
+  m_DataProcessor->pushMaskStack();
+  emit statusMessage(QDateTime::currentDateTime(), "Mask Pushed");
+}
+
+void QxrdWindow::doUndoMask()
+{
+  emit statusMessage(QDateTime::currentDateTime(), "Undo Not Implemented");
 }

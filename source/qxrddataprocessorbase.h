@@ -7,6 +7,7 @@
 #include <QReadWriteLock>
 #include <QAtomicInt>
 #include <QWaitCondition>
+#include <QStack>
 
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
@@ -63,6 +64,25 @@ public slots:
   void clearGainMap();
   void clearMask();
 
+  int  maskStackSize();
+  int  maskStackPosition(int pos);
+  void pushMaskStack(QxrdMaskDataPtr mask = QxrdMaskDataPtr());
+  void popMaskStack(int amount=1);
+  void clearMaskStack();
+  void rollMaskStack(int amount);
+  void exchangeMaskStack(int pos);
+  void andMaskStack(int pos);
+  void orMaskStack(int pos);
+  void xorMaskStack(int pos);
+  void andNotMaskStack(int pos);
+  void orNotMaskStack(int pos);
+  void xorNotMaskStack(int pos);
+  void invertMaskStack(int pos);
+  void hideMaskAllStack(int pos);
+  void showMaskAllStack(int pos);
+  void hideMaskRangeStack(int pos);
+  void showMaskRangeStack(int pos);
+
   void newImage(int ncols, int nrows);
   void exponentialTail(double cx, double cy, double width, int oversample);
   void reciprocalTail(double cx, double cy, double strength, int oversample);
@@ -113,6 +133,8 @@ public:
 
   QxrdGenerateTestImagePtr generateTestImage() const;
 
+  void newMask();
+
 protected:
   void saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, int canOverwrite=NoOverwrite);
   void saveNamedImageData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite=NoOverwrite);
@@ -139,7 +161,6 @@ protected:
   void newDarkImage(QxrdDoubleImageDataPtr image);
   void newBadPixelsImage(QxrdDoubleImageDataPtr image);
   void newGainMapImage(QxrdDoubleImageDataPtr image);
-  void newMask();
 
 private:
   int incrementAcquiredCount();
@@ -174,6 +195,8 @@ protected:
   QxrdDoubleImageDataPtr m_GainMap;
   QxrdMaskDataPtr        m_Mask;
   QxrdMaskDataPtr        m_Overflow;
+
+  QStack<QxrdMaskDataPtr> m_Masks;
 
   QAtomicInt             m_AcquiredCount;
 

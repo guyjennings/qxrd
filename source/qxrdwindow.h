@@ -43,6 +43,25 @@ public slots:
   void doIntegrateSequence();
   void doProcessSequence();
 
+  void doHideMaskAll();
+  void doShowMaskAll();
+  void doHideMaskRange();
+  void doShowMaskRange();
+  void doInvertMask();
+  void doAndMask();
+  void doOrMask();
+  void doXorMask();
+  void doAndNotMask();
+  void doOrNotMask();
+  void doXorNotMask();
+  void doExchangeMask();
+  void doRollMask();
+  void doRollUpMask();
+  void doRollDownMask();
+  void doClearMask();
+  void doPushMask();
+  void doUndoMask();
+
   void doAcquire();
   void doCancel();
   void onAcquireStarted(int dark);
@@ -99,6 +118,9 @@ public:
   QxrdMaskDataPtr mask();
 
   QxrdAcquisitionPtr acquisition() const;
+
+private:
+  int maskStackSelectPopup();
 
 private:
   mutable QMutex                         m_Mutex;

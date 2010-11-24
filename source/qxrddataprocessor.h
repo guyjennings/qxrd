@@ -202,6 +202,27 @@ public:
   virtual void loadGainMap(QString name) = 0;
   virtual void saveGainMap(QString name, int canOverwrite=NoOverwrite) = 0;
 
+  virtual void newMask() = 0;
+
+  virtual int  maskStackSize() = 0;
+  virtual int  maskStackPosition(int pos) = 0;
+  virtual void pushMaskStack(QxrdMaskDataPtr mask = QxrdMaskDataPtr()) = 0;
+  virtual void popMaskStack(int amount=1) = 0;
+  virtual void clearMaskStack() = 0;
+  virtual void rollMaskStack(int amount) = 0;
+  virtual void exchangeMaskStack(int pos) = 0;
+  virtual void andMaskStack(int pos) = 0;
+  virtual void orMaskStack(int pos) = 0;
+  virtual void xorMaskStack(int pos) = 0;
+  virtual void andNotMaskStack(int pos) = 0;
+  virtual void orNotMaskStack(int pos) = 0;
+  virtual void xorNotMaskStack(int pos) = 0;
+  virtual void invertMaskStack(int pos) = 0;
+  virtual void hideMaskAllStack(int pos) = 0;
+  virtual void showMaskAllStack(int pos) = 0;
+  virtual void hideMaskRangeStack(int pos) = 0;
+  virtual void showMaskRangeStack(int pos) = 0;
+
   virtual void newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow) = 0;
   virtual void newDarkImage(QxrdDoubleImageDataPtr image) = 0;
   virtual void newBadPixelsImage(QxrdDoubleImageDataPtr image) = 0;

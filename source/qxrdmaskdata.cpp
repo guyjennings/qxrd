@@ -83,6 +83,78 @@ void QxrdMaskData::invertMask()
   }
 }
 
+void QxrdMaskData::andMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) & mask->maskValue(i,j));
+    }
+  }
+}
+
+void QxrdMaskData::orMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) | mask->maskValue(i,j));
+    }
+  }
+}
+
+void QxrdMaskData::xorMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) ^ mask->maskValue(i,j));
+    }
+  }
+}
+
+void QxrdMaskData::andNotMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) & !mask->maskValue(i,j));
+    }
+  }
+}
+
+void QxrdMaskData::orNotMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) | !mask->maskValue(i,j));
+    }
+  }
+}
+
+void QxrdMaskData::xorNotMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) ^ !mask->maskValue(i,j));
+    }
+  }
+}
+
 void QxrdMaskData::maskCircle(double cx, double cy, double r, bool val)
 {
   for (int j=0; j<=r; j++) {

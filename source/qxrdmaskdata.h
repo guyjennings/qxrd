@@ -25,6 +25,13 @@ public slots:
   void hideMaskAll();
   void invertMask();
 
+  void andMask(QxrdMaskDataPtr mask);
+  void orMask(QxrdMaskDataPtr mask);
+  void xorMask(QxrdMaskDataPtr mask);
+  void andNotMask(QxrdMaskDataPtr mask);
+  void orNotMask(QxrdMaskDataPtr mask);
+  void xorNotMask(QxrdMaskDataPtr mask);
+
   void maskCircle(double cx, double cy, double r, bool val);
 
   QString summary();
