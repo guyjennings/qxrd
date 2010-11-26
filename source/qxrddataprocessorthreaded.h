@@ -5,6 +5,9 @@
 
 #include "qxrddataprocessorbase.h"
 #include "qxrdresultserializer.h"
+#include "qxrdintegrateddata.h"
+#include "qxrdroidata.h"
+#include "qxrdhistogramdata.h"
 
 class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
 {

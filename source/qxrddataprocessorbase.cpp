@@ -17,9 +17,61 @@
 #include <QPainter>
 #include <math.h>
 
-QxrdDataProcessorBase::QxrdDataProcessorBase
-    (QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver, QObject *parent)
-  : QxrdDataProcessor(acq, allocator, saver, parent),
+QxrdDataProcessorBase::QxrdDataProcessorBase(
+    QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator,
+    QxrdFileSaverThreadPtr saver, QObject *parent) :
+
+    QObject(parent),
+    //    m_ProcessorType(this,"processorType",0),
+    //    m_ProcessorTypeName(this,"processorTypeName","processorType"),
+    m_OutputDirectory(this,"outputDirectory", ""),
+    m_FileName(this,"fileName",""),
+    m_DataPath(this,"dataPath", ""),
+    m_DarkImagePath(this, "darkImagePath", ""),
+    m_BadPixelsPath(this, "badPixelsPath", ""),
+    m_GainMapPath(this, "gainMapPath", ""),
+    m_MaskPath(this, "maskPath", ""),
+    m_LogFilePath(this, "logFilePath", "qxrd.log"),
+    m_PerformDarkSubtraction(this, "performDarkSubtraction", true),
+    m_SaveRawImages(this, "saveRawImages", true),
+    m_SaveDarkImages(this, "saveDarkImages", true),
+    m_PerformBadPixels(this, "performBadPixels", true),
+    m_PerformGainCorrection(this, "performGainCorrection", true),
+    m_SaveSubtracted(this, "saveSubtracted", true),
+    m_SaveAsText(this, "saveAsText", false),
+    m_SaveAsTextSeparator(this, "saveAsTextSeparator", " "),
+    m_SaveAsTextPerLine(this,"saveAsTextPerLine",16),
+    m_PerformIntegration(this, "performIntegration", true),
+    m_DisplayIntegratedData(this, "displayIntegratedData", true),
+    m_SaveIntegratedData(this, "saveIntegratedData", true),
+    m_SaveDarkInSubdirectory(this,"saveDarkInSubdirectory",0),
+    m_SaveDarkSubdirectory(this,"saveDarkSubdirectory",""),
+    m_SaveRawInSubdirectory(this,"saveRawInSubdirectory",0),
+    m_SaveRawSubdirectory(this,"saveRawSubdirectory",""),
+    m_SaveSubtractedInSubdirectory(this,"saveSubtractedInSubdirectory",0),
+    m_SaveSubtractedSubdirectory(this,"saveSubtractedSubdirectory",""),
+    m_SaveIntegratedInSeparateFiles(this,"saveIntegratedInSeparateFiles",0),
+    m_SaveIntegratedInSubdirectory(this,"saveIntegratedInSubdirectory",0),
+    m_SaveIntegratedSubdirectory(this,"saveIntegratedSubdirectory",""),
+    m_PerformDarkSubtractionTime(this, "performDarkSubtractionTime", 0.01),
+    m_PerformBadPixelsTime(this, "performBadPixelsTime", 0.01),
+    m_PerformGainCorrectionTime(this, "performGainCorrectionTime", 0.01),
+    m_SaveSubtractedTime(this, "saveSubtractedTime", 0.1),
+    m_SaveAsTextTime(this, "saveAsTextTime", 0.1),
+    m_PerformIntegrationTime(this, "performIntegrationTime", 0.05),
+    m_DisplayIntegratedDataTime(this, "displayIntegratedDataTime", 0.2),
+    m_SaveIntegratedDataTime(this, "saveIntegratedDataTime", 0.01),
+    m_EstimatedProcessingTime(this, "estimatedProcessingTime", 0.1),
+    m_AveragingRatio(this, "averagingRatio", 0.1),
+    //    m_FileName(this,"fileName",""),
+    m_MaskMinimumValue(this, "maskMinimumValue", 0),
+    m_MaskMaximumValue(this, "maskMaximumValue", 20000),
+    m_MaskCircleRadius(this, "maskCircleRadius", 10),
+    m_MaskSetPixels(this, "maskSetPixels", true),
+    m_CompressImages(this, "compressImages", false),
+    m_Average(this,"average",0.0),
+    m_AverageDark(this,"averageDark",0.0),
+    m_AverageRaw(this,"averageRaw",0.0),
     m_Mutex(QMutex::Recursive),
     m_LogFileMutex(QMutex::Recursive),
     m_Window(NULL),
@@ -124,6 +176,48 @@ void QxrdDataProcessorBase::readSettings(QxrdSettings &settings, QString section
   m_RefinedRingSetData -> readSettings(settings, section+"/refinedData");
 
   newLogFile(get_LogFilePath());
+}
+
+
+QString QxrdDataProcessorBase::existingOutputDirectory(QString dir, QString subdir)
+{
+  return QDir(dir).filePath(subdir);
+}
+
+QString QxrdDataProcessorBase::darkOutputDirectory()
+{
+  if (get_SaveDarkInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveDarkSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
+}
+
+QString QxrdDataProcessorBase::rawOutputDirectory()
+{
+  if (get_SaveRawInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveRawSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
+}
+
+QString QxrdDataProcessorBase::subtractedOutputDirectory()
+{
+  if (get_SaveSubtractedInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveSubtractedSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
+}
+
+QString QxrdDataProcessorBase::integratedOutputDirectory()
+{
+  if (get_SaveIntegratedInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveIntegratedSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage()

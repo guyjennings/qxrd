@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdDataProcessor *proc, QxrdAllocatorInterface *alloc, QObject *parent) :
+QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdDataProcessorBase *proc, QxrdAllocatorInterface *alloc, QObject *parent) :
     QObject(parent),
     m_Processor(proc),
     m_Allocator(alloc),

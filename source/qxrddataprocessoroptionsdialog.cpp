@@ -1,7 +1,7 @@
 #include "qxrddataprocessoroptionsdialog.h"
 #include "ui_qxrddataprocessoroptionsdialog.h"
 
-QxrdDataProcessorOptionsDialog::QxrdDataProcessorOptionsDialog(QxrdDataProcessor *processor, QWidget *parent) :
+QxrdDataProcessorOptionsDialog::QxrdDataProcessorOptionsDialog(QxrdDataProcessorBase *processor, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QxrdDataProcessorOptionsDialog)
 {
