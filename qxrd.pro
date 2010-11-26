@@ -9,10 +9,9 @@ TEMPLATE = subdirs
 SUBDIRS = source plugins
 
 win32 {
+#  SUBDIRS += $$quote(qxrd.app.pro)
+#  SUBDIRS += qxrd.nsis.pro
 #  include("qxrd.app.pri")
-#  include("qxrd.nsis.pri")
-
-  SUBDIRS += qxrd.app.pro qxrd.nsis.pro
 }
 
 DISTFILES += source plugins

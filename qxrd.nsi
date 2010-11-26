@@ -46,15 +46,15 @@ Var StartMenuFolder
 
 Section "Extract qxrd"
   SetShellVarContext all
-  SetOutPath $INSTDIR
-  File ${APPDIR}\app\qxrd.exe
-  File ${APPDIR}\app\*.dll
+  SetOutPath "$INSTDIR"
+  File "${APPDIR}\app\qxrd.exe"
+  File "${APPDIR}\app\*.dll"
 
-  SetOutPath $INSTDIR\plugins
+  SetOutPath "$INSTDIR\plugins"
 
-  File ${APPDIR}\app\plugins\*.dll
+  File "${APPDIR}\app\plugins\*.dll"
 
-  SetOutPath $INSTDIR
+  SetOutPath "$INSTDIR"
 
   WriteRegStr HKLM "Software\qxrd\qxrd${PREFIX}-${VERSION}" "install_dir" $INSTDIR
   WriteUninstaller "$INSTDIR\uninstall.exe"

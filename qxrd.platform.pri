@@ -33,3 +33,18 @@ win32-g++ {
   QXRDSUFFIXSTR = " (MINGW 32 bit)"
   message("MingW g++ build")
 }
+
+win32 {
+  contains(QMAKE_HOST.arch,x86_64) {
+    WIN64 = 1
+    PE_SDK = "c:/XIS/SDK64/"
+  } else {
+    WIN64 = 0
+    PE_SDK = "c:/XIS/SDK32/"
+  }
+
+  exists($${PE_SDK}/XISL.lib) {
+    DEFINES += HAVE_PERKIN_ELMER
+    INCLUDEPATH += $${PE_SDK}
+  }
+}
