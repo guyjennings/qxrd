@@ -3,6 +3,8 @@
 
 QxrdNIDAQPlugin::QxrdNIDAQPlugin()
 {
+  TaskHandle taskHandle;
+  int res = DAQmxCreateTask("", &taskHandle);
 }
 
 QString QxrdNIDAQPlugin::name() const

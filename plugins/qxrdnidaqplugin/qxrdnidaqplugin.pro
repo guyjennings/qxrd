@@ -11,6 +11,7 @@ INCLUDEPATH += ../../source/
 contains(DEFINES,HAVE_NIDAQ) {
   message("INCLUDEPATH += $${NIDAQ_BASE}/include")
   INCLUDEPATH += "$${NIDAQ_BASE}/include"
+  LIBS += "$${NIDAQ_BASE}/lib/msvc/NIDAQmx.lib"
 }
 
 HEADERS += \

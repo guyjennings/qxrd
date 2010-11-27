@@ -51,7 +51,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_AllocatorThread(NULL),
     m_FileSaverThread(NULL),
     m_SettingsSaverThread(NULL),
-    m_SettingsSaver(NULL)
+    m_SettingsSaver(NULL),
+    m_NIDAQPluginInterface(NULL)
 #ifdef HAVE_PERKIN_ELMER
       ,
     m_PerkinElmerPluginInterface(NULL)
@@ -283,6 +284,11 @@ QxrdPerkinElmerPluginInterface* QxrdApplication::perkinElmerPlugin()
 
 #endif
 
+QxrdNIDAQPluginInterface* QxrdApplication::nidaqPlugin()
+{
+  return m_NIDAQPluginInterface;
+}
+
 #define xstr(s) str(s)
 #define str(s) #s
 
@@ -327,15 +333,25 @@ void QxrdApplication::loadPlugins()
         }
 #endif
 
+        QxrdNIDAQPluginInterface *nidaq = qobject_cast<QxrdNIDAQPluginInterface*>(plugin);
+
+        if (nidaq) {
+          pluginName = nidaq -> name();
+
+          m_NIDAQPluginInterface = nidaq;
+        }
+
         emit printMessage(QDateTime::currentDateTime(),
                           tr("Loaded plugin \"%1\" from %2")
                           .arg(pluginName)
                           .arg(pluginsDir.absoluteFilePath(fileName)));
       } else {
-        emit printMessage(QDateTime::currentDateTime(),
-                          tr("Failed to load plugin %1 : %2")
-                          .arg(pluginsDir.absoluteFilePath(fileName))
-                          .arg(loader.errorString()));
+        if (QLibrary::isLibrary(pluginsDir.absoluteFilePath(fileName))) {
+          emit printMessage(QDateTime::currentDateTime(),
+                            tr("Failed to load plugin %1 : %2")
+                            .arg(pluginsDir.absoluteFilePath(fileName))
+                            .arg(loader.errorString()));
+        }
       }
     }
   }

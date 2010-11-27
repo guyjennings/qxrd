@@ -15,6 +15,8 @@
 #include "qxrdperkinelmerplugininterface.h"
 #endif
 
+#include "qxrdnidaqplugininterface.h"
+
 extern QxrdApplication *g_Application;
 
 class QxrdApplication : public QApplication
@@ -33,6 +35,8 @@ public:
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *perkinElmerPlugin();
 #endif
+
+  QxrdNIDAQPluginInterface *nidaqPlugin();
 
   void loadPlugins();
 
@@ -101,7 +105,7 @@ private:
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
   QxrdSettingsSaverThreadPtr      m_SettingsSaverThread;
   QxrdSettingsSaverPtr            m_SettingsSaver;
-
+  QxrdNIDAQPluginInterface       *m_NIDAQPluginInterface;
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;
 #endif
