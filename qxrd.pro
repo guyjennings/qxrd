@@ -6,7 +6,9 @@ message(Host Arch = $${QMAKE_HOST.arch})
 
 TEMPLATE = subdirs
 
-SUBDIRS = source plugins
+CONFIG += ordered
+
+SUBDIRS = plugins source
 
 DISTFILES += source plugins
 
