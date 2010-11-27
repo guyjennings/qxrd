@@ -8,12 +8,6 @@ TEMPLATE = subdirs
 
 SUBDIRS = source plugins
 
-win32 {
-#  SUBDIRS += $$quote(qxrd.app.pro)
-#  SUBDIRS += qxrd.nsis.pro
-#  include("qxrd.app.pri")
-}
-
 DISTFILES += source plugins
 
 OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile
