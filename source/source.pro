@@ -153,6 +153,7 @@ HEADERS += TODO.h \
     qxrddoubleimagedata.h \
     qxrdexposuretimespinner.h \
     qxrddetectorplugininterface.h \
+    qxrdnidaqplugininterface.h \
     qxrdprocessorinterface.h \
     qxrdnamedplugininterface.h \
     qxrddetectorgeometry.h \
@@ -245,6 +246,7 @@ SOURCES += qxrd.cpp \
     qxrddoubleimagedata.cpp \
     qxrdexposuretimespinner.cpp \
     qxrddetectorplugininterface.cpp \
+    qxrdnidaqplugininterface.cpp \
     qxrdprocessorinterface.cpp \
     qxrdnamedplugininterface.cpp \
     qxrddetectorgeometry.cpp \
@@ -330,10 +332,10 @@ win32 { # Copy QT Libraries into app directory
 
   CONFIG(debug, debug|release) {
     QMAKE_EXTRA_TARGETS += QtCored4
-    PRE_TARGETDEPS   += ../app/QtCored4.dll
-    QtCored4.target   = ../app/QtCored4.dll
-    QtCored4.depends  = $${LIBDIR}/QtCored4.dll
-    QtCored4.commands = $(COPY_FILE) $${LIBDIR}\\QtCored4.dll ..\\app\\QtCored4.dll
+    PRE_TARGETDEPS      += ../app/QtCored4.dll
+    QtCored4.target      = ../app/QtCored4.dll
+    QtCored4.depends     = $${LIBDIR}/QtCored4.dll
+    QtCored4.commands    = $(COPY_FILE) $${LIBDIR}\\QtCored4.dll ..\\app\\QtCored4.dll
 
     QMAKE_EXTRA_TARGETS += QtNetworkd4
     PRE_TARGETDEPS   += ../app/QtNetworkd4.dll
@@ -377,6 +379,10 @@ win32 { # Copy QT Libraries into app directory
     QtScript4.depends  = $${LIBDIR}/QtScript4.dll
     QtScript4.commands = $(COPY_FILE) $${LIBDIR}\\QtScript4.dll ..\\app\\QtScript4.dll
   }
+
+  QMAKE_DISTCLEAN += /Q ..\\app\\*.dll
+  QMAKE_DISTCLEAN += ..\\app\\plugins\\*
+  QMAKE_DISTCLEAN += ..\\app\\plugins
 }
 
 win32 { # Make NSIS installer...

@@ -9,6 +9,8 @@ DESTDIR = ../../app/plugins/
 INCLUDEPATH += ../../source/
 INCLUDEPATH += $$PE_SDK/
 
+LIBS += $${PE_SDK}/XISL.lib
+
 HEADERS += \
     qxrdperkinelmerplugin.h
 

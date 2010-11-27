@@ -46,5 +46,14 @@ win32 {
   exists($${PE_SDK}/XISL.lib) {
     DEFINES += HAVE_PERKIN_ELMER
     INCLUDEPATH += $${PE_SDK}
+    message("Perkin Elmer Software Found")
+  }
+}
+
+win32 {
+  exists("c:/Program Files/National Instruments/NI-DAQ/DAQmx ANSI C Dev/include/NIDAQmx.h") {
+    DEFINES += HAVE_NIDAQ
+    NIDAQ_BASE="c:/Program Files/National Instruments/NI-DAQ/DAQmx ANSI C Dev/"
+    message("NIDAQ Software Found")
   }
 }
