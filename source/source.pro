@@ -43,8 +43,6 @@ profile {
     QMAKE_CFLAGS += -pg
     QMAKE_LFLAGS += -pg
 }
-CONFIG(debug, debug|release):QXRDSUFFIX = $${QXRDSUFFIX}-dbg
-else:QXRDSUFFIX = $${QXRDSUFFIX}-rls
 
 MOC_DIR = moc
 UI_DIR = ui
@@ -129,6 +127,7 @@ HEADERS += TODO.h \
     qxrdacquisitionscripting.h \
     qxrdacquisitionoperations.h \
     qxrdacquisitionpilatus.h \
+    qxrdacquisitionperkinelmer.h \
     qxrdacquisitionareadetector.h \
     qxrdplot.h \
     qxrdplotslicer.h \
@@ -222,6 +221,7 @@ SOURCES += qxrd.cpp \
     qxrdacquisitionscripting.cpp \
     qxrdacquisitionoperations.cpp \
     qxrdacquisitionpilatus.cpp \
+    qxrdacquisitionperkinelmer.cpp \
     qxrdacquisitionareadetector.cpp \
     qxrdplot.cpp \
     qxrdplotslicer.cpp \
@@ -294,10 +294,8 @@ else:win32 {
 }
 
 defined(HAVE_PERKIN_ELMER) {
-    SOURCES += qxrdacquisitionperkinelmer.cpp \
-               qxrdperkinelmerplugininterface.cpp
-    HEADERS += qxrdacquisitionperkinelmer.h \
-               qxrdperkinelmerplugininterface.h
+    SOURCES += qxrdperkinelmerplugininterface.cpp
+    HEADERS += qxrdperkinelmerplugininterface.h
 }
 
 OTHER_FILES += qxrd.rc \
@@ -390,16 +388,26 @@ win32 { # Make NSIS installer...
     OUT_PWD_WIN = $${replace(OUT_PWD, /, \\)}
     PWD_WIN = $${replace(PWD, /, \\)}
 
-    QMAKE_POST_LINK = "\"c:\\Program Files\\NSIS\\makensis.exe\"" /V4
-
-    contains(QMAKE_HOST.arch,x86_64) {
-      QMAKE_POST_LINK += /DWIN64
+    exists("c:/Program Files/NSIS/makensis.exe") {
+      QMAKE_POST_LINK = "\"c:\\Program Files\\NSIS\\makensis.exe\"" /V4
+      message("NSIS found in Program Files")
     }
 
-    QMAKE_POST_LINK += /DVERSION=$${VERSION}
-    QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}\"
-    QMAKE_POST_LINK += /DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
-    QMAKE_POST_LINK += /DAPPDIR=\"$${OUT_PWD_WIN}\\..\\.\"
-    QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd.nsi\"
+    exists("c:/Program Files (x86)/NSIS/makensis.exe") {
+      QMAKE_POST_LINK = "\"c:\\Program Files (x86)\\NSIS\\makensis.exe\"" /V4
+      message("NSIS found in Program Files (x86)")
+    }
+
+    !isEmpty(QMAKE_POST_LINK) {
+      contains(QMAKE_HOST.arch,x86_64) {
+        QMAKE_POST_LINK += /DWIN64
+      }
+
+      QMAKE_POST_LINK += /DVERSION=$${VERSION}
+      QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}\"
+      QMAKE_POST_LINK += /DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+      QMAKE_POST_LINK += /DAPPDIR=\"$${OUT_PWD_WIN}\\..\\.\"
+      QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd.nsi\"
+    }
   }
 }
