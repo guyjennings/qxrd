@@ -261,7 +261,7 @@ public slots:
   void displayIntegratedData(QxrdIntegratedDataPtr d);
   void writeOutputScan(QxrdIntegratedDataPtr d);
 
-  void processorOptionsDialog();
+  virtual void processorOptionsDialog();
 
 public:
   QString existingOutputDirectory(QString dir, QString subdir);
