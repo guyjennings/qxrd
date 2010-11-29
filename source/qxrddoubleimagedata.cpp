@@ -96,3 +96,4 @@ double QxrdDoubleImageData::findAverage() const
     return sum/npix;
   }
 }
+

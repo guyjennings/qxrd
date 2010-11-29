@@ -72,7 +72,7 @@ QString QxrdFileSaver::uniqueFileName(QString name)
 
 #define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
 
-void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, int canOverwrite)
+void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   QTime tic;
   tic.start();
@@ -120,6 +120,10 @@ void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, int can
 
     image -> saveMetaData();
 
+    if (processor()->get_SaveOverflowFiles()) {
+      saveOverflowData(name, overflow);
+    }
+
     processor() -> updateEstimatedTime(processor() -> prop_SaveSubtractedTime(), tic.elapsed());
     processor() -> set_FileName(name);
 
@@ -135,18 +139,18 @@ void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, int can
   }
 }
 
-void QxrdFileSaver::saveData(QString name, QxrdInt32ImageDataPtr image, int canOverwrite)
+void QxrdFileSaver::saveData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   THREAD_CHECK;
 
-  saveRawData(name, image, canOverwrite);
+  saveRawData(name, image, overflow, canOverwrite);
 }
 
-void QxrdFileSaver::saveData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite)
+void QxrdFileSaver::saveData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   THREAD_CHECK;
 
-  saveRawData(name, image, canOverwrite);
+  saveRawData(name, image, overflow, canOverwrite);
 }
 
 void QxrdFileSaver::saveData(QString name, QxrdMaskDataPtr image, int canOverwrite)
@@ -203,7 +207,7 @@ void QxrdFileSaver::saveData(QString name, QxrdMaskDataPtr image, int canOverwri
   }
 }
 
-void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, int canOverwrite)
+void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   QTime tic;
   tic.start();
@@ -250,6 +254,10 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, int c
     image -> set_ImageSaved(true);
     image -> saveMetaData(name);
 
+    if (processor()->get_SaveOverflowFiles()) {
+      saveOverflowData(name, overflow);
+    }
+
     processor() -> updateEstimatedTime(m_Acquisition -> prop_Raw32SaveTime(), tic.elapsed());
     processor() -> set_FileName(name);
 
@@ -265,7 +273,7 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, int c
   }
 }
 
-void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite)
+void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   QTime tic;
   tic.start();
@@ -314,6 +322,10 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, int c
 
     image -> saveMetaData(name);
 
+    if (processor()->get_SaveOverflowFiles()) {
+      saveOverflowData(name, overflow);
+    }
+
     processor() -> updateEstimatedTime(m_Acquisition -> prop_Raw16SaveTime(), tic.elapsed());
     processor() -> set_FileName(name);
 
@@ -329,7 +341,7 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, int c
   }
 }
 
-void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, int canOverwrite)
+void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   THREAD_CHECK;
 
@@ -376,6 +388,10 @@ void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, int
   image -> set_ImageSaved(true);
 
   image -> saveMetaData();
+
+  if (processor()->get_SaveOverflowFiles()) {
+    saveOverflowData(name, overflow);
+  }
 
   processor() -> set_FileName(name);
 }
@@ -437,4 +453,32 @@ void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data)
 
     processor() -> updateEstimatedTime(m_Processor -> prop_SaveIntegratedDataTime(), tic.restart());
   }
+}
+
+void QxrdFileSaver::saveOverflowData(QString name, QxrdMaskDataPtr overflow)
+{
+  QString ovfname = name+".overflow";
+
+  FILE *ovfile = fopen(qPrintable(ovfname),"w+");
+
+  if (ovfile) {
+    int novf = overflow ->countOverflowPixels();
+
+    fprintf(ovfile, "#S %d overflow pixels for file %s\n", novf, qPrintable(name));
+    fprintf(ovfile, "#N 3\n");
+    fprintf(ovfile, "#L x  y  d\n");
+
+    int ncols = overflow -> get_Width();
+    int nrows = overflow -> get_Height();
+
+    for (int row=0; row<nrows; row++) {
+      for (int col=0; col<ncols; col++) {
+        if (overflow->value(col,row)) {
+          fprintf(ovfile, "%d\t%d\t1\n", col, row);
+        }
+      }
+    }
+  }
+
+  fclose(ovfile);
 }

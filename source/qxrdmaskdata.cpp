@@ -187,3 +187,36 @@ QString QxrdMaskData::summary()
 
   return tr("%1/%2 pixels set").arg(totalSet).arg(total);
 }
+
+int  QxrdMaskData::countMaskedPixels() const
+{
+  int total = m_Image.count();
+  int totalSet = 0;
+
+  for (int i=0; i<total; i++) {
+    if (m_Image[i] == 0) {
+      totalSet++;
+    }
+  }
+
+  return totalSet;
+}
+
+int  QxrdMaskData::countUnmaskedPixels() const
+{
+  int total = m_Image.count();
+  int totalSet = 0;
+
+  for (int i=0; i<total; i++) {
+    if (m_Image[i] == 1) {
+      totalSet++;
+    }
+  }
+
+  return totalSet;
+}
+
+int  QxrdMaskData::countOverflowPixels() const
+{
+  return countUnmaskedPixels();
+}

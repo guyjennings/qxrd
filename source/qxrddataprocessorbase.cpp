@@ -41,6 +41,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     m_SaveAsText(this, "saveAsText", false),
     m_SaveAsTextSeparator(this, "saveAsTextSeparator", " "),
     m_SaveAsTextPerLine(this,"saveAsTextPerLine",16),
+    m_SaveOverflowFiles(this,"saveOverflowFiles",0),
     m_PerformIntegration(this, "performIntegration", true),
     m_DisplayIntegratedData(this, "displayIntegratedData", true),
     m_SaveIntegratedData(this, "saveIntegratedData", true),
@@ -356,7 +357,7 @@ void QxrdDataProcessorBase::loadData(QString name)
 
 void QxrdDataProcessorBase::saveData(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_Data, canOverwrite);
+  saveNamedImageData(name, m_Data, QxrdMaskDataPtr(), canOverwrite);
 
   set_DataPath(m_Data -> get_FileName());
 }
@@ -387,7 +388,7 @@ void QxrdDataProcessorBase::loadDark(QString name)
 
 void QxrdDataProcessorBase::saveDark(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_DarkFrame, canOverwrite);
+  saveNamedImageData(name, m_DarkFrame, QxrdMaskDataPtr(), canOverwrite);
 
   set_DarkImagePath(m_DarkFrame -> get_FileName());
 }
@@ -411,7 +412,7 @@ void QxrdDataProcessorBase::loadBadPixels(QString name)
 
 void QxrdDataProcessorBase::saveBadPixels(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_BadPixels, canOverwrite);
+  saveNamedImageData(name, m_BadPixels, QxrdMaskDataPtr(), canOverwrite);
 
   set_BadPixelsPath(m_BadPixels -> get_FileName());
 }
@@ -435,7 +436,7 @@ void QxrdDataProcessorBase::loadGainMap(QString name)
 
 void QxrdDataProcessorBase::saveGainMap(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_GainMap, canOverwrite);
+  saveNamedImageData(name, m_GainMap, QxrdMaskDataPtr(), canOverwrite);
 
   set_GainMapPath(m_GainMap -> get_FileName());
 }
@@ -742,29 +743,29 @@ void QxrdDataProcessorBase::saveMask(QString name, int canOverwrite)
   set_MaskPath(m_Mask -> get_FileName());
 }
 
-void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveData(name, image, canOverwrite);
+  fileSaverThread() -> saveData(name, image, overflow, canOverwrite);
 }
 
-void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveData(name, image, canOverwrite);
+  fileSaverThread() -> saveData(name, image, overflow, canOverwrite);
 }
 
-void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveRawData(name, image, canOverwrite);
+  fileSaverThread() -> saveRawData(name, image, overflow, canOverwrite);
 }
 
-void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt32ImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveData(name, image, canOverwrite);
+  fileSaverThread() -> saveData(name, image, overflow, canOverwrite);
 }
 
-void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt32ImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveRawData(name, image, canOverwrite);
+  fileSaverThread() -> saveRawData(name, image, overflow, canOverwrite);
 }
 
 void QxrdDataProcessorBase::saveNamedMaskData(QString name, QxrdMaskDataPtr image, int canOverwrite)
@@ -772,9 +773,9 @@ void QxrdDataProcessorBase::saveNamedMaskData(QString name, QxrdMaskDataPtr imag
   fileSaverThread() -> saveData(name, image, canOverwrite);
 }
 
-void QxrdDataProcessorBase::saveNamedImageDataAsText(QString name, QxrdDoubleImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedImageDataAsText(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveTextData(name, image, canOverwrite);
+  fileSaverThread() -> saveTextData(name, image, overflow, canOverwrite);
 }
 
 void QxrdDataProcessorBase::clearDark()
@@ -821,7 +822,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image
         emit printMessage(QDateTime::currentDateTime(),
                           tr("Image \"%1\" is already saved").arg(img->rawFileName()));
       } else {
-        saveNamedRawImageData(img->rawFileName(), img, QxrdDataProcessorBase::NoOverwrite);
+        saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessorBase::NoOverwrite);
       }
     }
 
@@ -852,7 +853,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image
         emit printMessage(QDateTime::currentDateTime(),
                           tr("Image \"%1\" is already saved").arg(img->rawFileName()));
       } else {
-        saveNamedRawImageData(img->rawFileName(), img, QxrdDataProcessorBase::NoOverwrite);
+        saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessorBase::NoOverwrite);
       }
     }
 
@@ -920,12 +921,12 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
         emit printMessage(QDateTime::currentDateTime(),
                           tr("Image \"%1\" is already saved").arg(dimg->rawFileName()));
       } else {
-        saveNamedImageData(QDir(subtractedOutputDirectory()).filePath(dimg->get_FileBase()), dimg);
+        saveNamedImageData(QDir(subtractedOutputDirectory()).filePath(dimg->get_FileBase()), dimg, overflow);
       }
     }
 
     if (get_SaveAsText()) {
-      saveNamedImageDataAsText(dimg->get_FileName(), dimg);
+      saveNamedImageDataAsText(dimg->get_FileName(), dimg, overflow);
 
       updateEstimatedTime(prop_SaveAsTextTime(), tic.elapsed());
     }

@@ -57,6 +57,8 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   ui -> m_SaveIntegratedInSubdir  -> setChecked(proc->get_SaveIntegratedInSubdirectory());
   ui -> m_SaveIntegratedSubdir    -> setText  (proc->get_SaveIntegratedSubdirectory());
 
+  ui -> m_SaveOverflowFiles -> setChecked(proc->get_SaveOverflowFiles());
+
   ui -> m_DebugLevelSpinBox -> setRange(0,65535);
   ui -> m_DebugLevelSpinBox -> setValue(debugLevel);
 
@@ -213,6 +215,8 @@ void QxrdPreferencesDialog::accept()
   proc -> set_SaveIntegratedInSeparateFiles(ui -> m_SaveIntegratedInSeparateFiles -> isChecked());
   proc -> set_SaveIntegratedInSubdirectory (ui -> m_SaveIntegratedInSubdir  -> isChecked());
   proc -> set_SaveIntegratedSubdirectory   (ui -> m_SaveIntegratedSubdir    -> text());
+
+  proc -> set_SaveOverflowFiles(ui->m_SaveOverflowFiles -> isChecked());
 
   proc -> set_OutputDirectory(ui -> m_CurrentOutputDirectory -> text());
   proc -> set_LogFilePath    (ui -> m_CurrentLogFile -> text());

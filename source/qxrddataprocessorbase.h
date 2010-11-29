@@ -82,6 +82,9 @@ public:
   Q_PROPERTY(int saveAsTextPerLine READ get_SaveAsTextPerLine WRITE set_SaveAsTextPerLine);
   QCEP_INTEGER_PROPERTY(SaveAsTextPerLine);
 
+  Q_PROPERTY(bool saveOverflowFiles READ get_SaveOverflowFiles WRITE set_SaveOverflowFiles);
+  QCEP_BOOLEAN_PROPERTY(SaveOverflowFiles);
+
   Q_PROPERTY(bool performIntegration READ get_PerformIntegration WRITE set_PerformIntegration);
   QCEP_BOOLEAN_PROPERTY(PerformIntegration);
 
@@ -299,13 +302,13 @@ public:
   void newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
 
 protected:
-  void saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, int canOverwrite=NoOverwrite);
-  void saveNamedImageData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite=NoOverwrite);
-  void saveNamedImageData(QString name, QxrdInt32ImageDataPtr image, int canOverwrite=NoOverwrite);
-  void saveNamedRawImageData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite=NoOverwrite);
-  void saveNamedRawImageData(QString name, QxrdInt32ImageDataPtr image, int canOverwrite=NoOverwrite);
+  void saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+  void saveNamedImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+  void saveNamedImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+  void saveNamedRawImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+  void saveNamedRawImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
   void saveNamedMaskData(QString name, QxrdMaskDataPtr mask, int canOverwrite=NoOverwrite);
-  void saveNamedImageDataAsText(QString name, QxrdDoubleImageDataPtr image, int canOverwrite=NoOverwrite);
+  void saveNamedImageDataAsText(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
   void writeOutputScan(QVector<double> x, QVector<double> y);
 
   QxrdDoubleImageDataPtr processAcquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);

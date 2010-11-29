@@ -72,7 +72,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
       return processAcquiredInt16Image(image, dark, mask, overflow);
     } else {
       if (get_SaveDarkImages()) {
-        saveNamedImageData(image->get_FileName(), image);
+        saveNamedImageData(image->get_FileName(), image, overflow);
         set_DarkImagePath(image->get_FileName());
       }
 
@@ -96,7 +96,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
       return processAcquiredInt32Image(image, dark, mask, overflow);
     } else {
       if (get_SaveDarkImages()) {
-        saveNamedImageData(image->get_FileName(), image);
+        saveNamedImageData(image->get_FileName(), image, overflow);
 
         set_DarkImagePath(image->get_FileName());
       }
@@ -121,7 +121,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
       return processAcquiredDoubleImage(image, dark, mask, overflow);
     } else {
       if (get_SaveDarkImages()) {
-        saveNamedImageData(image->get_FileName(), image);
+        saveNamedImageData(image->get_FileName(), image, overflow);
 
         set_DarkImagePath(image->get_FileName());
       }

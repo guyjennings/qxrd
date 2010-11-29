@@ -222,7 +222,7 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="1">
+       <item row="10" column="1">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -286,6 +286,22 @@
         <widget class="QCheckBox" name="m_SaveIntegratedInLogFile">
          <property name="text">
           <string>Save Integrated Data in Log File?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="5">
+        <widget class="QCheckBox" name="m_SaveOverflowFiles">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string>Save info about overflowed pixels in .overflow file</string>
+         </property>
+         <property name="text">
+          <string>Save Overflow Pixel Information?</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

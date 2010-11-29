@@ -34,6 +34,10 @@ public slots:
 
   void maskCircle(double cx, double cy, double r, bool val);
 
+  int countMaskedPixels() const;
+  int countUnmaskedPixels() const;
+  int countOverflowPixels() const;
+
   QString summary();
 
 public:
