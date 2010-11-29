@@ -127,7 +127,6 @@ HEADERS += TODO.h \
     qxrdacquisitionscripting.h \
     qxrdacquisitionoperations.h \
     qxrdacquisitionpilatus.h \
-    qxrdacquisitionperkinelmer.h \
     qxrdacquisitionareadetector.h \
     qxrdplot.h \
     qxrdplotslicer.h \
@@ -221,7 +220,6 @@ SOURCES += qxrd.cpp \
     qxrdacquisitionscripting.cpp \
     qxrdacquisitionoperations.cpp \
     qxrdacquisitionpilatus.cpp \
-    qxrdacquisitionperkinelmer.cpp \
     qxrdacquisitionareadetector.cpp \
     qxrdplot.cpp \
     qxrdplotslicer.cpp \
@@ -294,8 +292,10 @@ else:win32 {
 }
 
 defined(HAVE_PERKIN_ELMER) {
-    SOURCES += qxrdperkinelmerplugininterface.cpp
-    HEADERS += qxrdperkinelmerplugininterface.h
+  SOURCES += qxrdacquisitionperkinelmer.cpp \
+             qxrdperkinelmerplugininterface.cpp
+  HEADERS += qxrdacquisitionperkinelmer.h \
+             qxrdperkinelmerplugininterface.h
 }
 
 OTHER_FILES += qxrd.rc \
