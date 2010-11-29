@@ -291,7 +291,7 @@ else:win32 {
     INCLUDEPATH += .
 }
 
-defined(HAVE_PERKIN_ELMER) {
+contains(DEFINES,HAVE_PERKIN_ELMER) {
   SOURCES += qxrdacquisitionperkinelmer.cpp \
              qxrdperkinelmerplugininterface.cpp
   HEADERS += qxrdacquisitionperkinelmer.h \
@@ -307,6 +307,7 @@ win32 { # Copy QT Libraries into app directory
 #  PRE_TARGETDEPS += app
 #  QMAKE_EXTRA_TARGETS += app
   LIBDIR = $$[QT_INSTALL_BINS]
+  LIBDIR_WIN = $${replace(LIBDIR, /, \\)}
 
   win32-g++ {
     exists($${LIBDIR}/libgcc_s_dw2-1.dll) {
@@ -315,7 +316,7 @@ win32 { # Copy QT Libraries into app directory
       PRE_TARGETDEPS   += ../app/libgcc_s_dw2-1.dll
       libgcc.target   = ../app/libgcc_s_dw2-1.dll
       libgcc.depends  = $${LIBDIR}/libgcc_s_dw2-1.dll
-      libgcc.commands = $(COPY_FILE) $${LIBDIR}\\libgcc_s_dw2-1.dll ..\\app\\libgcc_s_dw2-1.dll
+      libgcc.commands = $(COPY_FILE) $${LIBDIR_WIN}\\libgcc_s_dw2-1.dll ..\\app\\libgcc_s_dw2-1.dll
     }
 
     exists($${LIBDIR}/mingwm10.dll) {
@@ -324,7 +325,7 @@ win32 { # Copy QT Libraries into app directory
       PRE_TARGETDEPS   += ../app/mingwm10.dll
       mingwm10.target   = ../app/mingwm10.dll
       mingwm10.depends  = $${LIBDIR}/QtCored4.dll
-      mingwm10.commands = $(COPY_FILE) $${LIBDIR}\\mingwm10.dll ..\\app\\mingwm10.dll
+      mingwm10.commands = $(COPY_FILE) $${LIBDIR_WIN}\\mingwm10.dll ..\\app\\mingwm10.dll
     }
   }
 
@@ -333,49 +334,49 @@ win32 { # Copy QT Libraries into app directory
     PRE_TARGETDEPS      += ../app/QtCored4.dll
     QtCored4.target      = ../app/QtCored4.dll
     QtCored4.depends     = $${LIBDIR}/QtCored4.dll
-    QtCored4.commands    = $(COPY_FILE) $${LIBDIR}\\QtCored4.dll ..\\app\\QtCored4.dll
+    QtCored4.commands    = $(COPY_FILE) $${LIBDIR_WIN}\\QtCored4.dll ..\\app\\QtCored4.dll
 
     QMAKE_EXTRA_TARGETS += QtNetworkd4
     PRE_TARGETDEPS   += ../app/QtNetworkd4.dll
     QtNetworkd4.target   = ../app/QtNetworkd4.dll
     QtNetworkd4.depends  = $${LIBDIR}/QtNetworkd4.dll
-    QtNetworkd4.commands = $(COPY_FILE) $${LIBDIR}\\QtNetworkd4.dll ..\\app\\QtNetworkd4.dll
+    QtNetworkd4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtNetworkd4.dll ..\\app\\QtNetworkd4.dll
 
     QMAKE_EXTRA_TARGETS += QtGuid4
     PRE_TARGETDEPS   += ../app/QtGuid4.dll
     QtGuid4.target   = ../app/QtGuid4.dll
     QtGuid4.depends  = $${LIBDIR}/QtGuid4.dll
-    QtGuid4.commands = $(COPY_FILE) $${LIBDIR}\\QtGuid4.dll ..\\app\\QtGuid4.dll
+    QtGuid4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtGuid4.dll ..\\app\\QtGuid4.dll
 
     QMAKE_EXTRA_TARGETS += QtScriptd4
     PRE_TARGETDEPS   += ../app/QtScriptd4.dll
     QtScriptd4.target   = ../app/QtScriptd4.dll
     QtScriptd4.depends  = $${LIBDIR}/QtScriptd4.dll
-    QtScriptd4.commands = $(COPY_FILE) $${LIBDIR}\\QtScriptd4.dll ..\\app\\QtScriptd4.dll
+    QtScriptd4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtScriptd4.dll ..\\app\\QtScriptd4.dll
   } else {
     QMAKE_EXTRA_TARGETS += QtCore4
     PRE_TARGETDEPS   += ../app/QtCore4.dll
     QtCore4.target   = ../app/QtCore4.dll
     QtCore4.depends  = $${LIBDIR}/QtCore4.dll
-    QtCore4.commands = $(COPY_FILE) $${LIBDIR}\\QtCore4.dll ..\\app\\QtCore4.dll
+    QtCore4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtCore4.dll ..\\app\\QtCore4.dll
 
     QMAKE_EXTRA_TARGETS += QtNetwork4
     PRE_TARGETDEPS   += ../app/QtNetwork4.dll
     QtNetwork4.target   = ../app/QtNetwork4.dll
     QtNetwork4.depends  = $${LIBDIR}/QtNetwork4.dll
-    QtNetwork4.commands = $(COPY_FILE) $${LIBDIR}\\QtNetwork4.dll ..\\app\\QtNetwork4.dll
+    QtNetwork4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtNetwork4.dll ..\\app\\QtNetwork4.dll
 
     QMAKE_EXTRA_TARGETS += QtGui4
     PRE_TARGETDEPS   += ../app/QtGui4.dll
     QtGui4.target   = ../app/QtGui4.dll
     QtGui4.depends  = $${LIBDIR}/QtGui4.dll
-    QtGui4.commands = $(COPY_FILE) $${LIBDIR}\\QtGui4.dll ..\\app\\QtGui4.dll
+    QtGui4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtGui4.dll ..\\app\\QtGui4.dll
 
     QMAKE_EXTRA_TARGETS += QtScript4
     PRE_TARGETDEPS   += ../app/QtScript4.dll
     QtScript4.target   = ../app/QtScript4.dll
     QtScript4.depends  = $${LIBDIR}/QtScript4.dll
-    QtScript4.commands = $(COPY_FILE) $${LIBDIR}\\QtScript4.dll ..\\app\\QtScript4.dll
+    QtScript4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtScript4.dll ..\\app\\QtScript4.dll
   }
 
   QMAKE_DISTCLEAN += /Q ..\\app\\*.dll
