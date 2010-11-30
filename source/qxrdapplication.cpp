@@ -58,6 +58,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_PerkinElmerPluginInterface(NULL)
 #endif
 {
+  QcepProperty::registerMetaTypes();
+
   setupTiffHandlers();
 
   setObjectName("qxrdapplication");

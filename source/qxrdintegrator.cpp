@@ -54,6 +54,14 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
   QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(image);
 
   if (res) {
+    QcepDoubleList norm = image->get_Normalization();
+
+    double normVal = 1;
+
+    if (norm.length()>=1) {
+      normVal = norm[0];
+    }
+
     emit printMessage(QDateTime::currentDateTime(),
                       tr("Integrating image %1 from %2").arg(image->get_Title()).arg(image->get_FileName()));
 
@@ -158,9 +166,9 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
           double xv = (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
 
           if (normalize) {
-            res -> append(xv, integral[ir]/sv);
+            res -> append(xv, normVal*integral[ir]/sv);
           } else {
-            res -> append(xv, integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+            res -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
           }
         }
       }
@@ -182,6 +190,14 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
   QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(image);
 
   if (res) {
+    QcepDoubleList norm = image->get_Normalization();
+
+    double normVal = 1;
+
+    if (norm.length()>=1) {
+      normVal = norm[0];
+    }
+
     emit printMessage(QDateTime::currentDateTime(),
                       tr("Integrating image %1").arg(image->get_Title()));
 
@@ -245,9 +261,9 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
         double xv = ir*oversampleStep+halfOversampleStep;
 
         if (normalize) {
-          res -> append(xv, integral[ir]/sv);
+          res -> append(xv, normVal*integral[ir]/sv);
         } else {
-          res -> append(xv, integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+          res -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
         }
       }
     }

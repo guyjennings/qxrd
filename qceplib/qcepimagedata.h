@@ -93,6 +93,9 @@ public:
   Q_PROPERTY(int imageSaved READ get_ImageSaved WRITE set_ImageSaved);
   QCEP_INTEGER_PROPERTY(ImageSaved);
 
+  Q_PROPERTY(QcepDoubleList normalization READ get_Normalization WRITE set_Normalization);
+  QCEP_DOUBLE_LIST_PROPERTY(Normalization);
+
 public:
   int get_Width() const
   {

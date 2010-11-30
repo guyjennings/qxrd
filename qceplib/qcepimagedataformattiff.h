@@ -20,8 +20,8 @@ public:
   QcepImageDataFormatBase::Priority priority() const;
 
 private:
-  T unpackSignedBitField(void *buffer, int bitsPerSample, int x);
-  T unpackUnsignedBitField(void *buffer, int bitsPerSample, int x);
+  T unpackSignedBitField(void *buffer, int bitsPerSample, int x, int fillOrder);
+  T unpackUnsignedBitField(void *buffer, int bitsPerSample, int x, int fillOrder);
 };
 
 extern void qceptiff_warningHandler(const char *module, const char *fmt, va_list ap);
@@ -65,7 +65,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::canLoadFile(QString path)
 }
 
 template <typename T>
-T QcepImageDataFormatTiff<T>::unpackSignedBitField(void *buffer, int bitsPerSample, int x)
+T QcepImageDataFormatTiff<T>::unpackSignedBitField(void *buffer, int bitsPerSample, int x, int fillOrder)
 {
   int val=0;
   int samplesPerByte = 8/bitsPerSample;
@@ -97,7 +97,7 @@ T QcepImageDataFormatTiff<T>::unpackSignedBitField(void *buffer, int bitsPerSamp
 }
 
 template <typename T>
-T QcepImageDataFormatTiff<T>::unpackUnsignedBitField(void *buffer, int bitsPerSample, int x)
+T QcepImageDataFormatTiff<T>::unpackUnsignedBitField(void *buffer, int bitsPerSample, int x, int fillOrder)
 {
   int val=0;
   int samplesPerByte = 8/bitsPerSample;
@@ -133,12 +133,14 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::loadFile(QString path, QcepI
       quint16 sampleFormat = 0;
       quint16 samplesPerPixel = 0;
       quint16 bitsPerSample = 0;
+      quint16 fillOrder = 0;
 
       if ((TIFFGetFieldDefaulted(file, TIFFTAG_IMAGEWIDTH, &imageWidth)==1) &&
           (TIFFGetFieldDefaulted(file, TIFFTAG_IMAGELENGTH, &imageHeight)==1) &&
           (TIFFGetFieldDefaulted(file, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel)==1) &&
           (TIFFGetFieldDefaulted(file, TIFFTAG_BITSPERSAMPLE, &bitsPerSample)==1) &&
-          (TIFFGetFieldDefaulted(file, TIFFTAG_SAMPLEFORMAT, &sampleFormat)==1)) {
+          (TIFFGetFieldDefaulted(file, TIFFTAG_SAMPLEFORMAT, &sampleFormat)==1) &&
+          (TIFFGetFieldDefaulted(file, TIFFTAG_FILLORDER, &fillOrder)==1)) {
 
         img -> resize(imageWidth, imageHeight);
         img -> clear();
@@ -156,7 +158,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::loadFile(QString path, QcepI
                 case 1:
                 case 2:
                 case 4:
-                  img -> setValue(x,y, unpackSignedBitField(buffer, bitsPerSample, x));
+                  img -> setValue(x,y, unpackSignedBitField(buffer, bitsPerSample, x, fillOrder));
                   break;
                 case 8:
                   img -> setValue(x,y, (T)((qint8*) buffer)[x]);
@@ -174,7 +176,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::loadFile(QString path, QcepI
                 case 1:
                 case 2:
                 case 4:
-                  img -> setValue(x,y, unpackUnsignedBitField(buffer, bitsPerSample, x));
+                  img -> setValue(x,y, unpackUnsignedBitField(buffer, bitsPerSample, x, fillOrder));
                   break;
                 case 8:
                   img -> setValue(x,y, (T)((quint8*) buffer)[x]);

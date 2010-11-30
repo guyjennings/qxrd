@@ -185,6 +185,16 @@ QString QxrdDataProcessorBase::existingOutputDirectory(QString dir, QString subd
   return QDir(dir).filePath(subdir);
 }
 
+QString QxrdDataProcessorBase::filePathInCurrentDirectory(QString name)
+{
+  return QDir(currentDirectory()).filePath(name);
+}
+
+QString QxrdDataProcessorBase::currentDirectory()
+{
+  return get_OutputDirectory();
+}
+
 QString QxrdDataProcessorBase::darkOutputDirectory()
 {
   if (get_SaveDarkInSubdirectory()) {
@@ -460,6 +470,8 @@ int QxrdDataProcessorBase::maskStackPosition(int pos)
     return len-pos;
   } else if (pos < 0) {
     return -(pos+1);
+  } else {
+    return -1;
   }
 }
 
@@ -876,12 +888,20 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredDoubleImage
   return processAcquiredImage(dimg, dark, mask, overflow);
 }
 
+QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredDoubleImage
+    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v)
+{
+  return processAcquiredImage(dimg, dark, mask, overflow, v);
+}
+
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
-    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
+    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v)
 {
   if (dimg) {
     QTime tic;
     tic.start();
+
+    dimg->set_Normalization(v);
 
     QCEP_DEBUG(DEBUG_PROCESS,
                emit printMessage(QDateTime::currentDateTime(),

@@ -66,6 +66,8 @@ private:
   static QScriptValue maskFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue overflowFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue helpFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue processFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue typeNameFunc(QScriptContext *context, QScriptEngine *engine);
 
 private:
   mutable QMutex     m_Mutex;

@@ -95,6 +95,8 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("mask", m_ScriptEngine -> newFunction(maskFunc));
   m_ScriptEngine -> globalObject().setProperty("overflow", m_ScriptEngine -> newFunction(overflowFunc));
   m_ScriptEngine -> globalObject().setProperty("help", m_ScriptEngine -> newFunction(helpFunc));
+  m_ScriptEngine -> globalObject().setProperty("process", m_ScriptEngine -> newFunction(processFunc));
+  m_ScriptEngine -> globalObject().setProperty("typeName", m_ScriptEngine -> newFunction(typeNameFunc));
 }
 
 QScriptEngine* QxrdScriptEngine::scriptEngine() const
@@ -413,4 +415,29 @@ QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext *context, QScriptEngi
 QScriptValue QxrdScriptEngine::helpFunc(QScriptContext *context, QScriptEngine *engine)
 {
   return "Not yet implemented";
+}
+
+QScriptValue QxrdScriptEngine::typeNameFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() != 0) {
+    return QScriptValue(engine, QMetaType::typeName(context->argument(0).toUInt32()));
+  } else {
+    return QScriptValue(engine,"?");
+  }
+}
+
+QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  if (context->argumentCount() >= 1) {
+    QString file = context->argument(0).toString();
+    QList<double> normVals;
+
+    for (int i=1; i<context->argumentCount(); i++) {
+      normVals.append(context->argument(i).toNumber());
+    }
+
+    g_DataProcessor -> processNormalizedFile(file, normVals);
+  }
+
+  return QScriptValue(engine, 1);
 }

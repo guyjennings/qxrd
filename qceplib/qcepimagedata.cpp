@@ -26,6 +26,7 @@ QcepImageDataBase::QcepImageDataBase(int width, int height)
     m_UserComment3(this,"userComment3",""),
     m_UserComment4(this,"userComment4",""),
     m_ImageSaved(this,"imageSaved",0),
+    m_Normalization(this, "normalization", QcepDoubleList()),
     m_Width(width),
     m_Height(height),
     m_Mutex(QMutex::Recursive)
@@ -139,12 +140,23 @@ void QcepImageDataBase::saveMetaData(QString name)
   QTime tic;
   tic.start();
 
+  printf("type 266 = %s\n", QMetaType::typeName(266));
+
   {
     QMutexLocker lock(mutex());
 
     QSettings settings(name+".metadata", QSettings::IniFormat);
 
     QcepProperty::writeSettings(this, &staticMetaObject/*metaObject()*/, "metadata", settings);
+
+    settings.beginWriteArray("normalization");
+    QcepDoubleList norm = get_Normalization();
+
+    for (int i=0; i<norm.length(); i++) {
+      settings.setArrayIndex(i);
+      settings.setValue("val",norm[i]);
+    }
+    settings.endArray();
   }
 //
 //  printf("QcepImageDataBase::saveMetaData for file %s took %d msec\n",  qPrintable(name), tic.elapsed());

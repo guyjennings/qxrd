@@ -265,6 +265,8 @@ public slots:
 
 public:
   QString existingOutputDirectory(QString dir, QString subdir);
+  QString filePathInCurrentDirectory(QString name);
+  QString currentDirectory();
   QString darkOutputDirectory();
   QString rawOutputDirectory();
   QString subtractedOutputDirectory();
@@ -314,7 +316,9 @@ protected:
   QxrdDoubleImageDataPtr processAcquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
   QxrdDoubleImageDataPtr processAcquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
   QxrdDoubleImageDataPtr processAcquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
-  QxrdDoubleImageDataPtr processAcquiredImage(QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
+  QxrdDoubleImageDataPtr processAcquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v);
+  QxrdDoubleImageDataPtr processAcquiredImage(QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark,
+                                              QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v=QcepDoubleList());
 
   void newDarkImage(QxrdInt16ImageDataPtr image);
   void newDarkImage(QxrdInt32ImageDataPtr image);
