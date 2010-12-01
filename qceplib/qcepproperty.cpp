@@ -64,6 +64,9 @@ void QcepProperty::changeVariant(QVariant val)
   m_Variant = val;
 
   if (m_IsStored) {
+    QCEP_DEBUG(DEBUG_PREFS,
+               printf("%s: QcepProperty::changeVariant is stored\n", qPrintable(name())));
+
     m_ChangeCount.fetchAndAddOrdered(1);
   }
 }
@@ -76,6 +79,9 @@ void QcepProperty::changeVariant(T val)
   m_Variant.setValue(val);
 
   if (m_IsStored) {
+    QCEP_DEBUG(DEBUG_PREFS,
+               printf("%s: QcepProperty::changeVariant is stored\n", qPrintable(name())));
+
     m_ChangeCount.fetchAndAddOrdered(1);
   }
 }
