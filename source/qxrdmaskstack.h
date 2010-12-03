@@ -12,7 +12,7 @@ public:
   QxrdMaskStack();
 
   void changed();
-
+  QString stackLevelName(int n);
 signals:
   void maskChanged();
 };

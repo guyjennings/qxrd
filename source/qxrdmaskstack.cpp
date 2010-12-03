@@ -8,3 +8,8 @@ void QxrdMaskStack::changed()
 {
   emit maskChanged();
 }
+
+QString QxrdMaskStack::stackLevelName(int n)
+{
+  return tr("XYZTabcdefgh").at(n);
+}

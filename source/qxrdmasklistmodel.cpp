@@ -25,7 +25,7 @@ QVariant	 QxrdMaskListModel::data (const QModelIndex & index, int role) const
     QxrdMaskDataPtr p = m_MaskStack->at(index.row());
 
     if (p) {
-      return tr("%1 : %2").arg(index.row()).arg(p->get_Title());
+      return tr("%1 : %2").arg(m_MaskStack->stackLevelName(index.row())).arg(p->get_Title());
     }
   }
 
