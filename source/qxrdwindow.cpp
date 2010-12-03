@@ -9,6 +9,7 @@
 #include "qxrddataprocessor.h"
 #include "qxrdacquiredialog.h"
 #include "qxrdcenterfinderdialog.h"
+#include "qxrdmaskdialog.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdintegratordialog.h"
 #include "qxrdintegrator.h"
@@ -54,6 +55,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     m_IntegratorDialog(NULL),
     m_FileBrowser(NULL),
     m_Calculator(NULL),
+    m_MaskDialog(NULL),
     m_Progress(NULL),
     m_AllocationStatus(NULL),
     m_Acquiring(false),
@@ -86,6 +88,9 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 
   m_IntegratorDialog = QxrdIntegratorDialogPtr(new QxrdIntegratorDialog(m_DataProcessor -> integrator()));
   m_IntegratorDockWidget -> setWidget(m_IntegratorDialog);
+
+  m_MaskDialog = QxrdMaskDialogPtr(new QxrdMaskDialog(this, m_DataProcessor));
+  m_MaskDockWidget -> setWidget(m_MaskDialog);
 
 //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
 //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
@@ -127,28 +132,6 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(m_ActionIce, SIGNAL(triggered()), m_Plot, SLOT(setIce()));
 
   connect(m_ActionRefineCenterTilt, SIGNAL(triggered()), this, SLOT(doRefineCenterTilt()));
-
-  connect(m_HideMaskRange, SIGNAL(clicked()), this, SLOT(doHideMaskRange()));
-  connect(m_ShowMaskRange, SIGNAL(clicked()), this, SLOT(doShowMaskRange()));
-
-  connect(m_HideMaskAll, SIGNAL(clicked()), this, SLOT(doHideMaskAll()));
-  connect(m_ShowMaskAll, SIGNAL(clicked()), this, SLOT(doShowMaskAll()));
-  connect(m_InvertMask, SIGNAL(clicked()), this, SLOT(doInvertMask()));
-  connect(m_AndMask, SIGNAL(clicked()), this, SLOT(doAndMask()));
-  connect(m_OrMask, SIGNAL(clicked()), this, SLOT(doOrMask()));
-  connect(m_XorMask, SIGNAL(clicked()), this, SLOT(doXorMask()));
-  connect(m_AndNotMask, SIGNAL(clicked()), this, SLOT(doAndNotMask()));
-  connect(m_OrNotMask, SIGNAL(clicked()), this, SLOT(doOrNotMask()));
-  connect(m_XorNotMask, SIGNAL(clicked()), this, SLOT(doXorNotMask()));
-  connect(m_ExchangeMask, SIGNAL(clicked()), this, SLOT(doExchangeMask()));
-  connect(m_RollUpMask, SIGNAL(clicked()), this, SLOT(doRollUpMask()));
-  connect(m_RollDownMask, SIGNAL(clicked()), this, SLOT(doRollDownMask()));
-  connect(m_PushMask, SIGNAL(clicked()), this, SLOT(doPushMask()));
-  connect(m_ClearMask, SIGNAL(clicked()), this, SLOT(doClearMask()));
-  connect(m_UndoMask, SIGNAL(clicked()), this, SLOT(doUndoMask()));
-
-  connect(m_MaskCirclesRadio, SIGNAL(clicked()), m_ImageMaskCirclesButton, SLOT(click()));
-  connect(m_MaskPolygonsRadio, SIGNAL(clicked()), m_ImageMaskPolygonsButton, SLOT(click()));
 
   connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
   connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
@@ -290,11 +273,6 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 //  m_DataProcessor -> prop_BadPixelsPath() -> linkTo(m_BadPixelsPath);
 //  m_DataProcessor -> prop_GainMapPath() -> linkTo(m_GainMapPath);
 
-  m_DataProcessor -> prop_MaskMinimumValue() -> linkTo(Ui::QxrdWindow::m_MaskMinimum);
-  m_DataProcessor -> prop_MaskMaximumValue() -> linkTo(Ui::QxrdWindow::m_MaskMaximum);
-  m_DataProcessor -> prop_MaskCircleRadius() -> linkTo(Ui::QxrdWindow::m_MaskCircleRadius);
-  m_DataProcessor -> prop_MaskSetPixels() -> linkTo(Ui::QxrdWindow::m_MaskSetPixels);
-
   m_Plot -> prop_DisplayMinimumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumPct);
   m_Plot -> prop_DisplayMaximumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumPct);
   m_Plot -> prop_DisplayMinimumVal() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumVal);
@@ -367,7 +345,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 
   m_WindowsMenu -> addAction(m_AcquireDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CorrectionDockWidget -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_MaskingDockWidget -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_MaskDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_DisplayDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CenteringDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDockWidget -> toggleViewAction());

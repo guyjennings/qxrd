@@ -62,6 +62,8 @@ class QxrdCenterFinderDialog;      typedef QxrdCenterFinderDialog *QxrdCenterFin
 class QxrdCenterFinderPlot;        typedef QxrdCenterFinderPlot *QxrdCenterFinderPlotPtr;
 class QxrdCenterFinderPicker;      typedef QxrdCenterFinderPicker *QxrdCenterFinderPickerPtr;
 
+class QxrdMaskDialog;              typedef QxrdMaskDialog *QxrdMaskDialogPtr;
+
 class QxrdMaskPicker;              typedef QxrdMaskPicker *QxrdMaskPickerPtr;
 class QxrdCircularMaskPicker;      typedef QxrdCircularMaskPicker *QxrdCircularMaskPickerPtr;
 class QxrdPolygonalMaskPicker;     typedef QxrdPolygonalMaskPicker *QxrdPolygonalMaskPickerPtr;

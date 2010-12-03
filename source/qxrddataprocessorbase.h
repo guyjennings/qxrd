@@ -15,6 +15,7 @@
 #include "qxrdimagequeue.h"
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
+#include "qxrdmaskstack.h"
 #include "qxrddoubleimagedata.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdringsetfitparameters.h"
@@ -287,6 +288,8 @@ public:
   QxrdMaskDataPtr        mask() const;
   QxrdMaskDataPtr        overflow() const;
 
+  QxrdMaskStackPtr       maskStack();
+
   QxrdCenterFinderPtr    centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
   QxrdRingSetFitParametersPtr initialRingSetFitParameters() const;
@@ -364,7 +367,7 @@ protected:
   QxrdMaskDataPtr        m_Mask;
   QxrdMaskDataPtr        m_Overflow;
 
-  QStack<QxrdMaskDataPtr> m_Masks;
+  QxrdMaskStack          m_Masks;
 
   QAtomicInt             m_AcquiredCount;
 

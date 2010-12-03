@@ -182,7 +182,10 @@ HEADERS += TODO.h \
     qxrdplotimage.h \
     qxrdimagedisplaywidget.h \
     qxrddataprocessoroptionsdialog.h \
-    qwt_plot_piecewise_curve.h
+    qwt_plot_piecewise_curve.h \
+    qxrdmaskdialog.h \
+    qxrdmasklistmodel.h \
+    qxrdmaskstack.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -275,7 +278,10 @@ SOURCES += qxrd.cpp \
     qxrdplotimage.cpp \
     qxrdimagedisplaywidget.cpp \
     qxrddataprocessoroptionsdialog.cpp \
-    qwt_plot_piecewise_curve.cpp
+    qwt_plot_piecewise_curve.cpp \
+    qxrdmaskdialog.cpp \
+    qxrdmasklistmodel.cpp \
+    qxrdmaskstack.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -284,7 +290,8 @@ FORMS = qxrdwindow.ui \
     qxrdpreferencesdialog.ui \
     qxrdpowderfitwidget.ui \
     qxrdacquiredialog.ui \
-    qxrddataprocessoroptionsdialog.ui
+    qxrddataprocessoroptionsdialog.ui \
+    qxrdmaskdialog.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 

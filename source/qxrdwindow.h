@@ -134,6 +134,7 @@ private:
   QxrdCenterFinderDialogPtr              m_CenterFinderDialog;
   QxrdIntegratorDialogPtr                m_IntegratorDialog;
   QxrdImageCalculatorPtr                 m_Calculator;
+  QxrdMaskDialogPtr                      m_MaskDialog;
   QPointer<QxrdPowderFitDialog>          m_PowderFitDialog;
   QVector<double>                        m_Exposures;
   QProgressBarPtr                        m_Progress;

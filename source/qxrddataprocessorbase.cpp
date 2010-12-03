@@ -451,6 +451,11 @@ void QxrdDataProcessorBase::saveGainMap(QString name, int canOverwrite)
   set_GainMapPath(m_GainMap -> get_FileName());
 }
 
+QxrdMaskStackPtr QxrdDataProcessorBase::maskStack()
+{
+  return &m_Masks;
+}
+
 int QxrdDataProcessorBase::maskStackSize()
 {
   return m_Masks.count();
@@ -489,6 +494,8 @@ void QxrdDataProcessorBase::pushMaskStack(QxrdMaskDataPtr mask)
   emit printMessage(QDateTime::currentDateTime(),
                     tr("new mask, %1 on stack").arg(m_Masks.count()));
 
+  m_Masks.changed();
+
   newMask();
 }
 
@@ -516,12 +523,16 @@ void QxrdDataProcessorBase::popMaskStack(int amount)
     }
   }
 
+  m_Masks.changed();
+
   newMask();
 }
 
 void QxrdDataProcessorBase::clearMaskStack()
 {
   m_Masks.clear();
+
+  m_Masks.changed();
 
   newMask();
 }
@@ -548,6 +559,8 @@ void QxrdDataProcessorBase::rollMaskStack(int amount)
     m_Masks.pop_back();
   }
 
+  m_Masks.changed();
+
   newMask();
 }
 
@@ -560,6 +573,8 @@ void QxrdDataProcessorBase::exchangeMaskStack(int pos)
     m_Masks[p] = m_Mask;
     m_Mask = pm;
   }
+
+  m_Masks.changed();
 
   newMask();
 }
@@ -574,6 +589,8 @@ void QxrdDataProcessorBase::andMaskStack(int pos)
     m_Mask -> andMask(pm);
   }
 
+  m_Masks.changed();
+
   newMask();
 }
 
@@ -586,6 +603,8 @@ void QxrdDataProcessorBase::orMaskStack(int pos)
 
     m_Mask -> orMask(pm);
   }
+
+  m_Masks.changed();
 
   newMask();
 }
@@ -600,6 +619,8 @@ void QxrdDataProcessorBase::xorMaskStack(int pos)
     m_Mask -> xorMask(pm);
   }
 
+  m_Masks.changed();
+
   newMask();
 }
 
@@ -612,6 +633,8 @@ void QxrdDataProcessorBase::andNotMaskStack(int pos)
 
     m_Mask -> andNotMask(pm);
   }
+
+  m_Masks.changed();
 
   newMask();
 }
@@ -626,6 +649,8 @@ void QxrdDataProcessorBase::orNotMaskStack(int pos)
     m_Mask -> orNotMask(pm);
   }
 
+  m_Masks.changed();
+
   newMask();
 }
 
@@ -638,6 +663,8 @@ void QxrdDataProcessorBase::xorNotMaskStack(int pos)
 
     m_Mask -> xorNotMask(pm);
   }
+
+  m_Masks.changed();
 
   newMask();
 }
@@ -654,6 +681,8 @@ void QxrdDataProcessorBase::invertMaskStack(int pos)
     m_Mask->invertMask();
   }
 
+  m_Masks.changed();
+
   newMask();
 }
 
@@ -669,6 +698,8 @@ void QxrdDataProcessorBase::hideMaskAllStack(int pos)
     m_Mask->hideMaskAll();
   }
 
+  m_Masks.changed();
+
   newMask();
 }
 
@@ -683,6 +714,8 @@ void QxrdDataProcessorBase::showMaskAllStack(int pos)
   } else {
     m_Mask->showMaskAll();
   }
+
+  m_Masks.changed();
 
   newMask();
 }
@@ -702,6 +735,8 @@ void QxrdDataProcessorBase::hideMaskRangeStack(int pos)
     } else {
       m_Mask->hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
     }
+
+    m_Masks.changed();
 
     newMask();
   }
@@ -723,6 +758,8 @@ void QxrdDataProcessorBase::showMaskRangeStack(int pos)
       m_Mask->showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
     }
 
+    m_Masks.changed();
+
     newMask();
   }
 }
@@ -741,6 +778,8 @@ void QxrdDataProcessorBase::loadMask(QString name)
 //    res -> copyMask(m_Mask);
 
     pushMaskStack(res);
+
+    m_Masks.changed();
 
     newMask();
 
