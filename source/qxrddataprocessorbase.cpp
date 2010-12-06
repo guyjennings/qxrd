@@ -85,7 +85,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainMap(NULL),
-    m_Mask(allocator -> newMask()),
+//    m_Mask(allocator -> newMask()),
     m_AcquiredCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
@@ -315,7 +315,7 @@ void QxrdDataProcessorBase::newGainMapImage(QxrdDoubleImageDataPtr image)
 
 void QxrdDataProcessorBase::newMask()
 {
-  m_Window -> newMaskAvailable(m_Mask);
+  m_Window -> newMaskAvailable(mask());
 }
 
 void QxrdDataProcessorBase::loadDefaultImages()
@@ -465,31 +465,28 @@ int QxrdDataProcessorBase::maskStackPosition(int pos)
 {
   int len = m_Masks.count();
 
-  if (pos == 0) {
-    return -1;
-  } else if (pos > len) {
-    return 0;
-  } else if (pos < -len) {
-    return len-1;
-  } else if (pos > 0) {
+  if (pos >= 0 && pos < len) {
+    return pos;
+  } else if (pos < 0 && pos >= -len) {
     return len-pos;
-  } else if (pos < 0) {
-    return -(pos+1);
   } else {
     return -1;
   }
 }
 
-void QxrdDataProcessorBase::pushMaskStack(QxrdMaskDataPtr mask)
+void QxrdDataProcessorBase::pushMaskStack(QxrdMaskDataPtr m)
 {
-  if (mask == NULL) {
-    mask = m_Allocator -> newMask();
-    m_Mask->copyMask(mask);
+  if (m == NULL) {
+    m = m_Allocator -> newMask();
+
+    if (mask()) {
+      mask()->copyMaskTo(m);
+    }
   }
 
-  m_Masks.push(m_Mask);
+  m_Masks.push(m);
 
-  m_Mask = mask;
+//  m_Mask = mask;
 
   emit printMessage(QDateTime::currentDateTime(),
                     tr("new mask, %1 on stack").arg(m_Masks.count()));
@@ -513,12 +510,12 @@ void QxrdDataProcessorBase::popMaskStack(int amount)
     }
   } else if (amount == 1) {
     if (m_Masks.count() >= 1) {
-      m_Mask = m_Masks.first();
+//      m_Mask = m_Masks.first();
       m_Masks.pop_front();
     }
   } else if (amount == -1) {
     if (m_Masks.count() >= 1) {
-      m_Mask = m_Masks.last();
+//      m_Mask = m_Masks.last();
       m_Masks.pop_back();
     }
   }
@@ -550,12 +547,12 @@ void QxrdDataProcessorBase::rollMaskStack(int amount)
       rollMaskStack(-1);
     }
   } else if (amount == 1) {
-    m_Masks.push_back(m_Mask);
-    m_Mask = m_Masks.first();
+    QxrdMaskDataPtr m = m_Masks.first();
+    m_Masks.push_back(m);
     m_Masks.pop_front();
   } else if (amount == -1) {
-    m_Masks.push_front(m_Mask);
-    m_Mask = m_Masks.last();
+    QxrdMaskDataPtr m = m_Masks.last();
+    m_Masks.push_front(m);
     m_Masks.pop_back();
   }
 
@@ -566,107 +563,114 @@ void QxrdDataProcessorBase::rollMaskStack(int amount)
 
 void QxrdDataProcessorBase::exchangeMaskStack(int pos)
 {
-  int p = maskStackPosition(pos);
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
 
-  if (p >= 0) {
-    QxrdMaskDataPtr pm=m_Masks[p];
-    m_Masks[p] = m_Mask;
-    m_Mask = pm;
+  if ((p0 >= 0) && (p1 >= 0) && (p0 != p1)) {
+    QxrdMaskDataPtr pm=m_Masks[p0];
+    m_Masks[p0] = m_Masks[p1];
+    m_Masks[p1] = pm;
+
+    m_Masks.changed();
+
+    newMask();
   }
-
-  m_Masks.changed();
-
-  newMask();
 }
 
 void QxrdDataProcessorBase::andMaskStack(int pos)
 {
-  int p = maskStackPosition(pos);
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
 
-  if (p >= 0) {
-    QxrdMaskDataPtr pm = m_Masks[p];
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
 
-    m_Mask -> andMask(pm);
+    m_Masks[p0] -> andMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
   }
-
-  m_Masks.changed();
-
-  newMask();
 }
 
 void QxrdDataProcessorBase::orMaskStack(int pos)
 {
-  int p = maskStackPosition(pos);
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
 
-  if (p >= 0) {
-    QxrdMaskDataPtr pm = m_Masks[p];
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
 
-    m_Mask -> orMask(pm);
+    m_Masks[p0] -> orMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
   }
-
-  m_Masks.changed();
-
-  newMask();
 }
 
 void QxrdDataProcessorBase::xorMaskStack(int pos)
 {
-  int p = maskStackPosition(pos);
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
 
-  if (p >= 0) {
-    QxrdMaskDataPtr pm = m_Masks[p];
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
 
-    m_Mask -> xorMask(pm);
+    m_Masks[p0] -> xorMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
   }
-
-  m_Masks.changed();
-
-  newMask();
 }
 
 void QxrdDataProcessorBase::andNotMaskStack(int pos)
 {
-  int p = maskStackPosition(pos);
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
 
-  if (p >= 0) {
-    QxrdMaskDataPtr pm = m_Masks[p];
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
 
-    m_Mask -> andNotMask(pm);
+    m_Masks[p0] -> andNotMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
   }
-
-  m_Masks.changed();
-
-  newMask();
 }
 
 void QxrdDataProcessorBase::orNotMaskStack(int pos)
 {
-  int p = maskStackPosition(pos);
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
 
-  if (p >= 0) {
-    QxrdMaskDataPtr pm = m_Masks[p];
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
 
-    m_Mask -> orNotMask(pm);
+    m_Masks[p0] -> orNotMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
   }
-
-  m_Masks.changed();
-
-  newMask();
 }
 
 void QxrdDataProcessorBase::xorNotMaskStack(int pos)
 {
-  int p = maskStackPosition(pos);
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
 
-  if (p >= 0) {
-    QxrdMaskDataPtr pm = m_Masks[p];
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
 
-    m_Mask -> xorNotMask(pm);
+    m_Masks[p0] -> xorNotMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
   }
-
-  m_Masks.changed();
-
-  newMask();
 }
 
 void QxrdDataProcessorBase::invertMaskStack(int pos)
@@ -674,16 +678,12 @@ void QxrdDataProcessorBase::invertMaskStack(int pos)
   int p = maskStackPosition(pos);
 
   if (p >= 0) {
-    QxrdMaskDataPtr pm = m_Masks[p];
+    m_Masks[p] -> invertMask();
 
-    pm -> invertMask();
-  } else {
-    m_Mask->invertMask();
+    m_Masks.changed();
+
+    newMask();
   }
-
-  m_Masks.changed();
-
-  newMask();
 }
 
 void QxrdDataProcessorBase::hideMaskAllStack(int pos)
@@ -691,16 +691,12 @@ void QxrdDataProcessorBase::hideMaskAllStack(int pos)
   int p = maskStackPosition(pos);
 
   if (p >= 0) {
-    QxrdMaskDataPtr pm = m_Masks[p];
+    m_Masks[p] -> hideMaskAll();
 
-    pm -> hideMaskAll();
-  } else {
-    m_Mask->hideMaskAll();
+    m_Masks.changed();
+
+    newMask();
   }
-
-  m_Masks.changed();
-
-  newMask();
 }
 
 void QxrdDataProcessorBase::showMaskAllStack(int pos)
@@ -708,16 +704,12 @@ void QxrdDataProcessorBase::showMaskAllStack(int pos)
   int p = maskStackPosition(pos);
 
   if (p >= 0) {
-    QxrdMaskDataPtr pm = m_Masks[p];
+    m_Masks[p] -> showMaskAll();
 
-    pm -> showMaskAll();
-  } else {
-    m_Mask->showMaskAll();
+    m_Masks.changed();
+
+    newMask();
   }
-
-  m_Masks.changed();
-
-  newMask();
 }
 
 void QxrdDataProcessorBase::hideMaskRangeStack(int pos)
@@ -727,14 +719,8 @@ void QxrdDataProcessorBase::hideMaskRangeStack(int pos)
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
 
-  if (m_Data) {
-    if (p >= 0) {
-      QxrdMaskDataPtr pm = m_Masks[p];
-
-      pm -> hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
-    } else {
-      m_Mask->hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
-    }
+  if (m_Data && p >= 0) {
+    m_Masks[p] -> hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
 
     m_Masks.changed();
 
@@ -749,14 +735,8 @@ void QxrdDataProcessorBase::showMaskRangeStack(int pos)
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
 
-  if (m_Data) {
-    if (p >= 0) {
-      QxrdMaskDataPtr pm = m_Masks[p];
-
-      pm -> showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
-    } else {
-      m_Mask->showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
-    }
+  if (m_Data && p >= 0) {
+    m_Masks[p] -> showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
 
     m_Masks.changed();
 
@@ -775,7 +755,7 @@ void QxrdDataProcessorBase::loadMask(QString name)
     res -> loadMetaData();
     res -> set_DataType(QxrdMaskData::MaskData);
 
-//    res -> copyMask(m_Mask);
+//    res -> copyMaskTo(m_Mask);
 
     pushMaskStack(res);
 
@@ -783,15 +763,17 @@ void QxrdDataProcessorBase::loadMask(QString name)
 
     newMask();
 
-    set_MaskPath(m_Mask -> get_FileName());
+    set_MaskPath(mask() -> get_FileName());
   }
 }
 
 void QxrdDataProcessorBase::saveMask(QString name, int canOverwrite)
 {
-  saveNamedMaskData(name, m_Mask, canOverwrite);
+  if (mask()) {
+    saveNamedMaskData(name, mask(), canOverwrite);
 
-  set_MaskPath(m_Mask -> get_FileName());
+    set_MaskPath(mask() -> get_FileName());
+  }
 }
 
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
@@ -848,15 +830,6 @@ void QxrdDataProcessorBase::clearGainMap()
   newGainMapImage(QxrdDoubleImageDataPtr(NULL));
 
   set_GainMapPath("");
-}
-
-void QxrdDataProcessorBase::clearMask()
-{
-  m_Mask -> clear();
-
-  newMask();
-
-  set_MaskPath("");
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image
@@ -1139,8 +1112,8 @@ void QxrdDataProcessorBase::showMaskRange(/*double min, double max*/)
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
 
-  if (m_Data && m_Mask) {
-    m_Mask -> showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
+  if (m_Data && mask()) {
+    mask() -> showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
 
     newMask();
   }
@@ -1148,8 +1121,8 @@ void QxrdDataProcessorBase::showMaskRange(/*double min, double max*/)
 
 void QxrdDataProcessorBase::hideMaskAll()
 {
-  if (m_Mask) {
-    m_Mask -> hideMaskAll();
+  if (mask()) {
+    mask() -> hideMaskAll();
 
     newMask();
   }
@@ -1157,8 +1130,8 @@ void QxrdDataProcessorBase::hideMaskAll()
 
 void QxrdDataProcessorBase::showMaskAll()
 {
-  if (m_Mask) {
-    m_Mask -> showMaskAll();
+  if (mask()) {
+    mask() -> showMaskAll();
 
     newMask();
   }
@@ -1169,8 +1142,8 @@ void QxrdDataProcessorBase::hideMaskRange(/*double min, double max*/)
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
 
-  if (m_Data && m_Mask) {
-    m_Mask -> hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
+  if (m_Data && mask()) {
+    mask() -> hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
 
     newMask();
   }
@@ -1178,8 +1151,8 @@ void QxrdDataProcessorBase::hideMaskRange(/*double min, double max*/)
 
 void QxrdDataProcessorBase::invertMask()
 {
-  if (m_Mask) {
-    m_Mask -> invertMask();
+  if (mask()) {
+    mask() -> invertMask();
 
     newMask();
   }
@@ -1187,15 +1160,15 @@ void QxrdDataProcessorBase::invertMask()
 
 void QxrdDataProcessorBase::maskCircle(QwtDoubleRect rect)
 { 
-  if (m_Mask) {
+  if (mask()) {
     if ((rect.left() == rect.right()) && (rect.bottom() == rect.top())) {
-      m_Mask -> maskCircle(rect.left(), rect.top(), get_MaskCircleRadius(), get_MaskSetPixels());
+      mask() -> maskCircle(rect.left(), rect.top(), get_MaskCircleRadius(), get_MaskSetPixels());
     } else {
       double cx = rect.center().x();
       double cy = rect.center().y();
       double rad = rect.width()/2;
 
-      m_Mask -> maskCircle(cx, cy, rad, get_MaskSetPixels());
+      mask() -> maskCircle(cx, cy, rad, get_MaskSetPixels());
     }
 
     newMask();
@@ -1204,11 +1177,11 @@ void QxrdDataProcessorBase::maskCircle(QwtDoubleRect rect)
 
 void QxrdDataProcessorBase::maskPolygon(QVector<QwtDoublePoint> poly)
 {
-  if (m_Mask) {
+  if (mask()) {
     //  printf("QxrdDataProcessorBase::maskPolygon(%d points ...)\n", poly.size());
 
-    int nRows = m_Mask -> get_Height();
-    int nCols = m_Mask -> get_Width();
+    int nRows = mask() -> get_Height();
+    int nCols = mask() -> get_Width();
 
     QImage polyImage(nCols, nRows, QImage::Format_RGB32);
     QPainter polyPainter(&polyImage);
@@ -1228,7 +1201,7 @@ void QxrdDataProcessorBase::maskPolygon(QVector<QwtDoublePoint> poly)
     for (int j=0; j<nRows; j++) {
       for (int i=0; i<nCols; i++) {
         if (qGray(polyImage.pixel(i,j))) {
-          m_Mask -> setMaskValue(i, j, newval);
+          mask() -> setMaskValue(i, j, newval);
         }
       }
     }
@@ -1305,7 +1278,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::darkImage() const
 
 QxrdMaskDataPtr QxrdDataProcessorBase::mask() const
 {
-  return m_Mask;
+  return m_Masks.first();
 }
 
 QxrdMaskDataPtr QxrdDataProcessorBase::overflow() const
@@ -1644,11 +1617,11 @@ void QxrdDataProcessorBase::calculateROI()
   QTime tic;
   tic.start();
 
-  if (m_Data && m_Mask) {
+  if (m_Data && mask()) {
     double *res = new double[65536];
     long npixels = (m_Data -> get_Height()) * (m_Data -> get_Width());
     double *data = m_Data -> data();
-    short  *mask = m_Mask -> data();
+    short  *maskp = mask() -> data();
 
     for (int i=0; i<65536; i++) {
       res[i] = 0;
@@ -1656,7 +1629,7 @@ void QxrdDataProcessorBase::calculateROI()
 
     for (long i=0; i<npixels; i++) {
       double v = data[i];
-      short bin = mask[i];
+      short bin = maskp[i];
       bin &= 255;
       res[bin] += v;
     }
@@ -1675,11 +1648,11 @@ void QxrdDataProcessorBase::calculateHistogram()
   QTime tic;
   tic.start();
 
-  if (m_Data && m_Mask) {
+  if (m_Data && mask()) {
     double *res = new double[65536];
     long npixels = m_Data -> get_Height() * m_Data -> get_Width();
     double *data = m_Data -> data();
-    short  *mask = m_Mask -> data();
+    short  *maskp = mask() -> data();
 
     double minVal = *data;
     double maxVal = minVal;
@@ -1696,7 +1669,7 @@ void QxrdDataProcessorBase::calculateHistogram()
 
     for (long i=0; i<npixels; i++) {
       double v = data[i];
-      short bin = mask[i];
+      short bin = maskp[i];
       res[bin] += v;
     }
 

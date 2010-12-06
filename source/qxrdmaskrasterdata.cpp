@@ -45,13 +45,17 @@ double QxrdMaskRasterData::value(double x, double y) const
       return m_Mask->maskValue(((int) qRound(x)), ((int) qRound(y)));
     }
   } else {
-    return m_Mask->defaultValue();
+    return 0;
   }
 }
 
 short int *QxrdMaskRasterData::data() const
 {
-  return m_Mask->data();
+  if (m_Mask) {
+    return m_Mask->data();
+  } else {
+    return NULL;
+  }
 }
 
 void QxrdMaskRasterData::mask_combine(QxrdMaskRasterData *a)

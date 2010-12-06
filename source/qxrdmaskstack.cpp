@@ -11,5 +11,5 @@ void QxrdMaskStack::changed()
 
 QString QxrdMaskStack::stackLevelName(int n)
 {
-  return tr("XYZTabcdefgh").at(n);
+  return tr("XYZTabcdefghijklmnopqrstuvwxyz").at(n);
 }
