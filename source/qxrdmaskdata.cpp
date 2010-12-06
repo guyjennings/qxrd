@@ -10,7 +10,7 @@ short *QxrdMaskData::mask()
   return m_Image.data();
 }
 
-void QxrdMaskData::copyMask(QxrdMaskDataPtr dest)
+void QxrdMaskData::copyMaskTo(QxrdMaskDataPtr dest)
 {
   int height = get_Height();
   int width  = get_Width();
@@ -20,6 +20,8 @@ void QxrdMaskData::copyMask(QxrdMaskDataPtr dest)
       dest -> setMaskValue(i,j, maskValue(i,j));
     }
   }
+
+  dest -> set_Title(get_Title()+" copy");
 //
 //  setMask(from -> m_Mask);
 }

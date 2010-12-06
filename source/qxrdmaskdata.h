@@ -41,7 +41,7 @@ public slots:
   QString summary();
 
 public:
-  void copyMask(QxrdMaskDataPtr dest);
+  void copyMaskTo(QxrdMaskDataPtr dest);
 
   short* mask();
 
