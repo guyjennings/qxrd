@@ -1278,7 +1278,11 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::darkImage() const
 
 QxrdMaskDataPtr QxrdDataProcessorBase::mask() const
 {
-  return m_Masks.first();
+  if (m_Masks.isEmpty()) {
+    return QxrdMaskDataPtr();
+  } else {
+    return m_Masks.first();
+  }
 }
 
 QxrdMaskDataPtr QxrdDataProcessorBase::overflow() const

@@ -222,3 +222,35 @@ int  QxrdMaskData::countOverflowPixels() const
 {
   return countUnmaskedPixels();
 }
+
+QImage QxrdMaskData::thumbnailImage() const
+{
+  int height    = get_Height();
+  int width     = get_Width();
+  int th_height = 48;
+  int th_width  = 48;
+  int sc_height = height/th_height;
+  int sc_width  = width/th_width;
+  int threshold = sc_height*sc_width;
+
+  QImage res(th_width, th_height, QImage::Format_RGB32);
+
+  for (int j=0; j<th_height; j++) {
+    for (int i=0; i<th_width; i++) {
+      int tot=0;
+      for (int jsc = 0; jsc<sc_height; jsc++) {
+        for (int isc = 0; isc<sc_width; isc++) {
+          if (maskValue(i*th_width+isc, j*th_height+jsc)) {
+            tot++;
+          }
+        }
+      }
+
+      int val = tot*255/(threshold+1);
+
+      res.setPixel(i,j, qRgb(255-val,0,0));
+    }
+  }
+
+  return res;
+}

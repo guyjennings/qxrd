@@ -4,6 +4,7 @@
 #include "qcepmacros.h"
 //#include "qxrdforwardtypes.h"
 #include "qxrdimagedata.h"
+#include <QImage>
 
 class QxrdMaskData;
 
@@ -39,6 +40,8 @@ public slots:
   int countOverflowPixels() const;
 
   QString summary();
+
+  QImage thumbnailImage() const;
 
 public:
   void copyMaskTo(QxrdMaskDataPtr dest);

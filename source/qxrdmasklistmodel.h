@@ -4,7 +4,7 @@
 #include <QAbstractListModel>
 #include "qxrdmaskstack.h"
 
-class QxrdMaskListModel : public QAbstractListModel
+class QxrdMaskListModel : public QAbstractTableModel
 {
   Q_OBJECT;
 
@@ -14,14 +14,21 @@ public:
   QxrdMaskStackPtr maskStack();
   void setMaskStack(QxrdMaskStackPtr masks);
 
-  virtual QVariant	     data ( const QModelIndex & index, int role ) const;
+  virtual QVariant	   data ( const QModelIndex & index, int role ) const;
   virtual Qt::ItemFlags    flags ( const QModelIndex & index ) const;
   virtual bool             insertRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
   virtual bool             removeRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
-  virtual int	             rowCount ( const QModelIndex & parent = QModelIndex() ) const;
+  virtual int	           rowCount ( const QModelIndex & parent = QModelIndex() ) const;
+  virtual int	           columnCount ( const QModelIndex & parent = QModelIndex() ) const;
   virtual bool             setData ( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
   //    virtual void             sort ( int column, Qt::SortOrder order = Qt::AscendingOrder );
   virtual Qt::DropActions  supportedDropActions () const;
+
+  enum {
+    ThumbnailColumn,
+    VisibilityColumn,
+    TitleColumn
+  };
 
 public slots:
   void onMaskChanged();
