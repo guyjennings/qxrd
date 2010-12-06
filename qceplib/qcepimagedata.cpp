@@ -27,6 +27,7 @@ QcepImageDataBase::QcepImageDataBase(int width, int height)
     m_UserComment4(this,"userComment4",""),
     m_ImageSaved(this,"imageSaved",0),
     m_Normalization(this, "normalization", QcepDoubleList()),
+    m_Used(this, "used", true),
     m_Width(width),
     m_Height(height),
     m_Mutex(QMutex::Recursive)

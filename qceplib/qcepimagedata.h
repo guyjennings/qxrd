@@ -96,6 +96,9 @@ public:
   Q_PROPERTY(QcepDoubleList normalization READ get_Normalization WRITE set_Normalization);
   QCEP_DOUBLE_LIST_PROPERTY(Normalization);
 
+  Q_PROPERTY(bool used READ get_Used WRITE set_Used);
+  QCEP_BOOLEAN_PROPERTY(Used);
+
 public:
   int get_Width() const
   {
