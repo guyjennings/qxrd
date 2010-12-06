@@ -70,10 +70,12 @@ Qt::ItemFlags QxrdMaskListModel::flags (const QModelIndex & index) const
 
 bool QxrdMaskListModel::insertRows ( int row, int count, const QModelIndex & parent)
 {
+  return false;
 }
 
 bool QxrdMaskListModel::removeRows ( int row, int count, const QModelIndex & parent)
 {
+  return false;
 }
 
 bool QxrdMaskListModel::setData ( const QModelIndex & index, const QVariant & value, int role)
