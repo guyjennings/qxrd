@@ -15,7 +15,7 @@ class QxrdMaskData : public QxrdImageData<short>
   Q_OBJECT;
 
 public:
-  QxrdMaskData(QxrdAllocatorInterface *allocator, int width=0, int height=0, int def=1);
+  QxrdMaskData(QxrdAllocatorInterface *allocator, int width=0, int height=0, int def=0);
 
 public slots:
   bool maskValue(int x, int y) const;
