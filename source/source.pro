@@ -16,8 +16,6 @@ CONFIG += qt
 QT += network \
     script \
     scripttools
-macx:CONFIG += x86 \
-    ppc
 macx:
 else:unix { 
     message(Version = $${VERSION})
