@@ -97,6 +97,10 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("help", m_ScriptEngine -> newFunction(helpFunc));
   m_ScriptEngine -> globalObject().setProperty("process", m_ScriptEngine -> newFunction(processFunc));
   m_ScriptEngine -> globalObject().setProperty("typeName", m_ScriptEngine -> newFunction(typeNameFunc));
+
+  if (g_Application->nidaqPlugin()) {
+    m_ScriptEngine->globalObject().setProperty("nidaq", m_ScriptEngine->newQObject(g_Application->nidaqPlugin()));
+  }
 }
 
 QScriptEngine* QxrdScriptEngine::scriptEngine() const
