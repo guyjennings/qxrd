@@ -98,8 +98,10 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("process", m_ScriptEngine -> newFunction(processFunc));
   m_ScriptEngine -> globalObject().setProperty("typeName", m_ScriptEngine -> newFunction(typeNameFunc));
 
-  if (g_Application->nidaqPlugin()) {
-    m_ScriptEngine->globalObject().setProperty("nidaq", m_ScriptEngine->newQObject(g_Application->nidaqPlugin()));
+  QObject *obj = dynamic_cast<QObject*>(g_Application->nidaqPlugin());
+
+  if (obj) {
+    m_ScriptEngine->globalObject().setProperty("nidaq", m_ScriptEngine->newQObject(obj));
   }
 }
 
