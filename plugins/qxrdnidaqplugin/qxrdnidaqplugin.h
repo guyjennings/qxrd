@@ -17,6 +17,7 @@ public:
 public slots:
   void   aoSet(QString chan, double val);
   double aiGet(QString chan);
+  void   aoWave(QString chan, int type, double freq, double amplitude, double offset);
 };
 
 #endif // QXRDNIDAQPLUGIN_H
