@@ -27,6 +27,10 @@ public:
 
   QVariant variant() const;
   QString name() const;
+
+  int wasLoaded() const;
+  void setWasLoaded(int loaded);
+
   static void registerMetaTypes();
 
 //  int debug() const;
@@ -53,6 +57,7 @@ protected:
 private:
 //  int                      m_Debug;
   int                      m_IsStored;
+  int                      m_WasLoaded;
   QObject                 *m_Parent;
   const char              *m_Name;
   QVariant                 m_Variant;

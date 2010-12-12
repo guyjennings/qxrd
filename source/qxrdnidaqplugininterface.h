@@ -8,6 +8,10 @@ class QxrdNIDAQPluginInterface : public QxrdNamedPluginInterface
 {
 public:
   virtual ~QxrdNIDAQPluginInterface() {}
+
+public:
+  virtual void   aoSet(QString chan, double val) = 0;
+  virtual double aiGet(QString chan) = 0;
 };
 
 Q_DECLARE_INTERFACE(QxrdNIDAQPluginInterface, "gov.anl.aps.cep.Qxrd.NIDAQInterface/1.0");

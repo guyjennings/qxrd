@@ -8,7 +8,6 @@
 
 class QxrdPerkinElmerPlugin : public QObject, public QxrdPerkinElmerPluginInterface
 {
-  Q_OBJECT;
   Q_INTERFACES(QxrdPerkinElmerPluginInterface);
 
 public:

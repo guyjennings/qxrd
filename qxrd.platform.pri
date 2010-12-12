@@ -43,6 +43,11 @@ win32 {
     PE_SDK = "c:/XIS/SDK32/"
   }
 
+  exists("c:/XIS/SDK/") {
+    WIND64 = 0
+    PE_SDK = "c:/XIS/SDK/"
+  }
+
   exists($${PE_SDK}/XISL.lib) {
     DEFINES += HAVE_PERKIN_ELMER
     INCLUDEPATH += $${PE_SDK}
@@ -53,7 +58,26 @@ win32 {
 win32 {
   exists("c:/Program Files/National Instruments/NI-DAQ/DAQmx ANSI C Dev/include/NIDAQmx.h") {
     DEFINES += HAVE_NIDAQ
-    NIDAQ_BASE="c:/Program Files/National Instruments/NI-DAQ/DAQmx ANSI C Dev/"
+    NIDAQ_HEADER="c:/Program Files/National Instruments/NI-DAQ/DAQmx ANSI C Dev/include/"
+    NIDAQ_LIBS="c:/Program Files/National Instruments/NI-DAQ/DAQmx ANSI C Dev/"
     message("NIDAQ Software Found")
+  }
+
+  exists("c:/Program Files (x86)/National Instruments/Shared/ExternalCompilerSupport/C/include/NIDAQmx.h") {
+    contains(QMAKE_HOST.arch,x86_64) {
+      exists("c:/Program Files (x86)/National Instruments/Shared/ExternalCompilerSupport/C/lib64/msvc/NIDAQmx.lib") {
+        DEFINES += HAVE_NIDAQ
+        NIDAQ_HEADER="c:/Program Files (x86)/National Instruments/Shared/ExternalCompilerSupport/C/include/"
+        NIDAQ_LIBS="c:/Program Files (x86)/National Instruments/Shared/ExternalCompilerSupport/C/lib64/msvc/NIDAQmx.lib"
+        message("64 Bit NIDAQ Software Found")
+      }
+    } else {
+      exists("c:/Program Files (x86)/National Instruments/Shared/ExternalCompilerSupport/C/lib32/msvc/NIDAQmx.lib") {
+        DEFINES += HAVE_NIDAQ
+        NIDAQ_HEADER="c:/Program Files (x86)/National Instruments/Shared/ExternalCompilerSupport/C/include/"
+        NIDAQ_LIBS="c:/Program Files (x86)/National Instruments/Shared/ExternalCompilerSupport/C/lib32/msvc/NIDAQmx.lib"
+        message("32 Bit NIDAQ Software Found")
+      }
+    }
   }
 }

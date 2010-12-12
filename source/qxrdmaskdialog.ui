@@ -14,9 +14,6 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
-    <widget class="QListView" name="m_MaskListView"/>
-   </item>
    <item row="1" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -467,6 +464,9 @@ If unselected, image pixels are masked out</string>
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QListView" name="m_MaskListView"/>
    </item>
   </layout>
  </widget>

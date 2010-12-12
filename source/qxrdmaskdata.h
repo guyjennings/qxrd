@@ -4,6 +4,7 @@
 #include "qcepmacros.h"
 //#include "qxrdforwardtypes.h"
 #include "qxrdimagedata.h"
+#include <QImage>
 
 class QxrdMaskData;
 
@@ -14,7 +15,7 @@ class QxrdMaskData : public QxrdImageData<short>
   Q_OBJECT;
 
 public:
-  QxrdMaskData(QxrdAllocatorInterface *allocator, int width=0, int height=0, int def=1);
+  QxrdMaskData(QxrdAllocatorInterface *allocator, int width=0, int height=0, int def=0);
 
 public slots:
   bool maskValue(int x, int y) const;
@@ -40,8 +41,10 @@ public slots:
 
   QString summary();
 
+  QImage thumbnailImage() const;
+
 public:
-  void copyMask(QxrdMaskDataPtr dest);
+  void copyMaskTo(QxrdMaskDataPtr dest);
 
   short* mask();
 

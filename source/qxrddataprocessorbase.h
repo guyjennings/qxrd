@@ -220,7 +220,6 @@ public slots:
   void clearDark();
   void clearBadPixels();
   void clearGainMap();
-  void clearMask();
 
   int  maskStackSize();
   int  maskStackPosition(int pos);
@@ -364,7 +363,7 @@ protected:
   QxrdDoubleImageDataPtr m_DarkFrame;
   QxrdDoubleImageDataPtr m_BadPixels;
   QxrdDoubleImageDataPtr m_GainMap;
-  QxrdMaskDataPtr        m_Mask;
+//  QxrdMaskDataPtr        m_Mask;
   QxrdMaskDataPtr        m_Overflow;
 
   QxrdMaskStack          m_Masks;

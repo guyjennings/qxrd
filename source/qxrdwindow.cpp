@@ -650,7 +650,7 @@ void QxrdWindow::newMaskAvailable(QxrdMaskDataPtr mask)
 {
 //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewMaskMutex);
 
-//  mask -> copyMask(m_NewMask);
+//  mask -> copyMaskTo(m_NewMask);
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_NewMask = mask;
@@ -961,12 +961,18 @@ int QxrdWindow::maskStackSelectPopup()
 {
   QMenu actions;
 
-  actions.addAction("Current Mask")->setData(0);
+  QxrdMaskStackPtr m = m_DataProcessor->maskStack();
 
-  int nmasks = m_DataProcessor->maskStackSize();
+  if (m) {
+    int nmasks = m->size();
 
-  for (int i=1; i<=nmasks; i++) {
-    actions.addAction(tr("Stack %1").arg(i))->setData(i);;
+    for (int i=0; i<nmasks; i++) {
+      QxrdMaskDataPtr p = m->at(i);
+      if (p) {
+        QString lvl = m->stackLevelName(i);
+        actions.addAction(tr("%1: %2").arg(lvl).arg(p->get_Title()))->setData(i);
+      }
+    }
   }
 
   QAction *selected = actions.exec(QCursor::pos());

@@ -15,17 +15,44 @@ int QxrdMaskListModel::rowCount (const QModelIndex & parent) const
   return m_MaskStack->count();
 }
 
+int QxrdMaskListModel::columnCount(const QModelIndex & parent) const
+{
+  if (parent.isValid()) {
+    return 0;
+  }
+
+  return 1;
+}
+
 QVariant	 QxrdMaskListModel::data (const QModelIndex & index, int role) const
 {
   if (index.row() < 0 || index.row() >= m_MaskStack->count()) {
     return QVariant();
   }
 
-  if (role == Qt::DisplayRole || role == Qt::EditRole) {
-    QxrdMaskDataPtr p = m_MaskStack->at(index.row());
+  QxrdMaskDataPtr p = m_MaskStack->at(index.row());
 
-    if (p) {
-      return tr("%1 : %2").arg(m_MaskStack->stackLevelName(index.row())).arg(p->get_Title());
+  if (p) {
+    int col = index.column();
+
+//    if (col == ThumbnailColumn) {
+//      if (role == Qt::DecorationRole) {
+//        return p->thumbnailImage();
+//      }
+//    } else if (col == VisibilityColumn) {
+//      if (role == Qt::CheckStateRole) {
+//        return p->get_Used();
+//      }
+//    } else if (col == TitleColumn) {
+    if (col == 0) {
+      if (role == Qt::DecorationRole) {
+        return p->thumbnailImage();
+      } else if (role == Qt::CheckStateRole) {
+        return p->get_Used();
+      } else if (role == Qt::DisplayRole || role == Qt::EditRole) {
+//        return tr("%1 : %2").arg(m_MaskStack->stackLevelName(index.row())).arg(p->get_Title());
+        return p->get_Title();
+      }
     }
   }
 
@@ -38,32 +65,35 @@ Qt::ItemFlags QxrdMaskListModel::flags (const QModelIndex & index) const
     return QAbstractItemModel::flags(index) | Qt::ItemIsDropEnabled;
   }
 
-  return QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+  return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable |Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 }
 
 bool QxrdMaskListModel::insertRows ( int row, int count, const QModelIndex & parent)
 {
+  return false;
 }
 
 bool QxrdMaskListModel::removeRows ( int row, int count, const QModelIndex & parent)
 {
+  return false;
 }
 
 bool QxrdMaskListModel::setData ( const QModelIndex & index, const QVariant & value, int role)
 {
-  if ((index.row() >= 0)
-      && (index.row() < m_MaskStack->count())
-      && (role == Qt::EditRole || role == Qt::DisplayRole)) {
+  if (index.column() == 0) {
+    if ((index.row() >= 0) && (index.row() < m_MaskStack->count())) {
+      QxrdMaskDataPtr p = m_MaskStack->at(index.row());
 
-    QxrdMaskDataPtr p = m_MaskStack->at(index.row());
+      if ((role == Qt::EditRole || role == Qt::DisplayRole)) {
+        if (p) {
+          p->set_Title(value.toString());
+        }
 
-    if (p) {
-      p->set_Title(value.toString());
+        emit dataChanged(index, index);
+
+        return true;
+      }
     }
-
-    emit dataChanged(index, index);
-
-    return true;
   }
 
   return false;
