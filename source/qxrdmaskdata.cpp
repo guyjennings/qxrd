@@ -227,11 +227,32 @@ QImage QxrdMaskData::thumbnailImage() const
 {
   int height    = get_Height();
   int width     = get_Width();
-  int th_height = 48;
-  int th_width  = 48;
+  int th_height = /*48*/24;
+  int th_width  = /*48*/24;
   int sc_height = height/th_height;
   int sc_width  = width/th_width;
   int threshold = sc_height*sc_width;
+
+  QTime tic;
+//  tic.start();
+
+//  QImage img(width, height, QImage::Format_RGB32);
+//  for (int j=0; j<height; j++) {
+//    for (int i=0; i<width; i++) {
+//      img.setPixel(i,height-j-1,qRgb((maskValue(i,j)?0:255),0,0));
+//    }
+//  }
+
+//  int t1 = tic.elapsed();
+
+//  QImage res1 = img.scaled(th_width, th_height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+//  int t2 = tic.elapsed();
+
+//  printf("Image creation takes %d msec, scaling %d msec\n", t1, t2);
+
+//  return res;
+  tic.start();
 
   QImage res(th_width, th_height, QImage::Format_RGB32);
 
@@ -240,7 +261,7 @@ QImage QxrdMaskData::thumbnailImage() const
       int tot=0;
       for (int jsc = 0; jsc<sc_height; jsc++) {
         for (int isc = 0; isc<sc_width; isc++) {
-          if (maskValue(i*th_width+isc, j*th_height+jsc)) {
+          if (maskValue(i*sc_width+isc, j*sc_height+jsc)) {
             tot++;
           }
         }
@@ -248,9 +269,11 @@ QImage QxrdMaskData::thumbnailImage() const
 
       int val = tot*255/(threshold+1);
 
-      res.setPixel(i,j, qRgb(255-val,0,0));
+      res.setPixel(i,th_height-j-1, qRgb(255-val,0,0));
     }
   }
+
+  printf("Original thumbnail algorithm takes %d msec\n", tic.elapsed());
 
   return res;
 }

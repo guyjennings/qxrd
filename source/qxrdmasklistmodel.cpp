@@ -65,7 +65,7 @@ Qt::ItemFlags QxrdMaskListModel::flags (const QModelIndex & index) const
     return QAbstractItemModel::flags(index) | Qt::ItemIsDropEnabled;
   }
 
-  return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable |Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+  return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable |Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsUserCheckable;
 }
 
 bool QxrdMaskListModel::insertRows ( int row, int count, const QModelIndex & parent)
@@ -87,6 +87,16 @@ bool QxrdMaskListModel::setData ( const QModelIndex & index, const QVariant & va
       if ((role == Qt::EditRole || role == Qt::DisplayRole)) {
         if (p) {
           p->set_Title(value.toString());
+        }
+
+        emit dataChanged(index, index);
+
+        return true;
+      }
+
+      if ((role == Qt::CheckStateRole)) {
+        if (p) {
+          p->set_Used(!(p->get_Used()));
         }
 
         emit dataChanged(index, index);
