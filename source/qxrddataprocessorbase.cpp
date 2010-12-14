@@ -484,7 +484,7 @@ void QxrdDataProcessorBase::pushMaskStack(QxrdMaskDataPtr m)
     }
   }
 
-  m_Masks.push(m);
+  m_Masks.push_front(m);
 
 //  m_Mask = mask;
 
