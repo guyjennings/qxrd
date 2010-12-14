@@ -1,14 +1,15 @@
+TEMPLATE = subdirs
+
+SUBDIRS = plugins source
+#SUBDIRS = plugins
+
+CONFIG += ordered
+
 include("qxrd.version.pri")
 include("qxrd.platform.pri")
 
 message(Version = $${VERSION})
 message(Host Arch = $${QMAKE_HOST.arch})
-
-TEMPLATE = subdirs
-
-CONFIG += ordered
-
-SUBDIRS = plugins source
 
 DISTFILES += source plugins
 
@@ -32,14 +33,15 @@ dist.commands += \
                       plugins/plugins.pro plugins/*/q*.{cpp,h,pro} qxrd-$${VERSION} &&
 
 dist.commands += \
-tar -czf qxrd-$${VERSION}.tar.gz qxrd-$${VERSION} ; rm -rf qxrd-$${VERSION}
+  tar -czf qxrd-$${VERSION}.tar.gz qxrd-$${VERSION} ; rm -rf qxrd-$${VERSION}
 
 QMAKE_EXTRA_TARGETS += dox \
     rpmsource \
     mock \
     website
+
 dox.target = docs
-dox.commands += ( cat Doxyfile ; echo "PROJECT_NUMBER=$${VERSION}" ; echo "ALIASES = \"projectnumber=$${VERSION}\" ) | doxygen -
+#dox.commands += ( cat Doxyfile ; echo "PROJECT_NUMBER=$${VERSION}" ; echo "ALIASES = \"projectnumber=$${VERSION}\" ) | doxygen -
 dox.depends = Doxyfile \
     $${SOURCES} \
     $${HEADERS}
