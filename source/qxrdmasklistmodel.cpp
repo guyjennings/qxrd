@@ -48,7 +48,7 @@ QVariant	 QxrdMaskListModel::data (const QModelIndex & index, int role) const
       if (role == Qt::DecorationRole) {
         return p->thumbnailImage();
       } else if (role == Qt::CheckStateRole) {
-        return p->get_Used();
+        return (p->get_Used()?Qt::Checked:Qt::Unchecked);
       } else if (role == Qt::DisplayRole || role == Qt::EditRole) {
 //        return tr("%1 : %2").arg(m_MaskStack->stackLevelName(index.row())).arg(p->get_Title());
         return p->get_Title();
