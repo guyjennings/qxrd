@@ -474,6 +474,20 @@ int QxrdDataProcessorBase::maskStackPosition(int pos)
   }
 }
 
+void QxrdDataProcessorBase::newMaskStack()
+{
+  QxrdMaskDataPtr m = m_Allocator->newMask();
+
+  m_Masks.push_front(m);
+
+  emit printMessage(QDateTime::currentDateTime(),
+                    tr("new mask, %1 on stack").arg(m_Masks.count()));
+
+  m_Masks.changed();
+
+  newMask();
+}
+
 void QxrdDataProcessorBase::pushMaskStack(QxrdMaskDataPtr m)
 {
   if (m == NULL) {
@@ -489,7 +503,7 @@ void QxrdDataProcessorBase::pushMaskStack(QxrdMaskDataPtr m)
 //  m_Mask = mask;
 
   emit printMessage(QDateTime::currentDateTime(),
-                    tr("new mask, %1 on stack").arg(m_Masks.count()));
+                    tr("dup mask, %1 on stack").arg(m_Masks.count()));
 
   m_Masks.changed();
 
@@ -532,6 +546,11 @@ void QxrdDataProcessorBase::clearMaskStack()
   m_Masks.changed();
 
   newMask();
+}
+
+void QxrdDataProcessorBase::clearMaskStackTop()
+{
+  popMaskStack();
 }
 
 void QxrdDataProcessorBase::rollMaskStack(int amount)

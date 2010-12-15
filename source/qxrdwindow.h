@@ -59,6 +59,8 @@ public slots:
   void doRollUpMask();
   void doRollDownMask();
   void doClearMask();
+  void doClearMaskTop();
+  void doNewMask();
   void doPushMask();
   void doUndoMask();
 

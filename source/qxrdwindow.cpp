@@ -1131,10 +1131,22 @@ void QxrdWindow::doClearMask()
   emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Cleared");
 }
 
+void QxrdWindow::doClearMaskTop()
+{
+  m_DataProcessor->clearMaskStackTop();
+  emit statusMessage(QDateTime::currentDateTime(), "Top of Mask Stack Cleared");
+}
+
 void QxrdWindow::doPushMask()
 {
   m_DataProcessor->pushMaskStack();
   emit statusMessage(QDateTime::currentDateTime(), "Mask Pushed");
+}
+
+void QxrdWindow::doNewMask()
+{
+  m_DataProcessor->newMaskStack();
+  emit statusMessage(QDateTime::currentDateTime(), "New Mask");
 }
 
 void QxrdWindow::doUndoMask()

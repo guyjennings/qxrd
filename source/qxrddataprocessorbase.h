@@ -223,9 +223,11 @@ public slots:
 
   int  maskStackSize();
   int  maskStackPosition(int pos);
+  void newMaskStack();
   void pushMaskStack(QxrdMaskDataPtr mask = QxrdMaskDataPtr());
   void popMaskStack(int amount=1);
   void clearMaskStack();
+  void clearMaskStackTop();
   void rollMaskStack(int amount);
   void exchangeMaskStack(int pos);
   void andMaskStack(int pos);
