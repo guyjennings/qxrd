@@ -6,4 +6,5 @@ obj
 dox
 *.o
 qxrd.pro.user
-
+opencl-*
+qtopencl
