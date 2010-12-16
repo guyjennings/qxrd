@@ -40,9 +40,9 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdWindowPtr win, QxrdDataProcessorPtr proc, QWi
   m_Processor -> prop_MaskSetPixels() -> linkTo(ui->m_MaskSetPixels);
 
   m_Masks = m_Processor->maskStack();
-  m_MaskListModel = new QxrdMaskListModel(m_Masks);
+  m_MaskStackModel = new QxrdMaskStackModel(m_Masks);
 
-  ui->m_MaskStackView -> setModel(m_MaskListModel);
+  ui->m_MaskStackView -> setModel(m_MaskStackModel);
   ui->m_MaskStackView -> setMaskStack(m_Masks);
   ui->m_MaskStackView -> setMaskDialog(this);
 }

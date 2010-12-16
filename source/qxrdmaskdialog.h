@@ -6,7 +6,7 @@
 #include <QWidget>
 #include "qxrddataprocessor.h"
 #include "qxrdwindow.h"
-#include "qxrdmasklistmodel.h"
+#include "qxrdmaskstackmodel.h"
 
 namespace Ui {
   class QxrdMaskDialog;
@@ -35,7 +35,7 @@ private:
   QxrdWindowPtr        m_Window;
   QxrdDataProcessorPtr m_Processor;
   QxrdMaskStackPtr     m_Masks;
-  QxrdMaskListModelPtr m_MaskListModel;
+  QxrdMaskStackModelPtr m_MaskStackModel;
 };
 
 #endif // QXRDMASKDIALOG_H
