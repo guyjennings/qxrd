@@ -691,7 +691,7 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
   return res;
 }
 
-void QxrdImagePlot::contextMenuEvent(QContextMenuEvent *event)
+void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * /*event*/)
 {
 //  QMenu plotMenu(NULL, NULL);
 

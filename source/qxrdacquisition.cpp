@@ -51,14 +51,14 @@ void QxrdAcquisition::allocateMemoryForAcquisition()
 {
   THREAD_CHECK;
 
-  int nThreads = QThreadPool::globalInstance()->maxThreadCount();
+//  int nThreads = QThreadPool::globalInstance()->maxThreadCount();
   int nRows = get_NRows(), nCols = get_NCols();
   int nSum = get_ExposuresToSum(), nPre = get_PreTriggerFiles();
-  int optInt16 = 2, optInt32 = 1, optDbl = 2;
+  int optInt16 = 2, optInt32 = 1/*, optDbl = 2*/;
 //  double avail = get_TotalBufferSizeMB()*MegaBytes;
   double szInt16 = nRows*nCols*sizeof(quint16);
   double szInt32 = nRows*nCols*sizeof(quint32);
-  double szDbl   = nRows*nCols*sizeof(double);
+//  double szDbl   = nRows*nCols*sizeof(double);
   int szAcq;
 
   if (nSum == 1) {

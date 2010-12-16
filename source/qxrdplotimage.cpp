@@ -8,7 +8,7 @@ QxrdPlotImage::QxrdPlotImage(const QString &title, QxrdDoubleImageDataPtr data, 
   setAlpha(40);
 }
 
-QImage QxrdPlotImage::renderImage(const QwtScaleMap &xMap, const QwtScaleMap &yMap, const QwtDoubleRect &area) const
+QImage QxrdPlotImage::renderImage(const QwtScaleMap &/*xMap*/, const QwtScaleMap &/*yMap*/, const QwtDoubleRect &area) const
 {
   int width = (m_Data ? m_Data->get_Width() : 256);
   int height = (m_Data ?  m_Data->get_Height() : 256);

@@ -36,7 +36,7 @@ void QxrdAcquisitionSimulated::onCameraGainChanged(int newGain)
                     tr("Camera Gain Changed to %1").arg(newGain));
 }
 
-void QxrdAcquisitionSimulated::setupExposureMenu(QDoubleSpinBox *cb)
+void QxrdAcquisitionSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/)
 {
 //  cb -> addItem(tr("0.067"));
 //  cb -> addItem(tr("0.1"));

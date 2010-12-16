@@ -926,7 +926,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredDoubleImage
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
-    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v)
+    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr /*mask*/, QxrdMaskDataPtr overflow, QcepDoubleList v)
 {
   if (dimg) {
     QTime tic;

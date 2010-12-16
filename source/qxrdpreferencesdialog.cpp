@@ -20,7 +20,7 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   QxrdDataProcessor *proc = app->dataProcessor();
 
   int detectorType = app -> get_DetectorType();
-  int processorType = app -> get_ProcessorType();
+//  int processorType = app -> get_ProcessorType();
   int debugLevel = app -> get_Debug();
 
   int runSpecServer = app -> get_RunSpecServer();

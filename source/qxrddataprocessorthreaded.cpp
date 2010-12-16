@@ -15,7 +15,7 @@ QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QxrdAcquisitionPtr acq, Qxr
   connect(&m_HistogramData,   SIGNAL(resultAvailable()), this, SLOT(onHistogramDataAvailable()));
 }
 
-void QxrdDataProcessorThreaded::beginAcquisition(int isDark)
+void QxrdDataProcessorThreaded::beginAcquisition(int /*isDark*/)
 {
 }
 
@@ -185,7 +185,7 @@ void QxrdDataProcessorThreaded::onCorrectedImageAvailable()
 }
 
 QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
-    (QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double cx, double cy)
+    (QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double /*cx*/, double /*cy*/)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
              emit printMessage(QDateTime::currentDateTime(),
@@ -222,7 +222,7 @@ void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
 }
 
 QxrdROIDataPtr QxrdDataProcessorThreaded::calculateROI
-    (QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)
+    (QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
              emit printMessage(QDateTime::currentDateTime(),
@@ -243,7 +243,7 @@ void QxrdDataProcessorThreaded::onROIDataAvailable()
 }
 
 QxrdHistogramDataPtr QxrdDataProcessorThreaded::calculateHistogram
-    (QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)
+    (QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
              emit printMessage(QDateTime::currentDateTime(),

@@ -445,7 +445,7 @@ void QxrdApplication::debugChanged(int newValue)
   gCEPDebug = newValue;
 }
 
-static void qxrdTIFFWarningHandler(const char* module, const char* fmt, va_list ap)
+static void qxrdTIFFWarningHandler(const char* /*module*/, const char* /*fmt*/, va_list /*ap*/)
 {
 //  char msg[100];
 //

@@ -170,7 +170,7 @@ void QxrdPowderFitIdentifyPage::idPerformFit()
     appendOutputString(tr("P[%1](%2)=%3").arg(i).arg(m_FittedParameters[i]->name()).arg(parms[i]));
   }
 
-  int ret = dlevmar_dif(initialFit, parms.data(), measured.data(), nparm, npts, 100, NULL, info, NULL, NULL, this);
+  /*int ret = */dlevmar_dif(initialFit, parms.data(), measured.data(), nparm, npts, 100, NULL, info, NULL, NULL, this);
 
   appendOutputString(tr("Fitted parameters"));
 
@@ -183,7 +183,7 @@ void QxrdPowderFitIdentifyPage::idPerformFit()
   }
 }
 
-void QxrdPowderFitIdentifyPage::evaluateFit(double *parm, double *x, int np, int nx)
+void QxrdPowderFitIdentifyPage::evaluateFit(double *parm, double *x, int np, int /*nx*/)
 {
   QVector<double> saved(np);
 

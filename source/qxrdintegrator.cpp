@@ -292,6 +292,8 @@ QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdDoubleImageDataPtr image, do
   catch (...) {
     printf("QxrdIntegrator::sliceLine failed\n");
   }
+
+  return QxrdIntegratedDataPtr();
 }
 
 QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image, QwtArray<QwtDoublePoint> poly, double /*width*/)
