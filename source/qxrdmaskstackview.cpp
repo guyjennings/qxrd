@@ -6,7 +6,8 @@
 QxrdMaskStackView::QxrdMaskStackView(QWidget *parent) :
   QTableView(parent),
   m_Dialog(NULL),
-  m_MaskStack(NULL)
+  m_MaskStack(NULL),
+  m_Processor(NULL)
 {
 }
 
@@ -18,6 +19,11 @@ void QxrdMaskStackView::setMaskDialog(QxrdMaskDialog *dlg)
 void QxrdMaskStackView::setMaskStack(QxrdMaskStackPtr stk)
 {
   m_MaskStack = stk;
+}
+
+void QxrdMaskStackView::setProcessor(QxrdDataProcessor *proc)
+{
+  m_Processor = proc;
 }
 
 void QxrdMaskStackView::contextMenuEvent(QContextMenuEvent *event)
@@ -42,7 +48,7 @@ void QxrdMaskStackView::contextMenuEvent(QContextMenuEvent *event)
 
   if (m_Dialog) {
     if (action == newMask) {
-      m_MaskStack->newMask();
+      m_Processor->newMaskStack();
     } else if (action == enbMask) {
       m_MaskStack->enableMasks(selected);
     } else if (action == dsbMask) {

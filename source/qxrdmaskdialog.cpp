@@ -44,6 +44,7 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdWindowPtr win, QxrdDataProcessorPtr proc, QWi
 
   ui->m_MaskStackView -> setModel(m_MaskStackModel);
   ui->m_MaskStackView -> setMaskStack(m_Masks);
+  ui->m_MaskStackView -> setProcessor(m_Processor);
   ui->m_MaskStackView -> setMaskDialog(this);
 }
 
