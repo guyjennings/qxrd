@@ -183,7 +183,8 @@ HEADERS += TODO.h \
     qwt_plot_piecewise_curve.h \
     qxrdmaskdialog.h \
     qxrdmasklistmodel.h \
-    qxrdmaskstack.h
+    qxrdmaskstack.h \
+    qxrdmaskstackview.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -279,7 +280,8 @@ SOURCES += qxrd.cpp \
     qwt_plot_piecewise_curve.cpp \
     qxrdmaskdialog.cpp \
     qxrdmasklistmodel.cpp \
-    qxrdmaskstack.cpp
+    qxrdmaskstack.cpp \
+    qxrdmaskstackview.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \

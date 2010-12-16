@@ -58,25 +58,6 @@ short int *QxrdMaskRasterData::data() const
   }
 }
 
-void QxrdMaskRasterData::mask_combine(QxrdMaskRasterData *a)
-{
-  if (m_Mask && a) {
-    int nrow = m_Mask->get_Height();
-    int ncol = m_Mask->get_Width();
-    long npix = nrow*ncol;
-
-    short int *dst = m_Mask->data();
-    short int *src = a->data();
-
-    for (long i=0; i<npix; i++) {
-      int sv = *src;
-      int dv = *dst++;
-
-      *src++ = i & 0x03;/*(sv & 0x0002) | (dv & 0x0001);*/
-    }
-  }
-}
-
 QwtDoubleInterval QxrdMaskRasterData::range() const
 {
   return QwtDoubleInterval(0.0, 3.0);

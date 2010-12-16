@@ -20,6 +20,13 @@ public:
   explicit QxrdMaskDialog(QxrdWindowPtr win, QxrdDataProcessorPtr proc, QWidget *parent = 0);
   ~QxrdMaskDialog();
 
+  void newMask();
+  void enableMasks();
+  void deleteMasks();
+  void andMasks();
+  void orMasks();
+  void thresholdMasks();
+
 protected:
   void changeEvent(QEvent *e);
 
@@ -27,6 +34,7 @@ private:
   Ui::QxrdMaskDialog  *ui;
   QxrdWindowPtr        m_Window;
   QxrdDataProcessorPtr m_Processor;
+  QxrdMaskStackPtr     m_Masks;
   QxrdMaskListModelPtr m_MaskListModel;
 };
 

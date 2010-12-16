@@ -15,6 +15,7 @@ public:
   void setMaskStack(QxrdMaskStackPtr masks);
 
   virtual QVariant	   data ( const QModelIndex & index, int role ) const;
+  virtual QVariant         headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
   virtual Qt::ItemFlags    flags ( const QModelIndex & index ) const;
   virtual bool             insertRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
   virtual bool             removeRows ( int row, int count, const QModelIndex & parent = QModelIndex() );
@@ -23,11 +24,11 @@ public:
   virtual bool             setData ( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
   //    virtual void             sort ( int column, Qt::SortOrder order = Qt::AscendingOrder );
   virtual Qt::DropActions  supportedDropActions () const;
-
   enum {
-    ThumbnailColumn,
     VisibilityColumn,
-    TitleColumn
+    ThumbnailColumn,
+    TitleColumn,
+    NumColumns
   };
 
 public slots:

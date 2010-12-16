@@ -227,8 +227,8 @@ QImage QxrdMaskData::thumbnailImage() const
 {
   int height    = get_Height();
   int width     = get_Width();
-  int th_height = /*48*/24;
-  int th_width  = /*48*/24;
+  int th_height = ThumbnailHeight;
+  int th_width  = ThumbnailWidth;
   double sc_height = height/th_height;
   double sc_width  = width/th_width;
   int threshold = sc_height*sc_width;
@@ -256,4 +256,9 @@ QImage QxrdMaskData::thumbnailImage() const
   }
 
   return res;
+}
+
+QSize QxrdMaskData::thumbnailImageSize() const
+{
+  return QSize(ThumbnailWidth, ThumbnailHeight);
 }

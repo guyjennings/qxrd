@@ -2,10 +2,11 @@
 #include "ui_qxrdmaskdialog.h"
 
 QxrdMaskDialog::QxrdMaskDialog(QxrdWindowPtr win, QxrdDataProcessorPtr proc, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::QxrdMaskDialog),
-    m_Window(win),
-    m_Processor(proc)
+  QWidget(parent),
+  ui(new Ui::QxrdMaskDialog),
+  m_Window(win),
+  m_Masks(NULL),
+  m_Processor(proc)
 {
   ui->setupUi(this);
 
@@ -38,9 +39,12 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdWindowPtr win, QxrdDataProcessorPtr proc, QWi
   m_Processor -> prop_MaskCircleRadius() -> linkTo(ui->m_MaskCircleRadius);
   m_Processor -> prop_MaskSetPixels() -> linkTo(ui->m_MaskSetPixels);
 
-  m_MaskListModel = new QxrdMaskListModel(m_Processor->maskStack());
+  m_Masks = m_Processor->maskStack();
+  m_MaskListModel = new QxrdMaskListModel(m_Masks);
 
-  ui->m_MaskListView -> setModel(m_MaskListModel);
+  ui->m_MaskStackView -> setModel(m_MaskListModel);
+  ui->m_MaskStackView -> setMaskStack(m_Masks);
+  ui->m_MaskStackView -> setMaskDialog(this);
 }
 
 QxrdMaskDialog::~QxrdMaskDialog()
@@ -58,4 +62,34 @@ void QxrdMaskDialog::changeEvent(QEvent *e)
   default:
     break;
   }
+}
+
+void QxrdMaskDialog::newMask()
+{
+
+}
+
+void QxrdMaskDialog::enableMasks()
+{
+
+}
+
+void QxrdMaskDialog::deleteMasks()
+{
+
+}
+
+void QxrdMaskDialog::andMasks()
+{
+
+}
+
+void QxrdMaskDialog::orMasks()
+{
+
+}
+
+void QxrdMaskDialog::thresholdMasks()
+{
+
 }

@@ -42,6 +42,7 @@ public slots:
   QString summary();
 
   QImage thumbnailImage() const;
+  QSize  thumbnailImageSize() const;
 
 public:
   void copyMaskTo(QxrdMaskDataPtr dest);
@@ -51,6 +52,12 @@ public:
   template <typename T> void setMaskRange(QSharedPointer< QcepImageData<T> > image,  T min, T max, bool inRange, bool setTo);
   template <typename T> void showMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max);
   template <typename T> void hideMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max);
+
+private:
+  enum {
+    ThumbnailWidth = 24,
+    ThumbnailHeight = 24
+  };
 };
 
 template <typename T>
