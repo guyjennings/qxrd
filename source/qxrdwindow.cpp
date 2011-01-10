@@ -92,6 +92,8 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_MaskDialog = QxrdMaskDialogPtr(new QxrdMaskDialog(this, m_DataProcessor));
   m_MaskDockWidget -> setWidget(m_MaskDialog);
 
+  m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
+
   //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
   //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
 
@@ -349,6 +351,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_WindowsMenu -> addAction(m_DisplayDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CenteringDockWidget -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDockWidget -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_SynchronizedAcquisitionDialog -> toggleViewAction());
 
   //  if (m_Acquisition->get_DetectorType() != 1) { // No file browser for PE detector...
   //    m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
@@ -578,6 +581,10 @@ void QxrdWindow::doCancelDark()
     m_Acquisition -> cancelDark();
     //    INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "cancelDark"));
   }
+}
+
+void QxrdWindow::doSynchronizedAcquisition()
+{
 }
 
 void QxrdWindow::readSettings(QxrdSettings &settings, QString section)

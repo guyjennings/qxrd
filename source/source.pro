@@ -184,7 +184,9 @@ HEADERS += TODO.h \
     qxrdmaskdialog.h \
     qxrdmaskstackmodel.h \
     qxrdmaskstack.h \
-    qxrdmaskstackview.h
+    qxrdmaskstackview.h \
+    qxrdsynchronizedacquisition.h \
+    qxrdsynchronizedacquisitiondialog.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -281,7 +283,9 @@ SOURCES += qxrd.cpp \
     qxrdmaskdialog.cpp \
     qxrdmaskstackmodel.cpp \
     qxrdmaskstack.cpp \
-    qxrdmaskstackview.cpp
+    qxrdmaskstackview.cpp \
+    qxrdsynchronizedacquisition.cpp \
+    qxrdsynchronizedacquisitiondialog.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -291,7 +295,8 @@ FORMS = qxrdwindow.ui \
     qxrdpowderfitwidget.ui \
     qxrdacquiredialog.ui \
     qxrddataprocessoroptionsdialog.ui \
-    qxrdmaskdialog.ui
+    qxrdmaskdialog.ui \
+    qxrdsynchronizedacquisitiondialog.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 

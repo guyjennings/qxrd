@@ -15,6 +15,7 @@
 #include "qxrddataprocessor.h"
 #include "qxrdimagedisplaywidget.h"
 #include "qxrdfilebrowser.h"
+#include "qxrdsynchronizedacquisitiondialog.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -71,6 +72,7 @@ public slots:
   void onAcquireComplete(int dark);
   void doAcquireDark();
   void doCancelDark();
+  void doSynchronizedAcquisition();
 
   void executeScript();
   void finishedCommand(QScriptValue result);
@@ -138,6 +140,7 @@ private:
   QxrdImageCalculatorPtr                 m_Calculator;
   QxrdMaskDialogPtr                      m_MaskDialog;
   QPointer<QxrdPowderFitDialog>          m_PowderFitDialog;
+  QPointer<QxrdSynchronizedAcquisitionDialog> m_SynchronizedAcquisitionDialog;
   QVector<double>                        m_Exposures;
   QProgressBarPtr                        m_Progress;
   QLabelPtr                              m_StatusMsg;
