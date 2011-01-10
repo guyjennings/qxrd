@@ -3,6 +3,7 @@
 #include "qxrddataprocessor.h"
 #include "qxrdallocator.h"
 #include "qxrdacquiredialog.h"
+#include "qxrdsynchronizedacquisition.h"
 
 #include <QThreadPool>
 
@@ -12,7 +13,8 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
     m_PreTriggerInt32Images("preTriggerInt32Images"),
     m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(NULL),
-    m_ControlPanel(NULL)
+    m_ControlPanel(NULL),
+    m_SynchronizedAcquisition(new QxrdSynchronizedAcquisition(this))
 {
   connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
   connect(prop_BinningMode(), SIGNAL(changedValue(int)), this, SLOT(onBinningModeChanged(int)));
@@ -638,4 +640,9 @@ void QxrdAcquisition::darkAcquisitionStarted()
   if (m_ControlPanel) {
     m_ControlPanel -> darkAcquisitionStarted();
   }
+}
+
+QSharedPointer<QxrdSynchronizedAcquisition> QxrdAcquisition::synchronizedAcquisition() const
+{
+  return m_SynchronizedAcquisition;
 }

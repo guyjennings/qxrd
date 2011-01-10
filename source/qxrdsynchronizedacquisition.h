@@ -3,16 +3,20 @@
 
 #include <QObject>
 
+class QxrdAcquisition;
+
 class QxrdSynchronizedAcquisition : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    explicit QxrdSynchronizedAcquisition(QObject *parent = 0);
+  explicit QxrdSynchronizedAcquisition(QxrdAcquisition *acq);
 
 signals:
 
 public slots:
 
+private:
+  QxrdAcquisition *m_Acquisition;
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITION_H

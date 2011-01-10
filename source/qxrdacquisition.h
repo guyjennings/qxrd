@@ -13,6 +13,8 @@
 #include "qxrdimagequeue.h"
 #include "qxrdacquisitionoperations.h"
 
+class QxrdSynchronizedAcquisition;
+
 class QxrdAcquisition : public QxrdAcquisitionOperations
 {
   Q_OBJECT;
@@ -57,6 +59,8 @@ public:
   void indicateDroppedFrame();
   virtual QWidget* controlPanel(QxrdWindowPtr win);
 
+  QSharedPointer<QxrdSynchronizedAcquisition> synchronizedAcquisition() const;
+
 protected:
   void allocateMemoryForAcquisition();
   void acquisition(int isDark);
@@ -91,6 +95,8 @@ protected:
   QAtomicInt             m_CurrentFile;
 
   QxrdAcquireDialog     *m_ControlPanel;
+
+  QSharedPointer<QxrdSynchronizedAcquisition> m_SynchronizedAcquisition;
 };
 
 #endif
