@@ -8,6 +8,7 @@
 #include <QThread>
 #include <QWaitCondition>
 #include <QAtomicInt>
+#include <QElapsedTimer>
 
 #include "qxrdrasterdata.h"
 #include "qxrdimagequeue.h"
@@ -71,6 +72,8 @@ protected:
   void acquisitionError(int n);
   void acquisitionError(int ln, int n);
 
+  void acquireTiming();
+
 protected slots:
   virtual void haltAcquisition();
 
@@ -97,6 +100,10 @@ protected:
   QxrdAcquireDialog     *m_ControlPanel;
 
   QSharedPointer<QxrdSynchronizedAcquisition> m_SynchronizedAcquisition;
+
+  QElapsedTimer          m_ElapsedTimer;
+  QVector<int>           m_ElapsedHistogram;
+  int                    m_ElapsedCounter;
 };
 
 #endif

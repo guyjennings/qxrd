@@ -27,6 +27,11 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
     connect(prop_TotalBufferSizeMB64(), SIGNAL(changedValue(int)), this, SLOT(onBufferSizeChanged(int)));
     onBufferSizeChanged(get_TotalBufferSizeMB64());
   }
+
+  m_ElapsedHistogram.resize(21);
+  m_ElapsedHistogram.fill(0);
+  m_ElapsedCounter = 0;
+  m_ElapsedTimer.start();
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -196,6 +201,7 @@ void QxrdAcquisition::acquisition(int isDark)
 
 void QxrdAcquisition::beginAcquisition()
 {
+  m_ElapsedTimer.start();
 }
 
 void QxrdAcquisition::indicateDroppedFrame()
@@ -251,6 +257,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
     // and acquisition should drop frames until memory is available
 {
   THREAD_CHECK;
+
+  acquireTiming();
 
   static int frameCounter = 0;
   static int updateInterval = 0;
@@ -645,4 +653,32 @@ void QxrdAcquisition::darkAcquisitionStarted()
 QSharedPointer<QxrdSynchronizedAcquisition> QxrdAcquisition::synchronizedAcquisition() const
 {
   return m_SynchronizedAcquisition;
+}
+
+void QxrdAcquisition::acquireTiming()
+{
+  int msec = m_ElapsedTimer.restart();
+
+  int expmsec = 1000.0*get_ExposureTime();
+
+  int del = expmsec-msec;
+
+  if (del >= -10 && del <= 10) {
+    m_ElapsedHistogram[del+10] += 1;
+  }
+
+  m_ElapsedCounter += 1;
+
+  if (((double)m_ElapsedCounter)*get_ExposureTime() > 60.0) {
+    QString msg = "Elapsed Histogram";
+
+    for (int i=-10; i<10; i++) {
+      msg += QString(" %1").arg(m_ElapsedHistogram[i+10]);
+    }
+
+    emit printMessage(QDateTime::currentDateTime(), msg);
+
+    m_ElapsedCounter = 0;
+    m_ElapsedHistogram.fill(0);
+  }
 }
