@@ -157,32 +157,32 @@ void QxrdAllocator::deallocate(int sz, int width, int height)
 
 void QxrdAllocator::maskDeleter(QxrdMaskData *mask)
 {
-    delete mask;
-//  mask->deleteLater();
+//    delete mask;
+  mask->deleteLater();
 }
 
 void QxrdAllocator::int16Deleter(QxrdInt16ImageData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+  img->deleteLater();
 }
 
 void QxrdAllocator::int32Deleter(QxrdInt32ImageData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+    img->deleteLater();
 }
 
 void QxrdAllocator::doubleDeleter(QxrdDoubleImageData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+  img->deleteLater();
 }
 
 void QxrdAllocator::integratedDeleter(QxrdIntegratedData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+  img->deleteLater();
 }
 
 int QxrdAllocator::nFreeInt16()
