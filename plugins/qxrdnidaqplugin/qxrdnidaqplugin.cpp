@@ -1,6 +1,7 @@
 #include "qxrdnidaqplugin.h"
 #include "NIDAQmx.h"
 #include <QVector>
+#include <stdio.h>
 
 #define DAQmxErrChk(functionCall) { if( DAQmxFailed(error=(functionCall)) ) { printf("%s:%d NI-DAQ Error %d\n",__FILE__,__LINE__,error); goto Error; } }
 
