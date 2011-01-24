@@ -6,12 +6,13 @@
 
 class QxrdPilatusPlugin : public QObject, public QxrdDetectorPluginInterface
 {
+  Q_OBJECT;
   Q_INTERFACES(QxrdDetectorPluginInterface);
 
 public:
-    QxrdPilatusPlugin();
+  QxrdPilatusPlugin();
 
-    QString name() const;
+  QString name() const;
 };
 
 #endif // QXRDPILATUSPLUGIN_H
