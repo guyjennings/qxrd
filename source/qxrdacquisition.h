@@ -15,6 +15,7 @@
 #include "qxrdacquisitionoperations.h"
 
 class QxrdSynchronizedAcquisition;
+class QxrdNIDAQPluginInterface;
 
 class QxrdAcquisition : public QxrdAcquisitionOperations
 {
@@ -60,7 +61,10 @@ public:
   void indicateDroppedFrame();
   virtual QWidget* controlPanel(QxrdWindowPtr win);
 
-  QSharedPointer<QxrdSynchronizedAcquisition> synchronizedAcquisition() const;
+  QxrdSynchronizedAcquisition* synchronizedAcquisition() const;
+
+  void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
+  QxrdNIDAQPluginInterface *nidaqPlugin() const;
 
 protected:
   void allocateMemoryForAcquisition();
@@ -99,7 +103,8 @@ protected:
 
   QxrdAcquireDialog     *m_ControlPanel;
 
-  QSharedPointer<QxrdSynchronizedAcquisition> m_SynchronizedAcquisition;
+  QxrdNIDAQPluginInterface    *m_NIDAQPlugin;
+  QxrdSynchronizedAcquisition *m_SynchronizedAcquisition;
 
   QElapsedTimer          m_ElapsedTimer;
   QVector<int>           m_ElapsedHistogram;

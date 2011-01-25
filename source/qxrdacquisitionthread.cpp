@@ -22,7 +22,9 @@ static int g_DetectorType = -1;
 static int g_PEAvailable = false;
 #endif
 
-QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator, int detectorType)
+QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessorPtr proc,
+                                             QxrdAllocatorPtr allocator,
+                                             int detectorType)
   : QThread(),
     m_Debug(true),
     m_Allocator(NULL),

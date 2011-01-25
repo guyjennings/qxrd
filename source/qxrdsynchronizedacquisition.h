@@ -4,6 +4,7 @@
 #include <QObject>
 
 class QxrdAcquisition;
+class QxrdNIDAQPluginInterface;
 
 class QxrdSynchronizedAcquisition : public QObject
 {
@@ -15,8 +16,13 @@ signals:
 
 public slots:
 
+public:
+  void acquiredFrameAvailable(int currentExposure, int currentFile);
+  void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
+
 private:
   QxrdAcquisition *m_Acquisition;
+  QxrdNIDAQPluginInterface *m_NIDAQPlugin;
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITION_H

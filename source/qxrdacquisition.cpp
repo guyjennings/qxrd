@@ -14,6 +14,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
     m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(NULL),
     m_ControlPanel(NULL),
+    m_NIDAQPlugin(NULL),
     m_SynchronizedAcquisition(new QxrdSynchronizedAcquisition(this))
 {
   connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
@@ -259,6 +260,10 @@ void QxrdAcquisition::acquiredFrameAvailable()
   THREAD_CHECK;
 
   acquireTiming();
+
+  if (synchronizedAcquisition()) {
+    synchronizedAcquisition()->acquiredFrameAvailable(m_CurrentExposure, m_CurrentFile);
+  }
 
   static int frameCounter = 0;
   static int updateInterval = 0;
@@ -650,7 +655,21 @@ void QxrdAcquisition::darkAcquisitionStarted()
   }
 }
 
-QSharedPointer<QxrdSynchronizedAcquisition> QxrdAcquisition::synchronizedAcquisition() const
+void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin)
+{
+  m_NIDAQPlugin = nidaqPlugin;
+
+  if (m_SynchronizedAcquisition) {
+    m_SynchronizedAcquisition -> setNIDAQPlugin(nidaqPlugin);
+  }
+}
+
+QxrdNIDAQPluginInterface *QxrdAcquisition::nidaqPlugin() const
+{
+  return m_NIDAQPlugin;
+}
+
+QxrdSynchronizedAcquisition* QxrdAcquisition::synchronizedAcquisition() const
 {
   return m_SynchronizedAcquisition;
 }
