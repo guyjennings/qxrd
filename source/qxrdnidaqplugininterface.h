@@ -10,6 +10,7 @@ public:
   virtual ~QxrdNIDAQPluginInterface() {}
 
 public:
+  virtual void   setAnalogOut(int chan, double val) = 0;
   virtual void   aoSet(QString chan, double val) = 0;
   virtual double aiGet(QString chan) = 0;
 };

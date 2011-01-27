@@ -8,7 +8,8 @@
 
 QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   m_AOTaskHandle(0),
-  m_AITaskHandle(0)
+  m_AITaskHandle(0),
+  m_TrigAOTask(0)
 {
   printf("NI-DAQ plugin constructed\n");
   initTaskHandles();
@@ -58,6 +59,12 @@ void QxrdNIDAQPlugin::initTaskHandles()
     DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle, "Dev1/ai1", NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
   }
 
+  if (m_TrigAOTask == 0) {
+    DAQmxErrChk(DAQmxCreateTask("", &m_TrigAOTask));
+    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_TrigAOTask, "Dev1/ao0", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+//    DAQmxErrChk(DAQmxCfgAnlgEdgeStartTrig(m_TrigAOTask, "Dev1/ai2", DAQmx_Val_FallingSlope, 1.0));
+  }
+
   return;
 
 Error:
@@ -75,6 +82,11 @@ void QxrdNIDAQPlugin::closeTaskHandles()
   if (m_AITaskHandle) {
     DAQmxClearTask(m_AITaskHandle);
     m_AITaskHandle = 0;
+  }
+
+  if (m_TrigAOTask) {
+    DAQmxClearTask(m_TrigAOTask);
+    m_TrigAOTask = 0;
   }
 }
 
@@ -95,7 +107,16 @@ void   QxrdNIDAQPlugin::aoSet(double val1, double val2)
                                   vals, &nWritten,
                                   NULL));
 
-  printf("Analog output took %d msec\n", t.elapsed());
+//  printf("Analog output took %d msec\n", t.elapsed());
+
+Error:
+  return;
+}
+
+void   QxrdNIDAQPlugin::setAnalogOut(int chan, double val)
+{
+  int error;
+  DAQmxErrChk(DAQmxWriteAnalogScalarF64(m_TrigAOTask, true, 10.0, val, NULL));
 
 Error:
   return;

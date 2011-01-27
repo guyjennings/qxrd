@@ -17,6 +17,8 @@ public:
   QString name() const;
 
 public slots:
+  void   setAnalogOut(int chan, double val);
+
   void   aoSet(QString chan, double val);
   double aiGet(QString chan);
   void   aoWave(QString chan, int type, double freq, double amplitude, double offset);
@@ -31,6 +33,7 @@ private:
 private:
   TaskHandle m_AOTaskHandle;
   TaskHandle m_AITaskHandle;
+  TaskHandle m_TrigAOTask;
 };
 
 #endif // QXRDNIDAQPLUGIN_H
