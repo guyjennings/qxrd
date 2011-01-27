@@ -6,6 +6,7 @@
 #include "qxrdapplication.h"
 #include "qxrdimagedata.h"
 #include "qxrdwindow.h"
+#include "qxrdsynchronizedacquisition.h"
 
 //#ifdef Q_OS_UNIX
 //#include "AcqLinuxTypes.h"
@@ -379,7 +380,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
       )
     }
 
-    quint16* current = (m_AcquiredInt16Data ? m_AcquiredInt16Data->data() : NULL);
+    quint16* current = (m_AcquiredInt16Data[0] ? m_AcquiredInt16Data[0]->data() : NULL);
     quint32  cksum = 0;
     double   avg = 0;
 
@@ -444,6 +445,12 @@ void QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb)
 
 void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 {
+  static int fc = 0;
+
+  if (synchronizedAcquisition()) {
+    synchronizedAcquisition()->acquiredFrameAvailable((fc++) % 10/*m_CurrentExposure*/, m_CurrentFile);
+  }
+
   if (checkPluginAvailable()) {
 
     DWORD actualFrame, actSecFrame;
