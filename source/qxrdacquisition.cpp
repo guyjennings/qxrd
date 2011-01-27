@@ -11,8 +11,8 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
   : QxrdAcquisitionOperations(proc, allocator),
     m_PreTriggerInt16Images("preTriggerInt16Images"),
     m_PreTriggerInt32Images("preTriggerInt32Images"),
-    m_AcquiredInt16Data(NULL),
-    m_AcquiredInt32Data(NULL),
+    m_AcquiredInt16Data(1),
+    m_AcquiredInt32Data(1),
     m_ControlPanel(NULL),
     m_NIDAQPlugin(NULL),
     m_SynchronizedAcquisition(new QxrdSynchronizedAcquisition(this))
@@ -46,8 +46,8 @@ void QxrdAcquisition::initialize()
 {
 //  allocateMemoryForAcquisition();
 
-  m_AcquiredInt16Data = m_Allocator -> newInt16Image();
-  m_AcquiredInt32Data = m_Allocator -> newInt32Image();
+  m_AcquiredInt16Data[0] = m_Allocator -> newInt16Image();
+  m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
 }
 
 void QxrdAcquisition::onBufferSizeChanged(int newMB)
@@ -259,11 +259,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
 {
   THREAD_CHECK;
 
-  acquireTiming();
-
-  if (synchronizedAcquisition()) {
-    synchronizedAcquisition()->acquiredFrameAvailable(m_CurrentExposure, m_CurrentFile);
-  }
+//  acquireTiming();
 
   static int frameCounter = 0;
   static int updateInterval = 0;
@@ -271,7 +267,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
   if (m_Acquiring.tryLock()) {
     m_Acquiring.unlock();
 
-    if (m_AcquiredInt16Data) {
+    if (m_AcquiredInt16Data[0]) {
       updateInterval = 1.0/get_ExposureTime();
 
       if (updateInterval < 1) {
@@ -281,20 +277,24 @@ void QxrdAcquisition::acquiredFrameAvailable()
       frameCounter++;
 
       if ((frameCounter % updateInterval) == 0) {
-        m_DataProcessor -> idleInt16Image(m_AcquiredInt16Data);
+        m_DataProcessor -> idleInt16Image(m_AcquiredInt16Data[0]);
       }
     }
 
-    m_AcquiredInt16Data = m_Allocator -> newInt16Image();
-  } else if (m_AcquiredInt16Data == NULL) {
+    m_AcquiredInt16Data[0] = m_Allocator -> newInt16Image();
+  } else if (m_AcquiredInt16Data[0] == NULL) {
     indicateDroppedFrame();
 
-    m_AcquiredInt16Data = m_Allocator -> newInt16Image();
-  } else if (m_AcquiredInt32Data == NULL) {
+    m_AcquiredInt16Data[0] = m_Allocator -> newInt16Image();
+  } else if (m_AcquiredInt32Data[0] == NULL) {
     indicateDroppedFrame();
 
-    m_AcquiredInt32Data = m_Allocator -> newInt32Image();
+    m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
   } else  {
+//    if (synchronizedAcquisition()) {
+//      synchronizedAcquisition()->acquiredFrameAvailable(m_CurrentExposure, m_CurrentFile);
+//    }
+
     m_CurrentExposure.fetchAndAddOrdered(1);
 
     if (m_CurrentExposure <= get_ExposuresToSkip()) {
@@ -302,8 +302,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
                  emit printMessage(QDateTime::currentDateTime(),
                                    tr("Frame %1 skipped").arg(m_CurrentExposure));
       );
-      m_DataProcessor -> idleInt16Image(m_AcquiredInt16Data);
-      m_AcquiredInt16Data = m_Allocator -> newInt16Image();
+      m_DataProcessor -> idleInt16Image(m_AcquiredInt16Data[0]);
+      m_AcquiredInt16Data[0] = m_Allocator -> newInt16Image();
       if (m_CurrentExposure == get_ExposuresToSkip()) {
         set_ExposuresToSkip(0);
         m_CurrentExposure.fetchAndStoreOrdered(0);
@@ -316,8 +316,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
 
         long nPixels = get_NRows()*get_NCols();
         int ovflwlvl = get_OverflowLevel();
-        quint16* src = m_AcquiredInt16Data->data();
-        quint32* dst = m_AcquiredInt32Data->data();
+        quint16* src = m_AcquiredInt16Data[0]->data();
+        quint32* dst = m_AcquiredInt32Data[0]->data();
         short int* ovf = m_OverflowMask->data();
 
         if (m_CurrentExposure == 1) {
@@ -383,32 +383,32 @@ void QxrdAcquisition::acquiredFrameAvailable()
         QFileInfo finfo(fileName);
 
         if (get_ExposuresToSum() == 1) {
-          m_AcquiredInt16Data -> set_FileBase(fileBase);
-          m_AcquiredInt16Data -> set_FileName(fileName);
-          m_AcquiredInt16Data -> set_Title(finfo.fileName());
-          m_AcquiredInt16Data -> set_ExposureTime(get_ExposureTime());
-          m_AcquiredInt16Data -> set_SummedExposures(get_ExposuresToSum());
-          m_AcquiredInt16Data -> set_DateTime(QDateTime::currentDateTime());
-          m_AcquiredInt16Data -> set_HBinning(1);
-          m_AcquiredInt16Data -> set_VBinning(1);
-          m_AcquiredInt16Data -> set_CameraGain(get_CameraGain());
-          m_AcquiredInt16Data -> set_DataType(QxrdInt16ImageData::Raw16Data);
-          m_AcquiredInt16Data -> set_Triggered(get_Trigger());
-          m_AcquiredInt16Data -> set_UserComment1(get_UserComment1());
-          m_AcquiredInt16Data -> set_UserComment2(get_UserComment2());
-          m_AcquiredInt16Data -> set_UserComment3(get_UserComment3());
-          m_AcquiredInt16Data -> set_UserComment4(get_UserComment4());
-          m_AcquiredInt16Data -> set_ImageSaved(false);
+          m_AcquiredInt16Data[0] -> set_FileBase(fileBase);
+          m_AcquiredInt16Data[0] -> set_FileName(fileName);
+          m_AcquiredInt16Data[0] -> set_Title(finfo.fileName());
+          m_AcquiredInt16Data[0] -> set_ExposureTime(get_ExposureTime());
+          m_AcquiredInt16Data[0] -> set_SummedExposures(get_ExposuresToSum());
+          m_AcquiredInt16Data[0] -> set_DateTime(QDateTime::currentDateTime());
+          m_AcquiredInt16Data[0] -> set_HBinning(1);
+          m_AcquiredInt16Data[0] -> set_VBinning(1);
+          m_AcquiredInt16Data[0] -> set_CameraGain(get_CameraGain());
+          m_AcquiredInt16Data[0] -> set_DataType(QxrdInt16ImageData::Raw16Data);
+          m_AcquiredInt16Data[0] -> set_Triggered(get_Trigger());
+          m_AcquiredInt16Data[0] -> set_UserComment1(get_UserComment1());
+          m_AcquiredInt16Data[0] -> set_UserComment2(get_UserComment2());
+          m_AcquiredInt16Data[0] -> set_UserComment3(get_UserComment3());
+          m_AcquiredInt16Data[0] -> set_UserComment4(get_UserComment4());
+          m_AcquiredInt16Data[0] -> set_ImageSaved(false);
 
-          copyDynamicProperties(m_AcquiredInt16Data.data());
+          copyDynamicProperties(m_AcquiredInt16Data[0].data());
 
           if (get_AcquireDark()) {
-            m_AcquiredInt16Data -> set_ImageNumber(-1);
+            m_AcquiredInt16Data[0] -> set_ImageNumber(-1);
             QCEP_DEBUG(DEBUG_ACQUIRE,
                        emit printMessage(QDateTime::currentDateTime(), tr("16 Bit Dark Image acquired"));
             );
-            m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
-            m_AcquiredInt16Data = m_Allocator -> newInt16Image();
+            m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data[0], m_OverflowMask);
+            m_AcquiredInt16Data[0] = m_Allocator -> newInt16Image();
             haltAcquisition();
           } else {
             if (get_PreTriggerFiles() > 0) {
@@ -434,19 +434,19 @@ void QxrdAcquisition::acquiredFrameAvailable()
                   fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
                 }
 
-                m_AcquiredInt16Data -> set_FileBase(fileBase);
-                m_AcquiredInt16Data -> set_FileName(fileName);
-                m_AcquiredInt16Data -> set_Title(fileBase);
+                m_AcquiredInt16Data[0] -> set_FileBase(fileBase);
+                m_AcquiredInt16Data[0] -> set_FileName(fileName);
+                m_AcquiredInt16Data[0] -> set_Title(fileBase);
                 QCEP_DEBUG(DEBUG_ACQUIRE,
                            emit printMessage(QDateTime::currentDateTime(),
                                              tr("16 bit Image %1 acquired").arg(m_CurrentFile));
                 );
-                m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-                m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
-                m_AcquiredInt16Data = m_Allocator -> newInt16Image();
+                m_AcquiredInt16Data[0] -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
+                m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data[0], m_OverflowMask);
+                m_AcquiredInt16Data[0] = m_Allocator -> newInt16Image();
                 set_FileIndex(get_FileIndex()+1);
               } else {
-                m_PreTriggerInt16Images.enqueue(m_AcquiredInt16Data);
+                m_PreTriggerInt16Images.enqueue(m_AcquiredInt16Data[0]);
                 QCEP_DEBUG(DEBUG_ACQUIRE,
                            emit printMessage(QDateTime::currentDateTime(),
                                              tr("16 bit Pretrigger Image buffered"));
@@ -458,47 +458,47 @@ void QxrdAcquisition::acquiredFrameAvailable()
                 while (m_PreTriggerInt16Images.size() > get_PreTriggerFiles()) {
                   m_PreTriggerInt16Images.dequeue();
                 }
-                m_AcquiredInt16Data = m_Allocator -> newInt16Image();
+                m_AcquiredInt16Data[0] = m_Allocator -> newInt16Image();
               }
             } else {
               QCEP_DEBUG(DEBUG_ACQUIRE,
                          emit printMessage(QDateTime::currentDateTime(),
                                            tr("16 bit Image %1 acquired").arg(m_CurrentFile));
               );
-              m_AcquiredInt16Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-              m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data, m_OverflowMask);
-              m_AcquiredInt16Data = m_Allocator -> newInt16Image();
+              m_AcquiredInt16Data[0] -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
+              m_DataProcessor -> acquiredInt16Image(m_AcquiredInt16Data[0], m_OverflowMask);
+              m_AcquiredInt16Data[0] = m_Allocator -> newInt16Image();
               set_FileIndex(get_FileIndex()+1);
             }
           }
         } else {
-          m_AcquiredInt32Data -> set_FileBase(fileBase);
-          m_AcquiredInt32Data -> set_FileName(fileName);
-          m_AcquiredInt32Data -> set_Title(finfo.fileName());
-          m_AcquiredInt32Data -> set_ExposureTime(get_ExposureTime());
-          m_AcquiredInt32Data -> set_SummedExposures(get_ExposuresToSum());
-          m_AcquiredInt32Data -> set_DateTime(QDateTime::currentDateTime());
-          m_AcquiredInt32Data -> set_HBinning(1);
-          m_AcquiredInt32Data -> set_VBinning(1);
-          m_AcquiredInt32Data -> set_CameraGain(get_CameraGain());
-          m_AcquiredInt32Data -> set_DataType(QxrdInt32ImageData::Raw32Data);
-          m_AcquiredInt32Data -> set_Triggered(get_Trigger());
-          m_AcquiredInt32Data -> set_UserComment1(get_UserComment1());
-          m_AcquiredInt32Data -> set_UserComment2(get_UserComment2());
-          m_AcquiredInt32Data -> set_UserComment3(get_UserComment3());
-          m_AcquiredInt32Data -> set_UserComment4(get_UserComment4());
-          m_AcquiredInt32Data -> set_ImageSaved(false);
+          m_AcquiredInt32Data[0] -> set_FileBase(fileBase);
+          m_AcquiredInt32Data[0] -> set_FileName(fileName);
+          m_AcquiredInt32Data[0] -> set_Title(finfo.fileName());
+          m_AcquiredInt32Data[0] -> set_ExposureTime(get_ExposureTime());
+          m_AcquiredInt32Data[0] -> set_SummedExposures(get_ExposuresToSum());
+          m_AcquiredInt32Data[0] -> set_DateTime(QDateTime::currentDateTime());
+          m_AcquiredInt32Data[0] -> set_HBinning(1);
+          m_AcquiredInt32Data[0] -> set_VBinning(1);
+          m_AcquiredInt32Data[0] -> set_CameraGain(get_CameraGain());
+          m_AcquiredInt32Data[0] -> set_DataType(QxrdInt32ImageData::Raw32Data);
+          m_AcquiredInt32Data[0] -> set_Triggered(get_Trigger());
+          m_AcquiredInt32Data[0] -> set_UserComment1(get_UserComment1());
+          m_AcquiredInt32Data[0] -> set_UserComment2(get_UserComment2());
+          m_AcquiredInt32Data[0] -> set_UserComment3(get_UserComment3());
+          m_AcquiredInt32Data[0] -> set_UserComment4(get_UserComment4());
+          m_AcquiredInt32Data[0] -> set_ImageSaved(false);
 
-          copyDynamicProperties(m_AcquiredInt32Data.data());
+          copyDynamicProperties(m_AcquiredInt32Data[0].data());
 
           if (get_AcquireDark()) {
-            m_AcquiredInt32Data -> set_ImageNumber(-1);
+            m_AcquiredInt32Data[0] -> set_ImageNumber(-1);
             QCEP_DEBUG(DEBUG_ACQUIRE,
                        emit printMessage(QDateTime::currentDateTime(),
                                          tr("32 bit Dark Image acquired"));
             );
-            m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
-            m_AcquiredInt32Data = m_Allocator -> newInt32Image();
+            m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data[0], m_OverflowMask);
+            m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
             haltAcquisition();
           } else {
             if (get_PreTriggerFiles() > 0) {
@@ -524,21 +524,21 @@ void QxrdAcquisition::acquiredFrameAvailable()
                   fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
                 }
 
-                m_AcquiredInt32Data -> set_FileBase(fileBase);
-                m_AcquiredInt32Data -> set_FileName(fileName);
-                m_AcquiredInt32Data -> set_Title(fileBase);
+                m_AcquiredInt32Data[0] -> set_FileBase(fileBase);
+                m_AcquiredInt32Data[0] -> set_FileName(fileName);
+                m_AcquiredInt32Data[0] -> set_Title(fileBase);
 
                 QCEP_DEBUG(DEBUG_ACQUIRE,
                            emit printMessage(QDateTime::currentDateTime(),
                                              tr("32 bit Image %1 acquired").arg(m_CurrentFile));
                 );
 
-                m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-                m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
-                m_AcquiredInt32Data = m_Allocator -> newInt32Image();
+                m_AcquiredInt32Data[0] -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
+                m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data[0], m_OverflowMask);
+                m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
                 set_FileIndex(get_FileIndex()+1);
               } else {
-                m_PreTriggerInt32Images.enqueue(m_AcquiredInt32Data);
+                m_PreTriggerInt32Images.enqueue(m_AcquiredInt32Data[0]);
                 QCEP_DEBUG(DEBUG_ACQUIRE,
                            emit printMessage(QDateTime::currentDateTime(),
                                              tr("32 bit Pretrigger Image buffered"));
@@ -550,16 +550,16 @@ void QxrdAcquisition::acquiredFrameAvailable()
                 while (m_PreTriggerInt32Images.size() > get_PreTriggerFiles()) {
                   m_PreTriggerInt32Images.dequeue();
                 }
-                m_AcquiredInt32Data = m_Allocator -> newInt32Image();
+                m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
               }
             } else {
               QCEP_DEBUG(DEBUG_ACQUIRE,
                          emit printMessage(QDateTime::currentDateTime(),
                                            tr("32 bit Image %1 acquired").arg(m_CurrentFile));
               );
-              m_AcquiredInt32Data -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-              m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data, m_OverflowMask);
-              m_AcquiredInt32Data = m_Allocator -> newInt32Image();
+              m_AcquiredInt32Data[0] -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
+              m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data[0], m_OverflowMask);
+              m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
               set_FileIndex(get_FileIndex()+1);
             }
           }

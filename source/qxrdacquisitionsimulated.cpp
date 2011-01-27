@@ -118,8 +118,8 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
 //    }
 //  }
 
-  if (m_AcquiredInt16Data) {
-    quint16 *ptr = m_AcquiredInt16Data->data();
+  if (m_AcquiredInt16Data[0]) {
+    quint16 *ptr = m_AcquiredInt16Data[0]->data();
     int frame = (frameCounter++) % 8;
 
     for (int j=0; j<nRows; j++) {
