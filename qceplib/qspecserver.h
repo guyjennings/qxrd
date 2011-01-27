@@ -32,6 +32,8 @@ public slots:
 
 signals:
   void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 signals:
   void executeCommand(QString cmd);
