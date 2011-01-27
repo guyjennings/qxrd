@@ -141,7 +141,7 @@ void QcepImageDataBase::saveMetaData(QString name)
   QTime tic;
   tic.start();
 
-  printf("type 266 = %s\n", QMetaType::typeName(266));
+//  printf("type 266 = %s\n", QMetaType::typeName(266));
 
   {
     QMutexLocker lock(mutex());
