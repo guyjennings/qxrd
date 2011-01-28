@@ -13,7 +13,7 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int currentExposure, in
 //  printf("Sync acquired frame available %d, %d\n", currentExposure, currentFile);
 
   if (m_NIDAQPlugin) {
-    m_NIDAQPlugin->setAnalogOut(0, currentExposure==0);
+    m_NIDAQPlugin->setAnalogOut(0, currentExposure);
   }
 }
 
