@@ -56,11 +56,13 @@ win32 {
 }
 
 win32 {
-  exists("c:/Program Files/National Instruments/NI-DAQ/DAQmx ANSI C Dev/include/NIDAQmx.h") {
-    DEFINES += HAVE_NIDAQ
-    NIDAQ_HEADER="c:/Program Files/National Instruments/NI-DAQ/DAQmx ANSI C Dev/include/"
-    NIDAQ_LIBS="c:/Program Files/National Instruments/NI-DAQ/DAQmx ANSI C Dev/"
-    message("NIDAQ Software Found")
+  exists("c:/Program Files/National Instruments/Shared/ExternalCompilerSupport/C/include/NIDAQmx.h") {
+    exists("c:/Program Files/National Instruments/Shared/ExternalCompilerSupport/C/lib32/msvc/NIDAQmx.lib") {
+      DEFINES += HAVE_NIDAQ
+      NIDAQ_HEADER="c:/Program Files/National Instruments/Shared/ExternalCompilerSupport/C/include/"
+      NIDAQ_LIBS="c:/Program Files/National Instruments/Shared/ExternalCompilerSupport/C/lib32/msvc/NIDAQmx.lib"
+      message("NIDAQ Software Found")
+    }
   }
 
   exists("c:/Program Files (x86)/National Instruments/Shared/ExternalCompilerSupport/C/include/NIDAQmx.h") {
