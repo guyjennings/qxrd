@@ -262,12 +262,12 @@ QxrdApplication::~QxrdApplication()
   );
 
   delete m_Window;
-  delete m_AcquisitionThread;
-  delete m_ServerThread;
-  delete m_DataProcessorThread;
-  delete m_FileSaverThread;
-  delete m_AllocatorThread;
-  delete m_ScriptEngineThread;
+  m_AcquisitionThread -> deleteLater();
+  m_ServerThread -> deleteLater();
+  m_DataProcessorThread -> deleteLater();
+  m_FileSaverThread -> deleteLater();
+  m_AllocatorThread -> deleteLater();
+  m_ScriptEngineThread -> deleteLater();
 
   QCEP_DEBUG(DEBUG_APP,
              printf("QxrdApplication::~QxrdApplication finished\n");
