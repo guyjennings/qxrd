@@ -93,6 +93,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_MaskDockWidget -> setWidget(m_MaskDialog);
 
   m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
+  addDockWidget(Qt::RightDockWidgetArea, m_SynchronizedAcquisitionDialog);
 
   //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
   //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
