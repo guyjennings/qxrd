@@ -214,9 +214,11 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
 //      printf("property %s of %s created dynamically\n",
 //             qPrintable(key),
 //             meta -> className());
-      printf("property %s of %s does not exist\n",
-             qPrintable(key),
-             meta -> className());
+      QCEP_DEBUG(DEBUG_PREFS | DEBUG_PROPERTIES,
+                 printf("property %s of %s does not exist\n",
+                        qPrintable(key),
+                        meta -> className());
+      );
     }
   }
 
