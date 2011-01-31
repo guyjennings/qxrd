@@ -398,27 +398,27 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
   return QScriptValue(engine, g_Acquisition -> get_FileIndex());
 }
 
-QScriptValue QxrdScriptEngine::dataFunc(QScriptContext */*context*/, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::dataFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   return engine -> newQObject(g_DataProcessor -> data().data());
 }
 
-QScriptValue QxrdScriptEngine::darkFunc(QScriptContext */*context*/, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   return engine -> newQObject(g_DataProcessor -> darkImage().data());
 }
 
-QScriptValue QxrdScriptEngine::maskFunc(QScriptContext */*context*/, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::maskFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   return engine -> newQObject(g_DataProcessor -> mask().data());
 }
 
-QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext */*context*/, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   return engine -> newQObject(g_DataProcessor -> overflow().data());
 }
 
-QScriptValue QxrdScriptEngine::helpFunc(QScriptContext */*context*/, QScriptEngine */*engine*/)
+QScriptValue QxrdScriptEngine::helpFunc(QScriptContext * /*context*/, QScriptEngine * /*engine*/)
 {
   return "Not yet implemented";
 }
