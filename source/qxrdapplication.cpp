@@ -136,6 +136,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_AcquisitionThread->initialize();
 
+  m_Window -> onAcquisitionInit();
+
   connect(m_DataProcessorThread, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
   connect(m_DataProcessorThread, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
   connect(m_DataProcessorThread, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));

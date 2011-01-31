@@ -387,6 +387,11 @@ QxrdWindow::~QxrdWindow()
   //  delete m_NewMask;
 }
 
+void QxrdWindow::onAcquisitionInit()
+{
+  m_AcquireDialog->onAcquisitionInit();
+}
+
 void QxrdWindow::enableTiltRefinement(bool enable)
 {
   m_ActionRefineCenterTilt->setEnabled(enable);

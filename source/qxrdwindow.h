@@ -24,6 +24,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 public:
   QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc, QWidget *parent=0);
   virtual ~QxrdWindow();
+  void onAcquisitionInit();
 
 public slots:
   void doAboutQxrd();
@@ -134,7 +135,7 @@ private:
   QxrdDataProcessorPtr                   m_DataProcessor;
   QxrdAllocatorPtr                       m_Allocator;
   QxrdScriptEnginePtr                    m_ScriptEngine;
-  QWidget                               *m_AcquireDialog;
+  QxrdAcquireDialog                     *m_AcquireDialog;
   QxrdCenterFinderDialogPtr              m_CenterFinderDialog;
   QxrdIntegratorDialogPtr                m_IntegratorDialog;
   QxrdImageCalculatorPtr                 m_Calculator;
