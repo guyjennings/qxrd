@@ -52,7 +52,9 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 {
   shutdown();
 
-  delete m_Acquisition;
+//  delete m_Acquisition;
+
+  m_Acquisition->deleteLater();
 }
 
 void QxrdAcquisitionThread::run()

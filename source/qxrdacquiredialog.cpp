@@ -27,10 +27,6 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdWindowPtr win, QxrdAcquisitionPtr acq, 
 
   connect(m_ClearDroppedButton, SIGNAL(clicked()), m_Acquisition, SLOT(clearDropped()));
 
-  m_Acquisition -> setupExposureMenu(this -> m_ExposureTime);
-  m_Acquisition -> setupCameraGainMenu(this -> m_CameraGain);
-  m_Acquisition -> setupCameraBinningModeMenu(this -> m_BinningMode);
-
   m_Acquisition -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
   m_Acquisition -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
   m_Acquisition -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
@@ -51,6 +47,13 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdWindowPtr win, QxrdAcquisitionPtr acq, 
 
 QxrdAcquireDialog::~QxrdAcquireDialog()
 {
+}
+
+void QxrdAcquireDialog::onAcquisitionInit()
+{
+  m_Acquisition -> setupExposureMenu(this -> m_ExposureTime);
+  m_Acquisition -> setupCameraGainMenu(this -> m_CameraGain);
+  m_Acquisition -> setupCameraBinningModeMenu(this -> m_BinningMode);
 }
 
 void QxrdAcquireDialog::changeEvent(QEvent *e)

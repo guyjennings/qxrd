@@ -102,23 +102,45 @@ void QxrdAcquisitionPerkinElmer::onBinningModeChanged(int newMode)
 {
   if (checkPluginAvailable()) {
 
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Binning mode changed to %1").arg(newMode));
+    if (m_HeaderID == 14) {
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Binning mode changed to %1").arg(newMode));
 
-    //    WORD binningMode = get_BinningMode();
-    //    emit printMessage(tr("Setting binning mode = %1").arg(binningMode));
-    //
-    //    if ((nRet=Acquisition_SetCameraBinningMode(m_AcqDesc, binningMode)) != HIS_ALL_OK) {
-    //      acquisitionError(__LINE__, nRet);
-    //      return;
-    //    }
-    //
-    //    if ((nRet=Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
-    //      acquisitionError(__LINE__, nRet);
-    //      return;
-    //    }
-    //
-    //    emit printMessage(tr("Binning mode was set to %1").arg(binningMode));
+      int nRet;
+      WORD binningMode = newMode;
+      WORD originalMode;
+
+//      if (newMode == 1) {
+//        if (m_CameraType == 1) {
+//          newMode = 2;
+//        } else {
+//          newMode = 258;
+//        }
+//      }
+      if ((nRet=m_PerkinElmer->Acquisition_GetCameraBinningMode(m_AcqDesc, &originalMode)) != HIS_ALL_OK) {
+        acquisitionError(__LINE__, nRet);
+        return;
+      }
+
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Starting binning mode = %1").arg(originalMode));
+
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Setting binning mode = %1").arg(newMode));
+
+      if ((nRet=m_PerkinElmer->Acquisition_SetCameraBinningMode(m_AcqDesc, newMode)) != HIS_ALL_OK) {
+        acquisitionError(__LINE__, nRet);
+        return;
+      }
+
+      if ((nRet=m_PerkinElmer->Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
+        acquisitionError(__LINE__, nRet);
+        return;
+      }
+
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Binning mode was set to %1").arg(binningMode));
+    }
   }
 }
 
@@ -126,27 +148,57 @@ void QxrdAcquisitionPerkinElmer::onCameraGainChanged(int newGain)
 {
   if (checkPluginAvailable()) {
 
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Camera Gain Changed to %1").arg(newGain));
+    if (m_HeaderID >= 11) {
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Camera Gain Changed to %1").arg(newGain));
 
-    emit printMessage(QDateTime::currentDateTime(), "Setting camera gain");
+      emit printMessage(QDateTime::currentDateTime(), "Setting camera gain");
 
-    int nRet;
+      int nRet;
 
-    if (m_CurrentGain != get_CameraGain()) {
-      if ((nRet=m_PerkinElmer->Acquisition_SetCameraGain(m_AcqDesc, get_CameraGain())) != HIS_ALL_OK) {
-        acquisitionError(__LINE__, nRet);
-        return;
+      if (m_CurrentGain != get_CameraGain()) {
+        if ((nRet=m_PerkinElmer->Acquisition_SetCameraGain(m_AcqDesc, get_CameraGain())) != HIS_ALL_OK) {
+          acquisitionError(__LINE__, nRet);
+          return;
+        }
+        m_CurrentGain = get_CameraGain();
       }
-      m_CurrentGain = get_CameraGain();
-    }
 
-    emit printMessage(QDateTime::currentDateTime(), "Set camera gain");
+      emit printMessage(QDateTime::currentDateTime(), "Set camera gain");
+    }
   }
 }
 
+/*
+ Sorting Mode Values:
+
+ Det.             S Mode     Hdr ID
+ RID 128            1
+ RID 256            2
+ RID 128-400        3
+ RID 1024-100       4
+ RID 512-400 A0     5
+ XRD 512-400 A1/A2  6
+ XRD 0840           6
+ XRD 512-400 E      7
+ XRD 1640 A         8
+ XRD 0820           8
+ XRD 1620 A         8
+ XRD 1640 A         9
+ XRD 1620/21 AM/AN  11
+ XRD 1620/40 AN CS  12
+
+ Header ID Values:
+ All except AM/AN   10
+ XRD 16x0 AM        11
+ XRD 16x0 AN        12,13
+ XRD 1621 AN        14
+ */
+
 void QxrdAcquisitionPerkinElmer::initialize()
 {
+  printf("QxrdAcquisitionPerkinElmer::initialize\n");
+
   if (checkPluginAvailable()) {
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
@@ -429,18 +481,35 @@ void QxrdAcquisitionPerkinElmer::setupExposureMenu(QDoubleSpinBox *cb)
 
 void QxrdAcquisitionPerkinElmer::setupCameraGainMenu(QComboBox *cb)
 {
-  cb -> addItem(tr("High: 0.25 pF"));
-  cb -> addItem(tr("0.5 pF"));
-  cb -> addItem(tr("1 pF"));
-  cb -> addItem(tr("2 pF"));
-  cb -> addItem(tr("4 pF"));
-  cb -> addItem(tr("Low: 8 pF"));
+  printf("QxrdAcquisitionPerkinElmer::setupCameraGainMenu m_HeaderID == %d\n", m_HeaderID);
+
+  if (m_HeaderID == 11) { /* AM type */
+  } else if (m_HeaderID >= 12) { /* AN type */
+    cb -> addItem(tr("High: 0.25 pF"));
+    cb -> addItem(tr("0.5 pF"));
+    cb -> addItem(tr("1 pF"));
+    cb -> addItem(tr("2 pF"));
+    cb -> addItem(tr("4 pF"));
+    cb -> addItem(tr("Low: 8 pF"));
+  }
 }
 
 void QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb)
 {
-  cb -> addItem(tr("1x1 - 2048x2048 pixels"));
-  cb -> addItem(tr("2x2 - 1024x1024 pixels"));
+  printf("QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu m_HeaderID == %d, m_CameraType == %d\n",
+         m_HeaderID, m_CameraType);
+
+  if (m_HeaderID == 14) {
+    if (m_CameraType == 1) {
+      cb -> addItem(tr("No binning"));
+      cb -> addItem(tr("2x2 binning"));
+    } else {
+      cb -> addItem(tr("No binning"));
+      cb -> addItem(tr("2x2 binning"));
+    }
+  } else {
+    cb -> addItem(tr("No binning"));
+  }
 }
 
 void QxrdAcquisitionPerkinElmer::onEndFrameCallback()

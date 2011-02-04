@@ -59,7 +59,7 @@ public:
   virtual void setupCameraBinningModeMenu(QComboBox *cb) = 0;
 
   void indicateDroppedFrame();
-  virtual QWidget* controlPanel(QxrdWindowPtr win);
+  virtual QxrdAcquireDialog* controlPanel(QxrdWindowPtr win);
 
   QxrdSynchronizedAcquisition* synchronizedAcquisition() const;
 

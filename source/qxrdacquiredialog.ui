@@ -55,7 +55,7 @@ Script Property: &quot;acquisition.cameraGain&quot;</string>
    <item row="1" column="2">
     <widget class="QLabel" name="label_21">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="font">
       <font>
@@ -73,7 +73,7 @@ Script Property: &quot;acquisition.cameraGain&quot;</string>
    <item row="1" column="3">
     <widget class="QComboBox" name="m_BinningMode">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

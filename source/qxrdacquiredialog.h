@@ -12,6 +12,8 @@ public:
   QxrdAcquireDialog(QxrdWindowPtr win, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc, QWidget *parent = 0);
   ~QxrdAcquireDialog();
 
+  void onAcquisitionInit();
+
   void acquisitionReady();
   void acquisitionStarted();
   void acquisitionFinished();

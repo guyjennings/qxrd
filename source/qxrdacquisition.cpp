@@ -614,7 +614,7 @@ void QxrdAcquisition::acquisitionError(int ln, int n)
   emit criticalMessage(QDateTime::currentDateTime(), tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
 }
 
-QWidget *QxrdAcquisition::controlPanel(QxrdWindowPtr win)
+QxrdAcquireDialog *QxrdAcquisition::controlPanel(QxrdWindowPtr win)
 {
   if (win) {
     m_Window = win;
