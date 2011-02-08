@@ -89,7 +89,7 @@ protected:
 //  QxrdInt32ImageQueue    m_FreeInt32Images;
   QxrdInt16ImageQueue    m_PreTriggerInt16Images;
   QxrdInt32ImageQueue    m_PreTriggerInt32Images;
-  QVector<QxrdInt16ImageDataPtr>  m_AcquiredInt16Data;
+  QxrdInt16ImageDataPtr  m_AcquiredInt16Data;
   QVector<QxrdInt32ImageDataPtr>  m_AcquiredInt32Data;
   QxrdMaskDataPtr        m_OverflowMask;
 

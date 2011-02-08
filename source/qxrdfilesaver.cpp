@@ -227,26 +227,46 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdM
   int res = 1;
 
   if (tif) {
+    int nsum = image->get_SummedExposures();
 
     TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
     TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
     TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
 
     TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
-    TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+
+    if (nsum == 1) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16));
+    } else {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+    }
+
     TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
 
     image -> setTiffMetaData(tif);
 
-    QVector<quint32> buffvec(ncols);
-    quint32* buffer = buffvec.data();
+    if (nsum == 1) {
+      QVector<quint16> buffvec(ncols);
+      quint16* buffer = buffvec.data();
 
-    for (int y=0; y<nrows; y++) {
-      for (int x=0; x<ncols; x++) {
-        buffer[x] = image->value(x,y);
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = image->value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
       }
+    } else {
+      QVector<quint32> buffvec(ncols);
+      quint32* buffer = buffvec.data();
 
-      TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = image->value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
     }
 
     TIFFClose(tif);
