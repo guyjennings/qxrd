@@ -3,12 +3,9 @@
 
 #include <QDockWidget>
 #include "qxrdacquisition.h"
+#include "ui_qxrdsynchronizedacquisitiondialog.h"
 
-namespace Ui {
-    class QxrdSynchronizedAcquisitionDialog;
-}
-
-class QxrdSynchronizedAcquisitionDialog : public QDockWidget
+class QxrdSynchronizedAcquisitionDialog : public QDockWidget, public Ui::QxrdSynchronizedAcquisitionDialog
 {
     Q_OBJECT
 
@@ -18,9 +15,6 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
-
-private:
-    Ui::QxrdSynchronizedAcquisitionDialog *ui;
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITIONDIALOG_H

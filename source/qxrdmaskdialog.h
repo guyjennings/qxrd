@@ -3,16 +3,13 @@
 
 #include "qcepmacros.h"
 
-#include <QWidget>
+#include <QDockWidget>
 #include "qxrddataprocessor.h"
 #include "qxrdwindow.h"
 #include "qxrdmaskstackmodel.h"
+#include "ui_qxrdmaskdialog.h"
 
-namespace Ui {
-  class QxrdMaskDialog;
-}
-
-class QxrdMaskDialog : public QWidget
+class QxrdMaskDialog : public QDockWidget, public Ui::QxrdMaskDialog
 {
   Q_OBJECT
 
@@ -31,7 +28,6 @@ protected:
   void changeEvent(QEvent *e);
 
 private:
-  Ui::QxrdMaskDialog  *ui;
   QxrdWindowPtr        m_Window;
   QxrdDataProcessorPtr m_Processor;
   QxrdMaskStackPtr     m_Masks;

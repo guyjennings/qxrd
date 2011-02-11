@@ -2,6 +2,7 @@
 #include <QListView>
 #include <QMenu>
 #include <QContextMenuEvent>
+#include "qxrdmaskdialog.h"
 
 QxrdMaskStackView::QxrdMaskStackView(QWidget *parent) :
   QTableView(parent),

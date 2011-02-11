@@ -2,55 +2,53 @@
 #include "ui_qxrdmaskdialog.h"
 
 QxrdMaskDialog::QxrdMaskDialog(QxrdWindowPtr win, QxrdDataProcessorPtr proc, QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::QxrdMaskDialog),
+  QDockWidget(parent),
   m_Window(win),
-  m_Masks(NULL),
-  m_Processor(proc)
+  m_Processor(proc),
+  m_Masks(NULL)
 {
-  ui->setupUi(this);
+  setupUi(this);
 
-  connect(ui->m_HideMaskRange, SIGNAL(clicked()), win, SLOT(doHideMaskRange()));
-  connect(ui->m_ShowMaskRange, SIGNAL(clicked()), win, SLOT(doShowMaskRange()));
+  connect(m_HideMaskRange, SIGNAL(clicked()), win, SLOT(doHideMaskRange()));
+  connect(m_ShowMaskRange, SIGNAL(clicked()), win, SLOT(doShowMaskRange()));
 
-  connect(ui->m_HideMaskAll, SIGNAL(clicked()), win, SLOT(doHideMaskAll()));
-  connect(ui->m_ShowMaskAll, SIGNAL(clicked()), win, SLOT(doShowMaskAll()));
-  connect(ui->m_InvertMask, SIGNAL(clicked()), win, SLOT(doInvertMask()));
-  connect(ui->m_AndMask, SIGNAL(clicked()), win, SLOT(doAndMask()));
-  connect(ui->m_OrMask, SIGNAL(clicked()), win, SLOT(doOrMask()));
-  connect(ui->m_XorMask, SIGNAL(clicked()), win, SLOT(doXorMask()));
-  connect(ui->m_AndNotMask, SIGNAL(clicked()), win, SLOT(doAndNotMask()));
-  connect(ui->m_OrNotMask, SIGNAL(clicked()), win, SLOT(doOrNotMask()));
-  connect(ui->m_XorNotMask, SIGNAL(clicked()), win, SLOT(doXorNotMask()));
-  connect(ui->m_ExchangeMask, SIGNAL(clicked()), win, SLOT(doExchangeMask()));
-  connect(ui->m_RollUpMask, SIGNAL(clicked()), win, SLOT(doRollUpMask()));
-  connect(ui->m_RollDownMask, SIGNAL(clicked()), win, SLOT(doRollDownMask()));
-  connect(ui->m_NewMask, SIGNAL(clicked()), win, SLOT(doNewMask()));
-  connect(ui->m_PushMask, SIGNAL(clicked()), win, SLOT(doPushMask()));
-  connect(ui->m_ClearMask, SIGNAL(clicked()), win, SLOT(doClearMask()));
-  connect(ui->m_ClearMaskTop, SIGNAL(clicked()), win, SLOT(doClearMaskTop()));
-  connect(ui->m_UndoMask, SIGNAL(clicked()), win, SLOT(doUndoMask()));
+  connect(m_HideMaskAll, SIGNAL(clicked()), win, SLOT(doHideMaskAll()));
+  connect(m_ShowMaskAll, SIGNAL(clicked()), win, SLOT(doShowMaskAll()));
+  connect(m_InvertMask, SIGNAL(clicked()), win, SLOT(doInvertMask()));
+  connect(m_AndMask, SIGNAL(clicked()), win, SLOT(doAndMask()));
+  connect(m_OrMask, SIGNAL(clicked()), win, SLOT(doOrMask()));
+  connect(m_XorMask, SIGNAL(clicked()), win, SLOT(doXorMask()));
+  connect(m_AndNotMask, SIGNAL(clicked()), win, SLOT(doAndNotMask()));
+  connect(m_OrNotMask, SIGNAL(clicked()), win, SLOT(doOrNotMask()));
+  connect(m_XorNotMask, SIGNAL(clicked()), win, SLOT(doXorNotMask()));
+  connect(m_ExchangeMask, SIGNAL(clicked()), win, SLOT(doExchangeMask()));
+  connect(m_RollUpMask, SIGNAL(clicked()), win, SLOT(doRollUpMask()));
+  connect(m_RollDownMask, SIGNAL(clicked()), win, SLOT(doRollDownMask()));
+  connect(m_NewMask, SIGNAL(clicked()), win, SLOT(doNewMask()));
+  connect(m_PushMask, SIGNAL(clicked()), win, SLOT(doPushMask()));
+  connect(m_ClearMask, SIGNAL(clicked()), win, SLOT(doClearMask()));
+  connect(m_ClearMaskTop, SIGNAL(clicked()), win, SLOT(doClearMaskTop()));
+  connect(m_UndoMask, SIGNAL(clicked()), win, SLOT(doUndoMask()));
 
-  connect(ui->m_MaskCirclesRadio, SIGNAL(clicked()), win->m_ImageMaskCirclesButton, SLOT(click()));
-  connect(ui->m_MaskPolygonsRadio, SIGNAL(clicked()), win->m_ImageMaskPolygonsButton, SLOT(click()));
+  connect(m_MaskCirclesRadio, SIGNAL(clicked()), win->m_ImageMaskCirclesButton, SLOT(click()));
+  connect(m_MaskPolygonsRadio, SIGNAL(clicked()), win->m_ImageMaskPolygonsButton, SLOT(click()));
 
-  m_Processor -> prop_MaskMinimumValue() -> linkTo(ui->m_MaskMinimum);
-  m_Processor -> prop_MaskMaximumValue() -> linkTo(ui->m_MaskMaximum);
-  m_Processor -> prop_MaskCircleRadius() -> linkTo(ui->m_MaskCircleRadius);
-  m_Processor -> prop_MaskSetPixels() -> linkTo(ui->m_MaskSetPixels);
+  m_Processor -> prop_MaskMinimumValue() -> linkTo(m_MaskMinimum);
+  m_Processor -> prop_MaskMaximumValue() -> linkTo(m_MaskMaximum);
+  m_Processor -> prop_MaskCircleRadius() -> linkTo(m_MaskCircleRadius);
+  m_Processor -> prop_MaskSetPixels() -> linkTo(m_MaskSetPixels);
 
   m_Masks = m_Processor->maskStack();
   m_MaskStackModel = new QxrdMaskStackModel(m_Masks);
 
-  ui->m_MaskStackView -> setModel(m_MaskStackModel);
-  ui->m_MaskStackView -> setMaskStack(m_Masks);
-  ui->m_MaskStackView -> setProcessor(m_Processor);
-  ui->m_MaskStackView -> setMaskDialog(this);
+  m_MaskStackView -> setModel(m_MaskStackModel);
+  m_MaskStackView -> setMaskStack(m_Masks);
+  m_MaskStackView -> setProcessor(m_Processor);
+  m_MaskStackView -> setMaskDialog(this);
 }
 
 QxrdMaskDialog::~QxrdMaskDialog()
 {
-  delete ui;
 }
 
 void QxrdMaskDialog::changeEvent(QEvent *e)
@@ -58,7 +56,7 @@ void QxrdMaskDialog::changeEvent(QEvent *e)
   QWidget::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
-    ui->retranslateUi(this);
+    retranslateUi(this);
     break;
   default:
     break;

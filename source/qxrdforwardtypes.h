@@ -56,6 +56,7 @@ class QxrdIntegrator;              typedef QxrdIntegrator *QxrdIntegratorPtr;
 class QxrdIntegratorDialog;        typedef QxrdIntegratorDialog *QxrdIntegratorDialogPtr;
 
 class QxrdAcquireDialog;           typedef QxrdAcquireDialog *QxrdAcquireDialogPtr;
+class QxrdDisplayDialog;           typedef QxrdDisplayDialog *QxrdDisplayDialogPtr;
 
 class QxrdCenterFinder;            typedef QxrdCenterFinder *QxrdCenterFinderPtr;
 class QxrdCenterFinderDialog;      typedef QxrdCenterFinderDialog *QxrdCenterFinderDialogPtr;

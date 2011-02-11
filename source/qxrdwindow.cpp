@@ -1,5 +1,7 @@
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
+#include "qxrdacquiredialog.h"
+#include "qxrddisplaydialog.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
 #include "qxrdsettings.h"
@@ -21,6 +23,8 @@
 #include "qxrdallocator.h"
 #include "qxrdpowderfitdialog.h"
 #include "qxrdimagedisplaywidget.h"
+
+#include "qxrdtestdockwidget.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -51,10 +55,14 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     m_Acquisition(acq),
     m_DataProcessor(proc),
     m_Allocator(alloc),
+    m_AcquireDialog(NULL),
+    m_SynchronizedAcquisitionDialog(NULL),
+    m_DisplayDialog(NULL),
     m_CenterFinderDialog(NULL),
+    m_MaskDialog(NULL),
+    m_CorrectionDialog(NULL),
     m_IntegratorDialog(NULL),
     m_Calculator(NULL),
-    m_MaskDialog(NULL),
     m_Progress(NULL),
     m_AllocationStatus(NULL),
     m_Acquiring(false),
@@ -81,19 +89,25 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   }
 
   m_AcquireDialog = m_Acquisition -> controlPanel(this);
-  m_AcquireDockWidget -> setWidget(m_AcquireDialog);
-
-  m_CenterFinderDialog = QxrdCenterFinderDialogPtr(new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder()));
-  m_CenteringDockWidget -> setWidget(m_CenterFinderDialog);
-
-  m_IntegratorDialog = QxrdIntegratorDialogPtr(new QxrdIntegratorDialog(m_DataProcessor -> integrator()));
-  m_IntegratorDockWidget -> setWidget(m_IntegratorDialog);
-
-  m_MaskDialog = QxrdMaskDialogPtr(new QxrdMaskDialog(this, m_DataProcessor));
-  m_MaskDockWidget -> setWidget(m_MaskDialog);
-
   m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
-  addDockWidget(Qt::RightDockWidgetArea, m_SynchronizedAcquisitionDialog);
+  m_DisplayDialog = new QxrdDisplayDialog(this);
+  m_CenterFinderDialog = new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder());
+  m_MaskDialog = new QxrdMaskDialog(this, m_DataProcessor);
+  m_CorrectionDialog = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
+  m_IntegratorDialog = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
+
+  addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
+
+  splitDockWidget(m_AcquireDialog, m_CenterFinderDialog, Qt::Vertical);
+  splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
+
+  tabifyDockWidget(m_AcquireDialog, m_SynchronizedAcquisitionDialog);
+  tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
+
+  tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
+  tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
+
+  tabifyDockWidget(m_IntegratorDialog, new QxrdTestDockWidget(this));
 
   //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
   //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
@@ -117,10 +131,10 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(m_ActionIntegrate, SIGNAL(triggered()), this, SLOT(doIntegrateSequence()));
   connect(m_ActionProcessData, SIGNAL(triggered()), this, SLOT(doProcessSequence()));
 
-  connect(m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));
-  connect(m_Display_5pct, SIGNAL(clicked()), m_Action005Range, SIGNAL(triggered()));
-  connect(m_Display_10pct, SIGNAL(clicked()), m_Action010Range, SIGNAL(triggered()));
-  connect(m_Display_100pct, SIGNAL(clicked()), m_Action100Range, SIGNAL(triggered()));
+  connect(m_DisplayDialog -> m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));
+  connect(m_DisplayDialog -> m_Display_5pct, SIGNAL(clicked()), m_Action005Range, SIGNAL(triggered()));
+  connect(m_DisplayDialog -> m_Display_10pct, SIGNAL(clicked()), m_Action010Range, SIGNAL(triggered()));
+  connect(m_DisplayDialog -> m_Display_100pct, SIGNAL(clicked()), m_Action100Range, SIGNAL(triggered()));
 
   connect(m_Action005Range, SIGNAL(triggered()), m_Plot, SLOT(set005Range()));
   connect(m_Action010Range, SIGNAL(triggered()), m_Plot, SLOT(set010Range()));
@@ -245,55 +259,55 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
           this,              SLOT(onAcquireComplete(int)));
 
 
-  m_Acquisition -> prop_OverflowLevel() -> linkTo(m_OverflowLevel);
+  m_Acquisition -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
 
-  m_DataProcessor -> prop_PerformDarkSubtraction() -> linkTo(m_PerformDark);
-  m_DataProcessor -> prop_PerformDarkSubtractionTime() -> linkTo(m_PerformDarkTime);
-  m_DataProcessor -> prop_SaveRawImages() -> linkTo(m_SaveRaw);
-  m_DataProcessor -> prop_SaveDarkImages() -> linkTo(m_SaveDark);
-  m_Acquisition   -> prop_RawSaveTime() -> linkTo(m_SaveRawTime);
-  m_Acquisition   -> prop_DarkSaveTime() -> linkTo(m_SaveDarkTime);
-  m_DataProcessor -> prop_PerformBadPixels() -> linkTo(m_PerformBadPixels);
-  m_DataProcessor -> prop_PerformBadPixelsTime() -> linkTo(m_PerformBadPixelsTime);
-  m_DataProcessor -> prop_PerformGainCorrection() -> linkTo(m_PerformGainCorrection);
-  m_DataProcessor -> prop_PerformGainCorrectionTime() -> linkTo(m_PerformGainCorrectionTime);
-  m_DataProcessor -> prop_SaveSubtracted() -> linkTo(m_SaveSubtracted);
-  m_DataProcessor -> prop_SaveSubtractedTime() -> linkTo(m_SaveSubtractedTime);
-  m_DataProcessor -> prop_SaveAsText() -> linkTo(m_SaveAsText);
-  m_DataProcessor -> prop_SaveAsTextTime() -> linkTo(m_SaveAsTextTime);
-  m_DataProcessor -> prop_PerformIntegration() -> linkTo(m_PerformIntegration);
-  m_DataProcessor -> prop_PerformIntegrationTime() -> linkTo(m_PerformIntegrationTime);
-  m_DataProcessor -> prop_DisplayIntegratedData() -> linkTo(m_DisplayIntegratedData);
-  m_DataProcessor -> prop_DisplayIntegratedDataTime() -> linkTo(m_DisplayIntegratedDataTime);
-  m_DataProcessor -> prop_SaveIntegratedData() -> linkTo(m_SaveIntegratedData);
-  m_DataProcessor -> prop_SaveIntegratedDataTime() -> linkTo(m_SaveIntegratedDataTime);
-  m_DataProcessor -> prop_SaveIntegratedInSeparateFiles() -> linkTo(m_SaveIntegratedInSeparateFiles);
-  //  m_DataProcessor -> prop_CorrectedTime() -> linkTo(m_CorrectedTime);
-  //  m_DataProcessor -> prop_IntegratedTime() -> linkTo(m_IntegratedTime);
-  m_DataProcessor -> prop_EstimatedProcessingTime() -> linkTo(m_EstimatedProcessingTime);
+  m_DataProcessor -> prop_PerformDarkSubtraction() -> linkTo(m_CorrectionDialog->m_PerformDark);
+  m_DataProcessor -> prop_PerformDarkSubtractionTime() -> linkTo(m_CorrectionDialog->m_PerformDarkTime);
+  m_DataProcessor -> prop_SaveRawImages() -> linkTo(m_CorrectionDialog->m_SaveRaw);
+  m_DataProcessor -> prop_SaveDarkImages() -> linkTo(m_CorrectionDialog->m_SaveDark);
+  m_Acquisition   -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
+  m_Acquisition   -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
+  m_DataProcessor -> prop_PerformBadPixels() -> linkTo(m_CorrectionDialog->m_PerformBadPixels);
+  m_DataProcessor -> prop_PerformBadPixelsTime() -> linkTo(m_CorrectionDialog->m_PerformBadPixelsTime);
+  m_DataProcessor -> prop_PerformGainCorrection() -> linkTo(m_CorrectionDialog->m_PerformGainCorrection);
+  m_DataProcessor -> prop_PerformGainCorrectionTime() -> linkTo(m_CorrectionDialog->m_PerformGainCorrectionTime);
+  m_DataProcessor -> prop_SaveSubtracted() -> linkTo(m_CorrectionDialog->m_SaveSubtracted);
+  m_DataProcessor -> prop_SaveSubtractedTime() -> linkTo(m_CorrectionDialog->m_SaveSubtractedTime);
+  m_DataProcessor -> prop_SaveAsText() -> linkTo(m_CorrectionDialog->m_SaveAsText);
+  m_DataProcessor -> prop_SaveAsTextTime() -> linkTo(m_CorrectionDialog->m_SaveAsTextTime);
+  m_DataProcessor -> prop_PerformIntegration() -> linkTo(m_CorrectionDialog->m_PerformIntegration);
+  m_DataProcessor -> prop_PerformIntegrationTime() -> linkTo(m_CorrectionDialog->m_PerformIntegrationTime);
+  m_DataProcessor -> prop_DisplayIntegratedData() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedData);
+  m_DataProcessor -> prop_DisplayIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedDataTime);
+  m_DataProcessor -> prop_SaveIntegratedData() -> linkTo(m_CorrectionDialog->m_SaveIntegratedData);
+  m_DataProcessor -> prop_SaveIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_SaveIntegratedDataTime);
+  m_DataProcessor -> prop_SaveIntegratedInSeparateFiles() -> linkTo(m_CorrectionDialog->m_SaveIntegratedInSeparateFiles);
+  //  m_DataProcessor -> prop_CorrectedTime() -> linkTo(m_CorrectionDialog->m_CorrectedTime);
+  //  m_DataProcessor -> prop_IntegratedTime() -> linkTo(m_CorrectionDialog->m_IntegratedTime);
+  m_DataProcessor -> prop_EstimatedProcessingTime() -> linkTo(m_CorrectionDialog->m_EstimatedProcessingTime);
 
   //  m_DataProcessor -> prop_DarkImagePath() -> linkTo(m_DarkImagePath);
   //  m_DataProcessor -> prop_BadPixelsPath() -> linkTo(m_BadPixelsPath);
   //  m_DataProcessor -> prop_GainMapPath() -> linkTo(m_GainMapPath);
 
-  m_Plot -> prop_DisplayMinimumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumPct);
-  m_Plot -> prop_DisplayMaximumPct() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumPct);
-  m_Plot -> prop_DisplayMinimumVal() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumVal);
-  m_Plot -> prop_DisplayMaximumVal() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumVal);
-  m_Plot -> prop_DisplayMinimumPctle() -> linkTo(Ui::QxrdWindow::m_DisplayMinimumPctle);
-  m_Plot -> prop_DisplayMaximumPctle() -> linkTo(Ui::QxrdWindow::m_DisplayMaximumPctle);
+  m_Plot -> prop_DisplayMinimumPct() -> linkTo(m_DisplayDialog->m_DisplayMinimumPct);
+  m_Plot -> prop_DisplayMaximumPct() -> linkTo(m_DisplayDialog->m_DisplayMaximumPct);
+  m_Plot -> prop_DisplayMinimumVal() -> linkTo(m_DisplayDialog->m_DisplayMinimumVal);
+  m_Plot -> prop_DisplayMaximumVal() -> linkTo(m_DisplayDialog->m_DisplayMaximumVal);
+  m_Plot -> prop_DisplayMinimumPctle() -> linkTo(m_DisplayDialog->m_DisplayMinimumPctle);
+  m_Plot -> prop_DisplayMaximumPctle() -> linkTo(m_DisplayDialog->m_DisplayMaximumPctle);
 
-  m_Plot -> prop_DisplayScalingMode() -> linkTo(Ui::QxrdWindow::m_DisplayScalingMode);
+  m_Plot -> prop_DisplayScalingMode() -> linkTo(m_DisplayDialog->m_DisplayScalingMode);
 
-  connect(m_Plot -> prop_DisplayScalingMode(), SIGNAL(changedValue(int)), Ui::QxrdWindow::m_DisplayParmsStack, SLOT(setCurrentIndex(int)));
+  connect(m_Plot -> prop_DisplayScalingMode(), SIGNAL(changedValue(int)), m_DisplayDialog->m_DisplayParmsStack, SLOT(setCurrentIndex(int)));
 
-  m_Plot -> prop_DisplayColorMap() -> linkTo(Ui::QxrdWindow::m_DisplayColorMap);
+  m_Plot -> prop_DisplayColorMap() -> linkTo(m_DisplayDialog->m_DisplayColorMap);
 
-  m_Plot -> prop_ImageShown() -> linkTo(Ui::QxrdWindow::m_DisplayImage);
-  m_Plot -> prop_MaskShown() -> linkTo(Ui::QxrdWindow::m_DisplayMask);
-  m_Plot -> prop_OverflowShown() -> linkTo(Ui::QxrdWindow::m_DisplayOverflow);
-  m_Plot -> prop_InterpolatePixels() -> linkTo(Ui::QxrdWindow::m_InterpolatePixels);
-  m_Plot -> prop_MaintainAspectRatio() -> linkTo(Ui::QxrdWindow::m_MaintainAspectRatio);
+  m_Plot -> prop_ImageShown() -> linkTo(m_DisplayDialog->m_DisplayImage);
+  m_Plot -> prop_MaskShown() -> linkTo(m_DisplayDialog->m_DisplayMask);
+  m_Plot -> prop_OverflowShown() -> linkTo(m_DisplayDialog->m_DisplayOverflow);
+  m_Plot -> prop_InterpolatePixels() -> linkTo(m_DisplayDialog->m_InterpolatePixels);
+  m_Plot -> prop_MaintainAspectRatio() -> linkTo(m_DisplayDialog->m_MaintainAspectRatio);
 
   m_Plot -> setDataProcessor(m_DataProcessor);
 
@@ -346,13 +360,13 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(m_Allocator -> prop_Allocated(), SIGNAL(changedValue(int)), this, SLOT(allocatedMemoryChanged()));
   connect(m_Allocator -> prop_Max(), SIGNAL(changedValue(int)), this, SLOT(allocatedMemoryChanged()));
 
-  m_WindowsMenu -> addAction(m_AcquireDockWidget -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_CorrectionDockWidget -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_MaskDockWidget -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_DisplayDockWidget -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_CenteringDockWidget -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_IntegratorDockWidget -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_AcquireDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_SynchronizedAcquisitionDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_DisplayDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_MaskDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_CorrectionDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_IntegratorDialog -> toggleViewAction());
 
   //  if (m_Acquisition->get_DetectorType() != 1) { // No file browser for PE detector...
   //    m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
@@ -556,7 +570,6 @@ void QxrdWindow::onAcquireComplete(int /*dark*/)
 void QxrdWindow::doAcquire()
 {
   //  printMessage("QxrdWindow::doAcquire()");
-
   acquisitionStarted();
 
   m_Acquiring = true;

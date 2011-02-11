@@ -2,7 +2,7 @@
 #include "qxrdintegrator.h"
 
 QxrdIntegratorDialog::QxrdIntegratorDialog(QxrdIntegratorPtr integ, QWidget *parent)
-  : QWidget(parent),
+  : QDockWidget(parent),
     m_Integrator(integ)
 {
   setupUi(this);

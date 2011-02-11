@@ -15,7 +15,13 @@
 #include "qxrddataprocessor.h"
 #include "qxrdimagedisplaywidget.h"
 #include "qxrdfilebrowser.h"
+#include "qxrdacquiredialog.h"
 #include "qxrdsynchronizedacquisitiondialog.h"
+#include "qxrddisplaydialog.h"
+#include "qxrdcenterfinderdialog.h"
+#include "qxrdmaskdialog.h"
+#include "qxrdcorrectiondialog.h"
+#include "qxrdintegratordialog.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -136,12 +142,14 @@ private:
   QxrdAllocatorPtr                       m_Allocator;
   QxrdScriptEnginePtr                    m_ScriptEngine;
   QxrdAcquireDialog                     *m_AcquireDialog;
-  QxrdCenterFinderDialogPtr              m_CenterFinderDialog;
-  QxrdIntegratorDialogPtr                m_IntegratorDialog;
+  QxrdSynchronizedAcquisitionDialog     *m_SynchronizedAcquisitionDialog;
+  QxrdDisplayDialog                     *m_DisplayDialog;
+  QxrdCenterFinderDialog                *m_CenterFinderDialog;
+  QxrdMaskDialog                        *m_MaskDialog;
+  QxrdCorrectionDialog                  *m_CorrectionDialog;
+  QxrdIntegratorDialog                  *m_IntegratorDialog;
   QxrdImageCalculatorPtr                 m_Calculator;
-  QxrdMaskDialogPtr                      m_MaskDialog;
   QPointer<QxrdPowderFitDialog>          m_PowderFitDialog;
-  QPointer<QxrdSynchronizedAcquisitionDialog> m_SynchronizedAcquisitionDialog;
   QVector<double>                        m_Exposures;
   QProgressBarPtr                        m_Progress;
   QLabelPtr                              m_StatusMsg;

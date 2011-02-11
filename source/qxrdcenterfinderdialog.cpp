@@ -2,7 +2,7 @@
 #include "qxrdcenterfinder.h"
 
 QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget *parent)
-  : QGroupBox(parent),
+  : QDockWidget(parent),
     m_CenterFinder(cen)
 {
   setupUi(this);

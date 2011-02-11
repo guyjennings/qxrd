@@ -6,7 +6,7 @@
 #include "qxrdforwardtypes.h"
 #include "ui_qxrdacquiredialog.h"
 
-class QxrdAcquireDialog : public QWidget, public Ui::QxrdAcquireDialog {
+class QxrdAcquireDialog : public QDockWidget, public Ui::QxrdAcquireDialog {
   Q_OBJECT
 public:
   QxrdAcquireDialog(QxrdWindowPtr win, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc, QWidget *parent = 0);
