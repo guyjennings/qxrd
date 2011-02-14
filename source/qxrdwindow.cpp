@@ -88,13 +88,14 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     setWindowTitle(windowTitle()+" - 64 bit - v"+QXRD_VERSION);
   }
 
-  m_AcquireDialog = m_Acquisition -> controlPanel(this);
+//  m_AcquireDialog = m_Acquisition -> controlPanel(this);
+  m_AcquireDialog      = new QxrdAcquireDialog(this, m_Acquisition, m_DataProcessor, this);
   m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
-  m_DisplayDialog = new QxrdDisplayDialog(this);
+  m_DisplayDialog      = new QxrdDisplayDialog(this);
   m_CenterFinderDialog = new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder());
-  m_MaskDialog = new QxrdMaskDialog(this, m_DataProcessor);
-  m_CorrectionDialog = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
-  m_IntegratorDialog = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
+  m_MaskDialog         = new QxrdMaskDialog(this, m_DataProcessor);
+  m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
+  m_IntegratorDialog   = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
 
   addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
 
