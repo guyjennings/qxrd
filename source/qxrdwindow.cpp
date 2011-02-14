@@ -108,7 +108,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
   tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
 
-  tabifyDockWidget(m_IntegratorDialog, new QxrdTestDockWidget(this));
+//  tabifyDockWidget(m_IntegratorDialog, new QxrdTestDockWidget(this));
 
   //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
   //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
