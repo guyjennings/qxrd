@@ -4,6 +4,7 @@
 #include "qxrdallocator.h"
 #include "qxrdacquiredialog.h"
 #include "qxrdsynchronizedacquisition.h"
+#include "qxrdwindow.h"
 
 #include <QThreadPool>
 
@@ -506,7 +507,7 @@ QxrdAcquireDialog *QxrdAcquisition::controlPanel(QxrdWindowPtr win)
   if (win) {
     m_Window = win;
 
-    m_ControlPanel = new QxrdAcquireDialog(m_Window, this, m_DataProcessor);
+    m_ControlPanel = new QxrdAcquireDialog(m_Window, this, m_DataProcessor, m_Window);
 
     return m_ControlPanel;
   } else {

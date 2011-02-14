@@ -57,7 +57,7 @@ void QxrdAcquireDialog::onAcquisitionInit()
 
 void QxrdAcquireDialog::changeEvent(QEvent *e)
 {
-  QWidget::changeEvent(e);
+  QDockWidget::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
     retranslateUi(this);
