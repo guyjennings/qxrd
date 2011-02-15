@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
 
   QxrdApplication app(argc, argv);
 
-  QPixmap pixmap(":/help/images/qxrd-layout-scaled.png");
+  QPixmap pixmap(":images/qxrd-splash-screen.png");
   QSplashScreen splash(pixmap);
   splash.show();
 
-  splash.showMessage("Initializing QXRD", Qt::AlignBottom, Qt::green);
+  splash.showMessage("Initializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
 
   app.processEvents();
 
