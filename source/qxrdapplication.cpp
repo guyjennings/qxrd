@@ -29,6 +29,7 @@
 #include <QString>
 #include <tiffio.h>
 #include <QPluginLoader>
+#include <QSplashScreen>
 
 int gCEPDebug = 0;
 QxrdApplication *g_Application = 0;
@@ -57,6 +58,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
       ,
     m_PerkinElmerPluginInterface(NULL)
 #endif
+{
+}
+
+void QxrdApplication::init()
 {
   QcepProperty::registerMetaTypes();
 

@@ -26,6 +26,7 @@ class QxrdApplication : public QApplication
 public:
   QxrdApplication(int &argc, char **argv);
   ~QxrdApplication();
+  void init();
 
   QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
