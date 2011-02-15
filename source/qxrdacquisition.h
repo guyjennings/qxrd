@@ -71,7 +71,6 @@ protected:
   void acquisition(int isDark);
   void copyParameters(int isDark);
   virtual void beginAcquisition();
-  void acquiredFrameAvailable();
 
   void acquisitionError(int n);
   void acquisitionError(int ln, int n);
@@ -80,6 +79,7 @@ protected:
 
 protected slots:
   virtual void haltAcquisition();
+  void acquiredFrameAvailable(QxrdInt16ImageDataPtr image);
 
 protected:
   QMutex                 m_Acquiring;
@@ -89,7 +89,7 @@ protected:
 //  QxrdInt32ImageQueue    m_FreeInt32Images;
   QxrdInt16ImageQueue    m_PreTriggerInt16Images;
   QxrdInt32ImageQueue    m_PreTriggerInt32Images;
-  QxrdInt16ImageDataPtr  m_AcquiredInt16Data;
+//  QxrdInt16ImageDataPtr  m_AcquiredInt16Data;
   QVector<QxrdInt32ImageDataPtr>  m_AcquiredInt32Data;
   QxrdMaskDataPtr        m_OverflowMask;
 

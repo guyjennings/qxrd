@@ -1,6 +1,7 @@
 #include "qxrdacquisitionsimulated.h"
 #include "qxrdimagedata.h"
 #include "qxrddataprocessor.h"
+#include "qxrdallocator.h"
 
 #include <QDir>
 #include <QThread>
@@ -83,8 +84,10 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
   int nRows = get_NRows();
   int nCols = get_NCols();
 
-  if (m_AcquiredInt16Data) {
-    quint16 *ptr = m_AcquiredInt16Data->data();
+  QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image();
+
+  if (image) {
+    quint16 *ptr = image->data();
     int frame = (frameCounter++) % 8;
 
     for (int j=0; j<nRows; j++) {
@@ -98,5 +101,5 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
     }
   }
 
-  acquiredFrameAvailable();
+  acquiredFrameAvailable(image);
 }

@@ -12,7 +12,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
   : QxrdAcquisitionOperations(proc, allocator),
     m_PreTriggerInt16Images("preTriggerInt16Images"),
     m_PreTriggerInt32Images("preTriggerInt32Images"),
-    m_AcquiredInt16Data(NULL),
+//    m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(1),
     m_ControlPanel(NULL),
     m_NIDAQPlugin(NULL),
@@ -47,7 +47,7 @@ void QxrdAcquisition::initialize()
 {
 //  allocateMemoryForAcquisition();
 
-  m_AcquiredInt16Data    = m_Allocator -> newInt16Image();
+//  m_AcquiredInt16Data    = m_Allocator -> newInt16Image();
   m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
 }
 
@@ -223,7 +223,7 @@ void QxrdAcquisition::copyParameters(int isDark)
   }
 }
 
-void QxrdAcquisition::acquiredFrameAvailable()
+void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
     // A new frame of data has been acquired, it is in m_AcquiredInt16Data.
     // If summation is required, it should be added to m_AcquiredInt32Data.
     // If a summed exposure has been completed, either the 16 or 32 bit data
@@ -242,7 +242,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
   if (m_Acquiring.tryLock()) {
     m_Acquiring.unlock();
 
-    if (m_AcquiredInt16Data) {
+    if (image) {
       updateInterval = 1.0/get_ExposureTime();
 
       if (updateInterval < 1) {
@@ -252,19 +252,19 @@ void QxrdAcquisition::acquiredFrameAvailable()
       frameCounter++;
 
       if ((frameCounter % updateInterval) == 0) {
-        m_DataProcessor -> idleInt16Image(m_AcquiredInt16Data);
+        m_DataProcessor -> idleInt16Image(image);
       }
     }
 
-    m_AcquiredInt16Data = m_Allocator -> newInt16Image();
-  } else if (m_AcquiredInt16Data == NULL) {
+//    m_AcquiredInt16Data = m_Allocator -> newInt16Image();
+  } else if (image == NULL) {
     indicateDroppedFrame();
 
-    m_AcquiredInt16Data = m_Allocator -> newInt16Image();
-  } else if (m_AcquiredInt32Data[0] == NULL) {
-    indicateDroppedFrame();
+//    m_AcquiredInt16Data = m_Allocator -> newInt16Image();
+//  } else if (m_AcquiredInt32Data[0] == NULL) {
+//    indicateDroppedFrame();
 
-    m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
+//    m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
   } else  {
 //    if (synchronizedAcquisition()) {
 //      synchronizedAcquisition()->acquiredFrameAvailable(m_CurrentExposure, m_CurrentFile);
@@ -277,8 +277,8 @@ void QxrdAcquisition::acquiredFrameAvailable()
                  emit printMessage(QDateTime::currentDateTime(),
                                    tr("Frame %1 skipped").arg(m_CurrentExposure));
       );
-      m_DataProcessor -> idleInt16Image(m_AcquiredInt16Data);
-      m_AcquiredInt16Data = m_Allocator -> newInt16Image();
+      m_DataProcessor -> idleInt16Image(image);
+//      m_AcquiredInt16Data = m_Allocator -> newInt16Image();
       if (m_CurrentExposure == get_ExposuresToSkip()) {
         set_ExposuresToSkip(0);
         m_CurrentExposure.fetchAndStoreOrdered(0);
@@ -291,7 +291,7 @@ void QxrdAcquisition::acquiredFrameAvailable()
 
         long nPixels = get_NRows()*get_NCols();
         int ovflwlvl = get_OverflowLevel();
-        quint16* src = m_AcquiredInt16Data->data();
+        quint16* src = image->data();
         quint32* dst = m_AcquiredInt32Data[0]->data();
         short int* ovf = m_OverflowMask->data();
 

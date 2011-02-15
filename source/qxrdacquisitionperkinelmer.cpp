@@ -7,6 +7,7 @@
 #include "qxrdimagedata.h"
 #include "qxrdwindow.h"
 #include "qxrdsynchronizedacquisition.h"
+#include "qxrdallocator.h"
 
 //#ifdef Q_OS_UNIX
 //#include "AcqLinuxTypes.h"
@@ -388,6 +389,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
 void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned int n2)
 {
   if (checkPluginAvailable()) {
+    QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image();
 
     QTime tic;
     tic.start();
@@ -432,7 +434,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
       )
     }
 
-    quint16* current = (m_AcquiredInt16Data ? m_AcquiredInt16Data->data() : NULL);
+    quint16* current = (image ? image->data() : NULL);
     quint32  cksum = 0;
     double   avg = 0;
 
@@ -454,7 +456,10 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 
     m_BufferIndex = (m_BufferIndex+1)%m_BufferSize;
 
-    acquiredFrameAvailable();
+//    acquiredFrameAvailable(image);
+
+    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "acquiredFrameAvailable", Qt::QueuedConnection,
+                                           Q_ARG(QxrdInt16ImageDataPtr, image)));
   }
 }
 
@@ -528,9 +533,10 @@ void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 
     int counter = m_Counter.fetchAndAddOrdered(1);
 
-    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "onEndFrame", Qt::QueuedConnection,
-                                           Q_ARG(int, counter),
-                                           Q_ARG(unsigned int, actualFrame), Q_ARG(unsigned int, actSecFrame)));
+//    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "onEndFrame", Qt::QueuedConnection,
+//                                           Q_ARG(int, counter),
+//                                           Q_ARG(unsigned int, actualFrame), Q_ARG(unsigned int, actSecFrame)));
+    onEndFrame(counter, actualFrame, actSecFrame);
   }
 }
 
