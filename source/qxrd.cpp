@@ -24,12 +24,14 @@ int main(int argc, char *argv[])
   QPixmap pixmap(":images/qxrd-splash-screen.png");
   QSplashScreen splash(pixmap);
   splash.show();
-
-  splash.showMessage("Initializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter, Qt::black);
+  QFont f;
+  f.setPointSize(14);
+  splash.setFont(f);
+  splash.showMessage("Initializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter);
 
   app.processEvents();
 
-  app.init();
+  app.init(&splash);
 
 //  printf("App Constructed\n");
 
