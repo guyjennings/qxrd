@@ -1710,9 +1710,9 @@ QxrdGenerateTestImagePtr QxrdDataProcessorBase::generateTestImage() const
   return m_GenerateTestImage;
 }
 
-void QxrdDataProcessorBase::processorOptionsDialog()
-{
-  QxrdDataProcessorOptionsDialog options(this);
+//void QxrdDataProcessorBase::processorOptionsDialog()
+//{
+//  QxrdDataProcessorOptionsDialog options(this);
 
-  options.exec();
-}
+//  options.exec();
+//}

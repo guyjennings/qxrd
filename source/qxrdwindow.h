@@ -47,7 +47,7 @@ public slots:
   void doLoadGainMap();
   void selectLogFile();
   void doRefineCenterTilt();
-  void doProcessorOptionsDialog();
+//  void doProcessorOptionsDialog();
   void doIntegrateSequence();
   void doProcessSequence();
 

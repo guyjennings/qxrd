@@ -840,10 +840,10 @@ void QxrdWindow::selectLogFile()
   }
 }
 
-void QxrdWindow::doProcessorOptionsDialog()
-{
-  m_DataProcessor->processorOptionsDialog();
-}
+//void QxrdWindow::doProcessorOptionsDialog()
+//{
+//  m_DataProcessor->processorOptionsDialog();
+//}
 
 void QxrdWindow::doTest()
 {

@@ -179,7 +179,6 @@ HEADERS += TODO.h \
     qxrdsettingssaverthread.h \
     qxrdplotimage.h \
     qxrdimagedisplaywidget.h \
-    qxrddataprocessoroptionsdialog.h \
     qwt_plot_piecewise_curve.h \
     qxrdmaskdialog.h \
     qxrdmaskstackmodel.h \
@@ -281,7 +280,6 @@ SOURCES += qxrd.cpp \
     qxrdsettingssaverthread.cpp \
     qxrdplotimage.cpp \
     qxrdimagedisplaywidget.cpp \
-    qxrddataprocessoroptionsdialog.cpp \
     qwt_plot_piecewise_curve.cpp \
     qxrdmaskdialog.cpp \
     qxrdmaskstackmodel.cpp \
@@ -300,7 +298,6 @@ FORMS = qxrdwindow.ui \
     qxrdpreferencesdialog.ui \
     qxrdpowderfitwidget.ui \
     qxrdacquiredialog.ui \
-    qxrddataprocessoroptionsdialog.ui \
     qxrdmaskdialog.ui \
     qxrdsynchronizedacquisitiondialog.ui \
     qxrddisplaydialog.ui \
