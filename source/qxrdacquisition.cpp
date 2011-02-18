@@ -10,10 +10,8 @@
 
 QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator)
   : QxrdAcquisitionOperations(proc, allocator),
-    m_PreTriggerInt16Images("preTriggerInt16Images"),
-    m_PreTriggerInt32Images("preTriggerInt32Images"),
-//    m_AcquiredInt16Data(NULL),
     m_AcquiredInt32Data(1),
+    m_FrameCounter(0),
     m_ControlPanel(NULL),
     m_NIDAQPlugin(NULL),
     m_SynchronizedAcquisition(new QxrdSynchronizedAcquisition(this))
@@ -60,30 +58,9 @@ void QxrdAcquisition::allocateMemoryForAcquisition()
 {
   THREAD_CHECK;
 
-//  int nThreads = QThreadPool::globalInstance()->maxThreadCount();
-  int nRows = get_NRows(), nCols = get_NCols();
-  int nSum = get_ExposuresToSum(), nPre = get_PreTriggerFiles();
-  int optInt16 = 2, optInt32 = 1/*, optDbl = 2*/;
-//  double avail = get_TotalBufferSizeMB()*MegaBytes;
-  double szInt16 = nRows*nCols*sizeof(quint16);
-  double szInt32 = nRows*nCols*sizeof(quint32);
-//  double szDbl   = nRows*nCols*sizeof(double);
-  int szAcq;
-
-  if (nSum == 1) {
-    optInt16 += nPre;
-    szAcq = szInt16;
-  } else {
-    optInt32 += nPre;
-    szAcq = szInt32;
-  }
-
-  m_PreTriggerInt32Images.deallocate();
-  m_PreTriggerInt16Images.deallocate();
-
   m_Allocator -> dimension(get_NCols(), get_NRows());
-  m_Allocator -> preallocateInt16(optInt16);
-  m_Allocator -> preallocateInt32(optInt32);
+  m_Allocator -> preallocateInt16(2);
+  m_Allocator -> preallocateInt32(3);
 }
 
 void QxrdAcquisition::acquire()
@@ -130,11 +107,6 @@ void QxrdAcquisition::cancel()
 void QxrdAcquisition::cancelDark()
 {
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "haltAcquisition", Qt::QueuedConnection));
-}
-
-void QxrdAcquisition::trigger()
-{
-  set_Trigger(true);
 }
 
 void QxrdAcquisition::clearDropped()
@@ -202,30 +174,39 @@ void QxrdAcquisition::copyParameters(int isDark)
   }
 
   set_AcquireDark(isDark);
-  set_Trigger(0);
 
   set_Cancelling(0);
+
   m_CurrentExposure.fetchAndStoreOrdered(0);
-  m_CurrentFile.fetchAndStoreOrdered(0);
+  m_CurrentPhase.fetchAndStoreOrdered(0);
+  m_CurrentSummation.fetchAndStoreOrdered(0);
+  m_CurrentGroup.fetchAndStoreOrdered(0);
+
+  m_NSkippedAtStart.fetchAndStoreOrdered(get_SkippedExposuresAtStart());
+  m_NSkippedBetweenGroups.fetchAndStoreOrdered(get_SkippedExposures());
 
   if (get_AcquireDark()) {
-    set_ExposuresToSum(get_DarkSummedExposures());
-    set_ExposuresToSkip(1);
-    set_FilesInAcquiredSequence(1);
+    m_NPhasesPerSummation.fetchAndStoreOrdered(1);
+    m_NSummationsPerGroup.fetchAndStoreOrdered(get_DarkSummedExposures());
+    m_NGroupsPerSequence.fetchAndStoreOrdered(1);
   } else {
-    set_ExposuresToSum(get_SummedExposures());
-    set_ExposuresToSkip(skipAtStart);
-    set_FilesInAcquiredSequence(get_PostTriggerFiles());
+    m_NPhasesPerSummation.fetchAndStoreOrdered(get_FilesInGroup());
+    m_NSummationsPerGroup.fetchAndStoreOrdered(get_SummedExposures());
+    m_NGroupsPerSequence.fetchAndStoreOrdered(get_GroupsInSequence());
   }
 
-  if (get_FilesInAcquiredSequence ()<= 0) {
-    set_FilesInAcquiredSequence(1);
-  }
+  if (m_NPhasesPerSummation < 1) m_NPhasesPerSummation.fetchAndStoreOrdered(1);
+  if (m_NSummationsPerGroup < 1) m_NSummationsPerGroup.fetchAndStoreOrdered(1);
+  if (m_NGroupsPerSequence  < 1) m_NGroupsPerSequence.fetchAndStoreOrdered(1);
+
+  printf("SAS:%d SBG:%d PPS:%d SPG:%d GPS:%d\n",
+         (int) m_NSkippedAtStart, (int) m_NSkippedBetweenGroups,
+         (int) m_NPhasesPerSummation, (int) m_NSummationsPerGroup,
+         (int) m_NGroupsPerSequence);
 }
 
 void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
-    // A new frame of data has been acquired, it is in m_AcquiredInt16Data.
-    // If summation is required, it should be added to m_AcquiredInt32Data.
+    // A new frame of data has been acquired, it should be added to m_AcquiredInt32Data.
     // If a summed exposure has been completed, either the 16 or 32 bit data
     // frame should be passed to the data processor, and replaced with a newly
     // allocated image.
@@ -236,242 +217,199 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
 
 //  acquireTiming();
 
-  static int frameCounter = 0;
-  static int updateInterval = 0;
+  m_FrameCounter.fetchAndAddOrdered(1);
+
+  if (image) {
+    m_UpdateInterval.fetchAndStoreOrdered(1.0/get_ExposureTime());
+
+    if (m_UpdateInterval < 1) {
+      m_UpdateInterval.fetchAndStoreOrdered(1);
+    }
+
+    if ((m_FrameCounter % m_UpdateInterval) == 0) {
+      m_DataProcessor -> idleInt16Image(image);
+    }
+  }
 
   if (m_Acquiring.tryLock()) {
     m_Acquiring.unlock();
-
-    if (image) {
-      updateInterval = 1.0/get_ExposureTime();
-
-      if (updateInterval < 1) {
-        updateInterval = 1;
-      }
-
-      frameCounter++;
-
-      if ((frameCounter % updateInterval) == 0) {
-        m_DataProcessor -> idleInt16Image(image);
-      }
-    }
-
-//    m_AcquiredInt16Data = m_Allocator -> newInt16Image();
   } else if (image == NULL) {
     indicateDroppedFrame();
-
-//    m_AcquiredInt16Data = m_Allocator -> newInt16Image();
-//  } else if (m_AcquiredInt32Data[0] == NULL) {
-//    indicateDroppedFrame();
-
-//    m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
   } else  {
-//    if (synchronizedAcquisition()) {
-//      synchronizedAcquisition()->acquiredFrameAvailable(m_CurrentExposure, m_CurrentFile);
-//    }
+//    m_CurrentExposure.fetchAndAddOrdered(1);
 
-    m_CurrentExposure.fetchAndAddOrdered(1);
-
-    if (m_CurrentExposure <= get_ExposuresToSkip()) {
+    if (m_CurrentExposure < m_NSkippedAtStart) {
       QCEP_DEBUG(DEBUG_ACQUIRE,
                  emit printMessage(QDateTime::currentDateTime(),
                                    tr("Frame %1 skipped").arg(m_CurrentExposure));
       );
-      m_DataProcessor -> idleInt16Image(image);
-//      m_AcquiredInt16Data = m_Allocator -> newInt16Image();
-      if (m_CurrentExposure == get_ExposuresToSkip()) {
-        set_ExposuresToSkip(0);
-        m_CurrentExposure.fetchAndStoreOrdered(0);
-      }
     } else {
-      if (m_CurrentExposure <= get_ExposuresToSum()) {
-        if (m_CurrentExposure == 1) {
-          m_OverflowMask = m_Allocator -> newMask(0);
-        }
+      int expAfterStart  = m_CurrentExposure - m_NSkippedAtStart;
+      int expPerGroup    = m_NPhasesPerSummation*m_NSummationsPerGroup+m_NSkippedBetweenGroups;
+      int grpInSequence  = expAfterStart / expPerGroup;
+      int expWithinGroup = expAfterStart % expPerGroup;
 
-        long nPixels = get_NRows()*get_NCols();
-        int ovflwlvl = get_OverflowLevel();
-        quint16* src = image->data();
-        quint32* dst = m_AcquiredInt32Data[0]->data();
-        short int* ovf = m_OverflowMask->data();
+      int expPerSummation = m_NPhasesPerSummation;
+      int sumInGroup     = expWithinGroup / expPerSummation;
+      int expWithinSummation = expWithinGroup % expPerSummation;
 
-        if (m_CurrentExposure == 1) {
-          QCEP_DEBUG(DEBUG_ACQUIRE,
-                     emit printMessage(QDateTime::currentDateTime(),
-                                       tr("Frame %1 saved").arg(m_CurrentExposure));
-          );
-          for (long i=0; i<nPixels; i++) {
-            quint16 val = *src++;
-
-            if (val>ovflwlvl) {
-              *ovf++ = 1;
-            } else {
-              *ovf++ = 0;
-            }
-
-            *dst++ = val;
-          }
-        } else {
-          QCEP_DEBUG(DEBUG_ACQUIRE,
-                     emit printMessage(QDateTime::currentDateTime(),
-                                       tr("Frame %1 summed").arg(m_CurrentExposure));
-          );
-          for (long i=0; i<nPixels; i++) {
-            quint16 val = *src++;
-
-            if (val>ovflwlvl) {
-              *ovf++ |= 1;
-            } else {
-              ovf++;
-            }
-
-            *dst++ += val;
-          }
-        }
-
-        m_AcquiredInt32Data[0] -> prop_SummedExposures() -> incValue(1);
+      if (expWithinGroup < m_NPhasesPerSummation) {
+        printf("Summed:  ");
+      } else {
+        printf("Skipped: ");
       }
 
-      QString fileName;
-      QString fileBase;
-
-      if (m_CurrentExposure == get_ExposuresToSum()) {
-        set_ExposuresToSkip(get_SkippedExposures());
-        m_CurrentExposure.fetchAndStoreOrdered(0);
-
-
-        if (get_AcquireDark()) {
-          fileBase = get_FilePattern()+tr("-%1.dark.tif").arg(get_FileIndex(),5,10,QChar('0'));
-          fileName = QDir(m_DataProcessor -> darkOutputDirectory()).filePath(fileBase);
-        } else {
-          fileBase = get_FilePattern()+tr("-%1.tif").arg(get_FileIndex(),5,10,QChar('0'));
-          fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
-        }
-
-        QCEP_DEBUG(DEBUG_ACQUIRE,
-          emit printMessage(QDateTime::currentDateTime(),
-                            tr("Fn: %1, Fi: %2, Exp: %3, Nexp %4, Fil: %5, NFil: %6")
-                            .arg(fileName).arg(get_FileIndex())
-                            .arg(m_CurrentExposure).arg(get_ExposuresToSum())
-                            .arg(m_CurrentFile).arg(get_FilesInAcquiredSequence()));
-        );
-
-        set_FileBase(fileBase);
-//        m_DataProcessor -> set_FileName(fileName);
-
-        QFileInfo finfo(fileName);
-
-        m_AcquiredInt32Data[0] -> set_FileBase(fileBase);
-        m_AcquiredInt32Data[0] -> set_FileName(fileName);
-        m_AcquiredInt32Data[0] -> set_Title(finfo.fileName());
-        m_AcquiredInt32Data[0] -> set_ExposureTime(get_ExposureTime());
-        //          m_AcquiredInt32Data[0] -> set_SummedExposures(get_ExposuresToSum());
-        m_AcquiredInt32Data[0] -> set_DateTime(QDateTime::currentDateTime());
-        m_AcquiredInt32Data[0] -> set_HBinning(1);
-        m_AcquiredInt32Data[0] -> set_VBinning(1);
-        m_AcquiredInt32Data[0] -> set_CameraGain(get_CameraGain());
-        m_AcquiredInt32Data[0] -> set_DataType(QxrdInt32ImageData::Raw32Data);
-        m_AcquiredInt32Data[0] -> set_Triggered(get_Trigger());
-        m_AcquiredInt32Data[0] -> set_UserComment1(get_UserComment1());
-        m_AcquiredInt32Data[0] -> set_UserComment2(get_UserComment2());
-        m_AcquiredInt32Data[0] -> set_UserComment3(get_UserComment3());
-        m_AcquiredInt32Data[0] -> set_UserComment4(get_UserComment4());
-        m_AcquiredInt32Data[0] -> set_ImageSaved(false);
-
-        copyDynamicProperties(m_AcquiredInt32Data[0].data());
-
-        if (get_AcquireDark()) {
-          m_AcquiredInt32Data[0] -> set_ImageNumber(-1);
-          QCEP_DEBUG(DEBUG_ACQUIRE,
-                     emit printMessage(QDateTime::currentDateTime(),
-                                       tr("32 bit Dark Image acquired"));
-              );
-          m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data[0], m_OverflowMask);
-          m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
-          haltAcquisition();
-        } else {
-          if (get_PreTriggerFiles() > 0) {
-            if (get_Trigger()) {
-              while (m_PreTriggerInt32Images.size() > 0) {
-                QxrdInt32ImageDataPtr img = m_PreTriggerInt32Images.dequeue();
-
-                QCEP_DEBUG(DEBUG_ACQUIRE,
-                           emit printMessage(QDateTime::currentDateTime(),
-                                             tr("32 bit Pretrigger Image %1 acquired").arg(m_CurrentFile));
-                    );
-
-                img -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-                img -> set_FileBase(fileBase);
-                img -> set_FileName(fileName);
-                img -> set_Title(fileBase);
-
-                m_DataProcessor -> acquiredInt32Image(img, m_OverflowMask);
-
-                set_FileIndex(get_FileIndex()+1);
-
-                fileBase = get_FilePattern()+tr("-%1.tif").arg(get_FileIndex(),5,10,QChar('0'));
-                fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
-              }
-
-              m_AcquiredInt32Data[0] -> set_FileBase(fileBase);
-              m_AcquiredInt32Data[0] -> set_FileName(fileName);
-              m_AcquiredInt32Data[0] -> set_Title(fileBase);
-
-              QCEP_DEBUG(DEBUG_ACQUIRE,
-                         emit printMessage(QDateTime::currentDateTime(),
-                                           tr("32 bit Image %1 acquired").arg(m_CurrentFile));
-                  );
-
-              m_AcquiredInt32Data[0] -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-              m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data[0], m_OverflowMask);
-              m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
-              set_FileIndex(get_FileIndex()+1);
-            } else {
-              m_PreTriggerInt32Images.enqueue(m_AcquiredInt32Data[0]);
-              QCEP_DEBUG(DEBUG_ACQUIRE,
-                         emit printMessage(QDateTime::currentDateTime(),
-                                           tr("32 bit Pretrigger Image buffered"));
-                  emit statusMessage(QDateTime::currentDateTime(),
-                                     tr("%1 pre trigger 32 bit images queued")
-                                     .arg(m_PreTriggerInt32Images.size()));
-              );
-
-              while (m_PreTriggerInt32Images.size() > get_PreTriggerFiles()) {
-                m_PreTriggerInt32Images.dequeue();
-              }
-              m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
-            }
-          } else {
-            QCEP_DEBUG(DEBUG_ACQUIRE,
-                       emit printMessage(QDateTime::currentDateTime(),
-                                         tr("32 bit Image %1 acquired").arg(m_CurrentFile));
-                );
-            m_AcquiredInt32Data[0] -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
-            m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data[0], m_OverflowMask);
-            m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
-            set_FileIndex(get_FileIndex()+1);
-          }
-        }
-
-        emit statusMessage(QDateTime::currentDateTime(),
-                           tr("Acquiring ""%1"" (%2 i16, %3 i32, %4 dbl)").arg(fileName)
-                           .arg(m_Allocator->nFreeInt16())
-                           .arg(m_Allocator->nFreeInt32())
-                           .arg(m_Allocator->nFreeDouble())
-                           );
-
-        if (m_CurrentFile >= (get_FilesInAcquiredSequence() + get_PreTriggerFiles())) {
-          emit printMessage(QDateTime::currentDateTime(), "Acquisition ended");
-          emit printMessage(QDateTime::currentDateTime(), "Halted acquisition");
-
-          haltAcquisition();
-        }
+      if (m_CurrentExposure > m_NSkippedAtStart + m_NGroupsPerSequence*(expPerGroup)) {
+        haltAcquisition();
       }
 
-      emit acquiredFrame(fileName, get_FileIndex(),
-                         m_CurrentExposure,get_ExposuresToSum(),
-                         m_CurrentFile, get_FilesInAcquiredSequence());
+      m_CurrentPhase.fetchAndStoreOrdered(0);
+      m_CurrentSummation.fetchAndStoreOrdered(sumInGroup);
+      m_CurrentGroup.fetchAndStoreOrdered(grpInSequence);
+
+      printf("mCE %d: eas %d: epg %d: gis %d: ewg %d: eps %d: sig %d: ews %d\n",
+             (int) m_CurrentExposure, expAfterStart, expPerGroup, grpInSequence, expWithinGroup, expPerSummation, sumInGroup, expWithinSummation);
+
+//      m_CurrentGroup.fetchAndStoreOrdered(grpInSequence);
+
+//      if (m_CurrentExposure <= get_ExposuresToSum()) {
+//        if (m_CurrentExposure == 1) {
+//          m_OverflowMask = m_Allocator -> newMask(0);
+//        }
+
+//        long nPixels = get_NRows()*get_NCols();
+//        int ovflwlvl = get_OverflowLevel();
+//        quint16* src = image->data();
+//        quint32* dst = m_AcquiredInt32Data[0]->data();
+//        short int* ovf = m_OverflowMask->data();
+
+//        if (m_CurrentExposure == 1) {
+//          QCEP_DEBUG(DEBUG_ACQUIRE,
+//                     emit printMessage(QDateTime::currentDateTime(),
+//                                       tr("Frame %1 saved").arg(m_CurrentExposure));
+//          );
+//          for (long i=0; i<nPixels; i++) {
+//            quint16 val = *src++;
+
+//            if (val>ovflwlvl) {
+//              *ovf++ = 1;
+//            } else {
+//              *ovf++ = 0;
+//            }
+
+//            *dst++ = val;
+//          }
+//        } else {
+//          QCEP_DEBUG(DEBUG_ACQUIRE,
+//                     emit printMessage(QDateTime::currentDateTime(),
+//                                       tr("Frame %1 summed").arg(m_CurrentExposure));
+//          );
+//          for (long i=0; i<nPixels; i++) {
+//            quint16 val = *src++;
+
+//            if (val>ovflwlvl) {
+//              *ovf++ |= 1;
+//            } else {
+//              ovf++;
+//            }
+
+//            *dst++ += val;
+//          }
+//        }
+
+//        m_AcquiredInt32Data[0] -> prop_SummedExposures() -> incValue(1);
+//      }
+
+//      QString fileName;
+//      QString fileBase;
+
+//      if (m_CurrentExposure == get_ExposuresToSum()) {
+//        set_ExposuresToSkip(get_SkippedExposures());
+//        m_CurrentExposure.fetchAndStoreOrdered(0);
+
+
+//        if (get_AcquireDark()) {
+//          fileBase = get_FilePattern()+tr("-%1.dark.tif").arg(get_FileIndex(),5,10,QChar('0'));
+//          fileName = QDir(m_DataProcessor -> darkOutputDirectory()).filePath(fileBase);
+//        } else {
+//          fileBase = get_FilePattern()+tr("-%1.tif").arg(get_FileIndex(),5,10,QChar('0'));
+//          fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
+//        }
+
+//        QCEP_DEBUG(DEBUG_ACQUIRE,
+//          emit printMessage(QDateTime::currentDateTime(),
+//                            tr("Fn: %1, Fi: %2, Exp: %3, Nexp %4, Fil: %5, NFil: %6, Grp: %7, NGrp: %8")
+//                            .arg(fileName).arg(get_FileIndex())
+//                            .arg(m_CurrentExposure).arg(get_ExposuresToSum())
+//                            .arg(m_CurrentFile).arg(get_FilesInAcquiredGroup())
+//                            .arg(m_CurrentGroup).arg(get_GroupsInAcquiredSequence()));
+//        );
+
+//        set_FileBase(fileBase);
+////        m_DataProcessor -> set_FileName(fileName);
+
+//        QFileInfo finfo(fileName);
+
+//        m_AcquiredInt32Data[0] -> set_FileBase(fileBase);
+//        m_AcquiredInt32Data[0] -> set_FileName(fileName);
+//        m_AcquiredInt32Data[0] -> set_Title(finfo.fileName());
+//        m_AcquiredInt32Data[0] -> set_ExposureTime(get_ExposureTime());
+//        //          m_AcquiredInt32Data[0] -> set_SummedExposures(get_ExposuresToSum());
+//        m_AcquiredInt32Data[0] -> set_DateTime(QDateTime::currentDateTime());
+//        m_AcquiredInt32Data[0] -> set_HBinning(1);
+//        m_AcquiredInt32Data[0] -> set_VBinning(1);
+//        m_AcquiredInt32Data[0] -> set_CameraGain(get_CameraGain());
+//        m_AcquiredInt32Data[0] -> set_DataType(QxrdInt32ImageData::Raw32Data);
+//        m_AcquiredInt32Data[0] -> set_UserComment1(get_UserComment1());
+//        m_AcquiredInt32Data[0] -> set_UserComment2(get_UserComment2());
+//        m_AcquiredInt32Data[0] -> set_UserComment3(get_UserComment3());
+//        m_AcquiredInt32Data[0] -> set_UserComment4(get_UserComment4());
+//        m_AcquiredInt32Data[0] -> set_ImageSaved(false);
+
+//        copyDynamicProperties(m_AcquiredInt32Data[0].data());
+
+//        if (get_AcquireDark()) {
+//          m_AcquiredInt32Data[0] -> set_ImageNumber(-1);
+//          QCEP_DEBUG(DEBUG_ACQUIRE,
+//                     emit printMessage(QDateTime::currentDateTime(),
+//                                       tr("32 bit Dark Image acquired"));
+//              );
+//          m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data[0], m_OverflowMask);
+//          m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
+//          haltAcquisition();
+//        } else {
+//          QCEP_DEBUG(DEBUG_ACQUIRE,
+//                     emit printMessage(QDateTime::currentDateTime(),
+//                                       tr("32 bit Image %1 acquired").arg(m_CurrentFile));
+//              );
+//          m_AcquiredInt32Data[0] -> set_ImageNumber(m_CurrentFile.fetchAndAddOrdered(1));
+//          m_DataProcessor -> acquiredInt32Image(m_AcquiredInt32Data[0], m_OverflowMask);
+//          m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
+//          set_FileIndex(get_FileIndex()+1);
+//        }
+
+//        emit statusMessage(QDateTime::currentDateTime(),
+//                           tr("Acquiring ""%1"" (%2 i16, %3 i32, %4 dbl)").arg(fileName)
+//                           .arg(m_Allocator->nFreeInt16())
+//                           .arg(m_Allocator->nFreeInt32())
+//                           .arg(m_Allocator->nFreeDouble())
+//                           );
+
+//        if (m_CurrentFile >= (get_FilesInAcquiredGroup())) {
+//          emit printMessage(QDateTime::currentDateTime(), "Acquisition ended");
+//          emit printMessage(QDateTime::currentDateTime(), "Halted acquisition");
+
+//          haltAcquisition();
+//        }
+//      }
+
+      emit acquiredFrame("<<>>", get_FileIndex(),
+                         m_CurrentPhase,     m_NPhasesPerSummation,
+                         m_CurrentSummation, m_NSummationsPerGroup,
+                         m_CurrentGroup,     m_NGroupsPerSequence);
     }
+
+    m_CurrentExposure.fetchAndAddOrdered(1);
   }
 }
 

@@ -155,7 +155,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
   connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
   connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
-  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
+//  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
 
   connect(m_ActionShowImage, SIGNAL(triggered()), m_Plot, SLOT(toggleShowImage()));
   connect(m_ActionShowMask, SIGNAL(triggered()), m_Plot, SLOT(toggleShowMask()));
@@ -254,8 +254,8 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 
   connect(m_Acquisition,     SIGNAL(acquireStarted(int)),
           this,              SLOT(onAcquireStarted(int)));
-  connect(m_Acquisition,     SIGNAL(acquiredFrame(QString,int,int,int,int,int)),
-          this,              SLOT(onAcquiredFrame(QString,int,int,int,int,int)));
+  connect(m_Acquisition,     SIGNAL(acquiredFrame(QString,int,int,int,int,int,int,int)),
+          this,              SLOT(onAcquiredFrame(QString,int,int,int,int,int,int,int)));
   connect(m_Acquisition,     SIGNAL(acquireComplete(int)),
           this,              SLOT(onAcquireComplete(int)));
 
@@ -543,7 +543,7 @@ void QxrdWindow::onAcquireStarted(int dark)
 }
 
 void QxrdWindow::onAcquiredFrame(
-  QString fileName, int /*fileIndex*/, int isum, int nsum, int iframe, int nframe)
+  QString fileName, int /*fileIndex*/, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup)
 {
   //   printf("QxrdWindow::acquiredFrame(\"%s\",%d,%d,%d,%d,%d)\n",
   // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);

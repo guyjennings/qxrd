@@ -101,6 +101,8 @@ void QxrdAcquisitionPerkinElmer::onExposureTimeChanged(double newTime)
 
 void QxrdAcquisitionPerkinElmer::onBinningModeChanged(int newMode)
 {
+  return;
+
   if (checkPluginAvailable()) {
 
     if (m_HeaderID == 14) {
@@ -370,9 +372,6 @@ void QxrdAcquisitionPerkinElmer::initialize()
                emit printMessage(QDateTime::currentDateTime(),
                                  tr("Define Dest Buffers"));
     );
-
-    m_CurrentExposure = 0;
-    m_CurrentFile = 0;
 
     if ((nRet=m_PerkinElmer->Acquisition_Acquire_Image(m_AcqDesc, m_BufferSize,
                                         0, HIS_SEQ_CONTINUOUS, NULL, NULL, NULL)) != HIS_ALL_OK) {

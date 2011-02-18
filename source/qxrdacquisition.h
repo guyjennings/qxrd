@@ -32,7 +32,7 @@ public slots:
   void acquireDark();
   void cancel();
   void cancelDark();
-  void trigger();
+//  void trigger();
   void clearDropped();
 
   void acquisitionReady();
@@ -49,7 +49,7 @@ public slots:
   void onBufferSizeChanged(int newMB);
 
 signals:
-  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
+  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
   void acquireStarted(int dark);
   void acquireComplete(int dark);
 
@@ -85,21 +85,23 @@ protected:
   QMutex                 m_Acquiring;
   QWaitCondition         m_StatusWaiting;
 
-//  QxrdInt16ImageQueue    m_FreeInt16Images;
-//  QxrdInt32ImageQueue    m_FreeInt32Images;
-  QxrdInt16ImageQueue    m_PreTriggerInt16Images;
-  QxrdInt32ImageQueue    m_PreTriggerInt32Images;
-//  QxrdInt16ImageDataPtr  m_AcquiredInt16Data;
   QVector<QxrdInt32ImageDataPtr>  m_AcquiredInt32Data;
   QxrdMaskDataPtr        m_OverflowMask;
 
   QAtomicInt             m_AcquireDark;
-  QAtomicInt             m_NFramesStillToSkip;
-  QAtomicInt             m_NFramesStillToSum;
-  QAtomicInt             m_NPretriggerAcquired;
-  QAtomicInt             m_NPostTriggerAcquired;
+
+  QAtomicInt             m_NSkippedAtStart;
+  QAtomicInt             m_NSkippedBetweenGroups;
+  QAtomicInt             m_NPhasesPerSummation;
+  QAtomicInt             m_NSummationsPerGroup;
+  QAtomicInt             m_NGroupsPerSequence;
+
+  QAtomicInt             m_FrameCounter;
+  QAtomicInt             m_UpdateInterval;
   QAtomicInt             m_CurrentExposure;
-  QAtomicInt             m_CurrentFile;
+  QAtomicInt             m_CurrentPhase;
+  QAtomicInt             m_CurrentSummation;
+  QAtomicInt             m_CurrentGroup;
 
   QxrdAcquireDialog     *m_ControlPanel;
 
