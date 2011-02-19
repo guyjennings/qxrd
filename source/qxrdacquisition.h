@@ -79,7 +79,13 @@ protected:
 
 protected slots:
   virtual void haltAcquisition();
+
+protected:
   void acquiredFrameAvailable(QxrdInt16ImageDataPtr image);
+
+  template <typename T>
+  void accumulateAcquiredImage(QSharedPointer < QxrdImageData <T> > image);
+  void processAcquiredImage(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
 
 protected:
   QMutex                 m_Acquiring;

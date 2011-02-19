@@ -10,7 +10,12 @@
 
 QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator)
   : QxrdAcquisitionOperations(proc, allocator),
-    m_AcquiredInt32Data(1),
+    m_AcquiredInt32Data(),
+    m_NSkippedAtStart(0),
+    m_NSkippedBetweenGroups(0),
+    m_NPhasesPerSummation(1),
+    m_NSummationsPerGroup(1),
+    m_NGroupsPerSequence(1),
     m_FrameCounter(0),
     m_ControlPanel(NULL),
     m_NIDAQPlugin(NULL),
@@ -46,7 +51,7 @@ void QxrdAcquisition::initialize()
 //  allocateMemoryForAcquisition();
 
 //  m_AcquiredInt16Data    = m_Allocator -> newInt16Image();
-  m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
+//  m_AcquiredInt32Data[0] = m_Allocator -> newInt32Image();
 }
 
 void QxrdAcquisition::onBufferSizeChanged(int newMB)
@@ -58,9 +63,13 @@ void QxrdAcquisition::allocateMemoryForAcquisition()
 {
   THREAD_CHECK;
 
+  m_AcquiredInt32Data.clear();
+
   m_Allocator -> dimension(get_NCols(), get_NRows());
   m_Allocator -> preallocateInt16(2);
-  m_Allocator -> preallocateInt32(3);
+  m_Allocator -> preallocateInt32(3+m_NPhasesPerSummation);
+
+  m_AcquiredInt32Data.resize(m_NPhasesPerSummation);
 }
 
 void QxrdAcquisition::acquire()
@@ -195,10 +204,6 @@ void QxrdAcquisition::copyParameters(int isDark)
     m_NGroupsPerSequence.fetchAndStoreOrdered(get_GroupsInSequence());
   }
 
-  if (m_NPhasesPerSummation < 1) m_NPhasesPerSummation.fetchAndStoreOrdered(1);
-  if (m_NSummationsPerGroup < 1) m_NSummationsPerGroup.fetchAndStoreOrdered(1);
-  if (m_NGroupsPerSequence  < 1) m_NGroupsPerSequence.fetchAndStoreOrdered(1);
-
   printf("SAS:%d SBG:%d PPS:%d SPG:%d GPS:%d\n",
          (int) m_NSkippedAtStart, (int) m_NSkippedBetweenGroups,
          (int) m_NPhasesPerSummation, (int) m_NSummationsPerGroup,
@@ -217,6 +222,10 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
 
 //  acquireTiming();
 
+  if (m_NPhasesPerSummation < 1) m_NPhasesPerSummation.fetchAndStoreOrdered(1);
+  if (m_NSummationsPerGroup < 1) m_NSummationsPerGroup.fetchAndStoreOrdered(1);
+  if (m_NGroupsPerSequence  < 1) m_NGroupsPerSequence.fetchAndStoreOrdered(1);
+
   m_FrameCounter.fetchAndAddOrdered(1);
 
   if (image) {
@@ -231,6 +240,17 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
     }
   }
 
+  int expAfterStart  = m_CurrentExposure - m_NSkippedAtStart;
+  int expPerGroup    = m_NPhasesPerSummation*m_NSummationsPerGroup+m_NSkippedBetweenGroups;
+  int grpInSequence  = expAfterStart / expPerGroup;
+  int expWithinGroup = expAfterStart % expPerGroup;
+  int expPerSequence = m_NSkippedAtStart + m_NGroupsPerSequence*expPerGroup - m_NSkippedBetweenGroups;
+
+  int expPerSummation = m_NPhasesPerSummation;
+  int sumInGroup     = expWithinGroup / expPerSummation;
+  int expWithinSummation = expWithinGroup % expPerSummation;
+  int isSummed       = true;
+
   if (m_Acquiring.tryLock()) {
     m_Acquiring.unlock();
   } else if (image == NULL) {
@@ -243,32 +263,46 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
                  emit printMessage(QDateTime::currentDateTime(),
                                    tr("Frame %1 skipped").arg(m_CurrentExposure));
       );
+
+      printf("mCE %d: skipped at start\n", m_CurrentExposure);
     } else {
-      int expAfterStart  = m_CurrentExposure - m_NSkippedAtStart;
-      int expPerGroup    = m_NPhasesPerSummation*m_NSummationsPerGroup+m_NSkippedBetweenGroups;
-      int grpInSequence  = expAfterStart / expPerGroup;
-      int expWithinGroup = expAfterStart % expPerGroup;
 
-      int expPerSummation = m_NPhasesPerSummation;
-      int sumInGroup     = expWithinGroup / expPerSummation;
-      int expWithinSummation = expWithinGroup % expPerSummation;
-
-      if (expWithinGroup < m_NPhasesPerSummation) {
+      if (expWithinGroup < m_NPhasesPerSummation*m_NSummationsPerGroup) {
+        isSummed = true;
         printf("Summed:  ");
       } else {
+        isSummed = false;
         printf("Skipped: ");
       }
 
-      if (m_CurrentExposure > m_NSkippedAtStart + m_NGroupsPerSequence*(expPerGroup)) {
-        haltAcquisition();
-      }
-
-      m_CurrentPhase.fetchAndStoreOrdered(0);
+      m_CurrentPhase.fetchAndStoreOrdered(expWithinSummation);
       m_CurrentSummation.fetchAndStoreOrdered(sumInGroup);
       m_CurrentGroup.fetchAndStoreOrdered(grpInSequence);
 
-      printf("mCE %d: eas %d: epg %d: gis %d: ewg %d: eps %d: sig %d: ews %d\n",
-             (int) m_CurrentExposure, expAfterStart, expPerGroup, grpInSequence, expWithinGroup, expPerSummation, sumInGroup, expWithinSummation);
+      printf("mCE %d: mCP %d: mCS %d: mCG %d" /*": eas %d: epg %d: gis %d: ewg %d: eps %d: sig %d: ews %d"*/ "\n",
+             (int) m_CurrentExposure, (int) m_CurrentPhase, (int) m_CurrentSummation, (int) m_CurrentGroup/*,
+             expAfterStart, expPerGroup, grpInSequence, expWithinGroup, expPerSummation, sumInGroup, expWithinSummation*/);
+
+      printf("Buff:");
+      for (int i=0; i<m_NPhasesPerSummation; i++) {
+        if (m_AcquiredInt32Data[i] == NULL) {
+          printf(" %d:NULL", i);
+        } else {
+          printf(" %d:%-4d", i, m_AcquiredInt32Data[i]->get_SummedExposures());
+        }
+      }
+      printf("\n");
+
+      if (isSummed) {
+        if (m_AcquiredInt32Data[m_CurrentPhase] == NULL) {
+          m_AcquiredInt32Data[m_CurrentPhase] = m_Allocator->newInt32Image();
+        } else if (m_CurrentSummation == 0) {
+          processAcquiredImage(m_AcquiredInt32Data[m_CurrentPhase], m_OverflowMask);
+          m_AcquiredInt32Data[m_CurrentPhase] = m_Allocator->newInt32Image();
+        }
+
+        accumulateAcquiredImage(image);
+      }
 
 //      m_CurrentGroup.fetchAndStoreOrdered(grpInSequence);
 
@@ -410,7 +444,35 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
     }
 
     m_CurrentExposure.fetchAndAddOrdered(1);
+
+    if (m_CurrentExposure >= expPerSequence || get_Cancelling()) {
+      for (int i=0; i<m_NPhasesPerSummation; i++) {
+        if (m_AcquiredInt32Data[i]) {
+          processAcquiredImage(m_AcquiredInt32Data[i], m_OverflowMask);
+          m_AcquiredInt32Data[i] = QxrdInt32ImageDataPtr();
+        }
+      }
+      printf("Finished\n");
+      haltAcquisition();
+      return;
+    }
   }
+}
+
+template <typename T>
+void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image)
+{
+  if (image && m_AcquiredInt32Data[m_CurrentPhase]) {
+    m_AcquiredInt32Data[m_CurrentPhase]->accumulateImage(image);
+  }
+}
+
+void QxrdAcquisition::processAcquiredImage(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
+{
+  if (image) {
+    printf("processAcquiredImage summed:%d\n", image->get_SummedExposures());
+  }
+//  m_DataProcessor->acquiredInt32Image(image, overflow);
 }
 
 void QxrdAcquisition::haltAcquisition()
