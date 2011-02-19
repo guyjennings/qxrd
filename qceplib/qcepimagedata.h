@@ -60,6 +60,9 @@ public:
   Q_PROPERTY(int imageNumber READ get_ImageNumber WRITE set_ImageNumber);
   QCEP_INTEGER_PROPERTY(ImageNumber);
 
+  Q_PROPERTY(int phaseNumber READ get_PhaseNumber WRITE set_PhaseNumber);
+  QCEP_INTEGER_PROPERTY(PhaseNumber);
+
   Q_PROPERTY(QDateTime dateTime READ get_DateTime WRITE set_DateTime);
   QCEP_DATETIME_PROPERTY(DateTime);
 
@@ -187,6 +190,7 @@ public:
   T* data();
 
   void setValue(int x, int y, T val);
+  void incValue(int x, int y, T val);
   void fill(T val);
 
   T defaultValue() const;
@@ -277,6 +281,14 @@ void QcepImageData<T>::setValue(int x, int y, T val)
 {
   if (x >= 0 && x < get_Width() && y >= 0 && y < get_Height()) {
     m_Image[(get_Height()-y-1)*get_Width()+x] = val;
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::incValue(int x, int y, T val)
+{
+  if (x >= 0 && x < get_Width() && y >= 0 && y < get_Height()) {
+    m_Image[(get_Height()-y-1)*get_Width()+x] += val;
   }
 }
 
