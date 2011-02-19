@@ -132,6 +132,8 @@ public:
 
 private:
   int maskStackSelectPopup();
+  void shrinkDockWidget(QDockWidget *dockWidget);
+  void shrinkWidget(QWidget *widget);
 
 private:
   mutable QMutex                         m_Mutex;
