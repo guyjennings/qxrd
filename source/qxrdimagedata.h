@@ -27,6 +27,16 @@ public:
   int value();
 };
 
+template <typename T> class QxrdImageData;
+
+typedef QxrdImageData<quint16> QxrdInt16ImageData;
+typedef QxrdImageData<quint32> QxrdInt32ImageData;
+//typedef QxrdImageData<double>  QxrdDoubleImageData;
+
+typedef QSharedPointer<QxrdInt16ImageData> QxrdInt16ImageDataPtr;
+typedef QSharedPointer<QxrdInt32ImageData> QxrdInt32ImageDataPtr;
+//typedef QSharedPointer<QxrdDoubleImageData> QxrdDoubleImageDataPtr;
+
 template <typename T>
 class QxrdImageData : public QcepImageData<T>
 {
@@ -41,17 +51,13 @@ public:
   template <typename T2>
   void copyImage(QSharedPointer< QxrdImageData<T2> > dest);
 
+  template <typename T2>
+  void accumulateImage(QSharedPointer< QxrdImageData<T2> > image);
+
 private:
   QxrdImageDataObjectCounter m_ImageDataObjectCounter; /* global counter to track allocation of QxrdImageData objects */
   QxrdAllocatorInterface    *m_Allocator;
 };
-
-typedef QxrdImageData<quint16> QxrdInt16ImageData;
-typedef QxrdImageData<quint32> QxrdInt32ImageData;
-//typedef QxrdImageData<double>  QxrdDoubleImageData;
-
-typedef QSharedPointer<QxrdInt16ImageData> QxrdInt16ImageDataPtr;
-typedef QSharedPointer<QxrdInt32ImageData> QxrdInt32ImageDataPtr;
 
 template <typename T>
 QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, int width, int height, T def)
@@ -115,6 +121,35 @@ void QxrdImageData<T>::copyImage(QSharedPointer< QxrdImageData<T2> > dest)
 
     for (int i=0; i<npix; i++) {
       *destp++ = *srcp++;
+    }
+  }
+}
+
+template <typename T>
+template <typename T2>
+void QxrdImageData<T>::accumulateImage(QSharedPointer< QxrdImageData<T2> > image)
+{
+  if (image) {
+    int ncols = get_Width();
+    int nrows = get_Height();
+
+    prop_SummedExposures()->incValue(1);
+
+    if (ncols == image->get_Width() && nrows == image->get_Height()) {
+      int npix = ncols*nrows;
+
+      T *srcp = this -> data();
+      T2 *destp = image -> data();
+
+      for (int i=0; i<npix; i++) {
+        *destp++ += *srcp++;
+      }
+    } else {
+      for (int row=0; row<nrows; row++) {
+        for (int col=0; col<ncols; col++) {
+          incValue(col, row, image->value(col, row));
+        }
+      }
     }
   }
 }
