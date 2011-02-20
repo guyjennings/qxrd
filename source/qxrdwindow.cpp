@@ -46,6 +46,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QMenu>
+#include <QDesktopWidget>
 
 QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc, QWidget *parent)
   : QMainWindow(parent),
@@ -97,17 +98,47 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
   m_IntegratorDialog   = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
 
-  addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
+  QDesktopWidget *dw = QApplication::desktop();
+//  int screenNum = dw->screenNumber(this);
+  QRect screenGeom = dw->screenGeometry(this);
 
-  splitDockWidget(m_AcquireDialog, m_CenterFinderDialog, Qt::Vertical);
-  splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
+//  printf("Screen number %d Geom: %d,%d-%d,%d\n", screenNum,
+//         screenGeom.left(), screenGeom.top(),
+//         screenGeom.right(), screenGeom.bottom());
 
-  tabifyDockWidget(m_AcquireDialog, m_SynchronizedAcquisitionDialog);
-  tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
+  if (screenGeom.height() >= 1024) {
+    addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
 
-  tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
-  tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
+    splitDockWidget(m_AcquireDialog, m_CenterFinderDialog, Qt::Vertical);
+    splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
 
+    tabifyDockWidget(m_AcquireDialog, m_SynchronizedAcquisitionDialog);
+    tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
+
+    tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
+    tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
+} else {
+    addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
+
+    tabifyDockWidget(m_AcquireDialog, m_CenterFinderDialog);
+    tabifyDockWidget(m_CenterFinderDialog, m_IntegratorDialog);
+
+    tabifyDockWidget(m_IntegratorDialog, m_SynchronizedAcquisitionDialog);
+    tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
+
+    tabifyDockWidget(m_DisplayDialog, m_MaskDialog);
+    tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
+
+    if (screenGeom.height() < 800) {
+      shrinkDockWidget(m_AcquireDialog);
+      shrinkDockWidget(m_CenterFinderDialog);
+      shrinkDockWidget(m_IntegratorDialog);
+      shrinkDockWidget(m_SynchronizedAcquisitionDialog);
+      shrinkDockWidget(m_DisplayDialog);
+      shrinkDockWidget(m_MaskDialog);
+      shrinkDockWidget(m_CorrectionDialog);
+    }
+  }
 //  tabifyDockWidget(m_IntegratorDialog, new QxrdTestDockWidget(this));
 
   //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
@@ -400,6 +431,34 @@ QxrdWindow::~QxrdWindow()
   //  delete m_NewData;
   //  delete m_Mask;
   //  delete m_NewMask;
+}
+
+void QxrdWindow::shrinkDockWidget(QDockWidget *dw)
+{
+  shrinkWidget(dw);
+}
+
+void QxrdWindow::shrinkWidget(QWidget *wid)
+{
+  QFont f = wid->font();
+  if (f.pointSize() > 6) f.setPointSize(6);
+  wid->setFont(f);
+
+  QGridLayout *gl = qobject_cast<QGridLayout*>(wid);
+
+  if (gl) {
+    gl->setContentsMargins(2,2,2,2);
+    gl->setHorizontalSpacing(2);
+    gl->setVerticalSpacing(2);
+  }
+
+  foreach(QObject* obj, wid->children()) {
+    QWidget *wid = qobject_cast<QWidget*>(obj);
+
+    if (wid) {
+      shrinkWidget(wid);
+    }
+  }
 }
 
 void QxrdWindow::onAcquisitionInit()
