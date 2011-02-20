@@ -3,14 +3,14 @@
 
 #include "qcepmacros.h"
 
-#include <QWidget>
+#include <QDockWidget>
 #include "qxrdforwardtypes.h"
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
 #include "qxrddataprocessor.h"
 #include "ui_qxrdfilebrowser.h"
 
-class QxrdFileBrowser : public QWidget, public Ui::QxrdFileBrowser
+class QxrdFileBrowser : public QDockWidget, public Ui::QxrdFileBrowser
 {
   Q_OBJECT;
 
@@ -34,6 +34,7 @@ public slots:
   void doOpen();
   void doProcess();
   void doIntegrate();
+  void doAccumulate();
   void onRootDirectoryChanged(QString dir);
   void mousePressed(QModelIndex index);
 

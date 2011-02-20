@@ -152,6 +152,7 @@ private:
   QxrdCorrectionDialog                  *m_CorrectionDialog;
   QxrdIntegratorDialog                  *m_IntegratorDialog;
   QxrdImageCalculatorPtr                 m_Calculator;
+  QxrdFileBrowser                       *m_FileBrowser;
   QPointer<QxrdPowderFitDialog>          m_PowderFitDialog;
   QVector<double>                        m_Exposures;
   QProgressBarPtr                        m_Progress;
@@ -173,8 +174,6 @@ private:
   QAtomicInt                             m_NewMaskAvailable;
 
   QxrdImageDisplayWidget                *m_ImageDisplay;
-
-  QxrdFileBrowser                       *m_FileBrowser;
 };
 
 #endif

@@ -6,9 +6,9 @@
 #include "qxrdmutexlocker.h"
 
 QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent)
-  : QWidget(parent),
-    m_BrowserFilter(this, "BrowserFilter",1),
-    m_BrowserSelector(this, "BrowserSelector",""),
+  : QDockWidget(parent),
+    m_BrowserFilter(this, "browserFilter",1),
+    m_BrowserSelector(this, "browserSelector",""),
     m_Processor(processor),
     m_Model(NULL)
 {
@@ -19,9 +19,9 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent
   m_FileBrowser -> setModel(m_Model);
   m_FileBrowser -> setRootIndex(m_Model->index(QDir::currentPath()));
 
-  m_FileBrowser -> setColumnHidden(1,true);
-  m_FileBrowser -> setColumnHidden(2,true);
-  m_FileBrowser -> setColumnHidden(3,true);
+//  m_FileBrowser -> setColumnHidden(1,true); // Size
+  m_FileBrowser -> setColumnHidden(2,true); // Type
+//  m_FileBrowser -> setColumnHidden(3,true); // Modified
 
   m_Model -> setNameFilters(QStringList("*.tif"));
   m_Model -> setNameFilterDisables(false);
@@ -35,6 +35,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent
   connect(m_OpenButton, SIGNAL(clicked()), this, SLOT(doOpen()));
   connect(m_ProcessButton, SIGNAL(clicked()), this, SLOT(doProcess()));
   connect(m_IntegrateButton, SIGNAL(clicked()), this, SLOT(doIntegrate()));
+  connect(m_AccumulateButton, SIGNAL(clicked()), this, SLOT(doAccumulate()));
   connect(m_Processor -> prop_OutputDirectory(), SIGNAL(changedValue(QString)), this, SLOT(onRootDirectoryChanged(QString)));
 
   connect(m_FileBrowser, SIGNAL(pressed(QModelIndex)), this, SLOT(mousePressed(QModelIndex)));
@@ -135,6 +136,20 @@ void QxrdFileBrowser::doIntegrate()
 //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
     INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "integrateData", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
   }
+}
+
+void QxrdFileBrowser::doAccumulate()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+  QStringList paths;
+
+  foreach(index, rows) {
+    paths.append(m_Model->filePath(index));
+  }
+
+  INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "accumulateImages", Qt::QueuedConnection, Q_ARG(QStringList, paths)));
 }
 
 void QxrdFileBrowser::writeSettings(QxrdSettings &settings, QString section)

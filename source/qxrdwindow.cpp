@@ -64,6 +64,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     m_CorrectionDialog(NULL),
     m_IntegratorDialog(NULL),
     m_Calculator(NULL),
+    m_FileBrowser(NULL),
     m_Progress(NULL),
     m_AllocationStatus(NULL),
     m_Acquiring(false),
@@ -78,8 +79,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     m_Mask(NULL/*new QxrdMaskData(NULL,2048,2048)*/),
     m_NewMask(NULL/*new QxrdMaskData(2048,2048)*/),
     m_NewMaskAvailable(false),
-    m_ImageDisplay(NULL),
-    m_FileBrowser(NULL)
+    m_ImageDisplay(NULL)
 {
   setupUi(this);
 
@@ -97,6 +97,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_MaskDialog         = new QxrdMaskDialog(this, m_DataProcessor);
   m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
   m_IntegratorDialog   = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
+  m_FileBrowser        = new QxrdFileBrowser(m_DataProcessor, this);
 
   QDesktopWidget *dw = QApplication::desktop();
 //  int screenNum = dw->screenNumber(this);
@@ -114,6 +115,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 
     tabifyDockWidget(m_AcquireDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
+    tabifyDockWidget(m_DisplayDialog, m_FileBrowser);
 
     tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
@@ -126,7 +128,9 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     tabifyDockWidget(m_IntegratorDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
 
-    tabifyDockWidget(m_DisplayDialog, m_MaskDialog);
+    tabifyDockWidget(m_DisplayDialog, m_FileBrowser);
+
+    tabifyDockWidget(m_FileBrowser, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
 
     if (screenGeom.height() < 800) {
@@ -136,6 +140,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
       shrinkDockWidget(m_SynchronizedAcquisitionDialog);
       shrinkDockWidget(m_DisplayDialog);
       shrinkDockWidget(m_MaskDialog);
+      shrinkDockWidget(m_FileBrowser);
       shrinkDockWidget(m_CorrectionDialog);
     }
   }
@@ -394,6 +399,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(m_Allocator -> prop_Max(), SIGNAL(changedValue(int)), this, SLOT(allocatedMemoryChanged()));
 
   m_WindowsMenu -> addAction(m_AcquireDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_FileBrowser -> toggleViewAction());
   m_WindowsMenu -> addAction(m_SynchronizedAcquisitionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_DisplayDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
