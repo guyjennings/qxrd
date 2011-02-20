@@ -16,7 +16,6 @@
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
 #include "qxrdmaskstack.h"
-#include "qxrddoubleimagedata.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdringsetfitparameters.h"
 #include "qxrdringsetsampleddata.h"

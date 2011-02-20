@@ -31,11 +31,13 @@ template <typename T> class QxrdImageData;
 
 typedef QxrdImageData<quint16> QxrdInt16ImageData;
 typedef QxrdImageData<quint32> QxrdInt32ImageData;
-//typedef QxrdImageData<double>  QxrdDoubleImageData;
+typedef QxrdImageData<double>  QxrdDoubleImageData;
+class QxrdMaskData;
 
 typedef QSharedPointer<QxrdInt16ImageData> QxrdInt16ImageDataPtr;
 typedef QSharedPointer<QxrdInt32ImageData> QxrdInt32ImageDataPtr;
-//typedef QSharedPointer<QxrdDoubleImageData> QxrdDoubleImageDataPtr;
+typedef QSharedPointer<QxrdDoubleImageData> QxrdDoubleImageDataPtr;
+typedef QSharedPointer<QxrdMaskData> QxrdMaskDataPtr;
 
 template <typename T>
 class QxrdImageData : public QcepImageData<T>
@@ -52,17 +54,33 @@ public:
   void copyImage(QSharedPointer< QxrdImageData<T2> > dest);
 
   template <typename T2>
+      void copyFrom(const QSharedPointer< QxrdImageData<T2> > img);
+
+  template <typename T2>
   void accumulateImage(QSharedPointer< QxrdImageData<T2> > image);
 
+  void setMask(QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
+  QxrdMaskDataPtr mask() const;
+  QxrdMaskDataPtr overflow() const;
+
+  T findMin() const;
+  T findMax() const;
+  double findAverage() const;
+
+private:
 private:
   QxrdImageDataObjectCounter m_ImageDataObjectCounter; /* global counter to track allocation of QxrdImageData objects */
   QxrdAllocatorInterface    *m_Allocator;
+  QxrdMaskDataPtr            m_Mask;
+  QxrdMaskDataPtr            m_Overflow;
 };
 
 template <typename T>
 QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, int width, int height, T def)
   : QcepImageData<T>(width, height, def),
-    m_Allocator(allocator)
+    m_Allocator(allocator),
+    m_Mask(NULL),
+    m_Overflow(NULL)
 {
   int count = m_ImageDataObjectCounter.value();
 
@@ -127,6 +145,28 @@ void QxrdImageData<T>::copyImage(QSharedPointer< QxrdImageData<T2> > dest)
 
 template <typename T>
 template <typename T2>
+void QxrdImageData<T>::copyFrom(QSharedPointer< QxrdImageData<T2> > img)
+{
+  if (img) {
+    int ncols = img -> get_Width();
+    int nrows = img -> get_Height();
+    int npix = ncols*nrows;
+
+    resize(ncols, nrows);
+
+    copyPropertiesFrom(img);
+
+    T2 *srcp  = img -> data();
+    T  *destp = data();
+
+    for (int i=0; i<npix; i++) {
+      *destp++ = *srcp++;
+    }
+  }
+}
+
+template <typename T>
+template <typename T2>
 void QxrdImageData<T>::accumulateImage(QSharedPointer< QxrdImageData<T2> > image)
 {
   if (image) {
@@ -151,6 +191,103 @@ void QxrdImageData<T>::accumulateImage(QSharedPointer< QxrdImageData<T2> > image
         }
       }
     }
+  }
+}
+
+
+template <typename T>
+void QxrdImageData<T>::setMask(QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
+{
+  m_Mask     = mask;
+  m_Overflow = overflow;
+}
+
+template <typename T>
+QxrdMaskDataPtr QxrdImageData<T>::mask() const
+{
+  return m_Mask;
+}
+
+template <typename T>
+QxrdMaskDataPtr QxrdImageData<T>::overflow() const
+{
+  return m_Overflow;
+}
+
+template <typename T>
+T QxrdImageData<T>::findMin() const
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int first = true;
+  T minv = 0;
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      if (m_Mask == NULL || m_Mask->value(col,row)) {
+        T val = value(col, row);
+
+        if (first) {
+          minv = val;
+          first = false;
+        } else if (val < minv){
+          minv = val;
+        }
+      }
+    }
+  }
+
+  return minv;
+}
+
+template <typename T>
+T QxrdImageData<T>::findMax() const
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int first = true;
+  T maxv = 0;
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      if (m_Mask == NULL || m_Mask->value(col,row)) {
+        double val = value(col, row);
+
+        if (first) {
+          maxv = val;
+          first = false;
+        } else if (val > maxv){
+          maxv = val;
+        }
+      }
+    }
+  }
+
+  return maxv;
+}
+
+template <typename T>
+double QxrdImageData<T>::findAverage() const
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  double npix = 0;
+  double sum = 0;
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      if (m_Mask == NULL || m_Mask->value(col,row)) {
+        double val = value(col, row);
+        npix += 1;
+        sum += val;
+      }
+    }
+  }
+
+  if (npix <= 0) {
+    return 0;
+  } else {
+    return sum/npix;
   }
 }
 

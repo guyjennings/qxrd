@@ -146,7 +146,6 @@ HEADERS += TODO.h \
     qxrdresultserializer.h \
     qxrdroidata.h \
     qxrdhistogramdata.h \
-    qxrddoubleimagedata.h \
     qxrdexposuretimespinner.h \
     qxrddetectorplugininterface.h \
     qxrdnidaqplugininterface.h \
@@ -247,7 +246,6 @@ SOURCES += qxrd.cpp \
     qxrdresultserializer.cpp \
     qxrdroidata.cpp \
     qxrdhistogramdata.cpp \
-    qxrddoubleimagedata.cpp \
     qxrdexposuretimespinner.cpp \
     qxrddetectorplugininterface.cpp \
     qxrdnidaqplugininterface.cpp \
