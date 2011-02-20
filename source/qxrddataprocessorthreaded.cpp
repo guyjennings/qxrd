@@ -2,6 +2,7 @@
 #include "qxrddataprocessorthreaded.h"
 #include "qxrdintegrator.h"
 #include "qxrdcenterfinder.h"
+#include "qxrdimagedata.h"
 
 #include <QtConcurrentRun>
 #include <QDirIterator>
@@ -271,6 +272,39 @@ double QxrdDataProcessorThreaded::estimatedProcessingTime(double estSerialTime, 
     return qMax(estSerialTime, estParallelTime/((double)nThreads));
   } else {
     return estSerialTime + estParallelTime;
+  }
+}
+
+void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
+{
+  QxrdDoubleImageDataPtr summed = takeNextFreeImage();
+  int first = true;
+
+  foreach(QString name, names) {
+    QxrdDoubleImageDataPtr img = takeNextFreeImage();
+
+    if (img->readImage(name)) {
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Load image from %1").arg(name));
+      img -> loadMetaData();
+
+      if (first) {
+        summed->copyFrom(img);
+        first = false;
+      } else {
+        summed->accumulateImage(img);
+      }
+    } else {
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Couldn't load %1").arg(name));
+    }
+  }
+
+  if (first) {
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("No images were loaded"));
+  } else {
+    acquiredDoubleImage(summed, QxrdMaskDataPtr());
   }
 }
 

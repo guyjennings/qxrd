@@ -30,6 +30,7 @@ private slots:
   void onHistogramDataAvailable();
 
 public slots:
+  void accumulateImages(QStringList names);
   void integrateData(QString name);
 
   void processData(QString name);

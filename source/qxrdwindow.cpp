@@ -160,6 +160,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(m_ActionSaveMask, SIGNAL(triggered()), this, SLOT(doSaveMask()));
   connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
 
+  connect(m_ActionAccumulateImages, SIGNAL(triggered()), this, SLOT(doAccumulateImages()));
   connect(m_ActionIntegrate, SIGNAL(triggered()), this, SLOT(doIntegrateSequence()));
   connect(m_ActionProcessData, SIGNAL(triggered()), this, SLOT(doProcessSequence()));
 
@@ -1019,6 +1020,15 @@ void QxrdWindow::doRefineCenterTilt()
 {
   m_PowderFitDialog = QxrdPowderFitDialogPtr(new QxrdPowderFitDialog(m_DataProcessor, this));
   m_PowderFitDialog -> exec();
+}
+
+void QxrdWindow::doAccumulateImages()
+{
+  QStringList files = QFileDialog::getOpenFileNames(this,
+                                                    "Select data files to accumulate...",
+                                                    m_DataProcessor -> get_DataPath());
+
+  m_DataProcessor->accumulateImages(files);
 }
 
 void QxrdWindow::doIntegrateSequence()

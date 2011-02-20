@@ -48,6 +48,7 @@ public slots:
   void selectLogFile();
   void doRefineCenterTilt();
 //  void doProcessorOptionsDialog();
+  void doAccumulateImages();
   void doIntegrateSequence();
   void doProcessSequence();
 
