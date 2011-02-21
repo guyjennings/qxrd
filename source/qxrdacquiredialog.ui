@@ -460,7 +460,7 @@ Script Function: acquiredark()</string>
       </property>
       <property name="toolTip">
        <string>The directory where data files will be saved
-Script Property: &quot;acquisition.outputDirectory&quot;
+Script Property: &quot;processor.outputDirectory&quot;
 Script Function: outputDirectory()</string>
       </property>
       <property name="readOnly">
