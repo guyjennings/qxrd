@@ -719,7 +719,7 @@ Script Function: filesInGroup()</string>
        <bool>false</bool>
       </property>
       <property name="minimum">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="maximum">
        <number>99999</number>
@@ -755,7 +755,7 @@ Script Function: groupsInSequence()</string>
        <bool>false</bool>
       </property>
       <property name="minimum">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="maximum">
        <number>99999</number>
