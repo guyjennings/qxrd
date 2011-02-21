@@ -1,8 +1,17 @@
 #include "qxrdmaskdata.h"
+#include "qxrdallocator.h"
 
 QxrdMaskData::QxrdMaskData(QxrdAllocatorInterface *allocator, int width, int height, int def)
-  : QxrdImageData<short>(allocator, width, height, def)
+  : QcepImageData<short>(/*allocator, */width, height, def),
+    m_Allocator(allocator)
 {
+}
+
+QxrdMaskData::~QxrdMaskData()
+{
+  if (m_Allocator) {
+    m_Allocator -> deallocate(sizeof(short), QcepImageDataBase::get_Width(), QcepImageDataBase::get_Height());
+  }
 }
 
 short *QxrdMaskData::mask()
