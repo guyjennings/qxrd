@@ -103,7 +103,7 @@ void QxrdAcquisitionThread::run()
 
   int rc = exec();
 
-  printf("Acquisition thread terminated with rc %d\n", rc);
+//  printf("Acquisition thread terminated with rc %d\n", rc);
 }
 
 void QxrdAcquisitionThread::initialize()
