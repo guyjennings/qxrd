@@ -77,22 +77,21 @@ protected:
 
   void acquireTiming();
 
+  template <typename T>
+  void accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
+  void processAcquiredImage(int fileIndex, int phase, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+  void getFileBaseAndName(int fileIndex, int phase, QString &fileBase, QString &fileName);
+
 protected slots:
   virtual void haltAcquisition();
-
-protected:
   void acquiredFrameAvailable(QxrdInt16ImageDataPtr image);
-
-  template <typename T>
-  void accumulateAcquiredImage(QSharedPointer < QxrdImageData <T> > image);
-  void processAcquiredImage(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
 
 protected:
   QMutex                 m_Acquiring;
   QWaitCondition         m_StatusWaiting;
 
   QVector<QxrdInt32ImageDataPtr>  m_AcquiredInt32Data;
-  QxrdMaskDataPtr        m_OverflowMask;
+  QVector<QxrdMaskDataPtr>        m_OverflowMask;
 
   QAtomicInt             m_AcquireDark;
 
@@ -108,6 +107,8 @@ protected:
   QAtomicInt             m_CurrentPhase;
   QAtomicInt             m_CurrentSummation;
   QAtomicInt             m_CurrentGroup;
+
+  QAtomicInt             m_InitialFileIndex;
 
   QxrdAcquireDialog     *m_ControlPanel;
 

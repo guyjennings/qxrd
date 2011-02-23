@@ -75,6 +75,8 @@ private:
   QxrdMaskDataPtr            m_Overflow;
 };
 
+#include "qxrdmaskdata.h"
+
 template <typename T>
 QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, int width, int height, T def)
   : QcepImageData<T>(width, height, def),
@@ -152,12 +154,12 @@ void QxrdImageData<T>::copyFrom(QSharedPointer< QxrdImageData<T2> > img)
     int nrows = img -> get_Height();
     int npix = ncols*nrows;
 
-    resize(ncols, nrows);
+    this -> resize(ncols, nrows);
 
     copyPropertiesFrom(img);
 
     T2 *srcp  = img -> data();
-    T  *destp = data();
+    T  *destp = this -> data();
 
     for (int i=0; i<npix; i++) {
       *destp++ = *srcp++;
@@ -170,10 +172,10 @@ template <typename T2>
 void QxrdImageData<T>::accumulateImage(QSharedPointer< QxrdImageData<T2> > image)
 {
   if (image) {
-    int ncols = get_Width();
-    int nrows = get_Height();
+    int ncols = this -> get_Width();
+    int nrows = this -> get_Height();
 
-    prop_SummedExposures()->incValue(1);
+    this->prop_SummedExposures()->incValue(1);
 
     if (ncols == image->get_Width() && nrows == image->get_Height()) {
       int npix = ncols*nrows;
@@ -225,7 +227,7 @@ T QxrdImageData<T>::findMin() const
   for (int row=0; row<nrows; row++) {
     for (int col=0; col<ncols; col++) {
       if (m_Mask == NULL || m_Mask->value(col,row)) {
-        T val = value(col, row);
+        T val = this->value(col, row);
 
         if (first) {
           minv = val;
@@ -251,7 +253,7 @@ T QxrdImageData<T>::findMax() const
   for (int row=0; row<nrows; row++) {
     for (int col=0; col<ncols; col++) {
       if (m_Mask == NULL || m_Mask->value(col,row)) {
-        double val = value(col, row);
+        double val = this -> value(col, row);
 
         if (first) {
           maxv = val;
@@ -277,7 +279,7 @@ double QxrdImageData<T>::findAverage() const
   for (int row=0; row<nrows; row++) {
     for (int col=0; col<ncols; col++) {
       if (m_Mask == NULL || m_Mask->value(col,row)) {
-        double val = value(col, row);
+        double val = this -> value(col, row);
         npix += 1;
         sum += val;
       }

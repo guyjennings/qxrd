@@ -460,7 +460,7 @@ Script Function: acquiredark()</string>
       </property>
       <property name="toolTip">
        <string>The directory where data files will be saved
-Script Property: &quot;acquisition.outputDirectory&quot;
+Script Property: &quot;processor.outputDirectory&quot;
 Script Function: outputDirectory()</string>
       </property>
       <property name="readOnly">
@@ -719,7 +719,7 @@ Script Function: filesInGroup()</string>
        <bool>false</bool>
       </property>
       <property name="minimum">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="maximum">
        <number>99999</number>
@@ -755,7 +755,7 @@ Script Function: groupsInSequence()</string>
        <bool>false</bool>
       </property>
       <property name="minimum">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="maximum">
        <number>99999</number>

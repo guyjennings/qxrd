@@ -3,19 +3,21 @@
 
 #include "qcepmacros.h"
 //#include "qxrdforwardtypes.h"
-#include "qxrdimagedata.h"
+#include "qcepimagedata.h"
 #include <QImage>
 
 class QxrdMaskData;
-
 typedef QSharedPointer<QxrdMaskData>             QxrdMaskDataPtr;
 
-class QxrdMaskData : public QxrdImageData<short>
+class QxrdAllocatorInterface;
+
+class QxrdMaskData : public QcepImageData<short>
 {
   Q_OBJECT;
 
 public:
   QxrdMaskData(QxrdAllocatorInterface *allocator, int width=0, int height=0, int def=0);
+  ~QxrdMaskData();
 
 public slots:
   bool maskValue(int x, int y) const;
@@ -58,6 +60,8 @@ private:
     ThumbnailWidth = 24,
     ThumbnailHeight = 24
   };
+
+  QxrdAllocatorInterface    *m_Allocator;
 };
 
 template <typename T>

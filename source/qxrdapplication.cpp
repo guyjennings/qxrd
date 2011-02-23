@@ -36,7 +36,6 @@ QxrdApplication *g_Application = 0;
 
 QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
-    m_Splash(NULL),
     m_DetectorType(this,"detectorType", 1),
     m_ProcessorType(this,"processorType", 0),
     m_Debug(this,"debug", 0),
@@ -44,6 +43,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_SpecServerPort(this,"specServerPort", -1),
     m_RunSimpleServer(this,"simpleServer", 1),
     m_SimpleServerPort(this,"simpleServerPort", 1234),
+    m_Splash(NULL),
     m_Window(NULL),
     m_ServerThread(NULL),
     m_Server(NULL),

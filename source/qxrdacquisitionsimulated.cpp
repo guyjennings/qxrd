@@ -53,12 +53,42 @@ void QxrdAcquisitionSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/)
 
 void QxrdAcquisitionSimulated::setupCameraGainMenu(QComboBox *cb)
 {
-  cb -> addItem(tr("High: 0.25 pF"));
-  cb -> addItem(tr("0.5 pF"));
-  cb -> addItem(tr("1 pF"));
-  cb -> addItem(tr("2 pF"));
-  cb -> addItem(tr("4 pF"));
-  cb -> addItem(tr("Low: 8 pF"));
+  for (int i=0; i<16; i++) {
+    QString msg;
+
+    if (i==0) {
+      msg = "High: ";
+    } else if (i==15) {
+      msg = "Low: ";
+    }
+
+    double value = 0.1;
+    if (i & 1) {
+      value += 0.3;
+    }
+
+    if (i & 2) {
+      value += 0.9;
+    }
+
+    if (i & 4) {
+      value += 4.7;
+    }
+
+    if (i & 8) {
+      value += 10.0;
+    }
+
+    msg += tr("%1 pF").arg(value);
+
+    cb -> addItem(msg);
+  }
+//  cb -> addItem(tr("High: 0.25 pF"));
+//  cb -> addItem(tr("0.5 pF"));
+//  cb -> addItem(tr("1 pF"));
+//  cb -> addItem(tr("2 pF"));
+//  cb -> addItem(tr("4 pF"));
+//  cb -> addItem(tr("Low: 8 pF"));
 }
 
 void QxrdAcquisitionSimulated::setupCameraBinningModeMenu(QComboBox *cb)

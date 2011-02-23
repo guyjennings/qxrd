@@ -614,8 +614,8 @@ void QxrdWindow::onAcquiredFrame(
   //   printf("QxrdWindow::acquiredFrame(\"%s\",%d,%d,%d,%d,%d)\n",
   // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
 
-  int totalframes = (nsum*nframe <= 0 ? 1 : nsum*nframe);
-  int thisframe = iframe*nsum+isum+1;
+  int totalframes = (nsum*nframe*ngroup <= 0 ? 1 : nsum*nframe*ngroup);
+  int thisframe = igroup*nframe*nsum + iframe*nsum + isum + 1;
 
   //  printf("%d %% progress\n", thisframe*100/totalframes);
 
