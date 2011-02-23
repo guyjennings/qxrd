@@ -200,7 +200,7 @@ void QxrdAcquisitionPerkinElmer::onCameraGainChanged(int newGain)
 
 void QxrdAcquisitionPerkinElmer::initialize()
 {
-  printf("QxrdAcquisitionPerkinElmer::initialize\n");
+//  printf("QxrdAcquisitionPerkinElmer::initialize\n");
 
   if (checkPluginAvailable()) {
 
@@ -488,6 +488,36 @@ void QxrdAcquisitionPerkinElmer::setupCameraGainMenu(QComboBox *cb)
   printf("QxrdAcquisitionPerkinElmer::setupCameraGainMenu m_HeaderID == %d\n", m_HeaderID);
 
   if (m_HeaderID == 11) { /* AM type */
+    for (int i=0; i<16; i++) {
+      QString msg;
+
+      if (i==0) {
+        msg = "High: ";
+      } else if (i==15) {
+        msg = "Low: ";
+      }
+
+      double value = 0.1;
+      if (i & 1) {
+        value += 0.3;
+      }
+
+      if (i & 2) {
+        value += 0.9;
+      }
+
+      if (i & 4) {
+        value += 4.7;
+      }
+
+      if (i & 8) {
+        value += 10.0;
+      }
+
+      msg += tr("%1 pF").arg(value);
+
+      cb -> addItem(msg);
+    }
   } else if (m_HeaderID >= 12) { /* AN type */
     cb -> addItem(tr("High: 0.25 pF"));
     cb -> addItem(tr("0.5 pF"));
@@ -495,6 +525,8 @@ void QxrdAcquisitionPerkinElmer::setupCameraGainMenu(QComboBox *cb)
     cb -> addItem(tr("2 pF"));
     cb -> addItem(tr("4 pF"));
     cb -> addItem(tr("Low: 8 pF"));
+  } else {
+    cb -> addItem(tr("Gain not settable"));
   }
 }
 
