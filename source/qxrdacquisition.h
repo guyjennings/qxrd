@@ -80,6 +80,7 @@ protected:
   template <typename T>
   void accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
   void processAcquiredImage(int fileIndex, int phase, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+  void getFileBaseAndName(int fileIndex, int phase, QString &fileBase, QString &fileName);
 
 protected slots:
   virtual void haltAcquisition();

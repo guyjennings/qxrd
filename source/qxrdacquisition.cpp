@@ -320,7 +320,11 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
 //        }
 //      }
 
-      emit acquiredFrame("<<>>", get_FileIndex(),
+      QString fileBase, fileName;
+
+      getFileBaseAndName(m_InitialFileIndex+m_CurrentGroup, m_CurrentPhase, fileBase, fileName);
+
+      emit acquiredFrame(fileBase, get_FileIndex(),
                          m_CurrentPhase,     m_NPhasesPerSummation,
                          m_CurrentSummation, m_NSummationsPerGroup,
                          m_CurrentGroup,     m_NGroupsPerSequence);
@@ -395,6 +399,21 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
   }
 }
 
+void QxrdAcquisition::getFileBaseAndName(int fileIndex, int phase, QString &fileBase, QString &fileName)
+{
+  if (get_AcquireDark()) {
+    fileBase = get_FilePattern()+tr("-%1.dark.tif").arg(fileIndex,5,10,QChar('0'));
+    fileName = QDir(m_DataProcessor -> darkOutputDirectory()).filePath(fileBase);
+  } else {
+    if (m_NPhasesPerSummation > 1) {
+      fileBase = get_FilePattern()+tr("-%1-%2.tif").arg(fileIndex,5,10,QChar('0')).arg(phase,3,10,QChar('0'));
+    } else {
+      fileBase = get_FilePattern()+tr("-%1.tif").arg(fileIndex,5,10,QChar('0'));
+    }
+    fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
+  }
+}
+
 void QxrdAcquisition::processAcquiredImage(int fileIndex, int phase, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   if (image) {
@@ -403,17 +422,7 @@ void QxrdAcquisition::processAcquiredImage(int fileIndex, int phase, QxrdInt32Im
     QString fileName;
     QString fileBase;
 
-    if (get_AcquireDark()) {
-      fileBase = get_FilePattern()+tr("-%1.dark.tif").arg(fileIndex,5,10,QChar('0'));
-      fileName = QDir(m_DataProcessor -> darkOutputDirectory()).filePath(fileBase);
-    } else {
-      if (m_NPhasesPerSummation > 1) {
-        fileBase = get_FilePattern()+tr("-%1-%2.tif").arg(fileIndex,5,10,QChar('0')).arg(phase,3,10,QChar('0'));
-      } else {
-        fileBase = get_FilePattern()+tr("-%1.tif").arg(fileIndex,5,10,QChar('0'));
-      }
-      fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
-    }
+    getFileBaseAndName(fileIndex, phase, fileBase, fileName);
 
     QCEP_DEBUG(DEBUG_ACQUIRE,
                emit printMessage(QDateTime::currentDateTime(),
