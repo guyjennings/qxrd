@@ -261,6 +261,8 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
   } else if (image == NULL) {
     indicateDroppedFrame();
   } else  {
+    printf("Acq fctr %d: ", (int) m_FrameCounter);
+
     if (m_CurrentExposure < m_NSkippedAtStart) {
       QCEP_DEBUG(DEBUG_ACQUIRE,
                  emit printMessage(QDateTime::currentDateTime(),
@@ -284,16 +286,16 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
 
       set_FileIndex(m_InitialFileIndex+m_CurrentGroup);
 
-      printf("mCE %d: mCP %d: mCS %d: mCG %d" /*": eas %d: epg %d: gis %d: ewg %d: eps %d: sig %d: ews %d"*/ "\n",
-             (int) m_CurrentExposure, (int) m_CurrentPhase, (int) m_CurrentSummation, (int) m_CurrentGroup/*,
-             expAfterStart, expPerGroup, grpInSequence, expWithinGroup, expPerSummation, sumInGroup, expWithinSummation*/);
+      printf("fIdx %d: mCE %d: mCP %d: mCS %d: mCG %d\n",
+             get_FileIndex(),
+             (int) m_CurrentExposure, (int) m_CurrentPhase, (int) m_CurrentSummation, (int) m_CurrentGroup);
 
       if (isSummed) {
         if (m_AcquiredInt32Data[m_CurrentPhase] == NULL) {
           m_AcquiredInt32Data[m_CurrentPhase] = m_Allocator->newInt32Image();
           m_OverflowMask[m_CurrentPhase] = m_Allocator->newMask(0);
         } else if (m_CurrentSummation == 0) {
-          processAcquiredImage(m_InitialFileIndex+m_CurrentGroup, m_CurrentPhase, m_AcquiredInt32Data[m_CurrentPhase], m_OverflowMask[m_CurrentPhase]);
+          processAcquiredImage(m_InitialFileIndex+m_CurrentGroup-1, m_CurrentPhase, m_AcquiredInt32Data[m_CurrentPhase], m_OverflowMask[m_CurrentPhase]);
           m_AcquiredInt32Data[m_CurrentPhase] = m_Allocator->newInt32Image();
           m_OverflowMask[m_CurrentPhase] = m_Allocator->newMask(0);
         }
@@ -336,6 +338,9 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
       }
 
       printf("Finished\n");
+
+      prop_FileIndex()->incValue(1);
+
       haltAcquisition();
       return;
     }
@@ -393,7 +398,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
 void QxrdAcquisition::processAcquiredImage(int fileIndex, int phase, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   if (image) {
-    printf("processAcquiredImage summed:%d\n", image->get_SummedExposures());
+    printf("processAcquiredImage(%d,%d) summed:%d\n", fileIndex, phase, image->get_SummedExposures());
 
     QString fileName;
     QString fileBase;
@@ -439,21 +444,23 @@ void QxrdAcquisition::processAcquiredImage(int fileIndex, int phase, QxrdInt32Im
     copyDynamicProperties(image.data());
 
     if (get_AcquireDark()) {
-      image -> set_ImageNumber(-1);
       QCEP_DEBUG(DEBUG_ACQUIRE,
                  emit printMessage(QDateTime::currentDateTime(),
                                    tr("32 bit Dark Image acquired"));
           );
-      m_DataProcessor -> acquiredInt32Image(image, overflow);
+
+      image -> set_ImageNumber(-1);
+      image -> set_PhaseNumber(-1);
     } else {
       QCEP_DEBUG(DEBUG_ACQUIRE,
                  emit printMessage(QDateTime::currentDateTime(),
                                    tr("32 bit Image %1 acquired").arg(get_FileIndex()));
           );
-      image -> set_ImageNumber(get_FileIndex());
-      m_DataProcessor -> acquiredInt32Image(image, overflow);
-      set_FileIndex(get_FileIndex()+1);
+      image -> set_ImageNumber(fileIndex);
+      image -> set_PhaseNumber(phase);
     }
+
+    m_DataProcessor -> acquiredInt32Image(image, overflow);
   }
 }
 
