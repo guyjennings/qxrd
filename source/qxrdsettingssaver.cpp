@@ -19,13 +19,17 @@ void QxrdSettingsSaver::performSave()
   int nupdates = QcepProperty::getChangeCount();
 
   if (nupdates > 0) {
-    emit printMessage(QDateTime::currentDateTime(), tr("Settings Saver saving %1 updates").arg(nupdates));
+    QCEP_DEBUG(DEBUG_PREFS,
+      emit printMessage(QDateTime::currentDateTime(), tr("Settings Saver saving %1 updates").arg(nupdates));
+    );
 
     QTime tic;
     tic.start();
 
     INVOKE_CHECK(QMetaObject::invokeMethod(m_Application, "writeSettings", Qt::BlockingQueuedConnection));
 
-    emit printMessage(QDateTime::currentDateTime(), tr("Saving settings took %1 msec").arg(tic.elapsed()));
+    QCEP_DEBUG(DEBUG_PREFS,
+      emit printMessage(QDateTime::currentDateTime(), tr("Saving settings took %1 msec").arg(tic.elapsed()));
+    );
   }
 }
