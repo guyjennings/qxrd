@@ -5,6 +5,8 @@
 #include "qxrdapplication.h"
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QGridLayout>
+#include "qcepdebug.h"
 
 QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
     QDialog(parent),
@@ -59,9 +61,6 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
 
   ui -> m_SaveOverflowFiles -> setChecked(proc->get_SaveOverflowFiles());
 
-  ui -> m_DebugLevelSpinBox -> setRange(0,65535);
-  ui -> m_DebugLevelSpinBox -> setValue(debugLevel);
-
   ui -> m_ReservedMemory32 -> setRange(500, 3000);
   ui -> m_ReservedMemory32 -> setValue(acq->get_TotalBufferSizeMB32());
   ui -> m_ReservedMemory64 -> setRange(500, 60000);
@@ -75,7 +74,7 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   ui -> m_SimpleServerPort -> setRange(0,65535);
   ui -> m_SimpleServerPort -> setValue(simpleServerPort);
 
-  setupDebugWidgets();
+  setupDebugWidgets(debugLevel);
 }
 
 QxrdPreferencesDialog::~QxrdPreferencesDialog()
@@ -150,17 +149,17 @@ void QxrdPreferencesDialog::changeEvent(QEvent *e)
 
 void QxrdPreferencesDialog::accept()
 {
+  bool restartNeeded = false;
+
   int detectorType = ui -> m_DetectorTypeCombo -> currentIndex();
 //  int processorType = ui -> m_ProcessorTypeCombo -> currentIndex();
-  int debugLevel = ui -> m_DebugLevelSpinBox -> value();
+  int debugLevel = readDebugWidgets();
   int bufferSize32 = ui -> m_ReservedMemory32 -> value();
   int bufferSize64 = ui -> m_ReservedMemory64 -> value();
   int runSpecServer = ui -> m_RunSpecServer -> isChecked();
   int runSimpleServer = ui -> m_RunSimpleServer -> isChecked();
   int specServerPort = ui -> m_SpecServerPort -> value();
   int simpleServerPort = ui -> m_SimpleServerPort -> value();
-
-  bool restartNeeded = false;
 
   if (detectorType != QxrdAcquisitionThread::detectorType()) {
     restartNeeded = true;
@@ -223,17 +222,38 @@ void QxrdPreferencesDialog::accept()
   proc -> set_OutputDirectory(ui -> m_CurrentOutputDirectory -> text());
   proc -> set_LogFilePath    (ui -> m_CurrentLogFile -> text());
 
-  readDebugWidgets();
-
   QDialog::accept();
 }
 
-void QxrdPreferencesDialog::setupDebugWidgets()
+void QxrdPreferencesDialog::setupDebugWidgets(int dbg)
 {
+  QGridLayout *grid = new QGridLayout(ui -> m_DebugWidgets);
 
+  int mask = 1;
+
+  for (int i=0; gDebugStrings[i]; i++) {
+    QCheckBox *cb = new QCheckBox(gDebugStrings[i]);
+    cb->setChecked(dbg & mask);
+    grid->addWidget(cb, i, 0);
+
+    mask <<= 1;
+
+    m_DebugWidgets.append(cb);
+  }
 }
 
-void QxrdPreferencesDialog::readDebugWidgets()
+int QxrdPreferencesDialog::readDebugWidgets()
 {
+  int mask = 1;
+  int newDbg = 0;
 
+  for (int i=0; gDebugStrings[i]; i++) {
+    if (m_DebugWidgets[i]->isChecked()) {
+      newDbg |= mask;
+    }
+
+    mask <<= 1;
+  }
+
+  return newDbg;
 }

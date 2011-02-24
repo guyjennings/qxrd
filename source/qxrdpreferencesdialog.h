@@ -5,6 +5,8 @@
 
 #include <QDialog>
 #include <QLineEdit>
+#include <QVector>
+#include <QCheckBox>
 
 namespace Ui {
   class QxrdPreferencesDialog;
@@ -32,9 +34,12 @@ protected:
 
 private:
   void getRelativeDirectoryPath(QLineEdit *edit);
+  void setupDebugWidgets(int dbg);
+  int readDebugWidgets();
 
 private:
   Ui::QxrdPreferencesDialog *ui;
+  QVector<QCheckBox*> m_DebugWidgets;
 };
 
 #endif // QXRDPREFERENCESDIALOG_H

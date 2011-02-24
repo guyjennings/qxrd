@@ -15,5 +15,6 @@ SOURCES += ../qceplib/qspecserver.cpp \
     ../qceplib/qcepimagedataformat.cpp \
     ../qceplib/qcepimagedataformattiff.cpp \
     ../qceplib/qcepimagedataformatmar345.cpp \
-    ../qceplib/qcepimagedataformatfactory.cpp
+    ../qceplib/qcepimagedataformatfactory.cpp \
+    ../qceplib/qcepdebug.cpp
 OTHER_FILES += source/testImage.js
