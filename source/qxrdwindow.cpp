@@ -64,7 +64,8 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     m_CorrectionDialog(NULL),
     m_IntegratorDialog(NULL),
     m_Calculator(NULL),
-    m_FileBrowser(NULL),
+    m_InputFileBrowser(NULL),
+    m_OutputFileBrowser(NULL),
     m_Progress(NULL),
     m_AllocationStatus(NULL),
     m_Acquiring(false),
@@ -97,7 +98,8 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_MaskDialog         = new QxrdMaskDialog(this, m_DataProcessor);
   m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
   m_IntegratorDialog   = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
-  m_FileBrowser        = new QxrdFileBrowser(m_DataProcessor, this);
+  m_InputFileBrowser   = new QxrdInputFileBrowser(m_DataProcessor, this);
+  m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_DataProcessor, this);
 
   QDesktopWidget *dw = QApplication::desktop();
 //  int screenNum = dw->screenNumber(this);
@@ -115,10 +117,11 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 
     tabifyDockWidget(m_AcquireDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
-    tabifyDockWidget(m_DisplayDialog, m_FileBrowser);
+    tabifyDockWidget(m_DisplayDialog, m_InputFileBrowser);
 
     tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
+    tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
 } else {
     addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
 
@@ -128,10 +131,11 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     tabifyDockWidget(m_IntegratorDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
 
-    tabifyDockWidget(m_DisplayDialog, m_FileBrowser);
+    tabifyDockWidget(m_DisplayDialog, m_InputFileBrowser);
 
-    tabifyDockWidget(m_FileBrowser, m_MaskDialog);
+    tabifyDockWidget(m_InputFileBrowser, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
+    tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
 
     if (screenGeom.height() < 800) {
       shrinkDockWidget(m_AcquireDialog);
@@ -140,7 +144,8 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
       shrinkDockWidget(m_SynchronizedAcquisitionDialog);
       shrinkDockWidget(m_DisplayDialog);
       shrinkDockWidget(m_MaskDialog);
-      shrinkDockWidget(m_FileBrowser);
+      shrinkDockWidget(m_InputFileBrowser);
+      shrinkDockWidget(m_OutputFileBrowser);
       shrinkDockWidget(m_CorrectionDialog);
     }
   }
@@ -367,7 +372,8 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(m_Allocator -> prop_Max(), SIGNAL(changedValue(int)), this, SLOT(allocatedMemoryChanged()));
 
   m_WindowsMenu -> addAction(m_AcquireDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_FileBrowser -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_InputFileBrowser -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_OutputFileBrowser -> toggleViewAction());
   m_WindowsMenu -> addAction(m_SynchronizedAcquisitionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_DisplayDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
@@ -638,8 +644,12 @@ void QxrdWindow::readSettings(QxrdSettings &settings, QString section)
   m_CenterFinderPlot -> readSettings(settings, section+"/centerFinderPlot");
   m_IntegratorPlot   -> readSettings(settings, section+"/integratorPlot");
 
-  if (m_FileBrowser) {
-    m_FileBrowser  -> readSettings(settings, section+"/fileBrowser");
+  if (m_InputFileBrowser) {
+    m_InputFileBrowser  -> readSettings(settings, section+"/inputFileBrowser");
+  }
+
+  if (m_OutputFileBrowser) {
+    m_OutputFileBrowser  -> readSettings(settings, section+"/outputFileBrowser");
   }
 
   m_SettingsLoaded = true;
@@ -659,8 +669,12 @@ void QxrdWindow::writeSettings(QxrdSettings &settings, QString section)
   m_CenterFinderPlot -> writeSettings(settings, section+"/centerFinderPlot");
   m_IntegratorPlot   -> writeSettings(settings, section+"/integratorPlot");
 
-  if (m_FileBrowser) {
-    m_FileBrowser  -> writeSettings(settings, section+"/fileBrowser");
+  if (m_InputFileBrowser) {
+    m_InputFileBrowser  -> writeSettings(settings, section+"/inputFileBrowser");
+  }
+
+  if (m_OutputFileBrowser) {
+    m_OutputFileBrowser  -> writeSettings(settings, section+"/outputFileBrowser");
   }
 
   settings.setValue(section+"-geometry", saveGeometry());

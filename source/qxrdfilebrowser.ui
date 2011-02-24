@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>227</width>
-    <height>321</height>
+    <width>247</width>
+    <height>407</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,8 +20,88 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QGridLayout" name="m_GridLayout">
-    <item row="1" column="0" colspan="2">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0" colspan="2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QToolButton" name="m_PrevDirectoryButton">
+        <property name="toolTip">
+         <string>Return to precvious directory</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="qxrdresources.qrc">
+          <normaloff>:/images/go-left.png</normaloff>:/images/go-left.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="m_UpDirectoryButton">
+        <property name="toolTip">
+         <string>Change directory up one level</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="qxrdresources.qrc">
+          <normaloff>:/images/go-up.png</normaloff>:/images/go-up.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="m_ChangeDirectoryButton">
+        <property name="toolTip">
+         <string>Select a new directory</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="qxrdresources.qrc">
+          <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="m_HomeDirectoryButton">
+        <property name="toolTip">
+         <string>Changed to home directory</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="qxrdresources.qrc">
+          <normaloff>:/images/go-home.png</normaloff>:/images/go-home.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>77</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QxrdFileBrowserView" name="m_FileBrowser">
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
      <widget class="QComboBox" name="m_FilterChoices">
       <item>
        <property name="text">
@@ -50,14 +130,14 @@
       </item>
      </widget>
     </item>
-    <item row="2" column="0" colspan="2">
+    <item row="4" column="0" colspan="2">
      <widget class="QLineEdit" name="m_FileSelector">
       <property name="toolTip">
        <string>File filter</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="5" column="0">
      <widget class="QPushButton" name="m_OpenButton">
       <property name="toolTip">
        <string>Open selected files</string>
@@ -67,7 +147,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
+    <item row="5" column="1">
      <widget class="QPushButton" name="m_ProcessButton">
       <property name="toolTip">
        <string>Process selected files</string>
@@ -77,17 +157,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
-     <widget class="QPushButton" name="m_IntegrateButton">
-      <property name="toolTip">
-       <string>Integrate selected files</string>
-      </property>
-      <property name="text">
-       <string>Integrate</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
+    <item row="6" column="0">
      <widget class="QPushButton" name="m_AccumulateButton">
       <property name="toolTip">
        <string>Accumulate (sum) selected files</string>
@@ -97,16 +167,31 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="0" colspan="2">
-     <widget class="QTreeView" name="m_FileBrowser">
-      <property name="selectionMode">
-       <enum>QAbstractItemView::ExtendedSelection</enum>
+    <item row="6" column="1">
+     <widget class="QPushButton" name="m_IntegrateButton">
+      <property name="toolTip">
+       <string>Integrate selected files</string>
+      </property>
+      <property name="text">
+       <string>Integrate</string>
       </property>
      </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="QComboBox" name="m_RootDirectoryCombo"/>
     </item>
    </layout>
   </widget>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>QxrdFileBrowserView</class>
+   <extends>QTreeView</extends>
+   <header>qxrdfilebrowserview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="qxrdresources.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -187,7 +187,9 @@ HEADERS += TODO.h \
     qxrdsynchronizedacquisitiondialog.h \
     qxrddisplaydialog.h \
     qxrdcorrectiondialog.h \
-    qxrdtestdockwidget.h
+    qxrdtestdockwidget.h \
+    qxrdfilebrowsermodel.h \
+    qxrdfilebrowserview.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -287,7 +289,9 @@ SOURCES += qxrd.cpp \
     qxrdsynchronizedacquisitiondialog.cpp \
     qxrddisplaydialog.cpp \
     qxrdcorrectiondialog.cpp \
-    qxrdtestdockwidget.cpp
+    qxrdtestdockwidget.cpp \
+    qxrdfilebrowsermodel.cpp \
+    qxrdfilebrowserview.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
