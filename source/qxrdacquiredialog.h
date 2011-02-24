@@ -23,6 +23,10 @@ public:
 protected:
   void changeEvent(QEvent *e);
 
+private slots:
+  void acquireStarted(int isDark);
+  void acquireComplete(int isDark);
+
 private:
   QxrdWindowPtr        m_Window;
   QxrdAcquisitionPtr   m_Acquisition;

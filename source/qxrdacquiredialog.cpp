@@ -24,6 +24,9 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdWindowPtr win, QxrdAcquisitionPtr acq, 
 
   connect(m_ClearDroppedButton, SIGNAL(clicked()), m_Acquisition, SLOT(clearDropped()));
 
+  connect(m_Acquisition, SIGNAL(acquireStarted(int)), this, SLOT(acquireStarted(int)));
+  connect(m_Acquisition, SIGNAL(acquireComplete(int)), this, SLOT(acquireComplete(int)));
+
   m_Acquisition -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
   m_Acquisition -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
   m_Acquisition -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
@@ -64,6 +67,16 @@ void QxrdAcquireDialog::changeEvent(QEvent *e)
   default:
     break;
   }
+}
+
+void QxrdAcquireDialog::acquireStarted(int isDark)
+{
+  acquisitionStarted();
+}
+
+void QxrdAcquireDialog::acquireComplete(int isDark)
+{
+  acquisitionFinished();
 }
 
 void QxrdAcquireDialog::acquisitionReady()

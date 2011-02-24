@@ -35,12 +35,6 @@ public slots:
 //  void trigger();
   void clearDropped();
 
-  void acquisitionReady();
-  void acquisitionStarted();
-  void acquisitionFinished();
-
-  void darkAcquisitionStarted();
-
   int acquisitionStatus(double time);
 
   virtual void onExposureTimeChanged(double newTime) = 0;

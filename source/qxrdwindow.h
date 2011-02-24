@@ -75,9 +75,9 @@ public slots:
 
   void doAcquire();
   void doCancel();
-  void onAcquireStarted(int dark);
-  void onAcquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
-  void onAcquireComplete(int dark);
+  void acquireStarted(int dark);
+  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
+  void acquireComplete(int dark);
   void doAcquireDark();
   void doCancelDark();
   void doSynchronizedAcquisition();
@@ -93,11 +93,11 @@ public slots:
   void statusMessage(QDateTime ts, QString msg);
   void criticalMessage(QDateTime ts, QString msg);
 
-  void acquisitionReady();
-  void acquisitionStarted();
-  void acquisitionFinished();
+//  void acquisitionReady();
+//  void acquisitionStarted();
+//  void acquisitionFinished();
 
-  void darkAcquisitionStarted();
+//  void darkAcquisitionStarted();
 
   void selectOutputDirectory();
   void clearStatusMessage();

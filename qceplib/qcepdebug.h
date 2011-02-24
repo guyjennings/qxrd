@@ -20,6 +20,23 @@ enum {
   DEBUG_ALLOCATOR = 8192
 };
 
+const char* gDebugStrings[] = {
+  "Application startup and shutdown",
+  "Acquisition Operations",
+  "Processing Operations",
+  "Display Operations",
+  "File Operations",
+  "Queue Operations",
+  "Performance Measurement",
+  "Image Operations",
+  "Properties",
+  "Window Operations",
+  "Perkin Elmer Acquisition",
+  "Settings/Prefs Operations",
+  "Halt at exit",
+  "Memory Allocation"
+};
+
 #define QCEP_DEBUG(cond,action) if (gCEPDebug & (cond)) { action; }
 
 #endif // QCEPDEBUG_H

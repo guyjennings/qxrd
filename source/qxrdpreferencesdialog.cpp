@@ -74,6 +74,8 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   ui -> m_SpecServerPort -> setValue(specServerPort);
   ui -> m_SimpleServerPort -> setRange(0,65535);
   ui -> m_SimpleServerPort -> setValue(simpleServerPort);
+
+  setupDebugWidgets();
 }
 
 QxrdPreferencesDialog::~QxrdPreferencesDialog()
@@ -221,5 +223,17 @@ void QxrdPreferencesDialog::accept()
   proc -> set_OutputDirectory(ui -> m_CurrentOutputDirectory -> text());
   proc -> set_LogFilePath    (ui -> m_CurrentLogFile -> text());
 
+  readDebugWidgets();
+
   QDialog::accept();
+}
+
+void QxrdPreferencesDialog::setupDebugWidgets()
+{
+
+}
+
+void QxrdPreferencesDialog::readDebugWidgets()
+{
+
 }
