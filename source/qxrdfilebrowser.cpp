@@ -19,6 +19,8 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent
   m_FileBrowser -> setModel(m_Model);
   m_FileBrowser -> setRootIndex(m_Model->index(QDir::currentPath()));
 
+  connect(m_FileBrowser, SIGNAL(rowCountChanged(int,int)), this, SLOT(onRowCountChanged(int,int)));
+
 //  m_FileBrowser -> setColumnHidden(1,true); // Size
   m_FileBrowser -> setColumnHidden(2,true); // Type
 //  m_FileBrowser -> setColumnHidden(3,true); // Modified
@@ -183,4 +185,11 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
       doProcess();
     }
   }
+}
+
+void QxrdFileBrowser::onRowCountChanged(int oldCount, int newCount)
+{
+  printf("QxrdFileBrowser::onRowCountChanged(%d,%d)\n", oldCount, newCount);
+
+  m_FileBrowser->resizeColumnToContents(0);
 }

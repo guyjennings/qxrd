@@ -37,6 +37,7 @@ public slots:
   void doAccumulate();
   void onRootDirectoryChanged(QString dir);
   void mousePressed(QModelIndex index);
+  void onRowCountChanged(int oldCount, int newCount);
 
 signals:
   void printMessage(QDateTime ts, QString msg) const;
