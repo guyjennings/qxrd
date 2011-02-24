@@ -8,7 +8,10 @@
 #include <QThread>
 #include <QWaitCondition>
 #include <QAtomicInt>
+
+#if QT_VERSION >= 0x040700
 #include <QElapsedTimer>
+#endif
 
 #include "qxrdrasterdata.h"
 #include "qxrdimagequeue.h"
@@ -109,7 +112,11 @@ protected:
   QxrdNIDAQPluginInterface    *m_NIDAQPlugin;
   QxrdSynchronizedAcquisition *m_SynchronizedAcquisition;
 
+#if QT_VERSION >= 0x040700
   QElapsedTimer          m_ElapsedTimer;
+#else
+  QTime                  m_ElapsedTimer;
+#endif
   QVector<int>           m_ElapsedHistogram;
   int                    m_ElapsedCounter;
 };

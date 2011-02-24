@@ -1,7 +1,9 @@
 #include "qxrdnidaqplugin.h"
 #include "NIDAQmx.h"
 #include <QVector>
+#if QT_VERSION >= 0x040700
 #include <QElapsedTimer>
+#endif
 #include <stdio.h>
 
 #define DAQmxErrChk(functionCall) { if( DAQmxFailed(error=(functionCall)) ) { QxrdNIDAQPlugin::errorCheck(__FILE__,__LINE__,error); goto Error; } }
@@ -92,7 +94,12 @@ void QxrdNIDAQPlugin::closeTaskHandles()
 
 void   QxrdNIDAQPlugin::aoSet(double val1, double val2)
 {
+#if QT_VERSION >= 0x040700
   QElapsedTimer t;
+#else
+  QTime t;
+#endif
+
   t.start();
 
   double vals[2];
