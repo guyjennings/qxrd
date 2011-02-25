@@ -24,6 +24,7 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdWindowPtr win, QxrdDataProcessorPtr proc, QWi
   connect(m_ExchangeMask, SIGNAL(clicked()), win, SLOT(doExchangeMask()));
   connect(m_RollUpMask, SIGNAL(clicked()), win, SLOT(doRollUpMask()));
   connect(m_RollDownMask, SIGNAL(clicked()), win, SLOT(doRollDownMask()));
+  connect(m_RollMask, SIGNAL(clicked()), win, SLOT(doRollMask()));
   connect(m_NewMask, SIGNAL(clicked()), win, SLOT(doNewMask()));
   connect(m_PushMask, SIGNAL(clicked()), win, SLOT(doPushMask()));
   connect(m_ClearMask, SIGNAL(clicked()), win, SLOT(doClearMask()));

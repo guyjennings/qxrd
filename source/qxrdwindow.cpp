@@ -1190,13 +1190,13 @@ void QxrdWindow::doRollMask()
 
 void QxrdWindow::doRollUpMask()
 {
-  m_DataProcessor->rollMaskStack(-1);
+  m_DataProcessor->rollMaskStack(1);
   emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Rolled Up");
 }
 
 void QxrdWindow::doRollDownMask()
 {
-  m_DataProcessor->rollMaskStack(1);
+  m_DataProcessor->rollMaskStack(-1);
   emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Rolled Down");
 }
 
