@@ -678,4 +678,13 @@ National Instruments MIO card in sync with acquisition
 
 -------------------------------------------------------
 
+Load/Save mask stack state on program entry/exit
+
+-------------------------------------------------------
+
+Overall mask should be made to be a combination of the various
+mask stack levels.
+
+-------------------------------------------------------
+
 #endif // TODO_H
