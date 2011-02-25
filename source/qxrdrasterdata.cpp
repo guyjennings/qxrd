@@ -188,9 +188,9 @@ QwtDoubleInterval QxrdRasterData::percentileRange(double lowpct, double highpct)
     int *histogram = histogramVec.data();
 
     bool first = 1;
-    double minVal, maxVal;
+    double minVal=0, maxVal=0;
     int npixels = m_NRows*m_NCols;
-    double histStep;
+    double histStep=0;
     int nAbove = 0, nBelow = 0, nTotal = 0;
 
     double *data = m_Data->data();

@@ -2,6 +2,7 @@
 
 #include "qxrdserver.h"
 #include <QMetaObject>
+#include <QDateTime>
 
 QxrdServerThread::QxrdServerThread(QxrdAcquisitionThreadPtr acq, QString name, int port)
   : m_AcquisitionThread(acq),
@@ -41,15 +42,16 @@ void QxrdServerThread::run()
 //  printf("start server\n");
   m_Server = QxrdServerPtr(new QxrdServer(QxrdAcquisitionThreadPtr(NULL), m_Name, m_Port));
 
-  connect(m_Server,             SIGNAL(printMessage(QString)), this,            SIGNAL(printMessage(QString)));
-  connect(m_Server,             SIGNAL(statusMessage(QString)), this,            SIGNAL(statusMessage(QString)));
-  connect(m_Server,             SIGNAL(criticalMessage(QString)), this,            SIGNAL(criticalMessage(QString)));
+  connect(m_Server,             SIGNAL(printMessage(QDateTime,QString)), this,            SIGNAL(printMessage(QDateTime,QString)));
+  connect(m_Server,             SIGNAL(statusMessage(QDateTime,QString)), this,            SIGNAL(statusMessage(QDateTime,QString)));
+  connect(m_Server,             SIGNAL(criticalMessage(QDateTime,QString)), this,            SIGNAL(criticalMessage(QDateTime,QString)));
 
   m_Server -> startServer(QHostAddress::Any, m_Port);
 
   int rc = exec();
 
-  emit printMessage(tr("spec server started on port %1").arg(m_Server->serverPort()));
+  emit printMessage(QDateTime::currentDateTime(),
+                    tr("spec server started on port %1").arg(m_Server->serverPort()));
 
 //  printf("Server thread terminated with rc %d\n", rc);
 }

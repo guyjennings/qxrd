@@ -129,11 +129,13 @@ public:
 
   virtual QwtText trackerText(const QwtDoublePoint &pos);
 
+  void contextMenuEvent(QContextMenuEvent *event);
+
 private:
   void replotImage();
   void setImage(QxrdRasterData data);
   void setMask(QxrdMaskRasterData data);
-  void setOverflows(QxrdMaskDataPtr overflow);
+  void setOverflows(QxrdMaskRasterData overflow);
   void changedColorMap();
   void setTrackerPen(const QPen &pen);
 

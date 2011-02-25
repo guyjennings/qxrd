@@ -23,6 +23,11 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc
 {
 }
 
+QxrdDataProcessorPtr QxrdIntegrator::dataProcessor() const
+{
+  return m_DataProcessor;
+}
+
 void QxrdIntegrator::writeSettings(QxrdSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -37,13 +42,6 @@ void QxrdIntegrator::readSettings(QxrdSettings &settings, QString section)
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdIntegrator::integrateSaveAndDisplay()
-{
-  QxrdIntegratedDataPtr integ = performIntegration(m_DataProcessor -> data(), m_DataProcessor -> mask());
-  saveIntegratedData(integ);
-  displayIntegratedData(integ);
-}
-
 QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
 {
   return integrate(dimg, mask, /*m_DataProcessor -> centerFinder() -> get_CenterX(),
@@ -51,22 +49,21 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdDoubleImageDataPtr 
                    get_Oversample(), true);
 }
 
-void QxrdIntegrator::saveIntegratedData(QxrdIntegratedDataPtr data)
-{
-  m_DataProcessor -> writeOutputScan(data);
-}
-
-void QxrdIntegrator::displayIntegratedData(QxrdIntegratedDataPtr data)
-{
-  m_DataProcessor -> displayIntegratedData(data);
-}
-
 QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, int oversample, int normalize)
 {
   QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(image);
 
   if (res) {
-    emit printMessage(tr("Integrating image %1").arg(image->get_Title()));
+    QcepDoubleList norm = image->get_Normalization();
+
+    double normVal = 1;
+
+    if (norm.length()>=1) {
+      normVal = norm[0];
+    }
+
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Integrating image %1 from %2").arg(image->get_Title()).arg(image->get_FileName()));
 
     QTime tic;
     tic.start();
@@ -132,7 +129,8 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
       double cosrot  = cos(rot);
       double sinrot  = sin(rot);
 
-      emit printMessage(tr("Integration range rMin %1, rMax %2, %3 steps").arg(rMin).arg(rMax).arg(nMax - nMin));
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Integration range rMin %1, rMax %2, %3 steps").arg(rMin).arg(rMax).arg(nMax - nMin));
 
       for (int y=0; y<nRows; y++) {
         for (int x=0; x<nCols; x++) {
@@ -168,16 +166,17 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
           double xv = (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
 
           if (normalize) {
-            res -> append(xv, integral[ir]/sv);
+            res -> append(xv, normVal*integral[ir]/sv);
           } else {
-            res -> append(xv, integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+            res -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
           }
         }
       }
       //
       //  emit newIntegrationAvailable(image->get_Title(), x,y);
 
-      emit printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
     } else {
       printf("QxrdIntegrator::integrate failed\n");
     }
@@ -191,7 +190,16 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
   QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(image);
 
   if (res) {
-    emit printMessage(tr("Integrating image %1").arg(image->get_Title()));
+    QcepDoubleList norm = image->get_Normalization();
+
+    double normVal = 1;
+
+    if (norm.length()>=1) {
+      normVal = norm[0];
+    }
+
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Integrating image %1").arg(image->get_Title()));
 
     QTime tic;
     tic.start();
@@ -253,16 +261,17 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
         double xv = ir*oversampleStep+halfOversampleStep;
 
         if (normalize) {
-          res -> append(xv, integral[ir]/sv);
+          res -> append(xv, normVal*integral[ir]/sv);
         } else {
-          res -> append(xv, integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+          res -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
         }
       }
     }
     //
     //  emit newIntegrationAvailable(image->get_Title(), x,y);
 
-    emit printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
   } else {
     printf("QxrdIntegrator::integrate failed\n");
   }
@@ -283,6 +292,8 @@ QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdDoubleImageDataPtr image, do
   catch (...) {
     printf("QxrdIntegrator::sliceLine failed\n");
   }
+
+  return QxrdIntegratedDataPtr();
 }
 
 QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image, QwtArray<QwtDoublePoint> poly, double /*width*/)
@@ -331,9 +342,6 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image,
       }
       //
       //    emit newIntegrationAvailable(image->get_Title(),xs,ys);
-
-      saveIntegratedData(res);
-      displayIntegratedData(res);
     }
   } else {
     printf("QxrdIntegrator::slicePolygon failed\n");

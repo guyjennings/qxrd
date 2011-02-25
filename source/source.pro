@@ -1,32 +1,22 @@
-# message(Qt version: $$[QT_VERSION])
-# message(Qt is installed in $$[QT_INSTALL_PREFIX])
-# message(Qt resources can be found in the following locations:)
-# message(Documentation: $$[QT_INSTALL_DOCS])
-# message(Header files: $$[QT_INSTALL_HEADERS])
+include("../qxrd.version.pri")
+include("../qxrd.platform.pri")
+
 message(Libraries: $$[QT_INSTALL_LIBS])
 message(Binary files (executables): $$[QT_INSTALL_BINS])
-
-# message(Plugins: $$[QT_INSTALL_PLUGINS])
-# message(Data files: $$[QT_INSTALL_DATA])
-# message(Translation files: $$[QT_INSTALL_TRANSLATIONS])
-# message(Settings: $$[QT_INSTALL_SETTINGS])
-# message(Examples: $$[QT_INSTALL_EXAMPLES])
-# message(Demonstrations: $$[QT_INSTALL_DEMOS])
 message(Destdir = $${DESTDIR})
+
 TEMPLATE = app
-DESTDIR = ../app/
+TARGET   = qxrd
+DESTDIR  = ../app/
 
 # POST_TARGETDEPS += install
 target.path = ../app
 INSTALLS += target
 CONFIG += qt
-include("../qxrd.version.pri")
-include("../qxrd.platform.pri")
 QT += network \
     script \
     scripttools
 macx:CONFIG += x86
-macx:
 else:unix { 
     message(Version = $${VERSION})
     message(Plugin path = $${QXRD_PLUGIN_PATH})
@@ -51,22 +41,11 @@ profile {
     QMAKE_CFLAGS += -pg
     QMAKE_LFLAGS += -pg
 }
-CONFIG(debug, debug|release):QXRDSUFFIX = $${QXRDSUFFIX}-dbg
-else:QXRDSUFFIX = $${QXRDSUFFIX}-rls
 
-# win32 {
-# TARGET_EXT = -$${VERSION}$${QXRDSUFFIX}.exe
-# } else {
-# TARGET_EXT = -$${VERSION}$${QXRDSUFFIX}
-# }
-# INCLUDEPATH += /usr/local/lib/spec.d/include/
-# DESTDIR = app/app$${QXRDSUFFIX}
-# DESTDIR = .
-MOC_DIR = moc # /moc$${QXRDSUFFIX}
-UI_DIR = ui # /ui$${QXRDSUFFIX}
-OBJECTS_DIR = obj # /obj$${QXRDSUFFIX}
-RCC_DIR = rcc # /rcc$${QXRDSUFFIX}
-TARGET = qxrd
+MOC_DIR = moc
+UI_DIR = ui
+OBJECTS_DIR = obj
+RCC_DIR = rcc
 message(Building: $${TARGET})
 RC_FILE = qxrd.rc
 win32 { 
@@ -167,9 +146,9 @@ HEADERS += TODO.h \
     qxrdresultserializer.h \
     qxrdroidata.h \
     qxrdhistogramdata.h \
-    qxrddoubleimagedata.h \
     qxrdexposuretimespinner.h \
     qxrddetectorplugininterface.h \
+    qxrdnidaqplugininterface.h \
     qxrdprocessorinterface.h \
     qxrdnamedplugininterface.h \
     qxrddetectorgeometry.h \
@@ -197,7 +176,20 @@ HEADERS += TODO.h \
     qxrdcenterstepspinner.h \
     qxrdsettingssaver.h \
     qxrdsettingssaverthread.h \
-    qxrdplotimage.h
+    qxrdplotimage.h \
+    qxrdimagedisplaywidget.h \
+    qwt_plot_piecewise_curve.h \
+    qxrdmaskdialog.h \
+    qxrdmaskstackmodel.h \
+    qxrdmaskstack.h \
+    qxrdmaskstackview.h \
+    qxrdsynchronizedacquisition.h \
+    qxrdsynchronizedacquisitiondialog.h \
+    qxrddisplaydialog.h \
+    qxrdcorrectiondialog.h \
+    qxrdtestdockwidget.h \
+    qxrdfilebrowsermodel.h \
+    qxrdfilebrowserview.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -256,9 +248,9 @@ SOURCES += qxrd.cpp \
     qxrdresultserializer.cpp \
     qxrdroidata.cpp \
     qxrdhistogramdata.cpp \
-    qxrddoubleimagedata.cpp \
     qxrdexposuretimespinner.cpp \
     qxrddetectorplugininterface.cpp \
+    qxrdnidaqplugininterface.cpp \
     qxrdprocessorinterface.cpp \
     qxrdnamedplugininterface.cpp \
     qxrddetectorgeometry.cpp \
@@ -286,7 +278,20 @@ SOURCES += qxrd.cpp \
     qxrdcenterstepspinner.cpp \
     qxrdsettingssaver.cpp \
     qxrdsettingssaverthread.cpp \
-    qxrdplotimage.cpp
+    qxrdplotimage.cpp \
+    qxrdimagedisplaywidget.cpp \
+    qwt_plot_piecewise_curve.cpp \
+    qxrdmaskdialog.cpp \
+    qxrdmaskstackmodel.cpp \
+    qxrdmaskstack.cpp \
+    qxrdmaskstackview.cpp \
+    qxrdsynchronizedacquisition.cpp \
+    qxrdsynchronizedacquisitiondialog.cpp \
+    qxrddisplaydialog.cpp \
+    qxrdcorrectiondialog.cpp \
+    qxrdtestdockwidget.cpp \
+    qxrdfilebrowsermodel.cpp \
+    qxrdfilebrowserview.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -294,33 +299,136 @@ FORMS = qxrdwindow.ui \
     qxrdimagecalculator.ui \
     qxrdpreferencesdialog.ui \
     qxrdpowderfitwidget.ui \
-    qxrdacquiredialog.ui
+    qxrdacquiredialog.ui \
+    qxrdmaskdialog.ui \
+    qxrdsynchronizedacquisitiondialog.ui \
+    qxrddisplaydialog.ui \
+    qxrdcorrectiondialog.ui \
+    qxrdtestdockwidget.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 
-    contains(QMAKE_HOST.arch,x86_64) { 
-        WIN64 = 1
-        PE_SDK = "c:/XIS/SDK64/"
-    }
-    else { 
-        WIN64 = 0
-        PE_SDK = "c:/XIS/SDK32/"
-    }
-    DEFINES += HAVE_PERKIN_ELMER
-    INCLUDEPATH += $${PE_SDK} \
-        .
-    SOURCES += qxrdacquisitionperkinelmer.cpp \
-        qxrdperkinelmerplugininterface.cpp
-    HEADERS += qxrdacquisitionperkinelmer.h \
-        qxrdperkinelmerplugininterface.h
+    INCLUDEPATH += .
 }
 
-# QMAKE_LFLAGS += -Wl,--script,nordata.lscript
-# QMAKE_LFLAGS += -Wl,--disable-auto-import
-# QMAKE_CFLAGS += -g
-# QMAKE_CXXFLAGS += -g
-# LIBS += XISL.lib
+contains(DEFINES,HAVE_PERKIN_ELMER) {
+  SOURCES += qxrdacquisitionperkinelmer.cpp \
+             qxrdperkinelmerplugininterface.cpp
+  HEADERS += qxrdacquisitionperkinelmer.h \
+             qxrdperkinelmerplugininterface.h
+}
+
 OTHER_FILES += qxrd.rc \
     qxrd.nsi \
     qxrd-cuda.pri \
     HeaderTemplates.txt
+
+win32 { # Copy QT Libraries into app directory
+#  PRE_TARGETDEPS += app
+#  QMAKE_EXTRA_TARGETS += app
+  LIBDIR = $$[QT_INSTALL_BINS]
+  LIBDIR_WIN = $${replace(LIBDIR, /, \\)}
+
+  win32-g++ {
+    exists($${LIBDIR}/libgcc_s_dw2-1.dll) {
+      message("MINGW found in $${LIBDIR}/libgcc_s_dw2-1.dll")
+      QMAKE_EXTRA_TARGETS += libgcc
+      PRE_TARGETDEPS   += ../app/libgcc_s_dw2-1.dll
+      libgcc.target   = ../app/libgcc_s_dw2-1.dll
+      libgcc.depends  = $${LIBDIR}/libgcc_s_dw2-1.dll
+      libgcc.commands = $(COPY_FILE) $${LIBDIR_WIN}\\libgcc_s_dw2-1.dll ..\\app\\libgcc_s_dw2-1.dll
+    }
+
+    exists($${LIBDIR}/mingwm10.dll) {
+      message("MINGW found in $${LIBDIR}/mingwm10.dll")
+      QMAKE_EXTRA_TARGETS += mingwm10
+      PRE_TARGETDEPS   += ../app/mingwm10.dll
+      mingwm10.target   = ../app/mingwm10.dll
+      mingwm10.depends  = $${LIBDIR}/QtCored4.dll
+      mingwm10.commands = $(COPY_FILE) $${LIBDIR_WIN}\\mingwm10.dll ..\\app\\mingwm10.dll
+    }
+  }
+
+  CONFIG(debug, debug|release) {
+    QMAKE_EXTRA_TARGETS += QtCored4
+    PRE_TARGETDEPS      += ../app/QtCored4.dll
+    QtCored4.target      = ../app/QtCored4.dll
+    QtCored4.depends     = $${LIBDIR}/QtCored4.dll
+    QtCored4.commands    = $(COPY_FILE) $${LIBDIR_WIN}\\QtCored4.dll ..\\app\\QtCored4.dll
+
+    QMAKE_EXTRA_TARGETS += QtNetworkd4
+    PRE_TARGETDEPS   += ../app/QtNetworkd4.dll
+    QtNetworkd4.target   = ../app/QtNetworkd4.dll
+    QtNetworkd4.depends  = $${LIBDIR}/QtNetworkd4.dll
+    QtNetworkd4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtNetworkd4.dll ..\\app\\QtNetworkd4.dll
+
+    QMAKE_EXTRA_TARGETS += QtGuid4
+    PRE_TARGETDEPS   += ../app/QtGuid4.dll
+    QtGuid4.target   = ../app/QtGuid4.dll
+    QtGuid4.depends  = $${LIBDIR}/QtGuid4.dll
+    QtGuid4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtGuid4.dll ..\\app\\QtGuid4.dll
+
+    QMAKE_EXTRA_TARGETS += QtScriptd4
+    PRE_TARGETDEPS   += ../app/QtScriptd4.dll
+    QtScriptd4.target   = ../app/QtScriptd4.dll
+    QtScriptd4.depends  = $${LIBDIR}/QtScriptd4.dll
+    QtScriptd4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtScriptd4.dll ..\\app\\QtScriptd4.dll
+  } else {
+    QMAKE_EXTRA_TARGETS += QtCore4
+    PRE_TARGETDEPS   += ../app/QtCore4.dll
+    QtCore4.target   = ../app/QtCore4.dll
+    QtCore4.depends  = $${LIBDIR}/QtCore4.dll
+    QtCore4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtCore4.dll ..\\app\\QtCore4.dll
+
+    QMAKE_EXTRA_TARGETS += QtNetwork4
+    PRE_TARGETDEPS   += ../app/QtNetwork4.dll
+    QtNetwork4.target   = ../app/QtNetwork4.dll
+    QtNetwork4.depends  = $${LIBDIR}/QtNetwork4.dll
+    QtNetwork4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtNetwork4.dll ..\\app\\QtNetwork4.dll
+
+    QMAKE_EXTRA_TARGETS += QtGui4
+    PRE_TARGETDEPS   += ../app/QtGui4.dll
+    QtGui4.target   = ../app/QtGui4.dll
+    QtGui4.depends  = $${LIBDIR}/QtGui4.dll
+    QtGui4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtGui4.dll ..\\app\\QtGui4.dll
+
+    QMAKE_EXTRA_TARGETS += QtScript4
+    PRE_TARGETDEPS   += ../app/QtScript4.dll
+    QtScript4.target   = ../app/QtScript4.dll
+    QtScript4.depends  = $${LIBDIR}/QtScript4.dll
+    QtScript4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtScript4.dll ..\\app\\QtScript4.dll
+  }
+
+  QMAKE_DISTCLEAN += /Q ..\\app\\*.dll
+  QMAKE_DISTCLEAN += ..\\app\\plugins\\*
+  QMAKE_DISTCLEAN += ..\\app\\plugins
+}
+
+win32 { # Make NSIS installer...
+  CONFIG(release, debug|release) {
+    OUT_PWD_WIN = $${replace(OUT_PWD, /, \\)}
+    PWD_WIN = $${replace(PWD, /, \\)}
+
+    exists("c:/Program Files/NSIS/makensis.exe") {
+      QMAKE_POST_LINK = "\"c:\\Program Files\\NSIS\\makensis.exe\"" /V4
+      message("NSIS found in Program Files")
+    }
+
+    exists("c:/Program Files (x86)/NSIS/makensis.exe") {
+      QMAKE_POST_LINK = "\"c:\\Program Files (x86)\\NSIS\\makensis.exe\"" /V4
+      message("NSIS found in Program Files (x86)")
+    }
+
+    !isEmpty(QMAKE_POST_LINK) {
+      contains(QMAKE_HOST.arch,x86_64) {
+        QMAKE_POST_LINK += /DWIN64
+      }
+
+      QMAKE_POST_LINK += /DVERSION=$${VERSION}
+      QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}\"
+      QMAKE_POST_LINK += /DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+      QMAKE_POST_LINK += /DAPPDIR=\"$${OUT_PWD_WIN}\\..\\.\"
+      QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd.nsi\"
+    }
+  }
+}

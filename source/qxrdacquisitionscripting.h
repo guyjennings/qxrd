@@ -17,7 +17,7 @@ public:
 
 public slots:
   void propertyList();
-  void message(QString cmd);\
+  void Message(QString cmd);
 };
 
 #endif // QXRDACQUISITIONSCRIPTING_H

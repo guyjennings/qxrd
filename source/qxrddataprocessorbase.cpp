@@ -4,7 +4,6 @@
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
 #include "qxrdimagedata.h"
-#include "qxrddoubleimagedata.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdintegrator.h"
 #include "qxrdmutexlocker.h"
@@ -14,12 +13,64 @@
 
 #include <QTime>
 #include <QPainter>
-#include <QDirIterator>
 #include <math.h>
 
-QxrdDataProcessorBase::QxrdDataProcessorBase
-    (QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver, QObject *parent)
-  : QxrdDataProcessor(acq, allocator, saver, parent),
+QxrdDataProcessorBase::QxrdDataProcessorBase(
+    QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator,
+    QxrdFileSaverThreadPtr saver, QObject *parent) :
+
+    QObject(parent),
+    //    m_ProcessorType(this,"processorType",0),
+    //    m_ProcessorTypeName(this,"processorTypeName","processorType"),
+    m_OutputDirectory(this,"outputDirectory", ""),
+    m_FileName(this,"fileName",""),
+    m_DataPath(this,"dataPath", ""),
+    m_DarkImagePath(this, "darkImagePath", ""),
+    m_BadPixelsPath(this, "badPixelsPath", ""),
+    m_GainMapPath(this, "gainMapPath", ""),
+    m_MaskPath(this, "maskPath", ""),
+    m_LogFilePath(this, "logFilePath", "qxrd.log"),
+    m_PerformDarkSubtraction(this, "performDarkSubtraction", true),
+    m_SaveRawImages(this, "saveRawImages", true),
+    m_SaveDarkImages(this, "saveDarkImages", true),
+    m_PerformBadPixels(this, "performBadPixels", true),
+    m_PerformGainCorrection(this, "performGainCorrection", true),
+    m_SaveSubtracted(this, "saveSubtracted", true),
+    m_SaveAsText(this, "saveAsText", false),
+    m_SaveAsTextSeparator(this, "saveAsTextSeparator", " "),
+    m_SaveAsTextPerLine(this,"saveAsTextPerLine",16),
+    m_SaveOverflowFiles(this,"saveOverflowFiles",0),
+    m_PerformIntegration(this, "performIntegration", true),
+    m_DisplayIntegratedData(this, "displayIntegratedData", true),
+    m_SaveIntegratedData(this, "saveIntegratedData", true),
+    m_SaveDarkInSubdirectory(this,"saveDarkInSubdirectory",0),
+    m_SaveDarkSubdirectory(this,"saveDarkSubdirectory",""),
+    m_SaveRawInSubdirectory(this,"saveRawInSubdirectory",0),
+    m_SaveRawSubdirectory(this,"saveRawSubdirectory",""),
+    m_SaveSubtractedInSubdirectory(this,"saveSubtractedInSubdirectory",0),
+    m_SaveSubtractedSubdirectory(this,"saveSubtractedSubdirectory",""),
+    m_SaveIntegratedInSeparateFiles(this,"saveIntegratedInSeparateFiles",0),
+    m_SaveIntegratedInSubdirectory(this,"saveIntegratedInSubdirectory",0),
+    m_SaveIntegratedSubdirectory(this,"saveIntegratedSubdirectory",""),
+    m_PerformDarkSubtractionTime(this, "performDarkSubtractionTime", 0.01),
+    m_PerformBadPixelsTime(this, "performBadPixelsTime", 0.01),
+    m_PerformGainCorrectionTime(this, "performGainCorrectionTime", 0.01),
+    m_SaveSubtractedTime(this, "saveSubtractedTime", 0.1),
+    m_SaveAsTextTime(this, "saveAsTextTime", 0.1),
+    m_PerformIntegrationTime(this, "performIntegrationTime", 0.05),
+    m_DisplayIntegratedDataTime(this, "displayIntegratedDataTime", 0.2),
+    m_SaveIntegratedDataTime(this, "saveIntegratedDataTime", 0.01),
+    m_EstimatedProcessingTime(this, "estimatedProcessingTime", 0.1),
+    m_AveragingRatio(this, "averagingRatio", 0.1),
+    //    m_FileName(this,"fileName",""),
+    m_MaskMinimumValue(this, "maskMinimumValue", 0),
+    m_MaskMaximumValue(this, "maskMaximumValue", 20000),
+    m_MaskCircleRadius(this, "maskCircleRadius", 10),
+    m_MaskSetPixels(this, "maskSetPixels", true),
+    m_CompressImages(this, "compressImages", false),
+    m_Average(this,"average",0.0),
+    m_AverageDark(this,"averageDark",0.0),
+    m_AverageRaw(this,"averageRaw",0.0),
     m_Mutex(QMutex::Recursive),
     m_LogFileMutex(QMutex::Recursive),
     m_Window(NULL),
@@ -32,7 +83,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainMap(NULL),
-    m_Mask(allocator -> newMask()),
+//    m_Mask(allocator -> newMask()),
     m_AcquiredCount(0),
     m_CenterFinder(NULL),
     m_Integrator(NULL),
@@ -126,12 +177,64 @@ void QxrdDataProcessorBase::readSettings(QxrdSettings &settings, QString section
   newLogFile(get_LogFilePath());
 }
 
+
+QString QxrdDataProcessorBase::existingOutputDirectory(QString dir, QString subdir)
+{
+  return QDir(dir).filePath(subdir);
+}
+
+QString QxrdDataProcessorBase::filePathInCurrentDirectory(QString name)
+{
+  return QDir(currentDirectory()).filePath(name);
+}
+
+QString QxrdDataProcessorBase::currentDirectory()
+{
+  return get_OutputDirectory();
+}
+
+QString QxrdDataProcessorBase::darkOutputDirectory()
+{
+  if (get_SaveDarkInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveDarkSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
+}
+
+QString QxrdDataProcessorBase::rawOutputDirectory()
+{
+  if (get_SaveRawInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveRawSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
+}
+
+QString QxrdDataProcessorBase::subtractedOutputDirectory()
+{
+  if (get_SaveSubtractedInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveSubtractedSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
+}
+
+QString QxrdDataProcessorBase::integratedOutputDirectory()
+{
+  if (get_SaveIntegratedInSubdirectory()) {
+    return existingOutputDirectory(get_OutputDirectory(), get_SaveIntegratedSubdirectory());
+  } else {
+    return get_OutputDirectory();
+  }
+}
+
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage()
 {
   QxrdDoubleImageDataPtr res = m_Allocator -> newDoubleImage();
 
   while (res == NULL) {
-    emit printMessage(tr("Waiting for double image"));
+    emit printMessage(QDateTime::currentDateTime(), tr("Waiting for double image"));
 
     QxrdDataProcessorThread::msleep(500);
 
@@ -144,8 +247,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage()
 void QxrdDataProcessorBase::newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   m_Data = image;
-
-  m_Data -> setMask(m_Mask, overflow);
+  m_Overflow = overflow;
 
   m_Window -> newDataAvailable(m_Data, overflow);
 }
@@ -211,7 +313,7 @@ void QxrdDataProcessorBase::newGainMapImage(QxrdDoubleImageDataPtr image)
 
 void QxrdDataProcessorBase::newMask()
 {
-  m_Window -> newMaskAvailable(m_Mask);
+  m_Window -> newMaskAvailable(mask());
 }
 
 void QxrdDataProcessorBase::loadDefaultImages()
@@ -261,62 +363,9 @@ void QxrdDataProcessorBase::loadData(QString name)
   }
 }
 
-void QxrdDataProcessorBase::processData(QString name)
-{
-  QxrdDoubleImageDataPtr res = takeNextFreeImage();
-
-  if (res -> readImage(name)) {
-
-    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
-
-    res -> loadMetaData();
-
-    processAcquiredImage(res, darkImage(), mask(), QxrdMaskDataPtr());
-
-    set_DataPath(res -> get_FileName());
-  }
-}
-
-void QxrdDataProcessorBase::processDataSequence(QString path, QString filter)
-{
-  QDirIterator iter(path, QStringList(filter));
-
-  while (iter.hasNext()) {
-    QString path = iter.next();
-
-    emit printMessage(path);
-
-    processData(path);
-  }
-}
-
-void QxrdDataProcessorBase::processDataSequence(QStringList paths)
-{
-  QString path;
-
-  foreach(path, paths) {
-    emit printMessage(path);
-
-    processData(path);
-  }
-}
-
-void QxrdDataProcessorBase::processDataSequence(QString path, QStringList filters)
-{
-  QDirIterator iter(path, filters);
-
-  while (iter.hasNext()) {
-    QString path = iter.next();
-
-    emit printMessage(path);
-
-    processData(path);
-  }
-}
-
 void QxrdDataProcessorBase::saveData(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_Data, canOverwrite);
+  saveNamedImageData(name, m_Data, QxrdMaskDataPtr(), canOverwrite);
 
   set_DataPath(m_Data -> get_FileName());
 }
@@ -340,13 +389,14 @@ void QxrdDataProcessorBase::loadDark(QString name)
 
     set_DarkImagePath(res -> get_FileName());
   } else {
-    emit printMessage(tr("loadDark(%1) failed").arg(name));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("loadDark(%1) failed").arg(name));
   }
 }
 
 void QxrdDataProcessorBase::saveDark(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_DarkFrame, canOverwrite);
+  saveNamedImageData(name, m_DarkFrame, QxrdMaskDataPtr(), canOverwrite);
 
   set_DarkImagePath(m_DarkFrame -> get_FileName());
 }
@@ -370,7 +420,7 @@ void QxrdDataProcessorBase::loadBadPixels(QString name)
 
 void QxrdDataProcessorBase::saveBadPixels(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_BadPixels, canOverwrite);
+  saveNamedImageData(name, m_BadPixels, QxrdMaskDataPtr(), canOverwrite);
 
   set_BadPixelsPath(m_BadPixels -> get_FileName());
 }
@@ -394,9 +444,321 @@ void QxrdDataProcessorBase::loadGainMap(QString name)
 
 void QxrdDataProcessorBase::saveGainMap(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_GainMap, canOverwrite);
+  saveNamedImageData(name, m_GainMap, QxrdMaskDataPtr(), canOverwrite);
 
   set_GainMapPath(m_GainMap -> get_FileName());
+}
+
+QxrdMaskStackPtr QxrdDataProcessorBase::maskStack()
+{
+  return &m_Masks;
+}
+
+int QxrdDataProcessorBase::maskStackSize()
+{
+  return m_Masks.count();
+}
+
+int QxrdDataProcessorBase::maskStackPosition(int pos)
+{
+  int len = m_Masks.count();
+
+  if (pos >= 0 && pos < len) {
+    return pos;
+  } else if (pos < 0 && pos >= -len) {
+    return len-pos;
+  } else {
+    return -1;
+  }
+}
+
+void QxrdDataProcessorBase::newMaskStack()
+{
+  QxrdMaskDataPtr m = m_Allocator->newMask();
+
+  m_Masks.push_front(m);
+
+  emit printMessage(QDateTime::currentDateTime(),
+                    tr("new mask, %1 on stack").arg(m_Masks.count()));
+
+  m_Masks.changed();
+
+  newMask();
+}
+
+void QxrdDataProcessorBase::pushMaskStack(QxrdMaskDataPtr m)
+{
+  if (m == NULL) {
+    m = m_Allocator -> newMask();
+
+    if (mask()) {
+      mask()->copyMaskTo(m);
+    }
+  }
+
+  m_Masks.push_front(m);
+
+//  m_Mask = mask;
+
+  emit printMessage(QDateTime::currentDateTime(),
+                    tr("dup mask, %1 on stack").arg(m_Masks.count()));
+
+  m_Masks.changed();
+
+  newMask();
+}
+
+void QxrdDataProcessorBase::popMaskStack(int amount)
+{
+  if (amount == 0) {
+    return;
+  } else if (amount > 1) {
+    for (int i=0; i<amount; i++) {
+      popMaskStack(1);
+    }
+  } else if (amount < -1) {
+    for (int i=0; i<(-amount); i++) {
+      popMaskStack(-1);
+    }
+  } else if (amount == 1) {
+    if (m_Masks.count() >= 1) {
+//      m_Mask = m_Masks.first();
+      m_Masks.pop_front();
+    }
+  } else if (amount == -1) {
+    if (m_Masks.count() >= 1) {
+//      m_Mask = m_Masks.last();
+      m_Masks.pop_back();
+    }
+  }
+
+  m_Masks.changed();
+
+  newMask();
+}
+
+void QxrdDataProcessorBase::clearMaskStack()
+{
+  m_Masks.clear();
+
+  m_Masks.changed();
+
+  newMask();
+}
+
+void QxrdDataProcessorBase::clearMaskStackTop()
+{
+  popMaskStack();
+}
+
+void QxrdDataProcessorBase::rollMaskStack(int amount)
+{
+  if (amount == 0) {
+    return;
+  } else if (amount > 1) {
+    for (int i=0; i<amount; i++) {
+      rollMaskStack(1);
+    }
+  } else if (amount < -1) {
+    for (int i=0; i<(-amount); i++) {
+      rollMaskStack(-1);
+    }
+  } else if (amount == 1) {
+    QxrdMaskDataPtr m = m_Masks.first();
+    m_Masks.push_back(m);
+    m_Masks.pop_front();
+  } else if (amount == -1) {
+    QxrdMaskDataPtr m = m_Masks.last();
+    m_Masks.push_front(m);
+    m_Masks.pop_back();
+  }
+
+  m_Masks.changed();
+
+  newMask();
+}
+
+void QxrdDataProcessorBase::exchangeMaskStack(int pos)
+{
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
+
+  if ((p0 >= 0) && (p1 >= 0) && (p0 != p1)) {
+    QxrdMaskDataPtr pm=m_Masks[p0];
+    m_Masks[p0] = m_Masks[p1];
+    m_Masks[p1] = pm;
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::andMaskStack(int pos)
+{
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
+
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
+
+    m_Masks[p0] -> andMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::orMaskStack(int pos)
+{
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
+
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
+
+    m_Masks[p0] -> orMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::xorMaskStack(int pos)
+{
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
+
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
+
+    m_Masks[p0] -> xorMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::andNotMaskStack(int pos)
+{
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
+
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
+
+    m_Masks[p0] -> andNotMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::orNotMaskStack(int pos)
+{
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
+
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
+
+    m_Masks[p0] -> orNotMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::xorNotMaskStack(int pos)
+{
+  int p0 = maskStackPosition(0);
+  int p1 = maskStackPosition(pos);
+
+  if ((p0 >= 0) && (p1 >= 0)) {
+    QxrdMaskDataPtr pm = m_Masks[p1];
+
+    m_Masks[p0] -> xorNotMask(pm);
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::invertMaskStack(int pos)
+{
+  int p = maskStackPosition(pos);
+
+  if (p >= 0) {
+    m_Masks[p] -> invertMask();
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::hideMaskAllStack(int pos)
+{
+  int p = maskStackPosition(pos);
+
+  if (p >= 0) {
+    m_Masks[p] -> hideMaskAll();
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::showMaskAllStack(int pos)
+{
+  int p = maskStackPosition(pos);
+
+  if (p >= 0) {
+    m_Masks[p] -> showMaskAll();
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::hideMaskRangeStack(int pos)
+{
+  int p = maskStackPosition(pos);
+
+  double min = get_MaskMinimumValue();
+  double max = get_MaskMaximumValue();
+
+  if (m_Data && p >= 0) {
+    m_Masks[p] -> hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::showMaskRangeStack(int pos)
+{
+  int p = maskStackPosition(pos);
+
+  double min = get_MaskMinimumValue();
+  double max = get_MaskMaximumValue();
+
+  if (m_Data && p >= 0) {
+    m_Masks[p] -> showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
+
+    m_Masks.changed();
+
+    newMask();
+  }
 }
 
 void QxrdDataProcessorBase::loadMask(QString name)
@@ -410,44 +772,50 @@ void QxrdDataProcessorBase::loadMask(QString name)
     res -> loadMetaData();
     res -> set_DataType(QxrdMaskData::MaskData);
 
-    res -> copyMask(m_Mask);
+//    res -> copyMaskTo(m_Mask);
+
+    pushMaskStack(res);
+
+    m_Masks.changed();
 
     newMask();
 
-    set_MaskPath(m_Mask -> get_FileName());
+    set_MaskPath(mask() -> get_FileName());
   }
 }
 
 void QxrdDataProcessorBase::saveMask(QString name, int canOverwrite)
 {
-  saveNamedMaskData(name, m_Mask, canOverwrite);
+  if (mask()) {
+    saveNamedMaskData(name, mask(), canOverwrite);
 
-  set_MaskPath(m_Mask -> get_FileName());
+    set_MaskPath(mask() -> get_FileName());
+  }
 }
 
-void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveData(name, image, canOverwrite);
+  fileSaverThread() -> saveData(name, image, overflow, canOverwrite);
 }
 
-void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveData(name, image, canOverwrite);
+  fileSaverThread() -> saveData(name, image, overflow, canOverwrite);
 }
 
-void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveRawData(name, image, canOverwrite);
+  fileSaverThread() -> saveRawData(name, image, overflow, canOverwrite);
 }
 
-void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt32ImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveData(name, image, canOverwrite);
+  fileSaverThread() -> saveData(name, image, overflow, canOverwrite);
 }
 
-void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt32ImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveRawData(name, image, canOverwrite);
+  fileSaverThread() -> saveRawData(name, image, overflow, canOverwrite);
 }
 
 void QxrdDataProcessorBase::saveNamedMaskData(QString name, QxrdMaskDataPtr image, int canOverwrite)
@@ -455,9 +823,9 @@ void QxrdDataProcessorBase::saveNamedMaskData(QString name, QxrdMaskDataPtr imag
   fileSaverThread() -> saveData(name, image, canOverwrite);
 }
 
-void QxrdDataProcessorBase::saveNamedImageDataAsText(QString name, QxrdDoubleImageDataPtr image, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedImageDataAsText(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveTextData(name, image, canOverwrite);
+  fileSaverThread() -> saveTextData(name, image, overflow, canOverwrite);
 }
 
 void QxrdDataProcessorBase::clearDark()
@@ -481,28 +849,21 @@ void QxrdDataProcessorBase::clearGainMap()
   set_GainMapPath("");
 }
 
-void QxrdDataProcessorBase::clearMask()
-{
-  m_Mask -> clear();
-
-  newMask();
-
-  set_MaskPath("");
-}
-
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image
     (QxrdInt16ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("processing acquired 16 bit image, %1 remaining").arg(getAcquiredCount()));
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("processing acquired 16 bit image, %1 remaining").arg(getAcquiredCount()));
   );
 
   if (img) {
     if (get_SaveRawImages()) {
       if (img->get_ImageSaved()) {
-        emit printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
+        emit printMessage(QDateTime::currentDateTime(),
+                          tr("Image \"%1\" is already saved").arg(img->rawFileName()));
       } else {
-        saveNamedRawImageData(img->rawFileName(), img, QxrdDataProcessorBase::NoOverwrite);
+        saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessorBase::NoOverwrite);
       }
     }
 
@@ -523,15 +884,17 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image
     (QxrdInt32ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("processing acquired 32 bit image, %1 remaining").arg(getAcquiredCount()));
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("processing acquired 32 bit image, %1 remaining").arg(getAcquiredCount()));
   );
 
   if (img) {
     if (get_SaveRawImages()) {
       if (img->get_ImageSaved()) {
-        emit printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
+        emit printMessage(QDateTime::currentDateTime(),
+                          tr("Image \"%1\" is already saved").arg(img->rawFileName()));
       } else {
-        saveNamedRawImageData(img->rawFileName(), img, QxrdDataProcessorBase::NoOverwrite);
+        saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessorBase::NoOverwrite);
       }
     }
 
@@ -548,15 +911,30 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image
   }
 }
 
-QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
+QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredDoubleImage
     (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
+{
+  return processAcquiredImage(dimg, dark, mask, overflow);
+}
+
+QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredDoubleImage
+    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v)
+{
+  return processAcquiredImage(dimg, dark, mask, overflow, v);
+}
+
+QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
+    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr /*mask*/, QxrdMaskDataPtr overflow, QcepDoubleList v)
 {
   if (dimg) {
     QTime tic;
     tic.start();
 
+    dimg->set_Normalization(v);
+
     QCEP_DEBUG(DEBUG_PROCESS,
-               emit printMessage(tr("Processing Image \"%1\", count %2").arg(dimg->get_FileName()).arg(getAcquiredCount()));
+               emit printMessage(QDateTime::currentDateTime(),
+                                 tr("Processing Image \"%1\", count %2").arg(dimg->get_FileName()).arg(getAcquiredCount()));
     );
 
     if (get_PerformDarkSubtraction()) {
@@ -568,7 +946,8 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
       updateEstimatedTime(prop_PerformDarkSubtractionTime(), subTime);
 
       QCEP_DEBUG(DEBUG_PROCESS,
-                 emit printMessage(tr("Dark subtraction took %1 msec").arg(subTime));
+                 emit printMessage(QDateTime::currentDateTime(),
+                                   tr("Dark subtraction took %1 msec").arg(subTime));
       );
     }
 
@@ -588,14 +967,15 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
 
     if (get_SaveSubtracted()) {
       if (dimg->get_ImageSaved()) {
-        emit printMessage(tr("Image \"%1\" is already saved").arg(dimg->rawFileName()));
+        emit printMessage(QDateTime::currentDateTime(),
+                          tr("Image \"%1\" is already saved").arg(dimg->rawFileName()));
       } else {
-        saveNamedImageData(dimg->get_FileName(), dimg);
+        saveNamedImageData(QDir(subtractedOutputDirectory()).filePath(dimg->get_FileBase()), dimg, overflow);
       }
     }
 
     if (get_SaveAsText()) {
-      saveNamedImageDataAsText(dimg->get_FileName(), dimg);
+      saveNamedImageDataAsText(dimg->get_FileName(), dimg, overflow);
 
       updateEstimatedTime(prop_SaveAsTextTime(), tic.elapsed());
     }
@@ -603,7 +983,8 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
     newData(dimg, overflow);
 
     QCEP_DEBUG(DEBUG_PROCESS,
-               emit printMessage(tr("Processing took %1 msec").arg(tic.restart()));
+               emit printMessage(QDateTime::currentDateTime(),
+                                 tr("Processing took %1 msec").arg(tic.restart()));
     );
   }
 
@@ -622,24 +1003,28 @@ void QxrdDataProcessorBase::subtractDarkImage(QxrdDoubleImageDataPtr image, Qxrd
   if (get_PerformDarkSubtraction()) {
     if (dark && image) {
       if (dark->get_ExposureTime() != image->get_ExposureTime()) {
-        emit printMessage("Exposure times of acquired data and dark image are different, skipping");
+        emit printMessage(QDateTime::currentDateTime(),
+                          "Exposure times of acquired data and dark image are different, skipping");
         return;
       }
 
       if (dark->get_Width() != image->get_Width() ||
           dark->get_Height() != image->get_Height()) {
-        emit printMessage("Dimensions of acquired data and dark image are different, skipping");
+        emit printMessage(QDateTime::currentDateTime(),
+                          "Dimensions of acquired data and dark image are different, skipping");
         return;
       }
 
       if (dark->get_CameraGain() != image->get_CameraGain()) {
-        emit printMessage("Gains of acquired data and dark image are different, skipping");
+        emit printMessage(QDateTime::currentDateTime(),
+                          "Gains of acquired data and dark image are different, skipping");
         return;
       }
 
       if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
             image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
-        emit printMessage("Acquired data is not a raw image, skipping background subtraction");
+        emit printMessage(QDateTime::currentDateTime(),
+                          "Acquired data is not a raw image, skipping background subtraction");
         return;
       }
 
@@ -744,8 +1129,8 @@ void QxrdDataProcessorBase::showMaskRange(/*double min, double max*/)
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
 
-  if (m_Data && m_Mask) {
-    m_Mask -> showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
+  if (m_Data && mask()) {
+    mask() -> showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
 
     newMask();
   }
@@ -753,8 +1138,8 @@ void QxrdDataProcessorBase::showMaskRange(/*double min, double max*/)
 
 void QxrdDataProcessorBase::hideMaskAll()
 {
-  if (m_Mask) {
-    m_Mask -> hideMaskAll();
+  if (mask()) {
+    mask() -> hideMaskAll();
 
     newMask();
   }
@@ -762,8 +1147,8 @@ void QxrdDataProcessorBase::hideMaskAll()
 
 void QxrdDataProcessorBase::showMaskAll()
 {
-  if (m_Mask) {
-    m_Mask -> showMaskAll();
+  if (mask()) {
+    mask() -> showMaskAll();
 
     newMask();
   }
@@ -774,8 +1159,8 @@ void QxrdDataProcessorBase::hideMaskRange(/*double min, double max*/)
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
 
-  if (m_Data && m_Mask) {
-    m_Mask -> hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
+  if (m_Data && mask()) {
+    mask() -> hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
 
     newMask();
   }
@@ -783,8 +1168,8 @@ void QxrdDataProcessorBase::hideMaskRange(/*double min, double max*/)
 
 void QxrdDataProcessorBase::invertMask()
 {
-  if (m_Mask) {
-    m_Mask -> invertMask();
+  if (mask()) {
+    mask() -> invertMask();
 
     newMask();
   }
@@ -792,15 +1177,15 @@ void QxrdDataProcessorBase::invertMask()
 
 void QxrdDataProcessorBase::maskCircle(QwtDoubleRect rect)
 { 
-  if (m_Mask) {
+  if (mask()) {
     if ((rect.left() == rect.right()) && (rect.bottom() == rect.top())) {
-      m_Mask -> maskCircle(rect.left(), rect.top(), get_MaskCircleRadius(), get_MaskSetPixels());
+      mask() -> maskCircle(rect.left(), rect.top(), get_MaskCircleRadius(), get_MaskSetPixels());
     } else {
       double cx = rect.center().x();
       double cy = rect.center().y();
       double rad = rect.width()/2;
 
-      m_Mask -> maskCircle(cx, cy, rad, get_MaskSetPixels());
+      mask() -> maskCircle(cx, cy, rad, get_MaskSetPixels());
     }
 
     newMask();
@@ -809,11 +1194,11 @@ void QxrdDataProcessorBase::maskCircle(QwtDoubleRect rect)
 
 void QxrdDataProcessorBase::maskPolygon(QVector<QwtDoublePoint> poly)
 {
-  if (m_Mask) {
+  if (mask()) {
     //  printf("QxrdDataProcessorBase::maskPolygon(%d points ...)\n", poly.size());
 
-    int nRows = m_Mask -> get_Height();
-    int nCols = m_Mask -> get_Width();
+    int nRows = mask() -> get_Height();
+    int nCols = mask() -> get_Width();
 
     QImage polyImage(nCols, nRows, QImage::Format_RGB32);
     QPainter polyPainter(&polyImage);
@@ -833,7 +1218,7 @@ void QxrdDataProcessorBase::maskPolygon(QVector<QwtDoublePoint> poly)
     for (int j=0; j<nRows; j++) {
       for (int i=0; i<nCols; i++) {
         if (qGray(polyImage.pixel(i,j))) {
-          m_Mask -> setMaskValue(i, j, newval);
+          mask() -> setMaskValue(i, j, newval);
         }
       }
     }
@@ -845,7 +1230,8 @@ void QxrdDataProcessorBase::maskPolygon(QVector<QwtDoublePoint> poly)
 void QxrdDataProcessorBase::measurePolygon(QVector<QwtDoublePoint> poly)
 {
   foreach(QwtDoublePoint pt, poly) {
-    emit printMessage(tr("Measure pt (%1,%2) = %3").arg(pt.x()).arg(pt.y())
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Measure pt (%1,%2) = %3").arg(pt.x()).arg(pt.y())
                       .arg(m_Data -> value(pt.x(),pt.y())));
   }
 
@@ -855,7 +1241,8 @@ void QxrdDataProcessorBase::measurePolygon(QVector<QwtDoublePoint> poly)
 void QxrdDataProcessorBase::printMeasuredPolygon(QVector<QwtDoublePoint> poly)
 {
   foreach(QwtDoublePoint pt, poly) {
-    emit printMessage(tr("Measure pt (%1,%2)").arg(pt.x()).arg(pt.y()));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Measure pt (%1,%2)").arg(pt.x()).arg(pt.y()));
   }
 
   summarizeMeasuredPolygon(poly);
@@ -873,7 +1260,8 @@ void QxrdDataProcessorBase::summarizeMeasuredPolygon(QVector<QwtDoublePoint> pol
     double dx1 = x0-x1, dy1 = y0-y1, dx2 = x2-x1, dy2 = y2-y1;
     double a1 = atan2(dy1,dx1), a2 = atan2(dy2,dx2);
 
-    emit statusMessage(tr("Angle: @ %1,%2, ang %3 deg").arg(x1).arg(y1).arg((a2-a1)/M_PI*180.0));
+    emit statusMessage(QDateTime::currentDateTime(),
+                       tr("Angle: @ %1,%2, ang %3 deg").arg(x1).arg(y1).arg((a2-a1)/M_PI*180.0));
   } else if (poly.size() == 2) {
     double x0 = poly[0].x();
     double y0 = poly[0].y();
@@ -884,18 +1272,15 @@ void QxrdDataProcessorBase::summarizeMeasuredPolygon(QVector<QwtDoublePoint> pol
     double ang = atan2(dy,dx);
     double len = sqrt(dx*dx+dy*dy);
 
-    emit statusMessage(tr("Line: %1,%2 - %3,%4 : D %5,%6 : L %7 : Ang %8").
+    emit statusMessage(QDateTime::currentDateTime(),
+                       tr("Line: %1,%2 - %3,%4 : D %5,%6 : L %7 : Ang %8").
                        arg(x0).arg(y0).arg(x1).arg(y1).
                        arg(dx).arg(dy).arg(len).arg(ang/M_PI*180.0));
 
   } else if (poly.size() == 1) {
-    emit statusMessage(tr("Point: %1,%2").arg(poly[0].x()).arg(poly[0].y()));
+    emit statusMessage(QDateTime::currentDateTime(),
+                       tr("Point: %1,%2").arg(poly[0].x()).arg(poly[0].y()));
   }
-}
-
-void QxrdDataProcessorBase::slicePolygon(QVector<QwtDoublePoint> poly)
-{
-  m_Integrator -> slicePolygon(m_Data, poly, 0);
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::data() const
@@ -910,7 +1295,16 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::darkImage() const
 
 QxrdMaskDataPtr QxrdDataProcessorBase::mask() const
 {
-  return m_Mask;
+  if (m_Masks.isEmpty()) {
+    return QxrdMaskDataPtr();
+  } else {
+    return m_Masks.first();
+  }
+}
+
+QxrdMaskDataPtr QxrdDataProcessorBase::overflow() const
+{
+  return m_Overflow;
 }
 
 int QxrdDataProcessorBase::incrementAcquiredCount()
@@ -953,7 +1347,8 @@ int QxrdDataProcessorBase::status(double time)
 QxrdCenterFinderPtr QxrdDataProcessorBase::centerFinder() const
 {
   if (m_CenterFinder == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::centerFinder == NULL");
+    emit printMessage(QDateTime::currentDateTime(),
+                      "Problem QxrdDataProcessorBase::centerFinder == NULL");
   }
 
   return m_CenterFinder;
@@ -962,7 +1357,8 @@ QxrdCenterFinderPtr QxrdDataProcessorBase::centerFinder() const
 QxrdIntegratorPtr QxrdDataProcessorBase::integrator() const
 {
   if (m_Integrator == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::integrator == NULL");
+    emit printMessage(QDateTime::currentDateTime(),
+                      "Problem QxrdDataProcessorBase::integrator == NULL");
   }
 
   return m_Integrator;
@@ -971,7 +1367,8 @@ QxrdIntegratorPtr QxrdDataProcessorBase::integrator() const
 QxrdRingSetFitParametersPtr QxrdDataProcessorBase::initialRingSetFitParameters() const
 {
   if (m_InitialRingSetFitParameters == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::initialRingSetFitParameters == NULL");
+    emit printMessage(QDateTime::currentDateTime(),
+                      "Problem QxrdDataProcessorBase::initialRingSetFitParameters == NULL");
   }
 
   return m_InitialRingSetFitParameters;
@@ -980,7 +1377,8 @@ QxrdRingSetFitParametersPtr QxrdDataProcessorBase::initialRingSetFitParameters()
 QxrdRingSetSampledDataPtr QxrdDataProcessorBase::initialRingSetData() const
 {
   if (m_InitialRingSetData == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::initialRingSetData == NULL");
+    emit printMessage(QDateTime::currentDateTime(),
+                      "Problem QxrdDataProcessorBase::initialRingSetData == NULL");
   }
 
   return m_InitialRingSetData;
@@ -989,7 +1387,8 @@ QxrdRingSetSampledDataPtr QxrdDataProcessorBase::initialRingSetData() const
 QxrdRingSetFitParametersPtr QxrdDataProcessorBase::refinedRingSetFitParameters() const
 {
   if (m_RefinedRingSetFitParameters == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::refinedRingSetFitParameters == NULL");
+    emit printMessage(QDateTime::currentDateTime(),
+                      "Problem QxrdDataProcessorBase::refinedRingSetFitParameters == NULL");
   }
 
   return m_RefinedRingSetFitParameters;
@@ -998,7 +1397,8 @@ QxrdRingSetFitParametersPtr QxrdDataProcessorBase::refinedRingSetFitParameters()
 QxrdRingSetSampledDataPtr QxrdDataProcessorBase::refinedRingSetData() const
 {
   if (m_RefinedRingSetData == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::refinedRingSetData == NULL");
+    emit printMessage(QDateTime::currentDateTime(),
+                      "Problem QxrdDataProcessorBase::refinedRingSetData == NULL");
   }
 
   return m_RefinedRingSetData;
@@ -1188,7 +1588,13 @@ void QxrdDataProcessorBase::closeLogFile()
 
 void QxrdDataProcessorBase::writeOutputScan(QxrdIntegratedDataPtr data)
 {
-  fileSaverThread()->writeOutputScan(m_LogFile, data);
+  if (this->get_SaveIntegratedData()) {
+    fileSaverThread()->writeOutputScan(m_LogFile, data);
+  }
+
+  if (this->get_SaveIntegratedInSeparateFiles()) {
+    fileSaverThread()->writeOutputScan(integratedOutputDirectory(), data);
+  }
 }
 
 void QxrdDataProcessorBase::displayIntegratedData(QxrdIntegratedDataPtr data)
@@ -1216,11 +1622,14 @@ void QxrdDataProcessorBase::fileWriteTest(int dim, QString path)
 
       int dt = tic.restart();
       totalt += dt;
-      emit printMessage(tr("file %1 written in %2 msec").arg(fileName).arg(dt));
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("file %1 written in %2 msec").arg(fileName).arg(dt));
     }
   }
 
-  emit printMessage(tr("average write speed %1 MB/sec").arg(((double) sz)*40.0*1000.0/(1e6*((double) totalt))));
+  emit printMessage(QDateTime::currentDateTime(),
+                    tr("average write speed %1 MB/sec")
+                    .arg(((double) sz)*40.0*1000.0/(1e6*((double) totalt))));
   delete [] buff;
 }
 
@@ -1229,11 +1638,11 @@ void QxrdDataProcessorBase::calculateROI()
   QTime tic;
   tic.start();
 
-  if (m_Data && m_Mask) {
+  if (m_Data && mask()) {
     double *res = new double[65536];
     long npixels = (m_Data -> get_Height()) * (m_Data -> get_Width());
     double *data = m_Data -> data();
-    short  *mask = m_Mask -> data();
+    short  *maskp = mask() -> data();
 
     for (int i=0; i<65536; i++) {
       res[i] = 0;
@@ -1241,14 +1650,15 @@ void QxrdDataProcessorBase::calculateROI()
 
     for (long i=0; i<npixels; i++) {
       double v = data[i];
-      short bin = mask[i];
+      short bin = maskp[i];
       bin &= 255;
       res[bin] += v;
     }
 
     int dt = tic.restart();
 
-    emit printMessage(tr("ROI calculated in %1 msec").arg(dt));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("ROI calculated in %1 msec").arg(dt));
 
     delete [] res;
   }
@@ -1259,11 +1669,11 @@ void QxrdDataProcessorBase::calculateHistogram()
   QTime tic;
   tic.start();
 
-  if (m_Data && m_Mask) {
+  if (m_Data && mask()) {
     double *res = new double[65536];
     long npixels = m_Data -> get_Height() * m_Data -> get_Width();
     double *data = m_Data -> data();
-    short  *mask = m_Mask -> data();
+    short  *maskp = mask() -> data();
 
     double minVal = *data;
     double maxVal = minVal;
@@ -1280,13 +1690,14 @@ void QxrdDataProcessorBase::calculateHistogram()
 
     for (long i=0; i<npixels; i++) {
       double v = data[i];
-      short bin = mask[i];
+      short bin = maskp[i];
       res[bin] += v;
     }
 
     int dt = tic.restart();
 
-    emit printMessage(tr("Histogram calculated in %1 msec").arg(dt));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Histogram calculated in %1 msec").arg(dt));
 
     delete [] res;
   }
@@ -1296,3 +1707,4 @@ QxrdGenerateTestImagePtr QxrdDataProcessorBase::generateTestImage() const
 {
   return m_GenerateTestImage;
 }
+

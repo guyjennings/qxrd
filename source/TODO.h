@@ -495,10 +495,10 @@ crashed imediately.
 //QxrdDataProcessor properties were no being saved because the writeSettings method
 //was in a super class - QxrdDataProcessorBase while the properties were in QxrdDataProcessor
 //
--------------------------------------------------------
-
-Modify preferences handling so that updated prefs are saved as they are modified (or perhaps after a few seconds delay)
-
+//-------------------------------------------------------
+//
+//Modify preferences handling so that updated prefs are saved as they are modified (or perhaps after a few seconds delay)
+//
 //-------------------------------------------------------
 //
 //Saved raw images appear to be full of zeroes.  No - they are OK
@@ -578,10 +578,10 @@ Need to make the allocator algorithm more optimal.
 //
 //Add percentile display mode
 //
--------------------------------------------------------
-
-Add display of bad and over exposed pixels
-
+//-------------------------------------------------------
+//
+//Add display of bad and over exposed pixels
+//
 -------------------------------------------------------
 
 Improve user interface for setting debug mode
@@ -603,10 +603,12 @@ Update help documentation to reflect changes
 
 Add AB image acquisition mode
 
--------------------------------------------------------
-
-Test 64 bit readout mode
-
+//-------------------------------------------------------
+//
+//Test 64 bit readout mode
+//
+//Works.
+//
 -------------------------------------------------------
 
 Improve behaviour when plugins do not load
@@ -630,6 +632,70 @@ in the main thread.
 
 Be more aggressive about memory preallocation on 64 bit systems -
 or possibly have another go at recycling images.
+
+-------------------------------------------------------
+
+Investigate file naming problems when acquiring - sometimes
+data seem to be saved in wrong file names, also metadata not
+always saved.
+
+//-------------------------------------------------------
+//
+//'trigger()' script command doesnt work - blocks, while
+//'acquisition.triggered=1' does work.
+//
+//Does work, but is unintuitive - 'trigger()' returns
+//the trigger state, 'trigger(1)' sets the trigger.
+//
+//Changed so that 'trigger()' does a trigger
+//
+//-------------------------------------------------------
+//
+//Make 'preTriggerFiles' default to zero if not given
+//explicitly.
+//
+//If 'acquire(...)' is given 4 or fewer arguments, set
+//'preTriggerFiles' to zero.
+//
+-------------------------------------------------------
+
+Add a status function which waits until sufficient
+pre-trigger files have been acquired.
+
+-------------------------------------------------------
+
+Start thinking about how to synchronise acquisition with
+external processes - possible support for running a
+National Instruments MIO card in sync with acquisition
+
+//-------------------------------------------------------
+
+//Metadata is not saved for QxrdDoubleImageData, because
+//the metadata saving stuff doesn't know about inheritance
+
+//Changed QcepImageData::writeSettings to use staticMetaObject
+//rather than metaObject()
+
+-------------------------------------------------------
+
+Load/Save mask stack state on program entry/exit
+
+-------------------------------------------------------
+
+Overall mask should be made to be a combination of the various
+mask stack levels.
+
+-------------------------------------------------------
+
+Make the PE acquisition code work for a wider variety
+of PE detectors, ideally for all of them.   Need to check
+model number before trying to e.g. set gain, or allow
+failures when setting gain to still permit acquisition.
+
+-------------------------------------------------------
+
+PE Acquisition fails in debug builds - sending messages
+to object in different thread
 
 -------------------------------------------------------
 

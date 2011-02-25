@@ -3,18 +3,21 @@
 
 #include "qcepmacros.h"
 //#include "qxrdforwardtypes.h"
-#include "qxrdimagedata.h"
+#include "qcepimagedata.h"
+#include <QImage>
 
 class QxrdMaskData;
-
 typedef QSharedPointer<QxrdMaskData>             QxrdMaskDataPtr;
 
-class QxrdMaskData : public QxrdImageData<short>
+class QxrdAllocatorInterface;
+
+class QxrdMaskData : public QcepImageData<short>
 {
   Q_OBJECT;
 
 public:
-  QxrdMaskData(QxrdAllocatorInterface *allocator, int width=0, int height=0);
+  QxrdMaskData(QxrdAllocatorInterface *allocator, int width=0, int height=0, int def=0);
+  ~QxrdMaskData();
 
 public slots:
   bool maskValue(int x, int y) const;
@@ -25,16 +28,40 @@ public slots:
   void hideMaskAll();
   void invertMask();
 
+  void andMask(QxrdMaskDataPtr mask);
+  void orMask(QxrdMaskDataPtr mask);
+  void xorMask(QxrdMaskDataPtr mask);
+  void andNotMask(QxrdMaskDataPtr mask);
+  void orNotMask(QxrdMaskDataPtr mask);
+  void xorNotMask(QxrdMaskDataPtr mask);
+
   void maskCircle(double cx, double cy, double r, bool val);
 
+  int countMaskedPixels() const;
+  int countUnmaskedPixels() const;
+  int countOverflowPixels() const;
+
+  QString summary();
+
+  QImage thumbnailImage() const;
+  QSize  thumbnailImageSize() const;
+
 public:
-  void copyMask(QxrdMaskDataPtr dest);
+  void copyMaskTo(QxrdMaskDataPtr dest);
 
   short* mask();
 
   template <typename T> void setMaskRange(QSharedPointer< QcepImageData<T> > image,  T min, T max, bool inRange, bool setTo);
   template <typename T> void showMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max);
   template <typename T> void hideMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max);
+
+private:
+  enum {
+    ThumbnailWidth = 24,
+    ThumbnailHeight = 24
+  };
+
+  QxrdAllocatorInterface    *m_Allocator;
 };
 
 template <typename T>

@@ -10,6 +10,7 @@
 #include "qxrdintegrator.h"
 #include "qxrdplotmeasurer.h"
 #include "qxrdintegrateddata.h"
+#include "qwt_plot_piecewise_curve.h"
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   : QxrdPlot(parent),
@@ -45,7 +46,7 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
 
     const QString title = data -> get_Image() -> get_Title();
 
-    QwtPlotCurvePtr pc = QwtPlotCurvePtr(new QwtPlotCurve(title/*tr("Plot %1").arg(m_PlotIndex)*/));
+    QwtPlotCurvePtr pc = QwtPlotCurvePtr(new QwtPlotPiecewiseCurve(this, title/*tr("Plot %1").arg(m_PlotIndex)*/));
     pc -> setData(data->x(), data->y(), data->size());
     setPlotCurveStyle(m_PlotIndex, pc);
     pc -> attach(this);

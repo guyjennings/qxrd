@@ -10,4 +10,5 @@ QString QxrdPilatusPlugin::name() const
 }
 
 Q_EXPORT_PLUGIN2(qxrdpilatusplugin, QxrdPilatusPlugin);
-\
+
+

@@ -56,11 +56,14 @@ class QxrdIntegrator;              typedef QxrdIntegrator *QxrdIntegratorPtr;
 class QxrdIntegratorDialog;        typedef QxrdIntegratorDialog *QxrdIntegratorDialogPtr;
 
 class QxrdAcquireDialog;           typedef QxrdAcquireDialog *QxrdAcquireDialogPtr;
+class QxrdDisplayDialog;           typedef QxrdDisplayDialog *QxrdDisplayDialogPtr;
 
 class QxrdCenterFinder;            typedef QxrdCenterFinder *QxrdCenterFinderPtr;
 class QxrdCenterFinderDialog;      typedef QxrdCenterFinderDialog *QxrdCenterFinderDialogPtr;
 class QxrdCenterFinderPlot;        typedef QxrdCenterFinderPlot *QxrdCenterFinderPlotPtr;
 class QxrdCenterFinderPicker;      typedef QxrdCenterFinderPicker *QxrdCenterFinderPickerPtr;
+
+class QxrdMaskDialog;              typedef QxrdMaskDialog *QxrdMaskDialogPtr;
 
 class QxrdMaskPicker;              typedef QxrdMaskPicker *QxrdMaskPickerPtr;
 class QxrdCircularMaskPicker;      typedef QxrdCircularMaskPicker *QxrdCircularMaskPickerPtr;

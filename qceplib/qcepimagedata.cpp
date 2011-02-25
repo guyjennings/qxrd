@@ -9,12 +9,14 @@
 QcepImageDataBase::QcepImageDataBase(int width, int height)
   : QObject(),
     m_DataType(this, "dataType", UndefinedData),
+    m_FileBase(this, "fileBase", ""),
     m_FileName(this, "fileName", ""),
     m_Title(this, "title", ""),
     m_ReadoutMode(this, "readoutMode", 0),
     m_ExposureTime(this, "exposureTime", 0),
     m_SummedExposures(this, "summedExposures", 0),
     m_ImageNumber(this, "imageNumber", 0),
+    m_PhaseNumber(this, "phaseNumber", -1),
     m_DateTime(this, "dateTime", QDateTime::currentDateTime()),
     m_HBinning(this, "hBinning", 1),
     m_VBinning(this, "vBinning", 1),
@@ -25,6 +27,8 @@ QcepImageDataBase::QcepImageDataBase(int width, int height)
     m_UserComment3(this,"userComment3",""),
     m_UserComment4(this,"userComment4",""),
     m_ImageSaved(this,"imageSaved",0),
+    m_Normalization(this, "normalization", QcepDoubleList()),
+    m_Used(this, "used", true),
     m_Width(width),
     m_Height(height),
     m_Mutex(QMutex::Recursive)
@@ -45,12 +49,14 @@ QMutex *QcepImageDataBase::mutex()
 void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 {
   dest -> set_DataType(get_DataType());
+  dest -> set_FileBase(get_FileBase());
   dest -> set_FileName(get_FileName());
   dest -> set_Title(get_Title());
   dest -> set_ReadoutMode(get_ReadoutMode());
   dest -> set_ExposureTime(get_ExposureTime());
   dest -> set_SummedExposures(get_SummedExposures());
   dest -> set_ImageNumber(get_ImageNumber());
+  dest -> set_PhaseNumber(get_PhaseNumber());
   dest -> set_DateTime(get_DateTime());
   dest -> set_HBinning(get_HBinning());
   dest -> set_VBinning(get_VBinning());
@@ -72,12 +78,14 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src)
 {
   set_DataType(src -> get_DataType());
+  set_FileBase(src -> get_FileBase());
   set_FileName(src -> get_FileName());
   set_Title(src -> get_Title());
   set_ReadoutMode(src -> get_ReadoutMode());
   set_ExposureTime(src -> get_ExposureTime());
   set_SummedExposures(src -> get_SummedExposures());
   set_ImageNumber(src -> get_ImageNumber());
+  set_PhaseNumber(src -> get_PhaseNumber());
   set_DateTime(src -> get_DateTime());
   set_HBinning(src -> get_HBinning());
   set_VBinning(src -> get_VBinning());
@@ -136,12 +144,23 @@ void QcepImageDataBase::saveMetaData(QString name)
   QTime tic;
   tic.start();
 
+//  printf("type 266 = %s\n", QMetaType::typeName(266));
+
   {
     QMutexLocker lock(mutex());
 
     QSettings settings(name+".metadata", QSettings::IniFormat);
 
-    QcepProperty::writeSettings(this, metaObject(), "metadata", settings);
+    QcepProperty::writeSettings(this, &staticMetaObject/*metaObject()*/, "metadata", settings);
+
+    settings.beginWriteArray("normalization");
+    QcepDoubleList norm = get_Normalization();
+
+    for (int i=0; i<norm.length(); i++) {
+      settings.setArrayIndex(i);
+      settings.setValue("val",norm[i]);
+    }
+    settings.endArray();
   }
 //
 //  printf("QcepImageDataBase::saveMetaData for file %s took %d msec\n",  qPrintable(name), tic.elapsed());

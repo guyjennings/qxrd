@@ -22,7 +22,9 @@ static int g_DetectorType = -1;
 static int g_PEAvailable = false;
 #endif
 
-QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator, int detectorType)
+QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessorPtr proc,
+                                             QxrdAllocatorPtr allocator,
+                                             int detectorType)
   : QThread(),
     m_Debug(true),
     m_Allocator(NULL),
@@ -50,7 +52,9 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 {
   shutdown();
 
-  delete m_Acquisition;
+//  delete m_Acquisition;
+
+  m_Acquisition->deleteLater();
 }
 
 void QxrdAcquisitionThread::run()
@@ -99,7 +103,7 @@ void QxrdAcquisitionThread::run()
 
   int rc = exec();
 
-  printf("Acquisition thread terminated with rc %d\n", rc);
+//  printf("Acquisition thread terminated with rc %d\n", rc);
 }
 
 void QxrdAcquisitionThread::initialize()

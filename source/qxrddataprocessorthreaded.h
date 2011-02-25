@@ -5,6 +5,9 @@
 
 #include "qxrddataprocessorbase.h"
 #include "qxrdresultserializer.h"
+#include "qxrdintegrateddata.h"
+#include "qxrdroidata.h"
+#include "qxrdhistogramdata.h"
 
 class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
 {
@@ -17,6 +20,8 @@ public:
   void idleInt16Image(QxrdInt16ImageDataPtr image);
   void acquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow);
   void acquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+  void acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
+  void acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, QcepDoubleList v);
 
 private slots:
   void onCorrectedImageAvailable();
@@ -24,9 +29,26 @@ private slots:
   void onROIDataAvailable();
   void onHistogramDataAvailable();
 
+public slots:
+  void accumulateImages(QStringList names);
+  void integrateData(QString name);
+
+  void processData(QString name);
+  void processDataSequence(QString path, QString filter="*.tif");
+  void processDataSequence(QStringList paths);
+  void processDataSequence(QString path, QStringList filter);
+  void processNormalizedFile(QString path, double v1);
+  void processNormalizedFile(QString path, double v1, double v2);
+  void processNormalizedFile(QString path, QcepDoubleList v);
+
+  void slicePolygon(QwtArray<QwtDoublePoint> poly);
+  void integrateSaveAndDisplay();
+
 private:
   QxrdDoubleImageDataPtr correctInt16Image(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
   QxrdDoubleImageDataPtr correctInt32Image(QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
+  QxrdDoubleImageDataPtr correctDoubleImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
+  QxrdDoubleImageDataPtr correctDoubleImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v);
   QxrdIntegratedDataPtr  integrateImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double cx, double cy);
   QxrdROIDataPtr         calculateROI(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
   QxrdHistogramDataPtr   calculateHistogram(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);

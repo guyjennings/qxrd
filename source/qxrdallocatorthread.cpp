@@ -20,13 +20,16 @@ void QxrdAllocatorThread::run()
 {
   m_Allocator.fetchAndStoreOrdered(new QxrdAllocator(/*m_Acquisition*/));
 
-  connect(m_Allocator, SIGNAL(printMessage(QString)), this, SIGNAL(printMessage(QString)));
-  connect(m_Allocator, SIGNAL(statusMessage(QString)), this, SIGNAL(statusMessage(QString)));
-  connect(m_Allocator, SIGNAL(criticalMessage(QString)), this, SIGNAL(criticalMessage(QString)));
+  connect(m_Allocator, SIGNAL(printMessage(QDateTime,QString)),
+          this,        SIGNAL(printMessage(QDateTime,QString)));
+  connect(m_Allocator, SIGNAL(statusMessage(QDateTime,QString)),
+          this,        SIGNAL(statusMessage(QDateTime,QString)));
+  connect(m_Allocator, SIGNAL(criticalMessage(QDateTime,QString)),
+          this,        SIGNAL(criticalMessage(QDateTime,QString)));
 
   int rc = exec();
 
-  printf("Allocator thread terminated with rc %d\n", rc);
+//  printf("Allocator thread terminated with rc %d\n", rc);
 }
 
 void QxrdAllocatorThread::shutdown()
@@ -43,4 +46,9 @@ QxrdAllocatorPtr QxrdAllocatorThread::allocator() const
   }
 
   return m_Allocator;
+}
+
+void QxrdAllocatorThread::msleep(unsigned long t)
+{
+  QThread::msleep(t);
 }

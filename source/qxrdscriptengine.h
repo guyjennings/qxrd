@@ -28,9 +28,9 @@ signals:
   void simpleServerResultAvailable(QScriptValue cmd);
   void specResultAvailable(QScriptValue cmd);
 
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 public:
   bool hasUncaughtException() const;
@@ -55,16 +55,18 @@ private:
   static QScriptValue summedExposuresFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue skippedExposuresFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue darkSummedExposuresFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue preTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue postTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue triggerFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue filesInGroupFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue groupsInSequenceFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue filePatternFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue outputDirectoryFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue fileIndexFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue dataFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue darkFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue maskFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue overflowFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue helpFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue processFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue typeNameFunc(QScriptContext *context, QScriptEngine *engine);
 
 private:
   mutable QMutex     m_Mutex;

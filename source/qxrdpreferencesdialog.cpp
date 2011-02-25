@@ -4,6 +4,9 @@
 #include "qxrddataprocessorthread.h"
 #include "qxrdapplication.h"
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QGridLayout>
+#include "qcepdebug.h"
 
 QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
     QDialog(parent),
@@ -16,9 +19,10 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   QxrdSettings settings;
   QxrdApplication *app = QxrdApplication::application();
   QxrdAcquisition *acq = app -> acquisition();
+  QxrdDataProcessor *proc = app->dataProcessor();
 
   int detectorType = app -> get_DetectorType();
-  int processorType = app -> get_ProcessorType();
+//  int processorType = app -> get_ProcessorType();
   int debugLevel = app -> get_Debug();
 
   int runSpecServer = app -> get_RunSpecServer();
@@ -30,8 +34,33 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
 
   ui -> m_DetectorTypeCombo -> addItems(detectorTypes);
   ui -> m_DetectorTypeCombo -> setCurrentIndex(detectorType);
-  ui -> m_DebugLevelSpinBox -> setRange(0,65535);
-  ui -> m_DebugLevelSpinBox -> setValue(debugLevel);
+
+  connect(ui->m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
+  ui ->m_CurrentOutputDirectory -> setText(proc->get_OutputDirectory());
+
+  connect(ui->m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
+  ui ->m_CurrentLogFile -> setText(proc->get_LogFilePath());
+
+  connect(ui->m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
+  ui -> m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
+  ui -> m_SaveRawSubdir    -> setText  (proc->get_SaveRawSubdirectory());
+
+  connect(ui->m_SaveDarkBrowse, SIGNAL(clicked()), this, SLOT(saveDarkBrowse()));
+  ui -> m_SaveDarkInSubdir  -> setChecked(proc->get_SaveDarkInSubdirectory());
+  ui -> m_SaveDarkSubdir    -> setText  (proc->get_SaveDarkSubdirectory());
+
+  connect(ui->m_SaveSubtractedBrowse, SIGNAL(clicked()), this, SLOT(saveSubtractedBrowse()));
+  ui -> m_SaveSubtractedInSubdir  -> setChecked(proc->get_SaveSubtractedInSubdirectory());
+  ui -> m_SaveSubtractedSubdir    -> setText  (proc->get_SaveSubtractedSubdirectory());
+
+  connect(ui->m_SaveIntegratedBrowse, SIGNAL(clicked()), this, SLOT(saveIntegratedBrowse()));
+  ui -> m_SaveIntegratedInLogFile  -> setChecked(proc->get_SaveIntegratedData());
+  ui -> m_SaveIntegratedInSeparateFiles  -> setChecked(proc->get_SaveIntegratedInSeparateFiles());
+  ui -> m_SaveIntegratedInSubdir  -> setChecked(proc->get_SaveIntegratedInSubdirectory());
+  ui -> m_SaveIntegratedSubdir    -> setText  (proc->get_SaveIntegratedSubdirectory());
+
+  ui -> m_SaveOverflowFiles -> setChecked(proc->get_SaveOverflowFiles());
+
   ui -> m_ReservedMemory32 -> setRange(500, 3000);
   ui -> m_ReservedMemory32 -> setValue(acq->get_TotalBufferSizeMB32());
   ui -> m_ReservedMemory64 -> setRange(500, 60000);
@@ -44,11 +73,66 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   ui -> m_SpecServerPort -> setValue(specServerPort);
   ui -> m_SimpleServerPort -> setRange(0,65535);
   ui -> m_SimpleServerPort -> setValue(simpleServerPort);
+
+  setupDebugWidgets(debugLevel);
 }
 
 QxrdPreferencesDialog::~QxrdPreferencesDialog()
 {
   delete ui;
+}
+
+void QxrdPreferencesDialog::getRelativeDirectoryPath(QLineEdit *edit)
+{
+  QDir pwd(ui ->m_CurrentOutputDirectory->text());
+  QFileInfo initial(pwd, edit->text());
+
+  QString dir = QFileDialog::getExistingDirectory(this, "", initial.absolutePath(), QFileDialog::ShowDirsOnly);
+
+  if (dir != "") {
+    edit -> setText(pwd.relativeFilePath(dir));
+  }
+}
+
+void QxrdPreferencesDialog::saveRawBrowse()
+{
+  getRelativeDirectoryPath(ui->m_SaveRawSubdir);
+}
+
+void QxrdPreferencesDialog::saveDarkBrowse()
+{
+  getRelativeDirectoryPath(ui->m_SaveDarkSubdir);
+}
+
+void QxrdPreferencesDialog::saveSubtractedBrowse()
+{
+  getRelativeDirectoryPath(ui->m_SaveSubtractedSubdir);
+}
+
+void QxrdPreferencesDialog::saveIntegratedBrowse()
+{
+  getRelativeDirectoryPath(ui->m_SaveIntegratedSubdir);
+}
+
+void QxrdPreferencesDialog::currentOutputBrowse()
+{
+  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", ui->m_CurrentOutputDirectory->text(), QFileDialog::ShowDirsOnly);
+
+  if (dir != "") {
+    ui->m_CurrentOutputDirectory->setText(dir);
+  }
+}
+
+void QxrdPreferencesDialog::currentLogfileBrowse()
+{
+  QDir pwd(ui ->m_CurrentOutputDirectory->text());
+  QFileInfo initial(pwd, ui->m_CurrentLogFile->text());
+
+  QString file = QFileDialog::getSaveFileName(this, "Log File", initial.absoluteFilePath());
+
+  if (file != "") {
+    ui->m_CurrentLogFile->setText(pwd.relativeFilePath(file));
+  }
 }
 
 void QxrdPreferencesDialog::changeEvent(QEvent *e)
@@ -65,17 +149,17 @@ void QxrdPreferencesDialog::changeEvent(QEvent *e)
 
 void QxrdPreferencesDialog::accept()
 {
+  bool restartNeeded = false;
+
   int detectorType = ui -> m_DetectorTypeCombo -> currentIndex();
 //  int processorType = ui -> m_ProcessorTypeCombo -> currentIndex();
-  int debugLevel = ui -> m_DebugLevelSpinBox -> value();
+  int debugLevel = readDebugWidgets();
   int bufferSize32 = ui -> m_ReservedMemory32 -> value();
   int bufferSize64 = ui -> m_ReservedMemory64 -> value();
   int runSpecServer = ui -> m_RunSpecServer -> isChecked();
   int runSimpleServer = ui -> m_RunSimpleServer -> isChecked();
   int specServerPort = ui -> m_SpecServerPort -> value();
   int simpleServerPort = ui -> m_SimpleServerPort -> value();
-
-  bool restartNeeded = false;
 
   if (detectorType != QxrdAcquisitionThread::detectorType()) {
     restartNeeded = true;
@@ -87,6 +171,7 @@ void QxrdPreferencesDialog::accept()
 
   QxrdApplication *app = QxrdApplication::application();
   QxrdAcquisition *acq = app -> acquisition();
+  QxrdDataProcessor *proc = app->dataProcessor();
 
   if (runSpecServer != app -> get_RunSpecServer()) {
     restartNeeded = true;
@@ -118,5 +203,57 @@ void QxrdPreferencesDialog::accept()
   app -> set_RunSimpleServer(runSimpleServer);
   app -> set_SimpleServerPort(simpleServerPort);
 
+  proc -> set_SaveRawInSubdirectory(ui -> m_SaveRawInSubdir -> isChecked());
+  proc -> set_SaveRawSubdirectory  (ui -> m_SaveRawSubdir   -> text());
+
+  proc -> set_SaveDarkInSubdirectory(ui -> m_SaveDarkInSubdir  -> isChecked());
+  proc -> set_SaveDarkSubdirectory  (ui -> m_SaveDarkSubdir    -> text());
+
+  proc -> set_SaveSubtractedInSubdirectory(ui -> m_SaveSubtractedInSubdir -> isChecked());
+  proc -> set_SaveSubtractedSubdirectory  (ui -> m_SaveSubtractedSubdir   -> text());
+
+  proc -> set_SaveIntegratedData(ui -> m_SaveIntegratedInLogFile  -> isChecked());
+  proc -> set_SaveIntegratedInSeparateFiles(ui -> m_SaveIntegratedInSeparateFiles -> isChecked());
+  proc -> set_SaveIntegratedInSubdirectory (ui -> m_SaveIntegratedInSubdir  -> isChecked());
+  proc -> set_SaveIntegratedSubdirectory   (ui -> m_SaveIntegratedSubdir    -> text());
+
+  proc -> set_SaveOverflowFiles(ui->m_SaveOverflowFiles -> isChecked());
+
+  proc -> set_OutputDirectory(ui -> m_CurrentOutputDirectory -> text());
+  proc -> set_LogFilePath    (ui -> m_CurrentLogFile -> text());
+
   QDialog::accept();
+}
+
+void QxrdPreferencesDialog::setupDebugWidgets(int dbg)
+{
+  QGridLayout *grid = new QGridLayout(ui -> m_DebugWidgets);
+
+  int mask = 1;
+
+  for (int i=0; gDebugStrings[i]; i++) {
+    QCheckBox *cb = new QCheckBox(gDebugStrings[i]);
+    cb->setChecked(dbg & mask);
+    grid->addWidget(cb, i, 0);
+
+    mask <<= 1;
+
+    m_DebugWidgets.append(cb);
+  }
+}
+
+int QxrdPreferencesDialog::readDebugWidgets()
+{
+  int mask = 1;
+  int newDbg = 0;
+
+  for (int i=0; gDebugStrings[i]; i++) {
+    if (m_DebugWidgets[i]->isChecked()) {
+      newDbg |= mask;
+    }
+
+    mask <<= 1;
+  }
+
+  return newDbg;
 }

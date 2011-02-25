@@ -1,6 +1,6 @@
 #include "qxrddataprocessorthread.h"
 
-#include "qxrddataprocessorthreaded.h"
+#include "qxrddataprocessor.h"
 
 QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver)
   : QThread(),
@@ -22,13 +22,13 @@ void QxrdDataProcessorThread::run()
 {
   QxrdDataProcessorPtr p;
 
-  p = QxrdDataProcessorPtr(new QxrdDataProcessorThreaded(m_Acquisition, m_Allocator, m_FileSaverThread, NULL));
+  p = QxrdDataProcessorPtr(new QxrdDataProcessor(m_Acquisition, m_Allocator, m_FileSaverThread, NULL));
 
   m_DataProcessor.fetchAndStoreOrdered(p);
 
   int rc = exec();
 
-  printf("Processor thread terminated with rc %d\n", rc);
+//  printf("Processor thread terminated with rc %d\n", rc);
 }
 
 void QxrdDataProcessorThread::shutdown()

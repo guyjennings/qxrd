@@ -27,17 +27,15 @@ public:
 public:
   void readSettings(QxrdSettings &settings, QString section);
   void writeSettings(QxrdSettings &settings, QString section);
+  QxrdDataProcessorPtr dataProcessor() const;
 
 signals:
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 public slots:
-  void integrateSaveAndDisplay();
   QxrdIntegratedDataPtr performIntegration(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask);
-  void saveIntegratedData(QxrdIntegratedDataPtr d);
-  void displayIntegratedData(QxrdIntegratedDataPtr d);
   QxrdIntegratedDataPtr integrate(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int oversample, int normalize);
   QxrdIntegratedDataPtr integrate(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, double cx, double cy, int oversample, int normalize);
 

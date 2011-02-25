@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include "qxrdimagedata.h"
-#include "qxrddoubleimagedata.h"
 
 class QxrdIntegratedData : public QObject
 {

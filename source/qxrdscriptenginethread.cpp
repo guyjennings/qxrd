@@ -45,5 +45,5 @@ void QxrdScriptEngineThread::run()
 
   exec();
 
-  emit printMessage("Scripting thread terminated");
+//  emit printMessage(QDateTime::currentDateTime(), "Scripting thread terminated");
 }

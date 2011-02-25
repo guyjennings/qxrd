@@ -13,11 +13,14 @@ class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 public:
   QxrdAcquisitionOperations(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator);
 
-  QxrdDoubleImageDataPtr takeNextAcquiredImage();
+//  QxrdDoubleImageDataPtr takeNextAcquiredImage();
 
-  void newAcquiredImage(QxrdDoubleImageDataPtr img);
+//  void newAcquiredImage(QxrdDoubleImageDataPtr img);
+
+  void setWindow(QxrdWindowPtr win);
 
 protected:
+  QxrdWindowPtr          m_Window;
   QxrdAllocatorPtr       m_Allocator;
   QxrdDataProcessorPtr   m_DataProcessor;
 };

@@ -1,9 +1,17 @@
 #include "qxrdmaskdata.h"
+#include "qxrdallocator.h"
 
-QxrdMaskData::QxrdMaskData(QxrdAllocatorInterface *allocator, int width, int height)
-  : QxrdImageData<short>(allocator, width, height)
+QxrdMaskData::QxrdMaskData(QxrdAllocatorInterface *allocator, int width, int height, int def)
+  : QcepImageData<short>(/*allocator, */width, height, def),
+    m_Allocator(allocator)
 {
-  fill(1);
+}
+
+QxrdMaskData::~QxrdMaskData()
+{
+  if (m_Allocator) {
+    m_Allocator -> deallocate(sizeof(short), QcepImageDataBase::get_Width(), QcepImageDataBase::get_Height());
+  }
 }
 
 short *QxrdMaskData::mask()
@@ -11,7 +19,7 @@ short *QxrdMaskData::mask()
   return m_Image.data();
 }
 
-void QxrdMaskData::copyMask(QxrdMaskDataPtr dest)
+void QxrdMaskData::copyMaskTo(QxrdMaskDataPtr dest)
 {
   int height = get_Height();
   int width  = get_Width();
@@ -21,6 +29,8 @@ void QxrdMaskData::copyMask(QxrdMaskDataPtr dest)
       dest -> setMaskValue(i,j, maskValue(i,j));
     }
   }
+
+  dest -> set_Title(get_Title()+" copy");
 //
 //  setMask(from -> m_Mask);
 }
@@ -31,7 +41,7 @@ bool QxrdMaskData::maskValue(int x, int y) const
     return m_Image.value((get_Height()-y-1)*get_Width()+x);
   }
 
-  return 1;
+  return defaultValue();
 }
 
 void QxrdMaskData::setMaskValue(int x, int y, bool mval)
@@ -84,6 +94,78 @@ void QxrdMaskData::invertMask()
   }
 }
 
+void QxrdMaskData::andMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) & mask->maskValue(i,j));
+    }
+  }
+}
+
+void QxrdMaskData::orMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) | mask->maskValue(i,j));
+    }
+  }
+}
+
+void QxrdMaskData::xorMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) ^ mask->maskValue(i,j));
+    }
+  }
+}
+
+void QxrdMaskData::andNotMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) & !mask->maskValue(i,j));
+    }
+  }
+}
+
+void QxrdMaskData::orNotMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) | !mask->maskValue(i,j));
+    }
+  }
+}
+
+void QxrdMaskData::xorNotMask(QxrdMaskDataPtr mask)
+{
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      setMaskValue(i,j, maskValue(i,j) ^ !mask->maskValue(i,j));
+    }
+  }
+}
+
 void QxrdMaskData::maskCircle(double cx, double cy, double r, bool val)
 {
   for (int j=0; j<=r; j++) {
@@ -99,4 +181,93 @@ void QxrdMaskData::maskCircle(double cx, double cy, double r, bool val)
       }
     }
   }
+}
+
+QString QxrdMaskData::summary()
+{
+  QString res;
+
+  int total = m_Image.count();
+  int totalSet = 0;
+
+  for (int i=0; i<total; i++) {
+    if (m_Image[i]) {
+      totalSet++;
+    }
+  }
+
+  return tr("%1/%2 pixels set").arg(totalSet).arg(total);
+}
+
+int  QxrdMaskData::countMaskedPixels() const
+{
+  int total = m_Image.count();
+  int totalSet = 0;
+
+  for (int i=0; i<total; i++) {
+    if (m_Image[i] == 0) {
+      totalSet++;
+    }
+  }
+
+  return totalSet;
+}
+
+int  QxrdMaskData::countUnmaskedPixels() const
+{
+  int total = m_Image.count();
+  int totalSet = 0;
+
+  for (int i=0; i<total; i++) {
+    if (m_Image[i] == 1) {
+      totalSet++;
+    }
+  }
+
+  return totalSet;
+}
+
+int  QxrdMaskData::countOverflowPixels() const
+{
+  return countUnmaskedPixels();
+}
+
+QImage QxrdMaskData::thumbnailImage() const
+{
+  int height    = get_Height();
+  int width     = get_Width();
+  int th_height = ThumbnailHeight;
+  int th_width  = ThumbnailWidth;
+  double sc_height = height/th_height;
+  double sc_width  = width/th_width;
+  int threshold = sc_height*sc_width;
+  double scale = qMin(sc_height, sc_width);
+  th_width = width/scale;
+  th_height = height/scale;
+
+  QImage res(th_width, th_height, QImage::Format_RGB32);
+
+  for (int j=0; j<th_height; j++) {
+    for (int i=0; i<th_width; i++) {
+      int tot=0;
+      for (int jsc = 0; jsc<sc_height; jsc++) {
+        for (int isc = 0; isc<sc_width; isc++) {
+          if (maskValue(i*scale+isc, j*scale+jsc)) {
+            tot++;
+          }
+        }
+      }
+
+      int val = tot*255/(threshold+1);
+
+      res.setPixel(i,th_height-j-1, qRgb(255-val,0,0));
+    }
+  }
+
+  return res;
+}
+
+QSize QxrdMaskData::thumbnailImageSize() const
+{
+  return QSize(ThumbnailWidth, ThumbnailHeight);
 }

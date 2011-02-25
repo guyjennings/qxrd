@@ -13,6 +13,15 @@
 #include "qxrdforwardtypes.h"
 #include "qxrdimagequeue.h"
 #include "qxrddataprocessor.h"
+#include "qxrdimagedisplaywidget.h"
+#include "qxrdfilebrowser.h"
+#include "qxrdacquiredialog.h"
+#include "qxrdsynchronizedacquisitiondialog.h"
+#include "qxrddisplaydialog.h"
+#include "qxrdcenterfinderdialog.h"
+#include "qxrdmaskdialog.h"
+#include "qxrdcorrectiondialog.h"
+#include "qxrdintegratordialog.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -21,6 +30,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 public:
   QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc, QWidget *parent=0);
   virtual ~QxrdWindow();
+  void onAcquisitionInit();
 
 public slots:
   void doAboutQxrd();
@@ -37,14 +47,19 @@ public slots:
   void doLoadGainMap();
   void selectLogFile();
   void doRefineCenterTilt();
+//  void doProcessorOptionsDialog();
+  void doAccumulateImages();
+  void doIntegrateSequence();
+  void doProcessSequence();
 
   void doAcquire();
   void doCancel();
-  void onAcquireStarted(int dark);
-  void onAcquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
-  void onAcquireComplete(int dark);
+  void acquireStarted(int dark);
+  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
+  void acquireComplete(int dark);
   void doAcquireDark();
   void doCancelDark();
+  void doSynchronizedAcquisition();
 
   void executeScript();
   void finishedCommand(QScriptValue result);
@@ -53,15 +68,15 @@ public slots:
   void doTest();
 
   QString timeStamp();
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
-  void acquisitionReady();
-  void acquisitionStarted();
-  void acquisitionFinished();
+//  void acquisitionReady();
+//  void acquisitionStarted();
+//  void acquisitionFinished();
 
-  void darkAcquisitionStarted();
+//  void darkAcquisitionStarted();
 
   void selectOutputDirectory();
   void clearStatusMessage();
@@ -96,6 +111,10 @@ public:
   QxrdAcquisitionPtr acquisition() const;
 
 private:
+  void shrinkDockWidget(QDockWidget *dockWidget);
+  void shrinkWidget(QWidget *widget);
+
+private:
   mutable QMutex                         m_Mutex;
   int                                    m_SettingsLoaded;
   QxrdApplicationPtr                     m_Application;
@@ -103,10 +122,16 @@ private:
   QxrdDataProcessorPtr                   m_DataProcessor;
   QxrdAllocatorPtr                       m_Allocator;
   QxrdScriptEnginePtr                    m_ScriptEngine;
-  QxrdAcquireDialogPtr                   m_AcquireDialog;
-  QxrdCenterFinderDialogPtr              m_CenterFinderDialog;
-  QxrdIntegratorDialogPtr                m_IntegratorDialog;
+  QxrdAcquireDialog                     *m_AcquireDialog;
+  QxrdSynchronizedAcquisitionDialog     *m_SynchronizedAcquisitionDialog;
+  QxrdDisplayDialog                     *m_DisplayDialog;
+  QxrdCenterFinderDialog                *m_CenterFinderDialog;
+  QxrdMaskDialog                        *m_MaskDialog;
+  QxrdCorrectionDialog                  *m_CorrectionDialog;
+  QxrdIntegratorDialog                  *m_IntegratorDialog;
   QxrdImageCalculatorPtr                 m_Calculator;
+  QxrdInputFileBrowser                  *m_InputFileBrowser;
+  QxrdOutputFileBrowser                 *m_OutputFileBrowser;
   QPointer<QxrdPowderFitDialog>          m_PowderFitDialog;
   QVector<double>                        m_Exposures;
   QProgressBarPtr                        m_Progress;
@@ -126,6 +151,8 @@ private:
   QxrdMaskDataPtr                        m_Mask;
   QxrdMaskDataPtr                        m_NewMask;
   QAtomicInt                             m_NewMaskAvailable;
+
+  QxrdImageDisplayWidget                *m_ImageDisplay;
 };
 
 #endif

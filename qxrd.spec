@@ -1,5 +1,5 @@
 Name:		qxrd
-Version: 0.5.2
+Version: 0.5.14
 Release:        1%{?dist}
 Summary:        qxrd - a readout and control program for perkin elmer x ray detector
 
@@ -45,8 +45,8 @@ mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/plugins/
 
-install source/qxrd $RPM_BUILD_ROOT%{_bindir}
-install plugins/*/*.so  $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/plugins/
+install app/qxrd $RPM_BUILD_ROOT%{_bindir}
+install app/plugins/*.so  $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/plugins/
 
 #install images/qscan345.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/96x96/apps/
 #desktop-file-install --vendor=bessrc \

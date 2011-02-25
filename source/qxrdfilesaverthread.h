@@ -20,19 +20,20 @@ public:
   void setProcessor(QxrdDataProcessorPtr proc);
   void setAcquisition(QxrdAcquisitionPtr acq);
 
-  void saveData(QString name, QxrdDoubleImageDataPtr image, int canOverwrite);
-  void saveData(QString name, QxrdInt32ImageDataPtr image, int canOverwrite);
-  void saveData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite);
+  void saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
   void saveData(QString name, QxrdMaskDataPtr image, int canOverwrite);
-  void saveRawData(QString name, QxrdInt32ImageDataPtr image, int canOverwrite);
-  void saveRawData(QString name, QxrdInt16ImageDataPtr image, int canOverwrite);
-  void saveTextData(QString name, QxrdDoubleImageDataPtr image, int canOverwrite);
+  void saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveTextData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
   void writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data);
+  void writeOutputScan(QString dir, QxrdIntegratedDataPtr data);
 
 signals:
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 protected:
   void run();

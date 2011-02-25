@@ -20,9 +20,12 @@ void QxrdSettingsSaverThread::run()
 {
   m_SettingsSaver = new QxrdSettingsSaver(NULL, m_Application);
 
-  connect(m_SettingsSaver,             SIGNAL(printMessage(QString)), this,            SIGNAL(printMessage(QString)));
-  connect(m_SettingsSaver,             SIGNAL(statusMessage(QString)), this,            SIGNAL(statusMessage(QString)));
-  connect(m_SettingsSaver,             SIGNAL(criticalMessage(QString)), this,            SIGNAL(criticalMessage(QString)));
+  connect(m_SettingsSaver, SIGNAL(printMessage(QDateTime,QString)),
+          this,            SIGNAL(printMessage(QDateTime,QString)));
+  connect(m_SettingsSaver, SIGNAL(statusMessage(QDateTime,QString)),
+          this,            SIGNAL(statusMessage(QDateTime,QString)));
+  connect(m_SettingsSaver, SIGNAL(criticalMessage(QDateTime,QString)),
+          this,            SIGNAL(criticalMessage(QDateTime,QString)));
 
   exec();
 }

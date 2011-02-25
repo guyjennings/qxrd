@@ -1,5 +1,6 @@
 #include "qxrdallocator.h"
 #include "qxrdmutexlocker.h"
+#include "qxrdallocatorthread.h"
 
 //#include "qxrdacquisition.h"
 
@@ -44,8 +45,12 @@ QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image()
   if (m_FreeInt16Images.size() > 0) {
     return m_FreeInt16Images.dequeue();
   } else {
-    if ((m_AllocatedMemory/MegaBytes + int16SizeMB()) < get_Max()) {
-      return QxrdInt16ImageDataPtr(new QxrdInt16ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int16Deleter);
+    if ((m_AllocatedMemoryMB + int16SizeMB()) < get_Max()) {
+      QxrdInt16ImageDataPtr res(new QxrdInt16ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int16Deleter);
+
+      res->moveToThread(thread());
+
+      return res;
     } else {
       return QxrdInt16ImageDataPtr(NULL);
     }
@@ -61,8 +66,12 @@ QxrdInt32ImageDataPtr QxrdAllocator::newInt32Image()
   if (m_FreeInt32Images.size() > 0) {
     return m_FreeInt32Images.dequeue();
   } else {
-    if ((m_AllocatedMemory/MegaBytes + int32SizeMB()) < get_Max()) {
-      return QxrdInt32ImageDataPtr(new QxrdInt32ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int32Deleter);
+    if ((m_AllocatedMemoryMB + int32SizeMB()) < get_Max()) {
+      QxrdInt32ImageDataPtr res(new QxrdInt32ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int32Deleter);
+
+      res->moveToThread(thread());
+
+      return res;
     } else {
       return QxrdInt32ImageDataPtr(NULL);
     }
@@ -78,23 +87,38 @@ QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage()
   if (m_FreeDoubleImages.size() > 0) {
     return m_FreeDoubleImages.dequeue();
   } else {
-//    if ((m_AllocatedMemory/MegaBytes + doubleSizeMB()) < get_Max()) {
-      return QxrdDoubleImageDataPtr(new QxrdDoubleImageData(this, get_Width(), get_Height()), &QxrdAllocator::doubleDeleter);
+    while ((m_AllocatedMemoryMB + doubleSizeMB()) > get_Max()) {
+      QxrdAllocatorThread::msleep(100);
+    }
+
+    QxrdDoubleImageDataPtr res(new QxrdDoubleImageData(this, get_Width(), get_Height()), &QxrdAllocator::doubleDeleter);
+
+    res->moveToThread(thread());
+
+    return res;
 //    } else {
 //      return QxrdDoubleImageDataPtr(NULL);
 //    }
   }
 }
 
-QxrdMaskDataPtr QxrdAllocator::newMask()
+QxrdMaskDataPtr QxrdAllocator::newMask(int def)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  if (m_FreeMasks.size() > 0) {
-    return m_FreeMasks.dequeue();
-  } else {
-    return QxrdMaskDataPtr(new QxrdMaskData(this, get_Width(), get_Height()), &QxrdAllocator::maskDeleter);
-  }
+//  if (m_FreeMasks.size() > 0) {
+//    return m_FreeMasks.dequeue();
+//  } else {
+    while ((m_AllocatedMemoryMB + maskSizeMB()) > get_Max()) {
+      QxrdAllocatorThread::msleep(100);
+    }
+
+    QxrdMaskDataPtr res(new QxrdMaskData(this, get_Width(), get_Height(), def), &QxrdAllocator::maskDeleter);
+
+    res->moveToThread(thread());
+
+    return res;
+//  }
 }
 
 QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(QxrdDoubleImageDataPtr data)
@@ -110,7 +134,11 @@ QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(QxrdDoubleImageDataPtr da
 
     return res;
   } else {
-    return QxrdIntegratedDataPtr(new QxrdIntegratedData(this, data, 10000), &QxrdAllocator::integratedDeleter);
+    QxrdIntegratedDataPtr res(new QxrdIntegratedData(this, data, 10000), &QxrdAllocator::integratedDeleter);
+
+    res->moveToThread(thread());
+
+    return res;
   }
 }
 
@@ -139,42 +167,42 @@ void QxrdAllocator::preallocateDouble(int ndbl)
 
 void QxrdAllocator::allocate(int sz, int width, int height)
 {
-  m_AllocatedMemory.fetchAndAddOrdered(sz*width*height);
+  m_AllocatedMemoryMB.fetchAndAddOrdered(sz*width*height/MegaBytes);
 }
 
 void QxrdAllocator::deallocate(int sz, int width, int height)
 {
-  m_AllocatedMemory.fetchAndAddOrdered(-sz*width*height);
+  m_AllocatedMemoryMB.fetchAndAddOrdered(-sz*width*height/MegaBytes);
 }
 
 void QxrdAllocator::maskDeleter(QxrdMaskData *mask)
 {
-    delete mask;
-//  mask->deleteLater();
+//    delete mask;
+  mask->deleteLater();
 }
 
 void QxrdAllocator::int16Deleter(QxrdInt16ImageData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+  img->deleteLater();
 }
 
 void QxrdAllocator::int32Deleter(QxrdInt32ImageData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+    img->deleteLater();
 }
 
 void QxrdAllocator::doubleDeleter(QxrdDoubleImageData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+  img->deleteLater();
 }
 
 void QxrdAllocator::integratedDeleter(QxrdIntegratedData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+  img->deleteLater();
 }
 
 int QxrdAllocator::nFreeInt16()
@@ -207,6 +235,11 @@ int QxrdAllocator::doubleSizeMB()
   return sizeof(double)*get_Width()*get_Height()/MegaBytes;
 }
 
+int QxrdAllocator::maskSizeMB()
+{
+  return sizeof(quint16)*get_Width()*get_Height()/MegaBytes;
+}
+
 void QxrdAllocator::allocatorHeartbeat()
 {
 //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -234,8 +267,9 @@ void QxrdAllocator::allocatorHeartbeat()
   if (ndblneeded < 4) ndblneeded = 4;
 
   QCEP_DEBUG(DEBUG_ALLOCATOR,
-             emit printMessage(tr("Allocator heartbeat, %1 out of %2, [%3,%4,%5,%6] [%7,%8,%9]\n")
-                               .arg(m_AllocatedMemory/MegaBytes).arg(get_Max()).arg(n16).arg(n32).arg(ndbl).arg(nmsk)
+             emit printMessage(QDateTime::currentDateTime(),
+                               tr("Allocator heartbeat, %1 out of %2, [%3,%4,%5,%6] [%7,%8,%9]\n")
+                               .arg(m_AllocatedMemoryMB).arg(get_Max()).arg(n16).arg(n32).arg(ndbl).arg(nmsk)
                                .arg(n16needed).arg(n32needed).arg(ndblneeded));
   );
 
@@ -294,17 +328,17 @@ void QxrdAllocator::allocatorHeartbeat()
 //    }
 //  }
 
-  set_Allocated(m_AllocatedMemory/MegaBytes);
+  set_Allocated(m_AllocatedMemoryMB);
 }
 
 double QxrdAllocator::allocatedMemoryMB()
 {
-  return m_AllocatedMemory/MegaBytes;
+  return m_AllocatedMemoryMB;
 }
 
 double QxrdAllocator::allocatedMemory()
 {
-  return m_AllocatedMemory;
+  return m_AllocatedMemoryMB*MegaBytes;
 }
 
 double QxrdAllocator::maximumMemoryMB()

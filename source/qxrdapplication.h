@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QScriptEngine>
 #include <QScriptEngineDebugger>
+#include <QSplashScreen>
 
 #include "qxrdforwardtypes.h"
 #include "qxrddataprocessor.h"
@@ -14,6 +15,8 @@
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
 #endif
+
+#include "qxrdnidaqplugininterface.h"
 
 extern QxrdApplication *g_Application;
 
@@ -24,6 +27,7 @@ class QxrdApplication : public QApplication
 public:
   QxrdApplication(int &argc, char **argv);
   ~QxrdApplication();
+  void init(QSplashScreen *splash);
 
   QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
@@ -33,6 +37,8 @@ public:
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *perkinElmerPlugin();
 #endif
+
+  QxrdNIDAQPluginInterface *nidaqPlugin();
 
   void loadPlugins();
 
@@ -49,11 +55,12 @@ public slots:
 
   void readSettings();
   void writeSettings();
+  void splashMessage(const char *msg);
 
 signals:
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 public:
   bool wantToQuit();
@@ -84,6 +91,7 @@ public:
   QCEP_INTEGER_PROPERTY(SimpleServerPort);
 
 private:
+  QSplashScreen                  *m_Splash;
   QxrdWindowPtr                   m_Window;
   QxrdServerThreadPtr             m_ServerThread;
   QxrdServerPtr                   m_Server;
@@ -101,7 +109,7 @@ private:
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
   QxrdSettingsSaverThreadPtr      m_SettingsSaverThread;
   QxrdSettingsSaverPtr            m_SettingsSaver;
-
+  QxrdNIDAQPluginInterface       *m_NIDAQPluginInterface;
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;
 #endif

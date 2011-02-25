@@ -16,6 +16,8 @@
 #include <qwt_double_range.h>
 
 #include <QTime>
+#include <QMenu>
+#include <QContextMenuEvent>
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QxrdPlot(parent),
@@ -118,6 +120,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 
   connect(prop_ImageShown(), SIGNAL(changedValue(bool)), this, SLOT(changeImageShown(bool)));
   connect(prop_MaskShown(), SIGNAL(changedValue(bool)), this, SLOT(changeMaskShown(bool)));
+  connect(prop_OverflowShown(), SIGNAL(changedValue(bool)), this, SLOT(changeOverflowShown(bool)));
   connect(prop_DisplayMinimumPct(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
   connect(prop_DisplayMaximumPct(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
   connect(prop_DisplayMinimumVal(), SIGNAL(changedValue(double)), this, SLOT(recalculateDisplayedRange()));
@@ -159,17 +162,19 @@ QxrdDataProcessorPtr QxrdImagePlot::processor() const
 
 void QxrdImagePlot::readSettings(QxrdSettings &settings, QString section)
 {
+  QxrdPlot::readSettings(settings, section);
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdImagePlot::writeSettings(QxrdSettings &settings, QString section)
 {
+  QxrdPlot::writeSettings(settings, section);
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdImagePlot::setAutoRange()
 {
-  emit criticalMessage("QxrdImagePlot::setAutoRange To do...");
+  emit criticalMessage(QDateTime::currentDateTime(), "QxrdImagePlot::setAutoRange To do...");
 }
 
 void QxrdImagePlot::set005Range()
@@ -416,7 +421,7 @@ void QxrdImagePlot::changeOverflowShown(bool shown)
   set_OverflowShown(shown);
 
   if (m_OverflowImage) {
-    m_OverflowImage -> setAlpha(get_ImageShown() ? m_OverflowAlpha : 0);
+    m_OverflowImage -> setAlpha(get_OverflowShown() ? m_OverflowAlpha : 0);
     m_OverflowImage -> invalidateCache();
     m_OverflowImage -> itemChanged();
 
@@ -433,6 +438,10 @@ void QxrdImagePlot::changedColorMap()
   m_MaskImage   -> setColorMap(m_MaskColorMap);
   m_MaskImage   -> invalidateCache();
   m_MaskImage   -> itemChanged();
+
+  m_OverflowImage   -> setColorMap(m_OverflowColorMap);
+  m_OverflowImage   -> invalidateCache();
+  m_OverflowImage   -> itemChanged();
 
   replotImage();
 }
@@ -459,20 +468,15 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
   replot();
 }
 
-void QxrdImagePlot::setOverflows(QxrdMaskDataPtr overflow)
+void QxrdImagePlot::setOverflows(QxrdMaskRasterData overflow)
 {
-  short int *ov = overflow->data();
-  short int *msk = m_MaskRaster.data();
+  m_OverflowRaster = overflow;
 
-  int npix=overflow->get_Width()*overflow->get_Height();
+  m_OverflowImage -> setData(overflow);
+  m_OverflowImage -> invalidateCache();
+  m_OverflowImage -> itemChanged();
 
-  for (int i=0; i<npix; i++) {
-    msk[i] = (msk[i] & (~2)) | (ov[i] & 2);
-  }
-
-  m_MaskImage -> setData(m_MaskRaster);
-  m_MaskImage -> invalidateCache();
-  m_MaskImage -> itemChanged();
+  replot();
 }
 
 void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
@@ -506,7 +510,8 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
 
   replotImage();
 
-  emit printMessage(tr("plot image took %1 msec").arg(tic.elapsed()));
+  emit printMessage(QDateTime::currentDateTime(),
+                    tr("plot image took %1 msec").arg(tic.elapsed()));
 }
 
 void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)
@@ -684,4 +689,30 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
   }
 
   return res;
+}
+
+void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * /*event*/)
+{
+//  QMenu plotMenu(NULL, NULL);
+
+////  QAction *xLog = plotMenu.addAction("Log X Axis");
+////  QAction *yLog = plotMenu.addAction("Log Y Axis");
+//  QAction *auSc = plotMenu.addAction("Autoscale");
+
+////  xLog->setCheckable(true);
+////  yLog->setCheckable(true);
+////  xLog->setChecked(get_XAxisLog());
+////  yLog->setChecked(get_YAxisLog());
+
+//  QAction *action = plotMenu.exec(event->globalPos());
+
+////  if (action == xLog) {
+////    set_XAxisLog(!get_XAxisLog());
+////  } else if (action == yLog) {
+////    set_YAxisLog(!get_YAxisLog());
+///*  } else*/ if (action == auSc) {
+//    autoScale();
+//  }
+
+//  event->accept();
 }

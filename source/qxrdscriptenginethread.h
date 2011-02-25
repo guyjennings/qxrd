@@ -24,9 +24,9 @@ protected:
   void run();
 
 signals:
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 private:
   QAtomicPointer<QxrdScriptEngine>  m_ScriptEngine;

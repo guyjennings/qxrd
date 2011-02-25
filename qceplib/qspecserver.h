@@ -11,6 +11,7 @@
 #include <QList>
 #include <QMetaType>
 #include <QScriptValue>
+#include <QDateTime>
 
 class QTcpSocket;
 
@@ -30,7 +31,9 @@ public slots:
   void clientRead();
 
 signals:
-  void printMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 signals:
   void executeCommand(QString cmd);

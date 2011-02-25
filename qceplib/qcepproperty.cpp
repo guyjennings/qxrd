@@ -12,14 +12,17 @@
 #include <stdio.h>
 
 QcepProperty::QcepProperty(QObject *parent, const char *name, QVariant value)
-  : QObject(/*parent*/),
+  : QObject(parent),
     m_Mutex(QMutex::Recursive),
     m_NQueuedUpdates(0),
     m_IsStored(false),
+    m_WasLoaded(false),
     m_Parent(parent),
     m_Name(name),
     m_Variant(value)
 {
+  setObjectName(name);
+
   if (parent) {
     const QMetaObject   *metaObj = parent->metaObject();
 
@@ -37,6 +40,16 @@ QcepProperty::QcepProperty(QObject *parent, const char *name, QVariant value)
       }
     }
   }
+}
+
+int QcepProperty::wasLoaded() const
+{
+  return m_WasLoaded;
+}
+
+void QcepProperty::setWasLoaded(int loaded)
+{
+  m_WasLoaded = loaded;
 }
 
 QVariant QcepProperty::variant() const
@@ -63,7 +76,10 @@ void QcepProperty::changeVariant(QVariant val)
 
   m_Variant = val;
 
-  if (m_IsStored) {
+  if (m_IsStored && m_WasLoaded) {
+    QCEP_DEBUG(DEBUG_PREFS,
+               printf("%s: QcepProperty::changeVariant is stored\n", qPrintable(name())));
+
     m_ChangeCount.fetchAndAddOrdered(1);
   }
 }
@@ -75,7 +91,10 @@ void QcepProperty::changeVariant(T val)
 
   m_Variant.setValue(val);
 
-  if (m_IsStored) {
+  if (m_IsStored && m_WasLoaded) {
+    QCEP_DEBUG(DEBUG_PREFS,
+               printf("%s: QcepProperty::changeVariant is stored\n", qPrintable(name())));
+
     m_ChangeCount.fetchAndAddOrdered(1);
   }
 }
@@ -172,7 +191,11 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
       QMetaProperty metaproperty = meta->property(metaindex);
 
       if (metaproperty.isStored()) {
-//        QcepProperty *property = qobject_cast<QcepProperty*> (object -> property(key));
+        QcepProperty *property = object->findChild<QcepProperty *>(key);
+
+        if (property) {
+          property->setWasLoaded(true);
+        }
 //
 //        property -> readSettings(settings, groupName);
 //
@@ -191,9 +214,11 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
 //      printf("property %s of %s created dynamically\n",
 //             qPrintable(key),
 //             meta -> className());
-      printf("property %s of %s does not exist\n",
-             qPrintable(key),
-             meta -> className());
+      QCEP_DEBUG(DEBUG_PREFS | DEBUG_PROPERTIES,
+                 printf("property %s of %s does not exist\n",
+                        qPrintable(key),
+                        meta -> className());
+      );
     }
   }
 

@@ -7,6 +7,7 @@
 #include <QString>
 #include <QVector>
 #include <QSharedPointer>
+#include <QFileInfo>
 #include <math.h>
 #include <stdio.h>
 
@@ -38,6 +39,9 @@ public:
   Q_PROPERTY(int dataType READ get_DataType WRITE set_DataType);
   QCEP_INTEGER_PROPERTY(DataType);
 
+  Q_PROPERTY(QString fileBase READ get_FileBase WRITE set_FileBase);
+  QCEP_STRING_PROPERTY(FileBase);
+
   Q_PROPERTY(QString fileName READ get_FileName WRITE set_FileName);
   QCEP_STRING_PROPERTY(FileName);
 
@@ -55,6 +59,9 @@ public:
 
   Q_PROPERTY(int imageNumber READ get_ImageNumber WRITE set_ImageNumber);
   QCEP_INTEGER_PROPERTY(ImageNumber);
+
+  Q_PROPERTY(int phaseNumber READ get_PhaseNumber WRITE set_PhaseNumber);
+  QCEP_INTEGER_PROPERTY(PhaseNumber);
 
   Q_PROPERTY(QDateTime dateTime READ get_DateTime WRITE set_DateTime);
   QCEP_DATETIME_PROPERTY(DateTime);
@@ -88,6 +95,12 @@ public:
 
   Q_PROPERTY(int imageSaved READ get_ImageSaved WRITE set_ImageSaved);
   QCEP_INTEGER_PROPERTY(ImageSaved);
+
+  Q_PROPERTY(QcepDoubleList normalization READ get_Normalization WRITE set_Normalization);
+  QCEP_DOUBLE_LIST_PROPERTY(Normalization);
+
+  Q_PROPERTY(bool used READ get_Used WRITE set_Used);
+  QCEP_BOOLEAN_PROPERTY(Used);
 
 public:
   int get_Width() const
@@ -152,7 +165,7 @@ template <typename T>
     class QcepImageData : public QcepImageDataBase
 {
 public:
-  QcepImageData(int width=0, int height=0);
+  QcepImageData(int width=0, int height=0, T def=0);
 
 public:
   bool readImage(QString filename);
@@ -177,20 +190,26 @@ public:
   T* data();
 
   void setValue(int x, int y, T val);
+  void incValue(int x, int y, T val);
   void fill(T val);
+
+  T defaultValue() const;
+  void setDefaultValue(T def);
 
 protected:
   QVector<T> m_Image;
   T m_MinValue;
   T m_MaxValue;
+  T m_Default;
 };
 
 template <typename T>
-QcepImageData<T>::QcepImageData(int width, int height)
+QcepImageData<T>::QcepImageData(int width, int height, T def)
   : QcepImageDataBase(width, height),
-    m_Image(width*height),
+    m_Image(width*height, def),
     m_MinValue(0),
-    m_MaxValue(0)
+    m_MaxValue(0),
+    m_Default(def)
 {
 }
 
@@ -207,7 +226,7 @@ T QcepImageData<T>::value(int x, int y) const
     return m_Image.value((get_Height()-y-1)*get_Width()+x);
   }
 
-  return 0;
+  return m_Default;
 }
 
 template <typename T>
@@ -262,6 +281,14 @@ void QcepImageData<T>::setValue(int x, int y, T val)
 {
   if (x >= 0 && x < get_Width() && y >= 0 && y < get_Height()) {
     m_Image[(get_Height()-y-1)*get_Width()+x] = val;
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::incValue(int x, int y, T val)
+{
+  if (x >= 0 && x < get_Width() && y >= 0 && y < get_Height()) {
+    m_Image[(get_Height()-y-1)*get_Width()+x] += val;
   }
 }
 
@@ -357,7 +384,19 @@ void QcepImageData<T>::resize(int width, int height)
 template <typename T>
 void QcepImageData<T>::clear()
 {
-  m_Image.fill(0);
+  m_Image.fill(m_Default);
+}
+
+template <typename T>
+T QcepImageData<T>::defaultValue() const
+{
+  return m_Default;
+}
+
+template <typename T>
+void QcepImageData<T>::setDefaultValue(T def)
+{
+  m_Default = def;
 }
 
 template <typename T>
@@ -370,6 +409,10 @@ bool QcepImageData<T>::readImage(QString path)
     bool res = loader -> loadFile(path, this);
 
     if (res) {
+      QString fileBase = QFileInfo(path).fileName();
+
+      set_FileBase(fileBase);
+      set_Title(fileBase);
       set_FileName(path);
       set_ImageSaved(true);
     }

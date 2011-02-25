@@ -3,21 +3,13 @@
 
 #include "qcepmacros.h"
 
-//#include <QObject>
-//#include <QReadWriteLock>
-//#include <QAtomicInt>
-//#include <QWaitCondition>
 #include <QMutex>
 #include <QTimer>
 
-//#include "qxrdforwardtypes.h"
 #include "qcepproperty.h"
-//#include "qxrdsettings.h"
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
-#include "qxrddoubleimagedata.h"
 #include "qxrdintegrateddata.h"
-//#include "qxrdacquisition.h"
 #include "qxrdintegrateddataqueue.h"
 #include "qxrdimagequeue.h"
 
@@ -26,14 +18,14 @@ class QxrdAllocator : public QxrdAllocatorInterface
   Q_OBJECT;
 
 public:
-  QxrdAllocator(/*QxrdAcquisitionPtr acq,*/ QObject *parent=0);
+  QxrdAllocator(QObject *parent=0);
   virtual ~QxrdAllocator();
 
 public:
   QxrdInt16ImageDataPtr newInt16Image();
   QxrdInt32ImageDataPtr newInt32Image();
   QxrdDoubleImageDataPtr newDoubleImage();
-  QxrdMaskDataPtr newMask();
+  QxrdMaskDataPtr newMask(int def=1);
   QxrdIntegratedDataPtr newIntegratedData(QxrdDoubleImageDataPtr image);
 
   void dimension(int width, int height);
@@ -51,6 +43,7 @@ public:
   int int16SizeMB();
   int int32SizeMB();
   int doubleSizeMB();
+  int maskSizeMB();
 
   double allocatedMemoryMB();
   double allocatedMemory();
@@ -60,9 +53,9 @@ public:
   void changedSizeMB(int newMB);
 
 signals:
-  void printMessage(QString msg);
-  void statusMessage(QString msg);
-  void criticalMessage(QString msg);
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 private slots:
   void allocatorHeartbeat();
@@ -75,10 +68,9 @@ private:
   static void integratedDeleter(QxrdIntegratedData *integ);
 
 private:
-//  QxrdAcquisitionPtr    m_Acquisition;
   QMutex                m_Mutex;
   QTimer                m_Timer;
-  QAtomicInt            m_AllocatedMemory;
+  QAtomicInt            m_AllocatedMemoryMB;
   QAtomicInt            m_CountInt16;
   QAtomicInt            m_CountInt32;
   QAtomicInt            m_CountDouble;

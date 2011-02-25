@@ -6,6 +6,8 @@
 #include "qxrdapplication.h"
 #include "qxrdimagedata.h"
 #include "qxrdwindow.h"
+#include "qxrdsynchronizedacquisition.h"
+#include "qxrdallocator.h"
 
 //#ifdef Q_OS_UNIX
 //#include "AcqLinuxTypes.h"
@@ -46,7 +48,8 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessorPtr proc
     m_PerkinElmer(0)
 {
   QCEP_DEBUG(DEBUG_PERKINELMER,
-             printf("QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer\n");
+             emit printMessage(QDateTime::currentDateTime(),
+                               "QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer");
   );
 
   ::g_Acquisition = this;
@@ -63,7 +66,8 @@ bool QxrdAcquisitionPerkinElmer::checkPluginAvailable()
   }
 
   if (m_PerkinElmer == NULL) {
-    emit criticalMessage("No perkin elmer plugin available\n");
+    emit criticalMessage(QDateTime::currentDateTime(),
+                         "No perkin elmer plugin available");
   }
 
   return m_PerkinElmer;
@@ -73,15 +77,13 @@ void QxrdAcquisitionPerkinElmer::onExposureTimeChanged(double newTime)
 {
   if (checkPluginAvailable()) {
 
-    QCEP_DEBUG(DEBUG_PERKINELMER,
-               printf("Exposure time changed to %g\n", newTime);
-    );
-
-    emit printMessage(tr("Exposure time changed to %1").arg(newTime));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Exposure time changed to %1").arg(newTime));
 
     DWORD tmp = (int)(get_ExposureTime()*1e6);
 
-    emit printMessage(tr("SetTimerSync %1").arg(tmp));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("SetTimerSync %1").arg(tmp));
 
     int nRet;
 
@@ -90,7 +92,8 @@ void QxrdAcquisitionPerkinElmer::onExposureTimeChanged(double newTime)
       return;
     }
 
-    emit printMessage(tr("TimerSync = %1").arg(tmp));
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("TimerSync = %1").arg(tmp));
 
     set_ExposureTime(tmp/1.0e6);
   }
@@ -98,28 +101,49 @@ void QxrdAcquisitionPerkinElmer::onExposureTimeChanged(double newTime)
 
 void QxrdAcquisitionPerkinElmer::onBinningModeChanged(int newMode)
 {
+  return;
+
   if (checkPluginAvailable()) {
 
-    QCEP_DEBUG(DEBUG_PERKINELMER,
-               printf("Binning mode changed to %d\n", newMode);
-    );
+    if (m_HeaderID == 14) {
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Binning mode changed to %1").arg(newMode));
 
-    emit printMessage(tr("Binning mode changed to %1").arg(newMode));
+      int nRet;
+      WORD binningMode = newMode;
+      WORD originalMode;
 
-    //    WORD binningMode = get_BinningMode();
-    //    emit printMessage(tr("Setting binning mode = %1").arg(binningMode));
-    //
-    //    if ((nRet=Acquisition_SetCameraBinningMode(m_AcqDesc, binningMode)) != HIS_ALL_OK) {
-    //      acquisitionError(__LINE__, nRet);
-    //      return;
-    //    }
-    //
-    //    if ((nRet=Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
-    //      acquisitionError(__LINE__, nRet);
-    //      return;
-    //    }
-    //
-    //    emit printMessage(tr("Binning mode was set to %1").arg(binningMode));
+//      if (newMode == 1) {
+//        if (m_CameraType == 1) {
+//          newMode = 2;
+//        } else {
+//          newMode = 258;
+//        }
+//      }
+      if ((nRet=m_PerkinElmer->Acquisition_GetCameraBinningMode(m_AcqDesc, &originalMode)) != HIS_ALL_OK) {
+        acquisitionError(__LINE__, nRet);
+        return;
+      }
+
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Starting binning mode = %1").arg(originalMode));
+
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Setting binning mode = %1").arg(newMode));
+
+      if ((nRet=m_PerkinElmer->Acquisition_SetCameraBinningMode(m_AcqDesc, newMode)) != HIS_ALL_OK) {
+        acquisitionError(__LINE__, nRet);
+        return;
+      }
+
+      if ((nRet=m_PerkinElmer->Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
+        acquisitionError(__LINE__, nRet);
+        return;
+      }
+
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Binning mode was set to %1").arg(binningMode));
+    }
   }
 }
 
@@ -127,34 +151,62 @@ void QxrdAcquisitionPerkinElmer::onCameraGainChanged(int newGain)
 {
   if (checkPluginAvailable()) {
 
-    QCEP_DEBUG(DEBUG_PERKINELMER,
-               printf("Camera gain changed to %d\n", newGain);
-    );
+    if (m_HeaderID >= 11) {
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Camera Gain Changed to %1").arg(newGain));
 
-    emit printMessage(tr("Camera Gain Changed to %1").arg(newGain));
+      emit printMessage(QDateTime::currentDateTime(), "Setting camera gain");
 
-    emit printMessage("Setting camera gain");
+      int nRet;
 
-    int nRet;
-
-    if (m_CurrentGain != get_CameraGain()) {
-      if ((nRet=m_PerkinElmer->Acquisition_SetCameraGain(m_AcqDesc, get_CameraGain())) != HIS_ALL_OK) {
-        acquisitionError(__LINE__, nRet);
-        return;
+      if (m_CurrentGain != get_CameraGain()) {
+        if ((nRet=m_PerkinElmer->Acquisition_SetCameraGain(m_AcqDesc, get_CameraGain())) != HIS_ALL_OK) {
+          acquisitionError(__LINE__, nRet);
+          return;
+        }
+        m_CurrentGain = get_CameraGain();
       }
-      m_CurrentGain = get_CameraGain();
-    }
 
-    emit printMessage("Set camera gain");
+      emit printMessage(QDateTime::currentDateTime(), "Set camera gain");
+    }
   }
 }
 
+/*
+ Sorting Mode Values:
+
+ Det.             S Mode     Hdr ID
+ RID 128            1
+ RID 256            2
+ RID 128-400        3
+ RID 1024-100       4
+ RID 512-400 A0     5
+ XRD 512-400 A1/A2  6
+ XRD 0840           6
+ XRD 512-400 E      7
+ XRD 1640 A         8
+ XRD 0820           8
+ XRD 1620 A         8
+ XRD 1640 A         9
+ XRD 1620/21 AM/AN  11
+ XRD 1620/40 AN CS  12
+
+ Header ID Values:
+ All except AM/AN   10
+ XRD 16x0 AM        11
+ XRD 16x0 AN        12,13
+ XRD 1621 AN        14
+ */
+
 void QxrdAcquisitionPerkinElmer::initialize()
 {
+//  printf("QxrdAcquisitionPerkinElmer::initialize\n");
+
   if (checkPluginAvailable()) {
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
-               printf("QxrdAcquisitionPerkinElmer::initialize\n");
+               emit printMessage(QDateTime::currentDateTime(),
+                                 tr("QxrdAcquisitionPerkinElmer::initialize"));
     );
 
     THREAD_CHECK;
@@ -167,11 +219,13 @@ void QxrdAcquisitionPerkinElmer::initialize()
     int nChannelNr;
     UINT dwSortFlags, dwDataType, dwRows, dwColumns, dwFrames;
     DWORD dwAcqType, dwSystemID, dwSyncMode, dwHwAccess;
+    WORD binningMode;
 
     nRet = m_PerkinElmer->Acquisition_EnumSensors(&nSensors, bEnableIRQ, FALSE);
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
-               printf("Acquisition_EnumSensors = %d\n",nRet);
+               emit printMessage(QDateTime::currentDateTime(),
+                                 tr("Acquisition_EnumSensors = %1").arg(nRet));
     );
 
     if (nRet != HIS_ALL_OK) {
@@ -180,7 +234,8 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
-               printf("Number of sensors = %d\n",nSensors);
+               emit printMessage(QDateTime::currentDateTime(),
+                                 tr("Number of sensors = %1").arg(nSensors));
     );
 
     if (nSensors != 1) {
@@ -198,6 +253,12 @@ void QxrdAcquisitionPerkinElmer::initialize()
       return;
     }
 
+    QCEP_DEBUG(DEBUG_PERKINELMER,
+               emit printMessage(QDateTime::currentDateTime(),
+                                 tr("Acquisition_GetCommChannel channel type = %1, channel no = %2")
+                                 .arg(nChannelType).arg(nChannelNr));
+    );
+
     if ((nRet=m_PerkinElmer->Acquisition_GetConfiguration(m_AcqDesc, &dwFrames, &dwRows, &dwColumns, &dwDataType,
                                            &dwSortFlags, &bEnableIRQ, &dwAcqType,
                                            &dwSystemID, &dwSyncMode, &dwHwAccess))!=HIS_ALL_OK) {
@@ -205,8 +266,30 @@ void QxrdAcquisitionPerkinElmer::initialize()
       return;
     }
 
+    QCEP_DEBUG(DEBUG_PERKINELMER, {
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Acquisition_GetConfiguration frames = %1, rows = %2, cols = %3")
+                        .arg(dwFrames).arg(dwRows).arg(dwColumns));
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Acquisition_GetConfiguration data type = %1, sort flags = %2, IRQ = %3")
+                        .arg(dwDataType).arg(dwSortFlags).arg(bEnableIRQ));
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Acquisition_GetConfiguration acq type = %1, systemID = %2, syncMode = %3, hwAccess = %4")
+                        .arg(dwAcqType).arg(dwSystemID).arg(dwSyncMode).arg(dwHwAccess));
+    })
+
     set_NRows(dwRows);
     set_NCols(dwColumns);
+
+    if ((nRet=m_PerkinElmer->Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
+      acquisitionError(__LINE__, nRet);
+      return;
+    }
+
+    if (gCEPDebug & DEBUG_PERKINELMER) {
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Acquisition_GetCameraBinningMode mode = %1").arg(binningMode));
+    }
 
     QxrdAcquisition::initialize();
 
@@ -218,9 +301,8 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
-               printf("Prom ID %d, Header ID %d\n",
-                      (int) hwHeaderInfo.dwPROMID,
-                      (int) hwHeaderInfo.dwHeaderID);
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Prom ID %1, Header ID %2").arg(hwHeaderInfo.dwPROMID).arg(hwHeaderInfo.dwHeaderID));
     );
 
     m_PROMID = hwHeaderInfo.dwPROMID;
@@ -235,7 +317,8 @@ void QxrdAcquisitionPerkinElmer::initialize()
       }
 
       QCEP_DEBUG(DEBUG_PERKINELMER,
-                 printf("Camera Type %d\n", hdrx.wCameratype);
+        emit printMessage(QDateTime::currentDateTime(),
+                          tr("Camera Type %1").arg(hdrx.wCameratype));
       );
 
       m_CameraType = hdrx.wCameratype;
@@ -253,11 +336,6 @@ void QxrdAcquisitionPerkinElmer::initialize()
       m_ReadoutTimes.append(readoutTimes[i]);
     }
 
-    QCEP_DEBUG(DEBUG_PERKINELMER,
-               printf("channel type: %d, ChannelNr: %d\n",nChannelType,nChannelNr);
-               printf("frames: %d rows: %d, columns: %d\n",dwFrames,dwRows,dwColumns);
-    );
-
     if ((nRet=m_PerkinElmer->Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
                                                   0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
       acquisitionError(__LINE__, nRet);
@@ -270,10 +348,12 @@ void QxrdAcquisitionPerkinElmer::initialize()
     m_Buffer.resize(get_NRows()*get_NCols()*m_BufferSize);
     m_Buffer.fill(0);
 
-    QCEP_DEBUG(DEBUG_PERKINELMER,
-               printf("Exposure Time = %g\n", get_ExposureTime());
-               printf("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER\n");
-    );
+    QCEP_DEBUG(DEBUG_PERKINELMER, {
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Exposure Time = %1").arg(get_ExposureTime()));
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER"));
+    });
 
     if ((nRet=m_PerkinElmer->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
       acquisitionError(__LINE__, nRet);
@@ -289,11 +369,9 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
-               printf("Define Dest Buffers");
+               emit printMessage(QDateTime::currentDateTime(),
+                                 tr("Define Dest Buffers"));
     );
-
-    m_CurrentExposure = 0;
-    m_CurrentFile = 0;
 
     if ((nRet=m_PerkinElmer->Acquisition_Acquire_Image(m_AcqDesc, m_BufferSize,
                                         0, HIS_SEQ_CONTINUOUS, NULL, NULL, NULL)) != HIS_ALL_OK) {
@@ -302,7 +380,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
-               printf("Acquire");
+               emit printMessage(QDateTime::currentDateTime(), "Acquire");
     );
   }
 }
@@ -310,12 +388,14 @@ void QxrdAcquisitionPerkinElmer::initialize()
 void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned int n2)
 {
   if (checkPluginAvailable()) {
+    QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image();
 
     QTime tic;
     tic.start();
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
-               emit printMessage("QxrdAcquisitionPerkinElmer::onEndFrame()");
+               emit printMessage(QDateTime::currentDateTime(),
+                                 "QxrdAcquisitionPerkinElmer::onEndFrame()");
     );
 
     QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -341,17 +421,19 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
     int counter1 = m_Counter;
 
     if ((counter1 - counter) > 5) {
-      printf("%d frames behind [%d,%d], skipping\n", counter1-counter, counter, counter1);
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("%1 frames behind [%2,%3], skipping").arg(counter1-counter).arg(counter).arg(counter1));
       return;
     }
 
     if (((actSecFrame-1)%m_BufferSize) != m_BufferIndex) {
       QCEP_DEBUG(DEBUG_PERKINELMER,
-                 emit printMessage(tr("actSecFrame %1, m_BufferIndex %2").arg(actSecFrame).arg(m_BufferIndex));
+                 emit printMessage(QDateTime::currentDateTime(),
+                                   tr("actSecFrame %1, m_BufferIndex %2").arg(actSecFrame).arg(m_BufferIndex));
       )
     }
 
-    quint16* current = (m_AcquiredInt16Data ? m_AcquiredInt16Data->data() : NULL);
+    quint16* current = (image ? image->data() : NULL);
     quint32  cksum = 0;
     double   avg = 0;
 
@@ -367,12 +449,16 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
   //  set_Average(avg/npixels);
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
-               emit printMessage(tr("Frame checksum 0x%1, avg %2\n").arg(cksum,8,16,QChar('0')).arg(avg/npixels));
+               emit printMessage(QDateTime::currentDateTime(),
+                                 tr("Frame checksum 0x%1, avg %2\n").arg(cksum,8,16,QChar('0')).arg(avg/npixels));
     );
 
     m_BufferIndex = (m_BufferIndex+1)%m_BufferSize;
 
-    acquiredFrameAvailable();
+//    acquiredFrameAvailable(image);
+
+    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "acquiredFrameAvailable", Qt::QueuedConnection,
+                                           Q_ARG(QxrdInt16ImageDataPtr, image)));
   }
 }
 
@@ -380,14 +466,14 @@ void QxrdAcquisitionPerkinElmer::acquisitionInitError(int n)
 {
   acquisitionError(n);
 
-  emit criticalMessage("Detector Initialization Failed");
+  emit criticalMessage(QDateTime::currentDateTime(), "Detector Initialization Failed");
 }
 
 void QxrdAcquisitionPerkinElmer::acquisitionNSensorsError(int n)
 {
   acquisitionError(n);
 
-  emit criticalMessage("Detector Initialization Failed");
+  emit criticalMessage(QDateTime::currentDateTime(), "Detector Initialization Failed");
 }
 
 void QxrdAcquisitionPerkinElmer::setupExposureMenu(QDoubleSpinBox *cb)
@@ -399,22 +485,77 @@ void QxrdAcquisitionPerkinElmer::setupExposureMenu(QDoubleSpinBox *cb)
 
 void QxrdAcquisitionPerkinElmer::setupCameraGainMenu(QComboBox *cb)
 {
-  cb -> addItem(tr("High: 0.25 pF"));
-  cb -> addItem(tr("0.5 pF"));
-  cb -> addItem(tr("1 pF"));
-  cb -> addItem(tr("2 pF"));
-  cb -> addItem(tr("4 pF"));
-  cb -> addItem(tr("Low: 8 pF"));
+  printf("QxrdAcquisitionPerkinElmer::setupCameraGainMenu m_HeaderID == %d\n", m_HeaderID);
+
+  if (m_HeaderID == 11) { /* AM type */
+    for (int i=0; i<16; i++) {
+      QString msg;
+
+      if (i==0) {
+        msg = "High: ";
+      } else if (i==15) {
+        msg = "Low: ";
+      }
+
+      double value = 0.1;
+      if (i & 1) {
+        value += 0.3;
+      }
+
+      if (i & 2) {
+        value += 0.9;
+      }
+
+      if (i & 4) {
+        value += 4.7;
+      }
+
+      if (i & 8) {
+        value += 10.0;
+      }
+
+      msg += tr("%1 pF").arg(value);
+
+      cb -> addItem(msg);
+    }
+  } else if (m_HeaderID >= 12) { /* AN type */
+    cb -> addItem(tr("High: 0.25 pF"));
+    cb -> addItem(tr("0.5 pF"));
+    cb -> addItem(tr("1 pF"));
+    cb -> addItem(tr("2 pF"));
+    cb -> addItem(tr("4 pF"));
+    cb -> addItem(tr("Low: 8 pF"));
+  } else {
+    cb -> addItem(tr("Gain not settable"));
+  }
 }
 
 void QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb)
 {
-  cb -> addItem(tr("1x1 - 2048x2048 pixels"));
-  cb -> addItem(tr("2x2 - 1024x1024 pixels"));
+  printf("QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu m_HeaderID == %d, m_CameraType == %d\n",
+         m_HeaderID, m_CameraType);
+
+  if (m_HeaderID == 14) {
+    if (m_CameraType == 1) {
+      cb -> addItem(tr("No binning"));
+      cb -> addItem(tr("2x2 binning"));
+    } else {
+      cb -> addItem(tr("No binning"));
+      cb -> addItem(tr("2x2 binning"));
+    }
+  } else {
+    cb -> addItem(tr("No binning"));
+  }
 }
 
 void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 {
+  static int fc = 0;
+
+//  if (synchronizedAcquisition()) {
+//    synchronizedAcquisition()->acquiredFrameAvailable((fc++) % 10/*m_CurrentExposure*/, m_CurrentFile);
+//  }
+
   if (checkPluginAvailable()) {
 
     DWORD actualFrame, actSecFrame;
@@ -423,9 +564,10 @@ void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 
     int counter = m_Counter.fetchAndAddOrdered(1);
 
-    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "onEndFrame", Qt::QueuedConnection,
-                                           Q_ARG(int, counter),
-                                           Q_ARG(unsigned int, actualFrame), Q_ARG(unsigned int, actSecFrame)));
+//    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "onEndFrame", Qt::QueuedConnection,
+//                                           Q_ARG(int, counter),
+//                                           Q_ARG(unsigned int, actualFrame), Q_ARG(unsigned int, actSecFrame)));
+    onEndFrame(counter, actualFrame, actSecFrame);
   }
 }
 
