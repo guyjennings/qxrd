@@ -3,19 +3,21 @@
 
 #include "qcepmacros.h"
 
-#include <QWidget>
+#include <QDockWidget>
 #include "qxrdforwardtypes.h"
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
 #include "qxrddataprocessor.h"
 #include "ui_qxrdfilebrowser.h"
 
-class QxrdFileBrowser : public QWidget, public Ui::QxrdFileBrowser
+class QxrdFileBrowserModel;
+
+class QxrdFileBrowser : public QDockWidget, public Ui::QxrdFileBrowser
 {
   Q_OBJECT;
 
 public:
-  QxrdFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent=0);
+  QxrdFileBrowser(int isOutput, QxrdDataProcessorPtr processor, QWidget *parent=0);
 
 public:
   Q_PROPERTY(int browserFilter READ get_BrowserFilter WRITE set_BrowserFilter);
@@ -24,6 +26,9 @@ public:
   Q_PROPERTY(QString browserSelector READ get_BrowserSelector WRITE set_BrowserSelector);
   QCEP_STRING_PROPERTY(BrowserSelector);
 
+  Q_PROPERTY(QString rootDirectory READ get_RootDirectory WRITE set_RootDirectory);
+  QCEP_STRING_PROPERTY(RootDirectory);
+
 public:
   void readSettings(QxrdSettings &settings, QString section);
   void writeSettings(QxrdSettings &settings, QString section);
@@ -31,11 +36,20 @@ public:
 public slots:
   void onFilterChanged(int newfilter);
   void onSelectorChanged(QString str, QModelIndex = QModelIndex());
+  void doPushDirectory(QString newDir);
+  void doPreviousDirectory();
+  void doUpDirectory();
+  void doChangeDirectory();
+  void doHomeDirectory();
   void doOpen();
   void doProcess();
   void doIntegrate();
+  void doAccumulate();
   void onRootDirectoryChanged(QString dir);
   void mousePressed(QModelIndex index);
+  void onRowCountChanged(int oldCount, int newCount);
+  void doubleClicked(QModelIndex index);
+  void doSelectComboItem(int index);
 
 signals:
   void printMessage(QDateTime ts, QString msg) const;
@@ -44,8 +58,26 @@ signals:
 
 private:
   mutable QMutex       m_Mutex;
+  int                  m_IsOutput;
   QxrdDataProcessorPtr m_Processor;
-  QFileSystemModelPtr  m_Model;
+  QxrdFileBrowserModel *m_Model;
+  QStringList          m_DirectoryStack;
+};
+
+class QxrdInputFileBrowser : public QxrdFileBrowser
+{
+  Q_OBJECT;
+
+public:
+  QxrdInputFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent=0);
+};
+
+class QxrdOutputFileBrowser : public QxrdFileBrowser
+{
+  Q_OBJECT;
+
+public:
+  QxrdOutputFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent=0);
 };
 
 #endif // QXRDFILEBROWSER_H

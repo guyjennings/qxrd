@@ -14,7 +14,6 @@
 #include "qxrdimagequeue.h"
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
-#include "qxrddoubleimagedata.h"
 #include "qxrdacquisition.h"
 #include "qxrddataprocessorthreaded.h"
 

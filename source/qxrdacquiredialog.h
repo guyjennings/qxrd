@@ -6,11 +6,13 @@
 #include "qxrdforwardtypes.h"
 #include "ui_qxrdacquiredialog.h"
 
-class QxrdAcquireDialog : public QWidget, public Ui::QxrdAcquireDialog {
+class QxrdAcquireDialog : public QDockWidget, public Ui::QxrdAcquireDialog {
   Q_OBJECT
 public:
   QxrdAcquireDialog(QxrdWindowPtr win, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc, QWidget *parent = 0);
   ~QxrdAcquireDialog();
+
+  void onAcquisitionInit();
 
   void acquisitionReady();
   void acquisitionStarted();
@@ -20,6 +22,10 @@ public:
 
 protected:
   void changeEvent(QEvent *e);
+
+private slots:
+  void acquireStarted(int isDark);
+  void acquireComplete(int isDark);
 
 private:
   QxrdWindowPtr        m_Window;

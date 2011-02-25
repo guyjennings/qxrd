@@ -21,3 +21,4 @@ int QxrdImageDataObjectCounter::value()
 {
   return s_ImageDataObjectCounter.fetchAndAddOrdered(0);
 }
+

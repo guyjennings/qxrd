@@ -29,6 +29,7 @@
 #include <QString>
 #include <tiffio.h>
 #include <QPluginLoader>
+#include <QSplashScreen>
 
 int gCEPDebug = 0;
 QxrdApplication *g_Application = 0;
@@ -42,6 +43,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_SpecServerPort(this,"specServerPort", -1),
     m_RunSimpleServer(this,"simpleServer", 1),
     m_SimpleServerPort(this,"simpleServerPort", 1234),
+    m_Splash(NULL),
     m_Window(NULL),
     m_ServerThread(NULL),
     m_Server(NULL),
@@ -58,6 +60,12 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_PerkinElmerPluginInterface(NULL)
 #endif
 {
+}
+
+void QxrdApplication::init(QSplashScreen *splash)
+{
+  m_Splash = splash;
+
   QcepProperty::registerMetaTypes();
 
   setupTiffHandlers();
@@ -80,22 +88,28 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   int simpleServerPort = 0;
 
   {
-     QxrdSettings settings;
+    QxrdSettings settings;
 
-     detectorType = settings.value("application/detectorType").toInt();
-     gCEPDebug = settings.value("application/debug").toInt();
-     specServer = settings.value("application/runSpecServer").toInt();
-     specServerPort = settings.value("application/specServerPort").toInt();
-     simpleServer = settings.value("application/runSimpleServer").toInt();
-     simpleServerPort = settings.value("application/simpleServerPort").toInt();
-   }
+    detectorType = settings.value("application/detectorType").toInt();
+    gCEPDebug = settings.value("application/debug").toInt();
+    specServer = settings.value("application/runSpecServer").toInt();
+    specServerPort = settings.value("application/specServerPort").toInt();
+    simpleServer = settings.value("application/runSimpleServer").toInt();
+    simpleServerPort = settings.value("application/simpleServerPort").toInt();
+  }
+
+  splashMessage("Initializing Memory Allocator");
 
   m_AllocatorThread = QxrdAllocatorThreadPtr(new QxrdAllocatorThread());
   m_AllocatorThread -> start();
   m_Allocator = m_AllocatorThread -> allocator();
 
+  splashMessage("Initializing File Saver");
+
   m_FileSaverThread = QxrdFileSaverThreadPtr(new QxrdFileSaverThread(QxrdAllocatorPtr(m_Allocator)));
   m_FileSaverThread -> start();
+
+  splashMessage("Initializing Data Processing");
 
   m_DataProcessorThread = QxrdDataProcessorThreadPtr(new QxrdDataProcessorThread(QxrdAcquisitionPtr(NULL),
                                                                                  QxrdAllocatorPtr(m_Allocator),
@@ -106,12 +120,16 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   m_FileSaverThread -> setProcessor(m_DataProcessor);
 
+  splashMessage("Initializing Data Acquisition");
+
   m_AcquisitionThread = QxrdAcquisitionThreadPtr(new QxrdAcquisitionThread(m_DataProcessor, m_Allocator, detectorType));
   m_AcquisitionThread -> start();
   m_Acquisition = m_AcquisitionThread -> acquisition();
 
   m_DataProcessor -> setAcquisition(m_Acquisition);
   m_FileSaverThread -> setAcquisition(m_Acquisition);
+
+  splashMessage("Opening Main Window");
 
   m_Window = QxrdWindowPtr(new QxrdWindow(QxrdApplicationPtr(this), m_Acquisition, m_DataProcessor, m_Allocator));
 //  m_Window -> show();
@@ -128,11 +146,15 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   loadPlugins();
 
+  m_Acquisition -> setNIDAQPlugin(nidaqPlugin());
+
   connect(m_Acquisition, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
   connect(m_Acquisition, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
   connect(m_Acquisition, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
 
   m_AcquisitionThread->initialize();
+
+  m_Window -> onAcquisitionInit();
 
   connect(m_DataProcessorThread, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
   connect(m_DataProcessorThread, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
@@ -154,6 +176,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   connect(m_FileSaverThread, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
 
   if (specServer) {
+    splashMessage("Starting SPEC Server");
+
     m_ServerThread = QxrdServerThreadPtr(new QxrdServerThread(m_AcquisitionThread, "qxrd", specServerPort));
 
     connect(m_ServerThread,       SIGNAL(printMessage(QDateTime,QString)), m_Window,            SLOT(printMessage(QDateTime,QString)));
@@ -168,6 +192,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   }
 
   if (simpleServer) {
+    splashMessage("Starting Simple Socket Server");
+
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(new QxrdSimpleServerThread(m_AcquisitionThread, "simpleserver", simpleServerPort));
 
     connect(m_SimpleServerThread,       SIGNAL(printMessage(QDateTime,QString)), m_Window,            SLOT(printMessage(QDateTime,QString)));
@@ -181,6 +207,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
                       tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
   }
 
+
+  splashMessage("Starting Scripting System");
 
   m_ScriptEngineThread = QxrdScriptEngineThreadPtr(new QxrdScriptEngineThread(QxrdApplicationPtr(this), m_Window, m_Acquisition, m_DataProcessor));
   m_ScriptEngineThread -> start();
@@ -224,6 +252,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   connect(prop_Debug(), SIGNAL(changedValue(int)), this, SLOT(debugChanged(int)));
 
+  splashMessage("Loading Preferences");
+
   readSettings();
 
   m_SettingsSaverThread = new QxrdSettingsSaverThread(this);
@@ -240,6 +270,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   emit printMessage(QDateTime::currentDateTime(),
                     tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
+
+  splashMessage("Loading Background Images");
 
   m_DataProcessor -> loadDefaultImages();
 
@@ -260,12 +292,12 @@ QxrdApplication::~QxrdApplication()
   );
 
   delete m_Window;
-  delete m_AcquisitionThread;
-  delete m_ServerThread;
-  delete m_DataProcessorThread;
-  delete m_FileSaverThread;
-  delete m_AllocatorThread;
-  delete m_ScriptEngineThread;
+  m_AcquisitionThread -> deleteLater();
+  m_ServerThread -> deleteLater();
+  m_DataProcessorThread -> deleteLater();
+  m_FileSaverThread -> deleteLater();
+  m_AllocatorThread -> deleteLater();
+  m_ScriptEngineThread -> deleteLater();
 
   QCEP_DEBUG(DEBUG_APP,
              printf("QxrdApplication::~QxrdApplication finished\n");
@@ -275,6 +307,13 @@ QxrdApplication::~QxrdApplication()
 QxrdApplication* QxrdApplication::application()
 {
   return g_Application;
+}
+
+void QxrdApplication::splashMessage(const char *msg)
+{
+  if (m_Splash) {
+    m_Splash->showMessage(msg, Qt::AlignBottom|Qt::AlignHCenter);
+  }
 }
 
 #ifdef HAVE_PERKIN_ELMER

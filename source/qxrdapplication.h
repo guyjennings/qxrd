@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QScriptEngine>
 #include <QScriptEngineDebugger>
+#include <QSplashScreen>
 
 #include "qxrdforwardtypes.h"
 #include "qxrddataprocessor.h"
@@ -26,6 +27,7 @@ class QxrdApplication : public QApplication
 public:
   QxrdApplication(int &argc, char **argv);
   ~QxrdApplication();
+  void init(QSplashScreen *splash);
 
   QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
@@ -53,6 +55,7 @@ public slots:
 
   void readSettings();
   void writeSettings();
+  void splashMessage(const char *msg);
 
 signals:
   void printMessage(QDateTime ts, QString msg);
@@ -88,6 +91,7 @@ public:
   QCEP_INTEGER_PROPERTY(SimpleServerPort);
 
 private:
+  QSplashScreen                  *m_Splash;
   QxrdWindowPtr                   m_Window;
   QxrdServerThreadPtr             m_ServerThread;
   QxrdServerPtr                   m_Server;

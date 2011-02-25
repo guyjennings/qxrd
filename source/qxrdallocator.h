@@ -3,21 +3,13 @@
 
 #include "qcepmacros.h"
 
-//#include <QObject>
-//#include <QReadWriteLock>
-//#include <QAtomicInt>
-//#include <QWaitCondition>
 #include <QMutex>
 #include <QTimer>
 
-//#include "qxrdforwardtypes.h"
 #include "qcepproperty.h"
-//#include "qxrdsettings.h"
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
-#include "qxrddoubleimagedata.h"
 #include "qxrdintegrateddata.h"
-//#include "qxrdacquisition.h"
 #include "qxrdintegrateddataqueue.h"
 #include "qxrdimagequeue.h"
 
@@ -26,7 +18,7 @@ class QxrdAllocator : public QxrdAllocatorInterface
   Q_OBJECT;
 
 public:
-  QxrdAllocator(/*QxrdAcquisitionPtr acq,*/ QObject *parent=0);
+  QxrdAllocator(QObject *parent=0);
   virtual ~QxrdAllocator();
 
 public:
@@ -76,7 +68,6 @@ private:
   static void integratedDeleter(QxrdIntegratedData *integ);
 
 private:
-//  QxrdAcquisitionPtr    m_Acquisition;
   QMutex                m_Mutex;
   QTimer                m_Timer;
   QAtomicInt            m_AllocatedMemoryMB;

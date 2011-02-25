@@ -29,7 +29,7 @@ void QxrdAllocatorThread::run()
 
   int rc = exec();
 
-  printf("Allocator thread terminated with rc %d\n", rc);
+//  printf("Allocator thread terminated with rc %d\n", rc);
 }
 
 void QxrdAllocatorThread::shutdown()

@@ -5,7 +5,7 @@
 #include <QModelIndexList>
 
 #include "qxrdmaskdata.h"
-#include "qxrddoubleimagedata.h"
+#include "qxrdimagedata.h"
 
 class QxrdMaskStack : public QObject, public QStack<QxrdMaskDataPtr>
 {

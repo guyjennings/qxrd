@@ -16,6 +16,7 @@ QcepImageDataBase::QcepImageDataBase(int width, int height)
     m_ExposureTime(this, "exposureTime", 0),
     m_SummedExposures(this, "summedExposures", 0),
     m_ImageNumber(this, "imageNumber", 0),
+    m_PhaseNumber(this, "phaseNumber", -1),
     m_DateTime(this, "dateTime", QDateTime::currentDateTime()),
     m_HBinning(this, "hBinning", 1),
     m_VBinning(this, "vBinning", 1),
@@ -55,6 +56,7 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
   dest -> set_ExposureTime(get_ExposureTime());
   dest -> set_SummedExposures(get_SummedExposures());
   dest -> set_ImageNumber(get_ImageNumber());
+  dest -> set_PhaseNumber(get_PhaseNumber());
   dest -> set_DateTime(get_DateTime());
   dest -> set_HBinning(get_HBinning());
   dest -> set_VBinning(get_VBinning());
@@ -83,6 +85,7 @@ void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src
   set_ExposureTime(src -> get_ExposureTime());
   set_SummedExposures(src -> get_SummedExposures());
   set_ImageNumber(src -> get_ImageNumber());
+  set_PhaseNumber(src -> get_PhaseNumber());
   set_DateTime(src -> get_DateTime());
   set_HBinning(src -> get_HBinning());
   set_VBinning(src -> get_VBinning());
@@ -141,7 +144,7 @@ void QcepImageDataBase::saveMetaData(QString name)
   QTime tic;
   tic.start();
 
-  printf("type 266 = %s\n", QMetaType::typeName(266));
+//  printf("type 266 = %s\n", QMetaType::typeName(266));
 
   {
     QMutexLocker lock(mutex());

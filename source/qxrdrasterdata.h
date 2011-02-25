@@ -6,7 +6,6 @@
 #include <qwt_raster_data.h>
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
-#include "qxrddoubleimagedata.h"
 
 class QxrdRasterData;
 

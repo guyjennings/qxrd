@@ -20,6 +20,8 @@ enum {
   DEBUG_ALLOCATOR = 8192
 };
 
+extern const char* gDebugStrings[];
+
 #define QCEP_DEBUG(cond,action) if (gCEPDebug & (cond)) { action; }
 
 #endif // QCEPDEBUG_H

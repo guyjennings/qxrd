@@ -1,6 +1,7 @@
 #include "qxrdacquisitionsimulated.h"
 #include "qxrdimagedata.h"
 #include "qxrddataprocessor.h"
+#include "qxrdallocator.h"
 
 #include <QDir>
 #include <QThread>
@@ -52,12 +53,42 @@ void QxrdAcquisitionSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/)
 
 void QxrdAcquisitionSimulated::setupCameraGainMenu(QComboBox *cb)
 {
-  cb -> addItem(tr("High: 0.25 pF"));
-  cb -> addItem(tr("0.5 pF"));
-  cb -> addItem(tr("1 pF"));
-  cb -> addItem(tr("2 pF"));
-  cb -> addItem(tr("4 pF"));
-  cb -> addItem(tr("Low: 8 pF"));
+  for (int i=0; i<16; i++) {
+    QString msg;
+
+    if (i==0) {
+      msg = "High: ";
+    } else if (i==15) {
+      msg = "Low: ";
+    }
+
+    double value = 0.1;
+    if (i & 1) {
+      value += 0.3;
+    }
+
+    if (i & 2) {
+      value += 0.9;
+    }
+
+    if (i & 4) {
+      value += 4.7;
+    }
+
+    if (i & 8) {
+      value += 10.0;
+    }
+
+    msg += tr("%1 pF").arg(value);
+
+    cb -> addItem(msg);
+  }
+//  cb -> addItem(tr("High: 0.25 pF"));
+//  cb -> addItem(tr("0.5 pF"));
+//  cb -> addItem(tr("1 pF"));
+//  cb -> addItem(tr("2 pF"));
+//  cb -> addItem(tr("4 pF"));
+//  cb -> addItem(tr("Low: 8 pF"));
 }
 
 void QxrdAcquisitionSimulated::setupCameraBinningModeMenu(QComboBox *cb)
@@ -78,48 +109,15 @@ void QxrdAcquisitionSimulated::initialize()
 
 void QxrdAcquisitionSimulated::onTimerTimeout()
 {
-//  QTime tic;
-//  tic.start();
-
   static int frameCounter = 0;
 
   int nRows = get_NRows();
   int nCols = get_NCols();
 
-//  QImage sampleImage(nCols, nRows, QImage::Format_RGB32);
-//  QPainter painter(&sampleImage);
-//
-//  painter.fillRect(0,0,nCols,nRows, Qt::black);
-//  painter.setPen(Qt::white);
-//  painter.setFont(QFont("Times", 80, QFont::Bold, true));
-//  painter.drawText(nCols/4, nRows/12, QDateTime::currentDateTime().toString("yyyyMMdd:hhmmss.zzz"));
-//
-//  emit printMessage(QDateTime::currentDateTime(), tr("simulated data generated after %1 msec").arg(tic.elapsed()));
-//
-//  painter.fillRect(0,0,nCols/4,nRows/4, Qt::lightGray);
-//  painter.fillRect(1020,20,50,50, Qt::darkGray);
-//
-//  emit printMessage(QDateTime::currentDateTime(), tr("simulated data generated after %1 msec").arg(tic.elapsed()));
-//
-//  painter.setPen(Qt::gray);
-//  painter.setBrush(QBrush(QColor(40,40,40,240),Qt::SolidPattern));
-//  painter.drawEllipse(nCols/4, nRows/8, nCols/2, nRows/2);
-//
-//  emit printMessage(QDateTime::currentDateTime(), tr("simulated data generated after %1 msec").arg(tic.elapsed()));
-//
-//  if (m_AcquiredInt16Data) {
-//    quint16 *ptr = m_AcquiredInt16Data->data();
-//
-//    QRgb    *rgb = (QRgb*) sampleImage.bits();
-//    for (int j=0; j<nRows; j++) {
-//      for (int i=0; i<nCols; i++) {
-//        *ptr++ = *rgb++;
-//      }
-//    }
-//  }
+  QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image();
 
-  if (m_AcquiredInt16Data) {
-    quint16 *ptr = m_AcquiredInt16Data->data();
+  if (image) {
+    quint16 *ptr = image->data();
     int frame = (frameCounter++) % 8;
 
     for (int j=0; j<nRows; j++) {
@@ -132,7 +130,6 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
       }
     }
   }
-//  emit printMessage(QDateTime::currentDateTime(), tr("simulated data generation took %1 msec").arg(tic.elapsed()));
 
-  acquiredFrameAvailable();
+  acquiredFrameAvailable(image);
 }

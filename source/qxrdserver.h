@@ -14,11 +14,6 @@ class QxrdServer : public QSpecServer
 public:
   QxrdServer(QxrdAcquisitionThreadPtr acqth, QString name, int port, QObject *parent=0);
 
-signals:
-  void printMessage(QDateTime ts, QString msg);
-  void statusMessage(QDateTime ts, QString msg);
-  void criticalMessage(QDateTime ts, QString msg);
-
 public slots:
   QVariant executeCommand(QString cmd);
   QVariant readProperty(QString name);

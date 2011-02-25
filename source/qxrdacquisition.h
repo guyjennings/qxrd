@@ -9,9 +9,16 @@
 #include <QWaitCondition>
 #include <QAtomicInt>
 
+#if QT_VERSION >= 0x040700
+#include <QElapsedTimer>
+#endif
+
 #include "qxrdrasterdata.h"
 #include "qxrdimagequeue.h"
 #include "qxrdacquisitionoperations.h"
+
+class QxrdSynchronizedAcquisition;
+class QxrdNIDAQPluginInterface;
 
 class QxrdAcquisition : public QxrdAcquisitionOperations
 {
@@ -28,14 +35,8 @@ public slots:
   void acquireDark();
   void cancel();
   void cancelDark();
-  void trigger();
+//  void trigger();
   void clearDropped();
-
-  void acquisitionReady();
-  void acquisitionStarted();
-  void acquisitionFinished();
-
-  void darkAcquisitionStarted();
 
   int acquisitionStatus(double time);
 
@@ -45,7 +46,7 @@ public slots:
   void onBufferSizeChanged(int newMB);
 
 signals:
-  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe);
+  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
   void acquireStarted(int dark);
   void acquireComplete(int dark);
 
@@ -55,42 +56,69 @@ public:
   virtual void setupCameraBinningModeMenu(QComboBox *cb) = 0;
 
   void indicateDroppedFrame();
-  virtual QWidget* controlPanel(QxrdWindowPtr win);
+  virtual QxrdAcquireDialog* controlPanel(QxrdWindowPtr win);
+
+  QxrdSynchronizedAcquisition* synchronizedAcquisition() const;
+
+  void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
+  QxrdNIDAQPluginInterface *nidaqPlugin() const;
 
 protected:
   void allocateMemoryForAcquisition();
   void acquisition(int isDark);
   void copyParameters(int isDark);
   virtual void beginAcquisition();
-  void acquiredFrameAvailable();
 
   void acquisitionError(int n);
   void acquisitionError(int ln, int n);
 
+  void acquireTiming();
+
+  template <typename T>
+  void accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
+  void processAcquiredImage(int fileIndex, int phase, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+  void getFileBaseAndName(int fileIndex, int phase, QString &fileBase, QString &fileName);
+
 protected slots:
   virtual void haltAcquisition();
+  void acquiredFrameAvailable(QxrdInt16ImageDataPtr image);
 
 protected:
   QMutex                 m_Acquiring;
   QWaitCondition         m_StatusWaiting;
 
-//  QxrdInt16ImageQueue    m_FreeInt16Images;
-//  QxrdInt32ImageQueue    m_FreeInt32Images;
-  QxrdInt16ImageQueue    m_PreTriggerInt16Images;
-  QxrdInt32ImageQueue    m_PreTriggerInt32Images;
-  QxrdInt16ImageDataPtr  m_AcquiredInt16Data;
-  QxrdInt32ImageDataPtr  m_AcquiredInt32Data;
-  QxrdMaskDataPtr        m_OverflowMask;
+  QVector<QxrdInt32ImageDataPtr>  m_AcquiredInt32Data;
+  QVector<QxrdMaskDataPtr>        m_OverflowMask;
 
   QAtomicInt             m_AcquireDark;
-  QAtomicInt             m_NFramesStillToSkip;
-  QAtomicInt             m_NFramesStillToSum;
-  QAtomicInt             m_NPretriggerAcquired;
-  QAtomicInt             m_NPostTriggerAcquired;
+
+  QAtomicInt             m_NSkippedAtStart;
+  QAtomicInt             m_NSkippedBetweenGroups;
+  QAtomicInt             m_NPhasesPerSummation;
+  QAtomicInt             m_NSummationsPerGroup;
+  QAtomicInt             m_NGroupsPerSequence;
+
+  QAtomicInt             m_FrameCounter;
+  QAtomicInt             m_UpdateInterval;
   QAtomicInt             m_CurrentExposure;
-  QAtomicInt             m_CurrentFile;
+  QAtomicInt             m_CurrentPhase;
+  QAtomicInt             m_CurrentSummation;
+  QAtomicInt             m_CurrentGroup;
+
+  QAtomicInt             m_InitialFileIndex;
 
   QxrdAcquireDialog     *m_ControlPanel;
+
+  QxrdNIDAQPluginInterface    *m_NIDAQPlugin;
+  QxrdSynchronizedAcquisition *m_SynchronizedAcquisition;
+
+#if QT_VERSION >= 0x040700
+  QElapsedTimer          m_ElapsedTimer;
+#else
+  QTime                  m_ElapsedTimer;
+#endif
+  QVector<int>           m_ElapsedHistogram;
+  int                    m_ElapsedCounter;
 };
 
 #endif

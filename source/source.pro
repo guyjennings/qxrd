@@ -146,7 +146,6 @@ HEADERS += TODO.h \
     qxrdresultserializer.h \
     qxrdroidata.h \
     qxrdhistogramdata.h \
-    qxrddoubleimagedata.h \
     qxrdexposuretimespinner.h \
     qxrddetectorplugininterface.h \
     qxrdnidaqplugininterface.h \
@@ -179,12 +178,18 @@ HEADERS += TODO.h \
     qxrdsettingssaverthread.h \
     qxrdplotimage.h \
     qxrdimagedisplaywidget.h \
-    qxrddataprocessoroptionsdialog.h \
     qwt_plot_piecewise_curve.h \
     qxrdmaskdialog.h \
     qxrdmaskstackmodel.h \
     qxrdmaskstack.h \
-    qxrdmaskstackview.h
+    qxrdmaskstackview.h \
+    qxrdsynchronizedacquisition.h \
+    qxrdsynchronizedacquisitiondialog.h \
+    qxrddisplaydialog.h \
+    qxrdcorrectiondialog.h \
+    qxrdtestdockwidget.h \
+    qxrdfilebrowsermodel.h \
+    qxrdfilebrowserview.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -243,7 +248,6 @@ SOURCES += qxrd.cpp \
     qxrdresultserializer.cpp \
     qxrdroidata.cpp \
     qxrdhistogramdata.cpp \
-    qxrddoubleimagedata.cpp \
     qxrdexposuretimespinner.cpp \
     qxrddetectorplugininterface.cpp \
     qxrdnidaqplugininterface.cpp \
@@ -276,12 +280,18 @@ SOURCES += qxrd.cpp \
     qxrdsettingssaverthread.cpp \
     qxrdplotimage.cpp \
     qxrdimagedisplaywidget.cpp \
-    qxrddataprocessoroptionsdialog.cpp \
     qwt_plot_piecewise_curve.cpp \
     qxrdmaskdialog.cpp \
     qxrdmaskstackmodel.cpp \
     qxrdmaskstack.cpp \
-    qxrdmaskstackview.cpp
+    qxrdmaskstackview.cpp \
+    qxrdsynchronizedacquisition.cpp \
+    qxrdsynchronizedacquisitiondialog.cpp \
+    qxrddisplaydialog.cpp \
+    qxrdcorrectiondialog.cpp \
+    qxrdtestdockwidget.cpp \
+    qxrdfilebrowsermodel.cpp \
+    qxrdfilebrowserview.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -290,8 +300,11 @@ FORMS = qxrdwindow.ui \
     qxrdpreferencesdialog.ui \
     qxrdpowderfitwidget.ui \
     qxrdacquiredialog.ui \
-    qxrddataprocessoroptionsdialog.ui \
-    qxrdmaskdialog.ui
+    qxrdmaskdialog.ui \
+    qxrdsynchronizedacquisitiondialog.ui \
+    qxrddisplaydialog.ui \
+    qxrdcorrectiondialog.ui \
+    qxrdtestdockwidget.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 

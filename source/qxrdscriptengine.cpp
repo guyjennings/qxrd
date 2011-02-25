@@ -82,9 +82,8 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("summedExposures", m_ScriptEngine -> newFunction(summedExposuresFunc));
   m_ScriptEngine -> globalObject().setProperty("skippedExposures", m_ScriptEngine -> newFunction(skippedExposuresFunc));
   m_ScriptEngine -> globalObject().setProperty("darkSummedExposures", m_ScriptEngine -> newFunction(darkSummedExposuresFunc));
-  m_ScriptEngine -> globalObject().setProperty("preTriggerFiles", m_ScriptEngine -> newFunction(preTriggerFilesFunc));
-  m_ScriptEngine -> globalObject().setProperty("postTriggerFiles", m_ScriptEngine -> newFunction(postTriggerFilesFunc));
-  m_ScriptEngine -> globalObject().setProperty("trigger", m_ScriptEngine -> newFunction(triggerFunc));
+  m_ScriptEngine -> globalObject().setProperty("filesInGroup", m_ScriptEngine -> newFunction(filesInGroupFunc));
+  m_ScriptEngine -> globalObject().setProperty("groupsInSequence", m_ScriptEngine -> newFunction(groupsInSequenceFunc));
   m_ScriptEngine -> globalObject().setProperty("filePattern", m_ScriptEngine -> newFunction(filePatternFunc));
   m_ScriptEngine -> globalObject().setProperty("outputDirectory", m_ScriptEngine -> newFunction(outputDirectoryFunc));
   m_ScriptEngine -> globalObject().setProperty("fileIndex", m_ScriptEngine -> newFunction(fileIndexFunc));
@@ -209,17 +208,17 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
   int nArgs = context->argumentCount();
 
   if (nArgs < 5) {
-    g_Acquisition -> set_PreTriggerFiles(0);
+    g_Acquisition -> set_FilesInGroup(1);
   }
 
   switch (nArgs) {
   default:
 
   case 5:
-    g_Acquisition -> set_PreTriggerFiles(context -> argument(4).toUInt32());
+    g_Acquisition -> set_FilesInGroup(context -> argument(4).toUInt32());
 
   case 4:
-    g_Acquisition -> set_PostTriggerFiles(context -> argument(3).toUInt32());
+    g_Acquisition -> set_GroupsInSequence(context -> argument(3).toUInt32());
 
   case 3:
     g_Acquisition -> set_SummedExposures(context -> argument(2).toUInt32());
@@ -342,33 +341,22 @@ QScriptValue QxrdScriptEngine::darkSummedExposuresFunc(QScriptContext *context, 
   return QScriptValue(engine, g_Acquisition -> get_DarkSummedExposures());
 }
 
-QScriptValue QxrdScriptEngine::preTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::filesInGroupFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> set_PreTriggerFiles(context->argument(0).toUInt32());
+    g_Acquisition -> set_FilesInGroup(context->argument(0).toUInt32());
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_PreTriggerFiles());
+  return QScriptValue(engine, g_Acquisition -> get_FilesInGroup());
 }
 
-QScriptValue QxrdScriptEngine::postTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::groupsInSequenceFunc(QScriptContext *context, QScriptEngine *engine)
 {
   if (context->argumentCount() != 0) {
-    g_Acquisition -> set_PostTriggerFiles(context->argument(0).toUInt32());
+    g_Acquisition -> set_GroupsInSequence(context->argument(0).toUInt32());
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_PostTriggerFiles());
-}
-
-QScriptValue QxrdScriptEngine::triggerFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  if (context->argumentCount() != 0) {
-    g_Acquisition -> set_Trigger(context->argument(0).toUInt32());
-  } else {
-    g_Acquisition -> set_Trigger(1);
-  }
-
-  return QScriptValue(engine, g_Acquisition -> get_Trigger());
+  return QScriptValue(engine, g_Acquisition -> get_GroupsInSequence());
 }
 
 QScriptValue QxrdScriptEngine::filePatternFunc(QScriptContext *context, QScriptEngine *engine)
@@ -398,27 +386,27 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
   return QScriptValue(engine, g_Acquisition -> get_FileIndex());
 }
 
-QScriptValue QxrdScriptEngine::dataFunc(QScriptContext */*context*/, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::dataFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   return engine -> newQObject(g_DataProcessor -> data().data());
 }
 
-QScriptValue QxrdScriptEngine::darkFunc(QScriptContext */*context*/, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   return engine -> newQObject(g_DataProcessor -> darkImage().data());
 }
 
-QScriptValue QxrdScriptEngine::maskFunc(QScriptContext */*context*/, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::maskFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   return engine -> newQObject(g_DataProcessor -> mask().data());
 }
 
-QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext */*context*/, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   return engine -> newQObject(g_DataProcessor -> overflow().data());
 }
 
-QScriptValue QxrdScriptEngine::helpFunc(QScriptContext */*context*/, QScriptEngine */*engine*/)
+QScriptValue QxrdScriptEngine::helpFunc(QScriptContext * /*context*/, QScriptEngine * /*engine*/)
 {
   return "Not yet implemented";
 }

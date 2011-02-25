@@ -1,7 +1,10 @@
 #include <QApplication>
 
 #include "qxrdapplication.h"
+#include "qxrdwindow.h"
+
 #include <stdio.h>
+#include <QSplashScreen>
 
 /*!
 \mainpage QXRD - Readout and Analysis software for SAXS/PDF/Powder X-Ray measurements
@@ -18,7 +21,21 @@ int main(int argc, char *argv[])
 
   QxrdApplication app(argc, argv);
 
+  QPixmap pixmap(":images/qxrd-splash-screen.png");
+  QSplashScreen splash(pixmap);
+  splash.show();
+  QFont f;
+  f.setPointSize(14);
+  splash.setFont(f);
+  splash.showMessage("Initializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter);
+
+  app.processEvents();
+
+  app.init(&splash);
+
 //  printf("App Constructed\n");
+
+  splash.finish(app.window());
 
   int res = app.exec();
 

@@ -2,6 +2,7 @@
 #include "qxrddataprocessorthreaded.h"
 #include "qxrdintegrator.h"
 #include "qxrdcenterfinder.h"
+#include "qxrdimagedata.h"
 
 #include <QtConcurrentRun>
 #include <QDirIterator>
@@ -274,13 +275,57 @@ double QxrdDataProcessorThreaded::estimatedProcessingTime(double estSerialTime, 
   }
 }
 
+void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
+{
+  QxrdDoubleImageDataPtr summed = takeNextFreeImage();
+  int first = true;
+
+  foreach(QString name, names) {
+    QxrdDoubleImageDataPtr img = takeNextFreeImage();
+    QString path = filePathInCurrentDirectory(name);
+
+    if (img->readImage(path)) {
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Load image from %1").arg(path));
+      emit statusMessage(QDateTime::currentDateTime(),
+                        tr("Load image from %1").arg(path));
+      img -> loadMetaData();
+
+      if (first) {
+        summed->copyFrom(img);
+        first = false;
+      } else {
+        summed->accumulateImage(img);
+      }
+    } else {
+      emit printMessage(QDateTime::currentDateTime(),
+                        tr("Couldn't load %1").arg(path));
+      emit statusMessage(QDateTime::currentDateTime(),
+                        tr("Couldn't load %1").arg(path));
+    }
+  }
+
+  if (first) {
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("No images were loaded"));
+    emit statusMessage(QDateTime::currentDateTime(),
+                      tr("No images were loaded"));
+  } else {
+    acquiredDoubleImage(summed, QxrdMaskDataPtr());
+  }
+}
+
 void QxrdDataProcessorThreaded::integrateData(QString name)
 {
   QxrdDoubleImageDataPtr res = takeNextFreeImage();
 
-  if (res -> readImage(name)) {
+  QString path = filePathInCurrentDirectory(name);
+
+  if (res -> readImage(path)) {
     emit printMessage(QDateTime::currentDateTime(),
-                      tr("Load image from %1").arg(name));
+                      tr("Load image from %1").arg(path));
+    emit statusMessage(QDateTime::currentDateTime(),
+                      tr("Load image from %1").arg(path));
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -292,7 +337,9 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
                                                centerFinder() -> get_CenterY()));
   } else {
     emit printMessage(QDateTime::currentDateTime(),
-                      tr("Couldn't load %1").arg(name));
+                      tr("Couldn't load %1").arg(path));
+    emit statusMessage(QDateTime::currentDateTime(),
+                      tr("Couldn't load %1").arg(path));
   }
 }
 
@@ -303,6 +350,10 @@ void QxrdDataProcessorThreaded::processData(QString name)
   QString path = filePathInCurrentDirectory(name);
 
   if (res -> readImage(path)) {
+    emit printMessage(QDateTime::currentDateTime(),
+                      tr("Load image from %1").arg(path));
+    emit statusMessage(QDateTime::currentDateTime(),
+                      tr("Load image from %1").arg(path));
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -313,6 +364,8 @@ void QxrdDataProcessorThreaded::processData(QString name)
     set_DataPath(res -> get_FileName());
   } else {
     emit printMessage(QDateTime::currentDateTime(),
+                      tr("Couldn't load %1").arg(path));
+    emit statusMessage(QDateTime::currentDateTime(),
                       tr("Couldn't load %1").arg(path));
   }
 }

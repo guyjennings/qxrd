@@ -9,7 +9,7 @@
 
 //#include <qwt_double_rect.h>
 
-class QxrdCenterFinderDialog : public QGroupBox, public Ui::QxrdCenterFinderDialog
+class QxrdCenterFinderDialog : public QDockWidget, public Ui::QxrdCenterFinderDialog
 {
   Q_OBJECT;
 

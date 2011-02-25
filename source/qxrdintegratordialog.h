@@ -3,11 +3,11 @@
 
 #include "qcepmacros.h"
 
-#include <QGroupBox>
+#include <QDockWidget>
 #include "qxrdforwardtypes.h"
 #include "ui_qxrdintegratordialog.h"
 
-class QxrdIntegratorDialog : public QWidget, public Ui::QxrdIntegratorDialog
+class QxrdIntegratorDialog : public QDockWidget, public Ui::QxrdIntegratorDialog
 {
   Q_OBJECT;
 

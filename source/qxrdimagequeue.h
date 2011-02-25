@@ -5,7 +5,6 @@
 
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
-#include "qxrddoubleimagedata.h"
 #include <QQueue>
 #include <QReadWriteLock>
 #include <QString>

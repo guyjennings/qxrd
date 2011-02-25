@@ -16,7 +16,6 @@
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
 #include "qxrdmaskstack.h"
-#include "qxrddoubleimagedata.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdringsetfitparameters.h"
 #include "qxrdringsetsampleddata.h"
@@ -262,8 +261,6 @@ public slots:
 
   void displayIntegratedData(QxrdIntegratedDataPtr d);
   void writeOutputScan(QxrdIntegratedDataPtr d);
-
-  virtual void processorOptionsDialog();
 
 public:
   QString existingOutputDirectory(QString dir, QString subdir);

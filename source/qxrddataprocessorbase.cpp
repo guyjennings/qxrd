@@ -4,14 +4,12 @@
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
 #include "qxrdimagedata.h"
-#include "qxrddoubleimagedata.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdintegrator.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdallocator.h"
 #include "qxrdfilesaverthread.h"
 #include "qxrdgeneratetestimage.h"
-#include "qxrddataprocessoroptionsdialog.h"
 
 #include <QTime>
 #include <QPainter>
@@ -1710,9 +1708,3 @@ QxrdGenerateTestImagePtr QxrdDataProcessorBase::generateTestImage() const
   return m_GenerateTestImage;
 }
 
-void QxrdDataProcessorBase::processorOptionsDialog()
-{
-  QxrdDataProcessorOptionsDialog options(this);
-
-  options.exec();
-}

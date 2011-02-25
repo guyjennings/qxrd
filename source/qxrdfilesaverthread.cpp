@@ -37,7 +37,7 @@ void QxrdFileSaverThread::run()
 
   int rc = exec();
 
-  printf("File saver thread terminated with rc %d\n", rc);
+//  printf("File saver thread terminated with rc %d\n", rc);
 }
 
 void QxrdFileSaverThread::shutdown()

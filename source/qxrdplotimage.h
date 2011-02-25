@@ -2,7 +2,7 @@
 #define QXRDPLOTIMAGE_H
 
 #include <qwt_plot_rasteritem.h>
-#include "qxrddoubleimagedata.h"
+#include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
 
 class QxrdPlotImage : public QwtPlotRasterItem

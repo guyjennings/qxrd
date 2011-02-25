@@ -28,7 +28,7 @@ void QxrdDataProcessorThread::run()
 
   int rc = exec();
 
-  printf("Processor thread terminated with rc %d\n", rc);
+//  printf("Processor thread terminated with rc %d\n", rc);
 }
 
 void QxrdDataProcessorThread::shutdown()

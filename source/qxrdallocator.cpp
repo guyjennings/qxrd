@@ -46,7 +46,11 @@ QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image()
     return m_FreeInt16Images.dequeue();
   } else {
     if ((m_AllocatedMemoryMB + int16SizeMB()) < get_Max()) {
-      return QxrdInt16ImageDataPtr(new QxrdInt16ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int16Deleter);
+      QxrdInt16ImageDataPtr res(new QxrdInt16ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int16Deleter);
+
+      res->moveToThread(thread());
+
+      return res;
     } else {
       return QxrdInt16ImageDataPtr(NULL);
     }
@@ -63,7 +67,11 @@ QxrdInt32ImageDataPtr QxrdAllocator::newInt32Image()
     return m_FreeInt32Images.dequeue();
   } else {
     if ((m_AllocatedMemoryMB + int32SizeMB()) < get_Max()) {
-      return QxrdInt32ImageDataPtr(new QxrdInt32ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int32Deleter);
+      QxrdInt32ImageDataPtr res(new QxrdInt32ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int32Deleter);
+
+      res->moveToThread(thread());
+
+      return res;
     } else {
       return QxrdInt32ImageDataPtr(NULL);
     }
@@ -83,7 +91,11 @@ QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage()
       QxrdAllocatorThread::msleep(100);
     }
 
-    return QxrdDoubleImageDataPtr(new QxrdDoubleImageData(this, get_Width(), get_Height()), &QxrdAllocator::doubleDeleter);
+    QxrdDoubleImageDataPtr res(new QxrdDoubleImageData(this, get_Width(), get_Height()), &QxrdAllocator::doubleDeleter);
+
+    res->moveToThread(thread());
+
+    return res;
 //    } else {
 //      return QxrdDoubleImageDataPtr(NULL);
 //    }
@@ -101,7 +113,11 @@ QxrdMaskDataPtr QxrdAllocator::newMask(int def)
       QxrdAllocatorThread::msleep(100);
     }
 
-    return QxrdMaskDataPtr(new QxrdMaskData(this, get_Width(), get_Height(), def), &QxrdAllocator::maskDeleter);
+    QxrdMaskDataPtr res(new QxrdMaskData(this, get_Width(), get_Height(), def), &QxrdAllocator::maskDeleter);
+
+    res->moveToThread(thread());
+
+    return res;
 //  }
 }
 
@@ -118,7 +134,11 @@ QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(QxrdDoubleImageDataPtr da
 
     return res;
   } else {
-    return QxrdIntegratedDataPtr(new QxrdIntegratedData(this, data, 10000), &QxrdAllocator::integratedDeleter);
+    QxrdIntegratedDataPtr res(new QxrdIntegratedData(this, data, 10000), &QxrdAllocator::integratedDeleter);
+
+    res->moveToThread(thread());
+
+    return res;
   }
 }
 
@@ -157,32 +177,32 @@ void QxrdAllocator::deallocate(int sz, int width, int height)
 
 void QxrdAllocator::maskDeleter(QxrdMaskData *mask)
 {
-    delete mask;
-//  mask->deleteLater();
+//    delete mask;
+  mask->deleteLater();
 }
 
 void QxrdAllocator::int16Deleter(QxrdInt16ImageData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+  img->deleteLater();
 }
 
 void QxrdAllocator::int32Deleter(QxrdInt32ImageData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+    img->deleteLater();
 }
 
 void QxrdAllocator::doubleDeleter(QxrdDoubleImageData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+  img->deleteLater();
 }
 
 void QxrdAllocator::integratedDeleter(QxrdIntegratedData *img)
 {
-    delete img;
-//  img->deleteLater();
+//    delete img;
+  img->deleteLater();
 }
 
 int QxrdAllocator::nFreeInt16()

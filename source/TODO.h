@@ -687,4 +687,16 @@ mask stack levels.
 
 -------------------------------------------------------
 
+Make the PE acquisition code work for a wider variety
+of PE detectors, ideally for all of them.   Need to check
+model number before trying to e.g. set gain, or allow
+failures when setting gain to still permit acquisition.
+
+-------------------------------------------------------
+
+PE Acquisition fails in debug builds - sending messages
+to object in different thread
+
+-------------------------------------------------------
+
 #endif // TODO_H
