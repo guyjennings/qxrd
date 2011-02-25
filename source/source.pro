@@ -25,8 +25,7 @@ include("../qxrd.platform.pri")
 QT += network \
     script \
     scripttools
-macx:CONFIG += x86 \
-    ppc
+macx:CONFIG += x86
 macx:
 else:unix { 
     message(Version = $${VERSION})
