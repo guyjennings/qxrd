@@ -29,6 +29,10 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessorPtr processor, Q
   m_FileBrowser -> setRootIndex(m_Model->index(QDir::currentPath()));
   m_FileBrowser -> setUniformRowHeights(true);
   m_FileBrowser -> setExpandsOnDoubleClick(false);
+  m_FileBrowser -> setColumnWidth(0, 150);
+  m_FileBrowser -> setColumnWidth(1, 30);
+  m_FileBrowser -> setColumnWidth(2, -1);
+  m_FileBrowser -> setColumnWidth(3, 80);
 
 //  connect(m_FileBrowser, SIGNAL(rowCountChanged(int,int)), this, SLOT(onRowCountChanged(int,int)));
 
@@ -267,6 +271,17 @@ void QxrdFileBrowser::writeSettings(QxrdSettings &settings, QString section)
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+
+  if (m_FileBrowser) {
+    settings.beginWriteArray(section+"/colWidths",4);
+
+    for (int i=0; i<3; i++) {
+      settings.setArrayIndex(i);
+      settings.setValue("width", m_FileBrowser->columnWidth(i));
+    }
+
+    settings.endArray();
+  }
 }
 
 void QxrdFileBrowser::readSettings(QxrdSettings &settings, QString section)
@@ -274,6 +289,19 @@ void QxrdFileBrowser::readSettings(QxrdSettings &settings, QString section)
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+
+  int sz = settings.beginReadArray(section+"/colWidths");
+
+  for (int i=0; i<sz; i++) {
+    settings.setArrayIndex(i);
+    int width = settings.value("width", -1).toInt();
+
+    if (m_FileBrowser) {
+      m_FileBrowser->setColumnWidth(i, width);
+    }
+  }
+
+  settings.endArray();
 }
 
 void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
