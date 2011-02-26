@@ -424,13 +424,13 @@ void QxrdWindow::shrinkWidget(QWidget *wid)
   QFont f = wid->font();
   if (f.pointSize() > 6) f.setPointSize(6);
   wid->setFont(f);
+//  wid->setContentsMargins(1,1,1,1);
 
   QGridLayout *gl = qobject_cast<QGridLayout*>(wid);
 
   if (gl) {
-    gl->setContentsMargins(2,2,2,2);
-    gl->setHorizontalSpacing(2);
-    gl->setVerticalSpacing(2);
+    gl->setHorizontalSpacing(1);
+    gl->setVerticalSpacing(1);
   }
 
   foreach(QObject* obj, wid->children()) {
