@@ -16,7 +16,7 @@ CONFIG += qt
 QT += network \
     script \
     scripttools
-macx:
+macx:CONFIG += x86
 else:unix { 
     message(Version = $${VERSION})
     message(Plugin path = $${QXRD_PLUGIN_PATH})

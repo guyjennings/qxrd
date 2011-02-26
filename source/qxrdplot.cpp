@@ -151,7 +151,7 @@ void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurvePtr curve)
 
   symb.setPen(pen);
   symb.setBrush(QBrush(pen.color()));
-  symb.setSize(7,7);
+  symb.setSize(5,5);
 
   switch (symbolIndex) {
   case 0:
@@ -215,6 +215,27 @@ void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
 {
   emit printMessage(QDateTime::currentDateTime(),
                     tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
+
+  if (item) {
+    QwtPlotCurve *pc = dynamic_cast<QwtPlotCurve*>(item);
+
+    if (pc) {
+      QPen pen = pc->pen();
+      QwtSymbol symb = pc->symbol();
+
+      if (checked) {
+        pen.setWidth(3);
+        symb.setSize(9,9);
+      } else {
+        pen.setWidth(1);
+        symb.setSize(5,5);
+      }
+      pc->setPen(pen);
+      pc->setSymbol(symb);
+    }
+
+    replot();
+  }
 }
 
 void QxrdPlot::setXAxisLog(int isLog)

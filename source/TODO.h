@@ -678,6 +678,15 @@ National Instruments MIO card in sync with acquisition
 
 -------------------------------------------------------
 
+Load/Save mask stack state on program entry/exit
+
+-------------------------------------------------------
+
+Overall mask should be made to be a combination of the various
+mask stack levels.
+
+-------------------------------------------------------
+
 Make the PE acquisition code work for a wider variety
 of PE detectors, ideally for all of them.   Need to check
 model number before trying to e.g. set gain, or allow

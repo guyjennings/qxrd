@@ -26,7 +26,7 @@
       <item>
        <widget class="QToolButton" name="m_PrevDirectoryButton">
         <property name="toolTip">
-         <string>Return to precvious directory</string>
+         <string>Return to previous directory</string>
         </property>
         <property name="text">
          <string>...</string>

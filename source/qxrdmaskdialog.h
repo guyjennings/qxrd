@@ -17,15 +17,38 @@ public:
   explicit QxrdMaskDialog(QxrdWindowPtr win, QxrdDataProcessorPtr proc, QWidget *parent = 0);
   ~QxrdMaskDialog();
 
-  void newMask();
-  void enableMasks();
-  void deleteMasks();
-  void andMasks();
-  void orMasks();
-  void thresholdMasks();
+signals:
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
 
 protected:
   void changeEvent(QEvent *e);
+
+private slots:
+  void doHideMaskAll();
+  void doShowMaskAll();
+  void doHideMaskRange();
+  void doShowMaskRange();
+  void doInvertMask();
+  void doAndMask();
+  void doOrMask();
+  void doXorMask();
+  void doAndNotMask();
+  void doOrNotMask();
+  void doXorNotMask();
+  void doExchangeMask();
+  void doRollMask();
+  void doRollUpMask();
+  void doRollDownMask();
+  void doClearMask();
+  void doClearMaskTop();
+  void doNewMask();
+  void doPushMask();
+  void doUndoMask();
+
+private:
+  int maskStackSelectPopup();
 
 private:
   QxrdWindowPtr        m_Window;

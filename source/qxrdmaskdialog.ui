@@ -38,7 +38,11 @@
          </size>
         </property>
         <property name="toolTip">
-         <string>Push Current Mask Onto Stack</string>
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Push New Empty Mask Onto Stack&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>ENTER^</string>
@@ -60,7 +64,11 @@
          </size>
         </property>
         <property name="toolTip">
-         <string>Push Current Mask Onto Stack</string>
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Duplicate Current Mask Onto Stack&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>DUP^</string>
@@ -80,6 +88,9 @@
           <width>64</width>
           <height>16777215</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>Clear (Drop) Current Mask</string>
         </property>
         <property name="text">
          <string>CLR</string>
@@ -130,28 +141,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QToolButton" name="m_RollDownMask">
-        <property name="minimumSize">
-         <size>
-          <width>64</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>64</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Roll Mask Stack Down</string>
-        </property>
-        <property name="text">
-         <string>ROLL DN</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="2">
        <widget class="QToolButton" name="m_AndMask">
         <property name="minimumSize">
@@ -196,95 +185,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QToolButton" name="m_ExchangeMask">
-        <property name="minimumSize">
-         <size>
-          <width>64</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>64</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Exchange Current Mask with stack element</string>
-        </property>
-        <property name="text">
-         <string>EXCHG...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QToolButton" name="m_InvertMask">
-        <property name="minimumSize">
-         <size>
-          <width>64</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>64</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Invert each pixel mask</string>
-        </property>
-        <property name="text">
-         <string>INVERT...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QToolButton" name="m_XorMask">
-        <property name="minimumSize">
-         <size>
-          <width>64</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>64</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>mask &lt;- mask XOR mask2</string>
-        </property>
-        <property name="text">
-         <string>XOR...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="QToolButton" name="m_OrNotMask">
-        <property name="minimumSize">
-         <size>
-          <width>64</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>64</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>mask &lt;- mask OR NOT mask2</string>
-        </property>
-        <property name="text">
-         <string>OR NOT...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
+      <item row="4" column="0">
        <widget class="QToolButton" name="m_HideMaskAll">
         <property name="minimumSize">
          <size>
@@ -306,7 +207,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="4" column="1">
        <widget class="QToolButton" name="m_HideMaskRange">
         <property name="minimumSize">
          <size>
@@ -328,7 +229,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="2" colspan="2">
+      <item row="4" column="2" colspan="2">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QLabel" name="label_17">
@@ -367,7 +268,7 @@
         </item>
        </layout>
       </item>
-      <item row="4" column="0">
+      <item row="5" column="0">
        <widget class="QToolButton" name="m_ShowMaskAll">
         <property name="minimumSize">
          <size>
@@ -389,7 +290,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="5" column="1">
        <widget class="QToolButton" name="m_ShowMaskRange">
         <property name="minimumSize">
          <size>
@@ -411,7 +312,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="2" colspan="2">
+      <item row="5" column="2" colspan="2">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QLabel" name="label_18">
@@ -450,51 +351,187 @@
         </item>
        </layout>
       </item>
+      <item row="2" column="2">
+       <widget class="QToolButton" name="m_AndNotMask">
+        <property name="minimumSize">
+         <size>
+          <width>64</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>64</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>mask &lt;- mask AND NOT mask2</string>
+        </property>
+        <property name="text">
+         <string>AND NOT...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QToolButton" name="m_OrNotMask">
+        <property name="minimumSize">
+         <size>
+          <width>64</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>64</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>mask &lt;- mask OR NOT mask2</string>
+        </property>
+        <property name="text">
+         <string>OR NOT...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QToolButton" name="m_RollDownMask">
+        <property name="minimumSize">
+         <size>
+          <width>64</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>64</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Roll Mask Stack Down</string>
+        </property>
+        <property name="text">
+         <string>ROLL DN</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QToolButton" name="m_XorMask">
+        <property name="minimumSize">
+         <size>
+          <width>64</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>64</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>mask &lt;- mask XOR mask2</string>
+        </property>
+        <property name="text">
+         <string>XOR...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QToolButton" name="m_XorNotMask">
+        <property name="minimumSize">
+         <size>
+          <width>64</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>64</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>mask &lt;- mask XOR NOT mask2</string>
+        </property>
+        <property name="text">
+         <string>XOR NOT...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QToolButton" name="m_InvertMask">
+        <property name="minimumSize">
+         <size>
+          <width>64</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>64</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Invert each pixel mask</string>
+        </property>
+        <property name="text">
+         <string>INVERT...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QToolButton" name="m_ExchangeMask">
+        <property name="minimumSize">
+         <size>
+          <width>64</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>64</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Exchange Current Mask with stack element</string>
+        </property>
+        <property name="text">
+         <string>EXCHG...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QToolButton" name="m_RollMask">
+        <property name="minimumSize">
+         <size>
+          <width>64</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>64</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Roll Mask Stack To bring selected mask to top&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>ROLL...</string>
+        </property>
+       </widget>
+      </item>
      </layout>
-    </item>
-    <item row="2" column="0">
-     <widget class="QToolButton" name="m_AndNotMask">
-      <property name="minimumSize">
-       <size>
-        <width>64</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>64</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="toolTip">
-       <string>mask &lt;- mask AND NOT mask2</string>
-      </property>
-      <property name="text">
-       <string>AND NOT...</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QToolButton" name="m_XorNotMask">
-      <property name="minimumSize">
-       <size>
-        <width>64</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>64</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="toolTip">
-       <string>mask &lt;- mask XOR NOT mask2</string>
-      </property>
-      <property name="text">
-       <string>XOR NOT...</string>
-      </property>
-     </widget>
     </item>
     <item row="3" column="0" colspan="2">
      <widget class="QCheckBox" name="m_MaskSetPixels">
