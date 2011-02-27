@@ -12,6 +12,7 @@
 #include "qxrdringsetfitparameters.h"
 #include "qxrdringsampleddata.h"
 #include "qxrdringsetsampleddata.h"
+#include "qxrdsynchronizedacquisition.h"
 
 #include <QThread>
 
@@ -54,6 +55,7 @@ void QxrdScriptEngine::initialize()
 //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(m_ScriptEngine);
 
   m_ScriptEngine -> globalObject().setProperty("acquisition", m_ScriptEngine -> newQObject(m_Acquisition));
+  m_ScriptEngine -> globalObject().setProperty("synchronization", m_ScriptEngine -> newQObject(m_Acquisition->synchronizedAcquisition()));
   m_ScriptEngine -> globalObject().setProperty("application", m_ScriptEngine -> newQObject(m_Application));
   m_ScriptEngine -> globalObject().setProperty("window", m_ScriptEngine -> newQObject(m_Window));
   m_ScriptEngine -> globalObject().setProperty("processor", m_ScriptEngine -> newQObject(m_Application->dataProcessor()/*,QScriptEngine::QtOwnership,QScriptEngine::AutoCreateDynamicProperties*/));

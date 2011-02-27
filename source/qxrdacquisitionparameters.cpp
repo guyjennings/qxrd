@@ -1,5 +1,5 @@
 #include "qxrdacquisitionparameters.h"
-
+#include "qxrdsynchronizedacquisition.h"
 //#include <QMutexLocker>
 #include "qxrdmutexlocker.h"
 #include "qxrdsettings.h"
@@ -7,7 +7,7 @@
 #include <QStringList>
 #include <QThread>
 
-QxrdAcquisitionParameters::QxrdAcquisitionParameters(/*QxrdDataProcessor *proc*/)
+QxrdAcquisitionParameters::QxrdAcquisitionParameters()
   : QObject(),
     m_DetectorType(this, "detectorType",-1),
     m_DetectorTypeName(this,"detectorTypeName",""),
@@ -43,7 +43,8 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(/*QxrdDataProcessor *proc*/
     m_UserComment3(this,"userComment3",""),
     m_UserComment4(this,"userComment4",""),
     m_DroppedFrames(this,"droppedFrames",0),
-    m_Mutex(QMutex::Recursive)
+    m_Mutex(QMutex::Recursive),
+    m_SynchronizedAcquisition(new QxrdSynchronizedAcquisition(this))
 {
   connect(prop_Raw16SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateSaveTimes()));
   connect(prop_Raw32SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateSaveTimes()));
@@ -91,12 +92,20 @@ void QxrdAcquisitionParameters::writeSettings(QxrdSettings &settings, QString se
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
+  if (m_SynchronizedAcquisition) {
+    m_SynchronizedAcquisition->writeSettings(settings, section+"/sync");
+  }
+
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdAcquisitionParameters::readSettings(QxrdSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (m_SynchronizedAcquisition) {
+    m_SynchronizedAcquisition->readSettings(settings, section+"/sync");
+  }
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 

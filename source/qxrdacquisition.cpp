@@ -19,9 +19,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr all
     m_NGroupsPerSequence(1),
     m_FrameCounter(0),
     m_InitialFileIndex(0),
-    m_ControlPanel(NULL),
-    m_NIDAQPlugin(NULL),
-    m_SynchronizedAcquisition(new QxrdSynchronizedAcquisition(this))
+    m_ControlPanel(NULL)
 {
   connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
   connect(prop_BinningMode(), SIGNAL(changedValue(int)), this, SLOT(onBinningModeChanged(int)));
@@ -272,6 +270,9 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
                  emit printMessage(QDateTime::currentDateTime(),
                                    tr("Frame %1 skipped").arg(m_CurrentExposure));
       );
+      m_CurrentPhase.fetchAndStoreOrdered(-1);
+      m_CurrentSummation.fetchAndStoreOrdered(-1);
+      m_CurrentGroup.fetchAndStoreOrdered(-1);
     } else {
 
       if (expWithinGroup < m_NPhasesPerSummation*m_NSummationsPerGroup) {
@@ -510,8 +511,6 @@ QxrdAcquireDialog *QxrdAcquisition::controlPanel(QxrdWindowPtr win)
 
 void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin)
 {
-  m_NIDAQPlugin = nidaqPlugin;
-
   if (m_SynchronizedAcquisition) {
     m_SynchronizedAcquisition -> setNIDAQPlugin(nidaqPlugin);
   }
@@ -519,7 +518,11 @@ void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin)
 
 QxrdNIDAQPluginInterface *QxrdAcquisition::nidaqPlugin() const
 {
-  return m_NIDAQPlugin;
+  if (m_SynchronizedAcquisition) {
+    return m_SynchronizedAcquisition -> nidaqPlugin();
+  } else {
+    return NULL;
+  }
 }
 
 QxrdSynchronizedAcquisition* QxrdAcquisition::synchronizedAcquisition() const

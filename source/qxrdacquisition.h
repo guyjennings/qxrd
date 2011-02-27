@@ -109,9 +109,6 @@ protected:
 
   QxrdAcquireDialog     *m_ControlPanel;
 
-  QxrdNIDAQPluginInterface    *m_NIDAQPlugin;
-  QxrdSynchronizedAcquisition *m_SynchronizedAcquisition;
-
 #if QT_VERSION >= 0x040700
   QElapsedTimer          m_ElapsedTimer;
 #else
