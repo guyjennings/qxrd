@@ -5,6 +5,7 @@
 #include "ui_qxrdslicedialog.h"
 #include "qxrdsettings.h"
 #include "qxrdimagedata.h"
+#include "qwt_array.h"
 
 class QxrdSliceDialog : public QDockWidget, public Ui::QxrdSliceDialog
 {
@@ -17,6 +18,16 @@ public:
   void writeSettings(QxrdSettings &settings, QString section);
 
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
+
+public slots:
+  void slicePolygon(QwtArray<QwtDoublePoint> poly);
+
+private:
+  void reslice();
+
+private:
+  QxrdDoubleImageDataPtr   m_Image;
+  QwtArray<QwtDoublePoint> m_Polygon;
 };
 
 #endif // QXRDSLICEDIALOG_H

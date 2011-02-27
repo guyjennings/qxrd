@@ -23,5 +23,21 @@ void QxrdSliceDialog::writeSettings(QxrdSettings &settings, QString section)
 
 void QxrdSliceDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
 {
+  m_Image = image;
 
+  reslice();
+}
+
+void QxrdSliceDialog::slicePolygon(QwtArray<QwtDoublePoint> poly)
+{
+  m_Polygon = poly;
+
+  reslice();
+}
+
+void QxrdSliceDialog::reslice()
+{
+  foreach (QwtDoublePoint pt, m_Polygon) {
+    printf("%g,%g\n", pt.x(), pt.y());
+  }
 }

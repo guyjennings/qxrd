@@ -16,16 +16,16 @@
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QxrdPlot" name="m_SlicePlot" native="true"/>
+     <widget class="QxrdSlicerPlot" name="m_SlicePlot" native="true"/>
     </item>
    </layout>
   </widget>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QxrdPlot</class>
+   <class>QxrdSlicerPlot</class>
    <extends>QWidget</extends>
-   <header>qxrdplot.h</header>
+   <header>qxrdslicerplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

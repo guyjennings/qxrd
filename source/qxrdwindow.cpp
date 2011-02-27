@@ -23,6 +23,7 @@
 #include "qxrdallocator.h"
 #include "qxrdpowderfitdialog.h"
 #include "qxrdimagedisplaywidget.h"
+#include "qwt_array.h"
 
 #include "qxrdtestdockwidget.h"
 
@@ -399,6 +400,9 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_WindowsMenu -> addAction(m_SliceDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_HistogramDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_ImageInfoDialog -> toggleViewAction());
+
+  connect(m_Plot, SIGNAL(slicePolygon(QwtArray<QwtDoublePoint>)),
+          m_SliceDialog, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
 
   //  if (m_Acquisition->get_DetectorType() != 1) { // No file browser for PE detector...
   //    m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);

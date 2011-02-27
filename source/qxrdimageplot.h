@@ -10,6 +10,7 @@
 #include "qxrddataprocessor.h"
 
 #include <qwt_color_map.h>
+#include <qwt_array.h>
 
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
@@ -71,6 +72,9 @@ public:
 
   Q_PROPERTY(double maskMouse READ get_MaskMouse WRITE set_MaskMouse STORED false);
   QCEP_DOUBLE_PROPERTY(MaskMouse);
+
+signals:
+  void slicePolygon(QwtArray<QwtDoublePoint> poly);
 
 public slots:
   void set005Range();
