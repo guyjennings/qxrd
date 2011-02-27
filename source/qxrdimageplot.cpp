@@ -151,8 +151,8 @@ void QxrdImagePlot::setDataProcessor(QxrdDataProcessorPtr proc)
   connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
           m_DataProcessor, SLOT(measurePolygon(QwtArray<QwtDoublePoint>)));
 
-  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-          m_DataProcessor, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
+//  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+//          m_DataProcessor, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
 
   connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
           this, SIGNAL(slicePolygon(QwtArray<QwtDoublePoint>)));
