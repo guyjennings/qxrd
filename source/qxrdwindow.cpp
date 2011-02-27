@@ -66,6 +66,9 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     m_Calculator(NULL),
     m_InputFileBrowser(NULL),
     m_OutputFileBrowser(NULL),
+    m_SliceDialog(NULL),
+    m_HistogramDialog(NULL),
+    m_ImageInfoDialog(NULL),
     m_Progress(NULL),
     m_AllocationStatus(NULL),
     m_Acquiring(false),
@@ -100,6 +103,9 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_IntegratorDialog   = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
   m_InputFileBrowser   = new QxrdInputFileBrowser(m_DataProcessor, this);
   m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_DataProcessor, this);
+  m_SliceDialog        = new QxrdSliceDialog(this);
+  m_HistogramDialog    = new QxrdHistogramDialog(this);
+  m_ImageInfoDialog    = new QxrdInfoDialog(this);
 
   QDesktopWidget *dw = QApplication::desktop();
 //  int screenNum = dw->screenNumber(this);
@@ -118,10 +124,13 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     tabifyDockWidget(m_AcquireDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_InputFileBrowser);
+    tabifyDockWidget(m_InputFileBrowser, m_SliceDialog);
+    tabifyDockWidget(m_SliceDialog, m_ImageInfoDialog);
 
     tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
     tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
+    tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
 } else {
     addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
 
@@ -137,6 +146,10 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
     tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
 
+    tabifyDockWidget(m_OutputFileBrowser, m_SliceDialog);
+    tabifyDockWidget(m_SliceDialog, m_HistogramDialog);
+    tabifyDockWidget(m_HistogramDialog, m_ImageInfoDialog);
+
     if (screenGeom.height() < 800) {
       shrinkDockWidget(m_AcquireDialog);
       shrinkDockWidget(m_CenterFinderDialog);
@@ -147,6 +160,9 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
       shrinkDockWidget(m_InputFileBrowser);
       shrinkDockWidget(m_OutputFileBrowser);
       shrinkDockWidget(m_CorrectionDialog);
+      shrinkDockWidget(m_SliceDialog);
+      shrinkDockWidget(m_HistogramDialog);
+      shrinkDockWidget(m_ImageInfoDialog);
     }
   }
 //  tabifyDockWidget(m_IntegratorDialog, new QxrdTestDockWidget(this));
@@ -380,6 +396,9 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_WindowsMenu -> addAction(m_MaskDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CorrectionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_SliceDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_HistogramDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_ImageInfoDialog -> toggleViewAction());
 
   //  if (m_Acquisition->get_DetectorType() != 1) { // No file browser for PE detector...
   //    m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
@@ -652,6 +671,18 @@ void QxrdWindow::readSettings(QxrdSettings &settings, QString section)
     m_OutputFileBrowser  -> readSettings(settings, section+"/outputFileBrowser");
   }
 
+  if (m_HistogramDialog) {
+    m_HistogramDialog -> readSettings(settings, section+"/histogramDialog");
+  }
+
+  if (m_SliceDialog) {
+    m_SliceDialog -> readSettings(settings, section+"/sliceDialog");
+  }
+
+  if (m_ImageInfoDialog) {
+    m_ImageInfoDialog ->  readSettings(settings, section+"/imageInfoDialog");
+  }
+
   m_SettingsLoaded = true;
 
   QByteArray geometry = settings.value(section+"-geometry").toByteArray();
@@ -675,6 +706,18 @@ void QxrdWindow::writeSettings(QxrdSettings &settings, QString section)
 
   if (m_OutputFileBrowser) {
     m_OutputFileBrowser  -> writeSettings(settings, section+"/outputFileBrowser");
+  }
+
+  if (m_HistogramDialog) {
+    m_HistogramDialog -> writeSettings(settings, section+"/histogramDialog");
+  }
+
+  if (m_SliceDialog) {
+    m_SliceDialog -> writeSettings(settings, section+"/sliceDialog");
+  }
+
+  if (m_ImageInfoDialog) {
+    m_ImageInfoDialog ->  writeSettings(settings, section+"/imageInfoDialog");
   }
 
   settings.setValue(section+"-geometry", saveGeometry());
@@ -744,6 +787,18 @@ void QxrdWindow::newData()
 
     if (m_ImageDisplay) {
       m_ImageDisplay -> updateImage(m_Data, m_Overflow);
+    }
+
+    if (m_SliceDialog) {
+      m_SliceDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
+    }
+
+    if (m_HistogramDialog) {
+      m_HistogramDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
+    }
+
+    if (m_ImageInfoDialog) {
+      m_ImageInfoDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
     }
   }
 }

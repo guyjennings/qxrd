@@ -22,6 +22,9 @@
 #include "qxrdmaskdialog.h"
 #include "qxrdcorrectiondialog.h"
 #include "qxrdintegratordialog.h"
+#include "qxrdslicedialog.h"
+#include "qxrdhistogramdialog.h"
+#include "qxrdinfodialog.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -132,6 +135,9 @@ private:
   QxrdImageCalculatorPtr                 m_Calculator;
   QxrdInputFileBrowser                  *m_InputFileBrowser;
   QxrdOutputFileBrowser                 *m_OutputFileBrowser;
+  QxrdSliceDialog                       *m_SliceDialog;
+  QxrdHistogramDialog                   *m_HistogramDialog;
+  QxrdInfoDialog                        *m_ImageInfoDialog;
   QPointer<QxrdPowderFitDialog>          m_PowderFitDialog;
   QVector<double>                        m_Exposures;
   QProgressBarPtr                        m_Progress;

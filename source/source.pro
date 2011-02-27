@@ -189,7 +189,10 @@ HEADERS += TODO.h \
     qxrdcorrectiondialog.h \
     qxrdtestdockwidget.h \
     qxrdfilebrowsermodel.h \
-    qxrdfilebrowserview.h
+    qxrdfilebrowserview.h \
+    qxrdslicedialog.h \
+    qxrdhistogramdialog.h \
+    qxrdinfodialog.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -291,7 +294,10 @@ SOURCES += qxrd.cpp \
     qxrdcorrectiondialog.cpp \
     qxrdtestdockwidget.cpp \
     qxrdfilebrowsermodel.cpp \
-    qxrdfilebrowserview.cpp
+    qxrdfilebrowserview.cpp \
+    qxrdslicedialog.cpp \
+    qxrdhistogramdialog.cpp \
+    qxrdinfodialog.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -304,7 +310,10 @@ FORMS = qxrdwindow.ui \
     qxrdsynchronizedacquisitiondialog.ui \
     qxrddisplaydialog.ui \
     qxrdcorrectiondialog.ui \
-    qxrdtestdockwidget.ui
+    qxrdtestdockwidget.ui \
+    qxrdslicedialog.ui \
+    qxrdhistogramdialog.ui \
+    qxrdinfodialog.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 
