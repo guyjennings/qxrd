@@ -13,6 +13,22 @@ void QxrdSliceDialog::readSettings(QxrdSettings &settings, QString section)
   m_SlicePlot->readSettings(settings, section+"/plot");
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+
+  m_Polygon.clear();
+
+  int sz = settings.beginReadArray(section+"/polygon");
+
+  for (int i=0; i<sz; i++) {
+    settings.setArrayIndex(i);
+    bool xok, yok;
+    double x = settings.value("x").toDouble(&xok);
+    double y = settings.value("y").toDouble(&yok);
+    if (xok && yok) {
+      m_Polygon.append(QwtDoublePoint(x,y));
+    }
+  }
+
+  settings.endArray();
 }
 
 void QxrdSliceDialog::writeSettings(QxrdSettings &settings, QString section)
@@ -20,6 +36,18 @@ void QxrdSliceDialog::writeSettings(QxrdSettings &settings, QString section)
   m_SlicePlot->writeSettings(settings, section+"/plot");
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+
+  settings.beginWriteArray(section+"/polygon", m_Polygon.count());
+
+  for (int i=0; i<m_Polygon.count(); i++) {
+    QwtDoublePoint pt = m_Polygon[i];
+
+    settings.setArrayIndex(i);
+    settings.setValue("x", pt.x());
+    settings.setValue("y", pt.y());
+  }
+
+  settings.endArray();
 }
 
 void QxrdSliceDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
@@ -42,6 +70,7 @@ void QxrdSliceDialog::reslice()
 
   if (m_Image) {
     QVector<double> xp,yp;
+    QString title = m_Image->get_Title();
 
     double length = 0;
 
@@ -59,6 +88,8 @@ void QxrdSliceDialog::reslice()
       p0 = m_Polygon[0];
       double r = 0;
       double r0 = 0;
+
+      title += tr(" [%1,%2]").arg(p0.x()).arg(p0.y());
 
       for (int i=1; i<m_Polygon.size(); i++) {
         QwtDoublePoint p1 = m_Polygon[i];
@@ -81,7 +112,16 @@ void QxrdSliceDialog::reslice()
         r  -= len;
       }
 
-      QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_SlicePlot, m_Image->get_Title());
+      if (m_Polygon.size() > 2) {
+        title += "...";
+      } else {
+        title += "-";
+      }
+
+      QwtDoublePoint p1 = m_Polygon.last();
+      title += tr("[%1,%2]").arg(p1.x()).arg(p1.y());
+
+      QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_SlicePlot, title);
 
       pc->setData(xp, yp);
 
