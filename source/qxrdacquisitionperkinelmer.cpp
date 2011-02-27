@@ -550,11 +550,9 @@ void QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb)
 
 void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 {
-  static int fc = 0;
-
-//  if (synchronizedAcquisition()) {
-//    synchronizedAcquisition()->acquiredFrameAvailable((fc++) % 10/*m_CurrentExposure*/, m_CurrentFile);
-//  }
+  if (synchronizedAcquisition()) {
+    synchronizedAcquisition()->acquiredFrameAvailable(m_CurrentPhase);
+  }
 
   if (checkPluginAvailable()) {
 

@@ -2,6 +2,7 @@
 #include "qxrdimagedata.h"
 #include "qxrddataprocessor.h"
 #include "qxrdallocator.h"
+#include "qxrdsynchronizedacquisition.h"
 
 #include <QDir>
 #include <QThread>
@@ -109,6 +110,10 @@ void QxrdAcquisitionSimulated::initialize()
 
 void QxrdAcquisitionSimulated::onTimerTimeout()
 {
+  if (synchronizedAcquisition()) {
+    synchronizedAcquisition()->acquiredFrameAvailable(m_CurrentPhase);
+  }
+
   static int frameCounter = 0;
 
   int nRows = get_NRows();

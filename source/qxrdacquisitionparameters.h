@@ -7,6 +7,8 @@
 #include <QMutex>
 
 class QxrdSettings;
+class QxrdSynchronizedAcquisition;
+
 //class QxrdDataProcessor;
 
 #include "qcepproperty.h"
@@ -15,7 +17,7 @@ class QxrdAcquisitionParameters : public QObject
 {
   Q_OBJECT;
 public:
-  QxrdAcquisitionParameters(/*QxrdDataProcessor *proc*/);
+  QxrdAcquisitionParameters();
 
 signals:
   void printMessage(QDateTime ts, QString msg);
@@ -146,7 +148,8 @@ public:
 //  Q_PROPERTY(int     timerSync       READ timerSync WRITE setTimerSync);
 
 protected:
-  mutable QMutex         m_Mutex;
+  mutable QMutex               m_Mutex;
+  QxrdSynchronizedAcquisition *m_SynchronizedAcquisition;
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H

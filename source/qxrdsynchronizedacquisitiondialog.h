@@ -7,14 +7,17 @@
 
 class QxrdSynchronizedAcquisitionDialog : public QDockWidget, public Ui::QxrdSynchronizedAcquisitionDialog
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit QxrdSynchronizedAcquisitionDialog(QWidget *parent = 0, QxrdAcquisition *acq = 0);
-    ~QxrdSynchronizedAcquisitionDialog();
+  explicit QxrdSynchronizedAcquisitionDialog(QWidget *parent = 0, QxrdAcquisition *acq = 0);
+  ~QxrdSynchronizedAcquisitionDialog();
 
 protected:
-    void changeEvent(QEvent *e);
+  void changeEvent(QEvent *e);
+
+private:
+  QxrdSynchronizedAcquisition *m_SynchronizedAcquisition;
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITIONDIALOG_H
