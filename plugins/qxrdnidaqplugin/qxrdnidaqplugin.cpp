@@ -20,7 +20,7 @@ QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
 QxrdNIDAQPlugin::~QxrdNIDAQPlugin()
 {
 //  printf("NI-DAQ plugin destroyed");
-//  closeTaskHandles();
+  closeTaskHandles();
 }
 
 QString QxrdNIDAQPlugin::name() const
@@ -77,19 +77,20 @@ void QxrdNIDAQPlugin::initTaskHandles()
 
 void QxrdNIDAQPlugin::closeTaskHandles()
 {
-//  if (m_AOTaskHandle) {
-//    DAQmxClearTask(m_AOTaskHandle);
-//    m_AOTaskHandle = 0;
-//  }
-//  if (m_AITaskHandle) {
-//    DAQmxClearTask(m_AITaskHandle);
-//    m_AITaskHandle = 0;
-//  }
+  if (m_AOTaskHandle) {
+    DAQmxClearTask(m_AOTaskHandle);
+    m_AOTaskHandle = 0;
+  }
 
-//  if (m_TrigAOTask) {
-//    DAQmxClearTask(m_TrigAOTask);
-//    m_TrigAOTask = 0;
-//  }
+  if (m_AITaskHandle) {
+    DAQmxClearTask(m_AITaskHandle);
+    m_AITaskHandle = 0;
+  }
+
+  if (m_TrigAOTask) {
+    DAQmxClearTask(m_TrigAOTask);
+    m_TrigAOTask = 0;
+  }
 }
 
 void   QxrdNIDAQPlugin::aoSet(double val1, double val2)
@@ -181,7 +182,7 @@ void   QxrdNIDAQPlugin::setAnalogChannel(int chan)
   }
 
   if (chan >= 0) {
-    DAQmxErrChk(DAQmxCreateTask("", &m_AOTaskHandle))
+    DAQmxErrChk(DAQmxCreateTask("qxrd-output", &m_AOTaskHandle))
     DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle,
                                           qPrintable(tr("Dev1/ao%1").arg(chan)), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL))
   }

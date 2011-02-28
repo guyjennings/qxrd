@@ -294,7 +294,7 @@ QxrdApplication::~QxrdApplication()
              printf("QxrdApplication::~QxrdApplication\n");
   );
 
-  delete m_Window;
+  m_Window -> deleteLater();
   m_AcquisitionThread -> deleteLater();
   m_ServerThread -> deleteLater();
   m_DataProcessorThread -> deleteLater();
