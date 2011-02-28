@@ -23,6 +23,10 @@
 #include "qxrdprocessorinterface.h"
 #include "qxrdnidaqplugininterface.h"
 
+#ifdef HAVE_PERKIN_ELMER
+#include "qxrdperkinelmerplugininterface.h"
+#endif
+
 #include <QTime>
 #include <QtConcurrentRun>
 #include <QFileDialog>

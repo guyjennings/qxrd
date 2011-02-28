@@ -24,6 +24,7 @@
 #include <QDir>
 #include <QFile>
 #include <QTime>
+#include <QComboBox>
 //#include <QMutexLocker>
 #include "qxrdmutexlocker.h"
 #include <QMetaObject>
@@ -35,7 +36,7 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
 static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
 static HACQDESC m_AcqDesc = NULL;
 
-QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator)
+QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc, QxrdAllocator *allocator)
   : QxrdAcquisition(proc, allocator),
     m_Mutex(QMutex::Recursive),
     m_BufferSize(0),

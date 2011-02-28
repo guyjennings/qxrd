@@ -3,8 +3,6 @@
 
 //#ifdef HAVE_PERKIN_ELMER
 
-#include "qcepmacros.h"
-
 #include "qxrdacquisition.h"
 #include "qxrdperkinelmerplugininterface.h"
 
@@ -17,7 +15,7 @@ class QxrdAcquisitionPerkinElmer : public QxrdAcquisition
 {
   Q_OBJECT;
 public:
-  QxrdAcquisitionPerkinElmer(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator);
+  QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc, QxrdAllocator *allocator);
 //  ~QxrdAcquisitionPerkinElmer();
 
 private slots:
