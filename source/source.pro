@@ -194,7 +194,8 @@ HEADERS += TODO.h \
     qxrdhistogramdialog.h \
     qxrdinfodialog.h \
     qxrdhistogramplot.h \
-    qxrdslicerplot.h
+    qxrdslicerplot.h \
+    qxrdhistogramselector.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -301,7 +302,8 @@ SOURCES += qxrd.cpp \
     qxrdhistogramdialog.cpp \
     qxrdinfodialog.cpp \
     qxrdhistogramplot.cpp \
-    qxrdslicerplot.cpp
+    qxrdslicerplot.cpp \
+    qxrdhistogramselector.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \

@@ -7,6 +7,7 @@
 #include "qxrdcenterfinderpicker.h"
 #include "qxrddataprocessor.h"
 #include "qxrdmaskpicker.h"
+#include "qxrdhistogramselector.h"
 
 #include <qwt_plot_rescaler.h>
 #include <qwt_plot_marker.h>
@@ -40,6 +41,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Rescaler(NULL),
     m_Slicer(NULL),
     m_Measurer(NULL),
+    m_HistogramSelector(NULL),
 //    m_Legend(NULL),
     m_Data(NULL),
     m_Mask(NULL),
@@ -62,7 +64,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 {
   delete m_Zoomer;
 
-  m_Zoomer = QxrdPlotZoomerPtr(new QxrdImagePlotZoomer(QwtPlotCanvasPtr(canvas()), QxrdImagePlotPtr(this)));
+  m_Zoomer = new QxrdImagePlotZoomer(canvas(), this);
   m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
   m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
   m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
@@ -74,14 +76,17 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 
   m_Zoomer -> setEnabled(true);
 
-  m_Rescaler = QwtPlotRescalerPtr(new QwtPlotRescaler(canvas(), QwtPlot::xBottom, QwtPlotRescaler::Expanding));
+  m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::xBottom, QwtPlotRescaler::Expanding);
   m_Rescaler -> setEnabled(true);
 
-  m_Slicer = QxrdPlotSlicerPtr(new QxrdPlotSlicer(QwtPlotCanvasPtr(canvas()), QxrdImagePlotPtr(this)));
+  m_Slicer = new QxrdPlotSlicer(canvas(), this);
   m_Slicer -> setEnabled(false);
 
-  m_Measurer = QxrdImagePlotMeasurerPtr(new QxrdImagePlotMeasurer(QwtPlotCanvasPtr(canvas()), QxrdImagePlotPtr(this)));
+  m_Measurer = new QxrdImagePlotMeasurer(canvas(), this);
   m_Measurer -> setEnabled(false);
+
+  m_HistogramSelector = new QxrdHistogramSelector(canvas(), this);
+  m_HistogramSelector -> setEnabled(false);
 
 //  m_Legend = QwtLegendPtr(new QwtLegend(this));
   m_Legend -> setFrameStyle(QFrame::Box|QFrame::Sunken);
@@ -156,6 +161,9 @@ void QxrdImagePlot::setDataProcessor(QxrdDataProcessorPtr proc)
 
   connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
           this, SIGNAL(slicePolygon(QwtArray<QwtDoublePoint>)));
+
+  connect(m_HistogramSelector, SIGNAL(selected(QwtDoubleRect)),
+          this, SIGNAL(selectHistogram(QwtDoubleRect)));
 }
 
 QxrdDataProcessorPtr QxrdImagePlot::processor() const
@@ -273,6 +281,8 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
   m_Measurer -> setRubberBandPen(pen);
   m_Slicer   -> setTrackerPen(pen);
   m_Slicer   -> setRubberBandPen(pen);
+  m_HistogramSelector   -> setTrackerPen(pen);
+  m_HistogramSelector   -> setRubberBandPen(pen);
 
   if (m_CenterMarker) {
     m_CenterMarker -> setLinePen(pen);
@@ -591,6 +601,7 @@ void QxrdImagePlot::enableZooming()
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer       -> setEnabled(false);
   m_Measurer     -> setEnabled(false);
+  m_HistogramSelector -> setEnabled(false);
   m_Circles  -> setEnabled(false);
   m_Polygons -> setEnabled(false);
 }
@@ -601,6 +612,7 @@ void QxrdImagePlot::enableCentering()
   m_CenterFinderPicker -> setEnabled(true);
   m_Slicer   -> setEnabled(false);
   m_Measurer -> setEnabled(false);
+  m_HistogramSelector -> setEnabled(false);
   m_Circles  -> setEnabled(false);
   m_Polygons -> setEnabled(false);
 }
@@ -611,6 +623,7 @@ void QxrdImagePlot::enableSlicing()
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(true);
   m_Measurer -> setEnabled(false);
+  m_HistogramSelector -> setEnabled(false);
   m_Circles  -> setEnabled(false);
   m_Polygons -> setEnabled(false);
 }
@@ -621,6 +634,18 @@ void QxrdImagePlot::enableMeasuring()
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(false);
   m_Measurer -> setEnabled(true);
+  m_HistogramSelector -> setEnabled(false);
+  m_Circles  -> setEnabled(false);
+  m_Polygons -> setEnabled(false);
+}
+
+void QxrdImagePlot::enableHistograms()
+{
+  m_Zoomer   -> setEnabled(false);
+  m_CenterFinderPicker -> setEnabled(false);
+  m_Slicer   -> setEnabled(false);
+  m_Measurer -> setEnabled(false);
+  m_HistogramSelector -> setEnabled(true);
   m_Circles  -> setEnabled(false);
   m_Polygons -> setEnabled(false);
 }
@@ -631,6 +656,7 @@ void QxrdImagePlot::enableMaskCircles()
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(false);
   m_Measurer -> setEnabled(false);
+  m_HistogramSelector -> setEnabled(false);
   m_Circles  -> setEnabled(true);
   m_Polygons -> setEnabled(false);
 }
@@ -641,6 +667,7 @@ void QxrdImagePlot::enableMaskPolygons()
   m_CenterFinderPicker -> setEnabled(false);
   m_Slicer   -> setEnabled(false);
   m_Measurer -> setEnabled(false);
+  m_HistogramSelector -> setEnabled(false);
   m_Circles  -> setEnabled(false);
   m_Polygons -> setEnabled(true);
 }

@@ -17,6 +17,8 @@
 #include "qxrdmaskcolormap.h"
 #include "qxrdplotimage.h"
 
+class QxrdHistogramSelector;
+
 class QxrdImagePlot : public QxrdPlot
 {
   Q_OBJECT;
@@ -75,6 +77,7 @@ public:
 
 signals:
   void slicePolygon(QwtArray<QwtDoublePoint> poly);
+  void selectHistogram(QwtDoubleRect rect);
 
 public slots:
   void set005Range();
@@ -113,6 +116,7 @@ public slots:
   void enableCentering();
   void enableSlicing();
   void enableMeasuring();
+  void enableHistograms();
   void enableMaskCircles();
   void enableMaskPolygons();
 
@@ -154,6 +158,7 @@ private:
   QwtPlotRescalerPtr         m_Rescaler;
   QxrdPlotSlicerPtr          m_Slicer;
   QxrdImagePlotMeasurerPtr   m_Measurer;
+  QxrdHistogramSelector     *m_HistogramSelector;
 //  QwtLegendPtr               m_Legend;
 
   QxrdDoubleImageDataPtr     m_Data;

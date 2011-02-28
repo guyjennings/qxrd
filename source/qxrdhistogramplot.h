@@ -5,14 +5,13 @@
 
 class QxrdHistogramPlot : public QxrdPlot
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    explicit QxrdHistogramPlot(QWidget *parent = 0);
+  explicit QxrdHistogramPlot(QWidget *parent = 0);
 
 signals:
 
 public slots:
-
 };
 
 #endif // QXRDHISTOGRAMPLOT_H

@@ -237,6 +237,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   connect(m_ImageSetCenterButton, SIGNAL(clicked()), m_Plot, SLOT(enableCentering()));
   connect(m_ImageSliceButton, SIGNAL(clicked()), m_Plot, SLOT(enableSlicing()));
   connect(m_ImageMeasureButton, SIGNAL(clicked()), m_Plot, SLOT(enableMeasuring()));
+  connect(m_ImageHistogramButton, SIGNAL(clicked()), m_Plot, SLOT(enableHistograms()));
   connect(m_ImageMaskCirclesButton, SIGNAL(clicked()), m_Plot, SLOT(enableMaskCircles()));
   connect(m_ImageMaskPolygonsButton, SIGNAL(clicked()), m_Plot, SLOT(enableMaskPolygons()));
 
@@ -403,6 +404,9 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 
   connect(m_Plot, SIGNAL(slicePolygon(QwtArray<QwtDoublePoint>)),
           m_SliceDialog, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
+
+  connect(m_Plot, SIGNAL(selectHistogram(QwtDoubleRect)),
+          m_HistogramDialog, SLOT(histogramSelectionChanged(QwtDoubleRect)));
 
   //  if (m_Acquisition->get_DetectorType() != 1) { // No file browser for PE detector...
   //    m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);

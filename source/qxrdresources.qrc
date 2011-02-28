@@ -58,5 +58,6 @@
         <file>help/images/integration-panel.png</file>
         <file>help/images/masking-panel.png</file>
         <file>images/qxrd-splash-screen.png</file>
+        <file>images/histogram.png</file>
     </qresource>
 </RCC>

@@ -5,6 +5,7 @@
 #include "ui_qxrdhistogramdialog.h"
 #include "qxrdsettings.h"
 #include "qxrdimagedata.h"
+#include "qwt_double_rect.h"
 
 class QxrdHistogramDialog : public QDockWidget, public Ui::QxrdHistogramDialog
 {
@@ -17,6 +18,16 @@ public:
   void writeSettings(QxrdSettings &settings, QString section);
 
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
+
+public slots:
+  void histogramSelectionChanged(QwtDoubleRect rect);
+
+private:
+  void recalculateHistogram();
+
+private:
+  QxrdDoubleImageDataPtr   m_Image;
+  QwtDoubleRect            m_HistogramRect;
 };
 
 #endif // QXRDHISTOGRAMDIALOG_H
