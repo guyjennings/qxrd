@@ -1,6 +1,7 @@
 #include "qxrdsettingssaver.h"
 #include "qcepproperty.h"
 #include "qxrdapplication.h"
+#include <stdio.h>
 
 QxrdSettingsSaver::QxrdSettingsSaver(QObject *parent, QxrdApplication *app) :
     QObject(parent),
