@@ -149,6 +149,7 @@ public:
 
 protected:
   mutable QMutex               m_Mutex;
+
   QxrdSynchronizedAcquisition *m_SynchronizedAcquisition;
 };
 

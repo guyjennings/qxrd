@@ -13,14 +13,14 @@ QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   m_AITaskHandle(0),
   m_TrigAOTask(0)
 {
-  printf("NI-DAQ plugin constructed\n");
-  initTaskHandles();
+//  printf("NI-DAQ plugin constructed\n");
+//  initTaskHandles();
 }
 
 QxrdNIDAQPlugin::~QxrdNIDAQPlugin()
 {
-  printf("NI-DAQ plugin destroyed");
-  closeTaskHandles();
+//  printf("NI-DAQ plugin destroyed");
+//  closeTaskHandles();
 }
 
 QString QxrdNIDAQPlugin::name() const
@@ -47,98 +47,88 @@ void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
 
 void QxrdNIDAQPlugin::initTaskHandles()
 {
-  int error;
+//  int error;
 
-  if (m_AOTaskHandle == 0) {
-    DAQmxErrChk(DAQmxCreateTask("", &m_AOTaskHandle));
-    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle, "Dev1/ao0", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle, "Dev1/ao1", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-  }
+//  if (m_AOTaskHandle == 0) {
+//    DAQmxErrChk(DAQmxCreateTask("", &m_AOTaskHandle));
+//    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle, "Dev1/ao0", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+//    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle, "Dev1/ao1", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+//  }
 
-  if (m_AITaskHandle == 0) {
-    DAQmxErrChk(DAQmxCreateTask("", &m_AITaskHandle));
-    DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle, "Dev1/ai0", NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-    DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle, "Dev1/ai1", NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-  }
+//  if (m_AITaskHandle == 0) {
+//    DAQmxErrChk(DAQmxCreateTask("", &m_AITaskHandle));
+//    DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle, "Dev1/ai0", NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+//    DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle, "Dev1/ai1", NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+//  }
 
-  if (m_TrigAOTask == 0) {
-    DAQmxErrChk(DAQmxCreateTask("", &m_TrigAOTask));
-    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_TrigAOTask, "Dev1/ao0", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-//    DAQmxErrChk(DAQmxCfgAnlgEdgeStartTrig(m_TrigAOTask, "Dev1/ai2", DAQmx_Val_FallingSlope, 1.0));
-  }
+//  if (m_TrigAOTask == 0) {
+//    DAQmxErrChk(DAQmxCreateTask("", &m_TrigAOTask));
+//    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_TrigAOTask, "Dev1/ao0", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+////    DAQmxErrChk(DAQmxCfgAnlgEdgeStartTrig(m_TrigAOTask, "Dev1/ai2", DAQmx_Val_FallingSlope, 1.0));
+//  }
 
-  return;
+//  return;
 
-Error:
-  printf("Error in initTaskHandles\n");
+//Error:
+//  printf("Error in initTaskHandles\n");
 
-  closeTaskHandles();
+//  closeTaskHandles();
 }
 
 void QxrdNIDAQPlugin::closeTaskHandles()
 {
-  if (m_AOTaskHandle) {
-    DAQmxClearTask(m_AOTaskHandle);
-    m_AOTaskHandle = 0;
-  }
-  if (m_AITaskHandle) {
-    DAQmxClearTask(m_AITaskHandle);
-    m_AITaskHandle = 0;
-  }
+//  if (m_AOTaskHandle) {
+//    DAQmxClearTask(m_AOTaskHandle);
+//    m_AOTaskHandle = 0;
+//  }
+//  if (m_AITaskHandle) {
+//    DAQmxClearTask(m_AITaskHandle);
+//    m_AITaskHandle = 0;
+//  }
 
-  if (m_TrigAOTask) {
-    DAQmxClearTask(m_TrigAOTask);
-    m_TrigAOTask = 0;
-  }
+//  if (m_TrigAOTask) {
+//    DAQmxClearTask(m_TrigAOTask);
+//    m_TrigAOTask = 0;
+//  }
 }
 
 void   QxrdNIDAQPlugin::aoSet(double val1, double val2)
 {
-#if QT_VERSION >= 0x040700
-  QElapsedTimer t;
-#else
-  QTime t;
-#endif
+//#if QT_VERSION >= 0x040700
+//  QElapsedTimer t;
+//#else
+//  QTime t;
+//#endif
 
-  t.start();
+//  t.start();
 
-  double vals[2];
-  int32 nWritten;
+//  double vals[2];
+//  int32 nWritten;
 
-  vals[0]=val1;
-  vals[1]=val2;
+//  vals[0]=val1;
+//  vals[1]=val2;
 
-  int error;
-  DAQmxErrChk(DAQmxWriteAnalogF64(m_AOTaskHandle, 1, true, 10.0,
-                                  DAQmx_Val_GroupByScanNumber,
-                                  vals, &nWritten,
-                                  NULL));
+//  int error;
+//  DAQmxErrChk(DAQmxWriteAnalogF64(m_AOTaskHandle, 1, true, 10.0,
+//                                  DAQmx_Val_GroupByScanNumber,
+//                                  vals, &nWritten,
+//                                  NULL));
 
-//  printf("Analog output took %d msec\n", t.elapsed());
+////  printf("Analog output took %d msec\n", t.elapsed());
 
-Error:
-  return;
+//Error:
+//  return;
 }
-
-void   QxrdNIDAQPlugin::setAnalogOut(int chan, double val)
-{
-  int error;
-  DAQmxErrChk(DAQmxWriteAnalogScalarF64(m_TrigAOTask, true, 10.0, val, NULL));
-
-Error:
-  return;
-}
-
 void   QxrdNIDAQPlugin::aoSet(QString chan, double val)
 {
-  initTaskHandles();
+//  initTaskHandles();
 
-  int error;
-//  DAQmxErrChk(DAQmxCreateAOVoltageChan (m_TaskHandle, qPrintable(chan), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-  DAQmxErrChk(DAQmxWriteAnalogScalarF64(m_AOTaskHandle, true, 10.0, val, NULL));
+//  int error;
+////  DAQmxErrChk(DAQmxCreateAOVoltageChan (m_TaskHandle, qPrintable(chan), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+//  DAQmxErrChk(DAQmxWriteAnalogScalarF64(m_AOTaskHandle, true, 10.0, val, NULL));
 
-Error:
-  return;
+//Error:
+//  return;
 }
 
 double QxrdNIDAQPlugin::aiGet(int chan)
@@ -148,30 +138,100 @@ double QxrdNIDAQPlugin::aiGet(int chan)
 
 double QxrdNIDAQPlugin::aiGet(QString chan)
 {
-  initTaskHandles();
+//  initTaskHandles();
 
-  int error;
-  float64 res = 0;
+//  int error;
+//  float64 res = 0;
 
-  DAQmxErrChk(DAQmxReadAnalogScalarF64(m_AITaskHandle, 10.0, &res, NULL))
+//  DAQmxErrChk(DAQmxReadAnalogScalarF64(m_AITaskHandle, 10.0, &res, NULL))
 
-Error:
-  return res;
+//Error:
+//  return res;
+  return 0;
 }
 
 void   QxrdNIDAQPlugin::aoWave(QString chan, int type, double freq, double amplitude, double offset)
 {
-  int error;
-  float64 res = 0;
-  QVector<float64> waveform(1024);
+//  int error;
+//  float64 res = 0;
+//  QVector<float64> waveform(1024);
 
-  for (int i=0; i<1024; i++) {
-    waveform[i] = (i>512 ? 1 : -1);
+//  for (int i=0; i<1024; i++) {
+//    waveform[i] = (i>512 ? 1 : -1);
+//  }
+
+//  int32 numWritten;
+
+//  DAQmxErrChk(DAQmxWriteAnalogF64(m_AOTaskHandle, 1024, true, 10.0, DAQmx_Val_GroupByChannel, waveform.data(), &numWritten, NULL))
+
+//Error:
+//  return;
+}
+
+void   QxrdNIDAQPlugin::setAnalogChannel(int chan)
+{
+//  printf("setAnalogChannel(%d)\n", chan);
+
+  int error;
+
+  if (m_AOTaskHandle) {
+    DAQmxStopTask(m_AOTaskHandle);
+    DAQmxClearTask(m_AOTaskHandle);
+    m_AOTaskHandle = 0;
   }
 
-  int32 numWritten;
+  if (chan >= 0) {
+    DAQmxErrChk(DAQmxCreateTask("", &m_AOTaskHandle))
+    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle,
+                                          qPrintable(tr("Dev1/ao%1").arg(chan)), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL))
+  }
 
-  DAQmxErrChk(DAQmxWriteAnalogF64(m_AOTaskHandle, 1024, true, 10.0, DAQmx_Val_GroupByChannel, waveform.data(), &numWritten, NULL))
+Error:
+  return;
+}
+
+void   QxrdNIDAQPlugin::setAnalogWaveform(double rate, double wfm[], int size)
+{
+//  printf("setAnalogWaveform(%g,%g...,%d)\n", rate, wfm[0], size);
+
+  int error;
+  int32 nsampwrt;
+
+  if (m_AOTaskHandle) {
+    DAQmxErrChk(
+      DAQmxCfgSampClkTiming(m_AOTaskHandle, NULL, rate, DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, size)
+    )
+
+    DAQmxErrChk(
+      DAQmxWriteAnalogF64(m_AOTaskHandle, size, false, -1, DAQmx_Val_GroupByChannel, wfm, &nsampwrt, NULL)
+    )
+  }
+
+//  printf("%d samples written\n", nsampwrt);
+
+Error:
+  return;
+}
+
+void QxrdNIDAQPlugin::triggerAnalogWaveform()
+{
+//  printf("triggerAnalogWaveform()\n");
+
+  int error;
+
+  if (m_AOTaskHandle) {
+    DAQmxErrChk(
+      DAQmxWaitUntilTaskDone(m_AOTaskHandle, -1)
+    )
+
+    DAQmxErrChk(
+      DAQmxStopTask(m_AOTaskHandle)
+    )
+
+    DAQmxErrChk(
+      DAQmxStartTask(m_AOTaskHandle)
+    )
+  }
 
 Error:
   return;

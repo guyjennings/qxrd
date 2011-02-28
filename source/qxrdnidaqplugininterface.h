@@ -10,9 +10,9 @@ public:
   virtual ~QxrdNIDAQPluginInterface() {}
 
 public:
-  virtual void   setAnalogOut(int chan, double val) = 0;
-  virtual void   aoSet(QString chan, double val) = 0;
-  virtual double aiGet(QString chan) = 0;
+  virtual void setAnalogChannel(int chan) = 0;
+  virtual void setAnalogWaveform(double rate, double wfm[], int size) = 0;
+  virtual void triggerAnalogWaveform() = 0;
 };
 
 Q_DECLARE_INTERFACE(QxrdNIDAQPluginInterface, "gov.anl.aps.cep.Qxrd.NIDAQInterface/1.0");

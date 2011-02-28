@@ -7,14 +7,14 @@
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
 
-class QxrdAcquisitionParameters;
+class QxrdAcquisition;
 class QxrdNIDAQPluginInterface;
 
 class QxrdSynchronizedAcquisition : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSynchronizedAcquisition(QxrdAcquisitionParameters *acq);
+  explicit QxrdSynchronizedAcquisition(QxrdAcquisition *acq);
 
 public:
   Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode);
@@ -66,7 +66,7 @@ public:
 
 private:
   mutable QMutex             m_Mutex;
-  QxrdAcquisitionParameters *m_Acquisition;
+  QxrdAcquisition           *m_Acquisition;
   QxrdNIDAQPluginInterface  *m_NIDAQPlugin;
   int                        m_SyncMode;
   QVector<double>            m_OutputVoltage;

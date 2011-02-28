@@ -21,6 +21,8 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocat
     m_InitialFileIndex(0),
     m_ControlPanel(NULL)
 {
+  m_SynchronizedAcquisition = new QxrdSynchronizedAcquisition(this);
+
   connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
   connect(prop_BinningMode(), SIGNAL(changedValue(int)), this, SLOT(onBinningModeChanged(int)));
   connect(prop_CameraGain(), SIGNAL(changedValue(int)), this, SLOT(onCameraGainChanged(int)));
@@ -154,6 +156,10 @@ void QxrdAcquisition::acquisition(int isDark)
 
   allocateMemoryForAcquisition();
 
+  if (m_SynchronizedAcquisition) {
+    m_SynchronizedAcquisition->prepareForAcquisition();
+  }
+
   beginAcquisition();
 }
 
@@ -209,7 +215,7 @@ void QxrdAcquisition::copyParameters(int isDark)
 
   QCEP_DEBUG(DEBUG_ACQUIRE,
              emit printMessage(QDateTime::currentDateTime(),
-                               tr("SAS:%d SBG:%d PPS:%d SPG:%d GPS:%d\n")
+                               tr("SAS:%1 SBG:%2 PPS:%3 SPG:%4 GPS:%5\n")
                                .arg(m_NSkippedAtStart).arg(m_NSkippedBetweenGroups)
                                .arg(m_NPhasesPerSummation).arg(m_NSummationsPerGroup)
                                .arg(m_NGroupsPerSequence));

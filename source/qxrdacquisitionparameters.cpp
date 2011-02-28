@@ -1,4 +1,4 @@
-#include "qxrdacquisitionparameters.h"
+#include "qxrdacquisition.h"
 #include "qxrdsynchronizedacquisition.h"
 //#include <QMutexLocker>
 #include "qxrdmutexlocker.h"
@@ -44,7 +44,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters()
     m_UserComment4(this,"userComment4",""),
     m_DroppedFrames(this,"droppedFrames",0),
     m_Mutex(QMutex::Recursive),
-    m_SynchronizedAcquisition(new QxrdSynchronizedAcquisition(this))
+    m_SynchronizedAcquisition(NULL)
 {
   connect(prop_Raw16SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateSaveTimes()));
   connect(prop_Raw32SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateSaveTimes()));

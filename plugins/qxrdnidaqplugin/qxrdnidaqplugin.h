@@ -17,7 +17,9 @@ public:
   QString name() const;
 
 public slots:
-  void   setAnalogOut(int chan, double val);
+  void   setAnalogChannel(int chan);
+  void   setAnalogWaveform(double rate, double wfm[], int size);
+  void   triggerAnalogWaveform();
 
   void   aoSet(QString chan, double val);
   double aiGet(QString chan);
