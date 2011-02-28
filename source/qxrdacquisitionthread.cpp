@@ -22,8 +22,8 @@ static int g_DetectorType = -1;
 static int g_PEAvailable = false;
 #endif
 
-QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessorPtr proc,
-                                             QxrdAllocatorPtr allocator,
+QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessor *proc,
+                                             QxrdAllocator *allocator,
                                              int detectorType)
   : QThread(),
     m_Debug(true),
@@ -59,22 +59,22 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 
 void QxrdAcquisitionThread::run()
 {
-  QxrdAcquisitionPtr p;
+  QxrdAcquisition *p;
 
   switch(m_DetectorType) {
   case 0:
   default:
-    p = QxrdAcquisitionPtr(new QxrdAcquisitionSimulated(m_Processor, m_Allocator));
+    p = new QxrdAcquisitionSimulated(m_Processor, m_Allocator);
     g_DetectorType = 0;
     break;
 
 #ifdef HAVE_PERKIN_ELMER
   case 1:
     if (g_PEAvailable) {
-      p = QxrdAcquisitionPtr(new QxrdAcquisitionPerkinElmer(m_Processor, m_Allocator));
+      p = new QxrdAcquisitionPerkinElmer(m_Processor, m_Allocator);
       g_DetectorType = 1;
     } else {
-      p = QxrdAcquisitionPtr(new QxrdAcquisitionSimulated(m_Processor, m_Allocator));
+      p = new QxrdAcquisitionSimulated(m_Processor, m_Allocator);
       g_DetectorType = 0;
     }
     break;
@@ -82,14 +82,14 @@ void QxrdAcquisitionThread::run()
 
 #ifdef HAVE_PILATUS
   case 2:
-    p = QxrdAcquisitionPtr(new QxrdAcquisitionPilatus(m_Processor, m_Allocator));
+    p = new QxrdAcquisitionPilatus(m_Processor, m_Allocator);
     g_DetectorType = 2;
     break;
 #endif
 
 #ifdef HAVE_AREADETECTOR
   case 3:
-    p = QxrdAcquisitionPtr(new QxrdAcquisitionAreaDetector(m_Processor, m_Allocator));
+    p = new QxrdAcquisitionAreaDetector(m_Processor, m_Allocator);
     g_DetectorType = 3;
     break;
 #endif
@@ -147,7 +147,7 @@ void QxrdAcquisitionThread::cancelDark()
   INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "cancelDark", Qt::QueuedConnection));
 }
 
-QxrdAcquisitionPtr QxrdAcquisitionThread::acquisition() const
+QxrdAcquisition *QxrdAcquisitionThread::acquisition() const
 {
   while (m_Acquisition == NULL) {
     QThread::msleep(500);

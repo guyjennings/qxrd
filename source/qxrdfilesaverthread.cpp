@@ -4,7 +4,7 @@
 #include "qxrdacquisition.h"
 #include "qxrdintegrateddata.h"
 
-QxrdFileSaverThread::QxrdFileSaverThread(QxrdAllocatorPtr allocator)
+QxrdFileSaverThread::QxrdFileSaverThread(QxrdAllocator *allocator)
   : QThread(),
     m_FileSaver(NULL),
     m_Allocator(NULL)
@@ -47,7 +47,7 @@ void QxrdFileSaverThread::shutdown()
   wait();
 }
 
-QxrdFileSaverPtr QxrdFileSaverThread::fileSaver() const
+QxrdFileSaver *QxrdFileSaverThread::fileSaver() const
 {
   while (m_FileSaver == NULL) {
     QThread::msleep(500);
@@ -56,12 +56,12 @@ QxrdFileSaverPtr QxrdFileSaverThread::fileSaver() const
   return m_FileSaver;
 }
 
-void QxrdFileSaverThread::setProcessor(QxrdDataProcessorPtr proc)
+void QxrdFileSaverThread::setProcessor(QxrdDataProcessor *proc)
 {
   fileSaver() -> setProcessor(proc);
 }
 
-void QxrdFileSaverThread::setAcquisition(QxrdAcquisitionPtr acq)
+void QxrdFileSaverThread::setAcquisition(QxrdAcquisition *acq)
 {
   fileSaver() -> setAcquisition(acq);
 }

@@ -3,7 +3,7 @@
 #include "qxrdimageplot.h"
 #include "qxrdrasterdata.h"
 
-QxrdCenterFinderPicker::QxrdCenterFinderPicker(QxrdImagePlotPtr plot)
+QxrdCenterFinderPicker::QxrdCenterFinderPicker(QxrdImagePlot *plot)
   : QxrdImagePlotMeasurer(plot -> canvas(), plot),
     m_Plot(plot)
 {

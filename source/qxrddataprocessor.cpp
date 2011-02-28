@@ -15,7 +15,7 @@
 #include <math.h>
 
 QxrdDataProcessor::QxrdDataProcessor
-    (QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver, QObject *parent)
+    (QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver, QObject *parent)
   : QxrdDataProcessorThreaded(acq, allocator, saver, parent)
 {
 }

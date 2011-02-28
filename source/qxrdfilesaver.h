@@ -8,7 +8,6 @@
 #include <QAtomicInt>
 #include <QWaitCondition>
 
-#include "qxrdforwardtypes.h"
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
 #include "qxrdimagequeue.h"
@@ -17,16 +16,20 @@
 #include "qxrdacquisition.h"
 #include "qxrdintegrateddata.h"
 
+class QxrdAllocator;
+class QxrdDataProcessor;
+class QxrdAcquisition;
+
 class QxrdFileSaver : public QObject
 {
   Q_OBJECT;
 
 public:
-  QxrdFileSaver(QxrdAllocatorPtr allocator, QObject *parent=0);
+  QxrdFileSaver(QxrdAllocator *allocator, QObject *parent=0);
   ~QxrdFileSaver();
 
-  void setProcessor(QxrdDataProcessorPtr proc);
-  void setAcquisition(QxrdAcquisitionPtr acq);
+  void setProcessor(QxrdDataProcessor *proc);
+  void setAcquisition(QxrdAcquisition *acq);
 
 signals:
   void printMessage(QDateTime ts, QString msg);
@@ -53,13 +56,13 @@ public slots:
 private:
   void mkPath(QString filePath);
   QString uniqueFileName(QString name);
-  QxrdDataProcessorPtr processor() const;
+  QxrdDataProcessor *processor() const;
   void saveOverflowData(QString name, QxrdMaskDataPtr overflow);
 
 private:
-  QxrdDataProcessorPtr m_Processor;
-  QxrdAllocatorPtr     m_Allocator;
-  QxrdAcquisitionPtr   m_Acquisition;
+  QxrdDataProcessor *m_Processor;
+  QxrdAllocator     *m_Allocator;
+  QxrdAcquisition   *m_Acquisition;
 };
 
 #endif

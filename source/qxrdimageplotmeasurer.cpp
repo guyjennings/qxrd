@@ -5,7 +5,7 @@
 #include "qxrdimageplot.h"
 #include "qxrdcenterfinder.h"
 
-QxrdImagePlotMeasurer::QxrdImagePlotMeasurer(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
+QxrdImagePlotMeasurer::QxrdImagePlotMeasurer(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
   : QxrdPlotMeasurer(canvas, plot),
     m_Plot(plot)
 {

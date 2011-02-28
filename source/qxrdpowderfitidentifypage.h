@@ -8,7 +8,7 @@ class QxrdPowderFitIdentifyPage : public QxrdPowderFitWidget
 {
   Q_OBJECT;
 public:
-  QxrdPowderFitIdentifyPage(QxrdDataProcessorPtr proc, QWidget *parent);
+  QxrdPowderFitIdentifyPage(QxrdDataProcessor *proc, QWidget *parent);
 
   Q_PROPERTY(int    idCurrentRing     READ get_IdCurrentRing WRITE set_IdCurrentRing STORED false);
   QCEP_INTEGER_PROPERTY(IdCurrentRing);

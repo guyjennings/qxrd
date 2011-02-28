@@ -3,7 +3,7 @@
 #include "qxrddataprocessor.h"
 
 QxrdAcquisitionOperations::QxrdAcquisitionOperations
-    (QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator) :
+    (QxrdDataProcessor *proc, QxrdAllocator *allocator) :
     QxrdAcquisitionScripting(),
     m_Window(NULL),
     m_Allocator(allocator),
@@ -11,7 +11,7 @@ QxrdAcquisitionOperations::QxrdAcquisitionOperations
 {
 }
 
-void QxrdAcquisitionOperations::setWindow(QxrdWindowPtr win)
+void QxrdAcquisitionOperations::setWindow(QxrdWindow *win)
 {
   m_Window = win;
 }

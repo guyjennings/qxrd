@@ -1,20 +1,19 @@
 #ifndef QXRDMASKDIALOG_H
 #define QXRDMASKDIALOG_H
 
-#include "qcepmacros.h"
-
 #include <QDockWidget>
-#include "qxrddataprocessor.h"
-#include "qxrdwindow.h"
-#include "qxrdmaskstackmodel.h"
 #include "ui_qxrdmaskdialog.h"
+
+class QxrdWindow;
+class QxrdDataProcessor;
+class QxrdMaskStackModel;
 
 class QxrdMaskDialog : public QDockWidget, public Ui::QxrdMaskDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdMaskDialog(QxrdWindowPtr win, QxrdDataProcessorPtr proc, QWidget *parent = 0);
+  explicit QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessor *proc, QWidget *parent = 0);
   ~QxrdMaskDialog();
 
 signals:
@@ -51,10 +50,10 @@ private:
   int maskStackSelectPopup();
 
 private:
-  QxrdWindowPtr        m_Window;
-  QxrdDataProcessorPtr m_Processor;
-  QxrdMaskStackPtr     m_Masks;
-  QxrdMaskStackModelPtr m_MaskStackModel;
+  QxrdWindow           *m_Window;
+  QxrdDataProcessor    *m_Processor;
+  QxrdMaskStackPtr      m_Masks;
+  QxrdMaskStackModel   *m_MaskStackModel;
 };
 
 #endif // QXRDMASKDIALOG_H

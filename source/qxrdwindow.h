@@ -1,37 +1,41 @@
 #ifndef QXRDWINDOW_H
 #define QXRDWINDOW_H
 
-#include "qcepmacros.h"
-
 #include <QMainWindow>
 #include <QProgressBar>
 #include <QTimer>
-#include <QScriptValue>
 #include <QPointer>
+#include <QScriptValue>
+
 #include "ui_qxrdwindow.h"
 
-#include "qxrdforwardtypes.h"
-#include "qxrdimagequeue.h"
-#include "qxrddataprocessor.h"
-#include "qxrdimagedisplaywidget.h"
-#include "qxrdfilebrowser.h"
-#include "qxrdacquiredialog.h"
-#include "qxrdsynchronizedacquisitiondialog.h"
-#include "qxrddisplaydialog.h"
-#include "qxrdcenterfinderdialog.h"
-#include "qxrdmaskdialog.h"
-#include "qxrdcorrectiondialog.h"
-#include "qxrdintegratordialog.h"
-#include "qxrdslicedialog.h"
-#include "qxrdhistogramdialog.h"
-#include "qxrdinfodialog.h"
+class QxrdApplication;
+class QxrdAcquisition;
+class QxrdDataProcessor;
+class QxrdAllocator;
+class QxrdScriptEngine;
+class QxrdAcquireDialog;
+class QxrdSynchronizedAcquisitionDialog;
+class QxrdDisplayDialog;
+class QxrdCenterFinderDialog;
+class QxrdMaskDialog;
+class QxrdCorrectionDialog;
+class QxrdIntegratorDialog;
+class QxrdImageCalculator;
+class QxrdInputFileBrowser;
+class QxrdOutputFileBrowser;
+class QxrdSliceDialog;
+class QxrdHistogramDialog;
+class QxrdInfoDialog;
+class QxrdPowderFitDialog;
+class QxrdImageDisplayWidget;
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
   Q_OBJECT;
 
 public:
-  QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc, QWidget *parent=0);
+  QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent=0);
   virtual ~QxrdWindow();
   void onAcquisitionInit();
 
@@ -101,9 +105,9 @@ public:
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
-  QxrdScriptEnginePtr scriptEngine() const;
-  void setScriptEngine(QxrdScriptEnginePtr engine);
-  QxrdDataProcessorPtr dataProcessor() const;
+  QxrdScriptEngine *scriptEngine() const;
+  void setScriptEngine(QxrdScriptEngine *engine);
+  QxrdDataProcessor *dataProcessor() const;
 
   void newDataAvailable(QxrdDoubleImageDataPtr img, QxrdMaskDataPtr overflow);
   void newMaskAvailable(QxrdMaskDataPtr img);
@@ -111,7 +115,7 @@ public:
   QxrdDoubleImageDataPtr data();
   QxrdMaskDataPtr mask();
 
-  QxrdAcquisitionPtr acquisition() const;
+  QxrdAcquisition *acquisition() const;
 
 private:
   void shrinkDockWidget(QDockWidget *dockWidget);
@@ -120,11 +124,11 @@ private:
 private:
   mutable QMutex                         m_Mutex;
   int                                    m_SettingsLoaded;
-  QxrdApplicationPtr                     m_Application;
-  QxrdAcquisitionPtr                     m_Acquisition;
-  QxrdDataProcessorPtr                   m_DataProcessor;
-  QxrdAllocatorPtr                       m_Allocator;
-  QxrdScriptEnginePtr                    m_ScriptEngine;
+  QxrdApplication                       *m_Application;
+  QxrdAcquisition                       *m_Acquisition;
+  QxrdDataProcessor                     *m_DataProcessor;
+  QxrdAllocator                         *m_Allocator;
+  QxrdScriptEngine                      *m_ScriptEngine;
   QxrdAcquireDialog                     *m_AcquireDialog;
   QxrdSynchronizedAcquisitionDialog     *m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;
@@ -132,7 +136,7 @@ private:
   QxrdMaskDialog                        *m_MaskDialog;
   QxrdCorrectionDialog                  *m_CorrectionDialog;
   QxrdIntegratorDialog                  *m_IntegratorDialog;
-  QxrdImageCalculatorPtr                 m_Calculator;
+  QxrdImageCalculator                   *m_Calculator;
   QxrdInputFileBrowser                  *m_InputFileBrowser;
   QxrdOutputFileBrowser                 *m_OutputFileBrowser;
   QxrdSliceDialog                       *m_SliceDialog;
@@ -140,9 +144,9 @@ private:
   QxrdInfoDialog                        *m_ImageInfoDialog;
   QPointer<QxrdPowderFitDialog>          m_PowderFitDialog;
   QVector<double>                        m_Exposures;
-  QProgressBarPtr                        m_Progress;
-  QLabelPtr                              m_StatusMsg;
-  QProgressBarPtr                        m_AllocationStatus;
+  QProgressBar                          *m_Progress;
+  QLabel                                *m_StatusMsg;
+  QProgressBar                          *m_AllocationStatus;
   int                                    m_Acquiring;
   int                                    m_AcquiringDark;
   QTimer                                 m_StatusTimer;

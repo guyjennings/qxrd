@@ -26,7 +26,7 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   connect(this, SIGNAL(legendChecked(QwtPlotItem*,bool)), this, SLOT(onLegendChecked(QwtPlotItem*,bool)));
 }
 
-void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessorPtr proc)
+void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessor *proc)
 {
   m_DataProcessor = proc;
   m_Integrator = m_DataProcessor -> integrator();
@@ -46,7 +46,7 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
 
     const QString title = data -> get_Image() -> get_Title();
 
-    QwtPlotCurvePtr pc = QwtPlotCurvePtr(new QwtPlotPiecewiseCurve(this, title/*tr("Plot %1").arg(m_PlotIndex)*/));
+    QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(this, title/*tr("Plot %1").arg(m_PlotIndex)*/);
     pc -> setData(data->x(), data->y(), data->size());
     setPlotCurveStyle(m_PlotIndex, pc);
     pc -> attach(this);

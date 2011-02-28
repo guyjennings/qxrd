@@ -1,6 +1,6 @@
 #include "qxrdacquisitionpilatus.h"
 
-QxrdAcquisitionPilatus::QxrdAcquisitionPilatus(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator)
+QxrdAcquisitionPilatus::QxrdAcquisitionPilatus(QxrdDataProcessor *proc, QxrdAllocator *allocator)
   : QxrdAcquisition(proc, allocator)
 {
 }

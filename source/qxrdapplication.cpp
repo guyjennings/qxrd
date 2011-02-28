@@ -18,9 +18,10 @@
 #include "qxrdscriptengine.h"
 #include "qxrdpreferencesdialog.h"
 #include "qcepproperty.h"
-#include "qxrdsettings.h"
+#include "qxrdsettingssaverthread.h"
 #include "qxrddetectorplugininterface.h"
 #include "qxrdprocessorinterface.h"
+#include "qxrdnidaqplugininterface.h"
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -100,20 +101,18 @@ void QxrdApplication::init(QSplashScreen *splash)
 
   splashMessage("Initializing Memory Allocator");
 
-  m_AllocatorThread = QxrdAllocatorThreadPtr(new QxrdAllocatorThread());
+  m_AllocatorThread = new QxrdAllocatorThread();
   m_AllocatorThread -> start();
   m_Allocator = m_AllocatorThread -> allocator();
 
   splashMessage("Initializing File Saver");
 
-  m_FileSaverThread = QxrdFileSaverThreadPtr(new QxrdFileSaverThread(QxrdAllocatorPtr(m_Allocator)));
+  m_FileSaverThread = new QxrdFileSaverThread(m_Allocator);
   m_FileSaverThread -> start();
 
   splashMessage("Initializing Data Processing");
 
-  m_DataProcessorThread = QxrdDataProcessorThreadPtr(new QxrdDataProcessorThread(QxrdAcquisitionPtr(NULL),
-                                                                                 QxrdAllocatorPtr(m_Allocator),
-                                                                                 QxrdFileSaverThreadPtr(m_FileSaverThread)));
+  m_DataProcessorThread = new QxrdDataProcessorThread(NULL, m_Allocator, m_FileSaverThread);
 
   m_DataProcessorThread -> start();
   m_DataProcessor = m_DataProcessorThread -> dataProcessor();
@@ -122,7 +121,7 @@ void QxrdApplication::init(QSplashScreen *splash)
 
   splashMessage("Initializing Data Acquisition");
 
-  m_AcquisitionThread = QxrdAcquisitionThreadPtr(new QxrdAcquisitionThread(m_DataProcessor, m_Allocator, detectorType));
+  m_AcquisitionThread = new QxrdAcquisitionThread(m_DataProcessor, m_Allocator, detectorType);
   m_AcquisitionThread -> start();
   m_Acquisition = m_AcquisitionThread -> acquisition();
 
@@ -131,7 +130,7 @@ void QxrdApplication::init(QSplashScreen *splash)
 
   splashMessage("Opening Main Window");
 
-  m_Window = QxrdWindowPtr(new QxrdWindow(QxrdApplicationPtr(this), m_Acquisition, m_DataProcessor, m_Allocator));
+  m_Window = new QxrdWindow(this, m_Acquisition, m_DataProcessor, m_Allocator);
 //  m_Window -> show();
 
   m_DataProcessor -> setWindow(m_Window);
@@ -178,7 +177,7 @@ void QxrdApplication::init(QSplashScreen *splash)
   if (specServer) {
     splashMessage("Starting SPEC Server");
 
-    m_ServerThread = QxrdServerThreadPtr(new QxrdServerThread(m_AcquisitionThread, "qxrd", specServerPort));
+    m_ServerThread = new QxrdServerThread("qxrd", specServerPort);
 
     connect(m_ServerThread,       SIGNAL(printMessage(QDateTime,QString)), m_Window,            SLOT(printMessage(QDateTime,QString)));
     connect(m_ServerThread,       SIGNAL(statusMessage(QDateTime,QString)), m_Window,            SLOT(statusMessage(QDateTime,QString)));
@@ -194,7 +193,7 @@ void QxrdApplication::init(QSplashScreen *splash)
   if (simpleServer) {
     splashMessage("Starting Simple Socket Server");
 
-    m_SimpleServerThread = QxrdSimpleServerThreadPtr(new QxrdSimpleServerThread(m_AcquisitionThread, "simpleserver", simpleServerPort));
+    m_SimpleServerThread = new QxrdSimpleServerThread("simpleserver", simpleServerPort);
 
     connect(m_SimpleServerThread,       SIGNAL(printMessage(QDateTime,QString)), m_Window,            SLOT(printMessage(QDateTime,QString)));
     connect(m_SimpleServerThread,       SIGNAL(statusMessage(QDateTime,QString)), m_Window,            SLOT(statusMessage(QDateTime,QString)));
@@ -210,7 +209,7 @@ void QxrdApplication::init(QSplashScreen *splash)
 
   splashMessage("Starting Scripting System");
 
-  m_ScriptEngineThread = QxrdScriptEngineThreadPtr(new QxrdScriptEngineThread(QxrdApplicationPtr(this), m_Window, m_Acquisition, m_DataProcessor));
+  m_ScriptEngineThread = new QxrdScriptEngineThread(this, m_Window, m_Acquisition, m_DataProcessor);
   m_ScriptEngineThread -> start();
   m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
 
@@ -449,22 +448,22 @@ void QxrdApplication::shutdownThreads()
   m_FileSaverThread -> shutdown();
 }
 
-QxrdWindowPtr QxrdApplication::window()
+QxrdWindow *QxrdApplication::window()
 {
   return m_Window;
 }
 
-QxrdAcquisitionThreadPtr QxrdApplication::acquisitionThread()
+QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
 {
   return m_AcquisitionThread;
 }
 
-QxrdAcquisitionPtr QxrdApplication::acquisition() const
+QxrdAcquisition *QxrdApplication::acquisition() const
 {
   return m_Acquisition;
 }
 
-QxrdDataProcessorPtr QxrdApplication::dataProcessor() const
+QxrdDataProcessor *QxrdApplication::dataProcessor() const
 {
   return m_DataProcessor;
 }

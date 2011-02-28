@@ -24,7 +24,11 @@
 #include "qxrdpowderfitdialog.h"
 #include "qxrdimagedisplaywidget.h"
 #include "qwt_array.h"
-
+#include "qxrdsynchronizedacquisitiondialog.h"
+#include "qxrdcorrectiondialog.h"
+#include "qxrdslicedialog.h"
+#include "qxrdhistogramdialog.h"
+#include "qxrdinfodialog.h"
 #include "qxrdtestdockwidget.h"
 
 #include <qwt_plot.h>
@@ -49,7 +53,7 @@
 #include <QMenu>
 #include <QDesktopWidget>
 
-QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc, QWidget *parent)
+QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent)
   : QMainWindow(parent),
     m_Mutex(QMutex::Recursive),
     m_SettingsLoaded(false),
@@ -273,21 +277,21 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
   m_Plot->prop_ValMouse()->linkTo(m_ValMouse);
   m_Plot->prop_TTHMouse()->linkTo(m_TTHMouse);
 
-  m_StatusMsg = QLabelPtr(new QLabel(NULL));
+  m_StatusMsg = new QLabel(NULL);
   m_StatusMsg -> setMinimumWidth(200);
   m_StatusMsg -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   m_StatusMsg -> setToolTip(tr("Status Messages"));
 
   statusBar() -> addPermanentWidget(m_StatusMsg);
 
-  m_Progress = QProgressBarPtr(new QProgressBar(NULL));
+  m_Progress = new QProgressBar(NULL);
   m_Progress -> setMinimumWidth(150);
   m_Progress -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   m_Progress -> setToolTip(tr("Acquisition progress"));
 
   statusBar() -> addPermanentWidget(m_Progress);
 
-  m_AllocationStatus = QProgressBarPtr(new QProgressBar(NULL));
+  m_AllocationStatus = new QProgressBar(NULL);
   m_AllocationStatus -> setMinimumWidth(100);
   m_AllocationStatus -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   m_AllocationStatus -> setFormat("%v/%m");
@@ -354,7 +358,7 @@ QxrdWindow::QxrdWindow(QxrdApplicationPtr app, QxrdAcquisitionPtr acq, QxrdDataP
 
   m_Plot -> setDataProcessor(m_DataProcessor);
 
-  m_CenterFinderPlot -> setWindow(QxrdWindowPtr(this));
+  m_CenterFinderPlot -> setWindow(this);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
   connect(m_Plot, SIGNAL(printMessage(QDateTime,QString)), this, SLOT(printMessage(QDateTime,QString)));
@@ -985,22 +989,22 @@ void QxrdWindow::finishedCommand(QScriptValue result)
   m_ActionExecuteScript -> setEnabled(true);
 }
 
-QxrdScriptEnginePtr QxrdWindow::scriptEngine() const
+QxrdScriptEngine *QxrdWindow::scriptEngine() const
 {
   return m_ScriptEngine;
 }
 
-void QxrdWindow::setScriptEngine(QxrdScriptEnginePtr engine)
+void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
 {
   m_ScriptEngine = engine;
 }
 
-QxrdDataProcessorPtr QxrdWindow::dataProcessor() const
+QxrdDataProcessor *QxrdWindow::dataProcessor() const
 {
   return m_DataProcessor;
 }
 
-QxrdAcquisitionPtr QxrdWindow::acquisition() const
+QxrdAcquisition *QxrdWindow::acquisition() const
 {
   return m_Acquisition;
 }
@@ -1060,7 +1064,7 @@ void QxrdWindow::allocatedMemoryChanged()
 
 void QxrdWindow::doRefineCenterTilt()
 {
-  m_PowderFitDialog = QxrdPowderFitDialogPtr(new QxrdPowderFitDialog(m_DataProcessor, this));
+  m_PowderFitDialog = new QxrdPowderFitDialog(m_DataProcessor, this);
   m_PowderFitDialog -> exec();
 }
 

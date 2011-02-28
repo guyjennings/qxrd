@@ -4,21 +4,27 @@
 #include "qcepmacros.h"
 
 #include <QThread>
-#include "qxrdforwardtypes.h"
-#include "qxrdfilesaver.h"
+
+class QxrdAllocator;
+class QxrdDataProcessor;
+class QxrdAcquisition;
+class QxrdFileSaver;
+
+#include "qxrdimagedata.h"
+#include "qxrdintegrateddata.h"
 
 class QxrdFileSaverThread : public QThread
 {
   Q_OBJECT;
 
 public:
-  QxrdFileSaverThread(QxrdAllocatorPtr acq);
+  QxrdFileSaverThread(QxrdAllocator *acq);
   ~QxrdFileSaverThread();
 
   void shutdown();
 
-  void setProcessor(QxrdDataProcessorPtr proc);
-  void setAcquisition(QxrdAcquisitionPtr acq);
+  void setProcessor(QxrdDataProcessor *proc);
+  void setAcquisition(QxrdAcquisition *acq);
 
   void saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
   void saveData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
@@ -39,7 +45,7 @@ protected:
   void run();
 
 private:
-  QxrdFileSaverPtr fileSaver() const;
+  QxrdFileSaver *fileSaver() const;
 
 private:
   QAtomicPointer<QxrdFileSaver>     m_FileSaver;

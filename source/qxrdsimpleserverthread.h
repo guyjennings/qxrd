@@ -3,22 +3,20 @@
 
 #include "qcepmacros.h"
 #include <QThread>
-#include "qxrdforwardtypes.h"
 #include <QDateTime>
 
-//#include "qxrdsimpleserver.h"
-//#include "qxrdscriptengine.h"
+class QxrdSimpleServer;
 
 class QxrdSimpleServerThread : public QThread
 {
   Q_OBJECT;
 public:
-  QxrdSimpleServerThread(QxrdAcquisitionThreadPtr acq, QString name, int port);
+  QxrdSimpleServerThread(QString name, int port);
   ~QxrdSimpleServerThread();
 
   void shutdown();
 
-  QxrdSimpleServerPtr server() const;
+  QxrdSimpleServer *server() const;
 
 signals:
   void printMessage(QDateTime ts, QString msg);
@@ -29,10 +27,9 @@ protected:
   void run();
 
 private:
-  QxrdAcquisitionThreadPtr m_AcquisitionThread;
-  QString                  m_Name;
-  int                      m_Port;
-  QxrdSimpleServerPtr      m_Server;
+  QString           m_Name;
+  int               m_Port;
+  QxrdSimpleServer *m_Server;
 };
 
 #endif // QXRDSIMPLESERVERTHREAD_H

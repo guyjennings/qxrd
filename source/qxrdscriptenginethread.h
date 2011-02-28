@@ -1,24 +1,26 @@
 #ifndef QXRDSCRIPTENGINETHREAD_H
 #define QXRDSCRIPTENGINETHREAD_H
 
-#include "qcepmacros.h"
-
 #include <QThread>
-#include <QSharedPointer>
+#include <QAtomicPointer>
+#include <QDateTime>
 
-#include "qxrdforwardtypes.h"
-#include "qxrddataprocessor.h"
+class QxrdApplication;
+class QxrdWindow;
+class QxrdAcquisition;
+class QxrdDataProcessor;
+class QxrdScriptEngine;
 
 class QxrdScriptEngineThread : public QThread
 {
   Q_OBJECT;
 
 public:
-  QxrdScriptEngineThread(QxrdApplicationPtr app, QxrdWindowPtr win, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc);
+  QxrdScriptEngineThread(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc);
   ~QxrdScriptEngineThread();
 
   void shutdown();
-  QxrdScriptEnginePtr scriptEngine() const;
+  QxrdScriptEngine *scriptEngine() const;
 
 protected:
   void run();
@@ -30,10 +32,10 @@ signals:
 
 private:
   QAtomicPointer<QxrdScriptEngine>  m_ScriptEngine;
-  QxrdApplicationPtr   m_Application;
-  QxrdWindowPtr        m_Window;
-  QxrdAcquisitionPtr   m_Acquisition;
-  QxrdDataProcessorPtr m_DataProcessor;
+  QxrdApplication   *m_Application;
+  QxrdWindow        *m_Window;
+  QxrdAcquisition   *m_Acquisition;
+  QxrdDataProcessor *m_DataProcessor;
 };
 
 #endif // QXRDSCRIPTENGINETHREAD_H

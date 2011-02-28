@@ -4,9 +4,8 @@
 #include <QMetaObject>
 #include <QDateTime>
 
-QxrdServerThread::QxrdServerThread(QxrdAcquisitionThreadPtr acq, QString name, int port)
-  : m_AcquisitionThread(acq),
-    m_Name(name),
+QxrdServerThread::QxrdServerThread(QString name, int port)
+  : m_Name(name),
     m_Port(port),
     m_Server(NULL)
 {
@@ -19,7 +18,7 @@ QxrdServerThread::~QxrdServerThread()
   delete m_Server;
 }
 
-QxrdServerPtr QxrdServerThread::server() const
+QxrdServer *QxrdServerThread::server() const
 {
   while (m_Server == NULL) {
     QThread::msleep(500);
@@ -40,7 +39,7 @@ void QxrdServerThread::shutdown()
 void QxrdServerThread::run()
 {
 //  printf("start server\n");
-  m_Server = QxrdServerPtr(new QxrdServer(QxrdAcquisitionThreadPtr(NULL), m_Name, m_Port));
+  m_Server = new QxrdServer(m_Name, m_Port);
 
   connect(m_Server,             SIGNAL(printMessage(QDateTime,QString)), this,            SIGNAL(printMessage(QDateTime,QString)));
   connect(m_Server,             SIGNAL(statusMessage(QDateTime,QString)), this,            SIGNAL(statusMessage(QDateTime,QString)));

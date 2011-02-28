@@ -1,5 +1,5 @@
 #include "qxrdintegrator.h"
-#include "qxrddataprocessor.h"
+#include "qxrddataprocessorbase.h"
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
 #include "qxrdcenterfinder.h"
@@ -14,7 +14,7 @@
 
 #include <cmath>
 
-QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc, QObject *parent)
+QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent)
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_IntegrationStep(this, "integrationStep", 0.001),
@@ -23,7 +23,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc
 {
 }
 
-QxrdDataProcessorPtr QxrdIntegrator::dataProcessor() const
+QxrdDataProcessorBase *QxrdIntegrator::dataProcessor() const
 {
   return m_DataProcessor;
 }
@@ -82,7 +82,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
     double oversampleStep = 1.0/oversample;
     double halfOversampleStep = oversampleStep/2.0;
 
-    QxrdCenterFinderPtr cf = m_DataProcessor -> centerFinder();
+    QxrdCenterFinder *cf = m_DataProcessor -> centerFinder();
 
     if (cf) {
       double cx = cf -> get_CenterX();

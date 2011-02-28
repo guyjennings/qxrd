@@ -12,7 +12,7 @@
 #include <QFont>
 #include <QComboBox>
 
-QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator)
+QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc, QxrdAllocator *allocator)
   : QxrdAcquisition(proc, allocator)
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(onTimerTimeout()));

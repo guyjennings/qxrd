@@ -8,7 +8,7 @@
 
 #include <QThreadPool>
 
-QxrdAcquisition::QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator)
+QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocator)
   : QxrdAcquisitionOperations(proc, allocator),
     m_AcquiredInt32Data(),
     m_OverflowMask(),
@@ -496,7 +496,7 @@ void QxrdAcquisition::acquisitionError(int ln, int n)
   emit criticalMessage(QDateTime::currentDateTime(), tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
 }
 
-QxrdAcquireDialog *QxrdAcquisition::controlPanel(QxrdWindowPtr win)
+QxrdAcquireDialog *QxrdAcquisition::controlPanel(QxrdWindow *win)
 {
   if (win) {
     m_Window = win;

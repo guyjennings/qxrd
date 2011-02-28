@@ -10,12 +10,15 @@
 #include "qxrddataprocessor.h"
 #include <qwt_double_rect.h>
 
+class QxrdDataProcessorBase;
+class QxrdAllocator;
+
 class QxrdIntegrator : public QObject
 {
   Q_OBJECT;
 
 public:
-  QxrdIntegrator(QxrdDataProcessorPtr proc, QxrdAllocatorPtr alloc, QObject *parent=0);
+  QxrdIntegrator(QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent=0);
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample);
@@ -27,7 +30,7 @@ public:
 public:
   void readSettings(QxrdSettings &settings, QString section);
   void writeSettings(QxrdSettings &settings, QString section);
-  QxrdDataProcessorPtr dataProcessor() const;
+  QxrdDataProcessorBase *dataProcessor() const;
 
 signals:
   void printMessage(QDateTime ts, QString msg);
@@ -43,9 +46,9 @@ public slots:
   QxrdIntegratedDataPtr slicePolygon(QxrdDoubleImageDataPtr dimg, QwtArray<QwtDoublePoint> poly, double width);
 
 private:
-  mutable QMutex       m_Mutex;
-  QxrdDataProcessorPtr m_DataProcessor;
-  QxrdAllocatorPtr     m_Allocator;
+  mutable QMutex         m_Mutex;
+  QxrdDataProcessorBase *m_DataProcessor;
+  QxrdAllocator         *m_Allocator;
 };
 
 #endif // QXRDINTEGRATOR_H

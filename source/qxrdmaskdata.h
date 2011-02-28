@@ -1,8 +1,6 @@
 #ifndef QXRDMASKDATA_H
 #define QXRDMASKDATA_H
 
-#include "qcepmacros.h"
-//#include "qxrdforwardtypes.h"
 #include "qcepimagedata.h"
 #include <QImage>
 

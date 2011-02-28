@@ -7,7 +7,7 @@
 #include "qxrdfilebrowsermodel.h"
 #include "qxrdfilebrowserview.h"
 
-QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessorPtr processor, QWidget *parent)
+QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWidget *parent)
   : QDockWidget(parent),
     m_IsOutput(isOutput),
     m_BrowserFilter(this, "browserFilter",1),
@@ -341,12 +341,12 @@ void QxrdFileBrowser::onRowCountChanged(int oldCount, int newCount)
   m_FileBrowser->resizeColumnToContents(0);
 }
 
-QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent)
+QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
   : QxrdFileBrowser(false, processor, parent)
 {
 }
 
-QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent)
+QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
   : QxrdFileBrowser(true, processor, parent)
 {
 }

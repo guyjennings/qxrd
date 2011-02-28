@@ -4,11 +4,9 @@
 #include <QVariant>
 #include <QScriptEngine>
 #include "qxrdapplication.h"
-#include "qxrdacquisitionthread.h"
 
-QxrdServer::QxrdServer(QxrdAcquisitionThreadPtr acqth, QString name, int port, QObject *parent)
-  : QSpecServer(name, port, parent),
-    m_AcquisitionThread(acqth)
+QxrdServer::QxrdServer(QString name, int port, QObject *parent)
+  : QSpecServer(name, port, parent)
 {
 //  emit printMessage(QDateTime::currentDateTime(), "QxrdServer::QxrdServer");
 }

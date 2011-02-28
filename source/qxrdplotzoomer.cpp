@@ -4,7 +4,7 @@
 #include "qxrdimageplot.h"
 #include "qxrdcenterfinder.h"
 
-QxrdPlotZoomer::QxrdPlotZoomer(QwtPlotCanvasPtr canvas, QxrdPlotPtr plot)
+QxrdPlotZoomer::QxrdPlotZoomer(QwtPlotCanvas *canvas, QxrdPlot *plot)
   : QwtPlotZoomer(canvas),
     m_Plot(plot)
 {
@@ -17,7 +17,7 @@ QwtText QxrdPlotZoomer::trackerText(const QwtDoublePoint &pos) const
   return (m_Plot ? m_Plot->trackerText(pos) : tr("%1, %2").arg(pos.x()).arg(pos.y()));
 }
 
-QxrdImagePlotZoomer::QxrdImagePlotZoomer(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
+QxrdImagePlotZoomer::QxrdImagePlotZoomer(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
   : QxrdPlotZoomer(canvas, plot),
     m_ImagePlot(plot)
 {

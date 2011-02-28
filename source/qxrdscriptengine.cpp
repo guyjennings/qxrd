@@ -13,15 +13,16 @@
 #include "qxrdringsampleddata.h"
 #include "qxrdringsetsampleddata.h"
 #include "qxrdsynchronizedacquisition.h"
+#include "qxrdnidaqplugininterface.h"
 
 #include <QThread>
 
-static QxrdScriptEnginePtr  g_ScriptEngine;
-static QxrdAcquisitionPtr   g_Acquisition;
-//static QxrdApplicationPtr   g_Application;
-static QxrdDataProcessorPtr g_DataProcessor;
+static QxrdScriptEngine  *g_ScriptEngine;
+static QxrdAcquisition   *g_Acquisition;
+//static QxrdApplication *g_Application;
+static QxrdDataProcessor *g_DataProcessor;
 
-QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationPtr app, QxrdWindowPtr win, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc)
+QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc)
   : QObject(),
     m_Mutex(QMutex::Recursive),
     m_ScriptEngine(NULL),
@@ -29,7 +30,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationPtr app, QxrdWindowPtr win, Qx
     m_Window(win),
     m_Acquisition(acq)
 {
-  g_ScriptEngine    = QxrdScriptEnginePtr(this);
+  g_ScriptEngine    = this;
   g_Acquisition     = acq;
   g_Application     = app;
   g_DataProcessor   = proc;
@@ -37,7 +38,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationPtr app, QxrdWindowPtr win, Qx
 
 void QxrdScriptEngine::initialize()
 {
-  m_ScriptEngine = QScriptEnginePtr(new QScriptEngine(this));
+  m_ScriptEngine = new QScriptEngine(this);
 
   qScriptRegisterMetaType(m_ScriptEngine, ::QxrdRingFitToScriptValue, ::QxrdRingFitFromScriptValue);
   qScriptRegisterMetaType(m_ScriptEngine, ::QxrdRingSampledDataToScriptValue, ::QxrdRingSampledDataFromScriptValue);

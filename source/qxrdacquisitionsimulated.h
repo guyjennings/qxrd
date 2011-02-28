@@ -1,8 +1,6 @@
 #ifndef QXRDACQUISITIONSIMULATED_H
 #define QXRDACQUISITIONSIMULATED_H
 
-#include "qcepmacros.h"
-
 #include "qxrdacquisition.h"
 #include <QTimer>
 
@@ -10,7 +8,7 @@ class QxrdAcquisitionSimulated : public QxrdAcquisition
 {
   Q_OBJECT;
 public:
-  QxrdAcquisitionSimulated(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator);
+  QxrdAcquisitionSimulated(QxrdDataProcessor *proc, QxrdAllocator *allocator);
 
 public slots:
   void onExposureTimeChanged(double newTime);

@@ -34,7 +34,7 @@ QxrdPlot::QxrdPlot(QWidget *parent)
 
   setCanvasBackground(QColor(Qt::white));
 
-  m_Zoomer = QxrdPlotZoomerPtr(new QxrdPlotZoomer(QwtPlotCanvasPtr(canvas()), QxrdPlotPtr(this)));
+  m_Zoomer = new QxrdPlotZoomer(canvas(), this);
   m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
   m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
   m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
@@ -46,20 +46,20 @@ QxrdPlot::QxrdPlot(QWidget *parent)
 
   m_Zoomer -> setEnabled(true);
 
-  m_Legend = QwtLegendPtr(new QwtLegend(this));
+  m_Legend = new QwtLegend(this);
   m_Legend -> setItemMode(QwtLegend::CheckableItem);
 
-  m_Panner = QwtPlotPannerPtr(new QwtPlotPanner(canvas()));
+  m_Panner = new QwtPlotPanner(canvas());
   m_Panner -> setEnabled(true);
   m_Panner -> setMouseButton(Qt::MidButton);
   m_Panner -> setAxisEnabled(QwtPlot::yRight, false);
 
-  m_Magnifier = QwtPlotMagnifierPtr(new QwtPlotMagnifier(canvas()));
+  m_Magnifier = new QwtPlotMagnifier(canvas());
   m_Magnifier -> setEnabled(true);
   m_Magnifier -> setMouseButton(Qt::NoButton);
   m_Magnifier -> setAxisEnabled(QwtPlot::yRight, false);
 
-  m_Measurer = QxrdPlotMeasurerPtr(new QxrdPlotMeasurer(QwtPlotCanvasPtr(canvas()), QxrdPlotPtr(this)));
+  m_Measurer = new QxrdPlotMeasurer(canvas(), this);
   m_Measurer -> setEnabled(false);
 
   setAxisLabelRotation(QwtPlot::yLeft, -90);
@@ -87,7 +87,7 @@ void QxrdPlot::writeSettings(QxrdSettings &settings, QString section)
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurvePtr curve)
+void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
 {
   const int nColors = 10;
   const int nSymbols = 4;

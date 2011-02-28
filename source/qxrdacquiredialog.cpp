@@ -1,7 +1,8 @@
 #include "qxrdacquiredialog.h"
 #include "qxrdwindow.h"
+#include "qxrdacquisition.h"
 
-QxrdAcquireDialog::QxrdAcquireDialog(QxrdWindowPtr win, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc, QWidget *parent) :
+QxrdAcquireDialog::QxrdAcquireDialog(QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc, QWidget *parent) :
     QDockWidget(parent),
     m_Window(win),
     m_Acquisition(acq),

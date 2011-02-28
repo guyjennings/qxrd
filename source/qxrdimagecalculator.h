@@ -1,27 +1,22 @@
 #ifndef QXRDIMAGECALCULATOR_H
 #define QXRDIMAGECALCULATOR_H
 
-#include <QtGui/QDockWidget>
+#include <QDockWidget>
+#include "ui_qxrdimagecalculator.h"
 
-namespace Ui {
-    class QxrdImageCalculator;
-}
+class QxrdDataProcessor;
 
-#include "qxrddataprocessor.h"
-
-class QxrdImageCalculator : public QDockWidget {
+class QxrdImageCalculator : public QDockWidget, public Ui::QxrdImageCalculator {
     Q_OBJECT
 public:
-    QxrdImageCalculator(QxrdDataProcessorPtr processor, QWidget *parent = 0);
+    QxrdImageCalculator(QxrdDataProcessor *processor, QWidget *parent = 0);
     ~QxrdImageCalculator();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::QxrdImageCalculator *m_ui;
-
-    QxrdDataProcessorPtr  m_Processor;
+    QxrdDataProcessor *m_Processor;
 };
 
 #endif // QXRDIMAGECALCULATOR_H

@@ -1,23 +1,25 @@
 #ifndef QXRDDATAPROCESSORTHREAD_H
 #define QXRDDATAPROCESSORTHREAD_H
 
-#include "qcepmacros.h"
-
 #include <QThread>
-#include "qxrdforwardtypes.h"
-#include "qxrddataprocessor.h"
+#include <QDateTime>
+
+class QxrdAcquisition;
+class QxrdAllocator;
+class QxrdFileSaverThread;
+class QxrdDataProcessor;
 
 class QxrdDataProcessorThread : public QThread
 {
   Q_OBJECT;
 
 public:
-  QxrdDataProcessorThread(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver);
+  QxrdDataProcessorThread(QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver);
   ~QxrdDataProcessorThread();
 
   void shutdown();
 
-  QxrdDataProcessorPtr dataProcessor() const;
+  QxrdDataProcessor *dataProcessor() const;
 
   static void msleep(long unsigned int);
 

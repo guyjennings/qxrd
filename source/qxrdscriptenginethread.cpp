@@ -2,7 +2,7 @@
 
 #include "qxrdscriptengine.h"
 
-QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplicationPtr app, QxrdWindowPtr win, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc)
+QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc)
   : QThread(NULL),
     m_ScriptEngine(NULL),
     m_Application(app),
@@ -26,7 +26,7 @@ void QxrdScriptEngineThread::shutdown()
   wait(1000);
 }
 
-QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const
+QxrdScriptEngine *QxrdScriptEngineThread::scriptEngine() const
 {
   while (m_ScriptEngine == NULL) {
     QThread::msleep(500);
@@ -37,7 +37,7 @@ QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const
 
 void QxrdScriptEngineThread::run()
 {
-  QxrdScriptEnginePtr p = QxrdScriptEnginePtr(new QxrdScriptEngine(m_Application, m_Window, m_Acquisition, m_DataProcessor));
+  QxrdScriptEngine *p = new QxrdScriptEngine(m_Application, m_Window, m_Acquisition, m_DataProcessor);
 
   p -> initialize();
 

@@ -1,17 +1,13 @@
 #ifndef QXRDACQUISITIONPILATUS_H
 #define QXRDACQUISITIONPILATUS_H
 
-#include "qcepmacros.h"
-
 #include "qxrdacquisition.h"
-
-class QxrdAcquisitionThread;
 
 class QxrdAcquisitionPilatus : public QxrdAcquisition
 {
   Q_OBJECT;
 public:
-  QxrdAcquisitionPilatus(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator);
+  QxrdAcquisitionPilatus(QxrdDataProcessor *proc, QxrdAllocator *allocator);
 
 private slots:
   void initialize();

@@ -7,18 +7,29 @@
 #include <QScriptEngine>
 #include <QScriptEngineDebugger>
 #include <QSplashScreen>
+#include "qcepproperty.h"
 
-#include "qxrdforwardtypes.h"
-#include "qxrddataprocessor.h"
-#include "qxrdsettingssaverthread.h"
+class QxrdAcquisitionThread;
+class QxrdAcquisition;
+class QxrdWindow;
+class QxrdDataProcessorThread;
+class QxrdDataProcessor;
+class QxrdNIDAQPluginInterface;
+class QxrdServerThread;
+class QxrdServer;
+class QxrdSimpleServerThread;
+class QxrdSimpleServer;
+class QxrdAllocatorThread;
+class QxrdAllocator;
+class QxrdFileSaverThread;
+class QxrdScriptEngineThread;
+class QxrdScriptEngine;
+class QxrdSettingsSaverThread;
+class QxrdSettingsSaver;
 
 #ifdef HAVE_PERKIN_ELMER
-#include "qxrdperkinelmerplugininterface.h"
+class QxrdPerkinElmerPluginInterface;
 #endif
-
-#include "qxrdnidaqplugininterface.h"
-
-extern QxrdApplication *g_Application;
 
 class QxrdApplication : public QApplication
 {
@@ -29,10 +40,10 @@ public:
   ~QxrdApplication();
   void init(QSplashScreen *splash);
 
-  QxrdAcquisitionThreadPtr acquisitionThread();
-  QxrdAcquisitionPtr acquisition() const;
-  QxrdWindowPtr window();
-  QxrdDataProcessorPtr dataProcessor() const;
+  QxrdAcquisitionThread *acquisitionThread();
+  QxrdAcquisition *acquisition() const;
+  QxrdWindow *window();
+  QxrdDataProcessor *dataProcessor() const;
 
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *perkinElmerPlugin();
@@ -92,27 +103,29 @@ public:
 
 private:
   QSplashScreen                  *m_Splash;
-  QxrdWindowPtr                   m_Window;
-  QxrdServerThreadPtr             m_ServerThread;
-  QxrdServerPtr                   m_Server;
-  QxrdSimpleServerThreadPtr       m_SimpleServerThread;
-  QxrdSimpleServerPtr             m_SimpleServer;
-  QxrdDataProcessorThreadPtr      m_DataProcessorThread;
-  QxrdDataProcessorPtr            m_DataProcessor;
-  QxrdAcquisitionThreadPtr        m_AcquisitionThread;
-  QxrdAcquisitionPtr              m_Acquisition;
-  QxrdAllocatorThreadPtr          m_AllocatorThread;
-  QxrdAllocatorPtr                m_Allocator;
-  QxrdFileSaverThreadPtr          m_FileSaverThread;
-  QxrdScriptEngineThreadPtr       m_ScriptEngineThread;
-  QxrdScriptEnginePtr             m_ScriptEngine;
+  QxrdWindow                     *m_Window;
+  QxrdServerThread               *m_ServerThread;
+  QxrdServer                     *m_Server;
+  QxrdSimpleServerThread         *m_SimpleServerThread;
+  QxrdSimpleServer               *m_SimpleServer;
+  QxrdDataProcessorThread        *m_DataProcessorThread;
+  QxrdDataProcessor              *m_DataProcessor;
+  QxrdAcquisitionThread          *m_AcquisitionThread;
+  QxrdAcquisition                *m_Acquisition;
+  QxrdAllocatorThread            *m_AllocatorThread;
+  QxrdAllocator                  *m_Allocator;
+  QxrdFileSaverThread            *m_FileSaverThread;
+  QxrdScriptEngineThread         *m_ScriptEngineThread;
+  QxrdScriptEngine               *m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
-  QxrdSettingsSaverThreadPtr      m_SettingsSaverThread;
-  QxrdSettingsSaverPtr            m_SettingsSaver;
+  QxrdSettingsSaverThread        *m_SettingsSaverThread;
+  QxrdSettingsSaver              *m_SettingsSaver;
   QxrdNIDAQPluginInterface       *m_NIDAQPluginInterface;
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;
 #endif
 };
+
+extern QxrdApplication *g_Application;
 
 #endif

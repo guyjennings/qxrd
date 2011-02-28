@@ -1,11 +1,15 @@
 #ifndef QXRDPLOT_H
 #define QXRDPLOT_H
 
-#include "qcepmacros.h"
 #include "qcepproperty.h"
-#include "qxrdforwardtypes.h"
 #include "qxrdsettings.h"
 #include <qwt_plot.h>
+
+class QwtPlotCurve;
+class QwtPlotZoomer;
+class QwtPlotPanner;
+class QwtPlotMagnifier;
+class QxrdPlotMeasurer;
 
 class QxrdPlot : public QwtPlot
 {
@@ -38,7 +42,7 @@ public:
   virtual void readSettings(QxrdSettings &settings, QString section);
   virtual void writeSettings(QxrdSettings &settings, QString section);
 
-  void setPlotCurveStyle(int index, QwtPlotCurvePtr curve);
+  void setPlotCurveStyle(int index, QwtPlotCurve *curve);
   virtual QwtText trackerText(const QwtDoublePoint &pos);
 
   void contextMenuEvent(QContextMenuEvent *event);
@@ -71,11 +75,11 @@ public slots:
 //  void setCustomZoomer(QwtPlotZoomer *zoomer);
 
 protected:
-  QwtLegendPtr        m_Legend;
-  QwtPlotZoomerPtr    m_Zoomer;
-  QwtPlotPannerPtr    m_Panner;
-  QwtPlotMagnifierPtr m_Magnifier;
-  QxrdPlotMeasurerPtr m_Measurer;
+  QwtLegend        *m_Legend;
+  QwtPlotZoomer    *m_Zoomer;
+  QwtPlotPanner    *m_Panner;
+  QwtPlotMagnifier *m_Magnifier;
+  QxrdPlotMeasurer *m_Measurer;
 
   int                 m_IsLog[QwtPlot::axisCnt];
 };

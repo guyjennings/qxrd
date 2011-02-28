@@ -7,7 +7,7 @@
 #include <QtConcurrentRun>
 #include <QDirIterator>
 
-QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver, QObject *parent)
+QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver, QObject *parent)
   : QxrdDataProcessorBase(acq, allocator, saver, parent)
 {
   connect(&m_CorrectedImages, SIGNAL(resultAvailable()), this, SLOT(onCorrectedImageAvailable()));

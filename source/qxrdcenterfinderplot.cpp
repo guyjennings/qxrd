@@ -28,7 +28,7 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   insertLegend(m_Legend, QwtPlot::RightLegend);
 }
 
-void QxrdCenterFinderPlot::setWindow(QxrdWindowPtr win)
+void QxrdCenterFinderPlot::setWindow(QxrdWindow *win)
 {
   m_Window = win;
   m_DataProcessor = m_Window -> dataProcessor();

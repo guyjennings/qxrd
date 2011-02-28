@@ -7,12 +7,9 @@
 #include <QLineEdit>
 #include <QVector>
 #include <QCheckBox>
+#include "ui_qxrdpreferencesdialog.h"
 
-namespace Ui {
-  class QxrdPreferencesDialog;
-}
-
-class QxrdPreferencesDialog : public QDialog {
+class QxrdPreferencesDialog : public QDialog, public Ui::QxrdPreferencesDialog {
   Q_OBJECT;
 public:
   QxrdPreferencesDialog(QWidget *parent = 0);
@@ -38,8 +35,7 @@ private:
   int readDebugWidgets();
 
 private:
-  Ui::QxrdPreferencesDialog *ui;
-  QVector<QCheckBox*> m_DebugWidgets;
+  QVector<QCheckBox*> m_DebugWidgetList;
 };
 
 #endif // QXRDPREFERENCESDIALOG_H

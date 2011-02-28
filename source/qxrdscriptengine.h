@@ -1,21 +1,23 @@
 #ifndef QXRDSCRIPTENGINE_H
 #define QXRDSCRIPTENGINE_H
 
-#include "qcepmacros.h"
-
 #include <QObject>
+#include <QScriptValue>
 #include <QScriptEngine>
+#include <QDateTime>
 #include <QMutex>
 
-#include "qxrdforwardtypes.h"
-#include "qxrddataprocessor.h"
+class QxrdApplication;
+class QxrdWindow;
+class QxrdAcquisition;
+class QxrdDataProcessor;
 
 class QxrdScriptEngine : public QObject
 {
   Q_OBJECT;
 
 public:
-  QxrdScriptEngine(QxrdApplicationPtr app, QxrdWindowPtr win, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc);
+  QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc);
   void initialize();
 
 public slots:
@@ -70,10 +72,10 @@ private:
 
 private:
   mutable QMutex     m_Mutex;
-  QScriptEnginePtr   m_ScriptEngine;
-  QxrdApplicationPtr m_Application;
-  QxrdWindowPtr      m_Window;
-  QxrdAcquisitionPtr m_Acquisition;
+  QScriptEngine     *m_ScriptEngine;
+  QxrdApplication   *m_Application;
+  QxrdWindow        *m_Window;
+  QxrdAcquisition   *m_Acquisition;
 };
 
 #endif // QXRDSCRIPTENGINE_H

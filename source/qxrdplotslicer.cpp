@@ -2,7 +2,7 @@
 #include "qxrdrasterdata.h"
 #include "qxrdimageplot.h"
 
-QxrdPlotSlicer::QxrdPlotSlicer(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
+QxrdPlotSlicer::QxrdPlotSlicer(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
   : QxrdImagePlotMeasurer(canvas, plot),
     m_Plot(plot)
 {

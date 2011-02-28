@@ -5,7 +5,7 @@
 #include "tiffio.h"
 
 QxrdFileSaver::QxrdFileSaver
-    (QxrdAllocatorPtr allocator, QObject *parent)
+    (QxrdAllocator *allocator, QObject *parent)
   : QObject(parent),
     m_Processor(NULL),
     m_Allocator(allocator),
@@ -17,17 +17,17 @@ QxrdFileSaver::~QxrdFileSaver()
 {
 }
 
-void QxrdFileSaver::setProcessor(QxrdDataProcessorPtr proc)
+void QxrdFileSaver::setProcessor(QxrdDataProcessor *proc)
 {
   m_Processor = proc;
 }
 
-void QxrdFileSaver::setAcquisition(QxrdAcquisitionPtr acq)
+void QxrdFileSaver::setAcquisition(QxrdAcquisition *acq)
 {
   m_Acquisition = acq;
 }
 
-QxrdDataProcessorPtr QxrdFileSaver::processor() const
+QxrdDataProcessor *QxrdFileSaver::processor() const
 {
   if (m_Processor == NULL) {
     printf("processor == NULL in QxrdFileSaver::processor\n");

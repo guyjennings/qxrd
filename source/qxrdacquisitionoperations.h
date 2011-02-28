@@ -1,28 +1,24 @@
 #ifndef QXRDACQUISITIONOPERATIONS_H
 #define QXRDACQUISITIONOPERATIONS_H
 
-#include "qcepmacros.h"
-
-#include "qxrdforwardtypes.h"
 #include "qxrdacquisitionscripting.h"
-#include "qxrdimagequeue.h"
+
+class QxrdDataProcessor;
+class QxrdAllocator;
+class QxrdWindow;
 
 class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
   Q_OBJECT;
 public:
-  QxrdAcquisitionOperations(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator);
+  QxrdAcquisitionOperations(QxrdDataProcessor *proc, QxrdAllocator *allocator);
 
-//  QxrdDoubleImageDataPtr takeNextAcquiredImage();
-
-//  void newAcquiredImage(QxrdDoubleImageDataPtr img);
-
-  void setWindow(QxrdWindowPtr win);
+  void setWindow(QxrdWindow *win);
 
 protected:
-  QxrdWindowPtr          m_Window;
-  QxrdAllocatorPtr       m_Allocator;
-  QxrdDataProcessorPtr   m_DataProcessor;
+  QxrdWindow         *m_Window;
+  QxrdAllocator      *m_Allocator;
+  QxrdDataProcessor  *m_DataProcessor;
 };
 
 #endif // QXRDACQUISITIONOPERATIONS_H

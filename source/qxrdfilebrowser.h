@@ -4,20 +4,19 @@
 #include "qcepmacros.h"
 
 #include <QDockWidget>
-#include "qxrdforwardtypes.h"
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
-#include "qxrddataprocessor.h"
 #include "ui_qxrdfilebrowser.h"
 
 class QxrdFileBrowserModel;
+class QxrdDataProcessor;
 
 class QxrdFileBrowser : public QDockWidget, public Ui::QxrdFileBrowser
 {
   Q_OBJECT;
 
 public:
-  QxrdFileBrowser(int isOutput, QxrdDataProcessorPtr processor, QWidget *parent=0);
+  QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWidget *parent=0);
 
 public:
   Q_PROPERTY(int browserFilter READ get_BrowserFilter WRITE set_BrowserFilter);
@@ -57,11 +56,11 @@ signals:
   void criticalMessage(QDateTime ts, QString msg) const;
 
 private:
-  mutable QMutex       m_Mutex;
-  int                  m_IsOutput;
-  QxrdDataProcessorPtr m_Processor;
+  mutable QMutex        m_Mutex;
+  int                   m_IsOutput;
+  QxrdDataProcessor    *m_Processor;
   QxrdFileBrowserModel *m_Model;
-  QStringList          m_DirectoryStack;
+  QStringList           m_DirectoryStack;
 };
 
 class QxrdInputFileBrowser : public QxrdFileBrowser
@@ -69,7 +68,7 @@ class QxrdInputFileBrowser : public QxrdFileBrowser
   Q_OBJECT;
 
 public:
-  QxrdInputFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent=0);
+  QxrdInputFileBrowser(QxrdDataProcessor *processor, QWidget *parent=0);
 };
 
 class QxrdOutputFileBrowser : public QxrdFileBrowser
@@ -77,7 +76,7 @@ class QxrdOutputFileBrowser : public QxrdFileBrowser
   Q_OBJECT;
 
 public:
-  QxrdOutputFileBrowser(QxrdDataProcessorPtr processor, QWidget *parent=0);
+  QxrdOutputFileBrowser(QxrdDataProcessor *processor, QWidget *parent=0);
 };
 
 #endif // QXRDFILEBROWSER_H

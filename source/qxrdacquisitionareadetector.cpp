@@ -1,6 +1,6 @@
 #include "qxrdacquisitionareadetector.h"
 
-QxrdAcquisitionAreaDetector::QxrdAcquisitionAreaDetector(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator)
+QxrdAcquisitionAreaDetector::QxrdAcquisitionAreaDetector(QxrdDataProcessor *proc, QxrdAllocator *allocator)
   : QxrdAcquisition(proc, allocator)
 {
 }

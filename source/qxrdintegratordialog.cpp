@@ -1,7 +1,7 @@
 #include "qxrdintegratordialog.h"
 #include "qxrdintegrator.h"
 
-QxrdIntegratorDialog::QxrdIntegratorDialog(QxrdIntegratorPtr integ, QWidget *parent)
+QxrdIntegratorDialog::QxrdIntegratorDialog(QxrdIntegrator *integ, QWidget *parent)
   : QDockWidget(parent),
     m_Integrator(integ)
 {

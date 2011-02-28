@@ -2,14 +2,14 @@
 #include "qxrdimageplot.h"
 #include "qxrdrasterdata.h"
 
-QxrdMaskPicker::QxrdMaskPicker(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
+QxrdMaskPicker::QxrdMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
   : QxrdImagePlotMeasurer(canvas, plot),
     m_Plot(plot)
 {
   setTrackerMode(QwtPicker::AlwaysOn);
 }
 
-QxrdCircularMaskPicker::QxrdCircularMaskPicker(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
+QxrdCircularMaskPicker::QxrdCircularMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
   : QxrdMaskPicker(canvas, plot)
 {
   qRegisterMetaType<QwtDoubleRect>("QwtDoubleRect");
@@ -18,7 +18,7 @@ QxrdCircularMaskPicker::QxrdCircularMaskPicker(QwtPlotCanvasPtr canvas, QxrdImag
   setRubberBand(QwtPicker::EllipseRubberBand);
 }
 
-QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot)
+QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
   : QxrdMaskPicker(canvas, plot)
 {
   qRegisterMetaType< QwtArray<QwtDoublePoint> >("QwtArray<QwtDoublePoint>");

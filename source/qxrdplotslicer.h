@@ -1,20 +1,19 @@
 #ifndef QXRDPLOTSLICER_H
 #define QXRDPLOTSLICER_H
 
-#include "qcepmacros.h"
-
-#include "qxrdforwardtypes.h"
 #include "qxrdimageplotmeasurer.h"
+
+class QxrdImagePlot;
 
 class QxrdPlotSlicer : public QxrdImagePlotMeasurer
 {
 public:
-  QxrdPlotSlicer(QwtPlotCanvasPtr canvas, QxrdImagePlotPtr plot);
+  QxrdPlotSlicer(QwtPlotCanvas *canvas, QxrdImagePlot *plot);
 
 //  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
 
 private:
-  QxrdImagePlotPtr m_Plot;
+  QxrdImagePlot *m_Plot;
 };
 
 #endif // QXRDPLOTSLICER_H

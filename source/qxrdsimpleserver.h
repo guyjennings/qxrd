@@ -6,14 +6,11 @@
 #include <QScriptValue>
 #include <QDateTime>
 
-#include "qcepmacros.h"
-#include "qxrdforwardtypes.h"
-
 class QxrdSimpleServer : public QTcpServer
 {
   Q_OBJECT;
 public:
-  QxrdSimpleServer(QxrdAcquisitionThreadPtr acqth, QString name, int port, QObject *parent=NULL);
+  QxrdSimpleServer(QString name, int port, QObject *parent=NULL);
 public:
   void startServer(QHostAddress addr, int port);
 
@@ -35,7 +32,6 @@ public slots:
   void finishedCommand(QScriptValue result);
 
 private:
-  QxrdAcquisitionThreadPtr m_AcquisitionThread;
   QString                  m_Name;
   int                      m_Port;
   QTcpSocket              *m_Socket;

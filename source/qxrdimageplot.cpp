@@ -94,30 +94,30 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 
   insertLegend(m_Legend, QwtPlot::BottomLegend);
 
-  m_DataImage = QwtPlotSpectrogramPtr(new QwtPlotSpectrogram());
+  m_DataImage = new QwtPlotSpectrogram();
   m_DataImage -> attach(this);
 
-  m_MaskImage = QwtPlotSpectrogramPtr(new QwtPlotSpectrogram());
+  m_MaskImage = new QwtPlotSpectrogram();
   m_MaskImage -> setAlpha(get_MaskShown() ? m_MaskAlpha : 0);
   m_MaskImage -> attach(this);
 
-  m_OverflowImage = QwtPlotSpectrogramPtr(new QwtPlotSpectrogram());
+  m_OverflowImage = new QwtPlotSpectrogram();
   m_OverflowImage -> setAlpha(get_OverflowShown() ? m_OverflowAlpha : 0);
   m_OverflowImage -> attach(this);
 
 //  m_PlotImage = QxrdPlotImagePtr(new QxrdPlotImage());
 //  m_PlotImage -> attach(this);
 
-  m_CenterFinderPicker = QxrdCenterFinderPickerPtr(new QxrdCenterFinderPicker(QxrdImagePlotPtr(this)));
+  m_CenterFinderPicker = new QxrdCenterFinderPicker(this);
 
-  m_CenterMarker = QwtPlotMarkerPtr(new QwtPlotMarker());
+  m_CenterMarker = new QwtPlotMarker();
   m_CenterMarker -> setLineStyle(QwtPlotMarker::Cross);
   m_CenterMarker -> attach(this);
 
-  m_Circles = QxrdCircularMaskPickerPtr(new QxrdCircularMaskPicker(QwtPlotCanvasPtr(canvas()), QxrdImagePlotPtr(this)));
+  m_Circles = new QxrdCircularMaskPicker(canvas(), this);
   m_Circles -> setEnabled(false);
 
-  m_Polygons = QxrdPolygonalMaskPickerPtr(new QxrdPolygonalMaskPicker(QwtPlotCanvasPtr(canvas()), QxrdImagePlotPtr(this)));
+  m_Polygons = new QxrdPolygonalMaskPicker(canvas(), this);
   m_Polygons -> setEnabled(false);
 
   set100Range();
@@ -140,7 +140,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   enableZooming();
 }
 
-void QxrdImagePlot::setDataProcessor(QxrdDataProcessorPtr proc)
+void QxrdImagePlot::setDataProcessor(QxrdDataProcessor *proc)
 {
   m_DataProcessor = proc;
 
@@ -166,7 +166,7 @@ void QxrdImagePlot::setDataProcessor(QxrdDataProcessorPtr proc)
           this, SIGNAL(selectHistogram(QwtDoubleRect)));
 }
 
-QxrdDataProcessorPtr QxrdImagePlot::processor() const
+QxrdDataProcessor *QxrdImagePlot::processor() const
 {
   return m_DataProcessor;
 }
@@ -688,8 +688,8 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
 {
   const QxrdRasterData *ras = this->raster();
 
-  QxrdDataProcessorPtr processor = this->processor();
-  QxrdCenterFinderPtr centerFinder = NULL;
+  QxrdDataProcessor *processor = this->processor();
+  QxrdCenterFinder  *centerFinder = NULL;
 
   if (processor) {
     centerFinder = processor->centerFinder();

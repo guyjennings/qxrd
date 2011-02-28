@@ -3,14 +3,15 @@
 
 #include "qcepmacros.h"
 #include "qxrdsettingssaver.h"
-#include "qxrdforwardtypes.h"
 #include <QThread>
+
+class QxrdApplication;
 
 class QxrdSettingsSaverThread : public QThread
 {
   Q_OBJECT;
 public:
-  QxrdSettingsSaverThread(QxrdApplicationPtr app);
+  QxrdSettingsSaverThread(QxrdApplication *app);
 
   QxrdSettingsSaver *settingsSaver();
 
@@ -23,8 +24,8 @@ protected:
   void run();
 
 private:
-  QxrdApplicationPtr   m_Application;
-  QxrdSettingsSaverPtr m_SettingsSaver;
+  QxrdApplication   *m_Application;
+  QxrdSettingsSaver *m_SettingsSaver;
 };
 
 #endif // QXRDSETTINGSSAVERTHREAD_H

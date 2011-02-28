@@ -8,7 +8,8 @@
 
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
-#include "qxrdforwardtypes.h"
+
+class QxrdApplication;
 
 class QxrdImageDisplayWidget : public QWidget
 {

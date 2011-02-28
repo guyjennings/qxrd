@@ -139,7 +139,6 @@ HEADERS += TODO.h \
     qxrdimagecalculator.h \
     qxrdmutexlocker.h \
     qxrdpreferencesdialog.h \
-    qxrdforwardtypes.h \
     qxrdsharedpointer.h \
     qxrdintegrateddata.h \
     qxrdintegrateddataqueue.h \

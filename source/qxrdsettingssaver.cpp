@@ -2,7 +2,7 @@
 #include "qcepproperty.h"
 #include "qxrdapplication.h"
 
-QxrdSettingsSaver::QxrdSettingsSaver(QObject *parent, QxrdApplicationPtr app) :
+QxrdSettingsSaver::QxrdSettingsSaver(QObject *parent, QxrdApplication *app) :
     QObject(parent),
     m_Application(app),
     m_SaveDelay(5000)

@@ -3,7 +3,6 @@
 
 #include "qcepmacros.h"
 
-#include "qxrdforwardtypes.h"
 #include "qspecserver.h"
 #include <QVariant>
 
@@ -12,15 +11,12 @@ class QxrdServer : public QSpecServer
   Q_OBJECT;
 
 public:
-  QxrdServer(QxrdAcquisitionThreadPtr acqth, QString name, int port, QObject *parent=0);
+  QxrdServer(QString name, int port, QObject *parent=0);
 
 public slots:
   QVariant executeCommand(QString cmd);
   QVariant readProperty(QString name);
   void shutdown();
-
-private:
-  QxrdAcquisitionThreadPtr m_AcquisitionThread;
 };
 
 #endif

@@ -2,9 +2,8 @@
 #include <QTextStream>
 #include <QDateTime>
 
-QxrdSimpleServer::QxrdSimpleServer(QxrdAcquisitionThreadPtr acqth, QString name, int port, QObject *parent) :
+QxrdSimpleServer::QxrdSimpleServer(QString name, int port, QObject *parent) :
     QTcpServer(parent),
-    m_AcquisitionThread(acqth),
     m_Name(name),
     m_Port(port)
 {

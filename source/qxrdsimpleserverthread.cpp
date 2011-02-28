@@ -1,8 +1,7 @@
 #include "qxrdsimpleserver.h"
 #include "qxrdsimpleserverthread.h"
 
-QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdAcquisitionThreadPtr acq, QString name, int port) :
-    m_AcquisitionThread(acq),
+QxrdSimpleServerThread::QxrdSimpleServerThread(QString name, int port) :
     m_Name(name),
     m_Port(port),
     m_Server(NULL)
@@ -16,7 +15,7 @@ QxrdSimpleServerThread::~QxrdSimpleServerThread()
   delete m_Server;
 }
 
-QxrdSimpleServerPtr QxrdSimpleServerThread::server() const
+QxrdSimpleServer *QxrdSimpleServerThread::server() const
 {
   while (m_Server == NULL) {
     QThread::msleep(500);
@@ -37,7 +36,7 @@ void QxrdSimpleServerThread::shutdown()
 void QxrdSimpleServerThread::run()
 {
 //  printf("start server\n");
-  m_Server = QxrdSimpleServerPtr(new QxrdSimpleServer(QxrdAcquisitionThreadPtr(NULL), m_Name, m_Port));
+  m_Server = new QxrdSimpleServer(m_Name, m_Port);
 
   connect(m_Server,             SIGNAL(printMessage(QDateTime,QString)), this,            SIGNAL(printMessage(QDateTime,QString)));
   connect(m_Server,             SIGNAL(statusMessage(QDateTime,QString)), this,            SIGNAL(statusMessage(QDateTime,QString)));

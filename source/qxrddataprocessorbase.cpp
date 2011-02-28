@@ -16,8 +16,8 @@
 #include <math.h>
 
 QxrdDataProcessorBase::QxrdDataProcessorBase(
-    QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator,
-    QxrdFileSaverThreadPtr saver, QObject *parent) :
+    QxrdAcquisition *acq, QxrdAllocator *allocator,
+    QxrdFileSaverThread *saver, QObject *parent) :
 
     QObject(parent),
     //    m_ProcessorType(this,"processorType",0),
@@ -94,16 +94,16 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     m_GenerateTestImage(NULL),
     m_LogFile(NULL)
 {
-  m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(this));
-  m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(QxrdDataProcessorPtr(this), m_Allocator, this));
-  m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(this, m_Allocator, this));
-  m_InitialRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(this));
-  m_RefinedRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(this));
-  m_InitialRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(/*m_InitialRingSetFitParameters,*/ this));
-  m_RefinedRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(/*m_RefinedRingSetFitParameters,*/ this));
+  m_CenterFinder = new QxrdCenterFinder(this);
+  m_Integrator   = new QxrdIntegrator(this, m_Allocator, this);
+  m_GenerateTestImage = new QxrdGenerateTestImage(this, m_Allocator, this);
+  m_InitialRingSetFitParameters = new QxrdRingSetFitParameters(this);
+  m_RefinedRingSetFitParameters = new QxrdRingSetFitParameters(this);
+  m_InitialRingSetData = new QxrdRingSetSampledData(/*m_InitialRingSetFitParameters,*/ this);
+  m_RefinedRingSetData = new QxrdRingSetSampledData(/*m_RefinedRingSetFitParameters,*/ this);
 }
 
-QxrdFileSaverThreadPtr QxrdDataProcessorBase::fileSaverThread() const
+QxrdFileSaverThread *QxrdDataProcessorBase::fileSaverThread() const
 {
   return m_FileSaverThread;
 }
@@ -113,7 +113,7 @@ QxrdDataProcessorBase::~QxrdDataProcessorBase()
   closeLogFile();
 }
 
-void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionPtr acq)
+void QxrdDataProcessorBase::setAcquisition(QxrdAcquisition *acq)
 {
   m_Acquisition = acq;
 
@@ -139,7 +139,7 @@ void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionPtr acq)
   connect(m_Acquisition -> prop_Raw32SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateEstimatedProcessingTime()));
 }
 
-void QxrdDataProcessorBase::setWindow(QxrdWindowPtr win)
+void QxrdDataProcessorBase::setWindow(QxrdWindow *win)
 {
   m_Window = win;
   newData(m_Data, QxrdMaskDataPtr());
@@ -1344,7 +1344,7 @@ int QxrdDataProcessorBase::status(double time)
   }
 }
 
-QxrdCenterFinderPtr QxrdDataProcessorBase::centerFinder() const
+QxrdCenterFinder *QxrdDataProcessorBase::centerFinder() const
 {
   if (m_CenterFinder == NULL) {
     emit printMessage(QDateTime::currentDateTime(),
@@ -1354,7 +1354,7 @@ QxrdCenterFinderPtr QxrdDataProcessorBase::centerFinder() const
   return m_CenterFinder;
 }
 
-QxrdIntegratorPtr QxrdDataProcessorBase::integrator() const
+QxrdIntegrator *QxrdDataProcessorBase::integrator() const
 {
   if (m_Integrator == NULL) {
     emit printMessage(QDateTime::currentDateTime(),
@@ -1703,7 +1703,7 @@ void QxrdDataProcessorBase::calculateHistogram()
   }
 }
 
-QxrdGenerateTestImagePtr QxrdDataProcessorBase::generateTestImage() const
+QxrdGenerateTestImage *QxrdDataProcessorBase::generateTestImage() const
 {
   return m_GenerateTestImage;
 }

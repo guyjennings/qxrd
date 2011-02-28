@@ -4,7 +4,7 @@
 #include "qwt_plot_marker.h"
 #include "levmar.h"
 
-QxrdPowderFitIdentifyPage::QxrdPowderFitIdentifyPage(QxrdDataProcessorPtr proc, QWidget *parent) :
+QxrdPowderFitIdentifyPage::QxrdPowderFitIdentifyPage(QxrdDataProcessor *proc, QWidget *parent) :
     QxrdPowderFitWidget(proc, parent),
     m_IdCurrentRing(this,"idCurrentRing",0),
     m_Picker(NULL),

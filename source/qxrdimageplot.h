@@ -1,11 +1,6 @@
 #ifndef QXRDIMAGEPLOT_H
 #define QXRDIMAGEPLOT_H
 
-#include "qcepmacros.h"
-
-#include <QObject>
-
-#include "qxrdforwardtypes.h"
 #include "qxrdplot.h"
 #include "qxrddataprocessor.h"
 
@@ -18,6 +13,15 @@
 #include "qxrdplotimage.h"
 
 class QxrdHistogramSelector;
+class QwtPlotRescaler;
+class QxrdPlotSlicer;
+class QxrdImagePlotMeasurer;
+class QxrdHistogramSelector;
+class QwtPlotSpectrogram;
+class QxrdDataProcessor;
+class QxrdCenterFinderPicker;
+class QwtPlotMarker;
+class QxrdMaskPicker;
 
 class QxrdImagePlot : public QxrdPlot
 {
@@ -130,8 +134,8 @@ public:
   const QxrdMaskRasterData* maskRaster() const;
   QxrdMaskRasterData* maskRaster();
 
-  QxrdDataProcessorPtr processor() const;
-  void setDataProcessor(QxrdDataProcessorPtr proc);
+  QxrdDataProcessor *processor() const;
+  void setDataProcessor(QxrdDataProcessor *proc);
 
   void replot();
 
@@ -155,9 +159,9 @@ public:
   };
 
 private:
-  QwtPlotRescalerPtr         m_Rescaler;
-  QxrdPlotSlicerPtr          m_Slicer;
-  QxrdImagePlotMeasurerPtr   m_Measurer;
+  QwtPlotRescaler           *m_Rescaler;
+  QxrdPlotSlicer            *m_Slicer;
+  QxrdImagePlotMeasurer     *m_Measurer;
   QxrdHistogramSelector     *m_HistogramSelector;
 //  QwtLegendPtr               m_Legend;
 
@@ -169,9 +173,9 @@ private:
   QxrdMaskRasterData         m_MaskRaster;
   QxrdMaskRasterData         m_OverflowRaster;
 
-  QwtPlotSpectrogramPtr      m_DataImage;
-  QwtPlotSpectrogramPtr      m_MaskImage;
-  QwtPlotSpectrogramPtr      m_OverflowImage;
+  QwtPlotSpectrogram        *m_DataImage;
+  QwtPlotSpectrogram        *m_MaskImage;
+  QwtPlotSpectrogram        *m_OverflowImage;
 //  QxrdPlotImagePtr           m_PlotImage;
   QwtLinearColorMap          m_ColorMap;
 
@@ -181,13 +185,13 @@ private:
   QxrdMaskColorMap           m_OverflowColorMap;
   int                        m_OverflowAlpha;
 
-  QxrdDataProcessorPtr       m_DataProcessor;
+  QxrdDataProcessor         *m_DataProcessor;
 
-  QxrdCenterFinderPickerPtr  m_CenterFinderPicker;
-  QwtPlotMarkerPtr           m_CenterMarker;
+  QxrdCenterFinderPicker    *m_CenterFinderPicker;
+  QwtPlotMarker             *m_CenterMarker;
 
-  QxrdMaskPickerPtr          m_Circles;
-  QxrdMaskPickerPtr          m_Polygons;
+  QxrdMaskPicker            *m_Circles;
+  QxrdMaskPicker            *m_Polygons;
 
 //  QPen                       m_Pen;
   bool                 m_FirstTime;

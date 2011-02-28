@@ -39,7 +39,7 @@ void QxrdAllocatorThread::shutdown()
   wait();
 }
 
-QxrdAllocatorPtr QxrdAllocatorThread::allocator() const
+QxrdAllocator *QxrdAllocatorThread::allocator() const
 {
   while (m_Allocator == NULL) {
     QThread::msleep(500);

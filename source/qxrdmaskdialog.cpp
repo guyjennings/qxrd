@@ -1,7 +1,10 @@
 #include "qxrdmaskdialog.h"
 #include "ui_qxrdmaskdialog.h"
+#include "qxrdwindow.h"
+#include "qxrddataprocessor.h"
+#include "qxrdmaskstackmodel.h"
 
-QxrdMaskDialog::QxrdMaskDialog(QxrdWindowPtr win, QxrdDataProcessorPtr proc, QWidget *parent) :
+QxrdMaskDialog::QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessor *proc, QWidget *parent) :
   QDockWidget(parent),
   m_Window(win),
   m_Processor(proc),

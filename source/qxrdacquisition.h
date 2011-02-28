@@ -17,15 +17,19 @@
 #include "qxrdimagequeue.h"
 #include "qxrdacquisitionoperations.h"
 
+class QxrdAllocator;
+class QxrdDataProcessor;
 class QxrdSynchronizedAcquisition;
 class QxrdNIDAQPluginInterface;
+class QxrdAcquireDialog;
+class QxrdWindow;
 
 class QxrdAcquisition : public QxrdAcquisitionOperations
 {
   Q_OBJECT;
 
 public:
-  QxrdAcquisition(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator);
+  QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocator);
   ~QxrdAcquisition();
 
 public slots:
@@ -56,7 +60,7 @@ public:
   virtual void setupCameraBinningModeMenu(QComboBox *cb) = 0;
 
   void indicateDroppedFrame();
-  virtual QxrdAcquireDialog* controlPanel(QxrdWindowPtr win);
+  virtual QxrdAcquireDialog* controlPanel(QxrdWindow *win);
 
   QxrdSynchronizedAcquisition* synchronizedAcquisition() const;
 

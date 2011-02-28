@@ -1,23 +1,21 @@
 #ifndef QXRDACQUISITIONTHREAD_H
 #define QXRDACQUISITIONTHREAD_H
 
-#include "qcepmacros.h"
-
 #include <QThread>
-#include <QVector>
-#include <QVariant>
-#include <QMutex>
-#include <QWaitCondition>
+#include <QAtomicPointer>
+#include <QStringList>
+#include <QDateTime>
 
-#include "qxrdforwardtypes.h"
-#include "qxrddataprocessor.h"
+class QxrdDataProcessor;
+class QxrdAllocator;
+class QxrdAcquisition;
 
 class QxrdAcquisitionThread : public QThread
 {
   Q_OBJECT;
 
  public:
-  QxrdAcquisitionThread(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocator, int detectorType);
+  QxrdAcquisitionThread(QxrdDataProcessor *proc, QxrdAllocator *allocator, int detectorType);
   ~QxrdAcquisitionThread();
 
   void initialize();
@@ -40,7 +38,7 @@ signals:
   void criticalMessage(QDateTime ts, QString msg);
 
 public:
-  QxrdAcquisitionPtr acquisition() const;
+  QxrdAcquisition *acquisition() const;
 
 public:
   void sleep(double time);

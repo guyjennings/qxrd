@@ -6,7 +6,10 @@
 #include "qxrdplot.h"
 
 #include "qxrdimagedata.h"
-#include "qxrddataprocessor.h"
+
+class QxrdWindow;
+class QxrdDataProcessor;
+class QxrdCenterFinder;
 
 class QxrdCenterFinderPlot : public QxrdPlot
 {
@@ -15,7 +18,7 @@ class QxrdCenterFinderPlot : public QxrdPlot
 public:
   QxrdCenterFinderPlot(QWidget *parent=0);
 
-  void setWindow(QxrdWindowPtr win);
+  void setWindow(QxrdWindow *win);
 
 public slots:
   void onParameterChanged();
@@ -27,11 +30,11 @@ public slots:
   void onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
 
 private:
-  QVector<double>      m_XData, m_YData;
-  QxrdWindowPtr        m_Window;
-  QxrdDataProcessorPtr m_DataProcessor;
-  QxrdCenterFinderPtr  m_CenterFinder;
-  bool                 m_FirstTime;
+  QVector<double>    m_XData, m_YData;
+  QxrdWindow        *m_Window;
+  QxrdDataProcessor *m_DataProcessor;
+  QxrdCenterFinder  *m_CenterFinder;
+  bool               m_FirstTime;
 };
 
 #endif // QXRDCENTERFINDERPLOT_H

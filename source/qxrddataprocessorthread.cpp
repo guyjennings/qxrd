@@ -2,7 +2,7 @@
 
 #include "qxrddataprocessor.h"
 
-QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver)
+QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver)
   : QThread(),
     m_Allocator(allocator),
     m_FileSaverThread(saver),
@@ -20,9 +20,9 @@ QxrdDataProcessorThread::~QxrdDataProcessorThread()
 
 void QxrdDataProcessorThread::run()
 {
-  QxrdDataProcessorPtr p;
+  QxrdDataProcessor *p;
 
-  p = QxrdDataProcessorPtr(new QxrdDataProcessor(m_Acquisition, m_Allocator, m_FileSaverThread, NULL));
+  p = new QxrdDataProcessor(m_Acquisition, m_Allocator, m_FileSaverThread, NULL);
 
   m_DataProcessor.fetchAndStoreOrdered(p);
 
@@ -38,7 +38,7 @@ void QxrdDataProcessorThread::shutdown()
   wait();
 }
 
-QxrdDataProcessorPtr QxrdDataProcessorThread::dataProcessor() const
+QxrdDataProcessor *QxrdDataProcessorThread::dataProcessor() const
 {
   while (m_DataProcessor == NULL) {
     QThread::msleep(500);

@@ -1,17 +1,13 @@
 #ifndef QXRDACQUISITIONAREADETECTOR_H
 #define QXRDACQUISITIONAREADETECTOR_H
 
-#include "qcepmacros.h"
-
 #include "qxrdacquisition.h"
-
-class QxrdAcquisitionThread;
 
 class QxrdAcquisitionAreaDetector : public QxrdAcquisition
 {
   Q_OBJECT;
 public:
-  QxrdAcquisitionAreaDetector(QxrdDataProcessorPtr proc, QxrdAllocatorPtr allocatorn);
+  QxrdAcquisitionAreaDetector(QxrdDataProcessor *proc, QxrdAllocator *allocator);
 
 private slots:
   void initialize();

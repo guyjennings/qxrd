@@ -9,7 +9,6 @@
 #include <QWaitCondition>
 #include <QStack>
 
-#include "qxrdforwardtypes.h"
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
 #include "qxrdimagequeue.h"
@@ -22,12 +21,20 @@
 
 #include <qwt_double_rect.h>
 
+class QxrdAcquisition;
+class QxrdAllocator;
+class QxrdFileSaverThread;
+class QxrdWindow;
+class QxrdCenterFinder;
+class QxrdIntegrator;
+class QxrdGenerateTestImage;
+
 class QxrdDataProcessorBase : public QObject
 {
   Q_OBJECT;
 
 public:
-  QxrdDataProcessorBase(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver, QObject *parent=0);
+  QxrdDataProcessorBase(QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver, QObject *parent=0);
   ~QxrdDataProcessorBase();
 
 public:
@@ -278,8 +285,8 @@ public:
   void readSettings(QxrdSettings &settings, QString section);
   void writeSettings(QxrdSettings &settings, QString section);
 
-  void setAcquisition(QxrdAcquisitionPtr acq);
-  void setWindow(QxrdWindowPtr win);
+  void setAcquisition(QxrdAcquisition *acq);
+  void setWindow(QxrdWindow *win);
 
   QxrdDoubleImageDataPtr data() const;
   QxrdDoubleImageDataPtr darkImage() const;
@@ -288,16 +295,16 @@ public:
 
   QxrdMaskStackPtr       maskStack();
 
-  QxrdCenterFinderPtr    centerFinder() const;
-  QxrdIntegratorPtr      integrator() const;
+  QxrdCenterFinder      *centerFinder() const;
+  QxrdIntegrator        *integrator() const;
   QxrdRingSetFitParametersPtr initialRingSetFitParameters() const;
   QxrdRingSetSampledDataPtr   initialRingSetData() const;
   QxrdRingSetFitParametersPtr refinedRingSetFitParameters() const;
   QxrdRingSetSampledDataPtr   refinedRingSetData() const;
 
-  QxrdFileSaverThreadPtr fileSaverThread() const;
+  QxrdFileSaverThread *fileSaverThread() const;
 
-  QxrdGenerateTestImagePtr generateTestImage() const;
+  QxrdGenerateTestImage *generateTestImage() const;
 
   void newMask();
 
@@ -351,10 +358,10 @@ private:
   mutable QMutex         m_LogFileMutex;
 
 protected:
-  QxrdWindowPtr          m_Window;
-  QxrdAllocatorPtr       m_Allocator;
-  QxrdFileSaverThreadPtr m_FileSaverThread;
-  QxrdAcquisitionPtr     m_Acquisition;
+  QxrdWindow            *m_Window;
+  QxrdAllocator         *m_Allocator;
+  QxrdFileSaverThread   *m_FileSaverThread;
+  QxrdAcquisition       *m_Acquisition;
   QWaitCondition         m_ProcessWaiting;
   QxrdInt16ImageQueue    m_AcquiredInt16Images;
   QxrdInt32ImageQueue    m_AcquiredInt32Images;
@@ -369,8 +376,8 @@ protected:
 
   QAtomicInt             m_AcquiredCount;
 
-  QxrdCenterFinderPtr    m_CenterFinder;
-  QxrdIntegratorPtr      m_Integrator;
+  QxrdCenterFinder      *m_CenterFinder;
+  QxrdIntegrator        *m_Integrator;
 
   QxrdRingSetFitParametersPtr m_InitialRingSetFitParameters;
   QxrdRingSetFitParametersPtr m_RefinedRingSetFitParameters;
@@ -378,7 +385,7 @@ protected:
   QxrdRingSetSampledDataPtr m_InitialRingSetData;
   QxrdRingSetSampledDataPtr m_RefinedRingSetData;
 
-  QxrdGenerateTestImagePtr m_GenerateTestImage;
+  QxrdGenerateTestImage *m_GenerateTestImage;
 
   FILE                  *m_LogFile;
 };

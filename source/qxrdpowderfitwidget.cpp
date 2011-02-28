@@ -4,7 +4,7 @@
 #include "qwt_plot_item.h"
 #include "qwt_plot_marker.h"
 
-QxrdPowderFitWidget::QxrdPowderFitWidget(QxrdDataProcessorPtr proc, QWidget *parent) :
+QxrdPowderFitWidget::QxrdPowderFitWidget(QxrdDataProcessor *proc, QWidget *parent) :
     QDialog(parent),
     m_Processor(proc)
 {

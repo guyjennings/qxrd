@@ -1,6 +1,6 @@
 #include "qxrdsettingssaverthread.h"
 
-QxrdSettingsSaverThread::QxrdSettingsSaverThread(QxrdApplicationPtr app) :
+QxrdSettingsSaverThread::QxrdSettingsSaverThread(QxrdApplication *app) :
     QThread(),
     m_Application(app),
     m_SettingsSaver(NULL)

@@ -3,13 +3,16 @@
 
 #include "qcepmacros.h"
 #include <QWidget>
-#include "qxrdforwardtypes.h"
 #include "ui_qxrdacquiredialog.h"
+
+class QxrdWindow;
+class QxrdAcquisition;
+class QxrdDataProcessor;
 
 class QxrdAcquireDialog : public QDockWidget, public Ui::QxrdAcquireDialog {
   Q_OBJECT
 public:
-  QxrdAcquireDialog(QxrdWindowPtr win, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc, QWidget *parent = 0);
+  QxrdAcquireDialog(QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc, QWidget *parent = 0);
   ~QxrdAcquireDialog();
 
   void onAcquisitionInit();
@@ -28,9 +31,9 @@ private slots:
   void acquireComplete(int isDark);
 
 private:
-  QxrdWindowPtr        m_Window;
-  QxrdAcquisitionPtr   m_Acquisition;
-  QxrdDataProcessorPtr m_DataProcessor;
+  QxrdWindow        *m_Window;
+  QxrdAcquisition   *m_Acquisition;
+  QxrdDataProcessor *m_DataProcessor;
 };
 
 #endif // QXRDACQUIREDIALOG_H

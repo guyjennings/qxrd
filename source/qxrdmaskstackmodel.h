@@ -38,6 +38,4 @@ private:
   QxrdMaskStackPtr m_MaskStack;
 };
 
-typedef QxrdMaskStackModel *QxrdMaskStackModelPtr;
-
 #endif // QXRDMASKSTACKMODEL_H

@@ -8,12 +8,13 @@
 #include "qxrdintegrateddata.h"
 #include "qxrdroidata.h"
 #include "qxrdhistogramdata.h"
+#include "qxrdimagedata.h"
 
 class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
 {
   Q_OBJECT;
 public:
-  QxrdDataProcessorThreaded(QxrdAcquisitionPtr acq, QxrdAllocatorPtr allocator, QxrdFileSaverThreadPtr saver, QObject *parent=0);
+  QxrdDataProcessorThreaded(QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver, QObject *parent=0);
 
 public:
   void beginAcquisition(int isDark);

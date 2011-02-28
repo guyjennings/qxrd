@@ -1,11 +1,9 @@
 #ifndef QXRDALLOCATORTHREAD_H
 #define QXRDALLOCATORTHREAD_H
 
-#include "qcepmacros.h"
-
 #include <QThread>
-#include "qxrdforwardtypes.h"
-#include "qxrdallocator.h"
+#include <QDateTime>
+class QxrdAllocator;
 
 class QxrdAllocatorThread : public QThread
 {
@@ -17,7 +15,7 @@ public:
 
   void shutdown();
 
-  QxrdAllocatorPtr allocator() const;
+  QxrdAllocator *allocator() const;
 
   static void msleep(long unsigned int);
 

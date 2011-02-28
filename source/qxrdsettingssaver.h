@@ -6,13 +6,14 @@
 #include <QTimer>
 #include <QMutex>
 #include <QDateTime>
-#include "qxrdforwardtypes.h"
+
+class QxrdApplication;
 
 class QxrdSettingsSaver : public QObject
 {
   Q_OBJECT;
 public:
-  explicit QxrdSettingsSaver(QObject *parent, QxrdApplicationPtr app);
+  explicit QxrdSettingsSaver(QObject *parent, QxrdApplication *app);
 
 signals:
   void printMessage(QDateTime ts, QString msg);
@@ -24,7 +25,7 @@ public slots:
 
 private:
   QMutex             m_Mutex;
-  QxrdApplicationPtr m_Application;
+  QxrdApplication   *m_Application;
   QAtomicInt         m_UpdateCount;
   QTimer             m_Timer;
   int                m_SaveDelay;
