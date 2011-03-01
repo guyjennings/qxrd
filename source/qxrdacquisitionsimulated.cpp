@@ -130,7 +130,7 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
         if ((i>=frame*64) && (i<(frame+1)*64) && (j < 64)) {
           *ptr++ = frame;
         } else {
-          *ptr++ = 0;
+          *ptr++ = 1;
         }
       }
     }
