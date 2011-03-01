@@ -229,9 +229,9 @@ void QxrdNIDAQPlugin::triggerAnalogWaveform()
   int error;
 
   if (m_AOTaskHandle) {
-    DAQmxErrChk(
-      DAQmxWaitUntilTaskDone(m_AOTaskHandle, -1)
-    )
+//    DAQmxErrChk(
+//      DAQmxWaitUntilTaskDone(m_AOTaskHandle, -1)
+//    )
 
     DAQmxErrChk(
       DAQmxStopTask(m_AOTaskHandle)
