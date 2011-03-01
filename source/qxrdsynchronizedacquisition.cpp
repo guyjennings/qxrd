@@ -2,6 +2,7 @@
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdacquisition.h"
+#include "qwt_math.h"
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdAcquisition *acq) :
   m_SyncAcquisitionMode(this,"syncAcquisitionMode", 0),
@@ -29,41 +30,96 @@ QxrdNIDAQPluginInterface *QxrdSynchronizedAcquisition::nidaqPlugin() const
 
 void QxrdSynchronizedAcquisition::prepareForAcquisition()
 {
-  double exposureTime = m_Acquisition->get_ExposureTime();
-//  int    nsummed      = m_Acquisition->get_SummedExposures();
-  int    nphases      = m_Acquisition->get_FilesInGroup();
-  double cycleTime    = exposureTime/**nsummed*/*nphases;
-  double sampleRate   = 1000;
-  double nSamples     = cycleTime*sampleRate;
-  double minVal       = get_SyncAcquisitionMinimum();
-  double maxVal       = get_SyncAcquisitionMaximum();
-  int chan            = get_SyncAcquisitionOutputChannel();
+  if (!m_Acquisition->get_AcquireDark()) {
+    double exposureTime = m_Acquisition->get_ExposureTime();
+    //  int    nsummed      = m_Acquisition->get_SummedExposures();
+    int    nphases      = m_Acquisition->get_FilesInGroup();
+    double cycleTime    = exposureTime/**nsummed*/*nphases;
+    double sampleRate   = 1000;
+    double nSamples     = cycleTime*sampleRate;
+    double minVal       = get_SyncAcquisitionMinimum();
+    double maxVal       = get_SyncAcquisitionMaximum();
+    int chan            = get_SyncAcquisitionOutputChannel();
+    int wfm             = get_SyncAcquisitionWaveform();
+    int mode            = get_SyncAcquisitionMode();
+    int symm            = get_SyncAcquisitionSymmetry();
 
-  while (nSamples > 10000) {
-    sampleRate /= 10;
-    nSamples = cycleTime*sampleRate;
-  }
+    if (symm > 1.0) {
+      symm = 1.0;
+    } else if (symm < -1.0) {
+      symm = -1.0;
+    }
 
-  int iSamples = (int) nSamples;
+    if (mode) {
+      while (nSamples > 10000) {
+        sampleRate /= 10;
+        nSamples = cycleTime*sampleRate;
+      }
 
-  m_OutputVoltage.resize(iSamples);
+      int iSamples = (int) nSamples;
+      double divide = iSamples * (0.5 + symm/2.0);
 
-  for (int i=0; i<iSamples; i++) {
-    m_OutputVoltage[i] = minVal + i*(maxVal-minVal)/iSamples;
-  }
+      m_OutputVoltage.resize(iSamples+1);
 
-  if (m_NIDAQPlugin) {
-    m_NIDAQPlugin->setAnalogChannel(chan-1);
-    m_NIDAQPlugin->setAnalogWaveform(sampleRate, m_OutputVoltage.data(), iSamples);
+      switch (wfm) {
+      case SyncAcquisitionWaveformSquare:
+        for (int i=0; i<iSamples; i++) {
+          if (i<divide) {
+            m_OutputVoltage[i] = minVal;
+          } else {
+            m_OutputVoltage[i] = maxVal;
+          }
+        }
+        break;
+
+      case SyncAcquisitionWaveformSine:
+        for (int i=0; i<iSamples; i++) {
+          double x;
+          if (i<divide) {
+            x = M_PI*i/divide;
+          } else {
+            x = M_PI*(i-divide)/(iSamples-divide);
+          }
+          m_OutputVoltage[i] = minVal + (maxVal-minVal)*(sin(x)-1.0)/2.0;
+        }
+        break;
+
+      case SyncAcquisitionWaveformTriangle:
+        for (int i=0; i<iSamples; i++) {
+          if (i<divide) {
+            m_OutputVoltage[i] = minVal + i*(maxVal-minVal)/divide;
+          } else {
+            m_OutputVoltage[i] = maxVal + (i-divide)*(maxVal-minVal)/(iSamples-divide);
+          }
+        }
+        break;
+
+      case SyncAcquisitionWaveformSawtooth:
+      default:
+        for (int i=0; i<iSamples; i++) {
+          m_OutputVoltage[i] = minVal + i*(maxVal-minVal)/iSamples;
+        }
+        break;
+      }
+
+      m_OutputVoltage[iSamples] = minVal; // Return output voltage to starting value at the end of the waveform
+
+      if (m_NIDAQPlugin) {
+        m_NIDAQPlugin->setAnalogChannel(chan-1);
+        m_NIDAQPlugin->setAnalogWaveform(sampleRate, m_OutputVoltage.data(), iSamples+1);
+      }
+    }
   }
 }
 
 void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int currentPhase)
 {
-  if (m_Acquisition->acquisitionStatus(0.0) == 0) {
-    if (currentPhase == 0) {
-      if (m_NIDAQPlugin) {
-        m_NIDAQPlugin->triggerAnalogWaveform();
+  if (!m_Acquisition->get_AcquireDark()) {
+    if (m_Acquisition->acquisitionStatus(0.0) == 0) {
+      if (currentPhase == 0) {
+        if (m_NIDAQPlugin) {
+          m_NIDAQPlugin->triggerAnalogWaveform();
+        }
       }
     }
   }
