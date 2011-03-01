@@ -615,10 +615,17 @@ void QxrdWindow::acquiredFrame(
 
   //  printf("%d %% progress\n", thisframe*100/totalframes);
 
-  statusMessage(QDateTime::currentDateTime(),
-                tr("%1: Exposure %2 of %3, File %4 of %5")
-                .arg(fileName)
-                .arg(isum+1).arg(nsum).arg(iframe).arg(nframe));
+  if (nsum == 1) {
+    statusMessage(QDateTime::currentDateTime(),
+                  tr("%1: Exposure %2 of %3, File %4 of %5")
+                  .arg(fileName)
+                  .arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
+  } else {
+    statusMessage(QDateTime::currentDateTime(),
+                  tr("%1: Phase %2 of %3, Sum %4 of %5, Group %6 of %7")
+                  .arg(fileName)
+                  .arg(isum+1).arg(nsum).arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
+  }
 
   m_Progress -> setValue(thisframe*100/totalframes);
 }
