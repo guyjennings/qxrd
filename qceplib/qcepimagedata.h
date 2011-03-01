@@ -206,11 +206,15 @@ protected:
 template <typename T>
 QcepImageData<T>::QcepImageData(int width, int height, T def)
   : QcepImageDataBase(width, height),
-    m_Image(width*height, def),
+//    m_Image(width*height, def),
+    m_Image(width*height),
     m_MinValue(0),
     m_MaxValue(0),
     m_Default(def)
 {
+  if (def) {
+    m_Image.fill(def);
+  }
 }
 
 template <typename T>
