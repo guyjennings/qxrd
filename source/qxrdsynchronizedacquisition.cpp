@@ -45,7 +45,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition()
     int chan            = get_SyncAcquisitionOutputChannel();
     int wfm             = get_SyncAcquisitionWaveform();
     m_SyncMode          = get_SyncAcquisitionMode();
-    int symm            = get_SyncAcquisitionSymmetry();
+    double symm         = get_SyncAcquisitionSymmetry();
 
     if (symm > 1.0) {
       symm = 1.0;
@@ -81,9 +81,9 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition()
           if (i<divide) {
             x = M_PI*i/divide;
           } else {
-            x = M_PI*(i-divide)/(iSamples-divide);
+            x = M_PI+M_PI*(i-divide)/(iSamples-divide);
           }
-          m_OutputVoltage[i] = minVal + (maxVal-minVal)*(sin(x)-1.0)/2.0;
+          m_OutputVoltage[i] = minVal + (maxVal-minVal)*(1.0 - cos(x))/2.0;
         }
         break;
 
@@ -92,7 +92,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition()
           if (i<divide) {
             m_OutputVoltage[i] = minVal + i*(maxVal-minVal)/divide;
           } else {
-            m_OutputVoltage[i] = maxVal + (i-divide)*(maxVal-minVal)/(iSamples-divide);
+            m_OutputVoltage[i] = maxVal - (i-divide)*(maxVal-minVal)/(iSamples-divide);
           }
         }
         break;
@@ -108,8 +108,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition()
       m_OutputVoltage[iSamples] = minVal; // Return output voltage to starting value at the end of the waveform
 
       if (m_NIDAQPlugin) {
-        m_NIDAQPlugin->setAnalogChannel(chan-1);
-        m_NIDAQPlugin->setAnalogWaveform(sampleRate, m_OutputVoltage.data(), iSamples+1);
+        m_NIDAQPlugin->setAnalogWaveform(chan-1, sampleRate, m_OutputVoltage.data(), iSamples+1);
       }
     }
   }

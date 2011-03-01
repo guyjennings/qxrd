@@ -5,6 +5,7 @@
 #include <QElapsedTimer>
 #endif
 #include <stdio.h>
+#include <QMutexLocker>
 
 #define DAQmxErrChk(functionCall) { if( DAQmxFailed(error=(functionCall)) ) { QxrdNIDAQPlugin::errorCheck(__FILE__,__LINE__,error); goto Error; } }
 
@@ -78,6 +79,8 @@ void QxrdNIDAQPlugin::initTaskHandles()
 
 void QxrdNIDAQPlugin::closeTaskHandles()
 {
+  QMutexLocker lock(&m_Mutex);
+
   if (m_AOTaskHandle) {
     DAQmxClearTask(m_AOTaskHandle);
     m_AOTaskHandle = 0;
@@ -170,11 +173,25 @@ void   QxrdNIDAQPlugin::aoWave(QString chan, int type, double freq, double ampli
 //  return;
 }
 
-void   QxrdNIDAQPlugin::setAnalogChannel(int chan)
+//void   QxrdNIDAQPlugin::setAnalogChannel(int chan)
+//{
+//  QMutexLocker lock(&m_Mutex);
+////  printf("setAnalogChannel(%d)\n", chan);
+
+//  int error;
+
+
+//Error:
+//  return;
+//}
+
+void   QxrdNIDAQPlugin::setAnalogWaveform(int chan, double rate, double wfm[], int size)
 {
-//  printf("setAnalogChannel(%d)\n", chan);
+  QMutexLocker lock(&m_Mutex);
+//  printf("setAnalogWaveform(%g,%g...,%d)\n", rate, wfm[0], size);
 
   int error;
+  int32 nsampwrt;
 
   if (m_AOTaskHandle) {
     DAQmxStopTask(m_AOTaskHandle);
@@ -186,27 +203,16 @@ void   QxrdNIDAQPlugin::setAnalogChannel(int chan)
     DAQmxErrChk(DAQmxCreateTask("qxrd-output", &m_AOTaskHandle))
     DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle,
                                           qPrintable(tr("Dev1/ao%1").arg(chan)), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL))
-  }
 
-Error:
-  return;
-}
+    if (m_AOTaskHandle) {
+      DAQmxErrChk(
+          DAQmxCfgSampClkTiming(m_AOTaskHandle, NULL, rate, DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, size)
+          )
 
-void   QxrdNIDAQPlugin::setAnalogWaveform(double rate, double wfm[], int size)
-{
-//  printf("setAnalogWaveform(%g,%g...,%d)\n", rate, wfm[0], size);
-
-  int error;
-  int32 nsampwrt;
-
-  if (m_AOTaskHandle) {
-    DAQmxErrChk(
-      DAQmxCfgSampClkTiming(m_AOTaskHandle, NULL, rate, DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, size)
-    )
-
-    DAQmxErrChk(
-      DAQmxWriteAnalogF64(m_AOTaskHandle, size, false, -1, DAQmx_Val_GroupByChannel, wfm, &nsampwrt, NULL)
-    )
+      DAQmxErrChk(
+              DAQmxWriteAnalogF64(m_AOTaskHandle, size, false, -1, DAQmx_Val_GroupByChannel, wfm, &nsampwrt, NULL)
+          )
+      }
   }
 
 //  printf("%d samples written\n", nsampwrt);
@@ -217,6 +223,7 @@ Error:
 
 void QxrdNIDAQPlugin::triggerAnalogWaveform()
 {
+  QMutexLocker lock(&m_Mutex);
 //  printf("triggerAnalogWaveform()\n");
 
   int error;

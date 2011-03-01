@@ -10,8 +10,8 @@ public:
   virtual ~QxrdNIDAQPluginInterface() {}
 
 public:
-  virtual void setAnalogChannel(int chan) = 0;
-  virtual void setAnalogWaveform(double rate, double wfm[], int size) = 0;
+//  virtual void setAnalogChannel(int chan) = 0;
+  virtual void setAnalogWaveform(int chan, double rate, double wfm[], int size) = 0;
   virtual void triggerAnalogWaveform() = 0;
 };
 

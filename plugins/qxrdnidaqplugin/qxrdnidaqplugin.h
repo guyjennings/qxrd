@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <QMutex>
+
 #include "qxrdnidaqplugininterface.h"
 #include "NIDAQmx.h"
 
@@ -18,8 +20,8 @@ public:
   QString name() const;
 
 public slots:
-  void   setAnalogChannel(int chan);
-  void   setAnalogWaveform(double rate, double wfm[], int size);
+//  void   setAnalogChannel();
+  void   setAnalogWaveform(int chan, double rate, double wfm[], int size);
   void   triggerAnalogWaveform();
 
   void   aoSet(QString chan, double val);
@@ -39,6 +41,7 @@ private:
   void errorCheck(const char* file, int line, int err);
 
 private:
+  QMutex     m_Mutex;
   TaskHandle m_AOTaskHandle;
   TaskHandle m_AITaskHandle;
   TaskHandle m_TrigAOTask;
