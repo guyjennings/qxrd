@@ -307,10 +307,19 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
           m_AcquiredInt32Data[m_CurrentPhase] = m_Allocator->newInt32Image();
           m_OverflowMask[m_CurrentPhase] = m_Allocator->newMask(0);
         } else if (m_CurrentSummation == 0) {
+          QCEP_DEBUG(DEBUG_ACQUIRE,
+                     emit printMessage(QDateTime::currentDateTime(),
+                                       msg+tr("process[%1]").arg(m_CurrentPhase));
+          );
           processAcquiredImage(m_InitialFileIndex+m_CurrentGroup-1, m_CurrentPhase, m_AcquiredInt32Data[m_CurrentPhase], m_OverflowMask[m_CurrentPhase]);
           m_AcquiredInt32Data[m_CurrentPhase] = m_Allocator->newInt32Image();
           m_OverflowMask[m_CurrentPhase] = m_Allocator->newMask(0);
         }
+
+        QCEP_DEBUG(DEBUG_ACQUIRE,
+                   emit printMessage(QDateTime::currentDateTime(),
+                                     msg+tr("accumulate[%1]").arg(m_CurrentPhase));
+        );
 
         accumulateAcquiredImage(image, m_AcquiredInt32Data[m_CurrentPhase], m_OverflowMask[m_CurrentPhase]);
       }
@@ -359,7 +368,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
     quint32* dst = accum->data();
     short int* ovf = overflow->data();
 
-    if (m_CurrentExposure == 1) {
+    if (m_CurrentExposure == 0) {
       QCEP_DEBUG(DEBUG_ACQUIRE,
                  emit printMessage(QDateTime::currentDateTime(),
                                    tr("Frame %1 saved").arg(m_CurrentExposure));
