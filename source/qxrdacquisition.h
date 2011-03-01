@@ -55,11 +55,13 @@ signals:
   void acquireComplete(int dark);
 
 public:
+  int currentPhase(int frameNumber);
+
   virtual void setupExposureMenu(QDoubleSpinBox *cb) = 0;
   virtual void setupCameraGainMenu(QComboBox *cb) = 0;
   virtual void setupCameraBinningModeMenu(QComboBox *cb) = 0;
 
-  void indicateDroppedFrame();
+  void indicateDroppedFrame(int n);
   virtual QxrdAcquireDialog* controlPanel(QxrdWindow *win);
 
   QxrdSynchronizedAcquisition* synchronizedAcquisition() const;
@@ -85,7 +87,7 @@ protected:
 
 protected slots:
   virtual void haltAcquisition();
-  void acquiredFrameAvailable(QxrdInt16ImageDataPtr image);
+  void acquiredFrameAvailable(QxrdInt16ImageDataPtr image, int counter);
 
 protected:
   QMutex                 m_Acquiring;
@@ -104,10 +106,10 @@ protected:
 
   QAtomicInt             m_FrameCounter;
   QAtomicInt             m_UpdateInterval;
-  QAtomicInt             m_CurrentExposure;
-  QAtomicInt             m_CurrentPhase;
-  QAtomicInt             m_CurrentSummation;
-  QAtomicInt             m_CurrentGroup;
+//  QAtomicInt             m_CurrentExposure;
+//  QAtomicInt             m_CurrentPhase;
+//  QAtomicInt             m_CurrentSummation;
+//  QAtomicInt             m_CurrentGroup;
 
   QAtomicInt             m_InitialFileIndex;
 

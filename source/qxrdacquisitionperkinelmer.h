@@ -23,18 +23,20 @@ private slots:
   void onBinningModeChanged(int newMode);
   void onCameraGainChanged(int newGain);
 
+public slots:
+  void initialize();
+  void onEndFrame(int counter, unsigned int n1, unsigned int n2);
+  void onEndFrameCallback();
+
+protected:
+  void beginAcquisition();
+
 private:
   void setupExposureMenu(QDoubleSpinBox *cb);
   void setupCameraGainMenu(QComboBox *cb);
   void setupCameraBinningModeMenu(QComboBox *cb);
   bool checkPluginAvailable();
 
-public slots:
-  void initialize();
-  void onEndFrame(int counter, unsigned int n1, unsigned int n2);
-  void onEndFrameCallback();
-
-private:
   void acquisitionInitError(int n);
   void acquisitionNSensorsError(int n);
 

@@ -114,6 +114,8 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition()
   }
 }
 
+//static QTime tick;
+
 void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int currentPhase)
 {
   if (m_SyncMode) {
@@ -123,8 +125,10 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int currentPhase)
           m_NIDAQPlugin->triggerAnalogWaveform();
         }
       }
+//      printf("elapsed[%d] %d msec\n", currentPhase, tick.restart());
     }
   }
+
   //  printf("Sync acquired frame available %d, %d\n", currentExposure, currentFile);
 
 //  if (m_NIDAQPlugin) {

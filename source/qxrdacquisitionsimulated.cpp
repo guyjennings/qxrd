@@ -108,13 +108,19 @@ void QxrdAcquisitionSimulated::initialize()
   QxrdAcquisition::initialize();
 }
 
+static int frameCounter = 0;
+
+void QxrdAcquisitionSimulated::beginAcquisition()
+{
+  frameCounter = 0;
+}
+
 void QxrdAcquisitionSimulated::onTimerTimeout()
 {
   if (synchronizedAcquisition()) {
-    synchronizedAcquisition()->acquiredFrameAvailable(m_CurrentPhase);
+    synchronizedAcquisition()->acquiredFrameAvailable(currentPhase(frameCounter));
   }
 
-  static int frameCounter = 0;
 
   int nRows = get_NRows();
   int nCols = get_NCols();
@@ -136,5 +142,5 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
     }
   }
 
-  acquiredFrameAvailable(image);
+  acquiredFrameAvailable(image, frameCounter);
 }

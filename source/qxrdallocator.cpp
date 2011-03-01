@@ -38,13 +38,13 @@ QxrdAllocator::~QxrdAllocator()
 
 QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+//  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_CountInt16.fetchAndAddOrdered(1);
 
-  if (m_FreeInt16Images.size() > 0) {
-    return m_FreeInt16Images.dequeue();
-  } else {
+//  if (m_FreeInt16Images.size() > 0) {
+//    return m_FreeInt16Images.dequeue();
+//  } else {
     if ((m_AllocatedMemoryMB + int16SizeMB()) < get_Max()) {
       QxrdInt16ImageDataPtr res(new QxrdInt16ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int16Deleter);
 
@@ -54,7 +54,7 @@ QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image()
     } else {
       return QxrdInt16ImageDataPtr(NULL);
     }
-  }
+//  }
 }
 
 QxrdInt32ImageDataPtr QxrdAllocator::newInt32Image()

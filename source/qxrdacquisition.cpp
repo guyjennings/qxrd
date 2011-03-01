@@ -168,10 +168,10 @@ void QxrdAcquisition::beginAcquisition()
   m_ElapsedTimer.start();
 }
 
-void QxrdAcquisition::indicateDroppedFrame()
+void QxrdAcquisition::indicateDroppedFrame(int n)
 {
   QString msg = tr("Frame %1 dropped [%2/%3 MB Used]")
-                  .arg(m_CurrentExposure)
+                  .arg(n)
                   .arg(m_Allocator->allocatedMemoryMB())
                   .arg(m_Allocator->maximumMemoryMB());
 
@@ -193,10 +193,10 @@ void QxrdAcquisition::copyParameters(int isDark)
 
   set_Cancelling(0);
 
-  m_CurrentExposure.fetchAndStoreOrdered(0);
-  m_CurrentPhase.fetchAndStoreOrdered(0);
-  m_CurrentSummation.fetchAndStoreOrdered(0);
-  m_CurrentGroup.fetchAndStoreOrdered(0);
+//  m_CurrentExposure.fetchAndStoreOrdered(0);
+//  m_CurrentPhase.fetchAndStoreOrdered(0);
+//  m_CurrentSummation.fetchAndStoreOrdered(0);
+//  m_CurrentGroup.fetchAndStoreOrdered(0);
 
   m_NSkippedAtStart.fetchAndStoreOrdered(get_SkippedExposuresAtStart());
   m_NSkippedBetweenGroups.fetchAndStoreOrdered(get_SkippedExposures());
@@ -222,7 +222,27 @@ void QxrdAcquisition::copyParameters(int isDark)
       );
 }
 
-void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
+static QTime tick;
+
+int QxrdAcquisition::currentPhase(int frameNumber)
+{
+  if (frameNumber < m_NSkippedAtStart) {
+    return -1;
+  } else {
+    int expAfterStart  = frameNumber - m_NSkippedAtStart;
+    int expPerGroup    = m_NPhasesPerSummation*m_NSummationsPerGroup+m_NSkippedBetweenGroups;
+//    int currentGroup   = expAfterStart / expPerGroup;
+    int expWithinGroup = expAfterStart % expPerGroup;
+//    int expPerSequence = m_NSkippedAtStart + m_NGroupsPerSequence*expPerGroup - m_NSkippedBetweenGroups;
+
+    int expPerSummation = m_NPhasesPerSummation;
+//    int currentSummation = expWithinGroup / expPerSummation;
+    int currentPhase   = expWithinGroup % expPerSummation;
+    return currentPhase;
+  }
+}
+
+void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image, int counter)
     // A new frame of data has been acquired, it should be added to m_AcquiredInt32Data.
     // If a summed exposure has been completed, either the 16 or 32 bit data
     // frame should be passed to the data processor, and replaced with a newly
@@ -231,6 +251,7 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
     // and acquisition should drop frames until memory is available
 {
   THREAD_CHECK;
+
 
 //  acquireTiming();
 
@@ -252,33 +273,35 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
     }
   }
 
-  int expAfterStart  = m_CurrentExposure - m_NSkippedAtStart;
+  int expAfterStart  = counter - m_NSkippedAtStart;
   int expPerGroup    = m_NPhasesPerSummation*m_NSummationsPerGroup+m_NSkippedBetweenGroups;
-  int grpInSequence  = expAfterStart / expPerGroup;
+  int currentGroup   = expAfterStart / expPerGroup;
   int expWithinGroup = expAfterStart % expPerGroup;
   int expPerSequence = m_NSkippedAtStart + m_NGroupsPerSequence*expPerGroup - m_NSkippedBetweenGroups;
 
   int expPerSummation = m_NPhasesPerSummation;
-  int sumInGroup     = expWithinGroup / expPerSummation;
-  int expWithinSummation = expWithinGroup % expPerSummation;
+  int currentSummation = expWithinGroup / expPerSummation;
+  int currentPhase   = expWithinGroup % expPerSummation;
   int isSummed       = true;
 
   if (m_Acquiring.tryLock()) {
     m_Acquiring.unlock();
   } else if (image == NULL) {
-    indicateDroppedFrame();
+    indicateDroppedFrame(counter);
   } else  {
+//    printf("acquiredFrameAvailable[%d] %d msec\n", counter, tick.restart());
+
     QString msg;
     msg = tr("Acq fctr %1: ").arg(m_FrameCounter);
 
-    if (m_CurrentExposure < m_NSkippedAtStart) {
+    if (counter < m_NSkippedAtStart) {
       QCEP_DEBUG(DEBUG_ACQUIRE,
                  emit printMessage(QDateTime::currentDateTime(),
-                                   tr("Frame %1 skipped").arg(m_CurrentExposure));
+                                   tr("Frame %1 skipped").arg(counter));
       );
-      m_CurrentPhase.fetchAndStoreOrdered(-1);
-      m_CurrentSummation.fetchAndStoreOrdered(-1);
-      m_CurrentGroup.fetchAndStoreOrdered(-1);
+//      m_CurrentPhase.fetchAndStoreOrdered(-1);
+//      m_CurrentSummation.fetchAndStoreOrdered(-1);
+//      m_CurrentGroup.fetchAndStoreOrdered(-1);
     } else {
 
       if (expWithinGroup < m_NPhasesPerSummation*m_NSummationsPerGroup) {
@@ -289,57 +312,57 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
         msg += "Skipped: ";
       }
 
-      m_CurrentPhase.fetchAndStoreOrdered(expWithinSummation);
-      m_CurrentSummation.fetchAndStoreOrdered(sumInGroup);
-      m_CurrentGroup.fetchAndStoreOrdered(grpInSequence);
+//      m_CurrentPhase.fetchAndStoreOrdered(currentPhase);
+//      m_CurrentSummation.fetchAndStoreOrdered(currentSummation);
+//      m_CurrentGroup.fetchAndStoreOrdered(currentGroup);
 
-      set_FileIndex(m_InitialFileIndex+m_CurrentGroup);
+      set_FileIndex(m_InitialFileIndex+currentGroup);
 
       QCEP_DEBUG(DEBUG_ACQUIRE,
                  emit printMessage(QDateTime::currentDateTime(),
                                    msg+tr("fIdx %1: mCE %2: mCP %3: mCS %4: mCG %5")
-                                   .arg(get_FileIndex()).arg(m_CurrentExposure)
-                                   .arg(m_CurrentPhase).arg(m_CurrentSummation).arg(m_CurrentGroup));
+                                   .arg(get_FileIndex()).arg(counter)
+                                   .arg(currentPhase).arg(currentSummation).arg(currentGroup));
           );
 
       if (isSummed) {
-        if (m_AcquiredInt32Data[m_CurrentPhase] == NULL) {
-          m_AcquiredInt32Data[m_CurrentPhase] = m_Allocator->newInt32Image();
-          m_OverflowMask[m_CurrentPhase] = m_Allocator->newMask(0);
-        } else if (m_CurrentSummation == 0) {
+        if (m_AcquiredInt32Data[currentPhase] == NULL) {
+          m_AcquiredInt32Data[currentPhase] = m_Allocator->newInt32Image();
+          m_OverflowMask[currentPhase] = m_Allocator->newMask(0);
+        } else if (currentSummation == 0) {
           QCEP_DEBUG(DEBUG_ACQUIRE,
                      emit printMessage(QDateTime::currentDateTime(),
-                                       msg+tr("process[%1]").arg(m_CurrentPhase));
+                                       msg+tr("process[%1]").arg(currentPhase));
           );
-          processAcquiredImage(m_InitialFileIndex+m_CurrentGroup-1, m_CurrentPhase, m_AcquiredInt32Data[m_CurrentPhase], m_OverflowMask[m_CurrentPhase]);
-          m_AcquiredInt32Data[m_CurrentPhase] = m_Allocator->newInt32Image();
-          m_OverflowMask[m_CurrentPhase] = m_Allocator->newMask(0);
+          processAcquiredImage(m_InitialFileIndex+currentGroup-1, currentPhase, m_AcquiredInt32Data[currentPhase], m_OverflowMask[currentPhase]);
+          m_AcquiredInt32Data[currentPhase] = m_Allocator->newInt32Image();
+          m_OverflowMask[currentPhase] = m_Allocator->newMask(0);
         }
 
         QCEP_DEBUG(DEBUG_ACQUIRE,
                    emit printMessage(QDateTime::currentDateTime(),
-                                     msg+tr("accumulate[%1]").arg(m_CurrentPhase));
+                                     msg+tr("accumulate[%1]").arg(currentPhase));
         );
 
-        accumulateAcquiredImage(image, m_AcquiredInt32Data[m_CurrentPhase], m_OverflowMask[m_CurrentPhase]);
+        accumulateAcquiredImage(image, m_AcquiredInt32Data[currentPhase], m_OverflowMask[currentPhase]);
       }
 
       QString fileBase, fileName;
 
-      getFileBaseAndName(m_InitialFileIndex+m_CurrentGroup, m_CurrentPhase, fileBase, fileName);
+      getFileBaseAndName(m_InitialFileIndex+currentGroup, currentPhase, fileBase, fileName);
 
       emit acquiredFrame(fileBase, get_FileIndex(),
-                         m_CurrentPhase,     m_NPhasesPerSummation,
-                         m_CurrentSummation, m_NSummationsPerGroup,
-                         m_CurrentGroup,     m_NGroupsPerSequence);
+                         currentPhase,     m_NPhasesPerSummation,
+                         currentSummation, m_NSummationsPerGroup,
+                         currentGroup,     m_NGroupsPerSequence);
     }
 
-    m_CurrentExposure.fetchAndAddOrdered(1);
+//    m_CurrentExposure.fetchAndAddOrdered(1);
 
-    if (m_CurrentExposure >= expPerSequence || get_Cancelling()) {
+    if (counter >= expPerSequence || get_Cancelling()) {
       for (int i=0; i<m_NPhasesPerSummation; i++) {
         if (m_AcquiredInt32Data[i]) {
-          processAcquiredImage(m_InitialFileIndex+m_CurrentGroup, i, m_AcquiredInt32Data[i], m_OverflowMask[i]);
+          processAcquiredImage(m_InitialFileIndex+currentGroup, i, m_AcquiredInt32Data[i], m_OverflowMask[i]);
           m_AcquiredInt32Data[i] = QxrdInt32ImageDataPtr();
           m_OverflowMask[i] = QxrdMaskDataPtr();
         }
@@ -350,7 +373,9 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image)
                                    "Acquisition Finished\n");
           );
 
-      prop_FileIndex()->incValue(1);
+      if (!get_AcquireDark()) {
+        prop_FileIndex()->incValue(1);
+      }
 
       haltAcquisition();
       return;
@@ -367,11 +392,12 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
     T* src = image->data();
     quint32* dst = accum->data();
     short int* ovf = overflow->data();
+    int nsummed = accum->get_SummedExposures();
 
-    if (m_CurrentExposure == 0) {
+    if (nsummed == 0) {
       QCEP_DEBUG(DEBUG_ACQUIRE,
                  emit printMessage(QDateTime::currentDateTime(),
-                                   tr("Frame %1 saved").arg(m_CurrentExposure));
+                                   tr("Frame %1 saved").arg(nsummed));
           );
       for (long i=0; i<nPixels; i++) {
         T val = *src++;
@@ -387,7 +413,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
     } else {
       QCEP_DEBUG(DEBUG_ACQUIRE,
                  emit printMessage(QDateTime::currentDateTime(),
-                                   tr("Frame %1 summed").arg(m_CurrentExposure));
+                                   tr("Frame %1 summed").arg(nsummed));
           );
       for (long i=0; i<nPixels; i++) {
         T val = *src++;
@@ -437,8 +463,8 @@ void QxrdAcquisition::processAcquiredImage(int fileIndex, int phase, QxrdInt32Im
 
     QCEP_DEBUG(DEBUG_ACQUIRE,
                emit printMessage(QDateTime::currentDateTime(),
-                                 tr("Fn: %1, Fi: %2, Exp: %3")
-                                 .arg(fileName).arg(get_FileIndex()).arg(m_CurrentExposure));
+                                 tr("Fn: %1, Fi: %2, Phs: %3")
+                                 .arg(fileName).arg(get_FileIndex()).arg(phase));
         );
 
     set_FileBase(fileBase);

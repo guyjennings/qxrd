@@ -24,6 +24,9 @@ public:
 
 signals:
 
+protected:
+  void beginAcquisition();
+
 private:
   void initialize();
 

@@ -9,6 +9,8 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdallocator.h"
 
+#include <string.h>
+
 //#ifdef Q_OS_UNIX
 //#include "AcqLinuxTypes.h"
 //#endif
@@ -386,17 +388,24 @@ void QxrdAcquisitionPerkinElmer::initialize()
   }
 }
 
+void QxrdAcquisitionPerkinElmer::beginAcquisition()
+{
+  m_Counter.fetchAndStoreOrdered(0);
+}
+
 void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned int n2)
 {
+//  QTime tic;
+//  tic.start();
+
   if (checkPluginAvailable()) {
     QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image();
 
-    QTime tic;
-    tic.start();
+//    printf("allocator took %d msec\n", tic.restart());
 
     QCEP_DEBUG(DEBUG_PERKINELMER,
                emit printMessage(QDateTime::currentDateTime(),
-                                 "QxrdAcquisitionPerkinElmer::onEndFrame()");
+                                 tr("QxrdAcquisitionPerkinElmer::onEndFrame(%1,%2,%3)").arg(counter).arg(n1).arg(n2));
     );
 
     QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -438,14 +447,18 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
     quint32  cksum = 0;
     double   avg = 0;
 
-    for (long i=0; i<npixels; i++) {
-      unsigned short val = *frame++;
-      cksum += val;
-      avg += val;
-      if (current) {
-        *current++ = val;
-      }
-    }
+//    for (long i=0; i<npixels; i++) {
+//      unsigned short val = *frame++;
+//      cksum += val;
+//      avg += val;
+//      if (current) {
+//        *current++ = val;
+//      }
+//    }
+
+    ::memcpy(current, frame, npixels*sizeof(quint16));
+
+//    printf("Image copy took %d msec\n", tic.restart());
 
   //  set_Average(avg/npixels);
 
@@ -459,7 +472,9 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 //    acquiredFrameAvailable(image);
 
     INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "acquiredFrameAvailable", Qt::QueuedConnection,
-                                           Q_ARG(QxrdInt16ImageDataPtr, image)));
+                                           Q_ARG(QxrdInt16ImageDataPtr, image), Q_ARG(int,counter)));
+
+//    printf("Invoke took %d msec\n", tic.restart());
   }
 }
 
@@ -533,8 +548,8 @@ void QxrdAcquisitionPerkinElmer::setupCameraGainMenu(QComboBox *cb)
 
 void QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb)
 {
-  printf("QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu m_HeaderID == %d, m_CameraType == %d\n",
-         m_HeaderID, m_CameraType);
+//  printf("QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu m_HeaderID == %d, m_CameraType == %d\n",
+//         m_HeaderID, m_CameraType);
 
   if (m_HeaderID == 14) {
     if (m_CameraType == 1) {
@@ -551,9 +566,14 @@ void QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb)
 
 void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 {
+//  QTime tic;
+//  tic.start();
+
   if (synchronizedAcquisition()) {
-    synchronizedAcquisition()->acquiredFrameAvailable(m_CurrentPhase);
+    synchronizedAcquisition()->acquiredFrameAvailable(currentPhase(m_Counter));
   }
+
+//  printf("syncAcq->acquiredFrameAvailable took %d msec\n", tic.restart());
 
   if (checkPluginAvailable()) {
 
@@ -561,13 +581,19 @@ void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 
     m_PerkinElmer->Acquisition_GetActFrame(m_AcqDesc, &actualFrame, &actSecFrame);
 
+//    printf("m_PerkinElmer->Acquisition_GetActFrame took %d msec\n", tic.restart());
+
     int counter = m_Counter.fetchAndAddOrdered(1);
 
-//    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "onEndFrame", Qt::QueuedConnection,
+//    printf("m_Counter.fetchAndAddOrdered took %d msec\n", tic.restart());
+
+    //    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "onEndFrame", Qt::QueuedConnection,
 //                                           Q_ARG(int, counter),
 //                                           Q_ARG(unsigned int, actualFrame), Q_ARG(unsigned int, actSecFrame)));
     onEndFrame(counter, actualFrame, actSecFrame);
   }
+
+//  printf("onEndFrameCallback took %d msec\n", tic.elapsed());
 }
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
