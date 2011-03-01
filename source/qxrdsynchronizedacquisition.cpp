@@ -14,6 +14,7 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdAcquisition *acq) :
   m_SyncAcquisitionSymmetry(this,"syncAcquisitionSymmetry", 0.0),
   m_Acquisition(acq),
   m_NIDAQPlugin(NULL),
+  m_SyncMode(0),
   QObject(NULL)
 {
 }
@@ -30,6 +31,8 @@ QxrdNIDAQPluginInterface *QxrdSynchronizedAcquisition::nidaqPlugin() const
 
 void QxrdSynchronizedAcquisition::prepareForAcquisition()
 {
+  m_SyncMode = 0;
+
   if (!m_Acquisition->get_AcquireDark()) {
     double exposureTime = m_Acquisition->get_ExposureTime();
     //  int    nsummed      = m_Acquisition->get_SummedExposures();
@@ -41,7 +44,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition()
     double maxVal       = get_SyncAcquisitionMaximum();
     int chan            = get_SyncAcquisitionOutputChannel();
     int wfm             = get_SyncAcquisitionWaveform();
-    int mode            = get_SyncAcquisitionMode();
+    m_SyncMode          = get_SyncAcquisitionMode();
     int symm            = get_SyncAcquisitionSymmetry();
 
     if (symm > 1.0) {
@@ -50,7 +53,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition()
       symm = -1.0;
     }
 
-    if (mode) {
+    if (m_SyncMode) {
       while (nSamples > 10000) {
         sampleRate /= 10;
         nSamples = cycleTime*sampleRate;
@@ -114,7 +117,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition()
 
 void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int currentPhase)
 {
-  if (!m_Acquisition->get_AcquireDark()) {
+  if (m_SyncMode) {
     if (m_Acquisition->acquisitionStatus(0.0) == 0) {
       if (currentPhase == 0) {
         if (m_NIDAQPlugin) {
