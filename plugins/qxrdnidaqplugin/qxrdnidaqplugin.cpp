@@ -37,7 +37,8 @@ void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
       char *buff = (char*) malloc(sz);
 
       if (DAQmxGetErrorString(err, buff, sz) == 0) {
-        printf("%s:%d NI-DAQ Error %d : %s\n", file, line, err, buff);
+        emit printMessage(QDateTime::currentDateTime(),
+                          tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff));
       }
 
       free(buff);

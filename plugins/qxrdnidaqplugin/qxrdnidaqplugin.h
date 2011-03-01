@@ -2,6 +2,7 @@
 #define QXRDNIDAQPLUGIN_H
 
 #include <QObject>
+#include <QDateTime>
 #include "qxrdnidaqplugininterface.h"
 #include "NIDAQmx.h"
 
@@ -27,10 +28,15 @@ public slots:
   void   aoSet(double val1, double val2);
   double aiGet(int chan);
 
+signals:
+  void printMessage(QDateTime ts, QString msg);
+  void statusMessage(QDateTime ts, QString msg);
+  void criticalMessage(QDateTime ts, QString msg);
+
 private:
   void initTaskHandles();
   void closeTaskHandles();
-  static void errorCheck(const char* file, int line, int err);
+  void errorCheck(const char* file, int line, int err);
 
 private:
   TaskHandle m_AOTaskHandle;
