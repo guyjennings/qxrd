@@ -151,10 +151,12 @@ void QxrdApplication::init(QSplashScreen *splash)
 
   m_Acquisition -> setNIDAQPlugin(nidaqPlugin());
 
-  if (nidaqPlugin()) {
-    connect(nidaqPlugin(), SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
-    connect(nidaqPlugin(), SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
-    connect(nidaqPlugin(), SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
+  QObject *nidaq = dynamic_cast<QObject*>(nidaqPlugin());
+
+  if (nidaq) {
+    connect(nidaq, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
+    connect(nidaq, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
+    connect(nidaq, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
   }
 
   connect(m_Acquisition, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
