@@ -129,14 +129,9 @@ protected:
   void acquisitionError(int n);
   void acquisitionError(int ln, int n);
 
-//  void acquireTiming();
-
-//  void processAcquiredImage(int fileIndex, int phase, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
   void getFileBaseAndName(QString filePattern, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
 protected slots:
-//  virtual void haltAcquisition();
-//  void acquiredFrameAvailable(QxrdInt16ImageDataPtr image, int counter);
   void onAcquireComplete();
   void onIdleTimeout();
 
@@ -165,26 +160,6 @@ protected:
 
   QSemaphore             m_NAcquiredImages;
   QxrdInt16ImageQueue    m_AcquiredImages;
-
-//  QVector<QxrdInt32ImageDataPtr>  m_AcquiredInt32Data;
-//  QVector<QxrdMaskDataPtr>        m_OverflowMask;
-
-//  QAtomicInt             m_AcquireDark;
-
-//  QAtomicInt             m_NSkippedAtStart;
-//  QAtomicInt             m_NSkippedBetweenGroups;
-//  QAtomicInt             m_NPhasesPerSummation;
-//  QAtomicInt             m_NSummationsPerGroup;
-//  QAtomicInt             m_NGroupsPerSequence;
-
-//  QAtomicInt             m_FrameCounter;
-//  QAtomicInt             m_UpdateInterval;
-////  QAtomicInt             m_CurrentExposure;
-////  QAtomicInt             m_CurrentPhase;
-////  QAtomicInt             m_CurrentSummation;
-////  QAtomicInt             m_CurrentGroup;
-
-//  QAtomicInt             m_InitialFileIndex;
 
   QxrdAcquireDialog     *m_ControlPanel;
 

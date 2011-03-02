@@ -128,12 +128,6 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int currentPhase)
 //      printf("elapsed[%d] %d msec\n", currentPhase, tick.restart());
     }
   }
-
-  //  printf("Sync acquired frame available %d, %d\n", currentExposure, currentFile);
-
-//  if (m_NIDAQPlugin) {
-//    m_NIDAQPlugin->setAnalogOut(0, m_OutputVoltage[currentPhase]);
-//  }
 }
 
 void QxrdSynchronizedAcquisition::readSettings(QxrdSettings &settings, QString section)
