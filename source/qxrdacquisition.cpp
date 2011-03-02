@@ -20,7 +20,8 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocat
     m_NGroupsPerSequence(1),
     m_FrameCounter(0),
     m_InitialFileIndex(0),
-    m_ControlPanel(NULL)
+    m_ControlPanel(NULL),
+    m_Idling(1)
 {
   m_SynchronizedAcquisition = new QxrdSynchronizedAcquisition(this);
 
@@ -42,6 +43,9 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocat
   m_ElapsedTimer.start();
 
   connect(&m_Watcher, SIGNAL(finished()), this, SLOT(onAcquireComplete()));
+  connect(&m_IdleTimer, SIGNAL(timeout()), this, SLOT(onIdleTimeout()));
+
+  m_IdleTimer.start(1000);
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -93,10 +97,17 @@ void QxrdAcquisition::acquire()
     emit acquireStarted(0);
 
 //    acquisition(0);
+    QxrdAcquisitionParameterPack params(get_FilePattern(),
+                                        get_ExposureTime(),
+                                        get_SummedExposures(),
+                                        get_GroupsInSequence(),
+                                        get_FilesInGroup(),
+                                        get_SkippedExposuresAtStart(),
+                                        get_SkippedExposures());
 
-    typedef void (QxrdAcquisition::*MFType)(QString, double, int, int, int);
+    typedef void (QxrdAcquisition::*MFType)(QxrdAcquisitionParameterPack);
     MFType p = &QxrdAcquisition::doAcquire;
-    QFuture<void> res = QtConcurrent::run(this, p, tr("junk"), 0.2, 10, 3, 3);
+    QFuture<void> res = QtConcurrent::run(this, p, params);
 
     m_Watcher.setFuture(res);
   } else {
@@ -118,10 +129,14 @@ void QxrdAcquisition::acquireDark()
     emit acquireStarted(1);
 
 //    acquisition(1);
+    QxrdDarkAcquisitionParameterPack params(get_FilePattern(),
+                                            get_ExposureTime(),
+                                            get_DarkSummedExposures(),
+                                            get_SkippedExposuresAtStart());
 
-    typedef void (QxrdAcquisition::*MFType)(QString, double, int, int);
+    typedef void (QxrdAcquisition::*MFType)(QxrdDarkAcquisitionParameterPack);
     MFType p = &QxrdAcquisition::doAcquireDark;
-    QFuture<void> res = QtConcurrent::run(this, p, tr("junk"), 0.2, 10, 1);
+    QFuture<void> res = QtConcurrent::run(this, p, params);
 
     m_Watcher.setFuture(res);
   } else {
@@ -378,7 +393,7 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image, int co
 
       QString fileBase, fileName;
 
-      getFileBaseAndName(m_InitialFileIndex+currentGroup, currentPhase, fileBase, fileName);
+      getFileBaseAndName(get_FilePattern(), m_InitialFileIndex+currentGroup, currentPhase, expPerSummation, fileBase, fileName);
 
       emit acquiredFrame(fileBase, get_FileIndex(),
                          currentPhase,     m_NPhasesPerSummation,
@@ -461,16 +476,16 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
   }
 }
 
-void QxrdAcquisition::getFileBaseAndName(int fileIndex, int phase, QString &fileBase, QString &fileName)
+void QxrdAcquisition::getFileBaseAndName(QString filePattern, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName)
 {
   if (get_AcquireDark()) {
-    fileBase = get_FilePattern()+tr("-%1.dark.tif").arg(fileIndex,5,10,QChar('0'));
+    fileBase = filePattern+tr("-%1.dark.tif").arg(fileIndex,5,10,QChar('0'));
     fileName = QDir(m_DataProcessor -> darkOutputDirectory()).filePath(fileBase);
   } else {
-    if (m_NPhasesPerSummation > 1) {
-      fileBase = get_FilePattern()+tr("-%1-%2.tif").arg(fileIndex,5,10,QChar('0')).arg(phase,3,10,QChar('0'));
+    if (nphases > 1) {
+      fileBase = filePattern+tr("-%1-%2.tif").arg(fileIndex,5,10,QChar('0')).arg(phase,3,10,QChar('0'));
     } else {
-      fileBase = get_FilePattern()+tr("-%1.tif").arg(fileIndex,5,10,QChar('0'));
+      fileBase = filePattern+tr("-%1.tif").arg(fileIndex,5,10,QChar('0'));
     }
     fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
   }
@@ -488,7 +503,7 @@ void QxrdAcquisition::processAcquiredImage(int fileIndex, int phase, QxrdInt32Im
     QString fileName;
     QString fileBase;
 
-    getFileBaseAndName(fileIndex, phase, fileBase, fileName);
+    getFileBaseAndName(get_FilePattern(), fileIndex, phase, get_FilesInGroup(), fileBase, fileName);
 
     QCEP_DEBUG(DEBUG_ACQUIRE,
                emit printMessage(QDateTime::currentDateTime(),
@@ -628,18 +643,25 @@ void QxrdAcquisition::acquireTiming()
   }
 }
 
-void QxrdAcquisition::doAcquire    (QString fileName, double exposure, int nsummed, int nfiles, int nphases/*, int skipBefore, int skipBetween*/)
+void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 {
   stopIdling();
 
-  int skipBefore = 0;
-  int skipBetween = 0;
+  QString fileBase = parms.fileBase();
+  int fileIndex = get_FileIndex();
+  double exposure = parms.exposure();
+  int nsummed = parms.nsummed();
+  int nfiles = parms.nfiles();
+  int nphases = parms.nphases();
+  int skipBefore = parms.skipBefore();
+  int skipBetween = parms.skipBetween();
 
   QVector<QxrdInt32ImageDataPtr> res(nphases);
   QVector<QxrdMaskDataPtr>       ovf(nphases);
 
   for (int i=0; i<skipBefore; i++) {
     if (get_Cancelling()) goto cancel;
+    emit statusMessage(QDateTime::currentDateTime(), tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
     acquireFrame(exposure);
   }
 
@@ -649,6 +671,7 @@ void QxrdAcquisition::doAcquire    (QString fileName, double exposure, int nsumm
 
     if (i != 0) {
       for (int k=0; k<skipBetween; k++) {
+        emit statusMessage(QDateTime::currentDateTime(), tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
         acquireFrame(exposure);
       }
     }
@@ -656,12 +679,23 @@ void QxrdAcquisition::doAcquire    (QString fileName, double exposure, int nsumm
     for (int p=0; p<nphases; p++) {
       res[p] = m_Allocator->newInt32Image();
       ovf[p] = m_Allocator->newMask(0);
+
+      QString fb, fn;
+
+      getFileBaseAndName(fileBase, fileIndex+i, p, nphases, fb, fn);
+
+      if (res[p]) {
+        res[p] -> set_FileBase(fb);
+        res[p] -> set_FileName(fn);
+      }
     }
 
     if (get_Cancelling()) goto cancel;
 
     for (int s=0; s<nsummed; s++) {
       for (int p=0; p<nphases; p++) {
+        emit acquiredFrame(res[p]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, nfiles);
+
         QxrdInt16ImageDataPtr img = acquireFrame(exposure);
 
         accumulateAcquiredImage(img, res[p], ovf[p]);
@@ -672,7 +706,7 @@ void QxrdAcquisition::doAcquire    (QString fileName, double exposure, int nsumm
 
   saveCancel:
     for (int p=0; p<nphases; p++) {
-      processAcquiredImage(fileName, i, p, res[p], ovf[p]);
+      processAcquiredImage(fileBase, i, p, res[p], ovf[p]);
     }
   }
 
@@ -680,12 +714,24 @@ cancel:
   startIdling();
 }
 
-void QxrdAcquisition::doAcquireDark(QString fileName, double exposure, int nsummed, int skipBefore)
+void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
 {
   stopIdling();
 
+  QString fileBase = parms.fileBase();
+  int fileIndex = get_FileIndex();
+  double exposure = parms.exposure();
+  int nsummed = parms.nsummed();
+  int skipBefore = parms.skipBefore();
+
   QxrdInt32ImageDataPtr res = m_Allocator->newInt32Image();
   QxrdMaskDataPtr overflow  = m_Allocator->newMask(0);
+
+  QString fb, fn;
+  getFileBaseAndName(fileBase, fileIndex, -1, 1, fb, fn);
+
+  res -> set_FileBase(fb);
+  res -> set_FileName(fn);
 
   for (int i=0; i<skipBefore; i++) {
     if (get_Cancelling()) goto cancel;
@@ -695,13 +741,15 @@ void QxrdAcquisition::doAcquireDark(QString fileName, double exposure, int nsumm
   for (int i=0; i<nsummed; i++) {
     if (get_Cancelling()) goto saveCancel;
 
+    emit acquiredFrame(res->get_FileBase(), fileIndex, 0, 1, i, nsummed, 0, 1);
+
     QxrdInt16ImageDataPtr img = acquireFrame(exposure);
 
     accumulateAcquiredImage(img, res, overflow);
   }
 
 saveCancel:
-  processDarkImage(fileName, 0, res, overflow);
+  processDarkImage(fileBase, 0, res, overflow);
 
 cancel:
   startIdling();
@@ -709,12 +757,23 @@ cancel:
 
 void QxrdAcquisition::stopIdling()
 {
-  printf("stop idling\n");
+  m_Idling.fetchAndStoreOrdered(0);
 }
 
 void QxrdAcquisition::startIdling()
 {
-  printf("start idling\n");
+  m_Idling.fetchAndStoreOrdered(1);
+}
+
+void QxrdAcquisition::onIdleTimeout()
+{
+  if (m_Idling) {
+    QxrdInt16ImageDataPtr res = acquireFrame(get_ExposureTime());
+
+    if (res) {
+      m_DataProcessor->idleInt16Image(res);
+    }
+  }
 }
 
 QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
