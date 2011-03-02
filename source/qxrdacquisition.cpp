@@ -7,6 +7,7 @@
 #include "qxrdwindow.h"
 
 #include <QThreadPool>
+#include <QtConcurrentRun>
 
 QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocator)
   : QxrdAcquisitionOperations(proc, allocator),
@@ -39,6 +40,8 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocat
   m_ElapsedHistogram.fill(0);
   m_ElapsedCounter = 0;
   m_ElapsedTimer.start();
+
+  connect(&m_Watcher, SIGNAL(finished()), this, SLOT(onAcquireComplete()));
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -83,11 +86,19 @@ void QxrdAcquisition::acquire()
 //         thread(), QThread::currentThread());
 
   if (m_Acquiring.tryLock()) {
+    set_Cancelling(false);
+
     //  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquire()"));
     emit statusMessage(QDateTime::currentDateTime(), "Starting acquisition");
     emit acquireStarted(0);
 
-    acquisition(0);
+//    acquisition(0);
+
+    typedef void (QxrdAcquisition::*MFType)(QString, double, int, int, int);
+    MFType p = &QxrdAcquisition::doAcquire;
+    QFuture<void> res = QtConcurrent::run(this, p, tr("junk"), 0.2, 10, 3, 3);
+
+    m_Watcher.setFuture(res);
   } else {
     emit statusMessage(QDateTime::currentDateTime(), "Acquisition is already in progress");
   }
@@ -100,25 +111,41 @@ void QxrdAcquisition::acquireDark()
 //  printf("QxrdAcquisitionPerkinElmer::acquireDark (thread()=%p, currentThread()=%p)\n",
 //         thread(), QThread::currentThread());
   if (m_Acquiring.tryLock()) {
+    set_Cancelling(false);
 
     //  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquireDark()"));
     emit statusMessage(QDateTime::currentDateTime(), "Starting dark acquisition");
     emit acquireStarted(1);
 
-    acquisition(1);
+//    acquisition(1);
+
+    typedef void (QxrdAcquisition::*MFType)(QString, double, int, int);
+    MFType p = &QxrdAcquisition::doAcquireDark;
+    QFuture<void> res = QtConcurrent::run(this, p, tr("junk"), 0.2, 10, 1);
+
+    m_Watcher.setFuture(res);
   } else {
     emit statusMessage(QDateTime::currentDateTime(), "Acquisition is already in progress");
   }
 }
 
+void QxrdAcquisition::onAcquireComplete()
+{
+  m_Acquiring.unlock();
+
+  emit acquireComplete();
+}
+
 void QxrdAcquisition::cancel()
 {
-  INVOKE_CHECK(QMetaObject::invokeMethod(this, "haltAcquisition", Qt::QueuedConnection));
+  set_Cancelling(true);
+//  INVOKE_CHECK(QMetaObject::invokeMethod(this, "haltAcquisition", Qt::QueuedConnection));
 }
 
 void QxrdAcquisition::cancelDark()
 {
-  INVOKE_CHECK(QMetaObject::invokeMethod(this, "haltAcquisition", Qt::QueuedConnection));
+  set_Cancelling(true);
+//  INVOKE_CHECK(QMetaObject::invokeMethod(this, "haltAcquisition", Qt::QueuedConnection));
 }
 
 void QxrdAcquisition::clearDropped()
@@ -250,6 +277,8 @@ void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image, int co
     // If m_AcquiredInt16Data is NULL, then the program has run out of free memory
     // and acquisition should drop frames until memory is available
 {
+  return;
+
   THREAD_CHECK;
 
 
@@ -597,4 +626,112 @@ void QxrdAcquisition::acquireTiming()
     m_ElapsedCounter = 0;
     m_ElapsedHistogram.fill(0);
   }
+}
+
+void QxrdAcquisition::doAcquire    (QString fileName, double exposure, int nsummed, int nfiles, int nphases/*, int skipBefore, int skipBetween*/)
+{
+  stopIdling();
+
+  int skipBefore = 0;
+  int skipBetween = 0;
+
+  QVector<QxrdInt32ImageDataPtr> res(nphases);
+  QVector<QxrdMaskDataPtr>       ovf(nphases);
+
+  for (int i=0; i<skipBefore; i++) {
+    if (get_Cancelling()) goto cancel;
+    acquireFrame(exposure);
+  }
+
+
+  for (int i=0; i<nfiles; i++) {
+    if (get_Cancelling()) goto cancel;
+
+    if (i != 0) {
+      for (int k=0; k<skipBetween; k++) {
+        acquireFrame(exposure);
+      }
+    }
+
+    for (int p=0; p<nphases; p++) {
+      res[p] = m_Allocator->newInt32Image();
+      ovf[p] = m_Allocator->newMask(0);
+    }
+
+    if (get_Cancelling()) goto cancel;
+
+    for (int s=0; s<nsummed; s++) {
+      for (int p=0; p<nphases; p++) {
+        QxrdInt16ImageDataPtr img = acquireFrame(exposure);
+
+        accumulateAcquiredImage(img, res[p], ovf[p]);
+
+        if (get_Cancelling()) goto saveCancel;
+      }
+    }
+
+  saveCancel:
+    for (int p=0; p<nphases; p++) {
+      processAcquiredImage(fileName, i, p, res[p], ovf[p]);
+    }
+  }
+
+cancel:
+  startIdling();
+}
+
+void QxrdAcquisition::doAcquireDark(QString fileName, double exposure, int nsummed, int skipBefore)
+{
+  stopIdling();
+
+  QxrdInt32ImageDataPtr res = m_Allocator->newInt32Image();
+  QxrdMaskDataPtr overflow  = m_Allocator->newMask(0);
+
+  for (int i=0; i<skipBefore; i++) {
+    if (get_Cancelling()) goto cancel;
+    acquireFrame(exposure);
+  }
+
+  for (int i=0; i<nsummed; i++) {
+    if (get_Cancelling()) goto saveCancel;
+
+    QxrdInt16ImageDataPtr img = acquireFrame(exposure);
+
+    accumulateAcquiredImage(img, res, overflow);
+  }
+
+saveCancel:
+  processDarkImage(fileName, 0, res, overflow);
+
+cancel:
+  startIdling();
+}
+
+void QxrdAcquisition::stopIdling()
+{
+  printf("stop idling\n");
+}
+
+void QxrdAcquisition::startIdling()
+{
+  printf("start idling\n");
+}
+
+QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
+{
+  QxrdInt16ImageDataPtr res = m_Allocator->newInt16Image();
+
+  res->fill((int) (1000.0*exposure));
+
+  return res;
+}
+
+void QxrdAcquisition::processAcquiredImage(QString fileName, int fileIndex, int phase, QxrdInt32ImageDataPtr img, QxrdMaskDataPtr ovf)
+{
+  printf("processAcquiredImage(""%s"",%d,%d,img,ovf)\n", qPrintable(fileName), fileIndex, phase);
+}
+
+void QxrdAcquisition::processDarkImage(QString fileName, int fileIndex, QxrdInt32ImageDataPtr img, QxrdMaskDataPtr ovf)
+{
+  printf("processDarkImage(""%s"",%d,img,ovf)\n", qPrintable(fileName), fileIndex);
 }

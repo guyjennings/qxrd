@@ -8,6 +8,7 @@
 #include <QThread>
 #include <QWaitCondition>
 #include <QAtomicInt>
+#include <QFutureWatcher>
 
 #if QT_VERSION >= 0x040700
 #include <QElapsedTimer>
@@ -49,10 +50,13 @@ public slots:
   virtual void onCameraGainChanged(int newGain) = 0;
   void onBufferSizeChanged(int newMB);
 
+  void doAcquire    (QString fileName, double exposure, int nsummed, int nfiles, int nphases/*, int skipBefore=0, int skipBetween=0*/);
+  void doAcquireDark(QString fileName, double exposure, int nsummed, int skipBefore);
+
 signals:
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
-  void acquireStarted(int dark);
-  void acquireComplete(int dark);
+  void acquireStarted(int dark = 0);
+  void acquireComplete(int dark = 0);
 
 public:
   int currentPhase(int frameNumber);
@@ -88,6 +92,14 @@ protected:
 protected slots:
   virtual void haltAcquisition();
   void acquiredFrameAvailable(QxrdInt16ImageDataPtr image, int counter);
+  void onAcquireComplete();
+
+private:
+  QxrdInt16ImageDataPtr acquireFrame(double exposure);
+  void stopIdling();
+  void startIdling();
+  void processAcquiredImage(QString fileName, int fileIndex, int phase, QxrdInt32ImageDataPtr img, QxrdMaskDataPtr ovf);
+  void processDarkImage(QString fileName, int fileIndex, QxrdInt32ImageDataPtr img, QxrdMaskDataPtr ovf);
 
 protected:
   QMutex                 m_Acquiring;
@@ -122,6 +134,8 @@ protected:
 #endif
   QVector<int>           m_ElapsedHistogram;
   int                    m_ElapsedCounter;
+
+  QFutureWatcher<void>   m_Watcher;
 };
 
 #endif
