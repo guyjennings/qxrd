@@ -304,12 +304,12 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     emit criticalMessage(QDateTime::currentDateTime(), "Oh no, QxrdWindow::m_Acquisition == NULL");
   }
 
-  connect(m_Acquisition,     SIGNAL(acquireStarted(int)),
-          this,              SLOT(acquireStarted(int)));
+  connect(m_Acquisition,     SIGNAL(acquireStarted()),
+          this,              SLOT(acquireStarted()));
   connect(m_Acquisition,     SIGNAL(acquiredFrame(QString,int,int,int,int,int,int,int)),
           this,              SLOT(acquiredFrame(QString,int,int,int,int,int,int,int)));
-  connect(m_Acquisition,     SIGNAL(acquireComplete(int)),
-          this,              SLOT(acquireComplete(int)));
+  connect(m_Acquisition,     SIGNAL(acquireComplete()),
+          this,              SLOT(acquireComplete()));
 
 
   m_Acquisition -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
@@ -593,11 +593,11 @@ void QxrdWindow::selectOutputDirectory()
   }
 }
 
-void QxrdWindow::acquireStarted(int dark)
+void QxrdWindow::acquireStarted()
 {
 }
 
-void QxrdWindow::acquireComplete(int dark)
+void QxrdWindow::acquireComplete()
 {
   THREAD_CHECK;
 

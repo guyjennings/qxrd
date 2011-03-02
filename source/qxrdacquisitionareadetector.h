@@ -18,6 +18,8 @@ private slots:
 
 private:
   void beginAcquisition();
+  void endAcquisition();
+
   void setupExposureMenu(QDoubleSpinBox* cb);
   void setupCameraGainMenu(QComboBox* cb);
   void setupCameraBinningModeMenu(QComboBox *cb);

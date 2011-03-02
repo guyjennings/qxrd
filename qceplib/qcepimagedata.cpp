@@ -17,6 +17,7 @@ QcepImageDataBase::QcepImageDataBase(int width, int height)
     m_SummedExposures(this, "summedExposures", 0),
     m_ImageNumber(this, "imageNumber", 0),
     m_PhaseNumber(this, "phaseNumber", -1),
+    m_NPhases(this, "nPhases", -1),
     m_DateTime(this, "dateTime", QDateTime::currentDateTime()),
     m_HBinning(this, "hBinning", 1),
     m_VBinning(this, "vBinning", 1),

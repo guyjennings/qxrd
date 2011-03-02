@@ -393,6 +393,10 @@ void QxrdAcquisitionPerkinElmer::beginAcquisition()
   m_Counter.fetchAndStoreOrdered(0);
 }
 
+void QxrdAcquisitionPerkinElmer::endAcquisition()
+{
+}
+
 void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned int n2)
 {
 //  QTime tic;
@@ -480,14 +484,14 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 
 void QxrdAcquisitionPerkinElmer::acquisitionInitError(int n)
 {
-  acquisitionError(n);
+  acquisitionError(__LINE__, n);
 
   emit criticalMessage(QDateTime::currentDateTime(), "Detector Initialization Failed");
 }
 
 void QxrdAcquisitionPerkinElmer::acquisitionNSensorsError(int n)
 {
-  acquisitionError(n);
+  acquisitionError(__LINE__, n);
 
   emit criticalMessage(QDateTime::currentDateTime(), "Detector Initialization Failed");
 }

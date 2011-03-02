@@ -61,9 +61,9 @@ public slots:
 
   void doAcquire();
   void doCancel();
-  void acquireStarted(int dark);
+  void acquireStarted();
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
-  void acquireComplete(int dark);
+  void acquireComplete();
   void doAcquireDark();
   void doCancelDark();
   void doSynchronizedAcquisition();

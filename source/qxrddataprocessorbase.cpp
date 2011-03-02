@@ -927,6 +927,8 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
     (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr /*mask*/, QxrdMaskDataPtr overflow, QcepDoubleList v)
 {
   if (dimg) {
+    emit statusMessage(QDateTime::currentDateTime(), tr("Processing Image \"%1\"").arg(dimg->get_FileName()));
+
     QTime tic;
     tic.start();
 
@@ -986,6 +988,8 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
                emit printMessage(QDateTime::currentDateTime(),
                                  tr("Processing took %1 msec").arg(tic.restart()));
     );
+
+    emit statusMessage(QDateTime::currentDateTime(), tr("Completed Processing Image \"%1\"").arg(dimg->get_FileName()));
   }
 
   return dimg;

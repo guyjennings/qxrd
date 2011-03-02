@@ -115,13 +115,12 @@ void QxrdAcquisitionSimulated::beginAcquisition()
   frameCounter = 0;
 }
 
+void QxrdAcquisitionSimulated::endAcquisition()
+{
+}
+
 void QxrdAcquisitionSimulated::onTimerTimeout()
 {
-  if (synchronizedAcquisition()) {
-    synchronizedAcquisition()->acquiredFrameAvailable(currentPhase(frameCounter));
-  }
-
-
   int nRows = get_NRows();
   int nCols = get_NCols();
 
@@ -142,5 +141,5 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
     }
   }
 
-  acquiredFrameAvailable(image, frameCounter);
+  enqueueAcquiredFrame(image);
 }

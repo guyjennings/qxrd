@@ -10,6 +10,7 @@
 #include <QAtomicInt>
 #include <QFutureWatcher>
 #include <QTimer>
+#include <QSemaphore>
 
 #if QT_VERSION >= 0x040700
 #include <QElapsedTimer>
@@ -38,8 +39,8 @@ public:
   {
   public:
     QxrdAcquisitionParameterPack(QString fileBase, double exposure, int nsummed, int nfiles, int nphases, int skipBefore, int skipBetween)
-      : m_NFiles(nfiles), m_FileBase(fileBase), m_Exposure(exposure), m_NSummed(nsummed),
-      m_NPhases(nphases), m_SkipBefore(skipBefore), m_SkipBetween(skipBetween) {}
+      : m_FileBase(fileBase), m_Exposure(exposure), m_NSummed(nsummed), m_NFiles(nfiles),
+        m_NPhases(nphases), m_SkipBefore(skipBefore), m_SkipBetween(skipBetween) {}
 
     QString fileBase() { return m_FileBase; }
     double  exposure() { return m_Exposure; }
@@ -99,8 +100,8 @@ public slots:
 
 signals:
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
-  void acquireStarted(int dark = 0);
-  void acquireComplete(int dark = 0);
+  void acquireStarted();
+  void acquireComplete();
 
 public:
   int currentPhase(int frameNumber);
@@ -121,64 +122,71 @@ protected:
   void allocateMemoryForAcquisition();
   void acquisition(int isDark);
   void copyParameters(int isDark);
-  virtual void beginAcquisition();
+
+  virtual void beginAcquisition() = 0;
+  virtual void endAcquisition() = 0;
 
   void acquisitionError(int n);
   void acquisitionError(int ln, int n);
 
-  void acquireTiming();
+//  void acquireTiming();
 
-  template <typename T>
-  void accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
-  void processAcquiredImage(int fileIndex, int phase, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+//  void processAcquiredImage(int fileIndex, int phase, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
   void getFileBaseAndName(QString filePattern, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
 protected slots:
-  virtual void haltAcquisition();
-  void acquiredFrameAvailable(QxrdInt16ImageDataPtr image, int counter);
+//  virtual void haltAcquisition();
+//  void acquiredFrameAvailable(QxrdInt16ImageDataPtr image, int counter);
   void onAcquireComplete();
   void onIdleTimeout();
 
 private:
   QxrdInt16ImageDataPtr acquireFrame(double exposure);
+  QxrdInt16ImageDataPtr acquireFrameIfAvailable(double exposure);
+
   virtual void stopIdling();
   virtual void startIdling();
-  void processAcquiredImage(QString fileName, int fileIndex, int phase, QxrdInt32ImageDataPtr img, QxrdMaskDataPtr ovf);
-  void processDarkImage(QString fileName, int fileIndex, QxrdInt32ImageDataPtr img, QxrdMaskDataPtr ovf);
+
+  template <typename T>
+  void accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
+
+  void processImage        (QString filePattern, int fileIndex, int phase, int nPhases, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+  void processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+  void processDarkImage    (QString filePattern, int fileIndex,                         QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+
+  int cancelling();
+
+protected:
+  void enqueueAcquiredFrame(QxrdInt16ImageDataPtr img);
 
 protected:
   QMutex                 m_Acquiring;
   QWaitCondition         m_StatusWaiting;
 
-  QVector<QxrdInt32ImageDataPtr>  m_AcquiredInt32Data;
-  QVector<QxrdMaskDataPtr>        m_OverflowMask;
+  QSemaphore             m_NAcquiredImages;
+  QxrdInt16ImageQueue    m_AcquiredImages;
 
-  QAtomicInt             m_AcquireDark;
+//  QVector<QxrdInt32ImageDataPtr>  m_AcquiredInt32Data;
+//  QVector<QxrdMaskDataPtr>        m_OverflowMask;
 
-  QAtomicInt             m_NSkippedAtStart;
-  QAtomicInt             m_NSkippedBetweenGroups;
-  QAtomicInt             m_NPhasesPerSummation;
-  QAtomicInt             m_NSummationsPerGroup;
-  QAtomicInt             m_NGroupsPerSequence;
+//  QAtomicInt             m_AcquireDark;
 
-  QAtomicInt             m_FrameCounter;
-  QAtomicInt             m_UpdateInterval;
-//  QAtomicInt             m_CurrentExposure;
-//  QAtomicInt             m_CurrentPhase;
-//  QAtomicInt             m_CurrentSummation;
-//  QAtomicInt             m_CurrentGroup;
+//  QAtomicInt             m_NSkippedAtStart;
+//  QAtomicInt             m_NSkippedBetweenGroups;
+//  QAtomicInt             m_NPhasesPerSummation;
+//  QAtomicInt             m_NSummationsPerGroup;
+//  QAtomicInt             m_NGroupsPerSequence;
 
-  QAtomicInt             m_InitialFileIndex;
+//  QAtomicInt             m_FrameCounter;
+//  QAtomicInt             m_UpdateInterval;
+////  QAtomicInt             m_CurrentExposure;
+////  QAtomicInt             m_CurrentPhase;
+////  QAtomicInt             m_CurrentSummation;
+////  QAtomicInt             m_CurrentGroup;
+
+//  QAtomicInt             m_InitialFileIndex;
 
   QxrdAcquireDialog     *m_ControlPanel;
-
-#if QT_VERSION >= 0x040700
-  QElapsedTimer          m_ElapsedTimer;
-#else
-  QTime                  m_ElapsedTimer;
-#endif
-  QVector<int>           m_ElapsedHistogram;
-  int                    m_ElapsedCounter;
 
   QFutureWatcher<void>   m_Watcher;
 

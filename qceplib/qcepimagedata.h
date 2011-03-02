@@ -63,6 +63,9 @@ public:
   Q_PROPERTY(int phaseNumber READ get_PhaseNumber WRITE set_PhaseNumber);
   QCEP_INTEGER_PROPERTY(PhaseNumber);
 
+  Q_PROPERTY(int nPhases READ get_NPhases WRITE set_NPhases);
+  QCEP_INTEGER_PROPERTY(NPhases);
+
   Q_PROPERTY(QDateTime dateTime READ get_DateTime WRITE set_DateTime);
   QCEP_DATETIME_PROPERTY(DateTime);
 

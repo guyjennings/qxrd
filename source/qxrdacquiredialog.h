@@ -27,8 +27,8 @@ protected:
   void changeEvent(QEvent *e);
 
 private slots:
-  void acquireStarted(int isDark);
-  void acquireComplete(int isDark);
+  void acquireStarted();
+  void acquireComplete();
 
 private:
   QxrdWindow        *m_Window;

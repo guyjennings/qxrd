@@ -11,15 +11,16 @@
 
 QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocator)
   : QxrdAcquisitionOperations(proc, allocator),
-    m_AcquiredInt32Data(),
-    m_OverflowMask(),
-    m_NSkippedAtStart(0),
-    m_NSkippedBetweenGroups(0),
-    m_NPhasesPerSummation(1),
-    m_NSummationsPerGroup(1),
-    m_NGroupsPerSequence(1),
-    m_FrameCounter(0),
-    m_InitialFileIndex(0),
+    m_AcquiredImages("acquired"),
+//    m_AcquiredInt32Data(),
+//    m_OverflowMask(),
+//    m_NSkippedAtStart(0),
+//    m_NSkippedBetweenGroups(0),
+//    m_NPhasesPerSummation(1),
+//    m_NSummationsPerGroup(1),
+//    m_NGroupsPerSequence(1),
+//    m_FrameCounter(0),
+//    m_InitialFileIndex(0),
     m_ControlPanel(NULL),
     m_Idling(1)
 {
@@ -37,10 +38,10 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocat
     onBufferSizeChanged(get_TotalBufferSizeMB64());
   }
 
-  m_ElapsedHistogram.resize(21);
-  m_ElapsedHistogram.fill(0);
-  m_ElapsedCounter = 0;
-  m_ElapsedTimer.start();
+//  m_ElapsedHistogram.resize(21);
+//  m_ElapsedHistogram.fill(0);
+//  m_ElapsedCounter = 0;
+//  m_ElapsedTimer.start();
 
   connect(&m_Watcher, SIGNAL(finished()), this, SLOT(onAcquireComplete()));
   connect(&m_IdleTimer, SIGNAL(timeout()), this, SLOT(onIdleTimeout()));
@@ -72,14 +73,14 @@ void QxrdAcquisition::allocateMemoryForAcquisition()
 {
   THREAD_CHECK;
 
-  m_AcquiredInt32Data.clear();
+//  m_AcquiredInt32Data.clear();
 
   m_Allocator -> dimension(get_NCols(), get_NRows());
-  m_Allocator -> preallocateInt16(2);
-  m_Allocator -> preallocateInt32(3+m_NPhasesPerSummation);
+//  m_Allocator -> preallocateInt16(2);
+//  m_Allocator -> preallocateInt32(3+m_NPhasesPerSummation);
 
-  m_AcquiredInt32Data.resize(m_NPhasesPerSummation);
-  m_OverflowMask.resize(m_NPhasesPerSummation);
+//  m_AcquiredInt32Data.resize(m_NPhasesPerSummation);
+//  m_OverflowMask.resize(m_NPhasesPerSummation);
 }
 
 void QxrdAcquisition::acquire()
@@ -94,7 +95,7 @@ void QxrdAcquisition::acquire()
 
     //  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquire()"));
     emit statusMessage(QDateTime::currentDateTime(), "Starting acquisition");
-    emit acquireStarted(0);
+    emit acquireStarted();
 
 //    acquisition(0);
     QxrdAcquisitionParameterPack params(get_FilePattern(),
@@ -126,7 +127,7 @@ void QxrdAcquisition::acquireDark()
 
     //  emit printMessage(tr("QxrdAcquisitionPerkinElmer::acquireDark()"));
     emit statusMessage(QDateTime::currentDateTime(), "Starting dark acquisition");
-    emit acquireStarted(1);
+    emit acquireStarted();
 
 //    acquisition(1);
     QxrdDarkAcquisitionParameterPack params(get_FilePattern(),
@@ -154,13 +155,11 @@ void QxrdAcquisition::onAcquireComplete()
 void QxrdAcquisition::cancel()
 {
   set_Cancelling(true);
-//  INVOKE_CHECK(QMetaObject::invokeMethod(this, "haltAcquisition", Qt::QueuedConnection));
 }
 
 void QxrdAcquisition::cancelDark()
 {
   set_Cancelling(true);
-//  INVOKE_CHECK(QMetaObject::invokeMethod(this, "haltAcquisition", Qt::QueuedConnection));
 }
 
 void QxrdAcquisition::clearDropped()
@@ -190,24 +189,24 @@ int  QxrdAcquisition::acquisitionStatus(double time)
   }
 }
 
-void QxrdAcquisition::acquisition(int isDark)
-{
-  m_DataProcessor -> beginAcquisition(isDark);
+//void QxrdAcquisition::acquisition(int isDark)
+//{
+//  m_DataProcessor -> beginAcquisition(isDark);
 
-  copyParameters(isDark);
+//  copyParameters(isDark);
 
-  allocateMemoryForAcquisition();
+//  allocateMemoryForAcquisition();
 
-  if (m_SynchronizedAcquisition) {
-    m_SynchronizedAcquisition->prepareForAcquisition();
-  }
+//  if (m_SynchronizedAcquisition) {
+//    m_SynchronizedAcquisition->prepareForAcquisition();
+//  }
 
-  beginAcquisition();
-}
+//  beginAcquisition();
+//}
 
 void QxrdAcquisition::beginAcquisition()
 {
-  m_ElapsedTimer.start();
+//  m_ElapsedTimer.start();
 }
 
 void QxrdAcquisition::indicateDroppedFrame(int n)
@@ -223,209 +222,209 @@ void QxrdAcquisition::indicateDroppedFrame(int n)
   prop_DroppedFrames() -> incValue(1);
 }
 
-void QxrdAcquisition::copyParameters(int isDark)
-{
-  int skipAtStart = get_SkippedExposuresAtStart();
+//void QxrdAcquisition::copyParameters(int isDark)
+//{
+//  int skipAtStart = get_SkippedExposuresAtStart();
 
-  if (get_AcquireDark() != isDark) {
-    skipAtStart += 1;
-  }
+//  if (get_AcquireDark() != isDark) {
+//    skipAtStart += 1;
+//  }
 
-  set_AcquireDark(isDark);
+//  set_AcquireDark(isDark);
 
-  set_Cancelling(0);
+//  set_Cancelling(0);
 
-//  m_CurrentExposure.fetchAndStoreOrdered(0);
-//  m_CurrentPhase.fetchAndStoreOrdered(0);
-//  m_CurrentSummation.fetchAndStoreOrdered(0);
-//  m_CurrentGroup.fetchAndStoreOrdered(0);
+////  m_CurrentExposure.fetchAndStoreOrdered(0);
+////  m_CurrentPhase.fetchAndStoreOrdered(0);
+////  m_CurrentSummation.fetchAndStoreOrdered(0);
+////  m_CurrentGroup.fetchAndStoreOrdered(0);
 
-  m_NSkippedAtStart.fetchAndStoreOrdered(get_SkippedExposuresAtStart());
-  m_NSkippedBetweenGroups.fetchAndStoreOrdered(get_SkippedExposures());
+//  m_NSkippedAtStart.fetchAndStoreOrdered(get_SkippedExposuresAtStart());
+//  m_NSkippedBetweenGroups.fetchAndStoreOrdered(get_SkippedExposures());
 
-  if (get_AcquireDark()) {
-    m_NPhasesPerSummation.fetchAndStoreOrdered(1);
-    m_NSummationsPerGroup.fetchAndStoreOrdered(get_DarkSummedExposures());
-    m_NGroupsPerSequence.fetchAndStoreOrdered(1);
-  } else {
-    m_NPhasesPerSummation.fetchAndStoreOrdered(get_FilesInGroup());
-    m_NSummationsPerGroup.fetchAndStoreOrdered(get_SummedExposures());
-    m_NGroupsPerSequence.fetchAndStoreOrdered(get_GroupsInSequence());
-  }
+//  if (get_AcquireDark()) {
+//    m_NPhasesPerSummation.fetchAndStoreOrdered(1);
+//    m_NSummationsPerGroup.fetchAndStoreOrdered(get_DarkSummedExposures());
+//    m_NGroupsPerSequence.fetchAndStoreOrdered(1);
+//  } else {
+//    m_NPhasesPerSummation.fetchAndStoreOrdered(get_FilesInGroup());
+//    m_NSummationsPerGroup.fetchAndStoreOrdered(get_SummedExposures());
+//    m_NGroupsPerSequence.fetchAndStoreOrdered(get_GroupsInSequence());
+//  }
 
-  m_InitialFileIndex = get_FileIndex();
+//  m_InitialFileIndex = get_FileIndex();
 
-  QCEP_DEBUG(DEBUG_ACQUIRE,
-             emit printMessage(QDateTime::currentDateTime(),
-                               tr("SAS:%1 SBG:%2 PPS:%3 SPG:%4 GPS:%5\n")
-                               .arg(m_NSkippedAtStart).arg(m_NSkippedBetweenGroups)
-                               .arg(m_NPhasesPerSummation).arg(m_NSummationsPerGroup)
-                               .arg(m_NGroupsPerSequence));
-      );
-}
+//  QCEP_DEBUG(DEBUG_ACQUIRE,
+//             emit printMessage(QDateTime::currentDateTime(),
+//                               tr("SAS:%1 SBG:%2 PPS:%3 SPG:%4 GPS:%5\n")
+//                               .arg(m_NSkippedAtStart).arg(m_NSkippedBetweenGroups)
+//                               .arg(m_NPhasesPerSummation).arg(m_NSummationsPerGroup)
+//                               .arg(m_NGroupsPerSequence));
+//      );
+//}
 
-static QTime tick;
+//static QTime tick;
 
-int QxrdAcquisition::currentPhase(int frameNumber)
-{
-  if (frameNumber < m_NSkippedAtStart) {
-    return -1;
-  } else {
-    int expAfterStart  = frameNumber - m_NSkippedAtStart;
-    int expPerGroup    = m_NPhasesPerSummation*m_NSummationsPerGroup+m_NSkippedBetweenGroups;
-//    int currentGroup   = expAfterStart / expPerGroup;
-    int expWithinGroup = expAfterStart % expPerGroup;
-//    int expPerSequence = m_NSkippedAtStart + m_NGroupsPerSequence*expPerGroup - m_NSkippedBetweenGroups;
+//int QxrdAcquisition::currentPhase(int frameNumber)
+//{
+//  if (frameNumber < m_NSkippedAtStart) {
+//    return -1;
+//  } else {
+//    int expAfterStart  = frameNumber - m_NSkippedAtStart;
+//    int expPerGroup    = m_NPhasesPerSummation*m_NSummationsPerGroup+m_NSkippedBetweenGroups;
+////    int currentGroup   = expAfterStart / expPerGroup;
+//    int expWithinGroup = expAfterStart % expPerGroup;
+////    int expPerSequence = m_NSkippedAtStart + m_NGroupsPerSequence*expPerGroup - m_NSkippedBetweenGroups;
 
-    int expPerSummation = m_NPhasesPerSummation;
-//    int currentSummation = expWithinGroup / expPerSummation;
-    int currentPhase   = expWithinGroup % expPerSummation;
-    return currentPhase;
-  }
-}
+//    int expPerSummation = m_NPhasesPerSummation;
+////    int currentSummation = expWithinGroup / expPerSummation;
+//    int currentPhase   = expWithinGroup % expPerSummation;
+//    return currentPhase;
+//  }
+//}
 
-void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image, int counter)
-    // A new frame of data has been acquired, it should be added to m_AcquiredInt32Data.
-    // If a summed exposure has been completed, either the 16 or 32 bit data
-    // frame should be passed to the data processor, and replaced with a newly
-    // allocated image.
-    // If m_AcquiredInt16Data is NULL, then the program has run out of free memory
-    // and acquisition should drop frames until memory is available
-{
-  return;
+//void QxrdAcquisition::acquiredFrameAvailable(QxrdInt16ImageDataPtr image, int counter)
+//    // A new frame of data has been acquired, it should be added to m_AcquiredInt32Data.
+//    // If a summed exposure has been completed, either the 16 or 32 bit data
+//    // frame should be passed to the data processor, and replaced with a newly
+//    // allocated image.
+//    // If m_AcquiredInt16Data is NULL, then the program has run out of free memory
+//    // and acquisition should drop frames until memory is available
+//{
+//  return;
 
-  THREAD_CHECK;
+//  THREAD_CHECK;
 
 
-//  acquireTiming();
+////  acquireTiming();
 
-  if (m_NPhasesPerSummation < 1) m_NPhasesPerSummation.fetchAndStoreOrdered(1);
-  if (m_NSummationsPerGroup < 1) m_NSummationsPerGroup.fetchAndStoreOrdered(1);
-  if (m_NGroupsPerSequence  < 1) m_NGroupsPerSequence.fetchAndStoreOrdered(1);
+//  if (m_NPhasesPerSummation < 1) m_NPhasesPerSummation.fetchAndStoreOrdered(1);
+//  if (m_NSummationsPerGroup < 1) m_NSummationsPerGroup.fetchAndStoreOrdered(1);
+//  if (m_NGroupsPerSequence  < 1) m_NGroupsPerSequence.fetchAndStoreOrdered(1);
 
-  m_FrameCounter.fetchAndAddOrdered(1);
+//  m_FrameCounter.fetchAndAddOrdered(1);
 
-  if (image) {
-    m_UpdateInterval.fetchAndStoreOrdered(1.0/get_ExposureTime());
+//  if (image) {
+//    m_UpdateInterval.fetchAndStoreOrdered(1.0/get_ExposureTime());
 
-    if (m_UpdateInterval < 1) {
-      m_UpdateInterval.fetchAndStoreOrdered(1);
-    }
+//    if (m_UpdateInterval < 1) {
+//      m_UpdateInterval.fetchAndStoreOrdered(1);
+//    }
 
-    if ((m_FrameCounter % m_UpdateInterval) == 0) {
-      m_DataProcessor -> idleInt16Image(image);
-    }
-  }
+//    if ((m_FrameCounter % m_UpdateInterval) == 0) {
+//      m_DataProcessor -> idleInt16Image(image);
+//    }
+//  }
 
-  int expAfterStart  = counter - m_NSkippedAtStart;
-  int expPerGroup    = m_NPhasesPerSummation*m_NSummationsPerGroup+m_NSkippedBetweenGroups;
-  int currentGroup   = expAfterStart / expPerGroup;
-  int expWithinGroup = expAfterStart % expPerGroup;
-  int expPerSequence = m_NSkippedAtStart + m_NGroupsPerSequence*expPerGroup - m_NSkippedBetweenGroups;
+//  int expAfterStart  = counter - m_NSkippedAtStart;
+//  int expPerGroup    = m_NPhasesPerSummation*m_NSummationsPerGroup+m_NSkippedBetweenGroups;
+//  int currentGroup   = expAfterStart / expPerGroup;
+//  int expWithinGroup = expAfterStart % expPerGroup;
+//  int expPerSequence = m_NSkippedAtStart + m_NGroupsPerSequence*expPerGroup - m_NSkippedBetweenGroups;
 
-  int expPerSummation = m_NPhasesPerSummation;
-  int currentSummation = expWithinGroup / expPerSummation;
-  int currentPhase   = expWithinGroup % expPerSummation;
-  int isSummed       = true;
+//  int expPerSummation = m_NPhasesPerSummation;
+//  int currentSummation = expWithinGroup / expPerSummation;
+//  int currentPhase   = expWithinGroup % expPerSummation;
+//  int isSummed       = true;
 
-  if (m_Acquiring.tryLock()) {
-    m_Acquiring.unlock();
-  } else if (image == NULL) {
-    indicateDroppedFrame(counter);
-  } else  {
-//    printf("acquiredFrameAvailable[%d] %d msec\n", counter, tick.restart());
+//  if (m_Acquiring.tryLock()) {
+//    m_Acquiring.unlock();
+//  } else if (image == NULL) {
+//    indicateDroppedFrame(counter);
+//  } else  {
+////    printf("acquiredFrameAvailable[%d] %d msec\n", counter, tick.restart());
 
-    QString msg;
-    msg = tr("Acq fctr %1: ").arg(m_FrameCounter);
+//    QString msg;
+//    msg = tr("Acq fctr %1: ").arg(m_FrameCounter);
 
-    if (counter < m_NSkippedAtStart) {
-      QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(QDateTime::currentDateTime(),
-                                   tr("Frame %1 skipped").arg(counter));
-      );
-//      m_CurrentPhase.fetchAndStoreOrdered(-1);
-//      m_CurrentSummation.fetchAndStoreOrdered(-1);
-//      m_CurrentGroup.fetchAndStoreOrdered(-1);
-    } else {
+//    if (counter < m_NSkippedAtStart) {
+//      QCEP_DEBUG(DEBUG_ACQUIRE,
+//                 emit printMessage(QDateTime::currentDateTime(),
+//                                   tr("Frame %1 skipped").arg(counter));
+//      );
+////      m_CurrentPhase.fetchAndStoreOrdered(-1);
+////      m_CurrentSummation.fetchAndStoreOrdered(-1);
+////      m_CurrentGroup.fetchAndStoreOrdered(-1);
+//    } else {
 
-      if (expWithinGroup < m_NPhasesPerSummation*m_NSummationsPerGroup) {
-        isSummed = true;
-        msg += "Summed:  ";
-      } else {
-        isSummed = false;
-        msg += "Skipped: ";
-      }
+//      if (expWithinGroup < m_NPhasesPerSummation*m_NSummationsPerGroup) {
+//        isSummed = true;
+//        msg += "Summed:  ";
+//      } else {
+//        isSummed = false;
+//        msg += "Skipped: ";
+//      }
 
-//      m_CurrentPhase.fetchAndStoreOrdered(currentPhase);
-//      m_CurrentSummation.fetchAndStoreOrdered(currentSummation);
-//      m_CurrentGroup.fetchAndStoreOrdered(currentGroup);
+////      m_CurrentPhase.fetchAndStoreOrdered(currentPhase);
+////      m_CurrentSummation.fetchAndStoreOrdered(currentSummation);
+////      m_CurrentGroup.fetchAndStoreOrdered(currentGroup);
 
-      set_FileIndex(m_InitialFileIndex+currentGroup);
+//      set_FileIndex(m_InitialFileIndex+currentGroup);
 
-      QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(QDateTime::currentDateTime(),
-                                   msg+tr("fIdx %1: mCE %2: mCP %3: mCS %4: mCG %5")
-                                   .arg(get_FileIndex()).arg(counter)
-                                   .arg(currentPhase).arg(currentSummation).arg(currentGroup));
-          );
+//      QCEP_DEBUG(DEBUG_ACQUIRE,
+//                 emit printMessage(QDateTime::currentDateTime(),
+//                                   msg+tr("fIdx %1: mCE %2: mCP %3: mCS %4: mCG %5")
+//                                   .arg(get_FileIndex()).arg(counter)
+//                                   .arg(currentPhase).arg(currentSummation).arg(currentGroup));
+//          );
 
-      if (isSummed) {
-        if (m_AcquiredInt32Data[currentPhase] == NULL) {
-          m_AcquiredInt32Data[currentPhase] = m_Allocator->newInt32Image();
-          m_OverflowMask[currentPhase] = m_Allocator->newMask(0);
-        } else if (currentSummation == 0) {
-          QCEP_DEBUG(DEBUG_ACQUIRE,
-                     emit printMessage(QDateTime::currentDateTime(),
-                                       msg+tr("process[%1]").arg(currentPhase));
-          );
-          processAcquiredImage(m_InitialFileIndex+currentGroup-1, currentPhase, m_AcquiredInt32Data[currentPhase], m_OverflowMask[currentPhase]);
-          m_AcquiredInt32Data[currentPhase] = m_Allocator->newInt32Image();
-          m_OverflowMask[currentPhase] = m_Allocator->newMask(0);
-        }
+//      if (isSummed) {
+//        if (m_AcquiredInt32Data[currentPhase] == NULL) {
+//          m_AcquiredInt32Data[currentPhase] = m_Allocator->newInt32Image();
+//          m_OverflowMask[currentPhase] = m_Allocator->newMask(0);
+//        } else if (currentSummation == 0) {
+//          QCEP_DEBUG(DEBUG_ACQUIRE,
+//                     emit printMessage(QDateTime::currentDateTime(),
+//                                       msg+tr("process[%1]").arg(currentPhase));
+//          );
+//          processAcquiredImage(m_InitialFileIndex+currentGroup-1, currentPhase, m_AcquiredInt32Data[currentPhase], m_OverflowMask[currentPhase]);
+//          m_AcquiredInt32Data[currentPhase] = m_Allocator->newInt32Image();
+//          m_OverflowMask[currentPhase] = m_Allocator->newMask(0);
+//        }
 
-        QCEP_DEBUG(DEBUG_ACQUIRE,
-                   emit printMessage(QDateTime::currentDateTime(),
-                                     msg+tr("accumulate[%1]").arg(currentPhase));
-        );
+//        QCEP_DEBUG(DEBUG_ACQUIRE,
+//                   emit printMessage(QDateTime::currentDateTime(),
+//                                     msg+tr("accumulate[%1]").arg(currentPhase));
+//        );
 
-        accumulateAcquiredImage(image, m_AcquiredInt32Data[currentPhase], m_OverflowMask[currentPhase]);
-      }
+//        accumulateAcquiredImage(image, m_AcquiredInt32Data[currentPhase], m_OverflowMask[currentPhase]);
+//      }
 
-      QString fileBase, fileName;
+//      QString fileBase, fileName;
 
-      getFileBaseAndName(get_FilePattern(), m_InitialFileIndex+currentGroup, currentPhase, expPerSummation, fileBase, fileName);
+//      getFileBaseAndName(get_FilePattern(), m_InitialFileIndex+currentGroup, currentPhase, expPerSummation, fileBase, fileName);
 
-      emit acquiredFrame(fileBase, get_FileIndex(),
-                         currentPhase,     m_NPhasesPerSummation,
-                         currentSummation, m_NSummationsPerGroup,
-                         currentGroup,     m_NGroupsPerSequence);
-    }
+//      emit acquiredFrame(fileBase, get_FileIndex(),
+//                         currentPhase,     m_NPhasesPerSummation,
+//                         currentSummation, m_NSummationsPerGroup,
+//                         currentGroup,     m_NGroupsPerSequence);
+//    }
 
-//    m_CurrentExposure.fetchAndAddOrdered(1);
+////    m_CurrentExposure.fetchAndAddOrdered(1);
 
-    if (counter >= expPerSequence || get_Cancelling()) {
-      for (int i=0; i<m_NPhasesPerSummation; i++) {
-        if (m_AcquiredInt32Data[i]) {
-          processAcquiredImage(m_InitialFileIndex+currentGroup, i, m_AcquiredInt32Data[i], m_OverflowMask[i]);
-          m_AcquiredInt32Data[i] = QxrdInt32ImageDataPtr();
-          m_OverflowMask[i] = QxrdMaskDataPtr();
-        }
-      }
+//    if (counter >= expPerSequence || get_Cancelling()) {
+//      for (int i=0; i<m_NPhasesPerSummation; i++) {
+//        if (m_AcquiredInt32Data[i]) {
+//          processAcquiredImage(m_InitialFileIndex+currentGroup, i, m_AcquiredInt32Data[i], m_OverflowMask[i]);
+//          m_AcquiredInt32Data[i] = QxrdInt32ImageDataPtr();
+//          m_OverflowMask[i] = QxrdMaskDataPtr();
+//        }
+//      }
 
-      QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(QDateTime::currentDateTime(),
-                                   "Acquisition Finished\n");
-          );
+//      QCEP_DEBUG(DEBUG_ACQUIRE,
+//                 emit printMessage(QDateTime::currentDateTime(),
+//                                   "Acquisition Finished\n");
+//          );
 
-      if (!get_AcquireDark()) {
-        prop_FileIndex()->incValue(1);
-      }
+//      if (!get_AcquireDark()) {
+//        prop_FileIndex()->incValue(1);
+//      }
 
-      haltAcquisition();
-      return;
-    }
-  }
-}
+//      haltAcquisition();
+//      return;
+//    }
+//  }
+//}
 
 template <typename T>
 void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow)
@@ -478,7 +477,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
 
 void QxrdAcquisition::getFileBaseAndName(QString filePattern, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName)
 {
-  if (get_AcquireDark()) {
+  if (nphases == 0) {
     fileBase = filePattern+tr("-%1.dark.tif").arg(fileIndex,5,10,QChar('0'));
     fileName = QDir(m_DataProcessor -> darkOutputDirectory()).filePath(fileBase);
   } else {
@@ -491,7 +490,7 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int fileIndex, int
   }
 }
 
-void QxrdAcquisition::processAcquiredImage(int fileIndex, int phase, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
+void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase, int nPhases, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   if (image) {
     QCEP_DEBUG(DEBUG_ACQUIRE,
@@ -503,7 +502,7 @@ void QxrdAcquisition::processAcquiredImage(int fileIndex, int phase, QxrdInt32Im
     QString fileName;
     QString fileBase;
 
-    getFileBaseAndName(get_FilePattern(), fileIndex, phase, get_FilesInGroup(), fileBase, fileName);
+    getFileBaseAndName(filePattern, fileIndex, phase, nPhases, fileBase, fileName);
 
     QCEP_DEBUG(DEBUG_ACQUIRE,
                emit printMessage(QDateTime::currentDateTime(),
@@ -533,7 +532,7 @@ void QxrdAcquisition::processAcquiredImage(int fileIndex, int phase, QxrdInt32Im
 
     copyDynamicProperties(image.data());
 
-    if (get_AcquireDark()) {
+    if (nPhases == 0) {
       QCEP_DEBUG(DEBUG_ACQUIRE,
                  emit printMessage(QDateTime::currentDateTime(),
                                    tr("32 bit Dark Image acquired"));
@@ -541,6 +540,7 @@ void QxrdAcquisition::processAcquiredImage(int fileIndex, int phase, QxrdInt32Im
 
       image -> set_ImageNumber(-1);
       image -> set_PhaseNumber(-1);
+      image -> set_NPhases(0);
     } else {
       QCEP_DEBUG(DEBUG_ACQUIRE,
                  emit printMessage(QDateTime::currentDateTime(),
@@ -548,35 +548,50 @@ void QxrdAcquisition::processAcquiredImage(int fileIndex, int phase, QxrdInt32Im
           );
       image -> set_ImageNumber(fileIndex);
       image -> set_PhaseNumber(phase);
+      image -> set_NPhases(nPhases);
     }
 
     m_DataProcessor -> acquiredInt32Image(image, overflow);
   }
 }
 
-void QxrdAcquisition::haltAcquisition()
+void QxrdAcquisition::processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
-  set_Cancelling(true);
+  printf("processAcquiredImage(""%s"",%d,%d,img,ovf)\n", qPrintable(filePattern), fileIndex, phase);
 
-  emit statusMessage(QDateTime::currentDateTime(), "Acquire Complete");
-  emit acquireComplete(get_AcquireDark());
-
-  m_Acquiring.tryLock();
-  m_Acquiring.unlock();
-
-  m_StatusWaiting.wakeAll();
+  processImage(filePattern, fileIndex, phase, nPhases, image, overflow);
 }
+
+void QxrdAcquisition::processDarkImage(QString filePattern, int fileIndex, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
+{
+  printf("processDarkImage(""%s"",%d,img,ovf)\n", qPrintable(filePattern), fileIndex);
+
+  processImage(filePattern, fileIndex, -1, 0, image, overflow);
+}
+
+//void QxrdAcquisition::haltAcquisition()
+//{
+//  set_Cancelling(true);
+
+//  emit statusMessage(QDateTime::currentDateTime(), "Acquire Complete");
+//  emit acquireComplete();
+
+//  m_Acquiring.tryLock();
+//  m_Acquiring.unlock();
+
+//  m_StatusWaiting.wakeAll();
+//}
 
 void QxrdAcquisition::acquisitionError(int n)
 {
-  haltAcquisition();
+  cancel();
 
   emit criticalMessage(QDateTime::currentDateTime(), tr("Acquisition Error %1").arg(n));
 }
 
 void QxrdAcquisition::acquisitionError(int ln, int n)
 {
-  haltAcquisition();
+  cancel();
 
   emit criticalMessage(QDateTime::currentDateTime(), tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
 }
@@ -615,37 +630,51 @@ QxrdSynchronizedAcquisition* QxrdAcquisition::synchronizedAcquisition() const
   return m_SynchronizedAcquisition;
 }
 
-void QxrdAcquisition::acquireTiming()
+//void QxrdAcquisition::acquireTiming()
+//{
+//  int msec = m_ElapsedTimer.restart();
+
+//  int expmsec = 1000.0*get_ExposureTime();
+
+//  int del = expmsec-msec;
+
+//  if (del >= -10 && del <= 10) {
+//    m_ElapsedHistogram[del+10] += 1;
+//  }
+
+//  m_ElapsedCounter += 1;
+
+//  if (((double)m_ElapsedCounter)*get_ExposureTime() > 60.0) {
+//    QString msg = "Elapsed Histogram";
+
+//    for (int i=-10; i<10; i++) {
+//      msg += QString(" %1").arg(m_ElapsedHistogram[i+10]);
+//    }
+
+//    emit printMessage(QDateTime::currentDateTime(), msg);
+
+//    m_ElapsedCounter = 0;
+//    m_ElapsedHistogram.fill(0);
+//  }
+//}
+
+int QxrdAcquisition::cancelling()
 {
-  int msec = m_ElapsedTimer.restart();
+  int res = get_Cancelling();
 
-  int expmsec = 1000.0*get_ExposureTime();
-
-  int del = expmsec-msec;
-
-  if (del >= -10 && del <= 10) {
-    m_ElapsedHistogram[del+10] += 1;
+  if (res) {
+    emit statusMessage(QDateTime::currentDateTime(), tr("Cancelling acquisition"));
   }
 
-  m_ElapsedCounter += 1;
-
-  if (((double)m_ElapsedCounter)*get_ExposureTime() > 60.0) {
-    QString msg = "Elapsed Histogram";
-
-    for (int i=-10; i<10; i++) {
-      msg += QString(" %1").arg(m_ElapsedHistogram[i+10]);
-    }
-
-    emit printMessage(QDateTime::currentDateTime(), msg);
-
-    m_ElapsedCounter = 0;
-    m_ElapsedHistogram.fill(0);
-  }
+  return res;
 }
 
 void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 {
   stopIdling();
+
+  class SaveCancel : public std::exception {};
+  class Cancel : public std::exception {};
 
   QString fileBase = parms.fileBase();
   int fileIndex = get_FileIndex();
@@ -660,14 +689,16 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
   QVector<QxrdMaskDataPtr>       ovf(nphases);
 
   for (int i=0; i<skipBefore; i++) {
-    if (get_Cancelling()) goto cancel;
+    if (cancelling()) goto cancel;
     emit statusMessage(QDateTime::currentDateTime(), tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
     acquireFrame(exposure);
   }
 
 
   for (int i=0; i<nfiles; i++) {
-    if (get_Cancelling()) goto cancel;
+    if (cancelling()) goto cancel;
+
+    set_FileIndex(fileIndex+i);
 
     if (i != 0) {
       for (int k=0; k<skipBetween; k++) {
@@ -690,9 +721,15 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
       }
     }
 
-    if (get_Cancelling()) goto cancel;
+    if (cancelling()) goto cancel;
 
     for (int s=0; s<nsummed; s++) {
+      if (nphases > 1) {
+        if (synchronizedAcquisition()) {
+          synchronizedAcquisition()->acquiredFrameAvailable(0);
+        }
+      }
+
       for (int p=0; p<nphases; p++) {
         emit acquiredFrame(res[p]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, nfiles);
 
@@ -700,15 +737,19 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
         accumulateAcquiredImage(img, res[p], ovf[p]);
 
-        if (get_Cancelling()) goto saveCancel;
+        if (cancelling()) goto saveCancel;
       }
     }
 
   saveCancel:
+    prop_FileIndex()->incValue(1);
+
     for (int p=0; p<nphases; p++) {
-      processAcquiredImage(fileBase, i, p, res[p], ovf[p]);
+      processAcquiredImage(fileBase, fileIndex+i, p, nphases, res[p], ovf[p]);
     }
   }
+
+  emit statusMessage(QDateTime::currentDateTime(),tr("Acquisition complete"));
 
 cancel:
   startIdling();
@@ -734,12 +775,12 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
   res -> set_FileName(fn);
 
   for (int i=0; i<skipBefore; i++) {
-    if (get_Cancelling()) goto cancel;
+    if (cancelling()) goto cancel;
     acquireFrame(exposure);
   }
 
   for (int i=0; i<nsummed; i++) {
-    if (get_Cancelling()) goto saveCancel;
+    if (cancelling()) goto saveCancel;
 
     emit acquiredFrame(res->get_FileBase(), fileIndex, 0, 1, i, nsummed, 0, 1);
 
@@ -749,7 +790,9 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
   }
 
 saveCancel:
-  processDarkImage(fileBase, 0, res, overflow);
+  processDarkImage(fileBase, fileIndex, res, overflow);
+
+  emit statusMessage(QDateTime::currentDateTime(),tr("Acquisition complete"));
 
 cancel:
   startIdling();
@@ -768,7 +811,7 @@ void QxrdAcquisition::startIdling()
 void QxrdAcquisition::onIdleTimeout()
 {
   if (m_Idling) {
-    QxrdInt16ImageDataPtr res = acquireFrame(get_ExposureTime());
+    QxrdInt16ImageDataPtr res = acquireFrameIfAvailable(get_ExposureTime());
 
     if (res) {
       m_DataProcessor->idleInt16Image(res);
@@ -778,19 +821,27 @@ void QxrdAcquisition::onIdleTimeout()
 
 QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
 {
-  QxrdInt16ImageDataPtr res = m_Allocator->newInt16Image();
+  m_NAcquiredImages.acquire(1);
 
-  res->fill((int) (1000.0*exposure));
+  QxrdInt16ImageDataPtr res = m_AcquiredImages.dequeue();
 
   return res;
 }
 
-void QxrdAcquisition::processAcquiredImage(QString fileName, int fileIndex, int phase, QxrdInt32ImageDataPtr img, QxrdMaskDataPtr ovf)
+QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrameIfAvailable(double exposure)
 {
-  printf("processAcquiredImage(""%s"",%d,%d,img,ovf)\n", qPrintable(fileName), fileIndex, phase);
+  QxrdInt16ImageDataPtr res;
+
+  while (m_NAcquiredImages.available() >= 1) {
+    res = acquireFrame(exposure);
+  }
+
+  return res;
 }
 
-void QxrdAcquisition::processDarkImage(QString fileName, int fileIndex, QxrdInt32ImageDataPtr img, QxrdMaskDataPtr ovf)
+void QxrdAcquisition::enqueueAcquiredFrame(QxrdInt16ImageDataPtr img)
 {
-  printf("processDarkImage(""%s"",%d,img,ovf)\n", qPrintable(fileName), fileIndex);
+  m_AcquiredImages.enqueue(img);
+
+  m_NAcquiredImages.release(1);
 }

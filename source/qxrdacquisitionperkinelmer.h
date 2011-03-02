@@ -30,6 +30,7 @@ public slots:
 
 protected:
   void beginAcquisition();
+  void endAcquisition();
 
 private:
   void setupExposureMenu(QDoubleSpinBox *cb);
