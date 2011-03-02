@@ -475,8 +475,9 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 
 //    acquiredFrameAvailable(image);
 
-    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "acquiredFrameAvailable", Qt::QueuedConnection,
-                                           Q_ARG(QxrdInt16ImageDataPtr, image), Q_ARG(int,counter)));
+    enqueueAcquiredFrame(image);
+//    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "acquiredFrameAvailable", Qt::QueuedConnection,
+//                                           Q_ARG(QxrdInt16ImageDataPtr, image), Q_ARG(int,counter)));
 
 //    printf("Invoke took %d msec\n", tic.restart());
   }
@@ -573,9 +574,9 @@ void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 //  QTime tic;
 //  tic.start();
 
-  if (synchronizedAcquisition()) {
-    synchronizedAcquisition()->acquiredFrameAvailable(currentPhase(m_Counter));
-  }
+//  if (synchronizedAcquisition()) {
+//    synchronizedAcquisition()->acquiredFrameAvailable(currentPhase(m_Counter));
+//  }
 
 //  printf("syncAcq->acquiredFrameAvailable took %d msec\n", tic.restart());
 
