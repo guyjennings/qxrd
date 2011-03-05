@@ -125,6 +125,7 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
   int nCols = get_NCols();
 
   QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image();
+  int xpmsec = (int)(get_ExposureTime()*1000+0.5);
 
   if (image) {
     quint16 *ptr = image->data();
@@ -135,7 +136,7 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
         if ((i>=frame*64) && (i<(frame+1)*64) && (j < 64)) {
           *ptr++ = frame;
         } else {
-          *ptr++ = 1;
+          *ptr++ = xpmsec;
         }
       }
     }
