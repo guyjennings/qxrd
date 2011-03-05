@@ -16,92 +16,89 @@ DISTFILES += source plugins
 
 OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile
 
-QMAKE_EXTRA_TARGETS += dist
+QMAKE_EXTRA_TARGETS += tarball
 
-dist.depends = FORCE
-dist.commands += \
-        rm -rf qxrd-$${VERSION} ; \
-        $(MKDIR) qxrd-$${VERSION} && \
-        $(MKDIR) qxrd-$${VERSION}/source && \
-        $(MKDIR) qxrd-$${VERSION}/source/images && \
-        $(MKDIR) qxrd-$${VERSION}/source/levmar-2.5 && \
-        $(MKDIR) qxrd-$${VERSION}/source/help && \
-        $(MKDIR) qxrd-$${VERSION}/source/help/images && \
-        $(MKDIR) qxrd-$${VERSION}/qwt-5.2 && \
-        $(MKDIR) qxrd-$${VERSION}/qwt-5.2/src && \
-        $(MKDIR) qxrd-$${VERSION}/qceplib && \
-        $(MKDIR) qxrd-$${VERSION}/tiffconfig && \
-        $(MKDIR) qxrd-$${VERSION}/tiffconfig/macx && \
-        $(MKDIR) qxrd-$${VERSION}/tiffconfig/win32 && \
-        $(MKDIR) qxrd-$${VERSION}/tiff-3.8.2 && \
-        $(MKDIR) qxrd-$${VERSION}/tiff-3.8.2/libtiff && \
-        $(MKDIR) qxrd-$${VERSION}/plugins && \
-        $(MKDIR) qxrd-$${VERSION}/plugins/qxrdareadetectorplugin && \
-        $(MKDIR) qxrd-$${VERSION}/plugins/qxrdperkinelmerplugin && \
-        $(MKDIR) qxrd-$${VERSION}/plugins/qxrdcudaprocessorplugin && \
-        $(MKDIR) qxrd-$${VERSION}/plugins/qxrdpilatusplugin && \
-        $(MKDIR) qxrd-$${VERSION}/plugins/qxrdnidaqplugin && \
+tarball.depends = FORCE
+tarball.commands += \
+        rm -rf $${TARGET}-$${VERSION} ; \
+        $(MKDIR) $${TARGET}-$${VERSION} && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/images && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/levmar-2.5 && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/help && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/help/images && \
+        $(MKDIR) $${TARGET}-$${VERSION}/qwt-5.2 && \
+        $(MKDIR) $${TARGET}-$${VERSION}/qwt-5.2/src && \
+        $(MKDIR) $${TARGET}-$${VERSION}/qceplib && \
+        $(MKDIR) $${TARGET}-$${VERSION}/tiffconfig && \
+        $(MKDIR) $${TARGET}-$${VERSION}/tiffconfig/macx && \
+        $(MKDIR) $${TARGET}-$${VERSION}/tiffconfig/win32 && \
+        $(MKDIR) $${TARGET}-$${VERSION}/tiff-3.8.2 && \
+        $(MKDIR) $${TARGET}-$${VERSION}/tiff-3.8.2/libtiff && \
+        $(MKDIR) $${TARGET}-$${VERSION}/plugins && \
+        $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdareadetectorplugin && \
+        $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdperkinelmerplugin && \
+        $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdcudaprocessorplugin && \
+        $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdpilatusplugin && \
+        $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdnidaqplugin && \
 
-dist.commands += \
-        $(COPY_FILE)  $${PWD}/*.{pro,pri,spec} -t qxrd-$${VERSION} &&
-dist.commands += \
+tarball.commands += \
+        $(COPY_FILE)  $${PWD}/*.{pro,pri,spec} -t $${TARGET}-$${VERSION} &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/images/*.{png,ico} \
-                      -t qxrd-$${VERSION}/source/images &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/source/images &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/{[TA]*.h,q*.cpp,q*.h,q*.qrc,q*.rc,q*.ui,source.pro,*.pri} \
-                      -t qxrd-$${VERSION}/source &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/source &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/levmar-2.5/*.{c,h} \
-                      -t qxrd-$${VERSION}/source/levmar-2.5 &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/source/levmar-2.5 &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/help/*.html \
-                      -t qxrd-$${VERSION}/source/help &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/source/help &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/help/images/*.png \
-                      -t qxrd-$${VERSION}/source/help/images &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/source/help/images &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/qwt-5.2/src/*.{cpp,h} \
-                      -t qxrd-$${VERSION}/qwt-5.2/src &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/qwt-5.2/src &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/qceplib/*.{cpp,h} \
-                      -t qxrd-$${VERSION}/qceplib &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/qceplib &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/tiffconfig/macx/*.h \
-                      -t qxrd-$${VERSION}/tiffconfig/macx &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/tiffconfig/macx &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/tiffconfig/win32/*.h \
-                      -t qxrd-$${VERSION}/tiffconfig/win32 &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/tiffconfig/win32 &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/tiff-3.8.2/libtiff/*.{c,h,def} \
-                      -t qxrd-$${VERSION}/tiff-3.8.2/libtiff &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/tiff-3.8.2/libtiff &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/plugins.pro \
-                      -t qxrd-$${VERSION}/plugins &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/plugins &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/qxrdareadetectorplugin/q*.{cpp,h,pro} \
-                      -t qxrd-$${VERSION}/plugins/qxrdareadetectorplugin &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/plugins/qxrdareadetectorplugin &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/qxrdperkinelmerplugin/q*.{cpp,h,pro} \
-                      -t qxrd-$${VERSION}/plugins/qxrdperkinelmerplugin &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/plugins/qxrdperkinelmerplugin &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/qxrdcudaprocessorplugin/q*.{cpp,h,pro} \
-                      -t qxrd-$${VERSION}/plugins/qxrdcudaprocessorplugin &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/plugins/qxrdcudaprocessorplugin &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/qxrdpilatusplugin/q*.{cpp,h,pro} \
-                      -t qxrd-$${VERSION}/plugins/qxrdpilatusplugin &&
-dist.commands += \
+                      -t $${TARGET}-$${VERSION}/plugins/qxrdpilatusplugin &&
+tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/qxrdnidaqplugin/q*.{cpp,h,pro} \
-                      -t qxrd-$${VERSION}/plugins/qxrdnidaqplugin &&
+                      -t $${TARGET}-$${VERSION}/plugins/qxrdnidaqplugin &&
 
-dist.commands += \
-  tar -czf qxrd-$${VERSION}.tar.gz qxrd-$${VERSION} ; # rm -rf qxrd-$${VERSION}
+tarball.commands += \
+  tar -czf $${TARGET}-$${VERSION}.tar.gz $${TARGET}-$${VERSION} ; rm -rf $${TARGET}-$${VERSION}
 
-QMAKE_EXTRA_TARGETS += dox \
-    rpmsource \
-    mock \
-    website
+QMAKE_EXTRA_TARGETS += dox
 
-dox.target = dox/html/index.html
+#dox.target = dox/html/index.html
 dox.commands = "("
 dox.commands += cat $${PWD}/Doxyfile ;
 dox.commands += echo "PROJECT_NUMBER=$${VERSION}" ;
@@ -114,26 +111,24 @@ dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdperkinelmerplugin/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdcudaprocessorplugin/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdpilatusplugin/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdnidaqplugin/" ;
-dox.commands += echo "IMAGE_PATH=  \"$${PWD}\"/images" ;
 dox.commands += echo "IMAGE_PATH+= \"$${PWD}\"/images \"$${PWD}\"/source/images" ;
 dox.commands += echo "IMAGE_PATH+= \"$${PWD}\"/source/help/images \"$${PWD}\"/qwt-5.2/doc/images" ;
 dox.commands += echo "ALIASES=\"projectnumber=$${VERSION}\""
 dox.commands += ")" > Doxyfile.out ;
 dox.commands += doxygen < Doxyfile.out -
-dox.depends = FORCE $${PWD}/Doxyfile \
-    $${SOURCES} \
-    $${HEADERS}
+dox.depends = FORCE $${PWD}/Doxyfile
 
-rpmsource.depends += dist
-rpmsource.commands += cp \
-    qxrd-$${VERSION}.tar.gz \
-    ~/rpmbuild/SOURCES/ ;
+QMAKE_EXTRA_TARGETS += mock specfile
 
-rpmsource.commands += perl -pi -e '\'s/Version:.*/Version: $${VERSION}/\'' qxrd.spec
+specfile.target = $${TARGET}.spec
+specfile.depends = $${PWD}/$${TARGET}.spec
+specfile.commands = perl -p -e '\'s/Version:.*/Version: $${VERSION}/\'' $${PWD}/$${TARGET}.spec > $${TARGET}.spec
 
-mock.commands += mock-build qxrd.spec
-mock.commands += && cp /var/lib/mock/*/result/qxrd*.rpm download
-mock.depends = FORCE
+mock.depends = $${TARGET}-$${VERSION}.tar.gz $${TARGET}.spec
+mock.commands += cp $${TARGET}-$${VERSION}.tar.gz ~/rpmbuild/SOURCES/ &&
+mock.commands += mock-build $${TARGET}.spec
+
+QMAKE_EXTRA_TARGETS += website
 
 website.commands = rsync \
     -e \
