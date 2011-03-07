@@ -118,6 +118,10 @@ dox.commands += ")" > Doxyfile.out ;
 dox.commands += doxygen < Doxyfile.out -
 dox.depends = FORCE $${PWD}/Doxyfile
 
+QMAKE_EXTRA_TARGETS += upload-dox
+
+upload-dox.commands = rsync -e ssh -av --del dox/html/ guyjennings,$${TARGET}@web.sourceforge.net:htdocs/
+
 QMAKE_EXTRA_TARGETS += mock specfile
 
 specfile.target = $${TARGET}.spec

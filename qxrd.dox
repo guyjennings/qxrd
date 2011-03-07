@@ -23,9 +23,8 @@ QXRD acts as a bridge between the dynamic link library provided by Perkin
 Elmer and the beamline data acquisition software 'spec' and also provides
 a convenient GUI interface to the detector.
 
-More information may be found at the
-<a href="http://sourceforge.net/projects/qxrd">
-QXRD sourceforge project page</a>
+Downloads and more information are available from the QXRD developer page
+<a href="https://sourceforge.net/projects/qxrd">https://sourceforge.net/projects/qxrd</a>
 
 \image html image-screen.png
 
