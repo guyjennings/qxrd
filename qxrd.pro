@@ -125,10 +125,10 @@ upload-dox.commands = rsync -e ssh -av --del dox/html/ guyjennings,$${TARGET}@we
 QMAKE_EXTRA_TARGETS += mock specfile
 
 specfile.target = $${TARGET}.spec
-specfile.depends = $${PWD}/$${TARGET}.spec
+specfile.depends = $${PWD}/$${TARGET}.spec $${PWD}/$${TARGET}.version.pri
 specfile.commands = perl -p -e '\'s/Version:.*/Version: $${VERSION}/\'' $${PWD}/$${TARGET}.spec > $${TARGET}.spec
 
-mock.depends = $${TARGET}-$${VERSION}.tar.gz $${TARGET}.spec
+mock.depends = tarball $${TARGET}.spec
 mock.commands += cp $${TARGET}-$${VERSION}.tar.gz ~/rpmbuild/SOURCES/ &&
 mock.commands += mock-build $${TARGET}.spec
 
@@ -153,3 +153,7 @@ website.commands += && \
     ssh www12.xor.aps.anl.gov ln -s
 
 # rsync -avP -e ssh dox/html/ guyjennings,qxrd@web.sourceforge.net:htdocs/
+
+for(m, QT) {
+  message("QT contains $${m}")
+}
