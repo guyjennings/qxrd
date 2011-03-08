@@ -46,6 +46,7 @@ public:
   virtual QwtText trackerText(const QwtDoublePoint &pos);
 
   void contextMenuEvent(QContextMenuEvent *event);
+  void updateZoomer();
 
 signals:
   void printMessage(QDateTime ts, QString msg);

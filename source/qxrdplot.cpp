@@ -193,6 +193,15 @@ void QxrdPlot::zoomOut()
   m_Zoomer -> zoom(-1);
 }
 
+void QxrdPlot::updateZoomer()
+{
+  if (m_Zoomer && m_Zoomer -> zoomRectIndex() == 0) {
+    m_Zoomer -> setZoomBase();
+  }
+
+  replot();
+}
+
 void QxrdPlot::enableZooming()
 {
   m_Zoomer       -> setEnabled(true);

@@ -51,11 +51,7 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
     setPlotCurveStyle(m_PlotIndex, pc);
     pc -> attach(this);
 
-    if (m_Zoomer && m_Zoomer -> zoomRectIndex() == 0) {
-      m_Zoomer -> setZoomBase();
-    }
-
-    replot();
+    updateZoomer();
 
     m_DataProcessor -> updateEstimatedTime(m_DataProcessor -> prop_DisplayIntegratedDataTime(), tic.restart());
   }

@@ -127,6 +127,7 @@ void QxrdSliceDialog::reslice()
 
       pc->attach(m_SlicePlot);
 
+      m_SlicePlot->updateZoomer();
       m_SlicePlot->replot();
     }
   }
