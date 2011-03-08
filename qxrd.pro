@@ -14,7 +14,7 @@ message(Target = $${TARGET})
 
 DISTFILES += source plugins
 
-OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile
+OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile qxrd.spec
 
 QMAKE_EXTRA_TARGETS += tarball
 

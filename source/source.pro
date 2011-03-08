@@ -7,7 +7,8 @@ message(Destdir = $${DESTDIR})
 
 TEMPLATE = app
 TARGET   = qxrd
-DESTDIR  = ../app/
+DESTDIR  = ../
+#DESTDIR  = ../app/
 
 # POST_TARGETDEPS += install
 target.path = ../app

@@ -6,7 +6,7 @@ CONFIG += plugin
 
 #include("cuda.pri")
 
-DESTDIR = ../../app/plugins/
+DESTDIR = ../../plugins/
 
 INCLUDEPATH += ../../source/
 

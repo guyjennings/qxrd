@@ -4,7 +4,7 @@ include("../../qxrd.platform.pri")
 TEMPLATE = lib
 CONFIG += plugin
 
-DESTDIR = ../../app/plugins/
+DESTDIR = ../../plugins/
 
 INCLUDEPATH += ../../source/
 
