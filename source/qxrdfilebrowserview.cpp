@@ -3,4 +3,5 @@
 QxrdFileBrowserView::QxrdFileBrowserView(QWidget *parent) :
     QTreeView(parent)
 {
+  setSortingEnabled(true);
 }

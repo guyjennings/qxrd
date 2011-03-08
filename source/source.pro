@@ -448,3 +448,7 @@ win32 { # Make NSIS installer...
     }
   }
 }
+
+for(m, QT) {
+  message("In source.pro QT contains $${m}")
+}
