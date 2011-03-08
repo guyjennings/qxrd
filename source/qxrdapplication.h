@@ -8,6 +8,7 @@
 #include <QScriptEngineDebugger>
 #include <QSplashScreen>
 #include "qcepproperty.h"
+#include "qxrdresponsetimer.h"
 
 class QxrdAcquisitionThread;
 class QxrdAcquisition;
@@ -124,6 +125,7 @@ private:
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;
 #endif
+  QxrdResponseTimer              *m_ResponseTimer;
 };
 
 extern QxrdApplication *g_Application;

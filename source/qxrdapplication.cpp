@@ -294,6 +294,11 @@ void QxrdApplication::init(QSplashScreen *splash)
                     tr("Current directory %1").arg(QDir::currentPath()));
 
   m_Window -> show();
+
+  m_ResponseTimer = new QxrdResponseTimer(1000, this);
+
+  connect(m_ResponseTimer, SIGNAL(printMessage(QDateTime,QString)),
+          m_Window, SLOT(printMessage(QDateTime,QString)));
 }
 
 QxrdApplication::~QxrdApplication()
