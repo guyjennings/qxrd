@@ -10,6 +10,7 @@ class QxrdIntegratedData : public QObject
 
 public:
   explicit QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDoubleImageDataPtr data, int maxSize, QObject *parent = 0);
+  ~QxrdIntegratedData();
 
   void resize(int n);
   int size() const;
@@ -24,8 +25,10 @@ public:
   double cx() const;
   double cy() const;
 
+  int allocatedMemoryMB();
+
 private:
-  QxrdAllocatorInterface    *m_Allocator;
+  QxrdImageDataObjectCounter m_ObjectCounter; /* global counter to track allocation of QxrdImageData objects */
   QxrdDoubleImageDataPtr     m_Image;
   int                        m_MaxSize;
   int                        m_Size;

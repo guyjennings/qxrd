@@ -7,25 +7,11 @@
 #include <QFileInfo>
 #include <QAtomicInt>
 #include <QSharedPointer>
+#include <QThread>
+#include <typeinfo>
 #include "qcepimagedata.h"
-
-class QxrdAllocatorInterface : public QObject
-{
-  Q_OBJECT;
-public:
-  QxrdAllocatorInterface(QObject *parent=0);
-
-  virtual void allocate(int sz, int width, int height) = 0;
-  virtual void deallocate(int sz, int width, int height) = 0;
-};
-
-class QxrdImageDataObjectCounter {
-public:
-  QxrdImageDataObjectCounter();
-  ~QxrdImageDataObjectCounter();
-
-  int value();
-};
+#include "qxrdallocatorinterface.h"
+#include "qxrdimagedataobjectcounter.h"
 
 template <typename T> class QxrdImageData;
 
@@ -67,10 +53,10 @@ public:
   T findMax() const;
   double findAverage() const;
 
-private:
-private:
-  QxrdImageDataObjectCounter m_ImageDataObjectCounter; /* global counter to track allocation of QxrdImageData objects */
-  QxrdAllocatorInterface    *m_Allocator;
+  int allocatedMemoryMB();
+
+protected:
+  QxrdImageDataObjectCounter m_ObjectCounter; /* global counter to track allocation of QxrdImageData objects */
   QxrdMaskDataPtr            m_Mask;
   QxrdMaskDataPtr            m_Overflow;
 };
@@ -80,34 +66,27 @@ private:
 template <typename T>
 QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, int width, int height, T def)
   : QcepImageData<T>(width, height, def),
-    m_Allocator(allocator),
+    m_ObjectCounter(allocator),
     m_Mask(NULL),
     m_Overflow(NULL)
 {
-  int count = m_ImageDataObjectCounter.value();
 
-  QCEP_DEBUG(DEBUG_QUEUES + DEBUG_IMAGES,
-             printf("QxrdImageData<T>::QxrdImageData(%p,%d,%d) %p[%d]\n", allocator, width, height, this, count);
-  );
+  if (qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
+    int count = m_ObjectCounter.value();
 
-  if (m_Allocator) {
-    m_Allocator -> allocate(sizeof(T), width, height);
-  } else {
-    printf("QxrdImageData<T>::QxrdImageData called with NULL allocator\n");
+    printf("QxrdImageData<T>::QxrdImageData(%p,%d,%d) %p[%d] thr%p\n", allocator, width, height, this, count, QThread::currentThread());
   }
+
+  m_ObjectCounter.allocate(sizeof(T), width, height);
 }
 
 template <typename T>
 QxrdImageData<T>::~QxrdImageData()
 {
-  int count = m_ImageDataObjectCounter.value();
+  if (qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
+    int count = m_ObjectCounter.value();
 
-  QCEP_DEBUG(DEBUG_QUEUES + DEBUG_IMAGES,
-             printf("QxrdImageData<T>::~QxrdImageData %p[%d]\n", this, count);
-  );
-
-  if (m_Allocator) {
-    m_Allocator -> deallocate(sizeof(T), QcepImageDataBase::get_Width(), QcepImageDataBase::get_Height());
+    printf("QxrdImageData<T>::~QxrdImageData %p[%d], thr%p, cthr%p titl:%s\n", this, count, QThread::currentThread(), this->thread(), qPrintable(this->get_Title()));
   }
 }
 
@@ -117,8 +96,7 @@ QString QxrdImageData<T>::rawFileName()
 {
   QFileInfo info(QcepImageData<T>::get_FileName());
 
-  QString name = info.dir().filePath(
-      info.completeBaseName()+".raw.tif");
+  QString name = info.dir().filePath(info.completeBaseName()+".raw.tif");
 
   return name;
 }
@@ -291,6 +269,12 @@ double QxrdImageData<T>::findAverage() const
   } else {
     return sum/npix;
   }
+}
+
+template <typename T>
+int QxrdImageData<T>::allocatedMemoryMB()
+{
+  return m_ObjectCounter.allocatedMemoryMB();
 }
 
 #endif

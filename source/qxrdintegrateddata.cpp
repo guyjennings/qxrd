@@ -2,7 +2,7 @@
 
 QxrdIntegratedData::QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDoubleImageDataPtr image, int maxSize, QObject *parent) :
     QObject(parent),
-    m_Allocator(alloc),
+    m_ObjectCounter(alloc),
     m_Image(image),
     m_MaxSize(maxSize),
     m_Size(0),
@@ -12,6 +12,11 @@ QxrdIntegratedData::QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDouble
     m_cx(0),
     m_cy(0)
 {
+  m_ObjectCounter.allocate(sizeof(double), 2, m_MaxSize);
+}
+
+QxrdIntegratedData::~QxrdIntegratedData()
+{
 }
 
 void QxrdIntegratedData::resize(int n)
@@ -20,6 +25,9 @@ void QxrdIntegratedData::resize(int n)
     int newSize = (n/m_AllocStep+1)*m_AllocStep;
     m_X.resize(newSize);
     m_Y.resize(newSize);
+
+    m_ObjectCounter.allocate(sizeof(double), 2, newSize-m_MaxSize);
+
     m_MaxSize = newSize;
   }
 
@@ -73,4 +81,9 @@ void QxrdIntegratedData::set_Image(QxrdDoubleImageDataPtr image)
 QxrdDoubleImageDataPtr QxrdIntegratedData::get_Image() const
 {
   return m_Image;
+}
+
+int QxrdIntegratedData::allocatedMemoryMB()
+{
+  return m_ObjectCounter.allocatedMemoryMB();
 }

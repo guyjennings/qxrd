@@ -18,3 +18,8 @@ const char* gDebugStrings[] = {
   "Memory Allocation",
   NULL
 };
+
+int qcepDebug(int cond)
+{
+  return (gCEPDebug & (cond));
+}

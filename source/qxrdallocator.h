@@ -29,21 +29,24 @@ public:
   QxrdIntegratedDataPtr newIntegratedData(QxrdDoubleImageDataPtr image);
 
   void dimension(int width, int height);
-  void preallocateInt16(int n16);
-  void preallocateInt32(int n32);
-  void preallocateDouble(int ndbl);
+//  void preallocateInt16(int n16);
+//  void preallocateInt32(int n32);
+//  void preallocateDouble(int ndbl);
 
   void allocate(int sz, int width, int height);
+  void allocate(quint64 amt);
   void deallocate(int sz, int width, int height);
+  void deallocate(quint64 amt);
 
-  int nFreeInt16();
-  int nFreeInt32();
-  int nFreeDouble();
+//  int nFreeInt16();
+//  int nFreeInt32();
+//  int nFreeDouble();
 
   int int16SizeMB();
   int int32SizeMB();
   int doubleSizeMB();
   int maskSizeMB();
+  int integratedSizeMB(int nrows);
 
   double allocatedMemoryMB();
   double allocatedMemory();
@@ -71,18 +74,20 @@ private:
   QMutex                m_Mutex;
   QTimer                m_Timer;
   QAtomicInt            m_AllocatedMemoryMB;
-  QAtomicInt            m_CountInt16;
-  QAtomicInt            m_CountInt32;
-  QAtomicInt            m_CountDouble;
-  QAtomicInt            m_PreallocateInt16;
-  QAtomicInt            m_PreallocateInt32;
-  QAtomicInt            m_PreallocateDouble;
+  quint64               m_AllocatedMemory;
 
-  QxrdInt16ImageQueue   m_FreeInt16Images;
-  QxrdInt32ImageQueue   m_FreeInt32Images;
-  QxrdDoubleImageQueue  m_FreeDoubleImages;
-  QxrdMaskQueue         m_FreeMasks;
-  QxrdIntegratedDataQueue m_FreeIntegratedData;
+//  QAtomicInt            m_CountInt16;
+//  QAtomicInt            m_CountInt32;
+//  QAtomicInt            m_CountDouble;
+//  QAtomicInt            m_PreallocateInt16;
+//  QAtomicInt            m_PreallocateInt32;
+//  QAtomicInt            m_PreallocateDouble;
+
+//  QxrdInt16ImageQueue   m_FreeInt16Images;
+//  QxrdInt32ImageQueue   m_FreeInt32Images;
+//  QxrdDoubleImageQueue  m_FreeDoubleImages;
+//  QxrdMaskQueue         m_FreeMasks;
+//  QxrdIntegratedDataQueue m_FreeIntegratedData;
 
   enum { MegaBytes = 0x100000 };
 

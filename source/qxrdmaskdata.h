@@ -2,11 +2,12 @@
 #define QXRDMASKDATA_H
 
 #include "qcepimagedata.h"
+#include "qxrdimagedataobjectcounter.h"
+
 #include <QImage>
 
 class QxrdMaskData;
 typedef QSharedPointer<QxrdMaskData>             QxrdMaskDataPtr;
-
 class QxrdAllocatorInterface;
 
 class QxrdMaskData : public QcepImageData<short>
@@ -53,13 +54,15 @@ public:
   template <typename T> void showMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max);
   template <typename T> void hideMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max);
 
+  int allocatedMemoryMB();
+
 private:
   enum {
     ThumbnailWidth = 24,
     ThumbnailHeight = 24
   };
 
-  QxrdAllocatorInterface    *m_Allocator;
+  QxrdImageDataObjectCounter m_ObjectCounter;
 };
 
 template <typename T>

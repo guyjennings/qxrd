@@ -3,15 +3,13 @@
 
 QxrdMaskData::QxrdMaskData(QxrdAllocatorInterface *allocator, int width, int height, int def)
   : QcepImageData<short>(/*allocator, */width, height, def),
-    m_Allocator(allocator)
+    m_ObjectCounter(allocator)
 {
+  m_ObjectCounter.allocate(sizeof(short), width, height);
 }
 
 QxrdMaskData::~QxrdMaskData()
 {
-  if (m_Allocator) {
-    m_Allocator -> deallocate(sizeof(short), QcepImageDataBase::get_Width(), QcepImageDataBase::get_Height());
-  }
 }
 
 short *QxrdMaskData::mask()
@@ -270,4 +268,9 @@ QImage QxrdMaskData::thumbnailImage() const
 QSize QxrdMaskData::thumbnailImageSize() const
 {
   return QSize(ThumbnailWidth, ThumbnailHeight);
+}
+
+int QxrdMaskData::allocatedMemoryMB()
+{
+  return m_ObjectCounter.allocatedMemoryMB();
 }
