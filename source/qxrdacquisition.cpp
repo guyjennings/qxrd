@@ -409,8 +409,8 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     }
 
     for (int p=0; p<nphases; p++) {
-      res[p] = m_Allocator->newInt32Image(QxrdAllocator::WaitTillAvailable);
-      ovf[p] = m_Allocator->newMask(QxrdAllocator::WaitTillAvailable,0);
+      res[p] = m_Allocator->newInt32Image(QxrdAllocator::NullIfNotAvailable);
+      ovf[p] = m_Allocator->newMask(QxrdAllocator::NullIfNotAvailable,0);
 
       QString fb, fn;
 
@@ -432,11 +432,17 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
       }
 
       for (int p=0; p<nphases; p++) {
-        emit acquiredFrame(res[p]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, nfiles);
+        if (res[p]) {
+          emit acquiredFrame(res[p]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, nfiles);
+        }
 
         QxrdInt16ImageDataPtr img = acquireFrame(exposure);
 
-        accumulateAcquiredImage(img, res[p], ovf[p]);
+        if (img) {
+          accumulateAcquiredImage(img, res[p], ovf[p]);
+        } else {
+          indicateDroppedFrame(0);
+        }
 
         if (cancelling()) goto saveCancel;
       }
