@@ -22,21 +22,21 @@ public:
   virtual ~QxrdAllocator();
 
 public:
-  QxrdInt16ImageDataPtr newInt16Image();
-  QxrdInt32ImageDataPtr newInt32Image();
-  QxrdDoubleImageDataPtr newDoubleImage();
-  QxrdMaskDataPtr newMask(int def=1);
-  QxrdIntegratedDataPtr newIntegratedData(QxrdDoubleImageDataPtr image);
+  enum AllocationStrategy {
+    WaitTillAvailable,
+    NullIfNotAvailable
+  };
+
+  QxrdInt16ImageDataPtr newInt16Image(AllocationStrategy strat);
+  QxrdInt32ImageDataPtr newInt32Image(AllocationStrategy strat);
+  QxrdDoubleImageDataPtr newDoubleImage(AllocationStrategy strat);
+  QxrdMaskDataPtr newMask(AllocationStrategy strat, int def=1);
+  QxrdIntegratedDataPtr newIntegratedData(AllocationStrategy strat, QxrdDoubleImageDataPtr image);
 
   void dimension(int width, int height);
 //  void preallocateInt16(int n16);
 //  void preallocateInt32(int n32);
 //  void preallocateDouble(int ndbl);
-
-  void allocate(int sz, int width, int height);
-  void allocate(quint64 amt);
-  void deallocate(int sz, int width, int height);
-  void deallocate(quint64 amt);
 
 //  int nFreeInt16();
 //  int nFreeInt32();
@@ -69,6 +69,12 @@ private:
   static void int32Deleter(QxrdInt32ImageData *img);
   static void doubleDeleter(QxrdDoubleImageData *img);
   static void integratedDeleter(QxrdIntegratedData *integ);
+  int waitTillAvailable(AllocationStrategy strat, int sizeMB);
+
+  void allocate(int sz, int width, int height);
+  void allocate(quint64 amt);
+  void deallocate(int sz, int width, int height);
+  void deallocate(quint64 amt);
 
 private:
   QMutex                m_Mutex;

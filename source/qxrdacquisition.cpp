@@ -409,8 +409,8 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     }
 
     for (int p=0; p<nphases; p++) {
-      res[p] = m_Allocator->newInt32Image();
-      ovf[p] = m_Allocator->newMask(0);
+      res[p] = m_Allocator->newInt32Image(QxrdAllocator::WaitTillAvailable);
+      ovf[p] = m_Allocator->newMask(QxrdAllocator::WaitTillAvailable,0);
 
       QString fb, fn;
 
@@ -466,8 +466,8 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
   int nsummed = parms.nsummed();
   int skipBefore = parms.skipBefore();
 
-  QxrdInt32ImageDataPtr res = m_Allocator->newInt32Image();
-  QxrdMaskDataPtr overflow  = m_Allocator->newMask(0);
+  QxrdInt32ImageDataPtr res = m_Allocator->newInt32Image(QxrdAllocator::WaitTillAvailable);
+  QxrdMaskDataPtr overflow  = m_Allocator->newMask(QxrdAllocator::WaitTillAvailable,0);
 
   QString fb, fn;
   getFileBaseAndName(fileBase, fileIndex, -1, 1, fb, fn);

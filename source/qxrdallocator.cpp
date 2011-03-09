@@ -5,6 +5,8 @@
 QxrdAllocator::QxrdAllocator
     (QObject *parent)
   : QxrdAllocatorInterface(parent),
+    m_AllocatedMemory(0),
+    m_AllocatedMemoryMB(0),
     m_Max(this, "max", 800),
     m_Allocated(this, "allocated", 0),
     m_Width(this, "width", 2048),
@@ -28,13 +30,30 @@ QxrdAllocator::~QxrdAllocator()
   };
 }
 
-QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image()
+int QxrdAllocator::waitTillAvailable(AllocationStrategy strat, int sizeMB)
 {
-//  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  if (strat == QxrdAllocator::WaitTillAvailable) {
+    while((m_AllocatedMemoryMB + sizeMB) > get_Max()) {
+      if (qcepDebug(DEBUG_ALLOCATOR)) {
+        printf("QxrdAllocator::waitTillAvailable() sleeping 100msec\n");
+      }
 
-  if ((m_AllocatedMemoryMB + int16SizeMB()) < get_Max()) {
-//    m_CountInt16.fetchAndAddOrdered(1);
+      QxrdAllocatorThread::msleep(100);
+    }
 
+    return true;
+  } else if (strat == QxrdAllocator::NullIfNotAvailable) {
+    return ((m_AllocatedMemoryMB + sizeMB) < get_Max());
+  } else {
+    return false;
+  }
+}
+
+QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image(AllocationStrategy strat)
+{
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (waitTillAvailable(strat, int16SizeMB())) {
     QxrdInt16ImageDataPtr res(new QxrdInt16ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int16Deleter);
 
     res->moveToThread(thread());
@@ -53,13 +72,11 @@ QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image()
   }
 }
 
-QxrdInt32ImageDataPtr QxrdAllocator::newInt32Image()
+QxrdInt32ImageDataPtr QxrdAllocator::newInt32Image(AllocationStrategy strat)
 {
-//  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  if ((m_AllocatedMemoryMB + int32SizeMB()) < get_Max()) {
-//    m_CountInt32.fetchAndAddOrdered(1);
-
+  if (waitTillAvailable(strat, int32SizeMB())) {
     QxrdInt32ImageDataPtr res(new QxrdInt32ImageData(this, get_Width(), get_Height()), &QxrdAllocator::int32Deleter);
 
     res->moveToThread(thread());
@@ -78,75 +95,73 @@ QxrdInt32ImageDataPtr QxrdAllocator::newInt32Image()
   }
 }
 
-QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage()
+QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage(AllocationStrategy strat)
 {
-//  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-//  m_CountDouble.fetchAndAddOrdered(1);
+  if (waitTillAvailable(strat, doubleSizeMB())) {
+    QxrdDoubleImageDataPtr res(new QxrdDoubleImageData(this, get_Width(), get_Height()), &QxrdAllocator::doubleDeleter);
 
-  while ((m_AllocatedMemoryMB + doubleSizeMB()) > get_Max()) {
+    res->moveToThread(thread());
+
     if (qcepDebug(DEBUG_ALLOCATOR)) {
-      printf("QxrdAllocator::newDoubleImage() sleeping 100msec\n");
+      printf("QxrdAllocator::newDoubleImage() succeeded [%p] [%d]\n", res.data(), (int) m_AllocatedMemoryMB);
     }
 
-    QxrdAllocatorThread::msleep(100);
+    return res;
+  } else {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      printf("QxrdAllocator::newDoubleImage() returned NULL\n");
+    }
+
+    return QxrdDoubleImageDataPtr(NULL);
   }
-
-  QxrdDoubleImageDataPtr res(new QxrdDoubleImageData(this, get_Width(), get_Height()), &QxrdAllocator::doubleDeleter);
-
-  res->moveToThread(thread());
-
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
-    printf("QxrdAllocator::newDoubleImage() succeeded [%p] [%d]\n", res.data(), (int) m_AllocatedMemoryMB);
-  }
-
-  return res;
 }
 
-QxrdMaskDataPtr QxrdAllocator::newMask(int def)
+QxrdMaskDataPtr QxrdAllocator::newMask(AllocationStrategy strat, int def)
 {
-//  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  while ((m_AllocatedMemoryMB + maskSizeMB()) > get_Max()) {
+  if (waitTillAvailable(strat, maskSizeMB())) {
+    QxrdMaskDataPtr res(new QxrdMaskData(this, get_Width(), get_Height(), def), &QxrdAllocator::maskDeleter);
+
+    res->moveToThread(thread());
+
     if (qcepDebug(DEBUG_ALLOCATOR)) {
-      printf("QxrdAllocator::newMask() sleeping 100msec\n");
+      printf("QxrdAllocator::newMask() succeeded [%p] [%d]\n", res.data(), (int) m_AllocatedMemoryMB);
     }
 
-    QxrdAllocatorThread::msleep(100);
+    return res;
+  } else {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      printf("QxrdAllocator::newMask() returned NULL\n");
+    }
+
+    return QxrdMaskDataPtr(NULL);
   }
-
-  QxrdMaskDataPtr res(new QxrdMaskData(this, get_Width(), get_Height(), def), &QxrdAllocator::maskDeleter);
-
-  res->moveToThread(thread());
-
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
-    printf("QxrdAllocator::newMask() succeeded [%p] [%d]\n", res.data(), (int) m_AllocatedMemoryMB);
-  }
-
-  return res;
 }
 
-QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(QxrdDoubleImageDataPtr data)
+QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(AllocationStrategy strat, QxrdDoubleImageDataPtr data)
 {
-//  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  while ((m_AllocatedMemoryMB + integratedSizeMB(10000)) > get_Max()) {
+  if (waitTillAvailable(strat, integratedSizeMB(10000))) {
+    QxrdIntegratedDataPtr res(new QxrdIntegratedData(this, data, 10000), &QxrdAllocator::integratedDeleter);
+
+    res->moveToThread(thread());
+
     if (qcepDebug(DEBUG_ALLOCATOR)) {
-      printf("QxrdAllocator::newIntegratedData() sleeping 100msec\n");
+      printf("QxrdAllocator::newIntegratedData() succeeded [%p] [%d]\n", res.data(), (int) m_AllocatedMemoryMB);
     }
 
-    QxrdAllocatorThread::msleep(100);
+    return res;
+  } else {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      printf("QxrdAllocator::newIntegratedData() returned NULL\n");
+    }
+
+    return QxrdIntegratedDataPtr(NULL);
   }
-
-  QxrdIntegratedDataPtr res(new QxrdIntegratedData(this, data, 10000), &QxrdAllocator::integratedDeleter);
-
-  res->moveToThread(thread());
-
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
-    printf("QxrdAllocator::newIntegratedData() succeeded [%p] [%d]\n", res.data(), (int) m_AllocatedMemoryMB);
-  }
-
-  return res;
 }
 
 void QxrdAllocator::dimension(int width, int height)
@@ -164,7 +179,7 @@ void QxrdAllocator::allocate(int sz, int width, int height)
 
 void QxrdAllocator::allocate(quint64 amt)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+//  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_AllocatedMemory += amt;
 
@@ -178,7 +193,7 @@ void QxrdAllocator::deallocate(int sz, int width, int height)
 
 void QxrdAllocator::deallocate(quint64 amt)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+//  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_AllocatedMemory -= amt;
 

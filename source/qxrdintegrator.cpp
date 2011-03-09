@@ -51,7 +51,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdDoubleImageDataPtr 
 
 QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, int oversample, int normalize)
 {
-  QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(image);
+  QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(QxrdAllocator::WaitTillAvailable, image);
 
   if (res) {
     QcepDoubleList norm = image->get_Normalization();
@@ -187,7 +187,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
 
 QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double cx, double cy, int oversample, int normalize)
 {
-  QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(image);
+  QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(QxrdAllocator::WaitTillAvailable, image);
 
   if (res) {
     QcepDoubleList norm = image->get_Normalization();
@@ -298,7 +298,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdDoubleImageDataPtr image, do
 
 QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image, QwtArray<QwtDoublePoint> poly, double /*width*/)
 {
-  QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(image);
+  QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(QxrdAllocator::WaitTillAvailable, image);
 
   if (res) {
     double length = 0;

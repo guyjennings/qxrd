@@ -79,7 +79,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     m_Acquisition(acq),
     m_AcquiredInt16Images("acquiredInt16Images"),
     m_AcquiredInt32Images("acquiredInt32Images"),
-    m_Data(allocator -> newDoubleImage()),
+    m_Data(allocator -> newDoubleImage(QxrdAllocator::WaitTillAvailable)),
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainMap(NULL),
@@ -231,15 +231,7 @@ QString QxrdDataProcessorBase::integratedOutputDirectory()
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage()
 {
-  QxrdDoubleImageDataPtr res = m_Allocator -> newDoubleImage();
-
-  while (res == NULL) {
-    emit printMessage(QDateTime::currentDateTime(), tr("Waiting for double image"));
-
-    QxrdDataProcessorThread::msleep(500);
-
-    res = m_Allocator -> newDoubleImage();
-  }
+  QxrdDoubleImageDataPtr res = m_Allocator -> newDoubleImage(QxrdAllocator::WaitTillAvailable);
 
   return res;
 }
@@ -474,7 +466,7 @@ int QxrdDataProcessorBase::maskStackPosition(int pos)
 
 void QxrdDataProcessorBase::newMaskStack()
 {
-  QxrdMaskDataPtr m = m_Allocator->newMask();
+  QxrdMaskDataPtr m = m_Allocator->newMask(QxrdAllocator::WaitTillAvailable);
 
   m_Masks.push_front(m);
 
@@ -489,7 +481,7 @@ void QxrdDataProcessorBase::newMaskStack()
 void QxrdDataProcessorBase::pushMaskStack(QxrdMaskDataPtr m)
 {
   if (m == NULL) {
-    m = m_Allocator -> newMask();
+    m = m_Allocator -> newMask(QxrdAllocator::WaitTillAvailable);
 
     if (mask()) {
       mask()->copyMaskTo(m);
@@ -763,7 +755,7 @@ void QxrdDataProcessorBase::showMaskRangeStack(int pos)
 
 void QxrdDataProcessorBase::loadMask(QString name)
 {
-  QxrdMaskDataPtr res = m_Allocator -> newMask();
+  QxrdMaskDataPtr res = m_Allocator -> newMask(QxrdAllocator::WaitTillAvailable);
 
   if (res -> readImage(name)) {
 
