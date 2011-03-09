@@ -34,11 +34,15 @@ int QxrdAllocator::waitTillAvailable(AllocationStrategy strat, int sizeMB)
 {
   if (strat == QxrdAllocator::WaitTillAvailable) {
     while((m_AllocatedMemoryMB + sizeMB) > get_Max()) {
+      m_Mutex.unlock();
+
       if (qcepDebug(DEBUG_ALLOCATOR)) {
         printf("QxrdAllocator::waitTillAvailable() sleeping 100msec\n");
       }
 
       QxrdAllocatorThread::msleep(100);
+
+      m_Mutex.lock();
     }
 
     return true;
