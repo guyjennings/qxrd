@@ -12,9 +12,9 @@ public:
     explicit QxrdResponseTimer(int interval, QObject *parent = 0);
 
 signals:
-  void printMessage(QDateTime ts, QString msg);
-  void statusMessage(QDateTime ts, QString msg);
-  void criticalMessage(QDateTime ts, QString msg);
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 public slots:
   void onTimeout();

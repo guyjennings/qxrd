@@ -216,14 +216,12 @@ void QxrdPlot::enableMeasuring()
 
 void QxrdPlot::onLegendClicked(QwtPlotItem *item)
 {
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("QxrdPlot::onLegendClicked(%1)").arg(item->title().text()));
+  emit printMessage(tr("QxrdPlot::onLegendClicked(%1)").arg(item->title().text()));
 }
 
 void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
 {
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
+  emit printMessage(tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
 
   if (item) {
     QwtPlotCurve *pc = dynamic_cast<QwtPlotCurve*>(item);

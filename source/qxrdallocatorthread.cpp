@@ -20,12 +20,12 @@ void QxrdAllocatorThread::run()
 {
   m_Allocator.fetchAndStoreOrdered(new QxrdAllocator(/*m_Acquisition*/));
 
-  connect(m_Allocator, SIGNAL(printMessage(QDateTime,QString)),
-          this,        SIGNAL(printMessage(QDateTime,QString)));
-  connect(m_Allocator, SIGNAL(statusMessage(QDateTime,QString)),
-          this,        SIGNAL(statusMessage(QDateTime,QString)));
-  connect(m_Allocator, SIGNAL(criticalMessage(QDateTime,QString)),
-          this,        SIGNAL(criticalMessage(QDateTime,QString)));
+  connect(m_Allocator, SIGNAL(printMessage(QString,QDateTime)),
+          this,        SIGNAL(printMessage(QString,QDateTime)));
+  connect(m_Allocator, SIGNAL(statusMessage(QString,QDateTime)),
+          this,        SIGNAL(statusMessage(QString,QDateTime)));
+  connect(m_Allocator, SIGNAL(criticalMessage(QString,QDateTime)),
+          this,        SIGNAL(criticalMessage(QString,QDateTime)));
 
   int rc = exec();
 

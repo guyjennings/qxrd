@@ -38,9 +38,9 @@ void QxrdSimpleServerThread::run()
 //  printf("start server\n");
   m_Server = new QxrdSimpleServer(m_Name, m_Port);
 
-  connect(m_Server,             SIGNAL(printMessage(QDateTime,QString)), this,            SIGNAL(printMessage(QDateTime,QString)));
-  connect(m_Server,             SIGNAL(statusMessage(QDateTime,QString)), this,            SIGNAL(statusMessage(QDateTime,QString)));
-  connect(m_Server,             SIGNAL(criticalMessage(QDateTime,QString)), this,            SIGNAL(criticalMessage(QDateTime,QString)));
+  connect(m_Server,             SIGNAL(printMessage(QString,QDateTime)), this,            SIGNAL(printMessage(QString,QDateTime)));
+  connect(m_Server,             SIGNAL(statusMessage(QString,QDateTime)), this,            SIGNAL(statusMessage(QString,QDateTime)));
+  connect(m_Server,             SIGNAL(criticalMessage(QString,QDateTime)), this,            SIGNAL(criticalMessage(QString,QDateTime)));
 
   m_Server -> startServer(QHostAddress::Any, m_Port);
 

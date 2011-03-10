@@ -185,7 +185,7 @@ void QxrdImagePlot::writeSettings(QxrdSettings &settings, QString section)
 
 void QxrdImagePlot::setAutoRange()
 {
-  emit criticalMessage(QDateTime::currentDateTime(), "QxrdImagePlot::setAutoRange To do...");
+  emit criticalMessage("QxrdImagePlot::setAutoRange To do...");
 }
 
 void QxrdImagePlot::set005Range()
@@ -523,8 +523,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
 
   replotImage();
 
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("plot image took %1 msec").arg(tic.elapsed()));
+  emit printMessage(tr("plot image took %1 msec").arg(tic.elapsed()));
 }
 
 void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)

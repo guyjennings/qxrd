@@ -8,7 +8,7 @@
 QxrdServer::QxrdServer(QString name, int port, QObject *parent)
   : QSpecServer(name, port, parent)
 {
-//  emit printMessage(QDateTime::currentDateTime(), "QxrdServer::QxrdServer");
+//  emit printMessage("QxrdServer::QxrdServer");
 }
 
 QVariant QxrdServer::executeCommand(QString /*cmd*/)

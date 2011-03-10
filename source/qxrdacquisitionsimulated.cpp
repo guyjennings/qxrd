@@ -20,22 +20,19 @@ QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc, Qxrd
 
 void QxrdAcquisitionSimulated::onExposureTimeChanged(double newTime)
 {
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("Exposure time changed to %1").arg(newTime));
+  emit printMessage(tr("Exposure time changed to %1").arg(newTime));
 
   m_Timer.start(get_ExposureTime()*1000);
 }
 
 void QxrdAcquisitionSimulated::onBinningModeChanged(int newMode)
 {
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("Binning mode changed to %1").arg(newMode));
+  emit printMessage(tr("Binning mode changed to %1").arg(newMode));
 }
 
 void QxrdAcquisitionSimulated::onCameraGainChanged(int newGain)
 {
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("Camera Gain Changed to %1").arg(newGain));
+  emit printMessage(tr("Camera Gain Changed to %1").arg(newGain));
 }
 
 void QxrdAcquisitionSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/)

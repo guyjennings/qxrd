@@ -60,8 +60,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       normVal = norm[0];
     }
 
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Integrating image %1 from %2").arg(image->get_Title()).arg(image->get_FileName()));
+    emit printMessage(tr("Integrating image %1 from %2").arg(image->get_Title()).arg(image->get_FileName()));
 
     QTime tic;
     tic.start();
@@ -127,8 +126,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       double cosrot  = cos(rot);
       double sinrot  = sin(rot);
 
-      emit printMessage(QDateTime::currentDateTime(),
-                        tr("Integration range rMin %1, rMax %2, %3 steps").arg(rMin).arg(rMax).arg(nMax - nMin));
+      emit printMessage(tr("Integration range rMin %1, rMax %2, %3 steps").arg(rMin).arg(rMax).arg(nMax - nMin));
 
       for (int y=0; y<nRows; y++) {
         for (int x=0; x<nCols; x++) {
@@ -173,8 +171,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       //
       //  emit newIntegrationAvailable(image->get_Title(), x,y);
 
-      emit printMessage(QDateTime::currentDateTime(),
-                        tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
+      emit printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
     } else {
       printf("QxrdIntegrator::integrate failed\n");
     }
@@ -194,8 +191,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       normVal = norm[0];
     }
 
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Integrating image %1").arg(image->get_Title()));
+    emit printMessage(tr("Integrating image %1").arg(image->get_Title()));
 
     QTime tic;
     tic.start();
@@ -266,8 +262,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
     //
     //  emit newIntegrationAvailable(image->get_Title(), x,y);
 
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
+    emit printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
   } else {
     printf("QxrdIntegrator::integrate failed\n");
   }

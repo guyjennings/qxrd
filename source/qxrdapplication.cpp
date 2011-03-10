@@ -140,12 +140,14 @@ void QxrdApplication::init(QSplashScreen *splash)
   m_DataProcessor -> setWindow(m_Window);
   m_Acquisition -> setWindow(m_Window);
 
-  connect(this, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
-  connect(this, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
-  connect(this, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
+  connect(this, SIGNAL(printMessage(QString,QDateTime)), m_Window, SLOT(printMessage(QString,QDateTime)));
+  connect(this, SIGNAL(criticalMessage(QString,QDateTime)), m_Window, SLOT(criticalMessage(QString,QDateTime)));
+  connect(this, SIGNAL(statusMessage(QString,QDateTime)), m_Window, SLOT(statusMessage(QString,QDateTime)));
 //  emit printMessage("window shown");
 
-  emit printMessage(QDateTime::currentDateTime(), "about to load plugins");
+  splashMessage("Loading plugins");
+
+  emit printMessage("about to load plugins");
 
   loadPlugins();
 
@@ -154,52 +156,51 @@ void QxrdApplication::init(QSplashScreen *splash)
   QObject *nidaq = dynamic_cast<QObject*>(nidaqPlugin());
 
   if (nidaq) {
-    connect(nidaq, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
-    connect(nidaq, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
-    connect(nidaq, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
+    connect(nidaq, SIGNAL(statusMessage(QString,QDateTime)), m_Window, SLOT(statusMessage(QString,QDateTime)));
+    connect(nidaq, SIGNAL(printMessage(QString,QDateTime)), m_Window, SLOT(printMessage(QString,QDateTime)));
+    connect(nidaq, SIGNAL(criticalMessage(QString,QDateTime)), m_Window, SLOT(criticalMessage(QString,QDateTime)));
   }
 
-  connect(m_Acquisition, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
-  connect(m_Acquisition, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
-  connect(m_Acquisition, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
+  connect(m_Acquisition, SIGNAL(statusMessage(QString,QDateTime)), m_Window, SLOT(statusMessage(QString,QDateTime)));
+  connect(m_Acquisition, SIGNAL(printMessage(QString,QDateTime)), m_Window, SLOT(printMessage(QString,QDateTime)));
+  connect(m_Acquisition, SIGNAL(criticalMessage(QString,QDateTime)), m_Window, SLOT(criticalMessage(QString,QDateTime)));
 
   m_AcquisitionThread->initialize();
 
   m_Window -> onAcquisitionInit();
 
-  connect(m_DataProcessorThread, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
-  connect(m_DataProcessorThread, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
-  connect(m_DataProcessorThread, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
+  connect(m_DataProcessorThread, SIGNAL(printMessage(QString,QDateTime)), m_Window, SLOT(printMessage(QString,QDateTime)));
+  connect(m_DataProcessorThread, SIGNAL(statusMessage(QString,QDateTime)), m_Window, SLOT(statusMessage(QString,QDateTime)));
+  connect(m_DataProcessorThread, SIGNAL(criticalMessage(QString,QDateTime)), m_Window, SLOT(criticalMessage(QString,QDateTime)));
 
-  connect(m_DataProcessor, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
-  connect(m_DataProcessor -> integrator(), SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
-  connect(m_DataProcessor, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
-  connect(m_DataProcessor -> integrator(), SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
-  connect(m_DataProcessor, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
-  connect(m_DataProcessor -> integrator(), SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
+  connect(m_DataProcessor, SIGNAL(printMessage(QString,QDateTime)), m_Window, SLOT(printMessage(QString,QDateTime)));
+  connect(m_DataProcessor -> integrator(), SIGNAL(printMessage(QString,QDateTime)), m_Window, SLOT(printMessage(QString,QDateTime)));
+  connect(m_DataProcessor, SIGNAL(statusMessage(QString,QDateTime)), m_Window, SLOT(statusMessage(QString,QDateTime)));
+  connect(m_DataProcessor -> integrator(), SIGNAL(statusMessage(QString,QDateTime)), m_Window, SLOT(statusMessage(QString,QDateTime)));
+  connect(m_DataProcessor, SIGNAL(criticalMessage(QString,QDateTime)), m_Window, SLOT(criticalMessage(QString,QDateTime)));
+  connect(m_DataProcessor -> integrator(), SIGNAL(criticalMessage(QString,QDateTime)), m_Window, SLOT(criticalMessage(QString,QDateTime)));
 
-  connect(m_AllocatorThread, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
-  connect(m_AllocatorThread, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
-  connect(m_AllocatorThread, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
+  connect(m_AllocatorThread, SIGNAL(statusMessage(QString,QDateTime)), m_Window, SLOT(statusMessage(QString,QDateTime)));
+  connect(m_AllocatorThread, SIGNAL(printMessage(QString,QDateTime)), m_Window, SLOT(printMessage(QString,QDateTime)));
+  connect(m_AllocatorThread, SIGNAL(criticalMessage(QString,QDateTime)), m_Window, SLOT(criticalMessage(QString,QDateTime)));
 
-  connect(m_FileSaverThread, SIGNAL(statusMessage(QDateTime,QString)), m_Window, SLOT(statusMessage(QDateTime,QString)));
-  connect(m_FileSaverThread, SIGNAL(printMessage(QDateTime,QString)), m_Window, SLOT(printMessage(QDateTime,QString)));
-  connect(m_FileSaverThread, SIGNAL(criticalMessage(QDateTime,QString)), m_Window, SLOT(criticalMessage(QDateTime,QString)));
+  connect(m_FileSaverThread, SIGNAL(statusMessage(QString,QDateTime)), m_Window, SLOT(statusMessage(QString,QDateTime)));
+  connect(m_FileSaverThread, SIGNAL(printMessage(QString,QDateTime)), m_Window, SLOT(printMessage(QString,QDateTime)));
+  connect(m_FileSaverThread, SIGNAL(criticalMessage(QString,QDateTime)), m_Window, SLOT(criticalMessage(QString,QDateTime)));
 
   if (specServer) {
     splashMessage("Starting SPEC Server");
 
     m_ServerThread = new QxrdServerThread("qxrd", specServerPort);
 
-    connect(m_ServerThread,       SIGNAL(printMessage(QDateTime,QString)), m_Window,            SLOT(printMessage(QDateTime,QString)));
-    connect(m_ServerThread,       SIGNAL(statusMessage(QDateTime,QString)), m_Window,            SLOT(statusMessage(QDateTime,QString)));
-    connect(m_ServerThread,       SIGNAL(criticalMessage(QDateTime,QString)), m_Window,            SLOT(criticalMessage(QDateTime,QString)));
+    connect(m_ServerThread,       SIGNAL(printMessage(QString,QDateTime)), m_Window,            SLOT(printMessage(QString,QDateTime)));
+    connect(m_ServerThread,       SIGNAL(statusMessage(QString,QDateTime)), m_Window,            SLOT(statusMessage(QString,QDateTime)));
+    connect(m_ServerThread,       SIGNAL(criticalMessage(QString,QDateTime)), m_Window,            SLOT(criticalMessage(QString,QDateTime)));
 
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
 
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
+    emit printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
   }
 
   if (simpleServer) {
@@ -207,15 +208,14 @@ void QxrdApplication::init(QSplashScreen *splash)
 
     m_SimpleServerThread = new QxrdSimpleServerThread("simpleserver", simpleServerPort);
 
-    connect(m_SimpleServerThread,       SIGNAL(printMessage(QDateTime,QString)), m_Window,            SLOT(printMessage(QDateTime,QString)));
-    connect(m_SimpleServerThread,       SIGNAL(statusMessage(QDateTime,QString)), m_Window,            SLOT(statusMessage(QDateTime,QString)));
-    connect(m_SimpleServerThread,       SIGNAL(criticalMessage(QDateTime,QString)), m_Window,            SLOT(criticalMessage(QDateTime,QString)));
+    connect(m_SimpleServerThread,       SIGNAL(printMessage(QString,QDateTime)), m_Window,            SLOT(printMessage(QString,QDateTime)));
+    connect(m_SimpleServerThread,       SIGNAL(statusMessage(QString,QDateTime)), m_Window,            SLOT(statusMessage(QString,QDateTime)));
+    connect(m_SimpleServerThread,       SIGNAL(criticalMessage(QString,QDateTime)), m_Window,            SLOT(criticalMessage(QString,QDateTime)));
 
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
 
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
+    emit printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
   }
 
 
@@ -231,13 +231,13 @@ void QxrdApplication::init(QSplashScreen *splash)
 
 //  emit printMessage("script thread created");
 
-  connect(m_ScriptEngineThread, SIGNAL(printMessage(QDateTime,QString)), m_Window,            SLOT(printMessage(QDateTime,QString)));
-  connect(m_ScriptEngineThread, SIGNAL(statusMessage(QDateTime,QString)), m_Window,            SLOT(statusMessage(QDateTime,QString)));
-  connect(m_ScriptEngineThread, SIGNAL(criticalMessage(QDateTime,QString)), m_Window,            SLOT(criticalMessage(QDateTime,QString)));
+  connect(m_ScriptEngineThread, SIGNAL(printMessage(QString,QDateTime)), m_Window,            SLOT(printMessage(QString,QDateTime)));
+  connect(m_ScriptEngineThread, SIGNAL(statusMessage(QString,QDateTime)), m_Window,            SLOT(statusMessage(QString,QDateTime)));
+  connect(m_ScriptEngineThread, SIGNAL(criticalMessage(QString,QDateTime)), m_Window,            SLOT(criticalMessage(QString,QDateTime)));
 
-  connect(m_ScriptEngine,       SIGNAL(printMessage(QDateTime,QString)), m_Window,            SLOT(printMessage(QDateTime,QString)));
-  connect(m_ScriptEngine,       SIGNAL(statusMessage(QDateTime,QString)), m_Window,            SLOT(statusMessage(QDateTime,QString)));
-  connect(m_ScriptEngine,       SIGNAL(criticalMessage(QDateTime,QString)), m_Window,            SLOT(criticalMessage(QDateTime,QString)));
+  connect(m_ScriptEngine,       SIGNAL(printMessage(QString,QDateTime)), m_Window,            SLOT(printMessage(QString,QDateTime)));
+  connect(m_ScriptEngine,       SIGNAL(statusMessage(QString,QDateTime)), m_Window,            SLOT(statusMessage(QString,QDateTime)));
+  connect(m_ScriptEngine,       SIGNAL(criticalMessage(QString,QDateTime)), m_Window,            SLOT(criticalMessage(QString,QDateTime)));
 
   if (m_Server) {
     connect(m_Server,         SIGNAL(executeCommand(QString)),           m_ScriptEngine,    SLOT(evaluateSpecCommand(QString)));
@@ -255,7 +255,7 @@ void QxrdApplication::init(QSplashScreen *splash)
   m_Window -> setScriptEngine(m_ScriptEngine);
 
 
-//  emit printMessage(QDateTime::currentDateTime(), "script thread started");
+//  emit printMessage("script thread started");
 
 //  m_AcquisitionThread -> setWindow(m_Window);
 
@@ -269,18 +269,17 @@ void QxrdApplication::init(QSplashScreen *splash)
 
   m_SettingsSaverThread = new QxrdSettingsSaverThread(this);
 
-  connect(m_SettingsSaverThread, SIGNAL(printMessage(QDateTime,QString)),
-          m_Window,              SLOT(printMessage(QDateTime,QString)));
-  connect(m_SettingsSaverThread, SIGNAL(statusMessage(QDateTime,QString)),
-          m_Window,              SLOT(statusMessage(QDateTime,QString)));
-  connect(m_SettingsSaverThread, SIGNAL(criticalMessage(QDateTime,QString)),
-          m_Window,              SLOT(criticalMessage(QDateTime,QString)));
+  connect(m_SettingsSaverThread, SIGNAL(printMessage(QString,QDateTime)),
+          m_Window,              SLOT(printMessage(QString,QDateTime)));
+  connect(m_SettingsSaverThread, SIGNAL(statusMessage(QString,QDateTime)),
+          m_Window,              SLOT(statusMessage(QString,QDateTime)));
+  connect(m_SettingsSaverThread, SIGNAL(criticalMessage(QString,QDateTime)),
+          m_Window,              SLOT(criticalMessage(QString,QDateTime)));
 
   m_SettingsSaverThread -> start();
   m_SettingsSaver = m_SettingsSaverThread -> settingsSaver();
 
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
+  emit printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
   splashMessage("Loading Background Images");
 
@@ -290,15 +289,14 @@ void QxrdApplication::init(QSplashScreen *splash)
   QDir::setCurrent(QDir::homePath());
 #endif
 
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("Current directory %1").arg(QDir::currentPath()));
+  emit printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 
   m_Window -> show();
 
   m_ResponseTimer = new QxrdResponseTimer(1000, this);
 
-  connect(m_ResponseTimer, SIGNAL(printMessage(QDateTime,QString)),
-          m_Window, SLOT(printMessage(QDateTime,QString)));
+  connect(m_ResponseTimer, SIGNAL(printMessage(QString,QDateTime)),
+          m_Window, SLOT(printMessage(QString,QDateTime)));
 }
 
 QxrdApplication::~QxrdApplication()
@@ -330,6 +328,11 @@ void QxrdApplication::splashMessage(const char *msg)
   if (m_Splash) {
     m_Splash->showMessage(msg, Qt::AlignBottom|Qt::AlignHCenter);
   }
+}
+
+void QxrdApplication::splashMessage(QString msg)
+{
+  splashMessage(qPrintable(msg));
 }
 
 #ifdef HAVE_PERKIN_ELMER
@@ -398,16 +401,19 @@ void QxrdApplication::loadPlugins()
           m_NIDAQPluginInterface = nidaq;
         }
 
-        emit printMessage(QDateTime::currentDateTime(),
-                          tr("Loaded plugin \"%1\" from %2")
+        splashMessage(tr("Loaded plugin \"%1\"").arg(pluginName));
+
+        emit printMessage(tr("Loaded plugin \"%1\" from %2")
                           .arg(pluginName)
                           .arg(pluginsDir.absoluteFilePath(fileName)));
       } else {
+
         if (QLibrary::isLibrary(pluginsDir.absoluteFilePath(fileName))) {
-          emit printMessage(QDateTime::currentDateTime(),
-                            tr("Failed to load plugin %1 : %2")
-                            .arg(pluginsDir.absoluteFilePath(fileName))
-                            .arg(loader.errorString()));
+          QString msg = tr("Failed to load plugin %1 : %2")
+              .arg(pluginsDir.absoluteFilePath(fileName))
+              .arg(loader.errorString());
+          splashMessage(msg);
+          emit printMessage(msg);
         }
       }
     }
@@ -494,8 +500,7 @@ void QxrdApplication::editPreferences()
 
 void QxrdApplication::debugChanged(int newValue)
 {
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("Debug level changed from %1 to %2").arg(gCEPDebug).arg(newValue));
+  emit printMessage(tr("Debug level changed from %1 to %2").arg(gCEPDebug).arg(newValue));
 
   gCEPDebug = newValue;
 }
@@ -546,12 +551,10 @@ void QxrdApplication::setupTiffHandlers()
 
 void QxrdApplication::tiffWarning(const char *module, const char *msg)
 {
-  emit criticalMessage(QDateTime::currentDateTime(),
-                       tr("TIFF Warning from %1 : %2").arg(module).arg(msg));
+  emit criticalMessage(tr("TIFF Warning from %1 : %2").arg(module).arg(msg));
 }
 
 void QxrdApplication::tiffError(const char *module, const char *msg)
 {
-  emit criticalMessage(QDateTime::currentDateTime(),
-                       tr("TIFF Error from %1 : %2").arg(module).arg(msg));
+  emit criticalMessage(tr("TIFF Error from %1 : %2").arg(module).arg(msg));
 }

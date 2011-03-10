@@ -80,8 +80,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
     (QxrdDoubleImageDataPtr corrected, QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(QDateTime::currentDateTime(),
-                               tr("QxrdDataProcessorThreaded::correctInt16Image"));
+             emit printMessage(tr("QxrdDataProcessorThreaded::correctInt16Image"));
   );
 
   if (image) {
@@ -104,8 +103,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
     (QxrdDoubleImageDataPtr corrected, QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(QDateTime::currentDateTime(),
-                               tr("QxrdDataProcessorThreaded::correctInt32Image"));
+             emit printMessage(tr("QxrdDataProcessorThreaded::correctInt32Image"));
   );
 
   if (image) {
@@ -129,8 +127,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
     (QxrdDoubleImageDataPtr corrected, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(QDateTime::currentDateTime(),
-                               tr("QxrdDataProcessorThreaded::correctDoubleImage"));
+             emit printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
   );
 
   if (image) {
@@ -154,8 +151,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
     (QxrdDoubleImageDataPtr corrected, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr overflow, QcepDoubleList v)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(QDateTime::currentDateTime(),
-                               tr("QxrdDataProcessorThreaded::correctDoubleImage"));
+             emit printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
   );
 
   if (image) {
@@ -200,8 +196,7 @@ QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
     (QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double /*cx*/, double /*cy*/)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(QDateTime::currentDateTime(),
-                               tr("QxrdDataProcessorThreaded::integrateImage"));
+             emit printMessage(tr("QxrdDataProcessorThreaded::integrateImage"));
   );
 
   if (image && get_PerformIntegration()) {
@@ -221,8 +216,7 @@ QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
 void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(QDateTime::currentDateTime(),
-                               tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
+             emit printMessage(tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
   );
 
   QxrdIntegratedDataPtr integ = m_IntegratedData.dequeue();
@@ -237,8 +231,7 @@ QxrdROIDataPtr QxrdDataProcessorThreaded::calculateROI
     (QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(QDateTime::currentDateTime(),
-                               tr("QxrdDataProcessorThreaded::calculateROI"));
+             emit printMessage(tr("QxrdDataProcessorThreaded::calculateROI"));
   );
 
   return QxrdROIDataPtr();
@@ -247,8 +240,7 @@ QxrdROIDataPtr QxrdDataProcessorThreaded::calculateROI
 void QxrdDataProcessorThreaded::onROIDataAvailable()
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(QDateTime::currentDateTime(),
-                               tr("QxrdDataProcessorThreaded::onROIDataAvailable"));
+             emit printMessage(tr("QxrdDataProcessorThreaded::onROIDataAvailable"));
   );
 
   QxrdROIDataPtr roiData = m_ROIData.dequeue();
@@ -258,8 +250,7 @@ QxrdHistogramDataPtr QxrdDataProcessorThreaded::calculateHistogram
     (QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(QDateTime::currentDateTime(),
-                               tr("QxrdDataProcessorThreaded::calculateHistogram"));
+             emit printMessage(tr("QxrdDataProcessorThreaded::calculateHistogram"));
   );
 
   return QxrdHistogramDataPtr();
@@ -268,8 +259,7 @@ QxrdHistogramDataPtr QxrdDataProcessorThreaded::calculateHistogram
 void QxrdDataProcessorThreaded::onHistogramDataAvailable()
 {
   QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(QDateTime::currentDateTime(),
-                               tr("QxrdDataProcessorThreaded::onHistogramDataAvailable"));
+             emit printMessage(tr("QxrdDataProcessorThreaded::onHistogramDataAvailable"));
   );
 
   QxrdHistogramDataPtr histData = m_HistogramData.dequeue();
@@ -296,10 +286,8 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
     QString path = filePathInCurrentDirectory(name);
 
     if (img->readImage(path)) {
-      emit printMessage(QDateTime::currentDateTime(),
-                        tr("Load image from %1").arg(path));
-      emit statusMessage(QDateTime::currentDateTime(),
-                        tr("Load image from %1").arg(path));
+      emit printMessage(tr("Load image from %1").arg(path));
+      emit statusMessage(tr("Load image from %1").arg(path));
       img -> loadMetaData();
 
       if (first) {
@@ -309,18 +297,14 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
         summed->accumulateImage(img);
       }
     } else {
-      emit printMessage(QDateTime::currentDateTime(),
-                        tr("Couldn't load %1").arg(path));
-      emit statusMessage(QDateTime::currentDateTime(),
-                        tr("Couldn't load %1").arg(path));
+      emit printMessage(tr("Couldn't load %1").arg(path));
+      emit statusMessage(tr("Couldn't load %1").arg(path));
     }
   }
 
   if (first) {
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("No images were loaded"));
-    emit statusMessage(QDateTime::currentDateTime(),
-                      tr("No images were loaded"));
+    emit printMessage(tr("No images were loaded"));
+    emit statusMessage(tr("No images were loaded"));
   } else {
     acquiredDoubleImage(summed, QxrdMaskDataPtr());
   }
@@ -336,10 +320,8 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
   QString path = filePathInCurrentDirectory(name);
 
   if (img -> readImage(path)) {
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Load image from %1").arg(path));
-    emit statusMessage(QDateTime::currentDateTime(),
-                      tr("Load image from %1").arg(path));
+    emit printMessage(tr("Load image from %1").arg(path));
+    emit statusMessage(tr("Load image from %1").arg(path));
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -351,10 +333,8 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
                                                centerFinder() -> get_CenterX(),
                                                centerFinder() -> get_CenterY()));
   } else {
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Couldn't load %1").arg(path));
-    emit statusMessage(QDateTime::currentDateTime(),
-                      tr("Couldn't load %1").arg(path));
+    emit printMessage(tr("Couldn't load %1").arg(path));
+    emit statusMessage(tr("Couldn't load %1").arg(path));
   }
 }
 
@@ -365,10 +345,8 @@ void QxrdDataProcessorThreaded::processData(QString name)
   QString path = filePathInCurrentDirectory(name);
 
   if (res -> readImage(path)) {
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Load image from %1").arg(path));
-    emit statusMessage(QDateTime::currentDateTime(),
-                      tr("Load image from %1").arg(path));
+    emit printMessage(tr("Load image from %1").arg(path));
+    emit statusMessage(tr("Load image from %1").arg(path));
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -378,10 +356,8 @@ void QxrdDataProcessorThreaded::processData(QString name)
 
     set_DataPath(res -> get_FileName());
   } else {
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Couldn't load %1").arg(path));
-    emit statusMessage(QDateTime::currentDateTime(),
-                      tr("Couldn't load %1").arg(path));
+    emit printMessage(tr("Couldn't load %1").arg(path));
+    emit statusMessage(tr("Couldn't load %1").arg(path));
   }
 }
 
@@ -392,7 +368,7 @@ void QxrdDataProcessorThreaded::processDataSequence(QString path, QString filter
   while (iter.hasNext()) {
     QString path = iter.next();
 
-    emit printMessage(QDateTime::currentDateTime(), path);
+    emit printMessage(path);
 
     processData(path);
   }
@@ -403,7 +379,7 @@ void QxrdDataProcessorThreaded::processDataSequence(QStringList paths)
   QString path;
 
   foreach(path, paths) {
-    emit printMessage(QDateTime::currentDateTime(), path);
+    emit printMessage(path);
 
     processData(path);
   }
@@ -416,7 +392,7 @@ void QxrdDataProcessorThreaded::processDataSequence(QString path, QStringList fi
   while (iter.hasNext()) {
     QString path = iter.next();
 
-    emit printMessage(QDateTime::currentDateTime(), path);
+    emit printMessage(path);
 
     processData(path);
   }
@@ -455,8 +431,7 @@ void QxrdDataProcessorThreaded::processNormalizedFile(QString name, QList<double
 
     set_DataPath(res -> get_FileName());
   } else {
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Couldn't load %1").arg(path));
+    emit printMessage(tr("Couldn't load %1").arg(path));
   }
 }
 

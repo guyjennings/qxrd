@@ -65,7 +65,7 @@ void QxrdAcquisition::acquire()
   if (m_Acquiring.tryLock()) {
     set_Cancelling(false);
 
-    emit statusMessage(QDateTime::currentDateTime(), "Starting acquisition");
+    emit statusMessage("Starting acquisition");
     emit acquireStarted();
 
     QxrdAcquisitionParameterPack params(get_FilePattern(),
@@ -82,7 +82,7 @@ void QxrdAcquisition::acquire()
 
     m_Watcher.setFuture(res);
   } else {
-    emit statusMessage(QDateTime::currentDateTime(), "Acquisition is already in progress");
+    emit statusMessage("Acquisition is already in progress");
   }
 }
 
@@ -93,7 +93,7 @@ void QxrdAcquisition::acquireDark()
   if (m_Acquiring.tryLock()) {
     set_Cancelling(false);
 
-    emit statusMessage(QDateTime::currentDateTime(), "Starting dark acquisition");
+    emit statusMessage("Starting dark acquisition");
     emit acquireStarted();
 
     QxrdDarkAcquisitionParameterPack params(get_FilePattern(),
@@ -107,7 +107,7 @@ void QxrdAcquisition::acquireDark()
 
     m_Watcher.setFuture(res);
   } else {
-    emit statusMessage(QDateTime::currentDateTime(), "Acquisition is already in progress");
+    emit statusMessage("Acquisition is already in progress");
   }
 }
 
@@ -162,8 +162,8 @@ void QxrdAcquisition::indicateDroppedFrame(int n)
                   .arg(m_Allocator->allocatedMemoryMB())
                   .arg(m_Allocator->maximumMemoryMB());
 
-  emit statusMessage(QDateTime::currentDateTime(), msg);
-  emit printMessage(QDateTime::currentDateTime(), msg);
+  emit statusMessage(msg);
+  emit printMessage(msg);
 
   prop_DroppedFrames() -> incValue(1);
 }
@@ -181,8 +181,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
 
     if (nsummed == 0) {
       QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(QDateTime::currentDateTime(),
-                                   tr("Frame %1 saved").arg(nsummed));
+                 emit printMessage(tr("Frame %1 saved").arg(nsummed));
           );
       for (long i=0; i<nPixels; i++) {
         T val = *src++;
@@ -197,8 +196,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
       }
     } else {
       QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(QDateTime::currentDateTime(),
-                                   tr("Frame %1 summed").arg(nsummed));
+                 emit printMessage(tr("Frame %1 summed").arg(nsummed));
           );
       for (long i=0; i<nPixels; i++) {
         T val = *src++;
@@ -236,8 +234,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
 {
   if (image) {
     QCEP_DEBUG(DEBUG_ACQUIRE,
-               emit printMessage(QDateTime::currentDateTime(),
-                                 tr("processAcquiredImage(%1,%2) %3 summed exposures")
+               emit printMessage(tr("processAcquiredImage(%1,%2) %3 summed exposures")
                                  .arg(fileIndex).arg(phase).arg(image->get_SummedExposures()));
         );
 
@@ -247,8 +244,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     getFileBaseAndName(filePattern, fileIndex, phase, nPhases, fileBase, fileName);
 
     QCEP_DEBUG(DEBUG_ACQUIRE,
-               emit printMessage(QDateTime::currentDateTime(),
-                                 tr("Fn: %1, Fi: %2, Phs: %3")
+               emit printMessage(tr("Fn: %1, Fi: %2, Phs: %3")
                                  .arg(fileName).arg(get_FileIndex()).arg(phase));
         );
 
@@ -276,8 +272,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
 
     if (nPhases == 0) {
       QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(QDateTime::currentDateTime(),
-                                   tr("32 bit Dark Image acquired"));
+                 emit printMessage(tr("32 bit Dark Image acquired"));
           );
 
       image -> set_ImageNumber(-1);
@@ -285,8 +280,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
       image -> set_NPhases(0);
     } else {
       QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(QDateTime::currentDateTime(),
-                                   tr("32 bit Image %1 acquired").arg(get_FileIndex()));
+                 emit printMessage(tr("32 bit Image %1 acquired").arg(get_FileIndex()));
           );
       image -> set_ImageNumber(fileIndex);
       image -> set_PhaseNumber(phase);
@@ -315,14 +309,14 @@ void QxrdAcquisition::acquisitionError(int n)
 {
   cancel();
 
-  emit criticalMessage(QDateTime::currentDateTime(), tr("Acquisition Error %1").arg(n));
+  emit criticalMessage(tr("Acquisition Error %1").arg(n));
 }
 
 void QxrdAcquisition::acquisitionError(int ln, int n)
 {
   cancel();
 
-  emit criticalMessage(QDateTime::currentDateTime(), tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
+  emit criticalMessage(tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
 }
 
 QxrdAcquireDialog *QxrdAcquisition::controlPanel(QxrdWindow *win)
@@ -364,7 +358,7 @@ int QxrdAcquisition::cancelling()
   int res = get_Cancelling();
 
   if (res) {
-    emit statusMessage(QDateTime::currentDateTime(), tr("Cancelling acquisition"));
+    emit statusMessage(tr("Cancelling acquisition"));
   }
 
   return res;
@@ -391,7 +385,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
   for (int i=0; i<skipBefore; i++) {
     if (cancelling()) goto cancel;
-    emit statusMessage(QDateTime::currentDateTime(), tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
+    emit statusMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
     acquireFrame(exposure);
   }
 
@@ -403,7 +397,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
     if (i != 0) {
       for (int k=0; k<skipBetween; k++) {
-        emit statusMessage(QDateTime::currentDateTime(), tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
+        emit statusMessage(tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
         acquireFrame(exposure);
       }
     }
@@ -456,7 +450,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     }
   }
 
-  emit statusMessage(QDateTime::currentDateTime(),tr("Acquisition complete"));
+  emit statusMessage(tr("Acquisition complete"));
 
 cancel:
   startIdling();
@@ -503,7 +497,7 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
 saveCancel:
   processDarkImage(fileBase, fileIndex, res, overflow);
 
-  emit statusMessage(QDateTime::currentDateTime(),tr("Acquisition complete"));
+  emit statusMessage(tr("Acquisition complete"));
 
 cancel:
   startIdling();

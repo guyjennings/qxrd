@@ -33,9 +33,9 @@ public slots:
   void cancelDark();
 
 signals:
-  void printMessage(QDateTime ts, QString msg);
-  void statusMessage(QDateTime ts, QString msg);
-  void criticalMessage(QDateTime ts, QString msg);
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 public:
   QxrdAcquisition *acquisition() const;
