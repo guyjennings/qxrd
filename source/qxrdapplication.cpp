@@ -327,6 +327,7 @@ void QxrdApplication::splashMessage(const char *msg)
 {
   if (m_Splash) {
     m_Splash->showMessage(msg, Qt::AlignBottom|Qt::AlignHCenter);
+    processEvents();
   }
 }
 
