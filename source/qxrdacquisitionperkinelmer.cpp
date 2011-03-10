@@ -380,7 +380,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 //  tic.start();
 
   if (checkPluginAvailable()) {
-    QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image();
+    QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image(QxrdAllocator::NullIfNotAvailable);
 
 //    printf("allocator took %d msec\n", tic.restart());
 
@@ -434,7 +434,9 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 //      }
 //    }
 
-    ::memcpy(current, frame, npixels*sizeof(quint16));
+    if (current && frame) {
+      ::memcpy(current, frame, npixels*sizeof(quint16));
+    }
 
 //    printf("Image copy took %d msec\n", tic.restart());
 
@@ -460,14 +462,14 @@ void QxrdAcquisitionPerkinElmer::acquisitionInitError(int n)
 {
   acquisitionError(__LINE__, n);
 
-  emit criticalMessage(QDateTime::currentDateTime(), "Detector Initialization Failed");
+  emit criticalMessage("Detector Initialization Failed");
 }
 
 void QxrdAcquisitionPerkinElmer::acquisitionNSensorsError(int n)
 {
   acquisitionError(__LINE__, n);
 
-  emit criticalMessage(QDateTime::currentDateTime(), "Detector Initialization Failed");
+  emit criticalMessage("Detector Initialization Failed");
 }
 
 void QxrdAcquisitionPerkinElmer::setupExposureMenu(QDoubleSpinBox *cb)
