@@ -42,18 +42,16 @@ void QxrdIntegrator::readSettings(QxrdSettings &settings, QString section)
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
+QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
 {
-  return integrate(dimg, mask, /*m_DataProcessor -> centerFinder() -> get_CenterX(),
+  return integrate(integ, dimg, mask, /*m_DataProcessor -> centerFinder() -> get_CenterX(),
                    m_DataProcessor -> centerFinder() -> get_CenterY(),*/
                    get_Oversample(), true);
 }
 
-QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, int oversample, int normalize)
+QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, int oversample, int normalize)
 {
-  QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(QxrdAllocator::WaitTillAvailable, image);
-
-  if (res) {
+  if (integ && image) {
     QcepDoubleList norm = image->get_Normalization();
 
     double normVal = 1;
@@ -156,8 +154,8 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
         }
       }
 
-      res -> resize(0);
-      res -> set_Center(cx, cy);
+      integ -> resize(0);
+      integ -> set_Center(cx, cy);
 
       for(int ir=0; ir<nRange; ir++) {
         int sv = sumvalue[ir];
@@ -166,9 +164,9 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
           double xv = (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
 
           if (normalize) {
-            res -> append(xv, normVal*integral[ir]/sv);
+            integ -> append(xv, normVal*integral[ir]/sv);
           } else {
-            res -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+            integ -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
           }
         }
       }
@@ -182,14 +180,12 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
     }
   }
 
-  return res;
+  return integ;
 }
 
-QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double cx, double cy, int oversample, int normalize)
+QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double cx, double cy, int oversample, int normalize)
 {
-  QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(QxrdAllocator::WaitTillAvailable, image);
-
-  if (res) {
+  if (integ && image) {
     QcepDoubleList norm = image->get_Normalization();
 
     double normVal = 1;
@@ -251,8 +247,8 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
 
     //  QVector<double> x,y;
 
-    res -> resize(0);
-    res -> set_Center(cx, cy);
+    integ -> resize(0);
+    integ -> set_Center(cx, cy);
 
     for(int ir=0; ir<irmax; ir++) {
       int sv = sumvalue[ir];
@@ -261,9 +257,9 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
         double xv = ir*oversampleStep+halfOversampleStep;
 
         if (normalize) {
-          res -> append(xv, normVal*integral[ir]/sv);
+          integ -> append(xv, normVal*integral[ir]/sv);
         } else {
-          res -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+          integ -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
         }
       }
     }
@@ -276,17 +272,17 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdDoubleImageDataPtr image, Qx
     printf("QxrdIntegrator::integrate failed\n");
   }
 
-  return res;
+  return integ;
 }
 
-QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdDoubleImageDataPtr image, double x0, double y0, double x1, double y1, double width)
+QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, double x0, double y0, double x1, double y1, double width)
 {
   try {
     QwtArray<QwtDoublePoint> poly;
     poly.append(QwtDoublePoint(x0,y0));
     poly.append(QwtDoublePoint(x1,y1));
 
-    return slicePolygon(image, poly, width);
+    return slicePolygon(integ, image, poly, width);
   }
 
   catch (...) {
@@ -296,11 +292,9 @@ QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdDoubleImageDataPtr image, do
   return QxrdIntegratedDataPtr();
 }
 
-QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image, QwtArray<QwtDoublePoint> poly, double /*width*/)
+QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QwtArray<QwtDoublePoint> poly, double /*width*/)
 {
-  QxrdIntegratedDataPtr res = m_Allocator -> newIntegratedData(QxrdAllocator::WaitTillAvailable, image);
-
-  if (res) {
+  if (integ && image) {
     double length = 0;
 
     if (poly.size() >= 2) {
@@ -319,7 +313,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image,
       double r0 = 0;
 
       //    QVector<double> xs,ys;
-      res -> resize(0);
+      integ -> resize(0);
 
       for (int i=1; i<poly.size(); i++) {
         QwtDoublePoint p1 = poly[i];
@@ -332,7 +326,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image,
             double x = p0.x() + r*dx/len;
             double y = p0.y() + r*dy/len;
 
-            res -> append(r+r0, image->value((int) x, (int) y));
+            integ -> append(r+r0, image->value((int) x, (int) y));
           }
         }
 
@@ -347,5 +341,5 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdDoubleImageDataPtr image,
     printf("QxrdIntegrator::slicePolygon failed\n");
   }
 
-  return res;
+  return integ;
 }

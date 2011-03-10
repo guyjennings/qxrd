@@ -321,11 +321,12 @@ protected:
   void saveNamedImageDataAsText(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
   void writeOutputScan(QVector<double> x, QVector<double> y);
 
-  QxrdDoubleImageDataPtr processAcquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
-  QxrdDoubleImageDataPtr processAcquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
-  QxrdDoubleImageDataPtr processAcquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
-  QxrdDoubleImageDataPtr processAcquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v);
-  QxrdDoubleImageDataPtr processAcquiredImage(QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark,
+  QxrdDoubleImageDataPtr processAcquiredInt16Image(QxrdDoubleImageDataPtr processed, QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
+  QxrdDoubleImageDataPtr processAcquiredInt32Image(QxrdDoubleImageDataPtr processed, QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
+  QxrdDoubleImageDataPtr processAcquiredDoubleImage(QxrdDoubleImageDataPtr processed, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
+  QxrdDoubleImageDataPtr processAcquiredDoubleImage(QxrdDoubleImageDataPtr processed, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v);
+
+  QxrdDoubleImageDataPtr processAcquiredImage(QxrdDoubleImageDataPtr processed, QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark,
                                               QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v=QcepDoubleList());
 
   void newDarkImage(QxrdInt16ImageDataPtr image);

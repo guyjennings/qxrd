@@ -842,7 +842,7 @@ void QxrdDataProcessorBase::clearGainMap()
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image
-    (QxrdInt16ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
+    (QxrdDoubleImageDataPtr corrected, QxrdInt16ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
              emit printMessage(QDateTime::currentDateTime(),
@@ -859,21 +859,19 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image
       }
     }
 
-    QxrdDoubleImageDataPtr dimg = takeNextFreeImage();
+    corrected -> copyFrom(img);
+    corrected -> set_DateTime(QDateTime::currentDateTime());
 
-    dimg -> copyFrom(img);
-    dimg -> set_DateTime(QDateTime::currentDateTime());
+    processAcquiredImage(corrected, corrected, dark, mask, overflow);
 
-    processAcquiredImage(dimg, dark, mask, overflow);
-
-    return dimg;
+    return corrected;
   } else {
     return QxrdDoubleImageDataPtr();
   }
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image
-    (QxrdInt32ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
+    (QxrdDoubleImageDataPtr corrected, QxrdInt32ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   QCEP_DEBUG(DEBUG_PROCESS,
              emit printMessage(QDateTime::currentDateTime(),
@@ -890,50 +888,50 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image
       }
     }
 
-    QxrdDoubleImageDataPtr dimg = takeNextFreeImage();
+    corrected -> copyFrom(img);
+    corrected -> set_DateTime(QDateTime::currentDateTime());
 
-    dimg -> copyFrom(img);
-    dimg -> set_DateTime(QDateTime::currentDateTime());
+    processAcquiredImage(corrected, corrected, dark, mask, overflow);
 
-    processAcquiredImage(dimg, dark, mask, overflow);
-
-    return dimg;
+    return corrected;
   } else {
     return QxrdDoubleImageDataPtr();
   }
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredDoubleImage
-    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
+    (QxrdDoubleImageDataPtr processed, QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
-  return processAcquiredImage(dimg, dark, mask, overflow);
+  return processAcquiredImage(processed, dimg, dark, mask, overflow);
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredDoubleImage
-    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v)
+    (QxrdDoubleImageDataPtr processed, QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v)
 {
-  return processAcquiredImage(dimg, dark, mask, overflow, v);
+  return processAcquiredImage(processed, dimg, dark, mask, overflow, v);
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
-    (QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr /*mask*/, QxrdMaskDataPtr overflow, QcepDoubleList v)
+    (QxrdDoubleImageDataPtr processed, QxrdDoubleImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr /*mask*/, QxrdMaskDataPtr overflow, QcepDoubleList v)
 {
-  if (dimg) {
-    emit statusMessage(QDateTime::currentDateTime(), tr("Processing Image \"%1\"").arg(dimg->get_FileName()));
+  if (processed && img) {
+    processed->copyFrom(img);
+
+    emit statusMessage(QDateTime::currentDateTime(), tr("Processing Image \"%1\"").arg(processed->get_FileName()));
 
     QTime tic;
     tic.start();
 
-    dimg->set_Normalization(v);
+    processed->set_Normalization(v);
 
     QCEP_DEBUG(DEBUG_PROCESS,
                emit printMessage(QDateTime::currentDateTime(),
-                                 tr("Processing Image \"%1\", count %2").arg(dimg->get_FileName()).arg(getAcquiredCount()));
+                                 tr("Processing Image \"%1\", count %2").arg(processed->get_FileName()).arg(getAcquiredCount()));
     );
 
     if (get_PerformDarkSubtraction()) {
-      subtractDarkImage(dimg, dark);
-      dimg -> set_ImageSaved(false);
+      subtractDarkImage(processed, dark);
+      processed -> set_ImageSaved(false);
 
       int subTime = tic.restart();
 
@@ -946,45 +944,45 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
     }
 
     if (get_PerformBadPixels()) {
-      correctBadPixels(dimg);
-      dimg -> set_ImageSaved(false);
+      correctBadPixels(processed);
+      processed -> set_ImageSaved(false);
 
       updateEstimatedTime(prop_PerformBadPixelsTime(), tic.restart());
     }
 
     if (get_PerformGainCorrection()) {
-      correctImageGains(dimg);
-      dimg -> set_ImageSaved(false);
+      correctImageGains(processed);
+      processed -> set_ImageSaved(false);
 
       updateEstimatedTime(prop_PerformGainCorrectionTime(), tic.restart());
     }
 
     if (get_SaveSubtracted()) {
-      if (dimg->get_ImageSaved()) {
+      if (processed->get_ImageSaved()) {
         emit printMessage(QDateTime::currentDateTime(),
-                          tr("Image \"%1\" is already saved").arg(dimg->rawFileName()));
+                          tr("Image \"%1\" is already saved").arg(processed->rawFileName()));
       } else {
-        saveNamedImageData(QDir(subtractedOutputDirectory()).filePath(dimg->get_FileBase()), dimg, overflow);
+        saveNamedImageData(QDir(subtractedOutputDirectory()).filePath(processed->get_FileBase()), processed, overflow);
       }
     }
 
     if (get_SaveAsText()) {
-      saveNamedImageDataAsText(dimg->get_FileName(), dimg, overflow);
+      saveNamedImageDataAsText(processed->get_FileName(), processed, overflow);
 
       updateEstimatedTime(prop_SaveAsTextTime(), tic.elapsed());
     }
 
-    newData(dimg, overflow);
+    newData(processed, overflow);
 
     QCEP_DEBUG(DEBUG_PROCESS,
                emit printMessage(QDateTime::currentDateTime(),
                                  tr("Processing took %1 msec").arg(tic.restart()));
     );
 
-    emit statusMessage(QDateTime::currentDateTime(), tr("Completed Processing Image \"%1\"").arg(dimg->get_FileName()));
+    emit statusMessage(QDateTime::currentDateTime(), tr("Completed Processing Image \"%1\"").arg(processed->get_FileName()));
   }
 
-  return dimg;
+  return processed;
 }
 
 void QxrdDataProcessorBase::updateEstimatedTime(QcepDoubleProperty *prop, int msec)

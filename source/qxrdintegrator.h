@@ -38,12 +38,12 @@ signals:
   void criticalMessage(QDateTime ts, QString msg);
 
 public slots:
-  QxrdIntegratedDataPtr performIntegration(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask);
-  QxrdIntegratedDataPtr integrate(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int oversample, int normalize);
-  QxrdIntegratedDataPtr integrate(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, double cx, double cy, int oversample, int normalize);
+  QxrdIntegratedDataPtr performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask);
+  QxrdIntegratedDataPtr integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int oversample, int normalize);
+  QxrdIntegratedDataPtr integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, double cx, double cy, int oversample, int normalize);
 
-  QxrdIntegratedDataPtr sliceLine(QxrdDoubleImageDataPtr dimg, double x0, double y0, double x1, double y1, double width);
-  QxrdIntegratedDataPtr slicePolygon(QxrdDoubleImageDataPtr dimg, QwtArray<QwtDoublePoint> poly, double width);
+  QxrdIntegratedDataPtr sliceLine(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, double x0, double y0, double x1, double y1, double width);
+  QxrdIntegratedDataPtr slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QwtArray<QwtDoublePoint> poly, double width);
 
 private:
   mutable QMutex         m_Mutex;

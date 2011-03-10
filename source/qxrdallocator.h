@@ -33,6 +33,8 @@ public:
   QxrdMaskDataPtr newMask(AllocationStrategy strat, int def=1);
   QxrdIntegratedDataPtr newIntegratedData(AllocationStrategy strat, QxrdDoubleImageDataPtr image);
 
+  void newDoubleImageAndIntegratedData(AllocationStrategy strat, QxrdDoubleImageDataPtr &img, QxrdIntegratedDataPtr &integ);
+
   void dimension(int width, int height);
 //  void preallocateInt16(int n16);
 //  void preallocateInt32(int n32);
@@ -79,8 +81,8 @@ private:
 private:
   QMutex                m_Mutex;
   QTimer                m_Timer;
-  QAtomicInt            m_AllocatedMemoryMB;
   quint64               m_AllocatedMemory;
+  QAtomicInt            m_AllocatedMemoryMB;
 
 //  QAtomicInt            m_CountInt16;
 //  QAtomicInt            m_CountInt32;

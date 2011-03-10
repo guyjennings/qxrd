@@ -493,7 +493,11 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
 
     QxrdInt16ImageDataPtr img = acquireFrame(exposure);
 
-    accumulateAcquiredImage(img, res, overflow);
+    if (img) {
+      accumulateAcquiredImage(img, res, overflow);
+    } else {
+      indicateDroppedFrame(0);
+    }
   }
 
 saveCancel:

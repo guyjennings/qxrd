@@ -168,6 +168,28 @@ QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(AllocationStrategy strat,
   }
 }
 
+void QxrdAllocator::newDoubleImageAndIntegratedData(AllocationStrategy strat, QxrdDoubleImageDataPtr &img, QxrdIntegratedDataPtr &integ)
+{
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (waitTillAvailable(strat, doubleSizeMB() + integratedSizeMB(10000))) {
+    img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(this, get_Width(), get_Height()), &QxrdAllocator::doubleDeleter);
+    integ = QxrdIntegratedDataPtr(new QxrdIntegratedData(this, img, 10000), &QxrdAllocator::integratedDeleter);
+
+    img->moveToThread(thread());
+    integ->moveToThread(thread());
+
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      printf("QxrdAllocator::newDoubleImageAndIntegratedData() succeeded [%p] [%p] [%d]\n",
+             img.data(), integ.data(), (int) m_AllocatedMemoryMB);
+    }
+  } else {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      printf("QxrdAllocator::newDoubleImageAndIntegratedData() returned NULL\n");
+    }
+  }
+}
+
 void QxrdAllocator::dimension(int width, int height)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
