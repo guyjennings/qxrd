@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>299</width>
-    <height>374</height>
+    <width>337</width>
+    <height>495</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,11 +23,6 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QCheckBox" name="m_SaveRaw">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Save 'raw' images (before dark subtraction), as well</string>
       </property>
@@ -60,11 +55,6 @@
     </item>
     <item row="1" column="0">
      <widget class="QCheckBox" name="m_PerformDark">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Do dark subtraction as images are taken</string>
       </property>
@@ -97,11 +87,6 @@
     </item>
     <item row="2" column="0">
      <widget class="QCheckBox" name="m_SaveDark">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Save 'dark' images</string>
       </property>
@@ -136,11 +121,6 @@
      <widget class="QCheckBox" name="m_PerformBadPixels">
       <property name="enabled">
        <bool>false</bool>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Do Bad Pixel Correction</string>
@@ -177,11 +157,6 @@
       <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Perform gain correction</string>
       </property>
@@ -214,11 +189,6 @@
     </item>
     <item row="5" column="0">
      <widget class="QCheckBox" name="m_SaveSubtracted">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Save subtracted images as they are taken</string>
       </property>
@@ -251,11 +221,6 @@
     </item>
     <item row="6" column="0">
      <widget class="QCheckBox" name="m_SaveAsText">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Save subtracted images as they are taken</string>
       </property>
@@ -288,11 +253,6 @@
     </item>
     <item row="7" column="0">
      <widget class="QCheckBox" name="m_PerformIntegration">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Perform angular integration as each image is taken</string>
       </property>
@@ -327,11 +287,6 @@
      <widget class="QCheckBox" name="m_DisplayIntegratedData">
       <property name="enabled">
        <bool>true</bool>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Add integrated data to graph as it is calculated</string>
@@ -368,11 +323,6 @@
       <property name="enabled">
        <bool>true</bool>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Save each integration as it is calculated</string>
       </property>
@@ -407,11 +357,6 @@
      <widget class="QCheckBox" name="m_SaveIntegratedInSeparateFiles">
       <property name="enabled">
        <bool>true</bool>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Save each integration in a separate file as it is calculated</string>

@@ -17,11 +17,6 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QCheckBox" name="m_InterpolatePixels">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Gives a smoother display when zoomed in</string>
       </property>
@@ -32,11 +27,6 @@
     </item>
     <item row="0" column="1">
      <widget class="QCheckBox" name="m_MaintainAspectRatio">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Try to maintain the aspect ratio of the image as it is zoomed and resized</string>
       </property>
@@ -47,11 +37,6 @@
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="label_8">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Color Map</string>
       </property>
@@ -59,11 +44,6 @@
     </item>
     <item row="1" column="1">
      <widget class="QComboBox" name="m_DisplayColorMap">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Choose the color map for image display</string>
       </property>
@@ -101,11 +81,6 @@
     </item>
     <item row="2" column="0">
      <widget class="QCheckBox" name="m_DisplayImage">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Display image data</string>
       </property>
@@ -116,11 +91,6 @@
     </item>
     <item row="2" column="1">
      <widget class="QCheckBox" name="m_DisplayMask">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Display Mask</string>
       </property>
@@ -131,11 +101,6 @@
     </item>
     <item row="3" column="1">
      <widget class="QCheckBox" name="m_DisplayOverflow">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Display Mask</string>
       </property>
@@ -146,11 +111,6 @@
     </item>
     <item row="4" column="0">
      <widget class="QLabel" name="label_9">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Overflow Level:</string>
       </property>
@@ -158,11 +118,6 @@
     </item>
     <item row="4" column="1">
      <widget class="QSpinBox" name="m_OverflowLevel">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>overflow (saturation) level (0..65535)</string>
       </property>
@@ -173,11 +128,6 @@
     </item>
     <item row="5" column="0" colspan="2">
      <widget class="QComboBox" name="m_DisplayScalingMode">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Image display intensity scaling mode</string>
       </property>
@@ -207,11 +157,6 @@
        <layout class="QGridLayout" name="gridLayout_15">
         <item row="2" column="0">
          <widget class="QLabel" name="label_11">
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
           <property name="text">
            <string>Min (%):</string>
           </property>
@@ -222,11 +167,6 @@
         </item>
         <item row="2" column="1" colspan="2">
          <widget class="QDoubleSpinBox" name="m_DisplayMinimumPct">
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
           <property name="keyboardTracking">
            <bool>false</bool>
           </property>
@@ -243,11 +183,6 @@
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_12">
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
           <property name="text">
            <string>Max (%):</string>
           </property>
@@ -258,11 +193,6 @@
         </item>
         <item row="3" column="1" colspan="2">
          <widget class="QDoubleSpinBox" name="m_DisplayMaximumPct">
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
           <property name="keyboardTracking">
            <bool>false</bool>
           </property>
@@ -279,11 +209,6 @@
         </item>
         <item row="4" column="0">
          <widget class="QPushButton" name="m_Display_5pct">
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
           <property name="text">
            <string>5% Range</string>
           </property>
@@ -291,11 +216,6 @@
         </item>
         <item row="4" column="1">
          <widget class="QPushButton" name="m_Display_10pct">
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
           <property name="text">
            <string>10% Range</string>
           </property>
@@ -303,11 +223,6 @@
         </item>
         <item row="4" column="2">
          <widget class="QPushButton" name="m_Display_100pct">
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
           <property name="text">
            <string>100% Range</string>
           </property>
