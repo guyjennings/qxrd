@@ -380,7 +380,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 //  tic.start();
 
   if (checkPluginAvailable()) {
-    QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image(QxrdAllocator::NullIfNotAvailable);
+    QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image(QxrdAllocator::AllocateFromReserve);
 
 //    printf("allocator took %d msec\n", tic.restart());
 
