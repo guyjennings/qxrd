@@ -506,6 +506,7 @@ cancel:
 void QxrdAcquisition::stopIdling()
 {
   m_Idling.fetchAndStoreOrdered(0);
+  flushImageQueue();
   beginAcquisition();
 }
 
@@ -523,6 +524,16 @@ void QxrdAcquisition::onIdleTimeout()
     if (res) {
       m_DataProcessor->idleInt16Image(res);
     }
+  }
+}
+
+void QxrdAcquisition::flushImageQueue()
+{
+  int n = m_NAcquiredImages.available();
+  m_NAcquiredImages.acquire(n);
+
+  for (int i=0; i<n; i++) {
+    m_AcquiredImages.dequeue();
   }
 }
 

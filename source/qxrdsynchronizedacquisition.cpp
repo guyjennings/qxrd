@@ -5,6 +5,7 @@
 #include "qwt_math.h"
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdAcquisition *acq) :
+  QObject(NULL),
   m_SyncAcquisitionMode(this,"syncAcquisitionMode", 0),
   m_SyncAcquisitionWaveform(this,"syncAcquisitionWaveform", 0),
   m_SyncAcquisitionOutputChannel(this,"syncAcquisitionOutputChannel", 0),
@@ -14,8 +15,7 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdAcquisition *acq) :
   m_SyncAcquisitionSymmetry(this,"syncAcquisitionSymmetry", 0.0),
   m_Acquisition(acq),
   m_NIDAQPlugin(NULL),
-  m_SyncMode(0),
-  QObject(NULL)
+  m_SyncMode(0)
 {
 }
 

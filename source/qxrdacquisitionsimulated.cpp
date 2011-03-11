@@ -123,7 +123,7 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
 
   QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image(QxrdAllocator::AllocateFromReserve);
   int xpmsec = (int)(get_ExposureTime()*1000+0.5);
-  int frame = (frameCounter++) % 8;
+  int frame = frameCounter % 8;
 
   if (image) {
     quint16 *ptr = image->data();
@@ -179,4 +179,6 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
   }
 
   enqueueAcquiredFrame(image);
+
+  frameCounter++;
 }

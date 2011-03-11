@@ -138,6 +138,7 @@ protected slots:
 private:
   QxrdInt16ImageDataPtr acquireFrame(double exposure);
   QxrdInt16ImageDataPtr acquireFrameIfAvailable(double exposure);
+  void flushImageQueue();
 
   virtual void stopIdling();
   virtual void startIdling();
