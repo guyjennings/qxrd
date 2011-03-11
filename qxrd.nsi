@@ -47,12 +47,12 @@ Var StartMenuFolder
 Section "Extract qxrd"
   SetShellVarContext all
   SetOutPath "$INSTDIR"
-  File "${APPDIR}\app\qxrd.exe"
-  File "${APPDIR}\app\*.dll"
+  File "${APPDIR}\qxrd.exe"
+  File "${APPDIR}\*.dll"
 
   SetOutPath "$INSTDIR\plugins"
 
-  File "${APPDIR}\app\plugins\*.dll"
+  File "${APPDIR}\plugins\*.dll"
 
   SetOutPath "$INSTDIR"
 
