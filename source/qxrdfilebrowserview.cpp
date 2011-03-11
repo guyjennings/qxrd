@@ -10,10 +10,10 @@ QxrdFileBrowserView::QxrdFileBrowserView(QWidget *parent) :
 
 void QxrdFileBrowserView::paintEvent(QPaintEvent *event)
 {
-  QTime tic;
-  tic.start();
+//  QTime tic;
+//  tic.start();
 
   QTreeView::paintEvent(event);
 
-  printf("QxrdFileBrowserView::paintEvent took %d msec\n", tic.elapsed());
+//  printf("QxrdFileBrowserView::paintEvent took %d msec\n", tic.elapsed());
 }
