@@ -125,6 +125,16 @@
       </item>
       <item>
        <property name="text">
+        <string>Integrated Data Files (*.avg)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Metadata Files (*.metadata)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>All Files (*)</string>
        </property>
       </item>

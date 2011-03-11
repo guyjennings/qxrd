@@ -91,7 +91,15 @@ void QxrdFileBrowser::onFilterChanged(int newfilter)
     m_Model -> setNameFilters(QStringList("*.dark.tif"));
     break;
 
-  case 4: // All files
+  case 4: // Integrated data files
+    m_Model -> setNameFilters(QStringList("*.avg"));
+    break;
+
+  case 5: // Metadata files
+    m_Model -> setNameFilters(QStringList("*.metadata"));
+    break;
+
+  case 6: // All files
     m_Model -> setNameFilters(QStringList());
     break;
   }
