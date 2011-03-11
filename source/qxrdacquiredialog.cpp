@@ -13,8 +13,8 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdWindow *win, QxrdAcquisition *acq, Qxrd
   connect(m_ActionAcquire, SIGNAL(triggered()), m_Window, SLOT(doAcquire()));
   connect(m_ActionCancel, SIGNAL(triggered()), m_Window, SLOT(doCancel()));
   connect(m_ActionAcquireDark, SIGNAL(triggered()), m_Window, SLOT(doAcquireDark()));
-  connect(m_ActionCancelDark, SIGNAL(triggered()), m_Window, SLOT(doCancelDark()));
-//  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
+//  connect(m_ActionCancelDark, SIGNAL(triggered()), m_Window, SLOT(doCancelDark()));
+  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
 
   connect(m_SelectLogFileButton, SIGNAL(clicked()), m_Window, SLOT(selectLogFile()));
   connect(m_SelectDirectoryButton, SIGNAL(clicked()), m_Window, SLOT(selectOutputDirectory()));
@@ -36,11 +36,17 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdWindow *win, QxrdAcquisition *acq, Qxrd
   m_Acquisition -> prop_DarkSummedExposures() -> linkTo(this -> m_DarkSummedExposures);
   m_Acquisition -> prop_FilePattern() -> linkTo(this -> m_FilePattern);
   m_Acquisition -> prop_FileIndex() -> linkTo(this -> m_FileIndex);
-  m_Acquisition -> prop_FilesInGroup() -> linkTo(this -> m_FilesInGroup);
-  m_Acquisition -> prop_GroupsInSequence() -> linkTo(this -> m_GroupsInSequence);
+  m_Acquisition -> prop_PhasesInGroup() -> linkTo(this -> m_PhasesInGroup);
+  m_Acquisition -> prop_PreTriggerFiles() -> linkTo(this -> m_PreTriggerFiles);
+  m_Acquisition -> prop_PostTriggerFiles() -> linkTo(this -> m_PostTriggerFiles);
   m_Acquisition -> prop_CameraGain() -> linkTo(this -> m_CameraGain);
   m_Acquisition -> prop_BinningMode() -> linkTo(this -> m_BinningMode);
   m_Acquisition -> prop_DroppedFrames() -> linkTo(this -> m_DroppedFrames);
+
+  m_Acquisition -> prop_UserComment1() -> linkTo(this -> m_UserComment1);
+  m_Acquisition -> prop_UserComment2() -> linkTo(this -> m_UserComment2);
+  m_Acquisition -> prop_UserComment3() -> linkTo(this -> m_UserComment3);
+  m_Acquisition -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
 
   m_DataProcessor -> prop_OutputDirectory() -> linkTo(this -> m_OutputDirectory);
   m_DataProcessor -> prop_LogFilePath() -> linkTo(this -> m_LogFilePath);
@@ -83,56 +89,49 @@ void QxrdAcquireDialog::acquireComplete()
 void QxrdAcquireDialog::acquisitionReady()
 {
   m_AcquireButton -> setEnabled(true);
-//  m_TriggerButton -> setEnabled(false);
-  m_CancelButton -> setEnabled(false);
   m_ActionAcquire -> setEnabled(true);
+
+  m_TriggerButton -> setEnabled(false);
+  m_ActionTrigger -> setEnabled(false);
+
+  m_CancelButton -> setEnabled(false);
   m_ActionCancel -> setEnabled(false);
+
   m_DarkAcquireButton -> setEnabled(true);
-  //  m_DarkCancelButton -> setEnabled(false);
   m_ActionAcquireDark -> setEnabled(true);
-  m_ActionCancelDark -> setEnabled(false);
 }
 
 void QxrdAcquireDialog::acquisitionStarted()
 {
-//  if (m_Acquisition -> get_PreTriggerFiles() > 0) {
-//    m_TriggerButton -> setEnabled(true);
-//  } else {
-//    m_TriggerButton -> setEnabled(false);
-//  }
-
   m_AcquireButton -> setEnabled(false);
-  m_CancelButton -> setEnabled(true);
   m_ActionAcquire -> setEnabled(false);
+
+  if (m_Acquisition -> get_PreTriggerFiles() > 0) {
+    m_TriggerButton -> setEnabled(true);
+    m_ActionTrigger -> setEnabled(true);
+  } else {
+    m_TriggerButton -> setEnabled(false);
+    m_ActionTrigger -> setEnabled(false);
+  }
+
+  m_CancelButton -> setEnabled(true);
   m_ActionCancel -> setEnabled(true);
+
   m_DarkAcquireButton -> setEnabled(false);
-//  m_DarkCancelButton -> setEnabled(false);
   m_ActionAcquireDark -> setEnabled(false);
-  m_ActionCancelDark -> setEnabled(false);
 }
 
 void QxrdAcquireDialog::acquisitionFinished()
 {
   m_AcquireButton -> setEnabled(true);
-//  m_TriggerButton -> setEnabled(false);
-  m_CancelButton -> setEnabled(false);
   m_ActionAcquire -> setEnabled(true);
-  m_ActionCancel -> setEnabled(false);
-  m_DarkAcquireButton -> setEnabled(true);
-//  m_DarkCancelButton -> setEnabled(false);
-  m_ActionAcquireDark -> setEnabled(true);
-  m_ActionCancelDark -> setEnabled(false);
-}
 
-void QxrdAcquireDialog::darkAcquisitionStarted()
-{
-  m_AcquireButton -> setEnabled(false);
-//  m_TriggerButton -> setEnabled(false);
-  m_CancelButton -> setEnabled(/*false*/ true);
-  m_ActionAcquire -> setEnabled(false);
+  m_TriggerButton -> setEnabled(false);
+  m_ActionTrigger -> setEnabled(false);
+
+  m_CancelButton -> setEnabled(false);
   m_ActionCancel -> setEnabled(false);
-  m_DarkAcquireButton -> setEnabled(false);
-//  m_DarkCancelButton -> setEnabled(true);
-  m_ActionAcquireDark -> setEnabled(false);
-  m_ActionCancelDark -> setEnabled(true);
+
+  m_DarkAcquireButton -> setEnabled(true);
+  m_ActionAcquireDark -> setEnabled(true);
 }

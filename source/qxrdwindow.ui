@@ -866,7 +866,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -895,13 +895,10 @@
      <string>Edit</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuAcquire">
+   <widget class="QMenu" name="m_AcquireMenu">
     <property name="title">
      <string>Acquire</string>
     </property>
-    <addaction name="m_ActionAcquire"/>
-    <addaction name="m_ActionTrigger"/>
-    <addaction name="m_ActionAcquireDark"/>
     <addaction name="m_ActionExecuteScript"/>
    </widget>
    <widget class="QMenu" name="menuDisplay">
@@ -952,7 +949,7 @@
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
-   <addaction name="menuAcquire"/>
+   <addaction name="m_AcquireMenu"/>
    <addaction name="menuCalibration"/>
    <addaction name="menuDisplay"/>
    <addaction name="m_WindowsMenu"/>
@@ -971,11 +968,6 @@
   <action name="m_ActionPreferences">
    <property name="text">
     <string>Preferences...</string>
-   </property>
-  </action>
-  <action name="m_ActionAcquire">
-   <property name="text">
-    <string>Acquire</string>
    </property>
   </action>
   <action name="m_ActionAutoScale">
@@ -1009,11 +1001,6 @@
    </property>
    <property name="toolTip">
     <string>Execute Script</string>
-   </property>
-  </action>
-  <action name="m_ActionCancel">
-   <property name="text">
-    <string>Cancel</string>
    </property>
   </action>
   <action name="m_ActionGrayscale">
@@ -1057,16 +1044,6 @@
   <action name="m_Action100Range">
    <property name="text">
     <string>100% Range</string>
-   </property>
-  </action>
-  <action name="m_ActionAcquireDark">
-   <property name="text">
-    <string>Dark</string>
-   </property>
-  </action>
-  <action name="m_ActionCancelDark">
-   <property name="text">
-    <string>Cancel Dark</string>
    </property>
   </action>
   <action name="m_ActionIce">
@@ -1239,14 +1216,6 @@
    </property>
    <property name="toolTip">
     <string>Save Mask</string>
-   </property>
-  </action>
-  <action name="m_ActionTrigger">
-   <property name="text">
-    <string>Trigger</string>
-   </property>
-   <property name="toolTip">
-    <string>Trigger Acquisition</string>
    </property>
   </action>
   <action name="m_ActionSelectLogFile">

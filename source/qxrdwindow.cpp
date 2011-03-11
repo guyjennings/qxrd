@@ -214,10 +214,18 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   connect(m_ActionRefineCenterTilt, SIGNAL(triggered()), this, SLOT(doRefineCenterTilt()));
 
-  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
-  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
-  connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
-  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
+  m_AcquireMenu->addSeparator();
+  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionAcquire);
+  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionTrigger);
+  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionAcquireDark);
+  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionCancel);
+
+  m_AcquireDialog->acquisitionReady();
+
+//  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
+//  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
+//  connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
+////  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
 //  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
 
   connect(m_ActionShowImage, SIGNAL(triggered()), m_Plot, SLOT(toggleShowImage()));
@@ -662,13 +670,13 @@ void QxrdWindow::doCancel()
   }
 }
 
-void QxrdWindow::doCancelDark()
-{
-  if (m_AcquiringDark) {
-    m_Acquisition -> cancelDark();
-    //    INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "cancelDark"));
-  }
-}
+//void QxrdWindow::doCancelDark()
+//{
+//  if (m_AcquiringDark) {
+//    m_Acquisition -> cancelDark();
+//    //    INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "cancelDark"));
+//  }
+//}
 
 void QxrdWindow::doSynchronizedAcquisition()
 {

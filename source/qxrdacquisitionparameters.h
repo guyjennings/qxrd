@@ -53,8 +53,8 @@ public:
   Q_PROPERTY(int    skippedExposuresAtStart  READ get_SkippedExposuresAtStart WRITE set_SkippedExposuresAtStart);
   QCEP_INTEGER_PROPERTY(SkippedExposuresAtStart);
 
-  Q_PROPERTY(int    filesInGroup  READ get_FilesInGroup WRITE set_FilesInGroup);
-  QCEP_INTEGER_PROPERTY(FilesInGroup);
+  Q_PROPERTY(int    phasesInGroup  READ get_PhasesInGroup WRITE set_PhasesInGroup);
+  QCEP_INTEGER_PROPERTY(PhasesInGroup);
 
   Q_PROPERTY(int    summedExposures  READ get_SummedExposures WRITE set_SummedExposures);
   QCEP_INTEGER_PROPERTY(SummedExposures);
@@ -62,8 +62,11 @@ public:
   Q_PROPERTY(int    skippedExposures  READ get_SkippedExposures WRITE set_SkippedExposures);
   QCEP_INTEGER_PROPERTY(SkippedExposures);
 
-  Q_PROPERTY(int    groupsInSequence  READ get_GroupsInSequence WRITE set_GroupsInSequence);
-  QCEP_INTEGER_PROPERTY(GroupsInSequence);
+  Q_PROPERTY(int    preTriggerFiles  READ get_PreTriggerFiles WRITE set_PreTriggerFiles);
+  QCEP_INTEGER_PROPERTY(PreTriggerFiles);
+
+  Q_PROPERTY(int    postTriggerFiles  READ get_PostTriggerFiles WRITE set_PostTriggerFiles);
+  QCEP_INTEGER_PROPERTY(PostTriggerFiles);
 
   Q_PROPERTY(int    fileIndex        READ get_FileIndex WRITE set_FileIndex);
   QCEP_INTEGER_PROPERTY(FileIndex);
@@ -98,17 +101,8 @@ public:
   Q_PROPERTY(int     cancelling      READ get_Cancelling WRITE set_Cancelling STORED false);
   QCEP_INTEGER_PROPERTY(Cancelling);
 
-//  Q_PROPERTY(int     exposuresToSum      READ get_ExposuresToSum WRITE set_ExposuresToSum STORED false);
-//  QCEP_INTEGER_PROPERTY(ExposuresToSum);
-
-//  Q_PROPERTY(int     exposuresToSkip      READ get_ExposuresToSkip WRITE set_ExposuresToSkip STORED false);
-//  QCEP_INTEGER_PROPERTY(ExposuresToSkip);
-
-//  Q_PROPERTY(int     filesInAcquiredGroup      READ get_FilesInAcquiredGroup WRITE set_FilesInAcquiredGroup STORED false);
-//  QCEP_INTEGER_PROPERTY(FilesInAcquiredGroup);
-
-//  Q_PROPERTY(int     groupsInAcquiredSequence      READ get_GroupsInAcquiredSequence WRITE set_GroupsInAcquiredSequence STORED false);
-//  QCEP_INTEGER_PROPERTY(GroupsInAcquiredSequence);
+  Q_PROPERTY(int     triggered      READ get_Triggered WRITE set_Triggered STORED false);
+  QCEP_INTEGER_PROPERTY(Triggered);
 
   Q_PROPERTY(int     totalBufferSizeMB32    READ get_TotalBufferSizeMB32 WRITE set_TotalBufferSizeMB32);
   QCEP_INTEGER_PROPERTY(TotalBufferSizeMB32);

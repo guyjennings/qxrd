@@ -71,8 +71,9 @@ void QxrdAcquisition::acquire()
     QxrdAcquisitionParameterPack params(get_FilePattern(),
                                         get_ExposureTime(),
                                         get_SummedExposures(),
-                                        get_GroupsInSequence(),
-                                        get_FilesInGroup(),
+                                        get_PreTriggerFiles(),
+                                        get_PostTriggerFiles(),
+                                        get_PhasesInGroup(),
                                         get_SkippedExposuresAtStart(),
                                         get_SkippedExposures());
 
@@ -123,9 +124,9 @@ void QxrdAcquisition::cancel()
   set_Cancelling(true);
 }
 
-void QxrdAcquisition::cancelDark()
+void QxrdAcquisition::trigger()
 {
-  set_Cancelling(true);
+  set_Triggered(true);
 }
 
 void QxrdAcquisition::clearDropped()
@@ -375,7 +376,8 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
   int fileIndex = get_FileIndex();
   double exposure = parms.exposure();
   int nsummed = parms.nsummed();
-  int nfiles = parms.nfiles();
+  int preTrigger = parms.preTrigger();
+  int postTrigger = parms.postTrigger();
   int nphases = parms.nphases();
   int skipBefore = parms.skipBefore();
   int skipBetween = parms.skipBetween();
@@ -390,7 +392,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
   }
 
 
-  for (int i=0; i<nfiles; i++) {
+  for (int i=0; i<postTrigger; i++) {
     if (cancelling()) goto cancel;
 
     set_FileIndex(fileIndex+i);
@@ -427,7 +429,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
       for (int p=0; p<nphases; p++) {
         if (res[p]) {
-          emit acquiredFrame(res[p]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, nfiles);
+          emit acquiredFrame(res[p]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, postTrigger);
         }
 
         QxrdInt16ImageDataPtr img = acquireFrame(exposure);

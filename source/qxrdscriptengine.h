@@ -57,8 +57,9 @@ private:
   static QScriptValue summedExposuresFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue skippedExposuresFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue darkSummedExposuresFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue filesInGroupFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue groupsInSequenceFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue phasesInGroupFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue preTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue postTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue filePatternFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue outputDirectoryFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue fileIndexFunc(QScriptContext *context, QScriptEngine *engine);

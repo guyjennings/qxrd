@@ -21,8 +21,6 @@ public:
   void acquisitionStarted();
   void acquisitionFinished();
 
-  void darkAcquisitionStarted();
-
 protected:
   void changeEvent(QEvent *e);
 

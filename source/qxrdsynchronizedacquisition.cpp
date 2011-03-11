@@ -36,7 +36,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition()
   if (!m_Acquisition->get_AcquireDark()) {
     double exposureTime = m_Acquisition->get_ExposureTime();
     //  int    nsummed      = m_Acquisition->get_SummedExposures();
-    int    nphases      = m_Acquisition->get_FilesInGroup();
+    int    nphases      = m_Acquisition->get_PhasesInGroup();
     double cycleTime    = exposureTime/**nsummed*/*nphases;
     double sampleRate   = 1000;
     double nSamples     = cycleTime*sampleRate;
