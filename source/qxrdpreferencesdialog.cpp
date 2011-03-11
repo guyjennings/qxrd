@@ -3,6 +3,7 @@
 #include "qxrdacquisitionthread.h"
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
+#include "qxrdallocator.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QGridLayout>
@@ -18,6 +19,7 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   QxrdApplication *app = QxrdApplication::application();
   QxrdAcquisition *acq = app -> acquisition();
   QxrdDataProcessor *proc = app->dataProcessor();
+  QxrdAllocator *alloc = app->allocator();
 
   int detectorType = app -> get_DetectorType();
 //  int processorType = app -> get_ProcessorType();
@@ -63,6 +65,8 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   m_ReservedMemory32 -> setValue(acq->get_TotalBufferSizeMB32());
   m_ReservedMemory64 -> setRange(500, 60000);
   m_ReservedMemory64 -> setValue(acq->get_TotalBufferSizeMB64());
+  m_ExtraReservedMemory -> setRange(0, 500);
+  m_ExtraReservedMemory -> setValue(alloc->get_Reserve());
 
   m_RunSpecServer -> setChecked(runSpecServer);
   m_RunSimpleServer -> setChecked(runSimpleServer);
@@ -153,6 +157,7 @@ void QxrdPreferencesDialog::accept()
   int debugLevel = readDebugWidgets();
   int bufferSize32 = m_ReservedMemory32 -> value();
   int bufferSize64 = m_ReservedMemory64 -> value();
+  int extraReserve = m_ExtraReservedMemory -> value();
   int runSpecServer = m_RunSpecServer -> isChecked();
   int runSimpleServer = m_RunSimpleServer -> isChecked();
   int specServerPort = m_SpecServerPort -> value();
@@ -169,6 +174,7 @@ void QxrdPreferencesDialog::accept()
   QxrdApplication *app = QxrdApplication::application();
   QxrdAcquisition *acq = app -> acquisition();
   QxrdDataProcessor *proc = app->dataProcessor();
+  QxrdAllocator *alloc = app->allocator();
 
   if (runSpecServer != app -> get_RunSpecServer()) {
     restartNeeded = true;
@@ -195,6 +201,7 @@ void QxrdPreferencesDialog::accept()
   app -> set_Debug(debugLevel);
   acq -> set_TotalBufferSizeMB32(bufferSize32);
   acq -> set_TotalBufferSizeMB64(bufferSize64);
+  alloc -> set_Reserve(extraReserve);
   app -> set_RunSpecServer(runSpecServer);
   app -> set_SpecServerPort(specServerPort);
   app -> set_RunSimpleServer(runSimpleServer);

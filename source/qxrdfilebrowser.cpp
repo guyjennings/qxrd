@@ -43,9 +43,9 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
   m_Model -> setNameFilters(QStringList("*.tif"));
   m_Model -> setNameFilterDisables(false);
 
-  connect(this, SIGNAL(printMessage(QDateTime,QString)), m_Processor, SIGNAL(printMessage(QDateTime,QString)));
-  connect(this, SIGNAL(statusMessage(QDateTime,QString)), m_Processor, SIGNAL(statusMessage(QDateTime,QString)));
-  connect(this, SIGNAL(criticalMessage(QDateTime,QString)), m_Processor, SIGNAL(criticalMessage(QDateTime,QString)));
+  connect(this, SIGNAL(printMessage(QString,QDateTime)), m_Processor, SIGNAL(printMessage(QString,QDateTime)));
+  connect(this, SIGNAL(statusMessage(QString,QDateTime)), m_Processor, SIGNAL(statusMessage(QString,QDateTime)));
+  connect(this, SIGNAL(criticalMessage(QString,QDateTime)), m_Processor, SIGNAL(criticalMessage(QString,QDateTime)));
 
   connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
   connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
@@ -307,7 +307,7 @@ void QxrdFileBrowser::readSettings(QxrdSettings &settings, QString section)
 void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
 {
   if (QApplication::mouseButtons() & Qt::RightButton) {
-//    emit printMessage(QDateTime::currentDateTime(), "Right mouse pressed");
+//    emit printMessage("Right mouse pressed");
 
     QMenu *actions = new QMenu(this);
     QAction *open = actions->addAction("Open");

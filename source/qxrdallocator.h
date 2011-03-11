@@ -24,7 +24,9 @@ public:
 public:
   enum AllocationStrategy {
     WaitTillAvailable,
-    NullIfNotAvailable
+    NullIfNotAvailable,
+    AllocateFromReserve,
+    AlwaysAllocate
   };
 
   QxrdInt16ImageDataPtr newInt16Image(AllocationStrategy strat);
@@ -58,9 +60,9 @@ public:
   void changedSizeMB(int newMB);
 
 signals:
-  void printMessage(QDateTime ts, QString msg);
-  void statusMessage(QDateTime ts, QString msg);
-  void criticalMessage(QDateTime ts, QString msg);
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 private slots:
   void allocatorHeartbeat();
@@ -101,6 +103,9 @@ private:
 
   Q_PROPERTY(int     max        READ get_Max   WRITE set_Max STORED false);
   QCEP_INTEGER_PROPERTY(Max);
+
+  Q_PROPERTY(int     reserve        READ get_Reserve   WRITE set_Reserve STORED false);
+  QCEP_INTEGER_PROPERTY(Reserve);
 
   Q_PROPERTY(int     allocated        READ get_Allocated   WRITE set_Allocated STORED false);
   QCEP_INTEGER_PROPERTY(Allocated);

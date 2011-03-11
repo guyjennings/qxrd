@@ -45,6 +45,7 @@ public:
   QxrdAcquisition *acquisition() const;
   QxrdWindow *window();
   QxrdDataProcessor *dataProcessor() const;
+  QxrdAllocator *allocator() const;
 
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *perkinElmerPlugin();
@@ -68,11 +69,12 @@ public slots:
   void readSettings();
   void writeSettings();
   void splashMessage(const char *msg);
+  void splashMessage(QString msg);
 
 signals:
-  void printMessage(QDateTime ts, QString msg);
-  void statusMessage(QDateTime ts, QString msg);
-  void criticalMessage(QDateTime ts, QString msg);
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 public:
   bool wantToQuit();

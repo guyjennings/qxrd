@@ -51,9 +51,9 @@ public slots:
   void doSelectComboItem(int index);
 
 signals:
-  void printMessage(QDateTime ts, QString msg) const;
-  void statusMessage(QDateTime ts, QString msg) const;
-  void criticalMessage(QDateTime ts, QString msg) const;
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
 private:
   mutable QMutex        m_Mutex;

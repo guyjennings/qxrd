@@ -6,6 +6,7 @@ QxrdFileBrowserView::QxrdFileBrowserView(QWidget *parent) :
     QTreeView(parent)
 {
   setSortingEnabled(true);
+  sortByColumn(0, Qt::AscendingOrder);
 }
 
 void QxrdFileBrowserView::paintEvent(QPaintEvent *event)
@@ -15,5 +16,9 @@ void QxrdFileBrowserView::paintEvent(QPaintEvent *event)
 
   QTreeView::paintEvent(event);
 
-//  printf("QxrdFileBrowserView::paintEvent took %d msec\n", tic.elapsed());
+//  int elapsed = tic.elapsed();
+
+//  if (elapsed > 1000) {
+//    printf("QxrdFileBrowserView::paintEvent took %d msec\n", elapsed);
+//  }
 }

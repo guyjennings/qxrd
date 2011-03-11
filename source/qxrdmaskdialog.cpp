@@ -12,9 +12,9 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessor *proc, QWidget
 {
   setupUi(this);
 
-  connect(this, SIGNAL(printMessage(QDateTime,QString)), win, SLOT(printMessage(QDateTime,QString)));
-  connect(this, SIGNAL(statusMessage(QDateTime,QString)), win, SLOT(statusMessage(QDateTime,QString)));
-  connect(this, SIGNAL(criticalMessage(QDateTime,QString)), win, SLOT(criticalMessage(QDateTime,QString)));
+  connect(this, SIGNAL(printMessage(QString,QDateTime)), win, SLOT(printMessage(QString,QDateTime)));
+  connect(this, SIGNAL(statusMessage(QString,QDateTime)), win, SLOT(statusMessage(QString,QDateTime)));
+  connect(this, SIGNAL(criticalMessage(QString,QDateTime)), win, SLOT(criticalMessage(QString,QDateTime)));
 
   connect(m_HideMaskAll, SIGNAL(clicked()), this, SLOT(doHideMaskAll()));
   connect(m_ShowMaskAll, SIGNAL(clicked()), this, SLOT(doShowMaskAll()));
@@ -100,7 +100,7 @@ void QxrdMaskDialog::doHideMaskAll()
 
   if (n >= 0) {
     m_Processor->hideMaskAllStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Hide All");
+    emit statusMessage("Mask Stack Hide All");
   }
 }
 
@@ -110,7 +110,7 @@ void QxrdMaskDialog::doShowMaskAll()
 
   if (n >= 0) {
     m_Processor->showMaskAllStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Show All");
+    emit statusMessage("Mask Stack Show All");
   }
 }
 
@@ -120,7 +120,7 @@ void QxrdMaskDialog::doHideMaskRange()
 
   if (n >= 0) {
     m_Processor->hideMaskRangeStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Hide All");
+    emit statusMessage("Mask Stack Hide All");
   }
 }
 
@@ -130,7 +130,7 @@ void QxrdMaskDialog::doShowMaskRange()
 
   if (n >= 0) {
     m_Processor->showMaskRangeStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Show All");
+    emit statusMessage("Mask Stack Show All");
   }
 }
 
@@ -140,7 +140,7 @@ void QxrdMaskDialog::doInvertMask()
 
   if (n >= 0) {
     m_Processor->invertMaskStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Invert");
+    emit statusMessage("Mask Stack Invert");
   }
 }
 
@@ -150,7 +150,7 @@ void QxrdMaskDialog::doAndMask()
 
   if (n >= 0) {
     m_Processor->andMaskStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack AND");
+    emit statusMessage("Mask Stack AND");
   }
 }
 
@@ -160,7 +160,7 @@ void QxrdMaskDialog::doOrMask()
 
   if (n >= 0) {
     m_Processor->orMaskStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack OR");
+    emit statusMessage("Mask Stack OR");
   }
 }
 
@@ -170,7 +170,7 @@ void QxrdMaskDialog::doXorMask()
 
   if (n >= 0) {
     m_Processor->xorMaskStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack XOR");
+    emit statusMessage("Mask Stack XOR");
   }
 }
 
@@ -180,7 +180,7 @@ void QxrdMaskDialog::doAndNotMask()
 
   if (n >= 0) {
     m_Processor->andNotMaskStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack AND NOT");
+    emit statusMessage("Mask Stack AND NOT");
   }
 }
 
@@ -190,7 +190,7 @@ void QxrdMaskDialog::doOrNotMask()
 
   if (n >= 0) {
     m_Processor->orNotMaskStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack OR NOT");
+    emit statusMessage("Mask Stack OR NOT");
   }
 }
 
@@ -200,7 +200,7 @@ void QxrdMaskDialog::doXorNotMask()
 
   if (n >= 0) {
     m_Processor->xorNotMaskStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack XOR NOT");
+    emit statusMessage("Mask Stack XOR NOT");
   }
 }
 
@@ -210,7 +210,7 @@ void QxrdMaskDialog::doExchangeMask()
 
   if (n >= 0) {
     m_Processor->exchangeMaskStack(n);
-    emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Exchanged");
+    emit statusMessage("Mask Stack Exchanged");
   }
 }
 
@@ -226,40 +226,40 @@ void QxrdMaskDialog::doRollMask()
 void QxrdMaskDialog::doRollUpMask()
 {
   m_Processor->rollMaskStack(1);
-  emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Rolled Up");
+  emit statusMessage("Mask Stack Rolled Up");
 }
 
 void QxrdMaskDialog::doRollDownMask()
 {
   m_Processor->rollMaskStack(-1);
-  emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Rolled Down");
+  emit statusMessage("Mask Stack Rolled Down");
 }
 
 void QxrdMaskDialog::doClearMask()
 {
   m_Processor->clearMaskStack();
-  emit statusMessage(QDateTime::currentDateTime(), "Mask Stack Cleared");
+  emit statusMessage("Mask Stack Cleared");
 }
 
 void QxrdMaskDialog::doClearMaskTop()
 {
   m_Processor->clearMaskStackTop();
-  emit statusMessage(QDateTime::currentDateTime(), "Top of Mask Stack Cleared");
+  emit statusMessage("Top of Mask Stack Cleared");
 }
 
 void QxrdMaskDialog::doPushMask()
 {
   m_Processor->pushMaskStack();
-  emit statusMessage(QDateTime::currentDateTime(), "Mask Pushed");
+  emit statusMessage("Mask Pushed");
 }
 
 void QxrdMaskDialog::doNewMask()
 {
   m_Processor->newMaskStack();
-  emit statusMessage(QDateTime::currentDateTime(), "New Mask");
+  emit statusMessage("New Mask");
 }
 
 void QxrdMaskDialog::doUndoMask()
 {
-  emit statusMessage(QDateTime::currentDateTime(), "Undo Not Implemented");
+  emit statusMessage("Undo Not Implemented");
 }

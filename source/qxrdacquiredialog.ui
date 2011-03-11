@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>381</height>
+    <width>483</width>
+    <height>459</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,11 +24,6 @@
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="label_20">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Camera Gain:</string>
       </property>
@@ -45,11 +40,6 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Detector Gain (0..5)
 Script Property: &quot;acquisition.cameraGain&quot;</string>
@@ -60,11 +50,6 @@ Script Property: &quot;acquisition.cameraGain&quot;</string>
      <widget class="QLabel" name="label_21">
       <property name="enabled">
        <bool>false</bool>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="text">
        <string>Binning:</string>
@@ -85,11 +70,6 @@ Script Property: &quot;acquisition.cameraGain&quot;</string>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Detector binning mode (0..1)
 Script Property: &quot;acquisition.binningMode&quot;</string>
@@ -98,11 +78,6 @@ Script Property: &quot;acquisition.binningMode&quot;</string>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Exposure Time:</string>
       </property>
@@ -118,11 +93,6 @@ Script Property: &quot;acquisition.binningMode&quot;</string>
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Number of exposures to sum for each saved image
@@ -142,11 +112,6 @@ Script Function: summedExposures()</string>
     </item>
     <item row="2" column="2">
      <widget class="QLabel" name="label_24">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Skipped at start:</string>
       </property>
@@ -162,11 +127,6 @@ Script Function: summedExposures()</string>
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Number of exposures to skip before each acquisition sequence
@@ -188,11 +148,6 @@ Script Property: &quot;acquisition.skippedExposuresAtStart&quot;</string>
     </item>
     <item row="3" column="0">
      <widget class="QLabel" name="label_2">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Summed:</string>
       </property>
@@ -208,11 +163,6 @@ Script Property: &quot;acquisition.skippedExposuresAtStart&quot;</string>
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Number of exposures to sum for each saved image
@@ -232,11 +182,6 @@ Script Function: summedExposures()</string>
     </item>
     <item row="3" column="2">
      <widget class="QLabel" name="label_13">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Skipped:</string>
       </property>
@@ -252,11 +197,6 @@ Script Function: summedExposures()</string>
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Number of exposures to skip between each saved image
@@ -279,11 +219,6 @@ Script Function: skippedExposures()</string>
     </item>
     <item row="5" column="0">
      <widget class="QLabel" name="label_5">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>File Index:</string>
       </property>
@@ -300,11 +235,6 @@ Script Function: skippedExposures()</string>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Index number, substituted into file names, and incremented with each image
 Script Property: acquisition.fileIndex
@@ -320,11 +250,6 @@ Script Function: fileindex()</string>
     </item>
     <item row="5" column="2">
      <widget class="QLabel" name="label_7">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Dark Summed:</string>
       </property>
@@ -340,11 +265,6 @@ Script Function: fileindex()</string>
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Number of exposures to sum for dark image
@@ -367,11 +287,6 @@ Script Function: darkSummedExposures()</string>
       <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Cancel an acquisition</string>
       </property>
@@ -390,11 +305,6 @@ Script Function: darkSummedExposures()</string>
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Do regular acquisition
@@ -416,11 +326,6 @@ Script Function: acquire()</string>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Do Dark Acquisition
 Script Function: acquiredark()</string>
@@ -432,11 +337,6 @@ Script Function: acquiredark()</string>
     </item>
     <item row="7" column="0">
      <widget class="QLabel" name="label_6">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Output Directory:</string>
       </property>
@@ -453,11 +353,6 @@ Script Function: acquiredark()</string>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>The directory where data files will be saved
 Script Property: &quot;processor.outputDirectory&quot;
@@ -470,11 +365,6 @@ Script Function: outputDirectory()</string>
     </item>
     <item row="7" column="3">
      <widget class="QPushButton" name="m_SelectDirectoryButton">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Select New Output Directory...</string>
       </property>
@@ -485,11 +375,6 @@ Script Function: outputDirectory()</string>
     </item>
     <item row="8" column="0">
      <widget class="QLabel" name="label_4">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>File Pattern:</string>
       </property>
@@ -505,11 +390,6 @@ Script Function: outputDirectory()</string>
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Base File Name Pattern
@@ -536,11 +416,6 @@ Raw: &lt;pattern&gt;-&lt;nnnnn&gt;-&lt;ppp&gt;.raw.tif</string>
     </item>
     <item row="9" column="0">
      <widget class="QLabel" name="label_22">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Log File:</string>
       </property>
@@ -557,11 +432,6 @@ Raw: &lt;pattern&gt;-&lt;nnnnn&gt;-&lt;ppp&gt;.raw.tif</string>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Path to log file
 Script Property: &quot;processor.logFilePath&quot;</string>
@@ -573,11 +443,6 @@ Script Property: &quot;processor.logFilePath&quot;</string>
     </item>
     <item row="9" column="3">
      <widget class="QPushButton" name="m_SelectLogFileButton">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Select New LogFile...</string>
       </property>
@@ -637,11 +502,6 @@ Script Property: &quot;processor.logFilePath&quot;</string>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="toolTip">
        <string>Clear dropped frames counter</string>
       </property>
@@ -665,11 +525,6 @@ Script Property: &quot;processor.logFilePath&quot;</string>
     </item>
     <item row="4" column="0">
      <widget class="QLabel" name="label_9">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Groups in Seq</string>
       </property>
@@ -680,11 +535,6 @@ Script Property: &quot;processor.logFilePath&quot;</string>
     </item>
     <item row="4" column="2">
      <widget class="QLabel" name="label_3">
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
       <property name="text">
        <string>Files in Group:</string>
       </property>
@@ -700,11 +550,6 @@ Script Property: &quot;processor.logFilePath&quot;</string>
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Total number of files in each file group for synchronized acquisition
@@ -736,11 +581,6 @@ Script Function: filesInGroup()</string>
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
       </property>
       <property name="toolTip">
        <string>Total number of file groups in synchronized acquisition,

@@ -16,7 +16,6 @@ void QxrdResponseTimer::onTimeout()
   int elapsedTime = m_ResponseTime.restart();
 
   if (abs(elapsedTime-m_ResponseInterval) > 1000) {
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Excessive response time %1").arg(elapsedTime-m_ResponseInterval));
+    emit printMessage(tr("Excessive response time %1").arg(elapsedTime-m_ResponseInterval));
   }
 }

@@ -20,22 +20,19 @@ QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc, Qxrd
 
 void QxrdAcquisitionSimulated::onExposureTimeChanged(double newTime)
 {
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("Exposure time changed to %1").arg(newTime));
+  emit printMessage(tr("Exposure time changed to %1").arg(newTime));
 
   m_Timer.start(get_ExposureTime()*1000);
 }
 
 void QxrdAcquisitionSimulated::onBinningModeChanged(int newMode)
 {
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("Binning mode changed to %1").arg(newMode));
+  emit printMessage(tr("Binning mode changed to %1").arg(newMode));
 }
 
 void QxrdAcquisitionSimulated::onCameraGainChanged(int newGain)
 {
-  emit printMessage(QDateTime::currentDateTime(),
-                    tr("Camera Gain Changed to %1").arg(newGain));
+  emit printMessage(tr("Camera Gain Changed to %1").arg(newGain));
 }
 
 void QxrdAcquisitionSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/)
@@ -124,12 +121,12 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
   int nRows = get_NRows();
   int nCols = get_NCols();
 
-  QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image(QxrdAllocator::NullIfNotAvailable);
+  QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image(QxrdAllocator::AllocateFromReserve);
   int xpmsec = (int)(get_ExposureTime()*1000+0.5);
+  int frame = (frameCounter++) % 8;
 
   if (image) {
     quint16 *ptr = image->data();
-    int frame = (frameCounter++) % 8;
 
     for (int j=0; j<nRows; j++) {
       for (int i=0; i<nCols; i++) {
@@ -137,6 +134,45 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
           *ptr++ = frame;
         } else {
           *ptr++ = xpmsec;
+        }
+      }
+    }
+
+    if ((nRows > 1024) && (nCols > 1024)) {
+      const int labelWidth = 256;
+      const int labelHeight = 64;
+
+      QImage imageLabel(labelWidth, labelHeight, QImage::Format_RGB32);
+      QPainter painter(&imageLabel);
+
+      painter.fillRect(0,0,labelWidth,labelHeight, Qt::black);
+      painter.setPen(Qt::white);
+      painter.setFont(QFont("Times", labelHeight, QFont::Bold, true));
+      painter.drawText(0, labelHeight, tr("%1").arg(frameCounter));
+
+      QRgb    *rgb = (QRgb*) imageLabel.bits();
+      int nFrames = nRows / labelHeight;
+      int frameN = frameCounter % nFrames;
+      int plval = qGray(*rgb);
+      int pRgb  = *rgb;
+
+      for (int j=0; j<labelHeight; j++) {
+        for (int i=0; i<labelWidth; i++) {
+          int x = nCols-labelWidth+i;
+          int y = (frameN+1)*labelHeight-j;
+          int val = image->value(x,y);
+          int vRgb = *rgb++;
+          int lval = qGray(vRgb);
+
+          if (lval != plval) {
+            plval = lval;
+          }
+
+          if (vRgb != pRgb) {
+            pRgb = vRgb;
+          }
+
+          image->setValue(x,y,lval);
         }
       }
     }

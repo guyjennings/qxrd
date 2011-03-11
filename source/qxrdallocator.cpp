@@ -8,6 +8,7 @@ QxrdAllocator::QxrdAllocator
     m_AllocatedMemory(0),
     m_AllocatedMemoryMB(0),
     m_Max(this, "max", 800),
+    m_Reserve(this,"reserve",100),
     m_Allocated(this, "allocated", 0),
     m_Width(this, "width", 2048),
     m_Height(this, "height", 2048)
@@ -48,6 +49,10 @@ int QxrdAllocator::waitTillAvailable(AllocationStrategy strat, int sizeMB)
     return true;
   } else if (strat == QxrdAllocator::NullIfNotAvailable) {
     return ((m_AllocatedMemoryMB + sizeMB) < get_Max());
+  } else if (strat == QxrdAllocator::AllocateFromReserve) {
+    return ((m_AllocatedMemoryMB + sizeMB) < (get_Max() + get_Reserve()));
+  } else if (strat == QxrdAllocator::AlwaysAllocate) {
+    return true;
   } else {
     return false;
   }
@@ -328,8 +333,7 @@ void QxrdAllocator::allocatorHeartbeat()
 //  if (ndblneeded < 4) ndblneeded = 4;
 
 //  if (qcepDebug(DEBUG_ALLOCATOR)) {
-//    emit printMessage(QDateTime::currentDateTime(),
-//                      tr("Allocator heartbeat, %1 out of %2, [%3,%4,%5,%6] [%7,%8,%9]\n")
+//    emit printMessage(tr("Allocator heartbeat, %1 out of %2, [%3,%4,%5,%6] [%7,%8,%9]\n")
 //                      .arg(m_AllocatedMemoryMB).arg(get_Max()).arg(n16).arg(n32).arg(ndbl).arg(nmsk)
 //                      .arg(n16needed).arg(n32needed).arg(ndblneeded));
 //  }

@@ -11,7 +11,7 @@ QxrdAcquisitionScripting::QxrdAcquisitionScripting()
 
 void QxrdAcquisitionScripting::Message(QString msg)
 {
-  emit statusMessage(QDateTime::currentDateTime(), msg);
+  emit statusMessage(msg);
 }
 
 void QxrdAcquisitionScripting::propertyList()
@@ -29,7 +29,6 @@ void QxrdAcquisitionScripting::propertyList()
     const char *name = metaproperty.name();
     QVariant value = property(name);
 
-    emit printMessage(QDateTime::currentDateTime(),
-                      tr("Property %1: %2 = %3").arg(i).arg(name).arg(value.toString()));
+    emit printMessage(tr("Property %1: %2 = %3").arg(i).arg(name).arg(value.toString()));
   }
 }
