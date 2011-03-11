@@ -45,6 +45,7 @@ public:
   QxrdAcquisition *acquisition() const;
   QxrdWindow *window();
   QxrdDataProcessor *dataProcessor() const;
+  QxrdAllocator *allocator() const;
 
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *perkinElmerPlugin();

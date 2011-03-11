@@ -492,6 +492,11 @@ QxrdDataProcessor *QxrdApplication::dataProcessor() const
   return m_DataProcessor;
 }
 
+QxrdAllocator *QxrdApplication::allocator() const
+{
+  return m_Allocator;
+}
+
 void QxrdApplication::editPreferences()
 {
   QxrdPreferencesDialog prefs;
