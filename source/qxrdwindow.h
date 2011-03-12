@@ -119,7 +119,7 @@ public:
 
 private:
   void shrinkDockWidget(QDockWidget *dockWidget);
-  void shrinkWidget(QWidget *widget);
+  void shrinkObject(QObject *obj);
 
 private:
   mutable QMutex                         m_Mutex;

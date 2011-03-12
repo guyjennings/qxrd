@@ -156,6 +156,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     tabifyDockWidget(m_HistogramDialog, m_ImageInfoDialog);
 
     if (screenGeom.height() < 800) {
+//      shrinkObject(this);
       shrinkDockWidget(m_AcquireDialog);
       shrinkDockWidget(m_CenterFinderDialog);
       shrinkDockWidget(m_IntegratorDialog);
@@ -455,28 +456,40 @@ QxrdWindow::~QxrdWindow()
 
 void QxrdWindow::shrinkDockWidget(QDockWidget *dw)
 {
-  shrinkWidget(dw);
+  shrinkObject(dw);
 }
 
-void QxrdWindow::shrinkWidget(QWidget *wid)
+void QxrdWindow::shrinkObject(QObject *obj)
 {
-  QFont f = wid->font();
-  if (f.pointSize() > 6) f.setPointSize(6);
-  wid->setFont(f);
-//  wid->setContentsMargins(1,1,1,1);
+  if (obj) {
+//    printf("shrinkObject %p[%s]\n", obj, qPrintable(obj->objectName()));
 
-  QGridLayout *gl = qobject_cast<QGridLayout*>(wid);
-
-  if (gl) {
-    gl->setHorizontalSpacing(1);
-    gl->setVerticalSpacing(1);
-  }
-
-  foreach(QObject* obj, wid->children()) {
     QWidget *wid = qobject_cast<QWidget*>(obj);
 
     if (wid) {
-      shrinkWidget(wid);
+      QFont f = wid->font();
+      if (f.pointSize() > 6) f.setPointSize(6);
+      wid->setFont(f);
+      wid->setContentsMargins(1,1,1,1);
+    }
+
+    QLayout *ly = qobject_cast<QLayout*>(obj);
+
+    if (ly) {
+      ly->setContentsMargins(2,2,2,2);
+
+      QGridLayout *gl = qobject_cast<QGridLayout*>(ly);
+
+      if (gl) {
+        gl->setHorizontalSpacing(1);
+        gl->setVerticalSpacing(1);
+      }
+    }
+
+    foreach(QObject* chobj, obj->children()) {
+      if (chobj) {
+        shrinkObject(chobj);
+      }
     }
   }
 }
