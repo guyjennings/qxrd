@@ -564,3 +564,19 @@ void QxrdApplication::tiffError(const char *module, const char *msg)
 {
   emit criticalMessage(tr("TIFF Error from %1 : %2").arg(module).arg(msg));
 }
+
+bool QxrdApplication::event(QEvent *ev)
+{
+  QTime tick;
+  tick.start();
+
+  bool res = QApplication::event(ev);
+
+  int elapsed = tick.restart();
+
+  if (elapsed > 1000) {
+    printf("event processing took more than 1 sec\n");
+  }
+
+  return res;
+}
