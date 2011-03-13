@@ -13,7 +13,7 @@ DESTDIR  = ../
 # POST_TARGETDEPS += install
 #target.path = ../app
 INSTALLS += target
-CONFIG += qt
+CONFIG += qt #profile
 QT += network \
     script \
     scripttools
