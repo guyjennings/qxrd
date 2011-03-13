@@ -796,6 +796,9 @@ Script Property: &quot;acquisition.userComment4&quot;
    <property name="toolTip">
     <string>Trigger Acquisition</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+T</string>
+   </property>
   </action>
   <action name="m_ActionCancel">
    <property name="icon">
@@ -807,6 +810,9 @@ Script Property: &quot;acquisition.userComment4&quot;
    </property>
    <property name="toolTip">
     <string>Cancel Current Acquisition Operation</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+X</string>
    </property>
   </action>
   <action name="m_ActionAcquireDark">
@@ -820,6 +826,9 @@ Script Property: &quot;acquisition.userComment4&quot;
    <property name="toolTip">
     <string>Acquire Dark Image</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+Shift+A</string>
+   </property>
   </action>
   <action name="m_ActionAcquire">
    <property name="icon">
@@ -828,6 +837,9 @@ Script Property: &quot;acquisition.userComment4&quot;
    </property>
    <property name="text">
     <string>Acquire</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+A</string>
    </property>
   </action>
  </widget>
