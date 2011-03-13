@@ -60,6 +60,8 @@ public:
 
   static QxrdApplication* application();
 
+  bool event(QEvent *ev);
+
 public slots:
   void shutdownThreads();
   void possiblyQuit();
