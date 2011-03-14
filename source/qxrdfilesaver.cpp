@@ -253,7 +253,9 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdM
 
       TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
 
-      if (nsum == 1) {
+      if (nsum == 0) {
+        TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8));
+      } else if (nsum == 1) {
         TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16));
       } else {
         TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
@@ -263,7 +265,18 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdM
 
       image -> setTiffMetaData(tif);
 
-      if (nsum == 1) {
+      if (nsum == 0) {
+        QVector<quint8> buffvec(ncols);
+        quint8* buffer = buffvec.data();
+
+        for (int y=0; y<nrows; y++) {
+          for (int x=0; x<ncols; x++) {
+            buffer[x] = image->value(x,y);
+          }
+
+          TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+        }
+      } else if (nsum == 1) {
         QVector<quint16> buffvec(ncols);
         quint16* buffer = buffvec.data();
 
