@@ -118,6 +118,10 @@ void QxrdAcquisitionSimulated::endAcquisition()
 
 void QxrdAcquisitionSimulated::onTimerTimeout()
 {
+  if (synchronizedAcquisition()) {
+    synchronizedAcquisition()->acquiredFrameAvailable(frameCounter);
+  }
+
   int nRows = get_NRows();
   int nCols = get_NCols();
 

@@ -359,6 +359,7 @@ int QxrdAcquisition::cancelling()
   int res = get_Cancelling();
 
   if (res) {
+    emit printMessage(tr("Cancelling acquisition"));
     emit statusMessage(tr("Cancelling acquisition"));
   }
 
@@ -385,6 +386,12 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
   QVector<QxrdInt32ImageDataPtr> res(nphases);
   QVector<QxrdMaskDataPtr>       ovf(nphases);
 
+  emit printMessage("Starting acquisition");
+
+  if (synchronizedAcquisition()) {
+    synchronizedAcquisition()->prepareForAcquisition(&parms);
+  }
+
   for (int i=0; i<skipBefore; i++) {
     if (cancelling()) goto cancel;
     emit statusMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
@@ -396,13 +403,6 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     if (cancelling()) goto cancel;
 
     set_FileIndex(fileIndex+i);
-
-    if (i != 0) {
-      for (int k=0; k<skipBetween; k++) {
-        emit statusMessage(tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
-        acquireFrame(exposure);
-      }
-    }
 
     for (int p=0; p<nphases; p++) {
       res[p] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
@@ -418,15 +418,16 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
       }
     }
 
+    if (i != 0) {
+      for (int k=0; k<skipBetween; k++) {
+        emit statusMessage(tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
+        acquireFrame(exposure);
+      }
+    }
+
     if (cancelling()) goto cancel;
 
     for (int s=0; s<nsummed; s++) {
-      if (nphases > 1) {
-        if (synchronizedAcquisition()) {
-          synchronizedAcquisition()->acquiredFrameAvailable(0);
-        }
-      }
-
       for (int p=0; p<nphases; p++) {
         if (res[p]) {
           emit acquiredFrame(res[p]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, postTrigger);
@@ -453,8 +454,13 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
   }
 
   emit statusMessage(tr("Acquisition complete"));
+  emit printMessage(tr("Acquisition complete"));
 
 cancel:
+  if (synchronizedAcquisition()) {
+    synchronizedAcquisition()->finishedAcquisition();
+  }
+
   startIdling();
 }
 
@@ -467,6 +473,12 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
   double exposure = parms.exposure();
   int nsummed = parms.nsummed();
   int skipBefore = parms.skipBefore();
+
+  emit printMessage("Starting dark acquisition");
+
+  if (synchronizedAcquisition()) {
+    synchronizedAcquisition()->prepareForDarkAcquisition(&parms);
+  }
 
   QxrdInt32ImageDataPtr res = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
   QxrdMaskDataPtr overflow  = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,0);
@@ -500,8 +512,13 @@ saveCancel:
   processDarkImage(fileBase, fileIndex, res, overflow);
 
   emit statusMessage(tr("Acquisition complete"));
+  emit printMessage(tr("Acquisition complete"));
 
 cancel:
+  if (synchronizedAcquisition()) {
+    synchronizedAcquisition()->finishedAcquisition();
+  }
+
   startIdling();
 }
 

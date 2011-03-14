@@ -549,9 +549,9 @@ void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
 //  QTime tic;
 //  tic.start();
 
-//  if (synchronizedAcquisition()) {
-//    synchronizedAcquisition()->acquiredFrameAvailable(currentPhase(m_Counter));
-//  }
+  if (synchronizedAcquisition()) {
+    synchronizedAcquisition()->acquiredFrameAvailable(m_Counter);
+  }
 
 //  printf("syncAcq->acquiredFrameAvailable took %d msec\n", tic.restart());
 

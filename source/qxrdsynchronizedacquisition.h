@@ -6,8 +6,8 @@
 #include <QMutex>
 #include "qcepproperty.h"
 #include "qxrdsettings.h"
+#include "qxrdacquisition.h"
 
-class QxrdAcquisition;
 class QxrdNIDAQPluginInterface;
 
 class QxrdSynchronizedAcquisition : public QObject
@@ -56,7 +56,9 @@ signals:
 public slots:
 
 public:
-  void prepareForAcquisition();
+  void prepareForAcquisition(QxrdAcquisition::QxrdAcquisitionParameterPack *parms);
+  void prepareForDarkAcquisition(QxrdAcquisition::QxrdDarkAcquisitionParameterPack *parms);
+  void finishedAcquisition();
   void acquiredFrameAvailable(int currentPhase);
   void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
   QxrdNIDAQPluginInterface *nidaqPlugin() const;
@@ -67,6 +69,7 @@ public:
 private:
   mutable QMutex             m_Mutex;
   QxrdAcquisition           *m_Acquisition;
+  QxrdAcquisition::QxrdAcquisitionParameterPack *m_AcquisitionParms;
   QxrdNIDAQPluginInterface  *m_NIDAQPlugin;
   int                        m_SyncMode;
   QVector<double>            m_OutputVoltage;
