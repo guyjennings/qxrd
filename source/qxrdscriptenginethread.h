@@ -1,7 +1,7 @@
 #ifndef QXRDSCRIPTENGINETHREAD_H
 #define QXRDSCRIPTENGINETHREAD_H
 
-#include <QThread>
+#include "qxrdthread.h"
 #include <QAtomicPointer>
 #include <QDateTime>
 
@@ -11,7 +11,7 @@ class QxrdAcquisition;
 class QxrdDataProcessor;
 class QxrdScriptEngine;
 
-class QxrdScriptEngineThread : public QThread
+class QxrdScriptEngineThread : public QxrdThread
 {
   Q_OBJECT;
 

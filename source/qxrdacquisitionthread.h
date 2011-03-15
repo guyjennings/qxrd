@@ -1,7 +1,7 @@
 #ifndef QXRDACQUISITIONTHREAD_H
 #define QXRDACQUISITIONTHREAD_H
 
-#include <QThread>
+#include "qxrdthread.h"
 #include <QAtomicPointer>
 #include <QStringList>
 #include <QDateTime>
@@ -10,7 +10,7 @@ class QxrdDataProcessor;
 class QxrdAllocator;
 class QxrdAcquisition;
 
-class QxrdAcquisitionThread : public QThread
+class QxrdAcquisitionThread : public QxrdThread
 {
   Q_OBJECT;
 

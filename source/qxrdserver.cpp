@@ -34,4 +34,6 @@ QVariant QxrdServer::readProperty(QString name)
 void QxrdServer::shutdown()
 {
   close();
+
+  thread()->exit();
 }

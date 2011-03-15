@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 
-#include <QThread>
+#include "qxrdthread.h"
 
 class QxrdAllocator;
 class QxrdDataProcessor;
@@ -13,7 +13,7 @@ class QxrdFileSaver;
 #include "qxrdimagedata.h"
 #include "qxrdintegrateddata.h"
 
-class QxrdFileSaverThread : public QThread
+class QxrdFileSaverThread : public QxrdThread
 {
   Q_OBJECT;
 

@@ -3,17 +3,18 @@
 
 #include "qcepmacros.h"
 #include "qxrdsettingssaver.h"
-#include <QThread>
+#include "qxrdthread.h"
 
 class QxrdApplication;
 
-class QxrdSettingsSaverThread : public QThread
+class QxrdSettingsSaverThread : public QxrdThread
 {
   Q_OBJECT;
 public:
   QxrdSettingsSaverThread(QxrdApplication *app);
 
   QxrdSettingsSaver *settingsSaver();
+  void shutdown();
 
 signals:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());

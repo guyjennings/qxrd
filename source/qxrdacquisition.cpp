@@ -46,6 +46,13 @@ void QxrdAcquisition::initialize()
 {
 }
 
+void QxrdAcquisition::shutdown()
+{
+  shutdownAcquisition();
+
+  thread()->exit();
+}
+
 void QxrdAcquisition::onBufferSizeChanged(int newMB)
 {
   m_Allocator -> changedSizeMB(newMB);

@@ -4,7 +4,7 @@
 #include "qxrdacquisition.h"
 
 QxrdAllocatorThread::QxrdAllocatorThread(/*QxrdAcquisitionPtr acq*/)
-  : QThread(),
+  : QxrdThread(),
     m_Allocator(NULL)
 {
 }

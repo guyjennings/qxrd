@@ -18,6 +18,10 @@ void QxrdAcquisitionAreaDetector::endAcquisition()
 {
 }
 
+void QxrdAcquisitionAreaDetector::shutdownAcquisition()
+{
+}
+
 void QxrdAcquisitionAreaDetector::onExposureTimeChanged(double /*newTime*/)
 {
 }

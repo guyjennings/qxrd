@@ -198,7 +198,8 @@ HEADERS += TODO.h \
     qxrdhistogramselector.h \
     qxrdresponsetimer.h \
     qxrdallocatorinterface.h \
-    qxrdimagedataobjectcounter.h
+    qxrdimagedataobjectcounter.h \
+    qxrdthread.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -309,7 +310,8 @@ SOURCES += qxrd.cpp \
     qxrdhistogramselector.cpp \
     qxrdresponsetimer.cpp \
     qxrdallocatorinterface.cpp \
-    qxrdimagedataobjectcounter.cpp
+    qxrdimagedataobjectcounter.cpp \
+    qxrdthread.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \

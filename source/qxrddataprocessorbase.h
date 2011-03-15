@@ -199,6 +199,8 @@ signals:
   void newIntegrationAvailable(QxrdIntegratedDataPtr data);
 
 public slots:
+  void shutdown();
+
   void showMaskRange(/*double min, double max*/);
   void hideMaskRange(/*double min, double max*/);
   void showMaskAll();

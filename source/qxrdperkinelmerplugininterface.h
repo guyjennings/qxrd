@@ -30,6 +30,8 @@ public:
       HACQDESC pAcqDesc, unsigned short *pProcessedData,
       UINT nFrames, UINT nRows, UINT nColumns) = 0;
 
+  virtual UINT Acquisition_Abort(HACQDESC hAcqDesc) = 0;
+
   virtual UINT Acquisition_Acquire_Image(
       HACQDESC pAcqDesc, UINT dwFrames, UINT dwSkipFrms,
       UINT dwOpt, unsigned short *pwOffsetData,

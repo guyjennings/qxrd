@@ -3,12 +3,12 @@
 
 #include "qcepmacros.h"
 
-#include <QThread>
+#include "qxrdthread.h"
 #include <QDateTime>
 
 class QxrdServer;
 
-class QxrdServerThread : public QThread
+class QxrdServerThread : public QxrdThread
 {
   Q_OBJECT;
 

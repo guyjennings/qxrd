@@ -27,6 +27,7 @@ signals:
 protected:
   void beginAcquisition();
   void endAcquisition();
+  void shutdownAcquisition();
 
 private:
   void initialize();

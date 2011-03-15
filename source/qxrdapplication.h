@@ -9,24 +9,32 @@
 #include <QSplashScreen>
 #include "qcepproperty.h"
 #include "qxrdresponsetimer.h"
+#include "qxrdacquisitionthread.h"
+#include "qxrddataprocessorthread.h"
+#include "qxrdserverthread.h"
+#include "qxrdsimpleserverthread.h"
+#include "qxrdallocatorthread.h"
+#include "qxrdfilesaverthread.h"
+#include "qxrdscriptenginethread.h"
+#include "qxrdsettingssaverthread.h"
 
-class QxrdAcquisitionThread;
-class QxrdAcquisition;
+//class QxrdAcquisitionThread;
+//class QxrdAcquisition;
 class QxrdWindow;
-class QxrdDataProcessorThread;
-class QxrdDataProcessor;
+//class QxrdDataProcessorThread;
+//class QxrdDataProcessor;
 class QxrdNIDAQPluginInterface;
-class QxrdServerThread;
-class QxrdServer;
-class QxrdSimpleServerThread;
-class QxrdSimpleServer;
-class QxrdAllocatorThread;
-class QxrdAllocator;
-class QxrdFileSaverThread;
-class QxrdScriptEngineThread;
-class QxrdScriptEngine;
-class QxrdSettingsSaverThread;
-class QxrdSettingsSaver;
+//class QxrdServerThread;
+//class QxrdServer;
+//class QxrdSimpleServerThread;
+//class QxrdSimpleServer;
+//class QxrdAllocatorThread;
+//class QxrdAllocator;
+//class QxrdFileSaverThread;
+//class QxrdScriptEngineThread;
+//class QxrdScriptEngine;
+//class QxrdSettingsSaverThread;
+//class QxrdSettingsSaver;
 
 #ifdef HAVE_PERKIN_ELMER
 class QxrdPerkinElmerPluginInterface;
@@ -83,6 +91,7 @@ public:
 
 private:
   void setupTiffHandlers();
+  void shutdownThread(QxrdThread *thread);
 
 public:
   Q_PROPERTY(int    detectorType  READ get_DetectorType WRITE set_DetectorType);

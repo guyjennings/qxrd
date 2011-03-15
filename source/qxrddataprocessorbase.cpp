@@ -113,6 +113,11 @@ QxrdDataProcessorBase::~QxrdDataProcessorBase()
   closeLogFile();
 }
 
+void QxrdDataProcessorBase::shutdown()
+{
+  thread()->exit();
+}
+
 void QxrdDataProcessorBase::setAcquisition(QxrdAcquisition *acq)
 {
   m_Acquisition = acq;

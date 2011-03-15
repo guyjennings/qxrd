@@ -2,12 +2,12 @@
 #define QXRDSIMPLESERVERTHREAD_H
 
 #include "qcepmacros.h"
-#include <QThread>
+#include "qxrdthread.h"
 #include <QDateTime>
 
 class QxrdSimpleServer;
 
-class QxrdSimpleServerThread : public QThread
+class QxrdSimpleServerThread : public QxrdThread
 {
   Q_OBJECT;
 public:

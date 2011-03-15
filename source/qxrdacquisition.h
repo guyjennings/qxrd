@@ -90,6 +90,9 @@ public slots:
   void trigger();
   void clearDropped();
 
+  void shutdown();
+
+
   int acquisitionStatus(double time);
 
   virtual void onExposureTimeChanged(double newTime) = 0;
@@ -127,6 +130,7 @@ protected:
 
   virtual void beginAcquisition() = 0;
   virtual void endAcquisition() = 0;
+  virtual void shutdownAcquisition() = 0;
 
   void acquisitionError(int n);
   void acquisitionError(int ln, int n);

@@ -1,11 +1,11 @@
 #ifndef QXRDALLOCATORTHREAD_H
 #define QXRDALLOCATORTHREAD_H
 
-#include <QThread>
+#include "qxrdthread.h"
 #include <QDateTime>
 class QxrdAllocator;
 
-class QxrdAllocatorThread : public QThread
+class QxrdAllocatorThread : public QxrdThread
 {
   Q_OBJECT;
 

@@ -18,6 +18,10 @@ void QxrdAcquisitionPilatus::endAcquisition()
 {
 }
 
+void QxrdAcquisitionPilatus::shutdownAcquisition()
+{
+}
+
 void QxrdAcquisitionPilatus::onExposureTimeChanged(double /*newTime*/)
 {
 }
