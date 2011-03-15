@@ -301,9 +301,9 @@ void QxrdApplication::init(QSplashScreen *splash)
 
 QxrdApplication::~QxrdApplication()
 {
-  QCEP_DEBUG(DEBUG_APP,
-             printf("QxrdApplication::~QxrdApplication\n");
-  );
+  if (qcepDebug(DEBUG_APP)) {
+    printf("QxrdApplication::~QxrdApplication\n");
+  }
 
   m_Window -> deleteLater();
   m_AcquisitionThread -> deleteLater();
@@ -313,9 +313,9 @@ QxrdApplication::~QxrdApplication()
   m_AllocatorThread -> deleteLater();
   m_ScriptEngineThread -> deleteLater();
 
-  QCEP_DEBUG(DEBUG_APP,
-             printf("QxrdApplication::~QxrdApplication finished\n");
-  );
+  if (qcepDebug(DEBUG_APP)) {
+    printf("QxrdApplication::~QxrdApplication finished\n");
+  }
 }
 
 QxrdApplication* QxrdApplication::application()
@@ -459,9 +459,9 @@ bool QxrdApplication::wantToQuit()
 
 void QxrdApplication::shutdownThreads()
 {
-  QCEP_DEBUG(DEBUG_APP,
-             printf("QxrdApplication::shutdownThreads\n");
-  );
+  if (qcepDebug(DEBUG_APP)) {
+    printf("QxrdApplication::shutdownThreads\n");
+  }
 
   writeSettings();
 

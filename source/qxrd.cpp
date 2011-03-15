@@ -39,9 +39,9 @@ int main(int argc, char *argv[])
 
   int res = app.exec();
 
-  QCEP_DEBUG(DEBUG_EXITWAIT,
-             while(1) {}
-  );
+  if (qcepDebug(DEBUG_EXITWAIT)) {
+    while(1) {}
+  }
 
   return res;
 }

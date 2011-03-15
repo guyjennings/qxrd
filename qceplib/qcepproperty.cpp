@@ -70,15 +70,16 @@ void QcepProperty::changeVariant(QVariant val)
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
+  if (qcepDebug(DEBUG_PROPERTIES)) {
     printf("%s: QcepProperty::changeVariant <- %s\n", qPrintable(name()), qPrintable(val.toString()));
-  );
+  }
 
   m_Variant = val;
 
   if (m_IsStored && m_WasLoaded) {
-    QCEP_DEBUG(DEBUG_PREFS,
-               printf("%s: QcepProperty::changeVariant is stored\n", qPrintable(name())));
+    if (qcepDebug(DEBUG_PREFS)) {
+      printf("%s: QcepProperty::changeVariant is stored\n", qPrintable(name()));
+    }
 
     m_ChangeCount.fetchAndAddOrdered(1);
   }
@@ -92,8 +93,9 @@ void QcepProperty::changeVariant(T val)
   m_Variant.setValue(val);
 
   if (m_IsStored && m_WasLoaded) {
-    QCEP_DEBUG(DEBUG_PREFS,
-               printf("%s: QcepProperty::changeVariant is stored\n", qPrintable(name())));
+    if (qcepDebug(DEBUG_PREFS)) {
+      printf("%s: QcepProperty::changeVariant is stored\n", qPrintable(name()));
+    }
 
     m_ChangeCount.fetchAndAddOrdered(1);
   }
@@ -156,9 +158,11 @@ void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QStri
       const char *name = metaproperty.name();
       QVariant value = object -> property(name);
 
-      QCEP_DEBUG(DEBUG_PREFS | DEBUG_PROPERTIES,
-                 printf("Save %s/%s = %s [%s]\n", qPrintable(groupName), name, qPrintable(value.toString()), value.typeName())
-      );
+      if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+        printf("Save %s/%s = %s [%s]\n",
+               qPrintable(groupName), name,
+               qPrintable(value.toString()), value.typeName());
+      }
 
       settings.setValue(name, value);
     }
@@ -180,10 +184,12 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
   QStringList keys = settings.childKeys();
 
   foreach (QString key, keys) {
-    QCEP_DEBUG(DEBUG_PREFS | DEBUG_PROPERTIES,
-               printf("Load %s/%s = %s [%s]\n", qPrintable(groupName), qPrintable(key),
-                      qPrintable(settings.value(key).toString()), settings.value(key).typeName());
-    );
+    if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+      printf("Load %s/%s = %s [%s]\n",
+             qPrintable(groupName), qPrintable(key),
+             qPrintable(settings.value(key).toString()),
+             settings.value(key).typeName());
+    }
 
     int metaindex = meta->indexOfProperty(qPrintable(key));
 
@@ -201,11 +207,11 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
 //
         object -> setProperty(qPrintable(key), settings.value(key));
       } else {
-        QCEP_DEBUG(DEBUG_PREFS | DEBUG_PROPERTIES,
-                   printf("property %s of %s not stored\n",
-                          qPrintable(key),
-                          meta -> className());
-        );
+        if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+          printf("property %s of %s not stored\n",
+                 qPrintable(key),
+                 meta -> className());
+        }
       }
     } else {
 //      object -> setProperty(qPrintable(key), settings->value(key));
@@ -214,11 +220,10 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
 //      printf("property %s of %s created dynamically\n",
 //             qPrintable(key),
 //             meta -> className());
-      QCEP_DEBUG(DEBUG_PREFS | DEBUG_PROPERTIES,
-                 printf("property %s of %s does not exist\n",
-                        qPrintable(key),
-                        meta -> className());
-      );
+      if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+        printf("property %s of %s does not exist\n",
+               qPrintable(key), meta -> className());
+      }
     }
   }
 
@@ -260,9 +265,10 @@ double QcepDoubleProperty::defaultValue() const
 
 void QcepDoubleProperty::changeValue(double val)
 {
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-             printf("QcepDoubleProperty::changeValue [%s] = %g, %d\n", qPrintable(name()), val, m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("QcepDoubleProperty::changeValue [%s] = %g, %d\n",
+           qPrintable(name()), val, m_NQueuedUpdates);
+  }
 
   if (m_NQueuedUpdates <= 1) {
     setValue(val);
@@ -273,9 +279,10 @@ void QcepDoubleProperty::changeValue(double val)
 
 void QcepDoubleProperty::changeValue(QString val)
 {
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("QcepDoubleProperty::changeValue [%s] = %s, %d\n", qPrintable(name()), qPrintable(val), m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("QcepDoubleProperty::changeValue [%s] = %s, %d\n",
+           qPrintable(name()), qPrintable(val), m_NQueuedUpdates);
+  }
 
   if (m_NQueuedUpdates <= 1) {
     setValue(val.toDouble());
@@ -288,9 +295,10 @@ void QcepDoubleProperty::setValue(double val)
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("%s: QcepDoubleProperty::setValue <- %g, %d\n", qPrintable(name()), val, m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("%s: QcepDoubleProperty::setValue <- %g, %d\n",
+           qPrintable(name()), val, m_NQueuedUpdates);
+  }
 
   if (val != m_Value) {
     changeVariant(val);
@@ -308,9 +316,10 @@ void QcepDoubleProperty::incValue(double step)
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("%s: QcepDoubleProperty::incValue <- %g, %d\n", qPrintable(name()), step, m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("%s: QcepDoubleProperty::incValue <- %g, %d\n",
+           qPrintable(name()), step, m_NQueuedUpdates);
+  }
 
   if (step) {
     changeVariant(m_Value+step);
@@ -339,9 +348,9 @@ void QcepDoubleProperty::resetValue()
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
+  if (qcepDebug(DEBUG_PROPERTIES)) {
     printf("%s: QcepDoubleProperty::resetValue\n", qPrintable(name()));
-  );
+  }
 
   setValue(m_Default);
 }
@@ -351,9 +360,10 @@ void QcepDoubleProperty::linkTo(QComboBox *comboBox)
   {
     QMutexLocker lock(&m_Mutex);
 
-    QCEP_DEBUG(DEBUG_PROPERTIES,
-      printf("%s: QcepDoubleProperty::linkTo(QComboBox *%p)\n", qPrintable(name()), comboBox);
-    );
+    if (qcepDebug(DEBUG_PROPERTIES)) {
+      printf("%s: QcepDoubleProperty::linkTo(QComboBox *%p)\n",
+             qPrintable(name()), comboBox);
+    }
 
     connect(this, SIGNAL(changedValue(QString)), comboBox, SLOT(setEditText(QString)));
     connect(comboBox,SIGNAL(editTextChanged(QString)), this, SLOT(changeValue(QString)));
@@ -365,9 +375,10 @@ void QcepDoubleProperty::linkTo(QDoubleSpinBox *spinBox)
   {
     QMutexLocker lock(&m_Mutex);
 
-    QCEP_DEBUG(DEBUG_PROPERTIES,
-      printf("%s: QcepDoubleProperty::linkTo(QDoubleSpinBox *%p)\n", qPrintable(name()), spinBox);
-    );
+    if (qcepDebug(DEBUG_PROPERTIES)) {
+      printf("%s: QcepDoubleProperty::linkTo(QDoubleSpinBox *%p)\n",
+             qPrintable(name()), spinBox);
+    }
 
     spinBox -> setValue(value());
 
@@ -411,9 +422,10 @@ int QcepIntProperty::defaultValue() const
 
 void QcepIntProperty::changeValue(int val)
 {
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("QcepIntProperty::changeValue [%s] = %d, %d\n", qPrintable(name()), val, m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("QcepIntProperty::changeValue [%s] = %d, %d\n",
+           qPrintable(name()), val, m_NQueuedUpdates);
+  }
 
   if (m_NQueuedUpdates <= 1) {
     setValue(val);
@@ -426,9 +438,10 @@ void QcepIntProperty::setValue(int val)
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("%s: QcepIntProperty::setValue <- %d, %d\n", qPrintable(name()), val, m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("%s: QcepIntProperty::setValue <- %d, %d\n",
+           qPrintable(name()), val, m_NQueuedUpdates);
+  }
 
   if (val != m_Value) {
     changeVariant(val);
@@ -446,9 +459,10 @@ void QcepIntProperty::incValue(int step)
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("%s: QcepIntProperty::incValue <- %d, %d\n", qPrintable(name()), step, m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("%s: QcepIntProperty::incValue <- %d, %d\n",
+           qPrintable(name()), step, m_NQueuedUpdates);
+  }
 
   if (step) {
     changeVariant(m_Value + step);
@@ -477,9 +491,9 @@ void QcepIntProperty::resetValue()
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
+  if (qcepDebug(DEBUG_PROPERTIES)) {
     printf("%s: QcepIntProperty::resetValue\n", qPrintable(name()));
-  );
+  }
 
   setValue(m_Default);
 }
@@ -489,9 +503,9 @@ void QcepIntProperty::linkTo(QSpinBox *spinBox)
   {
     QMutexLocker lock(&m_Mutex);
 
-    QCEP_DEBUG(DEBUG_PROPERTIES,
+    if (qcepDebug(DEBUG_PROPERTIES)) {
       printf("%s: QcepIntProperty::linkTo(QSpinBox *%p)\n", qPrintable(name()), spinBox);
-    );
+    }
 
     spinBox -> setValue(value());
 
@@ -505,9 +519,10 @@ void QcepIntProperty::linkTo(QComboBox *comboBox)
   {
     QMutexLocker lock(&m_Mutex);
 
-    QCEP_DEBUG(DEBUG_PROPERTIES,
-      printf("%s: QcepIntProperty::linkTo(QComboBox *%p)\n", qPrintable(name()), comboBox);
-    );
+    if (qcepDebug(DEBUG_PROPERTIES)) {
+      printf("%s: QcepIntProperty::linkTo(QComboBox *%p)\n",
+             qPrintable(name()), comboBox);
+    }
 
     comboBox -> setCurrentIndex(value());
 
@@ -550,9 +565,10 @@ bool QcepBoolProperty::defaultValue() const
 
 void QcepBoolProperty::changeValue(bool val)
 {
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("QcepBoolProperty::changeValue [%s] = %d, %d\n", qPrintable(name()), val, m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("QcepBoolProperty::changeValue [%s] = %d, %d\n",
+           qPrintable(name()), val, m_NQueuedUpdates);
+  }
 
   if (m_NQueuedUpdates <= 1) {
     setValue(val);
@@ -565,9 +581,10 @@ void QcepBoolProperty::setValue(bool val)
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("%s: QcepBoolProperty::setValue <- %d, %d\n", qPrintable(name()), val, m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("%s: QcepBoolProperty::setValue <- %d, %d\n",
+           qPrintable(name()), val, m_NQueuedUpdates);
+  }
 
   if (val != m_Value) {
     changeVariant(val);
@@ -595,9 +612,9 @@ void QcepBoolProperty::resetValue()
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
+  if (qcepDebug(DEBUG_PROPERTIES)) {
     printf("%s: QcepBoolProperty::resetValue\n", qPrintable(name()));
-  );
+  }
 
   setValue(m_Default);
 }
@@ -607,9 +624,10 @@ void QcepBoolProperty::linkTo(QAbstractButton *button)
   {
     QMutexLocker lock(&m_Mutex);
 
-    QCEP_DEBUG(DEBUG_PROPERTIES,
-      printf("%s: QcepBoolProperty::linkTo(QAbstractButton *%p)\n", qPrintable(name()), button);
-    );
+    if (qcepDebug(DEBUG_PROPERTIES)) {
+      printf("%s: QcepBoolProperty::linkTo(QAbstractButton *%p)\n",
+             qPrintable(name()), button);
+    }
 
     button -> setChecked(value());
 
@@ -641,9 +659,10 @@ QString QcepStringProperty::defaultValue() const
 
 void QcepStringProperty::changeValue(QString val)
 {
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("QcepStringProperty::changeValue [%s] = %s, %d\n", qPrintable(name()), qPrintable(val), m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("QcepStringProperty::changeValue [%s] = %s, %d\n",
+           qPrintable(name()), qPrintable(val), m_NQueuedUpdates);
+  }
 
   if (m_NQueuedUpdates <= 1) {
     setValue(val);
@@ -656,9 +675,10 @@ void QcepStringProperty::setValue(QString val)
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("%s: QcepStringProperty::setValue <- %s, %d\n", qPrintable(name()), qPrintable(val), m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("%s: QcepStringProperty::setValue <- %s, %d\n",
+           qPrintable(name()), qPrintable(val), m_NQueuedUpdates);
+  }
 
   if (val != m_Value) {
     changeVariant(val);
@@ -684,9 +704,9 @@ void QcepStringProperty::setDefaultValue(QString val)
 
 void QcepStringProperty::resetValue()
 {
-  QCEP_DEBUG(DEBUG_PROPERTIES,
+  if (qcepDebug(DEBUG_PROPERTIES)) {
     printf("%s: QcepStringProperty::resetValue\n", qPrintable(name()));
-  );
+  }
 
   setValue(m_Default);
 }
@@ -701,9 +721,10 @@ void QcepStringProperty::linkTo(QLineEdit *lineEdit)
   {
     QMutexLocker lock(&m_Mutex);
 
-    QCEP_DEBUG(DEBUG_PROPERTIES,
-      printf("%s: QcepStringProperty::linkTo(QLineEdit *%p)\n", qPrintable(name()), lineEdit);
-    );
+    if (qcepDebug(DEBUG_PROPERTIES)) {
+      printf("%s: QcepStringProperty::linkTo(QLineEdit *%p)\n",
+             qPrintable(name()), lineEdit);
+    }
 
     lineEdit -> setText(value());
 
@@ -746,9 +767,10 @@ QDateTime QcepDateTimeProperty::defaultValue() const
 
 void QcepDateTimeProperty::changeValue(QDateTime val)
 {
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("QcepDateTimeProperty::changeValue [%s] = %s, %d\n", qPrintable(name()), qPrintable(val.toString()), m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("QcepDateTimeProperty::changeValue [%s] = %s, %d\n",
+           qPrintable(name()), qPrintable(val.toString()), m_NQueuedUpdates);
+  }
 
   if (m_NQueuedUpdates <= 1) {
     setValue(val);
@@ -761,9 +783,10 @@ void QcepDateTimeProperty::setValue(QDateTime val)
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("%s: QcepDateTimeProperty::setValue <- %s, %d\n", qPrintable(name()), qPrintable(val.toString()), m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("%s: QcepDateTimeProperty::setValue <- %s, %d\n",
+           qPrintable(name()), qPrintable(val.toString()), m_NQueuedUpdates);
+  }
 
   if (val != m_Value) {
     changeVariant(val);
@@ -789,9 +812,9 @@ void QcepDateTimeProperty::setDefaultValue(QDateTime val)
 
 void QcepDateTimeProperty::resetValue()
 {
-  QCEP_DEBUG(DEBUG_PROPERTIES,
+  if (qcepDebug(DEBUG_PROPERTIES)) {
     printf("%s: QcepDateTimeProperty::resetValue\n", qPrintable(name()));
-  );
+  }
 
   setValue(m_Default);
 }
@@ -820,9 +843,10 @@ QcepDoubleList QcepDoubleListProperty::defaultValue() const
 
 void QcepDoubleListProperty::changeValue(QcepDoubleList val)
 {
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-             printf("QcepDoubleListProperty::changeValue [%s] = %g, %d\n", qPrintable(name()), val[0], m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("QcepDoubleListProperty::changeValue [%s] = %g, %d\n",
+           qPrintable(name()), val[0], m_NQueuedUpdates);
+  }
 
   if (m_NQueuedUpdates <= 1) {
     setValue(val);
@@ -850,9 +874,9 @@ void QcepDoubleListProperty::appendValue(double val)
 
 //void QcepDoubleListProperty::changeValue(QString val)
 //{
-//  QCEP_DEBUG(DEBUG_PROPERTIES,
+//  if (qcepDebug(DEBUG_PROPERTIES)) {
 //    printf("QcepDoubleListProperty::changeValue [%s] = %s, %d\n", qPrintable(name()), qPrintable(val), m_NQueuedUpdates);
-//  );
+//  }
 //
 //  if (m_NQueuedUpdates <= 1) {
 //    setValue(val.toDouble());
@@ -865,9 +889,10 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
-    printf("%s: QcepDoubleListProperty::setValue <- %g, %d\n", qPrintable(name()), val[0], m_NQueuedUpdates);
-  );
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printf("%s: QcepDoubleListProperty::setValue <- %g, %d\n",
+           qPrintable(name()), val[0], m_NQueuedUpdates);
+  }
 
   if (val != m_Value) {
     changeVariant(val);
@@ -885,9 +910,9 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
 //{
 //  QMutexLocker lock(&m_Mutex);
 //
-//  QCEP_DEBUG(DEBUG_PROPERTIES,
+//  if (qcepDebug(DEBUG_PROPERTIES)) {
 //    printf("%s: QcepDoubleListProperty::incValue <- %g, %d\n", qPrintable(name()), step, m_NQueuedUpdates);
-//  );
+//  }
 //
 //  if (step) {
 //    changeVariant(m_Value+step);
@@ -916,9 +941,9 @@ void QcepDoubleListProperty::resetValue()
 {
   QMutexLocker lock(&m_Mutex);
 
-  QCEP_DEBUG(DEBUG_PROPERTIES,
+  if (qcepDebug(DEBUG_PROPERTIES)) {
     printf("%s: QcepDoubleListProperty::resetValue\n", qPrintable(name()));
-  );
+  }
 
   setValue(m_Default);
 }
@@ -928,9 +953,9 @@ void QcepDoubleListProperty::resetValue()
 //  {
 //    QMutexLocker lock(&m_Mutex);
 //
-//    QCEP_DEBUG(DEBUG_PROPERTIES,
+//    if (qcepDebug(DEBUG_PROPERTIES)) {
 //      printf("%s: QcepDoubleListProperty::linkTo(QComboBox *%p)\n", qPrintable(name()), comboBox);
-//    );
+//    }
 //
 //    connect(this, SIGNAL(changedValue(QString)), comboBox, SLOT(setEditText(QString)));
 //    connect(comboBox,SIGNAL(editTextChanged(QString)), this, SLOT(changeValue(QString)));
@@ -942,9 +967,9 @@ void QcepDoubleListProperty::resetValue()
 //  {
 //    QMutexLocker lock(&m_Mutex);
 //
-//    QCEP_DEBUG(DEBUG_PROPERTIES,
+//    if (qcepDebug(DEBUG_PROPERTIES)) {
 //      printf("%s: QcepDoubleListProperty::linkTo(QDoubleSpinBox *%p)\n", qPrintable(name()), spinBox);
-//    );
+//    }
 //
 //    spinBox -> setValue(value());
 //

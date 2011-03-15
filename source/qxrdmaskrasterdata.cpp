@@ -7,10 +7,10 @@ QxrdMaskRasterData::QxrdMaskRasterData(QxrdMaskDataPtr mask, int interp)
     m_Mask(mask),
     m_Interpolate(interp)
 {
-  QCEP_DEBUG(DEBUG_IMAGES,
-             printf("QxrdMaskRasterData::QxrdMaskRasterData(%p,%d) [%p]\n",
-                    mask.data(), interp, this);
-  );
+  if (qcepDebug(DEBUG_IMAGES)) {
+    printf("QxrdMaskRasterData::QxrdMaskRasterData(%p,%d) [%p]\n",
+           mask.data(), interp, this);
+  }
 }
 
 //QxrdMaskRasterData::QxrdMaskRasterData()
@@ -65,9 +65,9 @@ QwtDoubleInterval QxrdMaskRasterData::range() const
 
 QxrdMaskRasterData* QxrdMaskRasterData::copy() const
 {
-  QCEP_DEBUG(DEBUG_IMAGES,
-             printf("QxrdMaskRasterData::copy() [%p]\n", this);
-  );
+  if (qcepDebug(DEBUG_IMAGES)) {
+    printf("QxrdMaskRasterData::copy() [%p]\n", this);
+  }
 
   QxrdMaskRasterData *n = new QxrdMaskRasterData(this->mask(), this->interp());
 

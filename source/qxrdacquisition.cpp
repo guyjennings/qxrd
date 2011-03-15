@@ -37,9 +37,9 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocat
 
 QxrdAcquisition::~QxrdAcquisition()
 {
-//  QCEP_DEBUG(DEBUG_ACQUIRE,
+//  if (qcepDebug(DEBUG_ACQUIRE)) {
 //             printf("QxrdAcquisition::~QxrdAcquisition\n");
-//  );
+//  }
 }
 
 void QxrdAcquisition::initialize()
@@ -181,9 +181,10 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
     int nsummed = accum->get_SummedExposures();
 
     if (nsummed == 0) {
-      QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(tr("Frame %1 saved").arg(nsummed));
-          );
+      if (qcepDebug(DEBUG_ACQUIRE)) {
+        emit printMessage(tr("Frame %1 saved").arg(nsummed));
+      }
+
       for (long i=0; i<nPixels; i++) {
         T val = *src++;
 
@@ -196,9 +197,10 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
         *dst++ = val;
       }
     } else {
-      QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(tr("Frame %1 summed").arg(nsummed));
-          );
+      if (qcepDebug(DEBUG_ACQUIRE)) {
+        emit printMessage(tr("Frame %1 summed").arg(nsummed));
+      }
+
       for (long i=0; i<nPixels; i++) {
         T val = *src++;
 
@@ -234,20 +236,20 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int fileIndex, int
 void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase, int nPhases, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   if (image) {
-    QCEP_DEBUG(DEBUG_ACQUIRE,
-               emit printMessage(tr("processAcquiredImage(%1,%2) %3 summed exposures")
-                                 .arg(fileIndex).arg(phase).arg(image->get_SummedExposures()));
-        );
+    if (qcepDebug(DEBUG_ACQUIRE)) {
+      emit printMessage(tr("processAcquiredImage(%1,%2) %3 summed exposures")
+                        .arg(fileIndex).arg(phase).arg(image->get_SummedExposures()));
+    }
 
     QString fileName;
     QString fileBase;
 
     getFileBaseAndName(filePattern, fileIndex, phase, nPhases, fileBase, fileName);
 
-    QCEP_DEBUG(DEBUG_ACQUIRE,
-               emit printMessage(tr("Fn: %1, Fi: %2, Phs: %3")
-                                 .arg(fileName).arg(get_FileIndex()).arg(phase));
-        );
+    if (qcepDebug(DEBUG_ACQUIRE)) {
+      emit printMessage(tr("Fn: %1, Fi: %2, Phs: %3")
+                        .arg(fileName).arg(get_FileIndex()).arg(phase));
+    }
 
     set_FileBase(fileBase);
     //        m_DataProcessor -> set_FileName(fileName);
@@ -272,17 +274,18 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     copyDynamicProperties(image.data());
 
     if (nPhases == 0) {
-      QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(tr("32 bit Dark Image acquired"));
-          );
+      if (qcepDebug(DEBUG_ACQUIRE)) {
+        emit printMessage(tr("32 bit Dark Image acquired"));
+      }
 
       image -> set_ImageNumber(-1);
       image -> set_PhaseNumber(-1);
       image -> set_NPhases(0);
     } else {
-      QCEP_DEBUG(DEBUG_ACQUIRE,
-                 emit printMessage(tr("32 bit Image %1 acquired").arg(get_FileIndex()));
-          );
+      if (qcepDebug(DEBUG_ACQUIRE)) {
+        emit printMessage(tr("32 bit Image %1 acquired").arg(get_FileIndex()));
+      }
+
       image -> set_ImageNumber(fileIndex);
       image -> set_PhaseNumber(phase);
       image -> set_NPhases(nPhases);
@@ -370,9 +373,6 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 {
   stopIdling();
 
-  class SaveCancel : public std::exception {};
-  class Cancel : public std::exception {};
-
   QString fileBase = parms.fileBase();
   int fileIndex = get_FileIndex();
   double exposure = parms.exposure();
@@ -397,7 +397,6 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     emit statusMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
     acquireFrame(exposure);
   }
-
 
   for (int i=0; i<postTrigger; i++) {
     if (cancelling()) goto cancel;
