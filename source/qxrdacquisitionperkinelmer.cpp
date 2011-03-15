@@ -57,9 +57,16 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc, 
   ::g_Acquisition = this;
 }
 
-//QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()
-//{
-//}
+QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()
+{
+  if (qcepDebug(DEBUG_PERKINELMER)) {
+    printf("QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()\n");
+  }
+
+  if (m_PerkinElmer && m_AcqDesc) {
+    m_PerkinElmer->Acquisition_Abort(m_AcqDesc);
+  }
+}
 
 bool QxrdAcquisitionPerkinElmer::checkPluginAvailable()
 {
@@ -372,6 +379,13 @@ void QxrdAcquisitionPerkinElmer::beginAcquisition()
 
 void QxrdAcquisitionPerkinElmer::endAcquisition()
 {
+}
+
+void QxrdAcquisitionPerkinElmer::shutdownAcquisition()
+{
+  if (m_PerkinElmer && m_AcqDesc) {
+    m_PerkinElmer->Acquisition_Abort(m_AcqDesc);
+  }
 }
 
 void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned int n2)

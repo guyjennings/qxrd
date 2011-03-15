@@ -16,7 +16,7 @@ class QxrdAcquisitionPerkinElmer : public QxrdAcquisition
   Q_OBJECT;
 public:
   QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc, QxrdAllocator *allocator);
-//  ~QxrdAcquisitionPerkinElmer();
+  ~QxrdAcquisitionPerkinElmer();
 
 private slots:
   void onExposureTimeChanged(double newTime);
@@ -31,6 +31,7 @@ public slots:
 protected:
   void beginAcquisition();
   void endAcquisition();
+  void shutdownAcquisition();
 
 private:
   void setupExposureMenu(QDoubleSpinBox *cb);

@@ -47,6 +47,11 @@ UINT QxrdPerkinElmerPlugin::Acquisition_DefineDestBuffers(
                                          nFrames, nRows, nColumns);
 }
 
+UINT QxrdPerkinElmerPlugin::Acquisition_Abort(HACQDESC hAcqDesc)
+{
+  return ::Acquisition_Abort(hAcqDesc);
+}
+
 UINT QxrdPerkinElmerPlugin::Acquisition_Acquire_Image(
     HACQDESC pAcqDesc, UINT dwFrames, UINT dwSkipFrms,
     UINT dwOpt, unsigned short *pwOffsetData,
