@@ -6,4 +6,4 @@ then QXRD adds together multiple cycles of acquired images in phase with the out
 
 The acquisition code does not currently support the pre-trigger acquisition mode of earlier versions.
 I was hoping to remove this, but it seems that people are actually using it so I had better put it
-back in.  The functions and parameters are there, but they don't do anything different.
+back in.  The functions and parameters are there, but they don't do anything at the moment.
