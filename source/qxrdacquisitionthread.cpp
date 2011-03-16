@@ -25,7 +25,7 @@ static int g_PEAvailable = false;
 QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessor *proc,
                                              QxrdAllocator *allocator,
                                              int detectorType)
-  : QThread(),
+  : QxrdThread(),
     m_Debug(true),
     m_Allocator(NULL),
     m_Acquisition(NULL),
@@ -117,7 +117,7 @@ void QxrdAcquisitionThread::initialize()
 
 void QxrdAcquisitionThread::shutdown()
 {
-  exit();
+  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition,"shutdown",Qt::QueuedConnection));
 
   wait();
 }

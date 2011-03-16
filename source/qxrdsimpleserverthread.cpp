@@ -28,8 +28,6 @@ void QxrdSimpleServerThread::shutdown()
 {
   INVOKE_CHECK(QMetaObject::invokeMethod(m_Server, "shutdown", Qt::QueuedConnection));
 
-  exit();
-
   wait();
 }
 

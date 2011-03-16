@@ -3,7 +3,7 @@
 #include "qxrddataprocessor.h"
 
 QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver)
-  : QThread(),
+  : QxrdThread(),
     m_Allocator(allocator),
     m_FileSaverThread(saver),
     m_DataProcessor(NULL),
@@ -33,7 +33,7 @@ void QxrdDataProcessorThread::run()
 
 void QxrdDataProcessorThread::shutdown()
 {
-  exit();
+  INVOKE_CHECK(QMetaObject::invokeMethod(m_DataProcessor,"shutdown",Qt::QueuedConnection));
 
   wait();
 }

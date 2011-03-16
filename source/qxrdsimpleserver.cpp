@@ -1,6 +1,7 @@
 #include "qxrdsimpleserver.h"
 #include <QTextStream>
 #include <QDateTime>
+#include <QThread>
 
 QxrdSimpleServer::QxrdSimpleServer(QString name, int port, QObject *parent) :
     QTcpServer(parent),
@@ -65,4 +66,6 @@ void QxrdSimpleServer::finishedCommand(QScriptValue result)
 void QxrdSimpleServer::shutdown()
 {
   close();
+
+  thread()->exit();
 }

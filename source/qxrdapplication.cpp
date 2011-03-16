@@ -301,21 +301,37 @@ void QxrdApplication::init(QSplashScreen *splash)
 
 QxrdApplication::~QxrdApplication()
 {
-  QCEP_DEBUG(DEBUG_APP,
-             printf("QxrdApplication::~QxrdApplication\n");
-  );
+  if (qcepDebug(DEBUG_APP)) {
+    printf("QxrdApplication::~QxrdApplication\n");
+  }
 
-  m_Window -> deleteLater();
-  m_AcquisitionThread -> deleteLater();
-  m_ServerThread -> deleteLater();
-  m_DataProcessorThread -> deleteLater();
-  m_FileSaverThread -> deleteLater();
-  m_AllocatorThread -> deleteLater();
-  m_ScriptEngineThread -> deleteLater();
+//  delete m_ServerThread;
+//  delete m_SimpleServerThread;
+//  delete m_AcquisitionThread;
+//  delete m_DataProcessorThread;
+//  delete m_FileSaverThread;
+//  delete m_ScriptEngineThread;
+//  delete m_AllocatorThread;
+//  delete m_Window;
 
-  QCEP_DEBUG(DEBUG_APP,
-             printf("QxrdApplication::~QxrdApplication finished\n");
-  );
+//  m_ServerThread -> deleteLater();
+//  m_SimpleServerThread -> deleteLater();
+//  m_AcquisitionThread -> deleteLater();
+//  m_DataProcessorThread -> deleteLater();
+//  m_FileSaverThread -> deleteLater();
+//  m_ScriptEngineThread -> deleteLater();
+//  m_AllocatorThread -> deleteLater();
+
+//  m_Window -> deleteLater();
+//  m_AcquisitionThread -> deleteLater();
+//  m_DataProcessorThread -> deleteLater();
+//  m_FileSaverThread -> deleteLater();
+//  m_AllocatorThread -> deleteLater();
+//  m_ScriptEngineThread -> deleteLater();
+
+  if (qcepDebug(DEBUG_APP)) {
+    printf("QxrdApplication::~QxrdApplication finished\n");
+  }
 }
 
 QxrdApplication* QxrdApplication::application()
@@ -457,19 +473,30 @@ bool QxrdApplication::wantToQuit()
                                   QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
+void QxrdApplication::shutdownThread(QxrdThread *thread)
+{
+  if (thread) {
+    thread->shutdown();
+    delete thread;
+  }
+}
+
 void QxrdApplication::shutdownThreads()
 {
-  QCEP_DEBUG(DEBUG_APP,
-             printf("QxrdApplication::shutdownThreads\n");
-  );
+  if (qcepDebug(DEBUG_APP)) {
+    printf("QxrdApplication::shutdownThreads\n");
+  }
 
   writeSettings();
 
-  m_DataProcessorThread -> shutdown();
-  m_AcquisitionThread -> shutdown();
-  m_ServerThread -> shutdown();
-  m_AllocatorThread -> shutdown();
-  m_FileSaverThread -> shutdown();
+  shutdownThread(m_SettingsSaverThread);
+  shutdownThread(m_SimpleServerThread);
+  shutdownThread(m_ServerThread);
+  shutdownThread(m_ScriptEngineThread);
+  shutdownThread(m_AcquisitionThread);
+//  shutdownThread(m_DataProcessorThread);
+//  shutdownThread(m_AllocatorThread);
+//  shutdownThread(m_FileSaverThread);
 }
 
 QxrdWindow *QxrdApplication::window()

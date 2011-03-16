@@ -445,9 +445,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
 QxrdWindow::~QxrdWindow()
 {
-  QCEP_DEBUG(DEBUG_WINDOW,
-             printf("QxrdWindow::~QxrdWindow\n");
-      );
+  if (qcepDebug(DEBUG_WINDOW)) {
+    printf("QxrdWindow::~QxrdWindow\n");
+  }
   //  delete m_Data;
   //  delete m_NewData;
   //  delete m_Mask;

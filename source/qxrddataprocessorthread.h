@@ -1,7 +1,7 @@
 #ifndef QXRDDATAPROCESSORTHREAD_H
 #define QXRDDATAPROCESSORTHREAD_H
 
-#include <QThread>
+#include "qxrdthread.h"
 #include <QDateTime>
 
 class QxrdAcquisition;
@@ -9,7 +9,7 @@ class QxrdAllocator;
 class QxrdFileSaverThread;
 class QxrdDataProcessor;
 
-class QxrdDataProcessorThread : public QThread
+class QxrdDataProcessorThread : public QxrdThread
 {
   Q_OBJECT;
 

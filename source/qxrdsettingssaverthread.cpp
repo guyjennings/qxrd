@@ -1,7 +1,7 @@
 #include "qxrdsettingssaverthread.h"
 
 QxrdSettingsSaverThread::QxrdSettingsSaverThread(QxrdApplication *app) :
-    QThread(),
+    QxrdThread(),
     m_Application(app),
     m_SettingsSaver(NULL)
 {
@@ -28,4 +28,11 @@ void QxrdSettingsSaverThread::run()
           this,            SIGNAL(criticalMessage(QString,QDateTime)));
 
   exec();
+}
+
+void QxrdSettingsSaverThread::shutdown()
+{
+  exit();
+
+  wait();
 }

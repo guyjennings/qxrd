@@ -21,9 +21,6 @@ enum {
 };
 
 extern const char* gDebugStrings[];
-
-#define QCEP_DEBUG(cond,action) if (gCEPDebug & (cond)) { action; }
-
 extern int qcepDebug(int cond);
 
 #endif // QCEPDEBUG_H

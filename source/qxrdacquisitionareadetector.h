@@ -16,9 +16,10 @@ private slots:
   void onBinningModeChanged(int newMode);
   void onCameraGainChanged(int newGain);
 
-private:
+protected:
   void beginAcquisition();
   void endAcquisition();
+  void shutdownAcquisition();
 
   void setupExposureMenu(QDoubleSpinBox* cb);
   void setupCameraGainMenu(QComboBox* cb);

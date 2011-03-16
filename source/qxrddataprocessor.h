@@ -10,6 +10,7 @@ class QxrdDataProcessor : public QxrdDataProcessorThreaded
 public:
   QxrdDataProcessor(QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver, QObject *parent=0);
   ~QxrdDataProcessor();
+
 };
 
 #endif

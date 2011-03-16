@@ -79,9 +79,9 @@ void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image
 QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
     (QxrdDoubleImageDataPtr corrected, QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::correctInt16Image"));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("QxrdDataProcessorThreaded::correctInt16Image"));
+  }
 
   if (image) {
     if ((image -> get_ImageNumber()) >= 0) {
@@ -102,9 +102,9 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
 QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
     (QxrdDoubleImageDataPtr corrected, QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::correctInt32Image"));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("QxrdDataProcessorThreaded::correctInt32Image"));
+  }
 
   if (image) {
     if ((image -> get_ImageNumber()) >= 0) {
@@ -126,9 +126,9 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
 QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
     (QxrdDoubleImageDataPtr corrected, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
+  }
 
   if (image) {
     if ((image -> get_ImageNumber()) >= 0) {
@@ -150,9 +150,9 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
 QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
     (QxrdDoubleImageDataPtr corrected, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr overflow, QcepDoubleList v)
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
+  }
 
   if (image) {
     if ((image -> get_ImageNumber()) >= 0) {
@@ -195,9 +195,9 @@ void QxrdDataProcessorThreaded::onCorrectedImageAvailable()
 QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
     (QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double /*cx*/, double /*cy*/)
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::integrateImage"));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("QxrdDataProcessorThreaded::integrateImage"));
+  }
 
   if (image && get_PerformIntegration()) {
     QTime tic;
@@ -215,9 +215,9 @@ QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
 
 void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
+  }
 
   QxrdIntegratedDataPtr integ = m_IntegratedData.dequeue();
 
@@ -230,18 +230,18 @@ void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
 QxrdROIDataPtr QxrdDataProcessorThreaded::calculateROI
     (QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::calculateROI"));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("QxrdDataProcessorThreaded::calculateROI"));
+  }
 
   return QxrdROIDataPtr();
 }
 
 void QxrdDataProcessorThreaded::onROIDataAvailable()
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::onROIDataAvailable"));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("QxrdDataProcessorThreaded::onROIDataAvailable"));
+  }
 
   QxrdROIDataPtr roiData = m_ROIData.dequeue();
 }
@@ -249,18 +249,18 @@ void QxrdDataProcessorThreaded::onROIDataAvailable()
 QxrdHistogramDataPtr QxrdDataProcessorThreaded::calculateHistogram
     (QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::calculateHistogram"));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("QxrdDataProcessorThreaded::calculateHistogram"));
+  }
 
   return QxrdHistogramDataPtr();
 }
 
 void QxrdDataProcessorThreaded::onHistogramDataAvailable()
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("QxrdDataProcessorThreaded::onHistogramDataAvailable"));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("QxrdDataProcessorThreaded::onHistogramDataAvailable"));
+  }
 
   QxrdHistogramDataPtr histData = m_HistogramData.dequeue();
 }

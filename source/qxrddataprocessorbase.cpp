@@ -113,6 +113,11 @@ QxrdDataProcessorBase::~QxrdDataProcessorBase()
   closeLogFile();
 }
 
+void QxrdDataProcessorBase::shutdown()
+{
+  thread()->exit();
+}
+
 void QxrdDataProcessorBase::setAcquisition(QxrdAcquisition *acq)
 {
   m_Acquisition = acq;
@@ -364,9 +369,9 @@ void QxrdDataProcessorBase::saveData(QString name, int canOverwrite)
 
 void QxrdDataProcessorBase::loadDark(QString name)
 {
-  QCEP_DEBUG(DEBUG_FILES,
-             printf("QxrdDataProcessorBase::loadDark(%s)\n", qPrintable(name));
-  );
+  if (qcepDebug(DEBUG_FILES)) {
+    printf("QxrdDataProcessorBase::loadDark(%s)\n", qPrintable(name));
+  }
 
   QxrdDoubleImageDataPtr res = takeNextFreeImage();
 
@@ -841,9 +846,10 @@ void QxrdDataProcessorBase::clearGainMap()
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image
     (QxrdDoubleImageDataPtr corrected, QxrdInt16ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("processing acquired 16 bit image, %1 remaining").arg(getAcquiredCount()));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("processing acquired 16 bit image, %1 remaining")
+                      .arg(getAcquiredCount()));
+  }
 
   if (img) {
     if (get_SaveRawImages()) {
@@ -868,9 +874,10 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image
     (QxrdDoubleImageDataPtr corrected, QxrdInt32ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
-  QCEP_DEBUG(DEBUG_PROCESS,
-             emit printMessage(tr("processing acquired 32 bit image, %1 remaining").arg(getAcquiredCount()));
-  );
+  if (qcepDebug(DEBUG_PROCESS)) {
+    emit printMessage(tr("processing acquired 32 bit image, %1 remaining")
+                      .arg(getAcquiredCount()));
+  }
 
   if (img) {
     if (get_SaveRawImages()) {
@@ -917,9 +924,10 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
 
     processed->set_Normalization(v);
 
-    QCEP_DEBUG(DEBUG_PROCESS,
-               emit printMessage(tr("Processing Image \"%1\", count %2").arg(processed->get_FileName()).arg(getAcquiredCount()));
-    );
+    if (qcepDebug(DEBUG_PROCESS)) {
+      emit printMessage(tr("Processing Image \"%1\", count %2")
+                        .arg(processed->get_FileName()).arg(getAcquiredCount()));
+    }
 
     if (get_PerformDarkSubtraction()) {
       subtractDarkImage(processed, dark);
@@ -929,9 +937,9 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
 
       updateEstimatedTime(prop_PerformDarkSubtractionTime(), subTime);
 
-      QCEP_DEBUG(DEBUG_PROCESS,
-                 emit printMessage(tr("Dark subtraction took %1 msec").arg(subTime));
-      );
+      if (qcepDebug(DEBUG_PROCESS)) {
+        emit printMessage(tr("Dark subtraction took %1 msec").arg(subTime));
+      }
     }
 
     if (get_PerformBadPixels()) {
@@ -964,9 +972,9 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
 
     newData(processed, overflow);
 
-    QCEP_DEBUG(DEBUG_PROCESS,
-               emit printMessage(tr("Processing took %1 msec").arg(tic.restart()));
-    );
+    if (qcepDebug(DEBUG_PROCESS)) {
+      emit printMessage(tr("Processing took %1 msec").arg(tic.restart()));
+    }
 
     emit statusMessage(tr("Completed Processing Image \"%1\"").arg(processed->get_FileName()));
   }

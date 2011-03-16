@@ -5,7 +5,7 @@
 #include "qxrdintegrateddata.h"
 
 QxrdFileSaverThread::QxrdFileSaverThread(QxrdAllocator *allocator)
-  : QThread(),
+  : QxrdThread(),
     m_FileSaver(NULL),
     m_Allocator(NULL)
 {

@@ -116,6 +116,10 @@ void QxrdAcquisitionSimulated::endAcquisition()
 {
 }
 
+void QxrdAcquisitionSimulated::shutdownAcquisition()
+{
+}
+
 void QxrdAcquisitionSimulated::onTimerTimeout()
 {
   if (synchronizedAcquisition()) {

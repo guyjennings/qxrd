@@ -3,7 +3,7 @@
 #include "qxrdscriptengine.h"
 
 QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc)
-  : QThread(NULL),
+  : QxrdThread(NULL),
     m_ScriptEngine(NULL),
     m_Application(app),
     m_Window(win),
