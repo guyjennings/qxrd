@@ -76,7 +76,7 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
     QxrdDoubleImageDataPtr img = m_Window -> data();
     QxrdMaskDataPtr mask = m_Window -> mask();
 
-    if (img && mask) {
+    if (img /* && mask*/) {
       int width =img->get_Width();
       int height=img->get_Height();
 
