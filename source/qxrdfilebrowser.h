@@ -40,6 +40,7 @@ public slots:
   void doUpDirectory();
   void doChangeDirectory();
   void doHomeDirectory();
+  void doAcquisitionDirectory();
   void doOpen();
   void doProcess();
   void doIntegrate();
