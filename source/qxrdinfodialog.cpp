@@ -40,6 +40,6 @@ void QxrdInfoDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxr
     m_InfoText->append(tr("Summed Exposures %1").arg(image->get_SummedExposures()));
     m_InfoText->append(tr("Image Number %1").arg(image->get_ImageNumber()));
     m_InfoText->append(tr("Image Triggered? %1").arg(image->get_Triggered()));
-    m_InfoText->append(tr("Phase %1 of %2").arg(image->get_PhaseNumber()).arg(image->get_NPhases()));
+    m_InfoText->append(tr("Phase %1 of [0..%2]").arg(image->get_PhaseNumber()).arg(image->get_NPhases()-1));
   }
 }
