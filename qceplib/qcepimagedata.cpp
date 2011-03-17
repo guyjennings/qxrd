@@ -58,6 +58,7 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
   dest -> set_SummedExposures(get_SummedExposures());
   dest -> set_ImageNumber(get_ImageNumber());
   dest -> set_PhaseNumber(get_PhaseNumber());
+  dest -> set_NPhases(get_NPhases());
   dest -> set_DateTime(get_DateTime());
   dest -> set_HBinning(get_HBinning());
   dest -> set_VBinning(get_VBinning());
@@ -68,6 +69,8 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
   dest -> set_UserComment3(get_UserComment3());
   dest -> set_UserComment4(get_UserComment4());
   dest -> set_ImageSaved(get_ImageSaved());
+  dest -> set_Normalization(get_Normalization());
+  dest -> set_Used(get_Used());
 
   QByteArray name;
 
@@ -87,6 +90,7 @@ void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src
   set_SummedExposures(src -> get_SummedExposures());
   set_ImageNumber(src -> get_ImageNumber());
   set_PhaseNumber(src -> get_PhaseNumber());
+  set_NPhases(src -> get_NPhases());
   set_DateTime(src -> get_DateTime());
   set_HBinning(src -> get_HBinning());
   set_VBinning(src -> get_VBinning());
@@ -97,6 +101,8 @@ void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src
   set_UserComment3(src -> get_UserComment3());
   set_UserComment4(src -> get_UserComment4());
   set_ImageSaved(src -> get_ImageSaved());
+  set_Normalization(src -> get_Normalization());
+  set_Used(src -> get_Used());
 
   QByteArray name;
 
