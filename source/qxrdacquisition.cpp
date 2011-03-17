@@ -243,6 +243,17 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int fileIndex, int
 void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase, int nPhases, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   if (image) {
+    QxrdInt32ImageDataPtr proc = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
+    QxrdMaskDataPtr ovf = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve, 0);
+
+    if (proc == NULL || ovf == NULL) {
+      indicateDroppedFrame(0);
+      return;
+    }
+
+    proc->copyFrom(image);
+    overflow->copyMaskTo(ovf);
+
     if (qcepDebug(DEBUG_ACQUIRE)) {
       emit printMessage(tr("processAcquiredImage(%1,%2) %3 summed exposures")
                         .arg(fileIndex).arg(phase).arg(image->get_SummedExposures()));
@@ -263,42 +274,42 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
 
     QFileInfo finfo(fileName);
 
-    image -> set_FileBase(fileBase);
-    image -> set_FileName(fileName);
-    image -> set_Title(finfo.fileName());
-    image -> set_ExposureTime(get_ExposureTime());
-    image -> set_DateTime(QDateTime::currentDateTime());
-    image -> set_HBinning(1);
-    image -> set_VBinning(1);
-    image -> set_CameraGain(get_CameraGain());
-    image -> set_DataType(QxrdInt32ImageData::Raw32Data);
-    image -> set_UserComment1(get_UserComment1());
-    image -> set_UserComment2(get_UserComment2());
-    image -> set_UserComment3(get_UserComment3());
-    image -> set_UserComment4(get_UserComment4());
-    image -> set_ImageSaved(false);
+    proc -> set_FileBase(fileBase);
+    proc -> set_FileName(fileName);
+    proc -> set_Title(finfo.fileName());
+    proc -> set_ExposureTime(get_ExposureTime());
+    proc -> set_DateTime(QDateTime::currentDateTime());
+    proc -> set_HBinning(1);
+    proc -> set_VBinning(1);
+    proc -> set_CameraGain(get_CameraGain());
+    proc -> set_DataType(QxrdInt32ImageData::Raw32Data);
+    proc -> set_UserComment1(get_UserComment1());
+    proc -> set_UserComment2(get_UserComment2());
+    proc -> set_UserComment3(get_UserComment3());
+    proc -> set_UserComment4(get_UserComment4());
+    proc -> set_ImageSaved(false);
 
-    copyDynamicProperties(image.data());
+    copyDynamicProperties(proc.data());
 
     if (nPhases == 0) {
       if (qcepDebug(DEBUG_ACQUIRE)) {
         emit printMessage(tr("32 bit Dark Image acquired"));
       }
 
-      image -> set_ImageNumber(-1);
-      image -> set_PhaseNumber(-1);
-      image -> set_NPhases(0);
+      proc -> set_ImageNumber(-1);
+      proc -> set_PhaseNumber(-1);
+      proc -> set_NPhases(0);
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
         emit printMessage(tr("32 bit Image %1 acquired").arg(get_FileIndex()));
       }
 
-      image -> set_ImageNumber(fileIndex);
-      image -> set_PhaseNumber(phase);
-      image -> set_NPhases(nPhases);
+      proc -> set_ImageNumber(fileIndex);
+      proc -> set_PhaseNumber(phase);
+      proc -> set_NPhases(nPhases);
     }
 
-    m_DataProcessor -> acquiredInt32Image(image, overflow);
+    m_DataProcessor -> acquiredInt32Image(proc, ovf);
   }
 }
 
@@ -390,13 +401,23 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
   int skipBefore = parms.skipBefore();
   int skipBetween = parms.skipBetween();
 
+  if (synchronizedAcquisition()) {
+    synchronizedAcquisition()->prepareForAcquisition(&parms);
+  }
+
   QVector<QxrdInt32ImageDataPtr> res(nphases);
   QVector<QxrdMaskDataPtr>       ovf(nphases);
 
   emit printMessage("Starting acquisition");
 
-  if (synchronizedAcquisition()) {
-    synchronizedAcquisition()->prepareForAcquisition(&parms);
+  for (int p=0; p<nphases; p++) {
+    res[p] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
+    ovf[p] = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,0);
+
+    if (res[p]==NULL || ovf[p]==NULL) {
+      emit criticalMessage("Insufficient memory for acquisition operation");
+      goto cancel;
+    }
   }
 
   for (int i=0; i<skipBefore; i++) {
@@ -411,10 +432,10 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     set_FileIndex(fileIndex+i);
 
     for (int p=0; p<nphases; p++) {
-      res[p] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
-      ovf[p] = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,0);
-
       QString fb, fn;
+
+      res[p]->clear();
+      ovf[p]->clear();
 
       getFileBaseAndName(fileBase, fileIndex+i, p, nphases, fb, fn);
 
@@ -488,8 +509,13 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
 
   QxrdInt32ImageDataPtr res = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
   QxrdMaskDataPtr overflow  = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,0);
-
   QString fb, fn;
+
+  if (res == NULL || overflow == NULL) {
+    emit criticalMessage("Insufficient memory for acquisition operation");
+    goto cancel;
+  }
+
   getFileBaseAndName(fileBase, fileIndex, -1, 1, fb, fn);
 
   res -> set_FileBase(fb);
