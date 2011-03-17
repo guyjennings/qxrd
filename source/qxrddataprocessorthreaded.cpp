@@ -175,7 +175,7 @@ void QxrdDataProcessorThreaded::onCorrectedImageAvailable()
 {
   QxrdDoubleImageDataPtr img = m_CorrectedImages.dequeue();
   QxrdMaskDataPtr mask = (img ? img->mask() : QxrdMaskDataPtr());
-  QxrdIntegratedDataPtr integ = m_Allocator->newIntegratedData(QxrdAllocator::WaitTillAvailable, img);
+  QxrdIntegratedDataPtr integ = m_Allocator->newIntegratedData(QxrdAllocator::AlwaysAllocate, img);
 
   if (img) {
     m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessorThreaded::integrateImage,
@@ -315,7 +315,7 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
   QxrdDoubleImageDataPtr img;
   QxrdIntegratedDataPtr  result;
 
-  m_Allocator->newDoubleImageAndIntegratedData(QxrdAllocator::WaitTillAvailable, img, result);
+  m_Allocator->newDoubleImageAndIntegratedData(QxrdAllocator::AlwaysAllocate, img, result);
 
   QString path = filePathInCurrentDirectory(name);
 
