@@ -59,5 +59,6 @@
         <file>help/images/masking-panel.png</file>
         <file>images/qxrd-splash-screen.png</file>
         <file>images/histogram.png</file>
+        <file>images/system-run.png</file>
     </qresource>
 </RCC>
