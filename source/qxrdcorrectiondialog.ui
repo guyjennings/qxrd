@@ -21,7 +21,7 @@
     </sizepolicy>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QCheckBox" name="m_SaveRaw">
       <property name="toolTip">
        <string>Save 'raw' images (before dark subtraction), as well</string>
@@ -31,7 +31,7 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
+    <item row="1" column="1">
      <widget class="QDoubleSpinBox" name="m_SaveRawTime">
       <property name="frame">
        <bool>false</bool>
@@ -53,7 +53,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="2" column="0">
      <widget class="QCheckBox" name="m_PerformDark">
       <property name="toolTip">
        <string>Do dark subtraction as images are taken</string>
@@ -63,7 +63,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="2" column="1">
      <widget class="QDoubleSpinBox" name="m_PerformDarkTime">
       <property name="frame">
        <bool>false</bool>
@@ -85,7 +85,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <widget class="QCheckBox" name="m_SaveDark">
       <property name="toolTip">
        <string>Save 'dark' images</string>
@@ -95,7 +95,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="3" column="1">
      <widget class="QDoubleSpinBox" name="m_SaveDarkTime">
       <property name="frame">
        <bool>false</bool>
@@ -117,7 +117,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="4" column="0">
      <widget class="QCheckBox" name="m_PerformBadPixels">
       <property name="enabled">
        <bool>false</bool>
@@ -130,7 +130,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
+    <item row="4" column="1">
      <widget class="QDoubleSpinBox" name="m_PerformBadPixelsTime">
       <property name="frame">
        <bool>false</bool>
@@ -152,7 +152,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="5" column="0">
      <widget class="QCheckBox" name="m_PerformGainCorrection">
       <property name="enabled">
        <bool>false</bool>
@@ -165,7 +165,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="5" column="1">
      <widget class="QDoubleSpinBox" name="m_PerformGainCorrectionTime">
       <property name="frame">
        <bool>false</bool>
@@ -187,7 +187,7 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
+    <item row="6" column="0">
      <widget class="QCheckBox" name="m_SaveSubtracted">
       <property name="toolTip">
        <string>Save subtracted images as they are taken</string>
@@ -197,7 +197,7 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
+    <item row="6" column="1">
      <widget class="QDoubleSpinBox" name="m_SaveSubtractedTime">
       <property name="frame">
        <bool>false</bool>
@@ -219,7 +219,7 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
+    <item row="7" column="0">
      <widget class="QCheckBox" name="m_SaveAsText">
       <property name="toolTip">
        <string>Save subtracted images as they are taken</string>
@@ -229,7 +229,7 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
+    <item row="7" column="1">
      <widget class="QDoubleSpinBox" name="m_SaveAsTextTime">
       <property name="frame">
        <bool>false</bool>
@@ -251,7 +251,7 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="0">
+    <item row="8" column="0">
      <widget class="QCheckBox" name="m_PerformIntegration">
       <property name="toolTip">
        <string>Perform angular integration as each image is taken</string>
@@ -261,7 +261,7 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="1">
+    <item row="8" column="1">
      <widget class="QDoubleSpinBox" name="m_PerformIntegrationTime">
       <property name="frame">
        <bool>false</bool>
@@ -283,7 +283,7 @@
       </property>
      </widget>
     </item>
-    <item row="8" column="0">
+    <item row="9" column="0">
      <widget class="QCheckBox" name="m_DisplayIntegratedData">
       <property name="enabled">
        <bool>true</bool>
@@ -296,7 +296,7 @@
       </property>
      </widget>
     </item>
-    <item row="8" column="1">
+    <item row="9" column="1">
      <widget class="QDoubleSpinBox" name="m_DisplayIntegratedDataTime">
       <property name="frame">
        <bool>false</bool>
@@ -318,7 +318,7 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="0">
+    <item row="10" column="0">
      <widget class="QCheckBox" name="m_SaveIntegratedData">
       <property name="enabled">
        <bool>true</bool>
@@ -331,7 +331,7 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="1">
+    <item row="10" column="1">
      <widget class="QDoubleSpinBox" name="m_SaveIntegratedDataTime">
       <property name="frame">
        <bool>false</bool>
@@ -353,7 +353,7 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="0" colspan="2">
+    <item row="11" column="0" colspan="2">
      <widget class="QCheckBox" name="m_SaveIntegratedInSeparateFiles">
       <property name="enabled">
        <bool>true</bool>
@@ -366,14 +366,14 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="0">
+    <item row="12" column="0">
      <widget class="QLabel" name="label_16">
       <property name="text">
        <string>Estimated time per image</string>
       </property>
      </widget>
     </item>
-    <item row="11" column="1">
+    <item row="12" column="1">
      <widget class="QDoubleSpinBox" name="m_EstimatedProcessingTime">
       <property name="toolTip">
        <string>Estimated processing time</string>
@@ -398,7 +398,7 @@
       </property>
      </widget>
     </item>
-    <item row="12" column="0" colspan="2">
+    <item row="13" column="0" colspan="2">
      <spacer name="verticalSpacer_2">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -410,6 +410,13 @@
        </size>
       </property>
      </spacer>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="m_CorrectionOptionsButton">
+      <property name="text">
+       <string>More Options....</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

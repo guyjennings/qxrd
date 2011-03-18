@@ -265,6 +265,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_IntegratorMeasureButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableMeasuring()));
 
   connect(m_IntegratorDialog -> m_ClearGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearGraph()));
+  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
+  connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
+  connect(m_AcquireDialog -> m_AcquireOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
+  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
 
   connect(m_ActionAboutQXRD, SIGNAL(triggered()), this, SLOT(doAboutQxrd()));
   connect(m_ActionOpenQXRDWebPage, SIGNAL(triggered()), this, SLOT(doOpenQXRDWebPage()));

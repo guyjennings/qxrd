@@ -15,7 +15,10 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="4">
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <item row="0" column="0" colspan="3">
      <widget class="QLabel" name="m_DetectorTypeNameLabel">
       <property name="text">
        <string>Detector Type</string>
@@ -344,26 +347,6 @@ Script Function: acquireDark([fileName[,exposures[,summed]]])</string>
       </property>
      </widget>
     </item>
-    <item row="21" column="0">
-     <widget class="QLabel" name="label_10">
-      <property name="text">
-       <string>Avg. Value</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="21" column="1">
-     <widget class="QLabel" name="m_AverageDisplay">
-      <property name="toolTip">
-       <string>Average value of acquired frames</string>
-      </property>
-      <property name="text">
-       <string>TextLabel</string>
-      </property>
-     </widget>
-    </item>
     <item row="27" column="0" colspan="4">
      <spacer name="verticalSpacer">
       <property name="orientation">
@@ -554,7 +537,7 @@ Script Function: outputDirectory()</string>
        <string>Select New Output Directory...</string>
       </property>
       <property name="text">
-       <string>Select...</string>
+       <string>Select Output Dir...</string>
       </property>
      </widget>
     </item>
@@ -602,7 +585,7 @@ Raw: &lt;pattern&gt;-&lt;nnnnn&gt;-&lt;ppp&gt;.raw.tif</string>
        <string>Select New LogFile...</string>
       </property>
       <property name="text">
-       <string>Select...</string>
+       <string>Select Log File...</string>
       </property>
      </widget>
     </item>
@@ -764,7 +747,37 @@ Script Property: &quot;acquisition.userComment4&quot;
       </property>
      </widget>
     </item>
-    <item row="22" column="2">
+    <item row="0" column="3">
+     <widget class="QPushButton" name="m_AcquireOptionsButton">
+      <property name="toolTip">
+       <string>Select New LogFile...</string>
+      </property>
+      <property name="text">
+       <string>More Options...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="2">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>Avg. Value</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="3">
+     <widget class="QLabel" name="m_AverageDisplay">
+      <property name="toolTip">
+       <string>Average value of acquired frames</string>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item row="22" column="3">
      <widget class="QPushButton" name="m_ClearDroppedButton">
       <property name="enabled">
        <bool>true</bool>
