@@ -68,7 +68,7 @@
       <item>
        <widget class="QToolButton" name="m_HomeDirectoryButton">
         <property name="toolTip">
-         <string>Changed to home directory</string>
+         <string>Change to home directory</string>
         </property>
         <property name="text">
          <string>...</string>
@@ -76,6 +76,20 @@
         <property name="icon">
          <iconset resource="qxrdresources.qrc">
           <normaloff>:/images/go-home.png</normaloff>:/images/go-home.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="m_AcquisitionDirectoryButton">
+        <property name="toolTip">
+         <string>Change to acquisition output directory</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="qxrdresources.qrc">
+          <normaloff>:/images/system-run.png</normaloff>:/images/system-run.png</iconset>
         </property>
        </widget>
       </item>

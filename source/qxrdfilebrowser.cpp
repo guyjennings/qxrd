@@ -53,6 +53,7 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
   connect(m_UpDirectoryButton, SIGNAL(clicked()), this, SLOT(doUpDirectory()));
   connect(m_ChangeDirectoryButton, SIGNAL(clicked()), this, SLOT(doChangeDirectory()));
   connect(m_HomeDirectoryButton, SIGNAL(clicked()), this, SLOT(doHomeDirectory()));
+  connect(m_AcquisitionDirectoryButton, SIGNAL(clicked()), this, SLOT(doAcquisitionDirectory()));
   connect(m_OpenButton, SIGNAL(clicked()), this, SLOT(doOpen()));
   connect(m_ProcessButton, SIGNAL(clicked()), this, SLOT(doProcess()));
   connect(m_IntegrateButton, SIGNAL(clicked()), this, SLOT(doIntegrate()));
@@ -197,6 +198,11 @@ void QxrdFileBrowser::doUpDirectory()
 void QxrdFileBrowser::doHomeDirectory()
 {
   doPushDirectory(QDir::currentPath());
+}
+
+void QxrdFileBrowser::doAcquisitionDirectory()
+{
+  doPushDirectory(m_Processor->get_OutputDirectory());
 }
 
 void QxrdFileBrowser::doOpen()

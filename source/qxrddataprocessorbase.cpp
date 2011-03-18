@@ -236,7 +236,7 @@ QString QxrdDataProcessorBase::integratedOutputDirectory()
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage()
 {
-  QxrdDoubleImageDataPtr res = m_Allocator -> newDoubleImage(QxrdAllocator::WaitTillAvailable);
+  QxrdDoubleImageDataPtr res = m_Allocator -> newDoubleImage(QxrdAllocator::AlwaysAllocate);
 
   return res;
 }
@@ -1575,7 +1575,9 @@ void QxrdDataProcessorBase::writeOutputScan(QxrdIntegratedDataPtr data)
 
 void QxrdDataProcessorBase::displayIntegratedData(QxrdIntegratedDataPtr data)
 {
-  emit newIntegrationAvailable(data);
+  if (this->get_DisplayIntegratedData()) {
+    emit newIntegrationAvailable(data);
+  }
 }
 
 void QxrdDataProcessorBase::fileWriteTest(int dim, QString path)
