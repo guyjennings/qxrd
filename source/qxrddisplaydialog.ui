@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QCheckBox" name="m_InterpolatePixels">
       <property name="toolTip">
        <string>Gives a smoother display when zoomed in</string>
@@ -25,7 +25,7 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
+    <item row="1" column="1">
      <widget class="QCheckBox" name="m_MaintainAspectRatio">
       <property name="toolTip">
        <string>Try to maintain the aspect ratio of the image as it is zoomed and resized</string>
@@ -35,14 +35,14 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="2" column="0">
      <widget class="QLabel" name="label_8">
       <property name="text">
        <string>Color Map</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="2" column="1">
      <widget class="QComboBox" name="m_DisplayColorMap">
       <property name="toolTip">
        <string>Choose the color map for image display</string>
@@ -79,7 +79,7 @@
       </item>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <widget class="QCheckBox" name="m_DisplayImage">
       <property name="toolTip">
        <string>Display image data</string>
@@ -89,7 +89,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="3" column="1">
      <widget class="QCheckBox" name="m_DisplayMask">
       <property name="toolTip">
        <string>Display Mask</string>
@@ -99,7 +99,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
+    <item row="4" column="1">
      <widget class="QCheckBox" name="m_DisplayOverflow">
       <property name="toolTip">
        <string>Display Mask</string>
@@ -109,14 +109,14 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="5" column="0">
      <widget class="QLabel" name="label_9">
       <property name="text">
        <string>Overflow Level:</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="5" column="1">
      <widget class="QSpinBox" name="m_OverflowLevel">
       <property name="toolTip">
        <string>overflow (saturation) level (0..65535)</string>
@@ -126,7 +126,7 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0" colspan="2">
+    <item row="6" column="0" colspan="2">
      <widget class="QComboBox" name="m_DisplayScalingMode">
       <property name="toolTip">
        <string>Image display intensity scaling mode</string>
@@ -148,7 +148,7 @@
       </item>
      </widget>
     </item>
-    <item row="6" column="0" colspan="2">
+    <item row="7" column="0" colspan="2">
      <widget class="QStackedWidget" name="m_DisplayParmsStack">
       <property name="currentIndex">
        <number>0</number>
@@ -384,6 +384,13 @@
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="m_DisplayOptionsButton">
+      <property name="text">
+       <string>More Options...</string>
+      </property>
      </widget>
     </item>
    </layout>
