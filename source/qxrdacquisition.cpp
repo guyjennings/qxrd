@@ -405,18 +405,23 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     synchronizedAcquisition()->prepareForAcquisition(&parms);
   }
 
-  QVector<QxrdInt32ImageDataPtr> res(nphases);
-  QVector<QxrdMaskDataPtr>       ovf(nphases);
+  QVector<QVector<QxrdInt32ImageDataPtr> >res(nphases);
+  QVector<QVector<QxrdMaskDataPtr> >      ovf(nphases);
 
   emit printMessage("Starting acquisition");
 
   for (int p=0; p<nphases; p++) {
-    res[p] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
-    ovf[p] = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,0);
+    res[p].resize(preTrigger+1);
+    ovf[p].resize(preTrigger+1);
 
-    if (res[p]==NULL || ovf[p]==NULL) {
-      emit criticalMessage("Insufficient memory for acquisition operation");
-      goto cancel;
+    for (int t=0; t<=preTrigger; t++) {
+      res[p][t] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
+      ovf[p][t] = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,0);
+
+      if (res[p][t]==NULL || ovf[p][t]==NULL) {
+        emit criticalMessage("Insufficient memory for acquisition operation");
+        goto cancel;
+      }
     }
   }
 
@@ -434,15 +439,13 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     for (int p=0; p<nphases; p++) {
       QString fb, fn;
 
-      res[p]->clear();
-      ovf[p]->clear();
+      res[p][0] -> clear();
+      ovf[p][0] -> clear();
 
       getFileBaseAndName(fileBase, fileIndex+i, p, nphases, fb, fn);
 
-      if (res[p]) {
-        res[p] -> set_FileBase(fb);
-        res[p] -> set_FileName(fn);
-      }
+      res[p][0] -> set_FileBase(fb);
+      res[p][0] -> set_FileName(fn);
     }
 
     if (i != 0) {
@@ -456,14 +459,12 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
     for (int s=0; s<nsummed; s++) {
       for (int p=0; p<nphases; p++) {
-        if (res[p]) {
-          emit acquiredFrame(res[p]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, postTrigger);
-        }
+        emit acquiredFrame(res[p][0]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, postTrigger);
 
         QxrdInt16ImageDataPtr img = acquireFrame(exposure);
 
         if (img) {
-          accumulateAcquiredImage(img, res[p], ovf[p]);
+          accumulateAcquiredImage(img, res[p][0], ovf[p][0]);
         } else {
           indicateDroppedFrame(0);
         }
@@ -476,7 +477,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     prop_FileIndex()->incValue(1);
 
     for (int p=0; p<nphases; p++) {
-      processAcquiredImage(fileBase, fileIndex+i, p, nphases, res[p], ovf[p]);
+      processAcquiredImage(fileBase, fileIndex+i, p, nphases, res[p][0], ovf[p][0]);
     }
   }
 
