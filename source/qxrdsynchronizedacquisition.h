@@ -33,7 +33,8 @@ public:
     SyncAcquisitionWaveformSquare,
     SyncAcquisitionWaveformSine,
     SyncAcquisitionWaveformTriangle,
-    SyncAcquisitionWaveformSawtooth
+    SyncAcquisitionWaveformSawtooth,
+    SyncAcquisitionWaveformBipolarTriangle
   };
 
   Q_PROPERTY(int syncAcquisitionOutputChannel READ get_SyncAcquisitionOutputChannel WRITE set_SyncAcquisitionOutputChannel);

@@ -16,6 +16,7 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
   m_SyncAcqWfm      -> addItem("Sine Wave Output Waveform");
   m_SyncAcqWfm      -> addItem("Triangle Wave Output Waveform");
   m_SyncAcqWfm      -> addItem("Sawtooth Wave Output Waveform");
+  m_SyncAcqWfm      -> addItem("Bipolar Triangle Wave Output Waveform");
 
   m_SyncAcqOutChan  -> addItem("No Analog Output");
   m_SyncAcqOutChan  -> addItem("Analog Output 0 (AO0)");

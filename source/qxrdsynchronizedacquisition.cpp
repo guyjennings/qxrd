@@ -71,6 +71,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
 
     int iSamples = (int) nSamples;
     double divide = iSamples * (0.5 + symm/2.0);
+    double divideBy2 = divide/2;
 
     m_OutputVoltage.resize(iSamples+1);
 
@@ -103,6 +104,18 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
           m_OutputVoltage[i] = minVal + i*(maxVal-minVal)/divide;
         } else {
           m_OutputVoltage[i] = maxVal - (i-divide)*(maxVal-minVal)/(iSamples-divide);
+        }
+      }
+      break;
+
+      case SyncAcquisitionWaveformBipolarTriangle:
+      for (int i=0; i<iSamples; i++) {
+        if (i < divideBy2) {
+          m_OutputVoltage[i] = minVal + i*(maxVal-minVal)/divideBy2;
+        } else if (i < (iSamples-divideBy2)) {
+          m_OutputVoltage[i] = maxVal - (i-divideBy2)*(maxVal-minVal)/((iSamples-divide)/2);
+        } else {
+          m_OutputVoltage[i] = minVal - (iSamples-i)*(maxVal-minVal)/divideBy2;
         }
       }
       break;
