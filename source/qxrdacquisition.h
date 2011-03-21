@@ -123,6 +123,9 @@ public:
   void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
   QxrdNIDAQPluginInterface *nidaqPlugin() const;
 
+  QxrdAcquisitionParameterPack acquisitionParameterPack();
+  QxrdDarkAcquisitionParameterPack darkAcquisitionParameterPack();
+
 protected:
   void allocateMemoryForAcquisition();
   void acquisition(int isDark);

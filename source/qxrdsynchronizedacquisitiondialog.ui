@@ -6,15 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>306</width>
-    <height>314</height>
+    <width>310</width>
+    <height>502</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Sync Acq</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
-   <layout class="QFormLayout" name="formLayout">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Synchronized Acquisition Parameters</string>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
@@ -86,28 +93,19 @@
      <widget class="QDoubleSpinBox" name="m_SyncAcqSymmetry"/>
     </item>
     <item row="8" column="0" colspan="2">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>205</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="0" column="0" colspan="2">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Synchronized Acquisition Parameters</string>
-      </property>
-     </widget>
+     <widget class="QxrdSynchronizedAcquisitionPlot" name="m_WaveformPlot"/>
     </item>
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QxrdSynchronizedAcquisitionPlot</class>
+   <extends>QwtPlot</extends>
+   <header>qxrdsynchronizedacquisitionplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

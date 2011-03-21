@@ -1,9 +1,11 @@
 #include "qxrdsynchronizedacquisitiondialog.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "ui_qxrdsynchronizedacquisitiondialog.h"
+#include "qwt_plot_piecewise_curve.h"
 
 QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *parent, QxrdAcquisition *acq) :
     QDockWidget(parent),
+    m_Acquisition(acq),
     m_SynchronizedAcquisition(acq->synchronizedAcquisition())
 {
   setupUi(this);
@@ -44,6 +46,15 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
   m_SynchronizedAcquisition -> prop_SyncAcquisitionMinimum()       -> linkTo(m_SyncAcqMinimum);
   m_SynchronizedAcquisition -> prop_SyncAcquisitionMaximum()       -> linkTo(m_SyncAcqMaximum);
   m_SynchronizedAcquisition -> prop_SyncAcquisitionSymmetry()      -> linkTo(m_SyncAcqSymmetry);
+
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMode(), SIGNAL(changedValue(int)), this, SLOT(waveformChanged()));
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionWaveform(), SIGNAL(changedValue(int)), this, SLOT(waveformChanged()));
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMinimum(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMaximum(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionSymmetry(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
+
+  connect(m_Acquisition->prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
+  connect(m_Acquisition->prop_PhasesInGroup(), SIGNAL(changedValue(int)), this, SLOT(waveformChanged()));
 }
 
 QxrdSynchronizedAcquisitionDialog::~QxrdSynchronizedAcquisitionDialog()
@@ -59,5 +70,26 @@ void QxrdSynchronizedAcquisitionDialog::changeEvent(QEvent *e)
     break;
   default:
     break;
+  }
+}
+
+void QxrdSynchronizedAcquisitionDialog::waveformChanged()
+{
+  if (m_SynchronizedAcquisition) {
+    QxrdAcquisition::QxrdAcquisitionParameterPack parms = m_Acquisition->acquisitionParameterPack();
+    m_SynchronizedAcquisition->prepareForAcquisition(&parms);
+
+    m_WaveformPlot->clear();
+
+    if (m_SynchronizedAcquisition -> get_SyncAcquisitionMode()) {
+      QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_WaveformPlot, "Output Waveform");
+
+      pc->setData(m_SynchronizedAcquisition->outputTimes(), m_SynchronizedAcquisition->outputVoltage());
+
+      pc->attach(m_WaveformPlot);
+    }
+
+    m_WaveformPlot->updateZoomer();
+    m_WaveformPlot->replot();
   }
 }

@@ -67,12 +67,16 @@ public:
   void readSettings(QxrdSettings &settings, QString section);
   void writeSettings(QxrdSettings &settings, QString section);
 
+  QVector<double>  outputTimes();
+  QVector<double>  outputVoltage();
+
 private:
   mutable QMutex             m_Mutex;
   QxrdAcquisition           *m_Acquisition;
   QxrdAcquisition::QxrdAcquisitionParameterPack *m_AcquisitionParms;
   QxrdNIDAQPluginInterface  *m_NIDAQPlugin;
   int                        m_SyncMode;
+  QVector<double>            m_OutputTimes;
   QVector<double>            m_OutputVoltage;
 };
 

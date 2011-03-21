@@ -73,7 +73,12 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
     double divide = iSamples * (0.5 + symm/2.0);
     double divideBy2 = divide/2;
 
+    m_OutputTimes.resize(iSamples+1);
     m_OutputVoltage.resize(iSamples+1);
+
+    for (int i=0; i<=iSamples; i++) {
+      m_OutputTimes[i] = ((double)i)/((double) sampleRate);
+    }
 
     switch (wfm) {
     case SyncAcquisitionWaveformSquare:
@@ -177,4 +182,14 @@ void QxrdSynchronizedAcquisition::writeSettings(QxrdSettings &settings, QString 
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+}
+
+QVector<double>  QxrdSynchronizedAcquisition::outputTimes()
+{
+  return m_OutputTimes;
+}
+
+QVector<double>  QxrdSynchronizedAcquisition::outputVoltage()
+{
+  return m_OutputVoltage;
 }
