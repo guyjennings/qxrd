@@ -16,7 +16,11 @@ public:
 protected:
   void changeEvent(QEvent *e);
 
+private slots:
+  void waveformChanged();
+
 private:
+  QxrdAcquisition             *m_Acquisition;
   QxrdSynchronizedAcquisition *m_SynchronizedAcquisition;
 };
 

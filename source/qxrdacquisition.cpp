@@ -94,6 +94,27 @@ void QxrdAcquisition::acquire()
   }
 }
 
+QxrdAcquisition::QxrdAcquisitionParameterPack QxrdAcquisition::acquisitionParameterPack()
+{
+  return QxrdAcquisitionParameterPack (get_FilePattern(),
+                                       get_ExposureTime(),
+                                       get_SummedExposures(),
+                                       get_PreTriggerFiles(),
+                                       get_PostTriggerFiles(),
+                                       get_PhasesInGroup(),
+                                       get_SkippedExposuresAtStart(),
+                                       get_SkippedExposures());
+}
+
+QxrdAcquisition::QxrdDarkAcquisitionParameterPack QxrdAcquisition::darkAcquisitionParameterPack()
+{
+  return QxrdDarkAcquisitionParameterPack(get_FilePattern(),
+                                          get_ExposureTime(),
+                                          get_DarkSummedExposures(),
+                                          get_SkippedExposuresAtStart());
+
+}
+
 void QxrdAcquisition::acquireDark()
 {
   THREAD_CHECK;

@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <QMutexLocker>
 
-#define DAQmxErrChk(functionCall) { if( DAQmxFailed(error=(functionCall)) ) { QxrdNIDAQPlugin::errorCheck(__FILE__,__LINE__,error); goto Error; } }
+#define DAQmxErrChk(functionCall) do { if( DAQmxFailed(error=(functionCall)) ) { QxrdNIDAQPlugin::errorCheck(__FILE__,__LINE__,error); goto Error; } } while(0)
 
 QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   m_AOTaskHandle(0),
@@ -96,8 +96,8 @@ void QxrdNIDAQPlugin::closeTaskHandles()
   }
 }
 
-void   QxrdNIDAQPlugin::aoSet(double val1, double val2)
-{
+//void   QxrdNIDAQPlugin::aoSet(double val1, double val2)
+//{
 //#if QT_VERSION >= 0x040700
 //  QElapsedTimer t;
 //#else
@@ -122,9 +122,9 @@ void   QxrdNIDAQPlugin::aoSet(double val1, double val2)
 
 //Error:
 //  return;
-}
-void   QxrdNIDAQPlugin::aoSet(QString chan, double val)
-{
+//}
+//void   QxrdNIDAQPlugin::aoSet(QString chan, double val)
+//{
 //  initTaskHandles();
 
 //  int error;
@@ -133,15 +133,15 @@ void   QxrdNIDAQPlugin::aoSet(QString chan, double val)
 
 //Error:
 //  return;
-}
+//}
 
-double QxrdNIDAQPlugin::aiGet(int chan)
-{
-  return 0;
-}
+//double QxrdNIDAQPlugin::aiGet(int chan)
+//{
+//  return 0;
+//}
 
-double QxrdNIDAQPlugin::aiGet(QString chan)
-{
+//double QxrdNIDAQPlugin::aiGet(QString chan)
+//{
 //  initTaskHandles();
 
 //  int error;
@@ -151,11 +151,11 @@ double QxrdNIDAQPlugin::aiGet(QString chan)
 
 //Error:
 //  return res;
-  return 0;
-}
+//  return 0;
+//}
 
-void   QxrdNIDAQPlugin::aoWave(QString chan, int type, double freq, double amplitude, double offset)
-{
+//void   QxrdNIDAQPlugin::aoWave(QString chan, int type, double freq, double amplitude, double offset)
+//{
 //  int error;
 //  float64 res = 0;
 //  QVector<float64> waveform(1024);
@@ -170,7 +170,7 @@ void   QxrdNIDAQPlugin::aoWave(QString chan, int type, double freq, double ampli
 
 //Error:
 //  return;
-}
+//}
 
 //void   QxrdNIDAQPlugin::setAnalogChannel(int chan)
 //{
@@ -183,6 +183,59 @@ void   QxrdNIDAQPlugin::aoWave(QString chan, int type, double freq, double ampli
 //Error:
 //  return;
 //}
+
+double QxrdNIDAQPlugin::getAnalogInput(int chan)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  int error;
+  float64 res = 0;
+
+  if (m_AITaskHandle) {
+    DAQmxStopTask(m_AITaskHandle);
+    DAQmxClearTask(m_AITaskHandle);
+    m_AITaskHandle = 0;
+  }
+
+  if (chan >= 0) {
+    DAQmxErrChk(DAQmxCreateTask("qxrd-input", &m_AITaskHandle));
+    DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle,
+                                          qPrintable(tr("Dev1/ai%1").arg(chan)), NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+
+    if (m_AOTaskHandle) {
+      DAQmxErrChk(DAQmxReadAnalogScalarF64(m_AITaskHandle, 10.0, &res, NULL));
+    }
+  }
+
+Error:
+  return res;
+}
+
+void   QxrdNIDAQPlugin::setAnalogOutput(int chan, double value)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  int error;
+
+  if (m_AOTaskHandle) {
+    DAQmxStopTask(m_AOTaskHandle);
+    DAQmxClearTask(m_AOTaskHandle);
+    m_AOTaskHandle = 0;
+  }
+
+  if (chan >= 0) {
+    DAQmxErrChk(DAQmxCreateTask("qxrd-output", &m_AOTaskHandle));
+    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle,
+                                          qPrintable(tr("Dev1/ao%1").arg(chan)), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+
+    if (m_AOTaskHandle) {
+      DAQmxErrChk(DAQmxWriteAnalogScalarF64(m_AOTaskHandle, true, 10.0, value, NULL));
+    }
+  }
+
+Error:
+  return;
+}
 
 void   QxrdNIDAQPlugin::setAnalogWaveform(int chan, double rate, double wfm[], int size)
 {
@@ -199,18 +252,18 @@ void   QxrdNIDAQPlugin::setAnalogWaveform(int chan, double rate, double wfm[], i
   }
 
   if (chan >= 0) {
-    DAQmxErrChk(DAQmxCreateTask("qxrd-output", &m_AOTaskHandle))
+    DAQmxErrChk(DAQmxCreateTask("qxrd-output", &m_AOTaskHandle));
     DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle,
-                                          qPrintable(tr("Dev1/ao%1").arg(chan)), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL))
+                                          qPrintable(tr("Dev1/ao%1").arg(chan)), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
 
     if (m_AOTaskHandle) {
       DAQmxErrChk(
           DAQmxCfgSampClkTiming(m_AOTaskHandle, NULL, rate, DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, size)
-          )
+          );
 
       DAQmxErrChk(
               DAQmxWriteAnalogF64(m_AOTaskHandle, size, false, -1, DAQmx_Val_GroupByChannel, wfm, &nsampwrt, NULL)
-          )
+          );
       }
   }
 
@@ -234,11 +287,11 @@ void QxrdNIDAQPlugin::triggerAnalogWaveform()
 
     DAQmxErrChk(
       DAQmxStopTask(m_AOTaskHandle)
-    )
+    );
 
     DAQmxErrChk(
       DAQmxStartTask(m_AOTaskHandle)
-    )
+    );
   }
 
 Error:
