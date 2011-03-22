@@ -1,3 +1,8 @@
+v0.5.17 contains fixes and changes to the 'synchronized acquisition' mode
+
+Added a 'bipolar triangle' waveform.  Added nidaq.getAnalogInput and nidaq.setAnalogOutput
+script commands.  Added display of syncronization waveform to UI
+
 v0.5.16 mainly involves a major re-write of the acquisition code to support 'synchronized' acquisition.
 
 This involves taking 'groups' of images while varying an external programming voltage (using a
