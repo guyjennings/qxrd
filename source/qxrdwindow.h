@@ -29,6 +29,7 @@ class QxrdHistogramDialog;
 class QxrdInfoDialog;
 class QxrdPowderFitDialog;
 class QxrdImageDisplayWidget;
+class QxrdHighlighter;
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -163,6 +164,7 @@ private:
   QAtomicInt                             m_NewMaskAvailable;
 
   QxrdImageDisplayWidget                *m_ImageDisplay;
+  QxrdHighlighter                       *m_Highlighter;
 };
 
 #endif
