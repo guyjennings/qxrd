@@ -30,6 +30,7 @@
 #include "qxrdhistogramdialog.h"
 #include "qxrdinfodialog.h"
 #include "qxrdtestdockwidget.h"
+#include "qxrdhighlighter.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -88,7 +89,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_Mask(NULL/*new QxrdMaskData(NULL,2048,2048)*/),
     m_NewMask(NULL/*new QxrdMaskData(2048,2048)*/),
     m_NewMaskAvailable(false),
-    m_ImageDisplay(NULL)
+    m_ImageDisplay(NULL),
+    m_Highlighter(NULL)
 {
   setupUi(this);
 
@@ -418,6 +420,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_WindowsMenu -> addAction(m_SliceDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_HistogramDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_ImageInfoDialog -> toggleViewAction());
+
+  m_Highlighter = new QxrdHighlighter(m_ScriptEdit->document());
 
   connect(m_Plot, SIGNAL(slicePolygon(QwtArray<QwtDoublePoint>)),
           m_SliceDialog, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));

@@ -200,7 +200,8 @@ HEADERS += TODO.h \
     qxrdallocatorinterface.h \
     qxrdimagedataobjectcounter.h \
     qxrdthread.h \
-    qxrdsynchronizedacquisitionplot.h
+    qxrdsynchronizedacquisitionplot.h \
+    qxrdhighlighter.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -313,7 +314,8 @@ SOURCES += qxrd.cpp \
     qxrdallocatorinterface.cpp \
     qxrdimagedataobjectcounter.cpp \
     qxrdthread.cpp \
-    qxrdsynchronizedacquisitionplot.cpp
+    qxrdsynchronizedacquisitionplot.cpp \
+    qxrdhighlighter.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
