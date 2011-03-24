@@ -63,7 +63,9 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
     symm = -1.0;
   }
 
-  if (m_SyncMode) {
+  if (nphases <= 1) {
+    m_SyncMode = 0;
+  } else if (m_SyncMode) {
     while (nSamples > 10000) {
       sampleRate /= 10;
       nSamples = cycleTime*sampleRate;
@@ -156,11 +158,13 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
       int inGroup = (frameNumber-skipBefore) % perGroup;
       int phase = inGroup % nPhases;
 
-      if ((frameNumber >= skipBefore) && (frameNumber < (nGroups*perGroup-skipBetween+skipBefore))) {
-        if (inGroup < nPhases*nSummed) {
-          if (phase == 0) {
-            if (m_NIDAQPlugin) {
-              m_NIDAQPlugin->triggerAnalogWaveform();
+      if (nPhases > 1) {
+        if ((frameNumber >= skipBefore) && (frameNumber < (nGroups*perGroup-skipBetween+skipBefore))) {
+          if (inGroup < nPhases*nSummed) {
+            if (phase == 0) {
+              if (m_NIDAQPlugin) {
+                m_NIDAQPlugin->triggerAnalogWaveform();
+              }
             }
           }
         }

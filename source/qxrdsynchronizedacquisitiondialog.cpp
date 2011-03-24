@@ -81,7 +81,7 @@ void QxrdSynchronizedAcquisitionDialog::waveformChanged()
 
     m_WaveformPlot->clear();
 
-    if (m_SynchronizedAcquisition -> get_SyncAcquisitionMode()) {
+    if (m_SynchronizedAcquisition -> get_SyncAcquisitionMode() && (parms.nphases()>=2)) {
       QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_WaveformPlot, "Output Waveform");
 
       pc->setData(m_SynchronizedAcquisition->outputTimes(), m_SynchronizedAcquisition->outputVoltage());
