@@ -463,6 +463,9 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
       res[p][0] -> clear();
       ovf[p][0] -> clear();
 
+      res[p][0] -> set_SummedExposures(0);
+      ovf[p][0] -> set_SummedExposures(0);
+
       getFileBaseAndName(fileBase, fileIndex+i, p, nphases, fb, fn);
 
       res[p][0] -> set_FileBase(fb);

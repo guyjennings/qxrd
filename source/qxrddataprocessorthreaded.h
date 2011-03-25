@@ -45,6 +45,8 @@ public slots:
   void slicePolygon(QwtArray<QwtDoublePoint> poly);
   void integrateSaveAndDisplay();
 
+  void fixupBadBackgroundSubtraction(QString imagePattern, int nImgExposures, QString darkPath, int nDarkExposures);
+
 private:
   QxrdDoubleImageDataPtr correctInt16Image(QxrdDoubleImageDataPtr corrected, QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
   QxrdDoubleImageDataPtr correctInt32Image(QxrdDoubleImageDataPtr corrected, QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
