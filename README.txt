@@ -1,3 +1,5 @@
+v0.5.18 contains fixes for an acquisition problem caused by not resetting exposure counts
+
 v0.5.17 contains fixes and changes to the 'synchronized acquisition' mode
 
 Added a 'bipolar triangle' waveform.  Added nidaq.getAnalogInput and nidaq.setAnalogOutput
