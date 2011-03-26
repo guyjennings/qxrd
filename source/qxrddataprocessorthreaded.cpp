@@ -4,6 +4,7 @@
 #include "qxrdcenterfinder.h"
 #include "qxrdimagedata.h"
 #include "qxrdallocator.h"
+#include "qxrdfilesaverthread.h"
 
 #include <QtConcurrentRun>
 #include <QDirIterator>
@@ -457,3 +458,41 @@ void QxrdDataProcessorThreaded::integrateSaveAndDisplay()
                         data(), mask()));
 }
 
+void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePattern, int nImgExposures, QString darkPath, int nDarkExposures)
+{
+  QDirIterator imagePaths(currentDirectory(), QStringList(imagePattern));
+
+  QxrdDoubleImageDataPtr dark = takeNextFreeImage();
+  QString path = filePathInCurrentDirectory(darkPath);
+
+  if (dark->readImage(path)) {
+    dark->loadMetaData();
+
+    int nFileDarkExposures = dark->get_SummedExposures();
+
+    emit printMessage(tr("Loaded Dark image from %1 (%2 summed)").arg(path).arg(nFileDarkExposures));
+
+    while (imagePaths.hasNext()) {
+      QString imagePath=imagePaths.next();
+
+      QString path = filePathInCurrentDirectory(imagePath);
+      QxrdDoubleImageDataPtr image = takeNextFreeImage();
+
+      if (image->readImage(path)) {
+        image->loadMetaData();
+
+        int nFileImageExposures = image->get_SummedExposures();
+
+        emit printMessage(tr("Loaded image from %1 (%2 summed)").arg(path).arg(nFileImageExposures));
+
+        image->correctBadBackgroundSubtraction(dark,nImgExposures,nDarkExposures);
+
+        fileSaverThread()->saveData(path, image, QxrdMaskDataPtr(), NoOverwrite);
+      } else {
+        emit printMessage(tr("Failed to load image from %1").arg(path));
+      }
+    }
+  } else {
+    emit printMessage(tr("Failed to load Dark image from %1").arg(path));
+  }
+}

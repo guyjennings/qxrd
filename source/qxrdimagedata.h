@@ -55,6 +55,8 @@ public:
 
   int allocatedMemoryMB();
 
+  void correctBadBackgroundSubtraction(QxrdDoubleImageDataPtr dark, int nImgExposures, int nDarkExposures);
+
 protected:
   QxrdImageDataObjectCounter m_ObjectCounter; /* global counter to track allocation of QxrdImageData objects */
   QxrdMaskDataPtr            m_Mask;
@@ -275,6 +277,30 @@ template <typename T>
 int QxrdImageData<T>::allocatedMemoryMB()
 {
   return m_ObjectCounter.allocatedMemoryMB();
+}
+
+template <typename T>
+void QxrdImageData<T>::correctBadBackgroundSubtraction(QxrdDoubleImageDataPtr dark, int nImgExposures, int nDarkExposures)
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+
+  double badRatio = ((double) this->get_SummedExposures())/((double) dark->get_SummedExposures());
+  double goodRatio = ((double) nImgExposures)/((double) nDarkExposures);
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      double darkValue = dark->value(col,row);
+      double imgValue  = this->value(col,row);
+
+      imgValue += darkValue*badRatio;
+      imgValue -= darkValue*goodRatio;
+
+      this->setValue(col, row, imgValue);
+    }
+  }
+
+  this->set_SummedExposures(nImgExposures);
 }
 
 #endif
