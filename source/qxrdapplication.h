@@ -115,8 +115,11 @@ public:
   Q_PROPERTY(int    simpleServerPort    READ get_SimpleServerPort WRITE set_SimpleServerPort);
   QCEP_INTEGER_PROPERTY(SimpleServerPort);
 
+  Q_PROPERTY(int    defaultLayout   READ get_DefaultLayout WRITE set_DefaultLayout STORED false);
+  QCEP_INTEGER_PROPERTY(DefaultLayout);
+
 private:
-  bool                            m_NoPreferences;
+  bool                            m_FreshStart;
   QSplashScreen                  *m_Splash;
   QxrdWindow                     *m_Window;
   QxrdServerThread               *m_ServerThread;

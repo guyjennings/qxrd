@@ -201,7 +201,8 @@ HEADERS += TODO.h \
     qxrdimagedataobjectcounter.h \
     qxrdthread.h \
     qxrdsynchronizedacquisitionplot.h \
-    qxrdhighlighter.h
+    qxrdhighlighter.h \
+    qxrdfreshstartdialog.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -315,7 +316,8 @@ SOURCES += qxrd.cpp \
     qxrdimagedataobjectcounter.cpp \
     qxrdthread.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
-    qxrdhighlighter.cpp
+    qxrdhighlighter.cpp \
+    qxrdfreshstartdialog.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -331,7 +333,8 @@ FORMS = qxrdwindow.ui \
     qxrdtestdockwidget.ui \
     qxrdslicedialog.ui \
     qxrdhistogramdialog.ui \
-    qxrdinfodialog.ui
+    qxrdinfodialog.ui \
+    qxrdfreshstartdialog.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 
