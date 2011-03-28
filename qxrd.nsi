@@ -63,6 +63,7 @@ Section "Extract qxrd"
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}"
   CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\qxrd.exe"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Clean QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\qxrd.exe" "-noprefs -debug=10"
   CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Uninstall QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\uninstall.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 

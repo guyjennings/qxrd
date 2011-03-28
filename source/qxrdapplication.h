@@ -116,6 +116,7 @@ public:
   QCEP_INTEGER_PROPERTY(SimpleServerPort);
 
 private:
+  bool                            m_NoPreferences;
   QSplashScreen                  *m_Splash;
   QxrdWindow                     *m_Window;
   QxrdServerThread               *m_ServerThread;

@@ -48,6 +48,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_SpecServerPort(this,"specServerPort", -1),
     m_RunSimpleServer(this,"simpleServer", 1),
     m_SimpleServerPort(this,"simpleServerPort", 1234),
+    m_NoPreferences(false),
     m_Splash(NULL),
     m_Window(NULL),
     m_ServerThread(NULL),
@@ -65,6 +66,18 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_PerkinElmerPluginInterface(NULL)
 #endif
 {
+  printf("Argc = %d\n", argc);
+
+  for (int i=1; i<argc; i++) {
+    int dbg=0;
+    printf("Arg %d = %s\n", i, argv[i]);
+
+    if (strcmp(argv[i],"-noprefs") == 0) {
+      m_NoPreferences = true;
+    } else if (sscanf(argv[i],"-debug=%d",&dbg)==1) {
+      set_Debug(dbg);
+    }
+  }
 }
 
 void QxrdApplication::init(QSplashScreen *splash)
@@ -92,7 +105,7 @@ void QxrdApplication::init(QSplashScreen *splash)
   int simpleServer = 0;
   int simpleServerPort = 0;
 
-  {
+  if (!m_NoPreferences) {
     QxrdSettings settings;
 
     detectorType = settings.value("application/detectorType").toInt();
@@ -263,9 +276,13 @@ void QxrdApplication::init(QSplashScreen *splash)
 
   connect(prop_Debug(), SIGNAL(changedValue(int)), this, SLOT(debugChanged(int)));
 
-  splashMessage("Loading Preferences");
+  if (m_NoPreferences) {
+    splashMessage("Skipped loading preferences");
+  } else {
+    splashMessage("Loading Preferences");
 
-  readSettings();
+    readSettings();
+  }
 
   m_SettingsSaverThread = new QxrdSettingsSaverThread(this);
 
