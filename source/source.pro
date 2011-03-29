@@ -202,7 +202,8 @@ HEADERS += TODO.h \
     qxrdthread.h \
     qxrdsynchronizedacquisitionplot.h \
     qxrdhighlighter.h \
-    qxrdfreshstartdialog.h
+    qxrdfreshstartdialog.h \
+    qxrdfilebrowsermodelthread.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -317,7 +318,8 @@ SOURCES += qxrd.cpp \
     qxrdthread.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
     qxrdhighlighter.cpp \
-    qxrdfreshstartdialog.cpp
+    qxrdfreshstartdialog.cpp \
+    qxrdfilebrowsermodelthread.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
