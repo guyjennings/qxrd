@@ -890,8 +890,18 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
   QMutexLocker lock(&m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    printf("%s: QcepDoubleListProperty::setValue <- %g, %d\n",
-           qPrintable(name()), val[0], m_NQueuedUpdates);
+    int ct = val.count();
+    printf("%s: QcepDoubleListProperty::setValue <- [", qPrintable(name()));
+
+    for (int i=0; i<ct; i++) {
+      if (i<(ct-1)) {
+        printf("%g, ", val[i]);
+      } else {
+        printf("%g",   val[i]);
+      }
+    }
+
+    printf("], %d\n", m_NQueuedUpdates);
   }
 
   if (val != m_Value) {

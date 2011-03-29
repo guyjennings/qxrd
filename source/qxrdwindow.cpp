@@ -731,11 +731,15 @@ void QxrdWindow::readSettings(QxrdSettings &settings, QString section)
 
   m_SettingsLoaded = true;
 
-  QByteArray geometry = settings.value(section+"-geometry").toByteArray();
-  QByteArray winstate = settings.value(section+"-state").toByteArray();
+  if (!m_Application->get_DefaultLayout()) {
+    QByteArray geometry = settings.value(section+"-geometry").toByteArray();
+    QByteArray winstate = settings.value(section+"-state").toByteArray();
 
-  restoreGeometry(geometry);
-  restoreState(winstate,1);
+    restoreGeometry(geometry);
+    restoreState(winstate,1);
+  } else {
+    m_Application->set_DefaultLayout(0);
+  }
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }

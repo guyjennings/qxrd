@@ -238,11 +238,23 @@ void QxrdPreferencesDialog::setupDebugWidgets(int dbg)
   for (int i=0; gDebugStrings[i]; i++) {
     QCheckBox *cb = new QCheckBox(gDebugStrings[i]);
     cb->setChecked(dbg & mask);
-    grid->addWidget(cb, i, 0);
 
     mask <<= 1;
 
     m_DebugWidgetList.append(cb);
+  }
+
+  int ndebug = m_DebugWidgetList.count();
+  int ncol   = ndebug - ndebug/2;
+
+  for (int i=0; gDebugStrings[i]; i++) {
+    QCheckBox *cb = m_DebugWidgetList[i];
+
+    if (i < ncol) {
+      grid->addWidget(cb, i, 0);
+    } else {
+      grid->addWidget(cb, i - ncol, 1);
+    }
   }
 }
 
