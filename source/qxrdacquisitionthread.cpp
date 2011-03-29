@@ -150,7 +150,7 @@ void QxrdAcquisitionThread::cancelDark()
 QxrdAcquisition *QxrdAcquisitionThread::acquisition() const
 {
   while (m_Acquisition == NULL) {
-    QThread::msleep(500);
+    QThread::msleep(50);
   }
 
   return m_Acquisition;

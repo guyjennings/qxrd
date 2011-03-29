@@ -21,7 +21,7 @@ QxrdServerThread::~QxrdServerThread()
 QxrdServer *QxrdServerThread::server() const
 {
   while (m_Server == NULL) {
-    QThread::msleep(500);
+    QThread::msleep(50);
   }
 
   return m_Server;

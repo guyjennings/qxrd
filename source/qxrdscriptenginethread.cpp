@@ -29,7 +29,7 @@ void QxrdScriptEngineThread::shutdown()
 QxrdScriptEngine *QxrdScriptEngineThread::scriptEngine() const
 {
   while (m_ScriptEngine == NULL) {
-    QThread::msleep(500);
+    QThread::msleep(50);
   }
 
   return m_ScriptEngine;

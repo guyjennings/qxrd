@@ -9,7 +9,7 @@ QxrdFileBrowserModelThread::QxrdFileBrowserModelThread(QObject *parent) :
 QxrdFileBrowserModel* QxrdFileBrowserModelThread::fileBrowserModel() const
 {
   while (m_FileBrowserModel == NULL) {
-    QThread::msleep(100);
+    QThread::msleep(50);
   }
 
   return m_FileBrowserModel;
