@@ -375,6 +375,14 @@ void QxrdAcquisitionPerkinElmer::initialize()
 void QxrdAcquisitionPerkinElmer::beginAcquisition()
 {
   m_Counter.fetchAndStoreOrdered(0);
+
+  if (m_PerkinElmer && m_AcqDesc) {
+    if (qcepDebug(DEBUG_PERKINELMER)) {
+      emit printMessage("Reset frame counter");
+    }
+
+    m_PerkinElmer -> Acquisition_ResetFrameCnt(m_AcqDesc);
+  }
 }
 
 void QxrdAcquisitionPerkinElmer::endAcquisition()
@@ -441,14 +449,13 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
     quint32  cksum = 0;
     double   avg = 0;
 
-//    for (long i=0; i<npixels; i++) {
-//      unsigned short val = *frame++;
-//      cksum += val;
-//      avg += val;
-//      if (current) {
-//        *current++ = val;
-//      }
-//    }
+    unsigned short *fp = frame;
+
+    for (long i=0; i<npixels; i++) {
+      unsigned short val = *fp++;
+      cksum += val;
+      avg += val;
+    }
 
     if (current && frame) {
       ::memcpy(current, frame, npixels*sizeof(quint16));
@@ -461,6 +468,22 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
     if (qcepDebug(DEBUG_PERKINELMER)) {
       emit printMessage(tr("Frame checksum 0x%1, avg %2\n")
                         .arg(cksum,8,16,QChar('0')).arg(avg/npixels));
+
+      for (int f=0; f<m_BufferSize; f++) {
+        unsigned short* fp = m_Buffer.data() + f*npixels;
+
+        quint32  cksum = 0;
+        double   avg = 0;
+
+        for (long i=0; i<npixels; i++) {
+          unsigned short val = *fp++;
+          cksum += val;
+          avg += val;
+        }
+
+        emit printMessage(tr("Frame %1 checksum 0x%2, avg %3\n")
+                          .arg(f).arg(cksum,8,16,QChar('0')).arg(avg/npixels));
+      }
     }
 
     m_BufferIndex = (m_BufferIndex+1)%m_BufferSize;
