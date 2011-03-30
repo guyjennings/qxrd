@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=QXRD
+Comment=SAXS/PDF/Powder Data Analysis
+Exec=qxrd %f
+Icon=qxrd-icon
+Terminal=false
+Type=Application
+MimeType=text/plain
+Categories=Education;Science;Qt;
