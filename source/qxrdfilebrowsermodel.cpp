@@ -55,6 +55,10 @@ QModelIndex QxrdFileBrowserModel::parent(const QModelIndex &child) const
 
 QModelIndex QxrdFileBrowserModel::index(QString path) const
 {
+  if (m_RootPath.canonicalFilePath() == path) {
+    return index(0,0);
+  }
+
   return QModelIndex();
 }
 
