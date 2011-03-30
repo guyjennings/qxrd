@@ -16,6 +16,10 @@ DISTFILES += source plugins
 
 OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile qxrd.spec qxrd.desktop README.txt
 
+macx {
+  ICON = source/images/qxrd-icon.icns
+}
+
 QMAKE_EXTRA_TARGETS += tarball
 
 tarball.depends = FORCE
@@ -45,7 +49,7 @@ tarball.commands += \
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/{README.txt,*.{pro,pri,spec,desktop}} -t $${TARGET}-$${VERSION} &&
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/source/images/*.{png,ico} \
+        $(COPY_FILE)  $${PWD}/source/images/*.{png,ico,icns} \
                       -t $${TARGET}-$${VERSION}/source/images &&
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/{[TA]*.h,q*.cpp,q*.h,q*.qrc,q*.rc,q*.ui,source.pro,*.pri} \
@@ -154,6 +158,6 @@ website.commands += && \
 
 # rsync -avP -e ssh dox/html/ guyjennings,qxrd@web.sourceforge.net:htdocs/
 
-for(m, QT) {
-  message("QT contains $${m}")
-}
+#for(m, QT) {
+#  message("QT contains $${m}")
+#}

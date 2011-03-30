@@ -48,9 +48,9 @@ UI_DIR = ui
 OBJECTS_DIR = obj
 RCC_DIR = rcc
 message(Building: $${TARGET})
-RC_FILE = qxrd.rc
 win32 { 
-    contains(QMAKE_HOST.arch,x86_64) { 
+    RC_FILE = qxrd.rc
+    contains(QMAKE_HOST.arch,x86_64) {
         CONFIG(debug, debug|release):CONFIG += console
         else:
     }
@@ -465,6 +465,6 @@ win32 { # Make NSIS installer...
   }
 }
 
-for(m, QT) {
-  message("In source.pro QT contains $${m}")
-}
+#for(m, QT) {
+#  message("In source.pro QT contains $${m}")
+#}
