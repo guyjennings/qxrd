@@ -18,7 +18,7 @@ OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile qxrd.spec qxrd.desktop README.txt
 
 QMAKE_EXTRA_TARGETS += tarball
 
-tarball.depends = FORCE
+tarball.depends = FORCE qxrd.spec
 tarball.commands += \
         rm -rf $${TARGET}-$${VERSION} ; \
         $(MKDIR) $${TARGET}-$${VERSION} && \
@@ -92,6 +92,8 @@ tarball.commands += \
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/qxrdnidaqplugin/q*.{cpp,h,pro} \
                       -t $${TARGET}-$${VERSION}/plugins/qxrdnidaqplugin &&
+tarball.commands += \
+        $(COPY_FILE) qxrd.spec -t $${TARGET}-$${VERSION}/ &&
 
 tarball.commands += \
   tar -czf $${TARGET}-$${VERSION}.tar.gz $${TARGET}-$${VERSION} ; rm -rf $${TARGET}-$${VERSION}
