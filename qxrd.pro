@@ -16,10 +16,6 @@ DISTFILES += source plugins
 
 OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile qxrd.spec qxrd.desktop README.txt
 
-macx {
-  ICON = source/images/qxrd-icon.icns
-}
-
 QMAKE_EXTRA_TARGETS += tarball
 
 tarball.depends = FORCE

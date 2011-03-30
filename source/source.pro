@@ -10,6 +10,10 @@ TARGET   = qxrd
 DESTDIR  = ../
 #DESTDIR  = ../app/
 
+macx {
+  ICON = images/qxrd-icon.icns
+}
+
 # POST_TARGETDEPS += install
 #target.path = ../app
 INSTALLS += target
