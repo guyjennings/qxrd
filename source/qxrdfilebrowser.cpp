@@ -35,8 +35,8 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
 
   m_FileBrowser -> setModel(m_Model);
   m_FileBrowser -> setRootIndex(m_Model->index(QDir::currentPath()));
-  m_FileBrowser -> setUniformRowHeights(true);
-  m_FileBrowser -> setExpandsOnDoubleClick(false);
+//  m_FileBrowser -> setUniformRowHeights(true);
+//  m_FileBrowser -> setExpandsOnDoubleClick(false);
   m_FileBrowser -> setColumnWidth(0, 150);
   m_FileBrowser -> setColumnWidth(1, 30);
   m_FileBrowser -> setColumnWidth(2, -1);
@@ -46,7 +46,7 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
 //  connect(m_FileBrowser, SIGNAL(rowCountChanged(int,int)), this, SLOT(onRowCountChanged(int,int)));
 
 //  m_FileBrowser -> setColumnHidden(1,true); // Size
-  m_FileBrowser -> setColumnHidden(2,true); // Type
+//  m_FileBrowser -> setColumnHidden(2,true); // Type
 //  m_FileBrowser -> setColumnHidden(3,true); // Modified
 
   m_Model -> setNameFilters(QStringList("*.tif"));

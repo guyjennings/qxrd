@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 QxrdFileBrowserView::QxrdFileBrowserView(QWidget *parent) :
-    QTreeView(parent)
+    inherited(parent)
 {
   setSortingEnabled(true);
   sortByColumn(0, Qt::AscendingOrder);
@@ -14,7 +14,7 @@ void QxrdFileBrowserView::paintEvent(QPaintEvent *event)
   QTime tic;
   tic.start();
 
-  QTreeView::paintEvent(event);
+  inherited::paintEvent(event);
 
   int elapsed = tic.elapsed();
 
@@ -28,7 +28,7 @@ void	QxrdFileBrowserView::dataChanged ( const QModelIndex & topLeft, const QMode
   QTime tic;
   tic.start();
 
-  QTreeView::dataChanged(topLeft,bottomRight);
+  inherited::dataChanged(topLeft,bottomRight);
 
   int elapsed = tic.elapsed();
 
@@ -42,7 +42,7 @@ QModelIndex	QxrdFileBrowserView::indexAt ( const QPoint & point ) const
   QTime tic;
   tic.start();
 
-  QModelIndex result = QTreeView::indexAt(point);
+  QModelIndex result = inherited::indexAt(point);
 
   int elapsed = tic.elapsed();
 
@@ -58,7 +58,7 @@ void	QxrdFileBrowserView::keyboardSearch ( const QString & search )
   QTime tic;
   tic.start();
 
-  QTreeView::keyboardSearch(search);
+  inherited::keyboardSearch(search);
 
   int elapsed = tic.elapsed();
 
@@ -72,7 +72,7 @@ void	QxrdFileBrowserView::reset ()
   QTime tic;
   tic.start();
 
-  QTreeView::reset();
+  inherited::reset();
 
   int elapsed = tic.elapsed();
 
@@ -86,7 +86,7 @@ void	QxrdFileBrowserView::scrollTo ( const QModelIndex & index, ScrollHint hint 
   QTime tic;
   tic.start();
 
-  QTreeView::scrollTo(index, hint);
+  inherited::scrollTo(index, hint);
 
   int elapsed = tic.elapsed();
 
@@ -100,7 +100,7 @@ void	QxrdFileBrowserView::selectAll ()
   QTime tic;
   tic.start();
 
-  QTreeView::selectAll();
+  inherited::selectAll();
 
   int elapsed = tic.elapsed();
 
@@ -114,7 +114,7 @@ void	QxrdFileBrowserView::setModel ( QAbstractItemModel * model )
   QTime tic;
   tic.start();
 
-  QTreeView::setModel(model);
+  inherited::setModel(model);
 
   int elapsed = tic.elapsed();
 
@@ -128,7 +128,7 @@ void	QxrdFileBrowserView::setRootIndex ( const QModelIndex & index )
   QTime tic;
   tic.start();
 
-  QTreeView::setRootIndex(index);
+  inherited::setRootIndex(index);
 
   int elapsed = tic.elapsed();
 
@@ -142,7 +142,7 @@ void	QxrdFileBrowserView::setSelectionModel ( QItemSelectionModel * selectionMod
   QTime tic;
   tic.start();
 
-  QTreeView::setSelectionModel(selectionModel);
+  inherited::setSelectionModel(selectionModel);
 
   int elapsed = tic.elapsed();
 
@@ -156,7 +156,7 @@ QRect	QxrdFileBrowserView::visualRect ( const QModelIndex & index ) const
   QTime tic;
   tic.start();
 
-  QRect result = QTreeView::visualRect(index);
+  QRect result = inherited::visualRect(index);
 
   int elapsed = tic.elapsed();
 
