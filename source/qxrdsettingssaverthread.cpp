@@ -10,7 +10,7 @@ QxrdSettingsSaverThread::QxrdSettingsSaverThread(QxrdApplication *app) :
 QxrdSettingsSaver *QxrdSettingsSaverThread::settingsSaver()
 {
   while (m_SettingsSaver == NULL) {
-    QThread::msleep(500);
+    QThread::msleep(50);
   }
 
   return m_SettingsSaver;

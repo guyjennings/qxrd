@@ -1,3 +1,7 @@
+v0.5.19 allows setting some preferences before the application starts.  To activate this
+pass the command line argument '-fresh' when starting QXRD.  On windows there's an extra
+in the start menu to do this automatically.
+
 v0.5.18 contains fixes for an acquisition problem caused by not resetting exposure counts
 
 v0.5.17 contains fixes and changes to the 'synchronized acquisition' mode

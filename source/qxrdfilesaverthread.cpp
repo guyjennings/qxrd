@@ -50,7 +50,7 @@ void QxrdFileSaverThread::shutdown()
 QxrdFileSaver *QxrdFileSaverThread::fileSaver() const
 {
   while (m_FileSaver == NULL) {
-    QThread::msleep(500);
+    QThread::msleep(50);
   }
 
   return m_FileSaver;

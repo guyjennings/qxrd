@@ -10,6 +10,10 @@ TARGET   = qxrd
 DESTDIR  = ../
 #DESTDIR  = ../app/
 
+macx {
+  ICON = images/qxrd-icon.icns
+}
+
 # POST_TARGETDEPS += install
 #target.path = ../app
 INSTALLS += target
@@ -48,9 +52,9 @@ UI_DIR = ui
 OBJECTS_DIR = obj
 RCC_DIR = rcc
 message(Building: $${TARGET})
-RC_FILE = qxrd.rc
 win32 { 
-    contains(QMAKE_HOST.arch,x86_64) { 
+    RC_FILE = qxrd.rc
+    contains(QMAKE_HOST.arch,x86_64) {
         CONFIG(debug, debug|release):CONFIG += console
         else:
     }
@@ -202,7 +206,8 @@ HEADERS += TODO.h \
     qxrdthread.h \
     qxrdsynchronizedacquisitionplot.h \
     qxrdhighlighter.h \
-    qxrdfreshstartdialog.h
+    qxrdfreshstartdialog.h \
+    qxrdfilebrowsermodelthread.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -317,7 +322,8 @@ SOURCES += qxrd.cpp \
     qxrdthread.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
     qxrdhighlighter.cpp \
-    qxrdfreshstartdialog.cpp
+    qxrdfreshstartdialog.cpp \
+    qxrdfilebrowsermodelthread.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -463,6 +469,6 @@ win32 { # Make NSIS installer...
   }
 }
 
-for(m, QT) {
-  message("In source.pro QT contains $${m}")
-}
+#for(m, QT) {
+#  message("In source.pro QT contains $${m}")
+#}

@@ -44,27 +44,35 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/plugins/
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps/
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps/
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/
 
 install qxrd $RPM_BUILD_ROOT%{_bindir}
 install plugins/*.so  $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/plugins/
 
-#install images/qscan345.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/96x96/apps/
-#desktop-file-install --vendor=bessrc \
-#	--dir $RPM_BUILD_ROOT%{_datadir}/applications \
-#	qscan345.desktop
+cp source/images/qxrd-icon-32x32.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/qxrd-icon.png
+cp source/images/qxrd-icon-64x64.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps/qxrd-icon.png
+cp source/images/qxrd-icon-128x128.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps/qxrd-icon.png
+cp source/images/qxrd-icon-256x256.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/qxrd-icon.png
+
+desktop-file-install --vendor=bessrc \
+        --dir $RPM_BUILD_ROOT%{_datadir}/applications \
+        qxrd.desktop
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-#%post
-#update-desktop-database &> /dev/null || :
-#touch --no-create %{_datadir}/icons/hicolor || :
-#%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+%post
+update-desktop-database &> /dev/null || :
+touch --no-create %{_datadir}/icons/hicolor || :
+%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
 
-#%postun
-#update-desktop-database &> /dev/null || :
-#touch --no-create %{_datadir}/icons/hicolor || :
-#%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+%postun
+update-desktop-database &> /dev/null || :
+touch --no-create %{_datadir}/icons/hicolor || :
+%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
 
 
 %files
@@ -72,8 +80,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc
 %{_bindir}/%{name}
 %{_libdir}/%{name}-%{version}/plugins/*.so
-#%{_datadir}/applications/*%{name}.desktop
-#%{_datadir}/icons/hicolor/*/*/*
+%{_datadir}/applications/*%{name}.desktop
+%{_datadir}/icons/hicolor/*/*/*
 
 %changelog
 * Fri Oct 10 2008  <jennings@weimar.bessrc.aps.anl.gov> - 0.4.10-3

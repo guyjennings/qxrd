@@ -14,11 +14,11 @@ message(Target = $${TARGET})
 
 DISTFILES += source plugins
 
-OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile qxrd.spec README.txt
+OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile qxrd.spec qxrd.desktop README.txt
 
 QMAKE_EXTRA_TARGETS += tarball
 
-tarball.depends = FORCE
+tarball.depends = FORCE qxrd.spec
 tarball.commands += \
         rm -rf $${TARGET}-$${VERSION} ; \
         $(MKDIR) $${TARGET}-$${VERSION} && \
@@ -43,9 +43,9 @@ tarball.commands += \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdnidaqplugin && \
 
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/{README.txt,*.{pro,pri,spec}} -t $${TARGET}-$${VERSION} &&
+        $(COPY_FILE)  $${PWD}/{README.txt,*.{pro,pri,spec,desktop}} -t $${TARGET}-$${VERSION} &&
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/source/images/*.{png,ico} \
+        $(COPY_FILE)  $${PWD}/source/images/*.{png,ico,icns} \
                       -t $${TARGET}-$${VERSION}/source/images &&
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/{[TA]*.h,q*.cpp,q*.h,q*.qrc,q*.rc,q*.ui,source.pro,*.pri} \
@@ -92,6 +92,8 @@ tarball.commands += \
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/qxrdnidaqplugin/q*.{cpp,h,pro} \
                       -t $${TARGET}-$${VERSION}/plugins/qxrdnidaqplugin &&
+tarball.commands += \
+        $(COPY_FILE) qxrd.spec -t $${TARGET}-$${VERSION}/ &&
 
 tarball.commands += \
   tar -czf $${TARGET}-$${VERSION}.tar.gz $${TARGET}-$${VERSION} ; rm -rf $${TARGET}-$${VERSION}
@@ -154,6 +156,6 @@ website.commands += && \
 
 # rsync -avP -e ssh dox/html/ guyjennings,qxrd@web.sourceforge.net:htdocs/
 
-for(m, QT) {
-  message("QT contains $${m}")
-}
+#for(m, QT) {
+#  message("QT contains $${m}")
+#}

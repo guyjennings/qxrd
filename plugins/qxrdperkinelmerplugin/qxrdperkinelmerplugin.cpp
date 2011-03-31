@@ -84,6 +84,11 @@ UINT QxrdPerkinElmerPlugin::Acquisition_GetActFrame(
   return ::Acquisition_GetActFrame(hAcqDesc, dwActAcqFrame, dwActSecBuffFrame);
 }
 
+UINT QxrdPerkinElmerPlugin::Acquisition_ResetFrameCnt(HACQDESC hAcqDesc)
+{
+  return ::Acquisition_ResetFrameCnt(hAcqDesc);
+}
+
 UINT QxrdPerkinElmerPlugin::Acquisition_GetHwHeaderInfo(
     HACQDESC hAcqDesc, CHwHeaderInfo *pInfo)
 {

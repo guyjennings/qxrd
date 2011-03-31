@@ -48,6 +48,8 @@ public:
   virtual UINT Acquisition_GetActFrame(
       HACQDESC hAcqDesc, DWORD *dwActAcqFrame, DWORD *dwActSecBuffFrame) = 0;
 
+  virtual UINT Acquisition_ResetFrameCnt(HACQDESC hAcqDesc) = 0;
+
   virtual UINT Acquisition_GetHwHeaderInfo(
       HACQDESC hAcqDesc, CHwHeaderInfo *pInfo) = 0;
 

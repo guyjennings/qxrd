@@ -41,7 +41,7 @@ void QxrdDataProcessorThread::shutdown()
 QxrdDataProcessor *QxrdDataProcessorThread::dataProcessor() const
 {
   while (m_DataProcessor == NULL) {
-    QThread::msleep(500);
+    QThread::msleep(50);
   }
 
   return m_DataProcessor;
