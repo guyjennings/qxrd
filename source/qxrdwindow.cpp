@@ -186,6 +186,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
   connect(m_ActionPreferences, SIGNAL(triggered()), m_Application, SLOT(editPreferences()));
+  connect(m_ActionLoadPreferences, SIGNAL(triggered()), m_Application, SLOT(doLoadPreferences()));
+  connect(m_ActionSavePreferences, SIGNAL(triggered()), m_Application, SLOT(doSavePreferences()));
+
   connect(m_ActionLoadData, SIGNAL(triggered()), this, SLOT(doLoadData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), this, SLOT(doSaveData()));
   connect(m_ActionLoadDark, SIGNAL(triggered()), this, SLOT(doLoadDark()));

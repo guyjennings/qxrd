@@ -11,6 +11,7 @@ class QxrdSettings : public QSettings
 
 public:
   QxrdSettings(QObject *parent=0);
+  QxrdSettings(const QString &path, QSettings::Format format = QSettings::IniFormat, QObject *parent=0);
   ~QxrdSettings();
 };
 

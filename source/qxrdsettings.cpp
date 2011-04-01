@@ -9,6 +9,12 @@ QxrdSettings::QxrdSettings(QObject *parent)
   }
 }
 
+QxrdSettings::QxrdSettings(const QString &path, QSettings::Format format, QObject *parent)
+  : QSettings(path, format, parent)
+{
+
+}
+
 QxrdSettings::~QxrdSettings()
 {
   if (qcepDebug(DEBUG_PREFS)) {

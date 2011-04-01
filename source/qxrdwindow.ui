@@ -871,7 +871,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -893,6 +893,8 @@
     <addaction name="separator"/>
     <addaction name="m_ActionSelectLogFile"/>
     <addaction name="m_ActionPreferences"/>
+    <addaction name="m_ActionLoadPreferences"/>
+    <addaction name="m_ActionSavePreferences"/>
     <addaction name="m_ActionQuit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -1297,6 +1299,22 @@
    </property>
    <property name="toolTip">
     <string>Load a selection of images and add them all together</string>
+   </property>
+  </action>
+  <action name="m_ActionSavePreferences">
+   <property name="text">
+    <string>Save Preferences...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save QXRD Settings in a file</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadPreferences">
+   <property name="text">
+    <string>Load Preferences...</string>
+   </property>
+   <property name="toolTip">
+    <string>Load QXRD preferences from a file...</string>
    </property>
   </action>
  </widget>

@@ -483,6 +483,38 @@ void QxrdApplication::writeSettings()
   QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
 }
 
+void QxrdApplication::doLoadPreferences()
+{
+  QString loadPrefsFrom = QFileDialog::getOpenFileName(m_Window,
+                                                       "Load QXRD Preferences from...");
+
+  if (loadPrefsFrom != "") {
+    QxrdSettings settings(loadPrefsFrom, QSettings::IniFormat);
+
+    QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
+
+    m_Window       -> readSettings(settings, "window");
+    m_Acquisition  -> readSettings(settings, "acquire");
+    m_DataProcessor-> readSettings(settings, "processor");
+  }
+}
+
+void QxrdApplication::doSavePreferences()
+{
+  QString savePrefsTo = QFileDialog::getSaveFileName(m_Window,
+                                                     "Save QXRD Preferences to...");
+
+  if (savePrefsTo != "") {
+    QxrdSettings settings(savePrefsTo, QSettings::IniFormat);
+
+    m_Window       -> writeSettings(settings, "window");
+    m_Acquisition  -> writeSettings(settings, "acquire");
+    m_DataProcessor-> writeSettings(settings, "processor");
+
+    QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
+  }
+}
+
 void QxrdApplication::possiblyQuit()
 {
   if (wantToQuit()) {
