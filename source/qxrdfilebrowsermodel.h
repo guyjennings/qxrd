@@ -1,6 +1,9 @@
 #ifndef QXRDFILEBROWSERMODEL_H
 #define QXRDFILEBROWSERMODEL_H
 
+////#define OLD_FILE_BROWSER
+
+//#ifdef OLD_FILE_BROWSER
 //#include <QFileSystemModel>
 
 //class QxrdFileBrowserModel : public QFileSystemModel
@@ -33,23 +36,27 @@
 //  virtual Qt::DropActions	supportedDropActions () const;
 //};
 
-#include <QAbstractItemModel>
+//#else
+
+#include <QAbstractTableModel>
 #include <QVector>
 #include <QFileInfo>
 
-class QxrdFileBrowserModel : public QAbstractItemModel
+class QxrdFileBrowserModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
   explicit QxrdFileBrowserModel(QObject *parent=0);
-  virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-  virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-  virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
-  virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-  virtual QModelIndex parent(const QModelIndex &child) const;
-  virtual QModelIndex index(QString path) const;
-  virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+  typedef QAbstractTableModel inherited;
+
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+  QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex parent(const QModelIndex &child) const;
+  QModelIndex index(const QString &path) const;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   void setNameFilters(QStringList filters);
   void setNameFilterDisables(bool disables);
 
@@ -67,5 +74,7 @@ private:
   QFileInfo          m_RootPath;
   QVector<QFileInfo> m_FileList;
 };
+
+//#endif
 
 #endif // QXRDFILEBROWSERMODEL_H

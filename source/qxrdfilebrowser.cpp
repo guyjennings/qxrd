@@ -35,15 +35,19 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
 
   m_FileBrowser -> setModel(m_Model);
   m_FileBrowser -> setRootIndex(m_Model->index(QDir::currentPath()));
+
 //  m_FileBrowser -> setUniformRowHeights(true);
 //  m_FileBrowser -> setExpandsOnDoubleClick(false);
+
   m_FileBrowser -> setColumnWidth(0, 150);
   m_FileBrowser -> setColumnWidth(1, 30);
   m_FileBrowser -> setColumnWidth(2, -1);
   m_FileBrowser -> setColumnWidth(3, 80);
 
+  m_FileBrowser -> resizeColumnsToContents();
+  m_FileBrowser -> resizeRowsToContents();
 
-//  connect(m_FileBrowser, SIGNAL(rowCountChanged(int,int)), this, SLOT(onRowCountChanged(int,int)));
+  connect(m_FileBrowser, SIGNAL(rowCountChanged(int,int)), this, SLOT(onRowCountChanged(int,int)));
 
 //  m_FileBrowser -> setColumnHidden(1,true); // Size
 //  m_FileBrowser -> setColumnHidden(2,true); // Type
@@ -115,7 +119,7 @@ void QxrdFileBrowser::onFilterChanged(int newfilter)
   }
 }
 
-void QxrdFileBrowser::onSelectorChanged(QString str, QModelIndex parent)
+void QxrdFileBrowser::onSelectorChanged(QString str, const QModelIndex &parent)
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QRegExp pattern(str, Qt::CaseSensitive, QRegExp::Wildcard);
@@ -123,7 +127,7 @@ void QxrdFileBrowser::onSelectorChanged(QString str, QModelIndex parent)
   int rows = m_Model -> rowCount(parent);
 
   for (int i=0; i<rows; i++) {
-    QModelIndex index = m_Model -> index(i,0, parent);
+    QModelIndex index = m_Model -> index(i, 0, parent);
 
     QString path = m_Model->fileName(index);
 //    emit printMessage(tr("Testing %1").arg(path));
@@ -361,7 +365,7 @@ void QxrdFileBrowser::onRowCountChanged(int oldCount, int newCount)
 {
   printf("QxrdFileBrowser::onRowCountChanged(%d,%d)\n", oldCount, newCount);
 
-  m_FileBrowser->resizeColumnToContents(0);
+  m_FileBrowser->resizeColumnsToContents();
 }
 
 QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdDataProcessor *processor, QWidget *parent)

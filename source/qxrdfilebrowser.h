@@ -35,7 +35,7 @@ public:
 
 public slots:
   void onFilterChanged(int newfilter);
-  void onSelectorChanged(QString str, QModelIndex = QModelIndex());
+  void onSelectorChanged(QString str, const QModelIndex &a= QModelIndex());
   void doPushDirectory(QString newDir);
   void doPreviousDirectory();
   void doUpDirectory();

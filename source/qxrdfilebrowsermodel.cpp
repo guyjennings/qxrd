@@ -3,230 +3,9 @@
 #include <stdio.h>
 #include <QStringList>
 #include <QDirIterator>
+#include <QSize>
 
-QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
-  QAbstractItemModel(parent)
-{
-}
-
-QVariant QxrdFileBrowserModel::headerData
-  (int section, Qt::Orientation orientation, int role) const
-{
-  if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-    switch (section) {
-    case 0:
-      return "File name";
-
-    case 1:
-      return "Size";
-
-    case 2:
-      return "Modified";
-    }
-  }
-
-  return QVariant();
-}
-
-QVariant QxrdFileBrowserModel::data(const QModelIndex &index, int role) const
-{
-  if (role == Qt::DisplayRole) {
-    if (index.isValid()) {
-      QFileInfo info = m_FileList.at(index.row());
-
-      if (index.column() == 0) {
-        return info.fileName();
-      } else if (index.column() == 1) {
-        return info.size();
-      } else if (index.column() == 2) {
-        return info.lastModified();
-      }
-    }
-  }
-
-  return QVariant();
-}
-
-int	QxrdFileBrowserModel::columnCount ( const QModelIndex & parent ) const
-{
-//  if (parent.isValid()) {
-//    return 3;
-//  } else {
-    return 3;
-//  }
-}
-
-int	QxrdFileBrowserModel::rowCount ( const QModelIndex & parent ) const
-{
-//  if (parent.isValid()) {
-//    return 1;
-//  } else {
-    return m_FileList.count();
-//  }
-}
-
-QModelIndex QxrdFileBrowserModel::parent(const QModelIndex &child) const
-{
-//  if (!child.isValid()) {
-    return QModelIndex();
-//  }
-
-
-}
-
-QModelIndex QxrdFileBrowserModel::index(QString path) const
-{
-  if (m_RootPath.canonicalFilePath() == path) {
-    return index(0,0);
-  }
-
-  for (int i=0; i<rowCount(); i++) {
-    if (m_FileList.at(i).canonicalFilePath() == path) {
-      return index(i,0);
-    }
-  }
-
-  return QModelIndex();
-}
-
-QModelIndex QxrdFileBrowserModel::index(int row, int column, const QModelIndex &parent) const
-{
-  if (!hasIndex(row, column, parent)) {
-    return QModelIndex();
-  }
-
-  if (row >= 0 && row < m_FileList.count() && column >= 0 && column < 3) {
-    return createIndex(row, column);
-  }
-
-  return QModelIndex();
-}
-
-void QxrdFileBrowserModel::setNameFilters(QStringList filters)
-{
-}
-
-void QxrdFileBrowserModel::setNameFilterDisables(bool disables)
-{
-}
-
-QString QxrdFileBrowserModel::fileName(const QModelIndex &index)
-{
-  if (index.isValid()) {
-    return m_FileList.at(index.row()).fileName();
-  }
-
-  return "xxx";
-}
-
-QString QxrdFileBrowserModel::filePath(const QModelIndex &index) const
-{
-  if (index.isValid()) {
-    return m_FileList.at(index.row()).filePath();
-  }
-
-  return "/xxx/yyy";
-}
-
-void QxrdFileBrowserModel::setRootPath(QString path)
-{
-  beginResetModel();
-
-  QDirIterator iter(path);
-  QVector<QFileInfo> res;
-
-  while (iter.hasNext()) {
-    res.append(QFileInfo(path, iter.next()));
-  }
-
-  m_RootPath = QFileInfo(path);
-  m_FileList = res;
-
-  endResetModel();
-}
-
-bool QxrdFileBrowserModel::isDir(const QModelIndex &index) const
-{
-  if (index.isValid()) {
-    return m_FileList.at(index.row()).isDir();
-  }
-
-  return false;
-}
-
-bool QxrdFileBrowserModel::hasChildren (const QModelIndex &index) const
-{
-  return false;
-}
-
-bool fileNameLessThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.fileName().toLower() < f2.fileName().toLower();
-}
-
-bool fileNameGreaterThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.fileName().toLower() > f2.fileName().toLower();
-}
-
-bool fileSizeLessThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.size() < f2.size();
-}
-
-bool fileSizeGreaterThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.size() > f2.size();
-}
-
-bool fileDateLessThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.lastModified() < f2.lastModified();
-}
-
-bool fileDateGreaterThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.lastModified() > f2.lastModified();
-}
-
-void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
-{
-  beginResetModel();
-
-  bool (*lt)(QFileInfo f1, QFileInfo f2) = NULL;
-
-  switch(column) {
-  case 0:
-    if (order == Qt::AscendingOrder) {
-      lt = fileNameLessThan;
-    } else {
-      lt = fileNameGreaterThan;
-    }
-    break;
-
-  case 1:
-    if (order == Qt::AscendingOrder) {
-      lt = fileSizeLessThan;
-    } else {
-      lt = fileSizeGreaterThan;
-    }
-    break;
-
-  case 2:
-    if (order == Qt::AscendingOrder) {
-      lt = fileDateLessThan;
-    } else {
-      lt = fileDateGreaterThan;
-    }
-    break;
-  }
-
-  if (lt) {
-    qStableSort(m_FileList.begin(), m_FileList.end(), lt);
-  }
-
-  endResetModel();
-}
+//#ifdef OLD_FILE_BROWSER
 
 //QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
 //    QFileSystemModel(parent)
@@ -502,3 +281,227 @@ void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
 
 //  return result;
 //}
+
+//#else
+
+QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
+  QAbstractTableModel(parent)
+{
+}
+
+QVariant QxrdFileBrowserModel::headerData
+  (int section, Qt::Orientation orientation, int role) const
+{
+  if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+    switch (section) {
+    case 0:
+      return "File name";
+
+    case 1:
+      return "Size";
+
+    case 2:
+      return "Modified";
+    }
+  }
+
+  return QVariant();
+}
+
+QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
+{
+  QModelIndex index = idx;
+
+  if (role == Qt::DisplayRole) {
+    if (index.isValid()) {
+      QFileInfo info = m_FileList.at(index.row());
+
+      if (index.column() == 0) {
+        return info.fileName();
+      } else if (index.column() == 1) {
+        return info.size();
+      } else if (index.column() == 2) {
+        return info.lastModified();
+      }
+    }
+  } else if (role == Qt::SizeHintRole) {
+    return QSize(80,10);
+  }
+
+  return QVariant();
+}
+
+int	QxrdFileBrowserModel::columnCount ( const QModelIndex & parent ) const
+{
+//  if (parent.isValid()) {
+//    return 3;
+//  } else {
+    return 3;
+//  }
+}
+
+int	QxrdFileBrowserModel::rowCount ( const QModelIndex & parent ) const
+{
+//  if (parent.isValid()) {
+//    return 1;
+//  } else {
+    return m_FileList.count();
+//  }
+}
+
+QModelIndex QxrdFileBrowserModel::parent(const QModelIndex &child) const
+{
+//  if (!child.isValid()) {
+    return QModelIndex();
+//  }
+
+
+}
+
+QModelIndex QxrdFileBrowserModel::index(const QString &path) const
+{
+  if (m_RootPath.canonicalFilePath() == path) {
+    return inherited::index(0,0);
+  }
+
+  for (int i=0; i<rowCount(); i++) {
+    if (m_FileList.at(i).canonicalFilePath() == path) {
+      return inherited::index(i,0);
+    }
+  }
+
+  return QModelIndex();
+}
+
+QModelIndex QxrdFileBrowserModel::index(int row, int column, const QModelIndex &parent) const
+{
+  return inherited::index(row, column, parent);
+}
+
+void QxrdFileBrowserModel::setNameFilters(QStringList filters)
+{
+}
+
+void QxrdFileBrowserModel::setNameFilterDisables(bool disables)
+{
+}
+
+QString QxrdFileBrowserModel::fileName(const QModelIndex &index)
+{
+  if (index.isValid()) {
+    return m_FileList.at(index.row()).fileName();
+  }
+
+  return "xxx";
+}
+
+QString QxrdFileBrowserModel::filePath(const QModelIndex &index) const
+{
+  if (index.isValid()) {
+    return m_FileList.at(index.row()).filePath();
+  }
+
+  return "/xxx/yyy";
+}
+
+void QxrdFileBrowserModel::setRootPath(QString path)
+{
+  beginResetModel();
+
+  QDirIterator iter(path);
+  QVector<QFileInfo> res;
+
+  while (iter.hasNext()) {
+    res.append(QFileInfo(path, iter.next()));
+  }
+
+  m_RootPath = QFileInfo(path);
+  m_FileList = res;
+
+  endResetModel();
+}
+
+bool QxrdFileBrowserModel::isDir(const QModelIndex &index) const
+{
+  if (index.isValid()) {
+    return m_FileList.at(index.row()).isDir();
+  }
+
+  return false;
+}
+
+bool QxrdFileBrowserModel::hasChildren (const QModelIndex &index) const
+{
+  return false;
+}
+
+bool fileNameLessThan(QFileInfo f1, QFileInfo f2)
+{
+  return f1.fileName().toLower() < f2.fileName().toLower();
+}
+
+bool fileNameGreaterThan(QFileInfo f1, QFileInfo f2)
+{
+  return f1.fileName().toLower() > f2.fileName().toLower();
+}
+
+bool fileSizeLessThan(QFileInfo f1, QFileInfo f2)
+{
+  return f1.size() < f2.size();
+}
+
+bool fileSizeGreaterThan(QFileInfo f1, QFileInfo f2)
+{
+  return f1.size() > f2.size();
+}
+
+bool fileDateLessThan(QFileInfo f1, QFileInfo f2)
+{
+  return f1.lastModified() < f2.lastModified();
+}
+
+bool fileDateGreaterThan(QFileInfo f1, QFileInfo f2)
+{
+  return f1.lastModified() > f2.lastModified();
+}
+
+void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
+{
+  beginResetModel();
+
+  bool (*lt)(QFileInfo f1, QFileInfo f2) = NULL;
+
+  switch(column) {
+  case 0:
+    if (order == Qt::AscendingOrder) {
+      lt = fileNameLessThan;
+    } else {
+      lt = fileNameGreaterThan;
+    }
+    break;
+
+  case 1:
+    if (order == Qt::AscendingOrder) {
+      lt = fileSizeLessThan;
+    } else {
+      lt = fileSizeGreaterThan;
+    }
+    break;
+
+  case 2:
+    if (order == Qt::AscendingOrder) {
+      lt = fileDateLessThan;
+    } else {
+      lt = fileDateGreaterThan;
+    }
+    break;
+  }
+
+  if (lt) {
+    qStableSort(m_FileList.begin(), m_FileList.end(), lt);
+  }
+
+  endResetModel();
+}
+
+//#endif
