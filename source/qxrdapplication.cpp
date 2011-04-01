@@ -550,7 +550,7 @@ void QxrdApplication::shutdownThreads()
   shutdownThread(m_ServerThread);
   shutdownThread(m_ScriptEngineThread);
   shutdownThread(m_AcquisitionThread);
-//  shutdownThread(m_DataProcessorThread);
+  shutdownThread(m_DataProcessorThread);
 //  shutdownThread(m_AllocatorThread);
 //  shutdownThread(m_FileSaverThread);
 }
