@@ -338,10 +338,16 @@ void QxrdAcquisitionPerkinElmer::initialize()
     m_Buffer.resize(get_NRows()*get_NCols()*m_BufferSize);
     m_Buffer.fill(0);
 
+    if (get_ExposureTime() <= 0) {
+      set_ExposureTime(0.1);
+    }
+
     if (qcepDebug(DEBUG_PERKINELMER)) {
       emit printMessage(tr("Exposure Time = %1").arg(get_ExposureTime()));
       emit printMessage(tr("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER"));
     }
+
+    onExposureTimeChanged(get_ExposureTime());
 
     if ((nRet=m_PerkinElmer->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
       acquisitionError(__LINE__, nRet);

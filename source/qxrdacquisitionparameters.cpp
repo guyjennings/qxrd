@@ -11,7 +11,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters()
   : QObject(),
     m_DetectorType(this, "detectorType",-1),
     m_DetectorTypeName(this,"detectorTypeName",""),
-    m_ExposureTime(this,"exposureTime",0),
+    m_ExposureTime(this,"exposureTime",0.1),
     m_SkippedExposuresAtStart(this,"skippedExposuresAtStart",0),
     m_PhasesInGroup(this,"phasesInGroup",1),
     m_SummedExposures(this,"summedExposures",1),
