@@ -1,5 +1,7 @@
 v0.5.20 has :
 
+fixed problems with image accumulation.
+
 an initial implementation of a file browser that is more responsive when there
 are many files in a directory.
 
