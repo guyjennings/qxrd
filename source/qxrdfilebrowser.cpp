@@ -27,6 +27,10 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
   m_ModelThread = new QxrdFileBrowserModelThread();
   m_ModelThread -> start();
 
+  m_TestBrowser -> setModel(new QxrdSimpleTableModel());
+  m_TestBrowser -> resizeColumnsToContents();
+  m_TestBrowser -> resizeRowsToContents();
+
 //  m_Model = m_ModelThread ->fileBrowserModel();  /*new QxrdFileBrowserModel();*/
 //  m_Model -> setRootPath(QDir::currentPath());
   m_Model = new QxrdFileBrowserModel();

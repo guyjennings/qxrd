@@ -284,6 +284,44 @@
 
 //#else
 
+QxrdSimpleTableModel::QxrdSimpleTableModel(QObject *parent) :
+    QAbstractTableModel(parent)
+{
+}
+
+int QxrdSimpleTableModel::rowCount(const QModelIndex &parent) const
+{
+  return 10;
+}
+
+int QxrdSimpleTableModel::columnCount(const QModelIndex &parent) const
+{
+  return 3;
+}
+
+QVariant QxrdSimpleTableModel::data(const QModelIndex &index, int role) const
+{
+  if (role == Qt::DisplayRole) {
+    return "Item";
+  }
+
+//  if (role == Qt::SizeHintRole) {
+//    return QSize(80,8);
+//  }
+
+  return QVariant();
+}
+
+QVariant QxrdSimpleTableModel::headerData(
+    int section, Qt::Orientation orientation, int role) const
+{
+//  if (role == Qt::SizeHintRole) {
+//    return QSize(8,8);
+//  } else {
+    return inherited::headerData(section, orientation, role);
+//  }
+}
+
 QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   QAbstractTableModel(parent)
 {

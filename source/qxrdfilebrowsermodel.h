@@ -42,6 +42,20 @@
 #include <QVector>
 #include <QFileInfo>
 
+class QxrdSimpleTableModel : public QAbstractTableModel
+{
+  Q_OBJECT
+
+public:
+  explicit QxrdSimpleTableModel(QObject *parent=0);
+  typedef QAbstractTableModel inherited;
+
+  int rowCount(const QModelIndex &parent) const;
+  int columnCount(const QModelIndex &parent) const;
+  QVariant data(const QModelIndex &index, int role) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+};
+
 class QxrdFileBrowserModel : public QAbstractTableModel
 {
   Q_OBJECT

@@ -108,7 +108,7 @@
       </item>
      </layout>
     </item>
-    <item row="3" column="0" colspan="2">
+    <item row="4" column="0" colspan="2">
      <widget class="QComboBox" name="m_FilterChoices">
       <item>
        <property name="text">
@@ -147,14 +147,14 @@
       </item>
      </widget>
     </item>
-    <item row="4" column="0" colspan="2">
+    <item row="5" column="0" colspan="2">
      <widget class="QLineEdit" name="m_FileSelector">
       <property name="toolTip">
        <string>File filter</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
+    <item row="6" column="0">
      <widget class="QPushButton" name="m_OpenButton">
       <property name="toolTip">
        <string>Open selected files</string>
@@ -164,7 +164,7 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
+    <item row="6" column="1">
      <widget class="QPushButton" name="m_ProcessButton">
       <property name="toolTip">
        <string>Process selected files</string>
@@ -174,7 +174,7 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
+    <item row="7" column="0">
      <widget class="QPushButton" name="m_AccumulateButton">
       <property name="toolTip">
        <string>Accumulate (sum) selected files</string>
@@ -184,7 +184,7 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
+    <item row="7" column="1">
      <widget class="QPushButton" name="m_IntegrateButton">
       <property name="toolTip">
        <string>Integrate selected files</string>
@@ -197,7 +197,7 @@
     <item row="1" column="0" colspan="2">
      <widget class="QComboBox" name="m_RootDirectoryCombo"/>
     </item>
-    <item row="2" column="0" colspan="2">
+    <item row="3" column="0" colspan="2">
      <widget class="QxrdFileBrowserView" name="m_FileBrowser">
       <property name="alternatingRowColors">
        <bool>true</bool>
@@ -227,6 +227,9 @@
        <number>10</number>
       </attribute>
      </widget>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QTableView" name="m_TestBrowser"/>
     </item>
    </layout>
   </widget>
