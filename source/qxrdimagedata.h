@@ -155,7 +155,7 @@ void QxrdImageData<T>::accumulateImage(QSharedPointer< QxrdImageData<T2> > image
     int ncols = this -> get_Width();
     int nrows = this -> get_Height();
 
-    this->prop_SummedExposures()->incValue(1);
+    this->prop_SummedExposures()->incValue(image->get_SummedExposures());
 
     if (ncols == image->get_Width() && nrows == image->get_Height()) {
       int npix = ncols*nrows;
@@ -164,7 +164,7 @@ void QxrdImageData<T>::accumulateImage(QSharedPointer< QxrdImageData<T2> > image
       T2 *destp = image -> data();
 
       for (int i=0; i<npix; i++) {
-        *destp++ += *srcp++;
+        *srcp++ += *destp++;
       }
     } else {
       for (int row=0; row<nrows; row++) {
