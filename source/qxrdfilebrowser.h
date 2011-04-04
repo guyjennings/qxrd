@@ -51,6 +51,7 @@ public slots:
   void onRowCountChanged(int oldCount, int newCount);
   void doubleClicked(QModelIndex index);
   void doSelectComboItem(int index);
+  void onModelReset();
 
 signals:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;

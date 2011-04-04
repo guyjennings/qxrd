@@ -24,12 +24,8 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
     setWindowTitle("Input " + windowTitle());
   }
 
-  m_ModelThread = new QxrdFileBrowserModelThread();
-  m_ModelThread -> start();
-
-  m_TestBrowser -> setModel(new QxrdSimpleTableModel());
-  m_TestBrowser -> resizeColumnsToContents();
-  m_TestBrowser -> resizeRowsToContents();
+//  m_ModelThread = new QxrdFileBrowserModelThread();
+//  m_ModelThread -> start();
 
 //  m_Model = m_ModelThread ->fileBrowserModel();  /*new QxrdFileBrowserModel();*/
 //  m_Model -> setRootPath(QDir::currentPath());
@@ -38,27 +34,16 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
 //  m_Model -> moveToThread(m_ModelThread);
 
   m_FileBrowser -> setModel(m_Model);
-  m_FileBrowser -> setRootIndex(m_Model->index(QDir::currentPath()));
 
-//  m_FileBrowser -> setUniformRowHeights(true);
-//  m_FileBrowser -> setExpandsOnDoubleClick(false);
-
-  m_FileBrowser -> setColumnWidth(0, 150);
-  m_FileBrowser -> setColumnWidth(1, 30);
-  m_FileBrowser -> setColumnWidth(2, -1);
-  m_FileBrowser -> setColumnWidth(3, 80);
+  m_FileBrowser -> setRootPath(QDir::currentPath());
 
   m_FileBrowser -> resizeColumnsToContents();
   m_FileBrowser -> resizeRowsToContents();
 
-  connect(m_FileBrowser, SIGNAL(rowCountChanged(int,int)), this, SLOT(onRowCountChanged(int,int)));
-
-//  m_FileBrowser -> setColumnHidden(1,true); // Size
-//  m_FileBrowser -> setColumnHidden(2,true); // Type
-//  m_FileBrowser -> setColumnHidden(3,true); // Modified
-
   m_Model -> setNameFilters(QStringList("*.tif"));
   m_Model -> setNameFilterDisables(false);
+
+  connect(m_Model, SIGNAL(modelReset()), this, SLOT(onModelReset()));
 
   connect(this, SIGNAL(printMessage(QString,QDateTime)), m_Processor, SIGNAL(printMessage(QString,QDateTime)));
   connect(this, SIGNAL(statusMessage(QString,QDateTime)), m_Processor, SIGNAL(statusMessage(QString,QDateTime)));
@@ -141,12 +126,6 @@ void QxrdFileBrowser::onSelectorChanged(QString str, const QModelIndex &parent)
     } else {
       sel -> select(index, QItemSelectionModel::Rows | QItemSelectionModel::Deselect);
     }
-
-    if (m_Model -> hasChildren(index)) {
-//      emit printMessage(tr("%1 has children").arg(path));
-
-      onSelectorChanged(str, index);
-    }
   }
 }
 
@@ -162,7 +141,6 @@ void QxrdFileBrowser::doSelectComboItem(int index)
 void QxrdFileBrowser::onRootDirectoryChanged(QString str)
 {
   m_Model -> setRootPath(str);
-  m_FileBrowser -> setRootIndex(m_Model->index(str));
 
   QDir dir(str);
 
@@ -328,7 +306,11 @@ void QxrdFileBrowser::readSettings(QxrdSettings &settings, QString section)
     int width = settings.value("width", -1).toInt();
 
     if (m_FileBrowser) {
-      m_FileBrowser->setColumnWidth(i, width);
+      if (width > 5) {
+        m_FileBrowser->setColumnWidth(i, width);
+      } else {
+        m_FileBrowser->setColumnWidth(i, 5);
+      }
     }
   }
 
@@ -372,6 +354,12 @@ void QxrdFileBrowser::onRowCountChanged(int oldCount, int newCount)
   m_FileBrowser->resizeColumnsToContents();
 }
 
+void QxrdFileBrowser::onModelReset()
+{
+  m_FileBrowser->resizeColumnsToContents();
+  m_FileBrowser->resizeRowsToContents();
+}
+
 QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
   : QxrdFileBrowser(false, processor, parent)
 {
@@ -381,3 +369,4 @@ QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdDataProcessor *processor, QWidg
   : QxrdFileBrowser(true, processor, parent)
 {
 }
+

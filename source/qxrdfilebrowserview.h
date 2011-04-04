@@ -26,7 +26,7 @@ public:
   virtual void	scrollTo ( const QModelIndex & index, ScrollHint hint = EnsureVisible );
   virtual void	selectAll ();
   virtual void	setModel ( QAbstractItemModel * model );
-  virtual void	setRootIndex ( const QModelIndex & index );
+  virtual void	setRootPath ( const QString & path );
   virtual void	setSelectionModel ( QItemSelectionModel * selectionModel );
   virtual QRect	visualRect ( const QModelIndex & index ) const;
 };

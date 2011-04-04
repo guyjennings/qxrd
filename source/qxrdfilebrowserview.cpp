@@ -123,18 +123,8 @@ void	QxrdFileBrowserView::setModel ( QAbstractItemModel * model )
   }
 }
 
-void	QxrdFileBrowserView::setRootIndex ( const QModelIndex & index )
+void	QxrdFileBrowserView::setRootPath ( const QString & index )
 {
-  QTime tic;
-  tic.start();
-
-  inherited::setRootIndex(index);
-
-  int elapsed = tic.elapsed();
-
-  if (elapsed > 1000) {
-    printf("QxrdFileBrowserView::setRootIndex took %d msec\n", elapsed);
-  }
 }
 
 void	QxrdFileBrowserView::setSelectionModel ( QItemSelectionModel * selectionModel )

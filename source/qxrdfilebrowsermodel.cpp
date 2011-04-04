@@ -4,323 +4,7 @@
 #include <QStringList>
 #include <QDirIterator>
 #include <QSize>
-
-//#ifdef OLD_FILE_BROWSER
-
-//QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
-//    QFileSystemModel(parent)
-//{
-//}
-
-//QVariant QxrdFileBrowserModel::data(const QModelIndex &index, int role) const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  QVariant result = QFileSystemModel::data(index, role);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::data took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//bool	QxrdFileBrowserModel::canFetchMore ( const QModelIndex & parent ) const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  bool result = QFileSystemModel::canFetchMore(parent);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::canFetchMore took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//int	QxrdFileBrowserModel::columnCount ( const QModelIndex & parent ) const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  int result = QFileSystemModel::columnCount(parent);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::columnCount took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//bool	QxrdFileBrowserModel::dropMimeData ( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
-//{
-//  QTime tic;
-//  tic.start();
-
-//  bool result = QFileSystemModel::dropMimeData(data, action, row, column, parent);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::dropMimeData took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//void	QxrdFileBrowserModel::fetchMore ( const QModelIndex & parent )
-//{
-//  QTime tic;
-//  tic.start();
-
-//  QFileSystemModel::fetchMore(parent);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::fetchMore took %d msec\n", elapsed);
-//  }
-//}
-
-//Qt::ItemFlags	QxrdFileBrowserModel::flags ( const QModelIndex & index ) const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  Qt::ItemFlags result = QFileSystemModel::flags(index);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::flags took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//bool	QxrdFileBrowserModel::hasChildren ( const QModelIndex & parent ) const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  bool result = QFileSystemModel::hasChildren(parent);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::hasChildren took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//QVariant	QxrdFileBrowserModel::headerData ( int section, Qt::Orientation orientation, int role ) const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  QVariant result = QFileSystemModel::headerData(section, orientation, role);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::headerData took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//QModelIndex	QxrdFileBrowserModel::index ( const QString & path, int column ) const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  QModelIndex result = QFileSystemModel::index(path, column);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::index took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//QModelIndex	QxrdFileBrowserModel::index ( int row, int column, const QModelIndex & parent ) const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  QModelIndex result = QFileSystemModel::index(row, column, parent);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::index took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//QMimeData *	QxrdFileBrowserModel::mimeData ( const QModelIndexList & indexes ) const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  QMimeData * result = QFileSystemModel::mimeData(indexes);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::mimeData took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//QStringList	QxrdFileBrowserModel::mimeTypes () const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  QStringList result = QFileSystemModel::mimeTypes();
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::mimeTypes took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//QModelIndex	QxrdFileBrowserModel::parent ( const QModelIndex & index ) const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  QModelIndex result = QFileSystemModel::parent(index);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::parent took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//int	QxrdFileBrowserModel::rowCount ( const QModelIndex & parent ) const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  int result = QFileSystemModel::rowCount(parent);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::rowCount took %d msec\n", elapsed);
-//  }
-
-////  printf("QxrdFileBrowserModel::rowCount = %d\n", result);
-
-//  return result;
-//}
-
-//bool	QxrdFileBrowserModel::setData ( const QModelIndex & idx, const QVariant & value, int role )
-//{
-//  QTime tic;
-//  tic.start();
-
-//  bool result = QFileSystemModel::setData(idx, value, role);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::setData took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//void	QxrdFileBrowserModel::sort ( int column, Qt::SortOrder order )
-//{
-//  QTime tic;
-//  tic.start();
-
-//  QFileSystemModel::sort(column, order);
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::sort took %d msec\n", elapsed);
-//  }
-//}
-
-//Qt::DropActions	QxrdFileBrowserModel::supportedDropActions () const
-//{
-//  QTime tic;
-//  tic.start();
-
-//  Qt::DropActions result = QFileSystemModel::supportedDropActions();
-
-//  int elapsed = tic.elapsed();
-
-//  if (elapsed > 1000) {
-//    printf("QxrdFileBrowserModel::supportedDropActions took %d msec\n", elapsed);
-//  }
-
-//  return result;
-//}
-
-//#else
-
-QxrdSimpleTableModel::QxrdSimpleTableModel(QObject *parent) :
-    QAbstractTableModel(parent)
-{
-}
-
-int QxrdSimpleTableModel::rowCount(const QModelIndex &parent) const
-{
-  return 10;
-}
-
-int QxrdSimpleTableModel::columnCount(const QModelIndex &parent) const
-{
-  return 3;
-}
-
-QVariant QxrdSimpleTableModel::data(const QModelIndex &index, int role) const
-{
-  if (role == Qt::DisplayRole) {
-    return "Item";
-  }
-
-//  if (role == Qt::SizeHintRole) {
-//    return QSize(80,8);
-//  }
-
-  return QVariant();
-}
-
-QVariant QxrdSimpleTableModel::headerData(
-    int section, Qt::Orientation orientation, int role) const
-{
-//  if (role == Qt::SizeHintRole) {
-//    return QSize(8,8);
-//  } else {
-    return inherited::headerData(section, orientation, role);
-//  }
-}
+#include <QPixmap>
 
 QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   QAbstractTableModel(parent)
@@ -341,29 +25,50 @@ QVariant QxrdFileBrowserModel::headerData
     case 2:
       return "Modified";
     }
+  } else {
+    return inherited::headerData(section, orientation, role);
   }
-
-  return QVariant();
 }
 
 QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
 {
   QModelIndex index = idx;
+  QFileInfo info = fileInfo(index);
 
   if (role == Qt::DisplayRole) {
     if (index.isValid()) {
-      QFileInfo info = m_FileList.at(index.row());
-
       if (index.column() == 0) {
         return info.fileName();
       } else if (index.column() == 1) {
-        return info.size();
+        if (info.isDir()) {
+          return "--";
+        } else {
+          qint64 sz = info.size();
+
+          if (sz < 1024) {
+            return tr("%1 B").arg(sz);
+          } else if (sz < 1024*1024) {
+            return tr("%1 KB").arg(sz/1024);
+          } else if (sz < 1024*1024*1024) {
+            return tr("%1 MB").arg(sz/(1024*1024));
+          } else {
+            return tr("%1 GB").arg(sz/(1024*1024*1024));
+          }
+        }
       } else if (index.column() == 2) {
         return info.lastModified();
       }
     }
-  } else if (role == Qt::SizeHintRole) {
-    return QSize(80,10);
+  } else if (role == Qt::DecorationRole) {
+      if (index.column() == 0) {
+        if (info.isDir()) {
+          return QPixmap(":/images/folder-16x16.png");
+        } else {
+          return QPixmap(":/images/file-generic-16x16.png");
+        }
+      }
+      //  } else if (role == Qt::SizeHintRole) {
+      //    return QSize(80,10);
   }
 
   return QVariant();
@@ -371,106 +76,97 @@ QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
 
 int	QxrdFileBrowserModel::columnCount ( const QModelIndex & parent ) const
 {
-//  if (parent.isValid()) {
-//    return 3;
-//  } else {
-    return 3;
-//  }
+  return 3;
 }
 
 int	QxrdFileBrowserModel::rowCount ( const QModelIndex & parent ) const
 {
-//  if (parent.isValid()) {
-//    return 1;
-//  } else {
-    return m_FileList.count();
-//  }
-}
-
-QModelIndex QxrdFileBrowserModel::parent(const QModelIndex &child) const
-{
-//  if (!child.isValid()) {
-    return QModelIndex();
-//  }
-
-
-}
-
-QModelIndex QxrdFileBrowserModel::index(const QString &path) const
-{
-  if (m_RootPath.canonicalFilePath() == path) {
-    return inherited::index(0,0);
-  }
-
-  for (int i=0; i<rowCount(); i++) {
-    if (m_FileList.at(i).canonicalFilePath() == path) {
-      return inherited::index(i,0);
-    }
-  }
-
-  return QModelIndex();
-}
-
-QModelIndex QxrdFileBrowserModel::index(int row, int column, const QModelIndex &parent) const
-{
-  return inherited::index(row, column, parent);
+  return m_FileList.count() + m_DirList.count();
 }
 
 void QxrdFileBrowserModel::setNameFilters(QStringList filters)
 {
+  m_NameFilters = filters;
+
+  updateModel();
 }
 
 void QxrdFileBrowserModel::setNameFilterDisables(bool disables)
 {
 }
 
-QString QxrdFileBrowserModel::fileName(const QModelIndex &index)
+QFileInfo QxrdFileBrowserModel::fileInfo(const QModelIndex &index) const
 {
-  if (index.isValid()) {
-    return m_FileList.at(index.row()).fileName();
+  int n = index.row();
+  QFileInfo info;
+
+  if (n >= m_DirList.count()) {
+    info = m_FileList.at(n-m_DirList.count());
+  } else {
+    info = m_DirList.at(n);
   }
 
-  return "xxx";
+  return info;
+}
+
+QString QxrdFileBrowserModel::fileName(const QModelIndex &index) const
+{
+  return fileInfo(index).fileName();
 }
 
 QString QxrdFileBrowserModel::filePath(const QModelIndex &index) const
 {
-  if (index.isValid()) {
-    return m_FileList.at(index.row()).filePath();
-  }
-
-  return "/xxx/yyy";
+  return fileInfo(index).filePath();
 }
 
 void QxrdFileBrowserModel::setRootPath(QString path)
 {
+  m_RootPath = path;
+
+  updateModel();
+}
+
+void QxrdFileBrowserModel::updateModel()
+{
   beginResetModel();
 
-  QDirIterator iter(path);
-  QVector<QFileInfo> res;
+  QDirIterator iterd(m_RootPath);
+  QDirIterator iter(m_RootPath, m_NameFilters);
+  QVector<QFileInfo> dirs;
+  QVector<QFileInfo> files;
 
-  while (iter.hasNext()) {
-    res.append(QFileInfo(path, iter.next()));
+  while (iterd.hasNext()) {
+    QString filePath = iterd.next();
+    QFileInfo fileInfo(m_RootPath, filePath);
+
+    if (fileInfo.isDir()) {
+      QString dirName = fileInfo.fileName();
+
+      if ((dirName != ".") && (dirName != "..")) {
+        dirs.append(fileInfo);
+      }
+    }
   }
 
-  m_RootPath = QFileInfo(path);
-  m_FileList = res;
+  while (iter.hasNext()) {
+    QString filePath = iter.next();
+    QFileInfo fileInfo(m_RootPath, filePath);
+
+    if (fileInfo.isDir()) {
+    } else {
+      files.append(fileInfo);
+    }
+  }
+
+  m_DirList  = dirs;
+  m_FileList = files;
 
   endResetModel();
 }
 
 bool QxrdFileBrowserModel::isDir(const QModelIndex &index) const
 {
-  if (index.isValid()) {
-    return m_FileList.at(index.row()).isDir();
-  }
-
-  return false;
-}
-
-bool QxrdFileBrowserModel::hasChildren (const QModelIndex &index) const
-{
-  return false;
+  return fileInfo(index).isDir();
 }
 
 bool fileNameLessThan(QFileInfo f1, QFileInfo f2)
@@ -536,10 +232,9 @@ void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
   }
 
   if (lt) {
+    qStableSort(m_DirList.begin(), m_DirList.end(), fileNameLessThan);
     qStableSort(m_FileList.begin(), m_FileList.end(), lt);
   }
 
   endResetModel();
 }
-
-//#endif

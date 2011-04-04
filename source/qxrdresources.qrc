@@ -60,5 +60,9 @@
         <file>images/qxrd-splash-screen.png</file>
         <file>images/histogram.png</file>
         <file>images/system-run.png</file>
+        <file>images/file-document-16x16.png</file>
+        <file>images/file-generic-16x16.png</file>
+        <file>images/file-info-16x16.png</file>
+        <file>images/folder-16x16.png</file>
     </qresource>
 </RCC>
