@@ -126,6 +126,11 @@ void QxrdFileBrowserModel::setRootPath(QString path)
   updateModel();
 }
 
+void QxrdFileBrowserModel::refresh()
+{
+  updateModel();
+}
+
 void QxrdFileBrowserModel::updateModel()
 {
   beginResetModel();

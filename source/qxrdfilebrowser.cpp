@@ -56,6 +56,7 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
   connect(m_ChangeDirectoryButton, SIGNAL(clicked()), this, SLOT(doChangeDirectory()));
   connect(m_HomeDirectoryButton, SIGNAL(clicked()), this, SLOT(doHomeDirectory()));
   connect(m_AcquisitionDirectoryButton, SIGNAL(clicked()), this, SLOT(doAcquisitionDirectory()));
+  connect(m_RefreshButton, SIGNAL(clicked()), this, SLOT(doRefreshBrowser()));
   connect(m_OpenButton, SIGNAL(clicked()), this, SLOT(doOpen()));
   connect(m_ProcessButton, SIGNAL(clicked()), this, SLOT(doProcess()));
   connect(m_IntegrateButton, SIGNAL(clicked()), this, SLOT(doIntegrate()));
@@ -273,6 +274,11 @@ void QxrdFileBrowser::doAccumulate()
   }
 
   INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "accumulateImages", Qt::QueuedConnection, Q_ARG(QStringList, paths)));
+}
+
+void QxrdFileBrowser::doRefreshBrowser()
+{
+  m_Model->refresh();
 }
 
 void QxrdFileBrowser::writeSettings(QxrdSettings &settings, QString section)

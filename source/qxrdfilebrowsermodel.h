@@ -30,6 +30,7 @@ public:
   bool isDir(const QModelIndex &index) const;
 
   virtual void sort ( int column, Qt::SortOrder order = Qt::AscendingOrder );
+  void refresh();
 
 private:
   void updateModel();

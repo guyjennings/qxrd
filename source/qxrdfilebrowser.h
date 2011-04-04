@@ -42,6 +42,7 @@ public slots:
   void doChangeDirectory();
   void doHomeDirectory();
   void doAcquisitionDirectory();
+  void doRefreshBrowser();
   void doOpen();
   void doProcess();
   void doIntegrate();
