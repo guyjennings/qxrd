@@ -1,3 +1,11 @@
+v0.5.20 has :
+
+an initial implementation of a file browser that is more responsive when there
+are many files in a directory.
+
+load and save preferences commands which transfer application preferences to/from
+files.
+
 v0.5.19 allows setting some preferences before the application starts.  To activate this
 pass the command line argument '-fresh' when starting QXRD.  On windows there's an extra
 in the start menu to do this automatically.
