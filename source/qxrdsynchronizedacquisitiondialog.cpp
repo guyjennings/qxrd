@@ -91,5 +91,7 @@ void QxrdSynchronizedAcquisitionDialog::waveformChanged()
 
     m_WaveformPlot->updateZoomer();
     m_WaveformPlot->replot();
+
+    m_SynchronizedAcquisition->finishedAcquisition();
   }
 }
