@@ -55,7 +55,6 @@ public slots:
   void doLoadGainMap();
   void selectLogFile();
   void doRefineCenterTilt();
-//  void doProcessorOptionsDialog();
   void doAccumulateImages();
   void doIntegrateSequence();
   void doProcessSequence();
@@ -66,8 +65,6 @@ public slots:
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
   void acquireComplete();
   void doAcquireDark();
-//  void doCancelDark();
-  void doSynchronizedAcquisition();
 
   void executeScript();
   void finishedCommand(QScriptValue result);
@@ -79,12 +76,6 @@ public slots:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
-//  void acquisitionReady();
-//  void acquisitionStarted();
-//  void acquisitionFinished();
-
-//  void darkAcquisitionStarted();
 
   void selectOutputDirectory();
   void clearStatusMessage();
