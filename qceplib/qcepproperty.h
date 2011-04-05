@@ -24,6 +24,7 @@ class QcepProperty : public QObject {
   Q_OBJECT;
 public:
   QcepProperty(QObject *parent, const char *name, QVariant value);
+  ~QcepProperty();
 
   QVariant variant() const;
   QString name() const;
@@ -68,6 +69,7 @@ class QcepDoubleProperty : public QcepProperty {
   Q_OBJECT;
 public:
   QcepDoubleProperty(QObject *parent, const char *name, double value);
+  ~QcepDoubleProperty();
 
   double value() const;
   double defaultValue() const;
