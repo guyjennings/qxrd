@@ -36,8 +36,16 @@ public:
   Q_PROPERTY(int height READ get_Height);
   //  QCEP_INTEGER_PROPERTY(Height);
 
+  Q_PROPERTY(QString qxrdVersion READ get_QxrdVersion WRITE set_QxrdVersion);
+  QCEP_STRING_PROPERTY(QxrdVersion);
+
+  Q_PROPERTY(QString qtVersion READ get_QtVersion WRITE set_QtVersion);
+  QCEP_STRING_PROPERTY(QtVersion);
+
   Q_PROPERTY(int dataType READ get_DataType WRITE set_DataType);
   QCEP_INTEGER_PROPERTY(DataType);
+
+  Q_PROPERTY(QString dataTypeName READ get_DataTypeName);
 
   Q_PROPERTY(QString fileBase READ get_FileBase WRITE set_FileBase);
   QCEP_STRING_PROPERTY(FileBase);
@@ -130,6 +138,8 @@ public:
   {
     return get_DateTime().toString(tr("yyyy.MM.dd : hh:mm:ss.zzz"));
   }
+
+  QString get_DataTypeName() const;
 
   void copyProperties(QcepImageDataBase *dest);
   void copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src);

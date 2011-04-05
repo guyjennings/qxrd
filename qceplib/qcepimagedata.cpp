@@ -8,6 +8,8 @@
 
 QcepImageDataBase::QcepImageDataBase(int width, int height)
   : QObject(),
+    m_QxrdVersion(this,"qxrdVersion","unknown"),
+    m_QtVersion(this,"qtVersion","unknown"),
     m_DataType(this, "dataType", UndefinedData),
     m_FileBase(this, "fileBase", ""),
     m_FileName(this, "fileName", ""),
@@ -177,4 +179,34 @@ void QcepImageDataBase::setDefaultFileName(QString path)
 {
   set_FileName(path);
   set_Title(QFileInfo(path).fileName());
+}
+
+QString QcepImageDataBase::get_DataTypeName() const
+{
+  switch (get_DataType()) {
+  default:
+  case UndefinedData:
+    return "Undefined";
+
+  case Raw16Data:
+    return "16 Bit Raw Data";
+
+  case Raw32Data:
+    return "32 Bit Raw Data";
+
+  case DarkData:
+    return "Dark Data";
+
+  case MaskData:
+    return "Mask Data";
+
+  case SubtractedData:
+    return "Subtracted Data";
+
+  case GainData:
+    return "Pixel Gain Data";
+
+  case BadPixelsData:
+    return "Bad Pixel Data";
+  }
 }

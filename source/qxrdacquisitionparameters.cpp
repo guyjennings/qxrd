@@ -6,9 +6,12 @@
 #include <QMetaProperty>
 #include <QStringList>
 #include <QThread>
+#include <QtGlobal>
 
 QxrdAcquisitionParameters::QxrdAcquisitionParameters()
   : QObject(),
+    m_QxrdVersion(this,"qxrdVersion",QXRD_VERSION),
+    m_QtVersion(this,"qtVersion",qVersion()),
     m_DetectorType(this, "detectorType",-1),
     m_DetectorTypeName(this,"detectorTypeName",""),
     m_ExposureTime(this,"exposureTime",0.1),

@@ -41,6 +41,12 @@ protected:
   enum { MegaBytes = 0x100000 };
 
 public:
+  Q_PROPERTY(QString qxrdVersion READ get_QxrdVersion STORED false);
+  QCEP_STRING_PROPERTY(QxrdVersion);
+
+  Q_PROPERTY(QString qtVersion READ get_QtVersion STORED false);
+  QCEP_STRING_PROPERTY(QtVersion);
+
   Q_PROPERTY(int    detectorType     READ get_DetectorType WRITE set_DetectorType STORED false);
   QCEP_INTEGER_PROPERTY(DetectorType);
 

@@ -297,6 +297,8 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
 
     QFileInfo finfo(fileName);
 
+    proc -> set_QxrdVersion(get_QxrdVersion());
+    proc -> set_QtVersion(get_QtVersion());
     proc -> set_FileBase(fileBase);
     proc -> set_FileName(fileName);
     proc -> set_Title(finfo.fileName());
