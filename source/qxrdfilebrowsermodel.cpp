@@ -66,7 +66,17 @@ QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
         if (info.isDir()) {
           return QPixmap(":/images/folder-16x16.png");
         } else {
-          return QPixmap(":/images/file-generic-16x16.png");
+          QString suffix = info.suffix();
+
+          if (suffix == "metadata") {
+            return QPixmap(":/images/file-metadata-16x16.png");
+          } else if (suffix == "avg") {
+            return QPixmap(":/images/file-integration-16x16.png");
+          } else if (suffix == "tif") {
+            return QPixmap(":/images/file-image-16x16.png");
+          } else {
+            return QPixmap(":/images/file-generic-16x16.png");
+          }
         }
       }
       //  } else if (role == Qt::SizeHintRole) {

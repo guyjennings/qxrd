@@ -64,5 +64,8 @@
         <file>images/file-generic-16x16.png</file>
         <file>images/file-info-16x16.png</file>
         <file>images/folder-16x16.png</file>
+        <file>images/file-image-16x16.png</file>
+        <file>images/file-integration-16x16.png</file>
+        <file>images/file-metadata-16x16.png</file>
     </qresource>
 </RCC>
