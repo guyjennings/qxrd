@@ -15,6 +15,7 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
     m_BrowserSelector(this, "browserSelector",""),
     m_RootDirectory(this, "rootDirectory",""),
     m_Processor(processor),
+    m_ModelThread(NULL),
     m_Model(NULL)
 {
   setupUi(this);
@@ -28,7 +29,6 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
 //  m_ModelThread -> start();
 
 //  m_Model = m_ModelThread ->fileBrowserModel();  /*new QxrdFileBrowserModel();*/
-//  m_Model -> setRootPath(QDir::currentPath());
   m_Model = new QxrdFileBrowserModel();
   m_Model -> setRootPath(QDir::currentPath());
 //  m_Model -> moveToThread(m_ModelThread);
