@@ -102,6 +102,12 @@ void QxrdAcquisitionSimulated::initialize()
   set_NRows(2048);
   set_NCols(2048);
 
+  if (get_ExposureTime() <= 0) {
+    set_ExposureTime(0.1);
+  }
+
+  onExposureTimeChanged(get_ExposureTime());
+
   QxrdAcquisition::initialize();
 }
 
