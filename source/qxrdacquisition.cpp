@@ -71,6 +71,7 @@ void QxrdAcquisition::acquire()
 
   if (m_Acquiring.tryLock()) {
     set_Cancelling(false);
+    set_Triggered(false);
 
     emit statusMessage("Starting acquisition");
     emit acquireStarted();
@@ -121,6 +122,7 @@ void QxrdAcquisition::acquireDark()
 
   if (m_Acquiring.tryLock()) {
     set_Cancelling(false);
+    set_Triggered(true);
 
     emit statusMessage("Starting dark acquisition");
     emit acquireStarted();
@@ -261,7 +263,7 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int fileIndex, int
   }
 }
 
-void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase, int nPhases, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
+void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   if (image) {
     QxrdInt32ImageDataPtr proc = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
@@ -309,6 +311,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     proc -> set_UserComment3(get_UserComment3());
     proc -> set_UserComment4(get_UserComment4());
     proc -> set_ImageSaved(false);
+    proc -> set_Triggered(trig);
 
     copyDynamicProperties(proc.data());
 
@@ -334,32 +337,32 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
   }
 }
 
-void QxrdAcquisition::processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
+void QxrdAcquisition::processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
 //  printf("processAcquiredImage(""%s"",%d,%d,img,ovf)\n", qPrintable(filePattern), fileIndex, phase);
 
-  processImage(filePattern, fileIndex, phase, nPhases, image, overflow);
+  processImage(filePattern, fileIndex, phase, nPhases, trig, image, overflow);
 }
 
 void QxrdAcquisition::processDarkImage(QString filePattern, int fileIndex, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
 //  printf("processDarkImage(""%s"",%d,img,ovf)\n", qPrintable(filePattern), fileIndex);
 
-  processImage(filePattern, fileIndex, -1, 0, image, overflow);
+  processImage(filePattern, fileIndex, -1, 0, true, image, overflow);
 }
 
-void QxrdAcquisition::acquisitionError(int n)
+//void QxrdAcquisition::acquisitionError(int n)
+//{
+//  cancel();
+
+//  emit criticalMessage(tr("Acquisition Error %1").arg(n));
+//}
+
+void QxrdAcquisition::acquisitionError(const char *fn, int ln, int n)
 {
   cancel();
 
-  emit criticalMessage(tr("Acquisition Error %1").arg(n));
-}
-
-void QxrdAcquisition::acquisitionError(int ln, int n)
-{
-  cancel();
-
-  emit criticalMessage(tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
+  emit criticalMessage(tr("Acquisition Error %1 at line %2 in file %3").arg(n).arg(ln).arg(fn));
 }
 
 QxrdAcquireDialog *QxrdAcquisition::controlPanel(QxrdWindow *win)
@@ -421,6 +424,11 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
   int nphases = parms.nphases();
   int skipBefore = parms.skipBefore();
   int skipBetween = parms.skipBetween();
+  int nPreTriggered = 0;
+
+  if (preTrigger <= 0) {
+    set_Triggered(true);
+  }
 
   if (synchronizedAcquisition()) {
     synchronizedAcquisition()->prepareForAcquisition(&parms);
@@ -452,10 +460,8 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     acquireFrame(exposure);
   }
 
-  for (int i=0; i<postTrigger; i++) {
+  for (int i=0; i<postTrigger; i += (get_Triggered() ? 1:0)) {
     if (cancelling()) goto cancel;
-
-    set_FileIndex(fileIndex+i);
 
     for (int p=0; p<nphases; p++) {
       QString fb, fn;
@@ -498,10 +504,35 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     }
 
   saveCancel:
-    prop_FileIndex()->incValue(1);
+    if (get_Triggered()) {
+      int nPre = qMin(preTrigger, nPreTriggered);
 
-    for (int p=0; p<nphases; p++) {
-      processAcquiredImage(fileBase, fileIndex+i, p, nphases, res[p][0], ovf[p][0]);
+      for (int i=nPre; i >= 1; i--) {
+        for (int p=0; p<nphases; p++) {
+          processAcquiredImage(fileBase, fileIndex, p, nphases, false, res[p][i], ovf[p][i]);
+
+          res[p].pop_back();
+          ovf[p].pop_back();
+        }
+        fileIndex++;
+        set_FileIndex(fileIndex);
+      }
+
+      nPreTriggered = 0;
+
+      for (int p=0; p<nphases; p++) {
+        processAcquiredImage(fileBase, fileIndex, p, nphases, true, res[p][0], ovf[p][0]);
+      }
+      fileIndex++;
+      set_FileIndex(fileIndex);
+    } else {
+      nPreTriggered++;
+      for (int p=0; p<nphases; p++) {
+        res[p].push_front(res[p].last());
+        ovf[p].push_front(ovf[p].last());
+        res[p].pop_back();
+        ovf[p].pop_back();
+      }
     }
   }
 

@@ -94,7 +94,7 @@ void QxrdAcquisitionPerkinElmer::onExposureTimeChanged(double newTime)
     int nRet;
 
     if ((nRet=m_PerkinElmer->Acquisition_SetTimerSync(m_AcqDesc, &tmp)) != HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
+      acquisitionError(__FILE__, __LINE__, nRet);
       return;
     }
 
@@ -125,7 +125,7 @@ void QxrdAcquisitionPerkinElmer::onBinningModeChanged(int newMode)
 //        }
 //      }
       if ((nRet=m_PerkinElmer->Acquisition_GetCameraBinningMode(m_AcqDesc, &originalMode)) != HIS_ALL_OK) {
-        acquisitionError(__LINE__, nRet);
+        acquisitionError(__FILE__, __LINE__, nRet);
         return;
       }
 
@@ -134,12 +134,12 @@ void QxrdAcquisitionPerkinElmer::onBinningModeChanged(int newMode)
       emit printMessage(tr("Setting binning mode = %1").arg(newMode));
 
       if ((nRet=m_PerkinElmer->Acquisition_SetCameraBinningMode(m_AcqDesc, newMode)) != HIS_ALL_OK) {
-        acquisitionError(__LINE__, nRet);
+        acquisitionError(__FILE__, __LINE__, nRet);
         return;
       }
 
       if ((nRet=m_PerkinElmer->Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
-        acquisitionError(__LINE__, nRet);
+        acquisitionError(__FILE__, __LINE__, nRet);
         return;
       }
 
@@ -161,7 +161,7 @@ void QxrdAcquisitionPerkinElmer::onCameraGainChanged(int newGain)
 
       if (m_CurrentGain != get_CameraGain()) {
         if ((nRet=m_PerkinElmer->Acquisition_SetCameraGain(m_AcqDesc, get_CameraGain())) != HIS_ALL_OK) {
-          acquisitionError(__LINE__, nRet);
+          acquisitionError(__FILE__, __LINE__, nRet);
           return;
         }
         m_CurrentGain = get_CameraGain();
@@ -246,7 +246,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     if ((nRet=m_PerkinElmer->Acquisition_GetCommChannel(m_AcqDesc, &nChannelType, &nChannelNr))!=HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
+      acquisitionError(__FILE__, __LINE__, nRet);
       return;
     }
 
@@ -258,7 +258,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     if ((nRet=m_PerkinElmer->Acquisition_GetConfiguration(m_AcqDesc, &dwFrames, &dwRows, &dwColumns, &dwDataType,
                                            &dwSortFlags, &bEnableIRQ, &dwAcqType,
                                            &dwSystemID, &dwSyncMode, &dwHwAccess))!=HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
+      acquisitionError(__FILE__, __LINE__, nRet);
       return;
     }
 
@@ -275,7 +275,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     set_NCols(dwColumns);
 
     if ((nRet=m_PerkinElmer->Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
+      acquisitionError(__FILE__, __LINE__, nRet);
       return;
     }
 
@@ -288,7 +288,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     CHwHeaderInfo hwHeaderInfo;
 
     if ((nRet=m_PerkinElmer->Acquisition_GetHwHeaderInfo(m_AcqDesc, &hwHeaderInfo)) != HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
+      acquisitionError(__FILE__, __LINE__, nRet);
       return;
     }
 
@@ -303,7 +303,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
       CHwHeaderInfoEx hdrx;
 
       if ((nRet = m_PerkinElmer->Acquisition_GetHwHeaderInfoEx(m_AcqDesc, &hwHeaderInfo, &hdrx)) != HIS_ALL_OK) {
-        acquisitionError(__LINE__, nRet);
+        acquisitionError(__FILE__, __LINE__, nRet);
         return;
       }
 
@@ -318,7 +318,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     double readoutTimes[8];
 
     if ((nRet=m_PerkinElmer->Acquisition_GetIntTimes(m_AcqDesc, readoutTimes, &nReadoutTimes)) != HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
+      acquisitionError(__FILE__, __LINE__, nRet);
       return;
     }
 
@@ -328,7 +328,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
 
     if ((nRet=m_PerkinElmer->Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
                                                   0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
+      acquisitionError(__FILE__, __LINE__, nRet);
       return;
     }
 
@@ -347,18 +347,18 @@ void QxrdAcquisitionPerkinElmer::initialize()
       emit printMessage(tr("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER"));
     }
 
-    onExposureTimeChanged(get_ExposureTime());
-
     if ((nRet=m_PerkinElmer->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
+      acquisitionError(__FILE__, __LINE__, nRet);
       return;
     }
+
+    onExposureTimeChanged(get_ExposureTime());
 
     set_BinningMode(0);
 
     if ((nRet=m_PerkinElmer->Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_BufferSize,
                                             get_NRows(), get_NCols())) != HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
+      acquisitionError(__FILE__, __LINE__, nRet);
       return;
     }
 
@@ -368,7 +368,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
 
     if ((nRet=m_PerkinElmer->Acquisition_Acquire_Image(m_AcqDesc, m_BufferSize,
                                         0, HIS_SEQ_CONTINUOUS, NULL, NULL, NULL)) != HIS_ALL_OK) {
-      acquisitionError(__LINE__, nRet);
+      acquisitionError(__FILE__, __LINE__, nRet);
       return;
     }
 
@@ -506,14 +506,14 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 
 void QxrdAcquisitionPerkinElmer::acquisitionInitError(int n)
 {
-  acquisitionError(__LINE__, n);
+  acquisitionError(__FILE__, __LINE__, n);
 
   emit criticalMessage("Detector Initialization Failed");
 }
 
 void QxrdAcquisitionPerkinElmer::acquisitionNSensorsError(int n)
 {
-  acquisitionError(__LINE__, n);
+  acquisitionError(__FILE__, __LINE__, n);
 
   emit criticalMessage("Detector Initialization Failed");
 }

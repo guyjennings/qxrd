@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 QcepProperty::QcepProperty(QObject *parent, const char *name, QVariant value)
-  : QObject(parent),
+  : QObject(),
     m_Mutex(QMutex::Recursive),
     m_NQueuedUpdates(0),
     m_IsStored(false),
@@ -40,6 +40,10 @@ QcepProperty::QcepProperty(QObject *parent, const char *name, QVariant value)
       }
     }
   }
+}
+
+QcepProperty::~QcepProperty()
+{
 }
 
 int QcepProperty::wasLoaded() const
@@ -246,6 +250,10 @@ QcepDoubleProperty::QcepDoubleProperty(QObject *parent, const char *name, double
   : QcepProperty(parent, name, value),
     m_Default(value),
     m_Value(value)
+{
+}
+
+QcepDoubleProperty::~QcepDoubleProperty()
 {
 }
 

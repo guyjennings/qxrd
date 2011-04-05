@@ -135,8 +135,8 @@ protected:
   virtual void endAcquisition() = 0;
   virtual void shutdownAcquisition() = 0;
 
-  void acquisitionError(int n);
-  void acquisitionError(int ln, int n);
+//  void acquisitionError(const char *fn, int n);
+  void acquisitionError(const char *fn, int ln, int n);
 
   void getFileBaseAndName(QString filePattern, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
@@ -155,9 +155,9 @@ private:
   template <typename T>
   void accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
 
-  void processImage        (QString filePattern, int fileIndex, int phase, int nPhases, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
-  void processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
-  void processDarkImage    (QString filePattern, int fileIndex,                         QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+  void processImage        (QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+  void processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+  void processDarkImage    (QString filePattern, int fileIndex,                                    QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
 
   int cancelling();
 

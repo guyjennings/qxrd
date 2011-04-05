@@ -32,6 +32,7 @@ QxrdNIDAQPluginInterface *QxrdSynchronizedAcquisition::nidaqPlugin() const
 
 void QxrdSynchronizedAcquisition::finishedAcquisition()
 {
+  m_AcquisitionParms = NULL;
   m_SyncMode = 0;
 }
 

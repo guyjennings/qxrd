@@ -694,18 +694,6 @@ void QxrdWindow::doCancel()
   }
 }
 
-//void QxrdWindow::doCancelDark()
-//{
-//  if (m_AcquiringDark) {
-//    m_Acquisition -> cancelDark();
-//    //    INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "cancelDark"));
-//  }
-//}
-
-void QxrdWindow::doSynchronizedAcquisition()
-{
-}
-
 void QxrdWindow::readSettings(QxrdSettings &settings, QString section)
 {
   m_Plot             -> readSettings(settings, section+"/plot");
