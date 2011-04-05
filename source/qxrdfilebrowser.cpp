@@ -40,6 +40,9 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
   m_FileBrowser -> resizeColumnsToContents();
   m_FileBrowser -> resizeRowsToContents();
 
+  m_FileBrowser->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+  m_FileBrowser->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+
   m_Model -> setNameFilters(QStringList("*.tif"));
   m_Model -> setNameFilterDisables(false);
 
