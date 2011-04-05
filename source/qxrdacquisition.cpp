@@ -348,18 +348,18 @@ void QxrdAcquisition::processDarkImage(QString filePattern, int fileIndex, QxrdI
   processImage(filePattern, fileIndex, -1, 0, image, overflow);
 }
 
-void QxrdAcquisition::acquisitionError(int n)
+//void QxrdAcquisition::acquisitionError(int n)
+//{
+//  cancel();
+
+//  emit criticalMessage(tr("Acquisition Error %1").arg(n));
+//}
+
+void QxrdAcquisition::acquisitionError(const char *fn, int ln, int n)
 {
   cancel();
 
-  emit criticalMessage(tr("Acquisition Error %1").arg(n));
-}
-
-void QxrdAcquisition::acquisitionError(int ln, int n)
-{
-  cancel();
-
-  emit criticalMessage(tr("Acquisition Error %1 at line %2").arg(n).arg(ln));
+  emit criticalMessage(tr("Acquisition Error %1 at line %2 in file %3").arg(n).arg(ln).arg(fn));
 }
 
 QxrdAcquireDialog *QxrdAcquisition::controlPanel(QxrdWindow *win)
