@@ -40,6 +40,8 @@ private:
   QStringList        m_NameFilters;
   QVector<QFileInfo> m_DirList;
   QVector<QFileInfo> m_FileList;
+  int                m_SortedColumn;
+  Qt::SortOrder      m_SortOrder;
 };
 
 #endif // QXRDFILEBROWSERMODEL_H

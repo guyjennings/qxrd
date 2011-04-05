@@ -7,7 +7,9 @@
 #include <QPixmap>
 
 QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
-  QAbstractTableModel(parent)
+  QAbstractTableModel(parent),
+  m_SortedColumn(0),
+  m_SortOrder(Qt::AscendingOrder)
 {
 }
 
@@ -167,6 +169,8 @@ void QxrdFileBrowserModel::updateModel()
   m_FileList = files;
 
   endResetModel();
+
+  sort(m_SortedColumn, m_SortOrder);
 }
 
 bool QxrdFileBrowserModel::isDir(const QModelIndex &index) const
@@ -207,6 +211,9 @@ bool fileDateGreaterThan(QFileInfo f1, QFileInfo f2)
 void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
 {
   beginResetModel();
+
+  m_SortedColumn = column;
+  m_SortOrder = order;
 
   bool (*lt)(QFileInfo f1, QFileInfo f2) = NULL;
 
