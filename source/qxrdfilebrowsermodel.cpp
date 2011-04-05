@@ -5,6 +5,7 @@
 #include <QDirIterator>
 #include <QSize>
 #include <QPixmap>
+#include "qcepdebug.h"
 
 QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   QAbstractTableModel(parent),
@@ -220,6 +221,9 @@ bool fileDateGreaterThan(QFileInfo f1, QFileInfo f2)
 
 void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
 {
+  QTime tic;
+  tic.start();
+
   beginResetModel();
 
   m_SortedColumn = column;
@@ -259,4 +263,8 @@ void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
   }
 
   endResetModel();
+
+  if (qcepDebug(DEBUG_DISPLAY)) {
+    printf("Sort file browser took %d msec\n",tic.elapsed());
+  }
 }
