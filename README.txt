@@ -1,3 +1,18 @@
+QXRD Change Log
+
+See also http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog
+
+v0.5.21
+Pre-triggered acquisition should be working again.
+
+Changes to file browser window, including a refresh button.  File browser windows do not
+auto-update you must click the refresh button.
+
+Show/Hide Rng... buttons now work in masking dialog
+
+More info saved in acquired files - Qxrd and Qt version numbers - also more shown in info
+dialog
+
 v0.5.20 has :
 
 fixed problems with image accumulation.
