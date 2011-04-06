@@ -100,6 +100,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     setWindowTitle(windowTitle()+" - 64 bit - v"+QXRD_VERSION);
   }
 
+  setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
+
 //  m_AcquireDialog = m_Acquisition -> controlPanel(this);
   m_AcquireDialog      = new QxrdAcquireDialog(this, m_Acquisition, m_DataProcessor, this);
   m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);

@@ -67,5 +67,10 @@
         <file>images/file-image-16x16.png</file>
         <file>images/file-integration-16x16.png</file>
         <file>images/file-metadata-16x16.png</file>
+        <file>images/qxrd-icon-32x32.png</file>
+        <file>images/qxrd-icon-64x64.png</file>
+        <file>images/qxrd-icon-128x128.png</file>
+        <file>images/qxrd-icon-256x256.png</file>
+        <file>images/qxrd-icon-512x512.png</file>
     </qresource>
 </RCC>

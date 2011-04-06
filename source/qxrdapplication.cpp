@@ -127,18 +127,18 @@ void QxrdApplication::init(QSplashScreen *splash)
     simpleServerPort = settings.value("application/simpleServerPort").toInt();
   }
 
-  splashMessage("Initializing Memory Allocator");
+  splashMessage("Qxrd Version " QXRD_VERSION "\nInitializing Memory Allocator");
 
   m_AllocatorThread = new QxrdAllocatorThread();
   m_AllocatorThread -> start();
   m_Allocator = m_AllocatorThread -> allocator();
 
-  splashMessage("Initializing File Saver");
+  splashMessage("Qxrd Version " QXRD_VERSION "\nInitializing File Saver");
 
   m_FileSaverThread = new QxrdFileSaverThread(m_Allocator);
   m_FileSaverThread -> start();
 
-  splashMessage("Initializing Data Processing");
+  splashMessage("Qxrd Version " QXRD_VERSION "\nInitializing Data Processing");
 
   m_DataProcessorThread = new QxrdDataProcessorThread(NULL, m_Allocator, m_FileSaverThread);
 
@@ -147,7 +147,7 @@ void QxrdApplication::init(QSplashScreen *splash)
 
   m_FileSaverThread -> setProcessor(m_DataProcessor);
 
-  splashMessage("Initializing Data Acquisition");
+  splashMessage("Qxrd Version " QXRD_VERSION "\nInitializing Data Acquisition");
 
   m_AcquisitionThread = new QxrdAcquisitionThread(m_DataProcessor, m_Allocator, detectorType);
   m_AcquisitionThread -> start();
@@ -156,7 +156,7 @@ void QxrdApplication::init(QSplashScreen *splash)
   m_DataProcessor -> setAcquisition(m_Acquisition);
   m_FileSaverThread -> setAcquisition(m_Acquisition);
 
-  splashMessage("Opening Main Window");
+  splashMessage("Qxrd Version " QXRD_VERSION "\nOpening Main Window");
 
   m_Window = new QxrdWindow(this, m_Acquisition, m_DataProcessor, m_Allocator);
 //  m_Window -> show();
@@ -169,7 +169,7 @@ void QxrdApplication::init(QSplashScreen *splash)
   connect(this, SIGNAL(statusMessage(QString,QDateTime)), m_Window, SLOT(statusMessage(QString,QDateTime)));
 //  emit printMessage("window shown");
 
-  splashMessage("Loading plugins");
+  splashMessage("Qxrd Version " QXRD_VERSION "\nLoading plugins");
 
   emit printMessage("about to load plugins");
 
@@ -213,7 +213,7 @@ void QxrdApplication::init(QSplashScreen *splash)
   connect(m_FileSaverThread, SIGNAL(criticalMessage(QString,QDateTime)), m_Window, SLOT(criticalMessage(QString,QDateTime)));
 
   if (specServer) {
-    splashMessage("Starting SPEC Server");
+    splashMessage("Qxrd Version " QXRD_VERSION "\nStarting SPEC Server");
 
     m_ServerThread = new QxrdServerThread("qxrd", specServerPort);
 
@@ -228,7 +228,7 @@ void QxrdApplication::init(QSplashScreen *splash)
   }
 
   if (simpleServer) {
-    splashMessage("Starting Simple Socket Server");
+    splashMessage("Qxrd Version " QXRD_VERSION "\nStarting Simple Socket Server");
 
     m_SimpleServerThread = new QxrdSimpleServerThread("simpleserver", simpleServerPort);
 
@@ -243,7 +243,7 @@ void QxrdApplication::init(QSplashScreen *splash)
   }
 
 
-  splashMessage("Starting Scripting System");
+  splashMessage("Qxrd Version " QXRD_VERSION "\nStarting Scripting System");
 
   m_ScriptEngineThread = new QxrdScriptEngineThread(this, m_Window, m_Acquisition, m_DataProcessor);
   m_ScriptEngineThread -> start();
@@ -287,7 +287,7 @@ void QxrdApplication::init(QSplashScreen *splash)
 
   connect(prop_Debug(), SIGNAL(changedValue(int)), this, SLOT(debugChanged(int)));
 
-  splashMessage("Loading Preferences");
+  splashMessage("Qxrd Version " QXRD_VERSION "\nLoading Preferences");
 
   readSettings();
 
@@ -305,7 +305,7 @@ void QxrdApplication::init(QSplashScreen *splash)
 
   emit printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
-  splashMessage("Loading Background Images");
+  splashMessage("Qxrd Version " QXRD_VERSION "\nLoading Background Images");
 
   m_DataProcessor -> loadDefaultImages();
 
@@ -442,7 +442,7 @@ void QxrdApplication::loadPlugins()
           m_NIDAQPluginInterface = nidaq;
         }
 
-        splashMessage(tr("Loaded plugin \"%1\"").arg(pluginName));
+        splashMessage(tr("Qxrd Version " QXRD_VERSION "\nLoaded plugin \"%1\"").arg(pluginName));
 
         emit printMessage(tr("Loaded plugin \"%1\" from %2")
                           .arg(pluginName)
@@ -450,7 +450,7 @@ void QxrdApplication::loadPlugins()
       } else {
 
         if (QLibrary::isLibrary(pluginsDir.absoluteFilePath(fileName))) {
-          QString msg = tr("Failed to load plugin %1 : %2")
+          QString msg = tr("Qxrd Version " QXRD_VERSION "\nFailed to load plugin %1 : %2")
               .arg(pluginsDir.absoluteFilePath(fileName))
               .arg(loader.errorString());
           splashMessage(msg);

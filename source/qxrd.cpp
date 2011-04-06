@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
   QFont f;
   f.setPointSize(14);
   splash.setFont(f);
-  splash.showMessage("Initializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter);
+  splash.showMessage("Qxrd Version " QXRD_VERSION "\nInitializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter);
 
   app.processEvents();
 
