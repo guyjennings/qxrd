@@ -18,6 +18,8 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessor *proc, QWidget
 
   connect(m_HideMaskAll, SIGNAL(clicked()), this, SLOT(doHideMaskAll()));
   connect(m_ShowMaskAll, SIGNAL(clicked()), this, SLOT(doShowMaskAll()));
+  connect(m_HideMaskRange, SIGNAL(clicked()), this, SLOT(doHideMaskRange()));
+  connect(m_ShowMaskRange, SIGNAL(clicked()), this, SLOT(doShowMaskRange()));
   connect(m_InvertMask, SIGNAL(clicked()), this, SLOT(doInvertMask()));
   connect(m_AndMask, SIGNAL(clicked()), this, SLOT(doAndMask()));
   connect(m_OrMask, SIGNAL(clicked()), this, SLOT(doOrMask()));
@@ -120,7 +122,7 @@ void QxrdMaskDialog::doHideMaskRange()
 
   if (n >= 0) {
     m_Processor->hideMaskRangeStack(n);
-    emit statusMessage("Mask Stack Hide All");
+    emit statusMessage("Mask Stack Hide In Range");
   }
 }
 
@@ -130,7 +132,7 @@ void QxrdMaskDialog::doShowMaskRange()
 
   if (n >= 0) {
     m_Processor->showMaskRangeStack(n);
-    emit statusMessage("Mask Stack Show All");
+    emit statusMessage("Mask Stack Show In Range");
   }
 }
 
