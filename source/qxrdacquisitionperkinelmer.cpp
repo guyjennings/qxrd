@@ -47,6 +47,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc, 
     m_CameraType(-1),
     m_CameraModel(""),
     m_CurrentGain(-1),
+    m_SyncMode(HIS_SYNCMODE_INTERNAL_TIMER),
     m_Counter(0),
     m_PerkinElmer(0)
 {
@@ -326,6 +327,14 @@ void QxrdAcquisitionPerkinElmer::initialize()
       m_ReadoutTimes.append(readoutTimes[i]);
     }
 
+    if (qcepDebug(DEBUG_PERKINELMER)) {
+      emit printMessage(tr("%1 predefined exposure times available").arg(m_ReadoutTimes.count()));
+
+      for (int i=0; i<nReadoutTimes; i++) {
+        emit printMessage(tr("Exp %1 = %2").arg(i).arg(m_ReadoutTimes[i]));
+      }
+    }
+
     if ((nRet=m_PerkinElmer->Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
                                                   0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
       acquisitionError(__FILE__, __LINE__, nRet);
@@ -338,18 +347,24 @@ void QxrdAcquisitionPerkinElmer::initialize()
     m_Buffer.resize(get_NRows()*get_NCols()*m_BufferSize);
     m_Buffer.fill(0);
 
-    if (get_ExposureTime() <= 0) {
-      set_ExposureTime(0.1);
-    }
-
     if (qcepDebug(DEBUG_PERKINELMER)) {
       emit printMessage(tr("Exposure Time = %1").arg(get_ExposureTime()));
       emit printMessage(tr("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER"));
     }
 
     if ((nRet=m_PerkinElmer->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
-      acquisitionError(__FILE__, __LINE__, nRet);
-      return;
+      if ((nRet=m_PerkinElmer->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING)) != HIS_ALL_OK) {
+        acquisitionError(__FILE__, __LINE__, nRet);
+        return;
+      } else {
+        m_SyncMode = HIS_SYNCMODE_FREE_RUNNING;
+      }
+    } else {
+      m_SyncMode = HIS_SYNCMODE_INTERNAL_TIMER;
+    }
+
+    if (get_ExposureTime() <= 0) {
+      set_ExposureTime(0.135);
     }
 
     onExposureTimeChanged(get_ExposureTime());

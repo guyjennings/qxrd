@@ -54,6 +54,7 @@ private:
   int                    m_CameraType;
   QString                m_CameraModel;
   int                    m_CurrentGain;
+  int                    m_SyncMode;
 
   QAtomicInt             m_Counter;
 
