@@ -29,19 +29,20 @@ int main(int argc, char *argv[])
   splash.setFont(f);
   splash.showMessage("Qxrd Version " QXRD_VERSION "\nInitializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter);
 
+  int res = 0;
   app.processEvents();
 
-  app.init(&splash);
+  if (app.init(&splash)) {
 
-//  printf("App Constructed\n");
+    //  printf("App Constructed\n");
 
-  splash.finish(app.window());
+    splash.finish(app.window());
 
-  int res = app.exec();
+    res = app.exec();
 
-  if (qcepDebug(DEBUG_EXITWAIT)) {
-    while(1) {}
+    if (qcepDebug(DEBUG_EXITWAIT)) {
+      while(1) {}
+    }
   }
-
   return res;
 }

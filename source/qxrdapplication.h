@@ -47,7 +47,7 @@ class QxrdApplication : public QApplication
 public:
   QxrdApplication(int &argc, char **argv);
   ~QxrdApplication();
-  void init(QSplashScreen *splash);
+  bool init(QSplashScreen *splash);
 
   QxrdAcquisitionThread *acquisitionThread();
   QxrdAcquisition *acquisition() const;

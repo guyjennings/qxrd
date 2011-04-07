@@ -82,14 +82,14 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   }
 }
 
-void QxrdApplication::init(QSplashScreen *splash)
+bool QxrdApplication::init(QSplashScreen *splash)
 {
   if (m_FreshStart) {
     QxrdFreshStartDialog *fresh = new QxrdFreshStartDialog();
 
     if (fresh->exec() == QDialog::Rejected) {
       quit();
-      return;
+      return false;
     }
   }
 
@@ -321,6 +321,8 @@ void QxrdApplication::init(QSplashScreen *splash)
 
   connect(m_ResponseTimer, SIGNAL(printMessage(QString,QDateTime)),
           m_Window, SLOT(printMessage(QString,QDateTime)));
+
+  return true;
 }
 
 QxrdApplication::~QxrdApplication()
