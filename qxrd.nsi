@@ -75,15 +75,18 @@ Section "Uninstall"
   RMDir  "$INSTDIR\plugins"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\qxrd.exe"
-  RMDir  "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
   Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Uninstall QXRD${PREFIXSTR} ${VERSION}.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\QXRD${PREFIXSTR} ${VERSION}.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\QXRD${PREFIXSTR} ${VERSION} (Fresh Start).lnk"
   RMDir "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
   DeleteRegKey /ifempty HKLM "Software\qxrd\qxrd${PREFIX}-${VERSION}"
   DeleteRegKey /ifempty HKLM "Software\qxrd"
+
+  Delete "$INSTDIR\uninstall.exe"
+  RMDir  "$INSTDIR"
 
 SectionEnd
