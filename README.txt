@@ -2,6 +2,9 @@ QXRD Change Log
 
 See also http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog
 
+v0.5.22
+Changes in PE acquisition initialization to support more PE detector types
+
 v0.5.21
 Pre-triggered acquisition should be working again.
 
