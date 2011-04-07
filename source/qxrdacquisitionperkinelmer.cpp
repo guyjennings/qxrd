@@ -363,6 +363,10 @@ void QxrdAcquisitionPerkinElmer::initialize()
       m_SyncMode = HIS_SYNCMODE_INTERNAL_TIMER;
     }
 
+    if (qcepDebug(DEBUG_PERKINELMER)) {
+      emit printMessage(tr("Sync Mode = %1").arg(m_SyncMode));
+    }
+
     if (get_ExposureTime() <= 0) {
       set_ExposureTime(0.135);
     }
