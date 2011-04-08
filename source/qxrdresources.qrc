@@ -72,5 +72,29 @@
         <file>images/qxrd-icon-128x128.png</file>
         <file>images/qxrd-icon-256x256.png</file>
         <file>images/qxrd-icon-512x512.png</file>
+        <file>help/images/acquirie-dialog.png</file>
+        <file>help/images/az-avg-window.png</file>
+        <file>help/images/centering-dialog.png</file>
+        <file>help/images/centering-window.png</file>
+        <file>help/images/correction-dialog.png</file>
+        <file>help/images/debug-preferences.png</file>
+        <file>help/images/detector-preferences.png</file>
+        <file>help/images/display-dialog.png</file>
+        <file>help/images/help-window.png</file>
+        <file>help/images/histogram-dialog.png</file>
+        <file>help/images/image-window.png</file>
+        <file>help/images/info-dialog.png</file>
+        <file>help/images/input-files.png</file>
+        <file>help/images/integrate-dialog.png</file>
+        <file>help/images/masking-dialog.png</file>
+        <file>help/images/memory-preferences.png</file>
+        <file>help/images/messages-window.png</file>
+        <file>help/images/processing-preferences.png</file>
+        <file>help/images/qxrd-layout.png</file>
+        <file>help/images/saving-preferences.png</file>
+        <file>help/images/server-preferences.png</file>
+        <file>help/images/slice-dialog.png</file>
+        <file>help/images/startup-settings-dialog.png</file>
+        <file>help/images/sync-acquire-dialog.png</file>
     </qresource>
 </RCC>
