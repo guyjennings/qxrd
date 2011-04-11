@@ -1,2 +1,2 @@
-VERSION = 0.5.22
+VERSION = 0.5.23
 
