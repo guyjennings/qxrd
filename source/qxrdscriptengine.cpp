@@ -216,7 +216,7 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
   }
 
   if (nArgs < 5) {
-    g_Acquisition -> set_PreTriggerFiles(1);
+    g_Acquisition -> set_PreTriggerFiles(0);
   }
 
   switch (nArgs) {
