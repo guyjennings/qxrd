@@ -76,6 +76,7 @@ OTHER_FILES += help/qxrdhelptext.html \
     help/qxrdpowderfitidentifyhelp.html \
     help/qxrdpowderfitrefinehelp.html \
     help/qxrdpowderfitresultshelp.html \
+    help/README.html \
     simpleServerTest.mac
 DISTFILES += qxrd.dox \
     download/index.php \

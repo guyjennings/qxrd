@@ -14,7 +14,7 @@ message(Target = $${TARGET})
 
 DISTFILES += source plugins
 
-OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile qxrd.spec qxrd.desktop README.txt
+OTHER_FILES += qxrd.nsi qxrd.dox Doxyfile qxrd.spec qxrd.desktop
 
 QMAKE_EXTRA_TARGETS += tarball
 
@@ -43,7 +43,7 @@ tarball.commands += \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdnidaqplugin && \
 
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/{README.txt,*.{pro,pri,spec,desktop}} -t $${TARGET}-$${VERSION} &&
+        $(COPY_FILE)  $${PWD}/{*.{pro,pri,spec,desktop}} -t $${TARGET}-$${VERSION} &&
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/images/*.{png,ico,icns} \
                       -t $${TARGET}-$${VERSION}/source/images &&
