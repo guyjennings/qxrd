@@ -89,7 +89,7 @@ QVariant QxrdMaskStackModel::headerData ( int section, Qt::Orientation orientati
         return "Name";
       }
     } else if (orientation==Qt::Vertical && role==Qt::DisplayRole) {
-      return section+1;
+      return QxrdMaskStack::stackLevelName(section);
     }
   }
 

@@ -15,7 +15,7 @@ public:
   QxrdMaskStack();
 
   void changed();
-  QString stackLevelName(int n);
+  static QString stackLevelName(int n);
 
   QxrdMaskDataPtr mask(QModelIndex m);
 
