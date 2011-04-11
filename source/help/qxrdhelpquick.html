@@ -18,7 +18,7 @@
       chnages take effect.
     </p>
 
-    <h2><a name="Arrange">Arranging the QXRD Control Panels</h2>
+    <h2><a name="Arrange">Arranging the QXRD Control Dialogs</h2>
 
     <p>
       When you first run qxrd you'll see the (rather overwhelming)
@@ -26,25 +26,25 @@
     </p>
     <p>
       The first thing you'll probably want to do is to rearrange the
-      QXRD control panels into a more efficient arrangement.  You can
+      QXRD control dialogs into a more efficient arrangement.  You can
       do this by clicking and dragging on the title bars of the
-      individual control panels and stacking them all in two main
+      individual dialogs and stacking them all in two main
       groups on the right hand side of the screen, as shown below.
-      You can drag each panel into any of four areas around the border
-      of the qxrd window, on top of another panel (the panels will
-      stack), alongside another panel in the same border area, or as a
+      You can drag each dialog into any of four areas around the border
+      of the qxrd window, on top of another dialog (the dialogs will
+      stack), alongside another dialog in the same border area, or as a
       floating window.
     </p>
     <p>
-      You can also hide a panel by clicking its close button or by
+      You can also hide a dialog by clicking its close button or by
       choosing the corresponding command from the QXRD 'Windows' menu.
-      If you hide a panel you can re-show it by choosing it from the
+      If you hide a dialog you can re-show it by choosing it from the
       'Windows' menu.
     </p>
 
-    <h2><a name="Suggested">Suggested Panel Arrangement</h2> 
+    <h2><a name="Suggested">Suggested Dialog Arrangement</h2>
     <p>
-      A convenient arrangement for the control panels is to stack them
+      A convenient arrangement for the control dialogs is to stack them
       on the right hand border of the main window.  If your screen is
       sufficiently large, stack the panels into two groups, or one
       group if on a smaller screen.
@@ -59,11 +59,11 @@
 
     <h2><a name="Acquire">Acquiring Test Images</h2>
     <p>
-      Two control panels are important for data acquisition, the
-      'Acquire' panel and the 'Correction' panel.  The acquire panel
+      Two dialogs are important for data acquisition, the
+      'Acquire' dialog and the 'Correction' dialog.  The acquire dialog
       is concerned with the data acquisition process itself, with
       parameters such as the exposure time, number of images to
-      acquire and output directory choice. The correction panel is
+      acquire and output directory choice. The correction dialog is
       used to control what post processing steps are applied to the
       data after acquisition.  On a sufficiently fast system the
       correction steps are performed entirely in parallel with the
@@ -72,23 +72,23 @@
       proceed at the maximum speed.
     </p>
 
-    <h2><a name="Acquire">The Acquire Panel</h2>
-    <table border=0 cellpadding=5 width="100%" align="center">
+    <h2><a name="Acquire">The Acquire Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
-	  <td align="center">
-	    <img src="images/acquire-panel.png">
+          <td>
+            <img src="images/acquire-dialog.png">
 	  </td>
 	</tr>
 	<tr>
-	  <td align="center">
+          <td>
 	    <p>
-	      The 'Acquire' Panel
+              The 'Acquire' Dialog
 	    </p>
 	  </td>
     </table>
     <p>
       To acquire a test image set 'Skipped at Start', 'Skipped' and 
-      'Files Before' to zero, 'Summed' and 'Files After' to one. Set
+      'Pre Trigger' to zero, 'Dark Summed', 'Summed', 'Phases in Group' and 'Post Trigger' to one. Set
       the camera gain to the highest setting ('High 0.25 pF') and
       choose a value for the 'Exposure Time' (try 0.5 secs initially).
     </p>
@@ -101,48 +101,50 @@
     <p>
       Close the X-ray shutter and measure a dark image by clicking
       the 'Dark' button, then open the shutter and measure a test
-      image by clicking the 'Acquire' button.
+      image by clicking the 'Acquire' button.  The image should be
+      displayed in the 'Image' tab.
     </p>
 
-    <h2><a name="Display">The Display Panel</h2>
-    <table border=0 cellpadding=5 width="100%" align="center">
+    <h2><a name="Display">The Display Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
-	  <td align="center">
-	    <img src="images/display-panel.png">
+          <td>
+            <img src="images/display-dialog.png">
 	  </td>
 	</tr>
 	<tr>
-	  <td align="center">
+          <td>
 	    <p>
-	      The 'Display' Panel
+              The 'Display' Dialog
 	    </p>
 	  </td>
     </table>
     <p>
-      To set the program to automatically choose settings to display
+      The display dialog is used to control how acquired images
+      are displayed. To set the program to automatically choose settings to display
       images choose 'Display based on percentiles of pixel counts' in
       the 'Display' panel.  Set 'Min (Percentile)' to 1% and 
       'Max (Percentile}' to 98%.
     </p>
 
-    <h2><a name="Correction">The Correction Panel</h2>
-    <table border=0 cellpadding=5 width="100%" align="center">
+    <h2><a name="Correction">The Correction Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
 	  <td>
-	    <img src="images/correction-panel.png">
+            <img src="images/correction-dialog.png">
 	  </td>
 	</tr>
 	<tr>
 	  <td>
 	    <p>
-	      The 'Correction' Panel
+              The 'Correction' Dialog
 	    </p>
 	  </td>
 	</tr>
     </table>
 
     <p>
-      The 'Correction' panel is used to control which of the available
+      The 'Correction' dialog is used to control which of the available
       automatic processing steps are performed when images are
       acquired.  Alongside each step is an estimate of how long it is
       likely to take, averaged over the last 10 or so images - you can
@@ -153,7 +155,7 @@
 
     <p>
       The estimated times are measured when you run an acquire
-      operation and a running average value is displayed in the panel.
+      operation and a running average value is displayed in the dialog.
       Do an acquisition of 20 or so images to get decent values for
       the timings.  The timings may depend on other application
       parameters - for example the 'Oversampling Factor' strongly

@@ -34,6 +34,21 @@
         <file>images/go-next.png</file>
         <file>images/go-previous.png</file>
         <file>images/go-home.png</file>
+        <file>images/qxrd-splash-screen.png</file>
+        <file>images/histogram.png</file>
+        <file>images/system-run.png</file>
+        <file>images/file-document-16x16.png</file>
+        <file>images/file-generic-16x16.png</file>
+        <file>images/file-info-16x16.png</file>
+        <file>images/folder-16x16.png</file>
+        <file>images/file-image-16x16.png</file>
+        <file>images/file-integration-16x16.png</file>
+        <file>images/file-metadata-16x16.png</file>
+        <file>images/qxrd-icon-32x32.png</file>
+        <file>images/qxrd-icon-64x64.png</file>
+        <file>images/qxrd-icon-128x128.png</file>
+        <file>images/qxrd-icon-256x256.png</file>
+        <file>images/qxrd-icon-512x512.png</file>
         <file>help/qxrdhelptext.html</file>
         <file>help/qxrdpowderfitidentifyhelp.html</file>
         <file>help/qxrdpowderfitrefinehelp.html</file>
@@ -57,22 +72,7 @@
         <file>help/images/integrated-window.png</file>
         <file>help/images/integration-panel.png</file>
         <file>help/images/masking-panel.png</file>
-        <file>images/qxrd-splash-screen.png</file>
-        <file>images/histogram.png</file>
-        <file>images/system-run.png</file>
-        <file>images/file-document-16x16.png</file>
-        <file>images/file-generic-16x16.png</file>
-        <file>images/file-info-16x16.png</file>
-        <file>images/folder-16x16.png</file>
-        <file>images/file-image-16x16.png</file>
-        <file>images/file-integration-16x16.png</file>
-        <file>images/file-metadata-16x16.png</file>
-        <file>images/qxrd-icon-32x32.png</file>
-        <file>images/qxrd-icon-64x64.png</file>
-        <file>images/qxrd-icon-128x128.png</file>
-        <file>images/qxrd-icon-256x256.png</file>
-        <file>images/qxrd-icon-512x512.png</file>
-        <file>help/images/acquirie-dialog.png</file>
+        <file>help/images/acquire-dialog.png</file>
         <file>help/images/az-avg-window.png</file>
         <file>help/images/centering-dialog.png</file>
         <file>help/images/centering-window.png</file>

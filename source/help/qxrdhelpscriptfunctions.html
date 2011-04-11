@@ -9,7 +9,7 @@
 
     <dl>
       <dt><a name="acquire">
-	  <b>acquire</b>([fileName[, exposure[, summedExposures[, postTriggerFiles[, preTriggerFiles]]]]])</a>
+          <b>acquire</b>([fileName[, exposure[, summedExposures[, postTriggerFiles[, preTriggerFiles[, nPhases]]]]]])</a>
       <dd>
 	<p>
 	  Start acquisition of a sequence of images
@@ -17,7 +17,9 @@
 	<p>
 	  The
 	  arguments are optional and may be succssively omitted from the
-	  right.  Any argument which is omitted will take it's value
+          right.  If preTriggerFiles is omitted, zero is used instead.
+          If nPhases is omitted, one is used.
+          Any other argument which is omitted will take it's value
 	  instead from the values entered in the acquire dialog.  Any
 	  argument which is given will replace the corresponding value
 	  in the acquire dialog.
@@ -28,7 +30,7 @@
 	  acquisition and processing to be completed.
 	</p>
 	<p>
-	  The following is a typical example of the us e of this
+          The following is a typical example of the use of this
 	  command from spec:
 	</p>
 	<p>

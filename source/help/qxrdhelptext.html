@@ -11,22 +11,22 @@
       <img src="images/initial-screen.png">
     </p>
 
-    <h2><a name=Acquire>The Acquire Panel</h2>
-    <table border=0 cellpadding=5 width="100%" align="center">
+    <h2><a name=Acquire>The Acquire Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
 	  <td align="center">
-	    <img src="images/acquire-panel.png">
+            <img src="images/acquire-dialog.png">
 	  </td>
 	</tr>
 	<tr>
 	  <td align="center">
 	    <p>
-	      The 'Acquire' Panel
+              The 'Acquire' Dialog
 	    </p>
 	  </td>
     </table>
     <p>
-      The acquire panel is where you enter parameters related to the
+      The acquire dialog is where you enter parameters related to the
       basic acquisition operation.  The result of an individual
       acquisition operation consists of a sequence of image files,
       each containing the sum of a number of individual exposures.
@@ -98,16 +98,25 @@
     </p>
 
     <p>
-      The 'Files Before' and 'Files After' controls are used to
+      The 'Phases in Group' control lets you perform 'synchronized'
+      acquisition operations.  If you enter a value greater than one
+      then the acquisition operations are modified to acquire 'groups'
+      of images - and during each group acquisition an external hardware
+      signal may be used to drive an external ramp voltage.  More information
+      is given in the <a href="#SyncAcq">'Synchronized Acquisition'</a> section below.
+    </p>
+
+    <p>
+      The 'Pre Trigger' and 'Post Trigger' controls are used to
       specify the number of image files to save.  In most cases you
       won't want to use the 'Trigger' option so you should set the
-      'Files before Trigger' control to zero.  In this case
+      'Pre Trigger' control to zero.  In this case
       acquisition and image saving will start as soon as you press the
-      'Acquire' button and will continue until 'Files After' images
-      have been saved.  If 'Files Before' is non-zero then the
+      'Acquire' button and will continue until 'Post Trigger' images
+      have been saved.  If 'Pre Trigger' is non-zero then the
       acquisition is a little different - acquisition starts
       immediately but summed image files are not saved to disk, only
-      to the computer memory.  Only the most recent 'Files Before'
+      to the computer memory.  Only the most recent 'Pre Trigger'
       images are saved in this way but acquisition will continue by
       discarding earlier images from memory.  To start saving files,
       click on the 'Trigger' button.  At this point the pre-trigger
@@ -167,32 +176,42 @@
     </p>
 
     <p>
-      Finally, the 'Log File' indicator displays the path name to a
+      The 'Log File' indicator displays the path name to a
       'log' file which will contain all the messages that appear in
       the 'Messages' tab, together with the results of any slices
       and/or integrations of the images.  Click 'Select...' to choose
       a different log file.  The log file format is basically the same
       format as that used by 'spec'.
     </p>
+    <p>
+      Click the 'More Options...' button to open the main qxrd preferences
+      dialog and enter more acquisition-related options.
+      <table border=0 cellpadding=5 width="100%">
+        <tr>
+          <td align="center">
+            <img src="images/saving-preferences.png">
+          </td>
+        </tr>
+        <tr>
+          <td align="center">
+            <p>
+              The 'Acquire' 'More Options...' Dialog
+            </p>
+          </td>
+        </tr>
+      </table>
+    </p>
 
-    <h2><a name=Display>The Display Panel</h2>
-    <table border=0 cellpadding=5 width="100%" align="center">
-	<tr>
-	  <td>
-	    <img src="images/display-panel.png">
-	  </td>
-	</tr>
-	<tr>
-	  <td>
-	    <p>
-	      The 'Display' Panel
-	    </p>
-	  </td>
-	</tr>
-    </table>
+    <p>
+      The main extra options allow you to specify that the various kinds
+      of acquired and processed data should be saved in subdirectories of
+      the main output directory.  You can also control the way integrated
+      data are saved, and also control whether a list of 'overflow' pixel
+      positions is calculated for each acquired image.
+    </p>
 
     <h2><a name=ImageDisplay>The Image Display</h2>
-    <table border=0 cellpadding=5 width="100%" align="center">
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
 	  <td>
 	    <img src="images/image-panel.png">
@@ -208,24 +227,24 @@
     </table>
 
 
-    <h2><a name=Correction>The Correction Panel</h2>
-    <table border=0 cellpadding=5 width="100%" align="center">
+    <h2><a name=Correction>The Correction Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
 	  <td>
-	    <img src="images/correction-panel.png">
+            <img src="images/correction-dialog.png">
 	  </td>
 	</tr>
 	<tr>
 	  <td>
 	    <p>
-	      The 'Correction' Panel
+              The 'Correction' Dialog
 	    </p>
 	  </td>
 	</tr>
     </table>
 
     <p>
-      The 'Correction' panel is used to control which of the available
+      The 'Correction' dialog is used to control which of the available
       automatic processing steps are performed when images are
       acquired.  Alongside each step is an estimate of how long it is
       likely to take, averaged over the last 10 or so images - you can
@@ -262,39 +281,67 @@
       frames/second.
     </p>
 
-    <h2><a name=Masking>The Masking Panel</h2>
-    <table border=0 cellpadding=5 width="100%" align="center">
+    <h2><a name=Masking>The Masking Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
 	  <td>
-	    <img src="images/masking-panel.png">
+            <img src="images/masking-dialog.png">
 	  </td>
 	</tr>
 	<tr>
 	  <td>
 	    <p>
-	      The 'Masking' Panel
+              The 'Masking' Dialog
 	    </p>
 	  </td>
 	</tr>
     </table>
+    <p>
+      The masking dialog may be used to control which pixels are used
+      and which masked out in various processing steps.  The program
+      implements a 'stack' of mask images - the topmost of which is used
+      as a maks for processing options.  The upper panel in the masking
+      dialogs represents the mask stack.  Each entry in the mask stack
+      is displayed as a miniature thumbnail image - red areas are masked out.
+    </p>
+    <p>
+      Below the mask stack display is an array of buttons that implement
+      a variety of masking operations. Buttons whose label ends with dots ("...")
+      will pop up a menu to let you select which stack entry to work on - other
+      buttons act either on the stack as a whole, or on the top element only.
+      If you hover the mouse pointer over a button you should see a description
+      of its actions.
+    </p>
+    <p>
+      Below the calculator buttons are a few controls that control the behavior
+      of the two masking tools in the image window.  'Tools Unmask Pixels' controls
+      whether using the masking tools causes pixels to be 'masked' (i.e. excluded
+      from processing, or 'painted' red) or 'unmasked' (i.e. included in processing).
+      'Mask Circles' and 'Mask Polygons' basically duplicate the behavior of clicking
+      the corresponding tool in the image window.  'Circle Radius' is used to set
+      the default circle radius for the circle mask tool in the image window.  If you
+      click and release the circle mask tool you will mask a circle of this radius - if
+      you click and drag the circle mask tool you mask a circle of a corresponding radius.
+    </p>
 
-    <h2><a name=Centering>The Centering Panel</h2>
-    <table border=0 cellpadding=5 width="100%" align="center">
+
+    <h2><a name=Centering>The Centering Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
 	  <td>
-	    <img src="images/centering-panel.png">
+            <img src="images/centering-dialog.png">
 	  </td>
 	</tr>
 	<tr>
 	  <td>
 	    <p>
-	      The 'Centering' Panel
+              The 'Centering' Dialog
 	    </p>
 	  </td>
 	</tr>
     </table>
 
-    <table border=0 cellpadding=5 width="100%" align="center">
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
 	  <td>
 	    <img src="images/center-finding.png">
@@ -309,7 +356,7 @@
 	</tr>
     </table>
 
-    <table border=0 cellpadding=5 width="100%" align="center">
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
 	  <td>
 	    <img src="images/center-found.png">
@@ -324,23 +371,23 @@
 	</tr>
     </table>
     
-    <h2><a name=Integration>The Integration Panel</h2>
-    <table border=0 cellpadding=5 width="100%" align="center">
+    <h2><a name=Integration>The Integration Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
 	  <td>
-	    <img src="images/integration-panel.png">
+            <img src="images/integration-dialog.png">
 	  </td>
 	</tr>
 	<tr>
 	  <td>
 	    <p>
-	      The 'Integration' Panel
+              The 'Integration' Dialog
 	    </p>
 	  </td>
 	</tr>
     </table>
 
-    <table border=0 cellpadding=5 width="100%" align="center">
+    <table border=0 cellpadding=5 width="100%">
 	<tr>
 	  <td>
 	    <img src="images/integrated-window.png">
@@ -355,7 +402,89 @@
 	</tr>
     </table>
 
-    
+    <h2><a name=SyncAcq>The Synchronized Acquisition Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
+        <tr>
+          <td>
+            <img src="images/sync-acquire-dialog.png">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              The 'Display' Dialog
+            </p>
+          </td>
+        </tr>
+    </table>
+
+    <h2><a name=Sync-Acq>The Slice Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
+        <tr>
+          <td>
+            <img src="images/slice-dialog.png">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              The 'Slice' Dialog
+            </p>
+          </td>
+        </tr>
+    </table>
+
+    <h2><a name=Sync-Acq>The Histogram Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
+        <tr>
+          <td>
+            <img src="images/histogram-dialog.png">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              The 'Histogram' Dialog
+            </p>
+          </td>
+        </tr>
+    </table>
+
+    <h2><a name=Sync-Acq>The Info Dialog</h2>
+    <table border=0 cellpadding=5 width="100%">
+        <tr>
+          <td>
+            <img src="images/info-dialog.png">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              The 'Info' Dialog
+            </p>
+          </td>
+        </tr>
+    </table>
+
+
+    <h2><a name=Sync-Acq>The Input Files Browser</h2>
+    <table border=0 cellpadding=5 width="100%">
+        <tr>
+          <td>
+            <img src="images/input-files.png">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              The 'Input Files' Browser
+            </p>
+          </td>
+        </tr>
+    </table>
+
+
+
     <h2><a name=RemoteControl>Remote Control of QXRD</h2>
   </body>
 </html>

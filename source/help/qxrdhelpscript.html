@@ -40,10 +40,11 @@
     <dl>
       <dt>
 	<a href="qxrdhelpscriptfunctions.html#acquire">
-	  <b>acquire</b>([fileName[, exposure[, summedExposures[, postTriggerFiles[, preTriggerFiles]]]]])</a>
+          <b>acquire</b>([fileName[, exposure[, summedExposures[, postTriggerFiles[, preTriggerFiles=0[, acquirePhases=1]]]]])</a>
       <dd>
 	<p>
-	  Start acquisition of a sequence of images
+          Start acquisition of a sequence of images.  If preTriggerFiles or acquirePhases are omitted, they are
+          taken to be 0 and 1, respectively, any other omitted arguments are taken from the acquire dialog settings.
 	</p>
 
       <dt>
@@ -59,7 +60,10 @@
 	  <b>status</b>([time])</a>
       <dd>
 	<p>
-	  Test if acquisition and processing have finished
+          Test if acquisition and processing have finished.  If 'time' is given the function waits for up to 'time' seconds
+          for acquisition and processing to finish.  If they finish before the time period the function will return 'true'
+          and will return as soon as the acquisition and processing have finished.  If they do not finish in time the function
+          returns 'false'.
 	</p>
 
       <dt>
@@ -67,7 +71,7 @@
 	  <b>acquireStatus</b>([time])</a>
       <dd>
 	<p>
-	  Test if acquisition has finished
+          Test if acquisition has finished - similar to <b>status(time)</b> but only tests acquisition status.
 	</p>
 
       <dt>
@@ -75,7 +79,7 @@
 	  <b>processStatus</b>([time])</a>
       <dd>
 	<p>
-	  Test if processing has finished
+          Test if processing has finished - similar to <b>status(time)</b> but only tests processing status.
 	</p>
 
       <dt>
@@ -83,7 +87,7 @@
 	  <b>acquireCancel</b>()</a>
       <dd>
 	<p>
-	  Cancel the current acquisition operation
+          Cancel the current acquisition operation.
 	</p>
 
       <dt>
