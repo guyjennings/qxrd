@@ -85,10 +85,16 @@ bool QxrdAcquisitionPerkinElmer::checkPluginAvailable()
 void QxrdAcquisitionPerkinElmer::onExposureTimeChanged(double newTime)
 {
   if (checkPluginAvailable()) {
+    if (newTime*1e6 < m_ReadoutTimes.at(0)) {
+      emit printMessage(tr("Attempt to set exposure time less than minimum supported (%1 < %2)")
+                        .arg(newTime).arg(m_ReadoutTimes.at(0)/1e6));
+
+      newTime = m_ReadoutTimes.at(0);
+    }
 
     emit printMessage(tr("Exposure time changed to %1").arg(newTime));
 
-    DWORD tmp = (int)(get_ExposureTime()*1e6);
+    DWORD tmp = (int)(newTime*1e6);
 
     emit printMessage(tr("SetTimerSync %1").arg(tmp));
 
