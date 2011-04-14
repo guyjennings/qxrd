@@ -19,6 +19,8 @@ QxrdFreshStartDialog::QxrdFreshStartDialog(QWidget *parent) :
   int simpleServer = 0;
   int simpleServerPort = 0;
   int defaultLayout = 0;
+  double exposureTime = 0.0;
+
   QString logFilePath = "";
 
   {
@@ -32,6 +34,7 @@ QxrdFreshStartDialog::QxrdFreshStartDialog(QWidget *parent) :
     simpleServerPort = settings.value("application/simpleServerPort").toInt();
     defaultLayout = settings.value("application/defaultLayout").toInt();
     logFilePath = settings.value("processor/logFilePath").toString();
+    exposureTime = settings.value("acquire/exposureTime").toDouble();
   }
 
   QStringList detectorTypes = QxrdAcquisitionThread::detectorTypeNames();
@@ -48,6 +51,7 @@ QxrdFreshStartDialog::QxrdFreshStartDialog(QWidget *parent) :
   m_SimpleServerPort -> setValue(simpleServerPort);
   m_DefaultLayout ->setChecked(defaultLayout);
   m_CurrentLogFile ->setText(logFilePath);
+  m_ExposureTime -> setValue(exposureTime);
 
   connect(m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
 
@@ -81,6 +85,7 @@ void QxrdFreshStartDialog::accept()
   settings.setValue("application/runSimpleServer", m_RunSimpleServer->checkState());
   settings.setValue("application/simpleServerPort",m_SimpleServerPort->value());
   settings.setValue("application/defaultLayout",   m_DefaultLayout->checkState());
+  settings.setValue("acquire/exposureTime",        m_ExposureTime->value());
 
   QDialog::accept();
 }
