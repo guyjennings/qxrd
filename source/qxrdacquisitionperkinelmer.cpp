@@ -91,7 +91,7 @@ void QxrdAcquisitionPerkinElmer::onExposureTimeChanged(double newTime)
       emit printMessage(tr("Attempt to set exposure time less than minimum supported (%1 < %2)")
                         .arg(newTime).arg(m_ReadoutTimes.at(0)/1e6));
 
-      newTime = m_ReadoutTimes.at(0);
+      newTime = m_ReadoutTimes.at(0)/1e6;
     }
 
     emit printMessage(tr("Exposure time changed to %1").arg(newTime));
