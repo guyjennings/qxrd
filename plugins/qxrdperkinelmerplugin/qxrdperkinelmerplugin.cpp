@@ -39,6 +39,16 @@ UINT QxrdPerkinElmerPlugin::Acquisition_GetCommChannel(
   return ::Acquisition_GetCommChannel(pAcqDesc, pdwChannelType, pnChannelNr);
 }
 
+UINT QxrdPerkinElmerPlugin::Acquisition_Close(HACQDESC hAcqDesc)
+{
+  return ::Acquisition_Close(hAcqDesc);
+}
+
+UINT QxrdPerkinElmerPlugin::Acquisition_CloseAll()
+{
+  return ::Acquisition_CloseAll();
+}
+
 UINT QxrdPerkinElmerPlugin::Acquisition_DefineDestBuffers(
     HACQDESC pAcqDesc, unsigned short *pProcessedData,
     UINT nFrames, UINT nRows, UINT nColumns)

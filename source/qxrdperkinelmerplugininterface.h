@@ -26,6 +26,10 @@ public:
   virtual UINT Acquisition_GetCommChannel(
       HACQDESC pAcqDesc, UINT *pdwChannelType, int *pnChannelNr) = 0;
 
+  virtual UINT Acquisition_Close(HACQDESC hAcqDesc) = 0;
+
+  virtual UINT Acquisition_CloseAll() = 0;
+
   virtual UINT Acquisition_DefineDestBuffers(
       HACQDESC pAcqDesc, unsigned short *pProcessedData,
       UINT nFrames, UINT nRows, UINT nColumns) = 0;

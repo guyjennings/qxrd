@@ -66,6 +66,8 @@ QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()
 
   if (m_PerkinElmer && m_AcqDesc) {
     m_PerkinElmer->Acquisition_Abort(m_AcqDesc);
+
+    m_PerkinElmer->Acquisition_CloseAll();
   }
 }
 
