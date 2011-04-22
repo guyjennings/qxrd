@@ -1,2 +1,3 @@
-VERSION = 0.5.24
+VERSION = 0.7.1
+
 
