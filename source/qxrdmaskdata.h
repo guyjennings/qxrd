@@ -65,33 +65,4 @@ private:
   QxrdImageDataObjectCounter m_ObjectCounter;
 };
 
-template <typename T>
-void QxrdMaskData::setMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max, bool inRange, bool setTo)
-{
-  int nRows = image -> get_Height();
-  int nCols = image -> get_Width();
-
-  for (int y=0; y<nRows; y++) {
-    for (int x=0; x<nCols; x++) {
-      T v = image -> value(x,y);
-
-      if (((v >= min) && (v < max)) == inRange) {
-        setValue(x,y,setTo);
-      }
-    }
-  }
-}
-
-template <typename T>
-void QxrdMaskData::hideMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max)
-{
-  setMaskRange<T>(image, min, max, true, false);
-}
-
-template <typename T>
-void QxrdMaskData::showMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max)
-{
-  setMaskRange<T>(image, min, max, true, true);
-}
-
 #endif // QXRDMASKDATA_H
