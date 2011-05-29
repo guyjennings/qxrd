@@ -1006,7 +1006,7 @@ QxrdMaskDataPtr QxrdWindow::mask()
 
 void QxrdWindow::doAboutQxrd()
 {
-  QString about = "QXRD Data Acquisition for PE Area Detectors\nVersion " QXRD_VERSION;
+  QString about = "QXRD Data Acquisition for PE Area Detectors\nVersion " STR(QXRD_VERSION);
 
   if (sizeof(void*) == 4) {
     about += " - 32 Bit";

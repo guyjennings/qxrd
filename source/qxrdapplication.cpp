@@ -80,6 +80,33 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   printMessage("------ Starting QXRD Application ------");
 
+  QString about = "QXRD Version " STR(QXRD_VERSION);
+
+  if (sizeof(void*) == 4) {
+    about += " - 32 Bit";
+  } else {
+    about += " - 64 Bit";
+  }
+
+#ifdef Q_CC_MSVC
+  about += " MSVC";
+#endif
+
+#ifdef Q_CC_GNU
+  about += " gcc";
+#endif
+
+#ifdef QT_NO_DEBUG
+  about += " Release\n";
+#else
+  about += " Debug\n";
+#endif
+
+  printMessage(about);
+  printMessage("QWT Version " QWT_VERSION_STR);
+  printMessage(tr("QT Version %1").arg(qVersion()));
+
+
   //  printf("Argc = %d\n", argc);
 
   for (int i=1; i<argc; i++) {
