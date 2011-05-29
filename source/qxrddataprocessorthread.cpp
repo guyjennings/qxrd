@@ -1,6 +1,7 @@
 #include "qxrddataprocessorthread.h"
 
 #include "qxrddataprocessor.h"
+#include "qxrdapplication.h"
 
 QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver)
   : QxrdThread(),
@@ -20,6 +21,10 @@ QxrdDataProcessorThread::~QxrdDataProcessorThread()
 
 void QxrdDataProcessorThread::run()
 {
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage("Starting Processor Thread");
+  }
+
   QxrdDataProcessor *p;
 
   p = new QxrdDataProcessor(m_Acquisition, m_Allocator, m_FileSaverThread, NULL);
@@ -28,7 +33,9 @@ void QxrdDataProcessorThread::run()
 
   int rc = exec();
 
-//  printf("Processor thread terminated with rc %d\n", rc);
+  if (rc || qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage(tr("Processor Thread Terminated with rc %1").arg(rc));
+  }
 }
 
 void QxrdDataProcessorThread::shutdown()

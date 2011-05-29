@@ -48,9 +48,9 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
 
   connect(m_Model, SIGNAL(modelReset()), this, SLOT(onModelReset()));
 
-  connect(this, SIGNAL(printMessage(QString,QDateTime)), m_Processor, SIGNAL(printMessage(QString,QDateTime)));
-  connect(this, SIGNAL(statusMessage(QString,QDateTime)), m_Processor, SIGNAL(statusMessage(QString,QDateTime)));
-  connect(this, SIGNAL(criticalMessage(QString,QDateTime)), m_Processor, SIGNAL(criticalMessage(QString,QDateTime)));
+//  connect(this, SIGNAL(printMessage(QString,QDateTime)), m_Processor, SIGNAL(printMessage(QString,QDateTime)));
+//  connect(this, SIGNAL(statusMessage(QString,QDateTime)), m_Processor, SIGNAL(statusMessage(QString,QDateTime)));
+//  connect(this, SIGNAL(criticalMessage(QString,QDateTime)), m_Processor, SIGNAL(criticalMessage(QString,QDateTime)));
 
   connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
   connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
@@ -123,7 +123,7 @@ void QxrdFileBrowser::onSelectorChanged(QString str, const QModelIndex &parent)
     QModelIndex index = m_Model -> index(i, 0, parent);
 
     QString path = m_Model->fileName(index);
-//    emit printMessage(tr("Testing %1").arg(path));
+//    g_Application->printMessage(tr("Testing %1").arg(path));
 
     if (pattern.exactMatch(path)) {
       sel -> select(index, QItemSelectionModel::Rows | QItemSelectionModel::Select);
@@ -329,7 +329,7 @@ void QxrdFileBrowser::readSettings(QxrdSettings &settings, QString section)
 void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
 {
   if (QApplication::mouseButtons() & Qt::RightButton) {
-//    emit printMessage("Right mouse pressed");
+//    g_Application->printMessage("Right mouse pressed");
 
     QMenu *actions = new QMenu(this);
     QAction *open = actions->addAction("Open");

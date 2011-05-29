@@ -1,6 +1,7 @@
 #include "qxrdscriptenginethread.h"
 
 #include "qxrdscriptengine.h"
+#include "qxrdapplication.h"
 
 QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc)
   : QxrdThread(NULL),
@@ -37,13 +38,19 @@ QxrdScriptEngine *QxrdScriptEngineThread::scriptEngine() const
 
 void QxrdScriptEngineThread::run()
 {
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage("Starting Script Engine Thread");
+  }
+
   QxrdScriptEngine *p = new QxrdScriptEngine(m_Application, m_Window, m_Acquisition, m_DataProcessor);
 
   p -> initialize();
 
   m_ScriptEngine.fetchAndStoreOrdered(p);
 
-  exec();
+  int rc = exec();
 
-//  emit printMessage("Scripting thread terminated");
+  if (rc || qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage(tr("Script Engine Thread Terminated with rc %1").arg(rc));
+  }
 }

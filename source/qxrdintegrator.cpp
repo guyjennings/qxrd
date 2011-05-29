@@ -5,6 +5,7 @@
 #include "qxrdcenterfinder.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdallocator.h"
+#include "qxrdapplication.h"
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -60,7 +61,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       normVal = norm[0];
     }
 
-    emit printMessage(tr("Integrating image %1 from %2").arg(image->get_Title()).arg(image->get_FileName()));
+    g_Application->printMessage(tr("Integrating image %1 from %2").arg(image->get_Title()).arg(image->get_FileName()));
 
     QTime tic;
     tic.start();
@@ -126,7 +127,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       double cosrot  = cos(rot);
       double sinrot  = sin(rot);
 
-      emit printMessage(tr("Integration range rMin %1, rMax %2, %3 steps").arg(rMin).arg(rMax).arg(nMax - nMin));
+      g_Application->printMessage(tr("Integration range rMin %1, rMax %2, %3 steps").arg(rMin).arg(rMax).arg(nMax - nMin));
 
       for (int y=0; y<nRows; y++) {
         for (int x=0; x<nCols; x++) {
@@ -171,9 +172,9 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       //
       //  emit newIntegrationAvailable(image->get_Title(), x,y);
 
-      emit printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
+      g_Application->printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
     } else {
-      printf("QxrdIntegrator::integrate failed\n");
+      g_Application->printMessage("QxrdIntegrator::integrate failed");
     }
   }
 
@@ -191,7 +192,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       normVal = norm[0];
     }
 
-    emit printMessage(tr("Integrating image %1").arg(image->get_Title()));
+    g_Application->printMessage(tr("Integrating image %1").arg(image->get_Title()));
 
     QTime tic;
     tic.start();
@@ -262,9 +263,9 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
     //
     //  emit newIntegrationAvailable(image->get_Title(), x,y);
 
-    emit printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
+    g_Application->printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
   } else {
-    printf("QxrdIntegrator::integrate failed\n");
+    g_Application->printMessage("QxrdIntegrator::integrate failed");
   }
 
   return integ;
@@ -281,7 +282,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdIntegratedDataPtr integ, Qxr
   }
 
   catch (...) {
-    printf("QxrdIntegrator::sliceLine failed\n");
+    g_Application->printMessage("QxrdIntegrator::sliceLine failed");
   }
 
   return QxrdIntegratedDataPtr();
@@ -333,7 +334,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdIntegratedDataPtr integ, 
       //    emit newIntegrationAvailable(image->get_Title(),xs,ys);
     }
   } else {
-    printf("QxrdIntegrator::slicePolygon failed\n");
+    g_Application->printMessage("QxrdIntegrator::slicePolygon failed");
   }
 
   return integ;

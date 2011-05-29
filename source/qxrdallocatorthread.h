@@ -19,11 +19,6 @@ public:
 
   static void msleep(long unsigned int);
 
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
 protected:
   void run();
 

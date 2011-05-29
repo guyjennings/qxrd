@@ -22,9 +22,6 @@ public:
   void executeScript(QString cmd);
 
 signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void execute(QString cmd);
 
 protected:

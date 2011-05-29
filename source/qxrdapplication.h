@@ -85,15 +85,22 @@ public slots:
   void splashMessage(const char *msg);
   void splashMessage(QString msg);
 
-signals:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 public:
   bool wantToQuit();
+  FILE* logFile();
+
+  void newLogFile(QString path);
 
 private:
+  void logMessage(QString msg);
+  void closeLogFile();
+  void openLogFile();
+  void writeLogHeader();
+
   void setupTiffHandlers();
   void shutdownThread(QxrdThread *thread);
 
@@ -122,6 +129,9 @@ public:
   Q_PROPERTY(int    defaultLayout   READ get_DefaultLayout WRITE set_DefaultLayout STORED false);
   QCEP_INTEGER_PROPERTY(DefaultLayout);
 
+  Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath);
+  QCEP_STRING_PROPERTY(LogFilePath);
+
 private:
   bool                            m_FreshStart;
   QSplashScreen                  *m_Splash;
@@ -147,6 +157,9 @@ private:
   QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;
 #endif
   QxrdResponseTimer              *m_ResponseTimer;
+
+  mutable QMutex                  m_LogFileMutex;
+  FILE                           *m_LogFile;
 };
 
 extern QxrdApplication *g_Application;

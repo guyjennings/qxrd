@@ -54,11 +54,6 @@ public slots:
   void doSelectComboItem(int index);
   void onModelReset();
 
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-
 private:
   mutable QMutex               m_Mutex;
   int                          m_IsOutput;

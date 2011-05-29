@@ -73,9 +73,9 @@ public slots:
   void doTest();
 
   QString timeStamp();
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void displayMessage(QString msg);
+  void displayStatusMessage(QString msg);
+  void displayCriticalMessage(QString msg);
 
   void selectOutputDirectory();
   void clearStatusMessage();

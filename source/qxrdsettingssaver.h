@@ -15,11 +15,6 @@ class QxrdSettingsSaver : public QObject
 public:
   explicit QxrdSettingsSaver(QObject *parent, QxrdApplication *app);
 
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
 public slots:
   void performSave();
 

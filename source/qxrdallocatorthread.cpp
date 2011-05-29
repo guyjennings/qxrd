@@ -2,6 +2,7 @@
 
 #include "qxrdallocator.h"
 #include "qxrdacquisition.h"
+#include "qxrdapplication.h"
 
 QxrdAllocatorThread::QxrdAllocatorThread(/*QxrdAcquisitionPtr acq*/)
   : QxrdThread(),
@@ -20,16 +21,15 @@ void QxrdAllocatorThread::run()
 {
   m_Allocator.fetchAndStoreOrdered(new QxrdAllocator(/*m_Acquisition*/));
 
-  connect(m_Allocator, SIGNAL(printMessage(QString,QDateTime)),
-          this,        SIGNAL(printMessage(QString,QDateTime)));
-  connect(m_Allocator, SIGNAL(statusMessage(QString,QDateTime)),
-          this,        SIGNAL(statusMessage(QString,QDateTime)));
-  connect(m_Allocator, SIGNAL(criticalMessage(QString,QDateTime)),
-          this,        SIGNAL(criticalMessage(QString,QDateTime)));
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage("Starting Allocator Thread");
+  }
 
   int rc = exec();
 
-//  printf("Allocator thread terminated with rc %d\n", rc);
+  if (rc || qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage(tr("Allocator Thread Terminated with rc %1").arg(rc));
+  }
 }
 
 void QxrdAllocatorThread::shutdown()

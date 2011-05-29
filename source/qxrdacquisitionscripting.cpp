@@ -3,6 +3,7 @@
 #include "qxrdacquisitionthread.h"
 #include <QMetaProperty>
 #include "qxrdmutexlocker.h"
+#include "qxrdapplication.h"
 
 QxrdAcquisitionScripting::QxrdAcquisitionScripting()
   : QxrdAcquisitionParameters()
@@ -11,7 +12,7 @@ QxrdAcquisitionScripting::QxrdAcquisitionScripting()
 
 void QxrdAcquisitionScripting::Message(QString msg)
 {
-  emit statusMessage(msg);
+  g_Application->statusMessage(msg);
 }
 
 void QxrdAcquisitionScripting::propertyList()
@@ -29,6 +30,6 @@ void QxrdAcquisitionScripting::propertyList()
     const char *name = metaproperty.name();
     QVariant value = property(name);
 
-    emit printMessage(tr("Property %1: %2 = %3").arg(i).arg(name).arg(value.toString()));
+    g_Application->printMessage(tr("Property %1: %2 = %3").arg(i).arg(name).arg(value.toString()));
   }
 }

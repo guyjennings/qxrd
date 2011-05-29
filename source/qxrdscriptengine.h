@@ -30,10 +30,6 @@ signals:
   void simpleServerResultAvailable(QScriptValue cmd);
   void specResultAvailable(QScriptValue cmd);
 
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
 public:
   bool hasUncaughtException() const;
   int  uncaughtExceptionLineNumber() const;

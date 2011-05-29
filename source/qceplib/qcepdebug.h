@@ -17,7 +17,8 @@ enum {
   DEBUG_PERKINELMER = 1024,
   DEBUG_PREFS = 2048,
   DEBUG_EXITWAIT = 4096,
-  DEBUG_ALLOCATOR = 8192
+  DEBUG_ALLOCATOR = 8192,
+  DEBUG_THREADS = 16384
 };
 
 extern const char* gDebugStrings[];

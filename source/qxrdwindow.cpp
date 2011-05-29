@@ -321,7 +321,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   statusBar() -> addPermanentWidget(m_AllocationStatus);
 
   if (m_Acquisition == NULL) {
-    emit criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
+    g_Application->criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
   }
 
   connect(m_Acquisition,     SIGNAL(acquireStarted()),
@@ -381,15 +381,15 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_CenterFinderPlot -> setWindow(this);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
-  connect(m_Plot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
-  connect(m_CenterFinderPlot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
-  connect(m_IntegratorPlot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
-  connect(m_Plot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
-  connect(m_CenterFinderPlot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
-  connect(m_IntegratorPlot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
-  connect(m_Plot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
-  connect(m_CenterFinderPlot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
-  connect(m_IntegratorPlot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
+//  connect(m_Plot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
+//  connect(m_CenterFinderPlot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
+//  connect(m_IntegratorPlot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
+//  connect(m_Plot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
+//  connect(m_CenterFinderPlot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
+//  connect(m_IntegratorPlot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
+//  connect(m_Plot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
+//  connect(m_CenterFinderPlot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
+//  connect(m_IntegratorPlot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
 
   //  connect(m_DataProcessor, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
 
@@ -548,73 +548,27 @@ QString QxrdWindow::timeStamp()
   return QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ");
 }
 
-void QxrdWindow::printMessage(QString msg, QDateTime ts)
+void QxrdWindow::displayMessage(QString msg)
 {
-  //  printf("print message %s\n", qPrintable(msg));
+  THREAD_CHECK;
 
-  if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "printMessage", Qt::QueuedConnection,
-                                           Q_ARG(QString, msg), Q_ARG(QDateTime, ts)));
-  } else {
-    QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+msg.trimmed();
-
-    //int msgSize = m_Messages->document()->characterCount();
-    //int blkCount = m_Messages->document()->blockCount();
-
-    //printf("msgSize = %d, blkCount=%d\n", msgSize, blkCount);
-
-    m_Messages -> append(message);
-    m_DataProcessor -> logMessage(message);
-  }
+  m_Messages -> append(msg);
 }
 
-void QxrdWindow::criticalMessage(QString msg, QDateTime ts)
+void QxrdWindow::displayCriticalMessage(QString msg)
 {
+  THREAD_CHECK;
+
   static int dialogCount = 0;
 
   printf("critical message %s, count = %d\n", qPrintable(msg), dialogCount);
 
-  if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "criticalMessage", Qt::QueuedConnection,
-                                           Q_ARG(QString, msg), Q_ARG(QDateTime, ts)));
-  } else {
-    statusMessage(msg, ts);
-
-    dialogCount++;
-    if (dialogCount <= 1) {
-      QMessageBox::critical(this, "Error", msg);
-    }
-    dialogCount--;
+  dialogCount++;
+  if (dialogCount <= 1) {
+    QMessageBox::critical(this, "Error", msg);
   }
+  dialogCount--;
 }
-
-//void QxrdWindow::acquisitionReady()
-//{
-//  //  readSettings();
-//  THREAD_CHECK;
-
-//  m_Acquisition -> acquisitionReady();
-
-//  m_Progress -> reset();
-//}
-
-//void QxrdWindow::acquisitionStarted()
-//{
-//  THREAD_CHECK;
-
-//  m_Acquisition -> acquisitionStarted();
-
-//  m_Progress -> setValue(0);
-//}
-
-//void QxrdWindow::darkAcquisitionStarted()
-//{
-//  THREAD_CHECK;
-
-//  m_Acquisition -> darkAcquisitionStarted();
-
-//  m_Progress -> setValue(0);
-//}
 
 void QxrdWindow::selectOutputDirectory()
 {
@@ -650,11 +604,11 @@ void QxrdWindow::acquiredFrame(
   //  printf("%d %% progress\n", thisframe*100/totalframes);
 
   if (nsum == 1) {
-    statusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
+    g_Application->statusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
                   .arg(fileName)
                   .arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
   } else {
-    statusMessage(tr("%1: Phase %2 of %3, Sum %4 of %5, Group %6 of %7")
+    g_Application->statusMessage(tr("%1: Phase %2 of %3, Sum %4 of %5, Group %6 of %7")
                   .arg(fileName)
                   .arg(isum+1).arg(nsum).arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
   }
@@ -769,7 +723,7 @@ void QxrdWindow::writeSettings(QxrdSettings &settings, QString section)
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdWindow::statusMessage(QString msg, QDateTime /*ts*/)
+void QxrdWindow::displayStatusMessage(QString msg)
 {
   m_StatusMsg -> setText(msg);
 
@@ -973,7 +927,7 @@ void QxrdWindow::selectLogFile()
         this, "Save Log File in", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
-    m_DataProcessor->newLogFile(theFile);
+    g_Application->newLogFile(theFile);
   }
 }
 

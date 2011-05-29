@@ -2,6 +2,7 @@
 #include <QTextStream>
 #include <QDateTime>
 #include <QThread>
+#include "qxrdapplication.h"
 
 QxrdSimpleServer::QxrdSimpleServer(QString name, int port, QObject *parent) :
     QTcpServer(parent),
@@ -20,7 +21,7 @@ void QxrdSimpleServer::startServer(QHostAddress addr, int port)
   }
 
   if (!listen(addr, port)) {
-    emit printMessage(tr("Failed to bind to address %1 port %2").arg(addr.toString()).arg(port));
+    g_Application->printMessage(tr("Failed to bind to address %1 port %2").arg(addr.toString()).arg(port));
   }
 }
 
@@ -31,14 +32,14 @@ void QxrdSimpleServer::openNewConnection()
   connect(m_Socket, SIGNAL(disconnected()), m_Socket, SLOT(deleteLater()));
   connect(m_Socket, SIGNAL(readyRead()), this,     SLOT(clientRead()));
 
-  emit printMessage(tr("New connection from %1").arg(m_Socket->peerAddress().toString()) );
+  g_Application->printMessage(tr("New connection from %1").arg(m_Socket->peerAddress().toString()) );
 
   connect(m_Socket, SIGNAL(disconnected()), this,     SLOT(connectionClosed()));
 }
 
 void QxrdSimpleServer::connectionClosed()
 {
-  emit printMessage("Client closed connection");
+  g_Application->printMessage("Client closed connection");
 }
 
 void QxrdSimpleServer::clientRead()
@@ -48,7 +49,7 @@ void QxrdSimpleServer::clientRead()
   while ( m_Socket->canReadLine() ) {
     QString str = ts.readLine();
 
-    emit printMessage(tr("Command: %1 received").arg(str));
+    g_Application->printMessage(tr("Command: %1 received").arg(str));
 
     emit executeCommand(str);
   }
@@ -56,7 +57,7 @@ void QxrdSimpleServer::clientRead()
 
 void QxrdSimpleServer::finishedCommand(QScriptValue result)
 {
-  emit printMessage(tr("Result: %1").arg(result.toString()));
+  g_Application->printMessage(tr("Result: %1").arg(result.toString()));
 
   if (m_Socket && (m_Socket->isWritable())) {
     m_Socket -> write(qPrintable(result.toString()+"\n"));

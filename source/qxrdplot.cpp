@@ -13,6 +13,7 @@
 #include <qwt_scale_engine.h>
 #include <QMenu>
 #include <QContextMenuEvent>
+#include "qxrdapplication.h"
 
 QxrdPlot::QxrdPlot(QWidget *parent)
   : QwtPlot(parent),
@@ -216,12 +217,12 @@ void QxrdPlot::enableMeasuring()
 
 void QxrdPlot::onLegendClicked(QwtPlotItem *item)
 {
-  emit printMessage(tr("QxrdPlot::onLegendClicked(%1)").arg(item->title().text()));
+  g_Application->printMessage(tr("QxrdPlot::onLegendClicked(%1)").arg(item->title().text()));
 }
 
 void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
 {
-  emit printMessage(tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
+  g_Application->printMessage(tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
 
   if (item) {
     QwtPlotCurve *pc = dynamic_cast<QwtPlotCurve*>(item);

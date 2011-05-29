@@ -27,6 +27,9 @@ QVariant QxrdFileBrowserModel::headerData
 
     case 2:
       return "Modified";
+
+    default:
+      return "";
     }
   } else {
     return inherited::headerData(section, orientation, role);

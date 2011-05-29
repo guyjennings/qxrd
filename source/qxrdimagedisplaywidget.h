@@ -24,11 +24,6 @@ public:
 
   static QxrdImageDisplayWidget* insertNew(QxrdApplication *app, QTabWidget *tw);
 
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
 public slots:
   void updateImage(QxrdDoubleImageDataPtr img,
                    QxrdMaskDataPtr        ovflow = QxrdMaskDataPtr(),

@@ -48,11 +48,6 @@ public:
   void contextMenuEvent(QContextMenuEvent *event);
   void updateZoomer();
 
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
 public slots:
   void autoScale();
   void zoomIn();

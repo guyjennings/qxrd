@@ -1,5 +1,6 @@
 #include "qxrdsimpleserver.h"
 #include "qxrdsimpleserverthread.h"
+#include "qxrdapplication.h"
 
 QxrdSimpleServerThread::QxrdSimpleServerThread(QString name, int port) :
     m_Name(name),
@@ -33,16 +34,17 @@ void QxrdSimpleServerThread::shutdown()
 
 void QxrdSimpleServerThread::run()
 {
-//  printf("start server\n");
-  m_Server = new QxrdSimpleServer(m_Name, m_Port);
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage("Starting Simple Server Thread");
+  }
 
-  connect(m_Server,             SIGNAL(printMessage(QString,QDateTime)), this,            SIGNAL(printMessage(QString,QDateTime)));
-  connect(m_Server,             SIGNAL(statusMessage(QString,QDateTime)), this,            SIGNAL(statusMessage(QString,QDateTime)));
-  connect(m_Server,             SIGNAL(criticalMessage(QString,QDateTime)), this,            SIGNAL(criticalMessage(QString,QDateTime)));
+  m_Server = new QxrdSimpleServer(m_Name, m_Port);
 
   m_Server -> startServer(QHostAddress::Any, m_Port);
 
   int rc = exec();
 
-//  printf("Server thread terminated with rc %d\n", rc);
+  if (rc || qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage(tr("Simple Server Thread Terminated with rc %1").arg(rc));
+  }
 }

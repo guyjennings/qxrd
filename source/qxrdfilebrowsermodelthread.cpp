@@ -1,4 +1,5 @@
 #include "qxrdfilebrowsermodelthread.h"
+#include "qxrdapplication.h"
 
 QxrdFileBrowserModelThread::QxrdFileBrowserModelThread(QObject *parent) :
     QThread(),
@@ -17,9 +18,13 @@ QxrdFileBrowserModel* QxrdFileBrowserModelThread::fileBrowserModel() const
 
 void QxrdFileBrowserModelThread::run()
 {
-//  QxrdFileBrowserModel *model = new QxrdFileBrowserModel();
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage("Starting File Browser Model Thread");
+  }
 
-//  m_FileBrowserModel.fetchAndStoreOrdered(model);
+  int rc = exec();
 
-  exec();
+  if (rc || qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage(tr("File Browser Model Thread Terminated with rc %1").arg(rc));
+  }
 }

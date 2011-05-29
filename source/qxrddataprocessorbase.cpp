@@ -10,6 +10,7 @@
 #include "qxrdallocator.h"
 #include "qxrdfilesaverthread.h"
 #include "qxrdgeneratetestimage.h"
+#include "qxrdapplication.h"
 
 #include <QTime>
 #include <QPainter>
@@ -29,7 +30,6 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     m_BadPixelsPath(this, "badPixelsPath", ""),
     m_GainMapPath(this, "gainMapPath", ""),
     m_MaskPath(this, "maskPath", ""),
-    m_LogFilePath(this, "logFilePath", "qxrd.log"),
     m_PerformDarkSubtraction(this, "performDarkSubtraction", true),
     m_SaveRawImages(this, "saveRawImages", true),
     m_SaveDarkImages(this, "saveDarkImages", true),
@@ -72,7 +72,6 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     m_AverageDark(this,"averageDark",0.0),
     m_AverageRaw(this,"averageRaw",0.0),
     m_Mutex(QMutex::Recursive),
-    m_LogFileMutex(QMutex::Recursive),
     m_Window(NULL),
     m_Allocator(allocator),
     m_FileSaverThread(saver),
@@ -91,8 +90,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     m_RefinedRingSetFitParameters(NULL),
     m_InitialRingSetData(NULL),
     m_RefinedRingSetData(NULL),
-    m_GenerateTestImage(NULL),
-    m_LogFile(NULL)
+    m_GenerateTestImage(NULL)
 {
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, m_Allocator, this);
@@ -110,7 +108,6 @@ QxrdFileSaverThread *QxrdDataProcessorBase::fileSaverThread() const
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()
 {
-  closeLogFile();
 }
 
 void QxrdDataProcessorBase::shutdown()
@@ -178,8 +175,6 @@ void QxrdDataProcessorBase::readSettings(QxrdSettings &settings, QString section
   m_RefinedRingSetFitParameters -> readSettings(settings, section+"/refinedFit");
   m_InitialRingSetData -> readSettings(settings, section+"/initialData");
   m_RefinedRingSetData -> readSettings(settings, section+"/refinedData");
-
-  newLogFile(get_LogFilePath());
 }
 
 
@@ -386,7 +381,7 @@ void QxrdDataProcessorBase::loadDark(QString name)
 
     set_DarkImagePath(res -> get_FileName());
   } else {
-    emit printMessage(tr("loadDark(%1) failed").arg(name));
+    g_Application->printMessage(tr("loadDark(%1) failed").arg(name));
   }
 }
 
@@ -474,7 +469,7 @@ void QxrdDataProcessorBase::newMaskStack()
 
   m_Masks.push_front(m);
 
-  emit printMessage(tr("new mask, %1 on stack").arg(m_Masks.count()));
+  g_Application->printMessage(tr("new mask, %1 on stack").arg(m_Masks.count()));
 
   m_Masks.changed();
 
@@ -495,7 +490,7 @@ void QxrdDataProcessorBase::pushMaskStack(QxrdMaskDataPtr m)
 
 //  m_Mask = mask;
 
-  emit printMessage(tr("dup mask, %1 on stack").arg(m_Masks.count()));
+  g_Application->printMessage(tr("dup mask, %1 on stack").arg(m_Masks.count()));
 
   m_Masks.changed();
 
@@ -847,14 +842,14 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image
     (QxrdDoubleImageDataPtr corrected, QxrdInt16ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   if (qcepDebug(DEBUG_PROCESS)) {
-    emit printMessage(tr("processing acquired 16 bit image, %1 remaining")
+    g_Application->printMessage(tr("processing acquired 16 bit image, %1 remaining")
                       .arg(getAcquiredCount()));
   }
 
   if (img) {
     if (get_SaveRawImages()) {
       if (img->get_ImageSaved()) {
-        emit printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
+        g_Application->printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
       } else {
         saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessorBase::NoOverwrite);
       }
@@ -875,14 +870,14 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image
     (QxrdDoubleImageDataPtr corrected, QxrdInt32ImageDataPtr img, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   if (qcepDebug(DEBUG_PROCESS)) {
-    emit printMessage(tr("processing acquired 32 bit image, %1 remaining")
+    g_Application->printMessage(tr("processing acquired 32 bit image, %1 remaining")
                       .arg(getAcquiredCount()));
   }
 
   if (img) {
     if (get_SaveRawImages()) {
       if (img->get_ImageSaved()) {
-        emit printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
+        g_Application->printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
       } else {
         saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessorBase::NoOverwrite);
       }
@@ -917,7 +912,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
   if (processed && img) {
     processed->copyFrom(img);
 
-    emit statusMessage(tr("Processing Image \"%1\"").arg(processed->get_FileName()));
+    g_Application->statusMessage(tr("Processing Image \"%1\"").arg(processed->get_FileName()));
 
     QTime tic;
     tic.start();
@@ -925,7 +920,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
     processed->set_Normalization(v);
 
     if (qcepDebug(DEBUG_PROCESS)) {
-      emit printMessage(tr("Processing Image \"%1\", count %2")
+      g_Application->printMessage(tr("Processing Image \"%1\", count %2")
                         .arg(processed->get_FileName()).arg(getAcquiredCount()));
     }
 
@@ -938,7 +933,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
       updateEstimatedTime(prop_PerformDarkSubtractionTime(), subTime);
 
       if (qcepDebug(DEBUG_PROCESS)) {
-        emit printMessage(tr("Dark subtraction took %1 msec").arg(subTime));
+        g_Application->printMessage(tr("Dark subtraction took %1 msec").arg(subTime));
       }
     }
 
@@ -958,7 +953,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
 
     if (get_SaveSubtracted()) {
       if (processed->get_ImageSaved()) {
-        emit printMessage(tr("Image \"%1\" is already saved").arg(processed->rawFileName()));
+        g_Application->printMessage(tr("Image \"%1\" is already saved").arg(processed->rawFileName()));
       } else {
         saveNamedImageData(QDir(subtractedOutputDirectory()).filePath(processed->get_FileBase()), processed, overflow);
       }
@@ -973,10 +968,10 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
     newData(processed, overflow);
 
     if (qcepDebug(DEBUG_PROCESS)) {
-      emit printMessage(tr("Processing took %1 msec").arg(tic.restart()));
+      g_Application->printMessage(tr("Processing took %1 msec").arg(tic.restart()));
     }
 
-    emit statusMessage(tr("Completed Processing Image \"%1\"").arg(processed->get_FileName()));
+    g_Application->statusMessage(tr("Completed Processing Image \"%1\"").arg(processed->get_FileName()));
   }
 
   return processed;
@@ -994,24 +989,24 @@ void QxrdDataProcessorBase::subtractDarkImage(QxrdDoubleImageDataPtr image, Qxrd
   if (get_PerformDarkSubtraction()) {
     if (dark && image) {
       if (dark->get_ExposureTime() != image->get_ExposureTime()) {
-        emit printMessage("Exposure times of acquired data and dark image are different, skipping");
+        g_Application->printMessage("Exposure times of acquired data and dark image are different, skipping");
         return;
       }
 
       if (dark->get_Width() != image->get_Width() ||
           dark->get_Height() != image->get_Height()) {
-        emit printMessage("Dimensions of acquired data and dark image are different, skipping");
+        g_Application->printMessage("Dimensions of acquired data and dark image are different, skipping");
         return;
       }
 
       if (dark->get_CameraGain() != image->get_CameraGain()) {
-        emit printMessage("Gains of acquired data and dark image are different, skipping");
+        g_Application->printMessage("Gains of acquired data and dark image are different, skipping");
         return;
       }
 
       if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
             image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
-        emit printMessage("Acquired data is not a raw image, skipping background subtraction");
+        g_Application->printMessage("Acquired data is not a raw image, skipping background subtraction");
         return;
       }
 
@@ -1217,7 +1212,7 @@ void QxrdDataProcessorBase::maskPolygon(QVector<QwtDoublePoint> poly)
 void QxrdDataProcessorBase::measurePolygon(QVector<QwtDoublePoint> poly)
 {
   foreach(QwtDoublePoint pt, poly) {
-    emit printMessage(tr("Measure pt (%1,%2) = %3").arg(pt.x()).arg(pt.y())
+    g_Application->printMessage(tr("Measure pt (%1,%2) = %3").arg(pt.x()).arg(pt.y())
                       .arg(m_Data -> value(pt.x(),pt.y())));
   }
 
@@ -1227,7 +1222,7 @@ void QxrdDataProcessorBase::measurePolygon(QVector<QwtDoublePoint> poly)
 void QxrdDataProcessorBase::printMeasuredPolygon(QVector<QwtDoublePoint> poly)
 {
   foreach(QwtDoublePoint pt, poly) {
-    emit printMessage(tr("Measure pt (%1,%2)").arg(pt.x()).arg(pt.y()));
+    g_Application->printMessage(tr("Measure pt (%1,%2)").arg(pt.x()).arg(pt.y()));
   }
 
   summarizeMeasuredPolygon(poly);
@@ -1245,7 +1240,7 @@ void QxrdDataProcessorBase::summarizeMeasuredPolygon(QVector<QwtDoublePoint> pol
     double dx1 = x0-x1, dy1 = y0-y1, dx2 = x2-x1, dy2 = y2-y1;
     double a1 = atan2(dy1,dx1), a2 = atan2(dy2,dx2);
 
-    emit statusMessage(tr("Angle: @ %1,%2, ang %3 deg").arg(x1).arg(y1).arg((a2-a1)/M_PI*180.0));
+    g_Application->statusMessage(tr("Angle: @ %1,%2, ang %3 deg").arg(x1).arg(y1).arg((a2-a1)/M_PI*180.0));
   } else if (poly.size() == 2) {
     double x0 = poly[0].x();
     double y0 = poly[0].y();
@@ -1256,12 +1251,12 @@ void QxrdDataProcessorBase::summarizeMeasuredPolygon(QVector<QwtDoublePoint> pol
     double ang = atan2(dy,dx);
     double len = sqrt(dx*dx+dy*dy);
 
-    emit statusMessage(tr("Line: %1,%2 - %3,%4 : D %5,%6 : L %7 : Ang %8").
+    g_Application->statusMessage(tr("Line: %1,%2 - %3,%4 : D %5,%6 : L %7 : Ang %8").
                        arg(x0).arg(y0).arg(x1).arg(y1).
                        arg(dx).arg(dy).arg(len).arg(ang/M_PI*180.0));
 
   } else if (poly.size() == 1) {
-    emit statusMessage(tr("Point: %1,%2").arg(poly[0].x()).arg(poly[0].y()));
+    g_Application->statusMessage(tr("Point: %1,%2").arg(poly[0].x()).arg(poly[0].y()));
   }
 }
 
@@ -1329,7 +1324,7 @@ int QxrdDataProcessorBase::status(double time)
 QxrdCenterFinder *QxrdDataProcessorBase::centerFinder() const
 {
   if (m_CenterFinder == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::centerFinder == NULL");
+    g_Application->printMessage("Problem QxrdDataProcessorBase::centerFinder == NULL");
   }
 
   return m_CenterFinder;
@@ -1338,7 +1333,7 @@ QxrdCenterFinder *QxrdDataProcessorBase::centerFinder() const
 QxrdIntegrator *QxrdDataProcessorBase::integrator() const
 {
   if (m_Integrator == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::integrator == NULL");
+    g_Application->printMessage("Problem QxrdDataProcessorBase::integrator == NULL");
   }
 
   return m_Integrator;
@@ -1347,7 +1342,7 @@ QxrdIntegrator *QxrdDataProcessorBase::integrator() const
 QxrdRingSetFitParametersPtr QxrdDataProcessorBase::initialRingSetFitParameters() const
 {
   if (m_InitialRingSetFitParameters == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::initialRingSetFitParameters == NULL");
+    g_Application->printMessage("Problem QxrdDataProcessorBase::initialRingSetFitParameters == NULL");
   }
 
   return m_InitialRingSetFitParameters;
@@ -1356,7 +1351,7 @@ QxrdRingSetFitParametersPtr QxrdDataProcessorBase::initialRingSetFitParameters()
 QxrdRingSetSampledDataPtr QxrdDataProcessorBase::initialRingSetData() const
 {
   if (m_InitialRingSetData == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::initialRingSetData == NULL");
+    g_Application->printMessage("Problem QxrdDataProcessorBase::initialRingSetData == NULL");
   }
 
   return m_InitialRingSetData;
@@ -1365,7 +1360,7 @@ QxrdRingSetSampledDataPtr QxrdDataProcessorBase::initialRingSetData() const
 QxrdRingSetFitParametersPtr QxrdDataProcessorBase::refinedRingSetFitParameters() const
 {
   if (m_RefinedRingSetFitParameters == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::refinedRingSetFitParameters == NULL");
+    g_Application->printMessage("Problem QxrdDataProcessorBase::refinedRingSetFitParameters == NULL");
   }
 
   return m_RefinedRingSetFitParameters;
@@ -1374,7 +1369,7 @@ QxrdRingSetFitParametersPtr QxrdDataProcessorBase::refinedRingSetFitParameters()
 QxrdRingSetSampledDataPtr QxrdDataProcessorBase::refinedRingSetData() const
 {
   if (m_RefinedRingSetData == NULL) {
-    emit printMessage("Problem QxrdDataProcessorBase::refinedRingSetData == NULL");
+    g_Application->printMessage("Problem QxrdDataProcessorBase::refinedRingSetData == NULL");
   }
 
   return m_RefinedRingSetData;
@@ -1509,63 +1504,10 @@ void QxrdDataProcessorBase::ellipse(double cx, double cy, double a, double e, do
   newData(m_Data, QxrdMaskDataPtr());
 }
 
-void QxrdDataProcessorBase::openLogFile()
-{
-  if (m_LogFile == NULL) {
-    m_LogFile = fopen(qPrintable(get_LogFilePath()), "a");
-
-    if (m_LogFile) {
-      writeLogHeader();
-    }
-  }
-}
-
-void QxrdDataProcessorBase::newLogFile(QString path)
-{
-  if (m_LogFile) {
-    fclose(m_LogFile);
-    m_LogFile = NULL;
-  }
-
-  set_LogFilePath(path);
-
-  openLogFile();
-}
-
-void QxrdDataProcessorBase::writeLogHeader()
-{
-  if (m_LogFile) {
-    fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFilePath()));
-    fprintf(m_LogFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
-    fprintf(m_LogFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
-    fflush(m_LogFile);
-  }
-}
-
-void QxrdDataProcessorBase::logMessage(QString msg)
-{
-  openLogFile();
-
-  if (m_LogFile) {
-    fprintf(m_LogFile, "#CX %s\n", qPrintable(msg));
-    fflush(m_LogFile);
-  }
-}
-
-void QxrdDataProcessorBase::closeLogFile()
-{
-  if (m_LogFile) {
-    logMessage(tr("%1 ------- shutdown --------").
-               arg(QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ")));
-    fclose(m_LogFile);
-    m_LogFile = NULL;
-  }
-}
-
 void QxrdDataProcessorBase::writeOutputScan(QxrdIntegratedDataPtr data)
 {
   if (this->get_SaveIntegratedData()) {
-    fileSaverThread()->writeOutputScan(m_LogFile, data);
+    fileSaverThread()->writeOutputScan(g_Application->logFile(), data);
   }
 
   if (this->get_SaveIntegratedInSeparateFiles()) {
@@ -1600,11 +1542,11 @@ void QxrdDataProcessorBase::fileWriteTest(int dim, QString path)
 
       int dt = tic.restart();
       totalt += dt;
-      emit printMessage(tr("file %1 written in %2 msec").arg(fileName).arg(dt));
+      g_Application->printMessage(tr("file %1 written in %2 msec").arg(fileName).arg(dt));
     }
   }
 
-  emit printMessage(tr("average write speed %1 MB/sec")
+  g_Application->printMessage(tr("average write speed %1 MB/sec")
                     .arg(((double) sz)*40.0*1000.0/(1e6*((double) totalt))));
   delete [] buff;
 }
@@ -1633,7 +1575,7 @@ void QxrdDataProcessorBase::calculateROI()
 
     int dt = tic.restart();
 
-    emit printMessage(tr("ROI calculated in %1 msec").arg(dt));
+    g_Application->printMessage(tr("ROI calculated in %1 msec").arg(dt));
 
     delete [] res;
   }
@@ -1671,7 +1613,7 @@ void QxrdDataProcessorBase::calculateHistogram()
 
     int dt = tic.restart();
 
-    emit printMessage(tr("Histogram calculated in %1 msec").arg(dt));
+    g_Application->printMessage(tr("Histogram calculated in %1 msec").arg(dt));
 
     delete [] res;
   }

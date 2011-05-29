@@ -32,11 +32,6 @@ public slots:
   void doAcquireDark();
   void cancelDark();
 
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
 public:
   QxrdAcquisition *acquisition() const;
 

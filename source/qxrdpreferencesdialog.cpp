@@ -39,7 +39,7 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   m_CurrentOutputDirectory -> setText(proc->get_OutputDirectory());
 
   connect(m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
-  m_CurrentLogFile -> setText(proc->get_LogFilePath());
+  m_CurrentLogFile -> setText(app->get_LogFilePath());
 
   connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
   m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
@@ -224,7 +224,7 @@ void QxrdPreferencesDialog::accept()
   proc -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
 
   proc -> set_OutputDirectory(m_CurrentOutputDirectory -> text());
-  proc -> set_LogFilePath    (m_CurrentLogFile -> text());
+  app -> set_LogFilePath    (m_CurrentLogFile -> text());
 
   QDialog::accept();
 }

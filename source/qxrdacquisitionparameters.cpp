@@ -7,6 +7,7 @@
 #include <QStringList>
 #include <QThread>
 #include <QtGlobal>
+#include "qxrdapplication.h"
 
 QxrdAcquisitionParameters::QxrdAcquisitionParameters()
   : QObject(),
@@ -73,7 +74,7 @@ void QxrdAcquisitionParameters::dynamicProperties()
   QByteArray name;
 
   foreach(name, dynamicPropertyNames()) {
-    emit printMessage(tr("acquisition.%1\n").arg(name.data()));
+    g_Application->printMessage(tr("acquisition.%1\n").arg(name.data()));
   }
 }
 

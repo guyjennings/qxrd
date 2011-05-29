@@ -36,11 +36,6 @@ public:
   void writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data);
   void writeOutputScan(QString dir, QxrdIntegratedDataPtr data);
 
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
 protected:
   void run();
 

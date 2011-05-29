@@ -59,9 +59,6 @@ public:
   Q_PROPERTY(QString maskPath     READ get_MaskPath WRITE set_MaskPath);
   QCEP_STRING_PROPERTY(MaskPath);
 
-  Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath);
-  QCEP_STRING_PROPERTY(LogFilePath);
-
   Q_PROPERTY(bool performDarkSubtraction READ get_PerformDarkSubtraction WRITE set_PerformDarkSubtraction);
   QCEP_BOOLEAN_PROPERTY(PerformDarkSubtraction);
 
@@ -192,10 +189,6 @@ public:
   };
 
 signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-
   void newIntegrationAvailable(QxrdIntegratedDataPtr data);
 
 public slots:
@@ -257,10 +250,6 @@ public slots:
   void ellipse(double cx, double cy, double a, double e, double ang, double width, double strength, int oversample);
 
   void updateEstimatedProcessingTime();
-
-  void newLogFile(QString path);
-  void logMessage(QString msg);
-  void closeLogFile();
 
   void fileWriteTest(int dim, QString path);
   int status(double delay);
@@ -352,13 +341,8 @@ private:
   void performImageCorrections(QxrdDoubleImageDataPtr image);
 
 
-  void openLogFile();
-  void writeLogHeader();
-
-
 private:
   mutable QMutex         m_Mutex;
-  mutable QMutex         m_LogFileMutex;
 
 protected:
   QxrdWindow            *m_Window;
@@ -389,8 +373,6 @@ protected:
   QxrdRingSetSampledDataPtr m_RefinedRingSetData;
 
   QxrdGenerateTestImage *m_GenerateTestImage;
-
-  FILE                  *m_LogFile;
 };
 
 #endif

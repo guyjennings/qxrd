@@ -3,6 +3,7 @@
 #include "qxrddataprocessor.h"
 #include "qxrdallocator.h"
 #include "qxrdsynchronizedacquisition.h"
+#include "qxrdapplication.h"
 
 #include <QDir>
 #include <QThread>
@@ -20,19 +21,19 @@ QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc, Qxrd
 
 void QxrdAcquisitionSimulated::onExposureTimeChanged(double newTime)
 {
-  emit printMessage(tr("Exposure time changed to %1").arg(newTime));
+  g_Application->printMessage(tr("Exposure time changed to %1").arg(newTime));
 
   m_Timer.start(get_ExposureTime()*1000);
 }
 
 void QxrdAcquisitionSimulated::onBinningModeChanged(int newMode)
 {
-  emit printMessage(tr("Binning mode changed to %1").arg(newMode));
+  g_Application->printMessage(tr("Binning mode changed to %1").arg(newMode));
 }
 
 void QxrdAcquisitionSimulated::onCameraGainChanged(int newGain)
 {
-  emit printMessage(tr("Camera Gain Changed to %1").arg(newGain));
+  g_Application->printMessage(tr("Camera Gain Changed to %1").arg(newGain));
 }
 
 void QxrdAcquisitionSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/)

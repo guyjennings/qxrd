@@ -8,6 +8,7 @@
 #include "qxrddataprocessor.h"
 #include "qxrdmaskpicker.h"
 #include "qxrdhistogramselector.h"
+#include "qxrdapplication.h"
 
 #include <qwt_plot_rescaler.h>
 #include <qwt_plot_marker.h>
@@ -185,7 +186,7 @@ void QxrdImagePlot::writeSettings(QxrdSettings &settings, QString section)
 
 void QxrdImagePlot::setAutoRange()
 {
-  emit criticalMessage("QxrdImagePlot::setAutoRange To do...");
+  g_Application->criticalMessage("QxrdImagePlot::setAutoRange To do...");
 }
 
 void QxrdImagePlot::set005Range()
@@ -523,7 +524,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
 
   replotImage();
 
-  emit printMessage(tr("plot image took %1 msec").arg(tic.elapsed()));
+  g_Application->printMessage(tr("plot image took %1 msec").arg(tic.elapsed()));
 }
 
 void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)
@@ -680,7 +681,7 @@ void QxrdImagePlot::replot()
 
   QxrdPlot::replot();
 
-//  emit printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
+//  g_Application->printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
 }
 
 QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)

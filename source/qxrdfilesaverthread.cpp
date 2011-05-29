@@ -3,6 +3,7 @@
 #include "qxrdfilesaver.h"
 #include "qxrdacquisition.h"
 #include "qxrdintegrateddata.h"
+#include "qxrdapplication.h"
 
 QxrdFileSaverThread::QxrdFileSaverThread(QxrdAllocator *allocator)
   : QxrdThread(),
@@ -31,13 +32,15 @@ void QxrdFileSaverThread::run()
 {
   m_FileSaver.fetchAndStoreOrdered(new QxrdFileSaver(m_Allocator));
 
-  connect(m_FileSaver, SIGNAL(printMessage(QString,QDateTime)), this, SIGNAL(printMessage(QString,QDateTime)));
-  connect(m_FileSaver, SIGNAL(statusMessage(QString,QDateTime)), this, SIGNAL(statusMessage(QString,QDateTime)));
-  connect(m_FileSaver, SIGNAL(criticalMessage(QString,QDateTime)), this, SIGNAL(criticalMessage(QString,QDateTime)));
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage("Starting File Saver Thread");
+  }
 
   int rc = exec();
 
-//  printf("File saver thread terminated with rc %d\n", rc);
+  if (rc || qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage(tr("File Saver Thread Terminated with rc %1").arg(rc));
+  }
 }
 
 void QxrdFileSaverThread::shutdown()

@@ -1,6 +1,7 @@
 #include "qxrdfilesaver.h"
 #include "qxrdacquisition.h"
 #include "qxrddataprocessor.h"
+#include "qxrdapplication.h"
 
 #include "tiffio.h"
 
@@ -80,7 +81,7 @@ void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMas
   THREAD_CHECK;
 
   if (image == NULL) {
-    emit criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
+    g_Application->criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
   } else {
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
@@ -130,14 +131,14 @@ void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMas
       processor() -> updateEstimatedTime(processor() -> prop_SaveSubtractedTime(), tic.elapsed());
       processor() -> set_FileName(name);
 
-      emit printMessage(tr("Saved subtracted data in file \"%1\" after %2 msec").
+      g_Application->printMessage(tr("Saved subtracted data in file \"%1\" after %2 msec").
                         arg(name).arg(tic.restart()));
     } else {
       res = 0;
     }
 
     if (res == 0) {
-      emit printMessage("Error saving file");
+      g_Application->printMessage("Error saving file");
     }
   }
 }
@@ -147,7 +148,7 @@ void QxrdFileSaver::saveData(QString name, QxrdInt32ImageDataPtr image, QxrdMask
   THREAD_CHECK;
 
   if (image == NULL) {
-    emit criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
+    g_Application->criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
   } else {
     saveRawData(name, image, overflow, canOverwrite);
   }
@@ -158,7 +159,7 @@ void QxrdFileSaver::saveData(QString name, QxrdInt16ImageDataPtr image, QxrdMask
   THREAD_CHECK;
 
   if (image == NULL) {
-    emit criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
+    g_Application->criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
   } else {
     saveRawData(name, image, overflow, canOverwrite);
   }
@@ -169,7 +170,7 @@ void QxrdFileSaver::saveData(QString name, QxrdMaskDataPtr image, int canOverwri
   THREAD_CHECK;
 
   if (image == NULL) {
-    emit criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
+    g_Application->criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
   } else {
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
@@ -217,7 +218,7 @@ void QxrdFileSaver::saveData(QString name, QxrdMaskDataPtr image, int canOverwri
     }
 
     if (res == 0) {
-      emit printMessage("Error saving file");
+      g_Application->printMessage("Error saving file");
     }
   }
 }
@@ -230,7 +231,7 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdM
   THREAD_CHECK;
 
   if (image == NULL) {
-    emit criticalMessage(tr("QxrdFileSaver::saveRawData: image == NULL"));
+    g_Application->criticalMessage(tr("QxrdFileSaver::saveRawData: image == NULL"));
   } else {
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
@@ -312,14 +313,14 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdM
       processor() -> updateEstimatedTime(m_Acquisition -> prop_Raw32SaveTime(), tic.elapsed());
       processor() -> set_FileName(name);
 
-      emit printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
+      g_Application->printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
                         arg(name).arg(tic.restart()));
     } else {
       res = 0;
     }
 
     if (res == 0) {
-      emit printMessage("Error saving file");
+      g_Application->printMessage("Error saving file");
     }
   }
 }
@@ -332,7 +333,7 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdM
   THREAD_CHECK;
 
   if (image == NULL) {
-    emit criticalMessage(tr("QxrdFileSaver::saveRawData: image == NULL"));
+    g_Application->criticalMessage(tr("QxrdFileSaver::saveRawData: image == NULL"));
   } else {
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
@@ -383,14 +384,14 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdM
       processor() -> updateEstimatedTime(m_Acquisition -> prop_Raw16SaveTime(), tic.elapsed());
       processor() -> set_FileName(name);
 
-      emit printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
+      g_Application->printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
                         arg(name).arg(tic.restart()));
     } else {
       res = 0;
     }
 
     if (res == 0) {
-      emit printMessage("Error saving file");
+      g_Application->printMessage("Error saving file");
     }
   }
 }
@@ -400,7 +401,7 @@ void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, Qxr
   THREAD_CHECK;
 
   if (image == NULL) {
-    emit criticalMessage(tr("QxrdFileSaver::saveTextData: image == NULL"));
+    g_Application->criticalMessage(tr("QxrdFileSaver::saveTextData: image == NULL"));
   } else {
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
@@ -459,14 +460,14 @@ void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data)
   THREAD_CHECK;
 
   if (data == NULL) {
-    emit criticalMessage(tr("QxrdFileSaver::writeOutputScan: data == NULL"));
+    g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: data == NULL"));
   } else {
     mkPath(dir);
 
     QxrdDoubleImageDataPtr image = data -> get_Image();
 
     if (image == NULL) {
-      emit criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
+      g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
     } else {
       QFileInfo fi(image->get_FileName());
 
@@ -479,13 +480,13 @@ void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data)
       FILE *f = fopen(qPrintable(name),"a");
 
       if (f == NULL) {
-        emit criticalMessage(tr("Couldn't open file %1").arg(name));
+        g_Application->criticalMessage(tr("Couldn't open file %1").arg(name));
       } else {
         writeOutputScan(f, data);
 
         fclose(f);
 
-        emit printMessage(tr("Integrated data saved in %1").arg(name));
+        g_Application->printMessage(tr("Integrated data saved in %1").arg(name));
       }
     }
   }
@@ -496,7 +497,7 @@ void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data)
   THREAD_CHECK;
 
   if (data == NULL) {
-    emit criticalMessage(tr("QxrdFileSaver::writeOutputScan: data == NULL"));
+    g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: data == NULL"));
   } else if (logFile) {
     QTime tic;
     tic.start();
@@ -504,7 +505,7 @@ void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data)
     QxrdDoubleImageDataPtr image = data -> get_Image();
 
     if (image == NULL) {
-      emit criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
+      g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
     } else {
       fprintf(logFile, "#S %d qxrd.integrate \"%s\" %g %g\n",
               image -> get_ImageNumber(),

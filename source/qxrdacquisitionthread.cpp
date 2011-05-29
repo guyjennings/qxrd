@@ -8,6 +8,8 @@
 #include "qxrdacquisitionareadetector.h"
 #include "qxrdacquisitionsimulated.h"
 #include "qxrddataprocessor.h"
+#include "qxrdapplication.h"
+
 #include <QFuture>
 #include <QVariant>
 #include <QMetaObject>
@@ -59,6 +61,10 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 
 void QxrdAcquisitionThread::run()
 {
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage("Starting Acquisition Thread");
+  }
+
   QxrdAcquisition *p;
 
   switch(m_DetectorType) {
@@ -95,15 +101,13 @@ void QxrdAcquisitionThread::run()
 #endif
   }
 
-
-//  m_Processor -> setAcquisition(m_Acquisition);
-
   m_Acquisition.fetchAndStoreOrdered(p);
-
 
   int rc = exec();
 
-//  printf("Acquisition thread terminated with rc %d\n", rc);
+  if (rc || qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage(tr("Acquisition Thread Terminated with rc %1").arg(rc));
+  }
 }
 
 void QxrdAcquisitionThread::initialize()

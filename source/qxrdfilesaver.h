@@ -31,11 +31,6 @@ public:
   void setProcessor(QxrdDataProcessor *proc);
   void setAcquisition(QxrdAcquisition *acq);
 
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
 public:
   enum {
     NoOverwrite,

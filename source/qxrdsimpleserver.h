@@ -21,11 +21,6 @@ public slots:
   void shutdown();
 
 signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
-signals:
   void executeCommand(QString cmd);
 
 public slots:
