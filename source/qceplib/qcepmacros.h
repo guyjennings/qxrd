@@ -11,6 +11,9 @@
 
 #define INVOKE_CHECK(res) if(!res) { printf("Invoke failed File %s, Line %d\n", __FILE__, __LINE__); }
 
+#define STR(s) _STR(s)
+#define _STR(s) #s
+
 typedef QVector<double> QcepDoubleVector;
 Q_DECLARE_METATYPE(QcepDoubleVector);
 typedef QVector<bool> QcepBoolVector;

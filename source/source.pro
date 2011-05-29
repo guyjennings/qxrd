@@ -26,7 +26,7 @@ else:unix {
     message(Version = $${VERSION})
     message(Plugin path = $${QXRD_PLUGIN_PATH})
 }
-DEFINES += QXRD_VERSION=\"\\\"$$VERSION\\\"\"
+DEFINES += QXRD_VERSION=\"$$VERSION\"
 !isEmpty(QXRD_PLUGIN_PATH):DEFINES += QXRD_PLUGIN_PATH=\"$$QXRD_PLUGIN_PATH\"
 *g++* { 
     QMAKE_CXXFLAGS += -g

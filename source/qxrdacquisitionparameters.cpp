@@ -11,7 +11,7 @@
 
 QxrdAcquisitionParameters::QxrdAcquisitionParameters()
   : QObject(),
-    m_QxrdVersion(this,"qxrdVersion",QXRD_VERSION),
+    m_QxrdVersion(this,"qxrdVersion",STR(QXRD_VERSION)),
     m_QtVersion(this,"qtVersion",qVersion()),
     m_DetectorType(this, "detectorType",-1),
     m_DetectorTypeName(this,"detectorTypeName",""),

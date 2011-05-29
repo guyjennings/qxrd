@@ -95,9 +95,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   setupUi(this);
 
   if (sizeof(void*) == 4) {
-    setWindowTitle(windowTitle()+" - 32 bit - v"+QXRD_VERSION);
+    setWindowTitle(windowTitle()+" - 32 bit - v"+STR(QXRD_VERSION));
   } else {
-    setWindowTitle(windowTitle()+" - 64 bit - v"+QXRD_VERSION);
+    setWindowTitle(windowTitle()+" - 64 bit - v"+STR(QXRD_VERSION));
   }
 
   setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
