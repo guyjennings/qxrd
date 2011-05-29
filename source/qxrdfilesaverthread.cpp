@@ -30,11 +30,11 @@ QxrdFileSaverThread::~QxrdFileSaverThread()
 
 void QxrdFileSaverThread::run()
 {
-  m_FileSaver.fetchAndStoreOrdered(new QxrdFileSaver(m_Allocator));
-
   if (qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage("Starting File Saver Thread");
   }
+
+  m_FileSaver.fetchAndStoreOrdered(new QxrdFileSaver(m_Allocator));
 
   int rc = exec();
 

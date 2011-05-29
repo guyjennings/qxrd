@@ -19,11 +19,11 @@ QxrdAllocatorThread::~QxrdAllocatorThread()
 
 void QxrdAllocatorThread::run()
 {
-  m_Allocator.fetchAndStoreOrdered(new QxrdAllocator(/*m_Acquisition*/));
-
   if (qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage("Starting Allocator Thread");
   }
+
+  m_Allocator.fetchAndStoreOrdered(new QxrdAllocator(/*m_Acquisition*/));
 
   int rc = exec();
 
