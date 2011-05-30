@@ -464,7 +464,8 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
     int counter1 = m_Counter;
 
     if ((counter1 - counter) > 5) {
-      emit printMessage(tr("%1 frames behind [%2,%3], skipping").arg(counter1-counter).arg(counter).arg(counter1));
+      g_Application->printMessage(tr("%1 frames behind [%2,%3], skipping")
+			.arg(counter1-counter).arg(counter).arg(counter1));
       return;
     }
 

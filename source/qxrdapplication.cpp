@@ -200,7 +200,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading plugins");
 
-  emit printMessage("about to load plugins");
+  printMessage("about to load plugins");
 
   loadPlugins();
 
@@ -218,7 +218,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
 
-    emit printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
+    printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
   }
 
   if (simpleServer) {
@@ -229,7 +229,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
 
-    emit printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
+    printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
   }
 
 
