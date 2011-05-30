@@ -43,7 +43,7 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessor *proc,
   xisllib = LoadLibrary(L"XISL.dll");
 
   if (xisllib == NULL) {
-    printf("XISL library is not available - cannot use PE detector\n");
+    g_Application->criticalMessage("XISL library is not available - cannot use PE detector");
   } else {
     g_PEAvailable = true;
   }

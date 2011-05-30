@@ -31,7 +31,7 @@ void QxrdFileSaver::setAcquisition(QxrdAcquisition *acq)
 QxrdDataProcessor *QxrdFileSaver::processor() const
 {
   if (m_Processor == NULL) {
-    printf("processor == NULL in QxrdFileSaver::processor\n");
+    g_Application->printMessage("processor == NULL in QxrdFileSaver::processor\n");
   }
 
   return m_Processor;

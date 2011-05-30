@@ -6,6 +6,7 @@
 #include <QSize>
 #include <QPixmap>
 #include "qcepdebug.h"
+#include "qxrdapplication.h"
 
 QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   QAbstractTableModel(parent),
@@ -268,6 +269,6 @@ void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
   endResetModel();
 
   if (qcepDebug(DEBUG_DISPLAY)) {
-    printf("Sort file browser took %d msec\n",tic.elapsed());
+    g_Application->printMessage(tr("Sort file browser took %1 msec").arg(tic.elapsed()));
   }
 }

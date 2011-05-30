@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "qxrdmutexlocker.h"
+#include "qxrdapplication.h"
 
 QxrdRingSetFitParameters::QxrdRingSetFitParameters(QObject *parent) :
     m_CenterX(this, "centerX", 1024),
@@ -39,7 +40,7 @@ void QxrdRingSetFitParameters::writeSettings(QxrdSettings &settings, QString sec
     QxrdRingFitParameters* r = ring(i);
 
     if (r==NULL) {
-      printf("NULL ring fit parameters\n");
+      g_Application->printMessage("NULL ring fit parameters");
     } else {
       settings.setArrayIndex(i);
       r -> writeSettings(settings, "");
@@ -122,10 +123,10 @@ void QxrdRingSetFitParameters::remove(int n)
 
 void QxrdRingSetFitParameters::show()
 {
-  printf("NRings = %d\n", m_Rings.size());
+  g_Application->printMessage(tr("NRings = %1").arg(m_Rings.size()));
 
   foreach(QxrdRingFitParametersPtr p, m_Rings) {
-    printf("tth = %g\n", p->get_TwoTheta());
+    g_Application->printMessage(tr("tth = %1").arg(p->get_TwoTheta()));
   }
 }
 

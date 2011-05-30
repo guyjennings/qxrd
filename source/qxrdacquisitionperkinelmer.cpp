@@ -552,7 +552,10 @@ void QxrdAcquisitionPerkinElmer::setupExposureMenu(QDoubleSpinBox *cb)
 
 void QxrdAcquisitionPerkinElmer::setupCameraGainMenu(QComboBox *cb)
 {
-  printf("QxrdAcquisitionPerkinElmer::setupCameraGainMenu m_HeaderID == %d\n", m_HeaderID);
+  if (qcepDebug(DEBUG_PERKINELMER)) {
+    g_Application->printMessage(
+          tr("QxrdAcquisitionPerkinElmer::setupCameraGainMenu m_HeaderID == %1").arg(m_HeaderID));
+  }
 
   if (m_HeaderID == 11) { /* AM type */
     for (int i=0; i<16; i++) {

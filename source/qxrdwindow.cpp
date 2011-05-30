@@ -460,7 +460,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 QxrdWindow::~QxrdWindow()
 {
   if (qcepDebug(DEBUG_WINDOW)) {
-    printf("QxrdWindow::~QxrdWindow\n");
+    g_Application->printMessage("QxrdWindow::~QxrdWindow");
   }
   //  delete m_Data;
   //  delete m_NewData;

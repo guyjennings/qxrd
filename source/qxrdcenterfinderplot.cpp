@@ -17,6 +17,7 @@
 #include "qxrdplotmeasurer.h"
 #include "qwt_double_rect.h"
 #include "qwt_plot_piecewise_curve.h"
+#include "qxrdapplication.h"
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   : QxrdPlot(parent),
@@ -211,6 +212,6 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
   }
 
   catch(...) {
-    printf("QxrdCenterFinderPlot::onCenterChanged failed\n");
+    g_Application->printMessage("QxrdCenterFinderPlot::onCenterChanged failed");
   }
 }

@@ -3,6 +3,7 @@
 #include "qcepproperty.h"
 #include <stdio.h>
 #include <QThread>
+#include "qxrdapplication.h"
 
 QxrdRingSetSampledData::QxrdRingSetSampledData(/*QxrdRingSetFitParametersPtr parms,*/ QObject *parent) :
     QObject(parent)/*,
@@ -22,7 +23,7 @@ void QxrdRingSetSampledData::writeSettings(QxrdSettings &settings, QString secti
     QxrdRingSampledDataPtr r = ring(i);
 
     if (r==NULL) {
-      printf("NULL ring sampled data\n");
+      g_Application->printMessage("NULL ring sampled data\n");
     } else {
       settings.setArrayIndex(i);
       r -> writeSettings(settings, "");

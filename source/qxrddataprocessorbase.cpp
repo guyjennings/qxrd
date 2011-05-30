@@ -365,7 +365,8 @@ void QxrdDataProcessorBase::saveData(QString name, int canOverwrite)
 void QxrdDataProcessorBase::loadDark(QString name)
 {
   if (qcepDebug(DEBUG_FILES)) {
-    printf("QxrdDataProcessorBase::loadDark(%s)\n", qPrintable(name));
+    g_Application->printMessage(
+          tr("QxrdDataProcessorBase::loadDark(%1)").arg(name));
   }
 
   QxrdDoubleImageDataPtr res = takeNextFreeImage();

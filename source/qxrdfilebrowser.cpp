@@ -7,6 +7,7 @@
 #include "qxrdfilebrowsermodelthread.h"
 #include "qxrdfilebrowsermodel.h"
 #include "qxrdfilebrowserview.h"
+#include "qxrdapplication.h"
 
 QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWidget *parent)
   : QDockWidget(parent),
@@ -358,7 +359,10 @@ void QxrdFileBrowser::doubleClicked(QModelIndex index)
 
 void QxrdFileBrowser::onRowCountChanged(int oldCount, int newCount)
 {
-  printf("QxrdFileBrowser::onRowCountChanged(%d,%d)\n", oldCount, newCount);
+  if (qcepDebug(DEBUG_DISPLAY)) {
+    g_Application->printMessage(
+          tr("QxrdFileBrowser::onRowCountChanged(%1,%2)").arg(oldCount).arg(newCount));
+  }
 
   m_FileBrowser->resizeColumnsToContents();
 }
