@@ -250,6 +250,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionROICalculate, SIGNAL(triggered()), m_DataProcessor, SLOT(calculateROI()));
   connect(m_ActionHistogramCalculate, SIGNAL(triggered()), m_DataProcessor, SLOT(calculateHistogram()));
   connect(m_ActionTest, SIGNAL(triggered()), this, SLOT(doTest()));
+  connect(m_ActionCrashProgram, SIGNAL(triggered()), this, SLOT(crashProgram()));
 
   connect(m_ImageZoomInButton, SIGNAL(clicked()), m_Plot, SLOT(enableZooming()));
   connect(m_ImageZoomOutButton, SIGNAL(clicked()), m_Plot, SLOT(zoomOut()));
@@ -1084,3 +1085,13 @@ void QxrdWindow::doProcessSequence()
   }
 }
 
+void QxrdWindow::crashProgram()
+{
+  if (QMessageBox::question(this, tr("Really Crash?"),
+                               tr("Do you really want to crash the program?"),
+                               QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok) {
+    int *j = NULL;
+
+    *j= 42;
+  }
+}

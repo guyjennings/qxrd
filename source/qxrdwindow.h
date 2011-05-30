@@ -66,6 +66,8 @@ public slots:
   void acquireComplete();
   void doAcquireDark();
 
+  void crashProgram();
+
   void executeScript();
   void finishedCommand(QScriptValue result);
   void cancelScript();

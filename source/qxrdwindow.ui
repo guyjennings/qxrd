@@ -871,7 +871,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -947,6 +947,7 @@
     </property>
     <addaction name="m_ActionROICalculate"/>
     <addaction name="m_ActionHistogramCalculate"/>
+    <addaction name="m_ActionCrashProgram"/>
    </widget>
    <widget class="QMenu" name="menuCalibration">
     <property name="title">
@@ -1315,6 +1316,14 @@
    </property>
    <property name="toolTip">
     <string>Load QXRD preferences from a file...</string>
+   </property>
+  </action>
+  <action name="m_ActionCrashProgram">
+   <property name="text">
+    <string>Crash Program</string>
+   </property>
+   <property name="toolTip">
+    <string>Crash Program (for debugging purposes)</string>
    </property>
   </action>
  </widget>
