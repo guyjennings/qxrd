@@ -54,14 +54,7 @@ RCC_DIR = rcc
 message(Building: $${TARGET})
 win32 { 
     RC_FILE = qxrd.rc
-    contains(QMAKE_HOST.arch,x86_64) {
-        CONFIG(debug, debug|release):CONFIG += console
-        else:
-    }
-    else { 
-        CONFIG(debug, debug|release):CONFIG += console
-        else:
-    }
+    CONFIG(debug, debug|release):CONFIG += console
 }
 RESOURCES += qxrdresources.qrc
 
@@ -442,7 +435,7 @@ win32 { # Copy QT Libraries into app directory
 }
 
 win32 { # Make NSIS installer...
-  CONFIG(release, debug|release) {
+#  CONFIG(release, debug|release) {
     OUT_PWD_WIN = $${replace(OUT_PWD, /, \\)}
     PWD_WIN = $${replace(PWD, /, \\)}
 
@@ -462,12 +455,18 @@ win32 { # Make NSIS installer...
       }
 
       QMAKE_POST_LINK += /DVERSION=$${VERSION}
-      QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}\"
-      QMAKE_POST_LINK += /DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+      CONFIG(release, debug|release) {
+        QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}\"
+        QMAKE_POST_LINK += /DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+      } else {
+        QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}-dbg\"
+        QMAKE_POST_LINK += /DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
+      }
       QMAKE_POST_LINK += /DAPPDIR=\"$${OUT_PWD_WIN}\\..\\.\"
+
       QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd.nsi\"
     }
-  }
+#  }
 }
 
 #for(m, QT) {
