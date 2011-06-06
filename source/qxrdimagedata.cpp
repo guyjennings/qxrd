@@ -1,5 +1,6 @@
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
+#include "qxrdapplication.h"
 
 template <typename T>
 QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, int width, int height, T def)
@@ -12,7 +13,8 @@ QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, int width, in
   if (qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
     int count = m_ObjectCounter.value();
 
-    printf("QxrdImageData<T>::QxrdImageData(%p,%d,%d) %p[%d] thr%p\n", allocator, width, height, this, count, QThread::currentThread());
+    g_Application->printMessage(tr("QxrdImageData<T>::QxrdImageData(%1,%2,%3) %4[%5] thr%6")
+                                .HEXARG(allocator).arg(width).arg(height).HEXARG(this).arg(count).HEXARG(QThread::currentThread()));
   }
 
   m_ObjectCounter.allocate(sizeof(T), width, height);
@@ -24,7 +26,8 @@ QxrdImageData<T>::~QxrdImageData()
   if (qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
     int count = m_ObjectCounter.value();
 
-    printf("QxrdImageData<T>::~QxrdImageData %p[%d], thr%p, cthr%p titl:%s\n", this, count, QThread::currentThread(), this->thread(), qPrintable(this->get_Title()));
+    g_Application->printMessage(tr("QxrdImageData<T>::~QxrdImageData %1[%2], thr%3, cthr%4 titl:%5")
+                                .HEXARG(this).arg(count).HEXARG(QThread::currentThread()).HEXARG(this->thread()).arg(this->get_Title()));
   }
 }
 

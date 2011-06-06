@@ -44,7 +44,7 @@ void QxrdSimpleServerThread::run()
 
   int rc = exec();
 
-  if (rc || qcepDebug(DEBUG_THREADS)) {
+  if (qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Simple Server Thread Terminated with rc %1").arg(rc));
   }
 }

@@ -1,4 +1,5 @@
 #include "qxrdintegrateddataqueue.h"
+#include "qxrdapplication.h"
 
 QxrdIntegratedDataQueue::QxrdIntegratedDataQueue(QString name) :
     m_Name(name)
@@ -8,15 +9,15 @@ QxrdIntegratedDataQueue::QxrdIntegratedDataQueue(QString name) :
 QxrdIntegratedDataQueue::~QxrdIntegratedDataQueue()
 {
   if (qcepDebug(DEBUG_QUEUES)) {
-    printf("QxrdIntegratedDataQueue::~QxrdIntegratedDataQueue(%s) %p begin [contains %d]\n",
-           qPrintable(m_Name), this, m_Queue.size());
+    g_Application->printMessage(tr("QxrdIntegratedDataQueue::~QxrdIntegratedDataQueue(%1) %2 begin [contains %3]")
+                                .arg(m_Name).HEXARG(this).arg(m_Queue.size()));
   }
 
   deallocate();
 
   if (qcepDebug(DEBUG_QUEUES)) {
-    printf("QxrdIntegratedDataQueue::~QxrdIntegratedDataQueue(%s) %p end [contains %d]\n",
-           qPrintable(m_Name), this, m_Queue.size());
+    g_Application->printMessage(tr("QxrdIntegratedDataQueue::~QxrdIntegratedDataQueue(%1) %2 end [contains %3]")
+                                .arg(m_Name).HEXARG(this).arg(m_Queue.size()));
   }
 }
 
@@ -26,7 +27,7 @@ QxrdIntegratedDataPtr QxrdIntegratedDataQueue::dequeue()
 
   if (m_Queue.isEmpty()) {
     if (qcepDebug(DEBUG_QUEUES)) {
-      printf("QxrdIntegratedDataQueue::dequeue() = NULL from %s\n", qPrintable(m_Name));
+      g_Application->printMessage(tr("QxrdIntegratedDataQueue::dequeue() = NULL from %1").arg(m_Name));
     }
 
     return QxrdIntegratedDataPtr(NULL);
@@ -34,8 +35,8 @@ QxrdIntegratedDataPtr QxrdIntegratedDataQueue::dequeue()
     QxrdIntegratedDataPtr res = m_Queue.dequeue();
 
     if (qcepDebug(DEBUG_QUEUES)) {
-      printf("QxrdIntegratedDataQueue::dequeue() = %p from %s, leaving %d\n",
-             res.data(), qPrintable(m_Name), m_Queue.size());
+      g_Application->printMessage(tr("QxrdIntegratedDataQueue::dequeue() = %1 from %2, leaving %3")
+                                  .HEXARG(res.data()).arg(m_Name).arg(m_Queue.size()));
     }
 
     return res;
@@ -47,8 +48,8 @@ void QxrdIntegratedDataQueue::enqueue(QxrdIntegratedDataPtr data)
   QWriteLocker lock(&m_Lock);
 
   if (qcepDebug(DEBUG_QUEUES)) {
-    printf("QxrdIntegratedDataQueue::enqueue(%p) into %s, starting with %d\n",
-           data.data(), qPrintable(m_Name), m_Queue.size());
+    g_Application->printMessage(tr("QxrdIntegratedDataQueue::enqueue(%1) into %2, starting with %3")
+                                .HEXARG(data.data()).arg(m_Name).arg(m_Queue.size()));
   }
 
   if (data) {
@@ -61,8 +62,8 @@ int QxrdIntegratedDataQueue::size() const
   QReadLocker lock(&m_Lock);
 
   if (qcepDebug(DEBUG_QUEUES)) {
-    printf("QxrdIntegratedDataQueue::size() = %d for %s\n",
-           m_Queue.size(), qPrintable(m_Name));
+    g_Application->printMessage(tr("QxrdIntegratedDataQueue::size() = %1 for %2")
+                                .arg(m_Queue.size()).arg(m_Name));
   }
 
   return m_Queue.size();
@@ -84,7 +85,7 @@ void QxrdIntegratedDataQueue::deallocate()
   while (!m_Queue.isEmpty()) {
     QxrdIntegratedDataPtr img = m_Queue.dequeue();
     if (qcepDebug(DEBUG_QUEUES)) {
-      printf("Deallocate %p\n", img.data());
+      g_Application->printMessage(tr("Deallocate %1").HEXARG(img.data()));
     }
   }
 }

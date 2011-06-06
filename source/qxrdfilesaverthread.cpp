@@ -38,7 +38,7 @@ void QxrdFileSaverThread::run()
 
   int rc = exec();
 
-  if (rc || qcepDebug(DEBUG_THREADS)) {
+  if (qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("File Saver Thread Terminated with rc %1").arg(rc));
   }
 }

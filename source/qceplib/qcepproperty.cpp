@@ -247,7 +247,7 @@ void QcepProperty::dumpMetaData(const QMetaObject *meta)
     g_Application->printMessage(
         tr("MetaData for class %1").arg(meta -> className()));
     g_Application->printMessage(
-        tr(" superClass = %1").arg(qlonglong(meta -> superClass())));
+        tr(" superClass = %1").HEXARG((void*) meta -> superClass()));
     g_Application->printMessage(
         tr(" methodCount = %1, methodOffset = %2")
         .arg(meta->methodCount()).arg(meta->methodOffset()));
@@ -389,7 +389,7 @@ void QcepDoubleProperty::linkTo(QComboBox *comboBox)
     if (qcepDebug(DEBUG_PROPERTIES)) {
       g_Application->printMessage(
           tr("%1: QcepDoubleProperty::linkTo(QComboBox *%2)")
-          .arg(name()).arg(qlonglong(comboBox)));
+          .arg(name()).HEXARG(comboBox));
     }
 
     connect(this, SIGNAL(changedValue(QString)), comboBox, SLOT(setEditText(QString)));
@@ -405,7 +405,7 @@ void QcepDoubleProperty::linkTo(QDoubleSpinBox *spinBox)
     if (qcepDebug(DEBUG_PROPERTIES)) {
       g_Application->printMessage(
           tr("%1: QcepDoubleProperty::linkTo(QDoubleSpinBox *%2)")
-             .arg(name()).arg(qlonglong(spinBox)));
+             .arg(name()).HEXARG(spinBox));
     }
 
     spinBox -> setValue(value());
@@ -538,7 +538,7 @@ void QcepIntProperty::linkTo(QSpinBox *spinBox)
     if (qcepDebug(DEBUG_PROPERTIES)) {
       g_Application->printMessage(
           tr("%1: QcepIntProperty::linkTo(QSpinBox *%2)")
-          .arg(name()).arg(qlonglong(spinBox)));
+          .arg(name()).HEXARG(spinBox));
     }
 
     spinBox -> setValue(value());
@@ -556,7 +556,7 @@ void QcepIntProperty::linkTo(QComboBox *comboBox)
     if (qcepDebug(DEBUG_PROPERTIES)) {
       g_Application->printMessage(
           tr("%1: QcepIntProperty::linkTo(QComboBox *%2)")
-          .arg(name()).arg(qlonglong(comboBox)));
+          .arg(name()).HEXARG(comboBox));
     }
 
     comboBox -> setCurrentIndex(value());
@@ -665,7 +665,7 @@ void QcepBoolProperty::linkTo(QAbstractButton *button)
     if (qcepDebug(DEBUG_PROPERTIES)) {
       g_Application->printMessage(
           tr("%1: QcepBoolProperty::linkTo(QAbstractButton *%2)")
-          .arg(name()).arg(qlonglong(button)));
+          .arg(name()).HEXARG(button));
     }
 
     button -> setChecked(value());
@@ -766,7 +766,7 @@ void QcepStringProperty::linkTo(QLineEdit *lineEdit)
     if (qcepDebug(DEBUG_PROPERTIES)) {
       g_Application->printMessage(
           tr("%1: QcepStringProperty::linkTo(QLineEdit *%2)")
-          .arg(name()).arg(qlonglong(lineEdit)));
+          .arg(name()).HEXARG(lineEdit));
     }
 
     lineEdit -> setText(value());

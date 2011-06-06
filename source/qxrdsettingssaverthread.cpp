@@ -27,7 +27,7 @@ void QxrdSettingsSaverThread::run()
 
   int rc = exec();
 
-  if (rc || qcepDebug(DEBUG_THREADS)) {
+  if (qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Settings Saver Thread Terminated with rc %1").arg(rc));
   }
 }

@@ -95,6 +95,8 @@ public:
 
   void newLogFile(QString path);
 
+  static QString hexArg(void *p);
+
 private:
   void logMessage(QString msg);
   void closeLogFile();
@@ -161,6 +163,8 @@ private:
   mutable QMutex                  m_LogFileMutex;
   FILE                           *m_LogFile;
 };
+
+#define HEXARG(a) arg(QxrdApplication::hexArg(a))
 
 extern QxrdApplication *g_Application;
 

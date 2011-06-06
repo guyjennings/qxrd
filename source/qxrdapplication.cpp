@@ -336,6 +336,8 @@ QxrdApplication* QxrdApplication::application()
 
 void QxrdApplication::splashMessage(const char *msg)
 {
+  printMessage(msg);
+
   if (m_Splash) {
     m_Splash->showMessage(msg, Qt::AlignBottom|Qt::AlignHCenter);
     processEvents();
@@ -429,6 +431,15 @@ void QxrdApplication::loadPlugins()
         }
       }
     }
+  }
+}
+
+QString QxrdApplication::hexArg(void *p)
+{
+  if (sizeof(void*) == 4) {
+    return tr("0x%1").arg((quint32)p, 8, 16, QLatin1Char('0'));
+  } else {
+    return tr("0x%1").arg((quint64)p, 16, 16, QLatin1Char('0'));
   }
 }
 

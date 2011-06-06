@@ -33,7 +33,7 @@ void QxrdDataProcessorThread::run()
 
   int rc = exec();
 
-  if (rc || qcepDebug(DEBUG_THREADS)) {
+  if (qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Processor Thread Terminated with rc %1").arg(rc));
   }
 }

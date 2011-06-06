@@ -562,7 +562,7 @@ void QxrdWindow::displayCriticalMessage(QString msg)
 
   static int dialogCount = 0;
 
-  printf("critical message %s, count = %d\n", qPrintable(msg), dialogCount);
+  g_Application->printMessage(tr("critical message %1, count = %2").arg(msg).arg(dialogCount));
 
   dialogCount++;
   if (dialogCount <= 1) {
