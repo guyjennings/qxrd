@@ -13,7 +13,7 @@ QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, int width, in
   if (qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
     int count = m_ObjectCounter.value();
 
-    g_Application->printMessage(tr("QxrdImageData<T>::QxrdImageData(%1,%2,%3) %4[%5] thr%6")
+    g_Application->printMessage(QObject::tr("QxrdImageData<T>::QxrdImageData(%1,%2,%3) %4[%5] thr%6")
                                 .HEXARG(allocator).arg(width).arg(height).HEXARG(this).arg(count).HEXARG(QThread::currentThread()));
   }
 
@@ -26,7 +26,7 @@ QxrdImageData<T>::~QxrdImageData()
   if (qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
     int count = m_ObjectCounter.value();
 
-    g_Application->printMessage(tr("QxrdImageData<T>::~QxrdImageData %1[%2], thr%3, cthr%4 titl:%5")
+    g_Application->printMessage(QObject::tr("QxrdImageData<T>::~QxrdImageData %1[%2], thr%3, cthr%4 titl:%5")
                                 .HEXARG(this).arg(count).HEXARG(QThread::currentThread()).HEXARG(this->thread()).arg(this->get_Title()));
   }
 }
