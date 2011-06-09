@@ -34,6 +34,7 @@ protected:
   void shutdownAcquisition();
 
 private:
+  void startupAcquisition();
   void setupExposureMenu(QDoubleSpinBox *cb);
   void setupCameraGainMenu(QComboBox *cb);
   void setupCameraBinningModeMenu(QComboBox *cb);
@@ -48,6 +49,8 @@ private:
   int                    m_BufferIndex;
   QVector<quint16>       m_Buffer;
   QVector<double>        m_ReadoutTimes;
+
+  int                    m_StartupDelayed;
 
   int                    m_PROMID;
   int                    m_HeaderID;

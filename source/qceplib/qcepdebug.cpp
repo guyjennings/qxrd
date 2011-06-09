@@ -17,6 +17,7 @@ const char* gDebugStrings[] = {
   "Halt at exit",
   "Memory Allocation",
   "Thread Initialization",
+  "Delay Acquisition Startup",
   NULL
 };
 

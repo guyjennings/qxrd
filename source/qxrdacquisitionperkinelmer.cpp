@@ -42,6 +42,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc, 
   : QxrdAcquisition(proc, allocator),
     m_Mutex(QMutex::Recursive),
     m_BufferSize(0),
+    m_StartupDelayed(0),
     m_PROMID(-1),
     m_HeaderID(-1),
     m_CameraType(-1),
@@ -390,6 +391,19 @@ void QxrdAcquisitionPerkinElmer::initialize()
       g_Application->printMessage(tr("Define Dest Buffers"));
     }
 
+    if (qcepDebug(DEBUG_DELAY_ACQ)) {
+      m_StartupDelayed = 1;
+    } else {
+      startupAcquisition();
+    }
+  }
+}
+
+void QxrdAcquisitionPerkinElmer::startupAcquisition()
+{
+  if (checkPluginAvailable()) {
+    int nRet;
+
     if ((nRet=m_PerkinElmer->Acquisition_Acquire_Image(m_AcqDesc, m_BufferSize,
                                         0, HIS_SEQ_CONTINUOUS, NULL, NULL, NULL)) != HIS_ALL_OK) {
       acquisitionError(__FILE__, __LINE__, nRet);
@@ -404,6 +418,15 @@ void QxrdAcquisitionPerkinElmer::initialize()
 
 void QxrdAcquisitionPerkinElmer::beginAcquisition()
 {
+  if (m_StartupDelayed) {
+    if (qcepDebug(DEBUG_PERKINELMER)) {
+      g_Application->printMessage("Delayed Acquisition Startup");
+    }
+
+    startupAcquisition();
+    m_StartupDelayed = 0;
+  }
+
   m_Counter.fetchAndStoreOrdered(0);
 
   if (m_PerkinElmer && m_AcqDesc) {
