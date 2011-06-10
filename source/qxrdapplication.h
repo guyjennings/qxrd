@@ -18,23 +18,8 @@
 #include "qxrdscriptenginethread.h"
 #include "qxrdsettingssaverthread.h"
 
-//class QxrdAcquisitionThread;
-//class QxrdAcquisition;
 class QxrdWindow;
-//class QxrdDataProcessorThread;
-//class QxrdDataProcessor;
 class QxrdNIDAQPluginInterface;
-//class QxrdServerThread;
-//class QxrdServer;
-//class QxrdSimpleServerThread;
-//class QxrdSimpleServer;
-//class QxrdAllocatorThread;
-//class QxrdAllocator;
-//class QxrdFileSaverThread;
-//class QxrdScriptEngineThread;
-//class QxrdScriptEngine;
-//class QxrdSettingsSaverThread;
-//class QxrdSettingsSaver;
 
 #ifdef HAVE_PERKIN_ELMER
 class QxrdPerkinElmerPluginInterface;

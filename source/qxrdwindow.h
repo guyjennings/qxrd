@@ -14,7 +14,7 @@ class QxrdAcquisition;
 class QxrdDataProcessor;
 class QxrdAllocator;
 class QxrdScriptEngine;
-class QxrdAcquireDialog;
+class QxrdAcquireDialogBase;
 class QxrdSynchronizedAcquisitionDialog;
 class QxrdDisplayDialog;
 class QxrdCenterFinderDialog;
@@ -123,7 +123,7 @@ private:
   QxrdDataProcessor                     *m_DataProcessor;
   QxrdAllocator                         *m_Allocator;
   QxrdScriptEngine                      *m_ScriptEngine;
-  QxrdAcquireDialog                     *m_AcquireDialog;
+  QxrdAcquireDialogBase                 *m_AcquireDialog;
   QxrdSynchronizedAcquisitionDialog     *m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;
   QxrdCenterFinderDialog                *m_CenterFinderDialog;

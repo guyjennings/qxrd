@@ -24,7 +24,7 @@ class QxrdAllocator;
 class QxrdDataProcessor;
 class QxrdSynchronizedAcquisition;
 class QxrdNIDAQPluginInterface;
-class QxrdAcquireDialog;
+class QxrdAcquireDialogBase;
 class QxrdWindow;
 
 class QxrdAcquisition : public QxrdAcquisitionOperations
@@ -116,7 +116,7 @@ public:
   virtual void setupCameraBinningModeMenu(QComboBox *cb) = 0;
 
   void indicateDroppedFrame(int n);
-  virtual QxrdAcquireDialog* controlPanel(QxrdWindow *win);
+  virtual QxrdAcquireDialogBase* controlPanel(QxrdWindow *win);
 
   QxrdSynchronizedAcquisition* synchronizedAcquisition() const;
 
@@ -171,7 +171,7 @@ protected:
   QSemaphore             m_NAcquiredImages;
   QxrdInt16ImageQueue    m_AcquiredImages;
 
-  QxrdAcquireDialog     *m_ControlPanel;
+  QxrdAcquireDialogBase *m_ControlPanel;
 
   QFutureWatcher<void>   m_Watcher;
 

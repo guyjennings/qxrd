@@ -368,7 +368,7 @@ void QxrdAcquisition::acquisitionError(const char *fn, int ln, int n)
   g_Application->criticalMessage(tr("Acquisition Error %1 at line %2 in file %3").arg(n).arg(ln).arg(fn));
 }
 
-QxrdAcquireDialog *QxrdAcquisition::controlPanel(QxrdWindow *win)
+QxrdAcquireDialogBase *QxrdAcquisition::controlPanel(QxrdWindow *win)
 {
   if (win) {
     m_Window = win;

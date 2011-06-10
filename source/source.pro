@@ -201,7 +201,10 @@ HEADERS += TODO.h \
     qxrdsynchronizedacquisitionplot.h \
     qxrdhighlighter.h \
     qxrdfreshstartdialog.h \
-    qxrdfilebrowsermodelthread.h
+    qxrdfilebrowsermodelthread.h \
+    qxrdacquisitionfilewatcher.h \
+    qxrdacquirefilewatcherdialog.h \
+    qxrdacquiredialogbase.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -317,7 +320,10 @@ SOURCES += qxrd.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
     qxrdhighlighter.cpp \
     qxrdfreshstartdialog.cpp \
-    qxrdfilebrowsermodelthread.cpp
+    qxrdfilebrowsermodelthread.cpp \
+    qxrdacquisitionfilewatcher.cpp \
+    qxrdacquirefilewatcherdialog.cpp \
+    qxrdacquiredialogbase.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -334,7 +340,8 @@ FORMS = qxrdwindow.ui \
     qxrdslicedialog.ui \
     qxrdhistogramdialog.ui \
     qxrdinfodialog.ui \
-    qxrdfreshstartdialog.ui
+    qxrdfreshstartdialog.ui \
+    qxrdacquirefilewatcherdialog.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 

@@ -102,8 +102,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
 
-//  m_AcquireDialog = m_Acquisition -> controlPanel(this);
-  m_AcquireDialog      = new QxrdAcquireDialog(this, m_Acquisition, m_DataProcessor, this);
+  m_AcquireDialog = m_Acquisition -> controlPanel(this);
+//  m_AcquireDialog      = new QxrdAcquireDialog(this, m_Acquisition, m_DataProcessor, this);
   m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
   m_DisplayDialog      = new QxrdDisplayDialog(this);
   m_CenterFinderDialog = new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder());
@@ -222,11 +222,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   connect(m_ActionRefineCenterTilt, SIGNAL(triggered()), this, SLOT(doRefineCenterTilt()));
 
-  m_AcquireMenu->addSeparator();
-  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionAcquire);
-  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionTrigger);
-  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionAcquireDark);
-  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionCancel);
+  m_AcquireDialog->setupAcquireMenu(m_AcquireMenu);
 
   m_AcquireDialog->acquisitionReady();
 
@@ -275,7 +271,6 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_IntegratorDialog -> m_ClearGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearGraph()));
   connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
   connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
-  connect(m_AcquireDialog -> m_AcquireOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
   connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
 
   connect(m_ActionAboutQXRD, SIGNAL(triggered()), this, SLOT(doAboutQxrd()));

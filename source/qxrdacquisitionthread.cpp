@@ -7,6 +7,7 @@
 #include "qxrdacquisitionpilatus.h"
 #include "qxrdacquisitionareadetector.h"
 #include "qxrdacquisitionsimulated.h"
+#include "qxrdacquisitionfilewatcher.h"
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 
@@ -99,6 +100,11 @@ void QxrdAcquisitionThread::run()
     g_DetectorType = 3;
     break;
 #endif
+
+  case 4:
+    p = new QxrdAcquisitionFileWatcher(m_Processor, m_Allocator);
+    g_DetectorType = 4;
+    break;
   }
 
   m_Acquisition.fetchAndStoreOrdered(p);
@@ -172,7 +178,8 @@ QStringList QxrdAcquisitionThread::detectorTypeNames()
   res << "Simulated Detector"
       << "Perkin Elmer Flat Panel"
       << "Pilatus"
-      << "EPICS Area Detector";
+      << "EPICS Area Detector"
+      << "Files in Directory";
 
   return res;
 }
