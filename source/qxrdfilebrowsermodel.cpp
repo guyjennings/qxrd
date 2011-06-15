@@ -7,12 +7,26 @@
 #include <QPixmap>
 #include "qcepdebug.h"
 #include "qxrdapplication.h"
+#include "qxrdfilebrowsermodelupdater.h"
+#include "qxrdfilebrowsermodelupdaterthread.h"
 
 QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   QAbstractTableModel(parent),
+  m_UpdaterThread(NULL),
+  m_Updater(NULL),
   m_SortedColumn(0),
   m_SortOrder(Qt::AscendingOrder)
 {
+  m_UpdaterThread = new QxrdFileBrowserModelUpdaterThread(this);
+  m_UpdaterThread -> start();
+  m_Updater = m_UpdaterThread->updater();
+}
+
+QxrdFileBrowserModel::~QxrdFileBrowserModel()
+{
+  if (m_UpdaterThread) {
+    m_UpdaterThread->shutdown();
+  }
 }
 
 QVariant QxrdFileBrowserModel::headerData

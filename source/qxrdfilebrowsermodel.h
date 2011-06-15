@@ -6,12 +6,16 @@
 #include <QFileInfo>
 #include <QStringList>
 
+class QxrdFileBrowserModelUpdaterThread;
+class QxrdFileBrowserModelUpdater;
+
 class QxrdFileBrowserModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
   explicit QxrdFileBrowserModel(QObject *parent=0);
+  ~QxrdFileBrowserModel();
   typedef QAbstractTableModel inherited;
 
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
@@ -36,6 +40,8 @@ private:
   void updateModel();
 
 private:
+  QxrdFileBrowserModelUpdaterThread *m_UpdaterThread;
+  QxrdFileBrowserModelUpdater *m_Updater;
   QString            m_RootPath;
   QStringList        m_NameFilters;
   QVector<QFileInfo> m_DirList;

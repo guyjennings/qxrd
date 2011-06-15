@@ -204,7 +204,9 @@ HEADERS += TODO.h \
     qxrdfilebrowsermodelthread.h \
     qxrdacquisitionfilewatcher.h \
     qxrdacquirefilewatcherdialog.h \
-    qxrdacquiredialogbase.h
+    qxrdacquiredialogbase.h \
+    qxrdfilebrowsermodelupdater.h \
+    qxrdfilebrowsermodelupdaterthread.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -323,7 +325,9 @@ SOURCES += qxrd.cpp \
     qxrdfilebrowsermodelthread.cpp \
     qxrdacquisitionfilewatcher.cpp \
     qxrdacquirefilewatcherdialog.cpp \
-    qxrdacquiredialogbase.cpp
+    qxrdacquiredialogbase.cpp \
+    qxrdfilebrowsermodelupdater.cpp \
+    qxrdfilebrowsermodelupdaterthread.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
