@@ -164,6 +164,9 @@ void QxrdFileBrowserModel::refresh()
 
 void QxrdFileBrowserModel::updateModel()
 {
+  QTime tic;
+  tic.start();
+
   beginResetModel();
 
   QDirIterator iterd(m_RootPath);
@@ -198,6 +201,12 @@ void QxrdFileBrowserModel::updateModel()
   m_FileList = files;
 
   endResetModel();
+
+  if (qcepDebug(DEBUG_DISPLAY)) {
+    g_Application->printMessage(tr("Update file browser took %1 msec").arg(tic.elapsed()));
+    g_Application->printMessage(tr("File Path %1: %2 dirs, %3 files")
+                                .arg(m_RootPath).arg(m_DirList.count()).arg(m_FileList.count()));
+  }
 
   sort(m_SortedColumn, m_SortOrder);
 }
