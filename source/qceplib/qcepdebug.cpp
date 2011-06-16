@@ -18,6 +18,7 @@ const char* gDebugStrings[] = {
   "Memory Allocation",
   "Thread Initialization",
   "Delay Acquisition Startup",
+  "File Browser Operations",
   NULL
 };
 

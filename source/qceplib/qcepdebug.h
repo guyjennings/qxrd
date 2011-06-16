@@ -19,7 +19,8 @@ enum {
   DEBUG_EXITWAIT = 4096,
   DEBUG_ALLOCATOR = 8192,
   DEBUG_THREADS = 16384,
-  DEBUG_DELAY_ACQ = 32768
+  DEBUG_DELAY_ACQ = 32768,
+  DEBUG_BROWSER = 65536
 };
 
 extern const char* gDebugStrings[];

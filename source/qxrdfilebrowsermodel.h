@@ -36,6 +36,9 @@ public:
   virtual void sort ( int column, Qt::SortOrder order = Qt::AscendingOrder );
   void refresh();
 
+signals:
+  void rootChanged(const QString& path);
+
 private:
   void updateModel();
 
