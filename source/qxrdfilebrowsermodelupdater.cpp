@@ -1,6 +1,8 @@
 #include "qxrdfilebrowsermodelupdater.h"
 #include "qxrdapplication.h"
 #include <QThread>
+#include <QDirIterator>
+#include <QThreadStorage>
 
 QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModel *browser, QObject *parent) :
   QObject(parent),
@@ -46,6 +48,11 @@ void QxrdFileBrowserModelUpdater::changeRoot(const QString& path)
   m_RootPath = path;
 }
 
+void QxrdFileBrowserModelUpdater::needUpdate()
+{
+  m_UpdateNeeded.fetchAndStoreOrdered(1);
+}
+
 void QxrdFileBrowserModelUpdater::changeContents(const QString& path)
 {
   if (qcepDebug(DEBUG_BROWSER)) {
@@ -59,7 +66,190 @@ void QxrdFileBrowserModelUpdater::updateTimeout()
 {
   if (m_UpdateNeeded.fetchAndStoreOrdered(0)) {
     g_Application->printMessage(tr("QxrdFileBrowserModelUpdater::updateTimeout update needed %1").arg(m_RootPath));
+
+    updateContents();
   }
 
   m_UpdateTimer.start(m_UpdateInterval);
+}
+
+typedef QxrdFileBrowserModelUpdater *QxrdFileBrowserModelUpdaterPtr;
+
+QThreadStorage<QxrdFileBrowserModelUpdaterPtr*> g_Updaters;
+
+bool QxrdFileBrowserModelUpdater::updateNeeded()
+{
+  return m_UpdateNeeded.fetchAndAddOrdered(0);
+}
+
+void sortInterruptCheck()
+{
+  if (g_Updaters.hasLocalData()) {
+    QxrdFileBrowserModelUpdaterPtr *updaterp = g_Updaters.localData();
+
+    if (updaterp) {
+      QxrdFileBrowserModelUpdater *updater = *updaterp;
+
+      if (updater && updater->updateNeeded()) {
+        throw 0;
+      }
+    }
+  }
+}
+
+bool fileNameLessThan(QFileInfo f1, QFileInfo f2)
+{
+  sortInterruptCheck();
+
+  return f1.fileName().toLower() < f2.fileName().toLower();
+}
+
+bool fileNameGreaterThan(QFileInfo f1, QFileInfo f2)
+{
+  sortInterruptCheck();
+
+  return f1.fileName().toLower() > f2.fileName().toLower();
+}
+
+bool fileSizeLessThan(QFileInfo f1, QFileInfo f2)
+{
+  sortInterruptCheck();
+
+  return f1.size() < f2.size();
+}
+
+bool fileSizeGreaterThan(QFileInfo f1, QFileInfo f2)
+{
+  sortInterruptCheck();
+
+  return f1.size() > f2.size();
+}
+
+bool fileDateLessThan(QFileInfo f1, QFileInfo f2)
+{
+  sortInterruptCheck();
+
+  return f1.lastModified() < f2.lastModified();
+}
+
+bool fileDateGreaterThan(QFileInfo f1, QFileInfo f2)
+{
+  sortInterruptCheck();
+
+  return f1.lastModified() > f2.lastModified();
+}
+
+void QxrdFileBrowserModelUpdater::updateContents()
+{
+  QTime tic;
+  tic.start();
+
+  g_Updaters.setLocalData(new QxrdFileBrowserModelUpdaterPtr(this));
+
+  m_UpdateNeeded.fetchAndStoreOrdered(0);
+
+  QDirIterator iterd(m_RootPath);
+  QDirIterator iter(m_RootPath, m_BrowserModel->nameFilters());
+  QVector<QFileInfo> dirs;
+  QVector<QFileInfo> files;
+
+  while (iterd.hasNext()) {
+    if (m_UpdateNeeded.fetchAndAddOrdered(0)) {
+      if (qcepDebug(DEBUG_BROWSER)) {
+        g_Application->printMessage("Directory list generation abandoned");
+      }
+
+      return;
+    }
+
+    QString filePath = iterd.next();
+    QFileInfo fileInfo(m_RootPath, filePath);
+
+    if (fileInfo.isDir()) {
+      QString dirName = fileInfo.fileName();
+
+      if ((dirName != ".") && (dirName != "..")) {
+        dirs.append(fileInfo);
+      }
+    }
+  }
+
+  while (iter.hasNext()) {
+    if (m_UpdateNeeded.fetchAndAddOrdered(0)) {
+      if (qcepDebug(DEBUG_BROWSER)) {
+        g_Application->printMessage("File list generation abandoned");
+      }
+
+      return;
+    }
+
+    QString filePath = iter.next();
+    QFileInfo fileInfo(m_RootPath, filePath);
+
+    if (fileInfo.isDir()) {
+    } else {
+      files.append(fileInfo);
+    }
+  }
+
+  m_Directories  = dirs;
+  m_Files        = files;
+
+  if (qcepDebug(DEBUG_BROWSER)) {
+    g_Application->printMessage(tr("Update file browser took %1 msec").arg(tic.restart()));
+    g_Application->printMessage(tr("File Path %1: %2 dirs, %3 files")
+                                .arg(m_RootPath).arg(m_Directories.count()).arg(m_Files.count()));
+  }
+
+  int           column = m_BrowserModel->sortedColumn();
+  Qt::SortOrder order  = m_BrowserModel->sortOrder();
+
+  bool (*lt)(QFileInfo f1, QFileInfo f2) = NULL;
+
+  switch(column) {
+  case 0:
+    if (order == Qt::AscendingOrder) {
+      lt = fileNameLessThan;
+    } else {
+      lt = fileNameGreaterThan;
+    }
+    break;
+
+  case 1:
+    if (order == Qt::AscendingOrder) {
+      lt = fileSizeLessThan;
+    } else {
+      lt = fileSizeGreaterThan;
+    }
+    break;
+
+  case 2:
+    if (order == Qt::AscendingOrder) {
+      lt = fileDateLessThan;
+    } else {
+      lt = fileDateGreaterThan;
+    }
+    break;
+  }
+
+  if (lt) {
+    try {
+      qStableSort(m_Directories.begin(), m_Directories.end(), fileNameLessThan);
+      qStableSort(m_Files.begin(), m_Files.end(), lt);
+    }
+
+    catch (...) {
+      if (qcepDebug(DEBUG_BROWSER)) {
+        g_Application->printMessage("Sorting abandoned");
+      }
+
+      return;
+    }
+  }
+
+  if (qcepDebug(DEBUG_BROWSER)) {
+    g_Application->printMessage(tr("Sort file browser took %1 msec").arg(tic.elapsed()));
+  }
+
+  m_BrowserModel->newDataAvailable(m_Directories, m_Files);
 }

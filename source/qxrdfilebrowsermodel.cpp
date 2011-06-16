@@ -159,6 +159,21 @@ void QxrdFileBrowserModel::setRootPath(QString path)
   emit rootChanged(m_RootPath);
 }
 
+QStringList QxrdFileBrowserModel::nameFilters() const
+{
+  return m_NameFilters;
+}
+
+int QxrdFileBrowserModel::sortedColumn() const
+{
+  return m_SortedColumn;
+}
+
+Qt::SortOrder QxrdFileBrowserModel::sortOrder() const
+{
+  return m_SortOrder;
+}
+
 void QxrdFileBrowserModel::refresh()
 {
   updateModel();
@@ -166,51 +181,7 @@ void QxrdFileBrowserModel::refresh()
 
 void QxrdFileBrowserModel::updateModel()
 {
-  QTime tic;
-  tic.start();
-
-  beginResetModel();
-
-  QDirIterator iterd(m_RootPath);
-  QDirIterator iter(m_RootPath, m_NameFilters);
-  QVector<QFileInfo> dirs;
-  QVector<QFileInfo> files;
-
-  while (iterd.hasNext()) {
-    QString filePath = iterd.next();
-    QFileInfo fileInfo(m_RootPath, filePath);
-
-    if (fileInfo.isDir()) {
-      QString dirName = fileInfo.fileName();
-
-      if ((dirName != ".") && (dirName != "..")) {
-        dirs.append(fileInfo);
-      }
-    }
-  }
-
-  while (iter.hasNext()) {
-    QString filePath = iter.next();
-    QFileInfo fileInfo(m_RootPath, filePath);
-
-    if (fileInfo.isDir()) {
-    } else {
-      files.append(fileInfo);
-    }
-  }
-
-  m_DirList  = dirs;
-  m_FileList = files;
-
-  endResetModel();
-
-  if (qcepDebug(DEBUG_DISPLAY)) {
-    g_Application->printMessage(tr("Update file browser took %1 msec").arg(tic.elapsed()));
-    g_Application->printMessage(tr("File Path %1: %2 dirs, %3 files")
-                                .arg(m_RootPath).arg(m_DirList.count()).arg(m_FileList.count()));
-  }
-
-  sort(m_SortedColumn, m_SortOrder);
+  m_Updater->needUpdate();
 }
 
 bool QxrdFileBrowserModel::isDir(const QModelIndex &index) const
@@ -218,82 +189,22 @@ bool QxrdFileBrowserModel::isDir(const QModelIndex &index) const
   return fileInfo(index).isDir();
 }
 
-bool fileNameLessThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.fileName().toLower() < f2.fileName().toLower();
-}
-
-bool fileNameGreaterThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.fileName().toLower() > f2.fileName().toLower();
-}
-
-bool fileSizeLessThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.size() < f2.size();
-}
-
-bool fileSizeGreaterThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.size() > f2.size();
-}
-
-bool fileDateLessThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.lastModified() < f2.lastModified();
-}
-
-bool fileDateGreaterThan(QFileInfo f1, QFileInfo f2)
-{
-  return f1.lastModified() > f2.lastModified();
-}
-
 void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
 {
-  QTime tic;
-  tic.start();
+  if ((m_SortedColumn != column) || (m_SortOrder != order)) {
+    m_SortedColumn = column;
+    m_SortOrder    = order;
 
+    m_Updater -> needUpdate();
+  }
+}
+
+void QxrdFileBrowserModel::newDataAvailable(QVector<QFileInfo> dirs, QVector<QFileInfo> files)
+{
   beginResetModel();
 
-  m_SortedColumn = column;
-  m_SortOrder = order;
-
-  bool (*lt)(QFileInfo f1, QFileInfo f2) = NULL;
-
-  switch(column) {
-  case 0:
-    if (order == Qt::AscendingOrder) {
-      lt = fileNameLessThan;
-    } else {
-      lt = fileNameGreaterThan;
-    }
-    break;
-
-  case 1:
-    if (order == Qt::AscendingOrder) {
-      lt = fileSizeLessThan;
-    } else {
-      lt = fileSizeGreaterThan;
-    }
-    break;
-
-  case 2:
-    if (order == Qt::AscendingOrder) {
-      lt = fileDateLessThan;
-    } else {
-      lt = fileDateGreaterThan;
-    }
-    break;
-  }
-
-  if (lt) {
-    qStableSort(m_DirList.begin(), m_DirList.end(), fileNameLessThan);
-    qStableSort(m_FileList.begin(), m_FileList.end(), lt);
-  }
+  m_DirList = dirs;
+  m_FileList = files;
 
   endResetModel();
-
-  if (qcepDebug(DEBUG_DISPLAY)) {
-    g_Application->printMessage(tr("Sort file browser took %1 msec").arg(tic.elapsed()));
-  }
 }

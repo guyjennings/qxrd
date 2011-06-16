@@ -36,6 +36,13 @@ public:
   virtual void sort ( int column, Qt::SortOrder order = Qt::AscendingOrder );
   void refresh();
 
+  QStringList nameFilters() const;
+  int sortedColumn() const;
+  Qt::SortOrder sortOrder() const;
+
+public slots:
+  void newDataAvailable(QVector<QFileInfo> dirs, QVector<QFileInfo> files);
+
 signals:
   void rootChanged(const QString& path);
 
