@@ -42,10 +42,6 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
 
   connect(m_Model, SIGNAL(modelReset()), this, SLOT(onModelReset()));
 
-//  connect(this, SIGNAL(printMessage(QString,QDateTime)), m_Processor, SIGNAL(printMessage(QString,QDateTime)));
-//  connect(this, SIGNAL(statusMessage(QString,QDateTime)), m_Processor, SIGNAL(statusMessage(QString,QDateTime)));
-//  connect(this, SIGNAL(criticalMessage(QString,QDateTime)), m_Processor, SIGNAL(criticalMessage(QString,QDateTime)));
-
   connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
   connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
   connect(m_PrevDirectoryButton, SIGNAL(clicked()), this, SLOT(doPreviousDirectory()));

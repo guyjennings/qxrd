@@ -135,10 +135,6 @@ QxrdImageDisplayWidget* QxrdImageDisplayWidget::insertNew(QxrdApplication *app, 
     sa -> setWidget(res);
 
     tw->insertTab(1, sa, "Image");
-
-//    connect(res, SIGNAL(printMessage(QString,QDateTime)), app, SIGNAL(printMessage(QString,QDateTime)));
-//    connect(res, SIGNAL(statusMessage(QString,QDateTime)), app, SIGNAL(statusMessage(QString,QDateTime)));
-//    connect(res, SIGNAL(criticalMessage(QString,QDateTime)), app, SIGNAL(criticalMessage(QString,QDateTime)));
   }
 
   return res;

@@ -13,10 +13,6 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessor *proc, QWidget
 {
   setupUi(this);
 
-//  connect(this, SIGNAL(printMessage(QString,QDateTime)), win, SLOT(printMessage(QString,QDateTime)));
-//  connect(this, SIGNAL(statusMessage(QString,QDateTime)), win, SLOT(statusMessage(QString,QDateTime)));
-//  connect(this, SIGNAL(criticalMessage(QString,QDateTime)), win, SLOT(criticalMessage(QString,QDateTime)));
-
   connect(m_HideMaskAll, SIGNAL(clicked()), this, SLOT(doHideMaskAll()));
   connect(m_ShowMaskAll, SIGNAL(clicked()), this, SLOT(doShowMaskAll()));
   connect(m_HideMaskRange, SIGNAL(clicked()), this, SLOT(doHideMaskRange()));

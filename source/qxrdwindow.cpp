@@ -79,15 +79,13 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AllocationStatus(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    //    m_NewDataMutex(QMutex::Recursive),
-    m_Data(NULL/*new QxrdDoubleImageData(NULL,2048,2048)*/),
+    m_Data(NULL),
     m_Overflow(NULL),
-    m_NewData(NULL/*new QxrdDoubleImageData(NULL,2048,2048)*/),
+    m_NewData(NULL),
     m_NewOverflow(NULL),
     m_NewDataAvailable(false),
-    //    m_NewMaskMutex(QMutex::Recursive),
-    m_Mask(NULL/*new QxrdMaskData(NULL,2048,2048)*/),
-    m_NewMask(NULL/*new QxrdMaskData(2048,2048)*/),
+    m_Mask(NULL),
+    m_NewMask(NULL),
     m_NewMaskAvailable(false),
     m_ImageDisplay(NULL),
     m_Highlighter(NULL)
@@ -103,7 +101,6 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
 
   m_AcquireDialog = m_Acquisition -> controlPanel(this);
-//  m_AcquireDialog      = new QxrdAcquireDialog(this, m_Acquisition, m_DataProcessor, this);
   m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
   m_DisplayDialog      = new QxrdDisplayDialog(this);
   m_CenterFinderDialog = new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder());
@@ -377,20 +374,6 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_CenterFinderPlot -> setWindow(this);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
-//  connect(m_Plot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
-//  connect(m_CenterFinderPlot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
-//  connect(m_IntegratorPlot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
-//  connect(m_Plot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
-//  connect(m_CenterFinderPlot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
-//  connect(m_IntegratorPlot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
-//  connect(m_Plot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
-//  connect(m_CenterFinderPlot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
-//  connect(m_IntegratorPlot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
-
-  //  connect(m_DataProcessor, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
-
-  //  readSettings();
-
   connect(m_DataProcessor -> centerFinder() -> prop_CenterX(), SIGNAL(changedValue(double)),
           m_Plot, SLOT(onCenterXChanged(double)));
 
@@ -429,15 +412,6 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   connect(m_Plot, SIGNAL(selectHistogram(QwtDoubleRect)),
           m_HistogramDialog, SLOT(histogramSelectionChanged(QwtDoubleRect)));
-
-  //  if (m_Acquisition->get_DetectorType() != 1) { // No file browser for PE detector...
-  //    m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
-  //    m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
-
-  //    m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
-  //  }
-
-  //  m_WindowsMenu -> addAction(m_PowderFitWidget -> toggleViewAction());
 
   m_Messages -> document() -> setMaximumBlockCount(20000);
 
@@ -611,13 +585,6 @@ void QxrdWindow::acquiredFrame(
 
   m_Progress -> setValue(thisframe*100/totalframes);
 }
-
-//void QxrdWindow::onAcquireComplete(int /*dark*/)
-//{
-//  acquisitionFinished();
-
-//  m_Acquiring = false;
-//}
 
 void QxrdWindow::doAcquire()
 {
@@ -926,11 +893,6 @@ void QxrdWindow::selectLogFile()
     g_Application->newLogFile(theFile);
   }
 }
-
-//void QxrdWindow::doProcessorOptionsDialog()
-//{
-//  m_DataProcessor->processorOptionsDialog();
-//}
 
 void QxrdWindow::doTest()
 {
