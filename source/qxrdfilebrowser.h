@@ -8,7 +8,6 @@
 #include "qxrdsettings.h"
 #include "ui_qxrdfilebrowser.h"
 
-class QxrdFileBrowserModelThread;
 class QxrdFileBrowserModel;
 class QxrdDataProcessor;
 
@@ -58,7 +57,6 @@ private:
   mutable QMutex               m_Mutex;
   int                          m_IsOutput;
   QxrdDataProcessor           *m_Processor;
-  QxrdFileBrowserModelThread  *m_ModelThread;
   QxrdFileBrowserModel        *m_Model;
   QStringList                  m_DirectoryStack;
 };

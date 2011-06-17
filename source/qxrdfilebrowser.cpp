@@ -4,7 +4,6 @@
 #include <QFileDialog>
 #include <QMenu>
 #include "qxrdmutexlocker.h"
-#include "qxrdfilebrowsermodelthread.h"
 #include "qxrdfilebrowsermodel.h"
 #include "qxrdfilebrowserview.h"
 #include "qxrdapplication.h"
@@ -16,7 +15,6 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
     m_RootDirectory(this, "rootDirectory",""),
     m_IsOutput(isOutput),
     m_Processor(processor),
-    m_ModelThread(NULL),
     m_Model(NULL)
 {
   setupUi(this);
@@ -26,13 +24,8 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
     setWindowTitle("Input " + windowTitle());
   }
 
-//  m_ModelThread = new QxrdFileBrowserModelThread();
-//  m_ModelThread -> start();
-
-//  m_Model = m_ModelThread ->fileBrowserModel();  /*new QxrdFileBrowserModel();*/
   m_Model = new QxrdFileBrowserModel();
   m_Model -> setRootPath(QDir::currentPath());
-//  m_Model -> moveToThread(m_ModelThread);
 
   m_FileBrowser -> setModel(m_Model);
 

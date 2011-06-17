@@ -201,7 +201,6 @@ HEADERS += TODO.h \
     qxrdsynchronizedacquisitionplot.h \
     qxrdhighlighter.h \
     qxrdfreshstartdialog.h \
-    qxrdfilebrowsermodelthread.h \
     qxrdacquisitionfilewatcher.h \
     qxrdacquirefilewatcherdialog.h \
     qxrdacquiredialogbase.h \
@@ -322,7 +321,6 @@ SOURCES += qxrd.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
     qxrdhighlighter.cpp \
     qxrdfreshstartdialog.cpp \
-    qxrdfilebrowsermodelthread.cpp \
     qxrdacquisitionfilewatcher.cpp \
     qxrdacquirefilewatcherdialog.cpp \
     qxrdacquiredialogbase.cpp \
