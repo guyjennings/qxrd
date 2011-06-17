@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QFileInfo>
 #include <QStringList>
+#include <QDateTime>
 
 class QxrdFileBrowserModelUpdaterThread;
 class QxrdFileBrowserModelUpdater;
@@ -40,11 +41,15 @@ public:
   int sortedColumn() const;
   Qt::SortOrder sortOrder() const;
 
+  void generateFileUpdates(int doIt);
+
 public slots:
   void newDataAvailable(QVector<QFileInfo> dirs, QVector<QFileInfo> files, int limit=0, int trueSize=-1);
+  void updatedFile(QString path, QDateTime atTime);
 
 signals:
   void rootChanged(const QString& path);
+  void fileUpdated(QString path, QDateTime atTime);
 
 private:
   void updateModel();

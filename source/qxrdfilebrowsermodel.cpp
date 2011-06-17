@@ -226,3 +226,19 @@ void QxrdFileBrowserModel::newDataAvailable(QVector<QFileInfo> dirs, QVector<QFi
 
   endResetModel();
 }
+
+void QxrdFileBrowserModel::updatedFile(QString path, QDateTime atTime)
+{
+  if (qcepDebug(DEBUG_BROWSER)) {
+    g_Application->printMessage(tr("file %1 updated at %2")
+                                .arg(path)
+                                .arg(atTime.toString(Qt::ISODate)));
+  }
+
+  emit fileUpdated(path, atTime);
+}
+
+void QxrdFileBrowserModel::generateFileUpdates(int doIt)
+{
+  m_Updater->generateFileUpdates(doIt);
+}

@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QFileSystemWatcher>
 #include <QTimer>
+#include <QDateTime>
+
 #include "qxrdfilebrowsermodel.h"
 
 class QxrdFileBrowserModelUpdater : public QObject
@@ -21,6 +23,7 @@ public slots:
   void updateTimeout();
   void needUpdate();
   void updateContents();
+  void generateFileUpdates(int doIt);
 
 private:
   QxrdFileBrowserModel    *m_BrowserModel;
@@ -31,6 +34,8 @@ private:
   int                      m_UpdateInterval;
   QVector<QFileInfo>       m_Directories;
   QVector<QFileInfo>       m_Files;
+  QDateTime                m_PreviousUpdate;
+  QAtomicInt               m_GenerateUpdates;
 };
 
 #endif // QXRDFILEBROWSERMODELUPDATER_H

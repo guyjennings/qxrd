@@ -11,7 +11,9 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModel *b
   m_FileSystemWatcher(NULL),
   m_UpdateNeeded(0),
   m_UpdateTimer(),
-  m_UpdateInterval(1000)
+  m_UpdateInterval(1000),
+  m_PreviousUpdate(QDateTime::currentDateTime()),
+  m_GenerateUpdates(true)
 {
   if (qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage("Starting Browser Model Updater");
@@ -201,6 +203,23 @@ void QxrdFileBrowserModelUpdater::updateContents()
                                 .arg(m_RootPath).arg(m_Directories.count()).arg(m_Files.count()));
   }
 
+  if (m_GenerateUpdates) {
+    QDateTime latest = m_PreviousUpdate;
+
+    foreach(QFileInfo file, files) {
+      QDateTime mod = file.lastModified();
+      if (mod > m_PreviousUpdate) {
+        m_BrowserModel->updatedFile(file.filePath(), mod);
+      }
+
+      if (mod > latest) {
+        latest = mod;
+      }
+    }
+
+    m_PreviousUpdate = latest;
+  }
+
   int           column = m_BrowserModel->sortedColumn();
   Qt::SortOrder order  = m_BrowserModel->sortOrder();
 
@@ -259,4 +278,13 @@ void QxrdFileBrowserModelUpdater::updateContents()
   } else {
     m_BrowserModel->newDataAvailable(m_Directories, m_Files);
   }
+}
+
+void QxrdFileBrowserModelUpdater::generateFileUpdates(int doIt)
+{
+  if (doIt) {
+    m_PreviousUpdate = QDateTime::currentDateTime();
+  }
+
+  m_GenerateUpdates = doIt;
 }
