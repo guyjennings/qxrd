@@ -11,10 +11,10 @@
 
 QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWidget *parent)
   : QDockWidget(parent),
-    m_IsOutput(isOutput),
     m_BrowserFilter(this, "browserFilter",1),
     m_BrowserSelector(this, "browserSelector",""),
     m_RootDirectory(this, "rootDirectory",""),
+    m_IsOutput(isOutput),
     m_Processor(processor),
     m_ModelThread(NULL),
     m_Model(NULL)
