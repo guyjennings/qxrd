@@ -16,7 +16,7 @@ QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   m_Updater(NULL),
   m_SortedColumn(0),
   m_SortOrder(Qt::AscendingOrder),
-  m_Limit(0),
+  m_Limit(1000),
   m_TrueSize(0)
 {
   m_UpdaterThread = new QxrdFileBrowserModelUpdaterThread(this);
