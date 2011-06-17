@@ -41,7 +41,7 @@ public:
   Qt::SortOrder sortOrder() const;
 
 public slots:
-  void newDataAvailable(QVector<QFileInfo> dirs, QVector<QFileInfo> files);
+  void newDataAvailable(QVector<QFileInfo> dirs, QVector<QFileInfo> files, int limit=0, int trueSize=-1);
 
 signals:
   void rootChanged(const QString& path);
@@ -58,6 +58,8 @@ private:
   QVector<QFileInfo> m_FileList;
   int                m_SortedColumn;
   Qt::SortOrder      m_SortOrder;
+  int                m_Limit;
+  int                m_TrueSize;
 };
 
 #endif // QXRDFILEBROWSERMODEL_H

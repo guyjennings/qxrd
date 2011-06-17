@@ -119,6 +119,9 @@ public:
   Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath);
   QCEP_STRING_PROPERTY(LogFilePath);
 
+  Q_PROPERTY(int    fileBrowserLimit   READ get_FileBrowserLimit WRITE set_FileBrowserLimit);
+  QCEP_INTEGER_PROPERTY(FileBrowserLimit);
+
 private:
   bool                            m_FreshStart;
   QSplashScreen                  *m_Splash;

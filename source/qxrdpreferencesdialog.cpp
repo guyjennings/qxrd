@@ -76,6 +76,8 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   m_SimpleServerPort -> setRange(0,65535);
   m_SimpleServerPort -> setValue(simpleServerPort);
 
+  m_FileBrowserLimit -> setValue(app->get_FileBrowserLimit());
+
   setupDebugWidgets(debugLevel);
 }
 
@@ -225,6 +227,8 @@ void QxrdPreferencesDialog::accept()
 
   proc -> set_OutputDirectory(m_CurrentOutputDirectory -> text());
   app -> set_LogFilePath    (m_CurrentLogFile -> text());
+
+  app -> set_FileBrowserLimit(m_FileBrowserLimit->value());
 
   QDialog::accept();
 }

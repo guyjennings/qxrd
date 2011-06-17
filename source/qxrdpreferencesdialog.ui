@@ -463,6 +463,52 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab_4">
+      <attribute name="title">
+       <string>Display</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>Maximum number of items to display in file browsers (or zero for no limit)</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="m_FileBrowserLimit">
+         <property name="toolTip">
+          <string>You can limit the maximum number of files that will be displayed in a file browser widget - this can improve the program's responsiveness if there are a large number of files in a directory.</string>
+         </property>
+         <property name="specialValueText">
+          <string>Unlimited</string>
+         </property>
+         <property name="maximum">
+          <number>200000</number>
+         </property>
+         <property name="singleStep">
+          <number>1000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>281</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="debug">
       <attribute name="title">
        <string>Debug</string>

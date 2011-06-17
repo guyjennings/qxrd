@@ -251,5 +251,12 @@ void QxrdFileBrowserModelUpdater::updateContents()
     g_Application->printMessage(tr("Sort file browser took %1 msec").arg(tic.elapsed()));
   }
 
-  m_BrowserModel->newDataAvailable(m_Directories, m_Files);
+  int limit = g_Application->get_FileBrowserLimit();
+  int trueSize = m_Files.count();
+
+  if (limit && limit < trueSize) {
+    m_BrowserModel->newDataAvailable(m_Directories, m_Files.mid(0,limit), limit, trueSize);
+  } else {
+    m_BrowserModel->newDataAvailable(m_Directories, m_Files);
+  }
 }

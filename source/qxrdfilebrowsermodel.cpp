@@ -15,7 +15,9 @@ QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   m_UpdaterThread(NULL),
   m_Updater(NULL),
   m_SortedColumn(0),
-  m_SortOrder(Qt::AscendingOrder)
+  m_SortOrder(Qt::AscendingOrder),
+  m_Limit(0),
+  m_TrueSize(0)
 {
   m_UpdaterThread = new QxrdFileBrowserModelUpdaterThread(this);
   m_UpdaterThread -> start();
@@ -63,6 +65,8 @@ QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
       } else if (index.column() == 1) {
         if (info.isDir()) {
           return "--";
+        } else if (!info.exists()) {
+          return "";
         } else {
           qint64 sz = info.size();
 
@@ -84,6 +88,8 @@ QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
       if (index.column() == 0) {
         if (info.isDir()) {
           return QPixmap(":/images/folder-16x16.png");
+        } else if (!info.exists()) {
+          return QVariant();
         } else {
           QString suffix = info.suffix();
 
@@ -112,7 +118,11 @@ int	QxrdFileBrowserModel::columnCount ( const QModelIndex & parent ) const
 
 int	QxrdFileBrowserModel::rowCount ( const QModelIndex & parent ) const
 {
-  return m_FileList.count() + m_DirList.count();
+  if (m_Limit > 0) {
+    return m_DirList.count() + m_Limit + 1;
+  } else {
+    return m_FileList.count() + m_DirList.count();
+  }
 }
 
 void QxrdFileBrowserModel::setNameFilters(QStringList filters)
@@ -132,7 +142,13 @@ QFileInfo QxrdFileBrowserModel::fileInfo(const QModelIndex &index) const
   QFileInfo info;
 
   if (n >= m_DirList.count()) {
-    info = m_FileList.at(n-m_DirList.count());
+    int nf = n-m_DirList.count();
+
+    if (nf >= m_FileList.count()) {
+      info = QFileInfo(tr("... %1 additional files not displayed...").arg(m_TrueSize-m_Limit));
+    } else {
+      info = m_FileList.at(nf);
+    }
   } else {
     info = m_DirList.at(n);
   }
@@ -199,10 +215,12 @@ void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
   }
 }
 
-void QxrdFileBrowserModel::newDataAvailable(QVector<QFileInfo> dirs, QVector<QFileInfo> files)
+void QxrdFileBrowserModel::newDataAvailable(QVector<QFileInfo> dirs, QVector<QFileInfo> files, int limit, int trueSize)
 {
   beginResetModel();
 
+  m_Limit = limit;
+  m_TrueSize = trueSize;
   m_DirList = dirs;
   m_FileList = files;
 

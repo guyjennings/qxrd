@@ -51,6 +51,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_SimpleServerPort(this,"simpleServerPort", 1234),
     m_DefaultLayout(this,"defaultLayout",0),
     m_LogFilePath(this, "logFilePath", "qxrd.log"),
+    m_FileBrowserLimit(this, "fileBrowserLimit", 0),
     m_FreshStart(false),
     m_Splash(NULL),
     m_Window(NULL),
