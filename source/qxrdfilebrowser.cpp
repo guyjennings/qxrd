@@ -225,6 +225,48 @@ void QxrdFileBrowser::doOpen()
   }
 }
 
+void QxrdFileBrowser::doOpenDark()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+
+  foreach(index, rows) {
+//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+    if (!m_Model->isDir(index)) {
+      INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "loadDark", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+    }
+  }
+}
+
+void QxrdFileBrowser::doOpenMask()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+
+  foreach(index, rows) {
+//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+    if (!m_Model->isDir(index)) {
+      INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "loadMask", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+    }
+  }
+}
+
+void QxrdFileBrowser::doOpenGainMap()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+
+  foreach(index, rows) {
+//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+    if (!m_Model->isDir(index)) {
+      INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "loadGainMap", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+    }
+  }
+}
+
 void QxrdFileBrowser::doProcess()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
@@ -323,6 +365,9 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
 
     QMenu *actions = new QMenu(this);
     QAction *open = actions->addAction("Open");
+    QAction *openDark = actions->addAction("Open as Dark Image");
+    QAction *openMask = actions->addAction("Open as Mask");
+    QAction *openGainMap = actions->addAction("Open as Gain Map");
     QAction *accumulate = actions->addAction("Accumulate");
     QAction *integrate = actions->addAction("Integrate");
     QAction *process = actions->addAction("Process");
@@ -330,9 +375,15 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
     QAction *action = actions->exec(QCursor::pos());
 
     if (action == open) {
-      doOpen();
+        doOpen();
+    } else if (action == openDark) {
+        doOpenDark();
+    } else if (action == openMask) {
+        doOpenMask();
+    } else if (action == openGainMap) {
+        doOpenGainMap();
     } else if (action == accumulate) {
-      doAccumulate();
+        doAccumulate();
     } else if (action == integrate) {
       doIntegrate();
     } else if (action == process) {

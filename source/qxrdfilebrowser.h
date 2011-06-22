@@ -43,6 +43,9 @@ public slots:
   void doAcquisitionDirectory();
   void doRefreshBrowser();
   void doOpen();
+  void doOpenDark();
+  void doOpenMask();
+  void doOpenGainMap();
   void doProcess();
   void doIntegrate();
   void doAccumulate();

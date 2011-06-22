@@ -395,19 +395,24 @@ void QxrdDataProcessorBase::saveDark(QString name, int canOverwrite)
 
 void QxrdDataProcessorBase::loadBadPixels(QString name)
 {
-  QxrdDoubleImageDataPtr res = takeNextFreeImage();
+    if (qcepDebug(DEBUG_FILES)) {
+        g_Application->printMessage(
+                tr("QxrdDataProcessorBase::loadBadPixels(%1)").arg(name));
+    }
 
-  if (res -> readImage(name)) {
+    QxrdDoubleImageDataPtr res = takeNextFreeImage();
 
-    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+    if (res -> readImage(name)) {
 
-    res -> loadMetaData();
-    res -> set_DataType(QxrdDoubleImageData::BadPixelsData);
+        //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    newBadPixelsImage(res);
+        res -> loadMetaData();
+        res -> set_DataType(QxrdDoubleImageData::BadPixelsData);
 
-    set_BadPixelsPath(res -> get_FileName());
-  }
+        newBadPixelsImage(res);
+
+        set_BadPixelsPath(res -> get_FileName());
+    }
 }
 
 void QxrdDataProcessorBase::saveBadPixels(QString name, int canOverwrite)
@@ -419,6 +424,11 @@ void QxrdDataProcessorBase::saveBadPixels(QString name, int canOverwrite)
 
 void QxrdDataProcessorBase::loadGainMap(QString name)
 {
+    if (qcepDebug(DEBUG_FILES)) {
+        g_Application->printMessage(
+                tr("QxrdDataProcessorBase::loadGainMap(%1)").arg(name));
+    }
+
   QxrdDoubleImageDataPtr res = takeNextFreeImage();
 
   if (res -> readImage(name)) {
@@ -754,6 +764,11 @@ void QxrdDataProcessorBase::showMaskRangeStack(int pos)
 
 void QxrdDataProcessorBase::loadMask(QString name)
 {
+    if (qcepDebug(DEBUG_FILES)) {
+        g_Application->printMessage(
+                tr("QxrdDataProcessorBase::loadMask(%1)").arg(name));
+    }
+
   QxrdMaskDataPtr res = m_Allocator -> newMask(QxrdAllocator::WaitTillAvailable);
 
   if (res -> readImage(name)) {
