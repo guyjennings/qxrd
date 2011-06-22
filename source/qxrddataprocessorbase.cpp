@@ -427,6 +427,7 @@ void QxrdDataProcessorBase::loadGainMap(QString name)
 
     res -> loadMetaData();
     res -> set_DataType(QxrdDoubleImageData::GainData);
+    res -> setDefaultValue(1.0);
 
     newGainMapImage(res);
 
@@ -783,6 +784,11 @@ void QxrdDataProcessorBase::saveMask(QString name, int canOverwrite)
   }
 }
 
+void QxrdDataProcessorBase::clearMask()
+{
+  clearMaskStack();
+}
+
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   fileSaverThread() -> saveData(name, image, overflow, canOverwrite);
@@ -942,14 +948,26 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage
       correctBadPixels(processed);
       processed -> set_ImageSaved(false);
 
-      updateEstimatedTime(prop_PerformBadPixelsTime(), tic.restart());
+      int badPxlTime = tic.restart();
+
+      updateEstimatedTime(prop_PerformBadPixelsTime(), badPxlTime);
+
+      if (qcepDebug(DEBUG_PROCESS)) {
+        g_Application->printMessage(tr("Bad Pixel correction took %1 msec").arg(badPxlTime));
+      }
     }
 
     if (get_PerformGainCorrection()) {
       correctImageGains(processed);
       processed -> set_ImageSaved(false);
 
-      updateEstimatedTime(prop_PerformGainCorrectionTime(), tic.restart());
+      int gainTime = tic.restart();
+
+      updateEstimatedTime(prop_PerformGainCorrectionTime(), gainTime);
+
+      if (qcepDebug(DEBUG_PROCESS)) {
+        g_Application->printMessage(tr("Gain correction took %1 msec").arg(gainTime));
+      }
     }
 
     if (get_SaveSubtracted()) {
@@ -1051,8 +1069,15 @@ void QxrdDataProcessorBase::correctBadPixels(QxrdDoubleImageDataPtr /*image*/)
 {
 }
 
-void QxrdDataProcessorBase::correctImageGains(QxrdDoubleImageDataPtr /*image*/)
+void QxrdDataProcessorBase::correctImageGains(QxrdDoubleImageDataPtr image)
 {
+  if (image) {
+    QxrdDoubleImageDataPtr gains = gainMap();
+
+    if (gains) {
+      image -> multiply(gains);
+    }
+  }
 }
 
 void QxrdDataProcessorBase::updateEstimatedProcessingTime()
@@ -1269,6 +1294,11 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::data() const
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::darkImage() const
 {
   return m_DarkFrame;
+}
+
+QxrdDoubleImageDataPtr QxrdDataProcessorBase::gainMap() const
+{
+  return m_GainMap;
 }
 
 QxrdMaskDataPtr QxrdDataProcessorBase::mask() const

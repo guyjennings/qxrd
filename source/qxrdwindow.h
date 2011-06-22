@@ -47,12 +47,16 @@ public slots:
   void doLoadData();
   void doSaveDark();
   void doLoadDark();
+  void doClearDark();
   void doSaveMask();
   void doLoadMask();
+  void doClearMask();
   void doSaveBadPixels();
   void doLoadBadPixels();
+  void doClearBadPixels();
   void doSaveGainMap();
   void doLoadGainMap();
+  void doClearGainMap();
   void selectLogFile();
   void doRefineCenterTilt();
   void doAccumulateImages();

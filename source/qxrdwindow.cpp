@@ -192,8 +192,13 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionSaveData, SIGNAL(triggered()), this, SLOT(doSaveData()));
   connect(m_ActionLoadDark, SIGNAL(triggered()), this, SLOT(doLoadDark()));
   connect(m_ActionSaveDark, SIGNAL(triggered()), this, SLOT(doSaveDark()));
+  connect(m_ActionClearDark, SIGNAL(triggered()), this, SLOT(doClearDark()));
   connect(m_ActionLoadMask, SIGNAL(triggered()), this, SLOT(doLoadMask()));
   connect(m_ActionSaveMask, SIGNAL(triggered()), this, SLOT(doSaveMask()));
+  connect(m_ActionClearMask, SIGNAL(triggered()), this, SLOT(doClearMask()));
+  connect(m_ActionLoadGainMap, SIGNAL(triggered()), this, SLOT(doLoadGainMap()));
+  connect(m_ActionSaveGainMap, SIGNAL(triggered()), this, SLOT(doSaveGainMap()));
+  connect(m_ActionClearGainMap, SIGNAL(triggered()), this, SLOT(doClearGainMap()));
   connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
 
   connect(m_ActionAccumulateImages, SIGNAL(triggered()), this, SLOT(doAccumulateImages()));
@@ -824,6 +829,14 @@ void QxrdWindow::doLoadDark()
   }
 }
 
+void QxrdWindow::doClearDark()
+{
+  if (QMessageBox::question(this, "Clear Dark Image?", "Do you really want to clear the dark image?",
+                            QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+    m_DataProcessor->clearDark();
+  }
+}
+
 void QxrdWindow::doSaveMask()
 {
   QString theFile = QFileDialog::getSaveFileName(
@@ -841,6 +854,14 @@ void QxrdWindow::doLoadMask()
 
   if (theFile.length()) {
     m_DataProcessor->loadMask(theFile);
+  }
+}
+
+void QxrdWindow::doClearMask()
+{
+  if (QMessageBox::question(this, "Clear Mask?", "Do you really want to clear the mask?",
+                            QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+    m_DataProcessor->clearMask();
   }
 }
 
@@ -864,6 +885,14 @@ void QxrdWindow::doLoadBadPixels()
   }
 }
 
+void QxrdWindow::doClearBadPixels()
+{
+  if (QMessageBox::question(this, "Clear Bad Pixels", "Do you really want to clear the bad pixel map?",
+                            QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+    m_DataProcessor->clearBadPixels();
+  }
+}
+
 void QxrdWindow::doSaveGainMap()
 {
   QString theFile = QFileDialog::getSaveFileName(
@@ -881,6 +910,14 @@ void QxrdWindow::doLoadGainMap()
 
   if (theFile.length()) {
     m_DataProcessor->loadGainMap(theFile);
+  }
+}
+
+void QxrdWindow::doClearGainMap()
+{
+  if (QMessageBox::question(this, "Clear Gain Map", "Do you really want to clear the gain map?",
+                            QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+    m_DataProcessor->clearGainMap();
   }
 }
 

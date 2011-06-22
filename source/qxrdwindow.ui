@@ -871,7 +871,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -883,9 +883,15 @@
     <addaction name="separator"/>
     <addaction name="m_ActionLoadDark"/>
     <addaction name="m_ActionSaveDark"/>
+    <addaction name="m_ActionClearDark"/>
     <addaction name="separator"/>
     <addaction name="m_ActionLoadMask"/>
     <addaction name="m_ActionSaveMask"/>
+    <addaction name="m_ActionClearMask"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionLoadGainMap"/>
+    <addaction name="m_ActionSaveGainMap"/>
+    <addaction name="m_ActionClearGainMap"/>
     <addaction name="separator"/>
     <addaction name="m_ActionAccumulateImages"/>
     <addaction name="m_ActionIntegrate"/>
@@ -1324,6 +1330,62 @@
    </property>
    <property name="toolTip">
     <string>Crash Program (for debugging purposes)</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadGainMap">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Load Gain Map (Flat Field)...</string>
+   </property>
+   <property name="toolTip">
+    <string>Load Gain Map (Flat Field) Image</string>
+   </property>
+  </action>
+  <action name="m_ActionSaveGainMap">
+   <property name="text">
+    <string>Save Gain Map (Flat Field)...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Gain Map (Flat Field) Image</string>
+   </property>
+  </action>
+  <action name="m_ActionClearGainMap">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Gain Map (Flat Field)...</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Gain Map (Flat Field) Image</string>
+   </property>
+  </action>
+  <action name="m_ActionClearMask">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Mask...</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear Mask</string>
+   </property>
+  </action>
+  <action name="m_ActionClearDark">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Dark Data...</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear Dark Data</string>
    </property>
   </action>
  </widget>

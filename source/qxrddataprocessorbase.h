@@ -219,6 +219,7 @@ public slots:
   void loadGainMap(QString name);
   void saveGainMap(QString name, int canOverwrite=NoOverwrite);
   void clearDark();
+  void clearMask();
   void clearBadPixels();
   void clearGainMap();
 
@@ -281,6 +282,7 @@ public:
 
   QxrdDoubleImageDataPtr data() const;
   QxrdDoubleImageDataPtr darkImage() const;
+  QxrdDoubleImageDataPtr gainMap() const;
   QxrdMaskDataPtr        mask() const;
   QxrdMaskDataPtr        overflow() const;
 
