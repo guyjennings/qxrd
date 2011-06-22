@@ -108,13 +108,128 @@ void QxrdImageData<T>::accumulateImage(QSharedPointer< QxrdImageData<T2> > image
     } else {
       for (int row=0; row<nrows; row++) {
         for (int col=0; col<ncols; col++) {
-          incValue(col, row, image->value(col, row));
+          addValue(col, row, image->value(col, row));
         }
       }
     }
   }
 }
 
+template <typename T>
+template <typename T2>
+void QxrdImageData<T>::add(QSharedPointer< QxrdImageData<T2> > image)
+{
+  if (image) {
+    int ncols = this -> get_Width();
+    int nrows = this -> get_Height();
+
+    this->prop_SummedExposures()->incValue(image->get_SummedExposures());
+
+    if (ncols == image->get_Width() && nrows == image->get_Height()) {
+      int npix = ncols*nrows;
+
+      T *srcp = this -> data();
+      T2 *destp = image -> data();
+
+      for (int i=0; i<npix; i++) {
+        *srcp++ += *destp++;
+      }
+    } else {
+      for (int row=0; row<nrows; row++) {
+        for (int col=0; col<ncols; col++) {
+          addValue(col, row, image->value(col, row));
+        }
+      }
+    }
+  }
+}
+
+template <typename T>
+template <typename T2>
+void QxrdImageData<T>::subtract(QSharedPointer< QxrdImageData<T2> > image)
+{
+  if (image) {
+    int ncols = this -> get_Width();
+    int nrows = this -> get_Height();
+
+    this->prop_SummedExposures()->incValue(image->get_SummedExposures());
+
+    if (ncols == image->get_Width() && nrows == image->get_Height()) {
+      int npix = ncols*nrows;
+
+      T *srcp = this -> data();
+      T2 *destp = image -> data();
+
+      for (int i=0; i<npix; i++) {
+        *srcp++ -= *destp++;
+      }
+    } else {
+      for (int row=0; row<nrows; row++) {
+        for (int col=0; col<ncols; col++) {
+          subtractValue(col, row, image->value(col, row));
+        }
+      }
+    }
+  }
+}
+
+template <typename T>
+template <typename T2>
+void QxrdImageData<T>::multiply(QSharedPointer< QxrdImageData<T2> > image)
+{
+  if (image) {
+    int ncols = this -> get_Width();
+    int nrows = this -> get_Height();
+
+    this->prop_SummedExposures()->incValue(image->get_SummedExposures());
+
+    if (ncols == image->get_Width() && nrows == image->get_Height()) {
+      int npix = ncols*nrows;
+
+      T *srcp = this -> data();
+      T2 *destp = image -> data();
+
+      for (int i=0; i<npix; i++) {
+        *srcp++ *= *destp++;
+      }
+    } else {
+      for (int row=0; row<nrows; row++) {
+        for (int col=0; col<ncols; col++) {
+          multiplyValue(col, row, image->value(col, row));
+        }
+      }
+    }
+  }
+}
+
+template <typename T>
+template <typename T2>
+void QxrdImageData<T>::divide(QSharedPointer< QxrdImageData<T2> > image)
+{
+  if (image) {
+    int ncols = this -> get_Width();
+    int nrows = this -> get_Height();
+
+    this->prop_SummedExposures()->incValue(image->get_SummedExposures());
+
+    if (ncols == image->get_Width() && nrows == image->get_Height()) {
+      int npix = ncols*nrows;
+
+      T *srcp = this -> data();
+      T2 *destp = image -> data();
+
+      for (int i=0; i<npix; i++) {
+        *srcp++ /= *destp++;
+      }
+    } else {
+      for (int row=0; row<nrows; row++) {
+        for (int col=0; col<ncols; col++) {
+          divideValue(col, row, image->value(col, row));
+        }
+      }
+    }
+  }
+}
 
 template <typename T>
 void QxrdImageData<T>::setMask(QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
@@ -255,3 +370,7 @@ template void QxrdImageData<unsigned int>::copyFrom<unsigned int>(QSharedPointer
 
 template void QxrdImageData<double>::accumulateImage<double>(QSharedPointer<QxrdImageData<double> >);
 
+template void QxrdImageData<double>::add<double>(QSharedPointer<QxrdImageData<double> >);
+template void QxrdImageData<double>::subtract<double>(QSharedPointer<QxrdImageData<double> >);
+template void QxrdImageData<double>::multiply<double>(QSharedPointer<QxrdImageData<double> >);
+template void QxrdImageData<double>::divide<double>(QSharedPointer<QxrdImageData<double> >);

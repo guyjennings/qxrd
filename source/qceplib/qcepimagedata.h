@@ -203,7 +203,10 @@ public:
   T* data();
 
   void setValue(int x, int y, T val);
-  void incValue(int x, int y, T val);
+  void addValue(int x, int y, T val);
+  void subtractValue(int x, int y, T val);
+  void multiplyValue(int x, int y, T val);
+  void divideValue(int x, int y, T val);
   void fill(T val);
 
   T defaultValue() const;

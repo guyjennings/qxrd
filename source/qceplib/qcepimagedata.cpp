@@ -297,10 +297,34 @@ void QcepImageData<T>::setValue(int x, int y, T val)
 }
 
 template <typename T>
-void QcepImageData<T>::incValue(int x, int y, T val)
+void QcepImageData<T>::addValue(int x, int y, T val)
 {
   if (x >= 0 && x < get_Width() && y >= 0 && y < get_Height()) {
     m_Image[(get_Height()-y-1)*get_Width()+x] += val;
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::subtractValue(int x, int y, T val)
+{
+  if (x >= 0 && x < get_Width() && y >= 0 && y < get_Height()) {
+    m_Image[(get_Height()-y-1)*get_Width()+x] -= val;
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::multiplyValue(int x, int y, T val)
+{
+  if (x >= 0 && x < get_Width() && y >= 0 && y < get_Height()) {
+    m_Image[(get_Height()-y-1)*get_Width()+x] *= val;
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::divideValue(int x, int y, T val)
+{
+  if (x >= 0 && x < get_Width() && y >= 0 && y < get_Height()) {
+    m_Image[(get_Height()-y-1)*get_Width()+x] /= val;
   }
 }
 

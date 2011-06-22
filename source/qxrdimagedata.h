@@ -45,6 +45,18 @@ public:
   template <typename T2>
   void accumulateImage(QSharedPointer< QxrdImageData<T2> > image);
 
+  template <typename T2>
+  void add(QSharedPointer< QxrdImageData<T2> > image);
+
+  template <typename T2>
+  void subtract(QSharedPointer< QxrdImageData<T2> > image);
+
+  template <typename T2>
+  void multiply(QSharedPointer< QxrdImageData<T2> > image);
+
+  template <typename T2>
+  void divide(QSharedPointer< QxrdImageData<T2> > image);
+
   void setMask(QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
   QxrdMaskDataPtr mask() const;
   QxrdMaskDataPtr overflow() const;
