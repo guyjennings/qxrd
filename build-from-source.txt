@@ -1,0 +1,93 @@
+Building QXRD from source on Windows
+
+1:  Download and install the Qt SDK from
+    http://qt.nokia.com/downloads
+    Choose the windows online installer (or offline installer if you prefer)
+    Take all the default settings.
+
+2:  Download and install a copy of 'SmartGit' from
+    http://www.syntevo.com
+    Take default options
+
+3:  Download and install a copy of 'msysgit' from
+    http://code.google.com/msysgit/downloads/list
+    take the 'Full Installer' Git-1.7.4-preview20110204.exe
+    Take default options during installation
+
+4:  Download and install a copy of 'NSIS' from
+    http://nsis.sourceforge.net/Download
+    Take default options during installation (you don't
+    need to run it or look at the release notes in the
+    final installation step)
+
+5:  You'll need to have the Perkin Elmer SDK software installed
+    from the disk that came with the detector.  This should
+    install software into "C:\XIS\SDK" (on 32 bit windows XP).
+
+6:  Startup 'SmartGit' from the start menu - you should
+    get an introductory settings dialog - this should
+    automatically find the copy of 'msysgit' installed
+    in step 3.   Fill in a name and e-mail address when
+    asked.
+
+7:  You'll then get a 'Welcome to SmartGit' window - choose
+    'Clone Existing Repository' and you'll enter another
+    another window titled 'Clone' - choose 'Remote Git or
+    SVN repository' then enter
+    git://qxrd.git.sourceforge.net/gitroot/qxrd/qxrd
+    and choose 'Next>'
+
+8:  You'll see a dialog asking you to choose a local directory
+    to save files in - click 'Choose' and then click 'Home' and
+    then create a new directory 'qxrd-git' in your 'My Documents'
+    directory, then a new directory 'qxrd' inside the 'qxrd-git'
+    directory - click 'Select', then 'Next>'.  You should then
+    see a 'Project' page - keep the project name 'qxrd' and
+    click 'Finish'
+
+9:  Wait for the cloning operation to finish - it might take
+    quite a while as there are about 200MB of data to fetch at
+    this point.
+
+10:  Now click the 'Switch' button in the main smartgit window -
+    you'll get a 'Switch Branch' window - choose 'origin/experimental'
+    from the list of branches and click 'Switch' - you'll then
+    get a dialog asking you to 'Create Local Branch' - it should
+    have 'experimental' as the name of the branch and
+    'Configure Tracking,...' set.  Now click 'Switch'
+
+11:  Now start 'Qt Creator' from the windows start menu - click 'Develop'
+    in the welcome screen, then click the 'Open Project...' button.
+    Now navigate to the "My Documents\qxrd-git\qxrd' directory and
+    click on the 'qxrd.pro' project file (it might be shown as 'qxrd'
+    if your machine is set to not display file extensions).
+
+12: You should then see a 'Project Setup' window with three sections
+    'Symbian Device', 'Desktop' and 'Qt Simulator' - make sure that only
+    'Desktop' is selected and open the 'details' for the 'Desktop'
+    build.   You should see three details options, 'Use Shadow Build'
+    'Qt 4.7.3 for Desktop ... debug' and 'Qt ... release'.  Make sure all
+    three are selected.  Click the 'Browse...' buttons alongside the
+    last two options and create new directories 
+    '... My Documents\qxrd-git\qxrd-debug' and '... qxrd-git\qxrd-release'
+    and set the build directories accordingly then click 'Finish'
+
+13: You can now check that everything is ready - choose
+    'Build->Run QMake' in 'Qt Creator'  and click on the 'Compile Output'
+    button at the bottom.  You should a number of red colored lines of
+    output each starting 'Project MESSAGE'.  Check through these for
+    'NSIS found in Program Files' 'MingW g++ build' and 'Perkin Elmer
+    Software Found' - if the Perkin Elmer message isn't there double
+    check that the PE SDK was installed in 'c:\XIS\SDK' - the directory
+    should contain the files Acq.h and XISL.lib among others.
+
+14: You are now ready to build - click on the small 'hammer' icon at the
+    bottom left and the build should start - again, it might take a while
+    to finish - perhaps 10 minutes or so. As a check that things have
+    gone OK look for the string '-DQXRD_VERSION="0.7.6"' to be visible in
+    most of the compile commands.  It might be a later version as well.
+
+15: Assuming everything goes well you should be able to try to run the 
+    software - click the green arrow to try running the software directly,
+    or click the green arrow with the blue insect to run in the debugger.
+
