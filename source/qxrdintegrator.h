@@ -27,15 +27,31 @@ public:
   Q_PROPERTY(double integrationStep READ get_IntegrationStep WRITE set_IntegrationStep);
   QCEP_DOUBLE_PROPERTY(IntegrationStep);
 
+  Q_PROPERTY(double integrationMinimum READ get_IntegrationMinimum WRITE set_IntegrationMinimum);
+  QCEP_DOUBLE_PROPERTY(IntegrationMinimum);
+
+  Q_PROPERTY(double integrationMaximum READ get_IntegrationMaximum WRITE set_IntegrationMaximum);
+  QCEP_DOUBLE_PROPERTY(IntegrationMaximum);
+
+  Q_PROPERTY(int integrationXUnits READ get_IntegrationXUnits WRITE set_IntegrationXUnits);
+  QCEP_INTEGER_PROPERTY(IntegrationXUnits);
+
 public:
   void readSettings(QxrdSettings &settings, QString section);
   void writeSettings(QxrdSettings &settings, QString section);
   QxrdDataProcessorBase *dataProcessor() const;
 
+  enum {
+    IntegrateTTH, IntegrateQ, IntegrateR
+  };
+
+  double XValue(double x, double y) const;
+  double XValue(QwtDoublePoint pt) const;
+  QString XLabel() const;
+
 public slots:
   QxrdIntegratedDataPtr performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask);
   QxrdIntegratedDataPtr integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int oversample, int normalize);
-  QxrdIntegratedDataPtr integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, double cx, double cy, int oversample, int normalize);
 
   QxrdIntegratedDataPtr sliceLine(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, double x0, double y0, double x1, double y1, double width);
   QxrdIntegratedDataPtr slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QwtArray<QwtDoublePoint> poly, double width);

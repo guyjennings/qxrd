@@ -16,7 +16,8 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   : QxrdPlot(parent),
     m_DataProcessor(NULL),
     m_Integrator(NULL),
-    m_PlotIndex(0)
+    m_PlotIndex(0),
+    m_XUnitsLabel("")
 {
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
@@ -43,6 +44,16 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
   if (m_PlotIndex < 40) {
     QTime tic;
     tic.start();
+
+    QString units = data->get_XUnitsLabel();
+
+    if (m_PlotIndex == 0) {
+      m_XUnitsLabel = units;
+    } else if (units != m_XUnitsLabel) {
+      m_XUnitsLabel = "";
+    }
+
+    setAxisTitle(QwtPlot::xBottom, m_XUnitsLabel);
 
     const QString title = data -> get_Image() -> get_Title();
 

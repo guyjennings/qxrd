@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>276</width>
-    <height>172</height>
+    <width>292</width>
+    <height>271</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,14 +27,14 @@
     <property name="spacing">
      <number>2</number>
     </property>
-    <item row="3" column="1">
+    <item row="6" column="1">
      <widget class="QPushButton" name="m_IntegrateButton">
       <property name="text">
        <string>Integrate</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="0" colspan="2">
+    <item row="7" column="0" colspan="2">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -74,25 +74,25 @@ script property integrator.oversample</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="6" column="0">
      <widget class="QPushButton" name="m_ClearGraphButton">
       <property name="text">
        <string>Clear Graph</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="3" column="1">
      <widget class="QxrdCenterStepSpinner" name="m_IntegratorStepSize">
       <property name="toolTip">
-       <string>2Theta step size for integration
+       <string>step size for integration
 script property integrator.integrationStep</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>2Theta Step Size</string>
+       <string>Integration Step Size</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -106,6 +106,81 @@ script property integrator.integrationStep</string>
       </property>
       <property name="text">
        <string>More Options...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Integrate vs</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QComboBox" name="m_IntegratorXUnits">
+      <property name="toolTip">
+       <string>Choose X units for integration
+property integrator.integrationXUnits</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Integrate vs 2 Theta</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Integrate vs Q</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Integrate vs R</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Integration Minimum</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Integration Maximum</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QDoubleSpinBox" name="m_IntegratorMinimum">
+      <property name="toolTip">
+       <string>Start value for integration
+script property integrator.integrationMinimum</string>
+      </property>
+      <property name="maximum">
+       <double>10000.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QDoubleSpinBox" name="m_IntegratorMaximum">
+      <property name="toolTip">
+       <string>Ending value for integration range
+script property integrator.integrationMaximum</string>
+      </property>
+      <property name="maximum">
+       <double>10000.000000000000000</double>
       </property>
      </widget>
     </item>

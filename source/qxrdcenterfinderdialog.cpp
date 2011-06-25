@@ -25,6 +25,7 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinder *cen, QWidget *p
   m_CenterFinder -> prop_TiltPlaneRotation() -> linkTo(m_TiltPlaneRotation);
   m_CenterFinder -> prop_DetectorXPixelSize() -> linkTo(m_DetectorXPixelSize);
   m_CenterFinder -> prop_DetectorYPixelSize() -> linkTo(m_DetectorYPixelSize);
+  m_CenterFinder -> prop_Energy() -> linkTo(m_Energy);
 
   connect(m_CenterFinder -> prop_ImplementTilt(), SIGNAL(changedValue(bool)), this, SLOT(onImplementTiltChanged(bool)));
 

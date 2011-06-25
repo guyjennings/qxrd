@@ -1,16 +1,17 @@
 #include "qxrdintegrateddata.h"
 
 QxrdIntegratedData::QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDoubleImageDataPtr image, int maxSize, QObject *parent) :
-    QObject(parent),
-    m_ObjectCounter(alloc),
-    m_Image(image),
-    m_MaxSize(maxSize),
-    m_Size(0),
-    m_AllocStep(1024),
-    m_X(maxSize),
-    m_Y(maxSize),
-    m_cx(0),
-    m_cy(0)
+  QObject(parent),
+  m_ObjectCounter(alloc),
+  m_Image(image),
+  m_MaxSize(maxSize),
+  m_Size(0),
+  m_AllocStep(1024),
+  m_X(maxSize),
+  m_Y(maxSize),
+  m_cx(0),
+  m_cy(0),
+  m_XUnitsLabel("TTH")
 {
   m_ObjectCounter.allocate(sizeof(double), 2, m_MaxSize);
 }
@@ -81,6 +82,16 @@ void QxrdIntegratedData::set_Image(QxrdDoubleImageDataPtr image)
 QxrdDoubleImageDataPtr QxrdIntegratedData::get_Image() const
 {
   return m_Image;
+}
+
+QString QxrdIntegratedData::get_XUnitsLabel() const
+{
+  return m_XUnitsLabel;
+}
+
+void QxrdIntegratedData::set_XUnitsLabel(QString units)
+{
+  m_XUnitsLabel = units;
 }
 
 int QxrdIntegratedData::allocatedMemoryMB()

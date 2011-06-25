@@ -19,6 +19,9 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorBase *proc, QxrdAllocator *alloc
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_IntegrationStep(this, "integrationStep", 0.001),
+    m_IntegrationMinimum(this, "integrationMinimum", 0),
+    m_IntegrationMaximum(this, "integrationMaximum", INFINITY),
+    m_IntegrationXUnits(this, "integrationXUnits", IntegrateTTH),
     m_DataProcessor(proc),
     m_Allocator(alloc)
 {
@@ -48,6 +51,53 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr i
   return integrate(integ, dimg, mask, /*m_DataProcessor -> centerFinder() -> get_CenterX(),
                    m_DataProcessor -> centerFinder() -> get_CenterY(),*/
                    get_Oversample(), true);
+}
+
+double QxrdIntegrator::XValue(QwtDoublePoint pt) const
+{
+  return XValue(pt.x(), pt.y());
+}
+
+double QxrdIntegrator::XValue(double x, double y) const
+{
+  double xVal = 0;
+
+  switch(get_IntegrationXUnits()) {
+  case IntegrateTTH:
+    xVal = m_DataProcessor->centerFinder()->getTTH(x,y);
+    break;
+
+  case IntegrateQ:
+    xVal = m_DataProcessor->centerFinder()->getQ(x,y);
+    break;
+
+  case IntegrateR:
+    xVal = m_DataProcessor->centerFinder()->getR(x,y);
+    break;
+  }
+
+  return xVal;
+}
+
+QString QxrdIntegrator::XLabel() const
+{
+  QString label = "";
+
+  switch(get_IntegrationXUnits()) {
+  case IntegrateTTH:
+    label = "2 Theta (deg)";
+    break;
+
+  case IntegrateQ:
+    label = "Q";
+    break;
+
+  case IntegrateR:
+    label = "r (mm)";
+    break;
+  }
+
+  return label;
 }
 
 QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, int oversample, int normalize)
@@ -86,12 +136,13 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       double cx = cf -> get_CenterX();
       double cy = cf -> get_CenterY();
 
-      double rMin = cf ->getTTH(QwtDoublePoint(0,0));
-      double rMax = rMin;
+      double r00  = XValue(QwtDoublePoint(0,0));
+      double r10  = XValue(QwtDoublePoint(nRows+1,0));
+      double r01  = XValue(QwtDoublePoint(0,nCols+1));
+      double r11  = XValue(QwtDoublePoint(nRows+1,nCols+1));
 
-      double r10  = cf->getTTH(QwtDoublePoint(nRows+1,0));
-      double r01  = cf->getTTH(QwtDoublePoint(0,nCols+1));
-      double r11  = cf->getTTH(QwtDoublePoint(nRows+1,nCols+1));
+      double rMin = r00;
+      double rMax = r00;
 
       rMin = qMin(rMin, r10);
       rMin = qMin(rMin, r01);
@@ -104,6 +155,9 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       if (cx >= 0 && cx <= nCols && cy >= 0 && cy <= nRows) {
         rMin = qMin(rMin,0.0);
       }
+
+      rMin = qMax(rMin, get_IntegrationMinimum());
+      rMax = qMin(rMax, get_IntegrationMaximum());
 
       double rStep = get_IntegrationStep();
       double nMin  = floor(rMin/rStep);
@@ -126,6 +180,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       double sinbeta = sin(beta);
       double cosrot  = cos(rot);
       double sinrot  = sin(rot);
+      int xUnits = get_IntegrationXUnits();
 
       g_Application->printMessage(tr("Integration range rMin %1, rMax %2, %3 steps").arg(rMin).arg(rMax).arg(nMax - nMin));
 
@@ -138,7 +193,8 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
               for (double oversamplex = 0; oversamplex < 1; oversamplex += oversampleStep) {
                 double xx = x+oversamplex+halfOversampleStep;
 
-                double r = cf->getTwoTheta(cx,cy,dist,xx,yy,pxl,pyl,cosbeta,sinbeta,cosrot,sinrot);
+//                double r = cf->getTwoTheta(cx,cy,dist,xx,yy,pxl,pyl,cosbeta,sinbeta,cosrot,sinrot);
+                double r = XValue(xx,yy);
                 double n = floor(r/rStep);
 
                 if (n >= nMin && n < nMax) {
@@ -160,7 +216,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
         int sv = sumvalue[ir];
 
         if (sv > 0) {
-          double xv = (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
+          double xv = rMin + (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
 
           if (normalize) {
             integ -> append(xv, normVal*integral[ir]/sv);
@@ -169,103 +225,13 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
           }
         }
       }
-      //
-      //  emit newIntegrationAvailable(image->get_Title(), x,y);
+
+      integ->set_XUnitsLabel(XLabel());
 
       g_Application->printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
     } else {
       g_Application->printMessage("QxrdIntegrator::integrate failed");
     }
-  }
-
-  return integ;
-}
-
-QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double cx, double cy, int oversample, int normalize)
-{
-  if (integ && image) {
-    QcepDoubleList norm = image->get_Normalization();
-
-    double normVal = 1;
-
-    if (norm.length()>=1) {
-      normVal = norm[0];
-    }
-
-    g_Application->printMessage(tr("Integrating image %1").arg(image->get_Title()));
-
-    QTime tic;
-    tic.start();
-
-    int nRows = image -> get_Height();
-    int nCols = image -> get_Width();
-
-    if (oversample < 1) {
-      oversample = 1;
-      set_Oversample(1);
-    } else if (oversample > 16) {
-      oversample = 16;
-      set_Oversample(16);
-    }
-
-    double oversampleStep = 1.0/oversample;
-    double halfOversampleStep = oversampleStep/2.0;
-
-    int imax  = 0;
-    int irmax = (int) (oversample*sqrt((double)(nRows*nRows+nCols*nCols))) + 2;
-    QVector<double> integral(irmax), sumvalue(irmax);
-
-    integral.fill(0);
-    sumvalue.fill(0);
-
-    for (int y=0; y<nRows; y++) {
-      for (int x=0; x<nCols; x++) {
-        if ((mask == NULL) || (mask->value(x, y))) {
-          double val = image->value(x, y);
-          for (double oversampley = 0; oversampley < 1; oversampley += oversampleStep) {
-            double yy = y+oversampley+halfOversampleStep;
-            double cy2= (yy - cy)*(yy - cy);
-            for (double oversamplex = 0; oversamplex < 1; oversamplex += oversampleStep) {
-              double xx = x+oversamplex+halfOversampleStep;
-              double r = sqrt(cy2 + (xx-cx)*(xx-cx));
-              int ir = (int) (r * oversample);
-
-              if (ir > imax) imax = ir;
-
-              if (ir >= 0 && ir < irmax) {
-                integral[ir] += val;
-                sumvalue[ir] += 1;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    //  QVector<double> x,y;
-
-    integ -> resize(0);
-    integ -> set_Center(cx, cy);
-
-    for(int ir=0; ir<irmax; ir++) {
-      int sv = sumvalue[ir];
-
-      if (sv > 0) {
-        double xv = ir*oversampleStep+halfOversampleStep;
-
-        if (normalize) {
-          integ -> append(xv, normVal*integral[ir]/sv);
-        } else {
-          integ -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
-        }
-      }
-    }
-    //
-    //  emit newIntegrationAvailable(image->get_Title(), x,y);
-
-    g_Application->printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
-  } else {
-    g_Application->printMessage("QxrdIntegrator::integrate failed");
   }
 
   return integ;

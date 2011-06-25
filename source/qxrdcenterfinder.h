@@ -36,6 +36,9 @@ public:
   Q_PROPERTY(double detectorDistance READ get_DetectorDistance WRITE set_DetectorDistance);
   QCEP_DOUBLE_PROPERTY(DetectorDistance);
 
+  Q_PROPERTY(double energy READ get_Energy WRITE set_Energy);
+  QCEP_DOUBLE_PROPERTY(Energy);
+
   Q_PROPERTY(bool    implementTilt    READ get_ImplementTilt WRITE set_ImplementTilt);
   QCEP_BOOLEAN_PROPERTY(ImplementTilt);
 
@@ -58,8 +61,14 @@ signals:
 public slots:
   void onCenterChanged(QwtDoublePoint pt);
 
-  double getTTH(double x, double y);
-  double getTTH(QwtDoublePoint pt);
+  double getTTH(double x, double y) const;
+  double getTTH(QwtDoublePoint pt) const;
+
+  double getQ(double x, double y) const;
+  double getQ(QwtDoublePoint pt) const;
+
+  double getR(double x, double y) const;
+  double getR(QwtDoublePoint pt) const;
 
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);

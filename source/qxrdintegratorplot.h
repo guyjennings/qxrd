@@ -26,6 +26,7 @@ private:
   QxrdDataProcessor *m_DataProcessor;
   QxrdIntegrator    *m_Integrator;
   int                m_PlotIndex;
+  QString            m_XUnitsLabel;
 };
 
 #endif // QXRDINTEGRATORPLOT_H

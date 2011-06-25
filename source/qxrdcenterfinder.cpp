@@ -14,6 +14,7 @@ QxrdCenterFinder::QxrdCenterFinder
     m_DetectorXPixelSize(this, "detectorXPixelSize", 200),
     m_DetectorYPixelSize(this, "detectorYPixelSize", 200),
     m_DetectorDistance(this, "detectorDistance", 1000),
+    m_Energy(this, "energy", 20000),
     m_ImplementTilt(this,"implementTilt", false),
     m_DetectorTilt(this, "detectorTilt", 0),
     m_TiltPlaneRotation(this, "tiltPlaneRotation", 90)
@@ -53,19 +54,64 @@ void QxrdCenterFinder::onCenterChanged(QwtDoublePoint pt)
   set_CenterY(pt.y());
 }
 
-double QxrdCenterFinder::getTTH(QwtDoublePoint pt)
+double QxrdCenterFinder::getTTH(QwtDoublePoint pt) const
 {
   return getTTH(pt.x(), pt.y());
 }
 
-double QxrdCenterFinder::getTTH(double x, double y)
+double QxrdCenterFinder::getTTH(double x, double y) const
 {
   double beta = get_DetectorTilt()*M_PI/180.0;
   double rot  = get_TiltPlaneRotation()*M_PI/180.0;
 
   if (get_ImplementTilt()) {
-    return getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(), x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(), cos(beta), sin(beta), cos(rot), sin(rot));
+    return getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+                       x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+                       cos(beta), sin(beta), cos(rot), sin(rot));
   } else {
-    return getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(), x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(), 1.0, 0.0, 1.0, 0.0);
+    return getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+                       x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+                       1.0, 0.0, 1.0, 0.0);
   }
+}
+
+double QxrdCenterFinder::getQ(QwtDoublePoint pt) const
+{
+  return getQ(pt.x(), pt.y());
+}
+
+double QxrdCenterFinder::getQ(double x, double y) const
+{
+  double q,chi;
+  double beta = get_DetectorTilt()*M_PI/180.0;
+  double rot  = get_TiltPlaneRotation()*M_PI/180.0;
+
+  if (get_ImplementTilt()) {
+    getQChi(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+            get_Energy(),
+            x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+            rot, cos(beta), sin(beta), 1.0, 0.0, cos(rot), sin(rot),
+            &q, &chi);
+  } else {
+    getQChi(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+            get_Energy(),
+            x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+            0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0,
+            &q, &chi);
+  }
+
+  return q;
+}
+
+double QxrdCenterFinder::getR(QwtDoublePoint pt) const
+{
+  return getR(pt.x(), pt.y());
+}
+
+double QxrdCenterFinder::getR(double x, double y) const
+{
+  double tth = getTTH(x, y);
+  double r = get_DetectorDistance()*sin(tth);
+
+  return r;
 }
