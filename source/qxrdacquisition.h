@@ -127,7 +127,6 @@ public:
   QxrdDarkAcquisitionParameterPack darkAcquisitionParameterPack();
 
 protected:
-  void allocateMemoryForAcquisition();
   void acquisition(int isDark);
   void copyParameters(int isDark);
 

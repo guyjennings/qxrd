@@ -272,7 +272,7 @@ public:
 
   void loadDefaultImages();
 
-  QxrdDoubleImageDataPtr takeNextFreeImage();
+  QxrdDoubleImageDataPtr takeNextFreeImage(int width, int height);
 
   void readSettings(QxrdSettings &settings, QString section);
   void writeSettings(QxrdSettings &settings, QString section);
@@ -331,6 +331,9 @@ protected:
   void newDarkImage(QxrdDoubleImageDataPtr image);
   void newBadPixelsImage(QxrdDoubleImageDataPtr image);
   void newGainMapImage(QxrdDoubleImageDataPtr image);
+
+  int newMaskWidth() const;
+  int newMaskHeight() const;
 
 private:
   int incrementAcquiredCount();

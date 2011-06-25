@@ -17,16 +17,6 @@ QxrdRasterData::QxrdRasterData(QxrdDoubleImageDataPtr img, int interp, QxrdMaskD
   }
 }
 
-//QxrdRasterData::QxrdRasterData()
-//  : QxrdRasterData(NULL,NULL,1,NULL)
-//{
-//}
-//
-//QxrdRasterData::QxrdRasterData(const QxrdRasterData &cpy)
-//  : QxrdRasterData(cpy.data(), cpy.interp(), cpy.mask())
-//{
-//}
-//
 void QxrdRasterData::setInterpolate(int interp)
 {
 //  printf("%p->QxrdRasterData::setInterpolate(%d)\n", this, interp);

@@ -43,7 +43,7 @@ void QxrdDataProcessorThreaded::idleInt16Image(QxrdInt16ImageDataPtr image)
 
 void QxrdDataProcessorThreaded::acquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
-  QxrdDoubleImageDataPtr corrected = takeNextFreeImage();
+  QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
 
   typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdInt16ImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QxrdMaskDataPtr);
   MFType p = &QxrdDataProcessorThreaded::correctInt16Image;
@@ -52,7 +52,7 @@ void QxrdDataProcessorThreaded::acquiredInt16Image(QxrdInt16ImageDataPtr image, 
 
 void QxrdDataProcessorThreaded::acquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
-  QxrdDoubleImageDataPtr corrected = takeNextFreeImage();
+  QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
 
   typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdInt32ImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QxrdMaskDataPtr);
   MFType p = &QxrdDataProcessorThreaded::correctInt32Image;
@@ -61,7 +61,7 @@ void QxrdDataProcessorThreaded::acquiredInt32Image(QxrdInt32ImageDataPtr image, 
 
 void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
 {
-  QxrdDoubleImageDataPtr corrected = takeNextFreeImage();
+  QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
 
   typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QxrdMaskDataPtr);
   MFType p = &QxrdDataProcessorThreaded::correctDoubleImage;
@@ -70,7 +70,7 @@ void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image
 
 void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, QList<double> v)
 {
-  QxrdDoubleImageDataPtr corrected = takeNextFreeImage();
+  QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
 
   typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QList<double>);
   MFType p = &QxrdDataProcessorThreaded::correctDoubleImage;
@@ -279,11 +279,11 @@ double QxrdDataProcessorThreaded::estimatedProcessingTime(double estSerialTime, 
 
 void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
 {
-  QxrdDoubleImageDataPtr summed = takeNextFreeImage();
+  QxrdDoubleImageDataPtr summed = takeNextFreeImage(0,0);
   int first = true;
 
   foreach(QString name, names) {
-    QxrdDoubleImageDataPtr img = takeNextFreeImage();
+    QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
     QString path = filePathInCurrentDirectory(name);
 
     if (img->readImage(path)) {
@@ -316,7 +316,7 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
   QxrdDoubleImageDataPtr img;
   QxrdIntegratedDataPtr  result;
 
-  m_Allocator->newDoubleImageAndIntegratedData(QxrdAllocator::AlwaysAllocate, img, result);
+  m_Allocator->newDoubleImageAndIntegratedData(QxrdAllocator::AlwaysAllocate, 0,0, img, result);
 
   QString path = filePathInCurrentDirectory(name);
 
@@ -341,7 +341,7 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
 
 void QxrdDataProcessorThreaded::processData(QString name)
 {
-  QxrdDoubleImageDataPtr res = takeNextFreeImage();
+  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
   QString path = filePathInCurrentDirectory(name);
 
@@ -417,7 +417,7 @@ void QxrdDataProcessorThreaded::processNormalizedFile(QString path, double v1, d
 
 void QxrdDataProcessorThreaded::processNormalizedFile(QString name, QList<double> v)
 {
-  QxrdDoubleImageDataPtr res = takeNextFreeImage();
+  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
   QString path = filePathInCurrentDirectory(name);
 
@@ -462,7 +462,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
 {
   QDirIterator imagePaths(currentDirectory(), QStringList(imagePattern));
 
-  QxrdDoubleImageDataPtr dark = takeNextFreeImage();
+  QxrdDoubleImageDataPtr dark = takeNextFreeImage(0,0);
   QString path = filePathInCurrentDirectory(darkPath);
 
   if (dark->readImage(path)) {
@@ -476,7 +476,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
       QString imagePath=imagePaths.next();
 
       QString path = filePathInCurrentDirectory(imagePath);
-      QxrdDoubleImageDataPtr image = takeNextFreeImage();
+      QxrdDoubleImageDataPtr image = takeNextFreeImage(0,0);
 
       if (image->readImage(path)) {
         image->loadMetaData();

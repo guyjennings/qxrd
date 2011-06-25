@@ -27,7 +27,7 @@ class QcepImageDataBase : public QObject
   Q_OBJECT;
 
 public:
-  QcepImageDataBase(int width=0, int height=0);
+  QcepImageDataBase(int width, int height);
   virtual ~QcepImageDataBase();
 
   Q_PROPERTY(int width READ get_Width);
@@ -178,7 +178,7 @@ template <typename T>
     class QcepImageData : public QcepImageDataBase
 {
 public:
-  QcepImageData(int width=0, int height=0, T def=0);
+  QcepImageData(int width, int height, T def=0);
 
 public:
   bool readImage(QString filename);

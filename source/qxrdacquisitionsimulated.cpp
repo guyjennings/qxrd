@@ -136,7 +136,8 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
   int nRows = get_NRows();
   int nCols = get_NCols();
 
-  QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image(QxrdAllocator::AllocateFromReserve);
+  QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image(QxrdAllocator::AllocateFromReserve,
+                                                           nCols, nRows);
   int xpmsec = (int)(get_ExposureTime()*1000+0.5);
   int frame = frameCounter % 8;
 

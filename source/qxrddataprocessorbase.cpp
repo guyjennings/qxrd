@@ -78,7 +78,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     m_Acquisition(acq),
     m_AcquiredInt16Images("acquiredInt16Images"),
     m_AcquiredInt32Images("acquiredInt32Images"),
-    m_Data(allocator -> newDoubleImage(QxrdAllocator::WaitTillAvailable)),
+    m_Data(allocator -> newDoubleImage(QxrdAllocator::WaitTillAvailable, 2048, 2048)),
     m_DarkFrame(NULL),
     m_BadPixels(NULL),
     m_GainMap(NULL),
@@ -229,9 +229,10 @@ QString QxrdDataProcessorBase::integratedOutputDirectory()
   }
 }
 
-QxrdDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage()
+QxrdDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage(int width, int height)
 {
-  QxrdDoubleImageDataPtr res = m_Allocator -> newDoubleImage(QxrdAllocator::AlwaysAllocate);
+  QxrdDoubleImageDataPtr res = m_Allocator -> newDoubleImage(QxrdAllocator::AlwaysAllocate,
+                                                             width, height);
 
   return res;
 }
@@ -268,7 +269,7 @@ void QxrdDataProcessorBase::newDarkImage(QxrdDoubleImageDataPtr image)
 void QxrdDataProcessorBase::newDarkImage(QxrdInt16ImageDataPtr image)
 {
   if (m_DarkFrame == NULL) {
-    m_DarkFrame = takeNextFreeImage();  /*QxrdDoubleImageDataPtr(new QxrdDoubleImageData())*/;
+    m_DarkFrame = takeNextFreeImage(image->get_Width(), image->get_Height());
   }
 
   m_DarkFrame -> copyFrom(image);
@@ -280,7 +281,7 @@ void QxrdDataProcessorBase::newDarkImage(QxrdInt16ImageDataPtr image)
 void QxrdDataProcessorBase::newDarkImage(QxrdInt32ImageDataPtr image)
 {
   if (m_DarkFrame == NULL) {
-    m_DarkFrame = takeNextFreeImage();  /*QxrdDoubleImageDataPtr(new QxrdDoubleImageData())*/;
+    m_DarkFrame = takeNextFreeImage(image->get_Width(), image->get_Height());
   }
 
   m_DarkFrame -> copyFrom(image);
@@ -341,7 +342,7 @@ void QxrdDataProcessorBase::loadDefaultImages()
 
 void QxrdDataProcessorBase::loadData(QString name)
 {
-  QxrdDoubleImageDataPtr res = takeNextFreeImage();
+  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
   if (res -> readImage(name)) {
 
@@ -369,7 +370,7 @@ void QxrdDataProcessorBase::loadDark(QString name)
           tr("QxrdDataProcessorBase::loadDark(%1)").arg(name));
   }
 
-  QxrdDoubleImageDataPtr res = takeNextFreeImage();
+  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
   if (res -> readImage(name)) {
 
@@ -400,7 +401,7 @@ void QxrdDataProcessorBase::loadBadPixels(QString name)
                 tr("QxrdDataProcessorBase::loadBadPixels(%1)").arg(name));
     }
 
-    QxrdDoubleImageDataPtr res = takeNextFreeImage();
+    QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
     if (res -> readImage(name)) {
 
@@ -429,7 +430,7 @@ void QxrdDataProcessorBase::loadGainMap(QString name)
                 tr("QxrdDataProcessorBase::loadGainMap(%1)").arg(name));
     }
 
-  QxrdDoubleImageDataPtr res = takeNextFreeImage();
+  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
   if (res -> readImage(name)) {
 
@@ -475,9 +476,41 @@ int QxrdDataProcessorBase::maskStackPosition(int pos)
   }
 }
 
+int QxrdDataProcessorBase::newMaskWidth() const
+{
+  QxrdDoubleImageDataPtr d = data();
+
+  int w=0;
+
+  if (d) {
+    w = d->get_Width();
+  } else if (mask()) {
+    w = mask()->get_Width();
+  }
+
+  return w;
+}
+
+int QxrdDataProcessorBase::newMaskHeight() const
+{
+  QxrdDoubleImageDataPtr d = data();
+
+  int h=0;
+
+  if (d) {
+    h = d->get_Height();
+  } else if (mask()) {
+    h = mask()->get_Height();
+  }
+
+  return h;
+}
+
 void QxrdDataProcessorBase::newMaskStack()
 {
-  QxrdMaskDataPtr m = m_Allocator->newMask(QxrdAllocator::WaitTillAvailable);
+
+  QxrdMaskDataPtr m = m_Allocator->newMask(QxrdAllocator::WaitTillAvailable,
+                                           newMaskWidth(), newMaskHeight());
 
   m_Masks.push_front(m);
 
@@ -491,7 +524,8 @@ void QxrdDataProcessorBase::newMaskStack()
 void QxrdDataProcessorBase::pushMaskStack(QxrdMaskDataPtr m)
 {
   if (m == NULL) {
-    m = m_Allocator -> newMask(QxrdAllocator::WaitTillAvailable);
+    m = m_Allocator -> newMask(QxrdAllocator::WaitTillAvailable,
+                               newMaskWidth(), newMaskHeight());
 
     if (mask()) {
       mask()->copyMaskTo(m);
@@ -769,7 +803,7 @@ void QxrdDataProcessorBase::loadMask(QString name)
                 tr("QxrdDataProcessorBase::loadMask(%1)").arg(name));
     }
 
-  QxrdMaskDataPtr res = m_Allocator -> newMask(QxrdAllocator::WaitTillAvailable);
+  QxrdMaskDataPtr res = m_Allocator -> newMask(QxrdAllocator::WaitTillAvailable, 0,0);
 
   if (res -> readImage(name)) {
 

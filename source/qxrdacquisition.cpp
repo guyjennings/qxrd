@@ -59,13 +59,6 @@ void QxrdAcquisition::onBufferSizeChanged(int newMB)
   m_Allocator -> changedSizeMB(newMB);
 }
 
-void QxrdAcquisition::allocateMemoryForAcquisition()
-{
-  THREAD_CHECK;
-
-  m_Allocator -> dimension(get_NCols(), get_NRows());
-}
-
 void QxrdAcquisition::acquire()
 {
   THREAD_CHECK;
@@ -267,8 +260,10 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int fileIndex, int
 void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   if (image) {
-    QxrdInt32ImageDataPtr proc = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
-    QxrdMaskDataPtr ovf = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve, 0);
+    int w=image->get_Width(), h=image->get_Height();
+
+    QxrdInt32ImageDataPtr proc = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve, w,h);
+    QxrdMaskDataPtr ovf = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve, w,h, 0);
 
     if (proc == NULL || ovf == NULL) {
       indicateDroppedFrame(0);
@@ -447,8 +442,10 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     ovf[p].resize(preTrigger+1);
 
     for (int t=0; t<=preTrigger; t++) {
-      res[p][t] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
-      ovf[p][t] = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,0);
+      res[p][t] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve,
+                                             get_NCols(), get_NRows());
+      ovf[p][t] = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,
+                                       get_NCols(), get_NRows(), 0);
 
       if (res[p][t]==NULL || ovf[p][t]==NULL) {
         g_Application->criticalMessage("Insufficient memory for acquisition operation");
@@ -566,8 +563,10 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
     synchronizedAcquisition()->prepareForDarkAcquisition(&parms);
   }
 
-  QxrdInt32ImageDataPtr res = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
-  QxrdMaskDataPtr overflow  = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,0);
+  QxrdInt32ImageDataPtr res = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve,
+                                                         get_NCols(), get_NRows());
+  QxrdMaskDataPtr overflow  = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,
+                                                   get_NCols(), get_NRows(),0);
   QString fb, fn;
 
   if (res == NULL || overflow == NULL) {

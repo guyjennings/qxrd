@@ -21,10 +21,6 @@ public:
                  QxrdMaskDataPtr msk = QxrdMaskDataPtr(),
                  QwtDoubleInterval range = QwtDoubleInterval(0,40000));
 
-//private:
-//  QxrdRasterData();
-//  QxrdRasterData(const QxrdRasterData& cpy);
-
 public:
   double value(double x, double y) const;
   QxrdRasterData* copy() const;

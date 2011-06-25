@@ -31,7 +31,7 @@ class QxrdImageData : public QcepImageData<T>
 //  Q_OBJECT;
 //
 public:
-  QxrdImageData(QxrdAllocatorInterface *allocator, int width=0, int height=0, T def=0);
+  QxrdImageData(QxrdAllocatorInterface *allocator, int width, int height, T def=0);
   ~QxrdImageData();
 
   QString rawFileName();
