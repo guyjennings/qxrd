@@ -802,6 +802,8 @@ void QxrdDataProcessorBase::saveMask(QString name, int canOverwrite)
 void QxrdDataProcessorBase::clearMask()
 {
   clearMaskStack();
+
+  set_MaskPath("");
 }
 
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
