@@ -111,7 +111,7 @@ double QxrdCenterFinder::getR(QwtDoublePoint pt) const
 double QxrdCenterFinder::getR(double x, double y) const
 {
   double tth = getTTH(x, y);
-  double r = get_DetectorDistance()*sin(tth);
+  double r = get_DetectorDistance()*tan(tth*M_PI/180.0);
 
   return r;
 }
