@@ -73,6 +73,9 @@ public:
   Q_PROPERTY(double tthMouse READ get_TTHMouse WRITE set_TTHMouse STORED false);
   QCEP_DOUBLE_PROPERTY(TTHMouse);
 
+  Q_PROPERTY(double qMouse READ get_QMouse WRITE set_QMouse STORED false);
+  QCEP_DOUBLE_PROPERTY(QMouse);
+
   Q_PROPERTY(double valMouse READ get_ValMouse WRITE set_ValMouse STORED false);
   QCEP_DOUBLE_PROPERTY(ValMouse);
 

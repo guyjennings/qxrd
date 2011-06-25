@@ -294,6 +294,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_Plot->prop_YMouse()->linkTo(m_YMouse);
   m_Plot->prop_ValMouse()->linkTo(m_ValMouse);
   m_Plot->prop_TTHMouse()->linkTo(m_TTHMouse);
+  m_Plot->prop_QMouse()->linkTo(m_QMouse);
 
   m_StatusMsg = new QLabel(NULL);
   m_StatusMsg -> setMinimumWidth(200);

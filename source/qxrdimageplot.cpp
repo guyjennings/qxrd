@@ -37,6 +37,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_InterpolatePixels(this, "interpolatePixels", 1),
     m_MaintainAspectRatio(this, "maintainAspectRatio", 1),
     m_TTHMouse(this,"tthMouse",0),
+    m_QMouse(this,"qMouse",0),
     m_ValMouse(this,"valMouse",0),
     m_MaskMouse(this,"maskMouse",0),
     m_Rescaler(NULL),
@@ -714,8 +715,12 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
 
   if (centerFinder) {
     double tth = centerFinder->getTTH(pos);
-    res += tr(", TTH %1").arg(tth);
+    res += tr("\nTTH %1").arg(tth);
     set_TTHMouse(tth);
+
+    double q = centerFinder->getQ(pos);
+    res += tr(", Q %1").arg(q);
+    set_QMouse(q);
   }
 
   return res;
