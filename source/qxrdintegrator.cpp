@@ -20,7 +20,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorBase *proc, QxrdAllocator *alloc
     m_Oversample(this, "oversample", 1),
     m_IntegrationStep(this, "integrationStep", 0.001),
     m_IntegrationMinimum(this, "integrationMinimum", 0),
-    m_IntegrationMaximum(this, "integrationMaximum", INFINITY),
+    m_IntegrationMaximum(this, "integrationMaximum", 100000),
     m_IntegrationXUnits(this, "integrationXUnits", IntegrateTTH),
     m_DataProcessor(proc),
     m_Allocator(alloc)
