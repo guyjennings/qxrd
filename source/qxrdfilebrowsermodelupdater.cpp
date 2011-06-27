@@ -20,6 +20,7 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModel *b
   }
 
   m_FileSystemWatcher = new QFileSystemWatcher(this);
+  m_FileSystemWatcher->setObjectName(QLatin1String("_qt_autotest_force_engine_poller"));
 
   connect(m_BrowserModel,      SIGNAL(rootChanged(const QString&)),      this, SLOT(changeRoot(const QString&)));
   connect(m_FileSystemWatcher, SIGNAL(directoryChanged(const QString&)), this, SLOT(changeContents(const QString&)), Qt::DirectConnection);
