@@ -17,6 +17,12 @@ public slots:
   double convertTwoThetaToQ(double twoTheta,double wavelength) const;
   double convertQToTwoTheta(double Q, double wavelength) const;
 
+  double getRadius(double xCenter,double yCenter,
+                   double distance,double xPixel,double yPixel,
+                   double pixelLength,double pixelHeight,
+                   double cos_beta,double sin_beta,
+                   double cos_rotation,double sin_rotation) const;
+
   double getTwoTheta(double xCenter,double yCenter,
                    double distance,double xPixel,double yPixel,
                    double pixelLength,double pixelHeight,

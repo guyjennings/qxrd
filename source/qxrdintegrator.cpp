@@ -79,6 +79,36 @@ double QxrdIntegrator::XValue(double x, double y) const
   return xVal;
 }
 
+double QxrdIntegrator::XValue(double x, double y,
+                              int xUnits, QxrdCenterFinder *cf,
+                              double xc, double yc,
+                              double dst, double nrg,
+                              double pxl, double pxh,
+                              double rot, double cosr, double sinr,
+                              double cosb, double sinb,
+                              double cosa, double sina
+                              ) const
+{
+  double xVal = 0;
+  double junk;
+
+  switch(xUnits) {
+  case IntegrateTTH:
+    xVal = cf->getTwoTheta(xc,yc,dst,x,y,pxl,pxh,cosb,sinb,cosr,sinr);
+    break;
+
+  case IntegrateQ:
+    cf->getQChi(xc,yc,dst,nrg,x,y,pxl,pxh,rot,cosb,sinb,cosa,sina,cosr,sinr,&xVal, &junk);
+    break;
+
+  case IntegrateR:
+    xVal = cf->getRadius(xc,yc,dst,x,y,pxl,pxh,cosb,sinb,cosr,sinr);
+    break;
+  }
+
+  return xVal;
+}
+
 QString QxrdIntegrator::XLabel() const
 {
   QString label = "";
@@ -170,6 +200,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       double beta = cf->get_DetectorTilt()*M_PI/180.0;
       double rot  = cf->get_TiltPlaneRotation()*M_PI/180.0;
       double dist = cf->get_DetectorDistance();
+      double nrg  = cf->get_Energy();
 
       if (!cf->get_ImplementTilt()) {
         beta = 0;
@@ -194,7 +225,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
                 double xx = x+oversamplex+halfOversampleStep;
 
 //                double r = cf->getTwoTheta(cx,cy,dist,xx,yy,pxl,pyl,cosbeta,sinbeta,cosrot,sinrot);
-                double r = XValue(xx,yy);
+                double r = XValue(xx,yy,xUnits,cf,cx,cy,dist,nrg,pyl,pxl,rot,cosrot,sinrot,cosbeta,sinbeta,1.0,0.0);
                 double n = floor(r/rStep);
 
                 if (n >= nMin && n < nMax) {

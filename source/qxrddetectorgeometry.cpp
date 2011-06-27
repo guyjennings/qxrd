@@ -57,6 +57,45 @@ double QxrdDetectorGeometry::convertQToTwoTheta(double Q, double wavelength) con
   return 2.0*asin(Q*wavelength/(4*M_PI))*180.0/M_PI;
 }
 
+double QxrdDetectorGeometry::getRadius(double xCenter,double yCenter,
+                                       double distance,double xPixel,double yPixel,
+                                       double pixelLength,double pixelHeight,
+                                       double cos_beta,double sin_beta,
+                                       double cos_rotation,double sin_rotation) const
+{
+  double pixelLength_mm,pixelHeight_mm;
+  double xMeasured,yMeasured;
+  double bottom;
+  double xPhysical,yPhysical;
+
+  // pixellength comes in in units of micron
+  // We convert pixelLength & pixelHeight into mm units so
+  // that they are comparable with distance (in units of
+  //  millimeters)
+  pixelLength_mm = pixelLength/1000.0;
+  pixelHeight_mm = pixelHeight/1000.0;
+
+  xMeasured = (xPixel-xCenter)*pixelLength_mm;
+  yMeasured = (yPixel-yCenter)*pixelHeight_mm;
+
+  bottom = distance+(xMeasured*cos_rotation+
+                     yMeasured*sin_rotation)*sin_beta/*+
+      (-xMeasured*sin_rotation+
+       yMeasured*cos_rotation)*sin_alpha*cos_beta*/;
+
+  // calculate the x y coordinates on the imaginary
+  // detector using fancy math
+  xPhysical = distance*((xMeasured*cos_rotation+
+                         yMeasured*sin_rotation)*cos_beta
+                        /*-(-xMeasured*sin_rotation+
+                          yMeasured*cos_rotation)*sin_alpha*/)/bottom;
+
+  yPhysical = distance*(-xMeasured*sin_rotation+
+                        yMeasured*cos_rotation)/**cos_alpha*//bottom;
+
+  return sqrt(xPhysical*xPhysical + yPhysical*yPhysical);
+}
+
 double QxrdDetectorGeometry::getTwoTheta(double xCenter,double yCenter,
                                          double distance,double xPixel,double yPixel,
                                          double pixelLength,double pixelHeight,

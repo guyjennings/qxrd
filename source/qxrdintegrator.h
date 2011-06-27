@@ -47,6 +47,16 @@ public:
 
   double XValue(double x, double y) const;
   double XValue(QwtDoublePoint pt) const;
+  double XValue(double x, double y,
+                int xUnits, QxrdCenterFinder *cf,
+                double xc, double yc,
+                double dst, double nrg,
+                double pxl, double pxh,
+                double rot, double cosr, double sinr,
+                double cosb, double sinb,
+                double cosa, double sina
+                ) const;
+
   QString XLabel() const;
 
 public slots:
