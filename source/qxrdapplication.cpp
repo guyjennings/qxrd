@@ -141,6 +141,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
   setObjectName("qxrdapplication");
 
+  QThread::currentThread()->setObjectName("app");
 //  printf("application thread %p\n", thread());
 
   g_Application = this;
@@ -166,18 +167,20 @@ bool QxrdApplication::init(QSplashScreen *splash)
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing Memory Allocator");
 
   m_AllocatorThread = new QxrdAllocatorThread();
+  m_AllocatorThread -> setObjectName("alloc");
   m_AllocatorThread -> start();
   m_Allocator = m_AllocatorThread -> allocator();
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing File Saver");
 
   m_FileSaverThread = new QxrdFileSaverThread(m_Allocator);
+  m_FileSaverThread -> setObjectName("saver");
   m_FileSaverThread -> start();
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing Data Processing");
 
   m_DataProcessorThread = new QxrdDataProcessorThread(NULL, m_Allocator, m_FileSaverThread);
-
+  m_DataProcessorThread -> setObjectName("proc");
   m_DataProcessorThread -> start();
   m_DataProcessor = m_DataProcessorThread -> dataProcessor();
 
@@ -186,6 +189,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing Data Acquisition");
 
   m_AcquisitionThread = new QxrdAcquisitionThread(m_DataProcessor, m_Allocator, detectorType);
+  m_AcquisitionThread -> setObjectName("acqu");
   m_AcquisitionThread -> start();
   m_Acquisition = m_AcquisitionThread -> acquisition();
 
@@ -201,7 +205,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading plugins");
 
-  printMessage("about to load plugins");
+//  printMessage("about to load plugins");
 
   loadPlugins();
 
@@ -215,28 +219,33 @@ bool QxrdApplication::init(QSplashScreen *splash)
     splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting SPEC Server");
 
     m_ServerThread = new QxrdServerThread("qxrd", specServerPort);
-
+    m_ServerThread -> setObjectName("server");
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
 
-    printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
+    if (qcepDebug(DEBUG_SERVER)) {
+      printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
+    }
   }
 
   if (simpleServer) {
     splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Simple Socket Server");
 
     m_SimpleServerThread = new QxrdSimpleServerThread("simpleserver", simpleServerPort);
-
+    m_SimpleServerThread -> setObjectName("smpsrv");
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
 
-    printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
+    if (qcepDebug(DEBUG_SERVER)) {
+      printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
+    }
   }
 
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Scripting System");
 
   m_ScriptEngineThread = new QxrdScriptEngineThread(this, m_Window, m_Acquisition, m_DataProcessor);
+  m_ScriptEngineThread -> setObjectName("script");
   m_ScriptEngineThread -> start();
   m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
 
@@ -268,7 +277,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
   readSettings();
 
   m_SettingsSaverThread = new QxrdSettingsSaverThread(this);
-
+  m_SettingsSaverThread -> setObjectName("settings");
   m_SettingsSaverThread -> start();
   m_SettingsSaver = m_SettingsSaverThread -> settingsSaver();
 
@@ -444,9 +453,20 @@ QString QxrdApplication::hexArg(void *p)
 #endif
 }
 
+void QxrdApplication::warningMessage(QString msg, QDateTime ts)
+{
+  if (window()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(window(), "warningMessage", Qt::BlockingQueuedConnection, Q_ARG(QString, msg)));
+  }
+}
+
 void QxrdApplication::printMessage(QString msg, QDateTime ts)
 {
-  QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+msg.trimmed();
+  QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+
+      QThread::currentThread()->objectName()+": "+
+      msg.trimmed();
+
+  message = message.replace("\n", " : ");
 
   logMessage(message);
 
@@ -459,6 +479,8 @@ void QxrdApplication::statusMessage(QString msg, QDateTime ts)
 {
   QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+msg.trimmed();
 
+  message = message.replace("\n", " : ");
+
   logMessage(message);
 
   if (window()) {
@@ -469,6 +491,8 @@ void QxrdApplication::statusMessage(QString msg, QDateTime ts)
 void QxrdApplication::criticalMessage(QString msg, QDateTime ts)
 {
   QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+msg.trimmed();
+
+  message = message.replace("\n", " : ");
 
   logMessage(message);
 

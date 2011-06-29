@@ -70,6 +70,7 @@ public slots:
   void splashMessage(const char *msg);
   void splashMessage(QString msg);
 
+  void warningMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
