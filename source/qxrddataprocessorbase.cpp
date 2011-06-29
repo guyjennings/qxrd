@@ -249,59 +249,80 @@ void QxrdDataProcessorBase::newDarkImage(QxrdDoubleImageDataPtr image)
 {
   m_DarkFrame = image;
 
-  set_DarkImagePath(image->get_FileName());
+  if (image) {
+    set_DarkImagePath(image->get_FileName());
 
-  int height = image->get_Height();
-  int width  = image->get_Width();
-  int ndrk = image -> get_SummedExposures();
-  int npixels = width*height;
-  if (ndrk <= 0) ndrk = 1;
+    int height = image->get_Height();
+    int width  = image->get_Width();
+    int ndrk = image -> get_SummedExposures();
+    int npixels = width*height;
+    if (ndrk <= 0) ndrk = 1;
 
-  double *dk     = image->data();
-  double avgdark = 0;
+    double *dk     = image->data();
+    double avgdark = 0;
 
-  for (int i=0; i<npixels; i++) {
-    avgdark  += dk[i];
+    for (int i=0; i<npixels; i++) {
+      avgdark  += dk[i];
+    }
+    set_AverageDark(avgdark/npixels/ndrk);
+  } else {
+    set_DarkImagePath("");
+    set_AverageDark(0);
   }
-  set_AverageDark(avgdark/npixels/ndrk);
 }
 
 void QxrdDataProcessorBase::newDarkImage(QxrdInt16ImageDataPtr image)
 {
-  if (m_DarkFrame == NULL) {
-    m_DarkFrame = takeNextFreeImage(image->get_Width(), image->get_Height());
+  if (image) {
+    if (m_DarkFrame == NULL) {
+      m_DarkFrame = takeNextFreeImage(image->get_Width(), image->get_Height());
+    }
+
+    m_DarkFrame -> copyFrom(image);
+    newDarkImage(m_DarkFrame);
+
+    // set_DarkImagePath(m_DarkFrame -> get_FileName());
+  } else {
+    newDarkImage(QxrdDoubleImageDataPtr(NULL));
   }
-
-  m_DarkFrame -> copyFrom(image);
-  newDarkImage(m_DarkFrame);
-
-//  set_DarkImagePath(m_DarkFrame -> get_FileName());
 }
 
 void QxrdDataProcessorBase::newDarkImage(QxrdInt32ImageDataPtr image)
 {
-  if (m_DarkFrame == NULL) {
-    m_DarkFrame = takeNextFreeImage(image->get_Width(), image->get_Height());
+  if (image) {
+    if (m_DarkFrame == NULL) {
+      m_DarkFrame = takeNextFreeImage(image->get_Width(), image->get_Height());
+    }
+
+    m_DarkFrame -> copyFrom(image);
+    newDarkImage(m_DarkFrame);
+
+    //  set_DarkImagePath(m_DarkFrame -> get_FileName());
+  } else {
+    newDarkImage(QxrdDoubleImageDataPtr(NULL));
   }
-
-  m_DarkFrame -> copyFrom(image);
-  newDarkImage(m_DarkFrame);
-
-//  set_DarkImagePath(m_DarkFrame -> get_FileName());
 }
 
 void QxrdDataProcessorBase::newBadPixelsImage(QxrdDoubleImageDataPtr image)
 {
   m_BadPixels = image;
 
-  set_BadPixelsPath(image->get_FileName());
+  if (image) {
+    set_BadPixelsPath(image->get_FileName());
+  } else {
+    set_BadPixelsPath("");
+  }
 }
 
 void QxrdDataProcessorBase::newGainMapImage(QxrdDoubleImageDataPtr image)
 {
   m_GainMap = image;
 
-  set_GainMapPath(image->get_FileName());
+  if (image) {
+    set_GainMapPath(image->get_FileName());
+  } else {
+    set_GainMapPath("");
+  }
 }
 
 void QxrdDataProcessorBase::newMask()
@@ -344,7 +365,7 @@ void QxrdDataProcessorBase::loadData(QString name)
 {
   QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
-  if (res -> readImage(name)) {
+  if (res && res -> readImage(name)) {
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -372,7 +393,7 @@ void QxrdDataProcessorBase::loadDark(QString name)
 
   QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
-  if (res -> readImage(name)) {
+  if (res && res -> readImage(name)) {
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -389,9 +410,11 @@ void QxrdDataProcessorBase::loadDark(QString name)
 
 void QxrdDataProcessorBase::saveDark(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_DarkFrame, QxrdMaskDataPtr(), canOverwrite);
+  if (m_DarkFrame) {
+    saveNamedImageData(name, m_DarkFrame, QxrdMaskDataPtr(), canOverwrite);
 
-  set_DarkImagePath(m_DarkFrame -> get_FileName());
+    set_DarkImagePath(m_DarkFrame -> get_FileName());
+  }
 }
 
 void QxrdDataProcessorBase::loadBadPixels(QString name)
@@ -403,7 +426,7 @@ void QxrdDataProcessorBase::loadBadPixels(QString name)
 
     QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
-    if (res -> readImage(name)) {
+    if (res && res -> readImage(name)) {
 
         //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -418,9 +441,11 @@ void QxrdDataProcessorBase::loadBadPixels(QString name)
 
 void QxrdDataProcessorBase::saveBadPixels(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_BadPixels, QxrdMaskDataPtr(), canOverwrite);
+  if (m_BadPixels) {
+    saveNamedImageData(name, m_BadPixels, QxrdMaskDataPtr(), canOverwrite);
 
-  set_BadPixelsPath(m_BadPixels -> get_FileName());
+    set_BadPixelsPath(m_BadPixels -> get_FileName());
+  }
 }
 
 void QxrdDataProcessorBase::loadGainMap(QString name)
@@ -448,9 +473,11 @@ void QxrdDataProcessorBase::loadGainMap(QString name)
 
 void QxrdDataProcessorBase::saveGainMap(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_GainMap, QxrdMaskDataPtr(), canOverwrite);
+  if (m_GainMap) {
+    saveNamedImageData(name, m_GainMap, QxrdMaskDataPtr(), canOverwrite);
 
-  set_GainMapPath(m_GainMap -> get_FileName());
+    set_GainMapPath(m_GainMap -> get_FileName());
+  }
 }
 
 QxrdMaskStackPtr QxrdDataProcessorBase::maskStack()
@@ -1350,6 +1377,11 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::darkImage() const
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::gainMap() const
 {
   return m_GainMap;
+}
+
+QxrdDoubleImageDataPtr QxrdDataProcessorBase::badPixels() const
+{
+  return m_BadPixels;
 }
 
 QxrdMaskDataPtr QxrdDataProcessorBase::mask() const
