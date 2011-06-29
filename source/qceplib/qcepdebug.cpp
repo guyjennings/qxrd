@@ -19,6 +19,7 @@ const char* gDebugStrings[] = {
   "Thread Initialization",
   "Delay Acquisition Startup",
   "File Browser Operations",
+  "Server Commands",
   NULL
 };
 
