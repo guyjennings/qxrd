@@ -79,6 +79,7 @@ public slots:
   void doTest();
 
   QString timeStamp();
+  void warningMessage(QString msg);
   void displayMessage(QString msg);
   void displayStatusMessage(QString msg);
   void displayCriticalMessage(QString msg);

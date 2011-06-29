@@ -524,6 +524,13 @@ QString QxrdWindow::timeStamp()
   return QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ");
 }
 
+void QxrdWindow::warningMessage(QString msg)
+{
+  THREAD_CHECK;
+
+  QMessageBox::warning(this, tr("Warning"), msg);
+}
+
 void QxrdWindow::displayMessage(QString msg)
 {
   THREAD_CHECK;
@@ -792,11 +799,15 @@ void QxrdWindow::newMask()
 
 void QxrdWindow::doSaveData()
 {
-  QString theFile = QFileDialog::getSaveFileName(
-        this, "Save Data in", m_DataProcessor -> get_DataPath());
+  if (m_DataProcessor->data() == NULL) {
+    warningMessage("No data available to save");
+  } else {
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Data in", m_DataProcessor -> get_DataPath());
 
-  if (theFile.length()) {
-    m_DataProcessor->saveData(theFile, QxrdDataProcessor::CanOverwrite);
+    if (theFile.length()) {
+      m_DataProcessor->saveData(theFile, QxrdDataProcessor::CanOverwrite);
+    }
   }
 }
 
@@ -812,11 +823,15 @@ void QxrdWindow::doLoadData()
 
 void QxrdWindow::doSaveDark()
 {
-  QString theFile = QFileDialog::getSaveFileName(
-        this, "Save Dark Data in", m_DataProcessor -> get_DataPath());
+  if (m_DataProcessor->darkImage() == NULL) {
+    warningMessage("No dark image available to save");
+  } else {
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Dark Data in", m_DataProcessor -> get_DataPath());
 
-  if (theFile.length()) {
-    m_DataProcessor->saveDark(theFile, QxrdDataProcessor::CanOverwrite);
+    if (theFile.length()) {
+      m_DataProcessor->saveDark(theFile, QxrdDataProcessor::CanOverwrite);
+    }
   }
 }
 
@@ -832,19 +847,27 @@ void QxrdWindow::doLoadDark()
 
 void QxrdWindow::doClearDark()
 {
-  if (QMessageBox::question(this, "Clear Dark Image?", "Do you really want to clear the dark image?",
-                            QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
-    m_DataProcessor->clearDark();
+  if (m_DataProcessor->darkImage() == NULL) {
+    warningMessage("No dark image available to clear");
+  } else {
+    if (QMessageBox::question(this, "Clear Dark Image?", "Do you really want to clear the dark image?",
+                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+      m_DataProcessor->clearDark();
+    }
   }
 }
 
 void QxrdWindow::doSaveMask()
 {
-  QString theFile = QFileDialog::getSaveFileName(
-        this, "Save Mask in", m_DataProcessor -> get_DataPath());
+  if (m_DataProcessor->mask() == NULL) {
+    warningMessage("No mask image to save");
+  } else {
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Mask in", m_DataProcessor -> get_DataPath());
 
-  if (theFile.length()) {
-    m_DataProcessor->saveMask(theFile, QxrdDataProcessor::CanOverwrite);
+    if (theFile.length()) {
+      m_DataProcessor->saveMask(theFile, QxrdDataProcessor::CanOverwrite);
+    }
   }
 }
 
@@ -860,19 +883,27 @@ void QxrdWindow::doLoadMask()
 
 void QxrdWindow::doClearMask()
 {
-  if (QMessageBox::question(this, "Clear Mask?", "Do you really want to clear the mask?",
-                            QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
-    m_DataProcessor->clearMask();
+  if (m_DataProcessor->mask() == NULL) {
+    warningMessage("No mask image available to clear");
+  } else {
+    if (QMessageBox::question(this, "Clear Mask?", "Do you really want to clear the mask?",
+                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+      m_DataProcessor->clearMask();
+    }
   }
 }
 
 void QxrdWindow::doSaveBadPixels()
 {
-  QString theFile = QFileDialog::getSaveFileName(
-        this, "Save Bad Pixels in", m_DataProcessor -> get_DataPath());
+  if (m_DataProcessor->badPixels() == NULL) {
+    warningMessage("No Bad Pixel data to save");
+  } else {
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Bad Pixels in", m_DataProcessor -> get_DataPath());
 
-  if (theFile.length()) {
-    m_DataProcessor->saveBadPixels(theFile, QxrdDataProcessor::CanOverwrite);
+    if (theFile.length()) {
+      m_DataProcessor->saveBadPixels(theFile, QxrdDataProcessor::CanOverwrite);
+    }
   }
 }
 
@@ -888,19 +919,27 @@ void QxrdWindow::doLoadBadPixels()
 
 void QxrdWindow::doClearBadPixels()
 {
-  if (QMessageBox::question(this, "Clear Bad Pixels", "Do you really want to clear the bad pixel map?",
-                            QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
-    m_DataProcessor->clearBadPixels();
+  if (m_DataProcessor->badPixels() == NULL) {
+    warningMessage("No Bad Pixel data to clear");
+  } else {
+    if (QMessageBox::question(this, "Clear Bad Pixels", "Do you really want to clear the bad pixel map?",
+                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+      m_DataProcessor->clearBadPixels();
+    }
   }
 }
 
 void QxrdWindow::doSaveGainMap()
 {
-  QString theFile = QFileDialog::getSaveFileName(
-        this, "Save Gain Map in", m_DataProcessor -> get_DataPath());
+  if (m_DataProcessor->gainMap() == NULL) {
+    warningMessage("No Gain Map available to save");
+  } else {
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Gain Map in", m_DataProcessor -> get_DataPath());
 
-  if (theFile.length()) {
-    m_DataProcessor->saveGainMap(theFile, QxrdDataProcessor::CanOverwrite);
+    if (theFile.length()) {
+      m_DataProcessor->saveGainMap(theFile, QxrdDataProcessor::CanOverwrite);
+    }
   }
 }
 
@@ -916,9 +955,13 @@ void QxrdWindow::doLoadGainMap()
 
 void QxrdWindow::doClearGainMap()
 {
-  if (QMessageBox::question(this, "Clear Gain Map", "Do you really want to clear the gain map?",
-                            QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
-    m_DataProcessor->clearGainMap();
+  if (m_DataProcessor->gainMap() == NULL) {
+    warningMessage("No Gain Map available to clear");
+  } else {
+    if (QMessageBox::question(this, "Clear Gain Map", "Do you really want to clear the gain map?",
+                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+      m_DataProcessor->clearGainMap();
+    }
   }
 }
 
