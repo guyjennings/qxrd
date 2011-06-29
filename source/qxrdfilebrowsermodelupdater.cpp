@@ -15,7 +15,7 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModel *b
   m_PreviousUpdate(QDateTime::currentDateTime()),
   m_GenerateUpdates(true)
 {
-  if (qcepDebug(DEBUG_THREADS)) {
+  if (qcepDebug(DEBUG_BROWSER)) {
     g_Application->printMessage("Starting Browser Model Updater");
   }
 
@@ -68,7 +68,9 @@ void QxrdFileBrowserModelUpdater::changeContents(const QString& path)
 void QxrdFileBrowserModelUpdater::updateTimeout()
 {
   if (m_UpdateNeeded.fetchAndStoreOrdered(0)) {
-    g_Application->printMessage(tr("QxrdFileBrowserModelUpdater::updateTimeout update needed %1").arg(m_RootPath));
+    if (qcepDebug(DEBUG_BROWSER)) {
+      g_Application->printMessage(tr("QxrdFileBrowserModelUpdater::updateTimeout update needed %1").arg(m_RootPath));
+    }
 
     updateContents();
   }
