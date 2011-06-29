@@ -20,6 +20,7 @@ QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   m_TrueSize(0)
 {
   m_UpdaterThread = new QxrdFileBrowserModelUpdaterThread(this);
+  m_UpdaterThread -> setObjectName("browser");
   m_UpdaterThread -> start();
   m_Updater = m_UpdaterThread->updater();
 }
