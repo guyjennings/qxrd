@@ -15,7 +15,7 @@
 
 class QxrdAllocator : public QxrdAllocatorInterface
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdAllocator(QObject *parent=0);
@@ -77,14 +77,14 @@ private:
 
   enum { MegaBytes = 0x100000 };
 
-  Q_PROPERTY(int     max        READ get_Max   WRITE set_Max STORED false);
-  QCEP_INTEGER_PROPERTY(Max);
+  Q_PROPERTY(int     max        READ get_Max   WRITE set_Max STORED false)
+  QCEP_INTEGER_PROPERTY(Max)
 
-  Q_PROPERTY(int     reserve        READ get_Reserve   WRITE set_Reserve STORED false);
-  QCEP_INTEGER_PROPERTY(Reserve);
+  Q_PROPERTY(int     reserve        READ get_Reserve   WRITE set_Reserve STORED false)
+  QCEP_INTEGER_PROPERTY(Reserve)
 
-  Q_PROPERTY(int     allocated        READ get_Allocated   WRITE set_Allocated STORED false);
-  QCEP_INTEGER_PROPERTY(Allocated);
+  Q_PROPERTY(int     allocated        READ get_Allocated   WRITE set_Allocated STORED false)
+  QCEP_INTEGER_PROPERTY(Allocated)
 };
 
 #endif

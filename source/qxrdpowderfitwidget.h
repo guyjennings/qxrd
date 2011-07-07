@@ -10,7 +10,7 @@
 class QxrdDataProcessor;
 
 class QxrdPowderFitWidget : public QDialog, public Ui::QxrdPowderFitWidget {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdPowderFitWidget(QxrdDataProcessor *proc, QWidget *parent = 0);
   ~QxrdPowderFitWidget();

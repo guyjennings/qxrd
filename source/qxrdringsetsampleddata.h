@@ -9,7 +9,7 @@
 
 class QxrdRingSetSampledData : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   explicit QxrdRingSetSampledData(/*QxrdRingSetFitParametersPtr parms, */QObject *parent=0);
 
@@ -36,6 +36,6 @@ private:
 
 typedef QxrdRingSetSampledData *QxrdRingSetSampledDataPtr;
 
-Q_DECLARE_METATYPE(QxrdRingSetSampledDataPtr);
+Q_DECLARE_METATYPE(QxrdRingSetSampledDataPtr)
 
 #endif // QXRDRINGSETSAMPLEDDATA_H

@@ -22,7 +22,7 @@ class QxrdAcquisition;
 
 class QxrdFileSaver : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdFileSaver(QxrdAllocator *allocator, QObject *parent=0);

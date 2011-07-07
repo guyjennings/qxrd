@@ -9,7 +9,7 @@ class QxrdSimpleServer;
 
 class QxrdSimpleServerThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdSimpleServerThread(QString name, int port);
   ~QxrdSimpleServerThread();

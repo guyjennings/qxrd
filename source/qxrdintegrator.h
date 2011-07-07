@@ -15,26 +15,26 @@ class QxrdAllocator;
 
 class QxrdIntegrator : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdIntegrator(QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent=0);
 
 public:
-  Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample);
-  QCEP_INTEGER_PROPERTY(Oversample);
+  Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
+  QCEP_INTEGER_PROPERTY(Oversample)
 
-  Q_PROPERTY(double integrationStep READ get_IntegrationStep WRITE set_IntegrationStep);
-  QCEP_DOUBLE_PROPERTY(IntegrationStep);
+  Q_PROPERTY(double integrationStep READ get_IntegrationStep WRITE set_IntegrationStep)
+  QCEP_DOUBLE_PROPERTY(IntegrationStep)
 
-  Q_PROPERTY(double integrationMinimum READ get_IntegrationMinimum WRITE set_IntegrationMinimum);
-  QCEP_DOUBLE_PROPERTY(IntegrationMinimum);
+  Q_PROPERTY(double integrationMinimum READ get_IntegrationMinimum WRITE set_IntegrationMinimum)
+  QCEP_DOUBLE_PROPERTY(IntegrationMinimum)
 
-  Q_PROPERTY(double integrationMaximum READ get_IntegrationMaximum WRITE set_IntegrationMaximum);
-  QCEP_DOUBLE_PROPERTY(IntegrationMaximum);
+  Q_PROPERTY(double integrationMaximum READ get_IntegrationMaximum WRITE set_IntegrationMaximum)
+  QCEP_DOUBLE_PROPERTY(IntegrationMaximum)
 
-  Q_PROPERTY(int integrationXUnits READ get_IntegrationXUnits WRITE set_IntegrationXUnits);
-  QCEP_INTEGER_PROPERTY(IntegrationXUnits);
+  Q_PROPERTY(int integrationXUnits READ get_IntegrationXUnits WRITE set_IntegrationXUnits)
+  QCEP_INTEGER_PROPERTY(IntegrationXUnits)
 
 public:
   void readSettings(QxrdSettings &settings, QString section);

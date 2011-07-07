@@ -11,7 +11,7 @@ class QxrdDataProcessor;
 
 class QxrdDataProcessorThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdDataProcessorThread(QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver);

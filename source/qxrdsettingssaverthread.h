@@ -9,7 +9,7 @@ class QxrdApplication;
 
 class QxrdSettingsSaverThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdSettingsSaverThread(QxrdApplication *app);
 

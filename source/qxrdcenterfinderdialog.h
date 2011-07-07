@@ -8,7 +8,7 @@ class QxrdCenterFinder;
 
 class QxrdCenterFinderDialog : public QDockWidget, public Ui::QxrdCenterFinderDialog
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdCenterFinderDialog(QxrdCenterFinder *cen, QWidget *parent=0);

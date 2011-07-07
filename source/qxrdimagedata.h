@@ -28,7 +28,7 @@ typedef QSharedPointer<QxrdMaskData> QxrdMaskDataPtr;
 template <typename T>
 class QxrdImageData : public QcepImageData<T>
 {
-//  Q_OBJECT;
+//  Q_OBJECT
 //
 public:
   QxrdImageData(QxrdAllocatorInterface *allocator, int width, int height, T def=0);

@@ -7,7 +7,7 @@
 
 class QxrdExposureTimeSpinner : public QDoubleSpinBox
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   explicit QxrdExposureTimeSpinner(QWidget *parent = 0);
 

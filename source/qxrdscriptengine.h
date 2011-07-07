@@ -14,7 +14,7 @@ class QxrdDataProcessor;
 
 class QxrdScriptEngine : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc);

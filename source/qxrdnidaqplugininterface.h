@@ -15,6 +15,6 @@ public:
   virtual void triggerAnalogWaveform() = 0;
 };
 
-Q_DECLARE_INTERFACE(QxrdNIDAQPluginInterface, "gov.anl.aps.cep.Qxrd.NIDAQInterface/1.0");
+Q_DECLARE_INTERFACE(QxrdNIDAQPluginInterface, "gov.anl.aps.cep.Qxrd.NIDAQInterface/1.0")
 
 #endif // QXRDNIDAQPLUGININTERFACE_H

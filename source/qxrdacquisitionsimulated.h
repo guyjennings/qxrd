@@ -6,7 +6,7 @@
 
 class QxrdAcquisitionSimulated : public QxrdAcquisition
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdAcquisitionSimulated(QxrdDataProcessor *proc, QxrdAllocator *allocator);
 

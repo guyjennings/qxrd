@@ -12,7 +12,7 @@ class QxrdAcquisition;
 
 class QxrdAcquisitionThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   QxrdAcquisitionThread(QxrdDataProcessor *proc, QxrdAllocator *allocator, int detectorType);

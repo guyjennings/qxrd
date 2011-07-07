@@ -25,11 +25,11 @@ public:
   void deallocate();
 //  void preallocate(int nFrames, int nCols, int nRows);
 
-  Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows);
-  QCEP_INTEGER_PROPERTY(NRows);
+  Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows)
+  QCEP_INTEGER_PROPERTY(NRows)
 
-  Q_PROPERTY(int     nCols      READ get_NCols WRITE set_NCols);
-  QCEP_INTEGER_PROPERTY(NCols);
+  Q_PROPERTY(int     nCols      READ get_NCols WRITE set_NCols)
+  QCEP_INTEGER_PROPERTY(NCols)
 
 private:
   mutable QReadWriteLock m_Lock;

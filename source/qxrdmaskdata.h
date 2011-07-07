@@ -12,7 +12,7 @@ class QxrdAllocatorInterface;
 
 class QxrdMaskData : public QcepImageData<short>
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdMaskData(QxrdAllocatorInterface *allocator, int width, int height, int def=0);

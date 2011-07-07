@@ -13,7 +13,7 @@ class QxrdApplication;
 
 class QxrdImageDisplayWidget : public QWidget
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   explicit QxrdImageDisplayWidget(QWidget *parent = 0);

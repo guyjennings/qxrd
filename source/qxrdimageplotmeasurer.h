@@ -7,7 +7,7 @@ class QxrdImagePlot;
 
 class QxrdImagePlotMeasurer : public QxrdPlotMeasurer
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdImagePlotMeasurer(QwtPlotCanvas *canvas, QxrdImagePlot *plot);

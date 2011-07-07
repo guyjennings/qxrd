@@ -6,8 +6,8 @@
 
 class QxrdCudaProcessorPlugin : public QObject, public QxrdProcessorInterface
 {
-  Q_OBJECT;
-  Q_INTERFACES(QxrdProcessorInterface);
+  Q_OBJECT
+  Q_INTERFACES(QxrdProcessorInterface)
 
 public:
     QxrdCudaProcessorPlugin();

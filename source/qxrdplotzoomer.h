@@ -8,7 +8,7 @@ class QxrdImagePlot;
 
 class QxrdPlotZoomer : public QwtPlotZoomer
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdPlotZoomer(QwtPlotCanvas *canvas, QxrdPlot *plot);
@@ -22,7 +22,7 @@ private:
 
 class QxrdImagePlotZoomer : public QxrdPlotZoomer
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdImagePlotZoomer(QwtPlotCanvas *canvas, QxrdImagePlot *plot);

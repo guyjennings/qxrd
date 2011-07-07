@@ -7,7 +7,7 @@
 
 class QxrdDetectorGeometry : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   explicit QxrdDetectorGeometry(QObject *parent = 0);
 

@@ -15,21 +15,21 @@
 #define _STR(s) #s
 
 typedef QVector<double> QcepDoubleVector;
-Q_DECLARE_METATYPE(QcepDoubleVector);
+Q_DECLARE_METATYPE(QcepDoubleVector)
 typedef QVector<bool> QcepBoolVector;
-Q_DECLARE_METATYPE(QcepBoolVector);
+Q_DECLARE_METATYPE(QcepBoolVector)
 typedef QVector<int> QcepIntVector;
-Q_DECLARE_METATYPE(QcepIntVector);
+Q_DECLARE_METATYPE(QcepIntVector)
 typedef QVector<QString> QcepStringVector;
-Q_DECLARE_METATYPE(QcepStringVector);
+Q_DECLARE_METATYPE(QcepStringVector)
 
 typedef QList<double> QcepDoubleList;
-Q_DECLARE_METATYPE(QcepDoubleList);
+Q_DECLARE_METATYPE(QcepDoubleList)
 typedef QList<bool> QcepBoolList;
-Q_DECLARE_METATYPE(QcepBoolList);
+Q_DECLARE_METATYPE(QcepBoolList)
 typedef QList<int> QcepIntList;
-Q_DECLARE_METATYPE(QcepIntList);
+Q_DECLARE_METATYPE(QcepIntList)
 typedef QList<QString> QcepStringList;
-Q_DECLARE_METATYPE(QcepStringList);
+Q_DECLARE_METATYPE(QcepStringList)
 
 #endif // QCEPMACROS_H
