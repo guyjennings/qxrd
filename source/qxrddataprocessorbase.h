@@ -208,6 +208,11 @@ public slots:
   void summarizeMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
   virtual void integrateSaveAndDisplay() = 0;
 
+  QString pwd() const;
+  void cd(QString path);
+  QStringList ls() const;
+  QStringList ls(QString pattern) const;
+
   void loadData(QString name);
   void saveData(QString name, int canOverwrite=NoOverwrite);
   void loadDark(QString name);
@@ -262,13 +267,13 @@ public slots:
   void writeOutputScan(QxrdIntegratedDataPtr d);
 
 public:
-  QString existingOutputDirectory(QString dir, QString subdir);
-  QString filePathInCurrentDirectory(QString name);
-  QString currentDirectory();
-  QString darkOutputDirectory();
-  QString rawOutputDirectory();
-  QString subtractedOutputDirectory();
-  QString integratedOutputDirectory();
+  QString existingOutputDirectory(QString dir, QString subdir) const;
+  QString filePathInCurrentDirectory(QString name) const;
+  QString currentDirectory() const;
+  QString darkOutputDirectory() const;
+  QString rawOutputDirectory() const;
+  QString subtractedOutputDirectory() const;
+  QString integratedOutputDirectory() const;
 
   void loadDefaultImages();
 

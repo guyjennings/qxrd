@@ -178,22 +178,22 @@ void QxrdDataProcessorBase::readSettings(QxrdSettings &settings, QString section
 }
 
 
-QString QxrdDataProcessorBase::existingOutputDirectory(QString dir, QString subdir)
+QString QxrdDataProcessorBase::existingOutputDirectory(QString dir, QString subdir) const
 {
   return QDir(dir).filePath(subdir);
 }
 
-QString QxrdDataProcessorBase::filePathInCurrentDirectory(QString name)
+QString QxrdDataProcessorBase::filePathInCurrentDirectory(QString name) const
 {
   return QDir(currentDirectory()).filePath(name);
 }
 
-QString QxrdDataProcessorBase::currentDirectory()
+QString QxrdDataProcessorBase::currentDirectory() const
 {
   return get_OutputDirectory();
 }
 
-QString QxrdDataProcessorBase::darkOutputDirectory()
+QString QxrdDataProcessorBase::darkOutputDirectory() const
 {
   if (get_SaveDarkInSubdirectory()) {
     return existingOutputDirectory(get_OutputDirectory(), get_SaveDarkSubdirectory());
@@ -202,7 +202,7 @@ QString QxrdDataProcessorBase::darkOutputDirectory()
   }
 }
 
-QString QxrdDataProcessorBase::rawOutputDirectory()
+QString QxrdDataProcessorBase::rawOutputDirectory() const
 {
   if (get_SaveRawInSubdirectory()) {
     return existingOutputDirectory(get_OutputDirectory(), get_SaveRawSubdirectory());
@@ -211,7 +211,7 @@ QString QxrdDataProcessorBase::rawOutputDirectory()
   }
 }
 
-QString QxrdDataProcessorBase::subtractedOutputDirectory()
+QString QxrdDataProcessorBase::subtractedOutputDirectory() const
 {
   if (get_SaveSubtractedInSubdirectory()) {
     return existingOutputDirectory(get_OutputDirectory(), get_SaveSubtractedSubdirectory());
@@ -220,7 +220,7 @@ QString QxrdDataProcessorBase::subtractedOutputDirectory()
   }
 }
 
-QString QxrdDataProcessorBase::integratedOutputDirectory()
+QString QxrdDataProcessorBase::integratedOutputDirectory() const
 {
   if (get_SaveIntegratedInSubdirectory()) {
     return existingOutputDirectory(get_OutputDirectory(), get_SaveIntegratedSubdirectory());
@@ -361,11 +361,52 @@ void QxrdDataProcessorBase::loadDefaultImages()
   }
 }
 
+QString QxrdDataProcessorBase::pwd() const
+{
+  return currentDirectory();
+}
+
+void QxrdDataProcessorBase::cd(QString path)
+{
+  QDir dir(currentDirectory());
+
+  if (dir.cd(path)) {
+    set_OutputDirectory(dir.path());
+  }
+}
+
+QStringList QxrdDataProcessorBase::ls() const
+{
+  QStringList res;
+  QDir dir(currentDirectory());
+
+  res = dir.entryList(QStringList());
+
+  return res;
+}
+
+QStringList QxrdDataProcessorBase::ls(QString pattern) const
+{
+  QStringList res;
+  QDir dir(currentDirectory());
+
+  res = dir.entryList(QStringList(pattern));
+
+  return res;
+}
+
 void QxrdDataProcessorBase::loadData(QString name)
 {
+  if (qcepDebug(DEBUG_FILES)) {
+    g_Application->printMessage(
+          tr("QxrdDataProcessorBase::loadData(%1)").arg(name));
+  }
+
   QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
-  if (res && res -> readImage(name)) {
+  QString path = filePathInCurrentDirectory(name);
+
+  if (res && res -> readImage(path)) {
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -379,7 +420,9 @@ void QxrdDataProcessorBase::loadData(QString name)
 
 void QxrdDataProcessorBase::saveData(QString name, int canOverwrite)
 {
-  saveNamedImageData(name, m_Data, QxrdMaskDataPtr(), canOverwrite);
+  QString path = filePathInCurrentDirectory(name);
+
+  saveNamedImageData(path, m_Data, QxrdMaskDataPtr(), canOverwrite);
 
   set_DataPath(m_Data -> get_FileName());
 }
@@ -393,7 +436,9 @@ void QxrdDataProcessorBase::loadDark(QString name)
 
   QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
-  if (res && res -> readImage(name)) {
+  QString path = filePathInCurrentDirectory(name);
+
+  if (res && res -> readImage(path)) {
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -410,8 +455,10 @@ void QxrdDataProcessorBase::loadDark(QString name)
 
 void QxrdDataProcessorBase::saveDark(QString name, int canOverwrite)
 {
+  QString path = filePathInCurrentDirectory(name);
+
   if (m_DarkFrame) {
-    saveNamedImageData(name, m_DarkFrame, QxrdMaskDataPtr(), canOverwrite);
+    saveNamedImageData(path, m_DarkFrame, QxrdMaskDataPtr(), canOverwrite);
 
     set_DarkImagePath(m_DarkFrame -> get_FileName());
   }
@@ -426,7 +473,9 @@ void QxrdDataProcessorBase::loadBadPixels(QString name)
 
     QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
-    if (res && res -> readImage(name)) {
+    QString path = filePathInCurrentDirectory(name);
+
+    if (res && res -> readImage(path)) {
 
         //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -441,8 +490,10 @@ void QxrdDataProcessorBase::loadBadPixels(QString name)
 
 void QxrdDataProcessorBase::saveBadPixels(QString name, int canOverwrite)
 {
+  QString path = filePathInCurrentDirectory(name);
+
   if (m_BadPixels) {
-    saveNamedImageData(name, m_BadPixels, QxrdMaskDataPtr(), canOverwrite);
+    saveNamedImageData(path, m_BadPixels, QxrdMaskDataPtr(), canOverwrite);
 
     set_BadPixelsPath(m_BadPixels -> get_FileName());
   }
@@ -457,7 +508,9 @@ void QxrdDataProcessorBase::loadGainMap(QString name)
 
   QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
-  if (res -> readImage(name)) {
+  QString path = filePathInCurrentDirectory(name);
+
+  if (res -> readImage(path)) {
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -473,8 +526,10 @@ void QxrdDataProcessorBase::loadGainMap(QString name)
 
 void QxrdDataProcessorBase::saveGainMap(QString name, int canOverwrite)
 {
+  QString path = filePathInCurrentDirectory(name);
+
   if (m_GainMap) {
-    saveNamedImageData(name, m_GainMap, QxrdMaskDataPtr(), canOverwrite);
+    saveNamedImageData(path, m_GainMap, QxrdMaskDataPtr(), canOverwrite);
 
     set_GainMapPath(m_GainMap -> get_FileName());
   }
@@ -832,7 +887,9 @@ void QxrdDataProcessorBase::loadMask(QString name)
 
   QxrdMaskDataPtr res = m_Allocator -> newMask(QxrdAllocator::WaitTillAvailable, 0,0);
 
-  if (res -> readImage(name)) {
+  QString path = filePathInCurrentDirectory(name);
+
+  if (res -> readImage(path)) {
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -853,8 +910,10 @@ void QxrdDataProcessorBase::loadMask(QString name)
 
 void QxrdDataProcessorBase::saveMask(QString name, int canOverwrite)
 {
+  QString path = filePathInCurrentDirectory(name);
+
   if (mask()) {
-    saveNamedMaskData(name, mask(), canOverwrite);
+    saveNamedMaskData(path, mask(), canOverwrite);
 
     set_MaskPath(mask() -> get_FileName());
   }
