@@ -439,7 +439,8 @@ void QSpecServer::replyFromVariant(QVariant value)
 
   initReplyPacket();
 
-  if (value.canConvert< QVector<double> >()) {
+  /*if (value.isNull()) {
+  } else*/ if (value.canConvert< QVector<double> >()) {
     if (qcepDebug(DEBUG_SERVER)) {
        g_Application->printMessage(tr("replyFromVariant(QVector<double>)"));
     }
@@ -531,31 +532,40 @@ void QSpecServer::replyFromVariant(QVariant value)
     m_Reply.len = condSwapInt32(m_ReplyData.size());
   } else if (value.canConvert< QList<QVariant> >()) {
     if (qcepDebug(DEBUG_SERVER)) {
-      g_Application->printMessage(tr("replyFromVariant(QList<QString>)"));
+      g_Application->printMessage(tr("replyFromVariant(QList<QVariant>)"));
     }
 
     QList<QVariant> vec = value.value< QList<QVariant> > ();
     QVariant s;
 
     m_Reply.cmd = condSwapInt32(SV_REPLY);
-    m_Reply.type= condSwapInt32(SV_ARR_DOUBLE);
+    m_Reply.type= condSwapInt32(SV_ASSOC);
     m_Reply.rows = condSwapInt32(1);
-    m_Reply.cols = condSwapInt32(vec.size());
+    m_Reply.cols = condSwapInt32(1);
 
-    foreach (s, vec) {
-      double v=s.toDouble();
-      QByteArray a((const char*) &v, sizeof(double));
+//    foreach (s, vec) {
+//      double v=s.toDouble();
+//      QByteArray a((const char*) &v, sizeof(double));
 
-      if (m_SwapBytes) {
-        for (int i=0; i<4; i++) {
-          int tmp = a[i]; a[i] = a[7-i]; a[7-i] = tmp;
-        }
-      }
+//      if (m_SwapBytes) {
+//        for (int i=0; i<4; i++) {
+//          int tmp = a[i]; a[i] = a[7-i]; a[7-i] = tmp;
+//        }
+//      }
 
-      m_ReplyData.append(a);
+//      m_ReplyData.append(a);
+//    }
+
+    for (int i=0; i<vec.length(); i++) {
+      QString val = vec[i].toString();
+      m_ReplyData.append(tr("%1").arg(i));
+      m_ReplyData.append('\0');
+      m_ReplyData.append(val);
+      m_ReplyData.append('\0');
     }
+    m_ReplyData.append('\0');
 
-    m_Reply.len = m_ReplyData.size();
+    m_Reply.len = condSwapInt32(m_ReplyData.size());
   } else {
     if (qcepDebug(DEBUG_SERVER)) {
       g_Application->printMessage(tr("replyFromVariant(QString)"));
