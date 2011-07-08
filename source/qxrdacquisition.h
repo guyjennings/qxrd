@@ -29,7 +29,7 @@ class QxrdWindow;
 
 class QxrdAcquisition : public QxrdAcquisitionOperations
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocator);

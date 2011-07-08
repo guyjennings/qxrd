@@ -10,7 +10,7 @@ class QxrdServer;
 
 class QxrdServerThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdServerThread(QString name, int port);

@@ -11,7 +11,7 @@ class QxrdApplication;
 
 class QxrdSettingsSaver : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   explicit QxrdSettingsSaver(QObject *parent, QxrdApplication *app);
 

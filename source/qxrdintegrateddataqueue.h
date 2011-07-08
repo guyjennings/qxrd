@@ -9,7 +9,7 @@
 
 class QxrdIntegratedDataQueue : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdIntegratedDataQueue(QString name);

@@ -27,7 +27,7 @@ class QxrdPerkinElmerPluginInterface;
 
 class QxrdApplication : public QApplication
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdApplication(int &argc, char **argv);
@@ -93,35 +93,35 @@ private:
   void shutdownThread(QxrdThread *thread);
 
 public:
-  Q_PROPERTY(int    detectorType  READ get_DetectorType WRITE set_DetectorType);
-  QCEP_INTEGER_PROPERTY(DetectorType);
+  Q_PROPERTY(int    detectorType  READ get_DetectorType WRITE set_DetectorType)
+  QCEP_INTEGER_PROPERTY(DetectorType)
 
-  Q_PROPERTY(int    processorType READ get_ProcessorType WRITE set_ProcessorType);
-  QCEP_INTEGER_PROPERTY(ProcessorType);
+  Q_PROPERTY(int    processorType READ get_ProcessorType WRITE set_ProcessorType)
+  QCEP_INTEGER_PROPERTY(ProcessorType)
 
-  Q_PROPERTY(int    debug         READ get_Debug WRITE set_Debug);
-  QCEP_INTEGER_PROPERTY(Debug);
+  Q_PROPERTY(int    debug         READ get_Debug WRITE set_Debug)
+  QCEP_INTEGER_PROPERTY(Debug)
 
-  Q_PROPERTY(int    runSpecServer    READ get_RunSpecServer WRITE set_RunSpecServer);
-  QCEP_INTEGER_PROPERTY(RunSpecServer);
+  Q_PROPERTY(int    runSpecServer    READ get_RunSpecServer WRITE set_RunSpecServer)
+  QCEP_INTEGER_PROPERTY(RunSpecServer)
 
-  Q_PROPERTY(int    specServerPort    READ get_SpecServerPort WRITE set_SpecServerPort);
-  QCEP_INTEGER_PROPERTY(SpecServerPort);
+  Q_PROPERTY(int    specServerPort    READ get_SpecServerPort WRITE set_SpecServerPort)
+  QCEP_INTEGER_PROPERTY(SpecServerPort)
 
-  Q_PROPERTY(int    runSimpleServer    READ get_RunSimpleServer WRITE set_RunSimpleServer);
-  QCEP_INTEGER_PROPERTY(RunSimpleServer);
+  Q_PROPERTY(int    runSimpleServer    READ get_RunSimpleServer WRITE set_RunSimpleServer)
+  QCEP_INTEGER_PROPERTY(RunSimpleServer)
 
-  Q_PROPERTY(int    simpleServerPort    READ get_SimpleServerPort WRITE set_SimpleServerPort);
-  QCEP_INTEGER_PROPERTY(SimpleServerPort);
+  Q_PROPERTY(int    simpleServerPort    READ get_SimpleServerPort WRITE set_SimpleServerPort)
+  QCEP_INTEGER_PROPERTY(SimpleServerPort)
 
-  Q_PROPERTY(int    defaultLayout   READ get_DefaultLayout WRITE set_DefaultLayout STORED false);
-  QCEP_INTEGER_PROPERTY(DefaultLayout);
+  Q_PROPERTY(int    defaultLayout   READ get_DefaultLayout WRITE set_DefaultLayout STORED false)
+  QCEP_INTEGER_PROPERTY(DefaultLayout)
 
-  Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath);
-  QCEP_STRING_PROPERTY(LogFilePath);
+  Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath)
+  QCEP_STRING_PROPERTY(LogFilePath)
 
-  Q_PROPERTY(int    fileBrowserLimit   READ get_FileBrowserLimit WRITE set_FileBrowserLimit);
-  QCEP_INTEGER_PROPERTY(FileBrowserLimit);
+  Q_PROPERTY(int    fileBrowserLimit   READ get_FileBrowserLimit WRITE set_FileBrowserLimit)
+  QCEP_INTEGER_PROPERTY(FileBrowserLimit)
 
 private:
   bool                            m_FreshStart;

@@ -299,6 +299,6 @@ Error:
   return;
 }
 
-Q_EXPORT_PLUGIN2(qxrdnidaqplugin, QxrdNIDAQPlugin);
+Q_EXPORT_PLUGIN2(qxrdnidaqplugin, QxrdNIDAQPlugin)
 
 

@@ -5,7 +5,7 @@
 
 class QxrdAllocatorInterface : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdAllocatorInterface(QObject *parent=0);
 

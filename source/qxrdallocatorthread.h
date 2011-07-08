@@ -7,7 +7,7 @@ class QxrdAllocator;
 
 class QxrdAllocatorThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdAllocatorThread();

@@ -6,8 +6,8 @@
 
 class QxrdPilatusPlugin : public QObject, public QxrdDetectorPluginInterface
 {
-  Q_OBJECT;
-  Q_INTERFACES(QxrdDetectorPluginInterface);
+  Q_OBJECT
+  Q_INTERFACES(QxrdDetectorPluginInterface)
 
 public:
   QxrdPilatusPlugin();

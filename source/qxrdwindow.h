@@ -33,7 +33,7 @@ class QxrdHighlighter;
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent=0);

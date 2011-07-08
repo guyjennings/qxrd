@@ -21,7 +21,7 @@ class QAbstractButton;
 class QSettings;
 
 class QcepProperty : public QObject {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QcepProperty(QObject *parent, const char *name, QVariant value);
   ~QcepProperty();
@@ -66,7 +66,7 @@ private:
 };
 
 class QcepDoubleProperty : public QcepProperty {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QcepDoubleProperty(QObject *parent, const char *name, double value);
   ~QcepDoubleProperty();
@@ -97,7 +97,7 @@ private:
 };
 
 class QcepIntProperty : public QcepProperty {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QcepIntProperty(QObject *parent, const char *name, int value);
 
@@ -126,7 +126,7 @@ private:
 };
 
 class QcepBoolProperty : public QcepProperty {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QcepBoolProperty(QObject *parent, const char *name, bool value);
 
@@ -151,7 +151,7 @@ private:
 };
 
 class QcepStringProperty : public QcepProperty {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QcepStringProperty(QObject *parent, const char *name, QString value);
 
@@ -178,7 +178,7 @@ private:
 };
 
 class QcepDateTimeProperty : public QcepProperty {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QcepDateTimeProperty(QObject *parent, const char *name, QDateTime value);
 
@@ -202,7 +202,7 @@ private:
 
 
 class QcepDoubleListProperty : public QcepProperty {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QcepDoubleListProperty(QObject *parent, const char *name, QcepDoubleList value);
 

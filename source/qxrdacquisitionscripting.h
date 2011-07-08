@@ -11,7 +11,7 @@
 
 class QxrdAcquisitionScripting : public QxrdAcquisitionParameters
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdAcquisitionScripting();
 

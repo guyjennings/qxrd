@@ -8,7 +8,7 @@
 
 class QxrdSimpleServer : public QTcpServer
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdSimpleServer(QString name, int port, QObject *parent=NULL);
 public:

@@ -12,41 +12,41 @@
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdCenterFinder(QObject *parent=0);
 
 public:
-  Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX);
-  QCEP_DOUBLE_PROPERTY(CenterX);
+  Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
+  QCEP_DOUBLE_PROPERTY(CenterX)
 
-  Q_PROPERTY(double centerY READ get_CenterY WRITE set_CenterY);
-  QCEP_DOUBLE_PROPERTY(CenterY);
+  Q_PROPERTY(double centerY READ get_CenterY WRITE set_CenterY)
+  QCEP_DOUBLE_PROPERTY(CenterY)
 
-  Q_PROPERTY(double centerStep READ get_CenterStep WRITE set_CenterStep);
-  QCEP_DOUBLE_PROPERTY(CenterStep);
+  Q_PROPERTY(double centerStep READ get_CenterStep WRITE set_CenterStep)
+  QCEP_DOUBLE_PROPERTY(CenterStep)
 
-  Q_PROPERTY(double detectorXPixelSize READ get_DetectorXPixelSize WRITE set_DetectorXPixelSize);
-  QCEP_DOUBLE_PROPERTY(DetectorXPixelSize);
+  Q_PROPERTY(double detectorXPixelSize READ get_DetectorXPixelSize WRITE set_DetectorXPixelSize)
+  QCEP_DOUBLE_PROPERTY(DetectorXPixelSize)
 
-  Q_PROPERTY(double detectorYPixelSize READ get_DetectorYPixelSize WRITE set_DetectorYPixelSize);
-  QCEP_DOUBLE_PROPERTY(DetectorYPixelSize);
+  Q_PROPERTY(double detectorYPixelSize READ get_DetectorYPixelSize WRITE set_DetectorYPixelSize)
+  QCEP_DOUBLE_PROPERTY(DetectorYPixelSize)
 
-  Q_PROPERTY(double detectorDistance READ get_DetectorDistance WRITE set_DetectorDistance);
-  QCEP_DOUBLE_PROPERTY(DetectorDistance);
+  Q_PROPERTY(double detectorDistance READ get_DetectorDistance WRITE set_DetectorDistance)
+  QCEP_DOUBLE_PROPERTY(DetectorDistance)
 
-  Q_PROPERTY(double energy READ get_Energy WRITE set_Energy);
-  QCEP_DOUBLE_PROPERTY(Energy);
+  Q_PROPERTY(double energy READ get_Energy WRITE set_Energy)
+  QCEP_DOUBLE_PROPERTY(Energy)
 
-  Q_PROPERTY(bool    implementTilt    READ get_ImplementTilt WRITE set_ImplementTilt);
-  QCEP_BOOLEAN_PROPERTY(ImplementTilt);
+  Q_PROPERTY(bool    implementTilt    READ get_ImplementTilt WRITE set_ImplementTilt)
+  QCEP_BOOLEAN_PROPERTY(ImplementTilt)
 
-  Q_PROPERTY(double detectorTilt READ get_DetectorTilt WRITE set_DetectorTilt);
-  QCEP_DOUBLE_PROPERTY(DetectorTilt);
+  Q_PROPERTY(double detectorTilt READ get_DetectorTilt WRITE set_DetectorTilt)
+  QCEP_DOUBLE_PROPERTY(DetectorTilt)
 
-  Q_PROPERTY(double tiltPlaneRotation READ get_TiltPlaneRotation WRITE set_TiltPlaneRotation);
-  QCEP_DOUBLE_PROPERTY(TiltPlaneRotation);
+  Q_PROPERTY(double tiltPlaneRotation READ get_TiltPlaneRotation WRITE set_TiltPlaneRotation)
+  QCEP_DOUBLE_PROPERTY(TiltPlaneRotation)
 
 //public slots:
 //  void onCenterXChanged(double cx);

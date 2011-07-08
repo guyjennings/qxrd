@@ -15,7 +15,7 @@ class QxrdFileSaver;
 
 class QxrdFileSaverThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdFileSaverThread(QxrdAllocator *acq);

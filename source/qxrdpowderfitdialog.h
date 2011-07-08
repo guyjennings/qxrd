@@ -5,7 +5,7 @@
 
 class QxrdPowderFitDialog : public QxrdPowderFitResultsPage
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdPowderFitDialog(QxrdDataProcessor *proc, QWidget *parent);
 

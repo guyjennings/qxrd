@@ -13,7 +13,7 @@ typedef QSharedPointer<QxrdRasterData> QxrdRasterDataPtr;
 
 class QxrdRasterData : public QwtRasterData
 {
-//  Q_OBJECT;
+//  Q_OBJECT
 
 public:
   QxrdRasterData(QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(),

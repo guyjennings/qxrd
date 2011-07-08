@@ -5,7 +5,7 @@
 
 class QxrdPowderFitImagePlot : public QxrdImagePlot
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   explicit QxrdPowderFitImagePlot(QWidget *parent = 0);
 

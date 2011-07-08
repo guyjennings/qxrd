@@ -5,7 +5,7 @@
 
 class QxrdDataProcessor : public QxrdDataProcessorThreaded
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdDataProcessor(QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver, QObject *parent=0);

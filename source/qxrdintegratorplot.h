@@ -11,7 +11,7 @@ class QxrdIntegrator;
 
 class QxrdIntegratorPlot : public QxrdPlot
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdIntegratorPlot(QWidget *parent=0);

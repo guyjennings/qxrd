@@ -12,7 +12,7 @@
 
 class QxrdResultSerializerBase : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdResultSerializerBase(QObject *parent = 0);
   virtual ~QxrdResultSerializerBase();

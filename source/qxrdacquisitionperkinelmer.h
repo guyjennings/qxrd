@@ -13,7 +13,7 @@ class QxrdAcquisitionThread;
 
 class QxrdAcquisitionPerkinElmer : public QxrdAcquisition
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc, QxrdAllocator *allocator);
   ~QxrdAcquisitionPerkinElmer();

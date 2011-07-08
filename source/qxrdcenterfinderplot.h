@@ -13,7 +13,7 @@ class QxrdCenterFinder;
 
 class QxrdCenterFinderPlot : public QxrdPlot
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdCenterFinderPlot(QWidget *parent=0);

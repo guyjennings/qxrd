@@ -6,7 +6,7 @@
 
 class QxrdMaskStackModel : public QAbstractTableModel
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdMaskStackModel(QxrdMaskStackPtr masks);

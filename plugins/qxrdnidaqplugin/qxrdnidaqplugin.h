@@ -10,8 +10,8 @@
 
 class QxrdNIDAQPlugin : public QObject, public QxrdNIDAQPluginInterface
 {
-  Q_OBJECT;
-  Q_INTERFACES(QxrdNIDAQPluginInterface);
+  Q_OBJECT
+  Q_INTERFACES(QxrdNIDAQPluginInterface)
 
 public:
   QxrdNIDAQPlugin();

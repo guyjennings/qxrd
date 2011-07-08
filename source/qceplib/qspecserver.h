@@ -17,7 +17,7 @@ class QTcpSocket;
 
 class QSpecServer : public QTcpServer
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QSpecServer(QString name, int port, QObject *parent=0);

@@ -7,7 +7,7 @@
 
 class QxrdSettings : public QSettings
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdSettings(QObject *parent=0);
