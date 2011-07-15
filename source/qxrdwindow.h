@@ -71,6 +71,7 @@ public slots:
   void doAcquireDark();
 
   void crashProgram();
+  void testWidget();
 
   void executeScript();
   void finishedCommand(QScriptValue result);
