@@ -167,8 +167,9 @@ public:
   QMutex *mutex();
 
 protected:
-  int  m_Width;
-  int  m_Height;
+  int m_ImageCounter;
+  int m_Width;
+  int m_Height;
 
 private:
   mutable QMutex m_Mutex;

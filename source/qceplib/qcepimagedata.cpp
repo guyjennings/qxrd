@@ -5,7 +5,7 @@
 #include <QSettings>
 #include <QFileInfo>
 
-static int allocCount = 0;
+QAtomicInt allocCount = 0;
 
 QcepImageDataBase::QcepImageDataBase(int width, int height)
   : QObject(),
@@ -33,24 +33,25 @@ QcepImageDataBase::QcepImageDataBase(int width, int height)
     m_ImageSaved(this,"imageSaved",0),
     m_Normalization(this, "normalization", QcepDoubleList()),
     m_Used(this, "used", true),
+    m_ImageCounter(allocCount.fetchAndAddOrdered(1)),
     m_Width(width),
     m_Height(height),
     m_Mutex(QMutex::Recursive)
 {
-  allocCount++;
-
   if (qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage(tr("QcepImageDataBase::QcepImageDataBase allocate %1").arg(allocCount));
+    g_Application->printMessage(tr("QcepImageDataBase::QcepImageDataBase %1[%2]")
+                                .HEXARG(this).arg(m_ImageCounter));
   }
 }
 
 QcepImageDataBase::~QcepImageDataBase()
 {
   if (qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage(tr("QcepImageDataBase::~QcepImageDataBase deallocate %1").arg(allocCount));
+    g_Application->printMessage(tr("QcepImageDataBase::~QcepImageDataBase %1[%2]")
+                                .HEXARG(this).arg(m_ImageCounter));
   }
 
-  allocCount--;
+//  allocCount--;
 }
 
 QMutex *QcepImageDataBase::mutex()
@@ -230,7 +231,9 @@ QcepImageData<T>::QcepImageData(int width, int height, T def)
     m_Default(def)
 {
   if (qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage(tr("QcepImageData<%1>::QcepImageData").arg(typeid(T).name()));
+    g_Application->printMessage(tr("QcepImageData<%1>::QcepImageData %2")
+                                .arg(typeid(T).name())
+                                .HEXARG(this));
   }
 
   if (def) {
@@ -242,7 +245,9 @@ template <typename T>
 T* QcepImageData<T>::data()
 {
   if (qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage(tr("QcepImageData<%1>::~QcepImageData").arg(typeid(T).name()));
+    g_Application->printMessage(tr("QcepImageData<%1>::~QcepImageData %2")
+                                .arg(typeid(T).name())
+                                .HEXARG(this));
   }
 
   return m_Image.data();

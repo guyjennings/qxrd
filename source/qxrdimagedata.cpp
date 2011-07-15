@@ -13,8 +13,11 @@ QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, int width, in
   if (qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
     int count = m_ObjectCounter.value();
 
-    g_Application->printMessage(QObject::tr("QxrdImageData<T>::QxrdImageData(%1,%2,%3) %4[%5] thr%6")
-                                .HEXARG(allocator).arg(width).arg(height).HEXARG(this).arg(count).HEXARG(QThread::currentThread()));
+    g_Application->printMessage(QObject::tr("QxrdImageData<%1>::QxrdImageData(%2,%3,%4) %5[%6] thr%7")
+                                .arg(typeid(T).name())
+                                .HEXARG(allocator)
+                                .arg(width).arg(height)
+                                .HEXARG(this).arg(count).HEXARG(QThread::currentThread()));
   }
 
   m_ObjectCounter.allocate(sizeof(T), width, height);
@@ -26,7 +29,8 @@ QxrdImageData<T>::~QxrdImageData()
   if (qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
     int count = m_ObjectCounter.value();
 
-    g_Application->printMessage(QObject::tr("QxrdImageData<T>::~QxrdImageData %1[%2], thr%3, cthr%4 titl:%5")
+    g_Application->printMessage(QObject::tr("QxrdImageData<%1>::~QxrdImageData %2[%3], thr%4, cthr%5 titl:%6")
+                                .arg(typeid(T).name())
                                 .HEXARG(this).arg(count).HEXARG(QThread::currentThread()).HEXARG(this->thread()).arg(this->get_Title()));
   }
 }
