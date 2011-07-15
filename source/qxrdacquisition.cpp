@@ -16,6 +16,10 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocat
     m_ControlPanel(NULL),
     m_Idling(1)
 {
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage("QxrdAcquisition::QxrdAcquisition");
+  }
+
   m_SynchronizedAcquisition = new QxrdSynchronizedAcquisition(this);
 
   connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
@@ -38,9 +42,9 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocat
 
 QxrdAcquisition::~QxrdAcquisition()
 {
-//  if (qcepDebug(DEBUG_ACQUIRE)) {
-//             printf("QxrdAcquisition::~QxrdAcquisition\n");
-//  }
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage("QxrdAcquisition::~QxrdAcquisition");
+  }
 }
 
 void QxrdAcquisition::initialize()

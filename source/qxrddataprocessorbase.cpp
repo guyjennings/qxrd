@@ -92,6 +92,10 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     m_RefinedRingSetData(NULL),
     m_GenerateTestImage(NULL)
 {
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage("QxrdDataProcessorBase::QxrdDataProcessorBase");
+  }
+
   m_CenterFinder = new QxrdCenterFinder(this);
   m_Integrator   = new QxrdIntegrator(this, m_Allocator, this);
   m_GenerateTestImage = new QxrdGenerateTestImage(this, m_Allocator, this);
@@ -108,6 +112,9 @@ QxrdFileSaverThread *QxrdDataProcessorBase::fileSaverThread() const
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()
 {
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage("QxrdDataProcessorBase::~QxrdDataProcessorBase");
+  }
 }
 
 void QxrdDataProcessorBase::shutdown()

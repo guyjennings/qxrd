@@ -90,6 +90,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_ImageDisplay(NULL),
     m_Highlighter(NULL)
 {
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage("QxrdWindow::QxrdWindow");
+  }
+
   setupUi(this);
 
   if (sizeof(void*) == 4) {
@@ -434,7 +438,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
 QxrdWindow::~QxrdWindow()
 {
-  if (qcepDebug(DEBUG_WINDOW)) {
+  if (qcepDebug(DEBUG_APP)) {
     g_Application->printMessage("QxrdWindow::~QxrdWindow");
   }
   //  delete m_Data;
@@ -1140,7 +1144,7 @@ void QxrdWindow::testWidget()
     INVOKE_CHECK(QMetaObject::invokeMethod(this, "testWidget", Qt::BlockingQueuedConnection));
   } else {
     QDockWidget *dockWidget = new QDockWidget("Test", this);
-    QWidget     *contents   = new QWidget(dockWidget);
+    QWidget     *contents   = new QMainWindow(dockWidget);
     QMenuBar    *menuBar    = new QMenuBar(contents);
 
     QMenu *test1Menu = menuBar->addMenu("Test1");
@@ -1152,5 +1156,7 @@ void QxrdWindow::testWidget()
     test2Menu->addAction("Cmd4");
 
     addDockWidget(Qt::RightDockWidgetArea, dockWidget);
+
+    contents->show();
   }
 }

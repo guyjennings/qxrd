@@ -1,10 +1,11 @@
 #include "qcepimagedata.h"
+#include "qxrdapplication.h"
 #include <tiffio.h>
 
 #include <QSettings>
 #include <QFileInfo>
 
-//static int allocCount = 0;
+static int allocCount = 0;
 
 QcepImageDataBase::QcepImageDataBase(int width, int height)
   : QObject(),
@@ -36,12 +37,20 @@ QcepImageDataBase::QcepImageDataBase(int width, int height)
     m_Height(height),
     m_Mutex(QMutex::Recursive)
 {
-//    printf("QcepImageDataBase::QcepImageDataBase allocate %d\n", allocCount++);
+  allocCount++;
+
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage(tr("QcepImageDataBase::QcepImageDataBase allocate %1").arg(allocCount));
+  }
 }
 
 QcepImageDataBase::~QcepImageDataBase()
 {
-//    printf("QcepImageDataBase::QcepImageDataBase deallocate %d\n", allocCount--);
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage(tr("QcepImageDataBase::~QcepImageDataBase deallocate %1").arg(allocCount));
+  }
+
+  allocCount--;
 }
 
 QMutex *QcepImageDataBase::mutex()
@@ -220,6 +229,10 @@ QcepImageData<T>::QcepImageData(int width, int height, T def)
     m_MaxValue(0),
     m_Default(def)
 {
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage(tr("QcepImageData<%1>::QcepImageData").arg(typeid(T).name()));
+  }
+
   if (def) {
     m_Image.fill(def);
   }
@@ -228,6 +241,10 @@ QcepImageData<T>::QcepImageData(int width, int height, T def)
 template <typename T>
 T* QcepImageData<T>::data()
 {
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage(tr("QcepImageData<%1>::~QcepImageData").arg(typeid(T).name()));
+  }
+
   return m_Image.data();
 }
 

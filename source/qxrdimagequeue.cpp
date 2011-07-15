@@ -8,6 +8,10 @@ QxrdImageQueue<T>::QxrdImageQueue(QString name)
     m_NCols(NULL, "nCols", 2048),
     m_Name(name)
 {
+  if (qcepDebug(DEBUG_QUEUES)) {
+    g_Application->printMessage(tr("QxrdImageQueue<T>::QxrdImageQueue(%1) %2 begin [contains %3]")
+                                .arg(m_Name).HEXARG(this).arg(m_Queue.size()));
+  }
 }
 
 template <typename T>
