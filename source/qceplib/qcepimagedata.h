@@ -180,6 +180,7 @@ template <typename T>
 {
 public:
   QcepImageData(int width, int height, T def=0);
+  virtual ~QcepImageData();
 
 public:
   bool readImage(QString filename);

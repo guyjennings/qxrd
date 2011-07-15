@@ -242,14 +242,18 @@ QcepImageData<T>::QcepImageData(int width, int height, T def)
 }
 
 template <typename T>
-T* QcepImageData<T>::data()
+QcepImageData<T>::~QcepImageData()
 {
   if (qcepDebug(DEBUG_APP)) {
     g_Application->printMessage(tr("QcepImageData<%1>::~QcepImageData %2")
                                 .arg(typeid(T).name())
                                 .HEXARG(this));
   }
+}
 
+template <typename T>
+T* QcepImageData<T>::data()
+{
   return m_Image.data();
 }
 
