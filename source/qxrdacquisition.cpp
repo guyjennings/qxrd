@@ -53,6 +53,10 @@ void QxrdAcquisition::initialize()
 
 void QxrdAcquisition::shutdown()
 {
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage("QxrdAcquisition::shutdown()");
+  }
+
   shutdownAcquisition();
 
   thread()->exit();
@@ -150,6 +154,8 @@ void QxrdAcquisition::onAcquireComplete()
 void QxrdAcquisition::cancel()
 {
   set_Cancelling(true);
+
+  m_NAcquiredImages.release(1);
 }
 
 void QxrdAcquisition::trigger()
@@ -484,6 +490,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
     if (i != 0) {
       for (int k=0; k<skipBetween; k++) {
+        if (cancelling()) goto cancel;
         g_Application->statusMessage(tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
         acquireFrame(exposure);
       }
@@ -499,7 +506,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
         if (img) {
           accumulateAcquiredImage(img, res[p][0], ovf[p][0]);
-        } else {
+        } else if (!cancelling()){
           indicateDroppedFrame(0);
         }
 
@@ -589,7 +596,7 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
   }
 
   for (int i=0; i<nsummed; i++) {
-    if (cancelling()) goto saveCancel;
+    if (cancelling()) goto cancel;
 
     emit acquiredFrame(res->get_FileBase(), fileIndex, 0, 1, i, nsummed, 0, 1);
 
@@ -598,7 +605,11 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
     if (img) {
       accumulateAcquiredImage(img, res, overflow);
     } else {
-      indicateDroppedFrame(0);
+      if (!cancelling()){
+        indicateDroppedFrame(0);
+      } else {
+        goto cancel;
+      }
     }
   }
 
