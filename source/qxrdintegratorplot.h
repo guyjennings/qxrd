@@ -21,6 +21,7 @@ public:
 public slots:
   void onNewIntegrationAvailable(QxrdIntegratedDataPtr data);
   void clearGraph();
+  void clearSelectedCurves();
 
 private:
   QxrdDataProcessor *m_DataProcessor;

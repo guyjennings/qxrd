@@ -258,6 +258,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, Qxr
       }
 
       integ->set_XUnitsLabel(XLabel());
+      integ->set_Oversample(get_Oversample());
 
       g_Application->printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
     } else {
@@ -335,4 +336,19 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdIntegratedDataPtr integ, 
   }
 
   return integ;
+}
+
+void QxrdIntegrator::integrateVsQ()
+{
+  set_IntegrationXUnits(IntegrateQ);
+}
+
+void QxrdIntegrator::integrateVsR()
+{
+  set_IntegrationXUnits(IntegrateR);
+}
+
+void QxrdIntegrator::integrateVsTTH()
+{
+  set_IntegrationXUnits(IntegrateTTH);
 }

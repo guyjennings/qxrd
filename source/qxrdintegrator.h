@@ -66,6 +66,10 @@ public slots:
   QxrdIntegratedDataPtr sliceLine(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, double x0, double y0, double x1, double y1, double width);
   QxrdIntegratedDataPtr slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QwtArray<QwtDoublePoint> poly, double width);
 
+  void integrateVsR();
+  void integrateVsQ();
+  void integrateVsTTH();
+
 private:
   mutable QMutex         m_Mutex;
   QxrdDataProcessorBase *m_DataProcessor;

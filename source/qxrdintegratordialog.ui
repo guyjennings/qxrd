@@ -34,7 +34,7 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="0" colspan="2">
+    <item row="8" column="0" colspan="2">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -76,8 +76,11 @@ script property integrator.oversample</string>
     </item>
     <item row="6" column="0">
      <widget class="QPushButton" name="m_ClearGraphButton">
+      <property name="toolTip">
+       <string>Clear all curves from integrated data graph</string>
+      </property>
       <property name="text">
-       <string>Clear Graph</string>
+       <string>Clear All Curves</string>
       </property>
      </widget>
     </item>
@@ -181,6 +184,17 @@ script property integrator.integrationMaximum</string>
       </property>
       <property name="maximum">
        <double>10000.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QPushButton" name="m_ClearSelectedGraphButton">
+      <property name="toolTip">
+       <string>Clear selected curves from integrated data graph
+(Click legend entries to select curves)</string>
+      </property>
+      <property name="text">
+       <string>Clear Selected Curves</string>
       </property>
      </widget>
     </item>
