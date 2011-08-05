@@ -97,6 +97,7 @@ private slots:
   void newData();
   void newMask();
   void allocatedMemoryChanged();
+  void integrationXUnitsChanged(int newXUnits);
 
 public:
   void readSettings(QxrdSettings &settings, QString section);

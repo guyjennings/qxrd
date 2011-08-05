@@ -203,10 +203,11 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionLoadGainMap, SIGNAL(triggered()), this, SLOT(doLoadGainMap()));
   connect(m_ActionSaveGainMap, SIGNAL(triggered()), this, SLOT(doSaveGainMap()));
   connect(m_ActionClearGainMap, SIGNAL(triggered()), this, SLOT(doClearGainMap()));
+
   connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
+  connect(m_ActionSetAcquireDirectory, SIGNAL(triggered()), this, SLOT(selectOutputDirectory()));
 
   connect(m_ActionAccumulateImages, SIGNAL(triggered()), this, SLOT(doAccumulateImages()));
-  connect(m_ActionIntegrate, SIGNAL(triggered()), this, SLOT(doIntegrateSequence()));
   connect(m_ActionProcessData, SIGNAL(triggered()), this, SLOT(doProcessSequence()));
 
   connect(m_DisplayDialog -> m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));
@@ -227,6 +228,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionIce, SIGNAL(triggered()), m_Plot, SLOT(setIce()));
 
   connect(m_ActionRefineCenterTilt, SIGNAL(triggered()), this, SLOT(doRefineCenterTilt()));
+  connect(m_ActionMoveCenterUp, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveUp()));
+  connect(m_ActionMoveCenterDown, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveDown()));
+  connect(m_ActionMoveCenterLeft, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveLeft()));
+  connect(m_ActionMoveCenterRight, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveRight()));
 
   m_AcquireDialog->setupAcquireMenu(m_AcquireMenu);
 
@@ -274,8 +279,6 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(autoScale()));
   connect(m_IntegratorMeasureButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableMeasuring()));
 
-  connect(m_IntegratorDialog -> m_ClearGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearGraph()));
-  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
   connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
   connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
 
@@ -291,6 +294,26 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
   connect(&m_UpdateTimer, SIGNAL(timeout()), this, SLOT(newData()));
+
+  connect(m_ActionIntegrate, SIGNAL(triggered()), this, SLOT(doIntegrateSequence()));
+  connect(m_ActionIntegrateCurrent, SIGNAL(triggered()),
+          m_DataProcessor, SLOT(integrateSaveAndDisplay()));
+  connect(m_ActionIntegrateInputImages, SIGNAL(triggered()),
+          m_InputFileBrowser, SLOT(doIntegrate()));
+
+  connect(m_IntegratorDialog -> m_ClearGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearGraph()));
+  connect(m_IntegratorDialog -> m_ClearSelectedGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearSelectedCurves()));
+  connect(m_ActionClearIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearGraph()));
+  connect(m_ActionClearSelectedIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearSelectedCurves()));
+
+  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
+  connect(m_DataProcessor->integrator()->prop_IntegrationXUnits(), SIGNAL(changedValue(int)),
+          this, SLOT(integrationXUnitsChanged(int)));
+  integrationXUnitsChanged(m_DataProcessor->integrator()->get_IntegrationXUnits());
+
+  connect(m_ActionIntegrateVsR,   SIGNAL(triggered()), m_DataProcessor->integrator(), SLOT(integrateVsR()));
+  connect(m_ActionIntegrateVsQ,   SIGNAL(triggered()), m_DataProcessor->integrator(), SLOT(integrateVsQ()));
+  connect(m_ActionIntegrateVsTTH, SIGNAL(triggered()), m_DataProcessor->integrator(), SLOT(integrateVsTTH()));
 
   //  connect(m_SaveDarkOptions, SIGNAL(clicked()), this, SLOT(doProcessorOptionsDialog()));
 
@@ -1125,6 +1148,13 @@ void QxrdWindow::doProcessSequence()
   foreach (QString file, files) {
     m_DataProcessor->processData(file);
   }
+}
+
+void QxrdWindow::integrationXUnitsChanged(int newXUnits)
+{
+  m_ActionIntegrateVsR   -> setChecked(newXUnits == QxrdIntegrator::IntegrateR);
+  m_ActionIntegrateVsQ   -> setChecked(newXUnits == QxrdIntegrator::IntegrateQ);
+  m_ActionIntegrateVsTTH -> setChecked(newXUnits == QxrdIntegrator::IntegrateTTH);
 }
 
 void QxrdWindow::crashProgram()
