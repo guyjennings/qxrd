@@ -11,7 +11,8 @@ QxrdIntegratedData::QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDouble
   m_Y(maxSize),
   m_cx(0),
   m_cy(0),
-  m_XUnitsLabel("TTH")
+  m_XUnitsLabel("TTH"),
+  m_Oversample(1)
 {
   m_ObjectCounter.allocate(sizeof(double), 2, m_MaxSize);
 }
@@ -92,6 +93,16 @@ QString QxrdIntegratedData::get_XUnitsLabel() const
 void QxrdIntegratedData::set_XUnitsLabel(QString units)
 {
   m_XUnitsLabel = units;
+}
+
+int QxrdIntegratedData::get_Oversample() const
+{
+  return m_Oversample;
+}
+
+void QxrdIntegratedData::set_Oversample(int ovs)
+{
+  m_Oversample = ovs;
 }
 
 int QxrdIntegratedData::allocatedMemoryMB()
