@@ -21,7 +21,7 @@ protected:
 
 private:
   QxrdApplication   *m_Application;
-  QxrdSettingsSaver *m_SettingsSaver;
+  QAtomicPointer<QxrdSettingsSaver> m_SettingsSaver;
 };
 
 #endif // QXRDSETTINGSSAVERTHREAD_H

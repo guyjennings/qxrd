@@ -41,9 +41,12 @@ void QxrdServerThread::run()
     g_Application->printMessage("Starting Spec Server Thread");
   }
 
-  m_Server = new QxrdServer(m_Name, m_Port);
+  QxrdServer *server = new QxrdServer(m_Name, m_Port);
 
-  m_Server -> startServer(QHostAddress::Any, m_Port);
+  server -> startServer(QHostAddress::Any, m_Port);
+
+  m_Server.fetchAndStoreOrdered(server);
+
   g_Application->printMessage(tr("spec server started on port %1").arg(m_Server->serverPort()));
 
   int rc = exec();

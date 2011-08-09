@@ -23,7 +23,7 @@ void QxrdSettingsSaverThread::run()
     g_Application->printMessage("Starting Settings Saver Thread");
   }
 
-  m_SettingsSaver = new QxrdSettingsSaver(NULL, m_Application);
+  m_SettingsSaver.fetchAndStoreOrdered(new QxrdSettingsSaver(NULL, m_Application));
 
   int rc = exec();
 
