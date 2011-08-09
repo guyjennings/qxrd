@@ -30,7 +30,7 @@ protected:
 private:
   QString     m_Name;
   int         m_Port;
-  QxrdServer *m_Server;
+  QAtomicPointer<QxrdServer> m_Server;
 };
 
 #endif // QXRDSERVERTHREAD_H

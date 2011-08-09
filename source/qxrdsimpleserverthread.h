@@ -24,7 +24,7 @@ protected:
 private:
   QString           m_Name;
   int               m_Port;
-  QxrdSimpleServer *m_Server;
+  QAtomicPointer<QxrdSimpleServer> m_Server;
 };
 
 #endif // QXRDSIMPLESERVERTHREAD_H

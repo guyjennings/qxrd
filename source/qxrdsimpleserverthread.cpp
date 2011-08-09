@@ -38,9 +38,11 @@ void QxrdSimpleServerThread::run()
     g_Application->printMessage("Starting Simple Server Thread");
   }
 
-  m_Server = new QxrdSimpleServer(m_Name, m_Port);
+  QxrdSimpleServer *server = new QxrdSimpleServer(m_Name, m_Port);
 
-  m_Server -> startServer(QHostAddress::Any, m_Port);
+  server -> startServer(QHostAddress::Any, m_Port);
+
+  m_Server.fetchAndStoreOrdered(server);
 
   int rc = exec();
 
