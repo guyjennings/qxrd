@@ -5,7 +5,7 @@
 
 class QxrdPowderFitRefinePage : public QxrdPowderFitIdentifyPage
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdPowderFitRefinePage(QxrdDataProcessor *proc, QWidget *parent);

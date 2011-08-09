@@ -321,6 +321,15 @@
          <item row="1" column="1">
           <widget class="QWidget" name="widget_4" native="true">
            <layout class="QGridLayout" name="gridLayout_16">
+            <property name="horizontalSpacing">
+             <number>10</number>
+            </property>
+            <property name="verticalSpacing">
+             <number>2</number>
+            </property>
+            <property name="margin">
+             <number>2</number>
+            </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label">
               <property name="text">
@@ -377,7 +386,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="9">
+            <item row="0" column="11">
              <spacer name="horizontalSpacer_3">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -389,6 +398,20 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item row="0" column="9">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Q:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="10">
+             <widget class="QLabel" name="m_QMouse">
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -871,10 +894,10 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
+   <widget class="QMenu" name="m_FileMenu">
     <property name="title">
      <string>File</string>
     </property>
@@ -883,21 +906,22 @@
     <addaction name="separator"/>
     <addaction name="m_ActionLoadDark"/>
     <addaction name="m_ActionSaveDark"/>
+    <addaction name="m_ActionClearDark"/>
     <addaction name="separator"/>
     <addaction name="m_ActionLoadMask"/>
     <addaction name="m_ActionSaveMask"/>
+    <addaction name="m_ActionClearMask"/>
     <addaction name="separator"/>
-    <addaction name="m_ActionAccumulateImages"/>
-    <addaction name="m_ActionIntegrate"/>
-    <addaction name="m_ActionProcessData"/>
+    <addaction name="m_ActionLoadGainMap"/>
+    <addaction name="m_ActionSaveGainMap"/>
+    <addaction name="m_ActionClearGainMap"/>
     <addaction name="separator"/>
-    <addaction name="m_ActionSelectLogFile"/>
     <addaction name="m_ActionPreferences"/>
     <addaction name="m_ActionLoadPreferences"/>
     <addaction name="m_ActionSavePreferences"/>
     <addaction name="m_ActionQuit"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
+   <widget class="QMenu" name="m_EditMenu">
     <property name="title">
      <string>Edit</string>
     </property>
@@ -906,9 +930,10 @@
     <property name="title">
      <string>Acquire</string>
     </property>
-    <addaction name="m_ActionExecuteScript"/>
+    <addaction name="m_ActionSetAcquireDirectory"/>
+    <addaction name="m_ActionSelectLogFile"/>
    </widget>
-   <widget class="QMenu" name="menuDisplay">
+   <widget class="QMenu" name="m_DisplayMenu">
     <property name="title">
      <string>Display</string>
     </property>
@@ -934,34 +959,71 @@
      <string>Windows</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuHelp">
+   <widget class="QMenu" name="m_HelpMenu">
     <property name="title">
      <string>Help</string>
     </property>
     <addaction name="m_ActionAboutQXRD"/>
     <addaction name="m_ActionOpenQXRDWebPage"/>
    </widget>
-   <widget class="QMenu" name="menuTests">
+   <widget class="QMenu" name="m_TestsMenu">
     <property name="title">
      <string>Tests</string>
     </property>
     <addaction name="m_ActionROICalculate"/>
     <addaction name="m_ActionHistogramCalculate"/>
+    <addaction name="m_ActionCrashProgram"/>
    </widget>
-   <widget class="QMenu" name="menuCalibration">
+   <widget class="QMenu" name="m_CalibrationMenu">
     <property name="title">
-     <string>Calibration</string>
+     <string>Centering</string>
     </property>
     <addaction name="m_ActionRefineCenterTilt"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionMoveCenterUp"/>
+    <addaction name="m_ActionMoveCenterDown"/>
+    <addaction name="m_ActionMoveCenterLeft"/>
+    <addaction name="m_ActionMoveCenterRight"/>
    </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
+   <widget class="QMenu" name="m_OperationsMenu">
+    <property name="title">
+     <string>Process</string>
+    </property>
+    <widget class="QMenu" name="m_IntegrateVsMenu">
+     <property name="title">
+      <string>Integrate vs...</string>
+     </property>
+     <addaction name="m_ActionIntegrateVsR"/>
+     <addaction name="m_ActionIntegrateVsQ"/>
+     <addaction name="m_ActionIntegrateVsTTH"/>
+    </widget>
+    <addaction name="m_ActionAccumulateImages"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionIntegrateCurrent"/>
+    <addaction name="m_ActionIntegrateInputImages"/>
+    <addaction name="m_ActionIntegrate"/>
+    <addaction name="m_IntegrateVsMenu"/>
+    <addaction name="m_ActionClearIntegratedData"/>
+    <addaction name="m_ActionClearSelectedIntegratedData"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionProcessData"/>
+   </widget>
+   <widget class="QMenu" name="m_ScriptMenu">
+    <property name="title">
+     <string>Script</string>
+    </property>
+    <addaction name="m_ActionExecuteScript"/>
+   </widget>
+   <addaction name="m_FileMenu"/>
+   <addaction name="m_EditMenu"/>
    <addaction name="m_AcquireMenu"/>
-   <addaction name="menuCalibration"/>
-   <addaction name="menuDisplay"/>
+   <addaction name="m_OperationsMenu"/>
+   <addaction name="m_CalibrationMenu"/>
+   <addaction name="m_DisplayMenu"/>
    <addaction name="m_WindowsMenu"/>
-   <addaction name="menuHelp"/>
-   <addaction name="menuTests"/>
+   <addaction name="m_ScriptMenu"/>
+   <addaction name="m_HelpMenu"/>
+   <addaction name="m_TestsMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="m_ActionQuit">
@@ -1196,6 +1258,9 @@
    <property name="toolTip">
     <string>Load Dark Data</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+O</string>
+   </property>
   </action>
   <action name="m_ActionSaveDark">
    <property name="text">
@@ -1203,6 +1268,9 @@
    </property>
    <property name="toolTip">
     <string>Save Dark Data</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
    </property>
   </action>
   <action name="m_ActionLoadMask">
@@ -1216,6 +1284,9 @@
    <property name="toolTip">
     <string>Load Mask</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+O</string>
+   </property>
   </action>
   <action name="m_ActionSaveMask">
    <property name="text">
@@ -1223,6 +1294,9 @@
    </property>
    <property name="toolTip">
     <string>Save Mask</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="m_ActionSelectLogFile">
@@ -1315,6 +1389,172 @@
    </property>
    <property name="toolTip">
     <string>Load QXRD preferences from a file...</string>
+   </property>
+  </action>
+  <action name="m_ActionCrashProgram">
+   <property name="text">
+    <string>Crash Program</string>
+   </property>
+   <property name="toolTip">
+    <string>Crash Program (for debugging purposes)</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadGainMap">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Load Gain Map (Flat Field)...</string>
+   </property>
+   <property name="toolTip">
+    <string>Load Gain Map (Flat Field) Image</string>
+   </property>
+  </action>
+  <action name="m_ActionSaveGainMap">
+   <property name="text">
+    <string>Save Gain Map (Flat Field)...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Gain Map (Flat Field) Image</string>
+   </property>
+  </action>
+  <action name="m_ActionClearGainMap">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Gain Map (Flat Field)...</string>
+   </property>
+   <property name="toolTip">
+    <string>Remove Gain Map (Flat Field) Image</string>
+   </property>
+  </action>
+  <action name="m_ActionClearMask">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Mask...</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear Mask</string>
+   </property>
+  </action>
+  <action name="m_ActionClearDark">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Dark Data...</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear Dark Data</string>
+   </property>
+  </action>
+  <action name="m_ActionIntegrateVsR">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Integrate vs Radius</string>
+   </property>
+   <property name="toolTip">
+    <string>Integrate vs Radius</string>
+   </property>
+  </action>
+  <action name="m_ActionIntegrateVsQ">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Integrate vs Q</string>
+   </property>
+   <property name="toolTip">
+    <string>Integrate vs Q</string>
+   </property>
+  </action>
+  <action name="m_ActionIntegrateVsTTH">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Integrate vs 2 Theta</string>
+   </property>
+   <property name="toolTip">
+    <string>Integrate vs 2 Theta</string>
+   </property>
+  </action>
+  <action name="m_ActionMoveCenterUp">
+   <property name="text">
+    <string>Move Center Up</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Up</string>
+   </property>
+  </action>
+  <action name="m_ActionMoveCenterDown">
+   <property name="text">
+    <string>Move Center Down</string>
+   </property>
+   <property name="toolTip">
+    <string>Move Center Down</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Down</string>
+   </property>
+  </action>
+  <action name="m_ActionMoveCenterLeft">
+   <property name="text">
+    <string>Move Center Left</string>
+   </property>
+   <property name="toolTip">
+    <string>Move Center Left</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Left</string>
+   </property>
+  </action>
+  <action name="m_ActionMoveCenterRight">
+   <property name="text">
+    <string>Move Center Right</string>
+   </property>
+   <property name="toolTip">
+    <string>Move Center Right</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Right</string>
+   </property>
+  </action>
+  <action name="m_ActionClearIntegratedData">
+   <property name="text">
+    <string>Clear Integrated Data</string>
+   </property>
+  </action>
+  <action name="m_ActionClearSelectedIntegratedData">
+   <property name="text">
+    <string>Clear Selected Integrated Data</string>
+   </property>
+  </action>
+  <action name="m_ActionSetAcquireDirectory">
+   <property name="text">
+    <string>Set Acquire Directory...</string>
+   </property>
+  </action>
+  <action name="m_ActionIntegrateCurrent">
+   <property name="text">
+    <string>Integrate current image</string>
+   </property>
+  </action>
+  <action name="m_ActionIntegrateInputImages">
+   <property name="text">
+    <string>Integrate selected input images</string>
+   </property>
+   <property name="toolTip">
+    <string>Integrate selected input images</string>
    </property>
   </action>
  </widget>

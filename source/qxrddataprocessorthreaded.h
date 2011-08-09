@@ -12,7 +12,7 @@
 
 class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdDataProcessorThreaded(QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver, QObject *parent=0);
 

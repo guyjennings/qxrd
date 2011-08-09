@@ -9,24 +9,19 @@ class QxrdApplication;
 
 class QxrdSettingsSaverThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdSettingsSaverThread(QxrdApplication *app);
 
   QxrdSettingsSaver *settingsSaver();
   void shutdown();
 
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
 protected:
   void run();
 
 private:
   QxrdApplication   *m_Application;
-  QxrdSettingsSaver *m_SettingsSaver;
+  QAtomicPointer<QxrdSettingsSaver> m_SettingsSaver;
 };
 
 #endif // QXRDSETTINGSSAVERTHREAD_H

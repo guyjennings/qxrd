@@ -7,10 +7,11 @@
 #include <QStringList>
 #include <QThread>
 #include <QtGlobal>
+#include "qxrdapplication.h"
 
 QxrdAcquisitionParameters::QxrdAcquisitionParameters()
   : QObject(),
-    m_QxrdVersion(this,"qxrdVersion",QXRD_VERSION),
+    m_QxrdVersion(this,"qxrdVersion",STR(QXRD_VERSION)),
     m_QtVersion(this,"qtVersion",qVersion()),
     m_DetectorType(this, "detectorType",-1),
     m_DetectorTypeName(this,"detectorTypeName",""),
@@ -73,7 +74,7 @@ void QxrdAcquisitionParameters::dynamicProperties()
   QByteArray name;
 
   foreach(name, dynamicPropertyNames()) {
-    emit printMessage(tr("acquisition.%1\n").arg(name.data()));
+    g_Application->printMessage(tr("acquisition.%1\n").arg(name.data()));
   }
 }
 

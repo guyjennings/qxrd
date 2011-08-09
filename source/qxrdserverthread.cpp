@@ -3,6 +3,7 @@
 #include "qxrdserver.h"
 #include <QMetaObject>
 #include <QDateTime>
+#include "qxrdapplication.h"
 
 QxrdServerThread::QxrdServerThread(QString name, int port)
   : m_Name(name),
@@ -36,20 +37,23 @@ void QxrdServerThread::shutdown()
 
 void QxrdServerThread::run()
 {
-//  printf("start server\n");
-  m_Server = new QxrdServer(m_Name, m_Port);
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage("Starting Spec Server Thread");
+  }
 
-  connect(m_Server,             SIGNAL(printMessage(QString,QDateTime)), this,            SIGNAL(printMessage(QString,QDateTime)));
-  connect(m_Server,             SIGNAL(statusMessage(QString,QDateTime)), this,            SIGNAL(statusMessage(QString,QDateTime)));
-  connect(m_Server,             SIGNAL(criticalMessage(QString,QDateTime)), this,            SIGNAL(criticalMessage(QString,QDateTime)));
+  QxrdServer *server = new QxrdServer(m_Name, m_Port);
 
-  m_Server -> startServer(QHostAddress::Any, m_Port);
+  server -> startServer(QHostAddress::Any, m_Port);
+
+  m_Server.fetchAndStoreOrdered(server);
+
+  g_Application->printMessage(tr("spec server started on port %1").arg(m_Server->serverPort()));
 
   int rc = exec();
 
-  emit printMessage(tr("spec server started on port %1").arg(m_Server->serverPort()));
-
-//  printf("Server thread terminated with rc %d\n", rc);
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage(tr("Spec Server Thread Terminated with rc %1").arg(rc));
+  }
 }
 
 void QxrdServerThread::executeScript(QString cmd)

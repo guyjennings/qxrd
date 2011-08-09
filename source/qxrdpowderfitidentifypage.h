@@ -6,12 +6,12 @@
 
 class QxrdPowderFitIdentifyPage : public QxrdPowderFitWidget
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdPowderFitIdentifyPage(QxrdDataProcessor *proc, QWidget *parent);
 
-  Q_PROPERTY(int    idCurrentRing     READ get_IdCurrentRing WRITE set_IdCurrentRing STORED false);
-  QCEP_INTEGER_PROPERTY(IdCurrentRing);
+  Q_PROPERTY(int    idCurrentRing     READ get_IdCurrentRing WRITE set_IdCurrentRing STORED false)
+  QCEP_INTEGER_PROPERTY(IdCurrentRing)
 
 public slots:
   void selectIdentifyPage();

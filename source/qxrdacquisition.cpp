@@ -5,6 +5,7 @@
 #include "qxrdacquiredialog.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdwindow.h"
+#include "qxrdapplication.h"
 
 #include <QThreadPool>
 #include <QtConcurrentRun>
@@ -15,6 +16,10 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocat
     m_ControlPanel(NULL),
     m_Idling(1)
 {
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage("QxrdAcquisition::QxrdAcquisition");
+  }
+
   m_SynchronizedAcquisition = new QxrdSynchronizedAcquisition(this);
 
   connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
@@ -37,9 +42,9 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocat
 
 QxrdAcquisition::~QxrdAcquisition()
 {
-//  if (qcepDebug(DEBUG_ACQUIRE)) {
-//             printf("QxrdAcquisition::~QxrdAcquisition\n");
-//  }
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage("QxrdAcquisition::~QxrdAcquisition");
+  }
 }
 
 void QxrdAcquisition::initialize()
@@ -48,6 +53,10 @@ void QxrdAcquisition::initialize()
 
 void QxrdAcquisition::shutdown()
 {
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage("QxrdAcquisition::shutdown()");
+  }
+
   shutdownAcquisition();
 
   thread()->exit();
@@ -58,13 +67,6 @@ void QxrdAcquisition::onBufferSizeChanged(int newMB)
   m_Allocator -> changedSizeMB(newMB);
 }
 
-void QxrdAcquisition::allocateMemoryForAcquisition()
-{
-  THREAD_CHECK;
-
-  m_Allocator -> dimension(get_NCols(), get_NRows());
-}
-
 void QxrdAcquisition::acquire()
 {
   THREAD_CHECK;
@@ -73,7 +75,7 @@ void QxrdAcquisition::acquire()
     set_Cancelling(false);
     set_Triggered(false);
 
-    emit statusMessage("Starting acquisition");
+    g_Application->statusMessage("Starting acquisition");
     emit acquireStarted();
 
     QxrdAcquisitionParameterPack params(get_FilePattern(),
@@ -91,7 +93,7 @@ void QxrdAcquisition::acquire()
 
     m_Watcher.setFuture(res);
   } else {
-    emit statusMessage("Acquisition is already in progress");
+    g_Application->statusMessage("Acquisition is already in progress");
   }
 }
 
@@ -124,7 +126,7 @@ void QxrdAcquisition::acquireDark()
     set_Cancelling(false);
     set_Triggered(true);
 
-    emit statusMessage("Starting dark acquisition");
+    g_Application->statusMessage("Starting dark acquisition");
     emit acquireStarted();
 
     QxrdDarkAcquisitionParameterPack params(get_FilePattern(),
@@ -138,7 +140,7 @@ void QxrdAcquisition::acquireDark()
 
     m_Watcher.setFuture(res);
   } else {
-    emit statusMessage("Acquisition is already in progress");
+    g_Application->statusMessage("Acquisition is already in progress");
   }
 }
 
@@ -152,6 +154,8 @@ void QxrdAcquisition::onAcquireComplete()
 void QxrdAcquisition::cancel()
 {
   set_Cancelling(true);
+
+  m_NAcquiredImages.release(1);
 }
 
 void QxrdAcquisition::trigger()
@@ -193,8 +197,8 @@ void QxrdAcquisition::indicateDroppedFrame(int n)
                   .arg(m_Allocator->allocatedMemoryMB())
                   .arg(m_Allocator->maximumMemoryMB());
 
-  emit statusMessage(msg);
-  emit printMessage(msg);
+  g_Application->statusMessage(msg);
+  g_Application->printMessage(msg);
 
   prop_DroppedFrames() -> incValue(1);
 }
@@ -212,7 +216,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
 
     if (nsummed == 0) {
       if (qcepDebug(DEBUG_ACQUIRE)) {
-        emit printMessage(tr("Frame %1 saved").arg(nsummed));
+        g_Application->printMessage(tr("Frame %1 saved").arg(nsummed));
       }
 
       for (long i=0; i<nPixels; i++) {
@@ -228,7 +232,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
       }
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
-        emit printMessage(tr("Frame %1 summed").arg(nsummed));
+        g_Application->printMessage(tr("Frame %1 summed").arg(nsummed));
       }
 
       for (long i=0; i<nPixels; i++) {
@@ -266,8 +270,10 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int fileIndex, int
 void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   if (image) {
-    QxrdInt32ImageDataPtr proc = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
-    QxrdMaskDataPtr ovf = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve, 0);
+    int w=image->get_Width(), h=image->get_Height();
+
+    QxrdInt32ImageDataPtr proc = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve, w,h);
+    QxrdMaskDataPtr ovf = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve, w,h, 0);
 
     if (proc == NULL || ovf == NULL) {
       indicateDroppedFrame(0);
@@ -278,7 +284,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     overflow->copyMaskTo(ovf);
 
     if (qcepDebug(DEBUG_ACQUIRE)) {
-      emit printMessage(tr("processAcquiredImage(%1,%2) %3 summed exposures")
+      g_Application->printMessage(tr("processAcquiredImage(%1,%2) %3 summed exposures")
                         .arg(fileIndex).arg(phase).arg(image->get_SummedExposures()));
     }
 
@@ -288,7 +294,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     getFileBaseAndName(filePattern, fileIndex, phase, nPhases, fileBase, fileName);
 
     if (qcepDebug(DEBUG_ACQUIRE)) {
-      emit printMessage(tr("Fn: %1, Fi: %2, Phs: %3")
+      g_Application->printMessage(tr("Fn: %1, Fi: %2, Phs: %3")
                         .arg(fileName).arg(get_FileIndex()).arg(phase));
     }
 
@@ -319,7 +325,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
 
     if (nPhases == 0) {
       if (qcepDebug(DEBUG_ACQUIRE)) {
-        emit printMessage(tr("32 bit Dark Image acquired"));
+        g_Application->printMessage(tr("32 bit Dark Image acquired"));
       }
 
       proc -> set_ImageNumber(-1);
@@ -327,7 +333,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
       proc -> set_NPhases(0);
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
-        emit printMessage(tr("32 bit Image %1 acquired").arg(get_FileIndex()));
+        g_Application->printMessage(tr("32 bit Image %1 acquired").arg(get_FileIndex()));
       }
 
       proc -> set_ImageNumber(fileIndex);
@@ -364,10 +370,10 @@ void QxrdAcquisition::acquisitionError(const char *fn, int ln, int n)
 {
   cancel();
 
-  emit criticalMessage(tr("Acquisition Error %1 at line %2 in file %3").arg(n).arg(ln).arg(fn));
+  g_Application->criticalMessage(tr("Acquisition Error %1 at line %2 in file %3").arg(n).arg(ln).arg(fn));
 }
 
-QxrdAcquireDialog *QxrdAcquisition::controlPanel(QxrdWindow *win)
+QxrdAcquireDialogBase *QxrdAcquisition::controlPanel(QxrdWindow *win)
 {
   if (win) {
     m_Window = win;
@@ -406,8 +412,8 @@ int QxrdAcquisition::cancelling()
   int res = get_Cancelling();
 
   if (res) {
-    emit printMessage(tr("Cancelling acquisition"));
-    emit statusMessage(tr("Cancelling acquisition"));
+    g_Application->printMessage(tr("Cancelling acquisition"));
+    g_Application->statusMessage(tr("Cancelling acquisition"));
   }
 
   return res;
@@ -439,18 +445,20 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
   QVector<QVector<QxrdInt32ImageDataPtr> >res(nphases);
   QVector<QVector<QxrdMaskDataPtr> >      ovf(nphases);
 
-  emit printMessage("Starting acquisition");
+  g_Application->printMessage("Starting acquisition");
 
   for (int p=0; p<nphases; p++) {
     res[p].resize(preTrigger+1);
     ovf[p].resize(preTrigger+1);
 
     for (int t=0; t<=preTrigger; t++) {
-      res[p][t] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
-      ovf[p][t] = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,0);
+      res[p][t] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve,
+                                             get_NCols(), get_NRows());
+      ovf[p][t] = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,
+                                       get_NCols(), get_NRows(), 0);
 
       if (res[p][t]==NULL || ovf[p][t]==NULL) {
-        emit criticalMessage("Insufficient memory for acquisition operation");
+        g_Application->criticalMessage("Insufficient memory for acquisition operation");
         goto cancel;
       }
     }
@@ -458,7 +466,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
   for (int i=0; i<skipBefore; i++) {
     if (cancelling()) goto cancel;
-    emit statusMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
+    g_Application->statusMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
     acquireFrame(exposure);
   }
 
@@ -482,7 +490,8 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
     if (i != 0) {
       for (int k=0; k<skipBetween; k++) {
-        emit statusMessage(tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
+        if (cancelling()) goto cancel;
+        g_Application->statusMessage(tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
         acquireFrame(exposure);
       }
     }
@@ -497,7 +506,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
         if (img) {
           accumulateAcquiredImage(img, res[p][0], ovf[p][0]);
-        } else {
+        } else if (!cancelling()){
           indicateDroppedFrame(0);
         }
 
@@ -538,8 +547,8 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     }
   }
 
-  emit statusMessage(tr("Acquisition complete"));
-  emit printMessage(tr("Acquisition complete"));
+  g_Application->statusMessage(tr("Acquisition complete"));
+  g_Application->printMessage(tr("Acquisition complete"));
 
 cancel:
   if (synchronizedAcquisition()) {
@@ -559,18 +568,20 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
   int nsummed = parms.nsummed();
   int skipBefore = parms.skipBefore();
 
-  emit printMessage("Starting dark acquisition");
+  g_Application->printMessage("Starting dark acquisition");
 
   if (synchronizedAcquisition()) {
     synchronizedAcquisition()->prepareForDarkAcquisition(&parms);
   }
 
-  QxrdInt32ImageDataPtr res = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve);
-  QxrdMaskDataPtr overflow  = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,0);
+  QxrdInt32ImageDataPtr res = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve,
+                                                         get_NCols(), get_NRows());
+  QxrdMaskDataPtr overflow  = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,
+                                                   get_NCols(), get_NRows(),0);
   QString fb, fn;
 
   if (res == NULL || overflow == NULL) {
-    emit criticalMessage("Insufficient memory for acquisition operation");
+    g_Application->criticalMessage("Insufficient memory for acquisition operation");
     goto cancel;
   }
 
@@ -585,7 +596,7 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
   }
 
   for (int i=0; i<nsummed; i++) {
-    if (cancelling()) goto saveCancel;
+    if (cancelling()) goto cancel;
 
     emit acquiredFrame(res->get_FileBase(), fileIndex, 0, 1, i, nsummed, 0, 1);
 
@@ -594,15 +605,19 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
     if (img) {
       accumulateAcquiredImage(img, res, overflow);
     } else {
-      indicateDroppedFrame(0);
+      if (!cancelling()){
+        indicateDroppedFrame(0);
+      } else {
+        goto cancel;
+      }
     }
   }
 
 saveCancel:
   processDarkImage(fileBase, fileIndex, res, overflow);
 
-  emit statusMessage(tr("Acquisition complete"));
-  emit printMessage(tr("Acquisition complete"));
+  g_Application->statusMessage(tr("Acquisition complete"));
+  g_Application->printMessage(tr("Acquisition complete"));
 
 cancel:
   if (synchronizedAcquisition()) {

@@ -17,7 +17,7 @@ class QTcpSocket;
 
 class QSpecServer : public QTcpServer
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QSpecServer(QString name, int port, QObject *parent=0);
@@ -29,11 +29,6 @@ public slots:
   void openNewConnection();
   void connectionClosed();
   void clientRead();
-
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 signals:
   void executeCommand(QString cmd);

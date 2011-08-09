@@ -12,7 +12,7 @@ class QxrdAcquisition;
 
 class QxrdAcquisitionThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   QxrdAcquisitionThread(QxrdDataProcessor *proc, QxrdAllocator *allocator, int detectorType);
@@ -31,11 +31,6 @@ public slots:
 
   void doAcquireDark();
   void cancelDark();
-
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 public:
   QxrdAcquisition *acquisition() const;

@@ -9,7 +9,7 @@
 
 class QxrdMaskStack : public QObject, public QStack<QxrdMaskDataPtr>
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdMaskStack();

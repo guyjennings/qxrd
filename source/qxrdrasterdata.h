@@ -13,17 +13,13 @@ typedef QSharedPointer<QxrdRasterData> QxrdRasterDataPtr;
 
 class QxrdRasterData : public QwtRasterData
 {
-//  Q_OBJECT;
+//  Q_OBJECT
 
 public:
   QxrdRasterData(QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(),
                  int interp = 1,
                  QxrdMaskDataPtr msk = QxrdMaskDataPtr(),
                  QwtDoubleInterval range = QwtDoubleInterval(0,40000));
-
-//private:
-//  QxrdRasterData();
-//  QxrdRasterData(const QxrdRasterData& cpy);
 
 public:
   double value(double x, double y) const;

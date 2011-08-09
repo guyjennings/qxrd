@@ -4,6 +4,7 @@
 #include <qwt_plot_curve.h>
 #include <QMetaMethod>
 #include <qwt_legend.h>
+#include <qwt_legend_item.h>
 #include <stdio.h>
 //#include <QTime>
 #include "qxrddataprocessor.h"
@@ -16,7 +17,8 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   : QxrdPlot(parent),
     m_DataProcessor(NULL),
     m_Integrator(NULL),
-    m_PlotIndex(0)
+    m_PlotIndex(0),
+    m_XUnitsLabel("")
 {
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
@@ -44,7 +46,29 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
     QTime tic;
     tic.start();
 
-    const QString title = data -> get_Image() -> get_Title();
+    QString units = data->get_XUnitsLabel();
+
+    if (m_PlotIndex == 0) {
+      m_XUnitsLabel = units;
+    } else if (units != m_XUnitsLabel) {
+      m_XUnitsLabel = "";
+    }
+
+    setAxisTitle(QwtPlot::xBottom, m_XUnitsLabel);
+
+    QString title = data -> get_Image() -> get_Title();
+    QString tooltip;
+
+    if (data->get_Oversample() > 1) {
+      tooltip = tr("%1\nPlotted vs %2\n%3 x oversampled")
+          .arg(title)
+          .arg(units)
+          .arg(data->get_Oversample());
+    } else {
+      tooltip = tr("%1\nPlotted vs %2\nNo oversampling")
+          .arg(title)
+          .arg(units);
+    }
 
     QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(this, title/*tr("Plot %1").arg(m_PlotIndex)*/);
     pc -> setData(data->x(), data->y(), data->size());
@@ -54,6 +78,12 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
     updateZoomer();
 
     m_DataProcessor -> updateEstimatedTime(m_DataProcessor -> prop_DisplayIntegratedDataTime(), tic.restart());
+
+    QWidget *legend = m_Legend->find(pc);
+
+    if (legend) {
+      legend->setToolTip(tooltip);
+    }
   }
 
   m_PlotIndex++;
@@ -68,3 +98,36 @@ void QxrdIntegratorPlot::clearGraph()
   clear();
   replot();
 }
+
+void QxrdIntegratorPlot::clearSelectedCurves()
+{
+  QList<QwtPlotCurve*> toDelete;
+
+  foreach(QwtPlotItem* item, itemList()) {
+    QwtPlotCurve *pc = dynamic_cast<QwtPlotCurve*>(item);
+    if (pc) {
+      QWidget *wid = m_Legend->find(pc);
+
+      if (wid) {
+        QwtLegendItem *itm = qobject_cast<QwtLegendItem*>(wid);
+
+        if (itm) {
+          if (itm->isChecked()) {
+            toDelete.append(pc);
+          }
+        }
+      }
+    }
+  }
+
+  foreach(QwtPlotCurve *curve, toDelete) {
+    if (curve) {
+      curve->detach();
+
+      delete curve;
+    }
+  }
+
+  replot();
+}
+

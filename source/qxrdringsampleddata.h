@@ -11,7 +11,7 @@
 
 class QxrdRingSampledData : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   explicit QxrdRingSampledData(QObject *parent = 0);
 
@@ -38,7 +38,7 @@ private:
 //typedef QSharedPointer<QxrdRingSampledData> QxrdRingSampledDataPtr;
 typedef QxrdRingSampledData *QxrdRingSampledDataPtr;
 
-Q_DECLARE_METATYPE(QxrdRingSampledData*);
+Q_DECLARE_METATYPE(QxrdRingSampledData*)
 
 QScriptValue QxrdRingSampledDataToScriptValue(QScriptEngine *engine, QxrdRingSampledData* const &in);
 void QxrdRingSampledDataFromScriptValue(const QScriptValue &object, QxrdRingSampledData* &out);

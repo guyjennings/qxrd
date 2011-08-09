@@ -7,21 +7,27 @@
 
 class QxrdDetectorGeometry : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   explicit QxrdDetectorGeometry(QObject *parent = 0);
 
 public slots:
-  double convertEnergyToWavelength(double energy);
-  double convertWavelengthToEnergy(double wavelength);
-  double convertTwoThetaToQ(double twoTheta,double wavelength);
-  double convertQToTwoTheta(double Q, double wavelength);
+  double convertEnergyToWavelength(double energy) const;
+  double convertWavelengthToEnergy(double wavelength) const;
+  double convertTwoThetaToQ(double twoTheta,double wavelength) const;
+  double convertQToTwoTheta(double Q, double wavelength) const;
+
+  double getRadius(double xCenter,double yCenter,
+                   double distance,double xPixel,double yPixel,
+                   double pixelLength,double pixelHeight,
+                   double cos_beta,double sin_beta,
+                   double cos_rotation,double sin_rotation) const;
 
   double getTwoTheta(double xCenter,double yCenter,
                    double distance,double xPixel,double yPixel,
                    double pixelLength,double pixelHeight,
                    double cos_beta,double sin_beta,
-                   double cos_rotation,double sin_rotation);
+                   double cos_rotation,double sin_rotation) const;
 
   void getTwoThetaChi(double xCenter,double yCenter,
                       double distance,double xPixel,double yPixel,
@@ -29,7 +35,7 @@ public slots:
                       double rotation,double cos_beta,double sin_beta,
                       double cos_alpha,double sin_alpha,
                       double cos_rotation,double sin_rotation,
-                      double *twoTheta,double *chi);
+                      double *twoTheta,double *chi) const;
 
   void getQChi(double xCenter,double yCenter,double distance,
                double energy,double xPixel,double yPixel,
@@ -37,14 +43,14 @@ public slots:
                double rotation,double cos_beta,double sin_beta,
                double cos_alpha,double sin_alpha,
                double cos_rotation,double sin_rotation,
-               double *q,double *chi);
+               double *q,double *chi) const;
 
   void getXY(double xCenter,double yCenter,double distance,
              double energy,double q,double chi,double pixelLength,
              double pixelHeight,double rotation,double cos_beta,
              double sin_beta,double cos_alpha,double sin_alpha,
              double cos_rotation,double sin_rotation,
-             double * xPixel,double * yPixel);
+             double * xPixel,double * yPixel) const;
 };
 
 #endif // QXRDDETECTORGEOMETRY_H

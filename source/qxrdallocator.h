@@ -15,7 +15,7 @@
 
 class QxrdAllocator : public QxrdAllocatorInterface
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdAllocator(QObject *parent=0);
@@ -29,27 +29,21 @@ public:
     AlwaysAllocate
   };
 
-  QxrdInt16ImageDataPtr newInt16Image(AllocationStrategy strat);
-  QxrdInt32ImageDataPtr newInt32Image(AllocationStrategy strat);
-  QxrdDoubleImageDataPtr newDoubleImage(AllocationStrategy strat);
-  QxrdMaskDataPtr newMask(AllocationStrategy strat, int def=1);
+  QxrdInt16ImageDataPtr newInt16Image(AllocationStrategy strat, int width, int height);
+  QxrdInt32ImageDataPtr newInt32Image(AllocationStrategy strat, int width, int height);
+  QxrdDoubleImageDataPtr newDoubleImage(AllocationStrategy strat, int width, int height);
+  QxrdMaskDataPtr newMask(AllocationStrategy strat, int width, int height, int def=1);
   QxrdIntegratedDataPtr newIntegratedData(AllocationStrategy strat, QxrdDoubleImageDataPtr image);
 
-  void newDoubleImageAndIntegratedData(AllocationStrategy strat, QxrdDoubleImageDataPtr &img, QxrdIntegratedDataPtr &integ);
+  void newDoubleImageAndIntegratedData(AllocationStrategy strat,
+                                       int width, int height,
+                                       QxrdDoubleImageDataPtr &img,
+                                       QxrdIntegratedDataPtr &integ);
 
-  void dimension(int width, int height);
-//  void preallocateInt16(int n16);
-//  void preallocateInt32(int n32);
-//  void preallocateDouble(int ndbl);
-
-//  int nFreeInt16();
-//  int nFreeInt32();
-//  int nFreeDouble();
-
-  int int16SizeMB();
-  int int32SizeMB();
-  int doubleSizeMB();
-  int maskSizeMB();
+  int int16SizeMB(int width, int height);
+  int int32SizeMB(int width, int height);
+  int doubleSizeMB(int width, int height);
+  int maskSizeMB(int width, int height);
   int integratedSizeMB(int nrows);
 
   double allocatedMemoryMB();
@@ -58,11 +52,6 @@ public:
   double maximumMemory();
 
   void changedSizeMB(int newMB);
-
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 private slots:
   void allocatorHeartbeat();
@@ -86,35 +75,16 @@ private:
   quint64               m_AllocatedMemory;
   QAtomicInt            m_AllocatedMemoryMB;
 
-//  QAtomicInt            m_CountInt16;
-//  QAtomicInt            m_CountInt32;
-//  QAtomicInt            m_CountDouble;
-//  QAtomicInt            m_PreallocateInt16;
-//  QAtomicInt            m_PreallocateInt32;
-//  QAtomicInt            m_PreallocateDouble;
-
-//  QxrdInt16ImageQueue   m_FreeInt16Images;
-//  QxrdInt32ImageQueue   m_FreeInt32Images;
-//  QxrdDoubleImageQueue  m_FreeDoubleImages;
-//  QxrdMaskQueue         m_FreeMasks;
-//  QxrdIntegratedDataQueue m_FreeIntegratedData;
-
   enum { MegaBytes = 0x100000 };
 
-  Q_PROPERTY(int     max        READ get_Max   WRITE set_Max STORED false);
-  QCEP_INTEGER_PROPERTY(Max);
+  Q_PROPERTY(int     max        READ get_Max   WRITE set_Max STORED false)
+  QCEP_INTEGER_PROPERTY(Max)
 
-  Q_PROPERTY(int     reserve        READ get_Reserve   WRITE set_Reserve STORED false);
-  QCEP_INTEGER_PROPERTY(Reserve);
+  Q_PROPERTY(int     reserve        READ get_Reserve   WRITE set_Reserve STORED false)
+  QCEP_INTEGER_PROPERTY(Reserve)
 
-  Q_PROPERTY(int     allocated        READ get_Allocated   WRITE set_Allocated STORED false);
-  QCEP_INTEGER_PROPERTY(Allocated);
-
-  Q_PROPERTY(int     width      READ get_Width WRITE set_Width STORED false);
-  QCEP_INTEGER_PROPERTY(Width);
-
-  Q_PROPERTY(int     height      READ get_Height WRITE set_Height STORED false);
-  QCEP_INTEGER_PROPERTY(Height);
+  Q_PROPERTY(int     allocated        READ get_Allocated   WRITE set_Allocated STORED false)
+  QCEP_INTEGER_PROPERTY(Allocated)
 };
 
 #endif

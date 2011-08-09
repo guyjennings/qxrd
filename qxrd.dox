@@ -54,7 +54,7 @@ installed.
 
 Perkin Elmer provides three frame grabbers for their detectors - the PCI and PCI-X frame grabber
 both work with 32 bit Windows 2000 and Windows XP, the newer PCI-Express grabber works also with
-32 and 6 bit Windows Vista and Windows 7.
+32 and 64 bit Windows Vista and Windows 7.
 
 At least 1GB of memory is recommended, preferably 2-4GB.
 

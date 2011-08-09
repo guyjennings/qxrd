@@ -27,14 +27,14 @@ tarball.commands += \
         $(MKDIR) $${TARGET}-$${VERSION}/source/levmar-2.5 && \
         $(MKDIR) $${TARGET}-$${VERSION}/source/help && \
         $(MKDIR) $${TARGET}-$${VERSION}/source/help/images && \
-        $(MKDIR) $${TARGET}-$${VERSION}/qwt-5.2 && \
-        $(MKDIR) $${TARGET}-$${VERSION}/qwt-5.2/src && \
-        $(MKDIR) $${TARGET}-$${VERSION}/qceplib && \
-        $(MKDIR) $${TARGET}-$${VERSION}/tiffconfig && \
-        $(MKDIR) $${TARGET}-$${VERSION}/tiffconfig/macx && \
-        $(MKDIR) $${TARGET}-$${VERSION}/tiffconfig/win32 && \
-        $(MKDIR) $${TARGET}-$${VERSION}/tiff-3.8.2 && \
-        $(MKDIR) $${TARGET}-$${VERSION}/tiff-3.8.2/libtiff && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/qwt-5.2 && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/qwt-5.2/src && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/qceplib && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/tiffconfig && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/tiffconfig/macx && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/tiffconfig/win32 && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/tiff-3.8.2 && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/tiff-3.8.2/libtiff && \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins && \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdareadetectorplugin && \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdperkinelmerplugin && \
@@ -60,20 +60,20 @@ tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/help/images/*.png \
                       -t $${TARGET}-$${VERSION}/source/help/images &&
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/qwt-5.2/src/*.{cpp,h} \
-                      -t $${TARGET}-$${VERSION}/qwt-5.2/src &&
+        $(COPY_FILE)  $${PWD}/source/qwt-5.2/src/*.{cpp,h} \
+                      -t $${TARGET}-$${VERSION}/source/qwt-5.2/src &&
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/qceplib/*.{cpp,h} \
-                      -t $${TARGET}-$${VERSION}/qceplib &&
+        $(COPY_FILE)  $${PWD}/source/qceplib/*.{cpp,h} \
+                      -t $${TARGET}-$${VERSION}/source/qceplib &&
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/tiffconfig/macx/*.h \
-                      -t $${TARGET}-$${VERSION}/tiffconfig/macx &&
+        $(COPY_FILE)  $${PWD}/source/tiffconfig/macx/*.h \
+                      -t $${TARGET}-$${VERSION}/source/tiffconfig/macx &&
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/tiffconfig/win32/*.h \
-                      -t $${TARGET}-$${VERSION}/tiffconfig/win32 &&
+        $(COPY_FILE)  $${PWD}/source/tiffconfig/win32/*.h \
+                      -t $${TARGET}-$${VERSION}/source/tiffconfig/win32 &&
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/tiff-3.8.2/libtiff/*.{c,h,def} \
-                      -t $${TARGET}-$${VERSION}/tiff-3.8.2/libtiff &&
+        $(COPY_FILE)  $${PWD}/source/tiff-3.8.2/libtiff/*.{c,h,def} \
+                      -t $${TARGET}-$${VERSION}/source/tiff-3.8.2/libtiff &&
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/plugins.pro \
                       -t $${TARGET}-$${VERSION}/plugins &&
@@ -105,8 +105,8 @@ dox.commands = "("
 dox.commands += cat $${PWD}/Doxyfile ;
 dox.commands += echo "PROJECT_NUMBER=$${VERSION}" ;
 dox.commands += echo "INPUT=\"$${PWD}\"" ;
-dox.commands += echo "INPUT+=\"$${PWD}\"/qceplib/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/source/" ;
+dox.commands += echo "INPUT+=\"$${PWD}\"/source/qceplib/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdareadetectorplugin/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdperkinelmerplugin/" ;

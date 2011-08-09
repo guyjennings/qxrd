@@ -5,7 +5,7 @@
 
 class QxrdFitParameter : public QcepDoubleProperty
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdFitParameter(QObject *parent, const char *name, QVariant value);
 
@@ -31,7 +31,7 @@ private:
 
 typedef QSharedPointer<QxrdFitParameter> QxrdFitParameterPtr;
 
-Q_DECLARE_METATYPE(QxrdFitParameterPtr);
+Q_DECLARE_METATYPE(QxrdFitParameterPtr)
 
 #define QXRD_FIT_PARAMETER(propname) \
 public: \

@@ -5,7 +5,7 @@
 
 class QxrdAcquisitionPilatus : public QxrdAcquisition
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdAcquisitionPilatus(QxrdDataProcessor *proc, QxrdAllocator *allocator);
 

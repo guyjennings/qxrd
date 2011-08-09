@@ -1,12 +1,10 @@
 #include "qxrdacquiredialog.h"
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
+#include "qxrdapplication.h"
 
 QxrdAcquireDialog::QxrdAcquireDialog(QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc, QWidget *parent) :
-    QDockWidget(parent),
-    m_Window(win),
-    m_Acquisition(acq),
-    m_DataProcessor(proc)
+    QxrdAcquireDialogBase(win, acq, proc, parent)
 {
   setupUi(this);
 
@@ -50,12 +48,23 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdWindow *win, QxrdAcquisition *acq, Qxrd
   m_Acquisition -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
 
   m_DataProcessor -> prop_OutputDirectory() -> linkTo(this -> m_OutputDirectory);
-  m_DataProcessor -> prop_LogFilePath() -> linkTo(this -> m_LogFilePath);
+  g_Application   -> prop_LogFilePath() -> linkTo(this -> m_LogFilePath);
   m_DataProcessor -> prop_Average() -> linkTo(this -> m_AverageDisplay);
+
+  connect(m_AcquireOptionsButton, SIGNAL(clicked()), g_Application, SLOT(editPreferences()));
 }
 
 QxrdAcquireDialog::~QxrdAcquireDialog()
 {
+}
+
+void QxrdAcquireDialog::setupAcquireMenu(QMenu *menu)
+{
+  menu->addSeparator();
+  menu->addAction(m_ActionAcquire);
+  menu->addAction(m_ActionTrigger);
+  menu->addAction(m_ActionAcquireDark);
+  menu->addAction(m_ActionCancel);
 }
 
 void QxrdAcquireDialog::onAcquisitionInit()

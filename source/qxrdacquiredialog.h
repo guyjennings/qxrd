@@ -2,14 +2,10 @@
 #define QXRDACQUIREDIALOG_H
 
 #include "qcepmacros.h"
-#include <QWidget>
+#include "qxrdacquiredialogbase.h"
 #include "ui_qxrdacquiredialog.h"
 
-class QxrdWindow;
-class QxrdAcquisition;
-class QxrdDataProcessor;
-
-class QxrdAcquireDialog : public QDockWidget, public Ui::QxrdAcquireDialog {
+class QxrdAcquireDialog : public QxrdAcquireDialogBase, public Ui::QxrdAcquireDialog {
   Q_OBJECT
 public:
   QxrdAcquireDialog(QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc, QWidget *parent = 0);
@@ -23,15 +19,11 @@ public:
 
 protected:
   void changeEvent(QEvent *e);
+  void setupAcquireMenu(QMenu *menu);
 
 private slots:
   void acquireStarted();
   void acquireComplete();
-
-private:
-  QxrdWindow        *m_Window;
-  QxrdAcquisition   *m_Acquisition;
-  QxrdDataProcessor *m_DataProcessor;
 };
 
 #endif // QXRDACQUIREDIALOG_H

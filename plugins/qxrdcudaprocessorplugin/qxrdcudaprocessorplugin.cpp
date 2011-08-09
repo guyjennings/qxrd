@@ -18,4 +18,4 @@ QString QxrdCudaProcessorPlugin::name() const
   return "CUDA Plugin";
 }
 
-Q_EXPORT_PLUGIN2(qxrdcudaprocessorplugin, QxrdCudaProcessorPlugin);
+Q_EXPORT_PLUGIN2(qxrdcudaprocessorplugin, QxrdCudaProcessorPlugin)

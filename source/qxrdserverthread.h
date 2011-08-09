@@ -10,7 +10,7 @@ class QxrdServer;
 
 class QxrdServerThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdServerThread(QString name, int port);
@@ -22,9 +22,6 @@ public:
   void executeScript(QString cmd);
 
 signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void execute(QString cmd);
 
 protected:
@@ -33,7 +30,7 @@ protected:
 private:
   QString     m_Name;
   int         m_Port;
-  QxrdServer *m_Server;
+  QAtomicPointer<QxrdServer> m_Server;
 };
 
 #endif // QXRDSERVERTHREAD_H

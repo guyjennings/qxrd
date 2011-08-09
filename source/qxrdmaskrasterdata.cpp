@@ -1,6 +1,7 @@
 #include "qxrdmaskrasterdata.h"
 
 #include "qxrdrasterdata.h"
+#include "qxrdapplication.h"
 
 QxrdMaskRasterData::QxrdMaskRasterData(QxrdMaskDataPtr mask, int interp)
   : QwtRasterData(QwtDoubleRect(0,0,(mask?mask->get_Width():0),(mask?mask->get_Height():0))),
@@ -8,8 +9,8 @@ QxrdMaskRasterData::QxrdMaskRasterData(QxrdMaskDataPtr mask, int interp)
     m_Interpolate(interp)
 {
   if (qcepDebug(DEBUG_IMAGES)) {
-    printf("QxrdMaskRasterData::QxrdMaskRasterData(%p,%d) [%p]\n",
-           mask.data(), interp, this);
+    g_Application->printMessage(QObject::tr("QxrdMaskRasterData::QxrdMaskRasterData(%1,%2) [%3]")
+                                .HEXARG(mask.data()).arg(interp).HEXARG(this));
   }
 }
 
@@ -66,7 +67,7 @@ QwtDoubleInterval QxrdMaskRasterData::range() const
 QxrdMaskRasterData* QxrdMaskRasterData::copy() const
 {
   if (qcepDebug(DEBUG_IMAGES)) {
-    printf("QxrdMaskRasterData::copy() [%p]\n", this);
+    g_Application->printMessage(QObject::tr("QxrdMaskRasterData::copy() [%1]").HEXARG((void*) this));
   }
 
   QxrdMaskRasterData *n = new QxrdMaskRasterData(this->mask(), this->interp());

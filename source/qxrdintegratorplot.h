@@ -11,7 +11,7 @@ class QxrdIntegrator;
 
 class QxrdIntegratorPlot : public QxrdPlot
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdIntegratorPlot(QWidget *parent=0);
@@ -21,11 +21,13 @@ public:
 public slots:
   void onNewIntegrationAvailable(QxrdIntegratedDataPtr data);
   void clearGraph();
+  void clearSelectedCurves();
 
 private:
   QxrdDataProcessor *m_DataProcessor;
   QxrdIntegrator    *m_Integrator;
   int                m_PlotIndex;
+  QString            m_XUnitsLabel;
 };
 
 #endif // QXRDINTEGRATORPLOT_H

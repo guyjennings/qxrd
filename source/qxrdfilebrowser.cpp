@@ -4,18 +4,17 @@
 #include <QFileDialog>
 #include <QMenu>
 #include "qxrdmutexlocker.h"
-#include "qxrdfilebrowsermodelthread.h"
 #include "qxrdfilebrowsermodel.h"
 #include "qxrdfilebrowserview.h"
+#include "qxrdapplication.h"
 
 QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWidget *parent)
   : QDockWidget(parent),
-    m_IsOutput(isOutput),
     m_BrowserFilter(this, "browserFilter",1),
     m_BrowserSelector(this, "browserSelector",""),
     m_RootDirectory(this, "rootDirectory",""),
+    m_IsOutput(isOutput),
     m_Processor(processor),
-    m_ModelThread(NULL),
     m_Model(NULL)
 {
   setupUi(this);
@@ -25,13 +24,8 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
     setWindowTitle("Input " + windowTitle());
   }
 
-//  m_ModelThread = new QxrdFileBrowserModelThread();
-//  m_ModelThread -> start();
-
-//  m_Model = m_ModelThread ->fileBrowserModel();  /*new QxrdFileBrowserModel();*/
   m_Model = new QxrdFileBrowserModel();
   m_Model -> setRootPath(QDir::currentPath());
-//  m_Model -> moveToThread(m_ModelThread);
 
   m_FileBrowser -> setModel(m_Model);
 
@@ -47,10 +41,6 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
   m_Model -> setNameFilterDisables(false);
 
   connect(m_Model, SIGNAL(modelReset()), this, SLOT(onModelReset()));
-
-  connect(this, SIGNAL(printMessage(QString,QDateTime)), m_Processor, SIGNAL(printMessage(QString,QDateTime)));
-  connect(this, SIGNAL(statusMessage(QString,QDateTime)), m_Processor, SIGNAL(statusMessage(QString,QDateTime)));
-  connect(this, SIGNAL(criticalMessage(QString,QDateTime)), m_Processor, SIGNAL(criticalMessage(QString,QDateTime)));
 
   connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
   connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
@@ -123,7 +113,7 @@ void QxrdFileBrowser::onSelectorChanged(QString str, const QModelIndex &parent)
     QModelIndex index = m_Model -> index(i, 0, parent);
 
     QString path = m_Model->fileName(index);
-//    emit printMessage(tr("Testing %1").arg(path));
+//    g_Application->printMessage(tr("Testing %1").arg(path));
 
     if (pattern.exactMatch(path)) {
       sel -> select(index, QItemSelectionModel::Rows | QItemSelectionModel::Select);
@@ -235,6 +225,48 @@ void QxrdFileBrowser::doOpen()
   }
 }
 
+void QxrdFileBrowser::doOpenDark()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+
+  foreach(index, rows) {
+//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+    if (!m_Model->isDir(index)) {
+      INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "loadDark", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+    }
+  }
+}
+
+void QxrdFileBrowser::doOpenMask()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+
+  foreach(index, rows) {
+//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+    if (!m_Model->isDir(index)) {
+      INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "loadMask", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+    }
+  }
+}
+
+void QxrdFileBrowser::doOpenGainMap()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+
+  foreach(index, rows) {
+//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+    if (!m_Model->isDir(index)) {
+      INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "loadGainMap", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+    }
+  }
+}
+
 void QxrdFileBrowser::doProcess()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
@@ -329,10 +361,13 @@ void QxrdFileBrowser::readSettings(QxrdSettings &settings, QString section)
 void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
 {
   if (QApplication::mouseButtons() & Qt::RightButton) {
-//    emit printMessage("Right mouse pressed");
+//    g_Application->printMessage("Right mouse pressed");
 
     QMenu *actions = new QMenu(this);
     QAction *open = actions->addAction("Open");
+    QAction *openDark = actions->addAction("Open as Dark Image");
+    QAction *openMask = actions->addAction("Open as Mask");
+    QAction *openGainMap = actions->addAction("Open as Gain Map");
     QAction *accumulate = actions->addAction("Accumulate");
     QAction *integrate = actions->addAction("Integrate");
     QAction *process = actions->addAction("Process");
@@ -340,9 +375,15 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
     QAction *action = actions->exec(QCursor::pos());
 
     if (action == open) {
-      doOpen();
+        doOpen();
+    } else if (action == openDark) {
+        doOpenDark();
+    } else if (action == openMask) {
+        doOpenMask();
+    } else if (action == openGainMap) {
+        doOpenGainMap();
     } else if (action == accumulate) {
-      doAccumulate();
+        doAccumulate();
     } else if (action == integrate) {
       doIntegrate();
     } else if (action == process) {
@@ -358,7 +399,10 @@ void QxrdFileBrowser::doubleClicked(QModelIndex index)
 
 void QxrdFileBrowser::onRowCountChanged(int oldCount, int newCount)
 {
-  printf("QxrdFileBrowser::onRowCountChanged(%d,%d)\n", oldCount, newCount);
+  if (qcepDebug(DEBUG_DISPLAY)) {
+    g_Application->printMessage(
+          tr("QxrdFileBrowser::onRowCountChanged(%1,%2)").arg(oldCount).arg(newCount));
+  }
 
   m_FileBrowser->resizeColumnsToContents();
 }

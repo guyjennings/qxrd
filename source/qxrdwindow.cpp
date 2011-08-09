@@ -79,31 +79,32 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
     m_AllocationStatus(NULL),
     m_Acquiring(false),
     m_AcquiringDark(false),
-    //    m_NewDataMutex(QMutex::Recursive),
-    m_Data(NULL/*new QxrdDoubleImageData(NULL,2048,2048)*/),
+    m_Data(NULL),
     m_Overflow(NULL),
-    m_NewData(NULL/*new QxrdDoubleImageData(NULL,2048,2048)*/),
+    m_NewData(NULL),
     m_NewOverflow(NULL),
     m_NewDataAvailable(false),
-    //    m_NewMaskMutex(QMutex::Recursive),
-    m_Mask(NULL/*new QxrdMaskData(NULL,2048,2048)*/),
-    m_NewMask(NULL/*new QxrdMaskData(2048,2048)*/),
+    m_Mask(NULL),
+    m_NewMask(NULL),
     m_NewMaskAvailable(false),
     m_ImageDisplay(NULL),
     m_Highlighter(NULL)
 {
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage("QxrdWindow::QxrdWindow");
+  }
+
   setupUi(this);
 
   if (sizeof(void*) == 4) {
-    setWindowTitle(windowTitle()+" - 32 bit - v"+QXRD_VERSION);
+    setWindowTitle(windowTitle()+" - 32 bit - v"+STR(QXRD_VERSION));
   } else {
-    setWindowTitle(windowTitle()+" - 64 bit - v"+QXRD_VERSION);
+    setWindowTitle(windowTitle()+" - 64 bit - v"+STR(QXRD_VERSION));
   }
 
   setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
 
-//  m_AcquireDialog = m_Acquisition -> controlPanel(this);
-  m_AcquireDialog      = new QxrdAcquireDialog(this, m_Acquisition, m_DataProcessor, this);
+  m_AcquireDialog = m_Acquisition -> controlPanel(this);
   m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
   m_DisplayDialog      = new QxrdDisplayDialog(this);
   m_CenterFinderDialog = new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder());
@@ -195,12 +196,18 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionSaveData, SIGNAL(triggered()), this, SLOT(doSaveData()));
   connect(m_ActionLoadDark, SIGNAL(triggered()), this, SLOT(doLoadDark()));
   connect(m_ActionSaveDark, SIGNAL(triggered()), this, SLOT(doSaveDark()));
+  connect(m_ActionClearDark, SIGNAL(triggered()), this, SLOT(doClearDark()));
   connect(m_ActionLoadMask, SIGNAL(triggered()), this, SLOT(doLoadMask()));
   connect(m_ActionSaveMask, SIGNAL(triggered()), this, SLOT(doSaveMask()));
+  connect(m_ActionClearMask, SIGNAL(triggered()), this, SLOT(doClearMask()));
+  connect(m_ActionLoadGainMap, SIGNAL(triggered()), this, SLOT(doLoadGainMap()));
+  connect(m_ActionSaveGainMap, SIGNAL(triggered()), this, SLOT(doSaveGainMap()));
+  connect(m_ActionClearGainMap, SIGNAL(triggered()), this, SLOT(doClearGainMap()));
+
   connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
+  connect(m_ActionSetAcquireDirectory, SIGNAL(triggered()), this, SLOT(selectOutputDirectory()));
 
   connect(m_ActionAccumulateImages, SIGNAL(triggered()), this, SLOT(doAccumulateImages()));
-  connect(m_ActionIntegrate, SIGNAL(triggered()), this, SLOT(doIntegrateSequence()));
   connect(m_ActionProcessData, SIGNAL(triggered()), this, SLOT(doProcessSequence()));
 
   connect(m_DisplayDialog -> m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));
@@ -221,12 +228,12 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionIce, SIGNAL(triggered()), m_Plot, SLOT(setIce()));
 
   connect(m_ActionRefineCenterTilt, SIGNAL(triggered()), this, SLOT(doRefineCenterTilt()));
+  connect(m_ActionMoveCenterUp, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveUp()));
+  connect(m_ActionMoveCenterDown, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveDown()));
+  connect(m_ActionMoveCenterLeft, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveLeft()));
+  connect(m_ActionMoveCenterRight, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveRight()));
 
-  m_AcquireMenu->addSeparator();
-  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionAcquire);
-  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionTrigger);
-  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionAcquireDark);
-  m_AcquireMenu->addAction(m_AcquireDialog->m_ActionCancel);
+  m_AcquireDialog->setupAcquireMenu(m_AcquireMenu);
 
   m_AcquireDialog->acquisitionReady();
 
@@ -250,6 +257,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionROICalculate, SIGNAL(triggered()), m_DataProcessor, SLOT(calculateROI()));
   connect(m_ActionHistogramCalculate, SIGNAL(triggered()), m_DataProcessor, SLOT(calculateHistogram()));
   connect(m_ActionTest, SIGNAL(triggered()), this, SLOT(doTest()));
+  connect(m_ActionCrashProgram, SIGNAL(triggered()), this, SLOT(crashProgram()));
 
   connect(m_ImageZoomInButton, SIGNAL(clicked()), m_Plot, SLOT(enableZooming()));
   connect(m_ImageZoomOutButton, SIGNAL(clicked()), m_Plot, SLOT(zoomOut()));
@@ -271,10 +279,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(autoScale()));
   connect(m_IntegratorMeasureButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableMeasuring()));
 
-  connect(m_IntegratorDialog -> m_ClearGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearGraph()));
-  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
   connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
-  connect(m_AcquireDialog -> m_AcquireOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
   connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
 
   connect(m_ActionAboutQXRD, SIGNAL(triggered()), this, SLOT(doAboutQxrd()));
@@ -290,12 +295,33 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
   connect(&m_UpdateTimer, SIGNAL(timeout()), this, SLOT(newData()));
 
+  connect(m_ActionIntegrate, SIGNAL(triggered()), this, SLOT(doIntegrateSequence()));
+  connect(m_ActionIntegrateCurrent, SIGNAL(triggered()),
+          m_DataProcessor, SLOT(integrateSaveAndDisplay()));
+  connect(m_ActionIntegrateInputImages, SIGNAL(triggered()),
+          m_InputFileBrowser, SLOT(doIntegrate()));
+
+  connect(m_IntegratorDialog -> m_ClearGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearGraph()));
+  connect(m_IntegratorDialog -> m_ClearSelectedGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearSelectedCurves()));
+  connect(m_ActionClearIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearGraph()));
+  connect(m_ActionClearSelectedIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearSelectedCurves()));
+
+  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
+  connect(m_DataProcessor->integrator()->prop_IntegrationXUnits(), SIGNAL(changedValue(int)),
+          this, SLOT(integrationXUnitsChanged(int)));
+  integrationXUnitsChanged(m_DataProcessor->integrator()->get_IntegrationXUnits());
+
+  connect(m_ActionIntegrateVsR,   SIGNAL(triggered()), m_DataProcessor->integrator(), SLOT(integrateVsR()));
+  connect(m_ActionIntegrateVsQ,   SIGNAL(triggered()), m_DataProcessor->integrator(), SLOT(integrateVsQ()));
+  connect(m_ActionIntegrateVsTTH, SIGNAL(triggered()), m_DataProcessor->integrator(), SLOT(integrateVsTTH()));
+
   //  connect(m_SaveDarkOptions, SIGNAL(clicked()), this, SLOT(doProcessorOptionsDialog()));
 
   m_Plot->prop_XMouse()->linkTo(m_XMouse);
   m_Plot->prop_YMouse()->linkTo(m_YMouse);
   m_Plot->prop_ValMouse()->linkTo(m_ValMouse);
   m_Plot->prop_TTHMouse()->linkTo(m_TTHMouse);
+  m_Plot->prop_QMouse()->linkTo(m_QMouse);
 
   m_StatusMsg = new QLabel(NULL);
   m_StatusMsg -> setMinimumWidth(200);
@@ -321,7 +347,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   statusBar() -> addPermanentWidget(m_AllocationStatus);
 
   if (m_Acquisition == NULL) {
-    emit criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
+    g_Application->criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
   }
 
   connect(m_Acquisition,     SIGNAL(acquireStarted()),
@@ -381,20 +407,6 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_CenterFinderPlot -> setWindow(this);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
-  connect(m_Plot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
-  connect(m_CenterFinderPlot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
-  connect(m_IntegratorPlot, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
-  connect(m_Plot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
-  connect(m_CenterFinderPlot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
-  connect(m_IntegratorPlot, SIGNAL(statusMessage(QString,QDateTime)), this, SLOT(statusMessage(QString,QDateTime)));
-  connect(m_Plot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
-  connect(m_CenterFinderPlot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
-  connect(m_IntegratorPlot, SIGNAL(criticalMessage(QString,QDateTime)), this, SLOT(criticalMessage(QString,QDateTime)));
-
-  //  connect(m_DataProcessor, SIGNAL(printMessage(QString,QDateTime)), this, SLOT(printMessage(QString,QDateTime)));
-
-  //  readSettings();
-
   connect(m_DataProcessor -> centerFinder() -> prop_CenterX(), SIGNAL(changedValue(double)),
           m_Plot, SLOT(onCenterXChanged(double)));
 
@@ -434,15 +446,6 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_Plot, SIGNAL(selectHistogram(QwtDoubleRect)),
           m_HistogramDialog, SLOT(histogramSelectionChanged(QwtDoubleRect)));
 
-  //  if (m_Acquisition->get_DetectorType() != 1) { // No file browser for PE detector...
-  //    m_FileBrowser = new QxrdFileBrowser(m_DataProcessor);
-  //    m_FileBrowserDockWidget -> setWidget(m_FileBrowser);
-
-  //    m_WindowsMenu -> addAction(m_FileBrowserDockWidget -> toggleViewAction());
-  //  }
-
-  //  m_WindowsMenu -> addAction(m_PowderFitWidget -> toggleViewAction());
-
   m_Messages -> document() -> setMaximumBlockCount(20000);
 
 #ifdef QT_NO_DEBUG
@@ -458,8 +461,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
 QxrdWindow::~QxrdWindow()
 {
-  if (qcepDebug(DEBUG_WINDOW)) {
-    printf("QxrdWindow::~QxrdWindow\n");
+  if (qcepDebug(DEBUG_APP)) {
+    g_Application->printMessage("QxrdWindow::~QxrdWindow");
   }
   //  delete m_Data;
   //  delete m_NewData;
@@ -548,73 +551,34 @@ QString QxrdWindow::timeStamp()
   return QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ");
 }
 
-void QxrdWindow::printMessage(QString msg, QDateTime ts)
+void QxrdWindow::warningMessage(QString msg)
 {
-  //  printf("print message %s\n", qPrintable(msg));
+  THREAD_CHECK;
 
-  if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "printMessage", Qt::QueuedConnection,
-                                           Q_ARG(QString, msg), Q_ARG(QDateTime, ts)));
-  } else {
-    QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+msg.trimmed();
-
-    //int msgSize = m_Messages->document()->characterCount();
-    //int blkCount = m_Messages->document()->blockCount();
-
-    //printf("msgSize = %d, blkCount=%d\n", msgSize, blkCount);
-
-    m_Messages -> append(message);
-    m_DataProcessor -> logMessage(message);
-  }
+  QMessageBox::warning(this, tr("Warning"), msg);
 }
 
-void QxrdWindow::criticalMessage(QString msg, QDateTime ts)
+void QxrdWindow::displayMessage(QString msg)
 {
+  THREAD_CHECK;
+
+  m_Messages -> append(msg);
+}
+
+void QxrdWindow::displayCriticalMessage(QString msg)
+{
+  THREAD_CHECK;
+
   static int dialogCount = 0;
 
-  printf("critical message %s, count = %d\n", qPrintable(msg), dialogCount);
+  g_Application->printMessage(tr("critical message %1, count = %2").arg(msg).arg(dialogCount));
 
-  if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "criticalMessage", Qt::QueuedConnection,
-                                           Q_ARG(QString, msg), Q_ARG(QDateTime, ts)));
-  } else {
-    statusMessage(msg, ts);
-
-    dialogCount++;
-    if (dialogCount <= 1) {
-      QMessageBox::critical(this, "Error", msg);
-    }
-    dialogCount--;
+  dialogCount++;
+  if (dialogCount <= 1) {
+    QMessageBox::critical(this, "Error", msg);
   }
+  dialogCount--;
 }
-
-//void QxrdWindow::acquisitionReady()
-//{
-//  //  readSettings();
-//  THREAD_CHECK;
-
-//  m_Acquisition -> acquisitionReady();
-
-//  m_Progress -> reset();
-//}
-
-//void QxrdWindow::acquisitionStarted()
-//{
-//  THREAD_CHECK;
-
-//  m_Acquisition -> acquisitionStarted();
-
-//  m_Progress -> setValue(0);
-//}
-
-//void QxrdWindow::darkAcquisitionStarted()
-//{
-//  THREAD_CHECK;
-
-//  m_Acquisition -> darkAcquisitionStarted();
-
-//  m_Progress -> setValue(0);
-//}
 
 void QxrdWindow::selectOutputDirectory()
 {
@@ -650,24 +614,17 @@ void QxrdWindow::acquiredFrame(
   //  printf("%d %% progress\n", thisframe*100/totalframes);
 
   if (nsum == 1) {
-    statusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
+    g_Application->statusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
                   .arg(fileName)
                   .arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
   } else {
-    statusMessage(tr("%1: Phase %2 of %3, Sum %4 of %5, Group %6 of %7")
+    g_Application->statusMessage(tr("%1: Phase %2 of %3, Sum %4 of %5, Group %6 of %7")
                   .arg(fileName)
                   .arg(isum+1).arg(nsum).arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
   }
 
   m_Progress -> setValue(thisframe*100/totalframes);
 }
-
-//void QxrdWindow::onAcquireComplete(int /*dark*/)
-//{
-//  acquisitionFinished();
-
-//  m_Acquiring = false;
-//}
 
 void QxrdWindow::doAcquire()
 {
@@ -769,7 +726,7 @@ void QxrdWindow::writeSettings(QxrdSettings &settings, QString section)
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdWindow::statusMessage(QString msg, QDateTime /*ts*/)
+void QxrdWindow::displayStatusMessage(QString msg)
 {
   m_StatusMsg -> setText(msg);
 
@@ -869,11 +826,15 @@ void QxrdWindow::newMask()
 
 void QxrdWindow::doSaveData()
 {
-  QString theFile = QFileDialog::getSaveFileName(
-        this, "Save Data in", m_DataProcessor -> get_DataPath());
+  if (m_DataProcessor->data() == NULL) {
+    warningMessage("No data available to save");
+  } else {
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Data in", m_DataProcessor -> get_DataPath());
 
-  if (theFile.length()) {
-    m_DataProcessor->saveData(theFile, QxrdDataProcessor::CanOverwrite);
+    if (theFile.length()) {
+      m_DataProcessor->saveData(theFile, QxrdDataProcessor::CanOverwrite);
+    }
   }
 }
 
@@ -889,11 +850,15 @@ void QxrdWindow::doLoadData()
 
 void QxrdWindow::doSaveDark()
 {
-  QString theFile = QFileDialog::getSaveFileName(
-        this, "Save Dark Data in", m_DataProcessor -> get_DataPath());
+  if (m_DataProcessor->darkImage() == NULL) {
+    warningMessage("No dark image available to save");
+  } else {
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Dark Data in", m_DataProcessor -> get_DataPath());
 
-  if (theFile.length()) {
-    m_DataProcessor->saveDark(theFile, QxrdDataProcessor::CanOverwrite);
+    if (theFile.length()) {
+      m_DataProcessor->saveDark(theFile, QxrdDataProcessor::CanOverwrite);
+    }
   }
 }
 
@@ -907,13 +872,29 @@ void QxrdWindow::doLoadDark()
   }
 }
 
+void QxrdWindow::doClearDark()
+{
+  if (m_DataProcessor->darkImage() == NULL) {
+    warningMessage("No dark image available to clear");
+  } else {
+    if (QMessageBox::question(this, "Clear Dark Image?", "Do you really want to clear the dark image?",
+                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+      m_DataProcessor->clearDark();
+    }
+  }
+}
+
 void QxrdWindow::doSaveMask()
 {
-  QString theFile = QFileDialog::getSaveFileName(
-        this, "Save Mask in", m_DataProcessor -> get_DataPath());
+  if (m_DataProcessor->mask() == NULL) {
+    warningMessage("No mask image to save");
+  } else {
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Mask in", m_DataProcessor -> get_DataPath());
 
-  if (theFile.length()) {
-    m_DataProcessor->saveMask(theFile, QxrdDataProcessor::CanOverwrite);
+    if (theFile.length()) {
+      m_DataProcessor->saveMask(theFile, QxrdDataProcessor::CanOverwrite);
+    }
   }
 }
 
@@ -927,13 +908,29 @@ void QxrdWindow::doLoadMask()
   }
 }
 
+void QxrdWindow::doClearMask()
+{
+  if (m_DataProcessor->mask() == NULL) {
+    warningMessage("No mask image available to clear");
+  } else {
+    if (QMessageBox::question(this, "Clear Mask?", "Do you really want to clear the mask?",
+                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+      m_DataProcessor->clearMask();
+    }
+  }
+}
+
 void QxrdWindow::doSaveBadPixels()
 {
-  QString theFile = QFileDialog::getSaveFileName(
-        this, "Save Bad Pixels in", m_DataProcessor -> get_DataPath());
+  if (m_DataProcessor->badPixels() == NULL) {
+    warningMessage("No Bad Pixel data to save");
+  } else {
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Bad Pixels in", m_DataProcessor -> get_DataPath());
 
-  if (theFile.length()) {
-    m_DataProcessor->saveBadPixels(theFile, QxrdDataProcessor::CanOverwrite);
+    if (theFile.length()) {
+      m_DataProcessor->saveBadPixels(theFile, QxrdDataProcessor::CanOverwrite);
+    }
   }
 }
 
@@ -947,13 +944,29 @@ void QxrdWindow::doLoadBadPixels()
   }
 }
 
+void QxrdWindow::doClearBadPixels()
+{
+  if (m_DataProcessor->badPixels() == NULL) {
+    warningMessage("No Bad Pixel data to clear");
+  } else {
+    if (QMessageBox::question(this, "Clear Bad Pixels", "Do you really want to clear the bad pixel map?",
+                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+      m_DataProcessor->clearBadPixels();
+    }
+  }
+}
+
 void QxrdWindow::doSaveGainMap()
 {
-  QString theFile = QFileDialog::getSaveFileName(
-        this, "Save Gain Map in", m_DataProcessor -> get_DataPath());
+  if (m_DataProcessor->gainMap() == NULL) {
+    warningMessage("No Gain Map available to save");
+  } else {
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Gain Map in", m_DataProcessor -> get_DataPath());
 
-  if (theFile.length()) {
-    m_DataProcessor->saveGainMap(theFile, QxrdDataProcessor::CanOverwrite);
+    if (theFile.length()) {
+      m_DataProcessor->saveGainMap(theFile, QxrdDataProcessor::CanOverwrite);
+    }
   }
 }
 
@@ -967,20 +980,27 @@ void QxrdWindow::doLoadGainMap()
   }
 }
 
+void QxrdWindow::doClearGainMap()
+{
+  if (m_DataProcessor->gainMap() == NULL) {
+    warningMessage("No Gain Map available to clear");
+  } else {
+    if (QMessageBox::question(this, "Clear Gain Map", "Do you really want to clear the gain map?",
+                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+      m_DataProcessor->clearGainMap();
+    }
+  }
+}
+
 void QxrdWindow::selectLogFile()
 {
   QString theFile = QFileDialog::getSaveFileName(
         this, "Save Log File in", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
-    m_DataProcessor->newLogFile(theFile);
+    g_Application->newLogFile(theFile);
   }
 }
-
-//void QxrdWindow::doProcessorOptionsDialog()
-//{
-//  m_DataProcessor->processorOptionsDialog();
-//}
 
 void QxrdWindow::doTest()
 {
@@ -1052,7 +1072,7 @@ QxrdMaskDataPtr QxrdWindow::mask()
 
 void QxrdWindow::doAboutQxrd()
 {
-  QString about = "QXRD Data Acquisition for PE Area Detectors\nVersion " QXRD_VERSION;
+  QString about = "QXRD Data Acquisition for PE Area Detectors\nVersion " STR(QXRD_VERSION);
 
   if (sizeof(void*) == 4) {
     about += " - 32 Bit";
@@ -1130,3 +1150,43 @@ void QxrdWindow::doProcessSequence()
   }
 }
 
+void QxrdWindow::integrationXUnitsChanged(int newXUnits)
+{
+  m_ActionIntegrateVsR   -> setChecked(newXUnits == QxrdIntegrator::IntegrateR);
+  m_ActionIntegrateVsQ   -> setChecked(newXUnits == QxrdIntegrator::IntegrateQ);
+  m_ActionIntegrateVsTTH -> setChecked(newXUnits == QxrdIntegrator::IntegrateTTH);
+}
+
+void QxrdWindow::crashProgram()
+{
+  if (QMessageBox::question(this, tr("Really Crash?"),
+                               tr("Do you really want to crash the program?"),
+                               QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok) {
+    int *j = NULL;
+
+    *j= 42;
+  }
+}
+
+void QxrdWindow::testWidget()
+{
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "testWidget", Qt::BlockingQueuedConnection));
+  } else {
+    QDockWidget *dockWidget = new QDockWidget("Test", this);
+    QWidget     *contents   = new QMainWindow(dockWidget);
+    QMenuBar    *menuBar    = new QMenuBar(contents);
+
+    QMenu *test1Menu = menuBar->addMenu("Test1");
+    QMenu *test2Menu = menuBar->addMenu("Test2");
+
+    test1Menu->addAction("Cmd1");
+    test1Menu->addAction("Cmd2");
+    test2Menu->addAction("Cmd3");
+    test2Menu->addAction("Cmd4");
+
+    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
+
+    contents->show();
+  }
+}

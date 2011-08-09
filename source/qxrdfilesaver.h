@@ -22,7 +22,7 @@ class QxrdAcquisition;
 
 class QxrdFileSaver : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdFileSaver(QxrdAllocator *allocator, QObject *parent=0);
@@ -30,11 +30,6 @@ public:
 
   void setProcessor(QxrdDataProcessor *proc);
   void setAcquisition(QxrdAcquisition *acq);
-
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 public:
   enum {

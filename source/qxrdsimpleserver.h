@@ -8,7 +8,7 @@
 
 class QxrdSimpleServer : public QTcpServer
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdSimpleServer(QString name, int port, QObject *parent=NULL);
 public:
@@ -19,11 +19,6 @@ public slots:
   void connectionClosed();
   void clientRead();
   void shutdown();
-
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 signals:
   void executeCommand(QString cmd);

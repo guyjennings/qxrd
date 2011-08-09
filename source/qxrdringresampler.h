@@ -5,7 +5,7 @@
 
 class QxrdRingResampler : public QxrdResampler
 {
-  Q_OBJECT;
+  Q_OBJECT
 public:
     QxrdRingResampler(QObject *parent=0);
 };

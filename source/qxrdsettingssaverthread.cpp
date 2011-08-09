@@ -1,4 +1,5 @@
 #include "qxrdsettingssaverthread.h"
+#include "qxrdapplication.h"
 
 QxrdSettingsSaverThread::QxrdSettingsSaverThread(QxrdApplication *app) :
     QxrdThread(),
@@ -18,16 +19,17 @@ QxrdSettingsSaver *QxrdSettingsSaverThread::settingsSaver()
 
 void QxrdSettingsSaverThread::run()
 {
-  m_SettingsSaver = new QxrdSettingsSaver(NULL, m_Application);
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage("Starting Settings Saver Thread");
+  }
 
-  connect(m_SettingsSaver, SIGNAL(printMessage(QString,QDateTime)),
-          this,            SIGNAL(printMessage(QString,QDateTime)));
-  connect(m_SettingsSaver, SIGNAL(statusMessage(QString,QDateTime)),
-          this,            SIGNAL(statusMessage(QString,QDateTime)));
-  connect(m_SettingsSaver, SIGNAL(criticalMessage(QString,QDateTime)),
-          this,            SIGNAL(criticalMessage(QString,QDateTime)));
+  m_SettingsSaver.fetchAndStoreOrdered(new QxrdSettingsSaver(NULL, m_Application));
 
-  exec();
+  int rc = exec();
+
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage(tr("Settings Saver Thread Terminated with rc %1").arg(rc));
+  }
 }
 
 void QxrdSettingsSaverThread::shutdown()

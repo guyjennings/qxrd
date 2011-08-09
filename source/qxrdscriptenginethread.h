@@ -13,7 +13,7 @@ class QxrdScriptEngine;
 
 class QxrdScriptEngineThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdScriptEngineThread(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc);
@@ -24,11 +24,6 @@ public:
 
 protected:
   void run();
-
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 private:
   QAtomicPointer<QxrdScriptEngine>  m_ScriptEngine;

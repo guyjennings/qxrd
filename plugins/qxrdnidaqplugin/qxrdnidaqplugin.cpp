@@ -38,7 +38,8 @@ void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
       char *buff = (char*) malloc(sz);
 
       if (DAQmxGetErrorString(err, buff, sz) == 0) {
-        emit printMessage(tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff));
+//        g_Application->printMessage(tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff));
+        printf("%s:%d NI-DAQ Error %d : %s", file, line, err, buff);
       }
 
       free(buff);
@@ -298,6 +299,6 @@ Error:
   return;
 }
 
-Q_EXPORT_PLUGIN2(qxrdnidaqplugin, QxrdNIDAQPlugin);
+Q_EXPORT_PLUGIN2(qxrdnidaqplugin, QxrdNIDAQPlugin)
 
 

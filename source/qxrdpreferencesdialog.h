@@ -10,7 +10,7 @@
 #include "ui_qxrdpreferencesdialog.h"
 
 class QxrdPreferencesDialog : public QDialog, public Ui::QxrdPreferencesDialog {
-  Q_OBJECT;
+  Q_OBJECT
 public:
   QxrdPreferencesDialog(QWidget *parent = 0);
   ~QxrdPreferencesDialog();

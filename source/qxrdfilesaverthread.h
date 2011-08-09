@@ -15,7 +15,7 @@ class QxrdFileSaver;
 
 class QxrdFileSaverThread : public QxrdThread
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdFileSaverThread(QxrdAllocator *acq);
@@ -35,11 +35,6 @@ public:
   void saveTextData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
   void writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data);
   void writeOutputScan(QString dir, QxrdIntegratedDataPtr data);
-
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 protected:
   void run();

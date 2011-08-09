@@ -19,6 +19,12 @@ public:
   void set_Image(QxrdDoubleImageDataPtr image);
   QxrdDoubleImageDataPtr get_Image() const;
 
+  QString get_XUnitsLabel() const;
+  void set_XUnitsLabel(QString units);
+
+  int get_Oversample() const;
+  void set_Oversample(int ovs);
+
   const double* x() const;
   const double* y() const;
 
@@ -36,6 +42,8 @@ private:
 
   QVector<double>            m_X, m_Y;
   double                     m_cx, m_cy;
+  QString                    m_XUnitsLabel;
+  int                        m_Oversample;
 };
 
 typedef QSharedPointer<QxrdIntegratedData>       QxrdIntegratedDataPtr;

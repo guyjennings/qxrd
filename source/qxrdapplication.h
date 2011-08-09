@@ -18,23 +18,8 @@
 #include "qxrdscriptenginethread.h"
 #include "qxrdsettingssaverthread.h"
 
-//class QxrdAcquisitionThread;
-//class QxrdAcquisition;
 class QxrdWindow;
-//class QxrdDataProcessorThread;
-//class QxrdDataProcessor;
 class QxrdNIDAQPluginInterface;
-//class QxrdServerThread;
-//class QxrdServer;
-//class QxrdSimpleServerThread;
-//class QxrdSimpleServer;
-//class QxrdAllocatorThread;
-//class QxrdAllocator;
-//class QxrdFileSaverThread;
-//class QxrdScriptEngineThread;
-//class QxrdScriptEngine;
-//class QxrdSettingsSaverThread;
-//class QxrdSettingsSaver;
 
 #ifdef HAVE_PERKIN_ELMER
 class QxrdPerkinElmerPluginInterface;
@@ -42,7 +27,7 @@ class QxrdPerkinElmerPluginInterface;
 
 class QxrdApplication : public QApplication
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdApplication(int &argc, char **argv);
@@ -85,42 +70,58 @@ public slots:
   void splashMessage(const char *msg);
   void splashMessage(QString msg);
 
-signals:
+  void warningMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 public:
   bool wantToQuit();
+  FILE* logFile();
+
+  void newLogFile(QString path);
+
+  static QString hexArg(void *p);
 
 private:
+  void logMessage(QString msg);
+  void closeLogFile();
+  void openLogFile();
+  void writeLogHeader();
+
   void setupTiffHandlers();
   void shutdownThread(QxrdThread *thread);
 
 public:
-  Q_PROPERTY(int    detectorType  READ get_DetectorType WRITE set_DetectorType);
-  QCEP_INTEGER_PROPERTY(DetectorType);
+  Q_PROPERTY(int    detectorType  READ get_DetectorType WRITE set_DetectorType)
+  QCEP_INTEGER_PROPERTY(DetectorType)
 
-  Q_PROPERTY(int    processorType READ get_ProcessorType WRITE set_ProcessorType);
-  QCEP_INTEGER_PROPERTY(ProcessorType);
+  Q_PROPERTY(int    processorType READ get_ProcessorType WRITE set_ProcessorType)
+  QCEP_INTEGER_PROPERTY(ProcessorType)
 
-  Q_PROPERTY(int    debug         READ get_Debug WRITE set_Debug);
-  QCEP_INTEGER_PROPERTY(Debug);
+  Q_PROPERTY(int    debug         READ get_Debug WRITE set_Debug)
+  QCEP_INTEGER_PROPERTY(Debug)
 
-  Q_PROPERTY(int    runSpecServer    READ get_RunSpecServer WRITE set_RunSpecServer);
-  QCEP_INTEGER_PROPERTY(RunSpecServer);
+  Q_PROPERTY(int    runSpecServer    READ get_RunSpecServer WRITE set_RunSpecServer)
+  QCEP_INTEGER_PROPERTY(RunSpecServer)
 
-  Q_PROPERTY(int    specServerPort    READ get_SpecServerPort WRITE set_SpecServerPort);
-  QCEP_INTEGER_PROPERTY(SpecServerPort);
+  Q_PROPERTY(int    specServerPort    READ get_SpecServerPort WRITE set_SpecServerPort)
+  QCEP_INTEGER_PROPERTY(SpecServerPort)
 
-  Q_PROPERTY(int    runSimpleServer    READ get_RunSimpleServer WRITE set_RunSimpleServer);
-  QCEP_INTEGER_PROPERTY(RunSimpleServer);
+  Q_PROPERTY(int    runSimpleServer    READ get_RunSimpleServer WRITE set_RunSimpleServer)
+  QCEP_INTEGER_PROPERTY(RunSimpleServer)
 
-  Q_PROPERTY(int    simpleServerPort    READ get_SimpleServerPort WRITE set_SimpleServerPort);
-  QCEP_INTEGER_PROPERTY(SimpleServerPort);
+  Q_PROPERTY(int    simpleServerPort    READ get_SimpleServerPort WRITE set_SimpleServerPort)
+  QCEP_INTEGER_PROPERTY(SimpleServerPort)
 
-  Q_PROPERTY(int    defaultLayout   READ get_DefaultLayout WRITE set_DefaultLayout STORED false);
-  QCEP_INTEGER_PROPERTY(DefaultLayout);
+  Q_PROPERTY(int    defaultLayout   READ get_DefaultLayout WRITE set_DefaultLayout STORED false)
+  QCEP_INTEGER_PROPERTY(DefaultLayout)
+
+  Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath)
+  QCEP_STRING_PROPERTY(LogFilePath)
+
+  Q_PROPERTY(int    fileBrowserLimit   READ get_FileBrowserLimit WRITE set_FileBrowserLimit)
+  QCEP_INTEGER_PROPERTY(FileBrowserLimit)
 
 private:
   bool                            m_FreshStart;
@@ -147,7 +148,12 @@ private:
   QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;
 #endif
   QxrdResponseTimer              *m_ResponseTimer;
+
+  mutable QMutex                  m_LogFileMutex;
+  FILE                           *m_LogFile;
 };
+
+#define HEXARG(a) arg(QxrdApplication::hexArg(a))
 
 extern QxrdApplication *g_Application;
 

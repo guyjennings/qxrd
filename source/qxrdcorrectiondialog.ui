@@ -120,7 +120,7 @@
     <item row="4" column="0">
      <widget class="QCheckBox" name="m_PerformBadPixels">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="toolTip">
        <string>Do Bad Pixel Correction</string>
@@ -155,7 +155,7 @@
     <item row="5" column="0">
      <widget class="QCheckBox" name="m_PerformGainCorrection">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="toolTip">
        <string>Perform gain correction</string>

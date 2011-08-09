@@ -7,7 +7,10 @@
 #include "qxrdacquisitionpilatus.h"
 #include "qxrdacquisitionareadetector.h"
 #include "qxrdacquisitionsimulated.h"
+#include "qxrdacquisitionfilewatcher.h"
 #include "qxrddataprocessor.h"
+#include "qxrdapplication.h"
+
 #include <QFuture>
 #include <QVariant>
 #include <QMetaObject>
@@ -41,7 +44,7 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDataProcessor *proc,
   xisllib = LoadLibrary(L"XISL.dll");
 
   if (xisllib == NULL) {
-    printf("XISL library is not available - cannot use PE detector\n");
+    g_Application->criticalMessage("XISL library is not available - cannot use PE detector");
   } else {
     g_PEAvailable = true;
   }
@@ -59,6 +62,10 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 
 void QxrdAcquisitionThread::run()
 {
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage("Starting Acquisition Thread");
+  }
+
   QxrdAcquisition *p;
 
   switch(m_DetectorType) {
@@ -93,17 +100,20 @@ void QxrdAcquisitionThread::run()
     g_DetectorType = 3;
     break;
 #endif
+
+  case 4:
+    p = new QxrdAcquisitionFileWatcher(m_Processor, m_Allocator);
+    g_DetectorType = 4;
+    break;
   }
-
-
-//  m_Processor -> setAcquisition(m_Acquisition);
 
   m_Acquisition.fetchAndStoreOrdered(p);
 
-
   int rc = exec();
 
-//  printf("Acquisition thread terminated with rc %d\n", rc);
+  if (qcepDebug(DEBUG_THREADS)) {
+    g_Application->printMessage(tr("Acquisition Thread Terminated with rc %1").arg(rc));
+  }
 }
 
 void QxrdAcquisitionThread::initialize()
@@ -168,7 +178,8 @@ QStringList QxrdAcquisitionThread::detectorTypeNames()
   res << "Simulated Detector"
       << "Perkin Elmer Flat Panel"
       << "Pilatus"
-      << "EPICS Area Detector";
+      << "EPICS Area Detector"
+      << "Files in Directory";
 
   return res;
 }

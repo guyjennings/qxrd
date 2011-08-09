@@ -8,7 +8,7 @@
 
 class QxrdServer : public QSpecServer
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdServer(QString name, int port, QObject *parent=0);

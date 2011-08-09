@@ -21,7 +21,8 @@ static double mod(double a, double b) {
 /*
  * This is just the same as for convertWavelengthToEnergy but in reverse.
  */
-double QxrdDetectorGeometry::convertEnergyToWavelength(double energy) {
+double QxrdDetectorGeometry::convertEnergyToWavelength(double energy) const
+{
   return 12398.4172/energy;
 }
 
@@ -34,7 +35,8 @@ double QxrdDetectorGeometry::convertEnergyToWavelength(double energy) {
  * E = hc/wavelength = 12,398.4172 eV*angstrom/(wavelength*angstrom)  = 12,398.4172/wavelength (in units of eV, as desired)
  * So our formula for energy is E=12398.4172/wavelength. The units get taken care of properly!
  */
-double QxrdDetectorGeometry::convertWavelengthToEnergy(double wavelength) {
+double QxrdDetectorGeometry::convertWavelengthToEnergy(double wavelength) const
+{
   return 12398.4172/wavelength;
 }
 
@@ -42,22 +44,63 @@ double QxrdDetectorGeometry::convertWavelengthToEnergy(double wavelength) {
 /*
  * Use the famous Q=4*pi*sin(2theta/2)/lambda formula
  */
-double QxrdDetectorGeometry::convertTwoThetaToQ(double twoTheta,double wavelength) {
+double QxrdDetectorGeometry::convertTwoThetaToQ(double twoTheta,double wavelength) const
+{
   // convert twoTheta from degrees to radians first
   return 4.0*M_PI*sin( (twoTheta*M_PI/180.0) /2.0)/wavelength;
 }
 
 
-double QxrdDetectorGeometry::convertQToTwoTheta(double Q, double wavelength) {
+double QxrdDetectorGeometry::convertQToTwoTheta(double Q, double wavelength) const
+{
   // convert twoTheta to degrees before returning
   return 2.0*asin(Q*wavelength/(4*M_PI))*180.0/M_PI;
+}
+
+double QxrdDetectorGeometry::getRadius(double xCenter,double yCenter,
+                                       double distance,double xPixel,double yPixel,
+                                       double pixelLength,double pixelHeight,
+                                       double cos_beta,double sin_beta,
+                                       double cos_rotation,double sin_rotation) const
+{
+  double pixelLength_mm,pixelHeight_mm;
+  double xMeasured,yMeasured;
+  double bottom;
+  double xPhysical,yPhysical;
+
+  // pixellength comes in in units of micron
+  // We convert pixelLength & pixelHeight into mm units so
+  // that they are comparable with distance (in units of
+  //  millimeters)
+  pixelLength_mm = pixelLength/1000.0;
+  pixelHeight_mm = pixelHeight/1000.0;
+
+  xMeasured = (xPixel-xCenter)*pixelLength_mm;
+  yMeasured = (yPixel-yCenter)*pixelHeight_mm;
+
+  bottom = distance+(xMeasured*cos_rotation+
+                     yMeasured*sin_rotation)*sin_beta/*+
+      (-xMeasured*sin_rotation+
+       yMeasured*cos_rotation)*sin_alpha*cos_beta*/;
+
+  // calculate the x y coordinates on the imaginary
+  // detector using fancy math
+  xPhysical = distance*((xMeasured*cos_rotation+
+                         yMeasured*sin_rotation)*cos_beta
+                        /*-(-xMeasured*sin_rotation+
+                          yMeasured*cos_rotation)*sin_alpha*/)/bottom;
+
+  yPhysical = distance*(-xMeasured*sin_rotation+
+                        yMeasured*cos_rotation)/**cos_alpha*//bottom;
+
+  return sqrt(xPhysical*xPhysical + yPhysical*yPhysical);
 }
 
 double QxrdDetectorGeometry::getTwoTheta(double xCenter,double yCenter,
                                          double distance,double xPixel,double yPixel,
                                          double pixelLength,double pixelHeight,
                                          double cos_beta,double sin_beta,
-                                         double cos_rotation,double sin_rotation)
+                                         double cos_rotation,double sin_rotation) const
 {
   double pixelLength_mm,pixelHeight_mm;
   double xMeasured,yMeasured;
@@ -128,8 +171,8 @@ void QxrdDetectorGeometry::getTwoThetaChi(double xCenter,double yCenter,
                                           double rotation,double cos_beta,double sin_beta,
                                           double cos_alpha,double sin_alpha,
                                           double cos_rotation,double sin_rotation,
-                                          double *twoTheta,double *chi) {
-
+                                          double *twoTheta,double *chi) const
+{
   double pixelLength_mm,pixelHeight_mm;
   double xMeasured,yMeasured;
   double bottom;
@@ -188,7 +231,8 @@ void QxrdDetectorGeometry::getQChi(double xCenter,double yCenter,double distance
                                    double rotation,double cos_beta,double sin_beta,
                                    double cos_alpha,double sin_alpha,
                                    double cos_rotation,double sin_rotation,
-                                   double *q,double *chi) {
+                                   double *q,double *chi) const
+{
 
   double wavelength;
   double twoTheta;
@@ -217,8 +261,8 @@ void QxrdDetectorGeometry::getXY(double xCenter,double yCenter,double distance,
                                  double pixelHeight,double rotation,double cos_beta,
                                  double sin_beta,double cos_alpha,double sin_alpha,
                                  double cos_rotation,double sin_rotation,
-                                 double * xPixel,double * yPixel) {
-
+                                 double * xPixel,double * yPixel) const
+{
   double wavelength;
   double twoTheta;
   double xPhysical,yPhysical;

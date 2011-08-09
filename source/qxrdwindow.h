@@ -14,7 +14,7 @@ class QxrdAcquisition;
 class QxrdDataProcessor;
 class QxrdAllocator;
 class QxrdScriptEngine;
-class QxrdAcquireDialog;
+class QxrdAcquireDialogBase;
 class QxrdSynchronizedAcquisitionDialog;
 class QxrdDisplayDialog;
 class QxrdCenterFinderDialog;
@@ -33,7 +33,7 @@ class QxrdHighlighter;
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent=0);
@@ -47,12 +47,16 @@ public slots:
   void doLoadData();
   void doSaveDark();
   void doLoadDark();
+  void doClearDark();
   void doSaveMask();
   void doLoadMask();
+  void doClearMask();
   void doSaveBadPixels();
   void doLoadBadPixels();
+  void doClearBadPixels();
   void doSaveGainMap();
   void doLoadGainMap();
+  void doClearGainMap();
   void selectLogFile();
   void doRefineCenterTilt();
   void doAccumulateImages();
@@ -66,6 +70,9 @@ public slots:
   void acquireComplete();
   void doAcquireDark();
 
+  void crashProgram();
+  void testWidget();
+
   void executeScript();
   void finishedCommand(QScriptValue result);
   void cancelScript();
@@ -73,9 +80,10 @@ public slots:
   void doTest();
 
   QString timeStamp();
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void warningMessage(QString msg);
+  void displayMessage(QString msg);
+  void displayStatusMessage(QString msg);
+  void displayCriticalMessage(QString msg);
 
   void selectOutputDirectory();
   void clearStatusMessage();
@@ -89,6 +97,7 @@ private slots:
   void newData();
   void newMask();
   void allocatedMemoryChanged();
+  void integrationXUnitsChanged(int newXUnits);
 
 public:
   void readSettings(QxrdSettings &settings, QString section);
@@ -121,7 +130,7 @@ private:
   QxrdDataProcessor                     *m_DataProcessor;
   QxrdAllocator                         *m_Allocator;
   QxrdScriptEngine                      *m_ScriptEngine;
-  QxrdAcquireDialog                     *m_AcquireDialog;
+  QxrdAcquireDialogBase                 *m_AcquireDialog;
   QxrdSynchronizedAcquisitionDialog     *m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;
   QxrdCenterFinderDialog                *m_CenterFinderDialog;

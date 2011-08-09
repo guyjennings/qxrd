@@ -13,7 +13,7 @@ class QxrdApplication;
 
 class QxrdImageDisplayWidget : public QWidget
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   explicit QxrdImageDisplayWidget(QWidget *parent = 0);
@@ -23,11 +23,6 @@ public:
   QSize	sizeHint () const;
 
   static QxrdImageDisplayWidget* insertNew(QxrdApplication *app, QTabWidget *tw);
-
-signals:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 public slots:
   void updateImage(QxrdDoubleImageDataPtr img,

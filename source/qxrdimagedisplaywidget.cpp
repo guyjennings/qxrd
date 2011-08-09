@@ -81,7 +81,7 @@ void QxrdImageDisplayWidget::updateImage
   adjustSize();
   repaint();
 
-  emit printMessage(tr("Image rebuilt after %1 msec").arg(tic.elapsed()));
+  g_Application->printMessage(tr("Image rebuilt after %1 msec").arg(tic.elapsed()));
 }
 
 QSize QxrdImageDisplayWidget::sizeHint() const
@@ -135,10 +135,6 @@ QxrdImageDisplayWidget* QxrdImageDisplayWidget::insertNew(QxrdApplication *app, 
     sa -> setWidget(res);
 
     tw->insertTab(1, sa, "Image");
-
-    connect(res, SIGNAL(printMessage(QString,QDateTime)), app, SIGNAL(printMessage(QString,QDateTime)));
-    connect(res, SIGNAL(statusMessage(QString,QDateTime)), app, SIGNAL(statusMessage(QString,QDateTime)));
-    connect(res, SIGNAL(criticalMessage(QString,QDateTime)), app, SIGNAL(criticalMessage(QString,QDateTime)));
   }
 
   return res;

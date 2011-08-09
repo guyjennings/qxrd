@@ -14,7 +14,7 @@ class QxrdDataProcessor;
 
 class QxrdScriptEngine : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc);
@@ -29,10 +29,6 @@ signals:
   void appResultAvailable(QScriptValue res);
   void simpleServerResultAvailable(QScriptValue cmd);
   void specResultAvailable(QScriptValue cmd);
-
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 public:
   bool hasUncaughtException() const;

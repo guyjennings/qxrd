@@ -8,7 +8,7 @@ class QxrdIntegrator;
 
 class QxrdIntegratorDialog : public QDockWidget, public Ui::QxrdIntegratorDialog
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   QxrdIntegratorDialog(QxrdIntegrator *integ, QWidget *parent=0);
