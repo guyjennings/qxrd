@@ -13,6 +13,7 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdAcquisition *acq) :
   m_SyncAcquisitionMinimum(this,"syncAcquisitionMinimum", 0.0),
   m_SyncAcquisitionMaximum(this,"syncAcquisitionMaximum", 5.0),
   m_SyncAcquisitionSymmetry(this,"syncAcquisitionSymmetry", 0.0),
+  m_SyncAcquisitionPhaseShift(this,"syncAcquisitionPhaseShift", 0.0),
   m_Acquisition(acq),
   m_AcquisitionParms(NULL),
   m_NIDAQPlugin(NULL),
@@ -57,6 +58,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
   int wfm             = get_SyncAcquisitionWaveform();
   m_SyncMode          = get_SyncAcquisitionMode();
   double symm         = get_SyncAcquisitionSymmetry();
+  double phase        = get_SyncAcquisitionPhaseShift();
 
   if (symm > 1.0) {
     symm = 1.0;
@@ -67,6 +69,8 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
   if (nphases <= 1) {
     m_SyncMode = 0;
   } else if (m_SyncMode) {
+    int shift = (int)((double) phase*nphases/100.0 + nphases) % nphases;
+
     while (nSamples > 10000) {
       sampleRate /= 10;
       nSamples = cycleTime*sampleRate;
@@ -85,58 +89,63 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
 
     switch (wfm) {
     case SyncAcquisitionWaveformSquare:
-      for (int i=0; i<iSamples; i++) {
+      for (int ii=0; ii<iSamples; ii++) {
+        int i = (ii+iSamples+shift) % nphases;
         if (i<divide) {
-          m_OutputVoltage[i] = minVal;
+          m_OutputVoltage[ii] = minVal;
         } else {
-          m_OutputVoltage[i] = maxVal;
+          m_OutputVoltage[ii] = maxVal;
         }
       }
       break;
 
       case SyncAcquisitionWaveformSine:
-      for (int i=0; i<iSamples; i++) {
+      for (int ii=0; ii<iSamples; ii++) {
+        int i = (ii+iSamples+shift) % nphases;
         double x;
         if (i<divide) {
           x = M_PI*i/divide;
         } else {
           x = M_PI+M_PI*(i-divide)/(iSamples-divide);
         }
-        m_OutputVoltage[i] = minVal + (maxVal-minVal)*(1.0 - cos(x))/2.0;
+        m_OutputVoltage[ii] = minVal + (maxVal-minVal)*(1.0 - cos(x))/2.0;
       }
       break;
 
       case SyncAcquisitionWaveformTriangle:
-      for (int i=0; i<iSamples; i++) {
+      for (int ii=0; ii<iSamples; ii++) {
+        int i = (ii+iSamples+shift) % nphases;
         if (i<divide) {
-          m_OutputVoltage[i] = minVal + i*(maxVal-minVal)/divide;
+          m_OutputVoltage[ii] = minVal + i*(maxVal-minVal)/divide;
         } else {
-          m_OutputVoltage[i] = maxVal - (i-divide)*(maxVal-minVal)/(iSamples-divide);
+          m_OutputVoltage[ii] = maxVal - (i-divide)*(maxVal-minVal)/(iSamples-divide);
         }
       }
       break;
 
       case SyncAcquisitionWaveformBipolarTriangle:
-      for (int i=0; i<iSamples; i++) {
+      for (int ii=0; ii<iSamples; ii++) {
+        int i = (ii+iSamples+shift) % nphases;
         if (i < divideBy2) {
-          m_OutputVoltage[i] = minVal + i*(maxVal-minVal)/divideBy2;
+          m_OutputVoltage[ii] = minVal + i*(maxVal-minVal)/divideBy2;
         } else if (i < (iSamples-divideBy2)) {
-          m_OutputVoltage[i] = maxVal - (i-divideBy2)*(maxVal-minVal)/((iSamples-divide)/2);
+          m_OutputVoltage[ii] = maxVal - (i-divideBy2)*(maxVal-minVal)/((iSamples-divide)/2);
         } else {
-          m_OutputVoltage[i] = minVal - (iSamples-i)*(maxVal-minVal)/divideBy2;
+          m_OutputVoltage[ii] = minVal - (iSamples-i)*(maxVal-minVal)/divideBy2;
         }
       }
       break;
 
       case SyncAcquisitionWaveformSawtooth:
       default:
-      for (int i=0; i<iSamples; i++) {
-        m_OutputVoltage[i] = minVal + i*(maxVal-minVal)/iSamples;
+      for (int ii=0; ii<iSamples; ii++) {
+        int i = (ii+iSamples+shift) % nphases;
+        m_OutputVoltage[ii] = minVal + i*(maxVal-minVal)/iSamples;
       }
       break;
     }
 
-    m_OutputVoltage[iSamples] = minVal; // Return output voltage to starting value at the end of the waveform
+    m_OutputVoltage[iSamples] = m_OutputVoltage[0]; // Return output voltage to starting value at the end of the waveform
 
     if (m_NIDAQPlugin) {
       m_NIDAQPlugin->setAnalogWaveform(chan-1, sampleRate, m_OutputVoltage.data(), iSamples+1);

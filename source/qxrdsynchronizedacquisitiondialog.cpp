@@ -38,6 +38,10 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
   m_SyncAcqSymmetry -> setMaximum(1.0);
   m_SyncAcqSymmetry -> setSingleStep(0.1);
 
+  m_SyncAcqPhaseShift -> setMinimum(-100.0);
+  m_SyncAcqPhaseShift -> setMaximum(100.0);
+  m_SyncAcqPhaseShift -> setSingleStep(1);
+
   m_SynchronizedAcquisition -> prop_SyncAcquisitionMode()          -> linkTo(m_SyncAcqMode);
   m_SynchronizedAcquisition -> prop_SyncAcquisitionWaveform()      -> linkTo(m_SyncAcqWfm);
   m_SynchronizedAcquisition -> prop_SyncAcquisitionOutputChannel() -> linkTo(m_SyncAcqOutChan);
@@ -46,12 +50,14 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
   m_SynchronizedAcquisition -> prop_SyncAcquisitionMinimum()       -> linkTo(m_SyncAcqMinimum);
   m_SynchronizedAcquisition -> prop_SyncAcquisitionMaximum()       -> linkTo(m_SyncAcqMaximum);
   m_SynchronizedAcquisition -> prop_SyncAcquisitionSymmetry()      -> linkTo(m_SyncAcqSymmetry);
+  m_SynchronizedAcquisition -> prop_SyncAcquisitionPhaseShift()      -> linkTo(m_SyncAcqPhaseShift);
 
   connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMode(), SIGNAL(changedValue(int)), this, SLOT(waveformChanged()));
   connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionWaveform(), SIGNAL(changedValue(int)), this, SLOT(waveformChanged()));
   connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMinimum(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
   connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMaximum(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
   connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionSymmetry(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionPhaseShift(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
 
   connect(m_Acquisition->prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
   connect(m_Acquisition->prop_PhasesInGroup(), SIGNAL(changedValue(int)), this, SLOT(waveformChanged()));

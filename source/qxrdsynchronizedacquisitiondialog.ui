@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>310</width>
-    <height>502</height>
+    <height>532</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,7 +50,11 @@
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QComboBox" name="m_SyncAcqOutChan"/>
+     <widget class="QComboBox" name="m_SyncAcqOutChan">
+      <property name="toolTip">
+       <string>Output channel for synchronization waveform</string>
+      </property>
+     </widget>
     </item>
     <item row="4" column="0">
      <widget class="QLabel" name="label_8">
@@ -70,7 +74,12 @@
      </widget>
     </item>
     <item row="5" column="1">
-     <widget class="QDoubleSpinBox" name="m_SyncAcqMinimum"/>
+     <widget class="QDoubleSpinBox" name="m_SyncAcqMinimum">
+      <property name="toolTip">
+       <string>Output voltage at waveform minimum: range -10V .. 10V
+Script property: synchronization.syncAcquisitionMinimum</string>
+      </property>
+     </widget>
     </item>
     <item row="6" column="0">
      <widget class="QLabel" name="label_5">
@@ -80,7 +89,12 @@
      </widget>
     </item>
     <item row="6" column="1">
-     <widget class="QDoubleSpinBox" name="m_SyncAcqMaximum"/>
+     <widget class="QDoubleSpinBox" name="m_SyncAcqMaximum">
+      <property name="toolTip">
+       <string>Output voltage at waveform maximum: range -10V .. 10V
+Script property: synchronization.syncAcquisitionMaximum</string>
+      </property>
+     </widget>
     </item>
     <item row="7" column="0">
      <widget class="QLabel" name="label_6">
@@ -90,15 +104,50 @@
      </widget>
     </item>
     <item row="7" column="1">
-     <widget class="QDoubleSpinBox" name="m_SyncAcqSymmetry"/>
+     <widget class="QDoubleSpinBox" name="m_SyncAcqSymmetry">
+      <property name="toolTip">
+       <string>Waveform symmetry factor (range -1..+1)
+Script property: synchronization.syncAcquisitionSymmetry</string>
+      </property>
+     </widget>
     </item>
-    <item row="8" column="0" colspan="2">
+    <item row="9" column="0" colspan="2">
      <widget class="QxrdSynchronizedAcquisitionPlot" name="m_WaveformPlot"/>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Phase Shift</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QDoubleSpinBox" name="m_SyncAcqPhaseShift">
+      <property name="toolTip">
+       <string>Phase shift of synchronization waveform 
+as percentage of sync waveform period - range -100% .. 100%
+Script Property synchronization.syncAcquisitionPhaseShift</string>
+      </property>
+      <property name="suffix">
+       <string>%</string>
+      </property>
+      <property name="minimum">
+       <double>-100.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>100.000000000000000</double>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QwtPlot</class>
+   <extends>QFrame</extends>
+   <header>qwt_plot.h</header>
+  </customwidget>
   <customwidget>
    <class>QxrdSynchronizedAcquisitionPlot</class>
    <extends>QwtPlot</extends>

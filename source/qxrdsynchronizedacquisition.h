@@ -52,6 +52,9 @@ public:
   Q_PROPERTY(double syncAcquisitionSymmetry READ get_SyncAcquisitionSymmetry WRITE set_SyncAcquisitionSymmetry)
   QCEP_DOUBLE_PROPERTY(SyncAcquisitionSymmetry)
 
+  Q_PROPERTY(double syncAcquisitionPhaseShift READ get_SyncAcquisitionPhaseShift WRITE set_SyncAcquisitionPhaseShift)
+  QCEP_DOUBLE_PROPERTY(SyncAcquisitionPhaseShift)
+
 signals:
 
 public slots:
