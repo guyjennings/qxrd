@@ -69,7 +69,6 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
   if (nphases <= 1) {
     m_SyncMode = 0;
   } else if (m_SyncMode) {
-    int shift = (int)((double) phase*nphases/100.0 + nphases) % nphases;
 
     while (nSamples > 10000) {
       sampleRate /= 10;
@@ -79,6 +78,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
     int iSamples = (int) nSamples;
     double divide = iSamples * (0.5 + symm/2.0);
     double divideBy2 = divide/2;
+    int shift = (int)((double) phase*iSamples/360.0 + nphases) % iSamples;
 
     m_OutputTimes.resize(iSamples+1);
     m_OutputVoltage.resize(iSamples+1);
@@ -90,7 +90,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
     switch (wfm) {
     case SyncAcquisitionWaveformSquare:
       for (int ii=0; ii<iSamples; ii++) {
-        int i = (ii+iSamples+shift) % nphases;
+        int i = (ii+iSamples-shift) % iSamples;
         if (i<divide) {
           m_OutputVoltage[ii] = minVal;
         } else {
@@ -101,7 +101,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
 
       case SyncAcquisitionWaveformSine:
       for (int ii=0; ii<iSamples; ii++) {
-        int i = (ii+iSamples+shift) % nphases;
+        int i = (ii+iSamples-shift) % iSamples;
         double x;
         if (i<divide) {
           x = M_PI*i/divide;
@@ -114,7 +114,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
 
       case SyncAcquisitionWaveformTriangle:
       for (int ii=0; ii<iSamples; ii++) {
-        int i = (ii+iSamples+shift) % nphases;
+        int i = (ii+iSamples-shift) % iSamples;
         if (i<divide) {
           m_OutputVoltage[ii] = minVal + i*(maxVal-minVal)/divide;
         } else {
@@ -125,7 +125,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
 
       case SyncAcquisitionWaveformBipolarTriangle:
       for (int ii=0; ii<iSamples; ii++) {
-        int i = (ii+iSamples+shift) % nphases;
+        int i = (ii+iSamples-shift) % iSamples;
         if (i < divideBy2) {
           m_OutputVoltage[ii] = minVal + i*(maxVal-minVal)/divideBy2;
         } else if (i < (iSamples-divideBy2)) {
@@ -139,7 +139,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
       case SyncAcquisitionWaveformSawtooth:
       default:
       for (int ii=0; ii<iSamples; ii++) {
-        int i = (ii+iSamples+shift) % nphases;
+        int i = (ii+iSamples-shift) % iSamples;
         m_OutputVoltage[ii] = minVal + i*(maxVal-minVal)/iSamples;
       }
       break;
