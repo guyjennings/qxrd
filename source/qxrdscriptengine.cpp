@@ -14,6 +14,7 @@
 #include "qxrdringsetsampleddata.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaqplugininterface.h"
+#include "qxrdallocator.h"
 
 #include <QThread>
 
@@ -74,6 +75,7 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("imageGraph", m_ScriptEngine -> newQObject(m_Application->window()->m_Plot));
   m_ScriptEngine -> globalObject().setProperty("centeringGraph", m_ScriptEngine -> newQObject(m_Application->window()->m_CenterFinderPlot));
   m_ScriptEngine -> globalObject().setProperty("integratorGraph", m_ScriptEngine -> newQObject(m_Application->window()->m_IntegratorPlot));
+  m_ScriptEngine -> globalObject().setProperty("allocator", m_ScriptEngine -> newQObject(m_Application->allocator()));
 
   m_ScriptEngine -> globalObject().setProperty("acquire", m_ScriptEngine -> newFunction(acquireFunc));
   m_ScriptEngine -> globalObject().setProperty("acquireDark", m_ScriptEngine -> newFunction(acquireDarkFunc));
