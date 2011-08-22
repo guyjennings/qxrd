@@ -37,8 +37,34 @@
 #include <QPluginLoader>
 #include <QSplashScreen>
 
+#include <QCoreApplication>
+
 int gCEPDebug = 0;
 QxrdApplication *g_Application = 0;
+
+QCoreApplication::EventFilter oldEventFilter;
+
+int eventCounter;
+
+static bool myEventFilter(void *message, long *result)
+{
+  eventCounter++;
+
+  if (oldEventFilter) {
+    return oldEventFilter(message, result);
+  } else {
+    return false;
+  }
+}
+
+QTimer eventCounterTimer;
+
+void QxrdApplication::processEventCounter()
+{
+  printMessage(tr("%1 events processed").arg(eventCounter));
+
+  eventCounter = 0;
+}
 
 QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
@@ -52,6 +78,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_DefaultLayout(this,"defaultLayout",0),
     m_LogFilePath(this, "logFilePath", "qxrd.log"),
     m_FileBrowserLimit(this, "fileBrowserLimit", 0),
+    m_MessageWindowLines(this, "messageWindowLines", 1000),
+    m_UpdateIntervalMsec(this, "updateIntervalMsec", 1000),
     m_FreshStart(false),
     m_Splash(NULL),
     m_Window(NULL),
@@ -71,6 +99,11 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_LogFileMutex(QMutex::Recursive),
     m_LogFile(NULL)
 {
+  oldEventFilter = setEventFilter(myEventFilter);
+
+  connect(&eventCounterTimer, SIGNAL(timeout()), this, SLOT(processEventCounter()));
+  eventCounterTimer.start(10000);
+
   setOrganizationName("bessrc");
   setOrganizationDomain("xor.aps.anl.gov");
   setApplicationName("qxrd");
@@ -462,29 +495,35 @@ void QxrdApplication::warningMessage(QString msg, QDateTime ts)
 
 void QxrdApplication::printMessage(QString msg, QDateTime ts)
 {
-  QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+
-      QThread::currentThread()->objectName()+": "+
-      msg.trimmed();
+  if (qcepDebug(DEBUG_NOMESSAGES)) {
+  } else {
+    QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+
+        QThread::currentThread()->objectName()+": "+
+        msg.trimmed();
 
-  message = message.replace("\n", " : ");
+    message = message.replace("\n", " : ");
 
-  logMessage(message);
+    logMessage(message);
 
-  if (window()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+    if (window()) {
+      INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+    }
   }
 }
 
 void QxrdApplication::statusMessage(QString msg, QDateTime ts)
 {
-  QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+msg.trimmed();
+  if (qcepDebug(DEBUG_NOMESSAGES)) {
+  } else {
+    QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+msg.trimmed();
 
-  message = message.replace("\n", " : ");
+    message = message.replace("\n", " : ");
 
-  logMessage(message);
+    logMessage(message);
 
-  if (window()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayStatusMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+    if (window()) {
+      INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayStatusMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+    }
   }
 }
 

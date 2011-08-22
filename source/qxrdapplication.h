@@ -75,6 +75,8 @@ public slots:
   void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
+  void processEventCounter();
+
 public:
   bool wantToQuit();
   FILE* logFile();
@@ -122,6 +124,12 @@ public:
 
   Q_PROPERTY(int    fileBrowserLimit   READ get_FileBrowserLimit WRITE set_FileBrowserLimit)
   QCEP_INTEGER_PROPERTY(FileBrowserLimit)
+
+  Q_PROPERTY(int    messageWindowLines   READ get_MessageWindowLines WRITE set_MessageWindowLines)
+  QCEP_INTEGER_PROPERTY(MessageWindowLines)
+
+  Q_PROPERTY(int    updateIntervalMsec   READ get_UpdateIntervalMsec WRITE set_UpdateIntervalMsec)
+  QCEP_INTEGER_PROPERTY(UpdateIntervalMsec)
 
 private:
   bool                            m_FreshStart;
