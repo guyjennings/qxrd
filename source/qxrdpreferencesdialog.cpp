@@ -78,6 +78,9 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
 
   m_FileBrowserLimit -> setValue(app->get_FileBrowserLimit());
 
+  m_MessageWindowLines -> setValue(app->get_MessageWindowLines());
+  m_UpdateIntervalMsec -> setValue(app->get_UpdateIntervalMsec());
+
   setupDebugWidgets(debugLevel);
 }
 
@@ -229,6 +232,9 @@ void QxrdPreferencesDialog::accept()
   app -> set_LogFilePath    (m_CurrentLogFile -> text());
 
   app -> set_FileBrowserLimit(m_FileBrowserLimit->value());
+
+  app -> set_MessageWindowLines(m_MessageWindowLines -> value());
+  app -> set_UpdateIntervalMsec(m_UpdateIntervalMsec -> value());
 
   QDialog::accept();
 }
