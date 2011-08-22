@@ -11,7 +11,12 @@ QxrdAllocator::QxrdAllocator
     m_Max(this, "max", 800),
     m_Reserve(this,"reserve",100),
     m_Allocated(this, "allocated", 0),
-    m_QueuedDelete(this, "queuedDelete", 0)
+    m_QueuedDelete(this, "queuedDelete", 0),
+    m_NAllocatedInt16(this, "nAllocatedInt16", 0),
+    m_NAllocatedInt32(this, "nAllocatedInt32", 0),
+    m_NAllocatedDouble(this, "nAllocatedDouble", 0),
+    m_NAllocatedMask(this, "nAllocatedMask", 0),
+    m_NAllocatedIntegrated(this, "nAllocatedIntegrated", 0)
 {
   if (qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage(tr("allocator %1 constructed").HEXARG(this));
@@ -63,7 +68,7 @@ QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image(AllocationStrategy strat, int
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (waitTillAvailable(strat, int16SizeMB(width, height))) {
-    QxrdInt16ImageDataPtr res(new QxrdInt16ImageData(this, width, height), &QxrdAllocator::int16Deleter);
+    QxrdInt16ImageDataPtr res(new QxrdInt16ImageData(this, AllocateInt16, width, height), &QxrdAllocator::int16Deleter);
 
     res->moveToThread(thread());
 
@@ -86,7 +91,7 @@ QxrdInt32ImageDataPtr QxrdAllocator::newInt32Image(AllocationStrategy strat, int
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (waitTillAvailable(strat, int32SizeMB(width, height))) {
-    QxrdInt32ImageDataPtr res(new QxrdInt32ImageData(this, width, height), &QxrdAllocator::int32Deleter);
+    QxrdInt32ImageDataPtr res(new QxrdInt32ImageData(this, AllocateInt32, width, height), &QxrdAllocator::int32Deleter);
 
     res->moveToThread(thread());
 
@@ -109,7 +114,7 @@ QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage(AllocationStrategy strat, i
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (waitTillAvailable(strat, doubleSizeMB(width, height))) {
-    QxrdDoubleImageDataPtr res(new QxrdDoubleImageData(this, width, height), &QxrdAllocator::doubleDeleter);
+    QxrdDoubleImageDataPtr res(new QxrdDoubleImageData(this, AllocateDouble, width, height), &QxrdAllocator::doubleDeleter);
 
     res->moveToThread(thread());
 
@@ -132,7 +137,7 @@ QxrdMaskDataPtr QxrdAllocator::newMask(AllocationStrategy strat, int width, int 
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (waitTillAvailable(strat, maskSizeMB(width, height))) {
-    QxrdMaskDataPtr res(new QxrdMaskData(this, width, height, def), &QxrdAllocator::maskDeleter);
+    QxrdMaskDataPtr res(new QxrdMaskData(this, AllocateMask, width, height, def), &QxrdAllocator::maskDeleter);
 
     res->moveToThread(thread());
 
@@ -155,7 +160,10 @@ QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(AllocationStrategy strat,
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (waitTillAvailable(strat, integratedSizeMB(10000))) {
-    QxrdIntegratedDataPtr res(new QxrdIntegratedData(this, data, 10000), &QxrdAllocator::integratedDeleter);
+    QxrdIntegratedDataPtr res(new QxrdIntegratedData(this,
+                                                     data,
+                                                     AllocateIntegrated,
+                                                     10000), &QxrdAllocator::integratedDeleter);
 
     res->moveToThread(thread());
 
@@ -181,8 +189,8 @@ void QxrdAllocator::newDoubleImageAndIntegratedData(AllocationStrategy strat,
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (waitTillAvailable(strat, doubleSizeMB(width, height) + integratedSizeMB(10000))) {
-    img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(this, width, height), &QxrdAllocator::doubleDeleter);
-    integ = QxrdIntegratedDataPtr(new QxrdIntegratedData(this, img, 10000), &QxrdAllocator::integratedDeleter);
+    img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(this, AllocateDouble, width, height), &QxrdAllocator::doubleDeleter);
+    integ = QxrdIntegratedDataPtr(new QxrdIntegratedData(this, img, AllocateIntegrated, 10000), &QxrdAllocator::integratedDeleter);
 
     img->moveToThread(thread());
     integ->moveToThread(thread());
@@ -198,32 +206,68 @@ void QxrdAllocator::newDoubleImageAndIntegratedData(AllocationStrategy strat,
   }
 }
 
-void QxrdAllocator::allocate(int sz, int width, int height)
+void QxrdAllocator::allocate(int typ, int sz, int width, int height)
 {
-  allocate((quint64) sz*width*height);
+  allocate(typ, (quint64) sz*width*height);
 }
 
-void QxrdAllocator::allocate(quint64 amt)
+void QxrdAllocator::allocate(int typ, quint64 amt)
 {
 //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_AllocatedMemory += amt;
 
   m_AllocatedMemoryMB.fetchAndStoreOrdered(m_AllocatedMemory/MegaBytes);
+
+  switch (typ) {
+  case AllocateInt16:
+    m_NAllocatedInt16.incValue(1);
+    break;
+  case AllocateInt32:
+    m_NAllocatedInt32.incValue(1);
+    break;
+  case AllocateDouble:
+    m_NAllocatedDouble.incValue(1);
+    break;
+  case AllocateMask:
+    m_NAllocatedMask.incValue(1);
+    break;
+  case AllocateIntegrated:
+    m_NAllocatedIntegrated.incValue(1);
+    break;
+  }
 }
 
-void QxrdAllocator::deallocate(int sz, int width, int height)
+void QxrdAllocator::deallocate(int typ, int sz, int width, int height)
 {
-  deallocate((quint64) sz*width*height);
+  deallocate(typ, (quint64) sz*width*height);
 }
 
-void QxrdAllocator::deallocate(quint64 amt)
+void QxrdAllocator::deallocate(int typ, quint64 amt)
 {
 //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_AllocatedMemory -= amt;
 
   m_AllocatedMemoryMB.fetchAndStoreOrdered(m_AllocatedMemory/MegaBytes);
+
+  switch (typ) {
+  case AllocateInt16:
+    m_NAllocatedInt16.incValue(-1);
+    break;
+  case AllocateInt32:
+    m_NAllocatedInt32.incValue(-1);
+    break;
+  case AllocateDouble:
+    m_NAllocatedDouble.incValue(-1);
+    break;
+  case AllocateMask:
+    m_NAllocatedMask.incValue(-1);
+    break;
+  case AllocateIntegrated:
+    m_NAllocatedIntegrated.incValue(-1);
+    break;
+  }
 }
 
 static int g_QueuedDelete = 0;
@@ -373,4 +417,15 @@ double QxrdAllocator::maximumMemory()
 void QxrdAllocator::changedSizeMB(int newMB)
 {
   set_Max(newMB);
+}
+
+void QxrdAllocator::report()
+{
+  g_Application->printMessage(tr("Allocator: %1 i16, %2 i32, %3 dbl, %4 msk, %5 integ")
+                              .arg(get_NAllocatedInt16())
+                              .arg(get_NAllocatedInt32())
+                              .arg(get_NAllocatedDouble())
+                              .arg(get_NAllocatedMask())
+                              .arg(get_NAllocatedIntegrated())
+                              );
 }

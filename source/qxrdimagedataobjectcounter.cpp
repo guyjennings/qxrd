@@ -3,9 +3,10 @@
 
 static QAtomicInt s_ImageDataObjectCounter;
 
-QxrdImageDataObjectCounter::QxrdImageDataObjectCounter(QxrdAllocatorInterface *alloc)
+QxrdImageDataObjectCounter::QxrdImageDataObjectCounter(QxrdAllocatorInterface *alloc, int typ)
   : m_Allocator(alloc),
-    m_Allocated(0)
+    m_Allocated(0),
+    m_Type(typ)
 {
   s_ImageDataObjectCounter.fetchAndAddOrdered(1);
 }
@@ -13,7 +14,7 @@ QxrdImageDataObjectCounter::QxrdImageDataObjectCounter(QxrdAllocatorInterface *a
 QxrdImageDataObjectCounter::~QxrdImageDataObjectCounter()
 {
   if (m_Allocator) {
-    m_Allocator->deallocate(m_Allocated);
+    m_Allocator->deallocate(m_Type, m_Allocated);
   }
 
   s_ImageDataObjectCounter.fetchAndAddOrdered(-1);
@@ -26,7 +27,7 @@ int QxrdImageDataObjectCounter::value()
 
 void QxrdImageDataObjectCounter::allocate(int sz, int width, int height)
 {
-  m_Allocator->allocate(sz, width, height);
+  m_Allocator->allocate(m_Type, sz, width, height);
   m_Allocated += sz*width*height;
 }
 

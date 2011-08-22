@@ -9,7 +9,7 @@ class QxrdIntegratedData : public QObject
   Q_OBJECT
 
 public:
-  explicit QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDoubleImageDataPtr data, int maxSize, QObject *parent = 0);
+  explicit QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDoubleImageDataPtr data, int typ, int maxSize, QObject *parent = 0);
   ~QxrdIntegratedData();
 
   void resize(int n);

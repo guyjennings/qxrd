@@ -12,6 +12,7 @@
 #include "qxrdintegrateddata.h"
 #include "qxrdintegrateddataqueue.h"
 #include "qxrdimagequeue.h"
+#include "qxrdallocatorinterface.h"
 
 class QxrdAllocator : public QxrdAllocatorInterface
 {
@@ -53,6 +54,9 @@ public:
 
   void changedSizeMB(int newMB);
 
+public slots:
+  void report();
+
 private slots:
   void allocatorHeartbeat();
 
@@ -64,10 +68,10 @@ private:
   static void integratedDeleter(QxrdIntegratedData *integ);
   int waitTillAvailable(AllocationStrategy strat, int sizeMB);
 
-  void allocate(int sz, int width, int height);
-  void allocate(quint64 amt);
-  void deallocate(int sz, int width, int height);
-  void deallocate(quint64 amt);
+  void allocate(int typ, int sz, int width, int height);
+  void allocate(int typ, quint64 amt);
+  void deallocate(int typ, int sz, int width, int height);
+  void deallocate(int typ, quint64 amt);
 
 private:
   QMutex                m_Mutex;
@@ -88,6 +92,21 @@ private:
 
   Q_PROPERTY(int     queuedDelete      READ get_QueuedDelete WRITE set_QueuedDelete STORED false)
   QCEP_INTEGER_PROPERTY(QueuedDelete)
+
+  Q_PROPERTY(int     nAllocatedInt16   READ get_NAllocatedInt16 WRITE set_NAllocatedInt16 STORED false)
+  QCEP_INTEGER_PROPERTY(NAllocatedInt16)
+
+  Q_PROPERTY(int     nAllocatedInt32   READ get_NAllocatedInt32 WRITE set_NAllocatedInt32 STORED false)
+  QCEP_INTEGER_PROPERTY(NAllocatedInt32)
+
+  Q_PROPERTY(int     nAllocatedDouble   READ get_NAllocatedDouble WRITE set_NAllocatedDouble STORED false)
+  QCEP_INTEGER_PROPERTY(NAllocatedDouble)
+
+  Q_PROPERTY(int     nAllocatedMask   READ get_NAllocatedMask WRITE set_NAllocatedMask STORED false)
+  QCEP_INTEGER_PROPERTY(NAllocatedMask)
+
+  Q_PROPERTY(int     nAllocatedIntegrated   READ get_NAllocatedIntegrated WRITE set_NAllocatedIntegrated STORED false)
+  QCEP_INTEGER_PROPERTY(NAllocatedIntegrated)
 };
 
 #endif

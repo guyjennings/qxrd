@@ -81,7 +81,10 @@ void QxrdGenerateTestImage::appendRing(double tth, double intensity, double widt
 
 void QxrdGenerateTestImage::generateImage()
 {
-  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(m_Allocator, get_NCols(), get_NRows()));
+  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(m_Allocator,
+                                                                              QxrdAllocatorInterface::AllocateDouble,
+                                                                              get_NCols(),
+                                                                              get_NRows()));
 
   img->clear();
 
@@ -142,7 +145,10 @@ void QxrdGenerateTestImage::generateImage()
 
 void QxrdGenerateTestImage::generateTTHImage()
 {
-  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(m_Allocator, get_NCols(), get_NRows()));
+  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(m_Allocator,
+                                                                              QxrdAllocatorInterface::AllocateDouble,
+                                                                              get_NCols(),
+                                                                              get_NRows()));
 
   img->clear();
 
@@ -182,7 +188,10 @@ void QxrdGenerateTestImage::generateTTHImage()
 
 void QxrdGenerateTestImage::generateChiImage()
 {
-  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(m_Allocator, get_NCols(), get_NRows()));
+  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(m_Allocator,
+                                                                              QxrdAllocatorInterface::AllocateDouble,
+                                                                              get_NCols(),
+                                                                              get_NRows()));
 
   img->clear();
 

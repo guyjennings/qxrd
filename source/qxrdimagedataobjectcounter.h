@@ -7,7 +7,7 @@ class QxrdAllocatorInterface;
 
 class QxrdImageDataObjectCounter {
 public:
-  QxrdImageDataObjectCounter(QxrdAllocatorInterface *alloc);
+  QxrdImageDataObjectCounter(QxrdAllocatorInterface *alloc, int typ);
   ~QxrdImageDataObjectCounter();
 
   int value();
@@ -18,6 +18,7 @@ public:
 private:
   QxrdAllocatorInterface *m_Allocator;
   quint64                 m_Allocated;
+  int                     m_Type;
 };
 
 #endif // QXRDIMAGEDATAOBJECTCOUNTER_H

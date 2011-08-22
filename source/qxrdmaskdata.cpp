@@ -1,9 +1,9 @@
 #include "qxrdmaskdata.h"
 #include "qxrdallocator.h"
 
-QxrdMaskData::QxrdMaskData(QxrdAllocatorInterface *allocator, int width, int height, int def)
-  : QcepImageData<short>(/*allocator, */width, height, def),
-    m_ObjectCounter(allocator)
+QxrdMaskData::QxrdMaskData(QxrdAllocatorInterface *allocator, int typ, int width, int height, int def)
+  : QcepImageData<short>(width, height, def),
+    m_ObjectCounter(allocator, typ)
 {
   m_ObjectCounter.allocate(sizeof(short), width, height);
 }

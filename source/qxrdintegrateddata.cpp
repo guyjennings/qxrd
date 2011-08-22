@@ -1,8 +1,8 @@
 #include "qxrdintegrateddata.h"
 
-QxrdIntegratedData::QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDoubleImageDataPtr image, int maxSize, QObject *parent) :
+QxrdIntegratedData::QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDoubleImageDataPtr image, int typ, int maxSize, QObject *parent) :
   QObject(parent),
-  m_ObjectCounter(alloc),
+  m_ObjectCounter(alloc, typ),
   m_Image(image),
   m_MaxSize(maxSize),
   m_Size(0),

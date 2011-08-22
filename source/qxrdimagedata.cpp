@@ -3,9 +3,9 @@
 #include "qxrdapplication.h"
 
 template <typename T>
-QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, int width, int height, T def)
+QxrdImageData<T>::QxrdImageData(QxrdAllocatorInterface *allocator, int typ, int width, int height, T def)
   : QcepImageData<T>(width, height, def),
-    m_ObjectCounter(allocator),
+    m_ObjectCounter(allocator, typ),
     m_Mask(NULL),
     m_Overflow(NULL)
 {
