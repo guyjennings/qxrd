@@ -10,7 +10,8 @@ QxrdAllocator::QxrdAllocator
     m_AllocatedMemoryMB(0),
     m_Max(this, "max", 800),
     m_Reserve(this,"reserve",100),
-    m_Allocated(this, "allocated", 0)
+    m_Allocated(this, "allocated", 0),
+    m_QueuedDelete(this, "queuedDelete", 0)
 {
   if (qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage(tr("allocator %1 constructed").HEXARG(this));
@@ -225,54 +226,96 @@ void QxrdAllocator::deallocate(quint64 amt)
   m_AllocatedMemoryMB.fetchAndStoreOrdered(m_AllocatedMemory/MegaBytes);
 }
 
+static int g_QueuedDelete = 0;
+
 void QxrdAllocator::maskDeleter(QxrdMaskData *mask)
 {
 //    delete mask;
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
-    g_Application->printMessage(tr("QxrdAllocator::maskDeleter deleteLater %1 [%2]").HEXARG(mask).arg(mask->allocatedMemoryMB()));
-  }
+  if (g_QueuedDelete) {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      g_Application->printMessage(tr("QxrdAllocator::maskDeleter deleteLater %1 [%2]").HEXARG(mask).arg(mask->allocatedMemoryMB()));
+    }
 
-  mask->deleteLater();
+    mask->deleteLater();
+  } else {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      g_Application->printMessage(tr("QxrdAllocator::maskDeleter delete %1 [%2]").HEXARG(mask).arg(mask->allocatedMemoryMB()));
+    }
+
+    delete mask;
+  }
 }
 
 void QxrdAllocator::int16Deleter(QxrdInt16ImageData *img)
 {
 //    delete img;
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
-    g_Application->printMessage(tr("QxrdAllocator::int16Deleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-  }
+  if (g_QueuedDelete) {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      g_Application->printMessage(tr("QxrdAllocator::int16Deleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
+    }
 
-  img->deleteLater();
+    img->deleteLater();
+  } else {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      g_Application->printMessage(tr("QxrdAllocator::int16Deleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
+    }
+
+    delete img;
+  }
 }
 
 void QxrdAllocator::int32Deleter(QxrdInt32ImageData *img)
 {
 //    delete img;
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
-    g_Application->printMessage(tr("QxrdAllocator::int32Deleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-  }
+  if (g_QueuedDelete) {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      g_Application->printMessage(tr("QxrdAllocator::int32Deleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
+    }
 
-  img->deleteLater();
+    img->deleteLater();
+  } else {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      g_Application->printMessage(tr("QxrdAllocator::int32Deleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
+    }
+
+    delete img;
+  }
 }
 
 void QxrdAllocator::doubleDeleter(QxrdDoubleImageData *img)
 {
 //    delete img;
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
-    g_Application->printMessage(tr("QxrdAllocator::doubleDeleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-  }
+  if (g_QueuedDelete) {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      g_Application->printMessage(tr("QxrdAllocator::doubleDeleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
+    }
 
-  img->deleteLater();
+    img->deleteLater();
+  } else {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      g_Application->printMessage(tr("QxrdAllocator::doubleDeleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
+    }
+
+    delete img;
+  }
 }
 
 void QxrdAllocator::integratedDeleter(QxrdIntegratedData *img)
 {
 //    delete img;
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
-    g_Application->printMessage(tr("QxrdAllocator::integratedDeleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-  }
+  if (g_QueuedDelete) {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      g_Application->printMessage(tr("QxrdAllocator::integratedDeleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
+    }
 
-  img->deleteLater();
+    img->deleteLater();
+  } else {
+    if (qcepDebug(DEBUG_ALLOCATOR)) {
+      g_Application->printMessage(tr("QxrdAllocator::integratedDeleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
+    }
+
+    delete img;
+  }
 }
 
 int QxrdAllocator::int16SizeMB(int width, int height)
@@ -302,6 +345,8 @@ int QxrdAllocator::integratedSizeMB(int nrows)
 
 void QxrdAllocator::allocatorHeartbeat()
 {
+  g_QueuedDelete = get_QueuedDelete();
+
   set_Allocated(m_AllocatedMemoryMB);
 }
 

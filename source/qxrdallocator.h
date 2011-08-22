@@ -85,6 +85,9 @@ private:
 
   Q_PROPERTY(int     allocated        READ get_Allocated   WRITE set_Allocated STORED false)
   QCEP_INTEGER_PROPERTY(Allocated)
+
+  Q_PROPERTY(int     queuedDelete      READ get_QueuedDelete WRITE set_QueuedDelete STORED false)
+  QCEP_INTEGER_PROPERTY(QueuedDelete)
 };
 
 #endif
