@@ -21,7 +21,8 @@ enum {
   DEBUG_THREADS     = 0x00004000,
   DEBUG_DELAY_ACQ   = 0x00008000,
   DEBUG_BROWSER     = 0x00010000,
-  DEBUG_SERVER      = 0x00020000
+  DEBUG_SERVER      = 0x00020000,
+  DEBUG_NOMESSAGES  = 0x00040000
 };
 
 extern const char* gDebugStrings[];

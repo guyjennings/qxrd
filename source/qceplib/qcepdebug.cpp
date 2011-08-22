@@ -20,6 +20,7 @@ const char* gDebugStrings[] = {
   "Delay Acquisition Startup",
   "File Browser Operations",
   "Server Commands",
+  "Disable Messages",
   NULL
 };
 
