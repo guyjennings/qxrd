@@ -446,7 +446,10 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_Plot, SIGNAL(selectHistogram(QwtDoubleRect)),
           m_HistogramDialog, SLOT(histogramSelectionChanged(QwtDoubleRect)));
 
-  m_Messages -> document() -> setMaximumBlockCount(20000);
+  m_Messages -> document() -> setMaximumBlockCount(m_Application->get_MessageWindowLines());
+
+  connect(m_Application->prop_MessageWindowLines(), SIGNAL(changedValue(int)), this, SLOT(onMessageWindowLinesChanged(int)));
+  connect(m_Application->prop_UpdateIntervalMsec(), SIGNAL(changedValue(int)), this, SLOT(onUpdateIntervalMsecChanged(int)));
 
 #ifdef QT_NO_DEBUG
   m_ActionRefineCenterTilt->setEnabled(false);
@@ -456,7 +459,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   //  m_ImageDisplay = QxrdImageDisplayWidget::insertNew(app, m_XRDTabWidget);
   //#endif
 
-  m_UpdateTimer.start(100);
+  m_UpdateTimer.start(m_Application->get_UpdateIntervalMsec());
 }
 
 QxrdWindow::~QxrdWindow()
@@ -1189,4 +1192,14 @@ void QxrdWindow::testWidget()
 
     contents->show();
   }
+}
+
+void QxrdWindow::onMessageWindowLinesChanged(int newVal)
+{
+  m_Messages -> document() -> setMaximumBlockCount(newVal);
+}
+
+void QxrdWindow::onUpdateIntervalMsecChanged(int newVal)
+{
+  m_UpdateTimer.setInterval(newVal);
 }

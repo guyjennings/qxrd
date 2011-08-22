@@ -98,6 +98,8 @@ private slots:
   void newMask();
   void allocatedMemoryChanged();
   void integrationXUnitsChanged(int newXUnits);
+  void onMessageWindowLinesChanged(int newVal);
+  void onUpdateIntervalMsecChanged(int newVal);
 
 public:
   void readSettings(QxrdSettings &settings, QString section);
