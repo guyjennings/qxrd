@@ -21,6 +21,7 @@ const char* gDebugStrings[] = {
   "File Browser Operations",
   "Server Commands",
   "Disable Messages",
+  "Acquisition Timing Messages",
   NULL
 };
 

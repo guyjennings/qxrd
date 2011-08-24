@@ -421,6 +421,9 @@ int QxrdAcquisition::cancelling()
 
 void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 {
+  QTime acqTimer;
+  acqTimer.start();
+
   stopIdling();
 
   QString fileBase = parms.fileBase();
@@ -488,11 +491,19 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
       res[p][0] -> set_FileName(fn);
     }
 
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      g_Application->printMessage(tr("Clearing took %1 msec").arg(acqTimer.restart()));
+    }
+
     if (i != 0) {
       for (int k=0; k<skipBetween; k++) {
         if (cancelling()) goto cancel;
         g_Application->statusMessage(tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
         acquireFrame(exposure);
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          g_Application->printMessage(tr("Frame after %1 msec").arg(acqTimer.restart()));
+        }
       }
     }
 
@@ -510,6 +521,16 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
           indicateDroppedFrame(0);
         }
 
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          g_Application->printMessage(tr("accumulateAcquiredImage %1 msec idx:%2 post:%3 sum: %4 ph:%5")
+                                       .arg(acqTimer.restart())
+                                       .arg(fileIndex)
+                                       .arg(i)
+                                       .arg(s)
+                                       .arg(p)
+                                       );
+        }
+
         if (cancelling()) goto saveCancel;
       }
     }
@@ -522,6 +543,15 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
         for (int p=0; p<nphases; p++) {
           processAcquiredImage(fileBase, fileIndex, p, nphases, false, res[p][i], ovf[p][i]);
 
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            g_Application->printMessage(tr("processAcquiredImage %1 msec idx:%2 pre:%3 ph:%4")
+                                         .arg(acqTimer.restart())
+                                         .arg(fileIndex)
+                                         .arg(i)
+                                         .arg(p)
+                                         );
+          }
+
           res[p].pop_back();
           ovf[p].pop_back();
         }
@@ -533,6 +563,16 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
       for (int p=0; p<nphases; p++) {
         processAcquiredImage(fileBase, fileIndex, p, nphases, true, res[p][0], ovf[p][0]);
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          g_Application->printMessage(tr("processAcquiredImage %1 msec idx:%2 pre:%3 ph:%4")
+                                       .arg(acqTimer.restart())
+                                       .arg(fileIndex)
+                                       .arg(i)
+                                       .arg(p)
+                                       );
+        }
+
       }
       fileIndex++;
       set_FileIndex(fileIndex);
@@ -663,6 +703,14 @@ void QxrdAcquisition::flushImageQueue()
 
 QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
 {
+  if (qcepDebug(DEBUG_ACQUIRE)) {
+    g_Application->printMessage(tr("acquireFrame(%1) : allocated %2 MB : %3 images available")
+                                .arg(exposure)
+                                .arg(m_Allocator->allocatedMemoryMB())
+                                .arg(m_NAcquiredImages.available())
+                                );
+  }
+
   m_NAcquiredImages.acquire(1);
 
   QxrdInt16ImageDataPtr res = m_AcquiredImages.dequeue();
@@ -672,6 +720,10 @@ QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
 
 QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrameIfAvailable(double exposure)
 {
+  if (qcepDebug(DEBUG_ACQUIRE)) {
+    g_Application->printMessage(tr("acquireFrameIfAvailable(%1) : allocated %2 MB").arg(exposure).arg(m_Allocator->allocatedMemoryMB()));
+  }
+
   QxrdInt16ImageDataPtr res;
 
   while (m_NAcquiredImages.available() >= 1) {
