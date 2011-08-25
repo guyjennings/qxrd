@@ -80,6 +80,27 @@ public:
     int     m_SkipBefore;
   };
 
+  class QxrdProcessArgs {
+  public:
+    QxrdProcessArgs(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
+      : m_FilePattern(filePattern),
+        m_FileIndex(fileIndex),
+        m_Phase(phase),
+        m_NPhases(nPhases),
+        m_Trig(trig),
+        m_Image(image),
+        m_Overflow(overflow) {}
+
+  public:
+    QString               m_FilePattern;
+    int                   m_FileIndex;
+    int                   m_Phase;
+    int                   m_NPhases;
+    bool                  m_Trig;
+    QxrdInt32ImageDataPtr m_Image;
+    QxrdMaskDataPtr       m_Overflow;
+  };
+
 public slots:
   virtual void initialize();
 
@@ -154,6 +175,7 @@ private:
   template <typename T>
   void accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
 
+  void processImage(const QxrdProcessArgs &args);
   void processImage        (QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
   void processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
   void processDarkImage    (QString filePattern, int fileIndex,                                    QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);

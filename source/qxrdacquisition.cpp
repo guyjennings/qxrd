@@ -295,7 +295,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
 
     if (qcepDebug(DEBUG_ACQUIRE)) {
       g_Application->printMessage(tr("Fn: %1, Fi: %2, Phs: %3")
-                        .arg(fileName).arg(get_FileIndex()).arg(phase));
+                        .arg(fileName).arg(fileIndex).arg(phase));
     }
 
     set_FileBase(fileBase);
@@ -345,11 +345,23 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
   }
 }
 
+void QxrdAcquisition::processImage(const QxrdProcessArgs &args)
+{
+  g_Application->printMessage(tr("QxrdAcquisition::processImage %1 %2 start").arg(args.m_FilePattern).arg(args.m_FileIndex));
+
+  processImage(args.m_FilePattern, args.m_FileIndex, args.m_Phase, args.m_NPhases, args.m_Trig, args.m_Image, args.m_Overflow);
+
+  g_Application->printMessage(tr("QxrdAcquisition::processImage %1 %2 end").arg(args.m_FilePattern).arg(args.m_FileIndex));
+}
+
 void QxrdAcquisition::processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
 //  printf("processAcquiredImage(""%s"",%d,%d,img,ovf)\n", qPrintable(filePattern), fileIndex, phase);
 
-  processImage(filePattern, fileIndex, phase, nPhases, trig, image, overflow);
+//  processImage(filePattern, fileIndex, phase, nPhases, trig, image, overflow);
+
+  QtConcurrent::run(this, &QxrdAcquisition::processImage,
+                    QxrdProcessArgs(filePattern, fileIndex, phase, nPhases, trig, image, overflow));
 }
 
 void QxrdAcquisition::processDarkImage(QString filePattern, int fileIndex, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
@@ -479,8 +491,12 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     for (int p=0; p<nphases; p++) {
       QString fb, fn;
 
-      res[p][0] -> clear();
-      ovf[p][0] -> clear();
+      res[p][0] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve,
+                                             get_NCols(), get_NRows());
+      ovf[p][0] = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,
+                                       get_NCols(), get_NRows(), 0);
+//      res[p][0] -> clear();
+//      ovf[p][0] -> clear();
 
       res[p][0] -> set_SummedExposures(0);
       ovf[p][0] -> set_SummedExposures(0);
@@ -539,17 +555,18 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     if (get_Triggered()) {
       int nPre = qMin(preTrigger, nPreTriggered);
 
-      for (int i=nPre; i >= 1; i--) {
+      for (int ii=nPre; ii >= 1; ii--) {
         for (int p=0; p<nphases; p++) {
-          processAcquiredImage(fileBase, fileIndex, p, nphases, false, res[p][i], ovf[p][i]);
+          processAcquiredImage(fileBase, fileIndex, p, nphases, false, res[p][ii], ovf[p][ii]);
 
           if (qcepDebug(DEBUG_ACQUIRETIME)) {
-            g_Application->printMessage(tr("processAcquiredImage %1 msec idx:%2 pre:%3 ph:%4")
-                                         .arg(acqTimer.restart())
-                                         .arg(fileIndex)
-                                         .arg(i)
-                                         .arg(p)
-                                         );
+            g_Application->printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
+                                        .arg(__LINE__)
+                                        .arg(acqTimer.restart())
+                                        .arg(fileIndex)
+                                        .arg(ii)
+                                        .arg(p)
+                                        );
           }
 
           res[p].pop_back();
@@ -565,12 +582,13 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
         processAcquiredImage(fileBase, fileIndex, p, nphases, true, res[p][0], ovf[p][0]);
 
         if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          g_Application->printMessage(tr("processAcquiredImage %1 msec idx:%2 pre:%3 ph:%4")
-                                       .arg(acqTimer.restart())
-                                       .arg(fileIndex)
-                                       .arg(i)
-                                       .arg(p)
-                                       );
+          g_Application->printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
+                                      .arg(__LINE__)
+                                      .arg(acqTimer.restart())
+                                      .arg(fileIndex)
+                                      .arg(i)
+                                      .arg(p)
+                                      );
         }
 
       }
