@@ -491,20 +491,26 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     for (int p=0; p<nphases; p++) {
       QString fb, fn;
 
-      res[p][0] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve,
-                                             get_NCols(), get_NRows());
-      ovf[p][0] = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,
-                                       get_NCols(), get_NRows(), 0);
+      QxrdInt32ImageDataPtr nres = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve,
+                                                              get_NCols(), get_NRows());
+      QxrdMaskDataPtr novf = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,
+                                                   get_NCols(), get_NRows(), 0);
+      res[p][0] = nres;
+      ovf[p][0] = novf;
+
+      if (nres == NULL || novf == NULL) {
+        indicateDroppedFrame(0);
+      }
 //      res[p][0] -> clear();
 //      ovf[p][0] -> clear();
 
-      res[p][0] -> set_SummedExposures(0);
-      ovf[p][0] -> set_SummedExposures(0);
+      if (nres) res[p][0] -> set_SummedExposures(0);
+      if (novf) ovf[p][0] -> set_SummedExposures(0);
 
       getFileBaseAndName(fileBase, fileIndex+i, p, nphases, fb, fn);
 
-      res[p][0] -> set_FileBase(fb);
-      res[p][0] -> set_FileName(fn);
+      if (nres) res[p][0] -> set_FileBase(fb);
+      if (nres) res[p][0] -> set_FileName(fn);
     }
 
     if (qcepDebug(DEBUG_ACQUIRETIME)) {
@@ -527,11 +533,13 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
     for (int s=0; s<nsummed; s++) {
       for (int p=0; p<nphases; p++) {
-        emit acquiredFrame(res[p][0]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, postTrigger);
+        if (res[p][0]) {
+          emit acquiredFrame(res[p][0]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, postTrigger);
+        }
 
         QxrdInt16ImageDataPtr img = acquireFrame(exposure);
 
-        if (img) {
+        if (img && res[p][0] && ovf[p][0]) {
           accumulateAcquiredImage(img, res[p][0], ovf[p][0]);
         } else if (!cancelling()){
           indicateDroppedFrame(0);
@@ -579,7 +587,9 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
       nPreTriggered = 0;
 
       for (int p=0; p<nphases; p++) {
-        processAcquiredImage(fileBase, fileIndex, p, nphases, true, res[p][0], ovf[p][0]);
+        if (res[p][0] && ovf[p][0]) {
+          processAcquiredImage(fileBase, fileIndex, p, nphases, true, res[p][0], ovf[p][0]);
+        }
 
         if (qcepDebug(DEBUG_ACQUIRETIME)) {
           g_Application->printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
