@@ -43,7 +43,7 @@ tarball.commands += \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdnidaqplugin && \
 
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/*.{pro,pri,spec,desktop} -t $${TARGET}-$${VERSION} &&
+        $(COPY_FILE)  $${PWD}/*.{pro,pri,spec,desktop,markdown} -t $${TARGET}-$${VERSION} &&
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/images/*.{png,ico,icns} \
                       -t $${TARGET}-$${VERSION}/source/images &&
