@@ -254,14 +254,17 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
 
 void QxrdAcquisition::getFileBaseAndName(QString filePattern, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName)
 {
+  int width = get_FileIndexWidth();
+
   if (nphases == 0) {
-    fileBase = filePattern+tr("-%1.dark.tif").arg(fileIndex,5,10,QChar('0'));
+    fileBase = filePattern+tr("-%1.dark.tif").arg(fileIndex,width,10,QChar('0'));
     fileName = QDir(m_DataProcessor -> darkOutputDirectory()).filePath(fileBase);
   } else {
     if (nphases > 1) {
-      fileBase = filePattern+tr("-%1-%2.tif").arg(fileIndex,5,10,QChar('0')).arg(phase,3,10,QChar('0'));
+      int phswidth = get_FilePhaseWidth();
+      fileBase = filePattern+tr("-%1-%2.tif").arg(fileIndex,width,10,QChar('0')).arg(phase,phswidth,10,QChar('0'));
     } else {
-      fileBase = filePattern+tr("-%1.tif").arg(fileIndex,5,10,QChar('0'));
+      fileBase = filePattern+tr("-%1.tif").arg(fileIndex,width,10,QChar('0'));
     }
     fileName = QDir(m_DataProcessor -> rawOutputDirectory()).filePath(fileBase);
   }

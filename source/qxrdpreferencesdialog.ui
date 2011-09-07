@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>522</width>
-    <height>417</height>
+    <width>525</width>
+    <height>490</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -222,7 +222,7 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="1">
+       <item row="13" column="1">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -302,6 +302,57 @@
          </property>
          <property name="checkable">
           <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0" colspan="4">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Width of file index field in saved file names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0" colspan="4">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Width of 'phase' field in saved file names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="4">
+        <widget class="QSpinBox" name="m_FilePhaseWidth">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="4">
+        <widget class="QSpinBox" name="m_FileIndexWidth">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0" colspan="4">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Width of 'overflow' field in saved file names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="4">
+        <widget class="QSpinBox" name="m_FileOverflowWidth">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
          </property>
         </widget>
        </item>

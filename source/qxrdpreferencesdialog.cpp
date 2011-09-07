@@ -81,6 +81,10 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   m_MessageWindowLines -> setValue(app->get_MessageWindowLines());
   m_UpdateIntervalMsec -> setValue(app->get_UpdateIntervalMsec());
 
+  m_FileIndexWidth -> setValue(acq->get_FileIndexWidth());
+  m_FilePhaseWidth -> setValue(acq->get_FilePhaseWidth());
+  m_FileOverflowWidth -> setValue(acq->get_FileOverflowWidth());
+
   setupDebugWidgets(debugLevel);
 }
 
@@ -235,6 +239,10 @@ void QxrdPreferencesDialog::accept()
 
   app -> set_MessageWindowLines(m_MessageWindowLines -> value());
   app -> set_UpdateIntervalMsec(m_UpdateIntervalMsec -> value());
+
+  acq -> set_FileIndexWidth(m_FileIndexWidth -> value());
+  acq -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
+  acq -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
 
   QDialog::accept();
 }

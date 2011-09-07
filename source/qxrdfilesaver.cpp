@@ -37,6 +37,15 @@ QxrdDataProcessor *QxrdFileSaver::processor() const
   return m_Processor;
 }
 
+QxrdAcquisition *QxrdFileSaver::acquisition() const
+{
+  if (m_Acquisition == NULL) {
+    g_Application->printMessage("acquisition == NULL in QxrdFileSaver::acquisition\n");
+  }
+
+  return m_Acquisition;
+}
+
 void QxrdFileSaver::mkPath(QString filePath)
 {
   QFileInfo f(filePath);
@@ -58,8 +67,10 @@ QString QxrdFileSaver::uniqueFileName(QString name)
     QString base = f.baseName();
     QString suff = f.completeSuffix();
 
+    int width = acquisition()->get_FileOverflowWidth();
+
     for (int i=1; ; i++) {
-      QString newname = dir.filePath(base+QString().sprintf("-%05d.",i)+suff);
+      QString newname = dir.filePath(base+QString().sprintf("-%0*d.",width,i)+suff);
       QFileInfo f(newname);
 
       if (!f.exists()) {

@@ -76,6 +76,15 @@ public:
   Q_PROPERTY(QString filePattern     READ get_FilePattern WRITE set_FilePattern)
   QCEP_STRING_PROPERTY(FilePattern)
 
+  Q_PROPERTY(int    fileIndexWidth        READ get_FileIndexWidth WRITE set_FileIndexWidth)
+  QCEP_INTEGER_PROPERTY(FileIndexWidth)
+
+  Q_PROPERTY(int    filePhaseWidth        READ get_FilePhaseWidth WRITE set_FilePhaseWidth)
+  QCEP_INTEGER_PROPERTY(FilePhaseWidth)
+
+  Q_PROPERTY(int    fileOverflowWidth        READ get_FileOverflowWidth WRITE set_FileOverflowWidth)
+  QCEP_INTEGER_PROPERTY(FileOverflowWidth)
+
   Q_PROPERTY(int     darkSummedExposures READ get_DarkSummedExposures WRITE set_DarkSummedExposures)
   QCEP_INTEGER_PROPERTY(DarkSummedExposures)
 

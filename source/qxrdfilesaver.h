@@ -52,6 +52,7 @@ private:
   void mkPath(QString filePath);
   QString uniqueFileName(QString name);
   QxrdDataProcessor *processor() const;
+  QxrdAcquisition *acquisition() const;
   void saveOverflowData(QString name, QxrdMaskDataPtr overflow);
 
 private:
