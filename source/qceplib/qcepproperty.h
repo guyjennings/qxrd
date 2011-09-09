@@ -26,8 +26,6 @@ public:
   QcepProperty(QObject *parent, const char *name, QVariant value);
   ~QcepProperty();
 
-//  virtual QVariant variant() const = 0;
-
   QString name() const;
 
   int index();
@@ -46,15 +44,6 @@ public:
   static void dumpMetaData(const QMetaObject *meta);
   static int  getChangeCount();
 
-//  virtual void readSettings(QSettings &settings, QString section);
-//  virtual void writeSettings(QSettings &settings, QString section);
-
-//public slots:
-//  void changeVariant(QVariant val);
-
-//public:
-//  template <typename T> void changeVariant(T val);
-
 protected:
   mutable QMutex           m_Mutex;
   int                      m_NQueuedUpdates;
@@ -65,7 +54,6 @@ private:
   int                      m_IsStored;
   int                      m_WasLoaded;
   const char              *m_Name;
-//  QVariant                 m_Variant;
   QAtomicInt               m_Index;
 };
 
@@ -77,7 +65,6 @@ public:
 
   double value() const;
   double defaultValue() const;
-//  QVariant variant() const;
 
   void linkTo(QComboBox *comboBox);
   void linkTo(QDoubleSpinBox *spinBox);
@@ -108,14 +95,12 @@ public:
 
   int value() const;
   int defaultValue() const;
-//  QVariant variant() const;
 
   void linkTo(QSpinBox *spinBox);
   void linkTo(QComboBox *comboBox);
   void linkTo(QLabel *label);
 
 public slots:
-//  void changeValue(int val);
   void setValue(int val, int index);
   void setValue(int val);
   void incValue(int step);
@@ -161,8 +146,8 @@ public:
   void connect();
 
 public slots:
-  void setValue(int value, int index);
-  void setValue(int value);
+  void setCurrentIndex(int value, int index);
+  void setCurrentIndex(int value);
 
 signals:
   void currentIndexChanged(int value, int index);
@@ -180,7 +165,6 @@ public:
 
   bool value() const;
   bool defaultValue() const;
-//  QVariant variant() const;
 
   void linkTo(QAbstractButton *button);
 
@@ -206,7 +190,6 @@ public:
 
   QString value() const;
   QString defaultValue() const;
-//  QVariant variant() const;
 
   void linkTo(QComboBox *comboBox);
   void linkTo(QLineEdit *lineEdit);
@@ -234,7 +217,6 @@ public:
 
   QDateTime value() const;
   QDateTime defaultValue() const;
-//  QVariant variant() const;
 
 public slots:
   void changeValue(QDateTime val);
@@ -259,11 +241,9 @@ public:
 
   QcepDoubleList value() const;
   QcepDoubleList defaultValue() const;
-//  QVariant variant() const;
 
 public slots:
   void changeValue(QcepDoubleList val);
-//  void changeValue(QString val);
   void setValue(QcepDoubleList val);
   void setDefaultValue(QcepDoubleList val);
   void resetValue();
@@ -272,7 +252,6 @@ public slots:
 
 signals:
   void changedValue(QcepDoubleList val);
-//  void changedValue(QString val);
   void changedDefault(QcepDoubleList val);
 
 private:

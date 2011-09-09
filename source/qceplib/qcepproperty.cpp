@@ -55,13 +55,6 @@ void QcepProperty::setWasLoaded(int loaded)
   m_WasLoaded = loaded;
 }
 
-//QVariant QcepProperty::variant() const
-//{
-//  QMutexLocker lock(&m_Mutex);
-
-//  return m_Variant;
-//}
-
 QString QcepProperty::name() const
 {
   QMutexLocker lock(&m_Mutex);
@@ -88,44 +81,6 @@ int QcepProperty::debug() const
 {
   return m_Debug;
 }
-
-//void QcepProperty::setVariant(QVariant val)
-//{
-//  QMutexLocker lock(&m_Mutex);
-
-//  if (qcepDebug(DEBUG_PROPERTIES)) {
-//    g_Application->printMessage(
-//        tr("%1: QcepProperty::changeVariant <- %2)").arg(name()).arg(val.toString()));
-//  }
-
-//  m_Variant = val;
-
-//  if (m_IsStored && m_WasLoaded) {
-//    if (qcepDebug(DEBUG_PREFS)) {
-//      g_Application->printMessage(
-//          tr("%1: QcepProperty::changeVariant is stored\n").arg(name()));
-//    }
-
-//    m_ChangeCount.fetchAndAddOrdered(1);
-//  }
-//}
-
-//template <typename T>
-//void QcepProperty::setVariant(T val)
-//{
-//  QMutexLocker lock(&m_Mutex);
-
-//  m_Variant.setValue(val);
-
-//  if (m_IsStored && m_WasLoaded) {
-//    if (qcepDebug(DEBUG_PREFS)) {
-//      g_Application->printMessage(
-//          tr("%1: QcepProperty::changeVariant is stored\n").arg(name()));
-//    }
-
-//    m_ChangeCount.fetchAndAddOrdered(1);
-//  }
-//}
 
 QAtomicInt QcepProperty::m_ChangeCount = 0;
 
@@ -156,20 +111,6 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaTypeStreamOperators< QcepStringList >("QcepStringList");
 }
 
-//int QcepProperty::debug() const
-//{
-//  QMutexLocker lock(&m_Mutex);
-//
-//  return m_Debug;
-//}
-//
-//void QcepProperty::setDebug(int dbg)
-//{
-//  QMutexLocker lock(&m_Mutex);
-//
-//  m_Debug = dbg;
-//}
-//
 void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings &settings)
 {
   int count = meta->propertyCount();
@@ -230,9 +171,7 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
         if (property) {
           property->setWasLoaded(true);
         }
-//
-//        property -> readSettings(settings, groupName);
-//
+
         object -> setProperty(qPrintable(key), settings.value(key));
       } else {
         if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
@@ -242,12 +181,6 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
         }
       }
     } else {
-//      object -> setProperty(qPrintable(key), settings->value(key));
-//      QMetaObject::invokeMethod(object, "setDynamicProperty", Qt::QueuedConnection, Q_ARG(QString, key), Q_ARG(QVariant, settings->value(key)));
-//
-//      printf("property %s of %s created dynamically\n",
-//             qPrintable(key),
-//             meta -> className());
       if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
         g_Application->printMessage(
             tr("property %1 of %2 does not exist")
@@ -294,11 +227,6 @@ double QcepDoubleProperty::value() const
 
   return m_Value;
 }
-
-//QVariant QcepDoubleProperty::variant() const
-//{
-//  return value();
-//}
 
 double QcepDoubleProperty::defaultValue() const
 {
@@ -458,11 +386,6 @@ int QcepIntProperty::value() const
 {
   return m_Value;
 }
-
-//QVariant QcepIntProperty::variant() const
-//{
-//  return value();
-//}
 
 int QcepIntProperty::defaultValue() const
 {
@@ -656,10 +579,10 @@ QcepIntPropertyComboBoxHelper::QcepIntPropertyComboBoxHelper(QComboBox *comboBox
 
 void QcepIntPropertyComboBoxHelper::connect()
 {
-  CONNECT_CHECK(QObject::connect(m_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setValue(int)), Qt::DirectConnection));
+  CONNECT_CHECK(QObject::connect(m_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentIndex(int)), Qt::DirectConnection));
 }
 
-void QcepIntPropertyComboBoxHelper::setValue(int value, int index)
+void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value, int index)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
     g_Application->printMessage(
@@ -682,7 +605,7 @@ void QcepIntPropertyComboBoxHelper::setValue(int value, int index)
   }
 }
 
-void QcepIntPropertyComboBoxHelper::setValue(int value)
+void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
     g_Application->printMessage(
@@ -706,11 +629,6 @@ bool QcepBoolProperty::value() const
 
   return m_Value;
 }
-
-//QVariant QcepBoolProperty::variant() const
-//{
-//  return value();
-//}
 
 bool QcepBoolProperty::defaultValue() const
 {
@@ -808,11 +726,6 @@ QString QcepStringProperty::value() const
 
   return m_Value;
 }
-
-//QVariant QcepStringProperty::variant() const
-//{
-//  return value();
-//}
 
 QString QcepStringProperty::defaultValue() const
 {
@@ -925,11 +838,6 @@ QDateTime QcepDateTimeProperty::value() const
   return m_Value;
 }
 
-//QVariant QcepDateTimeProperty::variant() const
-//{
-//  return value();
-//}
-
 QDateTime QcepDateTimeProperty::defaultValue() const
 {
   QMutexLocker lock(&m_Mutex);
@@ -1007,11 +915,6 @@ QcepDoubleList QcepDoubleListProperty::value() const
   return m_Value;
 }
 
-//QVariant QcepDoubleListProperty::variant() const
-//{
-//  return value();
-//}
-
 QcepDoubleList QcepDoubleListProperty::defaultValue() const
 {
   QMutexLocker lock(&m_Mutex);
@@ -1051,19 +954,6 @@ void QcepDoubleListProperty::appendValue(double val)
   setValue(list);
 }
 
-//void QcepDoubleListProperty::changeValue(QString val)
-//{
-//  if (qcepDebug(DEBUG_PROPERTIES)) {
-//    printf("QcepDoubleListProperty::changeValue [%s] = %s, %d\n", qPrintable(name()), qPrintable(val), m_NQueuedUpdates);
-//  }
-//
-//  if (m_NQueuedUpdates <= 1) {
-//    setValue(val.toDouble());
-//  }
-//
-//  m_NQueuedUpdates--;
-//}
-
 void QcepDoubleListProperty::setValue(QcepDoubleList val)
 {
   QMutexLocker lock(&m_Mutex);
@@ -1098,26 +988,6 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
   }
 }
 
-//void QcepDoubleListProperty::incValue(QcepDoubleList step)
-//{
-//  QMutexLocker lock(&m_Mutex);
-//
-//  if (qcepDebug(DEBUG_PROPERTIES)) {
-//    printf("%s: QcepDoubleListProperty::incValue <- %g, %d\n", qPrintable(name()), step, m_NQueuedUpdates);
-//  }
-//
-//  if (step) {
-//    changeVariant(m_Value+step);
-//
-//    m_Value += step;
-//
-//    m_NQueuedUpdates++;
-//
-//    emit changedValue(m_Value);
-//    emit changedValue(tr("%1").arg(m_Value));
-//  }
-//}
-
 void QcepDoubleListProperty::setDefaultValue(QcepDoubleList val)
 {
   QMutexLocker lock(&m_Mutex);
@@ -1140,44 +1010,3 @@ void QcepDoubleListProperty::resetValue()
 
   setValue(m_Default);
 }
-
-//void QcepDoubleListProperty::linkTo(QComboBox *comboBox)
-//{
-//  {
-//    QMutexLocker lock(&m_Mutex);
-//
-//    if (qcepDebug(DEBUG_PROPERTIES)) {
-//      printf("%s: QcepDoubleListProperty::linkTo(QComboBox *%p)\n", qPrintable(name()), comboBox);
-//    }
-//
-//    connect(this, SIGNAL(changedValue(QString)), comboBox, SLOT(setEditText(QString)));
-//    connect(comboBox,SIGNAL(editTextChanged(QString)), this, SLOT(changeValue(QString)));
-//  }
-//}
-
-//void QcepDoubleListProperty::linkTo(QDoubleSpinBox *spinBox)
-//{
-//  {
-//    QMutexLocker lock(&m_Mutex);
-//
-//    if (qcepDebug(DEBUG_PROPERTIES)) {
-//      printf("%s: QcepDoubleListProperty::linkTo(QDoubleSpinBox *%p)\n", qPrintable(name()), spinBox);
-//    }
-//
-//    spinBox -> setValue(value());
-//
-//    connect(this, SIGNAL(changedValue(QcepDoubleList)), spinBox, SLOT(setValue(QcepDoubleList)));
-//    connect(spinBox, SIGNAL(valueChanged(QcepDoubleList)), this, SLOT(changeValue(QcepDoubleList)));
-//  }
-//}
-
-//void QcepDoubleListProperty::linkTo(QLabel *label)
-//{
-//  {
-//    QMutexLocker lock(&m_Mutex);
-//
-//    label -> setText(tr("%1").arg(value()));
-//
-//    connect(this, SIGNAL(changedValue(QString)), label, SLOT(setText(QString)));
-//  }
-//}
