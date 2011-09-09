@@ -15,12 +15,10 @@
 QcepProperty::QcepProperty(QObject *parent, const char *name, QVariant value)
   : QObject(),
     m_Mutex(QMutex::Recursive),
-    m_NQueuedUpdates(0),
     m_IsStored(false),
     m_WasLoaded(false),
-    m_Parent(parent),
-    m_Name(name),
-    m_Variant(value)
+    m_Name(name)/*,
+    m_Variant(value)*/
 {
   setObjectName(name);
 
@@ -57,12 +55,12 @@ void QcepProperty::setWasLoaded(int loaded)
   m_WasLoaded = loaded;
 }
 
-QVariant QcepProperty::variant() const
-{
-  QMutexLocker lock(&m_Mutex);
+//QVariant QcepProperty::variant() const
+//{
+//  QMutexLocker lock(&m_Mutex);
 
-  return m_Variant;
-}
+//  return m_Variant;
+//}
 
 QString QcepProperty::name() const
 {
@@ -71,43 +69,63 @@ QString QcepProperty::name() const
   return m_Name;
 }
 
-void QcepProperty::changeVariant(QVariant val)
+int QcepProperty::index()
 {
-  QMutexLocker lock(&m_Mutex);
-
-  if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-        tr("%1: QcepProperty::changeVariant <- %2)").arg(name()).arg(val.toString()));
-  }
-
-  m_Variant = val;
-
-  if (m_IsStored && m_WasLoaded) {
-    if (qcepDebug(DEBUG_PREFS)) {
-      g_Application->printMessage(
-          tr("%1: QcepProperty::changeVariant is stored\n").arg(name()));
-    }
-
-    m_ChangeCount.fetchAndAddOrdered(1);
-  }
+  return m_Index.fetchAndAddOrdered(0);
 }
 
-template <typename T>
-void QcepProperty::changeVariant(T val)
+int QcepProperty::incIndex(int step)
 {
-  QMutexLocker lock(&m_Mutex);
-
-  m_Variant.setValue(val);
-
-  if (m_IsStored && m_WasLoaded) {
-    if (qcepDebug(DEBUG_PREFS)) {
-      g_Application->printMessage(
-          tr("%1: QcepProperty::changeVariant is stored\n").arg(name()));
-    }
-
-    m_ChangeCount.fetchAndAddOrdered(1);
-  }
+  return m_Index.fetchAndAddOrdered(step) + step;
 }
+
+void QcepProperty::setDebug(int dbg)
+{
+  m_Debug = dbg;
+}
+
+int QcepProperty::debug() const
+{
+  return m_Debug;
+}
+
+//void QcepProperty::setVariant(QVariant val)
+//{
+//  QMutexLocker lock(&m_Mutex);
+
+//  if (qcepDebug(DEBUG_PROPERTIES)) {
+//    g_Application->printMessage(
+//        tr("%1: QcepProperty::changeVariant <- %2)").arg(name()).arg(val.toString()));
+//  }
+
+//  m_Variant = val;
+
+//  if (m_IsStored && m_WasLoaded) {
+//    if (qcepDebug(DEBUG_PREFS)) {
+//      g_Application->printMessage(
+//          tr("%1: QcepProperty::changeVariant is stored\n").arg(name()));
+//    }
+
+//    m_ChangeCount.fetchAndAddOrdered(1);
+//  }
+//}
+
+//template <typename T>
+//void QcepProperty::setVariant(T val)
+//{
+//  QMutexLocker lock(&m_Mutex);
+
+//  m_Variant.setValue(val);
+
+//  if (m_IsStored && m_WasLoaded) {
+//    if (qcepDebug(DEBUG_PREFS)) {
+//      g_Application->printMessage(
+//          tr("%1: QcepProperty::changeVariant is stored\n").arg(name()));
+//    }
+
+//    m_ChangeCount.fetchAndAddOrdered(1);
+//  }
+//}
 
 QAtomicInt QcepProperty::m_ChangeCount = 0;
 
@@ -277,6 +295,11 @@ double QcepDoubleProperty::value() const
   return m_Value;
 }
 
+//QVariant QcepDoubleProperty::variant() const
+//{
+//  return value();
+//}
+
 double QcepDoubleProperty::defaultValue() const
 {
   QMutexLocker lock(&m_Mutex);
@@ -325,11 +348,10 @@ void QcepDoubleProperty::setValue(double val)
   }
 
   if (val != m_Value) {
-    changeVariant(val);
-
     m_Value = val;
 
     m_NQueuedUpdates++;
+    m_ChangeCount.fetchAndAddOrdered(1);
 
     emit changedValue(m_Value);
     emit changedValue(tr("%1").arg(m_Value));
@@ -347,11 +369,10 @@ void QcepDoubleProperty::incValue(double step)
   }
 
   if (step) {
-    changeVariant(m_Value+step);
-
     m_Value += step;
 
     m_NQueuedUpdates++;
+    m_ChangeCount.fetchAndAddOrdered(1);
 
     emit changedValue(m_Value);
     emit changedValue(tr("%1").arg(m_Value));
@@ -431,88 +452,87 @@ QcepIntProperty::QcepIntProperty(QObject *parent, const char *name, int value)
     m_Default(value),
     m_Value(value)
 {
-//  setDebug(true);
 }
 
 int QcepIntProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
-
   return m_Value;
 }
 
+//QVariant QcepIntProperty::variant() const
+//{
+//  return value();
+//}
+
 int QcepIntProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
-
   return m_Default;
 }
 
-void QcepIntProperty::changeValue(int val)
+void QcepIntProperty::setValue(int val, int index)
 {
-  if (qcepDebug(DEBUG_PROPERTIES)) {
+  if (debug()) {
     g_Application->printMessage(
-        tr("QcepIntProperty::changeValue [%1] = %2, %3")
-        .arg(name()).arg(val).arg(m_NQueuedUpdates));
+          tr("%1 QcepIntProperty::setValue(int %2, int %3) [%4]")
+          .arg(name())
+          .arg(val)
+          .arg(index)
+          .arg(this->index()));
   }
 
-  if (m_NQueuedUpdates <= 1) {
+  if (index == this->index()) {
     setValue(val);
   }
-
-  m_NQueuedUpdates--;
 }
 
 void QcepIntProperty::setValue(int val)
 {
-  QMutexLocker lock(&m_Mutex);
-
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-        tr("%1: QcepIntProperty::setValue <- %2, %3")
-        .arg(name()).arg(val).arg(m_NQueuedUpdates));
+    if (g_Application) {
+      g_Application->printMessage(
+            tr("%1: QcepIntProperty::setValue <- %2, %3")
+            .arg(name()).arg(val).arg(m_NQueuedUpdates));
+    }
   }
 
   if (val != m_Value) {
-    changeVariant(val);
+    if (g_Application && debug()) {
+      g_Application->printMessage(
+            tr("%1: QcepIntProperty::setValue(int %2) [%3]")
+            .arg(name())
+            .arg(val)
+            .arg(index()));
+    }
 
-    m_Value = val;
+    m_Value.fetchAndStoreOrdered(val);
+    m_ChangeCount.fetchAndAddOrdered(1);
 
-    m_NQueuedUpdates++;
-
-    emit changedValue(m_Value);
+    emit changedValue(m_Value, incIndex(1));
     emit changedValue(tr("%1").arg(m_Value));
   }
 }
 
 void QcepIntProperty::incValue(int step)
 {
-  QMutexLocker lock(&m_Mutex);
-
-  if (qcepDebug(DEBUG_PROPERTIES)) {
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     g_Application->printMessage(
         tr("%1: QcepIntProperty::incValue <- %2, %3")
         .arg(name()).arg(step).arg(m_NQueuedUpdates));
   }
 
   if (step) {
-    changeVariant(m_Value + step);
+    m_Value.fetchAndAddOrdered(step);
+    m_ChangeCount.fetchAndAddOrdered(1);
 
-    m_Value += step;
-
-    m_NQueuedUpdates++;
-
-    emit changedValue(m_Value);
+    emit changedValue(m_Value, incIndex(1));
     emit changedValue(tr("%1").arg(m_Value));
   }
 }
 
 void QcepIntProperty::setDefaultValue(int val)
 {
-  QMutexLocker lock(&m_Mutex);
-
   if (val != m_Default) {
-    m_Default = val;
+    m_Default.fetchAndStoreOrdered(val);
 
     emit changedDefault(val);
   }
@@ -520,9 +540,7 @@ void QcepIntProperty::setDefaultValue(int val)
 
 void QcepIntProperty::resetValue()
 {
-  QMutexLocker lock(&m_Mutex);
-
-  if (qcepDebug(DEBUG_PROPERTIES)) {
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     g_Application->printMessage(
         tr("%1: QcepIntProperty::resetValue").arg(name()));
   }
@@ -533,48 +551,146 @@ void QcepIntProperty::resetValue()
 void QcepIntProperty::linkTo(QSpinBox *spinBox)
 {
   {
-    QMutexLocker lock(&m_Mutex);
-
-    if (qcepDebug(DEBUG_PROPERTIES)) {
+    if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
       g_Application->printMessage(
           tr("%1: QcepIntProperty::linkTo(QSpinBox *%2)")
           .arg(name()).HEXARG(spinBox));
     }
 
+    QcepIntPropertySpinBoxHelper *helper
+        = new QcepIntPropertySpinBoxHelper(spinBox, this);
+
+    helper->moveToThread(spinBox->thread());
+    helper->connect();
+
     spinBox -> setValue(value());
 
-    connect(this, SIGNAL(changedValue(int)), spinBox, SLOT(setValue(int)));
-    connect(spinBox, SIGNAL(valueChanged(int)), this, SLOT(changeValue(int)));
+    connect(this, SIGNAL(changedValue(int, int)), helper, SLOT(setValue(int, int)));
+    connect(helper, SIGNAL(valueChanged(int, int)), this, SLOT(setValue(int, int)));
   }
 }
 
 void QcepIntProperty::linkTo(QComboBox *comboBox)
 {
   {
-    QMutexLocker lock(&m_Mutex);
-
-    if (qcepDebug(DEBUG_PROPERTIES)) {
+    if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
       g_Application->printMessage(
           tr("%1: QcepIntProperty::linkTo(QComboBox *%2)")
           .arg(name()).HEXARG(comboBox));
     }
 
+    QcepIntPropertyComboBoxHelper *helper
+        = new QcepIntPropertyComboBoxHelper(comboBox, this);
+
+    helper->moveToThread(comboBox->thread());
+    helper->connect();
+
     comboBox -> setCurrentIndex(value());
 
-    connect(this, SIGNAL(changedValue(int)), comboBox, SLOT(setCurrentIndex(int)));
-    connect(comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changeValue(int)));
+    connect(this, SIGNAL(changedValue(int, int)), helper, SLOT(setCurrentIndex(int, int)));
+    connect(helper, SIGNAL(currentIndexChanged(int, int)), this, SLOT(setValue(int, int)));
   }
 }
 
 void QcepIntProperty::linkTo(QLabel *label)
 {
   {
-    QMutexLocker lock(&m_Mutex);
-
     label -> setText(tr("%1").arg(value()));
 
     connect(this, SIGNAL(changedValue(QString)), label, SLOT(setText(QString)));
   }
+}
+
+QcepIntPropertySpinBoxHelper::QcepIntPropertySpinBoxHelper(QSpinBox *spinBox, QcepIntProperty *property)
+  : QObject(spinBox),
+    m_SpinBox(spinBox),
+    m_Property(property)
+{
+}
+
+void QcepIntPropertySpinBoxHelper::connect()
+{
+  CONNECT_CHECK(QObject::connect(m_SpinBox, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)), Qt::DirectConnection));
+}
+
+void QcepIntPropertySpinBoxHelper::setValue(int value, int index)
+{
+  if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+    g_Application->printMessage(
+          tr("%1: QcepIntPropertySpinBoxHelper::setValue(int %2, int %3) [%4,%5]")
+          .arg(m_Property->name()).arg(value).arg(index).arg(m_Property->index()).arg(m_SpinBox->value()));
+  }
+
+  if (m_Property->index() == index) {
+    if (m_SpinBox->value() != value) {
+      if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+        g_Application->printMessage(
+              tr("%1: QcepIntPropertySpinBoxHelper spinBox %2 set to %3")
+              .arg(m_Property->name())
+              .arg(m_SpinBox->objectName())
+            .arg(value));
+      }
+
+      m_SpinBox->setValue(value);
+    }
+  }
+}
+
+void QcepIntPropertySpinBoxHelper::setValue(int value)
+{
+  if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+    g_Application->printMessage(
+          tr("%1: QcepIntPropertySpinBoxHelper::setValue(int %2)")
+          .arg(m_Property->name()).arg(value));
+  }
+
+  emit valueChanged(value, m_Property->incIndex());
+}
+
+QcepIntPropertyComboBoxHelper::QcepIntPropertyComboBoxHelper(QComboBox *comboBox, QcepIntProperty *property)
+  : QObject(comboBox),
+    m_ComboBox(comboBox),
+    m_Property(property)
+{
+}
+
+void QcepIntPropertyComboBoxHelper::connect()
+{
+  CONNECT_CHECK(QObject::connect(m_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setValue(int)), Qt::DirectConnection));
+}
+
+void QcepIntPropertyComboBoxHelper::setValue(int value, int index)
+{
+  if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+    g_Application->printMessage(
+          tr("%1: QcepIntPropertyComboBoxHelper::setValue(int %2, int %3) [%4,%5]")
+          .arg(m_Property->name()).arg(value).arg(index).arg(m_Property->index()).arg(m_ComboBox->currentIndex()));
+  }
+
+  if (m_Property->index() == index) {
+    if (m_ComboBox->currentIndex() != value) {
+      if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+        g_Application->printMessage(
+              tr("%1: QcepIntPropertyComboBoxHelper comboBox %2 set to %3")
+              .arg(m_Property->name())
+              .arg(m_ComboBox->objectName())
+            .arg(value));
+      }
+
+      m_ComboBox->setCurrentIndex(value);
+    }
+  }
+}
+
+void QcepIntPropertyComboBoxHelper::setValue(int value)
+{
+  if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+    g_Application->printMessage(
+          tr("%1: QcepIntPropertyComboBoxHelper::setValue(int %2)")
+          .arg(m_Property->name()).arg(value));
+  }
+
+  emit currentIndexChanged(value, m_Property->incIndex());
 }
 
 QcepBoolProperty::QcepBoolProperty(QObject *parent, const char *name, bool value)
@@ -590,6 +706,11 @@ bool QcepBoolProperty::value() const
 
   return m_Value;
 }
+
+//QVariant QcepBoolProperty::variant() const
+//{
+//  return value();
+//}
 
 bool QcepBoolProperty::defaultValue() const
 {
@@ -624,11 +745,10 @@ void QcepBoolProperty::setValue(bool val)
   }
 
   if (val != m_Value) {
-    changeVariant(val);
-
     m_Value = val;
 
     m_NQueuedUpdates++;
+    m_ChangeCount.fetchAndAddOrdered(1);
 
     emit changedValue(m_Value);
   }
@@ -689,6 +809,11 @@ QString QcepStringProperty::value() const
   return m_Value;
 }
 
+//QVariant QcepStringProperty::variant() const
+//{
+//  return value();
+//}
+
 QString QcepStringProperty::defaultValue() const
 {
   QMutexLocker lock(&m_Mutex);
@@ -722,11 +847,10 @@ void QcepStringProperty::setValue(QString val)
   }
 
   if (val != m_Value) {
-    changeVariant(val);
-
     m_Value = val;
 
     m_NQueuedUpdates++;
+    m_ChangeCount.fetchAndAddOrdered(1);
 
     emit changedValue(m_Value);
   }
@@ -801,6 +925,11 @@ QDateTime QcepDateTimeProperty::value() const
   return m_Value;
 }
 
+//QVariant QcepDateTimeProperty::variant() const
+//{
+//  return value();
+//}
+
 QDateTime QcepDateTimeProperty::defaultValue() const
 {
   QMutexLocker lock(&m_Mutex);
@@ -834,11 +963,10 @@ void QcepDateTimeProperty::setValue(QDateTime val)
   }
 
   if (val != m_Value) {
-    changeVariant(val);
-
     m_Value = val;
 
     m_NQueuedUpdates++;
+    m_ChangeCount.fetchAndAddOrdered(1);
 
     emit changedValue(m_Value);
   }
@@ -870,7 +998,6 @@ QcepDoubleListProperty::QcepDoubleListProperty(QObject *parent, const char *name
     m_Default(value),
     m_Value(value)
 {
-  changeVariant(value);
 }
 
 QcepDoubleList QcepDoubleListProperty::value() const
@@ -879,6 +1006,11 @@ QcepDoubleList QcepDoubleListProperty::value() const
 
   return m_Value;
 }
+
+//QVariant QcepDoubleListProperty::variant() const
+//{
+//  return value();
+//}
 
 QcepDoubleList QcepDoubleListProperty::defaultValue() const
 {
@@ -956,11 +1088,10 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
   }
 
   if (val != m_Value) {
-    changeVariant(val);
-
     m_Value = val;
 
     m_NQueuedUpdates++;
+    m_ChangeCount.fetchAndAddOrdered(1);
 
     emit changedValue(m_Value);
 //    emit changedValue(tr("%1").arg(m_Value));

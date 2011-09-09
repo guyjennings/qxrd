@@ -61,7 +61,9 @@ QTimer eventCounterTimer;
 
 void QxrdApplication::processEventCounter()
 {
-  printMessage(tr("%1 events processed").arg(eventCounter));
+  if (qcepDebug(DEBUG_APP)) {
+    printMessage(tr("%1 events processed").arg(eventCounter));
+  }
 
   eventCounter = 0;
 }

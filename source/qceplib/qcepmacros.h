@@ -10,6 +10,7 @@
 #define THREAD_CHECK Q_ASSERT(QThread::currentThread() == thread())
 
 #define INVOKE_CHECK(res) if(!res) { printf("Invoke failed File %s, Line %d\n", __FILE__, __LINE__); }
+#define CONNECT_CHECK(res) if(!res) { printf("Connect failed File %s, Line %d\n", __FILE__, __LINE__); }
 
 #define STR(s) _STR(s)
 #define _STR(s) #s

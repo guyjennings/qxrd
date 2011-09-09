@@ -55,6 +55,8 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters()
   connect(prop_Raw32SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateSaveTimes()));
   connect(prop_SummedExposures(), SIGNAL(changedValue(int)), this, SLOT(updateSaveTimes()));
   connect(prop_DarkSummedExposures(), SIGNAL(changedValue(int)), this, SLOT(updateSaveTimes()));
+
+  m_FileIndex.setDebug(1);
 }
 
 void QxrdAcquisitionParameters::updateSaveTimes()

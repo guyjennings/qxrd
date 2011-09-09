@@ -26,16 +26,20 @@ public:
   QcepProperty(QObject *parent, const char *name, QVariant value);
   ~QcepProperty();
 
-  QVariant variant() const;
+//  virtual QVariant variant() const = 0;
+
   QString name() const;
+
+  int index();
+  int incIndex(int step = 1);
 
   int wasLoaded() const;
   void setWasLoaded(int loaded);
 
   static void registerMetaTypes();
 
-//  int debug() const;
-//  void setDebug(int dbg);
+  int debug() const;
+  void setDebug(int dbg);
 
   static void writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings &settings);
   static void readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings &settings);
@@ -45,24 +49,24 @@ public:
 //  virtual void readSettings(QSettings &settings, QString section);
 //  virtual void writeSettings(QSettings &settings, QString section);
 
-public slots:
-  void changeVariant(QVariant val);
+//public slots:
+//  void changeVariant(QVariant val);
 
-public:
-  template <typename T> void changeVariant(T val);
+//public:
+//  template <typename T> void changeVariant(T val);
 
 protected:
   mutable QMutex           m_Mutex;
   int                      m_NQueuedUpdates;
+  static QAtomicInt        m_ChangeCount;
 
 private:
-//  int                      m_Debug;
+  int                      m_Debug;
   int                      m_IsStored;
   int                      m_WasLoaded;
-  QObject                 *m_Parent;
   const char              *m_Name;
-  QVariant                 m_Variant;
-  static QAtomicInt        m_ChangeCount;
+//  QVariant                 m_Variant;
+  QAtomicInt               m_Index;
 };
 
 class QcepDoubleProperty : public QcepProperty {
@@ -73,6 +77,7 @@ public:
 
   double value() const;
   double defaultValue() const;
+//  QVariant variant() const;
 
   void linkTo(QComboBox *comboBox);
   void linkTo(QDoubleSpinBox *spinBox);
@@ -103,26 +108,69 @@ public:
 
   int value() const;
   int defaultValue() const;
+//  QVariant variant() const;
 
   void linkTo(QSpinBox *spinBox);
   void linkTo(QComboBox *comboBox);
   void linkTo(QLabel *label);
 
 public slots:
-  void changeValue(int val);
+//  void changeValue(int val);
+  void setValue(int val, int index);
   void setValue(int val);
   void incValue(int step);
   void setDefaultValue(int val);
   void resetValue();
 
 signals:
+  void changedValue(int val, int index);
   void changedValue(int val);
   void changedValue(QString val);
   void changedDefault(int val);
 
 private:
-  int  m_Default;
-  int  m_Value;
+  QAtomicInt  m_Default;
+  QAtomicInt  m_Value;
+};
+
+class QcepIntPropertySpinBoxHelper : public QObject {
+  Q_OBJECT
+
+public:
+  QcepIntPropertySpinBoxHelper(QSpinBox *spinBox, QcepIntProperty *property);
+  void connect();
+
+public slots:
+  void setValue(int value, int index);
+  void setValue(int value);
+
+signals:
+  void valueChanged(int value, int index);
+  void valueChanged(int value);
+
+private:
+  QSpinBox        *m_SpinBox;
+  QcepIntProperty *m_Property;
+};
+
+class QcepIntPropertyComboBoxHelper : public QObject {
+  Q_OBJECT
+
+public:
+  QcepIntPropertyComboBoxHelper(QComboBox *comboBox, QcepIntProperty *property);
+  void connect();
+
+public slots:
+  void setValue(int value, int index);
+  void setValue(int value);
+
+signals:
+  void currentIndexChanged(int value, int index);
+  void currentIndexChanged(int value);
+
+private:
+  QComboBox       *m_ComboBox;
+  QcepIntProperty *m_Property;
 };
 
 class QcepBoolProperty : public QcepProperty {
@@ -132,6 +180,7 @@ public:
 
   bool value() const;
   bool defaultValue() const;
+//  QVariant variant() const;
 
   void linkTo(QAbstractButton *button);
 
@@ -157,6 +206,7 @@ public:
 
   QString value() const;
   QString defaultValue() const;
+//  QVariant variant() const;
 
   void linkTo(QComboBox *comboBox);
   void linkTo(QLineEdit *lineEdit);
@@ -184,6 +234,7 @@ public:
 
   QDateTime value() const;
   QDateTime defaultValue() const;
+//  QVariant variant() const;
 
 public slots:
   void changeValue(QDateTime val);
@@ -208,6 +259,7 @@ public:
 
   QcepDoubleList value() const;
   QcepDoubleList defaultValue() const;
+//  QVariant variant() const;
 
 public slots:
   void changeValue(QcepDoubleList val);
