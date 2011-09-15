@@ -23,13 +23,12 @@ class QSettings;
 class QcepProperty : public QObject {
   Q_OBJECT
 public:
-  QcepProperty(QObject *parent, const char *name, QVariant value);
-  ~QcepProperty();
+  QcepProperty(QObject *parent, const char *name);
 
   QString name() const;
 
   int index();
-  int incIndex(int step = 1);
+  int incIndex(int step);
 
   int wasLoaded() const;
   void setWasLoaded(int loaded);
@@ -46,7 +45,6 @@ public:
 
 protected:
   mutable QMutex           m_Mutex;
-  int                      m_NQueuedUpdates;
   static QAtomicInt        m_ChangeCount;
 
 private:
@@ -61,31 +59,46 @@ class QcepDoubleProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepDoubleProperty(QObject *parent, const char *name, double value);
-  ~QcepDoubleProperty();
 
   double value() const;
   double defaultValue() const;
 
-  void linkTo(QComboBox *comboBox);
   void linkTo(QDoubleSpinBox *spinBox);
   void linkTo(QLabel *label);
 
 public slots:
-  void changeValue(double val);
-  void changeValue(QString val);
+  void setValue(double val, int index);
   void setValue(double val);
   void incValue(double step);
   void setDefaultValue(double val);
   void resetValue();
 
 signals:
-  void changedValue(double val);
-  void changedValue(QString val);
-  void changedDefault(double val);
+  void valueChanged(double val, int index);
+  void valueChanged(QString val);
 
 private:
   double m_Default;
   double m_Value;
+};
+
+class QcepDoublePropertyDoubleSpinBoxHelper : public QObject {
+  Q_OBJECT
+
+public:
+  QcepDoublePropertyDoubleSpinBoxHelper(QDoubleSpinBox *spinBox, QcepDoubleProperty *property);
+  void connect();
+
+public slots:
+  void setValue(double value, int index);
+  void setValue(double value);
+
+signals:
+  void valueChanged(double value, int index);
+
+private:
+  QDoubleSpinBox     *m_DoubleSpinBox;
+  QcepDoubleProperty *m_Property;
 };
 
 class QcepIntProperty : public QcepProperty {
@@ -108,10 +121,8 @@ public slots:
   void resetValue();
 
 signals:
-  void changedValue(int val, int index);
-  void changedValue(int val);
-  void changedValue(QString val);
-  void changedDefault(int val);
+  void valueChanged(int val, int index);
+  void valueChanged(QString val);
 
 private:
   QAtomicInt  m_Default;
@@ -131,7 +142,6 @@ public slots:
 
 signals:
   void valueChanged(int value, int index);
-  void valueChanged(int value);
 
 private:
   QSpinBox        *m_SpinBox;
@@ -151,7 +161,6 @@ public slots:
 
 signals:
   void currentIndexChanged(int value, int index);
-  void currentIndexChanged(int value);
 
 private:
   QComboBox       *m_ComboBox;
@@ -169,18 +178,36 @@ public:
   void linkTo(QAbstractButton *button);
 
 public slots:
-  void changeValue(bool val);
+  void setValue(bool val, int index);
   void setValue(bool val);
   void setDefaultValue(bool val);
   void resetValue();
 
 signals:
-  void changedValue(bool val);
-  void changedDefault(bool val);
+  void valueChanged(bool val, int index);
 
 private:
-  bool   m_Default;
-  bool   m_Value;
+  QAtomicInt   m_Default;
+  QAtomicInt   m_Value;
+};
+
+class QcepBoolPropertyButtonHelper : public QObject {
+  Q_OBJECT
+
+public:
+  QcepBoolPropertyButtonHelper(QAbstractButton *button, QcepBoolProperty *property);
+  void connect();
+
+public slots:
+  void setChecked(bool value, int index);
+  void setChecked(bool value);
+
+signals:
+  void toggled(bool value, int index);
+
+private:
+  QAbstractButton  *m_Button;
+  QcepBoolProperty *m_Property;
 };
 
 class QcepStringProperty : public QcepProperty {
@@ -196,18 +223,55 @@ public:
   void linkTo(QLabel    *label);
 
 public slots:
-  void changeValue(QString val);
+  void setValue(QString val, int index);
   void setValue(QString val);
   void setDefaultValue(QString val);
   void resetValue();
 
 signals:
-  void changedValue(QString val);
-  void changedDefault(QString val);
+  void valueChanged(QString val, int index);
 
 private:
   QString m_Default;
   QString m_Value;
+};
+
+//class QcepStringPropertyComboBoxHelper : public QObject {
+//  Q_OBJECT
+
+//public:
+//  QcepStringPropertyComboBoxHelper(QComboBox *comboBox, QcepStringProperty *property);
+//  void connect();
+
+//public slots:
+//  void setEditText(QString value, int index);
+//  void setEditText(QString value);
+
+//signals:
+//  void editTextChanged(QString value, int index);
+
+//private:
+//  QComboBox          *m_ComboBox;
+//  QcepStringProperty *m_Property;
+//};
+
+class QcepStringPropertyLineEditHelper : public QObject {
+  Q_OBJECT
+
+public:
+  QcepStringPropertyLineEditHelper(QLineEdit *lineEdit, QcepStringProperty *property);
+  void connect();
+
+public slots:
+  void setText(QString value, int index);
+  void setText(QString value);
+
+signals:
+  void textEdited(QString value, int index);
+
+private:
+  QLineEdit          *m_LineEdit;
+  QcepStringProperty *m_Property;
 };
 
 class QcepDateTimeProperty : public QcepProperty {
@@ -219,14 +283,13 @@ public:
   QDateTime defaultValue() const;
 
 public slots:
-  void changeValue(QDateTime val);
+  void setValue(QDateTime val, int index);
   void setValue(QDateTime val);
   void setDefaultValue(QDateTime val);
   void resetValue();
 
 signals:
-  void changedValue(QDateTime val);
-  void changedDefault(QDateTime val);
+  void valueChanged(QDateTime val, int index);
 
 private:
   QDateTime m_Default;
@@ -241,9 +304,10 @@ public:
 
   QcepDoubleList value() const;
   QcepDoubleList defaultValue() const;
+  QString toString(const QcepDoubleList &list);
 
 public slots:
-  void changeValue(QcepDoubleList val);
+  void setValue(QcepDoubleList val, int index);
   void setValue(QcepDoubleList val);
   void setDefaultValue(QcepDoubleList val);
   void resetValue();
@@ -251,8 +315,7 @@ public slots:
   void appendValue(double val);
 
 signals:
-  void changedValue(QcepDoubleList val);
-  void changedDefault(QcepDoubleList val);
+  void valueChanged(QcepDoubleList val, int index);
 
 private:
   QcepDoubleList m_Default;

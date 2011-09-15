@@ -55,7 +55,7 @@ QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWi
   connect(m_IntegrateButton, SIGNAL(clicked()), this, SLOT(doIntegrate()));
   connect(m_AccumulateButton, SIGNAL(clicked()), this, SLOT(doAccumulate()));
 
-  connect(this -> prop_RootDirectory(), SIGNAL(changedValue(QString)), this, SLOT(onRootDirectoryChanged(QString)));
+  connect(this -> prop_RootDirectory(), SIGNAL(valueChanged(QString,int)), this, SLOT(onRootDirectoryChanged(QString)));
 
   connect(m_FileBrowser, SIGNAL(pressed(QModelIndex)), this, SLOT(mousePressed(QModelIndex)));
   connect(m_FileBrowser, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClicked(QModelIndex)));

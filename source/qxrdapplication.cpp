@@ -305,7 +305,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
-  connect(prop_Debug(), SIGNAL(changedValue(int)), this, SLOT(debugChanged(int)));
+  connect(prop_Debug(), SIGNAL(valueChanged(int,int)), this, SLOT(debugChanged(int)));
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading Preferences");
 

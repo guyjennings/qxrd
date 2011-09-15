@@ -307,7 +307,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionClearSelectedIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearSelectedCurves()));
 
   connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
-  connect(m_DataProcessor->integrator()->prop_IntegrationXUnits(), SIGNAL(changedValue(int)),
+  connect(m_DataProcessor->integrator()->prop_IntegrationXUnits(), SIGNAL(valueChanged(int,int)),
           this, SLOT(integrationXUnitsChanged(int)));
   integrationXUnitsChanged(m_DataProcessor->integrator()->get_IntegrationXUnits());
 
@@ -392,7 +392,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   m_Plot -> prop_DisplayScalingMode() -> linkTo(m_DisplayDialog->m_DisplayScalingMode);
 
-  connect(m_Plot -> prop_DisplayScalingMode(), SIGNAL(changedValue(int)), m_DisplayDialog->m_DisplayParmsStack, SLOT(setCurrentIndex(int)));
+  connect(m_Plot -> prop_DisplayScalingMode(), SIGNAL(valueChanged(int,int)), m_DisplayDialog->m_DisplayParmsStack, SLOT(setCurrentIndex(int)));
 
   m_Plot -> prop_DisplayColorMap() -> linkTo(m_DisplayDialog->m_DisplayColorMap);
 
@@ -407,23 +407,23 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   m_CenterFinderPlot -> setWindow(this);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
-  connect(m_DataProcessor -> centerFinder() -> prop_CenterX(), SIGNAL(changedValue(double)),
+  connect(m_DataProcessor -> centerFinder() -> prop_CenterX(), SIGNAL(valueChanged(double,int)),
           m_Plot, SLOT(onCenterXChanged(double)));
 
-  connect(m_DataProcessor -> centerFinder() -> prop_CenterY(), SIGNAL(changedValue(double)),
+  connect(m_DataProcessor -> centerFinder() -> prop_CenterY(), SIGNAL(valueChanged(double,int)),
           m_Plot, SLOT(onCenterYChanged(double)));
 
-  connect(m_DataProcessor -> centerFinder() -> prop_CenterX(), SIGNAL(changedValue(double)),
+  connect(m_DataProcessor -> centerFinder() -> prop_CenterX(), SIGNAL(valueChanged(double,int)),
           m_CenterFinderPlot, SLOT(onCenterXChanged(double)));
 
-  connect(m_DataProcessor -> centerFinder() -> prop_CenterY(), SIGNAL(changedValue(double)),
+  connect(m_DataProcessor -> centerFinder() -> prop_CenterY(), SIGNAL(valueChanged(double,int)),
           m_CenterFinderPlot, SLOT(onCenterYChanged(double)));
 
   connect(m_DataProcessor, SIGNAL(newIntegrationAvailable(QxrdIntegratedDataPtr)),
           m_IntegratorPlot, SLOT(onNewIntegrationAvailable(QxrdIntegratedDataPtr)));
 
-  connect(m_Allocator -> prop_Allocated(), SIGNAL(changedValue(int)), this, SLOT(allocatedMemoryChanged()));
-  connect(m_Allocator -> prop_Max(), SIGNAL(changedValue(int)), this, SLOT(allocatedMemoryChanged()));
+  connect(m_Allocator -> prop_Allocated(), SIGNAL(valueChanged(int,int)), this, SLOT(allocatedMemoryChanged()));
+  connect(m_Allocator -> prop_Max(), SIGNAL(valueChanged(int,int)), this, SLOT(allocatedMemoryChanged()));
 
   m_WindowsMenu -> addAction(m_AcquireDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_InputFileBrowser -> toggleViewAction());
@@ -448,8 +448,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
 
   m_Messages -> document() -> setMaximumBlockCount(m_Application->get_MessageWindowLines());
 
-  connect(m_Application->prop_MessageWindowLines(), SIGNAL(changedValue(int)), this, SLOT(onMessageWindowLinesChanged(int)));
-  connect(m_Application->prop_UpdateIntervalMsec(), SIGNAL(changedValue(int)), this, SLOT(onUpdateIntervalMsecChanged(int)));
+  connect(m_Application->prop_MessageWindowLines(), SIGNAL(valueChanged(int,int)), this, SLOT(onMessageWindowLinesChanged(int)));
+  connect(m_Application->prop_UpdateIntervalMsec(), SIGNAL(valueChanged(int,int)), this, SLOT(onUpdateIntervalMsecChanged(int)));
 
 #ifdef QT_NO_DEBUG
   m_ActionRefineCenterTilt->setEnabled(false);

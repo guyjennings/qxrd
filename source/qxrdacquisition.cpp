@@ -22,15 +22,15 @@ QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocat
 
   m_SynchronizedAcquisition = new QxrdSynchronizedAcquisition(this);
 
-  connect(prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(onExposureTimeChanged(double)));
-  connect(prop_BinningMode(), SIGNAL(changedValue(int)), this, SLOT(onBinningModeChanged(int)));
-  connect(prop_CameraGain(), SIGNAL(changedValue(int)), this, SLOT(onCameraGainChanged(int)));
+  connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged(double)));
+  connect(prop_BinningMode(), SIGNAL(valueChanged(int,int)), this, SLOT(onBinningModeChanged(int)));
+  connect(prop_CameraGain(), SIGNAL(valueChanged(int,int)), this, SLOT(onCameraGainChanged(int)));
 
   if (sizeof(void*) == 4) {
-    connect(prop_TotalBufferSizeMB32(), SIGNAL(changedValue(int)), this, SLOT(onBufferSizeChanged(int)));
+    connect(prop_TotalBufferSizeMB32(), SIGNAL(valueChanged(int,int)), this, SLOT(onBufferSizeChanged(int)));
     onBufferSizeChanged(get_TotalBufferSizeMB32());
   } else {
-    connect(prop_TotalBufferSizeMB64(), SIGNAL(changedValue(int)), this, SLOT(onBufferSizeChanged(int)));
+    connect(prop_TotalBufferSizeMB64(), SIGNAL(valueChanged(int,int)), this, SLOT(onBufferSizeChanged(int)));
     onBufferSizeChanged(get_TotalBufferSizeMB64());
   }
 

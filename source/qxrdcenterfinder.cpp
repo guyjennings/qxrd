@@ -24,14 +24,14 @@ QxrdCenterFinder::QxrdCenterFinder
 //  m_CenterX.setDebug(true);
 //  m_CenterY.setDebug(true);
 
-  connect(prop_CenterX(), SIGNAL(changedValue(double)), this, SIGNAL(parameterChanged()));
-  connect(prop_CenterY(), SIGNAL(changedValue(double)), this, SIGNAL(parameterChanged()));
-  connect(prop_DetectorXPixelSize(), SIGNAL(changedValue(double)), this, SIGNAL(parameterChanged()));
-  connect(prop_DetectorYPixelSize(), SIGNAL(changedValue(double)), this, SIGNAL(parameterChanged()));
-  connect(prop_DetectorDistance(), SIGNAL(changedValue(double)), this, SIGNAL(parameterChanged()));
-  connect(prop_ImplementTilt(), SIGNAL(changedValue(bool)), this, SIGNAL(parameterChanged()));
-  connect(prop_DetectorTilt(), SIGNAL(changedValue(double)), this, SIGNAL(parameterChanged()));
-  connect(prop_TiltPlaneRotation(), SIGNAL(changedValue(double)), this, SIGNAL(parameterChanged()));
+  connect(prop_CenterX(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_CenterY(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_DetectorXPixelSize(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_DetectorYPixelSize(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_DetectorDistance(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_ImplementTilt(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_DetectorTilt(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_TiltPlaneRotation(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
 }
 
 void QxrdCenterFinder::writeSettings(QxrdSettings &settings, QString section)

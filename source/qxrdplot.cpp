@@ -68,10 +68,10 @@ QxrdPlot::QxrdPlot(QWidget *parent)
 
   autoScale();
 
-  connect(prop_XAxisLog(), SIGNAL(changedValue(int)), this, SLOT(setXAxisLog(int)));
-  connect(prop_YAxisLog(), SIGNAL(changedValue(int)), this, SLOT(setYAxisLog(int)));
-  connect(prop_X2AxisLog(), SIGNAL(changedValue(int)), this, SLOT(setX2AxisLog(int)));
-  connect(prop_Y2AxisLog(), SIGNAL(changedValue(int)), this, SLOT(setY2AxisLog(int)));
+  connect(prop_XAxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setXAxisLog(int)));
+  connect(prop_YAxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setYAxisLog(int)));
+  connect(prop_X2AxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setX2AxisLog(int)));
+  connect(prop_Y2AxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setY2AxisLog(int)));
 }
 
 QxrdPlot::~QxrdPlot()

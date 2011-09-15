@@ -51,10 +51,10 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters()
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL)
 {
-  connect(prop_Raw16SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateSaveTimes()));
-  connect(prop_Raw32SaveTime(), SIGNAL(changedValue(double)), this, SLOT(updateSaveTimes()));
-  connect(prop_SummedExposures(), SIGNAL(changedValue(int)), this, SLOT(updateSaveTimes()));
-  connect(prop_DarkSummedExposures(), SIGNAL(changedValue(int)), this, SLOT(updateSaveTimes()));
+  connect(prop_Raw16SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
+  connect(prop_Raw32SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
+  connect(prop_SummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
+  connect(prop_DarkSummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
 
 //  m_FileIndex.setDebug(1);
 }

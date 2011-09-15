@@ -52,15 +52,15 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
   m_SynchronizedAcquisition -> prop_SyncAcquisitionSymmetry()      -> linkTo(m_SyncAcqSymmetry);
   m_SynchronizedAcquisition -> prop_SyncAcquisitionPhaseShift()      -> linkTo(m_SyncAcqPhaseShift);
 
-  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMode(), SIGNAL(changedValue(int)), this, SLOT(waveformChanged()));
-  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionWaveform(), SIGNAL(changedValue(int)), this, SLOT(waveformChanged()));
-  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMinimum(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
-  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMaximum(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
-  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionSymmetry(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
-  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionPhaseShift(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMode(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionWaveform(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMinimum(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMaximum(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionSymmetry(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
+  connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionPhaseShift(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
 
-  connect(m_Acquisition->prop_ExposureTime(), SIGNAL(changedValue(double)), this, SLOT(waveformChanged()));
-  connect(m_Acquisition->prop_PhasesInGroup(), SIGNAL(changedValue(int)), this, SLOT(waveformChanged()));
+  connect(m_Acquisition->prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
+  connect(m_Acquisition->prop_PhasesInGroup(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
 }
 
 QxrdSynchronizedAcquisitionDialog::~QxrdSynchronizedAcquisitionDialog()

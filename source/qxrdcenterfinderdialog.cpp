@@ -27,7 +27,7 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinder *cen, QWidget *p
   m_CenterFinder -> prop_DetectorYPixelSize() -> linkTo(m_DetectorYPixelSize);
   m_CenterFinder -> prop_Energy() -> linkTo(m_Energy);
 
-  connect(m_CenterFinder -> prop_ImplementTilt(), SIGNAL(changedValue(bool)), this, SLOT(onImplementTiltChanged(bool)));
+  connect(m_CenterFinder -> prop_ImplementTilt(), SIGNAL(valueChanged(bool,int)), this, SLOT(onImplementTiltChanged(bool)));
 
   onImplementTiltChanged(m_CenterFinder -> get_ImplementTilt());
 }
