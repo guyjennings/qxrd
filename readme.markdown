@@ -1,6 +1,10 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.7.14 - Sep 15 2011
+Improved implementation of remaining property types - should, (I hope) eliminate
+the update loop problem once and for all...
+
 ## v0.7.13 - Sep 9 2011
 Improved implementation of integer properties - should eliminate the occasional
 update loops that we get from time to time
