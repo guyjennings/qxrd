@@ -238,9 +238,9 @@ void QcepDoubleProperty::setValue(double val, int index)
           .arg(this->index()));
   }
 
-  if (index == this->index()) {
+//  if (index == this->index()) {
     setValue(val);
-  }
+//  }
 }
 
 void QcepDoubleProperty::setValue(double val)
@@ -365,7 +365,9 @@ void QcepDoublePropertyDoubleSpinBoxHelper::setValue(double value, int index)
               .arg(value));
       }
 
+      bool block = m_DoubleSpinBox->blockSignals(true);
       m_DoubleSpinBox->setValue(value);
+      m_DoubleSpinBox->blockSignals(block);
     }
   }
 }
@@ -552,7 +554,9 @@ void QcepIntPropertySpinBoxHelper::setValue(int value, int index)
             .arg(value));
       }
 
+      bool block = m_SpinBox->blockSignals(true);
       m_SpinBox->setValue(value);
+      m_SpinBox->blockSignals(block);
     }
   }
 }
@@ -601,7 +605,9 @@ void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value, int index)
               .arg(value));
       }
 
+      bool block = m_ComboBox->blockSignals(true);
       m_ComboBox->setCurrentIndex(value);
+      m_ComboBox->blockSignals(block);
     }
   }
 }
@@ -746,7 +752,9 @@ void QcepBoolPropertyButtonHelper::setChecked(bool value, int index)
               .arg(value));
       }
 
+      bool block = m_Button->blockSignals(true);
       m_Button->setChecked(value);
+      m_Button->blockSignals(block);
     }
   }
 }
@@ -908,7 +916,9 @@ void QcepStringPropertyLineEditHelper::setText(QString value, int index)
               .arg(value));
       }
 
+      bool block = m_LineEdit->blockSignals(true);
       m_LineEdit->setText(value);
+      m_LineEdit->blockSignals(block);
     }
   }
 }

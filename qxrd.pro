@@ -48,7 +48,7 @@ tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/images/*.{png,ico,icns} \
                       -t $${TARGET}-$${VERSION}/source/images &&
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/source/{[TA]*.h,q*.cpp,q*.h,q*.qrc,q*.rc,q*.ui,source.pro,*.pri} \
+        $(COPY_FILE)  $${PWD}/source/{[TA]*.h,q*.cpp,q*.h,q*.qrc,q*.rc,q*.ui,source.pro,*.pri,*.js} \
                       -t $${TARGET}-$${VERSION}/source &&
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/levmar-2.5/*.{c,h} \

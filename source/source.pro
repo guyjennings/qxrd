@@ -70,7 +70,11 @@ OTHER_FILES += help/qxrdhelptext.html \
     help/qxrdpowderfitrefinehelp.html \
     help/qxrdpowderfitresultshelp.html \
     help/README.html \
-    simpleServerTest.mac
+    simpleServerTest.mac \
+    testScripts.js \
+    testImage.js \
+    tilt_test.js \
+    testscript.js
 DISTFILES += qxrd.dox \
     download/index.php \
     images/*.* \
@@ -481,3 +485,6 @@ win32 { # Make NSIS installer...
 #for(m, QT) {
 #  message("In source.pro QT contains $${m}")
 #}
+
+
+

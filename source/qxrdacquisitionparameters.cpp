@@ -48,6 +48,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters()
     m_UserComment3(this,"userComment3",""),
     m_UserComment4(this,"userComment4",""),
     m_DroppedFrames(this,"droppedFrames",0),
+    m_Test(this,"test",0),
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL)
 {
