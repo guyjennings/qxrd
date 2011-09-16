@@ -1,6 +1,10 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.7.15 - Sep 16 2011
+Added caching scheme to speed up integration.  Looks to give about an order of
+magnitude speed boost
+
 ## v0.7.14 - Sep 15 2011
 Improved implementation of remaining property types - should, (I hope) eliminate
 the update loop problem once and for all...
