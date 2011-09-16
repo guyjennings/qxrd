@@ -4,6 +4,10 @@
 #include "qxrdapplication.h"
 #include "qcepdebug.h"
 
+#define _USE_MATH_DEFINES
+
+#include <cmath>
+
 QxrdIntegratorCache::QxrdIntegratorCache(QxrdAllocator *alloc) :
   QObject(NULL),
   m_Oversample(this, "oversample", 1),
