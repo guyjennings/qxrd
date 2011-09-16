@@ -209,7 +209,8 @@ HEADERS += TODO.h \
     qxrdacquirefilewatcherdialog.h \
     qxrdacquiredialogbase.h \
     qxrdfilebrowsermodelupdater.h \
-    qxrdfilebrowsermodelupdaterthread.h
+    qxrdfilebrowsermodelupdaterthread.h \
+    qxrdintegratorcache.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -329,7 +330,8 @@ SOURCES += qxrd.cpp \
     qxrdacquirefilewatcherdialog.cpp \
     qxrdacquiredialogbase.cpp \
     qxrdfilebrowsermodelupdater.cpp \
-    qxrdfilebrowsermodelupdaterthread.cpp
+    qxrdfilebrowsermodelupdaterthread.cpp \
+    qxrdintegratorcache.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -485,6 +487,3 @@ win32 { # Make NSIS installer...
 #for(m, QT) {
 #  message("In source.pro QT contains $${m}")
 #}
-
-
-

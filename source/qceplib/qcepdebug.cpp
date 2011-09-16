@@ -22,6 +22,7 @@ const char* gDebugStrings[] = {
   "Server Commands",
   "Disable Messages",
   "Acquisition Timing Messages",
+  "Integrator Operation",
   NULL
 };
 

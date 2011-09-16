@@ -9,6 +9,7 @@
 #include "qxrdsettings.h"
 #include "qxrddataprocessor.h"
 #include <qwt_double_rect.h>
+#include "qxrdintegratorcache.h"
 
 class QxrdDataProcessorBase;
 class QxrdAllocator;
@@ -70,10 +71,13 @@ public slots:
   void integrateVsQ();
   void integrateVsTTH();
 
+  void onIntegrationParametersChanged();
+
 private:
   mutable QMutex         m_Mutex;
   QxrdDataProcessorBase *m_DataProcessor;
   QxrdAllocator         *m_Allocator;
+  QxrdIntegratorCachePtr m_IntegratorCache;
 };
 
 #endif // QXRDINTEGRATOR_H
