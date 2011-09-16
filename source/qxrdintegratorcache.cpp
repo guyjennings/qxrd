@@ -288,16 +288,20 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
       for (int y = 0; y < nRows; y++) {
         for (int x = 0; x < nCols; x++) {
-          double val = dimg->value(x,y);
-          for (int oversampley = 0; oversampley < noversample; oversampley++) {
-            for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
-              int bin = *cachep++;
+          if ((mask == NULL) || (mask->value(x, y))) {
+            double val = dimg->value(x,y);
+            for (int oversampley = 0; oversampley < noversample; oversampley++) {
+              for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
+                int bin = *cachep++;
 
-              if (bin >= 0) {
-                integral[bin] += val;
-                sumvalue[bin] += 1;
+                if (bin >= 0) {
+                  integral[bin] += val;
+                  sumvalue[bin] += 1;
+                }
               }
             }
+          } else {
+            cachep += (noversample*noversample);
           }
         }
       }

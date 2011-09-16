@@ -66,7 +66,9 @@ void QxrdIntegrator::readSettings(QxrdSettings &settings, QString section)
 
 void QxrdIntegrator::onIntegrationParametersChanged()
 {
-  g_Application->printMessage("Integration parameters changed");
+  if (qcepDebug(DEBUG_INTEGRATOR)) {
+    g_Application->printMessage("Integration parameters changed");
+  }
 
   m_IntegratorCache = QxrdIntegratorCachePtr();
 }
