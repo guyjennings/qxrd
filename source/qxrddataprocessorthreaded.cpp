@@ -45,18 +45,18 @@ void QxrdDataProcessorThreaded::acquiredInt16Image(QxrdInt16ImageDataPtr image, 
 {
   QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
 
-  typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdInt16ImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QxrdMaskDataPtr);
-  MFType p = &QxrdDataProcessorThreaded::correctInt16Image;
-  m_CorrectedImages.enqueue(QtConcurrent::run(this, p, corrected, image, darkImage(), mask(), overflow));
+  m_CorrectedImages.enqueue(QtConcurrent::run(this,
+                                              &QxrdDataProcessorThreaded::correctInt16Image,
+                                              corrected, image, darkImage(), mask(), overflow));
 }
 
 void QxrdDataProcessorThreaded::acquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
 
-  typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdInt32ImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QxrdMaskDataPtr);
-  MFType p = &QxrdDataProcessorThreaded::correctInt32Image;
-  m_CorrectedImages.enqueue(QtConcurrent::run(this, p, corrected, image, darkImage(), mask(), overflow));
+  m_CorrectedImages.enqueue(QtConcurrent::run(this,
+                                              &QxrdDataProcessorThreaded::correctInt32Image,
+                                              corrected, image, darkImage(), mask(), overflow));
 }
 
 void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
@@ -65,7 +65,10 @@ void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image
 
   typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QxrdMaskDataPtr);
   MFType p = &QxrdDataProcessorThreaded::correctDoubleImage;
-  m_CorrectedImages.enqueue(QtConcurrent::run(this, p, corrected, image, darkImage(), mask(), overflow));
+
+  m_CorrectedImages.enqueue(QtConcurrent::run(this,
+                                              p,
+                                              corrected, image, darkImage(), mask(), overflow));
 }
 
 void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, QList<double> v)
@@ -74,12 +77,17 @@ void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image
 
   typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QList<double>);
   MFType p = &QxrdDataProcessorThreaded::correctDoubleImage;
-  m_CorrectedImages.enqueue(QtConcurrent::run(this, p, corrected, image, darkImage(), overflow, v));
+
+  m_CorrectedImages.enqueue(QtConcurrent::run(this,
+                                              p,
+                                              corrected, image, darkImage(), overflow, v));
 }
 
 QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
     (QxrdDoubleImageDataPtr corrected, QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
+  QThread::currentThread()->setObjectName("correctInt16Image");
+
   if (qcepDebug(DEBUG_PROCESS)) {
     g_Application->printMessage(tr("QxrdDataProcessorThreaded::correctInt16Image"));
   }
@@ -103,6 +111,8 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
 QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
     (QxrdDoubleImageDataPtr corrected, QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
+  QThread::currentThread()->setObjectName("correctInt32Image");
+
   if (qcepDebug(DEBUG_PROCESS)) {
     g_Application->printMessage(tr("QxrdDataProcessorThreaded::correctInt32Image"));
   }
@@ -127,6 +137,8 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
 QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
     (QxrdDoubleImageDataPtr corrected, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
+  QThread::currentThread()->setObjectName("correctDoubleImage");
+
   if (qcepDebug(DEBUG_PROCESS)) {
     g_Application->printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
   }
@@ -151,6 +163,8 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
 QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
     (QxrdDoubleImageDataPtr corrected, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr overflow, QcepDoubleList v)
 {
+  QThread::currentThread()->setObjectName("correctDoubleImage");
+
   if (qcepDebug(DEBUG_PROCESS)) {
     g_Application->printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
   }
@@ -196,6 +210,8 @@ void QxrdDataProcessorThreaded::onCorrectedImageAvailable()
 QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
     (QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double /*cx*/, double /*cy*/)
 {
+  QThread::currentThread()->setObjectName("integrateImage");
+
   if (qcepDebug(DEBUG_PROCESS)) {
     g_Application->printMessage(tr("QxrdDataProcessorThreaded::integrateImage"));
   }
@@ -231,6 +247,8 @@ void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
 QxrdROIDataPtr QxrdDataProcessorThreaded::calculateROI
     (QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
 {
+  QThread::currentThread()->setObjectName("calculateROI");
+
   if (qcepDebug(DEBUG_PROCESS)) {
     g_Application->printMessage(tr("QxrdDataProcessorThreaded::calculateROI"));
   }
@@ -250,6 +268,8 @@ void QxrdDataProcessorThreaded::onROIDataAvailable()
 QxrdHistogramDataPtr QxrdDataProcessorThreaded::calculateHistogram
     (QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
 {
+  QThread::currentThread()->setObjectName("calculateHistogram");
+
   if (qcepDebug(DEBUG_PROCESS)) {
     g_Application->printMessage(tr("QxrdDataProcessorThreaded::calculateHistogram"));
   }
@@ -313,6 +333,8 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
 
 void QxrdDataProcessorThreaded::integrateData(QString name)
 {
+  QThread::currentThread()->setObjectName("integrateData");
+
   QxrdDoubleImageDataPtr img;
   QxrdIntegratedDataPtr  result;
 

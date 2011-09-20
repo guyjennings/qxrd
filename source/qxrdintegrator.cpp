@@ -75,6 +75,8 @@ void QxrdIntegrator::onIntegrationParametersChanged()
 
 QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
 {
+  QThread::currentThread()->setObjectName("performIntegration");
+
   if (m_IntegratorCache == NULL ||
       dimg->get_Width() != m_IntegratorCache->get_NCols() ||
       dimg->get_Height() != m_IntegratorCache->get_NRows()) {
@@ -347,6 +349,8 @@ QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdIntegratedDataPtr integ, Qxr
 
 QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QwtArray<QwtDoublePoint> poly, double /*width*/)
 {
+  QThread::currentThread()->setObjectName("slicePolygon");
+
   if (integ && image) {
     double length = 0;
 

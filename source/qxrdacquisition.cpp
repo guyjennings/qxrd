@@ -87,9 +87,7 @@ void QxrdAcquisition::acquire()
                                         get_SkippedExposuresAtStart(),
                                         get_SkippedExposures());
 
-    typedef void (QxrdAcquisition::*MFType)(QxrdAcquisitionParameterPack);
-    MFType p = &QxrdAcquisition::doAcquire;
-    QFuture<void> res = QtConcurrent::run(this, p, params);
+    QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquire, params);
 
     m_Watcher.setFuture(res);
   } else {
@@ -134,9 +132,7 @@ void QxrdAcquisition::acquireDark()
                                             get_DarkSummedExposures(),
                                             get_SkippedExposuresAtStart());
 
-    typedef void (QxrdAcquisition::*MFType)(QxrdDarkAcquisitionParameterPack);
-    MFType p = &QxrdAcquisition::doAcquireDark;
-    QFuture<void> res = QtConcurrent::run(this, p, params);
+    QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquireDark, params);
 
     m_Watcher.setFuture(res);
   } else {
@@ -350,6 +346,8 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
 
 void QxrdAcquisition::processImage(const QxrdProcessArgs &args)
 {
+  QThread::currentThread()->setObjectName("processImage");
+
   g_Application->printMessage(tr("QxrdAcquisition::processImage %1 %2 start").arg(args.m_FilePattern).arg(args.m_FileIndex));
 
   processImage(args.m_FilePattern, args.m_FileIndex, args.m_Phase, args.m_NPhases, args.m_Trig, args.m_Image, args.m_Overflow);
@@ -438,6 +436,8 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 {
   QTime acqTimer;
   acqTimer.start();
+
+  QThread::currentThread()->setObjectName("doAcquire");
 
   stopIdling();
 
@@ -631,6 +631,8 @@ cancel:
 
 void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
 {
+  QThread::currentThread()->setObjectName("doAcquireDark");
+
   stopIdling();
 
   QString fileBase = parms.fileBase();
