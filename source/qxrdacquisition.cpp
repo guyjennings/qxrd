@@ -449,6 +449,15 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
   int postTrigger = parms.postTrigger();
   int nphases = parms.nphases();
   int skipBefore = parms.skipBefore();
+
+  if (skipBefore <= 0) {
+    if (get_LastAcquired() != 1) {
+      skipBefore = 1;
+    }
+  }
+
+  set_LastAcquired(1);
+
   int skipBetween = parms.skipBetween();
   int nPreTriggered = 0;
 
@@ -484,7 +493,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
   for (int i=0; i<skipBefore; i++) {
     if (cancelling()) goto cancel;
-    g_Application->statusMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
+    g_Application->printMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
     acquireFrame(exposure);
   }
 
@@ -523,7 +532,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     if (i != 0) {
       for (int k=0; k<skipBetween; k++) {
         if (cancelling()) goto cancel;
-        g_Application->statusMessage(tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
+        g_Application->printMessage(tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
         acquireFrame(exposure);
 
         if (qcepDebug(DEBUG_ACQUIRETIME)) {
@@ -641,6 +650,14 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
   int nsummed = parms.nsummed();
   int skipBefore = parms.skipBefore();
 
+  if (skipBefore <= 0) {
+    if (get_LastAcquired() != -1) {
+      skipBefore = 1;
+    }
+  }
+
+  set_LastAcquired(-1);
+
   g_Application->printMessage("Starting dark acquisition");
 
   if (synchronizedAcquisition()) {
@@ -665,6 +682,7 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
 
   for (int i=0; i<skipBefore; i++) {
     if (cancelling()) goto cancel;
+    g_Application->printMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
     acquireFrame(exposure);
   }
 

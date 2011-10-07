@@ -55,6 +55,9 @@ public:
   Q_PROPERTY(int    skippedExposuresAtStart  READ get_SkippedExposuresAtStart WRITE set_SkippedExposuresAtStart)
   QCEP_INTEGER_PROPERTY(SkippedExposuresAtStart)
 
+  Q_PROPERTY(int    lastAcquired  READ get_LastAcquired WRITE set_LastAcquired STORED false)
+  QCEP_INTEGER_PROPERTY(LastAcquired)
+
   Q_PROPERTY(int    phasesInGroup  READ get_PhasesInGroup WRITE set_PhasesInGroup)
   QCEP_INTEGER_PROPERTY(PhasesInGroup)
 
