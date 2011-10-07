@@ -373,6 +373,8 @@ void QxrdAcquisitionPerkinElmer::initialize()
       g_Application->printMessage(tr("Sync Mode = %1").arg(m_SyncMode));
     }
 
+    onCameraGainChanged(get_CameraGain());
+
     if (get_ExposureTime() <= 0) {
       set_ExposureTime(0.135);
     }
