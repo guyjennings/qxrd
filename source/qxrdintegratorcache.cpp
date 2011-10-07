@@ -263,6 +263,10 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
       if (qcepDebug(DEBUG_INTEGRATOR)) {
         g_Application->printMessage(tr("QxrdIntegratorCache::performIntegration - cache finished"));
       }
+
+      g_Application->printMessage(tr("Integration of %1 took %2 msec")
+                                  .arg(dimg->get_Title())
+                                  .arg(tic.restart()));
     }
 
     while (m_CacheFillLevel < m_CacheFullLevel) {
