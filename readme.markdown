@@ -1,6 +1,10 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.7.16 - Oct 7 2011
+Set initial camera gain on program startup
+Automatic insertion of skipped exposures when skippedExposuresAtStart==0
+
 ## v0.7.15 - Sep 16 2011
 Added caching scheme to speed up integration.  Looks to give about an order of
 magnitude speed boost
