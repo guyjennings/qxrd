@@ -1,6 +1,10 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.8.1 - Oct 27 2011
+Display error dialog if another copy of qxrd is already running
+Allow specifying number of integration steps as alternative to integration step size
+
 ## v0.7.16 - Oct 7 2011
 Set initial camera gain on program startup
 Automatic insertion of skipped exposures when skippedExposuresAtStart==0
