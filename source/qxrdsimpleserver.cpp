@@ -26,7 +26,7 @@ void QxrdSimpleServer::startServer(QHostAddress addr, int port)
   }
 
   if (!listen(addr, port)) {
-    g_Application->printMessage(tr("Failed to bind to address %1 port %2").arg(addr.toString()).arg(port));
+    g_Application->criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy of qxrd running already?").arg(addr.toString()).arg(port));
   }
 }
 

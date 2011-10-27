@@ -27,18 +27,12 @@ QSpecServer::startServer(QHostAddress a, int p)
   }
 
   if (p < 0) {
-    for (int p=6510; p<=6530; p++) {
-      if (listen(a,p)) {
-        (tr("Bound to port %1").arg(p));
-	return;
-      }
-    }
-    g_Application->warningMessage("Couldn't find unused port in range [6510..6530] to use for spec server");
-  } else {
-    if (!listen(a, p)) {
-      g_Application->warningMessage(tr("Failed to bind to address %1 port %2")
-               .arg(a.toString()).arg(p));
-    }
+    p = 6510;
+  }
+
+  if (!listen(a, p)) {
+    g_Application->criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy of qxrd running already?")
+                                   .arg(a.toString()).arg(p));
   }
 }
 
