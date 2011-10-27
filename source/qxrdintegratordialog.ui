@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>292</width>
+    <width>293</width>
     <height>271</height>
    </rect>
   </property>
@@ -27,14 +27,14 @@
     <property name="spacing">
      <number>2</number>
     </property>
-    <item row="6" column="1">
+    <item row="7" column="1">
      <widget class="QPushButton" name="m_IntegrateButton">
       <property name="text">
        <string>Integrate</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="0" colspan="2">
+    <item row="9" column="0" colspan="2">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -74,7 +74,7 @@ script property integrator.oversample</string>
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
+    <item row="7" column="0">
      <widget class="QPushButton" name="m_ClearGraphButton">
       <property name="toolTip">
        <string>Clear all curves from integrated data graph</string>
@@ -88,7 +88,11 @@ script property integrator.oversample</string>
      <widget class="QxrdCenterStepSpinner" name="m_IntegratorStepSize">
       <property name="toolTip">
        <string>step size for integration
+if ==  0, use fixed number of steps instead
 script property integrator.integrationStep</string>
+      </property>
+      <property name="specialValueText">
+       <string>Use fixed number of steps</string>
       </property>
      </widget>
     </item>
@@ -99,16 +103,6 @@ script property integrator.integrationStep</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QPushButton" name="m_IntegrateOptionsButton">
-      <property name="toolTip">
-       <string>More intergration options</string>
-      </property>
-      <property name="text">
-       <string>More Options...</string>
       </property>
      </widget>
     </item>
@@ -145,7 +139,7 @@ property integrator.integrationXUnits</string>
       </item>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="5" column="0">
      <widget class="QLabel" name="label_4">
       <property name="text">
        <string>Integration Minimum</string>
@@ -155,7 +149,7 @@ property integrator.integrationXUnits</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
+    <item row="6" column="0">
      <widget class="QLabel" name="label_5">
       <property name="text">
        <string>Integration Maximum</string>
@@ -165,7 +159,7 @@ property integrator.integrationXUnits</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="5" column="1">
      <widget class="QDoubleSpinBox" name="m_IntegratorMinimum">
       <property name="toolTip">
        <string>Start value for integration
@@ -176,7 +170,7 @@ script property integrator.integrationMinimum</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
+    <item row="6" column="1">
      <widget class="QDoubleSpinBox" name="m_IntegratorMaximum">
       <property name="toolTip">
        <string>Ending value for integration range
@@ -187,7 +181,7 @@ script property integrator.integrationMaximum</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="0">
+    <item row="8" column="0">
      <widget class="QPushButton" name="m_ClearSelectedGraphButton">
       <property name="toolTip">
        <string>Clear selected curves from integrated data graph
@@ -195,6 +189,41 @@ script property integrator.integrationMaximum</string>
       </property>
       <property name="text">
        <string>Clear Selected Curves</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Integration Number of Steps</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QSpinBox" name="m_IntegratorNSteps">
+      <property name="toolTip">
+       <string>Number of steps for integration
+if == 0, use step size instead
+script property integrator.integrationNSteps</string>
+      </property>
+      <property name="specialValueText">
+       <string>Use fixed step size</string>
+      </property>
+      <property name="maximum">
+       <number>999999</number>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QPushButton" name="m_IntegrateOptionsButton">
+      <property name="toolTip">
+       <string>More intergration options</string>
+      </property>
+      <property name="text">
+       <string>More Options...</string>
       </property>
      </widget>
     </item>

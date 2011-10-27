@@ -22,6 +22,9 @@ public:
   Q_PROPERTY(double integrationStep READ get_IntegrationStep WRITE set_IntegrationStep)
   QCEP_DOUBLE_PROPERTY(IntegrationStep)
 
+  Q_PROPERTY(double integrationNSteps READ get_IntegrationNSteps WRITE set_IntegrationNSteps)
+  QCEP_INTEGER_PROPERTY(IntegrationNSteps)
+
   Q_PROPERTY(double integrationMinimum READ get_IntegrationMinimum WRITE set_IntegrationMinimum)
   QCEP_DOUBLE_PROPERTY(IntegrationMinimum)
 
@@ -66,6 +69,9 @@ public:
 
   Q_PROPERTY(int     nCols      READ get_NCols WRITE set_NCols)
   QCEP_INTEGER_PROPERTY(NCols)
+
+  Q_PROPERTY(double rStep READ get_RStep WRITE set_RStep)
+  QCEP_DOUBLE_PROPERTY(RStep)
 
   Q_PROPERTY(double rMin READ get_RMin WRITE set_RMin)
   QCEP_DOUBLE_PROPERTY(RMin)

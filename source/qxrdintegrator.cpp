@@ -19,6 +19,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorBase *proc, QxrdAllocator *alloc
   : QObject(parent),
     m_Oversample(this, "oversample", 1),
     m_IntegrationStep(this, "integrationStep", 0.001),
+    m_IntegrationNSteps(this, "integrationNSteps", 0),
     m_IntegrationMinimum(this, "integrationMinimum", 0),
     m_IntegrationMaximum(this, "integrationMaximum", 100000),
     m_IntegrationXUnits(this, "integrationXUnits", IntegrateTTH),
@@ -28,6 +29,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorBase *proc, QxrdAllocator *alloc
 {
   connect(this->prop_Oversample(),         SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
   connect(this->prop_IntegrationStep(),    SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(this->prop_IntegrationNSteps(),  SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
   connect(this->prop_IntegrationMinimum(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
   connect(this->prop_IntegrationMaximum(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
   connect(this->prop_IntegrationXUnits(),  SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
@@ -86,6 +88,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr i
 
     cache->set_Oversample        (this->get_Oversample());
     cache->set_IntegrationStep   (this->get_IntegrationStep());
+    cache->set_IntegrationNSteps (this->get_IntegrationNSteps());
     cache->set_IntegrationMinimum(this->get_IntegrationMinimum());
     cache->set_IntegrationMaximum(this->get_IntegrationMaximum());
     cache->set_IntegrationXUnits (this->get_IntegrationXUnits());
@@ -191,144 +194,144 @@ QString QxrdIntegrator::XLabel() const
   return label;
 }
 
-QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, int oversample, int normalize)
-{
-  if (integ && image) {
-    QcepDoubleList norm = image->get_Normalization();
+//QxrdIntegratedDataPtr QxrdIntegrator::integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, int oversample, int normalize)
+//{
+//  if (integ && image) {
+//    QcepDoubleList norm = image->get_Normalization();
 
-    double normVal = 1;
+//    double normVal = 1;
 
-    if (norm.length()>=1) {
-      normVal = norm[0];
-    }
+//    if (norm.length()>=1) {
+//      normVal = norm[0];
+//    }
 
-    g_Application->printMessage(tr("Integrating image %1 from %2").arg(image->get_Title()).arg(image->get_FileName()));
+//    g_Application->printMessage(tr("Integrating image %1 from %2").arg(image->get_Title()).arg(image->get_FileName()));
 
-    QTime tic;
-    tic.start();
+//    QTime tic;
+//    tic.start();
 
-    int nRows = image -> get_Height();
-    int nCols = image -> get_Width();
+//    int nRows = image -> get_Height();
+//    int nCols = image -> get_Width();
 
-    if (oversample < 1) {
-      oversample = 1;
-      set_Oversample(1);
-    } else if (oversample > 16) {
-      oversample = 16;
-      set_Oversample(16);
-    }
+//    if (oversample < 1) {
+//      oversample = 1;
+//      set_Oversample(1);
+//    } else if (oversample > 16) {
+//      oversample = 16;
+//      set_Oversample(16);
+//    }
 
-    double oversampleStep = 1.0/oversample;
-    double halfOversampleStep = oversampleStep/2.0;
+//    double oversampleStep = 1.0/oversample;
+//    double halfOversampleStep = oversampleStep/2.0;
 
-    QxrdCenterFinder *cf = m_DataProcessor -> centerFinder();
+//    QxrdCenterFinder *cf = m_DataProcessor -> centerFinder();
 
-    if (cf) {
-      double cx = cf -> get_CenterX();
-      double cy = cf -> get_CenterY();
+//    if (cf) {
+//      double cx = cf -> get_CenterX();
+//      double cy = cf -> get_CenterY();
 
-      double r00  = XValue(QwtDoublePoint(0,0));
-      double r10  = XValue(QwtDoublePoint(nRows+1,0));
-      double r01  = XValue(QwtDoublePoint(0,nCols+1));
-      double r11  = XValue(QwtDoublePoint(nRows+1,nCols+1));
+//      double r00  = XValue(QwtDoublePoint(0,0));
+//      double r10  = XValue(QwtDoublePoint(nRows+1,0));
+//      double r01  = XValue(QwtDoublePoint(0,nCols+1));
+//      double r11  = XValue(QwtDoublePoint(nRows+1,nCols+1));
 
-      double rMin = r00;
-      double rMax = r00;
+//      double rMin = r00;
+//      double rMax = r00;
 
-      rMin = qMin(rMin, r10);
-      rMin = qMin(rMin, r01);
-      rMin = qMin(rMin, r11);
+//      rMin = qMin(rMin, r10);
+//      rMin = qMin(rMin, r01);
+//      rMin = qMin(rMin, r11);
 
-      rMax = qMax(rMax, r10);
-      rMax = qMax(rMax, r01);
-      rMax = qMax(rMax, r11);
+//      rMax = qMax(rMax, r10);
+//      rMax = qMax(rMax, r01);
+//      rMax = qMax(rMax, r11);
 
-      if (cx >= 0 && cx <= nCols && cy >= 0 && cy <= nRows) {
-        rMin = qMin(rMin,0.0);
-      }
+//      if (cx >= 0 && cx <= nCols && cy >= 0 && cy <= nRows) {
+//        rMin = qMin(rMin,0.0);
+//      }
 
-      rMin = qMax(rMin, get_IntegrationMinimum());
-      rMax = qMin(rMax, get_IntegrationMaximum());
+//      rMin = qMax(rMin, get_IntegrationMinimum());
+//      rMax = qMin(rMax, get_IntegrationMaximum());
 
-      double rStep = get_IntegrationStep();
-      double nMin  = floor(rMin/rStep);
-      double nMax  = ceil(rMax/rStep);
-      int nRange = (nMax - nMin);
-      QVector<double> integral(nRange), sumvalue(nRange);
+//      double rStep = get_IntegrationStep();
+//      double nMin  = floor(rMin/rStep);
+//      double nMax  = ceil(rMax/rStep);
+//      int nRange = (nMax - nMin);
+//      QVector<double> integral(nRange), sumvalue(nRange);
 
-      double pxl  = cf->get_DetectorXPixelSize();
-      double pyl  = cf->get_DetectorYPixelSize();
-      double beta = cf->get_DetectorTilt()*M_PI/180.0;
-      double rot  = cf->get_TiltPlaneRotation()*M_PI/180.0;
-      double dist = cf->get_DetectorDistance();
-      double nrg  = cf->get_Energy();
+//      double pxl  = cf->get_DetectorXPixelSize();
+//      double pyl  = cf->get_DetectorYPixelSize();
+//      double beta = cf->get_DetectorTilt()*M_PI/180.0;
+//      double rot  = cf->get_TiltPlaneRotation()*M_PI/180.0;
+//      double dist = cf->get_DetectorDistance();
+//      double nrg  = cf->get_Energy();
 
-      if (!cf->get_ImplementTilt()) {
-        beta = 0;
-        rot = 0;
-      }
+//      if (!cf->get_ImplementTilt()) {
+//        beta = 0;
+//        rot = 0;
+//      }
 
-      double cosbeta = cos(beta);
-      double sinbeta = sin(beta);
-      double cosrot  = cos(rot);
-      double sinrot  = sin(rot);
-      int xUnits = get_IntegrationXUnits();
+//      double cosbeta = cos(beta);
+//      double sinbeta = sin(beta);
+//      double cosrot  = cos(rot);
+//      double sinrot  = sin(rot);
+//      int xUnits = get_IntegrationXUnits();
 
-      g_Application->printMessage(tr("Integration range rMin %1, rMax %2, %3 steps").arg(rMin).arg(rMax).arg(nMax - nMin));
+//      g_Application->printMessage(tr("Integration range rMin %1, rMax %2, %3 steps").arg(rMin).arg(rMax).arg(nMax - nMin));
 
-      for (int y=0; y<nRows; y++) {
-        for (int x=0; x<nCols; x++) {
-          if ((mask == NULL) || (mask->value(x, y))) {
-            double val = image->value(x, y);
-            for (double oversampley = 0; oversampley < 1; oversampley += oversampleStep) {
-              double yy = y+oversampley+halfOversampleStep;
-              for (double oversamplex = 0; oversamplex < 1; oversamplex += oversampleStep) {
-                double xx = x+oversamplex+halfOversampleStep;
+//      for (int y=0; y<nRows; y++) {
+//        for (int x=0; x<nCols; x++) {
+//          if ((mask == NULL) || (mask->value(x, y))) {
+//            double val = image->value(x, y);
+//            for (double oversampley = 0; oversampley < 1; oversampley += oversampleStep) {
+//              double yy = y+oversampley+halfOversampleStep;
+//              for (double oversamplex = 0; oversamplex < 1; oversamplex += oversampleStep) {
+//                double xx = x+oversamplex+halfOversampleStep;
 
-//                double r = cf->getTwoTheta(cx,cy,dist,xx,yy,pxl,pyl,cosbeta,sinbeta,cosrot,sinrot);
-                double r = XValue(xx,yy,xUnits,cf,cx,cy,dist,nrg,pyl,pxl,rot,cosrot,sinrot,cosbeta,sinbeta,1.0,0.0);
-                double n = floor(r/rStep);
+////                double r = cf->getTwoTheta(cx,cy,dist,xx,yy,pxl,pyl,cosbeta,sinbeta,cosrot,sinrot);
+//                double r = XValue(xx,yy,xUnits,cf,cx,cy,dist,nrg,pyl,pxl,rot,cosrot,sinrot,cosbeta,sinbeta,1.0,0.0);
+//                double n = floor(r/rStep);
 
-                if (n >= nMin && n < nMax) {
-                  int bin = n - nMin;
+//                if (n >= nMin && n < nMax) {
+//                  int bin = n - nMin;
 
-                  integral[bin] += val;
-                  sumvalue[bin] += 1;
-                }
-              }
-            }
-          }
-        }
-      }
+//                  integral[bin] += val;
+//                  sumvalue[bin] += 1;
+//                }
+//              }
+//            }
+//          }
+//        }
+//      }
 
-      integ -> resize(0);
-      integ -> set_Center(cx, cy);
+//      integ -> resize(0);
+//      integ -> set_Center(cx, cy);
 
-      for(int ir=0; ir<nRange; ir++) {
-        int sv = sumvalue[ir];
+//      for(int ir=0; ir<nRange; ir++) {
+//        int sv = sumvalue[ir];
 
-        if (sv > 0) {
-          double xv = rMin + (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
+//        if (sv > 0) {
+//          double xv = rMin + (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
 
-          if (normalize) {
-            integ -> append(xv, normVal*integral[ir]/sv);
-          } else {
-            integ -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
-          }
-        }
-      }
+//          if (normalize) {
+//            integ -> append(xv, normVal*integral[ir]/sv);
+//          } else {
+//            integ -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+//          }
+//        }
+//      }
 
-      integ->set_XUnitsLabel(XLabel());
-      integ->set_Oversample(get_Oversample());
+//      integ->set_XUnitsLabel(XLabel());
+//      integ->set_Oversample(get_Oversample());
 
-      g_Application->printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
-    } else {
-      g_Application->printMessage("QxrdIntegrator::integrate failed");
-    }
-  }
+//      g_Application->printMessage(tr("Integration of %1 took %2 msec").arg(image->get_Title()).arg(tic.restart()));
+//    } else {
+//      g_Application->printMessage("QxrdIntegrator::integrate failed");
+//    }
+//  }
 
-  return integ;
-}
+//  return integ;
+//}
 
 QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, double x0, double y0, double x1, double y1, double width)
 {

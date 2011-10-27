@@ -12,6 +12,7 @@ QxrdIntegratorCache::QxrdIntegratorCache(QxrdAllocator *alloc) :
   QObject(NULL),
   m_Oversample(this, "oversample", 1),
   m_IntegrationStep(this, "integrationStep", 0.001),
+  m_IntegrationNSteps(this, "integrationNSteps", 0),
   m_IntegrationMinimum(this, "integrationMinimum", 0),
   m_IntegrationMaximum(this, "integrationMaximum", 100000),
   m_IntegrationXUnits(this, "integrationXUnits", QxrdIntegrator::IntegrateTTH),
@@ -27,6 +28,7 @@ QxrdIntegratorCache::QxrdIntegratorCache(QxrdAllocator *alloc) :
   m_TiltPlaneRotation(this, "tiltPlaneRotation", 90),
   m_NRows(this, "nRows", -1),
   m_NCols(this, "nCols", -1),
+  m_RStep(this, "rStep", 0),
   m_RMin(this, "rMin", 0),
   m_RMax(this, "rMax", 0),
   m_NMin(this, "nMin", 0),
@@ -215,10 +217,22 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
       rMax = qMin(rMax, get_IntegrationMaximum());
 
       double rStep = get_IntegrationStep();
+
+      if (rStep == 0) {
+        int nStep = get_IntegrationNSteps();
+
+        if (nStep <= 0) {
+          nStep = 512;
+        }
+
+        rStep = (rMax - rMin)/nStep;
+      }
+
       double nMin  = floor(rMin/rStep);
       double nMax  = ceil(rMax/rStep);
       int nRange = (nMax - nMin);
 
+      set_RStep(rStep);
       set_NRange(nRange);
       set_RMin(rMin);
       set_RMax(rMax);
@@ -288,7 +302,8 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
       int nRows = get_NRows();
       int nCols = get_NCols();
       double rMin = get_RMin();
-      double rStep = get_IntegrationStep();
+      double rMax = get_RMax();
+      double rStep = get_RStep();
 
       QVector<double> integral(nRange), sumvalue(nRange);
       qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
