@@ -277,10 +277,6 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
       if (qcepDebug(DEBUG_INTEGRATOR)) {
         g_Application->printMessage(tr("QxrdIntegratorCache::performIntegration - cache finished"));
       }
-
-      g_Application->printMessage(tr("Integration of %1 took %2 msec")
-                                  .arg(dimg->get_Title())
-                                  .arg(tic.restart()));
     }
 
     while (m_CacheFillLevel < m_CacheFullLevel) {
@@ -348,12 +344,12 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
       integ->set_XUnitsLabel(XLabel());
       integ->set_Oversample(get_Oversample());
-
-      g_Application->printMessage(tr("Integration of %1 took %2 msec")
-                                  .arg(dimg->get_Title())
-                                  .arg(tic.restart()));
       // Integrate entirely out of cache
     }
+
+    g_Application->printMessage(tr("Integration of %1 took %2 msec")
+                                .arg(dimg->get_Title())
+                                .arg(tic.restart()));
   } else {
     g_Application->printMessage(tr("QxrdIntegratorCache::performIntegration - integration failed"));
   }
