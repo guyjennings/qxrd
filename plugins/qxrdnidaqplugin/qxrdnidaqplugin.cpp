@@ -6,6 +6,7 @@
 #endif
 #include <stdio.h>
 #include <QMutexLocker>
+#include <QStringList>
 
 #define DAQmxErrChk(functionCall) do { if( DAQmxFailed(error=(functionCall)) ) { QxrdNIDAQPlugin::errorCheck(__FILE__,__LINE__,error); goto Error; } } while(0)
 
@@ -16,6 +17,32 @@ QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
 {
 //  printf("NI-DAQ plugin constructed\n");
 //  initTaskHandles();
+
+//  res = DAQmxGetDevTerminals("Dev1", buffer, sizeof(buffer));
+//  printf("%d: DAQmxGetDevTerminals : \"%s\"\n", res, buffer);
+
+//  int32 aiTrigUsage;
+//  int32 aoTrigUsage;
+//  int32 diTrigUsage;
+//  int32 doTrigUsage;
+//  int32 ciTrigUsage;
+//  int32 coTrigUsage;
+
+//  res = DAQmxGetDevAITrigUsage("Dev1", &aiTrigUsage);
+//  res = DAQmxGetDevAOTrigUsage("Dev1", &aoTrigUsage);
+//  res = DAQmxGetDevDITrigUsage("Dev1", &diTrigUsage);
+//  res = DAQmxGetDevDOTrigUsage("Dev1", &doTrigUsage);
+//  res = DAQmxGetDevCITrigUsage("Dev1", &ciTrigUsage);
+//  res = DAQmxGetDevCOTrigUsage("Dev1", &coTrigUsage);
+
+//  printf("AI:%02x, AO:%02x, DI:%02x, DO:%02x, CI:%02x, CO:%02x\n",
+//         aiTrigUsage, aoTrigUsage, diTrigUsage, doTrigUsage, ciTrigUsage, coTrigUsage
+//         );
+
+//  bool32 isSupported=false;
+//  res = DAQmxGetDevCISampClkSupported("Dev1", &isSupported);
+
+//  printf("%d: DAQmxGetDevCISampClkSupported=%d\n", res, isSupported);
 }
 
 QxrdNIDAQPlugin::~QxrdNIDAQPlugin()
@@ -297,6 +324,121 @@ void QxrdNIDAQPlugin::triggerAnalogWaveform()
 
 Error:
   return;
+}
+
+double QxrdNIDAQPlugin::count(int chan, double time)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  TaskHandle counterTask = 0;
+  int error;
+  float64 res = 0;
+
+  DAQmxErrChk(DAQmxCreateTask("counter", &counterTask));
+  DAQmxErrChk(DAQmxCreateCICountEdgesChan(counterTask,"Dev1/ctr0", "", DAQmx_Val_Rising, 0, DAQmx_Val_CountUp));
+
+  if (counterTask) {
+    DAQmxErrChk(DAQmxCfgSampClkTiming(counterTask, NULL, 100000.0, DAQmx_Val_Rising, DAQmx_Val_HWTimedSinglePoint, time*100000.0));
+    DAQmxStartTask(counterTask);
+    DAQmxWaitUntilTaskDone(counterTask, time*1.25);
+    DAQmxErrChk(DAQmxReadCounterScalarF64(counterTask, time*1.2, &res, NULL));
+  }
+
+Error:
+  DAQmxClearTask(counterTask);
+  return res;
+}
+
+QStringList QxrdNIDAQPlugin::deviceNames()
+{
+  char buffer[5120]="";
+  int32 res=DAQmxGetSysDevNames(buffer, sizeof(buffer));
+//  printf("%d: DAQmxGetSysDevNames : \"%s\"\n", res, buffer);
+
+  QStringList result = QString(buffer).split(", ");
+
+  return result;
+}
+
+QStringList QxrdNIDAQPlugin::deviceAIChannels(QString device)
+{
+  char buffer[5120]="";
+  int32 res=DAQmxGetDevAIPhysicalChans(qPrintable(device), buffer, sizeof(buffer));
+  //  printf("%d: DAQmxGetDevAIPhysicalChans : \"%s\"\n", res, buffer);
+
+  QStringList result = QString(buffer).split(", ");
+
+  return result;
+}
+
+QStringList QxrdNIDAQPlugin::deviceAOChannels(QString device)
+{
+  char buffer[5120]="";
+  int32 res=DAQmxGetDevAOPhysicalChans(qPrintable(device), buffer, sizeof(buffer));
+
+  QStringList result = QString(buffer).split(", ");
+
+  return result;
+}
+
+QStringList QxrdNIDAQPlugin::deviceDIPorts(QString device)
+{
+  char buffer[5120]="";
+  int32 res=DAQmxGetDevDIPorts(qPrintable(device), buffer, sizeof(buffer));
+
+  QStringList result = QString(buffer).split(", ");
+
+  return result;
+}
+
+QStringList QxrdNIDAQPlugin::deviceDILines(QString port)
+{
+  char buffer[5120]="";
+  int32 res=DAQmxGetDevDILines(qPrintable(port), buffer, sizeof(buffer));
+
+  QStringList result = QString(buffer).split(", ");
+
+  return result;
+}
+
+QStringList QxrdNIDAQPlugin::deviceDOPorts(QString device)
+{
+  char buffer[5120]="";
+  int32 res=DAQmxGetDevDOPorts(qPrintable(device), buffer, sizeof(buffer));
+
+  QStringList result = QString(buffer).split(", ");
+
+  return result;
+}
+
+QStringList QxrdNIDAQPlugin::deviceDOLines(QString port)
+{
+  char buffer[5120]="";
+  int32 res=DAQmxGetDevDOLines(qPrintable(port), buffer, sizeof(buffer));
+
+  QStringList result = QString(buffer).split(", ");
+
+  return result;
+}
+
+QStringList QxrdNIDAQPlugin::deviceCIChannels(QString device)
+{
+  char buffer[5120]="";
+  int32 res=DAQmxGetDevCIPhysicalChans(qPrintable(device), buffer, sizeof(buffer));
+
+  QStringList result = QString(buffer).split(", ");
+
+  return result;
+}
+
+QStringList QxrdNIDAQPlugin::deviceCOChannels(QString device)
+{
+  char buffer[5120]="";
+  int32 res=DAQmxGetDevCOPhysicalChans(qPrintable(device), buffer, sizeof(buffer));
+
+  QStringList result = QString(buffer).split(", ");
+
+  return result;
 }
 
 Q_EXPORT_PLUGIN2(qxrdnidaqplugin, QxrdNIDAQPlugin)

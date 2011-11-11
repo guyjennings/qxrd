@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QMutex>
+#include <QStringList>
 
 #include "qxrdnidaqplugininterface.h"
 #include "NIDAQmx.h"
@@ -24,6 +25,18 @@ public slots:
   void   setAnalogOutput(int chan, double val);
   double getAnalogInput(int chan);
   void   triggerAnalogWaveform();
+
+  double count(int chan, double time);
+
+  QStringList deviceNames();
+  QStringList deviceAIChannels(QString device);
+  QStringList deviceAOChannels(QString device);
+  QStringList deviceDIPorts(QString device);
+  QStringList deviceDILines(QString port);
+  QStringList deviceDOPorts(QString device);
+  QStringList deviceDOLines(QString port);
+  QStringList deviceCIChannels(QString device);
+  QStringList deviceCOChannels(QString device);
 
 private:
   void initTaskHandles();
