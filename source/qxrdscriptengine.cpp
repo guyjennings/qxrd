@@ -102,6 +102,7 @@ void QxrdScriptEngine::initialize()
   m_ScriptEngine -> globalObject().setProperty("help", m_ScriptEngine -> newFunction(helpFunc));
   m_ScriptEngine -> globalObject().setProperty("process", m_ScriptEngine -> newFunction(processFunc));
   m_ScriptEngine -> globalObject().setProperty("typeName", m_ScriptEngine -> newFunction(typeNameFunc));
+  m_ScriptEngine -> globalObject().setProperty("matchFiles", m_ScriptEngine -> newFunction(matchFilesFunc));
 
   QObject *obj = dynamic_cast<QObject*>(g_Application->nidaqPlugin());
 
@@ -472,4 +473,42 @@ QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngin
   }
 
   return QScriptValue(engine, 1);
+}
+
+QScriptValue QxrdScriptEngine::matchFilesFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QStringList result;
+
+  if (context->argumentCount() >= 1) {
+    QString dir = context->argument(0).toString();
+
+    if (context->argumentCount() == 1) {
+      QDir a(dir);
+      a.setFilter(QDir::Dirs | QDir::Files);
+
+      result.append(a.entryList());
+    } else {
+      for (int i=1; i<context->argumentCount(); i++) {
+        QString patt = context->argument(i).toString();
+
+//        g_Application->printMessage(tr("Matching %1").arg(patt));
+
+        QDir a(dir);
+
+        a.setFilter(QDir::Dirs | QDir::Files);
+        QStringList patts;
+        patts<<patt;
+
+        a.setNameFilters(patts);
+
+        QStringList entries = a.entryList();
+//        int nEntries = entries.length();
+//        g_Application->printMessage(tr("Matched %1 entries").arg(nEntries));
+
+        result.append(entries);
+      }
+    }
+  }
+
+  return engine->toScriptValue(result);
 }
