@@ -24,6 +24,7 @@ public slots:
   void evaluateAppCommand(QString cmd);
   void evaluateSimpleServerCommand(QString cmd);
   void evaluateSpecCommand(QString cmd);
+  void loadScript(QString path);
 
 signals:
   void appResultAvailable(QScriptValue res);

@@ -142,6 +142,22 @@ void QxrdScriptEngine::evaluateSpecCommand(QString expr)
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluate", Qt::QueuedConnection, Q_ARG(int, 2), Q_ARG(QString, expr)));
 }
 
+void QxrdScriptEngine::loadScript(QString path)
+{
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "loadScript", Qt::QueuedConnection, Q_ARG(QString, path)));
+  } else {
+    QFile scriptFile(path);
+
+    if (scriptFile.open(QFile::ReadOnly)) {
+      QTextStream scriptStream(&scriptFile);
+      QString script = scriptStream.readAll();
+
+      m_ScriptEngine->evaluate(script, path);
+    }
+  }
+}
+
 void QxrdScriptEngine::evaluate(int src, QString expr)
 {
   THREAD_CHECK;

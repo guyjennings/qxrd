@@ -30,6 +30,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     m_BadPixelsPath(this, "badPixelsPath", ""),
     m_GainMapPath(this, "gainMapPath", ""),
     m_MaskPath(this, "maskPath", ""),
+    m_ScriptPath(this, "scriptPath", ""),
     m_PerformDarkSubtraction(this, "performDarkSubtraction", true),
     m_SaveRawImages(this, "saveRawImages", true),
     m_SaveDarkImages(this, "saveDarkImages", true),
@@ -1804,3 +1805,35 @@ QxrdGenerateTestImage *QxrdDataProcessorBase::generateTestImage() const
   return m_GenerateTestImage;
 }
 
+double QxrdDataProcessorBase::integrateRectangle(int x0, int y0, int x1, int y1)
+{
+  double sum = 0;
+  double npx = 0;
+
+  QxrdDoubleImageDataPtr dat = m_Data;
+  QxrdMaskDataPtr        msk = mask();
+
+  if (dat) {
+    if (msk) {
+      for (int y=y0; y<y1; y++) {
+        for (int x=x0; x<x1; x++) {
+          if (msk->value(x,y)) {
+            sum += dat->value(x,y);
+            npx += 1;
+          }
+        }
+      }
+    } else {
+      for (int y=y0; y<y1; y++) {
+        for (int x=x0; x<x1; x++) {
+          sum += dat->value(x,y);
+          npx += 1;
+        }
+      }
+    }
+  }
+
+  g_Application->printMessage(tr("integrateRectange(%1,%2,%3,%4)=[%5,%6]=%7").arg(x0).arg(y0).arg(x1).arg(y1).arg(sum).arg(npx).arg(sum/npx));
+
+  return sum/npx;
+}

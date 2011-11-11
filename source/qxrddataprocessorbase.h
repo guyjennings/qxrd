@@ -59,6 +59,9 @@ public:
   Q_PROPERTY(QString maskPath     READ get_MaskPath WRITE set_MaskPath)
   QCEP_STRING_PROPERTY(MaskPath)
 
+  Q_PROPERTY(QString scriptPath   READ get_ScriptPath WRITE set_ScriptPath)
+  QCEP_STRING_PROPERTY(ScriptPath)
+
   Q_PROPERTY(bool performDarkSubtraction READ get_PerformDarkSubtraction WRITE set_PerformDarkSubtraction)
   QCEP_BOOLEAN_PROPERTY(PerformDarkSubtraction)
 
@@ -265,6 +268,8 @@ public slots:
 
   void displayIntegratedData(QxrdIntegratedDataPtr d);
   void writeOutputScan(QxrdIntegratedDataPtr d);
+
+  double integrateRectangle(int x0, int y0, int x1, int y1);
 
 public:
   QString existingOutputDirectory(QString dir, QString subdir) const;

@@ -185,6 +185,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionExecuteScript, SIGNAL(triggered()), this, SLOT(executeScript()));
   connect(m_CancelScriptButton, SIGNAL(clicked()), m_ActionCancelScript, SIGNAL(triggered()));
   connect(m_ActionCancelScript, SIGNAL(triggered()), this, SLOT(cancelScript()));
+  connect(m_LoadScriptButton, SIGNAL(clicked()), m_ActionLoadScript, SIGNAL(triggered()));
+  connect(m_ActionLoadScript, SIGNAL(triggered()), this, SLOT(doLoadScript()));
 
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
@@ -1041,6 +1043,25 @@ void QxrdWindow::finishedCommand(QScriptValue result)
   m_ActionCancelScript  -> setEnabled(false);
   m_ExecuteScriptButton -> setEnabled(true);
   m_ActionExecuteScript -> setEnabled(true);
+}
+
+void QxrdWindow::doLoadScript()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+        this, "Load Script from...", m_DataProcessor->get_ScriptPath());
+
+  if (theFile.length()) {
+    m_DataProcessor->set_ScriptPath(theFile);
+
+    loadScript(theFile);
+  }
+}
+
+void QxrdWindow::loadScript(QString path)
+{
+  g_Application->printMessage(tr("Loading script file from %1").arg(path));
+
+  m_ScriptEngine->loadScript(path);
 }
 
 QxrdScriptEngine *QxrdWindow::scriptEngine() const

@@ -76,6 +76,8 @@ public slots:
   void executeScript();
   void finishedCommand(QScriptValue result);
   void cancelScript();
+  void doLoadScript();
+  void loadScript(QString path);
 
   void doTest();
 
@@ -167,6 +169,8 @@ private:
 
   QxrdImageDisplayWidget                *m_ImageDisplay;
   QxrdHighlighter                       *m_Highlighter;
+
+  QString                                m_ScriptPath;
 };
 
 #endif
