@@ -1,6 +1,11 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.8.2 - Nov 11 2011
+Added a loadScript routine to read and execute a script from a file.
+Added some device query routines into the NIDAQ plugin
+Added integrateRectangle(x0,y0,x1,y1) routine to processor
+
 ## v0.8.1 - Oct 27 2011
 Display error dialog if another copy of qxrd is already running
 Allow specifying number of integration steps as alternative to integration step size
