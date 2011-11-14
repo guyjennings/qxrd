@@ -2,6 +2,7 @@
 #define QXRDINTEGRATEDDATA_H
 
 #include <QObject>
+#include <QSharedPointer>
 #include "qxrdimagedata.h"
 
 class QxrdIntegratedData : public QObject
@@ -32,6 +33,9 @@ public:
   double cy() const;
 
   int allocatedMemoryMB();
+
+  Q_PROPERTY(QString title READ get_Title WRITE set_Title STORED false)
+  QCEP_STRING_PROPERTY(Title)
 
 private:
   QxrdImageDataObjectCounter m_ObjectCounter; /* global counter to track allocation of QxrdImageData objects */

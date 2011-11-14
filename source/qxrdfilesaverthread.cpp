@@ -145,20 +145,22 @@ void QxrdFileSaverThread::saveTextData(QString name, QxrdDoubleImageDataPtr imag
   }
 }
 
-void QxrdFileSaverThread::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data)
+void QxrdFileSaverThread::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName)
 {
   if (!QMetaObject::invokeMethod(fileSaver(), "writeOutputScan",
                                  Q_ARG(FILE*, logFile),
-                                 Q_ARG(QxrdIntegratedDataPtr, data))) {
+                                 Q_ARG(QxrdIntegratedDataPtr, data),
+                                 Q_ARG(QString, fileName))) {
     g_Application->printMessage("QxrdFileSaverThread::writeOutputScan failed");
   }
 }
 
-void QxrdFileSaverThread::writeOutputScan(QString dir, QxrdIntegratedDataPtr data)
+void QxrdFileSaverThread::writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QString fileName)
 {
   if (!QMetaObject::invokeMethod(fileSaver(), "writeOutputScan",
                                  Q_ARG(QString, dir),
-                                 Q_ARG(QxrdIntegratedDataPtr, data))) {
+                                 Q_ARG(QxrdIntegratedDataPtr, data),
+                                 Q_ARG(QString, fileName))) {
     g_Application->printMessage("QxrdFileSaverThread::writeOutputScan failed");
   }
 }

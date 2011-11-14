@@ -466,7 +466,7 @@ void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, Qxr
   }
 }
 
-void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data)
+void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QString fileName)
 {
   THREAD_CHECK;
 
@@ -475,35 +475,39 @@ void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data)
   } else {
     mkPath(dir);
 
-    QxrdDoubleImageDataPtr image = data -> get_Image();
-
-    if (image == NULL) {
-      g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
-    } else {
-      QFileInfo fi(image->get_FileName());
-
-      QString fileBase = fi.completeBaseName();
-
-      QString name = QDir(dir).filePath(fileBase+".avg");
-
-      name = uniqueFileName(name);
-
-      FILE *f = fopen(qPrintable(name),"a");
-
-      if (f == NULL) {
-        g_Application->criticalMessage(tr("Couldn't open file %1").arg(name));
-      } else {
-        writeOutputScan(f, data);
-
-        fclose(f);
-
-        g_Application->printMessage(tr("Integrated data saved in %1").arg(name));
+    if (fileName.isNull()) {
+      QxrdDoubleImageDataPtr image = data -> get_Image();
+      if (image == NULL) {
+        g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
+        return;
       }
+
+      fileName    = image -> get_FileName();
+    }
+
+    QFileInfo fi(fileName);
+
+    QString fileBase = fi.completeBaseName();
+
+    QString name = QDir(dir).filePath(fileBase+".avg");
+
+    name = uniqueFileName(name);
+
+    FILE *f = fopen(qPrintable(name),"a");
+
+    if (f == NULL) {
+      g_Application->criticalMessage(tr("Couldn't open file %1").arg(name));
+    } else {
+      writeOutputScan(f, data, fileName);
+
+      fclose(f);
+
+      g_Application->printMessage(tr("Integrated data saved in %1").arg(name));
     }
   }
 }
 
-void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data)
+void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName)
 {
   THREAD_CHECK;
 
@@ -512,33 +516,40 @@ void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data)
   } else if (logFile) {
     QTime tic;
     tic.start();
+    int imageNumber = 0;
 
-    QxrdDoubleImageDataPtr image = data -> get_Image();
-
-    if (image == NULL) {
-      g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
-    } else {
-      fprintf(logFile, "#S %d qxrd.integrate \"%s\" %g %g\n",
-              image -> get_ImageNumber(),
-              qPrintable(image -> get_FileName()),
-              data -> cx(),
-              data -> cy());
-      fprintf(logFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
-      fprintf(logFile, "#N 2\n");
-      fprintf(logFile, "#L x  y\n");
-
-      int n = data->size();
-      const double *x = data->x();
-      const double *y = data->y();
-
-      for (int i=0; i<n; i++) {
-        fprintf(logFile, "%g %g\n", x[i], y[i]);
+    if (fileName.isNull()) {
+      QxrdDoubleImageDataPtr image = data -> get_Image();
+      if (image == NULL) {
+        g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
+        return;
       }
 
-      fflush(logFile);
-
-      processor() -> updateEstimatedTime(m_Processor -> prop_SaveIntegratedDataTime(), tic.restart());
+      fileName    = image -> get_FileName();
+      imageNumber = image -> get_ImageNumber();
     }
+
+    fprintf(logFile, "#S %d qxrd.integrate \"%s\" %g %g\n",
+            imageNumber,
+            qPrintable(fileName),
+            data -> cx(),
+            data -> cy());
+
+    fprintf(logFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
+    fprintf(logFile, "#N 2\n");
+    fprintf(logFile, "#L x  y\n");
+
+    int n = data->size();
+    const double *x = data->x();
+    const double *y = data->y();
+
+    for (int i=0; i<n; i++) {
+      fprintf(logFile, "%g %g\n", x[i], y[i]);
+    }
+
+    fflush(logFile);
+
+    processor() -> updateEstimatedTime(m_Processor -> prop_SaveIntegratedDataTime(), tic.restart());
   }
 }
 

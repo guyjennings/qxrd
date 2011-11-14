@@ -2,6 +2,7 @@
 
 QxrdIntegratedData::QxrdIntegratedData(QxrdAllocatorInterface *alloc, QxrdDoubleImageDataPtr image, int typ, int maxSize, QObject *parent) :
   QObject(parent),
+  m_Title(this, "title", ""),
   m_ObjectCounter(alloc, typ),
   m_Image(image),
   m_MaxSize(maxSize),

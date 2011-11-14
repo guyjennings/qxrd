@@ -269,6 +269,11 @@ public slots:
   void displayIntegratedData(QxrdIntegratedDataPtr d);
   void writeOutputScan(QxrdIntegratedDataPtr d);
 
+  void newOutputScan(QString title);
+  void appendToOutputScan(double x, double y);
+  void plotOutputScan();
+  void saveOutputScan(QString fileName);
+
   double integrateRectangle(int x0, int y0, int x1, int y1);
 
 public:
@@ -389,6 +394,8 @@ protected:
   QxrdRingSetSampledDataPtr m_RefinedRingSetData;
 
   QxrdGenerateTestImage *m_GenerateTestImage;
+
+  QxrdIntegratedDataPtr m_OutputScan;
 };
 
 #endif

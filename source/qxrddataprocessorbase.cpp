@@ -6,6 +6,7 @@
 #include "qxrdimagedata.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdintegrator.h"
+#include "qxrdintegrateddata.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdallocator.h"
 #include "qxrdfilesaverthread.h"
@@ -1803,6 +1804,34 @@ void QxrdDataProcessorBase::calculateHistogram()
 QxrdGenerateTestImage *QxrdDataProcessorBase::generateTestImage() const
 {
   return m_GenerateTestImage;
+}
+
+void QxrdDataProcessorBase::newOutputScan(QString title)
+{
+  m_OutputScan = m_Allocator->newIntegratedData(QxrdAllocator::AlwaysAllocate, data());
+
+  m_OutputScan -> set_Title(title);
+}
+
+void QxrdDataProcessorBase::appendToOutputScan(double x, double y)
+{
+  if (m_OutputScan) {
+    m_OutputScan->append(x,y);
+  }
+}
+
+void QxrdDataProcessorBase::plotOutputScan()
+{
+  if (m_OutputScan) {
+    emit newIntegrationAvailable(m_OutputScan);
+  }
+}
+
+void QxrdDataProcessorBase::saveOutputScan(QString fileName)
+{
+  if (m_OutputScan) {
+
+  }
 }
 
 double QxrdDataProcessorBase::integrateRectangle(int x0, int y0, int x1, int y1)

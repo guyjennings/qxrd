@@ -45,8 +45,8 @@ public slots:
   void saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
   void saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
   void saveTextData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
-  void writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data);
-  void writeOutputScan(QString dir, QxrdIntegratedDataPtr data);
+  void writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName);
+  void writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QString fileName);
 
 private:
   void mkPath(QString filePath);
