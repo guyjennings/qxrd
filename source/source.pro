@@ -72,6 +72,7 @@ OTHER_FILES += help/qxrdhelptext.html \
     help/README.html \
     simpleServerTest.mac \
     testScripts.js \
+    testScriptPlot.js \
     testImage.js \
     tilt_test.js \
     testscript.js

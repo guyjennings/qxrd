@@ -1,6 +1,9 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.8.3 - Nov 14 2011
+Added newOutputScan, appendToOutputScan, plotOutputScan and saveOutputScan script commands to 'processor'
+
 ## v0.8.2 - Nov 11 2011
 Added a loadScript routine to read and execute a script from a file.
 Added some device query routines into the NIDAQ plugin
