@@ -13,7 +13,8 @@
 QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   m_AOTaskHandle(0),
   m_AITaskHandle(0),
-  m_TrigAOTask(0)
+  m_TrigAOTask(0),
+  m_PulseTask(0)
 {
 //  printf("NI-DAQ plugin constructed\n");
 //  initTaskHandles();
@@ -321,6 +322,24 @@ void QxrdNIDAQPlugin::triggerAnalogWaveform()
       DAQmxStartTask(m_AOTaskHandle)
     );
   }
+
+Error:
+  return;
+}
+
+void QxrdNIDAQPlugin::pulseOutput()
+{
+  QMutexLocker lock(&m_Mutex);
+
+  int error;
+
+  DAQmxErrChk(DAQmxCreateTask("pulse-output", &m_PulseTask));
+  DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_PulseTask, "Dev1/ctr0", "", DAQmx_Val_Seconds, DAQmx_Val_Low, 0, 1e-6, 1e-6));
+
+  DAQmxErrChk(DAQmxStartTask(m_PulseTask));
+  DAQmxErrChk(DAQmxWaitUntilTaskDone(m_PulseTask, 0.5));
+  DAQmxErrChk(DAQmxStopTask(m_PulseTask));
+  DAQmxErrChk(DAQmxClearTask(m_PulseTask));
 
 Error:
   return;
