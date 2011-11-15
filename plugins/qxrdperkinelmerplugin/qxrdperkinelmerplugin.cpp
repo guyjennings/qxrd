@@ -135,6 +135,12 @@ UINT QxrdPerkinElmerPlugin::Acquisition_GetCameraBinningMode(
   return ::Acquisition_GetCameraBinningMode(hAcqDesc, wMode);
 }
 
+UINT QxrdPerkinElmerPlugin::Acquisition_GetLatestFrameHeader(
+    HACQDESC hAcqDesc, CHwHeaderInfo *pInfo, CHwHeaderInfoEx *pInfoEx)
+{
+  return ::Acquisition_GetLatestFrameHeader(hAcqDesc, pInfo, pInfoEx);
+}
+
 UINT QxrdPerkinElmerPlugin::Acquisition_GetHwHeaderInfoEx(
     HACQDESC hAcqDesc, CHwHeaderInfo *pInfo, CHwHeaderInfoEx *pInfoEx)
 {

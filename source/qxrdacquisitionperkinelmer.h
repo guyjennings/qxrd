@@ -28,6 +28,8 @@ public slots:
   void onEndFrame(int counter, unsigned int n1, unsigned int n2);
   void onEndFrameCallback();
 
+  void dumpHeaderInfo();
+
 protected:
   void beginAcquisition();
   void endAcquisition();
@@ -60,6 +62,9 @@ private:
   int                    m_SyncMode;
 
   QAtomicInt             m_Counter;
+
+  CHwHeaderInfo          m_HwHeaderInfo;
+  CHwHeaderInfoEx        m_HwHeaderInfoEx;
 
   QxrdPerkinElmerPluginInterface *m_PerkinElmer;
 };

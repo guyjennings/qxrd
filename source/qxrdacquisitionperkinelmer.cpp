@@ -660,6 +660,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrameCallback()
     DWORD actualFrame, actSecFrame;
 
     m_PerkinElmer->Acquisition_GetActFrame(m_AcqDesc, &actualFrame, &actSecFrame);
+    m_PerkinElmer->Acquisition_GetLatestFrameHeader(m_AcqDesc, &m_HwHeaderInfo, &m_HwHeaderInfoEx);
 
 //    printf("m_PerkinElmer->Acquisition_GetActFrame took %d msec\n", tic.restart());
 
@@ -684,6 +685,24 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 
 static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 {
+}
+
+void QxrdAcquisitionPerkinElmer::dumpHeaderInfo()
+{
+  g_Application->printMessage(tr("Detector Header Info"));
+  g_Application->printMessage(tr("HeaderID %1  PROMID %2  Frame %3  Msec %4   Usec %5  Status %6")
+                              .arg(m_HwHeaderInfo.dwHeaderID)
+                              .arg(m_HwHeaderInfo.dwPROMID)
+                              .arg(m_HwHeaderInfoEx.wFrameCnt)
+                              .arg(m_HwHeaderInfoEx.wRealInttime_milliSec)
+                              .arg(m_HwHeaderInfoEx.wRealInttime_microSec)
+                              .arg(m_HwHeaderInfoEx.wStatus));
+
+  g_Application->printMessage(tr("Cmd1 %1  Cmd2 %2  Cmd3 %3  Cmd4 %4")
+                              .arg(m_HwHeaderInfoEx.wCommand1)
+                              .arg(m_HwHeaderInfoEx.wCommand2)
+                              .arg(m_HwHeaderInfoEx.wCommand3)
+                              .arg(m_HwHeaderInfoEx.wCommand4));
 }
 
 //#endif // HAVE_PERKIN_ELMER

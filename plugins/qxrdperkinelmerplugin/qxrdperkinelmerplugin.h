@@ -76,6 +76,9 @@ public:
   virtual UINT Acquisition_GetCameraBinningMode(
       HACQDESC hAcqDesc, WORD* wMode);
 
+  virtual UINT Acquisition_GetLatestFrameHeader(
+      HACQDESC hAcqDesc, CHwHeaderInfo *pInfo, CHwHeaderInfoEx *pInfoEx);
+
   virtual UINT Acquisition_GetHwHeaderInfoEx(
       HACQDESC hAcqDesc, CHwHeaderInfo *pInfo, CHwHeaderInfoEx *pInfoEx);
 };
