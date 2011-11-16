@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include <QSplashScreen>
 
-#include "getopt.h"
-
 /*!
 \mainpage QXRD - Readout and Analysis software for SAXS/PDF/Powder X-Ray measurements
 
@@ -23,44 +21,34 @@ int main(int argc, char *argv[])
 
   QxrdApplication app(argc, argv);
 
-  int opt;
-
-  while((opt=getopt(argc, argv, "nc:s:")) != -1) {
-      switch(opt) {
-      case 'n':
-          break;
-      case 'c':
-          printf("Execute command %s\n", optarg);
-          break;
-
-      case 's':
-          printf("Execute script %s\n", optarg);
-          break;
-      }
-  }
-
-  while (optind < argc) {
-      printf("Additional argument %s\n", argv[optind++]);
-  }
-
   QPixmap pixmap(":images/qxrd-splash-screen.png");
   QSplashScreen splash(pixmap);
-  splash.show();
-  QFont f;
-  f.setPointSize(14);
-  splash.setFont(f);
-  splash.showMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter);
+
+  if (app.get_GuiWanted()) {
+    splash.show();
+    QFont f;
+    f.setPointSize(14);
+    splash.setFont(f);
+    splash.showMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter);
+    app.processEvents();
+  }
 
   int res = 0;
-  app.processEvents();
 
-  if (app.init(&splash)) {
+  if (app.init((app.get_GuiWanted() ? &splash : NULL))) {
 
     //  printf("App Constructed\n");
 
-    splash.finish(app.window());
-
-    res = app.exec();
+    if (app.get_GuiWanted()) {
+      splash.finish(app.window());
+      res = app.exec();
+    } else {
+      foreach(QString cmd, app.get_CmdList()) {
+        app.executeCommand(cmd);
+        app.processEvents();
+      }
+      app.exit();
+    }
 
     if (qcepDebug(DEBUG_EXITWAIT)) {
       while(1) {}

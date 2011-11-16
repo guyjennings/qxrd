@@ -68,6 +68,17 @@ void QxrdApplication::processEventCounter()
   eventCounter = 0;
 }
 
+QStringList QxrdApplication::makeStringList(int argc, char **argv)
+{
+  QStringList res;
+
+  for (int i=0; i<argc; i++) {
+    res.append(argv[i]);
+  }
+
+  return res;
+}
+
 QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
     m_DetectorType(this,"detectorType", 1),
@@ -82,6 +93,11 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_FileBrowserLimit(this, "fileBrowserLimit", 0),
     m_MessageWindowLines(this, "messageWindowLines", 1000),
     m_UpdateIntervalMsec(this, "updateIntervalMsec", 1000),
+    m_Argc(this, "argc", argc),
+    m_Argv(this, "argv", makeStringList(argc, argv)),
+    m_GuiWanted(this, "guiWanted", 1),
+    m_CmdList(this, "cmdList", QStringList()),
+    m_FileList(this, "fileList", QStringList()),
     m_FreshStart(false),
     m_Splash(NULL),
     m_Window(NULL),
@@ -153,6 +169,30 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
       m_FreshStart = true;
     } else if (sscanf(argv[i],"-debug=%d",&dbg)==1) {
       set_Debug(dbg);
+    } else if (strcmp(argv[i],"-nogui")==0) {
+      set_GuiWanted(false);
+    } else if (strcmp(argv[i],"-gui")==0) {
+      set_GuiWanted(true);
+    } else if (strcmp(argv[i],"-c")==0) {
+      if (i++ < argc) {
+        prop_CmdList()->appendValue(argv[i]);
+      }
+    } else if (strcmp(argv[i],"-s")==0) {
+      if (i++ < argc) {
+        prop_CmdList()->appendValue(tr("loadScript(\"%1\")").arg(argv[i]));
+      }
+    } else {
+      prop_FileList()->appendValue(argv[i]);
+    }
+  }
+
+  if (get_GuiWanted() == false) {
+    foreach(QString cmd, get_CmdList()) {
+      printf("Cmd: %s\n", qPrintable(cmd));
+    }
+
+    foreach(QString file, get_FileList()) {
+      printf("File: %s\n", qPrintable(file));
     }
   }
 }
@@ -231,12 +271,14 @@ bool QxrdApplication::init(QSplashScreen *splash)
   m_DataProcessor -> setAcquisition(m_Acquisition);
   m_FileSaverThread -> setAcquisition(m_Acquisition);
 
-  splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Main Window");
 
-  m_Window = new QxrdWindow(this, m_Acquisition, m_DataProcessor, m_Allocator);
+//  if (get_GuiWanted()) {
+    splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Main Window");
+    m_Window = new QxrdWindow(this, m_Acquisition, m_DataProcessor, m_Allocator);
 
-  m_DataProcessor -> setWindow(m_Window);
-  m_Acquisition -> setWindow(m_Window);
+    m_DataProcessor -> setWindow(m_Window);
+    m_Acquisition -> setWindow(m_Window);
+//  }
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading plugins");
 
@@ -248,7 +290,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
   m_AcquisitionThread->initialize();
 
-  m_Window -> onAcquisitionInit();
+  if (m_Window) m_Window -> onAcquisitionInit();
 
   if (specServer) {
     splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting SPEC Server");
@@ -298,10 +340,10 @@ bool QxrdApplication::init(QSplashScreen *splash)
     connect(m_ScriptEngine,   SIGNAL(simpleServerResultAvailable(QScriptValue)), m_SimpleServer,  SLOT(finishedCommand(QScriptValue)));
   }
 
-  connect(m_Window,         SIGNAL(executeCommand(QString)),           m_ScriptEngine,    SLOT(evaluateAppCommand(QString)));
-  connect(m_ScriptEngine,   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
+  if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           m_ScriptEngine,    SLOT(evaluateAppCommand(QString)));
+  if (m_Window) connect(m_ScriptEngine,   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
 
-  m_Window -> setScriptEngine(m_ScriptEngine);
+  if (m_Window) m_Window -> setScriptEngine(m_ScriptEngine);
 
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
@@ -330,7 +372,9 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Windows");
 
-  m_Window -> show();
+  if (get_GuiWanted() && m_Window) {
+    m_Window -> show();
+  }
 
   m_ResponseTimer = new QxrdResponseTimer(1000, this);
 
@@ -652,6 +696,11 @@ void QxrdApplication::doSavePreferences()
 
     QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
   }
+}
+
+void QxrdApplication::executeCommand(QString cmd)
+{
+  m_ScriptEngine->evaluateAppCommand(cmd);
 }
 
 void QxrdApplication::possiblyQuit()
