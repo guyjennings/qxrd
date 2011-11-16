@@ -11,6 +11,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QVector>
+#include <QStringList>
 
 class QSpinBox;
 class QComboBox;
@@ -322,6 +323,31 @@ private:
   QcepDoubleList m_Value;
 };
 
+class QcepStringListProperty : public QcepProperty {
+  Q_OBJECT
+public:
+  QcepStringListProperty(QObject *parent, const char *name, QcepStringList value);
+
+  QcepStringList value() const;
+  QcepStringList defaultValue() const;
+  QString toString(const QcepStringList &list);
+
+public slots:
+  void setValue(QcepStringList val, int index);
+  void setValue(QcepStringList val);
+  void setDefaultValue(QcepStringList val);
+  void resetValue();
+  void clear();
+  void appendValue(QString val);
+
+signals:
+  void valueChanged(QcepStringList val, int index);
+
+private:
+  QcepStringList m_Default;
+  QcepStringList m_Value;
+};
+
 #define QCEP_DOUBLE_PROPERTY(propname) \
 public: \
 double get_##propname() const \
@@ -526,5 +552,39 @@ QcepDoubleListProperty *prop_##propname() { \
 \
 private: \
 QcepDoubleListProperty m_##propname;
+
+#define QCEP_STRING_LIST_PROPERTY(propname) \
+public: \
+QcepStringList get_##propname() const \
+{ \
+  return m_##propname.value(); \
+} \
+\
+void set_##propname(QcepStringList val) \
+{ \
+  m_##propname.setValue(val); \
+} \
+\
+QcepStringList def_##propname() const \
+{ \
+  return m_##propname.defaultValue(); \
+} \
+\
+void setdef_##propname(QcepStringList val) \
+{ \
+  m_##propname.setDefaultValue(val); \
+} \
+\
+void reset_##propname() \
+{ \
+  m_##propname.resetValue(); \
+} \
+\
+QcepStringListProperty *prop_##propname() { \
+  return &m_##propname; \
+} \
+\
+private: \
+QcepStringListProperty m_##propname;
 
 #endif // QCEPPROPERTY_H

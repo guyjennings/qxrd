@@ -1135,3 +1135,119 @@ void QcepDoubleListProperty::resetValue()
 
   setValue(m_Default);
 }
+
+QcepStringListProperty::QcepStringListProperty(QObject *parent, const char *name, QcepStringList value)
+  : QcepProperty(parent, name),
+    m_Default(value),
+    m_Value(value)
+{
+}
+
+QcepStringList QcepStringListProperty::value() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Value;
+}
+
+QcepStringList QcepStringListProperty::defaultValue() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Default;
+}
+
+void QcepStringListProperty::setValue(QcepStringList val, int index)
+{
+  if (debug()) {
+    g_Application->printMessage(
+          tr("%1 QcepStringListProperty::setValue(QcepStringList %2, int %3) [%4]")
+          .arg(name())
+          .arg(toString(val))
+          .arg(index)
+          .arg(this->index()));
+  }
+
+  if (index == this->index()) {
+    setValue(val);
+  }
+}
+
+void QcepStringListProperty::clear()
+{
+  QMutexLocker lock(&m_Mutex);
+
+  setValue(QcepStringList());
+}
+
+void QcepStringListProperty::appendValue(QString val)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  QcepStringList list = value();
+  list.append(val);
+
+  setValue(list);
+}
+
+QString QcepStringListProperty::toString(const QcepStringList &val)
+{
+  QString res = "[";
+  int ct = val.count();
+
+  for (int i=0; i<ct; i++) {
+    if (i<(ct-1)) {
+      res += tr("%1, ").arg(val[i]);
+    } else {
+      res += tr("%1").arg(val[i]);
+    }
+  }
+
+  res += "]";
+
+  return res;
+}
+
+void QcepStringListProperty::setValue(QcepStringList val)
+{
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    g_Application->printMessage(
+          tr("%1 QcepStringListProperty::setValue(QcepStringList %2)")
+          .arg(name())
+          .arg(toString(val)));
+  }
+
+  if (val != m_Value) {
+    if (g_Application && debug()) {
+      g_Application->printMessage(
+            tr("%1: QcepDateTimeProperty::setValue(QcepStringList %2) [%3]")
+            .arg(name())
+            .arg(toString(val))
+            .arg(index()));
+    }
+
+    QMutexLocker lock(&m_Mutex);
+
+    m_Value = val;
+    m_ChangeCount.fetchAndAddOrdered(1);
+
+    emit valueChanged(m_Value, incIndex(1));
+  }
+}
+
+void QcepStringListProperty::setDefaultValue(QcepStringList val)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_Default = val;
+}
+
+void QcepStringListProperty::resetValue()
+{
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    g_Application->printMessage(
+        tr("%1: QcepStringListProperty::resetValue").arg(name()));
+  }
+
+  setValue(m_Default);
+}
