@@ -93,8 +93,6 @@ include("qxrd.levmar.pri")
 
 # include("qxrd-cuda.pri")
 HEADERS += TODO.h \
-    getopt.h \
-    getopt_int.h \
     qxrdapplication.h \
     qxrdsettings.h \
     qxrdimagedata.h \
@@ -216,7 +214,6 @@ HEADERS += TODO.h \
     qxrdintegratorcache.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
-    getopt.c \
     qxrdapplication.cpp \
     qxrdsettings.cpp \
     qxrdimagedata.cpp \
@@ -491,3 +488,4 @@ win32 { # Make NSIS installer...
 #for(m, QT) {
 #  message("In source.pro QT contains $${m}")
 #}
+
