@@ -13,6 +13,7 @@ public:
 //  virtual void setAnalogChannel(int chan) = 0;
   virtual void setAnalogWaveform(int chan, double rate, double wfm[], int size) = 0;
   virtual void triggerAnalogWaveform() = 0;
+  virtual void pulseOutput() = 0;
 };
 
 Q_DECLARE_INTERFACE(QxrdNIDAQPluginInterface, "gov.anl.aps.cep.Qxrd.NIDAQInterface/1.0")

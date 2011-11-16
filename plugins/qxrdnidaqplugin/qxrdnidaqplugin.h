@@ -26,6 +26,8 @@ public slots:
   double getAnalogInput(int chan);
   void   triggerAnalogWaveform();
 
+  void   pulseOutput();
+
   double count(int chan, double time);
 
   QStringList deviceNames();
@@ -48,6 +50,7 @@ private:
   TaskHandle m_AOTaskHandle;
   TaskHandle m_AITaskHandle;
   TaskHandle m_TrigAOTask;
+  TaskHandle m_PulseTask;
 };
 
 #endif // QXRDNIDAQPLUGIN_H

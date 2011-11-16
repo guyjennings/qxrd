@@ -106,7 +106,7 @@ Script Function: exposureTime()</string>
        <bool>false</bool>
       </property>
       <property name="keyboardTracking">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="decimals">
        <number>5</number>
@@ -139,7 +139,7 @@ Script Function: exposureTime()</string>
 Script Property: &quot;acquisition.skippedExposuresAtStart&quot;</string>
       </property>
       <property name="keyboardTracking">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="minimum">
        <number>0</number>
@@ -176,7 +176,7 @@ Script Property: &quot;acquisition.summedExposures&quot;
 Script Function: summedExposures()</string>
       </property>
       <property name="keyboardTracking">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="minimum">
        <number>1</number>
@@ -210,7 +210,7 @@ Script Property: &quot;acquisition.skippedExposures&quot;
 Script Function: skippedExposures()</string>
       </property>
       <property name="keyboardTracking">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="minimum">
        <number>0</number>
@@ -247,7 +247,7 @@ Script Property: acquisition.fileIndex
 Script Function: fileindex()</string>
       </property>
       <property name="keyboardTracking">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="maximum">
        <number>99999999</number>
@@ -278,7 +278,7 @@ Script Property: acquisition.darkSummedExposures
 Script Function: darkSummedExposures()</string>
       </property>
       <property name="keyboardTracking">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="minimum">
        <number>1</number>
@@ -388,7 +388,7 @@ Script Function: postTriggerFiles()</string>
        <string/>
       </property>
       <property name="keyboardTracking">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="minimum">
        <number>1</number>
@@ -429,7 +429,7 @@ Script Function: preTriggerFiles()</string>
        <string/>
       </property>
       <property name="keyboardTracking">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="minimum">
        <number>0</number>
@@ -470,7 +470,7 @@ Script Function: phasesInGroup()</string>
        <string/>
       </property>
       <property name="keyboardTracking">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="minimum">
        <number>1</number>

@@ -157,6 +157,10 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisition::QxrdAcq
 
 void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
 {
+  if (m_NIDAQPlugin) {
+    m_NIDAQPlugin->pulseOutput();
+  }
+
   if (m_SyncMode && m_AcquisitionParms) {
     if (m_Acquisition->acquisitionStatus(0.0) == 0) {
       int skipBefore = m_AcquisitionParms->skipBefore();

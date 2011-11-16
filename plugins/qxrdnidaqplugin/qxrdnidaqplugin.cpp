@@ -13,7 +13,8 @@
 QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   m_AOTaskHandle(0),
   m_AITaskHandle(0),
-  m_TrigAOTask(0)
+  m_TrigAOTask(0),
+  m_PulseTask(0)
 {
 //  printf("NI-DAQ plugin constructed\n");
 //  initTaskHandles();
@@ -66,7 +67,7 @@ void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
 
       if (DAQmxGetErrorString(err, buff, sz) == 0) {
 //        g_Application->printMessage(tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff));
-        printf("%s:%d NI-DAQ Error %d : %s", file, line, err, buff);
+        printf("%s:%d NI-DAQ Error %d : %s\n", file, line, err, buff);
       }
 
       free(buff);
@@ -326,23 +327,44 @@ Error:
   return;
 }
 
+void QxrdNIDAQPlugin::pulseOutput()
+{
+  QMutexLocker lock(&m_Mutex);
+
+  int error;
+
+  DAQmxErrChk(DAQmxCreateTask("pulse-output", &m_PulseTask));
+  DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_PulseTask, "Dev1/ctr0", "", DAQmx_Val_Seconds, DAQmx_Val_Low, 0, 1e-6, 1e-6));
+
+  DAQmxErrChk(DAQmxStartTask(m_PulseTask));
+  DAQmxErrChk(DAQmxWaitUntilTaskDone(m_PulseTask, 0.5));
+  DAQmxErrChk(DAQmxStopTask(m_PulseTask));
+  DAQmxErrChk(DAQmxClearTask(m_PulseTask));
+
+Error:
+  return;
+}
+
 double QxrdNIDAQPlugin::count(int chan, double time)
 {
   QMutexLocker lock(&m_Mutex);
 
-  TaskHandle counterTask = 0;
+  static TaskHandle counterTask = 0;
   int error;
   float64 res = 0;
 
-  DAQmxErrChk(DAQmxCreateTask("counter", &counterTask));
-  DAQmxErrChk(DAQmxCreateCICountEdgesChan(counterTask,"Dev1/ctr0", "", DAQmx_Val_Rising, 0, DAQmx_Val_CountUp));
+  if (counterTask == 0) {
+    DAQmxErrChk(DAQmxCreateTask("counter", &counterTask));
+    DAQmxErrChk(DAQmxCreateCICountEdgesChan(counterTask,"Dev1/ctr2", "", DAQmx_Val_Rising, 0, DAQmx_Val_CountUp));
+    DAQmxSetCICountEdgesTerm(counterTask, "/Dev1/ctr2", "/Dev1/100MHzTimebase");
+    DAQmxStartTask(counterTask);
+  }
 
   if (counterTask) {
-    DAQmxErrChk(DAQmxCfgSampClkTiming(counterTask, NULL, 100000.0, DAQmx_Val_Rising, DAQmx_Val_HWTimedSinglePoint, time*100000.0));
-    DAQmxStartTask(counterTask);
-    DAQmxWaitUntilTaskDone(counterTask, time*1.25);
-    DAQmxErrChk(DAQmxReadCounterScalarF64(counterTask, time*1.2, &res, NULL));
+    DAQmxErrChk(DAQmxReadCounterScalarF64(counterTask, 0, &res, NULL));
   }
+
+  return res;
 
 Error:
   DAQmxClearTask(counterTask);

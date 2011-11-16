@@ -323,6 +323,7 @@ void QcepDoubleProperty::linkTo(QDoubleSpinBox *spinBox)
   helper->connect();
 
   spinBox -> setValue(value());
+  spinBox -> setKeyboardTracking(false);
 
   connect(this,   SIGNAL(valueChanged(double, int)), helper, SLOT(setValue(double, int)));
   connect(helper, SIGNAL(valueChanged(double, int)), this,   SLOT(setValue(double, int)));
@@ -490,6 +491,7 @@ void QcepIntProperty::linkTo(QSpinBox *spinBox)
   helper->connect();
 
   spinBox -> setValue(value());
+  spinBox -> setKeyboardTracking(false);
 
   connect(this,   SIGNAL(valueChanged(int, int)), helper, SLOT(setValue(int, int)));
   connect(helper, SIGNAL(valueChanged(int, int)), this,   SLOT(setValue(int, int)));
