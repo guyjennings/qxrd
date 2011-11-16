@@ -94,6 +94,7 @@ include("qxrd.levmar.pri")
 # include("qxrd-cuda.pri")
 HEADERS += TODO.h \
     getopt.h \
+    getopt_int.h \
     qxrdapplication.h \
     qxrdsettings.h \
     qxrdimagedata.h \
