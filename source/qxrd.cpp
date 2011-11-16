@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <QSplashScreen>
 
+#include "getopt.h"
+
 /*!
 \mainpage QXRD - Readout and Analysis software for SAXS/PDF/Powder X-Ray measurements
 
@@ -20,6 +22,26 @@ int main(int argc, char *argv[])
 //  printf("App starts\n");
 
   QxrdApplication app(argc, argv);
+
+  int opt;
+
+  while((opt=getopt(argc, argv, "nc:s:")) != -1) {
+      switch(opt) {
+      case 'n':
+          break;
+      case 'c':
+          printf("Execute command %s\n", optarg);
+          break;
+
+      case 's':
+          printf("Execute script %s\n", optarg);
+          break;
+      }
+  }
+
+  while (optind < argc) {
+      printf("Additional argument %s\n", argv[optind++]);
+  }
 
   QPixmap pixmap(":images/qxrd-splash-screen.png");
   QSplashScreen splash(pixmap);
