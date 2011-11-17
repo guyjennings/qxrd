@@ -80,7 +80,7 @@ QStringList QxrdApplication::makeStringList(int argc, char **argv)
 }
 
 QxrdApplication::QxrdApplication(int &argc, char **argv)
-  : QApplication(argc, argv),
+  : QxrdDefaultApplication(argc, argv),
     m_DetectorType(this,"detectorType", 1),
     m_ProcessorType(this,"processorType", 0),
     m_Debug(this,"debug", 0),

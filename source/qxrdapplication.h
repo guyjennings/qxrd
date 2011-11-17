@@ -17,6 +17,7 @@
 #include "qxrdfilesaverthread.h"
 #include "qxrdscriptenginethread.h"
 #include "qxrdsettingssaverthread.h"
+#include "qxrddefaultapplication.h"
 
 class QxrdWindow;
 class QxrdNIDAQPluginInterface;
@@ -25,7 +26,7 @@ class QxrdNIDAQPluginInterface;
 class QxrdPerkinElmerPluginInterface;
 #endif
 
-class QxrdApplication : public QApplication
+class QxrdApplication : public QxrdDefaultApplication
 {
   Q_OBJECT
 

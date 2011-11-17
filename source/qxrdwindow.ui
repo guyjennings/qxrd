@@ -901,13 +901,17 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="m_ActionNewExperiment"/>
+    <addaction name="m_ActionOpenExperiment"/>
+    <addaction name="m_ActionRecentExperiments"/>
+    <addaction name="separator"/>
     <addaction name="m_ActionLoadData"/>
     <addaction name="m_ActionSaveData"/>
     <addaction name="separator"/>
@@ -1571,6 +1575,36 @@
    </property>
    <property name="toolTip">
     <string>Load Script from File</string>
+   </property>
+  </action>
+  <action name="m_ActionNewExperiment">
+   <property name="text">
+    <string>New Experiment...</string>
+   </property>
+   <property name="toolTip">
+    <string>Start a new experiment...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="m_ActionOpenExperiment">
+   <property name="text">
+    <string>Open Experiment...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open an existing experiment...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+N</string>
+   </property>
+  </action>
+  <action name="m_ActionRecentExperiments">
+   <property name="text">
+    <string>Recent Experiments</string>
+   </property>
+   <property name="toolTip">
+    <string>Reopen a recent experiment...</string>
    </property>
   </action>
  </widget>

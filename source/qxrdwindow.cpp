@@ -194,6 +194,9 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProce
   connect(m_ActionLoadPreferences, SIGNAL(triggered()), m_Application, SLOT(doLoadPreferences()));
   connect(m_ActionSavePreferences, SIGNAL(triggered()), m_Application, SLOT(doSavePreferences()));
 
+  connect(m_ActionNewExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseNewExperiment()));
+  connect(m_ActionOpenExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseExistingExperiment()));
+
   connect(m_ActionLoadData, SIGNAL(triggered()), this, SLOT(doLoadData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), this, SLOT(doSaveData()));
   connect(m_ActionLoadDark, SIGNAL(triggered()), this, SLOT(doLoadDark()));
