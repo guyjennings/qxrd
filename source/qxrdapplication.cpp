@@ -195,6 +195,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
       printf("File: %s\n", qPrintable(file));
     }
   }
+
+  printMessage(tr("Home Path: %1").arg(QDir::homePath()));
+  printMessage(tr("Current Path: %1").arg(QDir::currentPath()));
+  printMessage(tr("Root Path %1").arg(QDir::rootPath()));
 }
 
 bool QxrdApplication::init(QSplashScreen *splash)
@@ -584,6 +588,21 @@ void QxrdApplication::criticalMessage(QString msg, QDateTime ts)
   if (window()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayCriticalMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
   }
+}
+
+QString QxrdApplication::homePath()
+{
+  return QDir::homePath();
+}
+
+QString QxrdApplication::currentPath()
+{
+  return QDir::currentPath();
+}
+
+QString QxrdApplication::rootPath()
+{
+  return QDir::rootPath();
 }
 
 void QxrdApplication::openLogFile()

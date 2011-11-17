@@ -81,6 +81,10 @@ public slots:
 
   void executeCommand(QString cmd);
 
+  QString homePath();
+  QString currentPath();
+  QString rootPath();
+
 public:
   bool wantToQuit();
   FILE* logFile();
