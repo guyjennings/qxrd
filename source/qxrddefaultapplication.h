@@ -42,13 +42,13 @@ public slots:
   void populateRecentExperimentsMenu();
 
 public:
-  Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)
+  Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments STORED false)
   QCEP_STRING_LIST_PROPERTY(RecentExperiments)
 
-  Q_PROPERTY(int recentExperimentsSize READ get_RecentExperimentsSize WRITE set_RecentExperimentsSize)
+  Q_PROPERTY(int recentExperimentsSize READ get_RecentExperimentsSize WRITE set_RecentExperimentsSize STORED false)
   QCEP_INTEGER_PROPERTY(RecentExperimentsSize)
 
-  Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment)
+  Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment STORED false)
   QCEP_STRING_PROPERTY(CurrentExperiment)
 
 private:

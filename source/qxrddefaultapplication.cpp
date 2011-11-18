@@ -20,7 +20,7 @@ void QxrdDefaultApplication::readDefaultSettings()
   QSettings settings("cep.xor.aps.anl.gov", "qxrd-defaults");
 
   set_RecentExperiments(settings.value("recentExperiments").toStringList());
-  set_RecentExperimentsSize(settings.value("recentExperimentsSize").toInt());
+  set_RecentExperimentsSize(settings.value("recentExperimentsSize", 8).toInt());
   set_CurrentExperiment(settings.value("currentExperiment").toString());
 }
 
