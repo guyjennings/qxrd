@@ -4,6 +4,7 @@
 #include "qcepmacros.h"
 
 #include <QApplication>
+#include <QMenu>
 #include "qcepproperty.h"
 
 class QxrdDefaultApplication : public QApplication
@@ -19,18 +20,26 @@ public:
 
   virtual void loadPreferences(QString path) = 0;
   virtual void savePreferences(QString path) = 0;
+  virtual void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) = 0;
 
-  void newAnalysisExperiment(QString path);
-  void newPerkinElmerExperiment(QString path);
-  void newPilatusExperiment(QString path);
+  QString newAnalysisExperiment(QString path);
+  QString newPerkinElmerExperiment(QString path);
+  QString newPilatusExperiment(QString path);
+
+  QString normalizeExperimentName(QString filename);
+  void setNewExperimentSettings(QSettings &settings, int type, QString filename);
+
+  void setupRecentExperimentsMenu(QAction *action);
 
 signals:
 
 public slots:
   void chooseNewExperiment();
   void chooseExistingExperiment();
+  void openRecentExperiment(QString path);
 
   void openExperiment(int kind, QString path);
+  void populateRecentExperimentsMenu();
 
 public:
   Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)
@@ -41,6 +50,9 @@ public:
 
   Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment)
   QCEP_STRING_PROPERTY(CurrentExperiment)
+
+private:
+    QMenu   *m_RecentExperimentsMenu;
 };
 
 #endif // QXRDDEFAULTAPPLICATION_H

@@ -101,6 +101,9 @@ public:
   Q_PROPERTY(bool saveIntegratedData READ get_SaveIntegratedData WRITE set_SaveIntegratedData)
   QCEP_BOOLEAN_PROPERTY(SaveIntegratedData)
 
+  Q_PROPERTY(QString saveIntegratedPath READ get_SaveIntegratedPath WRITE set_SaveIntegratedPath)
+  QCEP_STRING_PROPERTY(SaveIntegratedPath)
+
   Q_PROPERTY(bool saveDarkInSubdirectory READ get_SaveDarkInSubdirectory WRITE set_SaveDarkInSubdirectory)
   QCEP_BOOLEAN_PROPERTY(SaveDarkInSubdirectory)
 
