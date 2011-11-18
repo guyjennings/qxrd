@@ -23,7 +23,7 @@ QxrdRingFitParameters* QxrdRingSetFitParameters::ring(int n) const
   return m_Rings.value(n).data();
 }
 
-void QxrdRingSetFitParameters::writeSettings(QxrdSettings &settings, QString section)
+void QxrdRingSetFitParameters::writeSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -50,7 +50,7 @@ void QxrdRingSetFitParameters::writeSettings(QxrdSettings &settings, QString sec
   settings.endArray();
 }
 
-void QxrdRingSetFitParameters::readSettings(QxrdSettings &settings, QString section)
+void QxrdRingSetFitParameters::readSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

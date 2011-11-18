@@ -23,8 +23,8 @@ public slots:
   void clear();
 
 public:
-  void readSettings(QxrdSettings &settings, QString section);
-  void writeSettings(QxrdSettings &settings, QString section);
+  void readSettings(QSettings &settings, QString section);
+  void writeSettings(QSettings &settings, QString section);
 
 private:
   mutable QMutex         m_Mutex;

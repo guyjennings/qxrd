@@ -1136,28 +1136,28 @@ void QcepDoubleListProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepStringListProperty::QcepStringListProperty(QObject *parent, const char *name, QcepStringList value)
+QcepStringListProperty::QcepStringListProperty(QObject *parent, const char *name, QStringList value)
   : QcepProperty(parent, name),
     m_Default(value),
     m_Value(value)
 {
 }
 
-QcepStringList QcepStringListProperty::value() const
+QStringList QcepStringListProperty::value() const
 {
   QMutexLocker lock(&m_Mutex);
 
   return m_Value;
 }
 
-QcepStringList QcepStringListProperty::defaultValue() const
+QStringList QcepStringListProperty::defaultValue() const
 {
   QMutexLocker lock(&m_Mutex);
 
   return m_Default;
 }
 
-void QcepStringListProperty::setValue(QcepStringList val, int index)
+void QcepStringListProperty::setValue(QStringList val, int index)
 {
   if (debug()) {
     g_Application->printMessage(
@@ -1184,13 +1184,13 @@ void QcepStringListProperty::appendValue(QString val)
 {
   QMutexLocker lock(&m_Mutex);
 
-  QcepStringList list = value();
+  QStringList list = value();
   list.append(val);
 
   setValue(list);
 }
 
-QString QcepStringListProperty::toString(const QcepStringList &val)
+QString QcepStringListProperty::toString(const QStringList &val)
 {
   QString res = "[";
   int ct = val.count();
@@ -1208,7 +1208,7 @@ QString QcepStringListProperty::toString(const QcepStringList &val)
   return res;
 }
 
-void QcepStringListProperty::setValue(QcepStringList val)
+void QcepStringListProperty::setValue(QStringList val)
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
     g_Application->printMessage(
@@ -1235,7 +1235,7 @@ void QcepStringListProperty::setValue(QcepStringList val)
   }
 }
 
-void QcepStringListProperty::setDefaultValue(QcepStringList val)
+void QcepStringListProperty::setDefaultValue(QStringList val)
 {
   QMutexLocker lock(&m_Mutex);
 

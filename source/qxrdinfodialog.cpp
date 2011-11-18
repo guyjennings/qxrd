@@ -8,12 +8,12 @@ QxrdInfoDialog::QxrdInfoDialog(QWidget *parent) :
   setupUi(this);
 }
 
-void QxrdInfoDialog::readSettings(QxrdSettings &settings, QString section)
+void QxrdInfoDialog::readSettings(QSettings &settings, QString section)
 {
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdInfoDialog::writeSettings(QxrdSettings &settings, QString section)
+void QxrdInfoDialog::writeSettings(QSettings &settings, QString section)
 {
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }

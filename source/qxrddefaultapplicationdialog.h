@@ -17,7 +17,7 @@ public:
   explicit QxrdDefaultApplicationDialog(QxrdDefaultApplication *app = 0);
   ~QxrdDefaultApplicationDialog();
 
-  QString choose();
+  bool choose();
 
   int     chosenKind();
   QString chosenPath();

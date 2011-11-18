@@ -126,9 +126,17 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   setOrganizationDomain("xor.aps.anl.gov");
   setApplicationName("qxrd");
 
-  QxrdSettings settings;
+  QString currentExperiment = get_CurrentExperiment();
 
-  QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
+  if (currentExperiment.length() > 0) {
+    QSettings settings(currentExperiment, QSettings::IniFormat);
+
+    QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
+  } else {
+    QxrdSettings settings;
+
+    QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
+  }
 
   printMessage("------ Starting QXRD Application ------");
 
@@ -232,7 +240,18 @@ bool QxrdApplication::init(QSplashScreen *splash)
   int simpleServer = 0;
   int simpleServerPort = 0;
 
-  {
+  QString currentExperiment = get_CurrentExperiment();
+
+  if (currentExperiment.length()>0) {
+    QSettings settings(currentExperiment, QSettings::IniFormat);
+
+    detectorType = settings.value("application/detectorType").toInt();
+    gCEPDebug = settings.value("application/debug").toInt();
+    specServer = settings.value("application/runSpecServer").toInt();
+    specServerPort = settings.value("application/specServerPort").toInt();
+    simpleServer = settings.value("application/runSimpleServer").toInt();
+    simpleServerPort = settings.value("application/simpleServerPort").toInt();
+  } else {
     QxrdSettings settings;
 
     detectorType = settings.value("application/detectorType").toInt();
@@ -665,8 +684,21 @@ void QxrdApplication::closeLogFile()
 
 void QxrdApplication::readSettings()
 {
-  QxrdSettings settings;
+  QString currentExperiment = get_CurrentExperiment();
 
+  if (currentExperiment.length()>0) {
+    QSettings settings(currentExperiment, QSettings::IniFormat);
+
+    readSettings(settings);
+  } else {
+    QxrdSettings settings;
+
+    readSettings(settings);
+  }
+}
+
+void QxrdApplication::readSettings(QSettings &settings)
+{
   QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
 
   m_Window       -> readSettings(settings, "window");
@@ -676,8 +708,21 @@ void QxrdApplication::readSettings()
 
 void QxrdApplication::writeSettings()
 {
-  QxrdSettings settings;
+  QString currentExperiment = get_CurrentExperiment();
 
+  if (currentExperiment.length()>0) {
+    QSettings settings(currentExperiment, QSettings::IniFormat);
+
+    writeSettings(settings);
+  } else {
+    QxrdSettings settings;
+
+    writeSettings(settings);
+  }
+}
+
+void QxrdApplication::writeSettings(QSettings &settings)
+{
   m_Window       -> writeSettings(settings, "window");
   m_Acquisition  -> writeSettings(settings, "acquire");
   m_DataProcessor-> writeSettings(settings, "processor");
@@ -691,14 +736,19 @@ void QxrdApplication::doLoadPreferences()
                                                        "Load QXRD Preferences from...");
 
   if (loadPrefsFrom != "") {
-    QxrdSettings settings(loadPrefsFrom, QSettings::IniFormat);
-
-    QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
-
-    m_Window       -> readSettings(settings, "window");
-    m_Acquisition  -> readSettings(settings, "acquire");
-    m_DataProcessor-> readSettings(settings, "processor");
+    loadPreferences(loadPrefsFrom);
   }
+}
+
+void QxrdApplication::loadPreferences(QString path)
+{
+  QxrdSettings settings(path, QSettings::IniFormat);
+
+  QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
+
+  m_Window       -> readSettings(settings, "window");
+  m_Acquisition  -> readSettings(settings, "acquire");
+  m_DataProcessor-> readSettings(settings, "processor");
 }
 
 void QxrdApplication::doSavePreferences()
@@ -707,14 +757,19 @@ void QxrdApplication::doSavePreferences()
                                                      "Save QXRD Preferences to...");
 
   if (savePrefsTo != "") {
-    QxrdSettings settings(savePrefsTo, QSettings::IniFormat);
-
-    m_Window       -> writeSettings(settings, "window");
-    m_Acquisition  -> writeSettings(settings, "acquire");
-    m_DataProcessor-> writeSettings(settings, "processor");
-
-    QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
+    savePreferences(savePrefsTo);
   }
+}
+
+void QxrdApplication::savePreferences(QString path)
+{
+  QxrdSettings settings(path, QSettings::IniFormat);
+
+  m_Window       -> writeSettings(settings, "window");
+  m_Acquisition  -> writeSettings(settings, "acquire");
+  m_DataProcessor-> writeSettings(settings, "processor");
+
+  QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
 }
 
 void QxrdApplication::executeCommand(QString cmd)

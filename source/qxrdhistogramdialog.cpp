@@ -7,7 +7,7 @@ QxrdHistogramDialog::QxrdHistogramDialog(QWidget *parent) :
   setupUi(this);
 }
 
-void QxrdHistogramDialog::readSettings(QxrdSettings &settings, QString section)
+void QxrdHistogramDialog::readSettings(QSettings &settings, QString section)
 {
   m_HistogramPlot->readSettings(settings, section+"/plot");
 
@@ -23,7 +23,7 @@ void QxrdHistogramDialog::readSettings(QxrdSettings &settings, QString section)
   settings.endGroup();
 }
 
-void QxrdHistogramDialog::writeSettings(QxrdSettings &settings, QString section)
+void QxrdHistogramDialog::writeSettings(QSettings &settings, QString section)
 {
   m_HistogramPlot->writeSettings(settings, section+"/plot");
 

@@ -54,14 +54,15 @@ void QxrdDefaultApplicationDialog::changeEvent(QEvent *e)
     }
 }
 
-QString QxrdDefaultApplicationDialog::choose()
+bool QxrdDefaultApplicationDialog::choose()
 {
   int dc = exec();
 
-  QString result;
+  bool result = false;
 
   switch (dc) {
   case QDialog::Accepted:
+    result = true;
     break;
 
   case QDialog::Rejected:
@@ -125,4 +126,14 @@ void QxrdDefaultApplicationDialog::chooseRecent(QString path)
 
   m_ChosenKind = Existing;
   m_ChosenPath = path;
+}
+
+int QxrdDefaultApplicationDialog::chosenKind()
+{
+  return m_ChosenKind;
+}
+
+QString QxrdDefaultApplicationDialog::chosenPath()
+{
+  return m_ChosenPath;
 }

@@ -18,7 +18,7 @@ void QxrdRingSampledDataFromScriptValue(const QScriptValue &object, QxrdRingSamp
   out = qobject_cast<QxrdRingSampledData*>(object.toQObject());
 }
 
-void QxrdRingSampledData::writeSettings(QxrdSettings &settings, QString section)
+void QxrdRingSampledData::writeSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -37,7 +37,7 @@ void QxrdRingSampledData::writeSettings(QxrdSettings &settings, QString section)
   settings.endArray();
 }
 
-void QxrdRingSampledData::readSettings(QxrdSettings &settings, QString section)
+void QxrdRingSampledData::readSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

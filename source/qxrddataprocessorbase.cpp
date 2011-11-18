@@ -157,7 +157,7 @@ void QxrdDataProcessorBase::setWindow(QxrdWindow *win)
   newMask();
 }
 
-void QxrdDataProcessorBase::writeSettings(QxrdSettings &settings, QString section)
+void QxrdDataProcessorBase::writeSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -172,7 +172,7 @@ void QxrdDataProcessorBase::writeSettings(QxrdSettings &settings, QString sectio
   m_RefinedRingSetData -> writeSettings(settings, section+"/refinedData");
 }
 
-void QxrdDataProcessorBase::readSettings(QxrdSettings &settings, QString section)
+void QxrdDataProcessorBase::readSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

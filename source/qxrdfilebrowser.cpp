@@ -316,7 +316,7 @@ void QxrdFileBrowser::doRefreshBrowser()
   m_Model->refresh();
 }
 
-void QxrdFileBrowser::writeSettings(QxrdSettings &settings, QString section)
+void QxrdFileBrowser::writeSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -334,7 +334,7 @@ void QxrdFileBrowser::writeSettings(QxrdSettings &settings, QString section)
   }
 }
 
-void QxrdFileBrowser::readSettings(QxrdSettings &settings, QString section)
+void QxrdFileBrowser::readSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

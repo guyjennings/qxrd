@@ -188,14 +188,14 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
   }
 }
 
-void QxrdSynchronizedAcquisition::readSettings(QxrdSettings &settings, QString section)
+void QxrdSynchronizedAcquisition::readSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdSynchronizedAcquisition::writeSettings(QxrdSettings &settings, QString section)
+void QxrdSynchronizedAcquisition::writeSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

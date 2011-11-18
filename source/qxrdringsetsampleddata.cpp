@@ -11,7 +11,7 @@ QxrdRingSetSampledData::QxrdRingSetSampledData(/*QxrdRingSetFitParametersPtr par
 {
 }
 
-void QxrdRingSetSampledData::writeSettings(QxrdSettings &settings, QString section)
+void QxrdRingSetSampledData::writeSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -33,7 +33,7 @@ void QxrdRingSetSampledData::writeSettings(QxrdSettings &settings, QString secti
   settings.endArray();
 }
 
-void QxrdRingSetSampledData::readSettings(QxrdSettings &settings, QString section)
+void QxrdRingSetSampledData::readSettings(QSettings &settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

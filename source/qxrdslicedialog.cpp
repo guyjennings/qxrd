@@ -8,7 +8,7 @@ QxrdSliceDialog::QxrdSliceDialog(QWidget *parent) :
   setupUi(this);
 }
 
-void QxrdSliceDialog::readSettings(QxrdSettings &settings, QString section)
+void QxrdSliceDialog::readSettings(QSettings &settings, QString section)
 {
   m_SlicePlot->readSettings(settings, section+"/plot");
 
@@ -31,7 +31,7 @@ void QxrdSliceDialog::readSettings(QxrdSettings &settings, QString section)
   settings.endArray();
 }
 
-void QxrdSliceDialog::writeSettings(QxrdSettings &settings, QString section)
+void QxrdSliceDialog::writeSettings(QSettings &settings, QString section)
 {
   m_SlicePlot->writeSettings(settings, section+"/plot");
 

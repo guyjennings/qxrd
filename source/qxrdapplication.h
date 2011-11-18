@@ -66,9 +66,14 @@ public slots:
 
   void readSettings();
   void writeSettings();
+  void readSettings(QSettings &settings);
+  void writeSettings(QSettings &settings);
 
   void doSavePreferences();
   void doLoadPreferences();
+
+  void loadPreferences(QString path);
+  void savePreferences(QString path);
 
   void splashMessage(const char *msg);
   void splashMessage(QString msg);

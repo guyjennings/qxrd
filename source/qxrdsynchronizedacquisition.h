@@ -67,8 +67,8 @@ public:
   void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
   QxrdNIDAQPluginInterface *nidaqPlugin() const;
 
-  void readSettings(QxrdSettings &settings, QString section);
-  void writeSettings(QxrdSettings &settings, QString section);
+  void readSettings(QSettings &settings, QString section);
+  void writeSettings(QSettings &settings, QString section);
 
   QVector<double>  outputTimes();
   QVector<double>  outputVoltage();

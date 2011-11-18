@@ -104,8 +104,8 @@ private slots:
   void onUpdateIntervalMsecChanged(int newVal);
 
 public:
-  void readSettings(QxrdSettings &settings, QString section);
-  void writeSettings(QxrdSettings &settings, QString section);
+  void readSettings(QSettings &settings, QString section);
+  void writeSettings(QSettings &settings, QString section);
   void possiblyClose();
   bool wantToClose();
   void closeEvent (QCloseEvent * event);

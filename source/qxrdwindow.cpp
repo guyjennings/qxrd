@@ -661,7 +661,7 @@ void QxrdWindow::doCancel()
   }
 }
 
-void QxrdWindow::readSettings(QxrdSettings &settings, QString section)
+void QxrdWindow::readSettings(QSettings &settings, QString section)
 {
   m_Plot             -> readSettings(settings, section+"/plot");
   m_CenterFinderPlot -> readSettings(settings, section+"/centerFinderPlot");
@@ -702,7 +702,7 @@ void QxrdWindow::readSettings(QxrdSettings &settings, QString section)
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdWindow::writeSettings(QxrdSettings &settings, QString section)
+void QxrdWindow::writeSettings(QSettings &settings, QString section)
 {
   m_Plot             -> writeSettings(settings, section+"/plot");
   m_CenterFinderPlot -> writeSettings(settings, section+"/centerFinderPlot");

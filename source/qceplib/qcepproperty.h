@@ -326,26 +326,26 @@ private:
 class QcepStringListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringListProperty(QObject *parent, const char *name, QcepStringList value);
+  QcepStringListProperty(QObject *parent, const char *name, QStringList value);
 
-  QcepStringList value() const;
-  QcepStringList defaultValue() const;
-  QString toString(const QcepStringList &list);
+  QStringList value() const;
+  QStringList defaultValue() const;
+  QString toString(const QStringList &list);
 
 public slots:
-  void setValue(QcepStringList val, int index);
-  void setValue(QcepStringList val);
-  void setDefaultValue(QcepStringList val);
+  void setValue(QStringList val, int index);
+  void setValue(QStringList val);
+  void setDefaultValue(QStringList val);
   void resetValue();
   void clear();
   void appendValue(QString val);
 
 signals:
-  void valueChanged(QcepStringList val, int index);
+  void valueChanged(QStringList val, int index);
 
 private:
-  QcepStringList m_Default;
-  QcepStringList m_Value;
+  QStringList m_Default;
+  QStringList m_Value;
 };
 
 #define QCEP_DOUBLE_PROPERTY(propname) \
@@ -555,12 +555,12 @@ QcepDoubleListProperty m_##propname;
 
 #define QCEP_STRING_LIST_PROPERTY(propname) \
 public: \
-QcepStringList get_##propname() const \
+QStringList get_##propname() const \
 { \
   return m_##propname.value(); \
 } \
 \
-void set_##propname(QcepStringList val) \
+void set_##propname(QStringList val) \
 { \
   m_##propname.setValue(val); \
 } \
@@ -570,7 +570,7 @@ QcepStringList def_##propname() const \
   return m_##propname.defaultValue(); \
 } \
 \
-void setdef_##propname(QcepStringList val) \
+void setdef_##propname(QStringList val) \
 { \
   m_##propname.setDefaultValue(val); \
 } \
