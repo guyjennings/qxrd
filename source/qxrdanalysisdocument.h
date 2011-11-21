@@ -1,0 +1,18 @@
+#ifndef QXRDANALYSISDOCUMENT_H
+#define QXRDANALYSISDOCUMENT_H
+
+#include "qxrddocument.h"
+
+class QxrdAnalysisDocument : public QxrdDocument
+{
+    Q_OBJECT
+public:
+    explicit QxrdAnalysisDocument(QObject *parent = 0);
+
+signals:
+
+public slots:
+
+};
+
+#endif // QXRDANALYSISDOCUMENT_H

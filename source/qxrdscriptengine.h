@@ -8,9 +8,11 @@
 #include <QMutex>
 
 class QxrdApplication;
-class QxrdWindow;
-class QxrdAcquisition;
-class QxrdDataProcessor;
+
+#include "qxrddocument.h"
+#include "qxrdwindow.h"
+#include "qxrdacquisition.h"
+#include "qxrddataprocessor.h"
 
 class QxrdScriptEngine : public QObject
 {
@@ -19,6 +21,18 @@ class QxrdScriptEngine : public QObject
 public:
   QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc);
   void initialize();
+
+  void documentOpened(QxrdDocumentPtr doc);
+  void documentClosed(QxrdDocumentPtr doc);
+
+  void windowOpened(QxrdWindowPtr win);
+  void windowClosed(QxrdWindowPtr win);
+
+  void acquisitionOpened(QxrdAcquisitionPtr acq);
+  void acquisitionClosed(QxrdAcquisitionPtr acg);
+
+  void processorOpened(QxrdDataProcessorPtr proc);
+  void processorClosed(QxrdDataProcessorPtr proc);
 
 public slots:
   void evaluateAppCommand(QString cmd);
@@ -75,6 +89,9 @@ private:
   QxrdApplication   *m_Application;
   QxrdWindow        *m_Window;
   QxrdAcquisition   *m_Acquisition;
+
+  QList<QxrdDocumentPtr> m_Documents;
+  QList<QxrdWindowPtr>   m_Windows;
 };
 
 #endif // QXRDSCRIPTENGINE_H

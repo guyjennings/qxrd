@@ -1,5 +1,6 @@
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
+#include "qxrddocument.h"
 #include "qxrdacquiredialog.h"
 #include "qxrddisplaydialog.h"
 #include "qxrdacquisitionthread.h"
@@ -54,11 +55,12 @@
 #include <QMenu>
 #include <QDesktopWidget>
 
-QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent)
+QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdDocument *doc, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent)
   : QMainWindow(parent),
     m_Mutex(QMutex::Recursive),
     m_SettingsLoaded(false),
     m_Application(app),
+    m_Document(doc),
     m_Acquisition(acq),
     m_DataProcessor(proc),
     m_Allocator(alloc),
@@ -691,14 +693,14 @@ void QxrdWindow::readSettings(QSettings &settings, QString section)
 
   m_SettingsLoaded = true;
 
-  if (!m_Application->get_DefaultLayout()) {
+  if (!m_Document->get_DefaultLayout()) {
     QByteArray geometry = settings.value(section+"-geometry").toByteArray();
     QByteArray winstate = settings.value(section+"-state").toByteArray();
 
     restoreGeometry(geometry);
     restoreState(winstate,1);
   } else {
-    m_Application->set_DefaultLayout(0);
+    m_Document->set_DefaultLayout(0);
   }
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);

@@ -12,12 +12,14 @@
 #include "qxrdfilesaverthread.h"
 #include "qxrdgeneratetestimage.h"
 #include "qxrdapplication.h"
+#include "qxrddocument.h"
 
 #include <QTime>
 #include <QPainter>
 #include <math.h>
 
 QxrdDataProcessorBase::QxrdDataProcessorBase(
+    QxrdDocument *doc,
     QxrdAcquisition *acq, QxrdAllocator *allocator,
     QxrdFileSaverThread *saver, QObject *parent) :
 
@@ -75,6 +77,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_AverageDark(this,"averageDark",0.0),
   m_AverageRaw(this,"averageRaw",0.0),
   m_Mutex(QMutex::Recursive),
+  m_Document(doc),
   m_Window(NULL),
   m_Allocator(allocator),
   m_FileSaverThread(saver),
@@ -1690,7 +1693,7 @@ void QxrdDataProcessorBase::ellipse(double cx, double cy, double a, double e, do
 void QxrdDataProcessorBase::writeOutputScan(QxrdIntegratedDataPtr data)
 {
   if (this->get_SaveIntegratedData()) {
-    fileSaverThread()->writeOutputScan(g_Application->logFile(), data);
+    fileSaverThread()->writeOutputScan(m_Document->scanFile(), data);
   }
 
   if (this->get_SaveIntegratedInSeparateFiles()) {

@@ -2,25 +2,18 @@
 #define QXRDAPPLICATION_H
 
 #include "qcepmacros.h"
+#include "qcepproperty.h"
 
 #include <QApplication>
 #include <QScriptEngine>
 #include <QScriptEngineDebugger>
-#include <QSplashScreen>
-#include "qcepproperty.h"
 #include "qxrdresponsetimer.h"
-#include "qxrdacquisitionthread.h"
-#include "qxrddataprocessorthread.h"
-#include "qxrdserverthread.h"
-#include "qxrdsimpleserverthread.h"
 #include "qxrdallocatorthread.h"
-#include "qxrdfilesaverthread.h"
 #include "qxrdscriptenginethread.h"
-#include "qxrdsettingssaverthread.h"
 #include "qxrddefaultapplication.h"
-
-class QxrdWindow;
-class QxrdNIDAQPluginInterface;
+#include "qxrddocument.h"
+#include "qxrddocumentthread.h"
+#include "qxrdwelcomewindow.h"
 
 #ifdef HAVE_PERKIN_ELMER
 class QxrdPerkinElmerPluginInterface;
@@ -35,10 +28,6 @@ public:
   ~QxrdApplication();
   bool init(QSplashScreen *splash);
 
-  QxrdAcquisitionThread *acquisitionThread();
-  QxrdAcquisition *acquisition() const;
-  QxrdWindow *window();
-  QxrdDataProcessor *dataProcessor() const;
   QxrdAllocator *allocator() const;
 
 #ifdef HAVE_PERKIN_ELMER
@@ -58,6 +47,8 @@ public:
 
   QStringList makeStringList(int argc, char **argv);
 
+  QWidget* window();
+
 public slots:
   void shutdownThreads();
   void possiblyQuit();
@@ -75,9 +66,6 @@ public slots:
   void loadPreferences(QString path);
   void savePreferences(QString path);
 
-  void splashMessage(const char *msg);
-  void splashMessage(QString msg);
-
   void warningMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
@@ -93,48 +81,20 @@ public slots:
 
 public:
   bool wantToQuit();
-  FILE* logFile();
-
-  void newLogFile(QString path);
 
   static QString hexArg(void *p);
 
 private:
-  void logMessage(QString msg);
-  void closeLogFile();
-  void openLogFile();
-  void writeLogHeader();
 
   void setupTiffHandlers();
   void shutdownThread(QxrdThread *thread);
 
 public:
-  Q_PROPERTY(int    detectorType  READ get_DetectorType WRITE set_DetectorType)
-  QCEP_INTEGER_PROPERTY(DetectorType)
-
-  Q_PROPERTY(int    processorType READ get_ProcessorType WRITE set_ProcessorType)
-  QCEP_INTEGER_PROPERTY(ProcessorType)
-
   Q_PROPERTY(int    debug         READ get_Debug WRITE set_Debug)
   QCEP_INTEGER_PROPERTY(Debug)
 
-  Q_PROPERTY(int    runSpecServer    READ get_RunSpecServer WRITE set_RunSpecServer)
-  QCEP_INTEGER_PROPERTY(RunSpecServer)
-
-  Q_PROPERTY(int    specServerPort    READ get_SpecServerPort WRITE set_SpecServerPort)
-  QCEP_INTEGER_PROPERTY(SpecServerPort)
-
-  Q_PROPERTY(int    runSimpleServer    READ get_RunSimpleServer WRITE set_RunSimpleServer)
-  QCEP_INTEGER_PROPERTY(RunSimpleServer)
-
-  Q_PROPERTY(int    simpleServerPort    READ get_SimpleServerPort WRITE set_SimpleServerPort)
-  QCEP_INTEGER_PROPERTY(SimpleServerPort)
-
-  Q_PROPERTY(int    defaultLayout   READ get_DefaultLayout WRITE set_DefaultLayout STORED false)
-  QCEP_INTEGER_PROPERTY(DefaultLayout)
-
-  Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath)
-  QCEP_STRING_PROPERTY(LogFilePath)
+  Q_PROPERTY(int    freshStart         READ get_FreshStart WRITE set_FreshStart)
+  QCEP_INTEGER_PROPERTY(FreshStart)
 
   Q_PROPERTY(int    fileBrowserLimit   READ get_FileBrowserLimit WRITE set_FileBrowserLimit)
   QCEP_INTEGER_PROPERTY(FileBrowserLimit)
@@ -161,20 +121,9 @@ public:
   QCEP_STRING_LIST_PROPERTY(FileList)
 
 private:
-  bool                            m_FreshStart;
-  QSplashScreen                  *m_Splash;
-  QxrdWindow                     *m_Window;
-  QxrdServerThread               *m_ServerThread;
-  QxrdServer                     *m_Server;
-  QxrdSimpleServerThread         *m_SimpleServerThread;
-  QxrdSimpleServer               *m_SimpleServer;
-  QxrdDataProcessorThread        *m_DataProcessorThread;
-  QxrdDataProcessor              *m_DataProcessor;
-  QxrdAcquisitionThread          *m_AcquisitionThread;
-  QxrdAcquisition                *m_Acquisition;
+  QxrdWelcomeWindow              *m_WelcomeWindow;
   QxrdAllocatorThread            *m_AllocatorThread;
   QxrdAllocator                  *m_Allocator;
-  QxrdFileSaverThread            *m_FileSaverThread;
   QxrdScriptEngineThread         *m_ScriptEngineThread;
   QxrdScriptEngine               *m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
@@ -186,8 +135,8 @@ private:
 #endif
   QxrdResponseTimer              *m_ResponseTimer;
 
-  mutable QMutex                  m_LogFileMutex;
-  FILE                           *m_LogFile;
+  QList<QxrdDocumentThreadPtr>    m_DocumentThreads;
+  QList<QxrdDocumentPtr>          m_Documents;
 };
 
 #define HEXARG(a) arg(QxrdApplication::hexArg(a))

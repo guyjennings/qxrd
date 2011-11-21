@@ -200,4 +200,6 @@ protected:
   QAtomicInt             m_Idling;
 };
 
+typedef QSharedPointer<QxrdAcquisition> QxrdAcquisitionPtr;
+
 #endif

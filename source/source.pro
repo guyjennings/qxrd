@@ -213,7 +213,15 @@ HEADERS += TODO.h \
     qxrdfilebrowsermodelupdaterthread.h \
     qxrdintegratorcache.h \
     qxrddefaultapplication.h \
-    qxrddefaultapplicationdialog.h
+    qxrddefaultapplicationdialog.h \
+    qxrddocumentthread.h \
+    qxrddocument.h \
+    qxrdpilatusdocument.h \
+    qxrdperkinelmerdocument.h \
+    qxrdanalysisdocument.h \
+    qxrdperkinelmeranalysisdocument.h \
+    qxrdpilatusanalysisdocument.h \
+    qxrdwelcomewindow.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -336,7 +344,15 @@ SOURCES += qxrd.cpp \
     qxrdfilebrowsermodelupdaterthread.cpp \
     qxrdintegratorcache.cpp \
     qxrddefaultapplication.cpp \
-    qxrddefaultapplicationdialog.cpp
+    qxrddefaultapplicationdialog.cpp \
+    qxrddocumentthread.cpp \
+    qxrddocument.cpp \
+    qxrdpilatusdocument.cpp \
+    qxrdperkinelmerdocument.cpp \
+    qxrdanalysisdocument.cpp \
+    qxrdperkinelmeranalysisdocument.cpp \
+    qxrdpilatusanalysisdocument.cpp \
+    qxrdwelcomewindow.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -355,7 +371,8 @@ FORMS = qxrdwindow.ui \
     qxrdinfodialog.ui \
     qxrdfreshstartdialog.ui \
     qxrdacquirefilewatcherdialog.ui \
-    qxrddefaultapplicationdialog.ui
+    qxrddefaultapplicationdialog.ui \
+    qxrdwelcomewindow.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 
@@ -493,6 +510,23 @@ win32 { # Make NSIS installer...
 #for(m, QT) {
 #  message("In source.pro QT contains $${m}")
 #}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

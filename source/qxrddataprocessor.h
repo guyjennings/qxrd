@@ -13,4 +13,6 @@ public:
 
 };
 
+typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;
+
 #endif
