@@ -8,7 +8,9 @@ class QxrdAcquisitionSimulated : public QxrdAcquisition
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionSimulated(QxrdDataProcessor *proc, QxrdAllocator *allocator);
+  QxrdAcquisitionSimulated(QxrdDocument *doc,
+                           QxrdDataProcessor *proc,
+                           QxrdAllocator *allocator);
 
 public slots:
   void onExposureTimeChanged(double newTime);

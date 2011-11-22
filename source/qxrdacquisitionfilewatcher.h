@@ -7,7 +7,9 @@ class QxrdAcquisitionFileWatcher : public QxrdAcquisition
 {
     Q_OBJECT
 public:
-    explicit QxrdAcquisitionFileWatcher(QxrdDataProcessor *proc, QxrdAllocator *allocator);
+    explicit QxrdAcquisitionFileWatcher(QxrdDocument *doc,
+                                        QxrdDataProcessor *proc,
+                                        QxrdAllocator *allocator);
 
 private slots:
   void initialize();

@@ -42,8 +42,7 @@ public:
   void onAcquisitionInit();
 
 public slots:
-  void doAboutQxrd();
-  void doOpenQXRDWebPage();
+  void doEditPreferences();
   void doSaveData();
   void doLoadData();
   void doSaveDark();

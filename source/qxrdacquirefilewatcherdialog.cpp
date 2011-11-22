@@ -1,8 +1,12 @@
 #include "qxrdacquirefilewatcherdialog.h"
 #include "ui_qxrdacquirefilewatcherdialog.h"
 
-QxrdAcquireFileWatcherDialog::QxrdAcquireFileWatcherDialog(QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc, QWidget *parent) :
-    QxrdAcquireDialogBase(win, acq, proc, parent)
+QxrdAcquireFileWatcherDialog::QxrdAcquireFileWatcherDialog(QxrdDocument *doc,
+                                                           QxrdWindow *win,
+                                                           QxrdAcquisition *acq,
+                                                           QxrdDataProcessor *proc,
+                                                           QWidget *parent) :
+    QxrdAcquireDialogBase(doc, win, acq, proc, parent)
 {
   setupUi(this);
 }

@@ -3,8 +3,12 @@
 #include "qxrdacquisition.h"
 #include "qxrdapplication.h"
 
-QxrdAcquireDialog::QxrdAcquireDialog(QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc, QWidget *parent) :
-    QxrdAcquireDialogBase(win, acq, proc, parent)
+QxrdAcquireDialog::QxrdAcquireDialog(QxrdDocument *doc,
+                                     QxrdWindow *win,
+                                     QxrdAcquisition *acq,
+                                     QxrdDataProcessor *proc,
+                                     QWidget *parent) :
+    QxrdAcquireDialogBase(doc, win, acq, proc, parent)
 {
   setupUi(this);
 
@@ -48,7 +52,7 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdWindow *win, QxrdAcquisition *acq, Qxrd
   m_Acquisition -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
 
   m_DataProcessor -> prop_OutputDirectory() -> linkTo(this -> m_OutputDirectory);
-  g_Application   -> prop_LogFilePath() -> linkTo(this -> m_LogFilePath);
+  m_Document      -> prop_LogFilePath() -> linkTo(this -> m_LogFilePath);
   m_DataProcessor -> prop_Average() -> linkTo(this -> m_AverageDisplay);
 
   connect(m_AcquireOptionsButton, SIGNAL(clicked()), g_Application, SLOT(editPreferences()));

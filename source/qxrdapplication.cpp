@@ -16,7 +16,7 @@
 #include "qxrdfilesaver.h"
 #include "qxrdscriptenginethread.h"
 #include "qxrdscriptengine.h"
-#include "qxrdpreferencesdialog.h"
+#include "qxrdglobalpreferencesdialog.h"
 #include "qcepproperty.h"
 #include "qxrdsettingssaverthread.h"
 #include "qxrddetectorplugininterface.h"
@@ -36,7 +36,8 @@
 #include <tiffio.h>
 #include <QPluginLoader>
 #include <QSplashScreen>
-
+#include <QDesktopServices>
+#include <QUrl>
 #include <QCoreApplication>
 
 int gCEPDebug = 0;
@@ -201,6 +202,8 @@ bool QxrdApplication::init(QSplashScreen *splash)
 {
   m_WelcomeWindow = new QxrdWelcomeWindow(this);
   m_WelcomeWindow -> show();
+
+  return true;
 }
 
 QxrdApplication::~QxrdApplication()
@@ -236,8 +239,6 @@ QxrdApplication::~QxrdApplication()
   if (qcepDebug(DEBUG_APP)) {
     g_Application->printMessage("QxrdApplication::~QxrdApplication finished");
   }
-
-  closeLogFile();
 }
 
 QWidget* QxrdApplication::window()
@@ -344,6 +345,14 @@ QString QxrdApplication::hexArg(void *p)
 #endif
 }
 
+void QxrdApplication::splashMessage(QString msg)
+{
+}
+
+void QxrdApplication::logMessage(QString msg)
+{
+}
+
 void QxrdApplication::warningMessage(QString msg, QDateTime ts)
 {
   if (window()) {
@@ -413,64 +422,6 @@ QString QxrdApplication::rootPath()
   return QDir::rootPath();
 }
 
-void QxrdApplication::openLogFile()
-{
-  if (m_LogFile == NULL) {
-    m_LogFile = fopen(qPrintable(get_LogFilePath()), "a");
-
-    if (m_LogFile) {
-      writeLogHeader();
-    }
-  }
-}
-
-void QxrdApplication::newLogFile(QString path)
-{
-  if (m_LogFile) {
-    fclose(m_LogFile);
-    m_LogFile = NULL;
-  }
-
-  set_LogFilePath(path);
-
-  openLogFile();
-}
-
-FILE* QxrdApplication::logFile()
-{
-  return m_LogFile;
-}
-
-void QxrdApplication::writeLogHeader()
-{
-  if (m_LogFile) {
-    fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFilePath()));
-    fprintf(m_LogFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
-    fprintf(m_LogFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
-    fflush(m_LogFile);
-  }
-}
-
-void QxrdApplication::logMessage(QString msg)
-{
-  openLogFile();
-
-  if (m_LogFile) {
-    fprintf(m_LogFile, "#CX %s\n", qPrintable(msg));
-    fflush(m_LogFile);
-  }
-}
-
-void QxrdApplication::closeLogFile()
-{
-  if (m_LogFile) {
-    logMessage(tr("%1 ------- shutdown --------").
-               arg(QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ")));
-    fclose(m_LogFile);
-    m_LogFile = NULL;
-  }
-}
-
 void QxrdApplication::readSettings()
 {
   QString currentExperiment = get_CurrentExperiment();
@@ -489,10 +440,6 @@ void QxrdApplication::readSettings()
 void QxrdApplication::readSettings(QSettings &settings)
 {
   QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
-
-  m_Window       -> readSettings(settings, "window");
-  m_Acquisition  -> readSettings(settings, "acquire");
-  m_DataProcessor-> readSettings(settings, "processor");
 }
 
 void QxrdApplication::writeSettings()
@@ -512,16 +459,12 @@ void QxrdApplication::writeSettings()
 
 void QxrdApplication::writeSettings(QSettings &settings)
 {
-  m_Window       -> writeSettings(settings, "window");
-  m_Acquisition  -> writeSettings(settings, "acquire");
-  m_DataProcessor-> writeSettings(settings, "processor");
-
   QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
 }
 
 void QxrdApplication::doLoadPreferences()
 {
-  QString loadPrefsFrom = QFileDialog::getOpenFileName(m_Window,
+  QString loadPrefsFrom = QFileDialog::getOpenFileName(NULL,
                                                        "Load QXRD Preferences from...");
 
   if (loadPrefsFrom != "") {
@@ -534,15 +477,11 @@ void QxrdApplication::loadPreferences(QString path)
   QxrdSettings settings(path, QSettings::IniFormat);
 
   QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
-
-  m_Window       -> readSettings(settings, "window");
-  m_Acquisition  -> readSettings(settings, "acquire");
-  m_DataProcessor-> readSettings(settings, "processor");
 }
 
 void QxrdApplication::doSavePreferences()
 {
-  QString savePrefsTo = QFileDialog::getSaveFileName(m_Window,
+  QString savePrefsTo = QFileDialog::getSaveFileName(NULL,
                                                      "Save QXRD Preferences to...");
 
   if (savePrefsTo != "") {
@@ -553,10 +492,6 @@ void QxrdApplication::doSavePreferences()
 void QxrdApplication::savePreferences(QString path)
 {
   QxrdSettings settings(path, QSettings::IniFormat);
-
-  m_Window       -> writeSettings(settings, "window");
-  m_Acquisition  -> writeSettings(settings, "acquire");
-  m_DataProcessor-> writeSettings(settings, "processor");
 
   QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
 }
@@ -575,7 +510,7 @@ void QxrdApplication::possiblyQuit()
 
 bool QxrdApplication::wantToQuit()
 {
-  return QMessageBox::question(m_Window, tr("Really Quit?"),
+  return QMessageBox::question(NULL, tr("Really Quit?"),
                                tr("Do you really want to exit the application?"),
                                   QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
@@ -597,33 +532,13 @@ void QxrdApplication::shutdownThreads()
   writeSettings();
 
   shutdownThread(m_SettingsSaverThread);
-  shutdownThread(m_SimpleServerThread);
-  shutdownThread(m_ServerThread);
+//  shutdownThread(m_SimpleServerThread);
+//  shutdownThread(m_ServerThread);
   shutdownThread(m_ScriptEngineThread);
-  shutdownThread(m_AcquisitionThread);
-  shutdownThread(m_DataProcessorThread);
+//  shutdownThread(m_AcquisitionThread);
+//  shutdownThread(m_DataProcessorThread);
 //  shutdownThread(m_AllocatorThread);
 //  shutdownThread(m_FileSaverThread);
-}
-
-QxrdWindow *QxrdApplication::window()
-{
-  return m_Window;
-}
-
-QxrdAcquisitionThread *QxrdApplication::acquisitionThread()
-{
-  return m_AcquisitionThread;
-}
-
-QxrdAcquisition *QxrdApplication::acquisition() const
-{
-  return m_Acquisition;
-}
-
-QxrdDataProcessor *QxrdApplication::dataProcessor() const
-{
-  return m_DataProcessor;
 }
 
 QxrdAllocator *QxrdApplication::allocator() const
@@ -631,9 +546,43 @@ QxrdAllocator *QxrdApplication::allocator() const
   return m_Allocator;
 }
 
-void QxrdApplication::editPreferences()
+void QxrdApplication::doAboutQxrd()
 {
-  QxrdPreferencesDialog prefs;
+  QString about = "QXRD Data Acquisition for PE Area Detectors\nVersion " STR(QXRD_VERSION);
+
+  if (sizeof(void*) == 4) {
+    about += " - 32 Bit";
+  } else {
+    about += " - 64 Bit";
+  }
+
+#ifdef Q_CC_MSVC
+  about += " MSVC";
+#endif
+
+#ifdef Q_CC_GNU
+  about += " gcc";
+#endif
+
+#ifdef QT_NO_DEBUG
+  about += " Release\n";
+#else
+  about += " Debug\n";
+#endif
+
+  about += tr("Qt Version %1").arg(qVersion());
+
+  QMessageBox::about(NULL, "QXRD", about);
+}
+
+void QxrdApplication::doOpenQXRDWebPage()
+{
+  QDesktopServices::openUrl(QUrl("http://qxrd.sourceforge.net/"));
+}
+
+void QxrdApplication::editGlobalPreferences()
+{
+  QxrdGlobalPreferencesDialog prefs;
 
   prefs.exec();
 }

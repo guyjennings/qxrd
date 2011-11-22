@@ -24,6 +24,7 @@ class QxrdDocument : public QObject
 public:
   QxrdDocument(QxrdApplication *app, QObject *parent = 0);
   virtual bool init(QSplashScreen *splash);
+  virtual ~QxrdDocument();
 
   QxrdAcquisitionThread *acquisitionThread();
   QxrdAcquisition *acquisition() const;
@@ -53,6 +54,9 @@ private:
   void closeLogFile();
   void openLogFile();
   void writeLogHeader();
+
+  void closeScanFile();
+  void openScanFile();
 
 public:  // Properties
   Q_PROPERTY(QString documentFilePath     READ get_DocumentFilePath WRITE set_DocumentFilePath)

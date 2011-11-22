@@ -4,31 +4,32 @@
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 #include "qxrdallocator.h"
+#include "qxrdapplication.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QGridLayout>
 #include "qcepdebug.h"
 
-QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
-    QDialog(parent)
+QxrdPreferencesDialog::QxrdPreferencesDialog(QxrdDocument *doc, QWidget *parent) :
+  QDialog(parent),
+  m_Document(doc)
 {
   setupUi(this);
 
   connect(m_DetectorTypeCombo, SIGNAL(currentIndexChanged(int)), m_DetectorPrefsStack, SLOT(setCurrentIndex(int)));
 
-  QxrdApplication *app = QxrdApplication::application();
-  QxrdAcquisition *acq = app -> acquisition();
-  QxrdDataProcessor *proc = app->dataProcessor();
-  QxrdAllocator *alloc = app->allocator();
+  QxrdAcquisition *acq = m_Document -> acquisition();
+  QxrdDataProcessor *proc = m_Document->dataProcessor();
+  QxrdAllocator *alloc = g_Application->allocator();
 
-  int detectorType = app -> get_DetectorType();
-//  int processorType = app -> get_ProcessorType();
-  int debugLevel = app -> get_Debug();
+  int detectorType = m_Document -> get_DetectorType();
+//  int processorType = m_Document -> get_ProcessorType();
+  int debugLevel = g_Application -> get_Debug();
 
-  int runSpecServer = app -> get_RunSpecServer();
-  int runSimpleServer = app -> get_RunSimpleServer();
-  int specServerPort = app -> get_SpecServerPort();
-  int simpleServerPort = app -> get_SimpleServerPort();
+  int runSpecServer = m_Document -> get_RunSpecServer();
+  int runSimpleServer = m_Document -> get_RunSimpleServer();
+  int specServerPort = m_Document -> get_SpecServerPort();
+  int simpleServerPort = m_Document -> get_SimpleServerPort();
 
   QStringList detectorTypes = QxrdAcquisitionThread::detectorTypeNames();
 
@@ -39,7 +40,7 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QWidget *parent) :
   m_CurrentOutputDirectory -> setText(proc->get_OutputDirectory());
 
   connect(m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
-  m_CurrentLogFile -> setText(app->get_LogFilePath());
+  m_CurrentLogFile -> setText(m_Document->get_LogFilePath());
 
   connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
   m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
@@ -180,24 +181,23 @@ void QxrdPreferencesDialog::accept()
 //    restartNeeded = true;
 //  }
 
-  QxrdApplication *app = QxrdApplication::application();
-  QxrdAcquisition *acq = app -> acquisition();
-  QxrdDataProcessor *proc = app->dataProcessor();
-  QxrdAllocator *alloc = app->allocator();
+  QxrdAcquisition *acq = m_Document -> acquisition();
+  QxrdDataProcessor *proc = m_Document->dataProcessor();
+  QxrdAllocator *alloc = g_Application->allocator();
 
-  if (runSpecServer != app -> get_RunSpecServer()) {
+  if (runSpecServer != m_Document -> get_RunSpecServer()) {
     restartNeeded = true;
   }
 
-  if (specServerPort != app -> get_SpecServerPort()) {
+  if (specServerPort != m_Document -> get_SpecServerPort()) {
     restartNeeded = true;
   }
 
-  if (runSimpleServer != app -> get_RunSimpleServer()) {
+  if (runSimpleServer != m_Document -> get_RunSimpleServer()) {
     restartNeeded = true;
   }
 
-  if (simpleServerPort != app -> get_SimpleServerPort()) {
+  if (simpleServerPort != m_Document -> get_SimpleServerPort()) {
     restartNeeded = true;
   }
 
@@ -205,11 +205,11 @@ void QxrdPreferencesDialog::accept()
     QMessageBox::information(this,"Restart Needed","You will need to restart qxrd before your changes will take effect");
   }
 
-  app -> set_DetectorType(detectorType);
+  m_Document -> set_DetectorType(detectorType);
 //  app -> set_ProcessorType(processorType);
-  app -> set_Debug(debugLevel);
-  acq -> set_TotalBufferSizeMB32(bufferSize32);
-  acq -> set_TotalBufferSizeMB64(bufferSize64);
+  g_Application -> set_Debug(debugLevel);
+  g_Application -> set_TotalBufferSizeMB32(bufferSize32);
+  g_Application -> set_TotalBufferSizeMB64(bufferSize64);
   alloc -> set_Reserve(extraReserve);
   app -> set_RunSpecServer(runSpecServer);
   app -> set_SpecServerPort(specServerPort);

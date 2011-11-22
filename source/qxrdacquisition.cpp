@@ -10,8 +10,8 @@
 #include <QThreadPool>
 #include <QtConcurrentRun>
 
-QxrdAcquisition::QxrdAcquisition(QxrdDataProcessor *proc, QxrdAllocator *allocator)
-  : QxrdAcquisitionOperations(proc, allocator),
+QxrdAcquisition::QxrdAcquisition(QxrdDocument *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator)
+  : QxrdAcquisitionOperations(doc, proc, allocator),
     m_AcquiredImages("acquired"),
     m_ControlPanel(NULL),
     m_Idling(1)
@@ -391,7 +391,7 @@ QxrdAcquireDialogBase *QxrdAcquisition::controlPanel(QxrdWindow *win)
   if (win) {
     m_Window = win;
 
-    m_ControlPanel = new QxrdAcquireDialog(m_Window, this, m_DataProcessor, m_Window);
+    m_ControlPanel = new QxrdAcquireDialog(m_Document, m_Window, this, m_DataProcessor, m_Window);
 
     return m_ControlPanel;
   } else {

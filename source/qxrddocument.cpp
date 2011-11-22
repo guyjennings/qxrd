@@ -214,6 +214,12 @@ bool QxrdDocument::init(QSplashScreen *splash)
   return true;
 }
 
+QxrdDocument::~QxrdDocument()
+{
+  closeScanFile();
+  closeLogFile();
+}
+
 void QxrdDocument::splashMessage(const char *msg)
 {
   printMessage(msg);
@@ -224,9 +230,87 @@ void QxrdDocument::splashMessage(const char *msg)
   }
 }
 
-void QxrdDocumeny::splashMessage(QString msg)
+void QxrdDocument::splashMessage(QString msg)
 {
   splashMessage(qPrintable(msg));
+}
+
+void QxrdDocument::openLogFile()
+{
+  if (m_LogFile == NULL) {
+    m_LogFile = fopen(qPrintable(get_LogFilePath()), "a");
+
+    if (m_LogFile) {
+      writeLogHeader();
+    }
+  }
+}
+
+QxrdWindow *QxrdDocument::window()
+{
+  return m_Window;
+}
+
+QxrdAcquisitionThread *QxrdDocument::acquisitionThread()
+{
+  return m_AcquisitionThread;
+}
+
+QxrdAcquisition *QxrdDocument::acquisition() const
+{
+  return m_Acquisition;
+}
+
+QxrdDataProcessor *QxrdDocument::dataProcessor() const
+{
+  return m_DataProcessor;
+}
+
+void QxrdDocument::newLogFile(QString path)
+{
+  if (m_LogFile) {
+    fclose(m_LogFile);
+    m_LogFile = NULL;
+  }
+
+  set_LogFilePath(path);
+
+  openLogFile();
+}
+
+FILE* QxrdDocument::logFile()
+{
+  return m_LogFile;
+}
+
+void QxrdDocument::writeLogHeader()
+{
+  if (m_LogFile) {
+    fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFilePath()));
+    fprintf(m_LogFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
+    fprintf(m_LogFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
+    fflush(m_LogFile);
+  }
+}
+
+void QxrdDocument::logMessage(QString msg)
+{
+  openLogFile();
+
+  if (m_LogFile) {
+    fprintf(m_LogFile, "#CX %s\n", qPrintable(msg));
+    fflush(m_LogFile);
+  }
+}
+
+void QxrdDocument::closeLogFile()
+{
+  if (m_LogFile) {
+    logMessage(tr("%1 ------- shutdown --------").
+               arg(QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ")));
+    fclose(m_LogFile);
+    m_LogFile = NULL;
+  }
 }
 
 void QxrdDocument::readSettings()

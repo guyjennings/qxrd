@@ -7,7 +7,7 @@ class QxrdAcquisitionPilatus : public QxrdAcquisition
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionPilatus(QxrdDataProcessor *proc, QxrdAllocator *allocator);
+  QxrdAcquisitionPilatus(QxrdDocument *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator);
 
 private slots:
   void initialize();

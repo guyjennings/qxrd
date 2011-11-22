@@ -13,8 +13,10 @@
 #include <QFont>
 #include <QComboBox>
 
-QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDataProcessor *proc, QxrdAllocator *allocator)
-  : QxrdAcquisition(proc, allocator)
+QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdDocument *doc,
+                                                   QxrdDataProcessor *proc,
+                                                   QxrdAllocator *allocator)
+  : QxrdAcquisition(doc, proc, allocator)
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(onTimerTimeout()));
 }

@@ -50,9 +50,12 @@ public:
   QWidget* window();
 
 public slots:
+  void doAboutQxrd();
+  void doOpenQXRDWebPage();
+
   void shutdownThreads();
   void possiblyQuit();
-  void editPreferences();
+  void editGlobalPreferences();
   void debugChanged(int newValue);
 
   void readSettings();
@@ -66,6 +69,8 @@ public slots:
   void loadPreferences(QString path);
   void savePreferences(QString path);
 
+  void splashMessage(QString msg);
+  void logMessage(QString msg);
   void warningMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());

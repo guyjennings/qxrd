@@ -6,16 +6,18 @@
 class QxrdDataProcessor;
 class QxrdAllocator;
 class QxrdWindow;
+class QxrdDocument;
 
 class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionOperations(QxrdDataProcessor *proc, QxrdAllocator *allocator);
+  QxrdAcquisitionOperations(QxrdDocument *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator);
 
   void setWindow(QxrdWindow *win);
 
 protected:
+  QxrdDocument       *m_Document;
   QxrdWindow         *m_Window;
   QxrdAllocator      *m_Allocator;
   QxrdDataProcessor  *m_DataProcessor;

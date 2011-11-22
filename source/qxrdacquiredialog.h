@@ -8,7 +8,11 @@
 class QxrdAcquireDialog : public QxrdAcquireDialogBase, public Ui::QxrdAcquireDialog {
   Q_OBJECT
 public:
-  QxrdAcquireDialog(QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc, QWidget *parent = 0);
+  QxrdAcquireDialog(QxrdDocument *doc,
+                    QxrdWindow *win,
+                    QxrdAcquisition *acq,
+                    QxrdDataProcessor *proc,
+                    QWidget *parent = 0);
   ~QxrdAcquireDialog();
 
   void onAcquisitionInit();

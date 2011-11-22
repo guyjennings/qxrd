@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+class QxrdApplication;
+
 namespace Ui {
     class QxrdWelcomeWindow;
 }
@@ -12,7 +14,7 @@ class QxrdWelcomeWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit QxrdWelcomeWindow(QWidget *parent = 0);
+    explicit QxrdWelcomeWindow(QxrdApplication *app);
     ~QxrdWelcomeWindow();
 
 protected:

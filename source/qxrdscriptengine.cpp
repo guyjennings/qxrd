@@ -18,23 +18,21 @@
 
 #include <QThread>
 
-static QxrdScriptEngine  *g_ScriptEngine;
+//static QxrdScriptEngine  *g_ScriptEngine;
 static QxrdAcquisition   *g_Acquisition;
 //static QxrdApplication *g_Application;
 static QxrdDataProcessor *g_DataProcessor;
 
-QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc)
+QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app/*, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc*/)
   : QObject(),
     m_Mutex(QMutex::Recursive),
     m_ScriptEngine(NULL),
-    m_Application(app),
+    m_Application(app)/*,
     m_Window(win),
-    m_Acquisition(acq)
+    m_Acquisition(acq)*/
 {
-  g_ScriptEngine    = this;
-  g_Acquisition     = acq;
-  g_Application     = app;
-  g_DataProcessor   = proc;
+//  g_ScriptEngine    = this;
+//  g_Application     = app;
 }
 
 void QxrdScriptEngine::initialize()
@@ -55,26 +53,8 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterSequenceMetaType< QVector<double> >(m_ScriptEngine);
   qScriptRegisterSequenceMetaType< QVector<QString> >(m_ScriptEngine);
 //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(m_ScriptEngine);
-
-  m_ScriptEngine -> globalObject().setProperty("acquisition", m_ScriptEngine -> newQObject(m_Acquisition));
-  m_ScriptEngine -> globalObject().setProperty("synchronization", m_ScriptEngine -> newQObject(m_Acquisition->synchronizedAcquisition()));
   m_ScriptEngine -> globalObject().setProperty("application", m_ScriptEngine -> newQObject(m_Application));
-  m_ScriptEngine -> globalObject().setProperty("window", m_ScriptEngine -> newQObject(m_Window));
-  m_ScriptEngine -> globalObject().setProperty("processor", m_ScriptEngine -> newQObject(m_Application->dataProcessor()/*,QScriptEngine::QtOwnership,QScriptEngine::AutoCreateDynamicProperties*/));
-  m_ScriptEngine -> globalObject().setProperty("centering", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->centerFinder()));
-  m_ScriptEngine -> globalObject().setProperty("integrator", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->integrator()));
-  m_ScriptEngine -> globalObject().setProperty("initialFit", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->initialRingSetFitParameters()));
-  m_ScriptEngine -> globalObject().setProperty("refinedFit", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->refinedRingSetFitParameters()));
-  m_ScriptEngine -> globalObject().setProperty("initialData", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->initialRingSetData()));
-  m_ScriptEngine -> globalObject().setProperty("refinedData", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->refinedRingSetData()));
-//  m_ScriptEngine -> globalObject().setProperty("data", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->data().data()));
-//  m_ScriptEngine -> globalObject().setProperty("dark", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->darkImage().data()));
-//  m_ScriptEngine -> globalObject().setProperty("mask", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->mask().data()));
-  m_ScriptEngine -> globalObject().setProperty("testImage", m_ScriptEngine -> newQObject(m_Application->dataProcessor()->generateTestImage()));
-  m_ScriptEngine -> globalObject().setProperty("global", m_ScriptEngine -> newQObject(m_ScriptEngine -> globalObject().toQObject()));
-  m_ScriptEngine -> globalObject().setProperty("imageGraph", m_ScriptEngine -> newQObject(m_Application->window()->m_Plot));
-  m_ScriptEngine -> globalObject().setProperty("centeringGraph", m_ScriptEngine -> newQObject(m_Application->window()->m_CenterFinderPlot));
-  m_ScriptEngine -> globalObject().setProperty("integratorGraph", m_ScriptEngine -> newQObject(m_Application->window()->m_IntegratorPlot));
+
   m_ScriptEngine -> globalObject().setProperty("allocator", m_ScriptEngine -> newQObject(m_Application->allocator()));
 
   m_ScriptEngine -> globalObject().setProperty("acquire", m_ScriptEngine -> newFunction(acquireFunc));
@@ -109,6 +89,77 @@ void QxrdScriptEngine::initialize()
   if (obj) {
     m_ScriptEngine->globalObject().setProperty("nidaq", m_ScriptEngine->newQObject(obj));
   }
+}
+
+void QxrdScriptEngine::documentOpened(QxrdDocument *doc)
+{
+  if (!m_Documents.contains(doc)) {
+    QString suffix="";
+
+    if (m_Documents.length() > 0) {
+      suffix = tr("%1").arg(m_Documents.length());
+    }
+
+    m_Documents.append(doc);
+
+    m_ScriptEngine -> globalObject().setProperty("document"+suffix,
+                                                 m_ScriptEngine->newQObject(doc));
+    QxrdAcquisition *acq = doc->acquisition();
+
+    m_ScriptEngine -> globalObject().setProperty("acquisition"+suffix,
+                                                 m_ScriptEngine -> newQObject(acq));
+    m_ScriptEngine -> globalObject().setProperty("synchronization"+suffix,
+                                                 m_ScriptEngine -> newQObject(acq->synchronizedAcquisition()));
+    m_ScriptEngine -> globalObject().setProperty("processor"+suffix,
+                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()));
+    m_ScriptEngine -> globalObject().setProperty("centering"+suffix,
+                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->centerFinder()));
+    m_ScriptEngine -> globalObject().setProperty("integrator"+suffix,
+                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->integrator()));
+    m_ScriptEngine -> globalObject().setProperty("initialFit"+suffix,
+                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->initialRingSetFitParameters()));
+    m_ScriptEngine -> globalObject().setProperty("refinedFit"+suffix,
+                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->refinedRingSetFitParameters()));
+    m_ScriptEngine -> globalObject().setProperty("initialData"+suffix,
+                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->initialRingSetData()));
+    m_ScriptEngine -> globalObject().setProperty("refinedData"+suffix,
+                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->refinedRingSetData()));
+    m_ScriptEngine -> globalObject().setProperty("testImage"+suffix,
+                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->generateTestImage()));
+
+    g_Acquisition     = acq;
+    //  g_DataProcessor   = proc;
+  }
+}
+
+void QxrdScriptEngine::documentClosed(QxrdDocument *doc)
+{
+}
+
+void QxrdScriptEngine::windowOpened(QxrdWindow *win)
+{
+  if (!m_Windows.contains(win)) {
+    QString suffix="";
+
+    if (m_Windows.length() > 0) {
+      suffix = tr("%1").arg(m_Windows.length());
+    }
+
+    m_Windows.append(win);
+
+    m_ScriptEngine -> globalObject().setProperty("window"+suffix,
+                                                 m_ScriptEngine -> newQObject(win));
+    m_ScriptEngine -> globalObject().setProperty("imageGraph"+suffix,
+                                                 m_ScriptEngine -> newQObject(win->m_Plot));
+    m_ScriptEngine -> globalObject().setProperty("centeringGraph"+suffix,
+                                                 m_ScriptEngine -> newQObject(win->m_CenterFinderPlot));
+    m_ScriptEngine -> globalObject().setProperty("integratorGraph"+suffix,
+                                                 m_ScriptEngine -> newQObject(win->m_IntegratorPlot));
+  }
+}
+
+void QxrdScriptEngine::windowClosed(QxrdWindow *win)
+{
 }
 
 QScriptEngine* QxrdScriptEngine::scriptEngine() const

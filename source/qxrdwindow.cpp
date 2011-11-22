@@ -50,8 +50,6 @@
 #include <QString>
 #include <QMetaObject>
 #include <QMetaMethod>
-#include <QDesktopServices>
-#include <QUrl>
 #include <QMenu>
 #include <QDesktopWidget>
 
@@ -1010,7 +1008,7 @@ void QxrdWindow::selectLogFile()
         this, "Save Log File in", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
-    g_Application->newLogFile(theFile);
+    m_Document->newLogFile(theFile);
   }
 }
 
@@ -1099,40 +1097,6 @@ QxrdDoubleImageDataPtr QxrdWindow::data()
 QxrdMaskDataPtr QxrdWindow::mask()
 {
   return m_Mask;
-}
-
-void QxrdWindow::doAboutQxrd()
-{
-  QString about = "QXRD Data Acquisition for PE Area Detectors\nVersion " STR(QXRD_VERSION);
-
-  if (sizeof(void*) == 4) {
-    about += " - 32 Bit";
-  } else {
-    about += " - 64 Bit";
-  }
-
-#ifdef Q_CC_MSVC
-  about += " MSVC";
-#endif
-
-#ifdef Q_CC_GNU
-  about += " gcc";
-#endif
-
-#ifdef QT_NO_DEBUG
-  about += " Release\n";
-#else
-  about += " Debug\n";
-#endif
-
-  about += tr("Qt Version %1").arg(qVersion());
-
-  QMessageBox::about(this, "QXRD", about);
-}
-
-void QxrdWindow::doOpenQXRDWebPage()
-{
-  QDesktopServices::openUrl(QUrl("http://qxrd.sourceforge.net/"));
 }
 
 void QxrdWindow::allocatedMemoryChanged()

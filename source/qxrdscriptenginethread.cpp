@@ -42,7 +42,7 @@ void QxrdScriptEngineThread::run()
     g_Application->printMessage("Starting Script Engine Thread");
   }
 
-  QxrdScriptEngine *p = new QxrdScriptEngine(m_Application, m_Window, m_Acquisition, m_DataProcessor);
+  QxrdScriptEngine *p = new QxrdScriptEngine(m_Application);
 
   p -> initialize();
 

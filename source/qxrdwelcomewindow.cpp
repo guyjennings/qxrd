@@ -1,8 +1,8 @@
 #include "qxrdwelcomewindow.h"
 #include "ui_qxrdwelcomewindow.h"
 
-QxrdWelcomeWindow::QxrdWelcomeWindow(QWidget *parent) :
-    QMainWindow(parent),
+QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
+    QMainWindow(NULL),
     ui(new Ui::QxrdWelcomeWindow)
 {
     ui->setupUi(this);
