@@ -234,3 +234,27 @@ void QxrdDefaultApplication::openRecentExperiment(QString path)
     printMessage(tr("Experiment %1 does not exist").arg(path));
   }
 }
+
+void QxrdDefaultApplication::doNewPerkinElmerAcquisition()
+{
+}
+
+void QxrdDefaultApplication::doNewPilatusAcquisition()
+{
+}
+
+void QxrdDefaultApplication::doNewSimulatedAcquisition()
+{
+}
+
+void QxrdDefaultApplication::doNewPerkinElmerAnalysis()
+{
+}
+
+void QxrdDefaultApplication::doNewPilatusAnalysis()
+{
+}
+
+void QxrdDefaultApplication::doNewGenericAnalysis()
+{
+}

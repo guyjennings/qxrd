@@ -34,6 +34,13 @@ public:
 signals:
 
 public slots:
+  void doNewPerkinElmerAcquisition();
+  void doNewPilatusAcquisition();
+  void doNewSimulatedAcquisition();
+  void doNewPerkinElmerAnalysis();
+  void doNewPilatusAnalysis();
+  void doNewGenericAnalysis();
+
   void chooseNewExperiment();
   void chooseExistingExperiment();
   void openRecentExperiment(QString path);

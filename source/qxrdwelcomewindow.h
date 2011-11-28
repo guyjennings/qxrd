@@ -2,6 +2,7 @@
 #define QXRDWELCOMEWINDOW_H
 
 #include <QMainWindow>
+#include <QSignalMapper>
 
 class QxrdApplication;
 
@@ -26,6 +27,7 @@ private:
   Ui::QxrdWelcomeWindow *ui;
   QxrdApplication       *m_Application;
   int                    m_InsertRow;
+  QSignalMapper         *m_SignalMapper;
 };
 
 #endif // QXRDWELCOMEWINDOW_H
