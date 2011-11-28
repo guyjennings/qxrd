@@ -32,6 +32,7 @@
 #include "qxrdinfodialog.h"
 #include "qxrdtestdockwidget.h"
 #include "qxrdhighlighter.h"
+#include "qxrdpreferencesdialog.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -832,6 +833,13 @@ void QxrdWindow::newMask()
       m_ImageDisplay->updateImage(QxrdDoubleImageDataPtr(), QxrdMaskDataPtr(), m_Mask);
     }
   }
+}
+
+void QxrdWindow::doEditPreferences()
+{
+  QxrdPreferencesDialog prefs(m_Document);
+
+  prefs.exec();
 }
 
 void QxrdWindow::doSaveData()

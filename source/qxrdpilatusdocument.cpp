@@ -1,6 +1,6 @@
 #include "qxrdpilatusdocument.h"
 
-QxrdPilatusDocument::QxrdPilatusDocument(QObject *parent) :
-    QxrdDocument(parent)
+QxrdPilatusDocument::QxrdPilatusDocument(QxrdApplication *app, QObject *parent) :
+    QxrdDocument(app, parent)
 {
 }

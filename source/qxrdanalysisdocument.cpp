@@ -1,6 +1,6 @@
 #include "qxrdanalysisdocument.h"
 
-QxrdAnalysisDocument::QxrdAnalysisDocument(QObject *parent) :
-    QxrdDocument(parent)
+QxrdAnalysisDocument::QxrdAnalysisDocument(QxrdApplication *app, QObject *parent) :
+    QxrdDocument(app, parent)
 {
 }

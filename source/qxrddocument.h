@@ -90,7 +90,6 @@ public:  // Properties
   QCEP_INTEGER_PROPERTY(SimpleServerPort)
 
 private:
-    bool                            m_FreshStart;
     QSplashScreen                  *m_Splash;
     QxrdApplication                *m_Application;
     QxrdWindow                     *m_Window;
@@ -104,9 +103,8 @@ private:
     QxrdAcquisition                *m_Acquisition;
     QxrdFileSaverThread            *m_FileSaverThread;
 
-    mutable QMutex                  m_LogFileMutex;
     FILE                           *m_LogFile;
-
+    FILE                           *m_ScanFile;
 };
 
 typedef QSharedPointer<QxrdDocument> QxrdDocumentPtr;

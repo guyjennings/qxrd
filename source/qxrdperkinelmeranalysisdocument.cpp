@@ -1,6 +1,6 @@
 #include "qxrdperkinelmeranalysisdocument.h"
 
-QxrdPerkinElmerAnalysisDocument::QxrdPerkinElmerAnalysisDocument(QObject *parent) :
-    QxrdAnalysisDocument(parent)
+QxrdPerkinElmerAnalysisDocument::QxrdPerkinElmerAnalysisDocument(QxrdApplication *app, QObject *parent) :
+    QxrdAnalysisDocument(app, parent)
 {
 }

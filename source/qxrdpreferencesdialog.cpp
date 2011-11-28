@@ -77,10 +77,10 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QxrdDocument *doc, QWidget *parent)
   m_SimpleServerPort -> setRange(0,65535);
   m_SimpleServerPort -> setValue(simpleServerPort);
 
-  m_FileBrowserLimit -> setValue(app->get_FileBrowserLimit());
+  m_FileBrowserLimit -> setValue(g_Application->get_FileBrowserLimit());
 
-  m_MessageWindowLines -> setValue(app->get_MessageWindowLines());
-  m_UpdateIntervalMsec -> setValue(app->get_UpdateIntervalMsec());
+  m_MessageWindowLines -> setValue(g_Application->get_MessageWindowLines());
+  m_UpdateIntervalMsec -> setValue(g_Application->get_UpdateIntervalMsec());
 
   m_FileIndexWidth -> setValue(acq->get_FileIndexWidth());
   m_FilePhaseWidth -> setValue(acq->get_FilePhaseWidth());
@@ -205,44 +205,44 @@ void QxrdPreferencesDialog::accept()
     QMessageBox::information(this,"Restart Needed","You will need to restart qxrd before your changes will take effect");
   }
 
-  m_Document -> set_DetectorType(detectorType);
+  m_Document    -> set_DetectorType(detectorType);
 //  app -> set_ProcessorType(processorType);
   g_Application -> set_Debug(debugLevel);
-  g_Application -> set_TotalBufferSizeMB32(bufferSize32);
-  g_Application -> set_TotalBufferSizeMB64(bufferSize64);
-  alloc -> set_Reserve(extraReserve);
-  app -> set_RunSpecServer(runSpecServer);
-  app -> set_SpecServerPort(specServerPort);
-  app -> set_RunSimpleServer(runSimpleServer);
-  app -> set_SimpleServerPort(simpleServerPort);
+  acq           -> set_TotalBufferSizeMB32(bufferSize32);
+  acq           -> set_TotalBufferSizeMB64(bufferSize64);
+  alloc         -> set_Reserve(extraReserve);
+  m_Document    -> set_RunSpecServer(runSpecServer);
+  m_Document    -> set_SpecServerPort(specServerPort);
+  m_Document    -> set_RunSimpleServer(runSimpleServer);
+  m_Document    -> set_SimpleServerPort(simpleServerPort);
 
-  proc -> set_SaveRawInSubdirectory(m_SaveRawInSubdir -> isChecked());
-  proc -> set_SaveRawSubdirectory  (m_SaveRawSubdir   -> text());
+  proc          -> set_SaveRawInSubdirectory(m_SaveRawInSubdir -> isChecked());
+  proc          -> set_SaveRawSubdirectory  (m_SaveRawSubdir   -> text());
 
-  proc -> set_SaveDarkInSubdirectory(m_SaveDarkInSubdir  -> isChecked());
-  proc -> set_SaveDarkSubdirectory  (m_SaveDarkSubdir    -> text());
+  proc          -> set_SaveDarkInSubdirectory(m_SaveDarkInSubdir  -> isChecked());
+  proc          -> set_SaveDarkSubdirectory  (m_SaveDarkSubdir    -> text());
 
-  proc -> set_SaveSubtractedInSubdirectory(m_SaveSubtractedInSubdir -> isChecked());
-  proc -> set_SaveSubtractedSubdirectory  (m_SaveSubtractedSubdir   -> text());
+  proc          -> set_SaveSubtractedInSubdirectory(m_SaveSubtractedInSubdir -> isChecked());
+  proc          -> set_SaveSubtractedSubdirectory  (m_SaveSubtractedSubdir   -> text());
 
-  proc -> set_SaveIntegratedData(m_SaveIntegratedInLogFile  -> isChecked());
-  proc -> set_SaveIntegratedInSeparateFiles(m_SaveIntegratedInSeparateFiles -> isChecked());
-  proc -> set_SaveIntegratedInSubdirectory (m_SaveIntegratedInSubdir  -> isChecked());
-  proc -> set_SaveIntegratedSubdirectory   (m_SaveIntegratedSubdir    -> text());
+  proc          -> set_SaveIntegratedData(m_SaveIntegratedInLogFile  -> isChecked());
+  proc          -> set_SaveIntegratedInSeparateFiles(m_SaveIntegratedInSeparateFiles -> isChecked());
+  proc          -> set_SaveIntegratedInSubdirectory (m_SaveIntegratedInSubdir  -> isChecked());
+  proc          -> set_SaveIntegratedSubdirectory   (m_SaveIntegratedSubdir    -> text());
 
-  proc -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
+  proc          -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
 
-  proc -> set_OutputDirectory(m_CurrentOutputDirectory -> text());
-  app -> set_LogFilePath    (m_CurrentLogFile -> text());
+  proc          -> set_OutputDirectory(m_CurrentOutputDirectory -> text());
+  m_Document    -> set_LogFilePath    (m_CurrentLogFile -> text());
 
-  app -> set_FileBrowserLimit(m_FileBrowserLimit->value());
+  g_Application -> set_FileBrowserLimit(m_FileBrowserLimit->value());
 
-  app -> set_MessageWindowLines(m_MessageWindowLines -> value());
-  app -> set_UpdateIntervalMsec(m_UpdateIntervalMsec -> value());
+  g_Application -> set_MessageWindowLines(m_MessageWindowLines -> value());
+  g_Application -> set_UpdateIntervalMsec(m_UpdateIntervalMsec -> value());
 
-  acq -> set_FileIndexWidth(m_FileIndexWidth -> value());
-  acq -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
-  acq -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
+  acq           -> set_FileIndexWidth(m_FileIndexWidth -> value());
+  acq           -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
+  acq           -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
 
   QDialog::accept();
 }

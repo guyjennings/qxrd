@@ -1,6 +1,15 @@
 #include "qxrddocument.h"
+#include "qxrdfreshstartdialog.h"
+#include "qxrdapplication.h"
+#include "qxrddataprocessor.h"
+#include "qxrdwindow.h"
+#include "qxrdacquisition.h"
+#include "qxrdserver.h"
+#include "qxrdsimpleserver.h"
+#include "qxrdscriptengine.h"
 
-QxrdDocument::QxrdDocument(QObject *parent) :
+QxrdDocument::QxrdDocument(QxrdApplication *app,
+                           QObject *parent) :
   QObject(parent),
   m_DocumentFilePath(this, "documentFilePath", "qxrd.log"),
   m_LogFilePath(this, "logFilePath", "qxrd.log"),
@@ -12,8 +21,8 @@ QxrdDocument::QxrdDocument(QObject *parent) :
   m_SpecServerPort(this,"specServerPort", -1),
   m_RunSimpleServer(this,"simpleServer", 1),
   m_SimpleServerPort(this,"simpleServerPort", 1234),
-  m_FreshStart(false),
   m_Splash(NULL),
+  m_Application(app),
   m_Window(NULL),
   m_ServerThread(NULL),
   m_Server(NULL),
@@ -28,66 +37,51 @@ QxrdDocument::QxrdDocument(QObject *parent) :
 
 bool QxrdDocument::init(QSplashScreen *splash)
 {
-  if (m_FreshStart) {
-    QxrdFreshStartDialog *fresh = new QxrdFreshStartDialog();
-
-    if (fresh->exec() == QDialog::Rejected) {
-      quit();
-      return false;
-    }
-  }
-
   m_Splash = splash;
 
-  QcepProperty::registerMetaTypes();
+  setObjectName("qxrddocument");
 
-  setupTiffHandlers();
-
-  setObjectName("qxrdapplication");
-
-  QThread::currentThread()->setObjectName("app");
+  QThread::currentThread()->setObjectName("doc");
 //  printf("application thread %p\n", thread());
 
-  g_Application = this;
+//  int detectorType = 0;
 
-  int detectorType = 0;
+//  int specServer = 0;
+//  int specServerPort = 0;
+//  int simpleServer = 0;
+//  int simpleServerPort = 0;
 
-  int specServer = 0;
-  int specServerPort = 0;
-  int simpleServer = 0;
-  int simpleServerPort = 0;
+//  QString currentExperiment = get_CurrentExperiment();
 
-  QString currentExperiment = get_CurrentExperiment();
+//  if (currentExperiment.length()>0) {
+//    QSettings settings(currentExperiment, QSettings::IniFormat);
 
-  if (currentExperiment.length()>0) {
-    QSettings settings(currentExperiment, QSettings::IniFormat);
+//    detectorType = settings.value("application/detectorType").toInt();
+//    gCEPDebug = settings.value("application/debug").toInt();
+//    specServer = settings.value("application/runSpecServer").toInt();
+//    specServerPort = settings.value("application/specServerPort").toInt();
+//    simpleServer = settings.value("application/runSimpleServer").toInt();
+//    simpleServerPort = settings.value("application/simpleServerPort").toInt();
+//  } else {
+//    QxrdSettings settings;
 
-    detectorType = settings.value("application/detectorType").toInt();
-    gCEPDebug = settings.value("application/debug").toInt();
-    specServer = settings.value("application/runSpecServer").toInt();
-    specServerPort = settings.value("application/specServerPort").toInt();
-    simpleServer = settings.value("application/runSimpleServer").toInt();
-    simpleServerPort = settings.value("application/simpleServerPort").toInt();
-  } else {
-    QxrdSettings settings;
-
-    detectorType = settings.value("application/detectorType").toInt();
-    gCEPDebug = settings.value("application/debug").toInt();
-    specServer = settings.value("application/runSpecServer").toInt();
-    specServerPort = settings.value("application/specServerPort").toInt();
-    simpleServer = settings.value("application/runSimpleServer").toInt();
-    simpleServerPort = settings.value("application/simpleServerPort").toInt();
-  }
+//    detectorType = settings.value("application/detectorType").toInt();
+//    gCEPDebug = settings.value("application/debug").toInt();
+//    specServer = settings.value("application/runSpecServer").toInt();
+//    specServerPort = settings.value("application/specServerPort").toInt();
+//    simpleServer = settings.value("application/runSimpleServer").toInt();
+//    simpleServerPort = settings.value("application/simpleServerPort").toInt();
+//  }
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing File Saver");
 
-  m_FileSaverThread = new QxrdFileSaverThread(m_Allocator);
+  m_FileSaverThread = new QxrdFileSaverThread(g_Application->allocator());
   m_FileSaverThread -> setObjectName("saver");
   m_FileSaverThread -> start();
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing Data Processing");
 
-  m_DataProcessorThread = new QxrdDataProcessorThread(NULL, m_Allocator, m_FileSaverThread);
+  m_DataProcessorThread = new QxrdDataProcessorThread(this, NULL, g_Application->allocator(), m_FileSaverThread);
   m_DataProcessorThread -> setObjectName("proc");
   m_DataProcessorThread -> start();
   m_DataProcessor = m_DataProcessorThread -> dataProcessor();
@@ -96,7 +90,7 @@ bool QxrdDocument::init(QSplashScreen *splash)
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing Data Acquisition");
 
-  m_AcquisitionThread = new QxrdAcquisitionThread(m_DataProcessor, m_Allocator, detectorType);
+  m_AcquisitionThread = new QxrdAcquisitionThread(this, m_DataProcessor, g_Application->allocator(), get_DetectorType());
   m_AcquisitionThread -> setObjectName("acqu");
   m_AcquisitionThread -> start();
   m_Acquisition = m_AcquisitionThread -> acquisition();
@@ -105,9 +99,9 @@ bool QxrdDocument::init(QSplashScreen *splash)
   m_FileSaverThread -> setAcquisition(m_Acquisition);
 
 
-//  if (get_GuiWanted()) {
+//  if (g_Application->get_GuiWanted()) {
     splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Main Window");
-    m_Window = new QxrdWindow(this, m_Acquisition, m_DataProcessor, m_Allocator);
+    m_Window = new QxrdWindow(g_Application, this, m_Acquisition, m_DataProcessor, g_Application->allocator());
 
     m_DataProcessor -> setWindow(m_Window);
     m_Acquisition -> setWindow(m_Window);
@@ -117,81 +111,58 @@ bool QxrdDocument::init(QSplashScreen *splash)
 
 //  printMessage("about to load plugins");
 
-  loadPlugins();
-
-  m_Acquisition -> setNIDAQPlugin(nidaqPlugin());
+  m_Acquisition -> setNIDAQPlugin(g_Application->nidaqPlugin());
 
   m_AcquisitionThread->initialize();
 
   if (m_Window) m_Window -> onAcquisitionInit();
 
-  if (specServer) {
+  if (get_RunSpecServer()) {
     splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting SPEC Server");
 
-    m_ServerThread = new QxrdServerThread("qxrd", specServerPort);
+    m_ServerThread = new QxrdServerThread("qxrd", get_SpecServerPort());
     m_ServerThread -> setObjectName("server");
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
 
     if (qcepDebug(DEBUG_SERVER)) {
-      printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
+      g_Application->printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
     }
   }
 
-  if (simpleServer) {
+  if (get_RunSimpleServer()) {
     splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Simple Socket Server");
 
-    m_SimpleServerThread = new QxrdSimpleServerThread("simpleserver", simpleServerPort);
+    m_SimpleServerThread = new QxrdSimpleServerThread("simpleserver", get_SimpleServerPort());
     m_SimpleServerThread -> setObjectName("smpsrv");
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
 
     if (qcepDebug(DEBUG_SERVER)) {
-      printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
+      g_Application->printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
     }
   }
 
-
-  splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Scripting System");
-
-  m_ScriptEngineThread = new QxrdScriptEngineThread(this, m_Window, m_Acquisition, m_DataProcessor);
-  m_ScriptEngineThread -> setObjectName("script");
-  m_ScriptEngineThread -> start();
-  m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
-
-//  m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
-//  m_ScriptEngineDebugger -> attachTo(m_ScriptEngine->scriptEngine());
-//  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
-
   if (m_Server) {
-    connect(m_Server,         SIGNAL(executeCommand(QString)),           m_ScriptEngine,    SLOT(evaluateSpecCommand(QString)));
-    connect(m_ScriptEngine,   SIGNAL(specResultAvailable(QScriptValue)), m_Server,          SLOT(finishedCommand(QScriptValue)));
+    connect(m_Server,         SIGNAL(executeCommand(QString)),           g_Application->scriptEngine(),    SLOT(evaluateSpecCommand(QString)));
+    connect(g_Application->scriptEngine(),   SIGNAL(specResultAvailable(QScriptValue)), m_Server,          SLOT(finishedCommand(QScriptValue)));
   }
 
   if (m_SimpleServer) {
-    connect(m_SimpleServer,   SIGNAL(executeCommand(QString)),           m_ScriptEngine,    SLOT(evaluateSimpleServerCommand(QString)));
-    connect(m_ScriptEngine,   SIGNAL(simpleServerResultAvailable(QScriptValue)), m_SimpleServer,  SLOT(finishedCommand(QScriptValue)));
+    connect(m_SimpleServer,   SIGNAL(executeCommand(QString)),           g_Application->scriptEngine(),    SLOT(evaluateSimpleServerCommand(QString)));
+    connect(g_Application->scriptEngine(),   SIGNAL(simpleServerResultAvailable(QScriptValue)), m_SimpleServer,  SLOT(finishedCommand(QScriptValue)));
   }
 
-  if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           m_ScriptEngine,    SLOT(evaluateAppCommand(QString)));
-  if (m_Window) connect(m_ScriptEngine,   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
+  if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           g_Application->scriptEngine(),    SLOT(evaluateAppCommand(QString)));
+  if (m_Window) connect(g_Application->scriptEngine(),   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
 
-  if (m_Window) m_Window -> setScriptEngine(m_ScriptEngine);
+  if (m_Window) m_Window -> setScriptEngine(g_Application->scriptEngine());
 
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
-
-  connect(prop_Debug(), SIGNAL(valueChanged(int,int)), this, SLOT(debugChanged(int)));
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading Preferences");
 
   readSettings();
-
-  m_SettingsSaverThread = new QxrdSettingsSaverThread(this);
-  m_SettingsSaverThread -> setObjectName("settings");
-  m_SettingsSaverThread -> start();
-  m_SettingsSaver = m_SettingsSaverThread -> settingsSaver();
-
-  g_Application->printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading Background Images");
 
@@ -205,11 +176,9 @@ bool QxrdDocument::init(QSplashScreen *splash)
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Windows");
 
-  if (get_GuiWanted() && m_Window) {
+  if (g_Application->get_GuiWanted() && m_Window) {
     m_Window -> show();
   }
-
-  m_ResponseTimer = new QxrdResponseTimer(1000, this);
 
   return true;
 }
@@ -222,11 +191,11 @@ QxrdDocument::~QxrdDocument()
 
 void QxrdDocument::splashMessage(const char *msg)
 {
-  printMessage(msg);
+  g_Application->printMessage(msg);
 
   if (m_Splash) {
     m_Splash->showMessage(msg, Qt::AlignBottom|Qt::AlignHCenter);
-    processEvents();
+    g_Application->processEvents();
   }
 }
 
@@ -310,6 +279,19 @@ void QxrdDocument::closeLogFile()
                arg(QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ")));
     fclose(m_LogFile);
     m_LogFile = NULL;
+  }
+}
+
+FILE* QxrdDocument::scanFile()
+{
+  return m_ScanFile;
+}
+
+void QxrdDocument::closeScanFile()
+{
+  if (m_ScanFile) {
+    fclose(m_ScanFile);
+    m_ScanFile = NULL;
   }
 }
 

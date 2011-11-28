@@ -48,6 +48,7 @@ public:
   QStringList makeStringList(int argc, char **argv);
 
   QWidget* window();
+  QxrdScriptEngine* scriptEngine();
 
 public slots:
   void doAboutQxrd();

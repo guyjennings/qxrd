@@ -1,6 +1,6 @@
 #include "qxrdpilatusanalysisdocument.h"
 
-QxrdPilatusAnalysisDocument::QxrdPilatusAnalysisDocument(QObject *parent) :
-    QxrdAnalysisDocument(parent)
+QxrdPilatusAnalysisDocument::QxrdPilatusAnalysisDocument(QxrdApplication *app, QObject *parent) :
+    QxrdAnalysisDocument(app, parent)
 {
 }

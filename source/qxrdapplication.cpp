@@ -99,7 +99,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     #ifdef HAVE_PERKIN_ELMER
         m_PerkinElmerPluginInterface(NULL),
     #endif
-    m_NIDAQPluginInterface(NULL)
+    m_NIDAQPluginInterface(NULL),
+    m_ResponseTimer(NULL)
 {
   oldEventFilter = setEventFilter(myEventFilter);
 
@@ -200,6 +201,50 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
 bool QxrdApplication::init(QSplashScreen *splash)
 {
+  if (get_FreshStart()) {
+    QxrdFreshStartDialog *fresh = new QxrdFreshStartDialog();
+
+    if (fresh->exec() == QDialog::Rejected) {
+      quit();
+      return false;
+    }
+  }
+
+  QcepProperty::registerMetaTypes();
+
+  setupTiffHandlers();
+
+  setObjectName("qxrdapplication");
+
+  QThread::currentThread()->setObjectName("app");
+//  printf("application thread %p\n", thread());
+
+  g_Application = this;
+
+  loadPlugins();
+
+  splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Scripting System");
+
+  m_ScriptEngineThread = new QxrdScriptEngineThread(this);
+  m_ScriptEngineThread -> setObjectName("script");
+  m_ScriptEngineThread -> start();
+  m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
+
+//  m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
+//  m_ScriptEngineDebugger -> attachTo(m_ScriptEngine->scriptEngine());
+//  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
+
+  connect(prop_Debug(), SIGNAL(valueChanged(int,int)), this, SLOT(debugChanged(int)));
+
+  m_SettingsSaverThread = new QxrdSettingsSaverThread(this);
+  m_SettingsSaverThread -> setObjectName("settings");
+  m_SettingsSaverThread -> start();
+  m_SettingsSaver = m_SettingsSaverThread -> settingsSaver();
+
+  printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
+
+  m_ResponseTimer = new QxrdResponseTimer(1000, this);
+
   m_WelcomeWindow = new QxrdWelcomeWindow(this);
   m_WelcomeWindow -> show();
 
@@ -209,7 +254,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
 QxrdApplication::~QxrdApplication()
 {
   if (qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage("QxrdApplication::~QxrdApplication");
+    printMessage("QxrdApplication::~QxrdApplication");
   }
 
 //  delete m_ServerThread;
@@ -237,8 +282,13 @@ QxrdApplication::~QxrdApplication()
 //  m_ScriptEngineThread -> deleteLater();
 
   if (qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage("QxrdApplication::~QxrdApplication finished");
+    printMessage("QxrdApplication::~QxrdApplication finished");
   }
+}
+
+QxrdScriptEngine* QxrdApplication::scriptEngine()
+{
+  return m_ScriptEngine;
 }
 
 QWidget* QxrdApplication::window()

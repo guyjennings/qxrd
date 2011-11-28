@@ -1,6 +1,6 @@
 #include "qxrdperkinelmerdocument.h"
 
-QxrdPerkinElmerDocument::QxrdPerkinElmerDocument(QObject *parent) :
-    QxrdDocument(parent)
+QxrdPerkinElmerDocument::QxrdPerkinElmerDocument(QxrdApplication *app, QObject *parent) :
+    QxrdDocument(app, parent)
 {
 }

@@ -7,7 +7,7 @@ class QxrdPerkinElmerAnalysisDocument : public QxrdAnalysisDocument
 {
     Q_OBJECT
 public:
-    explicit QxrdPerkinElmerAnalysisDocument(QObject *parent = 0);
+    explicit QxrdPerkinElmerAnalysisDocument(QxrdApplication *app, QObject *parent = 0);
 
 signals:
 

@@ -16,7 +16,7 @@ class QxrdScriptEngineThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdScriptEngineThread(QxrdApplication *app, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc);
+  QxrdScriptEngineThread(QxrdApplication *app);
   ~QxrdScriptEngineThread();
 
   void shutdown();
@@ -28,9 +28,6 @@ protected:
 private:
   QAtomicPointer<QxrdScriptEngine>  m_ScriptEngine;
   QxrdApplication   *m_Application;
-  QxrdWindow        *m_Window;
-  QxrdAcquisition   *m_Acquisition;
-  QxrdDataProcessor *m_DataProcessor;
 };
 
 #endif // QXRDSCRIPTENGINETHREAD_H
