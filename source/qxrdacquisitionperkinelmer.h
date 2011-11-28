@@ -15,7 +15,7 @@ class QxrdAcquisitionPerkinElmer : public QxrdAcquisition
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc, QxrdAllocator *allocator);
+  QxrdAcquisitionPerkinElmer(QxrdDocument *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator);
   ~QxrdAcquisitionPerkinElmer();
 
 private slots:

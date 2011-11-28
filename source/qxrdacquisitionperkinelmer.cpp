@@ -38,8 +38,10 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
 static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
 static HACQDESC m_AcqDesc = NULL;
 
-QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDataProcessor *proc, QxrdAllocator *allocator)
-  : QxrdAcquisition(proc, allocator),
+QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdDocument *doc,
+                                                       QxrdDataProcessor *proc,
+                                                       QxrdAllocator *allocator)
+  : QxrdAcquisition(doc, proc, allocator),
     m_Mutex(QMutex::Recursive),
     m_BufferSize(0),
     m_StartupDelayed(0),
