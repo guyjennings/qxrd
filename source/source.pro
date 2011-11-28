@@ -222,7 +222,8 @@ HEADERS += TODO.h \
     qxrdperkinelmeranalysisdocument.h \
     qxrdpilatusanalysisdocument.h \
     qxrdwelcomewindow.h \
-    qxrdglobalpreferencesdialog.h
+    qxrdglobalpreferencesdialog.h \
+    qxrdwelcomerecentitem.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -354,7 +355,8 @@ SOURCES += qxrd.cpp \
     qxrdperkinelmeranalysisdocument.cpp \
     qxrdpilatusanalysisdocument.cpp \
     qxrdwelcomewindow.cpp \
-    qxrdglobalpreferencesdialog.cpp
+    qxrdglobalpreferencesdialog.cpp \
+    qxrdwelcomerecentitem.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -375,7 +377,8 @@ FORMS = qxrdwindow.ui \
     qxrdacquirefilewatcherdialog.ui \
     qxrddefaultapplicationdialog.ui \
     qxrdwelcomewindow.ui \
-    qxrdglobalpreferencesdialog.ui
+    qxrdglobalpreferencesdialog.ui \
+    qxrdwelcomerecentitem.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 
@@ -513,6 +516,9 @@ win32 { # Make NSIS installer...
 #for(m, QT) {
 #  message("In source.pro QT contains $${m}")
 #}
+
+
+
 
 
 

@@ -6,22 +6,26 @@
 class QxrdApplication;
 
 namespace Ui {
-    class QxrdWelcomeWindow;
+class QxrdWelcomeWindow;
 }
 
 class QxrdWelcomeWindow : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit QxrdWelcomeWindow(QxrdApplication *app);
-    ~QxrdWelcomeWindow();
+  explicit QxrdWelcomeWindow(QxrdApplication *app);
+  ~QxrdWelcomeWindow();
+
+  void appendRecentDocument(QString title);
 
 protected:
-    void changeEvent(QEvent *e);
+  void changeEvent(QEvent *e);
 
 private:
-    Ui::QxrdWelcomeWindow *ui;
+  Ui::QxrdWelcomeWindow *ui;
+  QxrdApplication       *m_Application;
+  int                    m_InsertRow;
 };
 
 #endif // QXRDWELCOMEWINDOW_H

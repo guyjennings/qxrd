@@ -1,24 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>QxrdWelcomeWindow</class>
  <widget class="QMainWindow" name="QxrdWelcomeWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>873</width>
+    <height>570</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>QXRD Welcome</string>
   </property>
-  <widget class="QMenuBar" name="menubar"/>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>851</width>
+         <height>504</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QWidget" name="widget" native="true">
+          <layout class="QGridLayout" name="m_GridLayout">
+           <item row="0" column="0">
+            <widget class="QCommandLinkButton" name="commandLinkButton">
+             <property name="font">
+              <font>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Start a new Perkin Elmer Experiment...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QCommandLinkButton" name="commandLinkButton_4">
+             <property name="font">
+              <font>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Start a new Perkin Elmer Analysis...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/system-run.png</normaloff>:/images/system-run.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCommandLinkButton" name="commandLinkButton_2">
+             <property name="font">
+              <font>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Start a new Pilatus Experiment...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QCommandLinkButton" name="commandLinkButton_5">
+             <property name="font">
+              <font>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Start a new Pilatus Analysis...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/system-run.png</normaloff>:/images/system-run.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QCommandLinkButton" name="commandLinkButton_3">
+             <property name="font">
+              <font>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Start a new Simulated Experiment...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QCommandLinkButton" name="commandLinkButton_6">
+             <property name="font">
+              <font>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Start a new Generic Analysis...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/system-run.png</normaloff>:/images/system-run.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QCommandLinkButton" name="commandLinkButton_7">
+             <property name="font">
+              <font>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Open an existing Experiment...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::MinimumExpanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>233</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>873</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="menuNew_Analysis_Experiment">
+     <property name="title">
+      <string>New Analysis Experiment</string>
+     </property>
+     <addaction name="m_ActionNewPerkinElmerAnalysis"/>
+     <addaction name="m_ActionNewPilatusAnalysis"/>
+     <addaction name="m_ActionNewGenericAnalysis"/>
+    </widget>
+    <widget class="QMenu" name="menuNew_Acquisition_Experiment">
+     <property name="title">
+      <string>New Acquisition Experiment</string>
+     </property>
+     <addaction name="m_ActionNewPerkinElmerAcquisition"/>
+     <addaction name="m_ActionNewPilatusAcquisition"/>
+     <addaction name="m_ActionNewSimulatedAcquisition"/>
+    </widget>
+    <addaction name="menuNew_Acquisition_Experiment"/>
+    <addaction name="menuNew_Analysis_Experiment"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionOpenExperiment"/>
+    <addaction name="m_ActionOpenRecentExperiment"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionEditApplicationPreferences"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionExitApplication"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+  </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="m_ActionOpenExperiment">
+   <property name="text">
+    <string>Open Experiment...</string>
+   </property>
+  </action>
+  <action name="m_ActionOpenRecentExperiment">
+   <property name="text">
+    <string>Open Recent Experiment</string>
+   </property>
+  </action>
+  <action name="m_ActionEditApplicationPreferences">
+   <property name="text">
+    <string>Edit Application Preferences...</string>
+   </property>
+  </action>
+  <action name="m_ActionExitApplication">
+   <property name="text">
+    <string>Exit Application</string>
+   </property>
+  </action>
+  <action name="m_ActionNewPerkinElmerAcquisition">
+   <property name="text">
+    <string>New Perkin Elmer Acquisition...</string>
+   </property>
+  </action>
+  <action name="m_ActionNewPilatusAcquisition">
+   <property name="text">
+    <string>New Pilatus Acquisition...</string>
+   </property>
+  </action>
+  <action name="m_ActionNewSimulatedAcquisition">
+   <property name="text">
+    <string>New Simulated Acquisition...</string>
+   </property>
+  </action>
+  <action name="m_ActionNewPerkinElmerAnalysis">
+   <property name="text">
+    <string>New Perkin Elmer Analysis...</string>
+   </property>
+  </action>
+  <action name="m_ActionNewGenericAnalysis">
+   <property name="text">
+    <string>New Generic Analysis...</string>
+   </property>
+  </action>
+  <action name="m_ActionNewPilatusAnalysis">
+   <property name="text">
+    <string>New Pilatus Analysis...</string>
+   </property>
+  </action>
  </widget>
- <pixmapfunction/>
+ <resources>
+  <include location="qxrdresources.qrc"/>
+ </resources>
  <connections/>
 </ui>
