@@ -241,11 +241,17 @@
      <addaction name="m_ActionNewPilatusAcquisition"/>
      <addaction name="m_ActionNewSimulatedAcquisition"/>
     </widget>
+    <widget class="QMenu" name="m_OpenRecentExperimentMenu">
+     <property name="title">
+      <string>Open Recent Experiment</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
     <addaction name="menuNew_Acquisition_Experiment"/>
     <addaction name="menuNew_Analysis_Experiment"/>
     <addaction name="separator"/>
     <addaction name="m_ActionOpenExperiment"/>
-    <addaction name="m_ActionOpenRecentExperiment"/>
+    <addaction name="m_OpenRecentExperimentMenu"/>
     <addaction name="separator"/>
     <addaction name="m_ActionEditApplicationPreferences"/>
     <addaction name="separator"/>
@@ -263,11 +269,6 @@
   <action name="m_ActionOpenExperiment">
    <property name="text">
     <string>Open Experiment...</string>
-   </property>
-  </action>
-  <action name="m_ActionOpenRecentExperiment">
-   <property name="text">
-    <string>Open Recent Experiment</string>
    </property>
   </action>
   <action name="m_ActionEditApplicationPreferences">

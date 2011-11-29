@@ -7,6 +7,7 @@
 #include <QApplication>
 #include <QScriptEngine>
 #include <QScriptEngineDebugger>
+#include <QSettings>
 #include "qxrdresponsetimer.h"
 #include "qxrdallocatorthread.h"
 #include "qxrdscriptenginethread.h"

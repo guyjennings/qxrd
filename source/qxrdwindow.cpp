@@ -300,7 +300,6 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdDocument *doc, QxrdAcquisition 
   connect(m_HelpBrowser, SIGNAL(forwardAvailable(bool)), m_HelpForwardButton, SLOT(setEnabled(bool)));
   connect(m_HelpBrowser, SIGNAL(backwardAvailable(bool)), m_HelpBackButton, SLOT(setEnabled(bool)));
 
-  connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
   connect(&m_UpdateTimer, SIGNAL(timeout()), this, SLOT(newData()));
 
   connect(m_ActionIntegrate, SIGNAL(triggered()), this, SLOT(doIntegrateSequence()));

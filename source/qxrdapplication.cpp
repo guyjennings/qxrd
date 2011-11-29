@@ -23,6 +23,7 @@
 #include "qxrdprocessorinterface.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdfreshstartdialog.h"
+#include "qxrdsettings.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -197,10 +198,19 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   printMessage(tr("Home Path: %1").arg(QDir::homePath()));
   printMessage(tr("Current Path: %1").arg(QDir::currentPath()));
   printMessage(tr("Root Path %1").arg(QDir::rootPath()));
+
+  connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 }
 
 bool QxrdApplication::init(QSplashScreen *splash)
 {
+  m_WelcomeWindow = new QxrdWelcomeWindow(this);
+
+  readSettings();
+
+  m_WelcomeWindow -> show();
+
+
   if (get_FreshStart()) {
     QxrdFreshStartDialog *fresh = new QxrdFreshStartDialog();
 
@@ -244,9 +254,6 @@ bool QxrdApplication::init(QSplashScreen *splash)
   printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
   m_ResponseTimer = new QxrdResponseTimer(1000, this);
-
-  m_WelcomeWindow = new QxrdWelcomeWindow(this);
-  m_WelcomeWindow -> show();
 
   return true;
 }

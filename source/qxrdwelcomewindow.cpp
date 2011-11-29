@@ -2,6 +2,8 @@
 #include "ui_qxrdwelcomewindow.h"
 #include "qxrdwelcomerecentitem.h"
 #include "qxrdapplication.h"
+#include <QCloseEvent>
+#include <QMessageBox>
 
 QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   QMainWindow(NULL),
@@ -12,7 +14,14 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
 {
   ui->setupUi(this);
 
-  QStringList recents = m_Application->get_RecentExperiments();
+  m_StatusMsg = new QLabel(NULL);
+  m_StatusMsg -> setMinimumWidth(500);
+  m_StatusMsg -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  m_StatusMsg -> setToolTip(tr("Status Messages"));
+
+  statusBar() -> addPermanentWidget(m_StatusMsg);
+
+  connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
 
   connect(ui->m_ActionEditApplicationPreferences, SIGNAL(triggered()), m_Application, SLOT(editGlobalPreferences()));
   connect(ui->m_ActionNewPerkinElmerAcquisition, SIGNAL(triggered()), m_Application, SLOT(doNewPerkinElmerAcquisition()));
@@ -22,6 +31,7 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   connect(ui->m_ActionNewPilatusAnalysis, SIGNAL(triggered()), m_Application, SLOT(doNewPilatusAnalysis()));
   connect(ui->m_ActionNewGenericAnalysis, SIGNAL(triggered()), m_Application, SLOT(doNewGenericAnalysis()));
   connect(ui->m_ActionOpenExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseExistingExperiment()));
+  connect(ui->m_ActionExitApplication, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
 
   connect(ui->m_NewPerkinElmerAcquisition, SIGNAL(clicked()), ui->m_ActionNewPerkinElmerAcquisition, SLOT(trigger()));
   connect(ui->m_NewPilatusAcquisition, SIGNAL(clicked()), ui->m_ActionNewPilatusAcquisition, SLOT(trigger()));
@@ -34,6 +44,8 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   m_SignalMapper = new QSignalMapper(this);
 
   connect(m_SignalMapper, SIGNAL(mapped(QString)), m_Application, SLOT(openRecentExperiment(QString)));
+
+  QStringList recents = m_Application->get_RecentExperiments();
 
   foreach (QString recent, recents) {
     appendRecentDocument(recent);
@@ -68,4 +80,74 @@ void QxrdWelcomeWindow::appendRecentDocument(QString title)
   connect(item, SIGNAL(clicked()), m_SignalMapper, SLOT(map()));
 
   m_SignalMapper->setMapping(item, title);
+
+  QAction *recentAction = new QAction(this);
+
+  recentAction->setText(title);
+
+  ui->m_OpenRecentExperimentMenu -> addAction(recentAction);
+
+  m_SignalMapper->setMapping(recentAction, title);
+
+  connect(recentAction, SIGNAL(triggered()), m_SignalMapper, SLOT(map()));
 }
+
+void QxrdWelcomeWindow::closeEvent ( QCloseEvent * event )
+{
+  if (wantToClose()) {
+    event -> accept();
+  } else {
+    event -> ignore();
+  }
+}
+
+void QxrdWelcomeWindow::possiblyClose()
+{
+  //   printf("QxrdWindow::possiblyClose()\n");
+  if (wantToClose()) {
+    close();
+  }
+}
+
+bool QxrdWelcomeWindow::wantToClose()
+{
+  THREAD_CHECK;
+
+  return QMessageBox::question(this, tr("Really Close?"),
+                               tr("Do you really want to close the window?"),
+                               QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
+}
+
+void QxrdWelcomeWindow::readSettings(QSettings &settings, QString section)
+{
+  QByteArray geometry = settings.value(section+"-geometry").toByteArray();
+  QByteArray winstate = settings.value(section+"-state").toByteArray();
+
+  if (!geometry.isEmpty() && !winstate.isEmpty()) {
+    restoreGeometry(geometry);
+    restoreState(winstate,1);
+  }
+
+  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdWelcomeWindow::writeSettings(QSettings &settings, QString section)
+{
+  settings.setValue(section+"-geometry", saveGeometry());
+  settings.setValue(section+"-state", saveState(1));
+
+  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdWelcomeWindow::displayMessage(QString msg)
+{
+  m_StatusMsg -> setText(msg);
+
+  m_StatusTimer.start(5000);
+}
+
+void QxrdWelcomeWindow::clearStatusMessage()
+{
+  m_StatusMsg -> setText("");
+}
+
