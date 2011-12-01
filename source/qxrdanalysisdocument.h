@@ -7,7 +7,7 @@ class QxrdAnalysisDocument : public QxrdDocument
 {
     Q_OBJECT
 public:
-    explicit QxrdAnalysisDocument(QxrdApplication *app, QObject *parent = 0);
+    explicit QxrdAnalysisDocument(QString path, QxrdApplication *app, QObject *parent = 0);
 
 signals:
 

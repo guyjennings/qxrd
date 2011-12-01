@@ -8,10 +8,11 @@
 #include "qxrdsimpleserver.h"
 #include "qxrdscriptengine.h"
 
-QxrdDocument::QxrdDocument(QxrdApplication *app,
+QxrdDocument::QxrdDocument(QString path,
+                           QxrdApplication *app,
                            QObject *parent) :
   QObject(parent),
-  m_DocumentFilePath(this, "documentFilePath", "qxrd.log"),
+  m_DocumentFilePath(this, "documentFilePath", path),
   m_LogFilePath(this, "logFilePath", "qxrd.log"),
   m_ScanFilePath(this, "scanFilePath", "qxrd.log"),
   m_DetectorType(this,"detectorType", 1),

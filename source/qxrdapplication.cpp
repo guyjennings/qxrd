@@ -24,6 +24,11 @@
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdfreshstartdialog.h"
 #include "qxrdsettings.h"
+#include "qxrdnewexperimentdialog.h"
+#include "qxrdperkinelmerdocument.h"
+#include "qxrdperkinelmeranalysisdocument.h"
+#include "qxrdpilatusdocument.h"
+#include "qxrdpilatusanalysisdocument.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -82,7 +87,10 @@ QStringList QxrdApplication::makeStringList(int argc, char **argv)
 }
 
 QxrdApplication::QxrdApplication(int &argc, char **argv)
-  : QxrdDefaultApplication(argc, argv),
+  : QApplication(argc, argv),
+    m_RecentExperiments(this, "recentExperiments", QStringList()),
+    m_RecentExperimentsSize(this,"recentExperimentsSize", 8),
+    m_CurrentExperiment(this, "currentExperiment", ""),
     m_Debug(this,"debug", 0),
     m_FreshStart(this,"freshStart", 0),
     m_FileBrowserLimit(this, "fileBrowserLimit", 0),
@@ -287,6 +295,8 @@ QxrdApplication::~QxrdApplication()
 //  m_FileSaverThread -> deleteLater();
 //  m_AllocatorThread -> deleteLater();
 //  m_ScriptEngineThread -> deleteLater();
+
+  writeDefaultSettings();
 
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdApplication::~QxrdApplication finished");
@@ -719,4 +729,256 @@ bool QxrdApplication::event(QEvent *ev)
   }
 
   return res;
+}
+
+void QxrdApplication::readDefaultSettings()
+{
+  QSettings settings("cep.xor.aps.anl.gov", "qxrd-defaults");
+
+  set_RecentExperiments(settings.value("recentExperiments").toStringList());
+  set_RecentExperimentsSize(settings.value("recentExperimentsSize", 8).toInt());
+  set_CurrentExperiment(settings.value("currentExperiment").toString());
+}
+
+void QxrdApplication::writeDefaultSettings()
+{
+  QSettings settings("cep.xor.aps.anl.gov", "qxrd-defaults");
+
+  settings.setValue("recentExperiments", get_RecentExperiments());
+  settings.setValue("recentExperimentsSize", get_RecentExperimentsSize());
+  settings.setValue("currentExperiment", get_CurrentExperiment());
+}
+
+void QxrdApplication::chooseNewExperiment()
+{
+  QxrdNewExperimentDialog *chooser =  new QxrdNewExperimentDialog(this);
+
+  if (chooser->choose()) {
+    openExperiment(chooser->chosenKind(), chooser->chosenPath());
+  }
+}
+
+void QxrdApplication::chooseExistingExperiment()
+{
+  QString res = QFileDialog::getOpenFileName(NULL,
+                                             "Open an existing experiment...",
+                                             get_CurrentExperiment(),
+                                             "QXRD Experiments (*.qxrdp);;Other Files (*)");
+
+  if (res.length() > 0) {
+    openExperiment(QxrdNewExperimentDialog::Existing, res);
+  }
+}
+
+void QxrdApplication::openExperiment(int kind, QString path)
+{
+  printMessage("");
+  printMessage(tr("===== Open Experiment %1").arg(path));
+
+  switch(kind) {
+  case QxrdNewExperimentDialog::Analysis:
+    path = newAnalysisExperiment(path);
+    break;
+
+  case QxrdNewExperimentDialog::PerkinElmer:
+    path = newPerkinElmerExperiment(path);
+    break;
+
+  case QxrdNewExperimentDialog::Pilatus:
+    path = newPilatusExperiment(path);
+    break;
+  }
+
+  if (path.length() > 0) {
+    appendRecentExperiment(path);
+
+    writeDefaultSettings();
+
+    loadPreferences(path);
+
+    printMessage("");
+    printMessage("New experiment loaded");
+    printMessage("");
+  }
+}
+
+void QxrdApplication::appendRecentExperiment(QString path)
+{
+  QStringList recent = get_RecentExperiments();
+
+  recent.prepend(path);
+  recent.removeDuplicates();
+
+  while(recent.length() > get_RecentExperimentsSize()) {
+    recent.removeLast();
+  }
+
+  set_RecentExperiments(recent);
+}
+
+QString QxrdApplication::normalizeExperimentName(QString filename)
+{
+  QFileInfo info(filename);
+  QString exten = info.suffix();
+
+  if (exten != "qxrdp") {
+    return filename+".qxrdp";
+  } else {
+    return filename;
+  }
+}
+
+void QxrdApplication::setNewExperimentSettings(QSettings &settings, int type, QString filename)
+{
+  QFileInfo info(filename);
+  QString  path = info.path();
+  QString  base = info.completeBaseName();
+
+  settings.setValue("application/detectorType", type);
+  settings.setValue("processor/outputDirectory", path);
+  settings.setValue("application/logFilePath", base+".log");
+  settings.setValue("processor/integratedFilePath", base+".avg");
+  settings.setValue("window/inputFileBrowser/rootDirectory", path);
+  settings.setValue("window/outputFileBrowser/rootDirectory", path);
+
+  switch(type) {
+  case 1: // Perkin Elmer
+    break;
+
+  case 2: // Pilatus
+    break;
+
+  case 4: // Analysis
+    settings.setValue("application/runSpecServer", false);
+    settings.setValue("application/runSimpleServer", false);
+    break;
+  }
+}
+
+QString QxrdApplication::newAnalysisExperiment(QString path)
+{
+  path = normalizeExperimentName(path);
+
+  if (path.length() > 0) {
+    savePreferences(path);
+
+    QSettings settings(path, QSettings::IniFormat);
+
+    setNewExperimentSettings(settings, 4, path);
+
+    return path;
+  } else {
+    return QString();
+  }
+}
+
+QString QxrdApplication::newPerkinElmerExperiment(QString path)
+{
+  path = normalizeExperimentName(path);
+
+  if (path.length() > 0) {
+    savePreferences(path);
+
+    QSettings settings(path, QSettings::IniFormat);
+
+    setNewExperimentSettings(settings, 1, path);
+
+    return path;
+  } else {
+    return QString();
+  }
+}
+
+QString QxrdApplication::newPilatusExperiment(QString path)
+{
+  path = normalizeExperimentName(path);
+
+  if (path.length() > 0) {
+    savePreferences(path);
+
+    QSettings settings(path, QSettings::IniFormat);
+
+    setNewExperimentSettings(settings, 2, path);
+
+    return path;
+  } else {
+    return QString();
+  }
+}
+
+void QxrdApplication::setupRecentExperimentsMenu(QAction *action)
+{
+  m_RecentExperimentsMenu = new QMenu();
+
+  action->setMenu(m_RecentExperimentsMenu);
+
+  connect(m_RecentExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateRecentExperimentsMenu()));
+}
+
+void QxrdApplication::populateRecentExperimentsMenu()
+{
+//  printMessage("Populating recent experiments menu");
+
+  m_RecentExperimentsMenu->clear();
+
+  foreach (QString exp, get_RecentExperiments()) {
+    QAction *action = new QAction(exp, m_RecentExperimentsMenu);
+    QSignalMapper *mapper = new QSignalMapper(action);
+    connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
+    mapper->setMapping(action, exp);
+
+    connect(mapper, SIGNAL(mapped(const QString &)), this, SLOT(openRecentExperiment(QString)));
+
+    m_RecentExperimentsMenu -> addAction(action);
+  }
+}
+
+void QxrdApplication::openRecentExperiment(QString path)
+{
+//  printMessage(tr("Attempt to open experiment %1").arg(path));
+
+  QFileInfo info(path);
+
+  if (info.exists()) {
+    openExperiment(QxrdNewExperimentDialog::Existing, path);
+  } else {
+    printMessage(tr("Experiment %1 does not exist").arg(path));
+  }
+}
+
+void QxrdApplication::openedNewExperiment(QxrdDocument *doc)
+{
+}
+
+void QxrdApplication::doNewPerkinElmerAcquisition()
+{
+  QString newExperiment = QFileDialog::getSaveFileName();
+
+  if (newExperiment.length() >= 1) {
+    QxrdDocument *doc = new QxrdPerkinElmerDocument(newExperiment, this);
+
+    doc -> init(NULL);
+
+    openedNewExperiment(doc);
+  }
+}
+
+void QxrdApplication::doNewPilatusAcquisition()
+{
+}
+
+void QxrdApplication::doNewSimulatedAcquisition()
+{
+}
+
+void QxrdApplication::doNewPerkinElmerAnalysis()
+{
+}
+
+void QxrdApplication::doNewPilatusAnalysis()
+{
+}
+
+void QxrdApplication::doNewGenericAnalysis()
+{
 }

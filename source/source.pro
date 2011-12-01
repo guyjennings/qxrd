@@ -212,8 +212,7 @@ HEADERS += TODO.h \
     qxrdfilebrowsermodelupdater.h \
     qxrdfilebrowsermodelupdaterthread.h \
     qxrdintegratorcache.h \
-    qxrddefaultapplication.h \
-    qxrddefaultapplicationdialog.h \
+    qxrdnewexperimentdialog.h \
     qxrddocumentthread.h \
     qxrddocument.h \
     qxrdpilatusdocument.h \
@@ -345,8 +344,7 @@ SOURCES += qxrd.cpp \
     qxrdfilebrowsermodelupdater.cpp \
     qxrdfilebrowsermodelupdaterthread.cpp \
     qxrdintegratorcache.cpp \
-    qxrddefaultapplication.cpp \
-    qxrddefaultapplicationdialog.cpp \
+    qxrdnewexperimentdialog.cpp \
     qxrddocumentthread.cpp \
     qxrddocument.cpp \
     qxrdpilatusdocument.cpp \
@@ -375,7 +373,7 @@ FORMS = qxrdwindow.ui \
     qxrdinfodialog.ui \
     qxrdfreshstartdialog.ui \
     qxrdacquirefilewatcherdialog.ui \
-    qxrddefaultapplicationdialog.ui \
+    qxrdnewexperimentdialog.ui \
     qxrdwelcomewindow.ui \
     qxrdglobalpreferencesdialog.ui \
     qxrdwelcomerecentitem.ui

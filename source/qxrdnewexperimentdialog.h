@@ -3,19 +3,19 @@
 
 #include <QDialog>
 
-class QxrdDefaultApplication;
+class QxrdApplication;
 
 namespace Ui {
-class QxrdDefaultApplicationDialog;
+class QxrdNewExperimentDialog;
 }
 
-class QxrdDefaultApplicationDialog : public QDialog
+class QxrdNewExperimentDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdDefaultApplicationDialog(QxrdDefaultApplication *app = 0);
-  ~QxrdDefaultApplicationDialog();
+  explicit QxrdNewExperimentDialog(QxrdApplication *app = 0);
+  ~QxrdNewExperimentDialog();
 
   bool choose();
 
@@ -42,8 +42,8 @@ private slots:
 private:
   int                               m_ChosenKind;
   QString                           m_ChosenPath;
-  QxrdDefaultApplication           *m_Application;
-  Ui::QxrdDefaultApplicationDialog *ui;
+  QxrdApplication                  *m_Application;
+  Ui::QxrdNewExperimentDialog      *ui;
 };
 
 #endif // QXRDDEFAULTAPPLICATIONDIALOG_H

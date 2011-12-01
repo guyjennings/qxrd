@@ -7,7 +7,7 @@ class QxrdPilatusAnalysisDocument : public QxrdAnalysisDocument
 {
     Q_OBJECT
 public:
-    explicit QxrdPilatusAnalysisDocument(QxrdApplication *app, QObject *parent = 0);
+    explicit QxrdPilatusAnalysisDocument(QString path, QxrdApplication *app, QObject *parent = 0);
 
 signals:
 

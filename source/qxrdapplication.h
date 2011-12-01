@@ -11,7 +11,7 @@
 #include "qxrdresponsetimer.h"
 #include "qxrdallocatorthread.h"
 #include "qxrdscriptenginethread.h"
-#include "qxrddefaultapplication.h"
+//#include "qxrddefaultapplication.h"
 #include "qxrddocument.h"
 #include "qxrddocumentthread.h"
 #include "qxrdwelcomewindow.h"
@@ -20,7 +20,7 @@
 class QxrdPerkinElmerPluginInterface;
 #endif
 
-class QxrdApplication : public QxrdDefaultApplication
+class QxrdApplication : public QApplication
 {
   Q_OBJECT
 
@@ -51,7 +51,35 @@ public:
   QWidget* window();
   QxrdScriptEngine* scriptEngine();
 
+  void readDefaultSettings();
+  void writeDefaultSettings();
+  void appendRecentExperiment(QString path);
+
+  void openedNewExperiment(QxrdDocument *doc);
+  QString newAnalysisExperiment(QString path);
+  QString newPerkinElmerExperiment(QString path);
+  QString newPilatusExperiment(QString path);
+
+  QString normalizeExperimentName(QString filename);
+  void setNewExperimentSettings(QSettings &settings, int type, QString filename);
+
+  void setupRecentExperimentsMenu(QAction *action);
+
 public slots:
+  void doNewPerkinElmerAcquisition();
+  void doNewPilatusAcquisition();
+  void doNewSimulatedAcquisition();
+  void doNewPerkinElmerAnalysis();
+  void doNewPilatusAnalysis();
+  void doNewGenericAnalysis();
+
+  void chooseNewExperiment();
+  void chooseExistingExperiment();
+  void openRecentExperiment(QString path);
+
+  void openExperiment(int kind, QString path);
+  void populateRecentExperimentsMenu();
+
   void doAboutQxrd();
   void doOpenQXRDWebPage();
 
@@ -97,6 +125,17 @@ private:
   void shutdownThread(QxrdThread *thread);
 
 public:
+
+public:
+  Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments STORED false)
+  QCEP_STRING_LIST_PROPERTY(RecentExperiments)
+
+  Q_PROPERTY(int recentExperimentsSize READ get_RecentExperimentsSize WRITE set_RecentExperimentsSize STORED false)
+  QCEP_INTEGER_PROPERTY(RecentExperimentsSize)
+
+  Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment STORED false)
+  QCEP_STRING_PROPERTY(CurrentExperiment)
+
   Q_PROPERTY(int    debug         READ get_Debug WRITE set_Debug)
   QCEP_INTEGER_PROPERTY(Debug)
 
@@ -128,6 +167,11 @@ public:
   QCEP_STRING_LIST_PROPERTY(FileList)
 
 private:
+  QMenu                          *m_RecentExperimentsMenu;
+
+  QList<QxrdDocumentThreadPtr>    m_DocumentThreads;
+  QList<QxrdDocumentPtr>          m_Documents;
+
   QxrdWelcomeWindow              *m_WelcomeWindow;
   QxrdAllocatorThread            *m_AllocatorThread;
   QxrdAllocator                  *m_Allocator;
@@ -141,9 +185,6 @@ private:
   QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;
 #endif
   QxrdResponseTimer              *m_ResponseTimer;
-
-  QList<QxrdDocumentThreadPtr>    m_DocumentThreads;
-  QList<QxrdDocumentPtr>          m_Documents;
 };
 
 #define HEXARG(a) arg(QxrdApplication::hexArg(a))

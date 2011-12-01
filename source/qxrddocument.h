@@ -22,7 +22,7 @@ class QxrdDocument : public QObject
   Q_OBJECT
 
 public:
-  QxrdDocument(QxrdApplication *app, QObject *parent = 0);
+  QxrdDocument(QString path, QxrdApplication *app, QObject *parent = 0);
   virtual bool init(QSplashScreen *splash);
   virtual ~QxrdDocument();
 
@@ -90,21 +90,21 @@ public:  // Properties
   QCEP_INTEGER_PROPERTY(SimpleServerPort)
 
 private:
-    QSplashScreen                  *m_Splash;
-    QxrdApplication                *m_Application;
-    QxrdWindow                     *m_Window;
-    QxrdServerThread               *m_ServerThread;
-    QxrdServer                     *m_Server;
-    QxrdSimpleServerThread         *m_SimpleServerThread;
-    QxrdSimpleServer               *m_SimpleServer;
-    QxrdDataProcessorThread        *m_DataProcessorThread;
-    QxrdDataProcessor              *m_DataProcessor;
-    QxrdAcquisitionThread          *m_AcquisitionThread;
-    QxrdAcquisition                *m_Acquisition;
-    QxrdFileSaverThread            *m_FileSaverThread;
+  QSplashScreen                  *m_Splash;
+  QxrdApplication                *m_Application;
+  QxrdWindow                     *m_Window;
+  QxrdServerThread               *m_ServerThread;
+  QxrdServer                     *m_Server;
+  QxrdSimpleServerThread         *m_SimpleServerThread;
+  QxrdSimpleServer               *m_SimpleServer;
+  QxrdDataProcessorThread        *m_DataProcessorThread;
+  QxrdDataProcessor              *m_DataProcessor;
+  QxrdAcquisitionThread          *m_AcquisitionThread;
+  QxrdAcquisition                *m_Acquisition;
+  QxrdFileSaverThread            *m_FileSaverThread;
 
-    FILE                           *m_LogFile;
-    FILE                           *m_ScanFile;
+  FILE                           *m_LogFile;
+  FILE                           *m_ScanFile;
 };
 
 typedef QSharedPointer<QxrdDocument> QxrdDocumentPtr;
