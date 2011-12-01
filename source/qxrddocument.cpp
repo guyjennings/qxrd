@@ -22,7 +22,6 @@ QxrdDocument::QxrdDocument(QString path,
   m_SpecServerPort(this,"specServerPort", -1),
   m_RunSimpleServer(this,"simpleServer", 1),
   m_SimpleServerPort(this,"simpleServerPort", 1234),
-  m_Splash(NULL),
   m_Application(app),
   m_Window(NULL),
   m_ServerThread(NULL),
@@ -36,10 +35,8 @@ QxrdDocument::QxrdDocument(QString path,
 {
 }
 
-bool QxrdDocument::init(QSplashScreen *splash)
+bool QxrdDocument::init()
 {
-  m_Splash = splash;
-
   setObjectName("qxrddocument");
 
   QThread::currentThread()->setObjectName("doc");
@@ -194,10 +191,10 @@ void QxrdDocument::splashMessage(const char *msg)
 {
   g_Application->printMessage(msg);
 
-  if (m_Splash) {
-    m_Splash->showMessage(msg, Qt::AlignBottom|Qt::AlignHCenter);
-    g_Application->processEvents();
-  }
+//  if (m_Splash) {
+//    m_Splash->showMessage(msg, Qt::AlignBottom|Qt::AlignHCenter);
+//    g_Application->processEvents();
+//  }
 }
 
 void QxrdDocument::splashMessage(QString msg)

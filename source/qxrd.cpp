@@ -2,6 +2,7 @@
 
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
+#include "qxrdsplashscreen.h"
 
 #include <stdio.h>
 #include <QSplashScreen>
@@ -21,8 +22,7 @@ int main(int argc, char *argv[])
 
   QxrdApplication app(argc, argv);
 
-  QPixmap pixmap(":images/qxrd-splash-screen.png");
-  QSplashScreen splash(pixmap);
+  QxrdSplashScreen splash;
 
   if (app.get_GuiWanted()) {
     splash.show();

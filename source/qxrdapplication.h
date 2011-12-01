@@ -15,6 +15,7 @@
 #include "qxrddocument.h"
 #include "qxrddocumentthread.h"
 #include "qxrdwelcomewindow.h"
+#include "qxrdsplashscreen.h"
 
 #ifdef HAVE_PERKIN_ELMER
 class QxrdPerkinElmerPluginInterface;
@@ -55,7 +56,7 @@ public:
   void writeDefaultSettings();
   void appendRecentExperiment(QString path);
 
-  void openedNewExperiment(QxrdDocument *doc);
+  void openedNewExperiment(QxrdDocumentThreadPtr docThread);
   QString newAnalysisExperiment(QString path);
   QString newPerkinElmerExperiment(QString path);
   QString newPilatusExperiment(QString path);

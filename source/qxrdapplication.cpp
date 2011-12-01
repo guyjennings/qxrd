@@ -27,8 +27,10 @@
 #include "qxrdnewexperimentdialog.h"
 #include "qxrdperkinelmerdocument.h"
 #include "qxrdperkinelmeranalysisdocument.h"
+#include "qxrdsimulateddocument.h"
 #include "qxrdpilatusdocument.h"
 #include "qxrdpilatusanalysisdocument.h"
+#include "qxrdgenericanalysisdocument.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -946,39 +948,100 @@ void QxrdApplication::openRecentExperiment(QString path)
   }
 }
 
-void QxrdApplication::openedNewExperiment(QxrdDocument *doc)
+void QxrdApplication::openedNewExperiment(QxrdDocumentThreadPtr docThread)
 {
+  if (docThread) {
+    QxrdDocumentPtr doc = docThread->document();
+
+    QString path = doc->get_DocumentFilePath();
+    set_CurrentExperiment(path);
+    appendRecentExperiment(path);
+
+    m_DocumentThreads.append(docThread);
+    m_Documents.append(doc);
+  }
 }
 
 void QxrdApplication::doNewPerkinElmerAcquisition()
 {
-  QString newExperiment = QFileDialog::getSaveFileName();
+  QString newExperiment = QFileDialog::getSaveFileName(NULL,
+                                                       "New Perkin Elmer Experiment",
+                                                       get_CurrentExperiment(),
+                                                       "QXRD Experiments (*.qxrdp)");
 
   if (newExperiment.length() >= 1) {
-    QxrdDocument *doc = new QxrdPerkinElmerDocument(newExperiment, this);
+    QxrdDocumentThreadPtr docThread = QxrdDocumentThread::newPerkinElmerDocument(normalizeExperimentName(newExperiment), this);
 
-    doc -> init(NULL);
-
-    openedNewExperiment(doc);
+    openedNewExperiment(docThread);
   }
 }
 
 void QxrdApplication::doNewPilatusAcquisition()
 {
+  QString newExperiment = QFileDialog::getSaveFileName(NULL,
+                                                       "New Pilatus Experiment",
+                                                       get_CurrentExperiment(),
+                                                       "QXRD Experiments (*.qxrdp)");
+
+  if (newExperiment.length() >= 1) {
+    QxrdDocumentThreadPtr docThread = QxrdDocumentThread::newPilatusDocument(normalizeExperimentName(newExperiment), this);
+
+    openedNewExperiment(docThread);
+  }
 }
 
 void QxrdApplication::doNewSimulatedAcquisition()
 {
+  QString newExperiment = QFileDialog::getSaveFileName(NULL,
+                                                       "New Simulated Acquisition Experiment",
+                                                       get_CurrentExperiment(),
+                                                       "QXRD Experiments (*.qxrdp)");
+
+  if (newExperiment.length() >= 1) {
+    QxrdDocumentThreadPtr docThread = QxrdDocumentThread::newSimulatedDocument(normalizeExperimentName(newExperiment), this);
+
+    openedNewExperiment(docThread);
+  }
 }
 
 void QxrdApplication::doNewPerkinElmerAnalysis()
 {
+  QString newExperiment = QFileDialog::getSaveFileName(NULL,
+                                                       "New Perkin Elmer Analysis Experiment",
+                                                       get_CurrentExperiment(),
+                                                       "QXRD Experiments (*.qxrdp)");
+
+  if (newExperiment.length() >= 1) {
+    QxrdDocumentThreadPtr docThread = QxrdDocumentThread::newPerkinElmerAnalysisDocument(normalizeExperimentName(newExperiment), this);
+
+    openedNewExperiment(docThread);
+  }
 }
 
 void QxrdApplication::doNewPilatusAnalysis()
 {
+  QString newExperiment = QFileDialog::getSaveFileName(NULL,
+                                                       "New Pilatus Analysis Experiment",
+                                                       get_CurrentExperiment(),
+                                                       "QXRD Experiments (*.qxrdp)");
+
+  if (newExperiment.length() >= 1) {
+    QxrdDocumentThreadPtr docThread = QxrdDocumentThread::newPilatusAnalysisDocument(normalizeExperimentName(newExperiment), this);
+
+    openedNewExperiment(docThread);
+  }
 }
 
 void QxrdApplication::doNewGenericAnalysis()
 {
+  QString newExperiment = QFileDialog::getSaveFileName(NULL,
+                                                       "New Generic Analysis Experiment",
+                                                       get_CurrentExperiment(),
+                                                       "QXRD Experiments (*.qxrdp)");
+
+  if (newExperiment.length() >= 1) {
+    QxrdDocumentThreadPtr docThread = QxrdDocumentThread::newGenericAnalysisDocument(normalizeExperimentName(newExperiment), this);
+
+    openedNewExperiment(docThread);
+  }
 }

@@ -6,7 +6,6 @@
 
 #include <QObject>
 #include <QSharedPointer>
-#include <QSplashScreen>
 #include "qxrddataprocessorthread.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdserverthread.h"
@@ -23,7 +22,7 @@ class QxrdDocument : public QObject
 
 public:
   QxrdDocument(QString path, QxrdApplication *app, QObject *parent = 0);
-  virtual bool init(QSplashScreen *splash);
+  virtual bool init();
   virtual ~QxrdDocument();
 
   QxrdAcquisitionThread *acquisitionThread();
@@ -90,7 +89,6 @@ public:  // Properties
   QCEP_INTEGER_PROPERTY(SimpleServerPort)
 
 private:
-  QSplashScreen                  *m_Splash;
   QxrdApplication                *m_Application;
   QxrdWindow                     *m_Window;
   QxrdServerThread               *m_ServerThread;
