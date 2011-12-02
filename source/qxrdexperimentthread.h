@@ -45,7 +45,7 @@ protected:
 private:
   QxrdExperimentKind m_ExperimentKind;
   QString            m_ExperimentPath;
-  QxrdExperimentPtr  m_Document;
+  QxrdExperimentPtr  m_Experiment;
   QxrdApplication   *m_Application;
 };
 

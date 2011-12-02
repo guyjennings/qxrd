@@ -59,7 +59,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisitio
     m_Mutex(QMutex::Recursive),
     m_SettingsLoaded(false),
     m_Application(app),
-    m_Document(doc),
+    m_Experiment(doc),
     m_Acquisition(acq),
     m_DataProcessor(proc),
     m_Allocator(alloc),
@@ -691,14 +691,14 @@ void QxrdWindow::readSettings(QSettings &settings, QString section)
 
   m_SettingsLoaded = true;
 
-  if (!m_Document->get_DefaultLayout()) {
+  if (!m_Experiment->get_DefaultLayout()) {
     QByteArray geometry = settings.value(section+"-geometry").toByteArray();
     QByteArray winstate = settings.value(section+"-state").toByteArray();
 
     restoreGeometry(geometry);
     restoreState(winstate,1);
   } else {
-    m_Document->set_DefaultLayout(0);
+    m_Experiment->set_DefaultLayout(0);
   }
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
@@ -836,7 +836,7 @@ void QxrdWindow::newMask()
 
 void QxrdWindow::doEditPreferences()
 {
-  QxrdPreferencesDialog prefs(m_Document);
+  QxrdPreferencesDialog prefs(m_Experiment);
 
   prefs.exec();
 }
@@ -1015,7 +1015,7 @@ void QxrdWindow::selectLogFile()
         this, "Save Log File in", m_DataProcessor -> get_DataPath());
 
   if (theFile.length()) {
-    m_Document->newLogFile(theFile);
+    m_Experiment->newLogFile(theFile);
   }
 }
 

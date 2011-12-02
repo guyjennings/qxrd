@@ -12,7 +12,7 @@ QxrdExperimentThread::QxrdExperimentThread(QxrdExperimentKind kind, QString path
   QxrdThread(app),
   m_ExperimentKind(kind),
   m_ExperimentPath(path),
-  m_Document(NULL),
+  m_Experiment(NULL),
   m_Application(app)
 {
 }
@@ -85,11 +85,11 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentGenericAnalysis(QStri
 
 QxrdExperimentPtr QxrdExperimentThread::experiment()
 {
-  while (m_Document == NULL) {
+  while (m_Experiment == NULL) {
     msleep(100);
   }
 
-  return m_Document;
+  return m_Experiment;
 }
 
 void QxrdExperimentThread::run()
@@ -123,7 +123,7 @@ void QxrdExperimentThread::run()
     break;
   }
 
-  m_Document = doc;
+  m_Experiment = doc;
 }
 
 void QxrdExperimentThread::shutdown()

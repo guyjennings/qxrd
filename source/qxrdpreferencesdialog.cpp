@@ -12,24 +12,24 @@
 
 QxrdPreferencesDialog::QxrdPreferencesDialog(QxrdExperiment *doc, QWidget *parent) :
   QDialog(parent),
-  m_Document(doc)
+  m_Experiment(doc)
 {
   setupUi(this);
 
   connect(m_DetectorTypeCombo, SIGNAL(currentIndexChanged(int)), m_DetectorPrefsStack, SLOT(setCurrentIndex(int)));
 
-  QxrdAcquisition *acq = m_Document -> acquisition();
-  QxrdDataProcessor *proc = m_Document->dataProcessor();
+  QxrdAcquisition *acq = m_Experiment -> acquisition();
+  QxrdDataProcessor *proc = m_Experiment->dataProcessor();
   QxrdAllocator *alloc = g_Application->allocator();
 
-  int detectorType = m_Document -> get_DetectorType();
-//  int processorType = m_Document -> get_ProcessorType();
+  int detectorType = m_Experiment -> get_DetectorType();
+//  int processorType = m_Experiment -> get_ProcessorType();
   int debugLevel = g_Application -> get_Debug();
 
-  int runSpecServer = m_Document -> get_RunSpecServer();
-  int runSimpleServer = m_Document -> get_RunSimpleServer();
-  int specServerPort = m_Document -> get_SpecServerPort();
-  int simpleServerPort = m_Document -> get_SimpleServerPort();
+  int runSpecServer = m_Experiment -> get_RunSpecServer();
+  int runSimpleServer = m_Experiment -> get_RunSimpleServer();
+  int specServerPort = m_Experiment -> get_SpecServerPort();
+  int simpleServerPort = m_Experiment -> get_SimpleServerPort();
 
   QStringList detectorTypes = QxrdAcquisitionThread::detectorTypeNames();
 
@@ -40,7 +40,7 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QxrdExperiment *doc, QWidget *paren
   m_CurrentOutputDirectory -> setText(proc->get_OutputDirectory());
 
   connect(m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
-  m_CurrentLogFile -> setText(m_Document->get_LogFilePath());
+  m_CurrentLogFile -> setText(m_Experiment->get_LogFilePath());
 
   connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
   m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
@@ -181,23 +181,23 @@ void QxrdPreferencesDialog::accept()
 //    restartNeeded = true;
 //  }
 
-  QxrdAcquisition *acq = m_Document -> acquisition();
-  QxrdDataProcessor *proc = m_Document->dataProcessor();
+  QxrdAcquisition *acq = m_Experiment -> acquisition();
+  QxrdDataProcessor *proc = m_Experiment->dataProcessor();
   QxrdAllocator *alloc = g_Application->allocator();
 
-  if (runSpecServer != m_Document -> get_RunSpecServer()) {
+  if (runSpecServer != m_Experiment -> get_RunSpecServer()) {
     restartNeeded = true;
   }
 
-  if (specServerPort != m_Document -> get_SpecServerPort()) {
+  if (specServerPort != m_Experiment -> get_SpecServerPort()) {
     restartNeeded = true;
   }
 
-  if (runSimpleServer != m_Document -> get_RunSimpleServer()) {
+  if (runSimpleServer != m_Experiment -> get_RunSimpleServer()) {
     restartNeeded = true;
   }
 
-  if (simpleServerPort != m_Document -> get_SimpleServerPort()) {
+  if (simpleServerPort != m_Experiment -> get_SimpleServerPort()) {
     restartNeeded = true;
   }
 
@@ -205,16 +205,16 @@ void QxrdPreferencesDialog::accept()
     QMessageBox::information(this,"Restart Needed","You will need to restart qxrd before your changes will take effect");
   }
 
-  m_Document    -> set_DetectorType(detectorType);
+  m_Experiment    -> set_DetectorType(detectorType);
 //  app -> set_ProcessorType(processorType);
   g_Application -> set_Debug(debugLevel);
   acq           -> set_TotalBufferSizeMB32(bufferSize32);
   acq           -> set_TotalBufferSizeMB64(bufferSize64);
   alloc         -> set_Reserve(extraReserve);
-  m_Document    -> set_RunSpecServer(runSpecServer);
-  m_Document    -> set_SpecServerPort(specServerPort);
-  m_Document    -> set_RunSimpleServer(runSimpleServer);
-  m_Document    -> set_SimpleServerPort(simpleServerPort);
+  m_Experiment    -> set_RunSpecServer(runSpecServer);
+  m_Experiment    -> set_SpecServerPort(specServerPort);
+  m_Experiment    -> set_RunSimpleServer(runSimpleServer);
+  m_Experiment    -> set_SimpleServerPort(simpleServerPort);
 
   proc          -> set_SaveRawInSubdirectory(m_SaveRawInSubdir -> isChecked());
   proc          -> set_SaveRawSubdirectory  (m_SaveRawSubdir   -> text());
@@ -233,7 +233,7 @@ void QxrdPreferencesDialog::accept()
   proc          -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
 
   proc          -> set_OutputDirectory(m_CurrentOutputDirectory -> text());
-  m_Document    -> set_LogFilePath    (m_CurrentLogFile -> text());
+  m_Experiment    -> set_LogFilePath    (m_CurrentLogFile -> text());
 
   g_Application -> set_FileBrowserLimit(m_FileBrowserLimit->value());
 

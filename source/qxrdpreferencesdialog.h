@@ -37,8 +37,8 @@ private:
   int readDebugWidgets();
 
 private:
-  QxrdExperiment       *m_Document;
-  QVector<QCheckBox*> m_DebugWidgetList;
+  QxrdExperiment      *m_Experiment;
+  QVector<QCheckBox*>  m_DebugWidgetList;
 };
 
 #endif // QXRDPREFERENCESDIALOG_H

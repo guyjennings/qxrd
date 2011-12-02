@@ -48,7 +48,7 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   QStringList recents = m_Application->get_RecentExperiments();
 
   foreach (QString recent, recents) {
-    appendRecentDocument(recent);
+    appendRecentExperiment(recent);
   }
 }
 
@@ -69,7 +69,7 @@ void QxrdWelcomeWindow::changeEvent(QEvent *e)
   }
 }
 
-void QxrdWelcomeWindow::appendRecentDocument(QString title)
+void QxrdWelcomeWindow::appendRecentExperiment(QString title)
 {
   QxrdWelcomeRecentItem *item = new QxrdWelcomeRecentItem(this);
 

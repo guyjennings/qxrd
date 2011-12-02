@@ -21,7 +21,7 @@ public:
   explicit QxrdWelcomeWindow(QxrdApplication *app);
   ~QxrdWelcomeWindow();
 
-  void appendRecentDocument(QString title);
+  void appendRecentExperiment(QString title);
 
   void possiblyClose();
   bool wantToClose();

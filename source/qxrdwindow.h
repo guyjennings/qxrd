@@ -130,7 +130,7 @@ private:
   mutable QMutex                         m_Mutex;
   int                                    m_SettingsLoaded;
   QxrdApplication                       *m_Application;
-  QxrdExperiment                          *m_Document;
+  QxrdExperiment                        *m_Experiment;
   QxrdAcquisition                       *m_Acquisition;
   QxrdDataProcessor                     *m_DataProcessor;
   QxrdAllocator                         *m_Allocator;

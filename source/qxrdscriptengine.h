@@ -22,8 +22,8 @@ public:
   QxrdScriptEngine(QxrdApplication *app/*, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc*/);
   void initialize();
 
-  void documentOpened(QxrdExperiment *doc);
-  void documentClosed(QxrdExperiment *doc);
+  void experimentOpened(QxrdExperiment *doc);
+  void experimentClosed(QxrdExperiment *doc);
 
   void windowOpened(QxrdWindow *win);
   void windowClosed(QxrdWindow *win);
@@ -78,14 +78,14 @@ private:
   static QScriptValue matchFilesFunc(QScriptContext *context, QScriptEngine *engine);
 
 private:
-  mutable QMutex     m_Mutex;
-  QScriptEngine     *m_ScriptEngine;
-  QxrdApplication   *m_Application;
-//  QxrdWindow        *m_Window;
-//  QxrdAcquisition   *m_Acquisition;
+  mutable QMutex         m_Mutex;
+  QScriptEngine         *m_ScriptEngine;
+  QxrdApplication       *m_Application;
+//  QxrdWindow          *m_Window;
+//  QxrdAcquisition     *m_Acquisition;
 
-  QList<QxrdExperiment*> m_Documents;
-  QList<QxrdWindow*>   m_Windows;
+  QList<QxrdExperiment*> m_Experiments;
+  QList<QxrdWindow*>     m_Windows;
 };
 
 #endif // QXRDSCRIPTENGINE_H

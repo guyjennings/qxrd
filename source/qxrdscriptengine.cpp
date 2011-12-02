@@ -91,18 +91,18 @@ void QxrdScriptEngine::initialize()
   }
 }
 
-void QxrdScriptEngine::documentOpened(QxrdExperiment *doc)
+void QxrdScriptEngine::experimentOpened(QxrdExperiment *doc)
 {
-  if (!m_Documents.contains(doc)) {
+  if (!m_Experiments.contains(doc)) {
     QString suffix="";
 
-    if (m_Documents.length() > 0) {
-      suffix = tr("%1").arg(m_Documents.length());
+    if (m_Experiments.length() > 0) {
+      suffix = tr("%1").arg(m_Experiments.length());
     }
 
-    m_Documents.append(doc);
+    m_Experiments.append(doc);
 
-    m_ScriptEngine -> globalObject().setProperty("document"+suffix,
+    m_ScriptEngine -> globalObject().setProperty("experiment"+suffix,
                                                  m_ScriptEngine->newQObject(doc));
     QxrdAcquisition *acq = doc->acquisition();
 
@@ -132,7 +132,7 @@ void QxrdScriptEngine::documentOpened(QxrdExperiment *doc)
   }
 }
 
-void QxrdScriptEngine::documentClosed(QxrdExperiment *doc)
+void QxrdScriptEngine::experimentClosed(QxrdExperiment *doc)
 {
 }
 
