@@ -29,8 +29,8 @@ public:
   QCEP_STRING_PROPERTY(RootDirectory)
 
 public:
-  void readSettings(QSettings &settings, QString section);
-  void writeSettings(QSettings &settings, QString section);
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
 public slots:
   void onFilterChanged(int newfilter);

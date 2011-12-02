@@ -91,8 +91,8 @@ public slots:
 
   void readSettings();
   void writeSettings();
-  void readSettings(QSettings &settings);
-  void writeSettings(QSettings &settings);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   void doSavePreferences();
   void doLoadPreferences();

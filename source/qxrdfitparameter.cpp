@@ -50,28 +50,32 @@ void QxrdFitParameter::setLimited(bool lim)
   m_IsLimited = lim;
 }
 
-void QxrdFitParameter::writeSettings(QSettings &settings, QString section)
+void QxrdFitParameter::writeSettings(QSettings *settings, QString section)
 {
-  settings.beginGroup(section+"/"+name());
+  if (settings) {
+    settings->beginGroup(section+"/"+name());
 
-  settings.setValue("value",value());
-  settings.setValue("lower",m_LowerLimit);
-  settings.setValue("upper",m_UpperLimit);
-  settings.setValue("fitted",m_IsFitted);
-  settings.setValue("limited",m_IsLimited);
+    settings->setValue("value",value());
+    settings->setValue("lower",m_LowerLimit);
+    settings->setValue("upper",m_UpperLimit);
+    settings->setValue("fitted",m_IsFitted);
+    settings->setValue("limited",m_IsLimited);
 
-  settings.endGroup();
+    settings->endGroup();
+  }
 }
 
-void QxrdFitParameter::readSettings(QSettings &settings, QString section)
+void QxrdFitParameter::readSettings(QSettings *settings, QString section)
 {
-  settings.beginGroup(section+"/"+name());
+  if (settings) {
+    settings->beginGroup(section+"/"+name());
 
-  if (settings.contains("value")) setValue(settings.value("value").toDouble());
-  if (settings.contains("lower")) m_LowerLimit = settings.value("lower").toDouble();
-  if (settings.contains("upper")) m_UpperLimit = settings.value("upper").toDouble();
-  if (settings.contains("fitted")) m_IsFitted   = settings.value("fitted").toInt();
-  if (settings.contains("limited")) m_IsLimited  = settings.value("limited").toInt();
+    if (settings->contains("value")) setValue(settings->value("value").toDouble());
+    if (settings->contains("lower")) m_LowerLimit = settings->value("lower").toDouble();
+    if (settings->contains("upper")) m_UpperLimit = settings->value("upper").toDouble();
+    if (settings->contains("fitted")) m_IsFitted   = settings->value("fitted").toInt();
+    if (settings->contains("limited")) m_IsLimited  = settings->value("limited").toInt();
 
-  settings.endGroup();
+    settings->endGroup();
+  }
 }

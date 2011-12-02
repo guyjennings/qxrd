@@ -118,25 +118,29 @@ bool QxrdWelcomeWindow::wantToClose()
                                QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
-void QxrdWelcomeWindow::readSettings(QSettings &settings, QString section)
+void QxrdWelcomeWindow::readSettings(QSettings *settings, QString section)
 {
-  QByteArray geometry = settings.value(section+"-geometry").toByteArray();
-  QByteArray winstate = settings.value(section+"-state").toByteArray();
+  if (settings) {
+    QByteArray geometry = settings->value(section+"-geometry").toByteArray();
+    QByteArray winstate = settings->value(section+"-state").toByteArray();
 
-  if (!geometry.isEmpty() && !winstate.isEmpty()) {
-    restoreGeometry(geometry);
-    restoreState(winstate,1);
+    if (!geometry.isEmpty() && !winstate.isEmpty()) {
+      restoreGeometry(geometry);
+      restoreState(winstate,1);
+    }
+
+    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
   }
-
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdWelcomeWindow::writeSettings(QSettings &settings, QString section)
+void QxrdWelcomeWindow::writeSettings(QSettings *settings, QString section)
 {
-  settings.setValue(section+"-geometry", saveGeometry());
-  settings.setValue(section+"-state", saveState(1));
+  if (settings) {
+    settings->setValue(section+"-geometry", saveGeometry());
+    settings->setValue(section+"-state", saveState(1));
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  }
 }
 
 void QxrdWelcomeWindow::displayMessage(QString msg)

@@ -316,46 +316,50 @@ void QxrdFileBrowser::doRefreshBrowser()
   m_Model->refresh();
 }
 
-void QxrdFileBrowser::writeSettings(QSettings &settings, QString section)
+void QxrdFileBrowser::writeSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  if (settings) {
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 
-  if (m_FileBrowser) {
-    settings.beginWriteArray(section+"/colWidths",4);
+    if (m_FileBrowser) {
+      settings->beginWriteArray(section+"/colWidths",4);
 
-    for (int i=0; i<3; i++) {
-      settings.setArrayIndex(i);
-      settings.setValue("width", m_FileBrowser->columnWidth(i));
+      for (int i=0; i<3; i++) {
+        settings->setArrayIndex(i);
+        settings->setValue("width", m_FileBrowser->columnWidth(i));
+      }
+
+      settings->endArray();
     }
-
-    settings.endArray();
   }
 }
 
-void QxrdFileBrowser::readSettings(QSettings &settings, QString section)
+void QxrdFileBrowser::readSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  if (settings) {
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
-  int sz = settings.beginReadArray(section+"/colWidths");
+    int sz = settings->beginReadArray(section+"/colWidths");
 
-  for (int i=0; i<sz; i++) {
-    settings.setArrayIndex(i);
-    int width = settings.value("width", -1).toInt();
+    for (int i=0; i<sz; i++) {
+      settings->setArrayIndex(i);
+      int width = settings->value("width", -1).toInt();
 
-    if (m_FileBrowser) {
-      if (width > 5) {
-        m_FileBrowser->setColumnWidth(i, width);
-      } else {
-        m_FileBrowser->setColumnWidth(i, 5);
+      if (m_FileBrowser) {
+        if (width > 5) {
+          m_FileBrowser->setColumnWidth(i, width);
+        } else {
+          m_FileBrowser->setColumnWidth(i, 5);
+        }
       }
     }
-  }
 
-  settings.endArray();
+    settings->endArray();
+  }
 }
 
 void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)

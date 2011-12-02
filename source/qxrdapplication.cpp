@@ -127,11 +127,11 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   if (currentExperiment.length() > 0) {
     QSettings settings(currentExperiment, QSettings::IniFormat);
 
-    QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
+    QcepProperty::readSettings(this, &staticMetaObject, "application", &settings);
   } else {
     QxrdSettings settings;
 
-    QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
+    QcepProperty::readSettings(this, &staticMetaObject, "application", &settings);
   }
 
   printMessage("------ Starting QXRD Application ------");
@@ -498,15 +498,15 @@ void QxrdApplication::readSettings()
   if (currentExperiment.length()>0) {
     QSettings settings(currentExperiment, QSettings::IniFormat);
 
-    readSettings(settings);
+    readSettings(&settings);
   } else {
     QxrdSettings settings;
 
-    readSettings(settings);
+    readSettings(&settings);
   }
 }
 
-void QxrdApplication::readSettings(QSettings &settings)
+void QxrdApplication::readSettings(QSettings *settings)
 {
   QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
 }
@@ -518,15 +518,15 @@ void QxrdApplication::writeSettings()
   if (currentExperiment.length()>0) {
     QSettings settings(currentExperiment, QSettings::IniFormat);
 
-    writeSettings(settings);
+    writeSettings(&settings);
   } else {
     QxrdSettings settings;
 
-    writeSettings(settings);
+    writeSettings(&settings);
   }
 }
 
-void QxrdApplication::writeSettings(QSettings &settings)
+void QxrdApplication::writeSettings(QSettings *settings)
 {
   QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
 }
@@ -545,7 +545,7 @@ void QxrdApplication::loadPreferences(QString path)
 {
   QxrdSettings settings(path, QSettings::IniFormat);
 
-  QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
+  QcepProperty::readSettings(this, &staticMetaObject, "application", &settings);
 }
 
 void QxrdApplication::doSavePreferences()
@@ -562,7 +562,7 @@ void QxrdApplication::savePreferences(QString path)
 {
   QxrdSettings settings(path, QSettings::IniFormat);
 
-  QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
+  QcepProperty::writeSettings(this, &staticMetaObject, "application", &settings);
 }
 
 void QxrdApplication::executeCommand(QString cmd)

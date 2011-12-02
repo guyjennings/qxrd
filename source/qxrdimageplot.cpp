@@ -173,13 +173,13 @@ QxrdDataProcessor *QxrdImagePlot::processor() const
   return m_DataProcessor;
 }
 
-void QxrdImagePlot::readSettings(QSettings &settings, QString section)
+void QxrdImagePlot::readSettings(QSettings *settings, QString section)
 {
   QxrdPlot::readSettings(settings, section);
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdImagePlot::writeSettings(QSettings &settings, QString section)
+void QxrdImagePlot::writeSettings(QSettings *settings, QString section)
 {
   QxrdPlot::writeSettings(settings, section);
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);

@@ -18,44 +18,48 @@ void QxrdRingSampledDataFromScriptValue(const QScriptValue &object, QxrdRingSamp
   out = qobject_cast<QxrdRingSampledData*>(object.toQObject());
 }
 
-void QxrdRingSampledData::writeSettings(QSettings &settings, QString section)
+void QxrdRingSampledData::writeSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  if (settings) {
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 
-  settings.beginWriteArray(section+"/rings", count());
+    settings->beginWriteArray(section+"/rings", count());
 
-  for (int i=0; i<count(); i++) {
-    QwtDoublePoint pt = point(i);
+    for (int i=0; i<count(); i++) {
+      QwtDoublePoint pt = point(i);
 
-    settings.setArrayIndex(i);
-    settings.setValue("x", pt.x());
-    settings.setValue("y", pt.y());
+      settings->setArrayIndex(i);
+      settings->setValue("x", pt.x());
+      settings->setValue("y", pt.y());
+    }
+
+    settings->endArray();
   }
-
-  settings.endArray();
 }
 
-void QxrdRingSampledData::readSettings(QSettings &settings, QString section)
+void QxrdRingSampledData::readSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  if (settings) {
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
-  clear();
+    clear();
 
-  int sz = settings.beginReadArray(section+"/rings");
+    int sz = settings->beginReadArray(section+"/rings");
 
-  for (int i=0; i<sz; i++) {
-    settings.setArrayIndex(i);
+    for (int i=0; i<sz; i++) {
+      settings->setArrayIndex(i);
 
-    QwtDoublePoint pt(settings.value("x").toDouble(), settings.value("y").toDouble());
+      QwtDoublePoint pt(settings->value("x").toDouble(), settings->value("y").toDouble());
 
-    append(pt);
+      append(pt);
+    }
+
+    settings->endArray();
   }
-
-  settings.endArray();
 }
 
 void QxrdRingSampledData::append(QwtDoublePoint pt)

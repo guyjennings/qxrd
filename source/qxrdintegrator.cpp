@@ -52,14 +52,14 @@ QxrdDataProcessorBase *QxrdIntegrator::dataProcessor() const
   return m_DataProcessor;
 }
 
-void QxrdIntegrator::writeSettings(QSettings &settings, QString section)
+void QxrdIntegrator::writeSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdIntegrator::readSettings(QSettings &settings, QString section)
+void QxrdIntegrator::readSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

@@ -39,8 +39,8 @@ public:
   virtual ~QxrdPlot();
 
 public:
-  virtual void readSettings(QSettings &settings, QString section);
-  virtual void writeSettings(QSettings &settings, QString section);
+  virtual void readSettings(QSettings *settings, QString section);
+  virtual void writeSettings(QSettings *settings, QString section);
 
   void setPlotCurveStyle(int index, QwtPlotCurve *curve);
   virtual QwtText trackerText(const QwtDoublePoint &pos);

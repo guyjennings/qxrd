@@ -34,14 +34,14 @@ QxrdCenterFinder::QxrdCenterFinder
   connect(prop_TiltPlaneRotation(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
 }
 
-void QxrdCenterFinder::writeSettings(QSettings &settings, QString section)
+void QxrdCenterFinder::writeSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdCenterFinder::readSettings(QSettings &settings, QString section)
+void QxrdCenterFinder::readSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

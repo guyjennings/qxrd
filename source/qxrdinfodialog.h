@@ -13,8 +13,8 @@ class QxrdInfoDialog : public QDockWidget, public Ui::QxrdInfoDialog
 public:
   explicit QxrdInfoDialog(QWidget *parent = 0);
 
-  void readSettings(QSettings &settings, QString section);
-  void writeSettings(QSettings &settings, QString section);
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
 };

@@ -293,8 +293,8 @@ public:
 
   QxrdDoubleImageDataPtr takeNextFreeImage(int width, int height);
 
-  void readSettings(QSettings &settings, QString section);
-  void writeSettings(QSettings &settings, QString section);
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
   void setAcquisition(QxrdAcquisition *acq);
   void setWindow(QxrdWindow *win);

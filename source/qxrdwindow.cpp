@@ -663,77 +663,81 @@ void QxrdWindow::doCancel()
   }
 }
 
-void QxrdWindow::readSettings(QSettings &settings, QString section)
+void QxrdWindow::readSettings(QSettings *settings, QString section)
 {
-  m_Plot             -> readSettings(settings, section+"/plot");
-  m_CenterFinderPlot -> readSettings(settings, section+"/centerFinderPlot");
-  m_IntegratorPlot   -> readSettings(settings, section+"/integratorPlot");
+  if (settings) {
+    m_Plot             -> readSettings(settings, section+"/plot");
+    m_CenterFinderPlot -> readSettings(settings, section+"/centerFinderPlot");
+    m_IntegratorPlot   -> readSettings(settings, section+"/integratorPlot");
 
-  if (m_InputFileBrowser) {
-    m_InputFileBrowser  -> readSettings(settings, section+"/inputFileBrowser");
+    if (m_InputFileBrowser) {
+      m_InputFileBrowser  -> readSettings(settings, section+"/inputFileBrowser");
+    }
+
+    if (m_OutputFileBrowser) {
+      m_OutputFileBrowser  -> readSettings(settings, section+"/outputFileBrowser");
+    }
+
+    if (m_HistogramDialog) {
+      m_HistogramDialog -> readSettings(settings, section+"/histogramDialog");
+    }
+
+    if (m_SliceDialog) {
+      m_SliceDialog -> readSettings(settings, section+"/sliceDialog");
+    }
+
+    if (m_ImageInfoDialog) {
+      m_ImageInfoDialog ->  readSettings(settings, section+"/imageInfoDialog");
+    }
+
+    m_SettingsLoaded = true;
+
+    if (!m_Experiment->get_DefaultLayout()) {
+      QByteArray geometry = settings->value(section+"-geometry").toByteArray();
+      QByteArray winstate = settings->value(section+"-state").toByteArray();
+
+      restoreGeometry(geometry);
+      restoreState(winstate,1);
+    } else {
+      m_Experiment->set_DefaultLayout(0);
+    }
+
+    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
   }
-
-  if (m_OutputFileBrowser) {
-    m_OutputFileBrowser  -> readSettings(settings, section+"/outputFileBrowser");
-  }
-
-  if (m_HistogramDialog) {
-    m_HistogramDialog -> readSettings(settings, section+"/histogramDialog");
-  }
-
-  if (m_SliceDialog) {
-    m_SliceDialog -> readSettings(settings, section+"/sliceDialog");
-  }
-
-  if (m_ImageInfoDialog) {
-    m_ImageInfoDialog ->  readSettings(settings, section+"/imageInfoDialog");
-  }
-
-  m_SettingsLoaded = true;
-
-  if (!m_Experiment->get_DefaultLayout()) {
-    QByteArray geometry = settings.value(section+"-geometry").toByteArray();
-    QByteArray winstate = settings.value(section+"-state").toByteArray();
-
-    restoreGeometry(geometry);
-    restoreState(winstate,1);
-  } else {
-    m_Experiment->set_DefaultLayout(0);
-  }
-
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdWindow::writeSettings(QSettings &settings, QString section)
+void QxrdWindow::writeSettings(QSettings *settings, QString section)
 {
-  m_Plot             -> writeSettings(settings, section+"/plot");
-  m_CenterFinderPlot -> writeSettings(settings, section+"/centerFinderPlot");
-  m_IntegratorPlot   -> writeSettings(settings, section+"/integratorPlot");
+  if (settings) {
+    m_Plot             -> writeSettings(settings, section+"/plot");
+    m_CenterFinderPlot -> writeSettings(settings, section+"/centerFinderPlot");
+    m_IntegratorPlot   -> writeSettings(settings, section+"/integratorPlot");
 
-  if (m_InputFileBrowser) {
-    m_InputFileBrowser  -> writeSettings(settings, section+"/inputFileBrowser");
+    if (m_InputFileBrowser) {
+      m_InputFileBrowser  -> writeSettings(settings, section+"/inputFileBrowser");
+    }
+
+    if (m_OutputFileBrowser) {
+      m_OutputFileBrowser  -> writeSettings(settings, section+"/outputFileBrowser");
+    }
+
+    if (m_HistogramDialog) {
+      m_HistogramDialog -> writeSettings(settings, section+"/histogramDialog");
+    }
+
+    if (m_SliceDialog) {
+      m_SliceDialog -> writeSettings(settings, section+"/sliceDialog");
+    }
+
+    if (m_ImageInfoDialog) {
+      m_ImageInfoDialog ->  writeSettings(settings, section+"/imageInfoDialog");
+    }
+
+    settings->setValue(section+"-geometry", saveGeometry());
+    settings->setValue(section+"-state", saveState(1));
+
+    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
   }
-
-  if (m_OutputFileBrowser) {
-    m_OutputFileBrowser  -> writeSettings(settings, section+"/outputFileBrowser");
-  }
-
-  if (m_HistogramDialog) {
-    m_HistogramDialog -> writeSettings(settings, section+"/histogramDialog");
-  }
-
-  if (m_SliceDialog) {
-    m_SliceDialog -> writeSettings(settings, section+"/sliceDialog");
-  }
-
-  if (m_ImageInfoDialog) {
-    m_ImageInfoDialog ->  writeSettings(settings, section+"/imageInfoDialog");
-  }
-
-  settings.setValue(section+"-geometry", saveGeometry());
-  settings.setValue(section+"-state", saveState(1));
-
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdWindow::displayStatusMessage(QString msg)

@@ -39,8 +39,8 @@ public:
   int debug() const;
   void setDebug(int dbg);
 
-  static void writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings &settings);
-  static void readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings &settings);
+  static void writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings);
+  static void readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings);
   static void dumpMetaData(const QMetaObject *meta);
   static int  getChangeCount();
 

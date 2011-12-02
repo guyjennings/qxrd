@@ -41,8 +41,8 @@ public:
   QCEP_INTEGER_PROPERTY(IntegrationXUnits)
 
 public:
-  void readSettings(QSettings &settings, QString section);
-  void writeSettings(QSettings &settings, QString section);
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
   QxrdDataProcessorBase *dataProcessor() const;
 
   enum {

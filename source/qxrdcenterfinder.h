@@ -74,8 +74,8 @@ public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);
 //  void setPen(const QPen &pen);
 
-  void readSettings(QSettings &settings, QString section);
-  void writeSettings(QSettings &settings, QString section);
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
 //signals:
 ////  void centerChanged(double cx, double cy);

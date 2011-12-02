@@ -26,8 +26,8 @@ public slots:
   QwtDoublePoint point(int n) const;
 
 public:
-  void readSettings(QSettings &settings, QString section);
-  void writeSettings(QSettings &settings, QString section);
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
 private:
   mutable QMutex         m_Mutex;

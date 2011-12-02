@@ -21,7 +21,7 @@ class QxrdExperiment : public QObject
   Q_OBJECT
 
 public:
-  QxrdExperiment(QString path, QxrdApplication *app, QObject *parent = 0);
+  QxrdExperiment(QString path, QxrdApplication *app, QSettings *settings = 0, QObject *parent = 0);
   virtual bool init();
   virtual ~QxrdExperiment();
 
@@ -42,8 +42,8 @@ public slots:
 
   void readSettings();
   void writeSettings();
-  void readSettings(QSettings &settings);
-  void writeSettings(QSettings &settings);
+  virtual void readSettings(QSettings *settings, QString section);
+  virtual void writeSettings(QSettings *settings, QString section);
 
   void splashMessage(const char *msg);
   void splashMessage(QString msg);

@@ -23,59 +23,63 @@ QxrdRingFitParameters* QxrdRingSetFitParameters::ring(int n) const
   return m_Rings.value(n).data();
 }
 
-void QxrdRingSetFitParameters::writeSettings(QSettings &settings, QString section)
+void QxrdRingSetFitParameters::writeSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  if (settings) {
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  prop_CenterX()->writeSettings(settings, section);
-  prop_CenterY()->writeSettings(settings, section);
-  prop_Distance()->writeSettings(settings, section);
-  prop_Energy()->writeSettings(settings, section);
-  prop_Tilt()->writeSettings(settings, section);
-  prop_Rotation()->writeSettings(settings, section);
+    prop_CenterX()->writeSettings(settings, section);
+    prop_CenterY()->writeSettings(settings, section);
+    prop_Distance()->writeSettings(settings, section);
+    prop_Energy()->writeSettings(settings, section);
+    prop_Tilt()->writeSettings(settings, section);
+    prop_Rotation()->writeSettings(settings, section);
 
-  settings.beginWriteArray(section+"/rings", count());
+    settings->beginWriteArray(section+"/rings", count());
 
-  for (int i=0; i<count(); i++) {
-    QxrdRingFitParameters* r = ring(i);
+    for (int i=0; i<count(); i++) {
+      QxrdRingFitParameters* r = ring(i);
 
-    if (r==NULL) {
-      g_Application->printMessage("NULL ring fit parameters");
-    } else {
-      settings.setArrayIndex(i);
-      r -> writeSettings(settings, "");
+      if (r==NULL) {
+        g_Application->printMessage("NULL ring fit parameters");
+      } else {
+        settings->setArrayIndex(i);
+        r -> writeSettings(settings, "");
+      }
     }
-  }
 
-  settings.endArray();
+    settings->endArray();
+  }
 }
 
-void QxrdRingSetFitParameters::readSettings(QSettings &settings, QString section)
+void QxrdRingSetFitParameters::readSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  if (settings) {
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  prop_CenterX()->readSettings(settings, section);
-  prop_CenterY()->readSettings(settings, section);
-  prop_Distance()->readSettings(settings, section);
-  prop_Energy()->readSettings(settings, section);
-  prop_Tilt()->readSettings(settings, section);
-  prop_Rotation()->readSettings(settings, section);
+    prop_CenterX()->readSettings(settings, section);
+    prop_CenterY()->readSettings(settings, section);
+    prop_Distance()->readSettings(settings, section);
+    prop_Energy()->readSettings(settings, section);
+    prop_Tilt()->readSettings(settings, section);
+    prop_Rotation()->readSettings(settings, section);
 
-  clear();
+    clear();
 
-  int sz = settings.beginReadArray(section+"/rings");
+    int sz = settings->beginReadArray(section+"/rings");
 
-  for (int i=0; i<sz; i++) {
-    append();
+    for (int i=0; i<sz; i++) {
+      append();
 
-    QxrdRingFitParameters* r = ring(i);
+      QxrdRingFitParameters* r = ring(i);
 
-    settings.setArrayIndex(i);
+      settings->setArrayIndex(i);
 
-    r-> readSettings(settings, "");
+      r-> readSettings(settings, "");
+    }
+
+    settings->endArray();
   }
-
-  settings.endArray();
 }
 
 QList<QxrdRingFitParameters*> QxrdRingSetFitParameters::rings() const

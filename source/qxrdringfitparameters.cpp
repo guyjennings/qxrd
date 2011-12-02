@@ -19,14 +19,14 @@ void QxrdRingFitFromScriptValue(const QScriptValue &object, QxrdRingFitParameter
   out = qobject_cast<QxrdRingFitParameters*>(object.toQObject());
 }
 
-void QxrdRingFitParameters::writeSettings(QSettings &settings, QString section)
+void QxrdRingFitParameters::writeSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   prop_TwoTheta()->writeSettings(settings, section);
 }
 
-void QxrdRingFitParameters::readSettings(QSettings &settings, QString section)
+void QxrdRingFitParameters::readSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

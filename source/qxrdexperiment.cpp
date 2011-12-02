@@ -9,8 +9,9 @@
 #include "qxrdscriptengine.h"
 
 QxrdExperiment::QxrdExperiment(QString path,
-                           QxrdApplication *app,
-                           QObject *parent) :
+                               QxrdApplication *app,
+                               QSettings *settings,
+                               QObject *parent) :
   QObject(parent),
   m_ExperimentKind(this, "experimentKind", -1),
   m_ExperimentFilePath(this, "experimentFilePath", path),
@@ -34,6 +35,9 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_LogFile(NULL),
   m_ScanFile(NULL)
 {
+  if (settings) {
+    QcepProperty::readSettings(this, &staticMetaObject, "experiment", settings);
+  }
 }
 
 bool QxrdExperiment::init()
@@ -301,21 +305,23 @@ void QxrdExperiment::readSettings()
   if (docPath.length()>0) {
     QSettings settings(docPath, QSettings::IniFormat);
 
-    readSettings(settings);
+    readSettings(&settings, "experiment");
   } else {
     QxrdSettings settings;
 
-    readSettings(settings);
+    readSettings(&settings, "experiment");
   }
 }
 
-void QxrdExperiment::readSettings(QSettings &settings)
+void QxrdExperiment::readSettings(QSettings *settings, QString section)
 {
-  QcepProperty::readSettings(this, &staticMetaObject, "experiment", settings);
+  if (settings) {
+    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
-  m_Window       -> readSettings(settings, "window");
-  m_Acquisition  -> readSettings(settings, "acquire");
-  m_DataProcessor-> readSettings(settings, "processor");
+    m_Window       -> readSettings(settings, section+"/window");
+    m_Acquisition  -> readSettings(settings, section+"/acquire");
+    m_DataProcessor-> readSettings(settings, section+"/processor");
+  }
 }
 
 void QxrdExperiment::writeSettings()
@@ -325,20 +331,22 @@ void QxrdExperiment::writeSettings()
   if (docPath.length()>0) {
     QSettings settings(docPath, QSettings::IniFormat);
 
-    writeSettings(settings);
+    writeSettings(&settings, "experiment");
   } else {
     QxrdSettings settings;
 
-    writeSettings(settings);
+    writeSettings(&settings, "experiment");
   }
 }
 
-void QxrdExperiment::writeSettings(QSettings &settings)
+void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 {
-  m_Window       -> writeSettings(settings, "window");
-  m_Acquisition  -> writeSettings(settings, "acquire");
-  m_DataProcessor-> writeSettings(settings, "processor");
+  if (settings) {
+    m_Window       -> writeSettings(settings, section+"/window");
+    m_Acquisition  -> writeSettings(settings, section+"/acquire");
+    m_DataProcessor-> writeSettings(settings, section+"/processor");
 
-  QcepProperty::writeSettings(this, &staticMetaObject, "experiment", settings);
+    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  }
 }
 

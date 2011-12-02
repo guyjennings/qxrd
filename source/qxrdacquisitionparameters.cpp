@@ -96,7 +96,7 @@ void QxrdAcquisitionParameters::copyDynamicProperties(QObject *dest)
   }
 }
 
-void QxrdAcquisitionParameters::writeSettings(QSettings &settings, QString section)
+void QxrdAcquisitionParameters::writeSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -107,7 +107,7 @@ void QxrdAcquisitionParameters::writeSettings(QSettings &settings, QString secti
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdAcquisitionParameters::readSettings(QSettings &settings, QString section)
+void QxrdAcquisitionParameters::readSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

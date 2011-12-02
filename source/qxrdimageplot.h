@@ -128,8 +128,8 @@ public slots:
   void enableMaskPolygons();
 
 public:
-  void readSettings(QSettings &settings, QString section);
-  void writeSettings(QSettings &settings, QString section);
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
   const QxrdRasterData* raster() const;
   QxrdRasterData* raster();

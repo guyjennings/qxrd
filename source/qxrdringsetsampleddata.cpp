@@ -11,49 +11,53 @@ QxrdRingSetSampledData::QxrdRingSetSampledData(/*QxrdRingSetFitParametersPtr par
 {
 }
 
-void QxrdRingSetSampledData::writeSettings(QSettings &settings, QString section)
+void QxrdRingSetSampledData::writeSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  if (settings) {
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 
-  settings.beginWriteArray(section+"/rings", count());
+    settings->beginWriteArray(section+"/rings", count());
 
-  for (int i=0; i<count(); i++) {
-    QxrdRingSampledDataPtr r = ring(i);
+    for (int i=0; i<count(); i++) {
+      QxrdRingSampledDataPtr r = ring(i);
 
-    if (r==NULL) {
-      g_Application->printMessage("NULL ring sampled data\n");
-    } else {
-      settings.setArrayIndex(i);
-      r -> writeSettings(settings, "");
+      if (r==NULL) {
+        g_Application->printMessage("NULL ring sampled data\n");
+      } else {
+        settings->setArrayIndex(i);
+        r -> writeSettings(settings, "");
+      }
     }
-  }
 
-  settings.endArray();
+    settings->endArray();
+  }
 }
 
-void QxrdRingSetSampledData::readSettings(QSettings &settings, QString section)
+void QxrdRingSetSampledData::readSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  if (settings) {
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
-  clear();
+    clear();
 
-  int sz = settings.beginReadArray(section+"/rings");
+    int sz = settings->beginReadArray(section+"/rings");
 
-  for (int i=0; i<sz; i++) {
-    append();
+    for (int i=0; i<sz; i++) {
+      append();
 
-    QxrdRingSampledDataPtr r = ring(i);
+      QxrdRingSampledDataPtr r = ring(i);
 
-    settings.setArrayIndex(i);
+      settings->setArrayIndex(i);
 
-    r-> readSettings(settings, "");
+      r-> readSettings(settings, "");
+    }
+
+    settings->endArray();
   }
-
-  settings.endArray();
 }
 
 void QxrdRingSetSampledData::clear()

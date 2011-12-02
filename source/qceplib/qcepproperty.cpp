@@ -107,100 +107,104 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaTypeStreamOperators< QcepStringList >("QcepStringList");
 }
 
-void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings &settings)
+void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings)
 {
-  int count = meta->propertyCount();
-  int offset = meta->propertyOffset();
+  if (settings) {
+    int count = meta->propertyCount();
+    int offset = meta->propertyOffset();
 
-  settings.beginGroup(groupName);
+    settings->beginGroup(groupName);
 
-  for (int i=offset; i<count; i++) {
-    QMetaProperty metaproperty = meta->property(i);
-
-    if (metaproperty.isStored()) {
-      const char *name = metaproperty.name();
-      QVariant value = object -> property(name);
-
-      if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
-        g_Application->printMessage(
-            tr("Save %1/%2 = %3 [%4]")
-               .arg(groupName).arg(name)
-               .arg(value.toString()).arg(value.typeName()));
-      }
-
-      settings.setValue(name, value);
-    }
-  }
-
-  QByteArray name;
-
-  foreach (name, object->dynamicPropertyNames()) {
-    settings.setValue(name.data(), object->property(name.data()));
-  }
-
-  settings.endGroup();
-}
-
-void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings &settings)
-{
-  settings.beginGroup(groupName);
-
-  QStringList keys = settings.childKeys();
-
-  foreach (QString key, keys) {
-    if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
-      g_Application->printMessage(
-          tr("Load %1/%2 = %3 [%4]")
-             .arg(groupName).arg(key)
-             .arg(settings.value(key).toString())
-             .arg(settings.value(key).typeName()));
-    }
-
-    int metaindex = meta->indexOfProperty(qPrintable(key));
-
-    if (metaindex >= 0) {
-      QMetaProperty metaproperty = meta->property(metaindex);
+    for (int i=offset; i<count; i++) {
+      QMetaProperty metaproperty = meta->property(i);
 
       if (metaproperty.isStored()) {
-        QcepProperty *property = object->findChild<QcepProperty *>(key);
+        const char *name = metaproperty.name();
+        QVariant value = object -> property(name);
 
-        if (property) {
-          property->setWasLoaded(true);
+        if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+          g_Application->printMessage(
+                tr("Save %1/%2 = %3 [%4]")
+                .arg(groupName).arg(name)
+                .arg(value.toString()).arg(value.typeName()));
         }
 
-        object -> setProperty(qPrintable(key), settings.value(key));
+        settings->setValue(name, value);
+      }
+    }
+
+    QByteArray name;
+
+    foreach (name, object->dynamicPropertyNames()) {
+      settings->setValue(name.data(), object->property(name.data()));
+    }
+
+    settings->endGroup();
+  }
+}
+
+void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings)
+{
+  if (settings) {
+    settings->beginGroup(groupName);
+
+    QStringList keys = settings->childKeys();
+
+    foreach (QString key, keys) {
+      if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+        g_Application->printMessage(
+              tr("Load %1/%2 = %3 [%4]")
+              .arg(groupName).arg(key)
+              .arg(settings->value(key).toString())
+              .arg(settings->value(key).typeName()));
+      }
+
+      int metaindex = meta->indexOfProperty(qPrintable(key));
+
+      if (metaindex >= 0) {
+        QMetaProperty metaproperty = meta->property(metaindex);
+
+        if (metaproperty.isStored()) {
+          QcepProperty *property = object->findChild<QcepProperty *>(key);
+
+          if (property) {
+            property->setWasLoaded(true);
+          }
+
+          object -> setProperty(qPrintable(key), settings->value(key));
+        } else {
+          if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+            g_Application->printMessage(
+                  tr("property %1 of %2 not stored").arg(key)
+                  .arg(meta -> className()));
+          }
+        }
       } else {
         if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
           g_Application->printMessage(
-              tr("property %1 of %2 not stored").arg(key)
-                 .arg(meta -> className()));
+                tr("property %1 of %2 does not exist")
+                .arg(key).arg(meta -> className()));
         }
       }
-    } else {
-      if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
-        g_Application->printMessage(
-            tr("property %1 of %2 does not exist")
-               .arg(key).arg(meta -> className()));
-      }
     }
-  }
 
-  settings.endGroup();
+    settings->endGroup();
+  }
 }
 
 void QcepProperty::dumpMetaData(const QMetaObject *meta)
 {
   while (meta) {
     g_Application->printMessage(
-        tr("MetaData for class %1").arg(meta -> className()));
+          tr("MetaData for class %1").arg(meta -> className()));
     g_Application->printMessage(
-        tr(" superClass = %1").HEXARG((void*) meta -> superClass()));
+          tr(" superClass = %1").HEXARG((void*) meta -> superClass()));
     g_Application->printMessage(
-        tr(" methodCount = %1, methodOffset = %2")
-        .arg(meta->methodCount()).arg(meta->methodOffset()));
+          tr(" methodCount = %1, methodOffset = %2")
+          .arg(meta->methodCount()).arg(meta->methodOffset()));
     g_Application->printMessage(
-        tr(" propertyCount = %1, propertyOffset = %2")
-        .arg(meta->propertyCount()).arg(meta->propertyOffset()));
+          tr(" propertyCount = %1, propertyOffset = %2")
+          .arg(meta->propertyCount()).arg(meta->propertyOffset()));
 
     meta = meta->superClass();
   }

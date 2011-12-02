@@ -28,8 +28,8 @@ public slots:
 //  QVariant dynamicProperty(QString name);
 
 public:
-  void readSettings(QSettings &settings, QString section);
-  void writeSettings(QSettings &settings, QString section);
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
   void copyDynamicProperties(QObject *dest);
 
