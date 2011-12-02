@@ -20,7 +20,7 @@
 #include "qxrdimagequeue.h"
 #include "qxrdacquisitionoperations.h"
 
-class QxrdDocument;
+class QxrdExperiment;
 class QxrdAllocator;
 class QxrdDataProcessor;
 class QxrdSynchronizedAcquisition;
@@ -33,7 +33,7 @@ class QxrdAcquisition : public QxrdAcquisitionOperations
   Q_OBJECT
 
 public:
-  QxrdAcquisition(QxrdDocument *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator);
+  QxrdAcquisition(QxrdExperiment *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator);
   ~QxrdAcquisition();
 
   class QxrdAcquisitionParameterPack

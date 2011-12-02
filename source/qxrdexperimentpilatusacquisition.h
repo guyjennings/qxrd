@@ -1,13 +1,13 @@
-#ifndef QXRDPILATUSDOCUMENT_H
-#define QXRDPILATUSDOCUMENT_H
+#ifndef QXRDEXPERIMENTPILATUSACQUISITION_H
+#define QXRDEXPERIMENTPILATUSACQUISITION_H
 
-#include "qxrddocument.h"
+#include "qxrdexperiment.h"
 
-class QxrdPilatusDocument : public QxrdDocument
+class QxrdExperimentPilatusAcquisition : public QxrdExperiment
 {
     Q_OBJECT
 public:
-    explicit QxrdPilatusDocument(QString path, QxrdApplication *app, QObject *parent = 0);
+    explicit QxrdExperimentPilatusAcquisition(QString path, QxrdApplication *app, QObject *parent = 0);
 
 signals:
 
@@ -15,4 +15,4 @@ public slots:
 
 };
 
-#endif // QXRDPILATUSDOCUMENT_H
+#endif // QXRDEXPERIMENTPILATUSACQUISITION_H

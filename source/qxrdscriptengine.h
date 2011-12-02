@@ -9,7 +9,7 @@
 
 class QxrdApplication;
 
-#include "qxrddocument.h"
+#include "qxrdexperiment.h"
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
 #include "qxrddataprocessor.h"
@@ -22,8 +22,8 @@ public:
   QxrdScriptEngine(QxrdApplication *app/*, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc*/);
   void initialize();
 
-  void documentOpened(QxrdDocument *doc);
-  void documentClosed(QxrdDocument *doc);
+  void documentOpened(QxrdExperiment *doc);
+  void documentClosed(QxrdExperiment *doc);
 
   void windowOpened(QxrdWindow *win);
   void windowClosed(QxrdWindow *win);
@@ -84,7 +84,7 @@ private:
 //  QxrdWindow        *m_Window;
 //  QxrdAcquisition   *m_Acquisition;
 
-  QList<QxrdDocument*> m_Documents;
+  QList<QxrdExperiment*> m_Documents;
   QList<QxrdWindow*>   m_Windows;
 };
 

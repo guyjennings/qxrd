@@ -1,89 +1,89 @@
-#include "qxrddocumentthread.h"
+#include "qxrdexperimentthread.h"
 #include "qxrdapplication.h"
-#include "qxrdperkinelmerdocument.h"
-#include "qxrdperkinelmeranalysisdocument.h"
-#include "qxrdpilatusdocument.h"
-#include "qxrdpilatusanalysisdocument.h"
-#include "qxrdsimulateddocument.h"
-#include "qxrdgenericanalysisdocument.h"
+#include "qxrdexperimentperkinelmeracquisition.h"
+#include "qxrdexperimentperkinelmeranalysis.h"
+#include "qxrdexperimentpilatusacquisition.h"
+#include "qxrdexperimentpilatusanalysis.h"
+#include "qxrdexperimentsimulatedacquisition.h"
+#include "qxrdexperimentgenericanalysis.h"
 #include "qxrdsplashscreen.h"
 
-QxrdDocumentThread::QxrdDocumentThread(QxrdDocumentKind kind, QString path, QxrdApplication *app) :
+QxrdExperimentThread::QxrdExperimentThread(QxrdExperimentKind kind, QString path, QxrdApplication *app) :
   QxrdThread(app),
-  m_DocumentKind(kind),
-  m_DocumentPath(path),
+  m_ExperimentKind(kind),
+  m_ExperimentPath(path),
   m_Document(NULL),
   m_Application(app)
 {
 }
 
-QxrdDocumentThreadPtr QxrdDocumentThread::newPerkinElmerDocument(QString path, QxrdApplication *app)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAcquisition(QString path, QxrdApplication *app)
 {
-  QxrdDocumentThreadPtr res = QxrdDocumentThreadPtr(new QxrdDocumentThread(PerkinElmer, path, app));
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PerkinElmerAcquisition, path, app));
 
   res->start();
 
-  res->document()->init();
+  res->experiment()->init();
 
   return res;
 }
 
-QxrdDocumentThreadPtr QxrdDocumentThread::newPilatusDocument(QString path, QxrdApplication *app)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAcquisition(QString path, QxrdApplication *app)
 {
-  QxrdDocumentThreadPtr res = QxrdDocumentThreadPtr(new QxrdDocumentThread(Pilatus, path, app));
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PilatusAcquisition, path, app));
 
   res->start();
 
-  res->document()->init();
+  res->experiment()->init();
 
   return res;
 }
 
-QxrdDocumentThreadPtr QxrdDocumentThread::newSimulatedDocument(QString path, QxrdApplication *app)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentSimulatedAcquisition(QString path, QxrdApplication *app)
 {
-  QxrdDocumentThreadPtr res = QxrdDocumentThreadPtr(new QxrdDocumentThread(Simulated, path, app));
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(SimulatedAcquisition, path, app));
 
   res->start();
 
-  res->document()->init();
+  res->experiment()->init();
 
   return res;
 }
 
-QxrdDocumentThreadPtr QxrdDocumentThread::newPerkinElmerAnalysisDocument(QString path, QxrdApplication *app)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAnalysis(QString path, QxrdApplication *app)
 {
-  QxrdDocumentThreadPtr res = QxrdDocumentThreadPtr(new QxrdDocumentThread(PerkinElmerAnalysis, path, app));
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PerkinElmerAnalysis, path, app));
 
   res->start();
 
-  res->document()->init();
+  res->experiment()->init();
 
   return res;
 }
 
-QxrdDocumentThreadPtr QxrdDocumentThread::newPilatusAnalysisDocument(QString path, QxrdApplication *app)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAnalysis(QString path, QxrdApplication *app)
 {
-  QxrdDocumentThreadPtr res = QxrdDocumentThreadPtr(new QxrdDocumentThread(PilatusAnalysis, path, app));
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PilatusAnalysis, path, app));
 
   res->start();
 
-  res->document()->init();
+  res->experiment()->init();
 
   return res;
 }
 
-QxrdDocumentThreadPtr QxrdDocumentThread::newGenericAnalysisDocument(QString path, QxrdApplication *app)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentGenericAnalysis(QString path, QxrdApplication *app)
 {
-  QxrdDocumentThreadPtr res = QxrdDocumentThreadPtr(new QxrdDocumentThread(GenericAnalysis, path, app));
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(GenericAnalysis, path, app));
 
   res->start();
 
-  res->document()->init();
+  res->experiment()->init();
 
   return res;
 }
 
-QxrdDocumentPtr QxrdDocumentThread::document()
+QxrdExperimentPtr QxrdExperimentThread::experiment()
 {
   while (m_Document == NULL) {
     msleep(100);
@@ -92,40 +92,40 @@ QxrdDocumentPtr QxrdDocumentThread::document()
   return m_Document;
 }
 
-void QxrdDocumentThread::run()
+void QxrdExperimentThread::run()
 {
   QxrdSplashScreen splash;
-  QxrdDocumentPtr doc;
+  QxrdExperimentPtr doc;
 
-  switch(m_DocumentKind) {
-  case PerkinElmer:
-    doc = QxrdDocumentPtr(new QxrdPerkinElmerDocument(m_DocumentPath, m_Application));
+  switch(m_ExperimentKind) {
+  case PerkinElmerAcquisition:
+    doc = QxrdExperimentPtr(new QxrdExperimentPerkinElmerAcquisition(m_ExperimentPath, m_Application));
     break;
 
-  case Pilatus:
-    doc = QxrdDocumentPtr(new QxrdPilatusDocument(m_DocumentPath, m_Application));
+  case PilatusAcquisition:
+    doc = QxrdExperimentPtr(new QxrdExperimentPilatusAcquisition(m_ExperimentPath, m_Application));
     break;
 
-  case Simulated:
-    doc = QxrdDocumentPtr(new QxrdSimulatedDocument(m_DocumentPath, m_Application));
+  case SimulatedAcquisition:
+    doc = QxrdExperimentPtr(new QxrdExperimentSimulatedAcquisition(m_ExperimentPath, m_Application));
     break;
 
   case PerkinElmerAnalysis:
-    doc = QxrdDocumentPtr(new QxrdPerkinElmerAnalysisDocument(m_DocumentPath, m_Application));
+    doc = QxrdExperimentPtr(new QxrdExperimentPerkinElmerAnalysis(m_ExperimentPath, m_Application));
     break;
 
   case PilatusAnalysis:
-    doc = QxrdDocumentPtr(new QxrdPilatusAnalysisDocument(m_DocumentPath, m_Application));
+    doc = QxrdExperimentPtr(new QxrdExperimentPilatusAnalysis(m_ExperimentPath, m_Application));
     break;
 
   case GenericAnalysis:
-    doc = QxrdDocumentPtr(new QxrdGenericAnalysisDocument(m_DocumentPath, m_Application));
+    doc = QxrdExperimentPtr(new QxrdExperimentGenericAnalysis(m_ExperimentPath, m_Application));
     break;
   }
 
   m_Document = doc;
 }
 
-void QxrdDocumentThread::shutdown()
+void QxrdExperimentThread::shutdown()
 {
 }

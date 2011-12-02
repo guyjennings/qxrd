@@ -8,7 +8,7 @@ class QxrdAcquisitionSimulated : public QxrdAcquisition
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionSimulated(QxrdDocument *doc,
+  QxrdAcquisitionSimulated(QxrdExperiment *doc,
                            QxrdDataProcessor *proc,
                            QxrdAllocator *allocator);
 

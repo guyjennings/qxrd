@@ -15,7 +15,7 @@
 #include <math.h>
 
 QxrdDataProcessor::QxrdDataProcessor
-    (QxrdDocument *doc,
+    (QxrdExperiment *doc,
      QxrdAcquisition *acq,
      QxrdAllocator *allocator,
      QxrdFileSaverThread *saver,

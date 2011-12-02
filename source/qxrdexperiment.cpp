@@ -1,4 +1,4 @@
-#include "qxrddocument.h"
+#include "qxrdexperiment.h"
 #include "qxrdfreshstartdialog.h"
 #include "qxrdapplication.h"
 #include "qxrddataprocessor.h"
@@ -8,11 +8,12 @@
 #include "qxrdsimpleserver.h"
 #include "qxrdscriptengine.h"
 
-QxrdDocument::QxrdDocument(QString path,
+QxrdExperiment::QxrdExperiment(QString path,
                            QxrdApplication *app,
                            QObject *parent) :
   QObject(parent),
-  m_DocumentFilePath(this, "documentFilePath", path),
+  m_ExperimentKind(this, "experimentKind", -1),
+  m_ExperimentFilePath(this, "experimentFilePath", path),
   m_LogFilePath(this, "logFilePath", "qxrd.log"),
   m_ScanFilePath(this, "scanFilePath", "qxrd.log"),
   m_DetectorType(this,"detectorType", 1),
@@ -35,9 +36,9 @@ QxrdDocument::QxrdDocument(QString path,
 {
 }
 
-bool QxrdDocument::init()
+bool QxrdExperiment::init()
 {
-  setObjectName("qxrddocument");
+  setObjectName("QxrdExperiment");
 
   QThread::currentThread()->setObjectName("doc");
 //  printf("application thread %p\n", thread());
@@ -181,13 +182,13 @@ bool QxrdDocument::init()
   return true;
 }
 
-QxrdDocument::~QxrdDocument()
+QxrdExperiment::~QxrdExperiment()
 {
   closeScanFile();
   closeLogFile();
 }
 
-void QxrdDocument::splashMessage(const char *msg)
+void QxrdExperiment::splashMessage(const char *msg)
 {
   g_Application->printMessage(msg);
 
@@ -197,12 +198,12 @@ void QxrdDocument::splashMessage(const char *msg)
 //  }
 }
 
-void QxrdDocument::splashMessage(QString msg)
+void QxrdExperiment::splashMessage(QString msg)
 {
   splashMessage(qPrintable(msg));
 }
 
-void QxrdDocument::openLogFile()
+void QxrdExperiment::openLogFile()
 {
   if (m_LogFile == NULL) {
     m_LogFile = fopen(qPrintable(get_LogFilePath()), "a");
@@ -213,27 +214,27 @@ void QxrdDocument::openLogFile()
   }
 }
 
-QxrdWindow *QxrdDocument::window()
+QxrdWindow *QxrdExperiment::window()
 {
   return m_Window;
 }
 
-QxrdAcquisitionThread *QxrdDocument::acquisitionThread()
+QxrdAcquisitionThread *QxrdExperiment::acquisitionThread()
 {
   return m_AcquisitionThread;
 }
 
-QxrdAcquisition *QxrdDocument::acquisition() const
+QxrdAcquisition *QxrdExperiment::acquisition() const
 {
   return m_Acquisition;
 }
 
-QxrdDataProcessor *QxrdDocument::dataProcessor() const
+QxrdDataProcessor *QxrdExperiment::dataProcessor() const
 {
   return m_DataProcessor;
 }
 
-void QxrdDocument::newLogFile(QString path)
+void QxrdExperiment::newLogFile(QString path)
 {
   if (m_LogFile) {
     fclose(m_LogFile);
@@ -245,12 +246,12 @@ void QxrdDocument::newLogFile(QString path)
   openLogFile();
 }
 
-FILE* QxrdDocument::logFile()
+FILE* QxrdExperiment::logFile()
 {
   return m_LogFile;
 }
 
-void QxrdDocument::writeLogHeader()
+void QxrdExperiment::writeLogHeader()
 {
   if (m_LogFile) {
     fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFilePath()));
@@ -260,7 +261,7 @@ void QxrdDocument::writeLogHeader()
   }
 }
 
-void QxrdDocument::logMessage(QString msg)
+void QxrdExperiment::logMessage(QString msg)
 {
   openLogFile();
 
@@ -270,7 +271,7 @@ void QxrdDocument::logMessage(QString msg)
   }
 }
 
-void QxrdDocument::closeLogFile()
+void QxrdExperiment::closeLogFile()
 {
   if (m_LogFile) {
     logMessage(tr("%1 ------- shutdown --------").
@@ -280,12 +281,12 @@ void QxrdDocument::closeLogFile()
   }
 }
 
-FILE* QxrdDocument::scanFile()
+FILE* QxrdExperiment::scanFile()
 {
   return m_ScanFile;
 }
 
-void QxrdDocument::closeScanFile()
+void QxrdExperiment::closeScanFile()
 {
   if (m_ScanFile) {
     fclose(m_ScanFile);
@@ -293,9 +294,9 @@ void QxrdDocument::closeScanFile()
   }
 }
 
-void QxrdDocument::readSettings()
+void QxrdExperiment::readSettings()
 {
-  QString docPath = get_DocumentFilePath();
+  QString docPath = get_ExperimentFilePath();
 
   if (docPath.length()>0) {
     QSettings settings(docPath, QSettings::IniFormat);
@@ -308,18 +309,18 @@ void QxrdDocument::readSettings()
   }
 }
 
-void QxrdDocument::readSettings(QSettings &settings)
+void QxrdExperiment::readSettings(QSettings &settings)
 {
-  QcepProperty::readSettings(this, &staticMetaObject, "document", settings);
+  QcepProperty::readSettings(this, &staticMetaObject, "experiment", settings);
 
   m_Window       -> readSettings(settings, "window");
   m_Acquisition  -> readSettings(settings, "acquire");
   m_DataProcessor-> readSettings(settings, "processor");
 }
 
-void QxrdDocument::writeSettings()
+void QxrdExperiment::writeSettings()
 {
-  QString docPath = get_DocumentFilePath();
+  QString docPath = get_ExperimentFilePath();
 
   if (docPath.length()>0) {
     QSettings settings(docPath, QSettings::IniFormat);
@@ -332,12 +333,12 @@ void QxrdDocument::writeSettings()
   }
 }
 
-void QxrdDocument::writeSettings(QSettings &settings)
+void QxrdExperiment::writeSettings(QSettings &settings)
 {
   m_Window       -> writeSettings(settings, "window");
   m_Acquisition  -> writeSettings(settings, "acquire");
   m_DataProcessor-> writeSettings(settings, "processor");
 
-  QcepProperty::writeSettings(this, &staticMetaObject, "document", settings);
+  QcepProperty::writeSettings(this, &staticMetaObject, "experiment", settings);
 }
 

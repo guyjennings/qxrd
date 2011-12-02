@@ -25,19 +25,19 @@ static int g_DetectorType = -1;
 static int g_PEAvailable = false;
 #endif
 
-QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdDocument *doc,
+QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdExperiment *doc,
                                              QxrdDataProcessor *proc,
                                              QxrdAllocator *allocator,
                                              int detectorType)
   : QxrdThread(),
     m_Debug(true),
-    m_Document(NULL),
+    m_Experiment(NULL),
     m_Allocator(NULL),
     m_Acquisition(NULL),
     m_Processor(NULL),
     m_DetectorType(detectorType)
 {
-  m_Document.fetchAndStoreOrdered(doc);
+  m_Experiment.fetchAndStoreOrdered(doc);
   m_Allocator.fetchAndStoreOrdered(allocator);
   m_Processor.fetchAndStoreOrdered(proc);
 
@@ -74,17 +74,17 @@ void QxrdAcquisitionThread::run()
   switch(m_DetectorType) {
   case 0:
   default:
-    p = new QxrdAcquisitionSimulated(m_Document, m_Processor, m_Allocator);
+    p = new QxrdAcquisitionSimulated(m_Experiment, m_Processor, m_Allocator);
     g_DetectorType = 0;
     break;
 
 #ifdef HAVE_PERKIN_ELMER
   case 1:
     if (g_PEAvailable) {
-      p = new QxrdAcquisitionPerkinElmer(m_Document, m_Processor, m_Allocator);
+      p = new QxrdAcquisitionPerkinElmer(m_Experiment, m_Processor, m_Allocator);
       g_DetectorType = 1;
     } else {
-      p = new QxrdAcquisitionSimulated(m_Document, m_Processor, m_Allocator);
+      p = new QxrdAcquisitionSimulated(m_Experiment, m_Processor, m_Allocator);
       g_DetectorType = 0;
     }
     break;
@@ -92,20 +92,20 @@ void QxrdAcquisitionThread::run()
 
 #ifdef HAVE_PILATUS
   case 2:
-    p = new QxrdAcquisitionPilatus(m_Document, m_Processor, m_Allocator);
+    p = new QxrdAcquisitionPilatus(m_Experiment, m_Processor, m_Allocator);
     g_DetectorType = 2;
     break;
 #endif
 
 #ifdef HAVE_AREADETECTOR
   case 3:
-    p = new QxrdAcquisitionAreaDetector(m_Document, m_Processor, m_Allocator);
+    p = new QxrdAcquisitionAreaDetector(m_Experiment, m_Processor, m_Allocator);
     g_DetectorType = 3;
     break;
 #endif
 
   case 4:
-    p = new QxrdAcquisitionFileWatcher(m_Document, m_Processor, m_Allocator);
+    p = new QxrdAcquisitionFileWatcher(m_Experiment, m_Processor, m_Allocator);
     g_DetectorType = 4;
     break;
   }

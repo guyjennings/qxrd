@@ -1,6 +1,6 @@
-#include "qxrdgenericanalysisdocument.h"
+#include "qxrdexperimentgenericanalysis.h"
 
-QxrdGenericAnalysisDocument::QxrdGenericAnalysisDocument(QString path, QxrdApplication *app, QObject *parent) :
-    QxrdAnalysisDocument(path, app, parent)
+QxrdExperimentGenericAnalysis::QxrdExperimentGenericAnalysis(QString path, QxrdApplication *app, QObject *parent) :
+    QxrdExperiment(path, app, parent)
 {
 }

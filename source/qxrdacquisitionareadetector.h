@@ -7,7 +7,7 @@ class QxrdAcquisitionAreaDetector : public QxrdAcquisition
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionAreaDetector(QxrdDocument *doc,
+  QxrdAcquisitionAreaDetector(QxrdExperiment *doc,
                               QxrdDataProcessor *proc,
                               QxrdAllocator *allocator);
 

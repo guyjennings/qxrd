@@ -1,13 +1,13 @@
-#ifndef QXRDSIMULATEDDOCUMENT_H
-#define QXRDSIMULATEDDOCUMENT_H
+#ifndef QXRDEXPERIMENTSIMULATEDACQUISITION_H
+#define QXRDEXPERIMENTSIMULATEDACQUISITION_H
 
-#include "qxrddocument.h"
+#include "qxrdexperiment.h"
 
-class QxrdSimulatedDocument : public QxrdDocument
+class QxrdExperimentSimulatedAcquisition : public QxrdExperiment
 {
     Q_OBJECT
 public:
-    explicit QxrdSimulatedDocument(QString path, QxrdApplication *app, QObject *parent = 0);
+    explicit QxrdExperimentSimulatedAcquisition(QString path, QxrdApplication *app, QObject *parent = 0);
 
 signals:
 
@@ -15,4 +15,4 @@ public slots:
 
 };
 
-#endif // QXRDSIMULATEDDOCUMENT_H
+#endif // QXRDEXPERIMENTSIMULATEDACQUISITION_H

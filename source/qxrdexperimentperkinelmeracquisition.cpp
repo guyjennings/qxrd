@@ -1,6 +1,6 @@
-#include "qxrdperkinelmerdocument.h"
+#include "qxrdexperimentperkinelmeracquisition.h"
 
-QxrdPerkinElmerDocument::QxrdPerkinElmerDocument(QString path, QxrdApplication *app, QObject *parent) :
-    QxrdDocument(path, app, parent)
+QxrdExperimentPerkinElmerAcquisition::QxrdExperimentPerkinElmerAcquisition(QString path, QxrdApplication *app, QObject *parent) :
+    QxrdExperiment(path, app, parent)
 {
 }

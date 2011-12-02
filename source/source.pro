@@ -213,15 +213,14 @@ HEADERS += TODO.h \
     qxrdfilebrowsermodelupdaterthread.h \
     qxrdintegratorcache.h \
     qxrdnewexperimentdialog.h \
-    qxrddocumentthread.h \
-    qxrddocument.h \
-    qxrdpilatusdocument.h \
-    qxrdperkinelmerdocument.h \
-    qxrdsimulateddocument.h \
-    qxrdanalysisdocument.h \
-    qxrdperkinelmeranalysisdocument.h \
-    qxrdpilatusanalysisdocument.h \
-    qxrdgenericanalysisdocument.h \
+    qxrdexperimentthread.h \
+    qxrdexperiment.h \
+    qxrdexperimentpilatusacquisition.h \
+    qxrdexperimentperkinelmeracquisition.h \
+    qxrdexperimentsimulatedacquisition.h \
+    qxrdexperimentperkinelmeranalysis.h \
+    qxrdexperimentpilatusanalysis.h \
+    qxrdexperimentgenericanalysis.h \
     qxrdwelcomewindow.h \
     qxrdglobalpreferencesdialog.h \
     qxrdwelcomerecentitem.h \
@@ -348,15 +347,14 @@ SOURCES += qxrd.cpp \
     qxrdfilebrowsermodelupdaterthread.cpp \
     qxrdintegratorcache.cpp \
     qxrdnewexperimentdialog.cpp \
-    qxrddocumentthread.cpp \
-    qxrddocument.cpp \
-    qxrdpilatusdocument.cpp \
-    qxrdperkinelmerdocument.cpp \
-    qxrdsimulateddocument.cpp \
-    qxrdanalysisdocument.cpp \
-    qxrdperkinelmeranalysisdocument.cpp \
-    qxrdpilatusanalysisdocument.cpp \
-    qxrdgenericanalysisdocument.cpp \
+    qxrdexperimentthread.cpp \
+    qxrdexperiment.cpp \
+    qxrdexperimentpilatusacquisition.cpp \
+    qxrdexperimentperkinelmeracquisition.cpp \
+    qxrdexperimentsimulatedacquisition.cpp \
+    qxrdexperimentperkinelmeranalysis.cpp \
+    qxrdexperimentpilatusanalysis.cpp \
+    qxrdexperimentgenericanalysis.cpp \
     qxrdwelcomewindow.cpp \
     qxrdglobalpreferencesdialog.cpp \
     qxrdwelcomerecentitem.cpp \

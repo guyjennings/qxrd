@@ -1,6 +1,6 @@
-#include "qxrdsimulateddocument.h"
+#include "qxrdexperimentsimulatedacquisition.h"
 
-QxrdSimulatedDocument::QxrdSimulatedDocument(QString path, QxrdApplication *app, QObject *parent) :
-    QxrdDocument(path, app, parent)
+QxrdExperimentSimulatedAcquisition::QxrdExperimentSimulatedAcquisition(QString path, QxrdApplication *app, QObject *parent) :
+    QxrdExperiment(path, app, parent)
 {
 }

@@ -3,7 +3,7 @@
 
 #include <QDockWidget>
 
-class QxrdDocument;
+class QxrdExperiment;
 class QxrdWindow;
 class QxrdAcquisition;
 class QxrdDataProcessor;
@@ -13,7 +13,7 @@ class QxrdAcquireDialogBase : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit QxrdAcquireDialogBase(QxrdDocument *doc,
+    explicit QxrdAcquireDialogBase(QxrdExperiment *doc,
                                    QxrdWindow *win,
                                    QxrdAcquisition *acq,
                                    QxrdDataProcessor *proc,
@@ -25,7 +25,7 @@ public:
   virtual void acquisitionReady() = 0;
 
 protected:
-  QxrdDocument      *m_Document;
+  QxrdExperiment    *m_Experiment;
   QxrdWindow        *m_Window;
   QxrdAcquisition   *m_Acquisition;
   QxrdDataProcessor *m_DataProcessor;

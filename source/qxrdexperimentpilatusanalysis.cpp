@@ -1,6 +1,6 @@
-#include "qxrdpilatusanalysisdocument.h"
+#include "qxrdexperimentpilatusanalysis.h"
 
-QxrdPilatusAnalysisDocument::QxrdPilatusAnalysisDocument(QString path, QxrdApplication *app, QObject *parent) :
-    QxrdAnalysisDocument(path, app, parent)
+QxrdExperimentPilatusAnalysis::QxrdExperimentPilatusAnalysis(QString path, QxrdApplication *app, QObject *parent) :
+    QxrdExperiment(path, app, parent)
 {
 }

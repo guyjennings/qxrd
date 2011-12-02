@@ -91,7 +91,7 @@ void QxrdScriptEngine::initialize()
   }
 }
 
-void QxrdScriptEngine::documentOpened(QxrdDocument *doc)
+void QxrdScriptEngine::documentOpened(QxrdExperiment *doc)
 {
   if (!m_Documents.contains(doc)) {
     QString suffix="";
@@ -132,7 +132,7 @@ void QxrdScriptEngine::documentOpened(QxrdDocument *doc)
   }
 }
 
-void QxrdScriptEngine::documentClosed(QxrdDocument *doc)
+void QxrdScriptEngine::documentClosed(QxrdExperiment *doc)
 {
 }
 

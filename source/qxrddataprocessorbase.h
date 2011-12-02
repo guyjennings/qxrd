@@ -21,7 +21,7 @@
 
 #include <qwt_double_rect.h>
 
-class QxrdDocument;
+class QxrdExperiment;
 class QxrdAcquisition;
 class QxrdAllocator;
 class QxrdFileSaverThread;
@@ -35,7 +35,7 @@ class QxrdDataProcessorBase : public QObject
   Q_OBJECT
 
 public:
-  QxrdDataProcessorBase(QxrdDocument *doc, QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver, QObject *parent=0);
+  QxrdDataProcessorBase(QxrdExperiment *doc, QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver, QObject *parent=0);
   ~QxrdDataProcessorBase();
 
 public:
@@ -370,7 +370,7 @@ private:
   mutable QMutex         m_Mutex;
 
 protected:
-  QxrdDocument          *m_Document;
+  QxrdExperiment        *m_Experiment;
   QxrdWindow            *m_Window;
   QxrdAllocator         *m_Allocator;
   QxrdFileSaverThread   *m_FileSaverThread;

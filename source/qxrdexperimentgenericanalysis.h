@@ -1,13 +1,13 @@
-#ifndef QXRDGENERICANALYSISDOCUMENT_H
-#define QXRDGENERICANALYSISDOCUMENT_H
+#ifndef QXRDEXPERIMENTGENERICANALYSIS_H
+#define QXRDEXPERIMENTGENERICANALYSIS_H
 
-#include "qxrdanalysisdocument.h"
+#include "qxrdexperiment.h"
 
-class QxrdGenericAnalysisDocument : public QxrdAnalysisDocument
+class QxrdExperimentGenericAnalysis : public QxrdExperiment
 {
     Q_OBJECT
 public:
-    explicit QxrdGenericAnalysisDocument(QString path, QxrdApplication *app, QObject *parent = 0);
+    explicit QxrdExperimentGenericAnalysis(QString path, QxrdApplication *app, QObject *parent = 0);
 
 signals:
 
@@ -15,4 +15,4 @@ public slots:
 
 };
 
-#endif // QXRDGENERICANALYSISDOCUMENT_H
+#endif // QXRDEXPERIMENTGENERICANALYSIS_H

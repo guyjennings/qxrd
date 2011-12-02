@@ -8,14 +8,14 @@ class QxrdAcquisition;
 class QxrdAllocator;
 class QxrdFileSaverThread;
 class QxrdDataProcessor;
-class QxrdDocument;
+class QxrdExperiment;
 
 class QxrdDataProcessorThread : public QxrdThread
 {
   Q_OBJECT
 
 public:
-  QxrdDataProcessorThread(QxrdDocument *doc,
+  QxrdDataProcessorThread(QxrdExperiment *doc,
                           QxrdAcquisition *acq,
                           QxrdAllocator *allocator,
                           QxrdFileSaverThread *saver);
@@ -35,7 +35,7 @@ private:
   QAtomicPointer<QxrdFileSaverThread> m_FileSaverThread;
   QAtomicPointer<QxrdDataProcessor>   m_DataProcessor;
   QAtomicPointer<QxrdAcquisition>     m_Acquisition;
-  QAtomicPointer<QxrdDocument>        m_Document;
+  QAtomicPointer<QxrdExperiment>      m_Experiment;
 };
 
 #endif // QXRDDATAPROCESSORTHREAD_H

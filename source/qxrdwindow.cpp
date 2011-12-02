@@ -1,6 +1,6 @@
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
-#include "qxrddocument.h"
+#include "qxrdexperiment.h"
 #include "qxrdacquiredialog.h"
 #include "qxrddisplaydialog.h"
 #include "qxrdacquisitionthread.h"
@@ -54,7 +54,7 @@
 #include <QMenu>
 #include <QDesktopWidget>
 
-QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdDocument *doc, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent)
+QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent)
   : QMainWindow(parent),
     m_Mutex(QMutex::Recursive),
     m_SettingsLoaded(false),

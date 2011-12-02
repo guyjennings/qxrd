@@ -8,7 +8,7 @@ class QxrdDataProcessor : public QxrdDataProcessorThreaded
   Q_OBJECT
 
 public:
-  QxrdDataProcessor(QxrdDocument *doc,
+  QxrdDataProcessor(QxrdExperiment *doc,
                     QxrdAcquisition *acq,
                     QxrdAllocator *allocator,
                     QxrdFileSaverThread *saver,

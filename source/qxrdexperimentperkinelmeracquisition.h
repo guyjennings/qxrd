@@ -1,13 +1,13 @@
-#ifndef QXRDPERKINELMERDOCUMENT_H
-#define QXRDPERKINELMERDOCUMENT_H
+#ifndef QXRDEXPERIMENTPERKINELMERACQUISITION_H
+#define QXRDEXPERIMENTPERKINELMERACQUISITION_H
 
-#include "qxrddocument.h"
+#include "qxrdexperiment.h"
 
-class QxrdPerkinElmerDocument : public QxrdDocument
+class QxrdExperimentPerkinElmerAcquisition : public QxrdExperiment
 {
     Q_OBJECT
 public:
-    explicit QxrdPerkinElmerDocument(QString path, QxrdApplication *app, QObject *parent = 0);
+    explicit QxrdExperimentPerkinElmerAcquisition(QString path, QxrdApplication *app, QObject *parent = 0);
 
 signals:
 
@@ -15,4 +15,4 @@ public slots:
 
 };
 
-#endif // QXRDPERKINELMERDOCUMENT_H
+#endif // QXRDEXPERIMENTPERKINELMERACQUISITION_H

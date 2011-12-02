@@ -12,8 +12,8 @@
 #include "qxrdallocatorthread.h"
 #include "qxrdscriptenginethread.h"
 //#include "qxrddefaultapplication.h"
-#include "qxrddocument.h"
-#include "qxrddocumentthread.h"
+#include "qxrdexperiment.h"
+#include "qxrdexperimentthread.h"
 #include "qxrdwelcomewindow.h"
 #include "qxrdsplashscreen.h"
 
@@ -56,7 +56,7 @@ public:
   void writeDefaultSettings();
   void appendRecentExperiment(QString path);
 
-  void openedNewExperiment(QxrdDocumentThreadPtr docThread);
+  void openedNewExperiment(QxrdExperimentThreadPtr docThread);
   QString newAnalysisExperiment(QString path);
   QString newPerkinElmerExperiment(QString path);
   QString newPilatusExperiment(QString path);
@@ -170,8 +170,8 @@ public:
 private:
   QMenu                          *m_RecentExperimentsMenu;
 
-  QList<QxrdDocumentThreadPtr>    m_DocumentThreads;
-  QList<QxrdDocumentPtr>          m_Documents;
+  QList<QxrdExperimentThreadPtr>    m_ExperimentThreads;
+  QList<QxrdExperimentPtr>          m_Experiments;
 
   QxrdWelcomeWindow              *m_WelcomeWindow;
   QxrdAllocatorThread            *m_AllocatorThread;

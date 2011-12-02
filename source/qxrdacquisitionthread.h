@@ -9,14 +9,14 @@
 class QxrdDataProcessor;
 class QxrdAllocator;
 class QxrdAcquisition;
-class QxrdDocument;
+class QxrdExperiment;
 
 class QxrdAcquisitionThread : public QxrdThread
 {
   Q_OBJECT
 
  public:
-  QxrdAcquisitionThread(QxrdDocument *doc,
+  QxrdAcquisitionThread(QxrdExperiment *doc,
                         QxrdDataProcessor *proc,
                         QxrdAllocator *allocator,
                         int detectorType);
@@ -47,7 +47,7 @@ protected:
 
 private:
   int                                 m_Debug;
-  QAtomicPointer<QxrdDocument>        m_Document;
+  QAtomicPointer<QxrdExperiment>      m_Experiment;
   QAtomicPointer<QxrdAllocator>       m_Allocator;
   QAtomicPointer<QxrdAcquisition>     m_Acquisition;
   QAtomicPointer<QxrdDataProcessor>   m_Processor;

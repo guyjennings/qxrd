@@ -10,7 +10,7 @@
 #include "ui_qxrdwindow.h"
 
 class QxrdApplication;
-class QxrdDocument;
+class QxrdExperiment;
 class QxrdAcquisition;
 class QxrdDataProcessor;
 class QxrdAllocator;
@@ -37,7 +37,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   Q_OBJECT
 
 public:
-  QxrdWindow(QxrdApplication *app, QxrdDocument *doc, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent=0);
+  QxrdWindow(QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent=0);
   virtual ~QxrdWindow();
   void onAcquisitionInit();
 
@@ -130,7 +130,7 @@ private:
   mutable QMutex                         m_Mutex;
   int                                    m_SettingsLoaded;
   QxrdApplication                       *m_Application;
-  QxrdDocument                          *m_Document;
+  QxrdExperiment                          *m_Document;
   QxrdAcquisition                       *m_Acquisition;
   QxrdDataProcessor                     *m_DataProcessor;
   QxrdAllocator                         *m_Allocator;

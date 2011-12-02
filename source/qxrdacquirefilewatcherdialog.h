@@ -9,7 +9,7 @@ class QxrdAcquireFileWatcherDialog : public QxrdAcquireDialogBase, public Ui::Qx
   Q_OBJECT
 
 public:
-  explicit QxrdAcquireFileWatcherDialog(QxrdDocument *doc,
+  explicit QxrdAcquireFileWatcherDialog(QxrdExperiment *doc,
                                         QxrdWindow *win,
                                         QxrdAcquisition *acq,
                                         QxrdDataProcessor *proc,

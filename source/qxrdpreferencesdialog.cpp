@@ -10,7 +10,7 @@
 #include <QGridLayout>
 #include "qcepdebug.h"
 
-QxrdPreferencesDialog::QxrdPreferencesDialog(QxrdDocument *doc, QWidget *parent) :
+QxrdPreferencesDialog::QxrdPreferencesDialog(QxrdExperiment *doc, QWidget *parent) :
   QDialog(parent),
   m_Document(doc)
 {

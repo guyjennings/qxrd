@@ -9,12 +9,12 @@
 #include <QCheckBox>
 #include "ui_qxrdpreferencesdialog.h"
 
-class QxrdDocument;
+class QxrdExperiment;
 
 class QxrdPreferencesDialog : public QDialog, public Ui::QxrdPreferencesDialog {
   Q_OBJECT
 public:
-  QxrdPreferencesDialog(QxrdDocument *doc, QWidget *parent = 0);
+  QxrdPreferencesDialog(QxrdExperiment *doc, QWidget *parent = 0);
   ~QxrdPreferencesDialog();
 
 public slots:
@@ -37,7 +37,7 @@ private:
   int readDebugWidgets();
 
 private:
-  QxrdDocument       *m_Document;
+  QxrdExperiment       *m_Document;
   QVector<QCheckBox*> m_DebugWidgetList;
 };
 

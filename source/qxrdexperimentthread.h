@@ -1,37 +1,37 @@
-#ifndef QXRDDOCUMENTTHREAD_H
-#define QXRDDOCUMENTTHREAD_H
+#ifndef QXRDEXPERIMENTTHREAD_H
+#define QXRDEXPERIMENTTHREAD_H
 
 #include <QThread>
 #include <QSharedPointer>
 #include "qxrdthread.h"
-#include "qxrddocument.h"
+#include "qxrdexperiment.h"
 
-class QxrdDocumentThread;
-typedef QSharedPointer<QxrdDocumentThread> QxrdDocumentThreadPtr;
+class QxrdExperimentThread;
+typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;
 
-class QxrdDocumentThread : public QxrdThread
+class QxrdExperimentThread : public QxrdThread
 {
   Q_OBJECT
 public:
   typedef enum {
-    PerkinElmer,
-    Pilatus,
-    Simulated,
+    PerkinElmerAcquisition,
+    PilatusAcquisition,
+    SimulatedAcquisition,
     PerkinElmerAnalysis,
     PilatusAnalysis,
     GenericAnalysis
-  } QxrdDocumentKind;
+  } QxrdExperimentKind;
 
-  QxrdDocumentThread(QxrdDocumentKind kind, QString path, QxrdApplication *app);
+  QxrdExperimentThread(QxrdExperimentKind kind, QString path, QxrdApplication *app);
 
-  static QxrdDocumentThreadPtr newPerkinElmerDocument(QString path, QxrdApplication *app);
-  static QxrdDocumentThreadPtr newPilatusDocument(QString path, QxrdApplication *app);
-  static QxrdDocumentThreadPtr newSimulatedDocument(QString path, QxrdApplication *app);
-  static QxrdDocumentThreadPtr newPerkinElmerAnalysisDocument(QString path, QxrdApplication *app);
-  static QxrdDocumentThreadPtr newPilatusAnalysisDocument(QString path, QxrdApplication *app);
-  static QxrdDocumentThreadPtr newGenericAnalysisDocument(QString path, QxrdApplication *app);
+  static QxrdExperimentThreadPtr newExperimentPerkinElmerAcquisition(QString path, QxrdApplication *app);
+  static QxrdExperimentThreadPtr newExperimentPilatusAcquisition(QString path, QxrdApplication *app);
+  static QxrdExperimentThreadPtr newExperimentSimulatedAcquisition(QString path, QxrdApplication *app);
+  static QxrdExperimentThreadPtr newExperimentPerkinElmerAnalysis(QString path, QxrdApplication *app);
+  static QxrdExperimentThreadPtr newExperimentPilatusAnalysis(QString path, QxrdApplication *app);
+  static QxrdExperimentThreadPtr newExperimentGenericAnalysis(QString path, QxrdApplication *app);
 
-  QxrdDocumentPtr document();
+  QxrdExperimentPtr experiment();
 
   void shutdown();
 
@@ -43,10 +43,10 @@ protected:
   void run();
 
 private:
-  QxrdDocumentKind m_DocumentKind;
-  QString          m_DocumentPath;
-  QxrdDocumentPtr  m_Document;
-  QxrdApplication *m_Application;
+  QxrdExperimentKind m_ExperimentKind;
+  QString            m_ExperimentPath;
+  QxrdExperimentPtr  m_Document;
+  QxrdApplication   *m_Application;
 };
 
-#endif // QXRDDOCUMENTTHREAD_H
+#endif // QXRDEXPERIMENTTHREAD_H

@@ -1,5 +1,5 @@
-#ifndef QXRDDOCUMENT_H
-#define QXRDDOCUMENT_H
+#ifndef QXRDEXPERIMENT_H
+#define QXRDEXPERIMENT_H
 
 #include "qcepmacros.h"
 #include "qcepproperty.h"
@@ -16,14 +16,14 @@
 class QxrdWindow;
 class QxrdNIDAQPluginInterface;
 
-class QxrdDocument : public QObject
+class QxrdExperiment : public QObject
 {
   Q_OBJECT
 
 public:
-  QxrdDocument(QString path, QxrdApplication *app, QObject *parent = 0);
+  QxrdExperiment(QString path, QxrdApplication *app, QObject *parent = 0);
   virtual bool init();
-  virtual ~QxrdDocument();
+  virtual ~QxrdExperiment();
 
   QxrdAcquisitionThread *acquisitionThread();
   QxrdAcquisition *acquisition() const;
@@ -58,8 +58,11 @@ private:
   void openScanFile();
 
 public:  // Properties
-  Q_PROPERTY(QString documentFilePath     READ get_DocumentFilePath WRITE set_DocumentFilePath)
-  QCEP_STRING_PROPERTY(DocumentFilePath)
+  Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
+  QCEP_INTEGER_PROPERTY(ExperimentKind)
+
+  Q_PROPERTY(QString experimentFilePath     READ get_ExperimentFilePath WRITE set_ExperimentFilePath)
+  QCEP_STRING_PROPERTY(ExperimentFilePath)
 
   Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath)
   QCEP_STRING_PROPERTY(LogFilePath)
@@ -105,6 +108,6 @@ private:
   FILE                           *m_ScanFile;
 };
 
-typedef QSharedPointer<QxrdDocument> QxrdDocumentPtr;
+typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
 
-#endif // QXRDDOCUMENT_H
+#endif // QXRDEXPERIMENT_H

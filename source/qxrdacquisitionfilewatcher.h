@@ -7,7 +7,7 @@ class QxrdAcquisitionFileWatcher : public QxrdAcquisition
 {
     Q_OBJECT
 public:
-    explicit QxrdAcquisitionFileWatcher(QxrdDocument *doc,
+    explicit QxrdAcquisitionFileWatcher(QxrdExperiment *doc,
                                         QxrdDataProcessor *proc,
                                         QxrdAllocator *allocator);
 

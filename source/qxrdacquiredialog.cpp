@@ -3,7 +3,7 @@
 #include "qxrdacquisition.h"
 #include "qxrdapplication.h"
 
-QxrdAcquireDialog::QxrdAcquireDialog(QxrdDocument *doc,
+QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperiment *doc,
                                      QxrdWindow *win,
                                      QxrdAcquisition *acq,
                                      QxrdDataProcessor *proc,
@@ -52,7 +52,7 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdDocument *doc,
   m_Acquisition -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
 
   m_DataProcessor -> prop_OutputDirectory() -> linkTo(this -> m_OutputDirectory);
-  m_Document      -> prop_LogFilePath() -> linkTo(this -> m_LogFilePath);
+  m_Experiment      -> prop_LogFilePath() -> linkTo(this -> m_LogFilePath);
   m_DataProcessor -> prop_Average() -> linkTo(this -> m_AverageDisplay);
 
   connect(m_AcquireOptionsButton, SIGNAL(clicked()), g_Application, SLOT(editPreferences()));
