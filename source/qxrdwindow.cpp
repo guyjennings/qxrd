@@ -191,7 +191,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisitio
 
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
-  connect(m_ActionPreferences, SIGNAL(triggered()), m_Application, SLOT(editPreferences()));
+  connect(m_ActionPreferences, SIGNAL(triggered()), m_Experiment, SLOT(editPreferences()));
   connect(m_ActionLoadPreferences, SIGNAL(triggered()), m_Application, SLOT(doLoadPreferences()));
   connect(m_ActionSavePreferences, SIGNAL(triggered()), m_Application, SLOT(doSavePreferences()));
 
@@ -287,11 +287,11 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisitio
   connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(autoScale()));
   connect(m_IntegratorMeasureButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableMeasuring()));
 
-  connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
-  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
+  connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), m_Experiment, SLOT(editPreferences()));
+  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), m_Experiment, SLOT(editPreferences()));
 
-  connect(m_ActionAboutQXRD, SIGNAL(triggered()), this, SLOT(doAboutQxrd()));
-  connect(m_ActionOpenQXRDWebPage, SIGNAL(triggered()), this, SLOT(doOpenQXRDWebPage()));
+  connect(m_ActionAboutQXRD, SIGNAL(triggered()), m_Application, SLOT(doAboutQxrd()));
+  connect(m_ActionOpenQXRDWebPage, SIGNAL(triggered()), m_Application, SLOT(doOpenQXRDWebPage()));
 
   connect(m_HelpHomeButton, SIGNAL(clicked()), m_HelpBrowser, SLOT(home()));
   connect(m_HelpForwardButton, SIGNAL(clicked()), m_HelpBrowser, SLOT(forward()));
@@ -313,7 +313,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisitio
   connect(m_ActionClearIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearGraph()));
   connect(m_ActionClearSelectedIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearSelectedCurves()));
 
-  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), m_Application, SLOT(editPreferences()));
+  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), m_Experiment, SLOT(editPreferences()));
   connect(m_DataProcessor->integrator()->prop_IntegrationXUnits(), SIGNAL(valueChanged(int,int)),
           this, SLOT(integrationXUnitsChanged(int)));
   integrationXUnitsChanged(m_DataProcessor->integrator()->get_IntegrationXUnits());
@@ -840,7 +840,7 @@ void QxrdWindow::newMask()
 
 void QxrdWindow::doEditPreferences()
 {
-  QxrdPreferencesDialog prefs(m_Experiment);
+  QxrdPreferencesDialog prefs(m_Experiment, this);
 
   prefs.exec();
 }

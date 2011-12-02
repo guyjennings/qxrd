@@ -7,6 +7,7 @@
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"
 #include "qxrdscriptengine.h"
+#include "qxrdpreferencesdialog.h"
 
 QxrdExperiment::QxrdExperiment(QString path,
                                QxrdApplication *app,
@@ -350,3 +351,9 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
   }
 }
 
+void QxrdExperiment::editPreferences()
+{
+  QxrdPreferencesDialog prefs(this, m_Window);
+
+  prefs.exec();
+}

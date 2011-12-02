@@ -39,6 +39,7 @@ public:
 signals:
 
 public slots:
+  void editPreferences();
 
   void readSettings();
   void writeSettings();
