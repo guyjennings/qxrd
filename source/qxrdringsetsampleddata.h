@@ -6,12 +6,13 @@
 #include "qxrdringsampleddata.h"
 //#include "qxrdringsetfitparameters.h"
 #include "qxrdsettings.h"
+#include "qxrdsettingssaver.h"
 
 class QxrdRingSetSampledData : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdRingSetSampledData(/*QxrdRingSetFitParametersPtr parms, */QObject *parent=0);
+  explicit QxrdRingSetSampledData(QxrdSettingsSaver *saver, /*QxrdRingSetFitParametersPtr parms, */QObject *parent=0);
 
 public slots:
   int count() const;

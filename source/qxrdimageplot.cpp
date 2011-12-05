@@ -23,23 +23,23 @@
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QxrdPlot(parent),
-    m_DisplayMinimumPct(this, "displayMinimumPct", 0),
-    m_DisplayMaximumPct(this, "displayMaximumPct", 100),
-    m_DisplayMinimumVal(this, "displayMinimumVal", 0),
-    m_DisplayMaximumVal(this, "displayMaximumVal", 10000),
-    m_DisplayMinimumPctle(this, "displayMinimumPercentile", 0),
-    m_DisplayMaximumPctle(this, "displayMaximumPercentile", 100),
-    m_DisplayScalingMode(this, "displayScalingMode", 0),
-    m_DisplayColorMap(this, "displayColorMap", 0),
-    m_ImageShown(this, "imageShown", 1),
-    m_MaskShown(this, "maskShown", 0),
-    m_OverflowShown(this, "overflowShown", 0),
-    m_InterpolatePixels(this, "interpolatePixels", 1),
-    m_MaintainAspectRatio(this, "maintainAspectRatio", 1),
-    m_TTHMouse(this,"tthMouse",0),
-    m_QMouse(this,"qMouse",0),
-    m_ValMouse(this,"valMouse",0),
-    m_MaskMouse(this,"maskMouse",0),
+    m_DisplayMinimumPct(NULL, this, "displayMinimumPct", 0),
+    m_DisplayMaximumPct(NULL, this, "displayMaximumPct", 100),
+    m_DisplayMinimumVal(NULL, this, "displayMinimumVal", 0),
+    m_DisplayMaximumVal(NULL, this, "displayMaximumVal", 10000),
+    m_DisplayMinimumPctle(NULL, this, "displayMinimumPercentile", 0),
+    m_DisplayMaximumPctle(NULL, this, "displayMaximumPercentile", 100),
+    m_DisplayScalingMode(NULL, this, "displayScalingMode", 0),
+    m_DisplayColorMap(NULL, this, "displayColorMap", 0),
+    m_ImageShown(NULL, this, "imageShown", 1),
+    m_MaskShown(NULL, this, "maskShown", 0),
+    m_OverflowShown(NULL, this, "overflowShown", 0),
+    m_InterpolatePixels(NULL, this, "interpolatePixels", 1),
+    m_MaintainAspectRatio(NULL, this, "maintainAspectRatio", 1),
+    m_TTHMouse(NULL, this,"tthMouse",0),
+    m_QMouse(NULL, this,"qMouse",0),
+    m_ValMouse(NULL, this,"valMouse",0),
+    m_MaskMouse(NULL, this,"maskMouse",0),
     m_Rescaler(NULL),
     m_Slicer(NULL),
     m_Measurer(NULL),
@@ -166,6 +166,25 @@ void QxrdImagePlot::setDataProcessor(QxrdDataProcessor *proc)
 
   connect(m_HistogramSelector, SIGNAL(selected(QwtDoubleRect)),
           this, SIGNAL(selectHistogram(QwtDoubleRect)));
+}
+
+void QxrdImagePlot::setSaver(QxrdSettingsSaver *saver)
+{
+  QxrdPlot::setSaver(saver);
+
+  prop_ImageShown()->setSaver(saver);
+  prop_MaskShown()->setSaver(saver);
+  prop_OverflowShown()->setSaver(saver);
+  prop_DisplayMinimumPct()->setSaver(saver);
+  prop_DisplayMaximumPct()->setSaver(saver);
+  prop_DisplayMinimumVal()->setSaver(saver);
+  prop_DisplayMaximumVal()->setSaver(saver);
+  prop_DisplayMinimumPctle()->setSaver(saver);
+  prop_DisplayMaximumPctle()->setSaver(saver);
+  prop_DisplayScalingMode()->setSaver(saver);
+  prop_InterpolatePixels()->setSaver(saver);
+  prop_MaintainAspectRatio()->setSaver(saver);
+  prop_DisplayColorMap()->setSaver(saver);
 }
 
 QxrdDataProcessor *QxrdImagePlot::processor() const

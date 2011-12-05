@@ -5,13 +5,14 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdapplication.h"
 
-QxrdRingSetFitParameters::QxrdRingSetFitParameters(QObject *parent) :
-    m_CenterX(this, "centerX", 1024),
-    m_CenterY(this, "centerY", 1024),
-    m_Distance(this, "distance", 1000),
-    m_Energy(this, "energy", 22000),
-    m_Tilt(this, "tilt", 0),
-    m_Rotation(this, "rotation", 0)
+QxrdRingSetFitParameters::QxrdRingSetFitParameters(QxrdSettingsSaver *saver, QObject *parent) :
+  m_CenterX(saver, this, "centerX", 1024),
+  m_CenterY(saver, this, "centerY", 1024),
+  m_Distance(saver, this, "distance", 1000),
+  m_Energy(saver, this, "energy", 22000),
+  m_Tilt(saver, this, "tilt", 0),
+  m_Rotation(saver, this, "rotation", 0),
+  m_Saver(saver)
 {
   qRegisterMetaType<QxrdFitParameterPtr>("QxrdFitParameterPtr");
   qRegisterMetaType<QxrdRingFitParametersPtr>("QxrdRingFitParametersPtr");
@@ -112,7 +113,7 @@ void QxrdRingSetFitParameters::append(double twoTheta)
   if (QThread::currentThread() != thread()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(this, "append", Qt::BlockingQueuedConnection, Q_ARG(double, twoTheta)));
   } else {
-    m_Rings.append(QxrdRingFitParametersPtr(new QxrdRingFitParameters(this, twoTheta)));
+    m_Rings.append(QxrdRingFitParametersPtr(new QxrdRingFitParameters(m_Saver, this, twoTheta)));
   }
 }
 

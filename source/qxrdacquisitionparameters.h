@@ -18,7 +18,7 @@ class QxrdAcquisitionParameters : public QObject
   Q_OBJECT
 
 public:
-  QxrdAcquisitionParameters();
+  QxrdAcquisitionParameters(QxrdSettingsSaver *saver);
 
 public slots:
   void dynamicProperties();

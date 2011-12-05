@@ -10,8 +10,8 @@
 #include <QThreadPool>
 #include <QtConcurrentRun>
 
-QxrdAcquisition::QxrdAcquisition(QxrdExperiment *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator)
-  : QxrdAcquisitionOperations(doc, proc, allocator),
+QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaver *saver, QxrdExperiment *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator)
+  : QxrdAcquisitionOperations(saver, doc, proc, allocator),
     m_AcquiredImages("acquired"),
     m_ControlPanel(NULL),
     m_Idling(1)
@@ -20,7 +20,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdExperiment *doc, QxrdDataProcessor *proc, Q
     g_Application->printMessage("QxrdAcquisition::QxrdAcquisition");
   }
 
-  m_SynchronizedAcquisition = new QxrdSynchronizedAcquisition(this);
+  m_SynchronizedAcquisition = new QxrdSynchronizedAcquisition(saver, this);
 
   connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged(double)));
   connect(prop_BinningMode(), SIGNAL(valueChanged(int,int)), this, SLOT(onBinningModeChanged(int)));

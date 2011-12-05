@@ -9,7 +9,7 @@ class QxrdRingSetFitParameters : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdRingSetFitParameters(QObject *parent = 0);
+  explicit QxrdRingSetFitParameters(QxrdSettingsSaver *saver, QObject *parent = 0);
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
@@ -47,6 +47,7 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
+  QxrdSettingsSaver     *m_Saver;
 
   QList<QxrdRingFitParametersPtr> m_Rings;
 };

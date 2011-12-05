@@ -2,9 +2,9 @@
 #include "qxrdringsetfitparameters.h"
 #include "qxrdmutexlocker.h"
 
-QxrdRingFitParameters::QxrdRingFitParameters(QxrdRingSetFitParameters *ringSet, double twoTheta) :
+QxrdRingFitParameters::QxrdRingFitParameters(QxrdSettingsSaver *saver, QxrdRingSetFitParameters *ringSet, double twoTheta) :
     QObject(ringSet),
-    m_TwoTheta(this, "twoTheta", twoTheta),
+    m_TwoTheta(saver, this, "twoTheta", twoTheta),
     m_RingSet(ringSet)
 {
 }

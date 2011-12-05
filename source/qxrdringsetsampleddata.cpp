@@ -5,9 +5,8 @@
 #include <QThread>
 #include "qxrdapplication.h"
 
-QxrdRingSetSampledData::QxrdRingSetSampledData(/*QxrdRingSetFitParametersPtr parms,*/ QObject *parent) :
-    QObject(parent)/*,
-    m_FitParms(parms)*/
+QxrdRingSetSampledData::QxrdRingSetSampledData(QxrdSettingsSaver *saver, QObject *parent) :
+    QObject(parent)
 {
 }
 

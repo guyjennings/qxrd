@@ -1,5 +1,6 @@
 #include "qcepproperty.h"
 #include "qxrdapplication.h"
+#include "qxrdsettingssaver.h"
 
 #include <QMutexLocker>
 #include <QSpinBox>
@@ -12,8 +13,9 @@
 #include <QSettings>
 #include <stdio.h>
 
-QcepProperty::QcepProperty(QObject *parent, const char *name)
+QcepProperty::QcepProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name)
   : QObject(),
+    m_Saver(saver),
     m_Mutex(QMutex::Recursive),
     m_Debug(false),
     m_IsStored(false),
@@ -78,13 +80,6 @@ int QcepProperty::debug() const
   return m_Debug;
 }
 
-QAtomicInt QcepProperty::m_ChangeCount = 0;
-
-int QcepProperty::getChangeCount()
-{
-  return m_ChangeCount.fetchAndStoreOrdered(0);
-}
-
 void QcepProperty::registerMetaTypes()
 {
   qRegisterMetaType< QcepDoubleVector >("QcepDoubleVector");
@@ -105,6 +100,11 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaTypeStreamOperators< QcepBoolList >("QcepBoolList");
   qRegisterMetaTypeStreamOperators< QcepIntList >("QcepIntList");
   qRegisterMetaTypeStreamOperators< QcepStringList >("QcepStringList");
+}
+
+void QcepProperty::setSaver(QxrdSettingsSaver *saver)
+{
+  m_Saver = saver;
 }
 
 void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings)
@@ -210,8 +210,8 @@ void QcepProperty::dumpMetaData(const QMetaObject *meta)
   }
 }
 
-QcepDoubleProperty::QcepDoubleProperty(QObject *parent, const char *name, double value)
-  : QcepProperty(parent, name),
+QcepDoubleProperty::QcepDoubleProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, double value)
+  : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
 {
@@ -268,7 +268,10 @@ void QcepDoubleProperty::setValue(double val)
     QMutexLocker lock(&m_Mutex);
 
     m_Value = val;
-    m_ChangeCount.fetchAndAddOrdered(1);
+
+    if (m_Saver) {
+      m_Saver->changed();
+    }
 
     emit valueChanged(m_Value, incIndex(1));
     emit valueChanged(tr("%1").arg(m_Value));
@@ -288,7 +291,10 @@ void QcepDoubleProperty::incValue(double step)
     QMutexLocker lock(&m_Mutex);
 
     m_Value += step;
-    m_ChangeCount.fetchAndAddOrdered(1);
+
+    if (m_Saver) {
+      m_Saver->changed();
+    }
 
     emit valueChanged(m_Value, incIndex(1));
     emit valueChanged(tr("%1").arg(m_Value));
@@ -388,8 +394,8 @@ void QcepDoublePropertyDoubleSpinBoxHelper::setValue(double value)
   emit valueChanged(value, m_Property->incIndex(1));
 }
 
-QcepIntProperty::QcepIntProperty(QObject *parent, const char *name, int value)
-  : QcepProperty(parent, name),
+QcepIntProperty::QcepIntProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, int value)
+  : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
 {
@@ -441,7 +447,10 @@ void QcepIntProperty::setValue(int val)
     }
 
     m_Value.fetchAndStoreOrdered(val);
-    m_ChangeCount.fetchAndAddOrdered(1);
+
+    if (m_Saver) {
+      m_Saver->changed();
+    }
 
     emit valueChanged(m_Value, incIndex(1));
     emit valueChanged(tr("%1").arg(m_Value));
@@ -458,7 +467,10 @@ void QcepIntProperty::incValue(int step)
 
   if (step) {
     m_Value.fetchAndAddOrdered(step);
-    m_ChangeCount.fetchAndAddOrdered(1);
+
+    if (m_Saver) {
+      m_Saver->changed();
+    }
 
     emit valueChanged(m_Value, incIndex(1));
     emit valueChanged(tr("%1").arg(m_Value));
@@ -629,8 +641,8 @@ void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value)
   emit currentIndexChanged(value, m_Property->incIndex(1));
 }
 
-QcepBoolProperty::QcepBoolProperty(QObject *parent, const char *name, bool value)
-  : QcepProperty(parent, name),
+QcepBoolProperty::QcepBoolProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, bool value)
+  : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
 {
@@ -683,7 +695,10 @@ void QcepBoolProperty::setValue(bool val)
     }
 
     m_Value.fetchAndStoreOrdered(val);
-    m_ChangeCount.fetchAndAddOrdered(1);
+
+    if (m_Saver) {
+      m_Saver->changed();
+    }
 
     emit valueChanged(m_Value, incIndex(1));
   }
@@ -776,8 +791,8 @@ void QcepBoolPropertyButtonHelper::setChecked(bool value)
   emit toggled(value, m_Property->incIndex(1));
 }
 
-QcepStringProperty::QcepStringProperty(QObject *parent, const char *name, QString value)
-  : QcepProperty(parent, name),
+QcepStringProperty::QcepStringProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QString value)
+  : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
 {
@@ -834,7 +849,10 @@ void QcepStringProperty::setValue(QString val)
     QMutexLocker lock(&m_Mutex);
 
     m_Value = val;
-    m_ChangeCount.fetchAndAddOrdered(1);
+
+    if (m_Saver) {
+      m_Saver->changed();
+    }
 
     emit valueChanged(m_Value, incIndex(1));
   }
@@ -940,8 +958,8 @@ void QcepStringPropertyLineEditHelper::setText(QString value)
   emit textEdited(value, m_Property->incIndex(1));
 }
 
-QcepDateTimeProperty::QcepDateTimeProperty(QObject *parent, const char *name, QDateTime value)
-  : QcepProperty(parent, name),
+QcepDateTimeProperty::QcepDateTimeProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QDateTime value)
+  : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
 {
@@ -999,7 +1017,10 @@ void QcepDateTimeProperty::setValue(QDateTime val)
     QMutexLocker lock(&m_Mutex);
 
     m_Value = val;
-    m_ChangeCount.fetchAndAddOrdered(1);
+
+    if (m_Saver) {
+      m_Saver->changed();
+    }
 
     emit valueChanged(m_Value, incIndex(1));
   }
@@ -1024,8 +1045,8 @@ void QcepDateTimeProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepDoubleListProperty::QcepDoubleListProperty(QObject *parent, const char *name, QcepDoubleList value)
-  : QcepProperty(parent, name),
+QcepDoubleListProperty::QcepDoubleListProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QcepDoubleList value)
+  : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
 {
@@ -1117,7 +1138,10 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
     QMutexLocker lock(&m_Mutex);
 
     m_Value = val;
-    m_ChangeCount.fetchAndAddOrdered(1);
+
+    if (m_Saver) {
+      m_Saver->changed();
+    }
 
     emit valueChanged(m_Value, incIndex(1));
   }
@@ -1140,8 +1164,8 @@ void QcepDoubleListProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepStringListProperty::QcepStringListProperty(QObject *parent, const char *name, QStringList value)
-  : QcepProperty(parent, name),
+QcepStringListProperty::QcepStringListProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QStringList value)
+  : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
 {
@@ -1233,7 +1257,10 @@ void QcepStringListProperty::setValue(QStringList val)
     QMutexLocker lock(&m_Mutex);
 
     m_Value = val;
-    m_ChangeCount.fetchAndAddOrdered(1);
+
+    if (m_Saver) {
+      m_Saver->changed();
+    }
 
     emit valueChanged(m_Value, incIndex(1));
   }

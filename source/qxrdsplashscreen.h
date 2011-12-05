@@ -7,7 +7,7 @@ class QxrdSplashScreen : public QSplashScreen
 {
     Q_OBJECT
 public:
-    explicit QxrdSplashScreen();
+    explicit QxrdSplashScreen(QWidget *parent);
 
 signals:
 

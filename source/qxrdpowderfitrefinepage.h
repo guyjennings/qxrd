@@ -8,7 +8,7 @@ class QxrdPowderFitRefinePage : public QxrdPowderFitIdentifyPage
   Q_OBJECT
 
 public:
-  QxrdPowderFitRefinePage(QxrdDataProcessor *proc, QWidget *parent);
+  QxrdPowderFitRefinePage(QxrdSettingsSaver *saver, QxrdDataProcessor *proc, QWidget *parent);
 
 public slots:
   void selectRefinePage();

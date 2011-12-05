@@ -15,7 +15,7 @@ class QxrdMaskData : public QcepImageData<short>
   Q_OBJECT
 
 public:
-  QxrdMaskData(QxrdAllocatorInterface *allocator, int typ, int width, int height, int def=0);
+  QxrdMaskData(QxrdSettingsSaver *saver, QxrdAllocatorInterface *allocator, int typ, int width, int height, int def=0);
   ~QxrdMaskData();
 
 public slots:

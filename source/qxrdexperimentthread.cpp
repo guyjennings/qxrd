@@ -94,7 +94,6 @@ QxrdExperimentPtr QxrdExperimentThread::experiment()
 
 void QxrdExperimentThread::run()
 {
-  QxrdSplashScreen splash;
   QxrdExperimentPtr doc;
 
   switch(m_ExperimentKind) {

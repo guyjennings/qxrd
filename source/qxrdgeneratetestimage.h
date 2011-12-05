@@ -14,7 +14,7 @@ class QxrdGenerateTestImage : public QObject
 {
   Q_OBJECT
 public:
-  QxrdGenerateTestImage(QxrdDataProcessorBase *proc, QxrdAllocatorInterface *alloc, QObject *parent);
+  QxrdGenerateTestImage(QxrdSettingsSaver *saver, QxrdDataProcessorBase *proc, QxrdAllocatorInterface *alloc, QObject *parent);
 
 public slots:
   void setDimension(int nc, int nr);

@@ -37,6 +37,12 @@ public slots:
 protected:
   void changeEvent(QEvent *e);
 
+private slots:
+  void populateRecentExperimentsMenu();
+
+private:
+  void setupRecentExperimentsMenu(QAction *action);
+
 private:
   Ui::QxrdWelcomeWindow *ui;
   QxrdApplication       *m_Application;
@@ -44,6 +50,8 @@ private:
   QSignalMapper         *m_SignalMapper;
   QLabel                *m_StatusMsg;
   QTimer                 m_StatusTimer;
+
+  QMenu                 *m_RecentExperimentsMenu;
 };
 
 #endif // QXRDWELCOMEWINDOW_H

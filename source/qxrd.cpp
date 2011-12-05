@@ -22,20 +22,22 @@ int main(int argc, char *argv[])
 
   QxrdApplication app(argc, argv);
 
-  QxrdSplashScreen splash;
+  QxrdSplashScreen *splash = NULL;
 
   if (app.get_GuiWanted()) {
-    splash.show();
+    splash = new QxrdSplashScreen(NULL);
+
+    splash->show();
     QFont f;
     f.setPointSize(14);
-    splash.setFont(f);
-    splash.showMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter);
+    splash->setFont(f);
+    splash->showMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter);
     app.processEvents();
   }
 
   int res = 0;
 
-  if (app.init((app.get_GuiWanted() ? &splash : NULL))) {
+  if (app.init((app.get_GuiWanted() ? splash : NULL))) {
 
     //  printf("App Constructed\n");
 
@@ -44,7 +46,7 @@ int main(int argc, char *argv[])
     }
 
     if (app.get_GuiWanted()) {
-      splash.finish(app.window());
+      splash->finish(app.window());
       res = app.exec();
     } else {
       app.processEvents();

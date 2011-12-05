@@ -33,7 +33,7 @@ class QxrdAcquisition : public QxrdAcquisitionOperations
   Q_OBJECT
 
 public:
-  QxrdAcquisition(QxrdExperiment *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator);
+  QxrdAcquisition(QxrdSettingsSaver *saver, QxrdExperiment *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator);
   ~QxrdAcquisition();
 
   class QxrdAcquisitionParameterPack

@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QSharedPointer>
+#include <QSplashScreen>
 #include "qxrddataprocessorthread.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdserverthread.h"
@@ -36,6 +37,8 @@ public:
   FILE* scanFile();
   void newScanFile(QString path);
 
+  QxrdSettingsSaver *saver();
+
 signals:
 
 public slots:
@@ -59,6 +62,8 @@ private:
   void openScanFile();
 
 public:  // Properties
+  QxrdSettingsSaver m_Saver;
+
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
   QCEP_INTEGER_PROPERTY(ExperimentKind)
 
@@ -95,6 +100,7 @@ public:  // Properties
 private:
   QxrdApplication                *m_Application;
   QxrdWindow                     *m_Window;
+  QSplashScreen                  *m_Splash;
   QxrdServerThread               *m_ServerThread;
   QxrdServer                     *m_Server;
   QxrdSimpleServerThread         *m_SimpleServerThread;

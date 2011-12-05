@@ -8,10 +8,11 @@ class QxrdDataProcessor : public QxrdDataProcessorThreaded
   Q_OBJECT
 
 public:
-  QxrdDataProcessor(QxrdExperiment *doc,
+  QxrdDataProcessor(QxrdSettingsSaver *saver,
+                    QxrdExperiment *doc,
                     QxrdAcquisition *acq,
                     QxrdAllocator *allocator,
-                    QxrdFileSaverThread *saver,
+                    QxrdFileSaverThread *filesaver,
                     QObject *parent=0);
   ~QxrdDataProcessor();
 };

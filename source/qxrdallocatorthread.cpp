@@ -4,9 +4,10 @@
 #include "qxrdacquisition.h"
 #include "qxrdapplication.h"
 
-QxrdAllocatorThread::QxrdAllocatorThread(/*QxrdAcquisitionPtr acq*/)
+QxrdAllocatorThread::QxrdAllocatorThread(QxrdSettingsSaver *saver)
   : QxrdThread(),
-    m_Allocator(NULL)
+    m_Allocator(NULL),
+    m_Saver(saver)
 {
 }
 
@@ -23,7 +24,7 @@ void QxrdAllocatorThread::run()
     g_Application->printMessage("Starting Allocator Thread");
   }
 
-  m_Allocator.fetchAndStoreOrdered(new QxrdAllocator(/*m_Acquisition*/));
+  m_Allocator.fetchAndStoreOrdered(new QxrdAllocator(m_Saver));
 
   int rc = exec();
 

@@ -37,7 +37,7 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   Q_OBJECT
 
 public:
-  QxrdWindow(QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent=0);
+  QxrdWindow(QxrdSettingsSaver *saver, QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent=0);
   virtual ~QxrdWindow();
   void onAcquisitionInit();
 
@@ -102,6 +102,7 @@ private slots:
   void integrationXUnitsChanged(int newXUnits);
   void onMessageWindowLinesChanged(int newVal);
   void onUpdateIntervalMsecChanged(int newVal);
+  void populateRecentExperimentsMenu();
 
 public:
   void readSettings(QSettings *settings, QString section);
@@ -126,10 +127,13 @@ private:
   void shrinkDockWidget(QDockWidget *dockWidget);
   void shrinkObject(QObject *obj);
 
+  void setupRecentExperimentsMenu(QAction *action);
+
 private:
   mutable QMutex                         m_Mutex;
   int                                    m_SettingsLoaded;
   QxrdApplication                       *m_Application;
+  QxrdSettingsSaver                     *m_Saver;
   QxrdExperiment                        *m_Experiment;
   QxrdAcquisition                       *m_Acquisition;
   QxrdDataProcessor                     *m_DataProcessor;
@@ -172,6 +176,8 @@ private:
   QxrdHighlighter                       *m_Highlighter;
 
   QString                                m_ScriptPath;
+
+  QMenu                                 *m_RecentExperimentsMenu;
 };
 
 typedef QSharedPointer<QxrdWindow> QxrdWindowPtr;

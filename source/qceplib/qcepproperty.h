@@ -20,11 +20,12 @@ class QDoubleSpinBox;
 class QLabel;
 class QAbstractButton;
 class QSettings;
+class QxrdSettingsSaver;
 
 class QcepProperty : public QObject {
   Q_OBJECT
 public:
-  QcepProperty(QObject *parent, const char *name);
+  QcepProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name);
 
   QString name() const;
 
@@ -39,14 +40,15 @@ public:
   int debug() const;
   void setDebug(int dbg);
 
+  void setSaver(QxrdSettingsSaver *saver);
+
   static void writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings);
   static void readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings);
   static void dumpMetaData(const QMetaObject *meta);
-  static int  getChangeCount();
 
 protected:
   mutable QMutex           m_Mutex;
-  static QAtomicInt        m_ChangeCount;
+  QxrdSettingsSaver       *m_Saver;
 
 private:
   int                      m_Debug;
@@ -59,7 +61,7 @@ private:
 class QcepDoubleProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleProperty(QObject *parent, const char *name, double value);
+  QcepDoubleProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, double value);
 
   double value() const;
   double defaultValue() const;
@@ -105,7 +107,7 @@ private:
 class QcepIntProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepIntProperty(QObject *parent, const char *name, int value);
+  QcepIntProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, int value);
 
   int value() const;
   int defaultValue() const;
@@ -171,7 +173,7 @@ private:
 class QcepBoolProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepBoolProperty(QObject *parent, const char *name, bool value);
+  QcepBoolProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, bool value);
 
   bool value() const;
   bool defaultValue() const;
@@ -214,7 +216,7 @@ private:
 class QcepStringProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringProperty(QObject *parent, const char *name, QString value);
+  QcepStringProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QString value);
 
   QString value() const;
   QString defaultValue() const;
@@ -278,7 +280,7 @@ private:
 class QcepDateTimeProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDateTimeProperty(QObject *parent, const char *name, QDateTime value);
+  QcepDateTimeProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QDateTime value);
 
   QDateTime value() const;
   QDateTime defaultValue() const;
@@ -301,7 +303,7 @@ private:
 class QcepDoubleListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleListProperty(QObject *parent, const char *name, QcepDoubleList value);
+  QcepDoubleListProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QcepDoubleList value);
 
   QcepDoubleList value() const;
   QcepDoubleList defaultValue() const;
@@ -326,7 +328,7 @@ private:
 class QcepStringListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringListProperty(QObject *parent, const char *name, QStringList value);
+  QcepStringListProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QStringList value);
 
   QStringList value() const;
   QStringList defaultValue() const;

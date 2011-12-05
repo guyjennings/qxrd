@@ -15,12 +15,13 @@
 #include <math.h>
 
 QxrdDataProcessor::QxrdDataProcessor
-    (QxrdExperiment *doc,
+    (QxrdSettingsSaver *saver,
+     QxrdExperiment *doc,
      QxrdAcquisition *acq,
      QxrdAllocator *allocator,
-     QxrdFileSaverThread *saver,
+     QxrdFileSaverThread *filesaver,
      QObject *parent)
-  : QxrdDataProcessorThreaded(doc, acq, allocator, saver, parent)
+  : QxrdDataProcessorThreaded(saver, doc, acq, allocator, filesaver, parent)
 {
 }
 

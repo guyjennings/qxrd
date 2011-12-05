@@ -1,9 +1,10 @@
 #include "qxrdacquisitionareadetector.h"
 
-QxrdAcquisitionAreaDetector::QxrdAcquisitionAreaDetector(QxrdExperiment *doc,
+QxrdAcquisitionAreaDetector::QxrdAcquisitionAreaDetector(QxrdSettingsSaver *saver,
+                                                         QxrdExperiment *doc,
                                                          QxrdDataProcessor *proc,
                                                          QxrdAllocator *allocator)
-  : QxrdAcquisition(doc, proc, allocator)
+  : QxrdAcquisition(saver, doc, proc, allocator)
 {
 }
 

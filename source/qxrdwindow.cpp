@@ -54,10 +54,11 @@
 #include <QMenu>
 #include <QDesktopWidget>
 
-QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent)
+QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver, QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent)
   : QMainWindow(parent),
     m_Mutex(QMutex::Recursive),
     m_SettingsLoaded(false),
+    m_Saver(saver),
     m_Application(app),
     m_Experiment(doc),
     m_Acquisition(acq),
@@ -112,8 +113,8 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisitio
   m_MaskDialog         = new QxrdMaskDialog(this, m_DataProcessor);
   m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
   m_IntegratorDialog   = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
-  m_InputFileBrowser   = new QxrdInputFileBrowser(m_DataProcessor, this);
-  m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_DataProcessor, this);
+  m_InputFileBrowser   = new QxrdInputFileBrowser(m_Experiment->saver(), m_DataProcessor, this);
+  m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_Experiment->saver(), m_DataProcessor, this);
   m_SliceDialog        = new QxrdSliceDialog(this);
   m_HistogramDialog    = new QxrdHistogramDialog(this);
   m_ImageInfoDialog    = new QxrdInfoDialog(this);
@@ -198,7 +199,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisitio
   connect(m_ActionNewExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseNewExperiment()));
   connect(m_ActionOpenExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseExistingExperiment()));
 
-  m_Application->setupRecentExperimentsMenu(m_ActionRecentExperiments);
+  setupRecentExperimentsMenu(m_ActionRecentExperiments);
 
   connect(m_ActionLoadData, SIGNAL(triggered()), this, SLOT(doLoadData()));
   connect(m_ActionSaveData, SIGNAL(triggered()), this, SLOT(doSaveData()));
@@ -554,6 +555,35 @@ bool QxrdWindow::wantToClose()
   return QMessageBox::question(this, tr("Really Close?"),
                                tr("Do you really want to close the window?"),
                                QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
+}
+
+void QxrdWindow::setupRecentExperimentsMenu(QAction *action)
+{
+  m_RecentExperimentsMenu = new QMenu(this);
+
+  action->setMenu(m_RecentExperimentsMenu);
+
+  connect(m_RecentExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateRecentExperimentsMenu()));
+}
+
+void QxrdWindow::populateRecentExperimentsMenu()
+{
+//  printMessage("Populating recent experiments menu");
+
+  m_RecentExperimentsMenu->clear();
+
+  QStringList recent = m_Application->get_RecentExperiments();
+
+  foreach (QString exp, recent) {
+    QAction *action = new QAction(exp, m_RecentExperimentsMenu);
+    QSignalMapper *mapper = new QSignalMapper(action);
+    connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
+    mapper->setMapping(action, exp);
+
+    connect(mapper, SIGNAL(mapped(const QString &)), m_Application, SLOT(openRecentExperiment(QString)));
+
+    m_RecentExperimentsMenu -> addAction(action);
+  }
 }
 
 QString QxrdWindow::timeStamp()
@@ -1121,7 +1151,7 @@ void QxrdWindow::allocatedMemoryChanged()
 
 void QxrdWindow::doRefineCenterTilt()
 {
-  m_PowderFitDialog = new QxrdPowderFitDialog(m_DataProcessor, this);
+  m_PowderFitDialog = new QxrdPowderFitDialog(m_Saver, m_DataProcessor, this);
   m_PowderFitDialog -> exec();
 }
 
