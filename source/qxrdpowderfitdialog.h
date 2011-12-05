@@ -7,7 +7,7 @@ class QxrdPowderFitDialog : public QxrdPowderFitResultsPage
 {
   Q_OBJECT
 public:
-  QxrdPowderFitDialog(QxrdDataProcessor *proc, QWidget *parent);
+  QxrdPowderFitDialog(QxrdSettingsSaver *saver, QxrdDataProcessor *proc, QWidget *parent);
 
 public slots:
   void displayPageChanged(int page);

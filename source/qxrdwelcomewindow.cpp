@@ -10,7 +10,8 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   ui(new Ui::QxrdWelcomeWindow),
   m_Application(app),
   m_InsertRow(4),
-  m_SignalMapper(NULL)
+  m_SignalMapper(NULL),
+  m_RecentExperimentsMenu(NULL)
 {
   ui->setupUi(this);
 
@@ -50,6 +51,8 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   foreach (QString recent, recents) {
     appendRecentExperiment(recent);
   }
+
+  setupRecentExperimentsMenu(ui->m_ActionOpenRecentExperiment);
 }
 
 QxrdWelcomeWindow::~QxrdWelcomeWindow()
@@ -69,6 +72,37 @@ void QxrdWelcomeWindow::changeEvent(QEvent *e)
   }
 }
 
+void QxrdWelcomeWindow::setupRecentExperimentsMenu(QAction *action)
+{
+  m_RecentExperimentsMenu = new QMenu(this);
+
+  action->setMenu(m_RecentExperimentsMenu);
+
+  connect(m_RecentExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateRecentExperimentsMenu()));
+}
+
+void QxrdWelcomeWindow::populateRecentExperimentsMenu()
+{
+//  printMessage("Populating recent experiments menu");
+
+  m_RecentExperimentsMenu->clear();
+
+  QStringList recent = m_Application->get_RecentExperiments();
+
+  foreach (QString exp, recent) {
+    printf("Recent experiment: %s\n", qPrintable(exp));
+
+    QAction *action = new QAction(exp, m_RecentExperimentsMenu);
+    QSignalMapper *mapper = new QSignalMapper(action);
+    connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
+    mapper->setMapping(action, exp);
+
+    connect(mapper, SIGNAL(mapped(const QString &)), m_Application, SLOT(openRecentExperiment(QString)));
+
+    m_RecentExperimentsMenu -> addAction(action);
+  }
+}
+
 void QxrdWelcomeWindow::appendRecentExperiment(QString title)
 {
   QxrdWelcomeRecentItem *item = new QxrdWelcomeRecentItem(this);
@@ -81,15 +115,15 @@ void QxrdWelcomeWindow::appendRecentExperiment(QString title)
 
   m_SignalMapper->setMapping(item, title);
 
-  QAction *recentAction = new QAction(this);
+//  QAction *recentAction = new QAction(this);
 
-  recentAction->setText(title);
+//  recentAction->setText(title);
 
-  ui->m_OpenRecentExperimentMenu -> addAction(recentAction);
+//  ui->m_OpenRecentExperimentMenu -> addAction(recentAction);
 
-  m_SignalMapper->setMapping(recentAction, title);
+//  m_SignalMapper->setMapping(recentAction, title);
 
-  connect(recentAction, SIGNAL(triggered()), m_SignalMapper, SLOT(map()));
+//  connect(recentAction, SIGNAL(triggered()), m_SignalMapper, SLOT(map()));
 }
 
 void QxrdWelcomeWindow::closeEvent ( QCloseEvent * event )

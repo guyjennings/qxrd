@@ -16,7 +16,7 @@ class QxrdFileBrowser : public QDockWidget, public Ui::QxrdFileBrowser
   Q_OBJECT
 
 public:
-  QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWidget *parent=0);
+  QxrdFileBrowser(QxrdSettingsSaver *saver, int isOutput, QxrdDataProcessor *processor, QWidget *parent=0);
 
 public:
   Q_PROPERTY(int browserFilter READ get_BrowserFilter WRITE set_BrowserFilter)
@@ -69,7 +69,7 @@ class QxrdInputFileBrowser : public QxrdFileBrowser
   Q_OBJECT
 
 public:
-  QxrdInputFileBrowser(QxrdDataProcessor *processor, QWidget *parent=0);
+  QxrdInputFileBrowser(QxrdSettingsSaver *saver, QxrdDataProcessor *processor, QWidget *parent=0);
 };
 
 class QxrdOutputFileBrowser : public QxrdFileBrowser
@@ -77,7 +77,7 @@ class QxrdOutputFileBrowser : public QxrdFileBrowser
   Q_OBJECT
 
 public:
-  QxrdOutputFileBrowser(QxrdDataProcessor *processor, QWidget *parent=0);
+  QxrdOutputFileBrowser(QxrdSettingsSaver *saver, QxrdDataProcessor *processor, QWidget *parent=0);
 };
 
 #endif // QXRDFILEBROWSER_H

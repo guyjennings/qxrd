@@ -4,16 +4,16 @@
 #include "qxrdacquisition.h"
 #include "qwt_math.h"
 
-QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdAcquisition *acq) :
+QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdSettingsSaver *saver, QxrdAcquisition *acq) :
   QObject(NULL),
-  m_SyncAcquisitionMode(this,"syncAcquisitionMode", 0),
-  m_SyncAcquisitionWaveform(this,"syncAcquisitionWaveform", 0),
-  m_SyncAcquisitionOutputChannel(this,"syncAcquisitionOutputChannel", 0),
-  m_SyncAcquisitionFlagChannel(this,"syncAcquisitionFlagChannel", 0),
-  m_SyncAcquisitionMinimum(this,"syncAcquisitionMinimum", 0.0),
-  m_SyncAcquisitionMaximum(this,"syncAcquisitionMaximum", 5.0),
-  m_SyncAcquisitionSymmetry(this,"syncAcquisitionSymmetry", 0.0),
-  m_SyncAcquisitionPhaseShift(this,"syncAcquisitionPhaseShift", 0.0),
+  m_SyncAcquisitionMode(saver, this,"syncAcquisitionMode", 0),
+  m_SyncAcquisitionWaveform(saver, this,"syncAcquisitionWaveform", 0),
+  m_SyncAcquisitionOutputChannel(saver, this,"syncAcquisitionOutputChannel", 0),
+  m_SyncAcquisitionFlagChannel(saver, this,"syncAcquisitionFlagChannel", 0),
+  m_SyncAcquisitionMinimum(saver, this,"syncAcquisitionMinimum", 0.0),
+  m_SyncAcquisitionMaximum(saver, this,"syncAcquisitionMaximum", 5.0),
+  m_SyncAcquisitionSymmetry(saver, this,"syncAcquisitionSymmetry", 0.0),
+  m_SyncAcquisitionPhaseShift(saver, this,"syncAcquisitionPhaseShift", 0.0),
   m_Acquisition(acq),
   m_AcquisitionParms(NULL),
   m_NIDAQPlugin(NULL),

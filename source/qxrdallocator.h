@@ -19,7 +19,7 @@ class QxrdAllocator : public QxrdAllocatorInterface
   Q_OBJECT
 
 public:
-  QxrdAllocator(QObject *parent=0);
+  QxrdAllocator(QxrdSettingsSaver *saver, QObject *parent=0);
   virtual ~QxrdAllocator();
 
 public:

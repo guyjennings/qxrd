@@ -14,19 +14,21 @@ QxrdExperiment::QxrdExperiment(QString path,
                                QSettings *settings,
                                QObject *parent) :
   QObject(parent),
-  m_ExperimentKind(this, "experimentKind", -1),
-  m_ExperimentFilePath(this, "experimentFilePath", path),
-  m_LogFilePath(this, "logFilePath", "qxrd.log"),
-  m_ScanFilePath(this, "scanFilePath", "qxrd.log"),
-  m_DetectorType(this,"detectorType", 1),
-  m_ProcessorType(this,"processorType", 0),
-  m_DefaultLayout(this,"defaultLayout",0),
-  m_RunSpecServer(this,"specServer", 1),
-  m_SpecServerPort(this,"specServerPort", -1),
-  m_RunSimpleServer(this,"simpleServer", 1),
-  m_SimpleServerPort(this,"simpleServerPort", 1234),
+  m_Saver(NULL, this),
+  m_ExperimentKind(&m_Saver, this, "experimentKind", -1),
+  m_ExperimentFilePath(&m_Saver, this, "experimentFilePath", path),
+  m_LogFilePath(&m_Saver, this, "logFilePath", "qxrd.log"),
+  m_ScanFilePath(&m_Saver, this, "scanFilePath", "qxrd.log"),
+  m_DetectorType(&m_Saver, this,"detectorType", 1),
+  m_ProcessorType(&m_Saver, this,"processorType", 0),
+  m_DefaultLayout(&m_Saver, this,"defaultLayout",0),
+  m_RunSpecServer(&m_Saver, this,"specServer", 1),
+  m_SpecServerPort(&m_Saver, this,"specServerPort", -1),
+  m_RunSimpleServer(&m_Saver, this,"simpleServer", 1),
+  m_SimpleServerPort(&m_Saver, this,"simpleServerPort", 1234),
   m_Application(app),
   m_Window(NULL),
+  m_Splash(NULL),
   m_ServerThread(NULL),
   m_Server(NULL),
   m_SimpleServerThread(NULL),
@@ -41,41 +43,23 @@ QxrdExperiment::QxrdExperiment(QString path,
   }
 }
 
+QxrdSettingsSaver *QxrdExperiment::saver()
+{
+  return &m_Saver;
+}
+
 bool QxrdExperiment::init()
 {
+  GUI_THREAD_CHECK;
+
+  if (m_Application->get_GuiWanted()) {
+    m_Splash = new QxrdSplashScreen(NULL);
+    m_Splash -> show();
+  }
+
   setObjectName("QxrdExperiment");
 
   QThread::currentThread()->setObjectName("doc");
-//  printf("application thread %p\n", thread());
-
-//  int detectorType = 0;
-
-//  int specServer = 0;
-//  int specServerPort = 0;
-//  int simpleServer = 0;
-//  int simpleServerPort = 0;
-
-//  QString currentExperiment = get_CurrentExperiment();
-
-//  if (currentExperiment.length()>0) {
-//    QSettings settings(currentExperiment, QSettings::IniFormat);
-
-//    detectorType = settings.value("application/detectorType").toInt();
-//    gCEPDebug = settings.value("application/debug").toInt();
-//    specServer = settings.value("application/runSpecServer").toInt();
-//    specServerPort = settings.value("application/specServerPort").toInt();
-//    simpleServer = settings.value("application/runSimpleServer").toInt();
-//    simpleServerPort = settings.value("application/simpleServerPort").toInt();
-//  } else {
-//    QxrdSettings settings;
-
-//    detectorType = settings.value("application/detectorType").toInt();
-//    gCEPDebug = settings.value("application/debug").toInt();
-//    specServer = settings.value("application/runSpecServer").toInt();
-//    specServerPort = settings.value("application/specServerPort").toInt();
-//    simpleServer = settings.value("application/runSimpleServer").toInt();
-//    simpleServerPort = settings.value("application/simpleServerPort").toInt();
-//  }
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing File Saver");
 
@@ -85,7 +69,7 @@ bool QxrdExperiment::init()
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing Data Processing");
 
-  m_DataProcessorThread = new QxrdDataProcessorThread(this, NULL, g_Application->allocator(), m_FileSaverThread);
+  m_DataProcessorThread = new QxrdDataProcessorThread(saver(), this, NULL, g_Application->allocator(), m_FileSaverThread);
   m_DataProcessorThread -> setObjectName("proc");
   m_DataProcessorThread -> start();
   m_DataProcessor = m_DataProcessorThread -> dataProcessor();
@@ -94,7 +78,7 @@ bool QxrdExperiment::init()
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing Data Acquisition");
 
-  m_AcquisitionThread = new QxrdAcquisitionThread(this, m_DataProcessor, g_Application->allocator(), get_DetectorType());
+  m_AcquisitionThread = new QxrdAcquisitionThread(saver(), this, m_DataProcessor, g_Application->allocator(), get_DetectorType());
   m_AcquisitionThread -> setObjectName("acqu");
   m_AcquisitionThread -> start();
   m_Acquisition = m_AcquisitionThread -> acquisition();
@@ -103,13 +87,13 @@ bool QxrdExperiment::init()
   m_FileSaverThread -> setAcquisition(m_Acquisition);
 
 
-//  if (g_Application->get_GuiWanted()) {
+  if (g_Application->get_GuiWanted()) {
     splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Main Window");
-    m_Window = new QxrdWindow(g_Application, this, m_Acquisition, m_DataProcessor, g_Application->allocator());
+    m_Window = new QxrdWindow(saver(), g_Application, this, m_Acquisition, m_DataProcessor, g_Application->allocator());
 
     m_DataProcessor -> setWindow(m_Window);
     m_Acquisition -> setWindow(m_Window);
-//  }
+  }
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading plugins");
 
@@ -195,12 +179,14 @@ QxrdExperiment::~QxrdExperiment()
 
 void QxrdExperiment::splashMessage(const char *msg)
 {
+  GUI_THREAD_CHECK;
+
   g_Application->printMessage(msg);
 
-//  if (m_Splash) {
-//    m_Splash->showMessage(msg, Qt::AlignBottom|Qt::AlignHCenter);
-//    g_Application->processEvents();
-//  }
+  if (m_Splash) {
+    m_Splash->showMessage(msg, Qt::AlignBottom|Qt::AlignHCenter);
+    g_Application->processEvents();
+  }
 }
 
 void QxrdExperiment::splashMessage(QString msg)

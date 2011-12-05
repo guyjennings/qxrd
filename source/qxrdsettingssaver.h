@@ -13,15 +13,18 @@ class QxrdSettingsSaver : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSettingsSaver(QObject *parent, QxrdApplication *app);
+  explicit QxrdSettingsSaver(QObject *parent, QObject *owner);
+  ~QxrdSettingsSaver();
+
+  void changed();
 
 public slots:
   void performSave();
 
 private:
   QMutex             m_Mutex;
-  QxrdApplication   *m_Application;
-  QAtomicInt         m_UpdateCount;
+  QObject           *m_Owner;
+  QAtomicInt         m_ChangeCount;
   QTimer             m_Timer;
   int                m_SaveDelay;
 };

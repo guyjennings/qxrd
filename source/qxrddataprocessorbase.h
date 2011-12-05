@@ -35,7 +35,7 @@ class QxrdDataProcessorBase : public QObject
   Q_OBJECT
 
 public:
-  QxrdDataProcessorBase(QxrdExperiment *doc, QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *saver, QObject *parent=0);
+  QxrdDataProcessorBase(QxrdSettingsSaver *saver, QxrdExperiment *doc, QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *filesaver, QObject *parent=0);
   ~QxrdDataProcessorBase();
 
 public:
@@ -299,6 +299,8 @@ public:
   void setAcquisition(QxrdAcquisition *acq);
   void setWindow(QxrdWindow *win);
 
+  QxrdSettingsSaver     *saver();
+
   QxrdDoubleImageDataPtr data() const;
   QxrdDoubleImageDataPtr darkImage() const;
   QxrdDoubleImageDataPtr gainMap() const;
@@ -371,6 +373,7 @@ private:
 
 protected:
   QxrdExperiment        *m_Experiment;
+  QxrdSettingsSaver     *m_Saver;
   QxrdWindow            *m_Window;
   QxrdAllocator         *m_Allocator;
   QxrdFileSaverThread   *m_FileSaverThread;

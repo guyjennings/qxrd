@@ -2,6 +2,7 @@
 #define QXRDDATAPROCESSORTHREAD_H
 
 #include "qxrdthread.h"
+#include "qxrdsettingssaver.h"
 #include <QDateTime>
 
 class QxrdAcquisition;
@@ -15,10 +16,11 @@ class QxrdDataProcessorThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdDataProcessorThread(QxrdExperiment *doc,
+  QxrdDataProcessorThread(QxrdSettingsSaver *saver,
+                          QxrdExperiment *doc,
                           QxrdAcquisition *acq,
                           QxrdAllocator *allocator,
-                          QxrdFileSaverThread *saver);
+                          QxrdFileSaverThread *filesaver);
   ~QxrdDataProcessorThread();
 
   void shutdown();
@@ -36,6 +38,7 @@ private:
   QAtomicPointer<QxrdDataProcessor>   m_DataProcessor;
   QAtomicPointer<QxrdAcquisition>     m_Acquisition;
   QAtomicPointer<QxrdExperiment>      m_Experiment;
+  QxrdSettingsSaver                  *m_Saver;
 };
 
 #endif // QXRDDATAPROCESSORTHREAD_H

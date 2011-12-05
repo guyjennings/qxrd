@@ -8,7 +8,8 @@ class QxrdAcquisitionSimulated : public QxrdAcquisition
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionSimulated(QxrdExperiment *doc,
+  QxrdAcquisitionSimulated(QxrdSettingsSaver *saver,
+                           QxrdExperiment *doc,
                            QxrdDataProcessor *proc,
                            QxrdAllocator *allocator);
 

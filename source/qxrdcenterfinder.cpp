@@ -6,18 +6,18 @@
 #include "qxrdmutexlocker.h"
 
 QxrdCenterFinder::QxrdCenterFinder
-    (QObject *parent)
+    (QxrdSettingsSaver *saver, QObject *parent)
   : QxrdDetectorGeometry(parent),
-    m_CenterX(this, "centerX", 0),
-    m_CenterY(this, "centerY", 0),
-    m_CenterStep(this, "centerStep", 1),
-    m_DetectorXPixelSize(this, "detectorXPixelSize", 200),
-    m_DetectorYPixelSize(this, "detectorYPixelSize", 200),
-    m_DetectorDistance(this, "detectorDistance", 1000),
-    m_Energy(this, "energy", 20000),
-    m_ImplementTilt(this,"implementTilt", false),
-    m_DetectorTilt(this, "detectorTilt", 0),
-    m_TiltPlaneRotation(this, "tiltPlaneRotation", 90)
+    m_CenterX(saver, this, "centerX", 0),
+    m_CenterY(saver, this, "centerY", 0),
+    m_CenterStep(saver, this, "centerStep", 1),
+    m_DetectorXPixelSize(saver, this, "detectorXPixelSize", 200),
+    m_DetectorYPixelSize(saver, this, "detectorYPixelSize", 200),
+    m_DetectorDistance(saver, this, "detectorDistance", 1000),
+    m_Energy(saver, this, "energy", 20000),
+    m_ImplementTilt(saver, this,"implementTilt", false),
+    m_DetectorTilt(saver, this, "detectorTilt", 0),
+    m_TiltPlaneRotation(saver, this, "tiltPlaneRotation", 90)
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 

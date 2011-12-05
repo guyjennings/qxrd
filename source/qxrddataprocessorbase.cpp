@@ -19,68 +19,70 @@
 #include <math.h>
 
 QxrdDataProcessorBase::QxrdDataProcessorBase(
+    QxrdSettingsSaver *saver,
     QxrdExperiment *doc,
     QxrdAcquisition *acq, QxrdAllocator *allocator,
-    QxrdFileSaverThread *saver, QObject *parent) :
+    QxrdFileSaverThread *filesaver, QObject *parent) :
 
   QObject(parent),
   //    m_ProcessorType(this,"processorType",0),
   //    m_ProcessorTypeName(this,"processorTypeName","processorType"),
-  m_OutputDirectory(this,"outputDirectory", ""),
-  m_FileName(this,"fileName",""),
-  m_DataPath(this,"dataPath", ""),
-  m_DarkImagePath(this, "darkImagePath", ""),
-  m_BadPixelsPath(this, "badPixelsPath", ""),
-  m_GainMapPath(this, "gainMapPath", ""),
-  m_MaskPath(this, "maskPath", ""),
-  m_ScriptPath(this, "scriptPath", ""),
-  m_PerformDarkSubtraction(this, "performDarkSubtraction", true),
-  m_SaveRawImages(this, "saveRawImages", true),
-  m_SaveDarkImages(this, "saveDarkImages", true),
-  m_PerformBadPixels(this, "performBadPixels", true),
-  m_PerformGainCorrection(this, "performGainCorrection", true),
-  m_SaveSubtracted(this, "saveSubtracted", true),
-  m_SaveAsText(this, "saveAsText", false),
-  m_SaveAsTextSeparator(this, "saveAsTextSeparator", " "),
-  m_SaveAsTextPerLine(this,"saveAsTextPerLine",16),
-  m_SaveOverflowFiles(this,"saveOverflowFiles",0),
-  m_PerformIntegration(this, "performIntegration", true),
-  m_DisplayIntegratedData(this, "displayIntegratedData", true),
-  m_SaveIntegratedData(this, "saveIntegratedData", true),
-  m_SaveIntegratedPath(this, "saveIntegratedPath", ""),
-  m_SaveDarkInSubdirectory(this,"saveDarkInSubdirectory",0),
-  m_SaveDarkSubdirectory(this,"saveDarkSubdirectory",""),
-  m_SaveRawInSubdirectory(this,"saveRawInSubdirectory",0),
-  m_SaveRawSubdirectory(this,"saveRawSubdirectory",""),
-  m_SaveSubtractedInSubdirectory(this,"saveSubtractedInSubdirectory",0),
-  m_SaveSubtractedSubdirectory(this,"saveSubtractedSubdirectory",""),
-  m_SaveIntegratedInSeparateFiles(this,"saveIntegratedInSeparateFiles",0),
-  m_SaveIntegratedInSubdirectory(this,"saveIntegratedInSubdirectory",0),
-  m_SaveIntegratedSubdirectory(this,"saveIntegratedSubdirectory",""),
-  m_PerformDarkSubtractionTime(this, "performDarkSubtractionTime", 0.01),
-  m_PerformBadPixelsTime(this, "performBadPixelsTime", 0.01),
-  m_PerformGainCorrectionTime(this, "performGainCorrectionTime", 0.01),
-  m_SaveSubtractedTime(this, "saveSubtractedTime", 0.1),
-  m_SaveAsTextTime(this, "saveAsTextTime", 0.1),
-  m_PerformIntegrationTime(this, "performIntegrationTime", 0.05),
-  m_DisplayIntegratedDataTime(this, "displayIntegratedDataTime", 0.2),
-  m_SaveIntegratedDataTime(this, "saveIntegratedDataTime", 0.01),
-  m_EstimatedProcessingTime(this, "estimatedProcessingTime", 0.1),
-  m_AveragingRatio(this, "averagingRatio", 0.1),
+  m_OutputDirectory(saver, this,"outputDirectory", ""),
+  m_FileName(saver, this,"fileName",""),
+  m_DataPath(saver, this,"dataPath", ""),
+  m_DarkImagePath(saver, this, "darkImagePath", ""),
+  m_BadPixelsPath(saver, this, "badPixelsPath", ""),
+  m_GainMapPath(saver, this, "gainMapPath", ""),
+  m_MaskPath(saver, this, "maskPath", ""),
+  m_ScriptPath(saver, this, "scriptPath", ""),
+  m_PerformDarkSubtraction(saver, this, "performDarkSubtraction", true),
+  m_SaveRawImages(saver, this, "saveRawImages", true),
+  m_SaveDarkImages(saver, this, "saveDarkImages", true),
+  m_PerformBadPixels(saver, this, "performBadPixels", true),
+  m_PerformGainCorrection(saver, this, "performGainCorrection", true),
+  m_SaveSubtracted(saver, this, "saveSubtracted", true),
+  m_SaveAsText(saver, this, "saveAsText", false),
+  m_SaveAsTextSeparator(saver, this, "saveAsTextSeparator", " "),
+  m_SaveAsTextPerLine(saver, this,"saveAsTextPerLine",16),
+  m_SaveOverflowFiles(saver, this,"saveOverflowFiles",0),
+  m_PerformIntegration(saver, this, "performIntegration", true),
+  m_DisplayIntegratedData(saver, this, "displayIntegratedData", true),
+  m_SaveIntegratedData(saver, this, "saveIntegratedData", true),
+  m_SaveIntegratedPath(saver, this, "saveIntegratedPath", ""),
+  m_SaveDarkInSubdirectory(saver, this,"saveDarkInSubdirectory",0),
+  m_SaveDarkSubdirectory(saver, this,"saveDarkSubdirectory",""),
+  m_SaveRawInSubdirectory(saver, this,"saveRawInSubdirectory",0),
+  m_SaveRawSubdirectory(saver, this,"saveRawSubdirectory",""),
+  m_SaveSubtractedInSubdirectory(saver, this,"saveSubtractedInSubdirectory",0),
+  m_SaveSubtractedSubdirectory(saver, this,"saveSubtractedSubdirectory",""),
+  m_SaveIntegratedInSeparateFiles(saver, this,"saveIntegratedInSeparateFiles",0),
+  m_SaveIntegratedInSubdirectory(saver, this,"saveIntegratedInSubdirectory",0),
+  m_SaveIntegratedSubdirectory(saver, this,"saveIntegratedSubdirectory",""),
+  m_PerformDarkSubtractionTime(saver, this, "performDarkSubtractionTime", 0.01),
+  m_PerformBadPixelsTime(saver, this, "performBadPixelsTime", 0.01),
+  m_PerformGainCorrectionTime(saver, this, "performGainCorrectionTime", 0.01),
+  m_SaveSubtractedTime(saver, this, "saveSubtractedTime", 0.1),
+  m_SaveAsTextTime(saver, this, "saveAsTextTime", 0.1),
+  m_PerformIntegrationTime(saver, this, "performIntegrationTime", 0.05),
+  m_DisplayIntegratedDataTime(saver, this, "displayIntegratedDataTime", 0.2),
+  m_SaveIntegratedDataTime(saver, this, "saveIntegratedDataTime", 0.01),
+  m_EstimatedProcessingTime(saver, this, "estimatedProcessingTime", 0.1),
+  m_AveragingRatio(saver, this, "averagingRatio", 0.1),
   //    m_FileName(this,"fileName",""),
-  m_MaskMinimumValue(this, "maskMinimumValue", 0),
-  m_MaskMaximumValue(this, "maskMaximumValue", 20000),
-  m_MaskCircleRadius(this, "maskCircleRadius", 10),
-  m_MaskSetPixels(this, "maskSetPixels", true),
-  m_CompressImages(this, "compressImages", false),
-  m_Average(this,"average",0.0),
-  m_AverageDark(this,"averageDark",0.0),
-  m_AverageRaw(this,"averageRaw",0.0),
+  m_MaskMinimumValue(saver, this, "maskMinimumValue", 0),
+  m_MaskMaximumValue(saver, this, "maskMaximumValue", 20000),
+  m_MaskCircleRadius(saver, this, "maskCircleRadius", 10),
+  m_MaskSetPixels(saver, this, "maskSetPixels", true),
+  m_CompressImages(saver, this, "compressImages", false),
+  m_Average(saver, this,"average",0.0),
+  m_AverageDark(saver, this,"averageDark",0.0),
+  m_AverageRaw(saver, this,"averageRaw",0.0),
   m_Mutex(QMutex::Recursive),
   m_Experiment(doc),
+  m_Saver(saver),
   m_Window(NULL),
   m_Allocator(allocator),
-  m_FileSaverThread(saver),
+  m_FileSaverThread(filesaver),
   m_Acquisition(acq),
   m_AcquiredInt16Images("acquiredInt16Images"),
   m_AcquiredInt32Images("acquiredInt32Images"),
@@ -102,13 +104,13 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     g_Application->printMessage("QxrdDataProcessorBase::QxrdDataProcessorBase");
   }
 
-  m_CenterFinder = new QxrdCenterFinder(this);
-  m_Integrator   = new QxrdIntegrator(this, m_Allocator, this);
-  m_GenerateTestImage = new QxrdGenerateTestImage(this, m_Allocator, this);
-  m_InitialRingSetFitParameters = new QxrdRingSetFitParameters(this);
-  m_RefinedRingSetFitParameters = new QxrdRingSetFitParameters(this);
-  m_InitialRingSetData = new QxrdRingSetSampledData(/*m_InitialRingSetFitParameters,*/ this);
-  m_RefinedRingSetData = new QxrdRingSetSampledData(/*m_RefinedRingSetFitParameters,*/ this);
+  m_CenterFinder = new QxrdCenterFinder(saver, this);
+  m_Integrator   = new QxrdIntegrator(saver, this, m_Allocator, this);
+  m_GenerateTestImage = new QxrdGenerateTestImage(saver, this, m_Allocator, this);
+  m_InitialRingSetFitParameters = new QxrdRingSetFitParameters(saver, this);
+  m_RefinedRingSetFitParameters = new QxrdRingSetFitParameters(saver, this);
+  m_InitialRingSetData = new QxrdRingSetSampledData(saver, /*m_InitialRingSetFitParameters,*/ this);
+  m_RefinedRingSetData = new QxrdRingSetSampledData(saver, /*m_RefinedRingSetFitParameters,*/ this);
 }
 
 QxrdFileSaverThread *QxrdDataProcessorBase::fileSaverThread() const
@@ -159,6 +161,11 @@ void QxrdDataProcessorBase::setWindow(QxrdWindow *win)
   m_Window = win;
   newData(m_Data, QxrdMaskDataPtr());
   newMask();
+}
+
+QxrdSettingsSaver *QxrdDataProcessorBase::saver()
+{
+  return m_Saver;
 }
 
 void QxrdDataProcessorBase::writeSettings(QSettings *settings, QString section)

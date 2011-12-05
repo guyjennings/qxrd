@@ -1,6 +1,6 @@
 #include "qxrdsplashscreen.h"
 
-QxrdSplashScreen::QxrdSplashScreen() :
-  QSplashScreen(QPixmap(":images/qxrd-splash-screen.png"))
+QxrdSplashScreen::QxrdSplashScreen(QWidget *parent) :
+  QSplashScreen(parent, QPixmap(":images/qxrd-splash-screen.png"))
 {
 }

@@ -1,8 +1,8 @@
 #include "qxrdfitparameter.h"
 #include "qxrdsettings.h"
 
-QxrdFitParameter::QxrdFitParameter(QObject *parent, const char *name, QVariant value) :
-    QcepDoubleProperty(parent, name, value.toDouble()),
+QxrdFitParameter::QxrdFitParameter(QxrdSettingsSaver *saver, QObject *parent, const char *name, QVariant value) :
+    QcepDoubleProperty(saver, parent, name, value.toDouble()),
     m_LowerLimit(0),
     m_UpperLimit(0),
     m_IsFitted(true),

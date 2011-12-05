@@ -64,8 +64,6 @@ public:
   QString normalizeExperimentName(QString filename);
   void setNewExperimentSettings(QSettings &settings, int type, QString filename);
 
-  void setupRecentExperimentsMenu(QAction *action);
-
 public slots:
   void doNewPerkinElmerAcquisition();
   void doNewPilatusAcquisition();
@@ -79,7 +77,6 @@ public slots:
   void openRecentExperiment(QString path);
 
   void openExperiment(int kind, QString path);
-  void populateRecentExperimentsMenu();
 
   void doAboutQxrd();
   void doOpenQXRDWebPage();
@@ -126,6 +123,7 @@ private:
   void shutdownThread(QxrdThread *thread);
 
 public:
+  QxrdSettingsSaver m_Saver;
 
 public:
   Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments STORED false)
@@ -168,8 +166,6 @@ public:
   QCEP_STRING_LIST_PROPERTY(FileList)
 
 private:
-  QMenu                          *m_RecentExperimentsMenu;
-
   QList<QxrdExperimentThreadPtr>    m_ExperimentThreads;
   QList<QxrdExperimentPtr>          m_Experiments;
 

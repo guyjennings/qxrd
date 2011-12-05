@@ -1,7 +1,7 @@
 #include "qxrdpowderfitdialog.h"
 
-QxrdPowderFitDialog::QxrdPowderFitDialog(QxrdDataProcessor *proc, QWidget *parent) :
-    QxrdPowderFitResultsPage(proc, parent)
+QxrdPowderFitDialog::QxrdPowderFitDialog(QxrdSettingsSaver *saver, QxrdDataProcessor *proc, QWidget *parent) :
+    QxrdPowderFitResultsPage(saver, proc, parent)
 {
   connect(m_PowderFitSteps, SIGNAL(currentChanged(int)), this, SLOT(displayPageChanged(int)));
   connect(m_IdNextStepButton, SIGNAL(clicked()), this, SLOT(selectRefinePage()));

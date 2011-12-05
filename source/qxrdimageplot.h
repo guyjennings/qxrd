@@ -128,6 +128,7 @@ public slots:
   void enableMaskPolygons();
 
 public:
+  void setSaver(QxrdSettingsSaver *saver);
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 

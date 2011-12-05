@@ -1,7 +1,7 @@
 #include "qxrdpowderfitresultspage.h"
 
-QxrdPowderFitResultsPage::QxrdPowderFitResultsPage(QxrdDataProcessor *proc, QWidget *parent) :
-    QxrdPowderFitRefinePage(proc, parent)
+QxrdPowderFitResultsPage::QxrdPowderFitResultsPage(QxrdSettingsSaver *saver, QxrdDataProcessor *proc, QWidget *parent) :
+    QxrdPowderFitRefinePage(saver, proc, parent)
 {
 }
 

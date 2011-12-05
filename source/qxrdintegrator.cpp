@@ -15,14 +15,14 @@
 
 #include <cmath>
 
-QxrdIntegrator::QxrdIntegrator(QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent)
+QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaver *saver, QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent)
   : QObject(parent),
-    m_Oversample(this, "oversample", 1),
-    m_IntegrationStep(this, "integrationStep", 0.001),
-    m_IntegrationNSteps(this, "integrationNSteps", 0),
-    m_IntegrationMinimum(this, "integrationMinimum", 0),
-    m_IntegrationMaximum(this, "integrationMaximum", 100000),
-    m_IntegrationXUnits(this, "integrationXUnits", IntegrateTTH),
+    m_Oversample(saver, this, "oversample", 1),
+    m_IntegrationStep(saver, this, "integrationStep", 0.001),
+    m_IntegrationNSteps(saver, this, "integrationNSteps", 0),
+    m_IntegrationMinimum(saver, this, "integrationMinimum", 0),
+    m_IntegrationMaximum(saver, this, "integrationMaximum", 100000),
+    m_IntegrationXUnits(saver, this, "integrationXUnits", IntegrateTTH),
     m_DataProcessor(proc),
     m_Allocator(alloc),
     m_IntegratorCache(NULL)

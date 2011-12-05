@@ -7,6 +7,7 @@
 
 #include "qcepdebug.h"
 
+#define GUI_THREAD_CHECK Q_ASSERT(QThread::currentThread() == g_Application->thread())
 #define THREAD_CHECK Q_ASSERT(QThread::currentThread() == thread())
 
 #define INVOKE_CHECK(res) if(!res) { printf("Invoke failed File %s, Line %d\n", __FILE__, __LINE__); }

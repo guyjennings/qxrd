@@ -8,11 +8,11 @@
 #include "qxrdfilebrowserview.h"
 #include "qxrdapplication.h"
 
-QxrdFileBrowser::QxrdFileBrowser(int isOutput, QxrdDataProcessor *processor, QWidget *parent)
+QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaver *saver, int isOutput, QxrdDataProcessor *processor, QWidget *parent)
   : QDockWidget(parent),
-    m_BrowserFilter(this, "browserFilter",1),
-    m_BrowserSelector(this, "browserSelector",""),
-    m_RootDirectory(this, "rootDirectory",""),
+    m_BrowserFilter(saver, this, "browserFilter",1),
+    m_BrowserSelector(saver, this, "browserSelector",""),
+    m_RootDirectory(saver, this, "rootDirectory",""),
     m_IsOutput(isOutput),
     m_Processor(processor),
     m_Model(NULL)
@@ -417,13 +417,13 @@ void QxrdFileBrowser::onModelReset()
   m_FileBrowser->resizeRowsToContents();
 }
 
-QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
-  : QxrdFileBrowser(false, processor, parent)
+QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdSettingsSaver *saver, QxrdDataProcessor *processor, QWidget *parent)
+  : QxrdFileBrowser(saver, false, processor, parent)
 {
 }
 
-QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdDataProcessor *processor, QWidget *parent)
-  : QxrdFileBrowser(true, processor, parent)
+QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdSettingsSaver *saver, QxrdDataProcessor *processor, QWidget *parent)
+  : QxrdFileBrowser(saver, true, processor, parent)
 {
 }
 

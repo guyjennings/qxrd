@@ -90,19 +90,20 @@ QStringList QxrdApplication::makeStringList(int argc, char **argv)
 
 QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
-    m_RecentExperiments(this, "recentExperiments", QStringList()),
-    m_RecentExperimentsSize(this,"recentExperimentsSize", 8),
-    m_CurrentExperiment(this, "currentExperiment", ""),
-    m_Debug(this,"debug", 0),
-    m_FreshStart(this,"freshStart", 0),
-    m_FileBrowserLimit(this, "fileBrowserLimit", 0),
-    m_MessageWindowLines(this, "messageWindowLines", 1000),
-    m_UpdateIntervalMsec(this, "updateIntervalMsec", 1000),
-    m_Argc(this, "argc", argc),
-    m_Argv(this, "argv", makeStringList(argc, argv)),
-    m_GuiWanted(this, "guiWanted", 1),
-    m_CmdList(this, "cmdList", QStringList()),
-    m_FileList(this, "fileList", QStringList()),
+    m_Saver(NULL, this),
+    m_RecentExperiments(&m_Saver, this, "recentExperiments", QStringList()),
+    m_RecentExperimentsSize(&m_Saver, this,"recentExperimentsSize", 8),
+    m_CurrentExperiment(&m_Saver, this, "currentExperiment", ""),
+    m_Debug(&m_Saver, this,"debug", 0),
+    m_FreshStart(NULL, this,"freshStart", 0),
+    m_FileBrowserLimit(&m_Saver, this, "fileBrowserLimit", 0),
+    m_MessageWindowLines(&m_Saver, this, "messageWindowLines", 1000),
+    m_UpdateIntervalMsec(&m_Saver, this, "updateIntervalMsec", 1000),
+    m_Argc(NULL, this, "argc", argc),
+    m_Argv(NULL, this, "argv", makeStringList(argc, argv)),
+    m_GuiWanted(NULL, this, "guiWanted", 1),
+    m_CmdList(NULL, this, "cmdList", QStringList()),
+    m_FileList(NULL, this, "fileList", QStringList()),
     m_WelcomeWindow(NULL),
     m_AllocatorThread(NULL),
     m_SettingsSaverThread(NULL),
@@ -200,7 +201,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     }
   }
 
-  m_AllocatorThread = new QxrdAllocatorThread();
+  m_AllocatorThread = new QxrdAllocatorThread(&m_Saver);
   m_AllocatorThread -> setObjectName("alloc");
   m_AllocatorThread -> start();
   m_Allocator = m_AllocatorThread -> allocator();
@@ -214,12 +215,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
 bool QxrdApplication::init(QSplashScreen *splash)
 {
-  m_WelcomeWindow = new QxrdWelcomeWindow(this);
-
   readSettings();
 
+  m_WelcomeWindow = new QxrdWelcomeWindow(this);
   m_WelcomeWindow -> show();
-
 
   if (get_FreshStart()) {
     QxrdFreshStartDialog *fresh = new QxrdFreshStartDialog();
@@ -298,7 +297,7 @@ QxrdApplication::~QxrdApplication()
 //  m_AllocatorThread -> deleteLater();
 //  m_ScriptEngineThread -> deleteLater();
 
-  writeDefaultSettings();
+//  writeDefaultSettings();
 
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdApplication::~QxrdApplication finished");
@@ -905,33 +904,6 @@ QString QxrdApplication::newPilatusExperiment(QString path)
     return path;
   } else {
     return QString();
-  }
-}
-
-void QxrdApplication::setupRecentExperimentsMenu(QAction *action)
-{
-  m_RecentExperimentsMenu = new QMenu();
-
-  action->setMenu(m_RecentExperimentsMenu);
-
-  connect(m_RecentExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateRecentExperimentsMenu()));
-}
-
-void QxrdApplication::populateRecentExperimentsMenu()
-{
-//  printMessage("Populating recent experiments menu");
-
-  m_RecentExperimentsMenu->clear();
-
-  foreach (QString exp, get_RecentExperiments()) {
-    QAction *action = new QAction(exp, m_RecentExperimentsMenu);
-    QSignalMapper *mapper = new QSignalMapper(action);
-    connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(action, exp);
-
-    connect(mapper, SIGNAL(mapped(const QString &)), this, SLOT(openRecentExperiment(QString)));
-
-    m_RecentExperimentsMenu -> addAction(action);
   }
 }
 

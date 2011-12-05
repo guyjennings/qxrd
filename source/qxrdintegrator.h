@@ -19,7 +19,7 @@ class QxrdIntegrator : public QObject
   Q_OBJECT
 
 public:
-  QxrdIntegrator(QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent=0);
+  QxrdIntegrator(QxrdSettingsSaver *saver, QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent=0);
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
