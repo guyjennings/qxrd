@@ -8,13 +8,26 @@
 #include "qxrdexperimentgenericanalysis.h"
 #include "qxrdsplashscreen.h"
 
+#include <stdio.h>
+
 QxrdExperimentThread::QxrdExperimentThread(QxrdExperimentKind kind, QString path, QxrdApplication *app) :
-  QxrdThread(app),
+  QxrdThread(),
   m_ExperimentKind(kind),
   m_ExperimentPath(path),
   m_Experiment(NULL),
   m_Application(app)
 {
+}
+
+QxrdExperimentThread::~QxrdExperimentThread()
+{
+  if (qcepDebug(DEBUG_APP)) {
+    m_Application->printMessage("QxrdExperimentThread::~QxrdExperimentThread");
+  }
+
+  ::fflush(stdout);
+
+  delete m_Experiment;
 }
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAcquisition(QString path, QxrdApplication *app)
@@ -83,7 +96,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentGenericAnalysis(QStri
   return res;
 }
 
-QxrdExperimentPtr QxrdExperimentThread::experiment()
+QxrdExperiment *QxrdExperimentThread::experiment()
 {
   while (m_Experiment == NULL) {
     msleep(100);
@@ -94,37 +107,49 @@ QxrdExperimentPtr QxrdExperimentThread::experiment()
 
 void QxrdExperimentThread::run()
 {
-  QxrdExperimentPtr doc;
+  QxrdExperiment *doc = NULL;
 
   switch(m_ExperimentKind) {
   case PerkinElmerAcquisition:
-    doc = QxrdExperimentPtr(new QxrdExperimentPerkinElmerAcquisition(m_ExperimentPath, m_Application));
+    doc = new QxrdExperimentPerkinElmerAcquisition(m_ExperimentPath, m_Application);
     break;
 
   case PilatusAcquisition:
-    doc = QxrdExperimentPtr(new QxrdExperimentPilatusAcquisition(m_ExperimentPath, m_Application));
+    doc = new QxrdExperimentPilatusAcquisition(m_ExperimentPath, m_Application);
     break;
 
   case SimulatedAcquisition:
-    doc = QxrdExperimentPtr(new QxrdExperimentSimulatedAcquisition(m_ExperimentPath, m_Application));
+    doc = new QxrdExperimentSimulatedAcquisition(m_ExperimentPath, m_Application);
     break;
 
   case PerkinElmerAnalysis:
-    doc = QxrdExperimentPtr(new QxrdExperimentPerkinElmerAnalysis(m_ExperimentPath, m_Application));
+    doc = new QxrdExperimentPerkinElmerAnalysis(m_ExperimentPath, m_Application);
     break;
 
   case PilatusAnalysis:
-    doc = QxrdExperimentPtr(new QxrdExperimentPilatusAnalysis(m_ExperimentPath, m_Application));
+    doc = new QxrdExperimentPilatusAnalysis(m_ExperimentPath, m_Application);
     break;
 
   case GenericAnalysis:
-    doc = QxrdExperimentPtr(new QxrdExperimentGenericAnalysis(m_ExperimentPath, m_Application));
+    doc = new QxrdExperimentGenericAnalysis(m_ExperimentPath, m_Application);
     break;
   }
 
-  m_Experiment = doc;
+  if (doc) {
+    m_Experiment = doc;
+
+    int rc = exec();
+
+    if (qcepDebug(DEBUG_THREADS)) {
+      m_Application->printMessage(tr("Experiment Thread Terminated with rc %1").arg(rc));
+    }
+  }
 }
 
 void QxrdExperimentThread::shutdown()
 {
+//  INVOKE_CHECK(QMetaObject::invokeMethod(m_Experiment, "shutdown", Qt::QueuedConnection));
+  exit();
+
+  wait();
 }

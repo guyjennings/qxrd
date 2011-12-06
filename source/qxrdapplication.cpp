@@ -25,6 +25,7 @@
 #include "qxrdfreshstartdialog.h"
 #include "qxrdsettings.h"
 #include "qxrdnewexperimentdialog.h"
+#include "qxrdexperimentthread.h"
 #include "qxrdexperimentperkinelmeracquisition.h"
 #include "qxrdexperimentperkinelmeranalysis.h"
 #include "qxrdexperimentsimulatedacquisition.h"
@@ -607,6 +608,10 @@ void QxrdApplication::shutdownThreads()
 //  shutdownThread(m_DataProcessorThread);
 //  shutdownThread(m_AllocatorThread);
 //  shutdownThread(m_FileSaverThread);
+
+  foreach(QxrdExperimentThreadPtr exp, m_ExperimentThreads) {
+    shutdownThread(exp/*.data()*/);
+  }
 }
 
 QxrdAllocator *QxrdApplication::allocator() const
@@ -923,7 +928,7 @@ void QxrdApplication::openRecentExperiment(QString path)
 void QxrdApplication::openedNewExperiment(QxrdExperimentThreadPtr docThread)
 {
   if (docThread) {
-    QxrdExperimentPtr doc = docThread->experiment();
+    QxrdExperiment *doc = docThread->experiment();
 
     QString path = doc->get_ExperimentFilePath();
     set_CurrentExperiment(path);

@@ -42,8 +42,6 @@ public:
 signals:
 
 public slots:
-  void editPreferences();
-
   void readSettings();
   void writeSettings();
   virtual void readSettings(QSettings *settings, QString section);
@@ -51,6 +49,8 @@ public slots:
 
   void splashMessage(const char *msg);
   void splashMessage(QString msg);
+
+  void shutdown();
 
 private:
   void logMessage(QString msg);
@@ -114,7 +114,5 @@ private:
   FILE                           *m_LogFile;
   FILE                           *m_ScanFile;
 };
-
-typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
 
 #endif // QXRDEXPERIMENT_H

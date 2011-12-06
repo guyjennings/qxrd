@@ -166,8 +166,8 @@ public:
   QCEP_STRING_LIST_PROPERTY(FileList)
 
 private:
-  QList<QxrdExperimentThreadPtr>    m_ExperimentThreads;
-  QList<QxrdExperimentPtr>          m_Experiments;
+  QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
+  QList<QxrdExperiment*>          m_Experiments;
 
   QxrdWelcomeWindow              *m_WelcomeWindow;
   QxrdAllocatorThread            *m_AllocatorThread;

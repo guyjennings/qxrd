@@ -7,7 +7,8 @@
 #include "qxrdexperiment.h"
 
 class QxrdExperimentThread;
-typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;
+//typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;
+typedef QxrdExperimentThread *QxrdExperimentThreadPtr;
 
 class QxrdExperimentThread : public QxrdThread
 {
@@ -23,6 +24,7 @@ public:
   } QxrdExperimentKind;
 
   QxrdExperimentThread(QxrdExperimentKind kind, QString path, QxrdApplication *app);
+  virtual ~QxrdExperimentThread();
 
   static QxrdExperimentThreadPtr newExperimentPerkinElmerAcquisition(QString path, QxrdApplication *app);
   static QxrdExperimentThreadPtr newExperimentPilatusAcquisition(QString path, QxrdApplication *app);
@@ -31,7 +33,7 @@ public:
   static QxrdExperimentThreadPtr newExperimentPilatusAnalysis(QString path, QxrdApplication *app);
   static QxrdExperimentThreadPtr newExperimentGenericAnalysis(QString path, QxrdApplication *app);
 
-  QxrdExperimentPtr experiment();
+  QxrdExperiment *experiment();
 
   void shutdown();
 
@@ -45,7 +47,7 @@ protected:
 private:
   QxrdExperimentKind m_ExperimentKind;
   QString            m_ExperimentPath;
-  QxrdExperimentPtr  m_Experiment;
+  QxrdExperiment    *m_Experiment;
   QxrdApplication   *m_Application;
 };
 

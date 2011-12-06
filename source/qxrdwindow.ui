@@ -927,6 +927,7 @@
     <addaction name="m_ActionSaveGainMap"/>
     <addaction name="m_ActionClearGainMap"/>
     <addaction name="separator"/>
+    <addaction name="m_ActionGlobalPreferences"/>
     <addaction name="m_ActionPreferences"/>
     <addaction name="m_ActionLoadPreferences"/>
     <addaction name="m_ActionSavePreferences"/>
@@ -1605,6 +1606,14 @@
    </property>
    <property name="toolTip">
     <string>Reopen a recent experiment...</string>
+   </property>
+  </action>
+  <action name="m_ActionGlobalPreferences">
+   <property name="text">
+    <string>Global Preferences...</string>
+   </property>
+   <property name="toolTip">
+    <string>Edir Global Preferences</string>
    </property>
   </action>
  </widget>

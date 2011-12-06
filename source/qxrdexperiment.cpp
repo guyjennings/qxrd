@@ -146,7 +146,7 @@ bool QxrdExperiment::init()
 
   if (m_Window) m_Window -> setScriptEngine(g_Application->scriptEngine());
 
-  connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
+  connect(m_Application, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading Preferences");
 
@@ -160,12 +160,14 @@ bool QxrdExperiment::init()
   QDir::setCurrent(QDir::homePath());
 #endif
 
-  g_Application->printMessage(tr("Current directory %1").arg(QDir::currentPath()));
+  m_Application->printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Windows");
 
-  if (g_Application->get_GuiWanted() && m_Window) {
+  if (m_Application->get_GuiWanted() && m_Window) {
     m_Window -> show();
+
+    m_Splash -> finish(m_Window);
   }
 
   return true;
@@ -173,8 +175,19 @@ bool QxrdExperiment::init()
 
 QxrdExperiment::~QxrdExperiment()
 {
+  if (qcepDebug(DEBUG_APP)) {
+    m_Application->printMessage("QxrdExperiment::~QxrdExperiment");
+  }
+
   closeScanFile();
   closeLogFile();
+}
+
+void QxrdExperiment::shutdown()
+{
+  if (qcepDebug(DEBUG_APP)) {
+    m_Application->printMessage("QxrdExperiment::shutdown()");
+  }
 }
 
 void QxrdExperiment::splashMessage(const char *msg)
@@ -335,11 +348,4 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 
     QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
   }
-}
-
-void QxrdExperiment::editPreferences()
-{
-  QxrdPreferencesDialog prefs(this, m_Window);
-
-  prefs.exec();
 }

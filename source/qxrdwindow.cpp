@@ -192,7 +192,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver, QxrdApplication *app, QxrdExper
 
   connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
   connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
-  connect(m_ActionPreferences, SIGNAL(triggered()), m_Experiment, SLOT(editPreferences()));
+  connect(m_ActionGlobalPreferences, SIGNAL(triggered()), m_Application, SLOT(editGlobalPreferences()));
+  connect(m_ActionPreferences, SIGNAL(triggered()), this, SLOT(doEditPreferences()));
   connect(m_ActionLoadPreferences, SIGNAL(triggered()), m_Application, SLOT(doLoadPreferences()));
   connect(m_ActionSavePreferences, SIGNAL(triggered()), m_Application, SLOT(doSavePreferences()));
 
@@ -288,8 +289,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver, QxrdApplication *app, QxrdExper
   connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(autoScale()));
   connect(m_IntegratorMeasureButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableMeasuring()));
 
-  connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), m_Experiment, SLOT(editPreferences()));
-  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), m_Experiment, SLOT(editPreferences()));
+  connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
+  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
 
   connect(m_ActionAboutQXRD, SIGNAL(triggered()), m_Application, SLOT(doAboutQxrd()));
   connect(m_ActionOpenQXRDWebPage, SIGNAL(triggered()), m_Application, SLOT(doOpenQXRDWebPage()));
@@ -314,7 +315,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver, QxrdApplication *app, QxrdExper
   connect(m_ActionClearIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearGraph()));
   connect(m_ActionClearSelectedIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearSelectedCurves()));
 
-  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), m_Experiment, SLOT(editPreferences()));
+  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
   connect(m_DataProcessor->integrator()->prop_IntegrationXUnits(), SIGNAL(valueChanged(int,int)),
           this, SLOT(integrationXUnitsChanged(int)));
   integrationXUnitsChanged(m_DataProcessor->integrator()->get_IntegrationXUnits());
@@ -473,7 +474,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver, QxrdApplication *app, QxrdExper
 QxrdWindow::~QxrdWindow()
 {
   if (qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage("QxrdWindow::~QxrdWindow");
+    m_Application->printMessage("QxrdWindow::~QxrdWindow");
   }
   //  delete m_Data;
   //  delete m_NewData;
@@ -870,6 +871,8 @@ void QxrdWindow::newMask()
 
 void QxrdWindow::doEditPreferences()
 {
+  GUI_THREAD_CHECK;
+
   QxrdPreferencesDialog prefs(m_Experiment, this);
 
   prefs.exec();
@@ -877,6 +880,8 @@ void QxrdWindow::doEditPreferences()
 
 void QxrdWindow::doSaveData()
 {
+  GUI_THREAD_CHECK;
+
   if (m_DataProcessor->data() == NULL) {
     warningMessage("No data available to save");
   } else {
@@ -891,6 +896,8 @@ void QxrdWindow::doSaveData()
 
 void QxrdWindow::doLoadData()
 {
+  GUI_THREAD_CHECK;
+
   QString theFile = QFileDialog::getOpenFileName(
         this, "Load Data from...", m_DataProcessor -> get_DataPath());
 
@@ -901,6 +908,8 @@ void QxrdWindow::doLoadData()
 
 void QxrdWindow::doSaveDark()
 {
+  GUI_THREAD_CHECK;
+
   if (m_DataProcessor->darkImage() == NULL) {
     warningMessage("No dark image available to save");
   } else {
@@ -915,6 +924,8 @@ void QxrdWindow::doSaveDark()
 
 void QxrdWindow::doLoadDark()
 {
+  GUI_THREAD_CHECK;
+
   QString theFile = QFileDialog::getOpenFileName(
         this, "Load Dark Data from...", m_DataProcessor -> get_DataPath());
 
@@ -925,6 +936,8 @@ void QxrdWindow::doLoadDark()
 
 void QxrdWindow::doClearDark()
 {
+  GUI_THREAD_CHECK;
+
   if (m_DataProcessor->darkImage() == NULL) {
     warningMessage("No dark image available to clear");
   } else {
@@ -937,6 +950,8 @@ void QxrdWindow::doClearDark()
 
 void QxrdWindow::doSaveMask()
 {
+  GUI_THREAD_CHECK;
+
   if (m_DataProcessor->mask() == NULL) {
     warningMessage("No mask image to save");
   } else {
@@ -951,6 +966,8 @@ void QxrdWindow::doSaveMask()
 
 void QxrdWindow::doLoadMask()
 {
+  GUI_THREAD_CHECK;
+
   QString theFile = QFileDialog::getOpenFileName(
         this, "Load Mask from...", m_DataProcessor -> get_DataPath());
 
@@ -961,6 +978,8 @@ void QxrdWindow::doLoadMask()
 
 void QxrdWindow::doClearMask()
 {
+  GUI_THREAD_CHECK;
+
   if (m_DataProcessor->mask() == NULL) {
     warningMessage("No mask image available to clear");
   } else {
@@ -973,6 +992,8 @@ void QxrdWindow::doClearMask()
 
 void QxrdWindow::doSaveBadPixels()
 {
+  GUI_THREAD_CHECK;
+
   if (m_DataProcessor->badPixels() == NULL) {
     warningMessage("No Bad Pixel data to save");
   } else {
@@ -987,6 +1008,8 @@ void QxrdWindow::doSaveBadPixels()
 
 void QxrdWindow::doLoadBadPixels()
 {
+  GUI_THREAD_CHECK;
+
   QString theFile = QFileDialog::getOpenFileName(
         this, "Load Bad Pixel Map from...", m_DataProcessor -> get_DataPath());
 
@@ -997,6 +1020,8 @@ void QxrdWindow::doLoadBadPixels()
 
 void QxrdWindow::doClearBadPixels()
 {
+  GUI_THREAD_CHECK;
+
   if (m_DataProcessor->badPixels() == NULL) {
     warningMessage("No Bad Pixel data to clear");
   } else {
@@ -1009,6 +1034,8 @@ void QxrdWindow::doClearBadPixels()
 
 void QxrdWindow::doSaveGainMap()
 {
+  GUI_THREAD_CHECK;
+
   if (m_DataProcessor->gainMap() == NULL) {
     warningMessage("No Gain Map available to save");
   } else {
@@ -1023,6 +1050,8 @@ void QxrdWindow::doSaveGainMap()
 
 void QxrdWindow::doLoadGainMap()
 {
+  GUI_THREAD_CHECK;
+
   QString theFile = QFileDialog::getOpenFileName(
         this, "Load Pixel Gain Map from...", m_DataProcessor -> get_DataPath());
 
@@ -1033,6 +1062,8 @@ void QxrdWindow::doLoadGainMap()
 
 void QxrdWindow::doClearGainMap()
 {
+  GUI_THREAD_CHECK;
+
   if (m_DataProcessor->gainMap() == NULL) {
     warningMessage("No Gain Map available to clear");
   } else {
@@ -1045,6 +1076,8 @@ void QxrdWindow::doClearGainMap()
 
 void QxrdWindow::selectLogFile()
 {
+  GUI_THREAD_CHECK;
+
   QString theFile = QFileDialog::getSaveFileName(
         this, "Save Log File in", m_DataProcessor -> get_DataPath());
 
