@@ -5,7 +5,6 @@
 #include <QVector>
 #include <QMutex>
 #include "qcepproperty.h"
-#include "qxrdsettings.h"
 #include "qxrdacquisition.h"
 
 class QxrdNIDAQPluginInterface;

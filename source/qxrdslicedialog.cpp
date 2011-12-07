@@ -1,6 +1,7 @@
 #include "qxrdslicedialog.h"
 #include "ui_qxrdslicedialog.h"
 #include "qwt_plot_piecewise_curve.h"
+#include <QSettings>
 
 QxrdSliceDialog::QxrdSliceDialog(QWidget *parent) :
   QDockWidget(parent)

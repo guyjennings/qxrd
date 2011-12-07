@@ -5,7 +5,6 @@
 
 #include <QDockWidget>
 #include "qcepproperty.h"
-#include "qxrdsettings.h"
 #include "ui_qxrdfilebrowser.h"
 
 class QxrdFileBrowserModel;

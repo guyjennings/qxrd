@@ -3,7 +3,6 @@
 
 #include "qxrdfitparameter.h"
 #include "qxrdringfitparameters.h"
-#include "qxrdsettings.h"
 
 class QxrdRingSetFitParameters : public QObject
 {

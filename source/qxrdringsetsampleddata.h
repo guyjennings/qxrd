@@ -5,7 +5,6 @@
 #include "qcepmacros.h"
 #include "qxrdringsampleddata.h"
 //#include "qxrdringsetfitparameters.h"
-#include "qxrdsettings.h"
 #include "qxrdsettingssaver.h"
 
 class QxrdRingSetSampledData : public QObject

@@ -94,7 +94,8 @@ include("qxrd.levmar.pri")
 # include("qxrd-cuda.pri")
 HEADERS += TODO.h \
     qxrdapplication.h \
-    qxrdsettings.h \
+    qxrdglobalsettings.h \
+    qxrdexperimentsettings.h \
     qxrdimagedata.h \
     qxrdimagequeue.h \
     qxrdimagedataformathis.h \
@@ -228,7 +229,8 @@ HEADERS += TODO.h \
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
-    qxrdsettings.cpp \
+    qxrdglobalsettings.cpp \
+    qxrdexperimentsettings.cpp \
     qxrdimagedata.cpp \
     qxrdimagequeue.cpp \
     qxrdimagedataformathis.cpp \

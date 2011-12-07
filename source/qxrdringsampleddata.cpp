@@ -1,5 +1,6 @@
 #include "qxrdringsampleddata.h"
 #include <QVector>
+#include <QSettings>
 #include "qxrdmutexlocker.h"
 #include "qcepproperty.h"
 

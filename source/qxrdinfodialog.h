@@ -3,7 +3,6 @@
 
 #include <QDockWidget>
 #include "ui_qxrdinfodialog.h"
-#include "qxrdsettings.h"
 #include "qxrdimagedata.h"
 
 class QxrdInfoDialog : public QDockWidget, public Ui::QxrdInfoDialog

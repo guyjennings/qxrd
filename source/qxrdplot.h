@@ -2,7 +2,6 @@
 #define QXRDPLOT_H
 
 #include "qcepproperty.h"
-#include "qxrdsettings.h"
 #include <qwt_plot.h>
 
 class QwtPlotCurve;

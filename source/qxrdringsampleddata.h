@@ -6,8 +6,9 @@
 #include "qcepmacros.h"
 #include <QSharedPointer>
 #include "qwt_double_rect.h"
-#include "qxrdsettings.h"
 #include <QScriptEngine>
+
+class QSettings;
 
 class QxrdRingSampledData : public QObject
 {

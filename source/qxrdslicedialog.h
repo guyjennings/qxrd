@@ -3,7 +3,6 @@
 
 #include <QDockWidget>
 #include "ui_qxrdslicedialog.h"
-#include "qxrdsettings.h"
 #include "qxrdimagedata.h"
 #include "qwt_array.h"
 

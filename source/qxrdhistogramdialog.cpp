@@ -1,5 +1,6 @@
 #include "qxrdhistogramdialog.h"
 #include "ui_qxrdhistogramdialog.h"
+#include <QSettings>
 
 QxrdHistogramDialog::QxrdHistogramDialog(QWidget *parent) :
   QDockWidget(parent)

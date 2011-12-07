@@ -2,7 +2,6 @@
 #include "qxrdsynchronizedacquisition.h"
 //#include <QMutexLocker>
 #include "qxrdmutexlocker.h"
-#include "qxrdsettings.h"
 #include <QMetaProperty>
 #include <QStringList>
 #include <QThread>

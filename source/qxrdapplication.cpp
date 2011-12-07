@@ -23,7 +23,7 @@
 #include "qxrdprocessorinterface.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdfreshstartdialog.h"
-#include "qxrdsettings.h"
+#include "qxrdglobalsettings.h"
 #include "qxrdnewexperimentdialog.h"
 #include "qxrdexperimentthread.h"
 #include "qxrdexperimentperkinelmeracquisition.h"
@@ -120,21 +120,11 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   connect(&eventCounterTimer, SIGNAL(timeout()), this, SLOT(processEventCounter()));
   eventCounterTimer.start(10000);
 
-  setOrganizationName("bessrc");
+  setOrganizationName("cep");
   setOrganizationDomain("xor.aps.anl.gov");
   setApplicationName("qxrd");
 
-  QString currentExperiment = get_CurrentExperiment();
 
-  if (currentExperiment.length() > 0) {
-    QSettings settings(currentExperiment, QSettings::IniFormat);
-
-    QcepProperty::readSettings(this, &staticMetaObject, "application", &settings);
-  } else {
-    QxrdSettings settings;
-
-    QcepProperty::readSettings(this, &staticMetaObject, "application", &settings);
-  }
 
   printMessage("------ Starting QXRD Application ------");
 
@@ -164,6 +154,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   printMessage("QWT Version " QWT_VERSION_STR);
   printMessage(tr("QT Version %1").arg(qVersion()));
 
+  readSettings();
 
   //  printf("Argc = %d\n", argc);
 
@@ -493,17 +484,9 @@ QString QxrdApplication::rootPath()
 
 void QxrdApplication::readSettings()
 {
-  QString currentExperiment = get_CurrentExperiment();
+  QxrdGlobalSettings settings(this);
 
-  if (currentExperiment.length()>0) {
-    QSettings settings(currentExperiment, QSettings::IniFormat);
-
-    readSettings(&settings);
-  } else {
-    QxrdSettings settings;
-
-    readSettings(&settings);
-  }
+  readSettings(&settings);
 }
 
 void QxrdApplication::readSettings(QSettings *settings)
@@ -513,17 +496,9 @@ void QxrdApplication::readSettings(QSettings *settings)
 
 void QxrdApplication::writeSettings()
 {
-  QString currentExperiment = get_CurrentExperiment();
+  QxrdGlobalSettings settings(this);
 
-  if (currentExperiment.length()>0) {
-    QSettings settings(currentExperiment, QSettings::IniFormat);
-
-    writeSettings(&settings);
-  } else {
-    QxrdSettings settings;
-
-    writeSettings(&settings);
-  }
+  writeSettings(&settings);
 }
 
 void QxrdApplication::writeSettings(QSettings *settings)
@@ -543,9 +518,9 @@ void QxrdApplication::doLoadPreferences()
 
 void QxrdApplication::loadPreferences(QString path)
 {
-  QxrdSettings settings(path, QSettings::IniFormat);
+  QxrdGlobalSettings settings(path, QSettings::IniFormat);
 
-  QcepProperty::readSettings(this, &staticMetaObject, "application", &settings);
+  readSettings(&settings);
 }
 
 void QxrdApplication::doSavePreferences()
@@ -560,9 +535,9 @@ void QxrdApplication::doSavePreferences()
 
 void QxrdApplication::savePreferences(QString path)
 {
-  QxrdSettings settings(path, QSettings::IniFormat);
+  QxrdGlobalSettings settings(path, QSettings::IniFormat);
 
-  QcepProperty::writeSettings(this, &staticMetaObject, "application", &settings);
+  writeSettings(&settings);
 }
 
 void QxrdApplication::executeCommand(QString cmd)

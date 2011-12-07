@@ -8,6 +8,7 @@
 #include "qxrdsimpleserver.h"
 #include "qxrdscriptengine.h"
 #include "qxrdpreferencesdialog.h"
+#include "qxrdexperimentsettings.h"
 
 QxrdExperiment::QxrdExperiment(QString path,
                                QxrdApplication *app,
@@ -207,6 +208,11 @@ void QxrdExperiment::splashMessage(QString msg)
   splashMessage(qPrintable(msg));
 }
 
+void QxrdExperiment::printMessage(QString msg)
+{
+  m_Application->printMessage(qPrintable(msg));
+}
+
 void QxrdExperiment::openLogFile()
 {
   if (m_LogFile == NULL) {
@@ -307,7 +313,7 @@ void QxrdExperiment::readSettings()
 
     readSettings(&settings, "experiment");
   } else {
-    QxrdSettings settings;
+    QxrdExperimentSettings settings;
 
     readSettings(&settings, "experiment");
   }
@@ -333,7 +339,7 @@ void QxrdExperiment::writeSettings()
 
     writeSettings(&settings, "experiment");
   } else {
-    QxrdSettings settings;
+    QxrdExperimentSettings settings;
 
     writeSettings(&settings, "experiment");
   }

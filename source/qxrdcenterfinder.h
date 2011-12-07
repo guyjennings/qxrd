@@ -6,7 +6,6 @@
 #include <QObject>
 #include <QPen>
 #include "qcepproperty.h"
-#include "qxrdsettings.h"
 #include <qwt_double_rect.h>
 #include "qxrddetectorgeometry.h"
 

@@ -6,7 +6,6 @@
 #include <QObject>
 #include <QMutex>
 
-class QxrdSettings;
 class QxrdSynchronizedAcquisition;
 
 //class QxrdDataProcessor;

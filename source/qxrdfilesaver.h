@@ -9,7 +9,6 @@
 #include <QWaitCondition>
 
 #include "qcepproperty.h"
-#include "qxrdsettings.h"
 #include "qxrdimagequeue.h"
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"

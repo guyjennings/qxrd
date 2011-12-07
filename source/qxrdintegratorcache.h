@@ -6,7 +6,6 @@
 #include <QObject>
 #include "qxrdintegrateddata.h"
 #include "qcepproperty.h"
-#include "qxrdsettings.h"
 #include "qxrddataprocessor.h"
 #include "qxrdallocator.h"
 

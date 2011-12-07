@@ -5,7 +5,6 @@
 #include "qxrddisplaydialog.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
-#include "qxrdsettings.h"
 #include "qxrdimageplot.h"
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"

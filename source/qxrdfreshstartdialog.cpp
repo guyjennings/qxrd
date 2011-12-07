@@ -1,6 +1,6 @@
 #include "qxrdfreshstartdialog.h"
 #include "ui_qxrdfreshstartdialog.h"
-#include "qxrdsettings.h"
+#include "qxrdexperimentsettings.h"
 #include "qxrdacquisitionthread.h"
 #include <stdio.h>
 #include <QDir>
@@ -24,7 +24,7 @@ QxrdFreshStartDialog::QxrdFreshStartDialog(QWidget *parent) :
   QString logFilePath = "";
 
   {
-    QxrdSettings settings;
+    QxrdExperimentSettings settings;
 
     detectorType = settings.value("application/detectorType").toInt();
     debugLevel = settings.value("application/debug").toInt();
@@ -76,7 +76,7 @@ void QxrdFreshStartDialog::changeEvent(QEvent *e)
 
 void QxrdFreshStartDialog::accept()
 {
-  QxrdSettings settings;
+  QxrdExperimentSettings settings;
 
   settings.setValue("application/detectorType",    m_DetectorTypeCombo->currentIndex());
   settings.setValue("application/debug",           readDebugWidgets());

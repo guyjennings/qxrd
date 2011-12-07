@@ -3,7 +3,6 @@
 
 #include <QDockWidget>
 #include "ui_qxrdhistogramdialog.h"
-#include "qxrdsettings.h"
 #include "qxrdimagedata.h"
 #include "qwt_double_rect.h"
 
