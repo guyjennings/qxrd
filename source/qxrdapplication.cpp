@@ -95,6 +95,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_RecentExperiments(&m_Saver, this, "recentExperiments", QStringList()),
     m_RecentExperimentsSize(&m_Saver, this,"recentExperimentsSize", 8),
     m_CurrentExperiment(&m_Saver, this, "currentExperiment", ""),
+    m_CurrentDirectory(&m_Saver, this, "currentDirectory", QDir::homePath()),
     m_Debug(&m_Saver, this,"debug", 0),
     m_FreshStart(NULL, this,"freshStart", 0),
     m_FileBrowserLimit(&m_Saver, this, "fileBrowserLimit", 0),
@@ -115,6 +116,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_NIDAQPluginInterface(NULL),
     m_ResponseTimer(NULL)
 {
+  QDir::setCurrent(QDir::homePath());
+
   oldEventFilter = setEventFilter(myEventFilter);
 
   connect(&eventCounterTimer, SIGNAL(timeout()), this, SLOT(processEventCounter()));

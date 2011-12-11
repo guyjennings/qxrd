@@ -126,14 +126,17 @@ public:
   QxrdSettingsSaver m_Saver;
 
 public:
-  Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments STORED false)
+  Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)
   QCEP_STRING_LIST_PROPERTY(RecentExperiments)
 
-  Q_PROPERTY(int recentExperimentsSize READ get_RecentExperimentsSize WRITE set_RecentExperimentsSize STORED false)
+  Q_PROPERTY(int recentExperimentsSize READ get_RecentExperimentsSize WRITE set_RecentExperimentsSize)
   QCEP_INTEGER_PROPERTY(RecentExperimentsSize)
 
-  Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment STORED false)
+  Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment)
   QCEP_STRING_PROPERTY(CurrentExperiment)
+
+  Q_PROPERTY(QString currentDirectory READ get_CurrentDirectory WRITE set_CurrentDirectory)
+  QCEP_STRING_PROPERTY(CurrentDirectory)
 
   Q_PROPERTY(int    debug         READ get_Debug WRITE set_Debug)
   QCEP_INTEGER_PROPERTY(Debug)
