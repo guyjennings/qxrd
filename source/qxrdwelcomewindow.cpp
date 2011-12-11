@@ -90,7 +90,7 @@ void QxrdWelcomeWindow::populateRecentExperimentsMenu()
   QStringList recent = m_Application->get_RecentExperiments();
 
   foreach (QString exp, recent) {
-    printf("Recent experiment: %s\n", qPrintable(exp));
+//    printf("Recent experiment: %s\n", qPrintable(exp));
 
     QAction *action = new QAction(exp, m_RecentExperimentsMenu);
     QSignalMapper *mapper = new QSignalMapper(action);
