@@ -32,6 +32,7 @@
 #include "qxrdexperimentgenericanalysis.h"
 #include "qxrdexperimentpilatusacquisition.h"
 #include "qxrdexperimentpilatusanalysis.h"
+#include "qxrdexperimentsettings.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -96,6 +97,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_RecentExperimentsSize(&m_Saver, this,"recentExperimentsSize", 8),
     m_CurrentExperiment(&m_Saver, this, "currentExperiment", ""),
     m_CurrentDirectory(&m_Saver, this, "currentDirectory", QDir::homePath()),
+    m_OpenDirectly(&m_Saver, this,"openDirectly", false),
     m_Debug(&m_Saver, this,"debug", 0),
     m_FreshStart(NULL, this,"freshStart", 0),
     m_FileBrowserLimit(&m_Saver, this, "fileBrowserLimit", 0),
@@ -211,6 +213,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 bool QxrdApplication::init(QSplashScreen *splash)
 {
   readSettings();
+
+  if (get_OpenDirectly() && (get_CurrentExperiment().length()>0)) {
+    openExperiment(get_CurrentExperiment());
+  }
 
   m_WelcomeWindow = new QxrdWelcomeWindow(this);
   m_WelcomeWindow -> show();
@@ -738,7 +744,7 @@ void QxrdApplication::chooseNewExperiment()
   QxrdNewExperimentDialog *chooser =  new QxrdNewExperimentDialog(this);
 
   if (chooser->choose()) {
-    openExperiment(chooser->chosenKind(), chooser->chosenPath());
+    openExperiment(chooser->chosenPath());
   }
 }
 
@@ -750,35 +756,23 @@ void QxrdApplication::chooseExistingExperiment()
                                              "QXRD Experiments (*.qxrdp);;Other Files (*)");
 
   if (res.length() > 0) {
-    openExperiment(QxrdNewExperimentDialog::Existing, res);
+    openExperiment(res);
   }
 }
 
-void QxrdApplication::openExperiment(int kind, QString path)
+void QxrdApplication::openExperiment(QString path)
 {
-  printMessage("");
-  printMessage(tr("===== Open Experiment %1").arg(path));
-
-  switch(kind) {
-  case QxrdNewExperimentDialog::Analysis:
-    path = newAnalysisExperiment(path);
-    break;
-
-  case QxrdNewExperimentDialog::PerkinElmer:
-    path = newPerkinElmerExperiment(path);
-    break;
-
-  case QxrdNewExperimentDialog::Pilatus:
-    path = newPilatusExperiment(path);
-    break;
-  }
-
   if (path.length() > 0) {
+    QxrdExperimentSettings settings(path);
+
+    QxrdExperimentThreadPtr experiment = QxrdExperimentThread::newExperiment(path, this, &settings);
+
+    printMessage("");
+    printMessage(tr("===== Open Experiment %1").arg(path));
+
     appendRecentExperiment(path);
 
-    writeDefaultSettings();
-
-    loadPreferences(path);
+    openedNewExperiment(experiment);
 
     printMessage("");
     printMessage("New experiment loaded");
@@ -897,7 +891,7 @@ void QxrdApplication::openRecentExperiment(QString path)
   QFileInfo info(path);
 
   if (info.exists()) {
-    openExperiment(QxrdNewExperimentDialog::Existing, path);
+    openExperiment(path);
   } else {
     printMessage(tr("Experiment %1 does not exist").arg(path));
   }

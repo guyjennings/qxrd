@@ -15,6 +15,7 @@ class QxrdExperimentThread : public QxrdThread
   Q_OBJECT
 public:
   typedef enum {
+    FromSettings,
     PerkinElmerAcquisition,
     PilatusAcquisition,
     SimulatedAcquisition,
@@ -23,15 +24,16 @@ public:
     GenericAnalysis
   } QxrdExperimentKind;
 
-  QxrdExperimentThread(QxrdExperimentKind kind, QString path, QxrdApplication *app);
+  QxrdExperimentThread(QxrdExperimentKind kind, QString path, QxrdApplication *app, QSettings *settings);
   virtual ~QxrdExperimentThread();
 
-  static QxrdExperimentThreadPtr newExperimentPerkinElmerAcquisition(QString path, QxrdApplication *app);
-  static QxrdExperimentThreadPtr newExperimentPilatusAcquisition(QString path, QxrdApplication *app);
-  static QxrdExperimentThreadPtr newExperimentSimulatedAcquisition(QString path, QxrdApplication *app);
-  static QxrdExperimentThreadPtr newExperimentPerkinElmerAnalysis(QString path, QxrdApplication *app);
-  static QxrdExperimentThreadPtr newExperimentPilatusAnalysis(QString path, QxrdApplication *app);
-  static QxrdExperimentThreadPtr newExperimentGenericAnalysis(QString path, QxrdApplication *app);
+  static QxrdExperimentThreadPtr newExperiment(QString path, QxrdApplication *app, QSettings *settings);
+  static QxrdExperimentThreadPtr newExperimentPerkinElmerAcquisition(QString path, QxrdApplication *app, QSettings *settings=0);
+  static QxrdExperimentThreadPtr newExperimentPilatusAcquisition(QString path, QxrdApplication *app, QSettings *settings=0);
+  static QxrdExperimentThreadPtr newExperimentSimulatedAcquisition(QString path, QxrdApplication *app, QSettings *settings=0);
+  static QxrdExperimentThreadPtr newExperimentPerkinElmerAnalysis(QString path, QxrdApplication *app, QSettings *settings=0);
+  static QxrdExperimentThreadPtr newExperimentPilatusAnalysis(QString path, QxrdApplication *app, QSettings *settings=0);
+  static QxrdExperimentThreadPtr newExperimentGenericAnalysis(QString path, QxrdApplication *app, QSettings *settings=0);
 
   QxrdExperiment *experiment();
 
@@ -49,6 +51,7 @@ private:
   QString            m_ExperimentPath;
   QxrdExperiment    *m_Experiment;
   QxrdApplication   *m_Application;
+  QSettings         *m_Settings;
 };
 
 #endif // QXRDEXPERIMENTTHREAD_H
