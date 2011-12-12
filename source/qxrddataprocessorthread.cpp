@@ -3,14 +3,22 @@
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 
-QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaver *saver, QxrdExperiment *doc, QxrdAcquisition *acq, QxrdAllocator *allocator, QxrdFileSaverThread *filesaver)
+QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaver *saver,
+                                                 QxrdExperiment *doc,
+                                                 QxrdAcquisition *acq,
+                                                 QxrdAllocator *allocator,
+                                                 QxrdFileSaverThread *filesaver,
+                                                 QSettings *settings,
+                                                 QString section)
   : QxrdThread(),
     m_Allocator(allocator),
     m_FileSaverThread(filesaver),
     m_DataProcessor(NULL),
     m_Acquisition(acq),
     m_Experiment(doc),
-    m_Saver(saver)
+    m_Saver(saver),
+    m_Settings(settings),
+    m_Section(section)
 {
 }
 
@@ -29,7 +37,14 @@ void QxrdDataProcessorThread::run()
 
   QxrdDataProcessor *p;
 
-  p = new QxrdDataProcessor(m_Saver, m_Experiment, m_Acquisition, m_Allocator, m_FileSaverThread, NULL);
+  p = new QxrdDataProcessor(m_Saver,
+                            m_Experiment,
+                            m_Acquisition,
+                            m_Allocator,
+                            m_FileSaverThread,
+                            m_Settings,
+                            m_Section,
+                            NULL);
 
   m_DataProcessor.fetchAndStoreOrdered(p);
 

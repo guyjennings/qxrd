@@ -212,24 +212,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
 bool QxrdApplication::init(QSplashScreen *splash)
 {
-  readSettings();
-
-  if (get_OpenDirectly() && (get_CurrentExperiment().length()>0)) {
-    openExperiment(get_CurrentExperiment());
-  }
-
-  m_WelcomeWindow = new QxrdWelcomeWindow(this);
-  m_WelcomeWindow -> show();
-
-  if (get_FreshStart()) {
-    QxrdFreshStartDialog *fresh = new QxrdFreshStartDialog();
-
-    if (fresh->exec() == QDialog::Rejected) {
-      quit();
-      return false;
-    }
-  }
-
   QcepProperty::registerMetaTypes();
 
   setupTiffHandlers();
@@ -242,6 +224,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
   g_Application = this;
 
   loadPlugins();
+  readSettings();
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Scripting System");
 
@@ -264,6 +247,18 @@ bool QxrdApplication::init(QSplashScreen *splash)
   printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
   m_ResponseTimer = new QxrdResponseTimer(1000, this);
+
+  if (get_FreshStart()) {
+    QxrdFreshStartDialog *fresh = new QxrdFreshStartDialog();
+
+    fresh->exec();
+  }
+
+  if (get_OpenDirectly() && (get_CurrentExperiment().length()>0)) {
+    openExperiment(get_CurrentExperiment());
+  } else {
+    openWelcomeWindow();
+  }
 
   return true;
 }
@@ -305,6 +300,28 @@ QxrdApplication::~QxrdApplication()
   }
 }
 
+void QxrdApplication::openWelcomeWindow()
+{
+  GUI_THREAD_CHECK;
+
+  if (m_WelcomeWindow == NULL) {
+    m_WelcomeWindow = new QxrdWelcomeWindow(this);
+  }
+
+  m_WelcomeWindow -> show();
+}
+
+void QxrdApplication::closeWelcomeWindow()
+{
+  GUI_THREAD_CHECK;
+
+  if (m_WelcomeWindow) {
+    delete m_WelcomeWindow;
+
+    m_WelcomeWindow = NULL;
+  }
+}
+
 QxrdScriptEngine* QxrdApplication::scriptEngine()
 {
   return m_ScriptEngine;
@@ -312,6 +329,10 @@ QxrdScriptEngine* QxrdApplication::scriptEngine()
 
 QWidget* QxrdApplication::window()
 {
+//  if (m_WelcomeWindow == NULL) {
+//    openWelcomeWindow();
+//  }
+
   return m_WelcomeWindow;
 }
 
@@ -741,11 +762,12 @@ void QxrdApplication::writeDefaultSettings()
 
 void QxrdApplication::chooseNewExperiment()
 {
-  QxrdNewExperimentDialog *chooser =  new QxrdNewExperimentDialog(this);
+  openWelcomeWindow();
+//  QxrdNewExperimentDialog *chooser =  new QxrdNewExperimentDialog(this);
 
-  if (chooser->choose()) {
-    openExperiment(chooser->chosenPath());
-  }
+//  if (chooser->choose()) {
+//    openExperiment(chooser->chosenPath());
+//  }
 }
 
 void QxrdApplication::chooseExistingExperiment()
@@ -777,6 +799,8 @@ void QxrdApplication::openExperiment(QString path)
     printMessage("");
     printMessage("New experiment loaded");
     printMessage("");
+
+    closeWelcomeWindow();
   }
 }
 

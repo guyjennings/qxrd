@@ -16,9 +16,13 @@
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdSettingsSaver *saver,
                                                    QxrdExperiment *doc,
                                                    QxrdDataProcessor *proc,
-                                                   QxrdAllocator *allocator)
+                                                   QxrdAllocator *allocator,
+                                                   QSettings *settings,
+                                                   QString section)
   : QxrdAcquisition(saver, doc, proc, allocator)
 {
+  readSettings(settings, section);
+
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(onTimerTimeout()));
 }
 

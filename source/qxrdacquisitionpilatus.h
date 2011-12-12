@@ -7,7 +7,12 @@ class QxrdAcquisitionPilatus : public QxrdAcquisition
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionPilatus(QxrdSettingsSaver *saver, QxrdExperiment *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator);
+  QxrdAcquisitionPilatus(QxrdSettingsSaver *saver,
+                         QxrdExperiment *doc,
+                         QxrdDataProcessor *proc,
+                         QxrdAllocator *allocator,
+                         QSettings *settings,
+                         QString section);
 
 private slots:
   void initialize();

@@ -53,7 +53,15 @@
 #include <QMenu>
 #include <QDesktopWidget>
 
-QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver, QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent)
+QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
+                       QxrdApplication *app,
+                       QxrdExperiment *doc,
+                       QxrdAcquisition *acq,
+                       QxrdDataProcessor *proc,
+                       QxrdAllocator *alloc,
+                       QSettings *settings,
+                       QString section,
+                       QWidget *parent)
   : QMainWindow(parent),
     m_Mutex(QMutex::Recursive),
     m_SettingsLoaded(false),

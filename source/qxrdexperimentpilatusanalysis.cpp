@@ -1,8 +1,10 @@
 #include "qxrdexperimentpilatusanalysis.h"
+#include "qxrdexperimentthread.h"
 
 QxrdExperimentPilatusAnalysis::QxrdExperimentPilatusAnalysis(QString path, QxrdApplication *app, QSettings *settings, QObject *parent) :
     QxrdExperiment(path, app, settings, parent)
 {
+  set_ExperimentKind(QxrdExperimentThread::PilatusAnalysis);
 }
 
 void QxrdExperimentPilatusAnalysis::readSettings(QSettings *settings, QString section)

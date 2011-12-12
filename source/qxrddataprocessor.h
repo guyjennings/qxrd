@@ -13,6 +13,8 @@ public:
                     QxrdAcquisition *acq,
                     QxrdAllocator *allocator,
                     QxrdFileSaverThread *filesaver,
+                    QSettings *settings,
+                    QString section,
                     QObject *parent=0);
   ~QxrdDataProcessor();
 };

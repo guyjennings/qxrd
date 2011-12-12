@@ -29,7 +29,9 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaver *saver,
                                              QxrdExperiment *doc,
                                              QxrdDataProcessor *proc,
                                              QxrdAllocator *allocator,
-                                             int detectorType)
+                                             int detectorType,
+                                             QSettings *settings,
+                                             QString section)
   : QxrdThread(),
     m_Debug(true),
     m_Saver(saver),
@@ -37,7 +39,8 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaver *saver,
     m_Allocator(allocator),
     m_Acquisition(NULL),
     m_Processor(proc),
-    m_DetectorType(detectorType)
+    m_DetectorType(detectorType),
+    m_Settings(settings)
 {
 #ifdef HAVE_PERKIN_ELMER
   HINSTANCE xisllib;
@@ -72,17 +75,17 @@ void QxrdAcquisitionThread::run()
   switch(m_DetectorType) {
   case 0:
   default:
-    p = new QxrdAcquisitionSimulated(m_Saver, m_Experiment, m_Processor, m_Allocator);
+    p = new QxrdAcquisitionSimulated(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
     g_DetectorType = 0;
     break;
 
 #ifdef HAVE_PERKIN_ELMER
   case 1:
     if (g_PEAvailable) {
-      p = new QxrdAcquisitionPerkinElmer(m_Saver, m_Experiment, m_Processor, m_Allocator);
+      p = new QxrdAcquisitionPerkinElmer(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
       g_DetectorType = 1;
     } else {
-      p = new QxrdAcquisitionSimulated(m_Saver, m_Experiment, m_Processor, m_Allocator);
+      p = new QxrdAcquisitionSimulated(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
       g_DetectorType = 0;
     }
     break;
@@ -90,20 +93,20 @@ void QxrdAcquisitionThread::run()
 
 #ifdef HAVE_PILATUS
   case 2:
-    p = new QxrdAcquisitionPilatus(m_Saver, m_Experiment, m_Processor, m_Allocator);
+    p = new QxrdAcquisitionPilatus(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
     g_DetectorType = 2;
     break;
 #endif
 
 #ifdef HAVE_AREADETECTOR
   case 3:
-    p = new QxrdAcquisitionAreaDetector(m_Saver, m_Experiment, m_Processor, m_Allocator);
+    p = new QxrdAcquisitionAreaDetector(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
     g_DetectorType = 3;
     break;
 #endif
 
   case 4:
-    p = new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator);
+    p = new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
     g_DetectorType = 4;
     break;
   }

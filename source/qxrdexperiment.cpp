@@ -35,13 +35,14 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_SimpleServerThread(NULL),
   m_SimpleServer(NULL),
   m_AcquisitionThread(NULL),
+  m_Acquisition(NULL),
+  m_DataProcessorThread(NULL),
+  m_DataProcessor(NULL),
   m_FileSaverThread(NULL),
   m_LogFile(NULL),
   m_ScanFile(NULL)
 {
-  if (settings) {
-    QcepProperty::readSettings(this, &staticMetaObject, "experiment", settings);
-  }
+  readSettings(settings);
 }
 
 QxrdSettingsSaver *QxrdExperiment::saver()
@@ -49,7 +50,7 @@ QxrdSettingsSaver *QxrdExperiment::saver()
   return &m_Saver;
 }
 
-bool QxrdExperiment::init()
+bool QxrdExperiment::init(QSettings *settings)
 {
   GUI_THREAD_CHECK;
 
@@ -70,7 +71,13 @@ bool QxrdExperiment::init()
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing Data Processing");
 
-  m_DataProcessorThread = new QxrdDataProcessorThread(saver(), this, NULL, g_Application->allocator(), m_FileSaverThread);
+  m_DataProcessorThread = new QxrdDataProcessorThread(saver(),
+                                                      this,
+                                                      NULL,
+                                                      g_Application->allocator(),
+                                                      m_FileSaverThread,
+                                                      settings,
+                                                      "experiment/processor");
   m_DataProcessorThread -> setObjectName("proc");
   m_DataProcessorThread -> start();
   m_DataProcessor = m_DataProcessorThread -> dataProcessor();
@@ -79,7 +86,13 @@ bool QxrdExperiment::init()
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing Data Acquisition");
 
-  m_AcquisitionThread = new QxrdAcquisitionThread(saver(), this, m_DataProcessor, g_Application->allocator(), get_DetectorType());
+  m_AcquisitionThread = new QxrdAcquisitionThread(saver(),
+                                                  this,
+                                                  m_DataProcessor,
+                                                  g_Application->allocator(),
+                                                  get_DetectorType(),
+                                                  settings,
+                                                  "experiment/acquire");
   m_AcquisitionThread -> setObjectName("acqu");
   m_AcquisitionThread -> start();
   m_Acquisition = m_AcquisitionThread -> acquisition();
@@ -90,7 +103,14 @@ bool QxrdExperiment::init()
 
   if (g_Application->get_GuiWanted()) {
     splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Main Window");
-    m_Window = new QxrdWindow(saver(), g_Application, this, m_Acquisition, m_DataProcessor, g_Application->allocator());
+    m_Window = new QxrdWindow(saver(),
+                              g_Application,
+                              this,
+                              m_Acquisition,
+                              m_DataProcessor,
+                              g_Application->allocator(),
+                              settings,
+                              "experiment/window");
 
     m_DataProcessor -> setWindow(m_Window);
     m_Acquisition -> setWindow(m_Window);
@@ -151,7 +171,7 @@ bool QxrdExperiment::init()
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading Preferences");
 
-  readSettings();
+  readSettings(settings);
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading Background Images");
 
@@ -324,9 +344,17 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
   if (settings) {
     QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
-    m_Window       -> readSettings(settings, section+"/window");
-    m_Acquisition  -> readSettings(settings, section+"/acquire");
-    m_DataProcessor-> readSettings(settings, section+"/processor");
+    if (m_Window) {
+      m_Window       -> readSettings(settings, section+"/window");
+    }
+
+    if (m_Acquisition) {
+      m_Acquisition  -> readSettings(settings, section+"/acquire");
+    }
+
+    if (m_DataProcessor) {
+      m_DataProcessor-> readSettings(settings, section+"/processor");
+    }
   }
 }
 
@@ -348,9 +376,17 @@ void QxrdExperiment::writeSettings()
 void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 {
   if (settings) {
-    m_Window       -> writeSettings(settings, section+"/window");
-    m_Acquisition  -> writeSettings(settings, section+"/acquire");
-    m_DataProcessor-> writeSettings(settings, section+"/processor");
+    if (m_Window) {
+      m_Window       -> writeSettings(settings, section+"/window");
+    }
+
+    if (m_Acquisition) {
+      m_Acquisition  -> writeSettings(settings, section+"/acquire");
+    }
+
+    if (m_DataProcessor) {
+      m_DataProcessor-> writeSettings(settings, section+"/processor");
+    }
 
     QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
   }

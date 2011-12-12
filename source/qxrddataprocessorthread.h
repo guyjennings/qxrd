@@ -4,6 +4,7 @@
 #include "qxrdthread.h"
 #include "qxrdsettingssaver.h"
 #include <QDateTime>
+#include <QSettings>
 
 class QxrdAcquisition;
 class QxrdAllocator;
@@ -20,7 +21,10 @@ public:
                           QxrdExperiment *doc,
                           QxrdAcquisition *acq,
                           QxrdAllocator *allocator,
-                          QxrdFileSaverThread *filesaver);
+                          QxrdFileSaverThread *filesaver,
+                          QSettings *settings,
+                          QString section);
+
   ~QxrdDataProcessorThread();
 
   void shutdown();
@@ -39,6 +43,8 @@ private:
   QAtomicPointer<QxrdAcquisition>     m_Acquisition;
   QAtomicPointer<QxrdExperiment>      m_Experiment;
   QxrdSettingsSaver                  *m_Saver;
+  QSettings                          *m_Settings;
+  QString                             m_Section;
 };
 
 #endif // QXRDDATAPROCESSORTHREAD_H

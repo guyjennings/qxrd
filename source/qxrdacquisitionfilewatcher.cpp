@@ -6,9 +6,12 @@
 QxrdAcquisitionFileWatcher::QxrdAcquisitionFileWatcher(QxrdSettingsSaver *saver,
                                                        QxrdExperiment *doc,
                                                        QxrdDataProcessor *proc,
-                                                       QxrdAllocator *allocator) :
+                                                       QxrdAllocator *allocator,
+                                                       QSettings *settings,
+                                                       QString section) :
     QxrdAcquisition(saver, doc, proc, allocator)
 {
+  readSettings(settings, section);
 }
 
 void QxrdAcquisitionFileWatcher::initialize()

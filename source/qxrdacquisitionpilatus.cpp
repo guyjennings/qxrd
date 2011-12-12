@@ -1,8 +1,14 @@
 #include "qxrdacquisitionpilatus.h"
 
-QxrdAcquisitionPilatus::QxrdAcquisitionPilatus(QxrdSettingsSaver *saver, QxrdExperiment *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator)
+QxrdAcquisitionPilatus::QxrdAcquisitionPilatus(QxrdSettingsSaver *saver,
+                                               QxrdExperiment *doc,
+                                               QxrdDataProcessor *proc,
+                                               QxrdAllocator *allocator,
+                                               QSettings *settings,
+                                               QString section)
   : QxrdAcquisition(saver, doc, proc, allocator)
 {
+  readSettings(settings, section);
 }
 
 void QxrdAcquisitionPilatus::initialize()

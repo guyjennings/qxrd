@@ -20,9 +20,12 @@ QxrdDataProcessor::QxrdDataProcessor
      QxrdAcquisition *acq,
      QxrdAllocator *allocator,
      QxrdFileSaverThread *filesaver,
+     QSettings *settings,
+     QString section,
      QObject *parent)
   : QxrdDataProcessorThreaded(saver, doc, acq, allocator, filesaver, parent)
 {
+  readSettings(settings, section);
 }
 
 QxrdDataProcessor::~QxrdDataProcessor()

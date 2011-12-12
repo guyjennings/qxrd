@@ -78,6 +78,9 @@ public slots:
 
   void openExperiment(QString path);
 
+  void openWelcomeWindow();
+  void closeWelcomeWindow();
+
   void doAboutQxrd();
   void doOpenQXRDWebPage();
 

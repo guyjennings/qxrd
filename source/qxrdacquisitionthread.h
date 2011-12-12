@@ -5,6 +5,7 @@
 #include <QAtomicPointer>
 #include <QStringList>
 #include <QDateTime>
+#include <QSettings>
 
 class QxrdDataProcessor;
 class QxrdAllocator;
@@ -21,7 +22,10 @@ class QxrdAcquisitionThread : public QxrdThread
                         QxrdExperiment *doc,
                         QxrdDataProcessor *proc,
                         QxrdAllocator *allocator,
-                        int detectorType);
+                        int detectorType,
+                        QSettings *settings,
+                        QString section);
+
   ~QxrdAcquisitionThread();
 
   void initialize();
@@ -55,6 +59,8 @@ private:
   QAtomicPointer<QxrdAcquisition>     m_Acquisition;
   QxrdDataProcessor                  *m_Processor;
   int                                 m_DetectorType;
+  QSettings                          *m_Settings;
+  QString                             m_Section;
 };
 
 #endif

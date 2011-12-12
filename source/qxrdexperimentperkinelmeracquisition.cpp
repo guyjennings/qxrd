@@ -1,8 +1,13 @@
 #include "qxrdexperimentperkinelmeracquisition.h"
+#include "qxrdexperimentthread.h"
 
-QxrdExperimentPerkinElmerAcquisition::QxrdExperimentPerkinElmerAcquisition(QString path, QxrdApplication *app, QSettings *settings, QObject *parent) :
+QxrdExperimentPerkinElmerAcquisition::QxrdExperimentPerkinElmerAcquisition(QString path,
+                                                                           QxrdApplication *app,
+                                                                           QSettings *settings,
+                                                                           QObject *parent) :
     QxrdExperiment(path, app, settings, parent)
 {
+  set_ExperimentKind(QxrdExperimentThread::PerkinElmerAcquisition);
 }
 
 void QxrdExperimentPerkinElmerAcquisition::readSettings(QSettings *settings, QString section)

@@ -1,8 +1,10 @@
 #include "qxrdexperimentgenericanalysis.h"
+#include "qxrdexperimentthread.h"
 
 QxrdExperimentGenericAnalysis::QxrdExperimentGenericAnalysis(QString path, QxrdApplication *app, QSettings *settings, QObject *parent) :
     QxrdExperiment(path, app, settings, parent)
 {
+  set_ExperimentKind(QxrdExperimentThread::GenericAnalysis);
 }
 
 void QxrdExperimentGenericAnalysis::readSettings(QSettings *settings, QString section)

@@ -37,7 +37,15 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   Q_OBJECT
 
 public:
-  QxrdWindow(QxrdSettingsSaver *saver, QxrdApplication *app, QxrdExperiment *doc, QxrdAcquisition *acq, QxrdDataProcessor *proc, QxrdAllocator *alloc, QWidget *parent=0);
+  QxrdWindow(QxrdSettingsSaver *saver,
+             QxrdApplication *app,
+             QxrdExperiment *doc,
+             QxrdAcquisition *acq,
+             QxrdDataProcessor *proc,
+             QxrdAllocator *alloc,
+             QSettings *settings,
+             QString secion,
+             QWidget *parent=0);
   virtual ~QxrdWindow();
   void onAcquisitionInit();
 

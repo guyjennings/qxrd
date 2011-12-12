@@ -1,8 +1,10 @@
 #include "qxrdexperimentsimulatedacquisition.h"
+#include "qxrdexperimentthread.h"
 
 QxrdExperimentSimulatedAcquisition::QxrdExperimentSimulatedAcquisition(QString path, QxrdApplication *app, QSettings *settings, QObject *parent) :
     QxrdExperiment(path, app, settings, parent)
 {
+  set_ExperimentKind(QxrdExperimentThread::SimulatedAcquisition);
 }
 
 void QxrdExperimentSimulatedAcquisition::readSettings(QSettings *settings, QString section)
