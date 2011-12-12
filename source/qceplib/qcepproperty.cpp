@@ -15,8 +15,8 @@
 
 QcepProperty::QcepProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name)
   : QObject(),
-    m_Saver(saver),
     m_Mutex(QMutex::Recursive),
+    m_Saver(saver),
     m_Debug(false),
     m_IsStored(false),
     m_WasLoaded(false),
