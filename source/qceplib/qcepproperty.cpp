@@ -1286,3 +1286,112 @@ void QcepStringListProperty::resetValue()
 
   setValue(m_Default);
 }
+
+QcepByteArrayProperty::QcepByteArrayProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QByteArray value)
+  : QcepProperty(saver, parent, name),
+    m_Default(value),
+    m_Value(value)
+{
+}
+
+QByteArray QcepByteArrayProperty::value() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Value;
+}
+
+QByteArray QcepByteArrayProperty::defaultValue() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Default;
+}
+
+void QcepByteArrayProperty::setValue(QByteArray val, int index)
+{
+  if (debug()) {
+    g_Application->printMessage(
+          tr("%1 QcepByteArrayProperty::setValue(QByteArray %2, int %3) [%4]")
+          .arg(name())
+          .arg(toString(val))
+          .arg(index)
+          .arg(this->index()));
+  }
+
+  if (index == this->index()) {
+    setValue(val);
+  }
+}
+
+void QcepByteArrayProperty::clear()
+{
+  QMutexLocker lock(&m_Mutex);
+
+  setValue(QByteArray());
+}
+
+QString QcepByteArrayProperty::toString(const QByteArray &val)
+{
+  QString res = "[";
+  int ct = val.count();
+
+  for (int i=0; i<ct; i++) {
+    if (i<(ct-1)) {
+      res += tr("%1, ").arg(val[i]);
+    } else {
+      res += tr("%1").arg(val[i]);
+    }
+  }
+
+  res += "]";
+
+  return res;
+}
+
+void QcepByteArrayProperty::setValue(QByteArray val)
+{
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    g_Application->printMessage(
+          tr("%1 QcepByteArrayProperty::setValue(QByteArray %2)")
+          .arg(name())
+          .arg(toString(val)));
+  }
+
+  if (val != m_Value) {
+    if (g_Application && debug()) {
+      g_Application->printMessage(
+            tr("%1: QcepByteArrayProperty::setValue(QByteArray %2) [%3]")
+            .arg(name())
+            .arg(toString(val))
+            .arg(index()));
+    }
+
+    QMutexLocker lock(&m_Mutex);
+
+    m_Value = val;
+
+    if (m_Saver) {
+      m_Saver->changed(this);
+    }
+
+    emit valueChanged(m_Value, incIndex(1));
+  }
+}
+
+void QcepByteArrayProperty::setDefaultValue(QByteArray val)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_Default = val;
+}
+
+void QcepByteArrayProperty::resetValue()
+{
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    g_Application->printMessage(
+        tr("%1: QcepByteArrayProperty::resetValue").arg(name()));
+  }
+
+  setValue(m_Default);
+}

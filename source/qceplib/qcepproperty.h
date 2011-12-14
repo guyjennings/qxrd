@@ -350,6 +350,30 @@ private:
   QStringList m_Value;
 };
 
+class QcepByteArrayProperty : public QcepProperty {
+  Q_OBJECT
+public:
+  QcepByteArrayProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QByteArray value);
+
+  QByteArray value() const;
+  QByteArray defaultValue() const;
+  QString toString(const QByteArray &list);
+
+public slots:
+  void setValue(QByteArray val, int index);
+  void setValue(QByteArray val);
+  void setDefaultValue(QByteArray val);
+  void resetValue();
+  void clear();
+
+signals:
+  void valueChanged(QByteArray val, int index);
+
+private:
+  QByteArray m_Default;
+  QByteArray m_Value;
+};
+
 #define QCEP_DOUBLE_PROPERTY(propname) \
 public: \
 double get_##propname() const \
@@ -588,5 +612,39 @@ QcepStringListProperty *prop_##propname() { \
 \
 private: \
 QcepStringListProperty m_##propname;
+
+#define QCEP_BYTE_ARRAY_PROPERTY(propname) \
+public: \
+QByteArray get_##propname() const \
+{ \
+  return m_##propname.value(); \
+} \
+\
+void set_##propname(QByteArray val) \
+{ \
+  m_##propname.setValue(val); \
+} \
+\
+QByteArray def_##propname() const \
+{ \
+  return m_##propname.defaultValue(); \
+} \
+\
+void setdef_##propname(QByteArray val) \
+{ \
+  m_##propname.setDefaultValue(val); \
+} \
+\
+void reset_##propname() \
+{ \
+  m_##propname.resetValue(); \
+} \
+\
+QcepByteArrayProperty *prop_##propname() { \
+  return &m_##propname; \
+} \
+\
+private: \
+QcepByteArrayProperty m_##propname;
 
 #endif // QCEPPROPERTY_H
