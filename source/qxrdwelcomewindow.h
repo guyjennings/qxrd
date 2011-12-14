@@ -47,7 +47,7 @@ private:
   Ui::QxrdWelcomeWindow *ui;
   QxrdApplication       *m_Application;
   int                    m_InsertRow;
-  QSignalMapper         *m_SignalMapper;
+  QSignalMapper          m_SignalMapper;
   QLabel                *m_StatusMsg;
   QTimer                 m_StatusTimer;
 

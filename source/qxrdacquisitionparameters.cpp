@@ -35,8 +35,8 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdSettingsSaver *saver)
     m_NCols(saver, this, "nCols", 2048),
     m_OverflowLevel(saver, this, "overflowLevel", 65500),
     m_AcquireDark(saver, this, "acquireDark", 0),
-    m_Cancelling(saver, this, "cancelling", 0),
-    m_Triggered(saver, this, "triggered", 0),
+    m_Cancelling(NULL, this, "cancelling", 0),
+    m_Triggered(NULL, this, "triggered", 0),
     m_TotalBufferSizeMB32(saver, this,"totalBufferSizeMB32", 800),
     m_TotalBufferSizeMB64(saver, this,"totalBufferSizeMB64", 2000),
     m_Raw16SaveTime(saver, this,"raw16SaveTime", 0.1),
@@ -47,8 +47,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdSettingsSaver *saver)
     m_UserComment2(saver, this,"userComment2",""),
     m_UserComment3(saver, this,"userComment3",""),
     m_UserComment4(saver, this,"userComment4",""),
-    m_DroppedFrames(saver, this,"droppedFrames",0),
-    m_Test(saver, this,"test",0),
+    m_DroppedFrames(NULL, this,"droppedFrames",0),
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL)
 {

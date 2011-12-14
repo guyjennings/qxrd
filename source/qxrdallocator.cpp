@@ -10,13 +10,13 @@ QxrdAllocator::QxrdAllocator
     m_AllocatedMemoryMB(0),
     m_Max(saver, this, "max", 800),
     m_Reserve(saver, this,"reserve",100),
-    m_Allocated(saver, this, "allocated", 0),
-    m_QueuedDelete(saver, this, "queuedDelete", 0),
-    m_NAllocatedInt16(saver, this, "nAllocatedInt16", 0),
-    m_NAllocatedInt32(saver, this, "nAllocatedInt32", 0),
-    m_NAllocatedDouble(saver, this, "nAllocatedDouble", 0),
-    m_NAllocatedMask(saver, this, "nAllocatedMask", 0),
-    m_NAllocatedIntegrated(saver, this, "nAllocatedIntegrated", 0)
+    m_Allocated(NULL, this, "allocated", 0),
+    m_QueuedDelete(NULL, this, "queuedDelete", 0),
+    m_NAllocatedInt16(NULL, this, "nAllocatedInt16", 0),
+    m_NAllocatedInt32(NULL, this, "nAllocatedInt32", 0),
+    m_NAllocatedDouble(NULL, this, "nAllocatedDouble", 0),
+    m_NAllocatedMask(NULL, this, "nAllocatedMask", 0),
+    m_NAllocatedIntegrated(NULL, this, "nAllocatedIntegrated", 0)
 {
   if (qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage(tr("allocator %1 constructed").HEXARG(this));

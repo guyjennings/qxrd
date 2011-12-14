@@ -41,6 +41,10 @@ QcepProperty::QcepProperty(QxrdSettingsSaver *saver, QObject *parent, const char
       }
     }
   }
+
+  if (m_Saver && !m_IsStored) {
+    printf("Warning: property %s has saver but is not stored\n", name);
+  }
 }
 
 int QcepProperty::wasLoaded() const
@@ -270,7 +274,7 @@ void QcepDoubleProperty::setValue(double val)
     m_Value = val;
 
     if (m_Saver) {
-      m_Saver->changed();
+      m_Saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -293,7 +297,7 @@ void QcepDoubleProperty::incValue(double step)
     m_Value += step;
 
     if (m_Saver) {
-      m_Saver->changed();
+      m_Saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -449,7 +453,7 @@ void QcepIntProperty::setValue(int val)
     m_Value.fetchAndStoreOrdered(val);
 
     if (m_Saver) {
-      m_Saver->changed();
+      m_Saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -469,7 +473,7 @@ void QcepIntProperty::incValue(int step)
     m_Value.fetchAndAddOrdered(step);
 
     if (m_Saver) {
-      m_Saver->changed();
+      m_Saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -697,7 +701,7 @@ void QcepBoolProperty::setValue(bool val)
     m_Value.fetchAndStoreOrdered(val);
 
     if (m_Saver) {
-      m_Saver->changed();
+      m_Saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -851,7 +855,7 @@ void QcepStringProperty::setValue(QString val)
     m_Value = val;
 
     if (m_Saver) {
-      m_Saver->changed();
+      m_Saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -1019,7 +1023,7 @@ void QcepDateTimeProperty::setValue(QDateTime val)
     m_Value = val;
 
     if (m_Saver) {
-      m_Saver->changed();
+      m_Saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -1140,7 +1144,7 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
     m_Value = val;
 
     if (m_Saver) {
-      m_Saver->changed();
+      m_Saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -1259,7 +1263,7 @@ void QcepStringListProperty::setValue(QStringList val)
     m_Value = val;
 
     if (m_Saver) {
-      m_Saver->changed();
+      m_Saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));

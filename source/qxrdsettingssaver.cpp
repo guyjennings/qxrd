@@ -4,9 +4,10 @@
 #include <stdio.h>
 
 QxrdSettingsSaver::QxrdSettingsSaver(QObject *parent, QObject *owner) :
-    QObject(parent),
-    m_Owner(owner),
-    m_SaveDelay(5000)
+  QObject(parent),
+  m_Owner(owner),
+  m_SaveDelay(5000),
+  m_LastChangedBy(NULL)
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(performSave()));
 
@@ -17,7 +18,7 @@ QxrdSettingsSaver::QxrdSettingsSaver(QObject *parent, QObject *owner) :
 
 QxrdSettingsSaver::~QxrdSettingsSaver()
 {
-//  performSave();
+  //  performSave();
 }
 
 void QxrdSettingsSaver::performSave()
@@ -27,7 +28,13 @@ void QxrdSettingsSaver::performSave()
   if (nupdates > 0) {
     if (qcepDebug(DEBUG_PREFS)) {
       g_Application->printMessage(tr("Settings Saver saving %1 updates").arg(nupdates));
+
+      if (m_LastChangedBy) {
+        g_Application->printMessage(tr("Last changed by %1").arg(m_LastChangedBy->name()));
+      }
     }
+
+    m_LastChangedBy = NULL;
 
     QTime tic;
     tic.start();
@@ -40,7 +47,8 @@ void QxrdSettingsSaver::performSave()
   }
 }
 
-void QxrdSettingsSaver::changed()
+void QxrdSettingsSaver::changed(QcepProperty *prop)
 {
   m_ChangeCount.fetchAndAddOrdered(1);
+  m_LastChangedBy = prop;
 }

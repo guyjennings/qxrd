@@ -110,6 +110,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_FileList(NULL, this, "fileList", QStringList()),
     m_WelcomeWindow(NULL),
     m_AllocatorThread(NULL),
+    m_Allocator(NULL),
+    m_ScriptEngineThread(NULL),
+    m_ScriptEngine(NULL),
+    m_ScriptEngineDebugger(NULL),
     m_SettingsSaverThread(NULL),
     m_SettingsSaver(NULL),
     #ifdef HAVE_PERKIN_ELMER
@@ -794,7 +798,7 @@ void QxrdApplication::openExperiment(QString path)
 
     appendRecentExperiment(path);
 
-    openedNewExperiment(experiment);
+    openedExperiment(experiment);
 
     printMessage("");
     printMessage("New experiment loaded");
@@ -921,17 +925,35 @@ void QxrdApplication::openRecentExperiment(QString path)
   }
 }
 
-void QxrdApplication::openedNewExperiment(QxrdExperimentThreadPtr docThread)
+void QxrdApplication::openedExperiment(QxrdExperimentThread *expthrd)
 {
-  if (docThread) {
-    QxrdExperiment *doc = docThread->experiment();
+  if (expthrd) {
+    QxrdExperiment *expt = expthrd->experiment();
 
-    QString path = doc->get_ExperimentFilePath();
+    QString path = expt->get_ExperimentFilePath();
     set_CurrentExperiment(path);
     appendRecentExperiment(path);
 
-    m_ExperimentThreads.append(docThread);
-    m_Experiments.append(doc);
+    m_ExperimentThreads.append(expthrd);
+    m_Experiments.append(expt);
+
+    m_ScriptEngine->experimentOpened(expt);
+
+    connect(expthrd, SIGNAL(destroyed(QObject*)), this, SLOT(closedExperiment(QObject*)), Qt::BlockingQueuedConnection);
+  }
+}
+
+void QxrdApplication::closedExperiment(QObject *obj)
+{
+  QxrdExperimentThreadPtr expthrd = qobject_cast<QxrdExperimentThreadPtr>(obj);
+
+  if (expthrd) {
+    QxrdExperiment *expt = expthrd->experiment();
+
+    m_ExperimentThreads.removeAll(expthrd);
+    m_Experiments.removeAll(expt);
+
+    m_ScriptEngine->experimentClosed(expt);
   }
 }
 
@@ -945,7 +967,7 @@ void QxrdApplication::doNewPerkinElmerAcquisition()
   if (newExperiment.length() >= 1) {
     QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPerkinElmerAcquisition(normalizeExperimentName(newExperiment), this);
 
-    openedNewExperiment(docThread);
+    openedExperiment(docThread);
   }
 }
 
@@ -959,7 +981,7 @@ void QxrdApplication::doNewPilatusAcquisition()
   if (newExperiment.length() >= 1) {
     QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPilatusAcquisition(normalizeExperimentName(newExperiment), this);
 
-    openedNewExperiment(docThread);
+    openedExperiment(docThread);
   }
 }
 
@@ -973,7 +995,7 @@ void QxrdApplication::doNewSimulatedAcquisition()
   if (newExperiment.length() >= 1) {
     QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentSimulatedAcquisition(normalizeExperimentName(newExperiment), this);
 
-    openedNewExperiment(docThread);
+    openedExperiment(docThread);
   }
 }
 
@@ -987,7 +1009,7 @@ void QxrdApplication::doNewPerkinElmerAnalysis()
   if (newExperiment.length() >= 1) {
     QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPerkinElmerAnalysis(normalizeExperimentName(newExperiment), this);
 
-    openedNewExperiment(docThread);
+    openedExperiment(docThread);
   }
 }
 
@@ -1001,7 +1023,7 @@ void QxrdApplication::doNewPilatusAnalysis()
   if (newExperiment.length() >= 1) {
     QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPilatusAnalysis(normalizeExperimentName(newExperiment), this);
 
-    openedNewExperiment(docThread);
+    openedExperiment(docThread);
   }
 }
 
@@ -1015,6 +1037,6 @@ void QxrdApplication::doNewGenericAnalysis()
   if (newExperiment.length() >= 1) {
     QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentGenericAnalysis(normalizeExperimentName(newExperiment), this);
 
-    openedNewExperiment(docThread);
+    openedExperiment(docThread);
   }
 }

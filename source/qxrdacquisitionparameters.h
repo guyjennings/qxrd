@@ -150,13 +150,6 @@ public:
   Q_PROPERTY(int     droppedFrames    READ get_DroppedFrames WRITE set_DroppedFrames STORED false)
   QCEP_INTEGER_PROPERTY(DroppedFrames)
 
-  Q_PROPERTY(int     test             READ get_Test          WRITE set_Test STORED false)
-  QCEP_INTEGER_PROPERTY(Test)
-
-//  Q_PROPERTY(int     cameraMode      READ cameraMode WRITE setCameraMode)
-//  Q_PROPERTY(int     frameSyncMode   READ frameSyncMode WRITE setFrameSyncMode)
-//  Q_PROPERTY(int     timerSync       READ timerSync WRITE setTimerSync)
-
 protected:
   mutable QMutex               m_Mutex;
 

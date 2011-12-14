@@ -56,7 +56,6 @@ public:
   void writeDefaultSettings();
   void appendRecentExperiment(QString path);
 
-  void openedNewExperiment(QxrdExperimentThreadPtr docThread);
   QString newAnalysisExperiment(QString path);
   QString newPerkinElmerExperiment(QString path);
   QString newPilatusExperiment(QString path);
@@ -77,6 +76,8 @@ public slots:
   void openRecentExperiment(QString path);
 
   void openExperiment(QString path);
+  void openedExperiment(QxrdExperimentThread *expthrd);
+  void closedExperiment(QObject *obj);
 
   void openWelcomeWindow();
   void closeWelcomeWindow();

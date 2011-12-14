@@ -42,9 +42,9 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   connect(ui->m_NewGenericAnalysis, SIGNAL(clicked()), ui->m_ActionNewGenericAnalysis, SLOT(trigger()));
   connect(ui->m_OpenExistingExperiment, SIGNAL(clicked()), ui->m_ActionOpenExperiment, SLOT(trigger()));
 
-  m_SignalMapper = new QSignalMapper(this);
+//  m_SignalMapper = new QSignalMapper(this);
 
-  connect(m_SignalMapper, SIGNAL(mapped(QString)), m_Application, SLOT(openRecentExperiment(QString)));
+  connect(&m_SignalMapper, SIGNAL(mapped(QString)), m_Application, SLOT(openRecentExperiment(QString)));
 
   QStringList recents = m_Application->get_RecentExperiments();
 
@@ -111,9 +111,9 @@ void QxrdWelcomeWindow::appendRecentExperiment(QString title)
 
   ui->m_GridLayout->addWidget(item, m_InsertRow++, 0, 1, 2);
 
-  connect(item, SIGNAL(clicked()), m_SignalMapper, SLOT(map()));
+  connect(item, SIGNAL(clicked()), &m_SignalMapper, SLOT(map()));
 
-  m_SignalMapper->setMapping(item, title);
+  m_SignalMapper.setMapping(item, title);
 
 //  QAction *recentAction = new QAction(this);
 
