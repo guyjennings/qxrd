@@ -37,7 +37,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdAp
 
   res->start();
 
-  res->experiment()->init();
+  res->experiment()->init(settings);
 
   return res;
 }
@@ -48,7 +48,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAcquisitio
 
   res->start();
 
-  res->experiment()->init();
+  res->experiment()->init(settings);
 
   return res;
 }
@@ -59,7 +59,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAcquisition(QS
 
   res->start();
 
-  res->experiment()->init();
+  res->experiment()->init(settings);
 
   return res;
 }
@@ -70,7 +70,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentSimulatedAcquisition(
 
   res->start();
 
-  res->experiment()->init();
+  res->experiment()->init(settings);
 
   return res;
 }
@@ -81,7 +81,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAnalysis(Q
 
   res->start();
 
-  res->experiment()->init();
+  res->experiment()->init(settings);
 
   return res;
 }
@@ -92,7 +92,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAnalysis(QStri
 
   res->start();
 
-  res->experiment()->init();
+  res->experiment()->init(settings);
 
   return res;
 }
@@ -103,7 +103,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentGenericAnalysis(QStri
 
   res->start();
 
-  res->experiment()->init();
+  res->experiment()->init(settings);
 
   return res;
 }

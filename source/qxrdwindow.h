@@ -131,11 +131,22 @@ public:
 
   QxrdAcquisition *acquisition() const;
 
+  void captureSize();
+  void resizeEvent(QResizeEvent *);
+  void moveEvent(QMoveEvent *);
+
 private:
   void shrinkDockWidget(QDockWidget *dockWidget);
   void shrinkObject(QObject *obj);
 
   void setupRecentExperimentsMenu(QAction *action);
+
+public:
+  Q_PROPERTY(QByteArray windowGeometry READ get_WindowGeometry WRITE set_WindowGeometry)
+  QCEP_BYTE_ARRAY_PROPERTY(WindowGeometry)
+
+  Q_PROPERTY(QByteArray windowState READ get_WindowState WRITE set_WindowState)
+  QCEP_BYTE_ARRAY_PROPERTY(WindowState)
 
 private:
   mutable QMutex                         m_Mutex;

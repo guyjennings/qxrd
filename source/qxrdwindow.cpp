@@ -63,6 +63,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
                        QString section,
                        QWidget *parent)
   : QMainWindow(parent),
+    m_WindowGeometry(saver, this, "windowGeometry", QByteArray()),
+    m_WindowState(saver, this, "windowState", QByteArray()),
     m_Mutex(QMutex::Recursive),
     m_SettingsLoaded(false),
     m_Application(app),
@@ -476,6 +478,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   //#endif
 
   m_UpdateTimer.start(m_Application->get_UpdateIntervalMsec());
+
+  captureSize();
 }
 
 QxrdWindow::~QxrdWindow()
@@ -703,7 +707,10 @@ void QxrdWindow::doCancel()
 
 void QxrdWindow::readSettings(QSettings *settings, QString section)
 {
+
   if (settings) {
+    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+
     m_Plot             -> readSettings(settings, section+"/plot");
     m_CenterFinderPlot -> readSettings(settings, section+"/centerFinderPlot");
     m_IntegratorPlot   -> readSettings(settings, section+"/integratorPlot");
@@ -731,21 +738,26 @@ void QxrdWindow::readSettings(QSettings *settings, QString section)
     m_SettingsLoaded = true;
 
     if (!m_Experiment->get_DefaultLayout()) {
-      QByteArray geometry = settings->value(section+"-geometry").toByteArray();
-      QByteArray winstate = settings->value(section+"-state").toByteArray();
+      QByteArray geometry = get_WindowGeometry();
+      QByteArray winstate = get_WindowState();
 
-      restoreGeometry(geometry);
-      restoreState(winstate,1);
+      if (!restoreGeometry(geometry)) {
+          printf("Restore geometry failed\n");
+      }
+
+      if (!restoreState(winstate,2)) {
+          printf("Restore state failed\n");
+      }
     } else {
       m_Experiment->set_DefaultLayout(0);
     }
-
-    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
   }
 }
 
 void QxrdWindow::writeSettings(QSettings *settings, QString section)
 {
+    printf("QxrdWindow::writeSettings\n");
+
   if (settings) {
     m_Plot             -> writeSettings(settings, section+"/plot");
     m_CenterFinderPlot -> writeSettings(settings, section+"/centerFinderPlot");
@@ -771,11 +783,28 @@ void QxrdWindow::writeSettings(QSettings *settings, QString section)
       m_ImageInfoDialog ->  writeSettings(settings, section+"/imageInfoDialog");
     }
 
-    settings->setValue(section+"-geometry", saveGeometry());
-    settings->setValue(section+"-state", saveState(1));
-
     QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
   }
+}
+
+void QxrdWindow::captureSize()
+{
+    set_WindowGeometry(saveGeometry());
+    set_WindowState(saveState(2));
+}
+
+void QxrdWindow::resizeEvent(QResizeEvent *ev)
+{
+    captureSize();
+
+    QMainWindow::resizeEvent(ev);
+}
+
+void QxrdWindow::moveEvent(QMoveEvent *ev)
+{
+    captureSize();
+
+    QMainWindow::moveEvent(ev);
 }
 
 void QxrdWindow::displayStatusMessage(QString msg)
@@ -822,6 +851,8 @@ void QxrdWindow::newMaskAvailable(QxrdMaskDataPtr mask)
 
 void QxrdWindow::newData()
 {
+  captureSize();
+
   //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
 
   if (m_NewDataAvailable.fetchAndStoreOrdered(0)) {

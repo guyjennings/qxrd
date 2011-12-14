@@ -399,6 +399,8 @@ void QxrdExperiment::writeSettings()
 void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 {
   if (settings) {
+    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+
     if (m_Window) {
       m_Window       -> writeSettings(settings, section+"/window");
     }
@@ -410,7 +412,5 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
     if (m_DataProcessor) {
       m_DataProcessor-> writeSettings(settings, section+"/processor");
     }
-
-    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
   }
 }
