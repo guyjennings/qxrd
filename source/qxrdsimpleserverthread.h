@@ -6,12 +6,13 @@
 #include <QDateTime>
 
 class QxrdSimpleServer;
+class QxrdExperiment;
 
 class QxrdSimpleServerThread : public QxrdThread
 {
   Q_OBJECT
 public:
-  QxrdSimpleServerThread(QString name, int port);
+  QxrdSimpleServerThread(QxrdExperiment *doc, QString name, int port);
   ~QxrdSimpleServerThread();
 
   void shutdown();
@@ -22,6 +23,7 @@ protected:
   void run();
 
 private:
+  QxrdExperiment   *m_Experiment;
   QString           m_Name;
   int               m_Port;
   QAtomicPointer<QxrdSimpleServer> m_Server;

@@ -939,7 +939,7 @@ void QxrdApplication::openedExperiment(QxrdExperimentThread *expthrd)
 
     m_ScriptEngine->experimentOpened(expt);
 
-    connect(expthrd, SIGNAL(destroyed(QObject*)), this, SLOT(closedExperiment(QObject*)), Qt::BlockingQueuedConnection);
+//    connect(expthrd, SIGNAL(destroyed(QObject*)), this, SLOT(closedExperiment(QObject*)), Qt::BlockingQueuedConnection);
   }
 }
 

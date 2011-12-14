@@ -32,7 +32,7 @@ QxrdDataProcessorThread::~QxrdDataProcessorThread()
 void QxrdDataProcessorThread::run()
 {
   if (qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage("Starting Processor Thread");
+    m_Experiment->printMessage("Starting Processor Thread");
   }
 
   QxrdDataProcessor *p;
@@ -51,7 +51,7 @@ void QxrdDataProcessorThread::run()
   int rc = exec();
 
   if (qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage(tr("Processor Thread Terminated with rc %1").arg(rc));
+    m_Experiment->printMessage(tr("Processor Thread Terminated with rc %1").arg(rc));
   }
 }
 

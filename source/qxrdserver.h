@@ -11,7 +11,7 @@ class QxrdServer : public QSpecServer
   Q_OBJECT
 
 public:
-  QxrdServer(QString name, int port, QObject *parent=0);
+  QxrdServer(QxrdExperiment *doc, QString name, int port, QObject *parent=0);
 
 public slots:
   QVariant executeCommand(QString cmd);

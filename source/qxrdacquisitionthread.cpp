@@ -48,7 +48,7 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaver *saver,
   xisllib = LoadLibrary(L"XISL.dll");
 
   if (xisllib == NULL) {
-    g_Application->criticalMessage("XISL library is not available - cannot use PE detector");
+    m_Experiment->criticalMessage("XISL library is not available - cannot use PE detector");
   } else {
     g_PEAvailable = true;
   }
@@ -67,7 +67,7 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 void QxrdAcquisitionThread::run()
 {
   if (qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage("Starting Acquisition Thread");
+    m_Experiment->printMessage("Starting Acquisition Thread");
   }
 
   QxrdAcquisition *p;
@@ -116,7 +116,7 @@ void QxrdAcquisitionThread::run()
   int rc = exec();
 
   if (qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage(tr("Acquisition Thread Terminated with rc %1").arg(rc));
+    m_Experiment->printMessage(tr("Acquisition Thread Terminated with rc %1").arg(rc));
   }
 }
 

@@ -58,7 +58,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdSettingsSaver *saver,
     m_PerkinElmer(0)
 {
   if (qcepDebug(DEBUG_PERKINELMER)) {
-    g_Application->printMessage("QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer()");
+    m_Experiment->printMessage("QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer()");
   }
 
   readSettings(settings, section);
@@ -69,7 +69,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdSettingsSaver *saver,
 QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()
 {
   if (qcepDebug(DEBUG_PERKINELMER)) {
-    g_Application->printMessage("QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()");
+    m_Experiment->printMessage("QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()");
   }
 
   if (m_PerkinElmer && m_AcqDesc) {
@@ -86,7 +86,7 @@ bool QxrdAcquisitionPerkinElmer::checkPluginAvailable()
   }
 
   if (m_PerkinElmer == NULL) {
-    g_Application->criticalMessage("No perkin elmer plugin available");
+    m_Experiment->criticalMessage("No perkin elmer plugin available");
   }
 
   return m_PerkinElmer;
@@ -96,17 +96,17 @@ void QxrdAcquisitionPerkinElmer::onExposureTimeChanged(double newTime)
 {
   if (checkPluginAvailable()) {
     if (newTime*1e6 < m_ReadoutTimes.at(0)) {
-      g_Application->printMessage(tr("Attempt to set exposure time less than minimum supported (%1 < %2)")
+      m_Experiment->printMessage(tr("Attempt to set exposure time less than minimum supported (%1 < %2)")
                         .arg(newTime).arg(m_ReadoutTimes.at(0)/1e6));
 
       newTime = m_ReadoutTimes.at(0)/1e6;
     }
 
-    g_Application->printMessage(tr("Exposure time changed to %1").arg(newTime));
+    m_Experiment->printMessage(tr("Exposure time changed to %1").arg(newTime));
 
     DWORD tmp = (int)(newTime*1e6);
 
-    g_Application->printMessage(tr("SetTimerSync %1").arg(tmp));
+    m_Experiment->printMessage(tr("SetTimerSync %1").arg(tmp));
 
     int nRet;
 
@@ -115,7 +115,7 @@ void QxrdAcquisitionPerkinElmer::onExposureTimeChanged(double newTime)
       return;
     }
 
-    g_Application->printMessage(tr("TimerSync = %1").arg(tmp));
+    m_Experiment->printMessage(tr("TimerSync = %1").arg(tmp));
 
     set_ExposureTime(tmp/1.0e6);
   }
@@ -128,7 +128,7 @@ void QxrdAcquisitionPerkinElmer::onBinningModeChanged(int newMode)
   if (checkPluginAvailable()) {
 
     if (m_HeaderID == 14) {
-      g_Application->printMessage(tr("Binning mode changed to %1").arg(newMode));
+      m_Experiment->printMessage(tr("Binning mode changed to %1").arg(newMode));
 
       int nRet;
       WORD binningMode = newMode;
@@ -146,9 +146,9 @@ void QxrdAcquisitionPerkinElmer::onBinningModeChanged(int newMode)
         return;
       }
 
-      g_Application->printMessage(tr("Starting binning mode = %1").arg(originalMode));
+      m_Experiment->printMessage(tr("Starting binning mode = %1").arg(originalMode));
 
-      g_Application->printMessage(tr("Setting binning mode = %1").arg(newMode));
+      m_Experiment->printMessage(tr("Setting binning mode = %1").arg(newMode));
 
       if ((nRet=m_PerkinElmer->Acquisition_SetCameraBinningMode(m_AcqDesc, newMode)) != HIS_ALL_OK) {
         acquisitionError(__FILE__, __LINE__, nRet);
@@ -160,7 +160,7 @@ void QxrdAcquisitionPerkinElmer::onBinningModeChanged(int newMode)
         return;
       }
 
-      g_Application->printMessage(tr("Binning mode was set to %1").arg(binningMode));
+      m_Experiment->printMessage(tr("Binning mode was set to %1").arg(binningMode));
     }
   }
 }
@@ -170,9 +170,9 @@ void QxrdAcquisitionPerkinElmer::onCameraGainChanged(int newGain)
   if (checkPluginAvailable()) {
 
     if (m_HeaderID >= 11) {
-      g_Application->printMessage(tr("Camera Gain Changed to %1").arg(newGain));
+      m_Experiment->printMessage(tr("Camera Gain Changed to %1").arg(newGain));
 
-      g_Application->printMessage("Setting camera gain");
+      m_Experiment->printMessage("Setting camera gain");
 
       int nRet;
 
@@ -184,7 +184,7 @@ void QxrdAcquisitionPerkinElmer::onCameraGainChanged(int newGain)
         m_CurrentGain = get_CameraGain();
       }
 
-      g_Application->printMessage("Set camera gain");
+      m_Experiment->printMessage("Set camera gain");
     }
   }
 }
@@ -218,7 +218,7 @@ void QxrdAcquisitionPerkinElmer::onCameraGainChanged(int newGain)
 void QxrdAcquisitionPerkinElmer::initialize()
 {
   if (qcepDebug(DEBUG_PERKINELMER)) {
-    g_Application->printMessage(tr("QxrdAcquisitionPerkinElmer::initialize"));
+    m_Experiment->printMessage(tr("QxrdAcquisitionPerkinElmer::initialize"));
   }
 
   if (checkPluginAvailable()) {
@@ -237,7 +237,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     nRet = m_PerkinElmer->Acquisition_EnumSensors(&nSensors, bEnableIRQ, FALSE);
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("Acquisition_EnumSensors = %1").arg(nRet));
+      m_Experiment->printMessage(tr("Acquisition_EnumSensors = %1").arg(nRet));
     }
 
     if (nRet != HIS_ALL_OK) {
@@ -246,7 +246,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("Number of sensors = %1").arg(nSensors));
+      m_Experiment->printMessage(tr("Number of sensors = %1").arg(nSensors));
     }
 
     if (nSensors != 1) {
@@ -265,7 +265,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("Acquisition_GetCommChannel channel type = %1, channel no = %2")
+      m_Experiment->printMessage(tr("Acquisition_GetCommChannel channel type = %1, channel no = %2")
                         .arg(nChannelType).arg(nChannelNr));
     }
 
@@ -277,11 +277,11 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("Acquisition_GetConfiguration frames = %1, rows = %2, cols = %3")
+      m_Experiment->printMessage(tr("Acquisition_GetConfiguration frames = %1, rows = %2, cols = %3")
                         .arg(dwFrames).arg(dwRows).arg(dwColumns));
-      g_Application->printMessage(tr("Acquisition_GetConfiguration data type = %1, sort flags = %2, IRQ = %3")
+      m_Experiment->printMessage(tr("Acquisition_GetConfiguration data type = %1, sort flags = %2, IRQ = %3")
                         .arg(dwDataType).arg(dwSortFlags).arg(bEnableIRQ));
-      g_Application->printMessage(tr("Acquisition_GetConfiguration acq type = %1, systemID = %2, syncMode = %3, hwAccess = %4")
+      m_Experiment->printMessage(tr("Acquisition_GetConfiguration acq type = %1, systemID = %2, syncMode = %3, hwAccess = %4")
                         .arg(dwAcqType).arg(dwSystemID).arg(dwSyncMode).arg(dwHwAccess));
     }
 
@@ -294,7 +294,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("Acquisition_GetCameraBinningMode mode = %1").arg(binningMode));
+      m_Experiment->printMessage(tr("Acquisition_GetCameraBinningMode mode = %1").arg(binningMode));
     }
 
     QxrdAcquisition::initialize();
@@ -307,7 +307,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("Prom ID %1, Header ID %2").arg(hwHeaderInfo.dwPROMID).arg(hwHeaderInfo.dwHeaderID));
+      m_Experiment->printMessage(tr("Prom ID %1, Header ID %2").arg(hwHeaderInfo.dwPROMID).arg(hwHeaderInfo.dwHeaderID));
     }
 
     m_PROMID = hwHeaderInfo.dwPROMID;
@@ -322,7 +322,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
       }
 
       if (qcepDebug(DEBUG_PERKINELMER)) {
-        g_Application->printMessage(tr("Camera Type %1").arg(hdrx.wCameratype));
+        m_Experiment->printMessage(tr("Camera Type %1").arg(hdrx.wCameratype));
       }
 
       m_CameraType = hdrx.wCameratype;
@@ -341,10 +341,10 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("%1 predefined exposure times available").arg(m_ReadoutTimes.count()));
+      m_Experiment->printMessage(tr("%1 predefined exposure times available").arg(m_ReadoutTimes.count()));
 
       for (int i=0; i<nReadoutTimes; i++) {
-        g_Application->printMessage(tr("Exp %1 = %2").arg(i).arg(m_ReadoutTimes[i]));
+        m_Experiment->printMessage(tr("Exp %1 = %2").arg(i).arg(m_ReadoutTimes[i]));
       }
     }
 
@@ -361,8 +361,8 @@ void QxrdAcquisitionPerkinElmer::initialize()
     m_Buffer.fill(0);
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("Exposure Time = %1").arg(get_ExposureTime()));
-      g_Application->printMessage(tr("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER"));
+      m_Experiment->printMessage(tr("Exposure Time = %1").arg(get_ExposureTime()));
+      m_Experiment->printMessage(tr("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER"));
     }
 
     if ((nRet=m_PerkinElmer->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
@@ -377,7 +377,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("Sync Mode = %1").arg(m_SyncMode));
+      m_Experiment->printMessage(tr("Sync Mode = %1").arg(m_SyncMode));
     }
 
     onCameraGainChanged(get_CameraGain());
@@ -397,7 +397,7 @@ void QxrdAcquisitionPerkinElmer::initialize()
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("Define Dest Buffers"));
+      m_Experiment->printMessage(tr("Define Dest Buffers"));
     }
 
     if (qcepDebug(DEBUG_DELAY_ACQ)) {
@@ -420,7 +420,7 @@ void QxrdAcquisitionPerkinElmer::startupAcquisition()
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage("Acquire");
+      m_Experiment->printMessage("Acquire");
     }
   }
 }
@@ -429,7 +429,7 @@ void QxrdAcquisitionPerkinElmer::beginAcquisition()
 {
   if (m_StartupDelayed) {
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage("Delayed Acquisition Startup");
+      m_Experiment->printMessage("Delayed Acquisition Startup");
     }
 
     startupAcquisition();
@@ -440,7 +440,7 @@ void QxrdAcquisitionPerkinElmer::beginAcquisition()
 
   if (m_PerkinElmer && m_AcqDesc) {
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage("Reset frame counter");
+      m_Experiment->printMessage("Reset frame counter");
     }
 
     m_PerkinElmer -> Acquisition_ResetFrameCnt(m_AcqDesc);
@@ -470,7 +470,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 //    printf("allocator took %d msec\n", tic.restart());
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("QxrdAcquisitionPerkinElmer::onEndFrame(%1,%2,%3)")
+      m_Experiment->printMessage(tr("QxrdAcquisitionPerkinElmer::onEndFrame(%1,%2,%3)")
                         .arg(counter).arg(n1).arg(n2));
     }
 
@@ -497,14 +497,14 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
     int counter1 = m_Counter;
 
     if ((counter1 - counter) > 5) {
-      g_Application->printMessage(tr("%1 frames behind [%2,%3], skipping")
+      m_Experiment->printMessage(tr("%1 frames behind [%2,%3], skipping")
 			.arg(counter1-counter).arg(counter).arg(counter1));
       return;
     }
 
     if (((actSecFrame-1)%m_BufferSize) != m_BufferIndex) {
       if (qcepDebug(DEBUG_PERKINELMER)) {
-        g_Application->printMessage(tr("actSecFrame %1, m_BufferIndex %2")
+        m_Experiment->printMessage(tr("actSecFrame %1, m_BufferIndex %2")
                           .arg(actSecFrame).arg(m_BufferIndex));
       }
     }
@@ -530,7 +530,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
   //  set_Average(avg/npixels);
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      g_Application->printMessage(tr("Frame checksum 0x%1, avg %2\n")
+      m_Experiment->printMessage(tr("Frame checksum 0x%1, avg %2\n")
                         .arg(cksum,8,16,QChar('0')).arg(avg/npixels));
 
       for (int f=0; f<m_BufferSize; f++) {
@@ -545,7 +545,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
           avg += val;
         }
 
-        g_Application->printMessage(tr("Frame %1 checksum 0x%2, avg %3\n")
+        m_Experiment->printMessage(tr("Frame %1 checksum 0x%2, avg %3\n")
                           .arg(f).arg(cksum,8,16,QChar('0')).arg(avg/npixels));
       }
     }
@@ -566,14 +566,14 @@ void QxrdAcquisitionPerkinElmer::acquisitionInitError(int n)
 {
   acquisitionError(__FILE__, __LINE__, n);
 
-  g_Application->criticalMessage("Detector Initialization Failed");
+  m_Experiment->criticalMessage("Detector Initialization Failed");
 }
 
 void QxrdAcquisitionPerkinElmer::acquisitionNSensorsError(int n)
 {
   acquisitionError(__FILE__, __LINE__, n);
 
-  g_Application->criticalMessage("Detector Initialization Failed");
+  m_Experiment->criticalMessage("Detector Initialization Failed");
 }
 
 void QxrdAcquisitionPerkinElmer::setupExposureMenu(QDoubleSpinBox *cb)
@@ -586,7 +586,7 @@ void QxrdAcquisitionPerkinElmer::setupExposureMenu(QDoubleSpinBox *cb)
 void QxrdAcquisitionPerkinElmer::setupCameraGainMenu(QComboBox *cb)
 {
   if (qcepDebug(DEBUG_PERKINELMER)) {
-    g_Application->printMessage(
+    m_Experiment->printMessage(
           tr("QxrdAcquisitionPerkinElmer::setupCameraGainMenu m_HeaderID == %1").arg(m_HeaderID));
   }
 
@@ -696,8 +696,8 @@ static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 
 void QxrdAcquisitionPerkinElmer::dumpHeaderInfo()
 {
-  g_Application->printMessage(tr("Detector Header Info"));
-  g_Application->printMessage(tr("HeaderID %1  PROMID %2  Frame %3  Msec %4   Usec %5  Status %6")
+  m_Experiment->printMessage(tr("Detector Header Info"));
+  m_Experiment->printMessage(tr("HeaderID %1  PROMID %2  Frame %3  Msec %4   Usec %5  Status %6")
                               .arg(m_HwHeaderInfo.dwHeaderID)
                               .arg(m_HwHeaderInfo.dwPROMID)
                               .arg(m_HwHeaderInfoEx.wFrameCnt)
@@ -705,7 +705,7 @@ void QxrdAcquisitionPerkinElmer::dumpHeaderInfo()
                               .arg(m_HwHeaderInfoEx.wRealInttime_microSec)
                               .arg(m_HwHeaderInfoEx.wStatus));
 
-  g_Application->printMessage(tr("Cmd1 %1  Cmd2 %2  Cmd3 %3  Cmd4 %4")
+  m_Experiment->printMessage(tr("Cmd1 %1  Cmd2 %2  Cmd3 %3  Cmd4 %4")
                               .arg(m_HwHeaderInfoEx.wCommand1)
                               .arg(m_HwHeaderInfoEx.wCommand2)
                               .arg(m_HwHeaderInfoEx.wCommand3)

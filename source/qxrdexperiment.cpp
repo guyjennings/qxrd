@@ -1,3 +1,4 @@
+#include "qcepmacros.h"
 #include "qxrdexperiment.h"
 #include "qxrdfreshstartdialog.h"
 #include "qxrdapplication.h"
@@ -65,7 +66,7 @@ bool QxrdExperiment::init(QSettings *settings)
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing File Saver");
 
-  m_FileSaverThread = new QxrdFileSaverThread(g_Application->allocator());
+  m_FileSaverThread = new QxrdFileSaverThread(m_Application->allocator());
   m_FileSaverThread -> setObjectName("saver");
   m_FileSaverThread -> start();
 
@@ -74,7 +75,7 @@ bool QxrdExperiment::init(QSettings *settings)
   m_DataProcessorThread = new QxrdDataProcessorThread(saver(),
                                                       this,
                                                       NULL,
-                                                      g_Application->allocator(),
+                                                      m_Application->allocator(),
                                                       m_FileSaverThread,
                                                       settings,
                                                       "experiment/processor");
@@ -89,7 +90,7 @@ bool QxrdExperiment::init(QSettings *settings)
   m_AcquisitionThread = new QxrdAcquisitionThread(saver(),
                                                   this,
                                                   m_DataProcessor,
-                                                  g_Application->allocator(),
+                                                  m_Application->allocator(),
                                                   get_DetectorType(),
                                                   settings,
                                                   "experiment/acquire");
@@ -101,14 +102,14 @@ bool QxrdExperiment::init(QSettings *settings)
   m_FileSaverThread -> setAcquisition(m_Acquisition);
 
 
-  if (g_Application->get_GuiWanted()) {
+  if (m_Application->get_GuiWanted()) {
     splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Main Window");
     m_Window = new QxrdWindow(saver(),
-                              g_Application,
+                              m_Application,
                               this,
                               m_Acquisition,
                               m_DataProcessor,
-                              g_Application->allocator(),
+                              m_Application->allocator(),
                               settings,
                               "experiment/window");
 
@@ -120,7 +121,7 @@ bool QxrdExperiment::init(QSettings *settings)
 
 //  printMessage("about to load plugins");
 
-  m_Acquisition -> setNIDAQPlugin(g_Application->nidaqPlugin());
+  m_Acquisition -> setNIDAQPlugin(m_Application->nidaqPlugin());
 
   m_AcquisitionThread->initialize();
 
@@ -129,43 +130,43 @@ bool QxrdExperiment::init(QSettings *settings)
   if (get_RunSpecServer()) {
     splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting SPEC Server");
 
-    m_ServerThread = new QxrdServerThread("qxrd", get_SpecServerPort());
+    m_ServerThread = new QxrdServerThread(this, "qxrd", get_SpecServerPort());
     m_ServerThread -> setObjectName("server");
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
 
     if (qcepDebug(DEBUG_SERVER)) {
-      g_Application->printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
+      printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
     }
   }
 
   if (get_RunSimpleServer()) {
     splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Simple Socket Server");
 
-    m_SimpleServerThread = new QxrdSimpleServerThread("simpleserver", get_SimpleServerPort());
+    m_SimpleServerThread = new QxrdSimpleServerThread(this, "simpleserver", get_SimpleServerPort());
     m_SimpleServerThread -> setObjectName("smpsrv");
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
 
     if (qcepDebug(DEBUG_SERVER)) {
-      g_Application->printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
+      printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
     }
   }
 
   if (m_Server) {
-    connect(m_Server,         SIGNAL(executeCommand(QString)),           g_Application->scriptEngine(),    SLOT(evaluateSpecCommand(QString)));
-    connect(g_Application->scriptEngine(),   SIGNAL(specResultAvailable(QScriptValue)), m_Server,          SLOT(finishedCommand(QScriptValue)));
+    connect(m_Server,         SIGNAL(executeCommand(QString)),           m_Application->scriptEngine(),    SLOT(evaluateSpecCommand(QString)));
+    connect(m_Application->scriptEngine(),   SIGNAL(specResultAvailable(QScriptValue)), m_Server,          SLOT(finishedCommand(QScriptValue)));
   }
 
   if (m_SimpleServer) {
-    connect(m_SimpleServer,   SIGNAL(executeCommand(QString)),           g_Application->scriptEngine(),    SLOT(evaluateSimpleServerCommand(QString)));
-    connect(g_Application->scriptEngine(),   SIGNAL(simpleServerResultAvailable(QScriptValue)), m_SimpleServer,  SLOT(finishedCommand(QScriptValue)));
+    connect(m_SimpleServer,   SIGNAL(executeCommand(QString)),           m_Application->scriptEngine(),    SLOT(evaluateSimpleServerCommand(QString)));
+    connect(m_Application->scriptEngine(),   SIGNAL(simpleServerResultAvailable(QScriptValue)), m_SimpleServer,  SLOT(finishedCommand(QScriptValue)));
   }
 
-  if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           g_Application->scriptEngine(),    SLOT(evaluateAppCommand(QString)));
-  if (m_Window) connect(g_Application->scriptEngine(),   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
+  if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           m_Application->scriptEngine(),    SLOT(evaluateAppCommand(QString)));
+  if (m_Window) connect(m_Application->scriptEngine(),   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
 
-  if (m_Window) m_Window -> setScriptEngine(g_Application->scriptEngine());
+  if (m_Window) m_Window -> setScriptEngine(m_Application->scriptEngine());
 
   connect(m_Application, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
@@ -181,7 +182,7 @@ bool QxrdExperiment::init(QSettings *settings)
   QDir::setCurrent(QDir::homePath());
 #endif
 
-  m_Application->printMessage(tr("Current directory %1").arg(QDir::currentPath()));
+  printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Windows");
 
@@ -215,7 +216,7 @@ void QxrdExperiment::splashMessage(const char *msg)
 {
   GUI_THREAD_CHECK;
 
-  g_Application->printMessage(msg);
+  printMessage(msg);
 
   if (m_Splash) {
     m_Splash->showMessage(msg, Qt::AlignBottom|Qt::AlignHCenter);
@@ -228,9 +229,31 @@ void QxrdExperiment::splashMessage(QString msg)
   splashMessage(qPrintable(msg));
 }
 
+void QxrdExperiment::criticalMessage(QString msg)
+{
+    if (m_Window) {
+        INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayCriticalMessage", Q_ARG(QString, msg)));
+    } else {
+        m_Application->criticalMessage(msg);
+    }
+}
+
+void QxrdExperiment::statusMessage(QString msg)
+{
+    if (m_Window) {
+        INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayStatusMessage", Q_ARG(QString, msg)));
+    } else {
+        m_Application->statusMessage(msg);
+    }
+}
+
 void QxrdExperiment::printMessage(QString msg)
 {
-  m_Application->printMessage(qPrintable(msg));
+    if (m_Window) {
+        INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayMessage", Q_ARG(QString, msg)));
+    } else {
+        m_Application->printMessage(qPrintable(msg));
+    }
 }
 
 void QxrdExperiment::openLogFile()

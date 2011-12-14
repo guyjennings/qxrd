@@ -49,6 +49,8 @@ public slots:
 
   void splashMessage(const char *msg);
   void splashMessage(QString msg);
+  void criticalMessage(QString msg);
+  void statusMessage(QString msg);
   void printMessage(QString msg);
   void shutdown();
 

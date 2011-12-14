@@ -6,11 +6,13 @@
 #include <QScriptValue>
 #include <QDateTime>
 
+class QxrdExperiment;
+
 class QxrdSimpleServer : public QTcpServer
 {
   Q_OBJECT
 public:
-  QxrdSimpleServer(QString name, int port, QObject *parent=NULL);
+  QxrdSimpleServer(QxrdExperiment *doc, QString name, int port, QObject *parent=NULL);
 public:
   void startServer(QHostAddress addr, int port);
 
@@ -27,6 +29,7 @@ public slots:
   void finishedCommand(QScriptValue result);
 
 private:
+  QxrdExperiment          *m_Experiment;
   QString                  m_Name;
   int                      m_Port;
   QTcpSocket              *m_Socket;

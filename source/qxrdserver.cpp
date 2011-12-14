@@ -5,8 +5,8 @@
 #include <QScriptEngine>
 #include "qxrdapplication.h"
 
-QxrdServer::QxrdServer(QString name, int port, QObject *parent)
-  : QSpecServer(name, port, parent)
+QxrdServer::QxrdServer(QxrdExperiment *doc, QString name, int port, QObject *parent)
+  : QSpecServer(doc, name, port, parent)
 {
 //  g_Application->printMessage("QxrdServer::QxrdServer");
 }

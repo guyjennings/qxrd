@@ -14,13 +14,14 @@
 #include <QDateTime>
 
 class QTcpSocket;
+class QxrdExperiment;
 
 class QSpecServer : public QTcpServer
 {
   Q_OBJECT
 
 public:
-  QSpecServer(QString name, int port, QObject *parent=0);
+  QSpecServer(QxrdExperiment *doc, QString name, int port, QObject *parent=0);
 
 public:
   void startServer(QHostAddress a, int p=-1);
@@ -64,6 +65,7 @@ protected:
   void replyFromError(QScriptValue value);
 
 private:
+  QxrdExperiment      *m_Experiment;
   QString              m_ServerName;
   int                  m_Port;
   QTcpSocket          *m_Socket;

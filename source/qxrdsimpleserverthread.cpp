@@ -1,8 +1,9 @@
 #include "qxrdsimpleserver.h"
 #include "qxrdsimpleserverthread.h"
-#include "qxrdapplication.h"
+#include "qxrdexperiment.h"
 
-QxrdSimpleServerThread::QxrdSimpleServerThread(QString name, int port) :
+QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdExperiment *doc, QString name, int port) :
+    m_Experiment(doc),
     m_Name(name),
     m_Port(port),
     m_Server(NULL)
@@ -35,10 +36,10 @@ void QxrdSimpleServerThread::shutdown()
 void QxrdSimpleServerThread::run()
 {
   if (qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage("Starting Simple Server Thread");
+    m_Experiment->printMessage("Starting Simple Server Thread");
   }
 
-  QxrdSimpleServer *server = new QxrdSimpleServer(m_Name, m_Port);
+  QxrdSimpleServer *server = new QxrdSimpleServer(m_Experiment, m_Name, m_Port);
 
   server -> startServer(QHostAddress::Any, m_Port);
 
@@ -47,6 +48,6 @@ void QxrdSimpleServerThread::run()
   int rc = exec();
 
   if (qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage(tr("Simple Server Thread Terminated with rc %1").arg(rc));
+    m_Experiment->printMessage(tr("Simple Server Thread Terminated with rc %1").arg(rc));
   }
 }

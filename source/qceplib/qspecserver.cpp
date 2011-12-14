@@ -6,10 +6,11 @@
 #include <QDateTime>
 #include <QTime>
 
-#include "qxrdapplication.h"
+#include "qxrdexperiment.h"
 
-QSpecServer::QSpecServer(QString name, int port, QObject *parent)
+QSpecServer::QSpecServer(QxrdExperiment *doc, QString name, int port, QObject *parent)
   : QTcpServer(parent),
+    m_Experiment(doc),
     m_ServerName(name),
     m_Port(port),
     m_Socket(NULL)
@@ -31,7 +32,7 @@ QSpecServer::startServer(QHostAddress a, int p)
   }
 
   if (!listen(a, p)) {
-    g_Application->criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy of qxrd running already?")
+    m_Experiment->criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy of qxrd running already?")
                                    .arg(a.toString()).arg(p));
   }
 }
@@ -48,7 +49,7 @@ QSpecServer::openNewConnection()
 	  this,     SLOT(clientRead()));
 
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(QString("New connection from %1")
+    m_Experiment->printMessage(QString("New connection from %1")
                                 .arg(m_Socket->peerAddress().toString()) );
   }
 
@@ -60,7 +61,7 @@ void
 QSpecServer::connectionClosed()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage("Client closed connection");
+    m_Experiment->printMessage("Client closed connection");
   }
 }
 
@@ -70,7 +71,7 @@ QSpecServer::clientRead()
   quint64 avail = m_Socket -> bytesAvailable();
 
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("QSpecServer::clientRead, %1 bytes available").arg(avail));
+    m_Experiment->printMessage(tr("QSpecServer::clientRead, %1 bytes available").arg(avail));
   }
 
   if (avail >= sizeof(struct svr_head)) {
@@ -80,7 +81,7 @@ QSpecServer::clientRead()
     avail -= sizeof(struct svr_head);
 
     if (qcepDebug(DEBUG_SERVER)) {
-      g_Application->printMessage(tr("QSpecServer::clientRead, %1 bytes available").arg(avail));
+      m_Experiment->printMessage(tr("QSpecServer::clientRead, %1 bytes available").arg(avail));
     }
 
     readPacketData();
@@ -95,7 +96,7 @@ QSpecServer::readPacketData()
   } else if (m_Packet.magic == swapUInt32(SV_SPEC_MAGIC)) {
     m_SwapBytes = 1;
   } else {
-    g_Application->printMessage(tr("Bad packet\n"));
+    m_Experiment->printMessage(tr("Bad packet\n"));
     return 0;
   }
 
@@ -133,16 +134,16 @@ QSpecServer::readPacketData()
 int
 QSpecServer::interpretPacket()
 {
-//   g_Application->printMessage(tr("Packet received: magic %1, version %2, size %3")
+//   m_Experiment->printMessage(tr("Packet received: magic %1, version %2, size %3")
 // 		     .arg(m_Packet.magic).arg(m_Packet.vers).arg(m_Packet.size));
-//   g_Application->printMessage(tr("Packet sn %1, sec %2, usec %3")
+//   m_Experiment->printMessage(tr("Packet sn %1, sec %2, usec %3")
 // 		     .arg(m_Packet.sn).arg(m_Packet.sec).arg(m_Packet.usec));
-//   g_Application->printMessage(tr("Packet cmd %1, type %2, rows %3, cols %4, len %5")
+//   m_Experiment->printMessage(tr("Packet cmd %1, type %2, rows %3, cols %4, len %5")
 // 		     .arg(m_Packet.cmd).arg(m_Packet.type).arg(m_Packet.rows).arg(m_Packet.cols).arg(m_Packet.len));
 
   switch (m_Packet.cmd) {
   case SV_CLOSE:
-//    g_Application->printMessage(tr("SV_CLOSE"));
+//    m_Experiment->printMessage(tr("SV_CLOSE"));
     break;
 
   case SV_ABORT:
@@ -158,7 +159,7 @@ QSpecServer::interpretPacket()
     break;
 
   case SV_RETURN:
-//    g_Application->printMessage(tr("SV_RETURN"));
+//    m_Experiment->printMessage(tr("SV_RETURN"));
     break;
 
   case SV_REGISTER:
@@ -170,7 +171,7 @@ QSpecServer::interpretPacket()
     break;
 
   case SV_EVENT:
-//    g_Application->printMessage(tr("SV_EVENT"));
+//    m_Experiment->printMessage(tr("SV_EVENT"));
     break;
 
   case SV_FUNC:
@@ -190,7 +191,7 @@ QSpecServer::interpretPacket()
     break;
 
   case SV_REPLY:
-//    g_Application->printMessage(tr("SV_REPLY"));
+//    m_Experiment->printMessage(tr("SV_REPLY"));
     break;
 
   case SV_HELLO:
@@ -198,11 +199,11 @@ QSpecServer::interpretPacket()
     break;
 
   case SV_HELLO_REPLY:
-//    g_Application->printMessage(tr("SV_HELLO_REPLY"));
+//    m_Experiment->printMessage(tr("SV_HELLO_REPLY"));
     break;
 
   default:
-//    g_Application->printMessage(tr("default"));
+//    m_Experiment->printMessage(tr("default"));
     break;
   }
 
@@ -307,14 +308,14 @@ quint32 QSpecServer::condSwapUInt32(quint32 val)
 void QSpecServer::handle_abort()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("SV_ABORT"));
+    m_Experiment->printMessage(tr("SV_ABORT"));
   }
 }
 
 void QSpecServer::handle_cmd()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("SV_CMD: %1").arg(QString(m_Data)));
+    m_Experiment->printMessage(tr("SV_CMD: %1").arg(QString(m_Data)));
   }
 
   emit executeCommand(QString(m_Data));
@@ -323,7 +324,7 @@ void QSpecServer::handle_cmd()
 void QSpecServer::handle_cmd_return()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("SV_CMD_WITH_RETURN: %1").arg(QString(m_Data)));
+    m_Experiment->printMessage(tr("SV_CMD_WITH_RETURN: %1").arg(QString(m_Data)));
   }
 
   emit executeCommand(QString(m_Data));
@@ -341,7 +342,7 @@ void QSpecServer::finishedCommand(QScriptValue result)
 void QSpecServer::handle_register()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("SV_REGISTER: %1").arg(m_Packet.name));
+    m_Experiment->printMessage(tr("SV_REGISTER: %1").arg(m_Packet.name));
   }
 
   initReplyPacket();
@@ -359,21 +360,21 @@ void QSpecServer::handle_register()
 void QSpecServer::handle_unregister()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("SV_UNREGISTER: %1").arg(m_Packet.name));
+    m_Experiment->printMessage(tr("SV_UNREGISTER: %1").arg(m_Packet.name));
   }
 }
 
 void QSpecServer::handle_func()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("SV_FUNC: %1").arg(m_Packet.name));
+    m_Experiment->printMessage(tr("SV_FUNC: %1").arg(m_Packet.name));
   }
 }
 
 void QSpecServer::handle_func_return()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("SV_FUNC_WITH_RETURN: %1").arg(m_Packet.name));
+    m_Experiment->printMessage(tr("SV_FUNC_WITH_RETURN: %1").arg(m_Packet.name));
   }
 
   initReplyPacket();
@@ -391,7 +392,7 @@ void QSpecServer::handle_func_return()
 void QSpecServer::handle_read()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("SV_CHAN_READ: %1").arg(m_Packet.name));
+    m_Experiment->printMessage(tr("SV_CHAN_READ: %1").arg(m_Packet.name));
   }
 
   QVariant res = readProperty( m_Packet.name);
@@ -402,14 +403,14 @@ void QSpecServer::handle_read()
 void QSpecServer::handle_send()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("SV_CHAN_SEND: %1").arg(m_Packet.name));
+    m_Experiment->printMessage(tr("SV_CHAN_SEND: %1").arg(m_Packet.name));
   }
 }
 
 void QSpecServer::handle_hello()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("SV_HELLO: %1").arg(m_Packet.name));
+    m_Experiment->printMessage(tr("SV_HELLO: %1").arg(m_Packet.name));
   }
 
   initReplyPacket();
@@ -428,7 +429,7 @@ void QSpecServer::handle_hello()
 void QSpecServer::replyFromVariant(QVariant value)
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    g_Application->printMessage(tr("replyFromVariant(%1)").arg(value.typeName()));
+    m_Experiment->printMessage(tr("replyFromVariant(%1)").arg(value.typeName()));
   }
 
   initReplyPacket();
@@ -436,7 +437,7 @@ void QSpecServer::replyFromVariant(QVariant value)
   /*if (value.isNull()) {
   } else*/ if (value.canConvert< QVector<double> >()) {
     if (qcepDebug(DEBUG_SERVER)) {
-       g_Application->printMessage(tr("replyFromVariant(QVector<double>)"));
+       m_Experiment->printMessage(tr("replyFromVariant(QVector<double>)"));
     }
 
     QVector<double> vec = value.value< QVector<double> > ();
@@ -462,7 +463,7 @@ void QSpecServer::replyFromVariant(QVariant value)
     m_Reply.len = condSwapInt32(m_ReplyData.size());
   } else if (value.canConvert< QVector<QString> >()) {
     if (qcepDebug(DEBUG_SERVER)) {
-      g_Application->printMessage(tr("replyFromVariant(QVector<QString>)"));
+      m_Experiment->printMessage(tr("replyFromVariant(QVector<QString>)"));
     }
 
     QVector<QString> vec = value.value< QVector<QString> > ();
@@ -481,7 +482,7 @@ void QSpecServer::replyFromVariant(QVariant value)
     m_Reply.len = condSwapInt32(m_ReplyData.size());
   } else if (value.canConvert< QList<double> >()) {
     if (qcepDebug(DEBUG_SERVER)) {
-      g_Application->printMessage(tr("replyFromVariant(QList<double>)"));
+      m_Experiment->printMessage(tr("replyFromVariant(QList<double>)"));
     }
 
     QList<double> vec = value.value< QList<double> > ();
@@ -507,7 +508,7 @@ void QSpecServer::replyFromVariant(QVariant value)
     m_Reply.len = condSwapInt32(m_ReplyData.size());
   } else if (value.canConvert< QList<QString> >()) {
     if (qcepDebug(DEBUG_SERVER)) {
-      g_Application->printMessage(tr("replyFromVariant(QList<QString>)"));
+      m_Experiment->printMessage(tr("replyFromVariant(QList<QString>)"));
     }
 
     QList<QString> vec = value.value< QList<QString> > ();
@@ -526,7 +527,7 @@ void QSpecServer::replyFromVariant(QVariant value)
     m_Reply.len = condSwapInt32(m_ReplyData.size());
   } else if (value.canConvert< QList<QVariant> >()) {
     if (qcepDebug(DEBUG_SERVER)) {
-      g_Application->printMessage(tr("replyFromVariant(QList<QVariant>)"));
+      m_Experiment->printMessage(tr("replyFromVariant(QList<QVariant>)"));
     }
 
     QList<QVariant> vec = value.value< QList<QVariant> > ();
@@ -562,7 +563,7 @@ void QSpecServer::replyFromVariant(QVariant value)
     m_Reply.len = condSwapInt32(m_ReplyData.size());
   } else {
     if (qcepDebug(DEBUG_SERVER)) {
-      g_Application->printMessage(tr("replyFromVariant(QString)"));
+      m_Experiment->printMessage(tr("replyFromVariant(QString)"));
     }
 
     m_Reply.cmd = condSwapInt32(SV_REPLY);
