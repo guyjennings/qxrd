@@ -25,6 +25,7 @@ public:
   QxrdExperiment(QString path, QxrdApplication *app, QSettings *settings, QObject *parent = 0);
   virtual bool init(QSettings *settings);
   virtual ~QxrdExperiment();
+  void closeExperiment();
 
   QxrdAcquisitionThread *acquisitionThread();
   QxrdAcquisition *acquisition() const;
@@ -38,6 +39,19 @@ public:
   void newScanFile(QString path);
 
   QxrdSettingsSaver *saver();
+
+  QString defaultDirectory(QString path);
+  QString defaultFileName(QString path);
+  QString defaultExperimentName(QString path);
+  QString defaultLogName(QString path);
+  QString defaultScanName(QString path);
+
+  QString experimentFilePath();
+  QString logFilePath();
+  QString scanFilePath();
+
+  void saveExperiment();
+  void saveExperimentCopy();
 
 signals:
 
@@ -69,8 +83,17 @@ public:  // Properties
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
   QCEP_INTEGER_PROPERTY(ExperimentKind)
 
-  Q_PROPERTY(QString experimentFilePath     READ get_ExperimentFilePath WRITE set_ExperimentFilePath)
-  QCEP_STRING_PROPERTY(ExperimentFilePath)
+  Q_PROPERTY(QString experimentDirectory     READ get_ExperimentDirectory WRITE set_ExperimentDirectory)
+  QCEP_STRING_PROPERTY(ExperimentDirectory)
+
+  Q_PROPERTY(QString experimentFileName     READ get_ExperimentFileName WRITE set_ExperimentFileName)
+  QCEP_STRING_PROPERTY(ExperimentFileName)
+
+  Q_PROPERTY(QString experimentName     READ get_ExperimentName WRITE set_ExperimentName)
+  QCEP_STRING_PROPERTY(ExperimentName)
+
+  Q_PROPERTY(QString experimentDescription     READ get_ExperimentDescription WRITE set_ExperimentDescription)
+  QCEP_STRING_PROPERTY(ExperimentDescription)
 
   Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath)
   QCEP_STRING_PROPERTY(LogFilePath)

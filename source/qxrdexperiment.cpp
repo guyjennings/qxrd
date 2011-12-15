@@ -18,9 +18,12 @@ QxrdExperiment::QxrdExperiment(QString path,
   QObject(parent),
   m_Saver(NULL, this),
   m_ExperimentKind(&m_Saver, this, "experimentKind", -1),
-  m_ExperimentFilePath(&m_Saver, this, "experimentFilePath", path),
-  m_LogFilePath(&m_Saver, this, "logFilePath", "qxrd.log"),
-  m_ScanFilePath(&m_Saver, this, "scanFilePath", "qxrd.log"),
+  m_ExperimentDirectory(&m_Saver, this, "experimentDirectory", defaultDirectory(path)),
+  m_ExperimentFileName(&m_Saver, this, "experimentFileName", defaultFileName(path)),
+  m_ExperimentName(&m_Saver, this, "experimentName", defaultExperimentName(path)),
+  m_ExperimentDescription(&m_Saver, this, "experimentDescription", ""),
+  m_LogFilePath(&m_Saver, this, "logFilePath", defaultLogName(path)),
+  m_ScanFilePath(&m_Saver, this, "scanFilePath", defaultScanName(path)),
   m_DetectorType(&m_Saver, this,"detectorType", 1),
   m_ProcessorType(&m_Saver, this,"processorType", 0),
   m_DefaultLayout(NULL, this,"defaultLayout",0),
@@ -64,13 +67,13 @@ bool QxrdExperiment::init(QSettings *settings)
 
   QThread::currentThread()->setObjectName("doc");
 
-  splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing File Saver");
+  splashMessage("Initializing File Saver");
 
   m_FileSaverThread = new QxrdFileSaverThread(m_Application->allocator());
   m_FileSaverThread -> setObjectName("saver");
   m_FileSaverThread -> start();
 
-  splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing Data Processing");
+  splashMessage("Initializing Data Processing");
 
   m_DataProcessorThread = new QxrdDataProcessorThread(saver(),
                                                       this,
@@ -85,7 +88,7 @@ bool QxrdExperiment::init(QSettings *settings)
 
   m_FileSaverThread -> setProcessor(m_DataProcessor);
 
-  splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing Data Acquisition");
+  splashMessage("Initializing Data Acquisition");
 
   m_AcquisitionThread = new QxrdAcquisitionThread(saver(),
                                                   this,
@@ -103,7 +106,7 @@ bool QxrdExperiment::init(QSettings *settings)
 
 
   if (m_Application->get_GuiWanted()) {
-    splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Main Window");
+    splashMessage("Opening Main Window");
     m_Window = new QxrdWindow(saver(),
                               m_Application,
                               this,
@@ -117,7 +120,7 @@ bool QxrdExperiment::init(QSettings *settings)
     m_Acquisition -> setWindow(m_Window);
   }
 
-  splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading plugins");
+  splashMessage("Loading plugins");
 
 //  printMessage("about to load plugins");
 
@@ -128,7 +131,7 @@ bool QxrdExperiment::init(QSettings *settings)
   if (m_Window) m_Window -> onAcquisitionInit();
 
   if (get_RunSpecServer()) {
-    splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting SPEC Server");
+    splashMessage("Starting SPEC Server");
 
     m_ServerThread = new QxrdServerThread(this, "qxrd", get_SpecServerPort());
     m_ServerThread -> setObjectName("server");
@@ -141,7 +144,7 @@ bool QxrdExperiment::init(QSettings *settings)
   }
 
   if (get_RunSimpleServer()) {
-    splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Simple Socket Server");
+    splashMessage("Starting Simple Socket Server");
 
     m_SimpleServerThread = new QxrdSimpleServerThread(this, "simpleserver", get_SimpleServerPort());
     m_SimpleServerThread -> setObjectName("smpsrv");
@@ -170,11 +173,11 @@ bool QxrdExperiment::init(QSettings *settings)
 
   connect(m_Application, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
-  splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading Preferences");
+  splashMessage("Loading Preferences");
 
   readSettings(settings);
 
-  splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nLoading Background Images");
+  splashMessage("Loading Background Images");
 
   m_DataProcessor -> loadDefaultImages();
 
@@ -184,7 +187,7 @@ bool QxrdExperiment::init(QSettings *settings)
 
   printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 
-  splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nOpening Windows");
+  splashMessage("Opening Windows");
 
   if (m_Application->get_GuiWanted() && m_Window) {
     m_Window -> show();
@@ -197,12 +200,18 @@ bool QxrdExperiment::init(QSettings *settings)
 
 QxrdExperiment::~QxrdExperiment()
 {
+  printf("QxrdExperiment::~QxrdExperiment\n");
+
   if (qcepDebug(DEBUG_APP)) {
     m_Application->printMessage("QxrdExperiment::~QxrdExperiment");
   }
 
   closeScanFile();
   closeLogFile();
+}
+
+void QxrdExperiment::closeExperiment()
+{
 }
 
 void QxrdExperiment::shutdown()
@@ -219,8 +228,10 @@ void QxrdExperiment::splashMessage(const char *msg)
   printMessage(msg);
 
   if (m_Splash) {
-    m_Splash->showMessage(msg, Qt::AlignBottom|Qt::AlignHCenter);
-    g_Application->processEvents();
+    char msgf[256];
+    snprintf(msgf, 200, "Qxrd Version " STR(QXRD_VERSION) "\n%s", msg);
+    m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
+    m_Application->processEvents();
   }
 }
 
@@ -349,7 +360,7 @@ void QxrdExperiment::closeScanFile()
 
 void QxrdExperiment::readSettings()
 {
-  QString docPath = get_ExperimentFilePath();
+  QString docPath = experimentFilePath();
 
   if (docPath.length()>0) {
     QSettings settings(docPath, QSettings::IniFormat);
@@ -383,7 +394,7 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
 
 void QxrdExperiment::writeSettings()
 {
-  QString docPath = get_ExperimentFilePath();
+  QString docPath = experimentFilePath();
 
   if (docPath.length()>0) {
     QSettings settings(docPath, QSettings::IniFormat);
@@ -413,4 +424,75 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
       m_DataProcessor-> writeSettings(settings, section+"/processor");
     }
   }
+}
+
+QString QxrdExperiment::defaultDirectory(QString path)
+{
+  QFileInfo info(path);
+
+  QString directory = info.dir().canonicalPath();
+
+  return directory;
+}
+
+QString QxrdExperiment::defaultFileName(QString path)
+{
+  QFileInfo info(path);
+
+  if (info.suffix() == "qxrdp") {
+    return info.fileName();
+  } else {
+    return info.fileName()+".qxrdp";
+  }
+}
+
+QString QxrdExperiment::defaultExperimentName(QString path)
+{
+  QFileInfo info(path);
+
+  if (info.suffix() == "qxrdp") {
+    return info.completeBaseName();
+  } else {
+    return info.fileName();
+  }
+}
+
+QString QxrdExperiment::defaultLogName(QString path)
+{
+  return defaultExperimentName(path)+".log";
+}
+
+QString QxrdExperiment::defaultScanName(QString path)
+{
+  return defaultExperimentName(path)+".scans";
+}
+
+QString QxrdExperiment::experimentFilePath()
+{
+  QDir dir(get_ExperimentDirectory());
+
+  return dir.filePath(get_ExperimentFileName());
+}
+
+QString QxrdExperiment::logFilePath()
+{
+  QDir dir(get_ExperimentDirectory());
+
+  return dir.filePath(get_LogFilePath());
+}
+
+QString QxrdExperiment::scanFilePath()
+{
+  QDir dir(get_ExperimentDirectory());
+
+  return dir.filePath(get_ScanFilePath());
+}
+
+void QxrdExperiment::saveExperiment()
+{
+  writeSettings();
+}
+
+void QxrdExperiment::saveExperimentCopy()
+{
 }

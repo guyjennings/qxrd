@@ -931,7 +931,7 @@ void QxrdApplication::openedExperiment(QxrdExperimentThread *expthrd)
   if (expthrd) {
     QxrdExperiment *expt = expthrd->experiment();
 
-    QString path = expt->get_ExperimentFilePath();
+    QString path = expt->experimentFilePath();
     set_CurrentExperiment(path);
     appendRecentExperiment(path);
 
@@ -966,7 +966,7 @@ QList<QxrdExperiment*> QxrdApplication::experiments()
 void QxrdApplication::activateExperiment(QString path)
 {
   foreach(QxrdExperiment* exp, m_Experiments) {
-    if (exp->get_ExperimentFilePath() == path) {
+    if (exp->experimentFilePath() == path) {
       QxrdWindow* win = exp->window();
 
       if (win) {

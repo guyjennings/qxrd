@@ -107,6 +107,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
 
   setupUi(this);
 
+  setWindowTitle(m_Experiment->experimentFilePath()+" - "+windowTitle());
+
   if (sizeof(void*) == 4) {
     setWindowTitle(windowTitle()+" - 32 bit - v"+STR(QXRD_VERSION));
   } else {
@@ -208,6 +210,9 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
 
   connect(m_ActionNewExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseNewExperiment()));
   connect(m_ActionOpenExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseExistingExperiment()));
+  connect(m_ActionCloseExperiment, SIGNAL(triggered()), this, SLOT(close()));
+  connect(m_ActionSaveExperiment, SIGNAL(triggered()), m_Application, SLOT(saveExperiment()));
+  connect(m_ActionSaveExperimentCopy, SIGNAL(triggered()), m_Application, SLOT(saveExperimentCopy()));
 
   connect(m_ExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateExperimentsMenu()));
   setupRecentExperimentsMenu(m_ActionRecentExperiments);
@@ -547,6 +552,7 @@ void QxrdWindow::enableTiltRefinement(bool enable)
 void QxrdWindow::closeEvent ( QCloseEvent * event )
 {
   if (wantToClose()) {
+    m_Experiment->closeExperiment();
     event -> accept();
   } else {
     event -> ignore();
@@ -588,7 +594,7 @@ void QxrdWindow::populateExperimentsMenu()
   QList<QxrdExperiment*> exps = m_Application->experiments();
 
   foreach (QxrdExperiment* exp, exps) {
-    QString path = exp->get_ExperimentFilePath();
+    QString path = exp->experimentFilePath();
 
     QAction *action = new QAction(path, m_ExperimentsMenu);
     QSignalMapper *mapper = new QSignalMapper(action);

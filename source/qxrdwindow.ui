@@ -911,6 +911,8 @@
     <addaction name="m_ActionNewExperiment"/>
     <addaction name="m_ActionOpenExperiment"/>
     <addaction name="m_ActionRecentExperiments"/>
+    <addaction name="m_ActionSaveExperiment"/>
+    <addaction name="m_ActionSaveExperimentCopy"/>
     <addaction name="m_ActionCloseExperiment"/>
     <addaction name="separator"/>
     <addaction name="m_ActionLoadData"/>
@@ -1635,6 +1637,22 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="m_ActionSaveExperiment">
+   <property name="text">
+    <string>Save Experiment</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Experiment</string>
+   </property>
+  </action>
+  <action name="m_ActionSaveExperimentCopy">
+   <property name="text">
+    <string>Save Experiment Copy...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Experiment Copy</string>
    </property>
   </action>
  </widget>
