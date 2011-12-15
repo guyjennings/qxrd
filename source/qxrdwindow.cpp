@@ -593,7 +593,7 @@ void QxrdWindow::populateExperimentsMenu()
     QAction *action = new QAction(path, m_ExperimentsMenu);
     QSignalMapper *mapper = new QSignalMapper(action);
     connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(action, exp);
+    mapper->setMapping(action, path);
 
     connect(mapper, SIGNAL(mapped(const QString &)), m_Application, SLOT(activateExperiment(QString)));
 

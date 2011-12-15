@@ -963,6 +963,19 @@ QList<QxrdExperiment*> QxrdApplication::experiments()
   return m_Experiments;
 }
 
+void QxrdApplication::activateExperiment(QString path)
+{
+  foreach(QxrdExperiment* exp, m_Experiments) {
+    if (exp->get_ExperimentFilePath() == path) {
+      QxrdWindow* win = exp->window();
+
+      if (win) {
+        win->activateWindow();
+      }
+    }
+  }
+}
+
 void QxrdApplication::doNewPerkinElmerAcquisition()
 {
   QString newExperiment = QFileDialog::getSaveFileName(NULL,
