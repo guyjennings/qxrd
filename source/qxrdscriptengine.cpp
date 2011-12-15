@@ -270,7 +270,15 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
     msg += context -> argument(i).toString();
   }
 
-  g_Application->printMessage(msg);
+  QWidget *win = QApplication::activeWindow();
+
+  if (win) {
+      QxrdWindow *qwin = qobject_cast<QxrdWindow*>(win);
+
+      if (qwin) {
+          qwin->displayMessage(msg);
+      }
+  }
 
   return QScriptValue(engine, 1);
 }
