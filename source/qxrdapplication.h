@@ -78,6 +78,7 @@ public slots:
   void openExperiment(QString path);
   void openedExperiment(QxrdExperimentThread *expthrd);
   void closedExperiment(QObject *obj);
+  QList<QxrdExperiment*> experiments();
 
   void openWelcomeWindow();
   void closeWelcomeWindow();

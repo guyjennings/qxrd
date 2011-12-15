@@ -93,11 +93,8 @@ void QxrdWelcomeWindow::populateRecentExperimentsMenu()
 //    printf("Recent experiment: %s\n", qPrintable(exp));
 
     QAction *action = new QAction(exp, m_RecentExperimentsMenu);
-    QSignalMapper *mapper = new QSignalMapper(action);
-    connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(action, exp);
-
-    connect(mapper, SIGNAL(mapped(const QString &)), m_Application, SLOT(openRecentExperiment(QString)));
+    connect(action, SIGNAL(triggered()), &m_SignalMapper, SLOT(map()));
+    m_SignalMapper.setMapping(action, exp);
 
     m_RecentExperimentsMenu -> addAction(action);
   }
@@ -128,11 +125,12 @@ void QxrdWelcomeWindow::appendRecentExperiment(QString title)
 
 void QxrdWelcomeWindow::closeEvent ( QCloseEvent * event )
 {
-  if (wantToClose()) {
-    event -> accept();
-  } else {
-    event -> ignore();
-  }
+  QMainWindow::closeEvent(event);
+////  if (wantToClose()) {
+//    event -> accept();
+//  } else {
+//    event -> ignore();
+//  }
 }
 
 void QxrdWelcomeWindow::possiblyClose()

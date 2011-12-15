@@ -110,6 +110,7 @@ private slots:
   void integrationXUnitsChanged(int newXUnits);
   void onMessageWindowLinesChanged(int newVal);
   void onUpdateIntervalMsecChanged(int newVal);
+  void populateExperimentsMenu();
   void populateRecentExperimentsMenu();
 
 public:

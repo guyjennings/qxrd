@@ -209,6 +209,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   connect(m_ActionNewExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseNewExperiment()));
   connect(m_ActionOpenExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseExistingExperiment()));
 
+  connect(m_ExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateExperimentsMenu()));
   setupRecentExperimentsMenu(m_ActionRecentExperiments);
 
   connect(m_ActionLoadData, SIGNAL(triggered()), this, SLOT(doLoadData()));
@@ -576,6 +577,28 @@ void QxrdWindow::setupRecentExperimentsMenu(QAction *action)
   action->setMenu(m_RecentExperimentsMenu);
 
   connect(m_RecentExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateRecentExperimentsMenu()));
+}
+
+void QxrdWindow::populateExperimentsMenu()
+{
+//  printMessage("Populating recent experiments menu");
+
+  m_ExperimentsMenu->clear();
+
+  QList<QxrdExperiment*> exps = m_Application->experiments();
+
+  foreach (QxrdExperiment* exp, exps) {
+    QString path = exp->get_ExperimentFilePath();
+
+    QAction *action = new QAction(path, m_ExperimentsMenu);
+    QSignalMapper *mapper = new QSignalMapper(action);
+    connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
+    mapper->setMapping(action, exp);
+
+    connect(mapper, SIGNAL(mapped(const QString &)), m_Application, SLOT(activateExperiment(QString)));
+
+    m_ExperimentsMenu -> addAction(action);
+  }
 }
 
 void QxrdWindow::populateRecentExperimentsMenu()

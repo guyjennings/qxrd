@@ -310,6 +310,7 @@ void QxrdApplication::openWelcomeWindow()
 
   if (m_WelcomeWindow == NULL) {
     m_WelcomeWindow = new QxrdWelcomeWindow(this);
+    m_WelcomeWindow->setAttribute(Qt::WA_DeleteOnClose, true);
   }
 
   m_WelcomeWindow -> show();
@@ -320,7 +321,7 @@ void QxrdApplication::closeWelcomeWindow()
   GUI_THREAD_CHECK;
 
   if (m_WelcomeWindow) {
-    delete m_WelcomeWindow;
+    m_WelcomeWindow -> close();
 
     m_WelcomeWindow = NULL;
   }
@@ -955,6 +956,11 @@ void QxrdApplication::closedExperiment(QObject *obj)
 
     m_ScriptEngine->experimentClosed(expt);
   }
+}
+
+QList<QxrdExperiment*> QxrdApplication::experiments()
+{
+  return m_Experiments;
 }
 
 void QxrdApplication::doNewPerkinElmerAcquisition()

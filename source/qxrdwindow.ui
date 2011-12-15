@@ -911,6 +911,7 @@
     <addaction name="m_ActionNewExperiment"/>
     <addaction name="m_ActionOpenExperiment"/>
     <addaction name="m_ActionRecentExperiments"/>
+    <addaction name="m_ActionCloseExperiment"/>
     <addaction name="separator"/>
     <addaction name="m_ActionLoadData"/>
     <addaction name="m_ActionSaveData"/>
@@ -1027,12 +1028,18 @@
     <addaction name="m_ActionExecuteScript"/>
     <addaction name="m_ActionLoadScript"/>
    </widget>
+   <widget class="QMenu" name="m_ExperimentsMenu">
+    <property name="title">
+     <string>Experiments</string>
+    </property>
+   </widget>
    <addaction name="m_FileMenu"/>
    <addaction name="m_EditMenu"/>
    <addaction name="m_AcquireMenu"/>
    <addaction name="m_OperationsMenu"/>
    <addaction name="m_CalibrationMenu"/>
    <addaction name="m_DisplayMenu"/>
+   <addaction name="m_ExperimentsMenu"/>
    <addaction name="m_WindowsMenu"/>
    <addaction name="m_ScriptMenu"/>
    <addaction name="m_HelpMenu"/>
@@ -1617,6 +1624,17 @@
    </property>
    <property name="toolTip">
     <string>Edir Global Preferences</string>
+   </property>
+  </action>
+  <action name="m_ActionCloseExperiment">
+   <property name="text">
+    <string>Close Experiment</string>
+   </property>
+   <property name="toolTip">
+    <string>Close an Experiment</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
  </widget>
