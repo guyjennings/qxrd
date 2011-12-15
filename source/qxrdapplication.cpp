@@ -940,6 +940,9 @@ void QxrdApplication::openedExperiment(QxrdExperimentThread *expthrd)
 
     m_ScriptEngine->experimentOpened(expt);
 
+    if (expt->window()) {
+        m_ScriptEngine->windowOpened(expt->window());
+    }
 //    connect(expthrd, SIGNAL(destroyed(QObject*)), this, SLOT(closedExperiment(QObject*)), Qt::BlockingQueuedConnection);
   }
 }
@@ -955,6 +958,10 @@ void QxrdApplication::closedExperiment(QObject *obj)
     m_Experiments.removeAll(expt);
 
     m_ScriptEngine->experimentClosed(expt);
+
+    if (expt->window()) {
+        m_ScriptEngine->windowClosed(expt->window());
+    }
   }
 }
 
