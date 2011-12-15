@@ -965,9 +965,14 @@ void QxrdApplication::closedExperiment(QObject *obj)
   }
 }
 
-QList<QxrdExperiment*> QxrdApplication::experiments()
+QList<QxrdExperiment*> &QxrdApplication::experiments()
 {
   return m_Experiments;
+}
+
+QxrdExperiment *QxrdApplication::experiment(int i)
+{
+    return m_Experiments.value(i);
 }
 
 void QxrdApplication::activateExperiment(QString path)
