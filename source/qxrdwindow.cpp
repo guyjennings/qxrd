@@ -634,31 +634,46 @@ QString QxrdWindow::timeStamp()
 
 void QxrdWindow::warningMessage(QString msg)
 {
-  THREAD_CHECK;
-
-  QMessageBox::warning(this, tr("Warning"), msg);
+    if (QThread::currentThread()==thread()) {
+        QMessageBox::warning(this, tr("Warning"), msg);
+    } else {
+        INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                               "warningMessage",
+                                               Qt::QueuedConnection,
+                                               Q_ARG(QString, msg)));
+    }
 }
 
 void QxrdWindow::displayMessage(QString msg)
 {
-  THREAD_CHECK;
-
-  m_Messages -> append(msg);
+    if (QThread::currentThread()==thread()) {
+        m_Messages -> append(msg);
+    } else {
+        INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                               "displayMessage",
+                                               Qt::QueuedConnection,
+                                               Q_ARG(QString, msg)));
+    }
 }
 
 void QxrdWindow::displayCriticalMessage(QString msg)
 {
-  THREAD_CHECK;
+    if (QThread::currentThread()==thread()) {
+        static int dialogCount = 0;
 
-  static int dialogCount = 0;
+        g_Application->printMessage(tr("critical message %1, count = %2").arg(msg).arg(dialogCount));
 
-  g_Application->printMessage(tr("critical message %1, count = %2").arg(msg).arg(dialogCount));
-
-  dialogCount++;
-  if (dialogCount <= 1) {
-    QMessageBox::critical(this, "Error", msg);
-  }
-  dialogCount--;
+        dialogCount++;
+        if (dialogCount <= 1) {
+            QMessageBox::critical(this, "Error", msg);
+        }
+        dialogCount--;
+    } else {
+        INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                               "displayCriticalMessage",
+                                               Qt::QueuedConnection,
+                                               Q_ARG(QString, msg)));
+    }
 }
 
 void QxrdWindow::selectOutputDirectory()
