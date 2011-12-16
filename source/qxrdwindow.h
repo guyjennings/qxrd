@@ -50,6 +50,7 @@ public:
   void onAcquisitionInit();
 
 public slots:
+  void saveExperimentCopy();
   void doEditPreferences();
   void doSaveData();
   void doLoadData();

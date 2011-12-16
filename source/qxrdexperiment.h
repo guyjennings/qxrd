@@ -40,8 +40,8 @@ public:
 
   QxrdSettingsSaver *saver();
 
-  QString defaultDirectory(QString path);
-  QString defaultFileName(QString path);
+  QString defaultExperimentDirectory(QString path);
+  QString defaultExperimentFileName(QString path);
   QString defaultExperimentName(QString path);
   QString defaultLogName(QString path);
   QString defaultScanName(QString path);
@@ -50,9 +50,9 @@ public:
   QString logFilePath();
   QString scanFilePath();
 
-  void saveExperiment();
-  void saveExperimentCopy();
+  void setExperimentFilePath(QString path);
 
+  void saveExperimentCopyAs(QString path);
 signals:
 
 public slots:
@@ -67,6 +67,8 @@ public slots:
   void statusMessage(QString msg);
   void printMessage(QString msg);
   void shutdown();
+
+  void saveExperiment();
 
 private:
   void logMessage(QString msg);

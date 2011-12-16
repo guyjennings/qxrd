@@ -10,6 +10,7 @@
 #include "qxrdscriptengine.h"
 #include "qxrdpreferencesdialog.h"
 #include "qxrdexperimentsettings.h"
+#include <QFileDialog>
 
 QxrdExperiment::QxrdExperiment(QString path,
                                QxrdApplication *app,
@@ -18,8 +19,8 @@ QxrdExperiment::QxrdExperiment(QString path,
   QObject(parent),
   m_Saver(NULL, this),
   m_ExperimentKind(&m_Saver, this, "experimentKind", -1),
-  m_ExperimentDirectory(&m_Saver, this, "experimentDirectory", defaultDirectory(path)),
-  m_ExperimentFileName(&m_Saver, this, "experimentFileName", defaultFileName(path)),
+  m_ExperimentDirectory(&m_Saver, this, "experimentDirectory", defaultExperimentDirectory(path)),
+  m_ExperimentFileName(&m_Saver, this, "experimentFileName", defaultExperimentFileName(path)),
   m_ExperimentName(&m_Saver, this, "experimentName", defaultExperimentName(path)),
   m_ExperimentDescription(&m_Saver, this, "experimentDescription", ""),
   m_LogFilePath(&m_Saver, this, "logFilePath", defaultLogName(path)),
@@ -38,10 +39,10 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_Server(NULL),
   m_SimpleServerThread(NULL),
   m_SimpleServer(NULL),
-  m_AcquisitionThread(NULL),
-  m_Acquisition(NULL),
   m_DataProcessorThread(NULL),
   m_DataProcessor(NULL),
+  m_AcquisitionThread(NULL),
+  m_Acquisition(NULL),
   m_FileSaverThread(NULL),
   m_LogFile(NULL),
   m_ScanFile(NULL)
@@ -426,7 +427,7 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
   }
 }
 
-QString QxrdExperiment::defaultDirectory(QString path)
+QString QxrdExperiment::defaultExperimentDirectory(QString path)
 {
   QFileInfo info(path);
 
@@ -435,7 +436,7 @@ QString QxrdExperiment::defaultDirectory(QString path)
   return directory;
 }
 
-QString QxrdExperiment::defaultFileName(QString path)
+QString QxrdExperiment::defaultExperimentFileName(QString path)
 {
   QFileInfo info(path);
 
@@ -474,6 +475,22 @@ QString QxrdExperiment::experimentFilePath()
   return dir.filePath(get_ExperimentFileName());
 }
 
+void QxrdExperiment::setExperimentFilePath(QString path)
+{
+  set_ExperimentDirectory(defaultExperimentDirectory(path));
+  set_ExperimentFileName(defaultExperimentFileName(path));
+  set_ExperimentName(defaultExperimentName(path));
+  set_LogFilePath(defaultLogName(path));
+  set_ScanFilePath(defaultScanName(path));
+
+  printf("setExperimentFilePath %s\n", qPrintable(path));
+  printf("  experimentDirectory: %s\n", qPrintable(get_ExperimentDirectory()));
+  printf("  experimentFileName: %s\n", qPrintable(get_ExperimentFileName()));
+  printf("  experimentName: %s\n", qPrintable(get_ExperimentName()));
+  printf("  logFilePath: %s\n", qPrintable(get_LogFilePath()));
+  printf("  scanFilePath: %s\n", qPrintable(get_ScanFilePath()));
+}
+
 QString QxrdExperiment::logFilePath()
 {
   QDir dir(get_ExperimentDirectory());
@@ -493,6 +510,19 @@ void QxrdExperiment::saveExperiment()
   writeSettings();
 }
 
-void QxrdExperiment::saveExperimentCopy()
+void QxrdExperiment::saveExperimentCopyAs(QString path)
 {
+  printf("Save experiment copy as %s\n", qPrintable(path));
+
+  QxrdExperimentSettings settings(path);
+
+  writeSettings(&settings);
+
+  QxrdExperiment *exp = new QxrdExperiment(path, m_Application, &settings);
+
+  exp -> setExperimentFilePath(path);
+
+  exp -> writeSettings(&settings);
+
+  delete exp;
 }

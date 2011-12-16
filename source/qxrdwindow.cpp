@@ -211,8 +211,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   connect(m_ActionNewExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseNewExperiment()));
   connect(m_ActionOpenExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseExistingExperiment()));
   connect(m_ActionCloseExperiment, SIGNAL(triggered()), this, SLOT(close()));
-  connect(m_ActionSaveExperiment, SIGNAL(triggered()), m_Application, SLOT(saveExperiment()));
-  connect(m_ActionSaveExperimentCopy, SIGNAL(triggered()), m_Application, SLOT(saveExperimentCopy()));
+  connect(m_ActionSaveExperiment, SIGNAL(triggered()), m_Experiment, SLOT(saveExperiment()));
+  connect(m_ActionSaveExperimentCopy, SIGNAL(triggered()), this, SLOT(saveExperimentCopy()));
 
   connect(m_ExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateExperimentsMenu()));
   setupRecentExperimentsMenu(m_ActionRecentExperiments);
@@ -958,6 +958,28 @@ void QxrdWindow::doEditPreferences()
   QxrdPreferencesDialog prefs(m_Experiment, this);
 
   prefs.exec();
+}
+
+void QxrdWindow::saveExperimentCopy()
+{
+  GUI_THREAD_CHECK;
+
+  QString path = m_Experiment->experimentFilePath();
+  QString name = m_Experiment->defaultExperimentName(path);
+  QString dirp = m_Experiment->defaultExperimentDirectory(path);
+
+  QDir dir(m_Experiment->get_ExperimentDirectory());
+
+  QString newPath = dir.filePath(name+"-copy.qxrdp");
+
+  QString newChoice = QFileDialog::getSaveFileName(NULL,
+                                                   "Save Experiment Copy",
+                                                   newPath,
+                                                   "QXRD Experiments (*.qxrdp)");
+
+  if (newChoice.length()>0) {
+    m_Experiment->saveExperimentCopyAs(newChoice);
+  }
 }
 
 void QxrdWindow::doSaveData()
