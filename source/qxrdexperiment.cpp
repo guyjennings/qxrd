@@ -123,7 +123,7 @@ bool QxrdExperiment::init(QSettings *settings)
 
   splashMessage("Loading plugins");
 
-//  printMessage("about to load plugins");
+  //  printMessage("about to load plugins");
 
   m_Acquisition -> setNIDAQPlugin(m_Application->nidaqPlugin());
 
@@ -243,40 +243,59 @@ void QxrdExperiment::splashMessage(QString msg)
 
 void QxrdExperiment::criticalMessage(QString msg)
 {
-    if (m_Window) {
-        INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayCriticalMessage", Q_ARG(QString, msg)));
-    } else {
-        m_Application->criticalMessage(msg);
-    }
+  if (m_Window) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayCriticalMessage", Q_ARG(QString, msg)));
+  } else {
+    m_Application->criticalMessage(msg);
+  }
 }
 
 void QxrdExperiment::statusMessage(QString msg)
 {
-    if (m_Window) {
-        INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayStatusMessage", Q_ARG(QString, msg)));
-    } else {
-        m_Application->statusMessage(msg);
-    }
+  if (m_Window) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayStatusMessage", Q_ARG(QString, msg)));
+  } else {
+    m_Application->statusMessage(msg);
+  }
 }
 
 void QxrdExperiment::printMessage(QString msg)
 {
-    if (m_Window) {
-        INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayMessage", Q_ARG(QString, msg)));
-    } else {
-        m_Application->printMessage(qPrintable(msg));
-    }
+  if (m_Window) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayMessage", Q_ARG(QString, msg)));
+  } else {
+    m_Application->printMessage(qPrintable(msg));
+  }
 }
 
 void QxrdExperiment::openLogFile()
 {
-  if (m_LogFile == NULL) {
-    m_LogFile = fopen(qPrintable(get_LogFilePath()), "a");
-
-    if (m_LogFile) {
-      writeLogHeader();
-    }
+  if (m_LogFile) {
+    fclose(m_LogFile);
   }
+
+  m_LogFile = fopen(qPrintable(logFilePath()), "a");
+
+  if (m_LogFile) {
+    writeLogHeader();
+  }
+}
+
+void QxrdExperiment::openScanFile()
+{
+  if (m_ScanFile) {
+    fclose(m_ScanFile);
+  }
+
+  m_ScanFile = fopen(qPrintable(scanFilePath()), "a");
+
+  if (m_ScanFile) {
+    writeScanHeader();
+  }
+}
+
+void QxrdExperiment::writeScanHeader()
+{
 }
 
 QxrdWindow *QxrdExperiment::window()
@@ -483,12 +502,21 @@ void QxrdExperiment::setExperimentFilePath(QString path)
   set_LogFilePath(defaultLogName(path));
   set_ScanFilePath(defaultScanName(path));
 
-  printf("setExperimentFilePath %s\n", qPrintable(path));
-  printf("  experimentDirectory: %s\n", qPrintable(get_ExperimentDirectory()));
-  printf("  experimentFileName: %s\n", qPrintable(get_ExperimentFileName()));
-  printf("  experimentName: %s\n", qPrintable(get_ExperimentName()));
-  printf("  logFilePath: %s\n", qPrintable(get_LogFilePath()));
-  printf("  scanFilePath: %s\n", qPrintable(get_ScanFilePath()));
+  if (m_Window) {
+    m_Window -> updateTitle();
+  }
+
+  if (qcepDebug(DEBUG_PREFS)) {
+    printMessage(tr("setExperimentFilePath %1").arg(path));
+    printMessage(tr("  experimentDirectory: %1").arg(get_ExperimentDirectory()));
+    printMessage(tr("  experimentFileName: %1").arg(get_ExperimentFileName()));
+    printMessage(tr("  experimentName: %1").arg(get_ExperimentName()));
+    printMessage(tr("  logFilePath: %1").arg(get_LogFilePath()));
+    printMessage(tr("  scanFilePath: %1").arg(get_ScanFilePath()));
+  }
+
+  openLogFile();
+  openScanFile();
 }
 
 QString QxrdExperiment::logFilePath()
@@ -508,6 +536,15 @@ QString QxrdExperiment::scanFilePath()
 void QxrdExperiment::saveExperiment()
 {
   writeSettings();
+}
+
+void QxrdExperiment::saveExperimentAs(QString path)
+{
+  QxrdExperimentSettings settings(path);
+
+  setExperimentFilePath(path);
+
+  writeSettings(&settings);
 }
 
 void QxrdExperiment::saveExperimentCopyAs(QString path)

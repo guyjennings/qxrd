@@ -107,13 +107,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
 
   setupUi(this);
 
-  setWindowTitle(m_Experiment->experimentFilePath()+" - "+windowTitle());
-
-  if (sizeof(void*) == 4) {
-    setWindowTitle(windowTitle()+" - 32 bit - v"+STR(QXRD_VERSION));
-  } else {
-    setWindowTitle(windowTitle()+" - 64 bit - v"+STR(QXRD_VERSION));
-  }
+  updateTitle();
 
   setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
 
@@ -212,6 +206,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   connect(m_ActionOpenExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseExistingExperiment()));
   connect(m_ActionCloseExperiment, SIGNAL(triggered()), this, SLOT(close()));
   connect(m_ActionSaveExperiment, SIGNAL(triggered()), m_Experiment, SLOT(saveExperiment()));
+  connect(m_ActionSaveExperimentAs, SIGNAL(triggered()), this, SLOT(saveExperimentAs()));
   connect(m_ActionSaveExperimentCopy, SIGNAL(triggered()), this, SLOT(saveExperimentCopy()));
 
   connect(m_ExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateExperimentsMenu()));
@@ -497,6 +492,17 @@ QxrdWindow::~QxrdWindow()
   //  delete m_NewData;
   //  delete m_Mask;
   //  delete m_NewMask;
+}
+
+void QxrdWindow::updateTitle()
+{
+  setWindowTitle(m_Experiment->experimentFilePath()+" - QXRD");
+
+  if (sizeof(void*) == 4) {
+    setWindowTitle(windowTitle()+" - 32 bit - v"+STR(QXRD_VERSION));
+  } else {
+    setWindowTitle(windowTitle()+" - 64 bit - v"+STR(QXRD_VERSION));
+  }
 }
 
 void QxrdWindow::shrinkDockWidget(QDockWidget *dw)
@@ -960,6 +966,29 @@ void QxrdWindow::doEditPreferences()
   prefs.exec();
 }
 
+void QxrdWindow::saveExperimentAs()
+{
+  GUI_THREAD_CHECK;
+
+  QString path = m_Experiment->experimentFilePath();
+  QString name = m_Experiment->defaultExperimentName(path);
+  QString dirp = m_Experiment->defaultExperimentDirectory(path);
+
+  QDir dir(m_Experiment->get_ExperimentDirectory());
+
+  QString newPath = dir.filePath(name+"-copy.qxrdp");
+
+  QString newChoice = QFileDialog::getSaveFileName(NULL,
+                                                   "Save Experiment As",
+                                                   newPath,
+                                                   "QXRD Experiments (*.qxrdp)");
+
+  if (newChoice.length()>0) {
+    m_Experiment->saveExperimentAs(newChoice);
+    m_Application->appendRecentExperiment(newChoice);
+  }
+}
+
 void QxrdWindow::saveExperimentCopy()
 {
   GUI_THREAD_CHECK;
@@ -979,6 +1008,7 @@ void QxrdWindow::saveExperimentCopy()
 
   if (newChoice.length()>0) {
     m_Experiment->saveExperimentCopyAs(newChoice);
+    m_Application->appendRecentExperiment(newChoice);
   }
 }
 

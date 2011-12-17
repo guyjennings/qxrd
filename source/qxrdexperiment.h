@@ -53,6 +53,8 @@ public:
   void setExperimentFilePath(QString path);
 
   void saveExperimentCopyAs(QString path);
+  void saveExperimentAs(QString path);
+
 signals:
 
 public slots:
@@ -78,6 +80,7 @@ private:
 
   void closeScanFile();
   void openScanFile();
+  void writeScanHeader();
 
 public:  // Properties
   QxrdSettingsSaver m_Saver;

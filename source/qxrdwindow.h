@@ -51,6 +51,7 @@ public:
 
 public slots:
   void saveExperimentCopy();
+  void saveExperimentAs();
   void doEditPreferences();
   void doSaveData();
   void doLoadData();
@@ -72,6 +73,7 @@ public slots:
   void doIntegrateSequence();
   void doProcessSequence();
 
+  void updateTitle();
   void doAcquire();
   void doCancel();
   void acquireStarted();

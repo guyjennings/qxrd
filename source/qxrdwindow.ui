@@ -912,6 +912,7 @@
     <addaction name="m_ActionOpenExperiment"/>
     <addaction name="m_ActionRecentExperiments"/>
     <addaction name="m_ActionSaveExperiment"/>
+    <addaction name="m_ActionSaveExperimentAs"/>
     <addaction name="m_ActionSaveExperimentCopy"/>
     <addaction name="m_ActionCloseExperiment"/>
     <addaction name="separator"/>
@@ -1653,6 +1654,14 @@
    </property>
    <property name="toolTip">
     <string>Save Experiment Copy</string>
+   </property>
+  </action>
+  <action name="m_ActionSaveExperimentAs">
+   <property name="text">
+    <string>Save Experiment As...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Experiment As...</string>
    </property>
   </action>
  </widget>
