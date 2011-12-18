@@ -12,7 +12,6 @@
 #include "qxrdserverthread.h"
 #include "qxrdsimpleserverthread.h"
 #include "qxrdfilesaverthread.h"
-#include "qxrdsettingssaverthread.h"
 
 class QxrdWindow;
 class QxrdNIDAQPluginInterface;

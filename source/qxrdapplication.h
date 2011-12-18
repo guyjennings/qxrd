@@ -11,7 +11,6 @@
 #include "qxrdresponsetimer.h"
 #include "qxrdallocatorthread.h"
 #include "qxrdscriptenginethread.h"
-//#include "qxrddefaultapplication.h"
 #include "qxrdexperiment.h"
 #include "qxrdexperimentthread.h"
 #include "qxrdwelcomewindow.h"
@@ -190,8 +189,6 @@ private:
   QxrdScriptEngineThread         *m_ScriptEngineThread;
   QxrdScriptEngine               *m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
-  QxrdSettingsSaverThread        *m_SettingsSaverThread;
-  QxrdSettingsSaver              *m_SettingsSaver;
   QxrdNIDAQPluginInterface       *m_NIDAQPluginInterface;
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;

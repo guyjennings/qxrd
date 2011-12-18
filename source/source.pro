@@ -179,7 +179,6 @@ HEADERS += TODO.h \
     qxrdacquiredialog.h \
     qxrdcenterstepspinner.h \
     qxrdsettingssaver.h \
-    qxrdsettingssaverthread.h \
     qxrdplotimage.h \
     qxrdimagedisplaywidget.h \
     qwt_plot_piecewise_curve.h \
@@ -213,7 +212,6 @@ HEADERS += TODO.h \
     qxrdfilebrowsermodelupdater.h \
     qxrdfilebrowsermodelupdaterthread.h \
     qxrdintegratorcache.h \
-    qxrdnewexperimentdialog.h \
     qxrdexperimentthread.h \
     qxrdexperiment.h \
     qxrdexperimentpilatusacquisition.h \
@@ -314,7 +312,6 @@ SOURCES += qxrd.cpp \
     qxrdacquiredialog.cpp \
     qxrdcenterstepspinner.cpp \
     qxrdsettingssaver.cpp \
-    qxrdsettingssaverthread.cpp \
     qxrdplotimage.cpp \
     qxrdimagedisplaywidget.cpp \
     qwt_plot_piecewise_curve.cpp \
@@ -348,7 +345,6 @@ SOURCES += qxrd.cpp \
     qxrdfilebrowsermodelupdater.cpp \
     qxrdfilebrowsermodelupdaterthread.cpp \
     qxrdintegratorcache.cpp \
-    qxrdnewexperimentdialog.cpp \
     qxrdexperimentthread.cpp \
     qxrdexperiment.cpp \
     qxrdexperimentpilatusacquisition.cpp \
@@ -379,7 +375,6 @@ FORMS = qxrdwindow.ui \
     qxrdinfodialog.ui \
     qxrdfreshstartdialog.ui \
     qxrdacquirefilewatcherdialog.ui \
-    qxrdnewexperimentdialog.ui \
     qxrdwelcomewindow.ui \
     qxrdglobalpreferencesdialog.ui \
     qxrdwelcomerecentitem.ui

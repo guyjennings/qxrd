@@ -18,13 +18,11 @@
 #include "qxrdscriptengine.h"
 #include "qxrdglobalpreferencesdialog.h"
 #include "qcepproperty.h"
-#include "qxrdsettingssaverthread.h"
 #include "qxrddetectorplugininterface.h"
 #include "qxrdprocessorinterface.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdfreshstartdialog.h"
 #include "qxrdglobalsettings.h"
-#include "qxrdnewexperimentdialog.h"
 #include "qxrdexperimentthread.h"
 #include "qxrdexperimentperkinelmeracquisition.h"
 #include "qxrdexperimentperkinelmeranalysis.h"
@@ -114,8 +112,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_ScriptEngineThread(NULL),
     m_ScriptEngine(NULL),
     m_ScriptEngineDebugger(NULL),
-    m_SettingsSaverThread(NULL),
-    m_SettingsSaver(NULL),
+//    m_SettingsSaverThread(NULL),
+//    m_SettingsSaver(NULL),
     #ifdef HAVE_PERKIN_ELMER
         m_PerkinElmerPluginInterface(NULL),
     #endif
@@ -243,10 +241,10 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
   connect(prop_Debug(), SIGNAL(valueChanged(int,int)), this, SLOT(debugChanged(int)));
 
-  m_SettingsSaverThread = new QxrdSettingsSaverThread(this);
-  m_SettingsSaverThread -> setObjectName("settings");
-  m_SettingsSaverThread -> start();
-  m_SettingsSaver = m_SettingsSaverThread -> settingsSaver();
+//  m_SettingsSaverThread = new QxrdSettingsSaverThread(this);
+//  m_SettingsSaverThread -> setObjectName("settings");
+//  m_SettingsSaverThread -> start();
+//  m_SettingsSaver = m_SettingsSaverThread -> settingsSaver();
 
   printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
@@ -610,7 +608,7 @@ void QxrdApplication::shutdownThreads()
 
   writeSettings();
 
-  shutdownThread(m_SettingsSaverThread);
+//  shutdownThread(m_SettingsSaverThread);
 //  shutdownThread(m_SimpleServerThread);
 //  shutdownThread(m_ServerThread);
   shutdownThread(m_ScriptEngineThread);
