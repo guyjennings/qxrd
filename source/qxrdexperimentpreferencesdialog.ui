@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>QxrdPreferencesDialog</class>
- <widget class="QDialog" name="QxrdPreferencesDialog">
+ <class>QxrdExperimentPreferencesDialog</class>
+ <widget class="QDialog" name="QxrdExperimentPreferencesDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>525</width>
-    <height>490</height>
+    <height>524</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -626,7 +626,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>QxrdPreferencesDialog</receiver>
+   <receiver>QxrdExperimentPreferencesDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -642,7 +642,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>QxrdPreferencesDialog</receiver>
+   <receiver>QxrdExperimentPreferencesDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

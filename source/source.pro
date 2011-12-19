@@ -143,7 +143,7 @@ HEADERS += TODO.h \
     qxrdfilebrowser.h \
     qxrdimagecalculator.h \
     qxrdmutexlocker.h \
-    qxrdpreferencesdialog.h \
+    qxrdexperimentpreferencesdialog.h \
     qxrdsharedpointer.h \
     qxrdintegrateddata.h \
     qxrdintegrateddataqueue.h \
@@ -276,7 +276,7 @@ SOURCES += qxrd.cpp \
     qxrdfilebrowser.cpp \
     qxrdimagecalculator.cpp \
     qxrdmutexlocker.cpp \
-    qxrdpreferencesdialog.cpp \
+    qxrdexperimentpreferencesdialog.cpp \
     qxrdsharedpointer.cpp \
     qxrdintegrateddata.cpp \
     qxrdintegrateddataqueue.cpp \
@@ -362,7 +362,7 @@ FORMS = qxrdwindow.ui \
     qxrdintegratordialog.ui \
     qxrdfilebrowser.ui \
     qxrdimagecalculator.ui \
-    qxrdpreferencesdialog.ui \
+    qxrdexperimentpreferencesdialog.ui \
     qxrdpowderfitwidget.ui \
     qxrdacquiredialog.ui \
     qxrdmaskdialog.ui \

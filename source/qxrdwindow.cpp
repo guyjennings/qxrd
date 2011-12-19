@@ -31,7 +31,7 @@
 #include "qxrdinfodialog.h"
 #include "qxrdtestdockwidget.h"
 #include "qxrdhighlighter.h"
-#include "qxrdpreferencesdialog.h"
+#include "qxrdexperimentpreferencesdialog.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -961,7 +961,7 @@ void QxrdWindow::doEditPreferences()
 {
   GUI_THREAD_CHECK;
 
-  QxrdPreferencesDialog prefs(m_Experiment, this);
+  QxrdExperimentPreferencesDialog prefs(m_Experiment, this);
 
   prefs.exec();
 }

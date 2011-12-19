@@ -1,5 +1,5 @@
-#ifndef QXRDPREFERENCESDIALOG_H
-#define QXRDPREFERENCESDIALOG_H
+#ifndef QXRDEXPERIMENTPREFERENCESDIALOG_H
+#define QXRDEXPERIMENTPREFERENCESDIALOG_H
 
 #include "qcepmacros.h"
 
@@ -7,15 +7,15 @@
 #include <QLineEdit>
 #include <QVector>
 #include <QCheckBox>
-#include "ui_qxrdpreferencesdialog.h"
+#include "ui_qxrdexperimentpreferencesdialog.h"
 
 class QxrdExperiment;
 
-class QxrdPreferencesDialog : public QDialog, public Ui::QxrdPreferencesDialog {
+class QxrdExperimentPreferencesDialog : public QDialog, public Ui::QxrdExperimentPreferencesDialog {
   Q_OBJECT
 public:
-  QxrdPreferencesDialog(QxrdExperiment *doc, QWidget *parent = 0);
-  ~QxrdPreferencesDialog();
+  QxrdExperimentPreferencesDialog(QxrdExperiment *doc, QWidget *parent = 0);
+  ~QxrdExperimentPreferencesDialog();
 
 public slots:
   void accept();
@@ -41,4 +41,4 @@ private:
   QVector<QCheckBox*>  m_DebugWidgetList;
 };
 
-#endif // QXRDPREFERENCESDIALOG_H
+#endif // QXRDEXPERIMENTPREFERENCESDIALOG_H

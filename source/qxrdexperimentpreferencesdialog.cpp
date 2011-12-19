@@ -1,4 +1,4 @@
-#include "qxrdpreferencesdialog.h"
+#include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdacquisition.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrddataprocessor.h"
@@ -10,7 +10,7 @@
 #include <QGridLayout>
 #include "qcepdebug.h"
 
-QxrdPreferencesDialog::QxrdPreferencesDialog(QxrdExperiment *doc, QWidget *parent) :
+QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperiment *doc, QWidget *parent) :
   QDialog(parent),
   m_Experiment(doc)
 {
@@ -89,11 +89,11 @@ QxrdPreferencesDialog::QxrdPreferencesDialog(QxrdExperiment *doc, QWidget *paren
   setupDebugWidgets(debugLevel);
 }
 
-QxrdPreferencesDialog::~QxrdPreferencesDialog()
+QxrdExperimentPreferencesDialog::~QxrdExperimentPreferencesDialog()
 {
 }
 
-void QxrdPreferencesDialog::getRelativeDirectoryPath(QLineEdit *edit)
+void QxrdExperimentPreferencesDialog::getRelativeDirectoryPath(QLineEdit *edit)
 {
   QDir pwd(m_CurrentOutputDirectory->text());
   QFileInfo initial(pwd, edit->text());
@@ -105,27 +105,27 @@ void QxrdPreferencesDialog::getRelativeDirectoryPath(QLineEdit *edit)
   }
 }
 
-void QxrdPreferencesDialog::saveRawBrowse()
+void QxrdExperimentPreferencesDialog::saveRawBrowse()
 {
   getRelativeDirectoryPath(m_SaveRawSubdir);
 }
 
-void QxrdPreferencesDialog::saveDarkBrowse()
+void QxrdExperimentPreferencesDialog::saveDarkBrowse()
 {
   getRelativeDirectoryPath(m_SaveDarkSubdir);
 }
 
-void QxrdPreferencesDialog::saveSubtractedBrowse()
+void QxrdExperimentPreferencesDialog::saveSubtractedBrowse()
 {
   getRelativeDirectoryPath(m_SaveSubtractedSubdir);
 }
 
-void QxrdPreferencesDialog::saveIntegratedBrowse()
+void QxrdExperimentPreferencesDialog::saveIntegratedBrowse()
 {
   getRelativeDirectoryPath(m_SaveIntegratedSubdir);
 }
 
-void QxrdPreferencesDialog::currentOutputBrowse()
+void QxrdExperimentPreferencesDialog::currentOutputBrowse()
 {
   QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", m_CurrentOutputDirectory->text(), QFileDialog::ShowDirsOnly);
 
@@ -134,7 +134,7 @@ void QxrdPreferencesDialog::currentOutputBrowse()
   }
 }
 
-void QxrdPreferencesDialog::currentLogfileBrowse()
+void QxrdExperimentPreferencesDialog::currentLogfileBrowse()
 {
   QDir pwd(m_CurrentOutputDirectory->text());
   QFileInfo initial(pwd, m_CurrentLogFile->text());
@@ -146,7 +146,7 @@ void QxrdPreferencesDialog::currentLogfileBrowse()
   }
 }
 
-void QxrdPreferencesDialog::changeEvent(QEvent *e)
+void QxrdExperimentPreferencesDialog::changeEvent(QEvent *e)
 {
   QDialog::changeEvent(e);
   switch (e->type()) {
@@ -158,7 +158,7 @@ void QxrdPreferencesDialog::changeEvent(QEvent *e)
   }
 }
 
-void QxrdPreferencesDialog::accept()
+void QxrdExperimentPreferencesDialog::accept()
 {
   bool restartNeeded = false;
 
@@ -247,7 +247,7 @@ void QxrdPreferencesDialog::accept()
   QDialog::accept();
 }
 
-void QxrdPreferencesDialog::setupDebugWidgets(int dbg)
+void QxrdExperimentPreferencesDialog::setupDebugWidgets(int dbg)
 {
   QGridLayout *grid = new QGridLayout(m_DebugWidgets);
 
@@ -276,7 +276,7 @@ void QxrdPreferencesDialog::setupDebugWidgets(int dbg)
   }
 }
 
-int QxrdPreferencesDialog::readDebugWidgets()
+int QxrdExperimentPreferencesDialog::readDebugWidgets()
 {
   int mask = 1;
   int newDbg = 0;
