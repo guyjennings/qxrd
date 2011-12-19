@@ -9,6 +9,8 @@ QxrdAllocator::QxrdAllocator
     m_AllocatedMemory(0),
     m_AllocatedMemoryMB(0),
     m_Max(saver, this, "max", 800),
+    m_TotalBufferSizeMB32(saver, this,"totalBufferSizeMB32", 800),
+    m_TotalBufferSizeMB64(saver, this,"totalBufferSizeMB64", 2000),
     m_Reserve(saver, this,"reserve",100),
     m_Allocated(NULL, this, "allocated", 0),
     m_QueuedDelete(NULL, this, "queuedDelete", 0),
@@ -34,6 +36,28 @@ QxrdAllocator::~QxrdAllocator()
   if (qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage(tr("allocator %1 deleted").HEXARG(this));
   };
+}
+
+void QxrdAllocator::writeSettings(QSettings *settings, QString section)
+{
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdAllocator::readSettings(QSettings *settings, QString section)
+{
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+
+  if (get_TotalBufferSizeMB32() > 100000000) {
+    set_TotalBufferSizeMB32(get_TotalBufferSizeMB32()/MegaBytes);
+  }
+
+  if (get_TotalBufferSizeMB64() > 100000000) {
+    set_TotalBufferSizeMB64(get_TotalBufferSizeMB64()/MegaBytes);
+  }
 }
 
 int QxrdAllocator::waitTillAvailable(AllocationStrategy strat, int sizeMB)

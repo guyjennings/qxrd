@@ -525,6 +525,10 @@ void QxrdApplication::readSettings()
 void QxrdApplication::readSettings(QSettings *settings)
 {
   QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
+
+  if (m_Allocator) {
+    m_Allocator->readSettings(settings, "allocator");
+  }
 }
 
 void QxrdApplication::writeSettings()
@@ -537,6 +541,10 @@ void QxrdApplication::writeSettings()
 void QxrdApplication::writeSettings(QSettings *settings)
 {
   QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
+
+  if (m_Allocator) {
+    m_Allocator->writeSettings(settings, "allocator");
+  }
 }
 
 void QxrdApplication::doLoadPreferences()
@@ -663,7 +671,7 @@ void QxrdApplication::doOpenQXRDWebPage()
 
 void QxrdApplication::editGlobalPreferences()
 {
-  QxrdGlobalPreferencesDialog prefs;
+  QxrdGlobalPreferencesDialog prefs(this);
 
   prefs.exec();
 }

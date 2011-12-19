@@ -2,24 +2,32 @@
 #define QXRDGLOBALPREFERENCESDIALOG_H
 
 #include <QDialog>
+#include <QCheckBox>
+#include "ui_qxrdglobalpreferencesdialog.h"
 
-namespace Ui {
-    class QxrdGlobalPreferencesDialog;
-}
+class QxrdApplication;
 
-class QxrdGlobalPreferencesDialog : public QDialog
+class QxrdGlobalPreferencesDialog : public QDialog, public Ui::QxrdGlobalPreferencesDialog
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit QxrdGlobalPreferencesDialog(QWidget *parent = 0);
-    ~QxrdGlobalPreferencesDialog();
+  explicit QxrdGlobalPreferencesDialog(QxrdApplication *app, QWidget *parent = 0);
+  ~QxrdGlobalPreferencesDialog();
+
+public slots:
+  void accept();
 
 protected:
-    void changeEvent(QEvent *e);
+  void changeEvent(QEvent *e);
 
 private:
-    Ui::QxrdGlobalPreferencesDialog *ui;
+  void setupDebugWidgets(int dbg);
+  int readDebugWidgets();
+
+private:
+  QxrdApplication                 *m_Application;
+  QVector<QCheckBox*>              m_DebugWidgetList;
 };
 
 #endif // QXRDGLOBALPREFERENCESDIALOG_H

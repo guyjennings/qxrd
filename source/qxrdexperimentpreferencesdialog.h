@@ -33,12 +33,9 @@ protected:
 
 private:
   void getRelativeDirectoryPath(QLineEdit *edit);
-  void setupDebugWidgets(int dbg);
-  int readDebugWidgets();
 
 private:
   QxrdExperiment      *m_Experiment;
-  QVector<QCheckBox*>  m_DebugWidgetList;
 };
 
 #endif // QXRDEXPERIMENTPREFERENCESDIALOG_H

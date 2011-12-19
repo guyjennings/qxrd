@@ -8,7 +8,7 @@
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"
 #include "qxrdscriptengine.h"
-#include "qxrdpreferencesdialog.h"
+#include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdexperimentsettings.h"
 #include <QFileDialog>
 

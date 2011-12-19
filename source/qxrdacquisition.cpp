@@ -27,11 +27,11 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaver *saver, QxrdExperiment *doc, 
   connect(prop_CameraGain(), SIGNAL(valueChanged(int,int)), this, SLOT(onCameraGainChanged(int)));
 
   if (sizeof(void*) == 4) {
-    connect(prop_TotalBufferSizeMB32(), SIGNAL(valueChanged(int,int)), this, SLOT(onBufferSizeChanged(int)));
-    onBufferSizeChanged(get_TotalBufferSizeMB32());
+    connect(m_Allocator->prop_TotalBufferSizeMB32(), SIGNAL(valueChanged(int,int)), this, SLOT(onBufferSizeChanged(int)));
+    onBufferSizeChanged(m_Allocator->get_TotalBufferSizeMB32());
   } else {
-    connect(prop_TotalBufferSizeMB64(), SIGNAL(valueChanged(int,int)), this, SLOT(onBufferSizeChanged(int)));
-    onBufferSizeChanged(get_TotalBufferSizeMB64());
+    connect(m_Allocator->prop_TotalBufferSizeMB64(), SIGNAL(valueChanged(int,int)), this, SLOT(onBufferSizeChanged(int)));
+    onBufferSizeChanged(m_Allocator->get_TotalBufferSizeMB64());
   }
 
   connect(&m_Watcher, SIGNAL(finished()), this, SLOT(onAcquireComplete()));

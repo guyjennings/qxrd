@@ -22,6 +22,9 @@ public:
   QxrdAllocator(QxrdSettingsSaver *saver, QObject *parent=0);
   virtual ~QxrdAllocator();
 
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
+
 public:
   enum AllocationStrategy {
     WaitTillAvailable,
@@ -83,6 +86,12 @@ private:
 
   Q_PROPERTY(int     max        READ get_Max   WRITE set_Max)
   QCEP_INTEGER_PROPERTY(Max)
+
+  Q_PROPERTY(int     totalBufferSizeMB32    READ get_TotalBufferSizeMB32 WRITE set_TotalBufferSizeMB32)
+  QCEP_INTEGER_PROPERTY(TotalBufferSizeMB32)
+
+  Q_PROPERTY(int     totalBufferSizeMB64    READ get_TotalBufferSizeMB64 WRITE set_TotalBufferSizeMB64)
+  QCEP_INTEGER_PROPERTY(TotalBufferSizeMB64)
 
   Q_PROPERTY(int     reserve        READ get_Reserve   WRITE set_Reserve)
   QCEP_INTEGER_PROPERTY(Reserve)

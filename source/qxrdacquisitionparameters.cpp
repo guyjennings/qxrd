@@ -37,8 +37,6 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdSettingsSaver *saver)
     m_AcquireDark(saver, this, "acquireDark", 0),
     m_Cancelling(NULL, this, "cancelling", 0),
     m_Triggered(NULL, this, "triggered", 0),
-    m_TotalBufferSizeMB32(saver, this,"totalBufferSizeMB32", 800),
-    m_TotalBufferSizeMB64(saver, this,"totalBufferSizeMB64", 2000),
     m_Raw16SaveTime(saver, this,"raw16SaveTime", 0.1),
     m_Raw32SaveTime(saver, this,"raw32SaveTime", 0.2),
     m_RawSaveTime(saver, this,"rawSaveTime", 0.2),
@@ -114,14 +112,6 @@ void QxrdAcquisitionParameters::readSettings(QSettings *settings, QString sectio
   }
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
-
-  if (get_TotalBufferSizeMB32() > 100000000) {
-    set_TotalBufferSizeMB32(get_TotalBufferSizeMB32()/MegaBytes);
-  }
-
-  if (get_TotalBufferSizeMB64() > 100000000) {
-    set_TotalBufferSizeMB64(get_TotalBufferSizeMB64()/MegaBytes);
-  }
 }
 
 //void QxrdAcquisitionParameters::setDynamicProperty(QString name, QVariant value)
