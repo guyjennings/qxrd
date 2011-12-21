@@ -41,9 +41,9 @@ int main(int argc, char *argv[])
 
     //  printf("App Constructed\n");
 
-    foreach(QString cmd, app.get_CmdList()) {
-      app.executeCommand(cmd);
-    }
+//    foreach(QString cmd, app.get_CmdList()) {
+//      app.executeCommand(cmd);
+//    }
 
     if (app.get_GuiWanted()) {
       splash->finish(app.window());

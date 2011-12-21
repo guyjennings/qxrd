@@ -14,19 +14,13 @@ class QxrdApplication;
 #include "qxrdacquisition.h"
 #include "qxrddataprocessor.h"
 
-class QxrdScriptEngine : public QObject
+class QxrdScriptEngine : public QScriptEngine
 {
   Q_OBJECT
 
 public:
-  QxrdScriptEngine(QxrdApplication *app/*, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc*/);
+  QxrdScriptEngine(QxrdApplication *app, QxrdExperiment *exp);
   void initialize();
-
-  void experimentOpened(QxrdExperiment *doc);
-  void experimentClosed(QxrdExperiment *doc);
-
-  void windowOpened(QxrdWindow *win);
-  void windowClosed(QxrdWindow *win);
 
 public slots:
   void evaluateAppCommand(QString cmd);
@@ -45,7 +39,11 @@ public:
   QString uncaughtExceptionString() const;
   void cancelCommand();
 
-  QScriptEngine* scriptEngine() const;
+  QxrdApplication *application() const;
+  QxrdExperiment  *experiment() const;
+  QxrdAcquisition *acquisition() const;
+  QxrdDataProcessor *dataProcessor() const;
+  QxrdWindow      *window() const;
 
 private slots:
   void              evaluate(int src, QString cmd);
@@ -79,13 +77,13 @@ private:
 
 private:
   mutable QMutex         m_Mutex;
-  QScriptEngine         *m_ScriptEngine;
   QxrdApplication       *m_Application;
-//  QxrdWindow          *m_Window;
-//  QxrdAcquisition     *m_Acquisition;
+  QxrdExperiment        *m_Experiment;
+  QxrdAcquisition       *m_Acquisition;
+  QxrdDataProcessor     *m_DataProcessor;
+  QxrdWindow            *m_Window;
 
-  QList<QxrdExperiment*> m_Experiments;
-  QList<QxrdWindow*>     m_Windows;
+//  QList<QxrdWindow*>     m_Windows;
 };
 
 #endif // QXRDSCRIPTENGINE_H

@@ -5,12 +5,9 @@
 #include "qcepproperty.h"
 
 #include <QApplication>
-#include <QScriptEngine>
-#include <QScriptEngineDebugger>
 #include <QSettings>
 #include "qxrdresponsetimer.h"
 #include "qxrdallocatorthread.h"
-#include "qxrdscriptenginethread.h"
 #include "qxrdexperiment.h"
 #include "qxrdexperimentthread.h"
 #include "qxrdwelcomewindow.h"
@@ -49,7 +46,6 @@ public:
   QStringList makeStringList(int argc, char **argv);
 
   QWidget* window();
-  QxrdScriptEngine* scriptEngine();
 
   void readDefaultSettings();
   void writeDefaultSettings();
@@ -113,8 +109,6 @@ public slots:
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
   void processEventCounter();
-
-  void executeCommand(QString cmd);
 
   QString homePath();
   QString currentPath();
@@ -186,9 +180,6 @@ private:
   QxrdWelcomeWindow              *m_WelcomeWindow;
   QxrdAllocatorThread            *m_AllocatorThread;
   QxrdAllocator                  *m_Allocator;
-  QxrdScriptEngineThread         *m_ScriptEngineThread;
-  QxrdScriptEngine               *m_ScriptEngine;
-  QScriptEngineDebugger          *m_ScriptEngineDebugger;
   QxrdNIDAQPluginInterface       *m_NIDAQPluginInterface;
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;

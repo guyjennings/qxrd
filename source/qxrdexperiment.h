@@ -7,11 +7,14 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QSplashScreen>
+#include <QScriptEngine>
+#include <QScriptEngineDebugger>
 #include "qxrddataprocessorthread.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdserverthread.h"
 #include "qxrdsimpleserverthread.h"
 #include "qxrdfilesaverthread.h"
+#include "qxrdscriptenginethread.h"
 
 class QxrdWindow;
 class QxrdNIDAQPluginInterface;
@@ -25,6 +28,7 @@ public:
   virtual bool init(QSettings *settings);
   virtual ~QxrdExperiment();
   void closeExperiment();
+  void shutdownThread(QxrdThread *thread);
 
   QxrdAcquisitionThread *acquisitionThread();
   QxrdAcquisition *acquisition() const;
@@ -38,6 +42,8 @@ public:
   void newScanFile(QString path);
 
   QxrdSettingsSaver *saver();
+  QxrdScriptEngine* scriptEngine();
+  void executeCommand(QString cmd);
 
   QString defaultExperimentDirectory(QString path);
   QString defaultExperimentFileName(QString path);
@@ -139,6 +145,9 @@ private:
   QxrdAcquisitionThread          *m_AcquisitionThread;
   QxrdAcquisition                *m_Acquisition;
   QxrdFileSaverThread            *m_FileSaverThread;
+  QxrdScriptEngineThread         *m_ScriptEngineThread;
+  QxrdScriptEngine               *m_ScriptEngine;
+  QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
   FILE                           *m_LogFile;
   FILE                           *m_ScanFile;

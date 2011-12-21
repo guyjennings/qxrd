@@ -3,10 +3,11 @@
 #include "qxrdscriptengine.h"
 #include "qxrdapplication.h"
 
-QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication *app)
+QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication *app, QxrdExperiment *exp)
   : QxrdThread(NULL),
     m_ScriptEngine(NULL),
-    m_Application(app)
+    m_Application(app),
+    m_Experiment(exp)
 {
 }
 
@@ -39,7 +40,7 @@ void QxrdScriptEngineThread::run()
     g_Application->printMessage("Starting Script Engine Thread");
   }
 
-  QxrdScriptEngine *p = new QxrdScriptEngine(m_Application);
+  QxrdScriptEngine *p = new QxrdScriptEngine(m_Application, m_Experiment);
 
   p -> initialize();
 

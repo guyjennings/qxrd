@@ -7,6 +7,7 @@
 
 class QxrdApplication;
 class QxrdWindow;
+class QxrdExperiment;
 class QxrdAcquisition;
 class QxrdDataProcessor;
 class QxrdScriptEngine;
@@ -16,7 +17,7 @@ class QxrdScriptEngineThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdScriptEngineThread(QxrdApplication *app);
+  QxrdScriptEngineThread(QxrdApplication *app, QxrdExperiment *exp);
   ~QxrdScriptEngineThread();
 
   void shutdown();
@@ -28,6 +29,7 @@ protected:
 private:
   QAtomicPointer<QxrdScriptEngine>  m_ScriptEngine;
   QxrdApplication   *m_Application;
+  QxrdExperiment    *m_Experiment;
 };
 
 #endif // QXRDSCRIPTENGINETHREAD_H

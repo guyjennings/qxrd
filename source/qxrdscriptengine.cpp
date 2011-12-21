@@ -19,152 +19,124 @@
 #include <QThread>
 
 //static QxrdScriptEngine  *g_ScriptEngine;
-static QxrdAcquisition   *g_Acquisition;
+//static QxrdAcquisition   *g_Acquisition;
 //static QxrdApplication *g_Application;
-static QxrdDataProcessor *g_DataProcessor;
+//static QxrdDataProcessor *g_DataProcessor;
 
-QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app/*, QxrdWindow *win, QxrdAcquisition *acq, QxrdDataProcessor *proc*/)
-  : QObject(),
+QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdExperiment *exp)
+  : QScriptEngine(),
     m_Mutex(QMutex::Recursive),
-    m_ScriptEngine(NULL),
-    m_Application(app)/*,
-    m_Window(win),
-    m_Acquisition(acq)*/
+    m_Application(app),
+    m_Experiment(exp),
+    m_Acquisition(NULL),
+    m_DataProcessor(NULL),
+    m_Window(NULL)
 {
-//  g_ScriptEngine    = this;
-//  g_Application     = app;
 }
 
 void QxrdScriptEngine::initialize()
 {
-  m_ScriptEngine = new QScriptEngine(this);
+  qScriptRegisterMetaType(this, ::QxrdRingFitToScriptValue, ::QxrdRingFitFromScriptValue);
+  qScriptRegisterMetaType(this, ::QxrdRingSampledDataToScriptValue, ::QxrdRingSampledDataFromScriptValue);
+//  qScriptRegisterMetaType(this, ::QxrdRingSampledDataPtrToScriptValue, ::QxrdRingSampledDataPtrFromScriptValue);
 
-  qScriptRegisterMetaType(m_ScriptEngine, ::QxrdRingFitToScriptValue, ::QxrdRingFitFromScriptValue);
-  qScriptRegisterMetaType(m_ScriptEngine, ::QxrdRingSampledDataToScriptValue, ::QxrdRingSampledDataFromScriptValue);
-//  qScriptRegisterMetaType(m_ScriptEngine, ::QxrdRingSampledDataPtrToScriptValue, ::QxrdRingSampledDataPtrFromScriptValue);
+  qScriptRegisterSequenceMetaType< QList<int> >(this);
+  qScriptRegisterSequenceMetaType< QList<bool> >(this);
+  qScriptRegisterSequenceMetaType< QList<double> >(this);
+  qScriptRegisterSequenceMetaType< QList<QString> >(this);
+//  qScriptRegisterSequenceMetaType< QList<QxrdRingFitParameters*> >(this);
+  qScriptRegisterSequenceMetaType< QVector<int> >(this);
+  qScriptRegisterSequenceMetaType< QVector<bool> >(this);
+  qScriptRegisterSequenceMetaType< QVector<double> >(this);
+  qScriptRegisterSequenceMetaType< QVector<QString> >(this);
+//  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
 
-  qScriptRegisterSequenceMetaType< QList<int> >(m_ScriptEngine);
-  qScriptRegisterSequenceMetaType< QList<bool> >(m_ScriptEngine);
-  qScriptRegisterSequenceMetaType< QList<double> >(m_ScriptEngine);
-  qScriptRegisterSequenceMetaType< QList<QString> >(m_ScriptEngine);
-//  qScriptRegisterSequenceMetaType< QList<QxrdRingFitParameters*> >(m_ScriptEngine);
-  qScriptRegisterSequenceMetaType< QVector<int> >(m_ScriptEngine);
-  qScriptRegisterSequenceMetaType< QVector<bool> >(m_ScriptEngine);
-  qScriptRegisterSequenceMetaType< QVector<double> >(m_ScriptEngine);
-  qScriptRegisterSequenceMetaType< QVector<QString> >(m_ScriptEngine);
-//  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(m_ScriptEngine);
-  m_ScriptEngine -> globalObject().setProperty("application", m_ScriptEngine -> newQObject(m_Application));
+  globalObject().setProperty("application", newQObject(m_Application));
+  globalObject().setProperty("allocator", newQObject(m_Application->allocator()));
 
-  m_ScriptEngine -> globalObject().setProperty("allocator", m_ScriptEngine -> newQObject(m_Application->allocator()));
+  globalObject().setProperty("acquire", newFunction(acquireFunc));
+  globalObject().setProperty("acquireDark", newFunction(acquireDarkFunc));
+  globalObject().setProperty("status", newFunction(statusFunc));
+  globalObject().setProperty("acquireStatus", newFunction(acquireStatusFunc));
+  globalObject().setProperty("processStatus", newFunction(processStatusFunc));
+  globalObject().setProperty("acquireCancel", newFunction(acquireCancelFunc));
+  globalObject().setProperty("exposureTime", newFunction(exposureTimeFunc));
+  globalObject().setProperty("summedExposures", newFunction(summedExposuresFunc));
+  globalObject().setProperty("skippedExposures", newFunction(skippedExposuresFunc));
+  globalObject().setProperty("darkSummedExposures", newFunction(darkSummedExposuresFunc));
+  globalObject().setProperty("phasesInGroup", newFunction(phasesInGroupFunc));
+  globalObject().setProperty("preTriggerFiles", newFunction(preTriggerFilesFunc));
+  globalObject().setProperty("postTriggerFiles", newFunction(postTriggerFilesFunc));
+  globalObject().setProperty("filePattern", newFunction(filePatternFunc));
+  globalObject().setProperty("outputDirectory", newFunction(outputDirectoryFunc));
+  globalObject().setProperty("fileIndex", newFunction(fileIndexFunc));
+  globalObject().setProperty("print", newFunction(printFunc));
+  globalObject().setProperty("printMessage", newFunction(printFunc));
+  globalObject().setProperty("data", newFunction(dataFunc));
+  globalObject().setProperty("dark", newFunction(darkFunc));
+  globalObject().setProperty("mask", newFunction(maskFunc));
+  globalObject().setProperty("overflow", newFunction(overflowFunc));
+  globalObject().setProperty("help", newFunction(helpFunc));
+  globalObject().setProperty("process", newFunction(processFunc));
+  globalObject().setProperty("typeName", newFunction(typeNameFunc));
+  globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
 
-  m_ScriptEngine -> globalObject().setProperty("acquire", m_ScriptEngine -> newFunction(acquireFunc));
-  m_ScriptEngine -> globalObject().setProperty("acquireDark", m_ScriptEngine -> newFunction(acquireDarkFunc));
-  m_ScriptEngine -> globalObject().setProperty("status", m_ScriptEngine -> newFunction(statusFunc));
-  m_ScriptEngine -> globalObject().setProperty("acquireStatus", m_ScriptEngine -> newFunction(acquireStatusFunc));
-  m_ScriptEngine -> globalObject().setProperty("processStatus", m_ScriptEngine -> newFunction(processStatusFunc));
-  m_ScriptEngine -> globalObject().setProperty("acquireCancel", m_ScriptEngine -> newFunction(acquireCancelFunc));
-  m_ScriptEngine -> globalObject().setProperty("exposureTime", m_ScriptEngine -> newFunction(exposureTimeFunc));
-  m_ScriptEngine -> globalObject().setProperty("summedExposures", m_ScriptEngine -> newFunction(summedExposuresFunc));
-  m_ScriptEngine -> globalObject().setProperty("skippedExposures", m_ScriptEngine -> newFunction(skippedExposuresFunc));
-  m_ScriptEngine -> globalObject().setProperty("darkSummedExposures", m_ScriptEngine -> newFunction(darkSummedExposuresFunc));
-  m_ScriptEngine -> globalObject().setProperty("phasesInGroup", m_ScriptEngine -> newFunction(phasesInGroupFunc));
-  m_ScriptEngine -> globalObject().setProperty("preTriggerFiles", m_ScriptEngine -> newFunction(preTriggerFilesFunc));
-  m_ScriptEngine -> globalObject().setProperty("postTriggerFiles", m_ScriptEngine -> newFunction(postTriggerFilesFunc));
-  m_ScriptEngine -> globalObject().setProperty("filePattern", m_ScriptEngine -> newFunction(filePatternFunc));
-  m_ScriptEngine -> globalObject().setProperty("outputDirectory", m_ScriptEngine -> newFunction(outputDirectoryFunc));
-  m_ScriptEngine -> globalObject().setProperty("fileIndex", m_ScriptEngine -> newFunction(fileIndexFunc));
-  m_ScriptEngine -> globalObject().setProperty("print", m_ScriptEngine -> newFunction(printFunc));
-  m_ScriptEngine -> globalObject().setProperty("printMessage", m_ScriptEngine -> newFunction(printFunc));
-  m_ScriptEngine -> globalObject().setProperty("data", m_ScriptEngine -> newFunction(dataFunc));
-  m_ScriptEngine -> globalObject().setProperty("dark", m_ScriptEngine -> newFunction(darkFunc));
-  m_ScriptEngine -> globalObject().setProperty("mask", m_ScriptEngine -> newFunction(maskFunc));
-  m_ScriptEngine -> globalObject().setProperty("overflow", m_ScriptEngine -> newFunction(overflowFunc));
-  m_ScriptEngine -> globalObject().setProperty("help", m_ScriptEngine -> newFunction(helpFunc));
-  m_ScriptEngine -> globalObject().setProperty("process", m_ScriptEngine -> newFunction(processFunc));
-  m_ScriptEngine -> globalObject().setProperty("typeName", m_ScriptEngine -> newFunction(typeNameFunc));
-  m_ScriptEngine -> globalObject().setProperty("matchFiles", m_ScriptEngine -> newFunction(matchFilesFunc));
+  QObject *plugin = dynamic_cast<QObject*>(m_Application->nidaqPlugin());
 
-  QObject *obj = dynamic_cast<QObject*>(g_Application->nidaqPlugin());
+  if (plugin) {
+    globalObject().setProperty("nidaq", newQObject(plugin));
+  }
 
-  if (obj) {
-    m_ScriptEngine->globalObject().setProperty("nidaq", m_ScriptEngine->newQObject(obj));
+  globalObject().setProperty("experiment", newQObject(m_Experiment));
+
+  m_Acquisition   = m_Experiment->acquisition();
+
+  if (m_Acquisition) {
+    globalObject().setProperty("acquisition",     newQObject(m_Acquisition));
+    globalObject().setProperty("synchronization", newQObject(m_Acquisition->synchronizedAcquisition()));
+  }
+
+  m_DataProcessor = m_Experiment->dataProcessor();
+
+  if (m_DataProcessor) {
+    globalObject().setProperty("processor",       newQObject(m_DataProcessor));
+    globalObject().setProperty("centering",       newQObject(m_DataProcessor->centerFinder()));
+    globalObject().setProperty("integrator",      newQObject(m_DataProcessor->integrator()));
+    globalObject().setProperty("initialFit",      newQObject(m_DataProcessor->initialRingSetFitParameters()));
+    globalObject().setProperty("refinedFit",      newQObject(m_DataProcessor->refinedRingSetFitParameters()));
+    globalObject().setProperty("initialData",     newQObject(m_DataProcessor->initialRingSetData()));
+    globalObject().setProperty("refinedData",     newQObject(m_DataProcessor->refinedRingSetData()));
+    globalObject().setProperty("testImage",       newQObject(m_DataProcessor->generateTestImage()));
+  }
+
+  m_Window = m_Experiment->window();
+
+  if (m_Window) {
+    globalObject().setProperty("window",          newQObject(m_Window));
+    globalObject().setProperty("imageGraph",      newQObject(m_Window->m_Plot));
+    globalObject().setProperty("centeringGraph",  newQObject(m_Window->m_CenterFinderPlot));
+    globalObject().setProperty("integratorGraph", newQObject(m_Window->m_IntegratorPlot));
   }
 }
 
-void QxrdScriptEngine::experimentOpened(QxrdExperiment *doc)
+QxrdExperiment *QxrdScriptEngine::experiment() const
 {
-  if (!m_Experiments.contains(doc)) {
-    QString suffix="";
-
-    if (m_Experiments.length() > 0) {
-      suffix = tr("%1").arg(m_Experiments.length());
-    }
-
-    m_Experiments.append(doc);
-
-    m_ScriptEngine -> globalObject().setProperty("experiment"+suffix,
-                                                 m_ScriptEngine->newQObject(doc));
-    QxrdAcquisition *acq = doc->acquisition();
-
-    m_ScriptEngine -> globalObject().setProperty("acquisition"+suffix,
-                                                 m_ScriptEngine -> newQObject(acq));
-    m_ScriptEngine -> globalObject().setProperty("synchronization"+suffix,
-                                                 m_ScriptEngine -> newQObject(acq->synchronizedAcquisition()));
-    m_ScriptEngine -> globalObject().setProperty("processor"+suffix,
-                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()));
-    m_ScriptEngine -> globalObject().setProperty("centering"+suffix,
-                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->centerFinder()));
-    m_ScriptEngine -> globalObject().setProperty("integrator"+suffix,
-                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->integrator()));
-    m_ScriptEngine -> globalObject().setProperty("initialFit"+suffix,
-                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->initialRingSetFitParameters()));
-    m_ScriptEngine -> globalObject().setProperty("refinedFit"+suffix,
-                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->refinedRingSetFitParameters()));
-    m_ScriptEngine -> globalObject().setProperty("initialData"+suffix,
-                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->initialRingSetData()));
-    m_ScriptEngine -> globalObject().setProperty("refinedData"+suffix,
-                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->refinedRingSetData()));
-    m_ScriptEngine -> globalObject().setProperty("testImage"+suffix,
-                                                 m_ScriptEngine -> newQObject(doc->dataProcessor()->generateTestImage()));
-
-    g_Acquisition     = acq;
-    //  g_DataProcessor   = proc;
-  }
+  return m_Experiment;
 }
 
-void QxrdScriptEngine::experimentClosed(QxrdExperiment *doc)
+QxrdAcquisition *QxrdScriptEngine::acquisition() const
 {
+  return m_Acquisition;
 }
 
-void QxrdScriptEngine::windowOpened(QxrdWindow *win)
+QxrdWindow *QxrdScriptEngine::window() const
 {
-  if (!m_Windows.contains(win)) {
-    QString suffix="";
-
-    if (m_Windows.length() > 0) {
-      suffix = tr("%1").arg(m_Windows.length());
-    }
-
-    m_Windows.append(win);
-
-    m_ScriptEngine -> globalObject().setProperty("window"+suffix,
-                                                 m_ScriptEngine -> newQObject(win));
-    m_ScriptEngine -> globalObject().setProperty("imageGraph"+suffix,
-                                                 m_ScriptEngine -> newQObject(win->m_Plot));
-    m_ScriptEngine -> globalObject().setProperty("centeringGraph"+suffix,
-                                                 m_ScriptEngine -> newQObject(win->m_CenterFinderPlot));
-    m_ScriptEngine -> globalObject().setProperty("integratorGraph"+suffix,
-                                                 m_ScriptEngine -> newQObject(win->m_IntegratorPlot));
-  }
+  return m_Window;
 }
 
-void QxrdScriptEngine::windowClosed(QxrdWindow *win)
+QxrdDataProcessor *QxrdScriptEngine::dataProcessor() const
 {
-}
-
-QScriptEngine* QxrdScriptEngine::scriptEngine() const
-{
-  return m_ScriptEngine;
+  return m_DataProcessor;
 }
 
 void QxrdScriptEngine::evaluateAppCommand(QString expr)
@@ -205,7 +177,7 @@ void QxrdScriptEngine::loadScript(QString path)
       QTextStream scriptStream(&scriptFile);
       QString script = scriptStream.readAll();
 
-      m_ScriptEngine->evaluate(script, path);
+      QScriptEngine::evaluate(script, path);
     }
   }
 }
@@ -216,7 +188,7 @@ void QxrdScriptEngine::evaluate(int src, QString expr)
 
 //  printf("QxrdScriptingEngine::evaluate(%s)\n", qPrintable(expr));
 
-  QScriptValue result = m_ScriptEngine -> evaluate(expr);
+  QScriptValue result = QScriptEngine::evaluate(expr);
 
   switch (src) {
   case 0:
@@ -233,51 +205,51 @@ void QxrdScriptEngine::evaluate(int src, QString expr)
 
 void QxrdScriptEngine::cancelCommand()
 {
-  m_ScriptEngine -> abortEvaluation();
+  abortEvaluation();
 }
 
 bool QxrdScriptEngine::hasUncaughtException() const
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  return m_ScriptEngine -> hasUncaughtException();
+  return hasUncaughtException();
 }
 
 int  QxrdScriptEngine::uncaughtExceptionLineNumber() const
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  return m_ScriptEngine -> uncaughtExceptionLineNumber();
+  return uncaughtExceptionLineNumber();
 }
 
 QString QxrdScriptEngine::uncaughtExceptionString() const
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  return m_ScriptEngine -> uncaughtException().toString();
+  return uncaughtException().toString();
 }
 
 QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  int nArgs = context->argumentCount();
-  QString msg;
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
-  for (int i=0; i<nArgs; i++) {
-    if (i != 0) {
-      msg += " ";
+  if (eng) {
+    int nArgs = context->argumentCount();
+    QString msg;
+
+    for (int i=0; i<nArgs; i++) {
+      if (i != 0) {
+        msg += " ";
+      }
+
+      msg += context -> argument(i).toString();
     }
 
-    msg += context -> argument(i).toString();
-  }
+    QxrdWindow *qwin = eng->window();
 
-  QWidget *win = QApplication::activeWindow();
-
-  if (win) {
-      QxrdWindow *qwin = qobject_cast<QxrdWindow*>(win);
-
-      if (qwin) {
-          qwin->displayMessage(msg);
-      }
+    if (qwin) {
+      qwin->displayMessage(msg);
+    }
   }
 
   return QScriptValue(engine, 1);
@@ -285,41 +257,47 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
 
 QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (!g_Acquisition) return QScriptValue(engine, -1);
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
-  int nArgs = context->argumentCount();
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
 
-  if (nArgs < 6) {
-    g_Acquisition -> set_PhasesInGroup(1);
-  }
+    if (!acq) return QScriptValue(engine, -1);
 
-  if (nArgs < 5) {
-    g_Acquisition -> set_PreTriggerFiles(0);
-  }
+    int nArgs = context->argumentCount();
 
-  switch (nArgs) {
-  default:
+    if (nArgs < 6) {
+      acq -> set_PhasesInGroup(1);
+    }
 
-  case 6:
-    g_Acquisition -> set_PhasesInGroup(context -> argument(5).toUInt32());
+    if (nArgs < 5) {
+      acq -> set_PreTriggerFiles(0);
+    }
 
-  case 5:
-    g_Acquisition -> set_PreTriggerFiles(context -> argument(4).toUInt32());
+    switch (nArgs) {
+    default:
 
-  case 4:
-    g_Acquisition -> set_PostTriggerFiles(context -> argument(3).toUInt32());
+    case 6:
+      acq -> set_PhasesInGroup(context -> argument(5).toUInt32());
 
-  case 3:
-    g_Acquisition -> set_SummedExposures(context -> argument(2).toUInt32());
+    case 5:
+      acq -> set_PreTriggerFiles(context -> argument(4).toUInt32());
 
-  case 2:
-    g_Acquisition -> set_ExposureTime(context -> argument(1).toNumber());
+    case 4:
+      acq -> set_PostTriggerFiles(context -> argument(3).toUInt32());
 
-  case 1:
-    g_Acquisition -> set_FilePattern(context -> argument(0).toString());
+    case 3:
+      acq -> set_SummedExposures(context -> argument(2).toUInt32());
 
-  case 0:
-    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "acquire"));
+    case 2:
+      acq -> set_ExposureTime(context -> argument(1).toNumber());
+
+    case 1:
+      acq -> set_FilePattern(context -> argument(0).toString());
+
+    case 0:
+      INVOKE_CHECK(QMetaObject::invokeMethod(acq, "acquire"));
+    }
   }
 
   return QScriptValue(engine, 1);
@@ -327,23 +305,29 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
 
 QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (!g_Acquisition) return QScriptValue(engine, -1);
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
-  int nArgs = context->argumentCount();
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
 
-  switch (nArgs) {
-  default:
-  case 3:
-    g_Acquisition -> set_DarkSummedExposures(context -> argument(2).toUInt32());
+    if (!acq) return QScriptValue(engine, -1);
 
-  case 2:
-    g_Acquisition -> set_ExposureTime(context -> argument(1).toNumber());
+    int nArgs = context->argumentCount();
 
-  case 1:
-    g_Acquisition -> set_FilePattern(context -> argument(0).toString());
+    switch (nArgs) {
+    default:
+    case 3:
+      acq -> set_DarkSummedExposures(context -> argument(2).toUInt32());
 
-  case 0:
-    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "acquireDark"));
+    case 2:
+      acq -> set_ExposureTime(context -> argument(1).toNumber());
+
+    case 1:
+      acq -> set_FilePattern(context -> argument(0).toString());
+
+    case 0:
+      INVOKE_CHECK(QMetaObject::invokeMethod(acq, "acquireDark"));
+    }
   }
 
   return QScriptValue(engine, 1);
@@ -351,157 +335,338 @@ QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptE
 
 QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  double time=0;
-  int status=0;
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
-  if (context->argumentCount() > 0) {
-    time = context->argument(0).toNumber();
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+    QxrdDataProcessor *proc = eng->dataProcessor();
+
+    if (!acq || !proc) return QScriptValue(engine, -1);
+
+    double time=0;
+    int status=0;
+
+    if (context->argumentCount() > 0) {
+      time = context->argument(0).toNumber();
+    }
+
+    status = acq -> acquisitionStatus(time);
+
+    if (status == 1) {
+      status = proc -> status(time);
+    }
+
+    return QScriptValue(engine, status);
+  } else {
+    return QScriptValue(engine, -1);
   }
-
-  status = g_Acquisition -> acquisitionStatus(time);
-
-  if (status == 1) {
-    status = g_DataProcessor -> status(time);
-  }
-
-  return QScriptValue(engine, status);
 }
 
 QScriptValue QxrdScriptEngine::acquireStatusFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_Acquisition -> acquisitionStatus(0));
-  } else {
-    double time = context->argument(0).toNumber();
-    return QScriptValue(engine, g_Acquisition -> acquisitionStatus(time));
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+
+    if (acq) {
+      if (context->argumentCount() == 0) {
+        return QScriptValue(engine, acq -> acquisitionStatus(0));
+      } else {
+        double time = context->argument(0).toNumber();
+        return QScriptValue(engine, acq -> acquisitionStatus(time));
+      }
+    }
   }
+
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::processStatusFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() == 0) {
-    return QScriptValue(engine, g_DataProcessor -> status(0));
-  } else {
-    double time = context->argument(0).toNumber();
-    return QScriptValue(engine, g_DataProcessor -> status(time));
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdDataProcessor *proc = eng->dataProcessor();
+
+    if (proc) {
+      if (context->argumentCount() == 0) {
+        return QScriptValue(engine, proc -> status(0));
+      } else {
+        double time = context->argument(0).toNumber();
+        return QScriptValue(engine, proc -> status(time));
+      }
+    }
   }
+
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
-  g_Acquisition -> cancel();
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
-  return QScriptValue(engine, 1);
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+
+    if (acq) {
+      acq -> cancel();
+
+      return QScriptValue(engine, 1);
+    }
+  }
+
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::exposureTimeFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() != 0) {
-    g_Acquisition -> set_ExposureTime(context->argument(0).toNumber());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+
+    if (acq) {
+      if (context->argumentCount() != 0) {
+        acq -> set_ExposureTime(context->argument(0).toNumber());
+      }
+
+      return QScriptValue(engine, acq -> get_ExposureTime());
+    }
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_ExposureTime());
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::summedExposuresFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() != 0) {
-    g_Acquisition -> set_SummedExposures(context->argument(0).toUInt32());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+
+    if (acq) {
+      if (context->argumentCount() != 0) {
+        acq -> set_SummedExposures(context->argument(0).toUInt32());
+      }
+
+      return QScriptValue(engine, acq -> get_SummedExposures());
+    }
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_SummedExposures());
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::skippedExposuresFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() != 0) {
-    g_Acquisition -> set_SkippedExposures(context->argument(0).toUInt32());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+
+    if (acq) {
+      if (context->argumentCount() != 0) {
+        acq -> set_SkippedExposures(context->argument(0).toUInt32());
+      }
+
+      return QScriptValue(engine, acq -> get_SkippedExposures());
+    }
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_SkippedExposures());
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::darkSummedExposuresFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() != 0) {
-    g_Acquisition -> set_DarkSummedExposures(context->argument(0).toUInt32());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+
+    if (acq) {
+      if (context->argumentCount() != 0) {
+        acq -> set_DarkSummedExposures(context->argument(0).toUInt32());
+      }
+
+      return QScriptValue(engine, acq -> get_DarkSummedExposures());
+    }
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_DarkSummedExposures());
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::phasesInGroupFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() != 0) {
-    g_Acquisition -> set_PhasesInGroup(context->argument(0).toUInt32());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+
+    if (acq) {
+      if (context->argumentCount() != 0) {
+        acq -> set_PhasesInGroup(context->argument(0).toUInt32());
+      }
+
+      return QScriptValue(engine, acq -> get_PhasesInGroup());
+    }
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_PhasesInGroup());
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::preTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() != 0) {
-    g_Acquisition -> set_PreTriggerFiles(context->argument(0).toUInt32());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+
+    if (acq) {
+      if (context->argumentCount() != 0) {
+        acq -> set_PreTriggerFiles(context->argument(0).toUInt32());
+      }
+
+      return QScriptValue(engine, acq -> get_PreTriggerFiles());
+    }
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_PreTriggerFiles());
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::postTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() != 0) {
-    g_Acquisition -> set_PostTriggerFiles(context->argument(0).toUInt32());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+
+    if (acq) {
+      if (context->argumentCount() != 0) {
+        acq -> set_PostTriggerFiles(context->argument(0).toUInt32());
+      }
+
+      return QScriptValue(engine, acq -> get_PostTriggerFiles());
+    }
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_PostTriggerFiles());
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::filePatternFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() != 0) {
-    g_Acquisition -> set_FilePattern(context->argument(0).toString());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+
+    if (acq) {
+      if (context->argumentCount() != 0) {
+        acq -> set_FilePattern(context->argument(0).toString());
+      }
+
+      return QScriptValue(engine, acq -> get_FilePattern());
+    }
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_FilePattern());
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::outputDirectoryFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() != 0) {
-    g_DataProcessor -> set_OutputDirectory(context->argument(0).toString());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdDataProcessor *proc = eng->dataProcessor();
+
+    if (proc) {
+      if (context->argumentCount() != 0) {
+        proc -> set_OutputDirectory(context->argument(0).toString());
+      }
+
+      return QScriptValue(engine, proc -> get_OutputDirectory());
+    }
   }
 
-  return QScriptValue(engine, g_DataProcessor -> get_OutputDirectory());
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() != 0) {
-    g_Acquisition -> set_FileIndex(context->argument(0).toUInt32());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisition *acq = eng->acquisition();
+
+    if (acq) {
+      if (context->argumentCount() != 0) {
+        acq -> set_FileIndex(context->argument(0).toUInt32());
+      }
+
+      return QScriptValue(engine, acq -> get_FileIndex());
+    }
   }
 
-  return QScriptValue(engine, g_Acquisition -> get_FileIndex());
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::dataFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
-  return engine -> newQObject(g_DataProcessor -> data().data());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdDataProcessor *proc = eng->dataProcessor();
+
+    if (proc) {
+      return engine -> newQObject(proc -> data().data());
+    }
+  }
+
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
-  return engine -> newQObject(g_DataProcessor -> darkImage().data());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdDataProcessor *proc = eng->dataProcessor();
+
+    if (proc) {
+      return engine -> newQObject(proc -> darkImage().data());
+    }
+  }
+
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::maskFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
-  return engine -> newQObject(g_DataProcessor -> mask().data());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdDataProcessor *proc = eng->dataProcessor();
+
+    if (proc) {
+      return engine -> newQObject(proc -> mask().data());
+    }
+  }
+
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
-  return engine -> newQObject(g_DataProcessor -> overflow().data());
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdDataProcessor *proc = eng->dataProcessor();
+
+    if (proc) {
+      return engine -> newQObject(proc -> overflow().data());
+    }
+  }
+
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::helpFunc(QScriptContext * /*context*/, QScriptEngine * /*engine*/)
@@ -520,18 +685,28 @@ QScriptValue QxrdScriptEngine::typeNameFunc(QScriptContext *context, QScriptEngi
 
 QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  if (context->argumentCount() >= 1) {
-    QString file = context->argument(0).toString();
-    QList<double> normVals;
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
-    for (int i=1; i<context->argumentCount(); i++) {
-      normVals.append(context->argument(i).toNumber());
+  if (eng) {
+    QxrdDataProcessor *proc = eng->dataProcessor();
+
+    if (proc) {
+      if (context->argumentCount() >= 1) {
+        QString file = context->argument(0).toString();
+        QList<double> normVals;
+
+        for (int i=1; i<context->argumentCount(); i++) {
+          normVals.append(context->argument(i).toNumber());
+        }
+
+        proc -> processNormalizedFile(file, normVals);
+      }
+
+      return QScriptValue(engine, 1);
     }
-
-    g_DataProcessor -> processNormalizedFile(file, normVals);
   }
 
-  return QScriptValue(engine, 1);
+  return QScriptValue(engine, -1);
 }
 
 QScriptValue QxrdScriptEngine::matchFilesFunc(QScriptContext *context, QScriptEngine *engine)

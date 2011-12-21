@@ -109,9 +109,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_WelcomeWindow(NULL),
     m_AllocatorThread(NULL),
     m_Allocator(NULL),
-    m_ScriptEngineThread(NULL),
-    m_ScriptEngine(NULL),
-    m_ScriptEngineDebugger(NULL),
 //    m_SettingsSaverThread(NULL),
 //    m_SettingsSaver(NULL),
     #ifdef HAVE_PERKIN_ELMER
@@ -230,15 +227,6 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Scripting System");
 
-  m_ScriptEngineThread = new QxrdScriptEngineThread(this);
-  m_ScriptEngineThread -> setObjectName("script");
-  m_ScriptEngineThread -> start();
-  m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
-
-//  m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
-//  m_ScriptEngineDebugger -> attachTo(m_ScriptEngine->scriptEngine());
-//  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
-
   connect(prop_Debug(), SIGNAL(valueChanged(int,int)), this, SLOT(debugChanged(int)));
 
 //  m_SettingsSaverThread = new QxrdSettingsSaverThread(this);
@@ -323,11 +311,6 @@ void QxrdApplication::closeWelcomeWindow()
 
     m_WelcomeWindow = NULL;
   }
-}
-
-QxrdScriptEngine* QxrdApplication::scriptEngine()
-{
-  return m_ScriptEngine;
 }
 
 QWidget* QxrdApplication::window()
@@ -581,11 +564,6 @@ void QxrdApplication::savePreferences(QString path)
   writeSettings(&settings);
 }
 
-void QxrdApplication::executeCommand(QString cmd)
-{
-  m_ScriptEngine->evaluateAppCommand(cmd);
-}
-
 void QxrdApplication::possiblyQuit()
 {
   if (wantToQuit()) {
@@ -619,7 +597,6 @@ void QxrdApplication::shutdownThreads()
 //  shutdownThread(m_SettingsSaverThread);
 //  shutdownThread(m_SimpleServerThread);
 //  shutdownThread(m_ServerThread);
-  shutdownThread(m_ScriptEngineThread);
 //  shutdownThread(m_AcquisitionThread);
 //  shutdownThread(m_DataProcessorThread);
 //  shutdownThread(m_AllocatorThread);
@@ -944,11 +921,11 @@ void QxrdApplication::openedExperiment(QxrdExperimentThread *expthrd)
     m_ExperimentThreads.append(expthrd);
     m_Experiments.append(expt);
 
-    m_ScriptEngine->experimentOpened(expt);
+//    m_ScriptEngine->experimentOpened(expt);
 
-    if (expt->window()) {
-        m_ScriptEngine->windowOpened(expt->window());
-    }
+//    if (expt->window()) {
+//        m_ScriptEngine->windowOpened(expt->window());
+//    }
 //    connect(expthrd, SIGNAL(destroyed(QObject*)), this, SLOT(closedExperiment(QObject*)), Qt::BlockingQueuedConnection);
   }
 }
@@ -963,11 +940,11 @@ void QxrdApplication::closedExperiment(QObject *obj)
     m_ExperimentThreads.removeAll(expthrd);
     m_Experiments.removeAll(expt);
 
-    m_ScriptEngine->experimentClosed(expt);
+//    m_ScriptEngine->experimentClosed(expt);
 
-    if (expt->window()) {
-        m_ScriptEngine->windowClosed(expt->window());
-    }
+//    if (expt->window()) {
+//        m_ScriptEngine->windowClosed(expt->window());
+//    }
   }
 }
 

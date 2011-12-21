@@ -44,6 +44,9 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_AcquisitionThread(NULL),
   m_Acquisition(NULL),
   m_FileSaverThread(NULL),
+  m_ScriptEngineThread(NULL),
+  m_ScriptEngine(NULL),
+  m_ScriptEngineDebugger(NULL),
   m_LogFile(NULL),
   m_ScanFile(NULL)
 {
@@ -158,19 +161,28 @@ bool QxrdExperiment::init(QSettings *settings)
   }
 
   if (m_Server) {
-    connect(m_Server,         SIGNAL(executeCommand(QString)),           m_Application->scriptEngine(),    SLOT(evaluateSpecCommand(QString)));
-    connect(m_Application->scriptEngine(),   SIGNAL(specResultAvailable(QScriptValue)), m_Server,          SLOT(finishedCommand(QScriptValue)));
+    connect(m_Server,         SIGNAL(executeCommand(QString)),           scriptEngine(),    SLOT(evaluateSpecCommand(QString)));
+    connect(scriptEngine(),   SIGNAL(specResultAvailable(QScriptValue)), m_Server,          SLOT(finishedCommand(QScriptValue)));
   }
 
   if (m_SimpleServer) {
-    connect(m_SimpleServer,   SIGNAL(executeCommand(QString)),           m_Application->scriptEngine(),    SLOT(evaluateSimpleServerCommand(QString)));
-    connect(m_Application->scriptEngine(),   SIGNAL(simpleServerResultAvailable(QScriptValue)), m_SimpleServer,  SLOT(finishedCommand(QScriptValue)));
+    connect(m_SimpleServer,   SIGNAL(executeCommand(QString)),           scriptEngine(),    SLOT(evaluateSimpleServerCommand(QString)));
+    connect(scriptEngine(),   SIGNAL(simpleServerResultAvailable(QScriptValue)), m_SimpleServer,  SLOT(finishedCommand(QScriptValue)));
   }
 
-  if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           m_Application->scriptEngine(),    SLOT(evaluateAppCommand(QString)));
-  if (m_Window) connect(m_Application->scriptEngine(),   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
+  if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           scriptEngine(),    SLOT(evaluateAppCommand(QString)));
+  if (m_Window) connect(scriptEngine(),   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
 
-  if (m_Window) m_Window -> setScriptEngine(m_Application->scriptEngine());
+  m_ScriptEngineThread = new QxrdScriptEngineThread(m_Application, this);
+  m_ScriptEngineThread -> setObjectName("script");
+  m_ScriptEngineThread -> start();
+  m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
+
+//  m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
+//  m_ScriptEngineDebugger -> attachTo(m_ScriptEngine->scriptEngine());
+//  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
+
+  if (m_Window) m_Window -> setScriptEngine(m_ScriptEngine);
 
   connect(m_Application, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
@@ -215,11 +227,21 @@ void QxrdExperiment::closeExperiment()
 {
 }
 
+void QxrdExperiment::shutdownThread(QxrdThread *thread)
+{
+  if (thread) {
+    thread->shutdown();
+    delete thread;
+  }
+}
+
 void QxrdExperiment::shutdown()
 {
   if (qcepDebug(DEBUG_APP)) {
     m_Application->printMessage("QxrdExperiment::shutdown()");
   }
+
+  shutdownThread(m_ScriptEngineThread);
 }
 
 void QxrdExperiment::splashMessage(const char *msg)
@@ -316,6 +338,16 @@ QxrdAcquisition *QxrdExperiment::acquisition() const
 QxrdDataProcessor *QxrdExperiment::dataProcessor() const
 {
   return m_DataProcessor;
+}
+
+QxrdScriptEngine* QxrdExperiment::scriptEngine()
+{
+  return m_ScriptEngine;
+}
+
+void QxrdExperiment::executeCommand(QString cmd)
+{
+  m_ScriptEngine->evaluateAppCommand(cmd);
 }
 
 void QxrdExperiment::newLogFile(QString path)
