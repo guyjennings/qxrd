@@ -1277,16 +1277,6 @@ void QxrdWindow::loadScript(QString path)
   m_ScriptEngine->loadScript(path);
 }
 
-QxrdScriptEngine *QxrdWindow::scriptEngine() const
-{
-  return m_ScriptEngine;
-}
-
-void QxrdWindow::setScriptEngine(QxrdScriptEngine *engine)
-{
-  m_ScriptEngine = engine;
-}
-
 QxrdDataProcessor *QxrdWindow::dataProcessor() const
 {
   return m_DataProcessor;

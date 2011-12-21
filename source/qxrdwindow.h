@@ -123,8 +123,6 @@ public:
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
-  QxrdScriptEngine *scriptEngine() const;
-  void setScriptEngine(QxrdScriptEngine *engine);
   QxrdDataProcessor *dataProcessor() const;
 
   void newDataAvailable(QxrdDoubleImageDataPtr img, QxrdMaskDataPtr overflow);
