@@ -160,6 +160,15 @@ bool QxrdExperiment::init(QSettings *settings)
     }
   }
 
+  m_ScriptEngineThread = new QxrdScriptEngineThread(m_Application, this);
+  m_ScriptEngineThread -> setObjectName("script");
+  m_ScriptEngineThread -> start();
+  m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
+
+//  m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
+//  m_ScriptEngineDebugger -> attachTo(m_ScriptEngine->scriptEngine());
+//  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
+
   if (m_Server) {
     connect(m_Server,         SIGNAL(executeCommand(QString)),           scriptEngine(),    SLOT(evaluateSpecCommand(QString)));
     connect(scriptEngine(),   SIGNAL(specResultAvailable(QScriptValue)), m_Server,          SLOT(finishedCommand(QScriptValue)));
@@ -172,17 +181,6 @@ bool QxrdExperiment::init(QSettings *settings)
 
   if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           scriptEngine(),    SLOT(evaluateAppCommand(QString)));
   if (m_Window) connect(scriptEngine(),   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
-
-  m_ScriptEngineThread = new QxrdScriptEngineThread(m_Application, this);
-  m_ScriptEngineThread -> setObjectName("script");
-  m_ScriptEngineThread -> start();
-  m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
-
-//  m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
-//  m_ScriptEngineDebugger -> attachTo(m_ScriptEngine->scriptEngine());
-//  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
-
-  if (m_Window) m_Window -> setScriptEngine(m_ScriptEngine);
 
   connect(m_Application, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
