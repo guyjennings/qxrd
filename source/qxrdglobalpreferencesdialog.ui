@@ -19,6 +19,50 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Startup</string>
+      </attribute>
+      <widget class="QCheckBox" name="m_OpenDirectly">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>20</y>
+         <width>374</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>At Startup, Automatically open most recent experiment</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_15">
+       <property name="geometry">
+        <rect>
+         <x>24</x>
+         <y>50</y>
+         <width>346</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Remember this many recent experiments:</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="m_RecentExperimentsSize">
+       <property name="geometry">
+        <rect>
+         <x>380</x>
+         <y>50</y>
+         <width>80</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="maximum">
+        <number>10</number>
+       </property>
+      </widget>
+     </widget>
      <widget class="QWidget" name="memoryPrefs">
       <attribute name="title">
        <string>Memory</string>
