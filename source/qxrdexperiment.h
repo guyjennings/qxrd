@@ -63,22 +63,23 @@ public:
 signals:
 
 public slots:
+  void shutdown();
+
   void readSettings();
   void writeSettings();
   virtual void readSettings(QSettings *settings, QString section="experiment");
   virtual void writeSettings(QSettings *settings, QString section="experiment");
 
+  void logMessage(QString msg);
   void splashMessage(const char *msg);
   void splashMessage(QString msg);
   void criticalMessage(QString msg);
   void statusMessage(QString msg);
-  void printMessage(QString msg);
-  void shutdown();
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
   void saveExperiment();
 
 private:
-  void logMessage(QString msg);
   void closeLogFile();
   void openLogFile();
   void writeLogHeader();

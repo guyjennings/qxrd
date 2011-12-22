@@ -279,25 +279,23 @@ void QxrdExperiment::statusMessage(QString msg)
   }
 }
 
-void QxrdExperiment::printMessage(QString msg)
+void QxrdExperiment::printMessage(QString msg, QDateTime ts)
 {
-  if (m_Window) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayMessage", Q_ARG(QString, msg)));
+  if (qcepDebug(DEBUG_NOMESSAGES)) {
   } else {
-    m_Application->printMessage(qPrintable(msg));
-  }
-}
+    QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+
+        QThread::currentThread()->objectName()+": "+
+        msg.trimmed();
 
-void QxrdExperiment::openLogFile()
-{
-  if (m_LogFile) {
-    fclose(m_LogFile);
-  }
+    message = message.replace("\n", " : ");
 
-  m_LogFile = fopen(qPrintable(logFilePath()), "a");
+    logMessage(message);
 
-  if (m_LogFile) {
-    writeLogHeader();
+    if (m_Window) {
+      INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+    } else {
+      m_Application->printMessage(qPrintable(message));
+    }
   }
 }
 
@@ -346,6 +344,19 @@ QxrdScriptEngine* QxrdExperiment::scriptEngine()
 void QxrdExperiment::executeCommand(QString cmd)
 {
   m_ScriptEngine->evaluateAppCommand(cmd);
+}
+
+void QxrdExperiment::openLogFile()
+{
+  if (m_LogFile) {
+    fclose(m_LogFile);
+  }
+
+  m_LogFile = fopen(qPrintable(logFilePath()), "a");
+
+  if (m_LogFile) {
+    writeLogHeader();
+  }
 }
 
 void QxrdExperiment::newLogFile(QString path)
