@@ -52,7 +52,7 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperiment *doc,
   m_Acquisition -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
 
   m_DataProcessor -> prop_OutputDirectory() -> linkTo(this -> m_OutputDirectory);
-  m_Experiment      -> prop_LogFilePath() -> linkTo(this -> m_LogFilePath);
+  m_Experiment      -> prop_LogFileName() -> linkTo(this -> m_LogFilePath);
   m_DataProcessor -> prop_Average() -> linkTo(this -> m_AverageDisplay);
 
   connect(m_AcquireOptionsButton, SIGNAL(clicked()), m_Window, SLOT(doEditPreferences()));

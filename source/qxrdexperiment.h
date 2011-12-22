@@ -43,6 +43,8 @@ public:
 
   QxrdSettingsSaver *saver();
   QxrdScriptEngine* scriptEngine();
+
+public slots:
   void executeCommand(QString cmd);
 
   QString defaultExperimentDirectory(QString path);
@@ -60,9 +62,6 @@ public:
   void saveExperimentCopyAs(QString path);
   void saveExperimentAs(QString path);
 
-signals:
-
-public slots:
   void shutdown();
 
   void readSettings();
@@ -106,11 +105,11 @@ public:  // Properties
   Q_PROPERTY(QString experimentDescription     READ get_ExperimentDescription WRITE set_ExperimentDescription)
   QCEP_STRING_PROPERTY(ExperimentDescription)
 
-  Q_PROPERTY(QString logFilePath     READ get_LogFilePath WRITE set_LogFilePath)
-  QCEP_STRING_PROPERTY(LogFilePath)
+  Q_PROPERTY(QString logFileName     READ get_LogFileName WRITE set_LogFileName)
+  QCEP_STRING_PROPERTY(LogFileName)
 
-  Q_PROPERTY(QString scanFilePath     READ get_ScanFilePath WRITE set_ScanFilePath)
-  QCEP_STRING_PROPERTY(ScanFilePath)
+  Q_PROPERTY(QString scanFileName     READ get_ScanFileName WRITE set_ScanFileName)
+  QCEP_STRING_PROPERTY(ScanFileName)
 
   Q_PROPERTY(int    detectorType  READ get_DetectorType WRITE set_DetectorType)
   QCEP_INTEGER_PROPERTY(DetectorType)

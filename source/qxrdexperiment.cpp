@@ -23,8 +23,8 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_ExperimentFileName(&m_Saver, this, "experimentFileName", defaultExperimentFileName(path)),
   m_ExperimentName(&m_Saver, this, "experimentName", defaultExperimentName(path)),
   m_ExperimentDescription(&m_Saver, this, "experimentDescription", ""),
-  m_LogFilePath(&m_Saver, this, "logFilePath", defaultLogName(path)),
-  m_ScanFilePath(&m_Saver, this, "scanFilePath", defaultScanName(path)),
+  m_LogFileName(&m_Saver, this, "logFileName", defaultLogName(path)),
+  m_ScanFileName(&m_Saver, this, "scanFileName", defaultScanName(path)),
   m_DetectorType(&m_Saver, this,"detectorType", 1),
   m_ProcessorType(&m_Saver, this,"processorType", 0),
   m_DefaultLayout(NULL, this,"defaultLayout",0),
@@ -366,7 +366,7 @@ void QxrdExperiment::newLogFile(QString path)
     m_LogFile = NULL;
   }
 
-  set_LogFilePath(path);
+  set_LogFileName(path);
 
   openLogFile();
 }
@@ -379,7 +379,7 @@ FILE* QxrdExperiment::logFile()
 void QxrdExperiment::writeLogHeader()
 {
   if (m_LogFile) {
-    fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFilePath()));
+    fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFileName()));
     fprintf(m_LogFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
     fprintf(m_LogFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
     fflush(m_LogFile);
@@ -540,8 +540,8 @@ void QxrdExperiment::setExperimentFilePath(QString path)
   set_ExperimentDirectory(defaultExperimentDirectory(path));
   set_ExperimentFileName(defaultExperimentFileName(path));
   set_ExperimentName(defaultExperimentName(path));
-  set_LogFilePath(defaultLogName(path));
-  set_ScanFilePath(defaultScanName(path));
+  set_LogFileName(defaultLogName(path));
+  set_ScanFileName(defaultScanName(path));
 
   if (m_Window) {
     m_Window -> updateTitle();
@@ -552,8 +552,8 @@ void QxrdExperiment::setExperimentFilePath(QString path)
     printMessage(tr("  experimentDirectory: %1").arg(get_ExperimentDirectory()));
     printMessage(tr("  experimentFileName: %1").arg(get_ExperimentFileName()));
     printMessage(tr("  experimentName: %1").arg(get_ExperimentName()));
-    printMessage(tr("  logFilePath: %1").arg(get_LogFilePath()));
-    printMessage(tr("  scanFilePath: %1").arg(get_ScanFilePath()));
+    printMessage(tr("  logFilePath: %1").arg(get_LogFileName()));
+    printMessage(tr("  scanFilePath: %1").arg(get_ScanFileName()));
   }
 
   openLogFile();
@@ -564,14 +564,14 @@ QString QxrdExperiment::logFilePath()
 {
   QDir dir(get_ExperimentDirectory());
 
-  return dir.filePath(get_LogFilePath());
+  return dir.filePath(get_LogFileName());
 }
 
 QString QxrdExperiment::scanFilePath()
 {
   QDir dir(get_ExperimentDirectory());
 
-  return dir.filePath(get_ScanFilePath());
+  return dir.filePath(get_ScanFileName());
 }
 
 void QxrdExperiment::saveExperiment()
