@@ -1,3 +1,4 @@
+#include "qcepmacros.h"
 #include "qxrdsettingssaver.h"
 #include "qcepproperty.h"
 #include "qxrdapplication.h"
@@ -27,10 +28,10 @@ void QxrdSettingsSaver::performSave()
 
   if (nupdates > 0) {
     if (qcepDebug(DEBUG_PREFS)) {
-      g_Application->printMessage(tr("Settings Saver saving %1 updates").arg(nupdates));
+      printMessage(tr("Settings Saver saving %1 updates").arg(nupdates));
 
       if (m_LastChangedBy) {
-        g_Application->printMessage(tr("Last changed by %1").arg(m_LastChangedBy->name()));
+        printMessage(tr("Last changed by %1").arg(m_LastChangedBy->name()));
       }
     }
 
@@ -39,10 +40,10 @@ void QxrdSettingsSaver::performSave()
     QTime tic;
     tic.start();
 
-    INVOKE_CHECK(QMetaObject::invokeMethod(m_Owner, "writeSettings"/*, Qt::BlockingQueuedConnection*/));
+    INVOKE_CHECK(QMetaObject::invokeMethod(m_Owner, "writeSettings"));
 
     if (qcepDebug(DEBUG_PREFS)) {
-      g_Application->printMessage(tr("Saving settings took %1 msec").arg(tic.elapsed()));
+      printMessage(tr("Saving settings took %1 msec").arg(tic.elapsed()));
     }
   }
 }
@@ -51,4 +52,9 @@ void QxrdSettingsSaver::changed(QcepProperty *prop)
 {
   m_ChangeCount.fetchAndAddOrdered(1);
   m_LastChangedBy = prop;
+}
+
+void QxrdSettingsSaver::printMessage(QString msg, QDateTime ts)
+{
+  INVOKE_CHECK(QMetaObject::invokeMethod(m_Owner, "printMessage", Q_ARG(QString, msg), Q_ARG(QDateTime, ts)));
 }

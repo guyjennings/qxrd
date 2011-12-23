@@ -21,6 +21,7 @@ public:
 
 public slots:
   void performSave();
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 private:
   QMutex             m_Mutex;

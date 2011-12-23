@@ -44,7 +44,7 @@ QcepProperty::QcepProperty(QxrdSettingsSaver *saver, QObject *parent, const char
   }
 
   if (m_Saver && !m_IsStored) {
-    printf("Warning: property %s has saver but is not stored\n", name);
+    printMessage(tr("Warning: property %1 has saver but is not stored").arg(name));
   }
 }
 
@@ -194,6 +194,13 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
     }
 
     settings->endGroup();
+  }
+}
+
+void QcepProperty::printMessage(QString msg, QDateTime ts)
+{
+  if (m_Saver) {
+    m_Saver->printMessage(msg, ts);
   }
 }
 

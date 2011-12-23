@@ -8,6 +8,7 @@
 #include <QVector>
 #include <QSharedPointer>
 #include <QFileInfo>
+#include <QDateTime>
 #include <math.h>
 #include <stdio.h>
 
