@@ -32,6 +32,9 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_SpecServerPort(&m_Saver, this,"specServerPort", -1),
   m_RunSimpleServer(&m_Saver, this,"runSimpleServer", 1),
   m_SimpleServerPort(&m_Saver, this,"simpleServerPort", 1234),
+  m_WorkCompleted(NULL, this, "workCompleted", 0),
+  m_WorkTarget(NULL, this, "workTarget", 0),
+  m_CompletionPercentage(NULL, this, "completionPercentage", 0),
   m_Application(app),
   m_Window(NULL),
   m_Splash(NULL),
@@ -183,6 +186,9 @@ bool QxrdExperiment::init(QSettings *settings)
   if (m_Window) connect(scriptEngine(),   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
 
   connect(m_Application, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
+
+  connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
+  connect(prop_WorkTarget(),    SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
 
   splashMessage("Loading Preferences");
 
@@ -603,4 +609,32 @@ void QxrdExperiment::saveExperimentCopyAs(QString path)
   exp -> writeSettings(&settings);
 
   delete exp;
+}
+
+void QxrdExperiment::updateCompletionPercentage(int, int)
+{
+  int completed = get_WorkCompleted();
+  int target    = get_WorkTarget();
+
+  if (target > 0) {
+    set_CompletionPercentage(100.0*completed/target);
+  } else {
+    set_CompletionPercentage(0);
+  }
+}
+
+void QxrdExperiment::completeWork(int amt)
+{
+  prop_WorkCompleted()->incValue(amt);
+}
+
+void QxrdExperiment::commenceWork(int amt)
+{
+  prop_WorkTarget()->incValue(amt);
+}
+
+void QxrdExperiment::finishedWork(int amt)
+{
+  prop_WorkCompleted()->incValue(-amt);
+  prop_WorkTarget()->incValue(-amt);
 }

@@ -78,6 +78,12 @@ public slots:
 
   void saveExperiment();
 
+  void completeWork(int amt);
+  void commenceWork(int amt);
+  void finishedWork(int amt);
+  void updateCompletionPercentage(int, int);
+
+
 private:
   void closeLogFile();
   void openLogFile();
@@ -131,6 +137,15 @@ public:  // Properties
 
   Q_PROPERTY(int    simpleServerPort    READ get_SimpleServerPort WRITE set_SimpleServerPort)
   QCEP_INTEGER_PROPERTY(SimpleServerPort)
+
+  Q_PROPERTY(int    workCompleted READ get_WorkCompleted WRITE set_WorkCompleted STORED false)
+  QCEP_INTEGER_PROPERTY(WorkCompleted)
+
+  Q_PROPERTY(int    workTarget READ get_WorkTarget WRITE set_WorkTarget STORED false)
+  QCEP_INTEGER_PROPERTY(WorkTarget)
+
+  Q_PROPERTY(int    completionPercentage READ get_CompletionPercentage WRITE set_CompletionPercentage)
+  QCEP_INTEGER_PROPERTY(CompletionPercentage)
 
 private:
   QxrdApplication                *m_Application;

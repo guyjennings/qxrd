@@ -21,6 +21,7 @@ class QLabel;
 class QAbstractButton;
 class QSettings;
 class QxrdSettingsSaver;
+class QProgressBar;
 
 class QcepProperty : public QObject {
   Q_OBJECT
@@ -68,6 +69,7 @@ public:
 
   void linkTo(QDoubleSpinBox *spinBox);
   void linkTo(QLabel *label);
+  void linkTo(QProgressBar *progress);
 
 public slots:
   void setValue(double val, int index);
@@ -115,6 +117,7 @@ public:
   void linkTo(QSpinBox *spinBox);
   void linkTo(QComboBox *comboBox);
   void linkTo(QLabel *label);
+  void linkTo(QProgressBar *progress);
 
 public slots:
   void setValue(int val, int index);

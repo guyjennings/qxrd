@@ -8,7 +8,7 @@
 
 #include <cmath>
 
-QxrdIntegratorCache::QxrdIntegratorCache(QxrdAllocator *alloc) :
+QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperiment *exp, QxrdAllocator *alloc) :
   QObject(NULL),
   m_Oversample(NULL, this, "oversample", 1),
   m_IntegrationStep(NULL, this, "integrationStep", 0.001),
@@ -42,6 +42,7 @@ QxrdIntegratorCache::QxrdIntegratorCache(QxrdAllocator *alloc) :
   m_SinRot(NULL, this, "sinRot", 0),
   m_CacheFillLevel(-1),
   m_CacheFullLevel(-1),
+  m_Experiment(exp),
   m_Allocator(alloc)
 {
 }
@@ -163,7 +164,7 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
   tic.start();
 
   if (qcepDebug(DEBUG_INTEGRATOR)) {
-    g_Application->printMessage(tr("QxrdIntegratorCache::performIntegration"));
+    m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration"));
   }
 
   if (integ && dimg) {
@@ -181,7 +182,7 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
     if (m_CacheFillLevel.testAndSetOrdered(-1,0)) {
       if (qcepDebug(DEBUG_INTEGRATOR)) {
-        g_Application->printMessage(tr("QxrdIntegratorCache::performIntegration - fill cache"));
+        m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration - fill cache"));
       }
 
       // Allocate new cache and fill it...
@@ -248,8 +249,11 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
         qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
 
+        m_Experiment->commenceWork(nRows);
 
         for (int y = 0; y < nRows; y++) {
+          m_Experiment->completeWork(1);
+
           for (int x = 0; x < nCols; x++) {
             for (int oversampley = 0; oversampley < noversample; oversampley++) {
               double yy = y+oversampley*oversampleStep+halfOversampleStep;
@@ -272,16 +276,18 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
             }
           }
         }
+
+        m_Experiment->finishedWork(nRows);
       }
 
       if (qcepDebug(DEBUG_INTEGRATOR)) {
-        g_Application->printMessage(tr("QxrdIntegratorCache::performIntegration - cache finished"));
+        m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration - cache finished"));
       }
     }
 
     while (m_CacheFillLevel < m_CacheFullLevel) {
       if (qcepDebug(DEBUG_INTEGRATOR)) {
-        g_Application->printMessage(tr("QxrdIntegratorCache::performIntegration - waiting for cache [%1,%2]")
+        m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration - waiting for cache [%1,%2]")
                                     .arg(m_CacheFillLevel)
                                     .arg(m_CacheFullLevel));
       }
@@ -291,7 +297,7 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
     if (m_CacheFillLevel == m_CacheFullLevel) {
       if (qcepDebug(DEBUG_INTEGRATOR)) {
-        g_Application->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
+        m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
       }
 
       int nRange = get_NRange();
@@ -305,7 +311,17 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
       qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
       int noversample = get_Oversample();
 
+      int nWork = nRows/100;
+      int nWorkDone = 0;
+
+      m_Experiment->commenceWork(nWork);
+
       for (int y = 0; y < nRows; y++) {
+        if (y%100 == 0) {
+          m_Experiment->completeWork(1);
+          nWorkDone++;
+        }
+
         for (int x = 0; x < nCols; x++) {
           if ((mask == NULL) || (mask->value(x, y))) {
             double val = dimg->value(x,y);
@@ -324,6 +340,12 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           }
         }
       }
+
+      if (nWorkDone != nWork) {
+        m_Experiment->completeWork(nWork-nWorkDone);
+      }
+
+      m_Experiment -> finishedWork(nWork);
 
       integ -> resize(0);
       integ -> set_Center(get_CenterX(), get_CenterY());
@@ -347,11 +369,11 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
       // Integrate entirely out of cache
     }
 
-    g_Application->printMessage(tr("Integration of %1 took %2 msec")
+    m_Experiment->printMessage(tr("Integration of %1 took %2 msec")
                                 .arg(dimg->get_Title())
                                 .arg(tic.restart()));
   } else {
-    g_Application->printMessage(tr("QxrdIntegratorCache::performIntegration - integration failed"));
+    m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration - integration failed"));
   }
 
   return integ;

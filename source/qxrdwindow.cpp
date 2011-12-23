@@ -351,6 +351,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
 
   m_Progress = new QProgressBar(NULL);
   m_Progress -> setMinimumWidth(150);
+  m_Progress -> setMinimum(0);
+  m_Progress -> setMaximum(100);
   m_Progress -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   m_Progress -> setToolTip(tr("Acquisition progress"));
 
@@ -379,6 +381,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
 
   m_Acquisition -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
 
+  m_Experiment    -> prop_CompletionPercentage() -> linkTo(m_Progress);
   m_DataProcessor -> prop_PerformDarkSubtraction() -> linkTo(m_CorrectionDialog->m_PerformDark);
   m_DataProcessor -> prop_PerformDarkSubtractionTime() -> linkTo(m_CorrectionDialog->m_PerformDarkTime);
   m_DataProcessor -> prop_SaveRawImages() -> linkTo(m_CorrectionDialog->m_SaveRaw);

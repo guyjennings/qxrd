@@ -12,13 +12,14 @@
 
 class QxrdDataProcessorBase;
 class QxrdAllocator;
+class QxrdExperiment;
 
 class QxrdIntegrator : public QObject
 {
   Q_OBJECT
 
 public:
-  QxrdIntegrator(QxrdSettingsSaver *saver, QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent=0);
+  QxrdIntegrator(QxrdSettingsSaver *saver, QxrdExperiment *exp, QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent=0);
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
@@ -77,6 +78,7 @@ public slots:
 
 private:
   mutable QMutex         m_Mutex;
+  QxrdExperiment        *m_Experiment;
   QxrdDataProcessorBase *m_DataProcessor;
   QxrdAllocator         *m_Allocator;
   QxrdIntegratorCachePtr m_IntegratorCache;

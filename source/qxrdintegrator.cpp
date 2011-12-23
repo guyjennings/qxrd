@@ -15,7 +15,7 @@
 
 #include <cmath>
 
-QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaver *saver, QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent)
+QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaver *saver, QxrdExperiment *exp, QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent)
   : QObject(parent),
     m_Oversample(saver, this, "oversample", 1),
     m_IntegrationStep(saver, this, "integrationStep", 0.001),
@@ -23,6 +23,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaver *saver, QxrdDataProcessorBase *
     m_IntegrationMinimum(saver, this, "integrationMinimum", 0),
     m_IntegrationMaximum(saver, this, "integrationMaximum", 100000),
     m_IntegrationXUnits(saver, this, "integrationXUnits", IntegrateTTH),
+    m_Experiment(exp),
     m_DataProcessor(proc),
     m_Allocator(alloc),
     m_IntegratorCache(NULL)
@@ -69,7 +70,7 @@ void QxrdIntegrator::readSettings(QSettings *settings, QString section)
 void QxrdIntegrator::onIntegrationParametersChanged()
 {
   if (qcepDebug(DEBUG_INTEGRATOR)) {
-    g_Application->printMessage("Integration parameters changed");
+    m_Experiment->printMessage("Integration parameters changed");
   }
 
   m_IntegratorCache = QxrdIntegratorCachePtr();
@@ -84,7 +85,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr i
       dimg->get_Height() != m_IntegratorCache->get_NRows()) {
 
     QxrdIntegratorCachePtr cache = QxrdIntegratorCachePtr(
-          new QxrdIntegratorCache(m_Allocator));
+          new QxrdIntegratorCache(m_Experiment, m_Allocator));
 
     cache->set_Oversample        (this->get_Oversample());
     cache->set_IntegrationStep   (this->get_IntegrationStep());
@@ -344,7 +345,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdIntegratedDataPtr integ, Qxr
   }
 
   catch (...) {
-    g_Application->printMessage("QxrdIntegrator::sliceLine failed");
+    m_Experiment->printMessage("QxrdIntegrator::sliceLine failed");
   }
 
   return QxrdIntegratedDataPtr();
@@ -398,7 +399,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdIntegratedDataPtr integ, 
       //    emit newIntegrationAvailable(image->get_Title(),xs,ys);
     }
   } else {
-    g_Application->printMessage("QxrdIntegrator::slicePolygon failed");
+    m_Experiment->printMessage("QxrdIntegrator::slicePolygon failed");
   }
 
   return integ;

@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QDoubleSpinBox>
 #include <QLabel>
+#include <QProgressBar>
 #include <QAbstractButton>
 #include <QMetaProperty>
 #include <QSettings>
@@ -350,6 +351,11 @@ void QcepDoubleProperty::linkTo(QLabel *label)
   connect(this, SIGNAL(valueChanged(QString)), label, SLOT(setText(QString)));
 }
 
+void QcepDoubleProperty::linkTo(QProgressBar *progress)
+{
+  connect(this, SIGNAL(valueChanged(double,int)), progress, SLOT(setValue(int)));
+}
+
 QcepDoublePropertyDoubleSpinBoxHelper::QcepDoublePropertyDoubleSpinBoxHelper(QDoubleSpinBox *spinBox, QcepDoubleProperty *property)
   : QObject(spinBox),
     m_DoubleSpinBox(spinBox),
@@ -544,6 +550,11 @@ void QcepIntProperty::linkTo(QLabel *label)
 
     connect(this, SIGNAL(valueChanged(QString)), label, SLOT(setText(QString)));
   }
+}
+
+void QcepIntProperty::linkTo(QProgressBar *progress)
+{
+  connect(this, SIGNAL(valueChanged(int,int)), progress, SLOT(setValue(int)));
 }
 
 QcepIntPropertySpinBoxHelper::QcepIntPropertySpinBoxHelper(QSpinBox *spinBox, QcepIntProperty *property)
