@@ -87,11 +87,9 @@ public slots:
 private:
   void closeLogFile();
   void openLogFile();
-  void writeLogHeader();
 
   void closeScanFile();
   void openScanFile();
-  void writeScanHeader();
 
 public:  // Properties
   QxrdSettingsSaver m_Saver;
@@ -164,7 +162,10 @@ private:
   QxrdScriptEngine               *m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
+  QMutex                          m_LogFileMutex;
   FILE                           *m_LogFile;
+
+  QMutex                          m_ScanFileMutex;
   FILE                           *m_ScanFile;
 };
 

@@ -305,23 +305,6 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdExperiment::openScanFile()
-{
-  if (m_ScanFile) {
-    fclose(m_ScanFile);
-  }
-
-  m_ScanFile = fopen(qPrintable(scanFilePath()), "a");
-
-  if (m_ScanFile) {
-    writeScanHeader();
-  }
-}
-
-void QxrdExperiment::writeScanHeader()
-{
-}
-
 QxrdWindow *QxrdExperiment::window()
 {
   return m_Window;
@@ -352,24 +335,15 @@ void QxrdExperiment::executeCommand(QString cmd)
   m_ScriptEngine->evaluateAppCommand(cmd);
 }
 
-void QxrdExperiment::openLogFile()
-{
-  if (m_LogFile) {
-    fclose(m_LogFile);
-  }
-
-  m_LogFile = fopen(qPrintable(logFilePath()), "a");
-
-  if (m_LogFile) {
-    writeLogHeader();
-  }
-}
-
 void QxrdExperiment::newLogFile(QString path)
 {
-  if (m_LogFile) {
-    fclose(m_LogFile);
-    m_LogFile = NULL;
+  {
+    QMutexLocker lock(&m_LogFileMutex);
+
+    if (m_LogFile) {
+      fclose(m_LogFile);
+      m_LogFile = NULL;
+    }
   }
 
   set_LogFileName(path);
@@ -377,24 +351,34 @@ void QxrdExperiment::newLogFile(QString path)
   openLogFile();
 }
 
-FILE* QxrdExperiment::logFile()
+void QxrdExperiment::openLogFile()
 {
-  return m_LogFile;
+  QMutexLocker lock(&m_LogFileMutex);
+
+  if (m_LogFile == NULL) {
+    m_LogFile = fopen(qPrintable(logFilePath()), "a");
+
+    if (m_LogFile) {
+      fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFileName()));
+      fprintf(m_LogFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
+      fprintf(m_LogFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
+      fflush(m_LogFile);
+    }
+  }
 }
 
-void QxrdExperiment::writeLogHeader()
+FILE* QxrdExperiment::logFile()
 {
-  if (m_LogFile) {
-    fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFileName()));
-    fprintf(m_LogFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
-    fprintf(m_LogFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
-    fflush(m_LogFile);
-  }
+  QMutexLocker lock(&m_LogFileMutex);
+
+  return m_LogFile;
 }
 
 void QxrdExperiment::logMessage(QString msg)
 {
   openLogFile();
+
+  QMutexLocker lock(&m_LogFileMutex);
 
   if (m_LogFile) {
     fprintf(m_LogFile, "#CX %s\n", qPrintable(msg));
@@ -404,11 +388,39 @@ void QxrdExperiment::logMessage(QString msg)
 
 void QxrdExperiment::closeLogFile()
 {
+  QMutexLocker lock(&m_LogFileMutex);
+
   if (m_LogFile) {
-    logMessage(tr("%1 ------- shutdown --------").
-               arg(QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ")));
+    fprintf(m_LogFile, "#CX %s ------- shutdown --------\n",
+               qPrintable(QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ")));
+
     fclose(m_LogFile);
     m_LogFile = NULL;
+  }
+}
+
+void QxrdExperiment::newScanFile(QString path)
+{
+  {
+    QMutexLocker lock(&m_ScanFileMutex);
+
+    if (m_ScanFile) {
+      fclose(m_ScanFile);
+      m_ScanFile = NULL;
+    }
+  }
+
+  set_ScanFileName(path);
+
+  openScanFile();
+}
+
+void QxrdExperiment::openScanFile()
+{
+  QMutexLocker lock(&m_ScanFileMutex);
+
+  if (m_ScanFile == NULL) {
+    m_ScanFile = fopen(qPrintable(scanFilePath()), "a");
   }
 }
 
@@ -419,6 +431,8 @@ FILE* QxrdExperiment::scanFile()
 
 void QxrdExperiment::closeScanFile()
 {
+  QMutexLocker lock(&m_ScanFileMutex);
+
   if (m_ScanFile) {
     fclose(m_ScanFile);
     m_ScanFile = NULL;
@@ -562,8 +576,8 @@ void QxrdExperiment::setExperimentFilePath(QString path)
     printMessage(tr("  scanFilePath: %1").arg(get_ScanFileName()));
   }
 
-  openLogFile();
-  openScanFile();
+  newLogFile(get_LogFileName());
+  newScanFile(get_ScanFileName());
 }
 
 QString QxrdExperiment::logFilePath()
