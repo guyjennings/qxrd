@@ -190,7 +190,6 @@ HEADERS += TODO.h \
     qxrdsynchronizedacquisitiondialog.h \
     qxrddisplaydialog.h \
     qxrdcorrectiondialog.h \
-    qxrdtestdockwidget.h \
     qxrdfilebrowsermodel.h \
     qxrdfilebrowserview.h \
     qxrdslicedialog.h \
@@ -323,7 +322,6 @@ SOURCES += qxrd.cpp \
     qxrdsynchronizedacquisitiondialog.cpp \
     qxrddisplaydialog.cpp \
     qxrdcorrectiondialog.cpp \
-    qxrdtestdockwidget.cpp \
     qxrdfilebrowsermodel.cpp \
     qxrdfilebrowserview.cpp \
     qxrdslicedialog.cpp \
@@ -369,7 +367,6 @@ FORMS = qxrdwindow.ui \
     qxrdsynchronizedacquisitiondialog.ui \
     qxrddisplaydialog.ui \
     qxrdcorrectiondialog.ui \
-    qxrdtestdockwidget.ui \
     qxrdslicedialog.ui \
     qxrdhistogramdialog.ui \
     qxrdinfodialog.ui \

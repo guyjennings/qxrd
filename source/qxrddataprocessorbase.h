@@ -38,8 +38,8 @@ public:
   ~QxrdDataProcessorBase();
 
 public:
-  Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory)
-  QCEP_STRING_PROPERTY(OutputDirectory)
+//  Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory)
+//  QCEP_STRING_PROPERTY(OutputDirectory)
 
   Q_PROPERTY(QString fileName READ get_FileName WRITE set_FileName STORED false)
   QCEP_STRING_PROPERTY(FileName)
@@ -215,7 +215,7 @@ public slots:
   virtual void integrateSaveAndDisplay() = 0;
 
   QString pwd() const;
-  void cd(QString path);
+//  void cd(QString path);
   QStringList ls() const;
   QStringList ls(QString pattern) const;
 

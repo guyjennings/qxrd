@@ -8,12 +8,17 @@
 #include "qxrdfilebrowserview.h"
 #include "qxrdapplication.h"
 
-QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaver *saver, int isOutput, QxrdDataProcessor *processor, QWidget *parent)
+QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaver *saver,
+                                 int isOutput,
+                                 QxrdExperiment *experiment,
+                                 QxrdDataProcessor *processor,
+                                 QWidget *parent)
   : QDockWidget(parent),
     m_BrowserFilter(saver, this, "browserFilter",1),
     m_BrowserSelector(saver, this, "browserSelector",""),
     m_RootDirectory(saver, this, "rootDirectory",""),
     m_IsOutput(isOutput),
+    m_Experiment(experiment),
     m_Processor(processor),
     m_Model(NULL)
 {
@@ -191,7 +196,7 @@ void QxrdFileBrowser::doHomeDirectory()
 
 void QxrdFileBrowser::doAcquisitionDirectory()
 {
-  doPushDirectory(m_Processor->get_OutputDirectory());
+  doPushDirectory(m_Experiment->get_ExperimentDirectory());
 }
 
 void QxrdFileBrowser::doOpen()
@@ -417,13 +422,19 @@ void QxrdFileBrowser::onModelReset()
   m_FileBrowser->resizeRowsToContents();
 }
 
-QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdSettingsSaver *saver, QxrdDataProcessor *processor, QWidget *parent)
-  : QxrdFileBrowser(saver, false, processor, parent)
+QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdSettingsSaver *saver,
+                                           QxrdExperiment *experiment,
+                                           QxrdDataProcessor *processor,
+                                           QWidget *parent)
+  : QxrdFileBrowser(saver, false, experiment, processor, parent)
 {
 }
 
-QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdSettingsSaver *saver, QxrdDataProcessor *processor, QWidget *parent)
-  : QxrdFileBrowser(saver, true, processor, parent)
+QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdSettingsSaver *saver,
+                                             QxrdExperiment *experiment,
+                                             QxrdDataProcessor *processor,
+                                             QWidget *parent)
+  : QxrdFileBrowser(saver, true, experiment, processor, parent)
 {
 }
 

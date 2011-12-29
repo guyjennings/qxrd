@@ -35,8 +35,8 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperiment 
   m_DetectorTypeCombo -> addItems(detectorTypes);
   m_DetectorTypeCombo -> setCurrentIndex(detectorType);
 
-  connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
-  m_CurrentOutputDirectory -> setText(proc->get_OutputDirectory());
+//  connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
+//  m_CurrentOutputDirectory -> setText(proc->get_OutputDirectory());
 
   connect(m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
   m_CurrentLogFile -> setText(m_Experiment->get_LogFileName());
@@ -208,7 +208,7 @@ void QxrdExperimentPreferencesDialog::accept()
 
   proc          -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
 
-  proc          -> set_OutputDirectory(m_CurrentOutputDirectory -> text());
+//  proc          -> set_OutputDirectory(m_CurrentOutputDirectory -> text());
   m_Experiment    -> set_LogFileName    (m_CurrentLogFile -> text());
 
   acq           -> set_FileIndexWidth(m_FileIndexWidth -> value());

@@ -576,14 +576,14 @@ QScriptValue QxrdScriptEngine::outputDirectoryFunc(QScriptContext *context, QScr
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessor *proc = eng->dataProcessor();
+    QxrdExperiment *doc = eng->experiment();
 
-    if (proc) {
+    if (doc) {
       if (context->argumentCount() != 0) {
-        proc -> set_OutputDirectory(context->argument(0).toString());
+        doc -> set_ExperimentDirectory(context->argument(0).toString());
       }
 
-      return QScriptValue(engine, proc -> get_OutputDirectory());
+      return QScriptValue(engine, doc -> get_ExperimentDirectory());
     }
   }
 

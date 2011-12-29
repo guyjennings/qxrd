@@ -946,8 +946,6 @@
     <property name="title">
      <string>Acquire</string>
     </property>
-    <addaction name="m_ActionSetAcquireDirectory"/>
-    <addaction name="m_ActionSelectLogFile"/>
    </widget>
    <widget class="QMenu" name="m_DisplayMenu">
     <property name="title">

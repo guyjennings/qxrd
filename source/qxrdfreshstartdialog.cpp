@@ -21,8 +21,6 @@ QxrdFreshStartDialog::QxrdFreshStartDialog(QWidget *parent) :
   int defaultLayout = 0;
   double exposureTime = 0.0;
 
-  QString logFilePath = "";
-
   {
     QxrdExperimentSettings settings;
 
@@ -33,7 +31,6 @@ QxrdFreshStartDialog::QxrdFreshStartDialog(QWidget *parent) :
     simpleServer = settings.value("application/runSimpleServer").toInt();
     simpleServerPort = settings.value("application/simpleServerPort").toInt();
     defaultLayout = settings.value("application/defaultLayout").toInt();
-    logFilePath = settings.value("processor/logFilePath").toString();
     exposureTime = settings.value("acquire/exposureTime").toDouble();
   }
 
@@ -50,10 +47,7 @@ QxrdFreshStartDialog::QxrdFreshStartDialog(QWidget *parent) :
   m_SimpleServerPort -> setRange(0,65535);
   m_SimpleServerPort -> setValue(simpleServerPort);
   m_DefaultLayout ->setChecked(defaultLayout);
-  m_CurrentLogFile ->setText(logFilePath);
   m_ExposureTime -> setValue(exposureTime);
-
-  connect(m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
 
   setupDebugWidgets(debugLevel);
 }
@@ -133,18 +127,5 @@ int QxrdFreshStartDialog::readDebugWidgets()
   }
 
   return newDbg;
-}
-
-void QxrdFreshStartDialog::currentLogfileBrowse()
-{
-  QDir pwd;
-
-  QFileInfo initial(pwd, m_CurrentLogFile->text());
-
-  QString file = QFileDialog::getSaveFileName(this, "Log File", initial.absoluteFilePath());
-
-  if (file != "") {
-    m_CurrentLogFile->setText(pwd.relativeFilePath(file));
-  }
 }
 

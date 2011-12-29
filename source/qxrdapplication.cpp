@@ -826,8 +826,8 @@ void QxrdApplication::setNewExperimentSettings(QSettings &settings, int type, QS
 
   settings.setValue("application/detectorType", type);
   settings.setValue("processor/outputDirectory", path);
-  settings.setValue("application/logFilePath", base+".log");
-  settings.setValue("processor/integratedFilePath", base+".avg");
+  settings.setValue("application/logFileName", base+".log");
+  settings.setValue("processor/integratedFileName", base+".avg");
   settings.setValue("window/inputFileBrowser/rootDirectory", path);
   settings.setValue("window/outputFileBrowser/rootDirectory", path);
 

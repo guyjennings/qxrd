@@ -67,7 +67,7 @@ public slots:
   void doSaveGainMap();
   void doLoadGainMap();
   void doClearGainMap();
-  void selectLogFile();
+//  void selectLogFile();
   void doRefineCenterTilt();
   void doAccumulateImages();
   void doIntegrateSequence();
@@ -98,7 +98,7 @@ public slots:
   void displayStatusMessage(QString msg);
   void displayCriticalMessage(QString msg);
 
-  void selectOutputDirectory();
+//  void selectOutputDirectory();
   void clearStatusMessage();
 
   void enableTiltRefinement(bool enable);

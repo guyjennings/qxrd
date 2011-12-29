@@ -29,7 +29,6 @@
 #include "qxrdslicedialog.h"
 #include "qxrdhistogramdialog.h"
 #include "qxrdinfodialog.h"
-#include "qxrdtestdockwidget.h"
 #include "qxrdhighlighter.h"
 #include "qxrdexperimentpreferencesdialog.h"
 
@@ -118,8 +117,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   m_MaskDialog         = new QxrdMaskDialog(this, m_DataProcessor);
   m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
   m_IntegratorDialog   = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
-  m_InputFileBrowser   = new QxrdInputFileBrowser(m_Experiment->saver(), m_DataProcessor, this);
-  m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_Experiment->saver(), m_DataProcessor, this);
+  m_InputFileBrowser   = new QxrdInputFileBrowser(m_Experiment->saver(), m_Experiment, m_DataProcessor, this);
+  m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_Experiment->saver(), m_Experiment, m_DataProcessor, this);
   m_SliceDialog        = new QxrdSliceDialog(this);
   m_HistogramDialog    = new QxrdHistogramDialog(this);
   m_ImageInfoDialog    = new QxrdInfoDialog(this);
@@ -224,8 +223,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   connect(m_ActionSaveGainMap, SIGNAL(triggered()), this, SLOT(doSaveGainMap()));
   connect(m_ActionClearGainMap, SIGNAL(triggered()), this, SLOT(doClearGainMap()));
 
-  connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
-  connect(m_ActionSetAcquireDirectory, SIGNAL(triggered()), this, SLOT(selectOutputDirectory()));
+//  connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
+//  connect(m_ActionSetAcquireDirectory, SIGNAL(triggered()), this, SLOT(selectOutputDirectory()));
 
   connect(m_ActionAccumulateImages, SIGNAL(triggered()), this, SLOT(doAccumulateImages()));
   connect(m_ActionProcessData, SIGNAL(triggered()), this, SLOT(doProcessSequence()));
@@ -685,16 +684,16 @@ void QxrdWindow::displayCriticalMessage(QString msg)
     }
 }
 
-void QxrdWindow::selectOutputDirectory()
-{
-  THREAD_CHECK;
+//void QxrdWindow::selectOutputDirectory()
+//{
+//  THREAD_CHECK;
 
-  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory",
-                                                  m_DataProcessor -> get_OutputDirectory());
-  if (dir.length()) {
-    m_DataProcessor -> set_OutputDirectory(dir);
-  }
-}
+//  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory",
+//                                                  m_DataProcessor -> get_OutputDirectory());
+//  if (dir.length()) {
+//    m_DataProcessor -> set_OutputDirectory(dir);
+//  }
+//}
 
 void QxrdWindow::acquireStarted()
 {
@@ -1211,17 +1210,17 @@ void QxrdWindow::doClearGainMap()
   }
 }
 
-void QxrdWindow::selectLogFile()
-{
-  GUI_THREAD_CHECK;
+//void QxrdWindow::selectLogFile()
+//{
+//  GUI_THREAD_CHECK;
 
-  QString theFile = QFileDialog::getSaveFileName(
-        this, "Save Log File in", m_DataProcessor -> get_DataPath());
+//  QString theFile = QFileDialog::getSaveFileName(
+//        this, "Save Log File in", m_DataProcessor -> get_DataPath());
 
-  if (theFile.length()) {
-    m_Experiment->newLogFile(theFile);
-  }
-}
+//  if (theFile.length()) {
+//    m_Experiment->newLogFile(theFile);
+//  }
+//}
 
 void QxrdWindow::doTest()
 {

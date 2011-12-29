@@ -42,9 +42,9 @@ public:
   void newScanFile(QString path);
 
   QxrdSettingsSaver *saver();
+public slots:
   QxrdScriptEngine* scriptEngine();
 
-public slots:
   void executeCommand(QString cmd);
 
   QString defaultExperimentDirectory(QString path);

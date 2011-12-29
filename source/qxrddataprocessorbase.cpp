@@ -27,7 +27,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   QObject(parent),
   //    m_ProcessorType(this,"processorType",0),
   //    m_ProcessorTypeName(this,"processorTypeName","processorType"),
-  m_OutputDirectory(saver, this,"outputDirectory", ""),
+//  m_OutputDirectory(saver, this,"outputDirectory", ""),
   m_FileName(NULL, this,"fileName",""),
   m_DataPath(saver, this,"dataPath", ""),
   m_DarkImagePath(saver, this, "darkImagePath", ""),
@@ -210,42 +210,42 @@ QString QxrdDataProcessorBase::filePathInCurrentDirectory(QString name) const
 
 QString QxrdDataProcessorBase::currentDirectory() const
 {
-  return get_OutputDirectory();
+  return m_Experiment->get_ExperimentDirectory();
 }
 
 QString QxrdDataProcessorBase::darkOutputDirectory() const
 {
   if (get_SaveDarkInSubdirectory()) {
-    return existingOutputDirectory(get_OutputDirectory(), get_SaveDarkSubdirectory());
+    return existingOutputDirectory(currentDirectory(), get_SaveDarkSubdirectory());
   } else {
-    return get_OutputDirectory();
+    return currentDirectory();
   }
 }
 
 QString QxrdDataProcessorBase::rawOutputDirectory() const
 {
   if (get_SaveRawInSubdirectory()) {
-    return existingOutputDirectory(get_OutputDirectory(), get_SaveRawSubdirectory());
+    return existingOutputDirectory(currentDirectory(), get_SaveRawSubdirectory());
   } else {
-    return get_OutputDirectory();
+    return currentDirectory();
   }
 }
 
 QString QxrdDataProcessorBase::subtractedOutputDirectory() const
 {
   if (get_SaveSubtractedInSubdirectory()) {
-    return existingOutputDirectory(get_OutputDirectory(), get_SaveSubtractedSubdirectory());
+    return existingOutputDirectory(currentDirectory(), get_SaveSubtractedSubdirectory());
   } else {
-    return get_OutputDirectory();
+    return currentDirectory();
   }
 }
 
 QString QxrdDataProcessorBase::integratedOutputDirectory() const
 {
   if (get_SaveIntegratedInSubdirectory()) {
-    return existingOutputDirectory(get_OutputDirectory(), get_SaveIntegratedSubdirectory());
+    return existingOutputDirectory(currentDirectory(), get_SaveIntegratedSubdirectory());
   } else {
-    return get_OutputDirectory();
+    return currentDirectory();
   }
 }
 
@@ -386,14 +386,14 @@ QString QxrdDataProcessorBase::pwd() const
   return currentDirectory();
 }
 
-void QxrdDataProcessorBase::cd(QString path)
-{
-  QDir dir(currentDirectory());
+//void QxrdDataProcessorBase::cd(QString path)
+//{
+//  QDir dir(currentDirectory());
 
-  if (dir.cd(path)) {
-    set_OutputDirectory(dir.path());
-  }
-}
+//  if (dir.cd(path)) {
+//    set_OutputDirectory(dir.path());
+//  }
+//}
 
 QStringList QxrdDataProcessorBase::ls() const
 {

@@ -18,8 +18,8 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperiment *doc,
 //  connect(m_ActionCancelDark, SIGNAL(triggered()), m_Window, SLOT(doCancelDark()));
   connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
 
-  connect(m_SelectLogFileButton, SIGNAL(clicked()), m_Window, SLOT(selectLogFile()));
-  connect(m_SelectDirectoryButton, SIGNAL(clicked()), m_Window, SLOT(selectOutputDirectory()));
+//  connect(m_SelectLogFileButton, SIGNAL(clicked()), m_Window, SLOT(selectLogFile()));
+//  connect(m_SelectDirectoryButton, SIGNAL(clicked()), m_Window, SLOT(selectOutputDirectory()));
 
   connect(m_AcquireButton, SIGNAL(clicked()), m_ActionAcquire, SIGNAL(triggered()));
   connect(m_CancelButton, SIGNAL(clicked()), m_ActionCancel, SIGNAL(triggered()));
@@ -51,8 +51,8 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperiment *doc,
   m_Acquisition -> prop_UserComment3() -> linkTo(this -> m_UserComment3);
   m_Acquisition -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
 
-  m_DataProcessor -> prop_OutputDirectory() -> linkTo(this -> m_OutputDirectory);
-  m_Experiment      -> prop_LogFileName() -> linkTo(this -> m_LogFilePath);
+  m_Experiment  -> prop_ExperimentDirectory() -> linkTo(this -> m_ExperimentDirectory);
+  m_Experiment  -> prop_LogFileName() -> linkTo(this -> m_LogFileName);
   m_DataProcessor -> prop_Average() -> linkTo(this -> m_AverageDisplay);
 
   connect(m_AcquireOptionsButton, SIGNAL(clicked()), m_Window, SLOT(doEditPreferences()));

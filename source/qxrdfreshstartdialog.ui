@@ -10,21 +10,21 @@
     <x>0</x>
     <y>0</y>
     <width>512</width>
-    <height>305</height>
+    <height>306</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Qxrd Startup Settings</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="0" colspan="3">
+   <item row="2" column="0" colspan="2">
     <widget class="QCheckBox" name="m_RunSpecServer">
      <property name="text">
       <string>Run 'spec' server socket</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="3">
+   <item row="2" column="2">
     <widget class="QLabel" name="label_16">
      <property name="text">
       <string>On Port:</string>
@@ -34,21 +34,21 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="4" colspan="2">
+   <item row="2" column="3" colspan="2">
     <widget class="QSpinBox" name="m_SpecServerPort">
      <property name="buttonSymbols">
       <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="3">
+   <item row="3" column="0" colspan="2">
     <widget class="QCheckBox" name="m_RunSimpleServer">
      <property name="text">
       <string>Run 'simple' server socket</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="3">
+   <item row="3" column="2">
     <widget class="QLabel" name="label_15">
      <property name="text">
       <string>On Port:</string>
@@ -58,42 +58,28 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="4" colspan="2">
+   <item row="3" column="3" colspan="2">
     <widget class="QSpinBox" name="m_SimpleServerPort">
      <property name="buttonSymbols">
       <enum>QAbstractSpinBox::NoButtons</enum>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="6">
+   <item row="4" column="0" colspan="5">
     <widget class="QCheckBox" name="m_DefaultLayout">
      <property name="text">
       <string>Reset Screen Layout to Defaults</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QLabel" name="label_10">
-     <property name="text">
-      <string>Current log file:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="5">
-    <widget class="QPushButton" name="m_CurrentLogfileBrowse">
-     <property name="text">
-      <string>Browse...</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0" colspan="6">
+   <item row="5" column="0" colspan="5">
     <widget class="QGroupBox" name="m_DebugWidgets">
      <property name="title">
       <string>Debug Settings</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="0" colspan="6">
+   <item row="6" column="0" colspan="5">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -106,7 +92,7 @@
      </property>
     </spacer>
    </item>
-   <item row="8" column="0" colspan="4">
+   <item row="7" column="0" colspan="3">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -119,7 +105,7 @@
      </property>
     </spacer>
    </item>
-   <item row="8" column="4" colspan="2">
+   <item row="7" column="3" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -129,27 +115,24 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="2" colspan="3">
-    <widget class="QLineEdit" name="m_CurrentLogFile"/>
-   </item>
-   <item row="0" column="3" colspan="3">
+   <item row="0" column="2" colspan="3">
     <widget class="QComboBox" name="m_DetectorTypeCombo"/>
    </item>
-   <item row="0" column="0" colspan="3">
+   <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Detector Type:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="3">
+   <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Initial Exposure Time:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="3" colspan="3">
+   <item row="1" column="2" colspan="3">
     <widget class="QDoubleSpinBox" name="m_ExposureTime">
      <property name="decimals">
       <number>5</number>

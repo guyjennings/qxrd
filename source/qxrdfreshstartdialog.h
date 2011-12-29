@@ -17,9 +17,6 @@ public:
 public slots:
   void accept();
 
-private slots:
-  void currentLogfileBrowse();
-
 protected:
   void changeEvent(QEvent *e);
   void setupDebugWidgets(int dbg);
