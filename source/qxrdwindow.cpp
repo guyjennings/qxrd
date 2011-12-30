@@ -808,7 +808,7 @@ void QxrdWindow::readSettings(QSettings *settings, QString section)
 
 void QxrdWindow::writeSettings(QSettings *settings, QString section)
 {
-    printf("QxrdWindow::writeSettings\n");
+//    printf("QxrdWindow::writeSettings\n");
 
   if (settings) {
     m_Plot             -> writeSettings(settings, section+"/plot");
