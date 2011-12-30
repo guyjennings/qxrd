@@ -18,14 +18,15 @@ public:
   void onAcquisitionInit();
 
   void acquisitionReady();
-  void acquisitionStarted();
-  void acquisitionFinished();
 
 protected:
   void changeEvent(QEvent *e);
   void setupAcquireMenu(QMenu *menu);
 
-private slots:
+public slots:
+  void doAcquire();
+  void doAcquireDark();
+  void doCancel();
   void acquireStarted();
   void acquireComplete();
 };

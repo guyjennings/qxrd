@@ -87,8 +87,6 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
     m_ImageInfoDialog(NULL),
     m_Progress(NULL),
     m_AllocationStatus(NULL),
-    m_Acquiring(false),
-    m_AcquiringDark(false),
     m_Data(NULL),
     m_Overflow(NULL),
     m_NewData(NULL),
@@ -728,33 +726,6 @@ void QxrdWindow::acquiredFrame(
   }
 
   m_Progress -> setValue(thisframe*100/totalframes);
-}
-
-void QxrdWindow::doAcquire()
-{
-  //  printMessage("QxrdWindow::doAcquire()");
-//  acquisitionStarted();
-
-  m_Acquiring = true;
-
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "acquire"));
-}
-
-void QxrdWindow::doAcquireDark()
-{
-//  darkAcquisitionStarted();
-
-  m_AcquiringDark = true;
-
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "acquireDark"));
-}
-
-void QxrdWindow::doCancel()
-{
-  if (m_Acquiring) {
-    m_Acquisition -> cancel();
-    //    INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "cancel"));
-  }
 }
 
 void QxrdWindow::readSettings(QSettings *settings, QString section)

@@ -74,12 +74,9 @@ public slots:
   void doProcessSequence();
 
   void updateTitle();
-  void doAcquire();
-  void doCancel();
   void acquireStarted();
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
   void acquireComplete();
-  void doAcquireDark();
 
   void crashProgram();
   void testWidget();
@@ -178,8 +175,6 @@ private:
   QProgressBar                          *m_Progress;
   QLabel                                *m_StatusMsg;
   QProgressBar                          *m_AllocationStatus;
-  int                                    m_Acquiring;
-  int                                    m_AcquiringDark;
   QTimer                                 m_StatusTimer;
   QTimer                                 m_UpdateTimer;
 

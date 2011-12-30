@@ -8,14 +8,14 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperiment *doc,
                                      QxrdAcquisition *acq,
                                      QxrdDataProcessor *proc,
                                      QWidget *parent) :
-    QxrdAcquireDialogBase(doc, win, acq, proc, parent)
+  QxrdAcquireDialogBase(doc, win, acq, proc, parent)
 {
   setupUi(this);
 
-  connect(m_ActionAcquire, SIGNAL(triggered()), m_Window, SLOT(doAcquire()));
-  connect(m_ActionCancel, SIGNAL(triggered()), m_Window, SLOT(doCancel()));
-  connect(m_ActionAcquireDark, SIGNAL(triggered()), m_Window, SLOT(doAcquireDark()));
-//  connect(m_ActionCancelDark, SIGNAL(triggered()), m_Window, SLOT(doCancelDark()));
+  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
+  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
+  connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
+//  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
   connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
 
 //  connect(m_SelectLogFileButton, SIGNAL(clicked()), m_Window, SLOT(selectLogFile()));
@@ -90,14 +90,19 @@ void QxrdAcquireDialog::changeEvent(QEvent *e)
   }
 }
 
-void QxrdAcquireDialog::acquireStarted()
+void QxrdAcquireDialog::doAcquire()
 {
-  acquisitionStarted();
+  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "acquire"));
 }
 
-void QxrdAcquireDialog::acquireComplete()
+void QxrdAcquireDialog::doAcquireDark()
 {
-  acquisitionFinished();
+  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "acquireDark"));
+}
+
+void QxrdAcquireDialog::doCancel()
+{
+  m_Acquisition -> cancel();
 }
 
 void QxrdAcquireDialog::acquisitionReady()
@@ -115,7 +120,7 @@ void QxrdAcquireDialog::acquisitionReady()
   m_ActionAcquireDark -> setEnabled(true);
 }
 
-void QxrdAcquireDialog::acquisitionStarted()
+void QxrdAcquireDialog::acquireStarted()
 {
   m_AcquireButton -> setEnabled(false);
   m_ActionAcquire -> setEnabled(false);
@@ -135,7 +140,7 @@ void QxrdAcquireDialog::acquisitionStarted()
   m_ActionAcquireDark -> setEnabled(false);
 }
 
-void QxrdAcquireDialog::acquisitionFinished()
+void QxrdAcquireDialog::acquireComplete()
 {
   m_AcquireButton -> setEnabled(true);
   m_ActionAcquire -> setEnabled(true);
