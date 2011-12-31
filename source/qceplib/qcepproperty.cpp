@@ -46,6 +46,10 @@ QcepProperty::QcepProperty(QxrdSettingsSaver *saver, QObject *parent, const char
   if (m_Saver && !m_IsStored) {
     printMessage(tr("Warning: property %1 has saver but is not stored").arg(name));
   }
+
+  if (m_IsStored && !m_Saver) {
+    printMessage(tr("Warning: property %1 is stored but has no saver").arg(name));
+  }
 }
 
 int QcepProperty::wasLoaded() const
