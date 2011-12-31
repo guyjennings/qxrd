@@ -146,7 +146,7 @@ public:
   Q_PROPERTY(int    debug         READ get_Debug WRITE set_Debug)
   QCEP_INTEGER_PROPERTY(Debug)
 
-  Q_PROPERTY(int    freshStart         READ get_FreshStart WRITE set_FreshStart)
+  Q_PROPERTY(int    freshStart         READ get_FreshStart WRITE set_FreshStart STORED false)
   QCEP_INTEGER_PROPERTY(FreshStart)
 
   Q_PROPERTY(int    fileBrowserLimit   READ get_FileBrowserLimit WRITE set_FileBrowserLimit)

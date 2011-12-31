@@ -204,7 +204,6 @@ HEADERS += TODO.h \
     qxrdthread.h \
     qxrdsynchronizedacquisitionplot.h \
     qxrdhighlighter.h \
-    qxrdfreshstartdialog.h \
     qxrdacquisitionfilewatcher.h \
     qxrdacquirefilewatcherdialog.h \
     qxrdacquiredialogbase.h \
@@ -336,7 +335,6 @@ SOURCES += qxrd.cpp \
     qxrdthread.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
     qxrdhighlighter.cpp \
-    qxrdfreshstartdialog.cpp \
     qxrdacquisitionfilewatcher.cpp \
     qxrdacquirefilewatcherdialog.cpp \
     qxrdacquiredialogbase.cpp \
@@ -370,7 +368,6 @@ FORMS = qxrdwindow.ui \
     qxrdslicedialog.ui \
     qxrdhistogramdialog.ui \
     qxrdinfodialog.ui \
-    qxrdfreshstartdialog.ui \
     qxrdacquirefilewatcherdialog.ui \
     qxrdwelcomewindow.ui \
     qxrdglobalpreferencesdialog.ui \

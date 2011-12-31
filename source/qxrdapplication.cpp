@@ -21,7 +21,6 @@
 #include "qxrddetectorplugininterface.h"
 #include "qxrdprocessorinterface.h"
 #include "qxrdnidaqplugininterface.h"
-#include "qxrdfreshstartdialog.h"
 #include "qxrdglobalsettings.h"
 #include "qxrdexperimentthread.h"
 #include "qxrdexperimentperkinelmeracquisition.h"
@@ -239,9 +238,7 @@ bool QxrdApplication::init(QSplashScreen *splash)
   m_ResponseTimer = new QxrdResponseTimer(1000, this);
 
   if (get_FreshStart()) {
-    QxrdFreshStartDialog *fresh = new QxrdFreshStartDialog();
-
-    fresh->exec();
+    editGlobalPreferences();
   }
 
   if (get_OpenDirectly() && (get_CurrentExperiment().length()>0)) {
