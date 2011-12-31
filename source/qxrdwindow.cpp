@@ -1211,7 +1211,7 @@ void QxrdWindow::executeScript()
 
 void QxrdWindow::cancelScript()
 {
-  m_ScriptEngine -> cancelCommand();
+  m_Experiment -> scriptEngine() -> cancelCommand();
 }
 
 void QxrdWindow::finishedCommand(QScriptValue result)
@@ -1245,9 +1245,8 @@ void QxrdWindow::doLoadScript()
 
 void QxrdWindow::loadScript(QString path)
 {
-  g_Application->printMessage(tr("Loading script file from %1").arg(path));
-
-  m_ScriptEngine->loadScript(path);
+  m_Experiment -> printMessage(tr("Loading script file from %1").arg(path));
+  m_Experiment -> scriptEngine() -> loadScript(path);
 }
 
 QxrdDataProcessor *QxrdWindow::dataProcessor() const

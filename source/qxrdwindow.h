@@ -156,7 +156,6 @@ private:
   QxrdAcquisition                       *m_Acquisition;
   QxrdDataProcessor                     *m_DataProcessor;
   QxrdAllocator                         *m_Allocator;
-  QxrdScriptEngine                      *m_ScriptEngine;
   QxrdAcquireDialogBase                 *m_AcquireDialog;
   QxrdSynchronizedAcquisitionDialog     *m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;
