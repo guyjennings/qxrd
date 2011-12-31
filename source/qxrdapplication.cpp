@@ -108,8 +108,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_WelcomeWindow(NULL),
     m_AllocatorThread(NULL),
     m_Allocator(NULL),
-//    m_SettingsSaverThread(NULL),
-//    m_SettingsSaver(NULL),
     #ifdef HAVE_PERKIN_ELMER
         m_PerkinElmerPluginInterface(NULL),
     #endif
@@ -159,11 +157,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 
   readSettings();
 
-  //  printf("Argc = %d\n", argc);
-
   for (int i=1; i<argc; i++) {
     int dbg=0;
-//    printf("Arg %d = %s\n", i, argv[i]);
 
     if (strcmp(argv[i],"-fresh") == 0) {
       set_FreshStart(true);
@@ -217,7 +212,6 @@ bool QxrdApplication::init(QSplashScreen *splash)
   setObjectName("qxrdapplication");
 
   QThread::currentThread()->setObjectName("app");
-//  printf("application thread %p\n", thread());
 
   g_Application = this;
 
@@ -227,11 +221,6 @@ bool QxrdApplication::init(QSplashScreen *splash)
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Scripting System");
 
   connect(prop_Debug(), SIGNAL(valueChanged(int,int)), this, SLOT(debugChanged(int)));
-
-//  m_SettingsSaverThread = new QxrdSettingsSaverThread(this);
-//  m_SettingsSaverThread -> setObjectName("settings");
-//  m_SettingsSaverThread -> start();
-//  m_SettingsSaver = m_SettingsSaverThread -> settingsSaver();
 
   printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
@@ -255,32 +244,6 @@ QxrdApplication::~QxrdApplication()
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdApplication::~QxrdApplication");
   }
-
-//  delete m_ServerThread;
-//  delete m_SimpleServerThread;
-//  delete m_AcquisitionThread;
-//  delete m_DataProcessorThread;
-//  delete m_FileSaverThread;
-//  delete m_ScriptEngineThread;
-//  delete m_AllocatorThread;
-//  delete m_Window;
-
-//  m_ServerThread -> deleteLater();
-//  m_SimpleServerThread -> deleteLater();
-//  m_AcquisitionThread -> deleteLater();
-//  m_DataProcessorThread -> deleteLater();
-//  m_FileSaverThread -> deleteLater();
-//  m_ScriptEngineThread -> deleteLater();
-//  m_AllocatorThread -> deleteLater();
-
-//  m_Window -> deleteLater();
-//  m_AcquisitionThread -> deleteLater();
-//  m_DataProcessorThread -> deleteLater();
-//  m_FileSaverThread -> deleteLater();
-//  m_AllocatorThread -> deleteLater();
-//  m_ScriptEngineThread -> deleteLater();
-
-//  writeDefaultSettings();
 
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdApplication::~QxrdApplication finished");
@@ -312,10 +275,6 @@ void QxrdApplication::closeWelcomeWindow()
 
 QWidget* QxrdApplication::window()
 {
-//  if (m_WelcomeWindow == NULL) {
-//    openWelcomeWindow();
-//  }
-
   return m_WelcomeWindow;
 }
 
@@ -600,7 +559,7 @@ void QxrdApplication::shutdownThreads()
 //  shutdownThread(m_FileSaverThread);
 
   foreach(QxrdExperimentThreadPtr exp, m_ExperimentThreads) {
-    shutdownThread(exp/*.data()*/);
+    shutdownThread(exp);
   }
 }
 
@@ -666,15 +625,6 @@ static void qxrdTIFFWarningHandler(const char* /*module*/, const char* /*fmt*/, 
 //  g_Application -> tiffWarning(module, msg);
 }
 
-//static void qxrdTIFFWarningHandlerExt(thandle_t fd, const char* module, const char* fmt, va_list ap)
-//{
-//  char msg[100];
-//
-//  vsnprintf(msg, sizeof(msg), fmt, ap);
-//
-//  g_Application -> tiffWarning(module, msg);
-//}
-
 static void qxrdTIFFErrorHandler(const char* module, const char* fmt, va_list ap)
 {
   char msg[100];
@@ -683,15 +633,6 @@ static void qxrdTIFFErrorHandler(const char* module, const char* fmt, va_list ap
 
   g_Application -> tiffError(module, msg);
 }
-
-//static void qxrdTIFFErrorHandlerExt(thandle_t fd, const char* module, const char* fmt, va_list ap)
-//{
-//  char msg[100];
-//
-//  vsnprintf(msg, sizeof(msg), fmt, ap);
-//
-//  g_Application -> tiffError(module, msg);
-//}
 
 void QxrdApplication::setupTiffHandlers()
 {
@@ -748,11 +689,6 @@ void QxrdApplication::writeDefaultSettings()
 void QxrdApplication::chooseNewExperiment()
 {
   openWelcomeWindow();
-//  QxrdNewExperimentDialog *chooser =  new QxrdNewExperimentDialog(this);
-
-//  if (chooser->choose()) {
-//    openExperiment(chooser->chosenPath());
-//  }
 }
 
 void QxrdApplication::chooseExistingExperiment()
@@ -895,8 +831,6 @@ QString QxrdApplication::newPilatusExperiment(QString path)
 
 void QxrdApplication::openRecentExperiment(QString path)
 {
-//  printMessage(tr("Attempt to open experiment %1").arg(path));
-
   QFileInfo info(path);
 
   if (info.exists()) {
@@ -917,13 +851,6 @@ void QxrdApplication::openedExperiment(QxrdExperimentThread *expthrd)
 
     m_ExperimentThreads.append(expthrd);
     m_Experiments.append(expt);
-
-//    m_ScriptEngine->experimentOpened(expt);
-
-//    if (expt->window()) {
-//        m_ScriptEngine->windowOpened(expt->window());
-//    }
-//    connect(expthrd, SIGNAL(destroyed(QObject*)), this, SLOT(closedExperiment(QObject*)), Qt::BlockingQueuedConnection);
   }
 }
 
@@ -936,12 +863,6 @@ void QxrdApplication::closedExperiment(QObject *obj)
 
     m_ExperimentThreads.removeAll(expthrd);
     m_Experiments.removeAll(expt);
-
-//    m_ScriptEngine->experimentClosed(expt);
-
-//    if (expt->window()) {
-//        m_ScriptEngine->windowClosed(expt->window());
-//    }
   }
 }
 
