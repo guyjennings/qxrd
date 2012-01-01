@@ -114,6 +114,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_NIDAQPluginInterface(NULL),
     m_ResponseTimer(NULL)
 {
+  g_Application = this;
+
   QDir::setCurrent(QDir::homePath());
 
   oldEventFilter = setEventFilter(myEventFilter);
@@ -155,6 +157,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   printMessage("QWT Version " QWT_VERSION_STR);
   printMessage(tr("QT Version %1").arg(qVersion()));
 
+  connect(prop_Debug(), SIGNAL(valueChanged(int,int)), this, SLOT(debugChanged(int)));
   readSettings();
 
   for (int i=1; i<argc; i++) {
@@ -213,14 +216,11 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
   QThread::currentThread()->setObjectName("app");
 
-  g_Application = this;
-
   loadPlugins();
   readSettings();
 
   splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Scripting System");
 
-  connect(prop_Debug(), SIGNAL(valueChanged(int,int)), this, SLOT(debugChanged(int)));
 
   printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
@@ -592,7 +592,8 @@ void QxrdApplication::doAboutQxrd()
   about += " Debug\n";
 #endif
 
-  about += tr("Qt Version %1").arg(qVersion());
+  about += tr("Qt Version %1\n").arg(qVersion());
+  about += tr("QWT Version %1").arg(QWT_VERSION_STR);
 
   QMessageBox::about(NULL, "QXRD", about);
 }
@@ -611,7 +612,7 @@ void QxrdApplication::editGlobalPreferences()
 
 void QxrdApplication::debugChanged(int newValue)
 {
-  g_Application->printMessage(tr("Debug level changed from %1 to %2").arg(gCEPDebug).arg(newValue));
+  printMessage(tr("Debug level changed from %1 to %2").arg(gCEPDebug).arg(newValue));
 
   gCEPDebug = newValue;
 }
