@@ -38,6 +38,7 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaver *saver,
     m_Experiment(doc),
     m_Allocator(allocator),
     m_Acquisition(NULL),
+    m_Ready(0),
     m_Processor(proc),
     m_DetectorType(detectorType),
     m_Settings(settings)
@@ -70,48 +71,40 @@ void QxrdAcquisitionThread::run()
     m_Experiment->printMessage("Starting Acquisition Thread");
   }
 
-  QxrdAcquisition *p;
+  QxrdAcquisition *p = NULL;
 
   switch(m_DetectorType) {
-  case 0:
-  default:
+  case QxrdAcquisition::SimulatedDetector:
     p = new QxrdAcquisitionSimulated(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
-    g_DetectorType = 0;
     break;
 
 #ifdef HAVE_PERKIN_ELMER
-  case 1:
+  case QxrdAcquisition::PerkinElmerDetector:
     if (g_PEAvailable) {
       p = new QxrdAcquisitionPerkinElmer(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
-      g_DetectorType = 1;
-    } else {
-      p = new QxrdAcquisitionSimulated(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
-      g_DetectorType = 0;
     }
     break;
 #endif
 
 #ifdef HAVE_PILATUS
-  case 2:
+  case QxrdAcquisition::PilatusDetector:
     p = new QxrdAcquisitionPilatus(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
-    g_DetectorType = 2;
     break;
 #endif
 
 #ifdef HAVE_AREADETECTOR
-  case 3:
+  case QxrdAcquisition::EpicsAreaDetector:
     p = new QxrdAcquisitionAreaDetector(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
-    g_DetectorType = 3;
     break;
 #endif
 
-  case 4:
+  case QxrdAcquisition::FileWatcherDetector:
     p = new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
-    g_DetectorType = 4;
     break;
   }
 
   m_Acquisition.fetchAndStoreOrdered(p);
+  m_Ready.fetchAndStoreOrdered(1);
 
   int rc = exec();
 
@@ -163,7 +156,7 @@ void QxrdAcquisitionThread::cancelDark()
 
 QxrdAcquisition *QxrdAcquisitionThread::acquisition() const
 {
-  while (m_Acquisition == NULL) {
+  while (m_Ready == 0) {
     QThread::msleep(50);
   }
 

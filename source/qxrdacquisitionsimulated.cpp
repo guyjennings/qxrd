@@ -19,7 +19,7 @@ QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdSettingsSaver *saver,
                                                    QxrdAllocator *allocator,
                                                    QSettings *settings,
                                                    QString section)
-  : QxrdAcquisition(saver, doc, proc, allocator)
+  : QxrdAcquisition(SimulatedDetector, saver, doc, proc, allocator)
 {
   readSettings(settings, section);
 

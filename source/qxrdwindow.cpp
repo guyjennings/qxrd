@@ -108,12 +108,19 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
 
   setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
 
-  m_AcquireDialog = m_Acquisition -> controlPanel(this);
-  m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
+  if (m_Acquisition) {
+    m_AcquireDialog = m_Acquisition -> controlPanel(this);
+    m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
+  }
+
   m_DisplayDialog      = new QxrdDisplayDialog(this);
   m_CenterFinderDialog = new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder());
   m_MaskDialog         = new QxrdMaskDialog(this, m_DataProcessor);
-  m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
+
+  if (m_Acquisition) {
+    m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
+  }
+
   m_IntegratorDialog   = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
   m_InputFileBrowser   = new QxrdInputFileBrowser(m_Experiment->saver(), m_Experiment, m_DataProcessor, this);
   m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_Experiment->saver(), m_Experiment, m_DataProcessor, this);

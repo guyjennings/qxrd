@@ -8,12 +8,12 @@
 #include <QtGlobal>
 #include "qxrdapplication.h"
 
-QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdSettingsSaver *saver)
+QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaver *saver)
   : QObject(),
     m_QxrdVersion(saver, this,"qxrdVersion",STR(QXRD_VERSION)),
     m_QtVersion(saver, this,"qtVersion",qVersion()),
-    m_DetectorType(saver, this, "detectorType",-1),
-    m_DetectorTypeName(saver, this,"detectorTypeName",""),
+    m_DetectorType(saver, this, "detectorType", detectorKind),
+    m_DetectorTypeName(saver, this,"detectorTypeName", detectorKindName(detectorKind)),
     m_ExposureTime(saver, this,"exposureTime",0.1),
     m_SkippedExposuresAtStart(saver, this,"skippedExposuresAtStart",0),
     m_LastAcquired(saver, this, "LastAcquired", 0),
@@ -55,6 +55,34 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdSettingsSaver *saver)
   connect(prop_DarkSummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
 
 //  m_FileIndex.setDebug(1);
+}
+
+QString QxrdAcquisitionParameters::detectorKindName(DetectorKind detectorKind)
+{
+  QString res = "unknown";
+  switch (detectorKind) {
+  case SimulatedDetector:
+    res = "Simulated Detector";
+    break;
+
+  case PerkinElmerDetector:
+    res = "Perkin Elmer Detector";
+    break;
+
+  case PilatusDetector:
+    res = "Pilatus Detector";
+    break;
+
+  case EpicsAreaDetector:
+    res = "Epics Area Detector";
+    break;
+
+  case FileWatcherDetector:
+    res = "File Watcher";
+    break;
+  }
+
+  return res;
 }
 
 void QxrdAcquisitionParameters::updateSaveTimes()

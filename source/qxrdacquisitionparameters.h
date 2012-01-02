@@ -17,7 +17,15 @@ class QxrdAcquisitionParameters : public QObject
   Q_OBJECT
 
 public:
-  QxrdAcquisitionParameters(QxrdSettingsSaver *saver);
+  typedef enum {
+    SimulatedDetector,
+    PerkinElmerDetector,
+    PilatusDetector,
+    EpicsAreaDetector,
+    FileWatcherDetector
+  } DetectorKind;
+
+  QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaver *saver);
 
 public slots:
   void dynamicProperties();
@@ -31,6 +39,8 @@ public:
   void writeSettings(QSettings *settings, QString section);
 
   void copyDynamicProperties(QObject *dest);
+
+  QString detectorKindName(DetectorKind detectorKind);
 
 protected:
   enum { MegaBytes = 0x100000 };

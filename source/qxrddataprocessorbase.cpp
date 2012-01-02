@@ -151,9 +151,12 @@ void QxrdDataProcessorBase::setAcquisition(QxrdAcquisition *acq)
   connect(prop_PerformIntegrationTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_DisplayIntegratedDataTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_SaveIntegratedDataTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(m_Acquisition -> prop_SummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(m_Acquisition -> prop_Raw16SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(m_Acquisition -> prop_Raw32SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
+
+  if (m_Acquisition) {
+    connect(m_Acquisition -> prop_SummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateEstimatedProcessingTime()));
+    connect(m_Acquisition -> prop_Raw16SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
+    connect(m_Acquisition -> prop_Raw32SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
+  }
 }
 
 void QxrdDataProcessorBase::setWindow(QxrdWindow *win)

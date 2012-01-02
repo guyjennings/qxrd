@@ -4,7 +4,7 @@ QxrdAcquisitionAreaDetector::QxrdAcquisitionAreaDetector(QxrdSettingsSaver *save
                                                          QxrdExperiment *doc,
                                                          QxrdDataProcessor *proc,
                                                          QxrdAllocator *allocator)
-  : QxrdAcquisition(saver, doc, proc, allocator)
+  : QxrdAcquisition(EpicsAreaDetector, saver, doc, proc, allocator)
 {
 }
 

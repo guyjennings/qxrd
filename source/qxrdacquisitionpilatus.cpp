@@ -6,7 +6,7 @@ QxrdAcquisitionPilatus::QxrdAcquisitionPilatus(QxrdSettingsSaver *saver,
                                                QxrdAllocator *allocator,
                                                QSettings *settings,
                                                QString section)
-  : QxrdAcquisition(saver, doc, proc, allocator)
+  : QxrdAcquisition(PilatusDetector, saver, doc, proc, allocator)
 {
   readSettings(settings, section);
 }

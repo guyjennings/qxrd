@@ -2,11 +2,12 @@
 #include "qxrdimagedata.h"
 #include "qxrddataprocessor.h"
 
-QxrdAcquisitionOperations::QxrdAcquisitionOperations(QxrdSettingsSaver *saver,
+QxrdAcquisitionOperations::QxrdAcquisitionOperations(DetectorKind detectorKind,
+                                                     QxrdSettingsSaver *saver,
                                                      QxrdExperiment *doc,
                                                      QxrdDataProcessor *proc,
                                                      QxrdAllocator *allocator) :
-  QxrdAcquisitionScripting(saver),
+  QxrdAcquisitionScripting(detectorKind, saver),
   m_Experiment(doc),
   m_Window(NULL),
   m_Allocator(allocator),

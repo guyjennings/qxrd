@@ -12,7 +12,7 @@ class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionOperations(QxrdSettingsSaver *saver, QxrdExperiment *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator);
+  QxrdAcquisitionOperations(DetectorKind detectorKind, QxrdSettingsSaver *saver, QxrdExperiment *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator);
 
   void setWindow(QxrdWindow *win);
 

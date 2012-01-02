@@ -13,7 +13,7 @@ class QxrdAcquisitionScripting : public QxrdAcquisitionParameters
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionScripting(QxrdSettingsSaver *saver);
+  QxrdAcquisitionScripting(DetectorKind detectorKind, QxrdSettingsSaver *saver);
 
 public slots:
   void propertyList();

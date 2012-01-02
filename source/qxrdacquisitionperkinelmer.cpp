@@ -44,7 +44,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdSettingsSaver *saver,
                                                        QxrdAllocator *allocator,
                                                        QSettings *settings,
                                                        QString section)
-  : QxrdAcquisition(saver, doc, proc, allocator),
+  : QxrdAcquisition(PerkinElmerDetector, saver, doc, proc, allocator),
     m_Mutex(QMutex::Recursive),
     m_BufferSize(0),
     m_StartupDelayed(0),
