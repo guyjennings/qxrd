@@ -19,7 +19,7 @@
 #include <windows.h>
 #endif
 
-static int g_DetectorType = -1;
+//static int g_DetectorType = -1;
 
 #ifdef HAVE_PERKIN_ELMER
 static int g_PEAvailable = false;
@@ -38,7 +38,6 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaver *saver,
     m_Experiment(doc),
     m_Allocator(allocator),
     m_Acquisition(NULL),
-    m_Ready(0),
     m_Processor(proc),
     m_DetectorType(detectorType),
     m_Settings(settings)
@@ -103,8 +102,13 @@ void QxrdAcquisitionThread::run()
     break;
   }
 
+  if (p == NULL) {
+    p = new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
+  }
+
   m_Acquisition.fetchAndStoreOrdered(p);
-  m_Ready.fetchAndStoreOrdered(1);
+
+  m_Acquisition -> initialize();
 
   int rc = exec();
 
@@ -113,14 +117,14 @@ void QxrdAcquisitionThread::run()
   }
 }
 
-void QxrdAcquisitionThread::initialize()
-{
-  if (m_Acquisition) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition,"initialize",Qt::BlockingQueuedConnection));
-    m_Acquisition->set_DetectorType(g_DetectorType);
-    m_Acquisition->set_DetectorTypeName(detectorTypeNames()[g_DetectorType]);
-  }
-}
+//void QxrdAcquisitionThread::initialize()
+//{
+//  if (m_Acquisition) {
+//    INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition,"initialize",Qt::BlockingQueuedConnection));
+//    m_Acquisition->set_DetectorType(g_DetectorType);
+//    m_Acquisition->set_DetectorTypeName(detectorTypeNames()[g_DetectorType]);
+//  }
+//}
 
 void QxrdAcquisitionThread::shutdown()
 {
@@ -156,7 +160,7 @@ void QxrdAcquisitionThread::cancelDark()
 
 QxrdAcquisition *QxrdAcquisitionThread::acquisition() const
 {
-  while (m_Ready == 0) {
+  while (m_Acquisition == NULL) {
     QThread::msleep(50);
   }
 
@@ -168,20 +172,20 @@ void QxrdAcquisitionThread::sleep(double time)
   QThread::usleep((int)(time*1e6));
 }
 
-QStringList QxrdAcquisitionThread::detectorTypeNames()
-{
-  QStringList res;
+//QStringList QxrdAcquisitionThread::detectorTypeNames()
+//{
+//  QStringList res;
 
-  res << "Simulated Detector"
-      << "Perkin Elmer Flat Panel"
-      << "Pilatus"
-      << "EPICS Area Detector"
-      << "Files in Directory";
+//  res << "Simulated Detector"
+//      << "Perkin Elmer Flat Panel"
+//      << "Pilatus"
+//      << "EPICS Area Detector"
+//      << "Files in Directory";
 
-  return res;
-}
+//  return res;
+//}
 
-int QxrdAcquisitionThread::detectorType()
-{
-  return g_DetectorType;
-}
+//int QxrdAcquisitionThread::detectorType()
+//{
+//  return g_DetectorType;
+//}

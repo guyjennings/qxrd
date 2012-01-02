@@ -132,7 +132,7 @@ bool QxrdExperiment::init(QSettings *settings)
 
   m_Acquisition -> setNIDAQPlugin(m_Application->nidaqPlugin());
 
-  m_AcquisitionThread->initialize();
+//  m_AcquisitionThread->initialize();
 
   if (m_Window) m_Window -> onAcquisitionInit();
 

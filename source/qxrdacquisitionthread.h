@@ -28,12 +28,12 @@ class QxrdAcquisitionThread : public QxrdThread
 
   ~QxrdAcquisitionThread();
 
-  void initialize();
+//  void initialize();
   void shutdown();
   void msleep(int msec);
 
-  static QStringList detectorTypeNames();
-  static int detectorType();
+//  static QStringList detectorTypeNames();
+//  static int detectorType();
 
 public slots:
   void doAcquire();
@@ -57,7 +57,6 @@ private:
   QxrdExperiment                     *m_Experiment;
   QxrdAllocator                      *m_Allocator;
   QAtomicPointer<QxrdAcquisition>     m_Acquisition;
-  QAtomicInt                          m_Ready;
   QxrdDataProcessor                  *m_Processor;
   int                                 m_DetectorType;
   QSettings                          *m_Settings;

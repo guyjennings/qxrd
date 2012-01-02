@@ -16,7 +16,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperiment 
 {
   setupUi(this);
 
-  connect(m_DetectorTypeCombo, SIGNAL(currentIndexChanged(int)), m_DetectorPrefsStack, SLOT(setCurrentIndex(int)));
+//  connect(m_DetectorTypeCombo, SIGNAL(currentIndexChanged(int)), m_DetectorPrefsStack, SLOT(setCurrentIndex(int)));
 
   QxrdAcquisition *acq = m_Experiment -> acquisition();
   QxrdDataProcessor *proc = m_Experiment->dataProcessor();
@@ -30,10 +30,10 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperiment 
   int specServerPort = m_Experiment -> get_SpecServerPort();
   int simpleServerPort = m_Experiment -> get_SimpleServerPort();
 
-  QStringList detectorTypes = QxrdAcquisitionThread::detectorTypeNames();
+//  QStringList detectorTypes = QxrdAcquisitionThread::detectorTypeNames();
 
-  m_DetectorTypeCombo -> addItems(detectorTypes);
-  m_DetectorTypeCombo -> setCurrentIndex(detectorType);
+//  m_DetectorTypeCombo -> addItems(detectorTypes);
+//  m_DetectorTypeCombo -> setCurrentIndex(detectorType);
 
 //  connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
 //  m_CurrentOutputDirectory -> setText(proc->get_OutputDirectory());
@@ -147,16 +147,16 @@ void QxrdExperimentPreferencesDialog::accept()
 {
   bool restartNeeded = false;
 
-  int detectorType = m_DetectorTypeCombo -> currentIndex();
+//  int detectorType = m_DetectorTypeCombo -> currentIndex();
 //  int processorType = m_ProcessorTypeCombo -> currentIndex();
   int runSpecServer = m_RunSpecServer -> isChecked();
   int runSimpleServer = m_RunSimpleServer -> isChecked();
   int specServerPort = m_SpecServerPort -> value();
   int simpleServerPort = m_SimpleServerPort -> value();
 
-  if (detectorType != QxrdAcquisitionThread::detectorType()) {
-    restartNeeded = true;
-  }
+//  if (detectorType != QxrdAcquisitionThread::detectorType()) {
+//    restartNeeded = true;
+//  }
 
 //  if (processorType != QxrdDataProcessorThread::processorType()) {
 //    restartNeeded = true;
@@ -185,7 +185,7 @@ void QxrdExperimentPreferencesDialog::accept()
     QMessageBox::information(this,"Restart Needed","You will need to restart qxrd before your changes will take effect");
   }
 
-  m_Experiment    -> set_DetectorType(detectorType);
+//  m_Experiment    -> set_DetectorType(detectorType);
 //  app -> set_ProcessorType(processorType);
   m_Experiment    -> set_RunSpecServer(runSpecServer);
   m_Experiment    -> set_SpecServerPort(specServerPort);
