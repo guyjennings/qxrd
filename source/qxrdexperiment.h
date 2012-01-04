@@ -70,7 +70,6 @@ public slots:
   virtual void writeSettings(QSettings *settings, QString section="experiment");
 
   void logMessage(QString msg);
-  void splashMessage(const char *msg);
   void splashMessage(QString msg);
   void criticalMessage(QString msg);
   void statusMessage(QString msg);

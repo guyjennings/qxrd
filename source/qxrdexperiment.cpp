@@ -247,23 +247,18 @@ void QxrdExperiment::shutdown()
   shutdownThread(m_ScriptEngineThread);
 }
 
-void QxrdExperiment::splashMessage(const char *msg)
+void QxrdExperiment::splashMessage(QString msg)
 {
   GUI_THREAD_CHECK;
 
   printMessage(msg);
 
   if (m_Splash) {
-    char msgf[256];
-    snprintf(msgf, 200, "Qxrd Version " STR(QXRD_VERSION) "\n%s", msg);
+    QString msgf = tr("Qxrd Version " STR(QXRD_VERSION) "\n")+msg;
+
     m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
     m_Application->processEvents();
   }
-}
-
-void QxrdExperiment::splashMessage(QString msg)
-{
-  splashMessage(qPrintable(msg));
 }
 
 void QxrdExperiment::criticalMessage(QString msg)
