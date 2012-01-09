@@ -421,7 +421,7 @@ void QxrdApplication::statusMessage(QString msg, QDateTime ts)
     logMessage(message);
 
     if (window()) {
-      INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayStatusMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+      INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
     }
   }
 }
@@ -435,7 +435,7 @@ void QxrdApplication::criticalMessage(QString msg, QDateTime ts)
   logMessage(message);
 
   if (window()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayCriticalMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+    INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
   }
 }
 

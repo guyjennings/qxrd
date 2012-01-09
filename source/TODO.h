@@ -1,6 +1,8 @@
 #ifndef TODO_H
 #define TODO_H
 
+/*
+
 //-------------------------------------------------------
 //
 //Check that settings are not being saved twice (in QxrdWindow destructor):
@@ -698,5 +700,15 @@ PE Acquisition fails in debug builds - sending messages
 to object in different thread
 
 -------------------------------------------------------
+
+Gain setting menu missing for PE acquisition
+
+-------------------------------------------------------
+
+Crashes on exit from PE acquisition
+
+-------------------------------------------------------
+
+*/
 
 #endif // TODO_H
