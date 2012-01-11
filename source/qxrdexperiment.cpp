@@ -228,6 +228,9 @@ QxrdExperiment::~QxrdExperiment()
 
 void QxrdExperiment::closeExperiment()
 {
+  shutdownThread(m_AcquisitionThread);
+  shutdownThread(m_DataProcessorThread);
+  shutdownThread(m_FileSaverThread);
 }
 
 void QxrdExperiment::shutdownThread(QxrdThread *thread)

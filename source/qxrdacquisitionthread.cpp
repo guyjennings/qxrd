@@ -106,9 +106,9 @@ void QxrdAcquisitionThread::run()
     p = new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
   }
 
-  m_Acquisition.fetchAndStoreOrdered(p);
+  p -> initialize();
 
-  m_Acquisition -> initialize();
+  m_Acquisition.fetchAndStoreOrdered(p);
 
   int rc = exec();
 
