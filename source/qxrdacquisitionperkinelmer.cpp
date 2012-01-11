@@ -73,8 +73,8 @@ QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()
   }
 
   if (m_PerkinElmer && m_AcqDesc) {
+    m_PerkinElmer->Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0, 0, NULL, NULL);
     m_PerkinElmer->Acquisition_Abort(m_AcqDesc);
-
     m_PerkinElmer->Acquisition_CloseAll();
   }
 }

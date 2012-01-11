@@ -241,6 +241,8 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
 QxrdApplication::~QxrdApplication()
 {
+//  shutdownThreads();
+
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdApplication::~QxrdApplication");
   }

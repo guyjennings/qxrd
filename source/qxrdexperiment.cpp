@@ -184,7 +184,7 @@ bool QxrdExperiment::init(QSettings *settings)
   if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           scriptEngine(),    SLOT(evaluateAppCommand(QString)));
   if (m_Window) connect(scriptEngine(),   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
 
-  connect(m_Application, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
+//  connect(m_Application, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 
   connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
   connect(prop_WorkTarget(),    SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
