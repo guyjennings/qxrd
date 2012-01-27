@@ -13,6 +13,8 @@ class QxrdSimpleServer : public QTcpServer
   Q_OBJECT
 public:
   QxrdSimpleServer(QxrdExperiment *doc, QString name, int port, QObject *parent=NULL);
+  virtual ~QxrdSimpleServer();
+
 public:
   void startServer(QHostAddress addr, int port);
 

@@ -32,6 +32,16 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdExperiment *exp)
     m_DataProcessor(NULL),
     m_Window(NULL)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdScriptEngine::QxrdScriptEngine\n");
+  }
+}
+
+QxrdScriptEngine::~QxrdScriptEngine()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdScriptEngine::~QxrdScriptEngine\n");
+  }
 }
 
 void QxrdScriptEngine::initialize()

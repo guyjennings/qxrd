@@ -10,7 +10,18 @@ QxrdSimpleServer::QxrdSimpleServer(QxrdExperiment *doc, QString name, int port, 
     m_Name(name),
     m_Port(port)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSimpleServer::QxrdSimpleServer\n");
+  }
+
   connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));
+}
+
+QxrdSimpleServer::~QxrdSimpleServer()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSimpleServer::~QxrdSimpleServer\n");
+  }
 }
 
 void QxrdSimpleServer::startServer(QHostAddress addr, int port)

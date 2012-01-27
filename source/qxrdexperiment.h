@@ -27,8 +27,6 @@ public:
   QxrdExperiment(QString path, QxrdApplication *app, QSettings *settings, QObject *parent = 0);
   virtual bool init(QSettings *settings);
   virtual ~QxrdExperiment();
-  void closeExperiment();
-  void shutdownThread(QxrdThread *thread);
 
   QxrdAcquisitionThread *acquisitionThread();
   QxrdAcquisition *acquisition() const;
@@ -61,8 +59,6 @@ public slots:
 
   void saveExperimentCopyAs(QString path);
   void saveExperimentAs(QString path);
-
-  void shutdown();
 
   void readSettings();
   void writeSettings();

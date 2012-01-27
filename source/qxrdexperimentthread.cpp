@@ -18,6 +18,9 @@ QxrdExperimentThread::QxrdExperimentThread(QxrdExperimentKind kind, QString path
   m_Application(app),
   m_Settings(settings)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdExperimentThread::QxrdExperimentThread\n");
+  }
 }
 
 QxrdExperimentThread::~QxrdExperimentThread()
@@ -28,7 +31,13 @@ QxrdExperimentThread::~QxrdExperimentThread()
 
   ::fflush(stdout);
 
+  shutdown();
+
   delete m_Experiment;
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdExperimentThread::~QxrdExperimentThread\n");
+  }
 }
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdApplication *app, QSettings *settings)

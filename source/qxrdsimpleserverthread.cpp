@@ -8,6 +8,10 @@ QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdExperiment *doc, QString name
     m_Port(port),
     m_Server(NULL)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSimpleServerThread::QxrdSimpleServerThread\n");
+  }
+
 }
 
 QxrdSimpleServerThread::~QxrdSimpleServerThread()
@@ -15,6 +19,10 @@ QxrdSimpleServerThread::~QxrdSimpleServerThread()
   shutdown();
 
   delete m_Server;
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSimpleServerThread::~QxrdSimpleServerThread\n");
+  }
 }
 
 QxrdSimpleServer *QxrdSimpleServerThread::server() const
@@ -28,7 +36,7 @@ QxrdSimpleServer *QxrdSimpleServerThread::server() const
 
 void QxrdSimpleServerThread::shutdown()
 {
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Server, "shutdown", Qt::QueuedConnection));
+  exit();
 
   wait();
 }

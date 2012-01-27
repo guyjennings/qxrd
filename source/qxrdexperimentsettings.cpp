@@ -7,7 +7,9 @@ QxrdExperimentSettings::QxrdExperimentSettings(QxrdExperiment *parent)
     m_Experiment(parent)
 {
   if (qcepDebug(DEBUG_PREFS)) {
-    m_Experiment->printMessage("QxrdExperimentSettings::QxrdExperimentSettings");
+    if (m_Experiment) {
+      m_Experiment->printMessage("QxrdExperimentSettings::QxrdExperimentSettings");
+    }
   }
 }
 
@@ -15,7 +17,6 @@ QxrdExperimentSettings::QxrdExperimentSettings(const QString &path, QSettings::F
   : QSettings(path, format, parent),
     m_Experiment(NULL)
 {
-
 }
 
 QxrdExperimentSettings::~QxrdExperimentSettings()

@@ -114,6 +114,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_NIDAQPluginInterface(NULL),
     m_ResponseTimer(NULL)
 {
+  printf("QxrdApplication::QxrdApplication\n");
+
   g_Application = this;
 
   QDir::setCurrent(QDir::homePath());
@@ -202,8 +204,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   printMessage(tr("Home Path: %1").arg(QDir::homePath()));
   printMessage(tr("Current Path: %1").arg(QDir::currentPath()));
   printMessage(tr("Root Path %1").arg(QDir::rootPath()));
-
-  connect(this, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
 }
 
 bool QxrdApplication::init(QSplashScreen *splash)
@@ -241,6 +241,14 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
 QxrdApplication::~QxrdApplication()
 {
+  foreach(QxrdExperimentThreadPtr exp, m_ExperimentThreads) {
+    delete exp;
+  }
+
+  writeSettings();
+
+  delete m_AllocatorThread;
+
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdApplication::~QxrdApplication");
   }
@@ -248,6 +256,8 @@ QxrdApplication::~QxrdApplication()
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdApplication::~QxrdApplication finished");
   }
+
+  printf("QxrdApplication::~QxrdApplication\n");
 }
 
 void QxrdApplication::openWelcomeWindow()
@@ -534,35 +544,6 @@ bool QxrdApplication::wantToQuit()
                                   QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
-void QxrdApplication::shutdownThread(QxrdThread *thread)
-{
-  if (thread) {
-    thread->shutdown();
-    delete thread;
-  }
-}
-
-void QxrdApplication::shutdownThreads()
-{
-  if (qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage("QxrdApplication::shutdownThreads");
-  }
-
-  writeSettings();
-
-//  shutdownThread(m_SettingsSaverThread);
-//  shutdownThread(m_SimpleServerThread);
-//  shutdownThread(m_ServerThread);
-//  shutdownThread(m_AcquisitionThread);
-//  shutdownThread(m_DataProcessorThread);
-//  shutdownThread(m_AllocatorThread);
-//  shutdownThread(m_FileSaverThread);
-
-  foreach(QxrdExperimentThreadPtr exp, m_ExperimentThreads) {
-    shutdownThread(exp);
-  }
-}
-
 QxrdAllocator *QxrdApplication::allocator() const
 {
   return m_Allocator;
@@ -724,6 +705,11 @@ void QxrdApplication::openExperiment(QString path)
 
     closeWelcomeWindow();
   }
+}
+
+void QxrdApplication::closeExperiment(QxrdExperiment *exp)
+{
+  printf("QxrdApplication::closeExperiment(%p)\n", exp);
 }
 
 void QxrdApplication::appendRecentExperiment(QString path)

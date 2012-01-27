@@ -12,6 +12,7 @@ class QxrdServer : public QSpecServer
 
 public:
   QxrdServer(QxrdExperiment *doc, QString name, int port, QObject *parent=0);
+  virtual ~QxrdServer();
 
 public slots:
   QVariant executeCommand(QString cmd);

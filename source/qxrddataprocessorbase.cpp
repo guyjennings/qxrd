@@ -100,6 +100,10 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_RefinedRingSetData(NULL),
   m_GenerateTestImage(NULL)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDataProcessorBase::QxrdDataProcessorBase\n");
+  }
+
   if (qcepDebug(DEBUG_APP)) {
     m_Experiment->printMessage("QxrdDataProcessorBase::QxrdDataProcessorBase");
   }
@@ -120,8 +124,8 @@ QxrdFileSaverThread *QxrdDataProcessorBase::fileSaverThread() const
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()
 {
-  if (qcepDebug(DEBUG_APP)) {
-    m_Experiment->printMessage("QxrdDataProcessorBase::~QxrdDataProcessorBase");
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDataProcessorBase::~QxrdDataProcessorBase\n");
   }
 }
 

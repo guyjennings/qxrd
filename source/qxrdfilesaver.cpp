@@ -12,10 +12,16 @@ QxrdFileSaver::QxrdFileSaver
     m_Allocator(allocator),
     m_Acquisition(NULL)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdFileSaver::QxrdFileSaver\n");
+  }
 }
 
 QxrdFileSaver::~QxrdFileSaver()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdFileSaver::~QxrdFileSaver\n");
+  }
 }
 
 void QxrdFileSaver::setProcessor(QxrdDataProcessor *proc)

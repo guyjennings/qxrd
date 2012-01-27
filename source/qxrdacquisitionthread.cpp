@@ -42,6 +42,10 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaver *saver,
     m_DetectorType(detectorType),
     m_Settings(settings)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAcquisitionThread::QxrdAcquisitionThread\n");
+  }
+
 #ifdef HAVE_PERKIN_ELMER
   HINSTANCE xisllib;
 
@@ -59,9 +63,11 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 {
   shutdown();
 
-//  delete m_Acquisition;
+  delete m_Acquisition;
 
-  m_Acquisition->deleteLater();
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAcquisitionThread::~QxrdAcquisitionThread\n");
+  }
 }
 
 void QxrdAcquisitionThread::run()
@@ -128,7 +134,7 @@ void QxrdAcquisitionThread::run()
 
 void QxrdAcquisitionThread::shutdown()
 {
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition,"shutdown",Qt::QueuedConnection));
+  exit();
 
   wait();
 }

@@ -8,7 +8,16 @@
 QxrdServer::QxrdServer(QxrdExperiment *doc, QString name, int port, QObject *parent)
   : QSpecServer(doc, name, port, parent)
 {
-//  g_Application->printMessage("QxrdServer::QxrdServer");
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdServer::QxrdServer\n");
+  }
+}
+
+QxrdServer::~QxrdServer()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdServer::~QxrdServer\n");
+  }
 }
 
 QVariant QxrdServer::executeCommand(QString /*cmd*/)

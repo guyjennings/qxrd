@@ -72,6 +72,7 @@ public slots:
 
   void activateExperiment(QString path);
   void openExperiment(QString path);
+  void closeExperiment(QxrdExperiment *exp);
 
   void openedExperiment(QxrdExperimentThread *expthrd);
   void closedExperiment(QObject *obj);
@@ -85,7 +86,6 @@ public slots:
   void doAboutQxrd();
   void doOpenQXRDWebPage();
 
-  void shutdownThreads();
   void possiblyQuit();
   void editGlobalPreferences();
   void debugChanged(int newValue);
@@ -122,7 +122,6 @@ public:
 private:
 
   void setupTiffHandlers();
-  void shutdownThread(QxrdThread *thread);
 
 public:
   QxrdSettingsSaver m_Saver;

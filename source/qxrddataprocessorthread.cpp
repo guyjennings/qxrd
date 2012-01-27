@@ -20,6 +20,9 @@ QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaver *saver,
     m_Settings(settings),
     m_Section(section)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDataProcessorThread::QxrdDataProcessorThread\n");
+  }
 }
 
 QxrdDataProcessorThread::~QxrdDataProcessorThread()
@@ -27,6 +30,10 @@ QxrdDataProcessorThread::~QxrdDataProcessorThread()
   shutdown();
 
   delete m_DataProcessor;
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDataProcessorThread::~QxrdDataProcessorThread\n");
+  }
 }
 
 void QxrdDataProcessorThread::run()
@@ -57,7 +64,7 @@ void QxrdDataProcessorThread::run()
 
 void QxrdDataProcessorThread::shutdown()
 {
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_DataProcessor,"shutdown",Qt::QueuedConnection));
+  exit();
 
   wait();
 }

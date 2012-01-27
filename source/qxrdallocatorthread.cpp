@@ -9,6 +9,9 @@ QxrdAllocatorThread::QxrdAllocatorThread(QxrdSettingsSaver *saver)
     m_Allocator(NULL),
     m_Saver(saver)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAllocatorThread::QxrdAllocatorThread\n");
+  }
 }
 
 QxrdAllocatorThread::~QxrdAllocatorThread()
@@ -16,6 +19,10 @@ QxrdAllocatorThread::~QxrdAllocatorThread()
   shutdown();
 
   delete m_Allocator;
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAllocatorThread::~QxrdAllocatorThread\n");
+  }
 }
 
 void QxrdAllocatorThread::run()

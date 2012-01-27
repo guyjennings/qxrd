@@ -52,6 +52,10 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_LogFile(NULL),
   m_ScanFile(NULL)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdExperiment::QxrdExperiment\n");
+  }
+
   readSettings(settings);
 }
 
@@ -184,8 +188,6 @@ bool QxrdExperiment::init(QSettings *settings)
   if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           scriptEngine(),    SLOT(evaluateAppCommand(QString)));
   if (m_Window) connect(scriptEngine(),   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
 
-  connect(m_Application, SIGNAL(aboutToQuit()), this, SLOT(shutdownThreads()));
-
   connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
   connect(prop_WorkTarget(),    SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
 
@@ -216,7 +218,6 @@ bool QxrdExperiment::init(QSettings *settings)
 
 QxrdExperiment::~QxrdExperiment()
 {
-  printf("QxrdExperiment::~QxrdExperiment\n");
 
   if (qcepDebug(DEBUG_APP)) {
     m_Application->printMessage("QxrdExperiment::~QxrdExperiment");
@@ -224,30 +225,15 @@ QxrdExperiment::~QxrdExperiment()
 
   closeScanFile();
   closeLogFile();
-}
 
-void QxrdExperiment::closeExperiment()
-{
-  shutdownThread(m_AcquisitionThread);
-  shutdownThread(m_DataProcessorThread);
-  shutdownThread(m_FileSaverThread);
-}
+  delete m_AcquisitionThread;
+  delete m_DataProcessorThread;
+  delete m_FileSaverThread;
+  delete m_ScriptEngineThread;
 
-void QxrdExperiment::shutdownThread(QxrdThread *thread)
-{
-  if (thread) {
-    thread->shutdown();
-    delete thread;
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdExperiment::~QxrdExperiment\n");
   }
-}
-
-void QxrdExperiment::shutdown()
-{
-  if (qcepDebug(DEBUG_APP)) {
-    m_Application->printMessage("QxrdExperiment::shutdown()");
-  }
-
-  shutdownThread(m_ScriptEngineThread);
 }
 
 void QxrdExperiment::splashMessage(QString msg)

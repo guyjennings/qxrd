@@ -26,6 +26,7 @@ public:
   } DetectorKind;
 
   QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaver *saver);
+  virtual ~QxrdAcquisitionParameters();
 
 public slots:
   void dynamicProperties();

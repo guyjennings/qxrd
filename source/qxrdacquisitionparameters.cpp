@@ -49,12 +49,23 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, 
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAcquisitionParameters::QxrdAcquisitionParameters\n");
+  }
+
   connect(prop_Raw16SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
   connect(prop_Raw32SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
   connect(prop_SummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
   connect(prop_DarkSummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
 
 //  m_FileIndex.setDebug(1);
+}
+
+QxrdAcquisitionParameters::~QxrdAcquisitionParameters()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAcquisitionParameters::~QxrdAcquisitionParameters\n");
+  }
 }
 
 QString QxrdAcquisitionParameters::detectorKindName(DetectorKind detectorKind)

@@ -10,6 +10,10 @@ QxrdSettingsSaver::QxrdSettingsSaver(QObject *parent, QObject *owner) :
   m_SaveDelay(5000),
   m_LastChangedBy(NULL)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSettingsSaver::QxrdSettingsSaver\n");
+  }
+
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(performSave()));
 
   m_Timer.setSingleShot(false);
@@ -19,6 +23,10 @@ QxrdSettingsSaver::QxrdSettingsSaver(QObject *parent, QObject *owner) :
 
 QxrdSettingsSaver::~QxrdSettingsSaver()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSettingsSaver::~QxrdSettingsSaver\n");
+  }
+
   //  performSave();
 }
 

@@ -9,6 +9,9 @@ QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication *app, QxrdExperim
     m_Application(app),
     m_Experiment(exp)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdScriptEngineThread::QxrdScriptEngineThread\n");
+  }
 }
 
 QxrdScriptEngineThread::~QxrdScriptEngineThread()
@@ -16,6 +19,10 @@ QxrdScriptEngineThread::~QxrdScriptEngineThread()
   shutdown();
 
   delete m_ScriptEngine;
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdScriptEngineThread::~QxrdScriptEngineThread\n");
+  }
 }
 
 void QxrdScriptEngineThread::shutdown()

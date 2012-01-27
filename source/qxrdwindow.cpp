@@ -98,6 +98,10 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
     m_ImageDisplay(NULL),
     m_Highlighter(NULL)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdWindow::QxrdWindow\n");
+  }
+
   if (qcepDebug(DEBUG_APP)) {
     g_Application->printMessage("QxrdWindow::QxrdWindow");
   }
@@ -499,6 +503,10 @@ QxrdWindow::~QxrdWindow()
   //  delete m_NewData;
   //  delete m_Mask;
   //  delete m_NewMask;
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdWindow::~QxrdWindow\n");
+  }
 }
 
 void QxrdWindow::updateTitle()
@@ -565,7 +573,7 @@ void QxrdWindow::enableTiltRefinement(bool enable)
 void QxrdWindow::closeEvent ( QCloseEvent * event )
 {
   if (wantToClose()) {
-    m_Experiment->closeExperiment();
+    m_Application->closeExperiment(m_Experiment);
     event -> accept();
   } else {
     event -> ignore();

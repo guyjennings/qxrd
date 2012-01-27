@@ -20,6 +20,7 @@ class QxrdScriptEngine : public QScriptEngine
 
 public:
   QxrdScriptEngine(QxrdApplication *app, QxrdExperiment *exp);
+  virtual ~QxrdScriptEngine();
   void initialize();
 
 public slots:
