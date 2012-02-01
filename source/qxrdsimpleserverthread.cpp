@@ -18,14 +18,12 @@ QxrdSimpleServerThread::~QxrdSimpleServerThread()
 {
   shutdown();
 
-  delete m_Server;
-
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdSimpleServerThread::~QxrdSimpleServerThread\n");
   }
 }
 
-QxrdSimpleServer *QxrdSimpleServerThread::server() const
+QxrdSimpleServerPtr QxrdSimpleServerThread::server() const
 {
   while (m_Server == NULL) {
     QThread::msleep(50);
@@ -47,11 +45,11 @@ void QxrdSimpleServerThread::run()
     m_Experiment->printMessage("Starting Simple Server Thread");
   }
 
-  QxrdSimpleServer *server = new QxrdSimpleServer(m_Experiment, m_Name, m_Port);
+  QxrdSimpleServerPtr server(new QxrdSimpleServer(m_Experiment, m_Name, m_Port));
 
   server -> startServer(QHostAddress::Any, m_Port);
 
-  m_Server.fetchAndStoreOrdered(server);
+  m_Server = server;
 
   int rc = exec();
 

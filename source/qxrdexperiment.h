@@ -147,7 +147,7 @@ private:
   QxrdServerThread               *m_ServerThread;
   QxrdServer                     *m_Server;
   QxrdSimpleServerThread         *m_SimpleServerThread;
-  QxrdSimpleServer               *m_SimpleServer;
+  QxrdSimpleServerPtr             m_SimpleServer;
   QxrdDataProcessorThread        *m_DataProcessorThread;
   QxrdDataProcessorPtr            m_DataProcessor;
   QxrdAcquisitionThread          *m_AcquisitionThread;

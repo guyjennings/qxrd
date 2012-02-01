@@ -4,8 +4,8 @@
 #include "qcepmacros.h"
 #include "qxrdthread.h"
 #include <QDateTime>
+#include "qxrdsimpleserver.h"
 
-class QxrdSimpleServer;
 class QxrdExperiment;
 
 class QxrdSimpleServerThread : public QxrdThread
@@ -17,16 +17,16 @@ public:
 
   void shutdown();
 
-  QxrdSimpleServer *server() const;
+  QxrdSimpleServerPtr server() const;
 
 protected:
   void run();
 
 private:
-  QxrdExperiment   *m_Experiment;
-  QString           m_Name;
-  int               m_Port;
-  QAtomicPointer<QxrdSimpleServer> m_Server;
+  QxrdExperiment     *m_Experiment;
+  QString             m_Name;
+  int                 m_Port;
+  QxrdSimpleServerPtr m_Server;
 };
 
 #endif // QXRDSIMPLESERVERTHREAD_H

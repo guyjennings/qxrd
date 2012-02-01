@@ -37,4 +37,6 @@ private:
   QTcpSocket              *m_Socket;
 };
 
+typedef QSharedPointer<QxrdSimpleServer> QxrdSimpleServerPtr;
+
 #endif // QXRDSIMPLESERVER_H

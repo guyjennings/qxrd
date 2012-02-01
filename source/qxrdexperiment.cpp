@@ -181,8 +181,11 @@ bool QxrdExperiment::init(QSettings *settings)
   }
 
   if (m_SimpleServer) {
-    connect(m_SimpleServer,   SIGNAL(executeCommand(QString)),           scriptEngine(),    SLOT(evaluateSimpleServerCommand(QString)));
-    connect(scriptEngine(),   SIGNAL(simpleServerResultAvailable(QScriptValue)), m_SimpleServer,  SLOT(finishedCommand(QScriptValue)));
+    connect(m_SimpleServer.data(),   SIGNAL(executeCommand(QString)),
+            scriptEngine(),    SLOT(evaluateSimpleServerCommand(QString)));
+
+    connect(scriptEngine(),   SIGNAL(simpleServerResultAvailable(QScriptValue)),
+            m_SimpleServer.data(),  SLOT(finishedCommand(QScriptValue)));
   }
 
   if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           scriptEngine(),    SLOT(evaluateAppCommand(QString)));
