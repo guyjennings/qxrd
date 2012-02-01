@@ -176,20 +176,28 @@ bool QxrdExperiment::init(QSettings *settings)
 //  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
 
   if (m_Server) {
-    connect(m_Server,         SIGNAL(executeCommand(QString)),           scriptEngine(),    SLOT(evaluateSpecCommand(QString)));
-    connect(scriptEngine(),   SIGNAL(specResultAvailable(QScriptValue)), m_Server,          SLOT(finishedCommand(QScriptValue)));
+    connect(m_Server.data(),         SIGNAL(executeCommand(QString)),
+            scriptEngine(),          SLOT(evaluateSpecCommand(QString)));
+
+    connect(scriptEngine(),          SIGNAL(specResultAvailable(QScriptValue)),
+            m_Server.data(),         SLOT(finishedCommand(QScriptValue)));
   }
 
   if (m_SimpleServer) {
     connect(m_SimpleServer.data(),   SIGNAL(executeCommand(QString)),
-            scriptEngine(),    SLOT(evaluateSimpleServerCommand(QString)));
+            scriptEngine(),          SLOT(evaluateSimpleServerCommand(QString)));
 
-    connect(scriptEngine(),   SIGNAL(simpleServerResultAvailable(QScriptValue)),
-            m_SimpleServer.data(),  SLOT(finishedCommand(QScriptValue)));
+    connect(scriptEngine(),          SIGNAL(simpleServerResultAvailable(QScriptValue)),
+            m_SimpleServer.data(),   SLOT(finishedCommand(QScriptValue)));
   }
 
-  if (m_Window) connect(m_Window,         SIGNAL(executeCommand(QString)),           scriptEngine(),    SLOT(evaluateAppCommand(QString)));
-  if (m_Window) connect(scriptEngine(),   SIGNAL(appResultAvailable(QScriptValue)),  m_Window,          SLOT(finishedCommand(QScriptValue)));
+  if (m_Window) {
+    connect(m_Window,                SIGNAL(executeCommand(QString)),
+            scriptEngine(),          SLOT(evaluateAppCommand(QString)));
+
+    connect(scriptEngine(),          SIGNAL(appResultAvailable(QScriptValue)),
+            m_Window,                SLOT(finishedCommand(QScriptValue)));
+  }
 
   connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
   connect(prop_WorkTarget(),    SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));

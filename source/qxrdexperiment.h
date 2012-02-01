@@ -145,7 +145,7 @@ private:
   QxrdWindow                     *m_Window;
   QSplashScreen                  *m_Splash;
   QxrdServerThread               *m_ServerThread;
-  QxrdServer                     *m_Server;
+  QxrdServerPtr                   m_Server;
   QxrdSimpleServerThread         *m_SimpleServerThread;
   QxrdSimpleServerPtr             m_SimpleServer;
   QxrdDataProcessorThread        *m_DataProcessorThread;

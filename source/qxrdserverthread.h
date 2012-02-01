@@ -4,9 +4,9 @@
 #include "qcepmacros.h"
 
 #include "qxrdthread.h"
+#include "qxrdserver.h"
 #include <QDateTime>
 
-class QxrdServer;
 class QxrdExperiment;
 
 class QxrdServerThread : public QxrdThread
@@ -17,7 +17,7 @@ public:
   QxrdServerThread(QxrdExperiment *doc, QString name, int port);
   ~QxrdServerThread();
 
-  QxrdServer *server() const;
+  QxrdServerPtr server() const;
 
   void shutdown();
   void executeScript(QString cmd);
@@ -32,7 +32,7 @@ private:
   QxrdExperiment   *m_Experiment;
   QString           m_Name;
   int               m_Port;
-  QAtomicPointer<QxrdServer> m_Server;
+  QxrdServerPtr     m_Server;
 };
 
 #endif // QXRDSERVERTHREAD_H

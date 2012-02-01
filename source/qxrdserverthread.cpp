@@ -20,14 +20,12 @@ QxrdServerThread::~QxrdServerThread()
 {
   shutdown();
 
-  delete m_Server;
-
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdServerThread::~QxrdServerThread\n");
   }
 }
 
-QxrdServer *QxrdServerThread::server() const
+QxrdServerPtr QxrdServerThread::server() const
 {
   while (m_Server == NULL) {
     QThread::msleep(50);
@@ -49,11 +47,11 @@ void QxrdServerThread::run()
     m_Experiment->printMessage("Starting Spec Server Thread");
   }
 
-  QxrdServer *server = new QxrdServer(m_Experiment, m_Name, m_Port);
+  QxrdServerPtr server(new QxrdServer(m_Experiment, m_Name, m_Port));
 
   server -> startServer(QHostAddress::Any, m_Port);
 
-  m_Server.fetchAndStoreOrdered(server);
+  m_Server = server;
 
   m_Experiment->printMessage(tr("spec server started on port %1").arg(m_Server->serverPort()));
 
