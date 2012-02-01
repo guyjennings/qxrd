@@ -16,6 +16,7 @@
 #include <QElapsedTimer>
 #endif
 
+
 #include "qxrdrasterdata.h"
 #include "qxrdimagequeue.h"
 #include "qxrdacquisitionoperations.h"

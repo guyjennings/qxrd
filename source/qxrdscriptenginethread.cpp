@@ -18,8 +18,6 @@ QxrdScriptEngineThread::~QxrdScriptEngineThread()
 {
   shutdown();
 
-  delete m_ScriptEngine;
-
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngineThread::~QxrdScriptEngineThread\n");
   }
@@ -32,7 +30,7 @@ void QxrdScriptEngineThread::shutdown()
   wait(1000);
 }
 
-QxrdScriptEngine *QxrdScriptEngineThread::scriptEngine() const
+QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const
 {
   while (m_ScriptEngine == NULL) {
     QThread::msleep(50);
@@ -47,11 +45,11 @@ void QxrdScriptEngineThread::run()
     g_Application->printMessage("Starting Script Engine Thread");
   }
 
-  QxrdScriptEngine *p = new QxrdScriptEngine(m_Application, m_Experiment);
+  QxrdScriptEnginePtr p(new QxrdScriptEngine(m_Application, m_Experiment));
 
   p -> initialize();
 
-  m_ScriptEngine.fetchAndStoreOrdered(p);
+  m_ScriptEngine = p;
 
   int rc = exec();
 

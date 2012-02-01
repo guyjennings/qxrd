@@ -8,8 +8,8 @@
 #include <QMutex>
 
 class QxrdApplication;
+class QxrdExperiment;
 
-#include "qxrdexperiment.h"
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
 #include "qxrddataprocessor.h"
@@ -84,5 +84,7 @@ private:
   QxrdDataProcessorPtr   m_DataProcessor;
   QxrdWindow            *m_Window;
 };
+
+typedef QSharedPointer<QxrdScriptEngine> QxrdScriptEnginePtr;
 
 #endif // QXRDSCRIPTENGINE_H

@@ -41,7 +41,7 @@ public:
 
   QxrdSettingsSaver *saver();
 public slots:
-  QxrdScriptEngine* scriptEngine();
+  QxrdScriptEnginePtr scriptEngine();
 
   void executeCommand(QString cmd);
 
@@ -154,7 +154,7 @@ private:
   QxrdAcquisitionPtr              m_Acquisition;
   QxrdFileSaverThread            *m_FileSaverThread;
   QxrdScriptEngineThread         *m_ScriptEngineThread;
-  QxrdScriptEngine               *m_ScriptEngine;
+  QxrdScriptEnginePtr             m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
   QMutex                          m_LogFileMutex;

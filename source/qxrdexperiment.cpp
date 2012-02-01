@@ -177,25 +177,25 @@ bool QxrdExperiment::init(QSettings *settings)
 
   if (m_Server) {
     connect(m_Server.data(),         SIGNAL(executeCommand(QString)),
-            scriptEngine(),          SLOT(evaluateSpecCommand(QString)));
+            scriptEngine().data(),   SLOT(evaluateSpecCommand(QString)));
 
-    connect(scriptEngine(),          SIGNAL(specResultAvailable(QScriptValue)),
+    connect(scriptEngine().data(),   SIGNAL(specResultAvailable(QScriptValue)),
             m_Server.data(),         SLOT(finishedCommand(QScriptValue)));
   }
 
   if (m_SimpleServer) {
     connect(m_SimpleServer.data(),   SIGNAL(executeCommand(QString)),
-            scriptEngine(),          SLOT(evaluateSimpleServerCommand(QString)));
+            scriptEngine().data(),   SLOT(evaluateSimpleServerCommand(QString)));
 
-    connect(scriptEngine(),          SIGNAL(simpleServerResultAvailable(QScriptValue)),
+    connect(scriptEngine().data(),   SIGNAL(simpleServerResultAvailable(QScriptValue)),
             m_SimpleServer.data(),   SLOT(finishedCommand(QScriptValue)));
   }
 
   if (m_Window) {
     connect(m_Window,                SIGNAL(executeCommand(QString)),
-            scriptEngine(),          SLOT(evaluateAppCommand(QString)));
+            scriptEngine().data(),   SLOT(evaluateAppCommand(QString)));
 
-    connect(scriptEngine(),          SIGNAL(appResultAvailable(QScriptValue)),
+    connect(scriptEngine().data(),   SIGNAL(appResultAvailable(QScriptValue)),
             m_Window,                SLOT(finishedCommand(QScriptValue)));
   }
 
@@ -319,7 +319,7 @@ QxrdDataProcessorPtr QxrdExperiment::dataProcessor() const
   return m_DataProcessor;
 }
 
-QxrdScriptEngine* QxrdExperiment::scriptEngine()
+QxrdScriptEnginePtr QxrdExperiment::scriptEngine()
 {
   return m_ScriptEngine;
 }
