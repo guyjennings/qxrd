@@ -56,7 +56,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
                        QxrdApplication *app,
                        QxrdExperiment *doc,
                        QxrdAcquisitionPtr acq,
-                       QxrdDataProcessor *proc,
+                       QxrdDataProcessorPtr proc,
                        QxrdAllocator *alloc,
                        QSettings *settings,
                        QString section,
@@ -274,16 +274,16 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   connect(m_ActionShowImage, SIGNAL(triggered()), m_Plot, SLOT(toggleShowImage()));
   connect(m_ActionShowMask, SIGNAL(triggered()), m_Plot, SLOT(toggleShowMask()));
   connect(m_ActionShowOverflow, SIGNAL(triggered()), m_Plot, SLOT(toggleShowOverflow()));
-  connect(m_ActionShowMaskRange, SIGNAL(triggered()), m_DataProcessor, SLOT(showMaskRange()));
-  connect(m_ActionHideMaskRange, SIGNAL(triggered()), m_DataProcessor, SLOT(hideMaskRange()));
-  connect(m_ActionShowMaskAll, SIGNAL(triggered()), m_DataProcessor, SLOT(showMaskAll()));
-  connect(m_ActionHideMaskAll, SIGNAL(triggered()), m_DataProcessor, SLOT(hideMaskAll()));
-  connect(m_ActionInvertMask, SIGNAL(triggered()), m_DataProcessor, SLOT(invertMask()));
+  connect(m_ActionShowMaskRange, SIGNAL(triggered()), m_DataProcessor.data(), SLOT(showMaskRange()));
+  connect(m_ActionHideMaskRange, SIGNAL(triggered()), m_DataProcessor.data(), SLOT(hideMaskRange()));
+  connect(m_ActionShowMaskAll, SIGNAL(triggered()), m_DataProcessor.data(), SLOT(showMaskAll()));
+  connect(m_ActionHideMaskAll, SIGNAL(triggered()), m_DataProcessor.data(), SLOT(hideMaskAll()));
+  connect(m_ActionInvertMask, SIGNAL(triggered()), m_DataProcessor.data(), SLOT(invertMask()));
   connect(m_ActionMaskCircles, SIGNAL(triggered()), m_ImageMaskCirclesButton, SLOT(click()));
   connect(m_ActionMaskPolygons, SIGNAL(triggered()), m_ImageMaskPolygonsButton, SLOT(click()));
 
-  connect(m_ActionROICalculate, SIGNAL(triggered()), m_DataProcessor, SLOT(calculateROI()));
-  connect(m_ActionHistogramCalculate, SIGNAL(triggered()), m_DataProcessor, SLOT(calculateHistogram()));
+  connect(m_ActionROICalculate, SIGNAL(triggered()), m_DataProcessor.data(), SLOT(calculateROI()));
+  connect(m_ActionHistogramCalculate, SIGNAL(triggered()), m_DataProcessor.data(), SLOT(calculateHistogram()));
   connect(m_ActionTest, SIGNAL(triggered()), this, SLOT(doTest()));
   connect(m_ActionCrashProgram, SIGNAL(triggered()), this, SLOT(crashProgram()));
 
@@ -324,7 +324,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
 
   connect(m_ActionIntegrate, SIGNAL(triggered()), this, SLOT(doIntegrateSequence()));
   connect(m_ActionIntegrateCurrent, SIGNAL(triggered()),
-          m_DataProcessor, SLOT(integrateSaveAndDisplay()));
+          m_DataProcessor.data(), SLOT(integrateSaveAndDisplay()));
   connect(m_ActionIntegrateInputImages, SIGNAL(triggered()),
           m_InputFileBrowser, SLOT(doIntegrate()));
 
@@ -448,7 +448,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   connect(m_DataProcessor -> centerFinder() -> prop_CenterY(), SIGNAL(valueChanged(double,int)),
           m_CenterFinderPlot, SLOT(onCenterYChanged(double)));
 
-  connect(m_DataProcessor, SIGNAL(newIntegrationAvailable(QxrdIntegratedDataPtr)),
+  connect(m_DataProcessor.data(), SIGNAL(newIntegrationAvailable(QxrdIntegratedDataPtr)),
           m_IntegratorPlot, SLOT(onNewIntegrationAvailable(QxrdIntegratedDataPtr)));
 
   connect(m_Allocator -> prop_Allocated(), SIGNAL(valueChanged(int,int)), this, SLOT(allocatedMemoryChanged()));
@@ -1263,7 +1263,7 @@ void QxrdWindow::loadScript(QString path)
   m_Experiment -> scriptEngine() -> loadScript(path);
 }
 
-QxrdDataProcessor *QxrdWindow::dataProcessor() const
+QxrdDataProcessorPtr QxrdWindow::dataProcessor() const
 {
   return m_DataProcessor;
 }

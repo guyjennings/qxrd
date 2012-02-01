@@ -3,10 +3,11 @@
 
 #include <QDockWidget>
 #include "qxrdacquisition.h"
+#include "qxrddataprocessor.h"
 
 class QxrdExperiment;
 class QxrdWindow;
-class QxrdDataProcessor;
+
 #include <QMenu>
 
 class QxrdAcquireDialogBase : public QDockWidget
@@ -16,7 +17,7 @@ public:
     explicit QxrdAcquireDialogBase(QxrdExperiment *doc,
                                    QxrdWindow *win,
                                    QxrdAcquisition *acq,
-                                   QxrdDataProcessor *proc,
+                                   QxrdDataProcessorPtr proc,
                                    QWidget *parent = 0);
 
 public:
@@ -25,10 +26,10 @@ public:
   virtual void acquisitionReady() = 0;
 
 protected:
-  QxrdExperiment    *m_Experiment;
-  QxrdWindow        *m_Window;
-  QxrdAcquisition   *m_Acquisition;
-  QxrdDataProcessor *m_DataProcessor;
+  QxrdExperiment      *m_Experiment;
+  QxrdWindow          *m_Window;
+  QxrdAcquisition     *m_Acquisition;
+  QxrdDataProcessorPtr m_DataProcessor;
 };
 
 #endif // QXRDACQUIREDIALOGBASE_H

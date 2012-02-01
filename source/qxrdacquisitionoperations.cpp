@@ -5,7 +5,7 @@
 QxrdAcquisitionOperations::QxrdAcquisitionOperations(DetectorKind detectorKind,
                                                      QxrdSettingsSaver *saver,
                                                      QxrdExperiment *doc,
-                                                     QxrdDataProcessor *proc,
+                                                     QSharedPointer<QxrdDataProcessor> proc,
                                                      QxrdAllocator *allocator) :
   QxrdAcquisitionScripting(detectorKind, saver),
   m_Experiment(doc),

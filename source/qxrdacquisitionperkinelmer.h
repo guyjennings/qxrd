@@ -5,7 +5,7 @@
 
 #include "qxrdacquisition.h"
 #include "qxrdperkinelmerplugininterface.h"
-
+#include "qxrddataprocessor.h"
 #include <QMutex>
 #include <QVector>
 
@@ -15,7 +15,7 @@ class QxrdAcquisitionPerkinElmer : public QxrdAcquisition
 public:
   QxrdAcquisitionPerkinElmer(QxrdSettingsSaver *saver,
                              QxrdExperiment *doc,
-                             QxrdDataProcessor *proc,
+                             QxrdDataProcessorPtr proc,
                              QxrdAllocator *allocator,
                              QSettings *settings,
                              QString section);

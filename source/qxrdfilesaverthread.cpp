@@ -67,7 +67,7 @@ QxrdFileSaver *QxrdFileSaverThread::fileSaver() const
   return m_FileSaver;
 }
 
-void QxrdFileSaverThread::setProcessor(QxrdDataProcessor *proc)
+void QxrdFileSaverThread::setProcessor(QxrdDataProcessorPtr proc)
 {
   fileSaver() -> setProcessor(proc);
 }

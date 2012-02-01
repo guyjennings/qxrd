@@ -22,7 +22,7 @@ void QxrdMaskStackView::setMaskStack(QxrdMaskStackPtr stk)
   m_MaskStack = stk;
 }
 
-void QxrdMaskStackView::setProcessor(QxrdDataProcessor *proc)
+void QxrdMaskStackView::setProcessor(QxrdDataProcessorPtr proc)
 {
   m_Processor = proc;
 }

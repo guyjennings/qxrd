@@ -43,7 +43,7 @@ public:
   QxrdApplication *application() const;
   QxrdExperiment  *experiment() const;
   QxrdAcquisitionPtr acquisition() const;
-  QxrdDataProcessor *dataProcessor() const;
+  QxrdDataProcessorPtr dataProcessor() const;
   QxrdWindow      *window() const;
 
 private slots:
@@ -81,10 +81,8 @@ private:
   QxrdApplication       *m_Application;
   QxrdExperiment        *m_Experiment;
   QxrdAcquisitionPtr     m_Acquisition;
-  QxrdDataProcessor     *m_DataProcessor;
+  QxrdDataProcessorPtr   m_DataProcessor;
   QxrdWindow            *m_Window;
-
-//  QList<QxrdWindow*>     m_Windows;
 };
 
 #endif // QXRDSCRIPTENGINE_H

@@ -303,7 +303,7 @@ QxrdAcquisitionPtr QxrdExperiment::acquisition() const
   return m_Acquisition;
 }
 
-QxrdDataProcessor *QxrdExperiment::dataProcessor() const
+QxrdDataProcessorPtr QxrdExperiment::dataProcessor() const
 {
   return m_DataProcessor;
 }

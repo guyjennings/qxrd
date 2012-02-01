@@ -41,7 +41,7 @@ public:
              QxrdApplication *app,
              QxrdExperiment *doc,
              QxrdAcquisitionPtr acq,
-             QxrdDataProcessor *proc,
+             QxrdDataProcessorPtr proc,
              QxrdAllocator *alloc,
              QSettings *settings,
              QString secion,
@@ -120,7 +120,7 @@ public:
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
-  QxrdDataProcessor *dataProcessor() const;
+  QxrdDataProcessorPtr dataProcessor() const;
 
   void newDataAvailable(QxrdDoubleImageDataPtr img, QxrdMaskDataPtr overflow);
   void newMaskAvailable(QxrdMaskDataPtr img);
@@ -154,7 +154,7 @@ private:
   QxrdSettingsSaver                     *m_Saver;
   QxrdExperiment                        *m_Experiment;
   QxrdAcquisitionPtr                     m_Acquisition;
-  QxrdDataProcessor                     *m_DataProcessor;
+  QxrdDataProcessorPtr                   m_DataProcessor;
   QxrdAllocator                         *m_Allocator;
   QxrdAcquireDialogBase                 *m_AcquireDialog;
   QxrdSynchronizedAcquisitionDialog     *m_SynchronizedAcquisitionDialog;

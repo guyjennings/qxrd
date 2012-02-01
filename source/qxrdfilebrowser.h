@@ -6,9 +6,9 @@
 #include <QDockWidget>
 #include "qcepproperty.h"
 #include "ui_qxrdfilebrowser.h"
+#include "qxrddataprocessor.h"
 
 class QxrdFileBrowserModel;
-class QxrdDataProcessor;
 class QxrdExperiment;
 
 class QxrdFileBrowser : public QDockWidget, public Ui::QxrdFileBrowser
@@ -19,7 +19,7 @@ public:
   QxrdFileBrowser(QxrdSettingsSaver *saver,
                   int isOutput,
                   QxrdExperiment *experiment,
-                  QxrdDataProcessor *processor,
+                  QxrdDataProcessorPtr processor,
                   QWidget *parent=0);
 
 public:
@@ -64,7 +64,7 @@ private:
   mutable QMutex               m_Mutex;
   int                          m_IsOutput;
   QxrdExperiment              *m_Experiment;
-  QxrdDataProcessor           *m_Processor;
+  QxrdDataProcessorPtr         m_Processor;
   QxrdFileBrowserModel        *m_Model;
   QStringList                  m_DirectoryStack;
 };
@@ -74,7 +74,7 @@ class QxrdInputFileBrowser : public QxrdFileBrowser
   Q_OBJECT
 
 public:
-  QxrdInputFileBrowser(QxrdSettingsSaver *saver, QxrdExperiment *experimnet, QxrdDataProcessor *processor, QWidget *parent=0);
+  QxrdInputFileBrowser(QxrdSettingsSaver *saver, QxrdExperiment *experiment, QxrdDataProcessorPtr processor, QWidget *parent);
 };
 
 class QxrdOutputFileBrowser : public QxrdFileBrowser
@@ -82,7 +82,7 @@ class QxrdOutputFileBrowser : public QxrdFileBrowser
   Q_OBJECT
 
 public:
-  QxrdOutputFileBrowser(QxrdSettingsSaver *saver, QxrdExperiment *experimnet, QxrdDataProcessor *processor, QWidget *parent=0);
+  QxrdOutputFileBrowser(QxrdSettingsSaver *saver, QxrdExperiment *experiment, QxrdDataProcessorPtr processor, QWidget *parent);
 };
 
 #endif // QXRDFILEBROWSER_H

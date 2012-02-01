@@ -3,9 +3,9 @@
 
 #include "qxrdthread.h"
 #include "qxrdacquisition.h"
+#include "qxrddataprocessor.h"
 #include <QSettings>
 
-class QxrdDataProcessor;
 class QxrdAllocator;
 class QxrdExperiment;
 class QxrdSettingsSaver;
@@ -17,7 +17,7 @@ class QxrdAcquisitionThread : public QxrdThread
  public:
   QxrdAcquisitionThread(QxrdSettingsSaver *saver,
                         QxrdExperiment *doc,
-                        QxrdDataProcessor *proc,
+                        QxrdDataProcessorPtr proc,
                         QxrdAllocator *allocator,
                         int detectorType,
                         QSettings *settings,
@@ -43,7 +43,7 @@ private:
   QxrdExperiment                     *m_Experiment;
   QxrdAllocator                      *m_Allocator;
   QxrdAcquisitionPtr                  m_Acquisition;
-  QxrdDataProcessor                  *m_Processor;
+  QxrdDataProcessorPtr                m_Processor;
   int                                 m_DetectorType;
   QSettings                          *m_Settings;
   QString                             m_Section;

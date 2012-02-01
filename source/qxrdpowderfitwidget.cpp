@@ -1,10 +1,9 @@
 #include "qxrdpowderfitwidget.h"
-#include "qxrddataprocessor.h"
 #include "qwt_symbol.h"
 #include "qwt_plot_item.h"
 #include "qwt_plot_marker.h"
 
-QxrdPowderFitWidget::QxrdPowderFitWidget(QxrdDataProcessor *proc, QWidget *parent) :
+QxrdPowderFitWidget::QxrdPowderFitWidget(QxrdDataProcessorPtr proc, QWidget *parent) :
     QDialog(parent),
     m_Processor(proc)
 {

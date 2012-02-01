@@ -12,7 +12,7 @@ class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionOperations(DetectorKind detectorKind, QxrdSettingsSaver *saver, QxrdExperiment *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator);
+  QxrdAcquisitionOperations(DetectorKind detectorKind, QxrdSettingsSaver *saver, QxrdExperiment *doc, QSharedPointer<QxrdDataProcessor> proc, QxrdAllocator *allocator);
 
   void setWindow(QxrdWindow *win);
 
@@ -20,7 +20,7 @@ protected:
   QxrdExperiment     *m_Experiment;
   QxrdWindow         *m_Window;
   QxrdAllocator      *m_Allocator;
-  QxrdDataProcessor  *m_DataProcessor;
+  QSharedPointer<QxrdDataProcessor> m_DataProcessor;
 };
 
 #endif // QXRDACQUISITIONOPERATIONS_H

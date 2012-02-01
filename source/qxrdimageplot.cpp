@@ -142,7 +142,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   enableZooming();
 }
 
-void QxrdImagePlot::setDataProcessor(QxrdDataProcessor *proc)
+void QxrdImagePlot::setDataProcessor(QxrdDataProcessorPtr proc)
 {
   m_DataProcessor = proc;
 
@@ -150,13 +150,13 @@ void QxrdImagePlot::setDataProcessor(QxrdDataProcessor *proc)
           m_DataProcessor -> centerFinder(), SLOT(onCenterChanged(QwtDoublePoint)));
 
   connect(m_Circles, SIGNAL(selected(QwtDoubleRect)),
-          m_DataProcessor, SLOT(maskCircle(QwtDoubleRect)));
+          m_DataProcessor.data(), SLOT(maskCircle(QwtDoubleRect)));
 
   connect(m_Polygons, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-          m_DataProcessor, SLOT(maskPolygon(QwtArray<QwtDoublePoint>)));
+          m_DataProcessor.data(), SLOT(maskPolygon(QwtArray<QwtDoublePoint>)));
 
   connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-          m_DataProcessor, SLOT(measurePolygon(QwtArray<QwtDoublePoint>)));
+          m_DataProcessor.data(), SLOT(measurePolygon(QwtArray<QwtDoublePoint>)));
 
 //  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
 //          m_DataProcessor, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
@@ -187,7 +187,7 @@ void QxrdImagePlot::setSaver(QxrdSettingsSaver *saver)
   prop_DisplayColorMap()->setSaver(saver);
 }
 
-QxrdDataProcessor *QxrdImagePlot::processor() const
+QxrdDataProcessorPtr QxrdImagePlot::processor() const
 {
   return m_DataProcessor;
 }
@@ -708,8 +708,8 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
 {
   const QxrdRasterData *ras = this->raster();
 
-  QxrdDataProcessor *processor = this->processor();
-  QxrdCenterFinder  *centerFinder = NULL;
+  QxrdDataProcessorPtr processor = this->processor();
+  QxrdCenterFinder    *centerFinder = NULL;
 
   if (processor) {
     centerFinder = processor->centerFinder();

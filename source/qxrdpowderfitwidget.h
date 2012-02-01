@@ -6,13 +6,12 @@
 #include "ui_qxrdpowderfitwidget.h"
 #include "qwt_double_rect.h"
 #include "qwt_symbol.h"
-
-class QxrdDataProcessor;
+#include "qxrddataprocessor.h"
 
 class QxrdPowderFitWidget : public QDialog, public Ui::QxrdPowderFitWidget {
   Q_OBJECT
 public:
-  QxrdPowderFitWidget(QxrdDataProcessor *proc, QWidget *parent = 0);
+  QxrdPowderFitWidget(QxrdDataProcessorPtr proc, QWidget *parent = 0);
   ~QxrdPowderFitWidget();
 
 protected:
@@ -31,7 +30,7 @@ public slots:
 protected:
 
 protected:
-  QxrdDataProcessor         *m_Processor;
+  QxrdDataProcessorPtr       m_Processor;
   QVector<QwtSymbol::Style>  m_SymbolStyles;
 };
 

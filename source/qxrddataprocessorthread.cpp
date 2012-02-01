@@ -29,8 +29,6 @@ QxrdDataProcessorThread::~QxrdDataProcessorThread()
 {
   shutdown();
 
-  delete m_DataProcessor;
-
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDataProcessorThread::~QxrdDataProcessorThread\n");
   }
@@ -42,18 +40,19 @@ void QxrdDataProcessorThread::run()
     m_Experiment->printMessage("Starting Processor Thread");
   }
 
-  QxrdDataProcessor *p;
+  QxrdDataProcessorPtr p;
 
-  p = new QxrdDataProcessor(m_Saver,
+  p = QxrdDataProcessorPtr(
+        new QxrdDataProcessor(m_Saver,
                             m_Experiment,
                             m_Acquisition,
                             m_Allocator,
                             m_FileSaverThread,
                             m_Settings,
                             m_Section,
-                            NULL);
+                            NULL));
 
-  m_DataProcessor.fetchAndStoreOrdered(p);
+  m_DataProcessor = p;
 
   int rc = exec();
 
@@ -69,7 +68,7 @@ void QxrdDataProcessorThread::shutdown()
   wait();
 }
 
-QxrdDataProcessor *QxrdDataProcessorThread::dataProcessor() const
+QxrdDataProcessorPtr QxrdDataProcessorThread::dataProcessor() const
 {
   while (m_DataProcessor == NULL) {
     QThread::msleep(50);

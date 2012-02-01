@@ -7,7 +7,7 @@ class QxrdPowderFitResultsPage : public QxrdPowderFitRefinePage
 {
   Q_OBJECT
 public:
-  QxrdPowderFitResultsPage(QxrdSettingsSaver *saver, QxrdDataProcessor *proc, QWidget *parent);
+  QxrdPowderFitResultsPage(QxrdSettingsSaver *saver, QxrdDataProcessorPtr proc, QWidget *parent);
 
 public slots:
   void selectResultsPage();

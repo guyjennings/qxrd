@@ -12,7 +12,7 @@ public:
   explicit QxrdAcquireFileWatcherDialog(QxrdExperiment *doc,
                                         QxrdWindow *win,
                                         QxrdAcquisition *acq,
-                                        QxrdDataProcessor *proc,
+                                        QxrdDataProcessorPtr proc,
                                         QWidget *parent = 0);
   ~QxrdAcquireFileWatcherDialog();
 

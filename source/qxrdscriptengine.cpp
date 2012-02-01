@@ -18,11 +18,6 @@
 
 #include <QThread>
 
-//static QxrdScriptEngine  *g_ScriptEngine;
-//static QxrdAcquisition   *g_Acquisition;
-//static QxrdApplication *g_Application;
-//static QxrdDataProcessor *g_DataProcessor;
-
 QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdExperiment *exp)
   : QScriptEngine(),
     m_Mutex(QMutex::Recursive),
@@ -109,7 +104,7 @@ void QxrdScriptEngine::initialize()
   m_DataProcessor = m_Experiment->dataProcessor();
 
   if (m_DataProcessor) {
-    globalObject().setProperty("processor",       newQObject(m_DataProcessor));
+    globalObject().setProperty("processor",       newQObject(m_DataProcessor.data()));
     globalObject().setProperty("centering",       newQObject(m_DataProcessor->centerFinder()));
     globalObject().setProperty("integrator",      newQObject(m_DataProcessor->integrator()));
     globalObject().setProperty("initialFit",      newQObject(m_DataProcessor->initialRingSetFitParameters()));
@@ -144,7 +139,7 @@ QxrdWindow *QxrdScriptEngine::window() const
   return m_Window;
 }
 
-QxrdDataProcessor *QxrdScriptEngine::dataProcessor() const
+QxrdDataProcessorPtr QxrdScriptEngine::dataProcessor() const
 {
   return m_DataProcessor;
 }
@@ -349,7 +344,7 @@ QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine
 
   if (eng) {
     QxrdAcquisitionPtr acq = eng->acquisition();
-    QxrdDataProcessor *proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc = eng->dataProcessor();
 
     if (!acq || !proc) return QScriptValue(engine, -1);
 
@@ -397,7 +392,7 @@ QScriptValue QxrdScriptEngine::processStatusFunc(QScriptContext *context, QScrip
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessor *proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc = eng->dataProcessor();
 
     if (proc) {
       if (context->argumentCount() == 0) {
@@ -624,7 +619,7 @@ QScriptValue QxrdScriptEngine::dataFunc(QScriptContext * /*context*/, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessor *proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc = eng->dataProcessor();
 
     if (proc) {
       return engine -> newQObject(proc -> data().data());
@@ -639,7 +634,7 @@ QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessor *proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc = eng->dataProcessor();
 
     if (proc) {
       return engine -> newQObject(proc -> darkImage().data());
@@ -654,7 +649,7 @@ QScriptValue QxrdScriptEngine::maskFunc(QScriptContext * /*context*/, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessor *proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc = eng->dataProcessor();
 
     if (proc) {
       return engine -> newQObject(proc -> mask().data());
@@ -669,7 +664,7 @@ QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScrip
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessor *proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc = eng->dataProcessor();
 
     if (proc) {
       return engine -> newQObject(proc -> overflow().data());
@@ -698,7 +693,7 @@ QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngin
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessor *proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc = eng->dataProcessor();
 
     if (proc) {
       if (context->argumentCount() >= 1) {

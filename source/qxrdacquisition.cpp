@@ -10,7 +10,7 @@
 #include <QThreadPool>
 #include <QtConcurrentRun>
 
-QxrdAcquisition::QxrdAcquisition(DetectorKind detectorKind, QxrdSettingsSaver *saver, QxrdExperiment *doc, QxrdDataProcessor *proc, QxrdAllocator *allocator)
+QxrdAcquisition::QxrdAcquisition(DetectorKind detectorKind, QxrdSettingsSaver *saver, QxrdExperiment *doc, QSharedPointer<QxrdDataProcessor> proc, QxrdAllocator *allocator)
   : QxrdAcquisitionOperations(detectorKind, saver, doc, proc, allocator),
     m_AcquiredImages("acquired"),
     m_ControlPanel(NULL),

@@ -36,7 +36,7 @@ void QxrdCenterFinderPlot::setWindow(QxrdWindow *win)
   m_CenterFinder = m_DataProcessor -> centerFinder();
 
   connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-          m_DataProcessor, SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
+          m_DataProcessor.data(), SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
 
   connect(m_CenterFinder, SIGNAL(parameterChanged()), this, SLOT(onParameterChanged()));
 }

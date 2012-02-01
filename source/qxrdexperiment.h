@@ -9,8 +9,8 @@
 #include <QSplashScreen>
 #include <QScriptEngine>
 #include <QScriptEngineDebugger>
-#include "qxrddataprocessorthread.h"
 #include "qxrdacquisitionthread.h"
+#include "qxrddataprocessorthread.h"
 #include "qxrdserverthread.h"
 #include "qxrdsimpleserverthread.h"
 #include "qxrdfilesaverthread.h"
@@ -31,7 +31,7 @@ public:
   QxrdAcquisitionThread *acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
   QxrdWindow *window();
-  QxrdDataProcessor *dataProcessor() const;
+  QxrdDataProcessorPtr dataProcessor() const;
 
   FILE* logFile();
   void newLogFile(QString path);
@@ -149,7 +149,7 @@ private:
   QxrdSimpleServerThread         *m_SimpleServerThread;
   QxrdSimpleServer               *m_SimpleServer;
   QxrdDataProcessorThread        *m_DataProcessorThread;
-  QxrdDataProcessor              *m_DataProcessor;
+  QxrdDataProcessorPtr            m_DataProcessor;
   QxrdAcquisitionThread          *m_AcquisitionThread;
   QxrdAcquisitionPtr              m_Acquisition;
   QxrdFileSaverThread            *m_FileSaverThread;

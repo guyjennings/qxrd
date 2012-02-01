@@ -21,7 +21,8 @@
 QxrdDataProcessorBase::QxrdDataProcessorBase(
     QxrdSettingsSaver *saver,
     QxrdExperiment *doc,
-    QxrdAcquisitionPtr acq, QxrdAllocator *allocator,
+    QSharedPointer<QxrdAcquisition> acq,
+    QxrdAllocator *allocator,
     QxrdFileSaverThread *filesaver, QObject *parent) :
 
   QObject(parent),
@@ -134,7 +135,7 @@ void QxrdDataProcessorBase::shutdown()
   thread()->exit();
 }
 
-void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionPtr acq)
+void QxrdDataProcessorBase::setAcquisition(QSharedPointer<QxrdAcquisition> acq)
 {
   m_Acquisition = acq;
 
@@ -424,70 +425,86 @@ QStringList QxrdDataProcessorBase::ls(QString pattern) const
 
 void QxrdDataProcessorBase::loadData(QString name)
 {
-  if (qcepDebug(DEBUG_FILES)) {
-    m_Experiment->printMessage(
-          tr("QxrdDataProcessorBase::loadData(%1)").arg(name));
-  }
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "loadData", Qt::QueuedConnection, Q_ARG(QString, name)))
+  } else {
+    if (qcepDebug(DEBUG_FILES)) {
+      m_Experiment->printMessage(
+            tr("QxrdDataProcessorBase::loadData(%1)").arg(name));
+    }
 
-  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
+    QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
-  QString path = filePathInCurrentDirectory(name);
+    QString path = filePathInCurrentDirectory(name);
 
-  if (res && res -> readImage(path)) {
+    if (res && res -> readImage(path)) {
 
-    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+      //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    res -> loadMetaData();
+      res -> loadMetaData();
 
-    newData(res, QxrdMaskDataPtr());
+      newData(res, QxrdMaskDataPtr());
 
-    set_DataPath(res -> get_FileName());
+      set_DataPath(res -> get_FileName());
+    }
   }
 }
 
 void QxrdDataProcessorBase::saveData(QString name, int canOverwrite)
 {
-  QString path = filePathInCurrentDirectory(name);
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveData", Qt::QueuedConnection, Q_ARG(QString, name), Q_ARG(int, canOverwrite)))
+  } else {
+    QString path = filePathInCurrentDirectory(name);
 
-  saveNamedImageData(path, m_Data, QxrdMaskDataPtr(), canOverwrite);
+    saveNamedImageData(path, m_Data, QxrdMaskDataPtr(), canOverwrite);
 
-  set_DataPath(m_Data -> get_FileName());
+    set_DataPath(m_Data -> get_FileName());
+  }
 }
 
 void QxrdDataProcessorBase::loadDark(QString name)
 {
-  if (qcepDebug(DEBUG_FILES)) {
-    m_Experiment->printMessage(
-          tr("QxrdDataProcessorBase::loadDark(%1)").arg(name));
-  }
-
-  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
-
-  QString path = filePathInCurrentDirectory(name);
-
-  if (res && res -> readImage(path)) {
-
-    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
-
-    res -> loadMetaData();
-    res -> set_DataType(QxrdDoubleImageData::DarkData);
-
-    newDarkImage(res);
-
-    set_DarkImagePath(res -> get_FileName());
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "loadDark", Qt::QueuedConnection, Q_ARG(QString, name)))
   } else {
-    m_Experiment->printMessage(tr("loadDark(%1) failed").arg(name));
+    if (qcepDebug(DEBUG_FILES)) {
+      m_Experiment->printMessage(
+            tr("QxrdDataProcessorBase::loadDark(%1)").arg(name));
+    }
+
+    QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
+
+    QString path = filePathInCurrentDirectory(name);
+
+    if (res && res -> readImage(path)) {
+
+      //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+      res -> loadMetaData();
+      res -> set_DataType(QxrdDoubleImageData::DarkData);
+
+      newDarkImage(res);
+
+      set_DarkImagePath(res -> get_FileName());
+    } else {
+      m_Experiment->printMessage(tr("loadDark(%1) failed").arg(name));
+    }
   }
 }
 
 void QxrdDataProcessorBase::saveDark(QString name, int canOverwrite)
 {
-  QString path = filePathInCurrentDirectory(name);
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveDark", Qt::QueuedConnection, Q_ARG(QString, name), Q_ARG(int, canOverwrite)))
+  } else {
+    QString path = filePathInCurrentDirectory(name);
 
-  if (m_DarkFrame) {
-    saveNamedImageData(path, m_DarkFrame, QxrdMaskDataPtr(), canOverwrite);
+    if (m_DarkFrame) {
+      saveNamedImageData(path, m_DarkFrame, QxrdMaskDataPtr(), canOverwrite);
 
-    set_DarkImagePath(m_DarkFrame -> get_FileName());
+      set_DarkImagePath(m_DarkFrame -> get_FileName());
+    }
   }
 }
 

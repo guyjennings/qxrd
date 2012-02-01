@@ -11,7 +11,7 @@
 QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaver *saver,
                                  int isOutput,
                                  QxrdExperiment *experiment,
-                                 QxrdDataProcessor *processor,
+                                 QxrdDataProcessorPtr processor,
                                  QWidget *parent)
   : QDockWidget(parent),
     m_BrowserFilter(saver, this, "browserFilter",1),
@@ -224,7 +224,7 @@ void QxrdFileBrowser::doOpen()
     foreach(index, rows) {
       if (!m_Model->isDir(index)) {
         //    printf("Open: %s\n", qPrintable(m_Model->filePath(index)));
-        INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "loadData", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+        m_Processor->loadData(m_Model->filePath(index));
       }
     }
   }
@@ -239,7 +239,7 @@ void QxrdFileBrowser::doOpenDark()
   foreach(index, rows) {
 //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
     if (!m_Model->isDir(index)) {
-      INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "loadDark", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+      m_Processor->loadDark(m_Model->filePath(index));
     }
   }
 }
@@ -253,7 +253,7 @@ void QxrdFileBrowser::doOpenMask()
   foreach(index, rows) {
 //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
     if (!m_Model->isDir(index)) {
-      INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "loadMask", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+      m_Processor->loadMask(m_Model->filePath(index));
     }
   }
 }
@@ -267,7 +267,7 @@ void QxrdFileBrowser::doOpenGainMap()
   foreach(index, rows) {
 //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
     if (!m_Model->isDir(index)) {
-      INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "loadGainMap", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+      m_Processor->loadGainMap(m_Model->filePath(index));
     }
   }
 }
@@ -281,7 +281,7 @@ void QxrdFileBrowser::doProcess()
   foreach(index, rows) {
 //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
     if (!m_Model->isDir(index)) {
-      INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "processData", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+      m_Processor->processData(m_Model->filePath(index));
     }
   }
 }
@@ -295,7 +295,7 @@ void QxrdFileBrowser::doIntegrate()
   foreach(index, rows) {
 //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
     if (!m_Model->isDir(index)) {
-      INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "integrateData", Qt::QueuedConnection, Q_ARG(QString, m_Model->filePath(index))));
+      m_Processor->integrateData(m_Model->filePath(index));
     }
   }
 }
@@ -313,7 +313,7 @@ void QxrdFileBrowser::doAccumulate()
     }
   }
 
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Processor, "accumulateImages", Qt::QueuedConnection, Q_ARG(QStringList, paths)));
+  m_Processor->accumulateImages(paths);
 }
 
 void QxrdFileBrowser::doRefreshBrowser()
@@ -424,7 +424,7 @@ void QxrdFileBrowser::onModelReset()
 
 QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdSettingsSaver *saver,
                                            QxrdExperiment *experiment,
-                                           QxrdDataProcessor *processor,
+                                           QxrdDataProcessorPtr processor,
                                            QWidget *parent)
   : QxrdFileBrowser(saver, false, experiment, processor, parent)
 {
@@ -432,7 +432,7 @@ QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdSettingsSaver *saver,
 
 QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdSettingsSaver *saver,
                                              QxrdExperiment *experiment,
-                                             QxrdDataProcessor *processor,
+                                             QxrdDataProcessorPtr processor,
                                              QWidget *parent)
   : QxrdFileBrowser(saver, true, experiment, processor, parent)
 {

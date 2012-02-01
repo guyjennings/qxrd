@@ -2,6 +2,7 @@
 #define QXRDACQUISITIONSIMULATED_H
 
 #include "qxrdacquisition.h"
+#include "qxrddataprocessor.h"
 #include <QTimer>
 
 class QxrdAcquisitionSimulated : public QxrdAcquisition
@@ -10,7 +11,7 @@ class QxrdAcquisitionSimulated : public QxrdAcquisition
 public:
   QxrdAcquisitionSimulated(QxrdSettingsSaver *saver,
                            QxrdExperiment *doc,
-                           QxrdDataProcessor *proc,
+                           QxrdDataProcessorPtr proc,
                            QxrdAllocator *allocator,
                            QSettings *settings,
                            QString section);

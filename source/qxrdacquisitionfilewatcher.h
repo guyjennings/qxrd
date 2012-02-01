@@ -2,6 +2,7 @@
 #define QXRDACQUISITIONFILEWATCHER_H
 
 #include "qxrdacquisition.h"
+#include "qxrddataprocessor.h"
 
 class QxrdAcquisitionFileWatcher : public QxrdAcquisition
 {
@@ -9,7 +10,7 @@ class QxrdAcquisitionFileWatcher : public QxrdAcquisition
 public:
     explicit QxrdAcquisitionFileWatcher(QxrdSettingsSaver *saver,
                                         QxrdExperiment *doc,
-                                        QxrdDataProcessor *proc,
+                                        QxrdDataProcessorPtr proc,
                                         QxrdAllocator *allocator,
                                         QSettings *settings,
                                         QString section);

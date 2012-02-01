@@ -14,9 +14,9 @@
 #include "qxrdmaskdata.h"
 #include "qxrdacquisition.h"
 #include "qxrdintegrateddata.h"
+#include "qxrddataprocessor.h"
 
 class QxrdAllocator;
-class QxrdDataProcessor;
 
 class QxrdFileSaver : public QObject
 {
@@ -26,7 +26,7 @@ public:
   QxrdFileSaver(QxrdAllocator *allocator, QObject *parent=0);
   ~QxrdFileSaver();
 
-  void setProcessor(QxrdDataProcessor *proc);
+  void setProcessor(QxrdDataProcessorPtr proc);
   void setAcquisition(QxrdAcquisitionPtr acq);
 
 public:
@@ -49,14 +49,14 @@ public slots:
 private:
   void mkPath(QString filePath);
   QString uniqueFileName(QString name);
-  QxrdDataProcessor *processor() const;
-  QxrdAcquisitionPtr acquisition() const;
+  QxrdDataProcessorPtr processor() const;
+  QxrdAcquisitionPtr   acquisition() const;
   void saveOverflowData(QString name, QxrdMaskDataPtr overflow);
 
 private:
-  QxrdDataProcessor *m_Processor;
-  QxrdAllocator     *m_Allocator;
-  QxrdAcquisitionPtr m_Acquisition;
+  QxrdDataProcessorPtr m_Processor;
+  QxrdAllocator       *m_Allocator;
+  QxrdAcquisitionPtr   m_Acquisition;
 };
 
 #endif

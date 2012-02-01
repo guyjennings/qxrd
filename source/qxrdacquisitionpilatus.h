@@ -9,7 +9,7 @@ class QxrdAcquisitionPilatus : public QxrdAcquisition
 public:
   QxrdAcquisitionPilatus(QxrdSettingsSaver *saver,
                          QxrdExperiment *doc,
-                         QxrdDataProcessor *proc,
+                         QSharedPointer<QxrdDataProcessor> proc,
                          QxrdAllocator *allocator,
                          QSettings *settings,
                          QString section);

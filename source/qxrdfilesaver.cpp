@@ -24,7 +24,7 @@ QxrdFileSaver::~QxrdFileSaver()
   }
 }
 
-void QxrdFileSaver::setProcessor(QxrdDataProcessor *proc)
+void QxrdFileSaver::setProcessor(QxrdDataProcessorPtr proc)
 {
   m_Processor = proc;
 }
@@ -34,7 +34,7 @@ void QxrdFileSaver::setAcquisition(QxrdAcquisitionPtr acq)
   m_Acquisition = acq;
 }
 
-QxrdDataProcessor *QxrdFileSaver::processor() const
+QxrdDataProcessorPtr QxrdFileSaver::processor() const
 {
   if (m_Processor == NULL) {
     g_Application->printMessage("processor == NULL in QxrdFileSaver::processor\n");

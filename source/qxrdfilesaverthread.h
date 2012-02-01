@@ -5,9 +5,9 @@
 
 #include "qxrdthread.h"
 #include "qxrdacquisition.h"
+#include "qxrddataprocessor.h"
 
 class QxrdAllocator;
-class QxrdDataProcessor;
 class QxrdFileSaver;
 
 #include "qxrdimagedata.h"
@@ -23,7 +23,7 @@ public:
 
   void shutdown();
 
-  void setProcessor(QxrdDataProcessor *proc);
+  void setProcessor(QxrdDataProcessorPtr proc);
   void setAcquisition(QxrdAcquisitionPtr acq);
 
   void saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);

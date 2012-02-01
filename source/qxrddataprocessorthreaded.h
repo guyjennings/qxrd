@@ -9,6 +9,7 @@
 #include "qxrdroidata.h"
 #include "qxrdhistogramdata.h"
 #include "qxrdimagedata.h"
+#include "qxrdacquisition.h"
 
 class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
 {

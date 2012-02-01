@@ -6,7 +6,7 @@
 QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperiment *doc,
                                      QxrdWindow *win,
                                      QxrdAcquisition *acq,
-                                     QxrdDataProcessor *proc,
+                                     QxrdDataProcessorPtr proc,
                                      QWidget *parent) :
   QxrdAcquireDialogBase(doc, win, acq, proc, parent)
 {

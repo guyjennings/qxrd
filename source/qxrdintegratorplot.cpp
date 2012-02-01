@@ -28,13 +28,13 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   connect(this, SIGNAL(legendChecked(QwtPlotItem*,bool)), this, SLOT(onLegendChecked(QwtPlotItem*,bool)));
 }
 
-void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessor *proc)
+void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessorPtr proc)
 {
   m_DataProcessor = proc;
   m_Integrator = m_DataProcessor -> integrator();
 
   connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-          m_DataProcessor, SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
+          m_DataProcessor.data(), SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
 }
 
 void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)

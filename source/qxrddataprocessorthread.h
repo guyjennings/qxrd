@@ -4,12 +4,12 @@
 #include "qxrdthread.h"
 #include "qxrdsettingssaver.h"
 #include "qxrdacquisition.h"
+#include "qxrddataprocessor.h"
 #include <QDateTime>
 #include <QSettings>
 
 class QxrdAllocator;
 class QxrdFileSaverThread;
-class QxrdDataProcessor;
 class QxrdExperiment;
 
 class QxrdDataProcessorThread : public QxrdThread
@@ -29,7 +29,7 @@ public:
 
   void shutdown();
 
-  QxrdDataProcessor *dataProcessor() const;
+  QxrdDataProcessorPtr dataProcessor() const;
 
   static void msleep(long unsigned int);
 
@@ -39,7 +39,7 @@ protected:
 private:
   QAtomicPointer<QxrdAllocator>       m_Allocator;
   QAtomicPointer<QxrdFileSaverThread> m_FileSaverThread;
-  QAtomicPointer<QxrdDataProcessor>   m_DataProcessor;
+  QxrdDataProcessorPtr                m_DataProcessor;
   QxrdAcquisitionPtr                  m_Acquisition;
   QAtomicPointer<QxrdExperiment>      m_Experiment;
   QxrdSettingsSaver                  *m_Saver;

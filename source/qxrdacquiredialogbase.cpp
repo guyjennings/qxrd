@@ -3,7 +3,7 @@
 QxrdAcquireDialogBase::QxrdAcquireDialogBase(QxrdExperiment *doc,
                                              QxrdWindow *win,
                                              QxrdAcquisition *acq,
-                                             QxrdDataProcessor *proc,
+                                             QxrdDataProcessorPtr proc,
                                              QWidget *parent) :
   QDockWidget(parent),
   m_Experiment(doc),

@@ -17,7 +17,6 @@
 #include "qxrdintegrateddata.h"
 #include "qxrdringsetfitparameters.h"
 #include "qxrdringsetsampleddata.h"
-#include "qxrdacquisition.h"
 #include <qwt_double_rect.h>
 
 class QxrdExperiment;
@@ -27,6 +26,7 @@ class QxrdWindow;
 class QxrdCenterFinder;
 class QxrdIntegrator;
 class QxrdGenerateTestImage;
+class QxrdAcquisition;
 
 class QxrdDataProcessorBase : public QObject
 {
@@ -35,7 +35,7 @@ class QxrdDataProcessorBase : public QObject
 public:
   QxrdDataProcessorBase(QxrdSettingsSaver *saver,
                         QxrdExperiment *doc,
-                        QxrdAcquisitionPtr acq,
+                        QSharedPointer<QxrdAcquisition> acq,
                         QxrdAllocator *allocator,
                         QxrdFileSaverThread *filesaver,
                         QObject *parent=0);
@@ -299,7 +299,7 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
-  void setAcquisition(QxrdAcquisitionPtr acq);
+  void setAcquisition(QSharedPointer<QxrdAcquisition> acq);
   void setWindow(QxrdWindow *win);
 
   QxrdSettingsSaver     *saver();
@@ -380,7 +380,7 @@ protected:
   QxrdWindow            *m_Window;
   QxrdAllocator         *m_Allocator;
   QxrdFileSaverThread   *m_FileSaverThread;
-  QxrdAcquisitionPtr     m_Acquisition;
+  QSharedPointer<QxrdAcquisition>     m_Acquisition;
   QWaitCondition         m_ProcessWaiting;
   QxrdInt16ImageQueue    m_AcquiredInt16Images;
   QxrdInt32ImageQueue    m_AcquiredInt32Images;
