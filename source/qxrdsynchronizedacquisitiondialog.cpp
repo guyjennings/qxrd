@@ -3,7 +3,7 @@
 #include "ui_qxrdsynchronizedacquisitiondialog.h"
 #include "qwt_plot_piecewise_curve.h"
 
-QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *parent, QxrdAcquisition *acq) :
+QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *parent, QxrdAcquisitionPtr acq) :
     QDockWidget(parent),
     m_Acquisition(acq),
     m_SynchronizedAcquisition(acq->synchronizedAcquisition())

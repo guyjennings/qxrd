@@ -55,7 +55,7 @@
 QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
                        QxrdApplication *app,
                        QxrdExperiment *doc,
-                       QxrdAcquisition *acq,
+                       QxrdAcquisitionPtr acq,
                        QxrdDataProcessor *proc,
                        QxrdAllocator *alloc,
                        QSettings *settings,
@@ -379,13 +379,12 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
     g_Application->criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
   }
 
-  connect(m_Acquisition,     SIGNAL(acquireStarted()),
-          this,              SLOT(acquireStarted()));
-  connect(m_Acquisition,     SIGNAL(acquiredFrame(QString,int,int,int,int,int,int,int)),
-          this,              SLOT(acquiredFrame(QString,int,int,int,int,int,int,int)));
-  connect(m_Acquisition,     SIGNAL(acquireComplete()),
-          this,              SLOT(acquireComplete()));
-
+  connect(m_Acquisition.data(), SIGNAL(acquireStarted()),
+          this,                 SLOT(acquireStarted()));
+  connect(m_Acquisition.data(), SIGNAL(acquiredFrame(QString,int,int,int,int,int,int,int)),
+          this,                 SLOT(acquiredFrame(QString,int,int,int,int,int,int,int)));
+  connect(m_Acquisition.data(), SIGNAL(acquireComplete()),
+          this,                 SLOT(acquireComplete()));
 
   m_Acquisition -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
 
@@ -1269,7 +1268,7 @@ QxrdDataProcessor *QxrdWindow::dataProcessor() const
   return m_DataProcessor;
 }
 
-QxrdAcquisition *QxrdWindow::acquisition() const
+QxrdAcquisitionPtr QxrdWindow::acquisition() const
 {
   return m_Acquisition;
 }

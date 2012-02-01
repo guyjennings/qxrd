@@ -2,14 +2,11 @@
 #define QXRDACQUISITIONTHREAD_H
 
 #include "qxrdthread.h"
-#include <QAtomicPointer>
-#include <QStringList>
-#include <QDateTime>
+#include "qxrdacquisition.h"
 #include <QSettings>
 
 class QxrdDataProcessor;
 class QxrdAllocator;
-class QxrdAcquisition;
 class QxrdExperiment;
 class QxrdSettingsSaver;
 
@@ -28,22 +25,11 @@ class QxrdAcquisitionThread : public QxrdThread
 
   ~QxrdAcquisitionThread();
 
-//  void initialize();
   void shutdown();
   void msleep(int msec);
 
-//  static QStringList detectorTypeNames();
-//  static int detectorType();
-
-public slots:
-  void doAcquire();
-  void cancel();
-
-  void doAcquireDark();
-  void cancelDark();
-
 public:
-  QxrdAcquisition *acquisition() const;
+  QxrdAcquisitionPtr acquisition() const;
 
 public:
   void sleep(double time);
@@ -56,7 +42,7 @@ private:
   QxrdSettingsSaver                  *m_Saver;
   QxrdExperiment                     *m_Experiment;
   QxrdAllocator                      *m_Allocator;
-  QAtomicPointer<QxrdAcquisition>     m_Acquisition;
+  QxrdAcquisitionPtr                  m_Acquisition;
   QxrdDataProcessor                  *m_Processor;
   int                                 m_DetectorType;
   QSettings                          *m_Settings;

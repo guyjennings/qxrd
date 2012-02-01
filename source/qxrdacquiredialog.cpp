@@ -92,12 +92,12 @@ void QxrdAcquireDialog::changeEvent(QEvent *e)
 
 void QxrdAcquireDialog::doAcquire()
 {
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "acquire"));
+  m_Acquisition -> acquire();
 }
 
 void QxrdAcquireDialog::doAcquireDark()
 {
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "acquireDark"));
+  m_Acquisition -> acquireDark();
 }
 
 void QxrdAcquireDialog::doCancel()

@@ -87,7 +87,7 @@ bool QxrdExperiment::init(QSettings *settings)
 
   m_DataProcessorThread = new QxrdDataProcessorThread(saver(),
                                                       this,
-                                                      NULL,
+                                                      QxrdAcquisitionPtr(),
                                                       m_Application->allocator(),
                                                       m_FileSaverThread,
                                                       settings,
@@ -298,7 +298,7 @@ QxrdAcquisitionThread *QxrdExperiment::acquisitionThread()
   return m_AcquisitionThread;
 }
 
-QxrdAcquisition *QxrdExperiment::acquisition() const
+QxrdAcquisitionPtr QxrdExperiment::acquisition() const
 {
   return m_Acquisition;
 }

@@ -63,8 +63,6 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 {
   shutdown();
 
-  delete m_Acquisition;
-
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionThread::~QxrdAcquisitionThread\n");
   }
@@ -76,45 +74,45 @@ void QxrdAcquisitionThread::run()
     m_Experiment->printMessage("Starting Acquisition Thread");
   }
 
-  QxrdAcquisition *p = NULL;
+  QxrdAcquisitionPtr p/* = NULL*/;
 
   switch(m_DetectorType) {
   case QxrdAcquisition::SimulatedDetector:
-    p = new QxrdAcquisitionSimulated(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
+    p = QxrdAcquisitionPtr(new QxrdAcquisitionSimulated(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
     break;
 
 #ifdef HAVE_PERKIN_ELMER
   case QxrdAcquisition::PerkinElmerDetector:
     if (g_PEAvailable) {
-      p = new QxrdAcquisitionPerkinElmer(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
+      p = QxrdAcquisitionPtr(new QxrdAcquisitionPerkinElmer(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
     }
     break;
 #endif
 
 #ifdef HAVE_PILATUS
   case QxrdAcquisition::PilatusDetector:
-    p = new QxrdAcquisitionPilatus(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
+    p = QxrdAcquisitionPtr(new QxrdAcquisitionPilatus(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
     break;
 #endif
 
 #ifdef HAVE_AREADETECTOR
   case QxrdAcquisition::EpicsAreaDetector:
-    p = new QxrdAcquisitionAreaDetector(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
+    p = QxrdAcquisitionPtr(new QxrdAcquisitionAreaDetector(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
     break;
 #endif
 
   case QxrdAcquisition::FileWatcherDetector:
-    p = new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
+    p = QxrdAcquisitionPtr(new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
     break;
   }
 
   if (p == NULL) {
-    p = new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section);
+    p = QxrdAcquisitionPtr(new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
   }
 
   p -> initialize();
 
-  m_Acquisition.fetchAndStoreOrdered(p);
+  m_Acquisition = p;
 
   int rc = exec();
 
@@ -123,15 +121,6 @@ void QxrdAcquisitionThread::run()
   }
 }
 
-//void QxrdAcquisitionThread::initialize()
-//{
-//  if (m_Acquisition) {
-//    INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition,"initialize",Qt::BlockingQueuedConnection));
-//    m_Acquisition->set_DetectorType(g_DetectorType);
-//    m_Acquisition->set_DetectorTypeName(detectorTypeNames()[g_DetectorType]);
-//  }
-//}
-
 void QxrdAcquisitionThread::shutdown()
 {
   exit();
@@ -139,32 +128,12 @@ void QxrdAcquisitionThread::shutdown()
   wait();
 }
 
-void QxrdAcquisitionThread::doAcquire()
-{
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "acquire", Qt::QueuedConnection));
-}
-
-void QxrdAcquisitionThread::doAcquireDark()
-{
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "acquireDark", Qt::QueuedConnection));
-}
-
 void QxrdAcquisitionThread::msleep(int msec)
 {
   QThread::msleep(msec);
 }
 
-void QxrdAcquisitionThread::cancel()
-{
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "cancel", Qt::QueuedConnection));
-}
-
-void QxrdAcquisitionThread::cancelDark()
-{
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Acquisition, "cancelDark", Qt::QueuedConnection));
-}
-
-QxrdAcquisition *QxrdAcquisitionThread::acquisition() const
+QxrdAcquisitionPtr QxrdAcquisitionThread::acquisition() const
 {
   while (m_Acquisition == NULL) {
     QThread::msleep(50);
@@ -177,21 +146,3 @@ void QxrdAcquisitionThread::sleep(double time)
 {
   QThread::usleep((int)(time*1e6));
 }
-
-//QStringList QxrdAcquisitionThread::detectorTypeNames()
-//{
-//  QStringList res;
-
-//  res << "Simulated Detector"
-//      << "Perkin Elmer Flat Panel"
-//      << "Pilatus"
-//      << "EPICS Area Detector"
-//      << "Files in Directory";
-
-//  return res;
-//}
-
-//int QxrdAcquisitionThread::detectorType()
-//{
-//  return g_DetectorType;
-//}

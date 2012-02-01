@@ -42,7 +42,7 @@ public:
 
   QxrdApplication *application() const;
   QxrdExperiment  *experiment() const;
-  QxrdAcquisition *acquisition() const;
+  QxrdAcquisitionPtr acquisition() const;
   QxrdDataProcessor *dataProcessor() const;
   QxrdWindow      *window() const;
 
@@ -80,7 +80,7 @@ private:
   mutable QMutex         m_Mutex;
   QxrdApplication       *m_Application;
   QxrdExperiment        *m_Experiment;
-  QxrdAcquisition       *m_Acquisition;
+  QxrdAcquisitionPtr     m_Acquisition;
   QxrdDataProcessor     *m_DataProcessor;
   QxrdWindow            *m_Window;
 

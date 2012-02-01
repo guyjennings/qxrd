@@ -59,7 +59,11 @@ QxrdAcquireDialogBase *QxrdAcquisitionFileWatcher::controlPanel(QxrdWindow *win)
   if (win) {
     m_Window = win;
 
-    m_ControlPanel = new QxrdAcquireFileWatcherDialog(m_Experiment, m_Window, this, m_DataProcessor, m_Window);
+    m_ControlPanel = new QxrdAcquireFileWatcherDialog(m_Experiment,
+                                                      m_Window,
+                                                      this,
+                                                      m_DataProcessor,
+                                                      m_Window);
 
     return m_ControlPanel;
   } else {

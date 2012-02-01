@@ -18,7 +18,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperiment 
 
 //  connect(m_DetectorTypeCombo, SIGNAL(currentIndexChanged(int)), m_DetectorPrefsStack, SLOT(setCurrentIndex(int)));
 
-  QxrdAcquisition *acq = m_Experiment -> acquisition();
+  QxrdAcquisitionPtr acq = m_Experiment -> acquisition();
   QxrdDataProcessor *proc = m_Experiment->dataProcessor();
 //  QxrdAllocator *alloc = g_Application->allocator();
 
@@ -162,7 +162,7 @@ void QxrdExperimentPreferencesDialog::accept()
 //    restartNeeded = true;
 //  }
 
-  QxrdAcquisition *acq = m_Experiment -> acquisition();
+  QxrdAcquisitionPtr acq = m_Experiment -> acquisition();
   QxrdDataProcessor *proc = m_Experiment->dataProcessor();
 
   if (runSpecServer != m_Experiment -> get_RunSpecServer()) {

@@ -17,7 +17,6 @@
 
 class QxrdAllocator;
 class QxrdDataProcessor;
-class QxrdAcquisition;
 
 class QxrdFileSaver : public QObject
 {
@@ -28,7 +27,7 @@ public:
   ~QxrdFileSaver();
 
   void setProcessor(QxrdDataProcessor *proc);
-  void setAcquisition(QxrdAcquisition *acq);
+  void setAcquisition(QxrdAcquisitionPtr acq);
 
 public:
   enum {
@@ -51,13 +50,13 @@ private:
   void mkPath(QString filePath);
   QString uniqueFileName(QString name);
   QxrdDataProcessor *processor() const;
-  QxrdAcquisition *acquisition() const;
+  QxrdAcquisitionPtr acquisition() const;
   void saveOverflowData(QString name, QxrdMaskDataPtr overflow);
 
 private:
   QxrdDataProcessor *m_Processor;
   QxrdAllocator     *m_Allocator;
-  QxrdAcquisition   *m_Acquisition;
+  QxrdAcquisitionPtr m_Acquisition;
 };
 
 #endif

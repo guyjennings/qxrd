@@ -6,10 +6,7 @@
 #include <QDateTime>
 
 class QxrdApplication;
-class QxrdWindow;
 class QxrdExperiment;
-class QxrdAcquisition;
-class QxrdDataProcessor;
 class QxrdScriptEngine;
 
 class QxrdScriptEngineThread : public QxrdThread

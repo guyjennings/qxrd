@@ -3,6 +3,7 @@
 
 #include "qcepmacros.h"
 #include "qxrdacquiredialogbase.h"
+#include "qxrdacquisition.h"
 #include "ui_qxrdacquiredialog.h"
 
 class QxrdAcquireDialog : public QxrdAcquireDialogBase, public Ui::QxrdAcquireDialog {

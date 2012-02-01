@@ -29,7 +29,7 @@ void QxrdFileSaver::setProcessor(QxrdDataProcessor *proc)
   m_Processor = proc;
 }
 
-void QxrdFileSaver::setAcquisition(QxrdAcquisition *acq)
+void QxrdFileSaver::setAcquisition(QxrdAcquisitionPtr acq)
 {
   m_Acquisition = acq;
 }
@@ -43,7 +43,7 @@ QxrdDataProcessor *QxrdFileSaver::processor() const
   return m_Processor;
 }
 
-QxrdAcquisition *QxrdFileSaver::acquisition() const
+QxrdAcquisitionPtr QxrdFileSaver::acquisition() const
 {
   if (m_Acquisition == NULL) {
     g_Application->printMessage("acquisition == NULL in QxrdFileSaver::acquisition\n");

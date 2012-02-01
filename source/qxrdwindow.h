@@ -8,10 +8,10 @@
 #include <QScriptValue>
 
 #include "ui_qxrdwindow.h"
+#include "qxrdacquisition.h"
 
 class QxrdApplication;
 class QxrdExperiment;
-class QxrdAcquisition;
 class QxrdDataProcessor;
 class QxrdAllocator;
 class QxrdScriptEngine;
@@ -40,7 +40,7 @@ public:
   QxrdWindow(QxrdSettingsSaver *saver,
              QxrdApplication *app,
              QxrdExperiment *doc,
-             QxrdAcquisition *acq,
+             QxrdAcquisitionPtr acq,
              QxrdDataProcessor *proc,
              QxrdAllocator *alloc,
              QSettings *settings,
@@ -128,7 +128,7 @@ public:
   QxrdDoubleImageDataPtr data();
   QxrdMaskDataPtr mask();
 
-  QxrdAcquisition *acquisition() const;
+  QxrdAcquisitionPtr acquisition() const;
 
   void captureSize();
   void resizeEvent(QResizeEvent *);
@@ -153,7 +153,7 @@ private:
   QxrdApplication                       *m_Application;
   QxrdSettingsSaver                     *m_Saver;
   QxrdExperiment                        *m_Experiment;
-  QxrdAcquisition                       *m_Acquisition;
+  QxrdAcquisitionPtr                     m_Acquisition;
   QxrdDataProcessor                     *m_DataProcessor;
   QxrdAllocator                         *m_Allocator;
   QxrdAcquireDialogBase                 *m_AcquireDialog;

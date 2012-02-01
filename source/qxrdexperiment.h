@@ -29,7 +29,7 @@ public:
   virtual ~QxrdExperiment();
 
   QxrdAcquisitionThread *acquisitionThread();
-  QxrdAcquisition *acquisition() const;
+  QxrdAcquisitionPtr acquisition() const;
   QxrdWindow *window();
   QxrdDataProcessor *dataProcessor() const;
 
@@ -151,7 +151,7 @@ private:
   QxrdDataProcessorThread        *m_DataProcessorThread;
   QxrdDataProcessor              *m_DataProcessor;
   QxrdAcquisitionThread          *m_AcquisitionThread;
-  QxrdAcquisition                *m_Acquisition;
+  QxrdAcquisitionPtr              m_Acquisition;
   QxrdFileSaverThread            *m_FileSaverThread;
   QxrdScriptEngineThread         *m_ScriptEngineThread;
   QxrdScriptEngine               *m_ScriptEngine;

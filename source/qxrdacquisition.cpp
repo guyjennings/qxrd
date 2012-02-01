@@ -69,29 +69,31 @@ void QxrdAcquisition::onBufferSizeChanged(int newMB)
 
 void QxrdAcquisition::acquire()
 {
-  THREAD_CHECK;
-
-  if (m_Acquiring.tryLock()) {
-    set_Cancelling(false);
-    set_Triggered(false);
-
-    m_Experiment->statusMessage("Starting acquisition");
-    emit acquireStarted();
-
-    QxrdAcquisitionParameterPack params(get_FilePattern(),
-                                        get_ExposureTime(),
-                                        get_SummedExposures(),
-                                        get_PreTriggerFiles(),
-                                        get_PostTriggerFiles(),
-                                        get_PhasesInGroup(),
-                                        get_SkippedExposuresAtStart(),
-                                        get_SkippedExposures());
-
-    QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquire, params);
-
-    m_Watcher.setFuture(res);
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "acquire", Qt::QueuedConnection));
   } else {
-    m_Experiment->statusMessage("Acquisition is already in progress");
+    if (m_Acquiring.tryLock()) {
+      set_Cancelling(false);
+      set_Triggered(false);
+
+      m_Experiment->statusMessage("Starting acquisition");
+      emit acquireStarted();
+
+      QxrdAcquisitionParameterPack params(get_FilePattern(),
+                                          get_ExposureTime(),
+                                          get_SummedExposures(),
+                                          get_PreTriggerFiles(),
+                                          get_PostTriggerFiles(),
+                                          get_PhasesInGroup(),
+                                          get_SkippedExposuresAtStart(),
+                                          get_SkippedExposures());
+
+      QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquire, params);
+
+      m_Watcher.setFuture(res);
+    } else {
+      m_Experiment->statusMessage("Acquisition is already in progress");
+    }
   }
 }
 
@@ -118,25 +120,27 @@ QxrdAcquisition::QxrdDarkAcquisitionParameterPack QxrdAcquisition::darkAcquisiti
 
 void QxrdAcquisition::acquireDark()
 {
-  THREAD_CHECK;
-
-  if (m_Acquiring.tryLock()) {
-    set_Cancelling(false);
-    set_Triggered(true);
-
-    m_Experiment->statusMessage("Starting dark acquisition");
-    emit acquireStarted();
-
-    QxrdDarkAcquisitionParameterPack params(get_FilePattern(),
-                                            get_ExposureTime(),
-                                            get_DarkSummedExposures(),
-                                            get_SkippedExposuresAtStart());
-
-    QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquireDark, params);
-
-    m_Watcher.setFuture(res);
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "acquireDark", Qt::QueuedConnection));
   } else {
-    m_Experiment->statusMessage("Acquisition is already in progress");
+    if (m_Acquiring.tryLock()) {
+      set_Cancelling(false);
+      set_Triggered(true);
+
+      m_Experiment->statusMessage("Starting dark acquisition");
+      emit acquireStarted();
+
+      QxrdDarkAcquisitionParameterPack params(get_FilePattern(),
+                                              get_ExposureTime(),
+                                              get_DarkSummedExposures(),
+                                              get_SkippedExposuresAtStart());
+
+      QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquireDark, params);
+
+      m_Watcher.setFuture(res);
+    } else {
+      m_Experiment->statusMessage("Acquisition is already in progress");
+    }
   }
 }
 
@@ -391,7 +395,11 @@ QxrdAcquireDialogBase *QxrdAcquisition::controlPanel(QxrdWindow *win)
   if (win) {
     m_Window = win;
 
-    m_ControlPanel = new QxrdAcquireDialog(m_Experiment, m_Window, this, m_DataProcessor, m_Window);
+    m_ControlPanel = new QxrdAcquireDialog(m_Experiment,
+                                           m_Window,
+                                           this,
+                                           m_DataProcessor,
+                                           m_Window);
 
     return m_ControlPanel;
   } else {

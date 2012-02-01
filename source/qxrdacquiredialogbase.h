@@ -2,10 +2,10 @@
 #define QXRDACQUIREDIALOGBASE_H
 
 #include <QDockWidget>
+#include "qxrdacquisition.h"
 
 class QxrdExperiment;
 class QxrdWindow;
-class QxrdAcquisition;
 class QxrdDataProcessor;
 #include <QMenu>
 

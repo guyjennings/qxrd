@@ -72,7 +72,7 @@ void QxrdFileSaverThread::setProcessor(QxrdDataProcessor *proc)
   fileSaver() -> setProcessor(proc);
 }
 
-void QxrdFileSaverThread::setAcquisition(QxrdAcquisition *acq)
+void QxrdFileSaverThread::setAcquisition(QxrdAcquisitionPtr acq)
 {
   fileSaver() -> setAcquisition(acq);
 }

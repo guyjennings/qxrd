@@ -4,10 +4,10 @@
 #include "qcepmacros.h"
 
 #include "qxrdthread.h"
+#include "qxrdacquisition.h"
 
 class QxrdAllocator;
 class QxrdDataProcessor;
-class QxrdAcquisition;
 class QxrdFileSaver;
 
 #include "qxrdimagedata.h"
@@ -24,7 +24,7 @@ public:
   void shutdown();
 
   void setProcessor(QxrdDataProcessor *proc);
-  void setAcquisition(QxrdAcquisition *acq);
+  void setAcquisition(QxrdAcquisitionPtr acq);
 
   void saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
   void saveData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);

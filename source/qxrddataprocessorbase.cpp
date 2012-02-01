@@ -21,7 +21,7 @@
 QxrdDataProcessorBase::QxrdDataProcessorBase(
     QxrdSettingsSaver *saver,
     QxrdExperiment *doc,
-    QxrdAcquisition *acq, QxrdAllocator *allocator,
+    QxrdAcquisitionPtr acq, QxrdAllocator *allocator,
     QxrdFileSaverThread *filesaver, QObject *parent) :
 
   QObject(parent),
@@ -134,7 +134,7 @@ void QxrdDataProcessorBase::shutdown()
   thread()->exit();
 }
 
-void QxrdDataProcessorBase::setAcquisition(QxrdAcquisition *acq)
+void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionPtr acq)
 {
   m_Acquisition = acq;
 

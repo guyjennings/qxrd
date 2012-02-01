@@ -9,8 +9,6 @@
 #include <QMutex>
 #include <QVector>
 
-class QxrdAcquisitionThread;
-
 class QxrdAcquisitionPerkinElmer : public QxrdAcquisition
 {
   Q_OBJECT

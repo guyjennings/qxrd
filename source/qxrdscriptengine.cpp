@@ -102,7 +102,7 @@ void QxrdScriptEngine::initialize()
   m_Acquisition   = m_Experiment->acquisition();
 
   if (m_Acquisition) {
-    globalObject().setProperty("acquisition",     newQObject(m_Acquisition));
+    globalObject().setProperty("acquisition",     newQObject(m_Acquisition.data()));
     globalObject().setProperty("synchronization", newQObject(m_Acquisition->synchronizedAcquisition()));
   }
 
@@ -134,7 +134,7 @@ QxrdExperiment *QxrdScriptEngine::experiment() const
   return m_Experiment;
 }
 
-QxrdAcquisition *QxrdScriptEngine::acquisition() const
+QxrdAcquisitionPtr QxrdScriptEngine::acquisition() const
 {
   return m_Acquisition;
 }
@@ -270,7 +270,7 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (!acq) return QScriptValue(engine, -1);
 
@@ -306,7 +306,7 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
       acq -> set_FilePattern(context -> argument(0).toString());
 
     case 0:
-      INVOKE_CHECK(QMetaObject::invokeMethod(acq, "acquire"));
+      acq->acquire();
     }
   }
 
@@ -318,7 +318,7 @@ QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptE
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (!acq) return QScriptValue(engine, -1);
 
@@ -336,7 +336,7 @@ QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptE
       acq -> set_FilePattern(context -> argument(0).toString());
 
     case 0:
-      INVOKE_CHECK(QMetaObject::invokeMethod(acq, "acquireDark"));
+      acq -> acquireDark();
     }
   }
 
@@ -348,7 +348,7 @@ QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
     QxrdDataProcessor *proc = eng->dataProcessor();
 
     if (!acq || !proc) return QScriptValue(engine, -1);
@@ -377,7 +377,7 @@ QScriptValue QxrdScriptEngine::acquireStatusFunc(QScriptContext *context, QScrip
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (acq) {
       if (context->argumentCount() == 0) {
@@ -417,7 +417,7 @@ QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext * /*context*/, Q
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (acq) {
       acq -> cancel();
@@ -434,7 +434,7 @@ QScriptValue QxrdScriptEngine::exposureTimeFunc(QScriptContext *context, QScript
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -453,7 +453,7 @@ QScriptValue QxrdScriptEngine::summedExposuresFunc(QScriptContext *context, QScr
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -472,7 +472,7 @@ QScriptValue QxrdScriptEngine::skippedExposuresFunc(QScriptContext *context, QSc
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -491,7 +491,7 @@ QScriptValue QxrdScriptEngine::darkSummedExposuresFunc(QScriptContext *context, 
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -510,7 +510,7 @@ QScriptValue QxrdScriptEngine::phasesInGroupFunc(QScriptContext *context, QScrip
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -529,7 +529,7 @@ QScriptValue QxrdScriptEngine::preTriggerFilesFunc(QScriptContext *context, QScr
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -548,7 +548,7 @@ QScriptValue QxrdScriptEngine::postTriggerFilesFunc(QScriptContext *context, QSc
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -567,7 +567,7 @@ QScriptValue QxrdScriptEngine::filePatternFunc(QScriptContext *context, QScriptE
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -605,7 +605,7 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisition *acq = eng->acquisition();
+    QxrdAcquisitionPtr acq = eng->acquisition();
 
     if (acq) {
       if (context->argumentCount() != 0) {

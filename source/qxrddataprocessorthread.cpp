@@ -5,7 +5,7 @@
 
 QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaver *saver,
                                                  QxrdExperiment *doc,
-                                                 QxrdAcquisition *acq,
+                                                 QxrdAcquisitionPtr acq,
                                                  QxrdAllocator *allocator,
                                                  QxrdFileSaverThread *filesaver,
                                                  QSettings *settings,
