@@ -54,7 +54,7 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_ScanFile(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdExperiment::QxrdExperiment\n");
+    printf("QxrdExperiment::QxrdExperiment(%p)\n", this);
   }
 
   readSettings(settings);
@@ -258,7 +258,7 @@ QxrdExperiment::~QxrdExperiment()
   closeLogFile();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdExperiment::~QxrdExperiment\n");
+    printf("QxrdExperiment::~QxrdExperiment(%p)\n", this);
   }
 }
 

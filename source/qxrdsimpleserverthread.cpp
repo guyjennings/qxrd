@@ -10,7 +10,7 @@ QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdExperiment *doc, QString name
     m_Server(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdSimpleServerThread::QxrdSimpleServerThread\n");
+    printf("QxrdSimpleServerThread::QxrdSimpleServerThread(%p)\n", this);
   }
 
 }
@@ -20,7 +20,7 @@ QxrdSimpleServerThread::~QxrdSimpleServerThread()
   shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdSimpleServerThread::~QxrdSimpleServerThread\n");
+    printf("QxrdSimpleServerThread::~QxrdSimpleServerThread(%p)\n", this);
   }
 }
 

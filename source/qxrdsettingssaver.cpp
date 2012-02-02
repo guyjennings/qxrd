@@ -11,7 +11,7 @@ QxrdSettingsSaver::QxrdSettingsSaver(QObject *parent, QObject *owner) :
   m_LastChangedBy(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdSettingsSaver::QxrdSettingsSaver\n");
+    printf("QxrdSettingsSaver::QxrdSettingsSaver(%p)\n", this);
   }
 
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(performSave()));
@@ -24,10 +24,10 @@ QxrdSettingsSaver::QxrdSettingsSaver(QObject *parent, QObject *owner) :
 QxrdSettingsSaver::~QxrdSettingsSaver()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdSettingsSaver::~QxrdSettingsSaver\n");
+    printf("QxrdSettingsSaver::~QxrdSettingsSaver(%p)\n", this);
   }
 
-  //  performSave();
+  performSave();
 }
 
 void QxrdSettingsSaver::performSave()
@@ -48,7 +48,7 @@ void QxrdSettingsSaver::performSave()
     QTime tic;
     tic.start();
 
-    INVOKE_CHECK(QMetaObject::invokeMethod(m_Owner, "writeSettings"));
+    INVOKE_CHECK(QMetaObject::invokeMethod(m_Owner, "writeSettings", Qt::DirectConnection));
 
     if (qcepDebug(DEBUG_PREFS)) {
       printMessage(tr("Saving settings took %1 msec").arg(tic.elapsed()));

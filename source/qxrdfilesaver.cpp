@@ -13,14 +13,14 @@ QxrdFileSaver::QxrdFileSaver
     m_Acquisition(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdFileSaver::QxrdFileSaver\n");
+    printf("QxrdFileSaver::QxrdFileSaver(%p)\n", this);
   }
 }
 
 QxrdFileSaver::~QxrdFileSaver()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdFileSaver::~QxrdFileSaver\n");
+    printf("QxrdFileSaver::~QxrdFileSaver(%p)\n", this);
   }
 }
 

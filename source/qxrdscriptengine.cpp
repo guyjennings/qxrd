@@ -28,14 +28,14 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdExperiment *exp)
     m_Window(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdScriptEngine::QxrdScriptEngine\n");
+    printf("QxrdScriptEngine::QxrdScriptEngine(%p)\n", this);
   }
 }
 
 QxrdScriptEngine::~QxrdScriptEngine()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdScriptEngine::~QxrdScriptEngine\n");
+    printf("QxrdScriptEngine::~QxrdScriptEngine(%p)\n", this);
   }
 }
 

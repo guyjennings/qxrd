@@ -21,7 +21,7 @@ QxrdAllocator::QxrdAllocator
     m_NAllocatedIntegrated(NULL, this, "nAllocatedIntegrated", 0)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdAllocator::QxrdAllocator\n");
+    printf("QxrdAllocator::QxrdAllocator(%p)\n", this);
   }
 
   if (qcepDebug(DEBUG_ALLOCATOR)) {
@@ -38,7 +38,7 @@ QxrdAllocator::QxrdAllocator
 QxrdAllocator::~QxrdAllocator()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdAllocator::~QxrdAllocator\n");
+    printf("QxrdAllocator::~QxrdAllocator(%p)\n", this);
   }
 
   if (qcepDebug(DEBUG_ALLOCATOR)) {

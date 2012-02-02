@@ -11,7 +11,7 @@ QxrdFileSaverThread::QxrdFileSaverThread(QxrdAllocatorPtr allocator)
     m_Allocator(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdFileSaverThread::QxrdFileSaverThread\n");
+    printf("QxrdFileSaverThread::QxrdFileSaverThread(%p)\n", this);
   }
 
   qRegisterMetaType<QxrdDoubleImageDataPtr>("QxrdDoubleImageDataPtr");
@@ -30,7 +30,7 @@ QxrdFileSaverThread::~QxrdFileSaverThread()
   shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdFileSaverThread::~QxrdFileSaverThread\n");
+    printf("QxrdFileSaverThread::~QxrdFileSaverThread(%p)\n", this);
   }
 }
 

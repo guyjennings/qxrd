@@ -99,7 +99,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
     m_Highlighter(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdWindow::QxrdWindow\n");
+    printf("QxrdWindow::QxrdWindow(%p)\n", this);
   }
 
   if (qcepDebug(DEBUG_APP)) {
@@ -504,7 +504,7 @@ QxrdWindow::~QxrdWindow()
   //  delete m_NewMask;
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdWindow::~QxrdWindow\n");
+    printf("QxrdWindow::~QxrdWindow(%p)\n", this);
   }
 }
 

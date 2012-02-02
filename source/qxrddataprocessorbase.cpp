@@ -103,7 +103,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_GenerateTestImage(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdDataProcessorBase::QxrdDataProcessorBase\n");
+    printf("QxrdDataProcessorBase::QxrdDataProcessorBase(%p)\n", this);
   }
 
   if (qcepDebug(DEBUG_APP)) {
@@ -122,7 +122,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
 QxrdDataProcessorBase::~QxrdDataProcessorBase()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdDataProcessorBase::~QxrdDataProcessorBase\n");
+    printf("QxrdDataProcessorBase::~QxrdDataProcessorBase(%p)\n", this);
   }
 }
 

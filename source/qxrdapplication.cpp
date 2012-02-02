@@ -114,7 +114,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_NIDAQPluginInterface(NULL),
     m_ResponseTimer(NULL)
 {
-  printf("QxrdApplication::QxrdApplication\n");
+  printf("QxrdApplication::QxrdApplication(%p)\n", this);
 
   g_Application = this;
 
@@ -258,7 +258,7 @@ QxrdApplication::~QxrdApplication()
     printMessage("QxrdApplication::~QxrdApplication finished");
   }
 
-  printf("QxrdApplication::~QxrdApplication\n");
+  printf("QxrdApplication::~QxrdApplication(%p)\n", this);
 }
 
 void QxrdApplication::openWelcomeWindow()

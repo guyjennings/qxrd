@@ -9,14 +9,14 @@ QxrdServer::QxrdServer(QxrdExperiment *doc, QString name, int port, QObject *par
   : QSpecServer(doc, name, port, parent)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdServer::QxrdServer\n");
+    printf("QxrdServer::QxrdServer(%p)\n", this);
   }
 }
 
 QxrdServer::~QxrdServer()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdServer::~QxrdServer\n");
+    printf("QxrdServer::~QxrdServer(%p)\n", this);
   }
 }
 

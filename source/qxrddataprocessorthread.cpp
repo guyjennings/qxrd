@@ -21,7 +21,7 @@ QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaver *saver,
     m_Section(section)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdDataProcessorThread::QxrdDataProcessorThread\n");
+    printf("QxrdDataProcessorThread::QxrdDataProcessorThread(%p)\n", this);
   }
 }
 
@@ -30,7 +30,7 @@ QxrdDataProcessorThread::~QxrdDataProcessorThread()
   shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdDataProcessorThread::~QxrdDataProcessorThread\n");
+    printf("QxrdDataProcessorThread::~QxrdDataProcessorThread(%p)\n", this);
   }
 }
 

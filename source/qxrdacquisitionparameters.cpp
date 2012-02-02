@@ -50,7 +50,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, 
     m_SynchronizedAcquisition(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdAcquisitionParameters::QxrdAcquisitionParameters\n");
+    printf("QxrdAcquisitionParameters::QxrdAcquisitionParameters(%p)\n", this);
   }
 
   connect(prop_Raw16SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
@@ -64,7 +64,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, 
 QxrdAcquisitionParameters::~QxrdAcquisitionParameters()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdAcquisitionParameters::~QxrdAcquisitionParameters\n");
+    printf("QxrdAcquisitionParameters::~QxrdAcquisitionParameters(%p)\n", this);
   }
 }
 

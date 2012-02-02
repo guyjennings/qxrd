@@ -10,7 +10,7 @@ QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication *app, QxrdExperim
     m_Experiment(exp)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdScriptEngineThread::QxrdScriptEngineThread\n");
+    printf("QxrdScriptEngineThread::QxrdScriptEngineThread(%p)\n", this);
   }
 }
 
@@ -19,7 +19,7 @@ QxrdScriptEngineThread::~QxrdScriptEngineThread()
   shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdScriptEngineThread::~QxrdScriptEngineThread\n");
+    printf("QxrdScriptEngineThread::~QxrdScriptEngineThread(%p)\n", this);
   }
 }
 

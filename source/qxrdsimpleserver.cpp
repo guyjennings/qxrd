@@ -11,7 +11,7 @@ QxrdSimpleServer::QxrdSimpleServer(QxrdExperiment *doc, QString name, int port, 
     m_Port(port)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdSimpleServer::QxrdSimpleServer\n");
+    printf("QxrdSimpleServer::QxrdSimpleServer(%p)\n", this);
   }
 
   connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));
@@ -20,7 +20,7 @@ QxrdSimpleServer::QxrdSimpleServer(QxrdExperiment *doc, QString name, int port, 
 QxrdSimpleServer::~QxrdSimpleServer()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdSimpleServer::~QxrdSimpleServer\n");
+    printf("QxrdSimpleServer::~QxrdSimpleServer(%p)\n", this);
   }
 }
 

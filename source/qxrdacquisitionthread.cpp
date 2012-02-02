@@ -43,7 +43,7 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaver *saver,
     m_Settings(settings)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdAcquisitionThread::QxrdAcquisitionThread\n");
+    printf("QxrdAcquisitionThread::QxrdAcquisitionThread(%p)\n", this);
   }
 
 #ifdef HAVE_PERKIN_ELMER
@@ -64,7 +64,7 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
   shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdAcquisitionThread::~QxrdAcquisitionThread\n");
+    printf("QxrdAcquisitionThread::~QxrdAcquisitionThread(%p)\n", this);
   }
 }
 

@@ -12,7 +12,7 @@ QxrdServerThread::QxrdServerThread(QxrdExperiment *doc, QString name, int port)
     m_Server(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdServerThread::QxrdServerThread\n");
+    printf("QxrdServerThread::QxrdServerThread(%p)\n", this);
   }
 }
 
@@ -21,7 +21,7 @@ QxrdServerThread::~QxrdServerThread()
   shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdServerThread::~QxrdServerThread\n");
+    printf("QxrdServerThread::~QxrdServerThread(%p)\n", this);
   }
 }
 
