@@ -12,22 +12,22 @@
 #include "qxrdimagequeue.h"
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
-#include "qxrdacquisition.h"
 #include "qxrdintegrateddata.h"
-#include "qxrddataprocessor.h"
+#include "qxrdallocator.h"
 
-class QxrdAllocator;
+class QxrdDataProcessor;
+class QxrdAcquisition;
 
 class QxrdFileSaver : public QObject
 {
   Q_OBJECT
 
 public:
-  QxrdFileSaver(QxrdAllocator *allocator, QObject *parent=0);
+  QxrdFileSaver(QxrdAllocatorPtr allocator, QObject *parent=0);
   ~QxrdFileSaver();
 
-  void setProcessor(QxrdDataProcessorPtr proc);
-  void setAcquisition(QxrdAcquisitionPtr acq);
+  void setProcessor(QSharedPointer<QxrdDataProcessor> proc);
+  void setAcquisition(QSharedPointer<QxrdAcquisition> acq);
 
 public:
   enum {
@@ -43,20 +43,22 @@ public slots:
   void saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
   void saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
   void saveTextData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
-  void writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName);
-  void writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QString fileName);
+  void writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName = QString());
+  void writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QString fileName = QString());
 
 private:
   void mkPath(QString filePath);
   QString uniqueFileName(QString name);
-  QxrdDataProcessorPtr processor() const;
-  QxrdAcquisitionPtr   acquisition() const;
+  QSharedPointer<QxrdDataProcessor> processor() const;
+  QSharedPointer<QxrdAcquisition>   acquisition() const;
   void saveOverflowData(QString name, QxrdMaskDataPtr overflow);
 
 private:
-  QxrdDataProcessorPtr m_Processor;
-  QxrdAllocator       *m_Allocator;
-  QxrdAcquisitionPtr   m_Acquisition;
+  QSharedPointer<QxrdDataProcessor> m_Processor;
+  QxrdAllocatorPtr                  m_Allocator;
+  QSharedPointer<QxrdAcquisition>   m_Acquisition;
 };
+
+typedef QSharedPointer<QxrdFileSaver> QxrdFileSaverPtr;
 
 #endif

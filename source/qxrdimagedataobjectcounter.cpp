@@ -1,9 +1,9 @@
 #include "qxrdimagedataobjectcounter.h"
-#include "qxrdallocatorinterface.h"
+#include "qxrdallocator.h"
 
 static QAtomicInt s_ImageDataObjectCounter;
 
-QxrdImageDataObjectCounter::QxrdImageDataObjectCounter(QxrdAllocatorInterface *alloc, int typ)
+QxrdImageDataObjectCounter::QxrdImageDataObjectCounter(QxrdAllocatorPtr alloc, int typ)
   : m_Allocator(alloc),
     m_Allocated(0),
     m_Type(typ)

@@ -13,7 +13,7 @@ class QxrdIntegratorCache : public QObject
 {
   Q_OBJECT
 public:
-  QxrdIntegratorCache(QxrdExperiment *exp, QxrdAllocator *alloc);
+  QxrdIntegratorCache(QxrdExperiment *exp, QxrdAllocatorPtr alloc);
 
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
   QCEP_INTEGER_PROPERTY(Oversample)
@@ -120,7 +120,7 @@ private:
   QAtomicInt             m_CacheFullLevel;
   QxrdInt32ImageDataPtr  m_CachedBinNumbers;
   QxrdExperiment        *m_Experiment;
-  QxrdAllocator         *m_Allocator;
+  QxrdAllocatorPtr       m_Allocator;
 };
 
 typedef QSharedPointer<QxrdIntegratorCache> QxrdIntegratorCachePtr;

@@ -41,7 +41,7 @@ static HACQDESC m_AcqDesc = NULL;
 QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdSettingsSaver *saver,
                                                        QxrdExperiment *doc,
                                                        QxrdDataProcessorPtr proc,
-                                                       QxrdAllocator *allocator,
+                                                       QxrdAllocatorPtr allocator,
                                                        QSettings *settings,
                                                        QString section)
   : QxrdAcquisition(PerkinElmerDetector, saver, doc, proc, allocator),
@@ -464,8 +464,9 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 //  tic.start();
 
   if (checkPluginAvailable()) {
-    QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image(QxrdAllocator::AllocateFromReserve,
-                                                             get_NCols(), get_NRows());
+    QxrdInt16ImageDataPtr image = QxrdAllocator::newInt16Image(m_Allocator,
+                                                               QxrdAllocator::AllocateFromReserve,
+                                                               get_NCols(), get_NRows());
 
 //    printf("allocator took %d msec\n", tic.restart());
 

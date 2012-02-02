@@ -28,4 +28,6 @@ private:
   QxrdExperiment     *m_Experiment;
 };
 
+typedef QSharedPointer<QxrdScriptEngineThread> QxrdScriptEngineThreadPtr;
+
 #endif // QXRDSCRIPTENGINETHREAD_H

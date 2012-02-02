@@ -14,7 +14,7 @@ QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, Q
 
   int debugLevel = m_Application -> get_Debug();
 
-  QxrdAllocator *alloc = m_Application->allocator();
+  QxrdAllocatorPtr alloc = m_Application->allocator();
 
   m_ReservedMemory32 -> setRange(500, 3000);
   m_ReservedMemory32 -> setValue(alloc->get_TotalBufferSizeMB32());
@@ -58,7 +58,7 @@ void QxrdGlobalPreferencesDialog::accept()
   int bufferSize64 = m_ReservedMemory64 -> value();
   int extraReserve = m_ExtraReservedMemory -> value();
 
-  QxrdAllocator *alloc = m_Application->allocator();
+  QxrdAllocatorPtr alloc = m_Application->allocator();
 
   m_Application -> set_Debug(debugLevel);
 

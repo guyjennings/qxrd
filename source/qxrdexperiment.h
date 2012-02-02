@@ -28,7 +28,7 @@ public:
   virtual bool init(QSettings *settings);
   virtual ~QxrdExperiment();
 
-  QxrdAcquisitionThread *acquisitionThread();
+  QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
   QxrdWindow *window();
   QxrdDataProcessorPtr dataProcessor() const;
@@ -39,7 +39,7 @@ public:
   FILE* scanFile();
   void newScanFile(QString path);
 
-  QxrdSettingsSaver *saver();
+  QxrdSettingsSaver *settingsSaver();
 public slots:
   QxrdScriptEnginePtr scriptEngine();
 
@@ -87,7 +87,7 @@ private:
   void openScanFile();
 
 public:  // Properties
-  QxrdSettingsSaver m_Saver;
+  QxrdSettingsSaver m_SettingsSaver;
 
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
   QCEP_INTEGER_PROPERTY(ExperimentKind)
@@ -144,16 +144,17 @@ private:
   QxrdApplication                *m_Application;
   QxrdWindow                     *m_Window;
   QSplashScreen                  *m_Splash;
-  QxrdServerThread               *m_ServerThread;
+  QxrdServerThreadPtr             m_ServerThread;
   QxrdServerPtr                   m_Server;
-  QxrdSimpleServerThread         *m_SimpleServerThread;
+  QxrdSimpleServerThreadPtr       m_SimpleServerThread;
   QxrdSimpleServerPtr             m_SimpleServer;
-  QxrdDataProcessorThread        *m_DataProcessorThread;
+  QxrdDataProcessorThreadPtr      m_DataProcessorThread;
   QxrdDataProcessorPtr            m_DataProcessor;
-  QxrdAcquisitionThread          *m_AcquisitionThread;
+  QxrdAcquisitionThreadPtr        m_AcquisitionThread;
   QxrdAcquisitionPtr              m_Acquisition;
-  QxrdFileSaverThread            *m_FileSaverThread;
-  QxrdScriptEngineThread         *m_ScriptEngineThread;
+  QxrdFileSaverThreadPtr          m_FileSaverThread;
+  QxrdFileSaverPtr                m_FileSaver;
+  QxrdScriptEngineThreadPtr       m_ScriptEngineThread;
   QxrdScriptEnginePtr             m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
 

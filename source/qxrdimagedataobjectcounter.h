@@ -2,12 +2,14 @@
 #define QXRDIMAGEDATAOBJECTCOUNTER_H
 
 #include <QObject>
+#include <QSharedPointer>
 
-class QxrdAllocatorInterface;
+class QxrdAllocator;
+typedef QSharedPointer<QxrdAllocator> QxrdAllocatorPtr;
 
 class QxrdImageDataObjectCounter {
 public:
-  QxrdImageDataObjectCounter(QxrdAllocatorInterface *alloc, int typ);
+  QxrdImageDataObjectCounter(QxrdAllocatorPtr alloc, int typ);
   ~QxrdImageDataObjectCounter();
 
   int value();
@@ -16,9 +18,9 @@ public:
   int allocatedMemoryMB();
 
 private:
-  QxrdAllocatorInterface *m_Allocator;
-  quint64                 m_Allocated;
-  int                     m_Type;
+  QxrdAllocatorPtr m_Allocator;
+  quint64          m_Allocated;
+  int              m_Type;
 };
 
 #endif // QXRDIMAGEDATAOBJECTCOUNTER_H

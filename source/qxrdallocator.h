@@ -12,9 +12,8 @@
 #include "qxrdintegrateddata.h"
 #include "qxrdintegrateddataqueue.h"
 #include "qxrdimagequeue.h"
-#include "qxrdallocatorinterface.h"
 
-class QxrdAllocator : public QxrdAllocatorInterface
+class QxrdAllocator : public QObject
 {
   Q_OBJECT
 
@@ -26,6 +25,14 @@ public:
   void writeSettings(QSettings *settings, QString section);
 
 public:
+  enum {
+    AllocateInt16      = 0,
+    AllocateInt32      = 1,
+    AllocateDouble     = 2,
+    AllocateMask       = 3,
+    AllocateIntegrated = 4
+  };
+
   enum AllocationStrategy {
     WaitTillAvailable,
     NullIfNotAvailable,
@@ -33,13 +40,14 @@ public:
     AlwaysAllocate
   };
 
-  QxrdInt16ImageDataPtr newInt16Image(AllocationStrategy strat, int width, int height);
-  QxrdInt32ImageDataPtr newInt32Image(AllocationStrategy strat, int width, int height);
-  QxrdDoubleImageDataPtr newDoubleImage(AllocationStrategy strat, int width, int height);
-  QxrdMaskDataPtr newMask(AllocationStrategy strat, int width, int height, int def=1);
-  QxrdIntegratedDataPtr newIntegratedData(AllocationStrategy strat, QxrdDoubleImageDataPtr image);
+  static QxrdInt16ImageDataPtr newInt16Image(QxrdAllocatorPtr alloc, AllocationStrategy strat, int width, int height);
+  static QxrdInt32ImageDataPtr newInt32Image(QxrdAllocatorPtr alloc, AllocationStrategy strat, int width, int height);
+  static QxrdDoubleImageDataPtr newDoubleImage(QxrdAllocatorPtr alloc, AllocationStrategy strat, int width, int height);
+  static QxrdMaskDataPtr newMask(QxrdAllocatorPtr alloc, AllocationStrategy strat, int width, int height, int def=1);
+  static QxrdIntegratedDataPtr newIntegratedData(QxrdAllocatorPtr alloc, AllocationStrategy strat, QxrdDoubleImageDataPtr image);
 
-  void newDoubleImageAndIntegratedData(AllocationStrategy strat,
+  static void newDoubleImageAndIntegratedData(QxrdAllocatorPtr alloc,
+                                              AllocationStrategy strat,
                                        int width, int height,
                                        QxrdDoubleImageDataPtr &img,
                                        QxrdIntegratedDataPtr &integ);
@@ -57,6 +65,13 @@ public:
 
   void changedSizeMB(int newMB);
 
+  QMutex *mutex();
+
+  void allocate(int typ, int sz, int width, int height);
+  void allocate(int typ, quint64 amt);
+  void deallocate(int typ, int sz, int width, int height);
+  void deallocate(int typ, quint64 amt);
+
 public slots:
   void report();
 
@@ -71,10 +86,6 @@ private:
   static void integratedDeleter(QxrdIntegratedData *integ);
   int waitTillAvailable(AllocationStrategy strat, int sizeMB);
 
-  void allocate(int typ, int sz, int width, int height);
-  void allocate(int typ, quint64 amt);
-  void deallocate(int typ, int sz, int width, int height);
-  void deallocate(int typ, quint64 amt);
 
 private:
   QMutex                m_Mutex;
@@ -117,5 +128,7 @@ private:
   Q_PROPERTY(int     nAllocatedIntegrated   READ get_NAllocatedIntegrated WRITE set_NAllocatedIntegrated STORED false)
   QCEP_INTEGER_PROPERTY(NAllocatedIntegrated)
 };
+
+typedef QSharedPointer<QxrdAllocator> QxrdAllocatorPtr;
 
 #endif

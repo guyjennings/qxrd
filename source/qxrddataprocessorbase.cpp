@@ -22,8 +22,9 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     QxrdSettingsSaver *saver,
     QxrdExperiment *doc,
     QSharedPointer<QxrdAcquisition> acq,
-    QxrdAllocator *allocator,
-    QxrdFileSaverThread *filesaver, QObject *parent) :
+    QxrdAllocatorPtr allocator,
+    QxrdFileSaverPtr filesaver,
+    QObject *parent) :
 
   QObject(parent),
   //    m_ProcessorType(this,"processorType",0),
@@ -83,11 +84,11 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_Saver(saver),
   m_Window(NULL),
   m_Allocator(allocator),
-  m_FileSaverThread(filesaver),
+  m_FileSaver(filesaver),
   m_Acquisition(acq),
   m_AcquiredInt16Images("acquiredInt16Images"),
   m_AcquiredInt32Images("acquiredInt32Images"),
-  m_Data(allocator -> newDoubleImage(QxrdAllocator::WaitTillAvailable, 2048, 2048)),
+  m_Data(QxrdAllocator::newDoubleImage(allocator, QxrdAllocator::WaitTillAvailable, 2048, 2048)),
   m_DarkFrame(NULL),
   m_BadPixels(NULL),
   m_GainMap(NULL),
@@ -116,11 +117,6 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_RefinedRingSetFitParameters = new QxrdRingSetFitParameters(saver, this);
   m_InitialRingSetData = new QxrdRingSetSampledData(saver, /*m_InitialRingSetFitParameters,*/ this);
   m_RefinedRingSetData = new QxrdRingSetSampledData(saver, /*m_RefinedRingSetFitParameters,*/ this);
-}
-
-QxrdFileSaverThread *QxrdDataProcessorBase::fileSaverThread() const
-{
-  return m_FileSaverThread;
 }
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()
@@ -171,10 +167,10 @@ void QxrdDataProcessorBase::setWindow(QxrdWindow *win)
   newMask();
 }
 
-QxrdSettingsSaver *QxrdDataProcessorBase::saver()
-{
-  return m_Saver;
-}
+//QxrdSettingsSaver *QxrdDataProcessorBase::saver()
+//{
+//  return m_Saver;
+//}
 
 void QxrdDataProcessorBase::writeSettings(QSettings *settings, QString section)
 {
@@ -259,7 +255,8 @@ QString QxrdDataProcessorBase::integratedOutputDirectory() const
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage(int width, int height)
 {
-  QxrdDoubleImageDataPtr res = m_Allocator -> newDoubleImage(QxrdAllocator::AlwaysAllocate,
+  QxrdDoubleImageDataPtr res = QxrdAllocator::newDoubleImage(m_Allocator,
+                                                             QxrdAllocator::AlwaysAllocate,
                                                              width, height);
 
   return res;
@@ -635,8 +632,9 @@ int QxrdDataProcessorBase::newMaskHeight() const
 void QxrdDataProcessorBase::newMaskStack()
 {
 
-  QxrdMaskDataPtr m = m_Allocator->newMask(QxrdAllocator::WaitTillAvailable,
-                                           newMaskWidth(), newMaskHeight());
+  QxrdMaskDataPtr m = QxrdAllocator::newMask(m_Allocator,
+                                             QxrdAllocator::WaitTillAvailable,
+                                             newMaskWidth(), newMaskHeight());
 
   m_Masks.push_front(m);
 
@@ -650,8 +648,9 @@ void QxrdDataProcessorBase::newMaskStack()
 void QxrdDataProcessorBase::pushMaskStack(QxrdMaskDataPtr m)
 {
   if (m == NULL) {
-    m = m_Allocator -> newMask(QxrdAllocator::WaitTillAvailable,
-                               newMaskWidth(), newMaskHeight());
+    m =  QxrdAllocator::newMask(m_Allocator,
+                                QxrdAllocator::WaitTillAvailable,
+                                newMaskWidth(), newMaskHeight());
 
     if (mask()) {
       mask()->copyMaskTo(m);
@@ -929,7 +928,7 @@ void QxrdDataProcessorBase::loadMask(QString name)
                 tr("QxrdDataProcessorBase::loadMask(%1)").arg(name));
     }
 
-  QxrdMaskDataPtr res = m_Allocator -> newMask(QxrdAllocator::WaitTillAvailable, 0,0);
+  QxrdMaskDataPtr res = QxrdAllocator::newMask(m_Allocator, QxrdAllocator::WaitTillAvailable, 0,0);
 
   QString path = filePathInCurrentDirectory(name);
 
@@ -972,37 +971,37 @@ void QxrdDataProcessorBase::clearMask()
 
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveData(name, image, overflow, canOverwrite);
+  m_FileSaver -> saveData(name, image, overflow, canOverwrite);
 }
 
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveData(name, image, overflow, canOverwrite);
+  m_FileSaver -> saveData(name, image, overflow, canOverwrite);
 }
 
 void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveRawData(name, image, overflow, canOverwrite);
+  m_FileSaver -> saveRawData(name, image, overflow, canOverwrite);
 }
 
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveData(name, image, overflow, canOverwrite);
+  m_FileSaver -> saveData(name, image, overflow, canOverwrite);
 }
 
 void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveRawData(name, image, overflow, canOverwrite);
+  m_FileSaver -> saveRawData(name, image, overflow, canOverwrite);
 }
 
 void QxrdDataProcessorBase::saveNamedMaskData(QString name, QxrdMaskDataPtr image, int canOverwrite)
 {
-  fileSaverThread() -> saveData(name, image, canOverwrite);
+  m_FileSaver -> saveData(name, image, canOverwrite);
 }
 
 void QxrdDataProcessorBase::saveNamedImageDataAsText(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  fileSaverThread() -> saveTextData(name, image, overflow, canOverwrite);
+  m_FileSaver -> saveTextData(name, image, overflow, canOverwrite);
 }
 
 void QxrdDataProcessorBase::clearDark()
@@ -1724,11 +1723,11 @@ void QxrdDataProcessorBase::ellipse(double cx, double cy, double a, double e, do
 void QxrdDataProcessorBase::writeOutputScan(QxrdIntegratedDataPtr data)
 {
   if (this->get_SaveIntegratedData()) {
-    fileSaverThread()->writeOutputScan(m_Experiment->scanFile(), data);
+    m_FileSaver->writeOutputScan(m_Experiment->scanFile(), data);
   }
 
   if (this->get_SaveIntegratedInSeparateFiles()) {
-    fileSaverThread()->writeOutputScan(integratedOutputDirectory(), data);
+    m_FileSaver->writeOutputScan(integratedOutputDirectory(), data);
   }
 }
 
@@ -1843,7 +1842,7 @@ QxrdGenerateTestImage *QxrdDataProcessorBase::generateTestImage() const
 
 void QxrdDataProcessorBase::newOutputScan(QString title)
 {
-  m_OutputScan = m_Allocator->newIntegratedData(QxrdAllocator::AlwaysAllocate, data());
+  m_OutputScan = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::AlwaysAllocate, data());
 
   m_OutputScan -> set_Title(title);
 }

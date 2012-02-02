@@ -63,8 +63,8 @@ public:
   void prepareForDarkAcquisition(QxrdAcquisition::QxrdDarkAcquisitionParameterPack *parms);
   void finishedAcquisition();
   void acquiredFrameAvailable(int currentPhase);
-  void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
-  QxrdNIDAQPluginInterface *nidaqPlugin() const;
+  void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
+  QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
@@ -73,13 +73,13 @@ public:
   QVector<double>  outputVoltage();
 
 private:
-  mutable QMutex             m_Mutex;
-  QxrdAcquisition           *m_Acquisition;
+  mutable QMutex              m_Mutex;
+  QxrdAcquisition            *m_Acquisition;
   QxrdAcquisition::QxrdAcquisitionParameterPack *m_AcquisitionParms;
-  QxrdNIDAQPluginInterface  *m_NIDAQPlugin;
-  int                        m_SyncMode;
-  QVector<double>            m_OutputTimes;
-  QVector<double>            m_OutputVoltage;
+  QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
+  int                         m_SyncMode;
+  QVector<double>             m_OutputTimes;
+  QVector<double>             m_OutputVoltage;
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITION_H

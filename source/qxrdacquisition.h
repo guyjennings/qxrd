@@ -20,12 +20,11 @@
 #include "qxrdrasterdata.h"
 #include "qxrdimagequeue.h"
 #include "qxrdacquisitionoperations.h"
+#include "qxrdnidaqplugininterface.h"
 
 class QxrdExperiment;
-class QxrdAllocator;
 class QxrdDataProcessor;
 class QxrdSynchronizedAcquisition;
-class QxrdNIDAQPluginInterface;
 class QxrdAcquireDialogBase;
 class QxrdWindow;
 
@@ -34,7 +33,11 @@ class QxrdAcquisition : public QxrdAcquisitionOperations
   Q_OBJECT
 
 public:
-  QxrdAcquisition(DetectorKind detectorKind, QxrdSettingsSaver *saver, QxrdExperiment *doc, QSharedPointer<QxrdDataProcessor> proc, QxrdAllocator *allocator);
+  QxrdAcquisition(DetectorKind detectorKind,
+                  QxrdSettingsSaver *saver,
+                  QxrdExperiment *doc,
+                  QSharedPointer<QxrdDataProcessor> proc,
+                  QxrdAllocatorPtr allocator);
   ~QxrdAcquisition();
 
   class QxrdAcquisitionParameterPack
@@ -143,8 +146,8 @@ public:
 
   QxrdSynchronizedAcquisition* synchronizedAcquisition() const;
 
-  void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
-  QxrdNIDAQPluginInterface *nidaqPlugin() const;
+  void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
+  QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;
 
   QxrdAcquisitionParameterPack acquisitionParameterPack();
   QxrdDarkAcquisitionParameterPack darkAcquisitionParameterPack();

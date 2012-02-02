@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaver *saver, QxrdDataProcessorBase *proc, QxrdAllocatorInterface *alloc, QObject *parent) :
+QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaver *saver, QxrdDataProcessorBase *proc, QxrdAllocatorPtr alloc, QObject *parent) :
     QObject(parent),
     m_Processor(proc),
     m_Allocator(alloc),
@@ -83,7 +83,7 @@ void QxrdGenerateTestImage::generateImage()
 {
   QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(NULL,
                                                                               m_Allocator,
-                                                                              QxrdAllocatorInterface::AllocateDouble,
+                                                                              QxrdAllocator::AllocateDouble,
                                                                               get_NCols(),
                                                                               get_NRows()));
 
@@ -148,7 +148,7 @@ void QxrdGenerateTestImage::generateTTHImage()
 {
   QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(NULL,
                                                                               m_Allocator,
-                                                                              QxrdAllocatorInterface::AllocateDouble,
+                                                                              QxrdAllocator::AllocateDouble,
                                                                               get_NCols(),
                                                                               get_NRows()));
 
@@ -192,7 +192,7 @@ void QxrdGenerateTestImage::generateChiImage()
 {
   QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(NULL,
                                                                               m_Allocator,
-                                                                              QxrdAllocatorInterface::AllocateDouble,
+                                                                              QxrdAllocator::AllocateDouble,
                                                                               get_NCols(),
                                                                               get_NRows()));
 

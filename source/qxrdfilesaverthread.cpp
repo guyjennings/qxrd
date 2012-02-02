@@ -5,7 +5,7 @@
 #include "qxrdintegrateddata.h"
 #include "qxrdapplication.h"
 
-QxrdFileSaverThread::QxrdFileSaverThread(QxrdAllocator *allocator)
+QxrdFileSaverThread::QxrdFileSaverThread(QxrdAllocatorPtr allocator)
   : QxrdThread(),
     m_FileSaver(NULL),
     m_Allocator(NULL)
@@ -22,14 +22,12 @@ QxrdFileSaverThread::QxrdFileSaverThread(QxrdAllocator *allocator)
   qRegisterMetaType<FILE*>("FILE*");
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
-  m_Allocator.fetchAndStoreOrdered(allocator);
+  m_Allocator = allocator;
 }
 
 QxrdFileSaverThread::~QxrdFileSaverThread()
 {
   shutdown();
-
-  delete m_FileSaver;
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdFileSaverThread::~QxrdFileSaverThread\n");
@@ -42,7 +40,9 @@ void QxrdFileSaverThread::run()
     g_Application->printMessage("Starting File Saver Thread");
   }
 
-  m_FileSaver.fetchAndStoreOrdered(new QxrdFileSaver(m_Allocator));
+  QxrdFileSaverPtr res(new QxrdFileSaver(m_Allocator));
+
+  m_FileSaver = res;
 
   int rc = exec();
 
@@ -58,7 +58,7 @@ void QxrdFileSaverThread::shutdown()
   wait();
 }
 
-QxrdFileSaver *QxrdFileSaverThread::fileSaver() const
+QxrdFileSaverPtr QxrdFileSaverThread::fileSaver() const
 {
   while (m_FileSaver == NULL) {
     QThread::msleep(50);
@@ -67,108 +67,108 @@ QxrdFileSaver *QxrdFileSaverThread::fileSaver() const
   return m_FileSaver;
 }
 
-void QxrdFileSaverThread::setProcessor(QxrdDataProcessorPtr proc)
-{
-  fileSaver() -> setProcessor(proc);
-}
+//void QxrdFileSaverThread::setProcessor(QxrdDataProcessorPtr proc)
+//{
+//  fileSaver() -> setProcessor(proc);
+//}
 
-void QxrdFileSaverThread::setAcquisition(QxrdAcquisitionPtr acq)
-{
-  fileSaver() -> setAcquisition(acq);
-}
+//void QxrdFileSaverThread::setAcquisition(QxrdAcquisitionPtr acq)
+//{
+//  fileSaver() -> setAcquisition(acq);
+//}
 
-void QxrdFileSaverThread::saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
-{
-  if (!QMetaObject::invokeMethod(fileSaver(), "saveData",
-                                 Q_ARG(QString,name),
-                                 Q_ARG(QxrdDoubleImageDataPtr,image),
-                                 Q_ARG(QxrdMaskDataPtr,overflow),
-                                 Q_ARG(int,canOverwrite))) {
-    g_Application->printMessage("QxrdFileSaverThread::saveData failed");
-  }
-}
+//void QxrdFileSaverThread::saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+//{
+//  if (!QMetaObject::invokeMethod(fileSaver(), "saveData",
+//                                 Q_ARG(QString,name),
+//                                 Q_ARG(QxrdDoubleImageDataPtr,image),
+//                                 Q_ARG(QxrdMaskDataPtr,overflow),
+//                                 Q_ARG(int,canOverwrite))) {
+//    g_Application->printMessage("QxrdFileSaverThread::saveData failed");
+//  }
+//}
 
-void QxrdFileSaverThread::saveData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
-{
-  if (!QMetaObject::invokeMethod(fileSaver(), "saveData",
-                                 Q_ARG(QString,name),
-                                 Q_ARG(QxrdInt32ImageDataPtr,image),
-                                 Q_ARG(QxrdMaskDataPtr,overflow),
-                                 Q_ARG(int,canOverwrite))) {
-    g_Application->printMessage("QxrdFileSaverThread::saveData failed");
-  }
-}
+//void QxrdFileSaverThread::saveData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+//{
+//  if (!QMetaObject::invokeMethod(fileSaver(), "saveData",
+//                                 Q_ARG(QString,name),
+//                                 Q_ARG(QxrdInt32ImageDataPtr,image),
+//                                 Q_ARG(QxrdMaskDataPtr,overflow),
+//                                 Q_ARG(int,canOverwrite))) {
+//    g_Application->printMessage("QxrdFileSaverThread::saveData failed");
+//  }
+//}
 
-void QxrdFileSaverThread::saveData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
-{
-  if (!QMetaObject::invokeMethod(fileSaver(), "saveData",
-                                 Q_ARG(QString,name),
-                                 Q_ARG(QxrdInt16ImageDataPtr,image),
-                                 Q_ARG(QxrdMaskDataPtr,overflow),
-                                 Q_ARG(int,canOverwrite))) {
-    g_Application->printMessage("QxrdFileSaverThread::saveData failed");
-  }
-}
+//void QxrdFileSaverThread::saveData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+//{
+//  if (!QMetaObject::invokeMethod(fileSaver(), "saveData",
+//                                 Q_ARG(QString,name),
+//                                 Q_ARG(QxrdInt16ImageDataPtr,image),
+//                                 Q_ARG(QxrdMaskDataPtr,overflow),
+//                                 Q_ARG(int,canOverwrite))) {
+//    g_Application->printMessage("QxrdFileSaverThread::saveData failed");
+//  }
+//}
 
-void QxrdFileSaverThread::saveData(QString name, QxrdMaskDataPtr image, int canOverwrite)
-{
-  if (!QMetaObject::invokeMethod(fileSaver(), "saveData",
-                                 Q_ARG(QString,name),
-                                 Q_ARG(QxrdMaskDataPtr,image),
-                                 Q_ARG(int,canOverwrite))) {
-    g_Application->printMessage("QxrdFileSaverThread::saveData failed");
-  }
-}
+//void QxrdFileSaverThread::saveData(QString name, QxrdMaskDataPtr image, int canOverwrite)
+//{
+//  if (!QMetaObject::invokeMethod(fileSaver(), "saveData",
+//                                 Q_ARG(QString,name),
+//                                 Q_ARG(QxrdMaskDataPtr,image),
+//                                 Q_ARG(int,canOverwrite))) {
+//    g_Application->printMessage("QxrdFileSaverThread::saveData failed");
+//  }
+//}
 
-void QxrdFileSaverThread::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
-{
-  if (!QMetaObject::invokeMethod(fileSaver(), "saveRawData",
-                                 Q_ARG(QString,name),
-                                 Q_ARG(QxrdInt32ImageDataPtr,image),
-                                 Q_ARG(QxrdMaskDataPtr,overflow),
-                                 Q_ARG(int,canOverwrite))) {
-    g_Application->printMessage("QxrdFileSaverThread::saveRawData failed");
-  }
-}
+//void QxrdFileSaverThread::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+//{
+//  if (!QMetaObject::invokeMethod(fileSaver(), "saveRawData",
+//                                 Q_ARG(QString,name),
+//                                 Q_ARG(QxrdInt32ImageDataPtr,image),
+//                                 Q_ARG(QxrdMaskDataPtr,overflow),
+//                                 Q_ARG(int,canOverwrite))) {
+//    g_Application->printMessage("QxrdFileSaverThread::saveRawData failed");
+//  }
+//}
 
-void QxrdFileSaverThread::saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
-{
-  if (!QMetaObject::invokeMethod(fileSaver(), "saveRawData",
-                                 Q_ARG(QString,name),
-                                 Q_ARG(QxrdInt16ImageDataPtr,image),
-                                 Q_ARG(QxrdMaskDataPtr,overflow),
-                                 Q_ARG(int,canOverwrite))) {
-    g_Application->printMessage("QxrdFileSaverThread::saveRawData failed");
-  }
-}
+//void QxrdFileSaverThread::saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+//{
+//  if (!QMetaObject::invokeMethod(fileSaver(), "saveRawData",
+//                                 Q_ARG(QString,name),
+//                                 Q_ARG(QxrdInt16ImageDataPtr,image),
+//                                 Q_ARG(QxrdMaskDataPtr,overflow),
+//                                 Q_ARG(int,canOverwrite))) {
+//    g_Application->printMessage("QxrdFileSaverThread::saveRawData failed");
+//  }
+//}
 
-void QxrdFileSaverThread::saveTextData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
-{
-  if (!QMetaObject::invokeMethod(fileSaver(), "saveTextData",
-                                 Q_ARG(QString,name),
-                                 Q_ARG(QxrdDoubleImageDataPtr,image),
-                                 Q_ARG(QxrdMaskDataPtr,overflow),
-                                 Q_ARG(int,canOverwrite))) {
-    g_Application->printMessage("QxrdFileSaverThread::saveTextData failed");
-  }
-}
+//void QxrdFileSaverThread::saveTextData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+//{
+//  if (!QMetaObject::invokeMethod(fileSaver(), "saveTextData",
+//                                 Q_ARG(QString,name),
+//                                 Q_ARG(QxrdDoubleImageDataPtr,image),
+//                                 Q_ARG(QxrdMaskDataPtr,overflow),
+//                                 Q_ARG(int,canOverwrite))) {
+//    g_Application->printMessage("QxrdFileSaverThread::saveTextData failed");
+//  }
+//}
 
-void QxrdFileSaverThread::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName)
-{
-  if (!QMetaObject::invokeMethod(fileSaver(), "writeOutputScan",
-                                 Q_ARG(FILE*, logFile),
-                                 Q_ARG(QxrdIntegratedDataPtr, data),
-                                 Q_ARG(QString, fileName))) {
-    g_Application->printMessage("QxrdFileSaverThread::writeOutputScan failed");
-  }
-}
+//void QxrdFileSaverThread::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName)
+//{
+//  if (!QMetaObject::invokeMethod(fileSaver(), "writeOutputScan",
+//                                 Q_ARG(FILE*, logFile),
+//                                 Q_ARG(QxrdIntegratedDataPtr, data),
+//                                 Q_ARG(QString, fileName))) {
+//    g_Application->printMessage("QxrdFileSaverThread::writeOutputScan failed");
+//  }
+//}
 
-void QxrdFileSaverThread::writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QString fileName)
-{
-  if (!QMetaObject::invokeMethod(fileSaver(), "writeOutputScan",
-                                 Q_ARG(QString, dir),
-                                 Q_ARG(QxrdIntegratedDataPtr, data),
-                                 Q_ARG(QString, fileName))) {
-    g_Application->printMessage("QxrdFileSaverThread::writeOutputScan failed");
-  }
-}
+//void QxrdFileSaverThread::writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QString fileName)
+//{
+//  if (!QMetaObject::invokeMethod(fileSaver(), "writeOutputScan",
+//                                 Q_ARG(QString, dir),
+//                                 Q_ARG(QxrdIntegratedDataPtr, data),
+//                                 Q_ARG(QString, fileName))) {
+//    g_Application->printMessage("QxrdFileSaverThread::writeOutputScan failed");
+//  }
+//}

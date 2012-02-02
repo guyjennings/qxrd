@@ -13,8 +13,8 @@ QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(
     QxrdSettingsSaver *saver,
     QxrdExperiment *doc,
     QxrdAcquisitionPtr acq,
-    QxrdAllocator *allocator,
-    QxrdFileSaverThread *filesaver,
+    QxrdAllocatorPtr allocator,
+    QxrdFileSaverPtr filesaver,
     QObject *parent)
   : QxrdDataProcessorBase(saver, doc, acq, allocator, filesaver, parent)
 {
@@ -196,7 +196,7 @@ void QxrdDataProcessorThreaded::onCorrectedImageAvailable()
 {
   QxrdDoubleImageDataPtr img = m_CorrectedImages.dequeue();
   QxrdMaskDataPtr mask = (img ? img->mask() : QxrdMaskDataPtr());
-  QxrdIntegratedDataPtr integ = m_Allocator->newIntegratedData(QxrdAllocator::AlwaysAllocate, img);
+  QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::AlwaysAllocate, img);
 
   if (img) {
     m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessorThreaded::integrateImage,
@@ -344,7 +344,7 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
   QxrdDoubleImageDataPtr img;
   QxrdIntegratedDataPtr  result;
 
-  m_Allocator->newDoubleImageAndIntegratedData(QxrdAllocator::AlwaysAllocate, 0,0, img, result);
+  QxrdAllocator::newDoubleImageAndIntegratedData(m_Allocator, QxrdAllocator::AlwaysAllocate, 0,0, img, result);
 
   QString path = filePathInCurrentDirectory(name);
 
@@ -466,7 +466,7 @@ void QxrdDataProcessorThreaded::processNormalizedFile(QString name, QList<double
 
 void QxrdDataProcessorThreaded::slicePolygon(QVector<QwtDoublePoint> poly)
 {
-  QxrdIntegratedDataPtr integ = m_Allocator->newIntegratedData(QxrdAllocator::WaitTillAvailable, data());
+  QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::WaitTillAvailable, data());
 
   m_IntegratedData.enqueue(
       QtConcurrent::run(m_Integrator,
@@ -477,7 +477,7 @@ void QxrdDataProcessorThreaded::slicePolygon(QVector<QwtDoublePoint> poly)
 
 void QxrdDataProcessorThreaded::integrateSaveAndDisplay()
 {
-  QxrdIntegratedDataPtr integ = m_Allocator->newIntegratedData(QxrdAllocator::WaitTillAvailable, data());
+  QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::WaitTillAvailable, data());
 
   m_IntegratedData.enqueue(
       QtConcurrent::run(m_Integrator,
@@ -515,7 +515,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
 
         image->correctBadBackgroundSubtraction(dark,nImgExposures,nDarkExposures);
 
-        fileSaverThread()->saveData(path, image, QxrdMaskDataPtr(), NoOverwrite);
+        m_FileSaver->saveData(path, image, QxrdMaskDataPtr(), NoOverwrite);
       } else {
         m_Experiment->printMessage(tr("Failed to load image from %1").arg(path));
       }

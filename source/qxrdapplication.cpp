@@ -196,7 +196,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     }
   }
 
-  m_AllocatorThread = new QxrdAllocatorThread(&m_Saver);
+  m_AllocatorThread = QxrdAllocatorThreadPtr(
+        new QxrdAllocatorThread(&m_Saver));
   m_AllocatorThread -> setObjectName("alloc");
   m_AllocatorThread -> start();
   m_Allocator = m_AllocatorThread -> allocator();
@@ -247,7 +248,7 @@ QxrdApplication::~QxrdApplication()
 
   writeSettings();
 
-  delete m_AllocatorThread;
+//  delete m_AllocatorThread;
 
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdApplication::~QxrdApplication");
@@ -295,14 +296,14 @@ QxrdApplication* QxrdApplication::application()
 
 #ifdef HAVE_PERKIN_ELMER
 
-QxrdPerkinElmerPluginInterface* QxrdApplication::perkinElmerPlugin()
+QxrdPerkinElmerPluginInterfacePtr QxrdApplication::perkinElmerPlugin()
 {
   return m_PerkinElmerPluginInterface;
 }
 
 #endif
 
-QxrdNIDAQPluginInterface* QxrdApplication::nidaqPlugin()
+QxrdNIDAQPluginInterfacePtr QxrdApplication::nidaqPlugin()
 {
   return m_NIDAQPluginInterface;
 }
@@ -347,7 +348,7 @@ void QxrdApplication::loadPlugins()
         if (perkinElmer) {
           pluginName = perkinElmer -> name();
 
-          m_PerkinElmerPluginInterface = perkinElmer;
+          m_PerkinElmerPluginInterface = QxrdPerkinElmerPluginInterfacePtr(perkinElmer);
         }
 #endif
 
@@ -356,7 +357,7 @@ void QxrdApplication::loadPlugins()
         if (nidaq) {
           pluginName = nidaq -> name();
 
-          m_NIDAQPluginInterface = nidaq;
+          m_NIDAQPluginInterface = QxrdNIDAQPluginInterfacePtr(nidaq);
         }
 
         splashMessage(tr("Qxrd Version " STR(QXRD_VERSION) "\nLoaded plugin \"%1\"").arg(pluginName));
@@ -544,7 +545,7 @@ bool QxrdApplication::wantToQuit()
                                   QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
-QxrdAllocator *QxrdApplication::allocator() const
+QxrdAllocatorPtr QxrdApplication::allocator() const
 {
   return m_Allocator;
 }

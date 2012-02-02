@@ -12,7 +12,7 @@ public:
   QxrdAcquisitionSimulated(QxrdSettingsSaver *saver,
                            QxrdExperiment *doc,
                            QxrdDataProcessorPtr proc,
-                           QxrdAllocator *allocator,
+                           QxrdAllocatorPtr allocator,
                            QSettings *settings,
                            QString section);
 

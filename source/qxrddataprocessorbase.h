@@ -17,11 +17,11 @@
 #include "qxrdintegrateddata.h"
 #include "qxrdringsetfitparameters.h"
 #include "qxrdringsetsampleddata.h"
+#include "qxrdfilesaver.h"
 #include <qwt_double_rect.h>
 
 class QxrdExperiment;
 class QxrdAllocator;
-class QxrdFileSaverThread;
 class QxrdWindow;
 class QxrdCenterFinder;
 class QxrdIntegrator;
@@ -36,8 +36,8 @@ public:
   QxrdDataProcessorBase(QxrdSettingsSaver *saver,
                         QxrdExperiment *doc,
                         QSharedPointer<QxrdAcquisition> acq,
-                        QxrdAllocator *allocator,
-                        QxrdFileSaverThread *filesaver,
+                        QxrdAllocatorPtr allocator,
+                        QxrdFileSaverPtr filesaver,
                         QObject *parent=0);
   ~QxrdDataProcessorBase();
 
@@ -302,7 +302,7 @@ public:
   void setAcquisition(QSharedPointer<QxrdAcquisition> acq);
   void setWindow(QxrdWindow *win);
 
-  QxrdSettingsSaver     *saver();
+//  QxrdSettingsSaver     *saver();
 
   QxrdDoubleImageDataPtr data() const;
   QxrdDoubleImageDataPtr darkImage() const;
@@ -319,8 +319,6 @@ public:
   QxrdRingSetSampledDataPtr   initialRingSetData() const;
   QxrdRingSetFitParametersPtr refinedRingSetFitParameters() const;
   QxrdRingSetSampledDataPtr   refinedRingSetData() const;
-
-  QxrdFileSaverThread *fileSaverThread() const;
 
   QxrdGenerateTestImage *generateTestImage() const;
 
@@ -378,8 +376,8 @@ protected:
   QxrdExperiment        *m_Experiment;
   QxrdSettingsSaver     *m_Saver;
   QxrdWindow            *m_Window;
-  QxrdAllocator         *m_Allocator;
-  QxrdFileSaverThread   *m_FileSaverThread;
+  QxrdAllocatorPtr       m_Allocator;
+  QxrdFileSaverPtr       m_FileSaver;
   QSharedPointer<QxrdAcquisition>     m_Acquisition;
   QWaitCondition         m_ProcessWaiting;
   QxrdInt16ImageQueue    m_AcquiredInt16Images;

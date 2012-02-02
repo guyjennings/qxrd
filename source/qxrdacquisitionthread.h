@@ -18,7 +18,7 @@ class QxrdAcquisitionThread : public QxrdThread
   QxrdAcquisitionThread(QxrdSettingsSaver *saver,
                         QxrdExperiment *doc,
                         QxrdDataProcessorPtr proc,
-                        QxrdAllocator *allocator,
+                        QxrdAllocatorPtr allocator,
                         int detectorType,
                         QSettings *settings,
                         QString section);
@@ -41,12 +41,14 @@ private:
   int                                 m_Debug;
   QxrdSettingsSaver                  *m_Saver;
   QxrdExperiment                     *m_Experiment;
-  QxrdAllocator                      *m_Allocator;
+  QxrdAllocatorPtr                    m_Allocator;
   QxrdAcquisitionPtr                  m_Acquisition;
   QxrdDataProcessorPtr                m_Processor;
   int                                 m_DetectorType;
   QSettings                          *m_Settings;
   QString                             m_Section;
 };
+
+typedef QSharedPointer<QxrdAcquisitionThread> QxrdAcquisitionThreadPtr;
 
 #endif

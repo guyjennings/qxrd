@@ -28,7 +28,7 @@ static int g_PEAvailable = false;
 QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaver *saver,
                                              QxrdExperiment *doc,
                                              QxrdDataProcessorPtr proc,
-                                             QxrdAllocator *allocator,
+                                             QxrdAllocatorPtr allocator,
                                              int detectorType,
                                              QSettings *settings,
                                              QString section)

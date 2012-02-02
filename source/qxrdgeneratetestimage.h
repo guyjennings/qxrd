@@ -14,7 +14,10 @@ class QxrdGenerateTestImage : public QObject
 {
   Q_OBJECT
 public:
-  QxrdGenerateTestImage(QxrdSettingsSaver *saver, QxrdDataProcessorBase *proc, QxrdAllocatorInterface *alloc, QObject *parent);
+  QxrdGenerateTestImage(QxrdSettingsSaver *saver,
+                        QxrdDataProcessorBase *proc,
+                        QxrdAllocatorPtr alloc,
+                        QObject *parent);
 
 public slots:
   void setDimension(int nc, int nr);
@@ -32,7 +35,7 @@ public slots:
 
 public:
   QxrdDataProcessorBase  *m_Processor;
-  QxrdAllocatorInterface *m_Allocator;
+  QxrdAllocatorPtr        m_Allocator;
   QxrdDetectorGeometry   *m_Geometry;
 
   Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows)

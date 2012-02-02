@@ -1,5 +1,6 @@
 #include "qxrdintegrateddataqueue.h"
 #include "qxrdapplication.h"
+#include "qxrdintegrateddata.h"
 
 QxrdIntegratedDataQueue::QxrdIntegratedDataQueue(QString name) :
     m_Name(name)

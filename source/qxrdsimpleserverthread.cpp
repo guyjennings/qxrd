@@ -1,6 +1,7 @@
 #include "qxrdsimpleserver.h"
 #include "qxrdsimpleserverthread.h"
 #include "qxrdexperiment.h"
+#include "qxrdapplication.h"
 
 QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdExperiment *doc, QString name, int port) :
     m_Experiment(doc),

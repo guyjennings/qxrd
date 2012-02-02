@@ -57,7 +57,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
                        QxrdExperiment *doc,
                        QxrdAcquisitionPtr acq,
                        QxrdDataProcessorPtr proc,
-                       QxrdAllocator *alloc,
+                       QxrdAllocatorPtr alloc,
                        QSettings *settings,
                        QString section,
                        QWidget *parent)
@@ -126,8 +126,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   }
 
   m_IntegratorDialog   = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
-  m_InputFileBrowser   = new QxrdInputFileBrowser(m_Experiment->saver(), m_Experiment, m_DataProcessor, this);
-  m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_Experiment->saver(), m_Experiment, m_DataProcessor, this);
+  m_InputFileBrowser   = new QxrdInputFileBrowser(m_Experiment->settingsSaver(), m_Experiment, m_DataProcessor, this);
+  m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_Experiment->settingsSaver(), m_Experiment, m_DataProcessor, this);
   m_SliceDialog        = new QxrdSliceDialog(this);
   m_HistogramDialog    = new QxrdHistogramDialog(this);
   m_ImageInfoDialog    = new QxrdInfoDialog(this);

@@ -16,7 +16,7 @@ public:
   QxrdAcquisitionPerkinElmer(QxrdSettingsSaver *saver,
                              QxrdExperiment *doc,
                              QxrdDataProcessorPtr proc,
-                             QxrdAllocator *allocator,
+                             QxrdAllocatorPtr allocator,
                              QSettings *settings,
                              QString section);
   ~QxrdAcquisitionPerkinElmer();
@@ -69,7 +69,7 @@ private:
   CHwHeaderInfo          m_HwHeaderInfo;
   CHwHeaderInfoEx        m_HwHeaderInfoEx;
 
-  QxrdPerkinElmerPluginInterface *m_PerkinElmer;
+  QxrdPerkinElmerPluginInterfacePtr m_PerkinElmer;
 };
 
 //#endif // HAVE_PERKIN_ELMER

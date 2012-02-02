@@ -2,9 +2,9 @@
 #define QXRDACQUISITIONOPERATIONS_H
 
 #include "qxrdacquisitionscripting.h"
+#include "qxrdallocator.h"
 
 class QxrdDataProcessor;
-class QxrdAllocator;
 class QxrdWindow;
 class QxrdExperiment;
 
@@ -12,14 +12,14 @@ class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionOperations(DetectorKind detectorKind, QxrdSettingsSaver *saver, QxrdExperiment *doc, QSharedPointer<QxrdDataProcessor> proc, QxrdAllocator *allocator);
+  QxrdAcquisitionOperations(DetectorKind detectorKind, QxrdSettingsSaver *saver, QxrdExperiment *doc, QSharedPointer<QxrdDataProcessor> proc, QxrdAllocatorPtr allocator);
 
   void setWindow(QxrdWindow *win);
 
 protected:
   QxrdExperiment     *m_Experiment;
   QxrdWindow         *m_Window;
-  QxrdAllocator      *m_Allocator;
+  QxrdAllocatorPtr    m_Allocator;
   QSharedPointer<QxrdDataProcessor> m_DataProcessor;
 };
 

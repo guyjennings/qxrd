@@ -57,7 +57,7 @@ void QxrdScriptEngine::initialize()
 //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
 
   globalObject().setProperty("application", newQObject(m_Application));
-  globalObject().setProperty("allocator", newQObject(m_Application->allocator()));
+  globalObject().setProperty("allocator", newQObject(m_Application->allocator().data()));
 
   globalObject().setProperty("acquire", newFunction(acquireFunc));
   globalObject().setProperty("acquireDark", newFunction(acquireDarkFunc));
@@ -86,7 +86,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("typeName", newFunction(typeNameFunc));
   globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
 
-  QObject *plugin = dynamic_cast<QObject*>(m_Application->nidaqPlugin());
+  QObject *plugin = dynamic_cast<QObject*>(m_Application->nidaqPlugin().data());
 
   if (plugin) {
     globalObject().setProperty("nidaq", newQObject(plugin));

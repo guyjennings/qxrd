@@ -10,7 +10,11 @@
 #include <QThreadPool>
 #include <QtConcurrentRun>
 
-QxrdAcquisition::QxrdAcquisition(DetectorKind detectorKind, QxrdSettingsSaver *saver, QxrdExperiment *doc, QSharedPointer<QxrdDataProcessor> proc, QxrdAllocator *allocator)
+QxrdAcquisition::QxrdAcquisition(DetectorKind detectorKind,
+                                 QxrdSettingsSaver *saver,
+                                 QxrdExperiment *doc,
+                                 QSharedPointer<QxrdDataProcessor> proc,
+                                 QxrdAllocatorPtr allocator)
   : QxrdAcquisitionOperations(detectorKind, saver, doc, proc, allocator),
     m_AcquiredImages("acquired"),
     m_ControlPanel(NULL),
@@ -275,8 +279,8 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
   if (image) {
     int w=image->get_Width(), h=image->get_Height();
 
-    QxrdInt32ImageDataPtr proc = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve, w,h);
-    QxrdMaskDataPtr ovf = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve, w,h, 0);
+    QxrdInt32ImageDataPtr proc = QxrdAllocator::newInt32Image(m_Allocator, QxrdAllocator::AllocateFromReserve, w,h);
+    QxrdMaskDataPtr ovf = QxrdAllocator::newMask(m_Allocator, QxrdAllocator::AllocateFromReserve, w,h, 0);
 
     if (proc == NULL || ovf == NULL) {
       indicateDroppedFrame(0);
@@ -407,19 +411,19 @@ QxrdAcquireDialogBase *QxrdAcquisition::controlPanel(QxrdWindow *win)
   }
 }
 
-void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin)
+void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
 {
   if (m_SynchronizedAcquisition) {
     m_SynchronizedAcquisition -> setNIDAQPlugin(nidaqPlugin);
   }
 }
 
-QxrdNIDAQPluginInterface *QxrdAcquisition::nidaqPlugin() const
+QxrdNIDAQPluginInterfacePtr QxrdAcquisition::nidaqPlugin() const
 {
   if (m_SynchronizedAcquisition) {
     return m_SynchronizedAcquisition -> nidaqPlugin();
   } else {
-    return NULL;
+    return QxrdNIDAQPluginInterfacePtr();
   }
 }
 
@@ -487,10 +491,12 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     ovf[p].resize(preTrigger+1);
 
     for (int t=0; t<=preTrigger; t++) {
-      res[p][t] = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve,
-                                             get_NCols(), get_NRows());
-      ovf[p][t] = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,
-                                       get_NCols(), get_NRows(), 0);
+      res[p][t] = QxrdAllocator::newInt32Image(m_Allocator,
+                                               QxrdAllocator::AllocateFromReserve,
+                                               get_NCols(), get_NRows());
+      ovf[p][t] = QxrdAllocator::newMask(m_Allocator,
+                                         QxrdAllocator::AllocateFromReserve,
+                                         get_NCols(), get_NRows(), 0);
 
       if (res[p][t]==NULL || ovf[p][t]==NULL) {
         m_Experiment->criticalMessage("Insufficient memory for acquisition operation");
@@ -511,10 +517,12 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     for (int p=0; p<nphases; p++) {
       QString fb, fn;
 
-      QxrdInt32ImageDataPtr nres = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve,
-                                                              get_NCols(), get_NRows());
-      QxrdMaskDataPtr novf = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,
-                                                   get_NCols(), get_NRows(), 0);
+      QxrdInt32ImageDataPtr nres = QxrdAllocator::newInt32Image(m_Allocator,
+                                                                QxrdAllocator::AllocateFromReserve,
+                                                                get_NCols(), get_NRows());
+      QxrdMaskDataPtr novf = QxrdAllocator::newMask(m_Allocator,
+                                                    QxrdAllocator::AllocateFromReserve,
+                                                    get_NCols(), get_NRows(), 0);
       res[p][0] = nres;
       ovf[p][0] = novf;
 
@@ -672,10 +680,12 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
     synchronizedAcquisition()->prepareForDarkAcquisition(&parms);
   }
 
-  QxrdInt32ImageDataPtr res = m_Allocator->newInt32Image(QxrdAllocator::AllocateFromReserve,
-                                                         get_NCols(), get_NRows());
-  QxrdMaskDataPtr overflow  = m_Allocator->newMask(QxrdAllocator::AllocateFromReserve,
-                                                   get_NCols(), get_NRows(),0);
+  QxrdInt32ImageDataPtr res = QxrdAllocator::newInt32Image(m_Allocator,
+                                                           QxrdAllocator::AllocateFromReserve,
+                                                           get_NCols(), get_NRows());
+  QxrdMaskDataPtr overflow  = QxrdAllocator::newMask(m_Allocator,
+                                                     QxrdAllocator::AllocateFromReserve,
+                                                     get_NCols(), get_NRows(),0);
   QString fb, fn;
 
   if (res == NULL || overflow == NULL) {

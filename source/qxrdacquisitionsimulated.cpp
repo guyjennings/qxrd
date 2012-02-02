@@ -16,7 +16,7 @@
 QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdSettingsSaver *saver,
                                                    QxrdExperiment *doc,
                                                    QxrdDataProcessorPtr proc,
-                                                   QxrdAllocator *allocator,
+                                                   QxrdAllocatorPtr allocator,
                                                    QSettings *settings,
                                                    QString section)
   : QxrdAcquisition(SimulatedDetector, saver, doc, proc, allocator)
@@ -143,8 +143,9 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
   int nRows = get_NRows();
   int nCols = get_NCols();
 
-  QxrdInt16ImageDataPtr image = m_Allocator->newInt16Image(QxrdAllocator::AllocateFromReserve,
-                                                           nCols, nRows);
+  QxrdInt16ImageDataPtr image = QxrdAllocator::newInt16Image(m_Allocator,
+                                                             QxrdAllocator::AllocateFromReserve,
+                                                             nCols, nRows);
   int xpmsec = (int)(get_ExposureTime()*1000+0.5);
   int frame = frameCounter % 8;
 

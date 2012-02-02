@@ -8,8 +8,6 @@
 #include <QDateTime>
 #include <QSettings>
 
-class QxrdAllocator;
-class QxrdFileSaverThread;
 class QxrdExperiment;
 
 class QxrdDataProcessorThread : public QxrdThread
@@ -20,8 +18,8 @@ public:
   QxrdDataProcessorThread(QxrdSettingsSaver *saver,
                           QxrdExperiment *doc,
                           QxrdAcquisitionPtr acq,
-                          QxrdAllocator *allocator,
-                          QxrdFileSaverThread *filesaver,
+                          QxrdAllocatorPtr allocator,
+                          QxrdFileSaverPtr filesaver,
                           QSettings *settings,
                           QString section);
 
@@ -37,14 +35,16 @@ protected:
   void run();
 
 private:
-  QAtomicPointer<QxrdAllocator>       m_Allocator;
-  QAtomicPointer<QxrdFileSaverThread> m_FileSaverThread;
-  QxrdDataProcessorPtr                m_DataProcessor;
-  QxrdAcquisitionPtr                  m_Acquisition;
-  QAtomicPointer<QxrdExperiment>      m_Experiment;
-  QxrdSettingsSaver                  *m_Saver;
-  QSettings                          *m_Settings;
-  QString                             m_Section;
+  QxrdAllocatorPtr                 m_Allocator;
+  QxrdFileSaverPtr                 m_FileSaver;
+  QxrdDataProcessorPtr             m_DataProcessor;
+  QxrdAcquisitionPtr               m_Acquisition;
+  QAtomicPointer<QxrdExperiment>   m_Experiment;
+  QxrdSettingsSaver               *m_Saver;
+  QSettings                       *m_Settings;
+  QString                          m_Section;
 };
+
+typedef QSharedPointer<QxrdDataProcessorThread> QxrdDataProcessorThreadPtr;
 
 #endif // QXRDDATAPROCESSORTHREAD_H

@@ -18,8 +18,8 @@ QxrdDataProcessor::QxrdDataProcessor
     (QxrdSettingsSaver *saver,
      QxrdExperiment *doc,
      QxrdAcquisitionPtr acq,
-     QxrdAllocator *allocator,
-     QxrdFileSaverThread *filesaver,
+     QxrdAllocatorPtr allocator,
+     QxrdFileSaverPtr filesaver,
      QSettings *settings,
      QString section,
      QObject *parent)

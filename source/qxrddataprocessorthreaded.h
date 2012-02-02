@@ -15,7 +15,12 @@ class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
 {
   Q_OBJECT
 public:
-  QxrdDataProcessorThreaded(QxrdSettingsSaver *saver, QxrdExperiment *doc, QxrdAcquisitionPtr acq, QxrdAllocator *allocator, QxrdFileSaverThread *filesaver, QObject *parent=0);
+  QxrdDataProcessorThreaded(QxrdSettingsSaver *saver,
+                            QxrdExperiment *doc,
+                            QxrdAcquisitionPtr acq,
+                            QxrdAllocatorPtr allocator,
+                            QxrdFileSaverPtr filesaver,
+                            QObject *parent=0);
 
 public:
   void beginAcquisition(int isDark);

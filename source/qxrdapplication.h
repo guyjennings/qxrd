@@ -12,9 +12,10 @@
 #include "qxrdexperimentthread.h"
 #include "qxrdwelcomewindow.h"
 #include "qxrdsplashscreen.h"
+#include "qxrdnidaqplugininterface.h"
 
 #ifdef HAVE_PERKIN_ELMER
-class QxrdPerkinElmerPluginInterface;
+#include "qxrdperkinelmerplugininterface.h"
 #endif
 
 class QxrdApplication : public QApplication
@@ -26,13 +27,13 @@ public:
   ~QxrdApplication();
   bool init(QSplashScreen *splash);
 
-  QxrdAllocator *allocator() const;
+  QxrdAllocatorPtr allocator() const;
 
 #ifdef HAVE_PERKIN_ELMER
-  QxrdPerkinElmerPluginInterface *perkinElmerPlugin();
+  QxrdPerkinElmerPluginInterfacePtr perkinElmerPlugin();
 #endif
 
-  QxrdNIDAQPluginInterface *nidaqPlugin();
+  QxrdNIDAQPluginInterfacePtr nidaqPlugin();
 
   void loadPlugins();
 
@@ -177,11 +178,11 @@ private:
   QList<QxrdExperiment*>          m_Experiments;
 
   QxrdWelcomeWindow              *m_WelcomeWindow;
-  QxrdAllocatorThread            *m_AllocatorThread;
-  QxrdAllocator                  *m_Allocator;
-  QxrdNIDAQPluginInterface       *m_NIDAQPluginInterface;
+  QxrdAllocatorThreadPtr          m_AllocatorThread;
+  QxrdAllocatorPtr                m_Allocator;
+  QxrdNIDAQPluginInterfacePtr     m_NIDAQPluginInterface;
 #ifdef HAVE_PERKIN_ELMER
-  QxrdPerkinElmerPluginInterface *m_PerkinElmerPluginInterface;
+  QxrdPerkinElmerPluginInterfacePtr m_PerkinElmerPluginInterface;
 #endif
   QxrdResponseTimer              *m_ResponseTimer;
 };

@@ -29,4 +29,6 @@ private:
   QxrdSimpleServerPtr m_Server;
 };
 
+typedef QSharedPointer<QxrdSimpleServerThread> QxrdSimpleServerThreadPtr;
+
 #endif // QXRDSIMPLESERVERTHREAD_H

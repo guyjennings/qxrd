@@ -35,4 +35,6 @@ private:
   QxrdServerPtr     m_Server;
 };
 
+typedef QSharedPointer<QxrdServerThread> QxrdServerThreadPtr;
+
 #endif // QXRDSERVERTHREAD_H

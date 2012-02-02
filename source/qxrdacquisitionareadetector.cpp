@@ -3,7 +3,7 @@
 QxrdAcquisitionAreaDetector::QxrdAcquisitionAreaDetector(QxrdSettingsSaver *saver,
                                                          QxrdExperiment *doc,
                                                          QSharedPointer<QxrdDataProcessor> proc,
-                                                         QxrdAllocator *allocator)
+                                                         QxrdAllocatorPtr allocator)
   : QxrdAcquisition(EpicsAreaDetector, saver, doc, proc, allocator)
 {
 }

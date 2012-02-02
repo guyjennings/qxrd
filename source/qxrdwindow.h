@@ -42,7 +42,7 @@ public:
              QxrdExperiment *doc,
              QxrdAcquisitionPtr acq,
              QxrdDataProcessorPtr proc,
-             QxrdAllocator *alloc,
+             QxrdAllocatorPtr alloc,
              QSettings *settings,
              QString secion,
              QWidget *parent=0);
@@ -155,7 +155,7 @@ private:
   QxrdExperiment                        *m_Experiment;
   QxrdAcquisitionPtr                     m_Acquisition;
   QxrdDataProcessorPtr                   m_DataProcessor;
-  QxrdAllocator                         *m_Allocator;
+  QxrdAllocatorPtr                       m_Allocator;
   QxrdAcquireDialogBase                 *m_AcquireDialog;
   QxrdSynchronizedAcquisitionDialog     *m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;

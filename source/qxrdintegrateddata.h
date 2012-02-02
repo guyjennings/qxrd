@@ -4,13 +4,17 @@
 #include <QObject>
 #include <QSharedPointer>
 #include "qxrdimagedata.h"
+#include "qxrdallocator.h"
 
 class QxrdIntegratedData : public QObject
 {
   Q_OBJECT
 
 public:
-  explicit QxrdIntegratedData(QxrdSettingsSaver *saver, QxrdAllocatorInterface *alloc, QxrdDoubleImageDataPtr data, int typ, int maxSize, QObject *parent = 0);
+  explicit QxrdIntegratedData(QxrdSettingsSaver *saver,
+                              QxrdAllocatorPtr alloc,
+                              QxrdDoubleImageDataPtr data,
+                              int typ, int maxSize, QObject *parent = 0);
   ~QxrdIntegratedData();
 
   void resize(int n);

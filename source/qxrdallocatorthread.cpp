@@ -18,8 +18,6 @@ QxrdAllocatorThread::~QxrdAllocatorThread()
 {
   shutdown();
 
-  delete m_Allocator;
-
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAllocatorThread::~QxrdAllocatorThread\n");
   }
@@ -31,7 +29,9 @@ void QxrdAllocatorThread::run()
     g_Application->printMessage("Starting Allocator Thread");
   }
 
-  m_Allocator.fetchAndStoreOrdered(new QxrdAllocator(m_Saver));
+  QxrdAllocatorPtr res(new QxrdAllocator(m_Saver));
+
+  m_Allocator = res;
 
   int rc = exec();
 
@@ -47,7 +47,7 @@ void QxrdAllocatorThread::shutdown()
   wait();
 }
 
-QxrdAllocator *QxrdAllocatorThread::allocator() const
+QxrdAllocatorPtr QxrdAllocatorThread::allocator() const
 {
   while (m_Allocator == NULL) {
     QThread::msleep(50);

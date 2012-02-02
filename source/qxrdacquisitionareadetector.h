@@ -10,7 +10,7 @@ public:
   QxrdAcquisitionAreaDetector(QxrdSettingsSaver *saver,
                               QxrdExperiment *doc,
                               QSharedPointer<QxrdDataProcessor> proc,
-                              QxrdAllocator *allocator);
+                              QxrdAllocatorPtr allocator);
 
 private slots:
   void initialize();

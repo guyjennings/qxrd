@@ -4,8 +4,7 @@
 #include "qxrdthread.h"
 #include <QDateTime>
 #include "qxrdsettingssaver.h"
-
-class QxrdAllocator;
+#include "qxrdallocator.h"
 
 class QxrdAllocatorThread : public QxrdThread
 {
@@ -17,7 +16,7 @@ public:
 
   void shutdown();
 
-  QxrdAllocator *allocator() const;
+  QxrdAllocatorPtr allocator() const;
 
   static void msleep(long unsigned int);
 
@@ -25,8 +24,10 @@ protected:
   void run();
 
 private:
-  QAtomicPointer<QxrdAllocator>     m_Allocator;
-  QxrdSettingsSaver                *m_Saver;
+  QxrdAllocatorPtr    m_Allocator;
+  QxrdSettingsSaver  *m_Saver;
 };
+
+typedef QSharedPointer<QxrdAllocatorThread> QxrdAllocatorThreadPtr;
 
 #endif // QXRDALLOCATORTHREAD_H

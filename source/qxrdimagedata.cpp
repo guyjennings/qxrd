@@ -3,7 +3,7 @@
 #include "qxrdapplication.h"
 
 template <typename T>
-QxrdImageData<T>::QxrdImageData(QxrdSettingsSaver *saver, QxrdAllocatorInterface *allocator, int typ, int width, int height, T def)
+QxrdImageData<T>::QxrdImageData(QxrdSettingsSaver *saver, QxrdAllocatorPtr allocator, int typ, int width, int height, T def)
   : QcepImageData<T>(saver, width, height, def),
     m_ObjectCounter(allocator, typ),
     m_Mask(NULL),
@@ -15,7 +15,7 @@ QxrdImageData<T>::QxrdImageData(QxrdSettingsSaver *saver, QxrdAllocatorInterface
 
     g_Application->printMessage(QObject::tr("QxrdImageData<%1>::QxrdImageData(%2,%3,%4) %5[%6] thr%7")
                                 .arg(typeid(T).name())
-                                .HEXARG(allocator)
+                                .HEXARG(allocator.data())
                                 .arg(width).arg(height)
                                 .HEXARG(this).arg(count).HEXARG(QThread::currentThread()));
   }

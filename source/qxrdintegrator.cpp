@@ -15,7 +15,7 @@
 
 #include <cmath>
 
-QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaver *saver, QxrdExperiment *exp, QxrdDataProcessorBase *proc, QxrdAllocator *alloc, QObject *parent)
+QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaver *saver, QxrdExperiment *exp, QxrdDataProcessorBase *proc, QxrdAllocatorPtr alloc, QObject *parent)
   : QObject(parent),
     m_Oversample(saver, this, "oversample", 1),
     m_IntegrationStep(saver, this, "integrationStep", 0.001),

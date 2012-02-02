@@ -2,6 +2,7 @@
 #define QXRDNIDAQPLUGININTERFACE_H
 
 #include <QtPlugin>
+#include <QSharedPointer>
 #include "qxrdnamedplugininterface.h"
 
 class QxrdNIDAQPluginInterface : public QxrdNamedPluginInterface
@@ -17,5 +18,7 @@ public:
 };
 
 Q_DECLARE_INTERFACE(QxrdNIDAQPluginInterface, "gov.anl.aps.cep.Qxrd.NIDAQInterface/1.0")
+
+typedef QSharedPointer<QxrdNIDAQPluginInterface> QxrdNIDAQPluginInterfacePtr;
 
 #endif // QXRDNIDAQPLUGININTERFACE_H

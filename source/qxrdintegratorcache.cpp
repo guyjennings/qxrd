@@ -8,7 +8,7 @@
 
 #include <cmath>
 
-QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperiment *exp, QxrdAllocator *alloc) :
+QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperiment *exp, QxrdAllocatorPtr alloc) :
   QObject(NULL),
   m_Oversample(NULL, this, "oversample", 1),
   m_IntegrationStep(NULL, this, "integrationStep", 0.001),
@@ -238,9 +238,10 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
       set_RMin(rMin);
       set_RMax(rMax);
 
-      m_CachedBinNumbers =  m_Allocator->newInt32Image(QxrdAllocator::AlwaysAllocate,
-                                                       get_NCols()*get_Oversample(),
-                                                       get_NRows()*get_Oversample());
+      m_CachedBinNumbers =  QxrdAllocator::newInt32Image(m_Allocator,
+                                                         QxrdAllocator::AlwaysAllocate,
+                                                         get_NCols()*get_Oversample(),
+                                                         get_NRows()*get_Oversample());
 
       if (m_CachedBinNumbers) {
         m_CachedBinNumbers -> clear();

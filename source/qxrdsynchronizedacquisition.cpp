@@ -21,12 +21,12 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdSettingsSaver *save
 {
 }
 
-void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin)
+void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
 {
   m_NIDAQPlugin = nidaqPlugin;
 }
 
-QxrdNIDAQPluginInterface *QxrdSynchronizedAcquisition::nidaqPlugin() const
+QxrdNIDAQPluginInterfacePtr QxrdSynchronizedAcquisition::nidaqPlugin() const
 {
   return m_NIDAQPlugin;
 }

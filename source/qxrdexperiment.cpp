@@ -16,21 +16,21 @@ QxrdExperiment::QxrdExperiment(QString path,
                                QSettings *settings,
                                QObject *parent) :
   QObject(parent),
-  m_Saver(NULL, this),
-  m_ExperimentKind(&m_Saver, this, "experimentKind", -1),
-  m_ExperimentDirectory(&m_Saver, this, "experimentDirectory", defaultExperimentDirectory(path)),
-  m_ExperimentFileName(&m_Saver, this, "experimentFileName", defaultExperimentFileName(path)),
-  m_ExperimentName(&m_Saver, this, "experimentName", defaultExperimentName(path)),
-  m_ExperimentDescription(&m_Saver, this, "experimentDescription", ""),
-  m_LogFileName(&m_Saver, this, "logFileName", defaultLogName(path)),
-  m_ScanFileName(&m_Saver, this, "scanFileName", defaultScanName(path)),
-  m_DetectorType(&m_Saver, this,"detectorType", 1),
-  m_ProcessorType(&m_Saver, this,"processorType", 0),
+  m_SettingsSaver(NULL, this),
+  m_ExperimentKind(&m_SettingsSaver, this, "experimentKind", -1),
+  m_ExperimentDirectory(&m_SettingsSaver, this, "experimentDirectory", defaultExperimentDirectory(path)),
+  m_ExperimentFileName(&m_SettingsSaver, this, "experimentFileName", defaultExperimentFileName(path)),
+  m_ExperimentName(&m_SettingsSaver, this, "experimentName", defaultExperimentName(path)),
+  m_ExperimentDescription(&m_SettingsSaver, this, "experimentDescription", ""),
+  m_LogFileName(&m_SettingsSaver, this, "logFileName", defaultLogName(path)),
+  m_ScanFileName(&m_SettingsSaver, this, "scanFileName", defaultScanName(path)),
+  m_DetectorType(&m_SettingsSaver, this,"detectorType", 1),
+  m_ProcessorType(&m_SettingsSaver, this,"processorType", 0),
   m_DefaultLayout(NULL, this,"defaultLayout",0),
-  m_RunSpecServer(&m_Saver, this,"runSpecServer", 1),
-  m_SpecServerPort(&m_Saver, this,"specServerPort", -1),
-  m_RunSimpleServer(&m_Saver, this,"runSimpleServer", 1),
-  m_SimpleServerPort(&m_Saver, this,"simpleServerPort", 1234),
+  m_RunSpecServer(&m_SettingsSaver, this,"runSpecServer", 1),
+  m_SpecServerPort(&m_SettingsSaver, this,"specServerPort", -1),
+  m_RunSimpleServer(&m_SettingsSaver, this,"runSimpleServer", 1),
+  m_SimpleServerPort(&m_SettingsSaver, this,"simpleServerPort", 1234),
   m_WorkCompleted(NULL, this, "workCompleted", 0),
   m_WorkTarget(NULL, this, "workTarget", 0),
   m_CompletionPercentage(NULL, this, "completionPercentage", 0),
@@ -46,6 +46,7 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_AcquisitionThread(NULL),
   m_Acquisition(NULL),
   m_FileSaverThread(NULL),
+  m_FileSaver(NULL),
   m_ScriptEngineThread(NULL),
   m_ScriptEngine(NULL),
   m_ScriptEngineDebugger(NULL),
@@ -59,9 +60,9 @@ QxrdExperiment::QxrdExperiment(QString path,
   readSettings(settings);
 }
 
-QxrdSettingsSaver *QxrdExperiment::saver()
+QxrdSettingsSaver *QxrdExperiment::settingsSaver()
 {
-  return &m_Saver;
+  return &m_SettingsSaver;
 }
 
 bool QxrdExperiment::init(QSettings *settings)
@@ -79,45 +80,49 @@ bool QxrdExperiment::init(QSettings *settings)
 
   splashMessage("Initializing File Saver");
 
-  m_FileSaverThread = new QxrdFileSaverThread(m_Application->allocator());
+  m_FileSaverThread = QxrdFileSaverThreadPtr(
+        new QxrdFileSaverThread(m_Application->allocator()));
   m_FileSaverThread -> setObjectName("saver");
   m_FileSaverThread -> start();
+  m_FileSaver = m_FileSaverThread -> fileSaver();
 
   splashMessage("Initializing Data Processing");
 
-  m_DataProcessorThread = new QxrdDataProcessorThread(saver(),
-                                                      this,
-                                                      QxrdAcquisitionPtr(),
-                                                      m_Application->allocator(),
-                                                      m_FileSaverThread,
-                                                      settings,
-                                                      "experiment/processor");
+  m_DataProcessorThread = QxrdDataProcessorThreadPtr(
+        new QxrdDataProcessorThread(&m_SettingsSaver,
+                                    this,
+                                    QxrdAcquisitionPtr(),
+                                    m_Application->allocator(),
+                                    m_FileSaver,
+                                    settings,
+                                    "experiment/processor"));
   m_DataProcessorThread -> setObjectName("proc");
   m_DataProcessorThread -> start();
   m_DataProcessor = m_DataProcessorThread -> dataProcessor();
 
-  m_FileSaverThread -> setProcessor(m_DataProcessor);
+  m_FileSaver -> setProcessor(m_DataProcessor);
 
   splashMessage("Initializing Data Acquisition");
 
-  m_AcquisitionThread = new QxrdAcquisitionThread(saver(),
-                                                  this,
-                                                  m_DataProcessor,
-                                                  m_Application->allocator(),
-                                                  get_DetectorType(),
-                                                  settings,
-                                                  "experiment/acquire");
+  m_AcquisitionThread = QxrdAcquisitionThreadPtr(
+        new QxrdAcquisitionThread(&m_SettingsSaver,
+                                  this,
+                                  m_DataProcessor,
+                                  m_Application->allocator(),
+                                  get_DetectorType(),
+                                  settings,
+                                  "experiment/acquire"));
   m_AcquisitionThread -> setObjectName("acqu");
   m_AcquisitionThread -> start();
   m_Acquisition = m_AcquisitionThread -> acquisition();
 
   m_DataProcessor -> setAcquisition(m_Acquisition);
-  m_FileSaverThread -> setAcquisition(m_Acquisition);
+  m_FileSaver -> setAcquisition(m_Acquisition);
 
 
   if (m_Application->get_GuiWanted()) {
     splashMessage("Opening Main Window");
-    m_Window = new QxrdWindow(saver(),
+    m_Window = new QxrdWindow(&m_SettingsSaver,
                               m_Application,
                               this,
                               m_Acquisition,
@@ -143,10 +148,18 @@ bool QxrdExperiment::init(QSettings *settings)
   if (get_RunSpecServer()) {
     splashMessage("Starting SPEC Server");
 
-    m_ServerThread = new QxrdServerThread(this, "qxrd", get_SpecServerPort());
+#ifdef Q_OS_WIN
+    // On windows, there are problems with servers not in the main thread...
+
+    m_Server = QxrdServerPtr(
+          new QxrdServer(this, "qxrd", get_SpecServerPort()));
+#else
+    m_ServerThread = QxrdServerThreadPtr(
+          new QxrdServerThread(this, "qxrd", get_SpecServerPort()));
     m_ServerThread -> setObjectName("server");
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
+#endif
 
     if (qcepDebug(DEBUG_SERVER)) {
       printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
@@ -156,17 +169,24 @@ bool QxrdExperiment::init(QSettings *settings)
   if (get_RunSimpleServer()) {
     splashMessage("Starting Simple Socket Server");
 
-    m_SimpleServerThread = new QxrdSimpleServerThread(this, "simpleserver", get_SimpleServerPort());
+#ifdef Q_OS_WIN
+    m_SimpleServer = QxrdSimpleServerPtr(
+          new QxrdSimpleServer(this, "simpleserver", get_SimpleServerPort()));
+#else
+    m_SimpleServerThread = QxrdSimpleServerThreadPtr(
+          new QxrdSimpleServerThread(this, "simpleserver", get_SimpleServerPort()));
     m_SimpleServerThread -> setObjectName("smpsrv");
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
+#endif
 
     if (qcepDebug(DEBUG_SERVER)) {
       printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
     }
   }
 
-  m_ScriptEngineThread = new QxrdScriptEngineThread(m_Application, this);
+  m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
+        new QxrdScriptEngineThread(m_Application, this));
   m_ScriptEngineThread -> setObjectName("script");
   m_ScriptEngineThread -> start();
   m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
@@ -237,11 +257,6 @@ QxrdExperiment::~QxrdExperiment()
   closeScanFile();
   closeLogFile();
 
-  delete m_AcquisitionThread;
-  delete m_DataProcessorThread;
-  delete m_FileSaverThread;
-  delete m_ScriptEngineThread;
-
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::~QxrdExperiment\n");
   }
@@ -304,7 +319,7 @@ QxrdWindow *QxrdExperiment::window()
   return m_Window;
 }
 
-QxrdAcquisitionThread *QxrdExperiment::acquisitionThread()
+QxrdAcquisitionThreadPtr QxrdExperiment::acquisitionThread()
 {
   return m_AcquisitionThread;
 }
