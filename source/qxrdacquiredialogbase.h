@@ -28,7 +28,7 @@ public:
 protected:
   QxrdExperimentPtr    m_Experiment;
   QxrdWindow          *m_Window;
-  QxrdAcquisitionPtr   m_Acquisition;
+  QxrdAcquisition     *m_Acquisition;
   QxrdDataProcessorPtr m_DataProcessor;
 };
 
