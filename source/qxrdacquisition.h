@@ -34,9 +34,9 @@ class QxrdAcquisition : public QxrdAcquisitionOperations
 
 public:
   QxrdAcquisition(DetectorKind detectorKind,
-                  QxrdSettingsSaver *saver,
-                  QxrdExperiment *doc,
-                  QSharedPointer<QxrdDataProcessor> proc,
+                  QxrdSettingsSaverPtr saver,
+                  QxrdExperimentPtr doc,
+                  QxrdDataProcessorPtr proc,
                   QxrdAllocatorPtr allocator);
   ~QxrdAcquisition();
 

@@ -7,9 +7,9 @@ class QxrdAcquisitionAreaDetector : public QxrdAcquisition
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionAreaDetector(QxrdSettingsSaver *saver,
-                              QxrdExperiment *doc,
-                              QSharedPointer<QxrdDataProcessor> proc,
+  QxrdAcquisitionAreaDetector(QxrdSettingsSaverPtr saver,
+                              QxrdExperimentPtr doc,
+                              QxrdDataProcessorPtr proc,
                               QxrdAllocatorPtr allocator);
 
 private slots:

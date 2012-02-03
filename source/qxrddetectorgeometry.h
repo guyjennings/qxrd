@@ -4,6 +4,7 @@
 #include "qcepmacros.h"
 
 #include <QObject>
+#include <QSharedPointer>
 
 class QxrdDetectorGeometry : public QObject
 {
@@ -52,5 +53,7 @@ public slots:
              double cos_rotation,double sin_rotation,
              double * xPixel,double * yPixel);
 };
+
+typedef QSharedPointer<QxrdDetectorGeometry> QxrdDetectorGeometryPtr;
 
 #endif // QXRDDETECTORGEOMETRY_H

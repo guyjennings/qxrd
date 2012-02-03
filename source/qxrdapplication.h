@@ -73,13 +73,13 @@ public slots:
 
   void activateExperiment(QString path);
   void openExperiment(QString path);
-  void closeExperiment(QxrdExperiment *exp);
+  void closeExperiment(QxrdExperimentPtr exp);
 
   void openedExperiment(QxrdExperimentThread *expthrd);
   void closedExperiment(QObject *obj);
-  QList<QxrdExperiment*> &experiments();
+  QList<QxrdExperimentPtr> &experiments();
 
-  QxrdExperiment* experiment(int i);
+  QxrdExperimentPtr experiment(int i);
 
   void openWelcomeWindow();
   void closeWelcomeWindow();
@@ -125,7 +125,7 @@ private:
   void setupTiffHandlers();
 
 public:
-  QxrdSettingsSaver m_Saver;
+  QxrdSettingsSaverPtr m_Saver;
 
 public:
   Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)
@@ -175,7 +175,7 @@ public:
 
 private:
   QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
-  QList<QxrdExperiment*>          m_Experiments;
+  QList<QxrdExperimentPtr>        m_Experiments;
 
   QxrdWelcomeWindow              *m_WelcomeWindow;
   QxrdAllocatorThreadPtr          m_AllocatorThread;

@@ -1,8 +1,8 @@
 #include "qxrdacquisitionareadetector.h"
 
-QxrdAcquisitionAreaDetector::QxrdAcquisitionAreaDetector(QxrdSettingsSaver *saver,
-                                                         QxrdExperiment *doc,
-                                                         QSharedPointer<QxrdDataProcessor> proc,
+QxrdAcquisitionAreaDetector::QxrdAcquisitionAreaDetector(QxrdSettingsSaverPtr saver,
+                                                         QxrdExperimentPtr doc,
+                                                         QxrdDataProcessorPtr proc,
                                                          QxrdAllocatorPtr allocator)
   : QxrdAcquisition(EpicsAreaDetector, saver, doc, proc, allocator)
 {

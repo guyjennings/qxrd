@@ -8,6 +8,7 @@
 #include "qxrdplot.h"
 
 class QxrdIntegrator;
+typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
 
 class QxrdIntegratorPlot : public QxrdPlot
 {
@@ -25,7 +26,7 @@ public slots:
 
 private:
   QxrdDataProcessorPtr m_DataProcessor;
-  QxrdIntegrator      *m_Integrator;
+  QxrdIntegratorPtr    m_Integrator;
   int                  m_PlotIndex;
   QString              m_XUnitsLabel;
 };

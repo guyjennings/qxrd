@@ -4,7 +4,7 @@
 #include "qwt_plot_marker.h"
 #include "levmar.h"
 
-QxrdPowderFitIdentifyPage::QxrdPowderFitIdentifyPage(QxrdSettingsSaver *saver, QxrdDataProcessorPtr proc, QWidget *parent) :
+QxrdPowderFitIdentifyPage::QxrdPowderFitIdentifyPage(QxrdSettingsSaverPtr saver, QxrdDataProcessorPtr proc, QWidget *parent) :
     QxrdPowderFitWidget(proc, parent),
     m_IdCurrentRing(saver, this,"idCurrentRing",0),
     m_Picker(NULL),
@@ -139,7 +139,7 @@ void QxrdPowderFitIdentifyPage::idPerformFit()
   }
 
 
-  QxrdRingSetFitParameters *p = m_Processor->initialRingSetFitParameters();
+  QxrdRingSetFitParametersPtr p = m_Processor->initialRingSetFitParameters();
 
   m_FittedParameters.clear();
 
@@ -192,7 +192,7 @@ void QxrdPowderFitIdentifyPage::evaluateFit(double *parm, double *x, int np, int
     m_FittedParameters[i]->setValue(parm[i]);
   }
 
-  QxrdRingSetFitParameters *pf = m_Processor->initialRingSetFitParameters();
+  QxrdRingSetFitParametersPtr pf = m_Processor->initialRingSetFitParameters();
 
   double cx       = pf -> get_CenterX();                // Beam center coords
   double cy       = pf -> get_CenterY();

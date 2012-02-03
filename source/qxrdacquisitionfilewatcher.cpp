@@ -3,8 +3,8 @@
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
 
-QxrdAcquisitionFileWatcher::QxrdAcquisitionFileWatcher(QxrdSettingsSaver *saver,
-                                                       QxrdExperiment *doc,
+QxrdAcquisitionFileWatcher::QxrdAcquisitionFileWatcher(QxrdSettingsSaverPtr saver,
+                                                       QxrdExperimentPtr doc,
                                                        QxrdDataProcessorPtr proc,
                                                        QxrdAllocatorPtr allocator,
                                                        QSettings *settings,

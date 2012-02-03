@@ -4,17 +4,17 @@
 #include <QDockWidget>
 #include "ui_qxrdintegratordialog.h"
 
-class QxrdIntegrator;
+#include "qxrdintegrator.h"
 
 class QxrdIntegratorDialog : public QDockWidget, public Ui::QxrdIntegratorDialog
 {
   Q_OBJECT
 
 public:
-  QxrdIntegratorDialog(QxrdIntegrator *integ, QWidget *parent=0);
+  QxrdIntegratorDialog(QxrdIntegratorPtr integ, QWidget *parent=0);
 
 private:
-  QxrdIntegrator *m_Integrator;
+  QxrdIntegratorPtr m_Integrator;
 };
 
 #endif // QXRDINTEGRATORDIALOG_H

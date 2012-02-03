@@ -1,7 +1,7 @@
 #include "qxrdcenterfinderdialog.h"
 #include "qxrdcenterfinder.h"
 
-QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinder *cen, QWidget *parent)
+QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget *parent)
   : QDockWidget(parent),
     m_CenterFinder(cen)
 {

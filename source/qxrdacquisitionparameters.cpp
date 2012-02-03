@@ -8,7 +8,7 @@
 #include <QtGlobal>
 #include "qxrdapplication.h"
 
-QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaver *saver)
+QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaverPtr saver)
   : QObject(),
     m_QxrdVersion(saver, this,"qxrdVersion",STR(QXRD_VERSION)),
     m_QtVersion(saver, this,"qtVersion",qVersion()),
@@ -35,8 +35,8 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, 
     m_NCols(saver, this, "nCols", 2048),
     m_OverflowLevel(saver, this, "overflowLevel", 65500),
     m_AcquireDark(saver, this, "acquireDark", 0),
-    m_Cancelling(NULL, this, "cancelling", 0),
-    m_Triggered(NULL, this, "triggered", 0),
+    m_Cancelling(QxrdSettingsSaverPtr(), this, "cancelling", 0),
+    m_Triggered(QxrdSettingsSaverPtr(), this, "triggered", 0),
     m_Raw16SaveTime(saver, this,"raw16SaveTime", 0.1),
     m_Raw32SaveTime(saver, this,"raw32SaveTime", 0.2),
     m_RawSaveTime(saver, this,"rawSaveTime", 0.2),
@@ -45,7 +45,7 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, 
     m_UserComment2(saver, this,"userComment2",""),
     m_UserComment3(saver, this,"userComment3",""),
     m_UserComment4(saver, this,"userComment4",""),
-    m_DroppedFrames(NULL, this,"droppedFrames",0),
+    m_DroppedFrames(QxrdSettingsSaverPtr(), this,"droppedFrames",0),
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL)
 {

@@ -1,7 +1,7 @@
 #include "qxrdacquirefilewatcherdialog.h"
 #include "ui_qxrdacquirefilewatcherdialog.h"
 
-QxrdAcquireFileWatcherDialog::QxrdAcquireFileWatcherDialog(QxrdExperiment *doc,
+QxrdAcquireFileWatcherDialog::QxrdAcquireFileWatcherDialog(QxrdExperimentPtr doc,
                                                            QxrdWindow *win,
                                                            QxrdAcquisition *acq,
                                                            QxrdDataProcessorPtr proc,

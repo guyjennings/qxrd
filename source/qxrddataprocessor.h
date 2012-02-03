@@ -2,14 +2,17 @@
 #define QXRDDATAPROCESSOR_H
 
 #include "qxrddataprocessorthreaded.h"
+#include "qxrdacquisition.h"
+
+class QxrdExperiment;
 
 class QxrdDataProcessor : public QxrdDataProcessorThreaded
 {
   Q_OBJECT
 
 public:
-  QxrdDataProcessor(QxrdSettingsSaver *saver,
-                    QxrdExperiment *doc,
+  QxrdDataProcessor(QxrdSettingsSaverPtr saver,
+                    QxrdExperimentPtr doc,
                     QxrdAcquisitionPtr acq,
                     QxrdAllocatorPtr allocator,
                     QxrdFileSaverPtr filesaver,

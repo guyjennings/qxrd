@@ -16,24 +16,25 @@ QxrdExperiment::QxrdExperiment(QString path,
                                QSettings *settings,
                                QObject *parent) :
   QObject(parent),
-  m_SettingsSaver(NULL, this),
-  m_ExperimentKind(&m_SettingsSaver, this, "experimentKind", -1),
-  m_ExperimentDirectory(&m_SettingsSaver, this, "experimentDirectory", defaultExperimentDirectory(path)),
-  m_ExperimentFileName(&m_SettingsSaver, this, "experimentFileName", defaultExperimentFileName(path)),
-  m_ExperimentName(&m_SettingsSaver, this, "experimentName", defaultExperimentName(path)),
-  m_ExperimentDescription(&m_SettingsSaver, this, "experimentDescription", ""),
-  m_LogFileName(&m_SettingsSaver, this, "logFileName", defaultLogName(path)),
-  m_ScanFileName(&m_SettingsSaver, this, "scanFileName", defaultScanName(path)),
-  m_DetectorType(&m_SettingsSaver, this,"detectorType", 1),
-  m_ProcessorType(&m_SettingsSaver, this,"processorType", 0),
-  m_DefaultLayout(NULL, this,"defaultLayout",0),
-  m_RunSpecServer(&m_SettingsSaver, this,"runSpecServer", 1),
-  m_SpecServerPort(&m_SettingsSaver, this,"specServerPort", -1),
-  m_RunSimpleServer(&m_SettingsSaver, this,"runSimpleServer", 1),
-  m_SimpleServerPort(&m_SettingsSaver, this,"simpleServerPort", 1234),
-  m_WorkCompleted(NULL, this, "workCompleted", 0),
-  m_WorkTarget(NULL, this, "workTarget", 0),
-  m_CompletionPercentage(NULL, this, "completionPercentage", 0),
+  m_SettingsSaver(QxrdSettingsSaverPtr(
+                    new QxrdSettingsSaver(NULL, this))),
+  m_ExperimentKind(m_SettingsSaver, this, "experimentKind", -1),
+  m_ExperimentDirectory(m_SettingsSaver, this, "experimentDirectory", defaultExperimentDirectory(path)),
+  m_ExperimentFileName(m_SettingsSaver, this, "experimentFileName", defaultExperimentFileName(path)),
+  m_ExperimentName(m_SettingsSaver, this, "experimentName", defaultExperimentName(path)),
+  m_ExperimentDescription(m_SettingsSaver, this, "experimentDescription", ""),
+  m_LogFileName(m_SettingsSaver, this, "logFileName", defaultLogName(path)),
+  m_ScanFileName(m_SettingsSaver, this, "scanFileName", defaultScanName(path)),
+  m_DetectorType(m_SettingsSaver, this,"detectorType", 1),
+  m_ProcessorType(m_SettingsSaver, this,"processorType", 0),
+  m_DefaultLayout(QxrdSettingsSaverPtr(), this,"defaultLayout",0),
+  m_RunSpecServer(m_SettingsSaver, this,"runSpecServer", 1),
+  m_SpecServerPort(m_SettingsSaver, this,"specServerPort", -1),
+  m_RunSimpleServer(m_SettingsSaver, this,"runSimpleServer", 1),
+  m_SimpleServerPort(m_SettingsSaver, this,"simpleServerPort", 1234),
+  m_WorkCompleted(QxrdSettingsSaverPtr(), this, "workCompleted", 0),
+  m_WorkTarget(QxrdSettingsSaverPtr(), this, "workTarget", 0),
+  m_CompletionPercentage(QxrdSettingsSaverPtr(), this, "completionPercentage", 0),
   m_Application(app),
   m_Window(NULL),
   m_Splash(NULL),
@@ -60,12 +61,12 @@ QxrdExperiment::QxrdExperiment(QString path,
   readSettings(settings);
 }
 
-QxrdSettingsSaver *QxrdExperiment::settingsSaver()
+QxrdSettingsSaverPtr QxrdExperiment::settingsSaver()
 {
-  return &m_SettingsSaver;
+  return m_SettingsSaver;
 }
 
-bool QxrdExperiment::init(QSettings *settings)
+bool QxrdExperiment::init(QxrdExperimentPtr exp, QSettings *settings)
 {
   GUI_THREAD_CHECK;
 
@@ -89,8 +90,8 @@ bool QxrdExperiment::init(QSettings *settings)
   splashMessage("Initializing Data Processing");
 
   m_DataProcessorThread = QxrdDataProcessorThreadPtr(
-        new QxrdDataProcessorThread(&m_SettingsSaver,
-                                    this,
+        new QxrdDataProcessorThread(m_SettingsSaver,
+                                    exp,
                                     QxrdAcquisitionPtr(),
                                     m_Application->allocator(),
                                     m_FileSaver,
@@ -105,8 +106,8 @@ bool QxrdExperiment::init(QSettings *settings)
   splashMessage("Initializing Data Acquisition");
 
   m_AcquisitionThread = QxrdAcquisitionThreadPtr(
-        new QxrdAcquisitionThread(&m_SettingsSaver,
-                                  this,
+        new QxrdAcquisitionThread(m_SettingsSaver,
+                                  exp,
                                   m_DataProcessor,
                                   m_Application->allocator(),
                                   get_DetectorType(),
@@ -122,17 +123,18 @@ bool QxrdExperiment::init(QSettings *settings)
 
   if (m_Application->get_GuiWanted()) {
     splashMessage("Opening Main Window");
-    m_Window = new QxrdWindow(&m_SettingsSaver,
-                              m_Application,
-                              this,
-                              m_Acquisition,
-                              m_DataProcessor,
-                              m_Application->allocator(),
-                              settings,
-                              "experiment/window");
+    m_Window = QxrdWindowPtr(
+          new QxrdWindow(m_SettingsSaver,
+                         m_Application,
+                         exp,
+                         m_Acquisition,
+                         m_DataProcessor,
+                         m_Application->allocator(),
+                         settings,
+                         "experiment/window"));
 
     m_DataProcessor -> setWindow(m_Window);
-    m_Acquisition -> setWindow(m_Window);
+    m_Acquisition -> setWindow(m_Window.data());
   }
 
   splashMessage("Loading plugins");
@@ -212,11 +214,11 @@ bool QxrdExperiment::init(QSettings *settings)
   }
 
   if (m_Window) {
-    connect(m_Window,                SIGNAL(executeCommand(QString)),
+    connect(m_Window.data(),         SIGNAL(executeCommand(QString)),
             scriptEngine().data(),   SLOT(evaluateAppCommand(QString)));
 
     connect(scriptEngine().data(),   SIGNAL(appResultAvailable(QScriptValue)),
-            m_Window,                SLOT(finishedCommand(QScriptValue)));
+            m_Window.data(),         SLOT(finishedCommand(QScriptValue)));
   }
 
   connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
@@ -241,7 +243,7 @@ bool QxrdExperiment::init(QSettings *settings)
   if (m_Application->get_GuiWanted() && m_Window) {
     m_Window -> show();
 
-    m_Splash -> finish(m_Window);
+    m_Splash -> finish(m_Window.data());
   }
 
   return true;
@@ -279,7 +281,7 @@ void QxrdExperiment::splashMessage(QString msg)
 void QxrdExperiment::criticalMessage(QString msg)
 {
   if (m_Window) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayCriticalMessage", Q_ARG(QString, msg)));
+    m_Window->displayCriticalMessage(msg);
   } else {
     m_Application->criticalMessage(msg);
   }
@@ -288,7 +290,7 @@ void QxrdExperiment::criticalMessage(QString msg)
 void QxrdExperiment::statusMessage(QString msg)
 {
   if (m_Window) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(m_Window, "displayStatusMessage", Q_ARG(QString, msg)));
+    m_Window->displayStatusMessage(msg);
   } else {
     m_Application->statusMessage(msg);
   }
@@ -307,14 +309,14 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts)
     logMessage(message);
 
     if (m_Window) {
-      INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+      m_Window->displayMessage(message);
     } else {
-      m_Application->printMessage(qPrintable(message));
+      m_Application->printMessage(message);
     }
   }
 }
 
-QxrdWindow *QxrdExperiment::window()
+QxrdWindowPtr QxrdExperiment::window()
 {
   return m_Window;
 }

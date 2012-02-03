@@ -29,9 +29,9 @@ template <typename T>
 class QxrdImageData : public QcepImageData<T>
 {
 //  Q_OBJECT
-//
+
 public:
-  QxrdImageData(QxrdSettingsSaver *saver, QxrdAllocatorPtr allocator, int typ, int width, int height, T def=0);
+  QxrdImageData(QxrdSettingsSaverPtr saver, QxrdAllocatorPtr allocator, int typ, int width, int height, T def=0);
   ~QxrdImageData();
 
   QString rawFileName();

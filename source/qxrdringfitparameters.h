@@ -3,14 +3,16 @@
 
 #include "qxrdfitparameter.h"
 #include <QScriptEngine>
+#include "qxrdsettingssaver.h"
 
 class QxrdRingSetFitParameters;
+typedef QSharedPointer<QxrdRingSetFitParameters> QxrdRingSetFitParametersPtr;
 
 class QxrdRingFitParameters : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdRingFitParameters(QxrdSettingsSaver *saver, QxrdRingSetFitParameters *ringSet = 0, double twoTheta=0);
+  explicit QxrdRingFitParameters(QxrdSettingsSaverPtr saver, QxrdRingSetFitParameters *ringSet, double twoTheta=0);
 
 public:
   Q_PROPERTY(double twoTheta READ get_TwoTheta WRITE set_TwoTheta)
@@ -27,11 +29,10 @@ private:
 };
 
 typedef QSharedPointer<QxrdRingFitParameters> QxrdRingFitParametersPtr;
-//typedef QxrdRingFitParameters *QxrdRingFitParametersPtr;
 
 Q_DECLARE_METATYPE(QxrdRingFitParameters*)
 
 QScriptValue QxrdRingFitToScriptValue(QScriptEngine *engine, QxrdRingFitParameters* const &in);
-void QxrdRingFitFromScriptValue(const QScriptValue &object, QxrdRingFitParameters* &out);
+void QxrdRingFitFromScriptValue(const QScriptValue &object, QxrdRingFitParameters *&out);
 
 #endif // QXRDRINGFITPARAMETERS_H

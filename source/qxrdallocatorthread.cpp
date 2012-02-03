@@ -4,7 +4,7 @@
 #include "qxrdacquisition.h"
 #include "qxrdapplication.h"
 
-QxrdAllocatorThread::QxrdAllocatorThread(QxrdSettingsSaver *saver)
+QxrdAllocatorThread::QxrdAllocatorThread(QxrdSettingsSaverPtr saver)
   : QxrdThread(),
     m_Allocator(NULL),
     m_Saver(saver)

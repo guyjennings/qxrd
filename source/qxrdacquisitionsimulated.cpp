@@ -13,8 +13,8 @@
 #include <QFont>
 #include <QComboBox>
 
-QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdSettingsSaver *saver,
-                                                   QxrdExperiment *doc,
+QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdSettingsSaverPtr saver,
+                                                   QxrdExperimentPtr doc,
                                                    QxrdDataProcessorPtr proc,
                                                    QxrdAllocatorPtr allocator,
                                                    QSettings *settings,

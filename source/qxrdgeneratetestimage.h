@@ -14,7 +14,7 @@ class QxrdGenerateTestImage : public QObject
 {
   Q_OBJECT
 public:
-  QxrdGenerateTestImage(QxrdSettingsSaver *saver,
+  QxrdGenerateTestImage(QxrdSettingsSaverPtr saver,
                         QxrdDataProcessorBase *proc,
                         QxrdAllocatorPtr alloc,
                         QObject *parent);
@@ -36,7 +36,7 @@ public slots:
 public:
   QxrdDataProcessorBase  *m_Processor;
   QxrdAllocatorPtr        m_Allocator;
-  QxrdDetectorGeometry   *m_Geometry;
+  QxrdDetectorGeometryPtr m_Geometry;
 
   Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows)
   QCEP_INTEGER_PROPERTY(NRows)

@@ -2,13 +2,12 @@
 #define QXRDSETTINGSSAVER_H
 
 #include "qcepmacros.h"
-#include "qcepproperty.h"
 #include <QObject>
 #include <QTimer>
 #include <QMutex>
 #include <QDateTime>
 
-class QxrdApplication;
+class QcepProperty;
 
 class QxrdSettingsSaver : public QObject
 {
@@ -31,5 +30,7 @@ private:
   int                m_SaveDelay;
   QcepProperty      *m_LastChangedBy;
 };
+
+typedef QSharedPointer<QxrdSettingsSaver> QxrdSettingsSaverPtr;
 
 #endif // QXRDSETTINGSSAVER_H

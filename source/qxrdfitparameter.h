@@ -7,7 +7,7 @@ class QxrdFitParameter : public QcepDoubleProperty
 {
   Q_OBJECT
 public:
-  QxrdFitParameter(QxrdSettingsSaver *saver, QObject *parent, const char *name, QVariant value);
+  QxrdFitParameter(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QVariant value);
 
   double lowerLimit() const;
   double upperLimit() const;

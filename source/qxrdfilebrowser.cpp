@@ -8,9 +8,9 @@
 #include "qxrdfilebrowserview.h"
 #include "qxrdapplication.h"
 
-QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaver *saver,
+QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
                                  int isOutput,
-                                 QxrdExperiment *experiment,
+                                 QxrdExperimentPtr experiment,
                                  QxrdDataProcessorPtr processor,
                                  QWidget *parent)
   : QDockWidget(parent),
@@ -422,16 +422,16 @@ void QxrdFileBrowser::onModelReset()
   m_FileBrowser->resizeRowsToContents();
 }
 
-QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdSettingsSaver *saver,
-                                           QxrdExperiment *experiment,
+QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdSettingsSaverPtr saver,
+                                           QxrdExperimentPtr experiment,
                                            QxrdDataProcessorPtr processor,
                                            QWidget *parent)
   : QxrdFileBrowser(saver, false, experiment, processor, parent)
 {
 }
 
-QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdSettingsSaver *saver,
-                                             QxrdExperiment *experiment,
+QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdSettingsSaverPtr saver,
+                                             QxrdExperimentPtr experiment,
                                              QxrdDataProcessorPtr processor,
                                              QWidget *parent)
   : QxrdFileBrowser(saver, true, experiment, processor, parent)

@@ -19,23 +19,30 @@
 #include "qxrdringsetsampleddata.h"
 #include "qxrdfilesaver.h"
 #include <qwt_double_rect.h>
+#include "qxrdsettingssaver.h"
 
 class QxrdExperiment;
 class QxrdAllocator;
 class QxrdWindow;
-class QxrdCenterFinder;
-class QxrdIntegrator;
 class QxrdGenerateTestImage;
 class QxrdAcquisition;
+class QxrdIntegrator;
+class QxrdCenterFinder;
+
+typedef QSharedPointer<QxrdWindow> QxrdWindowPtr;
+typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
+typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
+typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
+typedef QSharedPointer<QxrdAcquisition> QxrdAcquisitionPtr;
 
 class QxrdDataProcessorBase : public QObject
 {
   Q_OBJECT
 
 public:
-  QxrdDataProcessorBase(QxrdSettingsSaver *saver,
-                        QxrdExperiment *doc,
-                        QSharedPointer<QxrdAcquisition> acq,
+  QxrdDataProcessorBase(QxrdSettingsSaverPtr saver,
+                        QxrdExperimentPtr doc,
+                        QxrdAcquisitionPtr acq,
                         QxrdAllocatorPtr allocator,
                         QxrdFileSaverPtr filesaver,
                         QObject *parent=0);
@@ -299,8 +306,8 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
-  void setAcquisition(QSharedPointer<QxrdAcquisition> acq);
-  void setWindow(QxrdWindow *win);
+  void setAcquisition(QxrdAcquisitionPtr acq);
+  void setWindow(QxrdWindowPtr win);
 
 //  QxrdSettingsSaver     *saver();
 
@@ -313,8 +320,8 @@ public:
 
   QxrdMaskStackPtr       maskStack();
 
-  QxrdCenterFinder      *centerFinder() const;
-  QxrdIntegrator        *integrator() const;
+  QxrdCenterFinderPtr    centerFinder() const;
+  QxrdIntegratorPtr      integrator() const;
   QxrdRingSetFitParametersPtr initialRingSetFitParameters() const;
   QxrdRingSetSampledDataPtr   initialRingSetData() const;
   QxrdRingSetFitParametersPtr refinedRingSetFitParameters() const;
@@ -373,12 +380,12 @@ private:
   mutable QMutex         m_Mutex;
 
 protected:
-  QxrdExperiment        *m_Experiment;
-  QxrdSettingsSaver     *m_Saver;
-  QxrdWindow            *m_Window;
+  QxrdExperimentPtr      m_Experiment;
+  QxrdSettingsSaverPtr   m_Saver;
+  QxrdWindowPtr          m_Window;
   QxrdAllocatorPtr       m_Allocator;
   QxrdFileSaverPtr       m_FileSaver;
-  QSharedPointer<QxrdAcquisition>     m_Acquisition;
+  QxrdAcquisitionPtr     m_Acquisition;
   QWaitCondition         m_ProcessWaiting;
   QxrdInt16ImageQueue    m_AcquiredInt16Images;
   QxrdInt32ImageQueue    m_AcquiredInt32Images;
@@ -393,8 +400,8 @@ protected:
 
   QAtomicInt             m_AcquiredCount;
 
-  QxrdCenterFinder      *m_CenterFinder;
-  QxrdIntegrator        *m_Integrator;
+  QxrdCenterFinderPtr    m_CenterFinder;
+  QxrdIntegratorPtr      m_Integrator;
 
   QxrdRingSetFitParametersPtr m_InitialRingSetFitParameters;
   QxrdRingSetFitParametersPtr m_RefinedRingSetFitParameters;

@@ -13,7 +13,7 @@ class QxrdSynchronizedAcquisition : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSynchronizedAcquisition(QxrdSettingsSaver *saver, QxrdAcquisition *acq);
+  explicit QxrdSynchronizedAcquisition(QxrdSettingsSaverPtr saver, QxrdAcquisition *acq);
 
 public:
   Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode)

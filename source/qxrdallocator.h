@@ -18,7 +18,7 @@ class QxrdAllocator : public QObject
   Q_OBJECT
 
 public:
-  QxrdAllocator(QxrdSettingsSaver *saver, QObject *parent=0);
+  QxrdAllocator(QxrdSettingsSaverPtr saver, QObject *parent=0);
   virtual ~QxrdAllocator();
 
   void readSettings(QSettings *settings, QString section);

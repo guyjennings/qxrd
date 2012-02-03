@@ -9,12 +9,12 @@
 #include <QCheckBox>
 #include "ui_qxrdexperimentpreferencesdialog.h"
 
-class QxrdExperiment;
+#include "qxrdexperiment.h"
 
 class QxrdExperimentPreferencesDialog : public QDialog, public Ui::QxrdExperimentPreferencesDialog {
   Q_OBJECT
 public:
-  QxrdExperimentPreferencesDialog(QxrdExperiment *doc, QWidget *parent = 0);
+  QxrdExperimentPreferencesDialog(QxrdExperimentPtr doc, QWidget *parent = 0);
   ~QxrdExperimentPreferencesDialog();
 
 public slots:
@@ -35,7 +35,7 @@ private:
   void getRelativeDirectoryPath(QLineEdit *edit);
 
 private:
-  QxrdExperiment      *m_Experiment;
+  QxrdExperimentPtr m_Experiment;
 };
 
 #endif // QXRDEXPERIMENTPREFERENCESDIALOG_H

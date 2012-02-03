@@ -8,8 +8,8 @@ class QxrdAcquisitionFileWatcher : public QxrdAcquisition
 {
     Q_OBJECT
 public:
-    explicit QxrdAcquisitionFileWatcher(QxrdSettingsSaver *saver,
-                                        QxrdExperiment *doc,
+    explicit QxrdAcquisitionFileWatcher(QxrdSettingsSaverPtr saver,
+                                        QxrdExperimentPtr doc,
                                         QxrdDataProcessorPtr proc,
                                         QxrdAllocatorPtr allocator,
                                         QSettings *settings,

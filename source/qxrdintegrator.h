@@ -6,19 +6,24 @@
 #include <QObject>
 #include "qxrdintegrateddata.h"
 #include "qcepproperty.h"
-#include "qxrddataprocessor.h"
 #include <qwt_double_rect.h>
 #include "qxrdintegratorcache.h"
+#include "qxrdsettingssaver.h"
 
-class QxrdDataProcessorBase;
 class QxrdExperiment;
+class QxrdDataProcessor;
+class QxrdCenterFinder;
+
+typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
+typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;
+typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
 
 class QxrdIntegrator : public QObject
 {
   Q_OBJECT
 
 public:
-  QxrdIntegrator(QxrdSettingsSaver *saver, QxrdExperiment *exp, QxrdDataProcessorBase *proc, QxrdAllocatorPtr alloc, QObject *parent=0);
+  QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentPtr exp, QxrdDataProcessorBase *proc, QxrdAllocatorPtr alloc, QObject *parent=0);
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
@@ -51,7 +56,7 @@ public:
   double XValue(double x, double y) const;
   double XValue(QwtDoublePoint pt) const;
   double XValue(double x, double y,
-                int xUnits, QxrdCenterFinder *cf,
+                int xUnits, QxrdCenterFinderPtr cf,
                 double xc, double yc,
                 double dst, double nrg,
                 double pxl, double pxh,
@@ -77,10 +82,12 @@ public slots:
 
 private:
   mutable QMutex         m_Mutex;
-  QxrdExperiment        *m_Experiment;
+  QxrdExperimentPtr      m_Experiment;
   QxrdDataProcessorBase *m_DataProcessor;
   QxrdAllocatorPtr       m_Allocator;
   QxrdIntegratorCachePtr m_IntegratorCache;
 };
+
+typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
 
 #endif // QXRDINTEGRATOR_H

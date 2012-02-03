@@ -1,10 +1,11 @@
 #include "qxrdacquisitionoperations.h"
 #include "qxrdimagedata.h"
 #include "qxrddataprocessor.h"
+#include "qxrdexperiment.h"
 
 QxrdAcquisitionOperations::QxrdAcquisitionOperations(DetectorKind detectorKind,
-                                                     QxrdSettingsSaver *saver,
-                                                     QxrdExperiment *doc,
+                                                     QxrdSettingsSaverPtr saver,
+                                                     QxrdExperimentPtr doc,
                                                      QSharedPointer<QxrdDataProcessor> proc,
                                                      QxrdAllocatorPtr allocator) :
   QxrdAcquisitionScripting(detectorKind, saver),

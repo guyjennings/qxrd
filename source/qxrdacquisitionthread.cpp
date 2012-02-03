@@ -25,8 +25,8 @@
 static int g_PEAvailable = false;
 #endif
 
-QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaver *saver,
-                                             QxrdExperiment *doc,
+QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaverPtr saver,
+                                             QxrdExperimentPtr doc,
                                              QxrdDataProcessorPtr proc,
                                              QxrdAllocatorPtr allocator,
                                              int detectorType,

@@ -2,14 +2,14 @@
 #include "qxrdringsetfitparameters.h"
 #include "qxrdmutexlocker.h"
 
-QxrdRingFitParameters::QxrdRingFitParameters(QxrdSettingsSaver *saver, QxrdRingSetFitParameters *ringSet, double twoTheta) :
-    QObject(ringSet),
+QxrdRingFitParameters::QxrdRingFitParameters(QxrdSettingsSaverPtr saver, QxrdRingSetFitParameters *ringSet, double twoTheta) :
+    QObject(),
     m_TwoTheta(saver, this, "twoTheta", twoTheta),
     m_RingSet(ringSet)
 {
 }
 
-QScriptValue QxrdRingFitToScriptValue(QScriptEngine *engine, QxrdRingFitParameters* const &in)
+QScriptValue QxrdRingFitToScriptValue(QScriptEngine *engine, QxrdRingFitParameters* const&in)
 {
   return engine->newQObject(in);
 }

@@ -37,14 +37,14 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   Q_OBJECT
 
 public:
-  QxrdWindow(QxrdSettingsSaver *saver,
+  QxrdWindow(QxrdSettingsSaverPtr saver,
              QxrdApplication *app,
-             QxrdExperiment *doc,
+             QxrdExperimentPtr doc,
              QxrdAcquisitionPtr acq,
              QxrdDataProcessorPtr proc,
              QxrdAllocatorPtr alloc,
              QSettings *settings,
-             QString secion,
+             QString section,
              QWidget *parent=0);
   virtual ~QxrdWindow();
   void onAcquisitionInit();
@@ -151,8 +151,8 @@ private:
   mutable QMutex                         m_Mutex;
   int                                    m_SettingsLoaded;
   QxrdApplication                       *m_Application;
-  QxrdSettingsSaver                     *m_Saver;
-  QxrdExperiment                        *m_Experiment;
+  QxrdSettingsSaverPtr                   m_Saver;
+  QxrdExperimentPtr                      m_Experiment;
   QxrdAcquisitionPtr                     m_Acquisition;
   QxrdDataProcessorPtr                   m_DataProcessor;
   QxrdAllocatorPtr                       m_Allocator;

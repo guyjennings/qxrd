@@ -5,7 +5,7 @@
 #include <QThread>
 #include "qxrdapplication.h"
 
-QxrdRingSetSampledData::QxrdRingSetSampledData(QxrdSettingsSaver *saver, QObject *parent) :
+QxrdRingSetSampledData::QxrdRingSetSampledData(QxrdSettingsSaverPtr saver, QObject *parent) :
     QObject(parent)
 {
 }
@@ -73,7 +73,7 @@ int QxrdRingSetSampledData::count() const
   return m_Rings.count();
 }
 
-QxrdRingSampledData* QxrdRingSetSampledData::ring(int n) const
+QxrdRingSampledDataPtr QxrdRingSetSampledData::ring(int n) const
 {
   return m_Rings.value(n);
 }

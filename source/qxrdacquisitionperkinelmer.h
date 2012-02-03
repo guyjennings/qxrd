@@ -13,8 +13,8 @@ class QxrdAcquisitionPerkinElmer : public QxrdAcquisition
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionPerkinElmer(QxrdSettingsSaver *saver,
-                             QxrdExperiment *doc,
+  QxrdAcquisitionPerkinElmer(QxrdSettingsSaverPtr saver,
+                             QxrdExperimentPtr doc,
                              QxrdDataProcessorPtr proc,
                              QxrdAllocatorPtr allocator,
                              QSettings *settings,

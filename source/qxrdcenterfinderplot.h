@@ -33,7 +33,7 @@ private:
   QVector<double>      m_XData, m_YData;
   QxrdWindow          *m_Window;
   QxrdDataProcessorPtr m_DataProcessor;
-  QxrdCenterFinder    *m_CenterFinder;
+  QxrdCenterFinderPtr  m_CenterFinder;
   bool                 m_FirstTime;
 };
 

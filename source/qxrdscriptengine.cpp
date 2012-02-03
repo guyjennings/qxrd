@@ -105,16 +105,16 @@ void QxrdScriptEngine::initialize()
 
   if (m_DataProcessor) {
     globalObject().setProperty("processor",       newQObject(m_DataProcessor.data()));
-    globalObject().setProperty("centering",       newQObject(m_DataProcessor->centerFinder()));
-    globalObject().setProperty("integrator",      newQObject(m_DataProcessor->integrator()));
-    globalObject().setProperty("initialFit",      newQObject(m_DataProcessor->initialRingSetFitParameters()));
-    globalObject().setProperty("refinedFit",      newQObject(m_DataProcessor->refinedRingSetFitParameters()));
-    globalObject().setProperty("initialData",     newQObject(m_DataProcessor->initialRingSetData()));
-    globalObject().setProperty("refinedData",     newQObject(m_DataProcessor->refinedRingSetData()));
+    globalObject().setProperty("centering",       newQObject(m_DataProcessor->centerFinder().data()));
+    globalObject().setProperty("integrator",      newQObject(m_DataProcessor->integrator().data()));
+    globalObject().setProperty("initialFit",      newQObject(m_DataProcessor->initialRingSetFitParameters().data()));
+    globalObject().setProperty("refinedFit",      newQObject(m_DataProcessor->refinedRingSetFitParameters().data()));
+    globalObject().setProperty("initialData",     newQObject(m_DataProcessor->initialRingSetData().data()));
+    globalObject().setProperty("refinedData",     newQObject(m_DataProcessor->refinedRingSetData().data()));
     globalObject().setProperty("testImage",       newQObject(m_DataProcessor->generateTestImage()));
   }
 
-  m_Window = m_Experiment->window();
+  m_Window = m_Experiment->window().data();
 
   if (m_Window) {
     globalObject().setProperty("window",          newQObject(m_Window));
@@ -134,7 +134,7 @@ QxrdAcquisitionPtr QxrdScriptEngine::acquisition() const
   return m_Acquisition;
 }
 
-QxrdWindow *QxrdScriptEngine::window() const
+QxrdWindow* QxrdScriptEngine::window() const
 {
   return m_Window;
 }
@@ -250,7 +250,7 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
       msg += context -> argument(i).toString();
     }
 
-    QxrdWindow *qwin = eng->window();
+    QxrdWindow* qwin = eng->window();
 
     if (qwin) {
       qwin->displayMessage(msg);

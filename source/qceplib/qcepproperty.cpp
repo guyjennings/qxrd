@@ -14,7 +14,7 @@
 #include <QSettings>
 #include <stdio.h>
 
-QcepProperty::QcepProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name)
+QcepProperty::QcepProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name)
   : QObject(),
     m_Mutex(QMutex::Recursive),
     m_Saver(saver),
@@ -111,7 +111,7 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaTypeStreamOperators< QcepStringList >("QcepStringList");
 }
 
-void QcepProperty::setSaver(QxrdSettingsSaver *saver)
+void QcepProperty::setSaver(QxrdSettingsSaverPtr saver)
 {
   m_Saver = saver;
 }
@@ -226,7 +226,7 @@ void QcepProperty::dumpMetaData(const QMetaObject *meta)
   }
 }
 
-QcepDoubleProperty::QcepDoubleProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, double value)
+QcepDoubleProperty::QcepDoubleProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, double value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -415,7 +415,7 @@ void QcepDoublePropertyDoubleSpinBoxHelper::setValue(double value)
   emit valueChanged(value, m_Property->incIndex(1));
 }
 
-QcepIntProperty::QcepIntProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, int value)
+QcepIntProperty::QcepIntProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, int value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -667,7 +667,7 @@ void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value)
   emit currentIndexChanged(value, m_Property->incIndex(1));
 }
 
-QcepBoolProperty::QcepBoolProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, bool value)
+QcepBoolProperty::QcepBoolProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, bool value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -817,7 +817,7 @@ void QcepBoolPropertyButtonHelper::setChecked(bool value)
   emit toggled(value, m_Property->incIndex(1));
 }
 
-QcepStringProperty::QcepStringProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QString value)
+QcepStringProperty::QcepStringProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QString value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -984,7 +984,7 @@ void QcepStringPropertyLineEditHelper::setText(QString value)
   emit textEdited(value, m_Property->incIndex(1));
 }
 
-QcepDateTimeProperty::QcepDateTimeProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QDateTime value)
+QcepDateTimeProperty::QcepDateTimeProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QDateTime value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -1071,7 +1071,7 @@ void QcepDateTimeProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepDoubleListProperty::QcepDoubleListProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QcepDoubleList value)
+QcepDoubleListProperty::QcepDoubleListProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QcepDoubleList value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -1190,7 +1190,7 @@ void QcepDoubleListProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepStringListProperty::QcepStringListProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QStringList value)
+QcepStringListProperty::QcepStringListProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QStringList value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -1309,7 +1309,7 @@ void QcepStringListProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepByteArrayProperty::QcepByteArrayProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QByteArray value)
+QcepByteArrayProperty::QcepByteArrayProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QByteArray value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)

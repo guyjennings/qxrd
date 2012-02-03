@@ -1,6 +1,6 @@
 #include "qxrdacquiredialogbase.h"
 
-QxrdAcquireDialogBase::QxrdAcquireDialogBase(QxrdExperiment *doc,
+QxrdAcquireDialogBase::QxrdAcquireDialogBase(QxrdExperimentPtr doc,
                                              QxrdWindow *win,
                                              QxrdAcquisition *acq,
                                              QxrdDataProcessorPtr proc,

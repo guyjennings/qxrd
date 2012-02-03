@@ -17,12 +17,12 @@
 
 QxrdPlot::QxrdPlot(QWidget *parent)
   : QwtPlot(parent),
-  m_XMouse(NULL, this,"xMouse",0),
-  m_YMouse(NULL, this,"yMouse",0),
-  m_XAxisLog(NULL, this,"xAxisLog",0),
-  m_YAxisLog(NULL, this,"yAxisLog",0),
-  m_X2AxisLog(NULL, this,"x2AxisLog",0),
-  m_Y2AxisLog(NULL, this,"y2AxisLog",0),
+  m_XMouse(QxrdSettingsSaverPtr(), this,"xMouse",0),
+  m_YMouse(QxrdSettingsSaverPtr(), this,"yMouse",0),
+  m_XAxisLog(QxrdSettingsSaverPtr(), this,"xAxisLog",0),
+  m_YAxisLog(QxrdSettingsSaverPtr(), this,"yAxisLog",0),
+  m_X2AxisLog(QxrdSettingsSaverPtr(), this,"x2AxisLog",0),
+  m_Y2AxisLog(QxrdSettingsSaverPtr(), this,"y2AxisLog",0),
   m_Legend(NULL),
   m_Zoomer(NULL),
   m_Panner(NULL),
@@ -78,7 +78,7 @@ QxrdPlot::~QxrdPlot()
 {
 }
 
-void QxrdPlot::setSaver(QxrdSettingsSaver *saver)
+void QxrdPlot::setSaver(QxrdSettingsSaverPtr saver)
 {
   prop_XAxisLog()->setSaver(saver);
   prop_YAxisLog()->setSaver(saver);

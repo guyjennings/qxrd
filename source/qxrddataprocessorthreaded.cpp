@@ -10,11 +10,11 @@
 #include <QDirIterator>
 
 QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(
-    QxrdSettingsSaver *saver,
-    QxrdExperiment *doc,
-    QxrdAcquisitionPtr acq,
-    QxrdAllocatorPtr allocator,
-    QxrdFileSaverPtr filesaver,
+    QxrdSettingsSaverPtr saver,
+    QxrdExperimentPtr    doc,
+    QxrdAcquisitionPtr   acq,
+    QxrdAllocatorPtr     allocator,
+    QxrdFileSaverPtr     filesaver,
     QObject *parent)
   : QxrdDataProcessorBase(saver, doc, acq, allocator, filesaver, parent)
 {
@@ -469,7 +469,7 @@ void QxrdDataProcessorThreaded::slicePolygon(QVector<QwtDoublePoint> poly)
   QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::WaitTillAvailable, data());
 
   m_IntegratedData.enqueue(
-      QtConcurrent::run(m_Integrator,
+      QtConcurrent::run(m_Integrator.data(),
                         &QxrdIntegrator::slicePolygon,
                         integ,
                         m_Data, poly, 0));
@@ -480,7 +480,7 @@ void QxrdDataProcessorThreaded::integrateSaveAndDisplay()
   QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::WaitTillAvailable, data());
 
   m_IntegratedData.enqueue(
-      QtConcurrent::run(m_Integrator,
+      QtConcurrent::run(m_Integrator.data(),
                         &QxrdIntegrator::performIntegration,
                         integ,
                         data(), mask()));

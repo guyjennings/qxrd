@@ -5,7 +5,7 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdapplication.h"
 
-QxrdRingSetFitParameters::QxrdRingSetFitParameters(QxrdSettingsSaver *saver, QObject *parent) :
+QxrdRingSetFitParameters::QxrdRingSetFitParameters(QxrdSettingsSaverPtr saver, QObject *parent) :
   m_CenterX(saver, this, "centerX", 1024),
   m_CenterY(saver, this, "centerY", 1024),
   m_Distance(saver, this, "distance", 1000),
@@ -19,9 +19,9 @@ QxrdRingSetFitParameters::QxrdRingSetFitParameters(QxrdSettingsSaver *saver, QOb
   qRegisterMetaType<QxrdRingSetFitParametersPtr>("QxrdRingSetFitParametersPtr");
 }
 
-QxrdRingFitParameters* QxrdRingSetFitParameters::ring(int n) const
+QxrdRingFitParametersPtr QxrdRingSetFitParameters::ring(int n) const
 {
-  return m_Rings.value(n).data();
+  return m_Rings.value(n);
 }
 
 void QxrdRingSetFitParameters::writeSettings(QSettings *settings, QString section)
@@ -39,7 +39,7 @@ void QxrdRingSetFitParameters::writeSettings(QSettings *settings, QString sectio
     settings->beginWriteArray(section+"/rings", count());
 
     for (int i=0; i<count(); i++) {
-      QxrdRingFitParameters* r = ring(i);
+      QxrdRingFitParametersPtr r = ring(i);
 
       if (r==NULL) {
         g_Application->printMessage("NULL ring fit parameters");
@@ -72,7 +72,7 @@ void QxrdRingSetFitParameters::readSettings(QSettings *settings, QString section
     for (int i=0; i<sz; i++) {
       append();
 
-      QxrdRingFitParameters* r = ring(i);
+      QxrdRingFitParametersPtr r = ring(i);
 
       settings->setArrayIndex(i);
 
@@ -83,12 +83,12 @@ void QxrdRingSetFitParameters::readSettings(QSettings *settings, QString section
   }
 }
 
-QList<QxrdRingFitParameters*> QxrdRingSetFitParameters::rings() const
+QList<QxrdRingFitParametersPtr> QxrdRingSetFitParameters::rings() const
 {
-  QList<QxrdRingFitParameters*> res;
+  QList<QxrdRingFitParametersPtr> res;
 
   foreach(QxrdRingFitParametersPtr p, m_Rings) {
-    res.append(p.data());
+    res.append(p);
   }
 
   return res;

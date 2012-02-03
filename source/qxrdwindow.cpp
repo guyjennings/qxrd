@@ -52,9 +52,9 @@
 #include <QMenu>
 #include <QDesktopWidget>
 
-QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
+QxrdWindow::QxrdWindow(QxrdSettingsSaverPtr saver,
                        QxrdApplication *app,
-                       QxrdExperiment *doc,
+                       QxrdExperimentPtr doc,
                        QxrdAcquisitionPtr acq,
                        QxrdDataProcessorPtr proc,
                        QxrdAllocatorPtr alloc,
@@ -133,12 +133,12 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   m_ImageInfoDialog    = new QxrdInfoDialog(this);
 
   QDesktopWidget *dw = QApplication::desktop();
-//  int screenNum = dw->screenNumber(this);
+  //  int screenNum = dw->screenNumber(this);
   QRect screenGeom = dw->screenGeometry(this);
 
-//  printf("Screen number %d Geom: %d,%d-%d,%d\n", screenNum,
-//         screenGeom.left(), screenGeom.top(),
-//         screenGeom.right(), screenGeom.bottom());
+  //  printf("Screen number %d Geom: %d,%d-%d,%d\n", screenNum,
+  //         screenGeom.left(), screenGeom.top(),
+  //         screenGeom.right(), screenGeom.bottom());
 
   if (screenGeom.height() >= 1024) {
     addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
@@ -156,7 +156,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
     tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
-} else {
+  } else {
     addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
 
     tabifyDockWidget(m_AcquireDialog, m_CenterFinderDialog);
@@ -176,7 +176,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
     tabifyDockWidget(m_HistogramDialog, m_ImageInfoDialog);
 
     if (screenGeom.height() < 800) {
-//      shrinkObject(this);
+      //      shrinkObject(this);
       shrinkDockWidget(m_AcquireDialog);
       shrinkDockWidget(m_CenterFinderDialog);
       shrinkDockWidget(m_IntegratorDialog);
@@ -191,7 +191,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
       shrinkDockWidget(m_ImageInfoDialog);
     }
   }
-//  tabifyDockWidget(m_IntegratorDialog, new QxrdTestDockWidget(this));
+  //  tabifyDockWidget(m_IntegratorDialog, new QxrdTestDockWidget(this));
 
   //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
   //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
@@ -213,7 +213,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   connect(m_ActionNewExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseNewExperiment()));
   connect(m_ActionOpenExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseExistingExperiment()));
   connect(m_ActionCloseExperiment, SIGNAL(triggered()), this, SLOT(close()));
-  connect(m_ActionSaveExperiment, SIGNAL(triggered()), m_Experiment, SLOT(saveExperiment()));
+  connect(m_ActionSaveExperiment, SIGNAL(triggered()), m_Experiment.data(), SLOT(saveExperiment()));
   connect(m_ActionSaveExperimentAs, SIGNAL(triggered()), this, SLOT(saveExperimentAs()));
   connect(m_ActionSaveExperimentCopy, SIGNAL(triggered()), this, SLOT(saveExperimentCopy()));
 
@@ -232,8 +232,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
   connect(m_ActionSaveGainMap, SIGNAL(triggered()), this, SLOT(doSaveGainMap()));
   connect(m_ActionClearGainMap, SIGNAL(triggered()), this, SLOT(doClearGainMap()));
 
-//  connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
-//  connect(m_ActionSetAcquireDirectory, SIGNAL(triggered()), this, SLOT(selectOutputDirectory()));
+  //  connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
+  //  connect(m_ActionSetAcquireDirectory, SIGNAL(triggered()), this, SLOT(selectOutputDirectory()));
 
   connect(m_ActionAccumulateImages, SIGNAL(triggered()), this, SLOT(doAccumulateImages()));
   connect(m_ActionProcessData, SIGNAL(triggered()), this, SLOT(doProcessSequence()));
@@ -265,11 +265,11 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
 
   m_AcquireDialog->acquisitionReady();
 
-//  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
-//  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
-//  connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
-////  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
-//  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
+  //  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
+  //  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
+  //  connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
+  ////  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
+  //  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
 
   connect(m_ActionShowImage, SIGNAL(triggered()), m_Plot, SLOT(toggleShowImage()));
   connect(m_ActionShowMask, SIGNAL(triggered()), m_Plot, SLOT(toggleShowMask()));
@@ -338,9 +338,9 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaver *saver,
           this, SLOT(integrationXUnitsChanged(int)));
   integrationXUnitsChanged(m_DataProcessor->integrator()->get_IntegrationXUnits());
 
-  connect(m_ActionIntegrateVsR,   SIGNAL(triggered()), m_DataProcessor->integrator(), SLOT(integrateVsR()));
-  connect(m_ActionIntegrateVsQ,   SIGNAL(triggered()), m_DataProcessor->integrator(), SLOT(integrateVsQ()));
-  connect(m_ActionIntegrateVsTTH, SIGNAL(triggered()), m_DataProcessor->integrator(), SLOT(integrateVsTTH()));
+  connect(m_ActionIntegrateVsR,   SIGNAL(triggered()), m_DataProcessor->integrator().data(), SLOT(integrateVsR()));
+  connect(m_ActionIntegrateVsQ,   SIGNAL(triggered()), m_DataProcessor->integrator().data(), SLOT(integrateVsQ()));
+  connect(m_ActionIntegrateVsTTH, SIGNAL(triggered()), m_DataProcessor->integrator().data(), SLOT(integrateVsTTH()));
 
   //  connect(m_SaveDarkOptions, SIGNAL(clicked()), this, SLOT(doProcessorOptionsDialog()));
 
@@ -527,7 +527,7 @@ void QxrdWindow::shrinkDockWidget(QDockWidget *dw)
 void QxrdWindow::shrinkObject(QObject *obj)
 {
   if (obj) {
-//    printf("shrinkObject %p[%s]\n", obj, qPrintable(obj->objectName()));
+    //    printf("shrinkObject %p[%s]\n", obj, qPrintable(obj->objectName()));
 
     QWidget *wid = qobject_cast<QWidget*>(obj);
 
@@ -607,13 +607,13 @@ void QxrdWindow::setupRecentExperimentsMenu(QAction *action)
 
 void QxrdWindow::populateExperimentsMenu()
 {
-//  printMessage("Populating recent experiments menu");
+  //  printMessage("Populating recent experiments menu");
 
   m_ExperimentsMenu->clear();
 
-  QList<QxrdExperiment*> exps = m_Application->experiments();
+  QList<QxrdExperimentPtr> exps = m_Application->experiments();
 
-  foreach (QxrdExperiment* exp, exps) {
+  foreach (QxrdExperimentPtr exp, exps) {
     QString path = exp->experimentFilePath();
 
     QAction *action = new QAction(path, m_ExperimentsMenu);
@@ -629,7 +629,7 @@ void QxrdWindow::populateExperimentsMenu()
 
 void QxrdWindow::populateRecentExperimentsMenu()
 {
-//  printMessage("Populating recent experiments menu");
+  //  printMessage("Populating recent experiments menu");
 
   m_RecentExperimentsMenu->clear();
 
@@ -654,46 +654,46 @@ QString QxrdWindow::timeStamp()
 
 void QxrdWindow::warningMessage(QString msg)
 {
-    if (QThread::currentThread()==thread()) {
-        QMessageBox::warning(this, tr("Warning"), msg);
-    } else {
-        INVOKE_CHECK(QMetaObject::invokeMethod(this,
-                                               "warningMessage",
-                                               Qt::QueuedConnection,
-                                               Q_ARG(QString, msg)));
-    }
+  if (QThread::currentThread()==thread()) {
+    QMessageBox::warning(this, tr("Warning"), msg);
+  } else {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                           "warningMessage",
+                                           Qt::QueuedConnection,
+                                           Q_ARG(QString, msg)));
+  }
 }
 
 void QxrdWindow::displayMessage(QString msg)
 {
-    if (QThread::currentThread()==thread()) {
-        m_Messages -> append(msg);
-    } else {
-        INVOKE_CHECK(QMetaObject::invokeMethod(this,
-                                               "displayMessage",
-                                               Qt::QueuedConnection,
-                                               Q_ARG(QString, msg)));
-    }
+  if (QThread::currentThread()==thread()) {
+    m_Messages -> append(msg);
+  } else {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                           "displayMessage",
+                                           Qt::QueuedConnection,
+                                           Q_ARG(QString, msg)));
+  }
 }
 
 void QxrdWindow::displayCriticalMessage(QString msg)
 {
-    if (QThread::currentThread()==thread()) {
-        static int dialogCount = 0;
+  if (QThread::currentThread()==thread()) {
+    static int dialogCount = 0;
 
-        g_Application->printMessage(tr("critical message %1, count = %2").arg(msg).arg(dialogCount));
+    g_Application->printMessage(tr("critical message %1, count = %2").arg(msg).arg(dialogCount));
 
-        dialogCount++;
-        if (dialogCount <= 1) {
-            QMessageBox::critical(this, "Error", msg);
-        }
-        dialogCount--;
-    } else {
-        INVOKE_CHECK(QMetaObject::invokeMethod(this,
-                                               "displayCriticalMessage",
-                                               Qt::QueuedConnection,
-                                               Q_ARG(QString, msg)));
+    dialogCount++;
+    if (dialogCount <= 1) {
+      QMessageBox::critical(this, "Error", msg);
     }
+    dialogCount--;
+  } else {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                           "displayCriticalMessage",
+                                           Qt::QueuedConnection,
+                                           Q_ARG(QString, msg)));
+  }
 }
 
 //void QxrdWindow::selectOutputDirectory()
@@ -719,7 +719,7 @@ void QxrdWindow::acquireComplete()
 }
 
 void QxrdWindow::acquiredFrame(
-  QString fileName, int /*fileIndex*/, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup)
+    QString fileName, int /*fileIndex*/, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup)
 {
   //   printf("QxrdWindow::acquiredFrame(\"%s\",%d,%d,%d,%d,%d)\n",
   // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
@@ -731,12 +731,12 @@ void QxrdWindow::acquiredFrame(
 
   if (nsum == 1) {
     g_Application->statusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
-                  .arg(fileName)
-                  .arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
+                                 .arg(fileName)
+                                 .arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
   } else {
     g_Application->statusMessage(tr("%1: Phase %2 of %3, Sum %4 of %5, Group %6 of %7")
-                  .arg(fileName)
-                  .arg(isum+1).arg(nsum).arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
+                                 .arg(fileName)
+                                 .arg(isum+1).arg(nsum).arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
   }
 
   m_Progress -> setValue(thisframe*100/totalframes);
@@ -779,11 +779,11 @@ void QxrdWindow::readSettings(QSettings *settings, QString section)
       QByteArray winstate = get_WindowState();
 
       if (!restoreGeometry(geometry)) {
-          printf("Restore geometry failed\n");
+        printf("Restore geometry failed\n");
       }
 
       if (!restoreState(winstate,2)) {
-          printf("Restore state failed\n");
+        printf("Restore state failed\n");
       }
     } else {
       m_Experiment->set_DefaultLayout(0);
@@ -793,7 +793,7 @@ void QxrdWindow::readSettings(QSettings *settings, QString section)
 
 void QxrdWindow::writeSettings(QSettings *settings, QString section)
 {
-//    printf("QxrdWindow::writeSettings\n");
+  //    printf("QxrdWindow::writeSettings\n");
 
   if (settings) {
     m_Plot             -> writeSettings(settings, section+"/plot");
@@ -826,31 +826,38 @@ void QxrdWindow::writeSettings(QSettings *settings, QString section)
 
 void QxrdWindow::captureSize()
 {
-    set_WindowGeometry(saveGeometry());
-    set_WindowState(saveState(2));
+  set_WindowGeometry(saveGeometry());
+  set_WindowState(saveState(2));
 }
 
 void QxrdWindow::resizeEvent(QResizeEvent *ev)
 {
-    captureSize();
+  captureSize();
 
-    QMainWindow::resizeEvent(ev);
+  QMainWindow::resizeEvent(ev);
 }
 
 void QxrdWindow::moveEvent(QMoveEvent *ev)
 {
-    captureSize();
+  captureSize();
 
-    QMainWindow::moveEvent(ev);
+  QMainWindow::moveEvent(ev);
 }
 
 void QxrdWindow::displayStatusMessage(QString msg)
 {
-  m_StatusMsg -> setText(msg);
+  if (QThread::currentThread()==thread()) {
+    m_StatusMsg -> setText(msg);
 
-  //  printMessage(msg);
+    //  printMessage(msg);
 
-  m_StatusTimer.start(5000);
+    m_StatusTimer.start(5000);
+  } else {
+      INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                             "displayStatusMessage",
+                                             Qt::QueuedConnection,
+                                             Q_ARG(QString, msg)));
+  }
 }
 
 void QxrdWindow::clearStatusMessage()
@@ -1339,8 +1346,8 @@ void QxrdWindow::integrationXUnitsChanged(int newXUnits)
 void QxrdWindow::crashProgram()
 {
   if (QMessageBox::question(this, tr("Really Crash?"),
-                               tr("Do you really want to crash the program?"),
-                               QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok) {
+                            tr("Do you really want to crash the program?"),
+                            QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok) {
     int *j = NULL;
 
     *j= 42;

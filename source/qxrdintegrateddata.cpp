@@ -1,6 +1,6 @@
 #include "qxrdintegrateddata.h"
 
-QxrdIntegratedData::QxrdIntegratedData(QxrdSettingsSaver *saver,
+QxrdIntegratedData::QxrdIntegratedData(QxrdSettingsSaverPtr saver,
                                        QxrdAllocatorPtr alloc,
                                        QxrdDoubleImageDataPtr image,
                                        int typ, int maxSize, QObject *parent) :

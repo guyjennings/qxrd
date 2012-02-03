@@ -11,7 +11,7 @@ class QxrdAllocatorThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdAllocatorThread(QxrdSettingsSaver *saver);
+  QxrdAllocatorThread(QxrdSettingsSaverPtr saver);
   ~QxrdAllocatorThread();
 
   void shutdown();
@@ -24,8 +24,8 @@ protected:
   void run();
 
 private:
-  QxrdAllocatorPtr    m_Allocator;
-  QxrdSettingsSaver  *m_Saver;
+  QxrdAllocatorPtr     m_Allocator;
+  QxrdSettingsSaverPtr m_Saver;
 };
 
 typedef QSharedPointer<QxrdAllocatorThread> QxrdAllocatorThreadPtr;

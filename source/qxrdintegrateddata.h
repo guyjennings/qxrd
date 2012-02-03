@@ -11,7 +11,7 @@ class QxrdIntegratedData : public QObject
   Q_OBJECT
 
 public:
-  explicit QxrdIntegratedData(QxrdSettingsSaver *saver,
+  explicit QxrdIntegratedData(QxrdSettingsSaverPtr saver,
                               QxrdAllocatorPtr alloc,
                               QxrdDoubleImageDataPtr data,
                               int typ, int maxSize, QObject *parent = 0);

@@ -11,11 +11,11 @@ class QxrdRingSetSampledData : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdRingSetSampledData(QxrdSettingsSaver *saver, /*QxrdRingSetFitParametersPtr parms, */QObject *parent=0);
+  explicit QxrdRingSetSampledData(QxrdSettingsSaverPtr saver, /*QxrdRingSetFitParametersPtr parms, */QObject *parent=0);
 
 public slots:
   int count() const;
-  QxrdRingSampledData* ring(int n) const;
+  QxrdRingSampledDataPtr ring(int n) const;
   void setRing(int n, QxrdRingSampledDataPtr d);
   void append();
   void append(QxrdRingSampledDataPtr d);
@@ -34,7 +34,7 @@ private:
   QList<QxrdRingSampledDataPtr> m_Rings;
 };
 
-typedef QxrdRingSetSampledData *QxrdRingSetSampledDataPtr;
+typedef QSharedPointer<QxrdRingSetSampledData> QxrdRingSetSampledDataPtr;
 
 Q_DECLARE_METATYPE(QxrdRingSetSampledDataPtr)
 

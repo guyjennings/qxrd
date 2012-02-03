@@ -16,9 +16,9 @@ class QxrdFileBrowser : public QDockWidget, public Ui::QxrdFileBrowser
   Q_OBJECT
 
 public:
-  QxrdFileBrowser(QxrdSettingsSaver *saver,
+  QxrdFileBrowser(QxrdSettingsSaverPtr saver,
                   int isOutput,
-                  QxrdExperiment *experiment,
+                  QxrdExperimentPtr experiment,
                   QxrdDataProcessorPtr processor,
                   QWidget *parent=0);
 
@@ -63,7 +63,7 @@ public slots:
 private:
   mutable QMutex               m_Mutex;
   int                          m_IsOutput;
-  QxrdExperiment              *m_Experiment;
+  QxrdExperimentPtr            m_Experiment;
   QxrdDataProcessorPtr         m_Processor;
   QxrdFileBrowserModel        *m_Model;
   QStringList                  m_DirectoryStack;
@@ -74,7 +74,7 @@ class QxrdInputFileBrowser : public QxrdFileBrowser
   Q_OBJECT
 
 public:
-  QxrdInputFileBrowser(QxrdSettingsSaver *saver, QxrdExperiment *experiment, QxrdDataProcessorPtr processor, QWidget *parent);
+  QxrdInputFileBrowser(QxrdSettingsSaverPtr saver, QxrdExperimentPtr experiment, QxrdDataProcessorPtr processor, QWidget *parent);
 };
 
 class QxrdOutputFileBrowser : public QxrdFileBrowser
@@ -82,7 +82,7 @@ class QxrdOutputFileBrowser : public QxrdFileBrowser
   Q_OBJECT
 
 public:
-  QxrdOutputFileBrowser(QxrdSettingsSaver *saver, QxrdExperiment *experiment, QxrdDataProcessorPtr processor, QWidget *parent);
+  QxrdOutputFileBrowser(QxrdSettingsSaverPtr saver, QxrdExperimentPtr experiment, QxrdDataProcessorPtr processor, QWidget *parent);
 };
 
 #endif // QXRDFILEBROWSER_H

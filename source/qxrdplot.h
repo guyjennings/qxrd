@@ -38,7 +38,7 @@ public:
   virtual ~QxrdPlot();
 
 public:
-  virtual void setSaver(QxrdSettingsSaver *saver);
+  virtual void setSaver(QxrdSettingsSaverPtr saver);
   virtual void readSettings(QSettings *settings, QString section);
   virtual void writeSettings(QSettings *settings, QString section);
 

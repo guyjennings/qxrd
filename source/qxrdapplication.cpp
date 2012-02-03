@@ -89,22 +89,23 @@ QStringList QxrdApplication::makeStringList(int argc, char **argv)
 
 QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
-    m_Saver(NULL, this),
-    m_RecentExperiments(&m_Saver, this, "recentExperiments", QStringList()),
-    m_RecentExperimentsSize(&m_Saver, this,"recentExperimentsSize", 8),
-    m_CurrentExperiment(&m_Saver, this, "currentExperiment", ""),
-    m_CurrentDirectory(&m_Saver, this, "currentDirectory", QDir::homePath()),
-    m_OpenDirectly(&m_Saver, this,"openDirectly", false),
-    m_Debug(&m_Saver, this,"debug", 0),
-    m_FreshStart(NULL, this,"freshStart", 0),
-    m_FileBrowserLimit(&m_Saver, this, "fileBrowserLimit", 0),
-    m_MessageWindowLines(&m_Saver, this, "messageWindowLines", 1000),
-    m_UpdateIntervalMsec(&m_Saver, this, "updateIntervalMsec", 1000),
-    m_Argc(NULL, this, "argc", argc),
-    m_Argv(NULL, this, "argv", makeStringList(argc, argv)),
-    m_GuiWanted(NULL, this, "guiWanted", 1),
-    m_CmdList(NULL, this, "cmdList", QStringList()),
-    m_FileList(NULL, this, "fileList", QStringList()),
+    m_Saver(QxrdSettingsSaverPtr(
+              new QxrdSettingsSaver(NULL, this))),
+    m_RecentExperiments(m_Saver, this, "recentExperiments", QStringList()),
+    m_RecentExperimentsSize(m_Saver, this,"recentExperimentsSize", 8),
+    m_CurrentExperiment(m_Saver, this, "currentExperiment", ""),
+    m_CurrentDirectory(m_Saver, this, "currentDirectory", QDir::homePath()),
+    m_OpenDirectly(m_Saver, this,"openDirectly", false),
+    m_Debug(m_Saver, this,"debug", 0),
+    m_FreshStart(QxrdSettingsSaverPtr(), this,"freshStart", 0),
+    m_FileBrowserLimit(m_Saver, this, "fileBrowserLimit", 0),
+    m_MessageWindowLines(m_Saver, this, "messageWindowLines", 1000),
+    m_UpdateIntervalMsec(m_Saver, this, "updateIntervalMsec", 1000),
+    m_Argc(QxrdSettingsSaverPtr(), this, "argc", argc),
+    m_Argv(QxrdSettingsSaverPtr(), this, "argv", makeStringList(argc, argv)),
+    m_GuiWanted(QxrdSettingsSaverPtr(), this, "guiWanted", 1),
+    m_CmdList(QxrdSettingsSaverPtr(), this, "cmdList", QStringList()),
+    m_FileList(QxrdSettingsSaverPtr(), this, "fileList", QStringList()),
     m_WelcomeWindow(NULL),
     m_AllocatorThread(NULL),
     m_Allocator(NULL),
@@ -197,7 +198,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   }
 
   m_AllocatorThread = QxrdAllocatorThreadPtr(
-        new QxrdAllocatorThread(&m_Saver));
+        new QxrdAllocatorThread(m_Saver));
   m_AllocatorThread -> setObjectName("alloc");
   m_AllocatorThread -> start();
   m_Allocator = m_AllocatorThread -> allocator();
@@ -708,9 +709,9 @@ void QxrdApplication::openExperiment(QString path)
   }
 }
 
-void QxrdApplication::closeExperiment(QxrdExperiment *exp)
+void QxrdApplication::closeExperiment(QxrdExperimentPtr exp)
 {
-  printf("QxrdApplication::closeExperiment(%p)\n", exp);
+  printf("QxrdApplication::closeExperiment(%p)\n", exp.data());
 }
 
 void QxrdApplication::appendRecentExperiment(QString path)
@@ -831,7 +832,7 @@ void QxrdApplication::openRecentExperiment(QString path)
 void QxrdApplication::openedExperiment(QxrdExperimentThread *expthrd)
 {
   if (expthrd) {
-    QxrdExperiment *expt = expthrd->experiment();
+    QxrdExperimentPtr expt = expthrd->experiment();
 
     QString path = expt->experimentFilePath();
     set_CurrentExperiment(path);
@@ -847,28 +848,28 @@ void QxrdApplication::closedExperiment(QObject *obj)
   QxrdExperimentThreadPtr expthrd = qobject_cast<QxrdExperimentThreadPtr>(obj);
 
   if (expthrd) {
-    QxrdExperiment *expt = expthrd->experiment();
+    QxrdExperimentPtr expt = expthrd->experiment();
 
     m_ExperimentThreads.removeAll(expthrd);
     m_Experiments.removeAll(expt);
   }
 }
 
-QList<QxrdExperiment*> &QxrdApplication::experiments()
+QList<QxrdExperimentPtr> &QxrdApplication::experiments()
 {
   return m_Experiments;
 }
 
-QxrdExperiment *QxrdApplication::experiment(int i)
+QxrdExperimentPtr QxrdApplication::experiment(int i)
 {
     return m_Experiments.value(i);
 }
 
 void QxrdApplication::activateExperiment(QString path)
 {
-  foreach(QxrdExperiment* exp, m_Experiments) {
+  foreach(QxrdExperimentPtr exp, m_Experiments) {
     if (exp->experimentFilePath() == path) {
-      QxrdWindow* win = exp->window();
+      QxrdWindowPtr win = exp->window();
 
       if (win) {
         win->activateWindow();

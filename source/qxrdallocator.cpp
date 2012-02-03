@@ -4,7 +4,7 @@
 #include "qxrdapplication.h"
 
 QxrdAllocator::QxrdAllocator
-    (QxrdSettingsSaver *saver, QObject *parent)
+    (QxrdSettingsSaverPtr saver, QObject *parent)
   : QObject(parent),
     m_AllocatedMemory(0),
     m_AllocatedMemoryMB(0),
@@ -12,13 +12,13 @@ QxrdAllocator::QxrdAllocator
     m_TotalBufferSizeMB32(saver, this,"totalBufferSizeMB32", 800),
     m_TotalBufferSizeMB64(saver, this,"totalBufferSizeMB64", 2000),
     m_Reserve(saver, this,"reserve",100),
-    m_Allocated(NULL, this, "allocated", 0),
-    m_QueuedDelete(NULL, this, "queuedDelete", 0),
-    m_NAllocatedInt16(NULL, this, "nAllocatedInt16", 0),
-    m_NAllocatedInt32(NULL, this, "nAllocatedInt32", 0),
-    m_NAllocatedDouble(NULL, this, "nAllocatedDouble", 0),
-    m_NAllocatedMask(NULL, this, "nAllocatedMask", 0),
-    m_NAllocatedIntegrated(NULL, this, "nAllocatedIntegrated", 0)
+    m_Allocated(QxrdSettingsSaverPtr(), this, "allocated", 0),
+    m_QueuedDelete(QxrdSettingsSaverPtr(), this, "queuedDelete", 0),
+    m_NAllocatedInt16(QxrdSettingsSaverPtr(), this, "nAllocatedInt16", 0),
+    m_NAllocatedInt32(QxrdSettingsSaverPtr(), this, "nAllocatedInt32", 0),
+    m_NAllocatedDouble(QxrdSettingsSaverPtr(), this, "nAllocatedDouble", 0),
+    m_NAllocatedMask(QxrdSettingsSaverPtr(), this, "nAllocatedMask", 0),
+    m_NAllocatedIntegrated(QxrdSettingsSaverPtr(), this, "nAllocatedIntegrated", 0)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAllocator::QxrdAllocator(%p)\n", this);
@@ -105,7 +105,7 @@ QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image(QxrdAllocatorPtr alloc, Alloc
   QxrdMutexLocker lock(__FILE__, __LINE__, alloc->mutex());
 
   if (alloc->waitTillAvailable(strat, alloc->int16SizeMB(width, height))) {
-    QxrdInt16ImageDataPtr res(new QxrdInt16ImageData(NULL, alloc, AllocateInt16, width, height), &QxrdAllocator::int16Deleter);
+    QxrdInt16ImageDataPtr res(new QxrdInt16ImageData(QxrdSettingsSaverPtr(), alloc, AllocateInt16, width, height), &QxrdAllocator::int16Deleter);
 
     res->moveToThread(alloc->thread());
 
@@ -128,7 +128,7 @@ QxrdInt32ImageDataPtr QxrdAllocator::newInt32Image(QxrdAllocatorPtr alloc, Alloc
   QxrdMutexLocker lock(__FILE__, __LINE__, alloc->mutex());
 
   if (alloc->waitTillAvailable(strat, alloc->int32SizeMB(width, height))) {
-    QxrdInt32ImageDataPtr res(new QxrdInt32ImageData(NULL, alloc, AllocateInt32, width, height), &QxrdAllocator::int32Deleter);
+    QxrdInt32ImageDataPtr res(new QxrdInt32ImageData(QxrdSettingsSaverPtr(), alloc, AllocateInt32, width, height), &QxrdAllocator::int32Deleter);
 
     res->moveToThread(alloc->thread());
 
@@ -151,7 +151,7 @@ QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage(QxrdAllocatorPtr alloc, All
   QxrdMutexLocker lock(__FILE__, __LINE__, alloc->mutex());
 
   if (alloc->waitTillAvailable(strat, alloc->doubleSizeMB(width, height))) {
-    QxrdDoubleImageDataPtr res(new QxrdDoubleImageData(NULL, alloc, AllocateDouble, width, height), &QxrdAllocator::doubleDeleter);
+    QxrdDoubleImageDataPtr res(new QxrdDoubleImageData(QxrdSettingsSaverPtr(), alloc, AllocateDouble, width, height), &QxrdAllocator::doubleDeleter);
 
     res->moveToThread(alloc->thread());
 
@@ -174,7 +174,7 @@ QxrdMaskDataPtr QxrdAllocator::newMask(QxrdAllocatorPtr alloc, AllocationStrateg
   QxrdMutexLocker lock(__FILE__, __LINE__, alloc->mutex());
 
   if (alloc->waitTillAvailable(strat, alloc->maskSizeMB(width, height))) {
-    QxrdMaskDataPtr res(new QxrdMaskData(NULL, alloc, AllocateMask, width, height, def), &QxrdAllocator::maskDeleter);
+    QxrdMaskDataPtr res(new QxrdMaskData(QxrdSettingsSaverPtr(), alloc, AllocateMask, width, height, def), &QxrdAllocator::maskDeleter);
 
     res->moveToThread(alloc->thread());
 
@@ -197,7 +197,7 @@ QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(QxrdAllocatorPtr alloc, A
   QxrdMutexLocker lock(__FILE__, __LINE__, alloc->mutex());
 
   if (alloc->waitTillAvailable(strat, alloc->integratedSizeMB(10000))) {
-    QxrdIntegratedDataPtr res(new QxrdIntegratedData(NULL,
+    QxrdIntegratedDataPtr res(new QxrdIntegratedData(QxrdSettingsSaverPtr(),
                                                      alloc,
                                                      data,
                                                      AllocateIntegrated,
@@ -227,8 +227,8 @@ void QxrdAllocator::newDoubleImageAndIntegratedData(QxrdAllocatorPtr alloc,
   QxrdMutexLocker lock(__FILE__, __LINE__, alloc->mutex());
 
   if (alloc->waitTillAvailable(strat, alloc->doubleSizeMB(width, height) + alloc->integratedSizeMB(10000))) {
-    img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(NULL, alloc, AllocateDouble, width, height), &QxrdAllocator::doubleDeleter);
-    integ = QxrdIntegratedDataPtr(new QxrdIntegratedData(NULL, alloc, img, AllocateIntegrated, 10000), &QxrdAllocator::integratedDeleter);
+    img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(QxrdSettingsSaverPtr(), alloc, AllocateDouble, width, height), &QxrdAllocator::doubleDeleter);
+    integ = QxrdIntegratedDataPtr(new QxrdIntegratedData(QxrdSettingsSaverPtr(), alloc, img, AllocateIntegrated, 10000), &QxrdAllocator::integratedDeleter);
 
     img->moveToThread(alloc->thread());
     integ->moveToThread(alloc->thread());

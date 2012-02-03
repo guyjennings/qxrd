@@ -13,6 +13,7 @@
 #include <QVector>
 #include <QStringList>
 #include <QDateTime>
+#include "qxrdsettingssaver.h"
 
 class QSpinBox;
 class QComboBox;
@@ -21,13 +22,14 @@ class QDoubleSpinBox;
 class QLabel;
 class QAbstractButton;
 class QSettings;
-class QxrdSettingsSaver;
 class QProgressBar;
+
+typedef QSharedPointer<QxrdSettingsSaver> QxrdSettingsSaverPtr;
 
 class QcepProperty : public QObject {
   Q_OBJECT
 public:
-  QcepProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name);
+  QcepProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name);
 
   QString name() const;
 
@@ -42,7 +44,7 @@ public:
   int debug() const;
   void setDebug(int dbg);
 
-  void setSaver(QxrdSettingsSaver *saver);
+  void setSaver(QxrdSettingsSaverPtr saver);
 
   static void writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings);
   static void readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings);
@@ -52,7 +54,7 @@ public:
 
 protected:
   mutable QMutex           m_Mutex;
-  QxrdSettingsSaver       *m_Saver;
+  QxrdSettingsSaverPtr     m_Saver;
 
 private:
   int                      m_Debug;
@@ -65,7 +67,7 @@ private:
 class QcepDoubleProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, double value);
+  QcepDoubleProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, double value);
 
   double value() const;
   double defaultValue() const;
@@ -112,7 +114,7 @@ private:
 class QcepIntProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepIntProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, int value);
+  QcepIntProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, int value);
 
   int value() const;
   int defaultValue() const;
@@ -179,7 +181,7 @@ private:
 class QcepBoolProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepBoolProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, bool value);
+  QcepBoolProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, bool value);
 
   bool value() const;
   bool defaultValue() const;
@@ -222,7 +224,7 @@ private:
 class QcepStringProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QString value);
+  QcepStringProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QString value);
 
   QString value() const;
   QString defaultValue() const;
@@ -286,7 +288,7 @@ private:
 class QcepDateTimeProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDateTimeProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QDateTime value);
+  QcepDateTimeProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QDateTime value);
 
   QDateTime value() const;
   QDateTime defaultValue() const;
@@ -309,7 +311,7 @@ private:
 class QcepDoubleListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleListProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QcepDoubleList value);
+  QcepDoubleListProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QcepDoubleList value);
 
   QcepDoubleList value() const;
   QcepDoubleList defaultValue() const;
@@ -334,7 +336,7 @@ private:
 class QcepStringListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringListProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QStringList value);
+  QcepStringListProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QStringList value);
 
   QStringList value() const;
   QStringList defaultValue() const;
@@ -359,7 +361,7 @@ private:
 class QcepByteArrayProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepByteArrayProperty(QxrdSettingsSaver *saver, QObject *parent, const char *name, QByteArray value);
+  QcepByteArrayProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QByteArray value);
 
   QByteArray value() const;
   QByteArray defaultValue() const;

@@ -7,7 +7,7 @@
 
 QAtomicInt allocCount = 0;
 
-QcepImageDataBase::QcepImageDataBase(QxrdSettingsSaver *saver, int width, int height)
+QcepImageDataBase::QcepImageDataBase(QxrdSettingsSaverPtr saver, int width, int height)
   : QObject(),
     m_QxrdVersion(saver, this,"qxrdVersion","unknown"),
     m_QtVersion(saver, this,"qtVersion","unknown"),
@@ -222,7 +222,7 @@ QString QcepImageDataBase::get_DataTypeName() const
 }
 
 template <typename T>
-QcepImageData<T>::QcepImageData(QxrdSettingsSaver *saver, int width, int height, T def)
+QcepImageData<T>::QcepImageData(QxrdSettingsSaverPtr saver, int width, int height, T def)
   : QcepImageDataBase(saver, width, height),
 //    m_Image(width*height, def),
     m_Image(width*height),

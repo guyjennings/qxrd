@@ -9,14 +9,13 @@
 #include "qxrdroidata.h"
 #include "qxrdhistogramdata.h"
 #include "qxrdimagedata.h"
-#include "qxrdacquisition.h"
 
 class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
 {
   Q_OBJECT
 public:
-  QxrdDataProcessorThreaded(QxrdSettingsSaver *saver,
-                            QxrdExperiment *doc,
+  QxrdDataProcessorThreaded(QxrdSettingsSaverPtr saver,
+                            QxrdExperimentPtr doc,
                             QxrdAcquisitionPtr acq,
                             QxrdAllocatorPtr allocator,
                             QxrdFileSaverPtr filesaver,

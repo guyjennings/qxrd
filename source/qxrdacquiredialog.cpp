@@ -3,7 +3,7 @@
 #include "qxrdacquisition.h"
 #include "qxrdapplication.h"
 
-QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperiment *doc,
+QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperimentPtr doc,
                                      QxrdWindow *win,
                                      QxrdAcquisition *acq,
                                      QxrdDataProcessorPtr proc,
@@ -16,7 +16,7 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperiment *doc,
   connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
   connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
 //  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
-  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
+  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition.data(), SLOT(trigger()));
 
 //  connect(m_SelectLogFileButton, SIGNAL(clicked()), m_Window, SLOT(selectLogFile()));
 //  connect(m_SelectDirectoryButton, SIGNAL(clicked()), m_Window, SLOT(selectOutputDirectory()));
@@ -26,10 +26,10 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperiment *doc,
   connect(m_TriggerButton, SIGNAL(clicked()), m_ActionTrigger, SIGNAL(triggered()));
   connect(m_DarkAcquireButton, SIGNAL(clicked()), m_ActionAcquireDark, SIGNAL(triggered()));
 
-  connect(m_ClearDroppedButton, SIGNAL(clicked()), m_Acquisition, SLOT(clearDropped()));
+  connect(m_ClearDroppedButton, SIGNAL(clicked()), m_Acquisition.data(), SLOT(clearDropped()));
 
-  connect(m_Acquisition, SIGNAL(acquireStarted()), this, SLOT(acquireStarted()));
-  connect(m_Acquisition, SIGNAL(acquireComplete()), this, SLOT(acquireComplete()));
+  connect(m_Acquisition.data(), SIGNAL(acquireStarted()), this, SLOT(acquireStarted()));
+  connect(m_Acquisition.data(), SIGNAL(acquireComplete()), this, SLOT(acquireComplete()));
 
   m_Acquisition -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
   m_Acquisition -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);

@@ -3,8 +3,8 @@
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 
-QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaver *saver,
-                                                 QxrdExperiment *doc,
+QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaverPtr saver,
+                                                 QxrdExperimentPtr doc,
                                                  QxrdAcquisitionPtr acq,
                                                  QxrdAllocatorPtr allocator,
                                                  QxrdFileSaverPtr filesaver,

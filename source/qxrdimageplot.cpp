@@ -23,23 +23,23 @@
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QxrdPlot(parent),
-    m_DisplayMinimumPct(NULL, this, "displayMinimumPct", 0),
-    m_DisplayMaximumPct(NULL, this, "displayMaximumPct", 100),
-    m_DisplayMinimumVal(NULL, this, "displayMinimumVal", 0),
-    m_DisplayMaximumVal(NULL, this, "displayMaximumVal", 10000),
-    m_DisplayMinimumPctle(NULL, this, "displayMinimumPercentile", 0),
-    m_DisplayMaximumPctle(NULL, this, "displayMaximumPercentile", 100),
-    m_DisplayScalingMode(NULL, this, "displayScalingMode", 0),
-    m_DisplayColorMap(NULL, this, "displayColorMap", 0),
-    m_ImageShown(NULL, this, "imageShown", 1),
-    m_MaskShown(NULL, this, "maskShown", 0),
-    m_OverflowShown(NULL, this, "overflowShown", 0),
-    m_InterpolatePixels(NULL, this, "interpolatePixels", 1),
-    m_MaintainAspectRatio(NULL, this, "maintainAspectRatio", 1),
-    m_TTHMouse(NULL, this,"tthMouse",0),
-    m_QMouse(NULL, this,"qMouse",0),
-    m_ValMouse(NULL, this,"valMouse",0),
-    m_MaskMouse(NULL, this,"maskMouse",0),
+    m_DisplayMinimumPct(QxrdSettingsSaverPtr(), this, "displayMinimumPct", 0),
+    m_DisplayMaximumPct(QxrdSettingsSaverPtr(), this, "displayMaximumPct", 100),
+    m_DisplayMinimumVal(QxrdSettingsSaverPtr(), this, "displayMinimumVal", 0),
+    m_DisplayMaximumVal(QxrdSettingsSaverPtr(), this, "displayMaximumVal", 10000),
+    m_DisplayMinimumPctle(QxrdSettingsSaverPtr(), this, "displayMinimumPercentile", 0),
+    m_DisplayMaximumPctle(QxrdSettingsSaverPtr(), this, "displayMaximumPercentile", 100),
+    m_DisplayScalingMode(QxrdSettingsSaverPtr(), this, "displayScalingMode", 0),
+    m_DisplayColorMap(QxrdSettingsSaverPtr(), this, "displayColorMap", 0),
+    m_ImageShown(QxrdSettingsSaverPtr(), this, "imageShown", 1),
+    m_MaskShown(QxrdSettingsSaverPtr(), this, "maskShown", 0),
+    m_OverflowShown(QxrdSettingsSaverPtr(), this, "overflowShown", 0),
+    m_InterpolatePixels(QxrdSettingsSaverPtr(), this, "interpolatePixels", 1),
+    m_MaintainAspectRatio(QxrdSettingsSaverPtr(), this, "maintainAspectRatio", 1),
+    m_TTHMouse(QxrdSettingsSaverPtr(), this,"tthMouse",0),
+    m_QMouse(QxrdSettingsSaverPtr(), this,"qMouse",0),
+    m_ValMouse(QxrdSettingsSaverPtr(), this,"valMouse",0),
+    m_MaskMouse(QxrdSettingsSaverPtr(), this,"maskMouse",0),
     m_Rescaler(NULL),
     m_Slicer(NULL),
     m_Measurer(NULL),
@@ -147,7 +147,7 @@ void QxrdImagePlot::setDataProcessor(QxrdDataProcessorPtr proc)
   m_DataProcessor = proc;
 
   connect(m_CenterFinderPicker, SIGNAL(selected(QwtDoublePoint)),
-          m_DataProcessor -> centerFinder(), SLOT(onCenterChanged(QwtDoublePoint)));
+          m_DataProcessor -> centerFinder().data(), SLOT(onCenterChanged(QwtDoublePoint)));
 
   connect(m_Circles, SIGNAL(selected(QwtDoubleRect)),
           m_DataProcessor.data(), SLOT(maskCircle(QwtDoubleRect)));
@@ -168,7 +168,7 @@ void QxrdImagePlot::setDataProcessor(QxrdDataProcessorPtr proc)
           this, SIGNAL(selectHistogram(QwtDoubleRect)));
 }
 
-void QxrdImagePlot::setSaver(QxrdSettingsSaver *saver)
+void QxrdImagePlot::setSaver(QxrdSettingsSaverPtr saver)
 {
   QxrdPlot::setSaver(saver);
 
@@ -709,7 +709,7 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
   const QxrdRasterData *ras = this->raster();
 
   QxrdDataProcessorPtr processor = this->processor();
-  QxrdCenterFinder    *centerFinder = NULL;
+  QxrdCenterFinderPtr centerFinder;
 
   if (processor) {
     centerFinder = processor->centerFinder();

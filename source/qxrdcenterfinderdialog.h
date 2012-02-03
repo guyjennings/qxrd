@@ -5,13 +5,14 @@
 #include "ui_qxrdcenterfinderdialog.h"
 
 class QxrdCenterFinder;
+typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
 
 class QxrdCenterFinderDialog : public QDockWidget, public Ui::QxrdCenterFinderDialog
 {
   Q_OBJECT
 
 public:
-  QxrdCenterFinderDialog(QxrdCenterFinder *cen, QWidget *parent=0);
+  QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget *parent=0);
 
 public slots:
   void centerMoveUpLeft();
@@ -30,7 +31,7 @@ private:
   void moveCenter(int dx, int dy);
 
 private:
-  QxrdCenterFinder *m_CenterFinder;
+  QxrdCenterFinderPtr m_CenterFinder;
 };
 
 #endif // QXRDCENTERFINDERDIALOG_H

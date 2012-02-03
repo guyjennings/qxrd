@@ -8,13 +8,14 @@
 #include "qcepproperty.h"
 #include <qwt_double_rect.h>
 #include "qxrddetectorgeometry.h"
+#include "qxrdsettingssaver.h"
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
 {
   Q_OBJECT
 
 public:
-  QxrdCenterFinder(QxrdSettingsSaver *saver, QObject *parent=0);
+  QxrdCenterFinder(QxrdSettingsSaverPtr saver, QObject *parent=0);
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
@@ -85,5 +86,7 @@ public:
 private:
   mutable QMutex             m_Mutex;
 };
+
+typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
 
 #endif // QXRDCENTERFINDER_H

@@ -3,12 +3,13 @@
 
 #include "qxrdfitparameter.h"
 #include "qxrdringfitparameters.h"
+#include "qxrdsettingssaver.h"
 
 class QxrdRingSetFitParameters : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdRingSetFitParameters(QxrdSettingsSaver *saver, QObject *parent = 0);
+  explicit QxrdRingSetFitParameters(QxrdSettingsSaverPtr saver, QObject *parent = 0);
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
@@ -30,8 +31,8 @@ public:
   QXRD_FIT_PARAMETER(Rotation)
 
 public slots:
-  QList<QxrdRingFitParameters*> rings() const;
-  QxrdRingFitParameters* ring(int n) const;
+  QList<QxrdRingFitParametersPtr> rings() const;
+  QxrdRingFitParametersPtr ring(int n) const;
   int count() const;
   void clear();
   void append(double twoTheta=0);
@@ -46,12 +47,12 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  QxrdSettingsSaver     *m_Saver;
+  QxrdSettingsSaverPtr   m_Saver;
 
   QList<QxrdRingFitParametersPtr> m_Rings;
 };
 
-typedef QxrdRingSetFitParameters *QxrdRingSetFitParametersPtr;
+typedef QSharedPointer<QxrdRingSetFitParameters> QxrdRingSetFitParametersPtr;
 
 Q_DECLARE_METATYPE(QxrdRingSetFitParametersPtr)
 

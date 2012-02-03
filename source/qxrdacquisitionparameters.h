@@ -11,6 +11,7 @@ class QxrdSynchronizedAcquisition;
 //class QxrdDataProcessor;
 
 #include "qcepproperty.h"
+#include "qxrdsettingssaver.h"
 
 class QxrdAcquisitionParameters : public QObject
 {
@@ -25,7 +26,7 @@ public:
     FileWatcherDetector
   } DetectorKind;
 
-  QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaver *saver);
+  QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaverPtr saver);
   virtual ~QxrdAcquisitionParameters();
 
 public slots:

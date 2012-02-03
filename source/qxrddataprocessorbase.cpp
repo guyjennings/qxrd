@@ -19,9 +19,9 @@
 #include <math.h>
 
 QxrdDataProcessorBase::QxrdDataProcessorBase(
-    QxrdSettingsSaver *saver,
-    QxrdExperiment *doc,
-    QSharedPointer<QxrdAcquisition> acq,
+    QxrdSettingsSaverPtr saver,
+    QxrdExperimentPtr doc,
+    QxrdAcquisitionPtr acq,
     QxrdAllocatorPtr allocator,
     QxrdFileSaverPtr filesaver,
     QObject *parent) :
@@ -30,7 +30,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   //    m_ProcessorType(this,"processorType",0),
   //    m_ProcessorTypeName(this,"processorTypeName","processorType"),
 //  m_OutputDirectory(saver, this,"outputDirectory", ""),
-  m_FileName(NULL, this,"fileName",""),
+  m_FileName(QxrdSettingsSaverPtr(), this,"fileName",""),
   m_DataPath(saver, this,"dataPath", ""),
   m_DarkImagePath(saver, this, "darkImagePath", ""),
   m_BadPixelsPath(saver, this, "badPixelsPath", ""),
@@ -70,15 +70,14 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_SaveIntegratedDataTime(saver, this, "saveIntegratedDataTime", 0.01),
   m_EstimatedProcessingTime(saver, this, "estimatedProcessingTime", 0.1),
   m_AveragingRatio(saver, this, "averagingRatio", 0.1),
-  //    m_FileName(this,"fileName",""),
   m_MaskMinimumValue(saver, this, "maskMinimumValue", 0),
   m_MaskMaximumValue(saver, this, "maskMaximumValue", 20000),
   m_MaskCircleRadius(saver, this, "maskCircleRadius", 10),
   m_MaskSetPixels(saver, this, "maskSetPixels", true),
   m_CompressImages(saver, this, "compressImages", false),
-  m_Average(NULL, this,"average",0.0),
-  m_AverageDark(NULL, this,"averageDark",0.0),
-  m_AverageRaw(NULL, this,"averageRaw",0.0),
+  m_Average(QxrdSettingsSaverPtr(), this,"average",0.0),
+  m_AverageDark(QxrdSettingsSaverPtr(), this,"averageDark",0.0),
+  m_AverageRaw(QxrdSettingsSaverPtr(), this,"averageRaw",0.0),
   m_Mutex(QMutex::Recursive),
   m_Experiment(doc),
   m_Saver(saver),
@@ -110,13 +109,13 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     m_Experiment->printMessage("QxrdDataProcessorBase::QxrdDataProcessorBase");
   }
 
-  m_CenterFinder = new QxrdCenterFinder(saver, this);
-  m_Integrator   = new QxrdIntegrator(saver, m_Experiment, this, m_Allocator, this);
+  m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(saver, this));
+  m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(saver, m_Experiment, this, m_Allocator, this));
   m_GenerateTestImage = new QxrdGenerateTestImage(saver, this, m_Allocator, this);
-  m_InitialRingSetFitParameters = new QxrdRingSetFitParameters(saver, this);
-  m_RefinedRingSetFitParameters = new QxrdRingSetFitParameters(saver, this);
-  m_InitialRingSetData = new QxrdRingSetSampledData(saver, /*m_InitialRingSetFitParameters,*/ this);
-  m_RefinedRingSetData = new QxrdRingSetSampledData(saver, /*m_RefinedRingSetFitParameters,*/ this);
+  m_InitialRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver, this));
+  m_RefinedRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver, this));
+  m_InitialRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(saver, /*m_InitialRingSetFitParameters,*/ this));
+  m_RefinedRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(saver, /*m_RefinedRingSetFitParameters,*/ this));
 }
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()
@@ -131,7 +130,7 @@ void QxrdDataProcessorBase::shutdown()
   thread()->exit();
 }
 
-void QxrdDataProcessorBase::setAcquisition(QSharedPointer<QxrdAcquisition> acq)
+void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionPtr acq)
 {
   m_Acquisition = acq;
 
@@ -160,7 +159,7 @@ void QxrdDataProcessorBase::setAcquisition(QSharedPointer<QxrdAcquisition> acq)
   }
 }
 
-void QxrdDataProcessorBase::setWindow(QxrdWindow *win)
+void QxrdDataProcessorBase::setWindow(QxrdWindowPtr win)
 {
   m_Window = win;
   newData(m_Data, QxrdMaskDataPtr());
@@ -1537,7 +1536,7 @@ int QxrdDataProcessorBase::status(double time)
   }
 }
 
-QxrdCenterFinder *QxrdDataProcessorBase::centerFinder() const
+QxrdCenterFinderPtr QxrdDataProcessorBase::centerFinder() const
 {
   if (m_CenterFinder == NULL) {
     m_Experiment->printMessage("Problem QxrdDataProcessorBase::centerFinder == NULL");
@@ -1546,7 +1545,7 @@ QxrdCenterFinder *QxrdDataProcessorBase::centerFinder() const
   return m_CenterFinder;
 }
 
-QxrdIntegrator *QxrdDataProcessorBase::integrator() const
+QxrdIntegratorPtr QxrdDataProcessorBase::integrator() const
 {
   if (m_Integrator == NULL) {
     m_Experiment->printMessage("Problem QxrdDataProcessorBase::integrator == NULL");

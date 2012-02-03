@@ -25,12 +25,12 @@ class QxrdExperiment : public QObject
 
 public:
   QxrdExperiment(QString path, QxrdApplication *app, QSettings *settings, QObject *parent = 0);
-  virtual bool init(QSettings *settings);
+  virtual bool init(QxrdExperimentPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
 
   QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
-  QxrdWindow *window();
+  QxrdWindowPtr window();
   QxrdDataProcessorPtr dataProcessor() const;
 
   FILE* logFile();
@@ -39,7 +39,7 @@ public:
   FILE* scanFile();
   void newScanFile(QString path);
 
-  QxrdSettingsSaver *settingsSaver();
+  QxrdSettingsSaverPtr settingsSaver();
 public slots:
   QxrdScriptEnginePtr scriptEngine();
 
@@ -87,7 +87,7 @@ private:
   void openScanFile();
 
 public:  // Properties
-  QxrdSettingsSaver m_SettingsSaver;
+  QxrdSettingsSaverPtr m_SettingsSaver;
 
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
   QCEP_INTEGER_PROPERTY(ExperimentKind)
@@ -142,7 +142,7 @@ public:  // Properties
 
 private:
   QxrdApplication                *m_Application;
-  QxrdWindow                     *m_Window;
+  QxrdWindowPtr                   m_Window;
   QSplashScreen                  *m_Splash;
   QxrdServerThreadPtr             m_ServerThread;
   QxrdServerPtr                   m_Server;

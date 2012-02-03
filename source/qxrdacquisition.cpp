@@ -11,9 +11,9 @@
 #include <QtConcurrentRun>
 
 QxrdAcquisition::QxrdAcquisition(DetectorKind detectorKind,
-                                 QxrdSettingsSaver *saver,
-                                 QxrdExperiment *doc,
-                                 QSharedPointer<QxrdDataProcessor> proc,
+                                 QxrdSettingsSaverPtr saver,
+                                 QxrdExperimentPtr doc,
+                                 QxrdDataProcessorPtr proc,
                                  QxrdAllocatorPtr allocator)
   : QxrdAcquisitionOperations(detectorKind, saver, doc, proc, allocator),
     m_AcquiredImages("acquired"),

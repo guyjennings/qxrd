@@ -4,27 +4,27 @@
 
 #include <cmath>
 
-QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaver *saver, QxrdDataProcessorBase *proc, QxrdAllocatorPtr alloc, QObject *parent) :
-    QObject(parent),
-    m_Processor(proc),
-    m_Allocator(alloc),
-    m_Geometry(new QxrdDetectorGeometry(this)),
-    m_NRows(saver, this, "nRows", 2048),
-    m_NCols(saver, this, "nCols", 2048),
-    m_CenterX(saver, this, "centerX", 1024),
-    m_CenterY(saver, this, "centerY", 1024),
-    m_Distance(saver, this, "distance", 1000),
-    m_Energy(saver, this, "energy", 22000),
-    m_PixelWidth(saver, this, "pixelWidth", 10),
-    m_PixelHeight(saver, this, "pixelHeight", 10),
-    m_Alpha(saver, this, "alpha", 0),
-    m_Beta(saver, this, "beta", 0),
-    m_Gamma(saver, this, "gamma", 0),
-    m_ChiMin(saver, this, "chiMin", 0),
-    m_ChiMax(saver, this, "chiMax", 360),
-    m_RingTTH(saver, this, "ringTTH", QcepDoubleList()),
-    m_RingIntensity(saver, this, "ringIntensity", QcepDoubleList()),
-    m_RingWidth(saver, this, "ringWidth", QcepDoubleList())
+QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverPtr saver, QxrdDataProcessorBase *proc, QxrdAllocatorPtr alloc, QObject *parent) :
+  QObject(parent),
+  m_Processor(proc),
+  m_Allocator(alloc),
+  m_Geometry(new QxrdDetectorGeometry(this)),
+  m_NRows(saver, this, "nRows", 2048),
+  m_NCols(saver, this, "nCols", 2048),
+  m_CenterX(saver, this, "centerX", 1024),
+  m_CenterY(saver, this, "centerY", 1024),
+  m_Distance(saver, this, "distance", 1000),
+  m_Energy(saver, this, "energy", 22000),
+  m_PixelWidth(saver, this, "pixelWidth", 10),
+  m_PixelHeight(saver, this, "pixelHeight", 10),
+  m_Alpha(saver, this, "alpha", 0),
+  m_Beta(saver, this, "beta", 0),
+  m_Gamma(saver, this, "gamma", 0),
+  m_ChiMin(saver, this, "chiMin", 0),
+  m_ChiMax(saver, this, "chiMax", 360),
+  m_RingTTH(saver, this, "ringTTH", QcepDoubleList()),
+  m_RingIntensity(saver, this, "ringIntensity", QcepDoubleList()),
+  m_RingWidth(saver, this, "ringWidth", QcepDoubleList())
 {
 }
 
@@ -81,7 +81,7 @@ void QxrdGenerateTestImage::appendRing(double tth, double intensity, double widt
 
 void QxrdGenerateTestImage::generateImage()
 {
-  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(NULL,
+  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(QxrdSettingsSaverPtr(),
                                                                               m_Allocator,
                                                                               QxrdAllocator::AllocateDouble,
                                                                               get_NCols(),
@@ -146,7 +146,7 @@ void QxrdGenerateTestImage::generateImage()
 
 void QxrdGenerateTestImage::generateTTHImage()
 {
-  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(NULL,
+  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(QxrdSettingsSaverPtr(),
                                                                               m_Allocator,
                                                                               QxrdAllocator::AllocateDouble,
                                                                               get_NCols(),
@@ -190,7 +190,7 @@ void QxrdGenerateTestImage::generateTTHImage()
 
 void QxrdGenerateTestImage::generateChiImage()
 {
-  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(NULL,
+  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(QxrdSettingsSaverPtr(),
                                                                               m_Allocator,
                                                                               QxrdAllocator::AllocateDouble,
                                                                               get_NCols(),
