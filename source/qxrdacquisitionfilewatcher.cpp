@@ -4,7 +4,7 @@
 #include "qxrdwindow.h"
 
 QxrdAcquisitionFileWatcher::QxrdAcquisitionFileWatcher(QxrdSettingsSaverPtr saver,
-                                                       QxrdExperimentPtr doc,
+                                                       QxrdExperimentWPtr doc,
                                                        QxrdDataProcessorPtr proc,
                                                        QxrdAllocatorPtr allocator,
                                                        QSettings *settings,

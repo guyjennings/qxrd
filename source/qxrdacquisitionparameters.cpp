@@ -8,7 +8,7 @@
 #include <QtGlobal>
 #include "qxrdapplication.h"
 
-QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaverPtr saver)
+QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaverWPtr saver)
   : QObject(),
     m_QxrdVersion(saver, this,"qxrdVersion",STR(QXRD_VERSION)),
     m_QtVersion(saver, this,"qtVersion",qVersion()),

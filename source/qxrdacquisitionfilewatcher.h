@@ -9,7 +9,7 @@ class QxrdAcquisitionFileWatcher : public QxrdAcquisition
     Q_OBJECT
 public:
     explicit QxrdAcquisitionFileWatcher(QxrdSettingsSaverPtr saver,
-                                        QxrdExperimentPtr doc,
+                                        QxrdExperimentWPtr doc,
                                         QxrdDataProcessorPtr proc,
                                         QxrdAllocatorPtr allocator,
                                         QSettings *settings,

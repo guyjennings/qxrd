@@ -13,10 +13,10 @@
 #include <QFont>
 #include <QComboBox>
 
-QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdSettingsSaverPtr saver,
-                                                   QxrdExperimentPtr doc,
-                                                   QxrdDataProcessorPtr proc,
-                                                   QxrdAllocatorPtr allocator,
+QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdSettingsSaverWPtr saver,
+                                                   QxrdExperimentWPtr doc,
+                                                   QxrdDataProcessorWPtr proc,
+                                                   QxrdAllocatorWPtr allocator,
                                                    QSettings *settings,
                                                    QString section)
   : QxrdAcquisition(SimulatedDetector, saver, doc, proc, allocator)
@@ -28,19 +28,19 @@ QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdSettingsSaverPtr saver,
 
 void QxrdAcquisitionSimulated::onExposureTimeChanged(double newTime)
 {
-  m_Experiment->printMessage(tr("Exposure time changed to %1").arg(newTime));
+  m_Experiment.toStrongRef()->printMessage(tr("Exposure time changed to %1").arg(newTime));
 
   m_Timer.start(get_ExposureTime()*1000);
 }
 
 void QxrdAcquisitionSimulated::onBinningModeChanged(int newMode)
 {
-  m_Experiment->printMessage(tr("Binning mode changed to %1").arg(newMode));
+  m_Experiment.toStrongRef()->printMessage(tr("Binning mode changed to %1").arg(newMode));
 }
 
 void QxrdAcquisitionSimulated::onCameraGainChanged(int newGain)
 {
-  m_Experiment->printMessage(tr("Camera Gain Changed to %1").arg(newGain));
+  m_Experiment.toStrongRef()->printMessage(tr("Camera Gain Changed to %1").arg(newGain));
 }
 
 void QxrdAcquisitionSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/)

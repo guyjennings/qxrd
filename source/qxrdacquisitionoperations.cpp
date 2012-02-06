@@ -4,10 +4,10 @@
 #include "qxrdexperiment.h"
 
 QxrdAcquisitionOperations::QxrdAcquisitionOperations(DetectorKind detectorKind,
-                                                     QxrdSettingsSaverPtr saver,
-                                                     QxrdExperimentPtr doc,
-                                                     QSharedPointer<QxrdDataProcessor> proc,
-                                                     QxrdAllocatorPtr allocator) :
+                                                     QxrdSettingsSaverWPtr saver,
+                                                     QxrdExperimentWPtr doc,
+                                                     QxrdDataProcessorWPtr proc,
+                                                     QxrdAllocatorWPtr allocator) :
   QxrdAcquisitionScripting(detectorKind, saver),
   m_Experiment(doc),
   m_Window(NULL),
@@ -21,3 +21,29 @@ void QxrdAcquisitionOperations::setWindow(QxrdWindow *win)
   m_Window = win;
 }
 
+void QxrdAcquisitionOperations::printMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+
+  if (exp) {
+    exp->printMessage(msg, ts);
+  }
+}
+
+void QxrdAcquisitionOperations::criticalMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+
+  if (exp) {
+    exp->criticalMessage(msg);
+  }
+}
+
+void QxrdAcquisitionOperations::statusMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+
+  if (exp) {
+    exp->statusMessage(msg);
+  }
+}

@@ -34,10 +34,10 @@ class QxrdAcquisition : public QxrdAcquisitionOperations
 
 public:
   QxrdAcquisition(DetectorKind detectorKind,
-                  QxrdSettingsSaverPtr saver,
-                  QxrdExperimentPtr doc,
-                  QxrdDataProcessorPtr proc,
-                  QxrdAllocatorPtr allocator);
+                  QxrdSettingsSaverWPtr saver,
+                  QxrdExperimentWPtr doc,
+                  QxrdDataProcessorWPtr proc,
+                  QxrdAllocatorWPtr allocator);
   ~QxrdAcquisition();
 
   class QxrdAcquisitionParameterPack
@@ -206,5 +206,6 @@ protected:
 };
 
 typedef QSharedPointer<QxrdAcquisition> QxrdAcquisitionPtr;
+typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
 
 #endif

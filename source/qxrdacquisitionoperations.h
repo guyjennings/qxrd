@@ -8,23 +8,27 @@ class QxrdDataProcessor;
 class QxrdWindow;
 class QxrdExperiment;
 
-typedef QSharedPointer<QxrdWindow> QxrdWindowPtr;
-typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
-typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
 
 class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionOperations(DetectorKind detectorKind, QxrdSettingsSaverPtr saver, QxrdExperimentPtr doc, QSharedPointer<QxrdDataProcessor> proc, QxrdAllocatorPtr allocator);
+  QxrdAcquisitionOperations(DetectorKind detectorKind, QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdDataProcessorWPtr proc, QxrdAllocatorWPtr allocator);
 
   void setWindow(QxrdWindow *win);
 
+public slots:
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+
 protected:
-  QxrdExperimentPtr    m_Experiment;
-  QxrdWindow          *m_Window;
-  QxrdAllocatorPtr     m_Allocator;
-  QxrdDataProcessorPtr m_DataProcessor;
+  QxrdExperimentWPtr    m_Experiment;
+  QxrdWindow           *m_Window;
+  QxrdAllocatorWPtr     m_Allocator;
+  QxrdDataProcessorWPtr m_DataProcessor;
 };
 
 #endif // QXRDACQUISITIONOPERATIONS_H

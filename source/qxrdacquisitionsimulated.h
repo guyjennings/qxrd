@@ -9,10 +9,10 @@ class QxrdAcquisitionSimulated : public QxrdAcquisition
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionSimulated(QxrdSettingsSaverPtr saver,
-                           QxrdExperimentPtr doc,
-                           QxrdDataProcessorPtr proc,
-                           QxrdAllocatorPtr allocator,
+  QxrdAcquisitionSimulated(QxrdSettingsSaverWPtr saver,
+                           QxrdExperimentWPtr doc,
+                           QxrdDataProcessorWPtr proc,
+                           QxrdAllocatorWPtr allocator,
                            QSettings *settings,
                            QString section);
 

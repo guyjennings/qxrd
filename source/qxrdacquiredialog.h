@@ -9,10 +9,10 @@
 class QxrdAcquireDialog : public QxrdAcquireDialogBase, public Ui::QxrdAcquireDialog {
   Q_OBJECT
 public:
-  QxrdAcquireDialog(QxrdExperimentPtr doc,
+  QxrdAcquireDialog(QxrdExperimentWPtr doc,
                     QxrdWindow *win,
-                    QxrdAcquisition *acq,
-                    QxrdDataProcessorPtr proc,
+                    QxrdAcquisitionWPtr acq,
+                    QxrdDataProcessorWPtr proc,
                     QWidget *parent);
   ~QxrdAcquireDialog();
 

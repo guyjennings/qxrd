@@ -171,4 +171,7 @@ private:
   FILE                           *m_ScanFile;
 };
 
+typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+
 #endif // QXRDEXPERIMENT_H

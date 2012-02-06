@@ -110,7 +110,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_AllocatorThread(NULL),
     m_Allocator(NULL),
     #ifdef HAVE_PERKIN_ELMER
-        m_PerkinElmerPluginInterface(NULL),
+    m_PerkinElmerPluginInterface(NULL),
     #endif
     m_NIDAQPluginInterface(NULL),
     m_ResponseTimer(NULL)
@@ -368,8 +368,8 @@ void QxrdApplication::loadPlugins()
         splashMessage(tr("Qxrd Version " STR(QXRD_VERSION) "\nLoaded plugin \"%1\"").arg(pluginName));
 
         g_Application->printMessage(tr("Loaded plugin \"%1\" from %2")
-                          .arg(pluginName)
-                          .arg(pluginsDir.absoluteFilePath(fileName)));
+                                    .arg(pluginName)
+                                    .arg(pluginsDir.absoluteFilePath(fileName)));
       } else {
 
         if (QLibrary::isLibrary(pluginsDir.absoluteFilePath(fileName))) {
@@ -387,9 +387,9 @@ void QxrdApplication::loadPlugins()
 QString QxrdApplication::hexArg(void *p)
 {
 #if (QT_POINTER_SIZE==4)
-    return tr("0x%1").arg((quint32)p, 8, 16, QLatin1Char('0'));
+  return tr("0x%1").arg((quint32)p, 8, 16, QLatin1Char('0'));
 #else
-    return tr("0x%1").arg((quint64)p, 16, 16, QLatin1Char('0'));
+  return tr("0x%1").arg((quint64)p, 16, 16, QLatin1Char('0'));
 #endif
 }
 
@@ -547,7 +547,7 @@ bool QxrdApplication::wantToQuit()
 {
   return QMessageBox::question(NULL, tr("Really Quit?"),
                                tr("Do you really want to exit the application?"),
-                                  QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
+                               QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
 QxrdAllocatorPtr QxrdApplication::allocator() const
@@ -606,11 +606,11 @@ void QxrdApplication::debugChanged(int newValue)
 
 static void qxrdTIFFWarningHandler(const char* /*module*/, const char* /*fmt*/, va_list /*ap*/)
 {
-//  char msg[100];
-//
-//  vsnprintf(msg, sizeof(msg), fmt, ap);
-//
-//  g_Application -> tiffWarning(module, msg);
+  //  char msg[100];
+  //
+  //  vsnprintf(msg, sizeof(msg), fmt, ap);
+  //
+  //  g_Application -> tiffWarning(module, msg);
 }
 
 static void qxrdTIFFErrorHandler(const char* module, const char* fmt, va_list ap)
@@ -713,14 +713,18 @@ void QxrdApplication::openExperiment(QString path)
   }
 }
 
-void QxrdApplication::closeExperiment(QxrdExperimentPtr exp)
+void QxrdApplication::closeExperiment(QxrdExperimentWPtr exp)
 {
   printf("QxrdApplication::closeExperiment(%p)\n", exp.data());
 
-  QxrdExperimentThreadPtr expthrd = exp -> experimentThread();
+  QxrdExperimentPtr expp = exp.toStrongRef();
 
-  if (expthrd) {
-    closedExperiment(expthrd);
+  if (expp) {
+    QxrdExperimentThreadPtr expthrd = expp -> experimentThread();
+
+    if (expthrd) {
+      closedExperiment(expthrd);
+    }
   }
 }
 
@@ -870,7 +874,7 @@ QList<QxrdExperimentPtr> &QxrdApplication::experiments()
 
 QxrdExperimentPtr QxrdApplication::experiment(int i)
 {
-    return m_Experiments.value(i);
+  return m_Experiments.value(i);
 }
 
 void QxrdApplication::activateExperiment(QString path)

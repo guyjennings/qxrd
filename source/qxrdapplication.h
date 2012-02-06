@@ -75,7 +75,7 @@ public slots:
 
   void activateExperiment(QString path);
   void openExperiment(QString path);
-  void closeExperiment(QxrdExperimentPtr exp);
+  void closeExperiment(QxrdExperimentWPtr exp);
 
   void openedExperiment(QxrdExperimentThreadPtr expthrd);
   void closedExperiment(QxrdExperimentThreadPtr expthrd);

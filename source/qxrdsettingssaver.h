@@ -32,5 +32,6 @@ private:
 };
 
 typedef QSharedPointer<QxrdSettingsSaver> QxrdSettingsSaverPtr;
+typedef QWeakPointer<QxrdSettingsSaver> QxrdSettingsSaverWPtr;
 
 #endif // QXRDSETTINGSSAVER_H

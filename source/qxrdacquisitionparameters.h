@@ -26,7 +26,7 @@ public:
     FileWatcherDetector
   } DetectorKind;
 
-  QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaverPtr saver);
+  QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaverWPtr saver);
   virtual ~QxrdAcquisitionParameters();
 
 public slots:

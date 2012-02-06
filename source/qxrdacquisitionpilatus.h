@@ -8,8 +8,8 @@ class QxrdAcquisitionPilatus : public QxrdAcquisition
   Q_OBJECT
 public:
   QxrdAcquisitionPilatus(QxrdSettingsSaverPtr saver,
-                         QxrdExperimentPtr doc,
-                         QxrdDataProcessorPtr proc,
+                         QxrdExperimentWPtr doc,
+                         QxrdDataProcessorWPtr proc,
                          QxrdAllocatorPtr allocator,
                          QSettings *settings,
                          QString section);
