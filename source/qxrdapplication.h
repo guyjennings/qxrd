@@ -25,7 +25,7 @@ class QxrdApplication : public QApplication
 public:
   QxrdApplication(int &argc, char **argv);
   ~QxrdApplication();
-  bool init(QSplashScreen *splash);
+  bool init();
 
   QxrdAllocatorPtr allocator() const;
 
@@ -60,6 +60,8 @@ public:
   void setNewExperimentSettings(QSettings &settings, int type, QString filename);
 
 public slots:
+  void finish();
+
   void doNewPerkinElmerAcquisition();
   void doNewPilatusAcquisition();
   void doNewSimulatedAcquisition();
@@ -75,8 +77,8 @@ public slots:
   void openExperiment(QString path);
   void closeExperiment(QxrdExperimentPtr exp);
 
-  void openedExperiment(QxrdExperimentThread *expthrd);
-  void closedExperiment(QObject *obj);
+  void openedExperiment(QxrdExperimentThreadPtr expthrd);
+  void closedExperiment(QxrdExperimentThreadPtr expthrd);
   QList<QxrdExperimentPtr> &experiments();
 
   QxrdExperimentPtr experiment(int i);

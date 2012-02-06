@@ -22,10 +22,10 @@ int main(int argc, char *argv[])
 
   QxrdApplication app(argc, argv);
 
-  QxrdSplashScreen *splash = NULL;
+  QxrdSplashScreenPtr splash;
 
   if (app.get_GuiWanted()) {
-    splash = new QxrdSplashScreen(NULL);
+    splash = QxrdSplashScreenPtr(new QxrdSplashScreen(NULL));
 
     splash->show();
     QFont f;
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 
   int res = 0;
 
-  if (app.init((app.get_GuiWanted() ? splash : NULL))) {
+  if (app.init()) {
 
     //  printf("App Constructed\n");
 

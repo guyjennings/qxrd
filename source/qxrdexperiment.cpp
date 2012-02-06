@@ -11,11 +11,13 @@
 #include "qxrdexperimentsettings.h"
 #include <QFileDialog>
 
-QxrdExperiment::QxrdExperiment(QString path,
-                               QxrdApplication *app,
-                               QSettings *settings,
-                               QObject *parent) :
+QxrdExperiment::QxrdExperiment(
+    QString path,
+    QxrdApplication *app,
+    QSettings *settings,
+    QObject *parent) :
   QObject(parent),
+  m_ExperimentThread(),
   m_SettingsSaver(QxrdSettingsSaverPtr(
                     new QxrdSettingsSaver(NULL, this))),
   m_ExperimentKind(m_SettingsSaver, this, "experimentKind", -1),
@@ -61,14 +63,21 @@ QxrdExperiment::QxrdExperiment(QString path,
   readSettings(settings);
 }
 
+QxrdExperimentThreadWPtr QxrdExperiment::experimentThread()
+{
+  return m_ExperimentThread;
+}
+
 QxrdSettingsSaverPtr QxrdExperiment::settingsSaver()
 {
   return m_SettingsSaver;
 }
 
-bool QxrdExperiment::init(QxrdExperimentPtr exp, QSettings *settings)
+bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentPtr exp, QSettings *settings)
 {
   GUI_THREAD_CHECK;
+
+  m_ExperimentThread = expthrd;
 
   if (m_Application->get_GuiWanted()) {
     m_Splash = new QxrdSplashScreen(NULL);

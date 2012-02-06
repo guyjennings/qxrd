@@ -7,8 +7,9 @@
 #include "qxrdexperiment.h"
 
 class QxrdExperimentThread;
-//typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;
-typedef QxrdExperimentThread *QxrdExperimentThreadPtr;
+typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;
+typedef QWeakPointer<QxrdExperimentThread> QxrdExperimentThreadWPtr;
+//typedef QxrdExperimentThread *QxrdExperimentThreadPtr;
 
 class QxrdExperimentThread : public QxrdThread
 {

@@ -19,15 +19,20 @@
 class QxrdWindow;
 class QxrdNIDAQPluginInterface;
 
+class QxrdExperimentThread;
+typedef QWeakPointer<QxrdExperimentThread> QxrdExperimentThreadWPtr;
+typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;
+
 class QxrdExperiment : public QObject
 {
   Q_OBJECT
 
 public:
   QxrdExperiment(QString path, QxrdApplication *app, QSettings *settings, QObject *parent = 0);
-  virtual bool init(QxrdExperimentPtr exp, QSettings *settings);
+  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
 
+  QxrdExperimentThreadWPtr experimentThread();
   QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
   QxrdWindowPtr window();
@@ -87,6 +92,7 @@ private:
   void openScanFile();
 
 public:  // Properties
+  QxrdExperimentThreadWPtr m_ExperimentThread;
   QxrdSettingsSaverPtr m_SettingsSaver;
 
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)

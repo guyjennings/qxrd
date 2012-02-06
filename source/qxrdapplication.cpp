@@ -117,6 +117,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 {
   printf("QxrdApplication::QxrdApplication(%p)\n", this);
 
+  connect(this, SIGNAL(aboutToQuit()), this, SLOT(finish()));
+
   g_Application = this;
 
   QDir::setCurrent(QDir::homePath());
@@ -208,7 +210,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   printMessage(tr("Root Path %1").arg(QDir::rootPath()));
 }
 
-bool QxrdApplication::init(QSplashScreen *splash)
+bool QxrdApplication::init()
 {
   QcepProperty::registerMetaTypes();
 
@@ -243,23 +245,25 @@ bool QxrdApplication::init(QSplashScreen *splash)
 
 QxrdApplication::~QxrdApplication()
 {
-  foreach(QxrdExperimentThreadPtr exp, m_ExperimentThreads) {
-    delete exp;
-  }
-
-  writeSettings();
-
-//  delete m_AllocatorThread;
-
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdApplication::~QxrdApplication");
   }
 
-  if (qcepDebug(DEBUG_APP)) {
-    printMessage("QxrdApplication::~QxrdApplication finished");
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdApplication::~QxrdApplication\n");
   }
+}
 
-  printf("QxrdApplication::~QxrdApplication(%p)\n", this);
+void QxrdApplication::finish()
+{
+  printf("QxrdApplication::finish()\n");
+
+  writeSettings();
+
+  m_ExperimentThreads.clear();
+  m_Experiments.clear();
+
+  m_AllocatorThread = QxrdAllocatorThreadPtr();
 }
 
 void QxrdApplication::openWelcomeWindow()
@@ -712,6 +716,12 @@ void QxrdApplication::openExperiment(QString path)
 void QxrdApplication::closeExperiment(QxrdExperimentPtr exp)
 {
   printf("QxrdApplication::closeExperiment(%p)\n", exp.data());
+
+  QxrdExperimentThreadPtr expthrd = exp -> experimentThread();
+
+  if (expthrd) {
+    closedExperiment(expthrd);
+  }
 }
 
 void QxrdApplication::appendRecentExperiment(QString path)
@@ -829,7 +839,7 @@ void QxrdApplication::openRecentExperiment(QString path)
   }
 }
 
-void QxrdApplication::openedExperiment(QxrdExperimentThread *expthrd)
+void QxrdApplication::openedExperiment(QxrdExperimentThreadPtr expthrd)
 {
   if (expthrd) {
     QxrdExperimentPtr expt = expthrd->experiment();
@@ -843,10 +853,8 @@ void QxrdApplication::openedExperiment(QxrdExperimentThread *expthrd)
   }
 }
 
-void QxrdApplication::closedExperiment(QObject *obj)
+void QxrdApplication::closedExperiment(QxrdExperimentThreadPtr expthrd)
 {
-  QxrdExperimentThreadPtr expthrd = qobject_cast<QxrdExperimentThreadPtr>(obj);
-
   if (expthrd) {
     QxrdExperimentPtr expt = expthrd->experiment();
 
