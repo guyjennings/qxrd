@@ -14,11 +14,11 @@ class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
 {
   Q_OBJECT
 public:
-  QxrdDataProcessorThreaded(QxrdSettingsSaverPtr saver,
-                            QxrdExperimentPtr doc,
-                            QxrdAcquisitionPtr acq,
-                            QxrdAllocatorPtr allocator,
-                            QxrdFileSaverPtr filesaver,
+  QxrdDataProcessorThreaded(QxrdSettingsSaverWPtr saver,
+                            QxrdExperimentWPtr doc,
+                            QxrdAcquisitionWPtr acq,
+                            QxrdAllocatorWPtr allocator,
+                            QxrdFileSaverWPtr filesaver,
                             QObject *parent=0);
 
 public:

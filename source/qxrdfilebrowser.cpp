@@ -10,8 +10,8 @@
 
 QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
                                  int isOutput,
-                                 QxrdExperimentPtr experiment,
-                                 QxrdDataProcessorPtr processor,
+                                 QxrdExperimentWPtr experiment,
+                                 QxrdDataProcessorWPtr processor,
                                  QWidget *parent)
   : QDockWidget(parent),
     m_BrowserFilter(saver, this, "browserFilter",1),
@@ -196,7 +196,11 @@ void QxrdFileBrowser::doHomeDirectory()
 
 void QxrdFileBrowser::doAcquisitionDirectory()
 {
-  doPushDirectory(m_Experiment->get_ExperimentDirectory());
+  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+
+  if (exp) {
+    doPushDirectory(exp->get_ExperimentDirectory());
+  }
 }
 
 void QxrdFileBrowser::doOpen()
@@ -221,10 +225,14 @@ void QxrdFileBrowser::doOpen()
       }
     }
   } else {
-    foreach(index, rows) {
-      if (!m_Model->isDir(index)) {
-        //    printf("Open: %s\n", qPrintable(m_Model->filePath(index)));
-        m_Processor->loadData(m_Model->filePath(index));
+    QxrdDataProcessorPtr proc = m_Processor.toStrongRef();
+
+    if (proc) {
+      foreach(index, rows) {
+        if (!m_Model->isDir(index)) {
+          //    printf("Open: %s\n", qPrintable(m_Model->filePath(index)));
+          proc->loadData(m_Model->filePath(index));
+        }
       }
     }
   }
@@ -236,10 +244,14 @@ void QxrdFileBrowser::doOpenDark()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  foreach(index, rows) {
-//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
-    if (!m_Model->isDir(index)) {
-      m_Processor->loadDark(m_Model->filePath(index));
+  QxrdDataProcessorPtr proc = m_Processor.toStrongRef();
+
+  if (proc) {
+    foreach(index, rows) {
+      //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+      if (!m_Model->isDir(index)) {
+        proc->loadDark(m_Model->filePath(index));
+      }
     }
   }
 }
@@ -250,10 +262,14 @@ void QxrdFileBrowser::doOpenMask()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  foreach(index, rows) {
-//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
-    if (!m_Model->isDir(index)) {
-      m_Processor->loadMask(m_Model->filePath(index));
+  QxrdDataProcessorPtr proc = m_Processor.toStrongRef();
+
+  if (proc) {
+    foreach(index, rows) {
+      //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+      if (!m_Model->isDir(index)) {
+        proc->loadMask(m_Model->filePath(index));
+      }
     }
   }
 }
@@ -264,10 +280,14 @@ void QxrdFileBrowser::doOpenGainMap()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  foreach(index, rows) {
-//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
-    if (!m_Model->isDir(index)) {
-      m_Processor->loadGainMap(m_Model->filePath(index));
+  QxrdDataProcessorPtr proc = m_Processor.toStrongRef();
+
+  if (proc) {
+    foreach(index, rows) {
+      //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+      if (!m_Model->isDir(index)) {
+        proc->loadGainMap(m_Model->filePath(index));
+      }
     }
   }
 }
@@ -278,10 +298,14 @@ void QxrdFileBrowser::doProcess()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  foreach(index, rows) {
-//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
-    if (!m_Model->isDir(index)) {
-      m_Processor->processData(m_Model->filePath(index));
+  QxrdDataProcessorPtr proc = m_Processor.toStrongRef();
+
+  if (proc) {
+    foreach(index, rows) {
+      //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+      if (!m_Model->isDir(index)) {
+        proc->processData(m_Model->filePath(index));
+      }
     }
   }
 }
@@ -292,10 +316,14 @@ void QxrdFileBrowser::doIntegrate()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  foreach(index, rows) {
-//    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
-    if (!m_Model->isDir(index)) {
-      m_Processor->integrateData(m_Model->filePath(index));
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    foreach(index, rows) {
+      //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
+      if (!m_Model->isDir(index)) {
+        proc->integrateData(m_Model->filePath(index));
+      }
     }
   }
 }
@@ -313,7 +341,11 @@ void QxrdFileBrowser::doAccumulate()
     }
   }
 
-  m_Processor->accumulateImages(paths);
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc->accumulateImages(paths);
+  }
 }
 
 void QxrdFileBrowser::doRefreshBrowser()
@@ -423,16 +455,16 @@ void QxrdFileBrowser::onModelReset()
 }
 
 QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdSettingsSaverPtr saver,
-                                           QxrdExperimentPtr experiment,
-                                           QxrdDataProcessorPtr processor,
+                                           QxrdExperimentWPtr experiment,
+                                           QxrdDataProcessorWPtr processor,
                                            QWidget *parent)
   : QxrdFileBrowser(saver, false, experiment, processor, parent)
 {
 }
 
 QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdSettingsSaverPtr saver,
-                                             QxrdExperimentPtr experiment,
-                                             QxrdDataProcessorPtr processor,
+                                             QxrdExperimentWPtr experiment,
+                                             QxrdDataProcessorWPtr processor,
                                              QWidget *parent)
   : QxrdFileBrowser(saver, true, experiment, processor, parent)
 {

@@ -10,68 +10,72 @@
 #include <QGridLayout>
 #include "qcepdebug.h"
 
-QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentPtr doc, QWidget *parent) :
+QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentWPtr exptw, QWidget *parent) :
   QDialog(parent),
-  m_Experiment(doc)
+  m_Experiment(exptw)
 {
   setupUi(this);
 
+  QxrdExperimentPtr expt(m_Experiment);
+
 //  connect(m_DetectorTypeCombo, SIGNAL(currentIndexChanged(int)), m_DetectorPrefsStack, SLOT(setCurrentIndex(int)));
 
-  QxrdAcquisitionPtr acq = m_Experiment -> acquisition();
-  QxrdDataProcessorPtr proc = m_Experiment->dataProcessor();
-//  QxrdAllocator *alloc = g_Application->allocator();
+  if (expt) {
+    QxrdAcquisitionPtr acq = expt -> acquisition();
+    QxrdDataProcessorPtr proc = expt->dataProcessor();
+    //  QxrdAllocator *alloc = g_Application->allocator();
 
-  int detectorType = m_Experiment -> get_DetectorType();
-//  int processorType = m_Experiment -> get_ProcessorType();
+    int detectorType = expt -> get_DetectorType();
+    //  int processorType = m_Experiment -> get_ProcessorType();
 
-  int runSpecServer = m_Experiment -> get_RunSpecServer();
-  int runSimpleServer = m_Experiment -> get_RunSimpleServer();
-  int specServerPort = m_Experiment -> get_SpecServerPort();
-  int simpleServerPort = m_Experiment -> get_SimpleServerPort();
+    int runSpecServer = expt -> get_RunSpecServer();
+    int runSimpleServer = expt -> get_RunSimpleServer();
+    int specServerPort = expt -> get_SpecServerPort();
+    int simpleServerPort = expt -> get_SimpleServerPort();
 
-//  QStringList detectorTypes = QxrdAcquisitionThread::detectorTypeNames();
+    //  QStringList detectorTypes = QxrdAcquisitionThread::detectorTypeNames();
 
-//  m_DetectorTypeCombo -> addItems(detectorTypes);
-//  m_DetectorTypeCombo -> setCurrentIndex(detectorType);
+    //  m_DetectorTypeCombo -> addItems(detectorTypes);
+    //  m_DetectorTypeCombo -> setCurrentIndex(detectorType);
 
-//  connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
-//  m_CurrentOutputDirectory -> setText(proc->get_OutputDirectory());
+    //  connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
+    //  m_CurrentOutputDirectory -> setText(proc->get_OutputDirectory());
 
-  connect(m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
-  m_CurrentLogFile -> setText(m_Experiment->get_LogFileName());
+    connect(m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
+    m_CurrentLogFile -> setText(expt->get_LogFileName());
 
-  connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
-  m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
-  m_SaveRawSubdir    -> setText  (proc->get_SaveRawSubdirectory());
+    connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
+    m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
+    m_SaveRawSubdir    -> setText  (proc->get_SaveRawSubdirectory());
 
-  connect(m_SaveDarkBrowse, SIGNAL(clicked()), this, SLOT(saveDarkBrowse()));
-  m_SaveDarkInSubdir  -> setChecked(proc->get_SaveDarkInSubdirectory());
-  m_SaveDarkSubdir    -> setText  (proc->get_SaveDarkSubdirectory());
+    connect(m_SaveDarkBrowse, SIGNAL(clicked()), this, SLOT(saveDarkBrowse()));
+    m_SaveDarkInSubdir  -> setChecked(proc->get_SaveDarkInSubdirectory());
+    m_SaveDarkSubdir    -> setText  (proc->get_SaveDarkSubdirectory());
 
-  connect(m_SaveSubtractedBrowse, SIGNAL(clicked()), this, SLOT(saveSubtractedBrowse()));
-  m_SaveSubtractedInSubdir  -> setChecked(proc->get_SaveSubtractedInSubdirectory());
-  m_SaveSubtractedSubdir    -> setText  (proc->get_SaveSubtractedSubdirectory());
+    connect(m_SaveSubtractedBrowse, SIGNAL(clicked()), this, SLOT(saveSubtractedBrowse()));
+    m_SaveSubtractedInSubdir  -> setChecked(proc->get_SaveSubtractedInSubdirectory());
+    m_SaveSubtractedSubdir    -> setText  (proc->get_SaveSubtractedSubdirectory());
 
-  connect(m_SaveIntegratedBrowse, SIGNAL(clicked()), this, SLOT(saveIntegratedBrowse()));
-  m_SaveIntegratedInLogFile  -> setChecked(proc->get_SaveIntegratedData());
-  m_SaveIntegratedInSeparateFiles  -> setChecked(proc->get_SaveIntegratedInSeparateFiles());
-  m_SaveIntegratedInSubdir  -> setChecked(proc->get_SaveIntegratedInSubdirectory());
-  m_SaveIntegratedSubdir    -> setText  (proc->get_SaveIntegratedSubdirectory());
+    connect(m_SaveIntegratedBrowse, SIGNAL(clicked()), this, SLOT(saveIntegratedBrowse()));
+    m_SaveIntegratedInLogFile  -> setChecked(proc->get_SaveIntegratedData());
+    m_SaveIntegratedInSeparateFiles  -> setChecked(proc->get_SaveIntegratedInSeparateFiles());
+    m_SaveIntegratedInSubdir  -> setChecked(proc->get_SaveIntegratedInSubdirectory());
+    m_SaveIntegratedSubdir    -> setText  (proc->get_SaveIntegratedSubdirectory());
 
-  m_SaveOverflowFiles -> setChecked(proc->get_SaveOverflowFiles());
+    m_SaveOverflowFiles -> setChecked(proc->get_SaveOverflowFiles());
 
-  m_RunSpecServer -> setChecked(runSpecServer);
-  m_RunSimpleServer -> setChecked(runSimpleServer);
-  m_SpecServerPort -> setRange(-1,65535);
-  m_SpecServerPort -> setSpecialValueText(tr("Automatic"));
-  m_SpecServerPort -> setValue(specServerPort);
-  m_SimpleServerPort -> setRange(0,65535);
-  m_SimpleServerPort -> setValue(simpleServerPort);
+    m_RunSpecServer -> setChecked(runSpecServer);
+    m_RunSimpleServer -> setChecked(runSimpleServer);
+    m_SpecServerPort -> setRange(-1,65535);
+    m_SpecServerPort -> setSpecialValueText(tr("Automatic"));
+    m_SpecServerPort -> setValue(specServerPort);
+    m_SimpleServerPort -> setRange(0,65535);
+    m_SimpleServerPort -> setValue(simpleServerPort);
 
-  m_FileIndexWidth -> setValue(acq->get_FileIndexWidth());
-  m_FilePhaseWidth -> setValue(acq->get_FilePhaseWidth());
-  m_FileOverflowWidth -> setValue(acq->get_FileOverflowWidth());
+    m_FileIndexWidth -> setValue(acq->get_FileIndexWidth());
+    m_FilePhaseWidth -> setValue(acq->get_FilePhaseWidth());
+    m_FileOverflowWidth -> setValue(acq->get_FileOverflowWidth());
+  }
 }
 
 QxrdExperimentPreferencesDialog::~QxrdExperimentPreferencesDialog()
@@ -162,58 +166,63 @@ void QxrdExperimentPreferencesDialog::accept()
 //    restartNeeded = true;
 //  }
 
-  QxrdAcquisitionPtr acq = m_Experiment -> acquisition();
-  QxrdDataProcessorPtr proc = m_Experiment->dataProcessor();
+  QxrdExperimentPtr expt(m_Experiment);
 
-  if (runSpecServer != m_Experiment -> get_RunSpecServer()) {
-    restartNeeded = true;
+  if (expt) {
+    QxrdAcquisitionPtr acq = expt -> acquisition();
+    QxrdDataProcessorPtr proc = expt->dataProcessor();
+
+    if (runSpecServer != expt -> get_RunSpecServer()) {
+      restartNeeded = true;
+    }
+
+    if (specServerPort != expt -> get_SpecServerPort()) {
+      restartNeeded = true;
+    }
+
+    if (runSimpleServer != expt -> get_RunSimpleServer()) {
+      restartNeeded = true;
+    }
+
+    if (simpleServerPort != expt -> get_SimpleServerPort()) {
+      restartNeeded = true;
+    }
+
+    if (restartNeeded) {
+      QMessageBox::information(this,"Restart Needed","You will need to restart qxrd before your changes will take effect");
+    }
+
+    //  m_Experiment    -> set_DetectorType(detectorType);
+    //  app -> set_ProcessorType(processorType);
+
+    expt -> set_RunSpecServer(runSpecServer);
+    expt -> set_SpecServerPort(specServerPort);
+    expt -> set_RunSimpleServer(runSimpleServer);
+    expt -> set_SimpleServerPort(simpleServerPort);
+
+    proc -> set_SaveRawInSubdirectory(m_SaveRawInSubdir -> isChecked());
+    proc -> set_SaveRawSubdirectory  (m_SaveRawSubdir   -> text());
+
+    proc -> set_SaveDarkInSubdirectory(m_SaveDarkInSubdir  -> isChecked());
+    proc -> set_SaveDarkSubdirectory  (m_SaveDarkSubdir    -> text());
+
+    proc -> set_SaveSubtractedInSubdirectory(m_SaveSubtractedInSubdir -> isChecked());
+    proc -> set_SaveSubtractedSubdirectory  (m_SaveSubtractedSubdir   -> text());
+
+    proc -> set_SaveIntegratedData(m_SaveIntegratedInLogFile  -> isChecked());
+    proc -> set_SaveIntegratedInSeparateFiles(m_SaveIntegratedInSeparateFiles -> isChecked());
+    proc -> set_SaveIntegratedInSubdirectory (m_SaveIntegratedInSubdir  -> isChecked());
+    proc -> set_SaveIntegratedSubdirectory   (m_SaveIntegratedSubdir    -> text());
+
+    proc -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
+
+    //  proc          -> set_OutputDirectory(m_CurrentOutputDirectory -> text());
+    expt -> set_LogFileName    (m_CurrentLogFile -> text());
+
+    acq  -> set_FileIndexWidth(m_FileIndexWidth -> value());
+    acq  -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
+    acq  -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
   }
-
-  if (specServerPort != m_Experiment -> get_SpecServerPort()) {
-    restartNeeded = true;
-  }
-
-  if (runSimpleServer != m_Experiment -> get_RunSimpleServer()) {
-    restartNeeded = true;
-  }
-
-  if (simpleServerPort != m_Experiment -> get_SimpleServerPort()) {
-    restartNeeded = true;
-  }
-
-  if (restartNeeded) {
-    QMessageBox::information(this,"Restart Needed","You will need to restart qxrd before your changes will take effect");
-  }
-
-//  m_Experiment    -> set_DetectorType(detectorType);
-//  app -> set_ProcessorType(processorType);
-  m_Experiment    -> set_RunSpecServer(runSpecServer);
-  m_Experiment    -> set_SpecServerPort(specServerPort);
-  m_Experiment    -> set_RunSimpleServer(runSimpleServer);
-  m_Experiment    -> set_SimpleServerPort(simpleServerPort);
-
-  proc          -> set_SaveRawInSubdirectory(m_SaveRawInSubdir -> isChecked());
-  proc          -> set_SaveRawSubdirectory  (m_SaveRawSubdir   -> text());
-
-  proc          -> set_SaveDarkInSubdirectory(m_SaveDarkInSubdir  -> isChecked());
-  proc          -> set_SaveDarkSubdirectory  (m_SaveDarkSubdir    -> text());
-
-  proc          -> set_SaveSubtractedInSubdirectory(m_SaveSubtractedInSubdir -> isChecked());
-  proc          -> set_SaveSubtractedSubdirectory  (m_SaveSubtractedSubdir   -> text());
-
-  proc          -> set_SaveIntegratedData(m_SaveIntegratedInLogFile  -> isChecked());
-  proc          -> set_SaveIntegratedInSeparateFiles(m_SaveIntegratedInSeparateFiles -> isChecked());
-  proc          -> set_SaveIntegratedInSubdirectory (m_SaveIntegratedInSubdir  -> isChecked());
-  proc          -> set_SaveIntegratedSubdirectory   (m_SaveIntegratedSubdir    -> text());
-
-  proc          -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
-
-//  proc          -> set_OutputDirectory(m_CurrentOutputDirectory -> text());
-  m_Experiment    -> set_LogFileName    (m_CurrentLogFile -> text());
-
-  acq           -> set_FileIndexWidth(m_FileIndexWidth -> value());
-  acq           -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
-  acq           -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
 
   QDialog::accept();
 }

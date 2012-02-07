@@ -37,12 +37,12 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   Q_OBJECT
 
 public:
-  QxrdWindow(QxrdSettingsSaverPtr saver,
+  QxrdWindow(QxrdSettingsSaverWPtr saver,
              QxrdApplication *app,
-             QxrdExperimentPtr doc,
-             QxrdAcquisitionPtr acq,
-             QxrdDataProcessorPtr proc,
-             QxrdAllocatorPtr alloc,
+             QxrdExperimentWPtr docw,
+             QxrdAcquisitionWPtr acqw,
+             QxrdDataProcessorWPtr procw,
+             QxrdAllocatorWPtr allocw,
              QSettings *settings,
              QString section,
              QWidget *parent=0);
@@ -120,7 +120,7 @@ public:
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
-  QxrdDataProcessorPtr dataProcessor() const;
+  QxrdDataProcessorWPtr dataProcessor() const;
 
   void newDataAvailable(QxrdDoubleImageDataPtr img, QxrdMaskDataPtr overflow);
   void newMaskAvailable(QxrdMaskDataPtr img);
@@ -128,7 +128,7 @@ public:
   QxrdDoubleImageDataPtr data();
   QxrdMaskDataPtr mask();
 
-  QxrdAcquisitionPtr acquisition() const;
+  QxrdAcquisitionWPtr acquisition() const;
 
   void captureSize();
   void resizeEvent(QResizeEvent *);
@@ -151,11 +151,11 @@ private:
   mutable QMutex                         m_Mutex;
   int                                    m_SettingsLoaded;
   QxrdApplication                       *m_Application;
-  QxrdSettingsSaverPtr                   m_Saver;
-  QxrdExperimentPtr                      m_Experiment;
-  QxrdAcquisitionPtr                     m_Acquisition;
-  QxrdDataProcessorPtr                   m_DataProcessor;
-  QxrdAllocatorPtr                       m_Allocator;
+  QxrdSettingsSaverWPtr                  m_Saver;
+  QxrdExperimentWPtr                     m_Experiment;
+  QxrdAcquisitionWPtr                    m_Acquisition;
+  QxrdDataProcessorWPtr                  m_DataProcessor;
+  QxrdAllocatorWPtr                      m_Allocator;
   QxrdAcquireDialogBase                 *m_AcquireDialog;
   QxrdSynchronizedAcquisitionDialog     *m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;

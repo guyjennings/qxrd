@@ -5,11 +5,11 @@
 #include <QSharedPointer>
 
 class QxrdAllocator;
-typedef QSharedPointer<QxrdAllocator> QxrdAllocatorPtr;
+typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;
 
 class QxrdImageDataObjectCounter {
 public:
-  QxrdImageDataObjectCounter(QxrdAllocatorPtr alloc, int typ);
+  QxrdImageDataObjectCounter(QxrdAllocatorWPtr alloc, int typ);
   ~QxrdImageDataObjectCounter();
 
   int value();
@@ -18,9 +18,9 @@ public:
   int allocatedMemoryMB();
 
 private:
-  QxrdAllocatorPtr m_Allocator;
-  quint64          m_Allocated;
-  int              m_Type;
+  QxrdAllocatorWPtr m_Allocator;
+  quint64           m_Allocated;
+  int               m_Type;
 };
 
 #endif // QXRDIMAGEDATAOBJECTCOUNTER_H

@@ -13,7 +13,7 @@ class QxrdMaskDialog : public QDockWidget, public Ui::QxrdMaskDialog
   Q_OBJECT
 
 public:
-  explicit QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessorPtr proc, QWidget *parent = 0);
+  explicit QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessorWPtr procw, QWidget *parent = 0);
   ~QxrdMaskDialog();
 
 protected:
@@ -46,7 +46,7 @@ private:
 
 private:
   QxrdWindow           *m_Window;
-  QxrdDataProcessorPtr  m_Processor;
+  QxrdDataProcessorWPtr m_Processor;
   QxrdMaskStackPtr      m_Masks;
   QxrdMaskStackModel   *m_MaskStackModel;
 };

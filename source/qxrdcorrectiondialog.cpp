@@ -1,7 +1,7 @@
 #include "qxrdcorrectiondialog.h"
 #include "ui_qxrdcorrectiondialog.h"
 
-QxrdCorrectionDialog::QxrdCorrectionDialog(QWidget *parent, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc) :
+QxrdCorrectionDialog::QxrdCorrectionDialog(QWidget *parent, QxrdAcquisitionWPtr acq, QxrdDataProcessorWPtr proc) :
     QDockWidget(parent)
 {
     setupUi(this);

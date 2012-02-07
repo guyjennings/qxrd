@@ -60,5 +60,6 @@ private:
 };
 
 typedef QSharedPointer<QxrdFileSaver> QxrdFileSaverPtr;
+typedef QWeakPointer<QxrdFileSaver> QxrdFileSaverWPtr;
 
 #endif

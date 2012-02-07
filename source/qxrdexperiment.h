@@ -29,7 +29,7 @@ class QxrdExperiment : public QObject
 
 public:
   QxrdExperiment(QString path, QxrdApplication *app, QSettings *settings, QObject *parent = 0);
-  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentPtr exp, QSettings *settings);
+  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
 
   QxrdExperimentThreadWPtr experimentThread();
@@ -91,10 +91,12 @@ private:
   void closeScanFile();
   void openScanFile();
 
-public:  // Properties
-  QxrdExperimentThreadWPtr m_ExperimentThread;
-  QxrdSettingsSaverPtr m_SettingsSaver;
+private:
+  QxrdApplication                *m_Application;
+  QxrdExperimentThreadWPtr        m_ExperimentThread;
+  QxrdSettingsSaverPtr            m_SettingsSaver;
 
+public:  // Properties
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
   QCEP_INTEGER_PROPERTY(ExperimentKind)
 
@@ -147,7 +149,6 @@ public:  // Properties
   QCEP_INTEGER_PROPERTY(CompletionPercentage)
 
 private:
-  QxrdApplication                *m_Application;
   QxrdWindowPtr                   m_Window;
   QSplashScreen                  *m_Splash;
   QxrdServerThreadPtr             m_ServerThread;

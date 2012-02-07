@@ -10,7 +10,7 @@ class QxrdSynchronizedAcquisitionDialog : public QDockWidget, public Ui::QxrdSyn
   Q_OBJECT
 
 public:
-  explicit QxrdSynchronizedAcquisitionDialog(QWidget *parent, QxrdAcquisitionPtr acq);
+  explicit QxrdSynchronizedAcquisitionDialog(QWidget *parent, QxrdAcquisitionWPtr acq);
   ~QxrdSynchronizedAcquisitionDialog();
 
 protected:
@@ -20,7 +20,7 @@ private slots:
   void waveformChanged();
 
 private:
-  QxrdAcquisitionPtr           m_Acquisition;
+  QxrdAcquisitionWPtr          m_Acquisition;
   QxrdSynchronizedAcquisition *m_SynchronizedAcquisition;
 };
 

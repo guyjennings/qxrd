@@ -17,6 +17,7 @@ QxrdExperiment::QxrdExperiment(
     QSettings *settings,
     QObject *parent) :
   QObject(parent),
+  m_Application(app),
   m_ExperimentThread(),
   m_SettingsSaver(QxrdSettingsSaverPtr(
                     new QxrdSettingsSaver(NULL, this))),
@@ -37,7 +38,6 @@ QxrdExperiment::QxrdExperiment(
   m_WorkCompleted(QxrdSettingsSaverPtr(), this, "workCompleted", 0),
   m_WorkTarget(QxrdSettingsSaverPtr(), this, "workTarget", 0),
   m_CompletionPercentage(QxrdSettingsSaverPtr(), this, "completionPercentage", 0),
-  m_Application(app),
   m_Window(NULL),
   m_Splash(NULL),
   m_ServerThread(NULL),
@@ -73,7 +73,7 @@ QxrdSettingsSaverPtr QxrdExperiment::settingsSaver()
   return m_SettingsSaver;
 }
 
-bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentPtr exp, QSettings *settings)
+bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings)
 {
   GUI_THREAD_CHECK;
 

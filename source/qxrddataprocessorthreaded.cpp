@@ -10,11 +10,11 @@
 #include <QDirIterator>
 
 QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(
-    QxrdSettingsSaverPtr saver,
-    QxrdExperimentPtr    doc,
-    QxrdAcquisitionPtr   acq,
-    QxrdAllocatorPtr     allocator,
-    QxrdFileSaverPtr     filesaver,
+    QxrdSettingsSaverWPtr saver,
+    QxrdExperimentWPtr    doc,
+    QxrdAcquisitionWPtr   acq,
+    QxrdAllocatorWPtr allocator,
+    QxrdFileSaverWPtr filesaver,
     QObject *parent)
   : QxrdDataProcessorBase(saver, doc, acq, allocator, filesaver, parent)
 {
@@ -95,7 +95,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
   QThread::currentThread()->setObjectName("correctInt16Image");
 
   if (qcepDebug(DEBUG_PROCESS)) {
-    m_Experiment->printMessage(tr("QxrdDataProcessorThreaded::correctInt16Image"));
+    printMessage(tr("QxrdDataProcessorThreaded::correctInt16Image"));
   }
 
   if (image) {
@@ -120,7 +120,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
   QThread::currentThread()->setObjectName("correctInt32Image");
 
   if (qcepDebug(DEBUG_PROCESS)) {
-    m_Experiment->printMessage(tr("QxrdDataProcessorThreaded::correctInt32Image"));
+    printMessage(tr("QxrdDataProcessorThreaded::correctInt32Image"));
   }
 
   if (image) {
@@ -146,7 +146,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
   QThread::currentThread()->setObjectName("correctDoubleImage");
 
   if (qcepDebug(DEBUG_PROCESS)) {
-    m_Experiment->printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
+    printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
   }
 
   if (image) {
@@ -172,7 +172,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
   QThread::currentThread()->setObjectName("correctDoubleImage");
 
   if (qcepDebug(DEBUG_PROCESS)) {
-    m_Experiment->printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
+    printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
   }
 
   if (image) {
@@ -219,7 +219,7 @@ QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
   QThread::currentThread()->setObjectName("integrateImage");
 
   if (qcepDebug(DEBUG_PROCESS)) {
-    m_Experiment->printMessage(tr("QxrdDataProcessorThreaded::integrateImage"));
+    printMessage(tr("QxrdDataProcessorThreaded::integrateImage"));
   }
 
   if (image && get_PerformIntegration()) {
@@ -239,7 +239,7 @@ QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
 void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
 {
   if (qcepDebug(DEBUG_PROCESS)) {
-    m_Experiment->printMessage(tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
+    printMessage(tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
   }
 
   QxrdIntegratedDataPtr integ = m_IntegratedData.dequeue();
@@ -256,7 +256,7 @@ QxrdROIDataPtr QxrdDataProcessorThreaded::calculateROI
   QThread::currentThread()->setObjectName("calculateROI");
 
   if (qcepDebug(DEBUG_PROCESS)) {
-    m_Experiment->printMessage(tr("QxrdDataProcessorThreaded::calculateROI"));
+    printMessage(tr("QxrdDataProcessorThreaded::calculateROI"));
   }
 
   return QxrdROIDataPtr();
@@ -265,7 +265,7 @@ QxrdROIDataPtr QxrdDataProcessorThreaded::calculateROI
 void QxrdDataProcessorThreaded::onROIDataAvailable()
 {
   if (qcepDebug(DEBUG_PROCESS)) {
-    m_Experiment->printMessage(tr("QxrdDataProcessorThreaded::onROIDataAvailable"));
+    printMessage(tr("QxrdDataProcessorThreaded::onROIDataAvailable"));
   }
 
   QxrdROIDataPtr roiData = m_ROIData.dequeue();
@@ -277,7 +277,7 @@ QxrdHistogramDataPtr QxrdDataProcessorThreaded::calculateHistogram
   QThread::currentThread()->setObjectName("calculateHistogram");
 
   if (qcepDebug(DEBUG_PROCESS)) {
-    m_Experiment->printMessage(tr("QxrdDataProcessorThreaded::calculateHistogram"));
+    printMessage(tr("QxrdDataProcessorThreaded::calculateHistogram"));
   }
 
   return QxrdHistogramDataPtr();
@@ -286,7 +286,7 @@ QxrdHistogramDataPtr QxrdDataProcessorThreaded::calculateHistogram
 void QxrdDataProcessorThreaded::onHistogramDataAvailable()
 {
   if (qcepDebug(DEBUG_PROCESS)) {
-    m_Experiment->printMessage(tr("QxrdDataProcessorThreaded::onHistogramDataAvailable"));
+    printMessage(tr("QxrdDataProcessorThreaded::onHistogramDataAvailable"));
   }
 
   QxrdHistogramDataPtr histData = m_HistogramData.dequeue();
@@ -313,8 +313,8 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
     QString path = filePathInCurrentDirectory(name);
 
     if (img->readImage(path)) {
-      m_Experiment->printMessage(tr("Load image from %1").arg(path));
-      m_Experiment->statusMessage(tr("Load image from %1").arg(path));
+      printMessage(tr("Load image from %1").arg(path));
+      statusMessage(tr("Load image from %1").arg(path));
       img -> loadMetaData();
 
       if (first) {
@@ -324,14 +324,14 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
         summed->accumulateImage(img);
       }
     } else {
-      m_Experiment->printMessage(tr("Couldn't load %1").arg(path));
-      m_Experiment->statusMessage(tr("Couldn't load %1").arg(path));
+      printMessage(tr("Couldn't load %1").arg(path));
+      statusMessage(tr("Couldn't load %1").arg(path));
     }
   }
 
   if (first) {
-    m_Experiment->printMessage(tr("No images were loaded"));
-    m_Experiment->statusMessage(tr("No images were loaded"));
+    printMessage(tr("No images were loaded"));
+    statusMessage(tr("No images were loaded"));
   } else {
     acquiredDoubleImage(summed, QxrdMaskDataPtr());
   }
@@ -349,8 +349,8 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
   QString path = filePathInCurrentDirectory(name);
 
   if (img -> readImage(path)) {
-    m_Experiment->printMessage(tr("Load image from %1").arg(path));
-    m_Experiment->statusMessage(tr("Load image from %1").arg(path));
+    printMessage(tr("Load image from %1").arg(path));
+    statusMessage(tr("Load image from %1").arg(path));
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -362,8 +362,8 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
                                                centerFinder() -> get_CenterX(),
                                                centerFinder() -> get_CenterY()));
   } else {
-    m_Experiment->printMessage(tr("Couldn't load %1").arg(path));
-    m_Experiment->statusMessage(tr("Couldn't load %1").arg(path));
+    printMessage(tr("Couldn't load %1").arg(path));
+    statusMessage(tr("Couldn't load %1").arg(path));
   }
 }
 
@@ -374,8 +374,8 @@ void QxrdDataProcessorThreaded::processData(QString name)
   QString path = filePathInCurrentDirectory(name);
 
   if (res -> readImage(path)) {
-    m_Experiment->printMessage(tr("Load image from %1").arg(path));
-    m_Experiment->statusMessage(tr("Load image from %1").arg(path));
+    printMessage(tr("Load image from %1").arg(path));
+    statusMessage(tr("Load image from %1").arg(path));
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -385,8 +385,8 @@ void QxrdDataProcessorThreaded::processData(QString name)
 
     set_DataPath(res -> get_FileName());
   } else {
-    m_Experiment->printMessage(tr("Couldn't load %1").arg(path));
-    m_Experiment->statusMessage(tr("Couldn't load %1").arg(path));
+    printMessage(tr("Couldn't load %1").arg(path));
+    statusMessage(tr("Couldn't load %1").arg(path));
   }
 }
 
@@ -397,7 +397,7 @@ void QxrdDataProcessorThreaded::processDataSequence(QString path, QString filter
   while (iter.hasNext()) {
     QString path = iter.next();
 
-    m_Experiment->printMessage(path);
+    printMessage(path);
 
     processData(path);
   }
@@ -408,7 +408,7 @@ void QxrdDataProcessorThreaded::processDataSequence(QStringList paths)
   QString path;
 
   foreach(path, paths) {
-    m_Experiment->printMessage(path);
+    printMessage(path);
 
     processData(path);
   }
@@ -421,7 +421,7 @@ void QxrdDataProcessorThreaded::processDataSequence(QString path, QStringList fi
   while (iter.hasNext()) {
     QString path = iter.next();
 
-    m_Experiment->printMessage(path);
+    printMessage(path);
 
     processData(path);
   }
@@ -460,7 +460,7 @@ void QxrdDataProcessorThreaded::processNormalizedFile(QString name, QList<double
 
     set_DataPath(res -> get_FileName());
   } else {
-    m_Experiment->printMessage(tr("Couldn't load %1").arg(path));
+    printMessage(tr("Couldn't load %1").arg(path));
   }
 }
 
@@ -498,7 +498,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
 
     int nFileDarkExposures = dark->get_SummedExposures();
 
-    m_Experiment->printMessage(tr("Loaded Dark image from %1 (%2 summed)").arg(path).arg(nFileDarkExposures));
+    printMessage(tr("Loaded Dark image from %1 (%2 summed)").arg(path).arg(nFileDarkExposures));
 
     while (imagePaths.hasNext()) {
       QString imagePath=imagePaths.next();
@@ -511,16 +511,20 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
 
         int nFileImageExposures = image->get_SummedExposures();
 
-        m_Experiment->printMessage(tr("Loaded image from %1 (%2 summed)").arg(path).arg(nFileImageExposures));
+        printMessage(tr("Loaded image from %1 (%2 summed)").arg(path).arg(nFileImageExposures));
 
         image->correctBadBackgroundSubtraction(dark,nImgExposures,nDarkExposures);
 
-        m_FileSaver->saveData(path, image, QxrdMaskDataPtr(), NoOverwrite);
+        QxrdFileSaverPtr saver = m_FileSaver.toStrongRef();
+
+        if (saver) {
+          saver->saveData(path, image, QxrdMaskDataPtr(), NoOverwrite);
+        }
       } else {
-        m_Experiment->printMessage(tr("Failed to load image from %1").arg(path));
+        printMessage(tr("Failed to load image from %1").arg(path));
       }
     }
   } else {
-    m_Experiment->printMessage(tr("Failed to load Dark image from %1").arg(path));
+    printMessage(tr("Failed to load Dark image from %1").arg(path));
   }
 }

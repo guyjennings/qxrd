@@ -11,7 +11,7 @@ class QxrdCorrectionDialog : public QDockWidget, public Ui::QxrdCorrectionDialog
     Q_OBJECT
 
 public:
-    explicit QxrdCorrectionDialog(QWidget *parent, QxrdAcquisitionPtr acq, QxrdDataProcessorPtr proc);
+    explicit QxrdCorrectionDialog(QWidget *parent, QxrdAcquisitionWPtr acq, QxrdDataProcessorWPtr proc);
     ~QxrdCorrectionDialog();
 
 protected:

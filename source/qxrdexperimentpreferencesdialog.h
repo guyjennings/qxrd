@@ -14,7 +14,7 @@
 class QxrdExperimentPreferencesDialog : public QDialog, public Ui::QxrdExperimentPreferencesDialog {
   Q_OBJECT
 public:
-  QxrdExperimentPreferencesDialog(QxrdExperimentPtr doc, QWidget *parent = 0);
+  QxrdExperimentPreferencesDialog(QxrdExperimentWPtr exptw, QWidget *parent = 0);
   ~QxrdExperimentPreferencesDialog();
 
 public slots:
@@ -35,7 +35,7 @@ private:
   void getRelativeDirectoryPath(QLineEdit *edit);
 
 private:
-  QxrdExperimentPtr m_Experiment;
+  QxrdExperimentWPtr m_Experiment;
 };
 
 #endif // QXRDEXPERIMENTPREFERENCESDIALOG_H

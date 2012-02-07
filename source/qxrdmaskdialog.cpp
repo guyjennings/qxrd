@@ -5,10 +5,10 @@
 #include "qxrdmaskstackmodel.h"
 #include "qxrdapplication.h"
 
-QxrdMaskDialog::QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessorPtr proc, QWidget *parent) :
+QxrdMaskDialog::QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessorWPtr procw, QWidget *parent) :
   QDockWidget(parent),
   m_Window(win),
-  m_Processor(proc),
+  m_Processor(procw),
   m_Masks(NULL)
 {
   setupUi(this);
@@ -37,18 +37,22 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessorPtr proc, QWidg
   connect(m_MaskCirclesRadio, SIGNAL(clicked()), win->m_ImageMaskCirclesButton, SLOT(click()));
   connect(m_MaskPolygonsRadio, SIGNAL(clicked()), win->m_ImageMaskPolygonsButton, SLOT(click()));
 
-  m_Processor -> prop_MaskMinimumValue() -> linkTo(m_MaskMinimum);
-  m_Processor -> prop_MaskMaximumValue() -> linkTo(m_MaskMaximum);
-  m_Processor -> prop_MaskCircleRadius() -> linkTo(m_MaskCircleRadius);
-  m_Processor -> prop_MaskSetPixels() -> linkTo(m_MaskSetPixels);
+  QxrdDataProcessorPtr proc(m_Processor);
 
-  m_Masks = m_Processor->maskStack();
-  m_MaskStackModel = new QxrdMaskStackModel(m_Masks);
+  if (proc) {
+    proc -> prop_MaskMinimumValue() -> linkTo(m_MaskMinimum);
+    proc -> prop_MaskMaximumValue() -> linkTo(m_MaskMaximum);
+    proc -> prop_MaskCircleRadius() -> linkTo(m_MaskCircleRadius);
+    proc -> prop_MaskSetPixels() -> linkTo(m_MaskSetPixels);
 
-  m_MaskStackView -> setModel(m_MaskStackModel);
-  m_MaskStackView -> setMaskStack(m_Masks);
-  m_MaskStackView -> setProcessor(m_Processor);
-  m_MaskStackView -> setMaskDialog(this);
+    m_Masks = proc->maskStack();
+    m_MaskStackModel = new QxrdMaskStackModel(m_Masks);
+
+    m_MaskStackView -> setModel(m_MaskStackModel);
+    m_MaskStackView -> setMaskStack(m_Masks);
+    m_MaskStackView -> setProcessor(m_Processor);
+    m_MaskStackView -> setMaskDialog(this);
+  }
 }
 
 QxrdMaskDialog::~QxrdMaskDialog()
@@ -70,27 +74,31 @@ int QxrdMaskDialog::maskStackSelectPopup()
 {
   QMenu actions;
 
-  QxrdMaskStackPtr m = m_Processor->maskStack();
+  QxrdDataProcessorPtr proc(m_Processor);
 
-  if (m) {
-    int nmasks = m->size();
+  if (proc) {
+    QxrdMaskStackPtr m = proc->maskStack();
 
-    for (int i=0; i<nmasks; i++) {
-      QxrdMaskDataPtr p = m->at(i);
-      if (p) {
-        QString lvl = m->stackLevelName(i);
-        actions.addAction(tr("%1: %2").arg(lvl).arg(p->get_Title()))->setData(i);
+    if (m) {
+      int nmasks = m->size();
+
+      for (int i=0; i<nmasks; i++) {
+        QxrdMaskDataPtr p = m->at(i);
+        if (p) {
+          QString lvl = m->stackLevelName(i);
+          actions.addAction(tr("%1: %2").arg(lvl).arg(p->get_Title()))->setData(i);
+        }
       }
+    }
+
+    QAction *selected = actions.exec(QCursor::pos());
+
+    if (selected) {
+      return selected->data().toInt();
     }
   }
 
-  QAction *selected = actions.exec(QCursor::pos());
-
-  if (selected) {
-    return selected->data().toInt();
-  } else {
-    return -1;
-  }
+  return -1;
 }
 
 void QxrdMaskDialog::doHideMaskAll()
@@ -98,8 +106,12 @@ void QxrdMaskDialog::doHideMaskAll()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->hideMaskAllStack(n);
-    g_Application->statusMessage("Mask Stack Hide All");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->hideMaskAllStack(n);
+      proc->statusMessage("Mask Stack Hide All");
+    }
   }
 }
 
@@ -108,8 +120,12 @@ void QxrdMaskDialog::doShowMaskAll()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->showMaskAllStack(n);
-    g_Application->statusMessage("Mask Stack Show All");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->showMaskAllStack(n);
+      proc->statusMessage("Mask Stack Show All");
+    }
   }
 }
 
@@ -118,8 +134,12 @@ void QxrdMaskDialog::doHideMaskRange()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->hideMaskRangeStack(n);
-    g_Application->statusMessage("Mask Stack Hide In Range");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->hideMaskRangeStack(n);
+      proc->statusMessage("Mask Stack Hide In Range");
+    }
   }
 }
 
@@ -128,8 +148,12 @@ void QxrdMaskDialog::doShowMaskRange()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->showMaskRangeStack(n);
-    g_Application->statusMessage("Mask Stack Show In Range");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->showMaskRangeStack(n);
+      proc->statusMessage("Mask Stack Show In Range");
+    }
   }
 }
 
@@ -138,8 +162,12 @@ void QxrdMaskDialog::doInvertMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->invertMaskStack(n);
-    g_Application->statusMessage("Mask Stack Invert");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->invertMaskStack(n);
+      proc->statusMessage("Mask Stack Invert");
+    }
   }
 }
 
@@ -148,8 +176,12 @@ void QxrdMaskDialog::doAndMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->andMaskStack(n);
-    g_Application->statusMessage("Mask Stack AND");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->andMaskStack(n);
+      proc->statusMessage("Mask Stack AND");
+    }
   }
 }
 
@@ -158,8 +190,12 @@ void QxrdMaskDialog::doOrMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->orMaskStack(n);
-    g_Application->statusMessage("Mask Stack OR");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->orMaskStack(n);
+      proc->statusMessage("Mask Stack OR");
+    }
   }
 }
 
@@ -168,8 +204,12 @@ void QxrdMaskDialog::doXorMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->xorMaskStack(n);
-    g_Application->statusMessage("Mask Stack XOR");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->xorMaskStack(n);
+      proc->statusMessage("Mask Stack XOR");
+    }
   }
 }
 
@@ -178,8 +218,12 @@ void QxrdMaskDialog::doAndNotMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->andNotMaskStack(n);
-    g_Application->statusMessage("Mask Stack AND NOT");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->andNotMaskStack(n);
+      proc->statusMessage("Mask Stack AND NOT");
+    }
   }
 }
 
@@ -188,8 +232,12 @@ void QxrdMaskDialog::doOrNotMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->orNotMaskStack(n);
-    g_Application->statusMessage("Mask Stack OR NOT");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->orNotMaskStack(n);
+      proc->statusMessage("Mask Stack OR NOT");
+    }
   }
 }
 
@@ -198,8 +246,12 @@ void QxrdMaskDialog::doXorNotMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->xorNotMaskStack(n);
-    g_Application->statusMessage("Mask Stack XOR NOT");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->xorNotMaskStack(n);
+      proc->statusMessage("Mask Stack XOR NOT");
+    }
   }
 }
 
@@ -208,8 +260,12 @@ void QxrdMaskDialog::doExchangeMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->exchangeMaskStack(n);
-    g_Application->statusMessage("Mask Stack Exchanged");
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->exchangeMaskStack(n);
+      proc->statusMessage("Mask Stack Exchanged");
+    }
   }
 }
 
@@ -218,47 +274,79 @@ void QxrdMaskDialog::doRollMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    m_Processor->rollMaskStack(n);
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->rollMaskStack(n);
+    }
   }
 }
 
 void QxrdMaskDialog::doRollUpMask()
 {
-  m_Processor->rollMaskStack(1);
-  g_Application->statusMessage("Mask Stack Rolled Up");
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc->rollMaskStack(1);
+    proc->statusMessage("Mask Stack Rolled Up");
+  }
 }
 
 void QxrdMaskDialog::doRollDownMask()
 {
-  m_Processor->rollMaskStack(-1);
-  g_Application->statusMessage("Mask Stack Rolled Down");
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc->rollMaskStack(-1);
+    proc->statusMessage("Mask Stack Rolled Down");
+  }
 }
 
 void QxrdMaskDialog::doClearMask()
 {
-  m_Processor->clearMaskStack();
-  g_Application->statusMessage("Mask Stack Cleared");
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc->clearMaskStack();
+    proc->statusMessage("Mask Stack Cleared");
+  }
 }
 
 void QxrdMaskDialog::doClearMaskTop()
 {
-  m_Processor->clearMaskStackTop();
-  g_Application->statusMessage("Top of Mask Stack Cleared");
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc->clearMaskStackTop();
+    proc->statusMessage("Top of Mask Stack Cleared");
+  }
 }
 
 void QxrdMaskDialog::doPushMask()
 {
-  m_Processor->pushMaskStack();
-  g_Application->statusMessage("Mask Pushed");
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc->pushMaskStack();
+    proc->statusMessage("Mask Pushed");
+  }
 }
 
 void QxrdMaskDialog::doNewMask()
 {
-  m_Processor->newMaskStack();
-  g_Application->statusMessage("New Mask");
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc->newMaskStack();
+    proc->statusMessage("New Mask");
+  }
 }
 
 void QxrdMaskDialog::doUndoMask()
 {
-  g_Application->statusMessage("Undo Not Implemented");
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc->statusMessage("Undo Not Implemented");
+  }
 }

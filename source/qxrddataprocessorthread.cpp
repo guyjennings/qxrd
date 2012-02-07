@@ -3,11 +3,11 @@
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 
-QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaverPtr saver,
-                                                 QxrdExperimentPtr doc,
-                                                 QxrdAcquisitionPtr acq,
-                                                 QxrdAllocatorPtr allocator,
-                                                 QxrdFileSaverPtr filesaver,
+QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaverWPtr saver,
+                                                 QxrdExperimentWPtr doc,
+                                                 QxrdAcquisitionWPtr acq,
+                                                 QxrdAllocatorWPtr allocator,
+                                                 QxrdFileSaverWPtr filesaver,
                                                  QSettings *settings,
                                                  QString section)
   : QxrdThread(),
@@ -36,28 +36,32 @@ QxrdDataProcessorThread::~QxrdDataProcessorThread()
 
 void QxrdDataProcessorThread::run()
 {
-  if (qcepDebug(DEBUG_THREADS)) {
-    m_Experiment->printMessage("Starting Processor Thread");
-  }
+  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
 
-  QxrdDataProcessorPtr p;
+  if (exp) {
+    if (qcepDebug(DEBUG_THREADS)) {
+      exp->printMessage("Starting Processor Thread");
+    }
 
-  p = QxrdDataProcessorPtr(
-        new QxrdDataProcessor(m_Saver,
-                            m_Experiment,
-                            m_Acquisition,
-                            m_Allocator,
-                            m_FileSaver,
-                            m_Settings,
-                            m_Section,
-                            NULL));
+    QxrdDataProcessorPtr p;
 
-  m_DataProcessor = p;
+    p = QxrdDataProcessorPtr(
+          new QxrdDataProcessor(m_Saver,
+                                m_Experiment,
+                                m_Acquisition,
+                                m_Allocator,
+                                m_FileSaver,
+                                m_Settings,
+                                m_Section,
+                                NULL));
 
-  int rc = exec();
+    m_DataProcessor = p;
 
-  if (qcepDebug(DEBUG_THREADS)) {
-    m_Experiment->printMessage(tr("Processor Thread Terminated with rc %1").arg(rc));
+    int rc = exec();
+
+    if (qcepDebug(DEBUG_THREADS)) {
+      exp->printMessage(tr("Processor Thread Terminated with rc %1").arg(rc));
+    }
   }
 }
 

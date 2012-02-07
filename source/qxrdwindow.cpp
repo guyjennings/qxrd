@@ -52,12 +52,12 @@
 #include <QMenu>
 #include <QDesktopWidget>
 
-QxrdWindow::QxrdWindow(QxrdSettingsSaverPtr saver,
+QxrdWindow::QxrdWindow(QxrdSettingsSaverWPtr saver,
                        QxrdApplication *app,
-                       QxrdExperimentPtr doc,
-                       QxrdAcquisitionPtr acq,
-                       QxrdDataProcessorPtr proc,
-                       QxrdAllocatorPtr alloc,
+                       QxrdExperimentWPtr docw,
+                       QxrdAcquisitionWPtr acqw,
+                       QxrdDataProcessorWPtr procw,
+                       QxrdAllocatorWPtr allocw,
                        QSettings *settings,
                        QString section,
                        QWidget *parent)
@@ -68,10 +68,10 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaverPtr saver,
     m_SettingsLoaded(false),
     m_Application(app),
     m_Saver(saver),
-    m_Experiment(doc),
-    m_Acquisition(acq),
-    m_DataProcessor(proc),
-    m_Allocator(alloc),
+    m_Experiment(docw),
+    m_Acquisition(acqw),
+    m_DataProcessor(procw),
+    m_Allocator(allocw),
     m_AcquireDialog(NULL),
     m_SynchronizedAcquisitionDialog(NULL),
     m_DisplayDialog(NULL),
@@ -112,22 +112,38 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaverPtr saver,
 
   setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
 
-  if (m_Acquisition) {
-    m_AcquireDialog = m_Acquisition -> controlPanel(this);
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    m_AcquireDialog = acq -> controlPanel(this);
     m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
   }
 
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
   m_DisplayDialog      = new QxrdDisplayDialog(this);
-  m_CenterFinderDialog = new QxrdCenterFinderDialog(m_DataProcessor -> centerFinder());
+
+  if (proc) {
+    m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());
+  }
+
   m_MaskDialog         = new QxrdMaskDialog(this, m_DataProcessor);
 
-  if (m_Acquisition) {
+  if (acq) {
     m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
   }
 
-  m_IntegratorDialog   = new QxrdIntegratorDialog(m_DataProcessor -> integrator());
-  m_InputFileBrowser   = new QxrdInputFileBrowser(m_Experiment->settingsSaver(), m_Experiment, m_DataProcessor, this);
-  m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_Experiment->settingsSaver(), m_Experiment, m_DataProcessor, this);
+  if (proc) {
+    m_IntegratorDialog   = new QxrdIntegratorDialog(proc -> integrator());
+  }
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    m_InputFileBrowser   = new QxrdInputFileBrowser(expt->settingsSaver(), m_Experiment, m_DataProcessor, this);
+    m_OutputFileBrowser  = new QxrdOutputFileBrowser(expt->settingsSaver(), m_Experiment, m_DataProcessor, this);
+  }
+
   m_SliceDialog        = new QxrdSliceDialog(this);
   m_HistogramDialog    = new QxrdHistogramDialog(this);
   m_ImageInfoDialog    = new QxrdInfoDialog(this);
@@ -334,13 +350,15 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaverPtr saver,
   connect(m_ActionClearSelectedIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearSelectedCurves()));
 
   connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
-  connect(m_DataProcessor->integrator()->prop_IntegrationXUnits(), SIGNAL(valueChanged(int,int)),
-          this, SLOT(integrationXUnitsChanged(int)));
-  integrationXUnitsChanged(m_DataProcessor->integrator()->get_IntegrationXUnits());
+  if (proc) {
+    connect(proc->integrator()->prop_IntegrationXUnits(), SIGNAL(valueChanged(int,int)),
+            this, SLOT(integrationXUnitsChanged(int)));
+    integrationXUnitsChanged(proc->integrator()->get_IntegrationXUnits());
 
-  connect(m_ActionIntegrateVsR,   SIGNAL(triggered()), m_DataProcessor->integrator().data(), SLOT(integrateVsR()));
-  connect(m_ActionIntegrateVsQ,   SIGNAL(triggered()), m_DataProcessor->integrator().data(), SLOT(integrateVsQ()));
-  connect(m_ActionIntegrateVsTTH, SIGNAL(triggered()), m_DataProcessor->integrator().data(), SLOT(integrateVsTTH()));
+    connect(m_ActionIntegrateVsR,   SIGNAL(triggered()), proc->integrator().data(), SLOT(integrateVsR()));
+    connect(m_ActionIntegrateVsQ,   SIGNAL(triggered()), proc->integrator().data(), SLOT(integrateVsQ()));
+    connect(m_ActionIntegrateVsTTH, SIGNAL(triggered()), proc->integrator().data(), SLOT(integrateVsTTH()));
+  }
 
   //  connect(m_SaveDarkOptions, SIGNAL(clicked()), this, SLOT(doProcessorOptionsDialog()));
 
@@ -386,31 +404,38 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaverPtr saver,
   connect(m_Acquisition.data(), SIGNAL(acquireComplete()),
           this,                 SLOT(acquireComplete()));
 
-  m_Acquisition -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
+  if (acq) {
+    acq -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
+    acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
+    acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
+  }
 
-  m_Experiment    -> prop_CompletionPercentage() -> linkTo(m_Progress);
-  m_DataProcessor -> prop_PerformDarkSubtraction() -> linkTo(m_CorrectionDialog->m_PerformDark);
-  m_DataProcessor -> prop_PerformDarkSubtractionTime() -> linkTo(m_CorrectionDialog->m_PerformDarkTime);
-  m_DataProcessor -> prop_SaveRawImages() -> linkTo(m_CorrectionDialog->m_SaveRaw);
-  m_DataProcessor -> prop_SaveDarkImages() -> linkTo(m_CorrectionDialog->m_SaveDark);
-  m_Acquisition   -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
-  m_Acquisition   -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
-  m_DataProcessor -> prop_PerformBadPixels() -> linkTo(m_CorrectionDialog->m_PerformBadPixels);
-  m_DataProcessor -> prop_PerformBadPixelsTime() -> linkTo(m_CorrectionDialog->m_PerformBadPixelsTime);
-  m_DataProcessor -> prop_PerformGainCorrection() -> linkTo(m_CorrectionDialog->m_PerformGainCorrection);
-  m_DataProcessor -> prop_PerformGainCorrectionTime() -> linkTo(m_CorrectionDialog->m_PerformGainCorrectionTime);
-  m_DataProcessor -> prop_SaveSubtracted() -> linkTo(m_CorrectionDialog->m_SaveSubtracted);
-  m_DataProcessor -> prop_SaveSubtractedTime() -> linkTo(m_CorrectionDialog->m_SaveSubtractedTime);
-  m_DataProcessor -> prop_SaveAsText() -> linkTo(m_CorrectionDialog->m_SaveAsText);
-  m_DataProcessor -> prop_SaveAsTextTime() -> linkTo(m_CorrectionDialog->m_SaveAsTextTime);
-  m_DataProcessor -> prop_PerformIntegration() -> linkTo(m_CorrectionDialog->m_PerformIntegration);
-  m_DataProcessor -> prop_PerformIntegrationTime() -> linkTo(m_CorrectionDialog->m_PerformIntegrationTime);
-  m_DataProcessor -> prop_DisplayIntegratedData() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedData);
-  m_DataProcessor -> prop_DisplayIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedDataTime);
-  m_DataProcessor -> prop_SaveIntegratedData() -> linkTo(m_CorrectionDialog->m_SaveIntegratedData);
-  m_DataProcessor -> prop_SaveIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_SaveIntegratedDataTime);
-  m_DataProcessor -> prop_SaveIntegratedInSeparateFiles() -> linkTo(m_CorrectionDialog->m_SaveIntegratedInSeparateFiles);
-  m_DataProcessor -> prop_EstimatedProcessingTime() -> linkTo(m_CorrectionDialog->m_EstimatedProcessingTime);
+  if (expt) {
+    expt -> prop_CompletionPercentage() -> linkTo(m_Progress);
+  }
+
+  if (proc) {
+    proc -> prop_PerformDarkSubtraction() -> linkTo(m_CorrectionDialog->m_PerformDark);
+    proc -> prop_PerformDarkSubtractionTime() -> linkTo(m_CorrectionDialog->m_PerformDarkTime);
+    proc -> prop_SaveRawImages() -> linkTo(m_CorrectionDialog->m_SaveRaw);
+    proc -> prop_SaveDarkImages() -> linkTo(m_CorrectionDialog->m_SaveDark);
+    proc -> prop_PerformBadPixels() -> linkTo(m_CorrectionDialog->m_PerformBadPixels);
+    proc -> prop_PerformBadPixelsTime() -> linkTo(m_CorrectionDialog->m_PerformBadPixelsTime);
+    proc -> prop_PerformGainCorrection() -> linkTo(m_CorrectionDialog->m_PerformGainCorrection);
+    proc -> prop_PerformGainCorrectionTime() -> linkTo(m_CorrectionDialog->m_PerformGainCorrectionTime);
+    proc -> prop_SaveSubtracted() -> linkTo(m_CorrectionDialog->m_SaveSubtracted);
+    proc -> prop_SaveSubtractedTime() -> linkTo(m_CorrectionDialog->m_SaveSubtractedTime);
+    proc -> prop_SaveAsText() -> linkTo(m_CorrectionDialog->m_SaveAsText);
+    proc -> prop_SaveAsTextTime() -> linkTo(m_CorrectionDialog->m_SaveAsTextTime);
+    proc -> prop_PerformIntegration() -> linkTo(m_CorrectionDialog->m_PerformIntegration);
+    proc -> prop_PerformIntegrationTime() -> linkTo(m_CorrectionDialog->m_PerformIntegrationTime);
+    proc -> prop_DisplayIntegratedData() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedData);
+    proc -> prop_DisplayIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedDataTime);
+    proc -> prop_SaveIntegratedData() -> linkTo(m_CorrectionDialog->m_SaveIntegratedData);
+    proc -> prop_SaveIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_SaveIntegratedDataTime);
+    proc -> prop_SaveIntegratedInSeparateFiles() -> linkTo(m_CorrectionDialog->m_SaveIntegratedInSeparateFiles);
+    proc -> prop_EstimatedProcessingTime() -> linkTo(m_CorrectionDialog->m_EstimatedProcessingTime);
+  }
 
   m_Plot -> prop_DisplayMinimumPct() -> linkTo(m_DisplayDialog->m_DisplayMinimumPct);
   m_Plot -> prop_DisplayMaximumPct() -> linkTo(m_DisplayDialog->m_DisplayMaximumPct);
@@ -436,23 +461,29 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaverPtr saver,
   m_CenterFinderPlot -> setWindow(this);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
-  connect(m_DataProcessor -> centerFinder() -> prop_CenterX(), SIGNAL(valueChanged(double,int)),
-          m_Plot, SLOT(onCenterXChanged(double)));
+  if (proc) {
+    connect(proc -> centerFinder() -> prop_CenterX(), SIGNAL(valueChanged(double,int)),
+            m_Plot, SLOT(onCenterXChanged(double)));
 
-  connect(m_DataProcessor -> centerFinder() -> prop_CenterY(), SIGNAL(valueChanged(double,int)),
-          m_Plot, SLOT(onCenterYChanged(double)));
+    connect(proc -> centerFinder() -> prop_CenterY(), SIGNAL(valueChanged(double,int)),
+            m_Plot, SLOT(onCenterYChanged(double)));
 
-  connect(m_DataProcessor -> centerFinder() -> prop_CenterX(), SIGNAL(valueChanged(double,int)),
-          m_CenterFinderPlot, SLOT(onCenterXChanged(double)));
+    connect(proc -> centerFinder() -> prop_CenterX(), SIGNAL(valueChanged(double,int)),
+            m_CenterFinderPlot, SLOT(onCenterXChanged(double)));
 
-  connect(m_DataProcessor -> centerFinder() -> prop_CenterY(), SIGNAL(valueChanged(double,int)),
-          m_CenterFinderPlot, SLOT(onCenterYChanged(double)));
+    connect(proc -> centerFinder() -> prop_CenterY(), SIGNAL(valueChanged(double,int)),
+            m_CenterFinderPlot, SLOT(onCenterYChanged(double)));
 
-  connect(m_DataProcessor.data(), SIGNAL(newIntegrationAvailable(QxrdIntegratedDataPtr)),
-          m_IntegratorPlot, SLOT(onNewIntegrationAvailable(QxrdIntegratedDataPtr)));
+    connect(proc.data(), SIGNAL(newIntegrationAvailable(QxrdIntegratedDataPtr)),
+            m_IntegratorPlot, SLOT(onNewIntegrationAvailable(QxrdIntegratedDataPtr)));
+  }
 
-  connect(m_Allocator -> prop_Allocated(), SIGNAL(valueChanged(int,int)), this, SLOT(allocatedMemoryChanged()));
-  connect(m_Allocator -> prop_Max(), SIGNAL(valueChanged(int,int)), this, SLOT(allocatedMemoryChanged()));
+  QxrdAllocatorPtr alloc(m_Allocator);
+
+  if (alloc) {
+    connect(alloc -> prop_Allocated(), SIGNAL(valueChanged(int,int)), this, SLOT(allocatedMemoryChanged()));
+    connect(alloc -> prop_Max(), SIGNAL(valueChanged(int,int)), this, SLOT(allocatedMemoryChanged()));
+  }
 
   m_WindowsMenu -> addAction(m_AcquireDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_InputFileBrowser -> toggleViewAction());
@@ -510,7 +541,13 @@ QxrdWindow::~QxrdWindow()
 
 void QxrdWindow::updateTitle()
 {
-  setWindowTitle(m_Experiment->experimentFilePath()+" - QXRD");
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    setWindowTitle(expt->experimentFilePath()+" - QXRD");
+  } else {
+    setWindowTitle("QXRD");
+  }
 
   if (sizeof(void*) == 4) {
     setWindowTitle(windowTitle()+" - 32 bit - v"+STR(QXRD_VERSION));
@@ -611,19 +648,23 @@ void QxrdWindow::populateExperimentsMenu()
 
   m_ExperimentsMenu->clear();
 
-  QList<QxrdExperimentPtr> exps = m_Application->experiments();
+  QList<QxrdExperimentWPtr> exps = m_Application->experiments();
 
-  foreach (QxrdExperimentPtr exp, exps) {
-    QString path = exp->experimentFilePath();
+  foreach (QxrdExperimentWPtr expw, exps) {
+    QxrdExperimentPtr exp(expw);
 
-    QAction *action = new QAction(path, m_ExperimentsMenu);
-    QSignalMapper *mapper = new QSignalMapper(action);
-    connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
-    mapper->setMapping(action, path);
+    if (exp) {
+      QString path = exp->experimentFilePath();
 
-    connect(mapper, SIGNAL(mapped(const QString &)), m_Application, SLOT(activateExperiment(QString)));
+      QAction *action = new QAction(path, m_ExperimentsMenu);
+      QSignalMapper *mapper = new QSignalMapper(action);
+      connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
+      mapper->setMapping(action, path);
 
-    m_ExperimentsMenu -> addAction(action);
+      connect(mapper, SIGNAL(mapped(const QString &)), m_Application, SLOT(activateExperiment(QString)));
+
+      m_ExperimentsMenu -> addAction(action);
+    }
   }
 }
 
@@ -774,19 +815,23 @@ void QxrdWindow::readSettings(QSettings *settings, QString section)
 
     m_SettingsLoaded = true;
 
-    if (!m_Experiment->get_DefaultLayout()) {
-      QByteArray geometry = get_WindowGeometry();
-      QByteArray winstate = get_WindowState();
+    QxrdExperimentPtr expt(m_Experiment);
 
-      if (!restoreGeometry(geometry)) {
-        printf("Restore geometry failed\n");
-      }
+    if (expt) {
+      if (!expt->get_DefaultLayout()) {
+        QByteArray geometry = get_WindowGeometry();
+        QByteArray winstate = get_WindowState();
 
-      if (!restoreState(winstate,2)) {
-        printf("Restore state failed\n");
+        if (!restoreGeometry(geometry)) {
+          printf("Restore geometry failed\n");
+        }
+
+        if (!restoreState(winstate,2)) {
+          printf("Restore state failed\n");
+        }
+      } else{
+        expt->set_DefaultLayout(0);
       }
-    } else {
-      m_Experiment->set_DefaultLayout(0);
     }
   }
 }
@@ -964,22 +1009,26 @@ void QxrdWindow::saveExperimentAs()
 {
   GUI_THREAD_CHECK;
 
-  QString path = m_Experiment->experimentFilePath();
-  QString name = m_Experiment->defaultExperimentName(path);
-  QString dirp = m_Experiment->defaultExperimentDirectory(path);
+  QxrdExperimentPtr expt(m_Experiment);
 
-  QDir dir(m_Experiment->get_ExperimentDirectory());
+  if (expt) {
+    QString path = expt->experimentFilePath();
+    QString name = expt->defaultExperimentName(path);
+    QString dirp = expt->defaultExperimentDirectory(path);
 
-  QString newPath = dir.filePath(name+"-copy.qxrdp");
+    QDir dir(expt->get_ExperimentDirectory());
 
-  QString newChoice = QFileDialog::getSaveFileName(NULL,
-                                                   "Save Experiment As",
-                                                   newPath,
-                                                   "QXRD Experiments (*.qxrdp)");
+    QString newPath = dir.filePath(name+"-copy.qxrdp");
 
-  if (newChoice.length()>0) {
-    m_Experiment->saveExperimentAs(newChoice);
-    m_Application->appendRecentExperiment(newChoice);
+    QString newChoice = QFileDialog::getSaveFileName(NULL,
+                                                     "Save Experiment As",
+                                                     newPath,
+                                                     "QXRD Experiments (*.qxrdp)");
+
+    if (newChoice.length()>0) {
+      expt->saveExperimentAs(newChoice);
+      m_Application->appendRecentExperiment(newChoice);
+    }
   }
 }
 
@@ -987,22 +1036,26 @@ void QxrdWindow::saveExperimentCopy()
 {
   GUI_THREAD_CHECK;
 
-  QString path = m_Experiment->experimentFilePath();
-  QString name = m_Experiment->defaultExperimentName(path);
-  QString dirp = m_Experiment->defaultExperimentDirectory(path);
+  QxrdExperimentPtr expt(m_Experiment);
 
-  QDir dir(m_Experiment->get_ExperimentDirectory());
+  if (expt) {
+    QString path = expt->experimentFilePath();
+    QString name = expt->defaultExperimentName(path);
+    QString dirp = expt->defaultExperimentDirectory(path);
 
-  QString newPath = dir.filePath(name+"-copy.qxrdp");
+    QDir dir(expt->get_ExperimentDirectory());
 
-  QString newChoice = QFileDialog::getSaveFileName(NULL,
-                                                   "Save Experiment Copy",
-                                                   newPath,
-                                                   "QXRD Experiments (*.qxrdp)");
+    QString newPath = dir.filePath(name+"-copy.qxrdp");
 
-  if (newChoice.length()>0) {
-    m_Experiment->saveExperimentCopyAs(newChoice);
-    m_Application->appendRecentExperiment(newChoice);
+    QString newChoice = QFileDialog::getSaveFileName(NULL,
+                                                     "Save Experiment Copy",
+                                                     newPath,
+                                                     "QXRD Experiments (*.qxrdp)");
+
+    if (newChoice.length()>0) {
+      expt->saveExperimentCopyAs(newChoice);
+      m_Application->appendRecentExperiment(newChoice);
+    }
   }
 }
 
@@ -1010,14 +1063,18 @@ void QxrdWindow::doSaveData()
 {
   GUI_THREAD_CHECK;
 
-  if (m_DataProcessor->data() == NULL) {
-    warningMessage("No data available to save");
-  } else {
-    QString theFile = QFileDialog::getSaveFileName(
-          this, "Save Data in", m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-    if (theFile.length()) {
-      m_DataProcessor->saveData(theFile, QxrdDataProcessor::CanOverwrite);
+  if (proc) {
+    if (proc->data() == NULL) {
+      warningMessage("No data available to save");
+    } else {
+      QString theFile = QFileDialog::getSaveFileName(
+            this, "Save Data in", proc -> get_DataPath());
+
+      if (theFile.length()) {
+        proc->saveData(theFile, QxrdDataProcessor::CanOverwrite);
+      }
     }
   }
 }
@@ -1026,11 +1083,15 @@ void QxrdWindow::doLoadData()
 {
   GUI_THREAD_CHECK;
 
-  QString theFile = QFileDialog::getOpenFileName(
-        this, "Load Data from...", m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  if (theFile.length()) {
-    m_DataProcessor->loadData(theFile);
+  if (proc) {
+    QString theFile = QFileDialog::getOpenFileName(
+          this, "Load Data from...", proc -> get_DataPath());
+
+    if (theFile.length()) {
+      proc->loadData(theFile);
+    }
   }
 }
 
@@ -1038,14 +1099,18 @@ void QxrdWindow::doSaveDark()
 {
   GUI_THREAD_CHECK;
 
-  if (m_DataProcessor->darkImage() == NULL) {
-    warningMessage("No dark image available to save");
-  } else {
-    QString theFile = QFileDialog::getSaveFileName(
-          this, "Save Dark Data in", m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-    if (theFile.length()) {
-      m_DataProcessor->saveDark(theFile, QxrdDataProcessor::CanOverwrite);
+  if (proc) {
+    if (proc->darkImage() == NULL) {
+      warningMessage("No dark image available to save");
+    } else {
+      QString theFile = QFileDialog::getSaveFileName(
+            this, "Save Dark Data in", proc -> get_DataPath());
+
+      if (theFile.length()) {
+        proc->saveDark(theFile, QxrdDataProcessor::CanOverwrite);
+      }
     }
   }
 }
@@ -1054,11 +1119,15 @@ void QxrdWindow::doLoadDark()
 {
   GUI_THREAD_CHECK;
 
-  QString theFile = QFileDialog::getOpenFileName(
-        this, "Load Dark Data from...", m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  if (theFile.length()) {
-    m_DataProcessor->loadDark(theFile);
+  if (proc) {
+    QString theFile = QFileDialog::getOpenFileName(
+          this, "Load Dark Data from...", proc -> get_DataPath());
+
+    if (theFile.length()) {
+      proc->loadDark(theFile);
+    }
   }
 }
 
@@ -1066,12 +1135,16 @@ void QxrdWindow::doClearDark()
 {
   GUI_THREAD_CHECK;
 
-  if (m_DataProcessor->darkImage() == NULL) {
-    warningMessage("No dark image available to clear");
-  } else {
-    if (QMessageBox::question(this, "Clear Dark Image?", "Do you really want to clear the dark image?",
-                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
-      m_DataProcessor->clearDark();
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    if (proc->darkImage() == NULL) {
+      warningMessage("No dark image available to clear");
+    } else {
+      if (QMessageBox::question(this, "Clear Dark Image?", "Do you really want to clear the dark image?",
+                                QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+        proc->clearDark();
+      }
     }
   }
 }
@@ -1080,14 +1153,18 @@ void QxrdWindow::doSaveMask()
 {
   GUI_THREAD_CHECK;
 
-  if (m_DataProcessor->mask() == NULL) {
-    warningMessage("No mask image to save");
-  } else {
-    QString theFile = QFileDialog::getSaveFileName(
-          this, "Save Mask in", m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-    if (theFile.length()) {
-      m_DataProcessor->saveMask(theFile, QxrdDataProcessor::CanOverwrite);
+  if (proc) {
+    if (proc->mask() == NULL) {
+      warningMessage("No mask image to save");
+    } else {
+      QString theFile = QFileDialog::getSaveFileName(
+            this, "Save Mask in", proc -> get_DataPath());
+
+      if (theFile.length()) {
+        proc->saveMask(theFile, QxrdDataProcessor::CanOverwrite);
+      }
     }
   }
 }
@@ -1096,11 +1173,15 @@ void QxrdWindow::doLoadMask()
 {
   GUI_THREAD_CHECK;
 
-  QString theFile = QFileDialog::getOpenFileName(
-        this, "Load Mask from...", m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  if (theFile.length()) {
-    m_DataProcessor->loadMask(theFile);
+  if (proc) {
+    QString theFile = QFileDialog::getOpenFileName(
+          this, "Load Mask from...", proc -> get_DataPath());
+
+    if (theFile.length()) {
+      proc->loadMask(theFile);
+    }
   }
 }
 
@@ -1108,12 +1189,16 @@ void QxrdWindow::doClearMask()
 {
   GUI_THREAD_CHECK;
 
-  if (m_DataProcessor->mask() == NULL) {
-    warningMessage("No mask image available to clear");
-  } else {
-    if (QMessageBox::question(this, "Clear Mask?", "Do you really want to clear the mask?",
-                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
-      m_DataProcessor->clearMask();
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    if (proc->mask() == NULL) {
+      warningMessage("No mask image available to clear");
+    } else {
+      if (QMessageBox::question(this, "Clear Mask?", "Do you really want to clear the mask?",
+                                QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+        proc->clearMask();
+      }
     }
   }
 }
@@ -1122,14 +1207,18 @@ void QxrdWindow::doSaveBadPixels()
 {
   GUI_THREAD_CHECK;
 
-  if (m_DataProcessor->badPixels() == NULL) {
-    warningMessage("No Bad Pixel data to save");
-  } else {
-    QString theFile = QFileDialog::getSaveFileName(
-          this, "Save Bad Pixels in", m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-    if (theFile.length()) {
-      m_DataProcessor->saveBadPixels(theFile, QxrdDataProcessor::CanOverwrite);
+  if (proc) {
+    if (proc->badPixels() == NULL) {
+      warningMessage("No Bad Pixel data to save");
+    } else {
+      QString theFile = QFileDialog::getSaveFileName(
+            this, "Save Bad Pixels in", proc -> get_DataPath());
+
+      if (theFile.length()) {
+        proc->saveBadPixels(theFile, QxrdDataProcessor::CanOverwrite);
+      }
     }
   }
 }
@@ -1138,11 +1227,15 @@ void QxrdWindow::doLoadBadPixels()
 {
   GUI_THREAD_CHECK;
 
-  QString theFile = QFileDialog::getOpenFileName(
-        this, "Load Bad Pixel Map from...", m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  if (theFile.length()) {
-    m_DataProcessor->loadBadPixels(theFile);
+  if (proc) {
+    QString theFile = QFileDialog::getOpenFileName(
+          this, "Load Bad Pixel Map from...", proc -> get_DataPath());
+
+    if (theFile.length()) {
+      proc->loadBadPixels(theFile);
+    }
   }
 }
 
@@ -1150,12 +1243,16 @@ void QxrdWindow::doClearBadPixels()
 {
   GUI_THREAD_CHECK;
 
-  if (m_DataProcessor->badPixels() == NULL) {
-    warningMessage("No Bad Pixel data to clear");
-  } else {
-    if (QMessageBox::question(this, "Clear Bad Pixels", "Do you really want to clear the bad pixel map?",
-                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
-      m_DataProcessor->clearBadPixels();
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    if (proc->badPixels() == NULL) {
+      warningMessage("No Bad Pixel data to clear");
+    } else {
+      if (QMessageBox::question(this, "Clear Bad Pixels", "Do you really want to clear the bad pixel map?",
+                                QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+        proc->clearBadPixels();
+      }
     }
   }
 }
@@ -1164,14 +1261,18 @@ void QxrdWindow::doSaveGainMap()
 {
   GUI_THREAD_CHECK;
 
-  if (m_DataProcessor->gainMap() == NULL) {
-    warningMessage("No Gain Map available to save");
-  } else {
-    QString theFile = QFileDialog::getSaveFileName(
-          this, "Save Gain Map in", m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-    if (theFile.length()) {
-      m_DataProcessor->saveGainMap(theFile, QxrdDataProcessor::CanOverwrite);
+  if (proc) {
+    if (proc->gainMap() == NULL) {
+      warningMessage("No Gain Map available to save");
+    } else {
+      QString theFile = QFileDialog::getSaveFileName(
+            this, "Save Gain Map in", proc -> get_DataPath());
+
+      if (theFile.length()) {
+        proc->saveGainMap(theFile, QxrdDataProcessor::CanOverwrite);
+      }
     }
   }
 }
@@ -1180,11 +1281,15 @@ void QxrdWindow::doLoadGainMap()
 {
   GUI_THREAD_CHECK;
 
-  QString theFile = QFileDialog::getOpenFileName(
-        this, "Load Pixel Gain Map from...", m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  if (theFile.length()) {
-    m_DataProcessor->loadGainMap(theFile);
+  if (proc) {
+    QString theFile = QFileDialog::getOpenFileName(
+          this, "Load Pixel Gain Map from...", proc -> get_DataPath());
+
+    if (theFile.length()) {
+      proc->loadGainMap(theFile);
+    }
   }
 }
 
@@ -1192,12 +1297,16 @@ void QxrdWindow::doClearGainMap()
 {
   GUI_THREAD_CHECK;
 
-  if (m_DataProcessor->gainMap() == NULL) {
-    warningMessage("No Gain Map available to clear");
-  } else {
-    if (QMessageBox::question(this, "Clear Gain Map", "Do you really want to clear the gain map?",
-                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
-      m_DataProcessor->clearGainMap();
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    if (proc->gainMap() == NULL) {
+      warningMessage("No Gain Map available to clear");
+    } else {
+      if (QMessageBox::question(this, "Clear Gain Map", "Do you really want to clear the gain map?",
+                                QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+        proc->clearGainMap();
+      }
     }
   }
 }
@@ -1232,7 +1341,11 @@ void QxrdWindow::executeScript()
 
 void QxrdWindow::cancelScript()
 {
-  m_Experiment -> scriptEngine() -> cancelCommand();
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    expt -> scriptEngine() -> cancelCommand();
+  }
 }
 
 void QxrdWindow::finishedCommand(QScriptValue result)
@@ -1254,28 +1367,36 @@ void QxrdWindow::finishedCommand(QScriptValue result)
 
 void QxrdWindow::doLoadScript()
 {
-  QString theFile = QFileDialog::getOpenFileName(
-        this, "Load Script from...", m_DataProcessor->get_ScriptPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  if (theFile.length()) {
-    m_DataProcessor->set_ScriptPath(theFile);
+  if (proc) {
+    QString theFile = QFileDialog::getOpenFileName(
+          this, "Load Script from...", proc->get_ScriptPath());
 
-    loadScript(theFile);
+    if (theFile.length()) {
+      proc->set_ScriptPath(theFile);
+
+      loadScript(theFile);
+    }
   }
 }
 
 void QxrdWindow::loadScript(QString path)
 {
-  m_Experiment -> printMessage(tr("Loading script file from %1").arg(path));
-  m_Experiment -> scriptEngine() -> loadScript(path);
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    expt -> printMessage(tr("Loading script file from %1").arg(path));
+    expt -> scriptEngine() -> loadScript(path);
+  }
 }
 
-QxrdDataProcessorPtr QxrdWindow::dataProcessor() const
+QxrdDataProcessorWPtr QxrdWindow::dataProcessor() const
 {
   return m_DataProcessor;
 }
 
-QxrdAcquisitionPtr QxrdWindow::acquisition() const
+QxrdAcquisitionWPtr QxrdWindow::acquisition() const
 {
   return m_Acquisition;
 }
@@ -1292,11 +1413,15 @@ QxrdMaskDataPtr QxrdWindow::mask()
 
 void QxrdWindow::allocatedMemoryChanged()
 {
-  int alloc = m_Allocator -> get_Allocated();
-  int maxalloc = m_Allocator -> get_Max();
+  QxrdAllocatorPtr allocator(m_Allocator);
 
-  m_AllocationStatus -> setMaximum(maxalloc);
-  m_AllocationStatus -> setValue(alloc);
+  if (allocator) {
+    int alloc = allocator -> get_Allocated();
+    int maxalloc = allocator -> get_Max();
+
+    m_AllocationStatus -> setMaximum(maxalloc);
+    m_AllocationStatus -> setValue(alloc);
+  }
 }
 
 void QxrdWindow::doRefineCenterTilt()
@@ -1307,32 +1432,44 @@ void QxrdWindow::doRefineCenterTilt()
 
 void QxrdWindow::doAccumulateImages()
 {
-  QStringList files = QFileDialog::getOpenFileNames(this,
-                                                    "Select data files to accumulate...",
-                                                    m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  m_DataProcessor->accumulateImages(files);
+  if (proc) {
+    QStringList files = QFileDialog::getOpenFileNames(this,
+                                                      "Select data files to accumulate...",
+                                                      proc -> get_DataPath());
+
+    proc->accumulateImages(files);
+  }
 }
 
 void QxrdWindow::doIntegrateSequence()
 {
-  QStringList files = QFileDialog::getOpenFileNames(this,
-                                                    "Select data files to integrate...",
-                                                    m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  foreach (QString file, files) {
-    m_DataProcessor->integrateData(file);
+  if (proc) {
+    QStringList files = QFileDialog::getOpenFileNames(this,
+                                                      "Select data files to integrate...",
+                                                      proc -> get_DataPath());
+
+    foreach (QString file, files) {
+      proc->integrateData(file);
+    }
   }
 }
 
 void QxrdWindow::doProcessSequence()
 {
-  QStringList files = QFileDialog::getOpenFileNames(this,
-                                                    "Select data files to process...",
-                                                    m_DataProcessor -> get_DataPath());
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  foreach (QString file, files) {
-    m_DataProcessor->processData(file);
+  if (proc) {
+    QStringList files = QFileDialog::getOpenFileNames(this,
+                                                      "Select data files to process...",
+                                                      proc -> get_DataPath());
+
+    foreach (QString file, files) {
+      proc->processData(file);
+    }
   }
 }
 

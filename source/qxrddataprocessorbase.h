@@ -29,22 +29,22 @@ class QxrdAcquisition;
 class QxrdIntegrator;
 class QxrdCenterFinder;
 
-typedef QSharedPointer<QxrdWindow> QxrdWindowPtr;
+typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
 typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
 typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
-typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
-typedef QSharedPointer<QxrdAcquisition> QxrdAcquisitionPtr;
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
 
 class QxrdDataProcessorBase : public QObject
 {
   Q_OBJECT
 
 public:
-  QxrdDataProcessorBase(QxrdSettingsSaverPtr saver,
-                        QxrdExperimentPtr doc,
-                        QxrdAcquisitionPtr acq,
-                        QxrdAllocatorPtr allocator,
-                        QxrdFileSaverPtr filesaver,
+  QxrdDataProcessorBase(QxrdSettingsSaverWPtr saver,
+                        QxrdExperimentWPtr doc,
+                        QxrdAcquisitionWPtr acq,
+                        QxrdAllocatorWPtr allocator,
+                        QxrdFileSaverWPtr filesaver,
                         QObject *parent=0);
   ~QxrdDataProcessorBase();
 
@@ -209,6 +209,11 @@ signals:
   void newIntegrationAvailable(QxrdIntegratedDataPtr data);
 
 public slots:
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+
+public slots:
   void shutdown();
 
   void showMaskRange(/*double min, double max*/);
@@ -306,8 +311,8 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
-  void setAcquisition(QxrdAcquisitionPtr acq);
-  void setWindow(QxrdWindowPtr win);
+  void setAcquisition(QxrdAcquisitionWPtr acq);
+  void setWindow(QxrdWindowWPtr win);
 
 //  QxrdSettingsSaver     *saver();
 
@@ -380,12 +385,12 @@ private:
   mutable QMutex         m_Mutex;
 
 protected:
-  QxrdExperimentPtr      m_Experiment;
-  QxrdSettingsSaverPtr   m_Saver;
-  QxrdWindowPtr          m_Window;
-  QxrdAllocatorPtr       m_Allocator;
-  QxrdFileSaverPtr       m_FileSaver;
-  QxrdAcquisitionPtr     m_Acquisition;
+  QxrdExperimentWPtr     m_Experiment;
+  QxrdSettingsSaverWPtr  m_Saver;
+  QxrdWindowWPtr         m_Window;
+  QxrdAllocatorWPtr      m_Allocator;
+  QxrdFileSaverWPtr      m_FileSaver;
+  QxrdAcquisitionWPtr    m_Acquisition;
   QWaitCondition         m_ProcessWaiting;
   QxrdInt16ImageQueue    m_AcquiredInt16Images;
   QxrdInt32ImageQueue    m_AcquiredInt32Images;

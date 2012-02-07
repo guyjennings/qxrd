@@ -13,11 +13,11 @@ class QxrdDataProcessorThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdDataProcessorThread(QxrdSettingsSaverPtr saver,
-                          QxrdExperimentPtr doc,
-                          QxrdAcquisitionPtr acq,
-                          QxrdAllocatorPtr allocator,
-                          QxrdFileSaverPtr filesaver,
+  QxrdDataProcessorThread(QxrdSettingsSaverWPtr saver,
+                          QxrdExperimentWPtr doc,
+                          QxrdAcquisitionWPtr acq,
+                          QxrdAllocatorWPtr allocator,
+                          QxrdFileSaverWPtr filesaver,
                           QSettings *settings,
                           QString section);
 
@@ -33,12 +33,12 @@ protected:
   void run();
 
 private:
-  QxrdAllocatorPtr        m_Allocator;
-  QxrdFileSaverPtr        m_FileSaver;
+  QxrdAllocatorWPtr       m_Allocator;
+  QxrdFileSaverWPtr       m_FileSaver;
   QxrdDataProcessorPtr    m_DataProcessor;
-  QxrdAcquisitionPtr      m_Acquisition;
-  QxrdExperimentPtr       m_Experiment;
-  QxrdSettingsSaverPtr    m_Saver;
+  QxrdAcquisitionWPtr     m_Acquisition;
+  QxrdExperimentWPtr      m_Experiment;
+  QxrdSettingsSaverWPtr   m_Saver;
   QSettings              *m_Settings;
   QString                 m_Section;
 };

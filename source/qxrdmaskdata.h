@@ -7,15 +7,17 @@
 #include <QImage>
 
 class QxrdMaskData;
-typedef QSharedPointer<QxrdMaskData>             QxrdMaskDataPtr;
-class QxrdAllocatorInterface;
+typedef QSharedPointer<QxrdMaskData> QxrdMaskDataPtr;
+
+class QxrdAllocator;
+typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;
 
 class QxrdMaskData : public QcepImageData<short>
 {
   Q_OBJECT
 
 public:
-  QxrdMaskData(QxrdSettingsSaverPtr saver, QxrdAllocatorPtr allocator, int typ, int width, int height, int def=0);
+  QxrdMaskData(QxrdSettingsSaverPtr saver, QxrdAllocatorWPtr allocator, int typ, int width, int height, int def=0);
   ~QxrdMaskData();
 
 public slots:

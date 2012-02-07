@@ -11,11 +11,11 @@ class QxrdDataProcessor : public QxrdDataProcessorThreaded
   Q_OBJECT
 
 public:
-  QxrdDataProcessor(QxrdSettingsSaverPtr saver,
-                    QxrdExperimentPtr doc,
-                    QxrdAcquisitionPtr acq,
-                    QxrdAllocatorPtr allocator,
-                    QxrdFileSaverPtr filesaver,
+  QxrdDataProcessor(QxrdSettingsSaverWPtr saver,
+                    QxrdExperimentWPtr doc,
+                    QxrdAcquisitionWPtr acq,
+                    QxrdAllocatorWPtr allocator,
+                    QxrdFileSaverWPtr filesaver,
                     QSettings *settings,
                     QString section,
                     QObject *parent=0);
@@ -23,5 +23,6 @@ public:
 };
 
 typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;
+typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
 
 #endif

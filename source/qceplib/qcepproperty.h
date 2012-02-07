@@ -24,12 +24,10 @@ class QAbstractButton;
 class QSettings;
 class QProgressBar;
 
-typedef QSharedPointer<QxrdSettingsSaver> QxrdSettingsSaverPtr;
-
 class QcepProperty : public QObject {
   Q_OBJECT
 public:
-  QcepProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name);
+  QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name);
 
   QString name() const;
 
@@ -44,7 +42,7 @@ public:
   int debug() const;
   void setDebug(int dbg);
 
-  void setSaver(QxrdSettingsSaverPtr saver);
+  void setSaver(QxrdSettingsSaverWPtr saver);
 
   static void writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings);
   static void readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings);
@@ -54,7 +52,7 @@ public:
 
 protected:
   mutable QMutex           m_Mutex;
-  QxrdSettingsSaverPtr     m_Saver;
+  QxrdSettingsSaverWPtr    m_Saver;
 
 private:
   int                      m_Debug;
@@ -67,7 +65,7 @@ private:
 class QcepDoubleProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, double value);
+  QcepDoubleProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, double value);
 
   double value() const;
   double defaultValue() const;
@@ -114,7 +112,7 @@ private:
 class QcepIntProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepIntProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, int value);
+  QcepIntProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, int value);
 
   int value() const;
   int defaultValue() const;
@@ -181,7 +179,7 @@ private:
 class QcepBoolProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepBoolProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, bool value);
+  QcepBoolProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, bool value);
 
   bool value() const;
   bool defaultValue() const;
@@ -224,7 +222,7 @@ private:
 class QcepStringProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QString value);
+  QcepStringProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString value);
 
   QString value() const;
   QString defaultValue() const;
@@ -288,7 +286,7 @@ private:
 class QcepDateTimeProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDateTimeProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QDateTime value);
+  QcepDateTimeProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QDateTime value);
 
   QDateTime value() const;
   QDateTime defaultValue() const;
@@ -311,7 +309,7 @@ private:
 class QcepDoubleListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleListProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QcepDoubleList value);
+  QcepDoubleListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleList value);
 
   QcepDoubleList value() const;
   QcepDoubleList defaultValue() const;
@@ -336,7 +334,7 @@ private:
 class QcepStringListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringListProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QStringList value);
+  QcepStringListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QStringList value);
 
   QStringList value() const;
   QStringList defaultValue() const;
@@ -361,7 +359,7 @@ private:
 class QcepByteArrayProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepByteArrayProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QByteArray value);
+  QcepByteArrayProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QByteArray value);
 
   QByteArray value() const;
   QByteArray defaultValue() const;

@@ -13,6 +13,10 @@
 #include "qxrdintegrateddataqueue.h"
 #include "qxrdimagequeue.h"
 
+class QxrdAllocator;
+typedef QSharedPointer<QxrdAllocator> QxrdAllocatorPtr;
+typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;
+
 class QxrdAllocator : public QObject
 {
   Q_OBJECT
@@ -40,13 +44,13 @@ public:
     AlwaysAllocate
   };
 
-  static QxrdInt16ImageDataPtr newInt16Image(QxrdAllocatorPtr alloc, AllocationStrategy strat, int width, int height);
-  static QxrdInt32ImageDataPtr newInt32Image(QxrdAllocatorPtr alloc, AllocationStrategy strat, int width, int height);
-  static QxrdDoubleImageDataPtr newDoubleImage(QxrdAllocatorPtr alloc, AllocationStrategy strat, int width, int height);
-  static QxrdMaskDataPtr newMask(QxrdAllocatorPtr alloc, AllocationStrategy strat, int width, int height, int def=1);
-  static QxrdIntegratedDataPtr newIntegratedData(QxrdAllocatorPtr alloc, AllocationStrategy strat, QxrdDoubleImageDataPtr image);
+  static QxrdInt16ImageDataPtr newInt16Image(QxrdAllocatorWPtr allocw, AllocationStrategy strat, int width, int height);
+  static QxrdInt32ImageDataPtr newInt32Image(QxrdAllocatorWPtr allocw, AllocationStrategy strat, int width, int height);
+  static QxrdDoubleImageDataPtr newDoubleImage(QxrdAllocatorWPtr allocw, AllocationStrategy strat, int width, int height);
+  static QxrdMaskDataPtr newMask(QxrdAllocatorWPtr allocw, AllocationStrategy strat, int width, int height, int def=1);
+  static QxrdIntegratedDataPtr newIntegratedData(QxrdAllocatorWPtr allocw, AllocationStrategy strat, QxrdDoubleImageDataPtr image);
 
-  static void newDoubleImageAndIntegratedData(QxrdAllocatorPtr alloc,
+  static void newDoubleImageAndIntegratedData(QxrdAllocatorWPtr allocw,
                                               AllocationStrategy strat,
                                        int width, int height,
                                        QxrdDoubleImageDataPtr &img,
@@ -128,8 +132,5 @@ private:
   Q_PROPERTY(int     nAllocatedIntegrated   READ get_NAllocatedIntegrated WRITE set_NAllocatedIntegrated STORED false)
   QCEP_INTEGER_PROPERTY(NAllocatedIntegrated)
 };
-
-typedef QSharedPointer<QxrdAllocator> QxrdAllocatorPtr;
-typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;
 
 #endif

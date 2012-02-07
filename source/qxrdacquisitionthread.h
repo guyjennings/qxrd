@@ -15,10 +15,10 @@ class QxrdAcquisitionThread : public QxrdThread
   Q_OBJECT
 
  public:
-  QxrdAcquisitionThread(QxrdSettingsSaverPtr saver,
-                        QxrdExperimentPtr doc,
-                        QxrdDataProcessorPtr proc,
-                        QxrdAllocatorPtr allocator,
+  QxrdAcquisitionThread(QxrdSettingsSaverWPtr saver,
+                        QxrdExperimentWPtr doc,
+                        QxrdDataProcessorWPtr proc,
+                        QxrdAllocatorWPtr allocator,
                         int detectorType,
                         QSettings *settings,
                         QString section);
@@ -39,11 +39,11 @@ protected:
 
 private:
   int                   m_Debug;
-  QxrdSettingsSaverPtr  m_Saver;
-  QxrdExperimentPtr     m_Experiment;
-  QxrdAllocatorPtr      m_Allocator;
-  QxrdAcquisitionPtr    m_Acquisition;
-  QxrdDataProcessorPtr  m_Processor;
+  QxrdSettingsSaverWPtr m_Saver;
+  QxrdExperimentWPtr    m_Experiment;
+  QxrdAllocatorWPtr     m_Allocator;
+  QxrdAcquisitionWPtr   m_Acquisition;
+  QxrdDataProcessorWPtr m_Processor;
   int                   m_DetectorType;
   QSettings            *m_Settings;
   QString               m_Section;

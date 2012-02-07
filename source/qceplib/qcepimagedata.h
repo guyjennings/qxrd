@@ -28,7 +28,7 @@ class QcepImageDataBase : public QObject
   Q_OBJECT
 
 public:
-  QcepImageDataBase(QxrdSettingsSaverPtr saver, int width, int height);
+  QcepImageDataBase(QxrdSettingsSaverWPtr saver, int width, int height);
   virtual ~QcepImageDataBase();
 
   Q_PROPERTY(int width READ get_Width)
@@ -180,7 +180,7 @@ template <typename T>
     class QcepImageData : public QcepImageDataBase
 {
 public:
-  QcepImageData(QxrdSettingsSaverPtr saver, int width, int height, T def=0);
+  QcepImageData(QxrdSettingsSaverWPtr saver, int width, int height, T def=0);
   virtual ~QcepImageData();
 
 public:

@@ -14,7 +14,7 @@
 #include <QSettings>
 #include <stdio.h>
 
-QcepProperty::QcepProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name)
+QcepProperty::QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name)
   : QObject(),
     m_Mutex(QMutex::Recursive),
     m_Saver(saver),
@@ -111,14 +111,14 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaTypeStreamOperators< QcepStringList >("QcepStringList");
 }
 
-void QcepProperty::setSaver(QxrdSettingsSaverPtr saver)
+void QcepProperty::setSaver(QxrdSettingsSaverWPtr saver)
 {
   m_Saver = saver;
 }
 
 void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings)
 {
-  if (settings) {
+  if (settings && g_Application) {
     int count = meta->propertyCount();
     int offset = meta->propertyOffset();
 
@@ -132,7 +132,7 @@ void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QStri
         QVariant value = object -> property(name);
 
         if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
-          g_Application->printMessage(
+          g_Application -> printMessage(
                 tr("Save %1/%2 = %3 [%4]")
                 .arg(groupName).arg(name)
                 .arg(value.toString()).arg(value.typeName()));
@@ -154,14 +154,14 @@ void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QStri
 
 void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings)
 {
-  if (settings) {
+  if (settings && g_Application) {
     settings->beginGroup(groupName);
 
     QStringList keys = settings->childKeys();
 
     foreach (QString key, keys) {
       if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
-        g_Application->printMessage(
+        g_Application -> printMessage(
               tr("Load %1/%2 = %3 [%4]")
               .arg(groupName).arg(key)
               .arg(settings->value(key).toString())
@@ -183,14 +183,14 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
           object -> setProperty(qPrintable(key), settings->value(key));
         } else {
           if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
-            g_Application->printMessage(
+            g_Application -> printMessage(
                   tr("property %1 of %2 not stored").arg(key)
                   .arg(meta -> className()));
           }
         }
       } else {
         if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
-          g_Application->printMessage(
+          g_Application -> printMessage(
                 tr("property %1 of %2 does not exist")
                 .arg(key).arg(meta -> className()));
         }
@@ -203,22 +203,24 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
 
 void QcepProperty::printMessage(QString msg, QDateTime ts)
 {
-  if (m_Saver) {
-    m_Saver->printMessage(msg, ts);
+  QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+
+  if (saver) {
+    saver->printMessage(msg, ts);
   }
 }
 
 void QcepProperty::dumpMetaData(const QMetaObject *meta)
 {
-  while (meta) {
-    g_Application->printMessage(
+  while (meta && g_Application) {
+    g_Application -> printMessage(
           tr("MetaData for class %1").arg(meta -> className()));
-    g_Application->printMessage(
+    g_Application -> printMessage(
           tr(" superClass = %1").HEXARG((void*) meta -> superClass()));
-    g_Application->printMessage(
+    g_Application -> printMessage(
           tr(" methodCount = %1, methodOffset = %2")
           .arg(meta->methodCount()).arg(meta->methodOffset()));
-    g_Application->printMessage(
+    g_Application -> printMessage(
           tr(" propertyCount = %1, propertyOffset = %2")
           .arg(meta->propertyCount()).arg(meta->propertyOffset()));
 
@@ -226,7 +228,7 @@ void QcepProperty::dumpMetaData(const QMetaObject *meta)
   }
 }
 
-QcepDoubleProperty::QcepDoubleProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, double value)
+QcepDoubleProperty::QcepDoubleProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, double value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -250,43 +252,36 @@ double QcepDoubleProperty::defaultValue() const
 void QcepDoubleProperty::setValue(double val, int index)
 {
   if (debug()) {
-    g_Application->printMessage(
-          tr("%1 QcepDoubleProperty::setValue(double %2, int %3) [%4]")
-          .arg(name())
-          .arg(val)
-          .arg(index)
-          .arg(this->index()));
+    printMessage(tr("%1 QcepDoubleProperty::setValue(double %2, int %3) [%4]")
+                 .arg(name()).arg(val).arg(index).arg(this->index()));
   }
 
-//  if (index == this->index()) {
-    setValue(val);
-//  }
+  //  if (index == this->index()) {
+  setValue(val);
+  //  }
 }
 
 void QcepDoubleProperty::setValue(double val)
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-          tr("%1: QcepDoubleProperty::setValue(double %2)")
-          .arg(name())
-          .arg(val));
+    printMessage(tr("%1: QcepDoubleProperty::setValue(double %2)")
+                 .arg(name()).arg(val));
   }
 
   if (val != m_Value) {
-    if (g_Application && debug()) {
-      g_Application->printMessage(
-            tr("%1: QcepDoubleProperty::setValue(double %2) [%3]")
-            .arg(name())
-            .arg(val)
-            .arg(index()));
+    if (debug()) {
+      printMessage(tr("%1: QcepDoubleProperty::setValue(double %2) [%3]")
+                   .arg(name()).arg(val).arg(index()));
     }
 
     QMutexLocker lock(&m_Mutex);
 
     m_Value = val;
 
-    if (m_Saver) {
-      m_Saver->changed(this);
+    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+
+    if (saver) {
+      saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -298,9 +293,8 @@ void QcepDoubleProperty::incValue(double step)
 {
 
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepDoubleProperty::incValue(double %2)")
-        .arg(name()).arg(step));
+    printMessage(tr("%1: QcepDoubleProperty::incValue(double %2)")
+                 .arg(name()).arg(step));
   }
 
   if (step) {
@@ -308,8 +302,10 @@ void QcepDoubleProperty::incValue(double step)
 
     m_Value += step;
 
-    if (m_Saver) {
-      m_Saver->changed(this);
+    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+
+    if (saver) {
+      saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -327,8 +323,7 @@ void QcepDoubleProperty::setDefaultValue(double val)
 void QcepDoubleProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-        tr("%1: QcepDoubleProperty::resetValue").arg(name()));
+    printMessage(tr("%1: QcepDoubleProperty::resetValue").arg(name()));
   }
 
   setValue(m_Default);
@@ -337,9 +332,8 @@ void QcepDoubleProperty::resetValue()
 void QcepDoubleProperty::linkTo(QDoubleSpinBox *spinBox)
 {
   if (qcepDebug(DEBUG_PROPERTIES || debug())) {
-    g_Application->printMessage(
-        tr("%1: QcepDoubleProperty::linkTo(QDoubleSpinBox *%2)")
-           .arg(name()).HEXARG(spinBox));
+    printMessage(tr("%1: QcepDoubleProperty::linkTo(QDoubleSpinBox *%2)")
+                 .arg(name()).HEXARG(spinBox));
   }
 
   QcepDoublePropertyDoubleSpinBoxHelper *helper
@@ -382,19 +376,17 @@ void QcepDoublePropertyDoubleSpinBoxHelper::connect()
 void QcepDoublePropertyDoubleSpinBoxHelper::setValue(double value, int index)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepDoublePropertyDoubleSpinBoxHelper::setValue(double %2, int %3) [%4,%5]")
-          .arg(m_Property->name()).arg(value).arg(index).arg(m_Property->index()).arg(m_DoubleSpinBox->value()));
+    m_Property->printMessage(tr("%1: QcepDoublePropertyDoubleSpinBoxHelper::setValue(double %2, int %3) [%4,%5]")
+                             .arg(m_Property->name()).arg(value).arg(index).arg(m_Property->index()).arg(m_DoubleSpinBox->value()));
   }
 
   if (m_Property->index() == index) {
     if (m_DoubleSpinBox->value() != value) {
       if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-        g_Application->printMessage(
-              tr("%1: QcepDoublePropertyDoubleSpinBoxHelper spinBox %2 set to %3")
-              .arg(m_Property->name())
-              .arg(m_DoubleSpinBox->objectName())
-              .arg(value));
+        m_Property->printMessage(tr("%1: QcepDoublePropertyDoubleSpinBoxHelper spinBox %2 set to %3")
+                                 .arg(m_Property->name())
+                                 .arg(m_DoubleSpinBox->objectName())
+                                 .arg(value));
       }
 
       bool block = m_DoubleSpinBox->blockSignals(true);
@@ -407,15 +399,14 @@ void QcepDoublePropertyDoubleSpinBoxHelper::setValue(double value, int index)
 void QcepDoublePropertyDoubleSpinBoxHelper::setValue(double value)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepDoublePropertyDoubleSpinBoxHelper::setValue(double %2)")
-          .arg(m_Property->name()).arg(value));
+    m_Property->printMessage(tr("%1: QcepDoublePropertyDoubleSpinBoxHelper::setValue(double %2)")
+                             .arg(m_Property->name()).arg(value));
   }
 
   emit valueChanged(value, m_Property->incIndex(1));
 }
 
-QcepIntProperty::QcepIntProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, int value)
+QcepIntProperty::QcepIntProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, int value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -435,12 +426,8 @@ int QcepIntProperty::defaultValue() const
 void QcepIntProperty::setValue(int val, int index)
 {
   if (debug()) {
-    g_Application->printMessage(
-          tr("%1 QcepIntProperty::setValue(int %2, int %3) [%4]")
-          .arg(name())
-          .arg(val)
-          .arg(index)
-          .arg(this->index()));
+    printMessage(tr("%1 QcepIntProperty::setValue(int %2, int %3) [%4]")
+                 .arg(name()).arg(val).arg(index).arg(this->index()));
   }
 
   if (index == this->index()) {
@@ -451,26 +438,22 @@ void QcepIntProperty::setValue(int val, int index)
 void QcepIntProperty::setValue(int val)
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    if (g_Application) {
-      g_Application->printMessage(
-            tr("%1: QcepIntProperty::setValue(int %2)")
-            .arg(name()).arg(val));
-    }
+    printMessage(tr("%1: QcepIntProperty::setValue(int %2)")
+                 .arg(name()).arg(val));
   }
 
   if (val != m_Value) {
-    if (g_Application && debug()) {
-      g_Application->printMessage(
-            tr("%1: QcepIntProperty::setValue(int %2) [%3]")
-            .arg(name())
-            .arg(val)
-            .arg(index()));
+    if (debug()) {
+      printMessage(tr("%1: QcepIntProperty::setValue(int %2) [%3]")
+                   .arg(name()).arg(val).arg(index()));
     }
 
     m_Value.fetchAndStoreOrdered(val);
 
-    if (m_Saver) {
-      m_Saver->changed(this);
+    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+
+    if (saver) {
+      saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -481,16 +464,17 @@ void QcepIntProperty::setValue(int val)
 void QcepIntProperty::incValue(int step)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepIntProperty::incValue(int %2)")
-        .arg(name()).arg(step));
+    printMessage(tr("%1: QcepIntProperty::incValue(int %2)")
+                 .arg(name()).arg(step));
   }
 
   if (step) {
     m_Value.fetchAndAddOrdered(step);
 
-    if (m_Saver) {
-      m_Saver->changed(this);
+    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+
+    if (saver) {
+      saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -506,8 +490,7 @@ void QcepIntProperty::setDefaultValue(int val)
 void QcepIntProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
-    g_Application->printMessage(
-        tr("%1: QcepIntProperty::resetValue").arg(name()));
+    printMessage(tr("%1: QcepIntProperty::resetValue").arg(name()));
   }
 
   setValue(m_Default);
@@ -516,9 +499,8 @@ void QcepIntProperty::resetValue()
 void QcepIntProperty::linkTo(QSpinBox *spinBox)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepIntProperty::linkTo(QSpinBox *%2)")
-          .arg(name()).HEXARG(spinBox));
+    printMessage(tr("%1: QcepIntProperty::linkTo(QSpinBox *%2)")
+                 .arg(name()).HEXARG(spinBox));
   }
 
   QcepIntPropertySpinBoxHelper *helper
@@ -537,9 +519,8 @@ void QcepIntProperty::linkTo(QSpinBox *spinBox)
 void QcepIntProperty::linkTo(QComboBox *comboBox)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepIntProperty::linkTo(QComboBox *%2)")
-          .arg(name()).HEXARG(comboBox));
+    printMessage(tr("%1: QcepIntProperty::linkTo(QComboBox *%2)")
+                 .arg(name()).HEXARG(comboBox));
   }
 
   QcepIntPropertyComboBoxHelper *helper
@@ -583,19 +564,15 @@ void QcepIntPropertySpinBoxHelper::connect()
 void QcepIntPropertySpinBoxHelper::setValue(int value, int index)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepIntPropertySpinBoxHelper::setValue(int %2, int %3) [%4,%5]")
-          .arg(m_Property->name()).arg(value).arg(index).arg(m_Property->index()).arg(m_SpinBox->value()));
+    m_Property->printMessage(tr("%1: QcepIntPropertySpinBoxHelper::setValue(int %2, int %3) [%4,%5]")
+                 .arg(m_Property->name()).arg(value).arg(index).arg(m_Property->index()).arg(m_SpinBox->value()));
   }
 
   if (m_Property->index() == index) {
     if (m_SpinBox->value() != value) {
       if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-        g_Application->printMessage(
-              tr("%1: QcepIntPropertySpinBoxHelper spinBox %2 set to %3")
-              .arg(m_Property->name())
-              .arg(m_SpinBox->objectName())
-            .arg(value));
+        m_Property->printMessage(tr("%1: QcepIntPropertySpinBoxHelper spinBox %2 set to %3")
+                     .arg(m_Property->name()).arg(m_SpinBox->objectName()).arg(value));
       }
 
       bool block = m_SpinBox->blockSignals(true);
@@ -608,9 +585,8 @@ void QcepIntPropertySpinBoxHelper::setValue(int value, int index)
 void QcepIntPropertySpinBoxHelper::setValue(int value)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepIntPropertySpinBoxHelper::setValue(int %2)")
-          .arg(m_Property->name()).arg(value));
+    m_Property->printMessage(tr("%1: QcepIntPropertySpinBoxHelper::setValue(int %2)")
+                 .arg(m_Property->name()).arg(value));
   }
 
   emit valueChanged(value, m_Property->incIndex(1));
@@ -631,22 +607,16 @@ void QcepIntPropertyComboBoxHelper::connect()
 void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value, int index)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepIntPropertyComboBoxHelper::setValue(int %2, int %3) [%4,%5]")
-          .arg(m_Property->name())
-          .arg(value)
-          .arg(index)
-          .arg(m_Property->index()).arg(m_ComboBox->currentIndex()));
+    m_Property->printMessage(tr("%1: QcepIntPropertyComboBoxHelper::setValue(int %2, int %3) [%4,%5]")
+                 .arg(m_Property->name()).arg(value).arg(index)
+                 .arg(m_Property->index()).arg(m_ComboBox->currentIndex()));
   }
 
   if (m_Property->index() == index) {
     if (m_ComboBox->currentIndex() != value) {
       if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-        g_Application->printMessage(
-              tr("%1: QcepIntPropertyComboBoxHelper comboBox %2 set to %3")
-              .arg(m_Property->name())
-              .arg(m_ComboBox->objectName())
-              .arg(value));
+        m_Property->printMessage(tr("%1: QcepIntPropertyComboBoxHelper comboBox %2 set to %3")
+                     .arg(m_Property->name()).arg(m_ComboBox->objectName()).arg(value));
       }
 
       bool block = m_ComboBox->blockSignals(true);
@@ -659,15 +629,14 @@ void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value, int index)
 void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepIntPropertyComboBoxHelper::setValue(int %2)")
-          .arg(m_Property->name()).arg(value));
+    m_Property->printMessage(tr("%1: QcepIntPropertyComboBoxHelper::setValue(int %2)")
+                 .arg(m_Property->name()).arg(value));
   }
 
   emit currentIndexChanged(value, m_Property->incIndex(1));
 }
 
-QcepBoolProperty::QcepBoolProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, bool value)
+QcepBoolProperty::QcepBoolProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, bool value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -687,12 +656,8 @@ bool QcepBoolProperty::defaultValue() const
 void QcepBoolProperty::setValue(bool val, int index)
 {
   if (debug()) {
-    g_Application->printMessage(
-          tr("%1 QcepBoolProperty::setValue(bool %2, int %3) [%4]")
-          .arg(name())
-          .arg(val)
-          .arg(index)
-          .arg(this->index()));
+    printMessage(tr("%1 QcepBoolProperty::setValue(bool %2, int %3) [%4]")
+                 .arg(name()).arg(val).arg(index).arg(this->index()));
   }
 
   if (index == this->index()) {
@@ -703,27 +668,22 @@ void QcepBoolProperty::setValue(bool val, int index)
 void QcepBoolProperty::setValue(bool val)
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    if (g_Application) {
-      g_Application->printMessage(
-            tr("%1: QcepBoolProperty::setValue(bool %2)")
-            .arg(name())
-            .arg(val));
-    }
+    printMessage(tr("%1: QcepBoolProperty::setValue(bool %2)")
+                 .arg(name()).arg(val));
   }
 
   if (val != m_Value) {
-    if (g_Application && debug()) {
-      g_Application->printMessage(
-            tr("%1: QcepBoolProperty::setValue(bool %2) [%3]")
-            .arg(name())
-            .arg(val)
-            .arg(index()));
+    if (debug()) {
+      printMessage(tr("%1: QcepBoolProperty::setValue(bool %2) [%3]")
+                   .arg(name()).arg(val).arg(index()));
     }
 
     m_Value.fetchAndStoreOrdered(val);
 
-    if (m_Saver) {
-      m_Saver->changed(this);
+    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+
+    if (saver) {
+      saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -738,8 +698,7 @@ void QcepBoolProperty::setDefaultValue(bool val)
 void QcepBoolProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES || debug())) {
-    g_Application->printMessage(
-        tr("%1: QcepBoolProperty::resetValue").arg(name()));
+    printMessage(tr("%1: QcepBoolProperty::resetValue").arg(name()));
   }
 
   setValue(m_Default);
@@ -748,9 +707,8 @@ void QcepBoolProperty::resetValue()
 void QcepBoolProperty::linkTo(QAbstractButton *button)
 {
   if (qcepDebug(DEBUG_PROPERTIES || debug())) {
-    g_Application->printMessage(
-          tr("%1: QcepBoolProperty::linkTo(QAbstractButton *%2)")
-          .arg(name()).HEXARG(button));
+    printMessage(tr("%1: QcepBoolProperty::linkTo(QAbstractButton *%2)")
+                 .arg(name()).HEXARG(button));
   }
 
   QcepBoolPropertyButtonHelper *helper
@@ -780,23 +738,16 @@ void QcepBoolPropertyButtonHelper::connect()
 void QcepBoolPropertyButtonHelper::setChecked(bool value, int index)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepBoolPropertyButtonHelper::setChecked(bool %2, int %3) [%4,%5]")
-          .arg(m_Property->name())
-          .arg(value)
-          .arg(index)
-          .arg(m_Property->index())
-          .arg(m_Button->isChecked()));
+    m_Property->printMessage(tr("%1: QcepBoolPropertyButtonHelper::setChecked(bool %2, int %3) [%4,%5]")
+                 .arg(m_Property->name()).arg(value).arg(index)
+                 .arg(m_Property->index()).arg(m_Button->isChecked()));
   }
 
   if (m_Property->index() == index) {
     if (m_Button->isChecked() != value) {
       if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-        g_Application->printMessage(
-              tr("%1: QcepBoolPropertyButtonHelper button %2 set to %3")
-              .arg(m_Property->name())
-              .arg(m_Button->objectName())
-              .arg(value));
+        m_Property->printMessage(tr("%1: QcepBoolPropertyButtonHelper button %2 set to %3")
+                     .arg(m_Property->name()).arg(m_Button->objectName()).arg(value));
       }
 
       bool block = m_Button->blockSignals(true);
@@ -809,15 +760,14 @@ void QcepBoolPropertyButtonHelper::setChecked(bool value, int index)
 void QcepBoolPropertyButtonHelper::setChecked(bool value)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepIntPropertySpinBoxHelper::setValue(int %2)")
-          .arg(m_Property->name()).arg(value));
+    m_Property->printMessage(tr("%1: QcepIntPropertySpinBoxHelper::setValue(int %2)")
+                 .arg(m_Property->name()).arg(value));
   }
 
   emit toggled(value, m_Property->incIndex(1));
 }
 
-QcepStringProperty::QcepStringProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QString value)
+QcepStringProperty::QcepStringProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -841,12 +791,8 @@ QString QcepStringProperty::defaultValue() const
 void QcepStringProperty::setValue(QString val, int index)
 {
   if (debug()) {
-    g_Application->printMessage(
-          tr("%1 QcepStringProperty::setValue(QString \"%2\", int %3) [%4]")
-          .arg(name())
-          .arg(val)
-          .arg(index)
-          .arg(this->index()));
+    printMessage(tr("%1 QcepStringProperty::setValue(QString \"%2\", int %3) [%4]")
+                 .arg(name()).arg(val).arg(index).arg(this->index()));
   }
 
   if (index == this->index()) {
@@ -857,27 +803,24 @@ void QcepStringProperty::setValue(QString val, int index)
 void QcepStringProperty::setValue(QString val)
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-          tr("%1: QcepStringProperty::setValue(QString \"%2\")")
-          .arg(name())
-          .arg(val));
+    printMessage(tr("%1: QcepStringProperty::setValue(QString \"%2\")")
+                 .arg(name()).arg(val));
   }
 
   if (val != m_Value) {
-    if (g_Application && debug()) {
-      g_Application->printMessage(
-            tr("%1: QcepStringProperty::setValue(QString \"%2\") [%3]")
-            .arg(name())
-            .arg(val)
-            .arg(index()));
+    if (debug()) {
+      printMessage(tr("%1: QcepStringProperty::setValue(QString \"%2\") [%3]")
+                   .arg(name()).arg(val).arg(index()));
     }
 
     QMutexLocker lock(&m_Mutex);
 
     m_Value = val;
 
-    if (m_Saver) {
-      m_Saver->changed(this);
+    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+
+    if (saver) {
+      saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -894,8 +837,7 @@ void QcepStringProperty::setDefaultValue(QString val)
 void QcepStringProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-        tr("%1: QcepStringProperty::resetValue").arg(name()));
+    printMessage(tr("%1: QcepStringProperty::resetValue").arg(name()));
   }
 
   setValue(m_Default);
@@ -909,9 +851,8 @@ void QcepStringProperty::linkTo(QComboBox * /*comboBox*/)
 void QcepStringProperty::linkTo(QLineEdit *lineEdit)
 {
   if (qcepDebug(DEBUG_PROPERTIES || debug())) {
-    g_Application->printMessage(
-        tr("%1: QcepStringProperty::linkTo(QLineEdit *%2)")
-        .arg(name()).HEXARG(lineEdit));
+    printMessage(tr("%1: QcepStringProperty::linkTo(QLineEdit *%2)")
+                 .arg(name()).HEXARG(lineEdit));
   }
 
   QcepStringPropertyLineEditHelper *helper
@@ -948,22 +889,16 @@ void QcepStringPropertyLineEditHelper::connect()
 void QcepStringPropertyLineEditHelper::setText(QString value, int index)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepStringPropertyLineEditHelper::setText(QString \"%2\", int %3) [%4,%5]")
-          .arg(m_Property->name())
-          .arg(value)
-          .arg(index)
-          .arg(m_Property->index()).arg(m_LineEdit->text()));
+    m_Property->printMessage(tr("%1: QcepStringPropertyLineEditHelper::setText(QString \"%2\", int %3) [%4,%5]")
+                 .arg(m_Property->name()).arg(value).arg(index)
+                 .arg(m_Property->index()).arg(m_LineEdit->text()));
   }
 
   if (m_Property->index() == index) {
     if (m_LineEdit->text() != value) {
       if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-        g_Application->printMessage(
-              tr("%1: QcepStringPropertyLineEditHelper lineEdit %2 set to %3")
-              .arg(m_Property->name())
-              .arg(m_LineEdit->objectName())
-              .arg(value));
+        m_Property->printMessage(tr("%1: QcepStringPropertyLineEditHelper lineEdit %2 set to %3")
+                     .arg(m_Property->name()).arg(m_LineEdit->objectName()).arg(value));
       }
 
       bool block = m_LineEdit->blockSignals(true);
@@ -976,15 +911,14 @@ void QcepStringPropertyLineEditHelper::setText(QString value, int index)
 void QcepStringPropertyLineEditHelper::setText(QString value)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    g_Application->printMessage(
-          tr("%1: QcepStringPropertyLineEditHelper::setText(QString \"%2\")")
-          .arg(m_Property->name()).arg(value));
+    m_Property->printMessage(tr("%1: QcepStringPropertyLineEditHelper::setText(QString \"%2\")")
+                 .arg(m_Property->name()).arg(value));
   }
 
   emit textEdited(value, m_Property->incIndex(1));
 }
 
-QcepDateTimeProperty::QcepDateTimeProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QDateTime value)
+QcepDateTimeProperty::QcepDateTimeProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QDateTime value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -1008,12 +942,8 @@ QDateTime QcepDateTimeProperty::defaultValue() const
 void QcepDateTimeProperty::setValue(QDateTime val, int index)
 {
   if (debug()) {
-    g_Application->printMessage(
-          tr("%1 QcepDateTimeProperty::setValue(QDateTime \"%2\", int %3) [%4]")
-          .arg(name())
-          .arg(val.toString())
-          .arg(index)
-          .arg(this->index()));
+    printMessage(tr("%1 QcepDateTimeProperty::setValue(QDateTime \"%2\", int %3) [%4]")
+                 .arg(name()).arg(val.toString()).arg(index).arg(this->index()));
   }
 
   if (index == this->index()) {
@@ -1025,27 +955,24 @@ void QcepDateTimeProperty::setValue(QDateTime val)
 {
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-          tr("%1: QcepDateTimeProperty::setValue(QDateTime \"%2\")")
-          .arg(name())
-          .arg(val.toString()));
+    printMessage(tr("%1: QcepDateTimeProperty::setValue(QDateTime \"%2\")")
+                 .arg(name()).arg(val.toString()));
   }
 
   if (val != m_Value) {
-    if (g_Application && debug()) {
-      g_Application->printMessage(
-            tr("%1: QcepDateTimeProperty::setValue(QDateTime \"%2\") [%3]")
-            .arg(name())
-            .arg(val.toString())
-            .arg(index()));
+    if (debug()) {
+      printMessage(tr("%1: QcepDateTimeProperty::setValue(QDateTime \"%2\") [%3]")
+                   .arg(name()).arg(val.toString()).arg(index()));
     }
 
     QMutexLocker lock(&m_Mutex);
 
     m_Value = val;
 
-    if (m_Saver) {
-      m_Saver->changed(this);
+    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+
+    if (saver) {
+      saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -1064,14 +991,13 @@ void QcepDateTimeProperty::setDefaultValue(QDateTime val)
 void QcepDateTimeProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-        tr("%1: QcepDateTimeProperty::resetValue").arg(name()));
+    printMessage(tr("%1: QcepDateTimeProperty::resetValue").arg(name()));
   }
 
   setValue(m_Default);
 }
 
-QcepDoubleListProperty::QcepDoubleListProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QcepDoubleList value)
+QcepDoubleListProperty::QcepDoubleListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleList value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -1095,12 +1021,8 @@ QcepDoubleList QcepDoubleListProperty::defaultValue() const
 void QcepDoubleListProperty::setValue(QcepDoubleList val, int index)
 {
   if (debug()) {
-    g_Application->printMessage(
-          tr("%1 QcepDoubleListProperty::setValue(QcepDoubleList %2, int %3) [%4]")
-          .arg(name())
-          .arg(toString(val))
-          .arg(index)
-          .arg(this->index()));
+    printMessage(tr("%1 QcepDoubleListProperty::setValue(QcepDoubleList %2, int %3) [%4]")
+                 .arg(name()).arg(toString(val)).arg(index).arg(this->index()));
   }
 
   if (index == this->index()) {
@@ -1146,27 +1068,24 @@ QString QcepDoubleListProperty::toString(const QcepDoubleList &val)
 void QcepDoubleListProperty::setValue(QcepDoubleList val)
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-          tr("%1 QcepDoubleListProperty::setValue(QcepDoubleList %2)")
-          .arg(name())
-          .arg(toString(val)));
+    printMessage(tr("%1 QcepDoubleListProperty::setValue(QcepDoubleList %2)")
+                 .arg(name()).arg(toString(val)));
   }
 
   if (val != m_Value) {
-    if (g_Application && debug()) {
-      g_Application->printMessage(
-            tr("%1: QcepDateTimeProperty::setValue(QcepDoubleList %2) [%3]")
-            .arg(name())
-            .arg(toString(val))
-            .arg(index()));
+    if (debug()) {
+      printMessage(tr("%1: QcepDateTimeProperty::setValue(QcepDoubleList %2) [%3]")
+                   .arg(name()).arg(toString(val)).arg(index()));
     }
 
     QMutexLocker lock(&m_Mutex);
 
     m_Value = val;
 
-    if (m_Saver) {
-      m_Saver->changed(this);
+    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+
+    if (saver) {
+      saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -1183,14 +1102,13 @@ void QcepDoubleListProperty::setDefaultValue(QcepDoubleList val)
 void QcepDoubleListProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-        tr("%1: QcepDoubleListProperty::resetValue").arg(name()));
+    printMessage(tr("%1: QcepDoubleListProperty::resetValue").arg(name()));
   }
 
   setValue(m_Default);
 }
 
-QcepStringListProperty::QcepStringListProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QStringList value)
+QcepStringListProperty::QcepStringListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QStringList value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -1214,12 +1132,8 @@ QStringList QcepStringListProperty::defaultValue() const
 void QcepStringListProperty::setValue(QStringList val, int index)
 {
   if (debug()) {
-    g_Application->printMessage(
-          tr("%1 QcepStringListProperty::setValue(QcepStringList %2, int %3) [%4]")
-          .arg(name())
-          .arg(toString(val))
-          .arg(index)
-          .arg(this->index()));
+    printMessage(tr("%1 QcepStringListProperty::setValue(QcepStringList %2, int %3) [%4]")
+                 .arg(name()).arg(toString(val)).arg(index).arg(this->index()));
   }
 
   if (index == this->index()) {
@@ -1265,27 +1179,24 @@ QString QcepStringListProperty::toString(const QStringList &val)
 void QcepStringListProperty::setValue(QStringList val)
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-          tr("%1 QcepStringListProperty::setValue(QcepStringList %2)")
-          .arg(name())
-          .arg(toString(val)));
+    printMessage(tr("%1 QcepStringListProperty::setValue(QcepStringList %2)")
+                 .arg(name()).arg(toString(val)));
   }
 
   if (val != m_Value) {
-    if (g_Application && debug()) {
-      g_Application->printMessage(
-            tr("%1: QcepDateTimeProperty::setValue(QcepStringList %2) [%3]")
-            .arg(name())
-            .arg(toString(val))
-            .arg(index()));
+    if (debug()) {
+      printMessage(tr("%1: QcepDateTimeProperty::setValue(QcepStringList %2) [%3]")
+                   .arg(name()).arg(toString(val)).arg(index()));
     }
 
     QMutexLocker lock(&m_Mutex);
 
     m_Value = val;
 
-    if (m_Saver) {
-      m_Saver->changed(this);
+    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+
+    if (saver) {
+      saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -1302,14 +1213,13 @@ void QcepStringListProperty::setDefaultValue(QStringList val)
 void QcepStringListProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-        tr("%1: QcepStringListProperty::resetValue").arg(name()));
+    printMessage(tr("%1: QcepStringListProperty::resetValue").arg(name()));
   }
 
   setValue(m_Default);
 }
 
-QcepByteArrayProperty::QcepByteArrayProperty(QxrdSettingsSaverPtr saver, QObject *parent, const char *name, QByteArray value)
+QcepByteArrayProperty::QcepByteArrayProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QByteArray value)
   : QcepProperty(saver, parent, name),
     m_Default(value),
     m_Value(value)
@@ -1333,12 +1243,8 @@ QByteArray QcepByteArrayProperty::defaultValue() const
 void QcepByteArrayProperty::setValue(QByteArray val, int index)
 {
   if (debug()) {
-    g_Application->printMessage(
-          tr("%1 QcepByteArrayProperty::setValue(QByteArray %2, int %3) [%4]")
-          .arg(name())
-          .arg(toString(val))
-          .arg(index)
-          .arg(this->index()));
+    printMessage(tr("%1 QcepByteArrayProperty::setValue(QByteArray %2, int %3) [%4]")
+                 .arg(name()).arg(toString(val)).arg(index).arg(this->index()));
   }
 
   if (index == this->index()) {
@@ -1374,27 +1280,24 @@ QString QcepByteArrayProperty::toString(const QByteArray &val)
 void QcepByteArrayProperty::setValue(QByteArray val)
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-          tr("%1 QcepByteArrayProperty::setValue(QByteArray %2)")
-          .arg(name())
-          .arg(toString(val)));
+    printMessage(tr("%1 QcepByteArrayProperty::setValue(QByteArray %2)")
+                 .arg(name()).arg(toString(val)));
   }
 
   if (val != m_Value) {
-    if (g_Application && debug()) {
-      g_Application->printMessage(
-            tr("%1: QcepByteArrayProperty::setValue(QByteArray %2) [%3]")
-            .arg(name())
-            .arg(toString(val))
-            .arg(index()));
+    if (debug()) {
+      printMessage(tr("%1: QcepByteArrayProperty::setValue(QByteArray %2) [%3]")
+                   .arg(name()).arg(toString(val)).arg(index()));
     }
 
     QMutexLocker lock(&m_Mutex);
 
     m_Value = val;
 
-    if (m_Saver) {
-      m_Saver->changed(this);
+    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+
+    if (saver) {
+      saver->changed(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));
@@ -1411,8 +1314,7 @@ void QcepByteArrayProperty::setDefaultValue(QByteArray val)
 void QcepByteArrayProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    g_Application->printMessage(
-        tr("%1: QcepByteArrayProperty::resetValue").arg(name()));
+    printMessage(tr("%1: QcepByteArrayProperty::resetValue").arg(name()));
   }
 
   setValue(m_Default);

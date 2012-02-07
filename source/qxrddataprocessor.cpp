@@ -15,11 +15,11 @@
 #include <math.h>
 
 QxrdDataProcessor::QxrdDataProcessor
-    (QxrdSettingsSaverPtr saver,
-     QxrdExperimentPtr doc,
-     QxrdAcquisitionPtr acq,
-     QxrdAllocatorPtr allocator,
-     QxrdFileSaverPtr filesaver,
+    (QxrdSettingsSaverWPtr saver,
+     QxrdExperimentWPtr doc,
+     QxrdAcquisitionWPtr acq,
+     QxrdAllocatorWPtr allocator,
+     QxrdFileSaverWPtr filesaver,
      QSettings *settings,
      QString section,
      QObject *parent)

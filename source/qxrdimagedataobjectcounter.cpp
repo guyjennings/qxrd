@@ -3,7 +3,7 @@
 
 static QAtomicInt s_ImageDataObjectCounter;
 
-QxrdImageDataObjectCounter::QxrdImageDataObjectCounter(QxrdAllocatorPtr alloc, int typ)
+QxrdImageDataObjectCounter::QxrdImageDataObjectCounter(QxrdAllocatorWPtr alloc, int typ)
   : m_Allocator(alloc),
     m_Allocated(0),
     m_Type(typ)
@@ -13,8 +13,10 @@ QxrdImageDataObjectCounter::QxrdImageDataObjectCounter(QxrdAllocatorPtr alloc, i
 
 QxrdImageDataObjectCounter::~QxrdImageDataObjectCounter()
 {
-  if (m_Allocator) {
-    m_Allocator->deallocate(m_Type, m_Allocated);
+  QxrdAllocatorPtr alloc = m_Allocator.toStrongRef();
+
+  if (alloc) {
+    alloc->deallocate(m_Type, m_Allocated);
   }
 
   s_ImageDataObjectCounter.fetchAndAddOrdered(-1);
@@ -27,14 +29,20 @@ int QxrdImageDataObjectCounter::value()
 
 void QxrdImageDataObjectCounter::allocate(int sz, int width, int height)
 {
-  m_Allocator->allocate(m_Type, sz, width, height);
-  m_Allocated += sz*width*height;
+  QxrdAllocatorPtr alloc = m_Allocator.toStrongRef();
+
+  if (alloc) {
+    alloc->allocate(m_Type, sz, width, height);
+    m_Allocated += sz*width*height;
+  }
 }
 
 int QxrdImageDataObjectCounter::allocatedMemoryMB()
 {
-  if (m_Allocator) {
-    return m_Allocator->allocatedMemoryMB();
+  QxrdAllocatorPtr alloc = m_Allocator.toStrongRef();
+
+  if (alloc) {
+    return alloc->allocatedMemoryMB();
   } else {
     return -1;
   }
