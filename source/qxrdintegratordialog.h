@@ -11,10 +11,10 @@ class QxrdIntegratorDialog : public QDockWidget, public Ui::QxrdIntegratorDialog
   Q_OBJECT
 
 public:
-  QxrdIntegratorDialog(QxrdIntegratorPtr integ, QWidget *parent=0);
+  QxrdIntegratorDialog(QxrdIntegratorWPtr integw, QWidget *parent=0);
 
 private:
-  QxrdIntegratorPtr m_Integrator;
+  QxrdIntegratorWPtr m_Integrator;
 };
 
 #endif // QXRDINTEGRATORDIALOG_H

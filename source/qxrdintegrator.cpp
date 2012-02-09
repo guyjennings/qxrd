@@ -15,7 +15,7 @@
 
 #include <cmath>
 
-QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentPtr exp, QxrdDataProcessorBase *proc, QxrdAllocatorPtr alloc, QObject *parent)
+QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc, QObject *parent)
   : QObject(parent),
     m_Oversample(saver, this, "oversample", 1),
     m_IntegrationStep(saver, this, "integrationStep", 0.001),
@@ -24,9 +24,9 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentPtr exp
     m_IntegrationMaximum(saver, this, "integrationMaximum", 100000),
     m_IntegrationXUnits(saver, this, "integrationXUnits", IntegrateTTH),
     m_Experiment(exp),
-    m_DataProcessor(proc),
+    m_CenterFinder(cfw),
     m_Allocator(alloc),
-    m_IntegratorCache(NULL)
+    m_IntegratorCache()
 {
   connect(this->prop_Oversample(),         SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
   connect(this->prop_IntegrationStep(),    SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
@@ -35,22 +35,30 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentPtr exp
   connect(this->prop_IntegrationMaximum(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
   connect(this->prop_IntegrationXUnits(),  SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
 
-  QxrdCenterFinderPtr cf = m_DataProcessor -> centerFinder();
+  QxrdCenterFinderPtr cf(m_CenterFinder);
 
-  connect(cf->prop_CenterX(),            SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(cf->prop_CenterY(),            SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(cf->prop_DetectorXPixelSize(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(cf->prop_DetectorYPixelSize(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(cf->prop_DetectorDistance(),   SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(cf->prop_Energy(),             SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(cf->prop_ImplementTilt(),      SIGNAL(valueChanged(bool,int)),   this, SLOT(onIntegrationParametersChanged()));
-  connect(cf->prop_DetectorTilt(),       SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(cf->prop_TiltPlaneRotation(),  SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+  if (cf) {
+    connect(cf->prop_CenterX(),            SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+    connect(cf->prop_CenterY(),            SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+    connect(cf->prop_DetectorXPixelSize(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+    connect(cf->prop_DetectorYPixelSize(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+    connect(cf->prop_DetectorDistance(),   SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+    connect(cf->prop_Energy(),             SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+    connect(cf->prop_ImplementTilt(),      SIGNAL(valueChanged(bool,int)),   this, SLOT(onIntegrationParametersChanged()));
+    connect(cf->prop_DetectorTilt(),       SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+    connect(cf->prop_TiltPlaneRotation(),  SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+  }
 }
 
-QxrdDataProcessorBase *QxrdIntegrator::dataProcessor() const
+QxrdDataProcessorWPtr QxrdIntegrator::dataProcessor() const
 {
-  return m_DataProcessor;
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    return expt->dataProcessor();
+  } else {
+    return QxrdDataProcessorWPtr();
+  }
 }
 
 void QxrdIntegrator::writeSettings(QSettings *settings, QString section)
@@ -70,7 +78,11 @@ void QxrdIntegrator::readSettings(QSettings *settings, QString section)
 void QxrdIntegrator::onIntegrationParametersChanged()
 {
   if (qcepDebug(DEBUG_INTEGRATOR)) {
-    m_Experiment->printMessage("Integration parameters changed");
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt) {
+      expt->printMessage("Integration parameters changed");
+    }
   }
 
   m_IntegratorCache = QxrdIntegratorCachePtr();
@@ -94,17 +106,19 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr i
     cache->set_IntegrationMaximum(this->get_IntegrationMaximum());
     cache->set_IntegrationXUnits (this->get_IntegrationXUnits());
 
-    QxrdCenterFinderPtr cf = m_DataProcessor -> centerFinder();
+    QxrdCenterFinderPtr cf(m_CenterFinder);
 
-    cache->set_CenterX           (cf->get_CenterX());
-    cache->set_CenterY           (cf->get_CenterY());
-    cache->set_DetectorXPixelSize(cf->get_DetectorXPixelSize());
-    cache->set_DetectorYPixelSize(cf->get_DetectorYPixelSize());
-    cache->set_DetectorDistance  (cf->get_DetectorDistance());
-    cache->set_Energy            (cf->get_Energy());
-    cache->set_ImplementTilt     (cf->get_ImplementTilt());
-    cache->set_DetectorTilt      (cf->get_DetectorTilt());
-    cache->set_TiltPlaneRotation (cf->get_TiltPlaneRotation());
+    if (cf) {
+      cache->set_CenterX           (cf->get_CenterX());
+      cache->set_CenterY           (cf->get_CenterY());
+      cache->set_DetectorXPixelSize(cf->get_DetectorXPixelSize());
+      cache->set_DetectorYPixelSize(cf->get_DetectorYPixelSize());
+      cache->set_DetectorDistance  (cf->get_DetectorDistance());
+      cache->set_Energy            (cf->get_Energy());
+      cache->set_ImplementTilt     (cf->get_ImplementTilt());
+      cache->set_DetectorTilt      (cf->get_DetectorTilt());
+      cache->set_TiltPlaneRotation (cf->get_TiltPlaneRotation());
+    }
 
     cache->set_NCols             (dimg->get_Width());
     cache->set_NRows             (dimg->get_Height());
@@ -124,18 +138,22 @@ double QxrdIntegrator::XValue(double x, double y) const
 {
   double xVal = 0;
 
-  switch(get_IntegrationXUnits()) {
-  case IntegrateTTH:
-    xVal = m_DataProcessor->centerFinder()->getTTH(x,y);
-    break;
+  QxrdCenterFinderPtr cf(m_CenterFinder);
 
-  case IntegrateQ:
-    xVal = m_DataProcessor->centerFinder()->getQ(x,y);
-    break;
+  if (cf) {
+    switch(get_IntegrationXUnits()) {
+    case IntegrateTTH:
+      xVal = cf->getTTH(x,y);
+      break;
 
-  case IntegrateR:
-    xVal = m_DataProcessor->centerFinder()->getR(x,y);
-    break;
+    case IntegrateQ:
+      xVal = cf->getQ(x,y);
+      break;
+
+    case IntegrateR:
+      xVal = cf->getR(x,y);
+      break;
+    }
   }
 
   return xVal;
@@ -203,7 +221,11 @@ QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdIntegratedDataPtr integ, Qxr
   }
 
   catch (...) {
-    m_Experiment->printMessage("QxrdIntegrator::sliceLine failed");
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt) {
+      expt->printMessage("QxrdIntegrator::sliceLine failed");
+    }
   }
 
   return QxrdIntegratedDataPtr();
@@ -257,7 +279,11 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdIntegratedDataPtr integ, 
       //    emit newIntegrationAvailable(image->get_Title(),xs,ys);
     }
   } else {
-    m_Experiment->printMessage("QxrdIntegrator::slicePolygon failed");
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt) {
+      expt->printMessage("QxrdIntegrator::slicePolygon failed");
+    }
   }
 
   return integ;

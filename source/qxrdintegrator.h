@@ -10,20 +10,15 @@
 #include "qxrdintegratorcache.h"
 #include "qxrdsettingssaver.h"
 
-class QxrdExperiment;
-class QxrdDataProcessor;
 class QxrdCenterFinder;
-
-typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
-typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;
-typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
+typedef QWeakPointer<QxrdCenterFinder> QxrdCenterFinderWPtr;
 
 class QxrdIntegrator : public QObject
 {
   Q_OBJECT
 
 public:
-  QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentPtr exp, QxrdDataProcessorBase *proc, QxrdAllocatorPtr alloc, QObject *parent=0);
+  QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc, QObject *parent=0);
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
@@ -47,7 +42,7 @@ public:
 public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
-  QxrdDataProcessorBase *dataProcessor() const;
+  QxrdDataProcessorWPtr dataProcessor() const;
 
   enum {
     IntegrateTTH, IntegrateQ, IntegrateR
@@ -82,12 +77,13 @@ public slots:
 
 private:
   mutable QMutex         m_Mutex;
-  QxrdExperimentPtr      m_Experiment;
-  QxrdDataProcessorBase *m_DataProcessor;
-  QxrdAllocatorPtr       m_Allocator;
+  QxrdExperimentWPtr     m_Experiment;
+  QxrdCenterFinderWPtr   m_CenterFinder;
+  QxrdAllocatorWPtr      m_Allocator;
   QxrdIntegratorCachePtr m_IntegratorCache;
 };
 
 typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
+typedef QWeakPointer<QxrdIntegrator> QxrdIntegratorWPtr;
 
 #endif // QXRDINTEGRATOR_H

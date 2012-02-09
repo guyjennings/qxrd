@@ -43,17 +43,14 @@ void QxrdDataProcessorThread::run()
       exp->printMessage("Starting Processor Thread");
     }
 
-    QxrdDataProcessorPtr p;
-
-    p = QxrdDataProcessorPtr(
-          new QxrdDataProcessor(m_Saver,
-                                m_Experiment,
-                                m_Acquisition,
-                                m_Allocator,
-                                m_FileSaver,
-                                m_Settings,
-                                m_Section,
-                                NULL));
+    QxrdDataProcessorPtr p(new QxrdDataProcessor(m_Saver,
+                                                 m_Experiment,
+                                                 m_Acquisition,
+                                                 m_Allocator,
+                                                 m_FileSaver,
+                                                 m_Settings,
+                                                 m_Section,
+                                                 NULL));
 
     m_DataProcessor = p;
 

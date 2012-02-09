@@ -8,7 +8,7 @@
 
 #include <cmath>
 
-QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperimentPtr exp, QxrdAllocatorPtr alloc) :
+QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperimentWPtr exp, QxrdAllocatorWPtr alloc) :
   QObject(NULL),
   m_Oversample(QxrdSettingsSaverPtr(), this, "oversample", 1),
   m_IntegrationStep(QxrdSettingsSaverPtr(), this, "integrationStep", 0.001),
@@ -163,218 +163,222 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
   QTime tic;
   tic.start();
 
-  if (qcepDebug(DEBUG_INTEGRATOR)) {
-    m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration"));
-  }
+  QxrdExperimentPtr expt(m_Experiment);
 
-  if (integ && dimg) {
-    int noversample = get_Oversample();
-    double oversampleStep = 1.0/get_Oversample();
-    double halfOversampleStep = oversampleStep/2.0;
-
-    QcepDoubleList norm = dimg->get_Normalization();
-
-    double normVal = 1;
-
-    if (norm.length()>=1) {
-      normVal = norm[0];
+  if (expt) {
+    if (qcepDebug(DEBUG_INTEGRATOR)) {
+      expt->printMessage(tr("QxrdIntegratorCache::performIntegration"));
     }
 
-    if (m_CacheFillLevel.testAndSetOrdered(-1,0)) {
-      if (qcepDebug(DEBUG_INTEGRATOR)) {
-        m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration - fill cache"));
+    if (integ && dimg) {
+      int noversample = get_Oversample();
+      double oversampleStep = 1.0/get_Oversample();
+      double halfOversampleStep = oversampleStep/2.0;
+
+      QcepDoubleList norm = dimg->get_Normalization();
+
+      double normVal = 1;
+
+      if (norm.length()>=1) {
+        normVal = norm[0];
       }
 
-      // Allocate new cache and fill it...
-
-      double cx = get_CenterX();
-      double cy = get_CenterY();
-
-      int nRows = get_NRows();
-      int nCols = get_NCols();
-      int nPix  = nRows*nCols*get_Oversample()*get_Oversample();
-
-      double r00  = XValue(0,0);
-      double r10  = XValue(nRows+1,0);
-      double r01  = XValue(0,nCols+1);
-      double r11  = XValue(nRows+1,nCols+1);
-
-      double rMin = r00;
-      double rMax = r00;
-
-      rMin = qMin(rMin, r10);
-      rMin = qMin(rMin, r01);
-      rMin = qMin(rMin, r11);
-
-      rMax = qMax(rMax, r10);
-      rMax = qMax(rMax, r01);
-      rMax = qMax(rMax, r11);
-
-      if (cx >= 0 && cx <= nCols && cy >= 0 && cy <= nRows) {
-        rMin = qMin(rMin,0.0);
-      }
-
-      rMin = qMax(rMin, get_IntegrationMinimum());
-      rMax = qMin(rMax, get_IntegrationMaximum());
-
-      double rStep = get_IntegrationStep();
-
-      if (rStep == 0) {
-        int nStep = get_IntegrationNSteps();
-
-        if (nStep <= 0) {
-          nStep = 512;
+      if (m_CacheFillLevel.testAndSetOrdered(-1,0)) {
+        if (qcepDebug(DEBUG_INTEGRATOR)) {
+          expt->printMessage(tr("QxrdIntegratorCache::performIntegration - fill cache"));
         }
 
-        rStep = (rMax - rMin)/nStep;
+        // Allocate new cache and fill it...
+
+        double cx = get_CenterX();
+        double cy = get_CenterY();
+
+        int nRows = get_NRows();
+        int nCols = get_NCols();
+        int nPix  = nRows*nCols*get_Oversample()*get_Oversample();
+
+        double r00  = XValue(0,0);
+        double r10  = XValue(nRows+1,0);
+        double r01  = XValue(0,nCols+1);
+        double r11  = XValue(nRows+1,nCols+1);
+
+        double rMin = r00;
+        double rMax = r00;
+
+        rMin = qMin(rMin, r10);
+        rMin = qMin(rMin, r01);
+        rMin = qMin(rMin, r11);
+
+        rMax = qMax(rMax, r10);
+        rMax = qMax(rMax, r01);
+        rMax = qMax(rMax, r11);
+
+        if (cx >= 0 && cx <= nCols && cy >= 0 && cy <= nRows) {
+          rMin = qMin(rMin,0.0);
+        }
+
+        rMin = qMax(rMin, get_IntegrationMinimum());
+        rMax = qMin(rMax, get_IntegrationMaximum());
+
+        double rStep = get_IntegrationStep();
+
+        if (rStep == 0) {
+          int nStep = get_IntegrationNSteps();
+
+          if (nStep <= 0) {
+            nStep = 512;
+          }
+
+          rStep = (rMax - rMin)/nStep;
+        }
+
+        double nMin  = floor(rMin/rStep);
+        double nMax  = ceil(rMax/rStep);
+        int nRange = (nMax - nMin);
+
+        set_RStep(rStep);
+        set_NRange(nRange);
+        set_RMin(rMin);
+        set_RMax(rMax);
+
+        m_CachedBinNumbers =  QxrdAllocator::newInt32Image(m_Allocator,
+                                                           QxrdAllocator::AlwaysAllocate,
+                                                           get_NCols()*get_Oversample(),
+                                                           get_NRows()*get_Oversample());
+
+        if (m_CachedBinNumbers) {
+          m_CachedBinNumbers -> clear();
+
+          m_CacheFullLevel.fetchAndStoreOrdered(nPix);
+
+          qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
+
+          expt->commenceWork(nRows);
+
+          for (int y = 0; y < nRows; y++) {
+            expt->completeWork(1);
+
+            for (int x = 0; x < nCols; x++) {
+              for (int oversampley = 0; oversampley < noversample; oversampley++) {
+                double yy = y+oversampley*oversampleStep+halfOversampleStep;
+                for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
+                  double xx = x+oversamplex*oversampleStep+halfOversampleStep;
+
+                  double r = XValue(xx, yy);
+                  double n = floor(r / rStep);
+
+                  if (n >= nMin && n < nMax) {
+                    int bin = n - nMin;
+
+                    *cachep++ = bin;
+                  } else {
+                    *cachep++ = -1;
+                  }
+
+                  m_CacheFillLevel.fetchAndAddOrdered(1);
+                }
+              }
+            }
+          }
+
+          expt->finishedWork(nRows);
+        }
+
+        if (qcepDebug(DEBUG_INTEGRATOR)) {
+          expt->printMessage(tr("QxrdIntegratorCache::performIntegration - cache finished"));
+        }
       }
 
-      double nMin  = floor(rMin/rStep);
-      double nMax  = ceil(rMax/rStep);
-      int nRange = (nMax - nMin);
+      while (m_CacheFillLevel < m_CacheFullLevel) {
+        if (qcepDebug(DEBUG_INTEGRATOR)) {
+          expt->printMessage(tr("QxrdIntegratorCache::performIntegration - waiting for cache [%1,%2]")
+                             .arg(m_CacheFillLevel)
+                             .arg(m_CacheFullLevel));
+        }
 
-      set_RStep(rStep);
-      set_NRange(nRange);
-      set_RMin(rMin);
-      set_RMax(rMax);
+        QThreadAccess::msleep(100);
+      }
 
-      m_CachedBinNumbers =  QxrdAllocator::newInt32Image(m_Allocator,
-                                                         QxrdAllocator::AlwaysAllocate,
-                                                         get_NCols()*get_Oversample(),
-                                                         get_NRows()*get_Oversample());
+      if (m_CacheFillLevel == m_CacheFullLevel) {
+        if (qcepDebug(DEBUG_INTEGRATOR)) {
+          expt->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
+        }
 
-      if (m_CachedBinNumbers) {
-        m_CachedBinNumbers -> clear();
+        int nRange = get_NRange();
+        int nRows = get_NRows();
+        int nCols = get_NCols();
+        double rMin = get_RMin();
+        double rMax = get_RMax();
+        double rStep = get_RStep();
 
-        m_CacheFullLevel.fetchAndStoreOrdered(nPix);
-
+        QVector<double> integral(nRange), sumvalue(nRange);
         qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
+        int noversample = get_Oversample();
 
-        m_Experiment->commenceWork(nRows);
+        int nWork = nRows/100;
+        int nWorkDone = 0;
+
+        expt->commenceWork(nWork);
 
         for (int y = 0; y < nRows; y++) {
-          m_Experiment->completeWork(1);
+          if (y%100 == 0) {
+            expt->completeWork(1);
+            nWorkDone++;
+          }
 
           for (int x = 0; x < nCols; x++) {
-            for (int oversampley = 0; oversampley < noversample; oversampley++) {
-              double yy = y+oversampley*oversampleStep+halfOversampleStep;
-              for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
-                double xx = x+oversamplex*oversampleStep+halfOversampleStep;
+            if ((mask == NULL) || (mask->value(x, y))) {
+              double val = dimg->value(x,y);
+              for (int oversampley = 0; oversampley < noversample; oversampley++) {
+                for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
+                  int bin = *cachep++;
 
-                double r = XValue(xx, yy);
-                double n = floor(r / rStep);
-
-                if (n >= nMin && n < nMax) {
-                  int bin = n - nMin;
-
-                  *cachep++ = bin;
-                } else {
-                  *cachep++ = -1;
+                  if (bin >= 0) {
+                    integral[bin] += val;
+                    sumvalue[bin] += 1;
+                  }
                 }
-
-                m_CacheFillLevel.fetchAndAddOrdered(1);
               }
+            } else {
+              cachep += (noversample*noversample);
             }
           }
         }
 
-        m_Experiment->finishedWork(nRows);
-      }
-
-      if (qcepDebug(DEBUG_INTEGRATOR)) {
-        m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration - cache finished"));
-      }
-    }
-
-    while (m_CacheFillLevel < m_CacheFullLevel) {
-      if (qcepDebug(DEBUG_INTEGRATOR)) {
-        m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration - waiting for cache [%1,%2]")
-                                    .arg(m_CacheFillLevel)
-                                    .arg(m_CacheFullLevel));
-      }
-
-      QThreadAccess::msleep(100);
-    }
-
-    if (m_CacheFillLevel == m_CacheFullLevel) {
-      if (qcepDebug(DEBUG_INTEGRATOR)) {
-        m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
-      }
-
-      int nRange = get_NRange();
-      int nRows = get_NRows();
-      int nCols = get_NCols();
-      double rMin = get_RMin();
-      double rMax = get_RMax();
-      double rStep = get_RStep();
-
-      QVector<double> integral(nRange), sumvalue(nRange);
-      qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
-      int noversample = get_Oversample();
-
-      int nWork = nRows/100;
-      int nWorkDone = 0;
-
-      m_Experiment->commenceWork(nWork);
-
-      for (int y = 0; y < nRows; y++) {
-        if (y%100 == 0) {
-          m_Experiment->completeWork(1);
-          nWorkDone++;
+        if (nWorkDone != nWork) {
+          expt->completeWork(nWork-nWorkDone);
         }
 
-        for (int x = 0; x < nCols; x++) {
-          if ((mask == NULL) || (mask->value(x, y))) {
-            double val = dimg->value(x,y);
-            for (int oversampley = 0; oversampley < noversample; oversampley++) {
-              for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
-                int bin = *cachep++;
+        expt -> finishedWork(nWork);
 
-                if (bin >= 0) {
-                  integral[bin] += val;
-                  sumvalue[bin] += 1;
-                }
-              }
+        integ -> resize(0);
+        integ -> set_Center(get_CenterX(), get_CenterY());
+
+        for(int ir=0; ir<nRange; ir++) {
+          int sv = sumvalue[ir];
+
+          if (sv > 0) {
+            double xv = rMin + (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
+
+            if (normalize) {
+              integ -> append(xv, normVal*integral[ir]/sv);
+            } else {
+              integ -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
             }
-          } else {
-            cachep += (noversample*noversample);
           }
         }
+
+        integ->set_XUnitsLabel(XLabel());
+        integ->set_Oversample(get_Oversample());
+        // Integrate entirely out of cache
       }
 
-      if (nWorkDone != nWork) {
-        m_Experiment->completeWork(nWork-nWorkDone);
-      }
-
-      m_Experiment -> finishedWork(nWork);
-
-      integ -> resize(0);
-      integ -> set_Center(get_CenterX(), get_CenterY());
-
-      for(int ir=0; ir<nRange; ir++) {
-        int sv = sumvalue[ir];
-
-        if (sv > 0) {
-          double xv = rMin + (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
-
-          if (normalize) {
-            integ -> append(xv, normVal*integral[ir]/sv);
-          } else {
-            integ -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
-          }
-        }
-      }
-
-      integ->set_XUnitsLabel(XLabel());
-      integ->set_Oversample(get_Oversample());
-      // Integrate entirely out of cache
+      expt->printMessage(tr("Integration of %1 took %2 msec")
+                         .arg(dimg->get_Title())
+                         .arg(tic.restart()));
+    } else {
+      expt->printMessage(tr("QxrdIntegratorCache::performIntegration - integration failed"));
     }
-
-    m_Experiment->printMessage(tr("Integration of %1 took %2 msec")
-                                .arg(dimg->get_Title())
-                                .arg(tic.restart()));
-  } else {
-    m_Experiment->printMessage(tr("QxrdIntegratorCache::performIntegration - integration failed"));
   }
 
   return integ;

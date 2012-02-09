@@ -110,7 +110,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   }
 
   m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(saver, this));
-  m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(saver, m_Experiment, this, m_Allocator, this));
+  m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(saver, m_Experiment, m_CenterFinder, m_Allocator, this));
   m_GenerateTestImage = new QxrdGenerateTestImage(saver, this, m_Allocator, this);
   m_InitialRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver, this));
   m_RefinedRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver, this));
