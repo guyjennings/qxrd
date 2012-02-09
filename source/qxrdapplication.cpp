@@ -717,7 +717,7 @@ void QxrdApplication::closeExperiment(QxrdExperimentWPtr exp)
 {
   printf("QxrdApplication::closeExperiment(%p)\n", exp.data());
 
-  QxrdExperimentPtr expp = exp.toStrongRef();
+  QxrdExperimentPtr expp(exp);
 
   if (expp) {
     QxrdExperimentThreadPtr expthrd = expp -> experimentThread();

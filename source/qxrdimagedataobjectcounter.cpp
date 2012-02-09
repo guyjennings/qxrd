@@ -13,7 +13,7 @@ QxrdImageDataObjectCounter::QxrdImageDataObjectCounter(QxrdAllocatorWPtr alloc, 
 
 QxrdImageDataObjectCounter::~QxrdImageDataObjectCounter()
 {
-  QxrdAllocatorPtr alloc = m_Allocator.toStrongRef();
+  QxrdAllocatorPtr alloc(m_Allocator);
 
   if (alloc) {
     alloc->deallocate(m_Type, m_Allocated);
@@ -29,7 +29,7 @@ int QxrdImageDataObjectCounter::value()
 
 void QxrdImageDataObjectCounter::allocate(int sz, int width, int height)
 {
-  QxrdAllocatorPtr alloc = m_Allocator.toStrongRef();
+  QxrdAllocatorPtr alloc(m_Allocator);
 
   if (alloc) {
     alloc->allocate(m_Type, sz, width, height);
@@ -39,7 +39,7 @@ void QxrdImageDataObjectCounter::allocate(int sz, int width, int height)
 
 int QxrdImageDataObjectCounter::allocatedMemoryMB()
 {
-  QxrdAllocatorPtr alloc = m_Allocator.toStrongRef();
+  QxrdAllocatorPtr alloc(m_Allocator);
 
   if (alloc) {
     return alloc->allocatedMemoryMB();

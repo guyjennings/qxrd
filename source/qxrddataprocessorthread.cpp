@@ -36,7 +36,7 @@ QxrdDataProcessorThread::~QxrdDataProcessorThread()
 
 void QxrdDataProcessorThread::run()
 {
-  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     if (qcepDebug(DEBUG_THREADS)) {

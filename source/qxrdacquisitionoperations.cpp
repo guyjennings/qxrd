@@ -23,7 +23,7 @@ void QxrdAcquisitionOperations::setWindow(QxrdWindow *win)
 
 void QxrdAcquisitionOperations::printMessage(QString msg, QDateTime ts)
 {
-  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     exp->printMessage(msg, ts);
@@ -32,7 +32,7 @@ void QxrdAcquisitionOperations::printMessage(QString msg, QDateTime ts)
 
 void QxrdAcquisitionOperations::criticalMessage(QString msg, QDateTime ts)
 {
-  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     exp->criticalMessage(msg);
@@ -41,7 +41,7 @@ void QxrdAcquisitionOperations::criticalMessage(QString msg, QDateTime ts)
 
 void QxrdAcquisitionOperations::statusMessage(QString msg, QDateTime ts)
 {
-  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     exp->statusMessage(msg);

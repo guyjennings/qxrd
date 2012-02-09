@@ -36,7 +36,7 @@ public:
   static QxrdExperimentThreadPtr newExperimentPilatusAnalysis(QString path, QxrdApplication *app, QSettings *settings=0);
   static QxrdExperimentThreadPtr newExperimentGenericAnalysis(QString path, QxrdApplication *app, QSettings *settings=0);
 
-  QxrdExperimentPtr experiment();
+  QxrdExperimentWPtr experiment();
 
   void shutdown();
 

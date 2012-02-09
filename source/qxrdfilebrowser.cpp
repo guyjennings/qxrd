@@ -196,7 +196,7 @@ void QxrdFileBrowser::doHomeDirectory()
 
 void QxrdFileBrowser::doAcquisitionDirectory()
 {
-  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     doPushDirectory(exp->get_ExperimentDirectory());
@@ -225,7 +225,7 @@ void QxrdFileBrowser::doOpen()
       }
     }
   } else {
-    QxrdDataProcessorPtr proc = m_Processor.toStrongRef();
+    QxrdDataProcessorPtr proc(m_Processor);
 
     if (proc) {
       foreach(index, rows) {
@@ -244,7 +244,7 @@ void QxrdFileBrowser::doOpenDark()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc = m_Processor.toStrongRef();
+  QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
     foreach(index, rows) {
@@ -262,7 +262,7 @@ void QxrdFileBrowser::doOpenMask()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc = m_Processor.toStrongRef();
+  QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
     foreach(index, rows) {
@@ -280,7 +280,7 @@ void QxrdFileBrowser::doOpenGainMap()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc = m_Processor.toStrongRef();
+  QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
     foreach(index, rows) {
@@ -298,7 +298,7 @@ void QxrdFileBrowser::doProcess()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc = m_Processor.toStrongRef();
+  QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
     foreach(index, rows) {

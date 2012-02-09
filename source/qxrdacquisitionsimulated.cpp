@@ -28,19 +28,31 @@ QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdSettingsSaverWPtr saver,
 
 void QxrdAcquisitionSimulated::onExposureTimeChanged(double newTime)
 {
-  m_Experiment.toStrongRef()->printMessage(tr("Exposure time changed to %1").arg(newTime));
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    expt->printMessage(tr("Exposure time changed to %1").arg(newTime));
+  }
 
   m_Timer.start(get_ExposureTime()*1000);
 }
 
 void QxrdAcquisitionSimulated::onBinningModeChanged(int newMode)
 {
-  m_Experiment.toStrongRef()->printMessage(tr("Binning mode changed to %1").arg(newMode));
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    expt->printMessage(tr("Binning mode changed to %1").arg(newMode));
+  }
 }
 
 void QxrdAcquisitionSimulated::onCameraGainChanged(int newGain)
 {
-  m_Experiment.toStrongRef()->printMessage(tr("Camera Gain Changed to %1").arg(newGain));
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    expt->printMessage(tr("Camera Gain Changed to %1").arg(newGain));
+  }
 }
 
 void QxrdAcquisitionSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/)

@@ -515,7 +515,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
 
         image->correctBadBackgroundSubtraction(dark,nImgExposures,nDarkExposures);
 
-        QxrdFileSaverPtr saver = m_FileSaver.toStrongRef();
+        QxrdFileSaverPtr saver(m_FileSaver);
 
         if (saver) {
           saver->saveData(path, image, QxrdMaskDataPtr(), NoOverwrite);

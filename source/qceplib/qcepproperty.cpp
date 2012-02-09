@@ -203,7 +203,7 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
 
 void QcepProperty::printMessage(QString msg, QDateTime ts)
 {
-  QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+  QxrdSettingsSaverPtr saver(m_Saver);
 
   if (saver) {
     saver->printMessage(msg, ts);
@@ -278,7 +278,7 @@ void QcepDoubleProperty::setValue(double val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+    QxrdSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -302,7 +302,7 @@ void QcepDoubleProperty::incValue(double step)
 
     m_Value += step;
 
-    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+    QxrdSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -450,7 +450,7 @@ void QcepIntProperty::setValue(int val)
 
     m_Value.fetchAndStoreOrdered(val);
 
-    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+    QxrdSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -471,7 +471,7 @@ void QcepIntProperty::incValue(int step)
   if (step) {
     m_Value.fetchAndAddOrdered(step);
 
-    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+    QxrdSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -680,7 +680,7 @@ void QcepBoolProperty::setValue(bool val)
 
     m_Value.fetchAndStoreOrdered(val);
 
-    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+    QxrdSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -817,7 +817,7 @@ void QcepStringProperty::setValue(QString val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+    QxrdSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -969,7 +969,7 @@ void QcepDateTimeProperty::setValue(QDateTime val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+    QxrdSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1082,7 +1082,7 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+    QxrdSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1193,7 +1193,7 @@ void QcepStringListProperty::setValue(QStringList val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+    QxrdSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1294,7 +1294,7 @@ void QcepByteArrayProperty::setValue(QByteArray val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver = m_Saver.toStrongRef();
+    QxrdSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);

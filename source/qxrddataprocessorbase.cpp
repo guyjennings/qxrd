@@ -152,7 +152,7 @@ void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionWPtr acq)
   connect(prop_DisplayIntegratedDataTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
   connect(prop_SaveIntegratedDataTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
 
-  QxrdAcquisitionPtr acqp = m_Acquisition.toStrongRef();
+  QxrdAcquisitionPtr acqp(m_Acquisition);
 
   if (acqp) {
     connect(acqp -> prop_SummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateEstimatedProcessingTime()));
@@ -204,7 +204,7 @@ void QxrdDataProcessorBase::readSettings(QSettings *settings, QString section)
 
 void QxrdDataProcessorBase::printMessage(QString msg, QDateTime ts) const
 {
-  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     exp->printMessage(msg, ts);
@@ -213,7 +213,7 @@ void QxrdDataProcessorBase::printMessage(QString msg, QDateTime ts) const
 
 void QxrdDataProcessorBase::criticalMessage(QString msg, QDateTime ts) const
 {
-  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     exp->criticalMessage(msg);
@@ -222,7 +222,7 @@ void QxrdDataProcessorBase::criticalMessage(QString msg, QDateTime ts) const
 
 void QxrdDataProcessorBase::statusMessage(QString msg, QDateTime ts) const
 {
-  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     exp->statusMessage(msg);
@@ -241,7 +241,7 @@ QString QxrdDataProcessorBase::filePathInCurrentDirectory(QString name) const
 
 QString QxrdDataProcessorBase::currentDirectory() const
 {
-  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     return exp->get_ExperimentDirectory();
@@ -300,7 +300,7 @@ void QxrdDataProcessorBase::newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPt
   m_Data = image;
   m_Overflow = overflow;
 
-  QxrdWindowPtr w = m_Window.toStrongRef();
+  QxrdWindowPtr w(m_Window);
 
   if (w) {
     w -> newDataAvailable(m_Data, overflow);
@@ -389,7 +389,7 @@ void QxrdDataProcessorBase::newGainMapImage(QxrdDoubleImageDataPtr image)
 
 void QxrdDataProcessorBase::newMask()
 {
-  QxrdWindowPtr w = m_Window.toStrongRef();
+  QxrdWindowPtr w(m_Window);
 
   if (w) {
     w -> newMaskAvailable(mask());
@@ -1009,7 +1009,7 @@ void QxrdDataProcessorBase::clearMask()
 
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f = m_FileSaver.toStrongRef();
+  QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
     f -> saveData(name, image, overflow, canOverwrite);
@@ -1018,7 +1018,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdDoubleImageData
 
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f = m_FileSaver.toStrongRef();
+  QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
     f -> saveData(name, image, overflow, canOverwrite);
@@ -1027,7 +1027,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt16ImageDataP
 
 void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f = m_FileSaver.toStrongRef();
+  QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
     f -> saveRawData(name, image, overflow, canOverwrite);
@@ -1036,7 +1036,7 @@ void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt16ImageDa
 
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f = m_FileSaver.toStrongRef();
+  QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
     f -> saveData(name, image, overflow, canOverwrite);
@@ -1045,7 +1045,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt32ImageDataP
 
 void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f = m_FileSaver.toStrongRef();
+  QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
     f -> saveRawData(name, image, overflow, canOverwrite);
@@ -1054,7 +1054,7 @@ void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt32ImageDa
 
 void QxrdDataProcessorBase::saveNamedMaskData(QString name, QxrdMaskDataPtr image, int canOverwrite)
 {
-  QxrdFileSaverPtr f = m_FileSaver.toStrongRef();
+  QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
     f -> saveData(name, image, canOverwrite);
@@ -1063,7 +1063,7 @@ void QxrdDataProcessorBase::saveNamedMaskData(QString name, QxrdMaskDataPtr imag
 
 void QxrdDataProcessorBase::saveNamedImageDataAsText(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f = m_FileSaver.toStrongRef();
+  QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
     f -> saveTextData(name, image, overflow, canOverwrite);
@@ -1352,7 +1352,7 @@ void QxrdDataProcessorBase::updateEstimatedProcessingTime()
 {
   double estSerialTime = 0, estParallelTime = 0;
 
-  QxrdAcquisitionPtr acq = m_Acquisition.toStrongRef();
+  QxrdAcquisitionPtr acq(m_Acquisition);
 
   if (acq && get_SaveRawImages()) {
     if (acq -> get_SummedExposures() > 1) {
@@ -1812,11 +1812,11 @@ void QxrdDataProcessorBase::ellipse(double cx, double cy, double a, double e, do
 
 void QxrdDataProcessorBase::writeOutputScan(QxrdIntegratedDataPtr data)
 {
-  QxrdFileSaverPtr f = m_FileSaver.toStrongRef();
+  QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
     if (this->get_SaveIntegratedData()) {
-      QxrdExperimentPtr expt = m_Experiment.toStrongRef();
+      QxrdExperimentPtr expt(m_Experiment);
 
       if (expt) {
         f->writeOutputScan(expt->scanFile(), data);

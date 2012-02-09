@@ -52,7 +52,7 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaverWPtr saver,
   xisllib = LoadLibrary(L"XISL.dll");
 
   if (xisllib == NULL) {
-    QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+    QxrdExperimentPtr exp(m_Experiment);
 
     if (exp) {
       exp->criticalMessage("XISL library is not available - cannot use PE detector");
@@ -74,7 +74,7 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 
 void QxrdAcquisitionThread::run()
 {
-  QxrdExperimentPtr exp = m_Experiment.toStrongRef();
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     if (qcepDebug(DEBUG_THREADS)) {

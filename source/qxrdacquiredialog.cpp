@@ -12,7 +12,7 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperimentWPtr doc,
 {
   setupUi(this);
 
-  QxrdAcquisitionPtr acqp = m_Acquisition.toStrongRef();
+  QxrdAcquisitionPtr acqp(m_Acquisition);
 
   if (acqp) {
     QxrdAcquisition *acq = acqp.data();
@@ -57,7 +57,7 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperimentWPtr doc,
     acq -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
   }
 
-  QxrdExperimentPtr expp = m_Experiment.toStrongRef();
+  QxrdExperimentPtr expp(m_Experiment);
 
   if (expp) {
     QxrdExperiment *exp = expp.data();
@@ -66,7 +66,7 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperimentWPtr doc,
     exp  -> prop_LogFileName() -> linkTo(this -> m_LogFileName);
   }
 
-  QxrdDataProcessorPtr procp = m_DataProcessor.toStrongRef();
+  QxrdDataProcessorPtr procp(m_DataProcessor);
 
   if (procp) {
     procp.data() -> prop_Average() -> linkTo(this -> m_AverageDisplay);
@@ -90,13 +90,12 @@ void QxrdAcquireDialog::setupAcquireMenu(QMenu *menu)
 
 void QxrdAcquireDialog::onAcquisitionInit()
 {
-  QxrdAcquisitionPtr acqp = m_Acquisition.toStrongRef();
+  QxrdAcquisitionPtr acqp(m_Acquisition);
 
   if (acqp) {
-    QxrdAcquisition *acq = acqp.data();
-    acq -> setupExposureMenu(this -> m_ExposureTime);
-    acq -> setupCameraGainMenu(this -> m_CameraGain);
-    acq -> setupCameraBinningModeMenu(this -> m_BinningMode);
+    acqp -> setupExposureMenu(this -> m_ExposureTime);
+    acqp -> setupCameraGainMenu(this -> m_CameraGain);
+    acqp -> setupCameraBinningModeMenu(this -> m_BinningMode);
   }
 }
 
@@ -114,7 +113,7 @@ void QxrdAcquireDialog::changeEvent(QEvent *e)
 
 void QxrdAcquireDialog::doAcquire()
 {
-  QxrdAcquisitionPtr acqp = m_Acquisition.toStrongRef();
+  QxrdAcquisitionPtr acqp(m_Acquisition);
 
   if (acqp) {
     acqp -> acquire();
@@ -123,7 +122,7 @@ void QxrdAcquireDialog::doAcquire()
 
 void QxrdAcquireDialog::doAcquireDark()
 {
-  QxrdAcquisitionPtr acqp = m_Acquisition.toStrongRef();
+  QxrdAcquisitionPtr acqp(m_Acquisition);
 
   if (acqp) {
     acqp -> acquireDark();
@@ -132,7 +131,7 @@ void QxrdAcquireDialog::doAcquireDark()
 
 void QxrdAcquireDialog::doCancel()
 {
-  QxrdAcquisitionPtr acqp = m_Acquisition.toStrongRef();
+  QxrdAcquisitionPtr acqp(m_Acquisition);
 
   if (acqp) {
     acqp -> cancel();
@@ -156,7 +155,7 @@ void QxrdAcquireDialog::acquisitionReady()
 
 void QxrdAcquireDialog::acquireStarted()
 {
-  QxrdAcquisitionPtr acq = m_Acquisition.toStrongRef();
+  QxrdAcquisitionPtr acq(m_Acquisition);
 
   if (acq) {
     m_AcquireButton -> setEnabled(false);

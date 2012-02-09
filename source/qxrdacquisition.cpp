@@ -20,7 +20,7 @@ QxrdAcquisition::QxrdAcquisition(DetectorKind detectorKind,
     m_ControlPanel(NULL),
     m_Idling(1)
 {
-  QxrdAllocatorPtr alloc = m_Allocator.toStrongRef();
+  QxrdAllocatorPtr alloc(m_Allocator);
 
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdAcquisition::QxrdAcquisition");
@@ -72,7 +72,7 @@ void QxrdAcquisition::shutdown()
 
 void QxrdAcquisition::onBufferSizeChanged(int newMB)
 {
-  QxrdAllocatorPtr alloc = m_Allocator.toStrongRef();
+  QxrdAllocatorPtr alloc(m_Allocator);
 
   if (alloc) {
     alloc -> changedSizeMB(newMB);
@@ -204,7 +204,7 @@ int  QxrdAcquisition::acquisitionStatus(double time)
 
 void QxrdAcquisition::indicateDroppedFrame(int n)
 {
-  QxrdAllocatorPtr alloc = m_Allocator.toStrongRef();
+  QxrdAllocatorPtr alloc(m_Allocator);
 
   if (alloc) {
     QString msg = tr("Frame %1 dropped [%2/%3 MB Used]")
@@ -272,7 +272,7 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int fileIndex, int
 {
   int width = get_FileIndexWidth();
 
-  QxrdDataProcessorPtr proc = m_DataProcessor.toStrongRef();
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
   if (proc) {
     if (nphases == 0) {
@@ -364,7 +364,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
       proc -> set_NPhases(nPhases);
     }
 
-    QxrdDataProcessorPtr processor = m_DataProcessor.toStrongRef();
+    QxrdDataProcessorPtr processor(m_DataProcessor);
 
     if (processor) {
       processor -> acquiredInt32Image(proc, ovf);
@@ -773,7 +773,7 @@ void QxrdAcquisition::onIdleTimeout()
 {
   if (m_Idling) {
     QxrdInt16ImageDataPtr res = acquireFrameIfAvailable(get_ExposureTime());
-    QxrdDataProcessorPtr proc = m_DataProcessor.toStrongRef();
+    QxrdDataProcessorPtr proc(m_DataProcessor);
 
     if (res && proc) {
       proc->idleInt16Image(res);
@@ -794,7 +794,7 @@ void QxrdAcquisition::flushImageQueue()
 QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
 {
   if (qcepDebug(DEBUG_ACQUIRE)) {
-    QxrdAllocatorPtr alloc = m_Allocator.toStrongRef();
+    QxrdAllocatorPtr alloc(m_Allocator);
 
     if (alloc) {
       printMessage(tr("acquireFrame(%1) : allocated %2 MB : %3 images available")
@@ -815,7 +815,7 @@ QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
 QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrameIfAvailable(double exposure)
 {
   if (qcepDebug(DEBUG_ACQUIRE)) {
-    QxrdAllocatorPtr alloc = m_Allocator.toStrongRef();
+    QxrdAllocatorPtr alloc(m_Allocator);
 
     if (alloc) {
       printMessage(tr("acquireFrameIfAvailable(%1) : allocated %2 MB").arg(exposure).arg(alloc->allocatedMemoryMB()));

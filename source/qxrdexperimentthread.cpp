@@ -44,7 +44,11 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdAp
 
   res->start();
 
-  res->experiment()->init(res, res->experiment(), settings);
+  QxrdExperimentPtr expt(res->experiment());
+
+  if (expt) {
+    expt->init(res, res->experiment(), settings);
+  }
 
   return res;
 }
@@ -55,7 +59,11 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAcquisitio
 
   res->start();
 
-  res->experiment()->init(res, res->experiment(), settings);
+  QxrdExperimentPtr expt(res->experiment());
+
+  if (expt) {
+    expt->init(res, res->experiment(), settings);
+  }
 
   return res;
 }
@@ -66,7 +74,11 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAcquisition(QS
 
   res->start();
 
-  res->experiment()->init(res, res->experiment(), settings);
+  QxrdExperimentPtr expt(res->experiment());
+
+  if (expt) {
+    expt->init(res, res->experiment(), settings);
+  }
 
   return res;
 }
@@ -77,7 +89,11 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentSimulatedAcquisition(
 
   res->start();
 
-  res->experiment()->init(res, res->experiment(), settings);
+  QxrdExperimentPtr expt(res->experiment());
+
+  if (expt) {
+    expt->init(res, res->experiment(), settings);
+  }
 
   return res;
 }
@@ -88,7 +104,11 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAnalysis(Q
 
   res->start();
 
-  res->experiment()->init(res, res->experiment(), settings);
+  QxrdExperimentPtr expt(res->experiment());
+
+  if (expt) {
+    expt->init(res, res->experiment(), settings);
+  }
 
   return res;
 }
@@ -99,7 +119,11 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAnalysis(QStri
 
   res->start();
 
-  res->experiment()->init(res, res->experiment(), settings);
+  QxrdExperimentPtr expt(res->experiment());
+
+  if (expt) {
+    expt->init(res, res->experiment(), settings);
+  }
 
   return res;
 }
@@ -110,12 +134,16 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentGenericAnalysis(QStri
 
   res->start();
 
-  res->experiment()->init(res, res->experiment(), settings);
+  QxrdExperimentPtr expt(res->experiment());
+
+  if (expt) {
+    expt->init(res, res->experiment(), settings);
+  }
 
   return res;
 }
 
-QxrdExperimentPtr QxrdExperimentThread::experiment()
+QxrdExperimentWPtr QxrdExperimentThread::experiment()
 {
   while (m_Experiment == NULL) {
     msleep(100);
@@ -126,10 +154,18 @@ QxrdExperimentPtr QxrdExperimentThread::experiment()
 
 void QxrdExperimentThread::run()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdExperimentThread::run(%p)\n", this);
+  }
+
   QxrdExperimentPtr doc;
 
   if (m_ExperimentKind == FromSettings) {
-    m_ExperimentKind = (QxrdExperimentKind) m_Settings->value("experiment/experimentKind",GenericAnalysis).toInt();
+    if (m_Settings) {
+      m_ExperimentKind = (QxrdExperimentKind) m_Settings->value("experiment/experimentKind",GenericAnalysis).toInt();
+    } else {
+      m_ExperimentKind = GenericAnalysis;
+    }
   }
 
   switch(m_ExperimentKind) {
