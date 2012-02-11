@@ -24,7 +24,7 @@ QxrdAllocator::QxrdAllocator
     printf("QxrdAllocator::QxrdAllocator(%p)\n", this);
   }
 
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
+  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage(tr("allocator %1 constructed").HEXARG(this));
   };
 
@@ -41,7 +41,7 @@ QxrdAllocator::~QxrdAllocator()
     printf("QxrdAllocator::~QxrdAllocator(%p)\n", this);
   }
 
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
+  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage(tr("allocator %1 deleted").HEXARG(this));
   };
 }
@@ -80,7 +80,9 @@ int QxrdAllocator::waitTillAvailable(AllocationStrategy strat, int sizeMB)
       m_Mutex.unlock();
 
       if (qcepDebug(DEBUG_ALLOCATOR)) {
-        g_Application->printMessage("QxrdAllocator::waitTillAvailable() sleeping 100msec");
+        if (g_Application) {
+          g_Application->printMessage("QxrdAllocator::waitTillAvailable() sleeping 100msec");
+        }
       }
 
       QxrdAllocatorThread::msleep(100);
@@ -112,7 +114,7 @@ QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image(QxrdAllocatorWPtr allocw, All
 
       res->moveToThread(alloc->thread());
 
-      if (qcepDebug(DEBUG_ALLOCATOR)) {
+      if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QxrdAllocator::newInt16Image() succeeded [%1] [%2]").HEXARG(res.data()).arg(alloc->allocatedMemoryMB()));
       }
 
@@ -120,7 +122,7 @@ QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image(QxrdAllocatorWPtr allocw, All
     }
   }
 
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
+  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage("QxrdAllocator::newInt16Image() returned NULL");
   }
 
@@ -139,7 +141,7 @@ QxrdInt32ImageDataPtr QxrdAllocator::newInt32Image(QxrdAllocatorWPtr allocw, All
 
       res->moveToThread(alloc->thread());
 
-      if (qcepDebug(DEBUG_ALLOCATOR)) {
+      if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QxrdAllocator::newInt32Image() succeeded [%1] [%2]").HEXARG(res.data()).arg(alloc->allocatedMemoryMB()));
       }
 
@@ -147,7 +149,7 @@ QxrdInt32ImageDataPtr QxrdAllocator::newInt32Image(QxrdAllocatorWPtr allocw, All
     }
   }
 
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
+  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage("QxrdAllocator::newInt32Image() returned NULL");
   }
 
@@ -166,7 +168,7 @@ QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage(QxrdAllocatorWPtr allocw, A
 
       res->moveToThread(alloc->thread());
 
-      if (qcepDebug(DEBUG_ALLOCATOR)) {
+      if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QxrdAllocator::newDoubleImage() succeeded [%1] [%2]").HEXARG(res.data()).arg(alloc->allocatedMemoryMB()));
       }
 
@@ -174,7 +176,7 @@ QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage(QxrdAllocatorWPtr allocw, A
     }
   }
 
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
+  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage("QxrdAllocator::newDoubleImage() returned NULL");
   }
 
@@ -193,7 +195,7 @@ QxrdMaskDataPtr QxrdAllocator::newMask(QxrdAllocatorWPtr allocw, AllocationStrat
 
       res->moveToThread(alloc->thread());
 
-      if (qcepDebug(DEBUG_ALLOCATOR)) {
+      if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QxrdAllocator::newMask() succeeded [%1] [%2]").HEXARG(res.data()).arg(alloc->allocatedMemoryMB()));
       }
 
@@ -201,7 +203,7 @@ QxrdMaskDataPtr QxrdAllocator::newMask(QxrdAllocatorWPtr allocw, AllocationStrat
     }
   }
 
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
+  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage("QxrdAllocator::newMask() returned NULL");
   }
 
@@ -224,7 +226,7 @@ QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(QxrdAllocatorWPtr allocw,
 
       res->moveToThread(alloc->thread());
 
-      if (qcepDebug(DEBUG_ALLOCATOR)) {
+      if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QxrdAllocator::newIntegratedData() succeeded [%1] [%2]").HEXARG(res.data()).arg(alloc->allocatedMemoryMB()));
       }
 
@@ -232,7 +234,7 @@ QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(QxrdAllocatorWPtr allocw,
     }
   }
 
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
+  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage("QxrdAllocator::newIntegratedData() returned NULL");
   }
 
@@ -256,14 +258,14 @@ void QxrdAllocator::newDoubleImageAndIntegratedData(QxrdAllocatorWPtr allocw,
       img->moveToThread(alloc->thread());
       integ->moveToThread(alloc->thread());
 
-      if (qcepDebug(DEBUG_ALLOCATOR)) {
+      if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QxrdAllocator::newDoubleImageAndIntegratedData() succeeded [%1] [%2] [%3]")
-                                    .HEXARG(img.data()).HEXARG(integ.data()).arg(alloc->allocatedMemoryMB()));
+                          .HEXARG(img.data()).HEXARG(integ.data()).arg(alloc->allocatedMemoryMB()));
       }
     }
   }
 
-  if (qcepDebug(DEBUG_ALLOCATOR)) {
+  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage("QxrdAllocator::newDoubleImageAndIntegratedData() returned NULL");
   }
 }
@@ -338,13 +340,13 @@ void QxrdAllocator::maskDeleter(QxrdMaskData *mask)
 {
   //    delete mask;
   if (g_QueuedDelete) {
-    if (qcepDebug(DEBUG_ALLOCATOR)) {
+    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
       g_Application->printMessage(tr("QxrdAllocator::maskDeleter deleteLater %1 [%2]").HEXARG(mask).arg(mask->allocatedMemoryMB()));
     }
 
     mask->deleteLater();
   } else {
-    if (qcepDebug(DEBUG_ALLOCATOR)) {
+    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
       g_Application->printMessage(tr("QxrdAllocator::maskDeleter delete %1 [%2]").HEXARG(mask).arg(mask->allocatedMemoryMB()));
     }
 
@@ -356,13 +358,13 @@ void QxrdAllocator::int16Deleter(QxrdInt16ImageData *img)
 {
   //    delete img;
   if (g_QueuedDelete) {
-    if (qcepDebug(DEBUG_ALLOCATOR)) {
+    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
       g_Application->printMessage(tr("QxrdAllocator::int16Deleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
     }
 
     img->deleteLater();
   } else {
-    if (qcepDebug(DEBUG_ALLOCATOR)) {
+    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
       g_Application->printMessage(tr("QxrdAllocator::int16Deleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
     }
 
@@ -374,13 +376,13 @@ void QxrdAllocator::int32Deleter(QxrdInt32ImageData *img)
 {
   //    delete img;
   if (g_QueuedDelete) {
-    if (qcepDebug(DEBUG_ALLOCATOR)) {
+    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
       g_Application->printMessage(tr("QxrdAllocator::int32Deleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
     }
 
     img->deleteLater();
   } else {
-    if (qcepDebug(DEBUG_ALLOCATOR)) {
+    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
       g_Application->printMessage(tr("QxrdAllocator::int32Deleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
     }
 
@@ -392,13 +394,13 @@ void QxrdAllocator::doubleDeleter(QxrdDoubleImageData *img)
 {
   //    delete img;
   if (g_QueuedDelete) {
-    if (qcepDebug(DEBUG_ALLOCATOR)) {
+    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
       g_Application->printMessage(tr("QxrdAllocator::doubleDeleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
     }
 
     img->deleteLater();
   } else {
-    if (qcepDebug(DEBUG_ALLOCATOR)) {
+    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
       g_Application->printMessage(tr("QxrdAllocator::doubleDeleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
     }
 
@@ -410,13 +412,13 @@ void QxrdAllocator::integratedDeleter(QxrdIntegratedData *img)
 {
   //    delete img;
   if (g_QueuedDelete) {
-    if (qcepDebug(DEBUG_ALLOCATOR)) {
+    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
       g_Application->printMessage(tr("QxrdAllocator::integratedDeleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
     }
 
     img->deleteLater();
   } else {
-    if (qcepDebug(DEBUG_ALLOCATOR)) {
+    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
       g_Application->printMessage(tr("QxrdAllocator::integratedDeleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
     }
 
@@ -483,11 +485,13 @@ void QxrdAllocator::changedSizeMB(int newMB)
 
 void QxrdAllocator::report()
 {
-  g_Application->printMessage(tr("Allocator: %1 i16, %2 i32, %3 dbl, %4 msk, %5 integ")
-                              .arg(get_NAllocatedInt16())
-                              .arg(get_NAllocatedInt32())
-                              .arg(get_NAllocatedDouble())
-                              .arg(get_NAllocatedMask())
-                              .arg(get_NAllocatedIntegrated())
-                              );
+  if (g_Application) {
+    g_Application->printMessage(tr("Allocator: %1 i16, %2 i32, %3 dbl, %4 msk, %5 integ")
+                      .arg(get_NAllocatedInt16())
+                      .arg(get_NAllocatedInt32())
+                      .arg(get_NAllocatedDouble())
+                      .arg(get_NAllocatedMask())
+                      .arg(get_NAllocatedIntegrated())
+                      );
+  }
 }

@@ -8,7 +8,7 @@ QxrdMaskRasterData::QxrdMaskRasterData(QxrdMaskDataPtr mask, int interp)
     m_Mask(mask),
     m_Interpolate(interp)
 {
-  if (qcepDebug(DEBUG_IMAGES)) {
+  if (g_Application && qcepDebug(DEBUG_IMAGES)) {
     g_Application->printMessage(QObject::tr("QxrdMaskRasterData::QxrdMaskRasterData(%1,%2) [%3]")
                                 .HEXARG(mask.data()).arg(interp).HEXARG(this));
   }
@@ -66,7 +66,7 @@ QwtDoubleInterval QxrdMaskRasterData::range() const
 
 QxrdMaskRasterData* QxrdMaskRasterData::copy() const
 {
-  if (qcepDebug(DEBUG_IMAGES)) {
+  if (g_Application && qcepDebug(DEBUG_IMAGES)) {
     g_Application->printMessage(QObject::tr("QxrdMaskRasterData::copy() [%1]").HEXARG((void*) this));
   }
 

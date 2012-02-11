@@ -81,7 +81,9 @@ void QxrdImageDisplayWidget::updateImage
   adjustSize();
   repaint();
 
-  g_Application->printMessage(tr("Image rebuilt after %1 msec").arg(tic.elapsed()));
+  if (g_Application) {
+    g_Application->printMessage(tr("Image rebuilt after %1 msec").arg(tic.elapsed()));
+  }
 }
 
 QSize QxrdImageDisplayWidget::sizeHint() const

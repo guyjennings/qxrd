@@ -10,6 +10,7 @@ class QxrdExperiment;
 
 typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
 typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
+typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
 
 class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
@@ -17,7 +18,7 @@ class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 public:
   QxrdAcquisitionOperations(DetectorKind detectorKind, QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdDataProcessorWPtr proc, QxrdAllocatorWPtr allocator);
 
-  void setWindow(QxrdWindow *win);
+  void setWindow(QxrdWindowWPtr win);
 
 public slots:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
@@ -26,7 +27,7 @@ public slots:
 
 protected:
   QxrdExperimentWPtr    m_Experiment;
-  QxrdWindow           *m_Window;
+  QxrdWindowWPtr        m_Window;
   QxrdAllocatorWPtr     m_Allocator;
   QxrdDataProcessorWPtr m_DataProcessor;
 };

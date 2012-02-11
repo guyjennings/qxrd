@@ -48,6 +48,7 @@ public:
              QWidget *parent=0);
   virtual ~QxrdWindow();
   void onAcquisitionInit();
+  void init();
 
 public slots:
   void saveExperimentCopy();
@@ -196,5 +197,6 @@ private:
 };
 
 typedef QSharedPointer<QxrdWindow> QxrdWindowPtr;
+typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
 
 #endif

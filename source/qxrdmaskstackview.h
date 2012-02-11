@@ -14,7 +14,7 @@ public:
   explicit QxrdMaskStackView(QWidget *parent = 0);
   void setMaskStack(QxrdMaskStackPtr stk);
   void setMaskDialog(QxrdMaskDialog *dlg);
-  void setProcessor(QxrdDataProcessorPtr proc);
+  void setProcessor(QxrdDataProcessorWPtr proc);
   void contextMenuEvent ( QContextMenuEvent * event );
 
 signals:
@@ -24,7 +24,7 @@ public slots:
 private:
   QxrdMaskDialog      *m_Dialog;
   QxrdMaskStackPtr     m_MaskStack;
-  QxrdDataProcessorPtr m_Processor;
+  QxrdDataProcessorWPtr m_Processor;
 };
 
 #endif // QXRDMASKSTACKVIEW_H

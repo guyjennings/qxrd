@@ -48,7 +48,7 @@
 #include <QCoreApplication>
 
 int gCEPDebug = 0;
-QxrdApplication *g_Application = 0;
+QxrdApplication *g_Application = NULL;
 
 QCoreApplication::EventFilter oldEventFilter;
 
@@ -117,9 +117,12 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
 {
   printf("QxrdApplication::QxrdApplication(%p)\n", this);
 
-  connect(this, SIGNAL(aboutToQuit()), this, SLOT(finish()));
-
   g_Application = this;
+}
+
+bool QxrdApplication::init(int &argc, char **argv)
+{
+  connect(this, SIGNAL(aboutToQuit()), this, SLOT(finish()));
 
   QDir::setCurrent(QDir::homePath());
 
@@ -208,10 +211,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   printMessage(tr("Home Path: %1").arg(QDir::homePath()));
   printMessage(tr("Current Path: %1").arg(QDir::currentPath()));
   printMessage(tr("Root Path %1").arg(QDir::rootPath()));
-}
 
-bool QxrdApplication::init()
-{
   QcepProperty::registerMetaTypes();
 
   setupTiffHandlers();
@@ -294,10 +294,10 @@ QWidget* QxrdApplication::window()
   return m_WelcomeWindow;
 }
 
-QxrdApplication* QxrdApplication::application()
-{
-  return g_Application;
-}
+//QxrdApplicationPtr QxrdApplication::application()
+//{
+//  return g_Application;
+//}
 
 #ifdef HAVE_PERKIN_ELMER
 
@@ -367,7 +367,7 @@ void QxrdApplication::loadPlugins()
 
         splashMessage(tr("Qxrd Version " STR(QXRD_VERSION) "\nLoaded plugin \"%1\"").arg(pluginName));
 
-        g_Application->printMessage(tr("Loaded plugin \"%1\" from %2")
+        printMessage(tr("Loaded plugin \"%1\" from %2")
                                     .arg(pluginName)
                                     .arg(pluginsDir.absoluteFilePath(fileName)));
       } else {
@@ -377,7 +377,7 @@ void QxrdApplication::loadPlugins()
               .arg(pluginsDir.absoluteFilePath(fileName))
               .arg(loader.errorString());
           splashMessage(msg);
-          g_Application->printMessage(msg);
+          printMessage(msg);
         }
       }
     }
@@ -550,7 +550,7 @@ bool QxrdApplication::wantToQuit()
                                QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
-QxrdAllocatorPtr QxrdApplication::allocator() const
+QxrdAllocatorWPtr QxrdApplication::allocator() const
 {
   return m_Allocator;
 }
@@ -619,7 +619,9 @@ static void qxrdTIFFErrorHandler(const char* module, const char* fmt, va_list ap
 
   vsnprintf(msg, sizeof(msg), fmt, ap);
 
-  g_Application -> tiffError(module, msg);
+  if (g_Application) {
+    g_Application -> tiffError(module, msg);
+  }
 }
 
 void QxrdApplication::setupTiffHandlers()
@@ -632,12 +634,16 @@ void QxrdApplication::setupTiffHandlers()
 
 void QxrdApplication::tiffWarning(const char *module, const char *msg)
 {
-  g_Application->criticalMessage(tr("TIFF Warning from %1 : %2").arg(module).arg(msg));
+  if (g_Application) {
+    g_Application->criticalMessage(tr("TIFF Warning from %1 : %2").arg(module).arg(msg));
+  }
 }
 
 void QxrdApplication::tiffError(const char *module, const char *msg)
 {
-  g_Application->criticalMessage(tr("TIFF Error from %1 : %2").arg(module).arg(msg));
+  if (g_Application) {
+    g_Application->criticalMessage(tr("TIFF Error from %1 : %2").arg(module).arg(msg));
+  }
 }
 
 bool QxrdApplication::event(QEvent *ev)
@@ -650,7 +656,7 @@ bool QxrdApplication::event(QEvent *ev)
   int elapsed = tick.restart();
 
   if (elapsed > 1000) {
-    g_Application->printMessage("event processing took more than 1 sec");
+    printMessage("event processing took more than 1 sec");
   }
 
   return res;

@@ -38,7 +38,7 @@ QcepImageDataBase::QcepImageDataBase(QxrdSettingsSaverWPtr saver, int width, int
     m_Height(height),
     m_Mutex(QMutex::Recursive)
 {
-  if (qcepDebug(DEBUG_APP)) {
+  if (g_Application && qcepDebug(DEBUG_APP)) {
     g_Application->printMessage(tr("QcepImageDataBase::QcepImageDataBase %1[%2]")
                                 .HEXARG(this).arg(m_ImageCounter));
   }
@@ -46,7 +46,7 @@ QcepImageDataBase::QcepImageDataBase(QxrdSettingsSaverWPtr saver, int width, int
 
 QcepImageDataBase::~QcepImageDataBase()
 {
-  if (qcepDebug(DEBUG_APP)) {
+  if (g_Application && qcepDebug(DEBUG_APP)) {
     g_Application->printMessage(tr("QcepImageDataBase::~QcepImageDataBase %1[%2]")
                                 .HEXARG(this).arg(m_ImageCounter));
   }
@@ -230,7 +230,7 @@ QcepImageData<T>::QcepImageData(QxrdSettingsSaverWPtr saver, int width, int heig
     m_MaxValue(0),
     m_Default(def)
 {
-  if (qcepDebug(DEBUG_APP)) {
+  if (g_Application && qcepDebug(DEBUG_APP)) {
     g_Application->printMessage(tr("QcepImageData<%1>::QcepImageData %2")
                                 .arg(typeid(T).name())
                                 .HEXARG(this));
@@ -244,7 +244,7 @@ QcepImageData<T>::QcepImageData(QxrdSettingsSaverWPtr saver, int width, int heig
 template <typename T>
 QcepImageData<T>::~QcepImageData()
 {
-  if (qcepDebug(DEBUG_APP)) {
+  if (g_Application && qcepDebug(DEBUG_APP)) {
     g_Application->printMessage(tr("QcepImageData<%1>::~QcepImageData %2")
                                 .arg(typeid(T).name())
                                 .HEXARG(this));

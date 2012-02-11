@@ -111,7 +111,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
 
   m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(saver, this));
   m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(saver, m_Experiment, m_CenterFinder, m_Allocator, this));
-  m_GenerateTestImage = new QxrdGenerateTestImage(saver, this, m_Allocator, this);
+  m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(saver, m_Allocator, this));
   m_InitialRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver, this));
   m_RefinedRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver, this));
   m_InitialRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(saver, /*m_InitialRingSetFitParameters,*/ this));
@@ -1933,7 +1933,7 @@ void QxrdDataProcessorBase::calculateHistogram()
   }
 }
 
-QxrdGenerateTestImage *QxrdDataProcessorBase::generateTestImage() const
+QxrdGenerateTestImageWPtr QxrdDataProcessorBase::generateTestImage() const
 {
   return m_GenerateTestImage;
 }

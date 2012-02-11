@@ -34,6 +34,8 @@ typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
 typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
 typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
 typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
+typedef QSharedPointer<QxrdGenerateTestImage> QxrdGenerateTestImagePtr;
+typedef QWeakPointer<QxrdGenerateTestImage> QxrdGenerateTestImageWPtr;
 
 class QxrdDataProcessorBase : public QObject
 {
@@ -332,7 +334,7 @@ public:
   QxrdRingSetFitParametersPtr refinedRingSetFitParameters() const;
   QxrdRingSetSampledDataPtr   refinedRingSetData() const;
 
-  QxrdGenerateTestImage *generateTestImage() const;
+  QxrdGenerateTestImageWPtr generateTestImage() const;
 
   void newMask();
 
@@ -414,7 +416,7 @@ protected:
   QxrdRingSetSampledDataPtr m_InitialRingSetData;
   QxrdRingSetSampledDataPtr m_RefinedRingSetData;
 
-  QxrdGenerateTestImage *m_GenerateTestImage;
+  QxrdGenerateTestImagePtr m_GenerateTestImage;
 
   QxrdIntegratedDataPtr m_OutputScan;
 };

@@ -26,7 +26,7 @@ void QxrdFileBrowserModelUpdaterThread::shutdown()
 
 void QxrdFileBrowserModelUpdaterThread::run()
 {
-  if (qcepDebug(DEBUG_THREADS)) {
+  if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage("Starting Browser Model Updater Thread");
   }
 
@@ -36,7 +36,7 @@ void QxrdFileBrowserModelUpdaterThread::run()
 
   int rc = exec();
 
-  if (qcepDebug(DEBUG_THREADS)) {
+  if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Browser Model Updater Thread Terminated with rc %1").arg(rc));
   }
 }

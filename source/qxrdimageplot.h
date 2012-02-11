@@ -138,8 +138,8 @@ public:
   const QxrdMaskRasterData* maskRaster() const;
   QxrdMaskRasterData* maskRaster();
 
-  QxrdDataProcessorPtr processor() const;
-  void setDataProcessor(QxrdDataProcessorPtr proc);
+  QxrdDataProcessorWPtr processor() const;
+  void setProcessor(QxrdDataProcessorWPtr proc);
 
   void replot();
 
@@ -189,7 +189,7 @@ private:
   QxrdMaskColorMap           m_OverflowColorMap;
   int                        m_OverflowAlpha;
 
-  QxrdDataProcessorPtr       m_DataProcessor;
+  QxrdDataProcessorWPtr      m_DataProcessor;
 
   QxrdCenterFinderPicker    *m_CenterFinderPicker;
   QwtPlotMarker             *m_CenterMarker;

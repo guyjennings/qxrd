@@ -3,7 +3,7 @@
 #include "qxrdacquisition.h"
 
 QxrdExperimentPerkinElmerAcquisition::QxrdExperimentPerkinElmerAcquisition(QString path,
-                                                                           QxrdApplication *app,
+                                                                           QxrdApplication* app,
                                                                            QSettings *settings,
                                                                            QObject *parent) :
     QxrdExperiment(path, app, settings, parent)

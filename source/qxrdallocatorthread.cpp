@@ -25,7 +25,7 @@ QxrdAllocatorThread::~QxrdAllocatorThread()
 
 void QxrdAllocatorThread::run()
 {
-  if (qcepDebug(DEBUG_THREADS)) {
+  if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage("Starting Allocator Thread");
   }
 
@@ -35,7 +35,7 @@ void QxrdAllocatorThread::run()
 
   int rc = exec();
 
-  if (qcepDebug(DEBUG_THREADS)) {
+  if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Allocator Thread Terminated with rc %1").arg(rc));
   }
 }

@@ -57,7 +57,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_MaskAlpha(80),
     m_OverflowColorMap(QColor(0,0,0,0), Qt::green),
     m_OverflowAlpha(256),
-    m_DataProcessor(NULL),
+    m_DataProcessor(),
     m_CenterFinderPicker(NULL),
     m_CenterMarker(NULL),
     m_Circles(NULL),
@@ -142,24 +142,29 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   enableZooming();
 }
 
-void QxrdImagePlot::setDataProcessor(QxrdDataProcessorPtr proc)
+void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
 {
   m_DataProcessor = proc;
 
-  connect(m_CenterFinderPicker, SIGNAL(selected(QwtDoublePoint)),
-          m_DataProcessor -> centerFinder().data(), SLOT(onCenterChanged(QwtDoublePoint)));
+  QxrdDataProcessorPtr dp(m_DataProcessor);
 
-  connect(m_Circles, SIGNAL(selected(QwtDoubleRect)),
-          m_DataProcessor.data(), SLOT(maskCircle(QwtDoubleRect)));
+  if (dp) {
+    QxrdCenterFinderPtr cf(dp->centerFinder());
+    connect(m_CenterFinderPicker, SIGNAL(selected(QwtDoublePoint)),
+            cf.data(), SLOT(onCenterChanged(QwtDoublePoint)));
 
-  connect(m_Polygons, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-          m_DataProcessor.data(), SLOT(maskPolygon(QwtArray<QwtDoublePoint>)));
+    connect(m_Circles, SIGNAL(selected(QwtDoubleRect)),
+            dp.data(), SLOT(maskCircle(QwtDoubleRect)));
 
-  connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-          m_DataProcessor.data(), SLOT(measurePolygon(QwtArray<QwtDoublePoint>)));
+    connect(m_Polygons, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+            dp.data(), SLOT(maskPolygon(QwtArray<QwtDoublePoint>)));
 
-//  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-//          m_DataProcessor, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
+    connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+            dp.data(), SLOT(measurePolygon(QwtArray<QwtDoublePoint>)));
+
+    //  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+    //          m_DataProcessor, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
+  }
 
   connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
           this, SIGNAL(slicePolygon(QwtArray<QwtDoublePoint>)));
@@ -187,7 +192,7 @@ void QxrdImagePlot::setSaver(QxrdSettingsSaverPtr saver)
   prop_DisplayColorMap()->setSaver(saver);
 }
 
-QxrdDataProcessorPtr QxrdImagePlot::processor() const
+QxrdDataProcessorWPtr QxrdImagePlot::processor() const
 {
   return m_DataProcessor;
 }
@@ -206,7 +211,9 @@ void QxrdImagePlot::writeSettings(QSettings *settings, QString section)
 
 void QxrdImagePlot::setAutoRange()
 {
-  g_Application->criticalMessage("QxrdImagePlot::setAutoRange To do...");
+  if (g_Application) {
+    g_Application->criticalMessage("QxrdImagePlot::setAutoRange To do...");
+  }
 }
 
 void QxrdImagePlot::set005Range()
@@ -544,7 +551,9 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
 
   replotImage();
 
-  g_Application->printMessage(tr("plot image took %1 msec").arg(tic.elapsed()));
+  if (g_Application) {
+    g_Application->printMessage(tr("plot image took %1 msec").arg(tic.elapsed()));
+  }
 }
 
 void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)

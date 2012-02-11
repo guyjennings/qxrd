@@ -15,7 +15,7 @@ class QxrdAcquireDialogBase : public QDockWidget
     Q_OBJECT
 public:
     explicit QxrdAcquireDialogBase(QxrdExperimentWPtr doc,
-                                   QxrdWindow *win,
+                                   QxrdWindowWPtr win,
                                    QxrdAcquisitionWPtr acq,
                                    QxrdDataProcessorWPtr proc,
                                    QWidget *parent = 0);
@@ -27,7 +27,7 @@ public:
 
 protected:
   QxrdExperimentWPtr    m_Experiment;
-  QxrdWindow           *m_Window;
+  QxrdWindowWPtr        m_Window;
   QxrdAcquisitionWPtr   m_Acquisition;
   QxrdDataProcessorWPtr m_DataProcessor;
 };

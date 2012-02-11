@@ -25,9 +25,9 @@ class QxrdApplication : public QApplication
 public:
   QxrdApplication(int &argc, char **argv);
   ~QxrdApplication();
-  bool init();
+  bool init(int &argc, char **argv);
 
-  QxrdAllocatorPtr allocator() const;
+  QxrdAllocatorWPtr allocator() const;
 
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterfacePtr perkinElmerPlugin();
@@ -40,7 +40,7 @@ public:
   void tiffWarning(const char* module, const char *msg);
   void tiffError(const char* module, const char *msg);
 
-  static QxrdApplication* application();
+//  static QxrdApplicationPtr application();
 
   bool event(QEvent *ev);
 

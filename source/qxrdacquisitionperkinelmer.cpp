@@ -40,8 +40,8 @@ static HACQDESC m_AcqDesc = NULL;
 
 QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdSettingsSaverPtr saver,
                                                        QxrdExperimentWPtr doc,
-                                                       QxrdDataProcessorPtr proc,
-                                                       QxrdAllocatorPtr allocator,
+                                                       QxrdDataProcessorWPtr proc,
+                                                       QxrdAllocatorWPtr allocator,
                                                        QSettings *settings,
                                                        QString section)
   : QxrdAcquisition(PerkinElmerDetector, saver, doc, proc, allocator),
@@ -81,7 +81,7 @@ QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()
 
 bool QxrdAcquisitionPerkinElmer::checkPluginAvailable()
 {
-  if (m_PerkinElmer == NULL) {
+  if (g_Application && m_PerkinElmer == NULL) {
     m_PerkinElmer = g_Application->perkinElmerPlugin();
   }
 

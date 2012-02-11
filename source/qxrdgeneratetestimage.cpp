@@ -4,9 +4,9 @@
 
 #include <cmath>
 
-QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverPtr saver, QxrdDataProcessorBase *proc, QxrdAllocatorPtr alloc, QObject *parent) :
+QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr alloc, QObject *parent) :
   QObject(parent),
-  m_Processor(proc),
+  m_Processor(),
   m_Allocator(alloc),
   m_Geometry(new QxrdDetectorGeometry(this)),
   m_NRows(saver, this, "nRows", 2048),
@@ -26,6 +26,11 @@ QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverPtr saver, QxrdDat
   m_RingIntensity(saver, this, "ringIntensity", QcepDoubleList()),
   m_RingWidth(saver, this, "ringWidth", QcepDoubleList())
 {
+}
+
+void QxrdGenerateTestImage::setProcessor(QxrdDataProcessorWPtr proc)
+{
+  m_Processor = proc;
 }
 
 void QxrdGenerateTestImage::setDimension(int nc, int nr)
@@ -141,7 +146,11 @@ void QxrdGenerateTestImage::generateImage()
     }
   }
 
-  m_Processor -> newData(img, QxrdMaskDataPtr());
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc -> newData(img, QxrdMaskDataPtr());
+  }
 }
 
 void QxrdGenerateTestImage::generateTTHImage()
@@ -185,7 +194,12 @@ void QxrdGenerateTestImage::generateTTHImage()
       img->setValue(col,row,twoTheta);
     }
   }
-  m_Processor -> newData(img, QxrdMaskDataPtr());
+
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc -> newData(img, QxrdMaskDataPtr());
+  }
 }
 
 void QxrdGenerateTestImage::generateChiImage()
@@ -229,5 +243,10 @@ void QxrdGenerateTestImage::generateChiImage()
       img->setValue(col,row,chi);
     }
   }
-  m_Processor -> newData(img, QxrdMaskDataPtr());
+
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc -> newData(img, QxrdMaskDataPtr());
+  }
 }

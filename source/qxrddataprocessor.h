@@ -20,6 +20,8 @@ public:
                     QString section,
                     QObject *parent=0);
   ~QxrdDataProcessor();
+
+  void init();
 };
 
 typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;

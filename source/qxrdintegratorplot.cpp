@@ -15,8 +15,8 @@
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   : QxrdPlot(parent),
-    m_DataProcessor(NULL),
-    m_Integrator(NULL),
+    m_DataProcessor(),
+    m_Integrator(),
     m_PlotIndex(0),
     m_XUnitsLabel("")
 {
@@ -28,13 +28,18 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   connect(this, SIGNAL(legendChecked(QwtPlotItem*,bool)), this, SLOT(onLegendChecked(QwtPlotItem*,bool)));
 }
 
-void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessorPtr proc)
+void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessorWPtr proc)
 {
   m_DataProcessor = proc;
-  m_Integrator = m_DataProcessor -> integrator();
 
-  connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-          m_DataProcessor.data(), SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
+  QxrdDataProcessorPtr dp(m_DataProcessor);
+
+  if (dp) {
+    m_Integrator = dp -> integrator();
+
+    connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+            dp.data(), SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
+  }
 }
 
 void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
@@ -77,7 +82,11 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
 
     updateZoomer();
 
-    m_DataProcessor -> updateEstimatedTime(m_DataProcessor -> prop_DisplayIntegratedDataTime(), tic.restart());
+    QxrdDataProcessorPtr proc(m_DataProcessor);
+
+    if (proc) {
+      proc -> updateEstimatedTime(proc -> prop_DisplayIntegratedDataTime(), tic.restart());
+    }
 
     QWidget *legend = m_Legend->find(pc);
 

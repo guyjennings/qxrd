@@ -14,14 +14,16 @@ QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, Q
 
   int debugLevel = m_Application -> get_Debug();
 
-  QxrdAllocatorPtr alloc = m_Application->allocator();
+  QxrdAllocatorPtr alloc(m_Application->allocator());
 
-  m_ReservedMemory32 -> setRange(500, 3000);
-  m_ReservedMemory32 -> setValue(alloc->get_TotalBufferSizeMB32());
-  m_ReservedMemory64 -> setRange(500, 60000);
-  m_ReservedMemory64 -> setValue(alloc->get_TotalBufferSizeMB64());
-  m_ExtraReservedMemory -> setRange(0, 500);
-  m_ExtraReservedMemory -> setValue(alloc->get_Reserve());
+  if (alloc) {
+    m_ReservedMemory32 -> setRange(500, 3000);
+    m_ReservedMemory32 -> setValue(alloc->get_TotalBufferSizeMB32());
+    m_ReservedMemory64 -> setRange(500, 60000);
+    m_ReservedMemory64 -> setValue(alloc->get_TotalBufferSizeMB64());
+    m_ExtraReservedMemory -> setRange(0, 500);
+    m_ExtraReservedMemory -> setValue(alloc->get_Reserve());
+  }
 
   m_FileBrowserLimit -> setValue(m_Application->get_FileBrowserLimit());
 
@@ -58,13 +60,16 @@ void QxrdGlobalPreferencesDialog::accept()
   int bufferSize64 = m_ReservedMemory64 -> value();
   int extraReserve = m_ExtraReservedMemory -> value();
 
-  QxrdAllocatorPtr alloc = m_Application->allocator();
 
   m_Application -> set_Debug(debugLevel);
 
-  alloc         -> set_TotalBufferSizeMB32(bufferSize32);
-  alloc         -> set_TotalBufferSizeMB64(bufferSize64);
-  alloc         -> set_Reserve(extraReserve);
+  QxrdAllocatorPtr alloc(m_Application->allocator());
+
+  if (alloc) {
+    alloc         -> set_TotalBufferSizeMB32(bufferSize32);
+    alloc         -> set_TotalBufferSizeMB64(bufferSize64);
+    alloc         -> set_Reserve(extraReserve);
+  }
 
   m_Application -> set_FileBrowserLimit(m_FileBrowserLimit->value());
   m_Application -> set_MessageWindowLines(m_MessageWindowLines -> value());

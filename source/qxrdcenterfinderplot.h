@@ -10,6 +10,7 @@
 
 class QxrdWindow;
 class QxrdCenterFinder;
+typedef QWeakPointer<QxrdCenterFinder> QxrdCenterFinderWPtr;
 
 class QxrdCenterFinderPlot : public QxrdPlot
 {
@@ -18,7 +19,7 @@ class QxrdCenterFinderPlot : public QxrdPlot
 public:
   QxrdCenterFinderPlot(QWidget *parent=0);
 
-  void setWindow(QxrdWindow *win);
+  void setWindow(QxrdWindowWPtr win);
 
 public slots:
   void onParameterChanged();
@@ -30,11 +31,11 @@ public slots:
   void onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
 
 private:
-  QVector<double>      m_XData, m_YData;
-  QxrdWindow          *m_Window;
-  QxrdDataProcessorPtr m_DataProcessor;
-  QxrdCenterFinderPtr  m_CenterFinder;
-  bool                 m_FirstTime;
+  QVector<double>       m_XData, m_YData;
+  QxrdWindowWPtr        m_Window;
+  QxrdDataProcessorWPtr m_DataProcessor;
+  QxrdCenterFinderWPtr  m_CenterFinder;
+  bool                  m_FirstTime;
 };
 
 #endif // QXRDCENTERFINDERPLOT_H

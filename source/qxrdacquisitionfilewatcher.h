@@ -10,8 +10,8 @@ class QxrdAcquisitionFileWatcher : public QxrdAcquisition
 public:
     explicit QxrdAcquisitionFileWatcher(QxrdSettingsSaverPtr saver,
                                         QxrdExperimentWPtr doc,
-                                        QxrdDataProcessorPtr proc,
-                                        QxrdAllocatorPtr allocator,
+                                        QxrdDataProcessorWPtr proc,
+                                        QxrdAllocatorWPtr allocator,
                                         QSettings *settings,
                                         QString section);
 
@@ -31,7 +31,7 @@ protected:
   void setupCameraGainMenu(QComboBox* cb);
   void setupCameraBinningModeMenu(QComboBox *cb);
 
-  QxrdAcquireDialogBase* controlPanel(QxrdWindow *win);
+  QxrdAcquireDialogBase* controlPanel(QxrdWindowWPtr win);
 };
 
 #endif // QXRDACQUISITIONFILEWATCHER_H

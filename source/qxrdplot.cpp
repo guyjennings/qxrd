@@ -225,12 +225,16 @@ void QxrdPlot::enableMeasuring()
 
 void QxrdPlot::onLegendClicked(QwtPlotItem *item)
 {
-  g_Application->printMessage(tr("QxrdPlot::onLegendClicked(%1)").arg(item->title().text()));
+  if (g_Application) {
+    g_Application->printMessage(tr("QxrdPlot::onLegendClicked(%1)").arg(item->title().text()));
+  }
 }
 
 void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
 {
-  g_Application->printMessage(tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
+  if (g_Application) {
+    g_Application->printMessage(tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
+  }
 
   if (item) {
     QwtPlotCurve *pc = dynamic_cast<QwtPlotCurve*>(item);
@@ -318,17 +322,6 @@ void QxrdPlot::contextMenuEvent(QContextMenuEvent *event)
 int QxrdPlot::logAxis(int axis)
 {
   return m_IsLog[axis];
-//  QwtScaleEngine *se = axisScaleEngine(axis);
-
-//  if (se) {
-//    QSharedPointer<QwtScaleTransformation> tr(se->transformation());
-
-//    if (tr) {
-//      return tr->type() == QwtScaleTransformation::Log10;
-//    }
-//  }
-
-//  return false;
 }
 
 QwtText QxrdPlot::trackerText(const QwtDoublePoint &pos)

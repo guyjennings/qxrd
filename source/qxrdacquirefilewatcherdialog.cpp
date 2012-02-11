@@ -2,9 +2,9 @@
 #include "ui_qxrdacquirefilewatcherdialog.h"
 
 QxrdAcquireFileWatcherDialog::QxrdAcquireFileWatcherDialog(QxrdExperimentWPtr doc,
-                                                           QxrdWindow *win,
-                                                           QxrdAcquisition *acq,
-                                                           QxrdDataProcessorPtr proc,
+                                                           QxrdWindowWPtr win,
+                                                           QxrdAcquisitionWPtr acq,
+                                                           QxrdDataProcessorWPtr proc,
                                                            QWidget *parent) :
     QxrdAcquireDialogBase(doc, win, acq, proc, parent)
 {

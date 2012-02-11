@@ -10,13 +10,13 @@ QxrdAcquisitionOperations::QxrdAcquisitionOperations(DetectorKind detectorKind,
                                                      QxrdAllocatorWPtr allocator) :
   QxrdAcquisitionScripting(detectorKind, saver),
   m_Experiment(doc),
-  m_Window(NULL),
+  m_Window(),
   m_Allocator(allocator),
   m_DataProcessor(proc)
 {
 }
 
-void QxrdAcquisitionOperations::setWindow(QxrdWindow *win)
+void QxrdAcquisitionOperations::setWindow(QxrdWindowWPtr win)
 {
   m_Window = win;
 }

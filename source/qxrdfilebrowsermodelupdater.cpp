@@ -15,12 +15,12 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModel *b
   m_PreviousUpdate(QDateTime::currentDateTime()),
   m_GenerateUpdates(true)
 {
-  if (qcepDebug(DEBUG_BROWSER)) {
+  if (g_Application && qcepDebug(DEBUG_BROWSER)) {
     g_Application->printMessage("Starting Browser Model Updater");
   }
 
   m_FileSystemWatcher = new QFileSystemWatcher(this);
-//  m_FileSystemWatcher->setObjectName(QLatin1String("_qt_autotest_force_engine_poller"));
+  //  m_FileSystemWatcher->setObjectName(QLatin1String("_qt_autotest_force_engine_poller"));
 
   connect(m_BrowserModel,      SIGNAL(rootChanged(const QString&)),      this, SLOT(changeRoot(const QString&)));
   connect(m_FileSystemWatcher, SIGNAL(directoryChanged(const QString&)), this, SLOT(changeContents(const QString&)), Qt::DirectConnection);
@@ -37,7 +37,7 @@ void QxrdFileBrowserModelUpdater::shutdown()
 
 void QxrdFileBrowserModelUpdater::changeRoot(const QString& path)
 {
-  if (qcepDebug(DEBUG_BROWSER)) {
+  if (g_Application && qcepDebug(DEBUG_BROWSER)) {
     g_Application->printMessage(tr("QxrdFileBrowserModelUpdater::changeRoot %1").arg(path));
   }
 
@@ -58,7 +58,7 @@ void QxrdFileBrowserModelUpdater::needUpdate()
 
 void QxrdFileBrowserModelUpdater::changeContents(const QString& path)
 {
-  if (qcepDebug(DEBUG_BROWSER)) {
+  if (g_Application && qcepDebug(DEBUG_BROWSER)) {
     g_Application->printMessage(tr("QxrdFileBrowserModelUpdater::changeContents %1").arg(path));
   }
 
@@ -68,7 +68,7 @@ void QxrdFileBrowserModelUpdater::changeContents(const QString& path)
 void QxrdFileBrowserModelUpdater::updateTimeout()
 {
   if (m_UpdateNeeded.fetchAndStoreOrdered(0)) {
-    if (qcepDebug(DEBUG_BROWSER)) {
+    if (g_Application && qcepDebug(DEBUG_BROWSER)) {
       g_Application->printMessage(tr("QxrdFileBrowserModelUpdater::updateTimeout update needed %1").arg(m_RootPath));
     }
 
@@ -160,7 +160,7 @@ void QxrdFileBrowserModelUpdater::updateContents()
 
   while (iterd.hasNext()) {
     if (m_UpdateNeeded.fetchAndAddOrdered(0)) {
-      if (qcepDebug(DEBUG_BROWSER)) {
+      if (g_Application && qcepDebug(DEBUG_BROWSER)) {
         g_Application->printMessage("Directory list generation abandoned");
       }
 
@@ -181,7 +181,7 @@ void QxrdFileBrowserModelUpdater::updateContents()
 
   while (iter.hasNext()) {
     if (m_UpdateNeeded.fetchAndAddOrdered(0)) {
-      if (qcepDebug(DEBUG_BROWSER)) {
+      if (g_Application && qcepDebug(DEBUG_BROWSER)) {
         g_Application->printMessage("File list generation abandoned");
       }
 
@@ -200,10 +200,10 @@ void QxrdFileBrowserModelUpdater::updateContents()
   m_Directories  = dirs;
   m_Files        = files;
 
-  if (qcepDebug(DEBUG_BROWSER)) {
+  if (g_Application && qcepDebug(DEBUG_BROWSER)) {
     g_Application->printMessage(tr("Update file browser took %1 msec").arg(tic.restart()));
     g_Application->printMessage(tr("File Path %1: %2 dirs, %3 files")
-                                .arg(m_RootPath).arg(m_Directories.count()).arg(m_Files.count()));
+                      .arg(m_RootPath).arg(m_Directories.count()).arg(m_Files.count()));
   }
 
   if (m_GenerateUpdates) {
@@ -261,7 +261,7 @@ void QxrdFileBrowserModelUpdater::updateContents()
     }
 
     catch (...) {
-      if (qcepDebug(DEBUG_BROWSER)) {
+      if (g_Application && qcepDebug(DEBUG_BROWSER)) {
         g_Application->printMessage("Sorting abandoned");
       }
 
@@ -269,11 +269,16 @@ void QxrdFileBrowserModelUpdater::updateContents()
     }
   }
 
-  if (qcepDebug(DEBUG_BROWSER)) {
+  if (g_Application && qcepDebug(DEBUG_BROWSER)) {
     g_Application->printMessage(tr("Sort file browser took %1 msec").arg(tic.elapsed()));
   }
 
-  int limit = g_Application->get_FileBrowserLimit();
+  int limit = 10000;
+
+  if (g_Application) {
+    limit = g_Application->get_FileBrowserLimit();
+  }
+
   int trueSize = m_Files.count();
 
   if (limit && limit < trueSize) {

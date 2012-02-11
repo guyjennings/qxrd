@@ -3,7 +3,7 @@
 #include "qxrdscriptengine.h"
 #include "qxrdapplication.h"
 
-QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication *app, QxrdExperiment *exp)
+QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication* app, QxrdExperimentWPtr exp)
   : QxrdThread(NULL),
     m_ScriptEngine(NULL),
     m_Application(app),
@@ -41,7 +41,7 @@ QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const
 
 void QxrdScriptEngineThread::run()
 {
-  if (qcepDebug(DEBUG_THREADS)) {
+  if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage("Starting Script Engine Thread");
   }
 
@@ -53,7 +53,7 @@ void QxrdScriptEngineThread::run()
 
   int rc = exec();
 
-  if (qcepDebug(DEBUG_THREADS)) {
+  if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Script Engine Thread Terminated with rc %1").arg(rc));
   }
 }

@@ -1,7 +1,7 @@
 #include "qxrdacquiredialogbase.h"
 
 QxrdAcquireDialogBase::QxrdAcquireDialogBase(QxrdExperimentWPtr doc,
-                                             QxrdWindow *win,
+                                             QxrdWindowWPtr win,
                                              QxrdAcquisitionWPtr acq,
                                              QxrdDataProcessorWPtr proc,
                                              QWidget *parent) :

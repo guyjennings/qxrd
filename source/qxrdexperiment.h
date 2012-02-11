@@ -36,7 +36,7 @@ public:
   QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
   QxrdWindowPtr window();
-  QxrdDataProcessorPtr dataProcessor() const;
+  QxrdDataProcessorWPtr dataProcessor() const;
 
   FILE* logFile();
   void newLogFile(QString path);
@@ -92,9 +92,9 @@ private:
   void openScanFile();
 
 private:
-  QxrdApplication                *m_Application;
-  QxrdExperimentThreadWPtr        m_ExperimentThread;
-  QxrdSettingsSaverPtr            m_SettingsSaver;
+  QxrdApplication             *m_Application;
+  QxrdExperimentThreadWPtr     m_ExperimentThread;
+  QxrdSettingsSaverPtr         m_SettingsSaver;
 
 public:  // Properties
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)

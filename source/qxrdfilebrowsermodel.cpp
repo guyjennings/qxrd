@@ -230,7 +230,7 @@ void QxrdFileBrowserModel::newDataAvailable(QVector<QFileInfo> dirs, QVector<QFi
 
 void QxrdFileBrowserModel::updatedFile(QString path, QDateTime atTime)
 {
-  if (qcepDebug(DEBUG_BROWSER)) {
+  if (g_Application && qcepDebug(DEBUG_BROWSER)) {
     g_Application->printMessage(tr("file %1 updated at %2")
                                 .arg(path)
                                 .arg(atTime.toString(Qt::ISODate)));

@@ -18,14 +18,14 @@
 
 #include <QThread>
 
-QxrdScriptEngine::QxrdScriptEngine(QxrdApplication *app, QxrdExperiment *exp)
+QxrdScriptEngine::QxrdScriptEngine(QxrdApplication* app, QxrdExperimentWPtr exp)
   : QScriptEngine(),
     m_Mutex(QMutex::Recursive),
     m_Application(app),
     m_Experiment(exp),
-    m_Acquisition(NULL),
-    m_DataProcessor(NULL),
-    m_Window(NULL)
+    m_Acquisition(),
+    m_DataProcessor(),
+    m_Window()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngine::QxrdScriptEngine(%p)\n", this);
@@ -43,21 +43,28 @@ void QxrdScriptEngine::initialize()
 {
   qScriptRegisterMetaType(this, ::QxrdRingFitToScriptValue, ::QxrdRingFitFromScriptValue);
   qScriptRegisterMetaType(this, ::QxrdRingSampledDataToScriptValue, ::QxrdRingSampledDataFromScriptValue);
-//  qScriptRegisterMetaType(this, ::QxrdRingSampledDataPtrToScriptValue, ::QxrdRingSampledDataPtrFromScriptValue);
+  //  qScriptRegisterMetaType(this, ::QxrdRingSampledDataPtrToScriptValue, ::QxrdRingSampledDataPtrFromScriptValue);
 
   qScriptRegisterSequenceMetaType< QList<int> >(this);
   qScriptRegisterSequenceMetaType< QList<bool> >(this);
   qScriptRegisterSequenceMetaType< QList<double> >(this);
   qScriptRegisterSequenceMetaType< QList<QString> >(this);
-//  qScriptRegisterSequenceMetaType< QList<QxrdRingFitParameters*> >(this);
+  //  qScriptRegisterSequenceMetaType< QList<QxrdRingFitParameters*> >(this);
   qScriptRegisterSequenceMetaType< QVector<int> >(this);
   qScriptRegisterSequenceMetaType< QVector<bool> >(this);
   qScriptRegisterSequenceMetaType< QVector<double> >(this);
   qScriptRegisterSequenceMetaType< QVector<QString> >(this);
-//  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
+  //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
 
-  globalObject().setProperty("application", newQObject(m_Application));
-  globalObject().setProperty("allocator", newQObject(m_Application->allocator().data()));
+  if (m_Application) {
+    globalObject().setProperty("application", newQObject(m_Application));
+
+    QxrdAllocatorPtr alloc(m_Application->allocator());
+
+    if (alloc) {
+      globalObject().setProperty("allocator", newQObject(alloc.data()));
+    }
+  }
 
   globalObject().setProperty("acquire", newFunction(acquireFunc));
   globalObject().setProperty("acquireDark", newFunction(acquireDarkFunc));
@@ -86,60 +93,75 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("typeName", newFunction(typeNameFunc));
   globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
 
-  QObject *plugin = dynamic_cast<QObject*>(m_Application->nidaqPlugin().data());
+  if (m_Application) {
+    QObject *plugin = dynamic_cast<QObject*>(m_Application->nidaqPlugin().data());
 
-  if (plugin) {
-    globalObject().setProperty("nidaq", newQObject(plugin));
+    if (plugin) {
+      globalObject().setProperty("nidaq", newQObject(plugin));
+    }
   }
 
-  globalObject().setProperty("experiment", newQObject(m_Experiment));
+  QxrdExperimentPtr expt(m_Experiment);
 
-  m_Acquisition   = m_Experiment->acquisition();
+  if (expt) {
+    globalObject().setProperty("experiment", newQObject(expt.data()));
 
-  if (m_Acquisition) {
-    globalObject().setProperty("acquisition",     newQObject(m_Acquisition.data()));
-    globalObject().setProperty("synchronization", newQObject(m_Acquisition->synchronizedAcquisition()));
-  }
+    m_Acquisition   = expt->acquisition();
 
-  m_DataProcessor = m_Experiment->dataProcessor();
+    QxrdAcquisitionPtr acq(m_Acquisition);
 
-  if (m_DataProcessor) {
-    globalObject().setProperty("processor",       newQObject(m_DataProcessor.data()));
-    globalObject().setProperty("centering",       newQObject(m_DataProcessor->centerFinder().data()));
-    globalObject().setProperty("integrator",      newQObject(m_DataProcessor->integrator().data()));
-    globalObject().setProperty("initialFit",      newQObject(m_DataProcessor->initialRingSetFitParameters().data()));
-    globalObject().setProperty("refinedFit",      newQObject(m_DataProcessor->refinedRingSetFitParameters().data()));
-    globalObject().setProperty("initialData",     newQObject(m_DataProcessor->initialRingSetData().data()));
-    globalObject().setProperty("refinedData",     newQObject(m_DataProcessor->refinedRingSetData().data()));
-    globalObject().setProperty("testImage",       newQObject(m_DataProcessor->generateTestImage()));
-  }
+    if (acq) {
+      globalObject().setProperty("acquisition",     newQObject(acq.data()));
+      globalObject().setProperty("synchronization", newQObject(acq->synchronizedAcquisition()));
+    }
 
-  m_Window = m_Experiment->window().data();
+    m_DataProcessor = expt->dataProcessor();
 
-  if (m_Window) {
-    globalObject().setProperty("window",          newQObject(m_Window));
-    globalObject().setProperty("imageGraph",      newQObject(m_Window->m_Plot));
-    globalObject().setProperty("centeringGraph",  newQObject(m_Window->m_CenterFinderPlot));
-    globalObject().setProperty("integratorGraph", newQObject(m_Window->m_IntegratorPlot));
+    QxrdDataProcessorPtr dp(m_DataProcessor);
+
+    if (dp) {
+      globalObject().setProperty("processor",       newQObject(dp.data()));
+      globalObject().setProperty("centering",       newQObject(dp->centerFinder().data()));
+      globalObject().setProperty("integrator",      newQObject(dp->integrator().data()));
+      globalObject().setProperty("initialFit",      newQObject(dp->initialRingSetFitParameters().data()));
+      globalObject().setProperty("refinedFit",      newQObject(dp->refinedRingSetFitParameters().data()));
+      globalObject().setProperty("initialData",     newQObject(dp->initialRingSetData().data()));
+      globalObject().setProperty("refinedData",     newQObject(dp->refinedRingSetData().data()));
+
+      QxrdGenerateTestImagePtr gti(dp->generateTestImage());
+
+      if (gti) {
+        globalObject().setProperty("testImage",       newQObject(gti.data()));
+      }
+    }
+
+    QxrdWindowPtr wp(expt->window());
+
+    if (wp) {
+      globalObject().setProperty("window",          newQObject(wp.data()));
+      globalObject().setProperty("imageGraph",      newQObject(wp->m_Plot));
+      globalObject().setProperty("centeringGraph",  newQObject(wp->m_CenterFinderPlot));
+      globalObject().setProperty("integratorGraph", newQObject(wp->m_IntegratorPlot));
+    }
   }
 }
 
-QxrdExperiment *QxrdScriptEngine::experiment() const
+QxrdExperimentWPtr QxrdScriptEngine::experiment() const
 {
   return m_Experiment;
 }
 
-QxrdAcquisitionPtr QxrdScriptEngine::acquisition() const
+QxrdAcquisitionWPtr QxrdScriptEngine::acquisition() const
 {
   return m_Acquisition;
 }
 
-QxrdWindow* QxrdScriptEngine::window() const
+QxrdWindowWPtr QxrdScriptEngine::window() const
 {
   return m_Window;
 }
 
-QxrdDataProcessorPtr QxrdScriptEngine::dataProcessor() const
+QxrdDataProcessorWPtr QxrdScriptEngine::dataProcessor() const
 {
   return m_DataProcessor;
 }
@@ -148,7 +170,7 @@ void QxrdScriptEngine::evaluateAppCommand(QString expr)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-//  printf("QxrdScriptingEngine::evaluateAppCommand(%s)\n", qPrintable(expr));
+  //  printf("QxrdScriptingEngine::evaluateAppCommand(%s)\n", qPrintable(expr));
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluate", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(QString, expr)));
 }
@@ -157,7 +179,7 @@ void QxrdScriptEngine::evaluateSimpleServerCommand(QString expr)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-//  printf("QxrdScriptingEngine::evaluateServerCommand(%s)\n", qPrintable(expr));
+  //  printf("QxrdScriptingEngine::evaluateServerCommand(%s)\n", qPrintable(expr));
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluate", Qt::QueuedConnection, Q_ARG(int, 1), Q_ARG(QString, expr)));
 }
@@ -166,7 +188,7 @@ void QxrdScriptEngine::evaluateSpecCommand(QString expr)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-//  printf("QxrdScriptingEngine::evaluateSpecCommand(%s)\n", qPrintable(expr));
+  //  printf("QxrdScriptingEngine::evaluateSpecCommand(%s)\n", qPrintable(expr));
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluate", Qt::QueuedConnection, Q_ARG(int, 2), Q_ARG(QString, expr)));
 }
@@ -191,7 +213,7 @@ void QxrdScriptEngine::evaluate(int src, QString expr)
 {
   THREAD_CHECK;
 
-//  printf("QxrdScriptingEngine::evaluate(%s)\n", qPrintable(expr));
+  //  printf("QxrdScriptingEngine::evaluate(%s)\n", qPrintable(expr));
 
   QScriptValue result = QScriptEngine::evaluate(expr);
 
@@ -250,7 +272,7 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
       msg += context -> argument(i).toString();
     }
 
-    QxrdWindow* qwin = eng->window();
+    QxrdWindowPtr qwin = eng->window();
 
     if (qwin) {
       qwin->displayMessage(msg);
@@ -265,7 +287,7 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (!acq) return QScriptValue(engine, -1);
 
@@ -313,7 +335,7 @@ QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptE
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (!acq) return QScriptValue(engine, -1);
 
@@ -343,8 +365,8 @@ QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
-    QxrdDataProcessorPtr proc = eng->dataProcessor();
+    QxrdAcquisitionPtr acq(eng->acquisition());
+    QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (!acq || !proc) return QScriptValue(engine, -1);
 
@@ -372,7 +394,7 @@ QScriptValue QxrdScriptEngine::acquireStatusFunc(QScriptContext *context, QScrip
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() == 0) {
@@ -392,7 +414,7 @@ QScriptValue QxrdScriptEngine::processStatusFunc(QScriptContext *context, QScrip
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
       if (context->argumentCount() == 0) {
@@ -412,7 +434,7 @@ QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext * /*context*/, Q
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       acq -> cancel();
@@ -429,7 +451,7 @@ QScriptValue QxrdScriptEngine::exposureTimeFunc(QScriptContext *context, QScript
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -448,7 +470,7 @@ QScriptValue QxrdScriptEngine::summedExposuresFunc(QScriptContext *context, QScr
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -467,7 +489,7 @@ QScriptValue QxrdScriptEngine::skippedExposuresFunc(QScriptContext *context, QSc
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -486,7 +508,7 @@ QScriptValue QxrdScriptEngine::darkSummedExposuresFunc(QScriptContext *context, 
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -505,7 +527,7 @@ QScriptValue QxrdScriptEngine::phasesInGroupFunc(QScriptContext *context, QScrip
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -524,7 +546,7 @@ QScriptValue QxrdScriptEngine::preTriggerFilesFunc(QScriptContext *context, QScr
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -543,7 +565,7 @@ QScriptValue QxrdScriptEngine::postTriggerFilesFunc(QScriptContext *context, QSc
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -562,7 +584,7 @@ QScriptValue QxrdScriptEngine::filePatternFunc(QScriptContext *context, QScriptE
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -581,7 +603,7 @@ QScriptValue QxrdScriptEngine::outputDirectoryFunc(QScriptContext *context, QScr
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdExperiment *doc = eng->experiment();
+    QxrdExperimentPtr doc(eng->experiment());
 
     if (doc) {
       if (context->argumentCount() != 0) {
@@ -600,7 +622,7 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq = eng->acquisition();
+    QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -619,7 +641,7 @@ QScriptValue QxrdScriptEngine::dataFunc(QScriptContext * /*context*/, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
       return engine -> newQObject(proc -> data().data());
@@ -634,7 +656,7 @@ QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
       return engine -> newQObject(proc -> darkImage().data());
@@ -649,7 +671,7 @@ QScriptValue QxrdScriptEngine::maskFunc(QScriptContext * /*context*/, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
       return engine -> newQObject(proc -> mask().data());
@@ -664,7 +686,7 @@ QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScrip
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
       return engine -> newQObject(proc -> overflow().data());
@@ -693,7 +715,7 @@ QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngin
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc = eng->dataProcessor();
+    QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
       if (context->argumentCount() >= 1) {
@@ -730,7 +752,7 @@ QScriptValue QxrdScriptEngine::matchFilesFunc(QScriptContext *context, QScriptEn
       for (int i=1; i<context->argumentCount(); i++) {
         QString patt = context->argument(i).toString();
 
-//        g_Application->printMessage(tr("Matching %1").arg(patt));
+        //        g_Application->printMessage(tr("Matching %1").arg(patt));
 
         QDir a(dir);
 
@@ -741,8 +763,8 @@ QScriptValue QxrdScriptEngine::matchFilesFunc(QScriptContext *context, QScriptEn
         a.setNameFilters(patts);
 
         QStringList entries = a.entryList();
-//        int nEntries = entries.length();
-//        g_Application->printMessage(tr("Matched %1 entries").arg(nEntries));
+        //        int nEntries = entries.length();
+        //        g_Application->printMessage(tr("Matched %1 entries").arg(nEntries));
 
         result.append(entries);
       }

@@ -423,7 +423,7 @@ QxrdAcquireDialogBase *QxrdAcquisition::controlPanel(QxrdWindow *win)
                                            m_Window,
                                            this,
                                            m_DataProcessor,
-                                           m_Window);
+                                           m_Window.data());
 
     return m_ControlPanel;
   } else {

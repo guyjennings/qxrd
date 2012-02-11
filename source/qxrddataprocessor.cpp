@@ -6,6 +6,7 @@
 #include "qxrdcenterfinder.h"
 #include "qxrdintegrator.h"
 #include "qxrdmutexlocker.h"
+#include "qxrdgeneratetestimage.h"
 
 #include "tiffio.h"
 
@@ -25,9 +26,16 @@ QxrdDataProcessor::QxrdDataProcessor
      QObject *parent)
   : QxrdDataProcessorThreaded(saver, doc, acq, allocator, filesaver, parent)
 {
-  readSettings(settings, section);
+//  readSettings(settings, section);
 }
 
 QxrdDataProcessor::~QxrdDataProcessor()
 {
+}
+
+void QxrdDataProcessor::init()
+{
+  if (m_GenerateTestImage) {
+    m_GenerateTestImage -> setProcessor(this);
+  }
 }

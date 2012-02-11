@@ -12,7 +12,9 @@ QxrdAcquisitionScripting::QxrdAcquisitionScripting(DetectorKind detectorKind, Qx
 
 void QxrdAcquisitionScripting::Message(QString msg)
 {
-  g_Application->statusMessage(msg);
+  if (g_Application) {
+    g_Application->statusMessage(msg);
+  }
 }
 
 void QxrdAcquisitionScripting::propertyList()
@@ -30,6 +32,8 @@ void QxrdAcquisitionScripting::propertyList()
     const char *name = metaproperty.name();
     QVariant value = property(name);
 
-    g_Application->printMessage(tr("Property %1: %2 = %3").arg(i).arg(name).arg(value.toString()));
+    if (g_Application) {
+      g_Application->printMessage(tr("Property %1: %2 = %3").arg(i).arg(name).arg(value.toString()));
+    }
   }
 }

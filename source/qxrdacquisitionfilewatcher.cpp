@@ -5,8 +5,8 @@
 
 QxrdAcquisitionFileWatcher::QxrdAcquisitionFileWatcher(QxrdSettingsSaverPtr saver,
                                                        QxrdExperimentWPtr doc,
-                                                       QxrdDataProcessorPtr proc,
-                                                       QxrdAllocatorPtr allocator,
+                                                       QxrdDataProcessorWPtr proc,
+                                                       QxrdAllocatorWPtr allocator,
                                                        QSettings *settings,
                                                        QString section) :
     QxrdAcquisition(QxrdAcquisition::FileWatcherDetector, saver, doc, proc, allocator)
@@ -54,7 +54,7 @@ void QxrdAcquisitionFileWatcher::setupCameraBinningModeMenu(QComboBox *cb)
 {
 }
 
-QxrdAcquireDialogBase *QxrdAcquisitionFileWatcher::controlPanel(QxrdWindow *win)
+QxrdAcquireDialogBase *QxrdAcquisitionFileWatcher::controlPanel(QxrdWindowWPtr win)
 {
   if (win) {
     m_Window = win;
@@ -63,7 +63,7 @@ QxrdAcquireDialogBase *QxrdAcquisitionFileWatcher::controlPanel(QxrdWindow *win)
                                                       m_Window,
                                                       this,
                                                       m_DataProcessor,
-                                                      m_Window);
+                                                      m_Window.data());
 
     return m_ControlPanel;
   } else {

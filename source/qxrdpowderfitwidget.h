@@ -11,7 +11,7 @@
 class QxrdPowderFitWidget : public QDialog, public Ui::QxrdPowderFitWidget {
   Q_OBJECT
 public:
-  QxrdPowderFitWidget(QxrdDataProcessorPtr proc, QWidget *parent = 0);
+  QxrdPowderFitWidget(QxrdDataProcessorWPtr proc, QWidget *parent = 0);
   ~QxrdPowderFitWidget();
 
 protected:
@@ -30,7 +30,7 @@ public slots:
 protected:
 
 protected:
-  QxrdDataProcessorPtr       m_Processor;
+  QxrdDataProcessorWPtr      m_Processor;
   QVector<QwtSymbol::Style>  m_SymbolStyles;
 };
 

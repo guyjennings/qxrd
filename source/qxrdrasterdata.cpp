@@ -12,8 +12,10 @@ QxrdRasterData::QxrdRasterData(QxrdDoubleImageDataPtr img, int interp, QxrdMaskD
     m_Interpolate(interp)
 {
   if (qcepDebug(DEBUG_IMAGES)) {
-    g_Application->printMessage(QObject::tr("QxrdRasterData::QxrdRasterData(%1,%2,%3) [%4]")
-                                .HEXARG(img.data()).arg(interp).HEXARG(mask.data()).HEXARG(this));
+    if (g_Application) {
+      g_Application->printMessage(QObject::tr("QxrdRasterData::QxrdRasterData(%1,%2,%3) [%4]")
+                        .HEXARG(img.data()).arg(interp).HEXARG(mask.data()).HEXARG(this));
+    }
   }
 }
 
@@ -60,7 +62,7 @@ double QxrdRasterData::value(double x, double y) const
 
 QxrdRasterData* QxrdRasterData::copy() const
 {
-  if (qcepDebug(DEBUG_IMAGES)) {
+  if (g_Application && qcepDebug(DEBUG_IMAGES)) {
     g_Application->printMessage(QObject::tr("QxrdMaskRasterData::copy() [%1]").HEXARG((void*) this));
   }
 
@@ -69,7 +71,9 @@ QxrdRasterData* QxrdRasterData::copy() const
   }
 
   catch (...) {
-    g_Application->printMessage("QxrdRasterData::copy failed");
+    if (g_Application) {
+      g_Application->printMessage("QxrdRasterData::copy failed");
+    }
 
     return NULL;
   }

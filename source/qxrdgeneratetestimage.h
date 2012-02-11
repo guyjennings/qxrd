@@ -14,9 +14,8 @@ class QxrdGenerateTestImage : public QObject
 {
   Q_OBJECT
 public:
-  QxrdGenerateTestImage(QxrdSettingsSaverPtr saver,
-                        QxrdDataProcessorBase *proc,
-                        QxrdAllocatorPtr alloc,
+  QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver,
+                        QxrdAllocatorWPtr alloc,
                         QObject *parent);
 
 public slots:
@@ -34,8 +33,11 @@ public slots:
   void generateChiImage();
 
 public:
-  QxrdDataProcessorBase  *m_Processor;
-  QxrdAllocatorPtr        m_Allocator;
+  void setProcessor(QxrdDataProcessorWPtr proc);
+
+public:
+  QxrdDataProcessorWPtr   m_Processor;
+  QxrdAllocatorWPtr       m_Allocator;
   QxrdDetectorGeometryPtr m_Geometry;
 
   Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows)

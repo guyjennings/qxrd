@@ -23,7 +23,9 @@ void QxrdRingSetSampledData::writeSettings(QSettings *settings, QString section)
       QxrdRingSampledDataPtr r = ring(i);
 
       if (r==NULL) {
-        g_Application->printMessage("NULL ring sampled data\n");
+        if (g_Application) {
+          g_Application->printMessage("NULL ring sampled data\n");
+        }
       } else {
         settings->setArrayIndex(i);
         r -> writeSettings(settings, "");

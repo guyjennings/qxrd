@@ -132,10 +132,12 @@ void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QStri
         QVariant value = object -> property(name);
 
         if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
-          g_Application -> printMessage(
-                tr("Save %1/%2 = %3 [%4]")
-                .arg(groupName).arg(name)
-                .arg(value.toString()).arg(value.typeName()));
+          if (g_Application) {
+            g_Application -> printMessage(
+                  tr("Save %1/%2 = %3 [%4]")
+                  .arg(groupName).arg(name)
+                  .arg(value.toString()).arg(value.typeName()));
+          }
         }
 
         settings->setValue(name, value);
@@ -154,13 +156,13 @@ void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QStri
 
 void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings)
 {
-  if (settings && g_Application) {
+  if (settings) {
     settings->beginGroup(groupName);
 
     QStringList keys = settings->childKeys();
 
     foreach (QString key, keys) {
-      if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+      if (g_Application && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
         g_Application -> printMessage(
               tr("Load %1/%2 = %3 [%4]")
               .arg(groupName).arg(key)
@@ -182,14 +184,14 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
 
           object -> setProperty(qPrintable(key), settings->value(key));
         } else {
-          if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+          if (g_Application && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
             g_Application -> printMessage(
                   tr("property %1 of %2 not stored").arg(key)
                   .arg(meta -> className()));
           }
         }
       } else {
-        if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+        if (g_Application && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
           g_Application -> printMessage(
                 tr("property %1 of %2 does not exist")
                 .arg(key).arg(meta -> className()));

@@ -2,14 +2,16 @@
 #include <QDoubleSpinBox>
 #include <QCheckBox>
 
-QxrdPowderFitRefinePage::QxrdPowderFitRefinePage(QxrdSettingsSaverPtr saver, QxrdDataProcessorPtr proc, QWidget *parent) :
+QxrdPowderFitRefinePage::QxrdPowderFitRefinePage(QxrdSettingsSaverWPtr saver, QxrdDataProcessorWPtr proc, QWidget *parent) :
     QxrdPowderFitIdentifyPage(saver, proc, parent),
     m_RingSet(NULL),
     m_NStatic(0),
     m_NRings(0)
 {
-  if (proc) {
-    m_RingSet = proc -> refinedRingSetFitParameters();
+  QxrdDataProcessorPtr dp(proc);
+
+  if (dp) {
+    m_RingSet = dp -> refinedRingSetFitParameters();
   }
 
   if (m_RingSet) {

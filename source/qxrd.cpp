@@ -37,14 +37,7 @@ int main(int argc, char *argv[])
 
   int res = 0;
 
-  if (app.init()) {
-
-    //  printf("App Constructed\n");
-
-//    foreach(QString cmd, app.get_CmdList()) {
-//      app.executeCommand(cmd);
-//    }
-
+  if (app.init(argc, argv)) {
     if (app.get_GuiWanted()) {
       splash->finish(app.window());
       res = app.exec();

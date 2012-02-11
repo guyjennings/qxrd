@@ -19,7 +19,7 @@ class QxrdScriptEngine : public QScriptEngine
   Q_OBJECT
 
 public:
-  QxrdScriptEngine(QxrdApplication *app, QxrdExperiment *exp);
+  QxrdScriptEngine(QxrdApplication* app, QxrdExperimentWPtr exp);
   virtual ~QxrdScriptEngine();
   void initialize();
 
@@ -40,11 +40,11 @@ public:
   QString uncaughtExceptionString() const;
   void cancelCommand();
 
-  QxrdApplication *application() const;
-  QxrdExperiment  *experiment() const;
-  QxrdAcquisitionPtr acquisition() const;
-  QxrdDataProcessorPtr dataProcessor() const;
-  QxrdWindow      *window() const;
+  QxrdApplication* application() const;
+  QxrdExperimentWPtr experiment() const;
+  QxrdAcquisitionWPtr acquisition() const;
+  QxrdDataProcessorWPtr dataProcessor() const;
+  QxrdWindowWPtr window() const;
 
 private slots:
   void              evaluate(int src, QString cmd);
@@ -79,10 +79,10 @@ private:
 private:
   mutable QMutex         m_Mutex;
   QxrdApplication       *m_Application;
-  QxrdExperiment        *m_Experiment;
-  QxrdAcquisitionPtr     m_Acquisition;
-  QxrdDataProcessorPtr   m_DataProcessor;
-  QxrdWindow            *m_Window;
+  QxrdExperimentWPtr     m_Experiment;
+  QxrdAcquisitionWPtr    m_Acquisition;
+  QxrdDataProcessorWPtr  m_DataProcessor;
+  QxrdWindowWPtr         m_Window;
 };
 
 typedef QSharedPointer<QxrdScriptEngine> QxrdScriptEnginePtr;

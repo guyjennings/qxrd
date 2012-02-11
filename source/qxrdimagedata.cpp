@@ -9,15 +9,14 @@ QxrdImageData<T>::QxrdImageData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr a
     m_Mask(NULL),
     m_Overflow(NULL)
 {
-
-  if (qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
+  if (g_Application && qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
     int count = m_ObjectCounter.value();
 
     g_Application->printMessage(QObject::tr("QxrdImageData<%1>::QxrdImageData(%2,%3,%4) %5[%6] thr%7")
-                                .arg(typeid(T).name())
-                                .HEXARG(allocator.data())
-                                .arg(width).arg(height)
-                                .HEXARG(this).arg(count).HEXARG(QThread::currentThread()));
+                      .arg(typeid(T).name())
+                      .HEXARG(allocator.data())
+                      .arg(width).arg(height)
+                      .HEXARG(this).arg(count).HEXARG(QThread::currentThread()));
   }
 
   m_ObjectCounter.allocate(sizeof(T), width, height);
@@ -26,12 +25,12 @@ QxrdImageData<T>::QxrdImageData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr a
 template <typename T>
 QxrdImageData<T>::~QxrdImageData()
 {
-  if (qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
+  if (g_Application && qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
     int count = m_ObjectCounter.value();
 
     g_Application->printMessage(QObject::tr("QxrdImageData<%1>::~QxrdImageData %2[%3], thr%4, cthr%5 titl:%6")
-                                .arg(typeid(T).name())
-                                .HEXARG(this).arg(count).HEXARG(QThread::currentThread()).HEXARG(this->thread()).arg(this->get_Title()));
+                      .arg(typeid(T).name())
+                      .HEXARG(this).arg(count).HEXARG(QThread::currentThread()).HEXARG(this->thread()).arg(this->get_Title()));
   }
 }
 

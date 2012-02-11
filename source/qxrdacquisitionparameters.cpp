@@ -115,8 +115,10 @@ void QxrdAcquisitionParameters::dynamicProperties()
 {
   QByteArray name;
 
-  foreach(name, dynamicPropertyNames()) {
-    g_Application->printMessage(tr("acquisition.%1\n").arg(name.data()));
+  if (g_Application) {
+    foreach(name, dynamicPropertyNames()) {
+      g_Application->printMessage(tr("acquisition.%1\n").arg(name.data()));
+    }
   }
 }
 

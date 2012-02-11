@@ -38,7 +38,7 @@ QxrdExperiment::QxrdExperiment(
   m_WorkCompleted(QxrdSettingsSaverPtr(), this, "workCompleted", 0),
   m_WorkTarget(QxrdSettingsSaverPtr(), this, "workTarget", 0),
   m_CompletionPercentage(QxrdSettingsSaverPtr(), this, "completionPercentage", 0),
-  m_Window(NULL),
+  m_Window(),
   m_Splash(NULL),
   m_ServerThread(NULL),
   m_Server(NULL),
@@ -79,7 +79,7 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
 
   m_ExperimentThread = expthrd;
 
-  if (m_Application->get_GuiWanted()) {
+  if (m_Application && m_Application->get_GuiWanted()) {
     m_Splash = new QxrdSplashScreen(NULL);
     m_Splash -> show();
   }
@@ -90,169 +90,181 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
 
   splashMessage("Initializing File Saver");
 
-  m_FileSaverThread = QxrdFileSaverThreadPtr(
-        new QxrdFileSaverThread(m_Application->allocator()));
-  m_FileSaverThread -> setObjectName("saver");
-  m_FileSaverThread -> start();
-  m_FileSaver = m_FileSaverThread -> fileSaver();
+  if (m_Application) {
+    m_FileSaverThread = QxrdFileSaverThreadPtr(
+          new QxrdFileSaverThread(m_Application->allocator()));
+    m_FileSaverThread -> setObjectName("saver");
+    m_FileSaverThread -> start();
+    m_FileSaver = m_FileSaverThread -> fileSaver();
 
-  splashMessage("Initializing Data Processing");
+    splashMessage("Initializing Data Processing");
 
-  m_DataProcessorThread = QxrdDataProcessorThreadPtr(
-        new QxrdDataProcessorThread(m_SettingsSaver,
+    m_DataProcessorThread = QxrdDataProcessorThreadPtr(
+          new QxrdDataProcessorThread(m_SettingsSaver,
+                                      exp,
+                                      QxrdAcquisitionPtr(),
+                                      m_Application->allocator(),
+                                      m_FileSaver,
+                                      settings,
+                                      "experiment/processor"));
+    m_DataProcessorThread -> setObjectName("proc");
+    m_DataProcessorThread -> start();
+    m_DataProcessor = m_DataProcessorThread -> dataProcessor();
+
+    m_FileSaver -> setProcessor(m_DataProcessor);
+
+    splashMessage("Initializing Data Acquisition");
+
+    m_AcquisitionThread = QxrdAcquisitionThreadPtr(
+          new QxrdAcquisitionThread(m_SettingsSaver,
                                     exp,
-                                    QxrdAcquisitionPtr(),
+                                    m_DataProcessor,
                                     m_Application->allocator(),
-                                    m_FileSaver,
+                                    get_DetectorType(),
                                     settings,
-                                    "experiment/processor"));
-  m_DataProcessorThread -> setObjectName("proc");
-  m_DataProcessorThread -> start();
-  m_DataProcessor = m_DataProcessorThread -> dataProcessor();
+                                    "experiment/acquire"));
+    m_AcquisitionThread -> setObjectName("acqu");
+    m_AcquisitionThread -> start();
+    m_Acquisition = m_AcquisitionThread -> acquisition();
 
-  m_FileSaver -> setProcessor(m_DataProcessor);
-
-  splashMessage("Initializing Data Acquisition");
-
-  m_AcquisitionThread = QxrdAcquisitionThreadPtr(
-        new QxrdAcquisitionThread(m_SettingsSaver,
-                                  exp,
-                                  m_DataProcessor,
-                                  m_Application->allocator(),
-                                  get_DetectorType(),
-                                  settings,
-                                  "experiment/acquire"));
-  m_AcquisitionThread -> setObjectName("acqu");
-  m_AcquisitionThread -> start();
-  m_Acquisition = m_AcquisitionThread -> acquisition();
-
-  m_DataProcessor -> setAcquisition(m_Acquisition);
-  m_FileSaver -> setAcquisition(m_Acquisition);
+    m_DataProcessor -> setAcquisition(m_Acquisition);
+    m_FileSaver -> setAcquisition(m_Acquisition);
 
 
-  if (m_Application->get_GuiWanted()) {
-    splashMessage("Opening Main Window");
-    m_Window = QxrdWindowPtr(
-          new QxrdWindow(m_SettingsSaver,
-                         m_Application,
-                         exp,
-                         m_Acquisition,
-                         m_DataProcessor,
-                         m_Application->allocator(),
-                         settings,
-                         "experiment/window"));
+    if (m_Application && m_Application->get_GuiWanted()) {
+      splashMessage("Opening Main Window");
+      m_Window = QxrdWindowPtr(
+            new QxrdWindow(m_SettingsSaver,
+                           m_Application,
+                           exp,
+                           m_Acquisition,
+                           m_DataProcessor,
+                           m_Application->allocator(),
+                           settings,
+                           "experiment/window"));
 
-    m_DataProcessor -> setWindow(m_Window);
-    m_Acquisition -> setWindow(m_Window.data());
-  }
+      QxrdWindowPtr win(m_Window);
 
-  splashMessage("Loading plugins");
+      if (win) {
+        win -> init();
 
-  //  printMessage("about to load plugins");
+        m_DataProcessor -> setWindow(win);
+        m_Acquisition -> setWindow(win);
+      }
+    }
 
-  m_Acquisition -> setNIDAQPlugin(m_Application->nidaqPlugin());
+    splashMessage("Loading plugins");
 
-//  m_AcquisitionThread->initialize();
+    //  printMessage("about to load plugins");
 
-  if (m_Window) m_Window -> onAcquisitionInit();
+    m_Acquisition -> setNIDAQPlugin(m_Application->nidaqPlugin());
 
-  if (get_RunSpecServer()) {
-    splashMessage("Starting SPEC Server");
+    //  m_AcquisitionThread->initialize();
+
+    QxrdWindowPtr win(m_Window);
+
+    if (win) {
+      win -> onAcquisitionInit();
+    }
+
+    if (get_RunSpecServer()) {
+      splashMessage("Starting SPEC Server");
 
 #ifdef Q_OS_WIN
-    // On windows, there are problems with servers not in the main thread...
+      // On windows, there are problems with servers not in the main thread...
 
-    m_Server = QxrdServerPtr(
-          new QxrdServer(this, "qxrd", get_SpecServerPort()));
+      m_Server = QxrdServerPtr(
+            new QxrdServer(this, "qxrd", get_SpecServerPort()));
 #else
-    m_ServerThread = QxrdServerThreadPtr(
-          new QxrdServerThread(this, "qxrd", get_SpecServerPort()));
-    m_ServerThread -> setObjectName("server");
-    m_ServerThread -> start();
-    m_Server = m_ServerThread -> server();
+      m_ServerThread = QxrdServerThreadPtr(
+            new QxrdServerThread(this, "qxrd", get_SpecServerPort()));
+      m_ServerThread -> setObjectName("server");
+      m_ServerThread -> start();
+      m_Server = m_ServerThread -> server();
 #endif
 
-    if (qcepDebug(DEBUG_SERVER)) {
-      printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
+      if (qcepDebug(DEBUG_SERVER)) {
+        printMessage(tr("Spec Server Thread started: listening on port %1").arg(m_Server->serverPort()));
+      }
     }
-  }
 
-  if (get_RunSimpleServer()) {
-    splashMessage("Starting Simple Socket Server");
+    if (get_RunSimpleServer()) {
+      splashMessage("Starting Simple Socket Server");
 
 #ifdef Q_OS_WIN
-    m_SimpleServer = QxrdSimpleServerPtr(
-          new QxrdSimpleServer(this, "simpleserver", get_SimpleServerPort()));
+      m_SimpleServer = QxrdSimpleServerPtr(
+            new QxrdSimpleServer(this, "simpleserver", get_SimpleServerPort()));
 #else
-    m_SimpleServerThread = QxrdSimpleServerThreadPtr(
-          new QxrdSimpleServerThread(this, "simpleserver", get_SimpleServerPort()));
-    m_SimpleServerThread -> setObjectName("smpsrv");
-    m_SimpleServerThread -> start();
-    m_SimpleServer = m_SimpleServerThread -> server();
+      m_SimpleServerThread = QxrdSimpleServerThreadPtr(
+            new QxrdSimpleServerThread(this, "simpleserver", get_SimpleServerPort()));
+      m_SimpleServerThread -> setObjectName("smpsrv");
+      m_SimpleServerThread -> start();
+      m_SimpleServer = m_SimpleServerThread -> server();
 #endif
 
-    if (qcepDebug(DEBUG_SERVER)) {
-      printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
+      if (qcepDebug(DEBUG_SERVER)) {
+        printMessage(tr("Simple Server Thread started: listening on port %1").arg(m_SimpleServer->serverPort()));
+      }
     }
-  }
 
-  m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
-        new QxrdScriptEngineThread(m_Application, this));
-  m_ScriptEngineThread -> setObjectName("script");
-  m_ScriptEngineThread -> start();
-  m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
+    m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
+          new QxrdScriptEngineThread(m_Application, this));
+    m_ScriptEngineThread -> setObjectName("script");
+    m_ScriptEngineThread -> start();
+    m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
 
-//  m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
-//  m_ScriptEngineDebugger -> attachTo(m_ScriptEngine->scriptEngine());
-//  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
+    //  m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
+    //  m_ScriptEngineDebugger -> attachTo(m_ScriptEngine->scriptEngine());
+    //  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
 
-  if (m_Server) {
-    connect(m_Server.data(),         SIGNAL(executeCommand(QString)),
-            scriptEngine().data(),   SLOT(evaluateSpecCommand(QString)));
+    if (m_Server) {
+      connect(m_Server.data(),         SIGNAL(executeCommand(QString)),
+              scriptEngine().data(),   SLOT(evaluateSpecCommand(QString)));
 
-    connect(scriptEngine().data(),   SIGNAL(specResultAvailable(QScriptValue)),
-            m_Server.data(),         SLOT(finishedCommand(QScriptValue)));
-  }
+      connect(scriptEngine().data(),   SIGNAL(specResultAvailable(QScriptValue)),
+              m_Server.data(),         SLOT(finishedCommand(QScriptValue)));
+    }
 
-  if (m_SimpleServer) {
-    connect(m_SimpleServer.data(),   SIGNAL(executeCommand(QString)),
-            scriptEngine().data(),   SLOT(evaluateSimpleServerCommand(QString)));
+    if (m_SimpleServer) {
+      connect(m_SimpleServer.data(),   SIGNAL(executeCommand(QString)),
+              scriptEngine().data(),   SLOT(evaluateSimpleServerCommand(QString)));
 
-    connect(scriptEngine().data(),   SIGNAL(simpleServerResultAvailable(QScriptValue)),
-            m_SimpleServer.data(),   SLOT(finishedCommand(QScriptValue)));
-  }
+      connect(scriptEngine().data(),   SIGNAL(simpleServerResultAvailable(QScriptValue)),
+              m_SimpleServer.data(),   SLOT(finishedCommand(QScriptValue)));
+    }
 
-  if (m_Window) {
-    connect(m_Window.data(),         SIGNAL(executeCommand(QString)),
-            scriptEngine().data(),   SLOT(evaluateAppCommand(QString)));
+    if (win) {
+      connect(win.data(),              SIGNAL(executeCommand(QString)),
+              scriptEngine().data(),   SLOT(evaluateAppCommand(QString)));
 
-    connect(scriptEngine().data(),   SIGNAL(appResultAvailable(QScriptValue)),
-            m_Window.data(),         SLOT(finishedCommand(QScriptValue)));
-  }
+      connect(scriptEngine().data(),   SIGNAL(appResultAvailable(QScriptValue)),
+              win.data(),              SLOT(finishedCommand(QScriptValue)));
+    }
 
-  connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
-  connect(prop_WorkTarget(),    SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
+    connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
+    connect(prop_WorkTarget(),    SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
 
-  splashMessage("Loading Preferences");
+    splashMessage("Loading Preferences");
 
-  readSettings(settings);
+    readSettings(settings);
 
-  splashMessage("Loading Background Images");
+    splashMessage("Loading Background Images");
 
-  m_DataProcessor -> loadDefaultImages();
+    m_DataProcessor -> loadDefaultImages();
 
 #ifdef Q_OS_WIN32
-  QDir::setCurrent(QDir::homePath());
+    QDir::setCurrent(QDir::homePath());
 #endif
 
-  printMessage(tr("Current directory %1").arg(QDir::currentPath()));
+    printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 
-  splashMessage("Opening Windows");
+    splashMessage("Opening Windows");
 
-  if (m_Application->get_GuiWanted() && m_Window) {
-    m_Window -> show();
+    if (win && m_Application && m_Application->get_GuiWanted()) {
+      win -> show();
 
-    m_Splash -> finish(m_Window.data());
+      m_Splash -> finish(win.data());
+    }
   }
 
   return true;
@@ -260,8 +272,7 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
 
 QxrdExperiment::~QxrdExperiment()
 {
-
-  if (qcepDebug(DEBUG_APP)) {
+  if (m_Application && qcepDebug(DEBUG_APP)) {
     m_Application->printMessage("QxrdExperiment::~QxrdExperiment");
   }
 
@@ -279,7 +290,7 @@ void QxrdExperiment::splashMessage(QString msg)
 
   printMessage(msg);
 
-  if (m_Splash) {
+  if (m_Application && m_Splash) {
     QString msgf = tr("Qxrd Version " STR(QXRD_VERSION) "\n")+msg;
 
     m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
@@ -289,19 +300,27 @@ void QxrdExperiment::splashMessage(QString msg)
 
 void QxrdExperiment::criticalMessage(QString msg)
 {
-  if (m_Window) {
-    m_Window->displayCriticalMessage(msg);
-  } else {
+  QxrdWindowPtr win(m_Window);
+
+  if (win) {
+    win->displayCriticalMessage(msg);
+  } else if (m_Application) {
     m_Application->criticalMessage(msg);
+  } else {
+    printf("%s\n", qPrintable(msg));
   }
 }
 
 void QxrdExperiment::statusMessage(QString msg)
 {
-  if (m_Window) {
-    m_Window->displayStatusMessage(msg);
-  } else {
+  QxrdWindowPtr win(m_Window);
+
+  if (win) {
+    win->displayStatusMessage(msg);
+  } else if (m_Application) {
     m_Application->statusMessage(msg);
+  } else {
+    printf("%s\n", qPrintable(msg));
   }
 }
 
@@ -317,10 +336,14 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts)
 
     logMessage(message);
 
-    if (m_Window) {
-      m_Window->displayMessage(message);
-    } else {
+    QxrdWindowPtr win(m_Window);
+
+    if (win) {
+      win->displayMessage(message);
+    } else if (m_Application) {
       m_Application->printMessage(message);
+    } else {
+      printf("%s\n", qPrintable(message));
     }
   }
 }
@@ -340,7 +363,7 @@ QxrdAcquisitionPtr QxrdExperiment::acquisition() const
   return m_Acquisition;
 }
 
-QxrdDataProcessorPtr QxrdExperiment::dataProcessor() const
+QxrdDataProcessorWPtr QxrdExperiment::dataProcessor() const
 {
   return m_DataProcessor;
 }
@@ -412,7 +435,7 @@ void QxrdExperiment::closeLogFile()
 
   if (m_LogFile) {
     fprintf(m_LogFile, "#CX %s ------- shutdown --------\n",
-               qPrintable(QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ")));
+            qPrintable(QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ")));
 
     fclose(m_LogFile);
     m_LogFile = NULL;
@@ -479,8 +502,10 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
   if (settings) {
     QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
-    if (m_Window) {
-      m_Window       -> readSettings(settings, section+"/window");
+    QxrdWindowPtr win(m_Window);
+
+    if (win) {
+      win            -> readSettings(settings, section+"/window");
     }
 
     if (m_Acquisition) {
@@ -513,8 +538,10 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
   if (settings) {
     QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 
-    if (m_Window) {
-      m_Window       -> writeSettings(settings, section+"/window");
+    QxrdWindowPtr win(m_Window);
+
+    if (win) {
+      win            -> writeSettings(settings, section+"/window");
     }
 
     if (m_Acquisition) {
@@ -583,8 +610,10 @@ void QxrdExperiment::setExperimentFilePath(QString path)
   set_LogFileName(defaultLogName(path));
   set_ScanFileName(defaultScanName(path));
 
-  if (m_Window) {
-    m_Window -> updateTitle();
+  QxrdWindowPtr win(m_Window);
+
+  if (win) {
+    win -> updateTitle();
   }
 
   if (qcepDebug(DEBUG_PREFS)) {

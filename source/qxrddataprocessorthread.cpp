@@ -54,6 +54,8 @@ void QxrdDataProcessorThread::run()
 
     m_DataProcessor = p;
 
+    m_DataProcessor -> init();
+
     int rc = exec();
 
     if (qcepDebug(DEBUG_THREADS)) {

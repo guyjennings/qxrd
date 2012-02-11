@@ -15,8 +15,8 @@ class QxrdAcquisitionPerkinElmer : public QxrdAcquisition
 public:
   QxrdAcquisitionPerkinElmer(QxrdSettingsSaverPtr saver,
                              QxrdExperimentWPtr doc,
-                             QxrdDataProcessorPtr proc,
-                             QxrdAllocatorPtr allocator,
+                             QxrdDataProcessorWPtr proc,
+                             QxrdAllocatorWPtr allocator,
                              QSettings *settings,
                              QString section);
   ~QxrdAcquisitionPerkinElmer();

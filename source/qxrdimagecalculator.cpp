@@ -1,7 +1,7 @@
 #include "qxrdimagecalculator.h"
 #include "ui_qxrdimagecalculator.h"
 
-QxrdImageCalculator::QxrdImageCalculator(QxrdDataProcessorPtr processor, QWidget *parent) :
+QxrdImageCalculator::QxrdImageCalculator(QxrdDataProcessorWPtr processor, QWidget *parent) :
     QDockWidget(parent),
     m_Processor(processor)
 {

@@ -13,7 +13,7 @@ class QxrdScriptEngineThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdScriptEngineThread(QxrdApplication *app, QxrdExperiment *exp);
+  QxrdScriptEngineThread(QxrdApplication* app, QxrdExperimentWPtr exp);
   ~QxrdScriptEngineThread();
 
   void shutdown();
@@ -24,8 +24,8 @@ protected:
 
 private:
   QxrdScriptEnginePtr m_ScriptEngine;
-  QxrdApplication    *m_Application;
-  QxrdExperiment     *m_Experiment;
+  QxrdApplication* m_Application;
+  QxrdExperimentWPtr  m_Experiment;
 };
 
 typedef QSharedPointer<QxrdScriptEngineThread> QxrdScriptEngineThreadPtr;

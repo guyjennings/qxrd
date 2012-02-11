@@ -42,7 +42,9 @@ void QxrdRingSetFitParameters::writeSettings(QSettings *settings, QString sectio
       QxrdRingFitParametersPtr r = ring(i);
 
       if (r==NULL) {
-        g_Application->printMessage("NULL ring fit parameters");
+        if (g_Application) {
+          g_Application->printMessage("NULL ring fit parameters");
+        }
       } else {
         settings->setArrayIndex(i);
         r -> writeSettings(settings, "");
@@ -128,10 +130,12 @@ void QxrdRingSetFitParameters::remove(int n)
 
 void QxrdRingSetFitParameters::show()
 {
-  g_Application->printMessage(tr("NRings = %1").arg(m_Rings.size()));
+  if (g_Application) {
+    g_Application->printMessage(tr("NRings = %1").arg(m_Rings.size()));
 
-  foreach(QxrdRingFitParametersPtr p, m_Rings) {
-    g_Application->printMessage(tr("tth = %1").arg(p->get_TwoTheta()));
+    foreach(QxrdRingFitParametersPtr p, m_Rings) {
+      g_Application->printMessage(tr("tth = %1").arg(p->get_TwoTheta()));
+    }
   }
 }
 

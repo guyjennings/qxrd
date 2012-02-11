@@ -440,7 +440,7 @@ void QxrdFileBrowser::doubleClicked(QModelIndex index)
 
 void QxrdFileBrowser::onRowCountChanged(int oldCount, int newCount)
 {
-  if (qcepDebug(DEBUG_DISPLAY)) {
+  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
     g_Application->printMessage(
           tr("QxrdFileBrowser::onRowCountChanged(%1,%2)").arg(oldCount).arg(newCount));
   }

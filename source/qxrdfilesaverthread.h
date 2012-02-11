@@ -12,7 +12,7 @@ class QxrdFileSaverThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdFileSaverThread(QxrdAllocatorPtr acq);
+  QxrdFileSaverThread(QxrdAllocatorWPtr acq);
   ~QxrdFileSaverThread();
 
   void shutdown();
@@ -22,8 +22,8 @@ protected:
   void run();
 
 private:
-  QxrdFileSaverPtr m_FileSaver;
-  QxrdAllocatorPtr m_Allocator;
+  QxrdFileSaverPtr  m_FileSaver;
+  QxrdAllocatorWPtr m_Allocator;
 };
 
 typedef QSharedPointer<QxrdFileSaverThread> QxrdFileSaverThreadPtr;

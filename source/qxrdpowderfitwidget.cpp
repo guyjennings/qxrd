@@ -3,7 +3,7 @@
 #include "qwt_plot_item.h"
 #include "qwt_plot_marker.h"
 
-QxrdPowderFitWidget::QxrdPowderFitWidget(QxrdDataProcessorPtr proc, QWidget *parent) :
+QxrdPowderFitWidget::QxrdPowderFitWidget(QxrdDataProcessorWPtr proc, QWidget *parent) :
     QDialog(parent),
     m_Processor(proc)
 {
@@ -16,7 +16,11 @@ QxrdPowderFitWidget::QxrdPowderFitWidget(QxrdDataProcessorPtr proc, QWidget *par
   connect(m_CancelFitButton, SIGNAL(clicked()), this, SLOT(cancelFit()));
   connect(m_UndoFitButton, SIGNAL(clicked()), this, SLOT(undoFit()));
 
-  m_ImagePlot->onProcessedImageAvailable(m_Processor->data(), QxrdMaskDataPtr(NULL));
+  QxrdDataProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    m_ImagePlot->onProcessedImageAvailable(dp->data(), QxrdMaskDataPtr(NULL));
+  }
 }
 
 QxrdPowderFitWidget::~QxrdPowderFitWidget()

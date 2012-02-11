@@ -8,7 +8,7 @@
 #include "qxrdplot.h"
 
 class QxrdIntegrator;
-typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
+typedef QWeakPointer<QxrdIntegrator> QxrdIntegratorWPtr;
 
 class QxrdIntegratorPlot : public QxrdPlot
 {
@@ -17,7 +17,7 @@ class QxrdIntegratorPlot : public QxrdPlot
 public:
   QxrdIntegratorPlot(QWidget *parent=0);
 
-  void setDataProcessor(QxrdDataProcessorPtr proc);
+  void setDataProcessor(QxrdDataProcessorWPtr proc);
 
 public slots:
   void onNewIntegrationAvailable(QxrdIntegratedDataPtr data);
@@ -25,10 +25,10 @@ public slots:
   void clearSelectedCurves();
 
 private:
-  QxrdDataProcessorPtr m_DataProcessor;
-  QxrdIntegratorPtr    m_Integrator;
-  int                  m_PlotIndex;
-  QString              m_XUnitsLabel;
+  QxrdDataProcessorWPtr m_DataProcessor;
+  QxrdIntegratorWPtr    m_Integrator;
+  int                   m_PlotIndex;
+  QString               m_XUnitsLabel;
 };
 
 #endif // QXRDINTEGRATORPLOT_H

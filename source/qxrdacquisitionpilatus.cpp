@@ -3,7 +3,7 @@
 QxrdAcquisitionPilatus::QxrdAcquisitionPilatus(QxrdSettingsSaverPtr saver,
                                                QxrdExperimentWPtr doc,
                                                QxrdDataProcessorWPtr proc,
-                                               QxrdAllocatorPtr allocator,
+                                               QxrdAllocatorWPtr allocator,
                                                QSettings *settings,
                                                QString section)
   : QxrdAcquisition(PilatusDetector, saver, doc, proc, allocator)

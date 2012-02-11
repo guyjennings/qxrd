@@ -18,16 +18,19 @@
 class QxrdDataProcessor;
 class QxrdAcquisition;
 
+typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
+typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
+
 class QxrdFileSaver : public QObject
 {
   Q_OBJECT
 
 public:
-  QxrdFileSaver(QxrdAllocatorPtr allocator, QObject *parent=0);
+  QxrdFileSaver(QxrdAllocatorWPtr allocator, QObject *parent=0);
   ~QxrdFileSaver();
 
-  void setProcessor(QSharedPointer<QxrdDataProcessor> proc);
-  void setAcquisition(QSharedPointer<QxrdAcquisition> acq);
+  void setProcessor(QxrdDataProcessorWPtr proc);
+  void setAcquisition(QxrdAcquisitionWPtr acq);
 
 public:
   enum {
@@ -49,14 +52,13 @@ public slots:
 private:
   void mkPath(QString filePath);
   QString uniqueFileName(QString name);
-  QSharedPointer<QxrdDataProcessor> processor() const;
-  QSharedPointer<QxrdAcquisition>   acquisition() const;
+  QxrdAcquisitionWPtr acquisition() const;
   void saveOverflowData(QString name, QxrdMaskDataPtr overflow);
 
 private:
-  QSharedPointer<QxrdDataProcessor> m_Processor;
-  QxrdAllocatorPtr                  m_Allocator;
-  QSharedPointer<QxrdAcquisition>   m_Acquisition;
+  QxrdDataProcessorWPtr m_Processor;
+  QxrdAllocatorWPtr     m_Allocator;
+  QxrdAcquisitionWPtr   m_Acquisition;
 };
 
 typedef QSharedPointer<QxrdFileSaver> QxrdFileSaverPtr;
