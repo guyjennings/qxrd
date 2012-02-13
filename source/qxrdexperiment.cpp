@@ -234,11 +234,11 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
     }
 
     if (win) {
-      connect(win.data(),              SIGNAL(executeCommand(QString)),
+      connect(win,                     SIGNAL(executeCommand(QString)),
               scriptEngine().data(),   SLOT(evaluateAppCommand(QString)));
 
       connect(scriptEngine().data(),   SIGNAL(appResultAvailable(QScriptValue)),
-              win.data(),              SLOT(finishedCommand(QScriptValue)));
+              win,                     SLOT(finishedCommand(QScriptValue)));
     }
 
     connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
@@ -263,7 +263,7 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
     if (win && m_Application && m_Application->get_GuiWanted()) {
       win -> show();
 
-      m_Splash -> finish(win.data());
+      m_Splash -> finish(win);
     }
   }
 

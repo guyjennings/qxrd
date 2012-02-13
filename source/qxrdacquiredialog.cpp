@@ -75,7 +75,7 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperimentWPtr doc,
   QxrdWindowPtr wp(m_Window);
 
   if (wp) {
-    connect(m_AcquireOptionsButton, SIGNAL(clicked()), wp.data(), SLOT(doEditPreferences()));
+    connect(m_AcquireOptionsButton, SIGNAL(clicked()), wp, SLOT(doEditPreferences()));
   }
 }
 

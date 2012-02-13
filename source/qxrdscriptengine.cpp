@@ -138,7 +138,7 @@ void QxrdScriptEngine::initialize()
     QxrdWindowPtr wp(expt->window());
 
     if (wp) {
-      globalObject().setProperty("window",          newQObject(wp.data()));
+      globalObject().setProperty("window",          newQObject(wp));
       globalObject().setProperty("imageGraph",      newQObject(wp->m_Plot));
       globalObject().setProperty("centeringGraph",  newQObject(wp->m_CenterFinderPlot));
       globalObject().setProperty("integratorGraph", newQObject(wp->m_IntegratorPlot));

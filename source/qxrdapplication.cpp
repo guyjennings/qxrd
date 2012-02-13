@@ -719,7 +719,7 @@ void QxrdApplication::openExperiment(QString path)
   }
 }
 
-void QxrdApplication::closeExperiment(QxrdExperimentWPtr exp)
+void QxrdApplication::closeExperiment(QxrdExperimentPtr exp)
 {
   printf("QxrdApplication::closeExperiment(%p)\n", exp.data());
 
@@ -849,7 +849,7 @@ void QxrdApplication::openRecentExperiment(QString path)
   }
 }
 
-void QxrdApplication::openedExperiment(QxrdExperimentThreadWPtr expthrdw)
+void QxrdApplication::openedExperiment(QxrdExperimentThreadPtr expthrdw)
 {
   QxrdExperimentThreadPtr expthrd(expthrdw);
 
@@ -865,7 +865,7 @@ void QxrdApplication::openedExperiment(QxrdExperimentThreadWPtr expthrdw)
   }
 }
 
-void QxrdApplication::closedExperiment(QxrdExperimentThreadWPtr expthrdw)
+void QxrdApplication::closedExperiment(QxrdExperimentThreadPtr expthrdw)
 {
   QxrdExperimentThreadPtr expthrd(expthrdw);
 
@@ -877,12 +877,12 @@ void QxrdApplication::closedExperiment(QxrdExperimentThreadWPtr expthrdw)
   }
 }
 
-QList<QxrdExperimentWPtr> &QxrdApplication::experiments()
+QList<QxrdExperimentPtr> &QxrdApplication::experiments()
 {
   return m_Experiments;
 }
 
-QxrdExperimentWPtr QxrdApplication::experiment(int i)
+QxrdExperimentPtr QxrdApplication::experiment(int i)
 {
   return m_Experiments.value(i);
 }

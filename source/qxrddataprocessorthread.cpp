@@ -36,29 +36,37 @@ QxrdDataProcessorThread::~QxrdDataProcessorThread()
 
 void QxrdDataProcessorThread::run()
 {
-  QxrdExperimentPtr exp(m_Experiment);
+  {
+    QxrdExperimentPtr exp(m_Experiment);
 
-  if (exp) {
-    if (qcepDebug(DEBUG_THREADS)) {
-      exp->printMessage("Starting Processor Thread");
+    if (exp) {
+      if (qcepDebug(DEBUG_THREADS)) {
+        exp->printMessage("Starting Processor Thread");
+      }
+    } else {
+      return;
     }
+  }
 
-    QxrdDataProcessorPtr p(new QxrdDataProcessor(m_Saver,
-                                                 m_Experiment,
-                                                 m_Acquisition,
-                                                 m_Allocator,
-                                                 m_FileSaver,
-                                                 m_Settings,
-                                                 m_Section,
-                                                 NULL));
+  QxrdDataProcessorPtr p(new QxrdDataProcessor(m_Saver,
+                                               m_Experiment,
+                                               m_Acquisition,
+                                               m_Allocator,
+                                               m_FileSaver,
+                                               m_Settings,
+                                               m_Section,
+                                               NULL));
 
-    m_DataProcessor = p;
+  m_DataProcessor = p;
 
-    m_DataProcessor -> init();
+  m_DataProcessor -> init();
 
-    int rc = exec();
+  int rc = exec();
 
-    if (qcepDebug(DEBUG_THREADS)) {
+  {
+    QxrdExperimentPtr exp(m_Experiment);
+
+    if (exp && qcepDebug(DEBUG_THREADS)) {
       exp->printMessage(tr("Processor Thread Terminated with rc %1").arg(rc));
     }
   }

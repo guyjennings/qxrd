@@ -63,7 +63,7 @@ QxrdAcquireDialogBase *QxrdAcquisitionFileWatcher::controlPanel(QxrdWindowWPtr w
                                                       m_Window,
                                                       this,
                                                       m_DataProcessor,
-                                                      m_Window.data());
+                                                      m_Window);
 
     return m_ControlPanel;
   } else {

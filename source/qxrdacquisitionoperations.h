@@ -10,7 +10,8 @@ class QxrdExperiment;
 
 typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
 typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
-typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
+//typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
+typedef QxrdWindow *QxrdWindowWPtr;
 
 class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {

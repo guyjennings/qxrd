@@ -74,56 +74,64 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 
 void QxrdAcquisitionThread::run()
 {
-  QxrdExperimentPtr exp(m_Experiment);
+  {
+    QxrdExperimentPtr exp(m_Experiment);
 
-  if (exp) {
-    if (qcepDebug(DEBUG_THREADS)) {
-      exp->printMessage("Starting Acquisition Thread");
+    if (exp) {
+      if (qcepDebug(DEBUG_THREADS)) {
+        exp->printMessage("Starting Acquisition Thread");
+      }
+    } else {
+      return;
     }
+  }
 
-    QxrdAcquisitionPtr p/* = NULL*/;
+  QxrdAcquisitionPtr p/* = NULL*/;
 
-    switch(m_DetectorType) {
-    case QxrdAcquisition::SimulatedDetector:
-      p = QxrdAcquisitionPtr(new QxrdAcquisitionSimulated(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
-      break;
+  switch(m_DetectorType) {
+  case QxrdAcquisition::SimulatedDetector:
+    p = QxrdAcquisitionPtr(new QxrdAcquisitionSimulated(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
+    break;
 
 #ifdef HAVE_PERKIN_ELMER
-    case QxrdAcquisition::PerkinElmerDetector:
-      if (g_PEAvailable) {
-        p = QxrdAcquisitionPtr(new QxrdAcquisitionPerkinElmer(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
-      }
-      break;
+  case QxrdAcquisition::PerkinElmerDetector:
+    if (g_PEAvailable) {
+      p = QxrdAcquisitionPtr(new QxrdAcquisitionPerkinElmer(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
+    }
+    break;
 #endif
 
 #ifdef HAVE_PILATUS
-    case QxrdAcquisition::PilatusDetector:
-      p = QxrdAcquisitionPtr(new QxrdAcquisitionPilatus(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
-      break;
+  case QxrdAcquisition::PilatusDetector:
+    p = QxrdAcquisitionPtr(new QxrdAcquisitionPilatus(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
+    break;
 #endif
 
 #ifdef HAVE_AREADETECTOR
-    case QxrdAcquisition::EpicsAreaDetector:
-      p = QxrdAcquisitionPtr(new QxrdAcquisitionAreaDetector(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
-      break;
+  case QxrdAcquisition::EpicsAreaDetector:
+    p = QxrdAcquisitionPtr(new QxrdAcquisitionAreaDetector(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
+    break;
 #endif
 
-    case QxrdAcquisition::FileWatcherDetector:
-      p = QxrdAcquisitionPtr(new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
-      break;
-    }
+  case QxrdAcquisition::FileWatcherDetector:
+    p = QxrdAcquisitionPtr(new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
+    break;
+  }
 
-    if (p == NULL) {
-      p = QxrdAcquisitionPtr(new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
-    }
+  if (p == NULL) {
+    p = QxrdAcquisitionPtr(new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator, m_Settings, m_Section));
+  }
 
-    p -> initialize();
+  p -> initialize();
 
-    m_Acquisition = p;
+  m_Acquisition = p;
 
-    int rc = exec();
+  int rc = exec();
 
-    if (qcepDebug(DEBUG_THREADS)) {
+  {
+    QxrdExperimentPtr exp(m_Experiment);
+
+    if (exp && qcepDebug(DEBUG_THREADS)) {
       exp->printMessage(tr("Acquisition Thread Terminated with rc %1").arg(rc));
     }
   }

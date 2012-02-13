@@ -196,7 +196,10 @@ private:
   QMenu                                 *m_RecentExperimentsMenu;
 };
 
-typedef QSharedPointer<QxrdWindow> QxrdWindowPtr;
-typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
+typedef QxrdWindow *QxrdWindowPtr;
+typedef QxrdWindow *QxrdWindowWPtr;
+
+//typedef QSharedPointer<QxrdWindow> QxrdWindowPtr;
+//typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
 
 #endif

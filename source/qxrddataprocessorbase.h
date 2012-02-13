@@ -29,7 +29,8 @@ class QxrdAcquisition;
 class QxrdIntegrator;
 class QxrdCenterFinder;
 
-typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
+//typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
+typedef QxrdWindow *QxrdWindowWPtr;
 typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
 typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
 typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;

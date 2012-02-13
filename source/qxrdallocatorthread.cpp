@@ -29,9 +29,7 @@ void QxrdAllocatorThread::run()
     g_Application->printMessage("Starting Allocator Thread");
   }
 
-  QxrdAllocatorPtr res(new QxrdAllocator(m_Saver));
-
-  m_Allocator = res;
+  m_Allocator = QxrdAllocatorPtr(new QxrdAllocator(m_Saver));
 
   int rc = exec();
 

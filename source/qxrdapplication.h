@@ -75,13 +75,13 @@ public slots:
 
   void activateExperiment(QString path);
   void openExperiment(QString path);
-  void closeExperiment(QxrdExperimentWPtr exp);
+  void closeExperiment(QxrdExperimentPtr exp);
 
-  void openedExperiment(QxrdExperimentThreadWPtr expthrdw);
-  void closedExperiment(QxrdExperimentThreadWPtr expthrdw);
-  QList<QxrdExperimentWPtr> &experiments();
+  void openedExperiment(QxrdExperimentThreadPtr expthrdw);
+  void closedExperiment(QxrdExperimentThreadPtr expthrdw);
+  QList<QxrdExperimentPtr> &experiments();
 
-  QxrdExperimentWPtr experiment(int i);
+  QxrdExperimentPtr experiment(int i);
 
   void openWelcomeWindow();
   void closeWelcomeWindow();
@@ -177,7 +177,7 @@ public:
 
 private:
   QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
-  QList<QxrdExperimentWPtr>       m_Experiments;
+  QList<QxrdExperimentPtr>        m_Experiments;
 
   QxrdWelcomeWindow              *m_WelcomeWindow;
   QxrdAllocatorThreadPtr          m_AllocatorThread;
