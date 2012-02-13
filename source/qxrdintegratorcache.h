@@ -14,6 +14,7 @@ class QxrdIntegratorCache : public QObject
   Q_OBJECT
 public:
   QxrdIntegratorCache(QxrdExperimentWPtr exp, QxrdAllocatorWPtr alloc);
+  virtual ~QxrdIntegratorCache();
 
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
   QCEP_INTEGER_PROPERTY(Oversample)

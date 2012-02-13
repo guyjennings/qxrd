@@ -15,8 +15,8 @@
 
 #include <cmath>
 
-QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc, QObject *parent)
-  : QObject(parent),
+QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc)
+  : QObject(NULL),
     m_Oversample(saver, this, "oversample", 1),
     m_IntegrationStep(saver, this, "integrationStep", 0.001),
     m_IntegrationNSteps(saver, this, "integrationNSteps", 0),
@@ -28,6 +28,10 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr ex
     m_Allocator(alloc),
     m_IntegratorCache()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdIntegrator::QxrdIntegrator(%p)\n", this);
+  }
+
   connect(this->prop_Oversample(),         SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
   connect(this->prop_IntegrationStep(),    SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
   connect(this->prop_IntegrationNSteps(),  SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
@@ -47,6 +51,13 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr ex
     connect(cf->prop_ImplementTilt(),      SIGNAL(valueChanged(bool,int)),   this, SLOT(onIntegrationParametersChanged()));
     connect(cf->prop_DetectorTilt(),       SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
     connect(cf->prop_TiltPlaneRotation(),  SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+  }
+}
+
+QxrdIntegrator::~QxrdIntegrator()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdIntegrator::~QxrdIntegrator(%p)\n", this);
   }
 }
 

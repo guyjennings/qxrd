@@ -9,7 +9,7 @@
 #include <cmath>
 
 QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperimentWPtr exp, QxrdAllocatorWPtr alloc) :
-  QObject(NULL),
+  QObject(),
   m_Oversample(QxrdSettingsSaverPtr(), this, "oversample", 1),
   m_IntegrationStep(QxrdSettingsSaverPtr(), this, "integrationStep", 0.001),
   m_IntegrationNSteps(QxrdSettingsSaverPtr(), this, "integrationNSteps", 0),
@@ -45,6 +45,16 @@ QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperimentWPtr exp, QxrdAllocatorWP
   m_Experiment(exp),
   m_Allocator(alloc)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdIntegrator::QxrdIntegrator(%p)\n", this);
+  }
+}
+
+QxrdIntegratorCache::~QxrdIntegratorCache()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdIntegratorCache::~QxrdIntegratorCache(%p)\n", this);
+  }
 }
 
 double QxrdIntegratorCache::getTTH(double x, double y)

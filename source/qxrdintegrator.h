@@ -18,7 +18,8 @@ class QxrdIntegrator : public QObject
   Q_OBJECT
 
 public:
-  QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc, QObject *parent=0);
+  QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc);
+  virtual ~QxrdIntegrator();
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
