@@ -23,10 +23,9 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     QxrdExperimentWPtr doc,
     QxrdAcquisitionWPtr acq,
     QxrdAllocatorWPtr allocator,
-    QxrdFileSaverWPtr filesaver,
-    QObject *parent) :
+    QxrdFileSaverWPtr filesaver) :
 
-  QObject(parent),
+  QObject(NULL),
   //    m_ProcessorType(this,"processorType",0),
   //    m_ProcessorTypeName(this,"processorTypeName","processorType"),
 //  m_OutputDirectory(saver, this,"outputDirectory", ""),
@@ -109,13 +108,13 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     printMessage("QxrdDataProcessorBase::QxrdDataProcessorBase");
   }
 
-  m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(saver, this));
-  m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(saver, m_Experiment, m_CenterFinder, m_Allocator, this));
-  m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(saver, m_Allocator, this));
-  m_InitialRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver, this));
-  m_RefinedRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver, this));
-  m_InitialRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(saver, /*m_InitialRingSetFitParameters,*/ this));
-  m_RefinedRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(saver, /*m_RefinedRingSetFitParameters,*/ this));
+  m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(saver));
+  m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(saver, m_Experiment, m_CenterFinder, m_Allocator));
+  m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(saver, m_Allocator));
+  m_InitialRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver));
+  m_RefinedRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver));
+  m_InitialRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(saver));
+  m_RefinedRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(saver));
 }
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()

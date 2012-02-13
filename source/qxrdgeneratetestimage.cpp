@@ -4,11 +4,11 @@
 
 #include <cmath>
 
-QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr alloc, QObject *parent) :
-  QObject(parent),
+QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr alloc) :
+  QObject(NULL),
   m_Processor(),
   m_Allocator(alloc),
-  m_Geometry(new QxrdDetectorGeometry(this)),
+  m_Geometry(new QxrdDetectorGeometry()),
   m_NRows(saver, this, "nRows", 2048),
   m_NCols(saver, this, "nCols", 2048),
   m_CenterX(saver, this, "centerX", 1024),

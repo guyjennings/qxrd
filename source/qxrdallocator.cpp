@@ -4,8 +4,8 @@
 #include "qxrdapplication.h"
 
 QxrdAllocator::QxrdAllocator
-(QxrdSettingsSaverPtr saver, QObject *parent)
-  : QObject(parent),
+(QxrdSettingsSaverPtr saver)
+  : QObject(NULL),
     m_AllocatedMemory(0),
     m_AllocatedMemoryMB(0),
     m_Max(saver, this, "max", 800),

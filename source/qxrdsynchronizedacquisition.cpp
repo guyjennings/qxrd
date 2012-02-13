@@ -5,7 +5,7 @@
 #include "qwt_math.h"
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdSettingsSaverPtr saver, QxrdAcquisition *acq) :
-  QObject(NULL),
+  QObject(),
   m_SyncAcquisitionMode(saver, this,"syncAcquisitionMode", 0),
   m_SyncAcquisitionWaveform(saver, this,"syncAcquisitionWaveform", 0),
   m_SyncAcquisitionOutputChannel(saver, this,"syncAcquisitionOutputChannel", 0),

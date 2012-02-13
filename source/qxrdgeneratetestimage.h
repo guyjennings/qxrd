@@ -15,8 +15,7 @@ class QxrdGenerateTestImage : public QObject
   Q_OBJECT
 public:
   QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver,
-                        QxrdAllocatorWPtr alloc,
-                        QObject *parent);
+                        QxrdAllocatorWPtr alloc);
 
 public slots:
   void setDimension(int nc, int nr);

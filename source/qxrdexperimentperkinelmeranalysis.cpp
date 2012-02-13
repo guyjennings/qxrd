@@ -1,8 +1,8 @@
 #include "qxrdexperimentperkinelmeranalysis.h"
 #include "qxrdexperimentthread.h"
 
-QxrdExperimentPerkinElmerAnalysis::QxrdExperimentPerkinElmerAnalysis(QString path, QxrdApplication* app, QSettings *settings, QObject *parent) :
-    QxrdExperiment(path, app, settings, parent)
+QxrdExperimentPerkinElmerAnalysis::QxrdExperimentPerkinElmerAnalysis(QString path, QxrdApplication* app, QSettings *settings) :
+    QxrdExperiment(path, app, settings)
 {
   set_ExperimentKind(QxrdExperimentThread::PerkinElmerAnalysis);
 }

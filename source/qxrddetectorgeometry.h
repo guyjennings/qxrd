@@ -10,7 +10,7 @@ class QxrdDetectorGeometry : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorGeometry(QObject *parent = 0);
+  explicit QxrdDetectorGeometry();
 
 public slots:
   static double convertEnergyToWavelength(double energy);

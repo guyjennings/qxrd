@@ -22,9 +22,8 @@ QxrdDataProcessor::QxrdDataProcessor
      QxrdAllocatorWPtr allocator,
      QxrdFileSaverWPtr filesaver,
      QSettings *settings,
-     QString section,
-     QObject *parent)
-  : QxrdDataProcessorThreaded(saver, doc, acq, allocator, filesaver, parent)
+     QString section)
+  : QxrdDataProcessorThreaded(saver, doc, acq, allocator, filesaver)
 {
 //  readSettings(settings, section);
 }

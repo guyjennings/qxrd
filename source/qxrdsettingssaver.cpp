@@ -4,8 +4,8 @@
 #include "qxrdapplication.h"
 #include <stdio.h>
 
-QxrdSettingsSaver::QxrdSettingsSaver(QObject *parent, QObject *owner) :
-  QObject(parent),
+QxrdSettingsSaver::QxrdSettingsSaver(QObject *owner) :
+  QObject(),
   m_Owner(owner),
   m_SaveDelay(5000),
   m_LastChangedBy(NULL)

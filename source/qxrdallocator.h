@@ -22,7 +22,7 @@ class QxrdAllocator : public QObject
   Q_OBJECT
 
 public:
-  QxrdAllocator(QxrdSettingsSaverPtr saver, QObject *parent=0);
+  QxrdAllocator(QxrdSettingsSaverPtr saver);
   virtual ~QxrdAllocator();
 
   void readSettings(QSettings *settings, QString section);

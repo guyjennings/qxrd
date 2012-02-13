@@ -4,9 +4,8 @@
 
 QxrdExperimentPerkinElmerAcquisition::QxrdExperimentPerkinElmerAcquisition(QString path,
                                                                            QxrdApplication* app,
-                                                                           QSettings *settings,
-                                                                           QObject *parent) :
-    QxrdExperiment(path, app, settings, parent)
+                                                                           QSettings *settings) :
+    QxrdExperiment(path, app, settings)
 {
   set_ExperimentKind(QxrdExperimentThread::PerkinElmerAcquisition);
   set_DetectorType(QxrdAcquisition::PerkinElmerDetector);

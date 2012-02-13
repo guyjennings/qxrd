@@ -13,7 +13,7 @@ class QxrdSettingsSaver : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSettingsSaver(QObject *parent, QObject *owner);
+  explicit QxrdSettingsSaver(QObject *owner);
   ~QxrdSettingsSaver();
 
   void changed(QcepProperty *prop);

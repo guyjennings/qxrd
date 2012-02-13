@@ -6,8 +6,8 @@
 #include "tiffio.h"
 
 QxrdFileSaver::QxrdFileSaver
-(QxrdAllocatorWPtr allocator, QObject *parent)
-  : QObject(parent),
+(QxrdAllocatorWPtr allocator)
+  : QObject(NULL),
     m_Processor(),
     m_Allocator(allocator),
     m_Acquisition()

@@ -17,8 +17,7 @@ public:
                     QxrdAllocatorWPtr allocator,
                     QxrdFileSaverWPtr filesaver,
                     QSettings *settings,
-                    QString section,
-                    QObject *parent=0);
+                    QString section);
   ~QxrdDataProcessor();
 
   void init();

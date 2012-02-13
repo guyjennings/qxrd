@@ -54,8 +54,7 @@ void QxrdDataProcessorThread::run()
                                                m_Allocator,
                                                m_FileSaver,
                                                m_Settings,
-                                               m_Section,
-                                               NULL));
+                                               m_Section));
 
   m_DataProcessor = p;
 

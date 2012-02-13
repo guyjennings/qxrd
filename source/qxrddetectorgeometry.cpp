@@ -4,8 +4,8 @@
 
 #include <cmath>
 
-QxrdDetectorGeometry::QxrdDetectorGeometry(QObject *parent) :
-    QObject(parent)
+QxrdDetectorGeometry::QxrdDetectorGeometry() :
+    QObject(NULL)
 {
 }
 

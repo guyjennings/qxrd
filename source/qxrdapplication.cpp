@@ -90,7 +90,7 @@ QStringList QxrdApplication::makeStringList(int argc, char **argv)
 QxrdApplication::QxrdApplication(int &argc, char **argv)
   : QApplication(argc, argv),
     m_Saver(QxrdSettingsSaverPtr(
-              new QxrdSettingsSaver(NULL, this))),
+              new QxrdSettingsSaver(this))),
     m_RecentExperiments(m_Saver, this, "recentExperiments", QStringList()),
     m_RecentExperimentsSize(m_Saver, this,"recentExperimentsSize", 8),
     m_CurrentExperiment(m_Saver, this, "currentExperiment", ""),

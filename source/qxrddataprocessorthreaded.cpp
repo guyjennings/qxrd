@@ -14,9 +14,8 @@ QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(
     QxrdExperimentWPtr    doc,
     QxrdAcquisitionWPtr   acq,
     QxrdAllocatorWPtr allocator,
-    QxrdFileSaverWPtr filesaver,
-    QObject *parent)
-  : QxrdDataProcessorBase(saver, doc, acq, allocator, filesaver, parent)
+    QxrdFileSaverWPtr filesaver)
+  : QxrdDataProcessorBase(saver, doc, acq, allocator, filesaver)
 {
   connect(&m_CorrectedImages, SIGNAL(resultAvailable()), this, SLOT(onCorrectedImageAvailable()));
   connect(&m_IntegratedData,  SIGNAL(resultAvailable()), this, SLOT(onIntegratedDataAvailable()));

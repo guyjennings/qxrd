@@ -47,8 +47,7 @@ public:
                         QxrdExperimentWPtr doc,
                         QxrdAcquisitionWPtr acq,
                         QxrdAllocatorWPtr allocator,
-                        QxrdFileSaverWPtr filesaver,
-                        QObject *parent=0);
+                        QxrdFileSaverWPtr filesaver);
   ~QxrdDataProcessorBase();
 
 public:

@@ -18,8 +18,7 @@ public:
                             QxrdExperimentWPtr doc,
                             QxrdAcquisitionWPtr acq,
                             QxrdAllocatorWPtr allocator,
-                            QxrdFileSaverWPtr filesaver,
-                            QObject *parent=0);
+                            QxrdFileSaverWPtr filesaver);
 
 public:
   void beginAcquisition(int isDark);

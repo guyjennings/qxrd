@@ -14,13 +14,12 @@
 QxrdExperiment::QxrdExperiment(
     QString path,
     QxrdApplication *app,
-    QSettings *settings,
-    QObject *parent) :
-  QObject(parent),
+    QSettings *settings) :
+  QObject(NULL),
   m_Application(app),
   m_ExperimentThread(),
   m_SettingsSaver(QxrdSettingsSaverPtr(
-                    new QxrdSettingsSaver(NULL, this))),
+                    new QxrdSettingsSaver(this))),
   m_ExperimentKind(m_SettingsSaver, this, "experimentKind", -1),
   m_ExperimentDirectory(m_SettingsSaver, this, "experimentDirectory", defaultExperimentDirectory(path)),
   m_ExperimentFileName(m_SettingsSaver, this, "experimentFileName", defaultExperimentFileName(path)),

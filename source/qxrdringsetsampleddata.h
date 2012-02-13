@@ -11,7 +11,7 @@ class QxrdRingSetSampledData : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdRingSetSampledData(QxrdSettingsSaverPtr saver, /*QxrdRingSetFitParametersPtr parms, */QObject *parent=0);
+  explicit QxrdRingSetSampledData(QxrdSettingsSaverPtr saver);
 
 public slots:
   int count() const;

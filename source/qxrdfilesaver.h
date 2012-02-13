@@ -26,7 +26,7 @@ class QxrdFileSaver : public QObject
   Q_OBJECT
 
 public:
-  QxrdFileSaver(QxrdAllocatorWPtr allocator, QObject *parent=0);
+  QxrdFileSaver(QxrdAllocatorWPtr allocator);
   ~QxrdFileSaver();
 
   void setProcessor(QxrdDataProcessorWPtr proc);
