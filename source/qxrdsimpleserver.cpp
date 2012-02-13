@@ -4,8 +4,8 @@
 #include <QThread>
 #include "qxrdexperiment.h"
 
-QxrdSimpleServer::QxrdSimpleServer(QxrdExperiment *doc, QString name, int port, QObject *parent) :
-    QTcpServer(parent),
+QxrdSimpleServer::QxrdSimpleServer(QxrdExperiment *doc, QString name, int port) :
+    QTcpServer(NULL),
     m_Experiment(doc),
     m_Name(name),
     m_Port(port)

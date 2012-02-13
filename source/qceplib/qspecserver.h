@@ -21,7 +21,7 @@ class QSpecServer : public QTcpServer
   Q_OBJECT
 
 public:
-  QSpecServer(QxrdExperiment *doc, QString name, int port, QObject *parent=0);
+  QSpecServer(QxrdExperiment *doc, QString name, int port);
 
 public:
   void startServer(QHostAddress a, int p=-1);

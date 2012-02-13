@@ -174,6 +174,8 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
 
       m_Server = QxrdServerPtr(
             new QxrdServer(this, "qxrd", get_SpecServerPort()));
+
+      m_Server->startServer(QHostAddress::Any, get_SpecServerPort());
 #else
       m_ServerThread = QxrdServerThreadPtr(
             new QxrdServerThread(this, "qxrd", get_SpecServerPort()));
@@ -193,6 +195,8 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
 #ifdef Q_OS_WIN
       m_SimpleServer = QxrdSimpleServerPtr(
             new QxrdSimpleServer(this, "simpleserver", get_SimpleServerPort()));
+
+      m_SimpleServer->startServer(QHostAddress::Any, get_SimpleServerPort());
 #else
       m_SimpleServerThread = QxrdSimpleServerThreadPtr(
             new QxrdSimpleServerThread(this, "simpleserver", get_SimpleServerPort()));

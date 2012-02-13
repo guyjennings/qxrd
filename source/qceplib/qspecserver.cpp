@@ -8,8 +8,8 @@
 
 #include "qxrdexperiment.h"
 
-QSpecServer::QSpecServer(QxrdExperiment *doc, QString name, int port, QObject *parent)
-  : QTcpServer(parent),
+QSpecServer::QSpecServer(QxrdExperiment *doc, QString name, int port)
+  : QTcpServer(NULL),
     m_Experiment(doc),
     m_ServerName(name),
     m_Port(port),
