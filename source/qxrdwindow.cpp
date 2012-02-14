@@ -157,34 +157,43 @@ void QxrdWindow::init()
   //         screenGeom.left(), screenGeom.top(),
   //         screenGeom.right(), screenGeom.bottom());
 
-  if (screenGeom.height() >= 1024) {
-    addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
+  addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
+  addDockWidget(Qt::LeftDockWidgetArea, m_InputFileBrowser);
 
+  if (screenGeom.height() >= 1280) {
     splitDockWidget(m_AcquireDialog, m_CenterFinderDialog, Qt::Vertical);
     splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
 
     tabifyDockWidget(m_AcquireDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
-    tabifyDockWidget(m_DisplayDialog, m_InputFileBrowser);
-    tabifyDockWidget(m_InputFileBrowser, m_SliceDialog);
+    tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
     tabifyDockWidget(m_SliceDialog, m_ImageInfoDialog);
 
     tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
     tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
-  } else {
-    addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
+  } else if (screenGeom.height() >= 1000) {
+    splitDockWidget(m_AcquireDialog, m_CenterFinderDialog, Qt::Vertical);
 
+    tabifyDockWidget(m_AcquireDialog, m_SynchronizedAcquisitionDialog);
+    tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
+    tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
+    tabifyDockWidget(m_SliceDialog, m_ImageInfoDialog);
+
+    tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
+    tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
+    tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
+    tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
+    tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
+  } else {
     tabifyDockWidget(m_AcquireDialog, m_CenterFinderDialog);
     tabifyDockWidget(m_CenterFinderDialog, m_IntegratorDialog);
 
     tabifyDockWidget(m_IntegratorDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
 
-    tabifyDockWidget(m_DisplayDialog, m_InputFileBrowser);
-
-    tabifyDockWidget(m_InputFileBrowser, m_MaskDialog);
+    tabifyDockWidget(m_DisplayDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
     tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
 
@@ -192,7 +201,7 @@ void QxrdWindow::init()
     tabifyDockWidget(m_SliceDialog, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_ImageInfoDialog);
 
-    if (screenGeom.height() < 800) {
+    if (screenGeom.height() < 1000) {
       //      shrinkObject(this);
       shrinkDockWidget(m_AcquireDialog);
       shrinkDockWidget(m_CenterFinderDialog);
