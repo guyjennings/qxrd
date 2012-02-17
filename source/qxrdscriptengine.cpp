@@ -272,10 +272,10 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
       msg += context -> argument(i).toString();
     }
 
-    QxrdWindowPtr qwin = eng->window();
+    QxrdExperimentPtr expt(eng->experiment());
 
-    if (qwin) {
-      qwin->displayMessage(msg);
+    if (expt) {
+      expt->printMessage(msg);
     }
   }
 
