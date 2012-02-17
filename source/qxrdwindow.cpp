@@ -611,18 +611,18 @@ void QxrdWindow::shrinkObject(QObject *obj, int fontSize, int spacing)
       if (f.pointSize() > fontSize) f.setPointSize(fontSize);
       wid->setFont(f);
       wid->setContentsMargins(spacing, spacing, spacing, spacing);
-    }
 
-    QLayout *ly = qobject_cast<QLayout*>(obj);
+      QLayout *ly = qobject_cast<QLayout*>(obj);
 
-    if (ly) {
-      ly->setContentsMargins(spacing, spacing, spacing, spacing);
+      if (ly) {
+        ly->setContentsMargins(spacing, spacing, spacing, spacing);
 
-      QGridLayout *gl = qobject_cast<QGridLayout*>(ly);
+        QGridLayout *gl = qobject_cast<QGridLayout*>(ly);
 
-      if (gl) {
-        gl->setHorizontalSpacing(spacing);
-        gl->setVerticalSpacing(spacing);
+        if (gl) {
+          gl->setHorizontalSpacing(spacing);
+          gl->setVerticalSpacing(spacing);
+        }
       }
     }
 

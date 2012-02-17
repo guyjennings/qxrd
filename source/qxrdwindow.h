@@ -81,6 +81,7 @@ public slots:
 
   void crashProgram();
   void testWidget();
+  void shrinkPanels(int fontSize=6, int spacing=2);
 
   void executeScript();
   void finishedCommand(QScriptValue result);
@@ -136,8 +137,8 @@ public:
   void moveEvent(QMoveEvent *);
 
 private:
-  void shrinkDockWidget(QDockWidget *dockWidget);
-  void shrinkObject(QObject *obj);
+  void shrinkDockWidget(QDockWidget *dockWidget, int fontSize, int spacing);
+  void shrinkObject(QObject *obj, int fontSize, int spacing);
 
   void setupRecentExperimentsMenu(QAction *action);
 
