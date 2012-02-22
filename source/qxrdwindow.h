@@ -81,7 +81,7 @@ public slots:
 
   void crashProgram();
   void testWidget();
-  void shrinkPanels(int fontSize=6, int spacing=2);
+  void shrinkPanels(int fontSize, int spacing);
 
   void executeScript();
   void finishedCommand(QScriptValue result);

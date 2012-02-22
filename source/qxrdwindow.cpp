@@ -203,7 +203,7 @@ void QxrdWindow::init()
 
     if (screenGeom.height() < 1000) {
       //      shrinkObject(this);
-      shrinkPanels();
+      shrinkPanels(6,1);
     }
   }
   //  tabifyDockWidget(m_IntegratorDialog, new QxrdTestDockWidget(this));
@@ -575,22 +575,26 @@ void QxrdWindow::updateTitle()
 void QxrdWindow::shrinkPanels(int fontSize, int spacing)
 {
   if (QThread::currentThread()==thread()) {
-    shrinkDockWidget(m_AcquireDialog, fontSize, spacing);
-    shrinkDockWidget(m_CenterFinderDialog, fontSize, spacing);
-    shrinkDockWidget(m_IntegratorDialog, fontSize, spacing);
-    shrinkDockWidget(m_SynchronizedAcquisitionDialog, fontSize, spacing);
-    shrinkDockWidget(m_DisplayDialog, fontSize, spacing);
-    shrinkDockWidget(m_MaskDialog, fontSize, spacing);
-    shrinkDockWidget(m_InputFileBrowser, fontSize, spacing);
-    shrinkDockWidget(m_OutputFileBrowser, fontSize, spacing);
-    shrinkDockWidget(m_CorrectionDialog, fontSize, spacing);
-    shrinkDockWidget(m_SliceDialog, fontSize, spacing);
-    shrinkDockWidget(m_HistogramDialog, fontSize, spacing);
-    shrinkDockWidget(m_ImageInfoDialog, fontSize, spacing);
+//    shrinkDockWidget(m_AcquireDialog, fontSize, spacing);
+//    shrinkDockWidget(m_CenterFinderDialog, fontSize, spacing);
+//    shrinkDockWidget(m_IntegratorDialog, fontSize, spacing);
+//    shrinkDockWidget(m_SynchronizedAcquisitionDialog, fontSize, spacing);
+//    shrinkDockWidget(m_DisplayDialog, fontSize, spacing);
+//    shrinkDockWidget(m_MaskDialog, fontSize, spacing);
+//    shrinkDockWidget(m_InputFileBrowser, fontSize, spacing);
+//    shrinkDockWidget(m_OutputFileBrowser, fontSize, spacing);
+//    shrinkDockWidget(m_CorrectionDialog, fontSize, spacing);
+//    shrinkDockWidget(m_SliceDialog, fontSize, spacing);
+//    shrinkDockWidget(m_HistogramDialog, fontSize, spacing);
+//    shrinkDockWidget(m_ImageInfoDialog, fontSize, spacing);
+
+    shrinkObject(this, fontSize, spacing);
   } else {
     INVOKE_CHECK(QMetaObject::invokeMethod(this,
                                            "shrinkPanels",
-                                           Qt::QueuedConnection));
+                                           Qt::QueuedConnection,
+                                           Q_ARG(int, fontSize),
+                                           Q_ARG(int, spacing)));
   }
 }
 
@@ -608,21 +612,22 @@ void QxrdWindow::shrinkObject(QObject *obj, int fontSize, int spacing)
 
     if (wid) {
       QFont f = wid->font();
-      if (f.pointSize() > fontSize) f.setPointSize(fontSize);
+      /*if (f.pointSize() > fontSize)*/ f.setPointSize(fontSize);
       wid->setFont(f);
       wid->setContentsMargins(spacing, spacing, spacing, spacing);
+    }
 
-      QLayout *ly = qobject_cast<QLayout*>(obj);
+    QLayout *ly = qobject_cast<QLayout*>(obj);
 
-      if (ly) {
-        ly->setContentsMargins(spacing, spacing, spacing, spacing);
+    if (ly) {
+      ly->setContentsMargins(spacing, spacing, spacing, spacing);
 
-        QGridLayout *gl = qobject_cast<QGridLayout*>(ly);
+      QGridLayout *gl = qobject_cast<QGridLayout*>(ly);
 
-        if (gl) {
-          gl->setHorizontalSpacing(spacing);
-          gl->setVerticalSpacing(spacing);
-        }
+      if (gl) {
+        gl->setContentsMargins(spacing, spacing, spacing, spacing);
+        gl->setHorizontalSpacing(spacing);
+        gl->setVerticalSpacing(spacing);
       }
     }
 
