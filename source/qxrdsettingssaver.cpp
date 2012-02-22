@@ -26,8 +26,6 @@ QxrdSettingsSaver::~QxrdSettingsSaver()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdSettingsSaver::~QxrdSettingsSaver(%p)\n", this);
   }
-
-  performSave();
 }
 
 void QxrdSettingsSaver::performSave()
@@ -35,6 +33,8 @@ void QxrdSettingsSaver::performSave()
   int nupdates = m_ChangeCount.fetchAndStoreOrdered(0);
 
   if (nupdates > 0) {
+    QMutexLocker lock(&m_Mutex);
+
     if (qcepDebug(DEBUG_PREFS)) {
       printMessage(tr("Settings Saver saving %1 updates").arg(nupdates));
 
