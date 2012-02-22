@@ -275,6 +275,8 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
 
 QxrdExperiment::~QxrdExperiment()
 {
+  m_SettingsSaver->performSave();
+
   if (m_Application && qcepDebug(DEBUG_APP)) {
     m_Application->printMessage("QxrdExperiment::~QxrdExperiment");
   }
@@ -526,9 +528,17 @@ void QxrdExperiment::writeSettings()
   QString docPath = experimentFilePath();
 
   if (docPath.length()>0) {
-    QSettings settings(docPath, QSettings::IniFormat);
+    QFile::remove(docPath+".new");
 
-    writeSettings(&settings, "experiment");
+    {
+      QSettings settings(docPath+".new", QSettings::IniFormat);
+
+      writeSettings(&settings, "experiment");
+    }
+
+    QFile::remove(docPath+".bak");
+    QFile::rename(docPath, docPath+".bak");
+    QFile::rename(docPath+".new", docPath);
   } else {
     QxrdExperimentSettings settings;
 

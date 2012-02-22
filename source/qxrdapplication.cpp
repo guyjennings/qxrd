@@ -245,6 +245,8 @@ bool QxrdApplication::init(int &argc, char **argv)
 
 QxrdApplication::~QxrdApplication()
 {
+  m_Saver->performSave();
+
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdApplication::~QxrdApplication");
   }
@@ -531,9 +533,17 @@ void QxrdApplication::doSavePreferences()
 
 void QxrdApplication::savePreferences(QString path)
 {
-  QxrdGlobalSettings settings(path, QSettings::IniFormat);
+  QFile::remove(path+".new");
 
-  writeSettings(&settings);
+  {
+    QxrdGlobalSettings settings(path+".new", QSettings::IniFormat);
+
+    writeSettings(&settings);
+  }
+
+  QFile::remove(path+".bak");
+  QFile::rename(path, path+".bak");
+  QFile::rename(path+".new", path);
 }
 
 void QxrdApplication::possiblyQuit()
