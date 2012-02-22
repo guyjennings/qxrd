@@ -46,6 +46,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
   m_Model -> setNameFilterDisables(false);
 
   connect(m_Model, SIGNAL(modelReset()), this, SLOT(onModelReset()));
+  connect(m_Model, SIGNAL(fileUpdated(QString,QDateTime)), this, SLOT(fileUpdated(QString,QDateTime)));
 
   connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
   connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
@@ -452,6 +453,14 @@ void QxrdFileBrowser::onModelReset()
 {
   m_FileBrowser->resizeColumnsToContents();
   m_FileBrowser->resizeRowsToContents();
+}
+
+void QxrdFileBrowser::fileUpdated(QString path, QDateTime updatedAt)
+{
+  if (g_Application) {
+    g_Application->printMessage(
+          tr("QxrdFileBrowser::fileUpdated(\"%1\",\"%2\")").arg(path).arg(updatedAt.toString()));
+  }
 }
 
 QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdSettingsSaverPtr saver,
