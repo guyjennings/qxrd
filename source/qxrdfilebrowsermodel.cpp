@@ -17,7 +17,11 @@ QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   m_SortedColumn(0),
   m_SortOrder(Qt::AscendingOrder),
   m_Limit(1000),
-  m_TrueSize(0)
+  m_TrueSize(0),
+  m_HighlightOnTime(5),
+  m_HighlightFadeTime(25),
+  m_HighlightSaturation(200),
+  m_HighlightHue(116)
 {
   m_UpdaterThread = new QxrdFileBrowserModelUpdaterThread(this);
   m_UpdaterThread -> setObjectName("browser");
@@ -110,10 +114,18 @@ QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
   } else if (role == Qt::BackgroundRole) {
     int lastMod = info.lastModified().secsTo(QDateTime::currentDateTime());
 
-    if (lastMod > 500) {
+    if (lastMod > (m_HighlightOnTime+m_HighlightFadeTime)) {
       return Qt::white;
     } else {
-      return QColor::fromHsv(116 /*60*/, (500-lastMod)/2, 255, 255);
+      m_Updater -> needUpdate();
+
+      if (lastMod > m_HighlightOnTime) {
+        double fade = lastMod - m_HighlightOnTime;
+
+        return QColor::fromHsv(m_HighlightHue, int(m_HighlightSaturation*double(m_HighlightFadeTime-fade)/double(m_HighlightFadeTime)), 255, 255);
+      } else {
+        return QColor::fromHsv(m_HighlightHue, m_HighlightSaturation, 255, 255);
+      }
     }
   }
 

@@ -65,6 +65,10 @@ private:
   Qt::SortOrder      m_SortOrder;
   int                m_Limit;
   int                m_TrueSize;
+  int                m_HighlightOnTime;
+  int                m_HighlightFadeTime;
+  int                m_HighlightSaturation;
+  int                m_HighlightHue;
 };
 
 #endif // QXRDFILEBROWSERMODEL_H
