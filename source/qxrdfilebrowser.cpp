@@ -48,8 +48,8 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
   connect(m_Model, SIGNAL(modelReset()), this, SLOT(onModelReset()));
   connect(m_Model, SIGNAL(fileUpdated(QString,QDateTime)), this, SLOT(fileUpdated(QString,QDateTime)));
 
-  connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
-  connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
+//  connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
+//  connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
   connect(m_PrevDirectoryButton, SIGNAL(clicked()), this, SLOT(doPreviousDirectory()));
   connect(m_UpDirectoryButton, SIGNAL(clicked()), this, SLOT(doUpDirectory()));
   connect(m_ChangeDirectoryButton, SIGNAL(clicked()), this, SLOT(doChangeDirectory()));
@@ -62,6 +62,8 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
   connect(m_AccumulateButton, SIGNAL(clicked()), this, SLOT(doAccumulate()));
 
   connect(this -> prop_RootDirectory(), SIGNAL(valueChanged(QString,int)), this, SLOT(onRootDirectoryChanged(QString)));
+  connect(this -> prop_BrowserFilter(), SIGNAL(valueChanged(int,int)), this, SLOT(onFilterChanged(int)));
+  connect(this -> prop_BrowserSelector(), SIGNAL(valueChanged(QString,int)), this, SLOT(onSelectorChanged(QString)));
 
   connect(m_FileBrowser, SIGNAL(pressed(QModelIndex)), this, SLOT(mousePressed(QModelIndex)));
   connect(m_FileBrowser, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClicked(QModelIndex)));

@@ -107,6 +107,14 @@ QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
       }
       //  } else if (role == Qt::SizeHintRole) {
       //    return QSize(80,10);
+  } else if (role == Qt::BackgroundRole) {
+    int lastMod = info.lastModified().secsTo(QDateTime::currentDateTime());
+
+    if (lastMod > 500) {
+      return Qt::white;
+    } else {
+      return QColor::fromHsv(116 /*60*/, (500-lastMod)/2, 255, 255);
+    }
   }
 
   return QVariant();

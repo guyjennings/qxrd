@@ -9,7 +9,7 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModel *b
   m_BrowserModel(browser),
   m_RootPath(""),
   m_FileSystemWatcher(NULL),
-  m_UpdateNeeded(0),
+  m_UpdateNeeded(1),
   m_UpdateTimer(),
   m_UpdateInterval(1000),
   m_PreviousUpdate(QDateTime::currentDateTime()),
