@@ -212,7 +212,7 @@ void QxrdFileBrowserModelUpdater::updateContents()
     foreach(QFileInfo file, files) {
       QDateTime mod = file.lastModified();
       if (mod > m_PreviousUpdate) {
-        m_BrowserModel->updatedFile(file.filePath(), mod);
+        m_BrowserModel->updatedFile(file);
       }
 
       if (mod > latest) {

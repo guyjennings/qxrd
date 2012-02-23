@@ -59,7 +59,7 @@ public slots:
   void doubleClicked(QModelIndex index);
   void doSelectComboItem(int index);
   void onModelReset();
-  void fileUpdated(QString path, QDateTime updatedAt);
+  void onFileUpdated(QFileInfo file);
 
 private:
   mutable QMutex               m_Mutex;

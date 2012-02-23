@@ -45,11 +45,11 @@ public:
 
 public slots:
   void newDataAvailable(QVector<QFileInfo> dirs, QVector<QFileInfo> files, int limit=0, int trueSize=-1);
-  void updatedFile(QString path, QDateTime atTime);
+  void updatedFile(QFileInfo file);
 
 signals:
   void rootChanged(const QString& path);
-  void fileUpdated(QString path, QDateTime atTime);
+  void fileUpdated(QFileInfo file);
 
 private:
   void updateModel();

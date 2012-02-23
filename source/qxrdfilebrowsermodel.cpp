@@ -236,15 +236,17 @@ void QxrdFileBrowserModel::newDataAvailable(QVector<QFileInfo> dirs, QVector<QFi
   endResetModel();
 }
 
-void QxrdFileBrowserModel::updatedFile(QString path, QDateTime atTime)
+void QxrdFileBrowserModel::updatedFile(QFileInfo file)
 {
-  if (g_Application && qcepDebug(DEBUG_BROWSER)) {
-    g_Application->printMessage(tr("file %1 updated at %2")
-                                .arg(path)
-                                .arg(atTime.toString(Qt::ISODate)));
-  }
+//  QxrdExperimentPtr expt(m_Experiment);
 
-  emit fileUpdated(path, atTime);
+//  if (expt && qcepDebug(DEBUG_BROWSER)) {
+//    expt->printMessage(tr("file %1 updated at %2")
+//                                .arg(path)
+//                                .arg(atTime.toString(Qt::ISODate)));
+//  }
+
+  emit fileUpdated(file);
 }
 
 void QxrdFileBrowserModel::generateFileUpdates(int doIt)

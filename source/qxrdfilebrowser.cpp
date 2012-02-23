@@ -22,6 +22,8 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
     m_Processor(processor),
     m_Model(NULL)
 {
+  qRegisterMetaType<QFileInfo>("QFileInfo");
+
   setupUi(this);
   if (isOutput) {
     setWindowTitle("Output " + windowTitle());
@@ -46,7 +48,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
   m_Model -> setNameFilterDisables(false);
 
   connect(m_Model, SIGNAL(modelReset()), this, SLOT(onModelReset()));
-  connect(m_Model, SIGNAL(fileUpdated(QString,QDateTime)), this, SLOT(fileUpdated(QString,QDateTime)));
+  connect(m_Model, SIGNAL(fileUpdated(QFileInfo)), this, SLOT(onFileUpdated(QFileInfo)));
 
 //  connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
 //  connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
@@ -443,8 +445,10 @@ void QxrdFileBrowser::doubleClicked(QModelIndex index)
 
 void QxrdFileBrowser::onRowCountChanged(int oldCount, int newCount)
 {
-  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-    g_Application->printMessage(
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt && qcepDebug(DEBUG_DISPLAY)) {
+    expt->printMessage(
           tr("QxrdFileBrowser::onRowCountChanged(%1,%2)").arg(oldCount).arg(newCount));
   }
 
@@ -457,11 +461,13 @@ void QxrdFileBrowser::onModelReset()
   m_FileBrowser->resizeRowsToContents();
 }
 
-void QxrdFileBrowser::fileUpdated(QString path, QDateTime updatedAt)
+void QxrdFileBrowser::onFileUpdated(QFileInfo file)
 {
-  if (g_Application) {
-    g_Application->printMessage(
-          tr("QxrdFileBrowser::fileUpdated(\"%1\",\"%2\")").arg(path).arg(updatedAt.toString()));
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    expt->printMessage(
+          tr("QxrdFileBrowser::fileUpdated(\"%1\",\"%2\")").arg(file.filePath()).arg(file.lastModified().toString()));
   }
 }
 
