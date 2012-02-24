@@ -2,8 +2,8 @@
 #define QXRDMASKDATA_H
 
 #include "qcepimagedata.h"
-#include "qxrdimagedataobjectcounter.h"
 #include "qxrdmaskdata.h"
+#include "qxrdimagedataobjectcounter.h"
 #include <QImage>
 #include "qxrdallocator.h"
 

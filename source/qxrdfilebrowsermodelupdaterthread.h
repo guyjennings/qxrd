@@ -3,6 +3,7 @@
 
 #include "qxrdthread.h"
 #include "qxrdfilebrowsermodel.h"
+#include "qxrdfilebrowsermodelupdater.h"
 
 class QxrdFileBrowserModelUpdaterThread : public QxrdThread
 {

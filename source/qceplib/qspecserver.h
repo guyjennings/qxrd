@@ -13,7 +13,8 @@
 #include <QScriptValue>
 #include <QDateTime>
 #include <QTcpSocket>
-#include "qxrdexperiment.h"
+
+class QxrdExperiment;
 
 class QSpecServer : public QTcpServer
 {

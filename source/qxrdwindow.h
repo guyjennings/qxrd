@@ -21,7 +21,6 @@
 
 #include "qxrddisplaydialog.h"
 #include "qxrdcenterfinderdialog.h"
-#include "qxrdmaskdialog.h"
 #include "qxrdcorrectiondialog.h"
 #include "qxrdintegratordialog.h"
 #include "qxrdintegratorplot.h"
@@ -33,6 +32,8 @@
 #include "qxrdpowderfitdialog.h"
 #include "qxrdimagedisplaywidget.h"
 #include "qxrdhighlighter.h"
+
+class QxrdMaskDialog;
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {

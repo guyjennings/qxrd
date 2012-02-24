@@ -5,9 +5,8 @@
 #include "qxrdmaskstackmodel.h"
 #include "qxrdapplication.h"
 
-QxrdMaskDialog::QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessorWPtr procw, QWidget *parent) :
+QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
   QDockWidget(parent),
-  m_Window(win),
   m_Processor(procw),
   m_Masks(NULL)
 {
@@ -34,8 +33,8 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdWindow *win, QxrdDataProcessorWPtr procw, QWi
   connect(m_ClearMaskTop, SIGNAL(clicked()), this, SLOT(doClearMaskTop()));
   connect(m_UndoMask, SIGNAL(clicked()), this, SLOT(doUndoMask()));
 
-  connect(m_MaskCirclesRadio, SIGNAL(clicked()), win->m_ImageMaskCirclesButton, SLOT(click()));
-  connect(m_MaskPolygonsRadio, SIGNAL(clicked()), win->m_ImageMaskPolygonsButton, SLOT(click()));
+//  connect(m_MaskCirclesRadio, SIGNAL(clicked()), win->m_ImageMaskCirclesButton, SLOT(click()));
+//  connect(m_MaskPolygonsRadio, SIGNAL(clicked()), win->m_ImageMaskPolygonsButton, SLOT(click()));
 
   QxrdDataProcessorPtr proc(m_Processor);
 

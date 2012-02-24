@@ -1,17 +1,13 @@
 #ifndef QXRDIMAGEDATA_H
 #define QXRDIMAGEDATA_H
 
+#include <QSharedPointer>
+
 #include "qxrdimagedata.h"
 #include "qcepmacros.h"
 
-#include <QDir>
-#include <QFileInfo>
-#include <QAtomicInt>
-#include <QSharedPointer>
-#include <QThread>
-#include <typeinfo>
 #include "qcepimagedata.h"
-#include "qxrdallocatorinterface.h"
+#include "qxrdallocator.h"
 #include "qxrdimagedataobjectcounter.h"
 #include "qxrdmaskdata.h"
 
