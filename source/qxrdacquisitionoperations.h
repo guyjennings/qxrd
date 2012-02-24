@@ -3,15 +3,9 @@
 
 #include "qxrdacquisitionscripting.h"
 #include "qxrdallocator.h"
-
-class QxrdDataProcessor;
-class QxrdWindow;
-class QxrdExperiment;
-
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
-typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
-//typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
-typedef QxrdWindow *QxrdWindowWPtr;
+#include "qxrdexperiment.h"
+#include "qxrddataprocessor.h"
+#include "qxrdwindow.h"
 
 class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
@@ -34,3 +28,5 @@ protected:
 };
 
 #endif // QXRDACQUISITIONOPERATIONS_H
+
+class QxrdAcquisitionOperations;

@@ -7,10 +7,8 @@
 
 #include "qxrdimagedata.h"
 #include "qxrddataprocessor.h"
-
-class QxrdWindow;
-class QxrdCenterFinder;
-typedef QWeakPointer<QxrdCenterFinder> QxrdCenterFinderWPtr;
+#include "qxrdwindow.h"
+#include "qxrdcenterfinder.h"
 
 class QxrdCenterFinderPlot : public QxrdPlot
 {
@@ -39,3 +37,5 @@ private:
 };
 
 #endif // QXRDCENTERFINDERPLOT_H
+
+class QxrdCenterFinderPlot;

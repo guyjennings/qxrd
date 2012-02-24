@@ -19,3 +19,5 @@ public slots:
 };
 
 #endif // QXRDEXPERIMENTPILATUSACQUISITION_H
+
+class QxrdExperimentPilatusAcquisition;

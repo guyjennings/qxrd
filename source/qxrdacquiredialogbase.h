@@ -4,10 +4,8 @@
 #include <QDockWidget>
 #include "qxrdacquisition.h"
 #include "qxrddataprocessor.h"
-
-class QxrdExperiment;
-class QxrdWindow;
-
+#include "qxrdexperiment.h"
+#include "qxrdwindow.h"
 #include <QMenu>
 
 class QxrdAcquireDialogBase : public QDockWidget
@@ -33,3 +31,5 @@ protected:
 };
 
 #endif // QXRDACQUIREDIALOGBASE_H
+
+class QxrdAcquireDialogBase;

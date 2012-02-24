@@ -7,8 +7,8 @@
 #include <QStringList>
 #include <QDateTime>
 
-class QxrdFileBrowserModelUpdaterThread;
-class QxrdFileBrowserModelUpdater;
+#include "qxrdfilebrowsermodelupdaterthread.h"
+#include "qxrdfilebrowsermodelupdater.h"
 
 class QxrdFileBrowserModel : public QAbstractTableModel
 {
@@ -72,3 +72,5 @@ private:
 };
 
 #endif // QXRDFILEBROWSERMODEL_H
+
+class QxrdFileBrowserModel;

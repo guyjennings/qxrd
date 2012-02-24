@@ -3,10 +3,9 @@
 
 #include <QDockWidget>
 #include "ui_qxrdmaskdialog.h"
-
-class QxrdWindow;
-class QxrdDataProcessor;
-class QxrdMaskStackModel;
+#include "qxrdwindow.h"
+#include "qxrddataprocessor.h"
+#include "qxrdmaskstackmodel.h"
 
 class QxrdMaskDialog : public QDockWidget, public Ui::QxrdMaskDialog
 {
@@ -52,3 +51,5 @@ private:
 };
 
 #endif // QXRDMASKDIALOG_H
+
+class QxrdMaskDialog;

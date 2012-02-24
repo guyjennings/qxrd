@@ -5,10 +5,9 @@
 #include "qxrdacquisition.h"
 #include "qxrddataprocessor.h"
 #include <QSettings>
-
-class QxrdAllocator;
-class QxrdExperiment;
-class QxrdSettingsSaver;
+#include "qxrdallocator.h"
+#include "qxrdexperiment.h"
+#include "qxrdsettingssaver.h"
 
 class QxrdAcquisitionThread : public QxrdThread
 {
@@ -49,6 +48,8 @@ private:
   QString               m_Section;
 };
 
-typedef QSharedPointer<QxrdAcquisitionThread> QxrdAcquisitionThreadPtr;
-
 #endif
+
+class QxrdAcquisitionThread;
+typedef QSharedPointer<QxrdAcquisitionThread> QxrdAcquisitionThreadPtr;
+typedef QWeakPointer<QxrdAcquisitionThread> QxrdAcquisitionThreadWPtr;

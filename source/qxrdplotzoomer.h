@@ -2,9 +2,8 @@
 #define QXRDPLOTZOOMER_H
 
 #include <qwt_plot_zoomer.h>
-
-class QxrdPlot;
-class QxrdImagePlot;
+#include "qxrdplot.h"
+#include "qxrdimageplot.h"
 
 class QxrdPlotZoomer : public QwtPlotZoomer
 {
@@ -32,3 +31,6 @@ private:
 };
 
 #endif // QXRDPLOTZOOMER_H
+
+class QxrdPlotZoomer;
+class QxrdImagePlotZoomer;

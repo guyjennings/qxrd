@@ -24,3 +24,5 @@ private:
 };
 
 #endif // QXRDPOWDERFITIMAGEPLOT_H
+
+class QxrdPowderFitImagePlot;

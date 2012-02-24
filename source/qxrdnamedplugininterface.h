@@ -14,3 +14,5 @@ public:
 Q_DECLARE_INTERFACE(QxrdNamedPluginInterface, "gov.anl.aps.cep.Qxrd.NamedPluginInterface/1.0")
 
 #endif // QXRDNAMEDPLUGININTERFACE_H
+
+class QxrdNamedPluginInterface;

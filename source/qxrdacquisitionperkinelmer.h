@@ -75,3 +75,5 @@ private:
 //#endif // HAVE_PERKIN_ELMER
 
 #endif // QXRDACQUISITIONPERKINELMER_H
+
+class QxrdAcquisitionPerkinElmer;

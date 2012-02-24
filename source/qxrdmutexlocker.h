@@ -18,3 +18,5 @@ private:
 };
 
 #endif // QXRDMUTEXLOCKER_H
+
+class QxrdMutexLocker;

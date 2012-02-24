@@ -28,3 +28,5 @@ private:
 };
 
 #endif
+
+class QxrdMaskRasterData;

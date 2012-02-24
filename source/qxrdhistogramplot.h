@@ -15,3 +15,5 @@ public slots:
 };
 
 #endif // QXRDHISTOGRAMPLOT_H
+
+class QxrdHistogramPlot;

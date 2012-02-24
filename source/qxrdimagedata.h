@@ -1,6 +1,7 @@
 #ifndef QXRDIMAGEDATA_H
 #define QXRDIMAGEDATA_H
 
+#include "qxrdimagedata.h"
 #include "qcepmacros.h"
 
 #include <QDir>
@@ -12,18 +13,7 @@
 #include "qcepimagedata.h"
 #include "qxrdallocatorinterface.h"
 #include "qxrdimagedataobjectcounter.h"
-
-template <typename T> class QxrdImageData;
-
-typedef QxrdImageData<quint16> QxrdInt16ImageData;
-typedef QxrdImageData<quint32> QxrdInt32ImageData;
-typedef QxrdImageData<double>  QxrdDoubleImageData;
-class QxrdMaskData;
-
-typedef QSharedPointer<QxrdInt16ImageData> QxrdInt16ImageDataPtr;
-typedef QSharedPointer<QxrdInt32ImageData> QxrdInt32ImageDataPtr;
-typedef QSharedPointer<QxrdDoubleImageData> QxrdDoubleImageDataPtr;
-typedef QSharedPointer<QxrdMaskData> QxrdMaskDataPtr;
+#include "qxrdmaskdata.h"
 
 template <typename T>
 class QxrdImageData : public QcepImageData<T>
@@ -76,3 +66,13 @@ protected:
 };
 
 #endif
+
+template <typename T> class QxrdImageData;
+
+typedef QxrdImageData<quint16> QxrdInt16ImageData;
+typedef QxrdImageData<quint32> QxrdInt32ImageData;
+typedef QxrdImageData<double>  QxrdDoubleImageData;
+
+typedef QSharedPointer<QxrdInt16ImageData> QxrdInt16ImageDataPtr;
+typedef QSharedPointer<QxrdInt32ImageData> QxrdInt32ImageDataPtr;
+typedef QSharedPointer<QxrdDoubleImageData> QxrdDoubleImageDataPtr;

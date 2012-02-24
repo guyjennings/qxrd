@@ -3,9 +3,7 @@
 
 #include "qxrdpowderfitwidget.h"
 #include "qwt_plot_picker.h"
-
-class QxrdSettingsSaver;
-typedef QSharedPointer<QxrdSettingsSaver> QxrdSettingsSaverPtr;
+#include "qxrdsettingssaver.h"
 
 class QxrdPowderFitIdentifyPage : public QxrdPowderFitWidget
 {
@@ -40,3 +38,5 @@ private:
 };
 
 #endif // QXRDPOWDERFITIDENTIFYPAGE_H
+
+class QxrdPowderFitIdentifyPage;

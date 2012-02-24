@@ -16,3 +16,5 @@ public slots:
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITIONPLOT_H
+
+class QxrdSynchronizedAcquisitionPlot;

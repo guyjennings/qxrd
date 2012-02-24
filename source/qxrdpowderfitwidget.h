@@ -35,3 +35,5 @@ protected:
 };
 
 #endif // QXRDPOWDERFITWIDGET_H
+
+class QxrdPowderFitWidget;

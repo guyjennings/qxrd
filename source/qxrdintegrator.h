@@ -9,9 +9,7 @@
 #include <qwt_double_rect.h>
 #include "qxrdintegratorcache.h"
 #include "qxrdsettingssaver.h"
-
-class QxrdCenterFinder;
-typedef QWeakPointer<QxrdCenterFinder> QxrdCenterFinderWPtr;
+#include "qxrdcenterfinder.h"
 
 class QxrdIntegrator : public QObject
 {
@@ -84,7 +82,8 @@ private:
   QxrdIntegratorCachePtr m_IntegratorCache;
 };
 
+#endif // QXRDINTEGRATOR_H
+
+class QxrdIntegrator;
 typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
 typedef QWeakPointer<QxrdIntegrator> QxrdIntegratorWPtr;
-
-#endif // QXRDINTEGRATOR_H

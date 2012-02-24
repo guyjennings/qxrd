@@ -12,9 +12,8 @@
 #include <QMetaType>
 #include <QScriptValue>
 #include <QDateTime>
-
-class QTcpSocket;
-class QxrdExperiment;
+#include <QTcpSocket>
+#include "qxrdexperiment.h"
 
 class QSpecServer : public QTcpServer
 {
@@ -77,3 +76,5 @@ private:
 };
 
 #endif
+
+class QSpecServer;

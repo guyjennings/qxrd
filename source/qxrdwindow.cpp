@@ -31,6 +31,7 @@
 #include "qxrdinfodialog.h"
 #include "qxrdhighlighter.h"
 #include "qxrdexperimentpreferencesdialog.h"
+#include "qxrdacquisitiontriggerdialog.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -73,6 +74,7 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaverWPtr saver,
     m_DataProcessor(procw),
     m_Allocator(allocw),
     m_AcquireDialog(NULL),
+    m_AcquisitionTriggerDialog(NULL),
     m_SynchronizedAcquisitionDialog(NULL),
     m_DisplayDialog(NULL),
     m_CenterFinderDialog(NULL),
@@ -122,6 +124,7 @@ void QxrdWindow::init()
   if (acq) {
     m_AcquireDialog = acq -> controlPanel(this);
     m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
+    m_AcquisitionTriggerDialog = new QxrdAcquisitionTriggerDialog(this, m_Acquisition);
   }
 
   m_DisplayDialog      = new QxrdDisplayDialog(this);
@@ -164,7 +167,8 @@ void QxrdWindow::init()
     splitDockWidget(m_AcquireDialog, m_CenterFinderDialog, Qt::Vertical);
     splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
 
-    tabifyDockWidget(m_AcquireDialog, m_SynchronizedAcquisitionDialog);
+    tabifyDockWidget(m_AcquireDialog, m_AcquisitionTriggerDialog);
+    tabifyDockWidget(m_AcquisitionTriggerDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
     tabifyDockWidget(m_SliceDialog, m_ImageInfoDialog);
@@ -176,7 +180,8 @@ void QxrdWindow::init()
   } else if (screenGeom.height() >= 1000) {
     splitDockWidget(m_AcquireDialog, m_CenterFinderDialog, Qt::Vertical);
 
-    tabifyDockWidget(m_AcquireDialog, m_SynchronizedAcquisitionDialog);
+    tabifyDockWidget(m_AcquireDialog, m_AcquisitionTriggerDialog);
+    tabifyDockWidget(m_AcquisitionTriggerDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
     tabifyDockWidget(m_SliceDialog, m_ImageInfoDialog);
@@ -187,7 +192,8 @@ void QxrdWindow::init()
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
   } else {
-    tabifyDockWidget(m_AcquireDialog, m_CenterFinderDialog);
+    tabifyDockWidget(m_AcquireDialog, m_AcquisitionTriggerDialog);
+    tabifyDockWidget(m_AcquisitionTriggerDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_CenterFinderDialog, m_IntegratorDialog);
 
     tabifyDockWidget(m_IntegratorDialog, m_SynchronizedAcquisitionDialog);

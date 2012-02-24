@@ -39,3 +39,5 @@ private:
 };
 
 #endif // QXRDMASKSTACKMODEL_H
+
+class QxrdMaskStackModel;

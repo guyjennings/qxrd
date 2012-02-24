@@ -124,6 +124,7 @@ private:
   QxrdAllocatorWPtr      m_Allocator;
 };
 
-typedef QSharedPointer<QxrdIntegratorCache> QxrdIntegratorCachePtr;
-
 #endif // QXRDINTEGRATORCACHE_H
+
+class QxrdIntegratorCache;
+typedef QSharedPointer<QxrdIntegratorCache> QxrdIntegratorCachePtr;

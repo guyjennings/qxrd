@@ -6,8 +6,7 @@
 #include <QMutex>
 #include "qcepproperty.h"
 #include "qxrdacquisition.h"
-
-class QxrdNIDAQPluginInterface;
+#include "qxrdnidaqplugininterface.h"
 
 class QxrdSynchronizedAcquisition : public QObject
 {
@@ -83,3 +82,5 @@ private:
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITION_H
+
+class QxrdSynchronizedAcquisition;

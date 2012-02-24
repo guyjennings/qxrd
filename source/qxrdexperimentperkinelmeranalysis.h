@@ -19,3 +19,5 @@ public slots:
 };
 
 #endif // QXRDEXPERIMENTPERKINELMERANALYSIS_H
+
+class QxrdExperimentPerkinElmerAnalysis;

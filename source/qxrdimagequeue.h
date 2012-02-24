@@ -48,3 +48,6 @@ typedef QSharedPointer<QxrdDoubleImageQueue> QxrdDoubleImageQueuePtr;
 typedef QSharedPointer<QxrdMaskQueue>        QxrdMaskQueuePtr;
 
 #endif
+
+template <typename T>
+class QxrdImageQueue;

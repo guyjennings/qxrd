@@ -7,12 +7,11 @@
 #include <QDateTime>
 #include <QMutex>
 
-class QxrdApplication;
-class QxrdExperiment;
-
+#include "qxrdexperiment.h"
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
 #include "qxrddataprocessor.h"
+#include "qxrdapplication.h"
 
 class QxrdScriptEngine : public QScriptEngine
 {
@@ -85,6 +84,7 @@ private:
   QxrdWindowWPtr         m_Window;
 };
 
-typedef QSharedPointer<QxrdScriptEngine> QxrdScriptEnginePtr;
-
 #endif // QXRDSCRIPTENGINE_H
+
+class QxrdScriptEngine;
+typedef QSharedPointer<QxrdScriptEngine> QxrdScriptEnginePtr;

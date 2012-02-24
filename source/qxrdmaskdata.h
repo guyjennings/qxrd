@@ -3,14 +3,9 @@
 
 #include "qcepimagedata.h"
 #include "qxrdimagedataobjectcounter.h"
-
+#include "qxrdmaskdata.h"
 #include <QImage>
-
-class QxrdMaskData;
-typedef QSharedPointer<QxrdMaskData> QxrdMaskDataPtr;
-
-class QxrdAllocator;
-typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;
+#include "qxrdallocator.h"
 
 class QxrdMaskData : public QcepImageData<short>
 {
@@ -68,3 +63,6 @@ private:
 };
 
 #endif // QXRDMASKDATA_H
+
+class QxrdMaskData;
+typedef QSharedPointer<QxrdMaskData> QxrdMaskDataPtr;

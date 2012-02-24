@@ -134,3 +134,7 @@ private:
 };
 
 #endif
+
+class QxrdAllocator;
+typedef QSharedPointer<QxrdAllocator> QxrdAllocatorPtr;
+typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;

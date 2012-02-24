@@ -6,22 +6,19 @@
 
 #include <qwt_color_map.h>
 #include <qwt_array.h>
-
+#include <qwt_plot_rescaler.h>
+#include <qwt_plot_spectrogram.h>
+#include <qwt_plot_marker.h>
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
 #include "qxrdmaskcolormap.h"
 #include "qxrdplotimage.h"
-
-class QxrdHistogramSelector;
-class QwtPlotRescaler;
-class QxrdPlotSlicer;
-class QxrdImagePlotMeasurer;
-class QxrdHistogramSelector;
-class QwtPlotSpectrogram;
-class QxrdDataProcessor;
-class QxrdCenterFinderPicker;
-class QwtPlotMarker;
-class QxrdMaskPicker;
+#include "qxrdhistogramselector.h"
+#include "qxrdplotslicer.h"
+#include "qxrdimageplotmeasurer.h"
+#include "qxrddataprocessor.h"
+#include "qxrdcenterfinderpicker.h"
+#include "qxrdmaskpicker.h"
 
 class QxrdImagePlot : public QxrdPlot
 {
@@ -202,3 +199,5 @@ private:
 };
 
 #endif
+
+class QxrdImagePlot;

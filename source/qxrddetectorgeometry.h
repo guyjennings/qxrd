@@ -57,3 +57,5 @@ public slots:
 typedef QSharedPointer<QxrdDetectorGeometry> QxrdDetectorGeometryPtr;
 
 #endif // QXRDDETECTORGEOMETRY_H
+
+class QxrdDetectorGeometry;

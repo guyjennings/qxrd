@@ -19,3 +19,5 @@ public slots:
 };
 
 #endif // QXRDEXPERIMENTPILATUSANALYSIS_H
+
+class QxrdExperimentPilatusAnalysis;

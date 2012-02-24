@@ -4,6 +4,7 @@
 #include "qxrdallocator.h"
 #include "qxrdacquiredialog.h"
 #include "qxrdsynchronizedacquisition.h"
+#include "qxrdacquisitiontriggerthread.h"
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
 
@@ -57,6 +58,11 @@ QxrdAcquisition::~QxrdAcquisition()
 
 void QxrdAcquisition::initialize()
 {
+  m_AcquisitionTriggerThread = QxrdAcquisitionTriggerThreadPtr(new QxrdAcquisitionTriggerThread(m_Saver, m_Experiment, this));
+  m_AcquisitionTriggerThread -> setObjectName("trig");
+  m_AcquisitionTriggerThread -> start();
+
+  m_AcquisitionTrigger = m_AcquisitionTriggerThread -> acquisitionTrigger();
 }
 
 void QxrdAcquisition::shutdown()
@@ -450,6 +456,11 @@ QxrdNIDAQPluginInterfacePtr QxrdAcquisition::nidaqPlugin() const
 QxrdSynchronizedAcquisition* QxrdAcquisition::synchronizedAcquisition() const
 {
   return m_SynchronizedAcquisition;
+}
+
+QxrdAcquisitionTriggerPtr QxrdAcquisition::acquisitionTrigger() const
+{
+  return m_AcquisitionTrigger;
 }
 
 int QxrdAcquisition::cancelling()

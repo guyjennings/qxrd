@@ -5,8 +5,7 @@
 #include "qxrdthread.h"
 #include <QDateTime>
 #include "qxrdsimpleserver.h"
-
-class QxrdExperiment;
+#include "qxrdexperiment.h"
 
 class QxrdSimpleServerThread : public QxrdThread
 {
@@ -29,6 +28,7 @@ private:
   QxrdSimpleServerPtr m_Server;
 };
 
-typedef QSharedPointer<QxrdSimpleServerThread> QxrdSimpleServerThreadPtr;
-
 #endif // QXRDSIMPLESERVERTHREAD_H
+
+class QxrdSimpleServerThread;
+typedef QSharedPointer<QxrdSimpleServerThread> QxrdSimpleServerThreadPtr;

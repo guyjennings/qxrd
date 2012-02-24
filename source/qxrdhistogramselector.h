@@ -16,3 +16,5 @@ public slots:
 };
 
 #endif // QXRDHISTOGRAMSELECTOR_H
+
+class QxrdHistogramSelector;

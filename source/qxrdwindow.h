@@ -10,27 +10,29 @@
 #include "ui_qxrdwindow.h"
 #include "qxrdacquisition.h"
 
-class QxrdApplication;
-class QxrdExperiment;
-class QxrdDataProcessor;
-class QxrdAllocator;
-class QxrdScriptEngine;
-class QxrdAcquireDialogBase;
-class QxrdSynchronizedAcquisitionDialog;
-class QxrdDisplayDialog;
-class QxrdCenterFinderDialog;
-class QxrdMaskDialog;
-class QxrdCorrectionDialog;
-class QxrdIntegratorDialog;
-class QxrdImageCalculator;
-class QxrdInputFileBrowser;
-class QxrdOutputFileBrowser;
-class QxrdSliceDialog;
-class QxrdHistogramDialog;
-class QxrdInfoDialog;
-class QxrdPowderFitDialog;
-class QxrdImageDisplayWidget;
-class QxrdHighlighter;
+#include "qxrdapplication.h"
+#include "qxrdexperiment.h"
+#include "qxrddataprocessor.h"
+#include "qxrdallocator.h"
+#include "qxrdscriptengine.h"
+#include "qxrdacquiredialog.h"
+#include "qxrdsynchronizedacquisitiondialog.h"
+#include "qxrdacquisitiontriggerdialog.h"
+
+#include "qxrddisplaydialog.h"
+#include "qxrdcenterfinderdialog.h"
+#include "qxrdmaskdialog.h"
+#include "qxrdcorrectiondialog.h"
+#include "qxrdintegratordialog.h"
+#include "qxrdintegratorplot.h"
+#include "qxrdimagecalculator.h"
+#include "qxrdfilebrowser.h"
+#include "qxrdslicedialog.h"
+#include "qxrdhistogramdialog.h"
+#include "qxrdinfodialog.h"
+#include "qxrdpowderfitdialog.h"
+#include "qxrdimagedisplaywidget.h"
+#include "qxrdhighlighter.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -159,6 +161,7 @@ private:
   QxrdDataProcessorWPtr                  m_DataProcessor;
   QxrdAllocatorWPtr                      m_Allocator;
   QxrdAcquireDialogBase                 *m_AcquireDialog;
+  QxrdAcquisitionTriggerDialog          *m_AcquisitionTriggerDialog;
   QxrdSynchronizedAcquisitionDialog     *m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;
   QxrdCenterFinderDialog                *m_CenterFinderDialog;
@@ -197,10 +200,8 @@ private:
   QMenu                                 *m_RecentExperimentsMenu;
 };
 
+#endif
+
+class QxrdWindow;
 typedef QxrdWindow *QxrdWindowPtr;
 typedef QxrdWindow *QxrdWindowWPtr;
-
-//typedef QSharedPointer<QxrdWindow> QxrdWindowPtr;
-//typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
-
-#endif

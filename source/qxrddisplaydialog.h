@@ -17,3 +17,5 @@ protected:
 };
 
 #endif // QXRDDISPLAYDIALOG_H
+
+class QxrdDisplayDialog;

@@ -5,11 +5,8 @@
 #include <QSharedPointer>
 #include "qxrdthread.h"
 #include "qxrdexperiment.h"
-
-class QxrdExperimentThread;
-typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;
-typedef QWeakPointer<QxrdExperimentThread> QxrdExperimentThreadWPtr;
-//typedef QxrdExperimentThread *QxrdExperimentThreadPtr;
+#include "qxrdapplication.h"
+#include "qxrdexperimentthread.h"
 
 class QxrdExperimentThread : public QxrdThread
 {
@@ -56,3 +53,7 @@ private:
 };
 
 #endif // QXRDEXPERIMENTTHREAD_H
+
+class QxrdExperimentThread;
+typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;
+typedef QWeakPointer<QxrdExperimentThread> QxrdExperimentThreadWPtr;

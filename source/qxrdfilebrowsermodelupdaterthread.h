@@ -24,3 +24,5 @@ private:
 };
 
 #endif // QXRDFILEBROWSERMODELUPDATERTHREAD_H
+
+class QxrdFileBrowserModelUpdaterThread;

@@ -41,3 +41,7 @@ private:
 };
 
 #endif // QXRDRESULTSERIALIZER_H
+
+class QxrdResultSerializerBase;
+template <typename T>
+class QxrdResultSerializer;

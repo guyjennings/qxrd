@@ -2,6 +2,7 @@
 #define QXRDFITPARAMETER_H
 
 #include "qcepproperty.h"
+#include "qxrdfitparameter.h"
 
 class QxrdFitParameter : public QcepDoubleProperty
 {
@@ -28,8 +29,6 @@ private:
   int     m_IsFitted;
   int     m_IsLimited;
 };
-
-typedef QSharedPointer<QxrdFitParameter> QxrdFitParameterPtr;
 
 Q_DECLARE_METATYPE(QxrdFitParameterPtr)
 
@@ -68,3 +67,6 @@ private: \
   QxrdFitParameter m_##propname;
 
 #endif // QXRDFITPARAMETER_H
+
+class QxrdFitParameter;
+typedef QSharedPointer<QxrdFitParameter> QxrdFitParameterPtr;

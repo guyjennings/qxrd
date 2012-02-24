@@ -14,15 +14,14 @@
 #include <QStringList>
 #include <QDateTime>
 #include "qxrdsettingssaver.h"
-
-class QSpinBox;
-class QComboBox;
-class QLineEdit;
-class QDoubleSpinBox;
-class QLabel;
-class QAbstractButton;
-class QSettings;
-class QProgressBar;
+#include <QSpinBox>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QDoubleSpinBox>
+#include <QLabel>
+#include <QAbstractButton>
+#include <QSettings>
+#include <QProgressBar>
 
 class QcepProperty : public QObject {
   Q_OBJECT
@@ -654,3 +653,11 @@ private: \
 QcepByteArrayProperty m_##propname;
 
 #endif // QCEPPROPERTY_H
+
+class QcepProperty;
+class QcepIntProperty;
+class QcepDoubleProperty;
+class QcepBoolProperty;
+class QcepStringProperty;
+class QcepStringListProperty;
+class QcepByteArrayProperty;

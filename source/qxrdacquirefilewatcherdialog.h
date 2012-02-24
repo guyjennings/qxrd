@@ -25,3 +25,5 @@ protected:
 };
 
 #endif // QXRDACQUIREFILEWATCHERDIALOG_H
+
+class QxrdAcquireFileWatcherDialog;

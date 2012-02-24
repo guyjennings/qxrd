@@ -30,3 +30,5 @@ private:
 };
 
 #endif // QXRDHISTOGRAMDIALOG_H
+
+class QxrdHistogramDialog;

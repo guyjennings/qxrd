@@ -6,9 +6,7 @@
 #include "qxrdintegrateddata.h"
 #include "qxrddataprocessor.h"
 #include "qxrdplot.h"
-
-class QxrdIntegrator;
-typedef QWeakPointer<QxrdIntegrator> QxrdIntegratorWPtr;
+#include "qxrdintegrator.h"
 
 class QxrdIntegratorPlot : public QxrdPlot
 {
@@ -32,3 +30,5 @@ private:
 };
 
 #endif // QXRDINTEGRATORPLOT_H
+
+class QxrdIntegratorPlot;

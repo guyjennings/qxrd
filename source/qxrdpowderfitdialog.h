@@ -16,3 +16,5 @@ protected:
 };
 
 #endif // QXRDPOWDERFITDIALOG_H
+
+class QxrdPowderFitDialog;

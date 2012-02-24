@@ -1,5 +1,6 @@
 #include "qxrdacquisition.h"
 #include "qxrdsynchronizedacquisition.h"
+#include "qxrdacquisitiontrigger.h"
 //#include <QMutexLocker>
 #include "qxrdmutexlocker.h"
 #include <QMetaProperty>
@@ -10,6 +11,7 @@
 
 QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaverWPtr saver)
   : QObject(),
+    m_Saver(saver),
     m_QxrdVersion(saver, this,"qxrdVersion",STR(QXRD_VERSION)),
     m_QtVersion(saver, this,"qtVersion",qVersion()),
     m_DetectorType(saver, this, "detectorType", detectorKind),
@@ -47,7 +49,9 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, 
     m_UserComment4(saver, this,"userComment4",""),
     m_DroppedFrames(QxrdSettingsSaverPtr(), this,"droppedFrames",0),
     m_Mutex(QMutex::Recursive),
-    m_SynchronizedAcquisition(NULL)
+    m_SynchronizedAcquisition(NULL),
+    m_AcquisitionTriggerThread(NULL),
+    m_AcquisitionTrigger(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionParameters::QxrdAcquisitionParameters(%p)\n", this);
@@ -141,6 +145,10 @@ void QxrdAcquisitionParameters::writeSettings(QSettings *settings, QString secti
     m_SynchronizedAcquisition->writeSettings(settings, section+"/sync");
   }
 
+  if (m_AcquisitionTrigger) {
+    m_AcquisitionTrigger->writeSettings(settings, section+"/trigger");
+  }
+
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
@@ -150,6 +158,10 @@ void QxrdAcquisitionParameters::readSettings(QSettings *settings, QString sectio
 
   if (m_SynchronizedAcquisition) {
     m_SynchronizedAcquisition->readSettings(settings, section+"/sync");
+  }
+
+  if (m_AcquisitionTrigger) {
+    m_AcquisitionTrigger->readSettings(settings, section+"/trigger");
   }
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);

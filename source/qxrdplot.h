@@ -3,12 +3,11 @@
 
 #include "qcepproperty.h"
 #include <qwt_plot.h>
-
-class QwtPlotCurve;
-class QwtPlotZoomer;
-class QwtPlotPanner;
-class QwtPlotMagnifier;
-class QxrdPlotMeasurer;
+#include <qwt_plot_curve.h>
+#include <qwt_plot_zoomer.h>
+#include <qwt_plot_panner.h>
+#include <qwt_plot_magnifier.h>
+#include "qxrdplotmeasurer.h"
 
 class QxrdPlot : public QwtPlot
 {
@@ -81,3 +80,5 @@ protected:
 };
 
 #endif // QXRDPLOT_H
+
+class QxrdPlot;

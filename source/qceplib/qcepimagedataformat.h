@@ -62,3 +62,6 @@ class QcepImageDataFormat : public QcepImageDataFormatBase
 };
 
 #endif
+
+class QcepImageDataFormatBase;
+template <typename T> class QcepImageDataFormat;

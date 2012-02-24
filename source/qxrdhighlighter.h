@@ -5,8 +5,7 @@
 
 #include <QHash>
 #include <QTextCharFormat>
-
-class QTextDocument;
+#include <QTextDocument>
 
 class QxrdHighlighter : public QSyntaxHighlighter
 {
@@ -38,3 +37,5 @@ private:
 };
 
 #endif
+
+class QxrdHighlighter;

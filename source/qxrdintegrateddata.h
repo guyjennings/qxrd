@@ -54,6 +54,7 @@ private:
   int                        m_Oversample;
 };
 
-typedef QSharedPointer<QxrdIntegratedData>       QxrdIntegratedDataPtr;
-
 #endif // QXRDINTEGRATEDDATA_H
+
+class QxrdIntegratedData;
+typedef QSharedPointer<QxrdIntegratedData>       QxrdIntegratedDataPtr;

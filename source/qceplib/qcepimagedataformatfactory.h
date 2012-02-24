@@ -6,8 +6,8 @@
 #include <QObject>
 #include <QString>
 #include <QList>
-
-template <typename T> class QcepImageDataFormat;
+#include "qcepimagedata.h"
+#include "qcepimagedataformat.h"
 
 template <typename T>
 class QcepImageDataFormatFactory
@@ -30,3 +30,5 @@ class QcepImageDataFormatFactory
 };
 
 #endif
+
+template <typename T> class QcepImageDataFormatFactory;

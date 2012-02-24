@@ -4,8 +4,7 @@
 #include <QDialog>
 #include <QCheckBox>
 #include "ui_qxrdglobalpreferencesdialog.h"
-
-class QxrdApplication;
+#include "qxrdapplication.h"
 
 class QxrdGlobalPreferencesDialog : public QDialog, public Ui::QxrdGlobalPreferencesDialog
 {
@@ -31,3 +30,5 @@ private:
 };
 
 #endif // QXRDGLOBALPREFERENCESDIALOG_H
+
+class QxrdGlobalPreferencesDialog;

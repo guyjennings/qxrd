@@ -89,3 +89,5 @@ public:
 };
 
 #endif // QXRDGENERATETESTIMAGE_H
+
+class QxrdGenerateTestImage;

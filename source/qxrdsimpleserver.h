@@ -5,8 +5,7 @@
 #include <QTcpSocket>
 #include <QScriptValue>
 #include <QDateTime>
-
-class QxrdExperiment;
+#include "qxrdexperiment.h"
 
 class QxrdSimpleServer : public QTcpServer
 {
@@ -37,6 +36,7 @@ private:
   QTcpSocket              *m_Socket;
 };
 
-typedef QSharedPointer<QxrdSimpleServer> QxrdSimpleServerPtr;
-
 #endif // QXRDSIMPLESERVER_H
+
+class QxrdSimpleServer;
+typedef QSharedPointer<QxrdSimpleServer> QxrdSimpleServerPtr;

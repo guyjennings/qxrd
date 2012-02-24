@@ -221,7 +221,10 @@ HEADERS += TODO.h \
     qxrdwelcomewindow.h \
     qxrdglobalpreferencesdialog.h \
     qxrdwelcomerecentitem.h \
-    qxrdsplashscreen.h
+    qxrdsplashscreen.h \
+    qxrdacquisitiontrigger.h \
+    qxrdacquisitiontriggerthread.h \
+    qxrdacquisitiontriggerdialog.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -352,7 +355,10 @@ SOURCES += qxrd.cpp \
     qxrdwelcomewindow.cpp \
     qxrdglobalpreferencesdialog.cpp \
     qxrdwelcomerecentitem.cpp \
-    qxrdsplashscreen.cpp
+    qxrdsplashscreen.cpp \
+    qxrdacquisitiontrigger.cpp \
+    qxrdacquisitiontriggerthread.cpp \
+    qxrdacquisitiontriggerdialog.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -371,7 +377,8 @@ FORMS = qxrdwindow.ui \
     qxrdacquirefilewatcherdialog.ui \
     qxrdwelcomewindow.ui \
     qxrdglobalpreferencesdialog.ui \
-    qxrdwelcomerecentitem.ui
+    qxrdwelcomerecentitem.ui \
+    qxrdacquisitiontriggerdialog.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 

@@ -16,6 +16,7 @@ signals:
 public slots:
 };
 
-typedef QSharedPointer<QxrdROIData> QxrdROIDataPtr;
-
 #endif // QXRDROIDATA_H
+
+class QxrdROIData;
+typedef QSharedPointer<QxrdROIData> QxrdROIDataPtr;

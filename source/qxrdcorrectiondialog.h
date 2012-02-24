@@ -19,3 +19,5 @@ protected:
 };
 
 #endif // QXRDCORRECTIONDIALOG_H
+
+class QxrdCorrectionDialog;

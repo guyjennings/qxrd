@@ -30,3 +30,5 @@ private:
 };
 
 #endif // QXRDSLICEDIALOG_H
+
+class QxrdSliceDialog;

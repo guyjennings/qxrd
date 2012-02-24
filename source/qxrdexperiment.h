@@ -15,13 +15,9 @@
 #include "qxrdsimpleserverthread.h"
 #include "qxrdfilesaverthread.h"
 #include "qxrdscriptenginethread.h"
-
-class QxrdWindow;
-class QxrdNIDAQPluginInterface;
-
-class QxrdExperimentThread;
-typedef QWeakPointer<QxrdExperimentThread> QxrdExperimentThreadWPtr;
-typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;
+#include "qxrdwindow.h"
+#include "qxrdnidaqplugininterface.h"
+#include "qxrdexperimentthread.h"
 
 class QxrdExperiment : public QObject
 {
@@ -172,7 +168,8 @@ private:
   FILE                           *m_ScanFile;
 };
 
+#endif // QXRDEXPERIMENT_H
+
+class QxrdExperiment;
 typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
 typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
-
-#endif // QXRDEXPERIMENT_H

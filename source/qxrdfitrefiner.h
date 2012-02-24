@@ -16,3 +16,5 @@ public slots:
 };
 
 #endif // QXRDFITREFINER_H
+
+class QxrdFitRefiner;

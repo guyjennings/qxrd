@@ -20,6 +20,7 @@ public slots:
   void shutdown();
 };
 
-typedef QSharedPointer<QxrdServer> QxrdServerPtr;
-
 #endif
+
+class QxrdServer;
+typedef QSharedPointer<QxrdServer> QxrdServerPtr;

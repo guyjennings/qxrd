@@ -35,3 +35,5 @@ protected:
 };
 
 #endif // QXRDACQUISITIONFILEWATCHER_H
+
+class QxrdAcquisitionFileWatcher;

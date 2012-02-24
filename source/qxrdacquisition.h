@@ -21,12 +21,11 @@
 #include "qxrdimagequeue.h"
 #include "qxrdacquisitionoperations.h"
 #include "qxrdnidaqplugininterface.h"
-
-class QxrdExperiment;
-class QxrdDataProcessor;
-class QxrdSynchronizedAcquisition;
-class QxrdAcquireDialogBase;
-class QxrdWindow;
+#include "qxrdexperiment.h"
+#include "qxrddataprocessor.h"
+#include "qxrdsynchronizedacquisition.h"
+#include "qxrdacquiredialog.h"
+#include "qxrdwindow.h"
 
 class QxrdAcquisition : public QxrdAcquisitionOperations
 {
@@ -145,6 +144,7 @@ public:
   virtual QxrdAcquireDialogBase* controlPanel(QxrdWindow *win);
 
   QxrdSynchronizedAcquisition* synchronizedAcquisition() const;
+  QxrdAcquisitionTriggerPtr acquisitionTrigger() const;
 
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
   QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;
@@ -205,7 +205,8 @@ protected:
   QAtomicInt             m_Idling;
 };
 
+#endif
+
+class QxrdAcquisition;
 typedef QSharedPointer<QxrdAcquisition> QxrdAcquisitionPtr;
 typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
-
-#endif

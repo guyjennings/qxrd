@@ -194,3 +194,5 @@ private:
 extern QxrdApplication *g_Application;
 
 #endif
+
+class QxrdApplication;

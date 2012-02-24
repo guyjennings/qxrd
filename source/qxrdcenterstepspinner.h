@@ -17,3 +17,5 @@ public slots:
 };
 
 #endif // QXRDCENTERSTEPSPINNER_H
+
+class QxrdCenterStepSpinner;

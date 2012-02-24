@@ -22,3 +22,5 @@ class QxrdMaskColorMap : public QwtLinearColorMap
 };
 
 #endif
+
+class QxrdMaskColorMap;

@@ -16,3 +16,5 @@ public slots:
 };
 
 #endif // QXRDSLICERPLOT_H
+
+class QxrdSlicerPlot;

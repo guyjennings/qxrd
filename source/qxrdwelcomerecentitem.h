@@ -23,3 +23,5 @@ private:
 };
 
 #endif // QXRDWELCOMERECENTITEM_H
+
+class QxrdWelcomeRecentItem;

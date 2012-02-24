@@ -15,6 +15,7 @@ public slots:
 
 };
 
-typedef QSharedPointer<QxrdSplashScreen> QxrdSplashScreenPtr;
-
 #endif // QXRDSPLASHSCREEN_H
+
+class QxrdSplashScreen;
+typedef QSharedPointer<QxrdSplashScreen> QxrdSplashScreenPtr;

@@ -20,23 +20,13 @@
 #include "qxrdfilesaver.h"
 #include <qwt_double_rect.h>
 #include "qxrdsettingssaver.h"
-
-class QxrdExperiment;
-class QxrdAllocator;
-class QxrdWindow;
-class QxrdGenerateTestImage;
-class QxrdAcquisition;
-class QxrdIntegrator;
-class QxrdCenterFinder;
-
-//typedef QWeakPointer<QxrdWindow> QxrdWindowWPtr;
-typedef QxrdWindow *QxrdWindowWPtr;
-typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
-typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
-typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
-typedef QSharedPointer<QxrdGenerateTestImage> QxrdGenerateTestImagePtr;
-typedef QWeakPointer<QxrdGenerateTestImage> QxrdGenerateTestImageWPtr;
+#include "qxrdexperiment.h"
+#include "qxrdallocator.h"
+#include "qxrdwindow.h"
+#include "qxrdgeneratetestimage.h"
+#include "qxrdacquisition.h"
+#include "qxrdintegrator.h"
+#include "qxrdcenterfinder.h"
 
 class QxrdDataProcessorBase : public QObject
 {
@@ -422,3 +412,5 @@ protected:
 };
 
 #endif
+
+class QxrdDataProcessorBase;

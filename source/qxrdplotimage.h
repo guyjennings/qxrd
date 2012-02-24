@@ -17,6 +17,7 @@ private:
   QxrdMaskDataPtr        m_Mask;
 };
 
-typedef QxrdPlotImage *QxrdPlotImagePtr;
-
 #endif // QXRDPLOTIMAGE_H
+
+class QxrdPlotImage;
+typedef QxrdPlotImage *QxrdPlotImagePtr;

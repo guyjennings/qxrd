@@ -39,6 +39,7 @@ signals:
   void maskChanged();
 };
 
-typedef QxrdMaskStack *QxrdMaskStackPtr;
-
 #endif // QXRDMASKSTACK_H
+
+class QxrdMaskStack;
+typedef QxrdMaskStack *QxrdMaskStackPtr;

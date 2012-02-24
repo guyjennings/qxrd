@@ -5,11 +5,11 @@
 
 #include <QObject>
 #include <QMutex>
+#include <QSharedPointer>
 
-class QxrdSynchronizedAcquisition;
-
-//class QxrdDataProcessor;
-
+#include "qxrdsynchronizedacquisition.h"
+#include "qxrdacquisitiontrigger.h"
+#include "qxrdacquisitiontriggerthread.h"
 #include "qcepproperty.h"
 #include "qxrdsettingssaver.h"
 
@@ -46,6 +46,8 @@ public:
 
 protected:
   enum { MegaBytes = 0x100000 };
+
+  QxrdSettingsSaverWPtr m_Saver;
 
 public:
   Q_PROPERTY(QString qxrdVersion READ get_QxrdVersion STORED false)
@@ -157,9 +159,13 @@ public:
   QCEP_INTEGER_PROPERTY(DroppedFrames)
 
 protected:
-  mutable QMutex               m_Mutex;
+  mutable QMutex                m_Mutex;
 
-  QxrdSynchronizedAcquisition *m_SynchronizedAcquisition;
+  QxrdSynchronizedAcquisition    *m_SynchronizedAcquisition;
+  QxrdAcquisitionTriggerThreadPtr m_AcquisitionTriggerThread;
+  QxrdAcquisitionTriggerPtr       m_AcquisitionTrigger;
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
+
+class QxrdAcquisitionParameters;

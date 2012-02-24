@@ -4,8 +4,7 @@
 #include "qcepmacros.h"
 
 #include <QSettings>
-
-class QxrdExperiment;
+#include "qxrdexperiment.h"
 
 class QxrdExperimentSettings : public QSettings
 {
@@ -21,3 +20,5 @@ private:
 };
 
 #endif
+
+class QxrdExperimentSettings;

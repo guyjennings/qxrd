@@ -4,9 +4,7 @@
 #include "qxrdfitparameter.h"
 #include <QScriptEngine>
 #include "qxrdsettingssaver.h"
-
-class QxrdRingSetFitParameters;
-typedef QSharedPointer<QxrdRingSetFitParameters> QxrdRingSetFitParametersPtr;
+#include "qxrdringsetfitparameters.h"
 
 class QxrdRingFitParameters : public QObject
 {
@@ -28,11 +26,12 @@ private:
   QxrdRingSetFitParameters *m_RingSet;
 };
 
-typedef QSharedPointer<QxrdRingFitParameters> QxrdRingFitParametersPtr;
-
 Q_DECLARE_METATYPE(QxrdRingFitParameters*)
 
 QScriptValue QxrdRingFitToScriptValue(QScriptEngine *engine, QxrdRingFitParameters* const &in);
 void QxrdRingFitFromScriptValue(const QScriptValue &object, QxrdRingFitParameters *&out);
 
 #endif // QXRDRINGFITPARAMETERS_H
+
+class QxrdRingFitParameters;
+typedef QSharedPointer<QxrdRingFitParameters> QxrdRingFitParametersPtr;

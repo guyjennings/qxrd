@@ -39,3 +39,5 @@ private:
 };
 
 #endif // QXRDEXPERIMENTPREFERENCESDIALOG_H
+
+class QxrdExperimentPreferencesDialog;

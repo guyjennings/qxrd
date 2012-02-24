@@ -14,12 +14,8 @@
 #include "qxrdmaskdata.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdallocator.h"
-
-class QxrdDataProcessor;
-class QxrdAcquisition;
-
-typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
-typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
+#include "qxrddataprocessor.h"
+#include "qxrdacquisition.h"
 
 class QxrdFileSaver : public QObject
 {
@@ -65,3 +61,5 @@ typedef QSharedPointer<QxrdFileSaver> QxrdFileSaverPtr;
 typedef QWeakPointer<QxrdFileSaver> QxrdFileSaverWPtr;
 
 #endif
+
+class QxrdFileSaver;

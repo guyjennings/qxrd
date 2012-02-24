@@ -7,9 +7,8 @@
 #include "qcepproperty.h"
 #include "ui_qxrdfilebrowser.h"
 #include "qxrddataprocessor.h"
-
-class QxrdFileBrowserModel;
-class QxrdExperiment;
+#include "qxrdfilebrowsermodel.h"
+#include "qxrdexperiment.h"
 
 class QxrdFileBrowser : public QDockWidget, public Ui::QxrdFileBrowser
 {
@@ -87,3 +86,5 @@ public:
 };
 
 #endif // QXRDFILEBROWSER_H
+
+class QxrdFileBrowser;

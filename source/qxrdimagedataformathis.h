@@ -18,3 +18,5 @@ class QxrdImageDataFormatHis : public QcepImageDataFormat<double>
 };
 
 #endif
+
+class QxrdImageDataFormatHis;

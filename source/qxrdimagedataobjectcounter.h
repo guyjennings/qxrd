@@ -3,9 +3,7 @@
 
 #include <QObject>
 #include <QSharedPointer>
-
-class QxrdAllocator;
-typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;
+#include "qxrdallocator.h"
 
 class QxrdImageDataObjectCounter {
 public:
@@ -24,3 +22,5 @@ private:
 };
 
 #endif // QXRDIMAGEDATAOBJECTCOUNTER_H
+
+class QxrdImageDataObjectCounter;

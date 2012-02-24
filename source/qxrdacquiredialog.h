@@ -33,3 +33,5 @@ public slots:
 };
 
 #endif // QXRDACQUIREDIALOG_H
+
+class QxrdAcquireDialog;

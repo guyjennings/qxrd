@@ -4,7 +4,7 @@
 #include "qcepmacros.h"
 
 #include <QSettings>
-class QxrdApplication;
+#include "qxrdapplication.h"
 
 class QxrdGlobalSettings : public QSettings
 {
@@ -20,3 +20,5 @@ private:
 };
 
 #endif
+
+class QxrdGlobalSettings;

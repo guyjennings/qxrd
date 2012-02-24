@@ -12,3 +12,5 @@ public:
 };
 
 #endif
+
+class QxrdImageDataFormatTiff;

@@ -19,6 +19,7 @@ public:
 
 Q_DECLARE_INTERFACE(QxrdNIDAQPluginInterface, "gov.anl.aps.cep.Qxrd.NIDAQInterface/1.0")
 
-typedef QSharedPointer<QxrdNIDAQPluginInterface> QxrdNIDAQPluginInterfacePtr;
-
 #endif // QXRDNIDAQPLUGININTERFACE_H
+
+class QxrdNIDAQPluginInterface;
+typedef QSharedPointer<QxrdNIDAQPluginInterface> QxrdNIDAQPluginInterfacePtr;
