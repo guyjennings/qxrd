@@ -15,21 +15,21 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
   if (acq) {
     m_SynchronizedAcquisition = acq->synchronizedAcquisition();
 
-    m_SyncAcqMode     -> addItem("No External Synchronization");
-    m_SyncAcqMode     -> addItem("Stepped Output Synchronization");
-    m_SyncAcqMode     -> addItem("Continuous Output Synchronization");
+    m_SyncAcqMode     -> addItem("None");
+    m_SyncAcqMode     -> addItem("Stepped Output");
+    m_SyncAcqMode     -> addItem("Continuous Output");
 
-    m_SyncAcqWfm      -> addItem("Square Wave Output Waveform");
-    m_SyncAcqWfm      -> addItem("Sine Wave Output Waveform");
-    m_SyncAcqWfm      -> addItem("Triangle Wave Output Waveform");
-    m_SyncAcqWfm      -> addItem("Sawtooth Wave Output Waveform");
-    m_SyncAcqWfm      -> addItem("Bipolar Triangle Wave Output Waveform");
+    m_SyncAcqWfm      -> addItem("Square");
+    m_SyncAcqWfm      -> addItem("Sine");
+    m_SyncAcqWfm      -> addItem("Triangle");
+    m_SyncAcqWfm      -> addItem("Sawtooth");
+    m_SyncAcqWfm      -> addItem("Bipolar Triangle");
 
-    m_SyncAcqOutChan  -> addItem("No Analog Output");
-    m_SyncAcqOutChan  -> addItem("Analog Output 0 (AO0)");
-    m_SyncAcqOutChan  -> addItem("Analog Output 1 (AO1)");
+    m_SyncAcqOutChan  -> addItem("None");
+    m_SyncAcqOutChan  -> addItem("AO0");
+    m_SyncAcqOutChan  -> addItem("AO1");
 
-    m_SyncAcqFlagChan -> addItem("No Digital Output");
+    m_SyncAcqFlagChan -> addItem("None");
 
     m_SyncAcqMinimum  -> setMinimum(-10.0);
     m_SyncAcqMinimum  -> setMaximum(10.0);
