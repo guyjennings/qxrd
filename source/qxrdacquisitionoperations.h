@@ -2,10 +2,14 @@
 #define QXRDACQUISITIONOPERATIONS_H
 
 #include "qxrdacquisitionscripting.h"
+
+class QxrdExperiment;
+class QxrdDataProcessor;
+class QxrdWindow;
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
 #include "qxrdallocator.h"
-#include "qxrdexperiment.h"
-#include "qxrddataprocessor.h"
-#include "qxrdwindow.h"
+#include "qxrdsettingssaver.h"
 
 class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
@@ -13,7 +17,7 @@ class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 public:
   QxrdAcquisitionOperations(DetectorKind detectorKind, QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdDataProcessorWPtr proc, QxrdAllocatorWPtr allocator);
 
-  void setWindow(QxrdWindowWPtr win);
+  void setWindow(QxrdWindow *win);
 
 public slots:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
@@ -22,11 +26,9 @@ public slots:
 
 protected:
   QxrdExperimentWPtr    m_Experiment;
-  QxrdWindowWPtr        m_Window;
+  QxrdWindow           *m_Window;
   QxrdAllocatorWPtr     m_Allocator;
   QxrdDataProcessorWPtr m_DataProcessor;
 };
 
 #endif // QXRDACQUISITIONOPERATIONS_H
-
-class QxrdAcquisitionOperations;

@@ -72,5 +72,3 @@ private:
 };
 
 #endif // QXRDFILEBROWSERMODEL_H
-
-class QxrdFileBrowserModel;

@@ -1,6 +1,8 @@
 #include "qxrdimagedataformathis.h"
 #include "qxrdimagedata.h"
+#include "qxrdmaskdata.h"
 #include <QFileInfo>
+#include "qxrdimagedata-ptr.h"
 
 static QxrdImageDataFormatHis fmt;
 

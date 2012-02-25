@@ -28,5 +28,3 @@ private:
 };
 
 #endif // QXRDPOWDERFITREFINEPAGE_H
-
-class QxrdPowderFitRefinePage;

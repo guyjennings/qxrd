@@ -11,6 +11,9 @@
 #include "qxrdsettingssaver.h"
 #include "qxrdcenterfinder.h"
 
+class QxrdDataProcessor;
+typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;
+
 class QxrdIntegrator : public QObject
 {
   Q_OBJECT
@@ -41,7 +44,7 @@ public:
 public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
-  QxrdDataProcessorWPtr dataProcessor() const;
+  QxrdDataProcessorPtr dataProcessor() const;
 
   enum {
     IntegrateTTH, IntegrateQ, IntegrateR
@@ -82,8 +85,7 @@ private:
   QxrdIntegratorCachePtr m_IntegratorCache;
 };
 
-#endif // QXRDINTEGRATOR_H
-
-class QxrdIntegrator;
 typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
 typedef QWeakPointer<QxrdIntegrator> QxrdIntegratorWPtr;
+
+#endif // QXRDINTEGRATOR_H

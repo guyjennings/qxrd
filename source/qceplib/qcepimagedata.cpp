@@ -4,6 +4,7 @@
 
 #include <QSettings>
 #include <QFileInfo>
+#include <typeinfo>
 
 QAtomicInt allocCount = 0;
 

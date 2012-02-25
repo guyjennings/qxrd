@@ -30,5 +30,3 @@ private:
 };
 
 #endif // QXRDGLOBALPREFERENCESDIALOG_H
-
-class QxrdGlobalPreferencesDialog;

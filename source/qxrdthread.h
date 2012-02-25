@@ -13,5 +13,3 @@ public:
 };
 
 #endif // QXRDTHREAD_H
-
-class QxrdThread;

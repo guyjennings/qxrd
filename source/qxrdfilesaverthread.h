@@ -29,5 +29,3 @@ private:
 typedef QSharedPointer<QxrdFileSaverThread> QxrdFileSaverThreadPtr;
 
 #endif // QXRDFILESAVERTHREAD_H
-
-class QxrdFileSaverThread;

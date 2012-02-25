@@ -6,8 +6,10 @@
 #include <QObject>
 #include "qxrdintegrateddata.h"
 #include "qcepproperty.h"
-#include "qxrddataprocessor.h"
 #include "qxrdallocator.h"
+
+class QxrdExperiment;
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
 
 class QxrdIntegratorCache : public QObject
 {
@@ -124,7 +126,6 @@ private:
   QxrdAllocatorWPtr      m_Allocator;
 };
 
-#endif // QXRDINTEGRATORCACHE_H
-
-class QxrdIntegratorCache;
 typedef QSharedPointer<QxrdIntegratorCache> QxrdIntegratorCachePtr;
+
+#endif // QXRDINTEGRATORCACHE_H

@@ -4,7 +4,7 @@
 #include "qxrdapplication.h"
 
 QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperimentWPtr doc,
-                                     QxrdWindowWPtr win,
+                                     QxrdWindow *win,
                                      QxrdAcquisitionWPtr acq,
                                      QxrdDataProcessorWPtr proc,
                                      QWidget *parent) :
@@ -72,7 +72,7 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperimentWPtr doc,
     procp.data() -> prop_Average() -> linkTo(this -> m_AverageDisplay);
   }
 
-  QxrdWindowPtr wp(m_Window);
+  QxrdWindow *wp = m_Window;
 
   if (wp) {
     connect(m_AcquireOptionsButton, SIGNAL(clicked()), wp, SLOT(doEditPreferences()));

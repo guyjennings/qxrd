@@ -25,7 +25,3 @@ public:
 };
 
 #endif // QXRDMASKPICKER_H
-
-class QxrdMaskPicker;
-class QxrdCircularMaskPicker;
-class QxrdPolygonalMaskPicker;

@@ -5,8 +5,11 @@
 #include <QVector>
 #include <QMutex>
 #include "qcepproperty.h"
-#include "qxrdacquisition.h"
 #include "qxrdnidaqplugininterface.h"
+
+class QxrdAcquisition;
+class QxrdAcquisitionParameterPack;
+class QxrdDarkAcquisitionParameterPack;
 
 class QxrdSynchronizedAcquisition : public QObject
 {
@@ -58,8 +61,8 @@ signals:
 public slots:
 
 public:
-  void prepareForAcquisition(QxrdAcquisition::QxrdAcquisitionParameterPack *parms);
-  void prepareForDarkAcquisition(QxrdAcquisition::QxrdDarkAcquisitionParameterPack *parms);
+  void prepareForAcquisition(QxrdAcquisitionParameterPack *parms);
+  void prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPack *parms);
   void finishedAcquisition();
   void acquiredFrameAvailable(int currentPhase);
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
@@ -74,7 +77,7 @@ public:
 private:
   mutable QMutex              m_Mutex;
   QxrdAcquisition            *m_Acquisition;
-  QxrdAcquisition::QxrdAcquisitionParameterPack *m_AcquisitionParms;
+  QxrdAcquisitionParameterPack *m_AcquisitionParms;
   QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
   int                         m_SyncMode;
   QVector<double>             m_OutputTimes;
@@ -82,5 +85,3 @@ private:
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITION_H
-
-class QxrdSynchronizedAcquisition;

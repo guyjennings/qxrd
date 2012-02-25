@@ -27,5 +27,3 @@ private:
 extern void qceptiff_warningHandler(const char *module, const char *fmt, va_list ap);
 
 #endif
-
-template <typename T> class QcepImageDataFormatTiff;

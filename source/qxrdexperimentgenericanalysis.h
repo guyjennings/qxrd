@@ -19,5 +19,3 @@ public slots:
 };
 
 #endif // QXRDEXPERIMENTGENERICANALYSIS_H
-
-class QxrdExperimentGenericAnalysis;

@@ -6,7 +6,9 @@
 #include "ui_qxrdpowderfitwidget.h"
 #include "qwt_double_rect.h"
 #include "qwt_symbol.h"
-#include "qxrddataprocessor.h"
+//#include "qxrddataprocessor.h"
+
+class QxrdDataProcessor;
 
 class QxrdPowderFitWidget : public QDialog, public Ui::QxrdPowderFitWidget {
   Q_OBJECT
@@ -35,5 +37,3 @@ protected:
 };
 
 #endif // QXRDPOWDERFITWIDGET_H
-
-class QxrdPowderFitWidget;

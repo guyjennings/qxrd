@@ -4,6 +4,8 @@
 
 #include <cmath>
 
+#include "qxrddataprocessor.h"
+
 QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr alloc) :
   QObject(NULL),
   m_Processor(),

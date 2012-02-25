@@ -653,11 +653,3 @@ private: \
 QcepByteArrayProperty m_##propname;
 
 #endif // QCEPPROPERTY_H
-
-class QcepProperty;
-class QcepIntProperty;
-class QcepDoubleProperty;
-class QcepBoolProperty;
-class QcepStringProperty;
-class QcepStringListProperty;
-class QcepByteArrayProperty;

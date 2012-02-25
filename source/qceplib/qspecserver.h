@@ -15,13 +15,14 @@
 #include <QTcpSocket>
 
 class QxrdExperiment;
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
 
 class QSpecServer : public QTcpServer
 {
   Q_OBJECT
 
 public:
-  QSpecServer(QxrdExperiment *doc, QString name, int port);
+  QSpecServer(QxrdExperimentWPtr doc, QString name, int port);
 
 public:
   void startServer(QHostAddress a, int p=-1);
@@ -64,8 +65,10 @@ protected:
   void replyFromVariant(QVariant value);
   void replyFromError(QScriptValue value);
 
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+
 private:
-  QxrdExperiment      *m_Experiment;
+  QxrdExperimentWPtr   m_Experiment;
   QString              m_ServerName;
   int                  m_Port;
   QTcpSocket          *m_Socket;
@@ -77,5 +80,3 @@ private:
 };
 
 #endif
-
-class QSpecServer;

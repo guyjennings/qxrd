@@ -16,7 +16,7 @@ QxrdAcquisitionOperations::QxrdAcquisitionOperations(DetectorKind detectorKind,
 {
 }
 
-void QxrdAcquisitionOperations::setWindow(QxrdWindowWPtr win)
+void QxrdAcquisitionOperations::setWindow(QxrdWindow *win)
 {
   m_Window = win;
 }

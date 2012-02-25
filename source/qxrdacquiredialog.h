@@ -3,14 +3,13 @@
 
 #include "qcepmacros.h"
 #include "qxrdacquiredialogbase.h"
-#include "qxrdacquisition.h"
 #include "ui_qxrdacquiredialog.h"
 
 class QxrdAcquireDialog : public QxrdAcquireDialogBase, public Ui::QxrdAcquireDialog {
   Q_OBJECT
 public:
   QxrdAcquireDialog(QxrdExperimentWPtr doc,
-                    QxrdWindowWPtr win,
+                    QxrdWindow *win,
                     QxrdAcquisitionWPtr acq,
                     QxrdDataProcessorWPtr proc,
                     QWidget *parent);
@@ -33,5 +32,3 @@ public slots:
 };
 
 #endif // QXRDACQUIREDIALOG_H
-
-class QxrdAcquireDialog;

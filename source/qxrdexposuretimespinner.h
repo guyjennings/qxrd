@@ -21,5 +21,3 @@ private:
 };
 
 #endif // QXRDEXPOSURETIMESPINNER_H
-
-class QxrdExposureTimeSpinner;

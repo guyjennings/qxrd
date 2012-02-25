@@ -19,5 +19,3 @@ private:
 };
 
 #endif // QXRDIMAGECALCULATOR_H
-
-class QxrdImageCalculator;

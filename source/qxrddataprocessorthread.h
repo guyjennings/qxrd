@@ -43,7 +43,6 @@ private:
   QString                 m_Section;
 };
 
-#endif // QXRDDATAPROCESSORTHREAD_H
-
-class QxrdDataProcessorThread;
 typedef QSharedPointer<QxrdDataProcessorThread> QxrdDataProcessorThreadPtr;
+
+#endif // QXRDDATAPROCESSORTHREAD_H

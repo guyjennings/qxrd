@@ -28,7 +28,6 @@ private:
   QxrdSettingsSaverPtr m_Saver;
 };
 
-#endif // QXRDALLOCATORTHREAD_H
-
-class QxrdAllocatorThread;
 typedef QSharedPointer<QxrdAllocatorThread> QxrdAllocatorThreadPtr;
+
+#endif // QXRDALLOCATORTHREAD_H

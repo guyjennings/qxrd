@@ -132,7 +132,7 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
 
     if (m_Application && m_Application->get_GuiWanted()) {
       splashMessage("Opening Main Window");
-      m_Window = QxrdWindowPtr(
+      m_Window =
             new QxrdWindow(m_SettingsSaver,
                            m_Application,
                            exp,
@@ -140,9 +140,9 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
                            m_DataProcessor,
                            m_Application->allocator(),
                            settings,
-                           "experiment/window"));
+                           "experiment/window");
 
-      QxrdWindowPtr win(m_Window);
+      QxrdWindow *win = m_Window;
 
       if (win) {
         win -> init();
@@ -160,7 +160,7 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
 
     //  m_AcquisitionThread->initialize();
 
-    QxrdWindowPtr win(m_Window);
+    QxrdWindow *win = m_Window;
 
     if (win) {
       win -> onAcquisitionInit();
@@ -305,7 +305,7 @@ void QxrdExperiment::splashMessage(QString msg)
 
 void QxrdExperiment::criticalMessage(QString msg)
 {
-  QxrdWindowPtr win(m_Window);
+  QxrdWindow *win = m_Window;
 
   if (win) {
     win->displayCriticalMessage(msg);
@@ -318,7 +318,7 @@ void QxrdExperiment::criticalMessage(QString msg)
 
 void QxrdExperiment::statusMessage(QString msg)
 {
-  QxrdWindowPtr win(m_Window);
+  QxrdWindow *win = m_Window;
 
   if (win) {
     win->displayStatusMessage(msg);
@@ -341,7 +341,7 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts)
 
     logMessage(message);
 
-    QxrdWindowPtr win(m_Window);
+    QxrdWindow *win = m_Window;
 
     if (win) {
       win->displayMessage(message);
@@ -353,7 +353,7 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts)
   }
 }
 
-QxrdWindowPtr QxrdExperiment::window()
+QxrdWindow *QxrdExperiment::window()
 {
   return m_Window;
 }
@@ -507,7 +507,7 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
   if (settings) {
     QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
-    QxrdWindowPtr win(m_Window);
+    QxrdWindow *win = m_Window;
 
     if (win) {
       win            -> readSettings(settings, section+"/window");
@@ -551,7 +551,7 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
   if (settings) {
     QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 
-    QxrdWindowPtr win(m_Window);
+    QxrdWindow *win = m_Window;
 
     if (win) {
       win            -> writeSettings(settings, section+"/window");
@@ -623,7 +623,7 @@ void QxrdExperiment::setExperimentFilePath(QString path)
   set_LogFileName(defaultLogName(path));
   set_ScanFileName(defaultScanName(path));
 
-  QxrdWindowPtr win(m_Window);
+  QxrdWindow *win = m_Window;
 
   if (win) {
     win -> updateTitle();

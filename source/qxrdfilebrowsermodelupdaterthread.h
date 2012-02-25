@@ -2,8 +2,9 @@
 #define QXRDFILEBROWSERMODELUPDATERTHREAD_H
 
 #include "qxrdthread.h"
-#include "qxrdfilebrowsermodel.h"
 #include "qxrdfilebrowsermodelupdater.h"
+
+class QxrdFileBrowserModel;
 
 class QxrdFileBrowserModelUpdaterThread : public QxrdThread
 {
@@ -25,5 +26,3 @@ private:
 };
 
 #endif // QXRDFILEBROWSERMODELUPDATERTHREAD_H
-
-class QxrdFileBrowserModelUpdaterThread;

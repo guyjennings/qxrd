@@ -2,7 +2,7 @@
 #define QXRDMASKSTACKMODEL_H
 
 #include <QAbstractListModel>
-#include "qxrdmaskstack.h"
+#include "qxrdmaskstack-ptr.h"
 
 class QxrdMaskStackModel : public QAbstractTableModel
 {
@@ -39,5 +39,3 @@ private:
 };
 
 #endif // QXRDMASKSTACKMODEL_H
-
-class QxrdMaskStackModel;

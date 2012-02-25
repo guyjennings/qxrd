@@ -8,7 +8,8 @@
 QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
   QDockWidget(parent),
   m_Processor(procw),
-  m_Masks(NULL)
+  m_Masks(),
+  m_MaskStackModel()
 {
   setupUi(this);
 
@@ -45,9 +46,10 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
     proc -> prop_MaskSetPixels() -> linkTo(m_MaskSetPixels);
 
     m_Masks = proc->maskStack();
-    m_MaskStackModel = new QxrdMaskStackModel(m_Masks);
+    m_MaskStackModel = QxrdMaskStackModelPtr(
+          new QxrdMaskStackModel(m_Masks));
 
-    m_MaskStackView -> setModel(m_MaskStackModel);
+    m_MaskStackView -> setModel(m_MaskStackModel.data());
     m_MaskStackView -> setMaskStack(m_Masks);
     m_MaskStackView -> setProcessor(m_Processor);
     m_MaskStackView -> setMaskDialog(this);

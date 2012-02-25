@@ -5,13 +5,15 @@
 #include <QTcpSocket>
 #include <QScriptValue>
 #include <QDateTime>
-#include "qxrdexperiment.h"
+
+class QxrdExperiment;
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
 
 class QxrdSimpleServer : public QTcpServer
 {
   Q_OBJECT
 public:
-  QxrdSimpleServer(QxrdExperiment *doc, QString name, int port);
+  QxrdSimpleServer(QxrdExperimentWPtr doc, QString name, int port);
   virtual ~QxrdSimpleServer();
 
 public:
@@ -29,14 +31,17 @@ signals:
 public slots:
   void finishedCommand(QScriptValue result);
 
+protected:
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void criticalMessage(QString msg);
+
 private:
-  QxrdExperiment          *m_Experiment;
+  QxrdExperimentWPtr       m_Experiment;
   QString                  m_Name;
   int                      m_Port;
   QTcpSocket              *m_Socket;
 };
 
-#endif // QXRDSIMPLESERVER_H
-
-class QxrdSimpleServer;
 typedef QSharedPointer<QxrdSimpleServer> QxrdSimpleServerPtr;
+
+#endif // QXRDSIMPLESERVER_H

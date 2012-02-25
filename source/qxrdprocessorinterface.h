@@ -13,5 +13,3 @@ public:
 Q_DECLARE_INTERFACE(QxrdProcessorInterface, "gov.anl.aps.cep.Qxrd.ProcessorInterface/1.0")
 
 #endif // QXRDPROCESSORINTERFACE_H
-
-class QxrdProcessorInterface;

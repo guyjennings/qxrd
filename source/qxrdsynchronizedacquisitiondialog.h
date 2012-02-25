@@ -25,5 +25,3 @@ private:
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITIONDIALOG_H
-
-class QxrdSynchronizedAcquisitionDialog;

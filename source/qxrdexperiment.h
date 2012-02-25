@@ -15,9 +15,15 @@
 #include "qxrdsimpleserverthread.h"
 #include "qxrdfilesaverthread.h"
 #include "qxrdscriptenginethread.h"
-#include "qxrdwindow.h"
 #include "qxrdnidaqplugininterface.h"
-#include "qxrdexperimentthread.h"
+
+#include "qxrdexperimentthread-ptr.h"
+class QxrdApplication;
+class QxrdWindow;
+class QxrdExperimentThread;
+class QxrdExperiment;
+typedef QWeakPointer<QxrdExperimentThread> QxrdExperimentThreadWPtr;
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
 
 class QxrdExperiment : public QObject
 {
@@ -31,7 +37,7 @@ public:
   QxrdExperimentThreadWPtr experimentThread();
   QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
-  QxrdWindowPtr window();
+  QxrdWindow *window();
   QxrdDataProcessorWPtr dataProcessor() const;
 
   FILE* logFile();
@@ -145,7 +151,7 @@ public:  // Properties
   QCEP_INTEGER_PROPERTY(CompletionPercentage)
 
 private:
-  QxrdWindowPtr                   m_Window;
+  QxrdWindow                     *m_Window;
   QSplashScreen                  *m_Splash;
   QxrdServerThreadPtr             m_ServerThread;
   QxrdServerPtr                   m_Server;
@@ -168,8 +174,7 @@ private:
   FILE                           *m_ScanFile;
 };
 
-#endif // QXRDEXPERIMENT_H
-
-class QxrdExperiment;
 typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
 typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+
+#endif // QXRDEXPERIMENT_H

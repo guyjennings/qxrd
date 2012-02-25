@@ -30,5 +30,3 @@ private:
 };
 
 #endif // QXRDINTEGRATEDDATAQUEUE_H
-
-class QxrdIntegratedDataQueue;

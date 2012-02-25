@@ -30,5 +30,3 @@ protected:
 };
 
 #endif // QXRDACQUISITIONAREADETECTOR_H
-
-class QxrdAcquisitionAreaDetector;

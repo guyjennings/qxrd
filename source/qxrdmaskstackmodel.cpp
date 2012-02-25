@@ -1,4 +1,6 @@
 #include "qxrdmaskstackmodel.h"
+#include "qxrdmaskstack.h"
+#include "qxrdmaskdata.h"
 
 QxrdMaskStackModel::QxrdMaskStackModel(QxrdMaskStackPtr masks) :
     m_MaskStack(masks)

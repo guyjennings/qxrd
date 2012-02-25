@@ -2,7 +2,6 @@
 #define QXRDIMAGEDATAFORMATMAR345_H
 
 #include "qcepmacros.h"
-
 #include "qcepimagedataformatmar345.h"
 
 class QxrdImageDataFormatMar345 : public QcepImageDataFormatMar345<double>
@@ -12,5 +11,3 @@ public:
 };
 
 #endif
-
-class QxrdImageDataFormatMar345;

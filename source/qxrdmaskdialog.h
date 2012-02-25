@@ -3,8 +3,10 @@
 
 #include <QDockWidget>
 #include "ui_qxrdmaskdialog.h"
-#include "qxrddataprocessor.h"
-#include "qxrdmaskstackmodel.h"
+
+#include "qxrddataprocessor-ptr.h"
+#include "qxrdmaskstackmodel-ptr.h"
+#include "qxrdmaskstack-ptr.h"
 
 class QxrdMaskDialog : public QDockWidget, public Ui::QxrdMaskDialog
 {
@@ -43,11 +45,9 @@ private:
   int maskStackSelectPopup();
 
 private:
-  QxrdDataProcessorWPtr m_Processor;
-  QxrdMaskStackPtr      m_Masks;
-  QxrdMaskStackModel   *m_MaskStackModel;
+  QxrdDataProcessorWPtr  m_Processor;
+  QxrdMaskStackWPtr      m_Masks;
+  QxrdMaskStackModelPtr  m_MaskStackModel;
 };
 
 #endif // QXRDMASKDIALOG_H
-
-class QxrdMaskDialog;

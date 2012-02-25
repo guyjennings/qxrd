@@ -30,5 +30,3 @@ private:
 };
 
 #endif // QXRDINTEGRATORPLOT_H
-
-class QxrdIntegratorPlot;

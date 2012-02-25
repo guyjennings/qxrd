@@ -6,8 +6,9 @@
 #include <QSettings>
 #include <QLabel>
 #include <QTimer>
-#include "qxrdapplication.h"
 #include "ui_qxrdwelcomewindow.h"
+
+class QxrdApplication;
 
 class QxrdWelcomeWindow : public QMainWindow
 {
@@ -51,5 +52,3 @@ private:
 };
 
 #endif // QXRDWELCOMEWINDOW_H
-
-class QxrdWelcomeWindow;

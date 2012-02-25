@@ -90,7 +90,7 @@ void QxrdSynchronizedAcquisitionDialog::waveformChanged()
   QxrdAcquisitionPtr acq(m_Acquisition);
 
   if (acq && m_SynchronizedAcquisition) {
-    QxrdAcquisition::QxrdAcquisitionParameterPack parms = acq->acquisitionParameterPack();
+    QxrdAcquisitionParameterPack parms = acq->acquisitionParameterPack();
     m_SynchronizedAcquisition->prepareForAcquisition(&parms);
 
     m_WaveformPlot->clear();

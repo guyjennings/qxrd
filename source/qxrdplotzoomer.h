@@ -31,6 +31,3 @@ private:
 };
 
 #endif // QXRDPLOTZOOMER_H
-
-class QxrdPlotZoomer;
-class QxrdImagePlotZoomer;

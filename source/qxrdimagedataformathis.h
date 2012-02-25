@@ -2,9 +2,8 @@
 #define QIMGIMAGEDATAFORMATHIS_H
 
 #include "qcepmacros.h"
-
-#include "qcepimagedata.h"
 #include "qcepimagedataformat.h"
+template <typename T> class QcepImageData;
 
 class QxrdImageDataFormatHis : public QcepImageDataFormat<double>
 {
@@ -18,5 +17,3 @@ class QxrdImageDataFormatHis : public QcepImageDataFormat<double>
 };
 
 #endif
-
-class QxrdImageDataFormatHis;

@@ -19,5 +19,3 @@ public slots:
 };
 
 #endif // QXRDEXPERIMENTSIMULATEDACQUISITION_H
-
-class QxrdExperimentSimulatedAcquisition;

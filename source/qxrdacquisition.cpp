@@ -10,6 +10,7 @@
 
 #include <QThreadPool>
 #include <QtConcurrentRun>
+#include <QDir>
 
 QxrdAcquisition::QxrdAcquisition(DetectorKind detectorKind,
                                  QxrdSettingsSaverWPtr saver,
@@ -115,7 +116,7 @@ void QxrdAcquisition::acquire()
   }
 }
 
-QxrdAcquisition::QxrdAcquisitionParameterPack QxrdAcquisition::acquisitionParameterPack()
+QxrdAcquisitionParameterPack QxrdAcquisition::acquisitionParameterPack()
 {
   return QxrdAcquisitionParameterPack (get_FilePattern(),
                                        get_ExposureTime(),
@@ -127,7 +128,7 @@ QxrdAcquisition::QxrdAcquisitionParameterPack QxrdAcquisition::acquisitionParame
                                        get_SkippedExposures());
 }
 
-QxrdAcquisition::QxrdDarkAcquisitionParameterPack QxrdAcquisition::darkAcquisitionParameterPack()
+QxrdDarkAcquisitionParameterPack QxrdAcquisition::darkAcquisitionParameterPack()
 {
   return QxrdDarkAcquisitionParameterPack(get_FilePattern(),
                                           get_ExposureTime(),

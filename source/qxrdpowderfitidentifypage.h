@@ -38,5 +38,3 @@ private:
 };
 
 #endif // QXRDPOWDERFITIDENTIFYPAGE_H
-
-class QxrdPowderFitIdentifyPage;

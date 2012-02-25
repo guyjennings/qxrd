@@ -82,7 +82,6 @@ public:
 
 Q_DECLARE_INTERFACE(QxrdPerkinElmerPluginInterface, "gov.anl.aps.cep.Qxrd.PerkinElmerInterface/1.0")
 
-#endif // QXRDPERKINELMERPLUGININTERFACE_H
-
-class QxrdPerkinElmerPluginInterface;
 typedef QSharedPointer<QxrdPerkinElmerPluginInterface> QxrdPerkinElmerPluginInterfacePtr;
+
+#endif // QXRDPERKINELMERPLUGININTERFACE_H

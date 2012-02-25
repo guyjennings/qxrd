@@ -5,7 +5,7 @@
 #include <QDateTime>
 #include "qxrdapplication.h"
 
-QxrdServerThread::QxrdServerThread(QxrdExperiment *doc, QString name, int port)
+QxrdServerThread::QxrdServerThread(QxrdExperimentWPtr doc, QString name, int port)
     : m_Experiment(doc),
     m_Name(name),
     m_Port(port),
@@ -43,8 +43,10 @@ void QxrdServerThread::shutdown()
 
 void QxrdServerThread::run()
 {
-  if (qcepDebug(DEBUG_THREADS)) {
-    m_Experiment->printMessage("Starting Spec Server Thread");
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt && qcepDebug(DEBUG_THREADS)) {
+    expt->printMessage("Starting Spec Server Thread");
   }
 
   QxrdServerPtr server(new QxrdServer(m_Experiment, m_Name, m_Port));
@@ -53,12 +55,14 @@ void QxrdServerThread::run()
 
   m_Server = server;
 
-  m_Experiment->printMessage(tr("spec server started on port %1").arg(m_Server->serverPort()));
+  if (expt) {
+    expt->printMessage(tr("spec server started on port %1").arg(m_Server->serverPort()));
+  }
 
   int rc = exec();
 
-  if (qcepDebug(DEBUG_THREADS)) {
-    m_Experiment->printMessage(tr("Spec Server Thread Terminated with rc %1").arg(rc));
+  if (expt && qcepDebug(DEBUG_THREADS)) {
+    expt->printMessage(tr("Spec Server Thread Terminated with rc %1").arg(rc));
   }
 }
 

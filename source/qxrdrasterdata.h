@@ -6,7 +6,6 @@
 #include <qwt_raster_data.h>
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
-#include "qxrdrasterdata.h"
 
 class QxrdRasterData : public QwtRasterData
 {
@@ -48,7 +47,6 @@ private:
   int                    m_Interpolate;
 };
 
-#endif
-
-class QxrdRasterData;
 typedef QSharedPointer<QxrdRasterData> QxrdRasterDataPtr;
+
+#endif

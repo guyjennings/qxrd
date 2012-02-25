@@ -3,9 +3,14 @@
 
 #include "qxrdthread.h"
 #include "qxrdacquisitiontrigger.h"
-#include "qxrdexperiment.h"
 #include <QSettings>
 #include "qxrdsettingssaver.h"
+
+class QxrdExperiment;
+class QxrdAcquisition;
+
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
 
 class QxrdAcquisitionTriggerThread : public QxrdThread
 {
@@ -38,8 +43,7 @@ private:
   QxrdAcquisitionTriggerPtr m_AcquisitionTrigger;
 };
 
-#endif
-
-class QxrdAcquisitionTriggerThread;
 typedef QSharedPointer<QxrdAcquisitionTriggerThread> QxrdAcquisitionTriggerThreadPtr;
 typedef QWeakPointer<QxrdAcquisitionTriggerThread> QxrdAcquisitionTriggerThreadWPtr;
+
+#endif

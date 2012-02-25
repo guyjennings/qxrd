@@ -29,11 +29,11 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   insertLegend(m_Legend, QwtPlot::RightLegend);
 }
 
-void QxrdCenterFinderPlot::setWindow(QxrdWindowWPtr win)
+void QxrdCenterFinderPlot::setWindow(QxrdWindow *win)
 {
   m_Window = win;
 
-  QxrdWindowPtr wp(m_Window);
+  QxrdWindow *wp = m_Window;
 
   if (wp) {
     m_DataProcessor = wp -> dataProcessor();
@@ -107,7 +107,7 @@ void QxrdCenterFinderPlot::onCenterChanged(QwtDoublePoint c)
 
 void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 {
-  QxrdWindowPtr wp(m_Window);
+  QxrdWindow *wp = m_Window;
   QxrdCenterFinderPtr cf(m_CenterFinder);
 
   if (wp && cf) {

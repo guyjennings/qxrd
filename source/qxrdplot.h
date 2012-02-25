@@ -80,5 +80,3 @@ protected:
 };
 
 #endif // QXRDPLOT_H
-
-class QxrdPlot;

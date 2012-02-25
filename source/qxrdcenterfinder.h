@@ -87,7 +87,7 @@ private:
   mutable QMutex             m_Mutex;
 };
 
-#endif // QXRDCENTERFINDER_H
-
-class QxrdCenterFinder;
 typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
+typedef QWeakPointer<QxrdCenterFinder> QxrdCenterFinderWPtr;
+
+#endif // QXRDCENTERFINDER_H

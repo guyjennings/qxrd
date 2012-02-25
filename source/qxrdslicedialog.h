@@ -2,6 +2,7 @@
 #define QXRDSLICEDIALOG_H
 
 #include <QDockWidget>
+#include "qxrdplot.h"
 #include "ui_qxrdslicedialog.h"
 #include "qxrdimagedata.h"
 #include "qwt_array.h"
@@ -30,5 +31,3 @@ private:
 };
 
 #endif // QXRDSLICEDIALOG_H
-
-class QxrdSliceDialog;

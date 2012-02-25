@@ -1,6 +1,8 @@
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
 #include "qxrdapplication.h"
+#include <QDir>
+#include <typeinfo>
 
 template <typename T>
 QxrdImageData<T>::QxrdImageData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr allocator, int typ, int width, int height, T def)

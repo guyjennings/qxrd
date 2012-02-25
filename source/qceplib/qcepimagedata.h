@@ -2,7 +2,6 @@
 #define QCEPIMAGEDATA_H
 
 #include "qcepmacros.h"
-#include "qcepimagedata.h"
 #include <QMutex>
 #include <QString>
 #include <QVector>
@@ -219,5 +218,3 @@ protected:
 };
 
 #endif
-
-template <typename T> class QcepImageData;

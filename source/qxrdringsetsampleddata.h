@@ -34,7 +34,6 @@ private:
   QList<QxrdRingSampledDataPtr> m_Rings;
 };
 
-#endif // QXRDRINGSETSAMPLEDDATA_H
-
-class QxrdRingSetSampledData;
 typedef QSharedPointer<QxrdRingSetSampledData> QxrdRingSetSampledDataPtr;
+
+#endif // QXRDRINGSETSAMPLEDDATA_H

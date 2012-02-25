@@ -2,7 +2,8 @@
 #define QXRDPLOTMEASURER_H
 
 #include <qwt_plot_picker.h>
-#include "qxrdplot.h"
+
+class QxrdPlot;
 
 class QxrdPlotMeasurer : public QwtPlotPicker
 {
@@ -18,5 +19,3 @@ private:
 };
 
 #endif // QXRDPLOTMEASURER_H
-
-class QxrdPlotMeasurer;

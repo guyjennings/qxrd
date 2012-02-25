@@ -86,5 +86,3 @@ public:
 };
 
 #endif // QXRDFILEBROWSER_H
-
-class QxrdFileBrowser;

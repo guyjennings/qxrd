@@ -13,5 +13,3 @@ private:
 };
 
 #endif // QXRDCENTERFINDERPICKER_H
-
-class QxrdCenterFinderPicker;

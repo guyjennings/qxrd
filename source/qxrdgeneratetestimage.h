@@ -7,8 +7,10 @@
 
 #include "qcepproperty.h"
 #include "qxrdimagedata.h"
-#include "qxrddataprocessor.h"
 #include "qxrddetectorgeometry.h"
+
+class QxrdDataProcessor;
+typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
 
 class QxrdGenerateTestImage : public QObject
 {
@@ -88,6 +90,7 @@ public:
   QCEP_DOUBLE_LIST_PROPERTY(RingWidth)
 };
 
-#endif // QXRDGENERATETESTIMAGE_H
+typedef QSharedPointer<QxrdGenerateTestImage> QxrdGenerateTestImagePtr;
+typedef QWeakPointer<QxrdGenerateTestImage> QxrdGenerateTestImageWPtr;
 
-class QxrdGenerateTestImage;
+#endif // QXRDGENERATETESTIMAGE_H

@@ -2,7 +2,9 @@
 #define QXRDFITPARAMETER_H
 
 #include "qcepproperty.h"
-#include "qxrdfitparameter.h"
+
+class QxrdFitParameter;
+typedef QSharedPointer<QxrdFitParameter> QxrdFitParameterPtr;
 
 class QxrdFitParameter : public QcepDoubleProperty
 {
@@ -66,7 +68,5 @@ QxrdFitParameter *prop_##propname() { \
 private: \
   QxrdFitParameter m_##propname;
 
-#endif // QXRDFITPARAMETER_H
 
-class QxrdFitParameter;
-typedef QSharedPointer<QxrdFitParameter> QxrdFitParameterPtr;
+#endif // QXRDFITPARAMETER_H

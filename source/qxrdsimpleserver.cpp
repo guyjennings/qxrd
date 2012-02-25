@@ -4,7 +4,7 @@
 #include <QThread>
 #include "qxrdexperiment.h"
 
-QxrdSimpleServer::QxrdSimpleServer(QxrdExperiment *doc, QString name, int port) :
+QxrdSimpleServer::QxrdSimpleServer(QxrdExperimentWPtr doc, QString name, int port) :
     QTcpServer(NULL),
     m_Experiment(doc),
     m_Name(name),
@@ -24,10 +24,30 @@ QxrdSimpleServer::~QxrdSimpleServer()
   }
 }
 
+void
+QxrdSimpleServer::printMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    exp->printMessage(msg, ts);
+  }
+}
+
+void
+QxrdSimpleServer::criticalMessage(QString msg)
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    exp->criticalMessage(msg);
+  }
+}
+
 void QxrdSimpleServer::startServer(QHostAddress addr, int port)
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    m_Experiment->printMessage(tr("Starting simple server on address %1, port %2")
+    printMessage(tr("Starting simple server on address %1, port %2")
                                 .arg(addr.toString()).arg(port));
   }
 
@@ -38,7 +58,7 @@ void QxrdSimpleServer::startServer(QHostAddress addr, int port)
   }
 
   if (!listen(addr, port)) {
-    m_Experiment->criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy of qxrd running already?").arg(addr.toString()).arg(port));
+    criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy of qxrd running already?").arg(addr.toString()).arg(port));
   }
 }
 
@@ -50,7 +70,7 @@ void QxrdSimpleServer::openNewConnection()
   connect(m_Socket, SIGNAL(readyRead()), this,     SLOT(clientRead()));
 
   if (qcepDebug(DEBUG_SERVER)) {
-    m_Experiment->printMessage(tr("New connection from %1").arg(m_Socket->peerAddress().toString()) );
+    printMessage(tr("New connection from %1").arg(m_Socket->peerAddress().toString()) );
   }
 
   connect(m_Socket, SIGNAL(disconnected()), this,     SLOT(connectionClosed()));
@@ -59,7 +79,7 @@ void QxrdSimpleServer::openNewConnection()
 void QxrdSimpleServer::connectionClosed()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    m_Experiment->printMessage("Client closed connection");
+    printMessage("Client closed connection");
   }
 }
 
@@ -71,7 +91,7 @@ void QxrdSimpleServer::clientRead()
     QString str = ts.readLine();
 
     if (qcepDebug(DEBUG_SERVER)) {
-      m_Experiment->printMessage(tr("Command: %1 received").arg(str));
+      printMessage(tr("Command: %1 received").arg(str));
     }
 
     emit executeCommand(str);
@@ -81,7 +101,7 @@ void QxrdSimpleServer::clientRead()
 void QxrdSimpleServer::finishedCommand(QScriptValue result)
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    m_Experiment->printMessage(tr("Result: %1").arg(result.toString()));
+    printMessage(tr("Result: %1").arg(result.toString()));
   }
 
   if (m_Socket && (m_Socket->isWritable())) {

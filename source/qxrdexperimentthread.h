@@ -3,10 +3,12 @@
 
 #include <QThread>
 #include <QSharedPointer>
+#include <QSettings>
 #include "qxrdthread.h"
-#include "qxrdexperiment.h"
-#include "qxrdapplication.h"
-#include "qxrdexperimentthread.h"
+
+#include "qxrdexperiment-ptr.h"
+#include "qxrdapplication-ptr.h"
+#include "qxrdexperimentthread-ptr.h"
 
 class QxrdExperimentThread : public QxrdThread
 {
@@ -52,8 +54,7 @@ private:
   QSettings         *m_Settings;
 };
 
-#endif // QXRDEXPERIMENTTHREAD_H
-
-class QxrdExperimentThread;
 typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;
 typedef QWeakPointer<QxrdExperimentThread> QxrdExperimentThreadWPtr;
+
+#endif // QXRDEXPERIMENTTHREAD_H

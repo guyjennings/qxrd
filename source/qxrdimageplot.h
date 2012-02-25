@@ -16,9 +16,11 @@
 #include "qxrdhistogramselector.h"
 #include "qxrdplotslicer.h"
 #include "qxrdimageplotmeasurer.h"
-#include "qxrddataprocessor.h"
 #include "qxrdcenterfinderpicker.h"
 #include "qxrdmaskpicker.h"
+
+class QxrdDataProcessor;
+typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
 
 class QxrdImagePlot : public QxrdPlot
 {
@@ -199,5 +201,3 @@ private:
 };
 
 #endif
-
-class QxrdImagePlot;

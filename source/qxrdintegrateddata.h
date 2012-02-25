@@ -1,10 +1,17 @@
 #ifndef QXRDINTEGRATEDDATA_H
 #define QXRDINTEGRATEDDATA_H
 
+#include "qcepproperty.h"
 #include <QObject>
 #include <QSharedPointer>
+#include "qxrdimagedataobjectcounter.h"
 #include "qxrdimagedata.h"
-#include "qxrdallocator.h"
+
+class QxrdAllocator;
+class QxrdSettingsSaver;
+
+typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;
+typedef QWeakPointer<QxrdSettingsSaver> QxrdSettingsSaverWPtr;
 
 class QxrdIntegratedData : public QObject
 {
@@ -54,7 +61,6 @@ private:
   int                        m_Oversample;
 };
 
-#endif // QXRDINTEGRATEDDATA_H
-
-class QxrdIntegratedData;
 typedef QSharedPointer<QxrdIntegratedData>       QxrdIntegratedDataPtr;
+
+#endif // QXRDINTEGRATEDDATA_H

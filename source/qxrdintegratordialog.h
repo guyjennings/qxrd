@@ -18,5 +18,3 @@ private:
 };
 
 #endif // QXRDINTEGRATORDIALOG_H
-
-class QxrdIntegratorDialog;

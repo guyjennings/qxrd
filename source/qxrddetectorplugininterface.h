@@ -13,5 +13,3 @@ public:
 Q_DECLARE_INTERFACE(QxrdDetectorPluginInterface, "gov.anl.aps.cep.Qxrd.DetectorInterface/1.0")
 
 #endif // QXRDDETECTORPLUGININTERFACE_H
-
-class QxrdDetectorPluginInterface;

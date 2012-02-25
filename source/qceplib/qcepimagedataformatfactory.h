@@ -6,7 +6,6 @@
 #include <QObject>
 #include <QString>
 #include <QList>
-#include "qcepimagedata.h"
 #include "qcepimagedataformat.h"
 
 template <typename T>
@@ -30,5 +29,3 @@ class QcepImageDataFormatFactory
 };
 
 #endif
-
-template <typename T> class QcepImageDataFormatFactory;

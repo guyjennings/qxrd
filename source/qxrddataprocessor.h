@@ -2,8 +2,6 @@
 #define QXRDDATAPROCESSOR_H
 
 #include "qxrddataprocessorthreaded.h"
-#include "qxrdacquisition.h"
-#include "qxrdexperiment.h"
 
 class QxrdDataProcessor : public QxrdDataProcessorThreaded
 {
@@ -23,7 +21,3 @@ public:
 };
 
 #endif
-
-class QxrdDataProcessor;
-typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;
-typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;

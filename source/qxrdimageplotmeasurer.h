@@ -2,7 +2,8 @@
 #define QXRDIMAGEPLOTMEASURER_H
 
 #include "qxrdplotmeasurer.h"
-#include "qxrdimageplot.h"
+
+class QxrdImagePlot;
 
 class QxrdImagePlotMeasurer : public QxrdPlotMeasurer
 {
@@ -16,5 +17,3 @@ private:
 };
 
 #endif // QXRDIMAGEPLOTMEASURER_H
-
-class QxrdImagePlotMeasurer;

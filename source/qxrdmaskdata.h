@@ -2,10 +2,10 @@
 #define QXRDMASKDATA_H
 
 #include "qcepimagedata.h"
-#include "qxrdmaskdata.h"
 #include "qxrdimagedataobjectcounter.h"
 #include <QImage>
-#include "qxrdallocator.h"
+#include "qxrdmaskdata-ptr.h"
+#include "qxrdallocator-ptr.h"
 
 class QxrdMaskData : public QcepImageData<short>
 {
@@ -62,7 +62,5 @@ private:
   QxrdImageDataObjectCounter m_ObjectCounter;
 };
 
-#endif // QXRDMASKDATA_H
 
-class QxrdMaskData;
-typedef QSharedPointer<QxrdMaskData> QxrdMaskDataPtr;
+#endif // QXRDMASKDATA_H

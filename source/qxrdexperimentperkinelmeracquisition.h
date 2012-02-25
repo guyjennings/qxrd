@@ -19,5 +19,3 @@ public slots:
 };
 
 #endif // QXRDEXPERIMENTPERKINELMERACQUISITION_H
-
-class QxrdExperimentPerkinElmerAcquisition;

@@ -8,11 +8,7 @@
 #include <QScriptValue>
 
 #include "ui_qxrdwindow.h"
-#include "qxrdacquisition.h"
 
-#include "qxrdapplication.h"
-#include "qxrdexperiment.h"
-#include "qxrddataprocessor.h"
 #include "qxrdallocator.h"
 #include "qxrdscriptengine.h"
 #include "qxrdacquiredialog.h"
@@ -32,8 +28,9 @@
 #include "qxrdpowderfitdialog.h"
 #include "qxrdimagedisplaywidget.h"
 #include "qxrdhighlighter.h"
+#include "qxrdmaskdialog.h"
 
-class QxrdMaskDialog;
+#include "qxrdexperiment-ptr.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -202,7 +199,3 @@ private:
 };
 
 #endif
-
-class QxrdWindow;
-typedef QxrdWindow *QxrdWindowPtr;
-typedef QxrdWindow *QxrdWindowWPtr;

@@ -16,5 +16,3 @@ public slots:
 };
 
 #endif // QXRDRESAMPLER_H
-
-class QxrdResampler;

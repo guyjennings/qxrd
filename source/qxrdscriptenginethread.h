@@ -4,8 +4,10 @@
 #include "qxrdthread.h"
 #include "qxrdscriptengine.h"
 #include <QDateTime>
-#include "qxrdapplication.h"
-#include "qxrdexperiment.h"
+
+class QxrdApplication;
+class QxrdExperiment;
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
 
 class QxrdScriptEngineThread : public QxrdThread
 {
@@ -27,7 +29,6 @@ private:
   QxrdExperimentWPtr  m_Experiment;
 };
 
-#endif // QXRDSCRIPTENGINETHREAD_H
-
-class QxrdScriptEngineThread;
 typedef QSharedPointer<QxrdScriptEngineThread> QxrdScriptEngineThreadPtr;
+
+#endif // QXRDSCRIPTENGINETHREAD_H

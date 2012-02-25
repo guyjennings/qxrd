@@ -8,7 +8,8 @@
 
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
-#include "qxrdapplication.h"
+
+class QxrdApplication;
 
 class QxrdImageDisplayWidget : public QWidget
 {
@@ -50,5 +51,3 @@ private:
 };
 
 #endif // QXRDIMAGEDISPLAYWIDGET_H
-
-class QxrdImageDisplayWidget;

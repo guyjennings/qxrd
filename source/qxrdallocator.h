@@ -2,16 +2,18 @@
 #define QXRDALLOCATOR_H
 
 #include "qcepmacros.h"
-#include "qxrdallocator.h"
 
 #include <QMutex>
 #include <QTimer>
+#include <QWeakPointer>
+#include <QSharedPointer>
+
 #include "qcepproperty.h"
-#include "qxrdimagedata.h"
-#include "qxrdmaskdata.h"
-#include "qxrdintegrateddata.h"
-#include "qxrdintegrateddataqueue.h"
-#include "qxrdimagequeue.h"
+
+#include "qxrdallocator-ptr.h"
+#include "qxrdimagedata-ptr.h"
+#include "qxrdintegrateddata-ptr.h"
+#include "qxrdmaskdata-ptr.h"
 
 class QxrdAllocator : public QObject
 {
@@ -130,10 +132,3 @@ private:
 };
 
 #endif
-
-#include <QWeakPointer>
-#include <QSharedPointer>
-
-class QxrdAllocator;
-typedef QSharedPointer<QxrdAllocator> QxrdAllocatorPtr;
-typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;

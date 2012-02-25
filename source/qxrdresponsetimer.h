@@ -21,5 +21,3 @@ private:
 };
 
 #endif // QXRDRESPONSETIMER_H
-
-class QxrdResponseTimer;

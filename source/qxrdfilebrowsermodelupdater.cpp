@@ -3,6 +3,7 @@
 #include <QThread>
 #include <QDirIterator>
 #include <QThreadStorage>
+#include "qxrdfilebrowsermodel.h"
 
 QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModel *browser, QObject *parent) :
   QObject(parent),

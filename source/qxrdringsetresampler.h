@@ -16,5 +16,3 @@ public slots:
 };
 
 #endif // QXRDRINGSETRESAMPLER_H
-
-class QxrdRingSetResampler;

@@ -61,14 +61,14 @@ QxrdIntegrator::~QxrdIntegrator()
   }
 }
 
-QxrdDataProcessorWPtr QxrdIntegrator::dataProcessor() const
+QxrdDataProcessorPtr QxrdIntegrator::dataProcessor() const
 {
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
     return expt->dataProcessor();
   } else {
-    return QxrdDataProcessorWPtr();
+    return QxrdDataProcessorPtr();
   }
 }
 

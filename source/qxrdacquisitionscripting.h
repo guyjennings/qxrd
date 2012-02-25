@@ -4,10 +4,6 @@
 #include "qcepmacros.h"
 
 #include "qxrdacquisitionparameters.h"
-#include "qxrdsettingssaver.h"
-#include <QScriptEngine>
-
-//class QxrdDataProcessor;
 
 class QxrdAcquisitionScripting : public QxrdAcquisitionParameters
 {
@@ -21,5 +17,3 @@ public slots:
 };
 
 #endif // QXRDACQUISITIONSCRIPTING_H
-
-class QxrdAcquisitionScripting;

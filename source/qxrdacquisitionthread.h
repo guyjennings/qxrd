@@ -2,12 +2,15 @@
 #define QXRDACQUISITIONTHREAD_H
 
 #include "qxrdthread.h"
-#include "qxrdacquisition.h"
-#include "qxrddataprocessor.h"
 #include <QSettings>
 #include "qxrdallocator.h"
-#include "qxrdexperiment.h"
 #include "qxrdsettingssaver.h"
+#include "qxrdacquisition.h"
+
+class QxrdExperiment;
+class QxrdDataProcessor;
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
 
 class QxrdAcquisitionThread : public QxrdThread
 {
@@ -48,8 +51,7 @@ private:
   QString               m_Section;
 };
 
-#endif
-
-class QxrdAcquisitionThread;
 typedef QSharedPointer<QxrdAcquisitionThread> QxrdAcquisitionThreadPtr;
 typedef QWeakPointer<QxrdAcquisitionThread> QxrdAcquisitionThreadWPtr;
+
+#endif

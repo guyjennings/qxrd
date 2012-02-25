@@ -1,5 +1,6 @@
 #include "qxrdintegratordialog.h"
 #include "qxrdintegrator.h"
+#include "qxrddataprocessor.h"
 
 QxrdIntegratorDialog::QxrdIntegratorDialog(QxrdIntegratorWPtr integw, QWidget *parent)
   : QDockWidget(parent),

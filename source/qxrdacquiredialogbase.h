@@ -2,18 +2,23 @@
 #define QXRDACQUIREDIALOGBASE_H
 
 #include <QDockWidget>
-#include "qxrdacquisition.h"
-#include "qxrddataprocessor.h"
-#include "qxrdexperiment.h"
-#include "qxrdwindow.h"
 #include <QMenu>
+
+class QxrdExperiment;
+class QxrdWindow;
+class QxrdAcquisition;
+class QxrdDataProcessor;
+
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
+typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
 
 class QxrdAcquireDialogBase : public QDockWidget
 {
     Q_OBJECT
 public:
     explicit QxrdAcquireDialogBase(QxrdExperimentWPtr doc,
-                                   QxrdWindowWPtr win,
+                                   QxrdWindow *win,
                                    QxrdAcquisitionWPtr acq,
                                    QxrdDataProcessorWPtr proc,
                                    QWidget *parent = 0);
@@ -25,11 +30,9 @@ public:
 
 protected:
   QxrdExperimentWPtr    m_Experiment;
-  QxrdWindowWPtr        m_Window;
+  QxrdWindow           *m_Window;
   QxrdAcquisitionWPtr   m_Acquisition;
   QxrdDataProcessorWPtr m_DataProcessor;
 };
 
 #endif // QXRDACQUIREDIALOGBASE_H
-
-class QxrdAcquireDialogBase;

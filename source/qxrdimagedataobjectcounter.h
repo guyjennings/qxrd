@@ -23,5 +23,3 @@ private:
 };
 
 #endif // QXRDIMAGEDATAOBJECTCOUNTER_H
-
-class QxrdImageDataObjectCounter;

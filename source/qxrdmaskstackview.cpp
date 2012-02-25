@@ -3,6 +3,8 @@
 #include <QMenu>
 #include <QContextMenuEvent>
 #include "qxrdmaskdialog.h"
+#include "qxrdmaskstack.h"
+#include "qxrddataprocessor.h"
 
 QxrdMaskStackView::QxrdMaskStackView(QWidget *parent) :
   QTableView(parent),

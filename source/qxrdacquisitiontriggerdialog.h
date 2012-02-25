@@ -23,5 +23,3 @@ private:
 };
 
 #endif // QXRDACQUISITIONTRIGGERDIALOG_H
-
-class QxrdAcquisitionTriggerDialog;

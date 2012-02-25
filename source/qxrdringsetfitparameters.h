@@ -52,7 +52,6 @@ private:
   QList<QxrdRingFitParametersPtr> m_Rings;
 };
 
-#endif // QXRDRINGSETFITPARAMETERS_H
-
-class QxrdRingSetFitParameters;
 typedef QSharedPointer<QxrdRingSetFitParameters> QxrdRingSetFitParametersPtr;
+
+#endif // QXRDRINGSETFITPARAMETERS_H

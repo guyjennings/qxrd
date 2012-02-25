@@ -5,8 +5,9 @@
 #include <QFileSystemWatcher>
 #include <QTimer>
 #include <QDateTime>
-
-#include "qxrdfilebrowsermodel.h"
+#include <QFileInfo>
+#include <QVector>
+#include "qxrdfilebrowsermodel-ptr.h"
 
 class QxrdFileBrowserModelUpdater : public QObject
 {
@@ -39,5 +40,3 @@ private:
 };
 
 #endif // QXRDFILEBROWSERMODELUPDATER_H
-
-class QxrdFileBrowserModelUpdater;

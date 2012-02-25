@@ -11,22 +11,24 @@
 
 #include "qcepproperty.h"
 #include "qxrdimagequeue.h"
-#include "qxrdimagedata.h"
-#include "qxrdmaskdata.h"
+#include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata-ptr.h"
 #include "qxrdmaskstack.h"
+#include "qxrdmaskstack-ptr.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdringsetfitparameters.h"
 #include "qxrdringsetsampleddata.h"
 #include "qxrdfilesaver.h"
 #include <qwt_double_rect.h>
 #include "qxrdsettingssaver.h"
-#include "qxrdexperiment.h"
 #include "qxrdallocator.h"
-#include "qxrdwindow.h"
 #include "qxrdgeneratetestimage.h"
-#include "qxrdacquisition.h"
 #include "qxrdintegrator.h"
 #include "qxrdcenterfinder.h"
+
+#include "qxrdexperiment-ptr.h"
+#include "qxrdacquisition-ptr.h"
+#include "qxrdwindow-ptr.h"
 
 class QxrdDataProcessorBase : public QObject
 {
@@ -304,7 +306,7 @@ public:
   void writeSettings(QSettings *settings, QString section);
 
   void setAcquisition(QxrdAcquisitionWPtr acq);
-  void setWindow(QxrdWindowWPtr win);
+  void setWindow(QxrdWindow *win);
 
 //  QxrdSettingsSaver     *saver();
 
@@ -379,7 +381,7 @@ private:
 protected:
   QxrdExperimentWPtr     m_Experiment;
   QxrdSettingsSaverWPtr  m_Saver;
-  QxrdWindowWPtr         m_Window;
+  QxrdWindow            *m_Window;
   QxrdAllocatorWPtr      m_Allocator;
   QxrdFileSaverWPtr      m_FileSaver;
   QxrdAcquisitionWPtr    m_Acquisition;
@@ -412,5 +414,3 @@ protected:
 };
 
 #endif
-
-class QxrdDataProcessorBase;

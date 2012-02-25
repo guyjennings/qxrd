@@ -71,5 +71,3 @@ protected:
 };
 
 #endif // QXRDDATAPROCESSORTHREADED_H
-
-class QxrdDataProcessorThreaded;

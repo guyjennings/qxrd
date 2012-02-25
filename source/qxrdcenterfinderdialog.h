@@ -33,5 +33,3 @@ private:
 };
 
 #endif // QXRDCENTERFINDERDIALOG_H
-
-class QxrdCenterFinderDialog;

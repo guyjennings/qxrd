@@ -94,25 +94,32 @@ include("qxrd.levmar.pri")
 # include("qxrd-cuda.pri")
 HEADERS += TODO.h \
     qxrdapplication.h \
+    qxrdapplication-ptr.h \
     qxrdglobalsettings.h \
     qxrdexperimentsettings.h \
     qxrdimagedata.h \
+    qxrdimagedata-ptr.h \
     qxrdimagequeue.h \
     qxrdimagedataformathis.h \
     qxrdimagedataformattiff.h \
     qxrdimagedataformatmar345.h \
     qxrdrasterdata.h \
+    qxrdrasterdata-ptr.h \
     qxrdmaskrasterdata.h \
     qxrdmaskcolormap.h \
     qxrdwindow.h \
+    qxrdwindow-ptr.h \
     qxrddataprocessorthread.h \
     qxrddataprocessor.h \
+    qxrddataprocessor-ptr.h \
     qxrddataprocessorbase.h \
     qxrddataprocessorthreaded.h \
     qxrdallocatorthread.h \
     qxrdallocator.h \
+    qxrdallocator-ptr.h \
     qxrdfilesaverthread.h \
     qxrdfilesaver.h \
+    qxrdfilesaver-ptr.h \
     qxrdcenterfinder.h \
     qxrdcenterfinderplot.h \
     qxrdcenterfinderdialog.h \
@@ -126,17 +133,18 @@ HEADERS += TODO.h \
     qxrdserverthread.h \
     qxrdacquisitionthread.h \
     qxrdacquisition.h \
+    qxrdacquisition-ptr.h \
     qxrdacquisitionparameters.h \
     qxrdacquisitionscripting.h \
     qxrdacquisitionoperations.h \
     qxrdacquisitionpilatus.h \
     qxrdacquisitionareadetector.h \
+    qxrdacquisitionsimulated.h \
     qxrdplot.h \
     qxrdplotslicer.h \
     qxrdplotmeasurer.h \
     qxrdscriptengine.h \
     qxrdscriptenginethread.h \
-    qxrdacquisitionsimulated.h \
     qxrdmaskpicker.h \
     qxrdmaskdata.h \
     qxrdimageplotmeasurer.h \
@@ -146,6 +154,7 @@ HEADERS += TODO.h \
     qxrdexperimentpreferencesdialog.h \
     qxrdsharedpointer.h \
     qxrdintegrateddata.h \
+    qxrdintegrateddata-ptr.h \
     qxrdintegrateddataqueue.h \
     qxrdresultserializer.h \
     qxrdroidata.h \
@@ -184,13 +193,16 @@ HEADERS += TODO.h \
     qwt_plot_piecewise_curve.h \
     qxrdmaskdialog.h \
     qxrdmaskstackmodel.h \
+    qxrdmaskstackmodel-ptr.h \
     qxrdmaskstack.h \
+    qxrdmaskstack-ptr.h \
     qxrdmaskstackview.h \
     qxrdsynchronizedacquisition.h \
     qxrdsynchronizedacquisitiondialog.h \
     qxrddisplaydialog.h \
     qxrdcorrectiondialog.h \
     qxrdfilebrowsermodel.h \
+    qxrdfilebrowsermodel-ptr.h \
     qxrdfilebrowserview.h \
     qxrdslicedialog.h \
     qxrdhistogramdialog.h \
@@ -211,7 +223,9 @@ HEADERS += TODO.h \
     qxrdfilebrowsermodelupdaterthread.h \
     qxrdintegratorcache.h \
     qxrdexperimentthread.h \
+    qxrdexperimentthread-ptr.h \
     qxrdexperiment.h \
+    qxrdexperiment-ptr.h \
     qxrdexperimentpilatusacquisition.h \
     qxrdexperimentperkinelmeracquisition.h \
     qxrdexperimentsimulatedacquisition.h \

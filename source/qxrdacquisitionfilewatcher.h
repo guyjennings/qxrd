@@ -31,9 +31,7 @@ protected:
   void setupCameraGainMenu(QComboBox* cb);
   void setupCameraBinningModeMenu(QComboBox *cb);
 
-  QxrdAcquireDialogBase* controlPanel(QxrdWindowWPtr win);
+  QxrdAcquireDialogBase* controlPanel(QxrdWindow *win);
 };
 
 #endif // QXRDACQUISITIONFILEWATCHER_H
-
-class QxrdAcquisitionFileWatcher;

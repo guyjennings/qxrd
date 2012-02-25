@@ -32,5 +32,3 @@ public:
 };
 
 #endif // QXRDFILEBROWSERVIEW_H
-
-class QxrdFileBrowserView;

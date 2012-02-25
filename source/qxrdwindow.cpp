@@ -133,7 +133,9 @@ void QxrdWindow::init()
     m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());
   }
 
-  m_MaskDialog         = new QxrdMaskDialog(this, m_DataProcessor);
+  if (proc) {
+      m_MaskDialog       = new QxrdMaskDialog(m_DataProcessor, this);
+  }
 
   if (acq) {
     m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);

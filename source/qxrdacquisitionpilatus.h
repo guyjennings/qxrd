@@ -32,5 +32,3 @@ protected:
 };
 
 #endif // QXRDACQUISITIONPILATUS_H
-
-class QxrdAcquisitionPilatus;

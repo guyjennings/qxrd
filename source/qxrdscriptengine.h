@@ -7,11 +7,15 @@
 #include <QDateTime>
 #include <QMutex>
 
-#include "qxrdexperiment.h"
-#include "qxrdwindow.h"
-#include "qxrdacquisition.h"
-#include "qxrddataprocessor.h"
-#include "qxrdapplication.h"
+class QxrdApplication;
+class QxrdExperiment;
+class QxrdAcquisition;
+class QxrdDataProcessor;
+class QxrdWindow;
+
+typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
+typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
 
 class QxrdScriptEngine : public QScriptEngine
 {
@@ -43,7 +47,7 @@ public:
   QxrdExperimentWPtr experiment() const;
   QxrdAcquisitionWPtr acquisition() const;
   QxrdDataProcessorWPtr dataProcessor() const;
-  QxrdWindowWPtr window() const;
+  QxrdWindow *window() const;
 
 private slots:
   void              evaluate(int src, QString cmd);
@@ -81,10 +85,9 @@ private:
   QxrdExperimentWPtr     m_Experiment;
   QxrdAcquisitionWPtr    m_Acquisition;
   QxrdDataProcessorWPtr  m_DataProcessor;
-  QxrdWindowWPtr         m_Window;
+  QxrdWindow            *m_Window;
 };
 
-#endif // QXRDSCRIPTENGINE_H
-
-class QxrdScriptEngine;
 typedef QSharedPointer<QxrdScriptEngine> QxrdScriptEnginePtr;
+
+#endif // QXRDSCRIPTENGINE_H

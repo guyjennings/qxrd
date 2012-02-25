@@ -42,5 +42,3 @@ private:
 };
 
 #endif // QXRDACQUISITIONSIMULATED_H
-
-class QxrdAcquisitionSimulated;

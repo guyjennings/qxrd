@@ -17,6 +17,7 @@
 #include <QTime>
 #include <QPainter>
 #include <math.h>
+#include <QDir>
 
 QxrdDataProcessorBase::QxrdDataProcessorBase(
     QxrdSettingsSaverWPtr saver,
@@ -160,7 +161,7 @@ void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionWPtr acq)
   }
 }
 
-void QxrdDataProcessorBase::setWindow(QxrdWindowWPtr win)
+void QxrdDataProcessorBase::setWindow(QxrdWindow *win)
 {
   m_Window = win;
   newData(m_Data, QxrdMaskDataPtr());
@@ -299,7 +300,7 @@ void QxrdDataProcessorBase::newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPt
   m_Data = image;
   m_Overflow = overflow;
 
-  QxrdWindowPtr w(m_Window);
+  QxrdWindow *w = m_Window;
 
   if (w) {
     w -> newDataAvailable(m_Data, overflow);
@@ -388,7 +389,7 @@ void QxrdDataProcessorBase::newGainMapImage(QxrdDoubleImageDataPtr image)
 
 void QxrdDataProcessorBase::newMask()
 {
-  QxrdWindowPtr w(m_Window);
+  QxrdWindow *w = m_Window;
 
   if (w) {
     w -> newMaskAvailable(mask());

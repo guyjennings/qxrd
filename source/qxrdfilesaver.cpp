@@ -2,6 +2,7 @@
 #include "qxrdacquisition.h"
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
+#include <QDir>
 
 #include "tiffio.h"
 

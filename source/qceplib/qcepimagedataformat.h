@@ -6,8 +6,7 @@
 #include <QObject>
 #include <QString>
 
-#include "qcepimagedata.h"
-#include "qcepimagedataformatfactory.h"
+template <typename T> class QcepImageData;
 
 class QcepImageDataFormatBase
 {
@@ -48,13 +47,7 @@ template <typename T>
 class QcepImageDataFormat : public QcepImageDataFormatBase
 {
  public:
-  QcepImageDataFormat(QString fmtname)
-    : QcepImageDataFormatBase(fmtname)
-  {
-//    printf("QcepImageDataFormatFactory<T>::factory()->insert(%s)\n", qPrintable(name()));
-//
-    QcepImageDataFormatFactory<T>::factory()->insert(this);
-  }
+  QcepImageDataFormat(QString fmtname);
 
   virtual QcepImageDataFormat<T>* canLoadFile(QString path) = 0;
   virtual QcepImageDataFormat<T>* loadFile(QString path, QcepImageData<T> *img) = 0;
@@ -62,6 +55,3 @@ class QcepImageDataFormat : public QcepImageDataFormatBase
 };
 
 #endif
-
-class QcepImageDataFormatBase;
-template <typename T> class QcepImageDataFormat;

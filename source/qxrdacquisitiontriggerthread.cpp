@@ -1,5 +1,6 @@
 #include "qxrdacquisitiontriggerthread.h"
 #include "qxrdacquisition.h"
+#include "qxrdexperiment.h"
 
 QxrdAcquisitionTriggerThread::QxrdAcquisitionTriggerThread(QxrdSettingsSaverWPtr saver,
                                                            QxrdExperimentWPtr    doc,

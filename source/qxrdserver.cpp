@@ -5,7 +5,7 @@
 #include <QScriptEngine>
 #include "qxrdapplication.h"
 
-QxrdServer::QxrdServer(QxrdExperiment *doc, QString name, int port)
+QxrdServer::QxrdServer(QxrdExperimentWPtr doc, QString name, int port)
   : QSpecServer(doc, name, port)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {

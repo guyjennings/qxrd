@@ -1,4 +1,5 @@
 #include "qxrdmaskstack.h"
+#include "qxrdmaskdata.h"
 
 QxrdMaskStack::QxrdMaskStack() : QStack<QxrdMaskDataPtr>()
 {

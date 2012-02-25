@@ -14,5 +14,3 @@ public slots:
 };
 
 #endif // QXRDPOWDERFITRESULTSPAGE_H
-
-class QxrdPowderFitResultsPage;

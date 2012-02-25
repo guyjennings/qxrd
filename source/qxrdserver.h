@@ -11,7 +11,7 @@ class QxrdServer : public QSpecServer
   Q_OBJECT
 
 public:
-  QxrdServer(QxrdExperiment *doc, QString name, int port);
+  QxrdServer(QxrdExperimentWPtr doc, QString name, int port);
   virtual ~QxrdServer();
 
 public slots:
@@ -20,7 +20,6 @@ public slots:
   void shutdown();
 };
 
-#endif
-
-class QxrdServer;
 typedef QSharedPointer<QxrdServer> QxrdServerPtr;
+
+#endif

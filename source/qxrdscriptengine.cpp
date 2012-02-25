@@ -17,6 +17,7 @@
 #include "qxrdallocator.h"
 
 #include <QThread>
+#include <QDir>
 
 QxrdScriptEngine::QxrdScriptEngine(QxrdApplication* app, QxrdExperimentWPtr exp)
   : QScriptEngine(),
@@ -135,7 +136,7 @@ void QxrdScriptEngine::initialize()
       }
     }
 
-    QxrdWindowPtr wp(expt->window());
+    QxrdWindow *wp = expt->window();
 
     if (wp) {
       globalObject().setProperty("window",          newQObject(wp));
@@ -156,7 +157,7 @@ QxrdAcquisitionWPtr QxrdScriptEngine::acquisition() const
   return m_Acquisition;
 }
 
-QxrdWindowWPtr QxrdScriptEngine::window() const
+QxrdWindow *QxrdScriptEngine::window() const
 {
   return m_Window;
 }

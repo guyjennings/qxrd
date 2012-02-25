@@ -26,5 +26,3 @@ class QcepImageDataFormatMar345 : public QcepImageDataFormat<T>
 };
 
 #endif
-
-template <typename T> class QcepImageDataFormatMar345;

@@ -4,8 +4,8 @@
 #include <QStack>
 #include <QModelIndexList>
 
-#include "qxrdmaskdata.h"
-#include "qxrdimagedata.h"
+#include "qxrdmaskdata-ptr.h"
+#include "qxrdimagedata-ptr.h"
 
 class QxrdMaskStack : public QObject, public QStack<QxrdMaskDataPtr>
 {
@@ -33,13 +33,10 @@ public:
     IncludeOutside
   } QxrdThresholdMode;
 
-  void thresholdMasks(QModelIndexList sel, QxrdMaskStack::QxrdThresholdMode mode, double low, double high, QxrdDoubleImageData *data);
+  void thresholdMasks(QModelIndexList sel, QxrdThresholdMode mode, double low, double high, QxrdDoubleImageData *data);
 
 signals:
   void maskChanged();
 };
 
 #endif // QXRDMASKSTACK_H
-
-class QxrdMaskStack;
-typedef QxrdMaskStack *QxrdMaskStackPtr;

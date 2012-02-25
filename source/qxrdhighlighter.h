@@ -37,5 +37,3 @@ private:
 };
 
 #endif
-
-class QxrdHighlighter;

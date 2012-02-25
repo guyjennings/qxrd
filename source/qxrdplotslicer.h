@@ -2,7 +2,6 @@
 #define QXRDPLOTSLICER_H
 
 #include "qxrdimageplotmeasurer.h"
-#include "qxrdimageplot.h"
 
 class QxrdPlotSlicer : public QxrdImagePlotMeasurer
 {
@@ -16,5 +15,3 @@ private:
 };
 
 #endif // QXRDPLOTSLICER_H
-
-class QxrdPlotSlicer;

@@ -54,7 +54,7 @@ void QxrdAcquisitionFileWatcher::setupCameraBinningModeMenu(QComboBox *cb)
 {
 }
 
-QxrdAcquireDialogBase *QxrdAcquisitionFileWatcher::controlPanel(QxrdWindowWPtr win)
+QxrdAcquireDialogBase *QxrdAcquisitionFileWatcher::controlPanel(QxrdWindow *win)
 {
   if (win) {
     m_Window = win;

@@ -2,9 +2,10 @@
 #define QXRDMASKSTACKVIEW_H
 
 #include <QTableView>
-#include "qxrdmaskstack.h"
-#include "qxrddataprocessor.h"
-#include "qxrdmaskdialog.h"
+#include "qxrdmaskstack-ptr.h"
+#include "qxrddataprocessor-ptr.h"
+
+class QxrdMaskDialog;
 
 class QxrdMaskStackView : public QTableView
 {
@@ -27,5 +28,3 @@ private:
 };
 
 #endif // QXRDMASKSTACKVIEW_H
-
-class QxrdMaskStackView;

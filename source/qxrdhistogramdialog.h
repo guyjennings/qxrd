@@ -2,6 +2,7 @@
 #define QXRDHISTOGRAMDIALOG_H
 
 #include <QDockWidget>
+#include "qxrdplot.h"
 #include "ui_qxrdhistogramdialog.h"
 #include "qxrdimagedata.h"
 #include "qwt_double_rect.h"
@@ -30,5 +31,3 @@ private:
 };
 
 #endif // QXRDHISTOGRAMDIALOG_H
-
-class QxrdHistogramDialog;

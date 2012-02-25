@@ -16,7 +16,6 @@ signals:
 public slots:
 };
 
-#endif // QXRDHISTOGRAMDATA_H
-
-class QxrdHistogramData;
 typedef QSharedPointer<QxrdHistogramData> QxrdHistogramDataPtr;
+
+#endif // QXRDHISTOGRAMDATA_H

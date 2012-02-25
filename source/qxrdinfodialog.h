@@ -19,5 +19,3 @@ public:
 };
 
 #endif // QXRDINFODIALOG_H
-
-class QxrdInfoDialog;
