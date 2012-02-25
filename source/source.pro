@@ -147,6 +147,7 @@ HEADERS += TODO.h \
     qxrdscriptenginethread.h \
     qxrdmaskpicker.h \
     qxrdmaskdata.h \
+    qxrdmaskdata-ptr.h \
     qxrdimageplotmeasurer.h \
     qxrdfilebrowser.h \
     qxrdimagecalculator.h \
