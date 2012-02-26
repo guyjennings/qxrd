@@ -2,8 +2,7 @@
 #define QXRDRINGSETFITPARAMETERS_H
 
 #include "qxrdfitparameter.h"
-#include "qxrdringfitparameters.h"
-#include "qxrdsettingssaver.h"
+#include "qxrdringfitparameters-ptr.h"
 
 class QxrdRingSetFitParameters : public QObject
 {
@@ -51,7 +50,5 @@ private:
 
   QList<QxrdRingFitParametersPtr> m_Rings;
 };
-
-typedef QSharedPointer<QxrdRingSetFitParameters> QxrdRingSetFitParametersPtr;
 
 #endif // QXRDRINGSETFITPARAMETERS_H

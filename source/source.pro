@@ -128,6 +128,7 @@ HEADERS += TODO.h \
     qxrdcenterfinderdialog.h \
     qxrdcenterfinderpicker.h \
     qxrdintegrator.h \
+    qxrdintegrator-ptr.h \
     qxrdintegratorplot.h \
     qxrdintegratordialog.h \
     qxrdimageplot.h \
@@ -147,16 +148,21 @@ HEADERS += TODO.h \
     qxrdacquisitionareadetector.h \
     qxrdacquisitionsimulated.h \
     qxrdplot.h \
+    qxrdplot-ptr.h \
     qxrdplotslicer.h \
+    qxrdplotslicer-ptr.h \
     qxrdplotmeasurer.h \
+    qxrdplotmeasurer-ptr.h \
     qxrdscriptengine.h \
     qxrdscriptengine-ptr.h \
     qxrdscriptenginethread.h \
     qxrdscriptenginethread-ptr.h \
     qxrdmaskpicker.h \
+    qxrdmaskpicker-ptr.h \
     qxrdmaskdata.h \
     qxrdmaskdata-ptr.h \
     qxrdimageplotmeasurer.h \
+    qxrdimageplotmeasurer-ptr.h \
     qxrdfilebrowser.h \
     qxrdimagecalculator.h \
     qxrdmutexlocker.h \
@@ -179,7 +185,9 @@ HEADERS += TODO.h \
     qxrdfitparameter.h \
     qxrdfitparameter-ptr.h \
     qxrdringfitparameters.h \
+    qxrdringfitparameters-ptr.h \
     qxrdringsetfitparameters.h \
+    qxrdringsetfitparameters-ptr.h \
     qxrdringsampleddata.h \
     qxrdringsampleddata-ptr.h \
     qxrdringsetsampleddata.h \
@@ -205,6 +213,7 @@ HEADERS += TODO.h \
     qxrdsettingssaver.h \
     qxrdsettingssaver-ptr.h \
     qxrdplotimage.h \
+    qxrdplotimage-ptr.h \
     qxrdimagedisplaywidget.h \
     qwt_plot_piecewise_curve.h \
     qxrdmaskdialog.h \
@@ -252,9 +261,11 @@ HEADERS += TODO.h \
     qxrdexperimentpilatusanalysis.h \
     qxrdexperimentgenericanalysis.h \
     qxrdwelcomewindow.h \
+    qxrdwelcomewindow-ptr.h \
     qxrdglobalpreferencesdialog.h \
     qxrdwelcomerecentitem.h \
     qxrdsplashscreen.h \
+    qxrdsplashscreen-ptr.h \
     qxrdacquisitiontrigger.h \
     qxrdacquisitiontrigger-ptr.h \
     qxrdacquisitiontriggerthread.h \

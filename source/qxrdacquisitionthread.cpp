@@ -10,6 +10,7 @@
 #include "qxrdacquisitionfilewatcher.h"
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
+#include "qxrdexperiment.h"
 
 #include <QFuture>
 #include <QVariant>

@@ -1,6 +1,9 @@
 #include "qxrdpowderfitrefinepage.h"
 #include <QDoubleSpinBox>
 #include <QCheckBox>
+#include "qxrddataprocessor.h"
+#include "qxrdringsetfitparameters.h"
+#include "qxrdringfitparameters.h"
 
 QxrdPowderFitRefinePage::QxrdPowderFitRefinePage(QxrdSettingsSaverWPtr saver, QxrdDataProcessorWPtr proc, QWidget *parent) :
     QxrdPowderFitIdentifyPage(saver, proc, parent),

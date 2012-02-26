@@ -4,6 +4,7 @@
 #include <QMetaObject>
 #include <QDateTime>
 #include "qxrdapplication.h"
+#include "qxrdexperiment.h"
 
 QxrdServerThread::QxrdServerThread(QxrdExperimentWPtr doc, QString name, int port)
     : m_Experiment(doc),

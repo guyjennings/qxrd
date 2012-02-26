@@ -14,6 +14,8 @@
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qxrdringsetsampleddata.h"
+#include "qxrdringsetfitparameters.h"
+#include "qxrdringfitparameters.h"
 
 #include <QTime>
 #include <QPainter>

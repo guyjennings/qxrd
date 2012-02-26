@@ -3,6 +3,7 @@
 #include <QHostAddress>
 #include <QVariant>
 #include <QScriptEngine>
+#include <QThread>
 #include "qxrdapplication.h"
 
 QxrdServer::QxrdServer(QxrdExperimentWPtr doc, QString name, int port)

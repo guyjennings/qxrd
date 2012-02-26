@@ -2,9 +2,9 @@
 #define QXRDALLOCATORTHREAD_H
 
 #include "qxrdthread.h"
-#include <QDateTime>
-#include "qxrdsettingssaver.h"
-#include "qxrdallocator.h"
+
+#include "qxrdsettingssaver-ptr.h"
+#include "qxrdallocator-ptr.h"
 
 class QxrdAllocatorThread : public QxrdThread
 {
@@ -27,7 +27,5 @@ private:
   QxrdAllocatorPtr     m_Allocator;
   QxrdSettingsSaverPtr m_Saver;
 };
-
-typedef QSharedPointer<QxrdAllocatorThread> QxrdAllocatorThreadPtr;
 
 #endif // QXRDALLOCATORTHREAD_H

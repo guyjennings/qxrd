@@ -1,6 +1,7 @@
 #include "qcepmacros.h"
 #include "qxrdexperiment.h"
 #include "qxrdapplication.h"
+#include "qxrdsplashscreen.h"
 #include "qxrddataprocessorthread.h"
 #include "qxrddataprocessor.h"
 #include "qxrdwindow.h"

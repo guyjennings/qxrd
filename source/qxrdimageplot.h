@@ -2,25 +2,25 @@
 #define QXRDIMAGEPLOT_H
 
 #include "qxrdplot.h"
-#include "qxrddataprocessor.h"
 
 #include <qwt_color_map.h>
 #include <qwt_array.h>
 #include <qwt_plot_rescaler.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_plot_marker.h>
+#include "qxrddataprocessor-ptr.h"
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
 #include "qxrdmaskcolormap.h"
-#include "qxrdplotimage.h"
-#include "qxrdhistogramselector.h"
-#include "qxrdplotslicer.h"
-#include "qxrdimageplotmeasurer.h"
-#include "qxrdcenterfinderpicker.h"
-#include "qxrdmaskpicker.h"
-
-class QxrdDataProcessor;
-typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
+#include "qxrdplotimage-ptr.h"
+#include "qxrdhistogramselector-ptr.h"
+#include "qxrdplotslicer-ptr.h"
+#include "qxrdimageplotmeasurer-ptr.h"
+#include "qxrdcenterfinderpicker-ptr.h"
+#include "qxrdmaskpicker-ptr.h"
+#include "qxrddataprocessor-ptr.h"
+#include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata-ptr.h"
 
 class QxrdImagePlot : public QxrdPlot
 {

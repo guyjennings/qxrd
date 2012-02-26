@@ -8,6 +8,7 @@
 #include "qxrdwindow.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdallocator.h"
+#include "qxrdexperiment.h"
 
 #include <string.h>
 

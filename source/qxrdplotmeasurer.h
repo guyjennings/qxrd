@@ -3,19 +3,19 @@
 
 #include <qwt_plot_picker.h>
 
-class QxrdPlot;
+#include "qxrdplot-ptr.h"
 
 class QxrdPlotMeasurer : public QwtPlotPicker
 {
   Q_OBJECT
 
 public:
-  QxrdPlotMeasurer(QwtPlotCanvas *canvas, QxrdPlot *plot);
+  QxrdPlotMeasurer(QwtPlotCanvas *canvas, QxrdPlotPtr plot);
 
   virtual QwtText trackerText(const QwtDoublePoint &pos) const;
 
 private:
-  QxrdPlot *m_Plot;
+  QxrdPlotPtr m_Plot;
 };
 
 #endif // QXRDPLOTMEASURER_H

@@ -9,9 +9,6 @@
 #include "qxrdallocator-ptr.h"
 #include "qxrdsettingssaver-ptr.h"
 
-typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;
-typedef QWeakPointer<QxrdSettingsSaver> QxrdSettingsSaverWPtr;
-
 class QxrdIntegratedData : public QObject
 {
   Q_OBJECT
@@ -59,7 +56,5 @@ private:
   QString                    m_XUnitsLabel;
   int                        m_Oversample;
 };
-
-typedef QSharedPointer<QxrdIntegratedData>       QxrdIntegratedDataPtr;
 
 #endif // QXRDINTEGRATEDDATA_H

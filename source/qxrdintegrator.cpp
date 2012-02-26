@@ -6,6 +6,7 @@
 #include "qxrdintegrateddata.h"
 #include "qxrdallocator.h"
 #include "qxrdapplication.h"
+#include "qxrdexperiment.h"
 #include "qxrdintegratorcache.h"
 
 #include <QTime>

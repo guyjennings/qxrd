@@ -7,7 +7,7 @@
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
 #include <qwt_plot_magnifier.h>
-#include "qxrdplotmeasurer.h"
+#include "qxrdplotmeasurer-ptr.h"
 
 class QxrdPlot : public QwtPlot
 {
@@ -74,7 +74,7 @@ protected:
   QwtPlotZoomer    *m_Zoomer;
   QwtPlotPanner    *m_Panner;
   QwtPlotMagnifier *m_Magnifier;
-  QxrdPlotMeasurer *m_Measurer;
+  QxrdPlotMeasurerPtr m_Measurer;
 
   int                 m_IsLog[QwtPlot::axisCnt];
 };

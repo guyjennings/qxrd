@@ -3,6 +3,7 @@
 #include "qxrdapplication.h"
 #include <QDir>
 #include <typeinfo>
+#include <QThread>
 
 template <typename T>
 QxrdImageData<T>::QxrdImageData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr allocator, int typ, int width, int height, T def)

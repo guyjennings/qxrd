@@ -2,6 +2,7 @@
 #define QXRDPOWDERFITREFINEPAGE_H
 
 #include "qxrdpowderfitidentifypage.h"
+#include "qxrdringsetfitparameters-ptr.h"
 
 class QxrdPowderFitRefinePage : public QxrdPowderFitIdentifyPage
 {

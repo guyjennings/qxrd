@@ -4,6 +4,7 @@
 #include "qxrdallocator.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdapplication.h"
+#include "qxrdexperiment.h"
 
 #include <QDir>
 #include <QThread>

@@ -1,8 +1,9 @@
 #include "qxrdplotmeasurer.h"
 #include "qxrdrasterdata.h"
 #include "qxrdimageplot.h"
+#include "qxrdplot.h"
 
-QxrdPlotMeasurer::QxrdPlotMeasurer(QwtPlotCanvas *canvas, QxrdPlot *plot)
+QxrdPlotMeasurer::QxrdPlotMeasurer(QwtPlotCanvas *canvas, QxrdPlotPtr plot)
   : QwtPlotPicker(canvas),
     m_Plot(plot)
 {

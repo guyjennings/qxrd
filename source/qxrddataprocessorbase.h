@@ -15,8 +15,8 @@
 #include "qxrdmaskdata-ptr.h"
 #include "qxrdmaskstack.h"
 #include "qxrdmaskstack-ptr.h"
-#include "qxrdintegrateddata.h"
-#include "qxrdringsetfitparameters.h"
+#include "qxrdintegrateddata-ptr.h"
+#include "qxrdringsetfitparameters-ptr.h"
 #include "qxrdringsetsampleddata-ptr.h"
 #include "qxrdfilesaver.h"
 #include <qwt_double_rect.h>

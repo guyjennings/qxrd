@@ -5,6 +5,10 @@
 #include "levmar.h"
 #include "qxrdringsetsampleddata.h"
 #include "qxrdringsampleddata.h"
+#include "qxrddataprocessor.h"
+#include "qxrdringsetfitparameters.h"
+#include "qxrdringsetfitparameters-ptr.h"
+#include "qxrdringfitparameters.h"
 
 QxrdPowderFitIdentifyPage::QxrdPowderFitIdentifyPage(QxrdSettingsSaverWPtr saver, QxrdDataProcessorWPtr proc, QWidget *parent) :
   QxrdPowderFitWidget(proc, parent),

@@ -1,5 +1,6 @@
 #include "qcepdebug.h"
 #include "qxrdapplication.h"
+#include "qxrdwelcomewindow.h"
 #include "qxrdwindow.h"
 #include "qxrdserverthread.h"
 #include "qxrdserver.h"

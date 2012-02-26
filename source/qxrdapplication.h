@@ -7,15 +7,15 @@
 #include <QApplication>
 #include <QSettings>
 #include "qxrdresponsetimer.h"
-#include "qxrdallocatorthread.h"
-#include "qxrdexperiment.h"
-#include "qxrdexperimentthread.h"
-#include "qxrdwelcomewindow.h"
-#include "qxrdsplashscreen.h"
-#include "qxrdnidaqplugininterface.h"
+#include "qxrdallocatorthread-ptr.h"
+#include "qxrdallocator-ptr.h"
+#include "qxrdexperiment-ptr.h"
+#include "qxrdexperimentthread-ptr.h"
+#include "qxrdwelcomewindow-ptr.h"
+#include "qxrdnidaqplugininterface-ptr.h"
 
 #ifdef HAVE_PERKIN_ELMER
-#include "qxrdperkinelmerplugininterface.h"
+#include "qxrdperkinelmerplugininterface-ptr.h"
 #endif
 
 class QxrdApplication : public QApplication
@@ -179,7 +179,7 @@ private:
   QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
   QList<QxrdExperimentPtr>        m_Experiments;
 
-  QxrdWelcomeWindow              *m_WelcomeWindow;
+  QxrdWelcomeWindowPtr            m_WelcomeWindow;
   QxrdAllocatorThreadPtr          m_AllocatorThread;
   QxrdAllocatorPtr                m_Allocator;
   QxrdNIDAQPluginInterfacePtr     m_NIDAQPluginInterface;

@@ -1,4 +1,6 @@
 #include "qxrdringsetfitparameters.h"
+#include "qxrdringsetfitparameters-ptr.h"
+#include "qxrdringfitparameters.h"
 #include <QThread>
 #include <stdio.h>
 #include <math.h>

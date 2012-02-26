@@ -5,8 +5,10 @@
 #include "qxrdintegrateddata.h"
 #include "qxrddetectorgeometry.h"
 #include "qxrdapplication.h"
+#include "qxrdexperiment.h"
 #include "qcepdebug.h"
 #include <stdio.h>
+#include <QThread>
 
 #define _USE_MATH_DEFINES
 #include <cmath>

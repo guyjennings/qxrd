@@ -3,7 +3,7 @@
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
 #include "qxrdsplashscreen.h"
-
+#include "qxrdsplashscreen-ptr.h"
 #include <stdio.h>
 #include <QSplashScreen>
 

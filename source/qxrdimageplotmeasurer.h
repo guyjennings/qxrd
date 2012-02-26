@@ -3,7 +3,7 @@
 
 #include "qxrdplotmeasurer.h"
 
-class QxrdImagePlot;
+#include "qxrdimageplot-ptr.h"
 
 class QxrdImagePlotMeasurer : public QxrdPlotMeasurer
 {

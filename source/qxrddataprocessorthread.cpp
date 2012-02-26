@@ -2,6 +2,7 @@
 
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
+#include "qxrdexperiment.h"
 
 QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaverWPtr saver,
                                                  QxrdExperimentWPtr doc,

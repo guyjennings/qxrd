@@ -5,7 +5,7 @@
 #include <QReadWriteLock>
 #include <QQueue>
 #include <QSharedPointer>
-#include "qxrdintegrateddata.h"
+#include "qxrdintegrateddata-ptr.h"
 
 class QxrdIntegratedDataQueue : public QObject
 {

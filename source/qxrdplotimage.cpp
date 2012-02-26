@@ -1,4 +1,5 @@
 #include "qxrdplotimage.h"
+#include "qxrdimagedata.h"
 
 QxrdPlotImage::QxrdPlotImage(const QString &title, QxrdDoubleImageDataPtr data, QxrdMaskDataPtr mask) :
     QwtPlotRasterItem(title),
