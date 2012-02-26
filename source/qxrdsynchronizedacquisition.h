@@ -5,11 +5,8 @@
 #include <QVector>
 #include <QMutex>
 #include "qcepproperty.h"
-#include "qxrdnidaqplugininterface.h"
-
-class QxrdAcquisition;
-class QxrdAcquisitionParameterPack;
-class QxrdDarkAcquisitionParameterPack;
+#include "qxrdnidaqplugininterface-ptr.h"
+#include "qxrdacquisition-ptr.h"
 
 class QxrdSynchronizedAcquisition : public QObject
 {

@@ -2,11 +2,12 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "ui_qxrdsynchronizedacquisitiondialog.h"
 #include "qwt_plot_piecewise_curve.h"
+#include "qxrdacquisition.h"
 
 QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *parent, QxrdAcquisitionWPtr acqw) :
   QDockWidget(parent),
   m_Acquisition(acqw),
-  m_SynchronizedAcquisition(NULL)
+  m_SynchronizedAcquisition()
 {
   setupUi(this);
 
@@ -47,22 +48,26 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
     m_SyncAcqPhaseShift -> setMaximum(100.0);
     m_SyncAcqPhaseShift -> setSingleStep(1);
 
-    m_SynchronizedAcquisition -> prop_SyncAcquisitionMode()          -> linkTo(m_SyncAcqMode);
-    m_SynchronizedAcquisition -> prop_SyncAcquisitionWaveform()      -> linkTo(m_SyncAcqWfm);
-    m_SynchronizedAcquisition -> prop_SyncAcquisitionOutputChannel() -> linkTo(m_SyncAcqOutChan);
-    m_SynchronizedAcquisition -> prop_SyncAcquisitionFlagChannel()   -> linkTo(m_SyncAcqFlagChan);
+    QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
-    m_SynchronizedAcquisition -> prop_SyncAcquisitionMinimum()       -> linkTo(m_SyncAcqMinimum);
-    m_SynchronizedAcquisition -> prop_SyncAcquisitionMaximum()       -> linkTo(m_SyncAcqMaximum);
-    m_SynchronizedAcquisition -> prop_SyncAcquisitionSymmetry()      -> linkTo(m_SyncAcqSymmetry);
-    m_SynchronizedAcquisition -> prop_SyncAcquisitionPhaseShift()      -> linkTo(m_SyncAcqPhaseShift);
+    if (sync) {
+      sync -> prop_SyncAcquisitionMode()          -> linkTo(m_SyncAcqMode);
+      sync -> prop_SyncAcquisitionWaveform()      -> linkTo(m_SyncAcqWfm);
+      sync -> prop_SyncAcquisitionOutputChannel() -> linkTo(m_SyncAcqOutChan);
+      sync -> prop_SyncAcquisitionFlagChannel()   -> linkTo(m_SyncAcqFlagChan);
 
-    connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMode(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
-    connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionWaveform(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
-    connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMinimum(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
-    connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionMaximum(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
-    connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionSymmetry(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
-    connect(m_SynchronizedAcquisition -> prop_SyncAcquisitionPhaseShift(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
+      sync -> prop_SyncAcquisitionMinimum()       -> linkTo(m_SyncAcqMinimum);
+      sync -> prop_SyncAcquisitionMaximum()       -> linkTo(m_SyncAcqMaximum);
+      sync -> prop_SyncAcquisitionSymmetry()      -> linkTo(m_SyncAcqSymmetry);
+      sync -> prop_SyncAcquisitionPhaseShift()      -> linkTo(m_SyncAcqPhaseShift);
+
+      connect(sync -> prop_SyncAcquisitionMode(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
+      connect(sync -> prop_SyncAcquisitionWaveform(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
+      connect(sync -> prop_SyncAcquisitionMinimum(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
+      connect(sync -> prop_SyncAcquisitionMaximum(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
+      connect(sync -> prop_SyncAcquisitionSymmetry(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
+      connect(sync -> prop_SyncAcquisitionPhaseShift(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
+    }
 
     connect(acq->prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
     connect(acq->prop_PhasesInGroup(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
@@ -88,17 +93,18 @@ void QxrdSynchronizedAcquisitionDialog::changeEvent(QEvent *e)
 void QxrdSynchronizedAcquisitionDialog::waveformChanged()
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
-  if (acq && m_SynchronizedAcquisition) {
+  if (acq && sync) {
     QxrdAcquisitionParameterPack parms = acq->acquisitionParameterPack();
-    m_SynchronizedAcquisition->prepareForAcquisition(&parms);
+    sync->prepareForAcquisition(&parms);
 
     m_WaveformPlot->clear();
 
-    if (m_SynchronizedAcquisition -> get_SyncAcquisitionMode() && (parms.nphases()>=2)) {
+    if (sync -> get_SyncAcquisitionMode() && (parms.nphases()>=2)) {
       QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_WaveformPlot, "Output Waveform");
 
-      pc->setData(m_SynchronizedAcquisition->outputTimes(), m_SynchronizedAcquisition->outputVoltage());
+      pc->setData(sync->outputTimes(), sync->outputVoltage());
 
       pc->attach(m_WaveformPlot);
     }
@@ -106,6 +112,6 @@ void QxrdSynchronizedAcquisitionDialog::waveformChanged()
     m_WaveformPlot->updateZoomer();
     m_WaveformPlot->replot();
 
-    m_SynchronizedAcquisition->finishedAcquisition();
+    sync->finishedAcquisition();
   }
 }

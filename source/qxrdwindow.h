@@ -12,8 +12,6 @@
 #include "qxrdallocator.h"
 #include "qxrdscriptengine.h"
 #include "qxrdacquiredialog.h"
-#include "qxrdsynchronizedacquisitiondialog.h"
-#include "qxrdacquisitiontriggerdialog.h"
 
 #include "qxrddisplaydialog.h"
 #include "qxrdcenterfinderdialog.h"
@@ -31,6 +29,8 @@
 #include "qxrdmaskdialog.h"
 
 #include "qxrdexperiment-ptr.h"
+#include "qxrdsynchronizedacquisitiondialog-ptr.h"
+#include "qxrdacquisitiontriggerdialog-ptr.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -159,8 +159,8 @@ private:
   QxrdDataProcessorWPtr                  m_DataProcessor;
   QxrdAllocatorWPtr                      m_Allocator;
   QxrdAcquireDialogBase                 *m_AcquireDialog;
-  QxrdAcquisitionTriggerDialog          *m_AcquisitionTriggerDialog;
-  QxrdSynchronizedAcquisitionDialog     *m_SynchronizedAcquisitionDialog;
+  QxrdAcquisitionTriggerDialogPtr        m_AcquisitionTriggerDialog;
+  QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;
   QxrdCenterFinderDialog                *m_CenterFinderDialog;
   QxrdMaskDialog                        *m_MaskDialog;

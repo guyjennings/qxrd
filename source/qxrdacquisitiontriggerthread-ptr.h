@@ -1,0 +1,11 @@
+#ifndef QXRDACQUISITIONTRIGGERTHREAD_PTR_H
+#define QXRDACQUISITIONTRIGGERTHREAD_PTR_H
+
+#include <QSharedPointer>
+
+class QxrdAcquisitionTriggerThread;
+
+typedef QSharedPointer<QxrdAcquisitionTriggerThread> QxrdAcquisitionTriggerThreadPtr;
+typedef QWeakPointer<QxrdAcquisitionTriggerThread> QxrdAcquisitionTriggerThreadWPtr;
+
+#endif

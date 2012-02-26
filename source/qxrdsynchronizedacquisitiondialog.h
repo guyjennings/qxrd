@@ -2,8 +2,9 @@
 #define QXRDSYNCHRONIZEDACQUISITIONDIALOG_H
 
 #include <QDockWidget>
-#include "qxrdacquisition.h"
 #include "ui_qxrdsynchronizedacquisitiondialog.h"
+#include "qxrdacquisition-ptr.h"
+#include "qxrdsynchronizedacquisition-ptr.h"
 
 class QxrdSynchronizedAcquisitionDialog : public QDockWidget, public Ui::QxrdSynchronizedAcquisitionDialog
 {
@@ -20,8 +21,8 @@ private slots:
   void waveformChanged();
 
 private:
-  QxrdAcquisitionWPtr          m_Acquisition;
-  QxrdSynchronizedAcquisition *m_SynchronizedAcquisition;
+  QxrdAcquisitionWPtr             m_Acquisition;
+  QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITIONDIALOG_H

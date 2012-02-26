@@ -5,14 +5,10 @@
 #include <QVector>
 #include <QMutex>
 #include "qcepproperty.h"
-#include "qxrdnidaqplugininterface.h"
-#include "qxrdsettingssaver.h"
-
-class QxrdExperiment;
-class QxrdAcquisition;
-
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
-typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
+#include "qxrdnidaqplugininterface-ptr.h"
+#include "qxrdsettingssaver-ptr.h"
+#include "qxrdexperiment-ptr.h"
+#include "qxrdacquisition-ptr.h"
 
 class QxrdAcquisitionTrigger : public QObject
 {
@@ -81,8 +77,5 @@ private:
   QxrdAcquisitionWPtr         m_Acquisition;
   QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
 };
-
-typedef QSharedPointer<QxrdAcquisitionTrigger> QxrdAcquisitionTriggerPtr;
-typedef QWeakPointer<QxrdAcquisitionTrigger> QxrdAcquisitionTriggerWPtr;
 
 #endif // QXRDSYNCHRONIZEDACQUISITION_H

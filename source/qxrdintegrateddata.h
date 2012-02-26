@@ -5,10 +5,9 @@
 #include <QObject>
 #include <QSharedPointer>
 #include "qxrdimagedataobjectcounter.h"
-#include "qxrdimagedata.h"
-
-class QxrdAllocator;
-class QxrdSettingsSaver;
+#include "qxrdimagedata-ptr.h"
+#include "qxrdallocator-ptr.h"
+#include "qxrdsettingssaver-ptr.h"
 
 typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;
 typedef QWeakPointer<QxrdSettingsSaver> QxrdSettingsSaverWPtr;

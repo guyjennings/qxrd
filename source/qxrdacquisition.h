@@ -20,10 +20,9 @@
 
 #include "qxrdrasterdata.h"
 #include "qxrdimagequeue.h"
-#include "qxrdnidaqplugininterface.h"
-#include "qxrdsynchronizedacquisition.h"
-
-class QxrdAcquireDialogBase;
+#include "qxrdnidaqplugininterface-ptr.h"
+#include "qxrdsynchronizedacquisition-ptr.h"
+#include "qxrdacquiredialogbase-ptr.h"
 
 class QxrdAcquisitionParameterPack
 {
@@ -141,7 +140,7 @@ public:
   void indicateDroppedFrame(int n);
   virtual QxrdAcquireDialogBase* controlPanel(QxrdWindow *win);
 
-  QxrdSynchronizedAcquisition* synchronizedAcquisition() const;
+  QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
   QxrdAcquisitionTriggerPtr acquisitionTrigger() const;
 
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);

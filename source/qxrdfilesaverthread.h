@@ -4,8 +4,8 @@
 #include "qcepmacros.h"
 
 #include "qxrdthread.h"
-#include "qxrdallocator.h"
-#include "qxrdfilesaver.h"
+#include "qxrdallocator-ptr.h"
+#include "qxrdfilesaver-ptr.h"
 
 class QxrdFileSaverThread : public QxrdThread
 {
@@ -25,7 +25,5 @@ private:
   QxrdFileSaverPtr  m_FileSaver;
   QxrdAllocatorWPtr m_Allocator;
 };
-
-typedef QSharedPointer<QxrdFileSaverThread> QxrdFileSaverThreadPtr;
 
 #endif // QXRDFILESAVERTHREAD_H

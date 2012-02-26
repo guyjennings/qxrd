@@ -3,6 +3,8 @@
 #include "qwt_double_rect.h"
 #include "qwt_plot_marker.h"
 #include "levmar.h"
+#include "qxrdringsetsampleddata.h"
+#include "qxrdringsampleddata.h"
 
 QxrdPowderFitIdentifyPage::QxrdPowderFitIdentifyPage(QxrdSettingsSaverWPtr saver, QxrdDataProcessorWPtr proc, QWidget *parent) :
   QxrdPowderFitWidget(proc, parent),

@@ -13,7 +13,7 @@
 #include <QVector>
 #include <QStringList>
 #include <QDateTime>
-#include "qxrdsettingssaver.h"
+#include "qxrdsettingssaver-ptr.h"
 #include <QSpinBox>
 #include <QComboBox>
 #include <QLineEdit>

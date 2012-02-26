@@ -28,7 +28,8 @@ QxrdAcquisition::QxrdAcquisition(DetectorKind detectorKind,
     printMessage("QxrdAcquisition::QxrdAcquisition");
   }
 
-  m_SynchronizedAcquisition = new QxrdSynchronizedAcquisition(saver, this);
+  m_SynchronizedAcquisition = QxrdSynchronizedAcquisitionPtr(
+        new QxrdSynchronizedAcquisition(saver, this));
 
   connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged(double)));
   connect(prop_BinningMode(), SIGNAL(valueChanged(int,int)), this, SLOT(onBinningModeChanged(int)));
@@ -454,7 +455,7 @@ QxrdNIDAQPluginInterfacePtr QxrdAcquisition::nidaqPlugin() const
   }
 }
 
-QxrdSynchronizedAcquisition* QxrdAcquisition::synchronizedAcquisition() const
+QxrdSynchronizedAcquisitionPtr QxrdAcquisition::synchronizedAcquisition() const
 {
   return m_SynchronizedAcquisition;
 }

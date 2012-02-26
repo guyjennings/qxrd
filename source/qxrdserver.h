@@ -4,7 +4,6 @@
 #include "qcepmacros.h"
 
 #include "qspecserver.h"
-#include <QVariant>
 
 class QxrdServer : public QSpecServer
 {
@@ -19,7 +18,5 @@ public slots:
   QVariant readProperty(QString name);
   void shutdown();
 };
-
-typedef QSharedPointer<QxrdServer> QxrdServerPtr;
 
 #endif

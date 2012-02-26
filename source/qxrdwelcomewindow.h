@@ -8,7 +8,7 @@
 #include <QTimer>
 #include "ui_qxrdwelcomewindow.h"
 
-class QxrdApplication;
+#include "qxrdapplication-ptr.h"
 
 class QxrdWelcomeWindow : public QMainWindow
 {

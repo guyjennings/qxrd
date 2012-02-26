@@ -6,6 +6,9 @@
 #include <QFileInfo>
 #include <typeinfo>
 
+#include "qcepimagedataformat.h"
+#include "qcepimagedataformatfactory.h"
+
 QAtomicInt allocCount = 0;
 
 QcepImageDataBase::QcepImageDataBase(QxrdSettingsSaverWPtr saver, int width, int height)

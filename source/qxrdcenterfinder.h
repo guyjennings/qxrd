@@ -8,7 +8,7 @@
 #include "qcepproperty.h"
 #include <qwt_double_rect.h>
 #include "qxrddetectorgeometry.h"
-#include "qxrdsettingssaver.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
 {
@@ -86,8 +86,5 @@ public:
 private:
   mutable QMutex             m_Mutex;
 };
-
-typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
-typedef QWeakPointer<QxrdCenterFinder> QxrdCenterFinderWPtr;
 
 #endif // QXRDCENTERFINDER_H

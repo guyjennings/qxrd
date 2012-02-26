@@ -113,7 +113,12 @@ void QxrdScriptEngine::initialize()
 
     if (acq) {
       globalObject().setProperty("acquisition",     newQObject(acq.data()));
-      globalObject().setProperty("synchronization", newQObject(acq->synchronizedAcquisition()));
+
+      QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
+
+      if (sync) {
+        globalObject().setProperty("synchronization", newQObject(sync.data()));
+      }
     }
 
     m_DataProcessor = expt->dataProcessor();

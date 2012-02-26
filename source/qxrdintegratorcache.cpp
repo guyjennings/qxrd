@@ -1,11 +1,14 @@
 #include "qxrdintegratorcache.h"
 #include "qxrdintegrator.h"
+#include "qxrdimagedata.h"
+#include "qxrdmaskdata.h"
+#include "qxrdintegrateddata.h"
 #include "qxrddetectorgeometry.h"
 #include "qxrdapplication.h"
 #include "qcepdebug.h"
+#include <stdio.h>
 
 #define _USE_MATH_DEFINES
-
 #include <cmath>
 
 QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperimentWPtr exp, QxrdAllocatorWPtr alloc) :

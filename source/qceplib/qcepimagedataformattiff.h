@@ -3,9 +3,6 @@
 
 #include "qcepmacros.h"
 
-#include <tiffio.h>
-#include <QWriteLocker>
-
 #include "qcepimagedataformat.h"
 
 template <typename T>

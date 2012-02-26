@@ -4,12 +4,13 @@
 #include "qcepmacros.h"
 
 #include <QObject>
-#include "qxrdintegrateddata.h"
 #include "qcepproperty.h"
-#include "qxrdallocator.h"
 
-class QxrdExperiment;
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+#include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata-ptr.h"
+#include "qxrdintegrateddata-ptr.h"
+#include "qxrdallocator-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 class QxrdIntegratorCache : public QObject
 {
@@ -125,7 +126,5 @@ private:
   QxrdExperimentWPtr     m_Experiment;
   QxrdAllocatorWPtr      m_Allocator;
 };
-
-typedef QSharedPointer<QxrdIntegratorCache> QxrdIntegratorCachePtr;
 
 #endif // QXRDINTEGRATORCACHE_H

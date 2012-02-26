@@ -2,10 +2,13 @@
 #define QXRDRINGSETSAMPLEDDATA_H
 
 #include <QObject>
+#include <QSettings>
+#include <QMutex>
+
 #include "qcepmacros.h"
-#include "qxrdringsampleddata.h"
+#include "qxrdringsampleddata-ptr.h"
 //#include "qxrdringsetfitparameters.h"
-#include "qxrdsettingssaver.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdRingSetSampledData : public QObject
 {
@@ -33,7 +36,5 @@ private:
 
   QList<QxrdRingSampledDataPtr> m_Rings;
 };
-
-typedef QSharedPointer<QxrdRingSetSampledData> QxrdRingSetSampledDataPtr;
 
 #endif // QXRDRINGSETSAMPLEDDATA_H

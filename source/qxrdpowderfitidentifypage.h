@@ -3,7 +3,9 @@
 
 #include "qxrdpowderfitwidget.h"
 #include "qwt_plot_picker.h"
-#include "qxrdsettingssaver.h"
+#include "qxrdsettingssaver-ptr.h"
+#include "qxrdringsetsampleddata-ptr.h"
+#include "qxrdfitparameter-ptr.h"
 
 class QxrdPowderFitIdentifyPage : public QxrdPowderFitWidget
 {

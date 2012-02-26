@@ -3,14 +3,11 @@
 
 #include "qxrdthread.h"
 #include <QSettings>
-#include "qxrdallocator.h"
-#include "qxrdsettingssaver.h"
-#include "qxrdacquisition.h"
-
-class QxrdExperiment;
-class QxrdDataProcessor;
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
-typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
+#include "qxrdallocator-ptr.h"
+#include "qxrdsettingssaver-ptr.h"
+#include "qxrdacquisition-ptr.h"
+#include "qxrdexperiment-ptr.h"
+#include "qxrddataprocessor-ptr.h"
 
 class QxrdAcquisitionThread : public QxrdThread
 {
@@ -50,8 +47,5 @@ private:
   QSettings            *m_Settings;
   QString               m_Section;
 };
-
-typedef QSharedPointer<QxrdAcquisitionThread> QxrdAcquisitionThreadPtr;
-typedef QWeakPointer<QxrdAcquisitionThread> QxrdAcquisitionThreadWPtr;
 
 #endif

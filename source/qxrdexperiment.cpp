@@ -1,15 +1,21 @@
 #include "qcepmacros.h"
 #include "qxrdexperiment.h"
 #include "qxrdapplication.h"
+#include "qxrddataprocessorthread.h"
 #include "qxrddataprocessor.h"
 #include "qxrdwindow.h"
+#include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
+#include "qxrdserverthread.h"
 #include "qxrdserver.h"
+#include "qxrdsimpleserverthread.h"
 #include "qxrdsimpleserver.h"
+#include "qxrdscriptenginethread.h"
 #include "qxrdscriptengine.h"
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdexperimentsettings.h"
 #include <QFileDialog>
+#include "qxrdfilesaverthread.h"
 
 QxrdExperiment::QxrdExperiment(
     QString path,

@@ -2,15 +2,10 @@
 #define QXRDACQUISITIONTRIGGERTHREAD_H
 
 #include "qxrdthread.h"
-#include "qxrdacquisitiontrigger.h"
-#include <QSettings>
-#include "qxrdsettingssaver.h"
-
-class QxrdExperiment;
-class QxrdAcquisition;
-
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
-typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
+#include "qxrdacquisitiontrigger-ptr.h"
+#include "qxrdsettingssaver-ptr.h"
+#include "qxrdexperiment-ptr.h"
+#include "qxrdacquisition-ptr.h"
 
 class QxrdAcquisitionTriggerThread : public QxrdThread
 {
@@ -42,8 +37,5 @@ private:
   QxrdAcquisitionWPtr       m_Acquisition;
   QxrdAcquisitionTriggerPtr m_AcquisitionTrigger;
 };
-
-typedef QSharedPointer<QxrdAcquisitionTriggerThread> QxrdAcquisitionTriggerThreadPtr;
-typedef QWeakPointer<QxrdAcquisitionTriggerThread> QxrdAcquisitionTriggerThreadWPtr;
 
 #endif

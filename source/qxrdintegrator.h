@@ -4,12 +4,17 @@
 #include "qcepmacros.h"
 
 #include <QObject>
-#include "qxrdintegrateddata.h"
 #include "qcepproperty.h"
+
+#include "qxrdexperiment-ptr.h"
+#include "qxrdintegrateddata-ptr.h"
 #include <qwt_double_rect.h>
-#include "qxrdintegratorcache.h"
-#include "qxrdsettingssaver.h"
-#include "qxrdcenterfinder.h"
+#include "qxrdintegratorcache-ptr.h"
+#include "qxrdsettingssaver-ptr.h"
+#include "qxrdcenterfinder-ptr.h"
+#include "qxrdallocator-ptr.h"
+#include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata-ptr.h"
 
 class QxrdDataProcessor;
 typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;

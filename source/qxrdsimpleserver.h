@@ -6,8 +6,7 @@
 #include <QScriptValue>
 #include <QDateTime>
 
-class QxrdExperiment;
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+#include "qxrdexperiment-ptr.h"
 
 class QxrdSimpleServer : public QTcpServer
 {
@@ -41,7 +40,5 @@ private:
   int                      m_Port;
   QTcpSocket              *m_Socket;
 };
-
-typedef QSharedPointer<QxrdSimpleServer> QxrdSimpleServerPtr;
 
 #endif // QXRDSIMPLESERVER_H

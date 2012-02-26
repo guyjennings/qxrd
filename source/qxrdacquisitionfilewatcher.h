@@ -2,7 +2,6 @@
 #define QXRDACQUISITIONFILEWATCHER_H
 
 #include "qxrdacquisition.h"
-#include "qxrddataprocessor.h"
 
 class QxrdAcquisitionFileWatcher : public QxrdAcquisition
 {

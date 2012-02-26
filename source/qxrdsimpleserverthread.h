@@ -3,8 +3,8 @@
 
 #include "qcepmacros.h"
 #include "qxrdthread.h"
-#include <QDateTime>
-#include "qxrdsimpleserver.h"
+#include "qxrdsimpleserver-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 class QxrdSimpleServerThread : public QxrdThread
 {
@@ -26,7 +26,5 @@ private:
   int                 m_Port;
   QxrdSimpleServerPtr m_Server;
 };
-
-typedef QSharedPointer<QxrdSimpleServerThread> QxrdSimpleServerThreadPtr;
 
 #endif // QXRDSIMPLESERVERTHREAD_H

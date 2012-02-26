@@ -6,5 +6,6 @@
 class QxrdWindow;
 
 typedef QxrdWindow *QxrdWindowPtr;
+typedef QxrdWindow *QxrdWindowWPtr;
 
 #endif

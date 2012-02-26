@@ -3,8 +3,7 @@
 
 #include <QSharedPointer>
 
-template <typename T>
-class QxrdImageData;
+template <typename T> class QxrdImageData;
 
 typedef QxrdImageData<quint16> QxrdInt16ImageData;
 typedef QxrdImageData<quint32> QxrdInt32ImageData;

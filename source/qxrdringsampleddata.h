@@ -7,8 +7,7 @@
 #include <QSharedPointer>
 #include "qwt_double_rect.h"
 #include <QScriptEngine>
-
-class QSettings;
+#include <QSettings>
 
 class QxrdRingSampledData : public QObject
 {

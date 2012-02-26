@@ -5,7 +5,6 @@
 
 #include "qxrdacquisition.h"
 #include "qxrdperkinelmerplugininterface.h"
-#include "qxrddataprocessor.h"
 #include <QMutex>
 #include <QVector>
 

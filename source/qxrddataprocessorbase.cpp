@@ -13,6 +13,7 @@
 #include "qxrdgeneratetestimage.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
+#include "qxrdringsetsampleddata.h"
 
 #include <QTime>
 #include <QPainter>

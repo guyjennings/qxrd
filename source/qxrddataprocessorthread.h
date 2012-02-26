@@ -2,10 +2,12 @@
 #define QXRDDATAPROCESSORTHREAD_H
 
 #include "qxrdthread.h"
-#include "qxrdsettingssaver.h"
-#include "qxrdacquisition.h"
-#include "qxrddataprocessor.h"
-#include <QDateTime>
+#include "qxrdsettingssaver-ptr.h"
+#include "qxrdexperiment-ptr.h"
+#include "qxrdallocator-ptr.h"
+#include "qxrdfilesaver-ptr.h"
+#include "qxrdacquisition-ptr.h"
+#include "qxrddataprocessor-ptr.h"
 #include <QSettings>
 
 class QxrdDataProcessorThread : public QxrdThread

@@ -4,21 +4,17 @@
 #include <QDockWidget>
 #include <QMenu>
 
-class QxrdExperiment;
-class QxrdWindow;
-class QxrdAcquisition;
-class QxrdDataProcessor;
-
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
-typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
-typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
+#include "qxrdexperiment-ptr.h"
+#include "qxrdwindow-ptr.h"
+#include "qxrdacquisition-ptr.h"
+#include "qxrddataprocessor-ptr.h"
 
 class QxrdAcquireDialogBase : public QDockWidget
 {
     Q_OBJECT
 public:
     explicit QxrdAcquireDialogBase(QxrdExperimentWPtr doc,
-                                   QxrdWindow *win,
+                                   QxrdWindowWPtr win,
                                    QxrdAcquisitionWPtr acq,
                                    QxrdDataProcessorWPtr proc,
                                    QWidget *parent = 0);
@@ -30,7 +26,7 @@ public:
 
 protected:
   QxrdExperimentWPtr    m_Experiment;
-  QxrdWindow           *m_Window;
+  QxrdWindowWPtr        m_Window;
   QxrdAcquisitionWPtr   m_Acquisition;
   QxrdDataProcessorWPtr m_DataProcessor;
 };

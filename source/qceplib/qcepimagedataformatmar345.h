@@ -3,7 +3,6 @@
 
 #include "qcepmacros.h"
 
-#include "qcepimagedata.h"
 #include "qcepimagedataformat.h"
 
 #include <QFileInfo>

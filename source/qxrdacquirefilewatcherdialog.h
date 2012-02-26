@@ -10,7 +10,7 @@ class QxrdAcquireFileWatcherDialog : public QxrdAcquireDialogBase, public Ui::Qx
 
 public:
   explicit QxrdAcquireFileWatcherDialog(QxrdExperimentWPtr doc,
-                                        QxrdWindow *win,
+                                        QxrdWindowWPtr win,
                                         QxrdAcquisitionWPtr acq,
                                         QxrdDataProcessorWPtr proc,
                                         QWidget *parent = 0);

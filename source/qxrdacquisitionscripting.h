@@ -1,8 +1,6 @@
 #ifndef QXRDACQUISITIONSCRIPTING_H
 #define QXRDACQUISITIONSCRIPTING_H
 
-#include "qcepmacros.h"
-
 #include "qxrdacquisitionparameters.h"
 
 class QxrdAcquisitionScripting : public QxrdAcquisitionParameters

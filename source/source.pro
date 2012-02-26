@@ -110,6 +110,7 @@ HEADERS += TODO.h \
     qxrdwindow.h \
     qxrdwindow-ptr.h \
     qxrddataprocessorthread.h \
+    qxrddataprocessorthread-ptr.h \
     qxrddataprocessor.h \
     qxrddataprocessor-ptr.h \
     qxrddataprocessorbase.h \
@@ -118,9 +119,11 @@ HEADERS += TODO.h \
     qxrdallocator.h \
     qxrdallocator-ptr.h \
     qxrdfilesaverthread.h \
+    qxrdfilesaverthread-ptr.h \
     qxrdfilesaver.h \
     qxrdfilesaver-ptr.h \
     qxrdcenterfinder.h \
+    qxrdcenterfinder-ptr.h \
     qxrdcenterfinderplot.h \
     qxrdcenterfinderdialog.h \
     qxrdcenterfinderpicker.h \
@@ -130,8 +133,11 @@ HEADERS += TODO.h \
     qxrdimageplot.h \
     qxrdplotzoomer.h \
     qxrdserver.h \
+    qxrdserver-ptr.h \
     qxrdserverthread.h \
+    qxrdserverthread-ptr.h \
     qxrdacquisitionthread.h \
+    qxrdacquisitionthread-ptr.h \
     qxrdacquisition.h \
     qxrdacquisition-ptr.h \
     qxrdacquisitionparameters.h \
@@ -144,7 +150,9 @@ HEADERS += TODO.h \
     qxrdplotslicer.h \
     qxrdplotmeasurer.h \
     qxrdscriptengine.h \
+    qxrdscriptengine-ptr.h \
     qxrdscriptenginethread.h \
+    qxrdscriptenginethread-ptr.h \
     qxrdmaskpicker.h \
     qxrdmaskdata.h \
     qxrdmaskdata-ptr.h \
@@ -163,15 +171,19 @@ HEADERS += TODO.h \
     qxrdexposuretimespinner.h \
     qxrddetectorplugininterface.h \
     qxrdnidaqplugininterface.h \
+    qxrdnidaqplugininterface-ptr.h \
     qxrdprocessorinterface.h \
     qxrdnamedplugininterface.h \
     qxrddetectorgeometry.h \
     qxrdgeneratetestimage.h \
     qxrdfitparameter.h \
+    qxrdfitparameter-ptr.h \
     qxrdringfitparameters.h \
     qxrdringsetfitparameters.h \
     qxrdringsampleddata.h \
+    qxrdringsampleddata-ptr.h \
     qxrdringsetsampleddata.h \
+    qxrdringsetsampleddata-ptr.h \
     qxrdringsetresampler.h \
     qxrdringsetfitrefiner.h \
     qxrdringfitrefiner.h \
@@ -179,7 +191,9 @@ HEADERS += TODO.h \
     qxrdresampler.h \
     qxrdfitrefiner.h \
     qxrdsimpleserver.h \
+    qxrdsimpleserver-ptr.h \
     qxrdsimpleserverthread.h \
+    qxrdsimpleserverthread-ptr.h \
     qxrdpowderfitwidget.h \
     qxrdpowderfitimageplot.h \
     qxrdpowderfitidentifypage.h \
@@ -189,6 +203,7 @@ HEADERS += TODO.h \
     qxrdacquiredialog.h \
     qxrdcenterstepspinner.h \
     qxrdsettingssaver.h \
+    qxrdsettingssaver-ptr.h \
     qxrdplotimage.h \
     qxrdimagedisplaywidget.h \
     qwt_plot_piecewise_curve.h \
@@ -199,7 +214,9 @@ HEADERS += TODO.h \
     qxrdmaskstack-ptr.h \
     qxrdmaskstackview.h \
     qxrdsynchronizedacquisition.h \
+    qxrdsynchronizedacquisition-ptr.h \
     qxrdsynchronizedacquisitiondialog.h \
+    qxrdsynchronizedacquisitiondialog-ptr.h \
     qxrddisplaydialog.h \
     qxrdcorrectiondialog.h \
     qxrdfilebrowsermodel.h \
@@ -212,17 +229,18 @@ HEADERS += TODO.h \
     qxrdslicerplot.h \
     qxrdhistogramselector.h \
     qxrdresponsetimer.h \
-    qxrdallocatorinterface.h \
     qxrdimagedataobjectcounter.h \
     qxrdthread.h \
     qxrdsynchronizedacquisitionplot.h \
     qxrdhighlighter.h \
     qxrdacquisitionfilewatcher.h \
-    qxrdacquirefilewatcherdialog.h \
     qxrdacquiredialogbase.h \
+    qxrdacquiredialogbase-ptr.h \
+    qxrdacquirefilewatcherdialog.h \
     qxrdfilebrowsermodelupdater.h \
     qxrdfilebrowsermodelupdaterthread.h \
     qxrdintegratorcache.h \
+    qxrdintegratorcache-ptr.h \
     qxrdexperimentthread.h \
     qxrdexperimentthread-ptr.h \
     qxrdexperiment.h \
@@ -238,8 +256,11 @@ HEADERS += TODO.h \
     qxrdwelcomerecentitem.h \
     qxrdsplashscreen.h \
     qxrdacquisitiontrigger.h \
+    qxrdacquisitiontrigger-ptr.h \
     qxrdacquisitiontriggerthread.h \
-    qxrdacquisitiontriggerdialog.h
+    qxrdacquisitiontriggerthread-ptr.h \
+    qxrdacquisitiontriggerdialog.h \
+    qxrdacquisitiontriggerdialog-ptr.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -348,7 +369,6 @@ SOURCES += qxrd.cpp \
     qxrdslicerplot.cpp \
     qxrdhistogramselector.cpp \
     qxrdresponsetimer.cpp \
-    qxrdallocatorinterface.cpp \
     qxrdimagedataobjectcounter.cpp \
     qxrdthread.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
@@ -404,7 +424,8 @@ contains(DEFINES,HAVE_PERKIN_ELMER) {
   SOURCES += qxrdacquisitionperkinelmer.cpp \
              qxrdperkinelmerplugininterface.cpp
   HEADERS += qxrdacquisitionperkinelmer.h \
-             qxrdperkinelmerplugininterface.h
+             qxrdperkinelmerplugininterface.h \
+             qxrdperkinelmerplugininterface-ptr.h
 }
 
 OTHER_FILES += qxrd.rc \

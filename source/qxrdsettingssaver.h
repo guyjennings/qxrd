@@ -7,7 +7,7 @@
 #include <QMutex>
 #include <QDateTime>
 
-class QcepProperty;
+#include "qcepproperty-ptr.h"
 
 class QxrdSettingsSaver : public QObject
 {
@@ -30,8 +30,5 @@ private:
   int                m_SaveDelay;
   QcepProperty      *m_LastChangedBy;
 };
-
-typedef QSharedPointer<QxrdSettingsSaver> QxrdSettingsSaverPtr;
-typedef QWeakPointer<QxrdSettingsSaver> QxrdSettingsSaverWPtr;
 
 #endif // QXRDSETTINGSSAVER_H

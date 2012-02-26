@@ -2,12 +2,10 @@
 #define QXRDSCRIPTENGINETHREAD_H
 
 #include "qxrdthread.h"
-#include "qxrdscriptengine.h"
 #include <QDateTime>
-
-class QxrdApplication;
-class QxrdExperiment;
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+#include "qxrdscriptengine-ptr.h"
+#include "qxrdapplication-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 class QxrdScriptEngineThread : public QxrdThread
 {

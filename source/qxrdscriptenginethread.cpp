@@ -2,6 +2,7 @@
 
 #include "qxrdscriptengine.h"
 #include "qxrdapplication.h"
+#include <stdio.h>
 
 QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication* app, QxrdExperimentWPtr exp)
   : QxrdThread(NULL),

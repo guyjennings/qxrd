@@ -3,7 +3,7 @@
 
 #include <QDockWidget>
 #include "ui_qxrdcenterfinderdialog.h"
-#include "qxrdcenterfinder.h"
+#include "qxrdcenterfinder-ptr.h"
 
 class QxrdCenterFinderDialog : public QDockWidget, public Ui::QxrdCenterFinderDialog
 {

@@ -47,6 +47,4 @@ private:
   int                    m_Interpolate;
 };
 
-typedef QSharedPointer<QxrdRasterData> QxrdRasterDataPtr;
-
 #endif

@@ -5,13 +5,12 @@
 
 #include <QObject>
 #include <QMutex>
-#include <QSharedPointer>
 
-#include "qxrdsynchronizedacquisition.h"
-#include "qxrdacquisitiontrigger.h"
-#include "qxrdacquisitiontriggerthread.h"
+#include "qxrdsynchronizedacquisition-ptr.h"
+#include "qxrdacquisitiontrigger-ptr.h"
+#include "qxrdacquisitiontriggerthread-ptr.h"
 #include "qcepproperty.h"
-#include "qxrdsettingssaver.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdAcquisitionParameters : public QObject
 {
@@ -161,7 +160,7 @@ public:
 protected:
   mutable QMutex                m_Mutex;
 
-  QxrdSynchronizedAcquisition    *m_SynchronizedAcquisition;
+  QxrdSynchronizedAcquisitionPtr  m_SynchronizedAcquisition;
   QxrdAcquisitionTriggerThreadPtr m_AcquisitionTriggerThread;
   QxrdAcquisitionTriggerPtr       m_AcquisitionTrigger;
 };

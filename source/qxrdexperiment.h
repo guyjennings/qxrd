@@ -9,21 +9,23 @@
 #include <QSplashScreen>
 #include <QScriptEngine>
 #include <QScriptEngineDebugger>
-#include "qxrdacquisitionthread.h"
-#include "qxrddataprocessorthread.h"
-#include "qxrdserverthread.h"
-#include "qxrdsimpleserverthread.h"
-#include "qxrdfilesaverthread.h"
-#include "qxrdscriptenginethread.h"
-#include "qxrdnidaqplugininterface.h"
-
+#include "qxrdapplication-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
-class QxrdApplication;
-class QxrdWindow;
-class QxrdExperimentThread;
-class QxrdExperiment;
-typedef QWeakPointer<QxrdExperimentThread> QxrdExperimentThreadWPtr;
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+#include "qxrdexperiment-ptr.h"
+#include "qxrdacquisitionthread-ptr.h"
+#include "qxrdacquisition-ptr.h"
+#include "qxrddataprocessorthread-ptr.h"
+#include "qxrddataprocessor-ptr.h"
+#include "qxrdserverthread-ptr.h"
+#include "qxrdserver-ptr.h"
+#include "qxrdsimpleserverthread-ptr.h"
+#include "qxrdsimpleserver-ptr.h"
+#include "qxrdfilesaverthread-ptr.h"
+#include "qxrdfilesaver-ptr.h"
+#include "qxrdnidaqplugininterface-ptr.h"
+#include "qxrdwindow-ptr.h"
+#include "qxrdscriptengine-ptr.h"
+#include "qxrdscriptenginethread-ptr.h"
 
 class QxrdExperiment : public QObject
 {

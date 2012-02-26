@@ -1,4 +1,5 @@
 #include "qxrdringsetsampleddata.h"
+#include "qxrdringsampleddata.h"
 #include "qxrdmutexlocker.h"
 #include "qcepproperty.h"
 #include <stdio.h>

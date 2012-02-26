@@ -12,9 +12,7 @@
 #include <stdio.h>
 
 #include "qcepproperty.h"
-
-#include "qcepimagedataformat.h"
-#include "qcepimagedataformatfactory.h"
+#include "qxrdsettingssaver-ptr.h"
 
 typedef struct tiff TIFF;
 

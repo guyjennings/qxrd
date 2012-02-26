@@ -1,4 +1,5 @@
 #include "qxrdacquisitiontriggerthread.h"
+#include "qxrdacquisitiontrigger.h"
 #include "qxrdacquisition.h"
 #include "qxrdexperiment.h"
 

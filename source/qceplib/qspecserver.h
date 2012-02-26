@@ -14,8 +14,7 @@
 #include <QDateTime>
 #include <QTcpSocket>
 
-class QxrdExperiment;
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+#include "qxrdexperiment-ptr.h"
 
 class QSpecServer : public QTcpServer
 {

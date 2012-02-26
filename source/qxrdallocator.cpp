@@ -2,6 +2,10 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdallocatorthread.h"
 #include "qxrdapplication.h"
+#include <stdio.h>
+#include "qxrdimagedata.h"
+#include "qxrdmaskdata.h"
+#include "qxrdintegrateddata.h"
 
 QxrdAllocator::QxrdAllocator
 (QxrdSettingsSaverPtr saver)

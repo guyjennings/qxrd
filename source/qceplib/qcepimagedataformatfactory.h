@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QString>
 #include <QList>
-#include "qcepimagedataformat.h"
+#include "qcepimagedataformat-ptr.h"
 
 template <typename T>
 class QcepImageDataFormatFactory

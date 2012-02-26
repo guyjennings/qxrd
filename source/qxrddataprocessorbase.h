@@ -17,7 +17,7 @@
 #include "qxrdmaskstack-ptr.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdringsetfitparameters.h"
-#include "qxrdringsetsampleddata.h"
+#include "qxrdringsetsampleddata-ptr.h"
 #include "qxrdfilesaver.h"
 #include <qwt_double_rect.h>
 #include "qxrdsettingssaver.h"

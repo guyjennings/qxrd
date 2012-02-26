@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QString>
 
-template <typename T> class QcepImageData;
+#include "qcepimagedata-ptr.h"
 
 class QcepImageDataFormatBase
 {

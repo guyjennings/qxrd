@@ -2,14 +2,10 @@
 #define QXRDACQUISITIONOPERATIONS_H
 
 #include "qxrdacquisitionscripting.h"
-
-class QxrdExperiment;
-class QxrdDataProcessor;
-class QxrdWindow;
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
-typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
-#include "qxrdallocator.h"
-#include "qxrdsettingssaver.h"
+#include "qxrdwindow-ptr.h"
+#include "qxrdexperiment-ptr.h"
+#include "qxrdallocator-ptr.h"
+#include "qxrddataprocessor-ptr.h"
 
 class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
