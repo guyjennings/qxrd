@@ -26,20 +26,26 @@ public:
     TriggerSyncAsynchronous
   };
 
+  Q_PROPERTY(int triggerAMode READ get_TriggerAMode WRITE set_TriggerAMode)
+  QCEP_INTEGER_PROPERTY(TriggerAMode)
+
   Q_PROPERTY(int triggerACard READ get_TriggerACard WRITE set_TriggerACard)
   QCEP_INTEGER_PROPERTY(TriggerACard)
 
   Q_PROPERTY(int triggerAChannel READ get_TriggerAChannel WRITE set_TriggerAChannel)
   QCEP_INTEGER_PROPERTY(TriggerAChannel)
 
-  Q_PROPERTY(int triggerAMode READ get_TriggerAMode WRITE set_TriggerAMode)
-  QCEP_INTEGER_PROPERTY(TriggerAMode)
-
   Q_PROPERTY(int triggerASlope READ get_TriggerASlope WRITE set_TriggerASlope)
   QCEP_INTEGER_PROPERTY(TriggerASlope)
 
   Q_PROPERTY(double triggerALevel READ get_TriggerALevel WRITE set_TriggerALevel)
   QCEP_DOUBLE_PROPERTY(TriggerALevel)
+
+  Q_PROPERTY(double triggerAValue READ get_TriggerAValue WRITE set_TriggerAValue STORED false)
+  QCEP_DOUBLE_PROPERTY(TriggerAValue)
+
+  Q_PROPERTY(double triggerAPrevValue READ get_TriggerAPrevValue WRITE set_TriggerAPrevValue STORED false)
+  QCEP_DOUBLE_PROPERTY(TriggerAPrevValue)
 
   enum {
     TriggerModeNone,
@@ -59,20 +65,26 @@ public:
     TriggerSlopeNegative
   };
 
+  Q_PROPERTY(int triggerBMode READ get_TriggerBMode WRITE set_TriggerBMode)
+  QCEP_INTEGER_PROPERTY(TriggerBMode)
+
   Q_PROPERTY(int triggerBCard READ get_TriggerBCard WRITE set_TriggerBCard)
   QCEP_INTEGER_PROPERTY(TriggerBCard)
 
   Q_PROPERTY(int triggerBChannel READ get_TriggerBChannel WRITE set_TriggerBChannel)
   QCEP_INTEGER_PROPERTY(TriggerBChannel)
 
-  Q_PROPERTY(int triggerBMode READ get_TriggerBMode WRITE set_TriggerBMode)
-  QCEP_INTEGER_PROPERTY(TriggerBMode)
-
   Q_PROPERTY(int triggerBSlope READ get_TriggerBSlope WRITE set_TriggerBSlope)
   QCEP_INTEGER_PROPERTY(TriggerBSlope)
 
   Q_PROPERTY(double triggerBLevel READ get_TriggerBLevel WRITE set_TriggerBLevel)
   QCEP_DOUBLE_PROPERTY(TriggerBLevel)
+
+  Q_PROPERTY(double triggerBValue READ get_TriggerBValue WRITE set_TriggerBValue STORED false)
+  QCEP_DOUBLE_PROPERTY(TriggerBValue)
+
+  Q_PROPERTY(double triggerBPrevValue READ get_TriggerBPrevValue WRITE set_TriggerBPrevValue STORED false)
+  QCEP_DOUBLE_PROPERTY(TriggerBPrevValue)
 
 signals:
 

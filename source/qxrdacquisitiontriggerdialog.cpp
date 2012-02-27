@@ -19,12 +19,13 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
     QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
     QxrdNIDAQPluginInterfacePtr nidaq = acq->nidaqPlugin();
 
+    m_ATrigMode     -> addItem("None");
+    m_BTrigMode     -> addItem("None");
+
     if (nidaq && trig) {
-      m_ATrigMode     -> addItem("None");
       m_ATrigMode     -> addItem("Edge");
       m_ATrigMode     -> addItem("Level");
 
-      m_BTrigMode     -> addItem("None");
       m_BTrigMode     -> addItem("Edge");
       m_BTrigMode     -> addItem("Level");
 
@@ -69,6 +70,15 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
 
       trig->prop_TriggerALevel()->linkTo(m_ATrigLevel);
       trig->prop_TriggerBLevel()->linkTo(m_BTrigLevel);
+    } else {
+      m_ATrigCard->setEnabled(false);
+      m_BTrigCard->setEnabled(false);
+      m_ATrigChan->setEnabled(false);
+      m_BTrigChan->setEnabled(false);
+      m_ATrigSlope->setEnabled(false);
+      m_BTrigSlope->setEnabled(false);
+      m_ATrigLevel->setEnabled(false);
+      m_BTrigLevel->setEnabled(false);
     }
   }
 }
