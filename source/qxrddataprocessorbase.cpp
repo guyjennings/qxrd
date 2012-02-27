@@ -1995,9 +1995,12 @@ double QxrdDataProcessorBase::integrateRectangle(int x0, int y0, int x1, int y1)
         }
       }
     }
+
+    printMessage(tr("integrateRectange(\"%1\",%2,%3,%4,%5)=[%6,%7]=%8")
+                 .arg(dat->get_FileName())
+                 .arg(x0).arg(y0).arg(x1).arg(y1).arg(sum).arg(npx).arg(sum/npx));
   }
 
-  printMessage(tr("integrateRectange(%1,%2,%3,%4)=[%5,%6]=%7").arg(x0).arg(y0).arg(x1).arg(y1).arg(sum).arg(npx).arg(sum/npx));
 
   if (npx > 0) {
     return sum/npx;
