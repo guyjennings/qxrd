@@ -46,9 +46,6 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
     m_SyncAcqPhaseShift -> setMinimum(-100.0);
     m_SyncAcqPhaseShift -> setMaximum(100.0);
     m_SyncAcqPhaseShift -> setSingleStep(1);
-
-    connect(acq->prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
-    connect(acq->prop_PhasesInGroup(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
   }
 }
 
