@@ -19,6 +19,7 @@
 #include <QThread>
 #include <QDir>
 
+
 QxrdScriptEngine::QxrdScriptEngine(QxrdApplication* app, QxrdExperimentWPtr exp)
   : QScriptEngine(),
     m_Mutex(QMutex::Recursive),
@@ -245,14 +246,14 @@ bool QxrdScriptEngine::hasUncaughtException() const
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  return hasUncaughtException();
+  return QScriptEngine::hasUncaughtException();
 }
 
 int  QxrdScriptEngine::uncaughtExceptionLineNumber() const
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  return uncaughtExceptionLineNumber();
+  return QScriptEngine::uncaughtExceptionLineNumber();
 }
 
 QString QxrdScriptEngine::uncaughtExceptionString() const
