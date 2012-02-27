@@ -156,3 +156,5 @@ void QxrdAcquisitionTriggerDialog::setBTrigChannelNames()
     }
   }
 }
+
+
