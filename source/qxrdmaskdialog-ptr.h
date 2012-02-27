@@ -1,0 +1,6 @@
+#ifndef QXRDMASKDIALOG_PTR_H
+#define QXRDMASKDIALOG_PTR_H
+
+class QxrdMaskDialog;
+
+#endif // QXRDMASKDIALOG_PTR_H

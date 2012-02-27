@@ -1,0 +1,11 @@
+#ifndef QXRDFILEBROWSERMODELUPDATER_PTR_H
+#define QXRDFILEBROWSERMODELUPDATER_PTR_H
+
+#include <QSharedPointer>
+
+class QxrdFileBrowserModelUpdater;
+
+typedef QSharedPointer<QxrdFileBrowserModelUpdater> QxrdFileBrowserModelUpdaterPtr;
+typedef QWeakPointer<QxrdFileBrowserModelUpdater> QxrdFileBrowserModelUpdaterWPtr;
+
+#endif // QXRDFILEBROWSERMODELUPDATER_PTR_H
