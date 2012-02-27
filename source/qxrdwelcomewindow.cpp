@@ -4,6 +4,7 @@
 #include "qxrdapplication.h"
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QThread>
 
 QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   QMainWindow(NULL),

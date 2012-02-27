@@ -4,7 +4,9 @@
 //#ifdef HAVE_PERKIN_ELMER
 
 #include "qxrdacquisition.h"
-#include "qxrdperkinelmerplugininterface.h"
+#include "qxrdperkinelmerplugininterface-ptr.h"
+#include <Windows.h>
+#include "Acq.h"
 #include <QMutex>
 #include <QVector>
 

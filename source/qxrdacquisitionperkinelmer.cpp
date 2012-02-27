@@ -33,6 +33,7 @@
 #include <QMetaObject>
 #include <QMetaProperty>
 //#include "qxrdxislinterface.h"
+#include "qxrdperkinelmerplugininterface.h"
 
 static QxrdAcquisitionPerkinElmer * g_Acquisition = NULL;
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
