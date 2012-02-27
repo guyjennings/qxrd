@@ -17,6 +17,10 @@ public:
 protected:
   void changeEvent(QEvent *e);
 
+private slots:
+  void setATrigChannelNames();
+  void setBTrigChannelNames();
+
 private:
   QxrdAcquisitionWPtr        m_Acquisition;
   QxrdAcquisitionTriggerWPtr m_AcquisitionTrigger;

@@ -120,6 +120,8 @@ void QxrdAcquisitionSimulated::initialize()
 {
   THREAD_CHECK;
 
+  QxrdAcquisition::initialize();
+
   set_NRows(2048);
   set_NCols(2048);
 
@@ -128,8 +130,6 @@ void QxrdAcquisitionSimulated::initialize()
   }
 
   onExposureTimeChanged(get_ExposureTime());
-
-  QxrdAcquisition::initialize();
 }
 
 static int frameCounter = 0;

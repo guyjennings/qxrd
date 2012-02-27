@@ -219,6 +219,8 @@ void QxrdAcquisitionPerkinElmer::onCameraGainChanged(int newGain)
 
 void QxrdAcquisitionPerkinElmer::initialize()
 {
+  QxrdAcquisition::initialize();
+
   if (qcepDebug(DEBUG_PERKINELMER)) {
     printMessage(tr("QxrdAcquisitionPerkinElmer::initialize"));
   }

@@ -14,6 +14,7 @@
 #include "qxrdringsetsampleddata.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaqplugininterface.h"
+#include "qxrdacquisitiontrigger.h"
 #include "qxrdallocator.h"
 
 #include <QThread>
@@ -119,6 +120,12 @@ void QxrdScriptEngine::initialize()
 
       if (sync) {
         globalObject().setProperty("synchronization", newQObject(sync.data()));
+      }
+
+      QxrdAcquisitionTriggerPtr trig(acq->acquisitionTrigger());
+
+      if (trig) {
+        globalObject().setProperty("trigger", newQObject(trig.data()));
       }
     }
 

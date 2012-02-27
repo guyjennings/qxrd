@@ -35,6 +35,9 @@ public:
   Q_PROPERTY(int triggerAMode READ get_TriggerAMode WRITE set_TriggerAMode)
   QCEP_INTEGER_PROPERTY(TriggerAMode)
 
+  Q_PROPERTY(int triggerASlope READ get_TriggerASlope WRITE set_TriggerASlope)
+  QCEP_INTEGER_PROPERTY(TriggerASlope)
+
   Q_PROPERTY(double triggerALevel READ get_TriggerALevel WRITE set_TriggerALevel)
   QCEP_DOUBLE_PROPERTY(TriggerALevel)
 
@@ -51,6 +54,11 @@ public:
     TriggerChannelNone = -1
   };
 
+  enum {
+    TriggerSlopePositive,
+    TriggerSlopeNegative
+  };
+
   Q_PROPERTY(int triggerBCard READ get_TriggerBCard WRITE set_TriggerBCard)
   QCEP_INTEGER_PROPERTY(TriggerBCard)
 
@@ -59,6 +67,9 @@ public:
 
   Q_PROPERTY(int triggerBMode READ get_TriggerBMode WRITE set_TriggerBMode)
   QCEP_INTEGER_PROPERTY(TriggerBMode)
+
+  Q_PROPERTY(int triggerBSlope READ get_TriggerBSlope WRITE set_TriggerBSlope)
+  QCEP_INTEGER_PROPERTY(TriggerBSlope)
 
   Q_PROPERTY(double triggerBLevel READ get_TriggerBLevel WRITE set_TriggerBLevel)
   QCEP_DOUBLE_PROPERTY(TriggerBLevel)
