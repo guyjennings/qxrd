@@ -139,12 +139,12 @@ QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
   return QVariant();
 }
 
-int	QxrdFileBrowserModel::columnCount ( const QModelIndex & parent ) const
+int	QxrdFileBrowserModel::columnCount ( const QModelIndex & /*parent*/ ) const
 {
   return 3;
 }
 
-int	QxrdFileBrowserModel::rowCount ( const QModelIndex & parent ) const
+int	QxrdFileBrowserModel::rowCount ( const QModelIndex & /*parent*/ ) const
 {
   if (m_Limit > 0) {
     return m_DirList.count() + m_Limit + 1;
@@ -160,7 +160,7 @@ void QxrdFileBrowserModel::setNameFilters(QStringList filters)
   updateModel();
 }
 
-void QxrdFileBrowserModel::setNameFilterDisables(bool disables)
+void QxrdFileBrowserModel::setNameFilterDisables(bool /*disables*/)
 {
 }
 

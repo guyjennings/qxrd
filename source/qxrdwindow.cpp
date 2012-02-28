@@ -59,8 +59,6 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaverWPtr saver,
                        QxrdAcquisitionWPtr acqw,
                        QxrdDataProcessorWPtr procw,
                        QxrdAllocatorWPtr allocw,
-                       QSettings *settings,
-                       QString section,
                        QWidget *parent)
   : QMainWindow(parent),
     m_WindowGeometry(saver, this, "windowGeometry", QByteArray()),

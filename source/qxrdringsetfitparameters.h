@@ -2,13 +2,14 @@
 #define QXRDRINGSETFITPARAMETERS_H
 
 #include "qxrdfitparameter.h"
+#include "qxrdringfitparameters.h"
 #include "qxrdringfitparameters-ptr.h"
 
 class QxrdRingSetFitParameters : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdRingSetFitParameters(QxrdSettingsSaverPtr saver);
+  explicit QxrdRingSetFitParameters(QxrdSettingsSaverWPtr saver);
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
@@ -46,7 +47,7 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  QxrdSettingsSaverPtr   m_Saver;
+  QxrdSettingsSaverWPtr   m_Saver;
 
   QList<QxrdRingFitParametersPtr> m_Rings;
 };

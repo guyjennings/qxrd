@@ -9,10 +9,14 @@
 #include "qxrdresponsetimer.h"
 #include "qxrdallocatorthread-ptr.h"
 #include "qxrdallocator-ptr.h"
+#include "qxrdexperiment.h"
 #include "qxrdexperiment-ptr.h"
+#include "qxrdexperimentthread.h"
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdwelcomewindow-ptr.h"
+#include "qxrdnidaqplugininterface.h"
 #include "qxrdnidaqplugininterface-ptr.h"
+#include "qxrdsettingssaver.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface-ptr.h"
@@ -24,7 +28,8 @@ class QxrdApplication : public QApplication
 
 public:
   QxrdApplication(int &argc, char **argv);
-  ~QxrdApplication();
+  virtual ~QxrdApplication();
+
   bool init(int &argc, char **argv);
 
   QxrdAllocatorWPtr allocator() const;

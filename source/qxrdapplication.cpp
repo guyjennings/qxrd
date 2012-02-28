@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "qcepdebug.h"
 #include "qxrdapplication.h"
 #include "qxrdwelcomewindow.h"

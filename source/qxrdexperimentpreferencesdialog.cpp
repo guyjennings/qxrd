@@ -4,7 +4,7 @@
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 #include "qxrdallocator.h"
-//#include "qxrdapplication.h"
+#include "qxrdexperiment.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QGridLayout>

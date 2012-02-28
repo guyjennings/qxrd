@@ -490,7 +490,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 
     unsigned short* frame = m_Buffer.data() + m_BufferIndex*npixels;
 
-    DWORD actualFrame = n1, actSecFrame = n2;
+    DWORD /*actualFrame = n1,*/ actSecFrame = n2;
 
   //  this->Acquisition_GetActFrame(m_AcqDesc, &actualFrame, &actSecFrame);
   //
@@ -581,7 +581,7 @@ void QxrdAcquisitionPerkinElmer::acquisitionNSensorsError(int n)
   criticalMessage("Detector Initialization Failed");
 }
 
-void QxrdAcquisitionPerkinElmer::setupExposureMenu(QDoubleSpinBox *cb)
+void QxrdAcquisitionPerkinElmer::setupExposureMenu(QDoubleSpinBox* /*cb*/)
 {
 //  foreach(double t, m_ReadoutTimes) {
 //    cb -> addItem(tr("%1").arg(t/1e6,5,'f'));

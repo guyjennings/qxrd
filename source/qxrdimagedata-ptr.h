@@ -13,4 +13,8 @@ typedef QSharedPointer<QxrdInt16ImageData> QxrdInt16ImageDataPtr;
 typedef QSharedPointer<QxrdInt32ImageData> QxrdInt32ImageDataPtr;
 typedef QSharedPointer<QxrdDoubleImageData> QxrdDoubleImageDataPtr;
 
+typedef QWeakPointer<QxrdInt16ImageData> QxrdInt16ImageDataWPtr;
+typedef QWeakPointer<QxrdInt32ImageData> QxrdInt32ImageDataWPtr;
+typedef QWeakPointer<QxrdDoubleImageData> QxrdDoubleImageDataWPtr;
+
 #endif

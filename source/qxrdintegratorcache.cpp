@@ -324,7 +324,7 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
         int nRows = get_NRows();
         int nCols = get_NCols();
         double rMin = get_RMin();
-        double rMax = get_RMax();
+//        double rMax = get_RMax();
         double rStep = get_RStep();
 
         QVector<double> integral(nRange), sumvalue(nRange);

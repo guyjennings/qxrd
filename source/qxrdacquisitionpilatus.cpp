@@ -1,6 +1,6 @@
 #include "qxrdacquisitionpilatus.h"
 
-QxrdAcquisitionPilatus::QxrdAcquisitionPilatus(QxrdSettingsSaverPtr saver,
+QxrdAcquisitionPilatus::QxrdAcquisitionPilatus(QxrdSettingsSaverWPtr saver,
                                                QxrdExperimentWPtr doc,
                                                QxrdDataProcessorWPtr proc,
                                                QxrdAllocatorWPtr allocator,

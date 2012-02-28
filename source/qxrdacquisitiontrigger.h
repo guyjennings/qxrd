@@ -47,6 +47,9 @@ public:
   Q_PROPERTY(double triggerAPrevValue READ get_TriggerAPrevValue WRITE set_TriggerAPrevValue STORED false)
   QCEP_DOUBLE_PROPERTY(TriggerAPrevValue)
 
+  Q_PROPERTY(int triggerATriggered READ get_TriggerATriggered WRITE set_TriggerATriggered STORED false)
+  QCEP_INTEGER_PROPERTY(TriggerATriggered)
+
   enum {
     TriggerModeNone,
     TriggerModeEdgePos,
@@ -85,6 +88,9 @@ public:
 
   Q_PROPERTY(double triggerBPrevValue READ get_TriggerBPrevValue WRITE set_TriggerBPrevValue STORED false)
   QCEP_DOUBLE_PROPERTY(TriggerBPrevValue)
+
+  Q_PROPERTY(int triggerBTriggered READ get_TriggerBTriggered WRITE set_TriggerBTriggered STORED false)
+  QCEP_INTEGER_PROPERTY(TriggerBTriggered)
 
 signals:
 

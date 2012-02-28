@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "qcepimagedataformattiff.h"
 #include "qcepimagedata.h"
 #include <tiffio.h>
@@ -45,7 +47,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::canLoadFile(QString path)
 }
 
 template <typename T>
-T QcepImageDataFormatTiff<T>::unpackSignedBitField(void *buffer, int bitsPerSample, int x, int fillOrder)
+T QcepImageDataFormatTiff<T>::unpackSignedBitField(void *buffer, int bitsPerSample, int x, int /*fillOrder*/)
 {
   int val=0;
   int samplesPerByte = 8/bitsPerSample;
@@ -77,7 +79,7 @@ T QcepImageDataFormatTiff<T>::unpackSignedBitField(void *buffer, int bitsPerSamp
 }
 
 template <typename T>
-T QcepImageDataFormatTiff<T>::unpackUnsignedBitField(void *buffer, int bitsPerSample, int x, int fillOrder)
+T QcepImageDataFormatTiff<T>::unpackUnsignedBitField(void *buffer, int bitsPerSample, int x, int /*fillOrder*/)
 {
   int val=0;
   int samplesPerByte = 8/bitsPerSample;

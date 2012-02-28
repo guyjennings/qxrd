@@ -15,7 +15,7 @@ class QxrdCenterFinder : public QxrdDetectorGeometry
   Q_OBJECT
 
 public:
-  QxrdCenterFinder(QxrdSettingsSaverPtr saver);
+  QxrdCenterFinder(QxrdSettingsSaverWPtr saver);
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)

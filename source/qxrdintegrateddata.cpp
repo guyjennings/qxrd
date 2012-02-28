@@ -2,7 +2,7 @@
 
 QxrdIntegratedData::QxrdIntegratedData(QxrdSettingsSaverWPtr saver,
                                        QxrdAllocatorWPtr alloc,
-                                       QxrdDoubleImageDataPtr image,
+                                       QxrdDoubleImageDataWPtr image,
                                        int typ, int maxSize, QObject *parent) :
   QObject(parent),
   m_Title(saver, this, "title", ""),
@@ -79,12 +79,12 @@ void QxrdIntegratedData::append(double x, double y)
   m_Y[size()-1] = y;
 }
 
-void QxrdIntegratedData::set_Image(QxrdDoubleImageDataPtr image)
+void QxrdIntegratedData::set_Image(QxrdDoubleImageDataWPtr image)
 {
   m_Image = image;
 }
 
-QxrdDoubleImageDataPtr QxrdIntegratedData::get_Image() const
+QxrdDoubleImageDataWPtr QxrdIntegratedData::get_Image() const
 {
   return m_Image;
 }

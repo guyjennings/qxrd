@@ -7,7 +7,7 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdapplication.h"
 
-QxrdRingSetFitParameters::QxrdRingSetFitParameters(QxrdSettingsSaverPtr saver) :
+QxrdRingSetFitParameters::QxrdRingSetFitParameters(QxrdSettingsSaverWPtr saver) :
   QObject(),
   m_CenterX(saver, this, "centerX", 1024),
   m_CenterY(saver, this, "centerY", 1024),

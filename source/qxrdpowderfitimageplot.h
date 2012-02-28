@@ -2,6 +2,7 @@
 #define QXRDPOWDERFITIMAGEPLOT_H
 
 #include "qxrdimageplot.h"
+#include "qxrdringsetsampleddata.h"
 #include "qxrdringsetsampleddata-ptr.h"
 
 class QxrdPowderFitImagePlot : public QxrdImagePlot

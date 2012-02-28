@@ -20,12 +20,9 @@ QxrdDataProcessor::QxrdDataProcessor
      QxrdExperimentWPtr doc,
      QxrdAcquisitionWPtr acq,
      QxrdAllocatorWPtr allocator,
-     QxrdFileSaverWPtr filesaver,
-     QSettings *settings,
-     QString section)
+     QxrdFileSaverWPtr filesaver)
   : QxrdDataProcessorThreaded(saver, doc, acq, allocator, filesaver)
 {
-//  readSettings(settings, section);
 }
 
 QxrdDataProcessor::~QxrdDataProcessor()

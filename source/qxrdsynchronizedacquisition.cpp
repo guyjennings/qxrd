@@ -38,7 +38,7 @@ void QxrdSynchronizedAcquisition::finishedAcquisition()
   m_SyncMode = 0;
 }
 
-void QxrdSynchronizedAcquisition::prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPack *parms)
+void QxrdSynchronizedAcquisition::prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPack * /*parms*/)
 {
   m_SyncMode = 0;
 }

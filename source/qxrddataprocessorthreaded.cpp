@@ -7,6 +7,9 @@
 #include "qxrdfilesaverthread.h"
 #include "qxrdfilesaver.h"
 #include "qxrdapplication.h"
+#include "qxrdroidata.h"
+#include "qxrdintegrateddata.h"
+#include "qxrdhistogramdata.h"
 #include <QtConcurrentRun>
 #include <QDirIterator>
 
@@ -22,6 +25,10 @@ QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(
   connect(&m_IntegratedData,  SIGNAL(resultAvailable()), this, SLOT(onIntegratedDataAvailable()));
   connect(&m_ROIData,         SIGNAL(resultAvailable()), this, SLOT(onROIDataAvailable()));
   connect(&m_HistogramData,   SIGNAL(resultAvailable()), this, SLOT(onHistogramDataAvailable()));
+}
+
+QxrdDataProcessorThreaded::~QxrdDataProcessorThreaded()
+{
 }
 
 void QxrdDataProcessorThreaded::beginAcquisition(int /*isDark*/)

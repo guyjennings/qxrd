@@ -16,7 +16,7 @@ class QxrdIntegratedData : public QObject
 public:
   explicit QxrdIntegratedData(QxrdSettingsSaverWPtr saver,
                               QxrdAllocatorWPtr alloc,
-                              QxrdDoubleImageDataPtr data,
+                              QxrdDoubleImageDataWPtr data,
                               int typ, int maxSize, QObject *parent = 0);
   ~QxrdIntegratedData();
 
@@ -24,8 +24,8 @@ public:
   int size() const;
   void append(double x, double y);
   void set_Center(double cx, double cy);
-  void set_Image(QxrdDoubleImageDataPtr image);
-  QxrdDoubleImageDataPtr get_Image() const;
+  void set_Image(QxrdDoubleImageDataWPtr image);
+  QxrdDoubleImageDataWPtr get_Image() const;
 
   QString get_XUnitsLabel() const;
   void set_XUnitsLabel(QString units);
@@ -46,7 +46,7 @@ public:
 
 private:
   QxrdImageDataObjectCounter m_ObjectCounter; /* global counter to track allocation of QxrdImageData objects */
-  QxrdDoubleImageDataPtr     m_Image;
+  QxrdDoubleImageDataWPtr    m_Image;
   int                        m_MaxSize;
   int                        m_Size;
   const int                  m_AllocStep;

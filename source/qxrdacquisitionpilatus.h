@@ -7,7 +7,7 @@ class QxrdAcquisitionPilatus : public QxrdAcquisition
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionPilatus(QxrdSettingsSaverPtr saver,
+  QxrdAcquisitionPilatus(QxrdSettingsSaverWPtr saver,
                          QxrdExperimentWPtr doc,
                          QxrdDataProcessorWPtr proc,
                          QxrdAllocatorWPtr allocator,

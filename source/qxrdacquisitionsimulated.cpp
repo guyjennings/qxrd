@@ -197,7 +197,7 @@ void QxrdAcquisitionSimulated::onTimerTimeout()
         for (int i=0; i<labelWidth; i++) {
           int x = nCols-labelWidth+i;
           int y = (frameN+1)*labelHeight-j;
-          int val = image->value(x,y);
+//          int val = image->value(x,y);
           int vRgb = *rgb++;
           int lval = qGray(vRgb);
 

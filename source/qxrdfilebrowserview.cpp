@@ -148,7 +148,7 @@ void	QxrdFileBrowserView::setModel ( QAbstractItemModel * model )
   }
 }
 
-void	QxrdFileBrowserView::setRootPath ( const QString & index )
+void	QxrdFileBrowserView::setRootPath ( const QString & /*index*/ )
 {
 }
 

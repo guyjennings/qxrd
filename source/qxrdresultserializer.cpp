@@ -45,9 +45,13 @@ T QxrdResultSerializer<T>::dequeue()
   }
 }
 
+#include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
+#include "qxrdintegrateddata.h"
 #include "qxrdintegrateddata-ptr.h"
+#include "qxrdroidata.h"
 #include "qxrdroidata-ptr.h"
+#include "qxrdhistogramdata.h"
 #include "qxrdhistogramdata-ptr.h"
 
 template class QxrdResultSerializer<QxrdDoubleImageDataPtr>;

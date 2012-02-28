@@ -4,7 +4,7 @@
 #include "qcepmacros.h"
 
 #include <QSettings>
-#include "qxrdexperiment.h"
+#include "qxrdexperiment-ptr.h"
 
 class QxrdExperimentSettings : public QSettings
 {

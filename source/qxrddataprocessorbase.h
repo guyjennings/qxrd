@@ -15,6 +15,7 @@
 #include "qxrdmaskdata-ptr.h"
 #include "qxrdmaskstack.h"
 #include "qxrdmaskstack-ptr.h"
+#include "qxrdintegrateddata.h"
 #include "qxrdintegrateddata-ptr.h"
 #include "qxrdringsetfitparameters-ptr.h"
 #include "qxrdringsetsampleddata-ptr.h"
@@ -40,7 +41,7 @@ public:
                         QxrdAcquisitionWPtr acq,
                         QxrdAllocatorWPtr allocator,
                         QxrdFileSaverWPtr filesaver);
-  ~QxrdDataProcessorBase();
+  virtual ~QxrdDataProcessorBase();
 
 public:
 //  Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory)

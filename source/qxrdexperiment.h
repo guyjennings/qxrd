@@ -1,6 +1,8 @@
 #ifndef QXRDEXPERIMENT_H
 #define QXRDEXPERIMENT_H
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 
@@ -24,8 +26,11 @@
 #include "qxrdfilesaver-ptr.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdwindow-ptr.h"
+#include "qxrdscriptengine.h"
 #include "qxrdscriptengine-ptr.h"
+#include "qxrdscriptenginethread.h"
 #include "qxrdscriptenginethread-ptr.h"
+#include "qxrdsettingssaver.h"
 
 class QxrdExperiment : public QObject
 {

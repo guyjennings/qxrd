@@ -674,7 +674,7 @@ void QcepBoolProperty::setValue(bool val)
                  .arg(name()).arg(val));
   }
 
-  if (val != m_Value) {
+  if ((int) val != m_Value) {
     if (debug()) {
       printMessage(tr("%1: QcepBoolProperty::setValue(bool %2) [%3]")
                    .arg(name()).arg(val).arg(index()));

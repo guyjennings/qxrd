@@ -13,8 +13,11 @@
 #include "qxrdallocator-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdacquisition-ptr.h"
+#include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
+#include "qxrdintegrateddata.h"
 #include "qxrdintegrateddata-ptr.h"
 
 class QxrdFileSaver : public QObject

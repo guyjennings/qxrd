@@ -12,9 +12,7 @@ public:
                     QxrdExperimentWPtr doc,
                     QxrdAcquisitionWPtr acq,
                     QxrdAllocatorWPtr allocator,
-                    QxrdFileSaverWPtr filesaver,
-                    QSettings *settings,
-                    QString section);
+                    QxrdFileSaverWPtr filesaver);
   ~QxrdDataProcessor();
 
   void init();

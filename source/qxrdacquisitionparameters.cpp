@@ -1,5 +1,6 @@
 #include "qxrdacquisition.h"
 #include "qxrdsynchronizedacquisition.h"
+#include "qxrdacquisitiontriggerthread.h"
 #include "qxrdacquisitiontrigger.h"
 //#include <QMutexLocker>
 #include "qxrdmutexlocker.h"

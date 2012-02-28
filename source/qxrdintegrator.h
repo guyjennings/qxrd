@@ -7,13 +7,17 @@
 #include "qcepproperty.h"
 
 #include "qxrdexperiment-ptr.h"
+#include "qxrdintegrateddata.h"
 #include "qxrdintegrateddata-ptr.h"
 #include <qwt_double_rect.h>
+#include "qxrdintegratorcache.h"
 #include "qxrdintegratorcache-ptr.h"
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdallocator-ptr.h"
+#include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 
@@ -22,7 +26,7 @@ class QxrdIntegrator : public QObject
   Q_OBJECT
 
 public:
-  QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc);
+  QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc);
   virtual ~QxrdIntegrator();
 
 public:
@@ -47,7 +51,7 @@ public:
 public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
-  QxrdDataProcessorPtr dataProcessor() const;
+  QxrdDataProcessorWPtr dataProcessor() const;
 
   enum {
     IntegrateTTH, IntegrateQ, IntegrateR

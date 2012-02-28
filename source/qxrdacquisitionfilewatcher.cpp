@@ -19,15 +19,15 @@ void QxrdAcquisitionFileWatcher::initialize()
   QxrdAcquisition::initialize();
 }
 
-void QxrdAcquisitionFileWatcher::onExposureTimeChanged(double newTime)
+void QxrdAcquisitionFileWatcher::onExposureTimeChanged(double /*newTime*/)
 {
 }
 
-void QxrdAcquisitionFileWatcher::onBinningModeChanged(int newMode)
+void QxrdAcquisitionFileWatcher::onBinningModeChanged(int /*newMode*/)
 {
 }
 
-void QxrdAcquisitionFileWatcher::onCameraGainChanged(int newGain)
+void QxrdAcquisitionFileWatcher::onCameraGainChanged(int /*newGain*/)
 {
 }
 
@@ -43,15 +43,15 @@ void QxrdAcquisitionFileWatcher::shutdownAcquisition()
 {
 }
 
-void QxrdAcquisitionFileWatcher::setupExposureMenu(QDoubleSpinBox* cb)
+void QxrdAcquisitionFileWatcher::setupExposureMenu(QDoubleSpinBox* /*cb*/)
 {
 }
 
-void QxrdAcquisitionFileWatcher::setupCameraGainMenu(QComboBox* cb)
+void QxrdAcquisitionFileWatcher::setupCameraGainMenu(QComboBox* /*cb*/)
 {
 }
 
-void QxrdAcquisitionFileWatcher::setupCameraBinningModeMenu(QComboBox *cb)
+void QxrdAcquisitionFileWatcher::setupCameraBinningModeMenu(QComboBox* /*cb*/)
 {
 }
 

@@ -70,6 +70,10 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
 
       trig->prop_TriggerALevel()->linkTo(m_ATrigLevel);
       trig->prop_TriggerBLevel()->linkTo(m_BTrigLevel);
+
+      trig->prop_TriggerAValue()->linkTo(m_ATrigValue);
+      trig->prop_TriggerBValue()->linkTo(m_BTrigValue);
+
     } else {
       m_ATrigCard->setEnabled(false);
       m_BTrigCard->setEnabled(false);

@@ -4,7 +4,7 @@
 #include "qcepmacros.h"
 
 #include <QSettings>
-#include "qxrdapplication.h"
+#include "qxrdapplication-ptr.h"
 
 class QxrdGlobalSettings : public QSettings
 {

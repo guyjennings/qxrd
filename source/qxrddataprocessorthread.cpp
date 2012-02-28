@@ -8,18 +8,14 @@ QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaverWPtr saver,
                                                  QxrdExperimentWPtr doc,
                                                  QxrdAcquisitionWPtr acq,
                                                  QxrdAllocatorWPtr allocator,
-                                                 QxrdFileSaverWPtr filesaver,
-                                                 QSettings *settings,
-                                                 QString section)
+                                                 QxrdFileSaverWPtr filesaver)
   : QxrdThread(),
     m_Allocator(allocator),
     m_FileSaver(filesaver),
     m_DataProcessor(NULL),
     m_Acquisition(acq),
     m_Experiment(doc),
-    m_Saver(saver),
-    m_Settings(settings),
-    m_Section(section)
+    m_Saver(saver)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDataProcessorThread::QxrdDataProcessorThread(%p)\n", this);
@@ -53,9 +49,7 @@ void QxrdDataProcessorThread::run()
                                                m_Experiment,
                                                m_Acquisition,
                                                m_Allocator,
-                                               m_FileSaver,
-                                               m_Settings,
-                                               m_Section));
+                                               m_FileSaver));
 
   m_DataProcessor = p;
 

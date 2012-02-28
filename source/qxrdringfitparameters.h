@@ -10,7 +10,7 @@ class QxrdRingFitParameters : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdRingFitParameters(QxrdSettingsSaverPtr saver, QxrdRingSetFitParameters *ringSet, double twoTheta=0);
+  explicit QxrdRingFitParameters(QxrdSettingsSaverWPtr saver, QxrdRingSetFitParameters *ringSet, double twoTheta=0);
 
 public:
   Q_PROPERTY(double twoTheta READ get_TwoTheta WRITE set_TwoTheta)

@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "qcepmacros.h"
 #include "qxrdexperiment.h"
 #include "qxrdapplication.h"
@@ -112,9 +114,7 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
                                       exp,
                                       QxrdAcquisitionPtr(),
                                       m_Application->allocator(),
-                                      m_FileSaver,
-                                      settings,
-                                      "experiment/processor"));
+                                      m_FileSaver));
     m_DataProcessorThread -> setObjectName("proc");
     m_DataProcessorThread -> start();
     m_DataProcessor = m_DataProcessorThread -> dataProcessor();
@@ -148,9 +148,7 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
                            exp,
                            m_Acquisition,
                            m_DataProcessor,
-                           m_Application->allocator(),
-                           settings,
-                           "experiment/window");
+                           m_Application->allocator());
 
       QxrdWindow *win = m_Window;
 

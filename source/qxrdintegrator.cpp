@@ -17,7 +17,7 @@
 
 #include <cmath>
 
-QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc)
+QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc)
   : QObject(NULL),
     m_Oversample(saver, this, "oversample", 1),
     m_IntegrationStep(saver, this, "integrationStep", 0.001),
@@ -63,14 +63,14 @@ QxrdIntegrator::~QxrdIntegrator()
   }
 }
 
-QxrdDataProcessorPtr QxrdIntegrator::dataProcessor() const
+QxrdDataProcessorWPtr QxrdIntegrator::dataProcessor() const
 {
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
     return expt->dataProcessor();
   } else {
-    return QxrdDataProcessorPtr();
+    return QxrdDataProcessorWPtr();
   }
 }
 

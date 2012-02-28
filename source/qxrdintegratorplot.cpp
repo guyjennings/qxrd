@@ -61,7 +61,9 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
 
     setAxisTitle(QwtPlot::xBottom, m_XUnitsLabel);
 
-    QString title = data -> get_Image() -> get_Title();
+    QxrdDoubleImageDataPtr img(data->get_Image());
+
+    QString title = (img ? img -> get_Title() : "");
     QString tooltip;
 
     if (data->get_Oversample() > 1) {

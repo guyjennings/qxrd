@@ -1,7 +1,7 @@
 #include "qxrdmaskdata.h"
 #include "qxrdallocator.h"
 
-QxrdMaskData::QxrdMaskData(QxrdSettingsSaverPtr saver, QxrdAllocatorWPtr allocator, int typ, int width, int height, int def)
+QxrdMaskData::QxrdMaskData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr allocator, int typ, int width, int height, int def)
   : QcepImageData<short>(saver, width, height, def),
     m_ObjectCounter(allocator, typ)
 {

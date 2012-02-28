@@ -6,7 +6,7 @@
 #include "qxrdmutexlocker.h"
 
 QxrdCenterFinder::QxrdCenterFinder
-    (QxrdSettingsSaverPtr saver)
+    (QxrdSettingsSaverWPtr saver)
   : QxrdDetectorGeometry(),
     m_CenterX(saver, this, "centerX", 0),
     m_CenterY(saver, this, "centerY", 0),

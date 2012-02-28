@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "qcepimagedataformatmar345.h"
 #include "qcepimagedata.h"
 
@@ -174,7 +176,8 @@ QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::readMar345Header(FILE *fil
     T *p = img->data();
 
     for (int i=0; i<n32; i++ ) {
-      int n, ihigh, high[2], j, row, col;
+      size_t n;
+      int ihigh, high[2], j, row, col;
 
       if ( ( n=fread(high, sizeof(qint32), 2, file) )!= 2 ) {
         printf("ERROR> Cannot read pixel %d from %s\n",

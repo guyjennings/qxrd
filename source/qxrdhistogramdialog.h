@@ -3,7 +3,9 @@
 
 #include <QDockWidget>
 #include "ui_qxrdhistogramdialog.h"
+#include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
 #include "qwt_double_rect.h"
 #include "qxrdsettingssaver-ptr.h"

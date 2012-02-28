@@ -345,7 +345,7 @@ Error:
   return;
 }
 
-double QxrdNIDAQPlugin::count(int chan, double time)
+double QxrdNIDAQPlugin::count(int /* chan */, double /* time */)
 {
   QMutexLocker lock(&m_Mutex);
 
@@ -374,9 +374,12 @@ Error:
 QStringList QxrdNIDAQPlugin::deviceNames()
 {
   char buffer[5120]="";
-  int32 res=DAQmxGetSysDevNames(buffer, sizeof(buffer));
+  int error;
+
+  DAQmxErrChk(DAQmxGetSysDevNames(buffer, sizeof(buffer)));
 //  printf("%d: DAQmxGetSysDevNames : \"%s\"\n", res, buffer);
 
+Error:
   QStringList result = QString(buffer).split(", ");
 
   return result;
@@ -385,9 +388,12 @@ QStringList QxrdNIDAQPlugin::deviceNames()
 QStringList QxrdNIDAQPlugin::deviceAIChannels(QString device)
 {
   char buffer[5120]="";
-  int32 res=DAQmxGetDevAIPhysicalChans(qPrintable(device), buffer, sizeof(buffer));
+  int error;
+
+  DAQmxErrChk(DAQmxGetDevAIPhysicalChans(qPrintable(device), buffer, sizeof(buffer)));
   //  printf("%d: DAQmxGetDevAIPhysicalChans : \"%s\"\n", res, buffer);
 
+Error:
   QStringList result = QString(buffer).split(", ");
 
   return result;
@@ -396,8 +402,11 @@ QStringList QxrdNIDAQPlugin::deviceAIChannels(QString device)
 QStringList QxrdNIDAQPlugin::deviceAOChannels(QString device)
 {
   char buffer[5120]="";
-  int32 res=DAQmxGetDevAOPhysicalChans(qPrintable(device), buffer, sizeof(buffer));
+  int error;
 
+  DAQmxErrChk(DAQmxGetDevAOPhysicalChans(qPrintable(device), buffer, sizeof(buffer)));
+
+Error:
   QStringList result = QString(buffer).split(", ");
 
   return result;
@@ -406,8 +415,11 @@ QStringList QxrdNIDAQPlugin::deviceAOChannels(QString device)
 QStringList QxrdNIDAQPlugin::deviceDIPorts(QString device)
 {
   char buffer[5120]="";
-  int32 res=DAQmxGetDevDIPorts(qPrintable(device), buffer, sizeof(buffer));
+  int error;
 
+  DAQmxErrChk(DAQmxGetDevDIPorts(qPrintable(device), buffer, sizeof(buffer)));
+
+Error:
   QStringList result = QString(buffer).split(", ");
 
   return result;
@@ -416,8 +428,11 @@ QStringList QxrdNIDAQPlugin::deviceDIPorts(QString device)
 QStringList QxrdNIDAQPlugin::deviceDILines(QString port)
 {
   char buffer[5120]="";
-  int32 res=DAQmxGetDevDILines(qPrintable(port), buffer, sizeof(buffer));
+  int error;
 
+  DAQmxErrChk(DAQmxGetDevDILines(qPrintable(port), buffer, sizeof(buffer)));
+
+Error:
   QStringList result = QString(buffer).split(", ");
 
   return result;
@@ -426,8 +441,11 @@ QStringList QxrdNIDAQPlugin::deviceDILines(QString port)
 QStringList QxrdNIDAQPlugin::deviceDOPorts(QString device)
 {
   char buffer[5120]="";
-  int32 res=DAQmxGetDevDOPorts(qPrintable(device), buffer, sizeof(buffer));
+  int error;
 
+  DAQmxErrChk(DAQmxGetDevDOPorts(qPrintable(device), buffer, sizeof(buffer)));
+
+Error:
   QStringList result = QString(buffer).split(", ");
 
   return result;
@@ -436,8 +454,11 @@ QStringList QxrdNIDAQPlugin::deviceDOPorts(QString device)
 QStringList QxrdNIDAQPlugin::deviceDOLines(QString port)
 {
   char buffer[5120]="";
-  int32 res=DAQmxGetDevDOLines(qPrintable(port), buffer, sizeof(buffer));
+  int error;
 
+  DAQmxErrChk(DAQmxGetDevDOLines(qPrintable(port), buffer, sizeof(buffer)));
+
+Error:
   QStringList result = QString(buffer).split(", ");
 
   return result;
@@ -446,8 +467,11 @@ QStringList QxrdNIDAQPlugin::deviceDOLines(QString port)
 QStringList QxrdNIDAQPlugin::deviceCIChannels(QString device)
 {
   char buffer[5120]="";
-  int32 res=DAQmxGetDevCIPhysicalChans(qPrintable(device), buffer, sizeof(buffer));
+  int error;
 
+  DAQmxErrChk(DAQmxGetDevCIPhysicalChans(qPrintable(device), buffer, sizeof(buffer)));
+
+Error:
   QStringList result = QString(buffer).split(", ");
 
   return result;
@@ -456,8 +480,11 @@ QStringList QxrdNIDAQPlugin::deviceCIChannels(QString device)
 QStringList QxrdNIDAQPlugin::deviceCOChannels(QString device)
 {
   char buffer[5120]="";
-  int32 res=DAQmxGetDevCOPhysicalChans(qPrintable(device), buffer, sizeof(buffer));
+  int error;
 
+  DAQmxErrChk(DAQmxGetDevCOPhysicalChans(qPrintable(device), buffer, sizeof(buffer)));
+
+Error:
   QStringList result = QString(buffer).split(", ");
 
   return result;

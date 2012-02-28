@@ -19,9 +19,7 @@ public:
                           QxrdExperimentWPtr doc,
                           QxrdAcquisitionWPtr acq,
                           QxrdAllocatorWPtr allocator,
-                          QxrdFileSaverWPtr filesaver,
-                          QSettings *settings,
-                          QString section);
+                          QxrdFileSaverWPtr filesaver);
 
   ~QxrdDataProcessorThread();
 
@@ -41,8 +39,6 @@ private:
   QxrdAcquisitionWPtr     m_Acquisition;
   QxrdExperimentWPtr      m_Experiment;
   QxrdSettingsSaverWPtr   m_Saver;
-  QSettings              *m_Settings;
-  QString                 m_Section;
 };
 
 typedef QSharedPointer<QxrdDataProcessorThread> QxrdDataProcessorThreadPtr;

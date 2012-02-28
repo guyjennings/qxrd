@@ -9,7 +9,7 @@
 #include <QCheckBox>
 #include "ui_qxrdexperimentpreferencesdialog.h"
 
-#include "qxrdexperiment.h"
+#include "qxrdexperiment-ptr.h"
 
 class QxrdExperimentPreferencesDialog : public QDialog, public Ui::QxrdExperimentPreferencesDialog {
   Q_OBJECT

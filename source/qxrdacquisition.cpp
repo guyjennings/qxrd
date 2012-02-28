@@ -755,7 +755,7 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
     }
   }
 
-saveCancel:
+//saveCancel:
   processDarkImage(fileBase, fileIndex, res, overflow);
 
   statusMessage(tr("Acquisition complete"));

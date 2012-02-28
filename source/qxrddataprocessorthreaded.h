@@ -6,8 +6,11 @@
 #include "qxrddataprocessorbase.h"
 #include "qxrdresultserializer.h"
 #include "qxrdintegrateddata-ptr.h"
+#include "qxrdroidata.h"
 #include "qxrdroidata-ptr.h"
+#include "qxrdhistogramdata.h"
 #include "qxrdhistogramdata-ptr.h"
+#include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
 
 class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
@@ -19,6 +22,7 @@ public:
                             QxrdAcquisitionWPtr acq,
                             QxrdAllocatorWPtr allocator,
                             QxrdFileSaverWPtr filesaver);
+  virtual ~QxrdDataProcessorThreaded();
 
 public:
   void beginAcquisition(int isDark);

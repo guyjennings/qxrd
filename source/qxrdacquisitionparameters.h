@@ -6,8 +6,11 @@
 #include <QObject>
 #include <QMutex>
 
+#include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
+#include "qxrdacquisitiontrigger.h"
 #include "qxrdacquisitiontrigger-ptr.h"
+#include "qxrdacquisitiontriggerthread.h"
 #include "qxrdacquisitiontriggerthread-ptr.h"
 #include "qcepproperty.h"
 #include "qxrdsettingssaver-ptr.h"

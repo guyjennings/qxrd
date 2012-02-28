@@ -8,6 +8,7 @@
 #include "qcepimagedata.h"
 #include "qxrdimagedataobjectcounter.h"
 #include "qxrdallocator-ptr.h"
+#include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
 #include "qxrdimagedata-ptr.h"
 

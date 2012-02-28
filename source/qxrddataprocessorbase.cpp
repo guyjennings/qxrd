@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "qxrddataprocessorbase.h"
 #include "qxrddataprocessorthread.h"
 #include <QtConcurrentRun>

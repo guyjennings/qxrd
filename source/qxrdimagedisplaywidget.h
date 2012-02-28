@@ -6,7 +6,9 @@
 #include <QVector>
 #include <QRgb>
 
+#include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
 #include "qxrdapplication-ptr.h"
 

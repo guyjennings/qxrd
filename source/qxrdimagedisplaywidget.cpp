@@ -126,7 +126,7 @@ void QxrdImageDisplayWidget::rebuildImage()
   }
 }
 
-QxrdImageDisplayWidget* QxrdImageDisplayWidget::insertNew(QxrdApplication *app, QTabWidget *tw)
+QxrdImageDisplayWidget* QxrdImageDisplayWidget::insertNew(QxrdApplication * /*app*/, QTabWidget *tw)
 {
   QxrdImageDisplayWidget *res = NULL;
 

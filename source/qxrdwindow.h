@@ -43,8 +43,6 @@ public:
              QxrdAcquisitionWPtr acqw,
              QxrdDataProcessorWPtr procw,
              QxrdAllocatorWPtr allocw,
-             QSettings *settings,
-             QString section,
              QWidget *parent=0);
   virtual ~QxrdWindow();
   void onAcquisitionInit();

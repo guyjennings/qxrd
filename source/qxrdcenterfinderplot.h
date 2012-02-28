@@ -5,7 +5,9 @@
 
 #include "qxrdplot.h"
 
+#include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
