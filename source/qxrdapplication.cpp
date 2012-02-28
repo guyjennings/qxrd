@@ -399,11 +399,11 @@ QString QxrdApplication::hexArg(void *p)
 #endif
 }
 
-void QxrdApplication::splashMessage(QString msg)
+void QxrdApplication::splashMessage(QString /*msg*/)
 {
 }
 
-void QxrdApplication::logMessage(QString msg)
+void QxrdApplication::logMessage(QString /*msg*/)
 {
 }
 

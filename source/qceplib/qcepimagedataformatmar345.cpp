@@ -315,7 +315,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::checkMar345Header(FILE *fi
 {
   qint32 head[32];
   char buf[128];
-  int byteswap;
+//  int byteswap;
 
   if (file == NULL) {
     return NULL;
@@ -328,9 +328,9 @@ QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::checkMar345Header(FILE *fi
   }
 
   if ((head[0] < 5000) && (head[0] > 100)) {
-    byteswap = 0;
+//    byteswap = 0;
   } else {
-    byteswap = 1;
+//    byteswap = 1;
     swaplong((char*) head, 10*sizeof(qint32));
   }
 
