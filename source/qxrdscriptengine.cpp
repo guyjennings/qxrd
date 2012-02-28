@@ -15,10 +15,12 @@
 #include "qxrdringsetsampleddata.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaqplugininterface.h"
+#include "qxrdacquisitiontrigger.h"
 #include "qxrdallocator.h"
 
 #include <QThread>
 #include <QDir>
+
 
 QxrdScriptEngine::QxrdScriptEngine(QxrdApplication* app, QxrdExperimentWPtr exp)
   : QScriptEngine(),
@@ -119,6 +121,12 @@ void QxrdScriptEngine::initialize()
 
       if (sync) {
         globalObject().setProperty("synchronization", newQObject(sync.data()));
+      }
+
+      QxrdAcquisitionTriggerPtr trig(acq->acquisitionTrigger());
+
+      if (trig) {
+        globalObject().setProperty("trigger", newQObject(trig.data()));
       }
     }
 
@@ -246,14 +254,14 @@ bool QxrdScriptEngine::hasUncaughtException() const
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  return hasUncaughtException();
+  return QScriptEngine::hasUncaughtException();
 }
 
 int  QxrdScriptEngine::uncaughtExceptionLineNumber() const
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  return uncaughtExceptionLineNumber();
+  return QScriptEngine::uncaughtExceptionLineNumber();
 }
 
 QString QxrdScriptEngine::uncaughtExceptionString() const

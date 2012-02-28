@@ -136,6 +136,7 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
     m_DataProcessor -> setAcquisition(m_Acquisition);
     m_FileSaver -> setAcquisition(m_Acquisition);
 
+    m_Acquisition -> setNIDAQPlugin(m_Application->nidaqPlugin());
 
     if (m_Application && m_Application->get_GuiWanted()) {
       splashMessage("Opening Main Window");
@@ -158,14 +159,6 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
         m_Acquisition -> setWindow(win);
       }
     }
-
-    splashMessage("Loading plugins");
-
-    //  printMessage("about to load plugins");
-
-    m_Acquisition -> setNIDAQPlugin(m_Application->nidaqPlugin());
-
-    //  m_AcquisitionThread->initialize();
 
     QxrdWindow *win = m_Window;
 

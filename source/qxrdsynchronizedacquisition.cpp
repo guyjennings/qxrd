@@ -3,6 +3,7 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdacquisition.h"
 #include "qwt_math.h"
+#include "qxrdsettingssaver.h"
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdSettingsSaverPtr saver, QxrdAcquisition *acq) :
   QObject(),

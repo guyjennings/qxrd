@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>351</width>
-    <height>247</height>
+    <height>355</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,144 +15,231 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="4">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Acquisition TriggerParameters</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Synch Mode</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QComboBox" name="m_SyncAcqMode"/>
-    </item>
     <item row="6" column="0">
      <widget class="QLabel" name="label_4">
       <property name="text">
-       <string>Initial Output V</string>
+       <string>Channel</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
-     <widget class="QDoubleSpinBox" name="m_SyncAcqMinimum">
-      <property name="toolTip">
-       <string>Output voltage at waveform minimum: range -10V .. 10V
-Script property: synchronization.syncAcquisitionMinimum</string>
-      </property>
-      <property name="keyboardTracking">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="2">
-     <widget class="QLabel" name="label_9">
+    <item row="12" column="2">
+     <widget class="QLabel" name="label_17">
       <property name="text">
-       <string>Phase Shift</string>
+       <string>Triggered</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="8" column="3">
-     <widget class="QDoubleSpinBox" name="m_SyncAcqPhaseShift">
-      <property name="toolTip">
-       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Phase shift of synchronization waveform &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;- range -360 deg .. 360 deg&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Script Property synchronization.syncAcquisitionPhaseShift&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <item row="9" column="2">
+     <widget class="QLabel" name="label_13">
+      <property name="text">
+       <string>Level</string>
       </property>
-      <property name="keyboardTracking">
-       <bool>false</bool>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
-      <property name="suffix">
-       <string> deg</string>
+     </widget>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="label_12">
+      <property name="text">
+       <string>Level</string>
       </property>
-      <property name="minimum">
-       <double>-360.000000000000000</double>
-      </property>
-      <property name="maximum">
-       <double>360.000000000000000</double>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
     <item row="6" column="2">
      <widget class="QLabel" name="label_6">
       <property name="text">
-       <string>Wfm Symmetry</string>
+       <string>Channel</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="8" column="1">
-     <widget class="QDoubleSpinBox" name="m_SyncAcqMaximum">
-      <property name="toolTip">
-       <string>Output voltage at waveform maximum: range -10V .. 10V
-Script property: synchronization.syncAcquisitionMaximum</string>
-      </property>
-      <property name="keyboardTracking">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="3">
-     <widget class="QDoubleSpinBox" name="m_SyncAcqSymmetry">
-      <property name="toolTip">
-       <string>Waveform symmetry factor (range -1..+1)
-Script property: synchronization.syncAcquisitionSymmetry</string>
-      </property>
-      <property name="keyboardTracking">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0">
-     <widget class="QLabel" name="label_5">
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Final Output V</string>
+       <string>A Trigger Mode</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="2">
+     <widget class="QLabel" name="label_16">
+      <property name="text">
+       <string>Value</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2" colspan="2">
+     <widget class="QLabel" name="label_11">
+      <property name="text">
+       <string>'B' Trigger</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QComboBox" name="m_ATrigMode"/>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>A Trigger</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>B Trigger Mode</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="3">
+     <widget class="QComboBox" name="m_BTrigSlope"/>
+    </item>
+    <item row="8" column="2">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>Slope</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
     <item row="3" column="0">
      <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>Output Wfm</string>
+       <string>Card</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="3">
+     <widget class="QComboBox" name="m_BTrigChan"/>
+    </item>
+    <item row="9" column="1">
+     <widget class="QDoubleSpinBox" name="m_ATrigLevel">
+      <property name="minimum">
+       <double>-10.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QLabel" name="label_14">
+      <property name="text">
+       <string>Value</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QComboBox" name="m_SyncAcqWfm"/>
+     <widget class="QComboBox" name="m_ATrigCard"/>
     </item>
-    <item row="2" column="2">
-     <widget class="QLabel" name="label_7">
-      <property name="text">
-       <string>Output Chan</string>
+    <item row="9" column="3">
+     <widget class="QDoubleSpinBox" name="m_BTrigLevel">
+      <property name="minimum">
+       <double>-10.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
       </property>
      </widget>
     </item>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="m_ATrigChan"/>
+    </item>
     <item row="2" column="3">
-     <widget class="QComboBox" name="m_SyncAcqOutChan">
+     <widget class="QComboBox" name="m_BTrigMode">
       <property name="toolTip">
        <string>Output channel for synchronization waveform</string>
       </property>
      </widget>
     </item>
+    <item row="8" column="1">
+     <widget class="QComboBox" name="m_ATrigSlope"/>
+    </item>
     <item row="3" column="2">
      <widget class="QLabel" name="label_8">
       <property name="text">
-       <string>Flag Chan</string>
+       <string>Card</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Slope</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="3">
+     <widget class="QCheckBox" name="m_BTrigCheck">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="1">
+     <widget class="QCheckBox" name="m_ATrigCheck">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
     <item row="3" column="3">
-     <widget class="QComboBox" name="m_SyncAcqFlagChan"/>
+     <widget class="QComboBox" name="m_BTrigCard"/>
     </item>
-    <item row="9" column="0" colspan="4">
+    <item row="13" column="0" colspan="4">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -164,6 +251,67 @@ Script property: synchronization.syncAcquisitionSymmetry</string>
        </size>
       </property>
      </spacer>
+    </item>
+    <item row="12" column="0">
+     <widget class="QLabel" name="label_15">
+      <property name="text">
+       <string>Triggered</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="4">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Acquisition Trigger Parameters</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
+     <widget class="QDoubleSpinBox" name="m_ATrigValue">
+      <property name="frame">
+       <bool>false</bool>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+      <property name="minimum">
+       <double>-10.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="3">
+     <widget class="QDoubleSpinBox" name="m_BTrigValue">
+      <property name="frame">
+       <bool>false</bool>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+      <property name="minimum">
+       <double>-10.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10.000000000000000</double>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
