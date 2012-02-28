@@ -146,13 +146,17 @@ void QxrdWindow::init()
   }
 
   if (expt) {
-    m_InputFileBrowser   = new QxrdInputFileBrowser(expt->settingsSaver(), m_Experiment, m_DataProcessor, this);
-    m_OutputFileBrowser  = new QxrdOutputFileBrowser(expt->settingsSaver(), m_Experiment, m_DataProcessor, this);
+    m_InputFileBrowser   = new QxrdInputFileBrowser(m_Saver, m_Experiment, m_DataProcessor, this);
+    m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_Saver, m_Experiment, m_DataProcessor, this);
   }
 
-  m_SliceDialog        = new QxrdSliceDialog(this);
-  m_HistogramDialog    = new QxrdHistogramDialog(this);
-  m_ImageInfoDialog    = new QxrdInfoDialog(this);
+  m_SliceDialog        = new QxrdSliceDialog(m_Saver, this);
+  m_HistogramDialog    = new QxrdHistogramDialog(m_Saver, this);
+  m_ImageInfoDialog    = new QxrdInfoDialog(m_Saver, this);
+
+  m_Plot             -> setSaver(m_Saver);
+  m_CenterFinderPlot -> setSaver(m_Saver);
+  m_IntegratorPlot   -> setSaver(m_Saver);
 
   QDesktopWidget *dw = QApplication::desktop();
   //  int screenNum = dw->screenNumber(this);

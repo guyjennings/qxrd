@@ -2,9 +2,11 @@
 #include "ui_qxrdslicedialog.h"
 #include "qwt_plot_piecewise_curve.h"
 #include <QSettings>
+#include "qxrdsettingssaver.h"
 
-QxrdSliceDialog::QxrdSliceDialog(QWidget *parent) :
-  QDockWidget(parent)
+QxrdSliceDialog::QxrdSliceDialog(QxrdSettingsSaverWPtr saver, QWidget *parent) :
+  QDockWidget(parent),
+  m_Saver(saver)
 {
   setupUi(this);
 }
@@ -64,6 +66,12 @@ void QxrdSliceDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qx
 
 void QxrdSliceDialog::slicePolygon(QwtArray<QwtDoublePoint> poly)
 {
+  QxrdSettingsSaverPtr saver(m_Saver);
+
+  if (saver) {
+    saver->changed(NULL);
+  }
+
   m_Polygon = poly;
 
   reslice();

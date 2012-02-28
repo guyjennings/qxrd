@@ -2,17 +2,18 @@
 #define QXRDHISTOGRAMDIALOG_H
 
 #include <QDockWidget>
-#include "qxrdplot.h"
 #include "ui_qxrdhistogramdialog.h"
-#include "qxrdimagedata.h"
+#include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata-ptr.h"
 #include "qwt_double_rect.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdHistogramDialog : public QDockWidget, public Ui::QxrdHistogramDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdHistogramDialog(QWidget *parent = 0);
+  explicit QxrdHistogramDialog(QxrdSettingsSaverWPtr saver, QWidget *parent = 0);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
@@ -26,6 +27,7 @@ private:
   void recalculateHistogram();
 
 private:
+  QxrdSettingsSaverWPtr    m_Saver;
   QxrdDoubleImageDataPtr   m_Image;
   QwtDoubleRect            m_HistogramRect;
 };

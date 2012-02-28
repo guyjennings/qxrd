@@ -1,9 +1,11 @@
 #include "qxrdhistogramdialog.h"
 #include "ui_qxrdhistogramdialog.h"
 #include <QSettings>
+#include "qxrdsettingssaver.h"
 
-QxrdHistogramDialog::QxrdHistogramDialog(QWidget *parent) :
-  QDockWidget(parent)
+QxrdHistogramDialog::QxrdHistogramDialog(QxrdSettingsSaverWPtr saver, QWidget *parent) :
+  QDockWidget(parent),
+  m_Saver(saver)
 {
   setupUi(this);
 }
@@ -53,6 +55,12 @@ void QxrdHistogramDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image
 
 void QxrdHistogramDialog::histogramSelectionChanged(QwtDoubleRect rect)
 {
+  QxrdSettingsSaverPtr saver(m_Saver);
+
+  if (saver) {
+    saver->changed(NULL);
+  }
+
   m_HistogramRect = rect;
 
   recalculateHistogram();

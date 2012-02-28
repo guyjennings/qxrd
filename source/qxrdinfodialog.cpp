@@ -1,9 +1,12 @@
 #include "qxrdinfodialog.h"
 #include "ui_qxrdinfodialog.h"
 #include "qcepproperty.h"
+#include "qxrdsettingssaver.h"
+#include "qxrdimagedata.h"
 
-QxrdInfoDialog::QxrdInfoDialog(QWidget *parent) :
-  QDockWidget(parent)
+QxrdInfoDialog::QxrdInfoDialog(QxrdSettingsSaverWPtr saver, QWidget *parent) :
+  QDockWidget(parent),
+  m_Saver(saver)
 {
   setupUi(this);
 }

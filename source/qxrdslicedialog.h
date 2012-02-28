@@ -6,13 +6,14 @@
 #include "ui_qxrdslicedialog.h"
 #include "qxrdimagedata.h"
 #include "qwt_array.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdSliceDialog : public QDockWidget, public Ui::QxrdSliceDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdSliceDialog(QWidget *parent = 0);
+  explicit QxrdSliceDialog(QxrdSettingsSaverWPtr saver, QWidget *parent = 0);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
@@ -26,6 +27,7 @@ private:
   void reslice();
 
 private:
+  QxrdSettingsSaverWPtr    m_Saver;
   QxrdDoubleImageDataPtr   m_Image;
   QwtArray<QwtDoublePoint> m_Polygon;
 };
