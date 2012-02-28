@@ -3,17 +3,21 @@
 #include "qxrdfilebrowsermodelupdater.h"
 #include "qxrdapplication.h"
 
-QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(
-  QxrdFileBrowserModelPtr parent) :
-  QxrdThread(parent),
-  m_Browser(parent),
-  m_Updater(NULL)
+QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread() :
+  QxrdThread(),
+  m_Model(),
+  m_Updater()
 {
 }
 
 QxrdFileBrowserModelUpdaterThread::~QxrdFileBrowserModelUpdaterThread()
 {
   shutdown();
+}
+
+void QxrdFileBrowserModelUpdaterThread::setModel(QxrdFileBrowserModelWPtr model)
+{
+  m_Model = model;
 }
 
 void QxrdFileBrowserModelUpdaterThread::shutdown()
@@ -31,7 +35,7 @@ void QxrdFileBrowserModelUpdaterThread::run()
 
   QxrdFileBrowserModelUpdaterPtr p =
       QxrdFileBrowserModelUpdaterPtr(
-        new QxrdFileBrowserModelUpdater(m_Browser, NULL));
+        new QxrdFileBrowserModelUpdater(m_Model, NULL));
 
   m_Updater = p;
 

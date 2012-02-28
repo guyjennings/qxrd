@@ -2,6 +2,7 @@
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
 #include "qxrdapplication.h"
+#include "qxrdexperiment.h"
 
 QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperimentWPtr doc,
                                      QxrdWindow *win,

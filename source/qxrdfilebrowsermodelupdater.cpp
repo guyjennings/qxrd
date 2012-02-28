@@ -2,7 +2,6 @@
 #include "qxrdapplication.h"
 #include <QThread>
 #include <QDirIterator>
-#include <QThreadStorage>
 #include "qxrdfilebrowsermodel.h"
 
 QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr browser, QObject *parent) :
@@ -82,64 +81,143 @@ void QxrdFileBrowserModelUpdater::updateTimeout()
   m_UpdateTimer.start(m_UpdateInterval);
 }
 
-QThreadStorage<QxrdFileBrowserModelUpdaterPtr*> g_Updaters;
-
 bool QxrdFileBrowserModelUpdater::updateNeeded()
 {
   return m_UpdateNeeded.fetchAndAddOrdered(0);
 }
 
-void sortInterruptCheck()
+class QxrdSortInterruptChecker {
+public:
+  QxrdSortInterruptChecker(QxrdFileBrowserModelUpdaterWPtr updater);
+
+  void sortInterruptCheck();
+
+private:
+  QxrdFileBrowserModelUpdaterWPtr m_Updater;
+};
+
+QxrdSortInterruptChecker::QxrdSortInterruptChecker(QxrdFileBrowserModelUpdaterWPtr updater)
+  : m_Updater(updater)
 {
-  if (g_Updaters.hasLocalData()) {
-    QxrdFileBrowserModelUpdaterPtr *updaterp = g_Updaters.localData();
+}
 
-    if (updaterp) {
-      QxrdFileBrowserModelUpdaterPtr updater = *updaterp;
+void QxrdSortInterruptChecker::sortInterruptCheck()
+{
+  QxrdFileBrowserModelUpdaterPtr updater(m_Updater);
 
-      if (updater && updater->updateNeeded()) {
-        throw 0;
-      }
-    }
+  if (updater && updater->updateNeeded()) {
+    throw 0;
   }
 }
 
-bool fileNameLessThan(QFileInfo f1, QFileInfo f2)
+class QxrdFileNameLessThan : public QxrdSortInterruptChecker {
+public:
+  QxrdFileNameLessThan(QxrdFileBrowserModelUpdaterWPtr updater);
+
+  bool operator()(QFileInfo f1, QFileInfo f2);
+};
+
+QxrdFileNameLessThan::QxrdFileNameLessThan(QxrdFileBrowserModelUpdaterWPtr updater)
+  : QxrdSortInterruptChecker(updater)
+{
+}
+
+bool QxrdFileNameLessThan::operator()(QFileInfo f1, QFileInfo f2)
 {
   sortInterruptCheck();
 
   return f1.fileName().toLower() < f2.fileName().toLower();
 }
 
-bool fileNameGreaterThan(QFileInfo f1, QFileInfo f2)
+class QxrdFileNameGreaterThan : public QxrdSortInterruptChecker {
+public:
+  QxrdFileNameGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater);
+
+  bool operator()(QFileInfo f1, QFileInfo f2);
+};
+
+QxrdFileNameGreaterThan::QxrdFileNameGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater)
+  : QxrdSortInterruptChecker(updater)
+{
+}
+
+bool QxrdFileNameGreaterThan::operator()(QFileInfo f1, QFileInfo f2)
 {
   sortInterruptCheck();
 
   return f1.fileName().toLower() > f2.fileName().toLower();
 }
 
-bool fileSizeLessThan(QFileInfo f1, QFileInfo f2)
+class QxrdFileSizeLessThan : public QxrdSortInterruptChecker {
+public:
+  QxrdFileSizeLessThan(QxrdFileBrowserModelUpdaterWPtr updater);
+
+  bool operator()(QFileInfo f1, QFileInfo f2);
+};
+
+QxrdFileSizeLessThan::QxrdFileSizeLessThan(QxrdFileBrowserModelUpdaterWPtr updater)
+  : QxrdSortInterruptChecker(updater)
+{
+}
+
+bool QxrdFileSizeLessThan::operator()(QFileInfo f1, QFileInfo f2)
 {
   sortInterruptCheck();
 
   return f1.size() < f2.size();
 }
 
-bool fileSizeGreaterThan(QFileInfo f1, QFileInfo f2)
+class QxrdFileSizeGreaterThan : public QxrdSortInterruptChecker {
+public:
+  QxrdFileSizeGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater);
+
+  bool operator()(QFileInfo f1, QFileInfo f2);
+};
+
+QxrdFileSizeGreaterThan::QxrdFileSizeGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater)
+  : QxrdSortInterruptChecker(updater)
+{
+}
+
+bool QxrdFileSizeGreaterThan::operator()(QFileInfo f1, QFileInfo f2)
 {
   sortInterruptCheck();
 
   return f1.size() > f2.size();
 }
 
-bool fileDateLessThan(QFileInfo f1, QFileInfo f2)
+class QxrdFileDateLessThan : public QxrdSortInterruptChecker {
+public:
+  QxrdFileDateLessThan(QxrdFileBrowserModelUpdaterWPtr updater);
+
+  bool operator()(QFileInfo f1, QFileInfo f2);
+};
+
+QxrdFileDateLessThan::QxrdFileDateLessThan(QxrdFileBrowserModelUpdaterWPtr updater)
+  : QxrdSortInterruptChecker(updater)
+{
+}
+
+bool QxrdFileDateLessThan::operator()(QFileInfo f1, QFileInfo f2)
 {
   sortInterruptCheck();
 
   return f1.lastModified() < f2.lastModified();
 }
 
-bool fileDateGreaterThan(QFileInfo f1, QFileInfo f2)
+class QxrdFileDateGreaterThan : public QxrdSortInterruptChecker {
+public:
+  QxrdFileDateGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater);
+
+  bool operator()(QFileInfo f1, QFileInfo f2);
+};
+
+QxrdFileDateGreaterThan::QxrdFileDateGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater)
+  : QxrdSortInterruptChecker(updater)
+{
+}
+
+bool QxrdFileDateGreaterThan::operator ()(QFileInfo f1, QFileInfo f2)
 {
   sortInterruptCheck();
 
@@ -150,8 +228,6 @@ void QxrdFileBrowserModelUpdater::updateContents()
 {
   QTime tic;
   tic.start();
-
-  g_Updaters.setLocalData(new QxrdFileBrowserModelUpdaterPtr(this));
 
   m_UpdateNeeded.fetchAndStoreOrdered(0);
 
@@ -228,47 +304,49 @@ void QxrdFileBrowserModelUpdater::updateContents()
   int           column = m_BrowserModel->sortedColumn();
   Qt::SortOrder order  = m_BrowserModel->sortOrder();
 
-  bool (*lt)(QFileInfo f1, QFileInfo f2) = NULL;
+  try {
+    qStableSort(m_Directories.begin(), m_Directories.end(),
+                QxrdFileNameLessThan(this));
 
-  switch(column) {
-  case 0:
-    if (order == Qt::AscendingOrder) {
-      lt = fileNameLessThan;
-    } else {
-      lt = fileNameGreaterThan;
-    }
-    break;
+    switch(column) {
+    case 0:
+      if (order == Qt::AscendingOrder) {
+        qStableSort(m_Files.begin(), m_Files.end(),
+                    QxrdFileNameLessThan(this));
+      } else {
+        qStableSort(m_Files.begin(), m_Files.end(),
+                    QxrdFileNameGreaterThan(this));
+      }
+      break;
 
-  case 1:
-    if (order == Qt::AscendingOrder) {
-      lt = fileSizeLessThan;
-    } else {
-      lt = fileSizeGreaterThan;
-    }
-    break;
+    case 1:
+      if (order == Qt::AscendingOrder) {
+        qStableSort(m_Files.begin(), m_Files.end(),
+                    QxrdFileSizeLessThan(this));
+      } else {
+        qStableSort(m_Files.begin(), m_Files.end(),
+                    QxrdFileSizeGreaterThan(this));
+      }
+      break;
 
-  case 2:
-    if (order == Qt::AscendingOrder) {
-      lt = fileDateLessThan;
-    } else {
-      lt = fileDateGreaterThan;
+    case 2:
+      if (order == Qt::AscendingOrder) {
+        qStableSort(m_Files.begin(), m_Files.end(),
+                    QxrdFileDateLessThan(this));
+      } else {
+        qStableSort(m_Files.begin(), m_Files.end(),
+                    QxrdFileDateGreaterThan(this));
+      }
+      break;
     }
-    break;
   }
 
-  if (lt) {
-    try {
-      qStableSort(m_Directories.begin(), m_Directories.end(), fileNameLessThan);
-      qStableSort(m_Files.begin(), m_Files.end(), lt);
+  catch (...) {
+    if (g_Application && qcepDebug(DEBUG_BROWSER)) {
+      g_Application->printMessage("Sorting abandoned");
     }
 
-    catch (...) {
-      if (g_Application && qcepDebug(DEBUG_BROWSER)) {
-        g_Application->printMessage("Sorting abandoned");
-      }
-
-      return;
-    }
+    return;
   }
 
   if (g_Application && qcepDebug(DEBUG_BROWSER)) {

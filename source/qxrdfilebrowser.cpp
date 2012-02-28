@@ -36,6 +36,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
   m_Model = QxrdFileBrowserModelPtr(
         new QxrdFileBrowserModel());
 
+  m_Model -> initialize();
   m_Model -> setRootPath(QDir::currentPath());
 
   m_FileBrowser -> setModel(m_Model.data());

@@ -4,6 +4,7 @@
 #include "qcepmacros.h"
 
 #include <QDockWidget>
+#include <QFileInfo>
 #include "qcepproperty.h"
 #include "ui_qxrdfilebrowser.h"
 #include "qxrddataprocessor-ptr.h"

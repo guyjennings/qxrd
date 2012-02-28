@@ -17,6 +17,8 @@ class QxrdFileBrowserModel : public QAbstractTableModel
 public:
   explicit QxrdFileBrowserModel(QObject *parent=0);
   ~QxrdFileBrowserModel();
+  void initialize();
+
   typedef QAbstractTableModel inherited;
 
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
