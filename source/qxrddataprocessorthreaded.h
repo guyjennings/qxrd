@@ -5,10 +5,10 @@
 
 #include "qxrddataprocessorbase.h"
 #include "qxrdresultserializer.h"
-#include "qxrdintegrateddata.h"
-#include "qxrdroidata.h"
-#include "qxrdhistogramdata.h"
-#include "qxrdimagedata.h"
+#include "qxrdintegrateddata-ptr.h"
+#include "qxrdroidata-ptr.h"
+#include "qxrdhistogramdata-ptr.h"
+#include "qxrdimagedata-ptr.h"
 
 class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
 {

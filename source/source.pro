@@ -100,6 +100,7 @@ HEADERS += TODO.h \
     qxrdimagedata.h \
     qxrdimagedata-ptr.h \
     qxrdimagequeue.h \
+    qxrdimagequeue-ptr.h \
     qxrdimagedataformathis.h \
     qxrdimagedataformattiff.h \
     qxrdimagedataformatmar345.h \
@@ -173,7 +174,9 @@ HEADERS += TODO.h \
     qxrdintegrateddataqueue.h \
     qxrdresultserializer.h \
     qxrdroidata.h \
+    qxrdroidata-ptr.h \
     qxrdhistogramdata.h \
+    qxrdhistogramdata-ptr.h \
     qxrdexposuretimespinner.h \
     qxrddetectorplugininterface.h \
     qxrdnidaqplugininterface.h \
@@ -183,6 +186,7 @@ HEADERS += TODO.h \
     qxrddetectorgeometry.h \
     qxrddetectorgeometry-ptr.h \
     qxrdgeneratetestimage.h \
+    qxrdgeneratetestimage-ptr.h \
     qxrdfitparameter.h \
     qxrdfitparameter-ptr.h \
     qxrdringfitparameters.h \

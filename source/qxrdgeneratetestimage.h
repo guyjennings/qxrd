@@ -88,7 +88,4 @@ public:
   QCEP_DOUBLE_LIST_PROPERTY(RingWidth)
 };
 
-typedef QSharedPointer<QxrdGenerateTestImage> QxrdGenerateTestImagePtr;
-typedef QWeakPointer<QxrdGenerateTestImage> QxrdGenerateTestImageWPtr;
-
 #endif // QXRDGENERATETESTIMAGE_H

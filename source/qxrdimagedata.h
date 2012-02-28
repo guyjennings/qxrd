@@ -6,9 +6,9 @@
 #include "qcepmacros.h"
 
 #include "qcepimagedata.h"
-#include "qxrdallocator.h"
 #include "qxrdimagedataobjectcounter.h"
-#include "qxrdmaskdata.h"
+#include "qxrdallocator-ptr.h"
+#include "qxrdmaskdata-ptr.h"
 #include "qxrdimagedata-ptr.h"
 
 template <typename T>

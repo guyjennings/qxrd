@@ -3,7 +3,6 @@
 
 #include "qcepmacros.h"
 #include <QObject>
-#include <QSharedPointer>
 
 class QxrdROIData : public QObject
 {
@@ -15,7 +14,5 @@ signals:
 
 public slots:
 };
-
-typedef QSharedPointer<QxrdROIData> QxrdROIDataPtr;
 
 #endif // QXRDROIDATA_H

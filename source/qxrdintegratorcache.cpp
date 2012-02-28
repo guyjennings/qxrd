@@ -7,6 +7,7 @@
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qcepdebug.h"
+#include "qxrdallocator.h"
 #include <stdio.h>
 #include <QThread>
 

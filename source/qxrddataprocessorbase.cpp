@@ -10,6 +10,7 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdallocator.h"
 #include "qxrdfilesaverthread.h"
+#include "qxrdfilesaver.h"
 #include "qxrdgeneratetestimage.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"

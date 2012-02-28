@@ -4,10 +4,10 @@
 #include "qcepmacros.h"
 
 #include <QObject>
-#include <QReadWriteLock>
-#include <QAtomicInt>
+//#include <QReadWriteLock>
+//#include <QAtomicInt>
 #include <QWaitCondition>
-#include <QStack>
+//#include <QStack>
 
 #include "qcepproperty.h"
 #include "qxrdimagequeue.h"
@@ -18,13 +18,13 @@
 #include "qxrdintegrateddata-ptr.h"
 #include "qxrdringsetfitparameters-ptr.h"
 #include "qxrdringsetsampleddata-ptr.h"
-#include "qxrdfilesaver.h"
+#include "qxrdfilesaver-ptr.h"
 #include <qwt_double_rect.h>
-#include "qxrdsettingssaver.h"
-#include "qxrdallocator.h"
-#include "qxrdgeneratetestimage.h"
-#include "qxrdintegrator.h"
-#include "qxrdcenterfinder.h"
+#include "qxrdsettingssaver-ptr.h"
+#include "qxrdallocator-ptr.h"
+#include "qxrdgeneratetestimage-ptr.h"
+#include "qxrdintegrator-ptr.h"
+#include "qxrdcenterfinder-ptr.h"
 
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"

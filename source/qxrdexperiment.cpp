@@ -17,6 +17,8 @@
 #include "qxrdexperimentsettings.h"
 #include <QFileDialog>
 #include "qxrdfilesaverthread.h"
+#include "qxrdsettingssaver.h"
+#include "qxrdfilesaver.h"
 
 QxrdExperiment::QxrdExperiment(
     QString path,

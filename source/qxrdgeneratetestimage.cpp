@@ -5,6 +5,8 @@
 #include <cmath>
 
 #include "qxrddataprocessor.h"
+#include "qxrddetectorgeometry.h"
+#include "qxrdallocator.h"
 
 QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr alloc) :
   QObject(NULL),

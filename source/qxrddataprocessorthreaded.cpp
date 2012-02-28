@@ -5,6 +5,7 @@
 #include "qxrdimagedata.h"
 #include "qxrdallocator.h"
 #include "qxrdfilesaverthread.h"
+#include "qxrdfilesaver.h"
 #include "qxrdapplication.h"
 #include <QtConcurrentRun>
 #include <QDirIterator>

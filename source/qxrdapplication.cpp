@@ -31,6 +31,7 @@
 #include "qxrdexperimentpilatusacquisition.h"
 #include "qxrdexperimentpilatusanalysis.h"
 #include "qxrdexperimentsettings.h"
+#include "qxrdsettingssaver.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"

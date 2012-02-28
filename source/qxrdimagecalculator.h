@@ -3,7 +3,7 @@
 
 #include <QDockWidget>
 #include "ui_qxrdimagecalculator.h"
-#include "qxrddataprocessor.h"
+#include "qxrddataprocessor-ptr.h"
 
 class QxrdImageCalculator : public QDockWidget, public Ui::QxrdImageCalculator {
     Q_OBJECT
