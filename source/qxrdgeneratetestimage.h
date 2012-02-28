@@ -6,11 +6,9 @@
 #include <QObject>
 
 #include "qcepproperty.h"
-#include "qxrdimagedata.h"
-#include "qxrddetectorgeometry.h"
-
-class QxrdDataProcessor;
-typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
+#include "qxrddataprocessor-ptr.h"
+#include "qxrdallocator-ptr.h"
+#include "qxrddetectorgeometry-ptr.h"
 
 class QxrdGenerateTestImage : public QObject
 {

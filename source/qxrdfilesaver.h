@@ -9,16 +9,13 @@
 #include <QWaitCondition>
 
 #include "qcepproperty.h"
-#include "qxrdimagequeue.h"
-#include "qxrdimagedata.h"
-#include "qxrdmaskdata.h"
-#include "qxrdintegrateddata.h"
-#include "qxrdallocator.h"
 
-class QxrdDataProcessor;
-class QxrdAcquisition;
-typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
-typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
+#include "qxrdallocator-ptr.h"
+#include "qxrddataprocessor-ptr.h"
+#include "qxrdacquisition-ptr.h"
+#include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata-ptr.h"
+#include "qxrdintegrateddata-ptr.h"
 
 class QxrdFileSaver : public QObject
 {

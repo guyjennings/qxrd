@@ -2,6 +2,7 @@
 
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
+#include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
 #include "qxrdcenterfinder.h"
 #include "qxrddataprocessor.h"

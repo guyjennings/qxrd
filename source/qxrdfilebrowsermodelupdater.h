@@ -13,7 +13,7 @@ class QxrdFileBrowserModelUpdater : public QObject
 {
     Q_OBJECT
 public:
-  explicit QxrdFileBrowserModelUpdater(QxrdFileBrowserModel *browser, QObject *parent = 0);
+  explicit QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr browser, QObject *parent = 0);
 
   bool updateNeeded();
 
@@ -27,7 +27,7 @@ public slots:
   void generateFileUpdates(int doIt);
 
 private:
-  QxrdFileBrowserModel    *m_BrowserModel;
+  QxrdFileBrowserModelPtr  m_BrowserModel;
   QString                  m_RootPath;
   QFileSystemWatcher      *m_FileSystemWatcher;
   QAtomicInt               m_UpdateNeeded;

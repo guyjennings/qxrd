@@ -3,7 +3,8 @@
 #include "qxrdfilebrowsermodelupdater.h"
 #include "qxrdapplication.h"
 
-QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(QxrdFileBrowserModel *parent) :
+QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(
+  QxrdFileBrowserModelPtr parent) :
   QxrdThread(parent),
   m_Browser(parent),
   m_Updater(NULL)
@@ -13,13 +14,11 @@ QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(QxrdFileBro
 QxrdFileBrowserModelUpdaterThread::~QxrdFileBrowserModelUpdaterThread()
 {
   shutdown();
-
-  delete m_Updater;
 }
 
 void QxrdFileBrowserModelUpdaterThread::shutdown()
 {
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Updater,"shutdown",Qt::QueuedConnection));
+  INVOKE_CHECK(QMetaObject::invokeMethod(m_Updater.data(),"shutdown",Qt::QueuedConnection));
 
   wait();
 }
@@ -30,9 +29,11 @@ void QxrdFileBrowserModelUpdaterThread::run()
     g_Application->printMessage("Starting Browser Model Updater Thread");
   }
 
-  QxrdFileBrowserModelUpdater *p = new QxrdFileBrowserModelUpdater(m_Browser, NULL);
+  QxrdFileBrowserModelUpdaterPtr p =
+      QxrdFileBrowserModelUpdaterPtr(
+        new QxrdFileBrowserModelUpdater(m_Browser, NULL));
 
-  m_Updater.fetchAndStoreOrdered(p);
+  m_Updater = p;
 
   int rc = exec();
 
@@ -41,7 +42,7 @@ void QxrdFileBrowserModelUpdaterThread::run()
   }
 }
 
-QxrdFileBrowserModelUpdater *QxrdFileBrowserModelUpdaterThread::updater() const
+QxrdFileBrowserModelUpdaterPtr QxrdFileBrowserModelUpdaterThread::updater() const
 {
   while (m_Updater == NULL) {
     QThread::msleep(50);

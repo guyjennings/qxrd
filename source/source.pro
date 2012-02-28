@@ -181,6 +181,7 @@ HEADERS += TODO.h \
     qxrdprocessorinterface.h \
     qxrdnamedplugininterface.h \
     qxrddetectorgeometry.h \
+    qxrddetectorgeometry-ptr.h \
     qxrdgeneratetestimage.h \
     qxrdfitparameter.h \
     qxrdfitparameter-ptr.h \
@@ -217,6 +218,7 @@ HEADERS += TODO.h \
     qxrdimagedisplaywidget.h \
     qwt_plot_piecewise_curve.h \
     qxrdmaskdialog.h \
+    qxrdmaskdialog-ptr.h \
     qxrdmaskstackmodel.h \
     qxrdmaskstackmodel-ptr.h \
     qxrdmaskstack.h \
@@ -247,7 +249,9 @@ HEADERS += TODO.h \
     qxrdacquiredialogbase-ptr.h \
     qxrdacquirefilewatcherdialog.h \
     qxrdfilebrowsermodelupdater.h \
+    qxrdfilebrowsermodelupdater-ptr.h \
     qxrdfilebrowsermodelupdaterthread.h \
+    qxrdfilebrowsermodelupdaterthread-ptr.h \
     qxrdintegratorcache.h \
     qxrdintegratorcache-ptr.h \
     qxrdexperimentthread.h \

@@ -12,7 +12,7 @@
 
 #include "qwt_plot_curve.h"
 
-class QxrdPlot;
+#include "qxrdplot-ptr.h"
 
 /*!
   \brief A class which draws piecewise curves

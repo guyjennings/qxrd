@@ -7,8 +7,8 @@
 #include <QStringList>
 #include <QDateTime>
 
-#include "qxrdfilebrowsermodelupdaterthread.h"
-#include "qxrdfilebrowsermodelupdater.h"
+#include "qxrdfilebrowsermodelupdaterthread-ptr.h"
+#include "qxrdfilebrowsermodelupdater-ptr.h"
 
 class QxrdFileBrowserModel : public QAbstractTableModel
 {
@@ -55,8 +55,8 @@ private:
   void updateModel();
 
 private:
-  QxrdFileBrowserModelUpdaterThread *m_UpdaterThread;
-  QxrdFileBrowserModelUpdater *m_Updater;
+  QxrdFileBrowserModelUpdaterThreadPtr m_UpdaterThread;
+  QxrdFileBrowserModelUpdaterPtr m_Updater;
   QString            m_RootPath;
   QStringList        m_NameFilters;
   QVector<QFileInfo> m_DirList;

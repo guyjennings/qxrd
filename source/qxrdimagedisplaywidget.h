@@ -6,10 +6,9 @@
 #include <QVector>
 #include <QRgb>
 
-#include "qxrdimagedata.h"
-#include "qxrdmaskdata.h"
-
-class QxrdApplication;
+#include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata-ptr.h"
+#include "qxrdapplication-ptr.h"
 
 class QxrdImageDisplayWidget : public QWidget
 {

@@ -5,11 +5,11 @@
 
 #include "qxrdplot.h"
 
-#include "qxrdimagedata.h"
-#include "qxrddataprocessor.h"
-#include "qxrdcenterfinder.h"
-
-class QxrdWindow;
+#include "qxrdimagedata-ptr.h"
+#include "qxrdmaskdata-ptr.h"
+#include "qxrddataprocessor-ptr.h"
+#include "qxrdcenterfinder-ptr.h"
+#include "qxrdwindow-ptr.h"
 
 class QxrdCenterFinderPlot : public QxrdPlot
 {

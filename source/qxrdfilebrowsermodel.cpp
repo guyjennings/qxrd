@@ -23,7 +23,9 @@ QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   m_HighlightSaturation(200),
   m_HighlightHue(116)
 {
-  m_UpdaterThread = new QxrdFileBrowserModelUpdaterThread(this);
+  m_UpdaterThread =
+      QxrdFileBrowserModelUpdaterThreadPtr(
+        new QxrdFileBrowserModelUpdaterThread(this));
   m_UpdaterThread -> setObjectName("browser");
   m_UpdaterThread -> start();
   m_Updater = m_UpdaterThread->updater();

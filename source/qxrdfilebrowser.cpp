@@ -2,11 +2,13 @@
 #include "qxrddataprocessor.h"
 #include <QFileSystemModel>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QMenu>
 #include "qxrdmutexlocker.h"
 #include "qxrdfilebrowsermodel.h"
 #include "qxrdfilebrowserview.h"
 #include "qxrdapplication.h"
+#include "qxrdexperiment.h"
 
 QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
                                  int isOutput,
@@ -31,10 +33,12 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
     setWindowTitle("Input " + windowTitle());
   }
 
-  m_Model = new QxrdFileBrowserModel();
+  m_Model = QxrdFileBrowserModelPtr(
+        new QxrdFileBrowserModel());
+
   m_Model -> setRootPath(QDir::currentPath());
 
-  m_FileBrowser -> setModel(m_Model);
+  m_FileBrowser -> setModel(m_Model.data());
 
   m_FileBrowser -> setRootPath(QDir::currentPath());
 
@@ -47,8 +51,8 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
   m_Model -> setNameFilters(QStringList("*.tif"));
   m_Model -> setNameFilterDisables(false);
 
-  connect(m_Model, SIGNAL(modelReset()), this, SLOT(onModelReset()));
-  connect(m_Model, SIGNAL(fileUpdated(QFileInfo)), this, SLOT(onFileUpdated(QFileInfo)));
+  connect(m_Model.data(), SIGNAL(modelReset()), this, SLOT(onModelReset()));
+  connect(m_Model.data(), SIGNAL(fileUpdated(QFileInfo)), this, SLOT(onFileUpdated(QFileInfo)));
 
 //  connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
 //  connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));

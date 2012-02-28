@@ -5,7 +5,7 @@
 #include <QThreadStorage>
 #include "qxrdfilebrowsermodel.h"
 
-QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModel *browser, QObject *parent) :
+QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr browser, QObject *parent) :
   QObject(parent),
   m_BrowserModel(browser),
   m_RootPath(""),
@@ -23,9 +23,12 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModel *b
   m_FileSystemWatcher = new QFileSystemWatcher(this);
   //  m_FileSystemWatcher->setObjectName(QLatin1String("_qt_autotest_force_engine_poller"));
 
-  connect(m_BrowserModel,      SIGNAL(rootChanged(const QString&)),      this, SLOT(changeRoot(const QString&)));
-  connect(m_FileSystemWatcher, SIGNAL(directoryChanged(const QString&)), this, SLOT(changeContents(const QString&)), Qt::DirectConnection);
-  connect(&m_UpdateTimer,      SIGNAL(timeout()),                        this, SLOT(updateTimeout()));
+  connect(m_BrowserModel.data(), SIGNAL(rootChanged(const QString&)),
+          this,                  SLOT(changeRoot(const QString&)));
+  connect(m_FileSystemWatcher,   SIGNAL(directoryChanged(const QString&)),
+          this,                  SLOT(changeContents(const QString&)), Qt::DirectConnection);
+  connect(&m_UpdateTimer,        SIGNAL(timeout()),
+          this,                  SLOT(updateTimeout()));
 
   m_UpdateTimer.setSingleShot(true);
   m_UpdateTimer.start(m_UpdateInterval);
@@ -79,8 +82,6 @@ void QxrdFileBrowserModelUpdater::updateTimeout()
   m_UpdateTimer.start(m_UpdateInterval);
 }
 
-typedef QxrdFileBrowserModelUpdater *QxrdFileBrowserModelUpdaterPtr;
-
 QThreadStorage<QxrdFileBrowserModelUpdaterPtr*> g_Updaters;
 
 bool QxrdFileBrowserModelUpdater::updateNeeded()
@@ -94,7 +95,7 @@ void sortInterruptCheck()
     QxrdFileBrowserModelUpdaterPtr *updaterp = g_Updaters.localData();
 
     if (updaterp) {
-      QxrdFileBrowserModelUpdater *updater = *updaterp;
+      QxrdFileBrowserModelUpdaterPtr updater = *updaterp;
 
       if (updater && updater->updateNeeded()) {
         throw 0;

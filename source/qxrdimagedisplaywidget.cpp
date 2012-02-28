@@ -4,6 +4,7 @@
 #include <QScrollArea>
 #include <QPaintEvent>
 #include "qxrdapplication.h"
+#include "qxrdimagedata.h"
 
 QxrdImageDisplayWidget::QxrdImageDisplayWidget(QWidget *parent) :
     QWidget(parent),

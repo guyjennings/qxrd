@@ -2,10 +2,7 @@
 #define QXRDWELCOMERECENTITEM_H
 
 #include <QCommandLinkButton>
-
-namespace Ui {
-    class QxrdWelcomeRecentItem;
-}
+#include "ui_qxrdwelcomerecentitem.h"
 
 class QxrdWelcomeRecentItem : public QCommandLinkButton
 {

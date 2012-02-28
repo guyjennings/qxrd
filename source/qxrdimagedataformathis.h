@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 #include "qcepimagedataformat.h"
-template <typename T> class QcepImageData;
+#include "qcepimagedata-ptr.h"
 
 class QxrdImageDataFormatHis : public QcepImageDataFormat<double>
 {

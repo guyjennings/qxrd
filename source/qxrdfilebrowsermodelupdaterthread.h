@@ -2,18 +2,17 @@
 #define QXRDFILEBROWSERMODELUPDATERTHREAD_H
 
 #include "qxrdthread.h"
-#include "qxrdfilebrowsermodelupdater.h"
-
-class QxrdFileBrowserModel;
+#include "qxrdfilebrowsermodelupdater-ptr.h"
+#include "qxrdfilebrowsermodel-ptr.h"
 
 class QxrdFileBrowserModelUpdaterThread : public QxrdThread
 {
   Q_OBJECT
 public:
-  explicit QxrdFileBrowserModelUpdaterThread(QxrdFileBrowserModel *parent = 0);
+  explicit QxrdFileBrowserModelUpdaterThread(QxrdFileBrowserModelPtr parent);
   ~QxrdFileBrowserModelUpdaterThread();
 
-  QxrdFileBrowserModelUpdater *updater() const;
+  QxrdFileBrowserModelUpdaterPtr updater() const;
 
   void shutdown();
 
@@ -21,8 +20,8 @@ protected:
   void run();
 
 private:
-  QxrdFileBrowserModel                       *m_Browser;
-  QAtomicPointer<QxrdFileBrowserModelUpdater> m_Updater;
+  QxrdFileBrowserModelWPtr        m_Browser;
+  QxrdFileBrowserModelUpdaterPtr  m_Updater;
 };
 
 #endif // QXRDFILEBROWSERMODELUPDATERTHREAD_H

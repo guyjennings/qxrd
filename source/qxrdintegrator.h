@@ -15,9 +15,7 @@
 #include "qxrdallocator-ptr.h"
 #include "qxrdimagedata-ptr.h"
 #include "qxrdmaskdata-ptr.h"
-
-class QxrdDataProcessor;
-typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;
+#include "qxrddataprocessor-ptr.h"
 
 class QxrdIntegrator : public QObject
 {

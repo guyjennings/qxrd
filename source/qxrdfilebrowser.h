@@ -6,9 +6,9 @@
 #include <QDockWidget>
 #include "qcepproperty.h"
 #include "ui_qxrdfilebrowser.h"
-#include "qxrddataprocessor.h"
-#include "qxrdfilebrowsermodel.h"
-#include "qxrdexperiment.h"
+#include "qxrddataprocessor-ptr.h"
+#include "qxrdfilebrowsermodel-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 class QxrdFileBrowser : public QDockWidget, public Ui::QxrdFileBrowser
 {
@@ -65,7 +65,7 @@ private:
   int                          m_IsOutput;
   QxrdExperimentWPtr           m_Experiment;
   QxrdDataProcessorWPtr        m_Processor;
-  QxrdFileBrowserModel        *m_Model;
+  QxrdFileBrowserModelPtr      m_Model;
   QStringList                  m_DirectoryStack;
 };
 

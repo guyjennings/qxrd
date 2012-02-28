@@ -1,10 +1,7 @@
 #ifndef QXRDIMAGEDATAOBJECTCOUNTER_H
 #define QXRDIMAGEDATAOBJECTCOUNTER_H
 
-#include <QWeakPointer>
-
-class QxrdAllocator;
-typedef QWeakPointer<QxrdAllocator> QxrdAllocatorWPtr;
+#include "qxrdallocator-ptr.h"
 
 class QxrdImageDataObjectCounter {
 public:
