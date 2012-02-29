@@ -55,6 +55,9 @@ public:
   Q_PROPERTY(int displayColorMap        READ get_DisplayColorMap WRITE set_DisplayColorMap)
   QCEP_INTEGER_PROPERTY(DisplayColorMap)
 
+  Q_PROPERTY(bool displayLog READ get_DisplayLog WRITE set_DisplayLog)
+  QCEP_BOOLEAN_PROPERTY(DisplayLog)
+
   Q_PROPERTY(bool imageShown READ get_ImageShown WRITE set_ImageShown)
   QCEP_BOOLEAN_PROPERTY(ImageShown)
 
@@ -99,6 +102,8 @@ public slots:
   void setSpectrum();
   void setFire();
   void setIce();
+
+  void redoColorMap();
   void setColorMap(int index);
 
   void toggleShowImage();
@@ -151,6 +156,9 @@ private:
   void setImage(QxrdRasterData data);
   void setMask(QxrdMaskRasterData data);
   void setOverflows(QxrdMaskRasterData overflow);
+
+  void colorMapStart(QColor startColor, QColor endColor);
+  void colorMapRange(double value1, QColor color1, double value2, QColor color2);
   void changedColorMap();
   void setTrackerPen(const QPen &pen);
 

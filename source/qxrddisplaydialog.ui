@@ -393,6 +393,16 @@
       </property>
      </widget>
     </item>
+    <item row="4" column="0">
+     <widget class="QCheckBox" name="m_DisplayImageLog">
+      <property name="toolTip">
+       <string>Display image data</string>
+      </property>
+      <property name="text">
+       <string>Log Scaling</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>
