@@ -31,6 +31,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_DisplayMaximumPctle(QxrdSettingsSaverPtr(), this, "displayMaximumPercentile", 100),
     m_DisplayScalingMode(QxrdSettingsSaverPtr(), this, "displayScalingMode", 0),
     m_DisplayColorMap(QxrdSettingsSaverPtr(), this, "displayColorMap", 0),
+    m_DisplayLog(QxrdSettingsSaverPtr(), this, "displayLog", false),
     m_ImageShown(QxrdSettingsSaverPtr(), this, "imageShown", 1),
     m_MaskShown(QxrdSettingsSaverPtr(), this, "maskShown", 0),
     m_OverflowShown(QxrdSettingsSaverPtr(), this, "overflowShown", 0),
@@ -138,6 +139,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   connect(prop_InterpolatePixels(), SIGNAL(valueChanged(bool,int)), this, SLOT(onInterpolateChanged(bool)));
   connect(prop_MaintainAspectRatio(), SIGNAL(valueChanged(bool,int)), this, SLOT(onMaintainAspectChanged(bool)));
   connect(prop_DisplayColorMap(), SIGNAL(valueChanged(int,int)), this, SLOT(setColorMap(int)));
+  connect(prop_DisplayLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(redoColorMap()));
 
   enableZooming();
 }
@@ -190,6 +192,7 @@ void QxrdImagePlot::setSaver(QxrdSettingsSaverPtr saver)
   prop_InterpolatePixels()->setSaver(saver);
   prop_MaintainAspectRatio()->setSaver(saver);
   prop_DisplayColorMap()->setSaver(saver);
+  prop_DisplayLog()->setSaver(saver);
 }
 
 QxrdDataProcessorWPtr QxrdImagePlot::processor() const
@@ -319,9 +322,41 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
   m_MaskColorMap.setColorInterval(pen.color(), QColor(0,0,0,0));
 }
 
+void QxrdImagePlot::colorMapStart(QColor startColor, QColor endColor)
+{
+  m_ColorMap.setColorInterval(startColor, endColor);
+}
+
+void QxrdImagePlot::colorMapRange(double value1, QColor color1, double value2, QColor color2)
+{
+  if (get_DisplayLog()) {
+    int n1 = int(value1*100);
+    int n2 = int(value2*100);
+    double r1 = color1.redF();
+    double r2 = color2.redF();
+    double g1 = color1.greenF();
+    double g2 = color2.greenF();
+    double b1 = color1.blueF();
+    double b2 = color2.blueF();
+
+    for (int n=n1; n<n2; n++) {
+      double pos = double(n)/100.0;
+      double val = (pow(10.0, pos) - 1.0)/9.0;
+      double interp = (pos-value1)/(value2-value1);
+
+      QColor col = QColor::fromRgbF(r1 + (r2-r1)*interp, g1 + (g2 - g1)*interp, b1 + (b2 - b1)*interp);
+
+      m_ColorMap.addColorStop(val, col);
+    }
+  } else {
+    m_ColorMap.addColorStop(value1, color1);
+  }
+}
+
 void QxrdImagePlot::setGrayscale()
 {
-  m_ColorMap.setColorInterval(Qt::black, Qt::white);
+  colorMapStart(Qt::black, Qt::white);
+  colorMapRange(0.0, Qt::black, 1.0, Qt::white);
 
   setTrackerPen(QPen(Qt::red));
 
@@ -330,7 +365,8 @@ void QxrdImagePlot::setGrayscale()
 
 void QxrdImagePlot::setInverseGrayscale()
 {
-  m_ColorMap.setColorInterval(Qt::white, Qt::black);
+  colorMapStart(Qt::white, Qt::black);
+  colorMapRange(0.0, Qt::white, 1.0, Qt::black);
 
   setTrackerPen(QPen(Qt::red));
 
@@ -339,12 +375,14 @@ void QxrdImagePlot::setInverseGrayscale()
 
 void QxrdImagePlot::setEarthTones()
 {
-  m_ColorMap.setColorInterval(Qt::black, Qt::white);
-  m_ColorMap.addColorStop(0.15, Qt::blue);
-  m_ColorMap.addColorStop(0.25, Qt::gray);
-  m_ColorMap.addColorStop(0.35, Qt::green);
-  m_ColorMap.addColorStop(0.5, Qt::darkYellow);
-  m_ColorMap.addColorStop(0.85, Qt::darkMagenta);
+  colorMapStart(Qt::black, Qt::white);
+
+  colorMapRange(0.0, Qt::black, 0.15, Qt::blue);
+  colorMapRange(0.15, Qt::blue, 0.25, Qt::gray);
+  colorMapRange(0.25, Qt::gray, 0.35, Qt::green);
+  colorMapRange(0.35, Qt::green, 0.5, Qt::darkYellow);
+  colorMapRange(0.5, Qt::darkYellow, 0.85, Qt::darkMagenta);
+  colorMapRange(0.85, Qt::darkMagenta, 1.0, Qt::white);
 
   setTrackerPen(QPen(Qt::red));
 
@@ -353,11 +391,13 @@ void QxrdImagePlot::setEarthTones()
 
 void QxrdImagePlot::setSpectrum()
 {
-  m_ColorMap.setColorInterval(Qt::magenta, Qt::red);
-  m_ColorMap.addColorStop(0.2, Qt::blue);
-  m_ColorMap.addColorStop(0.4, Qt::cyan);
-  m_ColorMap.addColorStop(0.6, Qt::green);
-  m_ColorMap.addColorStop(0.8, Qt::yellow);
+  colorMapStart(Qt::magenta, Qt::red);
+
+  colorMapRange(0.0, Qt::magenta,0.2, Qt::blue);
+  colorMapRange(0.2, Qt::blue,   0.4, Qt::cyan);
+  colorMapRange(0.4, Qt::cyan,   0.6, Qt::green);
+  colorMapRange(0.6, Qt::green,  0.8, Qt::yellow);
+  colorMapRange(0.8, Qt::yellow, 1.0, Qt::red);
 
   setTrackerPen(QPen(Qt::black));
 
@@ -366,9 +406,11 @@ void QxrdImagePlot::setSpectrum()
 
 void QxrdImagePlot::setFire()
 {
-  m_ColorMap.setColorInterval(Qt::black, Qt::white);
-  m_ColorMap.addColorStop(0.25, Qt::red);
-  m_ColorMap.addColorStop(0.75, Qt::yellow);
+  colorMapStart(Qt::black, Qt::white);
+
+  colorMapRange(0.0,  Qt::black,  0.25, Qt::red);
+  colorMapRange(0.25, Qt::red,    0.75, Qt::yellow);
+  colorMapRange(0.75, Qt::yellow, 1.0,  Qt::white);
 
   setTrackerPen(QPen(Qt::blue));
 
@@ -377,14 +419,20 @@ void QxrdImagePlot::setFire()
 
 void QxrdImagePlot::setIce()
 {
-  m_ColorMap.setColorInterval(Qt::black, Qt::white);
-//  m_ColorMap.addColorStop(0.25, Qt::darkblue);
-  m_ColorMap.addColorStop(0.25, Qt::blue);
-  m_ColorMap.addColorStop(0.75, Qt::cyan);
+  colorMapStart(Qt::black, Qt::white);
+
+  colorMapRange(0.0,  Qt::black, 0.25, Qt::blue);
+  colorMapRange(0.25, Qt::blue,  0.75, Qt::cyan);
+  colorMapRange(0.75, Qt::cyan,  1.0,  Qt::white);
 
   setTrackerPen(QPen(Qt::red));
 
   changedColorMap();
+}
+
+void QxrdImagePlot::redoColorMap()
+{
+  setColorMap(get_DisplayColorMap());
 }
 
 void QxrdImagePlot::setColorMap(int n)
