@@ -274,7 +274,7 @@ public slots:
   void plotOutputScan();
   void saveOutputScan(QString fileName);
 
-  double integrateRectangle(int x0, int y0, int x1, int y1);
+  QStringList integrateRectangle(int x0, int y0, int x1, int y1);
 
 public:
   QString existingOutputDirectory(QString dir, QString subdir) const;
