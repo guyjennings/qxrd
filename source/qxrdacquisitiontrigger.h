@@ -41,6 +41,9 @@ public:
   Q_PROPERTY(double triggerALevel READ get_TriggerALevel WRITE set_TriggerALevel)
   QCEP_DOUBLE_PROPERTY(TriggerALevel)
 
+  Q_PROPERTY(double triggerAHysteresis READ get_TriggerAHysteresis WRITE set_TriggerAHysteresis)
+  QCEP_DOUBLE_PROPERTY(TriggerAHysteresis)
+
   Q_PROPERTY(double triggerAValue READ get_TriggerAValue WRITE set_TriggerAValue STORED false)
   QCEP_DOUBLE_PROPERTY(TriggerAValue)
 
@@ -49,6 +52,9 @@ public:
 
   Q_PROPERTY(int triggerATriggered READ get_TriggerATriggered WRITE set_TriggerATriggered STORED false)
   QCEP_INTEGER_PROPERTY(TriggerATriggered)
+
+  Q_PROPERTY(QString triggerAChannelName READ get_TriggerAChannelName WRITE set_TriggerAChannelName)
+  QCEP_STRING_PROPERTY(TriggerAChannelName)
 
   enum {
     TriggerModeNone,
@@ -83,6 +89,9 @@ public:
   Q_PROPERTY(double triggerBLevel READ get_TriggerBLevel WRITE set_TriggerBLevel)
   QCEP_DOUBLE_PROPERTY(TriggerBLevel)
 
+  Q_PROPERTY(double triggerBHysteresis READ get_TriggerBHysteresis WRITE set_TriggerBHysteresis)
+  QCEP_DOUBLE_PROPERTY(TriggerBHysteresis)
+
   Q_PROPERTY(double triggerBValue READ get_TriggerBValue WRITE set_TriggerBValue STORED false)
   QCEP_DOUBLE_PROPERTY(TriggerBValue)
 
@@ -92,6 +101,9 @@ public:
   Q_PROPERTY(int triggerBTriggered READ get_TriggerBTriggered WRITE set_TriggerBTriggered STORED false)
   QCEP_INTEGER_PROPERTY(TriggerBTriggered)
 
+  Q_PROPERTY(QString triggerBChannelName READ get_TriggerBChannelName WRITE set_TriggerBChannelName)
+  QCEP_STRING_PROPERTY(TriggerBChannelName)
+
 signals:
 
 public slots:
@@ -100,11 +112,16 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
+  int checkTriggerA();
+  int checkTriggerB();
+
+private:
+  void timerEvent(QTimerEvent *);
+
 private:
   mutable QMutex              m_Mutex;
   QxrdExperimentWPtr          m_Experiment;
   QxrdAcquisitionWPtr         m_Acquisition;
-  QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITION_H
