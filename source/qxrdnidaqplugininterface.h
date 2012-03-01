@@ -17,6 +17,8 @@ public:
   virtual void pulseOutput() = 0;
 
   virtual QStringList deviceNames() = 0;
+  virtual QString     deviceType(QString device) = 0;
+  virtual int         deviceIsSimulated(QString device) = 0;
   virtual QStringList deviceAIChannels(QString device) = 0;
   virtual QStringList deviceAOChannels(QString device) = 0;
   virtual QStringList deviceDIPorts(QString device) = 0;
@@ -25,6 +27,9 @@ public:
   virtual QStringList deviceDOLines(QString port) = 0;
   virtual QStringList deviceCIChannels(QString device) = 0;
   virtual QStringList deviceCOChannels(QString device) = 0;
+
+  virtual double getAnalogInput(QString channelName) = 0;
+  virtual void setAnalogOutput(QString channelName, double value) = 0;
 };
 
 Q_DECLARE_INTERFACE(QxrdNIDAQPluginInterface, "gov.anl.aps.cep.Qxrd.NIDAQInterface/1.0")

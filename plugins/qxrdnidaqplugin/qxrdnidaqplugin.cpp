@@ -231,7 +231,7 @@ double QxrdNIDAQPlugin::getAnalogInput(int chan)
     DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle,
                                           qPrintable(tr("Dev1/ai%1").arg(chan)), NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
 
-    if (m_AOTaskHandle) {
+    if (m_AITaskHandle) {
       DAQmxErrChk(DAQmxReadAnalogScalarF64(m_AITaskHandle, 10.0, &res, NULL));
     }
   }
@@ -385,6 +385,31 @@ Error:
   return result;
 }
 
+QString QxrdNIDAQPlugin::deviceType(QString device)
+{
+  char buffer[5120]="";
+  int error;
+
+  DAQmxErrChk(DAQmxGetDevProductType(qPrintable(device), buffer, sizeof(buffer)));
+
+Error:
+  QString result = QString(buffer);
+
+  return result;
+}
+
+int QxrdNIDAQPlugin::deviceIsSimulated(QString device)
+{
+  bool32 res = true;
+
+  int error;
+
+  DAQmxErrChk(DAQmxGetDevIsSimulated(qPrintable(device), &res));
+
+Error:
+  return res;
+}
+
 QStringList QxrdNIDAQPlugin::deviceAIChannels(QString device)
 {
   char buffer[5120]="";
@@ -488,6 +513,45 @@ Error:
   QStringList result = QString(buffer).split(", ");
 
   return result;
+}
+
+double QxrdNIDAQPlugin::getAnalogInput(QString channelName)
+{
+  TaskHandle task = 0;
+  float64 res = 0;
+  int error;
+
+  DAQmxErrChk(DAQmxCreateTask("qxrd-analog-in", &task));
+  DAQmxErrChk(DAQmxCreateAIVoltageChan (task,
+                                        qPrintable(channelName),
+                                        NULL,
+                                        DAQmx_Val_Cfg_Default, -10.0, 10.0,
+                                        DAQmx_Val_Volts, NULL));
+
+  DAQmxErrChk(DAQmxReadAnalogScalarF64(task, 10.0, &res, NULL));
+
+Error:
+  DAQmxClearTask(task);
+
+  return res;
+}
+
+void QxrdNIDAQPlugin::setAnalogOutput(QString channelName, double value)
+{
+  TaskHandle task = 0;
+  int error;
+
+  DAQmxErrChk(DAQmxCreateTask("qxrd-analog-out", &task));
+  DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle,
+                                        qPrintable(channelName),
+                                        NULL,
+                                        -10.0, 10.0,
+                                        DAQmx_Val_Volts, NULL));
+
+  DAQmxErrChk(DAQmxWriteAnalogScalarF64(task, true, 10.0, value, NULL));
+
+Error:
+  DAQmxClearTask(task);
 }
 
 Q_EXPORT_PLUGIN2(qxrdnidaqplugin, QxrdNIDAQPlugin)

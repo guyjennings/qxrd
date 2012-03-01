@@ -31,6 +31,8 @@ public slots:
   double count(int chan, double time);
 
   QStringList deviceNames();
+  QString     deviceType(QString device);
+  int         deviceIsSimulated(QString device);
   QStringList deviceAIChannels(QString device);
   QStringList deviceAOChannels(QString device);
   QStringList deviceDIPorts(QString device);
@@ -39,6 +41,9 @@ public slots:
   QStringList deviceDOLines(QString port);
   QStringList deviceCIChannels(QString device);
   QStringList deviceCOChannels(QString device);
+
+  double getAnalogInput(QString channelName);
+  void   setAnalogOutput(QString channelName, double value);
 
 private:
   void initTaskHandles();
