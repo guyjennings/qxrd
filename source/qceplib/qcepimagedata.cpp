@@ -291,6 +291,26 @@ T QcepImageData<T>::value(double x, double y) const
 }
 
 template <typename T>
+QVector<double> QcepImageData<T>::getImageData(int x0, int y0, int x1, int y1) const
+{
+  QVector<double> res;
+
+  for (int y=y0; y<y1; y++) {
+    for (int x=x0; x<x1; x++) {
+      res << this->value(x,y);
+    }
+  }
+
+  return res;
+}
+
+template <typename T>
+double QcepImageData<T>::getImageData(int x, int y) const
+{
+  return this->value(x,y);
+}
+
+template <typename T>
 void QcepImageData<T>::fill(T val)
 {
   m_Image.fill(val);
