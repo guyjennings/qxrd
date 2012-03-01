@@ -34,9 +34,25 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
 
       QStringList cards = nidaq -> deviceNames();
 
-      foreach (QString card, cards) {
+      for (int i=0; i<cards.count(); i++) {
+        QString card = cards.value(i);
+        QString type = nidaq->deviceType(card);
+        int     sim  = nidaq->deviceIsSimulated(card);
+
+        QString desc = card;
+
+        desc += " : ";
+        desc += type;
+
+        if (sim) {
+          desc += " [simulated]";
+        }
+
         m_ATrigCard -> addItem(card);
         m_BTrigCard -> addItem(card);
+
+        m_ATrigCard -> setItemData(i, desc, Qt::ToolTipRole);
+        m_BTrigCard -> setItemData(i, desc, Qt::ToolTipRole);
       }
 
       trig->prop_TriggerACard()->linkTo(m_ATrigCard);
@@ -71,9 +87,27 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
       trig->prop_TriggerALevel()->linkTo(m_ATrigLevel);
       trig->prop_TriggerBLevel()->linkTo(m_BTrigLevel);
 
+      m_ATrigHysteresis  -> setMinimum(0.0);
+      m_ATrigHysteresis  -> setMaximum(10.0);
+      m_ATrigHysteresis  -> setSingleStep(0.1);
+
+      m_ATrigHysteresis  -> setMinimum(0.0);
+      m_ATrigHysteresis  -> setMaximum(10.0);
+      m_ATrigHysteresis  -> setSingleStep(0.1);
+
+      trig->prop_TriggerAHysteresis()->linkTo(m_ATrigHysteresis);
+      trig->prop_TriggerBHysteresis()->linkTo(m_BTrigHysteresis);
+
       trig->prop_TriggerAValue()->linkTo(m_ATrigValue);
       trig->prop_TriggerBValue()->linkTo(m_BTrigValue);
 
+      trig->prop_TriggerAChannelName()->linkTo(m_ATrigChanName);
+      trig->prop_TriggerBChannelName()->linkTo(m_BTrigChanName);
+
+      connect(trig->prop_TriggerAChannel(), SIGNAL(valueChanged(int,int)),
+              this, SLOT(triggerChanged()));
+      connect(trig->prop_TriggerBChannel(), SIGNAL(valueChanged(int,int)),
+              this, SLOT(triggerChanged()));
     } else {
       m_ATrigCard->setEnabled(false);
       m_BTrigCard->setEnabled(false);
@@ -83,6 +117,10 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
       m_BTrigSlope->setEnabled(false);
       m_ATrigLevel->setEnabled(false);
       m_BTrigLevel->setEnabled(false);
+      m_ATrigHysteresis->setEnabled(false);
+      m_BTrigHysteresis->setEnabled(false);
+      m_ATrigChanName->setEnabled(false);
+      m_BTrigChanName->setEnabled(false);
     }
   }
 }
@@ -133,6 +171,8 @@ void QxrdAcquisitionTriggerDialog::setATrigChannelNames()
       for(int i=0; i<channels.count(); i++) {
         m_ATrigChan->setItemText(i, channels.value(i));
       }
+
+      trig->set_TriggerAChannelName(m_ATrigChan->currentText());
     }
   }
 }
@@ -167,8 +207,20 @@ void QxrdAcquisitionTriggerDialog::setBTrigChannelNames()
       for(int i=0; i<channels.count(); i++) {
         m_BTrigChan->setItemText(i, channels.value(i));
       }
+
+      trig->set_TriggerBChannelName(m_BTrigChan->currentText());
     }
   }
 }
 
+void QxrdAcquisitionTriggerDialog::triggerChanged()
+{
+  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
+
+  if (acq && trig) {
+    trig -> set_TriggerAChannelName(m_ATrigChan->currentText());
+    trig -> set_TriggerBChannelName(m_BTrigChan->currentText());
+  }
+}
 

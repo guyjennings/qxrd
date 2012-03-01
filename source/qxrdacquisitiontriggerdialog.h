@@ -20,6 +20,7 @@ protected:
 private slots:
   void setATrigChannelNames();
   void setBTrigChannelNames();
+  void triggerChanged();
 
 private:
   QxrdAcquisitionWPtr        m_Acquisition;
