@@ -36,6 +36,9 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
       trig->prop_TriggerAMode()->linkTo(m_ATrigMode);
       trig->prop_TriggerBMode()->linkTo(m_BTrigMode);
 
+      m_ATrigCard -> addItem("None");
+      m_BTrigCard -> addItem("None");
+
       QStringList cards = nidaq -> deviceNames();
 
       for (int i=0; i<cards.count(); i++) {
@@ -55,8 +58,8 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
         m_ATrigCard -> addItem(card);
         m_BTrigCard -> addItem(card);
 
-        m_ATrigCard -> setItemData(i, desc, Qt::ToolTipRole);
-        m_BTrigCard -> setItemData(i, desc, Qt::ToolTipRole);
+        m_ATrigCard -> setItemData(i+1, desc, Qt::ToolTipRole);
+        m_BTrigCard -> setItemData(i+1, desc, Qt::ToolTipRole);
       }
 
       trig->prop_TriggerACard()->linkTo(m_ATrigCard);
@@ -148,7 +151,7 @@ void QxrdAcquisitionTriggerDialog::setATrigChannelNames()
     if (nidaq) {
       QStringList devices = nidaq->deviceNames();
 
-      QString device = devices.value(trig->get_TriggerACard());
+      QString device = devices.value(trig->get_TriggerACard() - 1); /* -1 to allow for 'none' entry in menu */
 
       QStringList channels = nidaq->deviceAIChannels(device);
 
@@ -184,7 +187,7 @@ void QxrdAcquisitionTriggerDialog::setBTrigChannelNames()
     if (nidaq) {
       QStringList devices = nidaq->deviceNames();
 
-      QString device = devices.value(trig->get_TriggerBCard());
+      QString device = devices.value(trig->get_TriggerBCard() - 1); /* -1 to allow for 'none' entry in menu */
 
       QStringList channels = nidaq->deviceAIChannels(device);
 

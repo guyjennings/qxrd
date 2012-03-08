@@ -101,7 +101,7 @@
     <item row="1" column="0" colspan="2">
      <widget class="QLabel" name="label_10">
       <property name="text">
-       <string>A Trigger</string>
+       <string>'A' Trigger</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
