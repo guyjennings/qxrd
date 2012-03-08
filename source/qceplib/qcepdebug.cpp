@@ -24,6 +24,7 @@ const char* gDebugStrings[] = {
   "Acquisition Timing Messages",
   "Integrator Operation",
   "Object Constructors/Destructors",
+  "Acquisition Triggering",
   NULL
 };
 
