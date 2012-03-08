@@ -23,11 +23,15 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
     m_BTrigMode     -> addItem("None");
 
     if (nidaq && trig) {
-      m_ATrigMode     -> addItem("Edge");
-      m_ATrigMode     -> addItem("Level");
+      m_ATrigMode     -> addItem("Positive Edge");
+      m_ATrigMode     -> addItem("Negative Edge");
+      m_ATrigMode     -> addItem("Positive Level");
+      m_ATrigMode     -> addItem("Negative Level");
 
-      m_BTrigMode     -> addItem("Edge");
-      m_BTrigMode     -> addItem("Level");
+      m_BTrigMode     -> addItem("Positive Edge");
+      m_BTrigMode     -> addItem("Negative Edge");
+      m_BTrigMode     -> addItem("Positive Level");
+      m_BTrigMode     -> addItem("Negative Level");
 
       trig->prop_TriggerAMode()->linkTo(m_ATrigMode);
       trig->prop_TriggerBMode()->linkTo(m_BTrigMode);
@@ -67,15 +71,6 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
       trig->prop_TriggerAChannel()->linkTo(m_ATrigChan);
       trig->prop_TriggerBChannel()->linkTo(m_BTrigChan);
 
-      m_ATrigSlope  -> addItem("Positive");
-      m_ATrigSlope  -> addItem("Negative");
-
-      m_BTrigSlope  -> addItem("Positive");
-      m_BTrigSlope  -> addItem("Negative");
-
-      trig->prop_TriggerASlope()->linkTo(m_ATrigSlope);
-      trig->prop_TriggerBSlope()->linkTo(m_BTrigSlope);
-
       m_ATrigLevel  -> setMinimum(-10.0);
       m_ATrigLevel  -> setMaximum(10.0);
       m_ATrigLevel  -> setSingleStep(0.1);
@@ -101,6 +96,9 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
       trig->prop_TriggerAValue()->linkTo(m_ATrigValue);
       trig->prop_TriggerBValue()->linkTo(m_BTrigValue);
 
+      trig->prop_TriggerATriggered()->linkTo(m_ATrigTriggered);
+      trig->prop_TriggerBTriggered()->linkTo(m_BTrigTriggered);
+
       trig->prop_TriggerAChannelName()->linkTo(m_ATrigChanName);
       trig->prop_TriggerBChannelName()->linkTo(m_BTrigChanName);
 
@@ -113,8 +111,6 @@ QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, Qxrd
       m_BTrigCard->setEnabled(false);
       m_ATrigChan->setEnabled(false);
       m_BTrigChan->setEnabled(false);
-      m_ATrigSlope->setEnabled(false);
-      m_BTrigSlope->setEnabled(false);
       m_ATrigLevel->setEnabled(false);
       m_BTrigLevel->setEnabled(false);
       m_ATrigHysteresis->setEnabled(false);

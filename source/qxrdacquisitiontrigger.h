@@ -35,9 +35,6 @@ public:
   Q_PROPERTY(int triggerAChannel READ get_TriggerAChannel WRITE set_TriggerAChannel)
   QCEP_INTEGER_PROPERTY(TriggerAChannel)
 
-  Q_PROPERTY(int triggerASlope READ get_TriggerASlope WRITE set_TriggerASlope)
-  QCEP_INTEGER_PROPERTY(TriggerASlope)
-
   Q_PROPERTY(double triggerALevel READ get_TriggerALevel WRITE set_TriggerALevel)
   QCEP_DOUBLE_PROPERTY(TriggerALevel)
 
@@ -50,8 +47,8 @@ public:
   Q_PROPERTY(double triggerAPrevValue READ get_TriggerAPrevValue WRITE set_TriggerAPrevValue STORED false)
   QCEP_DOUBLE_PROPERTY(TriggerAPrevValue)
 
-  Q_PROPERTY(int triggerATriggered READ get_TriggerATriggered WRITE set_TriggerATriggered STORED false)
-  QCEP_INTEGER_PROPERTY(TriggerATriggered)
+  Q_PROPERTY(bool triggerATriggered READ get_TriggerATriggered WRITE set_TriggerATriggered STORED false)
+  QCEP_BOOLEAN_PROPERTY(TriggerATriggered)
 
   Q_PROPERTY(QString triggerAChannelName READ get_TriggerAChannelName WRITE set_TriggerAChannelName)
   QCEP_STRING_PROPERTY(TriggerAChannelName)
@@ -69,11 +66,6 @@ public:
     TriggerChannelNone = -1
   };
 
-  enum {
-    TriggerSlopePositive,
-    TriggerSlopeNegative
-  };
-
   Q_PROPERTY(int triggerBMode READ get_TriggerBMode WRITE set_TriggerBMode)
   QCEP_INTEGER_PROPERTY(TriggerBMode)
 
@@ -82,9 +74,6 @@ public:
 
   Q_PROPERTY(int triggerBChannel READ get_TriggerBChannel WRITE set_TriggerBChannel)
   QCEP_INTEGER_PROPERTY(TriggerBChannel)
-
-  Q_PROPERTY(int triggerBSlope READ get_TriggerBSlope WRITE set_TriggerBSlope)
-  QCEP_INTEGER_PROPERTY(TriggerBSlope)
 
   Q_PROPERTY(double triggerBLevel READ get_TriggerBLevel WRITE set_TriggerBLevel)
   QCEP_DOUBLE_PROPERTY(TriggerBLevel)
@@ -98,8 +87,8 @@ public:
   Q_PROPERTY(double triggerBPrevValue READ get_TriggerBPrevValue WRITE set_TriggerBPrevValue STORED false)
   QCEP_DOUBLE_PROPERTY(TriggerBPrevValue)
 
-  Q_PROPERTY(int triggerBTriggered READ get_TriggerBTriggered WRITE set_TriggerBTriggered STORED false)
-  QCEP_INTEGER_PROPERTY(TriggerBTriggered)
+  Q_PROPERTY(bool triggerBTriggered READ get_TriggerBTriggered WRITE set_TriggerBTriggered STORED false)
+  QCEP_BOOLEAN_PROPERTY(TriggerBTriggered)
 
   Q_PROPERTY(QString triggerBChannelName READ get_TriggerBChannelName WRITE set_TriggerBChannelName)
   QCEP_STRING_PROPERTY(TriggerBChannelName)
@@ -117,6 +106,8 @@ public:
 
 private:
   void timerEvent(QTimerEvent *);
+  int evaluateTrigger(
+      int wasTriggered, int mode, double level, double hysteresis, double value, double prevvalue);
 
 private:
   mutable QMutex              m_Mutex;
