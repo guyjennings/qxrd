@@ -70,6 +70,7 @@ void QxrdScriptEngine::initialize()
     }
   }
 
+  globalObject().setProperty("global", globalObject());
   globalObject().setProperty("acquire", newFunction(acquireFunc));
   globalObject().setProperty("acquireDark", newFunction(acquireDarkFunc));
   globalObject().setProperty("status", newFunction(statusFunc));
