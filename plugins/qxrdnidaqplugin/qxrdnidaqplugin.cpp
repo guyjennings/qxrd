@@ -14,7 +14,8 @@ QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   m_AOTaskHandle(0),
   m_AITaskHandle(0),
   m_TrigAOTask(0),
-  m_PulseTask(0)
+  m_PulseTask(0),
+  m_CountersTask(0)
 {
 //  printf("NI-DAQ plugin constructed\n");
 //  initTaskHandles();
@@ -356,8 +357,8 @@ double QxrdNIDAQPlugin::count(int /* chan */, double /* time */)
   if (counterTask == 0) {
     DAQmxErrChk(DAQmxCreateTask("counter", &counterTask));
     DAQmxErrChk(DAQmxCreateCICountEdgesChan(counterTask,"Dev1/ctr2", "", DAQmx_Val_Rising, 0, DAQmx_Val_CountUp));
-    DAQmxSetCICountEdgesTerm(counterTask, "/Dev1/ctr2", "/Dev1/100MHzTimebase");
-    DAQmxStartTask(counterTask);
+    DAQmxErrChk(DAQmxSetCICountEdgesTerm(counterTask, "/Dev1/ctr2", "/Dev1/100MHzTimebase"));
+    DAQmxErrChk(DAQmxStartTask(counterTask));
   }
 
   if (counterTask) {
@@ -369,6 +370,67 @@ double QxrdNIDAQPlugin::count(int /* chan */, double /* time */)
 Error:
   DAQmxClearTask(counterTask);
   return res;
+}
+
+int QxrdNIDAQPlugin::configCounters(QStringList chans)
+{
+  int error;
+
+  if (m_CountersTask) {
+    DAQmxClearTask(m_CountersTask);
+
+    m_CountersTask = 0;
+  }
+
+  if (m_CountersTask == 0) {
+    DAQmxErrChk(DAQmxCreateTask("counters", &m_CountersTask));
+
+    m_NCounters = chans.count();
+    m_Counts.resize(m_NCounters);
+
+    foreach(QString chan, chans) {
+      QStringList parsed = chan.split(",");
+      QString ch = parsed.value(0);
+      QString sig = parsed.value(1);
+
+      DAQmxErrChk(DAQmxCreateCICountEdgesChan(m_CountersTask, qPrintable(parsed.value(0)), "", DAQmx_Val_Rising, 0, DAQmx_Val_CountUp));
+      DAQmxErrChk(DAQmxSetCICountEdgesTerm(m_CountersTask, qPrintable(ch), qPrintable(sig)));
+    }
+
+    DAQmxErrChk(DAQmxStartTask(m_CountersTask));
+
+    return m_NCounters;
+  }
+
+Error:
+  DAQmxClearTask(m_CountersTask);
+
+  m_CountersTask = 0;
+
+  return error;
+}
+
+QVector<double> QxrdNIDAQPlugin::readCounters()
+{
+  int error;
+
+  if (m_CountersTask) {
+    QVector<float64> counts(m_NCounters);
+
+    DAQmxErrChk(DAQmxReadCounterScalarF64(m_CountersTask, 0, counts.data(), NULL));
+
+    QVector<double> res(m_NCounters);
+
+    for (int i=0; i<m_NCounters; i++) {
+      res[i] = counts[i] - m_Counts[i];
+      m_Counts[i] = counts[i];
+    }
+
+    return res;
+  }
+
+Error:
+  return QVector<double>();
 }
 
 QStringList QxrdNIDAQPlugin::deviceNames()

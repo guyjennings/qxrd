@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include <QMutex>
 #include <QStringList>
+#include <QVector>
 
 #include "qxrdnidaqplugininterface.h"
 #include "NIDAQmx.h"
@@ -29,6 +30,9 @@ public slots:
   void   pulseOutput();
 
   double count(int chan, double time);
+
+  int configCounters(QStringList chans);
+  QVector<double> readCounters();
 
   QStringList deviceNames();
   QString     deviceType(QString device);
@@ -56,6 +60,9 @@ private:
   TaskHandle m_AITaskHandle;
   TaskHandle m_TrigAOTask;
   TaskHandle m_PulseTask;
+  TaskHandle m_CountersTask;
+  int        m_NCounters;
+  QVector<double> m_Counts;
 };
 
 #endif // QXRDNIDAQPLUGIN_H
