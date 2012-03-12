@@ -18,6 +18,7 @@ class QxrdNIDAQPlugin : public QObject, public QxrdNIDAQPluginInterface
 public:
   QxrdNIDAQPlugin();
   virtual ~QxrdNIDAQPlugin();
+  virtual void setErrorOutput(QObject *errors);
 
   QString name() const;
 
@@ -49,12 +50,17 @@ public slots:
   double getAnalogInput(QString channelName);
   void   setAnalogOutput(QString channelName, double value);
 
+  void   continuousAnalogInput(QStringList chans, double sampleRate, int bufferSize);
+  void   haltContinuousInput();
+  QVector<double> readContinuousInput();
+
 private:
   void initTaskHandles();
   void closeTaskHandles();
   void errorCheck(const char* file, int line, int err);
 
 private:
+  QObject   *m_ErrorOutput;
   QMutex     m_Mutex;
   TaskHandle m_AOTaskHandle;
   TaskHandle m_AITaskHandle;
@@ -63,6 +69,10 @@ private:
   TaskHandle m_CountersTask;
   int        m_NCounters;
   QVector<double> m_Counts;
+
+  TaskHandle m_ContinuousInputTask;
+  int        m_NContinuousInputs;
+  int        m_NContinuousSamples;
 };
 
 #endif // QXRDNIDAQPLUGIN_H

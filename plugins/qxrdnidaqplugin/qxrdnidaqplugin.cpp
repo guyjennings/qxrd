@@ -11,6 +11,7 @@
 #define DAQmxErrChk(functionCall) do { if( DAQmxFailed(error=(functionCall)) ) { QxrdNIDAQPlugin::errorCheck(__FILE__,__LINE__,error); goto Error; } } while(0)
 
 QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
+  m_ErrorOutput(NULL),
   m_AOTaskHandle(0),
   m_AITaskHandle(0),
   m_TrigAOTask(0),
@@ -53,6 +54,11 @@ QxrdNIDAQPlugin::~QxrdNIDAQPlugin()
   closeTaskHandles();
 }
 
+void QxrdNIDAQPlugin::setErrorOutput(QObject *errors)
+{
+  m_ErrorOutput = errors;
+}
+
 QString QxrdNIDAQPlugin::name() const
 {
   return "NI DAQ Card";
@@ -67,8 +73,12 @@ void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
       char *buff = (char*) malloc(sz);
 
       if (DAQmxGetErrorString(err, buff, sz) == 0) {
-//        m_Experiment->printMessage(tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff));
-        printf("%s:%d NI-DAQ Error %d : %s\n", file, line, err, buff);
+        if (m_ErrorOutput &&
+            QMetaObject::invokeMethod(m_ErrorOutput, "printMessage", Qt::QueuedConnection,
+                                      Q_ARG(QString, tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff)))) {
+        } else {
+          printf("%s:%d NI-DAQ Error %d : %s\n", file, line, err, buff);
+        }
       }
 
       free(buff);
@@ -424,6 +434,93 @@ QVector<double> QxrdNIDAQPlugin::readCounters()
     for (int i=0; i<m_NCounters; i++) {
       res[i] = counts[i] - m_Counts[i];
       m_Counts[i] = counts[i];
+    }
+
+    return res;
+  }
+
+Error:
+  return QVector<double>();
+}
+
+void   QxrdNIDAQPlugin::continuousAnalogInput(QStringList chans, double sampleRate, int bufferSize)
+{
+  int error;
+
+  if (m_ContinuousInputTask) {
+    DAQmxClearTask(m_ContinuousInputTask);
+    m_ContinuousInputTask = NULL;
+  }
+
+  if (m_ContinuousInputTask == NULL) {
+    DAQmxErrChk(DAQmxCreateTask("continuous", &m_ContinuousInputTask));
+
+    m_NContinuousInputs = chans.count();
+    m_NContinuousSamples = bufferSize;
+
+    foreach(QString chan, chans) {
+      DAQmxErrChk(DAQmxCreateAIVoltageChan(m_ContinuousInputTask, qPrintable(chan), "", DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+    }
+
+    DAQmxErrChk(DAQmxCfgSampClkTiming(m_ContinuousInputTask, NULL, sampleRate, DAQmx_Val_Rising, DAQmx_Val_ContSamps, bufferSize));
+    DAQmxErrChk(DAQmxSetBufInputBufSize(m_ContinuousInputTask, bufferSize));
+    DAQmxErrChk(DAQmxSetReadOverWrite(m_ContinuousInputTask, DAQmx_Val_OverwriteUnreadSamps));
+
+    DAQmxErrChk(DAQmxStartTask(m_ContinuousInputTask));
+
+    return;
+  }
+
+Error:
+  DAQmxClearTask(m_ContinuousInputTask);
+
+  m_ContinuousInputTask = 0;
+}
+
+void   QxrdNIDAQPlugin::haltContinuousInput()
+{
+  DAQmxClearTask(m_ContinuousInputTask);
+
+  m_ContinuousInputTask = 0;
+}
+
+QVector<double> QxrdNIDAQPlugin::readContinuousInput()
+{
+  QVector<float64> buff;
+  uInt32 available;
+  uInt64 pos;
+  int error;
+
+  if (m_ContinuousInputTask) {
+    DAQmxErrChk(DAQmxGetReadCurrReadPos(m_ContinuousInputTask, &pos));
+
+//    printf("Current Read Position %lld\n", pos);
+
+    DAQmxErrChk(DAQmxGetReadAvailSampPerChan(m_ContinuousInputTask, &available));
+    int32 actuallyRead;
+
+    if (available > 0) {
+      buff.resize(available*m_NContinuousInputs);
+      DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousInputTask, available, 0,
+                                     DAQmx_Val_GroupByChannel, buff.data(), buff.count(),
+                                     &actuallyRead, NULL));
+    } else {
+      buff.resize(m_NContinuousSamples*m_NContinuousInputs);
+      DAQmxErrChk(DAQmxSetReadRelativeTo(m_ContinuousInputTask, DAQmx_Val_MostRecentSamp));
+      DAQmxErrChk(DAQmxSetReadOffset(m_ContinuousInputTask, -m_NContinuousSamples));
+
+      DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousInputTask, m_NContinuousSamples, 0,
+                                     DAQmx_Val_GroupByChannel, buff.data(), buff.count(),
+                                     &actuallyRead, NULL));
+
+      DAQmxErrChk(DAQmxResetReadRelativeTo(m_ContinuousInputTask));
+      DAQmxErrChk(DAQmxResetReadOffset(m_ContinuousInputTask));
+    }
+
+    QVector<double> res(actuallyRead*m_NContinuousInputs);
+
+    for (int i=0; i<actuallyRead*m_NContinuousInputs; i++) {
+      res[i] = buff[i];
     }
 
     return res;
