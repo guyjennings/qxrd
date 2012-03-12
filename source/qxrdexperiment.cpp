@@ -345,8 +345,8 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts)
 
     if (win) {
       win->displayMessage(message);
-    } else if (m_Application) {
-      m_Application->printMessage(message);
+//    } else if (m_Application) {
+//      m_Application->printMessage(message);
     } else {
       printf("%s\n", qPrintable(message));
     }

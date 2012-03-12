@@ -369,6 +369,7 @@ void QxrdApplication::loadPlugins()
           pluginName = nidaq -> name();
 
           m_NIDAQPluginInterface = QxrdNIDAQPluginInterfacePtr(nidaq);
+          m_NIDAQPluginInterface -> setErrorOutput(this);
         }
 
         splashMessage(tr("Qxrd Version " STR(QXRD_VERSION) "\nLoaded plugin \"%1\"").arg(pluginName));
@@ -426,8 +427,8 @@ void QxrdApplication::printMessage(QString msg, QDateTime ts)
 
     logMessage(message);
 
-    if (window()) {
-      INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+    if (experiment(0)) {
+      INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "printMessage", Qt::QueuedConnection, Q_ARG(QString, msg)));
     }
   }
 }
