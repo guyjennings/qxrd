@@ -2,6 +2,7 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdacquisitiontriggerthread.h"
 #include "qxrdacquisitiontrigger.h"
+#include "qxrdacquisitionextrainputs.h"
 //#include <QMutexLocker>
 #include "qxrdmutexlocker.h"
 #include <QMetaProperty>
@@ -52,7 +53,8 @@ QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, 
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL),
     m_AcquisitionTriggerThread(NULL),
-    m_AcquisitionTrigger(NULL)
+    m_AcquisitionTrigger(NULL),
+    m_AcquisitionExtraInputs(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionParameters::QxrdAcquisitionParameters(%p)\n", this);
@@ -150,6 +152,10 @@ void QxrdAcquisitionParameters::writeSettings(QSettings *settings, QString secti
     m_AcquisitionTrigger->writeSettings(settings, section+"/trigger");
   }
 
+  if (m_AcquisitionExtraInputs) {
+    m_AcquisitionExtraInputs->writeSettings(settings, section+"/extrainputs");
+  }
+
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
@@ -163,6 +169,10 @@ void QxrdAcquisitionParameters::readSettings(QSettings *settings, QString sectio
 
   if (m_AcquisitionTrigger) {
     m_AcquisitionTrigger->readSettings(settings, section+"/trigger");
+  }
+
+  if (m_AcquisitionExtraInputs) {
+    m_AcquisitionExtraInputs->readSettings(settings, section+"/extrainputs");
   }
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);

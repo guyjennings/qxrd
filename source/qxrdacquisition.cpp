@@ -5,6 +5,7 @@
 #include "qxrdacquiredialog.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdacquisitiontriggerthread.h"
+#include "qxrdacquisitionextrainputs.h"
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
 
@@ -65,6 +66,8 @@ void QxrdAcquisition::initialize()
   m_AcquisitionTriggerThread -> start();
 
   m_AcquisitionTrigger = m_AcquisitionTriggerThread -> acquisitionTrigger();
+
+  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, this));
 }
 
 void QxrdAcquisition::shutdown()

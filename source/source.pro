@@ -279,7 +279,11 @@ HEADERS += TODO.h \
     qxrdacquisitiontriggerthread.h \
     qxrdacquisitiontriggerthread-ptr.h \
     qxrdacquisitiontriggerdialog.h \
-    qxrdacquisitiontriggerdialog-ptr.h
+    qxrdacquisitiontriggerdialog-ptr.h \
+    qxrdacquisitionextrainputs.h \
+    qxrdacquisitionextrainputs-ptr.h \
+    qxrdacquisitionextrainputsdialog.h \
+    qxrdacquisitionextrainputsdialog-ptr.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -412,7 +416,9 @@ SOURCES += qxrd.cpp \
     qxrdsplashscreen.cpp \
     qxrdacquisitiontrigger.cpp \
     qxrdacquisitiontriggerthread.cpp \
-    qxrdacquisitiontriggerdialog.cpp
+    qxrdacquisitiontriggerdialog.cpp \
+    qxrdacquisitionextrainputs.cpp \
+    qxrdacquisitionextrainputsdialog.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -432,7 +438,8 @@ FORMS = qxrdwindow.ui \
     qxrdwelcomewindow.ui \
     qxrdglobalpreferencesdialog.ui \
     qxrdwelcomerecentitem.ui \
-    qxrdacquisitiontriggerdialog.ui
+    qxrdacquisitiontriggerdialog.ui \
+    qxrdacquisitionextrainputsdialog.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 

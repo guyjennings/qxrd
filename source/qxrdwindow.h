@@ -31,6 +31,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdsynchronizedacquisitiondialog-ptr.h"
 #include "qxrdacquisitiontriggerdialog-ptr.h"
+#include "qxrdacquisitionextrainputsdialog-ptr.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -158,6 +159,7 @@ private:
   QxrdAllocatorWPtr                      m_Allocator;
   QxrdAcquireDialogBase                 *m_AcquireDialog;
   QxrdAcquisitionTriggerDialogPtr        m_AcquisitionTriggerDialog;
+  QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
   QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;
   QxrdCenterFinderDialog                *m_CenterFinderDialog;

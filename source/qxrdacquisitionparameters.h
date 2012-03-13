@@ -12,6 +12,7 @@
 #include "qxrdacquisitiontrigger-ptr.h"
 #include "qxrdacquisitiontriggerthread.h"
 #include "qxrdacquisitiontriggerthread-ptr.h"
+#include "qxrdacquisitionextrainputs-ptr.h"
 #include "qcepproperty.h"
 #include "qxrdsettingssaver-ptr.h"
 
@@ -166,6 +167,7 @@ protected:
   QxrdSynchronizedAcquisitionPtr  m_SynchronizedAcquisition;
   QxrdAcquisitionTriggerThreadPtr m_AcquisitionTriggerThread;
   QxrdAcquisitionTriggerPtr       m_AcquisitionTrigger;
+  QxrdAcquisitionExtraInputsPtr   m_AcquisitionExtraInputs;
 };
 
 #endif // QXRDACQUISITIONPARAMETERS_H
