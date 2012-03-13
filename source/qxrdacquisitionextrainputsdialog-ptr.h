@@ -1,0 +1,8 @@
+#ifndef QXRDACQUISITIONEXTRAINPUTSDIALOG_PTR_H
+#define QXRDACQUISITIONEXTRAINPUTSDIALOG_PTR_H
+
+class QxrdAcquisitionExtraInputsDialog;
+
+typedef QxrdAcquisitionExtraInputsDialog *QxrdAcquisitionExtraInputsDialogPtr;
+
+#endif // QXRDACQUISITIONEXTRAINPUTSDIALOG_PTR_H
