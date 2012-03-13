@@ -484,7 +484,7 @@ void   QxrdNIDAQPlugin::haltContinuousInput()
   m_ContinuousInputTask = 0;
 }
 
-QVector<double> QxrdNIDAQPlugin::readContinuousInput()
+QVector<double> QxrdNIDAQPlugin::readContinuousInput(int nsamp)
 {
   QVector<float64> buff;
   uInt32 available;
@@ -492,25 +492,39 @@ QVector<double> QxrdNIDAQPlugin::readContinuousInput()
   int error;
 
   if (m_ContinuousInputTask) {
-    DAQmxErrChk(DAQmxGetReadCurrReadPos(m_ContinuousInputTask, &pos));
+    int32 actuallyRead = 0;
 
-//    printf("Current Read Position %lld\n", pos);
+    if (nsamp <= 0) {
+      DAQmxErrChk(DAQmxGetReadCurrReadPos(m_ContinuousInputTask, &pos));
 
-    DAQmxErrChk(DAQmxGetReadAvailSampPerChan(m_ContinuousInputTask, &available));
-    int32 actuallyRead;
+      //    printf("Current Read Position %lld\n", pos);
 
-    if (available > 0) {
-      buff.resize(available*m_NContinuousInputs);
-      DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousInputTask, available, 0,
-                                     DAQmx_Val_GroupByChannel, buff.data(), buff.count(),
-                                     &actuallyRead, NULL));
+      DAQmxErrChk(DAQmxGetReadAvailSampPerChan(m_ContinuousInputTask, &available));
+
+      if (available > 0) {
+        buff.resize(available*m_NContinuousInputs);
+        DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousInputTask, available, 0,
+                                       DAQmx_Val_GroupByScanNumber, buff.data(), buff.count(),
+                                       &actuallyRead, NULL));
+      } else {
+        buff.resize(m_NContinuousSamples*m_NContinuousInputs);
+        DAQmxErrChk(DAQmxSetReadRelativeTo(m_ContinuousInputTask, DAQmx_Val_MostRecentSamp));
+        DAQmxErrChk(DAQmxSetReadOffset(m_ContinuousInputTask, -m_NContinuousSamples));
+
+        DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousInputTask, m_NContinuousSamples, 0,
+                                       DAQmx_Val_GroupByScanNumber, buff.data(), buff.count(),
+                                       &actuallyRead, NULL));
+
+        DAQmxErrChk(DAQmxResetReadRelativeTo(m_ContinuousInputTask));
+        DAQmxErrChk(DAQmxResetReadOffset(m_ContinuousInputTask));
+      }
     } else {
-      buff.resize(m_NContinuousSamples*m_NContinuousInputs);
+      buff.resize(nsamp*m_NContinuousInputs);
       DAQmxErrChk(DAQmxSetReadRelativeTo(m_ContinuousInputTask, DAQmx_Val_MostRecentSamp));
-      DAQmxErrChk(DAQmxSetReadOffset(m_ContinuousInputTask, -m_NContinuousSamples));
+      DAQmxErrChk(DAQmxSetReadOffset(m_ContinuousInputTask, -nsamp));
 
-      DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousInputTask, m_NContinuousSamples, 0,
-                                     DAQmx_Val_GroupByChannel, buff.data(), buff.count(),
+      DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousInputTask, nsamp, 0,
+                                     DAQmx_Val_GroupByScanNumber, buff.data(), buff.count(),
                                      &actuallyRead, NULL));
 
       DAQmxErrChk(DAQmxResetReadRelativeTo(m_ContinuousInputTask));

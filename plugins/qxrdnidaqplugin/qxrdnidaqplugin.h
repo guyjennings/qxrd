@@ -52,7 +52,7 @@ public slots:
 
   void   continuousAnalogInput(QStringList chans, double sampleRate, int bufferSize);
   void   haltContinuousInput();
-  QVector<double> readContinuousInput();
+  QVector<double> readContinuousInput(int nsamp=0);
 
 private:
   void initTaskHandles();
