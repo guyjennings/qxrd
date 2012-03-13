@@ -477,14 +477,14 @@ Error:
   m_ContinuousInputTask = 0;
 }
 
-void   QxrdNIDAQPlugin::haltContinuousInput()
+void   QxrdNIDAQPlugin::haltContinuousAnalogInput()
 {
   DAQmxClearTask(m_ContinuousInputTask);
 
   m_ContinuousInputTask = 0;
 }
 
-QVector<double> QxrdNIDAQPlugin::readContinuousInput(int nsamp)
+QVector<double> QxrdNIDAQPlugin::readContinuousAnalogInput(int nsamp)
 {
   QVector<float64> buff;
   uInt32 available;

@@ -51,8 +51,8 @@ public slots:
   void   setAnalogOutput(QString channelName, double value);
 
   void   continuousAnalogInput(QStringList chans, double sampleRate, int bufferSize);
-  void   haltContinuousInput();
-  QVector<double> readContinuousInput(int nsamp=0);
+  void   haltContinuousAnalogInput();
+  QVector<double> readContinuousAnalogInput(int nsamp=0);
 
 private:
   void initTaskHandles();
