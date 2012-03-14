@@ -468,6 +468,11 @@ QxrdAcquisitionTriggerPtr QxrdAcquisition::acquisitionTrigger() const
   return m_AcquisitionTrigger;
 }
 
+QxrdAcquisitionExtraInputsPtr QxrdAcquisition::acquisitionExtraInputs() const
+{
+  return m_AcquisitionExtraInputs;
+}
+
 int QxrdAcquisition::cancelling()
 {
   int res = get_Cancelling();

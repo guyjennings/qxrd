@@ -142,6 +142,7 @@ public:
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
   QxrdAcquisitionTriggerPtr acquisitionTrigger() const;
+  QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;
 
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
   QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;

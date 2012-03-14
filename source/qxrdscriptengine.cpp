@@ -16,6 +16,7 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdacquisitiontrigger.h"
+#include "qxrdacquisitionextrainputs.h"
 #include "qxrdallocator.h"
 
 #include <QThread>
@@ -128,6 +129,12 @@ void QxrdScriptEngine::initialize()
 
       if (trig) {
         globalObject().setProperty("trigger", newQObject(trig.data()));
+      }
+
+      QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
+
+      if (extra) {
+        globalObject().setProperty("extraInputs", newQObject(extra.data()));
       }
     }
 
