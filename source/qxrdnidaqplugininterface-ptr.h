@@ -6,5 +6,6 @@
 class QxrdNIDAQPluginInterface;
 
 typedef QSharedPointer<QxrdNIDAQPluginInterface> QxrdNIDAQPluginInterfacePtr;
+typedef QWeakPointer<QxrdNIDAQPluginInterface> QxrdNIDAQPluginInterfaceWPtr;
 
 #endif // QXRDNIDAQPLUGININTERFACE_H

@@ -447,6 +447,10 @@ void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
   if (m_SynchronizedAcquisition) {
     m_SynchronizedAcquisition -> setNIDAQPlugin(nidaqPlugin);
   }
+
+  if (m_AcquisitionExtraInputs) {
+    m_AcquisitionExtraInputs -> setNIDAQPlugin(nidaqPlugin);
+  }
 }
 
 QxrdNIDAQPluginInterfacePtr QxrdAcquisition::nidaqPlugin() const

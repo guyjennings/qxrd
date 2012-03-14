@@ -23,6 +23,7 @@ public:
   QString name() const;
 
 public slots:
+  void   printMessage(QString msg);
   void   setAnalogWaveform(int chan, double rate, double wfm[], int size);
   void   setAnalogOutput(int chan, double val);
   double getAnalogInput(int chan);
@@ -50,9 +51,15 @@ public slots:
   double getAnalogInput(QString channelName);
   void   setAnalogOutput(QString channelName, double value);
 
-  void   continuousAnalogInput(QStringList chans, double sampleRate, int bufferSize);
-  void   haltContinuousAnalogInput();
-  QVector<double> readContinuousAnalogInput(int nsamp=0);
+  virtual void prepareContinuousInput(double sampleRate,
+                                      double acquireDelay,
+                                      double exposureTime,
+                                      QStringList chans,
+                                      QcepIntList flags,
+                                      QcepDoubleList startOffset,
+                                      QcepDoubleList endOffset);
+  virtual void readContinuousInput(QVector< QVector<double> > &data);
+  virtual void finishContinuousInput();
 
 private:
   void initTaskHandles();
@@ -73,6 +80,17 @@ private:
   TaskHandle m_ContinuousInputTask;
   int        m_NContinuousInputs;
   int        m_NContinuousSamples;
+
+  double              m_SampleRate;
+  double              m_ExposureTime;
+  double              m_AcquireDelay;
+
+  int                 m_NAIChannels;
+  int                 m_NCIChannels;
+  TaskHandle          m_ContinuousAITask;
+  QVector<TaskHandle> m_ContinuousCITasks;
+  QVector<int>        m_ContinuousFlags;
+  QVector<int>        m_ContinuousChans;
 };
 
 #endif // QXRDNIDAQPLUGIN_H

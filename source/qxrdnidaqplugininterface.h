@@ -1,6 +1,7 @@
 #ifndef QXRDNIDAQPLUGININTERFACE_H
 #define QXRDNIDAQPLUGININTERFACE_H
 
+#include "qcepmacros.h"
 #include <QtPlugin>
 #include <QSharedPointer>
 #include "qxrdnamedplugininterface.h"
@@ -32,6 +33,16 @@ public:
 
   virtual double getAnalogInput(QString channelName) = 0;
   virtual void setAnalogOutput(QString channelName, double value) = 0;
+
+  virtual void prepareContinuousInput(double sampleRate,
+                                      double acquireDelay,
+                                      double exposureTime,
+                                      QStringList chans,
+                                      QcepIntList flags,
+                                      QcepDoubleList startOffset,
+                                      QcepDoubleList endOffset) = 0;
+  virtual void readContinuousInput(QVector< QVector<double> > &data) = 0;
+  virtual void finishContinuousInput() = 0;
 };
 
 Q_DECLARE_INTERFACE(QxrdNIDAQPluginInterface, "gov.anl.aps.cep.Qxrd.NIDAQInterface/1.0")
