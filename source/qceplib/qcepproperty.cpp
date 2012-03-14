@@ -762,7 +762,7 @@ void QcepBoolPropertyButtonHelper::setChecked(bool value, int index)
 void QcepBoolPropertyButtonHelper::setChecked(bool value)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    m_Property->printMessage(tr("%1: QcepIntPropertySpinBoxHelper::setValue(int %2)")
+    m_Property->printMessage(tr("%1: QcepBoolPropertySpinBoxHelper::setValue(int %2)")
                  .arg(m_Property->name()).arg(value));
   }
 
@@ -1076,7 +1076,7 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
 
   if (val != m_Value) {
     if (debug()) {
-      printMessage(tr("%1: QcepDateTimeProperty::setValue(QcepDoubleList %2) [%3]")
+      printMessage(tr("%1: QcepDoubleListProperty::setValue(QcepDoubleList %2) [%3]")
                    .arg(name()).arg(toString(val)).arg(index()));
     }
 
@@ -1105,6 +1105,117 @@ void QcepDoubleListProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1: QcepDoubleListProperty::resetValue").arg(name()));
+  }
+
+  setValue(m_Default);
+}
+
+QcepIntListProperty::QcepIntListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value)
+  : QcepProperty(saver, parent, name),
+    m_Default(value),
+    m_Value(value)
+{
+}
+
+QcepIntList QcepIntListProperty::value() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Value;
+}
+
+QcepIntList QcepIntListProperty::defaultValue() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Default;
+}
+
+void QcepIntListProperty::setValue(QcepIntList val, int index)
+{
+  if (debug()) {
+    printMessage(tr("%1 QcepIntListProperty::setValue(QcepIntList %2, int %3) [%4]")
+                 .arg(name()).arg(toString(val)).arg(index).arg(this->index()));
+  }
+
+  if (index == this->index()) {
+    setValue(val);
+  }
+}
+
+void QcepIntListProperty::clear()
+{
+  QMutexLocker lock(&m_Mutex);
+
+  setValue(QcepIntList());
+}
+
+void QcepIntListProperty::appendValue(int val)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  QcepIntList list = value();
+  list.append(val);
+
+  setValue(list);
+}
+
+QString QcepIntListProperty::toString(const QcepIntList &val)
+{
+  QString res = "[";
+  int ct = val.count();
+
+  for (int i=0; i<ct; i++) {
+    if (i<(ct-1)) {
+      res += tr("%1, ").arg(val[i]);
+    } else {
+      res += tr("%1").arg(val[i]);
+    }
+  }
+
+  res += "]";
+
+  return res;
+}
+
+void QcepIntListProperty::setValue(QcepIntList val)
+{
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printMessage(tr("%1 QcepIntListProperty::setValue(QcepIntList %2)")
+                 .arg(name()).arg(toString(val)));
+  }
+
+  if (val != m_Value) {
+    if (debug()) {
+      printMessage(tr("%1: QcepIntListProperty::setValue(QcepIntList %2) [%3]")
+                   .arg(name()).arg(toString(val)).arg(index()));
+    }
+
+    QMutexLocker lock(&m_Mutex);
+
+    m_Value = val;
+
+    QxrdSettingsSaverPtr saver(m_Saver);
+
+    if (saver) {
+      saver->changed(this);
+    }
+
+    emit valueChanged(m_Value, incIndex(1));
+  }
+}
+
+void QcepIntListProperty::setDefaultValue(QcepIntList val)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_Default = val;
+}
+
+void QcepIntListProperty::resetValue()
+{
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printMessage(tr("%1: QcepIntListProperty::resetValue").arg(name()));
   }
 
   setValue(m_Default);
@@ -1187,7 +1298,7 @@ void QcepStringListProperty::setValue(QStringList val)
 
   if (val != m_Value) {
     if (debug()) {
-      printMessage(tr("%1: QcepDateTimeProperty::setValue(QcepStringList %2) [%3]")
+      printMessage(tr("%1: QcepStringListProperty::setValue(QcepStringList %2) [%3]")
                    .arg(name()).arg(toString(val)).arg(index()));
     }
 

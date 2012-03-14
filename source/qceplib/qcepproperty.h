@@ -330,6 +330,31 @@ private:
   QcepDoubleList m_Value;
 };
 
+class QcepIntListProperty : public QcepProperty {
+  Q_OBJECT
+public:
+  QcepIntListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value);
+
+  QcepIntList value() const;
+  QcepIntList defaultValue() const;
+  QString toString(const QcepIntList &list);
+
+public slots:
+  void setValue(QcepIntList val, int index);
+  void setValue(QcepIntList val);
+  void setDefaultValue(QcepIntList val);
+  void resetValue();
+  void clear();
+  void appendValue(int val);
+
+signals:
+  void valueChanged(QcepIntList val, int index);
+
+private:
+  QcepIntList m_Default;
+  QcepIntList m_Value;
+};
+
 class QcepStringListProperty : public QcepProperty {
   Q_OBJECT
 public:
@@ -583,6 +608,40 @@ QcepDoubleListProperty *prop_##propname() { \
 \
 private: \
 QcepDoubleListProperty m_##propname;
+
+#define QCEP_INTEGER_LIST_PROPERTY(propname) \
+public: \
+QcepIntList get_##propname() const \
+{ \
+  return m_##propname.value(); \
+} \
+\
+void set_##propname(QcepIntList val) \
+{ \
+  m_##propname.setValue(val); \
+} \
+\
+QcepIntList def_##propname() const \
+{ \
+  return m_##propname.defaultValue(); \
+} \
+\
+void setdef_##propname(QcepIntList val) \
+{ \
+  m_##propname.setDefaultValue(val); \
+} \
+\
+void reset_##propname() \
+{ \
+  m_##propname.resetValue(); \
+} \
+\
+QcepIntListProperty *prop_##propname() { \
+  return &m_##propname; \
+} \
+\
+private: \
+QcepIntListProperty m_##propname;
 
 #define QCEP_STRING_LIST_PROPERTY(propname) \
 public: \
