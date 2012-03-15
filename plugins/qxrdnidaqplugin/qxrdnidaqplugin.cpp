@@ -571,11 +571,12 @@ void QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
   QRegExp re_ci("^(.*)/ctr\\d+$");
   QString aiDevice;
 
+  if (m_ContinuousAITask == NULL) {
+    DAQmxErrChk(DAQmxCreateTask("continuousAI", &m_ContinuousAITask));
+  }
+
   foreach(QString chan, chans) {
     if (re_ai.exactMatch(chan)) {
-      if (m_ContinuousAITask == NULL) {
-        DAQmxErrChk(DAQmxCreateTask("continuousAI", &m_ContinuousAITask));
-      }
 
       DAQmxErrChk(DAQmxCreateAIVoltageChan(m_ContinuousAITask, qPrintable(chan), "",
                                            DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL ));
@@ -584,7 +585,9 @@ void QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
       m_ContinuousChans.append(m_NAIChannels++);
 
       if (re_ai.capturedTexts().count() >= 2) {
-        aiDevice = re_ai.capturedTexts().value(1);
+        if (aiDevice.count() == 0) {
+          aiDevice = re_ai.capturedTexts().value(1);
+        }
       }
 
       printMessage(tr("Analog input channel : %1").arg(chan));
@@ -600,6 +603,12 @@ void QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
       m_ContinuousFlags.append(-1);
       m_ContinuousChans.append(m_NCIChannels++);
 
+      if (re_ci.capturedTexts().count() >= 2) {
+        if (aiDevice.count() == 0) {
+          aiDevice = re_ci.capturedTexts().value(1);
+        }
+      }
+
       printMessage(tr("Counter input channel : %1").arg(chan));
     } else {
       m_ContinuousFlags.append(0);
@@ -607,6 +616,13 @@ void QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
 
       printMessage(tr("Skipped channel : %1").arg(chan));
     }
+  }
+
+  if (m_NAIChannels == 0) {
+    DAQmxErrChk(DAQmxCreateAIVoltageChan(m_ContinuousAITask,
+                                         qPrintable(tr("%1/ai0").arg(aiDevice)), "",
+                                         DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL ));
+
   }
 
   int bufferSize = m_SampleRate*(m_ExposureTime + m_AcquireDelay + 1.0);
@@ -625,12 +641,8 @@ void QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
                                       sampleRate, DAQmx_Val_Rising, DAQmx_Val_ContSamps, bufferSize));
     DAQmxErrChk(DAQmxSetBufInputBufSize(tsk, bufferSize));
     DAQmxErrChk(DAQmxSetReadOverWrite(tsk, DAQmx_Val_OverwriteUnreadSamps));
-    DAQmxErrChk(DAQmxCfgDigEdgeStartTrig(tsk, qPrintable(tr("/%1/ai/StartTrigger").arg(aiDevice)),
-                                         DAQmx_Val_Rising));
-  }
-
-  if (m_ContinuousAITask) {
-    DAQmxErrChk(DAQmxStartTask(m_ContinuousAITask));
+//    DAQmxErrChk(DAQmxCfgDigEdgeStartTrig(tsk, qPrintable(tr("/%1/ai/StartTrigger").arg(aiDevice)),
+//                                         DAQmx_Val_Rising));
   }
 
   foreach (TaskHandle tsk, m_ContinuousCITasks) {
@@ -656,25 +668,67 @@ void QxrdNIDAQPlugin::readContinuousInput(QVector< QVector<double> > &data)
   uInt64 pos;
   uInt32 avail;
 
+  QVector<float64> aiBuff;
+  QVector< QVector<float64> > ciBuff;
+
+  int nsamps = m_SampleRate*(m_ExposureTime + m_AcquireDelay);
+
+  aiBuff.resize(nsamps*m_NAIChannels);
+  ciBuff.resize(m_NCIChannels);
+
+  for (int i=0; i<m_NCIChannels; i++) {
+    ciBuff[i].resize(nsamps+1);
+  }
+
   if (m_ContinuousAITask) {
-    DAQmxErrChk(DAQmxGetReadCurrReadPos(m_ContinuousAITask, &min));
-    DAQmxErrChk(DAQmxGetReadAvailSampPerChan(m_ContinuousAITask, &avail));
-    printMessage(tr("sample number %1, avail %2").arg(min).arg(avail));
+    DAQmxErrChk(DAQmxSetReadRelativeTo(m_ContinuousAITask, DAQmx_Val_MostRecentSamp));
+    DAQmxErrChk(DAQmxSetReadOffset(m_ContinuousAITask, -nsamps));
   }
 
   foreach(TaskHandle tsk, m_ContinuousCITasks) {
-    DAQmxErrChk(DAQmxGetReadCurrReadPos(tsk, &pos));
-    DAQmxErrChk(DAQmxGetReadAvailSampPerChan(tsk, &avail));
+    DAQmxErrChk(DAQmxSetReadRelativeTo(tsk, DAQmx_Val_MostRecentSamp));
+    DAQmxErrChk(DAQmxSetReadOffset(tsk, -nsamps));
+  }
 
-    printMessage(tr("sample number %1, avail %2").arg(pos).arg(avail));
+  int32 actuallyRead;
 
-    if (pos < min) {
-      min = pos;
+  if (m_ContinuousAITask && m_NAIChannels) {
+    DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousAITask, nsamps, -1,
+                                   DAQmx_Val_GroupByScanNumber, aiBuff.data(), aiBuff.count(),
+                                   &actuallyRead, NULL));
+  }
+
+  for(int i=0; i<m_NCIChannels; i++) {
+    TaskHandle tsk = m_ContinuousCITasks.value(i);
+
+    if (tsk) {
+      DAQmxErrChk(DAQmxReadCounterF64(tsk, nsamps+1, -1,
+                                      ciBuff[i].data(), ciBuff[i].count(),
+                                      &actuallyRead, NULL));
     }
   }
 
-  printMessage(tr("min sample number %1").arg(min));
+  for (int i=0; i<m_NCIChannels; i++) {
+    for (int j=0; j<nsamps; j++) {
+      ciBuff[i][j] = ciBuff[i][j+1] - ciBuff[i][j];
+    }
 
+    ciBuff[i].resize(nsamps);
+  }
+
+  data.resize(m_NContinuousInputs);
+
+  for (int i=0; i<m_NContinuousInputs; i++) {
+    if (m_ContinuousFlags.value(i) == 1) { // an Analog Input Channel
+      int chan = m_ContinuousChans.value(i);
+
+      data[i] = aiBuff.mid(chan*nsamps, nsamps);
+    } else if (m_ContinuousFlags.value(i) == -1) { // a counter Input Channel
+      int chan = m_ContinuousChans.value(i);
+
+      data[i] = ciBuff[chan].mid(0, nsamps);
+    }
+  }
 Error:
   return;
 }

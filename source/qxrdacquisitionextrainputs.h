@@ -7,6 +7,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdnidaqplugininterface-ptr.h"
+#include "qxrdimagedata-ptr.h"
 
 #include <QSettings>
 #include <QMutex>
@@ -31,9 +32,14 @@ signals:
 public slots:
   void initialize();
   void acquire();
+  void logToImage(QxrdInt16ImageDataPtr img);
   void finish();
-  QVector<double> readChannel(int ch);
+
+  QcepDoubleList  evaluateChannels();
   double          evaluateChannel(int ch);
+  QVector<double> readChannel(int ch);
+  double          averageChannel(int ch);
+  double          sumChannel(int ch);
 
 public:
   Q_PROPERTY(int enabled READ get_Enabled WRITE set_Enabled STORED false)

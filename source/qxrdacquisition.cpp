@@ -858,6 +858,11 @@ QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrameIfAvailable(double exposure)
 
 void QxrdAcquisition::enqueueAcquiredFrame(QxrdInt16ImageDataPtr img)
 {
+  if (m_AcquisitionExtraInputs) {
+    m_AcquisitionExtraInputs->acquire();
+    m_AcquisitionExtraInputs->logToImage(img);
+  }
+
   m_AcquiredImages.enqueue(img);
 
   m_NAcquiredImages.release(1);

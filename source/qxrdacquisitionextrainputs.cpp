@@ -2,6 +2,7 @@
 #include "qxrdacquisition.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdnidaqplugininterface.h"
+#include "qxrdimagedata.h"
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
   QObject(acq.data()),
@@ -76,6 +77,13 @@ void QxrdAcquisitionExtraInputs::acquire()
   }
 }
 
+void QxrdAcquisitionExtraInputs::logToImage(QxrdInt16ImageDataPtr img)
+{
+  if (get_Enabled() && img) {
+    img->set_Normalization(evaluateChannels());
+  }
+}
+
 void QxrdAcquisitionExtraInputs::finish()
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
@@ -87,12 +95,50 @@ void QxrdAcquisitionExtraInputs::finish()
   set_Enabled(false);
 }
 
+QcepDoubleList QxrdAcquisitionExtraInputs::evaluateChannels()
+{
+  QcepDoubleList res;
+  int n = get_ChannelNames().count();
+
+  for (int i=0; i<n; i++) {
+    res.append(evaluateChannel(i));
+  }
+
+  return res;
+}
+
+double QxrdAcquisitionExtraInputs::evaluateChannel(int ch)
+{
+  return sumChannel(ch);
+}
+
 QVector<double> QxrdAcquisitionExtraInputs::readChannel(int ch)
 {
   return m_ChannelData.value(ch);
 }
 
-double QxrdAcquisitionExtraInputs::evaluateChannel(int ch)
+double QxrdAcquisitionExtraInputs::averageChannel(int ch)
 {
-  return 42;
+  QVector<double> res = readChannel(ch);
+
+  double n=res.count(), sum=0;
+
+  for(int i=0; i<n; i++) {
+    sum += res[i];
+  }
+
+  return sum/n;
+}
+
+double QxrdAcquisitionExtraInputs::sumChannel(int ch)
+{
+  QVector<double> res = readChannel(ch);
+
+  double n=res.count(), sum=0;
+
+  for(int i=0; i<n; i++) {
+    sum += res[i];
+  }
+
+  return sum;
 }
