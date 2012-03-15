@@ -118,8 +118,8 @@ void QxrdImageData<T>::accumulateImage(QSharedPointer< QxrdImageData<T2> > image
         }
       }
 
-      QcepDoubleList norm  = get_Normalization();
-      QcepDoubleList extra = get_ExtraInputs();
+      QcepDoubleList norm  = this->get_Normalization();
+      QcepDoubleList extra = this->get_ExtraInputs();
 
       QcepDoubleList norm2 = image->get_Normalization();
       QcepDoubleList extra2= image->get_ExtraInputs();
@@ -132,8 +132,8 @@ void QxrdImageData<T>::accumulateImage(QSharedPointer< QxrdImageData<T2> > image
         extra[i] += extra2.value(i);
       }
 
-      set_Normalization(norm);
-      set_ExtraInputs(extra);
+      this->set_Normalization(norm);
+      this->set_ExtraInputs(extra);
     }
   }
 }
