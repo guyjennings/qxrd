@@ -116,6 +116,101 @@ void QcepProperty::setSaver(QxrdSettingsSaverWPtr saver)
   m_Saver = saver;
 }
 
+void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant v)
+{
+  settings->setValue(name, v);
+
+  if (v.canConvert<QcepDoubleVector>()){
+    QcepDoubleVector dv = v.value<QcepDoubleVector>();
+
+    settings->beginWriteArray(name, dv.count());
+
+    for (int i=0; i<dv.count(); i++) {
+      settings->setArrayIndex(i);
+      settings->setValue(name, dv.value(i));
+    }
+
+    settings->endArray();
+  } else if (v.canConvert<QcepBoolVector>()) {
+    QcepBoolVector dv = v.value<QcepBoolVector>();
+
+    settings->beginWriteArray(name, dv.count());
+
+    for (int i=0; i<dv.count(); i++) {
+      settings->setArrayIndex(i);
+      settings->setValue(name, dv.value(i));
+    }
+
+    settings->endArray();
+  } else if (v.canConvert<QcepIntVector>()) {
+    QcepIntVector dv = v.value<QcepIntVector>();
+
+    settings->beginWriteArray(name, dv.count());
+
+    for (int i=0; i<dv.count(); i++) {
+      settings->setArrayIndex(i);
+      settings->setValue(name, dv.value(i));
+    }
+
+    settings->endArray();
+  } else if (v.canConvert<QcepStringVector>()) {
+    QcepStringVector dv = v.value<QcepStringVector>();
+
+    settings->beginWriteArray(name, dv.count());
+
+    for (int i=0; i<dv.count(); i++) {
+      settings->setArrayIndex(i);
+      settings->setValue(name, dv.value(i));
+    }
+
+    settings->endArray();
+  } else if (v.canConvert<QcepDoubleList>()){
+    QcepDoubleList dv = v.value<QcepDoubleList>();
+
+    settings->beginWriteArray(name, dv.count());
+
+    for (int i=0; i<dv.count(); i++) {
+      settings->setArrayIndex(i);
+      settings->setValue(name, dv.value(i));
+    }
+
+    settings->endArray();
+  } else if (v.canConvert<QcepBoolList>()) {
+    QcepBoolList dv = v.value<QcepBoolList>();
+
+    settings->beginWriteArray(name, dv.count());
+
+    for (int i=0; i<dv.count(); i++) {
+      settings->setArrayIndex(i);
+      settings->setValue(name, dv.value(i));
+    }
+
+    settings->endArray();
+  } else if (v.canConvert<QcepIntList>()) {
+    QcepIntList dv = v.value<QcepIntList>();
+
+    settings->beginWriteArray(name, dv.count());
+
+    for (int i=0; i<dv.count(); i++) {
+      settings->setArrayIndex(i);
+      settings->setValue(name, dv.value(i));
+    }
+
+    settings->endArray();
+  } else if (v.canConvert<QcepStringList>()) {
+    QcepStringList dv = v.value<QcepStringList>();
+
+    settings->beginWriteArray(name, dv.count());
+
+    for (int i=0; i<dv.count(); i++) {
+      settings->setArrayIndex(i);
+      settings->setValue(name, dv.value(i));
+    }
+
+    settings->endArray();
+  }
+}
+
 void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings)
 {
   if (settings && g_Application) {
@@ -140,14 +235,14 @@ void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QStri
           }
         }
 
-        settings->setValue(name, value);
+        setSettingsValue(settings, name, value);
       }
     }
 
     QByteArray name;
 
     foreach (name, object->dynamicPropertyNames()) {
-      settings->setValue(name.data(), object->property(name.data()));
+      setSettingsValue(settings, name.data(), object->property(name.data()));
     }
 
     settings->endGroup();
