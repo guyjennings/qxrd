@@ -208,6 +208,17 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
     }
 
     settings->endArray();
+  } else if (v.type() == QVariant::StringList) {
+    QStringList dv = v.toStringList();
+
+    settings->beginWriteArray(name, dv.count());
+
+    for (int i=0; i<dv.count(); i++) {
+      settings->setArrayIndex(i);
+      settings->setValue(name, dv.value(i));
+    }
+
+    settings->endArray();
   }
 }
 
