@@ -36,6 +36,7 @@ QcepImageDataBase::QcepImageDataBase(QxrdSettingsSaverWPtr saver, int width, int
     m_UserComment4(saver, this,"userComment4",""),
     m_ImageSaved(saver, this,"imageSaved",0),
     m_Normalization(saver, this, "normalization", QcepDoubleList()),
+    m_ExtraInputs(saver, this, "extraInputs", QcepDoubleList()),
     m_Used(saver, this, "used", true),
     m_ImageCounter(allocCount.fetchAndAddOrdered(1)),
     m_Width(width),
@@ -86,6 +87,7 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
   dest -> set_UserComment4(get_UserComment4());
   dest -> set_ImageSaved(get_ImageSaved());
   dest -> set_Normalization(get_Normalization());
+  dest -> set_ExtraInputs(get_ExtraInputs());
   dest -> set_Used(get_Used());
 
   QByteArray name;
@@ -118,6 +120,7 @@ void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src
   set_UserComment4(src -> get_UserComment4());
   set_ImageSaved(src -> get_ImageSaved());
   set_Normalization(src -> get_Normalization());
+  set_ExtraInputs(src -> get_ExtraInputs());
   set_Used(src -> get_Used());
 
   QByteArray name;
