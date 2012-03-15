@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Xtra Inps</string>
+   <string>Extra Inputs</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents"/>
  </widget>
