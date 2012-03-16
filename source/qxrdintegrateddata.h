@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include "qxrdimagedataobjectcounter.h"
+#include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
 #include "qxrdallocator-ptr.h"
 #include "qxrdsettingssaver-ptr.h"

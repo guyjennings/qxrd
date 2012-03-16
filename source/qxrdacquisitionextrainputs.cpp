@@ -3,6 +3,7 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdimagedata.h"
+#include "qxrdsettingssaver.h"
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
   QObject(acq.data()),
