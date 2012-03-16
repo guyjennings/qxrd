@@ -283,7 +283,9 @@ HEADERS += TODO.h \
     qxrdacquisitionextrainputs.h \
     qxrdacquisitionextrainputs-ptr.h \
     qxrdacquisitionextrainputsdialog.h \
-    qxrdacquisitionextrainputsdialog-ptr.h
+    qxrdacquisitionextrainputsdialog-ptr.h \
+    qxrdacquisitionextrainputschannel.h \
+    qxrdacquisitionextrainputschannel-ptr.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -418,7 +420,8 @@ SOURCES += qxrd.cpp \
     qxrdacquisitiontriggerthread.cpp \
     qxrdacquisitiontriggerdialog.cpp \
     qxrdacquisitionextrainputs.cpp \
-    qxrdacquisitionextrainputsdialog.cpp
+    qxrdacquisitionextrainputsdialog.cpp \
+    qxrdacquisitionextrainputschannel.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
