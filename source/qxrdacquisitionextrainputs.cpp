@@ -6,7 +6,7 @@
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
   QObject(acq.data()),
-  m_Enabled(saver, this, "enabled", 0, "Extra Inputs Enabled?"),
+  m_Enabled(QxrdSettingsSaverPtr(), this, "enabled", 0, "Extra Inputs Enabled?"),
   m_ExtraInputs(saver, this, "extraInputs", 8, "Number of Extra Inputs"),
   m_ChannelNames(saver, this, "channelNames", QStringList(), "Extra Input Channel Names"),
   m_ChannelFlags(saver, this, "channelFlags", QcepIntList(), "Extra Input Channel Flags"),
