@@ -8,17 +8,19 @@
 QxrdCenterFinder::QxrdCenterFinder
     (QxrdSettingsSaverWPtr saver)
   : QxrdDetectorGeometry(),
-    m_CenterX(saver, this, "centerX", 0),
-    m_CenterY(saver, this, "centerY", 0),
-    m_CenterStep(saver, this, "centerStep", 1),
-    m_DetectorXPixelSize(saver, this, "detectorXPixelSize", 200),
-    m_DetectorYPixelSize(saver, this, "detectorYPixelSize", 200),
-    m_DetectorDistance(saver, this, "detectorDistance", 1000),
-    m_Energy(saver, this, "energy", 20000),
-    m_ImplementTilt(saver, this,"implementTilt", false),
-    m_DetectorTilt(saver, this, "detectorTilt", 0),
-    m_TiltPlaneRotation(saver, this, "tiltPlaneRotation", 90)
+    m_CenterX(saver, this, "centerX", 0, "X Center"),
+    m_CenterY(saver, this, "centerY", 0, "Y Center"),
+    m_CenterStep(saver, this, "centerStep", 1, "Center Step"),
+    m_DetectorXPixelSize(saver, this, "detectorXPixelSize", 200, "Detector X Pixels (um)"),
+    m_DetectorYPixelSize(saver, this, "detectorYPixelSize", 200, "Detector Y Pixels (um)"),
+    m_DetectorDistance(saver, this, "detectorDistance", 1000, "Sample-Detector Distance (mm)"),
+    m_Energy(saver, this, "energy", 20000, "Beam Energy (eV)"),
+    m_ImplementTilt(saver, this,"implementTilt", false, "Implement Detector Tilt?"),
+    m_DetectorTilt(saver, this, "detectorTilt", 0, "Tilt Angle (deg)"),
+    m_TiltPlaneRotation(saver, this, "tiltPlaneRotation", 90, "Tilt Plane Rotation (deg)")
 {
+  setObjectName("centering");
+
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 
 //  m_CenterX.setDebug(true);

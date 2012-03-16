@@ -62,8 +62,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaverWPtr saver,
                        QxrdAllocatorWPtr allocw,
                        QWidget *parent)
   : QMainWindow(parent),
-    m_WindowGeometry(saver, this, "windowGeometry", QByteArray()),
-    m_WindowState(saver, this, "windowState", QByteArray()),
+    m_WindowGeometry(saver, this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
+    m_WindowState(saver, this, "windowState", QByteArray(), "Window State Settings"),
     m_Mutex(QMutex::Recursive),
     m_SettingsLoaded(false),
     m_Application(app),
@@ -107,6 +107,8 @@ QxrdWindow::QxrdWindow(QxrdSettingsSaverWPtr saver,
   if (m_Application && qcepDebug(DEBUG_APP)) {
     m_Application->printMessage("QxrdWindow::QxrdWindow");
   }
+
+  setObjectName("window");
 
   setupUi(this);
 }

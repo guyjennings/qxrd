@@ -4,8 +4,8 @@
 
 template <typename T>
 QxrdImageQueue<T>::QxrdImageQueue(QString name)
-  : m_NRows(QxrdSettingsSaverPtr(), NULL, "nRows", 2048),
-    m_NCols(QxrdSettingsSaverPtr(), NULL, "nCols", 2048),
+  : m_NRows(QxrdSettingsSaverPtr(), NULL, "nRows", 2048, "Number of Rows in Queued Images"),
+    m_NCols(QxrdSettingsSaverPtr(), NULL, "nCols", 2048, "Number of Cols in Queued Images"),
     m_Name(name)
 {
   if (g_Application && qcepDebug(DEBUG_QUEUES)) {

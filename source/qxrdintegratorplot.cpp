@@ -20,6 +20,8 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
     m_PlotIndex(0),
     m_XUnitsLabel("")
 {
+  setObjectName("integratorGraph");
+
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
   insertLegend(m_Legend, QwtPlot::BottomLegend);

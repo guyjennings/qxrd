@@ -182,8 +182,8 @@ public:
   Q_PROPERTY(bool maskSetPixels READ get_MaskSetPixels WRITE set_MaskSetPixels)
   QCEP_BOOLEAN_PROPERTY(MaskSetPixels)
 
-  Q_PROPERTY(bool compressImages READ get_CompressImages WRITE set_CompressImages)
-  QCEP_BOOLEAN_PROPERTY(CompressImages)
+//  Q_PROPERTY(bool compressImages READ get_CompressImages WRITE set_CompressImages)
+//  QCEP_BOOLEAN_PROPERTY(CompressImages)
 
   Q_PROPERTY(double     average    READ get_Average WRITE set_Average STORED false)
   QCEP_DOUBLE_PROPERTY(Average)

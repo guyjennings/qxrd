@@ -14,14 +14,16 @@
 #include <QSettings>
 #include <stdio.h>
 
-QcepProperty::QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name)
+QcepProperty::QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString toolTip)
   : QObject(),
     m_Mutex(QMutex::Recursive),
     m_Saver(saver),
     m_Debug(false),
     m_IsStored(false),
     m_WasLoaded(false),
-    m_Name(name)
+    m_Name(name),
+    m_Parent(parent),
+    m_ToolTip(toolTip)
 {
   setObjectName(name);
 
@@ -67,6 +69,59 @@ QString QcepProperty::name() const
   QMutexLocker lock(&m_Mutex);
 
   return m_Name;
+}
+
+QString QcepProperty::parentName() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  if (m_Parent) {
+    return m_Parent->objectName();
+  } else {
+    return QString();
+  }
+}
+
+QString QcepProperty::toolTip() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_ToolTip;
+}
+
+void QcepProperty::setToolTip(QString tip)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_ToolTip = tip;
+}
+
+QString QcepProperty::expandedToolTip() const
+{
+  QString pn = parentName();
+  QString nm = name();
+  QString tt = toolTip();
+
+  if (pn.count() && nm.count() && tt.count()) {
+    return pn+"."+nm+"\n"+tt;
+  } else if (pn.count() || nm.count()) {
+    return pn+"."+nm+"\n"+tt;
+  } else {
+    return tt;
+  }
+}
+
+void QcepProperty::setWidgetToolTip(QWidget *widget)
+{
+  if (widget) {
+    QString tt = widget->toolTip();
+
+    if (tt == "") {
+      widget->setToolTip(expandedToolTip());
+    } else {
+      widget->setToolTip(tt + "\n=============\n" + expandedToolTip());
+    }
+  }
 }
 
 int QcepProperty::index()
@@ -336,8 +391,8 @@ void QcepProperty::dumpMetaData(const QMetaObject *meta)
   }
 }
 
-QcepDoubleProperty::QcepDoubleProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, double value)
-  : QcepProperty(saver, parent, name),
+QcepDoubleProperty::QcepDoubleProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, double value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {
@@ -453,6 +508,8 @@ void QcepDoubleProperty::linkTo(QDoubleSpinBox *spinBox)
   spinBox -> setValue(value());
   spinBox -> setKeyboardTracking(false);
 
+  setWidgetToolTip(spinBox);
+
   connect(this,   SIGNAL(valueChanged(double, int)), helper, SLOT(setValue(double, int)));
   connect(helper, SIGNAL(valueChanged(double, int)), this,   SLOT(setValue(double, int)));
 }
@@ -461,11 +518,15 @@ void QcepDoubleProperty::linkTo(QLabel *label)
 {
   label -> setText(tr("%1").arg(value()));
 
+  setWidgetToolTip(label);
+
   connect(this, SIGNAL(valueChanged(QString)), label, SLOT(setText(QString)));
 }
 
 void QcepDoubleProperty::linkTo(QProgressBar *progress)
 {
+  setWidgetToolTip(progress);
+
   connect(this, SIGNAL(valueChanged(double,int)), progress, SLOT(setValue(int)));
 }
 
@@ -514,8 +575,8 @@ void QcepDoublePropertyDoubleSpinBoxHelper::setValue(double value)
   emit valueChanged(value, m_Property->incIndex(1));
 }
 
-QcepIntProperty::QcepIntProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, int value)
-  : QcepProperty(saver, parent, name),
+QcepIntProperty::QcepIntProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, int value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {
@@ -620,6 +681,8 @@ void QcepIntProperty::linkTo(QSpinBox *spinBox)
   spinBox -> setValue(value());
   spinBox -> setKeyboardTracking(false);
 
+  setWidgetToolTip(spinBox);
+
   connect(this,   SIGNAL(valueChanged(int, int)), helper, SLOT(setValue(int, int)));
   connect(helper, SIGNAL(valueChanged(int, int)), this,   SLOT(setValue(int, int)));
 }
@@ -639,6 +702,8 @@ void QcepIntProperty::linkTo(QComboBox *comboBox)
 
   comboBox -> setCurrentIndex(value());
 
+  setWidgetToolTip(comboBox);
+
   connect(this,   SIGNAL(valueChanged(int, int)),        helper, SLOT(setCurrentIndex(int, int)));
   connect(helper, SIGNAL(currentIndexChanged(int, int)), this,   SLOT(setValue(int, int)));
 }
@@ -648,12 +713,16 @@ void QcepIntProperty::linkTo(QLabel *label)
   {
     label -> setText(tr("%1").arg(value()));
 
+    setWidgetToolTip(label);
+
     connect(this, SIGNAL(valueChanged(QString)), label, SLOT(setText(QString)));
   }
 }
 
 void QcepIntProperty::linkTo(QProgressBar *progress)
 {
+  setWidgetToolTip(progress);
+
   connect(this, SIGNAL(valueChanged(int,int)), progress, SLOT(setValue(int)));
 }
 
@@ -744,8 +813,8 @@ void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value)
   emit currentIndexChanged(value, m_Property->incIndex(1));
 }
 
-QcepBoolProperty::QcepBoolProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, bool value)
-  : QcepProperty(saver, parent, name),
+QcepBoolProperty::QcepBoolProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, bool value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {
@@ -827,6 +896,8 @@ void QcepBoolProperty::linkTo(QAbstractButton *button)
 
   button -> setChecked(value());
 
+  setWidgetToolTip(button);
+
   connect(this,   SIGNAL(valueChanged(bool, int)), helper, SLOT(setChecked(bool, int)));
   connect(helper, SIGNAL(toggled(bool, int)),      this,   SLOT(setValue(bool, int)));
 }
@@ -875,8 +946,8 @@ void QcepBoolPropertyButtonHelper::setChecked(bool value)
   emit toggled(value, m_Property->incIndex(1));
 }
 
-QcepStringProperty::QcepStringProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString value)
-  : QcepProperty(saver, parent, name),
+QcepStringProperty::QcepStringProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {
@@ -951,8 +1022,10 @@ void QcepStringProperty::resetValue()
   setValue(m_Default);
 }
 
-void QcepStringProperty::linkTo(QComboBox * /*comboBox*/)
+void QcepStringProperty::linkTo(QComboBox *comboBox)
 {
+  setWidgetToolTip(comboBox);
+
   printf("QcepStringProperty::linkTo(QComboBox * not implemented yet\n");
 }
 
@@ -971,6 +1044,8 @@ void QcepStringProperty::linkTo(QLineEdit *lineEdit)
 
   lineEdit -> setText(value());
 
+  setWidgetToolTip(lineEdit);
+
   connect(this,   SIGNAL(valueChanged(QString, int)), helper, SLOT(setText(QString, int)));
   connect(helper, SIGNAL(textEdited(QString, int)),   this,   SLOT(setValue(QString, int)));
 }
@@ -978,6 +1053,8 @@ void QcepStringProperty::linkTo(QLineEdit *lineEdit)
 void QcepStringProperty::linkTo(QLabel *label)
 {
   label -> setText(value());
+
+  setWidgetToolTip(label);
 
   connect(this, SIGNAL(valueChanged(QString,int)), label, SLOT(setText(QString)));
 }
@@ -1026,8 +1103,8 @@ void QcepStringPropertyLineEditHelper::setText(QString value)
   emit textEdited(value, m_Property->incIndex(1));
 }
 
-QcepDateTimeProperty::QcepDateTimeProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QDateTime value)
-  : QcepProperty(saver, parent, name),
+QcepDateTimeProperty::QcepDateTimeProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QDateTime value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {
@@ -1105,8 +1182,8 @@ void QcepDateTimeProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepDoubleListProperty::QcepDoubleListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleList value)
-  : QcepProperty(saver, parent, name),
+QcepDoubleListProperty::QcepDoubleListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleList value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {
@@ -1216,8 +1293,8 @@ void QcepDoubleListProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepIntListProperty::QcepIntListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value)
-  : QcepProperty(saver, parent, name),
+QcepIntListProperty::QcepIntListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {
@@ -1327,8 +1404,8 @@ void QcepIntListProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepStringListProperty::QcepStringListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QStringList value)
-  : QcepProperty(saver, parent, name),
+QcepStringListProperty::QcepStringListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QStringList value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {
@@ -1438,8 +1515,8 @@ void QcepStringListProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepByteArrayProperty::QcepByteArrayProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QByteArray value)
-  : QcepProperty(saver, parent, name),
+QcepByteArrayProperty::QcepByteArrayProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QByteArray value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {

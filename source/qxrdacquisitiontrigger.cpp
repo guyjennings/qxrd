@@ -8,29 +8,31 @@
 
 QxrdAcquisitionTrigger::QxrdAcquisitionTrigger(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
   QObject(),
-  m_TriggerSync(saver, this, "triggerSync", TriggerSyncNone),
-  m_TriggerAMode(saver, this,"triggerAMode", TriggerModeNone),
-  m_TriggerACard(saver, this,"triggerACard", TriggerCardNone),
-  m_TriggerAChannel(saver, this,"triggerAChannel", TriggerChannelNone),
-  m_TriggerALevel(saver, this,"triggerALevel", 1.5),
-  m_TriggerAHysteresis(saver, this,"triggerAHysteresis", 0.5),
-  m_TriggerAValue(QxrdSettingsSaverPtr(), this,"triggerAValue", 0),
-  m_TriggerAPrevValue(QxrdSettingsSaverPtr(), this,"triggerAPrevValue", 0),
-  m_TriggerATriggered(QxrdSettingsSaverPtr(), this,"triggerATriggered", false),
-  m_TriggerAChannelName(saver, this, "triggerAChannelName", ""),
-  m_TriggerBMode(saver, this,"triggerBMode", TriggerModeNone),
-  m_TriggerBCard(saver, this,"triggerBCard", TriggerCardNone),
-  m_TriggerBChannel(saver, this,"triggerBChannel", TriggerChannelNone),
-  m_TriggerBLevel(saver, this,"triggerBLevel", 1.5),
-  m_TriggerBHysteresis(saver, this,"triggerBHysteresis", 0.5),
-  m_TriggerBValue(QxrdSettingsSaverPtr(), this,"triggerBValue", 0),
-  m_TriggerBPrevValue(QxrdSettingsSaverPtr(), this,"triggerBPrevValue", 0),
-  m_TriggerBTriggered(QxrdSettingsSaverPtr(), this,"triggerBTriggered", false),
-  m_TriggerBChannelName(saver, this, "triggerBChannelName", ""),
+  m_TriggerSync(saver, this, "triggerSync", TriggerSyncNone, "Trigger Synchronization (0 = None, 1 = Sync, 2 = Async)"),
+  m_TriggerAMode(saver, this,"triggerAMode", TriggerModeNone, "Trigger A Mode (0 = None, 1 = +Edge, 2 = -Edge, 3 = +Level, 4 = -Level)"),
+  m_TriggerACard(saver, this,"triggerACard", TriggerCardNone, "Trigger A Card Number"),
+  m_TriggerAChannel(saver, this,"triggerAChannel", TriggerChannelNone, "Trigger A Channel"),
+  m_TriggerALevel(saver, this,"triggerALevel", 1.5, "Trigger A Level (in Volts)"),
+  m_TriggerAHysteresis(saver, this,"triggerAHysteresis", 0.5, "Trigger A Hysteresis (in Volts)"),
+  m_TriggerAValue(QxrdSettingsSaverPtr(), this,"triggerAValue", 0, "Trigger A Value (in Volts)"),
+  m_TriggerAPrevValue(QxrdSettingsSaverPtr(), this,"triggerAPrevValue", 0, "Trigger A Previous Value (in Volts)"),
+  m_TriggerATriggered(QxrdSettingsSaverPtr(), this,"triggerATriggered", false, "Trigger A Triggered?"),
+  m_TriggerAChannelName(saver, this, "triggerAChannelName", "", "Trigger A NIDAQ Channel Name"),
+  m_TriggerBMode(saver, this,"triggerBMode", TriggerModeNone, "Trigger B Mode (0 = None, 1 = +Edge, 2 = -Edge, 3 = +Level, 4 = -Level)"),
+  m_TriggerBCard(saver, this,"triggerBCard", TriggerCardNone, "Trigger B Card Number"),
+  m_TriggerBChannel(saver, this,"triggerBChannel", TriggerChannelNone, "Trigger B Channel"),
+  m_TriggerBLevel(saver, this,"triggerBLevel", 1.5, "Trigger B Level (in Volts)"),
+  m_TriggerBHysteresis(saver, this,"triggerBHysteresis", 0.5, "Trigger B Hysteresis (in Volts)"),
+  m_TriggerBValue(QxrdSettingsSaverPtr(), this,"triggerBValue", 0, "Trigger B Value (in Volts)"),
+  m_TriggerBPrevValue(QxrdSettingsSaverPtr(), this,"triggerBPrevValue", 0, "Trigger B Previous Value (in Volts)"),
+  m_TriggerBTriggered(QxrdSettingsSaverPtr(), this,"triggerBTriggered", false, "Trigger B Triggered?"),
+  m_TriggerBChannelName(saver, this, "triggerBChannelName", "", "Trigger B NIDAQ Channel Name"),
   m_Experiment(expt),
   m_Acquisition(acq)
 {
   startTimer(200);
+
+  setObjectName("trigger");
 }
 
 void QxrdAcquisitionTrigger::readSettings(QSettings *settings, QString section)

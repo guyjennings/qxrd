@@ -26,6 +26,8 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_CenterFinder(),
     m_FirstTime(true)
 {
+  setObjectName("centeringGraph");
+
   insertLegend(m_Legend, QwtPlot::RightLegend);
 }
 

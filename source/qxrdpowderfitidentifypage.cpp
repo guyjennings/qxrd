@@ -12,7 +12,7 @@
 
 QxrdPowderFitIdentifyPage::QxrdPowderFitIdentifyPage(QxrdSettingsSaverWPtr saver, QxrdDataProcessorWPtr proc, QWidget *parent) :
   QxrdPowderFitWidget(proc, parent),
-  m_IdCurrentRing(saver, this,"idCurrentRing",0),
+  m_IdCurrentRing(saver, this,"idCurrentRing",0, "Current Ring Index"),
   m_Picker(NULL),
   m_SampledData()
 {

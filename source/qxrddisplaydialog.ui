@@ -102,7 +102,7 @@
     <item row="4" column="1">
      <widget class="QCheckBox" name="m_DisplayOverflow">
       <property name="toolTip">
-       <string>Display Mask</string>
+       <string>Display Overflow</string>
       </property>
       <property name="text">
        <string>Display Overflow</string>
@@ -396,7 +396,7 @@
     <item row="4" column="0">
      <widget class="QCheckBox" name="m_DisplayImageLog">
       <property name="toolTip">
-       <string>Display image data</string>
+       <string>Logarithmic Intensity Scaling</string>
       </property>
       <property name="text">
        <string>Log Scaling</string>

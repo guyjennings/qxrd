@@ -18,6 +18,8 @@ QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   m_PulseTask(0),
   m_CountersTask(0)
 {
+  setObjectName("nidaq");
+
 //  printf("NI-DAQ plugin constructed\n");
 //  initTaskHandles();
 

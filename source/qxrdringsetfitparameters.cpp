@@ -9,12 +9,12 @@
 
 QxrdRingSetFitParameters::QxrdRingSetFitParameters(QxrdSettingsSaverWPtr saver) :
   QObject(),
-  m_CenterX(saver, this, "centerX", 1024),
-  m_CenterY(saver, this, "centerY", 1024),
-  m_Distance(saver, this, "distance", 1000),
-  m_Energy(saver, this, "energy", 22000),
-  m_Tilt(saver, this, "tilt", 0),
-  m_Rotation(saver, this, "rotation", 0),
+  m_CenterX(saver, this, "centerX", 1024, "X Center"),
+  m_CenterY(saver, this, "centerY", 1024, "Y Center"),
+  m_Distance(saver, this, "distance", 1000, "Detector Distance (in mm)"),
+  m_Energy(saver, this, "energy", 22000, "Beam Energy (eV)"),
+  m_Tilt(saver, this, "tilt", 0, "Tilt Angle (deg)"),
+  m_Rotation(saver, this, "rotation", 0, "Tilt Plane Rotation (deg)"),
   m_Saver(saver)
 {
   qRegisterMetaType<QxrdFitParameterPtr>("QxrdFitParameterPtr");

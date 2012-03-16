@@ -6,14 +6,14 @@
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
   QObject(acq.data()),
-  m_Enabled(saver, this, "enabled", 0),
-  m_ExtraInputs(saver, this, "extraInputs", 8),
-  m_ChannelNames(saver, this, "channelNames", QStringList()),
-  m_ChannelFlags(saver, this, "channelFlags", QcepIntList()),
-  m_SampleRate(saver, this, "sampleRate", 1000.0),
-  m_StartOffset(saver, this, "startOffset", QcepDoubleList()),
-  m_EndOffset(saver, this, "endOffset", QcepDoubleList()),
-  m_AcquireDelay(saver, this, "acquireDelay", 0.107),
+  m_Enabled(saver, this, "enabled", 0, "Extra Inputs Enabled?"),
+  m_ExtraInputs(saver, this, "extraInputs", 8, "Number of Extra Inputs"),
+  m_ChannelNames(saver, this, "channelNames", QStringList(), "Extra Input Channel Names"),
+  m_ChannelFlags(saver, this, "channelFlags", QcepIntList(), "Extra Input Channel Flags"),
+  m_SampleRate(saver, this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
+  m_StartOffset(saver, this, "startOffset", QcepDoubleList(), "Start Offsets (in sec) for Extra Inputs"),
+  m_EndOffset(saver, this, "endOffset", QcepDoubleList(), "End Offsets (in sec) for Extra Inputs"),
+  m_AcquireDelay(saver, this, "acquireDelay", 0.107, "Delay between exposure end and Image available in QXRD"),
   m_Experiment(doc),
   m_Acquisition(acq),
   m_NIDAQPlugin()
@@ -23,6 +23,8 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr sav
   if (acqp) {
     m_NIDAQPlugin = acqp->nidaqPlugin();
   }
+
+  setObjectName("extraInputs");
 }
 
 void QxrdAcquisitionExtraInputs::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)

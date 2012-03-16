@@ -14,23 +14,24 @@ QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver, QxrdAl
   m_Processor(),
   m_Allocator(alloc),
   m_Geometry(new QxrdDetectorGeometry()),
-  m_NRows(saver, this, "nRows", 2048),
-  m_NCols(saver, this, "nCols", 2048),
-  m_CenterX(saver, this, "centerX", 1024),
-  m_CenterY(saver, this, "centerY", 1024),
-  m_Distance(saver, this, "distance", 1000),
-  m_Energy(saver, this, "energy", 22000),
-  m_PixelWidth(saver, this, "pixelWidth", 10),
-  m_PixelHeight(saver, this, "pixelHeight", 10),
-  m_Alpha(saver, this, "alpha", 0),
-  m_Beta(saver, this, "beta", 0),
-  m_Gamma(saver, this, "gamma", 0),
-  m_ChiMin(saver, this, "chiMin", 0),
-  m_ChiMax(saver, this, "chiMax", 360),
-  m_RingTTH(saver, this, "ringTTH", QcepDoubleList()),
-  m_RingIntensity(saver, this, "ringIntensity", QcepDoubleList()),
-  m_RingWidth(saver, this, "ringWidth", QcepDoubleList())
+  m_NRows(saver, this, "nRows", 2048, "Number of Rows"),
+  m_NCols(saver, this, "nCols", 2048, "Number of Cols"),
+  m_CenterX(saver, this, "centerX", 1024, "X Center"),
+  m_CenterY(saver, this, "centerY", 1024, "Y Center"),
+  m_Distance(saver, this, "distance", 1000, "Detector - Sample Distance (in mm)"),
+  m_Energy(saver, this, "energy", 22000, "Beam Energy (in eV)"),
+  m_PixelWidth(saver, this, "pixelWidth", 10, "Pixel Width (in um)"),
+  m_PixelHeight(saver, this, "pixelHeight", 10, "Pixel Height (in um)"),
+  m_Alpha(saver, this, "alpha", 0, "Alpha"),
+  m_Beta(saver, this, "beta", 0, "Beta"),
+  m_Gamma(saver, this, "gamma", 0, "Gamma"),
+  m_ChiMin(saver, this, "chiMin", 0, "Chi Min"),
+  m_ChiMax(saver, this, "chiMax", 360, "Chi Max"),
+  m_RingTTH(saver, this, "ringTTH", QcepDoubleList(), "TTH values of rings"),
+  m_RingIntensity(saver, this, "ringIntensity", QcepDoubleList(), "Intensities of rings"),
+  m_RingWidth(saver, this, "ringWidth", QcepDoubleList(), "Widths of Rings")
 {
+  setObjectName("testImage");
 }
 
 void QxrdGenerateTestImage::setProcessor(QxrdDataProcessorWPtr proc)

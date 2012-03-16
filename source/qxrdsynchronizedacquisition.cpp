@@ -7,19 +7,21 @@
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdSettingsSaverPtr saver, QxrdAcquisition *acq) :
   QObject(),
-  m_SyncAcquisitionMode(saver, this,"syncAcquisitionMode", 0),
-  m_SyncAcquisitionWaveform(saver, this,"syncAcquisitionWaveform", 0),
-  m_SyncAcquisitionOutputChannel(saver, this,"syncAcquisitionOutputChannel", 0),
-  m_SyncAcquisitionFlagChannel(saver, this,"syncAcquisitionFlagChannel", 0),
-  m_SyncAcquisitionMinimum(saver, this,"syncAcquisitionMinimum", 0.0),
-  m_SyncAcquisitionMaximum(saver, this,"syncAcquisitionMaximum", 5.0),
-  m_SyncAcquisitionSymmetry(saver, this,"syncAcquisitionSymmetry", 0.0),
-  m_SyncAcquisitionPhaseShift(saver, this,"syncAcquisitionPhaseShift", 0.0),
+  m_SyncAcquisitionMode(saver, this,"syncAcquisitionMode", 0, "Synchronized Acquisition Mode (0 = None, 1 = Stepped, 2 = Continuous)"),
+  m_SyncAcquisitionWaveform(saver, this,"syncAcquisitionWaveform", 0,
+                            "Synchronized Acquisition Waveform (0 = Square, 1 = Sine, 2 = Triangle, 3 = Sawtooth, 4 = Bipolar Triangle)"),
+  m_SyncAcquisitionOutputChannel(saver, this,"syncAcquisitionOutputChannel", 0, "Synchronized Acquisition Output Channel"),
+  m_SyncAcquisitionFlagChannel(saver, this,"syncAcquisitionFlagChannel", 0, "Synchronized Acquisition Flags"),
+  m_SyncAcquisitionMinimum(saver, this,"syncAcquisitionMinimum", 0.0, "Synchronized Acquisition Minimum (in Volts)"),
+  m_SyncAcquisitionMaximum(saver, this,"syncAcquisitionMaximum", 5.0, "Synchronized Acquisition Maximum (in Volts)"),
+  m_SyncAcquisitionSymmetry(saver, this,"syncAcquisitionSymmetry", 0.0, "Synchronized Acquisition Symmetry (0 = symmetric)"),
+  m_SyncAcquisitionPhaseShift(saver, this,"syncAcquisitionPhaseShift", 0.0, "Synchronized Acquisition Phase Shift (deg)"),
   m_Acquisition(acq),
   m_AcquisitionParms(NULL),
   m_NIDAQPlugin(NULL),
   m_SyncMode(0)
 {
+  setObjectName("synchronization");
 }
 
 void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)

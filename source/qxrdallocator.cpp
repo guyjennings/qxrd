@@ -12,21 +12,23 @@ QxrdAllocator::QxrdAllocator
   : QObject(NULL),
     m_AllocatedMemory(0),
     m_AllocatedMemoryMB(0),
-    m_Max(saver, this, "max", 800),
-    m_TotalBufferSizeMB32(saver, this,"totalBufferSizeMB32", 800),
-    m_TotalBufferSizeMB64(saver, this,"totalBufferSizeMB64", 2000),
-    m_Reserve(saver, this,"reserve",100),
-    m_Allocated(QxrdSettingsSaverPtr(), this, "allocated", 0),
-    m_QueuedDelete(QxrdSettingsSaverPtr(), this, "queuedDelete", 0),
-    m_NAllocatedInt16(QxrdSettingsSaverPtr(), this, "nAllocatedInt16", 0),
-    m_NAllocatedInt32(QxrdSettingsSaverPtr(), this, "nAllocatedInt32", 0),
-    m_NAllocatedDouble(QxrdSettingsSaverPtr(), this, "nAllocatedDouble", 0),
-    m_NAllocatedMask(QxrdSettingsSaverPtr(), this, "nAllocatedMask", 0),
-    m_NAllocatedIntegrated(QxrdSettingsSaverPtr(), this, "nAllocatedIntegrated", 0)
+    m_Max(saver, this, "max", 800, "Maximum Image Memory (MB)"),
+    m_TotalBufferSizeMB32(saver, this,"totalBufferSizeMB32", 800, "Maximum Image Memory in 32 bit system (MB)"),
+    m_TotalBufferSizeMB64(saver, this,"totalBufferSizeMB64", 2000,"Maximum Image Memory in 64 bit system (MB)"),
+    m_Reserve(saver, this,"reserve",100, "Extra Reserved Memory (MB)"),
+    m_Allocated(QxrdSettingsSaverPtr(), this, "allocated", 0, "Allocated Memory (MB)"),
+    m_QueuedDelete(QxrdSettingsSaverPtr(), this, "queuedDelete", 0, "Queued Delete?"),
+    m_NAllocatedInt16(QxrdSettingsSaverPtr(), this, "nAllocatedInt16", 0, "Number of 16 bit images allocated"),
+    m_NAllocatedInt32(QxrdSettingsSaverPtr(), this, "nAllocatedInt32", 0, "Number of 32 bit images allocated"),
+    m_NAllocatedDouble(QxrdSettingsSaverPtr(), this, "nAllocatedDouble", 0, "Number of double images allocated"),
+    m_NAllocatedMask(QxrdSettingsSaverPtr(), this, "nAllocatedMask", 0, "Number of mask images allocated"),
+    m_NAllocatedIntegrated(QxrdSettingsSaverPtr(), this, "nAllocatedIntegrated", 0, "Number of integrated data sets allocated")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAllocator::QxrdAllocator(%p)\n", this);
   }
+
+  setObjectName("allocator");
 
   if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage(tr("allocator %1 constructed").HEXARG(this));

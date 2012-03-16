@@ -5,7 +5,7 @@ QxrdIntegratedData::QxrdIntegratedData(QxrdSettingsSaverWPtr saver,
                                        QxrdDoubleImageDataPtr image,
                                        int typ, int maxSize, QObject *parent) :
   QObject(parent),
-  m_Title(saver, this, "title", ""),
+  m_Title(saver, this, "title", "", "Integrated Data Title"),
   m_ObjectCounter(alloc, typ),
   m_Image(image),
   m_MaxSize(maxSize),

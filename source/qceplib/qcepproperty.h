@@ -26,9 +26,16 @@
 class QcepProperty : public QObject {
   Q_OBJECT
 public:
-  QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name);
+  QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString toolTip);
 
   QString name() const;
+
+  QString parentName() const;
+  QString toolTip() const;
+  void setToolTip(QString tip);
+  QString expandedToolTip() const;
+
+  void setWidgetToolTip(QWidget *widget);
 
   int index();
   int incIndex(int step);
@@ -60,12 +67,14 @@ private:
   int                      m_WasLoaded;
   const char              *m_Name;
   QAtomicInt               m_Index;
+  QObject                 *m_Parent;
+  QString                  m_ToolTip;
 };
 
 class QcepDoubleProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, double value);
+  QcepDoubleProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, double value, QString toolTip);
 
   double value() const;
   double defaultValue() const;
@@ -112,7 +121,7 @@ private:
 class QcepIntProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepIntProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, int value);
+  QcepIntProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, int value, QString toolTip);
 
   int value() const;
   int defaultValue() const;
@@ -179,7 +188,7 @@ private:
 class QcepBoolProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepBoolProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, bool value);
+  QcepBoolProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, bool value, QString toolTip);
 
   bool value() const;
   bool defaultValue() const;
@@ -222,7 +231,7 @@ private:
 class QcepStringProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString value);
+  QcepStringProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString value, QString toolTip);
 
   QString value() const;
   QString defaultValue() const;
@@ -286,7 +295,7 @@ private:
 class QcepDateTimeProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDateTimeProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QDateTime value);
+  QcepDateTimeProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QDateTime value, QString toolTip);
 
   QDateTime value() const;
   QDateTime defaultValue() const;
@@ -309,7 +318,7 @@ private:
 class QcepDoubleListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleList value);
+  QcepDoubleListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleList value, QString toolTip);
 
   QcepDoubleList value() const;
   QcepDoubleList defaultValue() const;
@@ -334,7 +343,7 @@ private:
 class QcepIntListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepIntListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value);
+  QcepIntListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value, QString toolTip);
 
   QcepIntList value() const;
   QcepIntList defaultValue() const;
@@ -359,7 +368,7 @@ private:
 class QcepStringListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QStringList value);
+  QcepStringListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QStringList value, QString toolTip);
 
   QStringList value() const;
   QStringList defaultValue() const;
@@ -384,7 +393,7 @@ private:
 class QcepByteArrayProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepByteArrayProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QByteArray value);
+  QcepByteArrayProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QByteArray value, QString toolTip);
 
   QByteArray value() const;
   QByteArray defaultValue() const;

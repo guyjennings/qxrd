@@ -17,17 +17,17 @@
 
 QxrdPlot::QxrdPlot(QWidget *parent)
   : QwtPlot(parent),
-  m_XMouse(QxrdSettingsSaverPtr(), this,"xMouse",0),
-  m_YMouse(QxrdSettingsSaverPtr(), this,"yMouse",0),
-  m_XAxisLog(QxrdSettingsSaverPtr(), this,"xAxisLog",0),
-  m_YAxisLog(QxrdSettingsSaverPtr(), this,"yAxisLog",0),
-  m_X2AxisLog(QxrdSettingsSaverPtr(), this,"x2AxisLog",0),
-  m_Y2AxisLog(QxrdSettingsSaverPtr(), this,"y2AxisLog",0),
-  m_Legend(NULL),
-  m_Zoomer(NULL),
-  m_Panner(NULL),
-  m_Magnifier(NULL),
-  m_Measurer(NULL)
+    m_XMouse(QxrdSettingsSaverPtr(), this,"xMouse",0, "X Position of Mouse"),
+    m_YMouse(QxrdSettingsSaverPtr(), this,"yMouse",0, "Y Position of Mouse"),
+    m_XAxisLog(QxrdSettingsSaverPtr(), this,"xAxisLog",0, "Logarithmic X Axis?"),
+    m_YAxisLog(QxrdSettingsSaverPtr(), this,"yAxisLog",0, "Logarithmic Y Axis?"),
+    m_X2AxisLog(QxrdSettingsSaverPtr(), this,"x2AxisLog",0, "Logarithmic 2nd X Axis?"),
+    m_Y2AxisLog(QxrdSettingsSaverPtr(), this,"y2AxisLog",0, "Logarithmic 2nd Y Axis?"),
+    m_Legend(NULL),
+    m_Zoomer(NULL),
+    m_Panner(NULL),
+    m_Magnifier(NULL),
+    m_Measurer(NULL)
 {
   for (int i=0; i<QwtPlot::axisCnt; i++) {
     m_IsLog[i] = 0;
