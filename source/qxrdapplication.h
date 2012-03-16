@@ -192,6 +192,8 @@ private:
   QxrdPerkinElmerPluginInterfacePtr m_PerkinElmerPluginInterface;
 #endif
   QxrdResponseTimer              *m_ResponseTimer;
+
+  QMutex                          m_SettingsMutex;
 };
 
 #define HEXARG(a) arg(QxrdApplication::hexArg(a))

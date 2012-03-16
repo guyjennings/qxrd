@@ -4,6 +4,7 @@
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdimagedata.h"
 #include "qxrdsettingssaver.h"
+#include "qxrdacquisitionextrainputschannel.h"
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
   QObject(acq.data()),
@@ -17,6 +18,8 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr sav
   m_AcquireDelay(saver, this, "acquireDelay", 0.107, "Delay between exposure end and Image available in QXRD"),
   m_Experiment(doc),
   m_Acquisition(acq),
+  m_Saver(saver),
+  m_Channels(),
   m_NIDAQPlugin()
 {
   QxrdAcquisitionPtr acqp(m_Acquisition);
@@ -43,6 +46,20 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString secti
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+
+  m_Channels.clear();
+
+  int n = settings->beginReadArray(section+"/channels");
+
+  for (int i=0; i<n; i++) {
+    appendChannel();
+
+    settings->setArrayIndex(i);
+
+    m_Channels[i]->readSettings(settings, "");
+  }
+
+  settings->endArray();
 }
 
 void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString section)
@@ -50,6 +67,17 @@ void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString sect
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+
+  settings->beginWriteArray(section+"/channels");
+
+  int n = m_Channels.count();
+
+  for (int i=0; i<n; i++) {
+    settings->setArrayIndex(i);
+    m_Channels[i]->writeSettings(settings, "");
+  }
+
+  settings->endArray();
 }
 
 void QxrdAcquisitionExtraInputs::initialize()
@@ -66,6 +94,21 @@ void QxrdAcquisitionExtraInputs::initialize()
                                   get_EndOffset());
 
     set_Enabled(true);
+  }
+}
+
+QVector<QxrdAcquisitionExtraInputsChannelPtr> QxrdAcquisitionExtraInputs::channels() const
+{
+  return m_Channels;
+}
+
+void QxrdAcquisitionExtraInputs::appendChannel()
+{
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "appendChannel", Qt::BlockingQueuedConnection));
+  } else {
+    m_Channels.append(QxrdAcquisitionExtraInputsChannelPtr(
+                        new QxrdAcquisitionExtraInputsChannel(m_Saver, m_Experiment, this)));
   }
 }
 

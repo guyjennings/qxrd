@@ -179,6 +179,8 @@ private:
 
   QMutex                          m_ScanFileMutex;
   FILE                           *m_ScanFile;
+
+  QMutex                          m_ExperimentFileMutex;
 };
 
 typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;

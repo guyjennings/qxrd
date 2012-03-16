@@ -64,7 +64,8 @@ QxrdExperiment::QxrdExperiment(
   m_ScriptEngine(NULL),
   m_ScriptEngineDebugger(NULL),
   m_LogFile(NULL),
-  m_ScanFile(NULL)
+  m_ScanFile(NULL),
+  m_ExperimentFileMutex()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::QxrdExperiment(%p)\n", this);
@@ -489,6 +490,8 @@ void QxrdExperiment::closeScanFile()
 
 void QxrdExperiment::readSettings()
 {
+  QMutexLocker lock(&m_ExperimentFileMutex);
+
   QString docPath = experimentFilePath();
 
   if (docPath.length()>0) {
@@ -525,6 +528,8 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
 
 void QxrdExperiment::writeSettings()
 {
+  QMutexLocker lock(&m_ExperimentFileMutex);
+
   QString docPath = experimentFilePath();
 
   if (docPath.length()>0) {

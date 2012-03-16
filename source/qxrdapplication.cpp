@@ -117,7 +117,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_PerkinElmerPluginInterface(NULL),
     #endif
     m_NIDAQPluginInterface(NULL),
-    m_ResponseTimer(NULL)
+    m_ResponseTimer(NULL),
+    m_SettingsMutex()
 {
   printf("QxrdApplication::QxrdApplication(%p)\n", this);
 
@@ -481,6 +482,8 @@ QString QxrdApplication::rootPath()
 
 void QxrdApplication::readSettings()
 {
+  QMutexLocker lock(&m_SettingsMutex);
+
   QxrdGlobalSettings settings(this);
 
   readSettings(&settings);
@@ -497,6 +500,8 @@ void QxrdApplication::readSettings(QSettings *settings)
 
 void QxrdApplication::writeSettings()
 {
+  QMutexLocker lock(&m_SettingsMutex);
+
   QxrdGlobalSettings settings(this);
 
   writeSettings(&settings);

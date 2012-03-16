@@ -9,7 +9,8 @@
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
-
+#include "qxrdacquisitionextrainputschannel.h"
+#include "qxrdacquisitionextrainputschannel-ptr.h"
 #include <QSettings>
 #include <QMutex>
 
@@ -35,12 +36,14 @@ public slots:
   void acquire();
   void logToImage(QxrdInt16ImageDataPtr img);
   void finish();
+  void appendChannel();
 
   QcepDoubleList  evaluateChannels();
   double          evaluateChannel(int ch);
   QVector<double> readChannel(int ch);
   double          averageChannel(int ch);
   double          sumChannel(int ch);
+  QVector<QxrdAcquisitionExtraInputsChannelPtr> channels() const;
 
 public:
   Q_PROPERTY(int enabled READ get_Enabled WRITE set_Enabled STORED false)
@@ -71,6 +74,8 @@ private:
   mutable QMutex              m_Mutex;
   QxrdExperimentWPtr          m_Experiment;
   QxrdAcquisitionWPtr         m_Acquisition;
+  QxrdSettingsSaverWPtr       m_Saver;
+  QVector<QxrdAcquisitionExtraInputsChannelPtr> m_Channels;
   QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
   QVector< QVector<double> >  m_ChannelData;
 };
