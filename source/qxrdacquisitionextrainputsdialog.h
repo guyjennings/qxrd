@@ -13,7 +13,10 @@ class QxrdAcquisitionExtraInputsDialog : public QDockWidget, public Ui::QxrdAcqu
 public:
   explicit QxrdAcquisitionExtraInputsDialog(QWidget *parent, QxrdAcquisitionWPtr acq);
   ~QxrdAcquisitionExtraInputsDialog();
-  
+
+private:
+  void setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelPtr ch);
+
 private:
   QxrdAcquisitionWPtr            m_Acquisition;
   QxrdAcquisitionExtraInputsWPtr m_AcquisitionExtraInputs;
