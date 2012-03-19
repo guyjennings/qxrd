@@ -88,10 +88,36 @@ DISTFILES += qxrd.dox \
 win32:include("../qt-libtiff-win32.pri")
 macx:include("../qt-libtiff-macx.pri")
 include("../qwt-5.2.pri")
-include("../qceplib.pri")
+#include("../qceplib.pri")
 include("qxrd.levmar.pri")
 
 # include("qxrd-cuda.pri")
+HEADERS += spec_server.h \
+    qspecserver.h \
+    qcepmacros.h \
+    qcepproperty.h \
+    qcepproperty-ptr.h \
+    qcepimagedata.h \
+    qcepimagedata-ptr.h \
+    qcepimagedataformat.h \
+    qcepimagedataformat-ptr.h \
+    qcepimagedataformattiff.h \
+    qcepimagedataformatmar345.h \
+    qcepimagedataformatfactory.h \
+    qcepimagedataformatfactory-ptr.h \
+    qcepdebug.h
+
+SOURCES += qspecserver.cpp \
+    qcepproperty.cpp \
+    qcepimagedata.cpp \
+    qcepimagedataformat.cpp \
+    qcepimagedataformattiff.cpp \
+    qcepimagedataformatmar345.cpp \
+    qcepimagedataformatfactory.cpp \
+    qcepdebug.cpp
+
+OTHER_FILES += testImage.js
+
 HEADERS += TODO.h \
     qxrdapplication.h \
     qxrdapplication-ptr.h \
@@ -241,7 +267,7 @@ HEADERS += TODO.h \
     qxrdhistogramdialog.h \
     qxrdinfodialog.h \
     qxrdhistogramplot.h \
-    qxrdslicerplot.h \
+    qxrdsliceplot.h \
     qxrdhistogramselector.h \
     qxrdresponsetimer.h \
     qxrdimagedataobjectcounter.h \
@@ -290,7 +316,11 @@ HEADERS += TODO.h \
     qxrdslicedialogsettings.h \
     qxrdplotsettings.h \
     qxrdimageplotsettings.h \
-    qxrdfilebrowsersettings.h
+    qxrdfilebrowsersettings.h \
+    qxrdhistogramdialogsettings.h \
+    qxrdinfodialogsettings.h \
+    qxrdcenterfinderplotsettings.h \
+    qxrdsliceplotsettings.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -396,7 +426,7 @@ SOURCES += qxrd.cpp \
     qxrdhistogramdialog.cpp \
     qxrdinfodialog.cpp \
     qxrdhistogramplot.cpp \
-    qxrdslicerplot.cpp \
+    qxrdsliceplot.cpp \
     qxrdhistogramselector.cpp \
     qxrdresponsetimer.cpp \
     qxrdimagedataobjectcounter.cpp \
@@ -431,7 +461,11 @@ SOURCES += qxrd.cpp \
     qxrdslicedialogsettings.cpp \
     qxrdplotsettings.cpp \
     qxrdimageplotsettings.cpp \
-    qxrdfilebrowsersettings.cpp
+    qxrdfilebrowsersettings.cpp \
+    qxrdhistogramdialogsettings.cpp \
+    qxrdinfodialogsettings.cpp \
+    qxrdcenterfinderplotsettings.cpp \
+    qxrdsliceplotsettings.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \

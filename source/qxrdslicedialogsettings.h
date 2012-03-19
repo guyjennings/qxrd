@@ -2,17 +2,29 @@
 #define QXRDSLICEDIALOGSETTINGS_H
 
 #include <QObject>
+#include "qcepproperty.h"
+#include "qxrdsliceplotsettings.h"
 
 class QxrdSliceDialogSettings : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSliceDialogSettings(QObject *parent = 0);
+  explicit QxrdSliceDialogSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
   
+public:
+  Q_PROPERTY(QcepPolygon slicePolygon READ get_SlicePolygon WRITE set_SlicePolygon)
+  QCEP_POLYGON_PROPERTY(SlicePolygon)
+
+public:
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
+
 signals:
   
 public slots:
-  
+
+private:
+  QxrdSlicePlotSettings m_SlicePlotSettings;
 };
 
 #endif // QXRDSLICEDIALOGSETTINGS_H

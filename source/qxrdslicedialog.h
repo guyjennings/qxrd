@@ -15,9 +15,6 @@ class QxrdSliceDialog : public QDockWidget, public Ui::QxrdSliceDialog
 public:
   explicit QxrdSliceDialog(QxrdSettingsSaverWPtr saver, QWidget *parent = 0);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
-
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
 
 public slots:
@@ -27,9 +24,7 @@ private:
   void reslice();
 
 private:
-  QxrdSettingsSaverWPtr    m_Saver;
   QxrdDoubleImageDataPtr   m_Image;
-  QwtArray<QwtDoublePoint> m_Polygon;
 };
 
 #endif // QXRDSLICEDIALOG_H

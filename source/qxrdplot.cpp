@@ -72,13 +72,13 @@ QxrdPlot::~QxrdPlot()
 {
 }
 
-void QxrdPlot::setSaver(QxrdSettingsSaverPtr saver)
-{
-  prop_XAxisLog()->setSaver(saver);
-  prop_YAxisLog()->setSaver(saver);
-  prop_X2AxisLog()->setSaver(saver);
-  prop_Y2AxisLog()->setSaver(saver);
-}
+//void QxrdPlot::setSaver(QxrdSettingsSaverPtr saver)
+//{
+//  prop_XAxisLog()->setSaver(saver);
+//  prop_YAxisLog()->setSaver(saver);
+//  prop_X2AxisLog()->setSaver(saver);
+//  prop_Y2AxisLog()->setSaver(saver);
+//}
 
 void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
 {

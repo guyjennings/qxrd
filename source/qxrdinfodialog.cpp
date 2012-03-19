@@ -4,21 +4,10 @@
 #include "qxrdsettingssaver.h"
 #include "qxrdimagedata.h"
 
-QxrdInfoDialog::QxrdInfoDialog(QxrdSettingsSaverWPtr saver, QWidget *parent) :
-  QDockWidget(parent),
-  m_Saver(saver)
+QxrdInfoDialog::QxrdInfoDialog(QWidget *parent) :
+  QDockWidget(parent)
 {
   setupUi(this);
-}
-
-void QxrdInfoDialog::readSettings(QSettings *settings, QString section)
-{
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
-}
-
-void QxrdInfoDialog::writeSettings(QSettings *settings, QString section)
-{
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 }
 
 void QxrdInfoDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)

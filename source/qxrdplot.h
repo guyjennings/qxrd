@@ -19,7 +19,7 @@ public:
   virtual ~QxrdPlot();
 
 public:
-  virtual void setSaver(QxrdSettingsSaverPtr saver);
+//  virtual void setSaver(QxrdSettingsSaverPtr saver);
 
   void setPlotCurveStyle(int index, QwtPlotCurve *curve);
   virtual QwtText trackerText(const QwtDoublePoint &pos);

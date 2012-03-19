@@ -22,20 +22,6 @@ public:
                   QxrdDataProcessorWPtr processor,
                   QWidget *parent=0);
 
-public:
-  Q_PROPERTY(int browserFilter READ get_BrowserFilter WRITE set_BrowserFilter)
-  QCEP_INTEGER_PROPERTY(BrowserFilter)
-
-  Q_PROPERTY(QString browserSelector READ get_BrowserSelector WRITE set_BrowserSelector)
-  QCEP_STRING_PROPERTY(BrowserSelector)
-
-  Q_PROPERTY(QString rootDirectory READ get_RootDirectory WRITE set_RootDirectory)
-  QCEP_STRING_PROPERTY(RootDirectory)
-
-public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
-
 public slots:
   void onFilterChanged(int newfilter);
   void onSelectorChanged(QString str, const QModelIndex &a= QModelIndex());

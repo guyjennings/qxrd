@@ -159,25 +159,25 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
           this, SIGNAL(selectHistogram(QwtDoubleRect)));
 }
 
-void QxrdImagePlot::setSaver(QxrdSettingsSaverPtr saver)
-{
-  QxrdPlot::setSaver(saver);
+//void QxrdImagePlot::setSaver(QxrdSettingsSaverPtr saver)
+//{
+//  QxrdPlot::setSaver(saver);
 
-  prop_ImageShown()->setSaver(saver);
-  prop_MaskShown()->setSaver(saver);
-  prop_OverflowShown()->setSaver(saver);
-  prop_DisplayMinimumPct()->setSaver(saver);
-  prop_DisplayMaximumPct()->setSaver(saver);
-  prop_DisplayMinimumVal()->setSaver(saver);
-  prop_DisplayMaximumVal()->setSaver(saver);
-  prop_DisplayMinimumPctle()->setSaver(saver);
-  prop_DisplayMaximumPctle()->setSaver(saver);
-  prop_DisplayScalingMode()->setSaver(saver);
-  prop_InterpolatePixels()->setSaver(saver);
-  prop_MaintainAspectRatio()->setSaver(saver);
-  prop_DisplayColorMap()->setSaver(saver);
-  prop_DisplayLog()->setSaver(saver);
-}
+//  prop_ImageShown()->setSaver(saver);
+//  prop_MaskShown()->setSaver(saver);
+//  prop_OverflowShown()->setSaver(saver);
+//  prop_DisplayMinimumPct()->setSaver(saver);
+//  prop_DisplayMaximumPct()->setSaver(saver);
+//  prop_DisplayMinimumVal()->setSaver(saver);
+//  prop_DisplayMaximumVal()->setSaver(saver);
+//  prop_DisplayMinimumPctle()->setSaver(saver);
+//  prop_DisplayMaximumPctle()->setSaver(saver);
+//  prop_DisplayScalingMode()->setSaver(saver);
+//  prop_InterpolatePixels()->setSaver(saver);
+//  prop_MaintainAspectRatio()->setSaver(saver);
+//  prop_DisplayColorMap()->setSaver(saver);
+//  prop_DisplayLog()->setSaver(saver);
+//}
 
 QxrdDataProcessorWPtr QxrdImagePlot::processor() const
 {

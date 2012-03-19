@@ -38,13 +38,12 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
   Q_OBJECT
 
 public:
-  QxrdWindow(QxrdSettingsSaverWPtr saver,
-             QxrdApplication *app,
+  QxrdWindow(QxrdApplication *app,
              QxrdExperimentWPtr docw,
              QxrdAcquisitionWPtr acqw,
              QxrdDataProcessorWPtr procw,
              QxrdAllocatorWPtr allocw,
-             QWidget *parent=0);
+             QWidget *parent);
   virtual ~QxrdWindow();
   void onAcquisitionInit();
   void init();
@@ -115,8 +114,6 @@ private slots:
   void populateRecentExperimentsMenu();
 
 public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
   void possiblyClose();
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
@@ -141,18 +138,10 @@ private:
 
   void setupRecentExperimentsMenu(QAction *action);
 
-public:
-  Q_PROPERTY(QByteArray windowGeometry READ get_WindowGeometry WRITE set_WindowGeometry)
-  QCEP_BYTE_ARRAY_PROPERTY(WindowGeometry)
-
-  Q_PROPERTY(QByteArray windowState READ get_WindowState WRITE set_WindowState)
-  QCEP_BYTE_ARRAY_PROPERTY(WindowState)
-
 private:
   mutable QMutex                         m_Mutex;
   int                                    m_SettingsLoaded;
   QxrdApplication                       *m_Application;
-  QxrdSettingsSaverWPtr                  m_Saver;
   QxrdExperimentWPtr                     m_Experiment;
   QxrdAcquisitionWPtr                    m_Acquisition;
   QxrdDataProcessorWPtr                  m_DataProcessor;

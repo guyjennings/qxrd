@@ -77,7 +77,7 @@ public slots:
   void enableMaskPolygons();
 
 public:
-  void setSaver(QxrdSettingsSaverPtr saver);
+//  void setSaver(QxrdSettingsSaverPtr saver);
 
   const QxrdRasterData* raster() const;
   QxrdRasterData* raster();

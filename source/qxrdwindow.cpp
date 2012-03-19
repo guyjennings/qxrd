@@ -54,20 +54,16 @@
 #include <QMenu>
 #include <QDesktopWidget>
 
-QxrdWindow::QxrdWindow(QxrdSettingsSaverWPtr saver,
-                       QxrdApplication *app,
+QxrdWindow::QxrdWindow(QxrdApplication *app,
                        QxrdExperimentWPtr docw,
                        QxrdAcquisitionWPtr acqw,
                        QxrdDataProcessorWPtr procw,
                        QxrdAllocatorWPtr allocw,
                        QWidget *parent)
   : QMainWindow(parent),
-    m_WindowGeometry(saver, this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
-    m_WindowState(saver, this, "windowState", QByteArray(), "Window State Settings"),
     m_Mutex(QMutex::Recursive),
     m_SettingsLoaded(false),
     m_Application(app),
-    m_Saver(saver),
     m_Experiment(docw),
     m_Acquisition(acqw),
     m_DataProcessor(procw),
@@ -137,7 +133,7 @@ void QxrdWindow::init()
   }
 
   if (proc) {
-      m_MaskDialog       = new QxrdMaskDialog(m_DataProcessor, this);
+    m_MaskDialog       = new QxrdMaskDialog(m_DataProcessor, this);
   }
 
   if (acq) {
@@ -859,92 +855,6 @@ void QxrdWindow::acquiredFrame(
   }
 
   m_Progress -> setValue(thisframe*100/totalframes);
-}
-
-void QxrdWindow::readSettings(QSettings *settings, QString section)
-{
-
-  if (settings) {
-    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
-
-    m_Plot             -> readSettings(settings, section+"/plot");
-    m_CenterFinderPlot -> readSettings(settings, section+"/centerFinderPlot");
-    m_IntegratorPlot   -> readSettings(settings, section+"/integratorPlot");
-
-    if (m_InputFileBrowser) {
-      m_InputFileBrowser  -> readSettings(settings, section+"/inputFileBrowser");
-    }
-
-    if (m_OutputFileBrowser) {
-      m_OutputFileBrowser  -> readSettings(settings, section+"/outputFileBrowser");
-    }
-
-    if (m_HistogramDialog) {
-      m_HistogramDialog -> readSettings(settings, section+"/histogramDialog");
-    }
-
-    if (m_SliceDialog) {
-      m_SliceDialog -> readSettings(settings, section+"/sliceDialog");
-    }
-
-    if (m_ImageInfoDialog) {
-      m_ImageInfoDialog ->  readSettings(settings, section+"/imageInfoDialog");
-    }
-
-    m_SettingsLoaded = true;
-
-    QxrdExperimentPtr expt(m_Experiment);
-
-    if (expt) {
-      if (!expt->get_DefaultLayout()) {
-        QByteArray geometry = get_WindowGeometry();
-        QByteArray winstate = get_WindowState();
-
-        if (!restoreGeometry(geometry)) {
-          printf("Restore geometry failed\n");
-        }
-
-        if (!restoreState(winstate,2)) {
-          printf("Restore state failed\n");
-        }
-      } else{
-        expt->set_DefaultLayout(0);
-      }
-    }
-  }
-}
-
-void QxrdWindow::writeSettings(QSettings *settings, QString section)
-{
-  //    printf("QxrdWindow::writeSettings\n");
-
-  if (settings) {
-    m_Plot             -> writeSettings(settings, section+"/plot");
-    m_CenterFinderPlot -> writeSettings(settings, section+"/centerFinderPlot");
-    m_IntegratorPlot   -> writeSettings(settings, section+"/integratorPlot");
-
-    if (m_InputFileBrowser) {
-      m_InputFileBrowser  -> writeSettings(settings, section+"/inputFileBrowser");
-    }
-
-    if (m_OutputFileBrowser) {
-      m_OutputFileBrowser  -> writeSettings(settings, section+"/outputFileBrowser");
-    }
-
-    if (m_HistogramDialog) {
-      m_HistogramDialog -> writeSettings(settings, section+"/histogramDialog");
-    }
-
-    if (m_SliceDialog) {
-      m_SliceDialog -> writeSettings(settings, section+"/sliceDialog");
-    }
-
-    if (m_ImageInfoDialog) {
-      m_ImageInfoDialog ->  writeSettings(settings, section+"/imageInfoDialog");
-    }
-
-    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
-  }
 }
 
 void QxrdWindow::captureSize()

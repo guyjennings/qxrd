@@ -8,7 +8,7 @@ class QxrdPlotSettings : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdPlotSettings(QObject *parent = 0);
+  explicit QxrdPlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
   
   Q_PROPERTY(double xMouse READ get_XMouse WRITE set_XMouse STORED false)
   QCEP_DOUBLE_PROPERTY(XMouse)
