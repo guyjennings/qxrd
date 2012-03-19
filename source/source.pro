@@ -285,7 +285,12 @@ HEADERS += TODO.h \
     qxrdacquisitionextrainputsdialog.h \
     qxrdacquisitionextrainputsdialog-ptr.h \
     qxrdacquisitionextrainputschannel.h \
-    qxrdacquisitionextrainputschannel-ptr.h
+    qxrdacquisitionextrainputschannel-ptr.h \
+    qxrdwindowsettings.h \
+    qxrdslicedialogsettings.h \
+    qxrdplotsettings.h \
+    qxrdimageplotsettings.h \
+    qxrdfilebrowsersettings.h
 unix:HEADERS += AcqLinuxTypes.h
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -421,7 +426,12 @@ SOURCES += qxrd.cpp \
     qxrdacquisitiontriggerdialog.cpp \
     qxrdacquisitionextrainputs.cpp \
     qxrdacquisitionextrainputsdialog.cpp \
-    qxrdacquisitionextrainputschannel.cpp
+    qxrdacquisitionextrainputschannel.cpp \
+    qxrdwindowsettings.cpp \
+    qxrdslicedialogsettings.cpp \
+    qxrdplotsettings.cpp \
+    qxrdimageplotsettings.cpp \
+    qxrdfilebrowsersettings.cpp
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
