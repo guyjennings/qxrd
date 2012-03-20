@@ -16,6 +16,7 @@ public:
   explicit QxrdSettingsSaver(QObject *owner);
   ~QxrdSettingsSaver();
 
+  void start();
   void changed(QcepProperty *prop);
 
 public slots:

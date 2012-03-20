@@ -49,9 +49,9 @@ public slots:
   void onFileUpdated(QFileInfo file);
 
 private:
+  QxrdFileBrowserSettingsWPtr  m_FileBrowserSettings;
   mutable QMutex               m_Mutex;
   int                          m_IsOutput;
-  QxrdFileBrowserSettingsWPtr  m_FileBrowserSettings;
   QxrdExperimentWPtr           m_Experiment;
   QxrdDataProcessorWPtr        m_Processor;
   QxrdFileBrowserModelPtr      m_Model;

@@ -25,7 +25,7 @@ signals:
 public slots:
   
 private:
-  QxrdHistogramPlotSettings   m_HistogramPlotSettings;
+  QxrdHistogramPlotSettingsPtr  m_HistogramPlotSettings;
 };
 
 typedef QSharedPointer<QxrdHistogramDialogSettings> QxrdHistogramDialogSettingsPtr;

@@ -24,7 +24,7 @@ signals:
 public slots:
 
 private:
-  QxrdSlicePlotSettings m_SlicePlotSettings;
+  QxrdSlicePlotSettingsPtr m_SlicePlotSettings;
 };
 
 typedef QSharedPointer<QxrdSliceDialogSettings> QxrdSliceDialogSettingsPtr;

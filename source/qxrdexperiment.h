@@ -181,7 +181,7 @@ public:  // Properties
   Q_PROPERTY(int    workTarget READ get_WorkTarget WRITE set_WorkTarget STORED false)
   QCEP_INTEGER_PROPERTY(WorkTarget)
 
-  Q_PROPERTY(int    completionPercentage READ get_CompletionPercentage WRITE set_CompletionPercentage)
+  Q_PROPERTY(int    completionPercentage READ get_CompletionPercentage WRITE set_CompletionPercentage STORED false)
   QCEP_INTEGER_PROPERTY(CompletionPercentage)
 };
 

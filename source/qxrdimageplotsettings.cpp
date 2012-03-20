@@ -17,23 +17,25 @@ QxrdImagePlotSettings::QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObjec
   m_OverflowShown(saver, this, "overflowShown", 0, "Overflow Shown?"),
   m_InterpolatePixels(saver, this, "interpolatePixels", 1, "Interpolated Pixel Display?"),
   m_MaintainAspectRatio(saver, this, "maintainAspectRatio", 1, "Maintain Equal Scaling in X and Y"),
-  m_TTHMouse(QxrdSettingsSaverPtr(), this,"tthMouse",0, "2 Theta at Mouse"),
-  m_QMouse(QxrdSettingsSaverPtr(), this,"qMouse",0, "Q at Mouse"),
-  m_ValMouse(QxrdSettingsSaverPtr(), this,"valMouse",0, "Image Value at Mouse"),
-  m_MaskMouse(QxrdSettingsSaverPtr(), this,"maskMouse",0, "Mask Value at Mouse")
+  m_TTHMouse(QxrdSettingsSaverWPtr(), this,"tthMouse",0, "2 Theta at Mouse"),
+  m_QMouse(QxrdSettingsSaverWPtr(), this,"qMouse",0, "Q at Mouse"),
+  m_ValMouse(QxrdSettingsSaverWPtr(), this,"valMouse",0, "Image Value at Mouse"),
+  m_MaskMouse(QxrdSettingsSaverWPtr(), this,"maskMouse",0, "Mask Value at Mouse")
 {
   setObjectName("imageGraph");
 }
 
 void QxrdImagePlotSettings::readSettings(QSettings *settings, QString section)
 {
-  QxrdPlotSettings::readSettings(settings, section);
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+
+  QxrdPlotSettings::readSettings(settings, section);
 }
 
 void QxrdImagePlotSettings::writeSettings(QSettings *settings, QString section)
 {
-  QxrdPlotSettings::writeSettings(settings, section);
   QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+
+  QxrdPlotSettings::writeSettings(settings, section);
 }
 

@@ -247,6 +247,8 @@ bool QxrdApplication::init(int &argc, char **argv)
     openWelcomeWindow();
   }
 
+  m_Saver->start();
+
   return true;
 }
 

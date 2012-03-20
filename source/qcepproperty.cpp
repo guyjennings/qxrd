@@ -378,6 +378,8 @@ void QcepProperty::printMessage(QString msg, QDateTime ts)
 
   if (saver) {
     saver->printMessage(msg, ts);
+  } else {
+    printf("%s\n", qPrintable(msg));
   }
 }
 

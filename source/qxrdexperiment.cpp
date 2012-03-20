@@ -29,9 +29,8 @@ QxrdExperiment::QxrdExperiment(
   QObject(NULL),
   m_Application(app),
   m_ExperimentThread(),
-  m_SettingsSaver(QxrdSettingsSaverPtr(
-                    new QxrdSettingsSaver(this))),
-  m_WindowSettings(QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL))),
+  m_SettingsSaver(new QxrdSettingsSaver(this)),
+  m_WindowSettings(NULL),
   m_Window(NULL),
   m_Splash(NULL),
   m_ServerThread(NULL),
@@ -60,18 +59,20 @@ QxrdExperiment::QxrdExperiment(
   m_ScanFileName(m_SettingsSaver, this, "scanFileName", defaultScanName(path), "Scan File Name"),
   m_DetectorType(m_SettingsSaver, this,"detectorType", 1, "Detector Type"),
   m_ProcessorType(m_SettingsSaver, this,"processorType", 0, "Data Processor Type"),
-  m_DefaultLayout(QxrdSettingsSaverPtr(), this,"defaultLayout",0, "Default Layout Used?"),
+  m_DefaultLayout(QxrdSettingsSaverWPtr(), this,"defaultLayout",0, "Default Layout Used?"),
   m_RunSpecServer(m_SettingsSaver, this,"runSpecServer", 1, "Run SPEC Server?"),
   m_SpecServerPort(m_SettingsSaver, this,"specServerPort", -1, "Port for SPEC Server"),
   m_RunSimpleServer(m_SettingsSaver, this,"runSimpleServer", 1, "Run Simple Socket Server?"),
   m_SimpleServerPort(m_SettingsSaver, this,"simpleServerPort", 1234, "Port for Simple Socket Server"),
-  m_WorkCompleted(QxrdSettingsSaverPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
-  m_WorkTarget(QxrdSettingsSaverPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
-  m_CompletionPercentage(QxrdSettingsSaverPtr(), this, "completionPercentage", 0, "Percentage of Work Completed")
+  m_WorkCompleted(QxrdSettingsSaverWPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
+  m_WorkTarget(QxrdSettingsSaverWPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
+  m_CompletionPercentage(QxrdSettingsSaverWPtr(), this, "completionPercentage", 0, "Percentage of Work Completed")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::QxrdExperiment(%p)\n", this);
   }
+
+  m_WindowSettings = QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL));
 
   readSettings(settings);
 }
@@ -271,6 +272,8 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
       m_Splash -> finish(win);
     }
   }
+
+  m_SettingsSaver->start();
 
   return true;
 }

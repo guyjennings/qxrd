@@ -15,4 +15,7 @@ public slots:
   
 };
 
+typedef QSharedPointer<QxrdSlicePlotSettings> QxrdSlicePlotSettingsPtr;
+typedef QWeakPointer<QxrdSlicePlotSettings>   QxrdSlicePlotSettingsWPtr;
+
 #endif // QXRDSLICEPLOTSETTINGS_H

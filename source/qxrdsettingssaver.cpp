@@ -15,10 +15,6 @@ QxrdSettingsSaver::QxrdSettingsSaver(QObject *owner) :
   }
 
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(performSave()));
-
-  m_Timer.setSingleShot(false);
-
-  m_Timer.start(m_SaveDelay);
 }
 
 QxrdSettingsSaver::~QxrdSettingsSaver()
@@ -26,6 +22,13 @@ QxrdSettingsSaver::~QxrdSettingsSaver()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdSettingsSaver::~QxrdSettingsSaver(%p)\n", this);
   }
+}
+
+void QxrdSettingsSaver::start()
+{
+  m_Timer.setSingleShot(false);
+
+  m_Timer.start(m_SaveDelay);
 }
 
 void QxrdSettingsSaver::performSave()

@@ -41,14 +41,14 @@ signals:
 public slots:
   
 private:
-  QxrdImagePlotSettings                  m_ImagePlotSettings;
-  QxrdCenterFinderPlotSettings           m_CenterFinderPlotSettings;
-  QxrdPlotSettings                       m_IntegratorPlotSettings;
-  QxrdFileBrowserSettings                m_InputFileBrowserSettings;
-  QxrdFileBrowserSettings                m_OutputFileBrowserSettings;
-  QxrdHistogramDialogSettings            m_HistogramDialogSettings;
-  QxrdSliceDialogSettings                m_SliceDialogSettings;
-  QxrdInfoDialogSettings                 m_InfoDialogSettings;
+  QxrdImagePlotSettingsPtr               m_ImagePlotSettings;
+  QxrdCenterFinderPlotSettingsPtr        m_CenterFinderPlotSettings;
+  QxrdPlotSettingsPtr                    m_IntegratorPlotSettings;
+  QxrdFileBrowserSettingsPtr             m_InputFileBrowserSettings;
+  QxrdFileBrowserSettingsPtr             m_OutputFileBrowserSettings;
+  QxrdHistogramDialogSettingsPtr         m_HistogramDialogSettings;
+  QxrdSliceDialogSettingsPtr             m_SliceDialogSettings;
+  QxrdInfoDialogSettingsPtr              m_InfoDialogSettings;
 };
 
 typedef QSharedPointer<QxrdWindowSettings> QxrdWindowSettingsPtr;
