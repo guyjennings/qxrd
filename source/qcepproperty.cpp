@@ -47,10 +47,12 @@ QcepProperty::QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const c
 
   if (m_Saver && !m_IsStored) {
     printMessage(tr("Warning: property %1 has saver but is not stored").arg(name));
+//    printf("Warning: property %s has saver but is not stored\n", qPrintable(name));
   }
 
   if (m_IsStored && !m_Saver) {
     printMessage(tr("Warning: property %1 is stored but has no saver").arg(name));
+//    printf("Warning: property %s is stored but has no saver\n", qPrintable(name));
   }
 }
 
@@ -154,6 +156,9 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaType< QcepBoolList >("QcepBoolList");
   qRegisterMetaType< QcepIntList >("QcepIntList");
   qRegisterMetaType< QcepStringList >("QcepStringList");
+  qRegisterMetaType< QwtDoublePoint >("QwtDoublePoint");
+  qRegisterMetaType< QwtDoubleRect >("QwtDoubleRect");
+  qRegisterMetaType< QcepPolygon >("QcepPolygon");
   qRegisterMetaType< QVariant >("QVariant");
 
   qRegisterMetaTypeStreamOperators< QcepDoubleVector >("QcepDoubleVector");
@@ -164,6 +169,9 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaTypeStreamOperators< QcepBoolList >("QcepBoolList");
   qRegisterMetaTypeStreamOperators< QcepIntList >("QcepIntList");
   qRegisterMetaTypeStreamOperators< QcepStringList >("QcepStringList");
+  qRegisterMetaTypeStreamOperators< QwtDoublePoint >("QwtDoublePoint");
+  qRegisterMetaTypeStreamOperators< QwtDoubleRect >("QwtDoubleRect");
+  qRegisterMetaTypeStreamOperators< QcepPolygon >("QcepPolygon");
 }
 
 void QcepProperty::setSaver(QxrdSettingsSaverWPtr saver)
