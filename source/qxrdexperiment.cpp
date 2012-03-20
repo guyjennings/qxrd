@@ -31,25 +31,8 @@ QxrdExperiment::QxrdExperiment(
   m_ExperimentThread(),
   m_SettingsSaver(QxrdSettingsSaverPtr(
                     new QxrdSettingsSaver(this))),
-  m_ExperimentKind(m_SettingsSaver, this, "experimentKind", -1, "Kind of Experiment"),
-  m_ExperimentDirectory(m_SettingsSaver, this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
-  m_ExperimentFileName(m_SettingsSaver, this, "experimentFileName", defaultExperimentFileName(path), "Experiment File"),
-  m_ExperimentName(m_SettingsSaver, this, "experimentName", defaultExperimentName(path), "Experiment Name"),
-  m_ExperimentDescription(m_SettingsSaver, this, "experimentDescription", "", "Experiment Description"),
-  m_LogFileName(m_SettingsSaver, this, "logFileName", defaultLogName(path), "Log File Name"),
-  m_ScanFileName(m_SettingsSaver, this, "scanFileName", defaultScanName(path), "Scan File Name"),
-  m_DetectorType(m_SettingsSaver, this,"detectorType", 1, "Detector Type"),
-  m_ProcessorType(m_SettingsSaver, this,"processorType", 0, "Data Processor Type"),
-  m_DefaultLayout(QxrdSettingsSaverPtr(), this,"defaultLayout",0, "Default Layout Used?"),
-  m_RunSpecServer(m_SettingsSaver, this,"runSpecServer", 1, "Run SPEC Server?"),
-  m_SpecServerPort(m_SettingsSaver, this,"specServerPort", -1, "Port for SPEC Server"),
-  m_RunSimpleServer(m_SettingsSaver, this,"runSimpleServer", 1, "Run Simple Socket Server?"),
-  m_SimpleServerPort(m_SettingsSaver, this,"simpleServerPort", 1234, "Port for Simple Socket Server"),
-  m_WorkCompleted(QxrdSettingsSaverPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
-  m_WorkTarget(QxrdSettingsSaverPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
-  m_CompletionPercentage(QxrdSettingsSaverPtr(), this, "completionPercentage", 0, "Percentage of Work Completed"),
   m_WindowSettings(QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL))),
-  m_Window(),
+  m_Window(NULL),
   m_Splash(NULL),
   m_ServerThread(NULL),
   m_Server(NULL),
@@ -66,7 +49,25 @@ QxrdExperiment::QxrdExperiment(
   m_ScriptEngineDebugger(NULL),
   m_LogFile(NULL),
   m_ScanFile(NULL),
-  m_ExperimentFileMutex()
+  m_ExperimentFileMutex(),
+
+  m_ExperimentKind(m_SettingsSaver, this, "experimentKind", -1, "Kind of Experiment"),
+  m_ExperimentDirectory(m_SettingsSaver, this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
+  m_ExperimentFileName(m_SettingsSaver, this, "experimentFileName", defaultExperimentFileName(path), "Experiment File"),
+  m_ExperimentName(m_SettingsSaver, this, "experimentName", defaultExperimentName(path), "Experiment Name"),
+  m_ExperimentDescription(m_SettingsSaver, this, "experimentDescription", "", "Experiment Description"),
+  m_LogFileName(m_SettingsSaver, this, "logFileName", defaultLogName(path), "Log File Name"),
+  m_ScanFileName(m_SettingsSaver, this, "scanFileName", defaultScanName(path), "Scan File Name"),
+  m_DetectorType(m_SettingsSaver, this,"detectorType", 1, "Detector Type"),
+  m_ProcessorType(m_SettingsSaver, this,"processorType", 0, "Data Processor Type"),
+  m_DefaultLayout(QxrdSettingsSaverPtr(), this,"defaultLayout",0, "Default Layout Used?"),
+  m_RunSpecServer(m_SettingsSaver, this,"runSpecServer", 1, "Run SPEC Server?"),
+  m_SpecServerPort(m_SettingsSaver, this,"specServerPort", -1, "Port for SPEC Server"),
+  m_RunSimpleServer(m_SettingsSaver, this,"runSimpleServer", 1, "Run Simple Socket Server?"),
+  m_SimpleServerPort(m_SettingsSaver, this,"simpleServerPort", 1234, "Port for Simple Socket Server"),
+  m_WorkCompleted(QxrdSettingsSaverPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
+  m_WorkTarget(QxrdSettingsSaverPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
+  m_CompletionPercentage(QxrdSettingsSaverPtr(), this, "completionPercentage", 0, "Percentage of Work Completed")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::QxrdExperiment(%p)\n", this);
@@ -553,8 +554,6 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 {
   if (settings) {
     QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
-
-    QxrdWindow *win = m_Window;
 
     if (m_WindowSettings) {
       m_WindowSettings -> writeSettings(settings, section+"/window");

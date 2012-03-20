@@ -106,6 +106,32 @@ private:
   QxrdExperimentThreadWPtr     m_ExperimentThread;
   QxrdSettingsSaverPtr         m_SettingsSaver;
 
+private:
+  QxrdWindowSettingsPtr           m_WindowSettings;
+  QxrdWindow                     *m_Window;
+  QSplashScreen                  *m_Splash;
+  QxrdServerThreadPtr             m_ServerThread;
+  QxrdServerPtr                   m_Server;
+  QxrdSimpleServerThreadPtr       m_SimpleServerThread;
+  QxrdSimpleServerPtr             m_SimpleServer;
+  QxrdDataProcessorThreadPtr      m_DataProcessorThread;
+  QxrdDataProcessorPtr            m_DataProcessor;
+  QxrdAcquisitionThreadPtr        m_AcquisitionThread;
+  QxrdAcquisitionPtr              m_Acquisition;
+  QxrdFileSaverThreadPtr          m_FileSaverThread;
+  QxrdFileSaverPtr                m_FileSaver;
+  QxrdScriptEngineThreadPtr       m_ScriptEngineThread;
+  QxrdScriptEnginePtr             m_ScriptEngine;
+  QScriptEngineDebugger          *m_ScriptEngineDebugger;
+
+  QMutex                          m_LogFileMutex;
+  FILE                           *m_LogFile;
+
+  QMutex                          m_ScanFileMutex;
+  FILE                           *m_ScanFile;
+
+  QMutex                          m_ExperimentFileMutex;
+
 public:  // Properties
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
   QCEP_INTEGER_PROPERTY(ExperimentKind)
@@ -157,32 +183,6 @@ public:  // Properties
 
   Q_PROPERTY(int    completionPercentage READ get_CompletionPercentage WRITE set_CompletionPercentage)
   QCEP_INTEGER_PROPERTY(CompletionPercentage)
-
-private:
-  QxrdWindowSettingsPtr           m_WindowSettings;
-  QxrdWindow                     *m_Window;
-  QSplashScreen                  *m_Splash;
-  QxrdServerThreadPtr             m_ServerThread;
-  QxrdServerPtr                   m_Server;
-  QxrdSimpleServerThreadPtr       m_SimpleServerThread;
-  QxrdSimpleServerPtr             m_SimpleServer;
-  QxrdDataProcessorThreadPtr      m_DataProcessorThread;
-  QxrdDataProcessorPtr            m_DataProcessor;
-  QxrdAcquisitionThreadPtr        m_AcquisitionThread;
-  QxrdAcquisitionPtr              m_Acquisition;
-  QxrdFileSaverThreadPtr          m_FileSaverThread;
-  QxrdFileSaverPtr                m_FileSaver;
-  QxrdScriptEngineThreadPtr       m_ScriptEngineThread;
-  QxrdScriptEnginePtr             m_ScriptEngine;
-  QScriptEngineDebugger          *m_ScriptEngineDebugger;
-
-  QMutex                          m_LogFileMutex;
-  FILE                           *m_LogFile;
-
-  QMutex                          m_ScanFileMutex;
-  FILE                           *m_ScanFile;
-
-  QMutex                          m_ExperimentFileMutex;
 };
 
 typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
