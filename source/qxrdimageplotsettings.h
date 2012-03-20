@@ -12,6 +12,12 @@ public:
   explicit QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
   
 public:
+  Q_PROPERTY(double displayMinimumPctle     READ get_DisplayMinimumPctle WRITE set_DisplayMinimumPctle)
+  QCEP_DOUBLE_PROPERTY(DisplayMinimumPctle)
+
+  Q_PROPERTY(double displayMaximumPctle     READ get_DisplayMaximumPctle WRITE set_DisplayMaximumPctle)
+  QCEP_DOUBLE_PROPERTY(DisplayMaximumPctle)
+
   Q_PROPERTY(double displayMinimumPct     READ get_DisplayMinimumPct WRITE set_DisplayMinimumPct)
   QCEP_DOUBLE_PROPERTY(DisplayMinimumPct)
 
@@ -23,12 +29,6 @@ public:
 
   Q_PROPERTY(double displayMaximumVal     READ get_DisplayMaximumVal WRITE set_DisplayMaximumVal)
   QCEP_DOUBLE_PROPERTY(DisplayMaximumVal)
-
-  Q_PROPERTY(double displayMinimumPctle     READ get_DisplayMinimumPctle WRITE set_DisplayMinimumPctle)
-  QCEP_DOUBLE_PROPERTY(DisplayMinimumPctle)
-
-  Q_PROPERTY(double displayMaximumPctle     READ get_DisplayMaximumPctle WRITE set_DisplayMaximumPctle)
-  QCEP_DOUBLE_PROPERTY(DisplayMaximumPctle)
 
   Q_PROPERTY(int displayScalingMode        READ get_DisplayScalingMode WRITE set_DisplayScalingMode)
   QCEP_INTEGER_PROPERTY(DisplayScalingMode)
