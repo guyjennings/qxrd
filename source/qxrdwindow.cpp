@@ -54,7 +54,8 @@
 #include <QMenu>
 #include <QDesktopWidget>
 
-QxrdWindow::QxrdWindow(QxrdApplication *app,
+QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
+                       QxrdApplication *app,
                        QxrdExperimentWPtr docw,
                        QxrdAcquisitionWPtr acqw,
                        QxrdDataProcessorWPtr procw,
@@ -62,7 +63,7 @@ QxrdWindow::QxrdWindow(QxrdApplication *app,
                        QWidget *parent)
   : QMainWindow(parent),
     m_Mutex(QMutex::Recursive),
-    m_SettingsLoaded(false),
+    m_WindowSettings(settings),
     m_Application(app),
     m_Experiment(docw),
     m_Acquisition(acqw),
@@ -107,17 +108,33 @@ QxrdWindow::QxrdWindow(QxrdApplication *app,
   setObjectName("window");
 
   setupUi(this);
-}
 
-void QxrdWindow::init()
-{
+  QxrdExperimentPtr expt(m_Experiment);
+  QxrdWindowSettingsPtr set(m_WindowSettings);
+
+  if (expt && set) {
+    if (!expt->get_DefaultLayout()) {
+      QByteArray geometry = set->get_WindowGeometry();
+      QByteArray winstate = set->get_WindowState();
+
+      if (!restoreGeometry(geometry)) {
+        printf("Restore geometry failed\n");
+      }
+
+      if (!restoreState(winstate,2)) {
+        printf("Restore state failed\n");
+      }
+    } else{
+      expt->set_DefaultLayout(0);
+    }
+  }
+
   updateTitle();
 
   setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
 
   QxrdAcquisitionPtr acq(m_Acquisition);
   QxrdDataProcessorPtr proc(m_DataProcessor);
-  QxrdExperimentPtr expt(m_Experiment);
 
   if (acq) {
     m_AcquireDialog = acq -> controlPanel(this);
@@ -144,18 +161,22 @@ void QxrdWindow::init()
     m_IntegratorDialog   = new QxrdIntegratorDialog(proc -> integrator());
   }
 
-  if (expt) {
-    m_InputFileBrowser   = new QxrdInputFileBrowser(m_Saver, m_Experiment, m_DataProcessor, this);
-    m_OutputFileBrowser  = new QxrdOutputFileBrowser(m_Saver, m_Experiment, m_DataProcessor, this);
+  if (expt && set) {
+    m_InputFileBrowser   = new QxrdInputFileBrowser(set->inputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
+    m_OutputFileBrowser  = new QxrdOutputFileBrowser(set->outputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
   }
 
-  m_SliceDialog        = new QxrdSliceDialog(m_Saver, this);
-  m_HistogramDialog    = new QxrdHistogramDialog(m_Saver, this);
-  m_ImageInfoDialog    = new QxrdInfoDialog(m_Saver, this);
+  if (set) {
+    m_SliceDialog        = new QxrdSliceDialog(set->sliceDialogSettings(), this);
+    m_HistogramDialog    = new QxrdHistogramDialog(set->histogramDialogSettings(), this);
+    m_ImageInfoDialog    = new QxrdInfoDialog(set->infoDialogSettings(), this);
+  }
 
-  m_Plot             -> setSaver(m_Saver);
-  m_CenterFinderPlot -> setSaver(m_Saver);
-  m_IntegratorPlot   -> setSaver(m_Saver);
+  if (set) {
+    m_ImagePlot        -> init(set->imagePlotSettings());
+    m_CenterFinderPlot -> init(set->centerFinderPlotSettings());
+    m_IntegratorPlot   -> init(set->integratorPlotSettings());
+  }
 
   QDesktopWidget *dw = QApplication::desktop();
   //  int screenNum = dw->screenNumber(this);
@@ -233,7 +254,7 @@ void QxrdWindow::init()
   connect(m_ActionLoadScript, SIGNAL(triggered()), this, SLOT(doLoadScript()));
 
   if (m_Application) {
-    connect(m_ActionAutoScale, SIGNAL(triggered()), m_Plot, SLOT(autoScale()));
+    connect(m_ActionAutoScale, SIGNAL(triggered()), m_ImagePlot, SLOT(autoScale()));
     connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
     connect(m_ActionGlobalPreferences, SIGNAL(triggered()), m_Application, SLOT(editGlobalPreferences()));
     connect(m_ActionExperimentPreferences, SIGNAL(triggered()), this, SLOT(doEditPreferences()));
@@ -278,17 +299,17 @@ void QxrdWindow::init()
   connect(m_DisplayDialog -> m_Display_10pct, SIGNAL(clicked()), m_Action010Range, SIGNAL(triggered()));
   connect(m_DisplayDialog -> m_Display_100pct, SIGNAL(clicked()), m_Action100Range, SIGNAL(triggered()));
 
-  connect(m_Action005Range, SIGNAL(triggered()), m_Plot, SLOT(set005Range()));
-  connect(m_Action010Range, SIGNAL(triggered()), m_Plot, SLOT(set010Range()));
-  connect(m_Action100Range, SIGNAL(triggered()), m_Plot, SLOT(set100Range()));
-  connect(m_ActionAutoRange, SIGNAL(triggered()), m_Plot, SLOT(setAutoRange()));
+  connect(m_Action005Range, SIGNAL(triggered()), m_ImagePlot, SLOT(set005Range()));
+  connect(m_Action010Range, SIGNAL(triggered()), m_ImagePlot, SLOT(set010Range()));
+  connect(m_Action100Range, SIGNAL(triggered()), m_ImagePlot, SLOT(set100Range()));
+  connect(m_ActionAutoRange, SIGNAL(triggered()), m_ImagePlot, SLOT(setAutoRange()));
 
-  connect(m_ActionGrayscale, SIGNAL(triggered()), m_Plot, SLOT(setGrayscale()));
-  connect(m_ActionInverseGrayscale, SIGNAL(triggered()), m_Plot, SLOT(setInverseGrayscale()));
-  connect(m_ActionEarthTones, SIGNAL(triggered()), m_Plot, SLOT(setEarthTones()));
-  connect(m_ActionSpectrum, SIGNAL(triggered()), m_Plot, SLOT(setSpectrum()));
-  connect(m_ActionFire, SIGNAL(triggered()), m_Plot, SLOT(setFire()));
-  connect(m_ActionIce, SIGNAL(triggered()), m_Plot, SLOT(setIce()));
+  connect(m_ActionGrayscale, SIGNAL(triggered()), m_ImagePlot, SLOT(setGrayscale()));
+  connect(m_ActionInverseGrayscale, SIGNAL(triggered()), m_ImagePlot, SLOT(setInverseGrayscale()));
+  connect(m_ActionEarthTones, SIGNAL(triggered()), m_ImagePlot, SLOT(setEarthTones()));
+  connect(m_ActionSpectrum, SIGNAL(triggered()), m_ImagePlot, SLOT(setSpectrum()));
+  connect(m_ActionFire, SIGNAL(triggered()), m_ImagePlot, SLOT(setFire()));
+  connect(m_ActionIce, SIGNAL(triggered()), m_ImagePlot, SLOT(setIce()));
 
   connect(m_ActionRefineCenterTilt, SIGNAL(triggered()), this, SLOT(doRefineCenterTilt()));
   connect(m_ActionMoveCenterUp, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveUp()));
@@ -306,9 +327,9 @@ void QxrdWindow::init()
   ////  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
   //  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
 
-  connect(m_ActionShowImage, SIGNAL(triggered()), m_Plot, SLOT(toggleShowImage()));
-  connect(m_ActionShowMask, SIGNAL(triggered()), m_Plot, SLOT(toggleShowMask()));
-  connect(m_ActionShowOverflow, SIGNAL(triggered()), m_Plot, SLOT(toggleShowOverflow()));
+  connect(m_ActionShowImage, SIGNAL(triggered()), m_ImagePlot, SLOT(toggleShowImage()));
+  connect(m_ActionShowMask, SIGNAL(triggered()), m_ImagePlot, SLOT(toggleShowMask()));
+  connect(m_ActionShowOverflow, SIGNAL(triggered()), m_ImagePlot, SLOT(toggleShowOverflow()));
 
   if (proc) {
     connect(m_ActionShowMaskRange, SIGNAL(triggered()), proc.data(), SLOT(showMaskRange()));
@@ -326,15 +347,15 @@ void QxrdWindow::init()
   connect(m_ActionTest, SIGNAL(triggered()), this, SLOT(doTest()));
   connect(m_ActionCrashProgram, SIGNAL(triggered()), this, SLOT(crashProgram()));
 
-  connect(m_ImageZoomInButton, SIGNAL(clicked()), m_Plot, SLOT(enableZooming()));
-  connect(m_ImageZoomOutButton, SIGNAL(clicked()), m_Plot, SLOT(zoomOut()));
-  connect(m_ImageZoomAllButton, SIGNAL(clicked()), m_Plot, SLOT(autoScale()));
-  connect(m_ImageSetCenterButton, SIGNAL(clicked()), m_Plot, SLOT(enableCentering()));
-  connect(m_ImageSliceButton, SIGNAL(clicked()), m_Plot, SLOT(enableSlicing()));
-  connect(m_ImageMeasureButton, SIGNAL(clicked()), m_Plot, SLOT(enableMeasuring()));
-  connect(m_ImageHistogramButton, SIGNAL(clicked()), m_Plot, SLOT(enableHistograms()));
-  connect(m_ImageMaskCirclesButton, SIGNAL(clicked()), m_Plot, SLOT(enableMaskCircles()));
-  connect(m_ImageMaskPolygonsButton, SIGNAL(clicked()), m_Plot, SLOT(enableMaskPolygons()));
+  connect(m_ImageZoomInButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableZooming()));
+  connect(m_ImageZoomOutButton, SIGNAL(clicked()), m_ImagePlot, SLOT(zoomOut()));
+  connect(m_ImageZoomAllButton, SIGNAL(clicked()), m_ImagePlot, SLOT(autoScale()));
+  connect(m_ImageSetCenterButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableCentering()));
+  connect(m_ImageSliceButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableSlicing()));
+  connect(m_ImageMeasureButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableMeasuring()));
+  connect(m_ImageHistogramButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableHistograms()));
+  connect(m_ImageMaskCirclesButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableMaskCircles()));
+  connect(m_ImageMaskPolygonsButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableMaskPolygons()));
 
   connect(m_CenteringZoomInButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(enableZooming()));
   connect(m_CenteringZoomOutButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(zoomOut()));
@@ -388,11 +409,17 @@ void QxrdWindow::init()
 
   //  connect(m_SaveDarkOptions, SIGNAL(clicked()), this, SLOT(doProcessorOptionsDialog()));
 
-  m_Plot->prop_XMouse()->linkTo(m_XMouse);
-  m_Plot->prop_YMouse()->linkTo(m_YMouse);
-  m_Plot->prop_ValMouse()->linkTo(m_ValMouse);
-  m_Plot->prop_TTHMouse()->linkTo(m_TTHMouse);
-  m_Plot->prop_QMouse()->linkTo(m_QMouse);
+  if (set) {
+    QxrdImagePlotSettingsPtr ps(set->imagePlotSettings());
+
+    if (ps) {
+      ps->prop_XMouse()->linkTo(m_XMouse);
+      ps->prop_YMouse()->linkTo(m_YMouse);
+      ps->prop_ValMouse()->linkTo(m_ValMouse);
+      ps->prop_TTHMouse()->linkTo(m_TTHMouse);
+      ps->prop_QMouse()->linkTo(m_QMouse);
+    }
+  }
 
   m_StatusMsg = new QLabel(NULL);
   m_StatusMsg -> setMinimumWidth(200);
@@ -463,37 +490,43 @@ void QxrdWindow::init()
     proc -> prop_EstimatedProcessingTime() -> linkTo(m_CorrectionDialog->m_EstimatedProcessingTime);
   }
 
-  m_Plot -> prop_DisplayMinimumPct() -> linkTo(m_DisplayDialog->m_DisplayMinimumPct);
-  m_Plot -> prop_DisplayMaximumPct() -> linkTo(m_DisplayDialog->m_DisplayMaximumPct);
-  m_Plot -> prop_DisplayMinimumVal() -> linkTo(m_DisplayDialog->m_DisplayMinimumVal);
-  m_Plot -> prop_DisplayMaximumVal() -> linkTo(m_DisplayDialog->m_DisplayMaximumVal);
-  m_Plot -> prop_DisplayMinimumPctle() -> linkTo(m_DisplayDialog->m_DisplayMinimumPctle);
-  m_Plot -> prop_DisplayMaximumPctle() -> linkTo(m_DisplayDialog->m_DisplayMaximumPctle);
+  if (set) {
+    QxrdImagePlotSettingsPtr ps(set->imagePlotSettings());
 
-  m_Plot -> prop_DisplayLog() -> linkTo(m_DisplayDialog->m_DisplayImageLog);
-  m_Plot -> prop_DisplayScalingMode() -> linkTo(m_DisplayDialog->m_DisplayScalingMode);
+    if (ps) {
+      ps -> prop_DisplayMinimumPct() -> linkTo(m_DisplayDialog->m_DisplayMinimumPct);
+      ps -> prop_DisplayMaximumPct() -> linkTo(m_DisplayDialog->m_DisplayMaximumPct);
+      ps -> prop_DisplayMinimumVal() -> linkTo(m_DisplayDialog->m_DisplayMinimumVal);
+      ps -> prop_DisplayMaximumVal() -> linkTo(m_DisplayDialog->m_DisplayMaximumVal);
+      ps -> prop_DisplayMinimumPctle() -> linkTo(m_DisplayDialog->m_DisplayMinimumPctle);
+      ps -> prop_DisplayMaximumPctle() -> linkTo(m_DisplayDialog->m_DisplayMaximumPctle);
 
-  connect(m_Plot -> prop_DisplayScalingMode(), SIGNAL(valueChanged(int,int)), m_DisplayDialog->m_DisplayParmsStack, SLOT(setCurrentIndex(int)));
+      ps -> prop_DisplayLog() -> linkTo(m_DisplayDialog->m_DisplayImageLog);
+      ps -> prop_DisplayScalingMode() -> linkTo(m_DisplayDialog->m_DisplayScalingMode);
 
-  m_Plot -> prop_DisplayColorMap() -> linkTo(m_DisplayDialog->m_DisplayColorMap);
+      connect(ps -> prop_DisplayScalingMode(), SIGNAL(valueChanged(int,int)), m_DisplayDialog->m_DisplayParmsStack, SLOT(setCurrentIndex(int)));
 
-  m_Plot -> prop_ImageShown() -> linkTo(m_DisplayDialog->m_DisplayImage);
-  m_Plot -> prop_MaskShown() -> linkTo(m_DisplayDialog->m_DisplayMask);
-  m_Plot -> prop_OverflowShown() -> linkTo(m_DisplayDialog->m_DisplayOverflow);
-  m_Plot -> prop_InterpolatePixels() -> linkTo(m_DisplayDialog->m_InterpolatePixels);
-  m_Plot -> prop_MaintainAspectRatio() -> linkTo(m_DisplayDialog->m_MaintainAspectRatio);
+      ps -> prop_DisplayColorMap() -> linkTo(m_DisplayDialog->m_DisplayColorMap);
 
-  m_Plot -> setProcessor(m_DataProcessor);
+      ps -> prop_ImageShown() -> linkTo(m_DisplayDialog->m_DisplayImage);
+      ps -> prop_MaskShown() -> linkTo(m_DisplayDialog->m_DisplayMask);
+      ps -> prop_OverflowShown() -> linkTo(m_DisplayDialog->m_DisplayOverflow);
+      ps -> prop_InterpolatePixels() -> linkTo(m_DisplayDialog->m_InterpolatePixels);
+      ps -> prop_MaintainAspectRatio() -> linkTo(m_DisplayDialog->m_MaintainAspectRatio);
 
+    }
+  }
+
+  m_ImagePlot -> setProcessor(m_DataProcessor);
   m_CenterFinderPlot -> setWindow(this);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
   if (proc) {
     connect(proc -> centerFinder() -> prop_CenterX(), SIGNAL(valueChanged(double,int)),
-            m_Plot, SLOT(onCenterXChanged(double)));
+            m_ImagePlot, SLOT(onCenterXChanged(double)));
 
     connect(proc -> centerFinder() -> prop_CenterY(), SIGNAL(valueChanged(double,int)),
-            m_Plot, SLOT(onCenterYChanged(double)));
+            m_ImagePlot, SLOT(onCenterYChanged(double)));
 
     connect(proc -> centerFinder() -> prop_CenterX(), SIGNAL(valueChanged(double,int)),
             m_CenterFinderPlot, SLOT(onCenterXChanged(double)));
@@ -529,10 +562,10 @@ void QxrdWindow::init()
 
   m_Highlighter = new QxrdHighlighter(m_ScriptEdit->document());
 
-  connect(m_Plot, SIGNAL(slicePolygon(QwtArray<QwtDoublePoint>)),
+  connect(m_ImagePlot, SIGNAL(slicePolygon(QwtArray<QwtDoublePoint>)),
           m_SliceDialog, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
 
-  connect(m_Plot, SIGNAL(selectHistogram(QwtDoubleRect)),
+  connect(m_ImagePlot, SIGNAL(selectHistogram(QwtDoubleRect)),
           m_HistogramDialog, SLOT(histogramSelectionChanged(QwtDoubleRect)));
 
   if (m_Application) {
@@ -859,8 +892,12 @@ void QxrdWindow::acquiredFrame(
 
 void QxrdWindow::captureSize()
 {
-  set_WindowGeometry(saveGeometry());
-  set_WindowState(saveState(2));
+  QxrdWindowSettingsPtr set(m_WindowSettings);
+
+  if (set) {
+    set->set_WindowGeometry(saveGeometry());
+    set->set_WindowState(saveState(2));
+  }
 }
 
 void QxrdWindow::resizeEvent(QResizeEvent *ev)
@@ -942,7 +979,7 @@ void QxrdWindow::newData()
     m_Overflow = m_NewOverflow;
     m_NewOverflow = QxrdMaskDataPtr(NULL);
 
-    m_Plot             -> onProcessedImageAvailable(m_Data, m_Overflow);
+    m_ImagePlot        -> onProcessedImageAvailable(m_Data, m_Overflow);
     m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
 
     if (m_ImageDisplay) {
@@ -975,7 +1012,7 @@ void QxrdWindow::newMask()
     m_NewMask = QxrdMaskDataPtr(NULL);
     m_NewMaskAvailable.fetchAndStoreOrdered(0);
 
-    m_Plot             -> onMaskedImageAvailable(m_Data, m_Mask);
+    m_ImagePlot        -> onMaskedImageAvailable(m_Data, m_Mask);
     m_CenterFinderPlot -> onMaskedImageAvailable(m_Data, m_Mask);
 
     if (m_ImageDisplay) {
@@ -1414,7 +1451,7 @@ void QxrdWindow::allocatedMemoryChanged()
 
 void QxrdWindow::doRefineCenterTilt()
 {
-  m_PowderFitDialog = new QxrdPowderFitDialog(m_Saver, m_DataProcessor, this);
+  m_PowderFitDialog = new QxrdPowderFitDialog(QxrdSettingsSaverWPtr(), m_DataProcessor, this);
   m_PowderFitDialog -> exec();
 }
 

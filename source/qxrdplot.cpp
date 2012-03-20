@@ -17,6 +17,7 @@
 
 QxrdPlot::QxrdPlot(QWidget *parent)
   : QwtPlot(parent),
+    m_PlotSettings(),
     m_Legend(NULL),
     m_Zoomer(NULL),
     m_Panner(NULL),
@@ -26,6 +27,15 @@ QxrdPlot::QxrdPlot(QWidget *parent)
   for (int i=0; i<QwtPlot::axisCnt; i++) {
     m_IsLog[i] = 0;
   }
+}
+
+QxrdPlot::~QxrdPlot()
+{
+}
+
+void QxrdPlot::init(QxrdPlotSettingsWPtr settings)
+{
+  m_PlotSettings = settings;
 
   setCanvasBackground(QColor(Qt::white));
 
@@ -62,23 +72,15 @@ QxrdPlot::QxrdPlot(QWidget *parent)
 
   autoScale();
 
-  connect(prop_XAxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setXAxisLog(int)));
-  connect(prop_YAxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setYAxisLog(int)));
-  connect(prop_X2AxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setX2AxisLog(int)));
-  connect(prop_Y2AxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setY2AxisLog(int)));
-}
+  QxrdPlotSettingsPtr set(m_PlotSettings);
 
-QxrdPlot::~QxrdPlot()
-{
+  if (set) {
+    connect(set->prop_XAxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setXAxisLog(int)));
+    connect(set->prop_YAxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setYAxisLog(int)));
+    connect(set->prop_X2AxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setX2AxisLog(int)));
+    connect(set->prop_Y2AxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setY2AxisLog(int)));
+  }
 }
-
-//void QxrdPlot::setSaver(QxrdSettingsSaverPtr saver)
-//{
-//  prop_XAxisLog()->setSaver(saver);
-//  prop_YAxisLog()->setSaver(saver);
-//  prop_X2AxisLog()->setSaver(saver);
-//  prop_Y2AxisLog()->setSaver(saver);
-//}
 
 void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
 {
@@ -285,19 +287,23 @@ void QxrdPlot::contextMenuEvent(QContextMenuEvent *event)
   QAction *yLog = plotMenu.addAction("Log Y Axis");
   QAction *auSc = plotMenu.addAction("Autoscale");
 
-  xLog->setCheckable(true);
-  yLog->setCheckable(true);
-  xLog->setChecked(get_XAxisLog());
-  yLog->setChecked(get_YAxisLog());
+  QxrdPlotSettingsPtr set(m_PlotSettings);
 
-  QAction *action = plotMenu.exec(event->globalPos());
+  if (set) {
+    xLog->setCheckable(true);
+    yLog->setCheckable(true);
+    xLog->setChecked(set->get_XAxisLog());
+    yLog->setChecked(set->get_YAxisLog());
 
-  if (action == xLog) {
-    set_XAxisLog(!get_XAxisLog());
-  } else if (action == yLog) {
-    set_YAxisLog(!get_YAxisLog());
-  } else if (action == auSc) {
-    autoScale();
+    QAction *action = plotMenu.exec(event->globalPos());
+
+    if (action == xLog) {
+      set->set_XAxisLog(!set->get_XAxisLog());
+    } else if (action == yLog) {
+      set->set_YAxisLog(!set->get_YAxisLog());
+    } else if (action == auSc) {
+      autoScale();
+    }
   }
 
   event->accept();
@@ -310,8 +316,12 @@ int QxrdPlot::logAxis(int axis)
 
 QwtText QxrdPlot::trackerText(const QwtDoublePoint &pos)
 {
-  set_XMouse(pos.x());
-  set_YMouse(pos.y());
+  QxrdPlotSettingsPtr set(m_PlotSettings);
+
+  if (set) {
+    set->set_XMouse(pos.x());
+    set->set_YMouse(pos.y());
+  }
 
   return tr("%1, %2").arg(pos.x()).arg(pos.y());
 }

@@ -20,4 +20,7 @@ public slots:
   
 };
 
+typedef QSharedPointer<QxrdInfoDialogSettings> QxrdInfoDialogSettingsPtr;
+typedef QWeakPointer<QxrdInfoDialogSettings>   QxrdInfoDialogSettingsWPtr;
+
 #endif // QXRDINFODIALOGSETTINGS_H

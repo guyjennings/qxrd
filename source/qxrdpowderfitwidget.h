@@ -32,6 +32,7 @@ protected:
 protected:
   QxrdDataProcessorWPtr      m_Processor;
   QVector<QwtSymbol::Style>  m_SymbolStyles;
+  QxrdImagePlotSettingsPtr   m_ImagePlotSettings;
 };
 
 #endif // QXRDPOWDERFITWIDGET_H

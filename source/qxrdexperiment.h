@@ -26,6 +26,7 @@
 #include "qxrdfilesaver-ptr.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdwindow-ptr.h"
+#include "qxrdwindowsettings.h"
 #include "qxrdscriptengine.h"
 #include "qxrdscriptengine-ptr.h"
 #include "qxrdscriptenginethread.h"
@@ -158,6 +159,7 @@ public:  // Properties
   QCEP_INTEGER_PROPERTY(CompletionPercentage)
 
 private:
+  QxrdWindowSettingsPtr           m_WindowSettings;
   QxrdWindow                     *m_Window;
   QSplashScreen                  *m_Splash;
   QxrdServerThreadPtr             m_ServerThread;

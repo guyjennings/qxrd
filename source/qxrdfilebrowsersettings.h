@@ -20,6 +20,9 @@ public:
   Q_PROPERTY(QString rootDirectory READ get_RootDirectory WRITE set_RootDirectory)
   QCEP_STRING_PROPERTY(RootDirectory)
 
+//  Q_PROPERTY(QcepIntList columnWidths READ get_ColumnWidths WRITE set_ColumnWidths)
+//  QCEP_INTEGER_LIST_PROPERTY(ColumnWidths)
+
 public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
@@ -29,5 +32,8 @@ signals:
 public slots:
   
 };
+
+typedef QSharedPointer<QxrdFileBrowserSettings> QxrdFileBrowserSettingsPtr;
+typedef QWeakPointer<QxrdFileBrowserSettings>   QxrdFileBrowserSettingsWPtr;
 
 #endif // QXRDFILEBROWSERSETTINGS_H

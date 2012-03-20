@@ -27,4 +27,7 @@ private:
   QxrdSlicePlotSettings m_SlicePlotSettings;
 };
 
+typedef QSharedPointer<QxrdSliceDialogSettings> QxrdSliceDialogSettingsPtr;
+typedef QWeakPointer<QxrdSliceDialogSettings>   QxrdSliceDialogSettingsWPtr;
+
 #endif // QXRDSLICEDIALOGSETTINGS_H

@@ -8,6 +8,7 @@
 #include <qwt_plot_panner.h>
 #include <qwt_plot_magnifier.h>
 #include "qxrdplotmeasurer-ptr.h"
+#include "qxrdplotsettings.h"
 
 class QxrdPlot : public QwtPlot
 {
@@ -17,6 +18,7 @@ public:
   QxrdPlot(QWidget *parent = 0);
   typedef QwtPlot inherited;
   virtual ~QxrdPlot();
+  void init(QxrdPlotSettingsWPtr settings);
 
 public:
 //  virtual void setSaver(QxrdSettingsSaverPtr saver);
@@ -50,13 +52,14 @@ public slots:
 //  void setCustomZoomer(QwtPlotZoomer *zoomer);
 
 protected:
-  QwtLegend        *m_Legend;
-  QwtPlotZoomer    *m_Zoomer;
-  QwtPlotPanner    *m_Panner;
-  QwtPlotMagnifier *m_Magnifier;
-  QxrdPlotMeasurerPtr m_Measurer;
+  QxrdPlotSettingsWPtr m_PlotSettings;
+  QwtLegend           *m_Legend;
+  QwtPlotZoomer       *m_Zoomer;
+  QwtPlotPanner       *m_Panner;
+  QwtPlotMagnifier    *m_Magnifier;
+  QxrdPlotMeasurerPtr  m_Measurer;
 
-  int                 m_IsLog[QwtPlot::axisCnt];
+  int                  m_IsLog[QwtPlot::axisCnt];
 };
 
 #endif // QXRDPLOT_H

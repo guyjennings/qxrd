@@ -21,6 +21,7 @@
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdimagedata-ptr.h"
 #include "qxrdmaskdata-ptr.h"
+#include "qxrdimageplotsettings.h"
 
 class QxrdImagePlot : public QxrdPlot
 {
@@ -28,6 +29,7 @@ class QxrdImagePlot : public QxrdPlot
 
 public:
   QxrdImagePlot(QWidget *parent = 0);
+  void init(QxrdImagePlotSettingsWPtr settings);
 
 signals:
   void slicePolygon(QwtArray<QwtDoublePoint> poly);
@@ -77,7 +79,7 @@ public slots:
   void enableMaskPolygons();
 
 public:
-//  void setSaver(QxrdSettingsSaverPtr saver);
+  QxrdImagePlotSettingsWPtr imagePlotSettings();
 
   const QxrdRasterData* raster() const;
   QxrdRasterData* raster();
@@ -113,6 +115,7 @@ public:
   };
 
 private:
+  QxrdImagePlotSettingsWPtr  m_ImagePlotSettings;
   QwtPlotRescaler           *m_Rescaler;
   QxrdPlotSlicer            *m_Slicer;
   QxrdImagePlotMeasurer     *m_Measurer;

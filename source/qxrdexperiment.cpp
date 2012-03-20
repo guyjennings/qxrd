@@ -48,6 +48,7 @@ QxrdExperiment::QxrdExperiment(
   m_WorkCompleted(QxrdSettingsSaverPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
   m_WorkTarget(QxrdSettingsSaverPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
   m_CompletionPercentage(QxrdSettingsSaverPtr(), this, "completionPercentage", 0, "Percentage of Work Completed"),
+  m_WindowSettings(QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL))),
   m_Window(),
   m_Splash(NULL),
   m_ServerThread(NULL),
@@ -144,18 +145,17 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
     if (m_Application && m_Application->get_GuiWanted()) {
       splashMessage("Opening Main Window");
       m_Window =
-            new QxrdWindow(m_SettingsSaver,
+            new QxrdWindow(m_WindowSettings,
                            m_Application,
                            exp,
                            m_Acquisition,
                            m_DataProcessor,
-                           m_Application->allocator());
+                           m_Application->allocator(),
+                           NULL);
 
       QxrdWindow *win = m_Window;
 
       if (win) {
-        win -> init();
-
         m_DataProcessor -> setWindow(win);
         m_Acquisition -> setWindow(win);
       }
@@ -510,10 +510,8 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
   if (settings) {
     QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
-    QxrdWindow *win = m_Window;
-
-    if (win) {
-      win            -> readSettings(settings, section+"/window");
+    if (m_WindowSettings) {
+      m_WindowSettings -> readSettings(settings, section+"/window");
     }
 
     if (m_Acquisition) {
@@ -558,12 +556,12 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 
     QxrdWindow *win = m_Window;
 
-    if (win) {
-      win            -> writeSettings(settings, section+"/window");
+    if (m_WindowSettings) {
+      m_WindowSettings -> writeSettings(settings, section+"/window");
     }
 
     if (m_Acquisition) {
-      m_Acquisition  -> writeSettings(settings, section+"/acquire");
+      m_Acquisition -> writeSettings(settings, section+"/acquire");
     }
 
     if (m_DataProcessor) {

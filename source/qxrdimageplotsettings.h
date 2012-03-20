@@ -76,4 +76,7 @@ public slots:
   
 };
 
+typedef QSharedPointer<QxrdImagePlotSettings> QxrdImagePlotSettingsPtr;
+typedef QWeakPointer<QxrdImagePlotSettings>   QxrdImagePlotSettingsWPtr;
+
 #endif // QXRDIMAGEPLOTSETTINGS_H

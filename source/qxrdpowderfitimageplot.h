@@ -10,6 +10,7 @@ class QxrdPowderFitImagePlot : public QxrdImagePlot
   Q_OBJECT
 public:
   explicit QxrdPowderFitImagePlot(QWidget *parent = 0);
+  void init(QxrdImagePlotSettingsWPtr settings);
 
   void setRingSetSampleMarkers(QxrdRingSetSampledDataPtr p);
   void setRingSampleMarkers(int n);

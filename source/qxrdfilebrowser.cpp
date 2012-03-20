@@ -10,12 +10,13 @@
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 
-QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
+QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
                                  int isOutput,
                                  QxrdExperimentWPtr experiment,
                                  QxrdDataProcessorWPtr processor,
                                  QWidget *parent)
   : QDockWidget(parent),
+    m_FileBrowserSettings(settings),
     m_IsOutput(isOutput),
     m_Experiment(experiment),
     m_Processor(processor),
@@ -52,8 +53,8 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
   connect(m_Model.data(), SIGNAL(modelReset()), this, SLOT(onModelReset()));
   connect(m_Model.data(), SIGNAL(fileUpdated(QFileInfo)), this, SLOT(onFileUpdated(QFileInfo)));
 
-//  connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
-//  connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
+  //  connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
+  //  connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
   connect(m_PrevDirectoryButton, SIGNAL(clicked()), this, SLOT(doPreviousDirectory()));
   connect(m_UpDirectoryButton, SIGNAL(clicked()), this, SLOT(doUpDirectory()));
   connect(m_ChangeDirectoryButton, SIGNAL(clicked()), this, SLOT(doChangeDirectory()));
@@ -65,20 +66,29 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdSettingsSaverPtr saver,
   connect(m_IntegrateButton, SIGNAL(clicked()), this, SLOT(doIntegrate()));
   connect(m_AccumulateButton, SIGNAL(clicked()), this, SLOT(doAccumulate()));
 
-  connect(this -> prop_RootDirectory(), SIGNAL(valueChanged(QString,int)), this, SLOT(onRootDirectoryChanged(QString)));
-  connect(this -> prop_BrowserFilter(), SIGNAL(valueChanged(int,int)), this, SLOT(onFilterChanged(int)));
-  connect(this -> prop_BrowserSelector(), SIGNAL(valueChanged(QString,int)), this, SLOT(onSelectorChanged(QString)));
+  QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
+
+  if (set) {
+    connect(set -> prop_RootDirectory(), SIGNAL(valueChanged(QString,int)), this, SLOT(onRootDirectoryChanged(QString)));
+    connect(set -> prop_BrowserFilter(), SIGNAL(valueChanged(int,int)), this, SLOT(onFilterChanged(int)));
+    connect(set -> prop_BrowserSelector(), SIGNAL(valueChanged(QString,int)), this, SLOT(onSelectorChanged(QString)));
+  }
 
   connect(m_FileBrowser, SIGNAL(pressed(QModelIndex)), this, SLOT(mousePressed(QModelIndex)));
   connect(m_FileBrowser, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClicked(QModelIndex)));
 
   connect(m_RootDirectoryCombo, SIGNAL(activated(int)), this, SLOT(doSelectComboItem(int)));
 
-  prop_BrowserFilter() -> linkTo(m_FilterChoices);
-  prop_BrowserSelector() -> linkTo(m_FileSelector);
+  if (set) {
+    set->prop_BrowserFilter() -> linkTo(m_FilterChoices);
+    set->prop_BrowserSelector() -> linkTo(m_FileSelector);
+  }
 
   m_PrevDirectoryButton->setEnabled(false);
-  m_RootDirectoryCombo -> setItemText(0, get_RootDirectory());
+
+  if (set) {
+    m_RootDirectoryCombo -> setItemText(0, set->get_RootDirectory());
+  }
 }
 
 void QxrdFileBrowser::onFilterChanged(int newfilter)
@@ -125,7 +135,7 @@ void QxrdFileBrowser::onSelectorChanged(QString str, const QModelIndex &parent)
     QModelIndex index = m_Model -> index(i, 0, parent);
 
     QString path = m_Model->fileName(index);
-//    g_Application->printMessage(tr("Testing %1").arg(path));
+    //    g_Application->printMessage(tr("Testing %1").arg(path));
 
     if (pattern.exactMatch(path)) {
       sel -> select(index, QItemSelectionModel::Rows | QItemSelectionModel::Select);
@@ -160,10 +170,12 @@ void QxrdFileBrowser::onRootDirectoryChanged(QString str)
 
 void QxrdFileBrowser::doPushDirectory(QString newDir)
 {
-  if (newDir != "") {
-    m_DirectoryStack.append(get_RootDirectory());
+  QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
 
-    set_RootDirectory(newDir);
+  if (set && newDir != "") {
+    m_DirectoryStack.append(set->get_RootDirectory());
+
+    set->set_RootDirectory(newDir);
 
     m_PrevDirectoryButton->setEnabled(true);
   }
@@ -171,8 +183,10 @@ void QxrdFileBrowser::doPushDirectory(QString newDir)
 
 void QxrdFileBrowser::doPreviousDirectory()
 {
-  if (!m_DirectoryStack.isEmpty()) {
-    set_RootDirectory(m_DirectoryStack.takeLast());
+  QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
+
+  if (set && !m_DirectoryStack.isEmpty()) {
+    set->set_RootDirectory(m_DirectoryStack.takeLast());
 
     m_PrevDirectoryButton->setEnabled(!m_DirectoryStack.isEmpty());
   }
@@ -180,19 +194,27 @@ void QxrdFileBrowser::doPreviousDirectory()
 
 void QxrdFileBrowser::doChangeDirectory()
 {
-  QString newRoot = QFileDialog::getExistingDirectory(this, "New browser directory...", get_RootDirectory(), 0);
+  QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
 
-  if (newRoot != "") {
-    doPushDirectory(newRoot);
+  if (set) {
+    QString newRoot = QFileDialog::getExistingDirectory(this, "New browser directory...", set->get_RootDirectory(), 0);
+
+    if (newRoot != "") {
+      doPushDirectory(newRoot);
+    }
   }
 }
 
 void QxrdFileBrowser::doUpDirectory()
 {
-  QDir dir(get_RootDirectory());
+  QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
 
-  if (dir.cdUp()) {
-    doPushDirectory(dir.path());
+  if (set) {
+    QDir dir(set->get_RootDirectory());
+
+    if (dir.cdUp()) {
+      doPushDirectory(dir.path());
+    }
   }
 }
 
@@ -363,7 +385,7 @@ void QxrdFileBrowser::doRefreshBrowser()
 void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
 {
   if (QApplication::mouseButtons() & Qt::RightButton) {
-//    g_Application->printMessage("Right mouse pressed");
+    //    g_Application->printMessage("Right mouse pressed");
 
     QMenu *actions = new QMenu(this);
     QAction *open = actions->addAction("Open");
@@ -377,15 +399,15 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
     QAction *action = actions->exec(QCursor::pos());
 
     if (action == open) {
-        doOpen();
+      doOpen();
     } else if (action == openDark) {
-        doOpenDark();
+      doOpenDark();
     } else if (action == openMask) {
-        doOpenMask();
+      doOpenMask();
     } else if (action == openGainMap) {
-        doOpenGainMap();
+      doOpenGainMap();
     } else if (action == accumulate) {
-        doAccumulate();
+      doAccumulate();
     } else if (action == integrate) {
       doIntegrate();
     } else if (action == process) {
@@ -427,19 +449,19 @@ void QxrdFileBrowser::onFileUpdated(QFileInfo file)
   }
 }
 
-QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdSettingsSaverPtr saver,
+QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdFileBrowserSettingsWPtr settings,
                                            QxrdExperimentWPtr experiment,
                                            QxrdDataProcessorWPtr processor,
                                            QWidget *parent)
-  : QxrdFileBrowser(saver, false, experiment, processor, parent)
+  : QxrdFileBrowser(settings, false, experiment, processor, parent)
 {
 }
 
-QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdSettingsSaverPtr saver,
+QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdFileBrowserSettingsWPtr settings,
                                              QxrdExperimentWPtr experiment,
                                              QxrdDataProcessorWPtr processor,
                                              QWidget *parent)
-  : QxrdFileBrowser(saver, true, experiment, processor, parent)
+  : QxrdFileBrowser(settings, true, experiment, processor, parent)
 {
 }
 

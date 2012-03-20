@@ -4,9 +4,9 @@
 #include <QSettings>
 #include "qxrdsettingssaver.h"
 
-QxrdSliceDialog::QxrdSliceDialog(QxrdSettingsSaverWPtr saver, QWidget *parent) :
+QxrdSliceDialog::QxrdSliceDialog(QxrdSliceDialogSettingsWPtr settings, QWidget *parent) :
   QDockWidget(parent),
-  m_Saver(saver)
+  m_SliceDialogSettings(settings)
 {
   setupUi(this);
 }
@@ -20,13 +20,11 @@ void QxrdSliceDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qx
 
 void QxrdSliceDialog::slicePolygon(QwtArray<QwtDoublePoint> poly)
 {
-  QxrdSettingsSaverPtr saver(m_Saver);
+  QxrdSliceDialogSettingsPtr set(m_SliceDialogSettings);
 
-  if (saver) {
-    saver->changed(NULL);
+  if (set) {
+    set->set_SlicePolygon(poly);
   }
-
-  m_Polygon = poly;
 
   reslice();
 }
@@ -35,31 +33,35 @@ void QxrdSliceDialog::reslice()
 {
   m_SlicePlot->clear();
 
-  if (m_Image) {
+  QxrdSliceDialogSettingsPtr set(m_SliceDialogSettings);
+
+  if (set && m_Image) {
     QVector<double> xp,yp;
     QString title = m_Image->get_Title();
 
     double length = 0;
 
-    if (m_Polygon.size() >= 2) {
-      QwtDoublePoint p0 = m_Polygon[0];
+    QcepPolygon poly = set->get_SlicePolygon();
 
-      for (int i=1; i<m_Polygon.size(); i++) {
-        QwtDoublePoint p1 = m_Polygon[i];
+    if (poly.size() >= 2) {
+      QwtDoublePoint p0 = poly[0];
+
+      for (int i=1; i<poly.size(); i++) {
+        QwtDoublePoint p1 = poly[i];
         double dx = p1.x() - p0.x();
         double dy = p1.y() - p0.y();
         length += sqrt(dx*dx + dy*dy);
         p0=p1;
       }
 
-      p0 = m_Polygon[0];
+      p0 = poly[0];
       double r = 0;
       double r0 = 0;
 
       title += tr(" [%1,%2]").arg(p0.x()).arg(p0.y());
 
-      for (int i=1; i<m_Polygon.size(); i++) {
-        QwtDoublePoint p1 = m_Polygon[i];
+      for (int i=1; i<poly.size(); i++) {
+        QwtDoublePoint p1 = poly[i];
         double dx = p1.x() - p0.x();
         double dy = p1.y() - p0.y();
         double len = sqrt(dx*dx + dy*dy);
@@ -79,13 +81,13 @@ void QxrdSliceDialog::reslice()
         r  -= len;
       }
 
-      if (m_Polygon.size() > 2) {
+      if (poly.size() > 2) {
         title += "...";
       } else {
         title += "-";
       }
 
-      QwtDoublePoint p1 = m_Polygon.last();
+      QwtDoublePoint p1 = poly.last();
       title += tr("[%1,%2]").arg(p1.x()).arg(p1.y());
 
       QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_SlicePlot, title);

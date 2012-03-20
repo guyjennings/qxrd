@@ -318,6 +318,7 @@ HEADERS += TODO.h \
     qxrdimageplotsettings.h \
     qxrdfilebrowsersettings.h \
     qxrdhistogramdialogsettings.h \
+    qxrdhistogramplotsettings.h \
     qxrdinfodialogsettings.h \
     qxrdcenterfinderplotsettings.h \
     qxrdsliceplotsettings.h
@@ -463,6 +464,7 @@ SOURCES += qxrd.cpp \
     qxrdimageplotsettings.cpp \
     qxrdfilebrowsersettings.cpp \
     qxrdhistogramdialogsettings.cpp \
+    qxrdhistogramplotsettings.cpp \
     qxrdinfodialogsettings.cpp \
     qxrdcenterfinderplotsettings.cpp \
     qxrdsliceplotsettings.cpp

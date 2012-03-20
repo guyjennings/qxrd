@@ -5,13 +5,18 @@
 #include "qxrddataprocessor.h"
 
 QxrdPowderFitWidget::QxrdPowderFitWidget(QxrdDataProcessorWPtr proc, QWidget *parent) :
-    QDialog(parent),
-    m_Processor(proc)
+  QDialog(parent),
+  m_Processor(proc),
+  m_ImagePlotSettings()
 {
   setupUi(this);
 
+  m_ImagePlotSettings = QxrdImagePlotSettingsPtr(new QxrdImagePlotSettings(QxrdSettingsSaverWPtr(), NULL));
+
+  m_ImagePlot->init(m_ImagePlotSettings);
+
   m_SymbolStyles << QwtSymbol::Ellipse
-      << QwtSymbol::Cross << QwtSymbol::Diamond << QwtSymbol::Triangle;
+                 << QwtSymbol::Cross << QwtSymbol::Diamond << QwtSymbol::Triangle;
 
   connect(m_PerformFitButton, SIGNAL(clicked()), this, SLOT(performFit()));
   connect(m_CancelFitButton, SIGNAL(clicked()), this, SLOT(cancelFit()));

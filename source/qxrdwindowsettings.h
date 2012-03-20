@@ -27,13 +27,21 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
+  QxrdImagePlotSettingsWPtr              imagePlotSettings();
+  QxrdCenterFinderPlotSettingsWPtr       centerFinderPlotSettings();
+  QxrdPlotSettingsWPtr                   integratorPlotSettings();
+  QxrdFileBrowserSettingsWPtr            inputFileBrowserSettings();
+  QxrdFileBrowserSettingsWPtr            outputFileBrowserSettings();
+  QxrdHistogramDialogSettingsWPtr        histogramDialogSettings();
+  QxrdSliceDialogSettingsWPtr            sliceDialogSettings();
+  QxrdInfoDialogSettingsWPtr             infoDialogSettings();
+
 signals:
   
 public slots:
   
 private:
-  QxrdSettingsSaverWPtr                  m_Saver;
-  QxrdImagePlotSettings                  m_PlotSettings;
+  QxrdImagePlotSettings                  m_ImagePlotSettings;
   QxrdCenterFinderPlotSettings           m_CenterFinderPlotSettings;
   QxrdPlotSettings                       m_IntegratorPlotSettings;
   QxrdFileBrowserSettings                m_InputFileBrowserSettings;
@@ -42,5 +50,8 @@ private:
   QxrdSliceDialogSettings                m_SliceDialogSettings;
   QxrdInfoDialogSettings                 m_InfoDialogSettings;
 };
+
+typedef QSharedPointer<QxrdWindowSettings> QxrdWindowSettingsPtr;
+typedef QWeakPointer<QxrdWindowSettings>   QxrdWindowSettingsWPtr;
 
 #endif // QXRDWINDOWSETTINGS_H

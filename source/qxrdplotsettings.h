@@ -38,4 +38,7 @@ public slots:
   
 };
 
+typedef QSharedPointer<QxrdPlotSettings> QxrdPlotSettingsPtr;
+typedef QWeakPointer<QxrdPlotSettings>   QxrdPlotSettingsWPtr;
+
 #endif // QXRDPLOTSETTINGS_H

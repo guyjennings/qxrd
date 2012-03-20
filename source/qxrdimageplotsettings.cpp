@@ -22,6 +22,7 @@ QxrdImagePlotSettings::QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObjec
   m_ValMouse(QxrdSettingsSaverPtr(), this,"valMouse",0, "Image Value at Mouse"),
   m_MaskMouse(QxrdSettingsSaverPtr(), this,"maskMouse",0, "Mask Value at Mouse")
 {
+  setObjectName("imageGraph");
 }
 
 void QxrdImagePlotSettings::readSettings(QSettings *settings, QString section)

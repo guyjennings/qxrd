@@ -5,8 +5,7 @@ QxrdWindowSettings::QxrdWindowSettings(QxrdSettingsSaverWPtr saver,
   QObject(parent),
   m_WindowGeometry(saver, this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
   m_WindowState(saver, this, "windowState", QByteArray(), "Window State Settings"),
-  m_Saver(saver),
-  m_PlotSettings(saver, NULL),
+  m_ImagePlotSettings(saver, NULL),
   m_CenterFinderPlotSettings(saver, NULL),
   m_IntegratorPlotSettings(saver, NULL),
   m_InputFileBrowserSettings(saver, NULL),
@@ -19,11 +18,10 @@ QxrdWindowSettings::QxrdWindowSettings(QxrdSettingsSaverWPtr saver,
 
 void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
 {
-
   if (settings) {
     QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
-    m_PlotSettings.readSettings(settings, section+"/plot");
+    m_ImagePlotSettings.readSettings(settings, section+"/plot");
     m_CenterFinderPlotSettings.readSettings(settings, section+"/centerFinderPlot");
     m_IntegratorPlotSettings.readSettings(settings, section+"/integratorPlot");
     m_InputFileBrowserSettings.readSettings(settings, section+"/inputFileBrowser");
@@ -31,27 +29,6 @@ void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
     m_HistogramDialogSettings.readSettings(settings, section+"/histogramDialog");
     m_SliceDialogSettings.readSettings(settings, section+"/sliceDialog");
     m_InfoDialogSettings.readSettings(settings, section+"/imageInfoDialog");
-
-    m_SettingsLoaded = true;
-
-    QxrdExperimentPtr expt(m_Experiment);
-
-    if (expt) {
-      if (!expt->get_DefaultLayout()) {
-        QByteArray geometry = get_WindowGeometry();
-        QByteArray winstate = get_WindowState();
-
-        if (!restoreGeometry(geometry)) {
-          printf("Restore geometry failed\n");
-        }
-
-        if (!restoreState(winstate,2)) {
-          printf("Restore state failed\n");
-        }
-      } else{
-        expt->set_DefaultLayout(0);
-      }
-    }
   }
 }
 
@@ -62,14 +39,53 @@ void QxrdWindowSettings::writeSettings(QSettings *settings, QString section)
   if (settings) {
     QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 
-    m_PlotSettings.writeSettings(settings, section+"/plot");
+    m_ImagePlotSettings.writeSettings(settings, section+"/plot");
     m_CenterFinderPlotSettings.writeSettings(settings, section+"/centerFinderPlot");
     m_IntegratorPlotSettings.writeSettings(settings, section+"/integratorPlot");
     m_InputFileBrowserSettings.writeSettings(settings, section+"/inputFileBrowser");
     m_OutputFileBrowserSettings.writeSettings(settings, section+"/outputFileBrowser");
     m_HistogramDialogSettings.writeSettings(settings, section+"/histogramDialog");
     m_SliceDialogSettings.writeSettings(settings, section+"/sliceDialog");
-    m_ImageInfoDialogSettings.writeSettings(settings, section+"/imageInfoDialog");
+    m_InfoDialogSettings.writeSettings(settings, section+"/imageInfoDialog");
   }
 }
 
+QxrdImagePlotSettingsWPtr QxrdWindowSettings::imagePlotSettings()
+{
+  return &m_ImagePlotSettings;
+}
+
+QxrdCenterFinderPlotSettingsWPtr QxrdWindowSettings::centerFinderPlotSettings()
+{
+  return &m_CenterFinderPlotSettings;
+}
+
+QxrdPlotSettingsWPtr QxrdWindowSettings::integratorPlotSettings()
+{
+  return &m_IntegratorPlotSettings;
+}
+
+QxrdFileBrowserSettingsWPtr QxrdWindowSettings::inputFileBrowserSettings()
+{
+  return &m_InputFileBrowserSettings;
+}
+
+QxrdFileBrowserSettingsWPtr QxrdWindowSettings::outputFileBrowserSettings()
+{
+  return &m_OutputFileBrowserSettings;
+}
+
+QxrdSliceDialogSettingsWPtr QxrdWindowSettings::sliceDialogSettings()
+{
+  return &m_SliceDialogSettings;
+}
+
+QxrdHistogramDialogSettingsWPtr QxrdWindowSettings::histogramDialogSettings()
+{
+  return &m_HistogramDialogSettings;
+}
+
+QxrdInfoDialogSettingsWPtr QxrdWindowSettings::infoDialogSettings()
+{
+  return &m_InfoDialogSettings;
+}

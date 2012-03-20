@@ -4,8 +4,9 @@
 #include "qxrdsettingssaver.h"
 #include "qxrdimagedata.h"
 
-QxrdInfoDialog::QxrdInfoDialog(QWidget *parent) :
-  QDockWidget(parent)
+QxrdInfoDialog::QxrdInfoDialog(QxrdInfoDialogSettingsWPtr settings, QWidget *parent) :
+  QDockWidget(parent),
+  m_InfoDialogSettings(settings)
 {
   setupUi(this);
 }

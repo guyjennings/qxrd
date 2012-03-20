@@ -19,6 +19,7 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
+  QxrdHistogramPlotSettingsWPtr histogramPlotSettings();
 signals:
   
 public slots:
@@ -26,5 +27,8 @@ public slots:
 private:
   QxrdHistogramPlotSettings   m_HistogramPlotSettings;
 };
+
+typedef QSharedPointer<QxrdHistogramDialogSettings> QxrdHistogramDialogSettingsPtr;
+typedef QWeakPointer<QxrdHistogramDialogSettings>   QxrdHistogramDialogSettingsWPtr;
 
 #endif // QXRDHISTOGRAMDIALOGSETTINGS_H

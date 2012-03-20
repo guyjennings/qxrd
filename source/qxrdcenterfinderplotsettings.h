@@ -16,4 +16,7 @@ public slots:
   
 };
 
+typedef QSharedPointer<QxrdCenterFinderPlotSettings> QxrdCenterFinderPlotSettingsPtr;
+typedef QWeakPointer<QxrdCenterFinderPlotSettings>   QxrdCenterFinderPlotSettingsWPtr;
+
 #endif // QXRDCENTERFINDERPLOTSETTINGS_H

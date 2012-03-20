@@ -7,13 +7,14 @@
 #include "qxrdimagedata.h"
 #include "qwt_array.h"
 #include "qxrdsettingssaver-ptr.h"
+#include "qxrdslicedialogsettings.h"
 
 class QxrdSliceDialog : public QDockWidget, public Ui::QxrdSliceDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdSliceDialog(QxrdSettingsSaverWPtr saver, QWidget *parent = 0);
+  explicit QxrdSliceDialog(QxrdSliceDialogSettingsWPtr settings, QWidget *parent);
 
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
 
@@ -24,7 +25,8 @@ private:
   void reslice();
 
 private:
-  QxrdDoubleImageDataPtr   m_Image;
+  QxrdSliceDialogSettingsWPtr m_SliceDialogSettings;
+  QxrdDoubleImageDataPtr      m_Image;
 };
 
 #endif // QXRDSLICEDIALOG_H

@@ -3,10 +3,17 @@
 #include <QSettings>
 #include "qxrdsettingssaver.h"
 
-QxrdHistogramDialog::QxrdHistogramDialog(QWidget *parent) :
-  QDockWidget(parent)
+QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr settings, QWidget *parent) :
+  QDockWidget(parent),
+  m_HistogramDialogSettings(settings)
 {
   setupUi(this);
+
+  QxrdHistogramDialogSettingsPtr set(m_HistogramDialogSettings);
+
+  if (set) {
+    m_HistogramPlot->init(set->histogramPlotSettings());
+  }
 }
 
 void QxrdHistogramDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
@@ -18,15 +25,13 @@ void QxrdHistogramDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image
 
 void QxrdHistogramDialog::histogramSelectionChanged(QwtDoubleRect rect)
 {
-  QxrdSettingsSaverPtr saver(m_Saver);
+  QxrdHistogramDialogSettingsPtr set(m_HistogramDialogSettings);
 
-  if (saver) {
-    saver->changed(NULL);
+  if (set) {
+    set->set_HistogramRect(rect);
+
+    recalculateHistogram();
   }
-
-  m_HistogramRect = rect;
-
-  recalculateHistogram();
 }
 
 void QxrdHistogramDialog::recalculateHistogram()

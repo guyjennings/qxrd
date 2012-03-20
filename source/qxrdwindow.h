@@ -32,13 +32,15 @@
 #include "qxrdsynchronizedacquisitiondialog-ptr.h"
 #include "qxrdacquisitiontriggerdialog-ptr.h"
 #include "qxrdacquisitionextrainputsdialog-ptr.h"
+#include "qxrdwindowsettings.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
   Q_OBJECT
 
 public:
-  QxrdWindow(QxrdApplication *app,
+  QxrdWindow(QxrdWindowSettingsWPtr settings,
+             QxrdApplication *app,
              QxrdExperimentWPtr docw,
              QxrdAcquisitionWPtr acqw,
              QxrdDataProcessorWPtr procw,
@@ -46,7 +48,6 @@ public:
              QWidget *parent);
   virtual ~QxrdWindow();
   void onAcquisitionInit();
-  void init();
 
 public slots:
   void saveExperimentCopy();
@@ -140,7 +141,7 @@ private:
 
 private:
   mutable QMutex                         m_Mutex;
-  int                                    m_SettingsLoaded;
+  QxrdWindowSettingsWPtr                 m_WindowSettings;
   QxrdApplication                       *m_Application;
   QxrdExperimentWPtr                     m_Experiment;
   QxrdAcquisitionWPtr                    m_Acquisition;
