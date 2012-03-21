@@ -4,6 +4,7 @@
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QLineEdit>
+#include <QMessageBox>
 
 QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QWidget *parent, QxrdAcquisitionWPtr acq) :
   QDockWidget(parent),
@@ -46,7 +47,6 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     ch->prop_Channel()->linkTo(le);
 
     QComboBox *md = new QComboBox();
-    ch->prop_Mode()->linkTo(md);
 
     md->addItem("Sum");
     md->addItem("Avg");
@@ -57,6 +57,8 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     md->setItemData(1, "Value = Avg(wfm)", Qt::ToolTipRole);
     md->setItemData(2, "Value = Max(wfm)", Qt::ToolTipRole);
     md->setItemData(3, "Value = Min(wfm)", Qt::ToolTipRole);
+
+    ch->prop_Mode()->linkTo(md);
 
     QCheckBox *wf = new QCheckBox();
     ch->prop_SaveWave()->linkTo(wf);
@@ -179,21 +181,33 @@ void QxrdAcquisitionExtraInputsDialog::addChannel()
       QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
       if (xtra) {
-        xtra->appendChannel();
+        int nch = xtra->channels().count();
 
-        updateUi();
+        int n = (m_ChannelsInRows ?
+                   m_ExtraInputsTable->currentRow() :
+                   m_ExtraInputsTable->currentColumn());
+
+        int ch = (n<0 ? nch-1 : n);
+
+        QString titleString = tr("New Channel after Channel %1").arg(ch);
+        QString questString = tr("Do you really want to create a new extra input channel after channel %1").arg(ch);
+
+        int reply = QMessageBox::question(this, titleString, questString,
+                                          QMessageBox::Ok | QMessageBox::Cancel,
+                                          QMessageBox::Cancel);
+
+        if (reply== QMessageBox::Ok) {
+          if (ch < 0) {
+            xtra->appendChannel();
+          } else {
+            xtra->appendChannel(ch);
+          }
+
+          updateUi();
+        }
       }
     }
   }
-//  QList<QTableWidgetItem*> sel = m_ExtraInputsTable->selectedItems();
-
-//  printf("Selections\n");
-
-//  foreach(QTableWidgetItem *itm, sel) {
-//    if (itm) {
-//      printf("R: %d C: %d\n", itm->row(), itm->column());
-//    }
-//  }
 }
 
 void QxrdAcquisitionExtraInputsDialog::removeChannel()
@@ -208,9 +222,30 @@ void QxrdAcquisitionExtraInputsDialog::removeChannel()
       QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
       if (xtra) {
-        xtra->removeChannel();
+        int nch = xtra->channels().count();
 
-        updateUi();
+        int n = (m_ChannelsInRows ?
+                   m_ExtraInputsTable->currentRow() :
+                   m_ExtraInputsTable->currentColumn());
+
+        int ch = (n<0 ? nch-1 : n);
+
+        QString titleString = tr("Delete Channel %1").arg(ch);
+        QString questString = tr("Do you really want to delete extra input channel %1").arg(ch);
+
+        int reply = QMessageBox::question(this, titleString, questString,
+                                          QMessageBox::Ok | QMessageBox::Cancel,
+                                          QMessageBox::Cancel);
+
+        if (reply== QMessageBox::Ok) {
+          if (n < 0) {
+            xtra->removeChannel();
+          } else {
+            xtra->removeChannel(n);
+          }
+
+          updateUi();
+        }
       }
     }
   }
@@ -218,4 +253,19 @@ void QxrdAcquisitionExtraInputsDialog::removeChannel()
 
 void QxrdAcquisitionExtraInputsDialog::testReadout()
 {
+  QxrdAcquisitionPtr acqp(m_Acquisition);
+
+  if (acqp) {
+    acqp->printMessage(tr("Current column = %1").arg(m_ExtraInputsTable->currentColumn()));
+    acqp->printMessage(tr("Current row = %1").arg(m_ExtraInputsTable->currentRow()));
+
+    //  QList<QTableWidgetItem*> sel = m_ExtraInputsTable->selectedItems();
+
+    //  printf("Selections\n");
+
+    //  foreach(QTableWidgetItem *itm, sel) {
+    //    if (itm) {
+    //      printf("R: %d C: %d\n", itm->row(), itm->column());
+    //    }
+  }
 }
