@@ -16,10 +16,10 @@ public:
   explicit QxrdSettingsSaver(QObject *owner);
   ~QxrdSettingsSaver();
 
-  void start();
   void changed(QcepProperty *prop);
 
 public slots:
+  void start();
   void performSave();
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 

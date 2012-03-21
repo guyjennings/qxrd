@@ -26,9 +26,13 @@ QxrdSettingsSaver::~QxrdSettingsSaver()
 
 void QxrdSettingsSaver::start()
 {
-  m_Timer.setSingleShot(false);
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "start"));
+  } else {
+    m_Timer.setSingleShot(false);
 
-  m_Timer.start(m_SaveDelay);
+    m_Timer.start(m_SaveDelay);
+  }
 }
 
 void QxrdSettingsSaver::performSave()
