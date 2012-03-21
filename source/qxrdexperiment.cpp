@@ -24,8 +24,7 @@
 
 QxrdExperiment::QxrdExperiment(
     QString path,
-    QxrdApplication *app,
-    QSettings *settings) :
+    QxrdApplication *app) :
   QObject(NULL),
   m_Application(app),
   m_ExperimentThread(),
@@ -71,10 +70,6 @@ QxrdExperiment::QxrdExperiment(
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::QxrdExperiment(%p)\n", this);
   }
-
-  m_WindowSettings = QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL));
-
-  readSettings(settings);
 }
 
 QxrdExperimentThreadWPtr QxrdExperiment::experimentThread()
@@ -143,6 +138,10 @@ bool QxrdExperiment::init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr e
     m_FileSaver -> setAcquisition(m_Acquisition);
 
     m_Acquisition -> setNIDAQPlugin(m_Application->nidaqPlugin());
+
+    m_WindowSettings = QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL));
+
+    readSettings(settings);
 
     if (m_Application && m_Application->get_GuiWanted()) {
       splashMessage("Opening Main Window");
@@ -683,13 +682,13 @@ void QxrdExperiment::saveExperimentCopyAs(QString path)
 
   writeSettings(&settings);
 
-  QxrdExperiment *exp = new QxrdExperiment(path, m_Application, &settings);
+//  QxrdExperiment *exp = new QxrdExperiment(path, m_Application, &settings);
 
-  exp -> setExperimentFilePath(path);
+//  exp -> setExperimentFilePath(path);
 
-  exp -> writeSettings(&settings);
+//  exp -> writeSettings(&settings);
 
-  delete exp;
+//  delete exp;
 }
 
 void QxrdExperiment::updateCompletionPercentage(int, int)

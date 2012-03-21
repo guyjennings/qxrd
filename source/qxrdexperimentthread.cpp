@@ -171,37 +171,37 @@ void QxrdExperimentThread::run()
   switch(m_ExperimentKind) {
   case PerkinElmerAcquisition:
     doc = QxrdExperimentPtr(
-          new QxrdExperimentPerkinElmerAcquisition(m_ExperimentPath, m_Application, m_Settings));
+          new QxrdExperimentPerkinElmerAcquisition(m_ExperimentPath, m_Application));
     break;
 
   case PilatusAcquisition:
     doc = QxrdExperimentPtr(
-          new QxrdExperimentPilatusAcquisition(m_ExperimentPath, m_Application, m_Settings));
+          new QxrdExperimentPilatusAcquisition(m_ExperimentPath, m_Application));
     break;
 
   case SimulatedAcquisition:
     doc = QxrdExperimentPtr(
-          new QxrdExperimentSimulatedAcquisition(m_ExperimentPath, m_Application, m_Settings));
+          new QxrdExperimentSimulatedAcquisition(m_ExperimentPath, m_Application));
     break;
 
   case PerkinElmerAnalysis:
     doc = QxrdExperimentPtr(
-          new QxrdExperimentPerkinElmerAnalysis(m_ExperimentPath, m_Application, m_Settings));
+          new QxrdExperimentPerkinElmerAnalysis(m_ExperimentPath, m_Application));
     break;
 
   case PilatusAnalysis:
     doc = QxrdExperimentPtr(
-          new QxrdExperimentPilatusAnalysis(m_ExperimentPath, m_Application, m_Settings));
+          new QxrdExperimentPilatusAnalysis(m_ExperimentPath, m_Application));
     break;
 
   case GenericAnalysis:
     doc = QxrdExperimentPtr(
-          new QxrdExperimentGenericAnalysis(m_ExperimentPath, m_Application, m_Settings));
+          new QxrdExperimentGenericAnalysis(m_ExperimentPath, m_Application));
     break;
 
   default:
     doc = QxrdExperimentPtr(
-          new QxrdExperimentGenericAnalysis(m_ExperimentPath, m_Application, m_Settings));
+          new QxrdExperimentGenericAnalysis(m_ExperimentPath, m_Application));
     break;
   }
 

@@ -3,9 +3,8 @@
 #include "qxrdacquisition.h"
 
 QxrdExperimentPerkinElmerAcquisition::QxrdExperimentPerkinElmerAcquisition(QString path,
-                                                                           QxrdApplication* app,
-                                                                           QSettings *settings) :
-    QxrdExperiment(path, app, settings)
+                                                                           QxrdApplication* app) :
+    QxrdExperiment(path, app)
 {
   set_ExperimentKind(QxrdExperimentThread::PerkinElmerAcquisition);
   set_DetectorType(QxrdAcquisition::PerkinElmerDetector);

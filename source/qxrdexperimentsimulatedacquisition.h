@@ -7,7 +7,7 @@ class QxrdExperimentSimulatedAcquisition : public QxrdExperiment
 {
   Q_OBJECT
 public:
-  explicit QxrdExperimentSimulatedAcquisition(QString path, QxrdApplication* app, QSettings *settings=0);
+  explicit QxrdExperimentSimulatedAcquisition(QString path, QxrdApplication* app);
 
   virtual void readSettings(QSettings *settings, QString section);
   virtual void writeSettings(QSettings *settings, QString section);

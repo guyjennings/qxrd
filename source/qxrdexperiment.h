@@ -38,7 +38,7 @@ class QxrdExperiment : public QObject
   Q_OBJECT
 
 public:
-  QxrdExperiment(QString path, QxrdApplication *app, QSettings *settings);
+  QxrdExperiment(QString path, QxrdApplication *app);
   virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
 

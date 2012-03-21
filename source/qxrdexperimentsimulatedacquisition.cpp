@@ -2,8 +2,8 @@
 #include "qxrdexperimentthread.h"
 #include "qxrdacquisition.h"
 
-QxrdExperimentSimulatedAcquisition::QxrdExperimentSimulatedAcquisition(QString path, QxrdApplication* app, QSettings *settings) :
-    QxrdExperiment(path, app, settings)
+QxrdExperimentSimulatedAcquisition::QxrdExperimentSimulatedAcquisition(QString path, QxrdApplication* app) :
+    QxrdExperiment(path, app)
 {
   set_ExperimentKind(QxrdExperimentThread::SimulatedAcquisition);
   set_DetectorType(QxrdAcquisition::SimulatedDetector);

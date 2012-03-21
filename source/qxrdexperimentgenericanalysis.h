@@ -7,7 +7,7 @@ class QxrdExperimentGenericAnalysis : public QxrdExperiment
 {
   Q_OBJECT
 public:
-  explicit QxrdExperimentGenericAnalysis(QString path, QxrdApplication* app, QSettings *settings=0);
+  explicit QxrdExperimentGenericAnalysis(QString path, QxrdApplication* app);
 
   virtual void readSettings(QSettings *settings, QString section);
   virtual void writeSettings(QSettings *settings, QString section);
