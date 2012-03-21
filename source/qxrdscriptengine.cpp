@@ -98,6 +98,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("process", newFunction(processFunc));
   globalObject().setProperty("typeName", newFunction(typeNameFunc));
   globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
+  globalObject().setProperty("extraChannel", newFunction(extraChannelFunc));
 
   if (m_Application) {
     QObject *plugin = dynamic_cast<QObject*>(m_Application->nidaqPlugin().data());
@@ -731,6 +732,31 @@ QScriptValue QxrdScriptEngine::typeNameFunc(QScriptContext *context, QScriptEngi
   } else {
     return QScriptValue(engine,"?");
   }
+}
+
+QScriptValue QxrdScriptEngine::extraChannelFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisitionPtr acq(eng->acquisition());
+
+    if (acq) {
+      QxrdAcquisitionExtraInputsPtr xtra(acq->acquisitionExtraInputs());
+
+      if (xtra) {
+        if (context->argumentCount() != 0) {
+          int channel = context->argument(0).toInteger();
+
+          QxrdAcquisitionExtraInputsChannelPtr chan(xtra->channel(channel));
+
+          return engine->newQObject(chan.data());
+        }
+      }
+    }
+  }
+
+  return QScriptValue();
 }
 
 QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngine *engine)
