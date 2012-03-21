@@ -36,7 +36,8 @@ public slots:
   void acquire();
   void logToImage(QxrdInt16ImageDataPtr img);
   void finish();
-  void appendChannel();
+  void appendChannel(int ch = -1);
+  void removeChannel(int ch = -1);
 
   QcepDoubleList  evaluateChannels();
   double          evaluateChannel(int ch);

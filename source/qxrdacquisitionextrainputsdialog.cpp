@@ -29,38 +29,11 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QWidget *pare
       if (xtra) {
         xtra->prop_SampleRate()->linkTo(m_SampleRate);
         xtra->prop_AcquireDelay()->linkTo(m_AcquisitionDelay);
-
-        int nInputs = xtra->channels().count();
-
-        if (m_ChannelsInRows) {
-          m_ExtraInputsTable->setRowCount(nInputs);
-          m_ExtraInputsTable->setColumnCount(9);
-        } else {
-          m_ExtraInputsTable->setRowCount(9);
-          m_ExtraInputsTable->setColumnCount(nInputs);
-        }
-
-        for (int i=0; i<nInputs; i++) {
-          setupUiChannel(i, xtra->channels().value(i));
-        }
-
-        QStringList labels;
-
-        labels << "Enabled" << "Device Name" << "Mode" << "SaveWfm?"
-               << "Min V" << "Max V"
-               << "Start" << "End" << "Value";
-
-        if (m_ChannelsInRows) {
-          m_ExtraInputsTable->setHorizontalHeaderLabels(labels);
-        } else {
-          m_ExtraInputsTable->setVerticalHeaderLabels(labels);
-        }
-
-        m_ExtraInputsTable->resizeColumnsToContents();
-        m_ExtraInputsTable->resizeRowsToContents();
       }
     }
   }
+
+  updateUi();
 }
 
 void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelPtr ch)
@@ -139,21 +112,100 @@ QxrdAcquisitionExtraInputsDialog::~QxrdAcquisitionExtraInputsDialog()
 {
 }
 
-void QxrdAcquisitionExtraInputsDialog::addChannel()
+void QxrdAcquisitionExtraInputsDialog::updateUi()
 {
-  QList<QTableWidgetItem*> sel = m_ExtraInputsTable->selectedItems();
+  QxrdAcquisitionPtr acqp(m_Acquisition);
 
-  printf("Selections\n");
+  if (acqp) {
+    m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
 
-  foreach(QTableWidgetItem *itm, sel) {
-    if (itm) {
-      printf("R: %d C: %d\n", itm->row(), itm->column());
+    if (m_AcquisitionExtraInputs) {
+
+      QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+
+      if (xtra) {
+        int nInputs = xtra->channels().count();
+
+        m_ExtraInputsTable->clear();
+
+        if (m_ChannelsInRows) {
+          m_ExtraInputsTable->setRowCount(nInputs);
+          m_ExtraInputsTable->setColumnCount(9);
+        } else {
+          m_ExtraInputsTable->setRowCount(9);
+          m_ExtraInputsTable->setColumnCount(nInputs);
+        }
+
+        for (int i=0; i<nInputs; i++) {
+          setupUiChannel(i, xtra->channels().value(i));
+        }
+
+        QStringList labels;
+
+        labels << "Enabled" << "Device Name" << "Mode" << "SaveWfm?"
+               << "Min V" << "Max V"
+               << "Start" << "End" << "Value";
+
+        if (m_ChannelsInRows) {
+          m_ExtraInputsTable->setHorizontalHeaderLabels(labels);
+        } else {
+          m_ExtraInputsTable->setVerticalHeaderLabels(labels);
+        }
+
+        m_ExtraInputsTable->resizeColumnsToContents();
+        m_ExtraInputsTable->resizeRowsToContents();
+      }
     }
   }
 }
 
+void QxrdAcquisitionExtraInputsDialog::addChannel()
+{
+  QxrdAcquisitionPtr acqp(m_Acquisition);
+
+  if (acqp) {
+    m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
+
+    if (m_AcquisitionExtraInputs) {
+
+      QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+
+      if (xtra) {
+        xtra->appendChannel();
+
+        updateUi();
+      }
+    }
+  }
+//  QList<QTableWidgetItem*> sel = m_ExtraInputsTable->selectedItems();
+
+//  printf("Selections\n");
+
+//  foreach(QTableWidgetItem *itm, sel) {
+//    if (itm) {
+//      printf("R: %d C: %d\n", itm->row(), itm->column());
+//    }
+//  }
+}
+
 void QxrdAcquisitionExtraInputsDialog::removeChannel()
 {
+  QxrdAcquisitionPtr acqp(m_Acquisition);
+
+  if (acqp) {
+    m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
+
+    if (m_AcquisitionExtraInputs) {
+
+      QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+
+      if (xtra) {
+        xtra->removeChannel();
+
+        updateUi();
+      }
+    }
+  }
 }
 
 void QxrdAcquisitionExtraInputsDialog::testReadout()

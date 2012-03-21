@@ -18,6 +18,7 @@ private:
   void setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelPtr ch);
 
 private slots:
+  void updateUi();
   void addChannel();
   void removeChannel();
   void testReadout();
