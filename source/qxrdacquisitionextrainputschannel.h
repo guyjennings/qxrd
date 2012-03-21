@@ -21,6 +21,13 @@ signals:
 public slots:
   
 public:
+  enum {
+    ModeSummed,
+    ModeAveraged,
+    ModeMaximum,
+    ModeMinimum
+  };
+
   Q_PROPERTY(bool enabled READ get_Enabled WRITE set_Enabled)
   QCEP_BOOLEAN_PROPERTY(Enabled)
 
@@ -33,6 +40,9 @@ public:
   Q_PROPERTY(int mode READ get_Mode WRITE set_Mode)
   QCEP_INTEGER_PROPERTY(Mode)
 
+  Q_PROPERTY(bool saveWave READ get_SaveWave WRITE set_SaveWave)
+  QCEP_BOOLEAN_PROPERTY(SaveWave)
+
   Q_PROPERTY(double min READ get_Min WRITE set_Min)
   QCEP_DOUBLE_PROPERTY(Min)
 
@@ -44,6 +54,12 @@ public:
 
   Q_PROPERTY(double end READ get_End WRITE set_End)
   QCEP_DOUBLE_PROPERTY(End)
+
+  Q_PROPERTY(double value READ get_Value WRITE set_Value STORED false)
+  QCEP_DOUBLE_PROPERTY(Value)
+
+  Q_PROPERTY(QcepDoubleVector waveform READ get_Waveform WRITE set_Waveform STORED false)
+  QCEP_DOUBLE_VECTOR_PROPERTY(Waveform)
 
 private:
   mutable QMutex                 m_Mutex;
