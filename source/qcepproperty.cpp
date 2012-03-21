@@ -20,7 +20,6 @@ QcepProperty::QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const c
     m_Saver(saver),
     m_Debug(false),
     m_IsStored(false),
-    m_WasLoaded(false),
     m_Name(name),
     m_Parent(parent),
     m_ToolTip(toolTip)
@@ -56,16 +55,6 @@ QcepProperty::QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const c
 //                 .arg(name).arg(parent?parent->objectName():"NULL"));
 ////    printf("Warning: property %s is stored but has no saver\n", qPrintable(name));
 //  }
-}
-
-int QcepProperty::wasLoaded() const
-{
-  return m_WasLoaded;
-}
-
-void QcepProperty::setWasLoaded(int loaded)
-{
-  m_WasLoaded = loaded;
 }
 
 QString QcepProperty::name() const
@@ -347,12 +336,6 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
         QMetaProperty metaproperty = meta->property(metaindex);
 
         if (metaproperty.isStored()) {
-          QcepProperty *property = object->findChild<QcepProperty *>(key);
-
-          if (property) {
-            property->setWasLoaded(true);
-          }
-
           object -> setProperty(qPrintable(key), settings->value(key));
         } else {
           if (g_Application && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {

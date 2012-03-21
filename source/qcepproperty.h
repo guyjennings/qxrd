@@ -41,9 +41,6 @@ public:
   int index();
   int incIndex(int step);
 
-  int wasLoaded() const;
-  void setWasLoaded(int loaded);
-
   static void registerMetaTypes();
 
   int debug() const;
@@ -65,7 +62,6 @@ protected:
 private:
   int                      m_Debug;
   int                      m_IsStored;
-  int                      m_WasLoaded;
   const char              *m_Name;
   QAtomicInt               m_Index;
   QObject                 *m_Parent;
