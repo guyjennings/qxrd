@@ -17,9 +17,15 @@ public:
 private:
   void setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelPtr ch);
 
+private slots:
+  void addChannel();
+  void removeChannel();
+  void testReadout();
+
 private:
   QxrdAcquisitionWPtr            m_Acquisition;
   QxrdAcquisitionExtraInputsWPtr m_AcquisitionExtraInputs;
+  int                            m_ChannelsInRows;
 };
 
 #endif // QXRDACQUISITIONEXTRAINPUTSDIALOG_H
