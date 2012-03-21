@@ -269,10 +269,10 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
 
     for (int i=0; i<dv.count(); i++) {
       settings->setArrayIndex(i);
-      settings->beginGroup(name);
+//      settings->beginGroup(name);
       settings->setValue("x", dv.value(i).x());
       settings->setValue("y", dv.value(i).y());
-      settings->endGroup();
+//      settings->endGroup();
     }
 
     settings->endArray();
