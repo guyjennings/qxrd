@@ -6,7 +6,7 @@ QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(QxrdSetting
   QObject(),
   m_Experiment(doc),
   m_ExtraInputs(xtra),
-  m_Enabled(saver, this, "enabled", 0, "Enabled?"),
+  m_Enabled(saver, this, "enabled", 1, "Enabled?"),
   m_Channel(saver, this, "channel", "", "NIDAQ name of channel"),
   m_Kind(saver, this, "kind", 0, "Channel Kind (0 = none, 1 = Analog In, 2 = Counter In)"),
   m_Mode(saver, this, "mode", 0, "Channel Mode (0 = summed, 1 = averaged, 2 = maximum, 3 = minimum)"),
