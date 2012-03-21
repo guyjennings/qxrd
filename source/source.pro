@@ -105,7 +105,8 @@ HEADERS += spec_server.h \
     qcepimagedataformatmar345.h \
     qcepimagedataformatfactory.h \
     qcepimagedataformatfactory-ptr.h \
-    qcepdebug.h
+    qcepdebug.h \
+    qxrdacquisitionextrainputsplot.h
 
 SOURCES += qspecserver.cpp \
     qcepproperty.cpp \
@@ -114,7 +115,8 @@ SOURCES += qspecserver.cpp \
     qcepimagedataformattiff.cpp \
     qcepimagedataformatmar345.cpp \
     qcepimagedataformatfactory.cpp \
-    qcepdebug.cpp
+    qcepdebug.cpp \
+    qxrdacquisitionextrainputsplot.cpp
 
 OTHER_FILES += testImage.js
 
