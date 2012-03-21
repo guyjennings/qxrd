@@ -44,6 +44,7 @@ public slots:
   double          averageChannel(int ch);
   double          sumChannel(int ch);
   QVector<QxrdAcquisitionExtraInputsChannelPtr> channels() const;
+  QxrdAcquisitionExtraInputsChannelPtr channel(int chan) const;
 
 public:
   Q_PROPERTY(int enabled READ get_Enabled WRITE set_Enabled STORED false)

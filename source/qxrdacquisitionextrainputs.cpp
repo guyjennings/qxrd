@@ -102,14 +102,19 @@ QVector<QxrdAcquisitionExtraInputsChannelPtr> QxrdAcquisitionExtraInputs::channe
   return m_Channels;
 }
 
+QxrdAcquisitionExtraInputsChannelPtr QxrdAcquisitionExtraInputs::channel(int chan) const
+{
+  return m_Channels.value(chan);
+}
+
 void QxrdAcquisitionExtraInputs::appendChannel()
 {
-  if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "appendChannel", Qt::BlockingQueuedConnection));
-  } else {
+//  if (QThread::currentThread() != thread()) {
+//    INVOKE_CHECK(QMetaObject::invokeMethod(this, "appendChannel", Qt::BlockingQueuedConnection));
+//  } else {
     m_Channels.append(QxrdAcquisitionExtraInputsChannelPtr(
                         new QxrdAcquisitionExtraInputsChannel(m_Saver, m_Experiment, this)));
-  }
+//  }
 }
 
 void QxrdAcquisitionExtraInputs::acquire()
