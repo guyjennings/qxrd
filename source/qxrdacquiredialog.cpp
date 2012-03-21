@@ -56,6 +56,8 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperimentWPtr doc,
     acq -> prop_UserComment2() -> linkTo(this -> m_UserComment2);
     acq -> prop_UserComment3() -> linkTo(this -> m_UserComment3);
     acq -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
+  } else {
+    printf("acq == NULL in QxrdAcquireDilaog::QxrdAcquireDialog");
   }
 
   QxrdExperimentPtr expp(m_Experiment);
