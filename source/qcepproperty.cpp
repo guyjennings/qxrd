@@ -262,6 +262,40 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
     }
 
     settings->endArray();
+  } else if (v.canConvert<QcepPolygon>()) {
+    QcepPolygon dv = v.value<QcepPolygon>();
+
+    settings->beginWriteArray(name, dv.count());
+
+    for (int i=0; i<dv.count(); i++) {
+      settings->setArrayIndex(i);
+      settings->beginGroup(name);
+      settings->setValue("x", dv.value(i).x());
+      settings->setValue("y", dv.value(i).y());
+      settings->endGroup();
+    }
+
+    settings->endArray();
+  } else if (v.canConvert<QwtDoublePoint>()) {
+    QwtDoublePoint dv = v.value<QwtDoublePoint>();
+
+    settings->beginGroup(name);
+
+    settings->setValue("x", dv.x());
+    settings->setValue("y", dv.y());
+
+    settings->endGroup();
+  } else if (v.canConvert<QwtDoubleRect>()) {
+    QwtDoubleRect dv = v.value<QwtDoubleRect>();
+
+    settings->beginGroup(name);
+
+    settings->setValue("left",   dv.left());
+    settings->setValue("top",    dv.top());
+    settings->setValue("right",  dv.right());
+    settings->setValue("bottom", dv.bottom());
+
+    settings->endGroup();
   } else if (v.type() == QVariant::StringList) {
     QStringList dv = v.toStringList();
 
