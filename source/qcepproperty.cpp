@@ -1322,6 +1322,117 @@ void QcepDoubleListProperty::resetValue()
   setValue(m_Default);
 }
 
+QcepDoubleVectorProperty::QcepDoubleVectorProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleVector value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
+    m_Default(value),
+    m_Value(value)
+{
+}
+
+QcepDoubleVector QcepDoubleVectorProperty::value() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Value;
+}
+
+QcepDoubleVector QcepDoubleVectorProperty::defaultValue() const
+{
+  QMutexLocker lock(&m_Mutex);
+
+  return m_Default;
+}
+
+void QcepDoubleVectorProperty::setValue(QcepDoubleVector val, int index)
+{
+  if (debug()) {
+    printMessage(tr("%1 QcepDoubleVectorProperty::setValue(QcepDoubleVector %2, int %3) [%4]")
+                 .arg(name()).arg(toString(val)).arg(index).arg(this->index()));
+  }
+
+  if (index == this->index()) {
+    setValue(val);
+  }
+}
+
+void QcepDoubleVectorProperty::clear()
+{
+  QMutexLocker lock(&m_Mutex);
+
+  setValue(QcepDoubleVector());
+}
+
+void QcepDoubleVectorProperty::appendValue(double val)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  QcepDoubleVector list = value();
+  list.append(val);
+
+  setValue(list);
+}
+
+QString QcepDoubleVectorProperty::toString(const QcepDoubleVector &val)
+{
+  QString res = "[";
+  int ct = val.count();
+
+  for (int i=0; i<ct; i++) {
+    if (i<(ct-1)) {
+      res += tr("%1, ").arg(val[i]);
+    } else {
+      res += tr("%1").arg(val[i]);
+    }
+  }
+
+  res += "]";
+
+  return res;
+}
+
+void QcepDoubleVectorProperty::setValue(QcepDoubleVector val)
+{
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printMessage(tr("%1 QcepDoubleVectorProperty::setValue(QcepDoubleVector %2)")
+                 .arg(name()).arg(toString(val)));
+  }
+
+  if (val != m_Value) {
+    if (debug()) {
+      printMessage(tr("%1: QcepDoubleVectorProperty::setValue(QcepDoubleVector %2) [%3]")
+                   .arg(name()).arg(toString(val)).arg(index()));
+    }
+
+    QMutexLocker lock(&m_Mutex);
+
+    m_Value = val;
+
+    QxrdSettingsSaverPtr saver(m_Saver);
+
+    if (saver) {
+      saver->changed(this);
+    }
+
+    emit valueChanged(m_Value, incIndex(1));
+  }
+}
+
+void QcepDoubleVectorProperty::setDefaultValue(QcepDoubleVector val)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  m_Default = val;
+}
+
+void QcepDoubleVectorProperty::resetValue()
+{
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printMessage(tr("%1: QcepDoubleVectorProperty::resetValue").arg(name()));
+  }
+
+  setValue(m_Default);
+}
+
 QcepIntListProperty::QcepIntListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),

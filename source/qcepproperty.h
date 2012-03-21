@@ -337,6 +337,31 @@ private:
   QcepDoubleList m_Value;
 };
 
+class QcepDoubleVectorProperty : public QcepProperty {
+  Q_OBJECT
+public:
+  QcepDoubleVectorProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleVector value, QString toolTip);
+
+  QcepDoubleVector value() const;
+  QcepDoubleVector defaultValue() const;
+  QString toString(const QcepDoubleVector &list);
+
+public slots:
+  void setValue(QcepDoubleVector val, int index);
+  void setValue(QcepDoubleVector val);
+  void setDefaultValue(QcepDoubleVector val);
+  void resetValue();
+  void clear();
+  void appendValue(double val);
+
+signals:
+  void valueChanged(QcepDoubleVector val, int index);
+
+private:
+  QcepDoubleVector m_Default;
+  QcepDoubleVector m_Value;
+};
+
 class QcepIntListProperty : public QcepProperty {
   Q_OBJECT
 public:
@@ -681,6 +706,40 @@ QcepDoubleListProperty *prop_##propname() { \
 \
 private: \
 QcepDoubleListProperty m_##propname;
+
+#define QCEP_DOUBLE_VECTOR_PROPERTY(propname) \
+public: \
+QcepDoubleVector get_##propname() const \
+{ \
+  return m_##propname.value(); \
+} \
+\
+void set_##propname(QcepDoubleVector val) \
+{ \
+  m_##propname.setValue(val); \
+} \
+\
+QcepDoubleVector def_##propname() const \
+{ \
+  return m_##propname.defaultValue(); \
+} \
+\
+void setdef_##propname(QcepDoubleVector val) \
+{ \
+  m_##propname.setDefaultValue(val); \
+} \
+\
+void reset_##propname() \
+{ \
+  m_##propname.resetValue(); \
+} \
+\
+QcepDoubleVectorProperty *prop_##propname() { \
+  return &m_##propname; \
+} \
+\
+private: \
+QcepDoubleVectorProperty m_##propname;
 
 #define QCEP_INTEGER_LIST_PROPERTY(propname) \
 public: \
