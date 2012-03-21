@@ -146,9 +146,17 @@ void QxrdAcquisitionExtraInputsDialog::updateUi()
                << "Min V" << "Max V"
                << "Start" << "End" << "Value";
 
+        QStringList chanLabels;
+
+        for (int i=0; i<nInputs; i++) {
+          chanLabels << tr("Chan %1").arg(i);
+        }
+
         if (m_ChannelsInRows) {
           m_ExtraInputsTable->setHorizontalHeaderLabels(labels);
+          m_ExtraInputsTable->setVerticalHeaderLabels(chanLabels);
         } else {
+          m_ExtraInputsTable->setHorizontalHeaderLabels(chanLabels);
           m_ExtraInputsTable->setVerticalHeaderLabels(labels);
         }
 
