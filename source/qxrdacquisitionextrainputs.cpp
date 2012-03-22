@@ -47,13 +47,17 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString secti
 
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
-  m_Channels.clear();
-
   int n = settings->beginReadArray(section+"/channels");
 
-  for (int i=0; i<n; i++) {
-    appendChannel();
+  while (m_Channels.count() > n) {
+    removeChannel();
+  }
 
+  while (m_Channels.count() < n) {
+    appendChannel();
+  }
+
+  for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
 
     m_Channels[i]->readSettings(settings, "");
