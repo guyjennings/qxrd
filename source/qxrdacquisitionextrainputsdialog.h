@@ -22,6 +22,7 @@ private slots:
   void addChannel();
   void removeChannel();
   void testReadout();
+  void updateWaveforms();
 
 private:
   QxrdAcquisitionWPtr            m_Acquisition;

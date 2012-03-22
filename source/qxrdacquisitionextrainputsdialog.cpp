@@ -30,6 +30,8 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QWidget *pare
       if (xtra) {
         xtra->prop_SampleRate()->linkTo(m_SampleRate);
         xtra->prop_AcquireDelay()->linkTo(m_AcquisitionDelay);
+
+        connect(xtra.data(), SIGNAL(newDataAvailable()), this, SLOT(updateWaveforms()));
       }
     }
   }
@@ -43,8 +45,11 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     QCheckBox *cb = new QCheckBox();
     ch->prop_Enabled()->linkTo(cb);
 
+    QCheckBox *cb2 = new QCheckBox();
+    ch->prop_Plotted()->linkTo(cb2);
+
     QLineEdit *le = new QLineEdit();
-    ch->prop_Channel()->linkTo(le);
+    ch->prop_ChannelName()->linkTo(le);
 
     QComboBox *md = new QComboBox();
 
@@ -83,29 +88,36 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     end->setMaximum(10.0);
     ch->prop_Start()->linkTo(end);
 
+    QLabel *phy = new QLabel();
+    ch->prop_PhysicalChannel()->linkTo(phy);
+
     QLabel *val = new QLabel();
     ch->prop_Value()->linkTo(val);
 
     if (m_ChannelsInRows) {
       m_ExtraInputsTable->setCellWidget(i, 0, cb);
-      m_ExtraInputsTable->setCellWidget(i, 1, le);
-      m_ExtraInputsTable->setCellWidget(i, 2, md);
-      m_ExtraInputsTable->setCellWidget(i, 3, wf);
-      m_ExtraInputsTable->setCellWidget(i, 4, min);
-      m_ExtraInputsTable->setCellWidget(i, 5, max);
-      m_ExtraInputsTable->setCellWidget(i, 6, stt);
-      m_ExtraInputsTable->setCellWidget(i, 7, end);
-      m_ExtraInputsTable->setCellWidget(i, 8, val);
+      m_ExtraInputsTable->setCellWidget(i, 1, cb2);
+      m_ExtraInputsTable->setCellWidget(i, 2, le);
+      m_ExtraInputsTable->setCellWidget(i, 3, md);
+      m_ExtraInputsTable->setCellWidget(i, 4, wf);
+      m_ExtraInputsTable->setCellWidget(i, 5, min);
+      m_ExtraInputsTable->setCellWidget(i, 6, max);
+      m_ExtraInputsTable->setCellWidget(i, 7, stt);
+      m_ExtraInputsTable->setCellWidget(i, 8, end);
+      m_ExtraInputsTable->setCellWidget(i, 9, phy);
+      m_ExtraInputsTable->setCellWidget(i, 10, val);
     } else {
       m_ExtraInputsTable->setCellWidget(0, i, cb);
-      m_ExtraInputsTable->setCellWidget(1, i, le);
-      m_ExtraInputsTable->setCellWidget(2, i, md);
-      m_ExtraInputsTable->setCellWidget(3, i, wf);
-      m_ExtraInputsTable->setCellWidget(4, i, min);
-      m_ExtraInputsTable->setCellWidget(5, i, max);
-      m_ExtraInputsTable->setCellWidget(6, i, stt);
-      m_ExtraInputsTable->setCellWidget(7, i, end);
-      m_ExtraInputsTable->setCellWidget(8, i, val);
+      m_ExtraInputsTable->setCellWidget(1, i, cb2);
+      m_ExtraInputsTable->setCellWidget(2, i, le);
+      m_ExtraInputsTable->setCellWidget(3, i, md);
+      m_ExtraInputsTable->setCellWidget(4, i, wf);
+      m_ExtraInputsTable->setCellWidget(5, i, min);
+      m_ExtraInputsTable->setCellWidget(6, i, max);
+      m_ExtraInputsTable->setCellWidget(7, i, stt);
+      m_ExtraInputsTable->setCellWidget(8, i, end);
+      m_ExtraInputsTable->setCellWidget(9, i, phy);
+      m_ExtraInputsTable->setCellWidget(10, i, val);
     }
   }
 }
@@ -130,11 +142,23 @@ void QxrdAcquisitionExtraInputsDialog::updateUi()
 
         m_ExtraInputsTable->clear();
 
+        QStringList labels;
+
+        labels << "Enabled" << "Plotted" << "Device Name" << "Mode" << "SaveWfm?"
+               << "Min V" << "Max V"
+               << "Start" << "End" << "Phys Chan" << "Value";
+
+        QStringList chanLabels;
+
+        for (int i=0; i<nInputs; i++) {
+          chanLabels << tr("Chan %1").arg(i);
+        }
+
         if (m_ChannelsInRows) {
           m_ExtraInputsTable->setRowCount(nInputs);
-          m_ExtraInputsTable->setColumnCount(9);
+          m_ExtraInputsTable->setColumnCount(labels.count());
         } else {
-          m_ExtraInputsTable->setRowCount(9);
+          m_ExtraInputsTable->setRowCount(labels.count());
           m_ExtraInputsTable->setColumnCount(nInputs);
         }
 
@@ -142,17 +166,6 @@ void QxrdAcquisitionExtraInputsDialog::updateUi()
           setupUiChannel(i, xtra->channels().value(i));
         }
 
-        QStringList labels;
-
-        labels << "Enabled" << "Device Name" << "Mode" << "SaveWfm?"
-               << "Min V" << "Max V"
-               << "Start" << "End" << "Value";
-
-        QStringList chanLabels;
-
-        for (int i=0; i<nInputs; i++) {
-          chanLabels << tr("Chan %1").arg(i);
-        }
 
         if (m_ChannelsInRows) {
           m_ExtraInputsTable->setHorizontalHeaderLabels(labels);
@@ -267,5 +280,30 @@ void QxrdAcquisitionExtraInputsDialog::testReadout()
     //    if (itm) {
     //      printf("R: %d C: %d\n", itm->row(), itm->column());
     //    }
+  }
+}
+
+void QxrdAcquisitionExtraInputsDialog::updateWaveforms()
+{
+  QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+
+  if (xtra) {
+    int nchan = xtra->channels().count();
+
+    m_AcquisitionWaveforms->setNChannels(nchan);
+
+    for (int i=0; i<nchan; i++) {
+      QxrdAcquisitionExtraInputsChannelPtr chanp(xtra->channel(i));
+
+      if (chanp && chanp->get_Enabled() && chanp->get_Plotted()) {
+        m_AcquisitionWaveforms->plotChannel(i,
+                                            xtra->readXChannel(),
+                                            xtra->readChannel(i));
+      } else {
+        m_AcquisitionWaveforms->plotChannel(i, QcepDoubleVector(), QcepDoubleVector());
+      }
+    }
+
+    m_AcquisitionWaveforms->replot();
   }
 }

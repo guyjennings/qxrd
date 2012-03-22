@@ -51,14 +51,14 @@ public slots:
   double getAnalogInput(QString channelName);
   void   setAnalogOutput(QString channelName, double value);
 
-  virtual void prepareContinuousInput(double sampleRate,
-                                      double acquireDelay,
-                                      double exposureTime,
-                                      QStringList chans,
-                                      QcepIntList flags,
-                                      QcepDoubleList startOffset,
-                                      QcepDoubleList endOffset);
-  virtual void readContinuousInput(QVector< QVector<double> > &data);
+  virtual int prepareContinuousInput(double sampleRate,
+                                     double acquireDelay,
+                                     double exposureTime,
+                                     QStringList chans,
+                                     QVector<double> minVals,
+                                     QVector<double> maxVals);
+  virtual int readContinuousInput();
+  virtual QVector<double> readContinuousInputChannel(int ch);
   virtual void finishContinuousInput();
 
 private:
@@ -77,13 +77,12 @@ private:
   int        m_NCounters;
   QVector<double> m_Counts;
 
-  TaskHandle m_ContinuousInputTask;
-  int        m_NContinuousInputs;
-  int        m_NContinuousSamples;
-
   double              m_SampleRate;
   double              m_ExposureTime;
   double              m_AcquireDelay;
+
+  int                 m_NContinuousInputs;
+  int                 m_NContinuousSamples;
 
   int                 m_NAIChannels;
   int                 m_NCIChannels;
@@ -91,6 +90,8 @@ private:
   QVector<TaskHandle> m_ContinuousCITasks;
   QVector<int>        m_ContinuousFlags;
   QVector<int>        m_ContinuousChans;
+
+  QVector< QVector<double> > m_ContinuousInputData;
 };
 
 #endif // QXRDNIDAQPLUGIN_H

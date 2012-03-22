@@ -5,16 +5,13 @@
 #include "qxrdimagedata.h"
 #include "qxrdsettingssaver.h"
 #include "qxrdacquisitionextrainputschannel.h"
+#include <QTimer>
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
   QObject(acq.data()),
   m_Enabled(QxrdSettingsSaverPtr(), this, "enabled", 0, "Extra Inputs Enabled?"),
-  m_ExtraInputs(saver, this, "extraInputs", 8, "Number of Extra Inputs"),
-  m_ChannelNames(saver, this, "channelNames", QStringList(), "Extra Input Channel Names"),
-  m_ChannelFlags(saver, this, "channelFlags", QcepIntList(), "Extra Input Channel Flags"),
+  m_Skipping(QxrdSettingsSaverPtr(), this, "skipping", 0, "Skipping initial readout?"),
   m_SampleRate(saver, this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
-  m_StartOffset(saver, this, "startOffset", QcepDoubleList(), "Start Offsets (in sec) for Extra Inputs"),
-  m_EndOffset(saver, this, "endOffset", QcepDoubleList(), "End Offsets (in sec) for Extra Inputs"),
   m_AcquireDelay(saver, this, "acquireDelay", 0.107, "Delay between exposure end and Image available in QXRD"),
   m_Experiment(doc),
   m_Acquisition(acq),
@@ -29,6 +26,12 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr sav
   }
 
   setObjectName("extraInputs");
+
+  connect(prop_SampleRate(), SIGNAL(valueChanged(double,int)), this, SLOT(reinitialize()));
+
+  if (acqp) {
+    connect(acqp->prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(reinitialize()));
+  }
 }
 
 void QxrdAcquisitionExtraInputs::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
@@ -89,16 +92,57 @@ void QxrdAcquisitionExtraInputs::initialize()
   QxrdAcquisitionPtr acq(m_Acquisition);
 
   if (acq && m_NIDAQPlugin) {
-    m_NIDAQPlugin->prepareContinuousInput(get_SampleRate(),
-                                  get_AcquireDelay(),
-                                  acq->get_ExposureTime(),
-                                  get_ChannelNames(),
-                                  get_ChannelFlags(),
-                                  get_StartOffset(),
-                                  get_EndOffset());
+    QStringList uniqueChannels;
+    QVector<double> channelMinimum, channelMaximum;
 
-    set_Enabled(true);
+    foreach (QxrdAcquisitionExtraInputsChannelPtr chanp, m_Channels) {
+      if (chanp->get_Enabled()) {
+        QString channame = chanp->get_ChannelName();
+        double chanmin = chanp->get_Min();
+        double chanmax = chanp->get_Max();
+
+        int physChan = uniqueChannels.indexOf(channame);
+
+        if (physChan < 0) {
+          uniqueChannels.append(channame);
+          physChan = uniqueChannels.count() - 1;
+          channelMinimum.append(chanmin);
+          channelMaximum.append(chanmax);
+        } else {
+          channelMinimum[physChan] = qMin(channelMinimum[physChan], chanmin);
+          channelMaximum[physChan] = qMin(channelMaximum[physChan], chanmax);
+        }
+
+        chanp->set_PhysicalChannel(physChan);
+      }
+    }
+
+    if (m_NIDAQPlugin->prepareContinuousInput(get_SampleRate(),
+                                              get_AcquireDelay(),
+                                              acq->get_ExposureTime(),
+                                              uniqueChannels,
+                                              channelMinimum,
+                                              channelMaximum) == 0) {
+      set_Skipping(true);
+
+      QTimer::singleShot(1000*(get_AcquireDelay() + acq->get_ExposureTime() + 1.0),
+                         this, SLOT(timerDone()));
+
+      set_Enabled(true);
+    }
   }
+}
+
+void QxrdAcquisitionExtraInputs::reinitialize()
+{
+  if (get_Enabled()) {
+    initialize();
+  }
+}
+
+void QxrdAcquisitionExtraInputs::timerDone()
+{
+  set_Skipping(false);
 }
 
 QVector<QxrdAcquisitionExtraInputsChannelPtr> QxrdAcquisitionExtraInputs::channels() const
@@ -113,9 +157,14 @@ QxrdAcquisitionExtraInputsChannelPtr QxrdAcquisitionExtraInputs::channel(int cha
 
 void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 {
-  m_Channels.insert((ch < 0 ? m_Channels.size() : ch),
+  QxrdAcquisitionExtraInputsChannel *chan = 0;
+  int n = (ch < 0 ? m_Channels.size() : ch);
+
+  m_Channels.insert(n,
                     QxrdAcquisitionExtraInputsChannelPtr(
-                      new QxrdAcquisitionExtraInputsChannel(m_Saver, m_Experiment, this)));
+                      chan = new QxrdAcquisitionExtraInputsChannel(n, m_Saver, m_Experiment, this)));
+
+  connect(chan, SIGNAL(reinitializeNeeded()), this, SLOT(reinitialize()));
 }
 
 void QxrdAcquisitionExtraInputs::removeChannel(int ch)
@@ -126,10 +175,21 @@ void QxrdAcquisitionExtraInputs::removeChannel(int ch)
 void QxrdAcquisitionExtraInputs::acquire()
 {
   if (get_Enabled()) {
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    if (!get_Skipping()) {
+      QxrdAcquisitionPtr acq(m_Acquisition);
 
-    if (acq && m_NIDAQPlugin) {
-      m_NIDAQPlugin->readContinuousInput(m_ChannelData);
+      if (acq && m_NIDAQPlugin) {
+        m_NIDAQPlugin->readContinuousInput();
+      }
+
+      foreach (QxrdAcquisitionExtraInputsChannelPtr chanp, m_Channels) {
+        if (chanp->get_Enabled()) {
+          chanp -> set_Value(
+                chanp -> evaluateChannel());
+        }
+      }
+
+      emit newDataAvailable();
     }
   }
 }
@@ -155,10 +215,11 @@ void QxrdAcquisitionExtraInputs::finish()
 QcepDoubleList QxrdAcquisitionExtraInputs::evaluateChannels()
 {
   QcepDoubleList res;
-  int n = get_ChannelNames().count();
 
-  for (int i=0; i<n; i++) {
-    res.append(evaluateChannel(i));
+  foreach (QxrdAcquisitionExtraInputsChannelPtr chanp, m_Channels) {
+    if (chanp->get_Enabled()) {
+      res.append(chanp->evaluateChannel());
+    }
   }
 
   return res;
@@ -166,25 +227,54 @@ QcepDoubleList QxrdAcquisitionExtraInputs::evaluateChannels()
 
 double QxrdAcquisitionExtraInputs::evaluateChannel(int ch)
 {
-  return sumChannel(ch);
+  QxrdAcquisitionExtraInputsChannelPtr chanp = m_Channels.value(ch);
+
+  if (chanp) {
+    return chanp->evaluateChannel();
+  } else {
+    return 0;
+  }
+}
+
+QVector<double> QxrdAcquisitionExtraInputs::readXChannel()
+{
+  QxrdAcquisitionExtraInputsChannelPtr chanp = m_Channels.value(0);
+
+  if (chanp) {
+    QVector<double> res(chanp->readChannel().count());
+    double offset = get_AcquireDelay();
+    double rate   = get_SampleRate();
+
+    for (int i=0; i<res.count(); i++) {
+      res[i] = i/rate - offset;
+    }
+
+    return res;
+  } else {
+    return QVector<double>();
+  }
 }
 
 QVector<double> QxrdAcquisitionExtraInputs::readChannel(int ch)
 {
-  return m_ChannelData.value(ch);
+  QxrdAcquisitionExtraInputsChannelPtr chanp = m_Channels.value(ch);
+
+  if (chanp) {
+    return chanp->readChannel();
+  } else {
+    return QVector<double>();
+  }
 }
 
 double QxrdAcquisitionExtraInputs::averageChannel(int ch)
 {
-  QVector<double> res = readChannel(ch);
+  QxrdAcquisitionExtraInputsChannelPtr chanp = m_Channels.value(ch);
 
-  double n=res.count(), sum=0;
-
-  for(int i=0; i<n; i++) {
-    sum += res[i];
+  if (chanp) {
+    return chanp->averageChannel();
+  } else {
+    return 0;
   }
-
-  return sum/n;
 }
 
 double QxrdAcquisitionExtraInputs::sumChannel(int ch)

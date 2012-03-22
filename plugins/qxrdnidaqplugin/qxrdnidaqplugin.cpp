@@ -353,15 +353,20 @@ void QxrdNIDAQPlugin::pulseOutput()
 
   int error;
 
-  DAQmxErrChk(DAQmxCreateTask("pulse-output", &m_PulseTask));
+  DAQmxErrChk(DAQmxCreateTask("", &m_PulseTask));
   DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_PulseTask, "Dev1/ctr0", "", DAQmx_Val_Seconds, DAQmx_Val_Low, 0, 1e-6, 1e-6));
 
   DAQmxErrChk(DAQmxStartTask(m_PulseTask));
   DAQmxErrChk(DAQmxWaitUntilTaskDone(m_PulseTask, 0.5));
   DAQmxErrChk(DAQmxStopTask(m_PulseTask));
-  DAQmxErrChk(DAQmxClearTask(m_PulseTask));
 
 Error:
+
+  if (m_PulseTask) {
+    DAQmxClearTask(m_PulseTask);
+  }
+
+  m_PulseTask = 0;
   return;
 }
 
@@ -452,116 +457,14 @@ Error:
   return QVector<double>();
 }
 
-//void   QxrdNIDAQPlugin::continuousAnalogInput(QStringList chans, double sampleRate, int bufferSize)
-//{
-//  int error;
-
-//  if (m_ContinuousInputTask) {
-//    DAQmxClearTask(m_ContinuousInputTask);
-//    m_ContinuousInputTask = NULL;
-//  }
-
-//  if (m_ContinuousInputTask == NULL) {
-//    DAQmxErrChk(DAQmxCreateTask("continuous", &m_ContinuousInputTask));
-
-//    m_NContinuousInputs = chans.count();
-//    m_NContinuousSamples = bufferSize;
-
-//    foreach(QString chan, chans) {
-//      DAQmxErrChk(DAQmxCreateAIVoltageChan(m_ContinuousInputTask, qPrintable(chan), "", DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-//    }
-
-//    DAQmxErrChk(DAQmxCfgSampClkTiming(m_ContinuousInputTask, NULL, sampleRate, DAQmx_Val_Rising, DAQmx_Val_ContSamps, bufferSize));
-//    DAQmxErrChk(DAQmxSetBufInputBufSize(m_ContinuousInputTask, bufferSize));
-//    DAQmxErrChk(DAQmxSetReadOverWrite(m_ContinuousInputTask, DAQmx_Val_OverwriteUnreadSamps));
-
-//    DAQmxErrChk(DAQmxStartTask(m_ContinuousInputTask));
-
-//    return;
-//  }
-
-//Error:
-//  DAQmxClearTask(m_ContinuousInputTask);
-
-//  m_ContinuousInputTask = 0;
-//}
-
-//void   QxrdNIDAQPlugin::haltContinuousAnalogInput()
-//{
-//  DAQmxClearTask(m_ContinuousInputTask);
-
-//  m_ContinuousInputTask = 0;
-//}
-
-//QVector<double> QxrdNIDAQPlugin::readContinuousAnalogInput(int nsamp)
-//{
-//  QVector<float64> buff;
-//  uInt32 available;
-//  uInt64 pos;
-//  int error;
-
-//  if (m_ContinuousInputTask) {
-//    int32 actuallyRead = 0;
-
-//    if (nsamp <= 0) {
-//      DAQmxErrChk(DAQmxGetReadCurrReadPos(m_ContinuousInputTask, &pos));
-
-//      //    printf("Current Read Position %lld\n", pos);
-
-//      DAQmxErrChk(DAQmxGetReadAvailSampPerChan(m_ContinuousInputTask, &available));
-
-//      if (available > 0) {
-//        buff.resize(available*m_NContinuousInputs);
-//        DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousInputTask, available, 0,
-//                                       DAQmx_Val_GroupByScanNumber, buff.data(), buff.count(),
-//                                       &actuallyRead, NULL));
-//      } else {
-//        buff.resize(m_NContinuousSamples*m_NContinuousInputs);
-//        DAQmxErrChk(DAQmxSetReadRelativeTo(m_ContinuousInputTask, DAQmx_Val_MostRecentSamp));
-//        DAQmxErrChk(DAQmxSetReadOffset(m_ContinuousInputTask, -m_NContinuousSamples));
-
-//        DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousInputTask, m_NContinuousSamples, 0,
-//                                       DAQmx_Val_GroupByScanNumber, buff.data(), buff.count(),
-//                                       &actuallyRead, NULL));
-
-//        DAQmxErrChk(DAQmxResetReadRelativeTo(m_ContinuousInputTask));
-//        DAQmxErrChk(DAQmxResetReadOffset(m_ContinuousInputTask));
-//      }
-//    } else {
-//      buff.resize(nsamp*m_NContinuousInputs);
-//      DAQmxErrChk(DAQmxSetReadRelativeTo(m_ContinuousInputTask, DAQmx_Val_MostRecentSamp));
-//      DAQmxErrChk(DAQmxSetReadOffset(m_ContinuousInputTask, -nsamp));
-
-//      DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousInputTask, nsamp, 0,
-//                                     DAQmx_Val_GroupByScanNumber, buff.data(), buff.count(),
-//                                     &actuallyRead, NULL));
-
-//      DAQmxErrChk(DAQmxResetReadRelativeTo(m_ContinuousInputTask));
-//      DAQmxErrChk(DAQmxResetReadOffset(m_ContinuousInputTask));
-//    }
-
-//    QVector<double> res(actuallyRead*m_NContinuousInputs);
-
-//    for (int i=0; i<actuallyRead*m_NContinuousInputs; i++) {
-//      res[i] = buff[i];
-//    }
-
-//    return res;
-//  }
-
-//Error:
-//  return QVector<double>();
-//}
-
-void QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
-                                    double acquireDelay,
-                                    double exposureTime,
-                                    QStringList chans,
-                                    QcepIntList flags,
-                                    QcepDoubleList startOffset,
-                                    QcepDoubleList endOffset)
+int QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
+                                            double acquireDelay,
+                                            double exposureTime,
+                                            QStringList chans,
+                                            QVector<double> minVals,
+                                            QVector<double> maxVals)
 {
-  int error;
+  int error = 0;
 
   m_SampleRate = sampleRate;
   m_AcquireDelay = acquireDelay;
@@ -577,11 +480,16 @@ void QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
     DAQmxErrChk(DAQmxCreateTask("continuousAI", &m_ContinuousAITask));
   }
 
-  foreach(QString chan, chans) {
+  for(int i=0; i<chans.count(); i++) {
+    QString chan = chans.value(i);
+
     if (re_ai.exactMatch(chan)) {
 
       DAQmxErrChk(DAQmxCreateAIVoltageChan(m_ContinuousAITask, qPrintable(chan), "",
-                                           DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL ));
+                                           DAQmx_Val_Cfg_Default,
+                                           minVals.value(i),
+                                           maxVals.value(i),
+                                           DAQmx_Val_Volts, NULL ));
 
       m_ContinuousFlags.append(1);
       m_ContinuousChans.append(m_NAIChannels++);
@@ -627,7 +535,9 @@ void QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
 
   }
 
-  int bufferSize = m_SampleRate*(m_ExposureTime + m_AcquireDelay + 1.0);
+  m_NContinuousSamples = m_SampleRate*(m_ExposureTime + m_AcquireDelay + 0.1);
+
+  int bufferSize = m_NContinuousSamples+(2.0*m_SampleRate);
 
   printMessage(tr("Buffer size %1").arg(bufferSize));
 
@@ -657,45 +567,45 @@ void QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
 
   m_NContinuousInputs = chans.count();
 
+  m_ContinuousInputData.resize(m_NContinuousInputs);
+
+  for (int i=0; i<m_NContinuousInputs; i++) {
+    m_ContinuousInputData[i].resize(m_NContinuousSamples);
+  }
 Error:
 
-  return;
+  return error;
 }
 
-void QxrdNIDAQPlugin::readContinuousInput(QVector< QVector<double> > &data)
+int QxrdNIDAQPlugin::readContinuousInput()
 {
-  int error;
+  int error = 0;
 
   uInt64 min=0;
   uInt64 pos;
   uInt32 avail;
 
-  QVector<float64> aiBuff;
-  QVector< QVector<float64> > ciBuff;
-
-  int nsamps = m_SampleRate*(m_ExposureTime + m_AcquireDelay);
-
-  aiBuff.resize(nsamps*m_NAIChannels);
-  ciBuff.resize(m_NCIChannels);
+  QVector<double> aiBuff(m_NAIChannels*m_NContinuousSamples);
+  QVector< QVector<double> > ciBuff(m_NCIChannels);
 
   for (int i=0; i<m_NCIChannels; i++) {
-    ciBuff[i].resize(nsamps+1);
+    ciBuff[i].resize(m_NContinuousSamples + 1);
   }
 
   if (m_ContinuousAITask) {
     DAQmxErrChk(DAQmxSetReadRelativeTo(m_ContinuousAITask, DAQmx_Val_MostRecentSamp));
-    DAQmxErrChk(DAQmxSetReadOffset(m_ContinuousAITask, -nsamps));
+    DAQmxErrChk(DAQmxSetReadOffset(m_ContinuousAITask, -m_NContinuousSamples));
   }
 
   foreach(TaskHandle tsk, m_ContinuousCITasks) {
     DAQmxErrChk(DAQmxSetReadRelativeTo(tsk, DAQmx_Val_MostRecentSamp));
-    DAQmxErrChk(DAQmxSetReadOffset(tsk, -nsamps));
+    DAQmxErrChk(DAQmxSetReadOffset(tsk, -m_NContinuousSamples));
   }
 
   int32 actuallyRead;
 
   if (m_ContinuousAITask && m_NAIChannels) {
-    DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousAITask, nsamps, -1,
+    DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousAITask, m_NContinuousSamples, -1,
                                    DAQmx_Val_GroupByScanNumber, aiBuff.data(), aiBuff.count(),
                                    &actuallyRead, NULL));
   }
@@ -704,35 +614,38 @@ void QxrdNIDAQPlugin::readContinuousInput(QVector< QVector<double> > &data)
     TaskHandle tsk = m_ContinuousCITasks.value(i);
 
     if (tsk) {
-      DAQmxErrChk(DAQmxReadCounterF64(tsk, nsamps+1, -1,
+      DAQmxErrChk(DAQmxReadCounterF64(tsk, m_NContinuousSamples+1, -1,
                                       ciBuff[i].data(), ciBuff[i].count(),
                                       &actuallyRead, NULL));
     }
   }
 
   for (int i=0; i<m_NCIChannels; i++) {
-    for (int j=0; j<nsamps; j++) {
+    for (int j=0; j<m_NContinuousSamples; j++) {
       ciBuff[i][j] = ciBuff[i][j+1] - ciBuff[i][j];
     }
 
-    ciBuff[i].resize(nsamps);
+    ciBuff[i].resize(m_NContinuousSamples);
   }
-
-  data.resize(m_NContinuousInputs);
 
   for (int i=0; i<m_NContinuousInputs; i++) {
     if (m_ContinuousFlags.value(i) == 1) { // an Analog Input Channel
       int chan = m_ContinuousChans.value(i);
 
-      data[i] = aiBuff.mid(chan*nsamps, nsamps);
+      m_ContinuousInputData[i] = aiBuff.mid(chan*m_NContinuousSamples, m_NContinuousSamples);
     } else if (m_ContinuousFlags.value(i) == -1) { // a counter Input Channel
       int chan = m_ContinuousChans.value(i);
 
-      data[i] = ciBuff[chan].mid(0, nsamps);
+      m_ContinuousInputData[i] = ciBuff[chan].mid(0, m_NContinuousSamples);
     }
   }
 Error:
-  return;
+  return error;
+}
+
+QVector<double> QxrdNIDAQPlugin::readContinuousInputChannel(int ch)
+{
+  return m_ContinuousInputData.value(ch);
 }
 
 void QxrdNIDAQPlugin::finishContinuousInput()

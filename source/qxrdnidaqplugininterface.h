@@ -34,14 +34,14 @@ public:
   virtual double getAnalogInput(QString channelName) = 0;
   virtual void setAnalogOutput(QString channelName, double value) = 0;
 
-  virtual void prepareContinuousInput(double sampleRate,
-                                      double acquireDelay,
-                                      double exposureTime,
-                                      QStringList chans,
-                                      QcepIntList flags,
-                                      QcepDoubleList startOffset,
-                                      QcepDoubleList endOffset) = 0;
-  virtual void readContinuousInput(QVector< QVector<double> > &data) = 0;
+  virtual int prepareContinuousInput(double sampleRate,
+                                     double acquireDelay,
+                                     double exposureTime,
+                                     QStringList chans,
+                                     QVector<double> minVals,
+                                     QVector<double> maxVals) = 0;
+  virtual int readContinuousInput() = 0;
+  virtual QVector<double> readContinuousInputChannel(int ch) = 0;
   virtual void finishContinuousInput() = 0;
 };
 

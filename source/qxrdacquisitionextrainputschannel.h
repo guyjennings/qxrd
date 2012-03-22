@@ -11,15 +11,22 @@ class QxrdAcquisitionExtraInputsChannel : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdAcquisitionExtraInputsChannel(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra);
+  explicit QxrdAcquisitionExtraInputsChannel(int chnum, QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra);
   
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
 signals:
-  
+  void reinitializeNeeded();
+
 public slots:
-  
+  QVector<double> readChannel();
+  double          evaluateChannel();
+  double          sumChannel();
+  double          averageChannel();
+  double          maximumChannel();
+  double          minimumChannel();
+
 public:
   enum {
     ModeSummed,
@@ -28,14 +35,20 @@ public:
     ModeMinimum
   };
 
+  Q_PROPERTY(int channelNumber READ get_ChannelNumber WRITE set_ChannelNumber STORED false)
+  QCEP_INTEGER_PROPERTY(ChannelNumber)
+
   Q_PROPERTY(bool enabled READ get_Enabled WRITE set_Enabled)
   QCEP_BOOLEAN_PROPERTY(Enabled)
 
-  Q_PROPERTY(QString channel READ get_Channel WRITE set_Channel)
-  QCEP_STRING_PROPERTY(Channel)
+  Q_PROPERTY(bool plotted READ get_Plotted WRITE set_Plotted)
+  QCEP_BOOLEAN_PROPERTY(Plotted)
 
-  Q_PROPERTY(int kind READ get_Kind WRITE set_Kind)
-  QCEP_INTEGER_PROPERTY(Kind)
+  Q_PROPERTY(QString channelName READ get_ChannelName WRITE set_ChannelName)
+  QCEP_STRING_PROPERTY(ChannelName)
+
+//  Q_PROPERTY(int kind READ get_Kind WRITE set_Kind)
+//  QCEP_INTEGER_PROPERTY(Kind)
 
   Q_PROPERTY(int mode READ get_Mode WRITE set_Mode)
   QCEP_INTEGER_PROPERTY(Mode)
@@ -54,6 +67,9 @@ public:
 
   Q_PROPERTY(double end READ get_End WRITE set_End)
   QCEP_DOUBLE_PROPERTY(End)
+
+  Q_PROPERTY(int physicalChannel READ get_PhysicalChannel WRITE set_PhysicalChannel STORED false)
+  QCEP_INTEGER_PROPERTY(PhysicalChannel)
 
   Q_PROPERTY(double value READ get_Value WRITE set_Value STORED false)
   QCEP_DOUBLE_PROPERTY(Value)
