@@ -7,8 +7,8 @@
 #include "qcepdebug.h"
 #include "qwt_double_rect.h"
 
-#define GUI_THREAD_CHECK Q_ASSERT(QThread::currentThread() == (g_Application ? g_Application->thread() : NULL))
-#define THREAD_CHECK Q_ASSERT(QThread::currentThread() == thread())
+#define GUI_THREAD_CHECK Q_ASSERT(qApp && qApp ->thread() == QThread::currentThread())
+#define THREAD_CHECK     Q_ASSERT(QThread::currentThread() == thread())
 
 #define INVOKE_CHECK(res) if(!res) { printf("Invoke failed File %s, Line %d\n", __FILE__, __LINE__); }
 #define CONNECT_CHECK(res) if(!res) { printf("Connect failed File %s, Line %d\n", __FILE__, __LINE__); }
