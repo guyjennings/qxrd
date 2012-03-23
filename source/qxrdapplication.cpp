@@ -34,6 +34,7 @@
 #include "qxrdexperimentpilatusanalysis.h"
 #include "qxrdexperimentsettings.h"
 #include "qxrdsettingssaver.h"
+#include "qxrdsplashscreen.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -110,6 +111,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_GuiWanted(QxrdSettingsSaverPtr(), this, "guiWanted", 1, "GUI Wanted?"),
     m_CmdList(QxrdSettingsSaverPtr(), this, "cmdList", QStringList(), "Commands to Execute"),
     m_FileList(QxrdSettingsSaverPtr(), this, "fileList", QStringList(), "Files to Process"),
+    m_Splash(NULL),
     m_WelcomeWindow(NULL),
     m_AllocatorThread(NULL),
     m_Allocator(NULL),
@@ -125,6 +127,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
   setObjectName("application");
 
   g_Application = this;
+
+  connect(&m_SplashTimer, SIGNAL(timeout()), this, SLOT(hideSplash()));
 }
 
 bool QxrdApplication::init(int &argc, char **argv)
@@ -229,9 +233,6 @@ bool QxrdApplication::init(int &argc, char **argv)
 
   loadPlugins();
   readSettings();
-
-  splashMessage("Qxrd Version " STR(QXRD_VERSION) "\nStarting Scripting System");
-
 
   printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
@@ -377,7 +378,7 @@ void QxrdApplication::loadPlugins()
           m_NIDAQPluginInterface -> setErrorOutput(this);
         }
 
-        splashMessage(tr("Qxrd Version " STR(QXRD_VERSION) "\nLoaded plugin \"%1\"").arg(pluginName));
+        splashMessage(tr("Loaded plugin \"%1\"").arg(pluginName));
 
         printMessage(tr("Loaded plugin \"%1\" from %2")
                                     .arg(pluginName)
@@ -385,7 +386,7 @@ void QxrdApplication::loadPlugins()
       } else {
 
         if (QLibrary::isLibrary(pluginsDir.absoluteFilePath(fileName))) {
-          QString msg = tr("Qxrd Version " STR(QXRD_VERSION) "\nFailed to load plugin %1 : %2")
+          QString msg = tr("Failed to load plugin %1 : %2")
               .arg(pluginsDir.absoluteFilePath(fileName))
               .arg(loader.errorString());
           splashMessage(msg);
@@ -405,8 +406,37 @@ QString QxrdApplication::hexArg(void *p)
 #endif
 }
 
-void QxrdApplication::splashMessage(QString /*msg*/)
+void QxrdApplication::splashMessage(QString msg)
 {
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "splashMessage", Q_ARG(QString, msg));
+  } else {
+    GUI_THREAD_CHECK;
+
+    if (get_GuiWanted()) {
+      if (m_Splash == NULL) {
+        m_Splash = new QxrdSplashScreen(NULL);
+      }
+
+      m_Splash -> show();
+
+      QString msgf = tr("Qxrd Version " STR(QXRD_VERSION) "\n")+msg;
+
+      m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
+      processEvents();
+
+      m_SplashTimer.start(3000);
+    }
+  }
+}
+
+void QxrdApplication::hideSplash()
+{
+  GUI_THREAD_CHECK;
+
+  if (m_Splash) {
+    m_Splash -> hide();
+  }
 }
 
 void QxrdApplication::logMessage(QString /*msg*/)
@@ -726,20 +756,24 @@ void QxrdApplication::openExperiment(QString path)
   if (path.length() > 0) {
     QxrdExperimentSettings settings(path);
 
-    QxrdExperimentThreadPtr experiment = QxrdExperimentThread::newExperiment(path, this, &settings);
+    QxrdExperimentThreadPtr experimentThread = QxrdExperimentThread::newExperiment(path, this, &settings);
 
     printMessage("");
     printMessage(tr("===== Open Experiment %1").arg(path));
 
     appendRecentExperiment(path);
 
-    openedExperiment(experiment);
+    openedExperiment(experimentThread);
 
     printMessage("");
     printMessage("New experiment loaded");
     printMessage("");
 
     closeWelcomeWindow();
+
+    QxrdExperimentPtr experiment = experimentThread->experiment();
+
+    experiment->openWindows();
   }
 }
 

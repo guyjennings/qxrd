@@ -127,6 +127,9 @@ public:
 
   static QString hexArg(void *p);
 
+private slots:
+  void hideSplash();
+
 private:
 
   void setupTiffHandlers();
@@ -183,6 +186,9 @@ public:
 private:
   QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
   QList<QxrdExperimentPtr>        m_Experiments;
+
+  QTimer                          m_SplashTimer;
+  QSplashScreen                  *m_Splash;
 
   QxrdWelcomeWindowPtr            m_WelcomeWindow;
   QxrdAllocatorThreadPtr          m_AllocatorThread;
