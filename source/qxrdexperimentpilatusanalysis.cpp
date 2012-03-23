@@ -1,8 +1,8 @@
 #include "qxrdexperimentpilatusanalysis.h"
 #include "qxrdexperimentthread.h"
 
-QxrdExperimentPilatusAnalysis::QxrdExperimentPilatusAnalysis(QxrdExperimentThreadWPtr expthrd, QString path, QxrdApplication* app) :
-    QxrdExperiment(expthrd, path, app)
+QxrdExperimentPilatusAnalysis::QxrdExperimentPilatusAnalysis(QString path, QxrdApplication* app) :
+    QxrdExperiment(path, app)
 {
   set_ExperimentKind(QxrdExperimentThread::PilatusAnalysis);
 }

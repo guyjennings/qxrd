@@ -8,11 +8,6 @@ QxrdAcquisitionPilatus::QxrdAcquisitionPilatus(QxrdSettingsSaverWPtr saver,
 {
 }
 
-void QxrdAcquisitionPilatus::initialize()
-{
-  QxrdAcquisition::initialize();
-}
-
 void QxrdAcquisitionPilatus::beginAcquisition()
 {
 }

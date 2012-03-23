@@ -32,6 +32,15 @@ QxrdAcquisition::QxrdAcquisition(DetectorKind detectorKind,
   m_SynchronizedAcquisition = QxrdSynchronizedAcquisitionPtr(
         new QxrdSynchronizedAcquisition(saver, this));
 
+  m_AcquisitionTriggerThread = QxrdAcquisitionTriggerThreadPtr(new QxrdAcquisitionTriggerThread(m_Saver, m_Experiment, this));
+  m_AcquisitionTriggerThread -> setObjectName("trig");
+  m_AcquisitionTriggerThread -> start();
+
+  m_AcquisitionTrigger = m_AcquisitionTriggerThread -> acquisitionTrigger();
+
+  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, this));
+  m_AcquisitionExtraInputs -> initialize();
+
   connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged(double)));
   connect(prop_BinningMode(), SIGNAL(valueChanged(int,int)), this, SLOT(onBinningModeChanged(int)));
   connect(prop_CameraGain(), SIGNAL(valueChanged(int,int)), this, SLOT(onCameraGainChanged(int)));
@@ -57,18 +66,6 @@ QxrdAcquisition::~QxrdAcquisition()
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdAcquisition::~QxrdAcquisition");
   }
-}
-
-void QxrdAcquisition::initialize()
-{
-  m_AcquisitionTriggerThread = QxrdAcquisitionTriggerThreadPtr(new QxrdAcquisitionTriggerThread(m_Saver, m_Experiment, this));
-  m_AcquisitionTriggerThread -> setObjectName("trig");
-  m_AcquisitionTriggerThread -> start();
-
-  m_AcquisitionTrigger = m_AcquisitionTriggerThread -> acquisitionTrigger();
-
-  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, this));
-  m_AcquisitionExtraInputs -> initialize();
 }
 
 void QxrdAcquisition::shutdown()

@@ -11,11 +11,6 @@ QxrdAcquisitionFileWatcher::QxrdAcquisitionFileWatcher(QxrdSettingsSaverPtr save
 {
 }
 
-void QxrdAcquisitionFileWatcher::initialize()
-{
-  QxrdAcquisition::initialize();
-}
-
 void QxrdAcquisitionFileWatcher::onExposureTimeChanged(double /*newTime*/)
 {
 }

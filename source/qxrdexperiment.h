@@ -38,13 +38,15 @@ class QxrdExperiment : public QObject
   Q_OBJECT
 
 public:
-  QxrdExperiment(QxrdExperimentThreadWPtr expthrd, QString path, QxrdApplication *app);
+  QxrdExperiment(QString path, QxrdApplication *app);
 //  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
 
   void openWindows();
 
   QxrdExperimentThreadWPtr experimentThread();
+  void setExperimentThread(QxrdExperimentThreadWPtr th);
+
   QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
   QxrdWindow *window();

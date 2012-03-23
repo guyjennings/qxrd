@@ -62,6 +62,8 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdSettingsSaverPtr save
   }
 
   ::g_Acquisition = this;
+
+  initialize();
 }
 
 QxrdAcquisitionPerkinElmer::~QxrdAcquisitionPerkinElmer()
@@ -215,8 +217,6 @@ void QxrdAcquisitionPerkinElmer::onCameraGainChanged(int newGain)
 
 void QxrdAcquisitionPerkinElmer::initialize()
 {
-  QxrdAcquisition::initialize();
-
   if (qcepDebug(DEBUG_PERKINELMER)) {
     printMessage(tr("QxrdAcquisitionPerkinElmer::initialize"));
   }
@@ -296,8 +296,6 @@ void QxrdAcquisitionPerkinElmer::initialize()
     if (qcepDebug(DEBUG_PERKINELMER)) {
       printMessage(tr("Acquisition_GetCameraBinningMode mode = %1").arg(binningMode));
     }
-
-    QxrdAcquisition::initialize();
 
     CHwHeaderInfo hwHeaderInfo;
 

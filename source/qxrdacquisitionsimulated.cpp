@@ -21,6 +21,8 @@ QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdSettingsSaverWPtr saver,
   : QxrdAcquisition(SimulatedDetector, saver, doc, proc, allocator)
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(onTimerTimeout()));
+
+  initialize();
 }
 
 void QxrdAcquisitionSimulated::onExposureTimeChanged(double newTime)
@@ -115,8 +117,6 @@ void QxrdAcquisitionSimulated::setupCameraBinningModeMenu(QComboBox *cb)
 void QxrdAcquisitionSimulated::initialize()
 {
   THREAD_CHECK;
-
-  QxrdAcquisition::initialize();
 
   set_NRows(2048);
   set_NCols(2048);

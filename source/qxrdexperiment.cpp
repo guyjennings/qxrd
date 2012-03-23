@@ -20,14 +20,14 @@
 #include "qxrdfilesaverthread.h"
 #include "qxrdsettingssaver.h"
 #include "qxrdfilesaver.h"
+#include "qxrdexperimentthread.h"
 
 QxrdExperiment::QxrdExperiment(
-    QxrdExperimentThreadWPtr expthrd,
     QString path,
     QxrdApplication *app) :
   QObject(NULL),
   m_Application(app),
-  m_ExperimentThread(expthrd),
+  m_ExperimentThread(),
   m_SettingsSaver(new QxrdSettingsSaver(this)),
   m_WindowSettings(NULL),
   m_Window(NULL),
@@ -188,6 +188,11 @@ QxrdExperiment::QxrdExperiment(
 QxrdExperimentThreadWPtr QxrdExperiment::experimentThread()
 {
   return m_ExperimentThread;
+}
+
+void QxrdExperiment::setExperimentThread(QxrdExperimentThreadWPtr th)
+{
+  m_ExperimentThread = th;
 }
 
 QxrdSettingsSaverPtr QxrdExperiment::settingsSaver()

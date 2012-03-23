@@ -8,11 +8,6 @@ QxrdAcquisitionAreaDetector::QxrdAcquisitionAreaDetector(QxrdSettingsSaverWPtr s
 {
 }
 
-void QxrdAcquisitionAreaDetector::initialize()
-{
-  QxrdAcquisition::initialize();
-}
-
 void QxrdAcquisitionAreaDetector::beginAcquisition()
 {
 }

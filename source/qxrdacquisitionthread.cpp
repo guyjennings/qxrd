@@ -108,8 +108,6 @@ void QxrdAcquisitionThread::run()
     p = QxrdAcquisitionPtr(new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator));
   }
 
-  p -> initialize();
-
   m_Acquisition = p;
 
   int rc = exec();

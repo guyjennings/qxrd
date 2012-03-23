@@ -103,8 +103,6 @@ public:
   ~QxrdAcquisition();
 
 public slots:
-  virtual void initialize();
-
   void acquire();
   void acquireDark();
   void cancel();

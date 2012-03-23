@@ -28,18 +28,6 @@ QxrdAcquisitionTriggerThread::~QxrdAcquisitionTriggerThread()
 
 void QxrdAcquisitionTriggerThread::run()
 {
-  {
-    QxrdExperimentPtr exp(m_Experiment);
-
-    if (exp) {
-      if (qcepDebug(DEBUG_THREADS)) {
-        exp->printMessage("Starting Acquisition Thread");
-      }
-    } else {
-      return;
-    }
-  }
-
   QxrdAcquisitionTriggerPtr p = QxrdAcquisitionTriggerPtr(new QxrdAcquisitionTrigger(m_Saver, m_Experiment, m_Acquisition));
 
   m_AcquisitionTrigger = p;
