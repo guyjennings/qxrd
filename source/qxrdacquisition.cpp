@@ -68,6 +68,7 @@ void QxrdAcquisition::initialize()
   m_AcquisitionTrigger = m_AcquisitionTriggerThread -> acquisitionTrigger();
 
   m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, this));
+  m_AcquisitionExtraInputs -> initialize();
 }
 
 void QxrdAcquisition::shutdown()

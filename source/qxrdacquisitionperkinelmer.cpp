@@ -43,9 +43,7 @@ static HACQDESC m_AcqDesc = NULL;
 QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdSettingsSaverPtr saver,
                                                        QxrdExperimentWPtr doc,
                                                        QxrdDataProcessorWPtr proc,
-                                                       QxrdAllocatorWPtr allocator,
-                                                       QSettings *settings,
-                                                       QString section)
+                                                       QxrdAllocatorWPtr allocator)
   : QxrdAcquisition(PerkinElmerDetector, saver, doc, proc, allocator),
     m_Mutex(QMutex::Recursive),
     m_BufferSize(0),
@@ -62,8 +60,6 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdSettingsSaverPtr save
   if (qcepDebug(DEBUG_PERKINELMER)) {
     printMessage("QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer()");
   }
-
-  readSettings(settings, section);
 
   ::g_Acquisition = this;
 }

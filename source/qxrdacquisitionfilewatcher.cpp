@@ -6,12 +6,9 @@
 QxrdAcquisitionFileWatcher::QxrdAcquisitionFileWatcher(QxrdSettingsSaverPtr saver,
                                                        QxrdExperimentWPtr doc,
                                                        QxrdDataProcessorWPtr proc,
-                                                       QxrdAllocatorWPtr allocator,
-                                                       QSettings *settings,
-                                                       QString section) :
+                                                       QxrdAllocatorWPtr allocator) :
     QxrdAcquisition(QxrdAcquisition::FileWatcherDetector, saver, doc, proc, allocator)
 {
-  readSettings(settings, section);
 }
 
 void QxrdAcquisitionFileWatcher::initialize()

@@ -10,9 +10,7 @@ public:
   QxrdAcquisitionPilatus(QxrdSettingsSaverWPtr saver,
                          QxrdExperimentWPtr doc,
                          QxrdDataProcessorWPtr proc,
-                         QxrdAllocatorWPtr allocator,
-                         QSettings *settings,
-                         QString section);
+                         QxrdAllocatorWPtr allocator);
 
 private slots:
   void initialize();

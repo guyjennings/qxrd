@@ -17,9 +17,7 @@ public:
   QxrdAcquisitionPerkinElmer(QxrdSettingsSaverPtr saver,
                              QxrdExperimentWPtr doc,
                              QxrdDataProcessorWPtr proc,
-                             QxrdAllocatorWPtr allocator,
-                             QSettings *settings,
-                             QString section);
+                             QxrdAllocatorWPtr allocator);
   ~QxrdAcquisitionPerkinElmer();
 
 private slots:

@@ -10,9 +10,7 @@ public:
     explicit QxrdAcquisitionFileWatcher(QxrdSettingsSaverPtr saver,
                                         QxrdExperimentWPtr doc,
                                         QxrdDataProcessorWPtr proc,
-                                        QxrdAllocatorWPtr allocator,
-                                        QSettings *settings,
-                                        QString section);
+                                        QxrdAllocatorWPtr allocator);
 
 private slots:
   void initialize();

@@ -86,7 +86,7 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     QDoubleSpinBox *end = new QDoubleSpinBox();
     end->setMinimum(-0.2);
     end->setMaximum(10.0);
-    ch->prop_Start()->linkTo(end);
+    ch->prop_End()->linkTo(end);
 
     QLabel *phy = new QLabel();
     ch->prop_PhysicalChannel()->linkTo(phy);
