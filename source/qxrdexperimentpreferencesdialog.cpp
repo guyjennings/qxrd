@@ -5,6 +5,8 @@
 #include "qxrdapplication.h"
 #include "qxrdallocator.h"
 #include "qxrdexperiment.h"
+#include "qxrdserver.h"
+#include "qxrdsimpleserver.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QGridLayout>
@@ -28,10 +30,11 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     int detectorType = expt -> get_DetectorType();
     //  int processorType = m_Experiment -> get_ProcessorType();
 
-    int runSpecServer = expt -> get_RunSpecServer();
-    int runSimpleServer = expt -> get_RunSimpleServer();
-    int specServerPort = expt -> get_SpecServerPort();
-    int simpleServerPort = expt -> get_SimpleServerPort();
+    int runSpecServer = expt -> specServer() -> get_RunSpecServer();
+    int specServerPort = expt -> specServer() -> get_SpecServerPort();
+
+    int runSimpleServer = expt -> simpleServer() -> get_RunSimpleServer();
+    int simpleServerPort = expt -> simpleServer() -> get_SimpleServerPort();
 
     //  QStringList detectorTypes = QxrdAcquisitionThread::detectorTypeNames();
 
@@ -149,22 +152,10 @@ void QxrdExperimentPreferencesDialog::changeEvent(QEvent *e)
 
 void QxrdExperimentPreferencesDialog::accept()
 {
-  bool restartNeeded = false;
-
-//  int detectorType = m_DetectorTypeCombo -> currentIndex();
-//  int processorType = m_ProcessorTypeCombo -> currentIndex();
   int runSpecServer = m_RunSpecServer -> isChecked();
   int runSimpleServer = m_RunSimpleServer -> isChecked();
   int specServerPort = m_SpecServerPort -> value();
   int simpleServerPort = m_SimpleServerPort -> value();
-
-//  if (detectorType != QxrdAcquisitionThread::detectorType()) {
-//    restartNeeded = true;
-//  }
-
-//  if (processorType != QxrdDataProcessorThread::processorType()) {
-//    restartNeeded = true;
-//  }
 
   QxrdExperimentPtr expt(m_Experiment);
 
@@ -172,33 +163,10 @@ void QxrdExperimentPreferencesDialog::accept()
     QxrdAcquisitionPtr acq = expt -> acquisition();
     QxrdDataProcessorPtr proc = expt->dataProcessor();
 
-    if (runSpecServer != expt -> get_RunSpecServer()) {
-      restartNeeded = true;
-    }
-
-    if (specServerPort != expt -> get_SpecServerPort()) {
-      restartNeeded = true;
-    }
-
-    if (runSimpleServer != expt -> get_RunSimpleServer()) {
-      restartNeeded = true;
-    }
-
-    if (simpleServerPort != expt -> get_SimpleServerPort()) {
-      restartNeeded = true;
-    }
-
-    if (restartNeeded) {
-      QMessageBox::information(this,"Restart Needed","You will need to restart qxrd before your changes will take effect");
-    }
-
-    //  m_Experiment    -> set_DetectorType(detectorType);
-    //  app -> set_ProcessorType(processorType);
-
-    expt -> set_RunSpecServer(runSpecServer);
-    expt -> set_SpecServerPort(specServerPort);
-    expt -> set_RunSimpleServer(runSimpleServer);
-    expt -> set_SimpleServerPort(simpleServerPort);
+    expt -> specServer() -> set_RunSpecServer(runSpecServer);
+    expt -> specServer() -> set_SpecServerPort(specServerPort);
+    expt -> simpleServer() -> set_RunSimpleServer(runSimpleServer);
+    expt -> simpleServer() -> set_SimpleServerPort(simpleServerPort);
 
     proc -> set_SaveRawInSubdirectory(m_SaveRawInSubdir -> isChecked());
     proc -> set_SaveRawSubdirectory  (m_SaveRawSubdir   -> text());

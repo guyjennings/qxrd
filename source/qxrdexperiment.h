@@ -38,15 +38,19 @@ class QxrdExperiment : public QObject
   Q_OBJECT
 
 public:
-  QxrdExperiment(QString path, QxrdApplication *app);
-  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
+  QxrdExperiment(QxrdExperimentThreadWPtr expthrd, QString path, QxrdApplication *app);
+//  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
+
+  void openWindows();
 
   QxrdExperimentThreadWPtr experimentThread();
   QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
   QxrdWindow *window();
   QxrdDataProcessorWPtr dataProcessor() const;
+  QxrdServerPtr specServer();
+  QxrdSimpleServerPtr simpleServer();
 
   FILE* logFile();
   void newLogFile(QString path);
@@ -109,7 +113,6 @@ private:
 private:
   QxrdWindowSettingsPtr           m_WindowSettings;
   QxrdWindow                     *m_Window;
-  QSplashScreen                  *m_Splash;
   QxrdServerThreadPtr             m_ServerThread;
   QxrdServerPtr                   m_Server;
   QxrdSimpleServerThreadPtr       m_SimpleServerThread;
@@ -162,18 +165,6 @@ public:  // Properties
 
   Q_PROPERTY(int    defaultLayout   READ get_DefaultLayout WRITE set_DefaultLayout STORED false)
   QCEP_INTEGER_PROPERTY(DefaultLayout)
-
-  Q_PROPERTY(int    runSpecServer    READ get_RunSpecServer WRITE set_RunSpecServer)
-  QCEP_INTEGER_PROPERTY(RunSpecServer)
-
-  Q_PROPERTY(int    specServerPort    READ get_SpecServerPort WRITE set_SpecServerPort)
-  QCEP_INTEGER_PROPERTY(SpecServerPort)
-
-  Q_PROPERTY(int    runSimpleServer    READ get_RunSimpleServer WRITE set_RunSimpleServer)
-  QCEP_INTEGER_PROPERTY(RunSimpleServer)
-
-  Q_PROPERTY(int    simpleServerPort    READ get_SimpleServerPort WRITE set_SimpleServerPort)
-  QCEP_INTEGER_PROPERTY(SimpleServerPort)
 
   Q_PROPERTY(int    workCompleted READ get_WorkCompleted WRITE set_WorkCompleted STORED false)
   QCEP_INTEGER_PROPERTY(WorkCompleted)

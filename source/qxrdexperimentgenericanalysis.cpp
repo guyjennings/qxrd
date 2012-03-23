@@ -1,8 +1,8 @@
 #include "qxrdexperimentgenericanalysis.h"
 #include "qxrdexperimentthread.h"
 
-QxrdExperimentGenericAnalysis::QxrdExperimentGenericAnalysis(QString path, QxrdApplication* app) :
-    QxrdExperiment(path, app)
+QxrdExperimentGenericAnalysis::QxrdExperimentGenericAnalysis(QxrdExperimentThreadWPtr expthrd, QString path, QxrdApplication* app) :
+    QxrdExperiment(expthrd, path, app)
 {
   set_ExperimentKind(QxrdExperimentThread::GenericAnalysis);
 }

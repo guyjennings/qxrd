@@ -7,7 +7,7 @@ class QxrdExperimentPerkinElmerAcquisition : public QxrdExperiment
 {
   Q_OBJECT
 public:
-  explicit QxrdExperimentPerkinElmerAcquisition(QString path, QxrdApplication* app);
+  explicit QxrdExperimentPerkinElmerAcquisition(QxrdExperimentThreadWPtr expthrd, QString path, QxrdApplication* app);
 
   virtual void readSettings(QSettings *settings, QString section);
   virtual void writeSettings(QSettings *settings, QString section);
