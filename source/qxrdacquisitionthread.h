@@ -18,9 +18,7 @@ class QxrdAcquisitionThread : public QxrdThread
                         QxrdExperimentWPtr doc,
                         QxrdDataProcessorWPtr proc,
                         QxrdAllocatorWPtr allocator,
-                        int detectorType,
-                        QSettings *settings,
-                        QString section);
+                        int detectorType);
 
   ~QxrdAcquisitionThread();
 
@@ -44,8 +42,6 @@ private:
   QxrdAcquisitionWPtr   m_Acquisition;
   QxrdDataProcessorWPtr m_Processor;
   int                   m_DetectorType;
-  QSettings            *m_Settings;
-  QString               m_Section;
 };
 
 #endif

@@ -12,9 +12,7 @@ public:
   QxrdAcquisitionSimulated(QxrdSettingsSaverWPtr saver,
                            QxrdExperimentWPtr doc,
                            QxrdDataProcessorWPtr proc,
-                           QxrdAllocatorWPtr allocator,
-                           QSettings *settings,
-                           QString section);
+                           QxrdAllocatorWPtr allocator);
 
 public slots:
   void onExposureTimeChanged(double newTime);
