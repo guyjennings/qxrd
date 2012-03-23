@@ -45,6 +45,8 @@ public:
   QxrdDataProcessorWPtr dataProcessor() const;
   QxrdWindow *window() const;
 
+  void setWindow(QxrdWindow *win);
+
 private slots:
   void              evaluate(int src, QString cmd);
 

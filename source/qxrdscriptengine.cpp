@@ -158,15 +158,6 @@ void QxrdScriptEngine::initialize()
         globalObject().setProperty("testImage",       newQObject(gti.data()));
       }
     }
-
-    QxrdWindow *wp = expt->window();
-
-    if (wp) {
-      globalObject().setProperty("window",          newQObject(wp));
-      globalObject().setProperty("imageGraph",      newQObject(wp->m_ImagePlot));
-      globalObject().setProperty("centeringGraph",  newQObject(wp->m_CenterFinderPlot));
-      globalObject().setProperty("integratorGraph", newQObject(wp->m_IntegratorPlot));
-    }
   }
 }
 
@@ -188,6 +179,18 @@ QxrdWindow *QxrdScriptEngine::window() const
 QxrdDataProcessorWPtr QxrdScriptEngine::dataProcessor() const
 {
   return m_DataProcessor;
+}
+
+void QxrdScriptEngine::setWindow(QxrdWindow *win)
+{
+  m_Window = win;
+
+  if (m_Window) {
+    globalObject().setProperty("window",          newQObject(m_Window));
+    globalObject().setProperty("imageGraph",      newQObject(m_Window->m_ImagePlot));
+    globalObject().setProperty("centeringGraph",  newQObject(m_Window->m_CenterFinderPlot));
+    globalObject().setProperty("integratorGraph", newQObject(m_Window->m_IntegratorPlot));
+  }
 }
 
 void QxrdScriptEngine::evaluateAppCommand(QString expr)
