@@ -6,11 +6,11 @@
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 
-QxrdServerThread::QxrdServerThread(QxrdExperimentWPtr doc, QString name, int port)
-    : m_Experiment(doc),
-    m_Name(name),
-    m_Port(port),
-    m_Server(NULL)
+QxrdServerThread::QxrdServerThread(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
+  m_Saver(saver),
+  m_Experiment(doc),
+  m_Name(name),
+  m_Server(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdServerThread::QxrdServerThread(%p)\n", this);
@@ -50,15 +50,9 @@ void QxrdServerThread::run()
     expt->printMessage("Starting Spec Server Thread");
   }
 
-  QxrdServerPtr server(new QxrdServer(m_Experiment, m_Name, m_Port));
-
-  server -> startServer(QHostAddress::Any, m_Port);
+  QxrdServerPtr server(new QxrdServer(m_Saver, m_Experiment, m_Name));
 
   m_Server = server;
-
-  if (expt) {
-    expt->printMessage(tr("spec server started on port %1").arg(m_Server->serverPort()));
-  }
 
   int rc = exec();
 

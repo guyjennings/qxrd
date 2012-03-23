@@ -10,11 +10,10 @@
 
 #include "qxrdexperiment.h"
 
-QSpecServer::QSpecServer(QxrdExperimentWPtr doc, QString name, int port)
+QSpecServer::QSpecServer(QxrdExperimentWPtr doc, QString name)
   : QTcpServer(NULL),
     m_Experiment(doc),
     m_ServerName(name),
-    m_Port(port),
     m_Socket(NULL)
 {
   connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));

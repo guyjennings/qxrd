@@ -7,18 +7,30 @@
 #include <QDateTime>
 
 #include "qxrdexperiment-ptr.h"
+#include "qcepproperty.h"
 
 class QxrdSimpleServer : public QTcpServer
 {
   Q_OBJECT
 public:
-  QxrdSimpleServer(QxrdExperimentWPtr doc, QString name, int port);
+  QxrdSimpleServer(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name);
   virtual ~QxrdSimpleServer();
+
+  Q_PROPERTY(int    runSimpleServer    READ get_RunSimpleServer WRITE set_RunSimpleServer)
+  QCEP_INTEGER_PROPERTY(RunSimpleServer)
+
+  Q_PROPERTY(int    simpleServerPort    READ get_SimpleServerPort WRITE set_SimpleServerPort)
+  QCEP_INTEGER_PROPERTY(SimpleServerPort)
 
 public:
   void startServer(QHostAddress addr, int port);
 
+  virtual void readSettings(QSettings *settings, QString section);
+  virtual void writeSettings(QSettings *settings, QString section);
+
 public slots:
+  void runModeChanged();
+  void serverPortChanged();
   void openNewConnection();
   void connectionClosed();
   void clientRead();

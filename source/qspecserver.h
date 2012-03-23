@@ -21,7 +21,7 @@ class QSpecServer : public QTcpServer
   Q_OBJECT
 
 public:
-  QSpecServer(QxrdExperimentWPtr doc, QString name, int port);
+  QSpecServer(QxrdExperimentWPtr doc, QString name);
 
 public:
   void startServer(QHostAddress a, int p=-1);
@@ -69,7 +69,7 @@ protected:
 private:
   QxrdExperimentWPtr   m_Experiment;
   QString              m_ServerName;
-  int                  m_Port;
+//  int                  m_Port;
   QTcpSocket          *m_Socket;
   int                  m_SwapBytes;
   struct svr_head      m_Packet;

@@ -5,12 +5,13 @@
 #include "qxrdthread.h"
 #include "qxrdsimpleserver-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdSimpleServerThread : public QxrdThread
 {
   Q_OBJECT
 public:
-  QxrdSimpleServerThread(QxrdExperimentWPtr doc, QString name, int port);
+  QxrdSimpleServerThread(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name);
   ~QxrdSimpleServerThread();
 
   void shutdown();
@@ -21,10 +22,10 @@ protected:
   void run();
 
 private:
-  QxrdExperimentWPtr  m_Experiment;
-  QString             m_Name;
-  int                 m_Port;
-  QxrdSimpleServerPtr m_Server;
+  QxrdSettingsSaverWPtr m_Saver;
+  QxrdExperimentWPtr    m_Experiment;
+  QString               m_Name;
+  QxrdSimpleServerPtr   m_Server;
 };
 
 #endif // QXRDSIMPLESERVERTHREAD_H

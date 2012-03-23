@@ -3,11 +3,11 @@
 #include "qxrdexperiment.h"
 #include "qxrdapplication.h"
 
-QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdExperimentWPtr doc, QString name, int port) :
-    m_Experiment(doc),
-    m_Name(name),
-    m_Port(port),
-    m_Server(NULL)
+QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
+  m_Saver(saver),
+  m_Experiment(doc),
+  m_Name(name),
+  m_Server(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdSimpleServerThread::QxrdSimpleServerThread(%p)\n", this);
@@ -48,9 +48,7 @@ void QxrdSimpleServerThread::run()
     expt->printMessage("Starting Simple Server Thread");
   }
 
-  QxrdSimpleServerPtr server(new QxrdSimpleServer(m_Experiment, m_Name, m_Port));
-
-  server -> startServer(QHostAddress::Any, m_Port);
+  QxrdSimpleServerPtr server(new QxrdSimpleServer(m_Saver, m_Experiment, m_Name));
 
   m_Server = server;
 

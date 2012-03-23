@@ -4,15 +4,19 @@
 #include <QThread>
 #include "qxrdexperiment.h"
 
-QxrdSimpleServer::QxrdSimpleServer(QxrdExperimentWPtr doc, QString name, int port) :
-    QTcpServer(NULL),
-    m_Experiment(doc),
-    m_Name(name),
-    m_Port(port)
+QxrdSimpleServer::QxrdSimpleServer(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
+  QTcpServer(NULL),
+  m_RunSimpleServer(saver, this,"runSimpleServer", 1, "Run Simple Socket Server?"),
+  m_SimpleServerPort(saver, this,"simpleServerPort", 1234, "Port for Simple Socket Server"),
+  m_Experiment(doc),
+  m_Name(name)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdSimpleServer::QxrdSimpleServer(%p)\n", this);
   }
+
+  connect(prop_RunSimpleServer(), SIGNAL(valueChanged(int,int)), this, SLOT(runModeChanged()));
+  connect(prop_SimpleServerPort(), SIGNAL(valueChanged(int,int)), this, SLOT(serverPortChanged()));
 
   connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));
 }
@@ -24,8 +28,27 @@ QxrdSimpleServer::~QxrdSimpleServer()
   }
 }
 
-void
-QxrdSimpleServer::printMessage(QString msg, QDateTime ts)
+void QxrdSimpleServer::readSettings(QSettings *settings, QString section)
+{
+  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdSimpleServer::writeSettings(QSettings *settings, QString section)
+{
+  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdSimpleServer::runModeChanged()
+{
+  printf("Need to implement QxrdSimpleServer::runModeChanged()\n");
+}
+
+void QxrdSimpleServer::serverPortChanged()
+{
+  printf("Need to implement QxrdSimpleServer::serverPortChanged()\n");
+}
+
+void QxrdSimpleServer::printMessage(QString msg, QDateTime ts)
 {
   QxrdExperimentPtr exp(m_Experiment);
 
@@ -34,8 +57,7 @@ QxrdSimpleServer::printMessage(QString msg, QDateTime ts)
   }
 }
 
-void
-QxrdSimpleServer::criticalMessage(QString msg)
+void QxrdSimpleServer::criticalMessage(QString msg)
 {
   QxrdExperimentPtr exp(m_Experiment);
 
@@ -48,7 +70,7 @@ void QxrdSimpleServer::startServer(QHostAddress addr, int port)
 {
   if (qcepDebug(DEBUG_SERVER)) {
     printMessage(tr("Starting simple server on address %1, port %2")
-                                .arg(addr.toString()).arg(port));
+                 .arg(addr.toString()).arg(port));
   }
 
   setMaxPendingConnections(1);
