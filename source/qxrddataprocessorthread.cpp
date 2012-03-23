@@ -33,18 +33,6 @@ QxrdDataProcessorThread::~QxrdDataProcessorThread()
 
 void QxrdDataProcessorThread::run()
 {
-  {
-    QxrdExperimentPtr exp(m_Experiment);
-
-    if (exp) {
-      if (qcepDebug(DEBUG_THREADS)) {
-        exp->printMessage("Starting Processor Thread");
-      }
-    } else {
-      return;
-    }
-  }
-
   QxrdDataProcessorPtr p(new QxrdDataProcessor(m_Saver,
                                                m_Experiment,
                                                m_Acquisition,
