@@ -81,7 +81,7 @@ QxrdExperiment::QxrdExperiment(
 
     m_DataProcessorThread = QxrdDataProcessorThreadPtr(
           new QxrdDataProcessorThread(m_SettingsSaver,
-                                      this,
+                                      QxrdExperimentWPtr(this),
                                       QxrdAcquisitionPtr(),
                                       m_Application->allocator(),
                                       m_FileSaver));
@@ -95,7 +95,7 @@ QxrdExperiment::QxrdExperiment(
 
     m_AcquisitionThread = QxrdAcquisitionThreadPtr(
           new QxrdAcquisitionThread(m_SettingsSaver,
-                                    this,
+                                    QxrdExperimentWPtr(this),
                                     m_DataProcessor,
                                     m_Application->allocator(),
                                     get_DetectorType()));
