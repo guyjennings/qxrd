@@ -13,6 +13,7 @@
 
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include "math.h"
 
 QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperimentWPtr exp, QxrdAllocatorWPtr alloc) :
   QObject(),
