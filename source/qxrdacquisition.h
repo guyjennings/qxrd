@@ -16,13 +16,22 @@
 #include <QElapsedTimer>
 #endif
 
-#include "qxrdacquisitionoperations.h"
-
 #include "qxrdrasterdata.h"
 #include "qxrdimagequeue.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
-#include "qxrdacquiredialogbase-ptr.h"
+#include "qxrdacquisitiondialog-ptr.h"
+#include "qxrdexperiment-ptr.h"
+#include "qxrdwindow-ptr.h"
+#include "qxrddetector-ptr.h"
+#include "qxrddataprocessor-ptr.h"
+#include "qxrdsynchronizedacquisition.h"
+#include "qxrdsynchronizedacquisition-ptr.h"
+#include "qxrdacquisitiontrigger.h"
+#include "qxrdacquisitiontrigger-ptr.h"
+#include "qxrdacquisitiontriggerthread.h"
+#include "qxrdacquisitiontriggerthread-ptr.h"
+#include "qxrdacquisitionextrainputs-ptr.h"
 
 class QxrdAcquisitionParameterPack
 {
@@ -90,7 +99,7 @@ public:
   QxrdMaskDataPtr       m_Overflow;
 };
 
-class QxrdAcquisition : public QxrdAcquisitionOperations
+class QxrdAcquisition : public QObject
 {
   Q_OBJECT
 
@@ -100,8 +109,20 @@ public:
                   QxrdDataProcessorWPtr proc,
                   QxrdAllocatorWPtr allocator);
   ~QxrdAcquisition();
+  void setWindow(QxrdWindow *win);
+  void setDetector(QxrdDetectorWPtr det);
 
 public slots:
+  void propertyList();
+  void Message(QString cmd);
+
+  void dynamicProperties();
+  void updateSaveTimes();
+
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+
   void acquire();
   void acquireDark();
   void cancel();
@@ -114,13 +135,17 @@ public slots:
 
   int acquisitionStatus(double time);
 
-  virtual void onExposureTimeChanged(double newTime) = 0;
-  virtual void onBinningModeChanged(int newMode) = 0;
-  virtual void onCameraGainChanged(int newGain) = 0;
+  void onExposureTimeChanged(double newTime);
+  void onBinningModeChanged(int newMode);
+  void onCameraGainChanged(int newGain);
+
   void onBufferSizeChanged(int newMB);
 
   void doAcquire    (QxrdAcquisitionParameterPack parms);
   void doAcquireDark(QxrdDarkAcquisitionParameterPack parms);
+
+public:
+  void enqueueAcquiredFrame(QxrdInt16ImageDataPtr img);
 
 signals:
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
@@ -128,14 +153,20 @@ signals:
   void acquireComplete();
 
 public:
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
+
+  void copyDynamicProperties(QObject *dest);
+
   int currentPhase(int frameNumber);
 
-  virtual void setupExposureMenu(QDoubleSpinBox *cb) = 0;
-  virtual void setupCameraGainMenu(QComboBox *cb) = 0;
-  virtual void setupCameraBinningModeMenu(QComboBox *cb) = 0;
+  void setupExposureMenu(QDoubleSpinBox *cb);
+  void setupCameraGainMenu(QComboBox *cb);
+  void setupCameraBinningModeMenu(QComboBox *cb);
 
   void indicateDroppedFrame(int n);
-  virtual QxrdAcquireDialogBase* controlPanel(QxrdWindow *win);
+  virtual QxrdAcquisitionDialogPtr controlPanel(QxrdWindow *win);
+  QxrdAllocatorWPtr allocator() const;
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
   QxrdAcquisitionTriggerPtr acquisitionTrigger() const;
@@ -151,9 +182,9 @@ protected:
   void acquisition(int isDark);
   void copyParameters(int isDark);
 
-  virtual void beginAcquisition() = 0;
-  virtual void endAcquisition() = 0;
-  virtual void shutdownAcquisition() = 0;
+  void beginAcquisition();
+  void endAcquisition();
+  void shutdownAcquisition();
 
   //  void acquisitionError(const char *fn, int n);
   void acquisitionError(const char *fn, int ln, int n);
@@ -165,6 +196,8 @@ protected slots:
   void onIdleTimeout();
 
 private:
+  enum { MegaBytes = 0x100000 };
+
   QxrdInt16ImageDataPtr acquireFrame(double exposure);
   QxrdInt16ImageDataPtr acquireFrameIfAvailable(double exposure);
   void flushImageQueue();
@@ -182,17 +215,133 @@ private:
 
   int cancelling();
 
-protected:
-  void enqueueAcquiredFrame(QxrdInt16ImageDataPtr img);
+public:
+  Q_PROPERTY(QString qxrdVersion READ get_QxrdVersion STORED false)
+  QCEP_STRING_PROPERTY(QxrdVersion)
 
-protected:
+  Q_PROPERTY(QString qtVersion READ get_QtVersion STORED false)
+  QCEP_STRING_PROPERTY(QtVersion)
+
+//  Q_PROPERTY(int    detectorType     READ get_DetectorType WRITE set_DetectorType STORED false)
+//  QCEP_INTEGER_PROPERTY(DetectorType)
+
+  Q_PROPERTY(double exposureTime     READ get_ExposureTime WRITE set_ExposureTime)
+  QCEP_DOUBLE_PROPERTY(ExposureTime)
+
+  Q_PROPERTY(int    skippedExposuresAtStart  READ get_SkippedExposuresAtStart WRITE set_SkippedExposuresAtStart)
+  QCEP_INTEGER_PROPERTY(SkippedExposuresAtStart)
+
+  Q_PROPERTY(int    lastAcquired  READ get_LastAcquired WRITE set_LastAcquired STORED false)
+  QCEP_INTEGER_PROPERTY(LastAcquired)
+
+  Q_PROPERTY(int    phasesInGroup  READ get_PhasesInGroup WRITE set_PhasesInGroup)
+  QCEP_INTEGER_PROPERTY(PhasesInGroup)
+
+  Q_PROPERTY(int    summedExposures  READ get_SummedExposures WRITE set_SummedExposures)
+  QCEP_INTEGER_PROPERTY(SummedExposures)
+
+  Q_PROPERTY(int    skippedExposures  READ get_SkippedExposures WRITE set_SkippedExposures)
+  QCEP_INTEGER_PROPERTY(SkippedExposures)
+
+  Q_PROPERTY(int    preTriggerFiles  READ get_PreTriggerFiles WRITE set_PreTriggerFiles)
+  QCEP_INTEGER_PROPERTY(PreTriggerFiles)
+
+  Q_PROPERTY(int    postTriggerFiles  READ get_PostTriggerFiles WRITE set_PostTriggerFiles)
+  QCEP_INTEGER_PROPERTY(PostTriggerFiles)
+
+  Q_PROPERTY(int    fileIndex        READ get_FileIndex WRITE set_FileIndex)
+  QCEP_INTEGER_PROPERTY(FileIndex)
+
+  Q_PROPERTY(QString filePattern     READ get_FilePattern WRITE set_FilePattern)
+  QCEP_STRING_PROPERTY(FilePattern)
+
+  Q_PROPERTY(int    fileIndexWidth        READ get_FileIndexWidth WRITE set_FileIndexWidth)
+  QCEP_INTEGER_PROPERTY(FileIndexWidth)
+
+  Q_PROPERTY(int    filePhaseWidth        READ get_FilePhaseWidth WRITE set_FilePhaseWidth)
+  QCEP_INTEGER_PROPERTY(FilePhaseWidth)
+
+  Q_PROPERTY(int    fileOverflowWidth        READ get_FileOverflowWidth WRITE set_FileOverflowWidth)
+  QCEP_INTEGER_PROPERTY(FileOverflowWidth)
+
+  Q_PROPERTY(int     darkSummedExposures READ get_DarkSummedExposures WRITE set_DarkSummedExposures)
+  QCEP_INTEGER_PROPERTY(DarkSummedExposures)
+
+  Q_PROPERTY(int     cameraGain      READ get_CameraGain WRITE set_CameraGain)
+  QCEP_INTEGER_PROPERTY(CameraGain)
+
+  Q_PROPERTY(int     binningMode      READ get_BinningMode WRITE set_BinningMode)
+  QCEP_INTEGER_PROPERTY(BinningMode)
+
+  Q_PROPERTY(QString fileBase        READ get_FileBase WRITE set_FileBase)
+  QCEP_STRING_PROPERTY(FileBase)
+
+  Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows)
+  QCEP_INTEGER_PROPERTY(NRows)
+
+  Q_PROPERTY(int     nCols      READ get_NCols WRITE set_NCols)
+  QCEP_INTEGER_PROPERTY(NCols)
+
+  Q_PROPERTY(int     overflowLevel      READ get_OverflowLevel WRITE set_OverflowLevel)
+  QCEP_INTEGER_PROPERTY(OverflowLevel)
+
+  Q_PROPERTY(int     acquireDark      READ get_AcquireDark WRITE set_AcquireDark STORED false)
+  QCEP_INTEGER_PROPERTY(AcquireDark)
+
+  Q_PROPERTY(int     cancelling      READ get_Cancelling WRITE set_Cancelling STORED false)
+  QCEP_INTEGER_PROPERTY(Cancelling)
+
+  Q_PROPERTY(int     triggered      READ get_Triggered WRITE set_Triggered STORED false)
+  QCEP_INTEGER_PROPERTY(Triggered)
+
+  Q_PROPERTY(double     raw16SaveTime    READ get_Raw16SaveTime WRITE set_Raw16SaveTime)
+  QCEP_DOUBLE_PROPERTY(Raw16SaveTime)
+
+  Q_PROPERTY(double     raw32SaveTime    READ get_Raw32SaveTime WRITE set_Raw32SaveTime)
+  QCEP_DOUBLE_PROPERTY(Raw32SaveTime)
+
+  Q_PROPERTY(double     rawSaveTime    READ get_RawSaveTime WRITE set_RawSaveTime)
+  QCEP_DOUBLE_PROPERTY(RawSaveTime)
+
+  Q_PROPERTY(double     darkSaveTime    READ get_DarkSaveTime WRITE set_DarkSaveTime)
+  QCEP_DOUBLE_PROPERTY(DarkSaveTime)
+
+  Q_PROPERTY(QString userComment1 READ get_UserComment1 WRITE set_UserComment1)
+  QCEP_STRING_PROPERTY(UserComment1)
+
+  Q_PROPERTY(QString userComment2 READ get_UserComment2 WRITE set_UserComment2)
+  QCEP_STRING_PROPERTY(UserComment2)
+
+  Q_PROPERTY(QString userComment3 READ get_UserComment3 WRITE set_UserComment3)
+  QCEP_STRING_PROPERTY(UserComment3)
+
+  Q_PROPERTY(QString userComment4 READ get_UserComment4 WRITE set_UserComment4)
+  QCEP_STRING_PROPERTY(UserComment4)
+
+  Q_PROPERTY(int     droppedFrames    READ get_DroppedFrames WRITE set_DroppedFrames STORED false)
+  QCEP_INTEGER_PROPERTY(DroppedFrames)
+
+private:
+  mutable QMutex                m_Mutex;
+
+  QxrdSynchronizedAcquisitionPtr  m_SynchronizedAcquisition;
+  QxrdAcquisitionTriggerThreadPtr m_AcquisitionTriggerThread;
+  QxrdAcquisitionTriggerPtr       m_AcquisitionTrigger;
+  QxrdAcquisitionExtraInputsPtr   m_AcquisitionExtraInputs;
+
+  QxrdExperimentWPtr     m_Experiment;
+  QxrdWindowPtr          m_Window;
+  QxrdAllocatorWPtr      m_Allocator;
+  QxrdDataProcessorWPtr  m_DataProcessor;
+  QxrdDetectorWPtr       m_Detector;
+
   QMutex                 m_Acquiring;
   QWaitCondition         m_StatusWaiting;
 
   QSemaphore             m_NAcquiredImages;
   QxrdInt16ImageQueue    m_AcquiredImages;
 
-  QxrdAcquireDialogBase *m_ControlPanel;
+  QxrdAcquisitionDialogPtr m_ControlPanel;
 
   QFutureWatcher<void>   m_Watcher;
 

@@ -2,7 +2,7 @@
 #include "qxrdmutexlocker.h"
 #include "qxrddataprocessor.h"
 #include "qxrdallocator.h"
-#include "qxrdacquiredialog.h"
+#include "qxrdacquisitiondialog.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdacquisitiontriggerthread.h"
 #include "qxrdacquisitionextrainputs.h"
@@ -12,16 +12,71 @@
 #include <QThreadPool>
 #include <QtConcurrentRun>
 #include <QDir>
+#include <QMetaProperty>
 
 QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
                                  QxrdExperimentWPtr doc,
                                  QxrdDataProcessorWPtr proc,
                                  QxrdAllocatorWPtr allocator)
-  : QxrdAcquisitionOperations(saver, doc, proc, allocator),
+  : QObject(),
+    m_QxrdVersion(QxrdSettingsSaverPtr(), this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
+    m_QtVersion(QxrdSettingsSaverPtr(), this,"qtVersion",qVersion(), "QT Version Number"),
+//    m_DetectorType(QxrdSettingsSaverPtr(), this, "detectorType", 0, "Detector Type (0 = simulated, 1 = PE, 2 = Pilatus, 3 = EPICS, 4 = Files)"),
+    m_ExposureTime(saver, this,"exposureTime",0.1, "Exposure Time (in sec)"),
+    m_SkippedExposuresAtStart(saver, this,"skippedExposuresAtStart",0, "Exposures to Skip at Start"),
+    m_LastAcquired(QxrdSettingsSaverPtr(), this, "lastAcquired", 0, "Internal Acquisition Flag"),
+    m_PhasesInGroup(saver, this,"phasesInGroup",1, "Number of Image Phases"),
+    m_SummedExposures(saver, this,"summedExposures",1, "Summed Exposures per Image"),
+    m_SkippedExposures(saver, this,"skippedExposures",0, "Skipped Exposures between Images"),
+    m_PreTriggerFiles(saver, this,"preTriggerFiles",0, "Number of pre-Trigger Images"),
+    m_PostTriggerFiles(saver, this,"postTriggerFiles",1, "Number of post-Trigger Images"),
+    m_FileIndex(saver, this,"fileIndex",0, "File Index"),
+    m_FilePattern(saver, this,"filePattern","", "File Name Pattern"),
+    m_FileIndexWidth(saver, this, "fileIndexWidth", 5, "Digits in File Index Field"),
+    m_FilePhaseWidth(saver, this, "filePhaseWidth", 3, "Digits in Phase Number Field"),
+    m_FileOverflowWidth(saver, this, "fileOverflowWidth", 5, "Digits in Overflow Index Field"),
+    m_DarkSummedExposures(saver, this,"darkSummedExposures",1, "Summed Exposures in Dark Image"),
+    m_CameraGain(saver, this,"cameraGain",0, "Detector Gain"),
+    m_BinningMode(saver, this,"binningMode",0, "Binning Mode"),
+    m_FileBase(saver, this,"fileBase","", "File Base"),
+    m_NRows(saver, this, "nRows", 2048, "Number of Rows"),
+    m_NCols(saver, this, "nCols", 2048, "Number of Cols"),
+    m_OverflowLevel(saver, this, "overflowLevel", 65500, "Overflow level (per exposure)"),
+    m_AcquireDark(QxrdSettingsSaverPtr(), this, "acquireDark", 0, "Acquire Dark Image?"),
+    m_Cancelling(QxrdSettingsSaverPtr(), this, "cancelling", 0, "Cancel Acquisition?"),
+    m_Triggered(QxrdSettingsSaverPtr(), this, "triggered", 0, "Trigger Acquisition"),
+    m_Raw16SaveTime(saver, this,"raw16SaveTime", 0.1, "Time to save 16 bit images"),
+    m_Raw32SaveTime(saver, this,"raw32SaveTime", 0.2, "Time to save 32 bit images"),
+    m_RawSaveTime(saver, this,"rawSaveTime", 0.2, "Time to save raw images"),
+    m_DarkSaveTime(saver, this,"darkSaveTime", 0.2, "Time to save dark images"),
+    m_UserComment1(saver, this,"userComment1","", "User Comment 1"),
+    m_UserComment2(saver, this,"userComment2","", "User Comment 2"),
+    m_UserComment3(saver, this,"userComment3","", "User Comment 3"),
+    m_UserComment4(saver, this,"userComment4","", "User Comment 4"),
+    m_DroppedFrames(QxrdSettingsSaverPtr(), this,"droppedFrames",0, "Number of Dropped Frames"),
+    m_Mutex(QMutex::Recursive),
+    m_SynchronizedAcquisition(NULL),
+    m_AcquisitionTriggerThread(NULL),
+    m_AcquisitionTrigger(NULL),
+    m_AcquisitionExtraInputs(NULL),
+    m_Experiment(doc),
+    m_Window(),
+    m_Allocator(allocator),
+    m_DataProcessor(proc),
+    m_Detector(),
     m_AcquiredImages("acquired"),
     m_ControlPanel(NULL),
     m_Idling(1)
 {
+  setObjectName("acquisition");
+
+  connect(prop_Raw16SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
+  connect(prop_Raw32SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
+  connect(prop_SummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
+  connect(prop_DarkSummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
+
+//  m_FileIndex.setDebug(1);
+
   QxrdAllocatorPtr alloc(m_Allocator);
 
   if (qcepDebug(DEBUG_APP)) {
@@ -31,13 +86,13 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
   m_SynchronizedAcquisition = QxrdSynchronizedAcquisitionPtr(
         new QxrdSynchronizedAcquisition(saver, this));
 
-  m_AcquisitionTriggerThread = QxrdAcquisitionTriggerThreadPtr(new QxrdAcquisitionTriggerThread(m_Saver, m_Experiment, this));
+  m_AcquisitionTriggerThread = QxrdAcquisitionTriggerThreadPtr(new QxrdAcquisitionTriggerThread(saver, m_Experiment, this));
   m_AcquisitionTriggerThread -> setObjectName("trig");
   m_AcquisitionTriggerThread -> start();
 
   m_AcquisitionTrigger = m_AcquisitionTriggerThread -> acquisitionTrigger();
 
-  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, this));
+  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(saver, m_Experiment, this));
   m_AcquisitionExtraInputs -> initialize();
 
   connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged(double)));
@@ -78,6 +133,118 @@ void QxrdAcquisition::shutdown()
   thread()->exit();
 }
 
+void QxrdAcquisition::updateSaveTimes()
+{
+  if (get_SummedExposures() <= 1) {
+    set_RawSaveTime(get_Raw16SaveTime());
+  } else {
+    set_RawSaveTime(get_Raw32SaveTime());
+  }
+
+  if (get_DarkSummedExposures() <= 1) {
+    set_DarkSaveTime(get_Raw16SaveTime());
+  } else {
+    set_DarkSaveTime(get_Raw32SaveTime());
+  }
+}
+
+void QxrdAcquisition::dynamicProperties()
+{
+  QByteArray name;
+
+  if (g_Application) {
+    foreach(name, dynamicPropertyNames()) {
+      g_Application->printMessage(tr("acquisition.%1\n").arg(name.data()));
+    }
+  }
+}
+
+void QxrdAcquisition::copyDynamicProperties(QObject *dest)
+{
+  if (dest) {
+    QByteArray name;
+
+    foreach(name, dynamicPropertyNames()) {
+      dest -> setProperty(name.data(), property(name.data()));
+    }
+  }
+}
+
+void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
+{
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (m_SynchronizedAcquisition) {
+    m_SynchronizedAcquisition->writeSettings(settings, section+"/sync");
+  }
+
+  if (m_AcquisitionTrigger) {
+    m_AcquisitionTrigger->writeSettings(settings, section+"/trigger");
+  }
+
+  if (m_AcquisitionExtraInputs) {
+    m_AcquisitionExtraInputs->writeSettings(settings, section+"/extrainputs");
+  }
+
+  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdAcquisition::readSettings(QSettings *settings, QString section)
+{
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (m_SynchronizedAcquisition) {
+    m_SynchronizedAcquisition->readSettings(settings, section+"/sync");
+  }
+
+  if (m_AcquisitionTrigger) {
+    m_AcquisitionTrigger->readSettings(settings, section+"/trigger");
+  }
+
+  if (m_AcquisitionExtraInputs) {
+    m_AcquisitionExtraInputs->readSettings(settings, section+"/extrainputs");
+  }
+
+  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+}
+
+void QxrdAcquisition::setWindow(QxrdWindow *win)
+{
+  m_Window = win;
+}
+
+void QxrdAcquisition::setDetector(QxrdDetectorWPtr det)
+{
+  m_Detector = det;
+}
+
+void QxrdAcquisition::printMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    exp->printMessage(msg, ts);
+  }
+}
+
+void QxrdAcquisition::criticalMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    exp->criticalMessage(msg);
+  }
+}
+
+void QxrdAcquisition::statusMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    exp->statusMessage(msg);
+  }
+}
+
 void QxrdAcquisition::onBufferSizeChanged(int newMB)
 {
   QxrdAllocatorPtr alloc(m_Allocator);
@@ -85,6 +252,11 @@ void QxrdAcquisition::onBufferSizeChanged(int newMB)
   if (alloc) {
     alloc -> changedSizeMB(newMB);
   }
+}
+
+QxrdAllocatorWPtr QxrdAcquisition::allocator() const
+{
+  return m_Allocator;
 }
 
 void QxrdAcquisition::acquire()
@@ -422,16 +594,16 @@ void QxrdAcquisition::acquisitionError(const char *fn, int ln, int n)
   criticalMessage(tr("Acquisition Error %1 at line %2 in file %3").arg(n).arg(ln).arg(fn));
 }
 
-QxrdAcquireDialogBase *QxrdAcquisition::controlPanel(QxrdWindow *win)
+QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindow *win)
 {
   if (win) {
     m_Window = win;
 
-    m_ControlPanel = new QxrdAcquireDialog(m_Experiment,
-                                           m_Window,
-                                           this,
-                                           m_DataProcessor,
-                                           m_Window);
+    m_ControlPanel = new QxrdAcquisitionDialog(m_Experiment,
+                                               m_Window,
+                                               this,
+                                               m_DataProcessor,
+                                               m_Window);
 
     return m_ControlPanel;
   } else {
@@ -864,3 +1036,117 @@ void QxrdAcquisition::enqueueAcquiredFrame(QxrdInt16ImageDataPtr img)
 
   m_NAcquiredImages.release(1);
 }
+
+void QxrdAcquisition::onExposureTimeChanged(double newTime)
+{
+  QxrdDetectorPtr det(m_Detector);
+
+  if (det) {
+    det ->onExposureTimeChanged(newTime);
+  }
+}
+
+void QxrdAcquisition::onBinningModeChanged(int newMode)
+{
+  QxrdDetectorPtr det(m_Detector);
+
+  if (det) {
+    det ->onBinningModeChanged(newMode);
+  }
+}
+
+void QxrdAcquisition::onCameraGainChanged(int newGain)
+{
+  QxrdDetectorPtr det(m_Detector);
+
+  if (det) {
+    det ->onCameraGainChanged(newGain);
+  }
+}
+
+
+void QxrdAcquisition::setupExposureMenu(QDoubleSpinBox *cb)
+{
+  QxrdDetectorPtr det(m_Detector);
+
+  if (det) {
+    det ->setupExposureMenu(cb);
+  }
+}
+
+void QxrdAcquisition::setupCameraGainMenu(QComboBox *cb)
+{
+  QxrdDetectorPtr det(m_Detector);
+
+  if (det) {
+    det ->setupCameraGainMenu(cb);
+  }
+}
+
+void QxrdAcquisition::setupCameraBinningModeMenu(QComboBox *cb)
+{
+  QxrdDetectorPtr det(m_Detector);
+
+  if (det) {
+    det ->setupCameraBinningModeMenu(cb);
+  }
+}
+
+
+void QxrdAcquisition::beginAcquisition()
+{
+  QxrdDetectorPtr det(m_Detector);
+
+  if (det) {
+    det ->beginAcquisition();
+  }
+}
+
+void QxrdAcquisition::endAcquisition()
+{
+  QxrdDetectorPtr det(m_Detector);
+
+  if (det) {
+    det ->endAcquisition();
+  }
+}
+
+void QxrdAcquisition::shutdownAcquisition()
+{
+  QxrdDetectorPtr det(m_Detector);
+
+  if (det) {
+    det ->shutdownAcquisition();
+  }
+}
+
+void QxrdAcquisition::Message(QString msg)
+{
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    expt->statusMessage(msg);
+  }
+}
+
+void QxrdAcquisition::propertyList()
+{
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  const QMetaObject *meta = metaObject();
+
+  int count = meta->propertyCount();
+  int offset = 1; /*meta->propertyOffset();*/
+
+  for (int i=offset; i<count; i++) {
+    QMetaProperty metaproperty = meta->property(i);
+
+    const char *name = metaproperty.name();
+    QVariant value = property(name);
+
+    if (g_Application) {
+      g_Application->printMessage(tr("Property %1: %2 = %3").arg(i).arg(name).arg(value.toString()));
+    }
+  }
+}
+

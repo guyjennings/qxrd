@@ -1,16 +1,9 @@
 #include "qxrdacquisitionthread.h"
 
-#ifdef HAVE_PERKIN_ELMER
-#include "qxrdacquisitionperkinelmer.h"
-#endif
-
-#include "qxrdacquisitionpilatus.h"
-#include "qxrdacquisitionareadetector.h"
-#include "qxrdacquisitionsimulated.h"
-#include "qxrdacquisitionfilewatcher.h"
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
+#include "qxrdacquisition.h"
 
 #include <QFuture>
 #include <QVariant>
