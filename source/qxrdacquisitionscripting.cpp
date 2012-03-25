@@ -5,8 +5,8 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdapplication.h"
 
-QxrdAcquisitionScripting::QxrdAcquisitionScripting(DetectorKind detectorKind, QxrdSettingsSaverWPtr saver)
-  : QxrdAcquisitionParameters(detectorKind, saver)
+QxrdAcquisitionScripting::QxrdAcquisitionScripting(QxrdSettingsSaverWPtr saver)
+  : QxrdAcquisitionParameters(saver)
 {
 }
 

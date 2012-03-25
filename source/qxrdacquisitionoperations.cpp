@@ -3,12 +3,11 @@
 #include "qxrddataprocessor.h"
 #include "qxrdexperiment.h"
 
-QxrdAcquisitionOperations::QxrdAcquisitionOperations(DetectorKind detectorKind,
-                                                     QxrdSettingsSaverWPtr saver,
+QxrdAcquisitionOperations::QxrdAcquisitionOperations(QxrdSettingsSaverWPtr saver,
                                                      QxrdExperimentWPtr doc,
                                                      QxrdDataProcessorWPtr proc,
                                                      QxrdAllocatorWPtr allocator) :
-  QxrdAcquisitionScripting(detectorKind, saver),
+  QxrdAcquisitionScripting(saver),
   m_Experiment(doc),
   m_Window(),
   m_Allocator(allocator),

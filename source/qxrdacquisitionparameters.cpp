@@ -11,13 +11,12 @@
 #include <QtGlobal>
 #include "qxrdapplication.h"
 
-QxrdAcquisitionParameters::QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaverWPtr saver)
+QxrdAcquisitionParameters::QxrdAcquisitionParameters(QxrdSettingsSaverWPtr saver)
   : QObject(),
     m_Saver(saver),
     m_QxrdVersion(QxrdSettingsSaverPtr(), this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
     m_QtVersion(QxrdSettingsSaverPtr(), this,"qtVersion",qVersion(), "QT Version Number"),
-    m_DetectorType(QxrdSettingsSaverPtr(), this, "detectorType", detectorKind, "Detector Type (0 = simulated, 1 = PE, 2 = Pilatus, 3 = EPICS, 4 = Files)"),
-    m_DetectorTypeName(QxrdSettingsSaverPtr(), this,"detectorTypeName", detectorKindName(detectorKind), "Name of Detector Type"),
+//    m_DetectorType(QxrdSettingsSaverPtr(), this, "detectorType", 0, "Detector Type (0 = simulated, 1 = PE, 2 = Pilatus, 3 = EPICS, 4 = Files)"),
     m_ExposureTime(saver, this,"exposureTime",0.1, "Exposure Time (in sec)"),
     m_SkippedExposuresAtStart(saver, this,"skippedExposuresAtStart",0, "Exposures to Skip at Start"),
     m_LastAcquired(QxrdSettingsSaverPtr(), this, "lastAcquired", 0, "Internal Acquisition Flag"),
@@ -75,34 +74,6 @@ QxrdAcquisitionParameters::~QxrdAcquisitionParameters()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionParameters::~QxrdAcquisitionParameters(%p)\n", this);
   }
-}
-
-QString QxrdAcquisitionParameters::detectorKindName(DetectorKind detectorKind)
-{
-  QString res = "unknown";
-  switch (detectorKind) {
-  case SimulatedDetector:
-    res = "Simulated Detector";
-    break;
-
-  case PerkinElmerDetector:
-    res = "Perkin Elmer Detector";
-    break;
-
-  case PilatusDetector:
-    res = "Pilatus Detector";
-    break;
-
-  case EpicsAreaDetector:
-    res = "Epics Area Detector";
-    break;
-
-  case FileWatcherDetector:
-    res = "File Watcher";
-    break;
-  }
-
-  return res;
 }
 
 void QxrdAcquisitionParameters::updateSaveTimes()

@@ -11,7 +11,7 @@ class QxrdAcquisitionOperations : public QxrdAcquisitionScripting
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionOperations(DetectorKind detectorKind, QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdDataProcessorWPtr proc, QxrdAllocatorWPtr allocator);
+  QxrdAcquisitionOperations(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdDataProcessorWPtr proc, QxrdAllocatorWPtr allocator);
 
   void setWindow(QxrdWindow *win);
 

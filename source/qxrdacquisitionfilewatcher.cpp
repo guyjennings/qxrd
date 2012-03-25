@@ -7,7 +7,7 @@ QxrdAcquisitionFileWatcher::QxrdAcquisitionFileWatcher(QxrdSettingsSaverPtr save
                                                        QxrdExperimentWPtr doc,
                                                        QxrdDataProcessorWPtr proc,
                                                        QxrdAllocatorWPtr allocator) :
-    QxrdAcquisition(QxrdAcquisition::FileWatcherDetector, saver, doc, proc, allocator)
+    QxrdAcquisition(saver, doc, proc, allocator)
 {
 }
 

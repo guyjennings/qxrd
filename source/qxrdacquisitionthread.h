@@ -13,7 +13,7 @@ class QxrdAcquisitionThread : public QxrdThread
 {
   Q_OBJECT
 
- public:
+public:
   QxrdAcquisitionThread(QxrdSettingsSaverWPtr saver,
                         QxrdExperimentWPtr doc,
                         QxrdDataProcessorWPtr proc,

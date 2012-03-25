@@ -106,7 +106,15 @@ HEADERS += spec_server.h \
     qcepimagedataformatfactory.h \
     qcepimagedataformatfactory-ptr.h \
     qcepdebug.h \
-    qxrdacquisitionextrainputsplot.h
+    qxrdacquisitionextrainputsplot.h \
+    qxrddetector.h \
+    qxrddetectorperkinelmer.h \
+    qxrddetectorpilatus.h \
+    qxrddetectorsimulated.h \
+    qxrddetectorthread.h \
+    qxrddetector-ptr.h \
+    qxrddetectorthread-ptr.h \
+    qxrddetectorfilewatcher.h
 
 SOURCES += qspecserver.cpp \
     qcepproperty.cpp \
@@ -116,7 +124,13 @@ SOURCES += qspecserver.cpp \
     qcepimagedataformatmar345.cpp \
     qcepimagedataformatfactory.cpp \
     qcepdebug.cpp \
-    qxrdacquisitionextrainputsplot.cpp
+    qxrdacquisitionextrainputsplot.cpp \
+    qxrddetector.cpp \
+    qxrddetectorperkinelmer.cpp \
+    qxrddetectorpilatus.cpp \
+    qxrddetectorsimulated.cpp \
+    qxrddetectorthread.cpp \
+    qxrddetectorfilewatcher.cpp
 
 OTHER_FILES += testImage.js
 

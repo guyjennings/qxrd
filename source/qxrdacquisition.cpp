@@ -13,12 +13,11 @@
 #include <QtConcurrentRun>
 #include <QDir>
 
-QxrdAcquisition::QxrdAcquisition(DetectorKind detectorKind,
-                                 QxrdSettingsSaverWPtr saver,
+QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
                                  QxrdExperimentWPtr doc,
                                  QxrdDataProcessorWPtr proc,
                                  QxrdAllocatorWPtr allocator)
-  : QxrdAcquisitionOperations(detectorKind, saver, doc, proc, allocator),
+  : QxrdAcquisitionOperations(saver, doc, proc, allocator),
     m_AcquiredImages("acquired"),
     m_ControlPanel(NULL),
     m_Idling(1)

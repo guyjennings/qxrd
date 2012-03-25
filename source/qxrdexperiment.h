@@ -32,6 +32,10 @@
 #include "qxrdscriptenginethread.h"
 #include "qxrdscriptenginethread-ptr.h"
 #include "qxrdsettingssaver.h"
+#include "qxrddetectorthread.h"
+#include "qxrddetectorthread-ptr.h"
+#include "qxrddetector.h"
+#include "qxrddetector-ptr.h"
 
 class QxrdExperiment : public QObject
 {
@@ -39,7 +43,7 @@ class QxrdExperiment : public QObject
 
 public:
   QxrdExperiment(QString path, QxrdApplication *app);
-//  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
+  //  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
 
   void openWindows();
@@ -99,7 +103,6 @@ public slots:
   void finishedWork(int amt);
   void updateCompletionPercentage(int, int);
 
-
 private:
   void closeLogFile();
   void openLogFile();
@@ -123,6 +126,8 @@ private:
   QxrdDataProcessorPtr            m_DataProcessor;
   QxrdAcquisitionThreadPtr        m_AcquisitionThread;
   QxrdAcquisitionPtr              m_Acquisition;
+  QxrdDetectorThreadPtr           m_DetectorThread;
+  QxrdDetectorPtr                 m_Detector;
   QxrdFileSaverThreadPtr          m_FileSaverThread;
   QxrdFileSaverPtr                m_FileSaver;
   QxrdScriptEngineThreadPtr       m_ScriptEngineThread;
@@ -161,6 +166,9 @@ public:  // Properties
 
   Q_PROPERTY(int    detectorType  READ get_DetectorType WRITE set_DetectorType)
   QCEP_INTEGER_PROPERTY(DetectorType)
+
+  Q_PROPERTY(QString detectorTypeName READ get_DetectorTypeName WRITE set_DetectorTypeName STORED false)
+  QCEP_STRING_PROPERTY(DetectorTypeName)
 
   Q_PROPERTY(int    processorType READ get_ProcessorType WRITE set_ProcessorType)
   QCEP_INTEGER_PROPERTY(ProcessorType)

@@ -72,43 +72,8 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 
 void QxrdAcquisitionThread::run()
 {
-  QxrdAcquisitionPtr p/* = NULL*/;
-
-  switch(m_DetectorType) {
-  case QxrdAcquisition::SimulatedDetector:
-    p = QxrdAcquisitionPtr(new QxrdAcquisitionSimulated(m_Saver, m_Experiment, m_Processor, m_Allocator));
-    break;
-
-#ifdef HAVE_PERKIN_ELMER
-  case QxrdAcquisition::PerkinElmerDetector:
-    if (g_PEAvailable) {
-      p = QxrdAcquisitionPtr(new QxrdAcquisitionPerkinElmer(m_Saver, m_Experiment, m_Processor, m_Allocator));
-    }
-    break;
-#endif
-
-#ifdef HAVE_PILATUS
-  case QxrdAcquisition::PilatusDetector:
-    p = QxrdAcquisitionPtr(new QxrdAcquisitionPilatus(m_Saver, m_Experiment, m_Processor, m_Allocator));
-    break;
-#endif
-
-#ifdef HAVE_AREADETECTOR
-  case QxrdAcquisition::EpicsAreaDetector:
-    p = QxrdAcquisitionPtr(new QxrdAcquisitionAreaDetector(m_Saver, m_Experiment, m_Processor, m_Allocator));
-    break;
-#endif
-
-  case QxrdAcquisition::FileWatcherDetector:
-    p = QxrdAcquisitionPtr(new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator));
-    break;
-  }
-
-  if (p == NULL) {
-    p = QxrdAcquisitionPtr(new QxrdAcquisitionFileWatcher(m_Saver, m_Experiment, m_Processor, m_Allocator));
-  }
-
-  m_Acquisition = p;
+  m_Acquisition = QxrdAcquisitionPtr(
+        new QxrdAcquisition(m_Saver, m_Experiment, m_Processor, m_Allocator));
 
   int rc = exec();
 

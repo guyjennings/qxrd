@@ -21,15 +21,7 @@ class QxrdAcquisitionParameters : public QObject
   Q_OBJECT
 
 public:
-  typedef enum {
-    SimulatedDetector,
-    PerkinElmerDetector,
-    PilatusDetector,
-    EpicsAreaDetector,
-    FileWatcherDetector
-  } DetectorKind;
-
-  QxrdAcquisitionParameters(DetectorKind detectorKind, QxrdSettingsSaverWPtr saver);
+  QxrdAcquisitionParameters(QxrdSettingsSaverWPtr saver);
   virtual ~QxrdAcquisitionParameters();
 
 public slots:
@@ -45,8 +37,6 @@ public:
 
   void copyDynamicProperties(QObject *dest);
 
-  QString detectorKindName(DetectorKind detectorKind);
-
 protected:
   enum { MegaBytes = 0x100000 };
 
@@ -59,11 +49,8 @@ public:
   Q_PROPERTY(QString qtVersion READ get_QtVersion STORED false)
   QCEP_STRING_PROPERTY(QtVersion)
 
-  Q_PROPERTY(int    detectorType     READ get_DetectorType WRITE set_DetectorType STORED false)
-  QCEP_INTEGER_PROPERTY(DetectorType)
-
-  Q_PROPERTY(QString detectorTypeName READ get_DetectorTypeName WRITE set_DetectorTypeName STORED false)
-  QCEP_STRING_PROPERTY(DetectorTypeName)
+//  Q_PROPERTY(int    detectorType     READ get_DetectorType WRITE set_DetectorType STORED false)
+//  QCEP_INTEGER_PROPERTY(DetectorType)
 
   Q_PROPERTY(double exposureTime     READ get_ExposureTime WRITE set_ExposureTime)
   QCEP_DOUBLE_PROPERTY(ExposureTime)

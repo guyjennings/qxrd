@@ -4,7 +4,7 @@ QxrdAcquisitionPilatus::QxrdAcquisitionPilatus(QxrdSettingsSaverWPtr saver,
                                                QxrdExperimentWPtr doc,
                                                QxrdDataProcessorWPtr proc,
                                                QxrdAllocatorWPtr allocator)
-  : QxrdAcquisition(PilatusDetector, saver, doc, proc, allocator)
+  : QxrdAcquisition(saver, doc, proc, allocator)
 {
 }
 

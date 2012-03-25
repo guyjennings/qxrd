@@ -1,13 +1,13 @@
 #include "qxrdexperimentsimulatedacquisition.h"
 #include "qxrdexperimentthread.h"
-#include "qxrdacquisition.h"
+#include "qxrddetectorthread.h".h"
 
 QxrdExperimentSimulatedAcquisition::QxrdExperimentSimulatedAcquisition
   (QString path, QxrdApplication *app) :
     QxrdExperiment(path, app)
 {
   set_ExperimentKind(QxrdExperimentThread::SimulatedAcquisition);
-  set_DetectorType(QxrdAcquisition::SimulatedDetector);
+  set_DetectorType(QxrdDetectorThread::SimulatedDetector);
 }
 
 void QxrdExperimentSimulatedAcquisition::readSettings(QSettings *settings, QString section)

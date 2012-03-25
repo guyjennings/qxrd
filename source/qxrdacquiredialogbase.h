@@ -11,13 +11,13 @@
 
 class QxrdAcquireDialogBase : public QDockWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    explicit QxrdAcquireDialogBase(QxrdExperimentWPtr doc,
-                                   QxrdWindowWPtr win,
-                                   QxrdAcquisitionWPtr acq,
-                                   QxrdDataProcessorWPtr proc,
-                                   QWidget *parent = 0);
+  explicit QxrdAcquireDialogBase(QxrdExperimentWPtr doc,
+                                 QxrdWindowWPtr win,
+                                 QxrdAcquisitionWPtr acq,
+                                 QxrdDataProcessorWPtr proc,
+                                 QWidget *parent = 0);
 
 public:
   virtual void setupAcquireMenu(QMenu *menu) = 0;

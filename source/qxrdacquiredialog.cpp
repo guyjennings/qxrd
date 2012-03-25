@@ -37,7 +37,6 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperimentWPtr doc,
     connect(acq, SIGNAL(acquireStarted()), this, SLOT(acquireStarted()));
     connect(acq, SIGNAL(acquireComplete()), this, SLOT(acquireComplete()));
 
-    acq -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
     acq -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
     acq -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
     acq -> prop_SkippedExposures() -> linkTo(this -> m_SkippedExposures);
@@ -67,6 +66,7 @@ QxrdAcquireDialog::QxrdAcquireDialog(QxrdExperimentWPtr doc,
 
     exp  -> prop_ExperimentDirectory() -> linkTo(this -> m_ExperimentDirectory);
     exp  -> prop_LogFileName() -> linkTo(this -> m_LogFileName);
+    exp  -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
   }
 
   QxrdDataProcessorPtr procp(m_DataProcessor);

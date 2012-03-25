@@ -7,7 +7,7 @@ class QxrdAcquisitionScripting : public QxrdAcquisitionParameters
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionScripting(DetectorKind detectorKind, QxrdSettingsSaverWPtr saver);
+  QxrdAcquisitionScripting(QxrdSettingsSaverWPtr saver);
 
 public slots:
   void propertyList();

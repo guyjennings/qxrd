@@ -95,8 +95,7 @@ class QxrdAcquisition : public QxrdAcquisitionOperations
   Q_OBJECT
 
 public:
-  QxrdAcquisition(DetectorKind detectorKind,
-                  QxrdSettingsSaverWPtr saver,
+  QxrdAcquisition(QxrdSettingsSaverWPtr saver,
                   QxrdExperimentWPtr doc,
                   QxrdDataProcessorWPtr proc,
                   QxrdAllocatorWPtr allocator);
@@ -106,7 +105,7 @@ public slots:
   void acquire();
   void acquireDark();
   void cancel();
-//  void cancelDark();
+  //  void cancelDark();
   void trigger();
   void clearDropped();
 
@@ -156,7 +155,7 @@ protected:
   virtual void endAcquisition() = 0;
   virtual void shutdownAcquisition() = 0;
 
-//  void acquisitionError(const char *fn, int n);
+  //  void acquisitionError(const char *fn, int n);
   void acquisitionError(const char *fn, int ln, int n);
 
   void getFileBaseAndName(QString filePattern, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);

@@ -18,7 +18,7 @@ QxrdAcquisitionSimulated::QxrdAcquisitionSimulated(QxrdSettingsSaverWPtr saver,
                                                    QxrdExperimentWPtr doc,
                                                    QxrdDataProcessorWPtr proc,
                                                    QxrdAllocatorWPtr allocator)
-  : QxrdAcquisition(SimulatedDetector, saver, doc, proc, allocator)
+  : QxrdAcquisition(saver, doc, proc, allocator)
 {
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(onTimerTimeout()));
 
