@@ -71,8 +71,10 @@ QxrdExperiment::QxrdExperiment(
   setObjectName("experiment");
 }
 
-void QxrdExperiment::initialize()
+void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd)
 {
+  m_ExperimentThread = expthrd;
+
   if (m_Application) {
     splashMessage("Initializing File Saver");
 
@@ -194,11 +196,6 @@ void QxrdExperiment::initialize()
 QxrdExperimentThreadWPtr QxrdExperiment::experimentThread()
 {
   return m_ExperimentThread;
-}
-
-void QxrdExperiment::setExperimentThread(QxrdExperimentThreadWPtr th)
-{
-  m_ExperimentThread = th;
 }
 
 QxrdSettingsSaverPtr QxrdExperiment::settingsSaver()
@@ -682,6 +679,7 @@ void QxrdExperiment::onDetectorTypeChanged()
 
   set_DetectorTypeName(QxrdDetectorThread::detectorKindName(newType));
 
+  m_Detector       = QxrdDetectorPtr();
   m_DetectorThread = QxrdDetectorThreadPtr();
 
   m_DetectorThread = QxrdDetectorThreadPtr(new QxrdDetectorThread(this, m_Acquisition));

@@ -45,12 +45,11 @@ public:
   QxrdExperiment(QString path, QxrdApplication *app);
   //  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
-  void initialize();
+  void initialize(QxrdExperimentThreadWPtr expthrd);
 
   void openWindows();
 
   QxrdExperimentThreadWPtr experimentThread();
-  void setExperimentThread(QxrdExperimentThreadWPtr th);
 
   QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionPtr acquisition() const;
@@ -88,8 +87,9 @@ public slots:
 
   void readSettings();
   void writeSettings();
-  virtual void readSettings(QSettings *settings, QString section="experiment");
-  virtual void writeSettings(QSettings *settings, QString section="experiment");
+
+  void readSettings(QSettings *settings, QString section="experiment");
+  void writeSettings(QSettings *settings, QString section="experiment");
 
   void logMessage(QString msg);
   void splashMessage(QString msg);

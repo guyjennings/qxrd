@@ -35,13 +35,12 @@ protected:
   void run();
 
 private:
-  int                   m_Debug;
   QxrdSettingsSaverWPtr m_Saver;
   QxrdExperimentWPtr    m_Experiment;
   QxrdAllocatorWPtr     m_Allocator;
-  QxrdAcquisitionWPtr   m_Acquisition;
   QxrdDataProcessorWPtr m_Processor;
   int                   m_DetectorType;
+  QxrdAcquisitionPtr    m_Acquisition;
 };
 
 #endif

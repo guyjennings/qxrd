@@ -35,7 +35,7 @@ public:
   static QxrdExperimentThreadPtr newExperimentPilatusAnalysis(QString path, QxrdApplication *app, QSettings *settings=0);
   static QxrdExperimentThreadPtr newExperimentGenericAnalysis(QString path, QxrdApplication *app, QSettings *settings=0);
 
-  QxrdExperimentWPtr experiment();
+  QxrdExperimentPtr experiment();
 
   void shutdown();
 
@@ -49,9 +49,9 @@ protected:
 private:
   QxrdExperimentKind m_ExperimentKind;
   QString            m_ExperimentPath;
-  QxrdExperimentPtr  m_Experiment;
   QxrdApplication   *m_Application;
   QSettings         *m_Settings;
+  QxrdExperimentPtr  m_Experiment;
 };
 
 typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;

@@ -9,9 +9,6 @@ class QxrdExperimentPilatusAnalysis : public QxrdExperiment
 public:
   explicit QxrdExperimentPilatusAnalysis(QString path, QxrdApplication* app);
 
-  virtual void readSettings(QSettings *settings, QString section);
-  virtual void writeSettings(QSettings *settings, QString section);
-
 signals:
 
 public slots:

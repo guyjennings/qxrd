@@ -109,6 +109,8 @@ public:
                   QxrdDataProcessorWPtr proc,
                   QxrdAllocatorWPtr allocator);
   ~QxrdAcquisition();
+  void initialize();
+
   void setWindow(QxrdWindow *win);
   void setDetector(QxrdDetectorWPtr det);
 
@@ -214,6 +216,9 @@ private:
   void processDarkImage    (QString filePattern, int fileIndex,                                    QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
 
   int cancelling();
+
+private:
+  QxrdSettingsSaverWPtr         m_Saver;
 
 public:
   Q_PROPERTY(QString qxrdVersion READ get_QxrdVersion STORED false)

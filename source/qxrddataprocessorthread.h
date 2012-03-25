@@ -35,10 +35,10 @@ protected:
 private:
   QxrdAllocatorWPtr       m_Allocator;
   QxrdFileSaverWPtr       m_FileSaver;
-  QxrdDataProcessorPtr    m_DataProcessor;
   QxrdAcquisitionWPtr     m_Acquisition;
   QxrdExperimentWPtr      m_Experiment;
   QxrdSettingsSaverWPtr   m_Saver;
+  QxrdDataProcessorPtr    m_DataProcessor;
 };
 
 typedef QSharedPointer<QxrdDataProcessorThread> QxrdDataProcessorThreadPtr;

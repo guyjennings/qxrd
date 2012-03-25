@@ -25,13 +25,12 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaverWPtr saver,
                                              QxrdAllocatorWPtr allocator,
                                              int detectorType)
   : QxrdThread(),
-    m_Debug(true),
     m_Saver(saver),
     m_Experiment(doc),
     m_Allocator(allocator),
-    m_Acquisition(),
     m_Processor(proc),
-    m_DetectorType(detectorType)
+    m_DetectorType(detectorType),
+    m_Acquisition()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionThread::QxrdAcquisitionThread(%p)\n", this);
@@ -65,8 +64,12 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 
 void QxrdAcquisitionThread::run()
 {
-  m_Acquisition = QxrdAcquisitionPtr(
+  QxrdAcquisitionPtr acq = QxrdAcquisitionPtr(
         new QxrdAcquisition(m_Saver, m_Experiment, m_Processor, m_Allocator));
+
+  acq -> initialize();
+
+  m_Acquisition = acq;
 
   int rc = exec();
 

@@ -826,7 +826,7 @@ void QxrdApplication::setNewExperimentSettings(QSettings &settings, int type, QS
   QString  path = info.path();
   QString  base = info.completeBaseName();
 
-  settings.setValue("application/detectorType", type);
+  settings.setValue("application/d", type);
   settings.setValue("processor/outputDirectory", path);
   settings.setValue("application/logFileName", base+".log");
   settings.setValue("processor/integratedFileName", base+".avg");

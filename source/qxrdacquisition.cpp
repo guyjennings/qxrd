@@ -19,6 +19,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
                                  QxrdDataProcessorWPtr proc,
                                  QxrdAllocatorWPtr allocator)
   : QObject(),
+    m_Saver(saver),
     m_QxrdVersion(QxrdSettingsSaverPtr(), this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
     m_QtVersion(QxrdSettingsSaverPtr(), this,"qtVersion",qVersion(), "QT Version Number"),
 //    m_DetectorType(QxrdSettingsSaverPtr(), this, "detectorType", 0, "Detector Type (0 = simulated, 1 = PE, 2 = Pilatus, 3 = EPICS, 4 = Files)"),
@@ -69,7 +70,10 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
     m_Idling(1)
 {
   setObjectName("acquisition");
+}
 
+void QxrdAcquisition::initialize()
+{
   connect(prop_Raw16SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
   connect(prop_Raw32SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
   connect(prop_SummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
@@ -84,15 +88,15 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
   }
 
   m_SynchronizedAcquisition = QxrdSynchronizedAcquisitionPtr(
-        new QxrdSynchronizedAcquisition(saver, this));
+        new QxrdSynchronizedAcquisition(m_Saver, this));
 
-  m_AcquisitionTriggerThread = QxrdAcquisitionTriggerThreadPtr(new QxrdAcquisitionTriggerThread(saver, m_Experiment, this));
+  m_AcquisitionTriggerThread = QxrdAcquisitionTriggerThreadPtr(new QxrdAcquisitionTriggerThread(m_Saver, m_Experiment, this));
   m_AcquisitionTriggerThread -> setObjectName("trig");
   m_AcquisitionTriggerThread -> start();
 
   m_AcquisitionTrigger = m_AcquisitionTriggerThread -> acquisitionTrigger();
 
-  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(saver, m_Experiment, this));
+  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, this));
   m_AcquisitionExtraInputs -> initialize();
 
   connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged(double)));

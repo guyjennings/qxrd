@@ -15,7 +15,7 @@ public:
                     QxrdFileSaverWPtr filesaver);
   ~QxrdDataProcessor();
 
-  void init();
+  void initialize();
 };
 
 #endif
