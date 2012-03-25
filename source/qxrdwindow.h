@@ -11,7 +11,7 @@
 
 #include "qxrdallocator.h"
 #include "qxrdscriptengine.h"
-#include "qxrdacquiredialog.h"
+#include "qxrdacquisitiondialog.h"
 
 #include "qxrddisplaydialog.h"
 #include "qxrdcenterfinderdialog.h"
@@ -147,7 +147,7 @@ private:
   QxrdAcquisitionWPtr                    m_Acquisition;
   QxrdDataProcessorWPtr                  m_DataProcessor;
   QxrdAllocatorWPtr                      m_Allocator;
-  QxrdAcquireDialogBase                 *m_AcquireDialog;
+  QxrdAcquisitionDialog                 *m_AcquisitionDialog;
   QxrdAcquisitionTriggerDialogPtr        m_AcquisitionTriggerDialog;
   QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
   QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;

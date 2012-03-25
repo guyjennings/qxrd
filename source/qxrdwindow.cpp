@@ -1,7 +1,7 @@
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
-#include "qxrdacquiredialog.h"
+#include "qxrdacquisitiondialog.h"
 #include "qxrddisplaydialog.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
@@ -9,7 +9,6 @@
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
 #include "qxrddataprocessor.h"
-#include "qxrdacquiredialog.h"
 #include "qxrdcenterfinderdialog.h"
 #include "qxrdmaskdialog.h"
 #include "qxrdcenterfinder.h"
@@ -69,7 +68,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_Acquisition(acqw),
     m_DataProcessor(procw),
     m_Allocator(allocw),
-    m_AcquireDialog(NULL),
+    m_AcquisitionDialog(NULL),
     m_AcquisitionTriggerDialog(NULL),
     m_AcquisitionExtraInputsDialog(NULL),
     m_SynchronizedAcquisitionDialog(NULL),
@@ -112,23 +111,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   QxrdExperimentPtr expt(m_Experiment);
   QxrdWindowSettingsPtr set(m_WindowSettings);
 
-  if (expt && set) {
-    if (!expt->get_DefaultLayout()) {
-      QByteArray geometry = set->get_WindowGeometry();
-      QByteArray winstate = set->get_WindowState();
-
-      if (!restoreGeometry(geometry)) {
-        printf("Restore geometry failed\n");
-      }
-
-      if (!restoreState(winstate,2)) {
-        printf("Restore state failed\n");
-      }
-    } else{
-      expt->set_DefaultLayout(0);
-    }
-  }
-
   updateTitle();
 
   setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
@@ -137,7 +119,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   QxrdDataProcessorPtr proc(m_DataProcessor);
 
   if (acq) {
-    m_AcquireDialog = acq -> controlPanel(this);
+    m_AcquisitionDialog = acq -> controlPanel(this);
     m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
     m_AcquisitionTriggerDialog = new QxrdAcquisitionTriggerDialog(this, m_Acquisition);
     m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(this, m_Acquisition);
@@ -186,14 +168,14 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   //         screenGeom.left(), screenGeom.top(),
   //         screenGeom.right(), screenGeom.bottom());
 
-  addDockWidget(Qt::RightDockWidgetArea, m_AcquireDialog);
+  addDockWidget(Qt::RightDockWidgetArea, m_AcquisitionDialog);
   addDockWidget(Qt::LeftDockWidgetArea, m_InputFileBrowser);
 
   if (screenGeom.height() >= 1280) {
-    splitDockWidget(m_AcquireDialog, m_CenterFinderDialog, Qt::Vertical);
+    splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
     splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
 
-    tabifyDockWidget(m_AcquireDialog, m_AcquisitionTriggerDialog);
+    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionTriggerDialog);
     tabifyDockWidget(m_AcquisitionTriggerDialog, m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
@@ -205,9 +187,9 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
   } else if (screenGeom.height() >= 1000) {
-    splitDockWidget(m_AcquireDialog, m_CenterFinderDialog, Qt::Vertical);
+    splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
 
-    tabifyDockWidget(m_AcquireDialog, m_AcquisitionTriggerDialog);
+    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionTriggerDialog);
     tabifyDockWidget(m_AcquisitionTriggerDialog, m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
@@ -220,7 +202,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
   } else {
-    tabifyDockWidget(m_AcquireDialog, m_AcquisitionTriggerDialog);
+    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionTriggerDialog);
     tabifyDockWidget(m_AcquisitionTriggerDialog, m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_CenterFinderDialog, m_IntegratorDialog);
@@ -317,9 +299,9 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   connect(m_ActionMoveCenterLeft, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveLeft()));
   connect(m_ActionMoveCenterRight, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveRight()));
 
-  m_AcquireDialog->setupAcquireMenu(m_AcquireMenu);
+  m_AcquisitionDialog->setupAcquireMenu(m_AcquireMenu);
 
-  m_AcquireDialog->acquisitionReady();
+  m_AcquisitionDialog->acquisitionReady();
 
   //  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
   //  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
@@ -545,7 +527,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     connect(alloc -> prop_Max(), SIGNAL(valueChanged(int,int)), this, SLOT(allocatedMemoryChanged()));
   }
 
-  m_WindowsMenu -> addAction(m_AcquireDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_AcquisitionTriggerDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_AcquisitionExtraInputsDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_InputFileBrowser -> toggleViewAction());
@@ -582,6 +564,23 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   //#ifndef QT_NO_DEBUG
   //  m_ImageDisplay = QxrdImageDisplayWidget::insertNew(app, m_XRDTabWidget);
   //#endif
+
+  if (expt && set) {
+    if (!expt->get_DefaultLayout()) {
+      QByteArray geometry = set->get_WindowGeometry();
+      QByteArray winstate = set->get_WindowState();
+
+      if (!restoreGeometry(geometry)) {
+        printf("Restore geometry failed\n");
+      }
+
+      if (!restoreState(winstate,2)) {
+        printf("Restore state failed\n");
+      }
+    } else{
+      expt->set_DefaultLayout(0);
+    }
+  }
 
   if (m_Application) {
     m_UpdateTimer.start(m_Application->get_UpdateIntervalMsec());
@@ -691,7 +690,7 @@ void QxrdWindow::shrinkObject(QObject *obj, int fontSize, int spacing)
 
 void QxrdWindow::onAcquisitionInit()
 {
-  m_AcquireDialog->onAcquisitionInit();
+  m_AcquisitionDialog->onAcquisitionInit();
 }
 
 void QxrdWindow::enableTiltRefinement(bool enable)
