@@ -122,7 +122,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv)
     m_ResponseTimer(NULL),
     m_SettingsMutex()
 {
+#ifndef QT_NO_DEBUG
   printf("QxrdApplication::QxrdApplication(%p)\n", this);
+#endif
 
   setObjectName("application");
 
