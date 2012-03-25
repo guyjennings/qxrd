@@ -114,7 +114,8 @@ HEADERS += spec_server.h \
     qxrddetectorthread.h \
     qxrddetector-ptr.h \
     qxrddetectorthread-ptr.h \
-    qxrddetectorfilewatcher.h
+    qxrddetectorfilewatcher.h \
+    qxrdacquisitiondialog-ptr.h
 
 SOURCES += qspecserver.cpp \
     qcepproperty.cpp \
@@ -184,12 +185,7 @@ HEADERS += TODO.h \
     qxrdacquisitionthread-ptr.h \
     qxrdacquisition.h \
     qxrdacquisition-ptr.h \
-    qxrdacquisitionparameters.h \
-    qxrdacquisitionscripting.h \
-    qxrdacquisitionoperations.h \
-    qxrdacquisitionpilatus.h \
-    qxrdacquisitionareadetector.h \
-    qxrdacquisitionsimulated.h \
+    qxrdacquisitiondialog.h \
     qxrdplot.h \
     qxrdplot-ptr.h \
     qxrdplotslicer.h \
@@ -255,7 +251,6 @@ HEADERS += TODO.h \
     qxrdpowderfitrefinepage.h \
     qxrdpowderfitresultspage.h \
     qxrdpowderfitdialog.h \
-    qxrdacquiredialog.h \
     qxrdcenterstepspinner.h \
     qxrdsettingssaver.h \
     qxrdsettingssaver-ptr.h \
@@ -290,10 +285,6 @@ HEADERS += TODO.h \
     qxrdthread.h \
     qxrdsynchronizedacquisitionplot.h \
     qxrdhighlighter.h \
-    qxrdacquisitionfilewatcher.h \
-    qxrdacquiredialogbase.h \
-    qxrdacquiredialogbase-ptr.h \
-    qxrdacquirefilewatcherdialog.h \
     qxrdfilebrowsermodelupdater.h \
     qxrdfilebrowsermodelupdater-ptr.h \
     qxrdfilebrowsermodelupdaterthread.h \
@@ -372,18 +363,13 @@ SOURCES += qxrd.cpp \
     qxrdserverthread.cpp \
     qxrdacquisitionthread.cpp \
     qxrdacquisition.cpp \
-    qxrdacquisitionparameters.cpp \
-    qxrdacquisitionscripting.cpp \
-    qxrdacquisitionoperations.cpp \
-    qxrdacquisitionpilatus.cpp \
-    qxrdacquisitionareadetector.cpp \
+    qxrdacquisitiondialog.cpp \
     qxrdplot.cpp \
     qxrdplotslicer.cpp \
     qxrdplotmeasurer.cpp \
     qxrdscriptengine.cpp \
     qxrdscriptenginethread.cpp \
     qxrddataprocessorthread.cpp \
-    qxrdacquisitionsimulated.cpp \
     qxrdmaskpicker.cpp \
     qxrdmaskdata.cpp \
     qxrdimageplotmeasurer.cpp \
@@ -423,7 +409,6 @@ SOURCES += qxrd.cpp \
     qxrdpowderfitrefinepage.cpp \
     qxrdpowderfitresultspage.cpp \
     qxrdpowderfitdialog.cpp \
-    qxrdacquiredialog.cpp \
     qxrdcenterstepspinner.cpp \
     qxrdsettingssaver.cpp \
     qxrdplotimage.cpp \
@@ -450,9 +435,6 @@ SOURCES += qxrd.cpp \
     qxrdthread.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
     qxrdhighlighter.cpp \
-    qxrdacquisitionfilewatcher.cpp \
-    qxrdacquirefilewatcherdialog.cpp \
-    qxrdacquiredialogbase.cpp \
     qxrdfilebrowsermodelupdater.cpp \
     qxrdfilebrowsermodelupdaterthread.cpp \
     qxrdintegratorcache.cpp \
@@ -491,7 +473,6 @@ FORMS = qxrdwindow.ui \
     qxrdimagecalculator.ui \
     qxrdexperimentpreferencesdialog.ui \
     qxrdpowderfitwidget.ui \
-    qxrdacquiredialog.ui \
     qxrdmaskdialog.ui \
     qxrdsynchronizedacquisitiondialog.ui \
     qxrddisplaydialog.ui \
@@ -499,10 +480,10 @@ FORMS = qxrdwindow.ui \
     qxrdslicedialog.ui \
     qxrdhistogramdialog.ui \
     qxrdinfodialog.ui \
-    qxrdacquirefilewatcherdialog.ui \
     qxrdwelcomewindow.ui \
     qxrdglobalpreferencesdialog.ui \
     qxrdwelcomerecentitem.ui \
+    qxrdacquisitiondialog.ui \
     qxrdacquisitiontriggerdialog.ui \
     qxrdacquisitionextrainputsdialog.ui
 macx:
@@ -513,8 +494,10 @@ else:win32 {
 
 contains(DEFINES,HAVE_PERKIN_ELMER) {
   SOURCES += qxrdacquisitionperkinelmer.cpp \
+             qxrddetectorperkinelmer.cpp \
              qxrdperkinelmerplugininterface.cpp
   HEADERS += qxrdacquisitionperkinelmer.h \
+             qxrddetectorperkinelmer.h \
              qxrdperkinelmerplugininterface.h \
              qxrdperkinelmerplugininterface-ptr.h
 }
