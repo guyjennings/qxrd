@@ -45,6 +45,7 @@ public:
   QxrdExperiment(QString path, QxrdApplication *app);
   //  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
+  void initialize();
 
   void openWindows();
 
@@ -102,6 +103,9 @@ public slots:
   void commenceWork(int amt);
   void finishedWork(int amt);
   void updateCompletionPercentage(int, int);
+
+private slots:
+  void onDetectorTypeChanged();
 
 private:
   void closeLogFile();

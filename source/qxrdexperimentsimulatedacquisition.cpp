@@ -1,6 +1,6 @@
 #include "qxrdexperimentsimulatedacquisition.h"
 #include "qxrdexperimentthread.h"
-#include "qxrddetectorthread.h".h"
+#include "qxrddetectorthread.h"
 
 QxrdExperimentSimulatedAcquisition::QxrdExperimentSimulatedAcquisition
   (QString path, QxrdApplication *app) :

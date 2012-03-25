@@ -208,8 +208,8 @@ void QxrdExperimentThread::run()
 
   if (doc) {
     m_Experiment = doc;
-
-    m_Experiment->readSettings(m_Settings);
+    m_Experiment -> initialize();
+    m_Experiment -> readSettings(m_Settings);
 
     int rc = exec();
 

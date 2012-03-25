@@ -21,6 +21,7 @@
 #include "qxrdsettingssaver.h"
 #include "qxrdfilesaver.h"
 #include "qxrdexperimentthread.h"
+#include "qxrddetectorthread.h"
 
 QxrdExperiment::QxrdExperiment(
     QString path,
@@ -68,10 +69,13 @@ QxrdExperiment::QxrdExperiment(
   }
 
   setObjectName("experiment");
+}
 
-  splashMessage("Initializing File Saver");
-
+void QxrdExperiment::initialize()
+{
   if (m_Application) {
+    splashMessage("Initializing File Saver");
+
     m_FileSaverThread = QxrdFileSaverThreadPtr(
           new QxrdFileSaverThread(m_Application->allocator()));
     m_FileSaverThread -> setObjectName("saver");
@@ -167,6 +171,7 @@ QxrdExperiment::QxrdExperiment(
 
     connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
     connect(prop_WorkTarget(),    SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
+    connect(prop_DetectorType(),  SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
 
     splashMessage("Loading Preferences");
 
@@ -669,4 +674,19 @@ void QxrdExperiment::finishedWork(int amt)
 {
   prop_WorkCompleted()->incValue(-amt);
   prop_WorkTarget()->incValue(-amt);
+}
+
+void QxrdExperiment::onDetectorTypeChanged()
+{
+  int newType = get_DetectorType();
+
+  set_DetectorTypeName(QxrdDetectorThread::detectorKindName(newType));
+
+  m_DetectorThread = QxrdDetectorThreadPtr();
+
+  m_DetectorThread = QxrdDetectorThreadPtr(new QxrdDetectorThread(this, m_Acquisition));
+
+  if (m_DetectorThread) {
+    m_Detector = m_DetectorThread->detector();
+  }
 }
