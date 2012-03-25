@@ -10,8 +10,6 @@ class QxrdDetectorPilatus : public QxrdDetector
 public:
   explicit QxrdDetectorPilatus(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
 
-  void initialize();
-
 signals:
 
 public slots:

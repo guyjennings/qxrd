@@ -14,6 +14,7 @@ public:
   explicit QxrdDetectorThread(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
 
   QxrdDetectorPtr detector() const;
+  void shutdown();
 
   typedef enum {
     SimulatedDetector,

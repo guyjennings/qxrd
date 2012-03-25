@@ -10,8 +10,6 @@ class QxrdDetectorFileWatcher : public QxrdDetector
 public:
   explicit QxrdDetectorFileWatcher(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
   
-  void initialize();
-
 signals:
   
 public slots:

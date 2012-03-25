@@ -4,3 +4,7 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QxrdExperimentWPtr expt, QxrdAc
   QxrdDetector(expt, acq)
 {
 }
+
+void QxrdDetectorPerkinElmer::initialize()
+{
+}

@@ -3,6 +3,7 @@
 
 #include "qcepmacros.h"
 #include "qxrddetector.h"
+#include <QTimer>
 
 class QxrdDetectorSimulated : public QxrdDetector
 {
@@ -12,10 +13,31 @@ public:
 
   void initialize();
 
+public slots:
+  void onExposureTimeChanged(double newTime);
+  void onBinningModeChanged(int newMode);
+  void onCameraGainChanged(int newGain);
+
+  void onTimerTimeout();
+
+public:
+  void setupExposureMenu(QDoubleSpinBox *cb);
+  void setupCameraGainMenu(QComboBox *cb);
+  void setupCameraBinningModeMenu(QComboBox *cb);
+
+signals:
+
+protected:
+  void beginAcquisition();
+  void endAcquisition();
+  void shutdownAcquisition();
+
 signals:
 
 public slots:
 
+private:
+  QTimer m_Timer;
 };
 
 #endif // QXRDDETECTORSIMULATED_H

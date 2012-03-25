@@ -95,3 +95,19 @@ void QxrdDetectorThread::run()
   }
 }
 
+QxrdDetectorPtr QxrdDetectorThread::detector() const
+{
+  while (m_Detector == NULL) {
+    QThread::msleep(50);
+  }
+
+  return m_Detector;
+}
+
+void QxrdDetectorThread::shutdown()
+{
+  exit();
+
+  wait();
+}
+
