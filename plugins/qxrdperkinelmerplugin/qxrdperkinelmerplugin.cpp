@@ -33,6 +33,18 @@ UINT QxrdPerkinElmerPlugin::Acquisition_GetNextSensor(
   return ::Acquisition_GetNextSensor(Pos, phAcqDesc);
 }
 
+UINT QxrdPerkinElmerPlugin::Acquisition_SetAcqData(
+    HACQDESC hAcqDesc, void *AcqData)
+{
+  return ::Acquisition_SetAcqData(hAcqDesc, AcqData);
+}
+
+UINT QxrdPerkinElmerPlugin::Acquisition_GetAcqData(
+    HACQDESC hAcqDesc, void **AcqData)
+{
+  return ::Acquisition_GetAcqData(hAcqDesc, AcqData);
+}
+
 UINT QxrdPerkinElmerPlugin::Acquisition_GetCommChannel(
     HACQDESC pAcqDesc, UINT *pdwChannelType, int *pnChannelNr)
 {

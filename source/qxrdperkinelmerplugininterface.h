@@ -24,6 +24,12 @@ public:
   virtual UINT Acquisition_GetNextSensor(
       ACQDESCPOS *Pos, HACQDESC *phAcqDesc) = 0;
 
+  virtual UINT Acquisition_SetAcqData(
+      HACQDESC hAcqDesc, void *AcqData) = 0;
+
+  virtual UINT Acquisition_GetAcqData(
+      HACQDESC hAcqDesc, void **VoidAcqData) = 0;
+
   virtual UINT Acquisition_GetCommChannel(
       HACQDESC pAcqDesc, UINT *pdwChannelType, int *pnChannelNr) = 0;
 
