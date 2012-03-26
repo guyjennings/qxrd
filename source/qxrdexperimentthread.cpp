@@ -104,7 +104,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentGenericAnalysis(QStri
 
 QxrdExperimentPtr QxrdExperimentThread::experiment()
 {
-  while (m_Experiment == NULL) {
+  while (isRunning() && m_Experiment == NULL) {
     msleep(100);
   }
 
@@ -164,14 +164,18 @@ void QxrdExperimentThread::run()
     break;
   }
 
+  int rc = -1;
+
   if (doc) {
     doc -> initialize(this);
     doc -> readSettings(m_Settings);
 
     m_Experiment = doc;
 
-    int rc = exec();
+    rc = exec();
+  }
 
+  {
     if (qcepDebug(DEBUG_THREADS)) {
       m_Application->printMessage(tr("Experiment Thread Terminated with rc %1").arg(rc));
     }

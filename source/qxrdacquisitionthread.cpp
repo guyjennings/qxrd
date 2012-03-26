@@ -43,11 +43,15 @@ void QxrdAcquisitionThread::run()
   QxrdAcquisitionPtr acq = QxrdAcquisitionPtr(
         new QxrdAcquisition(m_Saver, m_Experiment, m_Processor, m_Allocator));
 
-  acq -> initialize();
+  int rc = -1;
 
-  m_Acquisition = acq;
+  if (acq) {
+    acq -> initialize();
 
-  int rc = exec();
+    m_Acquisition = acq;
+
+    rc = exec();
+  }
 
   {
     QxrdExperimentPtr exp(m_Experiment);
@@ -72,7 +76,7 @@ void QxrdAcquisitionThread::msleep(int msec)
 
 QxrdAcquisitionPtr QxrdAcquisitionThread::acquisition() const
 {
-  while (m_Acquisition == NULL) {
+  while (isRunning() && m_Acquisition == NULL) {
     QThread::msleep(50);
   }
 

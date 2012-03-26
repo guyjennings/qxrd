@@ -30,9 +30,13 @@ void QxrdAcquisitionTriggerThread::run()
 {
   QxrdAcquisitionTriggerPtr p = QxrdAcquisitionTriggerPtr(new QxrdAcquisitionTrigger(m_Saver, m_Experiment, m_Acquisition));
 
-  m_AcquisitionTrigger = p;
+  int rc = -1;
 
-  int rc = exec();
+  if (p) {
+    m_AcquisitionTrigger = p;
+
+    rc = exec();
+  }
 
   {
     QxrdExperimentPtr exp(m_Experiment);
@@ -57,7 +61,7 @@ void QxrdAcquisitionTriggerThread::msleep(int msec)
 
 QxrdAcquisitionTriggerPtr QxrdAcquisitionTriggerThread::acquisitionTrigger() const
 {
-  while (m_AcquisitionTrigger == NULL) {
+  while (isRunning() && m_AcquisitionTrigger == NULL) {
     QThread::msleep(50);
   }
 

@@ -29,9 +29,15 @@ void QxrdAllocatorThread::run()
     g_Application->printMessage("Starting Allocator Thread");
   }
 
-  m_Allocator = QxrdAllocatorPtr(new QxrdAllocator(m_Saver));
+  QxrdAllocatorPtr p(new QxrdAllocator(m_Saver));
 
-  int rc = exec();
+  int rc = -1;
+
+  if (p) {
+    m_Allocator = p;
+
+    rc = exec();
+  }
 
   if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Allocator Thread Terminated with rc %1").arg(rc));
@@ -47,7 +53,7 @@ void QxrdAllocatorThread::shutdown()
 
 QxrdAllocatorPtr QxrdAllocatorThread::allocator() const
 {
-  while (m_Allocator == NULL) {
+  while (isRunning() && m_Allocator == NULL) {
     QThread::msleep(50);
   }
 

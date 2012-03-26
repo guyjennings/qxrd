@@ -33,7 +33,7 @@ void QxrdScriptEngineThread::shutdown()
 
 QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const
 {
-  while (m_ScriptEngine == NULL) {
+  while (isRunning() && m_ScriptEngine == NULL) {
     QThread::msleep(50);
   }
 
@@ -48,11 +48,15 @@ void QxrdScriptEngineThread::run()
 
   QxrdScriptEnginePtr p(new QxrdScriptEngine(m_Application, m_Experiment));
 
-  p -> initialize();
+  int rc = -1;
 
-  m_ScriptEngine = p;
+  if (p) {
+    p -> initialize();
 
-  int rc = exec();
+    m_ScriptEngine = p;
+
+    rc = exec();
+  }
 
   if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Script Engine Thread Terminated with rc %1").arg(rc));

@@ -39,11 +39,15 @@ void QxrdDataProcessorThread::run()
                                                m_Allocator,
                                                m_FileSaver));
 
-  p -> initialize();
+  int rc = -1;
 
-  m_DataProcessor = p;
+  if (p) {
+    p -> initialize();
 
-  int rc = exec();
+    m_DataProcessor = p;
+
+    rc = exec();
+  }
 
   {
     QxrdExperimentPtr exp(m_Experiment);
@@ -63,7 +67,7 @@ void QxrdDataProcessorThread::shutdown()
 
 QxrdDataProcessorPtr QxrdDataProcessorThread::dataProcessor() const
 {
-  while (m_DataProcessor == NULL) {
+  while (isRunning() && m_DataProcessor == NULL) {
     QThread::msleep(50);
   }
 

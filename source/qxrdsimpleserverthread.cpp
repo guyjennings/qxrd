@@ -26,7 +26,7 @@ QxrdSimpleServerThread::~QxrdSimpleServerThread()
 
 QxrdSimpleServerPtr QxrdSimpleServerThread::server() const
 {
-  while (m_Server == NULL) {
+  while (isRunning() && m_Server == NULL) {
     QThread::msleep(50);
   }
 
@@ -50,9 +50,13 @@ void QxrdSimpleServerThread::run()
 
   QxrdSimpleServerPtr server(new QxrdSimpleServer(m_Saver, m_Experiment, m_Name));
 
-  m_Server = server;
+  int rc = -1;
 
-  int rc = exec();
+  if (server) {
+    m_Server = server;
+
+    rc = exec();
+  }
 
   if (expt && qcepDebug(DEBUG_THREADS)) {
     expt->printMessage(tr("Simple Server Thread Terminated with rc %1").arg(rc));

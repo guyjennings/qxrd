@@ -37,9 +37,13 @@ void QxrdFileBrowserModelUpdaterThread::run()
       QxrdFileBrowserModelUpdaterPtr(
         new QxrdFileBrowserModelUpdater(m_Model, NULL));
 
-  m_Updater = p;
+  int rc = -1;
 
-  int rc = exec();
+  if (p) {
+    m_Updater = p;
+
+    rc = exec();
+  }
 
   if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Browser Model Updater Thread Terminated with rc %1").arg(rc));
@@ -48,7 +52,7 @@ void QxrdFileBrowserModelUpdaterThread::run()
 
 QxrdFileBrowserModelUpdaterPtr QxrdFileBrowserModelUpdaterThread::updater() const
 {
-  while (m_Updater == NULL) {
+  while (isRunning() && m_Updater == NULL) {
     QThread::msleep(50);
   }
 
