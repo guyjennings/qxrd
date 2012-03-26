@@ -768,5 +768,11 @@ void QxrdExperiment::onDetectorTypeChanged()
   if (det) {
     set_DetectorType(det->detectorType());
     set_DetectorTypeName(det->detectorTypeName());
+
+    QxrdAcquisitionPtr acq(m_Acquisition);
+
+    if (acq) {
+      acq->setDetector(det);
+    }
   }
 }
