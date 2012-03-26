@@ -16,6 +16,8 @@ public:
   virtual ~QxrdDetector();
 
   virtual void initialize();
+  virtual int detectorType() const;
+  virtual QString detectorTypeName() const;
 
 signals:
 

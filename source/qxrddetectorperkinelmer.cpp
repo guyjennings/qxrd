@@ -47,6 +47,11 @@ QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer()
   }
 }
 
+int QxrdDetectorPerkinElmer::detectorType() const
+{
+  return QxrdDetectorThread::PerkinElmerDetector;
+}
+
 void QxrdDetectorPerkinElmer::printMessage(QString msg, QDateTime ts)
 {
   QxrdExperimentPtr exp(m_Experiment);

@@ -9,6 +9,7 @@ class QxrdDetectorPilatus : public QxrdDetector
   Q_OBJECT
 public:
   explicit QxrdDetectorPilatus(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
+  int detectorType() const;
 
 signals:
 

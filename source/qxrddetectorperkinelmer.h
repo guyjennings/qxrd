@@ -19,6 +19,7 @@ class QxrdDetectorPerkinElmer : public QxrdDetector
 public:
   explicit QxrdDetectorPerkinElmer(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorPerkinElmer();
+  int detectorType() const;
 
 private slots:
   void onExposureTimeChanged(double newTime);

@@ -23,9 +23,9 @@ public:
     PilatusDetector,
     EpicsAreaDetector,
     FileWatcherDetector
-  } DetectorKind;
+  } DetectorType;
 
-  static QString detectorKindName(int detectorKind);
+  static QString detectorTypeName(int detectorType);
 
 signals:
 

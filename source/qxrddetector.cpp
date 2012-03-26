@@ -1,4 +1,5 @@
 #include "qxrddetector.h"
+#include "qxrddetectorthread.h"
 
 QxrdDetector::QxrdDetector(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
   QObject(),
@@ -9,6 +10,16 @@ QxrdDetector::QxrdDetector(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
 
 QxrdDetector::~QxrdDetector()
 {
+}
+
+int  QxrdDetector::detectorType() const
+{
+  return QxrdDetectorThread::NoDetector;
+}
+
+QString QxrdDetector::detectorTypeName() const
+{
+  return QxrdDetectorThread::detectorTypeName(detectorType());
 }
 
 void QxrdDetector::initialize()

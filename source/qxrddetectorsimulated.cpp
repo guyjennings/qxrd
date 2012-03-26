@@ -11,6 +11,11 @@ QxrdDetectorSimulated::QxrdDetectorSimulated(QxrdExperimentWPtr expt, QxrdAcquis
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(onTimerTimeout()));
 }
 
+int QxrdDetectorSimulated::detectorType() const
+{
+  return QxrdDetectorThread::SimulatedDetector;
+}
+
 void QxrdDetectorSimulated::onExposureTimeChanged(double newTime)
 {
   QxrdExperimentPtr expt(m_Experiment);

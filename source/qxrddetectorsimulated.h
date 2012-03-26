@@ -12,6 +12,7 @@ public:
   explicit QxrdDetectorSimulated(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
 
   void initialize();
+  int detectorType() const;
 
 public slots:
   void onExposureTimeChanged(double newTime);

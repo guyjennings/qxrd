@@ -57,7 +57,7 @@ QxrdExperiment::QxrdExperiment(
   m_LogFileName(m_SettingsSaver, this, "logFileName", defaultLogName(path), "Log File Name"),
   m_ScanFileName(m_SettingsSaver, this, "scanFileName", defaultScanName(path), "Scan File Name"),
   m_DetectorType(m_SettingsSaver, this,"detectorType", 0, "Detector Type"),
-  m_DetectorTypeName(QxrdSettingsSaverPtr(), this,"detectorTypeName", QxrdDetectorThread::detectorKindName(get_DetectorType()), "Name of Detector Type"),
+  m_DetectorTypeName(QxrdSettingsSaverPtr(), this,"detectorTypeName", QxrdDetectorThread::detectorTypeName(get_DetectorType()), "Name of Detector Type"),
   m_ProcessorType(m_SettingsSaver, this,"processorType", 0, "Data Processor Type"),
   m_DefaultLayout(QxrdSettingsSaverWPtr(), this,"defaultLayout",0, "Default Layout Used?"),
   m_WorkCompleted(QxrdSettingsSaverWPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
@@ -752,14 +752,21 @@ void QxrdExperiment::onDetectorTypeChanged()
 
   printf("Detector type changed\n");
 
-  set_DetectorTypeName(QxrdDetectorThread::detectorKindName(newType));
 
   m_Detector       = QxrdDetectorPtr();
   m_DetectorThread = QxrdDetectorThreadPtr();
 
   m_DetectorThread = QxrdDetectorThreadPtr(new QxrdDetectorThread(this, m_Acquisition));
+  m_DetectorThread -> start();
 
   if (m_DetectorThread) {
     m_Detector = m_DetectorThread->detector();
+  }
+
+  QxrdDetectorPtr det(m_Detector);
+
+  if (det) {
+    set_DetectorType(det->detectorType());
+    set_DetectorTypeName(det->detectorTypeName());
   }
 }

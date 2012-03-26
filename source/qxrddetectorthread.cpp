@@ -13,10 +13,10 @@ QxrdDetectorThread::QxrdDetectorThread(QxrdExperimentWPtr expt, QxrdAcquisitionW
 {
 }
 
-QString QxrdDetectorThread::detectorKindName(int detectorKind)
+QString QxrdDetectorThread::detectorTypeName(int detectorType)
 {
   QString res = "unknown";
-  switch (detectorKind) {
+  switch (detectorType) {
   case NoDetector:
     res = "No Detector";
     break;
@@ -47,40 +47,47 @@ QString QxrdDetectorThread::detectorKindName(int detectorKind)
 
 void QxrdDetectorThread::run()
 {
-  if (g_Application && qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage("Starting Detector Thread");
-  }
-
-  QxrdExperimentPtr expt(m_Experiment);
   QxrdDetectorPtr p;
 
-  if (expt) {
-    switch(expt->get_DetectorType()) {
-    case SimulatedDetector:
-      p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment, m_Acquisition));
-      break;
+  {
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt && qcepDebug(DEBUG_THREADS)) {
+      expt->printMessage("Starting Detector Thread");
+    }
+
+    if (qcepDebug(DEBUG_THREADS)) {
+      printf("Starting Detector Thread\n");
+
+    }
+    if (expt) {
+      switch(expt->get_DetectorType()) {
+      case SimulatedDetector:
+        p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment, m_Acquisition));
+        break;
 
 #ifdef HAVE_PERKIN_ELMER
-    case PerkinElmerDetector:
-      p = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Experiment, m_Acquisition));
-      break;
+      case PerkinElmerDetector:
+        p = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Experiment, m_Acquisition));
+        break;
 #endif
 
 #ifdef HAVE_PILATUS
-    case PilatusDetector:
-      p = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Experiment, m_Acquisition));
-      break;
+      case PilatusDetector:
+        p = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Experiment, m_Acquisition));
+        break;
 #endif
 
 #ifdef HAVE_AREADETECTOR
-    case EpicsAreaDetector:
-      p = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Experiment, m_Acquisition));
-      break;
+      case EpicsAreaDetector:
+        p = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Experiment, m_Acquisition));
+        break;
 #endif
 
-    case FileWatcherDetector:
-      p = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Experiment, m_Acquisition));
-      break;
+      case FileWatcherDetector:
+        p = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Experiment, m_Acquisition));
+        break;
+      }
     }
   }
 
@@ -98,8 +105,16 @@ void QxrdDetectorThread::run()
     rc = exec();
   }
 
-  if (g_Application && qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage(tr("Detector Thread Terminated with rc %1").arg(rc));
+  {
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt && qcepDebug(DEBUG_THREADS)) {
+      expt->printMessage(tr("Detector Thread Terminated with rc %1").arg(rc));
+    }
+
+    if (qcepDebug(DEBUG_THREADS)) {
+      printf("Detector Thread Terminated with rc %d\n", rc);
+    }
   }
 }
 
