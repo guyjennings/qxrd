@@ -5,41 +5,22 @@
 #include "qxrddetectorsimulated.h"
 #include "qxrddetectorfilewatcher.h"
 
-#ifdef Q_OS_WIN32
-#include <windows.h>
-#endif
-
-#ifdef HAVE_PERKIN_ELMER
-static int g_PEAvailable = false;
-#endif
-
 QxrdDetectorThread::QxrdDetectorThread(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
   QxrdThread(),
   m_Experiment(expt),
   m_Acquisition(acq),
   m_Detector()
 {
-#ifdef HAVE_PERKIN_ELMER
-  HINSTANCE xisllib;
-
-  xisllib = LoadLibrary(L"XISL.dll");
-
-  if (xisllib == NULL) {
-    QxrdExperimentPtr exp(m_Experiment);
-
-    if (exp) {
-      exp->criticalMessage("XISL library is not available - cannot use PE detector");
-    }
-  } else {
-    g_PEAvailable = true;
-  }
-#endif
 }
 
 QString QxrdDetectorThread::detectorKindName(int detectorKind)
 {
   QString res = "unknown";
   switch (detectorKind) {
+  case NoDetector:
+    res = "No Detector";
+    break;
+
   case SimulatedDetector:
     res = "Simulated Detector";
     break;
@@ -81,9 +62,7 @@ void QxrdDetectorThread::run()
 
 #ifdef HAVE_PERKIN_ELMER
     case PerkinElmerDetector:
-      if (g_PEAvailable) {
-        p = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Experiment, m_Acquisition));
-      }
+      p = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Experiment, m_Acquisition));
       break;
 #endif
 
@@ -109,9 +88,15 @@ void QxrdDetectorThread::run()
     p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment, m_Acquisition));
   }
 
-  m_Detector = p;
+  int rc = -1;
 
-  int rc = exec();
+  if (p) {
+    p -> initialize();
+
+    m_Detector = p;
+
+    rc = exec();
+  }
 
   if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Detector Thread Terminated with rc %1").arg(rc));
@@ -120,7 +105,7 @@ void QxrdDetectorThread::run()
 
 QxrdDetectorPtr QxrdDetectorThread::detector() const
 {
-  while (m_Detector == NULL) {
+  while (isRunning() && m_Detector == NULL) {
     QThread::msleep(50);
   }
 

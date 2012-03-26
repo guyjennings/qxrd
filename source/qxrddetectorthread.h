@@ -17,6 +17,7 @@ public:
   void shutdown();
 
   typedef enum {
+    NoDetector,
     SimulatedDetector,
     PerkinElmerDetector,
     PilatusDetector,
