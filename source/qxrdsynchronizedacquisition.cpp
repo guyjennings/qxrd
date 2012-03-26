@@ -166,6 +166,8 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
 
   if (m_SyncMode && m_AcquisitionParms) {
     if (m_Acquisition->acquisitionStatus(0.0) == 0) {
+//      printf("QxrdSynchronizedAcquisition::acquiredFrameAvailable(%d)\n", frameNumber);
+
       int skipBefore = m_AcquisitionParms->skipBefore();
       int skipBetween = m_AcquisitionParms->skipBetween();
       int nPhases = m_AcquisitionParms->nphases();
@@ -180,6 +182,7 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
           if (inGroup < nPhases*nSummed) {
             if (phase == 0) {
               if (m_NIDAQPlugin) {
+//                printf("Triggered on frame %d\n", frameNumber);
                 m_NIDAQPlugin->triggerAnalogWaveform();
               }
             }
