@@ -750,6 +750,8 @@ void QxrdExperiment::onDetectorTypeChanged()
 {
   int newType = get_DetectorType();
 
+  printf("Detector type changed\n");
+
   set_DetectorTypeName(QxrdDetectorThread::detectorKindName(newType));
 
   m_Detector       = QxrdDetectorPtr();
