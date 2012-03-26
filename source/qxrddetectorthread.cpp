@@ -1,9 +1,20 @@
 #include "qxrddetectorthread.h"
 #include "qxrdapplication.h"
+
+#ifdef HAVE_PERKIN_ELMER
 #include "qxrddetectorperkinelmer.h"
+#endif
+
+#ifdef HAVE_PILATUS
 #include "qxrddetectorpilatus.h"
-#include "qxrddetectorsimulated.h"
+#endif
+
+#ifdef HAVE_AREADETECTOR
+#include "qxrddetectorepicsarea.h"
+#endif
+
 #include "qxrddetectorfilewatcher.h"
+#include "qxrddetectorsimulated.h"
 
 QxrdDetectorThread::QxrdDetectorThread(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
   QxrdThread(),
