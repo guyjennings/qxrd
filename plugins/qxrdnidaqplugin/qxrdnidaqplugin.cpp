@@ -20,39 +20,39 @@ QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
 {
   setObjectName("nidaq");
 
-//  printf("NI-DAQ plugin constructed\n");
-//  initTaskHandles();
+  //  printf("NI-DAQ plugin constructed\n");
+  //  initTaskHandles();
 
-//  res = DAQmxGetDevTerminals("Dev1", buffer, sizeof(buffer));
-//  printf("%d: DAQmxGetDevTerminals : \"%s\"\n", res, buffer);
+  //  res = DAQmxGetDevTerminals("Dev1", buffer, sizeof(buffer));
+  //  printf("%d: DAQmxGetDevTerminals : \"%s\"\n", res, buffer);
 
-//  int32 aiTrigUsage;
-//  int32 aoTrigUsage;
-//  int32 diTrigUsage;
-//  int32 doTrigUsage;
-//  int32 ciTrigUsage;
-//  int32 coTrigUsage;
+  //  int32 aiTrigUsage;
+  //  int32 aoTrigUsage;
+  //  int32 diTrigUsage;
+  //  int32 doTrigUsage;
+  //  int32 ciTrigUsage;
+  //  int32 coTrigUsage;
 
-//  res = DAQmxGetDevAITrigUsage("Dev1", &aiTrigUsage);
-//  res = DAQmxGetDevAOTrigUsage("Dev1", &aoTrigUsage);
-//  res = DAQmxGetDevDITrigUsage("Dev1", &diTrigUsage);
-//  res = DAQmxGetDevDOTrigUsage("Dev1", &doTrigUsage);
-//  res = DAQmxGetDevCITrigUsage("Dev1", &ciTrigUsage);
-//  res = DAQmxGetDevCOTrigUsage("Dev1", &coTrigUsage);
+  //  res = DAQmxGetDevAITrigUsage("Dev1", &aiTrigUsage);
+  //  res = DAQmxGetDevAOTrigUsage("Dev1", &aoTrigUsage);
+  //  res = DAQmxGetDevDITrigUsage("Dev1", &diTrigUsage);
+  //  res = DAQmxGetDevDOTrigUsage("Dev1", &doTrigUsage);
+  //  res = DAQmxGetDevCITrigUsage("Dev1", &ciTrigUsage);
+  //  res = DAQmxGetDevCOTrigUsage("Dev1", &coTrigUsage);
 
-//  printf("AI:%02x, AO:%02x, DI:%02x, DO:%02x, CI:%02x, CO:%02x\n",
-//         aiTrigUsage, aoTrigUsage, diTrigUsage, doTrigUsage, ciTrigUsage, coTrigUsage
-//         );
+  //  printf("AI:%02x, AO:%02x, DI:%02x, DO:%02x, CI:%02x, CO:%02x\n",
+  //         aiTrigUsage, aoTrigUsage, diTrigUsage, doTrigUsage, ciTrigUsage, coTrigUsage
+  //         );
 
-//  bool32 isSupported=false;
-//  res = DAQmxGetDevCISampClkSupported("Dev1", &isSupported);
+  //  bool32 isSupported=false;
+  //  res = DAQmxGetDevCISampClkSupported("Dev1", &isSupported);
 
-//  printf("%d: DAQmxGetDevCISampClkSupported=%d\n", res, isSupported);
+  //  printf("%d: DAQmxGetDevCISampClkSupported=%d\n", res, isSupported);
 }
 
 QxrdNIDAQPlugin::~QxrdNIDAQPlugin()
 {
-//  printf("NI-DAQ plugin destroyed");
+  //  printf("NI-DAQ plugin destroyed");
   closeTaskHandles();
 }
 
@@ -97,32 +97,32 @@ void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
 
 void QxrdNIDAQPlugin::initTaskHandles()
 {
-//  int error;
+  //  int error;
 
-//  if (m_AOTaskHandle == 0) {
-//    DAQmxErrChk(DAQmxCreateTask("", &m_AOTaskHandle));
-//    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle, "Dev1/ao0", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-//    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle, "Dev1/ao1", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-//  }
+  //  if (m_AOTaskHandle == 0) {
+  //    DAQmxErrChk(DAQmxCreateTask("", &m_AOTaskHandle));
+  //    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle, "Dev1/ao0", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+  //    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle, "Dev1/ao1", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+  //  }
 
-//  if (m_AITaskHandle == 0) {
-//    DAQmxErrChk(DAQmxCreateTask("", &m_AITaskHandle));
-//    DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle, "Dev1/ai0", NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-//    DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle, "Dev1/ai1", NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-//  }
+  //  if (m_AITaskHandle == 0) {
+  //    DAQmxErrChk(DAQmxCreateTask("", &m_AITaskHandle));
+  //    DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle, "Dev1/ai0", NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+  //    DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle, "Dev1/ai1", NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+  //  }
 
-//  if (m_TrigAOTask == 0) {
-//    DAQmxErrChk(DAQmxCreateTask("", &m_TrigAOTask));
-//    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_TrigAOTask, "Dev1/ao0", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-////    DAQmxErrChk(DAQmxCfgAnlgEdgeStartTrig(m_TrigAOTask, "Dev1/ai2", DAQmx_Val_FallingSlope, 1.0));
-//  }
+  //  if (m_TrigAOTask == 0) {
+  //    DAQmxErrChk(DAQmxCreateTask("", &m_TrigAOTask));
+  //    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_TrigAOTask, "Dev1/ao0", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+  ////    DAQmxErrChk(DAQmxCfgAnlgEdgeStartTrig(m_TrigAOTask, "Dev1/ai2", DAQmx_Val_FallingSlope, 1.0));
+  //  }
 
-//  return;
+  //  return;
 
-//Error:
-//  printf("Error in initTaskHandles\n");
+  //Error:
+  //  printf("Error in initTaskHandles\n");
 
-//  closeTaskHandles();
+  //  closeTaskHandles();
 }
 
 void QxrdNIDAQPlugin::closeTaskHandles()
@@ -307,16 +307,16 @@ void   QxrdNIDAQPlugin::setAnalogWaveform(int chan, double rate, double wfm[], i
 
     if (m_AOTaskHandle) {
       DAQmxErrChk(
-          DAQmxCfgSampClkTiming(m_AOTaskHandle, NULL, rate, DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, size)
-          );
+            DAQmxCfgSampClkTiming(m_AOTaskHandle, NULL, rate, DAQmx_Val_Rising, DAQmx_Val_FiniteSamps, size)
+            );
 
       DAQmxErrChk(
-              DAQmxWriteAnalogF64(m_AOTaskHandle, size, false, -1, DAQmx_Val_GroupByChannel, wfm, &nsampwrt, NULL)
-          );
-      }
+            DAQmxWriteAnalogF64(m_AOTaskHandle, size, false, -1, DAQmx_Val_GroupByChannel, wfm, &nsampwrt, NULL)
+            );
+    }
   }
 
-//  printf("%d samples written\n", nsampwrt);
+  printf("%d samples written\n", nsampwrt);
 
 Error:
   return;
@@ -330,17 +330,17 @@ void QxrdNIDAQPlugin::triggerAnalogWaveform()
   int error;
 
   if (m_AOTaskHandle) {
-//    DAQmxErrChk(
-//      DAQmxWaitUntilTaskDone(m_AOTaskHandle, -1)
-//    )
+    //    DAQmxErrChk(
+    //      DAQmxWaitUntilTaskDone(m_AOTaskHandle, -1)
+    //    )
 
     DAQmxErrChk(
-      DAQmxStopTask(m_AOTaskHandle)
-    );
+          DAQmxStopTask(m_AOTaskHandle)
+          );
 
     DAQmxErrChk(
-      DAQmxStartTask(m_AOTaskHandle)
-    );
+          DAQmxStartTask(m_AOTaskHandle)
+          );
   }
 
 Error:
@@ -553,8 +553,8 @@ int QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
                                       sampleRate, DAQmx_Val_Rising, DAQmx_Val_ContSamps, bufferSize));
     DAQmxErrChk(DAQmxSetBufInputBufSize(tsk, bufferSize));
     DAQmxErrChk(DAQmxSetReadOverWrite(tsk, DAQmx_Val_OverwriteUnreadSamps));
-//    DAQmxErrChk(DAQmxCfgDigEdgeStartTrig(tsk, qPrintable(tr("/%1/ai/StartTrigger").arg(aiDevice)),
-//                                         DAQmx_Val_Rising));
+    //    DAQmxErrChk(DAQmxCfgDigEdgeStartTrig(tsk, qPrintable(tr("/%1/ai/StartTrigger").arg(aiDevice)),
+    //                                         DAQmx_Val_Rising));
   }
 
   foreach (TaskHandle tsk, m_ContinuousCITasks) {
@@ -606,7 +606,7 @@ int QxrdNIDAQPlugin::readContinuousInput()
 
   if (m_ContinuousAITask && m_NAIChannels) {
     DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousAITask, m_NContinuousSamples, -1,
-                                   DAQmx_Val_GroupByScanNumber, aiBuff.data(), aiBuff.count(),
+                                   DAQmx_Val_GroupByChannel, aiBuff.data(), aiBuff.count(),
                                    &actuallyRead, NULL));
   }
 
@@ -673,7 +673,7 @@ QStringList QxrdNIDAQPlugin::deviceNames()
   int error;
 
   DAQmxErrChk(DAQmxGetSysDevNames(buffer, sizeof(buffer)));
-//  printf("%d: DAQmxGetSysDevNames : \"%s\"\n", res, buffer);
+  //  printf("%d: DAQmxGetSysDevNames : \"%s\"\n", res, buffer);
 
 Error:
   QStringList result = QString(buffer).split(", ");
