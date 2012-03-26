@@ -33,17 +33,17 @@ QxrdExperiment::QxrdExperiment(
   m_WindowSettings(NULL),
   m_Window(NULL),
   m_ServerThread(NULL),
-  m_Server(NULL),
+  m_Server(),
   m_SimpleServerThread(NULL),
-  m_SimpleServer(NULL),
+  m_SimpleServer(),
   m_DataProcessorThread(NULL),
-  m_DataProcessor(NULL),
+  m_DataProcessor(),
   m_AcquisitionThread(NULL),
-  m_Acquisition(NULL),
+  m_Acquisition(),
   m_FileSaverThread(NULL),
-  m_FileSaver(NULL),
+  m_FileSaver(),
   m_ScriptEngineThread(NULL),
-  m_ScriptEngine(NULL),
+  m_ScriptEngine(),
   m_ScriptEngineDebugger(NULL),
   m_LogFile(NULL),
   m_ScanFile(NULL),
@@ -96,7 +96,11 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd)
     m_DataProcessorThread -> start();
     m_DataProcessor = m_DataProcessorThread -> dataProcessor();
 
-    m_FileSaver -> setProcessor(m_DataProcessor);
+    QxrdFileSaverPtr saver(m_FileSaver);
+
+    if (saver) {
+      saver -> setProcessor(m_DataProcessor);
+    }
 
     splashMessage("Initializing Data Acquisition");
 
@@ -110,40 +114,51 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd)
     m_AcquisitionThread -> start();
     m_Acquisition = m_AcquisitionThread -> acquisition();
 
-    m_DataProcessor -> setAcquisition(m_Acquisition);
-    m_FileSaver -> setAcquisition(m_Acquisition);
+    QxrdDataProcessorPtr proc(m_DataProcessor);
 
-    m_Acquisition -> setNIDAQPlugin(m_Application->nidaqPlugin());
+    if (proc) {
+      proc -> setAcquisition(m_Acquisition);
+    }
+
+    if (saver) {
+      saver -> setAcquisition(m_Acquisition);
+    }
+
+    QxrdAcquisitionPtr acq(m_Acquisition);
+
+    if (acq) {
+      acq -> setNIDAQPlugin(m_Application->nidaqPlugin());
+    }
 
     m_WindowSettings = QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL));
 
     splashMessage("Starting SPEC Server");
 
-#ifdef Q_OS_WIN
-    // On windows, there are problems with servers not in the main thread...
+//#ifdef Q_OS_WIN
+//    // On windows, there are problems with servers not in the main thread...
 
-    m_Server = QxrdServerPtr(
-          new QxrdServer(m_SettingsSaver, this, "qxrd"));
-#else
+//    m_Server = QxrdServerPtr(
+//          new QxrdServer(m_SettingsSaver, this, "qxrd"));
+//#else
     m_ServerThread = QxrdServerThreadPtr(
           new QxrdServerThread(m_SettingsSaver, this, "qxrd"));
     m_ServerThread -> setObjectName("server");
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
-#endif
+//#endif
 
     splashMessage("Starting Simple Socket Server");
 
-#ifdef Q_OS_WIN
-    m_SimpleServer = QxrdSimpleServerPtr(
-          new QxrdSimpleServer(m_SettingsSaver, this, "simpleserver"));
-#else
+//#ifdef Q_OS_WIN
+//    m_SimpleServer = QxrdSimpleServerPtr(
+//          new QxrdSimpleServer(m_SettingsSaver, this, "simpleserver"));
+//#else
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(
           new QxrdSimpleServerThread(m_SettingsSaver, this, "simpleserver"));
     m_SimpleServerThread -> setObjectName("smpsrv");
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
-#endif
+//#endif
 
     m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
           new QxrdScriptEngineThread(m_Application, this));
@@ -155,20 +170,25 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd)
     //  m_ScriptEngineDebugger -> attachTo(m_ScriptEngine->scriptEngine());
     //  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
 
-    if (m_Server) {
-      connect(m_Server.data(),         SIGNAL(executeCommand(QString)),
-              m_ScriptEngine.data(),   SLOT(evaluateSpecCommand(QString)));
+    QxrdServerPtr srv(m_Server);
+    QxrdScriptEnginePtr eng(m_ScriptEngine);
 
-      connect(m_ScriptEngine.data(),   SIGNAL(specResultAvailable(QScriptValue)),
-              m_Server.data(),         SLOT(finishedCommand(QScriptValue)));
+    if (srv && eng) {
+      connect(srv.data(),   SIGNAL(executeCommand(QString)),
+              eng.data(),   SLOT(evaluateSpecCommand(QString)));
+
+      connect(eng.data(),   SIGNAL(specResultAvailable(QScriptValue)),
+              srv.data(),   SLOT(finishedCommand(QScriptValue)));
     }
 
-    if (m_SimpleServer) {
-      connect(m_SimpleServer.data(),   SIGNAL(executeCommand(QString)),
-              scriptEngine().data(),   SLOT(evaluateSimpleServerCommand(QString)));
+    QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
-      connect(scriptEngine().data(),   SIGNAL(simpleServerResultAvailable(QScriptValue)),
-              m_SimpleServer.data(),   SLOT(finishedCommand(QScriptValue)));
+    if (ssrv && eng) {
+      connect(ssrv.data(),  SIGNAL(executeCommand(QString)),
+              eng.data(),   SLOT(evaluateSimpleServerCommand(QString)));
+
+      connect(eng.data(),   SIGNAL(simpleServerResultAvailable(QScriptValue)),
+              ssrv.data(),  SLOT(finishedCommand(QScriptValue)));
     }
 
     connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
@@ -181,16 +201,18 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd)
 
     splashMessage("Loading Background Images");
 
-    m_DataProcessor -> loadDefaultImages();
+    if (proc) {
+      proc -> loadDefaultImages();
+    }
 
 #ifdef Q_OS_WIN32
     QDir::setCurrent(QDir::homePath());
 #endif
 
     printMessage(tr("Current directory %1").arg(QDir::currentPath()));
-  }
 
-  m_SettingsSaver->start();
+    m_SettingsSaver->start();
+  }
 }
 
 QxrdExperimentThreadWPtr QxrdExperiment::experimentThread()
@@ -219,19 +241,32 @@ void QxrdExperiment::openWindows()
                          NULL);
 
     QxrdWindow *win = m_Window;
+    QxrdDataProcessorPtr proc(m_DataProcessor);
+    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdScriptEnginePtr eng(m_ScriptEngine);
 
     if (win) {
-      m_DataProcessor -> setWindow(win);
-      m_Acquisition -> setWindow(win);
-      m_ScriptEngine -> setWindow(win);
+      if (proc) {
+        proc -> setWindow(win);
+      }
+
+      if (acq) {
+        acq -> setWindow(win);
+      }
+
+      if (eng) {
+        eng -> setWindow(win);
+      }
 
       win -> onAcquisitionInit();
 
-      connect(win,                     SIGNAL(executeCommand(QString)),
-              scriptEngine().data(),   SLOT(evaluateAppCommand(QString)));
+      if (eng) {
+        connect(win,          SIGNAL(executeCommand(QString)),
+                eng.data(),   SLOT(evaluateAppCommand(QString)));
 
-      connect(scriptEngine().data(),   SIGNAL(appResultAvailable(QScriptValue)),
-              win,                     SLOT(finishedCommand(QScriptValue)));
+        connect(eng.data(),   SIGNAL(appResultAvailable(QScriptValue)),
+                win,          SLOT(finishedCommand(QScriptValue)));
+      }
 
       if (win && m_Application && m_Application->get_GuiWanted()) {
         win -> show();
@@ -323,17 +358,17 @@ QxrdAcquisitionThreadPtr QxrdExperiment::acquisitionThread()
   return m_AcquisitionThread;
 }
 
-QxrdAcquisitionPtr QxrdExperiment::acquisition() const
+QxrdAcquisitionWPtr QxrdExperiment::acquisition() const
 {
   return m_Acquisition;
 }
 
-QxrdServerPtr QxrdExperiment::specServer()
+QxrdServerWPtr QxrdExperiment::specServer()
 {
   return m_Server;
 }
 
-QxrdSimpleServerPtr QxrdExperiment::simpleServer()
+QxrdSimpleServerWPtr QxrdExperiment::simpleServer()
 {
   return m_SimpleServer;
 }
@@ -343,14 +378,18 @@ QxrdDataProcessorWPtr QxrdExperiment::dataProcessor() const
   return m_DataProcessor;
 }
 
-QxrdScriptEnginePtr QxrdExperiment::scriptEngine()
+QxrdScriptEngineWPtr QxrdExperiment::scriptEngine()
 {
   return m_ScriptEngine;
 }
 
 void QxrdExperiment::executeCommand(QString cmd)
 {
-  m_ScriptEngine->evaluateAppCommand(cmd);
+  QxrdScriptEnginePtr eng(m_ScriptEngine);
+
+  if (eng) {
+    eng->evaluateAppCommand(cmd);
+  }
 }
 
 void QxrdExperiment::newLogFile(QString path)
@@ -479,11 +518,28 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
   if (settings) {
     QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 
+    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdDataProcessorPtr proc(m_DataProcessor);
+    QxrdServerPtr srv(m_Server);
+    QxrdSimpleServerPtr ssrv(m_SimpleServer);
+
     m_WindowSettings -> readSettings(settings, section+"/window");
-    m_Acquisition    -> readSettings(settings, section+"/acquire");
-    m_DataProcessor  -> readSettings(settings, section+"/processor");
-    m_Server         -> readSettings(settings, section+"/specserver");
-    m_SimpleServer   -> readSettings(settings, section+"/simpleserver");
+
+    if (acq) {
+      acq  -> readSettings(settings, section+"/acquire");
+    }
+
+    if (proc) {
+      proc -> readSettings(settings, section+"/processor");
+    }
+
+    if (srv) {
+      srv  -> readSettings(settings, section+"/specserver");
+    }
+
+    if (ssrv) {
+      ssrv -> readSettings(settings, section+"/simpleserver");
+    }
   }
 }
 
@@ -517,11 +573,28 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
   if (settings) {
     QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
 
+    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdDataProcessorPtr proc(m_DataProcessor);
+    QxrdServerPtr srv(m_Server);
+    QxrdSimpleServerPtr ssrv(m_SimpleServer);
+
     m_WindowSettings -> writeSettings(settings, section+"/window");
-    m_Acquisition    -> writeSettings(settings, section+"/acquire");
-    m_DataProcessor  -> writeSettings(settings, section+"/processor");
-    m_Server         -> writeSettings(settings, section+"/specserver");
-    m_SimpleServer   -> writeSettings(settings, section+"/simpleserver");
+
+    if (acq) {
+      acq  -> writeSettings(settings, section+"/acquire");
+    }
+
+    if (proc) {
+      proc -> writeSettings(settings, section+"/processor");
+    }
+
+    if (srv) {
+      srv  -> writeSettings(settings, section+"/specserver");
+    }
+
+    if (ssrv) {
+      ssrv -> writeSettings(settings, section+"/simpleserver");
+    }
   }
 }
 

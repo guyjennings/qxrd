@@ -1368,7 +1368,11 @@ void QxrdWindow::cancelScript()
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    expt -> scriptEngine() -> cancelCommand();
+    QxrdScriptEnginePtr eng(expt -> scriptEngine());
+
+    if (eng) {
+      eng -> cancelCommand();
+    }
   }
 }
 
@@ -1410,8 +1414,12 @@ void QxrdWindow::loadScript(QString path)
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    expt -> printMessage(tr("Loading script file from %1").arg(path));
-    expt -> scriptEngine() -> loadScript(path);
+    QxrdScriptEnginePtr eng(expt -> scriptEngine());
+
+    if (eng) {
+      expt -> printMessage(tr("Loading script file from %1").arg(path));
+      eng -> loadScript(path);
+    }
   }
 }
 

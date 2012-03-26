@@ -30,11 +30,25 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     int detectorType = expt -> get_DetectorType();
     //  int processorType = m_Experiment -> get_ProcessorType();
 
-    int runSpecServer = expt -> specServer() -> get_RunSpecServer();
-    int specServerPort = expt -> specServer() -> get_SpecServerPort();
+    int runSpecServer = 0;
+    int specServerPort = 0;
 
-    int runSimpleServer = expt -> simpleServer() -> get_RunSimpleServer();
-    int simpleServerPort = expt -> simpleServer() -> get_SimpleServerPort();
+    QxrdServerPtr srv(expt -> specServer());
+
+    if (srv) {
+      runSpecServer = srv -> get_RunSpecServer();
+      specServerPort = srv -> get_SpecServerPort();
+    }
+
+    int runSimpleServer = 0;
+    int simpleServerPort = 0;
+
+    QxrdSimpleServerPtr ssrv(expt -> simpleServer());
+
+    if (ssrv) {
+      runSimpleServer = ssrv -> get_RunSimpleServer();
+      simpleServerPort = ssrv -> get_SimpleServerPort();
+    }
 
     //  QStringList detectorTypes = QxrdAcquisitionThread::detectorTypeNames();
 
@@ -47,37 +61,46 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     connect(m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
     m_CurrentLogFile -> setText(expt->get_LogFileName());
 
-    connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
-    m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
-    m_SaveRawSubdir    -> setText  (proc->get_SaveRawSubdirectory());
+    if (proc) {
+      connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
+      m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
+      m_SaveRawSubdir    -> setText  (proc->get_SaveRawSubdirectory());
 
-    connect(m_SaveDarkBrowse, SIGNAL(clicked()), this, SLOT(saveDarkBrowse()));
-    m_SaveDarkInSubdir  -> setChecked(proc->get_SaveDarkInSubdirectory());
-    m_SaveDarkSubdir    -> setText  (proc->get_SaveDarkSubdirectory());
+      connect(m_SaveDarkBrowse, SIGNAL(clicked()), this, SLOT(saveDarkBrowse()));
+      m_SaveDarkInSubdir  -> setChecked(proc->get_SaveDarkInSubdirectory());
+      m_SaveDarkSubdir    -> setText  (proc->get_SaveDarkSubdirectory());
 
-    connect(m_SaveSubtractedBrowse, SIGNAL(clicked()), this, SLOT(saveSubtractedBrowse()));
-    m_SaveSubtractedInSubdir  -> setChecked(proc->get_SaveSubtractedInSubdirectory());
-    m_SaveSubtractedSubdir    -> setText  (proc->get_SaveSubtractedSubdirectory());
+      connect(m_SaveSubtractedBrowse, SIGNAL(clicked()), this, SLOT(saveSubtractedBrowse()));
+      m_SaveSubtractedInSubdir  -> setChecked(proc->get_SaveSubtractedInSubdirectory());
+      m_SaveSubtractedSubdir    -> setText  (proc->get_SaveSubtractedSubdirectory());
 
-    connect(m_SaveIntegratedBrowse, SIGNAL(clicked()), this, SLOT(saveIntegratedBrowse()));
-    m_SaveIntegratedInLogFile  -> setChecked(proc->get_SaveIntegratedData());
-    m_SaveIntegratedInSeparateFiles  -> setChecked(proc->get_SaveIntegratedInSeparateFiles());
-    m_SaveIntegratedInSubdir  -> setChecked(proc->get_SaveIntegratedInSubdirectory());
-    m_SaveIntegratedSubdir    -> setText  (proc->get_SaveIntegratedSubdirectory());
+      connect(m_SaveIntegratedBrowse, SIGNAL(clicked()), this, SLOT(saveIntegratedBrowse()));
+      m_SaveIntegratedInLogFile  -> setChecked(proc->get_SaveIntegratedData());
+      m_SaveIntegratedInSeparateFiles  -> setChecked(proc->get_SaveIntegratedInSeparateFiles());
+      m_SaveIntegratedInSubdir  -> setChecked(proc->get_SaveIntegratedInSubdirectory());
+      m_SaveIntegratedSubdir    -> setText  (proc->get_SaveIntegratedSubdirectory());
 
-    m_SaveOverflowFiles -> setChecked(proc->get_SaveOverflowFiles());
+      m_SaveOverflowFiles -> setChecked(proc->get_SaveOverflowFiles());
+    }
 
-    m_RunSpecServer -> setChecked(runSpecServer);
-    m_RunSimpleServer -> setChecked(runSimpleServer);
-    m_SpecServerPort -> setRange(-1,65535);
-    m_SpecServerPort -> setSpecialValueText(tr("Automatic"));
-    m_SpecServerPort -> setValue(specServerPort);
-    m_SimpleServerPort -> setRange(0,65535);
-    m_SimpleServerPort -> setValue(simpleServerPort);
+    if (srv) {
+      m_RunSpecServer -> setChecked(runSpecServer);
+      m_SpecServerPort -> setRange(-1,65535);
+      m_SpecServerPort -> setSpecialValueText(tr("Automatic"));
+      m_SpecServerPort -> setValue(specServerPort);
+    }
 
-    m_FileIndexWidth -> setValue(acq->get_FileIndexWidth());
-    m_FilePhaseWidth -> setValue(acq->get_FilePhaseWidth());
-    m_FileOverflowWidth -> setValue(acq->get_FileOverflowWidth());
+    if (ssrv) {
+      m_RunSimpleServer -> setChecked(runSimpleServer);
+      m_SimpleServerPort -> setRange(0,65535);
+      m_SimpleServerPort -> setValue(simpleServerPort);
+    }
+
+    if (acq) {
+      m_FileIndexWidth -> setValue(acq->get_FileIndexWidth());
+      m_FilePhaseWidth -> setValue(acq->get_FilePhaseWidth());
+      m_FileOverflowWidth -> setValue(acq->get_FileOverflowWidth());
+    }
   }
 }
 
@@ -162,34 +185,45 @@ void QxrdExperimentPreferencesDialog::accept()
   if (expt) {
     QxrdAcquisitionPtr acq = expt -> acquisition();
     QxrdDataProcessorPtr proc = expt->dataProcessor();
+    QxrdServerPtr srv(expt -> specServer());
+    QxrdSimpleServerPtr ssrv(expt -> simpleServer());
 
-    expt -> specServer() -> set_RunSpecServer(runSpecServer);
-    expt -> specServer() -> set_SpecServerPort(specServerPort);
-    expt -> simpleServer() -> set_RunSimpleServer(runSimpleServer);
-    expt -> simpleServer() -> set_SimpleServerPort(simpleServerPort);
+    if (srv) {
+      srv -> set_RunSpecServer(runSpecServer);
+      srv -> set_SpecServerPort(specServerPort);
+    }
 
-    proc -> set_SaveRawInSubdirectory(m_SaveRawInSubdir -> isChecked());
-    proc -> set_SaveRawSubdirectory  (m_SaveRawSubdir   -> text());
+    if (ssrv) {
+      ssrv -> set_RunSimpleServer(runSimpleServer);
+      ssrv -> set_SimpleServerPort(simpleServerPort);
+    }
 
-    proc -> set_SaveDarkInSubdirectory(m_SaveDarkInSubdir  -> isChecked());
-    proc -> set_SaveDarkSubdirectory  (m_SaveDarkSubdir    -> text());
+    if (proc) {
+      proc -> set_SaveRawInSubdirectory(m_SaveRawInSubdir -> isChecked());
+      proc -> set_SaveRawSubdirectory  (m_SaveRawSubdir   -> text());
 
-    proc -> set_SaveSubtractedInSubdirectory(m_SaveSubtractedInSubdir -> isChecked());
-    proc -> set_SaveSubtractedSubdirectory  (m_SaveSubtractedSubdir   -> text());
+      proc -> set_SaveDarkInSubdirectory(m_SaveDarkInSubdir  -> isChecked());
+      proc -> set_SaveDarkSubdirectory  (m_SaveDarkSubdir    -> text());
 
-    proc -> set_SaveIntegratedData(m_SaveIntegratedInLogFile  -> isChecked());
-    proc -> set_SaveIntegratedInSeparateFiles(m_SaveIntegratedInSeparateFiles -> isChecked());
-    proc -> set_SaveIntegratedInSubdirectory (m_SaveIntegratedInSubdir  -> isChecked());
-    proc -> set_SaveIntegratedSubdirectory   (m_SaveIntegratedSubdir    -> text());
+      proc -> set_SaveSubtractedInSubdirectory(m_SaveSubtractedInSubdir -> isChecked());
+      proc -> set_SaveSubtractedSubdirectory  (m_SaveSubtractedSubdir   -> text());
 
-    proc -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
+      proc -> set_SaveIntegratedData(m_SaveIntegratedInLogFile  -> isChecked());
+      proc -> set_SaveIntegratedInSeparateFiles(m_SaveIntegratedInSeparateFiles -> isChecked());
+      proc -> set_SaveIntegratedInSubdirectory (m_SaveIntegratedInSubdir  -> isChecked());
+      proc -> set_SaveIntegratedSubdirectory   (m_SaveIntegratedSubdir    -> text());
+
+      proc -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
+    }
 
     //  proc          -> set_OutputDirectory(m_CurrentOutputDirectory -> text());
     expt -> set_LogFileName    (m_CurrentLogFile -> text());
 
-    acq  -> set_FileIndexWidth(m_FileIndexWidth -> value());
-    acq  -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
-    acq  -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
+    if (acq) {
+      acq  -> set_FileIndexWidth(m_FileIndexWidth -> value());
+      acq  -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
+      acq  -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
+    }
   }
 
   QDialog::accept();

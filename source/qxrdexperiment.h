@@ -52,11 +52,11 @@ public:
   QxrdExperimentThreadWPtr experimentThread();
 
   QxrdAcquisitionThreadPtr acquisitionThread();
-  QxrdAcquisitionPtr acquisition() const;
+  QxrdAcquisitionWPtr acquisition() const;
   QxrdWindow *window();
   QxrdDataProcessorWPtr dataProcessor() const;
-  QxrdServerPtr specServer();
-  QxrdSimpleServerPtr simpleServer();
+  QxrdServerWPtr specServer();
+  QxrdSimpleServerWPtr simpleServer();
 
   FILE* logFile();
   void newLogFile(QString path);
@@ -65,8 +65,9 @@ public:
   void newScanFile(QString path);
 
   QxrdSettingsSaverPtr settingsSaver();
+  QxrdScriptEngineWPtr scriptEngine();
+
 public slots:
-  QxrdScriptEnginePtr scriptEngine();
 
   void executeCommand(QString cmd);
 
@@ -123,19 +124,19 @@ private:
   QxrdWindowSettingsPtr           m_WindowSettings;
   QxrdWindow                     *m_Window;
   QxrdServerThreadPtr             m_ServerThread;
-  QxrdServerPtr                   m_Server;
+  QxrdServerWPtr                  m_Server;
   QxrdSimpleServerThreadPtr       m_SimpleServerThread;
-  QxrdSimpleServerPtr             m_SimpleServer;
+  QxrdSimpleServerWPtr            m_SimpleServer;
   QxrdDataProcessorThreadPtr      m_DataProcessorThread;
-  QxrdDataProcessorPtr            m_DataProcessor;
+  QxrdDataProcessorWPtr           m_DataProcessor;
   QxrdAcquisitionThreadPtr        m_AcquisitionThread;
-  QxrdAcquisitionPtr              m_Acquisition;
+  QxrdAcquisitionWPtr             m_Acquisition;
   QxrdDetectorThreadPtr           m_DetectorThread;
-  QxrdDetectorPtr                 m_Detector;
+  QxrdDetectorWPtr                m_Detector;
   QxrdFileSaverThreadPtr          m_FileSaverThread;
-  QxrdFileSaverPtr                m_FileSaver;
+  QxrdFileSaverWPtr               m_FileSaver;
   QxrdScriptEngineThreadPtr       m_ScriptEngineThread;
-  QxrdScriptEnginePtr             m_ScriptEngine;
+  QxrdScriptEngineWPtr            m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
   QMutex                          m_LogFileMutex;

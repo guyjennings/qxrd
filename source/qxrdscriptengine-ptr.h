@@ -6,5 +6,6 @@
 class QxrdScriptEngine;
 
 typedef QSharedPointer<QxrdScriptEngine> QxrdScriptEnginePtr;
+typedef QWeakPointer<QxrdScriptEngine>   QxrdScriptEngineWPtr;
 
 #endif // QXRDSCRIPTENGINE_PTR_H

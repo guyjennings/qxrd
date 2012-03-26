@@ -6,5 +6,6 @@
 class QxrdServer;
 
 typedef QSharedPointer<QxrdServer> QxrdServerPtr;
+typedef QWeakPointer<QxrdServer>   QxrdServerWPtr;
 
 #endif
