@@ -108,7 +108,6 @@ HEADERS += spec_server.h \
     qcepdebug.h \
     qxrdacquisitionextrainputsplot.h \
     qxrddetector.h \
-    qxrddetectorperkinelmer.h \
     qxrddetectorpilatus.h \
     qxrddetectorsimulated.h \
     qxrddetectorthread.h \
@@ -127,7 +126,6 @@ SOURCES += qspecserver.cpp \
     qcepdebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
     qxrddetector.cpp \
-    qxrddetectorperkinelmer.cpp \
     qxrddetectorpilatus.cpp \
     qxrddetectorsimulated.cpp \
     qxrddetectorthread.cpp \
