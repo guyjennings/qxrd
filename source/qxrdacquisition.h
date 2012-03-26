@@ -188,9 +188,6 @@ protected:
   void endAcquisition();
   void shutdownAcquisition();
 
-  //  void acquisitionError(const char *fn, int n);
-  void acquisitionError(const char *fn, int ln, int n);
-
   void getFileBaseAndName(QString filePattern, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
 protected slots:
@@ -331,7 +328,7 @@ private:
 
   QxrdSynchronizedAcquisitionPtr  m_SynchronizedAcquisition;
   QxrdAcquisitionTriggerThreadPtr m_AcquisitionTriggerThread;
-  QxrdAcquisitionTriggerPtr       m_AcquisitionTrigger;
+  QxrdAcquisitionTriggerWPtr      m_AcquisitionTrigger;
   QxrdAcquisitionExtraInputsPtr   m_AcquisitionExtraInputs;
 
   QxrdExperimentWPtr     m_Experiment;

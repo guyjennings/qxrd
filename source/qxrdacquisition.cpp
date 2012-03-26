@@ -58,7 +58,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL),
     m_AcquisitionTriggerThread(NULL),
-    m_AcquisitionTrigger(NULL),
+    m_AcquisitionTrigger(),
     m_AcquisitionExtraInputs(NULL),
     m_Experiment(doc),
     m_Window(),
@@ -182,8 +182,10 @@ void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
     m_SynchronizedAcquisition->writeSettings(settings, section+"/sync");
   }
 
-  if (m_AcquisitionTrigger) {
-    m_AcquisitionTrigger->writeSettings(settings, section+"/trigger");
+  QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
+
+  if (trig) {
+    trig->writeSettings(settings, section+"/trigger");
   }
 
   if (m_AcquisitionExtraInputs) {
@@ -201,8 +203,10 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
     m_SynchronizedAcquisition->readSettings(settings, section+"/sync");
   }
 
-  if (m_AcquisitionTrigger) {
-    m_AcquisitionTrigger->readSettings(settings, section+"/trigger");
+  QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
+
+  if (trig) {
+    trig->readSettings(settings, section+"/trigger");
   }
 
   if (m_AcquisitionExtraInputs) {
@@ -590,13 +594,6 @@ void QxrdAcquisition::processDarkImage(QString filePattern, int fileIndex, QxrdI
 
 //  emit criticalMessage(tr("Acquisition Error %1").arg(n));
 //}
-
-void QxrdAcquisition::acquisitionError(const char *fn, int ln, int n)
-{
-  cancel();
-
-  criticalMessage(tr("Acquisition Error %1 at line %2 in file %3").arg(n).arg(ln).arg(fn));
-}
 
 QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindow *win)
 {
