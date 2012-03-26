@@ -7,6 +7,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdnidaqplugininterface-ptr.h"
+#include "qxrdnidaqplugininterface.h"
 #include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
 #include "qxrdacquisitionextrainputschannel.h"

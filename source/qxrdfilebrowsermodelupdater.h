@@ -8,6 +8,7 @@
 #include <QFileInfo>
 #include <QVector>
 #include "qxrdfilebrowsermodel-ptr.h"
+#include "qxrdfilebrowsermodel.h"
 
 class QxrdFileBrowserModelUpdater : public QObject
 {

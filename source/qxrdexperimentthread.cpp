@@ -14,9 +14,9 @@ QxrdExperimentThread::QxrdExperimentThread(QxrdExperimentKind kind, QString path
   QxrdThread(),
   m_ExperimentKind(kind),
   m_ExperimentPath(path),
-  m_Experiment(NULL),
   m_Application(app),
-  m_Settings(settings)
+  m_Settings(settings),
+  m_Experiment(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperimentThread::QxrdExperimentThread(%p)\n", this);

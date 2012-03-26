@@ -6,6 +6,7 @@
 #include <QMutex>
 #include "qcepproperty.h"
 #include "qxrdnidaqplugininterface-ptr.h"
+#include "qxrdnidaqplugininterface.h"
 #include "qxrdacquisition-ptr.h"
 
 class QxrdSynchronizedAcquisition : public QObject

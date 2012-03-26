@@ -7,8 +7,6 @@
 QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
     int chnum, QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra) :
   QObject(),
-  m_Experiment(doc),
-  m_ExtraInputs(xtra),
   m_ChannelNumber(QxrdSettingsSaverPtr(), this, "channelNumber", chnum, "Extra Input Channel Number"),
   m_Enabled(saver, this, "enabled", 1, "Enabled?"),
   m_Plotted(saver, this, "plotted", 1, "Plotted?"),
@@ -24,7 +22,9 @@ QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
                                  "i.e. Negative values mean times after end of exposure"),
   m_PhysicalChannel(QxrdSettingsSaverPtr(), this, "physicalChannel", 0, "Physical Channel Number"),
   m_Value(QxrdSettingsSaverWPtr(), this, "value", 0.0, "Current Value of Channel"),
-  m_Waveform(QxrdSettingsSaverWPtr(), this, "waveform", QcepDoubleVector(), "Waveform on Channel")
+  m_Waveform(QxrdSettingsSaverWPtr(), this, "waveform", QcepDoubleVector(), "Waveform on Channel"),
+  m_Experiment(doc),
+  m_ExtraInputs(xtra)
 {
   setObjectName(tr("extraChannel(%1)").arg(chnum));
 

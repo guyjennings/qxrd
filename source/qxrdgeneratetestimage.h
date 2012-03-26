@@ -9,6 +9,7 @@
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdallocator-ptr.h"
 #include "qxrddetectorgeometry-ptr.h"
+#include "qxrddetectorgeometry.h"
 
 class QxrdGenerateTestImage : public QObject
 {
