@@ -708,8 +708,10 @@ void QxrdDetectorPerkinElmer::onEndFrameCallback()
     QxrdAcquisitionPtr acq(m_Acquisition);
 
     if (plugin && acq) {
-      if (acq->synchronizedAcquisition()) {
-        acq->synchronizedAcquisition()->acquiredFrameAvailable(m_Counter);
+      QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
+
+      if (sync) {
+        sync->acquiredFrameAvailable(m_Counter);
       }
 
       //  printf("syncAcq->acquiredFrameAvailable took %d msec\n", tic.restart());
