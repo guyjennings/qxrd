@@ -5,12 +5,35 @@
 #include "qxrddetectorsimulated.h"
 #include "qxrddetectorfilewatcher.h"
 
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
+
+#ifdef HAVE_PERKIN_ELMER
+static int g_PEAvailable = false;
+#endif
+
 QxrdDetectorThread::QxrdDetectorThread(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
   QxrdThread(),
   m_Experiment(expt),
   m_Acquisition(acq),
   m_Detector()
 {
+#ifdef HAVE_PERKIN_ELMER
+  HINSTANCE xisllib;
+
+  xisllib = LoadLibrary(L"XISL.dll");
+
+  if (xisllib == NULL) {
+    QxrdExperimentPtr exp(m_Experiment);
+
+    if (exp) {
+      exp->criticalMessage("XISL library is not available - cannot use PE detector");
+    }
+  } else {
+    g_PEAvailable = true;
+  }
+#endif
 }
 
 QString QxrdDetectorThread::detectorKindName(int detectorKind)

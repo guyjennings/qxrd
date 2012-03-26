@@ -44,7 +44,7 @@ QxrdAcquisitionPerkinElmer::QxrdAcquisitionPerkinElmer(QxrdSettingsSaverPtr save
                                                        QxrdExperimentWPtr doc,
                                                        QxrdDataProcessorWPtr proc,
                                                        QxrdAllocatorWPtr allocator)
-  : QxrdAcquisition(PerkinElmerDetector, saver, doc, proc, allocator),
+  : QxrdAcquisition(saver, doc, proc, allocator),
     m_Mutex(QMutex::Recursive),
     m_BufferSize(0),
     m_StartupDelayed(0),
@@ -462,7 +462,7 @@ void QxrdAcquisitionPerkinElmer::onEndFrame(int counter, unsigned int n1, unsign
 //  tic.start();
 
   if (checkPluginAvailable()) {
-    QxrdInt16ImageDataPtr image = QxrdAllocator::newInt16Image(m_Allocator,
+    QxrdInt16ImageDataPtr image = QxrdAllocator::newInt16Image(allocator(),
                                                                QxrdAllocator::AllocateFromReserve,
                                                                get_NCols(), get_NRows());
 

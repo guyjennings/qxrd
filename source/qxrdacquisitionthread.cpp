@@ -9,15 +9,7 @@
 #include <QVariant>
 #include <QMetaObject>
 
-#ifdef Q_OS_WIN32
-#include <windows.h>
-#endif
-
 //static int g_DetectorType = -1;
-
-#ifdef HAVE_PERKIN_ELMER
-static int g_PEAvailable = false;
-#endif
 
 QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaverWPtr saver,
                                              QxrdExperimentWPtr doc,
@@ -35,22 +27,6 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaverWPtr saver,
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionThread::QxrdAcquisitionThread(%p)\n", this);
   }
-
-#ifdef HAVE_PERKIN_ELMER
-  HINSTANCE xisllib;
-
-  xisllib = LoadLibrary(L"XISL.dll");
-
-  if (xisllib == NULL) {
-    QxrdExperimentPtr exp(m_Experiment);
-
-    if (exp) {
-      exp->criticalMessage("XISL library is not available - cannot use PE detector");
-    }
-  } else {
-    g_PEAvailable = true;
-  }
-#endif
 }
 
 QxrdAcquisitionThread::~QxrdAcquisitionThread()
