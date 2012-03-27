@@ -94,30 +94,32 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     QLabel *val = new QLabel();
     ch->prop_Value()->linkTo(val);
 
+    int c = 0;
+
     if (m_ChannelsInRows) {
-      m_ExtraInputsTable->setCellWidget(i, 0, cb);
-      m_ExtraInputsTable->setCellWidget(i, 1, cb2);
-      m_ExtraInputsTable->setCellWidget(i, 2, le);
-      m_ExtraInputsTable->setCellWidget(i, 3, md);
-      m_ExtraInputsTable->setCellWidget(i, 4, wf);
-      m_ExtraInputsTable->setCellWidget(i, 5, min);
-      m_ExtraInputsTable->setCellWidget(i, 6, max);
-      m_ExtraInputsTable->setCellWidget(i, 7, stt);
-      m_ExtraInputsTable->setCellWidget(i, 8, end);
-      m_ExtraInputsTable->setCellWidget(i, 9, phy);
-      m_ExtraInputsTable->setCellWidget(i, 10, val);
+      m_ExtraInputsTable->setCellWidget(i, c++, cb);
+      m_ExtraInputsTable->setCellWidget(i, c++, cb2);
+      m_ExtraInputsTable->setCellWidget(i, c++, le);
+      m_ExtraInputsTable->setCellWidget(i, c++, md);
+      m_ExtraInputsTable->setCellWidget(i, c++, wf);
+      m_ExtraInputsTable->setCellWidget(i, c++, min);
+      m_ExtraInputsTable->setCellWidget(i, c++, max);
+      m_ExtraInputsTable->setCellWidget(i, c++, stt);
+      m_ExtraInputsTable->setCellWidget(i, c++, end);
+      m_ExtraInputsTable->setCellWidget(i, c++, phy);
+      m_ExtraInputsTable->setCellWidget(i, c++, val);
     } else {
-      m_ExtraInputsTable->setCellWidget(0, i, cb);
-      m_ExtraInputsTable->setCellWidget(1, i, cb2);
-      m_ExtraInputsTable->setCellWidget(2, i, le);
-      m_ExtraInputsTable->setCellWidget(3, i, md);
-      m_ExtraInputsTable->setCellWidget(4, i, wf);
-      m_ExtraInputsTable->setCellWidget(5, i, min);
-      m_ExtraInputsTable->setCellWidget(6, i, max);
-      m_ExtraInputsTable->setCellWidget(7, i, stt);
-      m_ExtraInputsTable->setCellWidget(8, i, end);
-      m_ExtraInputsTable->setCellWidget(9, i, phy);
-      m_ExtraInputsTable->setCellWidget(10, i, val);
+      m_ExtraInputsTable->setCellWidget(c++, i, cb);
+      m_ExtraInputsTable->setCellWidget(c++, i, cb2);
+      m_ExtraInputsTable->setCellWidget(c++, i, le);
+      m_ExtraInputsTable->setCellWidget(c++, i, md);
+      m_ExtraInputsTable->setCellWidget(c++, i, wf);
+      m_ExtraInputsTable->setCellWidget(c++, i, min);
+      m_ExtraInputsTable->setCellWidget(c++, i, max);
+      m_ExtraInputsTable->setCellWidget(c++, i, stt);
+      m_ExtraInputsTable->setCellWidget(c++, i, end);
+      m_ExtraInputsTable->setCellWidget(c++, i, phy);
+      m_ExtraInputsTable->setCellWidget(c++, i, val);
     }
   }
 }
