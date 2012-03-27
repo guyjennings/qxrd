@@ -316,7 +316,7 @@ void   QxrdNIDAQPlugin::setAnalogWaveform(int chan, double rate, double wfm[], i
     }
   }
 
-  printf("%d samples written\n", nsampwrt);
+//  printf("%d samples written\n", nsampwrt);
 
 Error:
   return;
