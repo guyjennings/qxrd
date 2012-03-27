@@ -324,6 +324,7 @@ public:
 public slots:
   void setValue(QcepDoubleList val, int index);
   void setValue(QcepDoubleList val);
+  void incValue(QcepDoubleList step);
   void setDefaultValue(QcepDoubleList val);
   void resetValue();
   void clear();
@@ -349,6 +350,7 @@ public:
 public slots:
   void setValue(QcepDoubleVector val, int index);
   void setValue(QcepDoubleVector val);
+  void incValue(QcepDoubleVector step);
   void setDefaultValue(QcepDoubleVector val);
   void resetValue();
   void clear();
@@ -374,6 +376,7 @@ public:
 public slots:
   void setValue(QcepIntList val, int index);
   void setValue(QcepIntList val);
+  void incValue(QcepIntList step);
   void setDefaultValue(QcepIntList val);
   void resetValue();
   void clear();

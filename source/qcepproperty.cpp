@@ -1244,6 +1244,30 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val, int index)
   }
 }
 
+void QcepDoubleListProperty::incValue(QcepDoubleList step)
+{
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
+    printMessage(tr("%1: QcepDoubleListProperty::incValue(QcepDoubleList %2...)")
+                 .arg(name()).arg(step.value(0)));
+  }
+
+  {
+    QMutexLocker lock(&m_Mutex);
+
+    for (int i=0; i<m_Value.count(); i++) {
+      m_Value[i] += step.value(i);
+    }
+
+    QxrdSettingsSaverPtr saver(m_Saver);
+
+    if (saver) {
+      saver->changed(this);
+    }
+
+    emit valueChanged(m_Value, incIndex(1));
+  }
+}
+
 void QcepDoubleListProperty::clear()
 {
   QMutexLocker lock(&m_Mutex);
@@ -1355,6 +1379,30 @@ void QcepDoubleVectorProperty::setValue(QcepDoubleVector val, int index)
   }
 }
 
+void QcepDoubleVectorProperty::incValue(QcepDoubleVector step)
+{
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
+    printMessage(tr("%1: QcepDoubleVectorProperty::incValue(QcepDoubleList %2...)")
+                 .arg(name()).arg(step.value(0)));
+  }
+
+  {
+    QMutexLocker lock(&m_Mutex);
+
+    for (int i=0; i<m_Value.count(); i++) {
+      m_Value[i] += step.value(i);
+    }
+
+    QxrdSettingsSaverPtr saver(m_Saver);
+
+    if (saver) {
+      saver->changed(this);
+    }
+
+    emit valueChanged(m_Value, incIndex(1));
+  }
+}
+
 void QcepDoubleVectorProperty::clear()
 {
   QMutexLocker lock(&m_Mutex);
@@ -1463,6 +1511,30 @@ void QcepIntListProperty::setValue(QcepIntList val, int index)
 
   if (index == this->index()) {
     setValue(val);
+  }
+}
+
+void QcepIntListProperty::incValue(QcepIntList step)
+{
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
+    printMessage(tr("%1: QcepIntListProperty::incValue(QcepDoubleList %2...)")
+                 .arg(name()).arg(step.value(0)));
+  }
+
+  {
+    QMutexLocker lock(&m_Mutex);
+
+    for (int i=0; i<m_Value.count(); i++) {
+      m_Value[i] += step.value(i);
+    }
+
+    QxrdSettingsSaverPtr saver(m_Saver);
+
+    if (saver) {
+      saver->changed(this);
+    }
+
+    emit valueChanged(m_Value, incIndex(1));
   }
 }
 
