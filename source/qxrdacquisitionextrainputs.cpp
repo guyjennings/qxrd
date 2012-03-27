@@ -13,6 +13,7 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr sav
   m_Skipping(QxrdSettingsSaverPtr(), this, "skipping", 0, "Skipping initial readout?"),
   m_SampleRate(saver, this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
   m_AcquireDelay(saver, this, "acquireDelay", 0.107, "Delay between exposure end and Image available in QXRD"),
+  m_ExposureTime(QxrdSettingsSaverPtr(), this, "exposureTime", 0.107, "Exposure time (in seconds)"),
   m_Experiment(doc),
   m_Acquisition(acq),
   m_Saver(saver),
@@ -87,6 +88,33 @@ void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString sect
   settings->endArray();
 }
 
+void QxrdAcquisitionExtraInputs::printMessage(QString msg, QDateTime ts)
+{
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    acq->printMessage(msg, ts);
+  }
+}
+
+void QxrdAcquisitionExtraInputs::criticalMessage(QString msg, QDateTime ts)
+{
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    acq->criticalMessage(msg);
+  }
+}
+
+void QxrdAcquisitionExtraInputs::statusMessage(QString msg, QDateTime ts)
+{
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    acq->statusMessage(msg);
+  }
+}
+
 void QxrdAcquisitionExtraInputs::initialize()
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
@@ -124,6 +152,7 @@ void QxrdAcquisitionExtraInputs::initialize()
                                               channelMinimum,
                                               channelMaximum) == 0) {
       set_Skipping(true);
+      set_ExposureTime(acq->get_ExposureTime());
 
       QTimer::singleShot(1000*(get_AcquireDelay() + acq->get_ExposureTime() + 1.0),
                          this, SLOT(timerDone()));
@@ -197,7 +226,7 @@ void QxrdAcquisitionExtraInputs::acquire()
 void QxrdAcquisitionExtraInputs::logToImage(QxrdInt16ImageDataPtr img)
 {
   if (get_Enabled() && img) {
-    img->set_Normalization(evaluateChannels());
+    img->set_ExtraInputs(evaluateChannels());
   }
 }
 
@@ -216,9 +245,17 @@ QcepDoubleList QxrdAcquisitionExtraInputs::evaluateChannels()
 {
   QcepDoubleList res;
 
-  foreach (QxrdAcquisitionExtraInputsChannelPtr chanp, m_Channels) {
+  for(int i=0; i<m_Channels.count(); i++) {
+    QxrdAcquisitionExtraInputsChannelPtr chanp = m_Channels[i];
+
     if (chanp->get_Enabled()) {
-      res.append(chanp->evaluateChannel());
+      double val = chanp->evaluateChannel();
+
+      if (qcepDebug(DEBUG_EXTRAINPUTS)) {
+        printMessage(tr("QxrdAcquisitionExtraInputs::evaluateChannels [%1] = %2").arg(i).arg(val));
+      }
+
+      res.append(val);
     }
   }
 

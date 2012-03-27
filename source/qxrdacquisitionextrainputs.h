@@ -30,6 +30,10 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+
 signals:
   void newDataAvailable();
 
@@ -64,6 +68,9 @@ public:
 
   Q_PROPERTY(double acquireDelay READ get_AcquireDelay WRITE set_AcquireDelay)
   QCEP_DOUBLE_PROPERTY(AcquireDelay)
+
+  Q_PROPERTY(double exposureTime READ get_ExposureTime WRITE set_ExposureTime STORED false)
+  QCEP_DOUBLE_PROPERTY(ExposureTime)
 
 private:
   mutable QMutex              m_Mutex;
