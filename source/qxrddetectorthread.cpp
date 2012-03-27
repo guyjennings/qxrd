@@ -16,6 +16,8 @@
 #include "qxrddetectorfilewatcher.h"
 #include "qxrddetectorsimulated.h"
 
+#include <stdio.h>
+
 QxrdDetectorThread::QxrdDetectorThread(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
   QxrdThread(),
   m_Experiment(expt),
