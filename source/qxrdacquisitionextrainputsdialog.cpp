@@ -297,10 +297,12 @@ void QxrdAcquisitionExtraInputsDialog::updateWaveforms()
 
       if (chanp && chanp->get_Enabled() && chanp->get_Plotted()) {
         m_AcquisitionWaveforms->plotChannel(i,
+                                            chanp->startIndex(),
+                                            chanp->endIndex(),
                                             xtra->readXChannel(),
                                             xtra->readChannel(i));
       } else {
-        m_AcquisitionWaveforms->plotChannel(i, QcepDoubleVector(), QcepDoubleVector());
+        m_AcquisitionWaveforms->plotChannel(i, 0, 0, QcepDoubleVector(), QcepDoubleVector());
       }
     }
 

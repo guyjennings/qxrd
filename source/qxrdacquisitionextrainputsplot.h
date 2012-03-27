@@ -16,10 +16,11 @@ signals:
   
 public slots:
   void setNChannels(int nch);
-  void plotChannel(int ch, QcepDoubleVector x, QcepDoubleVector y);
+  void plotChannel(int ch, int i0, int i1, QcepDoubleVector x, QcepDoubleVector y);
 
 private:
-  QVector<QwtPlotCurve*> m_Channels;
+  QVector<QwtPlotCurve*> m_RawData;
+  QVector<QwtPlotCurve*> m_Selections;
   QVector<QColor>        m_Colors;
 };
 
