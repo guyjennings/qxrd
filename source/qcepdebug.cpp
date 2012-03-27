@@ -25,6 +25,7 @@ const char* gDebugStrings[] = {
   "Integrator Operation",
   "Object Constructors/Destructors",
   "Acquisition Triggering",
+  "Extra Inputs",
   NULL
 };
 
