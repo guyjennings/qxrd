@@ -434,6 +434,10 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
 
         *dst++ = val;
       }
+
+      accum->set_Normalization(image->get_Normalization());
+      accum->set_ExtraInputs(image->get_ExtraInputs());
+      accum->set_SummedExposures(1);
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
         printMessage(tr("Frame %1 summed").arg(nsummed));
@@ -450,9 +454,11 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
 
         *dst++ += val;
       }
-    }
 
-    accum -> prop_SummedExposures() -> incValue(1);
+      accum->prop_Normalization()   -> incValue(image->get_Normalization());
+      accum->prop_ExtraInputs()     -> incValue(image->get_ExtraInputs());
+      accum->prop_SummedExposures() -> incValue(1);
+    }
   }
 }
 
@@ -1004,6 +1010,14 @@ QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
 
   QxrdInt16ImageDataPtr res = m_AcquiredImages.dequeue();
 
+  if (qcepDebug(DEBUG_EXTRAINPUTS)) {
+    QcepDoubleList extra = res->get_ExtraInputs();
+
+    for (int i=0; i<extra.count(); i++) {
+      printMessage(tr("QxrdAcquisition::acquireFrame : Extra Inputs[%1] = %2").arg(i).arg(extra[i]));
+    }
+  }
+
   return res;
 }
 
@@ -1031,6 +1045,16 @@ void QxrdAcquisition::enqueueAcquiredFrame(QxrdInt16ImageDataPtr img)
   if (m_AcquisitionExtraInputs) {
     m_AcquisitionExtraInputs->acquire();
     m_AcquisitionExtraInputs->logToImage(img);
+  }
+
+  if (qcepDebug(DEBUG_EXTRAINPUTS)) {
+    QcepDoubleList extra = img->get_ExtraInputs();
+
+    printMessage(tr("QxrdAcquisition::enqueueAcquiredFrame : %1 Extra Inputs").arg(extra.count()));
+
+    for (int i=0; i<extra.count(); i++) {
+      printMessage(tr("QxrdAcquisition::enqueueAcquiredFrame : Extra Inputs[%1] = %2").arg(i).arg(extra[i]));
+    }
   }
 
   m_AcquiredImages.enqueue(img);
