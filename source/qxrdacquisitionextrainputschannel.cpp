@@ -63,6 +63,54 @@ QVector<double> QxrdAcquisitionExtraInputsChannel::readChannel()
   return QVector<double>();
 }
 
+int QxrdAcquisitionExtraInputsChannel::startIndex()
+{
+  int res = 0;
+
+  QxrdAcquisitionExtraInputsPtr xtra(m_ExtraInputs);
+
+  if (xtra) {
+    QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
+
+    if (nidaq) {
+      int nSamples = nidaq->countContinuousInput();
+      int startOffset = xtra->get_SampleRate()*(0.1 + get_Start());
+
+      if (startOffset > nSamples) {
+        res = nSamples;
+      } else if (startOffset > 0) {
+        res = startOffset;
+      }
+    }
+  }
+
+  return res;
+}
+
+int QxrdAcquisitionExtraInputsChannel::endIndex()
+{
+  int res = 0;
+
+  QxrdAcquisitionExtraInputsPtr xtra(m_ExtraInputs);
+
+  if (xtra) {
+    QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
+
+    if (nidaq) {
+      int nSamples = nidaq->countContinuousInput();
+      int endOffset = xtra->get_SampleRate()*(0.1 + xtra->get_ExposureTime() - get_End());
+
+      if (endOffset > nSamples) {
+        res = nSamples;
+      } else if (endOffset > 0) {
+        res = endOffset;
+      }
+    }
+  }
+
+  return res;
+}
+
 double          QxrdAcquisitionExtraInputsChannel::evaluateChannel()
 {
   int mode = get_Mode();
@@ -87,10 +135,12 @@ double          QxrdAcquisitionExtraInputsChannel::sumChannel()
 {
   QVector<double> res = readChannel();
 
-  int n=res.count();
   double sum=0;
 
-  for(int i=0; i<n; i++) {
+  int i0 = startIndex();
+  int i1 = endIndex();
+
+  for(int i=i0; i<i1; i++) {
     sum += res[i];
   }
 
@@ -101,11 +151,15 @@ double          QxrdAcquisitionExtraInputsChannel::averageChannel()
 {
   QVector<double> res = readChannel();
 
-  int n=res.count();
+  double n=0;
   double sum=0;
 
-  for(int i=0; i<n; i++) {
+  int i0 = startIndex();
+  int i1 = endIndex();
+
+  for(int i=i0; i<i1; i++) {
     sum += res[i];
+    n   += 1;
   }
 
   return (n>0 ? sum/n : 0);
@@ -115,13 +169,15 @@ double          QxrdAcquisitionExtraInputsChannel::maximumChannel()
 {
   QVector<double> res = readChannel();
 
-  int n=res.count();
   double max=0;
 
-  for(int i=0; i<n; i++) {
+  int i0 = startIndex();
+  int i1 = endIndex();
+
+  for(int i=i0; i<i1; i++) {
     double v=res[i];
 
-    if (i == 0) {
+    if (i == i0) {
       max = v;
     } else {
       if (v > max) {
@@ -137,13 +193,15 @@ double          QxrdAcquisitionExtraInputsChannel::minimumChannel()
 {
   QVector<double> res = readChannel();
 
-  int n=res.count();
   double min=0;
 
-  for(int i=0; i<n; i++) {
+  int i0 = startIndex();
+  int i1 = endIndex();
+
+  for(int i=i0; i<i1; i++) {
     double v=res[i];
 
-    if (i == 0) {
+    if (i == i0) {
       min = v;
     } else {
       if (v < min) {

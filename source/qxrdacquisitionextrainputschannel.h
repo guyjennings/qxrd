@@ -26,6 +26,8 @@ public slots:
   double          averageChannel();
   double          maximumChannel();
   double          minimumChannel();
+  int             startIndex();
+  int             endIndex();
 
 public:
   enum {
