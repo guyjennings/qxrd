@@ -577,6 +577,11 @@ Error:
   return error;
 }
 
+int QxrdNIDAQPlugin::countContinuousInput()
+{
+  return m_NContinuousSamples;
+}
+
 int QxrdNIDAQPlugin::readContinuousInput()
 {
   int error = 0;

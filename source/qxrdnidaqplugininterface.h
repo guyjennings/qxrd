@@ -40,6 +40,7 @@ public:
                                      QStringList chans,
                                      QVector<double> minVals,
                                      QVector<double> maxVals) = 0;
+  virtual int countContinuousInput() = 0;
   virtual int readContinuousInput() = 0;
   virtual QVector<double> readContinuousInputChannel(int ch) = 0;
   virtual void finishContinuousInput() = 0;

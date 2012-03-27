@@ -57,6 +57,7 @@ public slots:
                                      QStringList chans,
                                      QVector<double> minVals,
                                      QVector<double> maxVals);
+  virtual int countContinuousInput();
   virtual int readContinuousInput();
   virtual QVector<double> readContinuousInputChannel(int ch);
   virtual void finishContinuousInput();
