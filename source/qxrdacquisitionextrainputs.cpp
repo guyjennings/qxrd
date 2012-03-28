@@ -68,6 +68,8 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString secti
   }
 
   settings->endArray();
+
+  reinitialize();
 }
 
 void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString section)
