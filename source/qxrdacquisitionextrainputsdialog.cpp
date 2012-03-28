@@ -6,8 +6,9 @@
 #include <QLineEdit>
 #include <QMessageBox>
 
-QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QWidget *parent, QxrdAcquisitionWPtr acq) :
+QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisitionExtraInputsDialogSettingsWPtr set, QWidget *parent, QxrdAcquisitionWPtr acq) :
   QDockWidget(parent),
+  m_Settings(set),
   m_Acquisition(acq),
   m_AcquisitionExtraInputs(),
   m_ChannelsInRows(0)
@@ -36,7 +37,11 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QWidget *pare
     }
   }
 
-  m_AcquisitionWaveforms -> init(QxrdPlotSettingsWPtr());
+  QxrdAcquisitionExtraInputsDialogSettingsPtr setg(m_Settings);
+
+  if (setg) {
+    m_AcquisitionWaveforms -> init(setg->plotSettings());
+  }
 
   updateUi();
 }

@@ -9,6 +9,7 @@
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdinfodialogsettings.h"
 #include "qxrdslicedialogsettings.h"
+#include "qxrdacquisitionextrainputsdialogsettings.h"
 
 class QxrdWindowSettings : public QObject
 {
@@ -27,28 +28,29 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
-  QxrdImagePlotSettingsWPtr              imagePlotSettings();
-  QxrdCenterFinderPlotSettingsWPtr       centerFinderPlotSettings();
-  QxrdPlotSettingsWPtr                   integratorPlotSettings();
-  QxrdFileBrowserSettingsWPtr            inputFileBrowserSettings();
-  QxrdFileBrowserSettingsWPtr            outputFileBrowserSettings();
-  QxrdHistogramDialogSettingsWPtr        histogramDialogSettings();
-  QxrdSliceDialogSettingsWPtr            sliceDialogSettings();
-  QxrdInfoDialogSettingsWPtr             infoDialogSettings();
-
+  QxrdImagePlotSettingsWPtr                    imagePlotSettings();
+  QxrdCenterFinderPlotSettingsWPtr             centerFinderPlotSettings();
+  QxrdPlotSettingsWPtr                         integratorPlotSettings();
+  QxrdFileBrowserSettingsWPtr                  inputFileBrowserSettings();
+  QxrdFileBrowserSettingsWPtr                  outputFileBrowserSettings();
+  QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
+  QxrdSliceDialogSettingsWPtr                  sliceDialogSettings();
+  QxrdInfoDialogSettingsWPtr                   infoDialogSettings();
+  QxrdAcquisitionExtraInputsDialogSettingsWPtr acquisitionExtraInputsDialogSettings();
 signals:
   
 public slots:
   
 private:
-  QxrdImagePlotSettingsPtr               m_ImagePlotSettings;
-  QxrdCenterFinderPlotSettingsPtr        m_CenterFinderPlotSettings;
-  QxrdPlotSettingsPtr                    m_IntegratorPlotSettings;
-  QxrdFileBrowserSettingsPtr             m_InputFileBrowserSettings;
-  QxrdFileBrowserSettingsPtr             m_OutputFileBrowserSettings;
-  QxrdHistogramDialogSettingsPtr         m_HistogramDialogSettings;
-  QxrdSliceDialogSettingsPtr             m_SliceDialogSettings;
-  QxrdInfoDialogSettingsPtr              m_InfoDialogSettings;
+  QxrdImagePlotSettingsPtr                     m_ImagePlotSettings;
+  QxrdCenterFinderPlotSettingsPtr              m_CenterFinderPlotSettings;
+  QxrdPlotSettingsPtr                          m_IntegratorPlotSettings;
+  QxrdFileBrowserSettingsPtr                   m_InputFileBrowserSettings;
+  QxrdFileBrowserSettingsPtr                   m_OutputFileBrowserSettings;
+  QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;
+  QxrdSliceDialogSettingsPtr                   m_SliceDialogSettings;
+  QxrdInfoDialogSettingsPtr                    m_InfoDialogSettings;
+  QxrdAcquisitionExtraInputsDialogSettingsPtr  m_AcquisitionExtraInputsDialogSettings;
 };
 
 typedef QSharedPointer<QxrdWindowSettings> QxrdWindowSettingsPtr;

@@ -5,13 +5,14 @@
 #include "qxrdacquisition.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "ui_qxrdacquisitionextrainputsdialog.h"
+#include "qxrdacquisitionextrainputsdialogsettings.h"
 
 class QxrdAcquisitionExtraInputsDialog : public QDockWidget, public Ui::QxrdAcquisitionExtraInputsDialog
 {
   Q_OBJECT
   
 public:
-  explicit QxrdAcquisitionExtraInputsDialog(QWidget *parent, QxrdAcquisitionWPtr acq);
+  explicit QxrdAcquisitionExtraInputsDialog(QxrdAcquisitionExtraInputsDialogSettingsWPtr set, QWidget *parent, QxrdAcquisitionWPtr acq);
   ~QxrdAcquisitionExtraInputsDialog();
 
 private:
@@ -25,6 +26,7 @@ private slots:
   void updateWaveforms();
 
 private:
+  QxrdAcquisitionExtraInputsDialogSettingsWPtr m_Settings;
   QxrdAcquisitionWPtr            m_Acquisition;
   QxrdAcquisitionExtraInputsWPtr m_AcquisitionExtraInputs;
   int                            m_ChannelsInRows;

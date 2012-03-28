@@ -14,6 +14,8 @@ QxrdWindowSettings::QxrdWindowSettings(QxrdSettingsSaverWPtr saver,
   m_HistogramDialogSettings   = QxrdHistogramDialogSettingsPtr(new QxrdHistogramDialogSettings(saver, NULL));
   m_SliceDialogSettings       = QxrdSliceDialogSettingsPtr(new QxrdSliceDialogSettings(saver, NULL));
   m_InfoDialogSettings        = QxrdInfoDialogSettingsPtr(new QxrdInfoDialogSettings(saver, NULL));
+  m_AcquisitionExtraInputsDialogSettings = QxrdAcquisitionExtraInputsDialogSettingsPtr(
+        new QxrdAcquisitionExtraInputsDialogSettings(saver, NULL));
 }
 
 void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
@@ -47,6 +49,7 @@ void QxrdWindowSettings::writeSettings(QSettings *settings, QString section)
     m_HistogramDialogSettings->writeSettings(settings, section+"/histogramDialog");
     m_SliceDialogSettings->writeSettings(settings, section+"/sliceDialog");
     m_InfoDialogSettings->writeSettings(settings, section+"/imageInfoDialog");
+    m_AcquisitionExtraInputsDialogSettings->writeSettings(settings, section+"/extraInputsDialog");
   }
 }
 
@@ -88,4 +91,9 @@ QxrdHistogramDialogSettingsWPtr QxrdWindowSettings::histogramDialogSettings()
 QxrdInfoDialogSettingsWPtr QxrdWindowSettings::infoDialogSettings()
 {
   return m_InfoDialogSettings;
+}
+
+QxrdAcquisitionExtraInputsDialogSettingsWPtr QxrdWindowSettings::acquisitionExtraInputsDialogSettings()
+{
+  return m_AcquisitionExtraInputsDialogSettings;
 }

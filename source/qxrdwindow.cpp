@@ -122,7 +122,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_AcquisitionDialog = acq -> controlPanel(this);
     m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
     m_AcquisitionTriggerDialog = new QxrdAcquisitionTriggerDialog(this, m_Acquisition);
-    m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(this, m_Acquisition);
+    m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
   }
 
   m_DisplayDialog      = new QxrdDisplayDialog(this);
