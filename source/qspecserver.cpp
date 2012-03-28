@@ -19,6 +19,11 @@ QSpecServer::QSpecServer(QxrdExperimentWPtr doc, QString name)
   connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));
 }
 
+QSpecServer::~QSpecServer()
+{
+  stopServer();
+}
+
 void
 QSpecServer::startServer(QHostAddress a, int p)
 {
@@ -39,6 +44,14 @@ QSpecServer::startServer(QHostAddress a, int p)
       exp->criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy of qxrd running already?")
                            .arg(a.toString()).arg(p));
     }
+  }
+}
+
+void
+QSpecServer::stopServer()
+{
+  if (isListening()) {
+    close();
   }
 }
 

@@ -22,9 +22,11 @@ class QSpecServer : public QTcpServer
 
 public:
   QSpecServer(QxrdExperimentWPtr doc, QString name);
+  virtual ~QSpecServer();
 
 public:
   void startServer(QHostAddress a, int p=-1);
+  void stopServer();
 
 public slots:
   void openNewConnection();

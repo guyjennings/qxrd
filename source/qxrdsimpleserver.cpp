@@ -26,11 +26,15 @@ QxrdSimpleServer::~QxrdSimpleServer()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdSimpleServer::~QxrdSimpleServer(%p)\n", this);
   }
+
+  stopServer();
 }
 
 void QxrdSimpleServer::readSettings(QSettings *settings, QString section)
 {
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+
+  runModeChanged();
 }
 
 void QxrdSimpleServer::writeSettings(QSettings *settings, QString section)
@@ -40,12 +44,28 @@ void QxrdSimpleServer::writeSettings(QSettings *settings, QString section)
 
 void QxrdSimpleServer::runModeChanged()
 {
-  printf("Need to implement QxrdSimpleServer::runModeChanged()\n");
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "runModeChanged");
+  } else {
+    if (get_RunSimpleServer()) {
+      startServer(QHostAddress::Any, get_SimpleServerPort());
+    } else {
+      stopServer();
+    }
+  }
 }
 
 void QxrdSimpleServer::serverPortChanged()
 {
-  printf("Need to implement QxrdSimpleServer::serverPortChanged()\n");
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "serverPortChanged");
+  } else {
+    stopServer();
+
+    if (get_RunSimpleServer()) {
+      startServer(QHostAddress::Any, get_SimpleServerPort());
+    }
+  }
 }
 
 void QxrdSimpleServer::printMessage(QString msg, QDateTime ts)
@@ -81,6 +101,13 @@ void QxrdSimpleServer::startServer(QHostAddress addr, int port)
 
   if (!listen(addr, port)) {
     criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy of qxrd running already?").arg(addr.toString()).arg(port));
+  }
+}
+
+void QxrdSimpleServer::stopServer()
+{
+  if (isListening()) {
+    close();
   }
 }
 

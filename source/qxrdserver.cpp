@@ -29,6 +29,8 @@ QxrdServer::~QxrdServer()
 void QxrdServer::readSettings(QSettings *settings, QString section)
 {
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+
+  runModeChanged();
 }
 
 void QxrdServer::writeSettings(QSettings *settings, QString section)
@@ -38,12 +40,28 @@ void QxrdServer::writeSettings(QSettings *settings, QString section)
 
 void QxrdServer::runModeChanged()
 {
-  printf("Need to implement QxrdServer::runModeChanged()\n");
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "runModeChanged");
+  } else {
+    if (get_RunSpecServer()) {
+      startServer(QHostAddress::Any, get_SpecServerPort());
+    } else {
+      stopServer();
+    }
+  }
 }
 
 void QxrdServer::serverPortChanged()
 {
-  printf("Need to implement QxrdServer::serverPortChanged()\n");
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "serverPortChanged");
+  } else {
+    stopServer();
+
+    if (get_RunSpecServer()) {
+      startServer(QHostAddress::Any, get_SpecServerPort());
+    }
+  }
 }
 
 QVariant QxrdServer::executeCommand(QString /*cmd*/)
