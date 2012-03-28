@@ -18,15 +18,19 @@ int QxrdDetectorSimulated::detectorType() const
 
 void QxrdDetectorSimulated::onExposureTimeChanged()
 {
-  QxrdExperimentPtr expt(m_Experiment);
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "onExposureTimeChanged");
+  } else {
+    QxrdExperimentPtr expt(m_Experiment);
+    QxrdAcquisitionPtr acq(m_Acquisition);
 
-  if (acq && expt) {
-    double newTime = acq->get_ExposureTime();
+    if (acq && expt) {
+      double newTime = acq->get_ExposureTime();
 
-    expt->printMessage(tr("Exposure time changed to %1").arg(newTime));
+      expt->printMessage(tr("Exposure time changed to %1").arg(newTime));
 
-    m_Timer.start(newTime*1000);
+      m_Timer.start(newTime*1000);
+    }
   }
 }
 
