@@ -134,31 +134,19 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd)
 
     splashMessage("Starting SPEC Server");
 
-//#ifdef Q_OS_WIN
-//    // On windows, there are problems with servers not in the main thread...
-
-//    m_Server = QxrdServerPtr(
-//          new QxrdServer(m_SettingsSaver, this, "qxrd"));
-//#else
     m_ServerThread = QxrdServerThreadPtr(
           new QxrdServerThread(m_SettingsSaver, this, "qxrd"));
     m_ServerThread -> setObjectName("server");
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
-//#endif
 
     splashMessage("Starting Simple Socket Server");
 
-//#ifdef Q_OS_WIN
-//    m_SimpleServer = QxrdSimpleServerPtr(
-//          new QxrdSimpleServer(m_SettingsSaver, this, "simpleserver"));
-//#else
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(
           new QxrdSimpleServerThread(m_SettingsSaver, this, "simpleserver"));
     m_SimpleServerThread -> setObjectName("smpsrv");
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
-//#endif
 
     m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
           new QxrdScriptEngineThread(m_Application, this));
@@ -540,6 +528,8 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
     if (ssrv) {
       ssrv -> readSettings(settings, section+"/simpleserver");
     }
+
+    onDetectorTypeChanged();
   }
 }
 
