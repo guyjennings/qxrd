@@ -27,8 +27,15 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_FirstTime(true)
 {
   setObjectName("centeringGraph");
+}
 
-  insertLegend(m_Legend, QwtPlot::RightLegend);
+void QxrdCenterFinderPlot::init(QxrdPlotSettingsWPtr settings)
+{
+  QxrdPlot::init(settings);
+
+  if (m_Legend) {
+    insertLegend(m_Legend, QwtPlot::RightLegend);
+  }
 }
 
 void QxrdCenterFinderPlot::setWindow(QxrdWindow *win)

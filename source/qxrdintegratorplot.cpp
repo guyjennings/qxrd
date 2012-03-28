@@ -24,10 +24,18 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
 
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
-  insertLegend(m_Legend, QwtPlot::BottomLegend);
 
   connect(this, SIGNAL(legendClicked(QwtPlotItem*)), this, SLOT(onLegendClicked(QwtPlotItem*)));
   connect(this, SIGNAL(legendChecked(QwtPlotItem*,bool)), this, SLOT(onLegendChecked(QwtPlotItem*,bool)));
+}
+
+void QxrdIntegratorPlot::init(QxrdPlotSettingsWPtr settings)
+{
+  QxrdPlot::init(settings);
+
+  if (m_Legend) {
+    insertLegend(m_Legend, QwtPlot::BottomLegend);
+  }
 }
 
 void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessorWPtr proc)

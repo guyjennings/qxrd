@@ -3,5 +3,13 @@
 QxrdSlicePlot::QxrdSlicePlot(QWidget *parent) :
     QxrdPlot(parent)
 {
-  insertLegend(m_Legend, QwtPlot::BottomLegend);
+}
+
+void QxrdSlicePlot::init(QxrdPlotSettingsWPtr settings)
+{
+  QxrdPlot::init(settings);
+
+  if (m_Legend) {
+    insertLegend(m_Legend, QwtPlot::BottomLegend);
+  }
 }

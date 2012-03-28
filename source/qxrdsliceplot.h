@@ -5,9 +5,10 @@
 
 class QxrdSlicePlot : public QxrdPlot
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    explicit QxrdSlicePlot(QWidget *parent = 0);
+  explicit QxrdSlicePlot(QWidget *parent = 0);
+  void init(QxrdPlotSettingsWPtr settings);
 
 signals:
 

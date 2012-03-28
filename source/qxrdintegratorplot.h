@@ -14,6 +14,7 @@ class QxrdIntegratorPlot : public QxrdPlot
 
 public:
   QxrdIntegratorPlot(QWidget *parent=0);
+  void init(QxrdPlotSettingsWPtr settings);
 
   void setDataProcessor(QxrdDataProcessorWPtr proc);
 

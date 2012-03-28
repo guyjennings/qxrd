@@ -19,6 +19,7 @@ class QxrdCenterFinderPlot : public QxrdPlot
 
 public:
   QxrdCenterFinderPlot(QWidget *parent=0);
+  void init(QxrdPlotSettingsWPtr settings);
 
   void setWindow(QxrdWindow *win);
 
