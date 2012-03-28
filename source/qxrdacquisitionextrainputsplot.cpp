@@ -15,6 +15,15 @@ QxrdAcquisitionExtraInputsPlot::QxrdAcquisitionExtraInputsPlot(QWidget *parent) 
            << Qt::gray;
 }
 
+void QxrdAcquisitionExtraInputsPlot::init(QxrdPlotSettingsWPtr settings)
+{
+  QxrdPlot::init(settings);
+
+  if (m_Legend) {
+    insertLegend(m_Legend, QwtPlot::BottomLegend);
+  }
+}
+
 void QxrdAcquisitionExtraInputsPlot::setNChannels(int nch)
 {
   if (m_RawData.count() > nch) {

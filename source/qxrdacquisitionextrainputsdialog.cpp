@@ -36,6 +36,8 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QWidget *pare
     }
   }
 
+  m_AcquisitionWaveforms -> init(QxrdPlotSettingsWPtr());
+
   updateUi();
 }
 
