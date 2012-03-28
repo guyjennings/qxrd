@@ -26,6 +26,23 @@ QxrdDetectorThread::QxrdDetectorThread(QxrdExperimentWPtr expt, QxrdAcquisitionW
 {
 }
 
+QxrdDetectorThread::~QxrdDetectorThread()
+{
+  if (qcepDebug(DEBUG_APP)) {
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt) {
+      expt->printMessage("QxrdExperimentThread::~QxrdExperimentThread");
+    }
+  }
+
+  shutdown();
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdExperimentThread::~QxrdExperimentThread(%p)\n", this);
+  }
+}
+
 QString QxrdDetectorThread::detectorTypeName(int detectorType)
 {
   QString res = "unknown";

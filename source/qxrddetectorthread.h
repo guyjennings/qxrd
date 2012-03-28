@@ -12,6 +12,7 @@ class QxrdDetectorThread : public QxrdThread
   Q_OBJECT
 public:
   explicit QxrdDetectorThread(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
+  virtual ~QxrdDetectorThread();
 
   QxrdDetectorPtr detector() const;
   void shutdown();
