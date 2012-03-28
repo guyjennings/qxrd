@@ -18,6 +18,8 @@
 #include "qxrdacquisitiontrigger.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdallocator.h"
+#include "qxrdserver.h"
+#include "qxrdsimpleserver.h"
 
 #include <QThread>
 #include <QDir>
@@ -137,6 +139,18 @@ void QxrdScriptEngine::initialize()
       if (extra) {
         globalObject().setProperty("extraInputs", newQObject(extra.data()));
       }
+    }
+
+    QxrdSimpleServerPtr ssrv(expt->simpleServer());
+
+    if (ssrv) {
+      globalObject().setProperty("simpleServer", newQObject(ssrv.data()));
+    }
+
+    QxrdServerPtr srv(expt->specServer());
+
+    if (srv) {
+      globalObject().setProperty("specServer", newQObject(srv.data()));
     }
 
     m_DataProcessor = expt->dataProcessor();
