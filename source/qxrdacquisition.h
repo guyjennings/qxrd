@@ -137,9 +137,9 @@ public slots:
 
   int acquisitionStatus(double time);
 
-  void onExposureTimeChanged(double newTime);
-  void onBinningModeChanged(int newMode);
-  void onCameraGainChanged(int newGain);
+  void onExposureTimeChanged();
+  void onBinningModeChanged();
+  void onCameraGainChanged();
 
   void onBufferSizeChanged(int newMB);
 

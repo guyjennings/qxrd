@@ -15,9 +15,7 @@ public:
   int detectorType() const;
 
 public slots:
-  void onExposureTimeChanged(double newTime);
-  void onBinningModeChanged(int newMode);
-  void onCameraGainChanged(int newGain);
+  void onExposureTimeChanged();
 
   void onTimerTimeout();
 

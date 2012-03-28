@@ -26,15 +26,15 @@ void QxrdDetector::initialize()
 {
 }
 
-void QxrdDetector::onExposureTimeChanged(double newTime)
+void QxrdDetector::onExposureTimeChanged()
 {
 }
 
-void QxrdDetector::onBinningModeChanged(int newMode)
+void QxrdDetector::onBinningModeChanged()
 {
 }
 
-void QxrdDetector::onCameraGainChanged(int newGain)
+void QxrdDetector::onCameraGainChanged()
 {
 }
 

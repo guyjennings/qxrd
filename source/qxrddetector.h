@@ -22,9 +22,9 @@ public:
 signals:
 
 public slots:
-  virtual void onExposureTimeChanged(double newTime);
-  virtual void onBinningModeChanged(int newMode);
-  virtual void onCameraGainChanged(int newGain);
+  virtual void onExposureTimeChanged();
+  virtual void onBinningModeChanged();
+  virtual void onCameraGainChanged();
 
   virtual void setupExposureMenu(QDoubleSpinBox *cb);
   virtual void setupCameraGainMenu(QComboBox *cb);

@@ -16,35 +16,17 @@ int QxrdDetectorSimulated::detectorType() const
   return QxrdDetectorThread::SimulatedDetector;
 }
 
-void QxrdDetectorSimulated::onExposureTimeChanged(double newTime)
+void QxrdDetectorSimulated::onExposureTimeChanged()
 {
   QxrdExperimentPtr expt(m_Experiment);
   QxrdAcquisitionPtr acq(m_Acquisition);
 
-  if (expt) {
+  if (acq && expt) {
+    double newTime = acq->get_ExposureTime();
+
     expt->printMessage(tr("Exposure time changed to %1").arg(newTime));
-  }
 
-  if (acq) {
-    m_Timer.start(acq->get_ExposureTime()*1000);
-  }
-}
-
-void QxrdDetectorSimulated::onBinningModeChanged(int newMode)
-{
-  QxrdExperimentPtr expt(m_Experiment);
-
-  if (expt) {
-    expt->printMessage(tr("Binning mode changed to %1").arg(newMode));
-  }
-}
-
-void QxrdDetectorSimulated::onCameraGainChanged(int newGain)
-{
-  QxrdExperimentPtr expt(m_Experiment);
-
-  if (expt) {
-    expt->printMessage(tr("Camera Gain Changed to %1").arg(newGain));
+    m_Timer.start(newTime*1000);
   }
 }
 
@@ -122,7 +104,7 @@ void QxrdDetectorSimulated::initialize()
       acq->set_ExposureTime(0.1);
     }
 
-//    onExposureTimeChanged(acq->get_ExposureTime());
+    onExposureTimeChanged();
   }
 }
 

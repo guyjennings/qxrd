@@ -99,9 +99,9 @@ void QxrdAcquisition::initialize()
   m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, this));
   m_AcquisitionExtraInputs -> initialize();
 
-  connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged(double)));
-  connect(prop_BinningMode(), SIGNAL(valueChanged(int,int)), this, SLOT(onBinningModeChanged(int)));
-  connect(prop_CameraGain(), SIGNAL(valueChanged(int,int)), this, SLOT(onCameraGainChanged(int)));
+  connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged()));
+  connect(prop_BinningMode(), SIGNAL(valueChanged(int,int)), this, SLOT(onBinningModeChanged()));
+  connect(prop_CameraGain(), SIGNAL(valueChanged(int,int)), this, SLOT(onCameraGainChanged()));
 
   if (alloc) {
     if (sizeof(void*) == 4) {
@@ -1062,30 +1062,30 @@ void QxrdAcquisition::enqueueAcquiredFrame(QxrdInt16ImageDataPtr img)
   m_NAcquiredImages.release(1);
 }
 
-void QxrdAcquisition::onExposureTimeChanged(double newTime)
+void QxrdAcquisition::onExposureTimeChanged()
 {
   QxrdDetectorPtr det(m_Detector);
 
   if (det) {
-    det ->onExposureTimeChanged(newTime);
+    det ->onExposureTimeChanged();
   }
 }
 
-void QxrdAcquisition::onBinningModeChanged(int newMode)
+void QxrdAcquisition::onBinningModeChanged()
 {
   QxrdDetectorPtr det(m_Detector);
 
   if (det) {
-    det ->onBinningModeChanged(newMode);
+    det ->onBinningModeChanged();
   }
 }
 
-void QxrdAcquisition::onCameraGainChanged(int newGain)
+void QxrdAcquisition::onCameraGainChanged()
 {
   QxrdDetectorPtr det(m_Detector);
 
   if (det) {
-    det ->onCameraGainChanged(newGain);
+    det ->onCameraGainChanged();
   }
 }
 

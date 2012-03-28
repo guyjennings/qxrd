@@ -311,13 +311,13 @@ void QxrdDetectorPerkinElmer::initialize()
     }
 
     if (acq) {
-      onCameraGainChanged(acq->get_CameraGain());
+      onCameraGainChanged();
 
       if (acq->get_ExposureTime() <= 0) {
         acq->set_ExposureTime(0.135);
       }
 
-      onExposureTimeChanged(acq->get_ExposureTime());
+      onExposureTimeChanged();
 
       acq->set_BinningMode(0);
 
@@ -340,107 +340,117 @@ void QxrdDetectorPerkinElmer::initialize()
   }
 }
 
-void QxrdDetectorPerkinElmer::onExposureTimeChanged(double newTime)
+void QxrdDetectorPerkinElmer::onExposureTimeChanged()
 {
   if (checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
     QxrdAcquisitionPtr acq(m_Acquisition);
 
-    if (newTime*1e6 < m_ReadoutTimes.value(0)) {
-      printMessage(tr("Attempt to set exposure time less than minimum supported (%1 < %2)")
-                   .arg(newTime).arg(m_ReadoutTimes.value(0)/1e6));
+    if (plugin && acq) {
+      double newTime = acq->get_ExposureTime();
+      if (newTime*1e6 < m_ReadoutTimes.value(0)) {
+        printMessage(tr("Attempt to set exposure time less than minimum supported (%1 < %2)")
+                     .arg(newTime).arg(m_ReadoutTimes.value(0)/1e6));
 
-      newTime = m_ReadoutTimes.value(0)/1e6;
-    }
+        newTime = m_ReadoutTimes.value(0)/1e6;
+      }
 
-    printMessage(tr("Exposure time changed to %1").arg(newTime));
+      printMessage(tr("Exposure time changed to %1").arg(newTime));
 
-    DWORD tmp = (int)(newTime*1e6);
+      DWORD tmp = (int)(newTime*1e6);
 
-    printMessage(tr("SetTimerSync %1").arg(tmp));
+      printMessage(tr("SetTimerSync %1").arg(tmp));
 
-    int nRet;
+      int nRet;
 
-    if (plugin && (nRet=plugin->Acquisition_SetTimerSync(m_AcqDesc, &tmp)) != HIS_ALL_OK) {
-      acquisitionError(__FILE__, __LINE__, nRet);
-      return;
-    }
+      if ((nRet=plugin->Acquisition_SetTimerSync(m_AcqDesc, &tmp)) != HIS_ALL_OK) {
+        acquisitionError(__FILE__, __LINE__, nRet);
+        return;
+      }
 
-    printMessage(tr("TimerSync = %1").arg(tmp));
+      printMessage(tr("TimerSync = %1").arg(tmp));
 
-    if (acq) {
       acq->set_ExposureTime(tmp/1.0e6);
     }
   }
 }
 
-void QxrdDetectorPerkinElmer::onBinningModeChanged(int newMode)
+void QxrdDetectorPerkinElmer::onBinningModeChanged()
 {
   return;
 
   if (checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
+    QxrdAcquisitionPtr acq(m_Acquisition);
 
-    if (m_HeaderID == 14) {
-      printMessage(tr("Binning mode changed to %1").arg(newMode));
+    if (plugin && acq) {
+      if (m_HeaderID == 14) {
+        int newMode = acq->get_BinningMode();
 
-      int nRet;
-      WORD binningMode = newMode;
-      WORD originalMode;
+        printMessage(tr("Binning mode changed to %1").arg(newMode));
 
-//      if (newMode == 1) {
-//        if (m_CameraType == 1) {
-//          newMode = 2;
-//        } else {
-//          newMode = 258;
-//        }
-//      }
-      if (plugin && (nRet=plugin->Acquisition_GetCameraBinningMode(m_AcqDesc, &originalMode)) != HIS_ALL_OK) {
-        acquisitionError(__FILE__, __LINE__, nRet);
-        return;
+        int nRet;
+        WORD binningMode = newMode;
+        WORD originalMode;
+
+        //      if (newMode == 1) {
+        //        if (m_CameraType == 1) {
+        //          newMode = 2;
+        //        } else {
+        //          newMode = 258;
+        //        }
+        //      }
+        if ((nRet=plugin->Acquisition_GetCameraBinningMode(m_AcqDesc, &originalMode)) != HIS_ALL_OK) {
+          acquisitionError(__FILE__, __LINE__, nRet);
+          return;
+        }
+
+        printMessage(tr("Starting binning mode = %1").arg(originalMode));
+
+        printMessage(tr("Setting binning mode = %1").arg(newMode));
+
+        if ((nRet=plugin->Acquisition_SetCameraBinningMode(m_AcqDesc, newMode)) != HIS_ALL_OK) {
+          acquisitionError(__FILE__, __LINE__, nRet);
+          return;
+        }
+
+        if ((nRet=plugin->Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
+          acquisitionError(__FILE__, __LINE__, nRet);
+          return;
+        }
+
+        printMessage(tr("Binning mode was set to %1").arg(binningMode));
       }
-
-      printMessage(tr("Starting binning mode = %1").arg(originalMode));
-
-      printMessage(tr("Setting binning mode = %1").arg(newMode));
-
-      if (plugin && (nRet=plugin->Acquisition_SetCameraBinningMode(m_AcqDesc, newMode)) != HIS_ALL_OK) {
-        acquisitionError(__FILE__, __LINE__, nRet);
-        return;
-      }
-
-      if (plugin && (nRet=plugin->Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
-        acquisitionError(__FILE__, __LINE__, nRet);
-        return;
-      }
-
-      printMessage(tr("Binning mode was set to %1").arg(binningMode));
     }
   }
 }
 
-void QxrdDetectorPerkinElmer::onCameraGainChanged(int newGain)
+void QxrdDetectorPerkinElmer::onCameraGainChanged()
 {
   if (checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
     QxrdAcquisitionPtr  acq(m_Acquisition);
 
-    if (plugin && acq && m_HeaderID >= 11) {
-      printMessage(tr("Camera Gain Changed to %1").arg(newGain));
+    if (acq && plugin) {
+      if (m_HeaderID >= 11) {
+        int newGain = acq->get_CameraGain();
 
-      printMessage("Setting camera gain");
+        printMessage(tr("Camera Gain Changed to %1").arg(newGain));
 
-      int nRet;
+        printMessage("Setting camera gain");
 
-      if (m_CurrentGain != acq->get_CameraGain()) {
-        if ((nRet=plugin->Acquisition_SetCameraGain(m_AcqDesc, acq->get_CameraGain())) != HIS_ALL_OK) {
-          acquisitionError(__FILE__, __LINE__, nRet);
-          return;
+        int nRet;
+
+        if (m_CurrentGain != acq->get_CameraGain()) {
+          if ((nRet=plugin->Acquisition_SetCameraGain(m_AcqDesc, acq->get_CameraGain())) != HIS_ALL_OK) {
+            acquisitionError(__FILE__, __LINE__, nRet);
+            return;
+          }
+          m_CurrentGain = acq->get_CameraGain();
         }
-        m_CurrentGain = acq->get_CameraGain();
-      }
 
-      printMessage("Set camera gain");
+        printMessage("Set camera gain");
+      }
     }
   }
 }

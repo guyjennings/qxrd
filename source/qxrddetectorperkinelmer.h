@@ -22,9 +22,9 @@ public:
   int detectorType() const;
 
 private slots:
-  void onExposureTimeChanged(double newTime);
-  void onBinningModeChanged(int newMode);
-  void onCameraGainChanged(int newGain);
+  void onExposureTimeChanged();
+  void onBinningModeChanged();
+  void onCameraGainChanged();
 
 public slots:
   void initialize();
