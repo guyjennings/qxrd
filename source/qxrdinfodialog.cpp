@@ -37,5 +37,17 @@ void QxrdInfoDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxr
     m_InfoText->append(tr("Image Number %1").arg(image->get_ImageNumber()));
     m_InfoText->append(tr("Image Triggered? %1").arg(image->get_Triggered()));
     m_InfoText->append(tr("Phase %1 of [0..%2]").arg(image->get_PhaseNumber()).arg(image->get_NPhases()-1));
+
+    m_InfoText->append(tr("Normalization Data Size = %1").arg(image->get_Normalization().count()));
+
+    for (int i=0; i<image->get_Normalization().count(); i++) {
+      m_InfoText->append(tr("Normalization Data [%1] = %2").arg(i).arg(image->get_Normalization().value(i)));
+    }
+
+    m_InfoText->append(tr("Extra Inputs Data Size = %1").arg(image->get_ExtraInputs().count()));
+
+    for (int i=0; i<image->get_ExtraInputs().count(); i++) {
+      m_InfoText->append(tr("Extra Inputs Data [%1] = %2").arg(i).arg(image->get_ExtraInputs().value(i)));
+    }
   }
 }
