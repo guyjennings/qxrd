@@ -1057,6 +1057,9 @@ void QxrdAcquisition::enqueueAcquiredFrame(QxrdInt16ImageDataPtr img)
     }
   }
 
+  img->set_QtVersion(QT_VERSION_STR);
+  img->set_QxrdVersion(STR(QXRD_VERSION));
+
   m_AcquiredImages.enqueue(img);
 
   m_NAcquiredImages.release(1);
