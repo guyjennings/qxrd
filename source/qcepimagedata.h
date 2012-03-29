@@ -24,11 +24,11 @@ public:
   QcepImageDataBase(QxrdSettingsSaverWPtr saver, int width, int height);
   virtual ~QcepImageDataBase();
 
-  Q_PROPERTY(int width READ get_Width)
-  //  QCEP_INTEGER_PROPERTY(Width)
+  Q_PROPERTY(int width READ get_Width WRITE set_Width)
+  QCEP_INTEGER_PROPERTY(Width)
 
-  Q_PROPERTY(int height READ get_Height)
-  //  QCEP_INTEGER_PROPERTY(Height)
+  Q_PROPERTY(int height READ get_Height WRITE set_Height)
+  QCEP_INTEGER_PROPERTY(Height)
 
   Q_PROPERTY(QString qxrdVersion READ get_QxrdVersion WRITE set_QxrdVersion)
   QCEP_STRING_PROPERTY(QxrdVersion)
@@ -39,7 +39,7 @@ public:
   Q_PROPERTY(int dataType READ get_DataType WRITE set_DataType)
   QCEP_INTEGER_PROPERTY(DataType)
 
-  Q_PROPERTY(QString dataTypeName READ get_DataTypeName)
+  Q_PROPERTY(QString dataTypeName READ get_DataTypeName WRITE set_DataTypeName)
 
   Q_PROPERTY(QString fileBase READ get_FileBase WRITE set_FileBase)
   QCEP_STRING_PROPERTY(FileBase)
@@ -71,7 +71,7 @@ public:
   Q_PROPERTY(QDateTime dateTime READ get_DateTime WRITE set_DateTime)
   QCEP_DATETIME_PROPERTY(DateTime)
 
-  Q_PROPERTY(QString dateString READ get_DateString)
+  Q_PROPERTY(QString dateString READ get_DateString WRITE set_DateString)
   //  QCEP_STRING_PROPERTY(DateString)
 
   Q_PROPERTY(int hBinning READ get_HBinning WRITE set_HBinning)
@@ -115,32 +115,35 @@ public:
     virtual QVector<double> getImageData(int x0, int y0, int x1, int y1) const = 0;
 
 public:
-  int get_Width() const
-  {
-    return m_Width;
-  }
+//  int get_Width() const
+//  {
+//    return m_Width;
+//  }
 
-  int get_Height() const
-  {
-    return m_Height;
-  }
+//  int get_Height() const
+//  {
+//    return m_Height;
+//  }
 
-  void set_Width(int width)
-  {
-    m_Width = width;
-  }
+//  void set_Width(int width)
+//  {
+//    m_Width = width;
+//  }
 
-  void set_Height(int height)
-  {
-    m_Height = height;
-  }
+//  void set_Height(int height)
+//  {
+//    m_Height = height;
+//  }
 
   QString get_DateString() const
   {
     return get_DateTime().toString(tr("yyyy.MM.dd : hh:mm:ss.zzz"));
   }
 
+  void set_DateString(QString val) {}
+
   QString get_DataTypeName() const;
+  void set_DataTypeName(QString name) {}
 
   void copyProperties(QcepImageDataBase *dest);
   void copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src);
@@ -169,8 +172,8 @@ public:
 
 protected:
   int m_ImageCounter;
-  int m_Width;
-  int m_Height;
+//  int m_Width;
+//  int m_Height;
 
 private:
   mutable QMutex m_Mutex;

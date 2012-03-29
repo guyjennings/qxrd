@@ -13,8 +13,8 @@ QAtomicInt allocCount = 0;
 
 QcepImageDataBase::QcepImageDataBase(QxrdSettingsSaverWPtr saver, int width, int height)
   : QObject(),
-    m_QxrdVersion(saver, this,"qxrdVersion","unknown", "QXRD Version Number"),
-    m_QtVersion(saver, this,"qtVersion","unknown", "QT Version Number"),
+    m_QxrdVersion(saver, this,"qxrdVersion", "Unknown", "QXRD Version Number"),
+    m_QtVersion(saver, this,"qtVersion", "Unknown", "QT Version Number"),
     m_DataType(saver, this, "dataType", UndefinedData, "Data Type of Image"),
     m_FileBase(saver, this, "fileBase", "", "File Base of Image"),
     m_FileName(saver, this, "fileName", "", "File Name of Image"),
@@ -39,8 +39,8 @@ QcepImageDataBase::QcepImageDataBase(QxrdSettingsSaverWPtr saver, int width, int
     m_ExtraInputs(saver, this, "extraInputs", QcepDoubleList(), "Extra Input Values"),
     m_Used(saver, this, "used", true, "Image Used?"),
     m_ImageCounter(allocCount.fetchAndAddOrdered(1)),
-    m_Width(width),
-    m_Height(height),
+    m_Width(saver, this, "width", width, "Image Width"),
+    m_Height(saver, this, "height", height, "Image Height"),
     m_Mutex(QMutex::Recursive)
 {
   if (g_Application && qcepDebug(DEBUG_APP)) {
