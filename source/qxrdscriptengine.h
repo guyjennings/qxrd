@@ -47,11 +47,18 @@ public:
 
   void setWindow(QxrdWindow *win);
 
+  QString documentationLink(QString base, QString subItem);
+  QString documentationText(QString item);
+  QByteArray helpText(QString item);
+
+//  QScriptValue newQxrdObject(QObject *object, QString objectName);
+//  QScriptValue newQxrdFunction(FunctionSignature fun, QString objectName);
+
 private slots:
   void              evaluate(int src, QString cmd);
 
 private:
-  static QScriptValue printFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue printFunc(QScriptContext *context, QScriptEngine *engine, void *u);
   static QScriptValue acquireFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue acquireDarkFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue statusFunc(QScriptContext *context, QScriptEngine *engine);

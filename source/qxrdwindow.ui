@@ -869,7 +869,7 @@
           </layout>
          </item>
          <item row="1" column="0">
-          <widget class="QTextBrowser" name="m_HelpBrowser">
+          <widget class="QxrdHelpBrowser" name="m_HelpBrowser">
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -1678,6 +1678,11 @@
    <class>QxrdIntegratorPlot</class>
    <extends>QWidget</extends>
    <header>qxrdintegratorplot.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QxrdHelpBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header>qxrdhelpbrowser.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -115,7 +115,11 @@ HEADERS += spec_server.h \
     qxrddetectorthread-ptr.h \
     qxrddetectorfilewatcher.h \
     qxrdacquisitiondialog-ptr.h \
-    qxrdacquisitionextrainputsdialogsettings.h
+    qxrdacquisitionextrainputsdialogsettings.h \
+    qxrdhelpbrowser.h \
+    qxrddocumentationdictionary.h \
+    qxrddocumentationforobject.h \
+    qxrddocumentationforfunction.h
 
 SOURCES += qspecserver.cpp \
     qcepproperty.cpp \
@@ -131,7 +135,11 @@ SOURCES += qspecserver.cpp \
     qxrddetectorsimulated.cpp \
     qxrddetectorthread.cpp \
     qxrddetectorfilewatcher.cpp \
-    qxrdacquisitionextrainputsdialogsettings.cpp
+    qxrdacquisitionextrainputsdialogsettings.cpp \
+    qxrdhelpbrowser.cpp \
+    qxrddocumentationdictionary.cpp \
+    qxrddocumentationforobject.cpp \
+    qxrddocumentationforfunction.cpp
 
 OTHER_FILES += testImage.js
 

@@ -364,6 +364,8 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   connect(m_HelpBrowser, SIGNAL(forwardAvailable(bool)), m_HelpForwardButton, SLOT(setEnabled(bool)));
   connect(m_HelpBrowser, SIGNAL(backwardAvailable(bool)), m_HelpBackButton, SLOT(setEnabled(bool)));
 
+  m_HelpBrowser->init(m_Experiment);
+
   connect(&m_UpdateTimer, SIGNAL(timeout()), this, SLOT(newData()));
 
   connect(m_ActionIntegrate, SIGNAL(triggered()), this, SLOT(doIntegrateSequence()));
