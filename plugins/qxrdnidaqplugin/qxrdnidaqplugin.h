@@ -68,15 +68,15 @@ private:
   void errorCheck(const char* file, int line, int err);
 
 private:
-  QObject   *m_ErrorOutput;
-  QMutex     m_Mutex;
-  TaskHandle m_AOTaskHandle;
-  TaskHandle m_AITaskHandle;
-  TaskHandle m_TrigAOTask;
-  TaskHandle m_PulseTask;
-  TaskHandle m_CountersTask;
-  int        m_NCounters;
-  QVector<double> m_Counts;
+  QObject            *m_ErrorOutput;
+  QMutex              m_Mutex;
+  TaskHandle          m_AOTaskHandle;
+  TaskHandle          m_AITaskHandle;
+  TaskHandle          m_TrigAOTask;
+  TaskHandle          m_PulseTask;
+  TaskHandle          m_CountersTask;
+  int                 m_NCounters;
+  QVector<double>     m_Counts;
 
   double              m_SampleRate;
   double              m_ExposureTime;
