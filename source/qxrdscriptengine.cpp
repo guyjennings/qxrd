@@ -20,10 +20,15 @@
 #include "qxrdallocator.h"
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"
+#include "qxrddocumentationdictionary.h"
+#include "qxrddocumentationforobject.h"
+#include "qxrddocumentationforfunction.h"
 
 #include <QThread>
 #include <QDir>
-
+#include <QScriptValueIterator>
+#include <QMetaObject>
+#include <QMetaProperty>
 
 QxrdScriptEngine::QxrdScriptEngine(QxrdApplication* app, QxrdExperimentWPtr exp)
   : QScriptEngine(),
@@ -43,135 +48,6 @@ QxrdScriptEngine::~QxrdScriptEngine()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngine::~QxrdScriptEngine(%p)\n", this);
-  }
-}
-
-void QxrdScriptEngine::initialize()
-{
-  qScriptRegisterMetaType(this, ::QxrdRingFitToScriptValue, ::QxrdRingFitFromScriptValue);
-  qScriptRegisterMetaType(this, ::QxrdRingSampledDataToScriptValue, ::QxrdRingSampledDataFromScriptValue);
-  //  qScriptRegisterMetaType(this, ::QxrdRingSampledDataPtrToScriptValue, ::QxrdRingSampledDataPtrFromScriptValue);
-
-  qScriptRegisterSequenceMetaType< QList<int> >(this);
-  qScriptRegisterSequenceMetaType< QList<bool> >(this);
-  qScriptRegisterSequenceMetaType< QList<double> >(this);
-  qScriptRegisterSequenceMetaType< QList<QString> >(this);
-  //  qScriptRegisterSequenceMetaType< QList<QxrdRingFitParameters*> >(this);
-  qScriptRegisterSequenceMetaType< QVector<int> >(this);
-  qScriptRegisterSequenceMetaType< QVector<bool> >(this);
-  qScriptRegisterSequenceMetaType< QVector<double> >(this);
-  qScriptRegisterSequenceMetaType< QVector<QString> >(this);
-  //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
-
-  if (m_Application) {
-    globalObject().setProperty("application", newQObject(m_Application));
-
-    QxrdAllocatorPtr alloc(m_Application->allocator());
-
-    if (alloc) {
-      globalObject().setProperty("allocator", newQObject(alloc.data()));
-    }
-  }
-
-  globalObject().setProperty("global", globalObject());
-  globalObject().setProperty("acquire", newFunction(acquireFunc));
-  globalObject().setProperty("acquireDark", newFunction(acquireDarkFunc));
-  globalObject().setProperty("status", newFunction(statusFunc));
-  globalObject().setProperty("acquireStatus", newFunction(acquireStatusFunc));
-  globalObject().setProperty("processStatus", newFunction(processStatusFunc));
-  globalObject().setProperty("acquireCancel", newFunction(acquireCancelFunc));
-  globalObject().setProperty("exposureTime", newFunction(exposureTimeFunc));
-  globalObject().setProperty("summedExposures", newFunction(summedExposuresFunc));
-  globalObject().setProperty("skippedExposures", newFunction(skippedExposuresFunc));
-  globalObject().setProperty("darkSummedExposures", newFunction(darkSummedExposuresFunc));
-  globalObject().setProperty("phasesInGroup", newFunction(phasesInGroupFunc));
-  globalObject().setProperty("preTriggerFiles", newFunction(preTriggerFilesFunc));
-  globalObject().setProperty("postTriggerFiles", newFunction(postTriggerFilesFunc));
-  globalObject().setProperty("filePattern", newFunction(filePatternFunc));
-  globalObject().setProperty("outputDirectory", newFunction(outputDirectoryFunc));
-  globalObject().setProperty("fileIndex", newFunction(fileIndexFunc));
-  globalObject().setProperty("print", newFunction(printFunc));
-  globalObject().setProperty("printMessage", newFunction(printFunc));
-  globalObject().setProperty("data", newFunction(dataFunc));
-  globalObject().setProperty("dark", newFunction(darkFunc));
-  globalObject().setProperty("mask", newFunction(maskFunc));
-  globalObject().setProperty("overflow", newFunction(overflowFunc));
-  globalObject().setProperty("help", newFunction(helpFunc));
-  globalObject().setProperty("process", newFunction(processFunc));
-  globalObject().setProperty("typeName", newFunction(typeNameFunc));
-  globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
-  globalObject().setProperty("extraChannel", newFunction(extraChannelFunc));
-
-  if (m_Application) {
-    QObject *plugin = dynamic_cast<QObject*>(m_Application->nidaqPlugin().data());
-
-    if (plugin) {
-      globalObject().setProperty("nidaq", newQObject(plugin));
-    }
-  }
-
-  QxrdExperimentPtr expt(m_Experiment);
-
-  if (expt) {
-    globalObject().setProperty("experiment", newQObject(expt.data()));
-
-    m_Acquisition   = expt->acquisition();
-
-    QxrdAcquisitionPtr acq(m_Acquisition);
-
-    if (acq) {
-      globalObject().setProperty("acquisition",     newQObject(acq.data()));
-
-      QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
-
-      if (sync) {
-        globalObject().setProperty("synchronization", newQObject(sync.data()));
-      }
-
-      QxrdAcquisitionTriggerPtr trig(acq->acquisitionTrigger());
-
-      if (trig) {
-        globalObject().setProperty("trigger", newQObject(trig.data()));
-      }
-
-      QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
-
-      if (extra) {
-        globalObject().setProperty("extraInputs", newQObject(extra.data()));
-      }
-    }
-
-    QxrdSimpleServerPtr ssrv(expt->simpleServer());
-
-    if (ssrv) {
-      globalObject().setProperty("simpleServer", newQObject(ssrv.data()));
-    }
-
-    QxrdServerPtr srv(expt->specServer());
-
-    if (srv) {
-      globalObject().setProperty("specServer", newQObject(srv.data()));
-    }
-
-    m_DataProcessor = expt->dataProcessor();
-
-    QxrdDataProcessorPtr dp(m_DataProcessor);
-
-    if (dp) {
-      globalObject().setProperty("processor",       newQObject(dp.data()));
-      globalObject().setProperty("centering",       newQObject(dp->centerFinder().data()));
-      globalObject().setProperty("integrator",      newQObject(dp->integrator().data()));
-      globalObject().setProperty("initialFit",      newQObject(dp->initialRingSetFitParameters().data()));
-      globalObject().setProperty("refinedFit",      newQObject(dp->refinedRingSetFitParameters().data()));
-      globalObject().setProperty("initialData",     newQObject(dp->initialRingSetData().data()));
-      globalObject().setProperty("refinedData",     newQObject(dp->refinedRingSetData().data()));
-
-      QxrdGenerateTestImagePtr gti(dp->generateTestImage());
-
-      if (gti) {
-        globalObject().setProperty("testImage",       newQObject(gti.data()));
-      }
-    }
   }
 }
 
@@ -297,7 +173,7 @@ QString QxrdScriptEngine::uncaughtExceptionString() const
   return uncaughtException().toString();
 }
 
-QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine *engine, void *u)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
@@ -802,6 +678,13 @@ QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngin
   return QScriptValue(engine, -1);
 }
 
+static QString matchFilesProto =
+    "matchFiles([pattern]...)";
+static QString matchFilesDoc =
+    "<p>Returns a list of file names matching the provided pattern(s).</p>"
+    "<p>The patterns support 'wild card' characters sush as * and ?.</p>"
+    "<p>Example:  matchFiles(\"*.tiff\")</p>";
+
 QScriptValue QxrdScriptEngine::matchFilesFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QStringList result;
@@ -838,4 +721,459 @@ QScriptValue QxrdScriptEngine::matchFilesFunc(QScriptContext *context, QScriptEn
   }
 
   return engine->toScriptValue(result);
+}
+
+void QxrdScriptEngine::initialize()
+{
+  qScriptRegisterMetaType(this, ::QxrdRingFitToScriptValue, ::QxrdRingFitFromScriptValue);
+  qScriptRegisterMetaType(this, ::QxrdRingSampledDataToScriptValue, ::QxrdRingSampledDataFromScriptValue);
+  //  qScriptRegisterMetaType(this, ::QxrdRingSampledDataPtrToScriptValue, ::QxrdRingSampledDataPtrFromScriptValue);
+
+  qScriptRegisterSequenceMetaType< QList<int> >(this);
+  qScriptRegisterSequenceMetaType< QList<bool> >(this);
+  qScriptRegisterSequenceMetaType< QList<double> >(this);
+  qScriptRegisterSequenceMetaType< QList<QString> >(this);
+  //  qScriptRegisterSequenceMetaType< QList<QxrdRingFitParameters*> >(this);
+  qScriptRegisterSequenceMetaType< QVector<int> >(this);
+  qScriptRegisterSequenceMetaType< QVector<bool> >(this);
+  qScriptRegisterSequenceMetaType< QVector<double> >(this);
+  qScriptRegisterSequenceMetaType< QVector<QString> >(this);
+  //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
+
+  if (m_Application) {
+    globalObject().setProperty("application", newQObject(m_Application));
+
+    QxrdAllocatorPtr alloc(m_Application->allocator());
+
+    if (alloc) {
+      globalObject().setProperty("allocator", newQObject(alloc.data()));
+    }
+  }
+
+  QXRD_DOC_OBJECT("global", "The Global Object");
+
+  globalObject().setProperty("global", globalObject());
+  globalObject().setProperty("acquire", newFunction(acquireFunc));
+  globalObject().setProperty("acquireDark", newFunction(acquireDarkFunc));
+  globalObject().setProperty("status", newFunction(statusFunc));
+  globalObject().setProperty("acquireStatus", newFunction(acquireStatusFunc));
+  globalObject().setProperty("processStatus", newFunction(processStatusFunc, 1));
+  globalObject().setProperty("acquireCancel", newFunction(acquireCancelFunc));
+  globalObject().setProperty("exposureTime", newFunction(exposureTimeFunc, 1));
+  globalObject().setProperty("summedExposures", newFunction(summedExposuresFunc, 1));
+  globalObject().setProperty("skippedExposures", newFunction(skippedExposuresFunc, 1));
+  globalObject().setProperty("darkSummedExposures", newFunction(darkSummedExposuresFunc, 1));
+  globalObject().setProperty("phasesInGroup", newFunction(phasesInGroupFunc, 1));
+  globalObject().setProperty("preTriggerFiles", newFunction(preTriggerFilesFunc, 1));
+  globalObject().setProperty("postTriggerFiles", newFunction(postTriggerFilesFunc, 1));
+  globalObject().setProperty("filePattern", newFunction(filePatternFunc, 1));
+  globalObject().setProperty("outputDirectory", newFunction(outputDirectoryFunc, 1));
+  globalObject().setProperty("fileIndex", newFunction(fileIndexFunc, 1));
+  globalObject().setProperty("print", newFunction(printFunc, NULL));
+  globalObject().setProperty("printMessage", newFunction(printFunc, NULL));
+  globalObject().setProperty("data", newFunction(dataFunc));
+  globalObject().setProperty("dark", newFunction(darkFunc));
+  globalObject().setProperty("mask", newFunction(maskFunc));
+  globalObject().setProperty("overflow", newFunction(overflowFunc));
+  globalObject().setProperty("help", newFunction(helpFunc));
+  globalObject().setProperty("process", newFunction(processFunc));
+  globalObject().setProperty("typeName", newFunction(typeNameFunc));
+  globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
+  globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
+
+  if (m_Application) {
+    QObject *plugin = dynamic_cast<QObject*>(m_Application->nidaqPlugin().data());
+
+    if (plugin) {
+      QXRD_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
+      globalObject().setProperty("nidaq", newQObject(plugin));
+    }
+  }
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QXRD_DOC_OBJECT("experiment", "The current experiment");
+    globalObject().setProperty("experiment", newQObject(expt.data()));
+
+    m_Acquisition   = expt->acquisition();
+
+    QxrdAcquisitionPtr acq(m_Acquisition);
+
+    if (acq) {
+      QXRD_DOC_OBJECT("acquisition", "The Acquisition Object");
+      globalObject().setProperty("acquisition",     newQObject(acq.data()));
+
+      QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
+
+      if (sync) {
+        QXRD_DOC_OBJECT("synchronization", "Synchronized Acquisition");
+        globalObject().setProperty("synchronization", newQObject(sync.data()));
+      }
+
+      QxrdAcquisitionTriggerPtr trig(acq->acquisitionTrigger());
+
+      if (trig) {
+        QXRD_DOC_OBJECT("trigger", "Acquisition Triggering");
+        globalObject().setProperty("trigger", newQObject(trig.data()));
+      }
+
+      QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
+
+      if (extra) {
+        QXRD_DOC_OBJECT("extraInputs", "Extra Inputs during Acquisition");
+        globalObject().setProperty("extraInputs", newQObject(extra.data()));
+      }
+    }
+
+    QxrdSimpleServerPtr ssrv(expt->simpleServer());
+
+    if (ssrv) {
+      QXRD_DOC_OBJECT("simpleServer", "Remote Control Text Based Socket Server");
+      globalObject().setProperty("simpleServer", newQObject(ssrv.data()));
+    }
+
+    QxrdServerPtr srv(expt->specServer());
+
+    if (srv) {
+      QXRD_DOC_OBJECT("specServer", "Remote Control Server for use with Spec");
+      globalObject().setProperty("specServer", newQObject(srv.data()));
+    }
+
+    m_DataProcessor = expt->dataProcessor();
+
+    QxrdDataProcessorPtr dp(m_DataProcessor);
+
+    if (dp) {
+      QXRD_DOC_OBJECT("processor", "Control Data Processing Options");
+      globalObject().setProperty("processor",       newQObject(dp.data()));
+
+      QXRD_DOC_OBJECT("centering", "Beam Center and Detector Alignment Options");
+      globalObject().setProperty("centering",       newQObject(dp->centerFinder().data()));
+
+      QXRD_DOC_OBJECT("integrator", "Image Circular Integration Options");
+      globalObject().setProperty("integrator",      newQObject(dp->integrator().data()));
+      globalObject().setProperty("initialFit",      newQObject(dp->initialRingSetFitParameters().data()));
+      globalObject().setProperty("refinedFit",      newQObject(dp->refinedRingSetFitParameters().data()));
+      globalObject().setProperty("initialData",     newQObject(dp->initialRingSetData().data()));
+      globalObject().setProperty("refinedData",     newQObject(dp->refinedRingSetData().data()));
+
+      QxrdGenerateTestImagePtr gti(dp->generateTestImage());
+
+      if (gti) {
+        globalObject().setProperty("testImage",       newQObject(gti.data()));
+      }
+    }
+  }
+}
+
+//#define DOC_PROPERTY "documentation"
+//#define PROTO_PROPERTY "protodoc"
+
+//QScriptValue QxrdScriptEngine::newQxrdObject(QObject *object, QString objectName)
+//{
+//  QScriptValue res = newQObject(object);
+
+//  res.setProperty(DOC_PROPERTY, docString);
+
+//  return res;
+//}
+
+//QScriptValue QxrdScriptEngine::newQxrdFunction(FunctionSignature fun, QString objectName)
+//{
+//  QScriptValue res = newFunction(fun);
+
+//  res.setProperty(PROTO_PROPERTY, protoString);
+//  res.setProperty(DOC_PROPERTY, docString);
+
+//  return res;
+//}
+
+QString QxrdScriptEngine::documentationLink(QString base, QString subItem)
+{
+  QString item = base.isEmpty() ? subItem : base+"."+subItem;
+
+  return tr("<a href=\"qrc:/help/autohelp?%1\">%2</a>").arg(item).arg(item);
+}
+
+QString QxrdScriptEngine::documentationText(QString item)
+{
+  //  QScriptValue val=QScriptEngine::evaluate("global." + item, QString(), 1);
+
+  QScriptValue val;
+  QString prefix  = "";
+  QString itemName="Global Object";
+
+  if (item.isEmpty()) {
+    val = globalObject();
+  } else {
+    val = globalObject().property(item);
+    prefix = item+".";
+    itemName = item;
+  }
+
+  QString res;
+  //  QString name  = val.toString();
+  QString doc   = QxrdDocumentationDictionary::get_Doc(item);
+
+  res.append(tr("<h2>Documentation for %1</h2>\n").arg(itemName));
+
+  if (val.isFunction()) {
+    QString proto = QxrdDocumentationDictionary::get_Proto(item);
+    res.append(tr("<p>%1</p>\n").arg(prefix+proto));
+    res.append(tr("%1\n").arg(doc));
+  } else if (val.isObject()) {
+    res.append(tr("%1\n").arg(doc));
+    QObject *qobj = val.toQObject();
+
+    if (qobj) {
+      res.append(tr("<h3>QObject class %1 name %2</h3>\n")
+                 .arg(qobj->metaObject()->className())
+                 .arg(qobj->objectName()));
+
+      const QMetaObject *meta = qobj->metaObject();
+
+      if (meta->propertyCount() > QObject::staticMetaObject.propertyCount()) {
+        res.append(tr("<h3>Properties of %1</h3>\n").arg(itemName));
+        res.append(tr("<table>\n"));
+
+        for (int i=QObject::staticMetaObject.propertyCount();
+             i<meta->propertyCount(); i++) {
+          const char* propName = meta->property(i).name();
+          QVariant val = qobj->property(propName);
+
+          res.append(tr("<tr>\n"));
+          res.append(tr("<td>%1</td>\n").arg(prefix+propName));
+          res.append(tr("<td>%1</td>\n").arg(val.typeName()));
+          res.append(tr("<td>%1</td>\n").arg(val.toString()));
+          res.append(tr("</tr>\n"));
+        }
+
+        res.append(tr("</table>\n"));
+      }
+
+      if (meta->methodCount() > QObject::staticMetaObject.methodCount()) {
+        res.append(tr("<h3>Methods of %1</h3>\n").arg(itemName));
+        res.append(tr("<table>\n"));
+
+        for (int i=QObject::staticMetaObject.methodCount();
+             i<meta->methodCount(); i++) {
+          const char* methodSig = meta->method(i).signature();
+
+          res.append(tr("<tr>\n"));
+          res.append(tr("<td>%1</td>\n").arg(prefix+methodSig));
+          res.append(tr("</tr>\n"));
+        }
+
+        res.append(tr("</table>\n"));
+      }
+    } else {
+      QScriptValueIterator iter(val);
+
+      QMap<QString, QScriptValue> subObjects, properties, functions;
+
+      while (iter.hasNext()) {
+        iter.next();
+
+        QScriptValue v = iter.value();
+        QString      n = iter.name();
+
+        if (v.isFunction()) {
+          functions.insert(n, v);
+        } else if (v.isObject()) {
+          subObjects.insert(n, v);
+        } else {
+          properties.insert(n, v);
+        }
+      }
+
+      if (subObjects.count()) {
+        QMapIterator<QString,QScriptValue> obj_iter(subObjects);
+
+        res.append(tr("<h3>Sub Objects of %1</h3>\n").arg(itemName));
+        res.append(tr("<table>\n"));
+
+        while (obj_iter.hasNext()) {
+          obj_iter.next();
+
+          res.append(tr("<tr>\n"));
+          res.append(tr("<td>%1</td>").arg(documentationLink(prefix+item, obj_iter.key())));
+          res.append(tr("</tr>\n"));
+        }
+
+        res.append(tr("</table>\n"));
+      }
+
+      if (properties.count()) {
+        QMapIterator<QString,QScriptValue> prop_iter(properties);
+
+        res.append(tr("<h3>Properties of %1</h3>\n").arg(itemName));
+        res.append(tr("<table>\n"));
+
+        while (prop_iter.hasNext()) {
+          prop_iter.next();
+
+          res.append(tr("<tr>\n"));
+          res.append(tr("<td>%1</td>").arg(documentationLink(prefix+item, prop_iter.key())));
+          res.append(tr("</tr>\n"));
+        }
+
+        res.append(tr("</table>\n"));
+      }
+
+      if (functions.count()) {
+        QMapIterator<QString,QScriptValue> func_iter(functions);
+
+        res.append(tr("<h3>Methods of %1</h3>\n").arg(itemName));
+        res.append(tr("<table>\n"));
+
+        while (func_iter.hasNext()) {
+          func_iter.next();
+
+          res.append(tr("<tr>\n"));
+          res.append(tr("<td>%1</td>").arg(documentationLink(prefix+item, func_iter.key())));
+          res.append(tr("</tr>\n"));
+        }
+
+        res.append(tr("</table>\n"));
+      }
+    }
+  }
+
+  QScriptValueIterator iter(val);
+
+  QMap<QString,QObject*>      subObjects;
+  QMap<QString,QcepProperty*> objectProperties;
+  QMap<QString,QScriptValue>  memberFunctions;
+
+  if (iter.hasNext()) {
+    res.append("<table>\n");
+    res.append("<tr>\n");
+    res.append("<th>Name</th>\n");
+    res.append("<th>Value</th>\n");
+    res.append("<th>Data</th>\n");
+    res.append("<th>Proto</th>\n");
+    res.append("<th>Arr?</th>\n");
+    res.append("<th>Bool?</th>\n");
+    res.append("<th>Num?</th>\n");
+    res.append("<th>Obj?</th>\n");
+    res.append("<th>QObj?</th>\n");
+    res.append("<th>QMta?</th>\n");
+    res.append("<th>Fun?</th>\n");
+    res.append("<th>Var?</th>\n");
+    res.append("<th>Str?</th>\n");
+    res.append("</tr>\n");
+
+    while (iter.hasNext()) {
+      iter.next();
+      if (iter.name() != "documentation") {
+        QScriptValue val = iter.value();
+
+        if (val.isQObject()) {
+          QObject *obj = val.toQObject();
+
+          if (obj) {
+            QcepProperty *prop = qobject_cast<QcepProperty*>(obj);
+
+            if (prop) {
+              objectProperties.insert(iter.name(),prop);
+            } else {
+              subObjects.insert(iter.name(),obj);
+            }
+          }
+        } else if (val.isFunction()) {
+          memberFunctions.insert(iter.name(),val);
+        }
+      }
+
+      QScriptValue val = iter.value();
+      res.append("<tr>\n");
+      res.append(tr("<td>%1</td>\n").arg(documentationLink(item,iter.name())));
+      res.append(tr("<td>%1</td>\n").arg(val.toString()));
+      res.append(tr("<td>%1</td>\n").arg(val.data().toString()));
+      res.append(tr("<td>%1</td>\n").arg(val.prototype().toString()));
+      res.append(tr("<td align=center>%1</td>\n").arg(val.isArray()?"ARR":""));
+      res.append(tr("<td align=center>%1</td>\n").arg(val.isBool()?"BOOL":""));
+      res.append(tr("<td align=center>%1</td>\n").arg(val.isNumber()?"NUM":""));
+      res.append(tr("<td align=center>%1</td>\n").arg(val.isObject()?"OBJ":""));
+      res.append(tr("<td align=center>%1</td>\n").arg(val.isQObject()?"QOBJ":""));
+      res.append(tr("<td align=center>%1</td>\n").arg(val.isQMetaObject()?"QMETA":""));
+      res.append(tr("<td align=center>%1</td>\n").arg(val.isFunction()?"FUNC":""));
+      res.append(tr("<td align=center>%1</td>\n").arg(val.isVariant()?"VRNT":""));
+      res.append(tr("<td align=center>%1</td>\n").arg(val.isString()?"STRG":""));
+      res.append("</tr>\n");
+    }
+
+    res.append("</table>\n");
+  }
+
+  if (objectProperties.count()) {
+    res.append(tr("<h3>Properties</h3>\n"));
+    res.append(tr("<dl>\n"));
+
+    foreach(QcepProperty *prop, objectProperties) {
+      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,prop->name())));
+      res.append(tr("<dd>%1</dd>\n").arg(prop->toolTip()));
+    }
+
+    res.append(tr("</dl>\n"));
+  }
+
+  if (memberFunctions.count()) {
+    res.append(tr("<h3>Functions</h3>\n"));
+    res.append(tr("<dl>\n"));
+
+    foreach(QScriptValue val, memberFunctions) {
+      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,val.property("name").toString())));
+      QString propDoc = val.property("documentation").toString();
+      res.append(tr("<dd>%1</dd>\n").arg(propDoc));
+    }
+
+    res.append(tr("</dl>\n"));
+  }
+
+  if (subObjects.count()) {
+    res.append(tr("<h3>Sub Objects</h3>\n"));
+    res.append(tr("<dl>\n"));
+
+    foreach(QObject *obj, subObjects) {
+      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,obj->objectName())));
+      QString propDoc = obj->property("documentation").toString();
+      res.append(tr("<dd>%1</dd>\n").arg(propDoc));
+    }
+
+    res.append(tr("</dl>\n"));
+  }
+
+  return res;
+}
+
+QByteArray QxrdScriptEngine::helpText(QString item)
+{
+  QString scriptItem;
+
+//  if (item.isEmpty()) {
+//    scriptItem = "global";
+//  } else {
+    scriptItem = item;
+//  }
+
+  QByteArray res;
+
+  res.append(
+        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"
+        "<html>\n"
+        "  <head>\n"
+        "    <title>qxrd help</title>\n"
+        "  </head>\n"
+        "\n"
+        "  <body>\n");
+
+  res.append(documentationText(scriptItem));
+
+  res.append(
+        "  </body>\n"
+        "</html>\n");
+
+  return res;
 }
