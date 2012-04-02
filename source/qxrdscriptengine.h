@@ -48,8 +48,10 @@ public:
   void setWindow(QxrdWindow *win);
 
   QString documentationLink(QString base, QString subItem);
-  QString documentationText(QString item);
   QByteArray helpText(QString item);
+
+public slots:
+  QString documentationText(QString item);
 
 //  QScriptValue newQxrdObject(QObject *object, QString objectName);
 //  QScriptValue newQxrdFunction(FunctionSignature fun, QString objectName);

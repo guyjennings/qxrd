@@ -75,7 +75,8 @@ OTHER_FILES += help/qxrdhelptext.html \
     testScriptPlot.js \
     testImage.js \
     tilt_test.js \
-    testscript.js
+    testscript.js \
+    unsubtractDark.js
 DISTFILES += qxrd.dox \
     download/index.php \
     images/*.* \

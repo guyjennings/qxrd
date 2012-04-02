@@ -1,7 +1,7 @@
 #include "qcepproperty.h"
 #include "qxrdapplication.h"
 #include "qxrdsettingssaver.h"
-#include "qxrddocumentationforobject.h"
+#include "qxrddocumentationdictionary.h"
 
 #include <QMutexLocker>
 #include <QSpinBox>

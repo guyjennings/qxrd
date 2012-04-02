@@ -199,6 +199,35 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
   return QScriptValue(engine, 1);
 }
 
+QXRD_DOC_FUNCTION(
+    "acquire",
+    "acquire</b>([fileName[, exposure[, summedExposures[, postTriggerFiles[, preTriggerFiles[, nPhases]]]]]])",
+    "<p>Start acquisition of a sequence of images</p>\n")
+
+QXRD_DOC_LONG(
+    "acquire",
+    "<p>The arguments are optional and may be succssively omitted from the"
+    "right.  If preTriggerFiles is omitted, zero is used instead."
+    "If nPhases is omitted, one is used."
+    "Any other argument which is omitted will take it's value"
+    "instead from the values entered in the acquire dialog.  Any"
+    "argument which is given will replace the corresponding value"
+    "in the acquire dialog.</p>\n"
+    "<p>Note that the script function merely starts the acquisition"
+    "- you should use the separate \"status\" function to wait for"
+    "acquisition and processing to be completed.</p>\n"
+    "<p>The following is a typical example of the use of this"
+    "command from spec:</p>\n"
+    "<p>"
+    "<code>"
+    "def PEexp(filename,exposure,subframes,frames) '{<br/>"
+    "&nbsp;&nbsp;remote_eval(PEHOST,"
+    "sprintf(\"acquire(\\\"%s\\\",%g,%d,%d,0)\",filename,exposure,subframes,frames));<br/>"
+    "&nbsp;&nbsp;<br/> &nbsp;&nbsp;PEwait()<br/> }'<br/>"
+    "</code>"
+    "</p>"
+    )
+
 QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -753,6 +782,7 @@ void QxrdScriptEngine::initialize()
   QXRD_DOC_OBJECT("global", "The Global Object");
 
   globalObject().setProperty("global", globalObject());
+  globalObject().setProperty("scripting", newQObject(this));
   globalObject().setProperty("acquire", newFunction(acquireFunc));
   globalObject().setProperty("acquireDark", newFunction(acquireDarkFunc));
   globalObject().setProperty("status", newFunction(statusFunc));
@@ -915,13 +945,18 @@ QString QxrdScriptEngine::documentationText(QString item)
   QString res;
   //  QString name  = val.toString();
   QString doc   = QxrdDocumentationDictionary::get_Doc(item);
+  QString proto = QxrdDocumentationDictionary::get_Proto(item);
 
   res.append(tr("<h2>Documentation for %1</h2>\n").arg(itemName));
 
   if (val.isFunction()) {
-    QString proto = QxrdDocumentationDictionary::get_Proto(item);
-    res.append(tr("<p>%1</p>\n").arg(prefix+proto));
-    res.append(tr("%1\n").arg(doc));
+    if (proto.length()) {
+      res.append(tr("<p><i>%1</i></p>\n").arg(prefix+proto));
+    }
+
+    if (doc.length()) {
+      res.append(tr("%1\n").arg(doc));
+    }
   } else if (val.isObject()) {
     res.append(tr("%1\n").arg(doc));
     QObject *qobj = val.toQObject();
@@ -935,37 +970,52 @@ QString QxrdScriptEngine::documentationText(QString item)
 
       if (meta->propertyCount() > QObject::staticMetaObject.propertyCount()) {
         res.append(tr("<h3>Properties of %1</h3>\n").arg(itemName));
-        res.append(tr("<table>\n"));
 
         for (int i=QObject::staticMetaObject.propertyCount();
              i<meta->propertyCount(); i++) {
           const char* propName = meta->property(i).name();
           QVariant val = qobj->property(propName);
 
-          res.append(tr("<tr>\n"));
-          res.append(tr("<td>%1</td>\n").arg(prefix+propName));
-          res.append(tr("<td>%1</td>\n").arg(val.typeName()));
-          res.append(tr("<td>%1</td>\n").arg(val.toString()));
-          res.append(tr("</tr>\n"));
-        }
+          res.append("<div style=\"background-color:#e0e0e0;\">\n");
+          res.append(tr("<p><i>%1</i> : %2 = %3</p>\n")
+                     .arg(prefix+propName)
+                     .arg(val.typeName())
+                     .arg(val.toString()));
+          res.append(tr("</div>\n"));
 
-        res.append(tr("</table>\n"));
+          QString doc = QxrdDocumentationDictionary::get_Doc(prefix+propName);
+
+          if (doc.length()) {
+            res.append(tr("<div style=\"margin-left:20px\">\n"));
+            res.append(tr("<p>%1</p>\n").arg(doc));
+            res.append(tr("</div>\n"));
+          }
+        }
       }
 
       if (meta->methodCount() > QObject::staticMetaObject.methodCount()) {
         res.append(tr("<h3>Methods of %1</h3>\n").arg(itemName));
-        res.append(tr("<table>\n"));
 
         for (int i=QObject::staticMetaObject.methodCount();
              i<meta->methodCount(); i++) {
           const char* methodSig = meta->method(i).signature();
 
-          res.append(tr("<tr>\n"));
-          res.append(tr("<td>%1</td>\n").arg(prefix+methodSig));
-          res.append(tr("</tr>\n"));
-        }
+          res.append(tr("<dl>\n"));
+          res.append(tr("<dt><i>%1</i></dt>\n").arg(prefix+methodSig));
 
-        res.append(tr("</table>\n"));
+          QString proto = QxrdDocumentationDictionary::get_Proto(prefix+methodSig);
+          QString doc   = QxrdDocumentationDictionary::get_Doc(prefix+methodSig);
+
+          if (proto.length()) {
+            res.append(tr("<dd><p>%1</p></dd>\n").arg(proto));
+          }
+
+          if (doc.length()) {
+            res.append(tr("<dd>%1</dd>\n").arg(doc));
+          }
+
+          res.append(tr("</dl>\n"));
+        }
       }
     } else {
       QScriptValueIterator iter(val);
@@ -1040,110 +1090,110 @@ QString QxrdScriptEngine::documentationText(QString item)
     }
   }
 
-  QScriptValueIterator iter(val);
+//  QScriptValueIterator iter(val);
 
-  QMap<QString,QObject*>      subObjects;
-  QMap<QString,QcepProperty*> objectProperties;
-  QMap<QString,QScriptValue>  memberFunctions;
+//  QMap<QString,QObject*>      subObjects;
+//  QMap<QString,QcepProperty*> objectProperties;
+//  QMap<QString,QScriptValue>  memberFunctions;
 
-  if (iter.hasNext()) {
-    res.append("<table>\n");
-    res.append("<tr>\n");
-    res.append("<th>Name</th>\n");
-    res.append("<th>Value</th>\n");
-    res.append("<th>Data</th>\n");
-    res.append("<th>Proto</th>\n");
-    res.append("<th>Arr?</th>\n");
-    res.append("<th>Bool?</th>\n");
-    res.append("<th>Num?</th>\n");
-    res.append("<th>Obj?</th>\n");
-    res.append("<th>QObj?</th>\n");
-    res.append("<th>QMta?</th>\n");
-    res.append("<th>Fun?</th>\n");
-    res.append("<th>Var?</th>\n");
-    res.append("<th>Str?</th>\n");
-    res.append("</tr>\n");
+//  if (iter.hasNext()) {
+//    res.append("<table>\n");
+//    res.append("<tr>\n");
+//    res.append("<th>Name</th>\n");
+//    res.append("<th>Value</th>\n");
+//    res.append("<th>Data</th>\n");
+//    res.append("<th>Proto</th>\n");
+//    res.append("<th>Arr?</th>\n");
+//    res.append("<th>Bool?</th>\n");
+//    res.append("<th>Num?</th>\n");
+//    res.append("<th>Obj?</th>\n");
+//    res.append("<th>QObj?</th>\n");
+//    res.append("<th>QMta?</th>\n");
+//    res.append("<th>Fun?</th>\n");
+//    res.append("<th>Var?</th>\n");
+//    res.append("<th>Str?</th>\n");
+//    res.append("</tr>\n");
 
-    while (iter.hasNext()) {
-      iter.next();
-      if (iter.name() != "documentation") {
-        QScriptValue val = iter.value();
+//    while (iter.hasNext()) {
+//      iter.next();
+//      if (iter.name() != "documentation") {
+//        QScriptValue val = iter.value();
 
-        if (val.isQObject()) {
-          QObject *obj = val.toQObject();
+//        if (val.isQObject()) {
+//          QObject *obj = val.toQObject();
 
-          if (obj) {
-            QcepProperty *prop = qobject_cast<QcepProperty*>(obj);
+//          if (obj) {
+//            QcepProperty *prop = qobject_cast<QcepProperty*>(obj);
 
-            if (prop) {
-              objectProperties.insert(iter.name(),prop);
-            } else {
-              subObjects.insert(iter.name(),obj);
-            }
-          }
-        } else if (val.isFunction()) {
-          memberFunctions.insert(iter.name(),val);
-        }
-      }
+//            if (prop) {
+//              objectProperties.insert(iter.name(),prop);
+//            } else {
+//              subObjects.insert(iter.name(),obj);
+//            }
+//          }
+//        } else if (val.isFunction()) {
+//          memberFunctions.insert(iter.name(),val);
+//        }
+//      }
 
-      QScriptValue val = iter.value();
-      res.append("<tr>\n");
-      res.append(tr("<td>%1</td>\n").arg(documentationLink(item,iter.name())));
-      res.append(tr("<td>%1</td>\n").arg(val.toString()));
-      res.append(tr("<td>%1</td>\n").arg(val.data().toString()));
-      res.append(tr("<td>%1</td>\n").arg(val.prototype().toString()));
-      res.append(tr("<td align=center>%1</td>\n").arg(val.isArray()?"ARR":""));
-      res.append(tr("<td align=center>%1</td>\n").arg(val.isBool()?"BOOL":""));
-      res.append(tr("<td align=center>%1</td>\n").arg(val.isNumber()?"NUM":""));
-      res.append(tr("<td align=center>%1</td>\n").arg(val.isObject()?"OBJ":""));
-      res.append(tr("<td align=center>%1</td>\n").arg(val.isQObject()?"QOBJ":""));
-      res.append(tr("<td align=center>%1</td>\n").arg(val.isQMetaObject()?"QMETA":""));
-      res.append(tr("<td align=center>%1</td>\n").arg(val.isFunction()?"FUNC":""));
-      res.append(tr("<td align=center>%1</td>\n").arg(val.isVariant()?"VRNT":""));
-      res.append(tr("<td align=center>%1</td>\n").arg(val.isString()?"STRG":""));
-      res.append("</tr>\n");
-    }
+//      QScriptValue val = iter.value();
+//      res.append("<tr>\n");
+//      res.append(tr("<td>%1</td>\n").arg(documentationLink(item,iter.name())));
+//      res.append(tr("<td>%1</td>\n").arg(val.toString()));
+//      res.append(tr("<td>%1</td>\n").arg(val.data().toString()));
+//      res.append(tr("<td>%1</td>\n").arg(val.prototype().toString()));
+//      res.append(tr("<td align=center>%1</td>\n").arg(val.isArray()?"ARR":""));
+//      res.append(tr("<td align=center>%1</td>\n").arg(val.isBool()?"BOOL":""));
+//      res.append(tr("<td align=center>%1</td>\n").arg(val.isNumber()?"NUM":""));
+//      res.append(tr("<td align=center>%1</td>\n").arg(val.isObject()?"OBJ":""));
+//      res.append(tr("<td align=center>%1</td>\n").arg(val.isQObject()?"QOBJ":""));
+//      res.append(tr("<td align=center>%1</td>\n").arg(val.isQMetaObject()?"QMETA":""));
+//      res.append(tr("<td align=center>%1</td>\n").arg(val.isFunction()?"FUNC":""));
+//      res.append(tr("<td align=center>%1</td>\n").arg(val.isVariant()?"VRNT":""));
+//      res.append(tr("<td align=center>%1</td>\n").arg(val.isString()?"STRG":""));
+//      res.append("</tr>\n");
+//    }
 
-    res.append("</table>\n");
-  }
+//    res.append("</table>\n");
+//  }
 
-  if (objectProperties.count()) {
-    res.append(tr("<h3>Properties</h3>\n"));
-    res.append(tr("<dl>\n"));
+//  if (objectProperties.count()) {
+//    res.append(tr("<h3>Properties</h3>\n"));
+//    res.append(tr("<dl>\n"));
 
-    foreach(QcepProperty *prop, objectProperties) {
-      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,prop->name())));
-      res.append(tr("<dd>%1</dd>\n").arg(prop->toolTip()));
-    }
+//    foreach(QcepProperty *prop, objectProperties) {
+//      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,prop->name())));
+//      res.append(tr("<dd>%1</dd>\n").arg(prop->toolTip()));
+//    }
 
-    res.append(tr("</dl>\n"));
-  }
+//    res.append(tr("</dl>\n"));
+//  }
 
-  if (memberFunctions.count()) {
-    res.append(tr("<h3>Functions</h3>\n"));
-    res.append(tr("<dl>\n"));
+//  if (memberFunctions.count()) {
+//    res.append(tr("<h3>Functions</h3>\n"));
+//    res.append(tr("<dl>\n"));
 
-    foreach(QScriptValue val, memberFunctions) {
-      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,val.property("name").toString())));
-      QString propDoc = val.property("documentation").toString();
-      res.append(tr("<dd>%1</dd>\n").arg(propDoc));
-    }
+//    foreach(QScriptValue val, memberFunctions) {
+//      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,val.property("name").toString())));
+//      QString propDoc = val.property("documentation").toString();
+//      res.append(tr("<dd>%1</dd>\n").arg(propDoc));
+//    }
 
-    res.append(tr("</dl>\n"));
-  }
+//    res.append(tr("</dl>\n"));
+//  }
 
-  if (subObjects.count()) {
-    res.append(tr("<h3>Sub Objects</h3>\n"));
-    res.append(tr("<dl>\n"));
+//  if (subObjects.count()) {
+//    res.append(tr("<h3>Sub Objects</h3>\n"));
+//    res.append(tr("<dl>\n"));
 
-    foreach(QObject *obj, subObjects) {
-      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,obj->objectName())));
-      QString propDoc = obj->property("documentation").toString();
-      res.append(tr("<dd>%1</dd>\n").arg(propDoc));
-    }
+//    foreach(QObject *obj, subObjects) {
+//      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,obj->objectName())));
+//      QString propDoc = obj->property("documentation").toString();
+//      res.append(tr("<dd>%1</dd>\n").arg(propDoc));
+//    }
 
-    res.append(tr("</dl>\n"));
-  }
+//    res.append(tr("</dl>\n"));
+//  }
 
   return res;
 }
