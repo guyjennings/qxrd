@@ -15,7 +15,7 @@ void QxrdHelpBrowser::init(QxrdExperimentWPtr expt)
 QVariant QxrdHelpBrowser::loadResource(int type, const QUrl &name)
 {
   printf("QxrdHelpBrowser::loadResource(%d,\"%s\",\"%s\",\"%s\")\n",
-         type, qPrintable(name.scheme()), qPrintable(name.path()), qPrintable(name.encodedQuery()));
+         type, qPrintable(name.scheme()), qPrintable(name.path()), name.encodedQuery().data());
 
   QxrdExperimentPtr expt(m_Experiment);
 

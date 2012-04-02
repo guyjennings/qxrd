@@ -27,6 +27,7 @@ QxrdExperiment::QxrdExperiment(
     QString path,
     QxrdApplication *app) :
   QObject(NULL),
+  m_ObjectNamer(this, "experiment"),
   m_Application(app),
   m_ExperimentThread(),
   m_SettingsSaver(new QxrdSettingsSaver(this)),
@@ -67,8 +68,6 @@ QxrdExperiment::QxrdExperiment(
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::QxrdExperiment(%p)\n", this);
   }
-
-  setObjectName("experiment");
 }
 
 void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd)

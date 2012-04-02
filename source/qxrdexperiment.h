@@ -36,6 +36,7 @@
 #include "qxrddetectorthread-ptr.h"
 #include "qxrddetector.h"
 #include "qxrddetector-ptr.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdExperiment : public QObject
 {
@@ -116,9 +117,10 @@ private:
   void openScanFile();
 
 private:
-  QxrdApplication             *m_Application;
-  QxrdExperimentThreadWPtr     m_ExperimentThread;
-  QxrdSettingsSaverPtr         m_SettingsSaver;
+  QxrdObjectNamer                 m_ObjectNamer;
+  QxrdApplication                *m_Application;
+  QxrdExperimentThreadWPtr        m_ExperimentThread;
+  QxrdSettingsSaverPtr            m_SettingsSaver;
 
 private:
   QxrdWindowSettingsPtr           m_WindowSettings;

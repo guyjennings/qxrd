@@ -33,6 +33,7 @@
 #include "qxrdacquisitiontriggerdialog-ptr.h"
 #include "qxrdacquisitionextrainputsdialog-ptr.h"
 #include "qxrdwindowsettings.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -140,6 +141,7 @@ private:
   void setupRecentExperimentsMenu(QAction *action);
 
 private:
+  QxrdObjectNamer                        m_ObjectNamer;
   mutable QMutex                         m_Mutex;
   QxrdWindowSettingsWPtr                 m_WindowSettings;
   QxrdApplication                       *m_Application;

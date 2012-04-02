@@ -61,6 +61,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
                        QxrdAllocatorWPtr allocw,
                        QWidget *parent)
   : QMainWindow(parent),
+    m_ObjectNamer(this, "window"),
     m_Mutex(QMutex::Recursive),
     m_WindowSettings(settings),
     m_Application(app),
@@ -103,8 +104,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   if (m_Application && qcepDebug(DEBUG_APP)) {
     m_Application->printMessage("QxrdWindow::QxrdWindow");
   }
-
-  setObjectName("window");
 
   setupUi(this);
 

@@ -10,6 +10,7 @@
 #include "qxrdallocator-ptr.h"
 #include "qxrddetectorgeometry-ptr.h"
 #include "qxrddetectorgeometry.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdGenerateTestImage : public QObject
 {
@@ -35,11 +36,14 @@ public slots:
 public:
   void setProcessor(QxrdDataProcessorWPtr proc);
 
-public:
+private:
+  QxrdObjectNamer         m_ObjectNamer;
+
   QxrdDataProcessorWPtr   m_Processor;
   QxrdAllocatorWPtr       m_Allocator;
   QxrdDetectorGeometryPtr m_Geometry;
 
+public:
   Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows)
   QCEP_INTEGER_PROPERTY(NRows)
 

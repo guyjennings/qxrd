@@ -10,6 +10,7 @@
 QxrdAllocator::QxrdAllocator
 (QxrdSettingsSaverPtr saver)
   : QObject(NULL),
+    m_ObjectNamer(this, "allocator"),
     m_AllocatedMemory(0),
     m_AllocatedMemoryMB(0),
     m_Max(saver, this, "max", 800, "Maximum Image Memory (MB)"),
@@ -27,8 +28,6 @@ QxrdAllocator::QxrdAllocator
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAllocator::QxrdAllocator(%p)\n", this);
   }
-
-  setObjectName("allocator");
 
   if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage(tr("allocator %1 constructed").HEXARG(this));

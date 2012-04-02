@@ -11,6 +11,7 @@
 
 QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr alloc) :
   QObject(NULL),
+  m_ObjectNamer(this, "testImage"),
   m_Processor(),
   m_Allocator(alloc),
   m_Geometry(new QxrdDetectorGeometry()),
@@ -31,7 +32,6 @@ QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver, QxrdAl
   m_RingIntensity(saver, this, "ringIntensity", QcepDoubleList(), "Intensities of rings"),
   m_RingWidth(saver, this, "ringWidth", QcepDoubleList(), "Widths of Rings")
 {
-  setObjectName("testImage");
 }
 
 void QxrdGenerateTestImage::setProcessor(QxrdDataProcessorWPtr proc)

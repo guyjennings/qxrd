@@ -23,6 +23,7 @@
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QxrdPlot(parent),
+    m_ObjectNamer(this, "imageGraph"),
     m_ImagePlotSettings(),
     m_Rescaler(NULL),
     m_Slicer(NULL),
@@ -48,7 +49,6 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Polygons(NULL),
     m_FirstTime(true)
 {
-  setObjectName("imageGraph");
 }
 
 void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)

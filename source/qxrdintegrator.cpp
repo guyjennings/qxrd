@@ -19,6 +19,7 @@
 
 QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc)
   : QObject(NULL),
+    m_ObjectNamer(this, "integrator"),
     m_Oversample(saver, this, "oversample", 1, "Oversampling for Integration"),
     m_IntegrationStep(saver, this, "integrationStep", 0.001, "Integration Step Size"),
     m_IntegrationNSteps(saver, this, "integrationNSteps", 0, "Integration Number of Steps"),
@@ -33,8 +34,6 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr e
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdIntegrator::QxrdIntegrator(%p)\n", this);
   }
-
-  setObjectName("integrator");
 
   connect(this->prop_Oversample(),         SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
   connect(this->prop_IntegrationStep(),    SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));

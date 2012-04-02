@@ -21,12 +21,12 @@
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   : QxrdPlot(parent),
+    m_ObjectNamer(this, "centeringGraph"),
     m_Window(),
     m_DataProcessor(),
     m_CenterFinder(),
     m_FirstTime(true)
 {
-  setObjectName("centeringGraph");
 }
 
 void QxrdCenterFinderPlot::init(QxrdPlotSettingsWPtr settings)

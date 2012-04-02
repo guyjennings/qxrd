@@ -12,6 +12,7 @@
 #include "qxrdimagedata-ptr.h"
 #include "qxrdacquisitionextrainputschannel.h"
 #include "qxrdacquisitionextrainputschannel-ptr.h"
+#include "qxrdobjectnamer.h"
 #include <QSettings>
 #include <QMutex>
 
@@ -55,6 +56,9 @@ public slots:
   double          sumChannel(int ch);
   QVector<QxrdAcquisitionExtraInputsChannelPtr> channels() const;
   QxrdAcquisitionExtraInputsChannelPtr channel(int chan) const;
+
+private:
+  QxrdObjectNamer m_ObjectNamer;
 
 public:
   Q_PROPERTY(bool enabled READ get_Enabled WRITE set_Enabled STORED false)

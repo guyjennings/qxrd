@@ -6,6 +6,7 @@
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdAcquisitionExtraInputsChannel : public QObject
 {
@@ -28,6 +29,9 @@ public slots:
   double          minimumChannel();
   int             startIndex();
   int             endIndex();
+
+private:
+  QxrdObjectNamer m_ObjectNamer;
 
 public:
   enum {

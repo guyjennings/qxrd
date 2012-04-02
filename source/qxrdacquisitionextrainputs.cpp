@@ -9,6 +9,7 @@
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
   QObject(acq.data()),
+  m_ObjectNamer(this, "extraInputs"),
   m_Enabled(QxrdSettingsSaverPtr(), this, "enabled", 0, "Extra Inputs Enabled?"),
   m_Skipping(QxrdSettingsSaverPtr(), this, "skipping", 0, "Skipping initial readout?"),
   m_SampleRate(saver, this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
@@ -25,8 +26,6 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr sav
   if (acqp) {
     m_NIDAQPlugin = acqp->nidaqPlugin();
   }
-
-  setObjectName("extraInputs");
 
   connect(prop_SampleRate(), SIGNAL(valueChanged(double,int)), this, SLOT(reinitialize()));
 

@@ -14,6 +14,7 @@
 #include "qxrdimagedata-ptr.h"
 #include "qxrdintegrateddata-ptr.h"
 #include "qxrdmaskdata-ptr.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdAllocator : public QObject
 {
@@ -90,11 +91,13 @@ private:
 
 
 private:
+  QxrdObjectNamer       m_ObjectNamer;
   QMutex                m_Mutex;
   QTimer                m_Timer;
   quint64               m_AllocatedMemory;
   QAtomicInt            m_AllocatedMemoryMB;
 
+public:
   enum { MegaBytes = 0x100000 };
 
   Q_PROPERTY(int     max        READ get_Max   WRITE set_Max)

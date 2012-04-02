@@ -7,6 +7,7 @@
 QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
     int chnum, QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra) :
   QObject(),
+  m_ObjectNamer(this, tr("extraChannel(%1)").arg(chnum)),
   m_ChannelNumber(QxrdSettingsSaverPtr(), this, "channelNumber", chnum, "Extra Input Channel Number"),
   m_Enabled(saver, this, "enabled", 1, "Enabled?"),
   m_Plotted(saver, this, "plotted", 1, "Plotted?"),
@@ -26,8 +27,6 @@ QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
   m_Experiment(doc),
   m_ExtraInputs(xtra)
 {
-  setObjectName(tr("extraChannel(%1)").arg(chnum));
-
   connect(prop_ChannelName(), SIGNAL(valueChanged(QString,int)), this, SIGNAL(reinitializeNeeded()));
   connect(prop_Min(),         SIGNAL(valueChanged(double,int)),  this, SIGNAL(reinitializeNeeded()));
   connect(prop_Max(),         SIGNAL(valueChanged(double,int)),  this, SIGNAL(reinitializeNeeded()));

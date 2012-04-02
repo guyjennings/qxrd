@@ -8,6 +8,7 @@
 
 QxrdAcquisitionTrigger::QxrdAcquisitionTrigger(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
   QObject(),
+  m_ObjectNamer(this, "trigger"),
   m_TriggerSync(saver, this, "triggerSync", TriggerSyncNone, "Trigger Synchronization (0 = None, 1 = Sync, 2 = Async)"),
   m_TriggerAMode(saver, this,"triggerAMode", TriggerModeNone, "Trigger A Mode (0 = None, 1 = +Edge, 2 = -Edge, 3 = +Level, 4 = -Level)"),
   m_TriggerACard(saver, this,"triggerACard", TriggerCardNone, "Trigger A Card Number"),
@@ -31,8 +32,6 @@ QxrdAcquisitionTrigger::QxrdAcquisitionTrigger(QxrdSettingsSaverPtr saver, QxrdE
   m_Acquisition(acq)
 {
   startTimer(200);
-
-  setObjectName("trigger");
 }
 
 void QxrdAcquisitionTrigger::readSettings(QSettings *settings, QString section)

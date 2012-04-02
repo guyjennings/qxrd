@@ -20,6 +20,7 @@
 #include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
 #include "qxrddataprocessor-ptr.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdIntegrator : public QObject
 {
@@ -85,6 +86,7 @@ public slots:
   void onIntegrationParametersChanged();
 
 private:
+  QxrdObjectNamer        m_ObjectNamer;
   mutable QMutex         m_Mutex;
   QxrdExperimentWPtr     m_Experiment;
   QxrdCenterFinderWPtr   m_CenterFinder;

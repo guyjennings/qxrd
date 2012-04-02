@@ -30,6 +30,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdwindow-ptr.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdDataProcessorBase : public QObject
 {
@@ -42,6 +43,9 @@ public:
                         QxrdAllocatorWPtr allocator,
                         QxrdFileSaverWPtr filesaver);
   virtual ~QxrdDataProcessorBase();
+
+private:
+  QxrdObjectNamer m_ObjectNamer;
 
 public:
 //  Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory)

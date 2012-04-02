@@ -5,9 +5,9 @@
 #include <qwt_plot_marker.h>
 #include "qxrdmutexlocker.h"
 
-QxrdCenterFinder::QxrdCenterFinder
-    (QxrdSettingsSaverWPtr saver)
+QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver)
   : QxrdDetectorGeometry(),
+    m_ObjectNamer(this, "centering"),
     m_CenterX(saver, this, "centerX", 0, "X Center"),
     m_CenterY(saver, this, "centerY", 0, "Y Center"),
     m_CenterStep(saver, this, "centerStep", 1, "Center Step"),
@@ -19,8 +19,6 @@ QxrdCenterFinder::QxrdCenterFinder
     m_DetectorTilt(saver, this, "detectorTilt", 0, "Tilt Angle (deg)"),
     m_TiltPlaneRotation(saver, this, "tiltPlaneRotation", 90, "Tilt Plane Rotation (deg)")
 {
-  setObjectName("centering");
-
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 
 //  m_CenterX.setDebug(true);

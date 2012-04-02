@@ -19,6 +19,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
                                  QxrdDataProcessorWPtr proc,
                                  QxrdAllocatorWPtr allocator)
   : QObject(),
+    m_ObjectNamer(this, "acquisition"),
     m_Saver(saver),
     m_QxrdVersion(QxrdSettingsSaverPtr(), this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
     m_QtVersion(QxrdSettingsSaverPtr(), this,"qtVersion",qVersion(), "QT Version Number"),
@@ -70,7 +71,6 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
     m_ControlPanel(NULL),
     m_Idling(1)
 {
-  setObjectName("acquisition");
 }
 
 void QxrdAcquisition::initialize()

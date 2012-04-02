@@ -33,6 +33,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     QxrdFileSaverWPtr filesaver) :
 
   QObject(NULL),
+  m_ObjectNamer(this, "processor"),
   //    m_ProcessorType(this,"processorType",0),
   //    m_ProcessorTypeName(this,"processorTypeName","processorType"),
 //  m_OutputDirectory(saver, this,"outputDirectory", ""),
@@ -114,8 +115,6 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdDataProcessorBase::QxrdDataProcessorBase");
   }
-
-  setObjectName("processor");
 
   m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(saver));
   m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(saver, m_Experiment, m_CenterFinder, m_Allocator));
@@ -1200,7 +1199,7 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage(
     QTime tic;
     tic.start();
 
-    processed->set_Normalization(v);
+//    processed->set_Normalization(v);
 
     if (qcepDebug(DEBUG_PROCESS)) {
       printMessage(tr("Processing Image \"%1\", count %2")

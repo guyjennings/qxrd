@@ -32,6 +32,7 @@
 #include "qxrdacquisitiontriggerthread.h"
 #include "qxrdacquisitiontriggerthread-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdAcquisitionParameterPack
 {
@@ -215,6 +216,7 @@ private:
   int cancelling();
 
 private:
+  QxrdObjectNamer               m_ObjectNamer;
   QxrdSettingsSaverWPtr         m_Saver;
 
 public:

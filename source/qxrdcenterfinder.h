@@ -9,6 +9,7 @@
 #include <qwt_double_rect.h>
 #include "qxrddetectorgeometry.h"
 #include "qxrdsettingssaver-ptr.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
 {
@@ -16,6 +17,9 @@ class QxrdCenterFinder : public QxrdDetectorGeometry
 
 public:
   QxrdCenterFinder(QxrdSettingsSaverWPtr saver);
+
+private:
+  QxrdObjectNamer m_ObjectNamer;
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)

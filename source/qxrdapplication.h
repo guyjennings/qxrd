@@ -17,6 +17,7 @@
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsettingssaver.h"
+#include "qxrdobjectnamer.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface-ptr.h"
@@ -134,7 +135,8 @@ private:
 
   void setupTiffHandlers();
 
-public:
+private:
+  QxrdObjectNamer      m_ObjectNamer;
   QxrdSettingsSaverPtr m_Saver;
 
 public:

@@ -12,6 +12,7 @@
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdwindow-ptr.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdCenterFinderPlot : public QxrdPlot
 {
@@ -33,6 +34,7 @@ public slots:
   void onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
 
 private:
+  QxrdObjectNamer       m_ObjectNamer;
   QVector<double>       m_XData, m_YData;
   QxrdWindow           *m_Window;
   QxrdDataProcessorWPtr m_DataProcessor;

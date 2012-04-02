@@ -3,6 +3,7 @@
 
 QxrdImagePlotSettings::QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent) :
   QxrdPlotSettings(saver, parent),
+  m_ObjectNamer(this, "imageGraph"),
   m_DisplayMinimumPctle(saver, this, "displayMinimumPctle", 0, "Minimum Displayed Value (as a percentile)"),
   m_DisplayMaximumPctle(saver, this, "displayMaximumPctle", 100, "Maximum Displayed Value (as a percentile)"),
   m_DisplayMinimumPct(saver, this, "displayMinimumPct", 0, "Minimum Displayed Value (as % of data range)"),
@@ -22,7 +23,6 @@ QxrdImagePlotSettings::QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObjec
   m_ValMouse(QxrdSettingsSaverWPtr(), this,"valMouse",0, "Image Value at Mouse"),
   m_MaskMouse(QxrdSettingsSaverWPtr(), this,"maskMouse",0, "Mask Value at Mouse")
 {
-  setObjectName("imageGraph");
 }
 
 void QxrdImagePlotSettings::readSettings(QSettings *settings, QString section)

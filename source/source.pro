@@ -119,7 +119,8 @@ HEADERS += spec_server.h \
     qxrdhelpbrowser.h \
     qxrddocumentationdictionary.h \
     qxrddocumentationforobject.h \
-    qxrddocumentationforfunction.h
+    qxrddocumentationforfunction.h \
+    qxrdobjectnamer.h
 
 SOURCES += qspecserver.cpp \
     qcepproperty.cpp \
@@ -139,7 +140,8 @@ SOURCES += qspecserver.cpp \
     qxrdhelpbrowser.cpp \
     qxrddocumentationdictionary.cpp \
     qxrddocumentationforobject.cpp \
-    qxrddocumentationforfunction.cpp
+    qxrddocumentationforfunction.cpp \
+    qxrdobjectnamer.cpp
 
 OTHER_FILES += testImage.js
 

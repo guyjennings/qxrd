@@ -9,12 +9,16 @@
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdAcquisitionTrigger : public QObject
 {
   Q_OBJECT
 public:
   explicit QxrdAcquisitionTrigger(QxrdSettingsSaverPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
+
+private:
+  QxrdObjectNamer m_ObjectNamer;
 
 public:
   Q_PROPERTY(int triggerSync READ get_TriggerSync WRITE set_TriggerSync)

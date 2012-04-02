@@ -22,6 +22,7 @@
 #include "qxrdimagedata-ptr.h"
 #include "qxrdmaskdata-ptr.h"
 #include "qxrdimageplotsettings.h"
+#include "qxrdobjectnamer.h"
 
 class QxrdImagePlot : public QxrdPlot
 {
@@ -115,6 +116,7 @@ public:
   };
 
 private:
+  QxrdObjectNamer            m_ObjectNamer;
   QxrdImagePlotSettingsWPtr  m_ImagePlotSettings;
   QwtPlotRescaler           *m_Rescaler;
   QxrdPlotSlicer            *m_Slicer;
