@@ -320,6 +320,9 @@ public:
   Q_PROPERTY(QString userComment4 READ get_UserComment4 WRITE set_UserComment4)
   QCEP_STRING_PROPERTY(UserComment4)
 
+  Q_PROPERTY(QcepDoubleList normalization READ get_Normalization WRITE set_Normalization)
+  QCEP_DOUBLE_LIST_PROPERTY(Normalization)
+
   Q_PROPERTY(int     droppedFrames    READ get_DroppedFrames WRITE set_DroppedFrames STORED false)
   QCEP_INTEGER_PROPERTY(DroppedFrames)
 

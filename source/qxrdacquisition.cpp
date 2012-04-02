@@ -54,6 +54,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
     m_UserComment2(saver, this,"userComment2","", "User Comment 2"),
     m_UserComment3(saver, this,"userComment3","", "User Comment 3"),
     m_UserComment4(saver, this,"userComment4","", "User Comment 4"),
+    m_Normalization(saver, this, "normalization", QcepDoubleList(), "Normalization Values"),
     m_DroppedFrames(QxrdSettingsSaverPtr(), this,"droppedFrames",0, "Number of Dropped Frames"),
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL),
@@ -537,6 +538,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     proc -> set_UserComment4(get_UserComment4());
     proc -> set_ImageSaved(false);
     proc -> set_Triggered(trig);
+    proc -> set_Normalization(get_Normalization());
 
     copyDynamicProperties(proc.data());
 
