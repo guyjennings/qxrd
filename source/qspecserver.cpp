@@ -119,6 +119,10 @@ QSpecServer::clientRead()
 int
 QSpecServer::readPacketData()
 {
+  if (qcepDebug(DEBUG_SERVER)) {
+    printMessage(tr("QSpecServer::readPacketData start"));
+  }
+
   if (m_Packet.magic == SV_SPEC_MAGIC) {
     m_SwapBytes = 0;
   } else if (m_Packet.magic == swapUInt32(SV_SPEC_MAGIC)) {
@@ -148,12 +152,26 @@ QSpecServer::readPacketData()
   }
 
   if (m_Packet.len > 0) {
+    if (qcepDebug(DEBUG_SERVER)) {
+      printMessage(tr("QSpecServer::readPacketData m_Packet.len = %1").arg(m_Packet.len));
+    }
 
     if (m_Packet.len > m_Socket->bytesAvailable()) {
+      if (qcepDebug(DEBUG_SERVER)) {
+        printMessage(tr("QSpecServer::readPacketData available = %1").arg(m_Socket->bytesAvailable()));
+      }
       m_Socket -> waitForReadyRead();
     }
 
+    if (qcepDebug(DEBUG_SERVER)) {
+      printMessage(tr("QSpecServer::readPacketData about to read %1 bytes").arg(m_Packet.len));
+    }
+
     m_Data.append(m_Socket->read(m_Packet.len));
+  }
+
+  if (qcepDebug(DEBUG_SERVER)) {
+    printMessage(tr("QSpecServer::readPacketData end"));
   }
 
   return interpretPacket();
@@ -162,6 +180,11 @@ QSpecServer::readPacketData()
 int
 QSpecServer::interpretPacket()
 {
+
+  if (qcepDebug(DEBUG_SERVER)) {
+    printMessage(tr("QSpecServer::interpretPacket start"));
+  }
+
 //   printMessage(tr("Packet received: magic %1, version %2, size %3")
 // 		     .arg(m_Packet.magic).arg(m_Packet.vers).arg(m_Packet.size));
 //   printMessage(tr("Packet sn %1, sec %2, usec %3")
@@ -235,6 +258,10 @@ QSpecServer::interpretPacket()
     break;
   }
 
+  if (qcepDebug(DEBUG_SERVER)) {
+    printMessage(tr("QSpecServer::interpretPacket end"));
+  }
+
   return 0;
 }
 
@@ -267,6 +294,10 @@ QSpecServer::initReplyPacket()
 void
 QSpecServer::sendReplyPacket()
 {
+  if (qcepDebug(DEBUG_SERVER)) {
+    printMessage(tr("QSpecServer::sendReplyPacket start"));
+  }
+
 //  if (m_SwapBytes) {
 //    printf("Byte swapping not yet implemented for replies\n");
 //    return;
@@ -277,6 +308,10 @@ QSpecServer::sendReplyPacket()
   m_Socket -> write((char*) &m_Reply, sizeof(m_Reply));
   m_Socket -> write(m_ReplyData);
   m_Socket -> flush();
+
+  if (qcepDebug(DEBUG_SERVER)) {
+    printMessage(tr("QSpecServer::sendReplyPacket end"));
+  }
 }
 
 qint32
