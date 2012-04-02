@@ -249,6 +249,11 @@ public slots:
   void clearBadPixels();
   void clearGainMap();
 
+  void subtractDark();
+  void unsubtractDark();
+  void multiplyData(double scalar);
+  void offsetData(double offset);
+
   int  maskStackSize();
   int  maskStackPosition(int pos);
   void newMaskStack();
@@ -375,6 +380,7 @@ private:
   int getAcquiredCount();
 
   void subtractDarkImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark);
+  void unsubtractDarkImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark);
   void correctBadPixels(QxrdDoubleImageDataPtr image);
   void correctImageGains(QxrdDoubleImageDataPtr image);
   void performImageCorrections(QxrdDoubleImageDataPtr image);

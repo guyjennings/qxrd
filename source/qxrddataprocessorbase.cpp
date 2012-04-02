@@ -1280,64 +1280,126 @@ void QxrdDataProcessorBase::updateEstimatedTime(QcepDoubleProperty *prop, int ms
 
 void QxrdDataProcessorBase::subtractDarkImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark)
 {
-  if (get_PerformDarkSubtraction()) {
-    if (dark && image) {
-      if (dark->get_ExposureTime() != image->get_ExposureTime()) {
-        printMessage("Exposure times of acquired data and dark image are different, skipping");
-        return;
-      }
-
-      if (dark->get_Width() != image->get_Width() ||
-          dark->get_Height() != image->get_Height()) {
-        printMessage("Dimensions of acquired data and dark image are different, skipping");
-        return;
-      }
-
-      if (dark->get_CameraGain() != image->get_CameraGain()) {
-        printMessage("Gains of acquired data and dark image are different, skipping");
-        return;
-      }
-
-      if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
-            image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
-        printMessage("Acquired data is not a raw image, skipping background subtraction");
-        return;
-      }
-
-      QxrdMutexLocker lock1(__FILE__, __LINE__, dark->mutex());
-      QxrdMutexLocker lock2(__FILE__, __LINE__, image->mutex());
-
-      int height = image->get_Height();
-      int width  = image->get_Width();
-      int nres = image-> get_SummedExposures();
-      int ndrk = dark -> get_SummedExposures();
-      int npixels = width*height;
-
-      if (nres <= 0) nres = 1;
-
-      double ratio = ((double) nres)/((double) ndrk);
-
-//      printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
-//             nres, ndrk, npixels, ratio);
-
-      double *result = image->data();
-      double *dk     = dark->data();
-      double avgraw  = 0;
-//      double avgdark = 0;
-
-      for (int i=0; i<npixels; i++) {
-//        avgdark  += dk[i];
-        avgraw   += result[i];
-        result[i] = result[i]-ratio*dk[i];
-      }
-
-//      set_AverageDark(avgdark/npixels/ndrk);
-      set_AverageRaw(avgraw/npixels/nres);
-      set_Average(get_AverageRaw() - get_AverageDark());
-
-      image -> set_DataType(QxrdDoubleImageData::SubtractedData);
+  //  if (get_PerformDarkSubtraction()) {
+  if (dark && image) {
+    if (dark->get_ExposureTime() != image->get_ExposureTime()) {
+      printMessage("Exposure times of acquired data and dark image are different, skipping");
+      return;
     }
+
+    if (dark->get_Width() != image->get_Width() ||
+        dark->get_Height() != image->get_Height()) {
+      printMessage("Dimensions of acquired data and dark image are different, skipping");
+      return;
+    }
+
+    if (dark->get_CameraGain() != image->get_CameraGain()) {
+      printMessage("Gains of acquired data and dark image are different, skipping");
+      return;
+    }
+
+    if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
+          image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
+      printMessage("Acquired data is not a raw image, skipping background subtraction");
+      return;
+    }
+
+    QxrdMutexLocker lock1(__FILE__, __LINE__, dark->mutex());
+    QxrdMutexLocker lock2(__FILE__, __LINE__, image->mutex());
+
+    int height = image->get_Height();
+    int width  = image->get_Width();
+    int nres = image-> get_SummedExposures();
+    int ndrk = dark -> get_SummedExposures();
+    int npixels = width*height;
+
+    if (nres <= 0) nres = 1;
+
+    double ratio = ((double) nres)/((double) ndrk);
+
+    //      printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
+    //             nres, ndrk, npixels, ratio);
+
+    double *result = image->data();
+    double *dk     = dark->data();
+    double avgraw  = 0;
+    //      double avgdark = 0;
+
+    for (int i=0; i<npixels; i++) {
+      //        avgdark  += dk[i];
+      avgraw   += result[i];
+      result[i] = result[i]-ratio*dk[i];
+    }
+
+    //      set_AverageDark(avgdark/npixels/ndrk);
+    set_AverageRaw(avgraw/npixels/nres);
+    set_Average(get_AverageRaw() - get_AverageDark());
+
+    image -> set_DataType(QxrdDoubleImageData::SubtractedData);
   }
+  //  }
+}
+
+void QxrdDataProcessorBase::unsubtractDarkImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark)
+{
+  //  if (get_PerformDarkSubtraction()) {
+  if (dark && image) {
+    if (dark->get_ExposureTime() != image->get_ExposureTime()) {
+      printMessage("Exposure times of acquired data and dark image are different, skipping");
+      return;
+    }
+
+    if (dark->get_Width() != image->get_Width() ||
+        dark->get_Height() != image->get_Height()) {
+      printMessage("Dimensions of acquired data and dark image are different, skipping");
+      return;
+    }
+
+    if (dark->get_CameraGain() != image->get_CameraGain()) {
+      printMessage("Gains of acquired data and dark image are different, skipping");
+      return;
+    }
+
+    if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
+          image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
+      printMessage("Acquired data is not a raw image, skipping background subtraction");
+      return;
+    }
+
+    QxrdMutexLocker lock1(__FILE__, __LINE__, dark->mutex());
+    QxrdMutexLocker lock2(__FILE__, __LINE__, image->mutex());
+
+    int height = image->get_Height();
+    int width  = image->get_Width();
+    int nres = image-> get_SummedExposures();
+    int ndrk = dark -> get_SummedExposures();
+    int npixels = width*height;
+
+    if (nres <= 0) nres = 1;
+
+    double ratio = ((double) nres)/((double) ndrk);
+
+    //      printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
+    //             nres, ndrk, npixels, ratio);
+
+    double *result = image->data();
+    double *dk     = dark->data();
+    double avgraw  = 0;
+    //      double avgdark = 0;
+
+    for (int i=0; i<npixels; i++) {
+      //        avgdark  += dk[i];
+      avgraw   += result[i];
+      result[i] = result[i]+ratio*dk[i];
+    }
+
+    //      set_AverageDark(avgdark/npixels/ndrk);
+    set_AverageRaw(avgraw/npixels/nres);
+    set_Average(get_AverageRaw() - get_AverageDark());
+
+    image -> set_DataType(QxrdDoubleImageData::SubtractedData);
+  }
+  //  }
 }
 
 void QxrdDataProcessorBase::correctBadPixels(QxrdDoubleImageDataPtr /*image*/)
@@ -2017,4 +2079,48 @@ QStringList QxrdDataProcessorBase::integrateRectangle(int x0, int y0, int x1, in
   }
 
   return res;
+}
+
+void QxrdDataProcessorBase::subtractDark()
+{
+  QxrdDoubleImageDataPtr dat = m_Data;
+  QxrdDoubleImageDataPtr dark = m_DarkFrame;
+
+  subtractDarkImage(dat, dark);
+}
+
+void QxrdDataProcessorBase::unsubtractDark()
+{
+  QxrdDoubleImageDataPtr dat = m_Data;
+  QxrdDoubleImageDataPtr dark = m_DarkFrame;
+
+  unsubtractDarkImage(dat, dark);
+}
+
+void QxrdDataProcessorBase::multiplyData(double scalar)
+{
+  QxrdDoubleImageDataPtr dat = m_Data;
+
+  int wid = dat->get_Width();
+  int ht  = dat->get_Height();
+
+  for (int y=0; y<ht; y++) {
+    for (int x=0; x<wid; x++) {
+      dat->setValue(x, y, dat->value(x, y) * scalar);
+    }
+  }
+}
+
+void QxrdDataProcessorBase::offsetData(double offset)
+{
+  QxrdDoubleImageDataPtr dat = m_Data;
+
+  int wid = dat->get_Width();
+  int ht  = dat->get_Height();
+
+  for (int y=0; y<ht; y++) {
+    for (int x=0; x<wid; x++) {
+      dat->setValue(x, y, dat->value(x, y) + offset);
+    }
+  }
 }
