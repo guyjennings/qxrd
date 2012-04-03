@@ -763,16 +763,6 @@ void QxrdApplication::openExperiment(QString path)
     appendRecentExperiment(path);
 
     openedExperiment(experimentThread);
-
-    printMessage("");
-    printMessage("New experiment loaded");
-    printMessage("");
-
-    closeWelcomeWindow();
-
-    QxrdExperimentPtr experiment = experimentThread->experiment();
-
-    experiment->openWindows();
   }
 }
 
@@ -913,12 +903,22 @@ void QxrdApplication::openedExperiment(QxrdExperimentThreadPtr expthrdw)
   if (expthrd) {
     QxrdExperimentPtr expt = expthrd->experiment();
 
-    QString path = expt->experimentFilePath();
-    set_CurrentExperiment(path);
-    appendRecentExperiment(path);
+    if (expt) {
+      QString path = expt->experimentFilePath();
+      set_CurrentExperiment(path);
+      appendRecentExperiment(path);
 
-    m_ExperimentThreads.append(expthrd);
-    m_Experiments.append(expt);
+      m_ExperimentThreads.append(expthrd);
+      m_Experiments.append(expt);
+
+      printMessage("");
+      printMessage("New experiment loaded");
+      printMessage("");
+
+      closeWelcomeWindow();
+
+      expt->openWindows();
+    }
   }
 }
 

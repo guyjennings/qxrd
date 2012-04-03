@@ -471,7 +471,7 @@ QStringList QxrdDataProcessorBase::ls(QString pattern) const
 void QxrdDataProcessorBase::loadData(QString name)
 {
   if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "loadData", Qt::QueuedConnection, Q_ARG(QString, name)))
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "loadData", Qt::BlockingQueuedConnection, Q_ARG(QString, name)))
   } else {
     if (qcepDebug(DEBUG_FILES)) {
       printMessage(
@@ -498,7 +498,7 @@ void QxrdDataProcessorBase::loadData(QString name)
 void QxrdDataProcessorBase::saveData(QString name, int canOverwrite)
 {
   if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveData", Qt::QueuedConnection, Q_ARG(QString, name), Q_ARG(int, canOverwrite)))
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveData", Qt::BlockingQueuedConnection, Q_ARG(QString, name), Q_ARG(int, canOverwrite)))
   } else {
     QString path = filePathInCurrentDirectory(name);
 
@@ -511,7 +511,7 @@ void QxrdDataProcessorBase::saveData(QString name, int canOverwrite)
 void QxrdDataProcessorBase::loadDark(QString name)
 {
   if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "loadDark", Qt::QueuedConnection, Q_ARG(QString, name)))
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "loadDark", Qt::BlockingQueuedConnection, Q_ARG(QString, name)))
   } else {
     if (qcepDebug(DEBUG_FILES)) {
       printMessage(
@@ -541,7 +541,7 @@ void QxrdDataProcessorBase::loadDark(QString name)
 void QxrdDataProcessorBase::saveDark(QString name, int canOverwrite)
 {
   if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveDark", Qt::QueuedConnection, Q_ARG(QString, name), Q_ARG(int, canOverwrite)))
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveDark", Qt::BlockingQueuedConnection, Q_ARG(QString, name), Q_ARG(int, canOverwrite)))
   } else {
     QString path = filePathInCurrentDirectory(name);
 
@@ -1298,11 +1298,11 @@ void QxrdDataProcessorBase::subtractDarkImage(QxrdDoubleImageDataPtr image, Qxrd
       return;
     }
 
-    if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
-          image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
-      printMessage("Acquired data is not a raw image, skipping background subtraction");
-      return;
-    }
+//    if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
+//          image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
+//      printMessage("Acquired data is not a raw image, skipping background subtraction");
+//      return;
+//    }
 
     QxrdMutexLocker lock1(__FILE__, __LINE__, dark->mutex());
     QxrdMutexLocker lock2(__FILE__, __LINE__, image->mutex());
@@ -1360,11 +1360,11 @@ void QxrdDataProcessorBase::unsubtractDarkImage(QxrdDoubleImageDataPtr image, Qx
       return;
     }
 
-    if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
-          image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
-      printMessage("Acquired data is not a raw image, skipping background subtraction");
-      return;
-    }
+//    if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
+//          image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
+//      printMessage("Acquired data is not a raw image, skipping background subtraction");
+//      return;
+//    }
 
     QxrdMutexLocker lock1(__FILE__, __LINE__, dark->mutex());
     QxrdMutexLocker lock2(__FILE__, __LINE__, image->mutex());

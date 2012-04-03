@@ -268,7 +268,7 @@ void QxrdDetectorPerkinElmer::initialize()
       }
     }
 
-    if (plugin && (nRet = plugin->Acquisition_SetAcqData(m_AcqDesc, this)) != HIS_ALL_OK) {
+    if (plugin && (nRet = plugin->Acquisition_SetAcqData(m_AcqDesc, (ACQDATATYPE) this)) != HIS_ALL_OK) {
       acquisitionError(__FILE__, __LINE__, nRet);
       return;
     }
@@ -754,7 +754,7 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
     QxrdPerkinElmerPluginInterfacePtr plugin(g_Application->perkinElmerPlugin());
 
     if (hAcqDesc && plugin) {
-      void *object;
+      ACQDATATYPE object;
 
       plugin->Acquisition_GetAcqData(hAcqDesc, &object);
 
