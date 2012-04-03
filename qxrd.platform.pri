@@ -17,6 +17,7 @@ win32-msvc* {
   contains(QMAKE_HOST.arch,x86_64) {
     QXRDSUFFIX = -msvc-x64
     QXRDSUFFIXSTR = " (MSVC 64 bit)"
+    DEFINES += WIN64
   } else {
     QXRDSUFFIX = -msvc-x86
     QXRDSUFFIXSTR = " (MSVC 32 bit)"
@@ -44,7 +45,7 @@ win32 {
   }
 
   exists("c:/XIS/SDK/") {
-    WIND64 = 0
+    WIN64 = 0
     PE_SDK = "c:/XIS/SDK/"
   }
 
