@@ -153,12 +153,15 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd)
     m_ScriptEngineThread -> start();
     m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
 
-    //  m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
-    //  m_ScriptEngineDebugger -> attachTo(m_ScriptEngine->scriptEngine());
-    //  m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
 
     QxrdServerPtr srv(m_Server);
     QxrdScriptEnginePtr eng(m_ScriptEngine);
+
+//    if (eng) {
+//      m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
+//      m_ScriptEngineDebugger -> attachTo(eng.data());
+//      m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
+//    }
 
     if (srv && eng) {
       connect(srv.data(),   SIGNAL(executeCommand(QString)),
