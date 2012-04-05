@@ -65,10 +65,27 @@ QSpecServer::printMessage(QString msg, QDateTime ts)
   }
 }
 
+/**
+  Called when a new connection is opened from SPEC
+
+  Call TCP_NODELAY to turn off Nagle algorithm on the
+  open socket to improve the latency of the command stream
+  */
+
 void
 QSpecServer::openNewConnection()
 {
   m_Socket = nextPendingConnection();
+
+  if (qcepDebug(DEBUG_SERVER)) {
+    printMessage(tr("LowDelayOption = %1").arg(m_Socket->socketOption(QAbstractSocket::LowDelayOption).toString()));
+  }
+
+  m_Socket->setSocketOption(QAbstractSocket::LowDelayOption, (int) 1);
+
+  if (qcepDebug(DEBUG_SERVER)) {
+    printMessage(tr("LowDelayOption = %1").arg(m_Socket->socketOption(QAbstractSocket::LowDelayOption).toString()));
+  }
 
   connect(m_Socket, SIGNAL(disconnected()),
 	  m_Socket, SLOT(deleteLater()));
@@ -151,12 +168,16 @@ QSpecServer::readPacketData()
     m_Packet.flags = swapInt32(m_Packet.flags);
   }
 
+  initReplyPacket();
+
   if (m_Packet.len > 0) {
+    sendReplyPacketHead();
+
     if (qcepDebug(DEBUG_SERVER)) {
       printMessage(tr("QSpecServer::readPacketData m_Packet.len = %1").arg(m_Packet.len));
     }
 
-    if (m_Packet.len > m_Socket->bytesAvailable()) {
+    while (m_Packet.len > m_Socket->bytesAvailable()) {
       if (qcepDebug(DEBUG_SERVER)) {
         printMessage(tr("QSpecServer::readPacketData available = %1").arg(m_Socket->bytesAvailable()));
       }
@@ -176,6 +197,10 @@ QSpecServer::readPacketData()
 
   return interpretPacket();
 }
+
+/**
+  Handle the various kinds of input packets
+  */
 
 int
 QSpecServer::interpretPacket()
@@ -265,9 +290,18 @@ QSpecServer::interpretPacket()
   return 0;
 }
 
+/**
+  Initialize the reply packet based on the byte order
+  of the received packet
+  */
+
 void
 QSpecServer::initReplyPacket()
 {
+  if (qcepDebug(DEBUG_SERVER)) {
+    printMessage(tr("QSpecServer::initReplyPacket"));
+  }
+
   memset(&m_Reply, 0, sizeof(m_Reply));
 
   m_Reply.magic = condSwapInt32(SV_SPEC_MAGIC);
@@ -289,30 +323,59 @@ QSpecServer::initReplyPacket()
   m_Reply.flags = 0;
 
   m_ReplyData.resize(0);
+
+  m_ReplyHeadSent = 0;
 }
 
+/**
+  Send back the first few bytes of the reply packet immediately,
+  so that the initial packet will get an ACK.  This avoids
+  an 0.2 sec delay that would occur due to delayed ACK on
+  Windows
+  */
+
+#define HEAD_SIZE sizeof(m_Reply.magic)
+
 void
-QSpecServer::sendReplyPacket()
+QSpecServer::sendReplyPacketHead()
 {
   if (qcepDebug(DEBUG_SERVER)) {
-    printMessage(tr("QSpecServer::sendReplyPacket start"));
+    printMessage(tr("QSpecServer::sendReplyPacketHead start"));
   }
 
-//  if (m_SwapBytes) {
-//    printf("Byte swapping not yet implemented for replies\n");
-//    return;
-//  }
+  m_Socket -> write((char*) &m_Reply, HEAD_SIZE);
+  m_Socket -> flush();
+  m_ReplyHeadSent = HEAD_SIZE;
 
-//   printf("sendReplyPacket %d + %d\n", sizeof(m_Reply), m_ReplyData.size());
+  if (qcepDebug(DEBUG_SERVER)) {
+    printMessage(tr("QSpecServer::sendReplyPacketHead end"));
+  }
+}
 
-  m_Socket -> write((char*) &m_Reply, sizeof(m_Reply));
+/**
+  Send back the remainder of the reply packet, omitting any bytes
+  that have already been sent by sendReplyPacketHead
+  */
+
+void
+QSpecServer::sendReplyPacketTail()
+{
+  if (qcepDebug(DEBUG_SERVER)) {
+    printMessage(tr("QSpecServer::sendReplyPacketTail start"));
+  }
+
+  m_Socket -> write(((char*) &m_Reply)+m_ReplyHeadSent, sizeof(m_Reply) - m_ReplyHeadSent);
   m_Socket -> write(m_ReplyData);
   m_Socket -> flush();
 
   if (qcepDebug(DEBUG_SERVER)) {
-    printMessage(tr("QSpecServer::sendReplyPacket end"));
+    printMessage(tr("QSpecServer::sendReplyPacketTail end"));
   }
 }
+
+/**
+  Swap byte order
+  */
 
 qint32
 QSpecServer::swapInt32(qint32 val)
@@ -349,6 +412,11 @@ QSpecServer::swapUInt32(quint32 val)
 
   return res;
 }
+
+/**
+  Conditionally swap byte order - depending
+  on the byte order of the received packet
+  */
 
 qint32 QSpecServer::condSwapInt32(qint32 val)
 {
@@ -408,7 +476,6 @@ void QSpecServer::handle_register()
     printMessage(tr("SV_REGISTER: %1").arg(m_Packet.name));
   }
 
-  initReplyPacket();
   m_Reply.cmd = condSwapInt32(SV_EVENT);
   m_Reply.type= condSwapInt32(SV_STRING);
 
@@ -417,7 +484,7 @@ void QSpecServer::handle_register()
   m_ReplyData.append('\0');
   m_Reply.len = condSwapInt32(m_ReplyData.size());
 
-  sendReplyPacket();
+  sendReplyPacketTail();
 }
 
 void QSpecServer::handle_unregister()
@@ -440,7 +507,6 @@ void QSpecServer::handle_func_return()
     printMessage(tr("SV_FUNC_WITH_RETURN: %1").arg(m_Packet.name));
   }
 
-  initReplyPacket();
   m_Reply.cmd = condSwapInt32(SV_REPLY);
   m_Reply.type= condSwapInt32(SV_STRING);
 
@@ -449,7 +515,7 @@ void QSpecServer::handle_func_return()
   m_ReplyData.append('\0');
   m_Reply.len = condSwapInt32(m_ReplyData.size());
 
-  sendReplyPacket();  
+  sendReplyPacketTail();
 }
 
 void QSpecServer::handle_read()
@@ -476,8 +542,6 @@ void QSpecServer::handle_hello()
     printMessage(tr("SV_HELLO: %1").arg(m_Packet.name));
   }
 
-  initReplyPacket();
-
   m_Reply.cmd = condSwapInt32(SV_HELLO_REPLY);
   m_Reply.type= condSwapInt32(SV_STRING);
 
@@ -486,7 +550,7 @@ void QSpecServer::handle_hello()
   m_ReplyData.append('\0');
   m_Reply.len = condSwapInt32(m_ReplyData.size());
 
-  sendReplyPacket();
+  sendReplyPacketTail();
 }
 
 void QSpecServer::replyFromVariant(QVariant value)
@@ -494,8 +558,6 @@ void QSpecServer::replyFromVariant(QVariant value)
   if (qcepDebug(DEBUG_SERVER)) {
     printMessage(tr("replyFromVariant(%1)").arg(value.typeName()));
   }
-
-  initReplyPacket();
 
   /*if (value.isNull()) {
   } else*/ if (value.canConvert< QVector<double> >()) {
@@ -638,14 +700,12 @@ void QSpecServer::replyFromVariant(QVariant value)
     m_Reply.len = condSwapInt32(m_ReplyData.size());
   }
 
-  sendReplyPacket();
+  sendReplyPacketTail();
 }
 
 void QSpecServer::replyFromError(QScriptValue value)
 {
 //  printf("Reply from error\n");
-
-  initReplyPacket();
 
   m_Reply.cmd = condSwapInt32(SV_REPLY);
   m_Reply.type = condSwapInt32(SV_ERROR);
@@ -664,7 +724,7 @@ void QSpecServer::replyFromError(QScriptValue value)
   m_Reply.len = condSwapInt32(m_ReplyData.size());
   m_Reply.err = 10;
 
-  sendReplyPacket();
+  sendReplyPacketTail();
 }
 
 QVariant QSpecServer::readProperty(QString /*name*/)

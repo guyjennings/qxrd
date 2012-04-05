@@ -16,6 +16,11 @@
 
 #include "qxrdexperiment-ptr.h"
 
+/**
+  QSpecServer implements a remote control interface to the
+  'SPEC' data acquisition program.
+  */
+
 class QSpecServer : public QTcpServer
 {
   Q_OBJECT
@@ -62,7 +67,9 @@ protected:
 
 protected:
   void initReplyPacket();
-  void sendReplyPacket();
+  void sendReplyPacketHead();
+  void sendReplyPacketTail();
+
   void replyFromVariant(QVariant value);
   void replyFromError(QScriptValue value);
 
@@ -71,13 +78,13 @@ protected:
 private:
   QxrdExperimentWPtr   m_Experiment;
   QString              m_ServerName;
-//  int                  m_Port;
   QTcpSocket          *m_Socket;
   int                  m_SwapBytes;
   struct svr_head      m_Packet;
   QByteArray           m_Data;
   struct svr_head      m_Reply;
   QByteArray           m_ReplyData;
+  int                  m_ReplyHeadSent;
 };
 
 #endif
