@@ -34,13 +34,13 @@ UINT QxrdPerkinElmerPlugin::Acquisition_GetNextSensor(
 }
 
 UINT QxrdPerkinElmerPlugin::Acquisition_SetAcqData(
-    HACQDESC hAcqDesc, void *AcqData)
+    HACQDESC hAcqDesc, ACQDATATYPE AcqData)
 {
   return ::Acquisition_SetAcqData(hAcqDesc, AcqData);
 }
 
 UINT QxrdPerkinElmerPlugin::Acquisition_GetAcqData(
-    HACQDESC hAcqDesc, void **AcqData)
+    HACQDESC hAcqDesc, ACQDATATYPE *AcqData)
 {
   return ::Acquisition_GetAcqData(hAcqDesc, AcqData);
 }

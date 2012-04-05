@@ -7,6 +7,18 @@
 #include <Windows.h>
 #include <QSharedPointer>
 
+#ifdef WIN64
+#if WIN64
+#define __X64
+#endif
+#endif
+
+#ifdef __X64
+#define ACQDATATYPE void*
+#else
+#define ACQDATATYPE DWORD
+#endif
+
 #include "Acq.h"
 
 class QxrdPerkinElmerPluginInterface : public QxrdNamedPluginInterface {
@@ -25,10 +37,10 @@ public:
       ACQDESCPOS *Pos, HACQDESC *phAcqDesc) = 0;
 
   virtual UINT Acquisition_SetAcqData(
-      HACQDESC hAcqDesc, void *AcqData) = 0;
+      HACQDESC hAcqDesc, ACQDATATYPE AcqData) = 0;
 
   virtual UINT Acquisition_GetAcqData(
-      HACQDESC hAcqDesc, void **VoidAcqData) = 0;
+      HACQDESC hAcqDesc, ACQDATATYPE *AcqData) = 0;
 
   virtual UINT Acquisition_GetCommChannel(
       HACQDESC pAcqDesc, UINT *pdwChannelType, int *pnChannelNr) = 0;

@@ -349,25 +349,25 @@ Error:
 
 void QxrdNIDAQPlugin::pulseOutput()
 {
-  QMutexLocker lock(&m_Mutex);
+//  QMutexLocker lock(&m_Mutex);
 
-  int error;
+//  int error;
 
-  DAQmxErrChk(DAQmxCreateTask("", &m_PulseTask));
-  DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_PulseTask, "Dev1/ctr0", "", DAQmx_Val_Seconds, DAQmx_Val_Low, 0, 1e-6, 1e-6));
+//  DAQmxErrChk(DAQmxCreateTask("", &m_PulseTask));
+//  DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_PulseTask, "Dev1/ctr0", "", DAQmx_Val_Seconds, DAQmx_Val_Low, 0, 1e-6, 1e-6));
 
-  DAQmxErrChk(DAQmxStartTask(m_PulseTask));
-  DAQmxErrChk(DAQmxWaitUntilTaskDone(m_PulseTask, 0.5));
-  DAQmxErrChk(DAQmxStopTask(m_PulseTask));
+//  DAQmxErrChk(DAQmxStartTask(m_PulseTask));
+//  DAQmxErrChk(DAQmxWaitUntilTaskDone(m_PulseTask, 0.5));
+//  DAQmxErrChk(DAQmxStopTask(m_PulseTask));
 
-Error:
+//Error:
 
-  if (m_PulseTask) {
-    DAQmxClearTask(m_PulseTask);
-  }
+//  if (m_PulseTask) {
+//    DAQmxClearTask(m_PulseTask);
+//  }
 
-  m_PulseTask = 0;
-  return;
+//  m_PulseTask = 0;
+//  return;
 }
 
 double QxrdNIDAQPlugin::count(int /* chan */, double /* time */)

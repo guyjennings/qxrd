@@ -28,10 +28,10 @@ public:
       ACQDESCPOS *Pos, HACQDESC *phAcqDesc);
 
   virtual UINT Acquisition_SetAcqData(
-      HACQDESC hAcqDesc, void *AcqData);
+      HACQDESC hAcqDesc, ACQDATATYPE AcqData);
 
   virtual UINT Acquisition_GetAcqData(
-      HACQDESC hAcqDesc, void **AcqData);
+      HACQDESC hAcqDesc, ACQDATATYPE *AcqData);
 
   virtual UINT Acquisition_GetCommChannel(
       HACQDESC pAcqDesc, UINT *pdwChannelType, int *pnChannelNr);

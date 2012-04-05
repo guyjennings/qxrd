@@ -1,6 +1,7 @@
 #include "qxrdhelpbrowser.h"
 #include "qxrdscriptengine.h"
 #include "qxrdexperiment.h"
+#include <stdio.h>
 
 QxrdHelpBrowser::QxrdHelpBrowser(QWidget *parent) :
   QTextBrowser(parent)
