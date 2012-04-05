@@ -772,7 +772,9 @@ void QxrdApplication::openExperiment(QString path)
 
     QxrdExperimentPtr experiment = experimentThread->experiment();
 
-    experiment->openWindows();
+    if (experiment) {
+      experiment->openWindows();
+    }
   }
 }
 
