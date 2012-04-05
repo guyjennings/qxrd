@@ -763,6 +763,18 @@ void QxrdApplication::openExperiment(QString path)
     appendRecentExperiment(path);
 
     openedExperiment(experimentThread);
+
+    printMessage("");
+    printMessage("New experiment loaded");
+    printMessage("");
+
+    closeWelcomeWindow();
+
+    QxrdExperimentPtr experiment = experimentThread->experiment();
+
+    if (experiment) {
+      experiment->openWindows();
+    }
   }
 }
 
