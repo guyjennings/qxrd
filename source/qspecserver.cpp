@@ -14,7 +14,8 @@ QSpecServer::QSpecServer(QxrdExperimentWPtr doc, QString name)
   : QTcpServer(NULL),
     m_Experiment(doc),
     m_ServerName(name),
-    m_Socket(NULL)
+    m_Socket(NULL),
+    m_ReplyHeadSent(0)
 {
   connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));
 }
@@ -113,6 +114,10 @@ QSpecServer::connectionClosed()
 void
 QSpecServer::clientRead()
 {
+  if (m_ReplyHeadSent != 0) {
+    printMessage(tr("QSpecServer::clientRead, m_ReplyHeadSent != 0"));
+  }
+
   quint64 avail = m_Socket -> bytesAvailable();
 
   if (qcepDebug(DEBUG_SERVER)) {
