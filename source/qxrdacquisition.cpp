@@ -1012,7 +1012,7 @@ QxrdInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
 
   QxrdInt16ImageDataPtr res = m_AcquiredImages.dequeue();
 
-  if (qcepDebug(DEBUG_EXTRAINPUTS)) {
+  if (qcepDebug(DEBUG_EXTRAINPUTS) && res) {
     QcepDoubleList extra = res->get_ExtraInputs();
 
     for (int i=0; i<extra.count(); i++) {
@@ -1049,7 +1049,7 @@ void QxrdAcquisition::enqueueAcquiredFrame(QxrdInt16ImageDataPtr img)
     m_AcquisitionExtraInputs->logToImage(img);
   }
 
-  if (qcepDebug(DEBUG_EXTRAINPUTS)) {
+  if (qcepDebug(DEBUG_EXTRAINPUTS) && img) {
     QcepDoubleList extra = img->get_ExtraInputs();
 
     printMessage(tr("QxrdAcquisition::enqueueAcquiredFrame : %1 Extra Inputs").arg(extra.count()));
@@ -1059,8 +1059,10 @@ void QxrdAcquisition::enqueueAcquiredFrame(QxrdInt16ImageDataPtr img)
     }
   }
 
-  img->set_QtVersion(QT_VERSION_STR);
-  img->set_QxrdVersion(STR(QXRD_VERSION));
+  if (img) {
+    img->set_QtVersion(QT_VERSION_STR);
+    img->set_QxrdVersion(STR(QXRD_VERSION));
+  }
 
   m_AcquiredImages.enqueue(img);
 
