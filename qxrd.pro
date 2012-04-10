@@ -29,7 +29,6 @@ tarball.commands += \
         $(MKDIR) $${TARGET}-$${VERSION}/source/help/images && \
         $(MKDIR) $${TARGET}-$${VERSION}/source/qwt-5.2 && \
         $(MKDIR) $${TARGET}-$${VERSION}/source/qwt-5.2/src && \
-        $(MKDIR) $${TARGET}-$${VERSION}/source/qceplib && \
         $(MKDIR) $${TARGET}-$${VERSION}/source/tiffconfig && \
         $(MKDIR) $${TARGET}-$${VERSION}/source/tiffconfig/macx && \
         $(MKDIR) $${TARGET}-$${VERSION}/source/tiffconfig/win32 && \
@@ -62,9 +61,6 @@ tarball.commands += \
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/qwt-5.2/src/*.{cpp,h} \
                       -t $${TARGET}-$${VERSION}/source/qwt-5.2/src &&
-tarball.commands += \
-        $(COPY_FILE)  $${PWD}/source/qceplib/*.{cpp,h} \
-                      -t $${TARGET}-$${VERSION}/source/qceplib &&
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/tiffconfig/macx/*.h \
                       -t $${TARGET}-$${VERSION}/source/tiffconfig/macx &&
@@ -106,7 +102,6 @@ dox.commands += cat $${PWD}/Doxyfile ;
 dox.commands += echo "PROJECT_NUMBER=$${VERSION}" ;
 dox.commands += echo "INPUT=\"$${PWD}\"" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/source/" ;
-dox.commands += echo "INPUT+=\"$${PWD}\"/source/qceplib/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdareadetectorplugin/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdperkinelmerplugin/" ;
