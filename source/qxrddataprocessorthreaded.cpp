@@ -58,6 +58,8 @@ void QxrdDataProcessorThreaded::acquiredInt16Image(QxrdInt16ImageDataPtr image, 
 {
   QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
 
+  prop_CorrectionQueueLength()->incValue(1);
+
   m_CorrectedImages.enqueue(QtConcurrent::run(this,
                                               &QxrdDataProcessorThreaded::correctInt16Image,
                                               corrected, image, darkImage(), mask(), overflow));
@@ -66,6 +68,8 @@ void QxrdDataProcessorThreaded::acquiredInt16Image(QxrdInt16ImageDataPtr image, 
 void QxrdDataProcessorThreaded::acquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
+
+  prop_CorrectionQueueLength()->incValue(1);
 
   m_CorrectedImages.enqueue(QtConcurrent::run(this,
                                               &QxrdDataProcessorThreaded::correctInt32Image,
@@ -79,6 +83,8 @@ void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image
   typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QxrdMaskDataPtr);
   MFType p = &QxrdDataProcessorThreaded::correctDoubleImage;
 
+  prop_CorrectionQueueLength()->incValue(1);
+
   m_CorrectedImages.enqueue(QtConcurrent::run(this,
                                               p,
                                               corrected, image, darkImage(), mask(), overflow));
@@ -90,6 +96,8 @@ void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image
 
   typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QList<double>);
   MFType p = &QxrdDataProcessorThreaded::correctDoubleImage;
+
+  prop_CorrectionQueueLength()->incValue(1);
 
   m_CorrectedImages.enqueue(QtConcurrent::run(this,
                                               p,
@@ -206,6 +214,9 @@ void QxrdDataProcessorThreaded::onCorrectedImageAvailable()
   QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::AlwaysAllocate, img);
 
   if (img) {
+    prop_CorrectionQueueLength()->incValue(-1);
+    prop_IntegrationQueueLength()->incValue(1);
+
     m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessorThreaded::integrateImage,
                                                integ,
                                                img, mask,
@@ -250,6 +261,8 @@ void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
   }
 
   QxrdIntegratedDataPtr integ = m_IntegratedData.dequeue();
+
+  prop_IntegrationQueueLength()->incValue(-1);
 
   if (integ) {
     writeOutputScan(integ);
@@ -363,6 +376,8 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
 
     img -> loadMetaData();
 
+    prop_IntegrationQueueLength()->incValue(1);
+
     m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessorThreaded::integrateImage,
                                                result,
                                                img, mask(),
@@ -475,6 +490,8 @@ void QxrdDataProcessorThreaded::slicePolygon(QVector<QwtDoublePoint> poly)
 {
   QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::WaitTillAvailable, data());
 
+  prop_IntegrationQueueLength()->incValue(1);
+
   m_IntegratedData.enqueue(
       QtConcurrent::run(m_Integrator.data(),
                         &QxrdIntegrator::slicePolygon,
@@ -485,6 +502,8 @@ void QxrdDataProcessorThreaded::slicePolygon(QVector<QwtDoublePoint> poly)
 void QxrdDataProcessorThreaded::integrateSaveAndDisplay()
 {
   QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::WaitTillAvailable, data());
+
+  prop_IntegrationQueueLength()->incValue(1);
 
   m_IntegratedData.enqueue(
       QtConcurrent::run(m_Integrator.data(),

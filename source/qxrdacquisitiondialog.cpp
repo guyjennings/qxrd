@@ -76,7 +76,9 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
   QxrdDataProcessorPtr procp(m_DataProcessor);
 
   if (procp) {
-    procp.data() -> prop_Average() -> linkTo(this -> m_AverageDisplay);
+    procp -> prop_Average()                -> linkTo(this -> m_AverageDisplay);
+    procp -> prop_CorrectionQueueLength()  -> linkTo(this -> m_CorrectionBacklog);
+    procp -> prop_IntegrationQueueLength() -> linkTo(this -> m_IntegrationBacklog);
   }
 
   QxrdWindow *wp = m_Window;

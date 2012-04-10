@@ -198,6 +198,12 @@ public:
   Q_PROPERTY(double     averageRaw    READ get_AverageRaw WRITE set_AverageRaw STORED false)
   QCEP_DOUBLE_PROPERTY(AverageRaw)
 
+  Q_PROPERTY(int correctionQueueLength READ get_CorrectionQueueLength WRITE set_CorrectionQueueLength)
+  QCEP_INTEGER_PROPERTY(CorrectionQueueLength)
+
+  Q_PROPERTY(int integrationQueueLength READ get_IntegrationQueueLength WRITE set_IntegrationQueueLength)
+  QCEP_INTEGER_PROPERTY(IntegrationQueueLength)
+
 public:
   enum {
     NoOverwrite,

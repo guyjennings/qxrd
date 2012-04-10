@@ -85,6 +85,8 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_Average(QxrdSettingsSaverPtr(), this,"average",0.0, "Average Value of Acquired Image (per exposure)"),
   m_AverageDark(QxrdSettingsSaverPtr(), this,"averageDark",0.0, "Average Value of Dark Image"),
   m_AverageRaw(QxrdSettingsSaverPtr(), this,"averageRaw",0.0, "Average Value of Raw Image"),
+  m_CorrectionQueueLength(QxrdSettingsSaverPtr(), this, "correctionQueueLength", 0, "Image correction backlog"),
+  m_IntegrationQueueLength(QxrdSettingsSaverPtr(), this, "integrationQueueLength", 0, "Image integration backlog"),
   m_Mutex(QMutex::Recursive),
   m_Experiment(doc),
   m_Saver(saver),
