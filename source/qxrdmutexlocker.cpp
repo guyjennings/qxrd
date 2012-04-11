@@ -12,8 +12,8 @@ QxrdMutexLocker::QxrdMutexLocker(const char *file, int line, QMutex * mutex)
 
 QxrdMutexLocker::~QxrdMutexLocker()
 {
-//  if (m_LockTime.elapsed() > 100) {
-//    printf("Lock held for %d msec, file %s, line %d, thread %p\n",
-//           m_LockTime.elapsed(), m_File, m_Line, QThread::currentThread());
-//  }
+  if (m_LockTime.elapsed() > 100) {
+    printf("Lock held for %d msec, file %s, line %d, thread %p\n",
+           m_LockTime.elapsed(), m_File, m_Line, QThread::currentThread());
+  }
 }
