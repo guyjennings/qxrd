@@ -6,6 +6,7 @@
 #include <QFileInfo>
 #include <QStringList>
 #include <QDateTime>
+#include <QMutex>
 
 #include "qxrdfilebrowsermodelupdaterthread-ptr.h"
 #include "qxrdfilebrowsermodelupdater-ptr.h"
@@ -57,6 +58,7 @@ private:
   void updateModel();
 
 private:
+  mutable QMutex     m_Mutex;
   QxrdFileBrowserModelUpdaterThreadPtr m_UpdaterThread;
   QxrdFileBrowserModelUpdaterPtr m_Updater;
   QString            m_RootPath;
