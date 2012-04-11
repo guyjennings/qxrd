@@ -465,6 +465,7 @@ int QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
                                             QVector<double> maxVals)
 {
   int error = 0;
+  int bufferSize = 0;
 
   m_SampleRate = sampleRate;
   m_AcquireDelay = acquireDelay;
@@ -537,7 +538,7 @@ int QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
 
   m_NContinuousSamples = m_SampleRate*(m_ExposureTime + m_AcquireDelay + 0.1);
 
-  int bufferSize = m_NContinuousSamples+(2.0*m_SampleRate);
+  bufferSize = m_NContinuousSamples+(2.0*m_SampleRate);
 
   printMessage(tr("Buffer size %1").arg(bufferSize));
 
