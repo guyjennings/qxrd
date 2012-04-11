@@ -90,8 +90,8 @@ public slots:
   void readSettings();
   void writeSettings();
 
-  void readSettings(QSettings *settings, QString section="experiment");
-  void writeSettings(QSettings *settings, QString section="experiment");
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   void logMessage(QString msg);
   void splashMessage(QString msg);

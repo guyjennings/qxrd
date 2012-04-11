@@ -495,40 +495,40 @@ void QxrdExperiment::readSettings()
   if (docPath.length()>0) {
     QSettings settings(docPath, QSettings::IniFormat);
 
-    readSettings(&settings, "experiment");
+    readSettings(&settings);
   } else {
     QxrdExperimentSettings settings;
 
-    readSettings(&settings, "experiment");
+    readSettings(&settings);
   }
 }
 
-void QxrdExperiment::readSettings(QSettings *settings, QString section)
+void QxrdExperiment::readSettings(QSettings *settings)
 {
   if (settings) {
-    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::readSettings(this, &staticMetaObject, "experiment", settings);
 
     QxrdAcquisitionPtr acq(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
-    m_WindowSettings -> readSettings(settings, section+"/window");
+    m_WindowSettings -> readSettings(settings, "window");
 
     if (acq) {
-      acq  -> readSettings(settings, section+"/acquire");
+      acq  -> readSettings(settings, "acquisition");
     }
 
     if (proc) {
-      proc -> readSettings(settings, section+"/processor");
+      proc -> readSettings(settings, "processor");
     }
 
     if (srv) {
-      srv  -> readSettings(settings, section+"/specserver");
+      srv  -> readSettings(settings, "specserver");
     }
 
     if (ssrv) {
-      ssrv -> readSettings(settings, section+"/simpleserver");
+      ssrv -> readSettings(settings, "simpleserver");
     }
 
     onDetectorTypeChanged();
@@ -547,7 +547,7 @@ void QxrdExperiment::writeSettings()
     {
       QSettings settings(docPath+".new", QSettings::IniFormat);
 
-      writeSettings(&settings, "experiment");
+      writeSettings(&settings);
     }
 
     QFile::remove(docPath+".bak");
@@ -556,36 +556,36 @@ void QxrdExperiment::writeSettings()
   } else {
     QxrdExperimentSettings settings;
 
-    writeSettings(&settings, "experiment");
+    writeSettings(&settings);
   }
 }
 
-void QxrdExperiment::writeSettings(QSettings *settings, QString section)
+void QxrdExperiment::writeSettings(QSettings *settings)
 {
   if (settings) {
-    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::writeSettings(this, &staticMetaObject, "experiment", settings);
 
     QxrdAcquisitionPtr acq(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
-    m_WindowSettings -> writeSettings(settings, section+"/window");
+    m_WindowSettings -> writeSettings(settings, "window");
 
     if (acq) {
-      acq  -> writeSettings(settings, section+"/acquire");
+      acq  -> writeSettings(settings, "acquisition");
     }
 
     if (proc) {
-      proc -> writeSettings(settings, section+"/processor");
+      proc -> writeSettings(settings, "processor");
     }
 
     if (srv) {
-      srv  -> writeSettings(settings, section+"/specserver");
+      srv  -> writeSettings(settings, "specserver");
     }
 
     if (ssrv) {
-      ssrv -> writeSettings(settings, section+"/simpleserver");
+      ssrv -> writeSettings(settings, "simpleserver");
     }
   }
 }
