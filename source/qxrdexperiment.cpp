@@ -70,7 +70,7 @@ QxrdExperiment::QxrdExperiment(
   }
 }
 
-void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd)
+void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *settings)
 {
   m_ExperimentThread = expthrd;
 
@@ -187,7 +187,7 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd)
 
     splashMessage("Loading Preferences");
 
-    readSettings();
+    readSettings(settings);
 
     splashMessage("Loading Background Images");
 

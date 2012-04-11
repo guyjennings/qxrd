@@ -167,8 +167,7 @@ void QxrdExperimentThread::run()
   int rc = -1;
 
   if (doc) {
-    doc -> initialize(this);
-    doc -> readSettings(m_Settings);
+    doc -> initialize(this, m_Settings);
 
     m_Experiment = doc;
 

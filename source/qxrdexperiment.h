@@ -46,7 +46,7 @@ public:
   QxrdExperiment(QString path, QxrdApplication *app);
   //  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
-  void initialize(QxrdExperimentThreadWPtr expthrd);
+  void initialize(QxrdExperimentThreadWPtr expthrd, QSettings *settings);
 
   void openWindows();
 
