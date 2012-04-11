@@ -206,17 +206,17 @@ QXRD_DOC_FUNCTION(
 
 QXRD_DOC_LONG(
     "acquire",
-    "<p>The arguments are optional and may be succssively omitted from the"
-    "right.  If preTriggerFiles is omitted, zero is used instead."
-    "If nPhases is omitted, one is used."
-    "Any other argument which is omitted will take it's value"
-    "instead from the values entered in the acquire dialog.  Any"
-    "argument which is given will replace the corresponding value"
+    "<p>The arguments are optional and may be successively omitted from the "
+    "right.  If <i>preTriggerFiles</i> is omitted, zero is used instead. "
+    "If <i>nPhases</i> is omitted, one is used. "
+    "Any other argument which is omitted will take its value "
+    "instead from the values entered in the acquire dialog.  Any "
+    "argument which is given will replace the corresponding value "
     "in the acquire dialog.</p>\n"
-    "<p>Note that the script function merely starts the acquisition"
-    "- you should use the separate \"status\" function to wait for"
+    "<p>Note that the script function merely starts the acquisition "
+    "- you should use the separate \"status\" function to wait for "
     "acquisition and processing to be completed.</p>\n"
-    "<p>The following is a typical example of the use of this"
+    "<p>The following is a typical example of the use of this "
     "command from spec:</p>\n"
     "<p>"
     "<code>"
@@ -922,8 +922,40 @@ void QxrdScriptEngine::initialize()
 QString QxrdScriptEngine::documentationLink(QString base, QString subItem)
 {
   QString item = base.isEmpty() ? subItem : base+"."+subItem;
+  QString res = tr("<a href=\"qrc:/help/autohelp?%1\">%2</a>").arg(item).arg(item);
 
-  return tr("<a href=\"qrc:/help/autohelp?%1\">%2</a>").arg(item).arg(item);
+  QString proto = QxrdDocumentationDictionary::get_Proto(item);
+  QString doc   = QxrdDocumentationDictionary::get_Doc(item);
+
+  res.append("</td>\n<td width=\"75%\">\n");
+
+  if (proto.length()) {
+    res.append(tr("<p><i>%1</i></p>\n").arg(proto));
+  }
+
+  if (doc.length()) {
+    res.append(tr("<p>%1</p>\n").arg(doc));
+  }
+
+  return res;
+}
+
+QString QxrdScriptEngine::tableHeader()
+{
+  return
+      "<table border=\"0\" cellpadding=\"0\" cellspacing=\"1\" bgcolor=\"black\" width=\"100%\">\n"
+      "<tr>\n"
+      "<td bgcolor=\"black\">\n"
+      "<table border=\"0\" cellpadding=\"1\" cellspacing=\"1\" bgcolor=\"black\" width=\"100%\">\n";
+}
+
+QString QxrdScriptEngine::tableFooter()
+{
+  return
+      "</table>\n"
+      "</td>\n"
+      "</tr>\n"
+      "</table>\n";
 }
 
 QString QxrdScriptEngine::documentationText(QString item)
@@ -946,6 +978,7 @@ QString QxrdScriptEngine::documentationText(QString item)
   //  QString name  = val.toString();
   QString doc   = QxrdDocumentationDictionary::get_Doc(item);
   QString proto = QxrdDocumentationDictionary::get_Proto(item);
+  QString longDoc = QxrdDocumentationDictionary::get_LongDoc(item);
 
   res.append(tr("<h2>Documentation for %1</h2>\n").arg(itemName));
 
@@ -957,8 +990,14 @@ QString QxrdScriptEngine::documentationText(QString item)
     if (doc.length()) {
       res.append(tr("%1\n").arg(doc));
     }
+
+    if (longDoc.length()) {
+      res.append(tr("%1\n").arg(longDoc));
+    }
   } else if (val.isObject()) {
     res.append(tr("%1\n").arg(doc));
+    res.append(tr("%1\n").arg(longDoc));
+
     QObject *qobj = val.toQObject();
 
     if (qobj) {
@@ -1041,51 +1080,69 @@ QString QxrdScriptEngine::documentationText(QString item)
         QMapIterator<QString,QScriptValue> obj_iter(subObjects);
 
         res.append(tr("<h3>Sub Objects of %1</h3>\n").arg(itemName));
-        res.append(tr("<table>\n"));
+        res.append(tableHeader());
+
+        int i=0;
 
         while (obj_iter.hasNext()) {
           obj_iter.next();
 
-          res.append(tr("<tr>\n"));
+          if ((i++%2)) {
+            res.append(tr("<tr bgcolor=\"#e0e0e0\">\n"));
+          } else {
+            res.append(tr("<tr bgcolor=\"white\">\n"));
+          }
           res.append(tr("<td>%1</td>").arg(documentationLink(prefix+item, obj_iter.key())));
           res.append(tr("</tr>\n"));
         }
 
-        res.append(tr("</table>\n"));
+        res.append(tableFooter());
       }
 
       if (properties.count()) {
         QMapIterator<QString,QScriptValue> prop_iter(properties);
 
         res.append(tr("<h3>Properties of %1</h3>\n").arg(itemName));
-        res.append(tr("<table>\n"));
+        res.append(tableHeader());
+
+        int i=0;
 
         while (prop_iter.hasNext()) {
           prop_iter.next();
 
-          res.append(tr("<tr>\n"));
+          if ((i++%2)) {
+            res.append(tr("<tr bgcolor=\"#e0e0e0\">\n"));
+          } else {
+            res.append(tr("<tr bgcolor=\"white\">\n"));
+          }
           res.append(tr("<td>%1</td>").arg(documentationLink(prefix+item, prop_iter.key())));
           res.append(tr("</tr>\n"));
         }
 
-        res.append(tr("</table>\n"));
+        res.append(tableFooter());
       }
 
       if (functions.count()) {
         QMapIterator<QString,QScriptValue> func_iter(functions);
 
         res.append(tr("<h3>Methods of %1</h3>\n").arg(itemName));
-        res.append(tr("<table>\n"));
+        res.append(tableHeader());
+
+        int i=0;
 
         while (func_iter.hasNext()) {
           func_iter.next();
 
-          res.append(tr("<tr>\n"));
+          if ((i++%2)) {
+            res.append(tr("<tr bgcolor=\"#e0e0e0\">\n"));
+          } else {
+            res.append(tr("<tr bgcolor=\"white\">\n"));
+          }
           res.append(tr("<td>%1</td>").arg(documentationLink(prefix+item, func_iter.key())));
           res.append(tr("</tr>\n"));
         }
 
-        res.append(tr("</table>\n"));
+        res.append(tableFooter());
       }
     }
   }

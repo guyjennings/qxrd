@@ -87,6 +87,9 @@ private:
   static QScriptValue matchFilesFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue extraChannelFunc(QScriptContext *context, QScriptEngine *engine);
 
+  QString tableHeader();
+  QString tableFooter();
+
 private:
   mutable QMutex         m_Mutex;
   QxrdApplication       *m_Application;
