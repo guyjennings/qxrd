@@ -3,6 +3,8 @@
 #include "qxrdacquisition.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
+#include <QFileDialog>
+#include <QDir>
 
 QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
                                      QxrdWindow *win,
@@ -28,8 +30,9 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     //  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
     connect(m_ActionTrigger, SIGNAL(triggered()), acq, SLOT(trigger()));
 
-    //  connect(m_SelectLogFileButton, SIGNAL(clicked()), m_Window, SLOT(selectLogFile()));
-    //  connect(m_SelectDirectoryButton, SIGNAL(clicked()), m_Window, SLOT(selectOutputDirectory()));
+    connect(m_BrowseDirectoryButton, SIGNAL(clicked()), this, SLOT(browseOutputDirectory()));
+    connect(m_BrowseLogFileButton, SIGNAL(clicked()), this, SLOT(browseLogFile()));
+    connect(m_BrowseScanFileButton, SIGNAL(clicked()), this, SLOT(browseScanFile()));
 
     connect(m_AcquireButton, SIGNAL(clicked()), m_ActionAcquire, SIGNAL(triggered()));
     connect(m_CancelButton, SIGNAL(clicked()), m_ActionCancel, SIGNAL(triggered()));
@@ -70,6 +73,7 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
 
     exp  -> prop_ExperimentDirectory() -> linkTo(this -> m_ExperimentDirectory);
     exp  -> prop_LogFileName() -> linkTo(this -> m_LogFileName);
+    exp  -> prop_ScanFileName() -> linkTo(this -> m_ScanFileName);
     exp  -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
   }
 
@@ -109,6 +113,39 @@ void QxrdAcquisitionDialog::onAcquisitionInit()
     acqp -> setupExposureMenu(this -> m_ExposureTime);
     acqp -> setupCameraGainMenu(this -> m_CameraGain);
     acqp -> setupCameraBinningModeMenu(this -> m_BinningMode);
+  }
+}
+
+void QxrdAcquisitionDialog::browseOutputDirectory()
+{
+  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", m_ExperimentDirectory->text(), QFileDialog::ShowDirsOnly);
+
+  if (dir != "") {
+    m_ExperimentDirectory->setText(dir);
+  }
+}
+
+void QxrdAcquisitionDialog::browseLogFile()
+{
+  QDir pwd(m_ExperimentDirectory->text());
+  QFileInfo initial(pwd, m_LogFileName->text());
+
+  QString file = QFileDialog::getSaveFileName(this, "Log File", initial.absoluteFilePath());
+
+  if (file != "") {
+    m_LogFileName->setText(pwd.relativeFilePath(file));
+  }
+}
+
+void QxrdAcquisitionDialog::browseScanFile()
+{
+  QDir pwd(m_ExperimentDirectory->text());
+  QFileInfo initial(pwd, m_ScanFileName->text());
+
+  QString file = QFileDialog::getSaveFileName(this, "Scan File", initial.absoluteFilePath());
+
+  if (file != "") {
+    m_ScanFileName->setText(pwd.relativeFilePath(file));
   }
 }
 

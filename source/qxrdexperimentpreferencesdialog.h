@@ -22,7 +22,8 @@ public slots:
 
 private slots:
   void currentOutputBrowse();
-  void currentLogfileBrowse();
+  void currentLogFileBrowse();
+  void currentScanFileBrowse();
   void saveRawBrowse();
   void saveDarkBrowse();
   void saveSubtractedBrowse();

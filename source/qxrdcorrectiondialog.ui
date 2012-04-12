@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>337</width>
+    <width>371</width>
     <height>495</height>
    </rect>
   </property>
@@ -327,7 +327,7 @@
        <string>Save each integration as it is calculated</string>
       </property>
       <property name="text">
-       <string>Save Integrated Data in Log File</string>
+       <string>Save Integrated Data in Scan File</string>
       </property>
      </widget>
     </item>

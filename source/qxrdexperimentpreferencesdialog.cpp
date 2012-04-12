@@ -55,11 +55,14 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     //  m_DetectorTypeCombo -> addItems(detectorTypes);
     //  m_DetectorTypeCombo -> setCurrentIndex(detectorType);
 
-    //  connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
-    //  m_CurrentOutputDirectory -> setText(proc->get_OutputDirectory());
+    connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
+    m_CurrentOutputDirectory -> setText(expt->get_ExperimentDirectory());
 
-    connect(m_CurrentLogfileBrowse, SIGNAL(clicked()), this, SLOT(currentLogfileBrowse()));
+    connect(m_CurrentLogFileBrowse, SIGNAL(clicked()), this, SLOT(currentLogFileBrowse()));
     m_CurrentLogFile -> setText(expt->get_LogFileName());
+
+    connect(m_CurrentScanFileBrowse, SIGNAL(clicked()), this, SLOT(currentScanFileBrowse()));
+    m_CurrentScanFile -> setText(expt->get_ScanFileName());
 
     if (proc) {
       connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
@@ -149,7 +152,7 @@ void QxrdExperimentPreferencesDialog::currentOutputBrowse()
   }
 }
 
-void QxrdExperimentPreferencesDialog::currentLogfileBrowse()
+void QxrdExperimentPreferencesDialog::currentLogFileBrowse()
 {
   QDir pwd(m_CurrentOutputDirectory->text());
   QFileInfo initial(pwd, m_CurrentLogFile->text());
@@ -158,6 +161,18 @@ void QxrdExperimentPreferencesDialog::currentLogfileBrowse()
 
   if (file != "") {
     m_CurrentLogFile->setText(pwd.relativeFilePath(file));
+  }
+}
+
+void QxrdExperimentPreferencesDialog::currentScanFileBrowse()
+{
+  QDir pwd(m_CurrentOutputDirectory->text());
+  QFileInfo initial(pwd, m_CurrentScanFile->text());
+
+  QString file = QFileDialog::getSaveFileName(this, "Scan File", initial.absoluteFilePath());
+
+  if (file != "") {
+    m_CurrentScanFile->setText(pwd.relativeFilePath(file));
   }
 }
 
@@ -216,8 +231,9 @@ void QxrdExperimentPreferencesDialog::accept()
       proc -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
     }
 
-    //  proc          -> set_OutputDirectory(m_CurrentOutputDirectory -> text());
+    expt -> set_ExperimentDirectory(m_CurrentOutputDirectory -> text());
     expt -> set_LogFileName    (m_CurrentLogFile -> text());
+    expt -> set_ScanFileName    (m_CurrentScanFile -> text());
 
     if (acq) {
       acq  -> set_FileIndexWidth(m_FileIndexWidth -> value());

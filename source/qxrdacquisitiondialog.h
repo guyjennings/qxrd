@@ -33,6 +33,10 @@ public slots:
   void acquireStarted();
   void acquireComplete();
 
+  void browseOutputDirectory();
+  void browseLogFile();
+  void browseScanFile();
+
 private:
   QxrdExperimentWPtr    m_Experiment;
   QxrdWindowWPtr        m_Window;
