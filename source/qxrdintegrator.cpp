@@ -111,31 +111,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr i
       dimg->get_Height() != m_IntegratorCache->get_NRows()) {
 
     QxrdIntegratorCachePtr cache = QxrdIntegratorCachePtr(
-          new QxrdIntegratorCache(m_Experiment, m_Allocator));
-
-    cache->set_Oversample        (this->get_Oversample());
-    cache->set_IntegrationStep   (this->get_IntegrationStep());
-    cache->set_IntegrationNSteps (this->get_IntegrationNSteps());
-    cache->set_IntegrationMinimum(this->get_IntegrationMinimum());
-    cache->set_IntegrationMaximum(this->get_IntegrationMaximum());
-    cache->set_IntegrationXUnits (this->get_IntegrationXUnits());
-
-    QxrdCenterFinderPtr cf(m_CenterFinder);
-
-    if (cf) {
-      cache->set_CenterX           (cf->get_CenterX());
-      cache->set_CenterY           (cf->get_CenterY());
-      cache->set_DetectorXPixelSize(cf->get_DetectorXPixelSize());
-      cache->set_DetectorYPixelSize(cf->get_DetectorYPixelSize());
-      cache->set_DetectorDistance  (cf->get_DetectorDistance());
-      cache->set_Energy            (cf->get_Energy());
-      cache->set_ImplementTilt     (cf->get_ImplementTilt());
-      cache->set_DetectorTilt      (cf->get_DetectorTilt());
-      cache->set_TiltPlaneRotation (cf->get_TiltPlaneRotation());
-    }
-
-    cache->set_NCols             (dimg->get_Width());
-    cache->set_NRows             (dimg->get_Height());
+          new QxrdIntegratorCache(m_Experiment, m_Allocator, this, m_CenterFinder));
 
     m_IntegratorCache = cache;
   }

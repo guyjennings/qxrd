@@ -8,6 +8,9 @@
 #include "qxrdexperiment.h"
 #include "qcepdebug.h"
 #include "qxrdallocator.h"
+#include "qxrdintegrator.h"
+#include "qxrdcenterfinder.h"
+
 #include <stdio.h>
 #include <QThread>
 
@@ -15,45 +18,72 @@
 #include <cmath>
 #include "math.h"
 
-QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperimentWPtr exp, QxrdAllocatorWPtr alloc) :
+QxrdIntegratorCache::QxrdIntegratorCache(
+    QxrdExperimentWPtr exp,
+    QxrdAllocatorWPtr alloc,
+    QxrdIntegratorWPtr integ,
+    QxrdCenterFinderWPtr cf) :
   QObject(),
-  m_Oversample(QxrdSettingsSaverPtr(), this, "oversample", 1, "Integrator Oversampling"),
-  m_IntegrationStep(QxrdSettingsSaverPtr(), this, "integrationStep", 0.001, "Integration Step Size"),
-  m_IntegrationNSteps(QxrdSettingsSaverPtr(), this, "integrationNSteps", 0, "Integration Number of Steps"),
-  m_IntegrationMinimum(QxrdSettingsSaverPtr(), this, "integrationMinimum", 0, "Minimum Value for Integration"),
-  m_IntegrationMaximum(QxrdSettingsSaverPtr(), this, "integrationMaximum", 100000, "Maximum Value for Integration"),
-  m_IntegrationXUnits(QxrdSettingsSaverPtr(), this, "integrationXUnits", QxrdIntegrator::IntegrateTTH, "X Units for Integration"),
-  m_CenterX(QxrdSettingsSaverPtr(), this, "centerX", 0, "X Center"),
-  m_CenterY(QxrdSettingsSaverPtr(), this, "centerY", 0, "Y Center"),
-  m_CenterStep(QxrdSettingsSaverPtr(), this, "centerStep", 1, "Center Step Size"),
-  m_DetectorXPixelSize(QxrdSettingsSaverPtr(), this, "detectorXPixelSize", 200, "X Pixel Size (um)"),
-  m_DetectorYPixelSize(QxrdSettingsSaverPtr(), this, "detectorYPixelSize", 200, "Y Pixel Size (um)"),
-  m_DetectorDistance(QxrdSettingsSaverPtr(), this, "detectorDistance", 1000, "Detector Distance (mm)"),
-  m_Energy(QxrdSettingsSaverPtr(), this, "energy", 20000, "Beam Energy (in eV)"),
-  m_ImplementTilt(QxrdSettingsSaverPtr(), this,"implementTilt", false, "Implement Tilt in Integration?"),
-  m_DetectorTilt(QxrdSettingsSaverPtr(), this, "detectorTilt", 0, "Detector Tilt Angle (deg)"),
-  m_TiltPlaneRotation(QxrdSettingsSaverPtr(), this, "tiltPlaneRotation", 90, "Tilt Plane Rotation (deg)"),
-  m_NRows(QxrdSettingsSaverPtr(), this, "nRows", -1, "Number Rows"),
-  m_NCols(QxrdSettingsSaverPtr(), this, "nCols", -1, "Number Cols"),
-  m_RStep(QxrdSettingsSaverPtr(), this, "rStep", 0, "R Step Size"),
-  m_RMin(QxrdSettingsSaverPtr(), this, "rMin", 0, "Minimum R"),
-  m_RMax(QxrdSettingsSaverPtr(), this, "rMax", 0, "Maximum R"),
-  m_NMin(QxrdSettingsSaverPtr(), this, "nMin", 0, "Minimum N"),
-  m_NMax(QxrdSettingsSaverPtr(), this, "nMax", 0, "Maximum N"),
-  m_NRange(QxrdSettingsSaverPtr(), this, "nRange", 0, "N Range"),
-  m_Beta(QxrdSettingsSaverPtr(), this, "beta", 0, "Beta (deg)"),
-  m_CosBeta(QxrdSettingsSaverPtr(), this, "cosBeta", 1, "cos(Beta)"),
-  m_SinBeta(QxrdSettingsSaverPtr(), this, "sinBeta", 0, "sin(Beta)"),
-  m_Rot(QxrdSettingsSaverPtr(), this, "rot", 0, "Rotation (deg)"),
-  m_CosRot(QxrdSettingsSaverPtr(), this, "cosRot", 0, "cos(Rotation)"),
-  m_SinRot(QxrdSettingsSaverPtr(), this, "sinRot", 0, "sin(Rotation)"),
+  m_Oversample(1),
+  m_IntegrationStep(0.001),
+  m_IntegrationNSteps(0),
+  m_IntegrationMinimum(0),
+  m_IntegrationMaximum(100000),
+  m_IntegrationXUnits(QxrdIntegrator::IntegrateTTH),
+  m_CenterX(0),
+  m_CenterY(0),
+  m_CenterStep(1),
+  m_DetectorXPixelSize(200),
+  m_DetectorYPixelSize(200),
+  m_DetectorDistance(1000),
+  m_Energy(20000),
+  m_ImplementTilt(false),
+  m_DetectorTilt(0),
+  m_TiltPlaneRotation(90),
+  m_NRows(-1),
+  m_NCols(-1),
+  m_RStep(0),
+  m_RMin(0),
+  m_RMax(0),
+  m_NMin(0),
+  m_NMax(0),
+  m_NRange(0),
+  m_Beta(0),
+  m_CosBeta(1),
+  m_SinBeta(0),
+  m_Rot(0),
+  m_CosRot(0),
+  m_SinRot(0),
   m_CacheFillLevel(-1),
   m_CacheFullLevel(-1),
   m_Experiment(exp),
-  m_Allocator(alloc)
+  m_Allocator(alloc),
+  m_Integrator(integ),
+  m_CenterFinder(cf)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdIntegrator::QxrdIntegrator(%p)\n", this);
+  }
+
+  if (m_Integrator) {
+    m_Oversample         = m_Integrator->get_Oversample();
+    m_IntegrationStep    = m_Integrator->get_IntegrationStep();
+    m_IntegrationNSteps  = m_Integrator->get_IntegrationNSteps();
+    m_IntegrationMinimum = m_Integrator->get_IntegrationMinimum();
+    m_IntegrationMaximum = m_Integrator->get_IntegrationMaximum();
+    m_IntegrationXUnits  = m_Integrator->get_IntegrationXUnits();
+  }
+
+  if (m_CenterFinder) {
+    m_CenterX            = m_CenterFinder->get_CenterX();
+    m_CenterY            = m_CenterFinder->get_CenterY();
+    m_DetectorXPixelSize = m_CenterFinder->get_DetectorXPixelSize();
+    m_DetectorYPixelSize = m_CenterFinder->get_DetectorYPixelSize();
+    m_DetectorDistance   = m_CenterFinder->get_DetectorDistance();
+    m_Energy             = m_CenterFinder->get_Energy();
+    m_ImplementTilt      = m_CenterFinder->get_ImplementTilt();
+    m_DetectorTilt       = m_CenterFinder->get_DetectorTilt();
+    m_TiltPlaneRotation  = m_CenterFinder->get_TiltPlaneRotation();
   }
 }
 
@@ -64,18 +94,28 @@ QxrdIntegratorCache::~QxrdIntegratorCache()
   }
 }
 
+int QxrdIntegratorCache::get_NRows() const
+{
+  return m_NRows;
+}
+
+int QxrdIntegratorCache::get_NCols() const
+{
+  return m_NCols;
+}
+
 double QxrdIntegratorCache::getTTH(double x, double y)
 {
-  double beta = get_DetectorTilt()*M_PI/180.0;
-  double rot  = get_TiltPlaneRotation()*M_PI/180.0;
+  double beta = m_DetectorTilt*M_PI/180.0;
+  double rot  = m_TiltPlaneRotation*M_PI/180.0;
 
-  if (get_ImplementTilt()) {
-    return QxrdDetectorGeometry::getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(),
-                                             x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+  if (m_ImplementTilt) {
+    return QxrdDetectorGeometry::getTwoTheta(m_CenterX, m_CenterY, m_DetectorDistance,
+                                             x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
                                              cos(beta), sin(beta), cos(rot), sin(rot));
   } else {
-    return QxrdDetectorGeometry::getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(),
-                                             x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+    return QxrdDetectorGeometry::getTwoTheta(m_CenterX, m_CenterY, m_DetectorDistance,
+                                             x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
                                              1.0, 0.0, 1.0, 0.0);
   }
 }
@@ -83,19 +123,19 @@ double QxrdIntegratorCache::getTTH(double x, double y)
 double QxrdIntegratorCache::getQ(double x, double y)
 {
   double q,chi;
-  double beta = get_DetectorTilt()*M_PI/180.0;
-  double rot  = get_TiltPlaneRotation()*M_PI/180.0;
+  double beta = m_DetectorTilt*M_PI/180.0;
+  double rot  = m_TiltPlaneRotation*M_PI/180.0;
 
-  if (get_ImplementTilt()) {
-    QxrdDetectorGeometry::getQChi(get_CenterX(), get_CenterY(), get_DetectorDistance(),
-                                  get_Energy(),
-                                  x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+  if (m_ImplementTilt) {
+    QxrdDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
+                                  m_Energy,
+                                  x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
                                   rot, cos(beta), sin(beta), 1.0, 0.0, cos(rot), sin(rot),
                                   &q, &chi);
   } else {
-    QxrdDetectorGeometry::getQChi(get_CenterX(), get_CenterY(), get_DetectorDistance(),
-                                  get_Energy(),
-                                  x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+    QxrdDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
+                                  m_Energy,
+                                  x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
                                   0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0,
                                   &q, &chi);
   }
@@ -106,7 +146,7 @@ double QxrdIntegratorCache::getQ(double x, double y)
 double QxrdIntegratorCache::getR(double x, double y)
 {
   double tth = getTTH(x, y);
-  double r = get_DetectorDistance()*tan(tth*M_PI/180.0);
+  double r = m_DetectorDistance*tan(tth*M_PI/180.0);
 
   return r;
 }
@@ -115,7 +155,7 @@ double QxrdIntegratorCache::XValue(double x, double y)
 {
   double xVal = 0;
 
-  switch(get_IntegrationXUnits()) {
+  switch(m_IntegrationXUnits) {
   case QxrdIntegrator::IntegrateTTH:
     xVal = getTTH(x,y);
     break;
@@ -154,7 +194,7 @@ QString QxrdIntegratorCache::XLabel() const
 {
   QString label = "";
 
-  switch(get_IntegrationXUnits()) {
+  switch(m_IntegrationXUnits) {
   case QxrdIntegrator::IntegrateTTH:
     label = "2 Theta (deg)";
     break;
@@ -188,9 +228,12 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
     }
 
     if (integ && dimg) {
-      int noversample = get_Oversample();
-      double oversampleStep = 1.0/get_Oversample();
+      int noversample = m_Oversample;
+      double oversampleStep = 1.0/m_Oversample;
       double halfOversampleStep = oversampleStep/2.0;
+
+      m_NRows = dimg->get_Height();
+      m_NCols = dimg->get_Width();
 
       QcepDoubleList norm = dimg->get_Normalization();
 
@@ -207,12 +250,12 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
         // Allocate new cache and fill it...
 
-        double cx = get_CenterX();
-        double cy = get_CenterY();
+        double cx = m_CenterX;
+        double cy = m_CenterY;
 
-        int nRows = get_NRows();
-        int nCols = get_NCols();
-        int nPix  = nRows*nCols*get_Oversample()*get_Oversample();
+        int nRows = m_NRows;
+        int nCols = m_NCols;
+        int nPix  = nRows*nCols*m_Oversample*m_Oversample;
 
         double r00  = XValue(0,0);
         double r10  = XValue(nRows+1,0);
@@ -234,13 +277,13 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           rMin = qMin(rMin,0.0);
         }
 
-        rMin = qMax(rMin, get_IntegrationMinimum());
-        rMax = qMin(rMax, get_IntegrationMaximum());
+        rMin = qMax(rMin, m_IntegrationMinimum);
+        rMax = qMin(rMax, m_IntegrationMaximum);
 
-        double rStep = get_IntegrationStep();
+        double rStep = m_IntegrationStep;
 
         if (rStep == 0) {
-          int nStep = get_IntegrationNSteps();
+          int nStep = m_IntegrationNSteps;
 
           if (nStep <= 0) {
             nStep = 512;
@@ -253,15 +296,15 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
         double nMax  = ceil(rMax/rStep);
         int nRange = (nMax - nMin);
 
-        set_RStep(rStep);
-        set_NRange(nRange);
-        set_RMin(rMin);
-        set_RMax(rMax);
+        m_RStep = rStep;
+        m_NRange = nRange;
+        m_RMin = rMin;
+        m_RMax = rMax;
 
         m_CachedBinNumbers =  QxrdAllocator::newInt32Image(m_Allocator,
                                                            QxrdAllocator::AlwaysAllocate,
-                                                           get_NCols()*get_Oversample(),
-                                                           get_NRows()*get_Oversample());
+                                                           m_NCols*m_Oversample,
+                                                           m_NRows*m_Oversample);
 
         if (m_CachedBinNumbers) {
           m_CachedBinNumbers -> clear();
@@ -270,10 +313,10 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
           qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
 
-          expt->commenceWork(nRows);
+//          expt->commenceWork(nRows);
 
           for (int y = 0; y < nRows; y++) {
-            expt->completeWork(1);
+//            expt->completeWork(1);
 
             for (int x = 0; x < nCols; x++) {
               for (int oversampley = 0; oversampley < noversample; oversampley++) {
@@ -298,7 +341,7 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
             }
           }
 
-          expt->finishedWork(nRows);
+//          expt->finishedWork(nRows);
         }
 
         if (qcepDebug(DEBUG_INTEGRATOR)) {
@@ -321,25 +364,25 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           expt->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
         }
 
-        int nRange = get_NRange();
-        int nRows = get_NRows();
-        int nCols = get_NCols();
-        double rMin = get_RMin();
-//        double rMax = get_RMax();
-        double rStep = get_RStep();
+        int nRange = m_NRange;
+        int nRows = m_NRows;
+        int nCols = m_NCols;
+        double rMin = m_RMin;
+//        double rMax = m_RMax;
+        double rStep = m_RStep;
 
         QVector<double> integral(nRange), sumvalue(nRange);
         qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
-        int noversample = get_Oversample();
+        int noversample = m_Oversample;
 
         int nWork = nRows/100;
         int nWorkDone = 0;
 
-        expt->commenceWork(nWork);
+//        expt->commenceWork(nWork);
 
         for (int y = 0; y < nRows; y++) {
           if (y%100 == 0) {
-            expt->completeWork(1);
+//            expt->completeWork(1);
             nWorkDone++;
           }
 
@@ -363,13 +406,13 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
         }
 
         if (nWorkDone != nWork) {
-          expt->completeWork(nWork-nWorkDone);
+//          expt->completeWork(nWork-nWorkDone);
         }
 
-        expt -> finishedWork(nWork);
+//        expt -> finishedWork(nWork);
 
         integ -> resize(0);
-        integ -> set_Center(get_CenterX(), get_CenterY());
+        integ -> set_Center(m_CenterX, m_CenterY);
 
         for(int ir=0; ir<nRange; ir++) {
           int sv = sumvalue[ir];
@@ -386,7 +429,7 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
         }
 
         integ->set_XUnitsLabel(XLabel());
-        integ->set_Oversample(get_Oversample());
+        integ->set_Oversample(m_Oversample);
         // Integrate entirely out of cache
       }
 
