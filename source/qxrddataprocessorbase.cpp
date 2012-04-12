@@ -1890,6 +1890,7 @@ void QxrdDataProcessorBase::writeOutputScan(QxrdIntegratedDataPtr data)
       QxrdExperimentPtr expt(m_Experiment);
 
       if (expt) {
+        expt->openScanFile();
         f->writeOutputScan(expt->scanFile(), data);
       }
     }

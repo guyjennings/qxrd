@@ -114,6 +114,8 @@ private:
   void openLogFile();
 
   void closeScanFile();
+
+public:
   void openScanFile();
 
 private:
