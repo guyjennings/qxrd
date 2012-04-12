@@ -113,6 +113,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_GuiWanted(QxrdSettingsSaverPtr(), this, "guiWanted", 1, "GUI Wanted?"),
   m_CmdList(QxrdSettingsSaverPtr(), this, "cmdList", QStringList(), "Commands to Execute"),
   m_FileList(QxrdSettingsSaverPtr(), this, "fileList", QStringList(), "Files to Process"),
+  m_LockerCount(QxrdSettingsSaverPtr(), this, "lockerCount", 0, "Number of mutex locks taken"),
+  m_LockerRate(QxrdSettingsSaverPtr(), this, "lockerRate", 0, "Mutex Locking Rate"),
   m_Splash(NULL),
   m_WelcomeWindow(NULL),
   m_AllocatorThread(NULL),
@@ -131,6 +133,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   g_Application = this;
 
   connect(&m_SplashTimer, SIGNAL(timeout()), this, SLOT(hideSplash()));
+
+  connect(&m_LockerTimer, SIGNAL(timeout()), this, SLOT(lockerTimerElapsed()));
+
+  m_LockerTimer.start(5000);
 }
 
 bool QxrdApplication::init(int &argc, char **argv)
@@ -1051,5 +1057,26 @@ void QxrdApplication::doNewGenericAnalysis()
     QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentGenericAnalysis(normalizeExperimentName(newExperiment), this);
 
     openedExperiment(docThread);
+  }
+}
+
+void QxrdApplication::incLockerCount()
+{
+  prop_LockerCount()->incValue(1);
+}
+
+void QxrdApplication::lockerTimerElapsed()
+{
+  double elapsed = m_LastLockerTime.elapsed();
+
+  double rate = (get_LockerCount() - m_LastLockerCount)/elapsed;
+
+  set_LockerRate(rate);
+
+  m_LastLockerTime = QTime::currentTime();
+  m_LastLockerCount= get_LockerCount();
+
+  if (get_LockerRate()>10) {
+    printMessage(tr("Locker rate %1 locks/sec").arg(get_LockerRate()));
   }
 }

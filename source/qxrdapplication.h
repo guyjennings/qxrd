@@ -123,10 +123,13 @@ public slots:
   QString currentPath();
   QString rootPath();
 
+  void lockerTimerElapsed();
+
 public:
   bool wantToQuit();
 
   static QString hexArg(void *p);
+  void incLockerCount();
 
 private slots:
   void hideSplash();
@@ -185,6 +188,12 @@ public:
   Q_PROPERTY(QStringList fileList READ get_FileList WRITE set_FileList STORED false)
   QCEP_STRING_LIST_PROPERTY(FileList)
 
+  Q_PROPERTY(int lockerCount READ get_LockerCount WRITE set_LockerCount STORED false)
+  QCEP_INTEGER_PROPERTY(LockerCount)
+
+  Q_PROPERTY(double lockerRate READ get_LockerRate WRITE set_LockerRate STORED false)
+  QCEP_DOUBLE_PROPERTY(LockerRate)
+
 private:
   QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
   QList<QxrdExperimentPtr>        m_Experiments;
@@ -202,6 +211,10 @@ private:
   QxrdResponseTimer              *m_ResponseTimer;
 
   QMutex                          m_SettingsMutex;
+
+  QTimer                          m_LockerTimer;
+  QTime                           m_LastLockerTime;
+  int                             m_LastLockerCount;
 };
 
 #define HEXARG(a) arg(QxrdApplication::hexArg(a))

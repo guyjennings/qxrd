@@ -1,6 +1,7 @@
 #include "qxrdmutexlocker.h"
 #include <stdio.h>
 #include <QThread>
+#include "qxrdapplication.h"
 
 QxrdMutexLocker::QxrdMutexLocker(const char *file, int line, QMutex * mutex)
   : QMutexLocker(mutex),
@@ -8,6 +9,10 @@ QxrdMutexLocker::QxrdMutexLocker(const char *file, int line, QMutex * mutex)
     m_Line(line)
 {
   m_LockTime.start();
+
+  if (g_Application) {
+    g_Application->incLockerCount();
+  }
 }
 
 QxrdMutexLocker::~QxrdMutexLocker()
