@@ -137,6 +137,8 @@ QxrdAcquisitionExtraInputsDialog::~QxrdAcquisitionExtraInputsDialog()
 
 void QxrdAcquisitionExtraInputsDialog::updateUi()
 {
+  GUI_THREAD_CHECK;
+
   QxrdAcquisitionPtr acqp(m_Acquisition);
 
   if (acqp) {
@@ -184,8 +186,10 @@ void QxrdAcquisitionExtraInputsDialog::updateUi()
           m_ExtraInputsTable->setVerticalHeaderLabels(labels);
         }
 
-        m_ExtraInputsTable->resizeColumnsToContents();
-        m_ExtraInputsTable->resizeRowsToContents();
+        if (m_ExtraInputsTable->columnCount() && m_ExtraInputsTable->rowCount()) {
+          m_ExtraInputsTable->resizeColumnsToContents();
+          m_ExtraInputsTable->resizeRowsToContents();
+        }
       }
     }
   }
