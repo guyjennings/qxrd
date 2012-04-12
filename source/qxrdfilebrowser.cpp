@@ -39,8 +39,6 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
 
   m_FileBrowser -> setModel(m_Model.data());
 
-  m_FileBrowser -> setRootPath(QDir::currentPath());
-
   m_FileBrowser -> resizeColumnsToContents();
   m_FileBrowser -> resizeRowsToContents();
 
