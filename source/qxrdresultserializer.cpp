@@ -1,4 +1,5 @@
 #include "qxrdresultserializer.h"
+#include "qxrdmutexlocker.h"
 
 QxrdResultSerializerBase::QxrdResultSerializerBase(QObject *parent) :
     QObject(parent)
@@ -20,7 +21,7 @@ QxrdResultSerializer<T>::QxrdResultSerializer(QObject *parent)
 template <typename T>
 void QxrdResultSerializer<T>::enqueue(QFuture<T> future)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Results.enqueue(future);
 
@@ -30,7 +31,7 @@ void QxrdResultSerializer<T>::enqueue(QFuture<T> future)
 template <typename T>
 T QxrdResultSerializer<T>::dequeue()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_Results.size() > 0) {
     QFuture<T> val = m_Results.dequeue();

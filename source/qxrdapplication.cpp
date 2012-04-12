@@ -35,6 +35,7 @@
 #include "qxrdexperimentsettings.h"
 #include "qxrdsettingssaver.h"
 #include "qxrdsplashscreen.h"
+#include "qxrdmutexlocker.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -513,7 +514,7 @@ QString QxrdApplication::rootPath()
 
 void QxrdApplication::readSettings()
 {
-  QMutexLocker lock(&m_SettingsMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
 
   QxrdGlobalSettings settings(this);
 
@@ -531,7 +532,7 @@ void QxrdApplication::readSettings(QSettings *settings)
 
 void QxrdApplication::writeSettings()
 {
-  QMutexLocker lock(&m_SettingsMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
 
   QxrdGlobalSettings settings(this);
 

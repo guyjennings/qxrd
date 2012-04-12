@@ -2,8 +2,8 @@
 #include "qxrdapplication.h"
 #include "qxrdsettingssaver.h"
 #include "qxrddocumentationdictionary.h"
+#include "qxrdmutexlocker.h"
 
-#include <QMutexLocker>
 #include <QSpinBox>
 #include <QComboBox>
 #include <QLineEdit>
@@ -62,14 +62,14 @@ QcepProperty::QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const c
 
 QString QcepProperty::name() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Name;
 }
 
 QString QcepProperty::parentName() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_Parent) {
     return m_Parent->objectName();
@@ -80,14 +80,14 @@ QString QcepProperty::parentName() const
 
 QString QcepProperty::toolTip() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_ToolTip;
 }
 
 void QcepProperty::setToolTip(QString tip)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_ToolTip = tip;
 }
@@ -432,14 +432,14 @@ QcepDoubleProperty::QcepDoubleProperty(QxrdSettingsSaverWPtr saver, QObject *par
 
 double QcepDoubleProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
 double QcepDoubleProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
@@ -469,7 +469,7 @@ void QcepDoubleProperty::setValue(double val)
                    .arg(name()).arg(val).arg(index()));
     }
 
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -493,7 +493,7 @@ void QcepDoubleProperty::incValue(double step)
   }
 
   if (step) {
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value += step;
 
@@ -510,7 +510,7 @@ void QcepDoubleProperty::incValue(double step)
 
 void QcepDoubleProperty::setDefaultValue(double val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Default = val;
 }
@@ -987,14 +987,14 @@ QcepStringProperty::QcepStringProperty(QxrdSettingsSaverWPtr saver, QObject *par
 
 QString QcepStringProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
 QString QcepStringProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
@@ -1024,7 +1024,7 @@ void QcepStringProperty::setValue(QString val)
                    .arg(name()).arg(val).arg(index()));
     }
 
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1040,7 +1040,7 @@ void QcepStringProperty::setValue(QString val)
 
 void QcepStringProperty::setDefaultValue(QString val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Default = val;
 }
@@ -1144,14 +1144,14 @@ QcepDateTimeProperty::QcepDateTimeProperty(QxrdSettingsSaverWPtr saver, QObject 
 
 QDateTime QcepDateTimeProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
 QDateTime QcepDateTimeProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
@@ -1182,7 +1182,7 @@ void QcepDateTimeProperty::setValue(QDateTime val)
                    .arg(name()).arg(val.toString()).arg(index()));
     }
 
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1198,7 +1198,7 @@ void QcepDateTimeProperty::setValue(QDateTime val)
 
 void QcepDateTimeProperty::setDefaultValue(QDateTime val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (val != m_Default) {
     m_Default = val;
@@ -1223,14 +1223,14 @@ QcepDoubleListProperty::QcepDoubleListProperty(QxrdSettingsSaverWPtr saver, QObj
 
 QcepDoubleList QcepDoubleListProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
 QcepDoubleList QcepDoubleListProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
@@ -1255,7 +1255,7 @@ void QcepDoubleListProperty::incValue(QcepDoubleList step)
   }
 
   {
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     for (int i=0; i<m_Value.count(); i++) {
       m_Value[i] += step.value(i);
@@ -1273,14 +1273,14 @@ void QcepDoubleListProperty::incValue(QcepDoubleList step)
 
 void QcepDoubleListProperty::clear()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   setValue(QcepDoubleList());
 }
 
 void QcepDoubleListProperty::appendValue(double val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepDoubleList list = value();
   list.append(val);
@@ -1319,7 +1319,7 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
                    .arg(name()).arg(toString(val)).arg(index()));
     }
 
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1335,7 +1335,7 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
 
 void QcepDoubleListProperty::setDefaultValue(QcepDoubleList val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Default = val;
 }
@@ -1358,14 +1358,14 @@ QcepDoubleVectorProperty::QcepDoubleVectorProperty(QxrdSettingsSaverWPtr saver, 
 
 QcepDoubleVector QcepDoubleVectorProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
 QcepDoubleVector QcepDoubleVectorProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
@@ -1390,7 +1390,7 @@ void QcepDoubleVectorProperty::incValue(QcepDoubleVector step)
   }
 
   {
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     for (int i=0; i<m_Value.count(); i++) {
       m_Value[i] += step.value(i);
@@ -1408,14 +1408,14 @@ void QcepDoubleVectorProperty::incValue(QcepDoubleVector step)
 
 void QcepDoubleVectorProperty::clear()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   setValue(QcepDoubleVector());
 }
 
 void QcepDoubleVectorProperty::appendValue(double val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepDoubleVector list = value();
   list.append(val);
@@ -1454,7 +1454,7 @@ void QcepDoubleVectorProperty::setValue(QcepDoubleVector val)
                    .arg(name()).arg(toString(val)).arg(index()));
     }
 
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1470,7 +1470,7 @@ void QcepDoubleVectorProperty::setValue(QcepDoubleVector val)
 
 void QcepDoubleVectorProperty::setDefaultValue(QcepDoubleVector val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Default = val;
 }
@@ -1493,14 +1493,14 @@ QcepIntListProperty::QcepIntListProperty(QxrdSettingsSaverWPtr saver, QObject *p
 
 QcepIntList QcepIntListProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
 QcepIntList QcepIntListProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
@@ -1525,7 +1525,7 @@ void QcepIntListProperty::incValue(QcepIntList step)
   }
 
   {
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     for (int i=0; i<m_Value.count(); i++) {
       m_Value[i] += step.value(i);
@@ -1543,14 +1543,14 @@ void QcepIntListProperty::incValue(QcepIntList step)
 
 void QcepIntListProperty::clear()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   setValue(QcepIntList());
 }
 
 void QcepIntListProperty::appendValue(int val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepIntList list = value();
   list.append(val);
@@ -1589,7 +1589,7 @@ void QcepIntListProperty::setValue(QcepIntList val)
                    .arg(name()).arg(toString(val)).arg(index()));
     }
 
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1605,7 +1605,7 @@ void QcepIntListProperty::setValue(QcepIntList val)
 
 void QcepIntListProperty::setDefaultValue(QcepIntList val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Default = val;
 }
@@ -1628,14 +1628,14 @@ QcepStringListProperty::QcepStringListProperty(QxrdSettingsSaverWPtr saver, QObj
 
 QStringList QcepStringListProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
 QStringList QcepStringListProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
@@ -1654,14 +1654,14 @@ void QcepStringListProperty::setValue(QStringList val, int index)
 
 void QcepStringListProperty::clear()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   setValue(QcepStringList());
 }
 
 void QcepStringListProperty::appendValue(QString val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QStringList list = value();
   list.append(val);
@@ -1700,7 +1700,7 @@ void QcepStringListProperty::setValue(QStringList val)
                    .arg(name()).arg(toString(val)).arg(index()));
     }
 
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1716,7 +1716,7 @@ void QcepStringListProperty::setValue(QStringList val)
 
 void QcepStringListProperty::setDefaultValue(QStringList val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Default = val;
 }
@@ -1739,14 +1739,14 @@ QcepByteArrayProperty::QcepByteArrayProperty(QxrdSettingsSaverWPtr saver, QObjec
 
 QByteArray QcepByteArrayProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
 QByteArray QcepByteArrayProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
@@ -1765,7 +1765,7 @@ void QcepByteArrayProperty::setValue(QByteArray val, int index)
 
 void QcepByteArrayProperty::clear()
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   setValue(QByteArray());
 }
@@ -1801,7 +1801,7 @@ void QcepByteArrayProperty::setValue(QByteArray val)
                    .arg(name()).arg(toString(val)).arg(index()));
     }
 
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1817,7 +1817,7 @@ void QcepByteArrayProperty::setValue(QByteArray val)
 
 void QcepByteArrayProperty::setDefaultValue(QByteArray val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Default = val;
 }
@@ -1840,14 +1840,14 @@ QcepDoublePointProperty::QcepDoublePointProperty(QxrdSettingsSaverWPtr saver, QO
 
 QwtDoublePoint QcepDoublePointProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
 QwtDoublePoint QcepDoublePointProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
@@ -1878,7 +1878,7 @@ void QcepDoublePointProperty::setValue(QwtDoublePoint val)
                    .arg(name()).arg(val.x()).arg(val.y()).arg(index()));
     }
 
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1894,7 +1894,7 @@ void QcepDoublePointProperty::setValue(QwtDoublePoint val)
 
 void QcepDoublePointProperty::setDefaultValue(QwtDoublePoint val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (val != m_Default) {
     m_Default = val;
@@ -1919,14 +1919,14 @@ QcepDoubleRectProperty::QcepDoubleRectProperty(QxrdSettingsSaverWPtr saver, QObj
 
 QwtDoubleRect QcepDoubleRectProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
 QwtDoubleRect QcepDoubleRectProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
@@ -1957,7 +1957,7 @@ void QcepDoubleRectProperty::setValue(QwtDoubleRect val)
                    .arg(name()).arg(val.top()).arg(val.right()).arg(val.bottom()).arg(index()));
     }
 
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1973,7 +1973,7 @@ void QcepDoubleRectProperty::setValue(QwtDoubleRect val)
 
 void QcepDoubleRectProperty::setDefaultValue(QwtDoubleRect val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (val != m_Default) {
     m_Default = val;
@@ -1998,14 +1998,14 @@ QcepPolygonProperty::QcepPolygonProperty(QxrdSettingsSaverWPtr saver, QObject *p
 
 QcepPolygon QcepPolygonProperty::value() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
 QcepPolygon QcepPolygonProperty::defaultValue() const
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
@@ -2036,7 +2036,7 @@ void QcepPolygonProperty::setValue(QcepPolygon val)
                    .arg(name()).arg(index()));
     }
 
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -2052,7 +2052,7 @@ void QcepPolygonProperty::setValue(QcepPolygon val)
 
 void QcepPolygonProperty::setDefaultValue(QcepPolygon val)
 {
-  QMutexLocker lock(&m_Mutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (val != m_Default) {
     m_Default = val;

@@ -8,6 +8,7 @@
 
 #include "qcepimagedataformat.h"
 #include "qcepimagedataformatfactory.h"
+#include "qxrdmutexlocker.h"
 
 QAtomicInt allocCount = 0;
 
@@ -148,7 +149,7 @@ void QcepImageDataBase::loadMetaData()
   tic.start();
 
   {
-    QMutexLocker lock(mutex());
+    QxrdMutexLocker lock(__FILE__, __LINE__, mutex());
 
     QSettings settings(get_FileName()+".metadata", QSettings::IniFormat);
 
@@ -173,7 +174,7 @@ void QcepImageDataBase::saveMetaData(QString name)
 //  printf("type 266 = %s\n", QMetaType::typeName(266));
 
   {
-    QMutexLocker lock(mutex());
+    QxrdMutexLocker lock(__FILE__, __LINE__, mutex());
 
     QSettings settings(name+".metadata", QSettings::IniFormat);
 

@@ -3,6 +3,7 @@
 #include "qcepproperty.h"
 #include "qxrdapplication.h"
 #include <stdio.h>
+#include "qxrdmutexlocker.h"
 
 QxrdSettingsSaver::QxrdSettingsSaver(QObject *owner) :
   QObject(),
@@ -40,7 +41,7 @@ void QxrdSettingsSaver::performSave()
   int nupdates = m_ChangeCount.fetchAndStoreOrdered(0);
 
   if (nupdates > 0) {
-    QMutexLocker lock(&m_Mutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     if (qcepDebug(DEBUG_PREFS)) {
       printMessage(tr("Settings Saver saving %1 updates").arg(nupdates));

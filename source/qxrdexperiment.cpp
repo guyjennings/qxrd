@@ -22,6 +22,7 @@
 #include "qxrdfilesaver.h"
 #include "qxrdexperimentthread.h"
 #include "qxrddetectorthread.h"
+#include "qxrdmutexlocker.h"
 
 QxrdExperiment::QxrdExperiment(
     QString path,
@@ -385,7 +386,7 @@ void QxrdExperiment::executeCommand(QString cmd)
 void QxrdExperiment::newLogFile(QString path)
 {
   {
-    QMutexLocker lock(&m_LogFileMutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
     if (m_LogFile) {
       fclose(m_LogFile);
@@ -400,7 +401,7 @@ void QxrdExperiment::newLogFile(QString path)
 
 void QxrdExperiment::openLogFile()
 {
-  QMutexLocker lock(&m_LogFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   if (m_LogFile == NULL) {
     m_LogFile = fopen(qPrintable(logFilePath()), "a");
@@ -416,7 +417,7 @@ void QxrdExperiment::openLogFile()
 
 FILE* QxrdExperiment::logFile()
 {
-  QMutexLocker lock(&m_LogFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   return m_LogFile;
 }
@@ -425,7 +426,7 @@ void QxrdExperiment::logMessage(QString msg)
 {
   openLogFile();
 
-  QMutexLocker lock(&m_LogFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   if (m_LogFile) {
     fprintf(m_LogFile, "#CX %s\n", qPrintable(msg));
@@ -435,7 +436,7 @@ void QxrdExperiment::logMessage(QString msg)
 
 void QxrdExperiment::closeLogFile()
 {
-  QMutexLocker lock(&m_LogFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   if (m_LogFile) {
     fprintf(m_LogFile, "#CX %s ------- shutdown --------\n",
@@ -449,7 +450,7 @@ void QxrdExperiment::closeLogFile()
 void QxrdExperiment::newScanFile(QString path)
 {
   {
-    QMutexLocker lock(&m_ScanFileMutex);
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_ScanFileMutex);
 
     if (m_ScanFile) {
       fclose(m_ScanFile);
@@ -464,7 +465,7 @@ void QxrdExperiment::newScanFile(QString path)
 
 void QxrdExperiment::openScanFile()
 {
-  QMutexLocker lock(&m_ScanFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_ScanFileMutex);
 
   if (m_ScanFile == NULL) {
     m_ScanFile = fopen(qPrintable(scanFilePath()), "a");
@@ -478,7 +479,7 @@ FILE* QxrdExperiment::scanFile()
 
 void QxrdExperiment::closeScanFile()
 {
-  QMutexLocker lock(&m_ScanFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_ScanFileMutex);
 
   if (m_ScanFile) {
     fclose(m_ScanFile);
@@ -488,7 +489,7 @@ void QxrdExperiment::closeScanFile()
 
 void QxrdExperiment::readSettings()
 {
-  QMutexLocker lock(&m_ExperimentFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_ExperimentFileMutex);
 
   QString docPath = experimentFilePath();
 
@@ -537,7 +538,7 @@ void QxrdExperiment::readSettings(QSettings *settings)
 
 void QxrdExperiment::writeSettings()
 {
-  QMutexLocker lock(&m_ExperimentFileMutex);
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_ExperimentFileMutex);
 
   QString docPath = experimentFilePath();
 
