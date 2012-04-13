@@ -26,8 +26,8 @@ public slots:
   void hideMaskAll();
   void invertMask();
 
-  void dilateMask();
-  void erodeMask();
+  void growMask();
+  void shrinkMask();
 
   void andMask(QxrdMaskDataPtr mask);
   void orMask(QxrdMaskDataPtr mask);

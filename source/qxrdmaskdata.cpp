@@ -101,7 +101,7 @@ QxrdMaskDataPtr QxrdMaskData::copyMask()
   return copy;
 }
 
-void QxrdMaskData::dilateMask()
+void QxrdMaskData::growMask()
 {
   QxrdMaskDataPtr copy(copyMask());
 
@@ -121,7 +121,7 @@ void QxrdMaskData::dilateMask()
   }
 }
 
-void QxrdMaskData::erodeMask()
+void QxrdMaskData::shrinkMask()
 {
   QxrdMaskDataPtr copy(copyMask());
 
