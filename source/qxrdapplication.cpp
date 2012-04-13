@@ -1069,14 +1069,14 @@ void QxrdApplication::lockerTimerElapsed()
 {
   double elapsed = m_LastLockerTime.elapsed();
 
-  double rate = (get_LockerCount() - m_LastLockerCount)/elapsed;
+  double rate = 1000.0*(get_LockerCount() - m_LastLockerCount)/elapsed;
 
   set_LockerRate(rate);
 
   m_LastLockerTime = QTime::currentTime();
   m_LastLockerCount= get_LockerCount();
 
-  if (get_LockerRate()>10) {
+  if (get_LockerRate()>1000) {
     printMessage(tr("Locker rate %1 locks/sec").arg(get_LockerRate()));
   }
 }
