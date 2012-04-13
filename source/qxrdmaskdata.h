@@ -19,10 +19,15 @@ public slots:
   bool maskValue(int x, int y) const;
   void setMaskValue(int x, int y, bool mval);
 
+  QxrdMaskDataPtr copyMask();
+
   void setCircularMask();
   void showMaskAll();
   void hideMaskAll();
   void invertMask();
+
+  void dilateMask();
+  void erodeMask();
 
   void andMask(QxrdMaskDataPtr mask);
   void orMask(QxrdMaskDataPtr mask);

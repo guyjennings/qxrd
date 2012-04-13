@@ -911,6 +911,32 @@ void QxrdDataProcessorBase::invertMaskStack(int pos)
   }
 }
 
+void QxrdDataProcessorBase::dilateMaskStack(int pos)
+{
+  int p = maskStackPosition(pos);
+
+  if (p >= 0) {
+    m_Masks[p] -> dilateMask();
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::erodeMaskStack(int pos)
+{
+  int p = maskStackPosition(pos);
+
+  if (p >= 0) {
+    m_Masks[p] -> erodeMask();
+
+    m_Masks.changed();
+
+    newMask();
+  }
+}
+
 void QxrdDataProcessorBase::hideMaskAllStack(int pos)
 {
   int p = maskStackPosition(pos);
@@ -1519,6 +1545,24 @@ void QxrdDataProcessorBase::invertMask()
 {
   if (mask()) {
     mask() -> invertMask();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::dilateMask()
+{
+  if (mask()) {
+    mask() -> dilateMask();
+
+    newMask();
+  }
+}
+
+void QxrdDataProcessorBase::erodeMask()
+{
+  if (mask()) {
+    mask() -> erodeMask();
 
     newMask();
   }

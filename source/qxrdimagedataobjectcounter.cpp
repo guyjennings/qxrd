@@ -47,3 +47,8 @@ int QxrdImageDataObjectCounter::allocatedMemoryMB()
     return -1;
   }
 }
+
+QxrdAllocatorWPtr QxrdImageDataObjectCounter::allocator()
+{
+  return m_Allocator;
+}

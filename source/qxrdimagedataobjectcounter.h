@@ -13,6 +13,8 @@ public:
   void allocate(int sz, int width, int height);
   int allocatedMemoryMB();
 
+  QxrdAllocatorWPtr allocator();
+
 private:
   QxrdAllocatorWPtr m_Allocator;
   quint64           m_Allocated;

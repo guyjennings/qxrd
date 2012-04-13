@@ -92,6 +92,55 @@ void QxrdMaskData::invertMask()
   }
 }
 
+QxrdMaskDataPtr QxrdMaskData::copyMask()
+{
+  QxrdMaskDataPtr copy(QxrdAllocator::newMask(m_ObjectCounter.allocator(), QxrdAllocator::AlwaysAllocate, get_Width(), get_Height()));
+
+  copyMaskTo(copy);
+
+  return copy;
+}
+
+void QxrdMaskData::dilateMask()
+{
+  QxrdMaskDataPtr copy(copyMask());
+
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      short res = maskValue(i,j);
+      for (int ii=-1; ii<2; ii++) {
+        for (int jj=-1; jj<2; jj++) {
+          res = qMin(res, (short) copy->maskValue(i+ii, j+jj));
+        }
+      }
+      setMaskValue(i,j, res);
+    }
+  }
+}
+
+void QxrdMaskData::erodeMask()
+{
+  QxrdMaskDataPtr copy(copyMask());
+
+  int height = get_Height();
+  int width  = get_Width();
+
+  for (int j=0; j<height; j++) {
+    for (int i=0; i<width; i++) {
+      short res = maskValue(i,j);
+      for (int ii=-1; ii<2; ii++) {
+        for (int jj=-1; jj<2; jj++) {
+          res = qMax(res, (short) copy->maskValue(i+ii, j+jj));
+        }
+      }
+      setMaskValue(i,j, res);
+    }
+  }
+}
+
 void QxrdMaskData::andMask(QxrdMaskDataPtr mask)
 {
   int height = get_Height();

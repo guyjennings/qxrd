@@ -25,6 +25,8 @@ private slots:
   void doHideMaskRange();
   void doShowMaskRange();
   void doInvertMask();
+  void doDilateMask();
+  void doErodeMask();
   void doAndMask();
   void doOrMask();
   void doXorMask();

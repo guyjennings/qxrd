@@ -226,6 +226,8 @@ public slots:
   void showMaskAll();
   void hideMaskAll();
   void invertMask();
+  void dilateMask();
+  void erodeMask();
   void maskCircle(QwtDoubleRect pt);
   void maskPolygon(QwtArray<QwtDoublePoint> poly);
 
@@ -276,6 +278,8 @@ public slots:
   void orNotMaskStack(int pos);
   void xorNotMaskStack(int pos);
   void invertMaskStack(int pos);
+  void dilateMaskStack(int pos);
+  void erodeMaskStack(int pos);
   void hideMaskAllStack(int pos);
   void showMaskAllStack(int pos);
   void hideMaskRangeStack(int pos);

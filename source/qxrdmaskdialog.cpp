@@ -18,6 +18,8 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
   connect(m_HideMaskRange, SIGNAL(clicked()), this, SLOT(doHideMaskRange()));
   connect(m_ShowMaskRange, SIGNAL(clicked()), this, SLOT(doShowMaskRange()));
   connect(m_InvertMask, SIGNAL(clicked()), this, SLOT(doInvertMask()));
+  connect(m_GrowMask, SIGNAL(clicked()), this, SLOT(doDilateMask()));
+  connect(m_ShrinkMask, SIGNAL(clicked()), this, SLOT(doErodeMask()));
   connect(m_AndMask, SIGNAL(clicked()), this, SLOT(doAndMask()));
   connect(m_OrMask, SIGNAL(clicked()), this, SLOT(doOrMask()));
   connect(m_XorMask, SIGNAL(clicked()), this, SLOT(doXorMask()));
@@ -167,6 +169,34 @@ void QxrdMaskDialog::doInvertMask()
 
     if (proc) {
       proc->invertMaskStack(n);
+      proc->statusMessage("Mask Stack Invert");
+    }
+  }
+}
+
+void QxrdMaskDialog::doDilateMask()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->dilateMaskStack(n);
+      proc->statusMessage("Mask Stack Invert");
+    }
+  }
+}
+
+void QxrdMaskDialog::doErodeMask()
+{
+  int n = maskStackSelectPopup();
+
+  if (n >= 0) {
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      proc->erodeMaskStack(n);
       proc->statusMessage("Mask Stack Invert");
     }
   }
