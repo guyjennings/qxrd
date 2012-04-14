@@ -42,6 +42,7 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   connect(ui->m_NewPilatusAnalysis, SIGNAL(clicked()), ui->m_ActionNewPilatusAnalysis, SLOT(trigger()));
   connect(ui->m_NewGenericAnalysis, SIGNAL(clicked()), ui->m_ActionNewGenericAnalysis, SLOT(trigger()));
   connect(ui->m_OpenExistingExperiment, SIGNAL(clicked()), ui->m_ActionOpenExperiment, SLOT(trigger()));
+//  connect(ui->m_OpenExistingExperiment, SIGNAL(clicked()), this, SLOT(openMostRecent()));
 
 //  m_SignalMapper = new QSignalMapper(this);
 
@@ -103,7 +104,7 @@ void QxrdWelcomeWindow::populateRecentExperimentsMenu()
 
 void QxrdWelcomeWindow::appendRecentExperiment(QString title)
 {
-  QxrdWelcomeRecentItem *item = new QxrdWelcomeRecentItem(this);
+  QxrdWelcomeRecentItem *item = new QxrdWelcomeRecentItem(NULL);
 
   item->setText(title);
 
@@ -188,3 +189,11 @@ void QxrdWelcomeWindow::clearStatusMessage()
   m_StatusMsg -> setText("");
 }
 
+void QxrdWelcomeWindow::openMostRecent()
+{
+  QString experiment = m_Application->get_RecentExperiments().value(0);
+
+  if (experiment.length()) {
+    m_Application->openExperiment(experiment);
+  }
+}

@@ -301,9 +301,7 @@ void QxrdApplication::closeWelcomeWindow()
   GUI_THREAD_CHECK;
 
   if (m_WelcomeWindow) {
-    m_WelcomeWindow -> close();
-
-    m_WelcomeWindow = NULL;
+    m_WelcomeWindow -> hide();
   }
 }
 
@@ -767,21 +765,7 @@ void QxrdApplication::openExperiment(QString path)
     printMessage("");
     printMessage(tr("===== Open Experiment %1").arg(path));
 
-    appendRecentExperiment(path);
-
     openedExperiment(experimentThread);
-
-//    printMessage("");
-//    printMessage("New experiment loaded");
-//    printMessage("");
-
-//    closeWelcomeWindow();
-
-//    QxrdExperimentPtr experiment = experimentThread->experiment();
-
-//    if (experiment) {
-//      experiment->openWindows();
-//    }
   }
 }
 

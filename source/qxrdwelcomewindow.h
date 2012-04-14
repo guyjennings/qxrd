@@ -36,6 +36,7 @@ protected:
 
 private slots:
   void populateRecentExperimentsMenu();
+  void openMostRecent();
 
 private:
   void setupRecentExperimentsMenu(QAction *action);
