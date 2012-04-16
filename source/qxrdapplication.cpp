@@ -119,10 +119,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_WelcomeWindow(NULL),
   m_AllocatorThread(NULL),
   m_Allocator(NULL),
+  m_NIDAQPluginInterface(NULL),
   #ifdef HAVE_PERKIN_ELMER
   m_PerkinElmerPluginInterface(NULL),
   #endif
-  m_NIDAQPluginInterface(NULL),
   m_ResponseTimer(NULL),
   m_SettingsMutex()
 {

@@ -30,6 +30,9 @@ public:
   QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc);
   virtual ~QxrdIntegrator();
 
+private:
+  QxrdObjectNamer        m_ObjectNamer;
+
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
   QCEP_INTEGER_PROPERTY(Oversample)
@@ -86,7 +89,6 @@ public slots:
   void onIntegrationParametersChanged();
 
 private:
-  QxrdObjectNamer        m_ObjectNamer;
   mutable QMutex         m_Mutex;
   QxrdExperimentWPtr     m_Experiment;
   QxrdCenterFinderWPtr   m_CenterFinder;

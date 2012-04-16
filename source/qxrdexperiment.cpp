@@ -23,6 +23,7 @@
 #include "qxrdexperimentthread.h"
 #include "qxrddetectorthread.h"
 #include "qxrdmutexlocker.h"
+#include "qxrdacquisition-ptr.h"
 
 QxrdExperiment::QxrdExperiment(
     QString path,
