@@ -40,6 +40,11 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_ImplementTilt(false),
   m_DetectorTilt(0),
   m_TiltPlaneRotation(90),
+  m_EnableGeometry(false),
+  m_EnablePolarization(false),
+  m_Polarization(1.0),
+  m_EnableAbsorption(false),
+  m_Absorption(0.0),
   m_NRows(-1),
   m_NCols(-1),
   m_RStep(0),
@@ -84,6 +89,11 @@ QxrdIntegratorCache::QxrdIntegratorCache(
     m_ImplementTilt      = m_CenterFinder->get_ImplementTilt();
     m_DetectorTilt       = m_CenterFinder->get_DetectorTilt();
     m_TiltPlaneRotation  = m_CenterFinder->get_TiltPlaneRotation();
+    m_EnableGeometry     = m_CenterFinder->get_EnableGeometricCorrections();
+    m_EnablePolarization = m_CenterFinder->get_EnablePolarizationCorrections();
+    m_Polarization       = m_CenterFinder->get_Polarization();
+    m_EnableAbsorption   = m_CenterFinder->get_EnableAbsorptionCorrections();
+    m_Absorption         = m_CenterFinder->get_AbsorptionCoefficient();
   }
 }
 
@@ -118,6 +128,36 @@ double QxrdIntegratorCache::getTTH(double x, double y)
                                              x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
                                              1.0, 0.0, 1.0, 0.0);
   }
+}
+
+double QxrdIntegratorCache::getDistance(double x, double y)
+{
+  double tth = getTTH(x, y)*M_PI/180.0;
+
+  return m_DetectorDistance/cos(tth);
+}
+
+double QxrdIntegratorCache::getChi(double x, double y)
+{
+  double q,chi;
+  double beta = m_DetectorTilt*M_PI/180.0;
+  double rot  = m_TiltPlaneRotation*M_PI/180.0;
+
+  if (m_ImplementTilt) {
+    QxrdDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
+                                  m_Energy,
+                                  x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
+                                  rot, cos(beta), sin(beta), 1.0, 0.0, cos(rot), sin(rot),
+                                  &q, &chi);
+  } else {
+    QxrdDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
+                                  m_Energy,
+                                  x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
+                                  0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0,
+                                  &q, &chi);
+  }
+
+  return chi;
 }
 
 double QxrdIntegratorCache::getQ(double x, double y)
@@ -170,6 +210,35 @@ double QxrdIntegratorCache::XValue(double x, double y)
   }
 
   return xVal;
+}
+
+double QxrdIntegratorCache::NormValue(double x, double y)
+{
+  double res = 1;
+
+  if (m_EnableGeometry || m_EnablePolarization || m_EnableAbsorption) {
+    if (m_EnableGeometry || m_EnableAbsorption) {
+      double distance = getDistance(x, y);
+
+      if (m_EnableGeometry) {
+        double tth = getTTH(x, y)*M_PI/180.0;
+
+        res *= cos(tth)*pow(distance/m_DetectorDistance, 2);
+      }
+
+      if (m_EnableAbsorption) {
+        res *= exp(distance*m_Absorption);
+      }
+    }
+
+    if (m_EnablePolarization) {
+      double chi = getChi(x,y);
+
+      res *= (1 - m_Polarization)*cos(chi*M_PI/180.0);
+    }
+  }
+
+  return res;
 }
 
 class QThreadAccess : public QThread {
@@ -306,12 +375,23 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
                                                            m_NCols*m_Oversample,
                                                            m_NRows*m_Oversample);
 
+        if (m_EnableGeometry || m_EnablePolarization || m_EnableAbsorption) {
+          m_CachedNormalization = QxrdAllocator::newDoubleImage(m_Allocator,
+                                                                QxrdAllocator::AlwaysAllocate,
+                                                                m_NCols*m_Oversample,
+                                                                m_NRows*m_Oversample);
+        } else {
+          m_CachedNormalization = QxrdDoubleImageDataPtr();
+        }
+
         if (m_CachedBinNumbers) {
           m_CachedBinNumbers -> clear();
 
           m_CacheFullLevel.fetchAndStoreOrdered(nPix);
 
           qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
+
+          double *cachen = (m_CachedNormalization ? m_CachedNormalization->data() : NULL);
 
 //          expt->commenceWork(nRows);
 
@@ -331,8 +411,14 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
                     int bin = n - nMin;
 
                     *cachep++ = bin;
+                    if (cachen) {
+                      *cachen++ = NormValue(xx,yy);
+                    }
                   } else {
                     *cachep++ = -1;
+                    if (cachen) {
+                      *cachen++ = 1;
+                    }
                   }
 
                   m_CacheFillLevel.fetchAndAddOrdered(1);
@@ -373,6 +459,8 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
         QVector<double> integral(nRange), sumvalue(nRange);
         qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
+        double *cachen = (m_CachedNormalization ? m_CachedNormalization->data() : NULL);
+
         int noversample = m_Oversample;
 
         int nWork = nRows/100;
@@ -392,9 +480,9 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
               for (int oversampley = 0; oversampley < noversample; oversampley++) {
                 for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
                   int bin = *cachep++;
-
+                  double norm = (cachen ? *cachen++ : 1.0);
                   if (bin >= 0) {
-                    integral[bin] += val;
+                    integral[bin] += val*norm;
                     sumvalue[bin] += 1;
                   }
                 }

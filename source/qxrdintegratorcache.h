@@ -44,6 +44,11 @@ private:
   bool   m_ImplementTilt;
   double m_DetectorTilt;
   double m_TiltPlaneRotation;
+  bool   m_EnableGeometry;
+  bool   m_EnablePolarization;
+  double m_Polarization;
+  bool   m_EnableAbsorption;
+  double m_Absorption;
   int    m_NRows;
   int    m_NCols;
   double m_RStep;
@@ -64,15 +69,19 @@ public:
 
 private:
   double getTTH(double x, double y);
+  double getDistance(double x, double y);
+  double getChi(double x, double y);
   double getQ(double x, double y);
   double getR(double x, double y);
   double XValue(double x, double y);
+  double NormValue(double x, double y);
   QString XLabel() const;
 
 private:
   QAtomicInt             m_CacheFillLevel;
   QAtomicInt             m_CacheFullLevel;
   QxrdInt32ImageDataPtr  m_CachedBinNumbers;
+  QxrdDoubleImageDataPtr m_CachedNormalization;
   QxrdExperimentWPtr     m_Experiment;
   QxrdAllocatorWPtr      m_Allocator;
   QxrdIntegratorPtr      m_Integrator;

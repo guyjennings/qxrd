@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>470</width>
-    <height>393</height>
+    <height>432</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -484,6 +484,88 @@ script property centering.energy</string>
         </property>
         <property name="singleStep">
          <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0" colspan="2">
+       <widget class="QCheckBox" name="m_EnableGeometry">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Enable Geometry Corrections </string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="2">
+       <widget class="QLabel" name="label_24">
+        <property name="text">
+         <string>Polarization Factor</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="3">
+       <widget class="QDoubleSpinBox" name="m_Polarization">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>6</number>
+        </property>
+        <property name="maximum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="3">
+       <widget class="QDoubleSpinBox" name="m_Absorption">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>6</number>
+        </property>
+        <property name="maximum">
+         <double>1000000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="2">
+       <widget class="QLabel" name="label_23">
+        <property name="text">
+         <string>Attenuation Coefficient</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0" colspan="2">
+       <widget class="QCheckBox" name="m_EnablePolarization">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Enable Polarization Corrections </string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0" colspan="2">
+       <widget class="QCheckBox" name="m_EnableAbsorption">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Enable Absorption Corrections </string>
         </property>
        </widget>
       </item>

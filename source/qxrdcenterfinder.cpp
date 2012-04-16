@@ -17,7 +17,12 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver)
     m_Energy(saver, this, "energy", 20000, "Beam Energy (eV)"),
     m_ImplementTilt(saver, this,"implementTilt", false, "Implement Detector Tilt?"),
     m_DetectorTilt(saver, this, "detectorTilt", 0, "Tilt Angle (deg)"),
-    m_TiltPlaneRotation(saver, this, "tiltPlaneRotation", 90, "Tilt Plane Rotation (deg)")
+    m_TiltPlaneRotation(saver, this, "tiltPlaneRotation", 90, "Tilt Plane Rotation (deg)"),
+    m_EnableGeometricCorrections(saver, this, "enableGeometricCorrections", false, "Enable Geometric Corrections (tilt and distance) in Integration"),
+    m_EnablePolarizationCorrections(saver, this, "enablePolarizationCorrections", false, "Enable Polarization Corrections in Integration"),
+    m_Polarization(saver, this, "polarization", 1.0, "Beam Polarization Factor"),
+    m_EnableAbsorptionCorrections(saver, this, "enableAbsorptionCorrections", false, "Enable Absorption Correction in Integration"),
+    m_AbsorptionCoefficient(saver, this, "absorptionCoefficient", 0, "Linear Attenuation Coefficient (1/mm)")
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 
@@ -32,6 +37,11 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver)
   connect(prop_ImplementTilt(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
   connect(prop_DetectorTilt(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
   connect(prop_TiltPlaneRotation(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_EnableGeometricCorrections(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_EnablePolarizationCorrections(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_Polarization(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_EnableAbsorptionCorrections(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_AbsorptionCoefficient(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
 }
 
 void QxrdCenterFinder::writeSettings(QSettings *settings, QString section)
@@ -101,6 +111,46 @@ double QxrdCenterFinder::getQ(double x, double y) const
   }
 
   return q;
+}
+
+double QxrdCenterFinder::getChi(QwtDoublePoint pt) const
+{
+  return getChi(pt.x(), pt.y());
+}
+
+double QxrdCenterFinder::getChi(double x, double y) const
+{
+  double q,chi;
+  double beta = get_DetectorTilt()*M_PI/180.0;
+  double rot  = get_TiltPlaneRotation()*M_PI/180.0;
+
+  if (get_ImplementTilt()) {
+    getQChi(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+            get_Energy(),
+            x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+            rot, cos(beta), sin(beta), 1.0, 0.0, cos(rot), sin(rot),
+            &q, &chi);
+  } else {
+    getQChi(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+            get_Energy(),
+            x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+            0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0,
+            &q, &chi);
+  }
+
+  return chi;
+}
+
+double QxrdCenterFinder::getDist(QwtDoublePoint pt) const
+{
+  return getDist(pt.x(), pt.y());
+}
+
+double QxrdCenterFinder::getDist(double x, double y) const
+{
+  double tth = getTTH(x,y);
+
+  return get_DetectorDistance()/cos(tth*M_PI/180.0);
 }
 
 double QxrdCenterFinder::getR(QwtDoublePoint pt) const

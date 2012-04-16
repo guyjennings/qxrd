@@ -26,10 +26,19 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   m_CenterFinder -> prop_DetectorXPixelSize() -> linkTo(m_DetectorXPixelSize);
   m_CenterFinder -> prop_DetectorYPixelSize() -> linkTo(m_DetectorYPixelSize);
   m_CenterFinder -> prop_Energy() -> linkTo(m_Energy);
+  m_CenterFinder -> prop_EnableGeometricCorrections() -> linkTo(m_EnableGeometry);
+  m_CenterFinder -> prop_EnablePolarizationCorrections() -> linkTo(m_EnablePolarization);
+  m_CenterFinder -> prop_Polarization() -> linkTo(m_Polarization);
+  m_CenterFinder -> prop_EnableAbsorptionCorrections() -> linkTo(m_EnableAbsorption);
+  m_CenterFinder -> prop_AbsorptionCoefficient() -> linkTo(m_Absorption);
 
   connect(m_CenterFinder -> prop_ImplementTilt(), SIGNAL(valueChanged(bool,int)), this, SLOT(onImplementTiltChanged(bool)));
+  connect(m_CenterFinder -> prop_EnablePolarizationCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onEnablePolarizationChanged(bool)));
+  connect(m_CenterFinder -> prop_EnableAbsorptionCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onEnableAbsorptionChanged(bool)));
 
   onImplementTiltChanged(m_CenterFinder -> get_ImplementTilt());
+  onEnablePolarizationChanged(m_CenterFinder -> get_EnablePolarizationCorrections());
+  onEnableAbsorptionChanged(m_CenterFinder -> get_EnableAbsorptionCorrections());
 }
 
 void QxrdCenterFinderDialog::onImplementTiltChanged(bool imp)
@@ -37,6 +46,16 @@ void QxrdCenterFinderDialog::onImplementTiltChanged(bool imp)
   m_DetectorDistance  -> setEnabled(true /*imp*/);
   m_DetectorTilt      -> setEnabled(imp);
   m_TiltPlaneRotation -> setEnabled(imp);
+}
+
+void QxrdCenterFinderDialog::onEnablePolarizationChanged(bool pol)
+{
+  m_Polarization      -> setEnabled(pol);
+}
+
+void QxrdCenterFinderDialog::onEnableAbsorptionChanged(bool absn)
+{
+  m_Absorption        -> setEnabled(absn);
 }
 
 void QxrdCenterFinderDialog::onCenterChanged(double cx, double cy)

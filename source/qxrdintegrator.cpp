@@ -45,15 +45,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr e
   QxrdCenterFinderPtr cf(m_CenterFinder);
 
   if (cf) {
-    connect(cf->prop_CenterX(),            SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-    connect(cf->prop_CenterY(),            SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-    connect(cf->prop_DetectorXPixelSize(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-    connect(cf->prop_DetectorYPixelSize(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-    connect(cf->prop_DetectorDistance(),   SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-    connect(cf->prop_Energy(),             SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-    connect(cf->prop_ImplementTilt(),      SIGNAL(valueChanged(bool,int)),   this, SLOT(onIntegrationParametersChanged()));
-    connect(cf->prop_DetectorTilt(),       SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-    connect(cf->prop_TiltPlaneRotation(),  SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+    connect(cf.data(), SIGNAL(parameterChanged()), this, SLOT(onIntegrationParametersChanged()));
   }
 }
 

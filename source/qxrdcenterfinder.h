@@ -52,6 +52,21 @@ public:
   Q_PROPERTY(double tiltPlaneRotation READ get_TiltPlaneRotation WRITE set_TiltPlaneRotation)
   QCEP_DOUBLE_PROPERTY(TiltPlaneRotation)
 
+  Q_PROPERTY(bool   enableGeometricCorrections READ get_EnableGeometricCorrections WRITE set_EnableGeometricCorrections)
+  QCEP_BOOLEAN_PROPERTY(EnableGeometricCorrections)
+
+  Q_PROPERTY(bool   enablePolarizationCorrections READ get_EnablePolarizationCorrections WRITE set_EnablePolarizationCorrections)
+  QCEP_BOOLEAN_PROPERTY(EnablePolarizationCorrections)
+
+  Q_PROPERTY(double polarization READ get_Polarization WRITE set_Polarization)
+  QCEP_DOUBLE_PROPERTY(Polarization)
+
+  Q_PROPERTY(bool   enableAbsorptionCorrections READ get_EnableAbsorptionCorrections WRITE set_EnableAbsorptionCorrections)
+  QCEP_BOOLEAN_PROPERTY(EnableAbsorptionCorrections)
+
+  Q_PROPERTY(double absorptionCoefficient READ get_AbsorptionCoefficient WRITE set_AbsorptionCoefficient)
+  QCEP_DOUBLE_PROPERTY(AbsorptionCoefficient)
+
 //public slots:
 //  void onCenterXChanged(double cx);
 //  void onCenterYChanged(double cy);
@@ -73,6 +88,12 @@ public slots:
 
   double getR(double x, double y) const;
   double getR(QwtDoublePoint pt) const;
+
+  double getChi(double x, double y) const;
+  double getChi(QwtDoublePoint pt) const;
+
+  double getDist(double x, double y) const;
+  double getDist(QwtDoublePoint pt) const;
 
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);

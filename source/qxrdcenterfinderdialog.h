@@ -24,6 +24,8 @@ public slots:
 
   void onCenterChanged(double cx, double cy);
   void onImplementTiltChanged(bool imp);
+  void onEnablePolarizationChanged(bool pol);
+  void onEnableAbsorptionChanged(bool absn);
 
 private:
   void moveCenter(int dx, int dy);
