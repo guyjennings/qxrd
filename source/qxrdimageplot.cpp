@@ -856,6 +856,9 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
     if (set) {
       set->set_QMouse(q);
     }
+
+    double chi = centerFinder->getChi(pos);
+    res += tr(", Chi %1").arg(chi);
   }
 
   return res;
