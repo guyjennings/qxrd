@@ -21,7 +21,8 @@ class QxrdDocumentationForFunction : public QxrdDocumentationForObject
 public:
   QxrdDocumentationForFunction(QString functionName,
                                QString functionProto,
-                               QString functionDoc);
+                               QString functionDoc,
+                               QString functionLogDoc);
 };
 
 class QxrdDocumentationDictionary
@@ -62,7 +63,7 @@ extern QxrdDocumentationDictionary *gDocumentationDirectory;
 #define QXRD_DOC_LONG(name, longDoc) \
   static QxrdLongDocumentationForObject TOKENPASTE(a__, __LINE__) (name, longDoc);
 
-#define QXRD_DOC_FUNCTION(name, proto, doc) \
-  static QxrdDocumentationForFunction TOKENPASTE(a__, __LINE__) (name, proto, doc);
+#define QXRD_DOC_FUNCTION(name, proto, doc, longDoc) \
+  static QxrdDocumentationForFunction TOKENPASTE(a__, __LINE__) (name, proto, doc, longDoc);
 
 #endif // QXRDDOCUMENTATIONDICTIONARY_H

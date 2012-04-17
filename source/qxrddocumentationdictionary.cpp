@@ -105,8 +105,9 @@ QxrdLongDocumentationForObject::QxrdLongDocumentationForObject(
 }
 
 QxrdDocumentationForFunction::QxrdDocumentationForFunction(
-    QString functionName, QString functionProto, QString functionDoc)
+    QString functionName, QString functionProto, QString functionDoc, QString functionLongDoc)
   : QxrdDocumentationForObject(functionName, functionDoc)
 {
   gDocumentationDirectory->setProto(functionName, functionProto);
+  gDocumentationDirectory->setLongDoc(functionName, functionLongDoc);
 }
