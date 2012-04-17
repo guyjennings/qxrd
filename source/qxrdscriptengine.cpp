@@ -173,6 +173,19 @@ QString QxrdScriptEngine::uncaughtExceptionString() const
   return uncaughtException().toString();
 }
 
+QXRD_DOC_FUNCTION(
+    "print",
+    "print([value]...)",
+    "Print values to the log file and message window",
+    "<p>The values of the arguments are catenated into a single string which is "
+    "printed to the log file and to the message window</p>\n"
+    "<p>The following is a typical use: print out the names and values of the "
+    "elements of an object:</p>\n"
+    "<code>"
+    "for(i in acquisition) print(i, acquisition[i])"
+    "</code>"
+    )
+
 QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine *engine, void *u)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -201,11 +214,10 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
 
 QXRD_DOC_FUNCTION(
     "acquire",
-    "acquire</b>([fileName[, exposure[, summedExposures[, postTriggerFiles[, preTriggerFiles[, nPhases]]]]]])",
-    "<p>Start acquisition of a sequence of images</p>\n")
 
-QXRD_DOC_LONG(
-    "acquire",
+    "acquire([fileName[, exposure[, summedExposures[, postTriggerFiles[, preTriggerFiles[, nPhases]]]]]])",
+    "Start acquisition of a sequence of images",
+
     "<p>The arguments are optional and may be successively omitted from the "
     "right.  If <i>preTriggerFiles</i> is omitted, zero is used instead. "
     "If <i>nPhases</i> is omitted, one is used. "
@@ -218,14 +230,12 @@ QXRD_DOC_LONG(
     "acquisition and processing to be completed.</p>\n"
     "<p>The following is a typical example of the use of this "
     "command from spec:</p>\n"
-    "<p>"
     "<code>"
     "def PEexp(filename,exposure,subframes,frames) '{<br/>"
     "&nbsp;&nbsp;remote_eval(PEHOST,"
     "sprintf(\"acquire(\\\"%s\\\",%g,%d,%d,0)\",filename,exposure,subframes,frames));<br/>"
     "&nbsp;&nbsp;<br/> &nbsp;&nbsp;PEwait()<br/> }'<br/>"
     "</code>"
-    "</p>"
     )
 
 QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngine *engine)
@@ -276,6 +286,23 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
   return QScriptValue(engine, 1);
 }
 
+QXRD_DOC_FUNCTION(
+    "acquireDark",
+    "acquireDark([filename [,exposure [,darkSummedExposures]]])",
+    "Start acquisition of a dark image",
+    "<p>Arguments are optional and, if given, will replace the "
+    "corresponding value in the acquire dialog, if not given the "
+    "dialog values are used.</p>\n"
+    "<p>The following is a typical example of the use of this "
+    "command from spec:</p>\n"
+    "<code>\n"
+    "def PEexpd(filename, exposure, subframes) '{<br/>\n"
+    "&nbsp;&nbsp;remote_eval(PEHOST,"
+    "sprintf(\"acquireDark(\\\"%s\\\",%g,%d)\",filename,exposure,subframes));<br/>\n"
+    "&nbsp;&nbsp;<br/> &nbsp;&nbsp;PEwait()<br/> }'<br/>\n"
+    "</code>\n"
+    )
+
 QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -306,6 +333,33 @@ QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptE
   return QScriptValue(engine, 1);
 }
 
+QXRD_DOC_FUNCTION(
+    "status",
+    "status([time])",
+    "Test if acquisition and processing have finished",
+    "<p>"
+    "If the argument is given the function will wait up to that "
+    "many seconds - if acquisition and processing finish before "
+    "the time elapsed then <code>status</code> will return at "
+    "that time, otherwise at the end of the timeout period.  The "
+    "function returns a non-zero result if acquisition and "
+    "processing are complete, or zero if they are not."
+    "</p>\n"
+    "<p>"
+    "If no argument is given the function tests if acquisition "
+    "and processing are complete and returns the result of the "
+    "test immediately."
+    "</p>\n"
+    "<p>"
+    "The following is a typical use of this command from spec:"
+    "</p>\n"
+    "<code>"
+    "def PEwait() '{<br/>"
+    "&nbsp;&nbsp;while(remote_eval(PEHOST,\"status(1.0)\")==0) {<br/>"
+    "&nbsp;&nbsp;}<br/> }'<br/>"
+    "</code>\n"
+    )
+
 QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -335,6 +389,16 @@ QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine
   }
 }
 
+QXRD_DOC_FUNCTION(
+    "acquireStatus",
+    "acquireStatus([time])",
+    "Test if acquisition has finished",
+    "<p>"
+    "Similar to 'status' "
+    "except that it only tests for the acquisition operation being complete."
+    "</p>"
+    )
+
 QScriptValue QxrdScriptEngine::acquireStatusFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -354,6 +418,16 @@ QScriptValue QxrdScriptEngine::acquireStatusFunc(QScriptContext *context, QScrip
 
   return QScriptValue(engine, -1);
 }
+
+QXRD_DOC_FUNCTION(
+    "processStatus",
+    "processStatus([time])",
+    "Test if processing has finished",
+    "<p>"
+    "Similar to 'status' "
+    "except that it only tests for the processing operation being complete."
+    "</p>"
+    )
 
 QScriptValue QxrdScriptEngine::processStatusFunc(QScriptContext *context, QScriptEngine *engine)
 {
@@ -375,6 +449,13 @@ QScriptValue QxrdScriptEngine::processStatusFunc(QScriptContext *context, QScrip
   return QScriptValue(engine, -1);
 }
 
+QXRD_DOC_FUNCTION(
+    "acquireCancel",
+    "acquireCancel()",
+    "Cancel the current acquisition operation",
+    ""
+    )
+
 QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -391,6 +472,43 @@ QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext * /*context*/, Q
 
   return QScriptValue(engine, -1);
 }
+
+QXRD_DOC_FUNCTION(
+    "trigger",
+    "trigger()",
+    "Trigger triggered acquisition",
+    "<p>If 'preTriggerFiles' is greater than zero then acquisition operations proceed in the "
+    "'triggered' mode.  This acts much like a digital oscilloscope trigger where a certain number "
+    "('preTriggerFiles') of acquired images are held in the computer RAM until the trigger operation occurs "
+    "and then the most recent acquired images are written to disk, along with a number of post-trigger images</p>"
+    )
+
+QScriptValue QxrdScriptEngine::triggerFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisitionPtr acq(eng->acquisition());
+
+    if (acq) {
+      acq -> trigger();
+
+      return QScriptValue(engine, 1);
+    }
+  }
+
+  return QScriptValue(engine, -1);
+}
+
+QXRD_DOC_FUNCTION(
+    "exposureTime",
+    "exposureTime([time])",
+    "Get or set the acquisition exposure time (also for dark exposures)",
+    "<p>If the time argument is given, set the exposure time, otherwise return the "
+    "current exposure time</p>"
+    "<p>This function provides a convenient method to access the "
+    "<code>acquisition.exposureTime</code> property</p>"
+    )
 
 QScriptValue QxrdScriptEngine::exposureTimeFunc(QScriptContext *context, QScriptEngine *engine)
 {
@@ -411,6 +529,15 @@ QScriptValue QxrdScriptEngine::exposureTimeFunc(QScriptContext *context, QScript
   return QScriptValue(engine, -1);
 }
 
+QXRD_DOC_FUNCTION(
+    "summedExposures",
+    "summedExposures([n])",
+    "Get or set the number of summed exposures for acquisition",
+    "<p>If the n argument is given, set the number of summed exposures, otherwise return the "
+    "current value.</p>"
+    "<p>Easy access to <code>acquisition.summedExposures</code></p>"
+    )
+
 QScriptValue QxrdScriptEngine::summedExposuresFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -429,6 +556,15 @@ QScriptValue QxrdScriptEngine::summedExposuresFunc(QScriptContext *context, QScr
 
   return QScriptValue(engine, -1);
 }
+
+QXRD_DOC_FUNCTION(
+    "skippedExposures",
+    "skippedExposures([n])",
+    "Get or set the number of skipped exposures for acquisition",
+    "<p>If the n argument is given, set the number of skipped exposures, otherwise return the "
+    "current value.</p>"
+    "<p>Easy access to <code>acquisition.skippedExposures</code></p>"
+    )
 
 QScriptValue QxrdScriptEngine::skippedExposuresFunc(QScriptContext *context, QScriptEngine *engine)
 {
@@ -449,6 +585,15 @@ QScriptValue QxrdScriptEngine::skippedExposuresFunc(QScriptContext *context, QSc
   return QScriptValue(engine, -1);
 }
 
+QXRD_DOC_FUNCTION(
+    "darkSummedExposures",
+    "darkSummedExposures([n])",
+    "Get or set the number of summed exposures for dark acquisition",
+    "<p>If the n argument is given, set the number of summed exposures, otherwise return the "
+    "current value.</p>"
+    "<p>Easy access to <code>acquisition.darkSummedExposures</code></p>"
+    )
+
 QScriptValue QxrdScriptEngine::darkSummedExposuresFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -467,6 +612,15 @@ QScriptValue QxrdScriptEngine::darkSummedExposuresFunc(QScriptContext *context, 
 
   return QScriptValue(engine, -1);
 }
+
+QXRD_DOC_FUNCTION(
+    "phasesInGroup",
+    "phasesInGroup([n])",
+    "Get or set the number of phases for synchronized acquisition",
+    "<p>If the n argument is given, set the number of phases, otherwise return the "
+    "current value.</p>"
+    "<p>Easy access to <code>acquisition.phasesInGroup</code></p>"
+    )
 
 QScriptValue QxrdScriptEngine::phasesInGroupFunc(QScriptContext *context, QScriptEngine *engine)
 {
@@ -487,6 +641,15 @@ QScriptValue QxrdScriptEngine::phasesInGroupFunc(QScriptContext *context, QScrip
   return QScriptValue(engine, -1);
 }
 
+QXRD_DOC_FUNCTION(
+    "preTriggerFiles",
+    "preTriggerFiles([n])",
+    "Get or set the number of pre-trigger file groups for triggered acquisition",
+    "<p>If the n argument is given, set the number of pre-trigger file groups, otherwise return the "
+    "current value.</p>"
+    "<p>Easy access to <code>acquisition.preTriggerFiles</code></p>"
+    )
+
 QScriptValue QxrdScriptEngine::preTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -505,6 +668,15 @@ QScriptValue QxrdScriptEngine::preTriggerFilesFunc(QScriptContext *context, QScr
 
   return QScriptValue(engine, -1);
 }
+
+QXRD_DOC_FUNCTION(
+    "postTriggerFiles",
+    "postTriggerFiles([n])",
+    "Get or set the number of post-trigger file groups for triggered acquisition",
+    "<p>If the n argument is given, set the number of post-trigger file groups, otherwise return the "
+    "current value.</p>"
+    "<p>Easy access to <code>acquisition.postTriggerFiles</code></p>"
+    )
 
 QScriptValue QxrdScriptEngine::postTriggerFilesFunc(QScriptContext *context, QScriptEngine *engine)
 {
@@ -525,6 +697,15 @@ QScriptValue QxrdScriptEngine::postTriggerFilesFunc(QScriptContext *context, QSc
   return QScriptValue(engine, -1);
 }
 
+QXRD_DOC_FUNCTION(
+    "filePattern",
+    "filePattern([pattern])",
+    "Get or set the acquisition file name pattern",
+    "<p>If the pattern argument is given, set the file name pattern, otherwise return the "
+    "current value.</p>"
+    "<p>Easy access to <code>acquisition.filePattern</code></p>"
+    )
+
 QScriptValue QxrdScriptEngine::filePatternFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -543,6 +724,15 @@ QScriptValue QxrdScriptEngine::filePatternFunc(QScriptContext *context, QScriptE
 
   return QScriptValue(engine, -1);
 }
+
+QXRD_DOC_FUNCTION(
+    "outputDirectory",
+    "outputDirectory([dir])",
+    "Get or set the acquisition output directory",
+    "<p>If the dir argument is given, set the output directory, otherwise return the "
+    "current value.</p>"
+    "<p>Easy access to <code>acquisition.outputDirectory</code></p>"
+    )
 
 QScriptValue QxrdScriptEngine::outputDirectoryFunc(QScriptContext *context, QScriptEngine *engine)
 {
@@ -563,6 +753,15 @@ QScriptValue QxrdScriptEngine::outputDirectoryFunc(QScriptContext *context, QScr
   return QScriptValue(engine, -1);
 }
 
+QXRD_DOC_FUNCTION(
+    "fileIndex",
+    "fileIndex([n])",
+    "Get or set the acquisition file index",
+    "<p>If the n argument is given, set the file index, otherwise return the "
+    "current value.</p>"
+    "<p>Easy access to <code>acquisition.fileIndex</code></p>"
+    )
+
 QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -582,6 +781,16 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
   return QScriptValue(engine, -1);
 }
 
+QXRD_DOC_FUNCTION(
+    "data",
+    "data()",
+    "Get the current image",
+    "<p>Returns a reference to the most recently acquired or most recently loaded image.</p>"
+    "<p>The returned object can have its properties queried.</p>"
+    "<p>Note that the value returned by this function will change as each "
+    "new image is acquired so be careful if calling this function during acquisition.</p>"
+    )
+
 QScriptValue QxrdScriptEngine::dataFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -596,6 +805,14 @@ QScriptValue QxrdScriptEngine::dataFunc(QScriptContext * /*context*/, QScriptEng
 
   return QScriptValue(engine, -1);
 }
+
+QXRD_DOC_FUNCTION(
+    "dark",
+    "dark()",
+    "Get the dark image (or null if none has been taken)",
+    "<p>Returns a reference to the current dark image.</p>"
+    "<p>The returned object can have its properties queried.</p>"
+    )
 
 QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
@@ -789,6 +1006,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("acquireStatus", newFunction(acquireStatusFunc));
   globalObject().setProperty("processStatus", newFunction(processStatusFunc, 1));
   globalObject().setProperty("acquireCancel", newFunction(acquireCancelFunc));
+  globalObject().setProperty("trigger", newFunction(triggerFunc));
   globalObject().setProperty("exposureTime", newFunction(exposureTimeFunc, 1));
   globalObject().setProperty("summedExposures", newFunction(summedExposuresFunc, 1));
   globalObject().setProperty("skippedExposures", newFunction(skippedExposuresFunc, 1));
@@ -844,8 +1062,8 @@ void QxrdScriptEngine::initialize()
       QxrdAcquisitionTriggerPtr trig(acq->acquisitionTrigger());
 
       if (trig) {
-        QXRD_DOC_OBJECT("trigger", "Acquisition Triggering");
-        globalObject().setProperty("trigger", newQObject(trig.data()));
+        QXRD_DOC_OBJECT("triggering", "Acquisition Triggering Parameters");
+        globalObject().setProperty("triggering", newQObject(trig.data()));
       }
 
       QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
@@ -984,7 +1202,7 @@ QString QxrdScriptEngine::documentationText(QString item)
 
   if (val.isFunction()) {
     if (proto.length()) {
-      res.append(tr("<p><i>%1</i></p>\n").arg(prefix+proto));
+      res.append(tr("<p><i>%1</i></p>\n").arg(proto));
     }
 
     if (doc.length()) {

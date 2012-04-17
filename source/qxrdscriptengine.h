@@ -67,6 +67,7 @@ private:
   static QScriptValue acquireStatusFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue processStatusFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue acquireCancelFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue triggerFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue exposureTimeFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue summedExposuresFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue skippedExposuresFunc(QScriptContext *context, QScriptEngine *engine);
