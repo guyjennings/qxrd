@@ -64,8 +64,8 @@ public:
   Q_PROPERTY(bool   enableAbsorptionCorrections READ get_EnableAbsorptionCorrections WRITE set_EnableAbsorptionCorrections)
   QCEP_BOOLEAN_PROPERTY(EnableAbsorptionCorrections)
 
-  Q_PROPERTY(double absorptionCoefficient READ get_AbsorptionCoefficient WRITE set_AbsorptionCoefficient)
-  QCEP_DOUBLE_PROPERTY(AbsorptionCoefficient)
+  Q_PROPERTY(double attenuationLength READ get_AttenuationLength WRITE set_AttenuationLength)
+  QCEP_DOUBLE_PROPERTY(AttenuationLength)
 
 //public slots:
 //  void onCenterXChanged(double cx);

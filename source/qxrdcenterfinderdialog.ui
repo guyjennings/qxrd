@@ -524,7 +524,7 @@ script property centering.energy</string>
        </widget>
       </item>
       <item row="11" column="3">
-       <widget class="QDoubleSpinBox" name="m_Absorption">
+       <widget class="QDoubleSpinBox" name="m_AttenuationLength">
         <property name="toolTip">
          <string/>
         </property>
@@ -540,12 +540,15 @@ script property centering.energy</string>
         <property name="singleStep">
          <double>0.010000000000000</double>
         </property>
+        <property name="value">
+         <double>1000.000000000000000</double>
+        </property>
        </widget>
       </item>
       <item row="11" column="2">
        <widget class="QLabel" name="label_23">
         <property name="text">
-         <string>Attenuation Coefficient</string>
+         <string>Attenuation Length</string>
         </property>
        </widget>
       </item>

@@ -30,7 +30,7 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   m_CenterFinder -> prop_EnablePolarizationCorrections() -> linkTo(m_EnablePolarization);
   m_CenterFinder -> prop_Polarization() -> linkTo(m_Polarization);
   m_CenterFinder -> prop_EnableAbsorptionCorrections() -> linkTo(m_EnableAbsorption);
-  m_CenterFinder -> prop_AbsorptionCoefficient() -> linkTo(m_Absorption);
+  m_CenterFinder -> prop_AttenuationLength() -> linkTo(m_AttenuationLength);
 
   connect(m_CenterFinder -> prop_ImplementTilt(), SIGNAL(valueChanged(bool,int)), this, SLOT(onImplementTiltChanged(bool)));
   connect(m_CenterFinder -> prop_EnablePolarizationCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onEnablePolarizationChanged(bool)));
@@ -55,7 +55,7 @@ void QxrdCenterFinderDialog::onEnablePolarizationChanged(bool pol)
 
 void QxrdCenterFinderDialog::onEnableAbsorptionChanged(bool absn)
 {
-  m_Absorption        -> setEnabled(absn);
+  m_AttenuationLength -> setEnabled(absn);
 }
 
 void QxrdCenterFinderDialog::onCenterChanged(double cx, double cy)

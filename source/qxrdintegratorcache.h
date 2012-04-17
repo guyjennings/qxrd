@@ -48,7 +48,7 @@ private:
   bool   m_EnablePolarization;
   double m_Polarization;
   bool   m_EnableAbsorption;
-  double m_Absorption;
+  double m_AttenuationLength;
   int    m_NRows;
   int    m_NCols;
   double m_RStep;

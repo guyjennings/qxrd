@@ -44,7 +44,7 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_EnablePolarization(false),
   m_Polarization(1.0),
   m_EnableAbsorption(false),
-  m_Absorption(0.0),
+  m_AttenuationLength(0.0),
   m_NRows(-1),
   m_NCols(-1),
   m_RStep(0),
@@ -93,7 +93,7 @@ QxrdIntegratorCache::QxrdIntegratorCache(
     m_EnablePolarization = m_CenterFinder->get_EnablePolarizationCorrections();
     m_Polarization       = m_CenterFinder->get_Polarization();
     m_EnableAbsorption   = m_CenterFinder->get_EnableAbsorptionCorrections();
-    m_Absorption         = m_CenterFinder->get_AbsorptionCoefficient();
+    m_AttenuationLength  = m_CenterFinder->get_AttenuationLength();
   }
 }
 
@@ -217,24 +217,21 @@ double QxrdIntegratorCache::NormValue(double x, double y)
   double res = 1;
 
   if (m_EnableGeometry || m_EnablePolarization || m_EnableAbsorption) {
-    if (m_EnableGeometry || m_EnableAbsorption) {
-      double distance = getDistance(x, y);
+    double distance = getDistance(x, y);
+    double tth      = getTTH(x,y)*M_PI/180.0;
+    double chi      = getChi(x,y)*M_PI/180.0;
 
-      if (m_EnableGeometry) {
-        double tth = getTTH(x, y)*M_PI/180.0;
+    if (m_EnableGeometry) {
+      res *= pow(distance/m_DetectorDistance, 2)/cos(tth);
+    }
 
-        res *= cos(tth)*pow(distance/m_DetectorDistance, 2);
-      }
-
-      if (m_EnableAbsorption) {
-        res *= exp(distance*m_Absorption);
-      }
+    if (m_EnableAbsorption) {
+      res *= exp((distance-m_DetectorDistance)/m_AttenuationLength);
     }
 
     if (m_EnablePolarization) {
-      double chi = getChi(x,y);
-
-      res *= (1 - m_Polarization)*cos(chi*M_PI/180.0);
+      res *= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
+              (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth/2),2)));
     }
   }
 

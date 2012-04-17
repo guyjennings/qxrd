@@ -22,7 +22,7 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver)
     m_EnablePolarizationCorrections(saver, this, "enablePolarizationCorrections", false, "Enable Polarization Corrections in Integration"),
     m_Polarization(saver, this, "polarization", 1.0, "Beam Polarization Factor"),
     m_EnableAbsorptionCorrections(saver, this, "enableAbsorptionCorrections", false, "Enable Absorption Correction in Integration"),
-    m_AbsorptionCoefficient(saver, this, "absorptionCoefficient", 0, "Linear Attenuation Coefficient (1/mm)")
+    m_AttenuationLength(saver, this, "attenuationLength", 0, "Attenuation Length (mm)")
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 
@@ -41,7 +41,7 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver)
   connect(prop_EnablePolarizationCorrections(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
   connect(prop_Polarization(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
   connect(prop_EnableAbsorptionCorrections(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
-  connect(prop_AbsorptionCoefficient(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_AttenuationLength(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
 }
 
 void QxrdCenterFinder::writeSettings(QSettings *settings, QString section)
