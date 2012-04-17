@@ -70,6 +70,10 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
     connect(set -> prop_RootDirectory(), SIGNAL(valueChanged(QString,int)), this, SLOT(onRootDirectoryChanged(QString)));
     connect(set -> prop_BrowserFilter(), SIGNAL(valueChanged(int,int)), this, SLOT(onFilterChanged(int)));
     connect(set -> prop_BrowserSelector(), SIGNAL(valueChanged(QString,int)), this, SLOT(onSelectorChanged(QString)));
+
+    onRootDirectoryChanged(set->get_RootDirectory());
+    onFilterChanged(set->get_BrowserFilter());
+    onSelectorChanged(set->get_BrowserSelector());
   }
 
   connect(m_FileBrowser, SIGNAL(pressed(QModelIndex)), this, SLOT(mousePressed(QModelIndex)));

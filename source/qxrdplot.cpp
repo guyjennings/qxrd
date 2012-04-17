@@ -79,6 +79,11 @@ void QxrdPlot::init(QxrdPlotSettingsWPtr settings)
     connect(set->prop_YAxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setYAxisLog(int)));
     connect(set->prop_X2AxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setX2AxisLog(int)));
     connect(set->prop_Y2AxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setY2AxisLog(int)));
+
+    setXAxisLog(set->get_XAxisLog());
+    setYAxisLog(set->get_YAxisLog());
+    setX2AxisLog(set->get_X2AxisLog());
+    setY2AxisLog(set->get_Y2AxisLog());
   }
 }
 

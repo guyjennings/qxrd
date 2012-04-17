@@ -135,6 +135,15 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
     connect(set->prop_MaintainAspectRatio(), SIGNAL(valueChanged(bool,int)), this, SLOT(onMaintainAspectChanged(bool)));
     connect(set->prop_DisplayColorMap(), SIGNAL(valueChanged(int,int)), this, SLOT(setColorMap(int)));
     connect(set->prop_DisplayLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(redoColorMap()));
+
+    changeImageShown(set->get_ImageShown());
+    changeMaskShown(set->get_MaskShown());
+    changeOverflowShown(set->get_OverflowShown());
+    recalculateDisplayedRange();
+    onInterpolateChanged(set->get_InterpolatePixels());
+    onMaintainAspectChanged(set->get_MaintainAspectRatio());
+    setColorMap(set->get_DisplayColorMap());
+    redoColorMap();
   }
 
   enableZooming();
@@ -148,20 +157,25 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
 
   if (dp) {
     QxrdCenterFinderPtr cf(dp->centerFinder());
-    connect(m_CenterFinderPicker, SIGNAL(selected(QwtDoublePoint)),
-            cf.data(), SLOT(onCenterChanged(QwtDoublePoint)));
 
-    connect(m_Circles, SIGNAL(selected(QwtDoubleRect)),
-            dp.data(), SLOT(maskCircle(QwtDoubleRect)));
+    if (cf) {
+      connect(m_CenterFinderPicker, SIGNAL(selected(QwtDoublePoint)),
+              cf.data(), SLOT(onCenterChanged(QwtDoublePoint)));
 
-    connect(m_Polygons, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-            dp.data(), SLOT(maskPolygon(QwtArray<QwtDoublePoint>)));
+      connect(m_Circles, SIGNAL(selected(QwtDoubleRect)),
+              dp.data(), SLOT(maskCircle(QwtDoubleRect)));
 
-    connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-            dp.data(), SLOT(measurePolygon(QwtArray<QwtDoublePoint>)));
+      connect(m_Polygons, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+              dp.data(), SLOT(maskPolygon(QwtArray<QwtDoublePoint>)));
 
-    //  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+      connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
+              dp.data(), SLOT(measurePolygon(QwtArray<QwtDoublePoint>)));
+
+      //  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
     //          m_DataProcessor, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
+
+      onCenterChanged(QwtDoublePoint(cf->get_CenterX(), cf->get_CenterY()));
+    }
   }
 
   connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
