@@ -6,6 +6,7 @@
 #include <QScriptEngine>
 #include <QDateTime>
 #include <QMutex>
+#include <QRegExp>
 
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -52,6 +53,7 @@ public:
 
 public slots:
   QString documentationText(QString item);
+  QString documentationText(QRegExp pattern);
 
 //  QScriptValue newQxrdObject(QObject *object, QString objectName);
 //  QScriptValue newQxrdFunction(FunctionSignature fun, QString objectName);
@@ -84,7 +86,7 @@ private:
   static QScriptValue overflowFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue helpFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue processFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue typeNameFunc(QScriptContext *context, QScriptEngine *engine);
+//  static QScriptValue typeNameFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue matchFilesFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue extraChannelFunc(QScriptContext *context, QScriptEngine *engine);
 

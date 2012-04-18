@@ -29,6 +29,7 @@
 #include <QScriptValueIterator>
 #include <QMetaObject>
 #include <QMetaProperty>
+#include <QRegExp>
 
 QxrdScriptEngine::QxrdScriptEngine(QxrdApplication* app, QxrdExperimentWPtr exp)
   : QScriptEngine(),
@@ -812,6 +813,10 @@ QXRD_DOC_FUNCTION(
     "Get the dark image (or null if none has been taken)",
     "<p>Returns a reference to the current dark image.</p>"
     "<p>The returned object can have its properties queried.</p>"
+    "<p>For example, to get the file name of the dark image:</p>"
+    "<code>print(dark().fileName)</code>"
+    "<p>Or to show a list of properties of the dark image:</p>"
+    "<code>for(i in dark()) print(i, dark()[i])</code>"
     )
 
 QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEngine *engine)
@@ -829,6 +834,14 @@ QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEng
   return QScriptValue(engine, -1);
 }
 
+QXRD_DOC_FUNCTION(
+    "mask",
+    "mask()",
+    "Get the top item of the mask stack",
+    "<p>Returns a reference to the top of the mask stack, or null if the "
+    "mask stack is empty.</p>"
+    )
+
 QScriptValue QxrdScriptEngine::maskFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -843,6 +856,17 @@ QScriptValue QxrdScriptEngine::maskFunc(QScriptContext * /*context*/, QScriptEng
 
   return QScriptValue(engine, -1);
 }
+
+QXRD_DOC_FUNCTION(
+    "overflow",
+    "overflow()",
+    "Get the overflow pixel map for acquired images",
+    "<p>Returns the overflow pixels map for the most recently acquired image "
+    "(if overflow processing is enabled)</p>\n"
+    "<p>The overflow map is non-zero wherever an image pixel exceeded the overflow "
+    "threshold during acquisition.  Where more than one exposures are summed, the overflow "
+    "map will count the number of exposures for which the pixel overflowed.</p>"
+    )
 
 QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
@@ -859,19 +883,56 @@ QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScrip
   return QScriptValue(engine, -1);
 }
 
-QScriptValue QxrdScriptEngine::helpFunc(QScriptContext * /*context*/, QScriptEngine * /*engine*/)
-{
-  return "Not yet implemented";
-}
+QXRD_DOC_FUNCTION(
+    "help",
+    "help([name...])",
+    "Returns help text for a given name or names",
+    "<p>Returns a string containing an html representation of the help text "
+    "for a name or names.  If more than one name is given the result is the "
+    "concatenation of the help for each name in turn</p>"
+    "<p>The names may contain wildcard characters, the result will contain help "
+    "for all available matching the wildcard patterns.</p>"
+    "<p>If no name is given the command returns help for the help command itself.</p>"
+    "<p>If the command is executed in the QXRD script window the html result will "
+    "be properly formatted in the message window.</p>"
+    "<p>For example:</p>"
+    "<code>help(\"help\")</code>"
+    )
 
-QScriptValue QxrdScriptEngine::typeNameFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::helpFunc(QScriptContext * context, QScriptEngine * engine)
 {
-  if (context->argumentCount() != 0) {
-    return QScriptValue(engine, QMetaType::typeName(context->argument(0).toUInt32()));
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    int n=context->argumentCount();
+    QString res="";
+
+    if (n==0) {
+      res = eng->documentationText("help");
+    } else {
+      for (int i=0; i<n; i++) {
+        QString name = context->argument(i).toString();
+
+        QRegExp re(name, Qt::CaseInsensitive, QRegExp::Wildcard);
+
+        res.append(eng->documentationText(re));
+      }
+    }
+
+    return QScriptValue(engine, res);
   } else {
-    return QScriptValue(engine,"?");
+    return QScriptValue(engine, QString());
   }
 }
+
+//QScriptValue QxrdScriptEngine::typeNameFunc(QScriptContext *context, QScriptEngine *engine)
+//{
+//  if (context->argumentCount() != 0) {
+//    return QScriptValue(engine, QMetaType::typeName(context->argument(0).toUInt32()));
+//  } else {
+//    return QScriptValue(engine,"?");
+//  }
+//}
 
 QScriptValue QxrdScriptEngine::extraChannelFunc(QScriptContext *context, QScriptEngine *engine)
 {
@@ -924,12 +985,20 @@ QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngin
   return QScriptValue(engine, -1);
 }
 
-static QString matchFilesProto =
-    "matchFiles([pattern]...)";
-static QString matchFilesDoc =
+QXRD_DOC_FUNCTION(
+    "matchFiles",
+    "matchFiles([pattern]...)",
+    "Return a list of files matching a pattern",
     "<p>Returns a list of file names matching the provided pattern(s).</p>"
     "<p>The patterns support 'wild card' characters sush as * and ?.</p>"
-    "<p>Example:  matchFiles(\"*.tiff\")</p>";
+    "<p>Example - to calculate the sum of the pixel intensity of pixel 100,100 in "
+    "all the TIFF files in the current directory:</p>"
+    "<code>var sum=0;<br/>\n"
+    "for(f in matchFiles(\"*.tif\") {<br/>\n"
+    "&nbsp;&nbsp;processor.loadData(f);<br/>\n"
+    "&nbsp;&nbsp;sum += data().getImageData(100,100);<br/>\n"
+    "}<br>"
+    )
 
 QScriptValue QxrdScriptEngine::matchFilesFunc(QScriptContext *context, QScriptEngine *engine)
 {
@@ -1025,7 +1094,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("overflow", newFunction(overflowFunc));
   globalObject().setProperty("help", newFunction(helpFunc));
   globalObject().setProperty("process", newFunction(processFunc));
-  globalObject().setProperty("typeName", newFunction(typeNameFunc));
+//  globalObject().setProperty("typeName", newFunction(typeNameFunc));
   globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
   globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
 
@@ -1365,110 +1434,21 @@ QString QxrdScriptEngine::documentationText(QString item)
     }
   }
 
-//  QScriptValueIterator iter(val);
+  return res;
+}
 
-//  QMap<QString,QObject*>      subObjects;
-//  QMap<QString,QcepProperty*> objectProperties;
-//  QMap<QString,QScriptValue>  memberFunctions;
+QString QxrdScriptEngine::documentationText(QRegExp pattern)
+{
+  QString res="";
 
-//  if (iter.hasNext()) {
-//    res.append("<table>\n");
-//    res.append("<tr>\n");
-//    res.append("<th>Name</th>\n");
-//    res.append("<th>Value</th>\n");
-//    res.append("<th>Data</th>\n");
-//    res.append("<th>Proto</th>\n");
-//    res.append("<th>Arr?</th>\n");
-//    res.append("<th>Bool?</th>\n");
-//    res.append("<th>Num?</th>\n");
-//    res.append("<th>Obj?</th>\n");
-//    res.append("<th>QObj?</th>\n");
-//    res.append("<th>QMta?</th>\n");
-//    res.append("<th>Fun?</th>\n");
-//    res.append("<th>Var?</th>\n");
-//    res.append("<th>Str?</th>\n");
-//    res.append("</tr>\n");
+  QHashIterator<QString, QString> iter(QxrdDocumentationDictionary::docs());
 
-//    while (iter.hasNext()) {
-//      iter.next();
-//      if (iter.name() != "documentation") {
-//        QScriptValue val = iter.value();
-
-//        if (val.isQObject()) {
-//          QObject *obj = val.toQObject();
-
-//          if (obj) {
-//            QcepProperty *prop = qobject_cast<QcepProperty*>(obj);
-
-//            if (prop) {
-//              objectProperties.insert(iter.name(),prop);
-//            } else {
-//              subObjects.insert(iter.name(),obj);
-//            }
-//          }
-//        } else if (val.isFunction()) {
-//          memberFunctions.insert(iter.name(),val);
-//        }
-//      }
-
-//      QScriptValue val = iter.value();
-//      res.append("<tr>\n");
-//      res.append(tr("<td>%1</td>\n").arg(documentationLink(item,iter.name())));
-//      res.append(tr("<td>%1</td>\n").arg(val.toString()));
-//      res.append(tr("<td>%1</td>\n").arg(val.data().toString()));
-//      res.append(tr("<td>%1</td>\n").arg(val.prototype().toString()));
-//      res.append(tr("<td align=center>%1</td>\n").arg(val.isArray()?"ARR":""));
-//      res.append(tr("<td align=center>%1</td>\n").arg(val.isBool()?"BOOL":""));
-//      res.append(tr("<td align=center>%1</td>\n").arg(val.isNumber()?"NUM":""));
-//      res.append(tr("<td align=center>%1</td>\n").arg(val.isObject()?"OBJ":""));
-//      res.append(tr("<td align=center>%1</td>\n").arg(val.isQObject()?"QOBJ":""));
-//      res.append(tr("<td align=center>%1</td>\n").arg(val.isQMetaObject()?"QMETA":""));
-//      res.append(tr("<td align=center>%1</td>\n").arg(val.isFunction()?"FUNC":""));
-//      res.append(tr("<td align=center>%1</td>\n").arg(val.isVariant()?"VRNT":""));
-//      res.append(tr("<td align=center>%1</td>\n").arg(val.isString()?"STRG":""));
-//      res.append("</tr>\n");
-//    }
-
-//    res.append("</table>\n");
-//  }
-
-//  if (objectProperties.count()) {
-//    res.append(tr("<h3>Properties</h3>\n"));
-//    res.append(tr("<dl>\n"));
-
-//    foreach(QcepProperty *prop, objectProperties) {
-//      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,prop->name())));
-//      res.append(tr("<dd>%1</dd>\n").arg(prop->toolTip()));
-//    }
-
-//    res.append(tr("</dl>\n"));
-//  }
-
-//  if (memberFunctions.count()) {
-//    res.append(tr("<h3>Functions</h3>\n"));
-//    res.append(tr("<dl>\n"));
-
-//    foreach(QScriptValue val, memberFunctions) {
-//      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,val.property("name").toString())));
-//      QString propDoc = val.property("documentation").toString();
-//      res.append(tr("<dd>%1</dd>\n").arg(propDoc));
-//    }
-
-//    res.append(tr("</dl>\n"));
-//  }
-
-//  if (subObjects.count()) {
-//    res.append(tr("<h3>Sub Objects</h3>\n"));
-//    res.append(tr("<dl>\n"));
-
-//    foreach(QObject *obj, subObjects) {
-//      res.append(tr("<dt>%1</dt>\n").arg(documentationLink(item,obj->objectName())));
-//      QString propDoc = obj->property("documentation").toString();
-//      res.append(tr("<dd>%1</dd>\n").arg(propDoc));
-//    }
-
-//    res.append(tr("</dl>\n"));
-//  }
+  while (iter.hasNext()) {
+    iter.next();
+    if (pattern.exactMatch(iter.key())) {
+      res.append(documentationText(iter.key()));
+    }
+  }
 
   return res;
 }

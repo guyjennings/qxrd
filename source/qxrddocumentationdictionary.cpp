@@ -111,3 +111,30 @@ QxrdDocumentationForFunction::QxrdDocumentationForFunction(
   gDocumentationDirectory->setProto(functionName, functionProto);
   gDocumentationDirectory->setLongDoc(functionName, functionLongDoc);
 }
+
+QHash<QString,QString> QxrdDocumentationDictionary::docs()
+{
+  if (gDocumentationDirectory) {
+    return gDocumentationDirectory->m_Docs;
+  } else {
+    return QHash<QString,QString>();
+  }
+}
+
+QHash<QString,QString> QxrdDocumentationDictionary::protos()
+{
+  if (gDocumentationDirectory) {
+    return gDocumentationDirectory->m_Protos;
+  } else {
+    return QHash<QString,QString>();
+  }
+}
+
+QHash<QString,QString> QxrdDocumentationDictionary::longDocs()
+{
+  if (gDocumentationDirectory) {
+    return gDocumentationDirectory->m_LongDocs;
+  } else {
+    return QHash<QString,QString>();
+  }
+}

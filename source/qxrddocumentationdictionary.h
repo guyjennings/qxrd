@@ -46,6 +46,10 @@ public:
   static void set_Doc(QString name, QString doc);
   static void set_LongDoc(QString name, QString longDoc);
 
+  static QHash<QString,QString> docs();
+  static QHash<QString,QString> protos();
+  static QHash<QString,QString> longDocs();
+
 private:
   QHash<QString,QString> m_Protos;
   QHash<QString,QString> m_Docs;
