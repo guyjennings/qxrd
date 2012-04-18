@@ -47,7 +47,7 @@ tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/images/*.{png,ico,icns} \
                       -t $${TARGET}-$${VERSION}/source/images &&
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/source/{[TA]*.h,q*.cpp,q*.h,q*.qrc,q*.rc,q*.ui,source.pro,*.pri,*.js} \
+        $(COPY_FILE)  $${PWD}/source/{*.cpp,*.h,*.qrc,*.rc,*.ui,source.pro,*.pri,*.js} \
                       -t $${TARGET}-$${VERSION}/source &&
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/levmar-2.5/*.{c,h} \
@@ -122,8 +122,8 @@ upload-dox.commands = rsync -e ssh -av --del dox/html/ guyjennings,$${TARGET}@we
 QMAKE_EXTRA_TARGETS += mock specfile
 
 specfile.target = $${TARGET}.spec
-specfile.depends = $${PWD}/$${TARGET}.spec $${PWD}/$${TARGET}.version.pri
-specfile.commands = perl -p -e '\'s/Version:.*/Version: $${VERSION}/\'' $${PWD}/$${TARGET}.spec > $${TARGET}.spec
+specfile.depends = $${PWD}/$${TARGET}.spec.in $${PWD}/$${TARGET}.version.pri
+specfile.commands = perl -p -e '\'s/Version:.*/Version: $${VERSION}/\'' $${PWD}/$${TARGET}.spec.in > $${TARGET}.spec
 
 mock.depends = tarball $${TARGET}.spec
 mock.commands += cp $${TARGET}-$${VERSION}.tar.gz ~/rpmbuild/SOURCES/ &&
