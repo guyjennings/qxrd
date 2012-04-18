@@ -448,7 +448,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
         T val = *src++;
 
         if (val>ovflwlvl) {
-          *ovf++ |= 1;
+          *ovf++ += 1;
         } else {
           ovf++;
         }
