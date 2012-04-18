@@ -77,9 +77,16 @@ void QxrdScriptEngine::setWindow(QxrdWindow *win)
   m_Window = win;
 
   if (m_Window) {
+    QXRD_DOC_OBJECT("window", "The Experiment Main Window");
     globalObject().setProperty("window",          newQObject(m_Window));
+
+    QXRD_DOC_OBJECT("imageGraph", "The Image Plot in the Main Experiment Window");
     globalObject().setProperty("imageGraph",      newQObject(m_Window->m_ImagePlot));
+
+    QXRD_DOC_OBJECT("centeringGraph", "The Center Finder Plot");
     globalObject().setProperty("centeringGraph",  newQObject(m_Window->m_CenterFinderPlot));
+
+    QXRD_DOC_OBJECT("integratorGraph", "The Integrated Data Plot");
     globalObject().setProperty("integratorGraph", newQObject(m_Window->m_IntegratorPlot));
   }
 }
@@ -934,6 +941,15 @@ QScriptValue QxrdScriptEngine::helpFunc(QScriptContext * context, QScriptEngine 
 //  }
 //}
 
+QXRD_DOC_FUNCTION(
+    "extraChannel",
+    "extraChannel(n)",
+    "Access channels for extra inputs",
+    "<p>Returns a reference to configuration data for an extra input channel.</p>"
+    "<p>Example: to access the acquired waveform for extra channel 0</p>"
+    "<code>extraChannel(0).waveform</code>"
+    )
+
 QScriptValue QxrdScriptEngine::extraChannelFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
@@ -958,6 +974,16 @@ QScriptValue QxrdScriptEngine::extraChannelFunc(QScriptContext *context, QScript
 
   return QScriptValue();
 }
+
+QXRD_DOC_FUNCTION(
+    "process",
+    "process(filename [, norm...])",
+    "Load and process an image file",
+    "<p>Load and process the file filename.  The norm arguments are used as "
+    "normalization values during processing</p>"
+    "<p>The function is closely related to</p>"
+    "<code>processor.processNormalizedFile(QString,QDoubleList)</code>"
+    )
 
 QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngine *engine)
 {
@@ -1038,6 +1064,106 @@ QScriptValue QxrdScriptEngine::matchFilesFunc(QScriptContext *context, QScriptEn
   return engine->toScriptValue(result);
 }
 
+QXRD_DOC_OBJECT(
+    "JSON",
+    "Qt Built-in JSON Parser"
+    )
+
+QXRD_DOC_FUNCTION(
+    "JSON.parse",
+    "JSON.parse(string)",
+    "Parse a string as a JSON object",
+    "<p>A built-in function in the Qt script system</p>"
+    )
+
+QXRD_DOC_FUNCTION(
+    "JSON.stringify",
+    "JSON.stringify(object)",
+    "Produce JSON string representation of an object",
+    "<p>A built-in function in the Qt script system</p>"
+    )
+
+QXRD_DOC_FUNCTION(
+    "Math",
+    "var x = Math.sqrt(2)",
+    "Qt Built-in Math Module",
+    "<p>Qt Script mathematical functions module</p>"
+    "<p>See also: <a href=\"http://www.w3schools.com/jsref/jsref_obj_math.asp\">JavaScript Math Object</a></p>"
+    )
+
+QXRD_DOC_OBJECT(
+    "Infinity",
+    "Qt Script built-in object with infinite value"
+    )
+
+QXRD_DOC_OBJECT(
+    "NaN",
+    "Qt Script built-in object with NaN (Not-a-Number) Value"
+    )
+
+QXRD_DOC_OBJECT(
+    "undefined",
+    "Qt Script built-in object with undefined value"
+    )
+
+
+QXRD_DOC_FUNCTION(
+    "Array",
+    "var x=Array([value...])",
+    "Qt Script built in array constructor function (<a href=\"http://www.w3schools.com/jsref/jsref_obj_array.asp\">JavaScript Array Object</a>)",
+    "<p>Construct a QtScript array containing the indicated elements</p>"
+    "<p>Example:</p>"
+    "<code>Array(1,2,3,4)</code>"
+    )
+
+QXRD_DOC_FUNCTION(
+    "Boolean",
+    "var bool=Boolean(value)",
+    "Qt Script built in Boolean constructor function",
+    "<p>Construct a QtScript boolean with the given value<p>"
+    "<p>Example:</p>"
+    "<code>Boolean(0)</code>"
+    )
+
+QXRD_DOC_FUNCTION(
+    "Date",
+    "var d=new Date(|msec|string|year,month[,day[,hr[,min[,sec[,msec]]]]])",
+    "Qt Script built in date object",
+    "<p>Construct dates given various inputs</p>"
+    "<code>var d = new Date() // current date<br/>"
+    "var d = new Date(msec)  // Date from millisecs<br/>"
+    "var d = new Date(\"October 13, 1975 11:13:00\") // Date from a string<br/>"
+    "var d = new Date(2001,5,24) // Date from numeric values</code>"
+    "<p>See also: <a href=\"http://www.w3schools.com/jsref/jsref_obj_date.asp\">JavaScript Date Object</a></p>"
+    )
+
+QXRD_DOC_FUNCTION(
+    "RegExp",
+    "var patt=new RegExp(pattern,modifiers) or var patt=/pattern/modifiers",
+    "Qt Script built in Regular Expression Object",
+    "<p>Construct regular expression matching objects</p>"
+    "<p>Examples:</p>"
+    "<code>var p1 = new RegExp(\".*\\.tif\",\"i\")<br/>"
+    "var p2=/.*\\.tif/i</code>"
+    "<p>See also: <a href=\"http://www.w3schools.com/jsref/jsref_obj_regexp.asp\">JavaScript RegExp Object</a></p>"
+    )
+
+QXRD_DOC_FUNCTION(
+    "String",
+    "var txt = new String(\"string\"); var t2=\"hhh\";",
+    "Qt Script built in String Object",
+    "<p>Construct and manipulate string values.</p>"
+    "<p>See also: <a href=\"http://www.w3schools.com/jsref/jsref_obj_string.asp\">JavaScript String Object</a></p>"
+    )
+
+QXRD_DOC_FUNCTION(
+    "Number",
+    "var num = new Number(42)",
+    "Qt Script Built in Number Object",
+    "<p>Construct and manipulate numeric values.</p>"
+    "<p>See also: <a href=\"http://www.w3schools.com/jsref/jsref_obj_number.asp\">JavaScript Number Object</a></p>"
+    )
+
 void QxrdScriptEngine::initialize()
 {
   qScriptRegisterMetaType(this, ::QxrdRingFitToScriptValue, ::QxrdRingFitFromScriptValue);
@@ -1056,19 +1182,23 @@ void QxrdScriptEngine::initialize()
   //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
 
   if (m_Application) {
+    QXRD_DOC_OBJECT("application", "The QXRD Application Object");
     globalObject().setProperty("application", newQObject(m_Application));
 
     QxrdAllocatorPtr alloc(m_Application->allocator());
 
     if (alloc) {
+      QXRD_DOC_OBJECT("allocator", "The QXRD Memory Allocator");
       globalObject().setProperty("allocator", newQObject(alloc.data()));
     }
   }
 
   QXRD_DOC_OBJECT("global", "The Global Object");
-
   globalObject().setProperty("global", globalObject());
+
+  QXRD_DOC_OBJECT("scripting", "The Script Engine");
   globalObject().setProperty("scripting", newQObject(this));
+
   globalObject().setProperty("acquire", newFunction(acquireFunc));
   globalObject().setProperty("acquireDark", newFunction(acquireDarkFunc));
   globalObject().setProperty("status", newFunction(statusFunc));
@@ -1170,14 +1300,23 @@ void QxrdScriptEngine::initialize()
 
       QXRD_DOC_OBJECT("integrator", "Image Circular Integration Options");
       globalObject().setProperty("integrator",      newQObject(dp->integrator().data()));
+
+      QXRD_DOC_OBJECT("initialFit", "Initial Powder Ring Fitting Parameters");
       globalObject().setProperty("initialFit",      newQObject(dp->initialRingSetFitParameters().data()));
+
+      QXRD_DOC_OBJECT("refinedFit", "Refined Powder Ring Fitting Parameters");
       globalObject().setProperty("refinedFit",      newQObject(dp->refinedRingSetFitParameters().data()));
+
+      QXRD_DOC_OBJECT("initialData", "Initial Powder Ring Fitting Data");
       globalObject().setProperty("initialData",     newQObject(dp->initialRingSetData().data()));
+
+      QXRD_DOC_OBJECT("refinedData", "Refined Power Ring Fitting Data");
       globalObject().setProperty("refinedData",     newQObject(dp->refinedRingSetData().data()));
 
       QxrdGenerateTestImagePtr gti(dp->generateTestImage());
 
       if (gti) {
+        QXRD_DOC_OBJECT("testImage", "Object for generating test images");
         globalObject().setProperty("testImage",       newQObject(gti.data()));
       }
     }
@@ -1296,52 +1435,58 @@ QString QxrdScriptEngine::documentationText(QString item)
 
       if (meta->propertyCount() > QObject::staticMetaObject.propertyCount()) {
         res.append(tr("<h3>Properties of %1</h3>\n").arg(itemName));
+        res.append(tableHeader());
 
         for (int i=QObject::staticMetaObject.propertyCount();
              i<meta->propertyCount(); i++) {
           const char* propName = meta->property(i).name();
           QVariant val = qobj->property(propName);
 
-          res.append("<div style=\"background-color:#e0e0e0;\">\n");
-          res.append(tr("<p><i>%1</i> : %2 = %3</p>\n")
+          if ((i%2)) {
+            res.append(tr("<tr bgcolor=\"#e0e0e0\">\n"));
+          } else {
+            res.append(tr("<tr bgcolor=\"white\">\n"));
+          }
+          res.append(tr("<td>%1</td><td>%2</td><td>%3</td>\n")
                      .arg(prefix+propName)
                      .arg(val.typeName())
                      .arg(val.toString()));
-          res.append(tr("</div>\n"));
 
           QString doc = QxrdDocumentationDictionary::get_Doc(prefix+propName);
 
-          if (doc.length()) {
-            res.append(tr("<div style=\"margin-left:20px\">\n"));
-            res.append(tr("<p>%1</p>\n").arg(doc));
-            res.append(tr("</div>\n"));
-          }
+          res.append(tr("<td width=\"75%\">%1</td>\n").arg(doc));
+
+          res.append("</tr>\n");
         }
+
+        res.append(tableFooter());
       }
 
       if (meta->methodCount() > QObject::staticMetaObject.methodCount()) {
         res.append(tr("<h3>Methods of %1</h3>\n").arg(itemName));
+        res.append(tableHeader());
 
         for (int i=QObject::staticMetaObject.methodCount();
              i<meta->methodCount(); i++) {
           const char* methodSig = meta->method(i).signature();
 
-          res.append(tr("<dl>\n"));
-          res.append(tr("<dt><i>%1</i></dt>\n").arg(prefix+methodSig));
-
-          QString proto = QxrdDocumentationDictionary::get_Proto(prefix+methodSig);
-          QString doc   = QxrdDocumentationDictionary::get_Doc(prefix+methodSig);
-
-          if (proto.length()) {
-            res.append(tr("<dd><p>%1</p></dd>\n").arg(proto));
+          if ((i%2)) {
+            res.append(tr("<tr bgcolor=\"#e0e0e0\">\n"));
+          } else {
+            res.append(tr("<tr bgcolor=\"white\">\n"));
           }
+          res.append(tr("<td><i>%1</i></td>\n").arg(prefix+methodSig));
 
-          if (doc.length()) {
-            res.append(tr("<dd>%1</dd>\n").arg(doc));
-          }
+          QString proto = QxrdDocumentationDictionary::get_Proto(methodSig);
+          QString doc   = QxrdDocumentationDictionary::get_Doc(methodSig);
 
-          res.append(tr("</dl>\n"));
+          res.append(tr("<td>%1<br/>\n").arg(proto));
+          res.append(tr("%1</td>\n").arg(doc));
+
+          res.append(tr("</tr>\n"));
         }
+
+        res.append(tableFooter());
       }
     } else {
       QScriptValueIterator iter(val);
@@ -1379,7 +1524,7 @@ QString QxrdScriptEngine::documentationText(QString item)
           } else {
             res.append(tr("<tr bgcolor=\"white\">\n"));
           }
-          res.append(tr("<td>%1</td>").arg(documentationLink(prefix+item, obj_iter.key())));
+          res.append(tr("<td>%1</td>").arg(documentationLink(item, obj_iter.key())));
           res.append(tr("</tr>\n"));
         }
 
@@ -1402,7 +1547,7 @@ QString QxrdScriptEngine::documentationText(QString item)
           } else {
             res.append(tr("<tr bgcolor=\"white\">\n"));
           }
-          res.append(tr("<td>%1</td>").arg(documentationLink(prefix+item, prop_iter.key())));
+          res.append(tr("<td>%1</td>").arg(documentationLink(item, prop_iter.key())));
           res.append(tr("</tr>\n"));
         }
 
@@ -1425,7 +1570,7 @@ QString QxrdScriptEngine::documentationText(QString item)
           } else {
             res.append(tr("<tr bgcolor=\"white\">\n"));
           }
-          res.append(tr("<td>%1</td>").arg(documentationLink(prefix+item, func_iter.key())));
+          res.append(tr("<td>%1</td>").arg(documentationLink(item, func_iter.key())));
           res.append(tr("</tr>\n"));
         }
 
