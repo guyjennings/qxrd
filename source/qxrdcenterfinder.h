@@ -67,6 +67,9 @@ public:
   Q_PROPERTY(double attenuationLength READ get_AttenuationLength WRITE set_AttenuationLength)
   QCEP_DOUBLE_PROPERTY(AttenuationLength)
 
+  Q_PROPERTY(QcepPolygon markedPoints READ get_MarkedPoints WRITE set_MarkedPoints)
+  QCEP_POLYGON_PROPERTY(MarkedPoints)
+
 //public slots:
 //  void onCenterXChanged(double cx);
 //  void onCenterYChanged(double cy);
@@ -79,6 +82,7 @@ signals:
 
 public slots:
   void onCenterChanged(QwtDoublePoint pt);
+  void onPointSelected(QwtDoublePoint pt);
 
   double getTTH(double x, double y) const;
   double getTTH(QwtDoublePoint pt) const;
@@ -94,6 +98,10 @@ public slots:
 
   double getDist(double x, double y) const;
   double getDist(QwtDoublePoint pt) const;
+
+  void fitPowderCircle();
+  void deletePowderPointNear(double x, double y);
+  void deletePowderPoints();
 
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);

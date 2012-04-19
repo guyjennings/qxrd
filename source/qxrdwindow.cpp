@@ -337,6 +337,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   connect(m_ImageHistogramButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableHistograms()));
   connect(m_ImageMaskCirclesButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableMaskCircles()));
   connect(m_ImageMaskPolygonsButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableMaskPolygons()));
+  connect(m_ImagePowderPointsButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enablePowderPoints()));
 
   connect(m_CenteringZoomInButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(enableZooming()));
   connect(m_CenteringZoomOutButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(zoomOut()));

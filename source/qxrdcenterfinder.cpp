@@ -22,7 +22,8 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver)
     m_EnablePolarizationCorrections(saver, this, "enablePolarizationCorrections", false, "Enable Polarization Corrections in Integration"),
     m_Polarization(saver, this, "polarization", 1.0, "Beam Polarization Factor"),
     m_EnableAbsorptionCorrections(saver, this, "enableAbsorptionCorrections", false, "Enable Absorption Correction in Integration"),
-    m_AttenuationLength(saver, this, "attenuationLength", 0, "Attenuation Length (mm)")
+    m_AttenuationLength(saver, this, "attenuationLength", 0, "Attenuation Length (mm)"),
+    m_MarkedPoints(saver, this, "markedPoints", QcepPolygon(), "Marker Points")
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 
@@ -164,4 +165,23 @@ double QxrdCenterFinder::getR(double x, double y) const
   double r = get_DetectorDistance()*tan(tth*M_PI/180.0);
 
   return r;
+}
+
+void QxrdCenterFinder::onPointSelected(QwtDoublePoint pt)
+{
+  m_MarkedPoints.appendValue(pt);
+}
+
+void QxrdCenterFinder::fitPowderCircle()
+{
+}
+
+void QxrdCenterFinder::deletePowderPointNear(double x, double y)
+{
+
+}
+
+void QxrdCenterFinder::deletePowderPoints()
+{
+  m_MarkedPoints.clear();
 }

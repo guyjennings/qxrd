@@ -114,7 +114,7 @@
               </property>
              </widget>
             </item>
-            <item row="11" column="1">
+            <item row="12" column="1">
              <spacer name="verticalSpacer_4">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -173,7 +173,7 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="1">
+            <item row="7" column="1">
              <widget class="QToolButton" name="m_ImageSliceButton">
               <property name="toolTip">
                <string>Slice Image Path</string>
@@ -199,7 +199,7 @@
               </property>
              </widget>
             </item>
-            <item row="9" column="1">
+            <item row="10" column="1">
              <widget class="QToolButton" name="m_ImageMeasureButton">
               <property name="toolTip">
                <string>Measure Distances on Image</string>
@@ -283,7 +283,7 @@
               </property>
              </widget>
             </item>
-            <item row="10" column="1">
+            <item row="11" column="1">
              <widget class="QToolButton" name="m_ImageHistogramButton">
               <property name="toolTip">
                <string>Display Histogram of Image Region</string>
@@ -312,6 +312,32 @@
               </property>
               <property name="arrowType">
                <enum>Qt::NoArrow</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QToolButton" name="m_ImagePowderPointsButton">
+              <property name="toolTip">
+               <string>Set Points on Powder Rings</string>
+              </property>
+              <property name="text">
+               <string>...</string>
+              </property>
+              <property name="icon">
+               <iconset resource="qxrdresources.qrc">
+                <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="autoExclusive">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -901,7 +927,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">

@@ -182,6 +182,7 @@ HEADERS += TODO.h \
     qxrdcenterfinderplot.h \
     qxrdcenterfinderdialog.h \
     qxrdcenterfinderpicker.h \
+    qxrdpowderpointpicker.h \
     qxrdintegrator.h \
     qxrdintegrator-ptr.h \
     qxrdintegratorplot.h \
@@ -365,6 +366,7 @@ SOURCES += qxrd.cpp \
     qxrdcenterfinderplot.cpp \
     qxrdcenterfinderdialog.cpp \
     qxrdcenterfinderpicker.cpp \
+    qxrdpowderpointpicker.cpp \
     qxrdintegrator.cpp \
     qxrdintegratorplot.cpp \
     qxrdintegratordialog.cpp \

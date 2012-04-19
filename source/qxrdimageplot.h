@@ -23,6 +23,7 @@
 #include "qxrdmaskdata-ptr.h"
 #include "qxrdimageplotsettings.h"
 #include "qxrdobjectnamer.h"
+#include "qxrdpowderpointpicker.h"
 
 class QxrdImagePlot : public QxrdPlot
 {
@@ -70,6 +71,7 @@ public slots:
   void onCenterXChanged(double cx);
   void onCenterYChanged(double cy);
   void onCenterChanged(QwtDoublePoint c);
+  void onMarkedPointsChanged();
 
   void enableZooming();
   void enableCentering();
@@ -78,6 +80,10 @@ public slots:
   void enableHistograms();
   void enableMaskCircles();
   void enableMaskPolygons();
+  void enablePowderPoints();
+
+  void clearPowderMarkers();
+  void displayPowderMarkers();
 
 public:
   QxrdImagePlotSettingsWPtr imagePlotSettings();
@@ -96,6 +102,7 @@ public:
   virtual QwtText trackerText(const QwtDoublePoint &pos);
 
   void contextMenuEvent(QContextMenuEvent *event);
+  void powderPointsContextMenu(QContextMenuEvent *event);
 
 private:
   void replotImage();
@@ -107,6 +114,8 @@ private:
   void colorMapRange(double value1, QColor color1, double value2, QColor color2);
   void changedColorMap();
   void setTrackerPen(const QPen &pen);
+
+  void disablePickers();
 
 public:
   enum {
@@ -152,8 +161,11 @@ private:
   QxrdMaskPicker            *m_Circles;
   QxrdMaskPicker            *m_Polygons;
 
+  QxrdPowderPointPicker     *m_PowderPointPicker;
+  QVector<QwtPlotMarker*>    m_PowderPointMarkers;
+
 //  QPen                       m_Pen;
-  bool                 m_FirstTime;
+  bool                       m_FirstTime;
 };
 
 #endif

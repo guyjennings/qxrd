@@ -16,6 +16,7 @@
 #include <qwt_plot_spectrogram.h>
 #include <qwt_scale_widget.h>
 #include <qwt_double_range.h>
+#include <qwt_symbol.h>
 
 #include <QTime>
 #include <QMenu>
@@ -47,6 +48,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_CenterMarker(NULL),
     m_Circles(NULL),
     m_Polygons(NULL),
+    m_PowderPointPicker(NULL),
     m_FirstTime(true)
 {
 }
@@ -117,6 +119,9 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   m_Polygons = new QxrdPolygonalMaskPicker(canvas(), this);
   m_Polygons -> setEnabled(false);
 
+  m_PowderPointPicker = new QxrdPowderPointPicker(this);
+  m_PowderPointPicker -> setEnabled(false);
+
   set100Range();
   setGrayscale();
 
@@ -174,7 +179,15 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
       //  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
     //          m_DataProcessor, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
 
+      connect(m_PowderPointPicker, SIGNAL(selected(QwtDoublePoint)),
+              cf.data(), SLOT(onPointSelected(QwtDoublePoint)));
+
       onCenterChanged(QwtDoublePoint(cf->get_CenterX(), cf->get_CenterY()));
+
+      connect(cf->prop_MarkedPoints(), SIGNAL(valueChanged(QcepPolygon,int)),
+              this, SLOT(onMarkedPointsChanged()));
+
+      onMarkedPointsChanged();
     }
   }
 
@@ -333,12 +346,23 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
   m_Slicer   -> setRubberBandPen(pen);
   m_HistogramSelector   -> setTrackerPen(pen);
   m_HistogramSelector   -> setRubberBandPen(pen);
+  m_PowderPointPicker   -> setTrackerPen(pen);
+  m_PowderPointPicker   -> setRubberBandPen(pen);
 
   if (m_CenterMarker) {
     m_CenterMarker -> setLinePen(pen);
   }
 
   m_MaskColorMap.setColorInterval(pen.color(), QColor(0,0,0,0));
+
+  foreach (QwtPlotMarker *m, m_PowderPointMarkers) {
+    QwtSymbol sym = m->symbol();
+
+    sym.setPen(pen);
+    sym.setBrush(QBrush(pen.color()));
+
+    m->setSymbol(sym);
+  }
 }
 
 void QxrdImagePlot::colorMapStart(QColor startColor, QColor endColor)
@@ -729,81 +753,76 @@ QxrdMaskRasterData* QxrdImagePlot::maskRaster()
   return &m_MaskRaster;
 }
 
+void QxrdImagePlot::disablePickers()
+{
+  m_Zoomer             -> setEnabled(false);
+  m_CenterFinderPicker -> setEnabled(false);
+  m_Slicer             -> setEnabled(false);
+  m_Measurer           -> setEnabled(false);
+  m_HistogramSelector  -> setEnabled(false);
+  m_Circles            -> setEnabled(false);
+  m_Polygons           -> setEnabled(false);
+  m_PowderPointPicker  -> setEnabled(false);
+
+  clearPowderMarkers();
+}
+
 void QxrdImagePlot::enableZooming()
 {
+  disablePickers();
+
   m_Zoomer       -> setEnabled(true);
-  m_CenterFinderPicker -> setEnabled(false);
-  m_Slicer       -> setEnabled(false);
-  m_Measurer     -> setEnabled(false);
-  m_HistogramSelector -> setEnabled(false);
-  m_Circles  -> setEnabled(false);
-  m_Polygons -> setEnabled(false);
 }
 
 void QxrdImagePlot::enableCentering()
 {
-  m_Zoomer   -> setEnabled(false);
+  disablePickers();
+
   m_CenterFinderPicker -> setEnabled(true);
-  m_Slicer   -> setEnabled(false);
-  m_Measurer -> setEnabled(false);
-  m_HistogramSelector -> setEnabled(false);
-  m_Circles  -> setEnabled(false);
-  m_Polygons -> setEnabled(false);
 }
 
 void QxrdImagePlot::enableSlicing()
 {
-  m_Zoomer   -> setEnabled(false);
-  m_CenterFinderPicker -> setEnabled(false);
+  disablePickers();
+
   m_Slicer   -> setEnabled(true);
-  m_Measurer -> setEnabled(false);
-  m_HistogramSelector -> setEnabled(false);
-  m_Circles  -> setEnabled(false);
-  m_Polygons -> setEnabled(false);
 }
 
 void QxrdImagePlot::enableMeasuring()
 {
-  m_Zoomer   -> setEnabled(false);
-  m_CenterFinderPicker -> setEnabled(false);
-  m_Slicer   -> setEnabled(false);
+  disablePickers();
+
   m_Measurer -> setEnabled(true);
-  m_HistogramSelector -> setEnabled(false);
-  m_Circles  -> setEnabled(false);
-  m_Polygons -> setEnabled(false);
 }
 
 void QxrdImagePlot::enableHistograms()
 {
-  m_Zoomer   -> setEnabled(false);
-  m_CenterFinderPicker -> setEnabled(false);
-  m_Slicer   -> setEnabled(false);
-  m_Measurer -> setEnabled(false);
+  disablePickers();
+
   m_HistogramSelector -> setEnabled(true);
-  m_Circles  -> setEnabled(false);
-  m_Polygons -> setEnabled(false);
 }
 
 void QxrdImagePlot::enableMaskCircles()
 {
-  m_Zoomer   -> setEnabled(false);
-  m_CenterFinderPicker -> setEnabled(false);
-  m_Slicer   -> setEnabled(false);
-  m_Measurer -> setEnabled(false);
-  m_HistogramSelector -> setEnabled(false);
+  disablePickers();
+
   m_Circles  -> setEnabled(true);
-  m_Polygons -> setEnabled(false);
 }
 
 void QxrdImagePlot::enableMaskPolygons()
 {
-  m_Zoomer   -> setEnabled(false);
-  m_CenterFinderPicker -> setEnabled(false);
-  m_Slicer   -> setEnabled(false);
-  m_Measurer -> setEnabled(false);
-  m_HistogramSelector -> setEnabled(false);
-  m_Circles  -> setEnabled(false);
+  disablePickers();
+
   m_Polygons -> setEnabled(true);
+}
+
+void QxrdImagePlot::enablePowderPoints()
+{
+  disablePickers();
+
+  m_PowderPointPicker -> setEnabled(true);
+
+  displayPowderMarkers();
 }
 
 //#undef replot
@@ -873,12 +892,17 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
 
     double chi = centerFinder->getChi(pos);
     res += tr(", Chi %1").arg(chi);
+
+    if (m_PowderPointPicker -> isEnabled()) {
+      QwtDoublePoint rpt = ras->optimizePeakPosition(pos);
+      res += tr("\nPtx %1, Pty %2").arg(rpt.x()).arg(rpt.y());
+    }
   }
 
   return res;
 }
 
-void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * /*event*/)
+void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 {
   //  QMenu plotMenu(NULL, NULL);
 
@@ -902,4 +926,98 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * /*event*/)
   //  }
 
   //  event->accept();
+
+  if (m_PowderPointPicker->isEnabled()) {
+    powderPointsContextMenu(event);
+  }
 }
+
+void QxrdImagePlot::powderPointsContextMenu(QContextMenuEvent *event)
+{
+  QMenu powderMenu(NULL, NULL);
+
+  QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
+  QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);
+
+  double x = xMap.invTransform(event->x());
+  double y = yMap.invTransform(event->y());
+
+  QAction *fitCircle       = powderMenu.addAction("Fit Center from Points on Circle");
+  QAction *delPoint        = powderMenu.addAction(tr("Delete point at (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+  QAction *deleteAllPoints = powderMenu.addAction("Delete all Points");
+
+  QAction *action = powderMenu.exec(event->globalPos());
+
+  QxrdDataProcessorPtr dp(m_DataProcessor);
+
+  if (dp) {
+    QxrdCenterFinderPtr cf(dp->centerFinder());
+
+    if (cf) {
+
+      if (action == fitCircle) {
+        cf->fitPowderCircle();
+      } else if (action == delPoint) {
+        cf->deletePowderPointNear(x,y);
+      } else if (action == deleteAllPoints) {
+        cf->deletePowderPoints();
+      }
+    }
+  }
+
+  event->accept();
+}
+
+void QxrdImagePlot::onMarkedPointsChanged()
+{
+  if (m_PowderPointPicker->isEnabled()) {
+    displayPowderMarkers();
+  } else {
+    clearPowderMarkers();
+  }
+
+  replot();
+}
+
+void QxrdImagePlot::displayPowderMarkers()
+{
+  clearPowderMarkers();
+
+  QxrdDataProcessorPtr dp(m_DataProcessor);
+
+  if (dp) {
+    QxrdCenterFinderPtr cf(dp->centerFinder());
+
+    if (cf) {
+      QcepPolygon poly = cf->get_MarkedPoints();
+
+      foreach(QwtDoublePoint pt, poly) {
+        QwtPlotMarker *marker = new QwtPlotMarker();
+        QwtSymbol symb;
+
+        symb.setStyle(QwtSymbol::Ellipse);
+        symb.setSize(5, 5);
+        symb.setPen(QPen(Qt::red));
+        symb.setBrush(QBrush(Qt::red));
+
+        marker->setSymbol(symb);
+        marker->setValue(pt);
+
+        m_PowderPointMarkers.append(marker);
+
+        marker->attach(this);
+      }
+    }
+  }
+}
+
+void QxrdImagePlot::clearPowderMarkers()
+{
+  foreach(QwtPlotMarker *marker, m_PowderPointMarkers) {
+    marker->detach();
+    delete marker;
+  }
+
+  m_PowderPointMarkers.clear();
+}
+
