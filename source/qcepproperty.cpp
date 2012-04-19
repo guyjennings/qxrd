@@ -2050,6 +2050,21 @@ void QcepPolygonProperty::setValue(QcepPolygon val)
   }
 }
 
+void QcepPolygonProperty::appendValue(QwtDoublePoint pt)
+{
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepPolygon poly = value();
+  poly.append(pt);
+
+  setValue(poly);
+}
+
+void QcepPolygonProperty::clear()
+{
+  setValue(QcepPolygon());
+}
+
 void QcepPolygonProperty::setDefaultValue(QcepPolygon val)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);

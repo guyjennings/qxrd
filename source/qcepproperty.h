@@ -496,6 +496,8 @@ public slots:
   void setValue(QcepPolygon val);
   void setDefaultValue(QcepPolygon val);
   void resetValue();
+  void appendValue(QwtDoublePoint pt);
+  void clear();
 
 signals:
   void valueChanged(QcepPolygon val, int index);
