@@ -38,6 +38,8 @@ public:
   const QxrdMaskDataPtr mask() const { return m_Mask; }
   int interp() const          { return m_Interpolate; }
 
+  QwtDoublePoint optimizePeakPosition(QwtDoublePoint pt) const;
+
 private:
   QxrdDoubleImageDataPtr m_Data;
   QxrdMaskDataPtr        m_Mask;

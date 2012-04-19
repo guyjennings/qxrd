@@ -302,3 +302,29 @@ int QxrdRasterData::height() const
 {
   return m_NRows;
 }
+
+QwtDoublePoint QxrdRasterData::optimizePeakPosition(QwtDoublePoint pt) const
+{
+  int rad = 10;
+  int ix = pt.x();
+  int iy = pt.y();
+  int first = 1;
+
+  double max;
+  int maxx = 0, maxy = 0;
+
+  for (int j=iy-rad; j<iy+rad; j++) {
+    for (int i=ix-rad; i<ix+rad; i++) {
+      double val=value(i,j);
+
+      if (first) {
+        max = val; maxx = i; maxy = j;
+        first = 0;
+      } else if (val > max) {
+        max = val; maxx = i; maxy = j;
+      }
+    }
+  }
+
+  return QwtDoublePoint(maxx, maxy);
+}
