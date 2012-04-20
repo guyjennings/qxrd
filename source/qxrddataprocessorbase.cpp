@@ -314,6 +314,10 @@ void QxrdDataProcessorBase::newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPt
   if (w) {
     w -> newDataAvailable(m_Data, overflow);
   }
+
+  if (m_CenterFinder) {
+    m_CenterFinder->setData(m_Data);
+  }
 }
 
 void QxrdDataProcessorBase::newDarkImage(QxrdDoubleImageDataPtr image)

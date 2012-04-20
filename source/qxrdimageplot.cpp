@@ -943,7 +943,9 @@ void QxrdImagePlot::powderPointsContextMenu(QContextMenuEvent *event)
   double y = yMap.invTransform(event->y());
 
   QAction *fitCircle       = powderMenu.addAction("Fit Center from Points on Circle");
-  QAction *delPoint        = powderMenu.addAction(tr("Delete point at (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+  QAction *adjPoint        = powderMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(x).arg(y));
+  QAction *adjAllPoints    = powderMenu.addAction(tr("Auto adjust position of all points"));
+  QAction *delPoint        = powderMenu.addAction(tr("Delete point at (%1,%2)").arg(x).arg(y));
   QAction *deleteAllPoints = powderMenu.addAction("Delete all Points");
 
   QAction *action = powderMenu.exec(event->globalPos());
@@ -957,6 +959,10 @@ void QxrdImagePlot::powderPointsContextMenu(QContextMenuEvent *event)
 
       if (action == fitCircle) {
         cf->fitPowderCircle();
+      } else if (action == adjPoint) {
+        cf->adjustPointNear(x,y);
+      } else if (action == adjAllPoints) {
+        cf->adjustAllPoints();
       } else if (action == delPoint) {
         cf->deletePowderPointNear(x,y);
       } else if (action == deleteAllPoints) {

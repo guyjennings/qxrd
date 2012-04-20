@@ -23,7 +23,9 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver)
     m_Polarization(saver, this, "polarization", 1.0, "Beam Polarization Factor"),
     m_EnableAbsorptionCorrections(saver, this, "enableAbsorptionCorrections", false, "Enable Absorption Correction in Integration"),
     m_AttenuationLength(saver, this, "attenuationLength", 0, "Attenuation Length (mm)"),
-    m_MarkedPoints(saver, this, "markedPoints", QcepPolygon(), "Marker Points")
+    m_MarkedPoints(saver, this, "markedPoints", QcepPolygon(), "Marker Points"),
+    m_AdjustMarkedPoints(saver, this, "adjustMarkedPoints", true, "Auto-adjust position of entered points"),
+    m_AdjustmentRadius(saver, this, "adjustmentRadius", 3.0, "Size of search region for marker auto adjustment")
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 
@@ -169,6 +171,10 @@ double QxrdCenterFinder::getR(double x, double y) const
 
 void QxrdCenterFinder::onPointSelected(QwtDoublePoint pt)
 {
+  if (get_AdjustMarkedPoints()) {
+    pt = adjustPoint(pt);
+  }
+
   m_MarkedPoints.appendValue(pt);
 }
 
@@ -176,12 +182,114 @@ void QxrdCenterFinder::fitPowderCircle()
 {
 }
 
+QwtDoublePoint QxrdCenterFinder::powderPoint(int i)
+{
+  return get_MarkedPoints().value(i);
+}
+
+int QxrdCenterFinder::nearestPowderPointIndex(double x, double y)
+{
+  int nearest = -1;
+  double nearestDist;
+  QcepPolygon pts = get_MarkedPoints();
+
+  for (int i=0; i<pts.count(); i++) {
+    QwtDoublePoint pt = pts.value(i);
+    double dist = sqrt(pow(x-pt.x(), 2) + pow(y-pt.y(), 2));
+
+    if (nearest == -1 || dist < nearestDist) {
+      nearest     = i;
+      nearestDist = dist;
+    }
+  }
+
+  return nearest;
+}
+
+QwtDoublePoint QxrdCenterFinder::nearestPowderPoint(double x, double y)
+{
+  return get_MarkedPoints().value(nearestPowderPointIndex(x,y));
+}
+
 void QxrdCenterFinder::deletePowderPointNear(double x, double y)
 {
+  int nearest = nearestPowderPointIndex(x, y);
 
+  if (nearest >= 0) {
+    QcepPolygon pts = get_MarkedPoints();
+
+    pts.remove(nearest);
+
+    set_MarkedPoints(pts);
+  }
 }
 
 void QxrdCenterFinder::deletePowderPoints()
 {
   m_MarkedPoints.clear();
+}
+
+QwtDoublePoint QxrdCenterFinder::adjustPoint(QwtDoublePoint pt)
+{
+  double x0=pt.x(), y0=pt.y();
+  int rad = get_AdjustmentRadius();
+  double sum=0, sumx=0, sumy=0;
+
+  for (int iy=-rad; iy<=rad; iy++) {
+    double y=y0+iy;
+    for (int ix=-rad; ix<=rad; ix++) {
+      double x=x0+ix;
+      double val = imageValue(x,y);
+      sum += val;
+      sumx += val*x;
+      sumy += val*y;
+    }
+  }
+
+  return QwtDoublePoint(sumx/sum, sumy/sum);
+}
+
+QwtDoublePoint QxrdCenterFinder::adjustPoint(int i)
+{
+  return adjustPoint(powderPoint(i));
+}
+
+void QxrdCenterFinder::adjustPointNear(double x, double y)
+{
+  int nearest = nearestPowderPointIndex(x, y);
+
+  if (nearest >= 0) {
+    QcepPolygon pts = get_MarkedPoints();
+
+    QwtDoublePoint val = adjustPoint(pts[nearest]);
+
+    pts[nearest] = val;
+
+    set_MarkedPoints(pts);
+  }
+}
+
+void QxrdCenterFinder::adjustAllPoints()
+{
+  QcepPolygon pts = get_MarkedPoints();
+
+  for (int i=0; i<pts.count(); i++) {
+    pts[i] = adjustPoint(pts[i]);
+  }
+
+  set_MarkedPoints(pts);
+}
+
+void QxrdCenterFinder::setData(QxrdDoubleImageDataPtr data)
+{
+  m_Data = data;
+}
+
+double QxrdCenterFinder::imageValue(double x, double y)
+{
+  if (m_Data) {
+    return m_Data->value(x,y);
+  } else {
+    return 0;
+  }
 }

@@ -10,6 +10,8 @@
 #include "qxrddetectorgeometry.h"
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdobjectnamer.h"
+#include "qxrddataprocessor-ptr.h"
+#include "qxrdimagedata-ptr.h"
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
 {
@@ -19,7 +21,7 @@ public:
   QxrdCenterFinder(QxrdSettingsSaverWPtr saver);
 
 private:
-  QxrdObjectNamer m_ObjectNamer;
+  QxrdObjectNamer       m_ObjectNamer;
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
@@ -70,6 +72,12 @@ public:
   Q_PROPERTY(QcepPolygon markedPoints READ get_MarkedPoints WRITE set_MarkedPoints)
   QCEP_POLYGON_PROPERTY(MarkedPoints)
 
+  Q_PROPERTY(bool adjustMarkedPoints READ get_AdjustMarkedPoints WRITE set_AdjustMarkedPoints)
+  QCEP_BOOLEAN_PROPERTY(AdjustMarkedPoints)
+
+  Q_PROPERTY(double adjustmentRadius READ get_AdjustmentRadius WRITE set_AdjustmentRadius)
+  QCEP_DOUBLE_PROPERTY(AdjustmentRadius)
+
 //public slots:
 //  void onCenterXChanged(double cx);
 //  void onCenterYChanged(double cy);
@@ -103,12 +111,24 @@ public slots:
   void deletePowderPointNear(double x, double y);
   void deletePowderPoints();
 
+  QwtDoublePoint powderPoint(int i);
+  int nearestPowderPointIndex(double x, double y);
+  QwtDoublePoint nearestPowderPoint(double x, double y);
+
+  QwtDoublePoint adjustPoint(QwtDoublePoint pt);
+  QwtDoublePoint adjustPoint(int i);
+  void adjustPointNear(double x, double y);
+  void adjustAllPoints();
+
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);
 //  void setPen(const QPen &pen);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
+
+  void setData(QxrdDoubleImageDataPtr data);
+  double imageValue(double x, double y);
 
 //signals:
 ////  void centerChanged(double cx, double cy);
@@ -118,6 +138,7 @@ public:
 //
 private:
   mutable QMutex             m_Mutex;
+  QxrdDoubleImageDataPtr     m_Data;
 };
 
 #endif // QXRDCENTERFINDER_H
