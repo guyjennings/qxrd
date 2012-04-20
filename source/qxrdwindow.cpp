@@ -10,6 +10,7 @@
 #include "qxrdmaskdata.h"
 #include "qxrddataprocessor.h"
 #include "qxrdcenterfinderdialog.h"
+#include "qxrdcenterfinder.h"
 #include "qxrdmaskdialog.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdintegratordialog.h"
@@ -297,6 +298,16 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   connect(m_ActionMoveCenterDown, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveDown()));
   connect(m_ActionMoveCenterLeft, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveLeft()));
   connect(m_ActionMoveCenterRight, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveRight()));
+
+  if (proc) {
+    QxrdCenterFinderPtr cf(proc->centerFinder());
+
+    if (cf) {
+      connect(m_ActionFindBeamCenter, SIGNAL(triggered()), cf.data(), SLOT(fitPowderCircle()));
+      connect(m_ActionAutoAdjustMarkers, SIGNAL(triggered()), cf.data(), SLOT(adjustAllPoints()));
+      connect(m_ActionClearMarkers, SIGNAL(triggered()), cf.data(), SLOT(deletePowderPoints()));
+    }
+  }
 
   m_AcquisitionDialog->setupAcquireMenu(m_AcquireMenu);
 

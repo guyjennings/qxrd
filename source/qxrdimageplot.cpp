@@ -934,28 +934,30 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 
 void QxrdImagePlot::powderPointsContextMenu(QContextMenuEvent *event)
 {
-  QMenu powderMenu(NULL, NULL);
-
-  QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
-  QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);
-
-  double x = xMap.invTransform(event->x());
-  double y = yMap.invTransform(event->y());
-
-  QAction *fitCircle       = powderMenu.addAction("Fit Center from Points on Circle");
-  QAction *adjPoint        = powderMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(x).arg(y));
-  QAction *adjAllPoints    = powderMenu.addAction(tr("Auto adjust position of all points"));
-  QAction *delPoint        = powderMenu.addAction(tr("Delete point at (%1,%2)").arg(x).arg(y));
-  QAction *deleteAllPoints = powderMenu.addAction("Delete all Points");
-
-  QAction *action = powderMenu.exec(event->globalPos());
-
   QxrdDataProcessorPtr dp(m_DataProcessor);
 
   if (dp) {
     QxrdCenterFinderPtr cf(dp->centerFinder());
 
     if (cf) {
+      QMenu powderMenu(NULL, NULL);
+
+      QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
+      QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);
+
+      double x = xMap.invTransform(event->x());
+      double y = yMap.invTransform(event->y());
+
+      QwtDoublePoint nearest = cf->nearestPowderPoint(x, y);
+
+      QAction *fitCircle       = powderMenu.addAction("Fit Center from Points on Circle");
+      QAction *adjPoint        = powderMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
+      QAction *adjAllPoints    = powderMenu.addAction(tr("Auto adjust position of all points"));
+      QAction *delPoint        = powderMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
+      QAction *deleteAllPoints = powderMenu.addAction("Delete all Points");
+
+      QAction *action = powderMenu.exec(event->globalPos());
+
 
       if (action == fitCircle) {
         cf->fitPowderCircle();
