@@ -1,6 +1,24 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.3 - Apr 23 2012
+Added beam center fitting from user-entered points on a powder ring
+
+## v0.9.2 - Apr 19 2012
+Added automatic scripting function help generation
+
+## v0.9.1 - Apr 3 2012
+First release in 0.9.x series - many many changes!
+Multiple 'experiments' may be open simultaneously - each has its own settings file
+A welcome dialog allows choosing from recent experiments
+Settings are saved automatically, whenever they are changed
+A NI-DAQ card can be used to measure auxiliary signals during acquisition (e.g. ion chamber readings)
+Logarithmic Intensity option for image plots
+File browsers highlight recently changed files
+Shrink/grow commands for masks
+
+## v0.8.4 - Feb 29 2012</h2>
+Backport logarithmic intensity option from v0.9.1
 ## v0.8.3 - Nov 14 2011
 Added newOutputScan, appendToOutputScan, plotOutputScan and saveOutputScan script commands to 'processor'
 
