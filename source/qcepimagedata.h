@@ -140,10 +140,10 @@ public:
     return get_DateTime().toString(tr("yyyy.MM.dd : hh:mm:ss.zzz"));
   }
 
-  void set_DateString(QString val) {}
+  void set_DateString(QString /*val*/) {}
 
   QString get_DataTypeName() const;
-  void set_DataTypeName(QString name) {}
+  void set_DataTypeName(QString /*name*/) {}
 
   void copyProperties(QcepImageDataBase *dest);
   void copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src);
