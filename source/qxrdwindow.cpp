@@ -303,9 +303,9 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     QxrdCenterFinderPtr cf(proc->centerFinder());
 
     if (cf) {
-      connect(m_ActionFindBeamCenter, SIGNAL(triggered()), cf.data(), SLOT(fitPowderCircle()));
-      connect(m_ActionAutoAdjustMarkers, SIGNAL(triggered()), cf.data(), SLOT(adjustAllPoints()));
-      connect(m_ActionClearMarkers, SIGNAL(triggered()), cf.data(), SLOT(deletePowderPoints()));
+      connect(m_ActionFindBeamCenter, SIGNAL(triggered()), cf.data(), SLOT(fitPowderCircle()), Qt::DirectConnection);
+      connect(m_ActionAutoAdjustMarkers, SIGNAL(triggered()), cf.data(), SLOT(adjustAllPoints()), Qt::DirectConnection);
+      connect(m_ActionClearMarkers, SIGNAL(triggered()), cf.data(), SLOT(deletePowderPoints()), Qt::DirectConnection);
     }
   }
 
