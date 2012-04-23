@@ -913,6 +913,11 @@ void QcepBoolProperty::resetValue()
   setValue(m_Default);
 }
 
+void QcepBoolProperty::toggle()
+{
+  setValue(!m_Value);
+}
+
 void QcepBoolProperty::linkTo(QAbstractButton *button)
 {
   if (qcepDebug(DEBUG_PROPERTIES || debug())) {

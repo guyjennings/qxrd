@@ -197,6 +197,7 @@ public slots:
   void setValue(bool val);
   void setDefaultValue(bool val);
   void resetValue();
+  void toggle();
 
 signals:
   void valueChanged(bool val, int index);
@@ -635,6 +636,11 @@ void setdef_##propname(bool val) \
 void reset_##propname() \
 { \
   m_##propname.resetValue(); \
+} \
+\
+void toggle_##propname() \
+{ \
+  m_##propname.toggle(); \
 } \
 \
 QcepBoolProperty *prop_##propname() { \
