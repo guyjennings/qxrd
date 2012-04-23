@@ -75,10 +75,10 @@ void QxrdPlot::init(QxrdPlotSettingsWPtr settings)
   QxrdPlotSettingsPtr set(m_PlotSettings);
 
   if (set) {
-    connect(set->prop_XAxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setXAxisLog(int)));
-    connect(set->prop_YAxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setYAxisLog(int)));
-    connect(set->prop_X2AxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setX2AxisLog(int)));
-    connect(set->prop_Y2AxisLog(), SIGNAL(valueChanged(int,int)), this, SLOT(setY2AxisLog(int)));
+    connect(set->prop_XAxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setXAxisLog(bool)));
+    connect(set->prop_YAxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setYAxisLog(bool)));
+    connect(set->prop_X2AxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setX2AxisLog(bool)));
+    connect(set->prop_Y2AxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setY2AxisLog(bool)));
 
     setXAxisLog(set->get_XAxisLog());
     setYAxisLog(set->get_YAxisLog());
@@ -249,22 +249,22 @@ void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
   }
 }
 
-void QxrdPlot::setXAxisLog(int isLog)
+void QxrdPlot::setXAxisLog(bool isLog)
 {
   setLogAxis(QwtPlot::xBottom, isLog);
 }
 
-void QxrdPlot::setYAxisLog(int isLog)
+void QxrdPlot::setYAxisLog(bool isLog)
 {
   setLogAxis(QwtPlot::yLeft, isLog);
 }
 
-void QxrdPlot::setX2AxisLog(int isLog)
+void QxrdPlot::setX2AxisLog(bool isLog)
 {
   setLogAxis(QwtPlot::xTop, isLog);
 }
 
-void QxrdPlot::setY2AxisLog(int isLog)
+void QxrdPlot::setY2AxisLog(bool isLog)
 {
   setLogAxis(QwtPlot::yRight, isLog);
 }
@@ -303,9 +303,9 @@ void QxrdPlot::contextMenuEvent(QContextMenuEvent *event)
     QAction *action = plotMenu.exec(event->globalPos());
 
     if (action == xLog) {
-      set->set_XAxisLog(!set->get_XAxisLog());
+      set->toggle_XAxisLog();
     } else if (action == yLog) {
-      set->set_YAxisLog(!set->get_YAxisLog());
+      set->toggle_YAxisLog();
     } else if (action == auSc) {
       autoScale();
     }

@@ -40,10 +40,10 @@ public slots:
   void onLegendClicked(QwtPlotItem *item);
   void onLegendChecked(QwtPlotItem *item, bool checked);
 
-  void setXAxisLog(int isLog);
-  void setYAxisLog(int isLog);
-  void setX2AxisLog(int isLog);
-  void setY2AxisLog(int isLog);
+  void setXAxisLog(bool isLog);
+  void setYAxisLog(bool isLog);
+  void setX2AxisLog(bool isLog);
+  void setY2AxisLog(bool isLog);
 
   void setLogAxis(int axis, int isLog);
   int logAxis(int axis);
