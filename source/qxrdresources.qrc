@@ -97,5 +97,6 @@
         <file>help/images/slice-dialog.png</file>
         <file>help/images/startup-settings-dialog.png</file>
         <file>help/images/sync-acquire-dialog.png</file>
+        <file>images/powder_point.png</file>
     </qresource>
 </RCC>
