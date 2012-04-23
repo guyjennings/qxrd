@@ -102,7 +102,6 @@ public:
   virtual QwtText trackerText(const QwtDoublePoint &pos);
 
   void contextMenuEvent(QContextMenuEvent *event);
-  void powderPointsContextMenu(QContextMenuEvent *event);
 
 private:
   void replotImage();

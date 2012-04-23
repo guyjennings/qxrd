@@ -4,8 +4,11 @@
 #include "qxrdwindow.h"
 #include <qwt_plot_marker.h>
 #include "qxrdmutexlocker.h"
+#include "levmar.h"
+#include <QMessageBox>
+#include "qxrdapplication.h"
 
-QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver)
+QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt)
   : QxrdDetectorGeometry(),
     m_ObjectNamer(this, "centering"),
     m_CenterX(saver, this, "centerX", 0, "X Center"),
@@ -24,8 +27,10 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver)
     m_EnableAbsorptionCorrections(saver, this, "enableAbsorptionCorrections", false, "Enable Absorption Correction in Integration"),
     m_AttenuationLength(saver, this, "attenuationLength", 0, "Attenuation Length (mm)"),
     m_MarkedPoints(saver, this, "markedPoints", QcepPolygon(), "Marker Points"),
+    m_RingRadius(saver, this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
     m_AdjustMarkedPoints(saver, this, "adjustMarkedPoints", true, "Auto-adjust position of entered points"),
-    m_AdjustmentRadius(saver, this, "adjustmentRadius", 3.0, "Size of search region for marker auto adjustment")
+    m_AdjustmentRadius(saver, this, "adjustmentRadius", 3.0, "Size of search region for marker auto adjustment"),
+    m_Experiment(expt)
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
 
@@ -178,8 +183,96 @@ void QxrdCenterFinder::onPointSelected(QwtDoublePoint pt)
   m_MarkedPoints.appendValue(pt);
 }
 
+void QxrdCenterFinder::evaluateFit(double *parm, double *x, int np, int nx)
+{
+  QcepPolygon pts = get_MarkedPoints();
+  double cx = parm[0];
+  double cy = parm[1];
+  double r  = parm[2];
+
+  for (int i=0; i<nx; i++) {
+    QwtDoublePoint pt = pts.value(i);
+    double rcalc = sqrt(pow(pt.x() - cx, 2) + pow(pt.y() - cy, 2));
+    x[i] = rcalc - r;
+  }
+}
+
+static void fitCenter(double *p, double *hx, int m,int n, void *adata)
+{
+  QxrdCenterFinder *cf = (QxrdCenterFinder*) adata;
+
+  if (cf) {
+    cf->evaluateFit(p, hx, m, n);
+  }
+}
+
+void QxrdCenterFinder::printMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    exp->printMessage(msg, ts);
+  }
+}
+
 void QxrdCenterFinder::fitPowderCircle()
 {
+  if (get_MarkedPoints().count() <= 3) {
+    QString message = "You must mark at least three points on a powder ring before you can fit the center";
+
+    if (g_Application->get_GuiWanted()) {
+      QMessageBox::information(NULL, "Fitting Failed", message);
+    } else {
+      printMessage(message);
+    }
+
+    return;
+  }
+
+  double parms[3];
+  QcepDoubleVector vals(get_MarkedPoints().count());
+
+  parms[0] = get_CenterX();
+  parms[1] = get_CenterY();
+  parms[2] = get_RingRadius();
+
+  double info[LM_INFO_SZ];
+
+  int niter = dlevmar_dif(fitCenter, parms, NULL, 3, vals.count(), 100, NULL, info, NULL, NULL, this);
+
+  int update = false;
+  QString message;
+
+  if (niter >= 0) {
+    message.append(tr("Fitting Succeeded after %1 iterations\n").arg(niter));
+
+    message.append(tr("New Center = [%1,%2], New Radius = %3\n").arg(parms[0]).arg(parms[1]).arg(parms[2]));
+
+  } else {
+    message.append(tr("dlevmar_dif failed: reason = %1").arg(info[6]));
+  }
+
+  printMessage(message);
+
+  if (g_Application->get_GuiWanted()) {
+    if (niter >= 0) {
+      message.append(tr("Do you want to update the beam centering parameters?"));
+
+      if (QMessageBox::question(NULL, "Update Fitted Center?", message, QMessageBox::Ok | QMessageBox::No, QMessageBox::Ok) == QMessageBox::Ok) {
+        update = true;
+      }
+    } else {
+      QMessageBox::information(NULL, "Fitting Failed", message);
+    }
+  } else if (niter >= 0){
+    update = true;
+  }
+
+  if (update) {
+    set_CenterX(parms[0]);
+    set_CenterY(parms[1]);
+    set_RingRadius(parms[2]);
+  }
 }
 
 QwtDoublePoint QxrdCenterFinder::powderPoint(int i)
@@ -246,7 +339,11 @@ QwtDoublePoint QxrdCenterFinder::adjustPoint(QwtDoublePoint pt)
     }
   }
 
-  return QwtDoublePoint(sumx/sum, sumy/sum);
+  if (sum != 0) {
+    return QwtDoublePoint(sumx/sum, sumy/sum);
+  } else {
+    return pt;
+  }
 }
 
 QwtDoublePoint QxrdCenterFinder::adjustPoint(int i)

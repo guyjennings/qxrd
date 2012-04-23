@@ -12,13 +12,14 @@
 #include "qxrdobjectnamer.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdimagedata-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
 {
   Q_OBJECT
 
 public:
-  QxrdCenterFinder(QxrdSettingsSaverWPtr saver);
+  QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt);
 
 private:
   QxrdObjectNamer       m_ObjectNamer;
@@ -72,6 +73,9 @@ public:
   Q_PROPERTY(QcepPolygon markedPoints READ get_MarkedPoints WRITE set_MarkedPoints)
   QCEP_POLYGON_PROPERTY(MarkedPoints)
 
+  Q_PROPERTY(double ringRadius READ get_RingRadius WRITE set_RingRadius)
+  QCEP_DOUBLE_PROPERTY(RingRadius)
+
   Q_PROPERTY(bool adjustMarkedPoints READ get_AdjustMarkedPoints WRITE set_AdjustMarkedPoints)
   QCEP_BOOLEAN_PROPERTY(AdjustMarkedPoints)
 
@@ -89,6 +93,8 @@ signals:
   void parameterChanged();
 
 public slots:
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+
   void onCenterChanged(QwtDoublePoint pt);
   void onPointSelected(QwtDoublePoint pt);
 
@@ -130,6 +136,8 @@ public:
   void setData(QxrdDoubleImageDataPtr data);
   double imageValue(double x, double y);
 
+  void evaluateFit(double *parm, double *x, int np, int nx);
+
 //signals:
 ////  void centerChanged(double cx, double cy);
 //
@@ -138,6 +146,7 @@ public:
 //
 private:
   mutable QMutex             m_Mutex;
+  QxrdExperimentWPtr         m_Experiment;
   QxrdDoubleImageDataPtr     m_Data;
 };
 

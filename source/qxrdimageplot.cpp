@@ -764,7 +764,7 @@ void QxrdImagePlot::disablePickers()
   m_Polygons           -> setEnabled(false);
   m_PowderPointPicker  -> setEnabled(false);
 
-  clearPowderMarkers();
+  displayPowderMarkers();
 }
 
 void QxrdImagePlot::enableZooming()
@@ -822,7 +822,7 @@ void QxrdImagePlot::enablePowderPoints()
 
   m_PowderPointPicker -> setEnabled(true);
 
-  displayPowderMarkers();
+//  displayPowderMarkers();
 }
 
 //#undef replot
@@ -904,71 +904,61 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
 
 void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 {
-  //  QMenu plotMenu(NULL, NULL);
+  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
-  ////  QAction *xLog = plotMenu.addAction("Log X Axis");
-  ////  QAction *yLog = plotMenu.addAction("Log Y Axis");
-  //  QAction *auSc = plotMenu.addAction("Autoscale");
+  if (set) {
+    QMenu plotMenu(NULL, NULL);
 
-  ////  xLog->setCheckable(true);
-  ////  yLog->setCheckable(true);
-  ////  xLog->setChecked(get_XAxisLog());
-  ////  yLog->setChecked(get_YAxisLog());
+//    QAction *xLog = plotMenu.addAction("Log X Axis");
+//    QAction *yLog = plotMenu.addAction("Log Y Axis");
+    QAction *auSc = plotMenu.addAction("Autoscale");
 
-  //  QAction *action = plotMenu.exec(event->globalPos());
+    plotMenu.addSeparator();
 
-  ////  if (action == xLog) {
-  ////    set_XAxisLog(!get_XAxisLog());
-  ////  } else if (action == yLog) {
-  ////    set_YAxisLog(!get_YAxisLog());
-  ///*  } else*/ if (action == auSc) {
-  //    autoScale();
-  //  }
+//    xLog->setCheckable(true);
+//    yLog->setCheckable(true);
+//    xLog->setChecked(set->get_XAxisLog());
+//    yLog->setChecked(set->get_YAxisLog());
 
-  //  event->accept();
+    QxrdDataProcessorPtr dp(m_DataProcessor);
 
-  if (m_PowderPointPicker->isEnabled()) {
-    powderPointsContextMenu(event);
-  }
-}
+    if (dp) {
+      QxrdCenterFinderPtr cf(dp->centerFinder());
 
-void QxrdImagePlot::powderPointsContextMenu(QContextMenuEvent *event)
-{
-  QxrdDataProcessorPtr dp(m_DataProcessor);
+      if (cf) {
+        QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
+        QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);
 
-  if (dp) {
-    QxrdCenterFinderPtr cf(dp->centerFinder());
+        double x = xMap.invTransform(event->x());
+        double y = yMap.invTransform(event->y());
 
-    if (cf) {
-      QMenu powderMenu(NULL, NULL);
+        QwtDoublePoint nearest = cf->nearestPowderPoint(x, y);
 
-      QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
-      QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);
+        QAction *fitCircle       = plotMenu.addAction("Fit Center from Points on Circle");
+        QAction *adjPoint        = plotMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
+        QAction *adjAllPoints    = plotMenu.addAction(tr("Auto adjust position of all points"));
+        QAction *delPoint        = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
+        QAction *deleteAllPoints = plotMenu.addAction("Delete all Points");
 
-      double x = xMap.invTransform(event->x());
-      double y = yMap.invTransform(event->y());
+        QAction *action = plotMenu.exec(event->globalPos());
 
-      QwtDoublePoint nearest = cf->nearestPowderPoint(x, y);
-
-      QAction *fitCircle       = powderMenu.addAction("Fit Center from Points on Circle");
-      QAction *adjPoint        = powderMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
-      QAction *adjAllPoints    = powderMenu.addAction(tr("Auto adjust position of all points"));
-      QAction *delPoint        = powderMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
-      QAction *deleteAllPoints = powderMenu.addAction("Delete all Points");
-
-      QAction *action = powderMenu.exec(event->globalPos());
-
-
-      if (action == fitCircle) {
-        cf->fitPowderCircle();
-      } else if (action == adjPoint) {
-        cf->adjustPointNear(x,y);
-      } else if (action == adjAllPoints) {
-        cf->adjustAllPoints();
-      } else if (action == delPoint) {
-        cf->deletePowderPointNear(x,y);
-      } else if (action == deleteAllPoints) {
-        cf->deletePowderPoints();
+        /*if (action == xLog) {
+          set->toggle_XAxisLog();
+        } else if (action == yLog) {
+          set->toggle_YAxisLog();
+        } else */if (action == auSc) {
+          autoScale();
+        } else if (action == fitCircle) {
+          cf->fitPowderCircle();
+        } else if (action == adjPoint) {
+          cf->adjustPointNear(x,y);
+        } else if (action == adjAllPoints) {
+          cf->adjustAllPoints();
+        } else if (action == delPoint) {
+          cf->deletePowderPointNear(x,y);
+        } else if (action == deleteAllPoints) {
+          cf->deletePowderPoints();
+        }
       }
     }
   }
@@ -978,11 +968,7 @@ void QxrdImagePlot::powderPointsContextMenu(QContextMenuEvent *event)
 
 void QxrdImagePlot::onMarkedPointsChanged()
 {
-  if (m_PowderPointPicker->isEnabled()) {
-    displayPowderMarkers();
-  } else {
-    clearPowderMarkers();
-  }
+  displayPowderMarkers();
 
   replot();
 }
