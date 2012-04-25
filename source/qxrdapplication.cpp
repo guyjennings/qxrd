@@ -400,15 +400,6 @@ void QxrdApplication::loadPlugins()
   }
 }
 
-QString QxrdApplication::hexArg(void *p)
-{
-#if (QT_POINTER_SIZE==4)
-  return tr("0x%1").arg((quint32)p, 8, 16, QLatin1Char('0'));
-#else
-  return tr("0x%1").arg((quint64)p, 16, 16, QLatin1Char('0'));
-#endif
-}
-
 void QxrdApplication::splashMessage(QString msg)
 {
   if (QThread::currentThread() != thread()) {

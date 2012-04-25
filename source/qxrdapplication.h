@@ -128,7 +128,6 @@ public slots:
 public:
   bool wantToQuit();
 
-  static QString hexArg(void *p);
   void incLockerCount();
 
 private slots:
@@ -216,8 +215,6 @@ private:
   QTime                           m_LastLockerTime;
   int                             m_LastLockerCount;
 };
-
-#define HEXARG(a) arg(QxrdApplication::hexArg(a))
 
 extern QxrdApplication *g_Application;
 
