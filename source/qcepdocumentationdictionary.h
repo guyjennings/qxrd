@@ -1,34 +1,34 @@
-#ifndef QXRDDOCUMENTATIONDICTIONARY_H
-#define QXRDDOCUMENTATIONDICTIONARY_H
+#ifndef QCEPDOCUMENTATIONDICTIONARY_H
+#define QCEPDOCUMENTATIONDICTIONARY_H
 
 #include <QString>
 #include <QHash>
 
-class QxrdDocumentationForObject
+class QcepDocumentationForObject
 {
 public:
-  QxrdDocumentationForObject(QString objectName, QString objectDoc);
+  QcepDocumentationForObject(QString objectName, QString objectDoc);
 };
 
-class QxrdLongDocumentationForObject
+class QcepLongDocumentationForObject
 {
 public:
-  QxrdLongDocumentationForObject(QString objectName, QString longDoc);
+  QcepLongDocumentationForObject(QString objectName, QString longDoc);
 };
 
-class QxrdDocumentationForFunction : public QxrdDocumentationForObject
+class QcepDocumentationForFunction : public QcepDocumentationForObject
 {
 public:
-  QxrdDocumentationForFunction(QString functionName,
+  QcepDocumentationForFunction(QString functionName,
                                QString functionProto,
                                QString functionDoc,
                                QString functionLogDoc);
 };
 
-class QxrdDocumentationDictionary
+class QcepDocumentationDictionary
 {
 public:
-  QxrdDocumentationDictionary();
+  QcepDocumentationDictionary();
 
   void setProto(QString name, QString proto);
   void setDoc(QString name, QString doc);
@@ -56,18 +56,18 @@ private:
   QHash<QString,QString> m_LongDocs;
 };
 
-extern QxrdDocumentationDictionary *gDocumentationDirectory;
+extern QcepDocumentationDictionary *gDocumentationDirectory;
 
 #define _TOKENPASTE(x, y) x ## y
 #define TOKENPASTE(x, y) _TOKENPASTE(x, y)
 
-#define QXRD_DOC_OBJECT(name,doc) \
-  static QxrdDocumentationForObject TOKENPASTE(a__, __LINE__) (name, doc);
+#define QCEP_DOC_OBJECT(name,doc) \
+  static QcepDocumentationForObject TOKENPASTE(a__, __LINE__) (name, doc);
 
-#define QXRD_DOC_LONG(name, longDoc) \
-  static QxrdLongDocumentationForObject TOKENPASTE(a__, __LINE__) (name, longDoc);
+#define QCEP_DOC_LONG(name, longDoc) \
+  static QcepLongDocumentationForObject TOKENPASTE(a__, __LINE__) (name, longDoc);
 
-#define QXRD_DOC_FUNCTION(name, proto, doc, longDoc) \
-  static QxrdDocumentationForFunction TOKENPASTE(a__, __LINE__) (name, proto, doc, longDoc);
+#define QCEP_DOC_FUNCTION(name, proto, doc, longDoc) \
+  static QcepDocumentationForFunction TOKENPASTE(a__, __LINE__) (name, proto, doc, longDoc);
 
 #endif // QXRDDOCUMENTATIONDICTIONARY_H

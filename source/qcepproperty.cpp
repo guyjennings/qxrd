@@ -2,7 +2,7 @@
 #include "qcepproperty.h"
 //#include "qxrdapplication.h"
 #include "qcepsettingssaver.h"
-#include "qxrddocumentationdictionary.h"
+#include "qcepdocumentationdictionary.h"
 #include "qcepmutexlocker.h"
 
 #include <QSpinBox>
@@ -45,7 +45,7 @@ QcepProperty::QcepProperty(QcepSettingsSaverWPtr saver, QObject *parent, const c
       }
     }
 
-    QXRD_DOC_OBJECT(tr("%1.%2").arg(parent->objectName()).arg(name), toolTip)
+    QCEP_DOC_OBJECT(tr("%1.%2").arg(parent->objectName()).arg(name), toolTip)
   }
 
   if (m_Saver && !m_IsStored) {

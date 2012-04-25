@@ -109,6 +109,7 @@ HEADERS += spec_server.h \
     qcepimagedataformatmar345.h \
     qcepimagedataformatfactory.h \
     qcepimagedataformatfactory-ptr.h \
+    qcepdocumentationdictionary.h \
     qcepdebug.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
@@ -122,9 +123,6 @@ HEADERS += spec_server.h \
     qxrdacquisitiondialog-ptr.h \
     qxrdacquisitionextrainputsdialogsettings.h \
     qxrdhelpbrowser.h \
-    qxrddocumentationdictionary.h \
-    qxrddocumentationforobject.h \
-    qxrddocumentationforfunction.h \
     qxrdobjectnamer.h
 
 SOURCES += qspecserver.cpp \
@@ -136,6 +134,7 @@ SOURCES += qspecserver.cpp \
     qcepimagedataformattiff.cpp \
     qcepimagedataformatmar345.cpp \
     qcepimagedataformatfactory.cpp \
+    qcepdocumentationdictionary.cpp \
     qcepdebug.cpp \
     qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
@@ -146,9 +145,6 @@ SOURCES += qspecserver.cpp \
     qxrddetectorfilewatcher.cpp \
     qxrdacquisitionextrainputsdialogsettings.cpp \
     qxrdhelpbrowser.cpp \
-    qxrddocumentationdictionary.cpp \
-    qxrddocumentationforobject.cpp \
-    qxrddocumentationforfunction.cpp \
     qxrdobjectnamer.cpp
 
 OTHER_FILES += testImage.js

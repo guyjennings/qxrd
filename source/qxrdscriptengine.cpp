@@ -21,9 +21,7 @@
 #include "qxrdallocator.h"
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"
-#include "qxrddocumentationdictionary.h"
-#include "qxrddocumentationforobject.h"
-#include "qxrddocumentationforfunction.h"
+#include "qcepdocumentationdictionary.h"
 
 #include <QThread>
 #include <QDir>
@@ -78,16 +76,16 @@ void QxrdScriptEngine::setWindow(QxrdWindow *win)
   m_Window = win;
 
   if (m_Window) {
-    QXRD_DOC_OBJECT("window", "The Experiment Main Window");
+    QCEP_DOC_OBJECT("window", "The Experiment Main Window");
     globalObject().setProperty("window",          newQObject(m_Window));
 
-    QXRD_DOC_OBJECT("imageGraph", "The Image Plot in the Main Experiment Window");
+    QCEP_DOC_OBJECT("imageGraph", "The Image Plot in the Main Experiment Window");
     globalObject().setProperty("imageGraph",      newQObject(m_Window->m_ImagePlot));
 
-    QXRD_DOC_OBJECT("centeringGraph", "The Center Finder Plot");
+    QCEP_DOC_OBJECT("centeringGraph", "The Center Finder Plot");
     globalObject().setProperty("centeringGraph",  newQObject(m_Window->m_CenterFinderPlot));
 
-    QXRD_DOC_OBJECT("integratorGraph", "The Integrated Data Plot");
+    QCEP_DOC_OBJECT("integratorGraph", "The Integrated Data Plot");
     globalObject().setProperty("integratorGraph", newQObject(m_Window->m_IntegratorPlot));
   }
 }
@@ -182,7 +180,7 @@ QString QxrdScriptEngine::uncaughtExceptionString() const
   return uncaughtException().toString();
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "print",
     "print([value]...)",
     "Print values to the log file and message window",
@@ -221,7 +219,7 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
   return QScriptValue(engine, 1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "acquire",
 
     "acquire([fileName[, exposure[, summedExposures[, postTriggerFiles[, preTriggerFiles[, nPhases]]]]]])",
@@ -295,7 +293,7 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
   return QScriptValue(engine, 1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "acquireDark",
     "acquireDark([filename [,exposure [,darkSummedExposures]]])",
     "Start acquisition of a dark image",
@@ -342,7 +340,7 @@ QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptE
   return QScriptValue(engine, 1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "status",
     "status([time])",
     "Test if acquisition and processing have finished",
@@ -398,7 +396,7 @@ QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine
   }
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "acquireStatus",
     "acquireStatus([time])",
     "Test if acquisition has finished",
@@ -428,7 +426,7 @@ QScriptValue QxrdScriptEngine::acquireStatusFunc(QScriptContext *context, QScrip
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "processStatus",
     "processStatus([time])",
     "Test if processing has finished",
@@ -458,7 +456,7 @@ QScriptValue QxrdScriptEngine::processStatusFunc(QScriptContext *context, QScrip
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "acquireCancel",
     "acquireCancel()",
     "Cancel the current acquisition operation",
@@ -482,7 +480,7 @@ QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext * /*context*/, Q
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "trigger",
     "trigger()",
     "Trigger triggered acquisition",
@@ -509,7 +507,7 @@ QScriptValue QxrdScriptEngine::triggerFunc(QScriptContext *context, QScriptEngin
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "exposureTime",
     "exposureTime([time])",
     "Get or set the acquisition exposure time (also for dark exposures)",
@@ -538,7 +536,7 @@ QScriptValue QxrdScriptEngine::exposureTimeFunc(QScriptContext *context, QScript
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "summedExposures",
     "summedExposures([n])",
     "Get or set the number of summed exposures for acquisition",
@@ -566,7 +564,7 @@ QScriptValue QxrdScriptEngine::summedExposuresFunc(QScriptContext *context, QScr
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "skippedExposures",
     "skippedExposures([n])",
     "Get or set the number of skipped exposures for acquisition",
@@ -594,7 +592,7 @@ QScriptValue QxrdScriptEngine::skippedExposuresFunc(QScriptContext *context, QSc
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "darkSummedExposures",
     "darkSummedExposures([n])",
     "Get or set the number of summed exposures for dark acquisition",
@@ -622,7 +620,7 @@ QScriptValue QxrdScriptEngine::darkSummedExposuresFunc(QScriptContext *context, 
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "phasesInGroup",
     "phasesInGroup([n])",
     "Get or set the number of phases for synchronized acquisition",
@@ -650,7 +648,7 @@ QScriptValue QxrdScriptEngine::phasesInGroupFunc(QScriptContext *context, QScrip
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "preTriggerFiles",
     "preTriggerFiles([n])",
     "Get or set the number of pre-trigger file groups for triggered acquisition",
@@ -678,7 +676,7 @@ QScriptValue QxrdScriptEngine::preTriggerFilesFunc(QScriptContext *context, QScr
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "postTriggerFiles",
     "postTriggerFiles([n])",
     "Get or set the number of post-trigger file groups for triggered acquisition",
@@ -706,7 +704,7 @@ QScriptValue QxrdScriptEngine::postTriggerFilesFunc(QScriptContext *context, QSc
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "filePattern",
     "filePattern([pattern])",
     "Get or set the acquisition file name pattern",
@@ -734,7 +732,7 @@ QScriptValue QxrdScriptEngine::filePatternFunc(QScriptContext *context, QScriptE
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "outputDirectory",
     "outputDirectory([dir])",
     "Get or set the acquisition output directory",
@@ -762,7 +760,7 @@ QScriptValue QxrdScriptEngine::outputDirectoryFunc(QScriptContext *context, QScr
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "fileIndex",
     "fileIndex([n])",
     "Get or set the acquisition file index",
@@ -790,7 +788,7 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "data",
     "data()",
     "Get the current image",
@@ -815,7 +813,7 @@ QScriptValue QxrdScriptEngine::dataFunc(QScriptContext * /*context*/, QScriptEng
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "dark",
     "dark()",
     "Get the dark image (or null if none has been taken)",
@@ -842,7 +840,7 @@ QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEng
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "mask",
     "mask()",
     "Get the top item of the mask stack",
@@ -865,7 +863,7 @@ QScriptValue QxrdScriptEngine::maskFunc(QScriptContext * /*context*/, QScriptEng
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "overflow",
     "overflow()",
     "Get the overflow pixel map for acquired images",
@@ -891,7 +889,7 @@ QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScrip
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "help",
     "help([name...])",
     "Returns help text for a given name or names",
@@ -942,7 +940,7 @@ QScriptValue QxrdScriptEngine::helpFunc(QScriptContext * context, QScriptEngine 
 //  }
 //}
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "extraChannel",
     "extraChannel(n)",
     "Access channels for extra inputs",
@@ -976,7 +974,7 @@ QScriptValue QxrdScriptEngine::extraChannelFunc(QScriptContext *context, QScript
   return QScriptValue();
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "process",
     "process(filename [, norm...])",
     "Load and process an image file",
@@ -1012,7 +1010,7 @@ QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngin
   return QScriptValue(engine, -1);
 }
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "matchFiles",
     "matchFiles([pattern]...)",
     "Return a list of files matching a pattern",
@@ -1065,26 +1063,26 @@ QScriptValue QxrdScriptEngine::matchFilesFunc(QScriptContext *context, QScriptEn
   return engine->toScriptValue(result);
 }
 
-QXRD_DOC_OBJECT(
+QCEP_DOC_OBJECT(
     "JSON",
     "Qt Built-in JSON Parser"
     )
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "JSON.parse",
     "JSON.parse(string)",
     "Parse a string as a JSON object",
     "<p>A built-in function in the Qt script system</p>"
     )
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "JSON.stringify",
     "JSON.stringify(object)",
     "Produce JSON string representation of an object",
     "<p>A built-in function in the Qt script system</p>"
     )
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "Math",
     "var x = Math.sqrt(2)",
     "Qt Built-in Math Module",
@@ -1092,23 +1090,23 @@ QXRD_DOC_FUNCTION(
     "<p>See also: <a href=\"http://www.w3schools.com/jsref/jsref_obj_math.asp\">JavaScript Math Object</a></p>"
     )
 
-QXRD_DOC_OBJECT(
+QCEP_DOC_OBJECT(
     "Infinity",
     "Qt Script built-in object with infinite value"
     )
 
-QXRD_DOC_OBJECT(
+QCEP_DOC_OBJECT(
     "NaN",
     "Qt Script built-in object with NaN (Not-a-Number) Value"
     )
 
-QXRD_DOC_OBJECT(
+QCEP_DOC_OBJECT(
     "undefined",
     "Qt Script built-in object with undefined value"
     )
 
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "Array",
     "var x=Array([value...])",
     "Qt Script built in array constructor function (<a href=\"http://www.w3schools.com/jsref/jsref_obj_array.asp\">JavaScript Array Object</a>)",
@@ -1117,7 +1115,7 @@ QXRD_DOC_FUNCTION(
     "<code>Array(1,2,3,4)</code>"
     )
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "Boolean",
     "var bool=Boolean(value)",
     "Qt Script built in Boolean constructor function",
@@ -1126,7 +1124,7 @@ QXRD_DOC_FUNCTION(
     "<code>Boolean(0)</code>"
     )
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "Date",
     "var d=new Date(|msec|string|year,month[,day[,hr[,min[,sec[,msec]]]]])",
     "Qt Script built in date object",
@@ -1138,7 +1136,7 @@ QXRD_DOC_FUNCTION(
     "<p>See also: <a href=\"http://www.w3schools.com/jsref/jsref_obj_date.asp\">JavaScript Date Object</a></p>"
     )
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "RegExp",
     "var patt=new RegExp(pattern,modifiers) or var patt=/pattern/modifiers",
     "Qt Script built in Regular Expression Object",
@@ -1149,7 +1147,7 @@ QXRD_DOC_FUNCTION(
     "<p>See also: <a href=\"http://www.w3schools.com/jsref/jsref_obj_regexp.asp\">JavaScript RegExp Object</a></p>"
     )
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "String",
     "var txt = new String(\"string\"); var t2=\"hhh\";",
     "Qt Script built in String Object",
@@ -1157,7 +1155,7 @@ QXRD_DOC_FUNCTION(
     "<p>See also: <a href=\"http://www.w3schools.com/jsref/jsref_obj_string.asp\">JavaScript String Object</a></p>"
     )
 
-QXRD_DOC_FUNCTION(
+QCEP_DOC_FUNCTION(
     "Number",
     "var num = new Number(42)",
     "Qt Script Built in Number Object",
@@ -1183,21 +1181,21 @@ void QxrdScriptEngine::initialize()
   //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
 
   if (m_Application) {
-    QXRD_DOC_OBJECT("application", "The QXRD Application Object");
+    QCEP_DOC_OBJECT("application", "The QXRD Application Object");
     globalObject().setProperty("application", newQObject(m_Application));
 
     QxrdAllocatorPtr alloc(m_Application->allocator());
 
     if (alloc) {
-      QXRD_DOC_OBJECT("allocator", "The QXRD Memory Allocator");
+      QCEP_DOC_OBJECT("allocator", "The QXRD Memory Allocator");
       globalObject().setProperty("allocator", newQObject(alloc.data()));
     }
   }
 
-  QXRD_DOC_OBJECT("global", "The Global Object");
+  QCEP_DOC_OBJECT("global", "The Global Object");
   globalObject().setProperty("global", globalObject());
 
-  QXRD_DOC_OBJECT("scripting", "The Script Engine");
+  QCEP_DOC_OBJECT("scripting", "The Script Engine");
   globalObject().setProperty("scripting", newQObject(this));
 
   globalObject().setProperty("acquire", newFunction(acquireFunc));
@@ -1233,7 +1231,7 @@ void QxrdScriptEngine::initialize()
     QObject *plugin = dynamic_cast<QObject*>(m_Application->nidaqPlugin().data());
 
     if (plugin) {
-      QXRD_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
+      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
       globalObject().setProperty("nidaq", newQObject(plugin));
     }
   }
@@ -1241,7 +1239,7 @@ void QxrdScriptEngine::initialize()
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QXRD_DOC_OBJECT("experiment", "The current experiment");
+    QCEP_DOC_OBJECT("experiment", "The current experiment");
     globalObject().setProperty("experiment", newQObject(expt.data()));
 
     m_Acquisition   = expt->acquisition();
@@ -1249,27 +1247,27 @@ void QxrdScriptEngine::initialize()
     QxrdAcquisitionPtr acq(m_Acquisition);
 
     if (acq) {
-      QXRD_DOC_OBJECT("acquisition", "The Acquisition Object");
+      QCEP_DOC_OBJECT("acquisition", "The Acquisition Object");
       globalObject().setProperty("acquisition",     newQObject(acq.data()));
 
       QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
 
       if (sync) {
-        QXRD_DOC_OBJECT("synchronization", "Synchronized Acquisition");
+        QCEP_DOC_OBJECT("synchronization", "Synchronized Acquisition");
         globalObject().setProperty("synchronization", newQObject(sync.data()));
       }
 
       QxrdAcquisitionTriggerPtr trig(acq->acquisitionTrigger());
 
       if (trig) {
-        QXRD_DOC_OBJECT("triggering", "Acquisition Triggering Parameters");
+        QCEP_DOC_OBJECT("triggering", "Acquisition Triggering Parameters");
         globalObject().setProperty("triggering", newQObject(trig.data()));
       }
 
       QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
 
       if (extra) {
-        QXRD_DOC_OBJECT("extraInputs", "Extra Inputs during Acquisition");
+        QCEP_DOC_OBJECT("extraInputs", "Extra Inputs during Acquisition");
         globalObject().setProperty("extraInputs", newQObject(extra.data()));
       }
     }
@@ -1277,14 +1275,14 @@ void QxrdScriptEngine::initialize()
     QxrdSimpleServerPtr ssrv(expt->simpleServer());
 
     if (ssrv) {
-      QXRD_DOC_OBJECT("simpleServer", "Remote Control Text Based Socket Server");
+      QCEP_DOC_OBJECT("simpleServer", "Remote Control Text Based Socket Server");
       globalObject().setProperty("simpleServer", newQObject(ssrv.data()));
     }
 
     QxrdServerPtr srv(expt->specServer());
 
     if (srv) {
-      QXRD_DOC_OBJECT("specServer", "Remote Control Server for use with Spec");
+      QCEP_DOC_OBJECT("specServer", "Remote Control Server for use with Spec");
       globalObject().setProperty("specServer", newQObject(srv.data()));
     }
 
@@ -1293,31 +1291,31 @@ void QxrdScriptEngine::initialize()
     QxrdDataProcessorPtr dp(m_DataProcessor);
 
     if (dp) {
-      QXRD_DOC_OBJECT("processor", "Control Data Processing Options");
+      QCEP_DOC_OBJECT("processor", "Control Data Processing Options");
       globalObject().setProperty("processor",       newQObject(dp.data()));
 
-      QXRD_DOC_OBJECT("centering", "Beam Center and Detector Alignment Options");
+      QCEP_DOC_OBJECT("centering", "Beam Center and Detector Alignment Options");
       globalObject().setProperty("centering",       newQObject(dp->centerFinder().data()));
 
-      QXRD_DOC_OBJECT("integrator", "Image Circular Integration Options");
+      QCEP_DOC_OBJECT("integrator", "Image Circular Integration Options");
       globalObject().setProperty("integrator",      newQObject(dp->integrator().data()));
 
-      QXRD_DOC_OBJECT("initialFit", "Initial Powder Ring Fitting Parameters");
+      QCEP_DOC_OBJECT("initialFit", "Initial Powder Ring Fitting Parameters");
       globalObject().setProperty("initialFit",      newQObject(dp->initialRingSetFitParameters().data()));
 
-      QXRD_DOC_OBJECT("refinedFit", "Refined Powder Ring Fitting Parameters");
+      QCEP_DOC_OBJECT("refinedFit", "Refined Powder Ring Fitting Parameters");
       globalObject().setProperty("refinedFit",      newQObject(dp->refinedRingSetFitParameters().data()));
 
-      QXRD_DOC_OBJECT("initialData", "Initial Powder Ring Fitting Data");
+      QCEP_DOC_OBJECT("initialData", "Initial Powder Ring Fitting Data");
       globalObject().setProperty("initialData",     newQObject(dp->initialRingSetData().data()));
 
-      QXRD_DOC_OBJECT("refinedData", "Refined Power Ring Fitting Data");
+      QCEP_DOC_OBJECT("refinedData", "Refined Power Ring Fitting Data");
       globalObject().setProperty("refinedData",     newQObject(dp->refinedRingSetData().data()));
 
       QxrdGenerateTestImagePtr gti(dp->generateTestImage());
 
       if (gti) {
-        QXRD_DOC_OBJECT("testImage", "Object for generating test images");
+        QCEP_DOC_OBJECT("testImage", "Object for generating test images");
         globalObject().setProperty("testImage",       newQObject(gti.data()));
       }
     }
@@ -1351,8 +1349,8 @@ QString QxrdScriptEngine::documentationLink(QString base, QString subItem)
   QString item = base.isEmpty() ? subItem : base+"."+subItem;
   QString res = tr("<a href=\"qrc:/help/autohelp?%1\">%2</a>").arg(item).arg(item);
 
-  QString proto = QxrdDocumentationDictionary::get_Proto(item);
-  QString doc   = QxrdDocumentationDictionary::get_Doc(item);
+  QString proto = QcepDocumentationDictionary::get_Proto(item);
+  QString doc   = QcepDocumentationDictionary::get_Doc(item);
 
   res.append("</td>\n<td width=\"75%\">\n");
 
@@ -1403,9 +1401,9 @@ QString QxrdScriptEngine::documentationText(QString item)
 
   QString res;
   //  QString name  = val.toString();
-  QString doc   = QxrdDocumentationDictionary::get_Doc(item);
-  QString proto = QxrdDocumentationDictionary::get_Proto(item);
-  QString longDoc = QxrdDocumentationDictionary::get_LongDoc(item);
+  QString doc   = QcepDocumentationDictionary::get_Doc(item);
+  QString proto = QcepDocumentationDictionary::get_Proto(item);
+  QString longDoc = QcepDocumentationDictionary::get_LongDoc(item);
 
   res.append(tr("<h2>Documentation for %1</h2>\n").arg(itemName));
 
@@ -1453,7 +1451,7 @@ QString QxrdScriptEngine::documentationText(QString item)
                      .arg(val.typeName())
                      .arg(val.toString()));
 
-          QString doc = QxrdDocumentationDictionary::get_Doc(prefix+propName);
+          QString doc = QcepDocumentationDictionary::get_Doc(prefix+propName);
 
           res.append(tr("<td width=\"75%\">%1</td>\n").arg(doc));
 
@@ -1478,8 +1476,8 @@ QString QxrdScriptEngine::documentationText(QString item)
           }
           res.append(tr("<td><i>%1</i></td>\n").arg(prefix+methodSig));
 
-          QString proto = QxrdDocumentationDictionary::get_Proto(methodSig);
-          QString doc   = QxrdDocumentationDictionary::get_Doc(methodSig);
+          QString proto = QcepDocumentationDictionary::get_Proto(methodSig);
+          QString doc   = QcepDocumentationDictionary::get_Doc(methodSig);
 
           res.append(tr("<td>%1<br/>\n").arg(proto));
           res.append(tr("%1</td>\n").arg(doc));
@@ -1587,7 +1585,7 @@ QString QxrdScriptEngine::documentationText(QRegExp pattern)
 {
   QString res="";
 
-  QHashIterator<QString, QString> iter(QxrdDocumentationDictionary::docs());
+  QHashIterator<QString, QString> iter(QcepDocumentationDictionary::docs());
 
   while (iter.hasNext()) {
     iter.next();
