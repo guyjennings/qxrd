@@ -8,6 +8,7 @@
 
 #include "qxrdexperiment-ptr.h"
 #include "qcepproperty.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdSimpleServer : public QTcpServer
 {

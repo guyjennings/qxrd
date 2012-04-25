@@ -98,6 +98,9 @@ HEADERS += spec_server.h \
     qcepmacros.h \
     qcepproperty.h \
     qcepproperty-ptr.h \
+    qcepsettingssaver.h \
+    qcepsettingssaver-ptr.h \
+    qcepmutexlocker.h \
     qcepimagedata.h \
     qcepimagedata-ptr.h \
     qcepimagedataformat.h \
@@ -126,6 +129,8 @@ HEADERS += spec_server.h \
 
 SOURCES += qspecserver.cpp \
     qcepproperty.cpp \
+    qcepsettingssaver.cpp \
+    qcepmutexlocker.cpp \
     qcepimagedata.cpp \
     qcepimagedataformat.cpp \
     qcepimagedataformattiff.cpp \

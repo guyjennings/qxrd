@@ -19,7 +19,6 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_SERVER,       "Server Commands");
   setMessage(DEBUG_ACQUIRETIME,  "Acquisition Timing Messages");
   setMessage(DEBUG_INTEGRATOR,   "Integrator Operation");
-  setMessage(DEBUG_CONSTRUCTORS, "Object Constructors/Destructors");
   setMessage(DEBUG_TRIGGER,      "Acquisition Triggering");
   setMessage(DEBUG_EXTRAINPUTS,  "Extra Inputs");
 }

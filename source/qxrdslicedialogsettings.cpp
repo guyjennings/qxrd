@@ -1,4 +1,5 @@
 #include "qxrdslicedialogsettings.h"
+#include "qxrdsettingssaver.h"
 
 QxrdSliceDialogSettings::QxrdSliceDialogSettings(QxrdSettingsSaverWPtr saver, QObject *parent) :
   QObject(parent),

@@ -11,7 +11,8 @@ enum {
   DEBUG_WINDOW      = (DEBUG_PROPERTIES << 1),
   DEBUG_PREFS       = (DEBUG_WINDOW << 1),
   DEBUG_DISPLAY     = (DEBUG_PREFS << 1),
-  LAST_CEP_DEBUG    = DEBUG_DISPLAY
+  DEBUG_CONSTRUCTORS= (DEBUG_DISPLAY<<1),
+  LAST_CEP_DEBUG    = DEBUG_CONSTRUCTORS
 };
 
 class QcepDebugDictionary : public QObject {

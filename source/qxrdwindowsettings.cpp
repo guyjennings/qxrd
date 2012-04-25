@@ -1,4 +1,5 @@
 #include "qxrdwindowsettings.h"
+#include "qxrdsettingssaver.h"
 
 QxrdWindowSettings::QxrdWindowSettings(QxrdSettingsSaverWPtr saver,
                                        QObject *parent) :

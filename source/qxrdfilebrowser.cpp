@@ -10,6 +10,7 @@
 #include "qxrdfilebrowserview.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
+#include "qxrdsettingssaver.h"
 
 QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
                                  int isOutput,

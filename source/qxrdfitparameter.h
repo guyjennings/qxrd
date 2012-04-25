@@ -3,6 +3,7 @@
 
 #include "qcepproperty.h"
 #include "qxrdfitparameter-ptr.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdFitParameter : public QcepDoubleProperty
 {

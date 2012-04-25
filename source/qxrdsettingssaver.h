@@ -8,28 +8,14 @@
 #include <QDateTime>
 
 #include "qcepproperty-ptr.h"
+#include "qcepsettingssaver.h"
 
-class QxrdSettingsSaver : public QObject
+class QxrdSettingsSaver : public QcepSettingsSaver
 {
   Q_OBJECT
 public:
   explicit QxrdSettingsSaver(QObject *owner);
   ~QxrdSettingsSaver();
-
-  void changed(QcepProperty *prop);
-
-public slots:
-  void start();
-  void performSave();
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-
-private:
-  QMutex             m_Mutex;
-  QObject           *m_Owner;
-  QAtomicInt         m_ChangeCount;
-  QTimer             m_Timer;
-  int                m_SaveDelay;
-  QcepProperty      *m_LastChangedBy;
 };
 
 #endif // QXRDSETTINGSSAVER_H

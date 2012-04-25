@@ -9,6 +9,7 @@
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdobjectnamer.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdSynchronizedAcquisition : public QObject
 {

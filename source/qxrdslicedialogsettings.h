@@ -4,6 +4,7 @@
 #include <QObject>
 #include "qcepproperty.h"
 #include "qxrdsliceplotsettings.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdSliceDialogSettings : public QObject
 {

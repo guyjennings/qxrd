@@ -11,6 +11,7 @@
 #include "qxrddetectorgeometry-ptr.h"
 #include "qxrddetectorgeometry.h"
 #include "qxrdobjectnamer.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdGenerateTestImage : public QObject
 {

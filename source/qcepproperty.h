@@ -13,7 +13,7 @@
 #include <QVector>
 #include <QStringList>
 #include <QDateTime>
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 #include <QSpinBox>
 #include <QComboBox>
 #include <QLineEdit>
@@ -27,7 +27,7 @@
 class QcepProperty : public QObject {
   Q_OBJECT
 public:
-  QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString toolTip);
+  QcepProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QString toolTip);
 
   QString name() const;
 
@@ -46,7 +46,7 @@ public:
   int debug() const;
   void setDebug(int dbg);
 
-  void setSaver(QxrdSettingsSaverWPtr saver);
+  void setSaver(QcepSettingsSaverWPtr saver);
 
   static void setSettingsValue(QSettings *settings, QString name, QVariant value);
   static void writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings);
@@ -57,7 +57,7 @@ public:
 
 protected:
   mutable QMutex           m_Mutex;
-  QxrdSettingsSaverWPtr    m_Saver;
+  QcepSettingsSaverWPtr    m_Saver;
 
 private:
   int                      m_Debug;
@@ -71,7 +71,7 @@ private:
 class QcepDoubleProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, double value, QString toolTip);
+  QcepDoubleProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, double value, QString toolTip);
 
   double value() const;
   double defaultValue() const;
@@ -118,7 +118,7 @@ private:
 class QcepIntProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepIntProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, int value, QString toolTip);
+  QcepIntProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, int value, QString toolTip);
 
   int value() const;
   int defaultValue() const;
@@ -185,7 +185,7 @@ private:
 class QcepBoolProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepBoolProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, bool value, QString toolTip);
+  QcepBoolProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, bool value, QString toolTip);
 
   bool value() const;
   bool defaultValue() const;
@@ -229,7 +229,7 @@ private:
 class QcepStringProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString value, QString toolTip);
+  QcepStringProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QString value, QString toolTip);
 
   QString value() const;
   QString defaultValue() const;
@@ -293,7 +293,7 @@ private:
 class QcepDateTimeProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDateTimeProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QDateTime value, QString toolTip);
+  QcepDateTimeProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QDateTime value, QString toolTip);
 
   QDateTime value() const;
   QDateTime defaultValue() const;
@@ -316,7 +316,7 @@ private:
 class QcepDoubleListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleList value, QString toolTip);
+  QcepDoubleListProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleList value, QString toolTip);
 
   QcepDoubleList value() const;
   QcepDoubleList defaultValue() const;
@@ -342,7 +342,7 @@ private:
 class QcepDoubleVectorProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleVectorProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleVector value, QString toolTip);
+  QcepDoubleVectorProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleVector value, QString toolTip);
 
   QcepDoubleVector value() const;
   QcepDoubleVector defaultValue() const;
@@ -368,7 +368,7 @@ private:
 class QcepIntListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepIntListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value, QString toolTip);
+  QcepIntListProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value, QString toolTip);
 
   QcepIntList value() const;
   QcepIntList defaultValue() const;
@@ -394,7 +394,7 @@ private:
 class QcepStringListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QStringList value, QString toolTip);
+  QcepStringListProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QStringList value, QString toolTip);
 
   QStringList value() const;
   QStringList defaultValue() const;
@@ -419,7 +419,7 @@ private:
 class QcepByteArrayProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepByteArrayProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QByteArray value, QString toolTip);
+  QcepByteArrayProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QByteArray value, QString toolTip);
 
   QByteArray value() const;
   QByteArray defaultValue() const;
@@ -443,7 +443,7 @@ private:
 class QcepDoublePointProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoublePointProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoublePoint value, QString toolTip);
+  QcepDoublePointProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoublePoint value, QString toolTip);
 
   QwtDoublePoint value() const;
   QwtDoublePoint defaultValue() const;
@@ -465,7 +465,7 @@ private:
 class QcepDoubleRectProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleRectProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoubleRect value, QString toolTip);
+  QcepDoubleRectProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoubleRect value, QString toolTip);
 
   QwtDoubleRect value() const;
   QwtDoubleRect defaultValue() const;
@@ -487,7 +487,7 @@ private:
 class QcepPolygonProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepPolygonProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepPolygon value, QString toolTip);
+  QcepPolygonProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepPolygon value, QString toolTip);
 
   QcepPolygon value() const;
   QcepPolygon defaultValue() const;

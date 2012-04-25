@@ -7,6 +7,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qxrdobjectnamer.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdAcquisitionExtraInputsChannel : public QObject
 {

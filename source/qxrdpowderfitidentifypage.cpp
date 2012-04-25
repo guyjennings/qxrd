@@ -9,6 +9,7 @@
 #include "qxrdringsetfitparameters.h"
 #include "qxrdringsetfitparameters-ptr.h"
 #include "qxrdringfitparameters.h"
+#include "qxrdsettingssaver.h"
 
 QxrdPowderFitIdentifyPage::QxrdPowderFitIdentifyPage(QxrdSettingsSaverWPtr saver, QxrdDataProcessorWPtr proc, QWidget *parent) :
   QxrdPowderFitWidget(proc, parent),

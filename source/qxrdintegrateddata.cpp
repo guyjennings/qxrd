@@ -1,4 +1,5 @@
 #include "qxrdintegrateddata.h"
+#include "qxrdsettingssaver.h"
 
 QxrdIntegratedData::QxrdIntegratedData(QxrdSettingsSaverWPtr saver,
                                        QxrdAllocatorWPtr alloc,

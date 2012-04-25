@@ -11,6 +11,7 @@ QcepDebugDictionary::QcepDebugDictionary()
   setMessage(DEBUG_WINDOW,     "Window Operations");
   setMessage(DEBUG_PREFS,      "Settings/Prefs Operations");
   setMessage(DEBUG_DISPLAY,    "Display Operations");
+  setMessage(DEBUG_CONSTRUCTORS, "Object Constructors/Destructors");
 }
 
 int qcepDebug(int cond)

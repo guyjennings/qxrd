@@ -1,4 +1,5 @@
 #include "qxrdinfodialogsettings.h"
+#include "qxrdsettingssaver.h"
 
 QxrdInfoDialogSettings::QxrdInfoDialogSettings(QxrdSettingsSaverWPtr saver, QObject *parent) :
   QObject(parent)

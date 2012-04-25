@@ -16,7 +16,7 @@
 #include <QSettings>
 #include <stdio.h>
 
-QcepProperty::QcepProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString toolTip)
+QcepProperty::QcepProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QString toolTip)
   : QObject(),
     m_Mutex(QMutex::Recursive),
     m_Saver(saver),
@@ -169,7 +169,7 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaTypeStreamOperators< QcepPolygon >("QcepPolygon");
 }
 
-void QcepProperty::setSaver(QxrdSettingsSaverWPtr saver)
+void QcepProperty::setSaver(QcepSettingsSaverWPtr saver)
 {
   m_Saver = saver;
 }
@@ -397,7 +397,7 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
 
 void QcepProperty::printMessage(QString msg, QDateTime ts)
 {
-  QxrdSettingsSaverPtr saver(m_Saver);
+  QcepSettingsSaverPtr saver(m_Saver);
 
   if (saver) {
     saver->printMessage(msg, ts);
@@ -424,7 +424,7 @@ void QcepProperty::dumpMetaData(const QMetaObject *meta)
   }
 }
 
-QcepDoubleProperty::QcepDoubleProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, double value, QString toolTip)
+QcepDoubleProperty::QcepDoubleProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, double value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -474,7 +474,7 @@ void QcepDoubleProperty::setValue(double val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -498,7 +498,7 @@ void QcepDoubleProperty::incValue(double step)
 
     m_Value += step;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -608,7 +608,7 @@ void QcepDoublePropertyDoubleSpinBoxHelper::setValue(double value)
   emit valueChanged(value, m_Property->incIndex(1));
 }
 
-QcepIntProperty::QcepIntProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, int value, QString toolTip)
+QcepIntProperty::QcepIntProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, int value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -652,7 +652,7 @@ void QcepIntProperty::setValue(int val)
 
     m_Value.fetchAndStoreOrdered(val);
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -673,7 +673,7 @@ void QcepIntProperty::incValue(int step)
   if (step) {
     m_Value.fetchAndAddOrdered(step);
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -846,7 +846,7 @@ void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value)
   emit currentIndexChanged(value, m_Property->incIndex(1));
 }
 
-QcepBoolProperty::QcepBoolProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, bool value, QString toolTip)
+QcepBoolProperty::QcepBoolProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, bool value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -890,7 +890,7 @@ void QcepBoolProperty::setValue(bool val)
 
     m_Value.fetchAndStoreOrdered(val);
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -984,7 +984,7 @@ void QcepBoolPropertyButtonHelper::setChecked(bool value)
   emit toggled(value, m_Property->incIndex(1));
 }
 
-QcepStringProperty::QcepStringProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QString value, QString toolTip)
+QcepStringProperty::QcepStringProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QString value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1034,7 +1034,7 @@ void QcepStringProperty::setValue(QString val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1141,7 +1141,7 @@ void QcepStringPropertyLineEditHelper::setText(QString value)
   emit textEdited(value, m_Property->incIndex(1));
 }
 
-QcepDateTimeProperty::QcepDateTimeProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QDateTime value, QString toolTip)
+QcepDateTimeProperty::QcepDateTimeProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QDateTime value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1192,7 +1192,7 @@ void QcepDateTimeProperty::setValue(QDateTime val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1220,7 +1220,7 @@ void QcepDateTimeProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepDoubleListProperty::QcepDoubleListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleList value, QString toolTip)
+QcepDoubleListProperty::QcepDoubleListProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleList value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1267,7 +1267,7 @@ void QcepDoubleListProperty::incValue(QcepDoubleList step)
       m_Value[i] += step.value(i);
     }
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1329,7 +1329,7 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1355,7 +1355,7 @@ void QcepDoubleListProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepDoubleVectorProperty::QcepDoubleVectorProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleVector value, QString toolTip)
+QcepDoubleVectorProperty::QcepDoubleVectorProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleVector value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1402,7 +1402,7 @@ void QcepDoubleVectorProperty::incValue(QcepDoubleVector step)
       m_Value[i] += step.value(i);
     }
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1464,7 +1464,7 @@ void QcepDoubleVectorProperty::setValue(QcepDoubleVector val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1490,7 +1490,7 @@ void QcepDoubleVectorProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepIntListProperty::QcepIntListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value, QString toolTip)
+QcepIntListProperty::QcepIntListProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1537,7 +1537,7 @@ void QcepIntListProperty::incValue(QcepIntList step)
       m_Value[i] += step.value(i);
     }
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1599,7 +1599,7 @@ void QcepIntListProperty::setValue(QcepIntList val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1625,7 +1625,7 @@ void QcepIntListProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepStringListProperty::QcepStringListProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QStringList value, QString toolTip)
+QcepStringListProperty::QcepStringListProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QStringList value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1710,7 +1710,7 @@ void QcepStringListProperty::setValue(QStringList val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1736,7 +1736,7 @@ void QcepStringListProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepByteArrayProperty::QcepByteArrayProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QByteArray value, QString toolTip)
+QcepByteArrayProperty::QcepByteArrayProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QByteArray value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1811,7 +1811,7 @@ void QcepByteArrayProperty::setValue(QByteArray val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1837,7 +1837,7 @@ void QcepByteArrayProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepDoublePointProperty::QcepDoublePointProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoublePoint value, QString toolTip)
+QcepDoublePointProperty::QcepDoublePointProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoublePoint value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1888,7 +1888,7 @@ void QcepDoublePointProperty::setValue(QwtDoublePoint val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1916,7 +1916,7 @@ void QcepDoublePointProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepDoubleRectProperty::QcepDoubleRectProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoubleRect value, QString toolTip)
+QcepDoubleRectProperty::QcepDoubleRectProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoubleRect value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1967,7 +1967,7 @@ void QcepDoubleRectProperty::setValue(QwtDoubleRect val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);
@@ -1995,7 +1995,7 @@ void QcepDoubleRectProperty::resetValue()
   setValue(m_Default);
 }
 
-QcepPolygonProperty::QcepPolygonProperty(QxrdSettingsSaverWPtr saver, QObject *parent, const char *name, QcepPolygon value, QString toolTip)
+QcepPolygonProperty::QcepPolygonProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepPolygon value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2046,7 +2046,7 @@ void QcepPolygonProperty::setValue(QcepPolygon val)
 
     m_Value = val;
 
-    QxrdSettingsSaverPtr saver(m_Saver);
+    QcepSettingsSaverPtr saver(m_Saver);
 
     if (saver) {
       saver->changed(this);

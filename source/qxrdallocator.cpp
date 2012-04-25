@@ -9,7 +9,7 @@
 #include "qxrdintegrateddata.h"
 
 QxrdAllocator::QxrdAllocator
-(QxrdSettingsSaverPtr saver)
+(QcepSettingsSaverPtr saver)
   : QObject(NULL),
     m_ObjectNamer(this, "allocator"),
     m_AllocatedMemory(0),

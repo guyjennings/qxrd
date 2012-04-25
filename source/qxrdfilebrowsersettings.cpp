@@ -1,4 +1,5 @@
 #include "qxrdfilebrowsersettings.h"
+#include "qxrdsettingssaver.h"
 
 QxrdFileBrowserSettings::QxrdFileBrowserSettings(QxrdSettingsSaverWPtr saver, QObject *parent) :
   QObject(parent),

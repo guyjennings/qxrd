@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "qcepproperty.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdPlotSettings : public QObject
 {

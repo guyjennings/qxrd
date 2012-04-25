@@ -1,4 +1,5 @@
 #include "qxrdhistogramdialogsettings.h"
+#include "qxrdsettingssaver.h"
 
 QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QxrdSettingsSaverWPtr saver, QObject *parent) :
   QObject(parent),
