@@ -1,5 +1,6 @@
 #include "qxrdmaskdata.h"
 #include "qxrdallocator.h"
+#include "qxrdsettingssaver.h"
 
 QxrdMaskData::QxrdMaskData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr allocator, int typ, int width, int height, int def)
   : QcepImageData<short>(saver, width, height, def),

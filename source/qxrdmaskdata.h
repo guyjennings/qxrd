@@ -6,6 +6,7 @@
 #include <QImage>
 #include "qxrdmaskdata-ptr.h"
 #include "qxrdallocator-ptr.h"
+#include "qxrdsettingssaver-ptr.h"
 
 class QxrdMaskData : public QcepImageData<short>
 {

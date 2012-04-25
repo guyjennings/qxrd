@@ -1,6 +1,6 @@
 #include "qcepdebug.h"
 #include "qcepimagedata.h"
-#include "qxrdapplication.h"
+//#include "qxrdapplication.h"
 #include <tiffio.h>
 
 #include <QSettings>
@@ -9,12 +9,15 @@
 
 #include "qcepimagedataformat.h"
 #include "qcepimagedataformatfactory.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
+#include "qcepsettingssaver.h"
 
 QAtomicInt allocCount = 0;
 
-QcepImageDataBase::QcepImageDataBase(QxrdSettingsSaverWPtr saver, int width, int height)
+QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height)
   : QObject(),
+    m_Width(saver, this, "width", width, "Image Width"),
+    m_Height(saver, this, "height", height, "Image Height"),
     m_QxrdVersion(saver, this,"qxrdVersion", "Unknown", "QXRD Version Number"),
     m_QtVersion(saver, this,"qtVersion", "Unknown", "QT Version Number"),
     m_DataType(saver, this, "dataType", UndefinedData, "Data Type of Image"),
@@ -41,24 +44,31 @@ QcepImageDataBase::QcepImageDataBase(QxrdSettingsSaverWPtr saver, int width, int
     m_ExtraInputs(saver, this, "extraInputs", QcepDoubleList(), "Extra Input Values"),
     m_Used(saver, this, "used", true, "Image Used?"),
     m_ImageCounter(allocCount.fetchAndAddOrdered(1)),
-    m_Width(saver, this, "width", width, "Image Width"),
-    m_Height(saver, this, "height", height, "Image Height"),
-    m_Mutex(QMutex::Recursive)
+    m_Mutex(QMutex::Recursive),
+    m_Saver(saver)
 {
-  if (g_Application && qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage(tr("QcepImageDataBase::QcepImageDataBase %1[%2]")
-                                .HEXARG(this).arg(m_ImageCounter));
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    QcepSettingsSaverPtr s(m_Saver);
+
+    if (s) {
+      s->printMessage(tr("QcepImageDataBase::QcepImageDataBase %1[%2]")
+                      .HEXARG(this).arg(m_ImageCounter));
+    }
   }
 }
 
 QcepImageDataBase::~QcepImageDataBase()
 {
-  if (g_Application && qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage(tr("QcepImageDataBase::~QcepImageDataBase %1[%2]")
-                                .HEXARG(this).arg(m_ImageCounter));
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    QcepSettingsSaverPtr s(m_Saver);
+
+    if (s) {
+      s->printMessage(tr("QcepImageDataBase::~QcepImageDataBase %1[%2]")
+                      .HEXARG(this).arg(m_ImageCounter));
+    }
   }
 
-//  allocCount--;
+  //  allocCount--;
 }
 
 QMutex *QcepImageDataBase::mutex()
@@ -150,7 +160,7 @@ void QcepImageDataBase::loadMetaData()
   tic.start();
 
   {
-    QxrdMutexLocker lock(__FILE__, __LINE__, mutex());
+    QcepMutexLocker lock(__FILE__, __LINE__, mutex());
 
     QSettings settings(get_FileName()+".metadata", QSettings::IniFormat);
 
@@ -175,7 +185,7 @@ void QcepImageDataBase::saveMetaData(QString name)
 //  printf("type 266 = %s\n", QMetaType::typeName(266));
 
   {
-    QxrdMutexLocker lock(__FILE__, __LINE__, mutex());
+    QcepMutexLocker lock(__FILE__, __LINE__, mutex());
 
     QSettings settings(name+".metadata", QSettings::IniFormat);
 
@@ -231,7 +241,7 @@ QString QcepImageDataBase::get_DataTypeName() const
 }
 
 template <typename T>
-QcepImageData<T>::QcepImageData(QxrdSettingsSaverWPtr saver, int width, int height, T def)
+QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, int width, int height, T def)
   : QcepImageDataBase(saver, width, height),
 //    m_Image(width*height, def),
     m_Image(width*height),
@@ -239,10 +249,14 @@ QcepImageData<T>::QcepImageData(QxrdSettingsSaverWPtr saver, int width, int heig
     m_MaxValue(0),
     m_Default(def)
 {
-  if (g_Application && qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage(tr("QcepImageData<%1>::QcepImageData %2")
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    QcepSettingsSaverPtr s(m_Saver);
+
+    if (s) {
+      s->printMessage(tr("QcepImageData<%1>::QcepImageData %2")
                                 .arg(typeid(T).name())
                                 .HEXARG(this));
+    }
   }
 
   if (def) {
@@ -253,10 +267,14 @@ QcepImageData<T>::QcepImageData(QxrdSettingsSaverWPtr saver, int width, int heig
 template <typename T>
 QcepImageData<T>::~QcepImageData()
 {
-  if (g_Application && qcepDebug(DEBUG_APP)) {
-    g_Application->printMessage(tr("QcepImageData<%1>::~QcepImageData %2")
-                                .arg(typeid(T).name())
-                                .HEXARG(this));
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    QcepSettingsSaverPtr s(m_Saver);
+
+    if (s) {
+      s->printMessage(tr("QcepImageData<%1>::~QcepImageData %2")
+                      .arg(typeid(T).name())
+                      .HEXARG(this));
+    }
   }
 }
 

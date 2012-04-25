@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 #include "qcepproperty.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 
 typedef struct tiff TIFF;
 
@@ -21,7 +21,7 @@ class QcepImageDataBase : public QObject
   Q_OBJECT
 
 public:
-  QcepImageDataBase(QxrdSettingsSaverWPtr saver, int width, int height);
+  QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height);
   virtual ~QcepImageDataBase();
 
   Q_PROPERTY(int width READ get_Width WRITE set_Width)
@@ -177,13 +177,16 @@ protected:
 
 private:
   mutable QMutex m_Mutex;
+
+protected:
+  QcepSettingsSaverWPtr m_Saver;
 };
 
 template <typename T>
     class QcepImageData : public QcepImageDataBase
 {
 public:
-  QcepImageData(QxrdSettingsSaverWPtr saver, int width, int height, T def=0);
+  QcepImageData(QcepSettingsSaverWPtr saver, int width, int height, T def=0);
   virtual ~QcepImageData();
 
 public:
