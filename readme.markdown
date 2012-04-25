@@ -9,30 +9,42 @@ Added automatic scripting function help generation
 
 ## v0.9.1 - Apr 3 2012
 First release in 0.9.x series - many many changes!
+
 Multiple 'experiments' may be open simultaneously - each has its own settings file
+
 A welcome dialog allows choosing from recent experiments
+
 Settings are saved automatically, whenever they are changed
+
 A NI-DAQ card can be used to measure auxiliary signals during acquisition (e.g. ion chamber readings)
+
 Logarithmic Intensity option for image plots
+
 File browsers highlight recently changed files
+
 Shrink/grow commands for masks
 
 ## v0.8.4 - Feb 29 2012</h2>
 Backport logarithmic intensity option from v0.9.1
+
 ## v0.8.3 - Nov 14 2011
 Added newOutputScan, appendToOutputScan, plotOutputScan and saveOutputScan script commands to 'processor'
 
 ## v0.8.2 - Nov 11 2011
 Added a loadScript routine to read and execute a script from a file.
+
 Added some device query routines into the NIDAQ plugin
+
 Added integrateRectangle(x0,y0,x1,y1) routine to processor
 
 ## v0.8.1 - Oct 27 2011
 Display error dialog if another copy of qxrd is already running
+
 Allow specifying number of integration steps as alternative to integration step size
 
 ## v0.7.16 - Oct 7 2011
 Set initial camera gain on program startup
+
 Automatic insertion of skipped exposures when skippedExposuresAtStart==0
 
 ## v0.7.15 - Sep 16 2011
