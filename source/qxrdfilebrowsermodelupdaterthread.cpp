@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdfilebrowsermodelupdaterthread.h"
 #include "qxrdfilebrowsermodel.h"
 #include "qxrdfilebrowsermodelupdater.h"

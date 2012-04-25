@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "qcepdebug.h"
+#include "qxrddebug.h"
 #include "qxrdapplication.h"
 #include "qxrdwelcomewindow.h"
 #include "qxrdwindow.h"
@@ -53,7 +53,6 @@
 #include <QUrl>
 #include <QCoreApplication>
 
-int gCEPDebug = 0;
 QxrdApplication *g_Application = NULL;
 
 QCoreApplication::EventFilter oldEventFilter;
@@ -657,9 +656,11 @@ void QxrdApplication::editGlobalPreferences()
 
 void QxrdApplication::debugChanged(int newValue)
 {
-  printMessage(tr("Debug level changed from %1 to %2").arg(gCEPDebug).arg(newValue));
+  if (g_DebugLevel) {
+    printMessage(tr("Debug level changed from %1 to %2").arg(g_DebugLevel->debugLevel()).arg(newValue));
 
-  gCEPDebug = newValue;
+    g_DebugLevel->setDebugLevel(newValue);
+  }
 }
 
 static void qxrdTIFFWarningHandler(const char* /*module*/, const char* /*fmt*/, va_list /*ap*/)

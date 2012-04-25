@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdintegrateddataqueue.h"
 #include "qxrdapplication.h"
 #include "qxrdintegrateddata.h"

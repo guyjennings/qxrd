@@ -107,6 +107,7 @@ HEADERS += spec_server.h \
     qcepimagedataformatfactory.h \
     qcepimagedataformatfactory-ptr.h \
     qcepdebug.h \
+    qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
     qxrddetector.h \
     qxrddetectorpilatus.h \
@@ -131,6 +132,7 @@ SOURCES += qspecserver.cpp \
     qcepimagedataformatmar345.cpp \
     qcepimagedataformatfactory.cpp \
     qcepdebug.cpp \
+    qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
     qxrddetector.cpp \
     qxrddetectorpilatus.cpp \

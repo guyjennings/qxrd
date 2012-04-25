@@ -4,7 +4,7 @@
 #include <QVector>
 #include <QList>
 #include <QMetaType>
-#include "qcepdebug.h"
+//#include "qcepdebug.h"
 #include "qwt_double_rect.h"
 
 #define GUI_THREAD_CHECK Q_ASSERT(qApp && qApp ->thread() == QThread::currentThread())

@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdscriptengine.h"
 
 #include "qxrdapplication.h"

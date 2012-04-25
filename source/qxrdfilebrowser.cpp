@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdfilebrowser.h"
 #include "qxrddataprocessor.h"
 #include <QFileSystemModel>

@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdintegratorcache.h"
 #include "qxrdintegrator.h"
 #include "qxrdimagedata.h"

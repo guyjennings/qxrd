@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdacquisition.h"
 #include "qxrdacquisitionthread.h"

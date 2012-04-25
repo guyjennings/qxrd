@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include <QApplication>
 
 #include "qxrdapplication.h"
@@ -19,6 +20,7 @@ remote-controlled via a socket interface, or directly from SPEC
 int main(int argc, char *argv[])
 {
 //  printf("App starts\n");
+  g_DebugLevel = new QxrdDebugDictionary();
 
   QxrdApplication app(argc, argv);
 

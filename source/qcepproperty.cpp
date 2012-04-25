@@ -1,3 +1,4 @@
+#include "qcepdebug.h"
 #include "qcepproperty.h"
 #include "qxrdapplication.h"
 #include "qxrdsettingssaver.h"

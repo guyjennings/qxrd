@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdrasterdata.h"
 #include "qxrdapplication.h"
 #include <QString>

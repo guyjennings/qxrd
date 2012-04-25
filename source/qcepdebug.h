@@ -1,36 +1,38 @@
 #ifndef QCEPDEBUG_H
 #define QCEPDEBUG_H
 
-extern int gCEPDebug;
+#include <QStringList>
+#include <QMap>
 
 enum {
-  DEBUG_APP         = 0x00000001,
-  DEBUG_ACQUIRE     = 0x00000002,
-  DEBUG_PROCESS     = 0x00000004,
-  DEBUG_DISPLAY     = 0x00000008,
-  DEBUG_FILES       = 0x00000010,
-  DEBUG_QUEUES      = 0x00000020,
-  DEBUG_PERFORM     = 0x00000040,
-  DEBUG_IMAGES      = 0x00000080,
-  DEBUG_PROPERTIES  = 0x00000100,
-  DEBUG_WINDOW      = 0x00000200,
-  DEBUG_PERKINELMER = 0x00000400,
-  DEBUG_PREFS       = 0x00000800,
-  DEBUG_EXITWAIT    = 0x00001000,
-  DEBUG_ALLOCATOR   = 0x00002000,
-  DEBUG_THREADS     = 0x00004000,
-  DEBUG_DELAY_ACQ   = 0x00008000,
-  DEBUG_BROWSER     = 0x00010000,
-  DEBUG_SERVER      = 0x00020000,
-  DEBUG_NOMESSAGES  = 0x00040000,
-  DEBUG_ACQUIRETIME = 0x00080000,
-  DEBUG_INTEGRATOR  = 0x00100000,
-  DEBUG_CONSTRUCTORS= 0x00200000,
-  DEBUG_TRIGGER     = 0x00400000,
-  DEBUG_EXTRAINPUTS = 0x00800000
+  DEBUG_NOMESSAGES  = 1,
+  DEBUG_APP         = (DEBUG_NOMESSAGES << 1),
+  DEBUG_PROPERTIES  = (DEBUG_APP << 1),
+  DEBUG_WINDOW      = (DEBUG_PROPERTIES << 1),
+  DEBUG_PREFS       = (DEBUG_WINDOW << 1),
+  DEBUG_DISPLAY     = (DEBUG_PREFS << 1),
+  LAST_CEP_DEBUG    = DEBUG_DISPLAY
 };
 
-extern const char* gDebugStrings[];
+class QcepDebugDictionary : public QObject {
+public:
+  QcepDebugDictionary();
+
+  int debugLevel() const;
+  void setDebugLevel(int level);
+
+  QString message(int val) const;
+
+protected:
+  void setMessage(int val, QString msg);
+
+private:
+  int                m_DebugLevel;
+  QMap<int, QString> m_Messages;
+};
+
 extern int qcepDebug(int cond);
+
+extern QcepDebugDictionary *g_DebugLevel;
 
 #endif // QCEPDEBUG_H

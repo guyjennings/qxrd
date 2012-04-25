@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdringsetsampleddata.h"
 #include "qxrdringsampleddata.h"
 #include "qxrdmutexlocker.h"

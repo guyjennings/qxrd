@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
 #include "qxrdapplication.h"

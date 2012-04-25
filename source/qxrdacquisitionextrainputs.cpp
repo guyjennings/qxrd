@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdacquisition.h"
 #include "qxrdmutexlocker.h"

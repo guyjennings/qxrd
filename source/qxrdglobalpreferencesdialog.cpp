@@ -1,7 +1,9 @@
+#include "qxrddebug.h"
 #include "qxrdglobalpreferencesdialog.h"
 #include "ui_qxrdglobalpreferencesdialog.h"
 #include "qxrdapplication.h"
 #include "qxrdallocator.h"
+#include <stdio.h>
 
 QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, QWidget *parent) :
   QDialog(parent),
@@ -80,29 +82,35 @@ void QxrdGlobalPreferencesDialog::accept()
 
 void QxrdGlobalPreferencesDialog::setupDebugWidgets(int dbg)
 {
-  QGridLayout *grid = new QGridLayout(m_DebugWidgets);
+  if (g_DebugLevel == NULL) {
+    printf("g_DebugLevel == NULL in QxrdGlobalPreferencesDialog::setupDebugWidgets\n");
+  } else {
+    QGridLayout *grid = new QGridLayout(m_DebugWidgets);
 
-  int mask = 1;
+    for (int mask=1; mask; mask <<= 1) {
+      QString msg = g_DebugLevel->message(mask);
 
-  for (int i=0; gDebugStrings[i]; i++) {
-    QCheckBox *cb = new QCheckBox(gDebugStrings[i]);
-    cb->setChecked(dbg & mask);
+      if (msg.length() > 0) {
+        QCheckBox *cb = new QCheckBox(msg);
+        cb->setChecked(dbg & mask);
 
-    mask <<= 1;
+        m_DebugWidgetList.append(cb);
+      } else {
+        break;
+      }
+    }
 
-    m_DebugWidgetList.append(cb);
-  }
+    int ndebug = m_DebugWidgetList.count();
+    int ncol   = ndebug - ndebug/2;
 
-  int ndebug = m_DebugWidgetList.count();
-  int ncol   = ndebug - ndebug/2;
+    for (int i=0; i<ndebug; i++) {
+      QCheckBox *cb = m_DebugWidgetList[i];
 
-  for (int i=0; gDebugStrings[i]; i++) {
-    QCheckBox *cb = m_DebugWidgetList[i];
-
-    if (i < ncol) {
-      grid->addWidget(cb, i, 0);
-    } else {
-      grid->addWidget(cb, i - ncol, 1);
+      if (i < ncol) {
+        grid->addWidget(cb, i, 0);
+      } else {
+        grid->addWidget(cb, i - ncol, 1);
+      }
     }
   }
 }
@@ -111,8 +119,9 @@ int QxrdGlobalPreferencesDialog::readDebugWidgets()
 {
   int mask = 1;
   int newDbg = 0;
+  int ndebug = m_DebugWidgetList.count();
 
-  for (int i=0; gDebugStrings[i]; i++) {
+  for (int i=0; i<ndebug; i++) {
     if (m_DebugWidgetList[i]->isChecked()) {
       newDbg |= mask;
     }

@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdsimpleserver.h"
 #include <QTextStream>
 #include <QDateTime>

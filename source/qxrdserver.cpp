@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdserver.h"
 
 #include <QHostAddress>

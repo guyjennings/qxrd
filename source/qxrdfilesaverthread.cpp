@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdfilesaverthread.h"
 
 #include "qxrdfilesaver.h"

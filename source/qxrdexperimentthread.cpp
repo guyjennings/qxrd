@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdexperimentthread.h"
 #include "qxrdapplication.h"
 #include "qxrdexperimentperkinelmeracquisition.h"

@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
+#include "qxrddebug.h"
 #include "qxrdfilesaver.h"
 #include "qxrdacquisition.h"
 #include "qxrddataprocessor.h"
