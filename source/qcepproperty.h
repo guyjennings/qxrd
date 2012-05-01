@@ -23,6 +23,7 @@
 #include <QSettings>
 #include <QProgressBar>
 #include <qwt_double_rect.h>
+#include <QLCDNumber>
 
 class QcepProperty : public QObject {
   Q_OBJECT
@@ -79,6 +80,7 @@ public:
   void linkTo(QDoubleSpinBox *spinBox);
   void linkTo(QLabel *label);
   void linkTo(QProgressBar *progress);
+  void linkTo(QLCDNumber *number);
 
 public slots:
   void setValue(double val, int index);
@@ -127,6 +129,7 @@ public:
   void linkTo(QComboBox *comboBox);
   void linkTo(QLabel *label);
   void linkTo(QProgressBar *progress);
+  void linkTo(QLCDNumber *number);
 
 public slots:
   void setValue(int val, int index);
@@ -237,6 +240,7 @@ public:
   void linkTo(QComboBox *comboBox);
   void linkTo(QLineEdit *lineEdit);
   void linkTo(QLabel    *label);
+  void linkTo(QLCDNumber *number);
 
 public slots:
   void setValue(QString val, int index);
