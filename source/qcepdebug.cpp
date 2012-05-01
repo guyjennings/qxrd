@@ -3,7 +3,8 @@
 
 QcepDebugDictionary *g_DebugLevel = NULL;
 
-QcepDebugDictionary::QcepDebugDictionary()
+QcepDebugDictionary::QcepDebugDictionary() :
+  m_DebugLevel(0)
 {
   setMessage(DEBUG_NOMESSAGES, "Disable All Debug Messages");
   setMessage(DEBUG_APP,        "Application startup and shutdown");
