@@ -572,6 +572,15 @@ void QcepDoubleProperty::linkTo(QProgressBar *progress)
   connect(this, SIGNAL(valueChanged(double,int)), progress, SLOT(setValue(int)));
 }
 
+void QcepDoubleProperty::linkTo(QLCDNumber *number)
+{
+  number -> display(value());
+
+  setWidgetToolTip(number);
+
+  connect(this, SIGNAL(valueChanged(double,int)), number, SLOT(display(double)));
+}
+
 QcepDoublePropertyDoubleSpinBoxHelper::QcepDoublePropertyDoubleSpinBoxHelper(QDoubleSpinBox *spinBox, QcepDoubleProperty *property)
   : QObject(spinBox),
     m_DoubleSpinBox(spinBox),
@@ -766,6 +775,15 @@ void QcepIntProperty::linkTo(QProgressBar *progress)
   setWidgetToolTip(progress);
 
   connect(this, SIGNAL(valueChanged(int,int)), progress, SLOT(setValue(int)));
+}
+
+void QcepIntProperty::linkTo(QLCDNumber *number)
+{
+  number -> display(value());
+
+  setWidgetToolTip(number);
+
+  connect(this, SIGNAL(valueChanged(int,int)), number, SLOT(display(int)));
 }
 
 QcepIntPropertySpinBoxHelper::QcepIntPropertySpinBoxHelper(QSpinBox *spinBox, QcepIntProperty *property)
@@ -1104,6 +1122,15 @@ void QcepStringProperty::linkTo(QLabel *label)
   setWidgetToolTip(label);
 
   connect(this, SIGNAL(valueChanged(QString,int)), label, SLOT(setText(QString)));
+}
+
+void QcepStringProperty::linkTo(QLCDNumber *number)
+{
+  number -> display(value());
+
+  setWidgetToolTip(number);
+
+  connect(this, SIGNAL(valueChanged(QString,int)), number, SLOT(display(QString)));
 }
 
 QcepStringPropertyLineEditHelper::QcepStringPropertyLineEditHelper(QLineEdit *lineEdit, QcepStringProperty *property)
