@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrddetectorperkinelmer.h"
 #include "qxrdapplication.h"
 #include "qxrdperkinelmerplugininterface.h"
