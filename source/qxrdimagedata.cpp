@@ -82,7 +82,7 @@ void QxrdImageData<T>::copyFrom(QSharedPointer< QxrdImageData<T2> > img)
 
     this -> resize(ncols, nrows);
 
-    copyPropertiesFrom(img);
+    this -> copyPropertiesFrom(img);
 
     T2 *srcp  = img -> data();
     T  *destp = this -> data();
@@ -115,7 +115,7 @@ void QxrdImageData<T>::accumulateImage(QSharedPointer< QxrdImageData<T2> > image
     } else {
       for (int row=0; row<nrows; row++) {
         for (int col=0; col<ncols; col++) {
-          addValue(col, row, image->value(col, row));
+          this -> addValue(col, row, image->value(col, row));
         }
       }
 
@@ -161,7 +161,7 @@ void QxrdImageData<T>::add(QSharedPointer< QxrdImageData<T2> > image)
     } else {
       for (int row=0; row<nrows; row++) {
         for (int col=0; col<ncols; col++) {
-          addValue(col, row, image->value(col, row));
+          this -> addValue(col, row, image->value(col, row));
         }
       }
     }
@@ -190,7 +190,7 @@ void QxrdImageData<T>::subtract(QSharedPointer< QxrdImageData<T2> > image)
     } else {
       for (int row=0; row<nrows; row++) {
         for (int col=0; col<ncols; col++) {
-          subtractValue(col, row, image->value(col, row));
+          this -> subtractValue(col, row, image->value(col, row));
         }
       }
     }
@@ -219,7 +219,7 @@ void QxrdImageData<T>::multiply(QSharedPointer< QxrdImageData<T2> > image)
     } else {
       for (int row=0; row<nrows; row++) {
         for (int col=0; col<ncols; col++) {
-          multiplyValue(col, row, image->value(col, row));
+          this -> multiplyValue(col, row, image->value(col, row));
         }
       }
     }
@@ -248,7 +248,7 @@ void QxrdImageData<T>::divide(QSharedPointer< QxrdImageData<T2> > image)
     } else {
       for (int row=0; row<nrows; row++) {
         for (int col=0; col<ncols; col++) {
-          divideValue(col, row, image->value(col, row));
+          this -> divideValue(col, row, image->value(col, row));
         }
       }
     }
