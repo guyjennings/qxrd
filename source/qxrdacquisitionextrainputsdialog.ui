@@ -158,7 +158,7 @@
            <item row="0" column="0">
             <widget class="QToolButton" name="m_TestReadout">
              <property name="toolTip">
-              <string>Test Readout</string>
+              <string>Initialize Readout</string>
              </property>
              <property name="text">
               <string>...</string>
