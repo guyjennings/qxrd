@@ -189,18 +189,30 @@ QxrdAcquisitionExtraInputsChannelPtr QxrdAcquisitionExtraInputs::channel(int cha
 void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 {
   QxrdAcquisitionExtraInputsChannel *chan = 0;
-  int n = (ch < 0 ? m_Channels.size() : ch);
+  int n = (ch < 0 ? m_Channels.size() : ch+1);
 
   m_Channels.insert(n,
                     QxrdAcquisitionExtraInputsChannelPtr(
-                      chan = new QxrdAcquisitionExtraInputsChannel(n, m_Saver, m_Experiment, this)));
+                        chan = new QxrdAcquisitionExtraInputsChannel(n, m_Saver, m_Experiment, this)));
 
   connect(chan, SIGNAL(reinitializeNeeded()), this, SLOT(reinitialize()));
+
+  QxrdSettingsSaverPtr saver(m_Saver);
+
+  if (saver) {
+      saver->changed();
+  }
 }
 
 void QxrdAcquisitionExtraInputs::removeChannel(int ch)
 {
   m_Channels.remove((ch < 0 ? m_Channels.size()-1 : ch));
+
+  QxrdSettingsSaverPtr saver(m_Saver);
+
+  if (saver) {
+      saver->changed();
+  }
 }
 
 void QxrdAcquisitionExtraInputs::acquire()
