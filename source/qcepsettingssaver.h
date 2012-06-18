@@ -16,7 +16,7 @@ public:
   explicit QcepSettingsSaver(QObject *owner);
   ~QcepSettingsSaver();
 
-  void changed(QcepProperty *prop);
+  void changed(QcepProperty *prop = NULL);
 
 public slots:
   void start();
