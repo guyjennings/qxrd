@@ -1,6 +1,10 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.4 - Jun 26 2012
+Fixed problems with mingw installer
+Added 'initialize' button to extra inputs dialog
+
 ## v0.9.3 - Apr 23 2012
 Added beam center fitting from user-entered points on a powder ring
 

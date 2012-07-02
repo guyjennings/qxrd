@@ -17,7 +17,7 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
 
   connect(m_AddChannel, SIGNAL(clicked()), this, SLOT(addChannel()));
   connect(m_RemoveChannel, SIGNAL(clicked()), this, SLOT(removeChannel()));
-  connect(m_TestReadout, SIGNAL(clicked()), this, SLOT(testReadout()));
+  connect(m_TestReadout, SIGNAL(clicked()), this, SLOT(initializeReadout()));
 
   QxrdAcquisitionPtr acqp(m_Acquisition);
 
@@ -277,22 +277,12 @@ void QxrdAcquisitionExtraInputsDialog::removeChannel()
   }
 }
 
-void QxrdAcquisitionExtraInputsDialog::testReadout()
+void QxrdAcquisitionExtraInputsDialog::initializeReadout()
 {
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
-  if (acqp) {
-    acqp->printMessage(tr("Current column = %1").arg(m_ExtraInputsTable->currentColumn()));
-    acqp->printMessage(tr("Current row = %1").arg(m_ExtraInputsTable->currentRow()));
-
-    //  QList<QTableWidgetItem*> sel = m_ExtraInputsTable->selectedItems();
-
-    //  printf("Selections\n");
-
-    //  foreach(QTableWidgetItem *itm, sel) {
-    //    if (itm) {
-    //      printf("R: %d C: %d\n", itm->row(), itm->column());
-    //    }
+  if (xtra) {
+    xtra->initialize();
   }
 }
 
