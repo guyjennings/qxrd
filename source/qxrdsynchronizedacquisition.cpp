@@ -102,7 +102,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
       }
       break;
 
-      case SyncAcquisitionWaveformSine:
+    case SyncAcquisitionWaveformSine:
       for (int ii=0; ii<iSamples; ii++) {
         int i = (ii+iSamples-shift) % iSamples;
         double x;
@@ -115,7 +115,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
       }
       break;
 
-      case SyncAcquisitionWaveformTriangle:
+    case SyncAcquisitionWaveformTriangle:
       for (int ii=0; ii<iSamples; ii++) {
         int i = (ii+iSamples-shift) % iSamples;
         if (i<divide) {
@@ -126,7 +126,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
       }
       break;
 
-      case SyncAcquisitionWaveformBipolarTriangle:
+    case SyncAcquisitionWaveformBipolarTriangle:
       for (int ii=0; ii<iSamples; ii++) {
         int i = (ii+iSamples-shift) % iSamples;
         if (i < divideBy2) {
@@ -139,8 +139,8 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
       }
       break;
 
-      case SyncAcquisitionWaveformSawtooth:
-      default:
+    case SyncAcquisitionWaveformSawtooth:
+    default:
       for (int ii=0; ii<iSamples; ii++) {
         int i = (ii+iSamples-shift) % iSamples;
         m_OutputVoltage[ii] = minVal + i*(maxVal-minVal)/iSamples;
