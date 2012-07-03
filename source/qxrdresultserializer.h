@@ -2,7 +2,7 @@
 #define QXRDRESULTSERIALIZER_H
 
 #include "qcepmacros.h"
-
+#include "qcepproperty.h"
 #include <QObject>
 #include <QMutex>
 #include <QMutexLocker>
@@ -28,16 +28,19 @@ template <typename T>
 class QxrdResultSerializer : public QxrdResultSerializerBase
 {
 public:
-    explicit QxrdResultSerializer(QObject *parent = 0);
+  explicit QxrdResultSerializer(QcepIntProperty *ctr=0, QObject *parent=0);
 
-    void enqueue(QFuture<T> future);
-    T dequeue();
+  void enqueue(QFuture<T> future);
+  T dequeue();
+
+  int count() const;
 
 public slots:
 
 private:
-    QQueue< QFuture<T> > m_Results;
-    QFutureWatcher<T>    m_Watcher;
+  QQueue< QFuture<T> > m_Results;
+  QFutureWatcher<T>    m_Watcher;
+  QcepIntProperty     *m_Counter;
 };
 
 #endif // QXRDRESULTSERIALIZER_H

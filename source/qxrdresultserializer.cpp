@@ -12,8 +12,9 @@ QxrdResultSerializerBase::~QxrdResultSerializerBase()
 
 
 template <typename T>
-QxrdResultSerializer<T>::QxrdResultSerializer(QObject *parent)
- : QxrdResultSerializerBase(parent)
+QxrdResultSerializer<T>::QxrdResultSerializer(QcepIntProperty *ctr, QObject *parent)
+ : QxrdResultSerializerBase(parent),
+   m_Counter(ctr)
 {
   connect(&m_Watcher, SIGNAL(finished()), this, SIGNAL(resultAvailable()));
 }
@@ -26,6 +27,10 @@ void QxrdResultSerializer<T>::enqueue(QFuture<T> future)
   m_Results.enqueue(future);
 
   m_Watcher.setFuture(m_Results[0]);
+
+  if (m_Counter) {
+    m_Counter->incValue(1);
+  }
 }
 
 template <typename T>
@@ -40,10 +45,26 @@ T QxrdResultSerializer<T>::dequeue()
       m_Watcher.setFuture(m_Results[0]);
     }
 
+    if (m_Counter) {
+      m_Counter->incValue(-1);
+    }
+
     return val.result();
   } else {
+    if (m_Counter) {
+      m_Counter->setValue(0);
+    }
+
     return T();
   }
+}
+
+template <typename T>
+int QxrdResultSerializer<T>::count() const
+{
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  return m_Results.size();
 }
 
 #include "qxrdimagedata.h"
