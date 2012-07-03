@@ -78,6 +78,8 @@ QMutex *QcepImageDataBase::mutex()
 
 void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 {
+  dest -> set_QxrdVersion(get_QxrdVersion());
+  dest -> set_QtVersion(get_QtVersion());
   dest -> set_DataType(get_DataType());
   dest -> set_FileBase(get_FileBase());
   dest -> set_FileName(get_FileName());
@@ -111,6 +113,8 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 
 void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src)
 {
+  set_QxrdVersion(src -> get_QxrdVersion());
+  set_QtVersion(src->get_QtVersion());
   set_DataType(src -> get_DataType());
   set_FileBase(src -> get_FileBase());
   set_FileName(src -> get_FileName());
