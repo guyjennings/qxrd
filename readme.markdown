@@ -1,6 +1,9 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.5 - Jul 9 2012
+Added liveView readout option
+
 ## v0.9.4 - Jun 26 2012
 Fixed problems with mingw installer
 Added 'initialize' button to extra inputs dialog
