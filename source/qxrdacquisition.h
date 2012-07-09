@@ -328,6 +328,12 @@ public:
   Q_PROPERTY(int     droppedFrames    READ get_DroppedFrames WRITE set_DroppedFrames STORED false)
   QCEP_INTEGER_PROPERTY(DroppedFrames)
 
+  Q_PROPERTY(bool     liveViewAtIdle   READ get_LiveViewAtIdle WRITE set_LiveViewAtIdle)
+  QCEP_BOOLEAN_PROPERTY(LiveViewAtIdle)
+
+  Q_PROPERTY(bool     acquisitionCancelsLiveView READ get_AcquisitionCancelsLiveView WRITE set_AcquisitionCancelsLiveView)
+  QCEP_BOOLEAN_PROPERTY(AcquisitionCancelsLiveView)
+
 private:
   mutable QMutex                m_Mutex;
 

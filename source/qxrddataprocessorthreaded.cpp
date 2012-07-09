@@ -41,7 +41,7 @@ void QxrdDataProcessorThreaded::beginAcquisition(int /*isDark*/)
 {
 }
 
-void QxrdDataProcessorThreaded::idleInt16Image(QxrdInt16ImageDataPtr image)
+void QxrdDataProcessorThreaded::idleInt16Image(QxrdInt16ImageDataPtr image, bool liveView)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, image->mutex());
   int height = image->get_Height();
@@ -58,6 +58,18 @@ void QxrdDataProcessorThreaded::idleInt16Image(QxrdInt16ImageDataPtr image)
 
   set_AverageRaw(avgraw/npixels/nres);
   set_Average(get_AverageRaw() - get_AverageDark());
+
+  if (liveView) {
+    printMessage("Image Live View");
+
+    QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
+    QxrdDoubleImageDataPtr dark      = darkImage();
+
+    corrected->copyFrom(image);
+    subtractDarkImage(corrected, dark);
+
+    newData(corrected, QxrdMaskDataPtr());
+  }
 }
 
 void QxrdDataProcessorThreaded::acquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow)

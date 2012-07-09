@@ -384,7 +384,7 @@ protected:
   int newMaskWidth() const;
   int newMaskHeight() const;
 
-private:
+protected:
   int incrementAcquiredCount();
   int decrementAcquiredCount();
   int getAcquiredCount();

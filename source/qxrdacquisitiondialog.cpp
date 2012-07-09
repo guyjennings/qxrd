@@ -62,6 +62,9 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     acq -> prop_UserComment2() -> linkTo(this -> m_UserComment2);
     acq -> prop_UserComment3() -> linkTo(this -> m_UserComment3);
     acq -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
+
+    acq -> prop_LiveViewAtIdle() -> linkTo(this -> m_LiveViewAtIdle);
+    acq -> prop_AcquisitionCancelsLiveView() -> linkTo(this -> m_AcquisitionCancelsLiveView);
   } else {
     printf("acq == NULL in QxrdAcquisitionDialog::QxrdAcquisitionDialog");
   }

@@ -26,7 +26,7 @@ public:
 
 public:
   void beginAcquisition(int isDark);
-  void idleInt16Image(QxrdInt16ImageDataPtr image);
+  void idleInt16Image(QxrdInt16ImageDataPtr image, bool liveView);
   void acquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow);
   void acquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
   void acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);

@@ -58,6 +58,8 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
     m_UserComment4(saver, this,"userComment4","", "User Comment 4"),
     m_Normalization(saver, this, "normalization", QcepDoubleList(), "Normalization Values"),
     m_DroppedFrames(QxrdSettingsSaverPtr(), this,"droppedFrames",0, "Number of Dropped Frames"),
+    m_LiveViewAtIdle(saver, this, "liveViewAtIdle", false, "Live View during Idle"),
+    m_AcquisitionCancelsLiveView(saver, this, "acquisitionCancelsLiveView", true, "Acquisition operations cancel live view"),
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL),
     m_AcquisitionTriggerThread(NULL),
@@ -964,6 +966,11 @@ void QxrdAcquisition::stopIdling()
 {
   m_Idling.fetchAndStoreOrdered(0);
   flushImageQueue();
+
+  if (get_AcquisitionCancelsLiveView()) {
+    set_LiveViewAtIdle(false);
+  }
+
   beginAcquisition();
 }
 
@@ -980,7 +987,7 @@ void QxrdAcquisition::onIdleTimeout()
     QxrdDataProcessorPtr proc(m_DataProcessor);
 
     if (res && proc) {
-      proc->idleInt16Image(res);
+      proc->idleInt16Image(res, this->get_LiveViewAtIdle());
     }
   }
 }
