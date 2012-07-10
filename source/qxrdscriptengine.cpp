@@ -1494,6 +1494,7 @@ QString QxrdScriptEngine::documentationText(QString item)
         for (int i=QObject::staticMetaObject.methodCount();
              i<meta->methodCount(); i++) {
           const char* methodSig = meta->method(i).signature();
+          QMetaMethod::MethodType methodType = meta->method(i).methodType();
 
           if ((i%2)) {
             res.append(tr("<tr bgcolor=\"#e0e0e0\">\n"));
@@ -1505,7 +1506,17 @@ QString QxrdScriptEngine::documentationText(QString item)
           QString proto = QcepDocumentationDictionary::get_Proto(methodSig);
           QString doc   = QcepDocumentationDictionary::get_Doc(methodSig);
 
-          res.append(tr("<td>%1<br/>\n").arg(proto));
+          res.append("<td>");
+          switch (methodType) {
+          case QMetaMethod::Signal:
+            res.append("<i>Signal</i><br/>\n");
+            break;
+          case QMetaMethod::Slot:
+            res.append("<i>Slot</i><br/>\n");
+            break;
+          }
+
+          res.append(tr("%1<br/>\n").arg(proto));
           res.append(tr("%1</td>\n").arg(doc));
 
           res.append(tr("</tr>\n"));
