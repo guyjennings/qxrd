@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdimageplot.h"
 #include "qxrdrasterdata.h"
 #include "qxrdplotzoomer.h"
@@ -676,7 +677,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
     replotImage();
   }
 
-  if (g_Application) {
+  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
     g_Application->printMessage(tr("plot image took %1 msec").arg(tic.elapsed()));
   }
 }

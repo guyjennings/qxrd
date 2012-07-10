@@ -51,8 +51,10 @@ void QxrdFileBrowserModelUpdater::changeRoot(const QString& path)
     m_FileSystemWatcher->removePaths(dirs);
   }
 
-  m_FileSystemWatcher->addPath(path);
-  m_RootPath = path;
+  if (path != "") {
+    m_FileSystemWatcher->addPath(path);
+    m_RootPath = path;
+  }
 }
 
 void QxrdFileBrowserModelUpdater::needUpdate()

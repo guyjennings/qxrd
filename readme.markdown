@@ -31,7 +31,7 @@ File browsers highlight recently changed files
 
 Shrink/grow commands for masks
 
-## v0.8.4 - Feb 29 2012</h2>
+## v0.8.4 - Feb 29 2012
 Backport logarithmic intensity option from v0.9.1
 
 ## v0.8.3 - Nov 14 2011

@@ -334,6 +334,7 @@ public:
   QxrdDoubleImageDataPtr darkImage() const;
   QxrdDoubleImageDataPtr gainMap() const;
   QxrdDoubleImageDataPtr badPixels() const;
+  QxrdDoubleImageDataPtr liveData() const;
   QxrdMaskDataPtr        mask() const;
   QxrdMaskDataPtr        overflow() const;
 
@@ -413,6 +414,7 @@ protected:
   QxrdDoubleImageDataPtr m_DarkFrame;
   QxrdDoubleImageDataPtr m_BadPixels;
   QxrdDoubleImageDataPtr m_GainMap;
+  QxrdDoubleImageDataPtr m_LiveData;
 //  QxrdMaskDataPtr        m_Mask;
   QxrdMaskDataPtr        m_Overflow;
 

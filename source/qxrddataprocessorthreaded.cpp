@@ -60,7 +60,9 @@ void QxrdDataProcessorThreaded::idleInt16Image(QxrdInt16ImageDataPtr image, bool
   set_Average(get_AverageRaw() - get_AverageDark());
 
   if (liveView) {
-    printMessage("Image Live View");
+    if (qcepDebug(DEBUG_PROCESS)) {
+      printMessage("Image Live View");
+    }
 
     QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
     QxrdDoubleImageDataPtr dark      = darkImage();
@@ -69,6 +71,8 @@ void QxrdDataProcessorThreaded::idleInt16Image(QxrdInt16ImageDataPtr image, bool
     subtractDarkImage(corrected, dark);
 
     newData(corrected, QxrdMaskDataPtr());
+
+    m_LiveData = corrected;
   }
 }
 

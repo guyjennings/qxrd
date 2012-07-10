@@ -890,6 +890,31 @@ QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScrip
 }
 
 QCEP_DOC_FUNCTION(
+    "liveData",
+    "liveData()",
+    "Get the current live view image",
+    "<p>Returns a reference to the most recently acquired live view image.</p>"
+    "<p>The returned object can have its properties queried.</p>"
+    "<p>Note that the value returned by this function will change as each "
+    "new live view image is acquired so be careful when calling this function.</p>"
+    )
+
+QScriptValue QxrdScriptEngine::liveDataFunc(QScriptContext * /*context*/, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdDataProcessorPtr proc(eng->dataProcessor());
+
+    if (proc) {
+      return engine -> newQObject(proc -> liveData().data());
+    }
+  }
+
+  return QScriptValue(engine, -1);
+}
+
+QCEP_DOC_FUNCTION(
     "help",
     "help([name...])",
     "Returns help text for a given name or names",
@@ -1221,6 +1246,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("dark", newFunction(darkFunc));
   globalObject().setProperty("mask", newFunction(maskFunc));
   globalObject().setProperty("overflow", newFunction(overflowFunc));
+  globalObject().setProperty("liveData", newFunction(liveDataFunc));
   globalObject().setProperty("help", newFunction(helpFunc));
   globalObject().setProperty("process", newFunction(processFunc));
 //  globalObject().setProperty("typeName", newFunction(typeNameFunc));

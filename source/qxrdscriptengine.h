@@ -84,6 +84,7 @@ private:
   static QScriptValue darkFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue maskFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue overflowFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue liveDataFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue helpFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue processFunc(QScriptContext *context, QScriptEngine *engine);
 //  static QScriptValue typeNameFunc(QScriptContext *context, QScriptEngine *engine);

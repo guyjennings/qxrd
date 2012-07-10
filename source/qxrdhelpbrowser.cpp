@@ -15,8 +15,8 @@ void QxrdHelpBrowser::init(QxrdExperimentWPtr expt)
 
 QVariant QxrdHelpBrowser::loadResource(int type, const QUrl &name)
 {
-  printf("QxrdHelpBrowser::loadResource(%d,\"%s\",\"%s\",\"%s\")\n",
-         type, qPrintable(name.scheme()), qPrintable(name.path()), name.encodedQuery().data());
+//  printf("QxrdHelpBrowser::loadResource(%d,\"%s\",\"%s\",\"%s\")\n",
+//         type, qPrintable(name.scheme()), qPrintable(name.path()), name.encodedQuery().data());
 
   QxrdExperimentPtr expt(m_Experiment);
 
@@ -30,7 +30,7 @@ QVariant QxrdHelpBrowser::loadResource(int type, const QUrl &name)
 
             QByteArray res = engine->helpText(name.encodedQuery());
 
-            printf("QxrdHelpBrowser::loadResource res.length = %d\n", res.count());
+//            printf("QxrdHelpBrowser::loadResource res.length = %d\n", res.count());
 
             return res;
           }
@@ -41,7 +41,7 @@ QVariant QxrdHelpBrowser::loadResource(int type, const QUrl &name)
 
   QVariant res = QTextBrowser::loadResource(type, name);
 
-  printf("QxrdHelpBrowser::loadResource res.typeName = %s\n", res.typeName());
+//  printf("QxrdHelpBrowser::loadResource res.typeName = %s\n", res.typeName());
 
   return res;
 }

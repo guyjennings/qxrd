@@ -336,7 +336,7 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts)
 //    } else if (m_Application) {
 //      m_Application->printMessage(message);
     } else {
-      printf("%s\n", qPrintable(message));
+//      printf("%s\n", qPrintable(message));
     }
   }
 }
@@ -698,7 +698,7 @@ void QxrdExperiment::saveExperimentAs(QString path)
 
 void QxrdExperiment::saveExperimentCopyAs(QString path)
 {
-  printf("Save experiment copy as %s\n", qPrintable(path));
+  printMessage(tr("Save experiment copy as %1").arg(path));
 
   QxrdExperimentSettings settings(path);
 
@@ -745,8 +745,9 @@ void QxrdExperiment::onDetectorTypeChanged()
 {
   int newType = get_DetectorType();
 
-  printf("Detector type changed\n");
-
+  if (qcepDebug(DEBUG_ACQUIRE)) {
+    printMessage(tr("Detector type changed to %1").arg(newType));
+  }
 
   m_Detector       = QxrdDetectorPtr();
   m_DetectorThread = QxrdDetectorThreadPtr();

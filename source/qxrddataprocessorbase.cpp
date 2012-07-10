@@ -1696,6 +1696,11 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::badPixels() const
   return m_BadPixels;
 }
 
+QxrdDoubleImageDataPtr QxrdDataProcessorBase::liveData() const
+{
+  return m_LiveData;
+}
+
 QxrdMaskDataPtr QxrdDataProcessorBase::mask() const
 {
   if (m_Masks.isEmpty()) {

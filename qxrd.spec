@@ -1,5 +1,5 @@
 Name:		qxrd
-Version: 0.9.3
+Version: 0.9.5
 Release:        1%{?dist}
 Summary:        qxrd - a readout and control program for perkin elmer x ray detector
 

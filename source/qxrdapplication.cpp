@@ -273,7 +273,9 @@ QxrdApplication::~QxrdApplication()
 
 void QxrdApplication::finish()
 {
-  printf("QxrdApplication::finish()\n");
+  if (qcepDebug(DEBUG_APP)) {
+    printMessage("QxrdApplication::finish()");
+  }
 
   writeSettings();
 
@@ -763,7 +765,9 @@ void QxrdApplication::openExperiment(QString path)
 
 void QxrdApplication::closeExperiment(QxrdExperimentPtr exp)
 {
-  printf("QxrdApplication::closeExperiment(%p)\n", exp.data());
+  if (qcepDebug(DEBUG_APP)) {
+    printf("QxrdApplication::closeExperiment(%p)\n", exp.data());
+  }
 
   QxrdExperimentPtr expp(exp);
 

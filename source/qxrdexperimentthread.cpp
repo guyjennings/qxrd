@@ -179,8 +179,6 @@ void QxrdExperimentThread::run()
     if (qcepDebug(DEBUG_THREADS)) {
       m_Application->printMessage(tr("Experiment Thread Terminated with rc %1").arg(rc));
     }
-
-    printf("Experiment thread terminated with rc %d\n", rc);
   }
 }
 
