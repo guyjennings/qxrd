@@ -1,6 +1,10 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.6 - Jul 16 2012
+Moved triggering options into extra inputs objects
+Added liveData() script function to access liveView data from scripts
+
 ## v0.9.5 - Jul 9 2012
 Added liveView readout option
 
