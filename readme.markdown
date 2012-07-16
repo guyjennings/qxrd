@@ -3,6 +3,7 @@ See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxr
 
 ## v0.9.6 - Jul 16 2012
 Moved triggering options into extra inputs objects
+
 Added liveData() script function to access liveView data from scripts
 
 ## v0.9.5 - Jul 9 2012
@@ -10,6 +11,7 @@ Added liveView readout option
 
 ## v0.9.4 - Jun 26 2012
 Fixed problems with mingw installer
+
 Added 'initialize' button to extra inputs dialog
 
 ## v0.9.3 - Apr 23 2012
