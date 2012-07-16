@@ -272,8 +272,13 @@ bool QxrdAcquisitionExtraInputsChannel::evalTrig(int polarity, bool edgeTrig)
   for(int i=i0; i<i1; i++) {
     double v=res[i]*polarity;
 
-    if (v > highlevel) nhigh += 1;
     if (v < lowlevel)  nlow  += 1;
+
+    if (edgeTrig) {
+      if (nlow && (v > highlevel)) nhigh += 1;
+    } else {
+      if (v > highlevel) nhigh += 1;
+    }
   }
 
   set_NLow(nlow);
