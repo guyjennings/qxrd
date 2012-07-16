@@ -122,7 +122,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   if (acq) {
     m_AcquisitionDialog = acq -> controlPanel(this);
     m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
-    m_AcquisitionTriggerDialog = new QxrdAcquisitionTriggerDialog(this, m_Acquisition);
+//    m_AcquisitionTriggerDialog = new QxrdAcquisitionTriggerDialog(this, m_Acquisition);
     m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
   }
 
@@ -176,8 +176,8 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
     splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
 
-    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionTriggerDialog);
-    tabifyDockWidget(m_AcquisitionTriggerDialog, m_AcquisitionExtraInputsDialog);
+    tabifyDockWidget(m_AcquisitionDialog, /*m_AcquisitionTriggerDialog);
+    tabifyDockWidget(m_AcquisitionTriggerDialog,*/ m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
@@ -190,8 +190,8 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   } else if (screenGeom.height() >= 1000) {
     splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
 
-    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionTriggerDialog);
-    tabifyDockWidget(m_AcquisitionTriggerDialog, m_AcquisitionExtraInputsDialog);
+    tabifyDockWidget(m_AcquisitionDialog, /*m_AcquisitionTriggerDialog);
+    tabifyDockWidget(m_AcquisitionTriggerDialog,*/ m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
@@ -203,8 +203,8 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
   } else {
-    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionTriggerDialog);
-    tabifyDockWidget(m_AcquisitionTriggerDialog, m_AcquisitionExtraInputsDialog);
+    tabifyDockWidget(m_AcquisitionDialog, /*m_AcquisitionTriggerDialog);
+    tabifyDockWidget(m_AcquisitionTriggerDialog,*/ m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_CenterFinderDialog, m_IntegratorDialog);
 
@@ -542,7 +542,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   }
 
   m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_AcquisitionTriggerDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_AcquisitionTriggerDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_AcquisitionExtraInputsDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_InputFileBrowser -> toggleViewAction());
   m_WindowsMenu -> addAction(m_OutputFileBrowser -> toggleViewAction());

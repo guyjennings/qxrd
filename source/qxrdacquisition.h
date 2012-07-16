@@ -27,10 +27,10 @@
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
-#include "qxrdacquisitiontrigger.h"
-#include "qxrdacquisitiontrigger-ptr.h"
-#include "qxrdacquisitiontriggerthread.h"
-#include "qxrdacquisitiontriggerthread-ptr.h"
+//#include "qxrdacquisitiontrigger.h"
+//#include "qxrdacquisitiontrigger-ptr.h"
+//#include "qxrdacquisitiontriggerthread.h"
+//#include "qxrdacquisitiontriggerthread-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qxrdobjectnamer.h"
 
@@ -172,7 +172,7 @@ public:
   QxrdAllocatorWPtr allocator() const;
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
-  QxrdAcquisitionTriggerPtr acquisitionTrigger() const;
+//  QxrdAcquisitionTriggerPtr acquisitionTrigger() const;
   QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;
 
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
@@ -338,8 +338,8 @@ private:
   mutable QMutex                m_Mutex;
 
   QxrdSynchronizedAcquisitionPtr  m_SynchronizedAcquisition;
-  QxrdAcquisitionTriggerThreadPtr m_AcquisitionTriggerThread;
-  QxrdAcquisitionTriggerWPtr      m_AcquisitionTrigger;
+//  QxrdAcquisitionTriggerThreadPtr m_AcquisitionTriggerThread;
+//  QxrdAcquisitionTriggerWPtr      m_AcquisitionTrigger;
   QxrdAcquisitionExtraInputsPtr   m_AcquisitionExtraInputs;
 
   QxrdExperimentWPtr     m_Experiment;

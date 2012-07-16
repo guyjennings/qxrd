@@ -1,225 +1,225 @@
-#include "qxrdacquisitiontriggerdialog.h"
-#include "qxrdacquisition.h"
-#include "ui_qxrdacquisitiontriggerdialog.h"
-#include "qwt_plot_piecewise_curve.h"
-#include "qxrdnidaqplugininterface.h"
+//#include "qxrdacquisitiontriggerdialog.h"
+//#include "qxrdacquisition.h"
+//#include "ui_qxrdacquisitiontriggerdialog.h"
+//#include "qwt_plot_piecewise_curve.h"
+//#include "qxrdnidaqplugininterface.h"
 
-QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, QxrdAcquisitionWPtr acqw) :
-  QDockWidget(parent),
-  m_Acquisition(acqw),
-  m_AcquisitionTrigger()
-{
-  setupUi(this);
+//QxrdAcquisitionTriggerDialog::QxrdAcquisitionTriggerDialog(QWidget *parent, QxrdAcquisitionWPtr acqw) :
+//  QDockWidget(parent),
+//  m_Acquisition(acqw),
+//  m_AcquisitionTrigger()
+//{
+//  setupUi(this);
 
-  QxrdAcquisitionPtr acq(acqw);
+//  QxrdAcquisitionPtr acq(acqw);
 
-  if (acq) {
-    m_AcquisitionTrigger = acq->acquisitionTrigger();
+//  if (acq) {
+//    m_AcquisitionTrigger = acq->acquisitionTrigger();
 
-    QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
-    QxrdNIDAQPluginInterfacePtr nidaq = acq->nidaqPlugin();
+//    QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
+//    QxrdNIDAQPluginInterfacePtr nidaq = acq->nidaqPlugin();
 
-    m_ATrigMode     -> addItem("None");
-    m_BTrigMode     -> addItem("None");
+//    m_ATrigMode     -> addItem("None");
+//    m_BTrigMode     -> addItem("None");
 
-    if (nidaq && trig) {
-      m_ATrigMode     -> addItem("Positive Edge");
-      m_ATrigMode     -> addItem("Negative Edge");
-      m_ATrigMode     -> addItem("Positive Level");
-      m_ATrigMode     -> addItem("Negative Level");
+//    if (nidaq && trig) {
+//      m_ATrigMode     -> addItem("Positive Edge");
+//      m_ATrigMode     -> addItem("Negative Edge");
+//      m_ATrigMode     -> addItem("Positive Level");
+//      m_ATrigMode     -> addItem("Negative Level");
 
-      m_BTrigMode     -> addItem("Positive Edge");
-      m_BTrigMode     -> addItem("Negative Edge");
-      m_BTrigMode     -> addItem("Positive Level");
-      m_BTrigMode     -> addItem("Negative Level");
+//      m_BTrigMode     -> addItem("Positive Edge");
+//      m_BTrigMode     -> addItem("Negative Edge");
+//      m_BTrigMode     -> addItem("Positive Level");
+//      m_BTrigMode     -> addItem("Negative Level");
 
-      trig->prop_TriggerAMode()->linkTo(m_ATrigMode);
-      trig->prop_TriggerBMode()->linkTo(m_BTrigMode);
+//      trig->prop_TriggerAMode()->linkTo(m_ATrigMode);
+//      trig->prop_TriggerBMode()->linkTo(m_BTrigMode);
 
-      m_ATrigCard -> addItem("None");
-      m_BTrigCard -> addItem("None");
+//      m_ATrigCard -> addItem("None");
+//      m_BTrigCard -> addItem("None");
 
-      QStringList cards = nidaq -> deviceNames();
+//      QStringList cards = nidaq -> deviceNames();
 
-      for (int i=0; i<cards.count(); i++) {
-        QString card = cards.value(i);
-        QString type = nidaq->deviceType(card);
-        int     sim  = nidaq->deviceIsSimulated(card);
+//      for (int i=0; i<cards.count(); i++) {
+//        QString card = cards.value(i);
+//        QString type = nidaq->deviceType(card);
+//        int     sim  = nidaq->deviceIsSimulated(card);
 
-        QString desc = card;
+//        QString desc = card;
 
-        desc += " : ";
-        desc += type;
+//        desc += " : ";
+//        desc += type;
 
-        if (sim) {
-          desc += " [simulated]";
-        }
+//        if (sim) {
+//          desc += " [simulated]";
+//        }
 
-        m_ATrigCard -> addItem(card);
-        m_BTrigCard -> addItem(card);
+//        m_ATrigCard -> addItem(card);
+//        m_BTrigCard -> addItem(card);
 
-        m_ATrigCard -> setItemData(i+1, desc, Qt::ToolTipRole);
-        m_BTrigCard -> setItemData(i+1, desc, Qt::ToolTipRole);
-      }
+//        m_ATrigCard -> setItemData(i+1, desc, Qt::ToolTipRole);
+//        m_BTrigCard -> setItemData(i+1, desc, Qt::ToolTipRole);
+//      }
 
-      trig->prop_TriggerACard()->linkTo(m_ATrigCard);
-      trig->prop_TriggerBCard()->linkTo(m_BTrigCard);
+//      trig->prop_TriggerACard()->linkTo(m_ATrigCard);
+//      trig->prop_TriggerBCard()->linkTo(m_BTrigCard);
 
-      connect(trig->prop_TriggerACard(), SIGNAL(valueChanged(int,int)), this, SLOT(setATrigChannelNames()));
-      connect(trig->prop_TriggerBCard(), SIGNAL(valueChanged(int,int)), this, SLOT(setBTrigChannelNames()));
+//      connect(trig->prop_TriggerACard(), SIGNAL(valueChanged(int,int)), this, SLOT(setATrigChannelNames()));
+//      connect(trig->prop_TriggerBCard(), SIGNAL(valueChanged(int,int)), this, SLOT(setBTrigChannelNames()));
 
-      setATrigChannelNames();
-      setBTrigChannelNames();
+//      setATrigChannelNames();
+//      setBTrigChannelNames();
 
-      trig->prop_TriggerAChannel()->linkTo(m_ATrigChan);
-      trig->prop_TriggerBChannel()->linkTo(m_BTrigChan);
+//      trig->prop_TriggerAChannel()->linkTo(m_ATrigChan);
+//      trig->prop_TriggerBChannel()->linkTo(m_BTrigChan);
 
-      m_ATrigLevel  -> setMinimum(-10.0);
-      m_ATrigLevel  -> setMaximum(10.0);
-      m_ATrigLevel  -> setSingleStep(0.1);
+//      m_ATrigLevel  -> setMinimum(-10.0);
+//      m_ATrigLevel  -> setMaximum(10.0);
+//      m_ATrigLevel  -> setSingleStep(0.1);
 
-      m_BTrigLevel  -> setMinimum(-10.0);
-      m_BTrigLevel  -> setMaximum(10.0);
-      m_BTrigLevel  -> setSingleStep(0.1);
+//      m_BTrigLevel  -> setMinimum(-10.0);
+//      m_BTrigLevel  -> setMaximum(10.0);
+//      m_BTrigLevel  -> setSingleStep(0.1);
 
-      trig->prop_TriggerALevel()->linkTo(m_ATrigLevel);
-      trig->prop_TriggerBLevel()->linkTo(m_BTrigLevel);
+//      trig->prop_TriggerALevel()->linkTo(m_ATrigLevel);
+//      trig->prop_TriggerBLevel()->linkTo(m_BTrigLevel);
 
-      m_ATrigHysteresis  -> setMinimum(0.0);
-      m_ATrigHysteresis  -> setMaximum(10.0);
-      m_ATrigHysteresis  -> setSingleStep(0.1);
+//      m_ATrigHysteresis  -> setMinimum(0.0);
+//      m_ATrigHysteresis  -> setMaximum(10.0);
+//      m_ATrigHysteresis  -> setSingleStep(0.1);
 
-      m_ATrigHysteresis  -> setMinimum(0.0);
-      m_ATrigHysteresis  -> setMaximum(10.0);
-      m_ATrigHysteresis  -> setSingleStep(0.1);
+//      m_ATrigHysteresis  -> setMinimum(0.0);
+//      m_ATrigHysteresis  -> setMaximum(10.0);
+//      m_ATrigHysteresis  -> setSingleStep(0.1);
 
-      trig->prop_TriggerAHysteresis()->linkTo(m_ATrigHysteresis);
-      trig->prop_TriggerBHysteresis()->linkTo(m_BTrigHysteresis);
+//      trig->prop_TriggerAHysteresis()->linkTo(m_ATrigHysteresis);
+//      trig->prop_TriggerBHysteresis()->linkTo(m_BTrigHysteresis);
 
-      trig->prop_TriggerAValue()->linkTo(m_ATrigValue);
-      trig->prop_TriggerBValue()->linkTo(m_BTrigValue);
+//      trig->prop_TriggerAValue()->linkTo(m_ATrigValue);
+//      trig->prop_TriggerBValue()->linkTo(m_BTrigValue);
 
-      trig->prop_TriggerATriggered()->linkTo(m_ATrigTriggered);
-      trig->prop_TriggerBTriggered()->linkTo(m_BTrigTriggered);
+//      trig->prop_TriggerATriggered()->linkTo(m_ATrigTriggered);
+//      trig->prop_TriggerBTriggered()->linkTo(m_BTrigTriggered);
 
-      trig->prop_TriggerAChannelName()->linkTo(m_ATrigChanName);
-      trig->prop_TriggerBChannelName()->linkTo(m_BTrigChanName);
+//      trig->prop_TriggerAChannelName()->linkTo(m_ATrigChanName);
+//      trig->prop_TriggerBChannelName()->linkTo(m_BTrigChanName);
 
-      connect(trig->prop_TriggerAChannel(), SIGNAL(valueChanged(int,int)),
-              this, SLOT(triggerChanged()));
-      connect(trig->prop_TriggerBChannel(), SIGNAL(valueChanged(int,int)),
-              this, SLOT(triggerChanged()));
-    } else {
-      m_ATrigCard->setEnabled(false);
-      m_BTrigCard->setEnabled(false);
-      m_ATrigChan->setEnabled(false);
-      m_BTrigChan->setEnabled(false);
-      m_ATrigLevel->setEnabled(false);
-      m_BTrigLevel->setEnabled(false);
-      m_ATrigHysteresis->setEnabled(false);
-      m_BTrigHysteresis->setEnabled(false);
-      m_ATrigChanName->setEnabled(false);
-      m_BTrigChanName->setEnabled(false);
-    }
-  }
-}
+//      connect(trig->prop_TriggerAChannel(), SIGNAL(valueChanged(int,int)),
+//              this, SLOT(triggerChanged()));
+//      connect(trig->prop_TriggerBChannel(), SIGNAL(valueChanged(int,int)),
+//              this, SLOT(triggerChanged()));
+//    } else {
+//      m_ATrigCard->setEnabled(false);
+//      m_BTrigCard->setEnabled(false);
+//      m_ATrigChan->setEnabled(false);
+//      m_BTrigChan->setEnabled(false);
+//      m_ATrigLevel->setEnabled(false);
+//      m_BTrigLevel->setEnabled(false);
+//      m_ATrigHysteresis->setEnabled(false);
+//      m_BTrigHysteresis->setEnabled(false);
+//      m_ATrigChanName->setEnabled(false);
+//      m_BTrigChanName->setEnabled(false);
+//    }
+//  }
+//}
 
-QxrdAcquisitionTriggerDialog::~QxrdAcquisitionTriggerDialog()
-{
-}
+//QxrdAcquisitionTriggerDialog::~QxrdAcquisitionTriggerDialog()
+//{
+//}
 
-void QxrdAcquisitionTriggerDialog::changeEvent(QEvent *e)
-{
-  QDockWidget::changeEvent(e);
-  switch (e->type()) {
-  case QEvent::LanguageChange:
-    retranslateUi(this);
-    break;
-  default:
-    break;
-  }
-}
+//void QxrdAcquisitionTriggerDialog::changeEvent(QEvent *e)
+//{
+//  QDockWidget::changeEvent(e);
+//  switch (e->type()) {
+//  case QEvent::LanguageChange:
+//    retranslateUi(this);
+//    break;
+//  default:
+//    break;
+//  }
+//}
 
-void QxrdAcquisitionTriggerDialog::setATrigChannelNames()
-{
-  QxrdAcquisitionPtr acq(m_Acquisition);
-  QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
+//void QxrdAcquisitionTriggerDialog::setATrigChannelNames()
+//{
+//  QxrdAcquisitionPtr acq(m_Acquisition);
+//  QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
 
-  if (acq && trig) {
-    QxrdNIDAQPluginInterfacePtr nidaq(acq->nidaqPlugin());
+//  if (acq && trig) {
+//    QxrdNIDAQPluginInterfacePtr nidaq(acq->nidaqPlugin());
 
-    if (nidaq) {
-      QStringList devices = nidaq->deviceNames();
+//    if (nidaq) {
+//      QStringList devices = nidaq->deviceNames();
 
-      QString device = devices.value(trig->get_TriggerACard() - 1); /* -1 to allow for 'none' entry in menu */
+//      QString device = devices.value(trig->get_TriggerACard() - 1); /* -1 to allow for 'none' entry in menu */
 
-      QStringList channels = nidaq->deviceAIChannels(device);
+//      QStringList channels = nidaq->deviceAIChannels(device);
 
-      int nitems = m_ATrigChan->count();
+//      int nitems = m_ATrigChan->count();
 
-      if (nitems > channels.count()) {
-        for (int i=channels.count(); i<nitems; i++) {
-          m_ATrigChan->removeItem(i);
-        }
-      } else if (nitems < channels.count()) {
-        for (int i=nitems; i<channels.count(); i++) {
-          m_ATrigChan->addItem(" ");
-        }
-      }
+//      if (nitems > channels.count()) {
+//        for (int i=channels.count(); i<nitems; i++) {
+//          m_ATrigChan->removeItem(i);
+//        }
+//      } else if (nitems < channels.count()) {
+//        for (int i=nitems; i<channels.count(); i++) {
+//          m_ATrigChan->addItem(" ");
+//        }
+//      }
 
-      for(int i=0; i<channels.count(); i++) {
-        m_ATrigChan->setItemText(i, channels.value(i));
-      }
+//      for(int i=0; i<channels.count(); i++) {
+//        m_ATrigChan->setItemText(i, channels.value(i));
+//      }
 
-      trig->set_TriggerAChannelName(m_ATrigChan->currentText());
-    }
-  }
-}
+//      trig->set_TriggerAChannelName(m_ATrigChan->currentText());
+//    }
+//  }
+//}
 
-void QxrdAcquisitionTriggerDialog::setBTrigChannelNames()
-{
-  QxrdAcquisitionPtr acq(m_Acquisition);
-  QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
+//void QxrdAcquisitionTriggerDialog::setBTrigChannelNames()
+//{
+//  QxrdAcquisitionPtr acq(m_Acquisition);
+//  QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
 
-  if (acq && trig) {
-    QxrdNIDAQPluginInterfacePtr nidaq(acq->nidaqPlugin());
+//  if (acq && trig) {
+//    QxrdNIDAQPluginInterfacePtr nidaq(acq->nidaqPlugin());
 
-    if (nidaq) {
-      QStringList devices = nidaq->deviceNames();
+//    if (nidaq) {
+//      QStringList devices = nidaq->deviceNames();
 
-      QString device = devices.value(trig->get_TriggerBCard() - 1); /* -1 to allow for 'none' entry in menu */
+//      QString device = devices.value(trig->get_TriggerBCard() - 1); /* -1 to allow for 'none' entry in menu */
 
-      QStringList channels = nidaq->deviceAIChannels(device);
+//      QStringList channels = nidaq->deviceAIChannels(device);
 
-      int nitems = m_BTrigChan->count();
+//      int nitems = m_BTrigChan->count();
 
-      if (nitems > channels.count()) {
-        for (int i=channels.count(); i<nitems; i++) {
-          m_BTrigChan->removeItem(i);
-        }
-      } else if (nitems < channels.count()) {
-        for (int i=nitems; i<channels.count(); i++) {
-          m_BTrigChan->addItem(" ");
-        }
-      }
+//      if (nitems > channels.count()) {
+//        for (int i=channels.count(); i<nitems; i++) {
+//          m_BTrigChan->removeItem(i);
+//        }
+//      } else if (nitems < channels.count()) {
+//        for (int i=nitems; i<channels.count(); i++) {
+//          m_BTrigChan->addItem(" ");
+//        }
+//      }
 
-      for(int i=0; i<channels.count(); i++) {
-        m_BTrigChan->setItemText(i, channels.value(i));
-      }
+//      for(int i=0; i<channels.count(); i++) {
+//        m_BTrigChan->setItemText(i, channels.value(i));
+//      }
 
-      trig->set_TriggerBChannelName(m_BTrigChan->currentText());
-    }
-  }
-}
+//      trig->set_TriggerBChannelName(m_BTrigChan->currentText());
+//    }
+//  }
+//}
 
-void QxrdAcquisitionTriggerDialog::triggerChanged()
-{
-  QxrdAcquisitionPtr acq(m_Acquisition);
-  QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
+//void QxrdAcquisitionTriggerDialog::triggerChanged()
+//{
+//  QxrdAcquisitionPtr acq(m_Acquisition);
+//  QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
 
-  if (acq && trig) {
-    trig -> set_TriggerAChannelName(m_ATrigChan->currentText());
-    trig -> set_TriggerBChannelName(m_BTrigChan->currentText());
-  }
-}
+//  if (acq && trig) {
+//    trig -> set_TriggerAChannelName(m_ATrigChan->currentText());
+//    trig -> set_TriggerBChannelName(m_BTrigChan->currentText());
+//  }
+//}
 

@@ -69,7 +69,7 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString secti
 
   settings->endArray();
 
-  reinitialize();
+  initialize();
 }
 
 void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString section)
@@ -114,6 +114,13 @@ void QxrdAcquisitionExtraInputs::statusMessage(QString msg, QDateTime ts)
 
   if (acq) {
     acq->statusMessage(msg);
+  }
+}
+
+void QxrdAcquisitionExtraInputs::prepareForAcquisition(QxrdAcquisitionParameterPack *parms)
+{
+  if (!get_Enabled()) {
+    initialize();
   }
 }
 

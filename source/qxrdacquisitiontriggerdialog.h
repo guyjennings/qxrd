@@ -1,30 +1,30 @@
-#ifndef QXRDACQUISITIONTRIGGERDIALOG_H
-#define QXRDACQUISITIONTRIGGERDIALOG_H
+//#ifndef QXRDACQUISITIONTRIGGERDIALOG_H
+//#define QXRDACQUISITIONTRIGGERDIALOG_H
 
-#include <QDockWidget>
-#include "qxrdacquisition.h"
-#include "qxrdacquisitiontrigger.h"
-#include "ui_qxrdacquisitiontriggerdialog.h"
+//#include <QDockWidget>
+//#include "qxrdacquisition.h"
+//#include "qxrdacquisitiontrigger.h"
+//#include "ui_qxrdacquisitiontriggerdialog.h"
 
-class QxrdAcquisitionTriggerDialog : public QDockWidget, public Ui::QxrdAcquisitionTriggerDialog
-{
-  Q_OBJECT
+//class QxrdAcquisitionTriggerDialog : public QDockWidget, public Ui::QxrdAcquisitionTriggerDialog
+//{
+//  Q_OBJECT
 
-public:
-  explicit QxrdAcquisitionTriggerDialog(QWidget *parent, QxrdAcquisitionWPtr acq);
-  ~QxrdAcquisitionTriggerDialog();
+//public:
+//  explicit QxrdAcquisitionTriggerDialog(QWidget *parent, QxrdAcquisitionWPtr acq);
+//  ~QxrdAcquisitionTriggerDialog();
 
-protected:
-  void changeEvent(QEvent *e);
+//protected:
+//  void changeEvent(QEvent *e);
 
-private slots:
-  void setATrigChannelNames();
-  void setBTrigChannelNames();
-  void triggerChanged();
+//private slots:
+//  void setATrigChannelNames();
+//  void setBTrigChannelNames();
+//  void triggerChanged();
 
-private:
-  QxrdAcquisitionWPtr        m_Acquisition;
-  QxrdAcquisitionTriggerWPtr m_AcquisitionTrigger;
-};
+//private:
+//  QxrdAcquisitionWPtr        m_Acquisition;
+//  QxrdAcquisitionTriggerWPtr m_AcquisitionTrigger;
+//};
 
-#endif // QXRDACQUISITIONTRIGGERDIALOG_H
+//#endif // QXRDACQUISITIONTRIGGERDIALOG_H

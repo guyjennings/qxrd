@@ -228,11 +228,11 @@ bool QxrdAcquisitionExtraInputsChannel::evaluateTrigger()
   switch (trigMode) {
   case TriggerModeNone:
   default:
-    res = true;
+    res = false;
     break;
 
   case TriggerModeEdgePos:
-    res = evalTrig(+1,true);
+    res = evalTrig(+1, true);
     break;
 
   case TriggerModeEdgeNeg:
@@ -248,6 +248,8 @@ bool QxrdAcquisitionExtraInputsChannel::evaluateTrigger()
     break;
   }
 
+  set_Triggered(res);
+
   return res;
 }
 
@@ -255,6 +257,7 @@ bool QxrdAcquisitionExtraInputsChannel::evalTrig(int polarity, bool edgeTrig)
 {
   double level = get_TriggerLevel();
   double hyst  = get_TriggerHysteresis();
+  bool tres;
 
   QVector<double> res = readChannel();
 
@@ -277,10 +280,10 @@ bool QxrdAcquisitionExtraInputsChannel::evalTrig(int polarity, bool edgeTrig)
   set_NHigh(nhigh);
 
   if (edgeTrig) {
-    set_Triggered((nlow > 0) && (nhigh > 0));
+    tres = ((nlow > 0) && (nhigh > 0));
   } else {
-    set_Triggered(nhigh > 0);
+    tres = (nhigh > 0);
   }
 
-  return get_Triggered();
+  return tres;
 }

@@ -1283,12 +1283,12 @@ void QxrdScriptEngine::initialize()
         globalObject().setProperty("synchronization", newQObject(sync.data()));
       }
 
-      QxrdAcquisitionTriggerPtr trig(acq->acquisitionTrigger());
+//      QxrdAcquisitionTriggerPtr trig(acq->acquisitionTrigger());
 
-      if (trig) {
-        QCEP_DOC_OBJECT("triggering", "Acquisition Triggering Parameters");
-        globalObject().setProperty("triggering", newQObject(trig.data()));
-      }
+//      if (trig) {
+//        QCEP_DOC_OBJECT("triggering", "Acquisition Triggering Parameters");
+//        globalObject().setProperty("triggering", newQObject(trig.data()));
+//      }
 
       QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
 
