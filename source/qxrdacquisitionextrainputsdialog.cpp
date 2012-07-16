@@ -78,21 +78,25 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     QDoubleSpinBox *min = new QDoubleSpinBox();
     min->setMinimum(-20.0);
     min->setMaximum(20.0);
+    min->setSingleStep(0.1);
     ch->prop_Min()->linkTo(min);
 
     QDoubleSpinBox *max = new QDoubleSpinBox();
     max->setMinimum(-20.0);
     max->setMaximum(20.0);
+    max->setSingleStep(0.1);
     ch->prop_Max()->linkTo(max);
 
     QDoubleSpinBox *stt = new QDoubleSpinBox();
     stt->setMinimum(-0.2);
     stt->setMaximum(10.0);
+    stt->setSingleStep(0.1);
     ch->prop_Start()->linkTo(stt);
 
     QDoubleSpinBox *end = new QDoubleSpinBox();
     end->setMinimum(-0.2);
     end->setMaximum(10.0);
+    end->setSingleStep(0.1);
     ch->prop_End()->linkTo(end);
 
     QComboBox  *tmode = new QComboBox();
@@ -106,11 +110,13 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     QDoubleSpinBox *tlevel = new QDoubleSpinBox();
     tlevel -> setMinimum(-20.0);
     tlevel -> setMaximum(+20.0);
+    tlevel -> setSingleStep(0.1);
     ch->prop_TriggerLevel()->linkTo(tlevel);
 
     QDoubleSpinBox *thyst = new QDoubleSpinBox();
     thyst -> setMinimum(0.0);
     thyst -> setMaximum(+20.0);
+    thyst -> setSingleStep(0.1);
     ch->prop_TriggerHysteresis()->linkTo(thyst);
 
     QLabel *phy = new QLabel();
