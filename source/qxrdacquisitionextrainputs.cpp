@@ -229,6 +229,10 @@ void QxrdAcquisitionExtraInputs::acquire()
         if (chanp->get_Enabled()) {
           chanp -> set_Value(
                 chanp -> evaluateChannel());
+
+          if (acq && chanp->get_Triggered()) {
+            acq->set_Triggered(true);
+          }
         }
       }
 

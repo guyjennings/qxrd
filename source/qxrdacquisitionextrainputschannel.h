@@ -30,6 +30,8 @@ public slots:
   double          minimumChannel();
   int             startIndex();
   int             endIndex();
+  bool            evaluateTrigger();
+  bool            evalTrig(int polarity, bool edgeTrig);
 
 private:
   QxrdObjectNamer m_ObjectNamer;
@@ -40,6 +42,14 @@ public:
     ModeAveraged,
     ModeMaximum,
     ModeMinimum
+  };
+
+  enum {
+    TriggerModeNone,
+    TriggerModeEdgePos,
+    TriggerModeEdgeNeg,
+    TriggerModeLevelPos,
+    TriggerModeLevelNeg
   };
 
   Q_PROPERTY(int channelNumber READ get_ChannelNumber WRITE set_ChannelNumber STORED false)
@@ -75,11 +85,29 @@ public:
   Q_PROPERTY(double end READ get_End WRITE set_End)
   QCEP_DOUBLE_PROPERTY(End)
 
+  Q_PROPERTY(int triggerMode READ get_TriggerMode WRITE set_TriggerMode)
+  QCEP_INTEGER_PROPERTY(TriggerMode)
+
+  Q_PROPERTY(double triggerLevel READ get_TriggerLevel WRITE set_TriggerLevel)
+  QCEP_DOUBLE_PROPERTY(TriggerLevel)
+
+  Q_PROPERTY(double triggerHysteresis READ get_TriggerHysteresis WRITE set_TriggerHysteresis)
+  QCEP_DOUBLE_PROPERTY(TriggerHysteresis)
+
   Q_PROPERTY(int physicalChannel READ get_PhysicalChannel WRITE set_PhysicalChannel STORED false)
   QCEP_INTEGER_PROPERTY(PhysicalChannel)
 
   Q_PROPERTY(double value READ get_Value WRITE set_Value STORED false)
   QCEP_DOUBLE_PROPERTY(Value)
+
+  Q_PROPERTY(bool triggered READ get_Triggered WRITE set_Triggered STORED false)
+  QCEP_BOOLEAN_PROPERTY(Triggered)
+
+  Q_PROPERTY(int nLow READ get_NLow WRITE set_NLow STORED false)
+  QCEP_INTEGER_PROPERTY(NLow)
+
+  Q_PROPERTY(int nHigh READ get_NHigh WRITE set_NHigh STORED false)
+  QCEP_INTEGER_PROPERTY(NHigh)
 
   Q_PROPERTY(QcepDoubleVector waveform READ get_Waveform WRITE set_Waveform STORED false)
   QCEP_DOUBLE_VECTOR_PROPERTY(Waveform)

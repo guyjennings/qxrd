@@ -21,8 +21,14 @@ QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
                                  "i.e. Negative values mean times before start of exposure"),
   m_End(saver, this, "end", 0.0, "End Offset for Channel (in sec before notional exposure end)\n"
                                  "i.e. Negative values mean times after end of exposure"),
+  m_TriggerMode(saver, this, "triggerMode", 0, "Trigger Mode (0 = None, 1 = +Edge, 2 = -Edge, 3 = +Level, 4 = -Level)"),
+  m_TriggerLevel(saver, this, "triggerLevel", 0.0, "Trigger Level (in Volts)"),
+  m_TriggerHysteresis(saver, this, "triggerHysteresis", 0.0, "Trigger Hysteresis (in Volts)"),
   m_PhysicalChannel(QxrdSettingsSaverPtr(), this, "physicalChannel", 0, "Physical Channel Number"),
   m_Value(QxrdSettingsSaverWPtr(), this, "value", 0.0, "Current Value of Channel"),
+  m_Triggered(QxrdSettingsSaverWPtr(), this, "triggered", 0, "Was channel triggered?"),
+  m_NLow(QxrdSettingsSaverWPtr(), this, "nLow", 0, "Number of untriggered data points"),
+  m_NHigh(QxrdSettingsSaverWPtr(), this, "nHigh", 0, "Number of triggered data points"),
   m_Waveform(QxrdSettingsSaverWPtr(), this, "waveform", QcepDoubleVector(), "Waveform on Channel"),
   m_Experiment(doc),
   m_ExtraInputs(xtra)
@@ -112,6 +118,8 @@ int QxrdAcquisitionExtraInputsChannel::endIndex()
 
 double          QxrdAcquisitionExtraInputsChannel::evaluateChannel()
 {
+  evaluateTrigger();
+
   int mode = get_Mode();
 
   switch (mode) {
@@ -212,3 +220,67 @@ double          QxrdAcquisitionExtraInputsChannel::minimumChannel()
   return min;
 }
 
+bool QxrdAcquisitionExtraInputsChannel::evaluateTrigger()
+{
+  int trigMode = get_TriggerMode();
+  bool res;
+
+  switch (trigMode) {
+  case TriggerModeNone:
+  default:
+    res = true;
+    break;
+
+  case TriggerModeEdgePos:
+    res = evalTrig(+1,true);
+    break;
+
+  case TriggerModeEdgeNeg:
+    res = evalTrig(-1, true);
+    break;
+
+  case TriggerModeLevelPos:
+    res = evalTrig(+1, false);
+    break;
+
+  case TriggerModeLevelNeg:
+    res = evalTrig(-1, false);
+    break;
+  }
+
+  return res;
+}
+
+bool QxrdAcquisitionExtraInputsChannel::evalTrig(int polarity, bool edgeTrig)
+{
+  double level = get_TriggerLevel();
+  double hyst  = get_TriggerHysteresis();
+
+  QVector<double> res = readChannel();
+
+  int nlow=0, nhigh=0;
+  double tlevel = level*polarity;
+  double lowlevel = tlevel-fabs(hyst);
+  double highlevel = tlevel+fabs(hyst);
+
+  int i0 = startIndex();
+  int i1 = endIndex();
+
+  for(int i=i0; i<i1; i++) {
+    double v=res[i]*polarity;
+
+    if (v > highlevel) nhigh += 1;
+    if (v < lowlevel)  nlow  += 1;
+  }
+
+  set_NLow(nlow);
+  set_NHigh(nhigh);
+
+  if (edgeTrig) {
+    set_Triggered((nlow > 0) && (nhigh > 0));
+  } else {
+    set_Triggered(nhigh > 0);
+  }
+
+  return get_Triggered();
+}

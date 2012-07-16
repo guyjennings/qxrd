@@ -95,11 +95,32 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     end->setMaximum(10.0);
     ch->prop_End()->linkTo(end);
 
+    QComboBox  *tmode = new QComboBox();
+    tmode -> addItem("No Trigger");
+    tmode -> addItem("Positive Edge");
+    tmode -> addItem("Negative Edge");
+    tmode -> addItem("Positive Level");
+    tmode -> addItem("Negative Level");
+    ch->prop_TriggerMode()->linkTo(tmode);
+
+    QDoubleSpinBox *tlevel = new QDoubleSpinBox();
+    tlevel -> setMinimum(-20.0);
+    tlevel -> setMaximum(+20.0);
+    ch->prop_TriggerLevel()->linkTo(tlevel);
+
+    QDoubleSpinBox *thyst = new QDoubleSpinBox();
+    thyst -> setMinimum(0.0);
+    thyst -> setMaximum(+20.0);
+    ch->prop_TriggerHysteresis()->linkTo(thyst);
+
     QLabel *phy = new QLabel();
     ch->prop_PhysicalChannel()->linkTo(phy);
 
     QLabel *val = new QLabel();
     ch->prop_Value()->linkTo(val);
+
+    QCheckBox *trig = new QCheckBox();
+    ch->prop_Triggered()->linkTo(trig);
 
     int c = 0;
 
@@ -113,8 +134,12 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
       m_ExtraInputsTable->setCellWidget(i, c++, max);
       m_ExtraInputsTable->setCellWidget(i, c++, stt);
       m_ExtraInputsTable->setCellWidget(i, c++, end);
+      m_ExtraInputsTable->setCellWidget(i, c++, tmode);
+      m_ExtraInputsTable->setCellWidget(i, c++, tlevel);
+      m_ExtraInputsTable->setCellWidget(i, c++, thyst);
       m_ExtraInputsTable->setCellWidget(i, c++, phy);
       m_ExtraInputsTable->setCellWidget(i, c++, val);
+      m_ExtraInputsTable->setCellWidget(i, c++, trig);
     } else {
       m_ExtraInputsTable->setCellWidget(c++, i, cb);
       m_ExtraInputsTable->setCellWidget(c++, i, cb2);
@@ -125,8 +150,12 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
       m_ExtraInputsTable->setCellWidget(c++, i, max);
       m_ExtraInputsTable->setCellWidget(c++, i, stt);
       m_ExtraInputsTable->setCellWidget(c++, i, end);
+      m_ExtraInputsTable->setCellWidget(c++, i, tmode);
+      m_ExtraInputsTable->setCellWidget(c++, i, tlevel);
+      m_ExtraInputsTable->setCellWidget(c++, i, thyst);
       m_ExtraInputsTable->setCellWidget(c++, i, phy);
       m_ExtraInputsTable->setCellWidget(c++, i, val);
+      m_ExtraInputsTable->setCellWidget(c++, i, trig);
     }
   }
 }
@@ -157,7 +186,9 @@ void QxrdAcquisitionExtraInputsDialog::updateUi()
 
         labels << "Enabled" << "Plotted" << "Device Name" << "Mode" << "SaveWfm?"
                << "Min V" << "Max V"
-               << "Start" << "End" << "Phys Chan" << "Value";
+               << "Start" << "End"
+               << "Trigger Mode" << "Trigger Level" << "Trigger Hysteresis"
+               << "Phys Chan" << "Value" << "Triggered?";
 
         QStringList chanLabels;
 
