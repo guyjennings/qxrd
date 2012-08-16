@@ -31,14 +31,12 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Slicer(NULL),
     m_Measurer(NULL),
     m_HistogramSelector(NULL),
-    //    m_Legend(NULL),
     m_Data(NULL),
     m_Mask(NULL),
     m_Overflow(NULL),
     m_DataImage(NULL),
     m_MaskImage(NULL),
     m_OverflowImage(NULL),
-    //    m_PlotImage(NULL),
     m_ColorMap(Qt::black, Qt::white),
     m_MaskColorMap(Qt::red, QColor(0,0,0,0)),
     m_MaskAlpha(80),
@@ -88,7 +86,6 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   m_HistogramSelector = new QxrdHistogramSelector(canvas(), this);
   m_HistogramSelector -> setEnabled(false);
 
-  //  m_Legend = QwtLegendPtr(new QwtLegend(this));
   m_Legend -> setFrameStyle(QFrame::Box|QFrame::Sunken);
   m_Legend -> setItemMode(QwtLegend::CheckableItem);
 
@@ -104,9 +101,6 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   m_OverflowImage = new QwtPlotSpectrogram();
   m_OverflowImage -> setAlpha(set && set->get_OverflowShown() ? m_OverflowAlpha : 0);
   m_OverflowImage -> attach(this);
-
-  //  m_PlotImage = QxrdPlotImagePtr(new QxrdPlotImage());
-  //  m_PlotImage -> attach(this);
 
   m_CenterFinderPicker = new QxrdCenterFinderPicker(this);
 
@@ -198,26 +192,6 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
   connect(m_HistogramSelector, SIGNAL(selected(QwtDoubleRect)),
           this, SIGNAL(selectHistogram(QwtDoubleRect)));
 }
-
-//void QxrdImagePlot::setSaver(QxrdSettingsSaverPtr saver)
-//{
-//  QxrdPlot::setSaver(saver);
-
-//  prop_ImageShown()->setSaver(saver);
-//  prop_MaskShown()->setSaver(saver);
-//  prop_OverflowShown()->setSaver(saver);
-//  prop_DisplayMinimumPct()->setSaver(saver);
-//  prop_DisplayMaximumPct()->setSaver(saver);
-//  prop_DisplayMinimumVal()->setSaver(saver);
-//  prop_DisplayMaximumVal()->setSaver(saver);
-//  prop_DisplayMinimumPctle()->setSaver(saver);
-//  prop_DisplayMaximumPctle()->setSaver(saver);
-//  prop_DisplayScalingMode()->setSaver(saver);
-//  prop_InterpolatePixels()->setSaver(saver);
-//  prop_MaintainAspectRatio()->setSaver(saver);
-//  prop_DisplayColorMap()->setSaver(saver);
-//  prop_DisplayLog()->setSaver(saver);
-//}
 
 QxrdDataProcessorWPtr QxrdImagePlot::processor() const
 {
@@ -910,16 +884,9 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
   if (set) {
     QMenu plotMenu(NULL, NULL);
 
-//    QAction *xLog = plotMenu.addAction("Log X Axis");
-//    QAction *yLog = plotMenu.addAction("Log Y Axis");
     QAction *auSc = plotMenu.addAction("Autoscale");
 
     plotMenu.addSeparator();
-
-//    xLog->setCheckable(true);
-//    yLog->setCheckable(true);
-//    xLog->setChecked(set->get_XAxisLog());
-//    yLog->setChecked(set->get_YAxisLog());
 
     QxrdDataProcessorPtr dp(m_DataProcessor);
 
@@ -943,11 +910,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 
         QAction *action = plotMenu.exec(event->globalPos());
 
-        /*if (action == xLog) {
-          set->toggle_XAxisLog();
-        } else if (action == yLog) {
-          set->toggle_YAxisLog();
-        } else */if (action == auSc) {
+        if (action == auSc) {
           autoScale();
         } else if (action == fitCircle) {
           cf->fitPowderCircle();

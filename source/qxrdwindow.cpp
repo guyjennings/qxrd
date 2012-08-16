@@ -561,10 +561,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   m_ActionRefineCenterTilt->setEnabled(false);
 #endif
 
-  //#ifndef QT_NO_DEBUG
-  //  m_ImageDisplay = QxrdImageDisplayWidget::insertNew(app, m_XRDTabWidget);
-  //#endif
-
   if (expt && set) {
     if (!expt->get_DefaultLayout()) {
       QByteArray geometry = set->get_WindowGeometry();
@@ -594,10 +590,6 @@ QxrdWindow::~QxrdWindow()
   if (m_Application && qcepDebug(DEBUG_APP)) {
     m_Application->printMessage("QxrdWindow::~QxrdWindow");
   }
-  //  delete m_Data;
-  //  delete m_NewData;
-  //  delete m_Mask;
-  //  delete m_NewMask;
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdWindow::~QxrdWindow(%p)\n", this);

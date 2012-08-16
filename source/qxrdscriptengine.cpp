@@ -955,15 +955,6 @@ QScriptValue QxrdScriptEngine::helpFunc(QScriptContext * context, QScriptEngine 
   }
 }
 
-//QScriptValue QxrdScriptEngine::typeNameFunc(QScriptContext *context, QScriptEngine *engine)
-//{
-//  if (context->argumentCount() != 0) {
-//    return QScriptValue(engine, QMetaType::typeName(context->argument(0).toUInt32()));
-//  } else {
-//    return QScriptValue(engine,"?");
-//  }
-//}
-
 QCEP_DOC_FUNCTION(
     "extraChannel",
     "extraChannel(n)",
@@ -1248,7 +1239,6 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("liveData", newFunction(liveDataFunc));
   globalObject().setProperty("help", newFunction(helpFunc));
   globalObject().setProperty("process", newFunction(processFunc));
-//  globalObject().setProperty("typeName", newFunction(typeNameFunc));
   globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
   globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
 
@@ -1339,28 +1329,6 @@ void QxrdScriptEngine::initialize()
     }
   }
 }
-
-//#define DOC_PROPERTY "documentation"
-//#define PROTO_PROPERTY "protodoc"
-
-//QScriptValue QxrdScriptEngine::newQxrdObject(QObject *object, QString objectName)
-//{
-//  QScriptValue res = newQObject(object);
-
-//  res.setProperty(DOC_PROPERTY, docString);
-
-//  return res;
-//}
-
-//QScriptValue QxrdScriptEngine::newQxrdFunction(FunctionSignature fun, QString objectName)
-//{
-//  QScriptValue res = newFunction(fun);
-
-//  res.setProperty(PROTO_PROPERTY, protoString);
-//  res.setProperty(DOC_PROPERTY, docString);
-
-//  return res;
-//}
 
 QString QxrdScriptEngine::documentationLink(QString base, QString subItem)
 {
@@ -1630,11 +1598,7 @@ QByteArray QxrdScriptEngine::helpText(QString item)
 {
   QString scriptItem;
 
-//  if (item.isEmpty()) {
-//    scriptItem = "global";
-//  } else {
-    scriptItem = item;
-//  }
+  scriptItem = item;
 
   QByteArray res;
 
