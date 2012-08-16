@@ -338,7 +338,7 @@ HEADERS += TODO.h \
     qxrdinfodialogsettings.h \
     qxrdcenterfinderplotsettings.h \
     qxrdsliceplotsettings.h
-unix:HEADERS += AcqLinuxTypes.h
+
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
     qxrdglobalsettings.cpp \
