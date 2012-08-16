@@ -16,7 +16,6 @@
 #include "qxrdringsetsampleddata.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaqplugininterface.h"
-#include "qxrdacquisitiontrigger.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdallocator.h"
 #include "qxrdserver.h"
@@ -1283,13 +1282,6 @@ void QxrdScriptEngine::initialize()
         globalObject().setProperty("synchronization", newQObject(sync.data()));
       }
 
-//      QxrdAcquisitionTriggerPtr trig(acq->acquisitionTrigger());
-
-//      if (trig) {
-//        QCEP_DOC_OBJECT("triggering", "Acquisition Triggering Parameters");
-//        globalObject().setProperty("triggering", newQObject(trig.data()));
-//      }
-
       QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
 
       if (extra) {
@@ -1662,4 +1654,9 @@ QByteArray QxrdScriptEngine::helpText(QString item)
         "</html>\n");
 
   return res;
+}
+
+void QxrdScriptEngine::dumpLocks()
+{
+  QcepMutexLocker::dumpLocks();
 }

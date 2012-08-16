@@ -30,7 +30,6 @@
 
 #include "qxrdexperiment-ptr.h"
 #include "qxrdsynchronizedacquisitiondialog-ptr.h"
-#include "qxrdacquisitiontriggerdialog-ptr.h"
 #include "qxrdacquisitionextrainputsdialog-ptr.h"
 #include "qxrdwindowsettings.h"
 #include "qxrdobjectnamer.h"
@@ -150,7 +149,6 @@ private:
   QxrdDataProcessorWPtr                  m_DataProcessor;
   QxrdAllocatorWPtr                      m_Allocator;
   QxrdAcquisitionDialog                 *m_AcquisitionDialog;
-  QxrdAcquisitionTriggerDialogPtr        m_AcquisitionTriggerDialog;
   QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
   QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;

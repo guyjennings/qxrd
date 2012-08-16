@@ -27,10 +27,6 @@
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
-//#include "qxrdacquisitiontrigger.h"
-//#include "qxrdacquisitiontrigger-ptr.h"
-//#include "qxrdacquisitiontriggerthread.h"
-//#include "qxrdacquisitiontriggerthread-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qxrdobjectnamer.h"
 
@@ -172,7 +168,6 @@ public:
   QxrdAllocatorWPtr allocator() const;
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
-//  QxrdAcquisitionTriggerPtr acquisitionTrigger() const;
   QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;
 
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
@@ -225,9 +220,6 @@ public:
 
   Q_PROPERTY(QString qtVersion READ get_QtVersion STORED false)
   QCEP_STRING_PROPERTY(QtVersion)
-
-//  Q_PROPERTY(int    detectorType     READ get_DetectorType WRITE set_DetectorType STORED false)
-//  QCEP_INTEGER_PROPERTY(DetectorType)
 
   Q_PROPERTY(double exposureTime     READ get_ExposureTime WRITE set_ExposureTime)
   QCEP_DOUBLE_PROPERTY(ExposureTime)
@@ -338,8 +330,6 @@ private:
   mutable QMutex                m_Mutex;
 
   QxrdSynchronizedAcquisitionPtr  m_SynchronizedAcquisition;
-//  QxrdAcquisitionTriggerThreadPtr m_AcquisitionTriggerThread;
-//  QxrdAcquisitionTriggerWPtr      m_AcquisitionTrigger;
   QxrdAcquisitionExtraInputsPtr   m_AcquisitionExtraInputs;
 
   QxrdExperimentWPtr     m_Experiment;

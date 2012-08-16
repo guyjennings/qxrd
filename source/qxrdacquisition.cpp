@@ -5,7 +5,6 @@
 #include "qxrdallocator.h"
 #include "qxrdacquisitiondialog.h"
 #include "qxrdsynchronizedacquisition.h"
-#include "qxrdacquisitiontriggerthread.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
@@ -62,8 +61,6 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
     m_AcquisitionCancelsLiveView(saver, this, "acquisitionCancelsLiveView", true, "Acquisition operations cancel live view"),
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL),
-//    m_AcquisitionTriggerThread(NULL),
-//    m_AcquisitionTrigger(),
     m_AcquisitionExtraInputs(NULL),
     m_Experiment(doc),
     m_Window(),
@@ -93,12 +90,6 @@ void QxrdAcquisition::initialize()
 
   m_SynchronizedAcquisition = QxrdSynchronizedAcquisitionPtr(
         new QxrdSynchronizedAcquisition(m_Saver, this));
-
-//  m_AcquisitionTriggerThread = QxrdAcquisitionTriggerThreadPtr(new QxrdAcquisitionTriggerThread(m_Saver, m_Experiment, this));
-//  m_AcquisitionTriggerThread -> setObjectName("trig");
-//  m_AcquisitionTriggerThread -> start();
-
-//  m_AcquisitionTrigger = m_AcquisitionTriggerThread -> acquisitionTrigger();
 
   m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, this));
   m_AcquisitionExtraInputs -> initialize();
@@ -186,12 +177,6 @@ void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
     m_SynchronizedAcquisition->writeSettings(settings, section+"/sync");
   }
 
-//  QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
-
-//  if (trig) {
-//    trig->writeSettings(settings, section+"/trigger");
-//  }
-
   if (m_AcquisitionExtraInputs) {
     m_AcquisitionExtraInputs->writeSettings(settings, section+"/extrainputs");
   }
@@ -206,12 +191,6 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
   if (m_SynchronizedAcquisition) {
     m_SynchronizedAcquisition->readSettings(settings, section+"/sync");
   }
-
-//  QxrdAcquisitionTriggerPtr trig(m_AcquisitionTrigger);
-
-//  if (trig) {
-//    trig->readSettings(settings, section+"/trigger");
-//  }
 
   if (m_AcquisitionExtraInputs) {
     m_AcquisitionExtraInputs->readSettings(settings, section+"/extrainputs");
@@ -599,13 +578,6 @@ void QxrdAcquisition::processDarkImage(QString filePattern, int fileIndex, QxrdI
   processImage(filePattern, fileIndex, -1, 0, true, image, overflow);
 }
 
-//void QxrdAcquisition::acquisitionError(int n)
-//{
-//  cancel();
-
-//  emit criticalMessage(tr("Acquisition Error %1").arg(n));
-//}
-
 QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindow *win)
 {
   if (win) {
@@ -647,11 +619,6 @@ QxrdSynchronizedAcquisitionPtr QxrdAcquisition::synchronizedAcquisition() const
 {
   return m_SynchronizedAcquisition;
 }
-
-//QxrdAcquisitionTriggerPtr QxrdAcquisition::acquisitionTrigger() const
-//{
-//  return m_AcquisitionTrigger;
-//}
 
 QxrdAcquisitionExtraInputsPtr QxrdAcquisition::acquisitionExtraInputs() const
 {

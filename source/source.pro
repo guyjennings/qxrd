@@ -322,12 +322,6 @@ HEADERS += TODO.h \
     qxrdwelcomerecentitem.h \
     qxrdsplashscreen.h \
     qxrdsplashscreen-ptr.h \
-    qxrdacquisitiontrigger.h \
-    qxrdacquisitiontrigger-ptr.h \
-    qxrdacquisitiontriggerthread.h \
-    qxrdacquisitiontriggerthread-ptr.h \
-    qxrdacquisitiontriggerdialog.h \
-    qxrdacquisitiontriggerdialog-ptr.h \
     qxrdacquisitionextrainputs.h \
     qxrdacquisitionextrainputs-ptr.h \
     qxrdacquisitionextrainputsdialog.h \
@@ -466,9 +460,6 @@ SOURCES += qxrd.cpp \
     qxrdglobalpreferencesdialog.cpp \
     qxrdwelcomerecentitem.cpp \
     qxrdsplashscreen.cpp \
-    qxrdacquisitiontrigger.cpp \
-    qxrdacquisitiontriggerthread.cpp \
-    qxrdacquisitiontriggerdialog.cpp \
     qxrdacquisitionextrainputs.cpp \
     qxrdacquisitionextrainputsdialog.cpp \
     qxrdacquisitionextrainputschannel.cpp \
@@ -500,7 +491,6 @@ FORMS = qxrdwindow.ui \
     qxrdglobalpreferencesdialog.ui \
     qxrdwelcomerecentitem.ui \
     qxrdacquisitiondialog.ui \
-    qxrdacquisitiontriggerdialog.ui \
     qxrdacquisitionextrainputsdialog.ui
 macx:
 else:unix:LIBS += -ltiff

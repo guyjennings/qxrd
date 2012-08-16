@@ -32,7 +32,6 @@
 #include "qxrdinfodialog.h"
 #include "qxrdhighlighter.h"
 #include "qxrdexperimentpreferencesdialog.h"
-#include "qxrdacquisitiontriggerdialog.h"
 #include "qxrdacquisitionextrainputsdialog.h"
 
 #include <qwt_plot.h>
@@ -72,7 +71,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_DataProcessor(procw),
     m_Allocator(allocw),
     m_AcquisitionDialog(NULL),
-    m_AcquisitionTriggerDialog(NULL),
     m_AcquisitionExtraInputsDialog(NULL),
     m_SynchronizedAcquisitionDialog(NULL),
     m_DisplayDialog(NULL),
@@ -122,7 +120,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   if (acq) {
     m_AcquisitionDialog = acq -> controlPanel(this);
     m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
-//    m_AcquisitionTriggerDialog = new QxrdAcquisitionTriggerDialog(this, m_Acquisition);
     m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
   }
 
@@ -176,8 +173,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
     splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
 
-    tabifyDockWidget(m_AcquisitionDialog, /*m_AcquisitionTriggerDialog);
-    tabifyDockWidget(m_AcquisitionTriggerDialog,*/ m_AcquisitionExtraInputsDialog);
+    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
@@ -190,8 +186,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   } else if (screenGeom.height() >= 1000) {
     splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
 
-    tabifyDockWidget(m_AcquisitionDialog, /*m_AcquisitionTriggerDialog);
-    tabifyDockWidget(m_AcquisitionTriggerDialog,*/ m_AcquisitionExtraInputsDialog);
+    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
@@ -203,8 +198,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
   } else {
-    tabifyDockWidget(m_AcquisitionDialog, /*m_AcquisitionTriggerDialog);
-    tabifyDockWidget(m_AcquisitionTriggerDialog,*/ m_AcquisitionExtraInputsDialog);
+    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_CenterFinderDialog, m_IntegratorDialog);
 
@@ -224,7 +218,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
       shrinkPanels(6,1);
     }
   }
-  //  tabifyDockWidget(m_IntegratorDialog, new QxrdTestDockWidget(this));
 
   //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
   //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
@@ -313,12 +306,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   m_AcquisitionDialog->setupAcquireMenu(m_AcquireMenu);
 
   m_AcquisitionDialog->acquisitionReady();
-
-  //  connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
-  //  connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
-  //  connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
-  ////  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
-  //  connect(m_ActionTrigger, SIGNAL(triggered()), m_Acquisition, SLOT(trigger()));
 
   connect(m_ActionShowImage, SIGNAL(triggered()), m_ImagePlot, SLOT(toggleShowImage()));
   connect(m_ActionShowMask, SIGNAL(triggered()), m_ImagePlot, SLOT(toggleShowMask()));
@@ -542,7 +529,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   }
 
   m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_AcquisitionTriggerDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_AcquisitionExtraInputsDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_InputFileBrowser -> toggleViewAction());
   m_WindowsMenu -> addAction(m_OutputFileBrowser -> toggleViewAction());
@@ -638,19 +624,6 @@ void QxrdWindow::updateTitle()
 void QxrdWindow::shrinkPanels(int fontSize, int spacing)
 {
   if (QThread::currentThread()==thread()) {
-//    shrinkDockWidget(m_AcquireDialog, fontSize, spacing);
-//    shrinkDockWidget(m_CenterFinderDialog, fontSize, spacing);
-//    shrinkDockWidget(m_IntegratorDialog, fontSize, spacing);
-//    shrinkDockWidget(m_SynchronizedAcquisitionDialog, fontSize, spacing);
-//    shrinkDockWidget(m_DisplayDialog, fontSize, spacing);
-//    shrinkDockWidget(m_MaskDialog, fontSize, spacing);
-//    shrinkDockWidget(m_InputFileBrowser, fontSize, spacing);
-//    shrinkDockWidget(m_OutputFileBrowser, fontSize, spacing);
-//    shrinkDockWidget(m_CorrectionDialog, fontSize, spacing);
-//    shrinkDockWidget(m_SliceDialog, fontSize, spacing);
-//    shrinkDockWidget(m_HistogramDialog, fontSize, spacing);
-//    shrinkDockWidget(m_ImageInfoDialog, fontSize, spacing);
-
     shrinkObject(this, fontSize, spacing);
   } else {
     INVOKE_CHECK(QMetaObject::invokeMethod(this,
@@ -852,17 +825,6 @@ void QxrdWindow::displayCriticalMessage(QString msg)
                                            Q_ARG(QString, msg)));
   }
 }
-
-//void QxrdWindow::selectOutputDirectory()
-//{
-//  THREAD_CHECK;
-
-//  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory",
-//                                                  m_DataProcessor -> get_OutputDirectory());
-//  if (dir.length()) {
-//    m_DataProcessor -> set_OutputDirectory(dir);
-//  }
-//}
 
 void QxrdWindow::acquireStarted()
 {
@@ -1348,18 +1310,6 @@ void QxrdWindow::doClearGainMap()
     }
   }
 }
-
-//void QxrdWindow::selectLogFile()
-//{
-//  GUI_THREAD_CHECK;
-
-//  QString theFile = QFileDialog::getSaveFileName(
-//        this, "Save Log File in", m_DataProcessor -> get_DataPath());
-
-//  if (theFile.length()) {
-//    m_Experiment->newLogFile(theFile);
-//  }
-//}
 
 void QxrdWindow::doTest()
 {

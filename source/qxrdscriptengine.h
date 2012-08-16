@@ -55,6 +55,8 @@ public slots:
   QString documentationText(QString item);
   QString documentationText(QRegExp pattern);
 
+  void dumpLocks();
+
 //  QScriptValue newQxrdObject(QObject *object, QString objectName);
 //  QScriptValue newQxrdFunction(FunctionSignature fun, QString objectName);
 
