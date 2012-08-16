@@ -157,7 +157,6 @@ HEADERS += TODO.h \
     qxrdimagedata.h \
     qxrdimagedata-ptr.h \
     qxrdimagequeue.h \
-    qxrdimagequeue-ptr.h \
     qxrdimagedataformathis.h \
     qxrdimagedataformattiff.h \
     qxrdimagedataformatmar345.h \
