@@ -13,6 +13,7 @@ QcepDebugDictionary::QcepDebugDictionary() :
   setMessage(DEBUG_PREFS,      "Settings/Prefs Operations");
   setMessage(DEBUG_DISPLAY,    "Display Operations");
   setMessage(DEBUG_CONSTRUCTORS, "Object Constructors/Destructors");
+  setMessage(DEBUG_LOCKING,    "Debug Mutex Lock Operations");
 }
 
 int qcepDebug(int cond)
