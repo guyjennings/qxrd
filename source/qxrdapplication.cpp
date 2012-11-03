@@ -114,6 +114,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_FileList(QxrdSettingsSaverPtr(), this, "fileList", QStringList(), "Files to Process"),
   m_LockerCount(QxrdSettingsSaverPtr(), this, "lockerCount", 0, "Number of mutex locks taken"),
   m_LockerRate(QxrdSettingsSaverPtr(), this, "lockerRate", 0, "Mutex Locking Rate"),
+  m_LastLockerCount(0),
   m_Splash(NULL),
   m_WelcomeWindow(NULL),
   m_AllocatorThread(NULL),
@@ -130,17 +131,18 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
 #endif
 
   g_Application = this;
-
-  connect(&m_SplashTimer, SIGNAL(timeout()), this, SLOT(hideSplash()));
-
-  connect(&m_LockerTimer, SIGNAL(timeout()), this, SLOT(lockerTimerElapsed()));
-
-  m_LockerTimer.start(5000);
 }
 
 bool QxrdApplication::init(int &argc, char **argv)
 {
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(finish()));
+
+  connect(&m_SplashTimer, SIGNAL(timeout()), this, SLOT(hideSplash()));
+
+  connect(&m_LockerTimer, SIGNAL(timeout()), this, SLOT(lockerTimerElapsed()));
+
+  m_LastLockerTime.start();
+  m_LockerTimer.start(5000);
 
   QDir::setCurrent(QDir::homePath());
 
@@ -1047,16 +1049,16 @@ void QxrdApplication::incLockerCount()
 
 void QxrdApplication::lockerTimerElapsed()
 {
-  double elapsed = m_LastLockerTime.elapsed();
+  double elapsed = m_LastLockerTime.restart();
 
   double rate = 1000.0*(get_LockerCount() - m_LastLockerCount)/elapsed;
 
-  set_LockerRate(rate);
+//  set_LockerRate(rate);
 
-  m_LastLockerTime = QTime::currentTime();
+//  m_LastLockerTime = QTime::currentTime();
   m_LastLockerCount= get_LockerCount();
 
-  if (get_LockerRate()>1000) {
-    printMessage(tr("Locker rate %1 locks/sec").arg(get_LockerRate()));
+  if (rate>1000) {
+    printMessage(tr("Locker rate %1 locks/sec").arg(rate));
   }
 }
