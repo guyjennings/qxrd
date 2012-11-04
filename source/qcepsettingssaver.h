@@ -29,7 +29,7 @@ private:
   QAtomicInt         m_ChangeCount;
   QTimer             m_Timer;
   int                m_SaveDelay;
-  QcepProperty      *m_LastChangedBy;
+  QcepPropertyWPtr   m_LastChangedBy;
 };
 
 #endif // QCEPSETTINGSSAVER_H
