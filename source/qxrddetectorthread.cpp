@@ -1,6 +1,7 @@
 #include "qxrddebug.h"
 #include "qxrddetectorthread.h"
 #include "qxrdapplication.h"
+#include "qxrdmutexlocker.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrddetectorperkinelmer.h"
@@ -131,7 +132,9 @@ void QxrdDetectorThread::run()
   if (p) {
     p -> initialize();
 
+    m_Mutex.lock();
     m_Detector = p;
+    m_Mutex.unlock();
 
     rc = exec();
   }
@@ -151,11 +154,17 @@ void QxrdDetectorThread::run()
 
 QxrdDetectorPtr QxrdDetectorThread::detector() const
 {
-  while (isRunning() && m_Detector == NULL) {
+  while (isRunning()) {
+    {
+      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+      if (m_Detector) return m_Detector;
+    }
+
     QThread::msleep(50);
   }
 
-  return m_Detector;
+  return QxrdDetectorPtr();
 }
 
 void QxrdDetectorThread::shutdown()

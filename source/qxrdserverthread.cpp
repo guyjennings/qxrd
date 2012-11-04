@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
+#include "qxrdmutexlocker.h"
 
 QxrdServerThread::QxrdServerThread(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
   m_Saver(saver),
@@ -29,11 +30,17 @@ QxrdServerThread::~QxrdServerThread()
 
 QxrdServerPtr QxrdServerThread::server() const
 {
-  while (isRunning() && m_Server == NULL) {
+  while (isRunning()) {
+    {
+      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+      if (m_Server) return m_Server;
+    }
+
     QThread::msleep(50);
   }
 
-  return m_Server;
+  return QxrdServerPtr();
 }
 
 void QxrdServerThread::shutdown()
@@ -56,7 +63,9 @@ void QxrdServerThread::run()
   int rc = -1;
 
   if (server) {
+    m_Mutex.lock();
     m_Server = server;
+    m_Mutex.unlock();
 
     rc = exec();
   }

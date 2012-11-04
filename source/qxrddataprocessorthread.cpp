@@ -4,6 +4,7 @@
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
+#include "qxrdmutexlocker.h"
 
 QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaverWPtr saver,
                                                  QxrdExperimentWPtr doc,
@@ -45,7 +46,9 @@ void QxrdDataProcessorThread::run()
   if (p) {
     p -> initialize();
 
+    m_Mutex.lock();
     m_DataProcessor = p;
+    m_Mutex.unlock();
 
     rc = exec();
   }
@@ -68,11 +71,17 @@ void QxrdDataProcessorThread::shutdown()
 
 QxrdDataProcessorPtr QxrdDataProcessorThread::dataProcessor() const
 {
-  while (isRunning() && m_DataProcessor == NULL) {
+  while (isRunning()) {
+    {
+      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+      if (m_DataProcessor) return m_DataProcessor;
+    }
+
     QThread::msleep(50);
   }
 
-  return m_DataProcessor;
+  return QxrdDataProcessorPtr();
 }
 
 void QxrdDataProcessorThread::msleep(unsigned long t)

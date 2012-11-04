@@ -8,6 +8,7 @@
 #include "qxrdexperimentsimulatedacquisition.h"
 #include "qxrdexperimentgenericanalysis.h"
 #include "qxrdsplashscreen.h"
+#include "qxrdmutexlocker.h"
 
 #include <stdio.h>
 
@@ -105,11 +106,17 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentGenericAnalysis(QStri
 
 QxrdExperimentPtr QxrdExperimentThread::experiment()
 {
-  while (isRunning() && m_Experiment == NULL) {
+  while (isRunning()) {
+    {
+      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+      if (m_Experiment) return m_Experiment;
+    }
+
     msleep(100);
   }
 
-  return m_Experiment;
+  return QxrdExperimentPtr();
 }
 
 void QxrdExperimentThread::run()
@@ -170,7 +177,9 @@ void QxrdExperimentThread::run()
   if (doc) {
     doc -> initialize(this, m_Settings);
 
+    m_Mutex.lock();
     m_Experiment = doc;
+    m_Mutex.unlock();
 
     rc = exec();
   }

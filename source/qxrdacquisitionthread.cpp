@@ -5,6 +5,7 @@
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
+#include "qxrdmutexlocker.h"
 
 #include <QFuture>
 #include <QVariant>
@@ -49,7 +50,9 @@ void QxrdAcquisitionThread::run()
   if (acq) {
     acq -> initialize();
 
+    m_Mutex.lock();
     m_Acquisition = acq;
+    m_Mutex.unlock();
 
     rc = exec();
   }
@@ -77,11 +80,17 @@ void QxrdAcquisitionThread::msleep(int msec)
 
 QxrdAcquisitionPtr QxrdAcquisitionThread::acquisition() const
 {
-  while (isRunning() && m_Acquisition == NULL) {
+  while (isRunning()) {
+    {
+      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+      if (m_Acquisition) return m_Acquisition;
+    }
+
     QThread::msleep(50);
   }
 
-  return m_Acquisition;
+  return QxrdAcquisitionPtr();
 }
 
 void QxrdAcquisitionThread::sleep(double time)

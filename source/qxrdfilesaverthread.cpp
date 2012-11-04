@@ -5,6 +5,7 @@
 #include "qxrdacquisition.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdapplication.h"
+#include "qxrdmutexlocker.h"
 
 QxrdFileSaverThread::QxrdFileSaverThread(QxrdAllocatorWPtr allocator)
   : QxrdThread(),
@@ -43,7 +44,9 @@ void QxrdFileSaverThread::run()
 
   QxrdFileSaverPtr res(new QxrdFileSaver(m_Allocator));
 
+  m_Mutex.lock();
   m_FileSaver = res;
+  m_Mutex.unlock();
 
   int rc = exec();
 
@@ -61,9 +64,15 @@ void QxrdFileSaverThread::shutdown()
 
 QxrdFileSaverPtr QxrdFileSaverThread::fileSaver() const
 {
-  while (m_FileSaver == NULL) {
+  while (isRunning()) {
+    {
+      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+      if (m_FileSaver) return m_FileSaver;
+    }
+
     QThread::msleep(50);
   }
 
-  return m_FileSaver;
+  return QxrdFileSaverPtr();
 }

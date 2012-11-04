@@ -3,6 +3,8 @@
 
 #include "qxrdscriptengine.h"
 #include "qxrdapplication.h"
+#include "qxrdmutexlocker.h"
+
 #include <stdio.h>
 
 QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication* app, QxrdExperimentWPtr exp)
@@ -34,11 +36,17 @@ void QxrdScriptEngineThread::shutdown()
 
 QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const
 {
-  while (isRunning() && m_ScriptEngine == NULL) {
+  while (isRunning()) {
+    {
+      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+      if (m_ScriptEngine) return m_ScriptEngine;
+    }
+
     QThread::msleep(50);
   }
 
-  return m_ScriptEngine;
+  return QxrdScriptEnginePtr();
 }
 
 void QxrdScriptEngineThread::run()
@@ -54,7 +62,9 @@ void QxrdScriptEngineThread::run()
   if (p) {
     p -> initialize();
 
+    m_Mutex.lock();
     m_ScriptEngine = p;
+    m_Mutex.unlock();
 
     rc = exec();
   }
