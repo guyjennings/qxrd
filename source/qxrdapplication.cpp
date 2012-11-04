@@ -35,6 +35,7 @@
 #include "qxrdexperimentsettings.h"
 #include "qxrdsettingssaver.h"
 #include "qxrdsplashscreen.h"
+#include "qxrdsplashscreen-ptr.h"
 #include "qxrdmutexlocker.h"
 
 #ifdef HAVE_PERKIN_ELMER
@@ -413,7 +414,7 @@ void QxrdApplication::splashMessage(QString msg)
 
     if (get_GuiWanted()) {
       if (m_Splash == NULL) {
-        m_Splash = new QxrdSplashScreen(NULL);
+        m_Splash = QxrdSplashScreenPtr(new QxrdSplashScreen(NULL));
       }
 
       m_Splash -> show();

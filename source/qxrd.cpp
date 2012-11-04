@@ -20,7 +20,7 @@ remote-controlled via a socket interface, or directly from SPEC
 int main(int argc, char *argv[])
 {
 //  printf("App starts\n");
-  g_DebugLevel = new QxrdDebugDictionary();
+  g_DebugLevel = QSharedPointer<QxrdDebugDictionary>(new QxrdDebugDictionary());
 
   QxrdApplication app(argc, argv);
 

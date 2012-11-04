@@ -18,6 +18,7 @@
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsettingssaver.h"
 #include "qxrdobjectnamer.h"
+#include "qxrdsplashscreen-ptr.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface-ptr.h"
@@ -198,7 +199,7 @@ private:
   QList<QxrdExperimentPtr>        m_Experiments;
 
   QTimer                          m_SplashTimer;
-  QSplashScreen                  *m_Splash;
+  QxrdSplashScreenPtr             m_Splash;
 
   QxrdWelcomeWindowPtr            m_WelcomeWindow;
   QxrdAllocatorThreadPtr          m_AllocatorThread;
