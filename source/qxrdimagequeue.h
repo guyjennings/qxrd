@@ -6,7 +6,6 @@
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
 #include <QQueue>
-#include <QReadWriteLock>
 #include <QString>
 #include <QSharedPointer>
 
@@ -32,7 +31,7 @@ public:
   QCEP_INTEGER_PROPERTY(NCols)
 
 private:
-  mutable QReadWriteLock m_Lock;
+  mutable QMutex m_Lock;
   QQueue< QSharedPointer<T> >     m_Queue;
   QString        m_Name;
 };

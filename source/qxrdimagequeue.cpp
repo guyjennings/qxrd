@@ -34,6 +34,8 @@ QxrdImageQueue<T>::~QxrdImageQueue()
 template <typename T>
 void QxrdImageQueue<T>::deallocate()
 {
+  QMutexLocker lock(&m_Lock);
+
   while (!m_Queue.isEmpty()) {
     QSharedPointer<T> img = m_Queue.dequeue();
     if (g_Application && qcepDebug(DEBUG_QUEUES)) {
@@ -45,7 +47,7 @@ void QxrdImageQueue<T>::deallocate()
 template <typename T>
 QSharedPointer<T> QxrdImageQueue<T>::dequeue()
 {
-  QWriteLocker lock(&m_Lock);
+  QMutexLocker lock(&m_Lock);
 
   if (m_Queue.isEmpty()) {
     if (g_Application && qcepDebug(DEBUG_QUEUES)) {
@@ -68,7 +70,7 @@ QSharedPointer<T> QxrdImageQueue<T>::dequeue()
 template <typename T>
 QSharedPointer<T> QxrdImageQueue<T>::operator[](int n)
 {
-  QReadLocker lock(&m_Lock);
+  QMutexLocker lock(&m_Lock);
 
   if (n < 0 || n >= m_Queue.size()) {
     return QSharedPointer<T>(NULL);
@@ -80,7 +82,7 @@ QSharedPointer<T> QxrdImageQueue<T>::operator[](int n)
 template <typename T>
 void QxrdImageQueue<T>::enqueue(QSharedPointer<T> data)
 {
-  QWriteLocker lock(&m_Lock);
+  QMutexLocker lock(&m_Lock);
 
   if (g_Application && qcepDebug(DEBUG_QUEUES)) {
     g_Application->printMessage(tr("QxrdImageQueue::enqueue(%1) into %2, starting with %3")
@@ -95,7 +97,7 @@ void QxrdImageQueue<T>::enqueue(QSharedPointer<T> data)
 template <typename T>
 int QxrdImageQueue<T>::size() const
 {
-  QReadLocker lock(&m_Lock);
+  QMutexLocker lock(&m_Lock);
 
   if (g_Application && qcepDebug(DEBUG_QUEUES)) {
     g_Application->printMessage(tr("QxrdImageQueue::size() = %1 for %2")
