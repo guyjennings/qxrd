@@ -1059,7 +1059,7 @@ void QxrdApplication::lockerTimerElapsed()
 //  m_LastLockerTime = QTime::currentTime();
   m_LastLockerCount= get_LockerCount();
 
-  if (rate>1000) {
-    printMessage(tr("Locker rate %1 locks/sec").arg(rate));
+  if (rate>10000) {
+    printMessage(tr("Locker rate %1 locks/sec").arg(get_LockerRate()));
   }
 }
