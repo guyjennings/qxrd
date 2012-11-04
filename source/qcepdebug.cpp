@@ -1,7 +1,7 @@
 #include "qcepdebug.h"
 #include <stdio.h>
 
-QcepDebugDictionary *g_DebugLevel = NULL;
+QSharedPointer<QcepDebugDictionary> g_DebugLevel;
 
 QcepDebugDictionary::QcepDebugDictionary() :
   m_DebugLevel(0)
@@ -13,6 +13,7 @@ QcepDebugDictionary::QcepDebugDictionary() :
   setMessage(DEBUG_PREFS,      "Settings/Prefs Operations");
   setMessage(DEBUG_DISPLAY,    "Display Operations");
   setMessage(DEBUG_CONSTRUCTORS, "Object Constructors/Destructors");
+  setMessage(DEBUG_IMAGE_CONSTRUCTORS, "Image Object Constructors/Destructors");
   setMessage(DEBUG_LOCKING,    "Debug Mutex Lock Operations");
 }
 

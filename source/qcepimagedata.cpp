@@ -47,25 +47,27 @@ QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int
     m_Mutex(QMutex::Recursive),
     m_Saver(saver)
 {
-  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    QcepSettingsSaverPtr s(m_Saver);
+  if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
+    printf("QcepImageDataBase::QcepImageDataBase(%p)\n", this);
+//    QcepSettingsSaverPtr s(m_Saver);
 
-    if (s) {
-      s->printMessage(tr("QcepImageDataBase::QcepImageDataBase %1[%2]")
-                      .HEXARG(this).arg(m_ImageCounter));
-    }
+//    if (s) {
+//      s->printMessage(tr("QcepImageDataBase::QcepImageDataBase %1[%2]")
+//                      .HEXARG(this).arg(m_ImageCounter));
+//    }
   }
 }
 
 QcepImageDataBase::~QcepImageDataBase()
 {
-  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    QcepSettingsSaverPtr s(m_Saver);
+  if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
+    printf("QcepImageDataBase::~QcepImageDataBase(%p)\n", this);
+//    QcepSettingsSaverPtr s(m_Saver);
 
-    if (s) {
-      s->printMessage(tr("QcepImageDataBase::~QcepImageDataBase %1[%2]")
-                      .HEXARG(this).arg(m_ImageCounter));
-    }
+//    if (s) {
+//      s->printMessage(tr("QcepImageDataBase::~QcepImageDataBase %1[%2]")
+//                      .HEXARG(this).arg(m_ImageCounter));
+//    }
   }
 
   //  allocCount--;
