@@ -468,18 +468,18 @@ void QcepDoubleProperty::setValue(double val, int index)
 
 void QcepDoubleProperty::setValue(double val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1: QcepDoubleProperty::setValue(double %2)")
                  .arg(name()).arg(val));
   }
 
-  if (val != m_Value) {
+  if (val != value()) {
     if (debug()) {
       printMessage(tr("%1: QcepDoubleProperty::setValue(double %2) [%3]")
                    .arg(name()).arg(val).arg(index()));
     }
-
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -489,13 +489,14 @@ void QcepDoubleProperty::setValue(double val)
       saver->changed(this);
     }
 
-    emit valueChanged(m_Value, incIndex(1));
-    emit valueChanged(tr("%1").arg(m_Value));
+    emit valueChanged(value(), incIndex(1));
+    emit valueChanged(tr("%1").arg(value()));
   }
 }
 
 void QcepDoubleProperty::incValue(double step)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     printMessage(tr("%1: QcepDoubleProperty::incValue(double %2)")
@@ -503,8 +504,6 @@ void QcepDoubleProperty::incValue(double step)
   }
 
   if (step) {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
     m_Value += step;
 
     QcepSettingsSaverPtr saver(m_Saver);
@@ -513,8 +512,8 @@ void QcepDoubleProperty::incValue(double step)
       saver->changed(this);
     }
 
-    emit valueChanged(m_Value, incIndex(1));
-    emit valueChanged(tr("%1").arg(m_Value));
+    emit valueChanged(value(), incIndex(1));
+    emit valueChanged(tr("%1").arg(value()));
   }
 }
 
@@ -531,7 +530,7 @@ void QcepDoubleProperty::resetValue()
     printMessage(tr("%1: QcepDoubleProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 void QcepDoubleProperty::linkTo(QDoubleSpinBox *spinBox)
@@ -713,7 +712,7 @@ void QcepIntProperty::resetValue()
     printMessage(tr("%1: QcepIntProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 void QcepIntProperty::linkTo(QSpinBox *spinBox)
@@ -938,7 +937,7 @@ void QcepBoolProperty::resetValue()
     printMessage(tr("%1: QcepBoolProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 void QcepBoolProperty::toggle()
@@ -1046,6 +1045,8 @@ void QcepStringProperty::setValue(QString val, int index)
 
 void QcepStringProperty::setValue(QString val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1: QcepStringProperty::setValue(QString \"%2\")")
                  .arg(name()).arg(val));
@@ -1056,8 +1057,6 @@ void QcepStringProperty::setValue(QString val)
       printMessage(tr("%1: QcepStringProperty::setValue(QString \"%2\") [%3]")
                    .arg(name()).arg(val).arg(index()));
     }
-
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1084,7 +1083,7 @@ void QcepStringProperty::resetValue()
     printMessage(tr("%1: QcepStringProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 void QcepStringProperty::linkTo(QComboBox *comboBox)
@@ -1212,6 +1211,7 @@ void QcepDateTimeProperty::setValue(QDateTime val, int index)
 
 void QcepDateTimeProperty::setValue(QDateTime val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1: QcepDateTimeProperty::setValue(QDateTime \"%2\")")
@@ -1223,8 +1223,6 @@ void QcepDateTimeProperty::setValue(QDateTime val)
       printMessage(tr("%1: QcepDateTimeProperty::setValue(QDateTime \"%2\") [%3]")
                    .arg(name()).arg(val.toString()).arg(index()));
     }
-
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1253,7 +1251,7 @@ void QcepDateTimeProperty::resetValue()
     printMessage(tr("%1: QcepDateTimeProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 QcepDoubleListProperty::QcepDoubleListProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleList value, QString toolTip)
@@ -1291,26 +1289,24 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val, int index)
 
 void QcepDoubleListProperty::incValue(QcepDoubleList step)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     printMessage(tr("%1: QcepDoubleListProperty::incValue(QcepDoubleList %2...)")
                  .arg(name()).arg(step.value(0)));
   }
 
-  {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-    for (int i=0; i<m_Value.count(); i++) {
-      m_Value[i] += step.value(i);
-    }
-
-    QcepSettingsSaverPtr saver(m_Saver);
-
-    if (saver) {
-      saver->changed(this);
-    }
-
-    emit valueChanged(m_Value, incIndex(1));
+  for (int i=0; i<m_Value.count(); i++) {
+    m_Value[i] += step.value(i);
   }
+
+  QcepSettingsSaverPtr saver(m_Saver);
+
+  if (saver) {
+    saver->changed(this);
+  }
+
+  emit valueChanged(m_Value, incIndex(1));
 }
 
 void QcepDoubleListProperty::clear()
@@ -1332,6 +1328,8 @@ void QcepDoubleListProperty::appendValue(double val)
 
 QString QcepDoubleListProperty::toString(const QcepDoubleList &val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   QString res = "[";
   int ct = val.count();
 
@@ -1350,6 +1348,8 @@ QString QcepDoubleListProperty::toString(const QcepDoubleList &val)
 
 void QcepDoubleListProperty::setValue(QcepDoubleList val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1 QcepDoubleListProperty::setValue(QcepDoubleList %2)")
                  .arg(name()).arg(toString(val)));
@@ -1360,8 +1360,6 @@ void QcepDoubleListProperty::setValue(QcepDoubleList val)
       printMessage(tr("%1: QcepDoubleListProperty::setValue(QcepDoubleList %2) [%3]")
                    .arg(name()).arg(toString(val)).arg(index()));
     }
-
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1388,7 +1386,7 @@ void QcepDoubleListProperty::resetValue()
     printMessage(tr("%1: QcepDoubleListProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 QcepDoubleVectorProperty::QcepDoubleVectorProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepDoubleVector value, QString toolTip)
@@ -1426,26 +1424,24 @@ void QcepDoubleVectorProperty::setValue(QcepDoubleVector val, int index)
 
 void QcepDoubleVectorProperty::incValue(QcepDoubleVector step)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     printMessage(tr("%1: QcepDoubleVectorProperty::incValue(QcepDoubleList %2...)")
                  .arg(name()).arg(step.value(0)));
   }
 
-  {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-    for (int i=0; i<m_Value.count(); i++) {
-      m_Value[i] += step.value(i);
-    }
-
-    QcepSettingsSaverPtr saver(m_Saver);
-
-    if (saver) {
-      saver->changed(this);
-    }
-
-    emit valueChanged(m_Value, incIndex(1));
+  for (int i=0; i<m_Value.count(); i++) {
+    m_Value[i] += step.value(i);
   }
+
+  QcepSettingsSaverPtr saver(m_Saver);
+
+  if (saver) {
+    saver->changed(this);
+  }
+
+  emit valueChanged(m_Value, incIndex(1));
 }
 
 void QcepDoubleVectorProperty::clear()
@@ -1467,6 +1463,8 @@ void QcepDoubleVectorProperty::appendValue(double val)
 
 QString QcepDoubleVectorProperty::toString(const QcepDoubleVector &val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   QString res = "[";
   int ct = val.count();
 
@@ -1485,6 +1483,8 @@ QString QcepDoubleVectorProperty::toString(const QcepDoubleVector &val)
 
 void QcepDoubleVectorProperty::setValue(QcepDoubleVector val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1 QcepDoubleVectorProperty::setValue(QcepDoubleVector %2)")
                  .arg(name()).arg(toString(val)));
@@ -1495,8 +1495,6 @@ void QcepDoubleVectorProperty::setValue(QcepDoubleVector val)
       printMessage(tr("%1: QcepDoubleVectorProperty::setValue(QcepDoubleVector %2) [%3]")
                    .arg(name()).arg(toString(val)).arg(index()));
     }
-
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1523,7 +1521,7 @@ void QcepDoubleVectorProperty::resetValue()
     printMessage(tr("%1: QcepDoubleVectorProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 QcepIntListProperty::QcepIntListProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntList value, QString toolTip)
@@ -1561,26 +1559,24 @@ void QcepIntListProperty::setValue(QcepIntList val, int index)
 
 void QcepIntListProperty::incValue(QcepIntList step)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     printMessage(tr("%1: QcepIntListProperty::incValue(QcepDoubleList %2...)")
                  .arg(name()).arg(step.value(0)));
   }
 
-  {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-    for (int i=0; i<m_Value.count(); i++) {
-      m_Value[i] += step.value(i);
-    }
-
-    QcepSettingsSaverPtr saver(m_Saver);
-
-    if (saver) {
-      saver->changed(this);
-    }
-
-    emit valueChanged(m_Value, incIndex(1));
+  for (int i=0; i<m_Value.count(); i++) {
+    m_Value[i] += step.value(i);
   }
+
+  QcepSettingsSaverPtr saver(m_Saver);
+
+  if (saver) {
+    saver->changed(this);
+  }
+
+  emit valueChanged(m_Value, incIndex(1));
 }
 
 void QcepIntListProperty::clear()
@@ -1602,6 +1598,8 @@ void QcepIntListProperty::appendValue(int val)
 
 QString QcepIntListProperty::toString(const QcepIntList &val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   QString res = "[";
   int ct = val.count();
 
@@ -1620,6 +1618,8 @@ QString QcepIntListProperty::toString(const QcepIntList &val)
 
 void QcepIntListProperty::setValue(QcepIntList val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1 QcepIntListProperty::setValue(QcepIntList %2)")
                  .arg(name()).arg(toString(val)));
@@ -1630,8 +1630,6 @@ void QcepIntListProperty::setValue(QcepIntList val)
       printMessage(tr("%1: QcepIntListProperty::setValue(QcepIntList %2) [%3]")
                    .arg(name()).arg(toString(val)).arg(index()));
     }
-
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1658,7 +1656,7 @@ void QcepIntListProperty::resetValue()
     printMessage(tr("%1: QcepIntListProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 QcepStringListProperty::QcepStringListProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QStringList value, QString toolTip)
@@ -1713,6 +1711,8 @@ void QcepStringListProperty::appendValue(QString val)
 
 QString QcepStringListProperty::toString(const QStringList &val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   QString res = "[";
   int ct = val.count();
 
@@ -1731,6 +1731,8 @@ QString QcepStringListProperty::toString(const QStringList &val)
 
 void QcepStringListProperty::setValue(QStringList val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1 QcepStringListProperty::setValue(QcepStringList %2)")
                  .arg(name()).arg(toString(val)));
@@ -1741,8 +1743,6 @@ void QcepStringListProperty::setValue(QStringList val)
       printMessage(tr("%1: QcepStringListProperty::setValue(QcepStringList %2) [%3]")
                    .arg(name()).arg(toString(val)).arg(index()));
     }
-
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1769,7 +1769,7 @@ void QcepStringListProperty::resetValue()
     printMessage(tr("%1: QcepStringListProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 QcepByteArrayProperty::QcepByteArrayProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QByteArray value, QString toolTip)
@@ -1814,6 +1814,8 @@ void QcepByteArrayProperty::clear()
 
 QString QcepByteArrayProperty::toString(const QByteArray &val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   QString res = "[";
   int ct = val.count();
 
@@ -1832,6 +1834,8 @@ QString QcepByteArrayProperty::toString(const QByteArray &val)
 
 void QcepByteArrayProperty::setValue(QByteArray val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1 QcepByteArrayProperty::setValue(QByteArray %2)")
                  .arg(name()).arg(toString(val)));
@@ -1842,8 +1846,6 @@ void QcepByteArrayProperty::setValue(QByteArray val)
       printMessage(tr("%1: QcepByteArrayProperty::setValue(QByteArray %2) [%3]")
                    .arg(name()).arg(toString(val)).arg(index()));
     }
-
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1870,7 +1872,7 @@ void QcepByteArrayProperty::resetValue()
     printMessage(tr("%1: QcepByteArrayProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 QcepDoublePointProperty::QcepDoublePointProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoublePoint value, QString toolTip)
@@ -1908,6 +1910,7 @@ void QcepDoublePointProperty::setValue(QwtDoublePoint val, int index)
 
 void QcepDoublePointProperty::setValue(QwtDoublePoint val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1: QcepDoublePointProperty::setValue(QwtDoublePoint(%2,%3)")
@@ -1919,8 +1922,6 @@ void QcepDoublePointProperty::setValue(QwtDoublePoint val)
       printMessage(tr("%1: QcepDoublePointProperty::setValue(QwtDoublePoint(%2,%3)) [%4]")
                    .arg(name()).arg(val.x()).arg(val.y()).arg(index()));
     }
-
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -1949,7 +1950,7 @@ void QcepDoublePointProperty::resetValue()
     printMessage(tr("%1: QcepDoublePointProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 QcepDoubleRectProperty::QcepDoubleRectProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoubleRect value, QString toolTip)
@@ -1987,6 +1988,7 @@ void QcepDoubleRectProperty::setValue(QwtDoubleRect val, int index)
 
 void QcepDoubleRectProperty::setValue(QwtDoubleRect val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1: QcepDoubleRectProperty::setValue(QwtDoubleRect([%2,%3],[%4,%5])")
@@ -1998,8 +2000,6 @@ void QcepDoubleRectProperty::setValue(QwtDoubleRect val)
       printMessage(tr("%1: QcepDoubleRectProperty::setValue(QwtDoubleRect([%2,%3],[%4,%5])) [%6]")
                    .arg(name()).arg(val.top()).arg(val.right()).arg(val.bottom()).arg(index()));
     }
-
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -2028,7 +2028,7 @@ void QcepDoubleRectProperty::resetValue()
     printMessage(tr("%1: QcepDoubleRectProperty::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
 QcepPolygonProperty::QcepPolygonProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepPolygon value, QString toolTip)
@@ -2066,6 +2066,7 @@ void QcepPolygonProperty::setValue(QcepPolygon val, int index)
 
 void QcepPolygonProperty::setValue(QcepPolygon val)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1: QcepPolygonProperty::setValue(QcepPolygon(...)")
@@ -2077,8 +2078,6 @@ void QcepPolygonProperty::setValue(QcepPolygon val)
       printMessage(tr("%1: QcepPolygonProperty::setValue(QcepPolygon(...)) [%2]")
                    .arg(name()).arg(index()));
     }
-
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Value = val;
 
@@ -2122,6 +2121,6 @@ void QcepPolygonProperty::resetValue()
     printMessage(tr("%1: QcepPolygon::resetValue").arg(name()));
   }
 
-  setValue(m_Default);
+  setValue(defaultValue());
 }
 
