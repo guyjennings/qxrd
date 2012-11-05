@@ -94,6 +94,8 @@ void QcepProperty::setToolTip(QString tip)
 
 QString QcepProperty::expandedToolTip() const
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   QString pn = parentName();
   QString nm = name();
   QString tt = toolTip();
@@ -109,6 +111,8 @@ QString QcepProperty::expandedToolTip() const
 
 void QcepProperty::setWidgetToolTip(QWidget *widget)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (widget) {
     QString tt = widget->toolTip();
 
@@ -122,21 +126,29 @@ void QcepProperty::setWidgetToolTip(QWidget *widget)
 
 int QcepProperty::index()
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   return m_Index.fetchAndAddOrdered(0);
 }
 
 int QcepProperty::incIndex(int step)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   return m_Index.fetchAndAddOrdered(step) + step;
 }
 
 void QcepProperty::setDebug(int dbg)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   m_Debug = dbg;
 }
 
 int QcepProperty::debug() const
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   return m_Debug;
 }
 
@@ -170,6 +182,8 @@ void QcepProperty::registerMetaTypes()
 
 void QcepProperty::setSaver(QcepSettingsSaverWPtr saver)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   m_Saver = saver;
 }
 
@@ -456,6 +470,8 @@ double QcepDoubleProperty::defaultValue() const
 
 void QcepDoubleProperty::setValue(double val, int index)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (debug()) {
     printMessage(tr("%1 QcepDoubleProperty::setValue(double %2, int %3) [%4]")
                  .arg(name()).arg(val).arg(index).arg(this->index()));
@@ -526,6 +542,8 @@ void QcepDoubleProperty::setDefaultValue(double val)
 
 void QcepDoubleProperty::resetValue()
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1: QcepDoubleProperty::resetValue").arg(name()));
   }
@@ -535,6 +553,8 @@ void QcepDoubleProperty::resetValue()
 
 void QcepDoubleProperty::linkTo(QDoubleSpinBox *spinBox)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (qcepDebug(DEBUG_PROPERTIES || debug())) {
     printMessage(tr("%1: QcepDoubleProperty::linkTo(QDoubleSpinBox *%2)")
                  .arg(name()).HEXARG(spinBox));
@@ -557,6 +577,8 @@ void QcepDoubleProperty::linkTo(QDoubleSpinBox *spinBox)
 
 void QcepDoubleProperty::linkTo(QLabel *label)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   label -> setText(tr("%1").arg(value()));
 
   setWidgetToolTip(label);
@@ -566,6 +588,8 @@ void QcepDoubleProperty::linkTo(QLabel *label)
 
 void QcepDoubleProperty::linkTo(QProgressBar *progress)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   setWidgetToolTip(progress);
 
   connect(this, SIGNAL(valueChanged(double,int)), progress, SLOT(setValue(int)));
@@ -573,6 +597,8 @@ void QcepDoubleProperty::linkTo(QProgressBar *progress)
 
 void QcepDoubleProperty::linkTo(QLCDNumber *number)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   number -> display(value());
 
   setWidgetToolTip(number);
