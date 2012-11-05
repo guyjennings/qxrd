@@ -24,24 +24,10 @@ int main(int argc, char *argv[])
 
   QxrdApplication app(argc, argv);
 
-  QxrdSplashScreenPtr splash;
-
-  if (app.get_GuiWanted()) {
-    splash = QxrdSplashScreenPtr(new QxrdSplashScreen(NULL));
-
-    splash->show();
-    QFont f;
-    f.setPointSize(14);
-    splash->setFont(f);
-    splash->showMessage("Qxrd Version " STR(QXRD_VERSION) "\nInitializing QXRD, Please Wait...", Qt::AlignBottom | Qt::AlignHCenter);
-    app.processEvents();
-  }
-
   int res = 0;
 
   if (app.init(argc, argv)) {
     if (app.get_GuiWanted()) {
-      splash->finish(app.window());
       res = app.exec();
     } else {
       app.processEvents();

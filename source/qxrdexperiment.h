@@ -8,7 +8,6 @@
 
 #include <QObject>
 #include <QSharedPointer>
-#include <QSplashScreen>
 #include <QScriptEngine>
 #include <QScriptEngineDebugger>
 #include "qxrdapplication-ptr.h"
