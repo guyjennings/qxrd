@@ -270,7 +270,7 @@ QxrdApplication::~QxrdApplication()
   }
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdApplication::~QxrdApplication\n");
+    printf("QxrdApplication::~QxrdApplication(%p)\n", this);
   }
 }
 

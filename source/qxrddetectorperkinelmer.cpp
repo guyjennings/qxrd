@@ -25,6 +25,10 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QxrdExperimentWPtr expt, QxrdAc
   m_Counter(0),
   m_PerkinElmer()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(%p)\n", this);
+  }
+
   if (qcepDebug(DEBUG_PERKINELMER)) {
     printMessage("QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer()");
   }
@@ -34,6 +38,10 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QxrdExperimentWPtr expt, QxrdAc
 
 QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer(%p)\n", this);
+  }
+
   if (qcepDebug(DEBUG_PERKINELMER)) {
     printMessage("QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer()");
   }

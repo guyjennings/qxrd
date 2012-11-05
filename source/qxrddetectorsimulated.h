@@ -10,6 +10,7 @@ class QxrdDetectorSimulated : public QxrdDetector
   Q_OBJECT
 public:
   explicit QxrdDetectorSimulated(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
+  virtual ~QxrdDetectorSimulated();
 
   void initialize();
   int detectorType() const;

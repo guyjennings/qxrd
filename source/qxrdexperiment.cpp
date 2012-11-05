@@ -270,18 +270,18 @@ void QxrdExperiment::openWindows()
 
 QxrdExperiment::~QxrdExperiment()
 {
-  m_SettingsSaver->performSave();
-
   if (m_Application && qcepDebug(DEBUG_APP)) {
     m_Application->printMessage("QxrdExperiment::~QxrdExperiment");
   }
 
-  closeScanFile();
-  closeLogFile();
-
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::~QxrdExperiment(%p)\n", this);
   }
+
+  m_SettingsSaver->performSave();
+
+  closeScanFile();
+  closeLogFile();
 }
 
 void QxrdExperiment::splashMessage(QString msg)

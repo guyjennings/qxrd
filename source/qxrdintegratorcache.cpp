@@ -68,7 +68,7 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_CenterFinder(cf)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdIntegrator::QxrdIntegrator(%p)\n", this);
+    printf("QxrdIntegratorCache::QxrdIntegratorCache(%p)\n", this);
   }
 
   if (m_Integrator) {

@@ -2,13 +2,26 @@
 #include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
 #include "qxrdallocator.h"
+#include "qxrddebug.h"
 
+#include <stdio.h>
 #include <QPainter>
 
 QxrdDetectorSimulated::QxrdDetectorSimulated(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
   QxrdDetector(expt, acq)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDetectorSimulated::QxrdDetectorSimulated(%p)\n", this);
+  }
+
   connect(&m_Timer, SIGNAL(timeout()), this, SLOT(onTimerTimeout()));
+}
+
+QxrdDetectorSimulated::~QxrdDetectorSimulated()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDetectorSimulated::~QxrdDetectorSimulated(%p)\n", this);
+  }
 }
 
 int QxrdDetectorSimulated::detectorType() const

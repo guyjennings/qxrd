@@ -71,6 +71,9 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
     m_ControlPanel(NULL),
     m_Idling(1)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAcquisition::QxrdAcquisition(%p)\n", this);
+  }
 }
 
 void QxrdAcquisition::initialize()
@@ -116,6 +119,10 @@ void QxrdAcquisition::initialize()
 
 QxrdAcquisition::~QxrdAcquisition()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAcquisition::~QxrdAcquisition(%p)\n", this);
+  }
+
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdAcquisition::~QxrdAcquisition");
   }

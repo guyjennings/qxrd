@@ -31,13 +31,13 @@ QxrdExperimentThread::~QxrdExperimentThread()
     m_Application->printMessage("QxrdExperimentThread::~QxrdExperimentThread");
   }
 
-  ::fflush(stdout);
-
-  shutdown();
-
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperimentThread::~QxrdExperimentThread(%p)\n", this);
   }
+
+  ::fflush(stdout);
+
+  shutdown();
 }
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdApplication *app, QSettings *settings)

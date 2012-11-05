@@ -26,6 +26,9 @@ QxrdDetectorThread::QxrdDetectorThread(QxrdExperimentWPtr expt, QxrdAcquisitionW
   m_Acquisition(acq),
   m_Detector()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDetectorThread::QxrdDetectorThread(%p)\n", this);
+  }
 }
 
 QxrdDetectorThread::~QxrdDetectorThread()
@@ -34,14 +37,14 @@ QxrdDetectorThread::~QxrdDetectorThread()
     QxrdExperimentPtr expt(m_Experiment);
 
     if (expt) {
-      expt->printMessage("QxrdExperimentThread::~QxrdExperimentThread");
+      expt->printMessage("QxrdDetectorThread::~QxrdDetectorThread");
     }
   }
 
   shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdExperimentThread::~QxrdExperimentThread(%p)\n", this);
+    printf("QxrdDetectorThread::~QxrdDetectorThread(%p)\n", this);
   }
 }
 
