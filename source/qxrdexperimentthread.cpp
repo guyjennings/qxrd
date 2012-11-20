@@ -17,8 +17,7 @@ QxrdExperimentThread::QxrdExperimentThread(QxrdExperimentKind kind, QString path
   m_ExperimentKind(kind),
   m_ExperimentPath(path),
   m_Application(app),
-  m_Settings(settings),
-  m_Experiment(NULL)
+  m_Settings(settings)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperimentThread::QxrdExperimentThread(%p)\n", this);
@@ -125,64 +124,66 @@ void QxrdExperimentThread::run()
     printf("QxrdExperimentThread::run(%p)\n", this);
   }
 
-  QxrdExperimentPtr doc;
+  {
+    QxrdExperimentPtr doc;
 
-  if (m_ExperimentKind == FromSettings) {
-    if (m_Settings) {
-      m_ExperimentKind = (QxrdExperimentKind) m_Settings->value("experiment/experimentKind",GenericAnalysis).toInt();
-    } else {
-      m_ExperimentKind = GenericAnalysis;
+    if (m_ExperimentKind == FromSettings) {
+      if (m_Settings) {
+        m_ExperimentKind = (QxrdExperimentKind) m_Settings->value("experiment/experimentKind",GenericAnalysis).toInt();
+      } else {
+        m_ExperimentKind = GenericAnalysis;
+      }
     }
-  }
 
-  switch(m_ExperimentKind) {
-  case PerkinElmerAcquisition:
-    doc = QxrdExperimentPtr(
-          new QxrdExperimentPerkinElmerAcquisition(m_ExperimentPath, m_Application));
-    break;
+    switch(m_ExperimentKind) {
+    case PerkinElmerAcquisition:
+      doc = QxrdExperimentPtr(
+            new QxrdExperimentPerkinElmerAcquisition(m_ExperimentPath, m_Application));
+      break;
 
-  case PilatusAcquisition:
-    doc = QxrdExperimentPtr(
-          new QxrdExperimentPilatusAcquisition(m_ExperimentPath, m_Application));
-    break;
+    case PilatusAcquisition:
+      doc = QxrdExperimentPtr(
+            new QxrdExperimentPilatusAcquisition(m_ExperimentPath, m_Application));
+      break;
 
-  case SimulatedAcquisition:
-    doc = QxrdExperimentPtr(
-          new QxrdExperimentSimulatedAcquisition(m_ExperimentPath, m_Application));
-    break;
+    case SimulatedAcquisition:
+      doc = QxrdExperimentPtr(
+            new QxrdExperimentSimulatedAcquisition(m_ExperimentPath, m_Application));
+      break;
 
-  case PerkinElmerAnalysis:
-    doc = QxrdExperimentPtr(
-          new QxrdExperimentPerkinElmerAnalysis(m_ExperimentPath, m_Application));
-    break;
+    case PerkinElmerAnalysis:
+      doc = QxrdExperimentPtr(
+            new QxrdExperimentPerkinElmerAnalysis(m_ExperimentPath, m_Application));
+      break;
 
-  case PilatusAnalysis:
-    doc = QxrdExperimentPtr(
-          new QxrdExperimentPilatusAnalysis(m_ExperimentPath, m_Application));
-    break;
+    case PilatusAnalysis:
+      doc = QxrdExperimentPtr(
+            new QxrdExperimentPilatusAnalysis(m_ExperimentPath, m_Application));
+      break;
 
-  case GenericAnalysis:
-    doc = QxrdExperimentPtr(
-          new QxrdExperimentGenericAnalysis(m_ExperimentPath, m_Application));
-    break;
+    case GenericAnalysis:
+      doc = QxrdExperimentPtr(
+            new QxrdExperimentGenericAnalysis(m_ExperimentPath, m_Application));
+      break;
 
-  default:
-    doc = QxrdExperimentPtr(
-          new QxrdExperimentGenericAnalysis(m_ExperimentPath, m_Application));
-    break;
+    default:
+      doc = QxrdExperimentPtr(
+            new QxrdExperimentGenericAnalysis(m_ExperimentPath, m_Application));
+      break;
+    }
+
+    if (doc) {
+      doc -> initialize(this, m_Settings);
+
+      m_Mutex.lock();
+      m_Experiment = doc;
+      m_Mutex.unlock();
+    }
   }
 
   int rc = -1;
 
-  if (doc) {
-    doc -> initialize(this, m_Settings);
-
-    m_Mutex.lock();
-    m_Experiment = doc;
-    m_Mutex.unlock();
-
-    rc = exec();
-  }
+  rc = exec();
 
   {
     if (qcepDebug(DEBUG_THREADS)) {

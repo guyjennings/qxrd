@@ -52,26 +52,35 @@ void QxrdServerThread::shutdown()
 
 void QxrdServerThread::run()
 {
-  QxrdExperimentPtr expt(m_Experiment);
+  {
+    QxrdExperimentPtr expt(m_Experiment);
 
-  if (expt && qcepDebug(DEBUG_THREADS)) {
-    expt->printMessage("Starting Spec Server Thread");
+    if (expt && qcepDebug(DEBUG_THREADS)) {
+      expt->printMessage("Starting Spec Server Thread");
+    }
+
+    QxrdServerPtr server(new QxrdServer(m_Saver, m_Experiment, m_Name));
+
+
+    if (server) {
+      m_Mutex.lock();
+      m_Server = server;
+      m_Mutex.unlock();
+    }
   }
-
-  QxrdServerPtr server(new QxrdServer(m_Saver, m_Experiment, m_Name));
 
   int rc = -1;
 
-  if (server) {
-    m_Mutex.lock();
-    m_Server = server;
-    m_Mutex.unlock();
-
+  if (m_Server) {
     rc = exec();
   }
 
-  if (expt && qcepDebug(DEBUG_THREADS)) {
-    expt->printMessage(tr("Spec Server Thread Terminated with rc %1").arg(rc));
+  {
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt && qcepDebug(DEBUG_THREADS)) {
+      expt->printMessage(tr("Spec Server Thread Terminated with rc %1").arg(rc));
+    }
   }
 }
 

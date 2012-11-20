@@ -282,6 +282,8 @@ QxrdExperiment::~QxrdExperiment()
 
   closeScanFile();
   closeLogFile();
+
+  delete m_Window;
 }
 
 void QxrdExperiment::splashMessage(QString msg)
