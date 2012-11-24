@@ -1,13 +1,21 @@
 #include "qxrddisplaydialog.h"
+#include "qxrddebug.h"
 
 QxrdDisplayDialog::QxrdDisplayDialog(QWidget *parent) :
     QDockWidget(parent)
 {
-    setupUi(this);
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDisplayDialog::QxrdDisplayDialog(%p)\n", this);
+  }
+
+  setupUi(this);
 }
 
 QxrdDisplayDialog::~QxrdDisplayDialog()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDisplayDialog::~QxrdDisplayDialog(%p)\n", this);
+  }
 }
 
 void QxrdDisplayDialog::changeEvent(QEvent *e)

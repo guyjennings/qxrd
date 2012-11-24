@@ -15,6 +15,7 @@ class QxrdSliceDialog : public QDockWidget, public Ui::QxrdSliceDialog
 
 public:
   explicit QxrdSliceDialog(QxrdSliceDialogSettingsWPtr settings, QWidget *parent);
+  virtual ~QxrdSliceDialog();
 
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
 

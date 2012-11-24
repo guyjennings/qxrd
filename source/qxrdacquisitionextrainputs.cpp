@@ -22,6 +22,10 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr sav
   m_Channels(),
   m_NIDAQPlugin()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(%p)\n", this);
+  }
+
   QxrdAcquisitionPtr acqp(m_Acquisition);
 
   if (acqp) {
@@ -32,6 +36,13 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr sav
 
   if (acqp) {
     connect(acqp->prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(reinitialize()));
+  }
+}
+
+QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs(%p)\n", this);
   }
 }
 

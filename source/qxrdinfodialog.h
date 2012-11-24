@@ -13,6 +13,7 @@ class QxrdInfoDialog : public QDockWidget, public Ui::QxrdInfoDialog
 
 public:
   explicit QxrdInfoDialog(QxrdInfoDialogSettingsWPtr settings, QWidget *parent);
+  virtual ~QxrdInfoDialog();
 
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
 

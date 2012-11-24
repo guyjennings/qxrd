@@ -1,10 +1,15 @@
 #include "qxrdcenterfinderdialog.h"
 #include "qxrdcenterfinder.h"
+#include "qxrddebug.h"
 
 QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget *parent)
   : QDockWidget(parent),
     m_CenterFinder(cen)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdCenterFinderDialog::QxrdCenterFinderDialog(%p)\n", this);
+  }
+
   setupUi(this);
 
   connect(m_CenterMoveUpLeft,    SIGNAL(clicked()), this, SLOT(centerMoveUpLeft()));
@@ -39,6 +44,13 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   onImplementTiltChanged(m_CenterFinder -> get_ImplementTilt());
   onEnablePolarizationChanged(m_CenterFinder -> get_EnablePolarizationCorrections());
   onEnableAbsorptionChanged(m_CenterFinder -> get_EnableAbsorptionCorrections());
+}
+
+QxrdCenterFinderDialog::~QxrdCenterFinderDialog()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdCenterFinderDialog::~QxrdCenterFinderDialog(%p)\n", this);
+  }
 }
 
 void QxrdCenterFinderDialog::onImplementTiltChanged(bool imp)

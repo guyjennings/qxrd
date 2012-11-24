@@ -17,6 +17,10 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
   QDialog(parent),
   m_Experiment(exptw)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(%p)\n", this);
+  }
+
   setupUi(this);
 
   QxrdExperimentPtr expt(m_Experiment);
@@ -110,6 +114,9 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
 
 QxrdExperimentPreferencesDialog::~QxrdExperimentPreferencesDialog()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdExperimentPreferencesDialog::~QxrdExperimentPreferencesDialog(%p)\n", this);
+  }
 }
 
 void QxrdExperimentPreferencesDialog::getRelativeDirectoryPath(QLineEdit *edit)

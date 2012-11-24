@@ -12,6 +12,7 @@ class QxrdIntegratorDialog : public QDockWidget, public Ui::QxrdIntegratorDialog
 
 public:
   QxrdIntegratorDialog(QxrdIntegratorWPtr integw, QWidget *parent=0);
+  virtual ~QxrdIntegratorDialog();
 
 private:
   QxrdIntegratorWPtr m_Integrator;
