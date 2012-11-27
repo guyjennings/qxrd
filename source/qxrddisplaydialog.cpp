@@ -1,5 +1,6 @@
 #include "qxrddisplaydialog.h"
 #include "qxrddebug.h"
+#include <stdio.h>
 
 QxrdDisplayDialog::QxrdDisplayDialog(QWidget *parent) :
     QDockWidget(parent)
