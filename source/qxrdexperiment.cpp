@@ -772,3 +772,11 @@ void QxrdExperiment::onDetectorTypeChanged()
     }
   }
 }
+
+void QxrdExperiment::dump()
+{
+  printf("About to dump\n");
+  dumpObjectInfo();
+  dumpObjectTree();
+  printf("Dumped\n");
+}

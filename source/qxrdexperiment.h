@@ -105,6 +105,8 @@ public slots:
   void finishedWork(int amt);
   void updateCompletionPercentage(int, int);
 
+  void dump();
+
 private slots:
   void onDetectorTypeChanged();
 
