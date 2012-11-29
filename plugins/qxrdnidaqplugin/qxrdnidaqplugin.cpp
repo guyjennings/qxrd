@@ -286,7 +286,7 @@ Error:
   return;
 }
 
-void   QxrdNIDAQPlugin::setAnalogWaveform(int chan, double rate, double wfm[], int size)
+void   QxrdNIDAQPlugin::setAnalogWaveform(QString chan, double rate, double wfm[], int size)
 {
   QMutexLocker lock(&m_Mutex);
 //  printf("setAnalogWaveform(%g,%g...,%d)\n", rate, wfm[0], size);
@@ -303,7 +303,7 @@ void   QxrdNIDAQPlugin::setAnalogWaveform(int chan, double rate, double wfm[], i
   if (chan >= 0) {
     DAQmxErrChk(DAQmxCreateTask("qxrd-output", &m_AOTaskHandle));
     DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle,
-                                          qPrintable(tr("Dev1/ao%1").arg(chan)), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+                                          qPrintable(chan), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
 
     if (m_AOTaskHandle) {
       DAQmxErrChk(

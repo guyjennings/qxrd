@@ -31,12 +31,6 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
     m_SyncAcqWfm      -> addItem("Sawtooth");
     m_SyncAcqWfm      -> addItem("Bipolar Triangle");
 
-    m_SyncAcqOutChan  -> addItem("None");
-    m_SyncAcqOutChan  -> addItem("AO0");
-    m_SyncAcqOutChan  -> addItem("AO1");
-
-    m_SyncAcqFlagChan -> addItem("None");
-
     m_SyncAcqMinimum  -> setMinimum(-10.0);
     m_SyncAcqMinimum  -> setMaximum(10.0);
     m_SyncAcqMinimum  -> setSingleStep(0.1);
@@ -56,16 +50,35 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
     QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
     if (sync) {
+      QxrdNIDAQPluginInterfacePtr nidaq = sync->nidaqPlugin();
+
+      QStringList devices = nidaq->deviceNames();
+
+      foreach(QString device, devices) {
+        QString desc = nidaq->deviceType(device);
+        int     isSim = nidaq->deviceIsSimulated(device);
+
+        QString item = device+" : "+desc;
+
+        if (isSim) {
+          item += " [simulated]";
+        }
+
+        m_SyncAcqOutDevice->addItem(item, device);
+      };
+
       sync -> prop_SyncAcquisitionMode()          -> linkTo(m_SyncAcqMode);
       sync -> prop_SyncAcquisitionWaveform()      -> linkTo(m_SyncAcqWfm);
+      sync -> prop_SyncAcquisitionOutputDevice()  -> linkTo(m_SyncAcqOutDevice);
       sync -> prop_SyncAcquisitionOutputChannel() -> linkTo(m_SyncAcqOutChan);
-      sync -> prop_SyncAcquisitionFlagChannel()   -> linkTo(m_SyncAcqFlagChan);
 
       sync -> prop_SyncAcquisitionMinimum()       -> linkTo(m_SyncAcqMinimum);
       sync -> prop_SyncAcquisitionMaximum()       -> linkTo(m_SyncAcqMaximum);
       sync -> prop_SyncAcquisitionSymmetry()      -> linkTo(m_SyncAcqSymmetry);
       sync -> prop_SyncAcquisitionPhaseShift()      -> linkTo(m_SyncAcqPhaseShift);
 
+      connect(sync -> prop_SyncAcquisitionOutputDevice(), SIGNAL(valueChanged(QString,int)), this, SLOT(deviceChanged()));
+      connect(sync -> prop_SyncAcquisitionOutputChannel(), SIGNAL(valueChanged(QString,int)), this, SLOT(waveformChanged()));
       connect(sync -> prop_SyncAcquisitionMode(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
       connect(sync -> prop_SyncAcquisitionWaveform(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
       connect(sync -> prop_SyncAcquisitionMinimum(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
@@ -76,6 +89,9 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
 
     connect(acq->prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
     connect(acq->prop_PhasesInGroup(), SIGNAL(valueChanged(int,int)), this, SLOT(waveformChanged()));
+
+    deviceChanged();
+    waveformChanged();
   }
 }
 
@@ -95,6 +111,26 @@ void QxrdSynchronizedAcquisitionDialog::changeEvent(QEvent *e)
     break;
   default:
     break;
+  }
+}
+
+void QxrdSynchronizedAcquisitionDialog::deviceChanged()
+{
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
+
+  if (sync) {
+    QxrdNIDAQPluginInterfacePtr nidaq = sync->nidaqPlugin();
+
+    QStringList aoChannels = nidaq->deviceAOChannels(sync->get_SyncAcquisitionOutputDevice());
+
+    bool blocked = m_SyncAcqOutChan->blockSignals(true);
+    m_SyncAcqOutChan->clear();
+
+    foreach(QString chan, aoChannels) {
+      m_SyncAcqOutChan->addItem(chan, chan);
+    }
+
+    m_SyncAcqOutChan->blockSignals(blocked);
   }
 }
 

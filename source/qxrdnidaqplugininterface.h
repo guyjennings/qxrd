@@ -15,7 +15,7 @@ public:
   virtual void setErrorOutput(QObject *errors) = 0;
 
 //  virtual void setAnalogChannel(int chan) = 0;
-  virtual void setAnalogWaveform(int chan, double rate, double wfm[], int size) = 0;
+  virtual void setAnalogWaveform(QString chan, double rate, double wfm[], int size) = 0;
   virtual void triggerAnalogWaveform() = 0;
   virtual void pulseOutput() = 0;
 
