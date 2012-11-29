@@ -1114,9 +1114,25 @@ void QcepStringProperty::resetValue()
 
 void QcepStringProperty::linkTo(QComboBox *comboBox)
 {
+  if (qcepDebug(DEBUG_PROPERTIES || debug())) {
+    printMessage(tr("%1: QcepStringProperty::linkTo(QComboBox *%2)")
+                 .arg(name()).HEXARG(comboBox));
+  }
+
+  QcepStringPropertyComboBoxHelper *helper
+      = new QcepStringPropertyComboBoxHelper(comboBox, this);
+
+  helper -> moveToThread(comboBox->thread());
+  helper -> connect();
+
+  int index = comboBox->findData(value());
+
+  comboBox -> setCurrentIndex(index);
+
   setWidgetToolTip(comboBox);
 
-  printf("QcepStringProperty::linkTo(QComboBox * not implemented yet\n");
+  connect(this,   SIGNAL(valueChanged(QString, int)), helper, SLOT(setValue(QString, int)));
+  connect(helper, SIGNAL(valueChanged(QString,int)),   this,   SLOT(setValue(QString, int)));
 }
 
 void QcepStringProperty::linkTo(QLineEdit *lineEdit)
@@ -1200,6 +1216,55 @@ void QcepStringPropertyLineEditHelper::setText(QString value)
   }
 
   emit textEdited(value, m_Property->incIndex(1));
+}
+
+QcepStringPropertyComboBoxHelper::QcepStringPropertyComboBoxHelper(QComboBox *comboBox, QcepStringProperty *property)
+  : QObject(comboBox),
+    m_ComboBox(comboBox),
+    m_Property(property)
+{
+}
+
+void QcepStringPropertyComboBoxHelper::connect()
+{
+  CONNECT_CHECK(QObject::connect(m_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setCurrentIndex(int)), Qt::DirectConnection));
+}
+
+void QcepStringPropertyComboBoxHelper::setValue(QString value, int index)
+{
+  if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+    m_Property->printMessage(tr("%1: QcepIntPropertyComboBoxHelper::setValue(int %2, int %3) [%4,%5]")
+                 .arg(m_Property->name()).arg(value).arg(index)
+                 .arg(m_Property->index()).arg(m_ComboBox->currentIndex()));
+  }
+
+  if (m_Property->index() == index) {
+    int current = m_ComboBox->findData(value);
+
+    if (m_ComboBox->currentIndex() != current) {
+      if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+        m_Property->printMessage(tr("%1: QcepIntPropertyComboBoxHelper comboBox %2 set to %3")
+                     .arg(m_Property->name()).arg(m_ComboBox->objectName()).arg(value));
+      }
+
+      bool block = m_ComboBox->blockSignals(true);
+
+      m_ComboBox->setCurrentIndex(current);
+      m_ComboBox->blockSignals(block);
+    }
+  }
+}
+
+void QcepStringPropertyComboBoxHelper::setCurrentIndex(int current)
+{
+  if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+    m_Property->printMessage(tr("%1: QcepStringPropertyComboBoxHelper::setCurrentIndex(int %2)")
+                 .arg(m_Property->name()).arg(current));
+  }
+
+  QString value = m_ComboBox->itemData(current).toString();
+
+  emit valueChanged(value, m_Property->incIndex(1));
 }
 
 QcepDateTimeProperty::QcepDateTimeProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QDateTime value, QString toolTip)
