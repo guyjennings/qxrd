@@ -34,8 +34,26 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
       QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
       if (xtra) {
+        QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
+
+        QStringList devices = nidaq->deviceNames();
+
+        foreach(QString device, devices) {
+          QString desc = nidaq->deviceType(device);
+          int     isSim = nidaq->deviceIsSimulated(device);
+
+          QString item = device+" : "+desc;
+
+          if (isSim) {
+            item += " [simulated]";
+          }
+
+          m_AcquisitionDevice->addItem(item, device);
+        }
+
         xtra->prop_SampleRate()->linkTo(m_SampleRate);
         xtra->prop_AcquireDelay()->linkTo(m_AcquisitionDelay);
+        xtra->prop_DeviceName()->linkTo(m_AcquisitionDevice);
 
         connect(xtra.data(), SIGNAL(newDataAvailable()), this, SLOT(updateWaveforms()));
       }
@@ -67,8 +85,31 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     QCheckBox *cb2 = new QCheckBox();
     ch->prop_Plotted()->linkTo(cb2);
 
-    QLineEdit *le = new QLineEdit();
-    ch->prop_ChannelName()->linkTo(le);
+    QComboBox *nm = new QComboBox();
+
+    QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+
+    if (xtra) {
+      QString deviceName = xtra->get_DeviceName();
+      QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
+
+      if (nidaq) {
+        QStringList aiChannels = nidaq->deviceAIChannels(deviceName);
+        QStringList ctrChannels = nidaq->deviceCIChannels(deviceName);
+
+        nm->addItem("Analog Inputs");
+        foreach(QString chan, aiChannels) {
+          nm->addItem(chan, chan);
+        }
+
+        nm->addItem("Counter Inputs");
+        foreach(QString chan, ctrChannels) {
+          nm->addItem(chan, chan);
+        }
+      }
+    }
+
+    ch->prop_ChannelName()->linkTo(nm);
 
     QComboBox *md = new QComboBox();
 
@@ -145,7 +186,7 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     if (m_ChannelsInRows) {
       m_ExtraInputsTable->setCellWidget(i, c++, cb);
       m_ExtraInputsTable->setCellWidget(i, c++, cb2);
-      m_ExtraInputsTable->setCellWidget(i, c++, le);
+      m_ExtraInputsTable->setCellWidget(i, c++, nm);
       m_ExtraInputsTable->setCellWidget(i, c++, md);
       m_ExtraInputsTable->setCellWidget(i, c++, wf);
       m_ExtraInputsTable->setCellWidget(i, c++, min);
@@ -161,7 +202,7 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
     } else {
       m_ExtraInputsTable->setCellWidget(c++, i, cb);
       m_ExtraInputsTable->setCellWidget(c++, i, cb2);
-      m_ExtraInputsTable->setCellWidget(c++, i, le);
+      m_ExtraInputsTable->setCellWidget(c++, i, nm);
       m_ExtraInputsTable->setCellWidget(c++, i, md);
       m_ExtraInputsTable->setCellWidget(c++, i, wf);
       m_ExtraInputsTable->setCellWidget(c++, i, min);

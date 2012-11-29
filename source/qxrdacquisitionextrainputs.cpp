@@ -16,6 +16,7 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr sav
   m_SampleRate(saver, this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
   m_AcquireDelay(saver, this, "acquireDelay", 0.107, "Delay between exposure end and Image available in QXRD"),
   m_ExposureTime(QxrdSettingsSaverPtr(), this, "exposureTime", 0.107, "Exposure time (in seconds)"),
+  m_DeviceName(saver, this, "deviceName", "", "NI-DAQ Device Name"),
   m_Experiment(doc),
   m_Acquisition(acq),
   m_Saver(saver),
