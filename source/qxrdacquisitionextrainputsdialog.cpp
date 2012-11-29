@@ -55,6 +55,7 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
         xtra->prop_AcquireDelay()->linkTo(m_AcquisitionDelay);
         xtra->prop_DeviceName()->linkTo(m_AcquisitionDevice);
 
+        connect(xtra->prop_DeviceName(), SIGNAL(valueChanged(QString,int)), this, SLOT(updateUi()));
         connect(xtra.data(), SIGNAL(newDataAvailable()), this, SLOT(updateWaveforms()));
       }
     }
