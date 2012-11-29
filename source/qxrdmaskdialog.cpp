@@ -4,6 +4,7 @@
 #include "qxrddataprocessor.h"
 #include "qxrdmaskstackmodel.h"
 #include "qxrdapplication.h"
+#include "qxrddebug.h"
 
 QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
   QDockWidget(parent),
@@ -11,6 +12,10 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
   m_Masks(),
   m_MaskStackModel()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdMaskDialog::QxrdMaskDialog(%p)\n", this);
+  }
+
   setupUi(this);
 
   connect(m_HideMaskAll, SIGNAL(clicked()), this, SLOT(doHideMaskAll()));
@@ -60,6 +65,9 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
 
 QxrdMaskDialog::~QxrdMaskDialog()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdMaskDialog::~QxrdMaskDialog(%p)\n", this);
+  }
 }
 
 void QxrdMaskDialog::changeEvent(QEvent *e)

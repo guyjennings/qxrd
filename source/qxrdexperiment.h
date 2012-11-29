@@ -196,7 +196,7 @@ public:  // Properties
   QCEP_INTEGER_PROPERTY(CompletionPercentage)
 };
 
-typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+//typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
+//typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
 
 #endif // QXRDEXPERIMENT_H

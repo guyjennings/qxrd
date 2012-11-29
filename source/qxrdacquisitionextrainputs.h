@@ -23,7 +23,8 @@ public:
   explicit QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver,
                                       QxrdExperimentWPtr    doc,
                                       QxrdAcquisitionWPtr   acq);
-  
+  virtual ~QxrdAcquisitionExtraInputs();
+
 public:
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
   QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;

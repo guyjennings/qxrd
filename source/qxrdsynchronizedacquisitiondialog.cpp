@@ -3,12 +3,17 @@
 #include "ui_qxrdsynchronizedacquisitiondialog.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdacquisition.h"
+#include "qxrddebug.h"
 
 QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *parent, QxrdAcquisitionWPtr acqw) :
   QDockWidget(parent),
   m_Acquisition(acqw),
   m_SynchronizedAcquisition()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(%p)\n", this);
+  }
+
   setupUi(this);
 
   QxrdAcquisitionPtr acq(acqw);
@@ -76,6 +81,9 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
 
 QxrdSynchronizedAcquisitionDialog::~QxrdSynchronizedAcquisitionDialog()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSynchronizedAcquisitionDialog::~QxrdSynchronizedAcquisitionDialog(%p)\n", this);
+  }
 }
 
 void QxrdSynchronizedAcquisitionDialog::changeEvent(QEvent *e)

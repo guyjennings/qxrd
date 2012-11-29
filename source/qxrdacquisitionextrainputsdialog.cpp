@@ -5,6 +5,7 @@
 #include <QDoubleSpinBox>
 #include <QLineEdit>
 #include <QMessageBox>
+#include "qxrddebug.h"
 
 QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisitionExtraInputsDialogSettingsWPtr set, QWidget *parent, QxrdAcquisitionWPtr acq) :
   QDockWidget(parent),
@@ -13,6 +14,10 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
   m_AcquisitionExtraInputs(),
   m_ChannelsInRows(0)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(%p)\n", this);
+  }
+
   setupUi(this);
 
   connect(m_AddChannel, SIGNAL(clicked()), this, SLOT(addChannel()));
@@ -44,6 +49,13 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
   }
 
   updateUi();
+}
+
+QxrdAcquisitionExtraInputsDialog::~QxrdAcquisitionExtraInputsDialog()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdAcquisitionExtraInputsDialog::~QxrdAcquisitionExtraInputsDialog(%p)\n", this);
+  }
 }
 
 void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelPtr ch)
@@ -164,10 +176,6 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
       m_ExtraInputsTable->setCellWidget(c++, i, trig);
     }
   }
-}
-
-QxrdAcquisitionExtraInputsDialog::~QxrdAcquisitionExtraInputsDialog()
-{
 }
 
 void QxrdAcquisitionExtraInputsDialog::updateUi()

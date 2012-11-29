@@ -11,6 +11,7 @@ class QxrdCenterFinderDialog : public QDockWidget, public Ui::QxrdCenterFinderDi
 
 public:
   QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget *parent=0);
+  virtual ~QxrdCenterFinderDialog();
 
 public slots:
   void centerMoveUpLeft();

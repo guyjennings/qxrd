@@ -9,6 +9,10 @@ QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, Q
   QDialog(parent),
   m_Application(app)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(%p)\n", this);
+  }
+
   setupUi(this);
 
   m_OpenDirectly -> setChecked(m_Application->get_OpenDirectly());
@@ -37,6 +41,9 @@ QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, Q
 
 QxrdGlobalPreferencesDialog::~QxrdGlobalPreferencesDialog()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdGlobalPreferencesDialog::~QxrdGlobalPreferencesDialog(%p)\n", this);
+  }
 }
 
 void QxrdGlobalPreferencesDialog::changeEvent(QEvent *e)

@@ -3,12 +3,24 @@
 #include "qcepproperty.h"
 #include "qxrdsettingssaver.h"
 #include "qxrdimagedata.h"
+#include "qxrddebug.h"
 
 QxrdInfoDialog::QxrdInfoDialog(QxrdInfoDialogSettingsWPtr settings, QWidget *parent) :
   QDockWidget(parent),
   m_InfoDialogSettings(settings)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdInfoDialog::QxrdInfoDialog(%p)\n", this);
+  }
+
   setupUi(this);
+}
+
+QxrdInfoDialog::~QxrdInfoDialog()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdInfoDialog::~QxrdInfoDialog(%p)\n", this);
+  }
 }
 
 void QxrdInfoDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
