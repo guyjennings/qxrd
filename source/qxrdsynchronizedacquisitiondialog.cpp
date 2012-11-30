@@ -52,20 +52,22 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
     if (sync) {
       QxrdNIDAQPluginInterfacePtr nidaq = sync->nidaqPlugin();
 
-      QStringList devices = nidaq->deviceNames();
+      if (nidaq) {
+        QStringList devices = nidaq->deviceNames();
 
-      foreach(QString device, devices) {
-        QString desc = nidaq->deviceType(device);
-        int     isSim = nidaq->deviceIsSimulated(device);
+        foreach(QString device, devices) {
+          QString desc = nidaq->deviceType(device);
+          int     isSim = nidaq->deviceIsSimulated(device);
 
-        QString item = device+" : "+desc;
+          QString item = device+" : "+desc;
 
-        if (isSim) {
-          item += " [simulated]";
+          if (isSim) {
+            item += " [simulated]";
+          }
+
+          m_SyncAcqOutDevice->addItem(item, device);
         }
-
-        m_SyncAcqOutDevice->addItem(item, device);
-      };
+      }
 
       sync -> prop_SyncAcquisitionMode()          -> linkTo(m_SyncAcqMode);
       sync -> prop_SyncAcquisitionWaveform()      -> linkTo(m_SyncAcqWfm);
@@ -121,16 +123,18 @@ void QxrdSynchronizedAcquisitionDialog::deviceChanged()
   if (sync) {
     QxrdNIDAQPluginInterfacePtr nidaq = sync->nidaqPlugin();
 
-    QStringList aoChannels = nidaq->deviceAOChannels(sync->get_SyncAcquisitionOutputDevice());
+    if (nidaq) {
+      QStringList aoChannels = nidaq->deviceAOChannels(sync->get_SyncAcquisitionOutputDevice());
 
-    bool blocked = m_SyncAcqOutChan->blockSignals(true);
-    m_SyncAcqOutChan->clear();
+      bool blocked = m_SyncAcqOutChan->blockSignals(true);
+      m_SyncAcqOutChan->clear();
 
-    foreach(QString chan, aoChannels) {
-      m_SyncAcqOutChan->addItem(chan, chan);
+      foreach(QString chan, aoChannels) {
+        m_SyncAcqOutChan->addItem(chan, chan);
+      }
+
+      m_SyncAcqOutChan->blockSignals(blocked);
     }
-
-    m_SyncAcqOutChan->blockSignals(blocked);
   }
 }
 

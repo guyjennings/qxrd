@@ -36,19 +36,21 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
       if (xtra) {
         QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
 
-        QStringList devices = nidaq->deviceNames();
+        if (nidaq) {
+          QStringList devices = nidaq->deviceNames();
 
-        foreach(QString device, devices) {
-          QString desc = nidaq->deviceType(device);
-          int     isSim = nidaq->deviceIsSimulated(device);
+          foreach(QString device, devices) {
+            QString desc = nidaq->deviceType(device);
+            int     isSim = nidaq->deviceIsSimulated(device);
 
-          QString item = device+" : "+desc;
+            QString item = device+" : "+desc;
 
-          if (isSim) {
-            item += " [simulated]";
+            if (isSim) {
+              item += " [simulated]";
+            }
+
+            m_AcquisitionDevice->addItem(item, device);
           }
-
-          m_AcquisitionDevice->addItem(item, device);
         }
 
         xtra->prop_SampleRate()->linkTo(m_SampleRate);
