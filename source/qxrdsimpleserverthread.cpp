@@ -61,9 +61,9 @@ void QxrdSimpleServerThread::run()
 
     if (server) {
       m_Mutex.lock();
+      server->moveToThread(g_Application->thread());
       m_Server = server;
       m_Mutex.unlock();
-
     }
   }
 
