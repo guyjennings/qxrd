@@ -473,6 +473,13 @@ void QxrdExperiment::openScanFile()
 
   if (m_ScanFile == NULL) {
     m_ScanFile = fopen(qPrintable(scanFilePath()), "a");
+
+    if (m_ScanFile) {
+      fprintf(m_ScanFile, "#F %s\n", qPrintable(get_LogFileName()));
+      fprintf(m_ScanFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
+      fprintf(m_ScanFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
+      fflush(m_ScanFile);
+    }
   }
 }
 
