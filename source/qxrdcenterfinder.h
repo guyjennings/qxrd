@@ -12,6 +12,7 @@
 #include "qxrdobjectnamer.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdimagedata-ptr.h"
+#include "qxrdimagedata.h"
 #include "qxrdexperiment-ptr.h"
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
