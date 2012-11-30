@@ -28,6 +28,8 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
 //  connect(m_DetectorTypeCombo, SIGNAL(currentIndexChanged(int)), m_DetectorPrefsStack, SLOT(setCurrentIndex(int)));
 
   if (expt) {
+    setWindowTitle(expt->experimentFilePath() + " Preferences");
+
     QxrdAcquisitionPtr acq = expt -> acquisition();
     QxrdDataProcessorPtr proc = expt->dataProcessor();
     //  QxrdAllocator *alloc = g_Application->allocator();
