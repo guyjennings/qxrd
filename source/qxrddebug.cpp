@@ -21,4 +21,5 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_INTEGRATOR,   "Integrator Operation");
   setMessage(DEBUG_TRIGGER,      "Acquisition Triggering");
   setMessage(DEBUG_EXTRAINPUTS,  "Extra Inputs");
+  setMessage(DEBUG_LOGSCRIPTS,   "Log Script Commands");
 }

@@ -140,6 +140,14 @@ void QxrdScriptEngine::evaluate(int src, QString expr)
 
   QScriptValue result = QScriptEngine::evaluate(expr);
 
+  if(qcepDebug(DEBUG_LOGSCRIPTS)) {
+    QxrdExperimentPtr exp(m_Experiment);
+
+    if (exp) {
+      exp->printMessage(tr("Evaluate[%1] %2 = %3").arg(src).arg(expr).arg(result.toString()));
+    }
+  }
+
   switch (src) {
   case 0:
     emit appResultAvailable(result);
