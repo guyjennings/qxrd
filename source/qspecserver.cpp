@@ -374,6 +374,8 @@ QSpecServer::sendReplyPacketTail()
   m_Socket -> write(m_ReplyData);
   m_Socket -> flush();
 
+  m_ReplyHeadSent = 0;
+
   if (qcepDebug(DEBUG_SERVER)) {
     printMessage(tr("QSpecServer::sendReplyPacketTail end"));
   }
