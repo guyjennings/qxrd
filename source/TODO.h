@@ -709,6 +709,10 @@ Crashes on exit from PE acquisition
 
 -------------------------------------------------------
 
+May crash on exit if live view active
+
+-------------------------------------------------------
+
 */
 
 #endif // TODO_H
