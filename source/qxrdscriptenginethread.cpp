@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 
-QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplication* app, QxrdExperimentWPtr exp)
+QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplicationWPtr app, QxrdExperimentWPtr exp)
   : QxrdThread(NULL),
     m_ScriptEngine(NULL),
     m_Application(app),

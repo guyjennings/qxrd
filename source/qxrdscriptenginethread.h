@@ -12,7 +12,7 @@ class QxrdScriptEngineThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdScriptEngineThread(QxrdApplication* app, QxrdExperimentWPtr exp);
+  QxrdScriptEngineThread(QxrdApplicationWPtr app, QxrdExperimentWPtr exp);
   ~QxrdScriptEngineThread();
 
   void shutdown();
@@ -23,7 +23,7 @@ protected:
 
 private:
   QxrdScriptEnginePtr m_ScriptEngine;
-  QxrdApplication* m_Application;
+  QxrdApplicationWPtr m_Application;
   QxrdExperimentWPtr  m_Experiment;
 };
 

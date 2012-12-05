@@ -950,7 +950,7 @@ void QxrdApplication::activateExperiment(QString path)
 {
   foreach(QxrdExperimentPtr exp, m_Experiments) {
     if (exp->experimentFilePath() == path) {
-      QxrdWindow *win = exp->window();
+      QxrdWindowPtr win = exp->window();
 
       if (win) {
         win->activateWindow();

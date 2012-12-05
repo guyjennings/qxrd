@@ -171,7 +171,7 @@ void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionWPtr acq)
   }
 }
 
-void QxrdDataProcessorBase::setWindow(QxrdWindow *win)
+void QxrdDataProcessorBase::setWindow(QxrdWindowWPtr win)
 {
   m_Window = win;
   newData(m_Data, QxrdMaskDataPtr());
@@ -310,7 +310,7 @@ void QxrdDataProcessorBase::newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPt
   m_Data = image;
   m_Overflow = overflow;
 
-  QxrdWindow *w = m_Window;
+  QxrdWindowPtr w = m_Window;
 
   if (w) {
     w -> newDataAvailable(m_Data, overflow);
@@ -403,7 +403,7 @@ void QxrdDataProcessorBase::newGainMapImage(QxrdDoubleImageDataPtr image)
 
 void QxrdDataProcessorBase::newMask()
 {
-  QxrdWindow *w = m_Window;
+  QxrdWindowPtr w = m_Window;
 
   if (w) {
     w -> newMaskAvailable(mask());

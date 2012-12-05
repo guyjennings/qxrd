@@ -29,7 +29,7 @@
 #include <QMetaProperty>
 #include <QRegExp>
 
-QxrdScriptEngine::QxrdScriptEngine(QxrdApplication* app, QxrdExperimentWPtr exp)
+QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr exp)
   : QScriptEngine(),
     m_Mutex(QMutex::Recursive),
     m_Application(app),
@@ -50,6 +50,11 @@ QxrdScriptEngine::~QxrdScriptEngine()
   }
 }
 
+QxrdApplicationWPtr QxrdScriptEngine::application() const
+{
+  return m_Application;
+}
+
 QxrdExperimentWPtr QxrdScriptEngine::experiment() const
 {
   return m_Experiment;
@@ -60,7 +65,7 @@ QxrdAcquisitionWPtr QxrdScriptEngine::acquisition() const
   return m_Acquisition;
 }
 
-QxrdWindow *QxrdScriptEngine::window() const
+QxrdWindowWPtr QxrdScriptEngine::window() const
 {
   return m_Window;
 }
@@ -70,22 +75,24 @@ QxrdDataProcessorWPtr QxrdScriptEngine::dataProcessor() const
   return m_DataProcessor;
 }
 
-void QxrdScriptEngine::setWindow(QxrdWindow *win)
+void QxrdScriptEngine::setWindow(QxrdWindowWPtr win)
 {
   m_Window = win;
 
-  if (m_Window) {
+  QxrdWindowPtr w = m_Window;
+
+  if (w) {
     QCEP_DOC_OBJECT("window", "The Experiment Main Window");
-    globalObject().setProperty("window",          newQObject(m_Window));
+    globalObject().setProperty("window",          newQObject(w.data()));
 
     QCEP_DOC_OBJECT("imageGraph", "The Image Plot in the Main Experiment Window");
-    globalObject().setProperty("imageGraph",      newQObject(m_Window->m_ImagePlot));
+    globalObject().setProperty("imageGraph",      newQObject(w->m_ImagePlot));
 
     QCEP_DOC_OBJECT("centeringGraph", "The Center Finder Plot");
-    globalObject().setProperty("centeringGraph",  newQObject(m_Window->m_CenterFinderPlot));
+    globalObject().setProperty("centeringGraph",  newQObject(w->m_CenterFinderPlot));
 
     QCEP_DOC_OBJECT("integratorGraph", "The Integrated Data Plot");
-    globalObject().setProperty("integratorGraph", newQObject(m_Window->m_IntegratorPlot));
+    globalObject().setProperty("integratorGraph", newQObject(w->m_IntegratorPlot));
   }
 }
 
@@ -1203,11 +1210,13 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterSequenceMetaType< QVector<QString> >(this);
   //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
 
-  if (m_Application) {
-    QCEP_DOC_OBJECT("application", "The QXRD Application Object");
-    globalObject().setProperty("application", newQObject(m_Application));
+  QxrdApplicationPtr app(m_Application);
 
-    QxrdAllocatorPtr alloc(m_Application->allocator());
+  if (app) {
+    QCEP_DOC_OBJECT("application", "The QXRD Application Object");
+    globalObject().setProperty("application", newQObject(app.data()));
+
+    QxrdAllocatorPtr alloc(app->allocator());
 
     if (alloc) {
       QCEP_DOC_OBJECT("allocator", "The QXRD Memory Allocator");
@@ -1250,8 +1259,8 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
   globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
 
-  if (m_Application) {
-    QObject *plugin = dynamic_cast<QObject*>(m_Application->nidaqPlugin().data());
+  if (app) {
+    QObject *plugin = dynamic_cast<QObject*>(app->nidaqPlugin().data());
 
     if (plugin) {
       QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");

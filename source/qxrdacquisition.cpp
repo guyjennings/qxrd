@@ -206,7 +206,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdAcquisition::setWindow(QxrdWindow *win)
+void QxrdAcquisition::setWindow(QxrdWindowWPtr win)
 {
   m_Window = win;
 }
@@ -585,7 +585,7 @@ void QxrdAcquisition::processDarkImage(QString filePattern, int fileIndex, QxrdI
   processImage(filePattern, fileIndex, -1, 0, true, image, overflow);
 }
 
-QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindow *win)
+QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindowWPtr win)
 {
   if (win) {
     m_Window = win;
@@ -594,7 +594,7 @@ QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindow *win)
                                                m_Window,
                                                this,
                                                m_DataProcessor,
-                                               m_Window);
+                                               m_Window.data());
 
     return m_ControlPanel;
   } else {

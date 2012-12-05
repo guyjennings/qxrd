@@ -707,9 +707,11 @@ Gain setting menu missing for PE acquisition
 
 Crashes on exit from PE acquisition
 
--------------------------------------------------------
+//-------------------------------------------------------
 
-May crash on exit if live view active
+//May crash on exit if live view active
+
+//Fixed by improving memory allocation tracking by using more QSharedPointers
 
 -------------------------------------------------------
 

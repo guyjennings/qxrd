@@ -55,7 +55,7 @@
 #include <QDesktopWidget>
 
 QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
-                       QxrdApplication *app,
+                       QxrdApplicationWPtr appl,
                        QxrdExperimentWPtr docw,
                        QxrdAcquisitionWPtr acqw,
                        QxrdDataProcessorWPtr procw,
@@ -65,7 +65,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_ObjectNamer(this, "window"),
     m_Mutex(QMutex::Recursive),
     m_WindowSettings(settings),
-    m_Application(app),
+    m_Application(appl),
     m_Experiment(docw),
     m_Acquisition(acqw),
     m_DataProcessor(procw),
@@ -101,12 +101,18 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     printf("QxrdWindow::QxrdWindow(%p)\n", this);
   }
 
-  if (m_Application && qcepDebug(DEBUG_APP)) {
-    m_Application->printMessage("QxrdWindow::QxrdWindow");
-  }
+  QxrdApplicationPtr app(m_Application);
 
+  if (app && qcepDebug(DEBUG_APP)) {
+    app->printMessage("QxrdWindow::QxrdWindow");
+  }
+}
+
+void QxrdWindow::initialize()
+{
   setupUi(this);
 
+  QxrdApplicationPtr app(m_Application);
   QxrdExperimentPtr expt(m_Experiment);
   QxrdWindowSettingsPtr set(m_WindowSettings);
 
@@ -229,16 +235,16 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   connect(m_LoadScriptButton, SIGNAL(clicked()), m_ActionLoadScript, SIGNAL(triggered()));
   connect(m_ActionLoadScript, SIGNAL(triggered()), this, SLOT(doLoadScript()));
 
-  if (m_Application) {
+  if (app) {
     connect(m_ActionAutoScale, SIGNAL(triggered()), m_ImagePlot, SLOT(autoScale()));
-    connect(m_ActionQuit, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
-    connect(m_ActionGlobalPreferences, SIGNAL(triggered()), m_Application, SLOT(editGlobalPreferences()));
+    connect(m_ActionQuit, SIGNAL(triggered()), app.data(), SLOT(possiblyQuit()));
+    connect(m_ActionGlobalPreferences, SIGNAL(triggered()), app.data(), SLOT(editGlobalPreferences()));
     connect(m_ActionExperimentPreferences, SIGNAL(triggered()), this, SLOT(doEditPreferences()));
-    connect(m_ActionLoadPreferences, SIGNAL(triggered()), m_Application, SLOT(doLoadPreferences()));
-    connect(m_ActionSavePreferences, SIGNAL(triggered()), m_Application, SLOT(doSavePreferences()));
+    connect(m_ActionLoadPreferences, SIGNAL(triggered()), app.data(), SLOT(doLoadPreferences()));
+    connect(m_ActionSavePreferences, SIGNAL(triggered()), app.data(), SLOT(doSavePreferences()));
 
-    connect(m_ActionNewExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseNewExperiment()));
-    connect(m_ActionOpenExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseExistingExperiment()));
+    connect(m_ActionNewExperiment, SIGNAL(triggered()), app.data(), SLOT(chooseNewExperiment()));
+    connect(m_ActionOpenExperiment, SIGNAL(triggered()), app.data(), SLOT(chooseExistingExperiment()));
     connect(m_ActionCloseExperiment, SIGNAL(triggered()), this, SLOT(close()));
   }
 
@@ -351,9 +357,9 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
   connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
 
-  if (m_Application) {
-    connect(m_ActionAboutQXRD, SIGNAL(triggered()), m_Application, SLOT(doAboutQxrd()));
-    connect(m_ActionOpenQXRDWebPage, SIGNAL(triggered()), m_Application, SLOT(doOpenQXRDWebPage()));
+  if (app) {
+    connect(m_ActionAboutQXRD, SIGNAL(triggered()), app.data(), SLOT(doAboutQxrd()));
+    connect(m_ActionOpenQXRDWebPage, SIGNAL(triggered()), app.data(), SLOT(doOpenQXRDWebPage()));
   }
 
   connect(m_HelpHomeButton, SIGNAL(clicked()), m_HelpBrowser, SLOT(home()));
@@ -429,8 +435,8 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
 
   statusBar() -> addPermanentWidget(m_AllocationStatus);
 
-  if (m_Application && m_Acquisition == NULL) {
-    m_Application->criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
+  if (app && m_Acquisition == NULL) {
+    app->criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
   }
 
   connect(m_Acquisition.data(), SIGNAL(acquireStarted()),
@@ -550,11 +556,11 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   connect(m_ImagePlot, SIGNAL(selectHistogram(QwtDoubleRect)),
           m_HistogramDialog, SLOT(histogramSelectionChanged(QwtDoubleRect)));
 
-  if (m_Application) {
-    m_Messages -> document() -> setMaximumBlockCount(m_Application->get_MessageWindowLines());
+  if (app) {
+    m_Messages -> document() -> setMaximumBlockCount(app->get_MessageWindowLines());
 
-    connect(m_Application->prop_MessageWindowLines(), SIGNAL(valueChanged(int,int)), this, SLOT(onMessageWindowLinesChanged(int)));
-    connect(m_Application->prop_UpdateIntervalMsec(), SIGNAL(valueChanged(int,int)), this, SLOT(onUpdateIntervalMsecChanged(int)));
+    connect(app->prop_MessageWindowLines(), SIGNAL(valueChanged(int,int)), this, SLOT(onMessageWindowLinesChanged(int)));
+    connect(app->prop_UpdateIntervalMsec(), SIGNAL(valueChanged(int,int)), this, SLOT(onUpdateIntervalMsecChanged(int)));
   }
 
 #ifdef QT_NO_DEBUG
@@ -578,8 +584,8 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     }
   }
 
-  if (m_Application) {
-    m_UpdateTimer.start(m_Application->get_UpdateIntervalMsec());
+  if (app) {
+    m_UpdateTimer.start(app->get_UpdateIntervalMsec());
   }
 
   captureSize();
@@ -587,8 +593,10 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
 
 QxrdWindow::~QxrdWindow()
 {
-  if (m_Application && qcepDebug(DEBUG_APP)) {
-    m_Application->printMessage("QxrdWindow::~QxrdWindow");
+  QxrdApplicationPtr app(m_Application);
+
+  if (app && qcepDebug(DEBUG_APP)) {
+    app->printMessage("QxrdWindow::~QxrdWindow");
   }
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -680,8 +688,10 @@ void QxrdWindow::enableTiltRefinement(bool enable)
 void QxrdWindow::closeEvent ( QCloseEvent * event )
 {
   if (wantToClose()) {
-    if (m_Application) {
-      m_Application->closeExperiment(m_Experiment);
+    QxrdApplicationPtr app(m_Application);
+
+    if (app) {
+      app->closeExperiment(m_Experiment);
     }
     event -> accept();
   } else {
@@ -721,8 +731,10 @@ void QxrdWindow::populateExperimentsMenu()
 
   m_ExperimentsMenu->clear();
 
-  if (m_Application) {
-    QList<QxrdExperimentPtr> exps = m_Application->experiments();
+  QxrdApplicationPtr app(m_Application);
+
+  if (app) {
+    QList<QxrdExperimentPtr> exps = app->experiments();
 
     foreach (QxrdExperimentPtr expw, exps) {
       QxrdExperimentPtr exp(expw);
@@ -735,7 +747,7 @@ void QxrdWindow::populateExperimentsMenu()
         connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
         mapper->setMapping(action, path);
 
-        connect(mapper, SIGNAL(mapped(const QString &)), m_Application, SLOT(activateExperiment(QString)));
+        connect(mapper, SIGNAL(mapped(const QString &)), app.data(), SLOT(activateExperiment(QString)));
 
         m_ExperimentsMenu -> addAction(action);
       }
@@ -749,8 +761,10 @@ void QxrdWindow::populateRecentExperimentsMenu()
 
   m_RecentExperimentsMenu->clear();
 
-  if (m_Application) {
-    QStringList recent = m_Application->get_RecentExperiments();
+  QxrdApplicationPtr app(m_Application);
+
+  if (app) {
+    QStringList recent = app->get_RecentExperiments();
 
     foreach (QString exp, recent) {
       QAction *action = new QAction(exp, m_RecentExperimentsMenu);
@@ -758,7 +772,7 @@ void QxrdWindow::populateRecentExperimentsMenu()
       connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
       mapper->setMapping(action, exp);
 
-      connect(mapper, SIGNAL(mapped(const QString &)), m_Application, SLOT(openRecentExperiment(QString)));
+      connect(mapper, SIGNAL(mapped(const QString &)), app.data(), SLOT(openRecentExperiment(QString)));
 
       m_RecentExperimentsMenu -> addAction(action);
     }
@@ -1002,8 +1016,9 @@ void QxrdWindow::saveExperimentAs()
   GUI_THREAD_CHECK;
 
   QxrdExperimentPtr expt(m_Experiment);
+  QxrdApplicationPtr app(m_Application);
 
-  if (m_Application && expt) {
+  if (app && expt) {
     QString path = expt->experimentFilePath();
     QString name = expt->defaultExperimentName(path);
     QString dirp = expt->defaultExperimentDirectory(path);
@@ -1019,7 +1034,7 @@ void QxrdWindow::saveExperimentAs()
 
     if (newChoice.length()>0) {
       expt->saveExperimentAs(newChoice);
-      m_Application->appendRecentExperiment(newChoice);
+      app->appendRecentExperiment(newChoice);
     }
   }
 }
@@ -1029,8 +1044,9 @@ void QxrdWindow::saveExperimentCopy()
   GUI_THREAD_CHECK;
 
   QxrdExperimentPtr expt(m_Experiment);
+  QxrdApplicationPtr app(m_Application);
 
-  if (m_Application && expt) {
+  if (app && expt) {
     QString path = expt->experimentFilePath();
     QString name = expt->defaultExperimentName(path);
     QString dirp = expt->defaultExperimentDirectory(path);
@@ -1046,7 +1062,7 @@ void QxrdWindow::saveExperimentCopy()
 
     if (newChoice.length()>0) {
       expt->saveExperimentCopyAs(newChoice);
-      m_Application->appendRecentExperiment(newChoice);
+      app->appendRecentExperiment(newChoice);
     }
   }
 }

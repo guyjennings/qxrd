@@ -2,6 +2,7 @@
 #include <QApplication>
 
 #include "qxrdapplication.h"
+#include "qxrdapplication-ptr.h"
 #include "qxrdwindow.h"
 #include "qxrdsplashscreen.h"
 #include "qxrdsplashscreen-ptr.h"
@@ -22,16 +23,17 @@ int main(int argc, char *argv[])
 //  printf("App starts\n");
   g_DebugLevel = QSharedPointer<QxrdDebugDictionary>(new QxrdDebugDictionary());
 
-  QxrdApplication app(argc, argv);
+  QxrdApplicationPtr app = QxrdApplicationPtr(
+        new QxrdApplication(argc, argv));
 
   int res = 0;
 
-  if (app.init(argc, argv)) {
-    if (app.get_GuiWanted()) {
-      res = app.exec();
+  if (app->init(argc, argv)) {
+    if (app->get_GuiWanted()) {
+      res = app->exec();
     } else {
-      app.processEvents();
-      app.exit();
+      app->processEvents();
+      app->exit();
     }
 
     if (qcepDebug(DEBUG_EXITWAIT)) {

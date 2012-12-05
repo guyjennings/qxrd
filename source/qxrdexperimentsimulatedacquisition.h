@@ -7,7 +7,7 @@ class QxrdExperimentSimulatedAcquisition : public QxrdExperiment
 {
   Q_OBJECT
 public:
-  explicit QxrdExperimentSimulatedAcquisition(QString path, QxrdApplication* app);
+  explicit QxrdExperimentSimulatedAcquisition(QString path, QxrdApplicationWPtr app);
 
 signals:
 

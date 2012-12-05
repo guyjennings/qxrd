@@ -2,7 +2,7 @@
 #include "qxrdexperimentthread.h"
 #include "qxrddetectorthread.h"
 
-QxrdExperimentPilatusAcquisition::QxrdExperimentPilatusAcquisition(QString path, QxrdApplication* app) :
+QxrdExperimentPilatusAcquisition::QxrdExperimentPilatusAcquisition(QString path, QxrdApplicationWPtr app) :
     QxrdExperiment(path, app)
 {
   set_ExperimentKind(QxrdExperimentThread::PilatusAcquisition);

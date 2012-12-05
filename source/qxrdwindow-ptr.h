@@ -5,7 +5,7 @@
 
 class QxrdWindow;
 
-typedef QxrdWindow *QxrdWindowPtr;
-typedef QxrdWindow *QxrdWindowWPtr;
+typedef QSharedPointer<QxrdWindow> QxrdWindowPtr;
+typedef QWeakPointer<QxrdWindow>   QxrdWindowWPtr;
 
 #endif

@@ -326,7 +326,7 @@ public:
   void writeSettings(QSettings *settings, QString section);
 
   void setAcquisition(QxrdAcquisitionWPtr acq);
-  void setWindow(QxrdWindow *win);
+  void setWindow(QxrdWindowWPtr win);
 
 //  QxrdSettingsSaver     *saver();
 
@@ -403,7 +403,7 @@ private:
 protected:
   QxrdExperimentWPtr     m_Experiment;
   QxrdSettingsSaverWPtr  m_Saver;
-  QxrdWindow            *m_Window;
+  QxrdWindowWPtr         m_Window;
   QxrdAllocatorWPtr      m_Allocator;
   QxrdFileSaverWPtr      m_FileSaver;
   QxrdAcquisitionWPtr    m_Acquisition;

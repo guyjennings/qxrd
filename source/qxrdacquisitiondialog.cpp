@@ -7,7 +7,7 @@
 #include <QDir>
 
 QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
-                                     QxrdWindow *win,
+                                     QxrdWindowWPtr win,
                                      QxrdAcquisitionWPtr acq,
                                      QxrdDataProcessorWPtr proc,
                                      QWidget *parent) :
@@ -88,10 +88,10 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     procp -> prop_IntegrationQueueLength() -> linkTo(this -> m_IntegrationBacklog);
   }
 
-  QxrdWindow *wp = m_Window;
+  QxrdWindowPtr wp = m_Window;
 
   if (wp) {
-    connect(m_AcquireOptionsButton, SIGNAL(clicked()), wp, SLOT(doEditPreferences()));
+    connect(m_AcquireOptionsButton, SIGNAL(clicked()), wp.data(), SLOT(doEditPreferences()));
   }
 }
 
