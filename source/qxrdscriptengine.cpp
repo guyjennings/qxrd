@@ -1429,7 +1429,7 @@ QString QxrdScriptEngine::documentationText(QString item)
 
   QScriptValue val;
   QString prefix  = "";
-  QString itemName="Global Object";
+  QString itemName="Global";
 
   if (item.isEmpty()) {
     val = globalObject();
@@ -1473,7 +1473,7 @@ QString QxrdScriptEngine::documentationText(QString item)
       const QMetaObject *meta = qobj->metaObject();
 
       if (meta->propertyCount() > QObject::staticMetaObject.propertyCount()) {
-        res.append(tr("<h3>Properties of %1</h3>\n").arg(itemName));
+        res.append(tr("<h3>%1 Properties</h3>\n").arg(itemName));
         res.append(tableHeader());
 
         for (int i=QObject::staticMetaObject.propertyCount();
@@ -1502,7 +1502,7 @@ QString QxrdScriptEngine::documentationText(QString item)
       }
 
       if (meta->methodCount() > QObject::staticMetaObject.methodCount()) {
-        res.append(tr("<h3>Methods of %1</h3>\n").arg(itemName));
+        res.append(tr("<h3>%1 Functions</h3>\n").arg(itemName));
         res.append(tableHeader());
 
         for (int i=QObject::staticMetaObject.methodCount();
@@ -1561,7 +1561,7 @@ QString QxrdScriptEngine::documentationText(QString item)
       if (subObjects.count()) {
         QMapIterator<QString,QScriptValue> obj_iter(subObjects);
 
-        res.append(tr("<h3>Sub Objects of %1</h3>\n").arg(itemName));
+        res.append(tr("<h3>%1 Objects</h3>\n").arg(itemName));
         res.append(tableHeader());
 
         int i=0;
@@ -1584,7 +1584,7 @@ QString QxrdScriptEngine::documentationText(QString item)
       if (properties.count()) {
         QMapIterator<QString,QScriptValue> prop_iter(properties);
 
-        res.append(tr("<h3>Properties of %1</h3>\n").arg(itemName));
+        res.append(tr("<h3>%1 Properties</h3>\n").arg(itemName));
         res.append(tableHeader());
 
         int i=0;
@@ -1607,7 +1607,7 @@ QString QxrdScriptEngine::documentationText(QString item)
       if (functions.count()) {
         QMapIterator<QString,QScriptValue> func_iter(functions);
 
-        res.append(tr("<h3>Methods of %1</h3>\n").arg(itemName));
+        res.append(tr("<h3>%1 Functions</h3>\n").arg(itemName));
         res.append(tableHeader());
 
         int i=0;
