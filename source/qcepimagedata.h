@@ -13,6 +13,7 @@
 
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 typedef struct tiff TIFF;
 
@@ -151,9 +152,9 @@ public:
   void setTiffMetaData(TIFF *tif);
   void getTiffMetaData(TIFF *tif);
 
-  void loadMetaData();
-  void saveMetaData();
-  void saveMetaData(QString name);
+  void loadMetaData(QxrdExperimentWPtr expt);
+  void saveMetaData(QxrdExperimentWPtr expt);
+  void saveMetaData(QString name, QxrdExperimentWPtr expt);
 
   void setDefaultFileName(QString path);
 

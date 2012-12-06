@@ -25,8 +25,9 @@
 #include "qxrdallocator-ptr.h"
 #include "qxrdgeneratetestimage-ptr.h"
 #include "qxrdintegrator-ptr.h"
+#include "qxrdintegrator.h"
 #include "qxrdcenterfinder-ptr.h"
-
+#include "qxrdcenterfinder.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdwindow-ptr.h"

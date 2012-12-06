@@ -6,6 +6,9 @@
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 #include "qxrdintegrateddata.h"
+#include "qxrdexperiment.h"
+#include "qxrdcenterfinder.h"
+#include "qxrdintegrator.h"
 
 #include <QDir>
 
@@ -14,6 +17,7 @@
 QxrdFileSaver::QxrdFileSaver
 (QxrdAllocatorWPtr allocator)
   : QObject(NULL),
+    m_Experiment(),
     m_Processor(),
     m_Allocator(allocator),
     m_Acquisition()
@@ -28,6 +32,20 @@ QxrdFileSaver::~QxrdFileSaver()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdFileSaver::~QxrdFileSaver(%p)\n", this);
   }
+}
+
+void QxrdFileSaver::setExperiment(QxrdExperimentWPtr expt)
+{
+  m_Experiment = expt;
+}
+
+QxrdExperimentWPtr QxrdFileSaver::experiment() const
+{
+  if (g_Application && m_Experiment == NULL) {
+    g_Application->printMessage(("experiment == NULL in QxrdFileSaver::experiment\n"));
+  }
+
+  return m_Experiment;
 }
 
 void QxrdFileSaver::setProcessor(QxrdDataProcessorWPtr proc)
@@ -149,7 +167,7 @@ void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMas
         image -> set_FileName(name);
         image -> set_ImageSaved(true);
 
-        image -> saveMetaData();
+        image -> saveMetaData(m_Experiment);
 
         QxrdDataProcessorPtr proc(m_Processor);
 
@@ -251,7 +269,7 @@ void QxrdFileSaver::saveData(QString name, QxrdMaskDataPtr image, int canOverwri
       image -> set_FileName(name);
       image -> set_ImageSaved(true);
 
-      image -> saveMetaData();
+      image -> saveMetaData(m_Experiment);
     } else {
       res = 0;
     }
@@ -349,7 +367,7 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdM
       TIFFClose(tif);
 
       image -> set_ImageSaved(true);
-      image -> saveMetaData(name);
+      image -> saveMetaData(name, m_Experiment);
 
       QxrdDataProcessorPtr proc(m_Processor);
       QxrdAcquisitionPtr acq(m_Acquisition);
@@ -433,7 +451,7 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdM
       image -> set_FileName(name);
       image -> set_ImageSaved(true);
 
-      image -> saveMetaData(name);
+      image -> saveMetaData(name, m_Experiment);
 
       QxrdDataProcessorPtr proc(m_Processor);
       QxrdAcquisitionPtr acq(m_Acquisition);
@@ -528,7 +546,7 @@ void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, Qxr
     image -> set_FileName(name);
     image -> set_ImageSaved(true);
 
-    image -> saveMetaData();
+    image -> saveMetaData(m_Experiment);
 
     if (proc) {
       if (proc->get_SaveOverflowFiles()) {

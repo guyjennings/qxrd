@@ -493,7 +493,7 @@ void QxrdDataProcessorBase::loadData(QString name)
 
       //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-      res -> loadMetaData();
+      res -> loadMetaData(m_Experiment);
 
       newData(res, QxrdMaskDataPtr());
 
@@ -533,7 +533,7 @@ void QxrdDataProcessorBase::loadDark(QString name)
 
       //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-      res -> loadMetaData();
+      res -> loadMetaData(m_Experiment);
       res -> set_DataType(QxrdDoubleImageData::DarkData);
 
       newDarkImage(res);
@@ -574,7 +574,7 @@ void QxrdDataProcessorBase::loadBadPixels(QString name)
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    res -> loadMetaData();
+    res -> loadMetaData(m_Experiment);
     res -> set_DataType(QxrdDoubleImageData::BadPixelsData);
 
     newBadPixelsImage(res);
@@ -608,7 +608,7 @@ void QxrdDataProcessorBase::loadGainMap(QString name)
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    res -> loadMetaData();
+    res -> loadMetaData(m_Experiment);
     res -> set_DataType(QxrdDoubleImageData::GainData);
     res -> setDefaultValue(1.0);
 
@@ -1014,7 +1014,7 @@ void QxrdDataProcessorBase::loadMask(QString name)
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    res -> loadMetaData();
+    res -> loadMetaData(m_Experiment);
     res -> set_DataType(QxrdMaskData::MaskData);
 
     //    res -> copyMaskTo(m_Mask);

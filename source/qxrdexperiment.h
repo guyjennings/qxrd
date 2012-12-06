@@ -36,6 +36,8 @@
 #include "qxrddetector.h"
 #include "qxrddetector-ptr.h"
 #include "qxrdobjectnamer.h"
+#include "qxrdcenterfinder-ptr.h"
+#include "qxrdintegrator-ptr.h"
 
 class QxrdExperiment : public QObject
 {
@@ -55,6 +57,8 @@ public:
   QxrdAcquisitionWPtr acquisition() const;
   QxrdWindowPtr window();
   QxrdDataProcessorWPtr dataProcessor() const;
+  QxrdCenterFinderWPtr centerFinder() const;
+  QxrdIntegratorWPtr integrator() const;
   QxrdServerWPtr specServer();
   QxrdSimpleServerWPtr simpleServer();
 

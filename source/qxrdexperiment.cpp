@@ -104,6 +104,7 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
 
     if (saver) {
       saver -> setProcessor(m_DataProcessor);
+      saver -> setExperiment(this);
     }
 
     splashMessage("Initializing Data Acquisition");
@@ -383,6 +384,28 @@ QxrdSimpleServerWPtr QxrdExperiment::simpleServer()
 QxrdDataProcessorWPtr QxrdExperiment::dataProcessor() const
 {
   return m_DataProcessor;
+}
+
+QxrdCenterFinderWPtr QxrdExperiment::centerFinder() const
+{
+  QxrdDataProcessorPtr dp(m_DataProcessor);
+
+  if (dp) {
+    return dp->centerFinder();
+  } else {
+    return QxrdCenterFinderWPtr();
+  }
+}
+
+QxrdIntegratorWPtr QxrdExperiment::integrator() const
+{
+  QxrdDataProcessorPtr dp(m_DataProcessor);
+
+  if (dp) {
+    return dp->integrator();
+  } else {
+    return QxrdIntegratorWPtr();
+  }
 }
 
 QxrdScriptEngineWPtr QxrdExperiment::scriptEngine()
