@@ -1041,6 +1041,42 @@ QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngin
 }
 
 QCEP_DOC_FUNCTION(
+    "setFileNormalization",
+    "setFileNormalization(filename [, norm...])",
+    "Set the normalization values for an image file",
+    "<p>Loads the file filename, sets its normalization values and "
+    "rewrites the metadata file</p>"
+    "<p>The function is closely related to</p>"
+    "<code>processor.setFileNormalization(QString,QDoubleList)</code>"
+    )
+
+QScriptValue QxrdScriptEngine::setFileNormalizationFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdDataProcessorPtr proc(eng->dataProcessor());
+
+    if (proc) {
+      if (context->argumentCount() >= 1) {
+        QString file = context->argument(0).toString();
+        QList<double> normVals;
+
+        for (int i=1; i<context->argumentCount(); i++) {
+          normVals.append(context->argument(i).toNumber());
+        }
+
+        proc -> setFileNormalization(file, normVals);
+      }
+
+      return QScriptValue(engine, 1);
+    }
+  }
+
+  return QScriptValue(engine, -1);
+}
+
+QCEP_DOC_FUNCTION(
     "matchFiles",
     "matchFiles([pattern]...)",
     "Return a list of files matching a pattern",
@@ -1256,6 +1292,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("liveData", newFunction(liveDataFunc));
   globalObject().setProperty("help", newFunction(helpFunc));
   globalObject().setProperty("process", newFunction(processFunc));
+  globalObject().setProperty("setFileNormalization", newFunction(setFileNormalizationFunc));
   globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
   globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
 

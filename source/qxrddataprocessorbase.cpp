@@ -1232,7 +1232,9 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage(
     QTime tic;
     tic.start();
 
-//    processed->set_Normalization(v);
+    if (v.length() > 0) {
+      processed->set_Normalization(v);
+    }
 
     if (qcepDebug(DEBUG_PROCESS)) {
       printMessage(tr("Processing Image \"%1\", count %2")

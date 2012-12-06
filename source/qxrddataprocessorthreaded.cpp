@@ -493,6 +493,41 @@ void QxrdDataProcessorThreaded::processNormalizedFile(QString name, QList<double
   }
 }
 
+void QxrdDataProcessorThreaded::setFileNormalization(QString path, double v1)
+{
+  QList<double> v;
+  v << v1;
+
+  setFileNormalization(path, v);
+}
+
+void QxrdDataProcessorThreaded::setFileNormalization(QString path, double v1, double v2)
+{
+  QList<double> v;
+  v << v1 << v2;
+
+  setFileNormalization(path, v);
+}
+
+void QxrdDataProcessorThreaded::setFileNormalization(QString name, QList<double> v)
+{
+  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
+
+  QString path = filePathInCurrentDirectory(name);
+
+  if (res -> readImage(path)) {
+
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+    res -> loadMetaData(m_Experiment);
+    res -> setMask(mask(), QxrdMaskDataPtr());
+    res -> set_Normalization(v);
+    res -> saveMetaData(name, m_Experiment);
+  } else {
+    printMessage(tr("Couldn't load %1").arg(path));
+  }
+}
+
 void QxrdDataProcessorThreaded::slicePolygon(QVector<QwtDoublePoint> poly)
 {
   QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::WaitTillAvailable, data());

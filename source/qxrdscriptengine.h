@@ -89,6 +89,7 @@ private:
   static QScriptValue liveDataFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue helpFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue processFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue setFileNormalizationFunc(QScriptContext *context, QScriptEngine *engine);
 //  static QScriptValue typeNameFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue matchFilesFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue extraChannelFunc(QScriptContext *context, QScriptEngine *engine);

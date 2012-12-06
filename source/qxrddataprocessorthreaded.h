@@ -49,6 +49,9 @@ public slots:
   void processNormalizedFile(QString path, double v1);
   void processNormalizedFile(QString path, double v1, double v2);
   void processNormalizedFile(QString path, QcepDoubleList v);
+  void setFileNormalization(QString path, double v1);
+  void setFileNormalization(QString path, double v1, double v2);
+  void setFileNormalization(QString path, QcepDoubleList v);
 
   void slicePolygon(QwtArray<QwtDoublePoint> poly);
   void integrateSaveAndDisplay();
