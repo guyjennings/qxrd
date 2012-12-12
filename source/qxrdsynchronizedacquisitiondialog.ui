@@ -134,26 +134,26 @@ Script property: synchronization.syncAcquisitionSymmetry</string>
     <item row="2" column="2">
      <widget class="QLabel" name="label_7">
       <property name="text">
-       <string>Output Chan</string>
+       <string>Output Device</string>
       </property>
      </widget>
     </item>
     <item row="2" column="3">
-     <widget class="QComboBox" name="m_SyncAcqOutChan">
+     <widget class="QComboBox" name="m_SyncAcqOutDevice">
       <property name="toolTip">
        <string>Output channel for synchronization waveform</string>
       </property>
      </widget>
     </item>
+    <item row="3" column="3">
+     <widget class="QComboBox" name="m_SyncAcqOutChan"/>
+    </item>
     <item row="3" column="2">
      <widget class="QLabel" name="label_8">
       <property name="text">
-       <string>Flag Chan</string>
+       <string>Output Chan</string>
       </property>
      </widget>
-    </item>
-    <item row="3" column="3">
-     <widget class="QComboBox" name="m_SyncAcqFlagChan"/>
     </item>
    </layout>
   </widget>

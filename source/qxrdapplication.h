@@ -51,7 +51,7 @@ public:
 
   bool event(QEvent *ev);
 
-  QStringList makeStringList(int argc, char **argv);
+  QStringList makeStringListFromArgs(int argc, char **argv);
 
   QWidget* window();
 

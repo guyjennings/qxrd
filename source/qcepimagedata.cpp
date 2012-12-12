@@ -11,6 +11,9 @@
 #include "qcepimagedataformatfactory.h"
 #include "qcepmutexlocker.h"
 #include "qcepsettingssaver.h"
+#include "qxrdexperiment.h"
+#include "qxrdcenterfinder.h"
+#include "qxrdintegrator.h"
 
 QAtomicInt allocCount = 0;
 
@@ -158,7 +161,7 @@ void QcepImageDataBase::getTiffMetaData(TIFF * /*tif*/)
 {
 }
 
-void QcepImageDataBase::loadMetaData()
+void QcepImageDataBase::loadMetaData(QxrdExperimentWPtr expt)
 {
 //  printf("QcepImageDataBase::loadMetaData for file %s\n", qPrintable(get_FileName()));
 
@@ -176,12 +179,12 @@ void QcepImageDataBase::loadMetaData()
 //  printf("QcepImageDataBase::loadMetaData for file %s took %d msec\n",  qPrintable(get_FileName()), tic.elapsed());
 }
 
-void QcepImageDataBase::saveMetaData()
+void QcepImageDataBase::saveMetaData(QxrdExperimentWPtr expt)
 {
-  saveMetaData(get_FileName());
+  saveMetaData(get_FileName(), expt);
 }
 
-void QcepImageDataBase::saveMetaData(QString name)
+void QcepImageDataBase::saveMetaData(QString name, QxrdExperimentWPtr expt)
 {
 //  printf("QcepImageDataBase::saveMetaData for file %s\n", qPrintable(name));
 
@@ -205,6 +208,22 @@ void QcepImageDataBase::saveMetaData(QString name)
       settings.setValue("val",norm[i]);
     }
     settings.endArray();
+
+    QxrdExperimentPtr exper(expt);
+
+    if (exper) {
+      QxrdCenterFinderPtr cf = exper->centerFinder();
+
+      if (cf) {
+        cf->writeSettings(&settings, "centerfinder");
+      }
+
+      QxrdIntegratorPtr integ = exper->integrator();
+
+      if (integ) {
+        integ->writeSettings(&settings, "integrator");
+      }
+    }
   }
 //
 //  printf("QcepImageDataBase::saveMetaData for file %s took %d msec\n",  qPrintable(name), tic.elapsed());

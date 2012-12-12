@@ -29,7 +29,7 @@
 #include <QMetaProperty>
 #include <QRegExp>
 
-QxrdScriptEngine::QxrdScriptEngine(QxrdApplication* app, QxrdExperimentWPtr exp)
+QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr exp)
   : QScriptEngine(),
     m_Mutex(QMutex::Recursive),
     m_Application(app),
@@ -50,6 +50,11 @@ QxrdScriptEngine::~QxrdScriptEngine()
   }
 }
 
+QxrdApplicationWPtr QxrdScriptEngine::application() const
+{
+  return m_Application;
+}
+
 QxrdExperimentWPtr QxrdScriptEngine::experiment() const
 {
   return m_Experiment;
@@ -60,7 +65,7 @@ QxrdAcquisitionWPtr QxrdScriptEngine::acquisition() const
   return m_Acquisition;
 }
 
-QxrdWindow *QxrdScriptEngine::window() const
+QxrdWindowWPtr QxrdScriptEngine::window() const
 {
   return m_Window;
 }
@@ -70,22 +75,24 @@ QxrdDataProcessorWPtr QxrdScriptEngine::dataProcessor() const
   return m_DataProcessor;
 }
 
-void QxrdScriptEngine::setWindow(QxrdWindow *win)
+void QxrdScriptEngine::setWindow(QxrdWindowWPtr win)
 {
   m_Window = win;
 
-  if (m_Window) {
+  QxrdWindowPtr w = m_Window;
+
+  if (w) {
     QCEP_DOC_OBJECT("window", "The Experiment Main Window");
-    globalObject().setProperty("window",          newQObject(m_Window));
+    globalObject().setProperty("window",          newQObject(w.data()));
 
     QCEP_DOC_OBJECT("imageGraph", "The Image Plot in the Main Experiment Window");
-    globalObject().setProperty("imageGraph",      newQObject(m_Window->m_ImagePlot));
+    globalObject().setProperty("imageGraph",      newQObject(w->m_ImagePlot));
 
     QCEP_DOC_OBJECT("centeringGraph", "The Center Finder Plot");
-    globalObject().setProperty("centeringGraph",  newQObject(m_Window->m_CenterFinderPlot));
+    globalObject().setProperty("centeringGraph",  newQObject(w->m_CenterFinderPlot));
 
     QCEP_DOC_OBJECT("integratorGraph", "The Integrated Data Plot");
-    globalObject().setProperty("integratorGraph", newQObject(m_Window->m_IntegratorPlot));
+    globalObject().setProperty("integratorGraph", newQObject(w->m_IntegratorPlot));
   }
 }
 
@@ -139,6 +146,14 @@ void QxrdScriptEngine::evaluate(int src, QString expr)
   //  printf("QxrdScriptingEngine::evaluate(%s)\n", qPrintable(expr));
 
   QScriptValue result = QScriptEngine::evaluate(expr);
+
+  if(qcepDebug(DEBUG_LOGSCRIPTS)) {
+    QxrdExperimentPtr exp(m_Experiment);
+
+    if (exp) {
+      exp->printMessage(tr("Evaluate[%1] %2 = %3").arg(src).arg(expr).arg(result.toString()));
+    }
+  }
 
   switch (src) {
   case 0:
@@ -1026,6 +1041,42 @@ QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngin
 }
 
 QCEP_DOC_FUNCTION(
+    "setFileNormalization",
+    "setFileNormalization(filename [, norm...])",
+    "Set the normalization values for an image file",
+    "<p>Loads the file filename, sets its normalization values and "
+    "rewrites the metadata file</p>"
+    "<p>The function is closely related to</p>"
+    "<code>processor.setFileNormalization(QString,QDoubleList)</code>"
+    )
+
+QScriptValue QxrdScriptEngine::setFileNormalizationFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdDataProcessorPtr proc(eng->dataProcessor());
+
+    if (proc) {
+      if (context->argumentCount() >= 1) {
+        QString file = context->argument(0).toString();
+        QList<double> normVals;
+
+        for (int i=1; i<context->argumentCount(); i++) {
+          normVals.append(context->argument(i).toNumber());
+        }
+
+        proc -> setFileNormalization(file, normVals);
+      }
+
+      return QScriptValue(engine, 1);
+    }
+  }
+
+  return QScriptValue(engine, -1);
+}
+
+QCEP_DOC_FUNCTION(
     "matchFiles",
     "matchFiles([pattern]...)",
     "Return a list of files matching a pattern",
@@ -1195,11 +1246,13 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterSequenceMetaType< QVector<QString> >(this);
   //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
 
-  if (m_Application) {
-    QCEP_DOC_OBJECT("application", "The QXRD Application Object");
-    globalObject().setProperty("application", newQObject(m_Application));
+  QxrdApplicationPtr app(m_Application);
 
-    QxrdAllocatorPtr alloc(m_Application->allocator());
+  if (app) {
+    QCEP_DOC_OBJECT("application", "The QXRD Application Object");
+    globalObject().setProperty("application", newQObject(app.data()));
+
+    QxrdAllocatorPtr alloc(app->allocator());
 
     if (alloc) {
       QCEP_DOC_OBJECT("allocator", "The QXRD Memory Allocator");
@@ -1239,11 +1292,12 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("liveData", newFunction(liveDataFunc));
   globalObject().setProperty("help", newFunction(helpFunc));
   globalObject().setProperty("process", newFunction(processFunc));
+  globalObject().setProperty("setFileNormalization", newFunction(setFileNormalizationFunc));
   globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
   globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
 
-  if (m_Application) {
-    QObject *plugin = dynamic_cast<QObject*>(m_Application->nidaqPlugin().data());
+  if (app) {
+    QObject *plugin = dynamic_cast<QObject*>(app->nidaqPlugin().data());
 
     if (plugin) {
       QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
@@ -1375,7 +1429,7 @@ QString QxrdScriptEngine::documentationText(QString item)
 
   QScriptValue val;
   QString prefix  = "";
-  QString itemName="Global Object";
+  QString itemName="Global";
 
   if (item.isEmpty()) {
     val = globalObject();
@@ -1419,7 +1473,7 @@ QString QxrdScriptEngine::documentationText(QString item)
       const QMetaObject *meta = qobj->metaObject();
 
       if (meta->propertyCount() > QObject::staticMetaObject.propertyCount()) {
-        res.append(tr("<h3>Properties of %1</h3>\n").arg(itemName));
+        res.append(tr("<h3>%1 Properties</h3>\n").arg(itemName));
         res.append(tableHeader());
 
         for (int i=QObject::staticMetaObject.propertyCount();
@@ -1448,7 +1502,7 @@ QString QxrdScriptEngine::documentationText(QString item)
       }
 
       if (meta->methodCount() > QObject::staticMetaObject.methodCount()) {
-        res.append(tr("<h3>Methods of %1</h3>\n").arg(itemName));
+        res.append(tr("<h3>%1 Functions</h3>\n").arg(itemName));
         res.append(tableHeader());
 
         for (int i=QObject::staticMetaObject.methodCount();
@@ -1507,7 +1561,7 @@ QString QxrdScriptEngine::documentationText(QString item)
       if (subObjects.count()) {
         QMapIterator<QString,QScriptValue> obj_iter(subObjects);
 
-        res.append(tr("<h3>Sub Objects of %1</h3>\n").arg(itemName));
+        res.append(tr("<h3>%1 Objects</h3>\n").arg(itemName));
         res.append(tableHeader());
 
         int i=0;
@@ -1530,7 +1584,7 @@ QString QxrdScriptEngine::documentationText(QString item)
       if (properties.count()) {
         QMapIterator<QString,QScriptValue> prop_iter(properties);
 
-        res.append(tr("<h3>Properties of %1</h3>\n").arg(itemName));
+        res.append(tr("<h3>%1 Properties</h3>\n").arg(itemName));
         res.append(tableHeader());
 
         int i=0;
@@ -1553,7 +1607,7 @@ QString QxrdScriptEngine::documentationText(QString item)
       if (functions.count()) {
         QMapIterator<QString,QScriptValue> func_iter(functions);
 
-        res.append(tr("<h3>Methods of %1</h3>\n").arg(itemName));
+        res.append(tr("<h3>%1 Functions</h3>\n").arg(itemName));
         res.append(tableHeader());
 
         int i=0;

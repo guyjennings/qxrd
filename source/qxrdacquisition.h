@@ -108,7 +108,7 @@ public:
   ~QxrdAcquisition();
   void initialize();
 
-  void setWindow(QxrdWindow *win);
+  void setWindow(QxrdWindowWPtr win);
   void setDetector(QxrdDetectorWPtr det);
 
 public slots:
@@ -164,7 +164,7 @@ public:
   void setupCameraBinningModeMenu(QComboBox *cb);
 
   void indicateDroppedFrame(int n);
-  virtual QxrdAcquisitionDialogPtr controlPanel(QxrdWindow *win);
+  virtual QxrdAcquisitionDialogPtr controlPanel(QxrdWindowWPtr win);
   QxrdAllocatorWPtr allocator() const;
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
@@ -333,7 +333,7 @@ private:
   QxrdAcquisitionExtraInputsPtr   m_AcquisitionExtraInputs;
 
   QxrdExperimentWPtr     m_Experiment;
-  QxrdWindowPtr          m_Window;
+  QxrdWindowWPtr         m_Window;
   QxrdAllocatorWPtr      m_Allocator;
   QxrdDataProcessorWPtr  m_DataProcessor;
   QxrdDetectorWPtr       m_Detector;

@@ -7,7 +7,6 @@
 #include "qxrdexperimentpilatusanalysis.h"
 #include "qxrdexperimentsimulatedacquisition.h"
 #include "qxrdexperimentgenericanalysis.h"
-#include "qxrdsplashscreen.h"
 #include "qxrdmutexlocker.h"
 
 #include <stdio.h>

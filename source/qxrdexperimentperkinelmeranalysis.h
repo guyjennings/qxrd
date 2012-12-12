@@ -7,7 +7,7 @@ class QxrdExperimentPerkinElmerAnalysis : public QxrdExperiment
 {
   Q_OBJECT
 public:
-  explicit QxrdExperimentPerkinElmerAnalysis(QString path, QxrdApplication* app);
+  explicit QxrdExperimentPerkinElmerAnalysis(QString path, QxrdApplicationWPtr app);
 
 signals:
 

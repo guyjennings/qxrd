@@ -16,6 +16,7 @@ class QxrdHistogramDialog : public QDockWidget, public Ui::QxrdHistogramDialog
 
 public:
   explicit QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr settings, QWidget *parent);
+  virtual ~QxrdHistogramDialog();
 
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
 

@@ -256,24 +256,24 @@ private:
   QString m_Value;
 };
 
-//class QcepStringPropertyComboBoxHelper : public QObject {
-//  Q_OBJECT
+class QcepStringPropertyComboBoxHelper : public QObject {
+  Q_OBJECT
 
-//public:
-//  QcepStringPropertyComboBoxHelper(QComboBox *comboBox, QcepStringProperty *property);
-//  void connect();
+public:
+  QcepStringPropertyComboBoxHelper(QComboBox *comboBox, QcepStringProperty *property);
+  void connect();
 
-//public slots:
-//  void setEditText(QString value, int index);
-//  void setEditText(QString value);
+public slots:
+  void setValue(QString value, int index);
+  void setCurrentIndex(int current);
 
-//signals:
-//  void editTextChanged(QString value, int index);
+signals:
+  void valueChanged(QString value, int index);
 
-//private:
-//  QComboBox          *m_ComboBox;
-//  QcepStringProperty *m_Property;
-//};
+private:
+  QComboBox          *m_ComboBox;
+  QcepStringProperty *m_Property;
+};
 
 class QcepStringPropertyLineEditHelper : public QObject {
   Q_OBJECT

@@ -24,6 +24,10 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
     m_Processor(processor),
     m_Model(NULL)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdFileBrowser::QxrdFileBrowser(%p)\n", this);
+  }
+
   qRegisterMetaType<QFileInfo>("QFileInfo");
 
   setupUi(this);
@@ -92,6 +96,13 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
 
   if (set) {
     m_RootDirectoryCombo -> setItemText(0, set->get_RootDirectory());
+  }
+}
+
+QxrdFileBrowser::~QxrdFileBrowser()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdFileBrowser::~QxrdFileBrowser(%p)\n", this);
   }
 }
 

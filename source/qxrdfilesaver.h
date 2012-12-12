@@ -19,6 +19,7 @@
 #include "qxrdmaskdata-ptr.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdintegrateddata-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 class QxrdFileSaver : public QObject
 {
@@ -30,6 +31,7 @@ public:
 
   void setProcessor(QxrdDataProcessorWPtr proc);
   void setAcquisition(QxrdAcquisitionWPtr acq);
+  void setExperiment(QxrdExperimentWPtr expt);
 
 public:
   enum {
@@ -52,9 +54,11 @@ private:
   void mkPath(QString filePath);
   QString uniqueFileName(QString name);
   QxrdAcquisitionWPtr acquisition() const;
+  QxrdExperimentWPtr experiment() const;
   void saveOverflowData(QString name, QxrdMaskDataPtr overflow);
 
 private:
+  QxrdExperimentWPtr    m_Experiment;
   QxrdDataProcessorWPtr m_Processor;
   QxrdAllocatorWPtr     m_Allocator;
   QxrdAcquisitionWPtr   m_Acquisition;

@@ -19,7 +19,7 @@ class QxrdScriptEngine : public QScriptEngine
   Q_OBJECT
 
 public:
-  QxrdScriptEngine(QxrdApplication* app, QxrdExperimentWPtr exp);
+  QxrdScriptEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr exp);
   virtual ~QxrdScriptEngine();
   void initialize();
 
@@ -40,13 +40,13 @@ public:
   QString uncaughtExceptionString() const;
   void cancelCommand();
 
-  QxrdApplication* application() const;
+  QxrdApplicationWPtr application() const;
   QxrdExperimentWPtr experiment() const;
   QxrdAcquisitionWPtr acquisition() const;
   QxrdDataProcessorWPtr dataProcessor() const;
-  QxrdWindow *window() const;
+  QxrdWindowWPtr window() const;
 
-  void setWindow(QxrdWindow *win);
+  void setWindow(QxrdWindowWPtr win);
 
   QString documentationLink(QString base, QString subItem);
   QByteArray helpText(QString item);
@@ -89,6 +89,7 @@ private:
   static QScriptValue liveDataFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue helpFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue processFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue setFileNormalizationFunc(QScriptContext *context, QScriptEngine *engine);
 //  static QScriptValue typeNameFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue matchFilesFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue extraChannelFunc(QScriptContext *context, QScriptEngine *engine);
@@ -98,11 +99,11 @@ private:
 
 private:
   mutable QMutex         m_Mutex;
-  QxrdApplication       *m_Application;
+  QxrdApplicationWPtr    m_Application;
   QxrdExperimentWPtr     m_Experiment;
   QxrdAcquisitionWPtr    m_Acquisition;
   QxrdDataProcessorWPtr  m_DataProcessor;
-  QxrdWindow            *m_Window;
+  QxrdWindowWPtr         m_Window;
 };
 
 #endif // QXRDSCRIPTENGINE_H

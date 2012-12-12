@@ -1,6 +1,11 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.7 - Dec 5 2012
+Primarily a bugfix release - address memory leaks at shutdown
+
+Added pulldown menus for NIDAQ device and channel names
+
 ## v0.9.6 - Jul 16 2012
 Moved triggering options into extra inputs objects
 

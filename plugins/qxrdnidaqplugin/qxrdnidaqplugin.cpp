@@ -286,7 +286,7 @@ Error:
   return;
 }
 
-void   QxrdNIDAQPlugin::setAnalogWaveform(int chan, double rate, double wfm[], int size)
+void   QxrdNIDAQPlugin::setAnalogWaveform(QString chan, double rate, double wfm[], int size)
 {
   QMutexLocker lock(&m_Mutex);
 //  printf("setAnalogWaveform(%g,%g...,%d)\n", rate, wfm[0], size);
@@ -303,7 +303,7 @@ void   QxrdNIDAQPlugin::setAnalogWaveform(int chan, double rate, double wfm[], i
   if (chan >= 0) {
     DAQmxErrChk(DAQmxCreateTask("qxrd-output", &m_AOTaskHandle));
     DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle,
-                                          qPrintable(tr("Dev1/ao%1").arg(chan)), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
+                                          qPrintable(chan), NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
 
     if (m_AOTaskHandle) {
       DAQmxErrChk(
@@ -587,8 +587,6 @@ int QxrdNIDAQPlugin::readContinuousInput()
 {
   int error = 0;
 
-  uInt64 min=0;
-  uInt64 pos;
   uInt32 avail;
 
   QVector<double> aiBuff(m_NAIChannels*m_NContinuousSamples);
@@ -599,30 +597,53 @@ int QxrdNIDAQPlugin::readContinuousInput()
   }
 
   if (m_ContinuousAITask) {
+    DAQmxErrChk(DAQmxGetReadAvailSampPerChan(m_ContinuousAITask, &avail));
+
+    if (avail < m_NContinuousSamples) {
+      return -1;
+    }
+
     DAQmxErrChk(DAQmxSetReadRelativeTo(m_ContinuousAITask, DAQmx_Val_MostRecentSamp));
     DAQmxErrChk(DAQmxSetReadOffset(m_ContinuousAITask, -m_NContinuousSamples));
   }
 
-  foreach(TaskHandle tsk, m_ContinuousCITasks) {
-    DAQmxErrChk(DAQmxSetReadRelativeTo(tsk, DAQmx_Val_MostRecentSamp));
-    DAQmxErrChk(DAQmxSetReadOffset(tsk, -m_NContinuousSamples));
-  }
+//  foreach(TaskHandle tsk, m_ContinuousCITasks) {
+//    DAQmxErrChk(DAQmxSetReadRelativeTo(tsk, DAQmx_Val_MostRecentSamp));
+//    DAQmxErrChk(DAQmxSetReadOffset(tsk, -m_NContinuousSamples));
+//  }
 
   int32 actuallyRead;
+  uInt64 lastSample[30];
 
   if (m_ContinuousAITask && m_NAIChannels) {
     DAQmxErrChk(DAQmxReadAnalogF64(m_ContinuousAITask, m_NContinuousSamples, -1,
                                    DAQmx_Val_GroupByChannel, aiBuff.data(), aiBuff.count(),
                                    &actuallyRead, NULL));
+
+    DAQmxErrChk(DAQmxGetReadCurrReadPos(m_ContinuousAITask, &lastSample[0]));
   }
 
   for(int i=0; i<m_NCIChannels; i++) {
     TaskHandle tsk = m_ContinuousCITasks.value(i);
 
     if (tsk) {
+      uInt64 currentPos;
+
+      DAQmxErrChk(DAQmxGetReadCurrReadPos(tsk, &currentPos));
+      DAQmxErrChk(DAQmxSetReadRelativeTo(tsk, DAQmx_Val_CurrReadPos));
+      int32 offset = ((int64)lastSample[0]) - ((int64)currentPos) - (m_NContinuousSamples+1);
+      DAQmxErrChk(DAQmxSetReadOffset(tsk, offset));
       DAQmxErrChk(DAQmxReadCounterF64(tsk, m_NContinuousSamples+1, -1,
                                       ciBuff[i].data(), ciBuff[i].count(),
                                       &actuallyRead, NULL));
+
+      if (i<29) {
+        DAQmxErrChk(DAQmxGetReadCurrReadPos(tsk, &lastSample[i+1]));
+
+        if (lastSample[i+1] != lastSample[i]) {
+          printf("Sync error %ld:%ld\n", lastSample[i+1], lastSample[i]);
+        }
+      }
     }
   }
 

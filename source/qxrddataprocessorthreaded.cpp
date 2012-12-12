@@ -344,7 +344,7 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
     if (img->readImage(path)) {
       printMessage(tr("Load image from %1").arg(path));
       statusMessage(tr("Load image from %1").arg(path));
-      img -> loadMetaData();
+      img -> loadMetaData(m_Experiment);
 
       if (first) {
         summed->copyFrom(img);
@@ -383,7 +383,7 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    img -> loadMetaData();
+    img -> loadMetaData(m_Experiment);
 
     m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessorThreaded::integrateImage,
                                                result,
@@ -408,7 +408,7 @@ void QxrdDataProcessorThreaded::processData(QString name)
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    res -> loadMetaData();
+    res -> loadMetaData(m_Experiment);
 
     acquiredDoubleImage(res, /*darkImage(), mask(),*/ QxrdMaskDataPtr());
 
@@ -482,12 +482,47 @@ void QxrdDataProcessorThreaded::processNormalizedFile(QString name, QList<double
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    res -> loadMetaData();
+    res -> loadMetaData(m_Experiment);
     res -> setMask(mask(), QxrdMaskDataPtr());
 
     acquiredDoubleImage(res, /*darkImage(), mask(),*/ QxrdMaskDataPtr(), v);
 
     set_DataPath(res -> get_FileName());
+  } else {
+    printMessage(tr("Couldn't load %1").arg(path));
+  }
+}
+
+void QxrdDataProcessorThreaded::setFileNormalization(QString path, double v1)
+{
+  QList<double> v;
+  v << v1;
+
+  setFileNormalization(path, v);
+}
+
+void QxrdDataProcessorThreaded::setFileNormalization(QString path, double v1, double v2)
+{
+  QList<double> v;
+  v << v1 << v2;
+
+  setFileNormalization(path, v);
+}
+
+void QxrdDataProcessorThreaded::setFileNormalization(QString name, QList<double> v)
+{
+  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
+
+  QString path = filePathInCurrentDirectory(name);
+
+  if (res -> readImage(path)) {
+
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+    res -> loadMetaData(m_Experiment);
+    res -> setMask(mask(), QxrdMaskDataPtr());
+    res -> set_Normalization(v);
+    res -> saveMetaData(name, m_Experiment);
   } else {
     printMessage(tr("Couldn't load %1").arg(path));
   }
@@ -523,7 +558,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
   QString path = filePathInCurrentDirectory(darkPath);
 
   if (dark->readImage(path)) {
-    dark->loadMetaData();
+    dark->loadMetaData(m_Experiment);
 
     int nFileDarkExposures = dark->get_SummedExposures();
 
@@ -536,7 +571,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
       QxrdDoubleImageDataPtr image = takeNextFreeImage(0,0);
 
       if (image->readImage(path)) {
-        image->loadMetaData();
+        image->loadMetaData(m_Experiment);
 
         int nFileImageExposures = image->get_SummedExposures();
 

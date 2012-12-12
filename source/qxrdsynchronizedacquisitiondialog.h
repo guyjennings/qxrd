@@ -18,6 +18,7 @@ protected:
   void changeEvent(QEvent *e);
 
 private slots:
+  void deviceChanged();
   void waveformChanged();
 
 private:

@@ -24,7 +24,7 @@ public:
 
 public slots:
   void   printMessage(QString msg);
-  void   setAnalogWaveform(int chan, double rate, double wfm[], int size);
+  void   setAnalogWaveform(QString chan, double rate, double wfm[], int size);
   void   setAnalogOutput(int chan, double val);
   double getAnalogInput(int chan);
   void   triggerAnalogWaveform();

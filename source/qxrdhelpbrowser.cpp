@@ -2,10 +2,21 @@
 #include "qxrdscriptengine.h"
 #include "qxrdexperiment.h"
 #include <stdio.h>
+#include "qxrddebug.h"
 
 QxrdHelpBrowser::QxrdHelpBrowser(QWidget *parent) :
   QTextBrowser(parent)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdHelpBrowser::QxrdHelpBrowser(%p)\n", this);
+  }
+}
+
+QxrdHelpBrowser::~QxrdHelpBrowser()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdHelpBrowser::~QxrdHelpBrowser(%p)\n", this);
+  }
 }
 
 void QxrdHelpBrowser::init(QxrdExperimentWPtr expt)

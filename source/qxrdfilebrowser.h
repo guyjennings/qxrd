@@ -22,6 +22,7 @@ public:
                   QxrdExperimentWPtr experiment,
                   QxrdDataProcessorWPtr processor,
                   QWidget *parent);
+  virtual ~QxrdFileBrowser();
 
 public slots:
   void onFilterChanged(int newfilter);

@@ -498,11 +498,9 @@ else:win32 {
 }
 
 contains(DEFINES,HAVE_PERKIN_ELMER) {
-  SOURCES += qxrdacquisitionperkinelmer.cpp \
-             qxrddetectorperkinelmer.cpp \
+  SOURCES += qxrddetectorperkinelmer.cpp \
              qxrdperkinelmerplugininterface.cpp
-  HEADERS += qxrdacquisitionperkinelmer.h \
-             qxrddetectorperkinelmer.h \
+  HEADERS += qxrddetectorperkinelmer.h \
              qxrdperkinelmerplugininterface.h \
              qxrdperkinelmerplugininterface-ptr.h
 }

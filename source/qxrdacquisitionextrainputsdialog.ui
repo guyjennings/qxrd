@@ -78,7 +78,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0" colspan="2">
+          <item row="3" column="0" colspan="2">
            <widget class="QTableWidget" name="m_ExtraInputsTable">
             <property name="toolTip">
              <string>Channel Information</string>
@@ -93,6 +93,16 @@
              <number>0</number>
             </property>
            </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Acquisition Device:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="m_AcquisitionDevice"/>
           </item>
          </layout>
         </item>

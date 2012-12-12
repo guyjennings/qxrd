@@ -17,6 +17,10 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
   QDialog(parent),
   m_Experiment(exptw)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(%p)\n", this);
+  }
+
   setupUi(this);
 
   QxrdExperimentPtr expt(m_Experiment);
@@ -24,6 +28,8 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
 //  connect(m_DetectorTypeCombo, SIGNAL(currentIndexChanged(int)), m_DetectorPrefsStack, SLOT(setCurrentIndex(int)));
 
   if (expt) {
+    setWindowTitle(expt->experimentFilePath() + " Preferences");
+
     QxrdAcquisitionPtr acq = expt -> acquisition();
     QxrdDataProcessorPtr proc = expt->dataProcessor();
     //  QxrdAllocator *alloc = g_Application->allocator();
@@ -110,6 +116,9 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
 
 QxrdExperimentPreferencesDialog::~QxrdExperimentPreferencesDialog()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdExperimentPreferencesDialog::~QxrdExperimentPreferencesDialog(%p)\n", this);
+  }
 }
 
 void QxrdExperimentPreferencesDialog::getRelativeDirectoryPath(QLineEdit *edit)

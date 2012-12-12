@@ -3,7 +3,7 @@
 #include "qxrddetectorthread.h"
 
 QxrdExperimentPerkinElmerAcquisition::QxrdExperimentPerkinElmerAcquisition(QString path,
-                                                                           QxrdApplication *app) :
+                                                                           QxrdApplicationWPtr app) :
   QxrdExperiment(path, app)
 {
   set_ExperimentKind(QxrdExperimentThread::PerkinElmerAcquisition);

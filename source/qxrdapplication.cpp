@@ -82,7 +82,7 @@ void QxrdApplication::processEventCounter()
   eventCounter = 0;
 }
 
-QStringList QxrdApplication::makeStringList(int argc, char **argv)
+QStringList QxrdApplication::makeStringListFromArgs(int argc, char **argv)
 {
   QStringList res;
 
@@ -109,7 +109,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_MessageWindowLines(m_Saver, this, "messageWindowLines", 1000, "Number of Lines in Message Window (0 = unlimited)"),
   m_UpdateIntervalMsec(m_Saver, this, "updateIntervalMsec", 1000, "Time Intervale for Updates (in msec)"),
   m_Argc(QxrdSettingsSaverPtr(), this, "argc", argc, "Number of Command Line Arguments"),
-  m_Argv(QxrdSettingsSaverPtr(), this, "argv", makeStringList(argc, argv), "Command Line Arguments"),
+  m_Argv(QxrdSettingsSaverPtr(), this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
   m_GuiWanted(QxrdSettingsSaverPtr(), this, "guiWanted", 1, "GUI Wanted?"),
   m_CmdList(QxrdSettingsSaverPtr(), this, "cmdList", QStringList(), "Commands to Execute"),
   m_FileList(QxrdSettingsSaverPtr(), this, "fileList", QStringList(), "Files to Process"),
@@ -950,7 +950,7 @@ void QxrdApplication::activateExperiment(QString path)
 {
   foreach(QxrdExperimentPtr exp, m_Experiments) {
     if (exp->experimentFilePath() == path) {
-      QxrdWindow *win = exp->window();
+      QxrdWindowPtr win = exp->window();
 
       if (win) {
         win->activateWindow();

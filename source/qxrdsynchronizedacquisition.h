@@ -41,11 +41,14 @@ public:
     SyncAcquisitionWaveformBipolarTriangle
   };
 
-  Q_PROPERTY(int syncAcquisitionOutputChannel READ get_SyncAcquisitionOutputChannel WRITE set_SyncAcquisitionOutputChannel)
-  QCEP_INTEGER_PROPERTY(SyncAcquisitionOutputChannel)
+  Q_PROPERTY(QString syncAcquisitionOutputDevice READ get_SyncAcquisitionOutputDevice WRITE set_SyncAcquisitionOutputDevice)
+  QCEP_STRING_PROPERTY(SyncAcquisitionOutputDevice)
 
-  Q_PROPERTY(int syncAcquisitionFlagChannel READ get_SyncAcquisitionFlagChannel WRITE set_SyncAcquisitionFlagChannel)
-  QCEP_INTEGER_PROPERTY(SyncAcquisitionFlagChannel)
+  Q_PROPERTY(QString syncAcquisitionOutputChannel READ get_SyncAcquisitionOutputChannel WRITE set_SyncAcquisitionOutputChannel)
+  QCEP_STRING_PROPERTY(SyncAcquisitionOutputChannel)
+
+//  Q_PROPERTY(int syncAcquisitionFlagChannel READ get_SyncAcquisitionFlagChannel WRITE set_SyncAcquisitionFlagChannel)
+//  QCEP_INTEGER_PROPERTY(SyncAcquisitionFlagChannel)
 
   Q_PROPERTY(double syncAcquisitionMinimum READ get_SyncAcquisitionMinimum WRITE set_SyncAcquisitionMinimum)
   QCEP_DOUBLE_PROPERTY(SyncAcquisitionMinimum)

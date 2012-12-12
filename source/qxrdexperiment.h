@@ -8,7 +8,6 @@
 
 #include <QObject>
 #include <QSharedPointer>
-#include <QSplashScreen>
 #include <QScriptEngine>
 #include <QScriptEngineDebugger>
 #include "qxrdapplication-ptr.h"
@@ -37,13 +36,15 @@
 #include "qxrddetector.h"
 #include "qxrddetector-ptr.h"
 #include "qxrdobjectnamer.h"
+#include "qxrdcenterfinder-ptr.h"
+#include "qxrdintegrator-ptr.h"
 
 class QxrdExperiment : public QObject
 {
   Q_OBJECT
 
 public:
-  QxrdExperiment(QString path, QxrdApplication *app);
+  QxrdExperiment(QString path, QxrdApplicationWPtr app);
   //  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
   void initialize(QxrdExperimentThreadWPtr expthrd, QSettings *settings);
@@ -54,8 +55,10 @@ public:
 
   QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionWPtr acquisition() const;
-  QxrdWindow *window();
+  QxrdWindowPtr window();
   QxrdDataProcessorWPtr dataProcessor() const;
+  QxrdCenterFinderWPtr centerFinder() const;
+  QxrdIntegratorWPtr integrator() const;
   QxrdServerWPtr specServer();
   QxrdSimpleServerWPtr simpleServer();
 
@@ -106,6 +109,8 @@ public slots:
   void finishedWork(int amt);
   void updateCompletionPercentage(int, int);
 
+  void dump();
+
 private slots:
   void onDetectorTypeChanged();
 
@@ -120,13 +125,13 @@ public:
 
 private:
   QxrdObjectNamer                 m_ObjectNamer;
-  QxrdApplication                *m_Application;
+  QxrdApplicationWPtr             m_Application;
   QxrdExperimentThreadWPtr        m_ExperimentThread;
   QxrdSettingsSaverPtr            m_SettingsSaver;
 
 private:
   QxrdWindowSettingsPtr           m_WindowSettings;
-  QxrdWindow                     *m_Window;
+  QxrdWindowPtr                   m_Window;
   QxrdServerThreadPtr             m_ServerThread;
   QxrdServerWPtr                  m_Server;
   QxrdSimpleServerThreadPtr       m_SimpleServerThread;

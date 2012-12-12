@@ -11,8 +11,9 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdSettingsSaverPtr sa
   m_SyncAcquisitionMode(saver, this,"syncAcquisitionMode", 0, "Synchronized Acquisition Mode (0 = None, 1 = Stepped, 2 = Continuous)"),
   m_SyncAcquisitionWaveform(saver, this,"syncAcquisitionWaveform", 0,
                             "Synchronized Acquisition Waveform (0 = Square, 1 = Sine, 2 = Triangle, 3 = Sawtooth, 4 = Bipolar Triangle)"),
-  m_SyncAcquisitionOutputChannel(saver, this,"syncAcquisitionOutputChannel", 0, "Synchronized Acquisition Output Channel"),
-  m_SyncAcquisitionFlagChannel(saver, this,"syncAcquisitionFlagChannel", 0, "Synchronized Acquisition Flags"),
+  m_SyncAcquisitionOutputDevice(saver, this,"syncAcquisitionOutputDevice", "", "Synchronized Acquisition Output Device"),
+  m_SyncAcquisitionOutputChannel(saver, this,"syncAcquisitionOutputChannel", "", "Synchronized Acquisition Output Channel"),
+//  m_SyncAcquisitionFlagChannel(saver, this,"syncAcquisitionFlagChannel", 0, "Synchronized Acquisition Flags"),
   m_SyncAcquisitionMinimum(saver, this,"syncAcquisitionMinimum", 0.0, "Synchronized Acquisition Minimum (in Volts)"),
   m_SyncAcquisitionMaximum(saver, this,"syncAcquisitionMaximum", 5.0, "Synchronized Acquisition Maximum (in Volts)"),
   m_SyncAcquisitionSymmetry(saver, this,"syncAcquisitionSymmetry", 0.0, "Synchronized Acquisition Symmetry (0 = symmetric)"),
@@ -57,7 +58,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
   double nSamples     = cycleTime*sampleRate;
   double minVal       = get_SyncAcquisitionMinimum();
   double maxVal       = get_SyncAcquisitionMaximum();
-  int chan            = get_SyncAcquisitionOutputChannel();
+  QString chan        = get_SyncAcquisitionOutputChannel();
   int wfm             = get_SyncAcquisitionWaveform();
   m_SyncMode          = get_SyncAcquisitionMode();
   double symm         = get_SyncAcquisitionSymmetry();
@@ -151,7 +152,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
     m_OutputVoltage[iSamples] = m_OutputVoltage[0]; // Return output voltage to starting value at the end of the waveform
 
     if (m_NIDAQPlugin) {
-      m_NIDAQPlugin->setAnalogWaveform(chan-1, sampleRate, m_OutputVoltage.data(), iSamples+1);
+      m_NIDAQPlugin->setAnalogWaveform(chan, sampleRate, m_OutputVoltage.data(), iSamples+1);
     }
   }
 }

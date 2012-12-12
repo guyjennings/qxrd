@@ -171,7 +171,7 @@ void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionWPtr acq)
   }
 }
 
-void QxrdDataProcessorBase::setWindow(QxrdWindow *win)
+void QxrdDataProcessorBase::setWindow(QxrdWindowWPtr win)
 {
   m_Window = win;
   newData(m_Data, QxrdMaskDataPtr());
@@ -310,7 +310,7 @@ void QxrdDataProcessorBase::newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPt
   m_Data = image;
   m_Overflow = overflow;
 
-  QxrdWindow *w = m_Window;
+  QxrdWindowPtr w = m_Window;
 
   if (w) {
     w -> newDataAvailable(m_Data, overflow);
@@ -403,7 +403,7 @@ void QxrdDataProcessorBase::newGainMapImage(QxrdDoubleImageDataPtr image)
 
 void QxrdDataProcessorBase::newMask()
 {
-  QxrdWindow *w = m_Window;
+  QxrdWindowPtr w = m_Window;
 
   if (w) {
     w -> newMaskAvailable(mask());
@@ -493,7 +493,7 @@ void QxrdDataProcessorBase::loadData(QString name)
 
       //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-      res -> loadMetaData();
+      res -> loadMetaData(m_Experiment);
 
       newData(res, QxrdMaskDataPtr());
 
@@ -533,7 +533,7 @@ void QxrdDataProcessorBase::loadDark(QString name)
 
       //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-      res -> loadMetaData();
+      res -> loadMetaData(m_Experiment);
       res -> set_DataType(QxrdDoubleImageData::DarkData);
 
       newDarkImage(res);
@@ -574,7 +574,7 @@ void QxrdDataProcessorBase::loadBadPixels(QString name)
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    res -> loadMetaData();
+    res -> loadMetaData(m_Experiment);
     res -> set_DataType(QxrdDoubleImageData::BadPixelsData);
 
     newBadPixelsImage(res);
@@ -608,7 +608,7 @@ void QxrdDataProcessorBase::loadGainMap(QString name)
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    res -> loadMetaData();
+    res -> loadMetaData(m_Experiment);
     res -> set_DataType(QxrdDoubleImageData::GainData);
     res -> setDefaultValue(1.0);
 
@@ -1014,7 +1014,7 @@ void QxrdDataProcessorBase::loadMask(QString name)
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    res -> loadMetaData();
+    res -> loadMetaData(m_Experiment);
     res -> set_DataType(QxrdMaskData::MaskData);
 
     //    res -> copyMaskTo(m_Mask);
@@ -1232,7 +1232,9 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage(
     QTime tic;
     tic.start();
 
-//    processed->set_Normalization(v);
+    if (v.length() > 0) {
+      processed->set_Normalization(v);
+    }
 
     if (qcepDebug(DEBUG_PROCESS)) {
       printMessage(tr("Processing Image \"%1\", count %2")

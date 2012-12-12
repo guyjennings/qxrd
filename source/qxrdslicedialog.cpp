@@ -3,12 +3,24 @@
 #include "qwt_plot_piecewise_curve.h"
 #include <QSettings>
 #include "qxrdsettingssaver.h"
+#include "qxrddebug.h"
 
 QxrdSliceDialog::QxrdSliceDialog(QxrdSliceDialogSettingsWPtr settings, QWidget *parent) :
   QDockWidget(parent),
   m_SliceDialogSettings(settings)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSliceDialog::QxrdSliceDialog(%p)\n", this);
+  }
+
   setupUi(this);
+}
+
+QxrdSliceDialog::~QxrdSliceDialog()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSliceDialog::~QxrdSliceDialog(%p)\n", this);
+  }
 }
 
 void QxrdSliceDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)

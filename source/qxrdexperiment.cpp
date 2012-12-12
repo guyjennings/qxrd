@@ -28,14 +28,14 @@
 
 QxrdExperiment::QxrdExperiment(
     QString path,
-    QxrdApplication *app) :
+    QxrdApplicationWPtr app) :
   QObject(NULL),
   m_ObjectNamer(this, "experiment"),
   m_Application(app),
   m_ExperimentThread(),
   m_SettingsSaver(new QxrdSettingsSaver(this)),
   m_WindowSettings(NULL),
-  m_Window(NULL),
+  m_Window(),
   m_ServerThread(NULL),
   m_Server(),
   m_SimpleServerThread(NULL),
@@ -77,11 +77,13 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
 {
   m_ExperimentThread = expthrd;
 
-  if (m_Application) {
+  QxrdApplicationPtr app(m_Application);
+
+  if (app) {
     splashMessage("Initializing File Saver");
 
     m_FileSaverThread = QxrdFileSaverThreadPtr(
-          new QxrdFileSaverThread(m_Application->allocator()));
+          new QxrdFileSaverThread(app->allocator()));
     m_FileSaverThread -> setObjectName("saver");
     m_FileSaverThread -> start();
     m_FileSaver = m_FileSaverThread -> fileSaver();
@@ -92,7 +94,7 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
           new QxrdDataProcessorThread(m_SettingsSaver,
                                       QxrdExperimentWPtr(this),
                                       QxrdAcquisitionPtr(),
-                                      m_Application->allocator(),
+                                      app->allocator(),
                                       m_FileSaver));
     m_DataProcessorThread -> setObjectName("proc");
     m_DataProcessorThread -> start();
@@ -102,6 +104,7 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
 
     if (saver) {
       saver -> setProcessor(m_DataProcessor);
+      saver -> setExperiment(this);
     }
 
     splashMessage("Initializing Data Acquisition");
@@ -110,7 +113,7 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
           new QxrdAcquisitionThread(m_SettingsSaver,
                                     QxrdExperimentWPtr(this),
                                     m_DataProcessor,
-                                    m_Application->allocator(),
+                                    app->allocator(),
                                     get_DetectorType()));
     m_AcquisitionThread -> setObjectName("acqu");
     m_AcquisitionThread -> start();
@@ -129,7 +132,7 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
     QxrdAcquisitionPtr acq(m_Acquisition);
 
     if (acq) {
-      acq -> setNIDAQPlugin(m_Application->nidaqPlugin());
+      acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
     m_WindowSettings = QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL));
@@ -222,23 +225,27 @@ void QxrdExperiment::openWindows()
 {
   GUI_THREAD_CHECK;
 
-  if (m_Application && m_Application->get_GuiWanted()) {
+  QxrdApplicationPtr app(m_Application);
+
+  if (app && app->get_GuiWanted()) {
     splashMessage("Opening Main Window");
-    m_Window =
+    m_Window = QxrdWindowPtr(
           new QxrdWindow(m_WindowSettings,
                          m_Application,
                          this,
                          m_Acquisition,
                          m_DataProcessor,
-                         m_Application->allocator(),
-                         NULL);
+                         app->allocator(),
+                         NULL));
 
-    QxrdWindow *win = m_Window;
+    QxrdWindowPtr win = m_Window;
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdAcquisitionPtr acq(m_Acquisition);
     QxrdScriptEnginePtr eng(m_ScriptEngine);
 
     if (win) {
+      win -> initialize();
+
       if (proc) {
         proc -> setWindow(win);
       }
@@ -254,14 +261,14 @@ void QxrdExperiment::openWindows()
       win -> onAcquisitionInit();
 
       if (eng) {
-        connect(win,          SIGNAL(executeCommand(QString)),
+        connect(win.data(),   SIGNAL(executeCommand(QString)),
                 eng.data(),   SLOT(evaluateAppCommand(QString)));
 
         connect(eng.data(),   SIGNAL(appResultAvailable(QScriptValue)),
-                win,          SLOT(finishedCommand(QScriptValue)));
+                win.data(),   SLOT(finishedCommand(QScriptValue)));
       }
 
-      if (win && m_Application && m_Application->get_GuiWanted()) {
+      if (win && app && app->get_GuiWanted()) {
         win -> show();
       }
     }
@@ -270,8 +277,10 @@ void QxrdExperiment::openWindows()
 
 QxrdExperiment::~QxrdExperiment()
 {
-  if (m_Application && qcepDebug(DEBUG_APP)) {
-    m_Application->printMessage("QxrdExperiment::~QxrdExperiment");
+  QxrdApplicationPtr app(m_Application);
+
+  if (app && qcepDebug(DEBUG_APP)) {
+    app->printMessage("QxrdExperiment::~QxrdExperiment");
   }
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -280,27 +289,30 @@ QxrdExperiment::~QxrdExperiment()
 
   m_SettingsSaver->performSave();
 
+//  delete m_Window;
+
   closeScanFile();
   closeLogFile();
-
-  delete m_Window;
 }
 
 void QxrdExperiment::splashMessage(QString msg)
 {
-  if (m_Application) {
-    m_Application->splashMessage(msg);
+  QxrdApplicationPtr app(m_Application);
+
+  if (app) {
+    app->splashMessage(msg);
   }
 }
 
 void QxrdExperiment::criticalMessage(QString msg)
 {
-  QxrdWindow *win = m_Window;
+  QxrdApplicationPtr app(m_Application);
+  QxrdWindowPtr      win(m_Window);
 
   if (win) {
     win->displayCriticalMessage(msg);
-  } else if (m_Application) {
-    m_Application->criticalMessage(msg);
+  } else if (app) {
+    app->criticalMessage(msg);
   } else {
     printf("%s\n", qPrintable(msg));
   }
@@ -308,12 +320,13 @@ void QxrdExperiment::criticalMessage(QString msg)
 
 void QxrdExperiment::statusMessage(QString msg)
 {
-  QxrdWindow *win = m_Window;
+  QxrdApplicationPtr app(m_Application);
+  QxrdWindowPtr      win(m_Window);
 
   if (win) {
     win->displayStatusMessage(msg);
-  } else if (m_Application) {
-    m_Application->statusMessage(msg);
+  } else if (app) {
+    app->statusMessage(msg);
   } else {
     printf("%s\n", qPrintable(msg));
   }
@@ -331,7 +344,7 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts)
 
     logMessage(message);
 
-    QxrdWindow *win = m_Window;
+    QxrdWindowPtr win = m_Window;
 
     if (win) {
       win->displayMessage(message);
@@ -343,7 +356,7 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts)
   }
 }
 
-QxrdWindow *QxrdExperiment::window()
+QxrdWindowPtr QxrdExperiment::window()
 {
   return m_Window;
 }
@@ -371,6 +384,28 @@ QxrdSimpleServerWPtr QxrdExperiment::simpleServer()
 QxrdDataProcessorWPtr QxrdExperiment::dataProcessor() const
 {
   return m_DataProcessor;
+}
+
+QxrdCenterFinderWPtr QxrdExperiment::centerFinder() const
+{
+  QxrdDataProcessorPtr dp(m_DataProcessor);
+
+  if (dp) {
+    return dp->centerFinder();
+  } else {
+    return QxrdCenterFinderWPtr();
+  }
+}
+
+QxrdIntegratorWPtr QxrdExperiment::integrator() const
+{
+  QxrdDataProcessorPtr dp(m_DataProcessor);
+
+  if (dp) {
+    return dp->integrator();
+  } else {
+    return QxrdIntegratorWPtr();
+  }
 }
 
 QxrdScriptEngineWPtr QxrdExperiment::scriptEngine()
@@ -473,6 +508,13 @@ void QxrdExperiment::openScanFile()
 
   if (m_ScanFile == NULL) {
     m_ScanFile = fopen(qPrintable(scanFilePath()), "a");
+
+    if (m_ScanFile) {
+      fprintf(m_ScanFile, "#F %s\n", qPrintable(get_LogFileName()));
+      fprintf(m_ScanFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
+      fprintf(m_ScanFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
+      fflush(m_ScanFile);
+    }
   }
 }
 
@@ -651,7 +693,7 @@ void QxrdExperiment::setExperimentFilePath(QString path)
   set_LogFileName(defaultLogName(path));
   set_ScanFileName(defaultScanName(path));
 
-  QxrdWindow *win = m_Window;
+  QxrdWindowPtr win = m_Window;
 
   if (win) {
     win -> updateTitle();
@@ -773,4 +815,12 @@ void QxrdExperiment::onDetectorTypeChanged()
       acq->setDetector(det);
     }
   }
+}
+
+void QxrdExperiment::dump()
+{
+  printf("About to dump\n");
+  dumpObjectInfo();
+  dumpObjectTree();
+  printf("Dumped\n");
 }

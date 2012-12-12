@@ -40,12 +40,13 @@ class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 
 public:
   QxrdWindow(QxrdWindowSettingsWPtr settings,
-             QxrdApplication *app,
+             QxrdApplicationWPtr appl,
              QxrdExperimentWPtr docw,
              QxrdAcquisitionWPtr acqw,
              QxrdDataProcessorWPtr procw,
              QxrdAllocatorWPtr allocw,
              QWidget *parent);
+  void initialize();
   virtual ~QxrdWindow();
   void onAcquisitionInit();
 
@@ -143,7 +144,7 @@ private:
   QxrdObjectNamer                        m_ObjectNamer;
   mutable QMutex                         m_Mutex;
   QxrdWindowSettingsWPtr                 m_WindowSettings;
-  QxrdApplication                       *m_Application;
+  QxrdApplicationWPtr                    m_Application;
   QxrdExperimentWPtr                     m_Experiment;
   QxrdAcquisitionWPtr                    m_Acquisition;
   QxrdDataProcessorWPtr                  m_DataProcessor;

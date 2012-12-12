@@ -23,7 +23,8 @@ public:
   explicit QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver,
                                       QxrdExperimentWPtr    doc,
                                       QxrdAcquisitionWPtr   acq);
-  
+  virtual ~QxrdAcquisitionExtraInputs();
+
 public:
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
   QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;
@@ -76,6 +77,9 @@ public:
 
   Q_PROPERTY(double exposureTime READ get_ExposureTime WRITE set_ExposureTime STORED false)
   QCEP_DOUBLE_PROPERTY(ExposureTime)
+
+  Q_PROPERTY(QString deviceName READ get_DeviceName WRITE set_DeviceName)
+  QCEP_STRING_PROPERTY(DeviceName)
 
 private:
   mutable QMutex              m_Mutex;
