@@ -9,8 +9,7 @@
 QcepSettingsSaver::QcepSettingsSaver(QObject *owner) :
   QObject(),
   m_Owner(owner),
-  m_SaveDelay(5000),
-  m_LastChangedBy()
+  m_SaveDelay(5000)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QcepSettingsSaver::QcepSettingsSaver(%p)\n", this);
@@ -46,15 +45,7 @@ void QcepSettingsSaver::performSave()
 
     if (qcepDebug(DEBUG_PREFS)) {
       printMessage(tr("Settings Saver saving %1 updates").arg(nupdates));
-
-      QcepPropertyPtr prop(m_LastChangedBy);
-
-      if (prop) {
-        printMessage(tr("Last changed by %1").arg(prop->name()));
-      }
     }
-
-    m_LastChangedBy = QcepPropertyWPtr();
 
     QTime tic;
     tic.start();
@@ -70,7 +61,6 @@ void QcepSettingsSaver::performSave()
 void QcepSettingsSaver::changed(QcepProperty *prop)
 {
   m_ChangeCount.fetchAndAddOrdered(1);
-  m_LastChangedBy = prop;
 }
 
 void QcepSettingsSaver::printMessage(QString msg, QDateTime ts)
