@@ -125,17 +125,19 @@ QSpecServer::clientRead()
     printMessage(tr("QSpecServer::clientRead, %1 bytes available").arg(avail));
   }
 
-  if (avail >= sizeof(struct svr_head)) {
+  while (avail >= sizeof(struct svr_head)) {
     m_Socket -> read((char*) &m_Packet, sizeof(struct svr_head));
     m_Data.resize(0);
 
-    avail -= sizeof(struct svr_head);
+    avail = m_Socket -> bytesAvailable();
 
     if (qcepDebug(DEBUG_SERVER)) {
-      printMessage(tr("QSpecServer::clientRead, %1 bytes available").arg(avail));
+      printMessage(tr("QSpecServer::clientRead, read header, %1 bytes available").arg(avail));
     }
 
     readPacketData();
+
+    avail = m_Socket -> bytesAvailable();
   }
 }
 
