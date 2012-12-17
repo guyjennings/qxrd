@@ -445,13 +445,13 @@ void QxrdFileBrowser::onRowCountChanged(int oldCount, int newCount)
           tr("QxrdFileBrowser::onRowCountChanged(%1,%2)").arg(oldCount).arg(newCount));
   }
 
-  m_FileBrowser->resizeColumnsToContents();
+//  m_FileBrowser->resizeColumnsToContents();
 }
 
 void QxrdFileBrowser::onModelReset()
 {
-  m_FileBrowser->resizeColumnsToContents();
-  m_FileBrowser->resizeRowsToContents();
+//  m_FileBrowser->resizeColumnsToContents();
+//  m_FileBrowser->resizeRowsToContents();
 }
 
 void QxrdFileBrowser::onFileUpdated(QFileInfo file)

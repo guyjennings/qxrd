@@ -105,7 +105,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
   m_Debug(m_Saver, this,"debug", 0, "Debug Level"),
   m_FreshStart(QxrdSettingsSaverPtr(), this,"freshStart", 0, "Do a Fresh Start"),
-  m_FileBrowserLimit(m_Saver, this, "fileBrowserLimit", 0, "Max Number of Files in Browser Windows (0 = unlimited)"),
+  m_FileBrowserLimit(m_Saver, this, "fileBrowserLimit", 1000, "Max Number of Files in Browser Windows (0 = unlimited)"),
   m_MessageWindowLines(m_Saver, this, "messageWindowLines", 1000, "Number of Lines in Message Window (0 = unlimited)"),
   m_UpdateIntervalMsec(m_Saver, this, "updateIntervalMsec", 1000, "Time Intervale for Updates (in msec)"),
   m_Argc(QxrdSettingsSaverPtr(), this, "argc", argc, "Number of Command Line Arguments"),
