@@ -2,7 +2,7 @@
 
 #include "qxrddebug.h"
 #include "qspecserver.h"
-
+#include "qxrdserverthread.h"
 #include <QTcpSocket>
 #include <QTextStream>
 #include <QVariant>
@@ -23,7 +23,7 @@ QSpecServer::QSpecServer(QxrdExperimentWPtr doc, QString name)
 
 QSpecServer::~QSpecServer()
 {
-  stopServer();
+//  stopServer();
 }
 
 void
@@ -79,6 +79,18 @@ QSpecServer::openNewConnection()
 {
   m_Socket = nextPendingConnection();
 
+//  {
+//    QxrdExperimentPtr expt(m_Experiment);
+
+//    if (expt) {
+//      QxrdServerThreadPtr tp(expt->specServerThread());
+
+//      if (tp) {
+//        m_Socket -> moveToThread(tp.data());
+//      }
+//    }
+//  }
+
   if (qcepDebug(DEBUG_SERVER)) {
     printMessage(tr("LowDelayOption = %1").arg(m_Socket->socketOption(QAbstractSocket::LowDelayOption).toString()));
   }
@@ -89,19 +101,19 @@ QSpecServer::openNewConnection()
     printMessage(tr("LowDelayOption = %1").arg(m_Socket->socketOption(QAbstractSocket::LowDelayOption).toString()));
   }
 
-  connect(m_Socket, SIGNAL(disconnected()),
-	  m_Socket, SLOT(deleteLater()));
+//  connect(m_Socket, SIGNAL(disconnected()),
+//	  m_Socket, SLOT(deleteLater()));
 
   connect(m_Socket, SIGNAL(readyRead()),
-	  this,     SLOT(clientRead()));
+      this,     SLOT(clientRead()));
 
   if (qcepDebug(DEBUG_SERVER)) {
     printMessage(QString("New connection from %1")
                                 .arg(m_Socket->peerAddress().toString()) );
   }
 
-  connect(m_Socket, SIGNAL(disconnected()),
-	  this,     SLOT(connectionClosed()));
+//  connect(m_Socket, SIGNAL(disconnected()),
+//	  this,     SLOT(connectionClosed()));
 }
 
 void
