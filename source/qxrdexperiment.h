@@ -60,6 +60,7 @@ public:
   QxrdCenterFinderWPtr centerFinder() const;
   QxrdIntegratorWPtr integrator() const;
   QxrdServerWPtr specServer();
+  QxrdServerThreadWPtr specServerThread();
   QxrdSimpleServerWPtr simpleServer();
 
   FILE* logFile();

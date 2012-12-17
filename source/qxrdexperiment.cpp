@@ -378,6 +378,11 @@ QxrdServerWPtr QxrdExperiment::specServer()
   return m_Server;
 }
 
+QxrdServerThreadWPtr QxrdExperiment::specServerThread()
+{
+  return m_ServerThread;
+}
+
 QxrdSimpleServerWPtr QxrdExperiment::simpleServer()
 {
   return m_SimpleServer;
