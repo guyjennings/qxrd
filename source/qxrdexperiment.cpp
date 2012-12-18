@@ -270,6 +270,8 @@ void QxrdExperiment::openWindows()
                 win.data(),   SLOT(finishedCommand(QScriptValue)));
       }
 
+      readInitialLogFile();
+
       if (win && app && app->get_GuiWanted()) {
         win -> show();
       }
@@ -388,6 +390,11 @@ QxrdSimpleServerWPtr QxrdExperiment::simpleServer()
   return m_SimpleServer;
 }
 
+QxrdSimpleServerThreadWPtr QxrdExperiment::simpleServerThread()
+{
+  return m_SimpleServerThread;
+}
+
 QxrdDataProcessorWPtr QxrdExperiment::dataProcessor() const
 {
   return m_DataProcessor;
@@ -459,6 +466,26 @@ void QxrdExperiment::openLogFile()
       fflush(m_LogFile);
     }
   }
+}
+
+void QxrdExperiment::readInitialLogFile()
+{
+  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
+
+  FILE *logFile = fopen(qPrintable(logFilePath()), "r");
+
+  fseek(logFile, -10000, SEEK_END);
+
+  char buff[10001];
+  fgets(buff, 10000, logFile);
+
+  while (!feof(logFile)) {
+    fgets(buff, 10000, logFile);
+
+    m_Window->initialLogEntry(buff);
+  }
+
+  fclose(logFile);
 }
 
 FILE* QxrdExperiment::logFile()

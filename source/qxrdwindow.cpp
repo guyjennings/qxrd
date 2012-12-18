@@ -808,6 +808,18 @@ void QxrdWindow::displayMessage(QString msg)
   }
 }
 
+void QxrdWindow::initialLogEntry(QString aline)
+{
+  if (QThread::currentThread()==thread()) {
+    m_Messages -> append("<font color=#cccccc>"+aline+"</font>");
+  } else {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                           "initialLogEntry",
+                                           Qt::QueuedConnection,
+                                           Q_ARG(QString, aline)));
+  }
+}
+
 void QxrdWindow::displayCriticalMessage(QString msg)
 {
   if (QThread::currentThread()==thread()) {

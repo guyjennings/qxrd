@@ -62,6 +62,7 @@ public:
   QxrdServerWPtr specServer();
   QxrdServerThreadWPtr specServerThread();
   QxrdSimpleServerWPtr simpleServer();
+  QxrdSimpleServerThreadWPtr simpleServerThread();
 
   FILE* logFile();
   void newLogFile(QString path);
@@ -118,6 +119,7 @@ private slots:
 private:
   void closeLogFile();
   void openLogFile();
+  void readInitialLogFile();
 
   void closeScanFile();
 

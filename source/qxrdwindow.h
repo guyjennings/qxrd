@@ -96,6 +96,7 @@ public slots:
   void displayMessage(QString msg);
   void displayStatusMessage(QString msg);
   void displayCriticalMessage(QString msg);
+  void initialLogEntry(QString aline);
 
 //  void selectOutputDirectory();
   void clearStatusMessage();

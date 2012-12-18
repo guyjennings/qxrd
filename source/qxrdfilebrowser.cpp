@@ -458,7 +458,7 @@ void QxrdFileBrowser::onFileUpdated(QFileInfo file)
 {
   QxrdExperimentPtr expt(m_Experiment);
 
-  if (expt) {
+  if (expt && qcepDebug(DEBUG_DISPLAY)) {
     expt->printMessage(
           tr("QxrdFileBrowser::fileUpdated(\"%1\",\"%2\")").arg(file.filePath()).arg(file.lastModified().toString()));
   }

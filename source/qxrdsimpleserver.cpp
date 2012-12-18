@@ -1,5 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdsimpleserver.h"
+#include "qxrdsimpleserverthread.h"
 #include <QTextStream>
 #include <QDateTime>
 #include <QThread>
@@ -116,14 +117,26 @@ void QxrdSimpleServer::openNewConnection()
 {
   m_Socket = nextPendingConnection();
 
-  connect(m_Socket, SIGNAL(disconnected()), m_Socket, SLOT(deleteLater()));
+//  connect(m_Socket, SIGNAL(disconnected()), m_Socket, SLOT(deleteLater()));
   connect(m_Socket, SIGNAL(readyRead()), this,     SLOT(clientRead()));
 
   if (qcepDebug(DEBUG_SERVER)) {
     printMessage(tr("New connection from %1").arg(m_Socket->peerAddress().toString()) );
   }
 
-  connect(m_Socket, SIGNAL(disconnected()), this,     SLOT(connectionClosed()));
+//  connect(m_Socket, SIGNAL(disconnected()), this,     SLOT(connectionClosed()));
+
+//  {
+//    QxrdExperimentPtr expt(m_Experiment);
+
+//    if (expt) {
+//      QxrdSimpleServerThreadPtr tp(expt->simpleServerThread());
+
+//      if (tp) {
+//        m_Socket -> moveToThread(tp.data());
+//      }
+//    }
+//  }
 }
 
 void QxrdSimpleServer::connectionClosed()
