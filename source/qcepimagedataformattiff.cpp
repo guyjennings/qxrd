@@ -2,6 +2,7 @@
 
 #include "qcepimagedataformattiff.h"
 #include "qcepimagedata.h"
+#include <tiff.h>
 #include <tiffio.h>
 
 void qceptiff_warningHandler(const char * /*module*/, const char * /*fmt*/, va_list /*ap*/)
@@ -25,7 +26,11 @@ template <typename T>
 QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::canLoadFile(QString path)
 {
 //   printf("QcepImageDataFormatTiff::canLoadFile(%s)\n", qPrintable(path));
+#ifdef TIFF_VERSION
   TIFFHeader header;
+#else
+  TIFFHeaderCommon header;
+#endif
   FILE *file = fopen(qPrintable(path), "r");
   QcepImageDataFormat<T>* res = NULL;
 
