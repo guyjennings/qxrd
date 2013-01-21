@@ -965,6 +965,18 @@ void QxrdAcquisition::onIdleTimeout()
     QxrdDataProcessorPtr proc(m_DataProcessor);
 
     if (res && proc) {
+      res -> set_ExposureTime(get_ExposureTime());
+      res -> set_DateTime(QDateTime::currentDateTime());
+      res -> set_HBinning(1);
+      res -> set_VBinning(1);
+      res -> set_CameraGain(get_CameraGain());
+      res -> set_DataType(QxrdInt32ImageData::Raw32Data);
+      res -> set_UserComment1(get_UserComment1());
+      res -> set_UserComment2(get_UserComment2());
+      res -> set_UserComment3(get_UserComment3());
+      res -> set_UserComment4(get_UserComment4());
+      res -> set_ImageSaved(false);
+
       proc->idleInt16Image(res, this->get_LiveViewAtIdle());
     }
   }
