@@ -1,6 +1,11 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.8 - Jan 23 2013
+Fixed problem with remote command execution
+
+Updated Qt to 4.8.4 on Mac and Windows
+
 ## v0.9.7 - Dec 5 2012
 Primarily a bugfix release - address memory leaks at shutdown
 
