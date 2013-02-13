@@ -153,7 +153,7 @@ bool QxrdApplication::init(int &argc, char **argv)
   eventCounterTimer.start(10000);
 
   setOrganizationName("cep");
-  setOrganizationDomain("xor.aps.anl.gov");
+  setOrganizationDomain("xray.aps.anl.gov");
   setApplicationName("qxrd");
 
 
