@@ -58,6 +58,8 @@ win32 {
 }
 RESOURCES += qxrdresources.qrc
 
+INCLUDEPATH += qceplib
+
 # RESOURCES.depends += help/*.html
 OTHER_FILES += help/qxrdhelptext.html \
     help/qxrdhelpscript.html \
@@ -92,25 +94,27 @@ include("../qwt-5.2.pri")
 #include("../qceplib.pri")
 include("qxrd.levmar.pri")
 
+INCLUDEPATH += qceplib
+
 # include("qxrd-cuda.pri")
-HEADERS += spec_server.h \
-    qspecserver.h \
-    qcepmacros.h \
-    qcepproperty.h \
-    qcepproperty-ptr.h \
-    qcepsettingssaver.h \
-    qcepsettingssaver-ptr.h \
-    qcepmutexlocker.h \
-    qcepimagedata.h \
-    qcepimagedata-ptr.h \
-    qcepimagedataformat.h \
-    qcepimagedataformat-ptr.h \
-    qcepimagedataformattiff.h \
-    qcepimagedataformatmar345.h \
-    qcepimagedataformatfactory.h \
-    qcepimagedataformatfactory-ptr.h \
-    qcepdocumentationdictionary.h \
-    qcepdebug.h \
+HEADERS += qceplib/spec_server.h \
+    qceplib/qspecserver.h \
+    qceplib/qcepmacros.h \
+    qceplib/qcepproperty.h \
+    qceplib/qcepproperty-ptr.h \
+    qceplib/qcepsettingssaver.h \
+    qceplib/qcepsettingssaver-ptr.h \
+    qceplib/qcepmutexlocker.h \
+    qceplib/qcepimagedata.h \
+    qceplib/qcepimagedata-ptr.h \
+    qceplib/qcepimagedataformat.h \
+    qceplib/qcepimagedataformat-ptr.h \
+    qceplib/qcepimagedataformattiff.h \
+    qceplib/qcepimagedataformatmar345.h \
+    qceplib/qcepimagedataformatfactory.h \
+    qceplib/qcepimagedataformatfactory-ptr.h \
+    qceplib/qcepdocumentationdictionary.h \
+    qceplib/qcepdebug.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
     qxrddetector.h \
@@ -125,17 +129,17 @@ HEADERS += spec_server.h \
     qxrdhelpbrowser.h \
     qxrdobjectnamer.h
 
-SOURCES += qspecserver.cpp \
-    qcepproperty.cpp \
-    qcepsettingssaver.cpp \
-    qcepmutexlocker.cpp \
-    qcepimagedata.cpp \
-    qcepimagedataformat.cpp \
-    qcepimagedataformattiff.cpp \
-    qcepimagedataformatmar345.cpp \
-    qcepimagedataformatfactory.cpp \
-    qcepdocumentationdictionary.cpp \
-    qcepdebug.cpp \
+SOURCES += qceplib/qspecserver.cpp \
+    qceplib/qcepproperty.cpp \
+    qceplib/qcepsettingssaver.cpp \
+    qceplib/qcepmutexlocker.cpp \
+    qceplib/qcepimagedata.cpp \
+    qceplib/qcepimagedataformat.cpp \
+    qceplib/qcepimagedataformattiff.cpp \
+    qceplib/qcepimagedataformatmar345.cpp \
+    qceplib/qcepimagedataformatfactory.cpp \
+    qceplib/qcepdocumentationdictionary.cpp \
+    qceplib/qcepdebug.cpp \
     qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
     qxrddetector.cpp \
