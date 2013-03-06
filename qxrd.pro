@@ -34,6 +34,7 @@ tarball.commands += \
         $(MKDIR) $${TARGET}-$${VERSION}/source/tiffconfig/win32 && \
         $(MKDIR) $${TARGET}-$${VERSION}/source/tiff-3.8.2 && \
         $(MKDIR) $${TARGET}-$${VERSION}/source/tiff-3.8.2/libtiff && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/qceplib && \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins && \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdareadetectorplugin && \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdperkinelmerplugin && \
@@ -70,6 +71,9 @@ tarball.commands += \
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/tiff-3.8.2/libtiff/*.{c,h,def} \
                       -t $${TARGET}-$${VERSION}/source/tiff-3.8.2/libtiff &&
+tarball.commands += \
+        $(COPY_FILE)  $${PWD}/source/qceplib/*.{cpp,h} \
+                      -t $${TARGET}-$${VERSION}/source/qceplib &&
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/plugins.pro \
                       -t $${TARGET}-$${VERSION}/plugins &&
