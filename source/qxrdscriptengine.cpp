@@ -1129,6 +1129,47 @@ QScriptValue QxrdScriptEngine::matchFilesFunc(QScriptContext *context, QScriptEn
   return engine->toScriptValue(result);
 }
 
+QCEP_DOC_FUNCTION(
+    "mapUserFunction",
+    "mapUserFunction(functionname)",
+    "Map a user function over current data",
+    ""
+    )
+
+QScriptValue QxrdScriptEngine::mapUserFunctionFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdDataProcessorPtr proc(eng->dataProcessor());
+
+    QxrdDoubleImageDataPtr d = proc->data();
+
+    if (d) {
+      int ht = d->get_Height();
+      int wd = d->get_Width();
+
+      if (context->argumentCount() == 1) {
+        QScriptValue func = context->argument(0);
+
+        if (!func.isFunction()) {
+          func = eng->globalObject().property(func.toString());
+        }
+
+        if (func.isFunction()) {
+          for (int i=0; i<wd; i++) {
+            for (int j=0; j<ht; j++) {
+              func.call(QScriptValue(), QScriptValueList() << i << j);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return engine->toScriptValue(0);
+}
+
 QCEP_DOC_OBJECT(
     "JSON",
     "Qt Built-in JSON Parser"
@@ -1295,6 +1336,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("setFileNormalization", newFunction(setFileNormalizationFunc));
   globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
   globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
+  globalObject().setProperty("mapUserFunction", newFunction(mapUserFunctionFunc, 1));
 
   if (app) {
     QObject *plugin = dynamic_cast<QObject*>(app->nidaqPlugin().data());

@@ -76,7 +76,9 @@ OTHER_FILES += help/qxrdhelptext.html \
     testImage.js \
     tilt_test.js \
     testscript.js \
-    unsubtractDark.js
+    unsubtractDark.js \
+    qxrdexampleusergeometry.js \
+    qxrdexampleuserabsorption.js
 DISTFILES += qxrd.dox \
     download/index.php \
     images/*.* \

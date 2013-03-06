@@ -98,5 +98,7 @@
         <file>help/images/startup-settings-dialog.png</file>
         <file>help/images/sync-acquire-dialog.png</file>
         <file>images/powder_point.png</file>
+        <file>qxrdexampleuserabsorption.js</file>
+        <file>qxrdexampleusergeometry.js</file>
     </qresource>
 </RCC>

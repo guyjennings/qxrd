@@ -83,6 +83,24 @@ public:
   Q_PROPERTY(double adjustmentRadius READ get_AdjustmentRadius WRITE set_AdjustmentRadius)
   QCEP_DOUBLE_PROPERTY(AdjustmentRadius)
 
+  Q_PROPERTY(int    enableUserGeometry READ get_EnableUserGeometry WRITE set_EnableUserGeometry)
+  QCEP_INTEGER_PROPERTY(EnableUserGeometry)
+
+  Q_PROPERTY(QString userGeometryScript READ get_UserGeometryScript WRITE set_UserGeometryScript)
+  QCEP_STRING_PROPERTY(UserGeometryScript)
+
+  Q_PROPERTY(QString userGeometryFunction READ get_UserGeometryFunction WRITE set_UserGeometryFunction)
+  QCEP_STRING_PROPERTY(UserGeometryFunction)
+
+  Q_PROPERTY(int     enableUserAbsorption READ get_EnableUserAbsorption WRITE set_EnableUserAbsorption)
+  QCEP_INTEGER_PROPERTY(EnableUserAbsorption)
+
+  Q_PROPERTY(QString userAbsorptionScript READ get_UserAbsorptionScript WRITE set_UserAbsorptionScript)
+  QCEP_STRING_PROPERTY(UserAbsorptionScript)
+
+  Q_PROPERTY(QString userAbsorptionFunction READ get_UserAbsorptionFunction WRITE set_UserAbsorptionFunction)
+  QCEP_STRING_PROPERTY(UserAbsorptionFunction)
+
 //public slots:
 //  void onCenterXChanged(double cx);
 //  void onCenterYChanged(double cy);
@@ -126,6 +144,9 @@ public slots:
   QwtDoublePoint adjustPoint(int i);
   void adjustPointNear(double x, double y);
   void adjustAllPoints();
+
+  QString defaultUserGeometryScript();
+  QString defaultUserAbsorptionScript();
 
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);

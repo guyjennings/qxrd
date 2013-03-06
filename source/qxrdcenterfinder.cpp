@@ -30,6 +30,12 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_RingRadius(saver, this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
     m_AdjustMarkedPoints(saver, this, "adjustMarkedPoints", true, "Auto-adjust position of entered points"),
     m_AdjustmentRadius(saver, this, "adjustmentRadius", 3.0, "Size of search region for marker auto adjustment"),
+    m_EnableUserGeometry(saver, this, "enableUserGeometry", 0, "Apply user-defined geometry function in integration"),
+    m_UserGeometryScript(saver, this, "userGeometryScript", defaultUserGeometryScript(), "Script to define user defined geometry functions"),
+    m_UserGeometryFunction(saver, this, "userGeometryFunction", "userGeometry", "Name of user defined geometry function"),
+    m_EnableUserAbsorption(saver, this, "enableUserAbsorption", 0, "Apply user-defined geometry function in integration"),
+    m_UserAbsorptionScript(saver, this, "userAbsorptionScript", defaultUserAbsorptionScript(), "Script to define user defined absorption functions"),
+    m_UserAbsorptionFunction(saver, this, "userAbsorptionFunction", "userAbsorption", "Name of user defined absorption function"),
     m_Experiment(expt)
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
@@ -388,5 +394,27 @@ double QxrdCenterFinder::imageValue(double x, double y)
     return m_Data->value(x,y);
   } else {
     return 0;
+  }
+}
+
+QString QxrdCenterFinder::defaultUserGeometryScript()
+{
+  QFile def(":/qxrdexampleusergeometry.js");
+
+  if (def.open(QFile::ReadOnly)) {
+    return def.readAll();
+  } else {
+    return "Couldn't open resource file";
+  }
+}
+
+QString QxrdCenterFinder::defaultUserAbsorptionScript()
+{
+  QFile def(":/qxrdexampleuserabsorption.js");
+
+  if (def.open(QFile::ReadOnly)) {
+    return def.readAll();
+  } else {
+    return "Couldn't open resource file";
   }
 }

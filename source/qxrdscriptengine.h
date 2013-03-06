@@ -93,6 +93,7 @@ private:
 //  static QScriptValue typeNameFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue matchFilesFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue extraChannelFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue mapUserFunctionFunc(QScriptContext *context, QScriptEngine *engine);
 
   QString tableHeader();
   QString tableFooter();
