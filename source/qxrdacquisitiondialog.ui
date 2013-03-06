@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>513</width>
-    <height>677</height>
+    <width>551</width>
+    <height>717</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -616,7 +616,8 @@ Script Function: darkSummedExposures()</string>
            <bool>false</bool>
           </property>
           <property name="toolTip">
-           <string>Cancel an acquisition</string>
+           <string>Cancel an acquisition
+Script Function: acquireCancel()</string>
           </property>
           <property name="text">
            <string>Cancel</string>
@@ -761,7 +762,7 @@ Script Function: acquireDark([fileName[,exposures[,summed]]])</string>
         <item row="21" column="1">
          <widget class="QLabel" name="m_CorrectionBacklog">
           <property name="toolTip">
-           <string>Count of dropped frames</string>
+           <string>Number of frames still to be corrected</string>
           </property>
           <property name="text">
            <string>TextLabel</string>
@@ -781,7 +782,7 @@ Script Function: acquireDark([fileName[,exposures[,summed]]])</string>
         <item row="21" column="3">
          <widget class="QLabel" name="m_IntegrationBacklog">
           <property name="toolTip">
-           <string>Count of dropped frames</string>
+           <string>Number of frames still to be integrated</string>
           </property>
           <property name="text">
            <string>TextLabel</string>

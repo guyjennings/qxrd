@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>470</width>
-    <height>432</height>
+    <width>501</width>
+    <height>441</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -490,7 +490,8 @@ script property centering.energy</string>
       <item row="9" column="0" colspan="2">
        <widget class="QCheckBox" name="m_EnableGeometry">
         <property name="toolTip">
-         <string/>
+         <string>Enable geometry corrections during integration
+intensity *= pow(distance/m_DetectorDistance, 2)/cos(tth);</string>
         </property>
         <property name="text">
          <string>Enable Geometry Corrections </string>
@@ -507,10 +508,13 @@ script property centering.energy</string>
       <item row="10" column="3">
        <widget class="QDoubleSpinBox" name="m_Polarization">
         <property name="toolTip">
-         <string/>
+         <string>Polarization factor : [0..1]</string>
         </property>
         <property name="keyboardTracking">
          <bool>false</bool>
+        </property>
+        <property name="prefix">
+         <string/>
         </property>
         <property name="decimals">
          <number>6</number>
@@ -526,7 +530,7 @@ script property centering.energy</string>
       <item row="11" column="3">
        <widget class="QDoubleSpinBox" name="m_AttenuationLength">
         <property name="toolTip">
-         <string/>
+         <string>Attenuation Length (mm)</string>
         </property>
         <property name="keyboardTracking">
          <bool>false</bool>
@@ -555,7 +559,9 @@ script property centering.energy</string>
       <item row="10" column="0" colspan="2">
        <widget class="QCheckBox" name="m_EnablePolarization">
         <property name="toolTip">
-         <string/>
+         <string>Enable polarization correction during integration:
+intensity *= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
+                   (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth/2),2)));</string>
         </property>
         <property name="text">
          <string>Enable Polarization Corrections </string>
@@ -565,7 +571,9 @@ script property centering.energy</string>
       <item row="11" column="0" colspan="2">
        <widget class="QCheckBox" name="m_EnableAbsorption">
         <property name="toolTip">
-         <string/>
+         <string>Enable absorption correction during integration
+intensity *= 
+  exp((distance-m_DetectorDistance)/m_AttenuationLength);</string>
         </property>
         <property name="text">
          <string>Enable Absorption Corrections </string>
