@@ -96,27 +96,27 @@ include("../qwt-5.2.pri")
 #include("../qceplib.pri")
 include("qxrd.levmar.pri")
 
-INCLUDEPATH += qceplib
+INCLUDEPATH += submodules/qceplib
 
 # include("qxrd-cuda.pri")
-HEADERS += qceplib/spec_server.h \
-    qceplib/qspecserver.h \
-    qceplib/qcepmacros.h \
-    qceplib/qcepproperty.h \
-    qceplib/qcepproperty-ptr.h \
-    qceplib/qcepsettingssaver.h \
-    qceplib/qcepsettingssaver-ptr.h \
-    qceplib/qcepmutexlocker.h \
-    qceplib/qcepimagedata.h \
-    qceplib/qcepimagedata-ptr.h \
-    qceplib/qcepimagedataformat.h \
-    qceplib/qcepimagedataformat-ptr.h \
-    qceplib/qcepimagedataformattiff.h \
-    qceplib/qcepimagedataformatmar345.h \
-    qceplib/qcepimagedataformatfactory.h \
-    qceplib/qcepimagedataformatfactory-ptr.h \
-    qceplib/qcepdocumentationdictionary.h \
-    qceplib/qcepdebug.h \
+HEADERS += submodules/qceplib/spec_server.h \
+    submodules/qceplib/qspecserver.h \
+    submodules/qceplib/qcepmacros.h \
+    submodules/qceplib/qcepproperty.h \
+    submodules/qceplib/qcepproperty-ptr.h \
+    submodules/qceplib/qcepsettingssaver.h \
+    submodules/qceplib/qcepsettingssaver-ptr.h \
+    submodules/qceplib/qcepmutexlocker.h \
+    submodules/qceplib/qcepimagedata.h \
+    submodules/qceplib/qcepimagedata-ptr.h \
+    submodules/qceplib/qcepimagedataformat.h \
+    submodules/qceplib/qcepimagedataformat-ptr.h \
+    submodules/qceplib/qcepimagedataformattiff.h \
+    submodules/qceplib/qcepimagedataformatmar345.h \
+    submodules/qceplib/qcepimagedataformatfactory.h \
+    submodules/qceplib/qcepimagedataformatfactory-ptr.h \
+    submodules/qceplib/qcepdocumentationdictionary.h \
+    submodules/qceplib/qcepdebug.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
     qxrddetector.h \
@@ -131,17 +131,17 @@ HEADERS += qceplib/spec_server.h \
     qxrdhelpbrowser.h \
     qxrdobjectnamer.h
 
-SOURCES += qceplib/qspecserver.cpp \
-    qceplib/qcepproperty.cpp \
-    qceplib/qcepsettingssaver.cpp \
-    qceplib/qcepmutexlocker.cpp \
-    qceplib/qcepimagedata.cpp \
-    qceplib/qcepimagedataformat.cpp \
-    qceplib/qcepimagedataformattiff.cpp \
-    qceplib/qcepimagedataformatmar345.cpp \
-    qceplib/qcepimagedataformatfactory.cpp \
-    qceplib/qcepdocumentationdictionary.cpp \
-    qceplib/qcepdebug.cpp \
+SOURCES += submodules/qceplib/qspecserver.cpp \
+    submodules/qceplib/qcepproperty.cpp \
+    submodules/qceplib/qcepsettingssaver.cpp \
+    submodules/qceplib/qcepmutexlocker.cpp \
+    submodules/qceplib/qcepimagedata.cpp \
+    submodules/qceplib/qcepimagedataformat.cpp \
+    submodules/qceplib/qcepimagedataformattiff.cpp \
+    submodules/qceplib/qcepimagedataformatmar345.cpp \
+    submodules/qceplib/qcepimagedataformatfactory.cpp \
+    submodules/qceplib/qcepdocumentationdictionary.cpp \
+    submodules/qceplib/qcepdebug.cpp \
     qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
     qxrddetector.cpp \
