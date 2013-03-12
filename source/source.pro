@@ -129,7 +129,8 @@ HEADERS += submodules/qceplib/spec_server.h \
     qxrdacquisitiondialog-ptr.h \
     qxrdacquisitionextrainputsdialogsettings.h \
     qxrdhelpbrowser.h \
-    qxrdobjectnamer.h
+    qxrdobjectnamer.h \
+    qxrduserscriptdialog.h
 
 SOURCES += submodules/qceplib/qspecserver.cpp \
     submodules/qceplib/qcepproperty.cpp \
@@ -151,7 +152,8 @@ SOURCES += submodules/qceplib/qspecserver.cpp \
     qxrddetectorfilewatcher.cpp \
     qxrdacquisitionextrainputsdialogsettings.cpp \
     qxrdhelpbrowser.cpp \
-    qxrdobjectnamer.cpp
+    qxrdobjectnamer.cpp \
+    qxrduserscriptdialog.cpp
 
 OTHER_FILES += testImage.js
 
@@ -496,7 +498,8 @@ FORMS = qxrdwindow.ui \
     qxrdglobalpreferencesdialog.ui \
     qxrdwelcomerecentitem.ui \
     qxrdacquisitiondialog.ui \
-    qxrdacquisitionextrainputsdialog.ui
+    qxrdacquisitionextrainputsdialog.ui \
+    qxrduserscriptdialog.ui
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 

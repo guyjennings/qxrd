@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>501</width>
-    <height>441</height>
+    <width>572</width>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -272,6 +272,37 @@ center in the right direction</string>
       <property name="spacing">
        <number>2</number>
       </property>
+      <item row="16" column="0">
+       <widget class="QLabel" name="label_26">
+        <property name="text">
+         <string>User Absorption Func</string>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="2">
+       <widget class="QLabel" name="label_27">
+        <property name="text">
+         <string>User Geometry Script</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="3">
+       <widget class="QPushButton" name="m_UserGeometryEdit">
+        <property name="text">
+         <string>Edit...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_20">
+        <property name="text">
+         <string>X Pixel Size:</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_14">
         <property name="text">
@@ -338,13 +369,6 @@ script property centering.centerStep</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_20">
-        <property name="text">
-         <string>X Pixel Size:</string>
-        </property>
-       </widget>
-      </item>
       <item row="5" column="1">
        <widget class="QDoubleSpinBox" name="m_DetectorXPixelSize">
         <property name="toolTip">
@@ -387,6 +411,13 @@ script property centering.detectorYPixelSize</string>
         </property>
        </widget>
       </item>
+      <item row="5" column="2">
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>Tilt Angle</string>
+        </property>
+       </widget>
+      </item>
       <item row="8" column="1">
        <widget class="QDoubleSpinBox" name="m_DetectorDistance">
         <property name="toolTip">
@@ -409,13 +440,6 @@ script property centering.implementTilt</string>
         </property>
         <property name="text">
          <string>Implement Tilt</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QLabel" name="label_18">
-        <property name="text">
-         <string>Tilt Angle</string>
         </property>
        </widget>
       </item>
@@ -498,36 +522,7 @@ intensity *= pow(distance/m_DetectorDistance, 2)/cos(tth);</string>
         </property>
        </widget>
       </item>
-      <item row="10" column="2">
-       <widget class="QLabel" name="label_24">
-        <property name="text">
-         <string>Polarization Factor</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="3">
-       <widget class="QDoubleSpinBox" name="m_Polarization">
-        <property name="toolTip">
-         <string>Polarization factor : [0..1]</string>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="prefix">
-         <string/>
-        </property>
-        <property name="decimals">
-         <number>6</number>
-        </property>
-        <property name="maximum">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.010000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="3">
+      <item row="14" column="3">
        <widget class="QDoubleSpinBox" name="m_AttenuationLength">
         <property name="toolTip">
          <string>Attenuation Length (mm)</string>
@@ -549,26 +544,14 @@ intensity *= pow(distance/m_DetectorDistance, 2)/cos(tth);</string>
         </property>
        </widget>
       </item>
-      <item row="11" column="2">
+      <item row="14" column="2">
        <widget class="QLabel" name="label_23">
         <property name="text">
          <string>Attenuation Length</string>
         </property>
        </widget>
       </item>
-      <item row="10" column="0" colspan="2">
-       <widget class="QCheckBox" name="m_EnablePolarization">
-        <property name="toolTip">
-         <string>Enable polarization correction during integration:
-intensity *= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
-                   (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth/2),2)));</string>
-        </property>
-        <property name="text">
-         <string>Enable Polarization Corrections </string>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="0" colspan="2">
+      <item row="14" column="0" colspan="2">
        <widget class="QCheckBox" name="m_EnableAbsorption">
         <property name="toolTip">
          <string>Enable absorption correction during integration
@@ -577,6 +560,131 @@ intensity *=
         </property>
         <property name="text">
          <string>Enable Absorption Corrections </string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="1" colspan="3">
+       <widget class="QComboBox" name="m_EnableUserGeometry">
+        <item>
+         <property name="text">
+          <string>None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>User Defined Geometry</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="16" column="3">
+       <widget class="QPushButton" name="m_UserAbsorptionEdit">
+        <property name="text">
+         <string>Edit...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="0">
+       <widget class="QLabel" name="label_29">
+        <property name="text">
+         <string>User Absorption Kind</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="1">
+       <widget class="QLineEdit" name="m_UserGeometryFunction"/>
+      </item>
+      <item row="16" column="2">
+       <widget class="QLabel" name="label_28">
+        <property name="text">
+         <string>User Absorption Script</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="QLabel" name="label_30">
+        <property name="text">
+         <string>User Geometry Kind</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0">
+       <widget class="QLabel" name="label_25">
+        <property name="text">
+         <string>User Geometry Func</string>
+        </property>
+       </widget>
+      </item>
+      <item row="16" column="1">
+       <widget class="QLineEdit" name="m_UserAbsorptionFunction"/>
+      </item>
+      <item row="15" column="1" colspan="3">
+       <widget class="QComboBox" name="m_EnableUserAbsorption">
+        <item>
+         <property name="text">
+          <string>None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A function of pixel coordinates</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A function of x,y displacement from beam center</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A function of r,chi</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>A function of q,chi</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="13" column="2">
+       <widget class="QLabel" name="label_24">
+        <property name="text">
+         <string>Polarization Factor</string>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="3">
+       <widget class="QDoubleSpinBox" name="m_Polarization">
+        <property name="toolTip">
+         <string>Polarization factor : [0..1]</string>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>6</number>
+        </property>
+        <property name="maximum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="13" column="0" colspan="2">
+       <widget class="QCheckBox" name="m_EnablePolarization">
+        <property name="toolTip">
+         <string>Enable polarization correction during integration:
+intensity *= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
+                   (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth/2),2)));</string>
+        </property>
+        <property name="text">
+         <string>Enable Polarization Corrections </string>
         </property>
        </widget>
       </item>
