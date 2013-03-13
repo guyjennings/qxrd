@@ -12,6 +12,12 @@
       This might be used to implement a custom
       sample absorption correction, for example.  The functions are
       written in the ECMAscript language used by the qxrd scripting system.
+      The ECMAscript interpreter is significantly slower than compiled C++
+      code so be prepared for integration to take around 10 seconds for
+      a non oversampled integration and correspondingly longer if
+      oversampling is used.   The caching mechanism used in the regular
+      integration system is still used, so integrations after the first
+      will be much faster.
     </p>
     <p>
       Two different user supplied functions are supported - a 'geometry'
