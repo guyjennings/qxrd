@@ -23,6 +23,9 @@ public:
   virtual ~QxrdScriptEngine();
   void initialize();
 
+  void lock();
+  void unlock();
+
 public slots:
   void evaluateAppCommand(QString cmd);
   void evaluateSimpleServerCommand(QString cmd);
@@ -61,7 +64,7 @@ public slots:
 //  QScriptValue newQxrdFunction(FunctionSignature fun, QString objectName);
 
 private slots:
-  void              evaluate(int src, QString cmd);
+  void              evaluateScript(int src, QString cmd);
 
 private:
   static QScriptValue printFunc(QScriptContext *context, QScriptEngine *engine, void *u);

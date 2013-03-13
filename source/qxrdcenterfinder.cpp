@@ -56,6 +56,14 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
   connect(prop_Polarization(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
   connect(prop_EnableAbsorptionCorrections(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
   connect(prop_AttenuationLength(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
+
+  connect(prop_EnableUserGeometry(), SIGNAL(valueChanged(int,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_UserGeometryScript(), SIGNAL(valueChanged(QString,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_UserGeometryFunction(), SIGNAL(valueChanged(QString,int)), this, SIGNAL(parameterChanged()));
+
+  connect(prop_EnableUserAbsorption(), SIGNAL(valueChanged(int,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_UserAbsorptionScript(), SIGNAL(valueChanged(QString,int)), this, SIGNAL(parameterChanged()));
+  connect(prop_UserAbsorptionFunction(), SIGNAL(valueChanged(QString,int)), this, SIGNAL(parameterChanged()));
 }
 
 void QxrdCenterFinder::writeSettings(QSettings *settings, QString section)

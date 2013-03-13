@@ -101,6 +101,15 @@ public:
   Q_PROPERTY(QString userAbsorptionFunction READ get_UserAbsorptionFunction WRITE set_UserAbsorptionFunction)
   QCEP_STRING_PROPERTY(UserAbsorptionFunction)
 
+public:
+  enum {
+    UserAbsorptionNone = 0,
+    UserAbsorptionPixelCoords = 1,
+    UserAbsorptionFromCenter = 2,
+    UserAbsorptionRChi = 3,
+    UserAbsorptionQChi = 4
+  }  UserAbsorptionKinds;
+
 //public slots:
 //  void onCenterXChanged(double cx);
 //  void onCenterYChanged(double cy);

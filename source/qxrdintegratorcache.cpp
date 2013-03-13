@@ -51,8 +51,6 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_RStep(0),
   m_RMin(0),
   m_RMax(0),
-  m_NMin(0),
-  m_NMax(0),
   m_NRange(0),
   m_Beta(0),
   m_CosBeta(1),
@@ -60,6 +58,8 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_Rot(0),
   m_CosRot(0),
   m_SinRot(0),
+  m_EnableUserGeometry(0),
+  m_EnableUserAbsorption(0),
   m_CacheFillLevel(-1),
   m_CacheFullLevel(-1),
   m_Experiment(exp),
@@ -95,6 +95,14 @@ QxrdIntegratorCache::QxrdIntegratorCache(
     m_Polarization       = m_CenterFinder->get_Polarization();
     m_EnableAbsorption   = m_CenterFinder->get_EnableAbsorptionCorrections();
     m_AttenuationLength  = m_CenterFinder->get_AttenuationLength();
+
+    m_EnableUserGeometry     = m_CenterFinder->get_EnableUserGeometry();
+    m_UserGeometryScript     = m_CenterFinder->get_UserGeometryScript();
+    m_UserGeometryFunction   = m_CenterFinder->get_UserGeometryFunction();
+
+    m_EnableUserAbsorption   = m_CenterFinder->get_EnableUserAbsorption();
+    m_UserAbsorptionScript   = m_CenterFinder->get_UserAbsorptionScript();
+    m_UserAbsorptionFunction = m_CenterFinder->get_UserAbsorptionFunction();
   }
 }
 
@@ -196,18 +204,22 @@ double QxrdIntegratorCache::XValue(double x, double y)
 {
   double xVal = 0;
 
-  switch(m_IntegrationXUnits) {
-  case QxrdIntegrator::IntegrateTTH:
-    xVal = getTTH(x,y);
-    break;
+  if (m_EnableUserGeometry == 0) {
+    switch(m_IntegrationXUnits) {
+    case QxrdIntegrator::IntegrateTTH:
+      xVal = getTTH(x,y);
+      break;
 
-  case QxrdIntegrator::IntegrateQ:
-    xVal = getQ(x,y);
-    break;
+    case QxrdIntegrator::IntegrateQ:
+      xVal = getQ(x,y);
+      break;
 
-  case QxrdIntegrator::IntegrateR:
-    xVal = getR(x,y);
-    break;
+    case QxrdIntegrator::IntegrateR:
+      xVal = getR(x,y);
+      break;
+    }
+  } else {
+    xVal = m_UserGeometryFunctionValue.call(QScriptValue(), QScriptValueList() << x << y).toNumber();
   }
 
   return xVal;
@@ -217,7 +229,7 @@ double QxrdIntegratorCache::NormValue(double x, double y)
 {
   double res = 1;
 
-  if (m_EnableGeometry || m_EnablePolarization || m_EnableAbsorption) {
+  if (m_EnableGeometry || m_EnablePolarization || m_EnableAbsorption || m_EnableUserAbsorption) {
     double distance = getDistance(x, y);
     double tth      = getTTH(x,y)*M_PI/180.0;
     double chi      = getChi(x,y)*M_PI/180.0;
@@ -233,6 +245,27 @@ double QxrdIntegratorCache::NormValue(double x, double y)
     if (m_EnablePolarization) {
       res *= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
               (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth/2),2)));
+    }
+
+    switch (m_EnableUserAbsorption) {
+    case QxrdCenterFinder::UserAbsorptionPixelCoords:
+      res *= m_UserAbsorptionFunctionValue.call(QScriptValue(), QScriptValueList() << x << y).toNumber();
+      break;
+
+    case QxrdCenterFinder::UserAbsorptionFromCenter:
+      res *= m_UserAbsorptionFunctionValue.call(QScriptValue(), QScriptValueList() << x - m_CenterX << y - m_CenterY).toNumber();
+      break;
+
+    case QxrdCenterFinder::UserAbsorptionRChi:
+      res *= m_UserAbsorptionFunctionValue.call(QScriptValue(), QScriptValueList() << getR(x,y) << chi).toNumber();
+      break;
+
+    case QxrdCenterFinder::UserAbsorptionQChi:
+      res *= m_UserAbsorptionFunctionValue.call(QScriptValue(), QScriptValueList() << getQ(x,y) << chi).toNumber();
+      break;
+
+    default:
+      break;
     }
   }
 
@@ -324,78 +357,33 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
         int nCols = m_NCols;
         int nPix  = nRows*nCols*m_Oversample*m_Oversample;
 
-        double r00  = XValue(0,0);
-        double r10  = XValue(nRows+1,0);
-        double r01  = XValue(0,nCols+1);
-        double r11  = XValue(nRows+1,nCols+1);
-
-        double rMin = r00;
-        double rMax = r00;
-
-        rMin = qMin(rMin, r10);
-        rMin = qMin(rMin, r01);
-        rMin = qMin(rMin, r11);
-
-        rMax = qMax(rMax, r10);
-        rMax = qMax(rMax, r01);
-        rMax = qMax(rMax, r11);
-
-        if (cx >= 0 && cx <= nCols && cy >= 0 && cy <= nRows) {
-          rMin = qMin(rMin,0.0);
-        }
-
-        rMin = qMax(rMin, m_IntegrationMinimum);
-        rMax = qMin(rMax, m_IntegrationMaximum);
-
-        double rStep = m_IntegrationStep;
-
-        if (rStep == 0) {
-          int nStep = m_IntegrationNSteps;
-
-          if (nStep <= 0) {
-            nStep = 512;
-          }
-
-          rStep = (rMax - rMin)/nStep;
-        }
-
-        double nMin  = floor(rMin/rStep);
-        double nMax  = ceil(rMax/rStep);
-        int nRange = (nMax - nMin);
-
-        m_RStep = rStep;
-        m_NRange = nRange;
-        m_RMin = rMin;
-        m_RMax = rMax;
-
         m_CachedBinNumbers =  QxrdAllocator::newInt32Image(m_Allocator,
                                                            QxrdAllocator::AlwaysAllocate,
                                                            m_NCols*m_Oversample,
                                                            m_NRows*m_Oversample);
 
-        if (m_EnableGeometry || m_EnablePolarization || m_EnableAbsorption) {
-          m_CachedNormalization = QxrdAllocator::newDoubleImage(m_Allocator,
-                                                                QxrdAllocator::AlwaysAllocate,
-                                                                m_NCols*m_Oversample,
-                                                                m_NRows*m_Oversample);
-        } else {
-          m_CachedNormalization = QxrdDoubleImageDataPtr();
-        }
+        m_CachedNormalization = QxrdAllocator::newDoubleImage(m_Allocator,
+                                                              QxrdAllocator::AlwaysAllocate,
+                                                              m_NCols*m_Oversample,
+                                                              m_NRows*m_Oversample);
 
-        if (m_CachedBinNumbers) {
+        if (m_CachedBinNumbers && m_CachedNormalization) {
           m_CachedBinNumbers -> clear();
+          m_CachedNormalization -> clear();
 
           m_CacheFullLevel.fetchAndStoreOrdered(nPix);
 
           qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
+          double *cachen = m_CachedNormalization->data();
 
-          double *cachen = (m_CachedNormalization ? m_CachedNormalization->data() : NULL);
+          if (m_EnableUserGeometry || m_EnableUserAbsorption) {
+            grabScriptEngine();
+          }
 
-//          expt->commenceWork(nRows);
+          double rMin, rMax;
+          bool first = true;
 
           for (int y = 0; y < nRows; y++) {
-//            expt->completeWork(1);
-
             for (int x = 0; x < nCols; x++) {
               for (int oversampley = 0; oversampley < noversample; oversampley++) {
                 double yy = y+oversampley*oversampleStep+halfOversampleStep;
@@ -403,19 +391,75 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
                   double xx = x+oversamplex*oversampleStep+halfOversampleStep;
 
                   double r = XValue(xx, yy);
-                  double n = floor(r / rStep);
+
+                  if (r == r) {
+                    if (first) {
+                      rMin = r;
+                      rMax = r;
+                      first = false;
+                    } else if (r > rMax) {
+                      rMax = r;
+                    } else if (r < rMin) {
+                      rMin = r;
+                    }
+                  }
+
+                  *cachen++ = r; // Use the intensity cache to buffer r values
+                }
+              }
+            }
+          }
+
+          rMin = qMax(rMin, m_IntegrationMinimum);
+          rMax = qMin(rMax, m_IntegrationMaximum);
+
+          double rStep = m_IntegrationStep;
+
+          if (rStep == 0) {
+            int nStep = m_IntegrationNSteps;
+
+            if (nStep <= 0) {
+              nStep = 512;
+            }
+
+            rStep = (rMax - rMin)/nStep;
+          }
+
+          double nMin  = floor(rMin/rStep);
+          double nMax  = ceil(rMax/rStep);
+          int nRange = (nMax - nMin);
+
+          m_RStep = rStep;
+          m_NRange = nRange;
+          m_RMin = rMin;
+          m_RMax = rMax;
+
+          cachep = (qint32*) m_CachedBinNumbers->data();
+          cachen = m_CachedNormalization->data();
+
+          for (int y = 0; y < nRows; y++) {
+            for (int x = 0; x < nCols; x++) {
+              for (int oversampley = 0; oversampley < noversample; oversampley++) {
+                double yy = y+oversampley*oversampleStep+halfOversampleStep;
+                for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
+                  double xx = x+oversamplex*oversampleStep+halfOversampleStep;
+
+                  double r = *cachen;
+                  double n = -1;
+
+                  if (r == r) {
+                    n = floor(r / rStep);
+                  }
 
                   if (n >= nMin && n < nMax) {
                     int bin = n - nMin;
 
                     *cachep++ = bin;
-                    if (cachen) {
-                      *cachen++ = NormValue(xx,yy);
-                    }
+                    *cachen++ = NormValue(xx,yy);
                   } else {
                     *cachep++ = -1;
                     if (cachen) {
-                      *cachen++ = 1;
+                      *cachen++ = 0;
                     }
                   }
 
@@ -423,6 +467,10 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
                 }
               }
             }
+          }
+
+          if (m_EnableUserGeometry || m_EnableUserAbsorption) {
+            releaseScriptEngine();
           }
 
 //          expt->finishedWork(nRows);
@@ -457,7 +505,7 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
         QVector<double> integral(nRange), sumvalue(nRange);
         qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
-        double *cachen = (m_CachedNormalization ? m_CachedNormalization->data() : NULL);
+        double *cachen = m_CachedNormalization->data();
 
         int noversample = m_Oversample;
 
@@ -528,4 +576,76 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
   }
 
   return integ;
+}
+
+void QxrdIntegratorCache::grabScriptEngine()
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    m_ScriptEngine = exp->scriptEngine();
+
+    if (m_ScriptEngine) {
+      m_ScriptEngine->lock();
+
+      m_UserGeometryFunctionValue = QScriptValue();
+      m_UserAbsorptionFunctionValue = QScriptValue();
+
+      if (m_EnableUserGeometry) {
+        m_ScriptEngine->evaluate(m_UserGeometryScript);
+
+        m_UserGeometryFunctionValue = m_ScriptEngine->evaluate(m_UserGeometryFunction);
+
+        if (!m_UserGeometryFunctionValue.isFunction()) {
+          m_UserGeometryFunctionValue = m_ScriptEngine->globalObject().property(m_UserGeometryFunctionValue.toString());
+        }
+
+        if (m_UserGeometryFunctionValue.isFunction()) {
+          exp->printMessage(tr("Using User Geometry Function %1").arg(m_UserGeometryFunctionValue.toString()));
+        } else {
+          exp->printMessage(tr("User Geometry Function %1 is not a function").arg(m_UserGeometryFunctionValue.toString()));
+        }
+      }
+
+      if (m_EnableUserAbsorption) {
+        m_ScriptEngine->evaluate(m_UserAbsorptionScript);
+
+        m_UserAbsorptionFunctionValue = m_ScriptEngine->evaluate(m_UserAbsorptionFunction);
+
+        if (!m_UserAbsorptionFunctionValue.isFunction()) {
+          m_UserAbsorptionFunctionValue = m_ScriptEngine->globalObject().property(m_UserAbsorptionFunctionValue.toString());
+        }
+
+        if (m_UserAbsorptionFunctionValue.isFunction()) {
+          exp->printMessage(tr("Using User Absorption Function %1").arg(m_UserAbsorptionFunctionValue.toString()));
+        } else {
+          exp->printMessage(tr("User Absorption Function %1 is not a function").arg(m_UserAbsorptionFunctionValue.toString()));
+        }
+      }
+    }
+  }
+}
+
+void QxrdIntegratorCache::releaseScriptEngine()
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  m_UserGeometryFunctionValue = QScriptValue();
+  m_UserAbsorptionFunctionValue = QScriptValue();
+
+  if (exp) {
+    m_ScriptEngine = exp->scriptEngine();
+
+    if (m_ScriptEngine) {
+      m_ScriptEngine->unlock();
+
+      if (m_EnableUserGeometry) {
+        exp->printMessage(tr("User Geometry Function Completed"));
+      }
+
+      if (m_EnableUserAbsorption) {
+        exp->printMessage(tr("User Absorption Function Completed"));
+      }
+    }
+  }
 }

@@ -96,13 +96,23 @@ void QxrdScriptEngine::setWindow(QxrdWindowWPtr win)
   }
 }
 
+void QxrdScriptEngine::lock()
+{
+  m_Mutex.lock();
+}
+
+void QxrdScriptEngine::unlock()
+{
+  m_Mutex.unlock();
+}
+
 void QxrdScriptEngine::evaluateAppCommand(QString expr)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   //  printf("QxrdScriptingEngine::evaluateAppCommand(%s)\n", qPrintable(expr));
 
-  INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluate", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(QString, expr)));
+  INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluateScript", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(QString, expr)));
 }
 
 void QxrdScriptEngine::evaluateSimpleServerCommand(QString expr)
@@ -111,7 +121,7 @@ void QxrdScriptEngine::evaluateSimpleServerCommand(QString expr)
 
   //  printf("QxrdScriptingEngine::evaluateServerCommand(%s)\n", qPrintable(expr));
 
-  INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluate", Qt::QueuedConnection, Q_ARG(int, 1), Q_ARG(QString, expr)));
+  INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluateScript", Qt::QueuedConnection, Q_ARG(int, 1), Q_ARG(QString, expr)));
 }
 
 void QxrdScriptEngine::evaluateSpecCommand(QString expr)
@@ -120,7 +130,7 @@ void QxrdScriptEngine::evaluateSpecCommand(QString expr)
 
   //  printf("QxrdScriptingEngine::evaluateSpecCommand(%s)\n", qPrintable(expr));
 
-  INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluate", Qt::QueuedConnection, Q_ARG(int, 2), Q_ARG(QString, expr)));
+  INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluateScript", Qt::QueuedConnection, Q_ARG(int, 2), Q_ARG(QString, expr)));
 }
 
 void QxrdScriptEngine::loadScript(QString path)
@@ -139,11 +149,11 @@ void QxrdScriptEngine::loadScript(QString path)
   }
 }
 
-void QxrdScriptEngine::evaluate(int src, QString expr)
+void QxrdScriptEngine::evaluateScript(int src, QString expr)
 {
   THREAD_CHECK;
 
-  //  printf("QxrdScriptingEngine::evaluate(%s)\n", qPrintable(expr));
+  //  printf("QxrdScriptingEngine::evaluateScript(%s)\n", qPrintable(expr));
 
   QScriptValue result = QScriptEngine::evaluate(expr);
 

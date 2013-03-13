@@ -13,6 +13,8 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdintegrator-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
+#include "qxrdscriptengine-ptr.h"
+#include <QScriptValue>
 
 class QxrdIntegratorCache : public QObject
 {
@@ -26,6 +28,9 @@ public:
 
   int get_NRows() const;
   int get_NCols() const;
+
+  void grabScriptEngine();
+  void releaseScriptEngine();
 
 private:
   int    m_Oversample;
@@ -54,8 +59,6 @@ private:
   double m_RStep;
   double m_RMin;
   double m_RMax;
-  double m_NMin;
-  double m_NMax;
   int    m_NRange;
   double m_Beta;
   double m_CosBeta;
@@ -63,6 +66,12 @@ private:
   double m_Rot;
   double m_CosRot;
   double m_SinRot;
+  int    m_EnableUserGeometry;
+  QString m_UserGeometryScript;
+  QString m_UserGeometryFunction;
+  int    m_EnableUserAbsorption;
+  QString m_UserAbsorptionScript;
+  QString m_UserAbsorptionFunction;
 
 public:
     QxrdIntegratedDataPtr performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int normalize);
@@ -86,6 +95,9 @@ private:
   QxrdAllocatorWPtr      m_Allocator;
   QxrdIntegratorPtr      m_Integrator;
   QxrdCenterFinderPtr    m_CenterFinder;
+  QxrdScriptEnginePtr    m_ScriptEngine;
+  QScriptValue           m_UserGeometryFunctionValue;
+  QScriptValue           m_UserAbsorptionFunctionValue;
 };
 
 #endif // QXRDINTEGRATORCACHE_H

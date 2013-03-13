@@ -9,7 +9,7 @@
 
   The function should return a radial distance value which represents
   the bin number that the pixel should map into,  If you want a pixel to
-  be ignored you can return a negative value.
+  be ignored you can return a NaN value.
   */
 
 function userGeometry(i, j) {

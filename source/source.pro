@@ -80,7 +80,8 @@ OTHER_FILES += help/qxrdhelptext.html \
     testscript.js \
     unsubtractDark.js \
     qxrdexampleusergeometry.js \
-    qxrdexampleuserabsorption.js
+    qxrdexampleuserabsorption.js \
+    help/qxrdhelpuserfunctions.html
 DISTFILES += qxrd.dox \
     download/index.php \
     images/*.* \

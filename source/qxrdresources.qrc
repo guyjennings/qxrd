@@ -100,5 +100,7 @@
         <file>images/powder_point.png</file>
         <file>qxrdexampleuserabsorption.js</file>
         <file>qxrdexampleusergeometry.js</file>
+        <file>help/qxrdhelpuserfunctions.html</file>
+        <file>help/images/script-editor.png</file>
     </qresource>
 </RCC>

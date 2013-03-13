@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Using User-Supplied Functions for Integration Calibration</title>
+  </head>
+
+  <body>
+    <h1>User Supplied Functions for Integration Calibration</h1>
+    <p>
+      From QXRD 0.9.9 onwards a facility is provided for user-defined
+      functions to be specified in the circular integration routine.
+      This might be used to implement a custom
+      sample absorption correction, for example.  The functions are
+      written in the ECMAscript language used by the qxrd scripting system.
+    </p>
+    <p>
+      Two different user supplied functions are supported - a 'geometry'
+      function which supplies the mapping between detector
+      pixels and integration 'radius', and an 'absorption' function
+      which provides a custom intensity normalization function.  A custom
+      geometry function replaces the normal qxrd radius calculation routine,
+      while a custom absorption function applies an additional multiplicative
+      absorption after the standard absorption corrections have been applied.
+    </p>
+    <p>
+    <table border=0 cellpadding=5 width="100%">
+        <tr>
+          <td>
+            <img src="images/centering-dialog.png">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              The 'Centering' Dialog
+            </p>
+          </td>
+        </tr>
+    </table>
+    </p>
+    <p>
+      The User Supplied functions are configured through the 'Centering' panel.
+      The 'User Geometry Kind' and 'User Absorption Kind' controls govern whether
+      user defined corrections are applied, and in what form.  Set these controls
+      to 'None' to disable the user defined corrections.
+    </p>
+    <p>
+      For both user defined function types there are two additional controls - a
+      text box where you should enter the name of the user defined function, and
+      an 'Edit...' button which opens a script editor window where you can define
+      the user defined function.
+    </p>
+    <table border=0 cellpadding=5 width="100%">
+        <tr>
+          <td>
+            <img src="images/script-editor.png">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              The Script Editor Window
+            </p>
+          </td>
+        </tr>
+    </table>
+    <p>
+      QXRD provides a default script for each function type showing some examples
+      of the kinds of functions that might be used.
+    </p>
+    <p>
+    </p>
+  </body>
+</html>
