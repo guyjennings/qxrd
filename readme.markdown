@@ -1,6 +1,12 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.9 - Mar 13 2013
+Added support for user-defined calibration functions in integration
+
+Modified build system to use git submodules - need to do 'git submodule init'
+and 'git submodule update' when checking out source tree.
+
 ## v0.9.8 - Jan 23 2013
 Fixed problem with remote command execution
 
