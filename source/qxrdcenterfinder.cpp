@@ -35,7 +35,7 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_UserGeometryFunction(saver, this, "userGeometryFunction", "userGeometry", "Name of user defined geometry function"),
     m_EnableUserAbsorption(saver, this, "enableUserAbsorption", 0, "Apply user-defined geometry function in integration"),
     m_UserAbsorptionScript(saver, this, "userAbsorptionScript", defaultUserAbsorptionScript(), "Script to define user defined absorption functions"),
-    m_UserAbsorptionFunction(saver, this, "userAbsorptionFunction", "userAbsorption", "Name of user defined absorption function"),
+    m_UserAbsorptionFunction(saver, this, "userAbsorptionFunction", "userAbsorb1", "Name of user defined absorption function"),
     m_Experiment(expt)
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
