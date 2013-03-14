@@ -339,6 +339,8 @@ public:
   QxrdMaskDataPtr        mask() const;
   QxrdMaskDataPtr        overflow() const;
 
+  void createMaskIfNeeded();
+
   QxrdMaskStackPtr       maskStack();
 
   QxrdCenterFinderPtr    centerFinder() const;

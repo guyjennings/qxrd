@@ -1508,6 +1508,8 @@ double QxrdDataProcessorBase::estimatedProcessingTime(double estSerialTime, doub
 
 void QxrdDataProcessorBase::showMaskRange(/*double min, double max*/)
 {
+  createMaskIfNeeded();
+
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
 
@@ -1520,6 +1522,8 @@ void QxrdDataProcessorBase::showMaskRange(/*double min, double max*/)
 
 void QxrdDataProcessorBase::hideMaskAll()
 {
+  createMaskIfNeeded();
+
   if (mask()) {
     mask() -> hideMaskAll();
 
@@ -1529,6 +1533,8 @@ void QxrdDataProcessorBase::hideMaskAll()
 
 void QxrdDataProcessorBase::showMaskAll()
 {
+  createMaskIfNeeded();
+
   if (mask()) {
     mask() -> showMaskAll();
 
@@ -1538,6 +1544,8 @@ void QxrdDataProcessorBase::showMaskAll()
 
 void QxrdDataProcessorBase::hideMaskRange(/*double min, double max*/)
 {
+  createMaskIfNeeded();
+
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
 
@@ -1559,6 +1567,8 @@ void QxrdDataProcessorBase::invertMask()
 
 void QxrdDataProcessorBase::growMask()
 {
+  createMaskIfNeeded();
+
   if (mask()) {
     mask() -> growMask();
 
@@ -1568,6 +1578,8 @@ void QxrdDataProcessorBase::growMask()
 
 void QxrdDataProcessorBase::shrinkMask()
 {
+  createMaskIfNeeded();
+
   if (mask()) {
     mask() -> shrinkMask();
 
@@ -1577,6 +1589,8 @@ void QxrdDataProcessorBase::shrinkMask()
 
 void QxrdDataProcessorBase::maskCircle(QwtDoubleRect rect)
 { 
+  createMaskIfNeeded();
+
   if (mask()) {
     if ((rect.left() == rect.right()) && (rect.bottom() == rect.top())) {
       mask() -> maskCircle(rect.left(), rect.top(), get_MaskCircleRadius(), get_MaskSetPixels());
@@ -1594,6 +1608,8 @@ void QxrdDataProcessorBase::maskCircle(QwtDoubleRect rect)
 
 void QxrdDataProcessorBase::maskPolygon(QVector<QwtDoublePoint> poly)
 {
+  createMaskIfNeeded();
+
   if (mask()) {
     //  printf("QxrdDataProcessorBase::maskPolygon(%d points ...)\n", poly.size());
 
@@ -1709,6 +1725,13 @@ QxrdMaskDataPtr QxrdDataProcessorBase::mask() const
     return QxrdMaskDataPtr();
   } else {
     return m_Masks.first();
+  }
+}
+
+void QxrdDataProcessorBase::createMaskIfNeeded()
+{
+  if (m_Masks.isEmpty()) {
+    newMaskStack();
   }
 }
 
