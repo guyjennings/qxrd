@@ -85,6 +85,9 @@ public slots:
   void clearPowderMarkers();
   void displayPowderMarkers();
 
+  void enableContextMenu();
+  void disableContextMenu();
+
 public:
   QxrdImagePlotSettingsWPtr imagePlotSettings();
 
@@ -165,6 +168,8 @@ private:
 
 //  QPen                       m_Pen;
   bool                       m_FirstTime;
+
+  bool                       m_ContextMenuEnabled;
 };
 
 #endif

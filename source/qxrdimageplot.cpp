@@ -48,7 +48,8 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Circles(NULL),
     m_Polygons(NULL),
     m_PowderPointPicker(NULL),
-    m_FirstTime(true)
+    m_FirstTime(true),
+    m_ContextMenuEnabled(true)
 {
 }
 
@@ -739,6 +740,8 @@ void QxrdImagePlot::disablePickers()
   m_Polygons           -> setEnabled(false);
   m_PowderPointPicker  -> setEnabled(false);
 
+  enableContextMenu();
+
   displayPowderMarkers();
 }
 
@@ -877,57 +880,71 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
   return res;
 }
 
+void QxrdImagePlot::enableContextMenu()
+{
+  m_ContextMenuEnabled = true;
+}
+
+void QxrdImagePlot::disableContextMenu()
+{
+  m_ContextMenuEnabled = false;
+}
+
 void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 {
-  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+  if (m_ContextMenuEnabled) {
+    QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
-  if (set) {
-    QMenu plotMenu(NULL, NULL);
+    if (set) {
+      QMenu plotMenu(NULL, NULL);
 
-    QAction *auSc = plotMenu.addAction("Autoscale");
+      QAction *auSc = plotMenu.addAction("Autoscale");
 
-    plotMenu.addSeparator();
+      plotMenu.addSeparator();
 
-    QxrdDataProcessorPtr dp(m_DataProcessor);
+      QxrdDataProcessorPtr dp(m_DataProcessor);
 
-    if (dp) {
-      QxrdCenterFinderPtr cf(dp->centerFinder());
+      if (dp) {
+        QxrdCenterFinderPtr cf(dp->centerFinder());
 
-      if (cf) {
-        QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
-        QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);
+        if (cf) {
+          QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
+          QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);
 
-        double x = xMap.invTransform(event->x());
-        double y = yMap.invTransform(event->y());
+          double x = xMap.invTransform(event->x());
+          double y = yMap.invTransform(event->y());
 
-        QwtDoublePoint nearest = cf->nearestPowderPoint(x, y);
+          QwtDoublePoint nearest = cf->nearestPowderPoint(x, y);
 
-        QAction *fitCircle       = plotMenu.addAction("Fit Center from Points on Circle");
-        QAction *adjPoint        = plotMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
-        QAction *adjAllPoints    = plotMenu.addAction(tr("Auto adjust position of all points"));
-        QAction *delPoint        = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
-        QAction *deleteAllPoints = plotMenu.addAction("Delete all Points");
+          QAction *fitCircle       = plotMenu.addAction("Fit Center from Points on Circle");
+          QAction *adjPoint        = plotMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
+          QAction *adjAllPoints    = plotMenu.addAction(tr("Auto adjust position of all points"));
+          QAction *delPoint        = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
+          QAction *deleteAllPoints = plotMenu.addAction("Delete all Points");
 
-        QAction *action = plotMenu.exec(event->globalPos());
+          QAction *action = plotMenu.exec(event->globalPos());
 
-        if (action == auSc) {
-          autoScale();
-        } else if (action == fitCircle) {
-          cf->fitPowderCircle();
-        } else if (action == adjPoint) {
-          cf->adjustPointNear(x,y);
-        } else if (action == adjAllPoints) {
-          cf->adjustAllPoints();
-        } else if (action == delPoint) {
-          cf->deletePowderPointNear(x,y);
-        } else if (action == deleteAllPoints) {
-          cf->deletePowderPoints();
+          if (action == auSc) {
+            autoScale();
+          } else if (action == fitCircle) {
+            cf->fitPowderCircle();
+          } else if (action == adjPoint) {
+            cf->adjustPointNear(x,y);
+          } else if (action == adjAllPoints) {
+            cf->adjustAllPoints();
+          } else if (action == delPoint) {
+            cf->deletePowderPointNear(x,y);
+          } else if (action == deleteAllPoints) {
+            cf->deletePowderPoints();
+          }
         }
       }
     }
-  }
 
-  event->accept();
+    event->accept();
+  } else {
+    event->accept();
+  }
 }
 
 void QxrdImagePlot::onMarkedPointsChanged()

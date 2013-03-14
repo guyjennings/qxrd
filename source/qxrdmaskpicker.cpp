@@ -26,3 +26,21 @@ QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QwtPlotCanvas *canvas, QxrdImag
   setSelectionFlags(QwtPicker::PolygonSelection);
   setRubberBand(QwtPicker::PolygonRubberBand);
 }
+
+void QxrdPolygonalMaskPicker::append(const QPoint &pt)
+{
+  if (m_Plot) {
+    m_Plot->disableContextMenu();
+  }
+
+  QxrdMaskPicker::append(pt);
+}
+
+bool QxrdPolygonalMaskPicker::end(bool ok)
+{
+  if (m_Plot) {
+    m_Plot->enableContextMenu();
+  }
+
+  return QxrdMaskPicker::end(ok);
+}

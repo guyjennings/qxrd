@@ -8,7 +8,7 @@ class QxrdMaskPicker : public QxrdImagePlotMeasurer
 public:
   QxrdMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot);
 
-private:
+protected:
   QxrdImagePlot *m_Plot;
 };
 
@@ -22,6 +22,10 @@ class QxrdPolygonalMaskPicker : public QxrdMaskPicker
 {
 public:
   QxrdPolygonalMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot);
+
+protected:
+  void append(const QPoint &pt);
+  bool end(bool ok=true);
 };
 
 #endif // QXRDMASKPICKER_H
