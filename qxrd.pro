@@ -34,7 +34,8 @@ tarball.commands += \
         $(MKDIR) $${TARGET}-$${VERSION}/source/tiffconfig/win32 && \
         $(MKDIR) $${TARGET}-$${VERSION}/source/tiff-3.8.2 && \
         $(MKDIR) $${TARGET}-$${VERSION}/source/tiff-3.8.2/libtiff && \
-        $(MKDIR) $${TARGET}-$${VERSION}/source/qceplib && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/submodules && \
+        $(MKDIR) $${TARGET}-$${VERSION}/source/submodules/qceplib && \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins && \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdareadetectorplugin && \
         $(MKDIR) $${TARGET}-$${VERSION}/plugins/qxrdperkinelmerplugin && \
@@ -72,8 +73,8 @@ tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/tiff-3.8.2/libtiff/*.{c,h,def} \
                       -t $${TARGET}-$${VERSION}/source/tiff-3.8.2/libtiff &&
 tarball.commands += \
-        $(COPY_FILE)  $${PWD}/source/qceplib/*.{cpp,h} \
-                      -t $${TARGET}-$${VERSION}/source/qceplib &&
+        $(COPY_FILE)  $${PWD}/source/submodules/qceplib/*.{cpp,h} \
+                      -t $${TARGET}-$${VERSION}/source/submodules/qceplib &&
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/plugins.pro \
                       -t $${TARGET}-$${VERSION}/plugins &&
@@ -103,9 +104,12 @@ QMAKE_EXTRA_TARGETS += dox
 #dox.target = dox/html/index.html
 dox.commands = "("
 dox.commands += cat $${PWD}/Doxyfile ;
+dox.commands += echo "PROJECT_NAME=\"QXRD\"" ;
 dox.commands += echo "PROJECT_NUMBER=$${VERSION}" ;
 dox.commands += echo "INPUT=\"$${PWD}\"" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/source/" ;
+dox.commands += echo "INPUT+=\"$${PWD}\"/source/submodules/" ;
+dox.commands += echo "INPUT+=\"$${PWD}\"/source/submodules/qceplib/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdareadetectorplugin/" ;
 dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdperkinelmerplugin/" ;
