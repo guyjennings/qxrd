@@ -16,6 +16,8 @@ public:
 
 private:
   QxrdIntegratorWPtr m_Integrator;
+  QString            m_GeometryPath;
+  QString            m_IntensityPath;
 };
 
 #endif // QXRDINTEGRATORDIALOG_H

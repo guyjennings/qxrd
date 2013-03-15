@@ -384,6 +384,9 @@ void QxrdWindow::initialize()
   connect(m_ActionClearIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearGraph()));
   connect(m_ActionClearSelectedIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearSelectedCurves()));
 
+  connect(m_ActionSaveCachedGeometry, SIGNAL(triggered()), this, SLOT(doSaveCachedGeometry()));
+  connect(m_ActionSaveCachedIntensity, SIGNAL(triggered()), this, SLOT(doSaveCachedIntensity()));
+
   connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
 
   if (proc) {
@@ -1327,6 +1330,46 @@ void QxrdWindow::doClearGainMap()
                                 QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
         proc->clearGainMap();
       }
+    }
+  }
+}
+
+void QxrdWindow::doSaveCachedGeometry()
+{
+  GUI_THREAD_CHECK;
+
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    QxrdIntegratorPtr integ(proc->integrator());
+
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Cached Geometry in", m_CachedGeometryPath);
+
+    if (theFile.length()) {
+      m_CachedGeometryPath = theFile;
+
+      proc -> saveCachedGeometry(theFile);
+    }
+  }
+}
+
+void QxrdWindow::doSaveCachedIntensity()
+{
+  GUI_THREAD_CHECK;
+
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    QxrdIntegratorPtr integ(proc->integrator());
+
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save Cached Intensity in", m_CachedIntensityPath);
+
+    if (theFile.length()) {
+      m_CachedIntensityPath = theFile;
+
+      proc -> saveCachedIntensity(theFile);
     }
   }
 }

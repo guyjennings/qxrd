@@ -28,7 +28,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -1053,6 +1053,8 @@
     <addaction name="m_ActionClearSelectedIntegratedData"/>
     <addaction name="separator"/>
     <addaction name="m_ActionProcessData"/>
+    <addaction name="m_ActionSaveCachedGeometry"/>
+    <addaction name="m_ActionSaveCachedIntensity"/>
    </widget>
    <widget class="QMenu" name="m_ScriptMenu">
     <property name="title">
@@ -1710,6 +1712,16 @@
   <action name="m_ActionClearMarkers">
    <property name="text">
     <string>Clear Markers</string>
+   </property>
+  </action>
+  <action name="m_ActionSaveCachedGeometry">
+   <property name="text">
+    <string>Save Cached Geometry File...</string>
+   </property>
+  </action>
+  <action name="m_ActionSaveCachedIntensity">
+   <property name="text">
+    <string>Save Cached Intensity File...</string>
    </property>
   </action>
  </widget>

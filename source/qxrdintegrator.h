@@ -88,6 +88,9 @@ public slots:
 
   void onIntegrationParametersChanged();
 
+  QxrdInt32ImageDataPtr  cachedGeometry();
+  QxrdDoubleImageDataPtr cachedIntensity();
+
 private:
   mutable QMutex         m_Mutex;
   QxrdExperimentWPtr     m_Experiment;

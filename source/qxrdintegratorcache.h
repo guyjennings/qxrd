@@ -32,6 +32,9 @@ public:
   void grabScriptEngine();
   void releaseScriptEngine();
 
+  QxrdInt32ImageDataPtr  cachedGeometry();
+  QxrdDoubleImageDataPtr cachedIntensity();
+
 private:
   int    m_Oversample;
   double m_IntegrationStep;

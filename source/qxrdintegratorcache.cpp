@@ -649,3 +649,13 @@ void QxrdIntegratorCache::releaseScriptEngine()
     }
   }
 }
+
+QxrdInt32ImageDataPtr QxrdIntegratorCache::cachedGeometry()
+{
+  return m_CachedBinNumbers;
+}
+
+QxrdDoubleImageDataPtr QxrdIntegratorCache::cachedIntensity()
+{
+  return m_CachedNormalization;
+}

@@ -68,6 +68,8 @@ public slots:
   void doSaveGainMap();
   void doLoadGainMap();
   void doClearGainMap();
+  void doSaveCachedGeometry();
+  void doSaveCachedIntensity();
 //  void selectLogFile();
   void doRefineCenterTilt();
   void doAccumulateImages();
@@ -188,6 +190,9 @@ private:
   QString                                m_ScriptPath;
 
   QMenu                                 *m_RecentExperimentsMenu;
+
+  QString                                m_CachedGeometryPath;
+  QString                                m_CachedIntensityPath;
 };
 
 #endif

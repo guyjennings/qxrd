@@ -253,6 +253,8 @@ public slots:
   void saveBadPixels(QString name, int canOverwrite=NoOverwrite);
   void loadGainMap(QString name);
   void saveGainMap(QString name, int canOverwrite=NoOverwrite);
+  void saveCachedGeometry(QString name);
+  void saveCachedIntensity(QString name);
   void clearDark();
   void clearMask();
   void clearBadPixels();

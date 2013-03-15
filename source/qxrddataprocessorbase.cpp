@@ -629,6 +629,28 @@ void QxrdDataProcessorBase::saveGainMap(QString name, int canOverwrite)
   }
 }
 
+void QxrdDataProcessorBase::saveCachedGeometry(QString name)
+{
+  QString path = filePathInCurrentDirectory(name);
+
+  QxrdInt32ImageDataPtr data = m_Integrator->cachedGeometry();
+
+  if (data) {
+    saveNamedImageData(path, data, QxrdMaskDataPtr(), true);
+  }
+}
+
+void QxrdDataProcessorBase::saveCachedIntensity(QString name)
+{
+  QString path = filePathInCurrentDirectory(name);
+
+  QxrdDoubleImageDataPtr data = m_Integrator->cachedIntensity();
+
+  if (data) {
+    saveNamedImageData(path, data, QxrdMaskDataPtr(), true);
+  }
+}
+
 QxrdMaskStackPtr QxrdDataProcessorBase::maskStack()
 {
   return &m_Masks;

@@ -1169,9 +1169,11 @@ QScriptValue QxrdScriptEngine::mapUserFunctionFunc(QScriptContext *context, QScr
         if (func.isFunction()) {
           for (int i=0; i<wd; i++) {
             for (int j=0; j<ht; j++) {
-              func.call(QScriptValue(), QScriptValueList() << i << j);
+              d->setValue(i,j, func.call(QScriptValue(), QScriptValueList() << i << j).toNumber());
             }
           }
+
+          proc->newData(d, QxrdMaskDataPtr());
         }
       }
     }
@@ -1579,6 +1581,8 @@ QString QxrdScriptEngine::documentationText(QString item)
             break;
           case QMetaMethod::Slot:
             res.append("<i>Slot</i><br/>\n");
+            break;
+          default:
             break;
           }
 

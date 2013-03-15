@@ -286,3 +286,21 @@ void QxrdIntegrator::integrateVsTTH()
 {
   set_IntegrationXUnits(IntegrateTTH);
 }
+
+QxrdInt32ImageDataPtr QxrdIntegrator::cachedGeometry()
+{
+  if (m_IntegratorCache) {
+    return m_IntegratorCache->cachedGeometry();
+  } else {
+    return QxrdInt32ImageDataPtr();
+  }
+}
+
+QxrdDoubleImageDataPtr QxrdIntegrator::cachedIntensity()
+{
+  if (m_IntegratorCache) {
+    return m_IntegratorCache->cachedIntensity();
+  } else {
+    return QxrdDoubleImageDataPtr();
+  }
+}
