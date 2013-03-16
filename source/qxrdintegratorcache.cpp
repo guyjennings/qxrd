@@ -373,9 +373,6 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
           m_CacheFullLevel.fetchAndStoreOrdered(nPix);
 
-          qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
-          double *cachen = m_CachedNormalization->data();
-
           if (m_EnableUserGeometry || m_EnableUserAbsorption) {
             grabScriptEngine();
           }
@@ -387,8 +384,10 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
             for (int x = 0; x < nCols; x++) {
               for (int oversampley = 0; oversampley < noversample; oversampley++) {
                 double yy = y+oversampley*oversampleStep+halfOversampleStep;
+                int iy = y*noversample+oversampley;
                 for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
                   double xx = x+oversamplex*oversampleStep+halfOversampleStep;
+                  int ix = x*noversample+oversamplex;
 
                   double r = XValue(xx, yy);
 
@@ -404,7 +403,7 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
                     }
                   }
 
-                  *cachen++ = r; // Use the intensity cache to buffer r values
+                  m_CachedNormalization->setValue(ix, iy, r);
                 }
               }
             }
@@ -434,17 +433,16 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           m_RMin = rMin;
           m_RMax = rMax;
 
-          cachep = (qint32*) m_CachedBinNumbers->data();
-          cachen = m_CachedNormalization->data();
-
           for (int y = 0; y < nRows; y++) {
             for (int x = 0; x < nCols; x++) {
               for (int oversampley = 0; oversampley < noversample; oversampley++) {
                 double yy = y+oversampley*oversampleStep+halfOversampleStep;
+                int iy = y*noversample+oversampley;
                 for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
                   double xx = x+oversamplex*oversampleStep+halfOversampleStep;
+                  int ix = x*noversample+oversamplex;
 
-                  double r = *cachen;
+                  double r = m_CachedNormalization->value(ix, iy);
                   double n = -1;
 
                   if (r == r) {
@@ -454,26 +452,22 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
                   if (n >= nMin && n < nMax) {
                     int bin = n - nMin;
 
-                    *cachep++ = bin;
-                    *cachen++ = NormValue(xx,yy);
+                    m_CachedBinNumbers->setValue(ix, iy, bin);
+                    m_CachedNormalization->setValue(ix, iy, NormValue(xx, yy));
                   } else {
-                    *cachep++ = -1;
-                    if (cachen) {
-                      *cachen++ = 0;
-                    }
+                    m_CachedBinNumbers->setValue(ix, iy, -1);
+                    m_CachedNormalization->setValue(ix, iy, 0.0);
                   }
-
-                  m_CacheFillLevel.fetchAndAddOrdered(1);
                 }
               }
             }
           }
 
+          m_CacheFillLevel.fetchAndStoreOrdered(nPix);
+
           if (m_EnableUserGeometry || m_EnableUserAbsorption) {
             releaseScriptEngine();
           }
-
-//          expt->finishedWork(nRows);
         }
 
         if (qcepDebug(DEBUG_INTEGRATOR)) {
@@ -500,50 +494,31 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
         int nRows = m_NRows;
         int nCols = m_NCols;
         double rMin = m_RMin;
-//        double rMax = m_RMax;
         double rStep = m_RStep;
 
         QVector<double> integral(nRange), sumvalue(nRange);
-        qint32 *cachep = (qint32*) m_CachedBinNumbers->data();
-        double *cachen = m_CachedNormalization->data();
 
         int noversample = m_Oversample;
 
-        int nWork = nRows/100;
-        int nWorkDone = 0;
-
-//        expt->commenceWork(nWork);
-
         for (int y = 0; y < nRows; y++) {
-          if (y%100 == 0) {
-//            expt->completeWork(1);
-            nWorkDone++;
-          }
-
           for (int x = 0; x < nCols; x++) {
             if ((mask == NULL) || (mask->value(x, y))) {
               double val = dimg->value(x,y);
               for (int oversampley = 0; oversampley < noversample; oversampley++) {
                 for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
-                  int bin = *cachep++;
-                  double norm = (cachen ? *cachen++ : 1.0);
+                  int iy = y*noversample+oversampley;
+                  int ix = x*noversample+oversamplex;
+                  int bin = m_CachedBinNumbers->value(ix, iy);
+                  double norm = m_CachedNormalization->value(ix, iy);
                   if (bin >= 0) {
                     integral[bin] += val*norm;
                     sumvalue[bin] += 1;
                   }
                 }
               }
-            } else {
-              cachep += (noversample*noversample);
             }
           }
         }
-
-        if (nWorkDone != nWork) {
-//          expt->completeWork(nWork-nWorkDone);
-        }
-
-//        expt -> finishedWork(nWork);
 
         integ -> resize(0);
         integ -> set_Center(m_CenterX, m_CenterY);
