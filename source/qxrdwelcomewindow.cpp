@@ -10,7 +10,7 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   QMainWindow(NULL),
   ui(new Ui::QxrdWelcomeWindow),
   m_Application(app),
-  m_InsertRow(4),
+  m_InsertRow(5),
   m_SignalMapper(NULL),
   m_RecentExperimentsMenu(NULL)
 {
@@ -43,6 +43,8 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   connect(ui->m_NewGenericAnalysis, SIGNAL(clicked()), ui->m_ActionNewGenericAnalysis, SLOT(trigger()));
   connect(ui->m_OpenExistingExperiment, SIGNAL(clicked()), ui->m_ActionOpenExperiment, SLOT(trigger()));
 //  connect(ui->m_OpenExistingExperiment, SIGNAL(clicked()), this, SLOT(openMostRecent()));
+
+  app->prop_OpenDirectly()->linkTo(ui->m_AutoOpenRecent);
 
 //  m_SignalMapper = new QSignalMapper(this);
 
