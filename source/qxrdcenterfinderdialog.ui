@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>511</width>
+    <width>540</width>
     <height>569</height>
    </rect>
   </property>
@@ -481,7 +481,7 @@ intensity *= pow(distance/m_DetectorDistance, 2)/cos(tth);</string>
        <widget class="QCheckBox" name="m_EnablePolarization">
         <property name="toolTip">
          <string>Enable polarization correction during integration:
-intensity *= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
+intensity /= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
                    (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth/2),2)));</string>
         </property>
         <property name="text">
