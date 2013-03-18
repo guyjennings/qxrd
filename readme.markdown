@@ -3,7 +3,9 @@ See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxr
 
 ## v0.9.10 - Mar 18 2013
 Fixed problems with integration corrections
+
 Added commands to save cached integration arrays for inspection
+
 Made the centering dialog more compact
 
 ## v0.9.9 - Mar 13 2013
