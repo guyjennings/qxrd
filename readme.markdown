@@ -1,6 +1,9 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.11 - Jun 4 2013
+Added script functions to access and modify the marked points in images
+
 ## v0.9.10 - Mar 18 2013
 Fixed problems with integration corrections
 
