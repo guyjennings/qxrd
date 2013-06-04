@@ -157,6 +157,10 @@ public slots:
   QString defaultUserGeometryScript();
   QString defaultUserAbsorptionScript();
 
+  double getPowderPointX(int i);
+  double getPowderPointY(int i);
+  void   setPowderPoint(int i, double x, double y);
+
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);
 //  void setPen(const QPen &pen);

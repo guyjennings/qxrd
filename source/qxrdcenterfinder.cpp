@@ -391,6 +391,33 @@ void QxrdCenterFinder::adjustAllPoints()
   set_MarkedPoints(pts);
 }
 
+double QxrdCenterFinder::getPowderPointX(int i)
+{
+  QwtDoublePoint res = get_MarkedPoints().at(i);
+
+  return res.x();
+}
+
+double QxrdCenterFinder::getPowderPointY(int i)
+{
+  QwtDoublePoint res = get_MarkedPoints().at(i);
+
+  return res.y();
+}
+
+void QxrdCenterFinder::setPowderPoint(int i, double x, double y)
+{
+  QcepPolygon pts = get_MarkedPoints();
+
+  if (i>=0 && i<pts.count()) {
+    pts[i] = QwtDoublePoint(x,y);
+  } else {
+    pts.append(QwtDoublePoint(x,y));
+  }
+
+  set_MarkedPoints(pts);
+}
+
 void QxrdCenterFinder::setData(QxrdDoubleImageDataPtr data)
 {
   m_Data = data;
