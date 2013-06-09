@@ -22,7 +22,7 @@
 #include <QAbstractButton>
 #include <QSettings>
 #include <QProgressBar>
-#include <qwt_double_rect.h>
+//#include <qwt_double_rect.h>
 #include <QLCDNumber>
 
 class QcepProperty : public QObject {
@@ -447,45 +447,45 @@ private:
 class QcepDoublePointProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoublePointProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoublePoint value, QString toolTip);
+  QcepDoublePointProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QPointF value, QString toolTip);
 
-  QwtDoublePoint value() const;
-  QwtDoublePoint defaultValue() const;
+  QPointF value() const;
+  QPointF defaultValue() const;
 
 public slots:
-  void setValue(QwtDoublePoint val, int index);
-  void setValue(QwtDoublePoint val);
-  void setDefaultValue(QwtDoublePoint val);
+  void setValue(QPointF val, int index);
+  void setValue(QPointF val);
+  void setDefaultValue(QPointF val);
   void resetValue();
 
 signals:
-  void valueChanged(QwtDoublePoint val, int index);
+  void valueChanged(QPointF val, int index);
 
 private:
-  QwtDoublePoint m_Default;
-  QwtDoublePoint m_Value;
+  QPointF m_Default;
+  QPointF m_Value;
 };
 
 class QcepDoubleRectProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleRectProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoubleRect value, QString toolTip);
+  QcepDoubleRectProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QRectF value, QString toolTip);
 
-  QwtDoubleRect value() const;
-  QwtDoubleRect defaultValue() const;
+  QRectF value() const;
+  QRectF defaultValue() const;
 
 public slots:
-  void setValue(QwtDoubleRect val, int index);
-  void setValue(QwtDoubleRect val);
-  void setDefaultValue(QwtDoubleRect val);
+  void setValue(QRectF val, int index);
+  void setValue(QRectF val);
+  void setDefaultValue(QRectF val);
   void resetValue();
 
 signals:
-  void valueChanged(QwtDoubleRect val, int index);
+  void valueChanged(QRectF val, int index);
 
 private:
-  QwtDoubleRect m_Default;
-  QwtDoubleRect m_Value;
+  QRectF m_Default;
+  QRectF m_Value;
 };
 
 class QcepPolygonProperty : public QcepProperty {
@@ -501,7 +501,7 @@ public slots:
   void setValue(QcepPolygon val);
   void setDefaultValue(QcepPolygon val);
   void resetValue();
-  void appendValue(QwtDoublePoint pt);
+  void appendValue(QPointF pt);
   void clear();
 
 signals:
@@ -860,22 +860,22 @@ QcepByteArrayProperty m_##propname;
 
 #define QCEP_DOUBLE_POINT_PROPERTY(propname) \
 public: \
-QwtDoublePoint get_##propname() const \
+QPointF get_##propname() const \
 { \
   return m_##propname.value(); \
 } \
 \
-void set_##propname(QwtDoublePoint val) \
+void set_##propname(QPointF val) \
 { \
   m_##propname.setValue(val); \
 } \
 \
-QwtDoublePoint def_##propname() const \
+QPointF def_##propname() const \
 { \
   return m_##propname.defaultValue(); \
 } \
 \
-void setdef_##propname(QwtDoublePoint val) \
+void setdef_##propname(QPointF val) \
 { \
   m_##propname.setDefaultValue(val); \
 } \
@@ -894,22 +894,22 @@ QcepDoublePointProperty m_##propname;
 
 #define QCEP_DOUBLE_RECT_PROPERTY(propname) \
 public: \
-QwtDoubleRect get_##propname() const \
+QRectF get_##propname() const \
 { \
   return m_##propname.value(); \
 } \
 \
-void set_##propname(QwtDoubleRect val) \
+void set_##propname(QRectF val) \
 { \
   m_##propname.setValue(val); \
 } \
 \
-QwtDoubleRect def_##propname() const \
+QRectF def_##propname() const \
 { \
   return m_##propname.defaultValue(); \
 } \
 \
-void setdef_##propname(QwtDoubleRect val) \
+void setdef_##propname(QRectF val) \
 { \
   m_##propname.setDefaultValue(val); \
 } \

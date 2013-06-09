@@ -162,8 +162,8 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaType< QcepBoolList >("QcepBoolList");
   qRegisterMetaType< QcepIntList >("QcepIntList");
   qRegisterMetaType< QcepStringList >("QcepStringList");
-  qRegisterMetaType< QwtDoublePoint >("QwtDoublePoint");
-  qRegisterMetaType< QwtDoubleRect >("QwtDoubleRect");
+  qRegisterMetaType< QPointF >("QPointF");
+  qRegisterMetaType< QRectF >("QRectF");
   qRegisterMetaType< QcepPolygon >("QcepPolygon");
   qRegisterMetaType< QVariant >("QVariant");
 
@@ -175,8 +175,8 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaTypeStreamOperators< QcepBoolList >("QcepBoolList");
   qRegisterMetaTypeStreamOperators< QcepIntList >("QcepIntList");
   qRegisterMetaTypeStreamOperators< QcepStringList >("QcepStringList");
-  qRegisterMetaTypeStreamOperators< QwtDoublePoint >("QwtDoublePoint");
-  qRegisterMetaTypeStreamOperators< QwtDoubleRect >("QwtDoubleRect");
+  qRegisterMetaTypeStreamOperators< QPointF >("QPointF");
+  qRegisterMetaTypeStreamOperators< QRectF >("QRectF");
   qRegisterMetaTypeStreamOperators< QcepPolygon >("QcepPolygon");
 }
 
@@ -293,8 +293,8 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
     }
 
     settings->endArray();
-  } else if (v.canConvert<QwtDoublePoint>()) {
-    QwtDoublePoint dv = v.value<QwtDoublePoint>();
+  } else if (v.canConvert<QPointF>()) {
+    QPointF dv = v.value<QPointF>();
 
     settings->beginGroup(name);
 
@@ -302,8 +302,8 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
     settings->setValue("y", dv.y());
 
     settings->endGroup();
-  } else if (v.canConvert<QwtDoubleRect>()) {
-    QwtDoubleRect dv = v.value<QwtDoubleRect>();
+  } else if (v.canConvert<QRectF>()) {
+    QRectF dv = v.value<QRectF>();
 
     settings->beginGroup(name);
 
@@ -1966,31 +1966,31 @@ void QcepByteArrayProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepDoublePointProperty::QcepDoublePointProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoublePoint value, QString toolTip)
+QcepDoublePointProperty::QcepDoublePointProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QPointF value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {
 }
 
-QwtDoublePoint QcepDoublePointProperty::value() const
+QPointF QcepDoublePointProperty::value() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
-QwtDoublePoint QcepDoublePointProperty::defaultValue() const
+QPointF QcepDoublePointProperty::defaultValue() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
 
-void QcepDoublePointProperty::setValue(QwtDoublePoint val, int index)
+void QcepDoublePointProperty::setValue(QPointF val, int index)
 {
   if (debug()) {
-    printMessage(tr("%1 QcepDoublePointProperty::setValue(QwtDoublePoint(%2,%3), int %4) [%5]")
+    printMessage(tr("%1 QcepDoublePointProperty::setValue(QPointF(%2,%3), int %4) [%5]")
                  .arg(name()).arg(val.x()).arg(val.y()).arg(index).arg(this->index()));
   }
 
@@ -1999,18 +1999,18 @@ void QcepDoublePointProperty::setValue(QwtDoublePoint val, int index)
   }
 }
 
-void QcepDoublePointProperty::setValue(QwtDoublePoint val)
+void QcepDoublePointProperty::setValue(QPointF val)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    printMessage(tr("%1: QcepDoublePointProperty::setValue(QwtDoublePoint(%2,%3)")
+    printMessage(tr("%1: QcepDoublePointProperty::setValue(QPointF(%2,%3)")
                  .arg(name()).arg(val.x()).arg(val.y()));
   }
 
   if (val != m_Value) {
     if (debug()) {
-      printMessage(tr("%1: QcepDoublePointProperty::setValue(QwtDoublePoint(%2,%3)) [%4]")
+      printMessage(tr("%1: QcepDoublePointProperty::setValue(QPointF(%2,%3)) [%4]")
                    .arg(name()).arg(val.x()).arg(val.y()).arg(index()));
     }
 
@@ -2026,7 +2026,7 @@ void QcepDoublePointProperty::setValue(QwtDoublePoint val)
   }
 }
 
-void QcepDoublePointProperty::setDefaultValue(QwtDoublePoint val)
+void QcepDoublePointProperty::setDefaultValue(QPointF val)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -2044,31 +2044,31 @@ void QcepDoublePointProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepDoubleRectProperty::QcepDoubleRectProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QwtDoubleRect value, QString toolTip)
+QcepDoubleRectProperty::QcepDoubleRectProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QRectF value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {
 }
 
-QwtDoubleRect QcepDoubleRectProperty::value() const
+QRectF QcepDoubleRectProperty::value() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
-QwtDoubleRect QcepDoubleRectProperty::defaultValue() const
+QRectF QcepDoubleRectProperty::defaultValue() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
 
-void QcepDoubleRectProperty::setValue(QwtDoubleRect val, int index)
+void QcepDoubleRectProperty::setValue(QRectF val, int index)
 {
   if (debug()) {
-    printMessage(tr("%1 QcepDoubleRectProperty::setValue(QwtDoubleRect([%2,%3],[%4,%5]), int %6) [%7]")
+    printMessage(tr("%1 QcepDoubleRectProperty::setValue(QRectF([%2,%3],[%4,%5]), int %6) [%7]")
                  .arg(name()).arg(val.left()).arg(val.top()).arg(val.right()).arg(val.bottom()).arg(index).arg(this->index()));
   }
 
@@ -2077,18 +2077,18 @@ void QcepDoubleRectProperty::setValue(QwtDoubleRect val, int index)
   }
 }
 
-void QcepDoubleRectProperty::setValue(QwtDoubleRect val)
+void QcepDoubleRectProperty::setValue(QRectF val)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    printMessage(tr("%1: QcepDoubleRectProperty::setValue(QwtDoubleRect([%2,%3],[%4,%5])")
+    printMessage(tr("%1: QcepDoubleRectProperty::setValue(QRectF([%2,%3],[%4,%5])")
                  .arg(name()).arg(val.top()).arg(val.right()).arg(val.bottom()));
   }
 
   if (val != m_Value) {
     if (debug()) {
-      printMessage(tr("%1: QcepDoubleRectProperty::setValue(QwtDoubleRect([%2,%3],[%4,%5])) [%6]")
+      printMessage(tr("%1: QcepDoubleRectProperty::setValue(QRectF([%2,%3],[%4,%5])) [%6]")
                    .arg(name()).arg(val.top()).arg(val.right()).arg(val.bottom()).arg(index()));
     }
 
@@ -2104,7 +2104,7 @@ void QcepDoubleRectProperty::setValue(QwtDoubleRect val)
   }
 }
 
-void QcepDoubleRectProperty::setDefaultValue(QwtDoubleRect val)
+void QcepDoubleRectProperty::setDefaultValue(QRectF val)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -2182,7 +2182,7 @@ void QcepPolygonProperty::setValue(QcepPolygon val)
   }
 }
 
-void QcepPolygonProperty::appendValue(QwtDoublePoint pt)
+void QcepPolygonProperty::appendValue(QPointF pt)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

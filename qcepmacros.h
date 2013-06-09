@@ -4,8 +4,11 @@
 #include <QVector>
 #include <QList>
 #include <QMetaType>
+#include <QPointF>
+#include <QRectF>
+
 //#include "qcepdebug.h"
-#include "qwt_double_rect.h"
+//#include "qwt_double_rect.h"
 
 #define GUI_THREAD_CHECK Q_ASSERT(qApp && qApp ->thread() == QThread::currentThread())
 #define THREAD_CHECK     Q_ASSERT(QThread::currentThread() == thread())
@@ -34,10 +37,10 @@ Q_DECLARE_METATYPE(QcepIntList)
 typedef QList<QString> QcepStringList;
 Q_DECLARE_METATYPE(QcepStringList)
 
-typedef QVector<QwtDoublePoint> QcepPolygon;
+typedef QVector<QPointF> QcepPolygon;
 Q_DECLARE_METATYPE(QcepPolygon)
 
-Q_DECLARE_METATYPE(QwtDoublePoint)
-Q_DECLARE_METATYPE(QwtDoubleRect)
+Q_DECLARE_METATYPE(QPointF)
+Q_DECLARE_METATYPE(QRectF)
 
 #endif // QCEPMACROS_H
