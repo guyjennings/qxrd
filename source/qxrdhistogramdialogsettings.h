@@ -12,7 +12,7 @@ public:
   explicit QxrdHistogramDialogSettings(QxrdSettingsSaverWPtr saver, QObject *parent = 0);
   
 public:
-  Q_PROPERTY(QwtDoubleRect histogramRect READ get_HistogramRect WRITE set_HistogramRect)
+  Q_PROPERTY(QRectF histogramRect READ get_HistogramRect WRITE set_HistogramRect)
   QCEP_DOUBLE_RECT_PROPERTY(HistogramRect)
 
 public:

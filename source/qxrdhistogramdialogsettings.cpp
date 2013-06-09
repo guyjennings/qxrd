@@ -3,7 +3,7 @@
 
 QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QxrdSettingsSaverWPtr saver, QObject *parent) :
   QObject(parent),
-  m_HistogramRect(saver, this, "histogramRect", QwtDoubleRect(), "Histogram Selection Rectangle")
+  m_HistogramRect(saver, this, "histogramRect", QRectF(), "Histogram Selection Rectangle")
 {
   m_HistogramPlotSettings = QxrdHistogramPlotSettingsPtr(new QxrdHistogramPlotSettings(saver, parent));
 }
