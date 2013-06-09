@@ -269,7 +269,7 @@ void QxrdFileSaver::saveData(QString name, QxrdMaskDataPtr image, int canOverwri
       image -> set_FileName(name);
       image -> set_ImageSaved(true);
 
-      image -> saveMetaData(m_Experiment);
+      image -> saveMetaData();
     } else {
       res = 0;
     }

@@ -11,6 +11,7 @@
 #include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
 #include "qxrdimagedata-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 template <typename T>
 class QxrdImageData : public QcepImageData<T>
@@ -55,6 +56,9 @@ public:
   int allocatedMemoryMB();
 
   void correctBadBackgroundSubtraction(QxrdDoubleImageDataPtr dark, int nImgExposures, int nDarkExposures);
+
+  void saveMetaData(QxrdExperimentWPtr expt);
+  void saveMetaData(QString name, QxrdExperimentWPtr expt);
 
 protected:
   QxrdImageDataObjectCounter m_ObjectCounter; /* global counter to track allocation of QxrdImageData objects */

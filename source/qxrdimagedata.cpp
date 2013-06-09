@@ -5,6 +5,61 @@
 #include <QDir>
 #include <typeinfo>
 #include <QThread>
+#include "qcepmutexlocker.h"
+#include "qxrdcenterfinder.h"
+#include "qxrdintegrator.h"
+
+template <typename T>
+void QxrdImageData<T>::saveMetaData(QxrdExperimentWPtr expt)
+{
+  saveMetaData(QcepImageDataBase::get_FileName(), expt);
+}
+
+template <typename T>
+void QxrdImageData<T>::saveMetaData(QString name, QxrdExperimentWPtr expt)
+{
+//  printf("QcepImageDataBase::saveMetaData for file %s\n", qPrintable(name));
+
+  QTime tic;
+  tic.start();
+
+//  printf("type 266 = %s\n", QMetaType::typeName(266));
+
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, QcepImageDataBase::mutex());
+
+    QSettings settings(name+".metadata", QSettings::IniFormat);
+
+    QcepProperty::writeSettings(this, &QcepImageDataBase::staticMetaObject/*metaObject()*/, "metadata", &settings);
+
+    settings.beginWriteArray("normalization");
+    QcepDoubleList norm = QcepImageDataBase::get_Normalization();
+
+    for (int i=0; i<norm.length(); i++) {
+      settings.setArrayIndex(i);
+      settings.setValue("val",norm[i]);
+    }
+    settings.endArray();
+
+    QxrdExperimentPtr exper(expt);
+
+    if (exper) {
+      QxrdCenterFinderPtr cf = exper->centerFinder();
+
+      if (cf) {
+        cf->writeSettings(&settings, "centerfinder");
+      }
+
+      QxrdIntegratorPtr integ = exper->integrator();
+
+      if (integ) {
+        integ->writeSettings(&settings, "integrator");
+      }
+    }
+  }
+//
+//  printf("QcepImageDataBase::saveMetaData for file %s took %d msec\n",  qPrintable(name), tic.elapsed());
+}
 
 template <typename T>
 QxrdImageData<T>::QxrdImageData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr allocator, int typ, int width, int height, T def)
