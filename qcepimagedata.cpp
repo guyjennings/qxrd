@@ -1,7 +1,7 @@
 #include "qcepdebug.h"
 #include "qcepimagedata.h"
 //#include "qxrdapplication.h"
-//#include <tiffio.h>
+#include <tiffio.h>
 
 #include <QSettings>
 #include <QFileInfo>
@@ -209,21 +209,21 @@ void QcepImageDataBase::saveMetaData(QString name)
     }
     settings.endArray();
 
-    QxrdExperimentPtr exper(expt);
+//    QxrdExperimentPtr exper(expt);
 
-    if (exper) {
-      QxrdCenterFinderPtr cf = exper->centerFinder();
+//    if (exper) {
+//      QxrdCenterFinderPtr cf = exper->centerFinder();
 
-      if (cf) {
-        cf->writeSettings(&settings, "centerfinder");
-      }
+//      if (cf) {
+//        cf->writeSettings(&settings, "centerfinder");
+//      }
 
-      QxrdIntegratorPtr integ = exper->integrator();
+//      QxrdIntegratorPtr integ = exper->integrator();
 
-      if (integ) {
-        integ->writeSettings(&settings, "integrator");
-      }
-    }
+//      if (integ) {
+//        integ->writeSettings(&settings, "integrator");
+//      }
+//    }
   }
 //
 //  printf("QcepImageDataBase::saveMetaData for file %s took %d msec\n",  qPrintable(name), tic.elapsed());

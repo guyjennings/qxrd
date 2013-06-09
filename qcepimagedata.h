@@ -15,7 +15,7 @@
 #include "qcepsettingssaver-ptr.h"
 //#include "qxrdexperiment-ptr.h"
 
-//typedef struct tiff TIFF;
+typedef struct tiff TIFF;
 
 class QcepImageDataBase : public QObject
 {

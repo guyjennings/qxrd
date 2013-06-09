@@ -1,9 +1,12 @@
-QT       += core gui script
+QT       += core gui script network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = qceplib
 TEMPLATE = app
+
+macx:include("tiffconfig/qt-libtiff-macx.pri")
+win32:include("tiffconfig/qt-libtiff-win32.pri")
 
 SOURCES += \
   qcepdebug.cpp \
@@ -13,10 +16,10 @@ SOURCES += \
   qcepsettingssaver.cpp \
   qcepimagedata.cpp \
   qcepimagedataformatfactory.cpp \
-  qcepimagedatadormat.cpp \
+  qcepimagedataformat.cpp \
   qcepimagedataformattiff.cpp \
   qcepimagedataformatmar345.cpp \
-  qspecserver.cpp \
+#  qspecserver.cpp \
     main.cpp
 
 HEADERS += \
@@ -30,9 +33,9 @@ HEADERS += \
   qcepimagedata.h \
   qcepimagedataformatfactory.h \
   qcepimagedataformatfactory-ptr.h \
-  qcepimagedatadormat.h \
+  qcepimagedataformat.h \
   qcepimagedataformattiff.h \
   qcepimagedataformatmar345.h \
   qcepimagedataformatmar345-ptr.h \
-  qspecserver.h \
+#  qspecserver.h \
   spec_server.h \
