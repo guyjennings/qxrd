@@ -11,6 +11,12 @@ SOURCES += \
   qcepmutexlocker.cpp \
   qcepdocumentationdictionary.cpp \
   qcepsettingssaver.cpp \
+  qcepimagedata.cpp \
+  qcepimagedataformatfactory.cpp \
+  qcepimagedatadormat.cpp \
+  qcepimagedataformattiff.cpp \
+  qcepimagedataformatmar345.cpp \
+  qspecserver.cpp \
     main.cpp
 
 HEADERS += \
@@ -21,3 +27,12 @@ HEADERS += \
   qcepdocumentationdictionary.h \
   qcepsettingssaver.h \
   qcepsettingssaver-ptr.h \
+  qcepimagedata.h \
+  qcepimagedataformatfactory.h \
+  qcepimagedataformatfactory-ptr.h \
+  qcepimagedatadormat.h \
+  qcepimagedataformattiff.h \
+  qcepimagedataformatmar345.h \
+  qcepimagedataformatmar345-ptr.h \
+  qspecserver.h \
+  spec_server.h \

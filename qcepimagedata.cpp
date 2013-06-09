@@ -1,7 +1,7 @@
 #include "qcepdebug.h"
 #include "qcepimagedata.h"
 //#include "qxrdapplication.h"
-#include <tiffio.h>
+//#include <tiffio.h>
 
 #include <QSettings>
 #include <QFileInfo>
@@ -11,9 +11,9 @@
 #include "qcepimagedataformatfactory.h"
 #include "qcepmutexlocker.h"
 #include "qcepsettingssaver.h"
-#include "qxrdexperiment.h"
-#include "qxrdcenterfinder.h"
-#include "qxrdintegrator.h"
+//#include "qxrdexperiment.h"
+//#include "qxrdcenterfinder.h"
+//#include "qxrdintegrator.h"
 
 QAtomicInt allocCount = 0;
 
@@ -161,7 +161,7 @@ void QcepImageDataBase::getTiffMetaData(TIFF * /*tif*/)
 {
 }
 
-void QcepImageDataBase::loadMetaData(QxrdExperimentWPtr expt)
+void QcepImageDataBase::loadMetaData()
 {
 //  printf("QcepImageDataBase::loadMetaData for file %s\n", qPrintable(get_FileName()));
 
@@ -179,12 +179,12 @@ void QcepImageDataBase::loadMetaData(QxrdExperimentWPtr expt)
 //  printf("QcepImageDataBase::loadMetaData for file %s took %d msec\n",  qPrintable(get_FileName()), tic.elapsed());
 }
 
-void QcepImageDataBase::saveMetaData(QxrdExperimentWPtr expt)
+void QcepImageDataBase::saveMetaData()
 {
-  saveMetaData(get_FileName(), expt);
+  saveMetaData(get_FileName());
 }
 
-void QcepImageDataBase::saveMetaData(QString name, QxrdExperimentWPtr expt)
+void QcepImageDataBase::saveMetaData(QString name)
 {
 //  printf("QcepImageDataBase::saveMetaData for file %s\n", qPrintable(name));
 
