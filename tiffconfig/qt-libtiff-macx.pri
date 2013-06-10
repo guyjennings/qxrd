@@ -1,6 +1,6 @@
 macx {
-  TIFFBASE = tiff-4.0.3/libtiff/
-  TIFFCONF = tiffconfig/macx/
+  TIFFBASE = $${QCEPLIB}/tiff-4.0.3/libtiff/
+  TIFFCONF = $${QCEPLIB}/tiffconfig/macx/
 
   INCLUDEPATH += $${TIFFBASE} $${TIFFCONF}
 
