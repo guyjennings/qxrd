@@ -1371,7 +1371,7 @@ void QxrdScriptEngine::initialize()
 
     if (acq) {
       QCEP_DOC_OBJECT("acquisition", "The Acquisition Object");
-      globalObject().setProperty("acquisition",     newQObject(acq.data()));
+      globalObject().setProperty("acquisition",     newQObject(acq.data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties));
 
       QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
 

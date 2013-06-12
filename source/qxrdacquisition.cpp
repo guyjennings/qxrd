@@ -1178,5 +1178,11 @@ void QxrdAcquisition::propertyList()
       g_Application->printMessage(tr("Property %1: %2 = %3").arg(i).arg(name).arg(value.toString()));
     }
   }
+
+  QList<QByteArray> dynProps = dynamicPropertyNames();
+
+  foreach(QByteArray name, dynProps) {
+    g_Application->printMessage(tr("Dynamic Property %1 = %2").arg(QString(name)).arg(property(name).toString()));
+  }
 }
 

@@ -61,5 +61,15 @@ void QxrdInfoDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxr
     for (int i=0; i<image->get_ExtraInputs().count(); i++) {
       m_InfoText->append(tr("Extra Inputs Data [%1] = %2").arg(i).arg(image->get_ExtraInputs().value(i)));
     }
+
+    QList<QByteArray> dynProps = image->dynamicPropertyNames();
+
+    if (dynProps.count()) {
+      m_InfoText->append("User Defined Properties:");
+
+      foreach(QByteArray prop, dynProps) {
+        m_InfoText->append(tr("%1 = %2").arg(QString(prop)).arg(image->property(prop).toString()));
+      }
+    }
   }
 }
