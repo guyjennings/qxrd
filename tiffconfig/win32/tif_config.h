@@ -220,6 +220,55 @@
 /* Support ThunderScan 4-bit RLE algorithm */
 #define THUNDER_SUPPORT 1
 
+
+/* Signed 16-bit type */
+#define TIFF_INT16_T signed short
+
+/* Signed 32-bit type formatter */
+#define TIFF_INT32_FORMAT "%d"
+
+/* Signed 32-bit type */
+#define TIFF_INT32_T signed int
+
+/* Signed 64-bit type formatter */
+#define TIFF_INT64_FORMAT "%ld"
+
+/* Signed 64-bit type */
+#define TIFF_INT64_T signed long
+
+/* Signed 8-bit type */
+#define TIFF_INT8_T signed char
+
+/* Pointer difference type formatter */
+#define TIFF_PTRDIFF_FORMAT "%ld"
+
+/* Pointer difference type */
+#define TIFF_PTRDIFF_T ptrdiff_t
+
+/* Signed size type formatter */
+#define TIFF_SSIZE_FORMAT "%ld"
+
+/* Signed size type */
+#define TIFF_SSIZE_T signed long
+
+/* Unsigned 16-bit type */
+#define TIFF_UINT16_T unsigned short
+
+/* Unsigned 32-bit type formatter */
+#define TIFF_UINT32_FORMAT "%u"
+
+/* Unsigned 32-bit type */
+#define TIFF_UINT32_T unsigned int
+
+/* Unsigned 64-bit type formatter */
+#define TIFF_UINT64_FORMAT "%llu"
+
+/* Unsigned 64-bit type */
+#define TIFF_UINT64_T unsigned long long
+
+/* Unsigned 8-bit type */
+#define TIFF_UINT8_T unsigned char
+
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #define TIME_WITH_SYS_TIME 1
 

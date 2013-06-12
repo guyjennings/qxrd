@@ -8,6 +8,36 @@
 #ifndef _TIFFCONF_
 #define _TIFFCONF_
 
+/* Signed 16-bit type */
+#define TIFF_INT16_T signed short
+
+/* Signed 32-bit type */
+#define TIFF_INT32_T signed int
+
+/* Signed 64-bit type */
+#define TIFF_INT64_T signed long
+
+/* Signed 8-bit type */
+#define TIFF_INT8_T signed char
+
+/* Unsigned 16-bit type */
+#define TIFF_UINT16_T unsigned short
+
+/* Unsigned 32-bit type */
+#define TIFF_UINT32_T unsigned int
+
+/* Unsigned 64-bit type */
+#define TIFF_UINT64_T unsigned long long
+
+/* Unsigned 8-bit type */
+#define TIFF_UINT8_T unsigned char
+
+/* Signed size type */
+#define TIFF_SSIZE_T signed long
+
+/* Pointer difference type */
+#define TIFF_PTRDIFF_T ptrdiff_t
+
 #define USE_WIN32_FILEIO 1
 
 /* Define to 1 if the system has the type `int16'. */
