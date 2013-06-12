@@ -327,7 +327,7 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
   }
 }
 
-void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings)
+void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic)
 {
   if (settings && object) {
     int count = meta->propertyCount();
@@ -356,17 +356,19 @@ void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QStri
       }
     }
 
-    QByteArray name;
+    if (includeDynamic) {
+      QByteArray name;
 
-    foreach (name, object->dynamicPropertyNames()) {
-      setSettingsValue(settings, name.data(), object->property(name.data()));
+      foreach (name, object->dynamicPropertyNames()) {
+        setSettingsValue(settings, name.data(), object->property(name.data()));
+      }
     }
 
     settings->endGroup();
   }
 }
 
-void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings)
+void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic)
 {
   if (settings) {
     settings->beginGroup(groupName);
@@ -403,7 +405,9 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
           }
         }
       } else {
-        if (object && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+        if (includeDynamic) {
+          object -> setProperty(qPrintable(key), settings->value(key));
+        } else if (object && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
           QString msg = tr("property %1 of %2 does not exist")
               .arg(key).arg(meta -> className());
 
