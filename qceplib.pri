@@ -1,6 +1,11 @@
 
-macx:include("$${QCEPLIB}/tiffconfig/qt-libtiff-macx.pri")
-win32:include("$${QCEPLIB}/tiffconfig/qt-libtiff-win32.pri")
+macx {
+  include("$${QCEPLIB}/tiffconfig/qt-libtiff-macx.pri")
+} else:win32 {
+  include("$${QCEPLIB}/tiffconfig/qt-libtiff-win32.pri")
+} else {
+  LIBS += -ltiff
+}
 
 SOURCES += \
   $${QCEPLIB}/qcepdebug.cpp \
