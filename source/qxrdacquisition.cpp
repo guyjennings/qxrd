@@ -188,7 +188,7 @@ void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
     m_AcquisitionExtraInputs->writeSettings(settings, section+"/extrainputs");
   }
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::writeSettings(this, &staticMetaObject, section, settings, true);
 }
 
 void QxrdAcquisition::readSettings(QSettings *settings, QString section)
@@ -203,7 +203,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
     m_AcquisitionExtraInputs->readSettings(settings, section+"/extrainputs");
   }
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::readSettings(this, &staticMetaObject, section, settings, true);
 }
 
 void QxrdAcquisition::setWindow(QxrdWindowWPtr win)

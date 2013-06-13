@@ -1555,6 +1555,37 @@ QString QxrdScriptEngine::documentationText(QString item)
         res.append(tableFooter());
       }
 
+      if (qobj->dynamicPropertyNames().count()) {
+        res.append(tr("<h3>%1 User Defined Properties</h3>\n").arg(itemName));
+        res.append(tableHeader());
+
+        QList<QByteArray> props = qobj->dynamicPropertyNames();
+
+        for (int i=0; i<props.count(); i++) {
+          QString propName = props[i];
+          QVariant val = qobj->property(qPrintable(propName));
+
+          if ((i%2)) {
+            res.append(tr("<tr bgcolor=\"#e0e0e0\">\n"));
+          } else {
+            res.append(tr("<tr bgcolor=\"white\">\n"));
+          }
+
+          res.append(tr("<td>%1</td><td>%2</td><td>%3</td>\n")
+                     .arg(prefix+propName)
+                     .arg(val.typeName())
+                     .arg(val.toString()));
+
+          QString doc = QcepDocumentationDictionary::get_Doc(prefix+propName);
+
+          res.append(tr("<td width=\"75%\">%1</td>\n").arg(doc));
+
+          res.append("</tr>\n");
+        }
+
+        res.append(tableFooter());
+      }
+
       if (meta->methodCount() > QObject::staticMetaObject.methodCount()) {
         res.append(tr("<h3>%1 Functions</h3>\n").arg(itemName));
         res.append(tableHeader());
