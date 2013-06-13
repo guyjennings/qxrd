@@ -1,6 +1,14 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.12 - Jun 13 2013
+Added the ability to set user-defined properties on the 'acquisition' object - such
+properties are copied into acquired image files.
+
+Fix for crash when moving image center parameter during acquisition
+
+Fix for initial detector gain problem after restart
+
 ## v0.9.11 - Jun 4 2013
 Added script functions to access and modify the marked points in images
 
