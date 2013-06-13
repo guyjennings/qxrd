@@ -16,14 +16,16 @@ public:
   int detectorType() const;
 
 public slots:
-  void onExposureTimeChanged();
+  virtual void onExposureTimeChanged();
+  virtual void onBinningModeChanged();
+  virtual void onCameraGainChanged();
 
   void onTimerTimeout();
 
 public:
-  void setupExposureMenu(QDoubleSpinBox *cb);
-  void setupCameraGainMenu(QComboBox *cb);
-  void setupCameraBinningModeMenu(QComboBox *cb);
+  void setupExposureMenu(QDoubleSpinBox *cb, double initialExposure);
+  void setupCameraGainMenu(QComboBox *cb, int initialGain);
+  void setupCameraBinningModeMenu(QComboBox *cb, int initialBinning);
 
 signals:
 

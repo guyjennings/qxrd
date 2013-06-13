@@ -644,18 +644,20 @@ void QxrdDetectorPerkinElmer::acquisitionNSensorsError(int n)
   criticalMessage("Detector Initialization Failed");
 }
 
-void QxrdDetectorPerkinElmer::setupExposureMenu(QDoubleSpinBox* /*cb*/)
+void QxrdDetectorPerkinElmer::setupExposureMenu(QDoubleSpinBox * /*cb*/, double /*initialExposure*/)
 {
 //  foreach(double t, m_ReadoutTimes) {
 //    cb -> addItem(tr("%1").arg(t/1e6,5,'f'));
 //  }
 }
 
-void QxrdDetectorPerkinElmer::setupCameraGainMenu(QComboBox *cb)
+void QxrdDetectorPerkinElmer::setupCameraGainMenu(QComboBox *cb, int initialGain)
 {
   if (qcepDebug(DEBUG_PERKINELMER)) {
     printMessage(tr("QxrdAcquisitionPerkinElmer::setupCameraGainMenu m_HeaderID == %1").arg(m_HeaderID));
   }
+
+  bool b = cb -> blockSignals(true);
 
   if (m_HeaderID == 11) { /* AM type */
     for (int i=0; i<16; i++) {
@@ -698,12 +700,17 @@ void QxrdDetectorPerkinElmer::setupCameraGainMenu(QComboBox *cb)
   } else {
     cb -> addItem(tr("Gain not settable"));
   }
+
+  cb -> setCurrentIndex(initialGain);
+
+  cb -> blockSignals(b);
 }
 
-void QxrdDetectorPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb)
+void QxrdDetectorPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb, int initialBinning)
 {
 //  printf("QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu m_HeaderID == %d, m_CameraType == %d\n",
 //         m_HeaderID, m_CameraType);
+  bool b = cb -> blockSignals(true);
 
   if (m_HeaderID == 14) {
     if (m_CameraType == 1) {
@@ -716,6 +723,10 @@ void QxrdDetectorPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb)
   } else {
     cb -> addItem(tr("No binning"));
   }
+
+  cb -> setCurrentIndex(initialBinning);
+
+  cb -> blockSignals(b);
 }
 
 void QxrdDetectorPerkinElmer::onEndFrameCallback()

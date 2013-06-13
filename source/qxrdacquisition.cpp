@@ -1100,7 +1100,7 @@ void QxrdAcquisition::setupExposureMenu(QDoubleSpinBox *cb)
   QxrdDetectorPtr det(m_Detector);
 
   if (det) {
-    det ->setupExposureMenu(cb);
+    det ->setupExposureMenu(cb, get_ExposureTime());
   }
 }
 
@@ -1109,7 +1109,7 @@ void QxrdAcquisition::setupCameraGainMenu(QComboBox *cb)
   QxrdDetectorPtr det(m_Detector);
 
   if (det) {
-    det ->setupCameraGainMenu(cb);
+    det ->setupCameraGainMenu(cb, get_CameraGain());
   }
 }
 
@@ -1118,7 +1118,7 @@ void QxrdAcquisition::setupCameraBinningModeMenu(QComboBox *cb)
   QxrdDetectorPtr det(m_Detector);
 
   if (det) {
-    det ->setupCameraBinningModeMenu(cb);
+    det ->setupCameraBinningModeMenu(cb, get_BinningMode());
   }
 }
 

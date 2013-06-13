@@ -26,9 +26,9 @@ public slots:
   virtual void onBinningModeChanged();
   virtual void onCameraGainChanged();
 
-  virtual void setupExposureMenu(QDoubleSpinBox *cb);
-  virtual void setupCameraGainMenu(QComboBox *cb);
-  virtual void setupCameraBinningModeMenu(QComboBox *cb);
+  virtual void setupExposureMenu(QDoubleSpinBox *cb, double initialExposure);
+  virtual void setupCameraGainMenu(QComboBox *cb, int initialGain);
+  virtual void setupCameraBinningModeMenu(QComboBox *cb, int initialBinning);
 
   virtual void beginAcquisition();
   virtual void endAcquisition();

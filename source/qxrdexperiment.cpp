@@ -189,10 +189,6 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
               ssrv.data(),  SLOT(finishedCommand(QScriptValue)));
     }
 
-    connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
-    connect(prop_WorkTarget(),    SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
-    connect(prop_DetectorType(),  SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
-
     splashMessage("Loading Preferences");
 
     readSettings(settings);
@@ -209,7 +205,13 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
 
     printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 
+    connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
+    connect(prop_WorkTarget(),    SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
+    connect(prop_DetectorType(),  SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
+
     m_SettingsSaver->start();
+
+    onDetectorTypeChanged();
   }
 }
 
@@ -612,7 +614,7 @@ void QxrdExperiment::readSettings(QSettings *settings)
       ssrv -> readSettings(settings, "simpleserver");
     }
 
-    onDetectorTypeChanged();
+//    onDetectorTypeChanged();
   }
 }
 

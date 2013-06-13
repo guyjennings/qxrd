@@ -46,15 +46,15 @@ void QxrdDetector::onCameraGainChanged()
 {
 }
 
-void QxrdDetector::setupExposureMenu(QDoubleSpinBox *cb)
+void QxrdDetector::setupExposureMenu(QDoubleSpinBox *cb, double initialExposure)
 {
 }
 
-void QxrdDetector::setupCameraGainMenu(QComboBox *cb)
+void QxrdDetector::setupCameraGainMenu(QComboBox *cb, int initialGain)
 {
 }
 
-void QxrdDetector::setupCameraBinningModeMenu(QComboBox *cb)
+void QxrdDetector::setupCameraBinningModeMenu(QComboBox *cb, int initialBinning)
 {
 }
 

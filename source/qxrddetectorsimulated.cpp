@@ -47,7 +47,39 @@ void QxrdDetectorSimulated::onExposureTimeChanged()
   }
 }
 
-void QxrdDetectorSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/)
+void QxrdDetectorSimulated::onBinningModeChanged()
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "onBinningModeChanged");
+  } else {
+    QxrdExperimentPtr expt(m_Experiment);
+    QxrdAcquisitionPtr acq(m_Acquisition);
+
+    if (acq && expt) {
+      int newMode = acq->get_BinningMode();
+
+      expt->printMessage(tr("Binning Mode changed to %1").arg(newMode));
+    }
+  }
+}
+
+void QxrdDetectorSimulated::onCameraGainChanged()
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "onCameraGainChanged");
+  } else {
+    QxrdExperimentPtr expt(m_Experiment);
+    QxrdAcquisitionPtr acq(m_Acquisition);
+
+    if (acq && expt) {
+      int newGain = acq->get_CameraGain();
+
+      expt->printMessage(tr("Camera gain changed to %1").arg(newGain));
+    }
+  }
+}
+
+void QxrdDetectorSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/, double /*initialExposure*/)
 {
 //  cb -> addItem(tr("0.067"));
 //  cb -> addItem(tr("0.1"));
@@ -61,8 +93,10 @@ void QxrdDetectorSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/)
 //  cb -> setValidator(new QDoubleValidator(0.0667,8,3,cb));
 }
 
-void QxrdDetectorSimulated::setupCameraGainMenu(QComboBox *cb)
+void QxrdDetectorSimulated::setupCameraGainMenu(QComboBox *cb, int initialGain)
 {
+  bool b = cb -> blockSignals(true);
+
   for (int i=0; i<16; i++) {
     QString msg;
 
@@ -93,18 +127,22 @@ void QxrdDetectorSimulated::setupCameraGainMenu(QComboBox *cb)
 
     cb -> addItem(msg);
   }
-//  cb -> addItem(tr("High: 0.25 pF"));
-//  cb -> addItem(tr("0.5 pF"));
-//  cb -> addItem(tr("1 pF"));
-//  cb -> addItem(tr("2 pF"));
-//  cb -> addItem(tr("4 pF"));
-//  cb -> addItem(tr("Low: 8 pF"));
+
+  cb -> setCurrentIndex(initialGain);
+
+  cb -> blockSignals(b);
 }
 
-void QxrdDetectorSimulated::setupCameraBinningModeMenu(QComboBox *cb)
+void QxrdDetectorSimulated::setupCameraBinningModeMenu(QComboBox *cb, int initialBinning)
 {
+  bool b = cb -> blockSignals(true);
+
   cb -> addItem(tr("1x1 - 2048x2048 pixels"));
   cb -> addItem(tr("2x2 - 1024x1024 pixels"));
+
+  cb -> setCurrentIndex(initialBinning);
+
+  cb -> blockSignals(b);
 }
 
 void QxrdDetectorSimulated::initialize()

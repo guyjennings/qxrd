@@ -45,9 +45,9 @@ private:
   void acquisitionError(const char *fn, int ln, int n);
 
   void startupAcquisition();
-  void setupExposureMenu(QDoubleSpinBox *cb);
-  void setupCameraGainMenu(QComboBox *cb);
-  void setupCameraBinningModeMenu(QComboBox *cb);
+  void setupExposureMenu(QDoubleSpinBox *cb, double initialExposure);
+  void setupCameraGainMenu(QComboBox *cb, int initialGain);
+  void setupCameraBinningModeMenu(QComboBox *cb, int initialBinning);
   bool checkPluginAvailable();
 
   void acquisitionInitError(int n);
