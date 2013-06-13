@@ -99,17 +99,19 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr i
 {
   QThread::currentThread()->setObjectName("performIntegration");
 
-  if (m_IntegratorCache == NULL ||
-      dimg->get_Width() != m_IntegratorCache->get_NCols() ||
-      dimg->get_Height() != m_IntegratorCache->get_NRows()) {
+  QxrdIntegratorCachePtr cache = m_IntegratorCache;
 
-    QxrdIntegratorCachePtr cache = QxrdIntegratorCachePtr(
+  if (cache == NULL ||
+      dimg->get_Width() != cache->get_NCols() ||
+      dimg->get_Height() != cache->get_NRows()) {
+
+    cache = QxrdIntegratorCachePtr(
           new QxrdIntegratorCache(m_Experiment, m_Allocator, this, m_CenterFinder));
 
     m_IntegratorCache = cache;
   }
 
-  return m_IntegratorCache->performIntegration(integ, dimg, mask, true);
+  return cache->performIntegration(integ, dimg, mask, true);
 }
 
 double QxrdIntegrator::XValue(QwtDoublePoint pt) const
