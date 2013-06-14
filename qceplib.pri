@@ -7,6 +7,8 @@ macx {
   LIBS += -ltiff
 }
 
+INCLUDEPATH += $${QCEPLIB}
+
 SOURCES += \
   $${QCEPLIB}/qcepdebug.cpp \
   $${QCEPLIB}/qcepproperty.cpp \
