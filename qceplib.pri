@@ -12,6 +12,8 @@ INCLUDEPATH += $${QCEPLIB}
 SOURCES += \
   $${QCEPLIB}/qcepdebug.cpp \
   $${QCEPLIB}/qcepproperty.cpp \
+  $${QCEPLIB}/qcepvector3dproperty.cpp \
+  $${QCEPLIB}/qcepmatrix3x3property.cpp \
   $${QCEPLIB}/qcepmutexlocker.cpp \
   $${QCEPLIB}/qcepdocumentationdictionary.cpp \
   $${QCEPLIB}/qcepsettingssaver.cpp \
@@ -27,6 +29,8 @@ HEADERS += \
   $${QCEPLIB}/qcepdebug.h \
   $${QCEPLIB}/qcepproperty.h \
   $${QCEPLIB}/qcepproperty-ptr.h \
+  $${QCEPLIB}/qcepvector3dproperty.h \
+  $${QCEPLIB}/qcepmatrix3x3property.h \
   $${QCEPLIB}/qcepmutexlocker.h \
   $${QCEPLIB}/qcepdocumentationdictionary.h \
   $${QCEPLIB}/qcepsettingssaver.h \

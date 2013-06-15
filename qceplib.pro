@@ -9,7 +9,8 @@ QCEPLIB = ./
 
 include("qceplib.pri")
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    qtestceplibmainwindow.cpp
 
 OTHER_FILES += \
     qceplib.pri
@@ -18,3 +19,10 @@ win32 {
 #    RC_FILE = qxrd.rc
     CONFIG(debug, debug|release):CONFIG += console
 }
+
+HEADERS += \
+    qtestceplibmainwindow.h
+
+FORMS += \
+    qtestceplibmainwindow.ui
+

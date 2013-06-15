@@ -14,6 +14,8 @@
 #include <QMetaProperty>
 #include <QSettings>
 #include <stdio.h>
+#include <QVector3D>
+#include <QMatrix3x3>
 
 QcepProperty::QcepProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QString toolTip)
   : QObject(),
@@ -311,6 +313,28 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
     settings->setValue("top",    dv.top());
     settings->setValue("right",  dv.right());
     settings->setValue("bottom", dv.bottom());
+
+    settings->endGroup();
+  } else if (v.canConvert<QVector3D>()) {
+    QVector3D dv = v.value<QVector3D>();
+
+    settings->beginGroup(name);
+
+    settings->setValue("x", dv.x());
+    settings->setValue("y", dv.y());
+    settings->setValue("z", dv.z());
+
+    settings->endGroup();
+  } else if (v.canConvert<QMatrix3x3>()) {
+    QMatrix3x3 dv = v.value<QMatrix3x3>();
+
+    settings->beginGroup(name);
+
+    for (int r=0; r<3; r++) {
+      for (int c=0; c<3; c++) {
+        settings->setValue(tr("r%1c%2").arg(r).arg(c), dv(r,c));
+      }
+    }
 
     settings->endGroup();
   } else if (v.type() == QVariant::StringList) {
