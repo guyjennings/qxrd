@@ -52,6 +52,8 @@ public:
   static void setSettingsValue(QSettings *settings, QString name, QVariant value);
   static void writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic = false);
   static void readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic = false);
+  static void writeSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic = false);
+  static void readSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic = false);
 //  static void dumpMetaData(const QMetaObject *meta);
 
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());

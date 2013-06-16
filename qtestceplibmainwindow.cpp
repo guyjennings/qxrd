@@ -75,12 +75,12 @@ void QtestceplibMainWindow::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, metaObject(), "qtestceplib", settings);
+  QcepProperty::readSettings(this, "qtestceplib", settings);
 }
 
 void QtestceplibMainWindow::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, metaObject(), "qtestceplib", settings);
+  QcepProperty::writeSettings(this, "qtestceplib", settings);
 }
