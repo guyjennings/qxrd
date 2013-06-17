@@ -14,6 +14,7 @@ class QcepImageDataFormatMar345 : public QcepImageDataFormat<T>
   QcepImageDataFormatMar345(QString name);
 
   virtual QcepImageDataFormat<T>* canLoadFile(QString path);
+  virtual QcepImageDataFormat<T>* canSaveFile(QString path);
   virtual QcepImageDataFormat<T>* loadFile(QString path, QcepImageData<T> *img);
   virtual QcepImageDataFormat<T>* saveFile(QString path, QcepImageData<T> *img);
   QcepImageDataFormatBase::Priority priority() const;

@@ -36,6 +36,12 @@ QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::canLoadFile(QString path)
 }
 
 template <typename T>
+QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::canSaveFile(QString /*path*/)
+{
+  return NULL;
+}
+
+template <typename T>
 QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::loadFile(QString path, QcepImageData<T> *img)
 {
   FILE *file = fopen(qPrintable(path), "rb");

@@ -52,6 +52,12 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::canLoadFile(QString path)
 }
 
 template <typename T>
+QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::canSaveFile(QString /*path*/)
+{
+  return this;
+}
+
+template <typename T>
 T QcepImageDataFormatTiff<T>::unpackSignedBitField(void *buffer, int bitsPerSample, int x, int /*fillOrder*/)
 {
   int val=0;
