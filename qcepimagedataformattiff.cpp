@@ -215,9 +215,57 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::loadFile(QString path, QcepI
   return NULL;
 }
 
+#define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
+
 template <typename T>
-QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::saveFile(QString /*path*/, QcepImageData<T> * /*img*/)
+QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::saveFile(QString path, QcepImageData<T> *img, int canOverwrite)
 {
+  if (img) {
+    int nrows = img -> get_Height();
+    int ncols = img -> get_Width();
+
+    QcepImageDataFormatBase::mkPath(path);
+
+    if (canOverwrite == QcepImageDataFormatBase::NoOverwrite) {
+      path = QcepImageDataFormatBase::uniqueFileName(path);
+    }
+
+    TIFF* tif = TIFFOpen(qPrintable(path),"w");
+    int res = 1;
+
+    if (tif) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP));
+
+      img -> setTiffMetaData(tif);
+
+      QVector<float> buffvec(ncols);
+      float* buffer = buffvec.data();
+
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = img->value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
+
+      TIFFClose(tif);
+
+      img -> set_FileName(path);
+      img -> set_ImageSaved(true);
+
+      img -> saveMetaData();
+
+      return this;
+    }
+  }
+
   return NULL;
 }
 

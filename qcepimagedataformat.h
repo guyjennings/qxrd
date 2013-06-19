@@ -39,6 +39,15 @@ class QcepImageDataFormatBase
     m_Name = name;
   }
 
+  enum {
+    NoOverwrite,
+    CanOverwrite
+  };
+
+public:
+  void mkPath(QString filePath);
+  QString uniqueFileName(QString name);
+
 private:
   QString m_Name;
 };
@@ -52,7 +61,7 @@ class QcepImageDataFormat : public QcepImageDataFormatBase
   virtual QcepImageDataFormat<T>* canLoadFile(QString path) = 0;
   virtual QcepImageDataFormat<T>* canSaveFile(QString path) = 0;
   virtual QcepImageDataFormat<T>* loadFile(QString path, QcepImageData<T> *img) = 0;
-  virtual QcepImageDataFormat<T>* saveFile(QString path, QcepImageData<T> *img) = 0;
+  virtual QcepImageDataFormat<T>* saveFile(QString path, QcepImageData<T> *img, int canOverwrite) = 0;
 };
 
 #endif

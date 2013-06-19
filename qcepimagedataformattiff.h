@@ -14,7 +14,7 @@ public:
   QcepImageDataFormat<T>* canLoadFile(QString path);
   QcepImageDataFormat<T>* canSaveFile(QString path);
   QcepImageDataFormat<T>* loadFile(QString path, QcepImageData<T> *img);
-  QcepImageDataFormat<T>* saveFile(QString path, QcepImageData<T> *img);
+  QcepImageDataFormat<T>* saveFile(QString path, QcepImageData<T> *img, int canOverwrite);
   QcepImageDataFormatBase::Priority priority() const;
 
 private:
