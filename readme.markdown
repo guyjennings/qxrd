@@ -1,6 +1,12 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.13 - Jun 21 2013
+Added more routines to access powder points
+
+Improved display of script values: arrays and objects are now printed
+out property by property.
+
 ## v0.9.12 - Jun 13 2013
 Added the ability to set user-defined properties on the 'acquisition' object - such
 properties are copied into acquired image files.
