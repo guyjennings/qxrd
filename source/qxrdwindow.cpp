@@ -1410,8 +1410,8 @@ void QxrdWindow::finishedCommand(QScriptValue result)
 
     m_Messages -> append(tr("Error in line %1").arg(line));
     m_Messages -> append(result.property("message").toString());
-  } else if (!result.isUndefined()){
-    m_Messages -> append(result.toString());
+  } else {
+    m_Messages -> append(QxrdScriptEngine::convertToString(result));
   }
 
   m_CancelScriptButton  -> setEnabled(false);

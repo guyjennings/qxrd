@@ -58,6 +58,8 @@ public slots:
   QString documentationText(QString item);
   QString documentationText(QRegExp pattern);
 
+  static QString convertToString(QScriptValue result);
+
   void dumpLocks();
 
 //  QScriptValue newQxrdObject(QObject *object, QString objectName);

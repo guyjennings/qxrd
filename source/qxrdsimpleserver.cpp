@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include <QThread>
 #include "qxrdexperiment.h"
+#include <QScriptValueIterator>
 
 QxrdSimpleServer::QxrdSimpleServer(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
   QTcpServer(NULL),
@@ -168,7 +169,7 @@ void QxrdSimpleServer::finishedCommand(QScriptValue result)
   }
 
   if (m_Socket && (m_Socket->isWritable())) {
-    m_Socket -> write(qPrintable(result.toString()+"\n"));
+    m_Socket -> write(qPrintable(QxrdScriptEngine::convertToString(result)+"\n"));
   }
 }
 
