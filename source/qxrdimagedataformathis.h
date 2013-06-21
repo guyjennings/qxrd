@@ -11,8 +11,9 @@ class QxrdImageDataFormatHis : public QcepImageDataFormat<double>
   QxrdImageDataFormatHis(QString name = "his");
 
   QxrdImageDataFormatHis* canLoadFile(QString path);
+  QxrdImageDataFormatHis* canSaveFile(QString path);
   QxrdImageDataFormatHis* loadFile(QString path, QcepImageData<double> *img);
-  QxrdImageDataFormatHis* saveFile(QString path, QcepImageData<double> *img);
+  QxrdImageDataFormatHis* saveFile(QString path, QcepImageData<double> *img, int);
   Priority priority() const;
 };
 

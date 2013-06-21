@@ -67,6 +67,11 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::canLoadFile(QString path)
   return res;
 }
 
+QxrdImageDataFormatHis* QxrdImageDataFormatHis::canSaveFile(QString path)
+{
+  return NULL;
+}
+
 QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImageData<double> *img)
 {
 //  printf("QxrdImageDataFormatHis::loadFile(%s)\n", qPrintable(path));
@@ -127,7 +132,7 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
   return NULL;
 }
 
-QxrdImageDataFormatHis* QxrdImageDataFormatHis::saveFile(QString /*path*/, QcepImageData<double> * /*img*/)
+QxrdImageDataFormatHis* QxrdImageDataFormatHis::saveFile(QString /*path*/, QcepImageData<double> * /*img*/, int /*canOverwrite*/)
 {
   return NULL;
 }
