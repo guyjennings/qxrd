@@ -161,12 +161,12 @@ QString QxrdScriptEngine::convertToString(QScriptValue result)
     for (int i=0; i<len; i++) {
       s += convertToString(result.property(tr("%1").arg(i)));
 
-      if (i==len-1) {
-        s += "]";
-      } else {
+      if (i<len-1) {
         s += ", ";
       }
     }
+
+    s += "]";
 
     return s;
 
@@ -183,10 +183,10 @@ QString QxrdScriptEngine::convertToString(QScriptValue result)
 
       if (it.hasNext()) {
         s += ", ";
-      } else {
-        s += "}";
       }
     }
+
+    s += "}";
 
     return s;
 
