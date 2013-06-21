@@ -14,6 +14,7 @@
 #include "qxrdimagedata-ptr.h"
 #include "qxrdimagedata.h"
 #include "qxrdexperiment-ptr.h"
+#include <QScriptValue>
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
 {
@@ -160,6 +161,11 @@ public slots:
   double getPowderPointX(int i);
   double getPowderPointY(int i);
   void   setPowderPoint(int i, double x, double y);
+
+  QScriptValue getPowderPoint(int i);
+  QScriptValue getPowderPoints();
+  int          countPowderPoints();
+  void         setPowderPoint(int i, QScriptValue val);
 
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);

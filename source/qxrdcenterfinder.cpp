@@ -418,6 +418,70 @@ void QxrdCenterFinder::setPowderPoint(int i, double x, double y)
   set_MarkedPoints(pts);
 }
 
+QScriptValue QxrdCenterFinder::getPowderPoint(int i)
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    QxrdScriptEnginePtr eng(exp->scriptEngine());
+
+    if (eng) {
+      if (i>=0 && i<get_MarkedPoints().count()) {
+        QScriptValue val = eng->newObject();
+
+        val.setProperty("x", getPowderPointX(i));
+        val.setProperty("y", getPowderPointY(i));
+
+        return val;
+      }
+    }
+  }
+
+  return QScriptValue();
+}
+
+QScriptValue QxrdCenterFinder::getPowderPoints()
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    QxrdScriptEnginePtr eng(exp->scriptEngine());
+
+    if (eng) {
+      QcepPolygon pts = get_MarkedPoints();
+
+      QScriptValue val = eng->newArray();
+
+      for (int i=0; i<pts.count(); i++) {
+        QScriptValue item = eng->newObject();
+
+        item.setProperty("x", pts[i].x());
+        item.setProperty("y", pts[i].y());
+
+        val.setProperty(tr("%1").arg(i), item);
+      }
+
+      return val;
+    }
+  }
+
+  return QScriptValue();
+}
+
+int          QxrdCenterFinder::countPowderPoints()
+{
+  return get_MarkedPoints().count();
+}
+
+void         QxrdCenterFinder::setPowderPoint(int i, QScriptValue val)
+{
+  double x = val.property("x").toNumber();
+  double y = val.property("y").toNumber();
+
+  setPowderPoint(i, x, y);
+}
+
+
 void QxrdCenterFinder::setData(QxrdDoubleImageDataPtr data)
 {
   m_Data = data;
