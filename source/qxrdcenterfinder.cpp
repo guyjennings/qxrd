@@ -393,14 +393,14 @@ void QxrdCenterFinder::adjustAllPoints()
 
 double QxrdCenterFinder::getPowderPointX(int i)
 {
-  QwtDoublePoint res = get_MarkedPoints().at(i);
+  QwtDoublePoint res = get_MarkedPoints().value(i);
 
   return res.x();
 }
 
 double QxrdCenterFinder::getPowderPointY(int i)
 {
-  QwtDoublePoint res = get_MarkedPoints().at(i);
+  QwtDoublePoint res = get_MarkedPoints().value(i);
 
   return res.y();
 }
