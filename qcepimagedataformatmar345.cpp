@@ -66,7 +66,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::loadFile(QString path, Qce
 
 
 template <typename T>
-QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::saveFile(QString /*path*/, QcepImageData<T> * /*img*/)
+QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::saveFile(QString /*path*/, QcepImageData<T> * /*img*/, int /*canOverwrite*/)
 {
   return NULL;
 }
