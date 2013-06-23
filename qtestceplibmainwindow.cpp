@@ -2,6 +2,8 @@
 #include "ui_qtestceplibmainwindow.h"
 #include <QFileDialog>
 #include "qcepmutexlocker.h"
+#include "qcepimagedataformattiff.h"
+#include "qcepimagedata.h"
 
 QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -18,6 +20,7 @@ QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
 
   connect(ui->m_ActionReadSettings, SIGNAL(triggered()), this, SLOT(doReadSettings()));
   connect(ui->m_ActionWriteSettings, SIGNAL(triggered()), this, SLOT(doWriteSettings()));
+  connect(ui->m_ActionLoadTIFFImage, SIGNAL(triggered()), this, SLOT(doLoadTIFFImage()));
 }
 
 QtestceplibMainWindow::~QtestceplibMainWindow()
@@ -83,4 +86,18 @@ void QtestceplibMainWindow::writeSettings(QSettings *settings)
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, "qtestceplib", settings);
+}
+
+void QtestceplibMainWindow::doLoadTIFFImage()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+        this, "Read TIFF Image from...", defPath);
+
+  if (theFile.length()) {
+    QcepImageDataFormatTiff<double> fmt("tiff");
+
+    QcepImageData<double> *img = new QcepImageData<double>(QcepSettingsSaverWPtr(), 1024,1024);
+
+    fmt.loadFile(theFile, img);
+  }
 }

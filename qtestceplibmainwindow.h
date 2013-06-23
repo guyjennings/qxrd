@@ -31,6 +31,8 @@ public slots:
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
 
+  void doLoadTIFFImage();
+
 private:
   Ui::QtestceplibMainWindow *ui;
   mutable QMutex m_Mutex;

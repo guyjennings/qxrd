@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -29,6 +29,7 @@
     </property>
     <addaction name="m_ActionReadSettings"/>
     <addaction name="m_ActionWriteSettings"/>
+    <addaction name="m_ActionLoadTIFFImage"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -47,6 +48,11 @@
    </property>
    <property name="toolTip">
     <string>Write Settings</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadTIFFImage">
+   <property name="text">
+    <string>Load TIFF Image...</string>
    </property>
   </action>
  </widget>
