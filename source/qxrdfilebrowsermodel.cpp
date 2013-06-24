@@ -128,7 +128,7 @@ QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
     int lastMod = info.lastModified().secsTo(QDateTime::currentDateTime());
 
     if (lastMod > (m_HighlightOnTime+m_HighlightFadeTime)) {
-      return Qt::white;
+      return QColor(Qt::white);
     } else {
       m_Updater -> needUpdate();
 

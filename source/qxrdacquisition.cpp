@@ -960,7 +960,7 @@ void QxrdAcquisition::startIdling()
 
 void QxrdAcquisition::onIdleTimeout()
 {
-  if (m_Idling) {
+  if (m_Idling.fetchAndAddOrdered(0)) {
     QxrdInt16ImageDataPtr res = acquireFrameIfAvailable(get_ExposureTime());
     QxrdDataProcessorPtr proc(m_DataProcessor);
 

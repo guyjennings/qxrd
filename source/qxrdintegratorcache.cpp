@@ -475,17 +475,17 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
         }
       }
 
-      while (m_CacheFillLevel < m_CacheFullLevel) {
+      while (m_CacheFillLevel.fetchAndAddOrdered(0) < m_CacheFullLevel.fetchAndAddOrdered(0)) {
         if (qcepDebug(DEBUG_INTEGRATOR)) {
           expt->printMessage(tr("QxrdIntegratorCache::performIntegration - waiting for cache [%1,%2]")
-                             .arg(m_CacheFillLevel)
-                             .arg(m_CacheFullLevel));
+                             .arg(m_CacheFillLevel.fetchAndAddOrdered(0))
+                             .arg(m_CacheFullLevel.fetchAndAddOrdered(0)));
         }
 
         QThreadAccess::msleep(100);
       }
 
-      if (m_CacheFillLevel == m_CacheFullLevel) {
+      if (m_CacheFillLevel.fetchAndAddOrdered(0) == m_CacheFullLevel.fetchAndAddOrdered(0)) {
         if (qcepDebug(DEBUG_INTEGRATOR)) {
           expt->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
         }

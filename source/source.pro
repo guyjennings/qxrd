@@ -14,6 +14,8 @@ macx {
   ICON = images/qxrd-icon.icns
 }
 
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent
+
 # POST_TARGETDEPS += install
 #target.path = ../app
 INSTALLS += target

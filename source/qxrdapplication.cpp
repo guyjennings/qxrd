@@ -56,9 +56,10 @@
 
 QxrdApplication *g_Application = NULL;
 
-QCoreApplication::EventFilter oldEventFilter;
-
 int eventCounter;
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+QCoreApplication::EventFilter oldEventFilter;
 
 static bool myEventFilter(void *message, long *result)
 {
@@ -72,6 +73,7 @@ static bool myEventFilter(void *message, long *result)
 }
 
 QTimer eventCounterTimer;
+#endif
 
 void QxrdApplication::processEventCounter()
 {
@@ -147,10 +149,12 @@ bool QxrdApplication::init(int &argc, char **argv)
 
   QDir::setCurrent(QDir::homePath());
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
   oldEventFilter = setEventFilter(myEventFilter);
 
   connect(&eventCounterTimer, SIGNAL(timeout()), this, SLOT(processEventCounter()));
   eventCounterTimer.start(10000);
+#endif
 
   setOrganizationName("cep");
   setOrganizationDomain("xray.aps.anl.gov");

@@ -48,8 +48,13 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
   m_FileBrowser -> resizeColumnsToContents();
   m_FileBrowser -> resizeRowsToContents();
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  m_FileBrowser->horizontalHeader()->sectionResizeMode(QHeaderView::ResizeToContents);
+  m_FileBrowser->verticalHeader()->sectionResizeMode(QHeaderView::ResizeToContents);
+#else
   m_FileBrowser->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
   m_FileBrowser->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+#endif
 
   m_Model -> setNameFilters(QStringList("*.tif"));
   m_Model -> setNameFilterDisables(false);

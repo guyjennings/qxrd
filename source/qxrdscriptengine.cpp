@@ -1638,7 +1638,11 @@ QString QxrdScriptEngine::documentationText(QString item)
 
         for (int i=QObject::staticMetaObject.methodCount();
              i<meta->methodCount(); i++) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+          QByteArray methodSig = meta->method(i).methodSignature();
+#else
           const char* methodSig = meta->method(i).signature();
+#endif
           QMetaMethod::MethodType methodType = meta->method(i).methodType();
 
           if ((i%2)) {

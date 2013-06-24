@@ -82,7 +82,7 @@ QMutex *QxrdAllocator::mutex()
 int QxrdAllocator::waitTillAvailable(AllocationStrategy strat, int sizeMB)
 {
   if (strat == QxrdAllocator::WaitTillAvailable) {
-    while((m_AllocatedMemoryMB + sizeMB) > get_Max()) {
+    while((m_AllocatedMemoryMB.fetchAndAddOrdered(0) + sizeMB) > get_Max()) {
       m_Mutex.unlock();
 
       if (qcepDebug(DEBUG_ALLOCATOR)) {
@@ -98,9 +98,9 @@ int QxrdAllocator::waitTillAvailable(AllocationStrategy strat, int sizeMB)
 
     return true;
   } else if (strat == QxrdAllocator::NullIfNotAvailable) {
-    return ((m_AllocatedMemoryMB + sizeMB) < get_Max());
+    return ((m_AllocatedMemoryMB.fetchAndAddOrdered(0) + sizeMB) < get_Max());
   } else if (strat == QxrdAllocator::AllocateFromReserve) {
-    return ((m_AllocatedMemoryMB + sizeMB) < (get_Max() + get_Reserve()));
+    return ((m_AllocatedMemoryMB.fetchAndAddOrdered(0) + sizeMB) < (get_Max() + get_Reserve()));
   } else if (strat == QxrdAllocator::AlwaysAllocate) {
     return true;
   } else {
@@ -461,17 +461,17 @@ void QxrdAllocator::allocatorHeartbeat()
 {
   g_QueuedDelete = get_QueuedDelete();
 
-  set_Allocated(m_AllocatedMemoryMB);
+  set_Allocated(m_AllocatedMemoryMB.fetchAndAddOrdered(0));
 }
 
 double QxrdAllocator::allocatedMemoryMB()
 {
-  return m_AllocatedMemoryMB;
+  return m_AllocatedMemoryMB.fetchAndAddOrdered(0);
 }
 
 double QxrdAllocator::allocatedMemory()
 {
-  return m_AllocatedMemoryMB*MegaBytes;
+  return m_AllocatedMemoryMB.fetchAndAddOrdered(0)*MegaBytes;
 }
 
 double QxrdAllocator::maximumMemoryMB()

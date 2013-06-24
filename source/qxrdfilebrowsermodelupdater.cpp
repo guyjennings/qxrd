@@ -287,7 +287,7 @@ void QxrdFileBrowserModelUpdater::updateContents()
                       .arg(m_RootPath).arg(m_Directories.count()).arg(m_Files.count()));
   }
 
-  if (m_GenerateUpdates) {
+  if (m_GenerateUpdates.fetchAndAddOrdered(0)) {
     QDateTime latest = m_PreviousUpdate;
 
     foreach(QFileInfo file, files) {

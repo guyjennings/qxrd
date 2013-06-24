@@ -415,10 +415,17 @@ void QwtPlot::updateLayout()
             if ( axisId == xBottom || axisId == xTop )
             {
                 QRegion r(d_data->layout->scaleRect(axisId));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+                if ( axisEnabled(yLeft) )
+                    r = r.subtracted(QRegion(d_data->layout->scaleRect(yLeft)));
+                if ( axisEnabled(yRight) )
+                    r = r.subtracted(QRegion(d_data->layout->scaleRect(yRight)));
+#else
                 if ( axisEnabled(yLeft) )
                     r = r.subtract(QRegion(d_data->layout->scaleRect(yLeft)));
                 if ( axisEnabled(yRight) )
                     r = r.subtract(QRegion(d_data->layout->scaleRect(yRight)));
+#endif
                 r.translate(-d_data->layout->scaleRect(axisId).x(), 
                     -d_data->layout->scaleRect(axisId).y());
 

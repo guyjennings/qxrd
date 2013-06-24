@@ -263,8 +263,11 @@ void QwtPainter::fillRect(QPainter *painter,
 
     QRect r = d_metricsMap.layoutToDevice(rect, painter);
     if ( deviceClipping )
-        r = r.intersect(clipRect);
-
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+      r = r.intersected(clipRect);
+#else
+      r = r.intersect(clipRect);
+#endif
     if ( r.isValid() )
         painter->fillRect(r, brush);
 }
