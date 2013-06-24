@@ -787,12 +787,20 @@ QcepIntProperty::QcepIntProperty(QcepSettingsSaverWPtr saver, QObject *parent, c
 
 int QcepIntProperty::value() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  return m_Value.load();
+#else
   return m_Value;
+#endif
 }
 
 int QcepIntProperty::defaultValue() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  return m_Default.load();
+#else
   return m_Default;
+#endif
 }
 
 void QcepIntProperty::setValue(int val, int index)
@@ -814,7 +822,12 @@ void QcepIntProperty::setValue(int val)
                  .arg(name()).arg(val));
   }
 
-  if (val != m_Value) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  int curVal = m_Value.load();
+#else
+  int curVal = m_Value;
+#endif
+  if (val != curVal) {
     if (debug()) {
       printMessage(tr("%1: QcepIntProperty::setValue(int %2) [%3]")
                    .arg(name()).arg(val).arg(index()));
@@ -828,8 +841,8 @@ void QcepIntProperty::setValue(int val)
       saver->changed(this);
     }
 
-    emit valueChanged(m_Value, incIndex(1));
-    emit valueChanged(tr("%1").arg(m_Value));
+    emit valueChanged(val, incIndex(1));
+    emit valueChanged(tr("%1").arg(val));
   }
 }
 
@@ -841,7 +854,7 @@ void QcepIntProperty::incValue(int step)
   }
 
   if (step) {
-    m_Value.fetchAndAddOrdered(step);
+    int newVal = m_Value.fetchAndAddOrdered(step);
 
     QcepSettingsSaverPtr saver(m_Saver);
 
@@ -849,8 +862,8 @@ void QcepIntProperty::incValue(int step)
       saver->changed(this);
     }
 
-    emit valueChanged(m_Value, incIndex(1));
-    emit valueChanged(tr("%1").arg(m_Value));
+    emit valueChanged(newVal, incIndex(1));
+    emit valueChanged(tr("%1").arg(newVal));
   }
 }
 
@@ -1034,12 +1047,20 @@ QcepBoolProperty::QcepBoolProperty(QcepSettingsSaverWPtr saver, QObject *parent,
 
 bool QcepBoolProperty::value() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  return m_Value.load();
+#else
   return m_Value;
+#endif
 }
 
 bool QcepBoolProperty::defaultValue() const
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  return m_Default.load();
+#else
   return m_Default;
+#endif
 }
 
 void QcepBoolProperty::setValue(bool val, int index)
@@ -1061,7 +1082,13 @@ void QcepBoolProperty::setValue(bool val)
                  .arg(name()).arg(val));
   }
 
-  if ((int) val != m_Value) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  int curVal = m_Value.load();
+#else
+  int curVal = m_Value;
+#endif
+
+  if ((int) val != curVal) {
     if (debug()) {
       printMessage(tr("%1: QcepBoolProperty::setValue(bool %2) [%3]")
                    .arg(name()).arg(val).arg(index()));
@@ -1075,7 +1102,7 @@ void QcepBoolProperty::setValue(bool val)
       saver->changed(this);
     }
 
-    emit valueChanged(m_Value, incIndex(1));
+    emit valueChanged(curVal, incIndex(1));
   }
 }
 
@@ -1095,7 +1122,11 @@ void QcepBoolProperty::resetValue()
 
 void QcepBoolProperty::toggle()
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  setValue(!m_Value.load());
+#else
   setValue(!m_Value);
+#endif
 }
 
 void QcepBoolProperty::linkTo(QAbstractButton *button)
