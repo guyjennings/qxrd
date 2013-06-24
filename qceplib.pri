@@ -14,6 +14,9 @@ SOURCES += \
   $${QCEPLIB}/qcepproperty.cpp \
   $${QCEPLIB}/qcepvector3dproperty.cpp \
   $${QCEPLIB}/qcepmatrix3x3property.cpp \
+  $${QCEPLIB}/qcepplotmarker.cpp \
+  $${QCEPLIB}/qcepplotmarkerlist.cpp \
+  $${QCEPLIB}/qcepplotmarkerlistproperty.cpp \
   $${QCEPLIB}/qcepmutexlocker.cpp \
   $${QCEPLIB}/qcepdocumentationdictionary.cpp \
   $${QCEPLIB}/qcepsettingssaver.cpp \
@@ -22,8 +25,7 @@ SOURCES += \
   $${QCEPLIB}/qcepimagedataformat.cpp \
   $${QCEPLIB}/qcepimagedataformattiff.cpp \
   $${QCEPLIB}/qcepimagedataformatmar345.cpp \
-#  $${QCEPLIB}/qspecserver.cpp \
-
+#  $${QCEPLIB}/qspecserver.cpp
 
 HEADERS += \
   $${QCEPLIB}/qcepdebug.h \
@@ -31,6 +33,9 @@ HEADERS += \
   $${QCEPLIB}/qcepproperty-ptr.h \
   $${QCEPLIB}/qcepvector3dproperty.h \
   $${QCEPLIB}/qcepmatrix3x3property.h \
+  $${QCEPLIB}/qcepplotmarker.h \
+  $${QCEPLIB}/qcepplotmarkerlist.h \
+  $${QCEPLIB}/qcepplotmarkerlistproperty.h \
   $${QCEPLIB}/qcepmutexlocker.h \
   $${QCEPLIB}/qcepdocumentationdictionary.h \
   $${QCEPLIB}/qcepsettingssaver.h \
@@ -43,4 +48,4 @@ HEADERS += \
   $${QCEPLIB}/qcepimagedataformatmar345.h \
   $${QCEPLIB}/qcepimagedataformatmar345-ptr.h \
 #  $${QCEPLIB}/qspecserver.h \
-#  $${QCEPLIB}/spec_server.h \
+#  $${QCEPLIB}/spec_server.h
