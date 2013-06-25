@@ -9,8 +9,9 @@ QCEPLIB = ./
 
 include("qceplib.pri")
 
-SOURCES += main.cpp \
-    qtestceplibmainwindow.cpp
+SOURCES += \
+    qtestceplibmainwindow.cpp \
+    qtestceplibmain.cpp
 
 OTHER_FILES += \
     qceplib.pri
