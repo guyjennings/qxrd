@@ -1187,7 +1187,7 @@ void QcepBoolPropertyButtonHelper::setChecked(bool value, int index)
 void QcepBoolPropertyButtonHelper::setChecked(bool value)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    m_Property->printMessage(tr("%1: QcepBoolPropertySpinBoxHelper::setValue(int %2)")
+    m_Property->printMessage(tr("%1: QcepBoolPropertyButtonHelper::setValue(int %2)")
                  .arg(m_Property->name()).arg(value));
   }
 
