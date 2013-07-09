@@ -69,6 +69,13 @@ QString QcepProperty::name() const
   return m_Name;
 }
 
+void QcepProperty::setName(QString name)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  m_Name = name;
+}
+
 QString QcepProperty::parentName() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);

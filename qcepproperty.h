@@ -31,6 +31,7 @@ public:
   QcepProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QString toolTip);
 
   QString name() const;
+  void setName(QString name);
 
   QString parentName() const;
   QString toolTip() const;
@@ -65,7 +66,7 @@ protected:
 private:
   int                      m_Debug;
   int                      m_IsStored;
-  const char              *m_Name;
+  QString                  m_Name;
   QAtomicInt               m_Index;
   QObject                 *m_Parent;
   QString                  m_ToolTip;
