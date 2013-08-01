@@ -1,6 +1,8 @@
+message(libtiff PWD = $${PWD})
+
 macx {
-  TIFFBASE = $${QCEPLIB}/tiff-4.0.3/libtiff/
-  TIFFCONF = $${QCEPLIB}/tiffconfig/macx/
+  TIFFBASE = $${PWD}/../tiff-4.0.3/libtiff/
+  TIFFCONF = $${PWD}/../tiffconfig/macx/
 
   INCLUDEPATH += $${TIFFBASE} $${TIFFCONF}
 
