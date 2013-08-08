@@ -1109,7 +1109,7 @@ void QcepBoolProperty::setValue(bool val)
       saver->changed(this);
     }
 
-    emit valueChanged(curVal, incIndex(1));
+    emit valueChanged(val, incIndex(1));
   }
 }
 
@@ -1194,7 +1194,7 @@ void QcepBoolPropertyButtonHelper::setChecked(bool value, int index)
 void QcepBoolPropertyButtonHelper::setChecked(bool value)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
-    m_Property->printMessage(tr("%1: QcepBoolPropertyButtonHelper::setValue(int %2)")
+    m_Property->printMessage(tr("%1: QcepBoolPropertyButtonHelper::setChecked(bool %2)")
                  .arg(m_Property->name()).arg(value));
   }
 
