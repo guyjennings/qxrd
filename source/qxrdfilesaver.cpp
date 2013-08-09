@@ -381,7 +381,7 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdM
         proc -> set_FileName(name);
 
         if (g_Application) {
-          g_Application->printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
+          g_Application->printMessage(tr("Saved 32 bit data in file \"%1\" after %2 msec").
                             arg(name).arg(tic.restart()));
         }
       }
@@ -465,7 +465,7 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdM
         proc -> set_FileName(name);
 
         if (g_Application) {
-          g_Application->printMessage(tr("Saved raw data in file \"%1\" after %2 msec").
+          g_Application->printMessage(tr("Saved 16 bit data in file \"%1\" after %2 msec").
                             arg(name).arg(tic.restart()));
         }
       }
