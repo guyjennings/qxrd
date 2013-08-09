@@ -67,15 +67,6 @@ void QxrdServer::serverPortChanged()
   }
 }
 
-QVariant QxrdServer::executeCommand(QString /*cmd*/)
-{
-//  printf("QxrdServer::executeCommand(%s)\n", qPrintable(cmd));
-
-//  QVariant result = m_AcquisitionThread->evaluate(cmd);
-
-  return 42;
-}
-
 QVariant QxrdServer::readProperty(QString name)
 {
   QVariant res;
