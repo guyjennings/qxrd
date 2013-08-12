@@ -80,6 +80,8 @@ OTHER_FILES += help/qxrdhelptext.html \
     testImage.js \
     tilt_test.js \
     testscript.js \
+    racetest.js \
+    racetest.mac \
     unsubtractDark.js \
     qxrdexampleusergeometry.js \
     qxrdexampleuserabsorption.js \
