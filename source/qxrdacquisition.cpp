@@ -260,7 +260,7 @@ QxrdAllocatorWPtr QxrdAcquisition::allocator() const
 void QxrdAcquisition::acquire()
 {
   if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "acquire", Qt::QueuedConnection));
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "acquire", Qt::BlockingQueuedConnection));
   } else {
     if (m_Acquiring.tryLock()) {
       set_Cancelling(false);
@@ -311,7 +311,7 @@ QxrdDarkAcquisitionParameterPack QxrdAcquisition::darkAcquisitionParameterPack()
 void QxrdAcquisition::acquireDark()
 {
   if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "acquireDark", Qt::QueuedConnection));
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "acquireDark", Qt::BlockingQueuedConnection));
   } else {
     if (m_Acquiring.tryLock()) {
       set_Cancelling(false);
