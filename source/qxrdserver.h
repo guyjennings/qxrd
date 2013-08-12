@@ -27,7 +27,6 @@ public:
 public slots:
   void runModeChanged();
   void serverPortChanged();
-  QVariant executeCommand(QString cmd);
   QVariant readProperty(QString name);
   void shutdown();
 };

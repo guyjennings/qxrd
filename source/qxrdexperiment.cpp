@@ -25,6 +25,7 @@
 #include "qxrddetectorthread.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdacquisition-ptr.h"
+#include <QHostInfo>
 
 QxrdExperiment::QxrdExperiment(
     QString path,
@@ -203,6 +204,45 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
     QDir::setCurrent(QDir::homePath());
 #endif
 
+    printMessage(tr("------- Starting new experiment -------"));
+    printMessage(tr("Experiment name: %1").arg(get_ExperimentName()));
+    printMessage(tr("Experiment Directory: %1").arg(get_ExperimentDirectory()));
+    printMessage(tr("Stored in file: %1").arg(get_ExperimentFileName()));
+
+    QString about = STR(QXRD_VERSION);
+
+    if (sizeof(void*) == 4) {
+      about += " - 32 Bit";
+    } else {
+      about += " - 64 Bit";
+    }
+
+#ifdef Q_CC_MSVC
+    about += " MSVC";
+#endif
+
+#ifdef Q_CC_GNU
+    about += " gcc";
+#endif
+
+#ifdef QT_NO_DEBUG
+    about += " Release";
+#else
+    about += " Debug";
+#endif
+
+#ifdef Q_OS_MAC
+    about += " : Macintosh";
+#elif defined(Q_OS_WIN32)
+    about += " : Windows";
+#elif defined(Q_OS_UNIX)
+    about += " : Unix";
+#endif
+
+    printMessage(tr("Qxrd Version : %1").arg(about));
+    printMessage("QWT Version " QWT_VERSION_STR);
+    printMessage(tr("QT Version %1").arg(qVersion()));
+    printMessage(tr("Running on host %1").arg(QHostInfo::localHostName()));
     printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 
     connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));

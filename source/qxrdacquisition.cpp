@@ -689,6 +689,8 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
   QVector<QVector<QxrdMaskDataPtr> >      ovf(nphases);
 
   printMessage("Starting acquisition");
+  printMessage(tr("Starting acquisition : QxrdAcquisition::doAcquire(fileBase = \"%1\" : index = %2 : Expos = %3 : nsum = %4 : preTrig = %5 : postTrig = %6 : nphases = %7 : skip = %8)")
+               .arg(fileBase).arg(fileIndex).arg(exposure).arg(nsummed).arg(preTrigger).arg(postTrigger).arg(nphases).arg(skipBefore));
 
   for (int p=0; p<nphases; p++) {
     res[p].resize(preTrigger+1);
@@ -878,7 +880,8 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
 
   set_LastAcquired(-1);
 
-  printMessage("Starting dark acquisition");
+  printMessage(tr("Starting dark acquisition : QxrdAcquisition::doAcquireDark(fileBase = \"%1\" : index = %2 : Expos = %3 : nsum = %4 skip = %5)")
+               .arg(fileBase).arg(fileIndex).arg(exposure).arg(nsummed).arg(skipBefore));
 
   if (synchronizedAcquisition()) {
     synchronizedAcquisition()->prepareForDarkAcquisition(&parms);
