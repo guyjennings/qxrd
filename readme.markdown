@@ -1,6 +1,16 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.14 - Aug 12 2013
+Fixed race problem with acquire and acquireDark - there was a race condition where
+the actual start of acquisition could be delayed till after acquire returned, meaning
+that a call to status would erroneously indicate that acquisition had succeeded.
+
+Added more information in the log file when an experiment starts up - show version
+information, host name and type, experiment name and path
+
+Fixed problems with conversion of array and list values to strings in scripts
+
 ## v0.9.13 - Jun 21 2013
 Added more routines to access powder points
 
