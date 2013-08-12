@@ -1,0 +1,27 @@
+def racetest(filename, exposure, iter) '{
+   for (i =0; i<iter; i++) {
+      racetest_acquiredark(filename, exposure, i)
+      racetest_acquire(filename, exposure, i)
+   }
+}'
+
+def racetest_acquire(filename, exposure, i) '{
+   remote_eval(PEHOST, \
+      sprintf("acquire(\"%s\",%g,1,1)",filename, exposure))
+   if (remote_eval(PEHOST, "status(0.0)")==1) {
+      printf("Iteration %d failed\n", i)
+   }
+   while(remote_eval(PEHOST,"status(1.0)")==0) {
+   }
+}'
+
+def racetest_acquiredark(filename, exposure, i) '{
+   remote_eval(PEHOST, \
+      sprintf("acquireDark(\"%s\",%g,1)",filename, exposure))
+   if (remote_eval(PEHOST, "status(0.0)")==1) {
+      printf("Iteration %d failed\n", i)
+   }
+   while(remote_eval(PEHOST,"status(1.0)")==0) {
+   }
+}'
+
