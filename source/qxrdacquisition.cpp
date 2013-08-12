@@ -225,7 +225,7 @@ void QxrdAcquisition::printMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdAcquisition::criticalMessage(QString msg, QDateTime ts)
+void QxrdAcquisition::criticalMessage(QString msg, QDateTime /*ts*/)
 {
   QxrdExperimentPtr exp(m_Experiment);
 
@@ -234,7 +234,7 @@ void QxrdAcquisition::criticalMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdAcquisition::statusMessage(QString msg, QDateTime ts)
+void QxrdAcquisition::statusMessage(QString msg, QDateTime /*ts*/)
 {
   QxrdExperimentPtr exp(m_Experiment);
 

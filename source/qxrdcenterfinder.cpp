@@ -197,7 +197,7 @@ void QxrdCenterFinder::onPointSelected(QwtDoublePoint pt)
   m_MarkedPoints.appendValue(pt);
 }
 
-void QxrdCenterFinder::evaluateFit(double *parm, double *x, int np, int nx)
+void QxrdCenterFinder::evaluateFit(double *parm, double *x, int /*np*/, int nx)
 {
   QcepPolygon pts = get_MarkedPoints();
   double cx = parm[0];

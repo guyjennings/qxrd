@@ -350,8 +350,8 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
         // Allocate new cache and fill it...
 
-        double cx = m_CenterX;
-        double cy = m_CenterY;
+//        double cx = m_CenterX;
+//        double cy = m_CenterY;
 
         int nRows = m_NRows;
         int nCols = m_NCols;
@@ -377,7 +377,7 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
             grabScriptEngine();
           }
 
-          double rMin, rMax;
+          double rMin=0, rMax=0;
           bool first = true;
 
           for (int y = 0; y < nRows; y++) {

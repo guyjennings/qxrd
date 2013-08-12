@@ -436,7 +436,7 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
   }
 }
 
-void QxrdFileBrowser::doubleClicked(QModelIndex index)
+void QxrdFileBrowser::doubleClicked(QModelIndex /*index*/)
 {
   doOpen();
 }

@@ -23,7 +23,7 @@ QxrdInfoDialog::~QxrdInfoDialog()
   }
 }
 
-void QxrdInfoDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
+void QxrdInfoDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr /*overflow*/)
 {
   m_InfoText->clear();
 

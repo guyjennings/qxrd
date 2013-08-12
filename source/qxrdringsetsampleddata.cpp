@@ -7,7 +7,7 @@
 #include <QThread>
 #include "qxrdapplication.h"
 
-QxrdRingSetSampledData::QxrdRingSetSampledData(QxrdSettingsSaverPtr saver) :
+QxrdRingSetSampledData::QxrdRingSetSampledData(QxrdSettingsSaverPtr /*saver*/) :
     QObject()
 {
 }

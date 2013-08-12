@@ -221,7 +221,7 @@ void QxrdDataProcessorBase::printMessage(QString msg, QDateTime ts) const
   }
 }
 
-void QxrdDataProcessorBase::criticalMessage(QString msg, QDateTime ts) const
+void QxrdDataProcessorBase::criticalMessage(QString msg, QDateTime /*ts*/) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 
@@ -230,7 +230,7 @@ void QxrdDataProcessorBase::criticalMessage(QString msg, QDateTime ts) const
   }
 }
 
-void QxrdDataProcessorBase::statusMessage(QString msg, QDateTime ts) const
+void QxrdDataProcessorBase::statusMessage(QString msg, QDateTime /*ts*/) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 
@@ -2132,7 +2132,7 @@ void QxrdDataProcessorBase::plotOutputScan()
   }
 }
 
-void QxrdDataProcessorBase::saveOutputScan(QString fileName)
+void QxrdDataProcessorBase::saveOutputScan(QString /*fileName*/)
 {
   if (m_OutputScan) {
 

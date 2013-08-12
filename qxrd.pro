@@ -102,24 +102,23 @@ tarball.commands += \
 QMAKE_EXTRA_TARGETS += dox
 
 #dox.target = dox/html/index.html
-dox.commands = "("
-dox.commands += cat $${PWD}/Doxyfile ;
-dox.commands += echo "PROJECT_NAME=\"QXRD\"" ;
-dox.commands += echo "PROJECT_NUMBER=$${VERSION}" ;
-dox.commands += echo "INPUT=\"$${PWD}\"" ;
-dox.commands += echo "INPUT+=\"$${PWD}\"/source/" ;
-dox.commands += echo "INPUT+=\"$${PWD}\"/source/submodules/" ;
-dox.commands += echo "INPUT+=\"$${PWD}\"/source/submodules/qceplib/" ;
-dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/" ;
-dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdareadetectorplugin/" ;
-dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdperkinelmerplugin/" ;
-dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdcudaprocessorplugin/" ;
-dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdpilatusplugin/" ;
-dox.commands += echo "INPUT+=\"$${PWD}\"/plugins/qxrdnidaqplugin/" ;
-dox.commands += echo "IMAGE_PATH+= \"$${PWD}\"/images \"$${PWD}\"/source/images" ;
-dox.commands += echo "IMAGE_PATH+= \"$${PWD}\"/source/help/images \"$${PWD}\"/qwt-5.2/doc/images" ;
-dox.commands += echo "ALIASES=\"projectnumber=$${VERSION}\""
-dox.commands += ")" > Doxyfile.out ;
+dox.commands = ( cat $${PWD}/Doxyfile ; \
+                 echo "PROJECT_NAME=\"QXRD\"" ; \
+                 echo "PROJECT_NUMBER=$${VERSION}" ; \
+                 echo "INPUT=\"$${PWD}\"" ; \
+                 echo "INPUT+=\"$${PWD}\"/source/" ; \
+                 echo "INPUT+=\"$${PWD}\"/source/submodules/" ; \
+                 echo "INPUT+=\"$${PWD}\"/source/submodules/qceplib/" ; \
+                 echo "INPUT+=\"$${PWD}\"/plugins/" ; \
+                 echo "INPUT+=\"$${PWD}\"/plugins/qxrdareadetectorplugin/" ; \
+                 echo "INPUT+=\"$${PWD}\"/plugins/qxrdperkinelmerplugin/" ; \
+                 echo "INPUT+=\"$${PWD}\"/plugins/qxrdcudaprocessorplugin/" ; \
+                 echo "INPUT+=\"$${PWD}\"/plugins/qxrdpilatusplugin/" ; \
+                 echo "INPUT+=\"$${PWD}\"/plugins/qxrdnidaqplugin/" ; \
+                 echo "IMAGE_PATH+= \"$${PWD}\"/images \"$${PWD}\"/source/images" ; \
+                 echo "IMAGE_PATH+= \"$${PWD}\"/source/help/images \"$${PWD}\"/qwt-5.2/doc/images" ; \
+                 echo "ALIASES=\"projectnumber=$${VERSION}\"" \
+               ) > Doxyfile.out ;
 dox.commands += doxygen < Doxyfile.out -
 dox.depends = FORCE $${PWD}/Doxyfile
 

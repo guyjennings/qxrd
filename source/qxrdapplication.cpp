@@ -117,7 +117,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_FileList(QxrdSettingsSaverPtr(), this, "fileList", QStringList(), "Files to Process"),
   m_LockerCount(QxrdSettingsSaverPtr(), this, "lockerCount", 0, "Number of mutex locks taken"),
   m_LockerRate(QxrdSettingsSaverPtr(), this, "lockerRate", 0, "Mutex Locking Rate"),
-  m_LastLockerCount(0),
   m_Splash(NULL),
   m_WelcomeWindow(NULL),
   m_AllocatorThread(NULL),
@@ -127,7 +126,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_PerkinElmerPluginInterface(NULL),
   #endif
   m_ResponseTimer(NULL),
-  m_SettingsMutex()
+  m_SettingsMutex(),
+  m_LastLockerCount(0)
 {
 #ifndef QT_NO_DEBUG
   printf("QxrdApplication::QxrdApplication(%p)\n", this);
@@ -446,7 +446,7 @@ void QxrdApplication::logMessage(QString /*msg*/)
 {
 }
 
-void QxrdApplication::warningMessage(QString msg, QDateTime ts)
+void QxrdApplication::warningMessage(QString msg, QDateTime /*ts*/)
 {
   if (window()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(window(), "warningMessage", Qt::BlockingQueuedConnection, Q_ARG(QString, msg)));

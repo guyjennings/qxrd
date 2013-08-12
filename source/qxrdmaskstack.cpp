@@ -55,17 +55,17 @@ void QxrdMaskStack::disableMasks(QModelIndexList sel)
   emit maskChanged();
 }
 
-void QxrdMaskStack::deleteMasks(QModelIndexList sel)
+void QxrdMaskStack::deleteMasks(QModelIndexList /*sel*/)
 {
 
 }
 
-void QxrdMaskStack::andMasks(QModelIndexList sel)
+void QxrdMaskStack::andMasks(QModelIndexList /*sel*/)
 {
 
 }
 
-void QxrdMaskStack::orMasks(QModelIndexList sel)
+void QxrdMaskStack::orMasks(QModelIndexList /*sel*/)
 {
 
 }

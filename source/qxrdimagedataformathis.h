@@ -15,6 +15,9 @@ class QxrdImageDataFormatHis : public QcepImageDataFormat<double>
   QxrdImageDataFormatHis* loadFile(QString path, QcepImageData<double> *img);
   QxrdImageDataFormatHis* saveFile(QString path, QcepImageData<double> *img, int);
   Priority priority() const;
+
+private:
+  void checkError(int e);
 };
 
 #endif

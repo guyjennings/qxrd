@@ -111,7 +111,7 @@ void QxrdAcquisitionExtraInputs::printMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdAcquisitionExtraInputs::criticalMessage(QString msg, QDateTime ts)
+void QxrdAcquisitionExtraInputs::criticalMessage(QString msg, QDateTime /*ts*/)
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
 
@@ -120,7 +120,7 @@ void QxrdAcquisitionExtraInputs::criticalMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdAcquisitionExtraInputs::statusMessage(QString msg, QDateTime ts)
+void QxrdAcquisitionExtraInputs::statusMessage(QString msg, QDateTime /*ts*/)
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
 
@@ -129,7 +129,7 @@ void QxrdAcquisitionExtraInputs::statusMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdAcquisitionExtraInputs::prepareForAcquisition(QxrdAcquisitionParameterPack *parms)
+void QxrdAcquisitionExtraInputs::prepareForAcquisition(QxrdAcquisitionParameterPack */*parms*/)
 {
   if (!get_Enabled()) {
     initialize();

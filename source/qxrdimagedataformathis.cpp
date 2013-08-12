@@ -31,6 +31,10 @@ typedef struct {
   quint16 TypeOfNumbers;		// short, long integer, float, signed/u};
 } HISHeader;
 
+void QxrdImageDataFormatHis::checkError(int /*e*/)
+{
+}
+
 QxrdImageDataFormatHis* QxrdImageDataFormatHis::canLoadFile(QString path)
 {
 //  printf("QxrdImageDataFormatHis::canLoadFile(%s)\n", qPrintable(path));
@@ -41,19 +45,19 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::canLoadFile(QString path)
   HISHeader h;
 
   if (file) {
-    fread(&h.FileType,     2, 1, file);
-    fread(&h.unk,          2, 1, file);
-    fread(&h.HeaderSize,   2, 1, file);
-    fread(&h.FileSize,     4, 1, file);
-    fread(&h.ImageHeaderSize, 2, 1, file);
-    fread(&h.ULX, 2, 1, file);
-    fread(&h.ULY, 2, 1, file);
-    fread(&h.BRX, 2, 1, file);
-    fread(&h.BRY, 2, 1, file);
-    fread(&h.NrOfFrames, 2, 1, file);
-    fread(&h.Correction, 2, 1, file);
-    fread(&h.IntegrationTime, 8, 1, file);
-    fread(&h.TypeOfNumbers, 2, 1, file);
+    checkError(fread(&h.FileType,     2, 1, file));
+    checkError(fread(&h.unk,          2, 1, file));
+    checkError(fread(&h.HeaderSize,   2, 1, file));
+    checkError(fread(&h.FileSize,     4, 1, file));
+    checkError(fread(&h.ImageHeaderSize, 2, 1, file));
+    checkError(fread(&h.ULX, 2, 1, file));
+    checkError(fread(&h.ULY, 2, 1, file));
+    checkError(fread(&h.BRX, 2, 1, file));
+    checkError(fread(&h.BRY, 2, 1, file));
+    checkError(fread(&h.NrOfFrames, 2, 1, file));
+    checkError(fread(&h.Correction, 2, 1, file));
+    checkError(fread(&h.IntegrationTime, 8, 1, file));
+    checkError(fread(&h.TypeOfNumbers, 2, 1, file));
 
     if (h.FileType == 0x7000 && 
 	h.HeaderSize == 100 &&
@@ -67,7 +71,7 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::canLoadFile(QString path)
   return res;
 }
 
-QxrdImageDataFormatHis* QxrdImageDataFormatHis::canSaveFile(QString path)
+QxrdImageDataFormatHis* QxrdImageDataFormatHis::canSaveFile(QString /*path*/)
 {
   return NULL;
 }
@@ -81,19 +85,19 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
   HISHeader h;
 
   if (file) {
-    fread(&h.FileType,     2, 1, file);
-    fread(&h.unk,          2, 1, file);
-    fread(&h.HeaderSize,   2, 1, file);
-    fread(&h.FileSize,     4, 1, file);
-    fread(&h.ImageHeaderSize, 2, 1, file);
-    fread(&h.ULX, 2, 1, file);
-    fread(&h.ULY, 2, 1, file);
-    fread(&h.BRX, 2, 1, file);
-    fread(&h.BRY, 2, 1, file);
-    fread(&h.NrOfFrames, 2, 1, file);
-    fread(&h.Correction, 2, 1, file);
-    fread(&h.IntegrationTime, 8, 1, file);
-    fread(&h.TypeOfNumbers, 2, 1, file);
+    checkError(fread(&h.FileType,     2, 1, file));
+    checkError(fread(&h.unk,          2, 1, file));
+    checkError(fread(&h.HeaderSize,   2, 1, file));
+    checkError(fread(&h.FileSize,     4, 1, file));
+    checkError(fread(&h.ImageHeaderSize, 2, 1, file));
+    checkError(fread(&h.ULX, 2, 1, file));
+    checkError(fread(&h.ULY, 2, 1, file));
+    checkError(fread(&h.BRX, 2, 1, file));
+    checkError(fread(&h.BRY, 2, 1, file));
+    checkError(fread(&h.NrOfFrames, 2, 1, file));
+    checkError(fread(&h.Correction, 2, 1, file));
+    checkError(fread(&h.IntegrationTime, 8, 1, file));
+    checkError(fread(&h.TypeOfNumbers, 2, 1, file));
 
     int width = h.BRX-h.ULX+1;
     int height = h.BRY-h.ULY+1;
@@ -106,7 +110,7 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
       quint16 pix;
       for (int y=0; y<height; y++) {
 	for (int x=0; x<width; x++) {
-	  fread(&pix, 2, 1, file);
+          checkError(fread(&pix, 2, 1, file));
           img -> setValue(x,(height-y-1),pix);
 	}
       }
@@ -114,7 +118,7 @@ QxrdImageDataFormatHis* QxrdImageDataFormatHis::loadFile(QString path, QcepImage
       quint32 pix;
       for (int y=0; y<height; y++) {
 	for (int x=0; x<width; x++) {
-          fread(&pix, 4, 1, file);
+          checkError(fread(&pix, 4, 1, file));
           img -> setValue(x,(height-y-1),pix);
 	}
       }

@@ -2,7 +2,7 @@
 #include "ui_qxrdcorrectiondialog.h"
 #include "qxrddebug.h"
 
-QxrdCorrectionDialog::QxrdCorrectionDialog(QWidget *parent, QxrdAcquisitionWPtr acq, QxrdDataProcessorWPtr proc) :
+QxrdCorrectionDialog::QxrdCorrectionDialog(QWidget *parent, QxrdAcquisitionWPtr /*acq*/, QxrdDataProcessorWPtr /*proc*/) :
     QDockWidget(parent)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {

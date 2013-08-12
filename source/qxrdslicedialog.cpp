@@ -23,7 +23,7 @@ QxrdSliceDialog::~QxrdSliceDialog()
   }
 }
 
-void QxrdSliceDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
+void QxrdSliceDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr /*overflow*/)
 {
   m_Image = image;
 

@@ -34,7 +34,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     QxrdDataProcessorPtr proc = expt->dataProcessor();
     //  QxrdAllocator *alloc = g_Application->allocator();
 
-    int detectorType = expt -> get_DetectorType();
+//    int detectorType = expt -> get_DetectorType();
     //  int processorType = m_Experiment -> get_ProcessorType();
 
     int runSpecServer = 0;
