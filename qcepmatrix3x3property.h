@@ -9,7 +9,12 @@ class QcepMatrix3x3Property : public QcepProperty
   Q_OBJECT
 public:
   explicit QcepMatrix3x3Property(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QMatrix3x3 value, QString toolTip);
-  
+  explicit QcepMatrix3x3Property(QcepSettingsSaverWPtr saver, QObject *parent, const char *name,
+                                 double r0c0, double r0c1, double r0c2,
+                                 double r1c0, double r1c1, double r1c2,
+                                 double r2c0, double r2c1, double r2c2,
+                                 QString toolTip);
+
   QMatrix3x3 value() const;
   QMatrix3x3 defaultValue() const;
   QString toString(const QMatrix3x3& mat);

@@ -10,6 +10,13 @@ QcepVector3DProperty::QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject 
 {
 }
 
+QcepVector3DProperty::QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, double x, double y, double z, QString toolTip) :
+  QcepProperty(saver, parent, name, toolTip),
+  m_Default(QVector3D(x,y,z)),
+  m_Value(QVector3D(x,y,z))
+{
+}
+
 void QcepVector3DProperty::registerMetaTypes()
 {
   qRegisterMetaType< QVector3D >("QVector3D");

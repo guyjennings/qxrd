@@ -50,11 +50,17 @@ public:
   Q_PROPERTY(QcepStringList sListProp READ get_SListProp WRITE set_SListProp)
   QCEP_STRING_LIST_PROPERTY(SListProp)
 
-  Q_PROPERTY(QVector3D vec3dProp READ get_Vec3dProp WRITE set_Vec3dProp)
-  QCEP_VECTOR3D_PROPERTY(Vec3dProp)
+  Q_PROPERTY(QVector3D vec3dPropA READ get_Vec3dPropA WRITE set_Vec3dPropA)
+  QCEP_VECTOR3D_PROPERTY(Vec3dPropA)
 
-  Q_PROPERTY(QMatrix3x3 mat3x3Prop READ get_Mat3x3Prop WRITE set_Mat3x3Prop)
-  QCEP_MATRIX3X3_PROPERTY(Mat3x3Prop)
+  Q_PROPERTY(QVector3D vec3dPropB READ get_Vec3dPropB WRITE set_Vec3dPropB)
+  QCEP_VECTOR3D_PROPERTY(Vec3dPropB)
+
+  Q_PROPERTY(QMatrix3x3 mat3x3PropA READ get_Mat3x3PropA WRITE set_Mat3x3PropA)
+  QCEP_MATRIX3X3_PROPERTY(Mat3x3PropA)
+
+  Q_PROPERTY(QMatrix3x3 mat3x3PropB READ get_Mat3x3PropB WRITE set_Mat3x3PropB)
+  QCEP_MATRIX3X3_PROPERTY(Mat3x3PropB)
 };
 
 #endif // QTESTCEPLIBMAINWINDOW_H

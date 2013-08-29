@@ -9,6 +9,7 @@ class QcepVector3DProperty : public QcepProperty
   Q_OBJECT
 public:
   explicit QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QVector3D value, QString toolTip);
+  explicit QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, double x, double y, double z, QString toolTip);
 
   QVector3D value() const;
   QVector3D defaultValue() const;

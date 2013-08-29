@@ -10,6 +10,25 @@ QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSettingsSaverWPtr saver, QObjec
 {
 }
 
+QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSettingsSaverWPtr saver, QObject *parent, const char *name,
+                                             double r0c0, double r0c1, double r0c2,
+                                             double r1c0, double r1c1, double r1c2,
+                                             double r2c0, double r2c1, double r2c2,
+                                             QString toolTip) :
+  QcepProperty(saver, parent, name, toolTip),
+  m_Default(),
+  m_Value()
+{
+  QMatrix3x3 val;
+
+  val(0,0) = r0c0; val(0,1) = r0c1; val(0,2) = r0c2;
+  val(1,0) = r1c0; val(1,1) = r1c1; val(1,2) = r1c2;
+  val(2,0) = r2c0; val(2,1) = r2c1; val(2,2) = r2c2;
+
+  m_Default = val;
+  m_Value = val;
+}
+
 void QcepMatrix3x3Property::registerMetaTypes()
 {
   qRegisterMetaType< QMatrix3x3 >("QMatrix3x3");
