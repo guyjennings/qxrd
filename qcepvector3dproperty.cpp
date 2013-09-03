@@ -3,7 +3,7 @@
 #include "qcepdebug.h"
 #include "qcepsettingssaver.h"
 
-QcepVector3DProperty::QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QVector3D value, QString toolTip) :
+QcepVector3DProperty::QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepVector3D value, QString toolTip) :
   QcepProperty(saver, parent, name, toolTip),
   m_Default(value),
   m_Value(value)
@@ -12,36 +12,36 @@ QcepVector3DProperty::QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject 
 
 QcepVector3DProperty::QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, double x, double y, double z, QString toolTip) :
   QcepProperty(saver, parent, name, toolTip),
-  m_Default(QVector3D(x,y,z)),
-  m_Value(QVector3D(x,y,z))
+  m_Default(x,y,z),
+  m_Value(x,y,z)
 {
 }
 
 void QcepVector3DProperty::registerMetaTypes()
 {
-  qRegisterMetaType< QVector3D >("QVector3D");
+  qRegisterMetaType< QcepVector3D >("QcepVector3D");
 
-  qRegisterMetaTypeStreamOperators< QVector3D >("QVector3D");
+  qRegisterMetaTypeStreamOperators< QcepVector3D >("QcepVector3D");
 }
 
-QVector3D QcepVector3DProperty::value() const
+QcepVector3D QcepVector3DProperty::value() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
-QVector3D QcepVector3DProperty::defaultValue() const
+QcepVector3D QcepVector3DProperty::defaultValue() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
 
-void QcepVector3DProperty::setValue(QVector3D val, int index)
+void QcepVector3DProperty::setValue(QcepVector3D val, int index)
 {
   if (debug()) {
-    printMessage(tr("%1 QcepVector3DProperty::setValue(QVector3D %2, int %3) [%4]")
+    printMessage(tr("%1 QcepVector3DProperty::setValue(QcepVector3D %2, int %3) [%4]")
                  .arg(name()).arg(toString(val)).arg(index).arg(this->index()));
   }
 
@@ -50,12 +50,12 @@ void QcepVector3DProperty::setValue(QVector3D val, int index)
   }
 }
 
-void QcepVector3DProperty::incValue(QVector3D step)
+void QcepVector3DProperty::incValue(QcepVector3D step)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
-    printMessage(tr("%1: QcepVector3DProperty::incValue(QVector3D %2...)")
+    printMessage(tr("%1: QcepVector3DProperty::incValue(QcepVector3D %2...)")
                  .arg(name()).arg(toString(step)));
   }
 
@@ -70,7 +70,7 @@ void QcepVector3DProperty::incValue(QVector3D step)
   emit valueChanged(m_Value, incIndex(1));
 }
 
-QString QcepVector3DProperty::toString(const QVector3D &val)
+QString QcepVector3DProperty::toString(const QcepVector3D &val)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -79,18 +79,18 @@ QString QcepVector3DProperty::toString(const QVector3D &val)
   return res;
 }
 
-void QcepVector3DProperty::setValue(QVector3D val)
+void QcepVector3DProperty::setValue(QcepVector3D val)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    printMessage(tr("%1 QcepVector3DProperty::setValue(QVector3D %2)")
+    printMessage(tr("%1 QcepVector3DProperty::setValue(QcepVector3D %2)")
                  .arg(name()).arg(toString(val)));
   }
 
   if (val != m_Value) {
     if (debug()) {
-      printMessage(tr("%1: QcepVector3DProperty::setValue(QVector3D %2) [%3]")
+      printMessage(tr("%1: QcepVector3DProperty::setValue(QcepVector3D %2) [%3]")
                    .arg(name()).arg(toString(val)).arg(index()));
     }
 
@@ -106,7 +106,7 @@ void QcepVector3DProperty::setValue(QVector3D val)
   }
 }
 
-void QcepVector3DProperty::setDefaultValue(QVector3D val)
+void QcepVector3DProperty::setDefaultValue(QcepVector3D val)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

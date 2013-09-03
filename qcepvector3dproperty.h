@@ -2,54 +2,54 @@
 #define QCEPVECTOR3DPROPERTY_H
 
 #include "qcepproperty.h"
-#include <QVector3D>
+#include "qcepvector3d.h"
 
 class QcepVector3DProperty : public QcepProperty
 {
   Q_OBJECT
 public:
-  explicit QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QVector3D value, QString toolTip);
+  explicit QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepVector3D value, QString toolTip);
   explicit QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, double x, double y, double z, QString toolTip);
 
-  QVector3D value() const;
-  QVector3D defaultValue() const;
-  QString toString(const QVector3D& mat);
+  QcepVector3D value() const;
+  QcepVector3D defaultValue() const;
+  QString toString(const QcepVector3D& mat);
 
   static void registerMetaTypes();
 
 public slots:
-  void setValue(QVector3D val, int index);
-  void setValue(QVector3D val);
-  void incValue(QVector3D step);
-  void setDefaultValue(QVector3D val);
+  void setValue(QcepVector3D val, int index);
+  void setValue(QcepVector3D val);
+  void incValue(QcepVector3D step);
+  void setDefaultValue(QcepVector3D val);
   void resetValue();
 
 signals:
-  void valueChanged(QVector3D val, int index);
+  void valueChanged(QcepVector3D val, int index);
 
 private:
-  QVector3D m_Default;
-  QVector3D m_Value;
+  QcepVector3D m_Default;
+  QcepVector3D m_Value;
 };
 
 #define QCEP_VECTOR3D_PROPERTY(propname) \
 public: \
-QVector3D get_##propname() const \
+QcepVector3D get_##propname() const \
 { \
   return m_##propname.value(); \
 } \
 \
-void set_##propname(QVector3D val) \
+void set_##propname(QcepVector3D val) \
 { \
   m_##propname.setValue(val); \
 } \
 \
-QVector3D def_##propname() const \
+QcepVector3D def_##propname() const \
 { \
   return m_##propname.defaultValue(); \
 } \
 \
-void setdef_##propname(QVector3D val) \
+void setdef_##propname(QcepVector3D val) \
 { \
   m_##propname.setDefaultValue(val); \
 } \

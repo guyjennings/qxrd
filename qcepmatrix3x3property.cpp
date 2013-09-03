@@ -3,7 +3,7 @@
 #include "qcepdebug.h"
 #include "qcepsettingssaver.h"
 
-QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QMatrix3x3 value, QString toolTip) :
+QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepMatrix3x3 value, QString toolTip) :
   QcepProperty(saver, parent, name, toolTip),
   m_Default(value),
   m_Value(value)
@@ -19,7 +19,7 @@ QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSettingsSaverWPtr saver, QObjec
   m_Default(),
   m_Value()
 {
-  QMatrix3x3 val;
+  QcepMatrix3x3 val;
 
   val(0,0) = r0c0; val(0,1) = r0c1; val(0,2) = r0c2;
   val(1,0) = r1c0; val(1,1) = r1c1; val(1,2) = r1c2;
@@ -31,29 +31,29 @@ QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSettingsSaverWPtr saver, QObjec
 
 void QcepMatrix3x3Property::registerMetaTypes()
 {
-  qRegisterMetaType< QMatrix3x3 >("QMatrix3x3");
+  qRegisterMetaType< QcepMatrix3x3 >("QcepMatrix3x3");
 
-  qRegisterMetaTypeStreamOperators< QMatrix3x3 >("QMatrix3x3");
+  qRegisterMetaTypeStreamOperators< QcepMatrix3x3 >("QcepMatrix3x3");
 }
 
-QMatrix3x3 QcepMatrix3x3Property::value() const
+QcepMatrix3x3 QcepMatrix3x3Property::value() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Value;
 }
 
-QMatrix3x3 QcepMatrix3x3Property::defaultValue() const
+QcepMatrix3x3 QcepMatrix3x3Property::defaultValue() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Default;
 }
 
-void QcepMatrix3x3Property::setValue(QMatrix3x3 val, int index)
+void QcepMatrix3x3Property::setValue(QcepMatrix3x3 val, int index)
 {
   if (debug()) {
-    printMessage(tr("%1 QcepMatrix3x3Property::setValue(QMatrix3x3 %2, int %3) [%4]")
+    printMessage(tr("%1 QcepMatrix3x3Property::setValue(QcepMatrix3x3 %2, int %3) [%4]")
                  .arg(name()).arg(toString(val)).arg(index).arg(this->index()));
   }
 
@@ -62,12 +62,12 @@ void QcepMatrix3x3Property::setValue(QMatrix3x3 val, int index)
   }
 }
 
-void QcepMatrix3x3Property::incValue(QMatrix3x3 step)
+void QcepMatrix3x3Property::incValue(QcepMatrix3x3 step)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
-    printMessage(tr("%1: QcepMatrix3x3Property::incValue(QMatrix3x3 %2...)")
+    printMessage(tr("%1: QcepMatrix3x3Property::incValue(QcepMatrix3x3 %2...)")
                  .arg(name()).arg(toString(step)));
   }
 
@@ -82,7 +82,7 @@ void QcepMatrix3x3Property::incValue(QMatrix3x3 step)
   emit valueChanged(m_Value, incIndex(1));
 }
 
-QString QcepMatrix3x3Property::toString(const QMatrix3x3 &val)
+QString QcepMatrix3x3Property::toString(const QcepMatrix3x3 &val)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -101,18 +101,18 @@ QString QcepMatrix3x3Property::toString(const QMatrix3x3 &val)
   return res;
 }
 
-void QcepMatrix3x3Property::setValue(QMatrix3x3 val)
+void QcepMatrix3x3Property::setValue(QcepMatrix3x3 val)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    printMessage(tr("%1 QcepMatrix3x3Property::setValue(QMatrix3x3 %2)")
+    printMessage(tr("%1 QcepMatrix3x3Property::setValue(QcepMatrix3x3 %2)")
                  .arg(name()).arg(toString(val)));
   }
 
   if (val != m_Value) {
     if (debug()) {
-      printMessage(tr("%1: QcepMatrix3x3Property::setValue(QMatrix3x3 %2) [%3]")
+      printMessage(tr("%1: QcepMatrix3x3Property::setValue(QcepMatrix3x3 %2) [%3]")
                    .arg(name()).arg(toString(val)).arg(index()));
     }
 
@@ -128,7 +128,7 @@ void QcepMatrix3x3Property::setValue(QMatrix3x3 val)
   }
 }
 
-void QcepMatrix3x3Property::setDefaultValue(QMatrix3x3 val)
+void QcepMatrix3x3Property::setDefaultValue(QcepMatrix3x3 val)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 

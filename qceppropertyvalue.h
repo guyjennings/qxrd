@@ -18,5 +18,6 @@ public:
 };
 
 Q_DECLARE_METATYPE(QcepPropertyValue)
+Q_DECLARE_METATYPE(QcepPropertyValue*)
 
 #endif // QCEPPROPERTYVALUE_H

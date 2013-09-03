@@ -28,7 +28,9 @@ SOURCES += \
   $${PWD}/qcepimagedataformatmar345.cpp \
   $${PWD}/qcepobjectnamer.cpp \
 #  $${PWD}/qspecserver.cpp
-    qceppropertyvalue.cpp
+    qceppropertyvalue.cpp \
+    qcepmatrix3x3.cpp \
+    qcepvector3d.cpp
 
 HEADERS += \
   $${PWD}/qcepdebug.h \
@@ -53,4 +55,6 @@ HEADERS += \
   $${PWD}/qcepobjectnamer.h \
 #  $${PWD}/qspecserver.h \
 #  $${PWD}/spec_server.h
-    qceppropertyvalue.h
+    qceppropertyvalue.h \
+    qcepmatrix3x3.h \
+    qcepvector3d.h
