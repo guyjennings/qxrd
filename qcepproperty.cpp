@@ -3,6 +3,7 @@
 #include "qcepsettingssaver.h"
 #include "qcepdocumentationdictionary.h"
 #include "qcepmutexlocker.h"
+#include "qceppropertyvalue.h"
 
 #include <QSpinBox>
 #include <QComboBox>
@@ -175,6 +176,7 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaType< QRectF >("QRectF");
   qRegisterMetaType< QcepPolygon >("QcepPolygon");
   qRegisterMetaType< QVariant >("QVariant");
+  qRegisterMetaType< QcepPropertyValue >("QcepPropertyValue");
 
   qRegisterMetaTypeStreamOperators< QcepDoubleVector >("QcepDoubleVector");
   qRegisterMetaTypeStreamOperators< QcepBoolVector >("QcepBoolVector");
@@ -200,7 +202,11 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
 {
   settings->setValue(name, v);
 
-  if (v.canConvert<QcepDoubleVector>()){
+  if (v.canConvert<QcepPropertyValue>()) {
+    QcepPropertyValue pv = v.value<QcepPropertyValue>();
+
+    pv.setSettingsValue(settings, name);
+  } else if (v.canConvert<QcepDoubleVector>()){
     QcepDoubleVector dv = v.value<QcepDoubleVector>();
 
     settings->beginWriteArray(name, dv.count());
