@@ -12,3 +12,10 @@ void QcepMatrix3x3::setSettingsValue(QSettings *settings, QString name)
 
   settings->endGroup();
 }
+
+void QcepMatrix3x3::customSaver(const QVariant &val, QSettings *settings, QString name)
+{
+  QcepMatrix3x3 vec = val.value<QcepMatrix3x3>();
+
+  vec.setSettingsValue(settings, name);
+}

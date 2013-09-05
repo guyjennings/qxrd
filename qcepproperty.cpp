@@ -18,6 +18,8 @@
 #include "qcepvector3d.h"
 #include "qcepmatrix3x3.h"
 
+QMap<QString, CustomSettingsSaver*> QcepProperty::m_CustomSavers;
+
 QcepProperty::QcepProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QString toolTip)
   : QObject(),
     m_Mutex(QMutex::Recursive),
@@ -180,7 +182,6 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaType< QcepPropertyValue* >("QcepPropertyValue*");
   qRegisterMetaType< QcepMatrix3x3 >("QcepMatrix3x3");
   qRegisterMetaType< QcepVector3D >("QcepVector3D");
-
   qRegisterMetaTypeStreamOperators< QcepDoubleVector >("QcepDoubleVector");
   qRegisterMetaTypeStreamOperators< QcepBoolVector >("QcepBoolVector");
   qRegisterMetaTypeStreamOperators< QcepIntVector >("QcepIntVector");
@@ -194,6 +195,9 @@ void QcepProperty::registerMetaTypes()
   qRegisterMetaTypeStreamOperators< QcepPolygon >("QcepPolygon");
   qRegisterMetaTypeStreamOperators< QcepMatrix3x3 >("QcepMatrix3x3");
   qRegisterMetaTypeStreamOperators< QcepVector3D >("QcepVector3D");
+
+  registerCustomSaver("QcepMatrix3x3", QcepMatrix3x3::customSaver);
+  registerCustomSaver("QcepVector3D",  QcepVector3D::customSaver);
 }
 
 void QcepProperty::setSaver(QcepSettingsSaverWPtr saver)
@@ -207,7 +211,15 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
 {
   settings->setValue(name, v);
 
-  if (v.canConvert<QcepPropertyValue*>()) {
+  QVariant::Type typeId = v.type();
+  QString typeName = v.typeName();
+
+  if (m_CustomSavers.contains(typeName)) {
+    CustomSettingsSaver *saver = m_CustomSavers[typeName];
+
+    if (saver) {
+      (*saver)(v, settings, name);
+    }
   } else if (v.canConvert<QcepVector3D>()) {
     QcepVector3D pv = v.value<QcepVector3D>();
 
@@ -596,6 +608,11 @@ void QcepProperty::printMessage(QString msg, QDateTime ts)
 //    meta = meta->superClass();
 //  }
 //}
+
+void QcepProperty::registerCustomSaver(QString typeName, CustomSettingsSaver *saver)
+{
+  m_CustomSavers[typeName] = saver;
+}
 
 QcepDoubleProperty::QcepDoubleProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, double value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),

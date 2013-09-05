@@ -14,6 +14,8 @@ public:
 
 public:
   void setSettingsValue(QSettings *settings, QString name);
+
+  static void customSaver(const QVariant &val, QSettings *settings, QString name);
 };
 
 Q_DECLARE_METATYPE(QcepVector3D)

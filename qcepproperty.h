@@ -25,6 +25,8 @@
 //#include <qwt_double_rect.h>
 #include <QLCDNumber>
 
+typedef void (CustomSettingsSaver)(const QVariant &val, QSettings *settings, QString name);
+
 class QcepProperty : public QObject {
   Q_OBJECT
 public:
@@ -59,6 +61,8 @@ public:
 
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
+  static void registerCustomSaver(QString typeName, CustomSettingsSaver *saver);
+
 protected:
   mutable QMutex           m_Mutex;
   QcepSettingsSaverWPtr    m_Saver;
@@ -70,6 +74,8 @@ private:
   QAtomicInt               m_Index;
   QObject                 *m_Parent;
   QString                  m_ToolTip;
+
+  static QMap<QString, CustomSettingsSaver*> m_CustomSavers;
 };
 
 class QcepDoubleProperty : public QcepProperty {
