@@ -1,6 +1,11 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.15 - Sep 12 2013
+Added an experiment.detectorNumber parameter to permit working with multiple detectors on the same machine.
+
+Added detector number control widget in the acquisition dialog.
+
 ## v0.9.14 - Aug 12 2013
 Fixed race problem with acquire and acquireDark - there was a race condition where
 the actual start of acquisition could be delayed till after acquire returned, meaning
