@@ -20,6 +20,7 @@ public:
   explicit QxrdDetectorPerkinElmer(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorPerkinElmer();
   int detectorType() const;
+  int detectorNumber() const;
 
 private slots:
   void onExposureTimeChanged();
@@ -63,6 +64,7 @@ private:
   HACQDESC               m_AcqDesc;
   int                    m_StartupDelayed;
 
+  int                    m_DetectorNumber;
   int                    m_PROMID;
   int                    m_HeaderID;
   int                    m_CameraType;

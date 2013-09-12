@@ -50,13 +50,6 @@ Script Property: &quot;acquisition.userComment4&quot;
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="m_DetectorTypeNameLabel">
-          <property name="text">
-           <string>Detector Type</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="3">
          <widget class="QPushButton" name="m_AcquireOptionsButton">
           <property name="toolTip">
@@ -892,6 +885,23 @@ Script Property: &quot;processor.logFileName&quot;</string>
          <widget class="QCheckBox" name="m_AcquisitionCancelsLiveView">
           <property name="text">
            <string>Acquisition Cancels Live View</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QLabel" name="m_DetectorTypeNameLabel">
+          <property name="text">
+           <string>Detector Type</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QSpinBox" name="m_DetectorNumber">
+          <property name="specialValueText">
+           <string>Default</string>
+          </property>
+          <property name="prefix">
+           <string>Number</string>
           </property>
          </widget>
         </item>

@@ -16,6 +16,7 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QxrdExperimentWPtr expt, QxrdAc
   m_BufferSize(0),
   m_AcqDesc(NULL),
   m_StartupDelayed(0),
+  m_DetectorNumber(0),
   m_PROMID(-1),
   m_HeaderID(-1),
   m_CameraType(-1),
@@ -157,6 +158,14 @@ void QxrdDetectorPerkinElmer::initialize()
     DWORD dwAcqType, dwSystemID, dwSyncMode, dwHwAccess;
     WORD binningMode;
 
+    QxrdExperimentPtr exp(m_Experiment);
+
+    int detNum  = 0;
+
+    if (exp) {
+      detNum = exp->get_DetectorNumber();
+    }
+
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
 
     if (plugin) {
@@ -176,14 +185,19 @@ void QxrdDetectorPerkinElmer::initialize()
       printMessage(tr("Number of sensors = %1").arg(nSensors));
     }
 
-    if (nSensors != 1) {
+    if (detNum == 0 && nSensors != 1) {
+      acquisitionNSensorsError(nRet);
+      return;
+    } else if (detNum < 0 || detNum > nSensors) {
       acquisitionNSensorsError(nRet);
       return;
     }
 
-    if (plugin && (nRet = plugin->Acquisition_GetNextSensor(&Pos, &m_AcqDesc))!=HIS_ALL_OK) {
-      acquisitionNSensorsError(nRet);
-      return;
+    for (int i=1; i<=(detNum?detNum:1); i++) {
+      if (plugin && (nRet = plugin->Acquisition_GetNextSensor(&Pos, &m_AcqDesc))!=HIS_ALL_OK) {
+        acquisitionNSensorsError(nRet);
+        return;
+      }
     }
 
     if (plugin && (nRet = plugin->Acquisition_GetCommChannel(m_AcqDesc, &nChannelType, &nChannelNr))!=HIS_ALL_OK) {

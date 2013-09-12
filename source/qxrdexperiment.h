@@ -187,6 +187,9 @@ public:  // Properties
   Q_PROPERTY(QString detectorTypeName READ get_DetectorTypeName WRITE set_DetectorTypeName STORED false)
   QCEP_STRING_PROPERTY(DetectorTypeName)
 
+  Q_PROPERTY(int    detectorNumber  READ get_DetectorNumber WRITE set_DetectorNumber)
+  QCEP_INTEGER_PROPERTY(DetectorNumber)
+
   Q_PROPERTY(int    processorType READ get_ProcessorType WRITE set_ProcessorType)
   QCEP_INTEGER_PROPERTY(ProcessorType)
 

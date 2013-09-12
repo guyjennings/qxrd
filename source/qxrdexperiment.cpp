@@ -61,8 +61,9 @@ QxrdExperiment::QxrdExperiment(
   m_ExperimentDescription(m_SettingsSaver, this, "experimentDescription", "", "Experiment Description"),
   m_LogFileName(m_SettingsSaver, this, "logFileName", defaultLogName(path), "Log File Name"),
   m_ScanFileName(m_SettingsSaver, this, "scanFileName", defaultScanName(path), "Scan File Name"),
-  m_DetectorType(m_SettingsSaver, this,"detectorType", 0, "Detector Type"),
+  m_DetectorType(m_SettingsSaver, this, "detectorType", 0, "Detector Type"),
   m_DetectorTypeName(QxrdSettingsSaverPtr(), this,"detectorTypeName", QxrdDetectorThread::detectorTypeName(get_DetectorType()), "Name of Detector Type"),
+  m_DetectorNumber(m_SettingsSaver, this, "detectorNumber", 0, "Detector Number"),
   m_ProcessorType(m_SettingsSaver, this,"processorType", 0, "Data Processor Type"),
   m_DefaultLayout(QxrdSettingsSaverWPtr(), this,"defaultLayout",0, "Default Layout Used?"),
   m_WorkCompleted(QxrdSettingsSaverWPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
@@ -248,6 +249,7 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
     connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
     connect(prop_WorkTarget(),    SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
     connect(prop_DetectorType(),  SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
+    connect(prop_DetectorNumber(),SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
 
     m_SettingsSaver->start();
 
@@ -864,9 +866,10 @@ void QxrdExperiment::finishedWork(int amt)
 void QxrdExperiment::onDetectorTypeChanged()
 {
   int newType = get_DetectorType();
+  int newNum  = get_DetectorNumber();
 
   if (qcepDebug(DEBUG_ACQUIRE)) {
-    printMessage(tr("Detector type changed to %1").arg(newType));
+    printMessage(tr("Detector type changed to %1, Number %2").arg(newType).arg(newNum));
   }
 
   m_Detector       = QxrdDetectorPtr();
