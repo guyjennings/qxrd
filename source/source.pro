@@ -122,6 +122,9 @@ HEADERS += submodules/qceplib/spec_server.h \
     submodules/qceplib/qcepimagedataformatfactory-ptr.h \
     submodules/qceplib/qcepdocumentationdictionary.h \
     submodules/qceplib/qcepdebug.h \
+    submodules/qceplib/qceppropertyvalue.h \
+    submodules/qceplib/qcepvector3d.h \
+    submodules/qceplib/qcepmatrix3x3.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
     qxrddetector.h \
@@ -148,6 +151,9 @@ SOURCES += submodules/qceplib/qspecserver.cpp \
     submodules/qceplib/qcepimagedataformatfactory.cpp \
     submodules/qceplib/qcepdocumentationdictionary.cpp \
     submodules/qceplib/qcepdebug.cpp \
+    submodules/qceplib/qceppropertyvalue.cpp \
+    submodules/qceplib/qcepvector3d.cpp \
+    submodules/qceplib/qcepmatrix3x3.cpp \
     qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
     qxrddetector.cpp \
