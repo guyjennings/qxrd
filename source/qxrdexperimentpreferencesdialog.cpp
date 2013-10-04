@@ -124,15 +124,28 @@ QxrdExperimentPreferencesDialog::~QxrdExperimentPreferencesDialog()
   }
 }
 
+QString QxrdExperimentPreferencesDialog::experimentDirectory()
+{
+  return m_ExperimentDirectory->text();
+}
+
+QString QxrdExperimentPreferencesDialog::dataDirectory()
+{
+  return QDir(experimentDirectory()).filePath(m_DataDirectory->text());
+}
+
 void QxrdExperimentPreferencesDialog::getRelativeDirectoryPath(QLineEdit *edit)
 {
-  QDir pwd(m_ExperimentDirectory->text());
-  QFileInfo initial(pwd, edit->text());
+  QString initial = QDir(dataDirectory()).filePath(edit->text());
 
-  QString dir = QFileDialog::getExistingDirectory(this, "", initial.absolutePath(), QFileDialog::ShowDirsOnly);
+  QString dir = QFileDialog::getExistingDirectory(this, "", initial, QFileDialog::ShowDirsOnly);
 
   if (dir != "") {
-    edit -> setText(pwd.relativeFilePath(dir));
+    QString result = QDir(dataDirectory()).relativeFilePath(dir);
+
+    edit -> setText(result);
+
+//    printf("Initial: %s\nDir: %s\nResult: %s\n", qPrintable(initial), qPrintable(dir), qPrintable(result));
   }
 }
 
@@ -158,37 +171,34 @@ void QxrdExperimentPreferencesDialog::saveIntegratedBrowse()
 
 void QxrdExperimentPreferencesDialog::dataDirectoryBrowse()
 {
-  QDir pwd(m_ExperimentDirectory->text());
-  QFileInfo initial(pwd, m_DataDirectory->text());
+  QString initial = QDir(experimentDirectory()).filePath(m_DataDirectory->text());
 
-  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", initial.canonicalPath(), QFileDialog::ShowDirsOnly);
+  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", initial, QFileDialog::ShowDirsOnly);
 
   if (dir != "") {
-    m_DataDirectory->setText(pwd.relativeFilePath(dir));
+    m_DataDirectory->setText(QDir(experimentDirectory()).relativeFilePath(dir));
   }
 }
 
 void QxrdExperimentPreferencesDialog::currentLogFileBrowse()
 {
-  QDir pwd(m_ExperimentDirectory->text());
-  QFileInfo initial(pwd, m_CurrentLogFile->text());
+  QString initial = QDir(experimentDirectory()).filePath(m_ExperimentDirectory->text());
 
-  QString file = QFileDialog::getSaveFileName(this, "Log File", initial.absoluteFilePath());
+  QString file = QFileDialog::getSaveFileName(this, "Log File", initial);
 
   if (file != "") {
-    m_CurrentLogFile->setText(pwd.relativeFilePath(file));
+    m_CurrentLogFile->setText(QDir(experimentDirectory()).relativeFilePath(file));
   }
 }
 
 void QxrdExperimentPreferencesDialog::integratedScansFileBrowse()
 {
-  QDir pwd(m_ExperimentDirectory->text());
-  QFileInfo initial(pwd, m_IntegratedScansFile->text());
+  QString initial = QDir(dataDirectory()).filePath(m_IntegratedScansFile->text());
 
-  QString file = QFileDialog::getSaveFileName(this, "Scans File", initial.absoluteFilePath());
+  QString file = QFileDialog::getSaveFileName(this, "Scans File", initial);
 
   if (file != "") {
-    m_IntegratedScansFile->setText(pwd.relativeFilePath(file));
+    m_IntegratedScansFile->setText(QDir(dataDirectory()).relativeFilePath(file));
   }
 }
 

@@ -35,6 +35,9 @@ protected:
 private:
   void getRelativeDirectoryPath(QLineEdit *edit);
 
+  QString experimentDirectory();
+  QString dataDirectory();
+
 private:
   QxrdExperimentWPtr m_Experiment;
 };
