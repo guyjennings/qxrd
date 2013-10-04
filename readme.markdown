@@ -9,6 +9,9 @@ and the data directory - the root directory where data files are stored
 
 Removed some confusing commands related to new experiment creation
 
+Rearranged order of widgets in acquisition panel and experiment preferences dialog to better
+reflect hierarchy of directories used.
+
 ## v0.9.15 - Sep 12 2013
 Added an experiment.detectorNumber parameter to permit working with multiple detectors on the same machine.
 
