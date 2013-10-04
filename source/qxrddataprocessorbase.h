@@ -314,8 +314,10 @@ public slots:
 
 public:
   QString existingOutputDirectory(QString dir, QString subdir) const;
-  QString filePathInCurrentDirectory(QString name) const;
-  QString currentDirectory() const;
+  QString filePathInExperimentDirectory(QString name) const;
+  QString filePathInDataDirectory(QString name) const;
+  QString experimentDirectory() const;
+  QString dataDirectory() const;
   QString darkOutputDirectory() const;
   QString rawOutputDirectory() const;
   QString subtractedOutputDirectory() const;

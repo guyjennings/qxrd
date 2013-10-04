@@ -340,7 +340,7 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
 
   foreach(QString name, names) {
     QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
-    QString path = filePathInCurrentDirectory(name);
+    QString path = filePathInDataDirectory(name);
 
     if (img->readImage(path)) {
       printMessage(tr("Load image from %1").arg(path));
@@ -377,7 +377,7 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
 
   QxrdAllocator::newDoubleImageAndIntegratedData(m_Allocator, QxrdAllocator::AlwaysAllocate, 0,0, img, result);
 
-  QString path = filePathInCurrentDirectory(name);
+  QString path = filePathInDataDirectory(name);
 
   if (img -> readImage(path)) {
     printMessage(tr("Load image from %1").arg(path));
@@ -402,7 +402,7 @@ void QxrdDataProcessorThreaded::processData(QString name)
 {
   QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
-  QString path = filePathInCurrentDirectory(name);
+  QString path = filePathInDataDirectory(name);
 
   if (res -> readImage(path)) {
     printMessage(tr("Load image from %1").arg(path));
@@ -478,7 +478,7 @@ void QxrdDataProcessorThreaded::processNormalizedFile(QString name, QList<double
 {
   QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
-  QString path = filePathInCurrentDirectory(name);
+  QString path = filePathInDataDirectory(name);
 
   if (res -> readImage(path)) {
 
@@ -515,7 +515,7 @@ void QxrdDataProcessorThreaded::setFileNormalization(QString name, QList<double>
 {
   QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
-  QString path = filePathInCurrentDirectory(name);
+  QString path = filePathInDataDirectory(name);
 
   if (res -> readImage(path)) {
 
@@ -556,10 +556,10 @@ void QxrdDataProcessorThreaded::integrateSaveAndDisplay()
 
 void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePattern, int nImgExposures, QString darkPath, int nDarkExposures)
 {
-  QDirIterator imagePaths(currentDirectory(), QStringList(imagePattern));
+  QDirIterator imagePaths(dataDirectory(), QStringList(imagePattern));
 
   QxrdDoubleImageDataPtr dark = takeNextFreeImage(0,0);
-  QString path = filePathInCurrentDirectory(darkPath);
+  QString path = filePathInDataDirectory(darkPath);
 
   if (dark->readImage(path)) {
     dark->loadMetaData();
@@ -571,7 +571,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
     while (imagePaths.hasNext()) {
       QString imagePath=imagePaths.next();
 
-      QString path = filePathInCurrentDirectory(imagePath);
+      QString path = filePathInDataDirectory(imagePath);
       QxrdDoubleImageDataPtr image = takeNextFreeImage(0,0);
 
       if (image->readImage(path)) {

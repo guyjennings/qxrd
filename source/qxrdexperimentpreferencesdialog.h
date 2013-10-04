@@ -21,9 +21,9 @@ public slots:
   void accept();
 
 private slots:
-  void currentOutputBrowse();
+  void dataDirectoryBrowse();
   void currentLogFileBrowse();
-  void currentScanFileBrowse();
+  void integratedScansFileBrowse();
   void saveRawBrowse();
   void saveDarkBrowse();
   void saveSubtractedBrowse();

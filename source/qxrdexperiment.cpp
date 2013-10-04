@@ -59,6 +59,7 @@ QxrdExperiment::QxrdExperiment(
   m_ExperimentFileName(m_SettingsSaver, this, "experimentFileName", defaultExperimentFileName(path), "Experiment File"),
   m_ExperimentName(m_SettingsSaver, this, "experimentName", defaultExperimentName(path), "Experiment Name"),
   m_ExperimentDescription(m_SettingsSaver, this, "experimentDescription", "", "Experiment Description"),
+  m_DataDirectory(m_SettingsSaver, this, "dataDirectory", defaultDataDirectory(path), "Saved Data Directory"),
   m_LogFileName(m_SettingsSaver, this, "logFileName", defaultLogName(path), "Log File Name"),
   m_ScanFileName(m_SettingsSaver, this, "scanFileName", defaultScanName(path), "Scan File Name"),
   m_DetectorType(m_SettingsSaver, this, "detectorType", 0, "Detector Type"),
@@ -744,6 +745,11 @@ QString QxrdExperiment::defaultExperimentName(QString path)
   } else {
     return info.fileName();
   }
+}
+
+QString QxrdExperiment::defaultDataDirectory(QString path)
+{
+  return "";
 }
 
 QString QxrdExperiment::defaultLogName(QString path)

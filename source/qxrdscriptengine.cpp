@@ -808,7 +808,7 @@ QCEP_DOC_FUNCTION(
     "Get or set the acquisition output directory",
     "<p>If the dir argument is given, set the output directory, otherwise return the "
     "current value.</p>"
-    "<p>Easy access to <code>acquisition.outputDirectory</code></p>"
+    "<p>Easy access to <code>experiment.dataDirectory</code></p>"
     )
 
 QScriptValue QxrdScriptEngine::outputDirectoryFunc(QScriptContext *context, QScriptEngine *engine)
@@ -820,10 +820,10 @@ QScriptValue QxrdScriptEngine::outputDirectoryFunc(QScriptContext *context, QScr
 
     if (doc) {
       if (context->argumentCount() != 0) {
-        doc -> set_ExperimentDirectory(context->argument(0).toString());
+        doc -> set_DataDirectory(context->argument(0).toString());
       }
 
-      return QScriptValue(engine, doc -> get_ExperimentDirectory());
+      return QScriptValue(engine, doc -> get_DataDirectory());
     }
   }
 

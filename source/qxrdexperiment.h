@@ -80,6 +80,7 @@ public slots:
   QString defaultExperimentDirectory(QString path);
   QString defaultExperimentFileName(QString path);
   QString defaultExperimentName(QString path);
+  QString defaultDataDirectory(QString path);
   QString defaultLogName(QString path);
   QString defaultScanName(QString path);
 
@@ -174,6 +175,9 @@ public:  // Properties
 
   Q_PROPERTY(QString experimentDescription     READ get_ExperimentDescription WRITE set_ExperimentDescription)
   QCEP_STRING_PROPERTY(ExperimentDescription)
+
+  Q_PROPERTY(QString dataDirectory     READ get_DataDirectory WRITE set_DataDirectory)
+  QCEP_STRING_PROPERTY(DataDirectory)
 
   Q_PROPERTY(QString logFileName     READ get_LogFileName WRITE set_LogFileName)
   QCEP_STRING_PROPERTY(LogFileName)

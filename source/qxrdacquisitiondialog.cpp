@@ -30,7 +30,7 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     //  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
     connect(m_ActionTrigger, SIGNAL(triggered()), acq, SLOT(trigger()));
 
-    connect(m_BrowseDirectoryButton, SIGNAL(clicked()), this, SLOT(browseOutputDirectory()));
+//    connect(m_BrowseDirectoryButton, SIGNAL(clicked()), this, SLOT(browseOutputDirectory()));
     connect(m_BrowseLogFileButton, SIGNAL(clicked()), this, SLOT(browseLogFile()));
     connect(m_BrowseScanFileButton, SIGNAL(clicked()), this, SLOT(browseScanFile()));
 
@@ -76,6 +76,7 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
 
     exp  -> prop_ExperimentDirectory() -> linkTo(this -> m_ExperimentDirectory);
     exp  -> prop_LogFileName() -> linkTo(this -> m_LogFileName);
+    exp  -> prop_DataDirectory() -> linkTo(this -> m_DataDirectory);
     exp  -> prop_ScanFileName() -> linkTo(this -> m_ScanFileName);
     exp  -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
     exp  -> prop_DetectorNumber() -> linkTo(this -> m_DetectorNumber);

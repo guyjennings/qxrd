@@ -62,14 +62,17 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     //  m_DetectorTypeCombo -> addItems(detectorTypes);
     //  m_DetectorTypeCombo -> setCurrentIndex(detectorType);
 
-    connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
-    m_CurrentOutputDirectory -> setText(expt->get_ExperimentDirectory());
+//    connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
+    m_ExperimentDirectory -> setText(expt->get_ExperimentDirectory());
 
     connect(m_CurrentLogFileBrowse, SIGNAL(clicked()), this, SLOT(currentLogFileBrowse()));
     m_CurrentLogFile -> setText(expt->get_LogFileName());
 
-    connect(m_CurrentScanFileBrowse, SIGNAL(clicked()), this, SLOT(currentScanFileBrowse()));
-    m_CurrentScanFile -> setText(expt->get_ScanFileName());
+    connect(m_DataDirectoryBrowse, SIGNAL(clicked()), this, SLOT(dataDirectoryBrowse()));
+    m_DataDirectory -> setText(expt->get_DataDirectory());
+
+    connect(m_IntegratedScansFileBrowse, SIGNAL(clicked()), this, SLOT(integratedScansFileBrowse()));
+    m_IntegratedScansFile -> setText(expt->get_ScanFileName());
 
     if (proc) {
       connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
@@ -123,7 +126,7 @@ QxrdExperimentPreferencesDialog::~QxrdExperimentPreferencesDialog()
 
 void QxrdExperimentPreferencesDialog::getRelativeDirectoryPath(QLineEdit *edit)
 {
-  QDir pwd(m_CurrentOutputDirectory->text());
+  QDir pwd(m_ExperimentDirectory->text());
   QFileInfo initial(pwd, edit->text());
 
   QString dir = QFileDialog::getExistingDirectory(this, "", initial.absolutePath(), QFileDialog::ShowDirsOnly);
@@ -153,18 +156,21 @@ void QxrdExperimentPreferencesDialog::saveIntegratedBrowse()
   getRelativeDirectoryPath(m_SaveIntegratedSubdir);
 }
 
-void QxrdExperimentPreferencesDialog::currentOutputBrowse()
+void QxrdExperimentPreferencesDialog::dataDirectoryBrowse()
 {
-  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", m_CurrentOutputDirectory->text(), QFileDialog::ShowDirsOnly);
+  QDir pwd(m_ExperimentDirectory->text());
+  QFileInfo initial(pwd, m_DataDirectory->text());
+
+  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", initial.canonicalPath(), QFileDialog::ShowDirsOnly);
 
   if (dir != "") {
-    m_CurrentOutputDirectory->setText(dir);
+    m_DataDirectory->setText(pwd.relativeFilePath(dir));
   }
 }
 
 void QxrdExperimentPreferencesDialog::currentLogFileBrowse()
 {
-  QDir pwd(m_CurrentOutputDirectory->text());
+  QDir pwd(m_ExperimentDirectory->text());
   QFileInfo initial(pwd, m_CurrentLogFile->text());
 
   QString file = QFileDialog::getSaveFileName(this, "Log File", initial.absoluteFilePath());
@@ -174,15 +180,15 @@ void QxrdExperimentPreferencesDialog::currentLogFileBrowse()
   }
 }
 
-void QxrdExperimentPreferencesDialog::currentScanFileBrowse()
+void QxrdExperimentPreferencesDialog::integratedScansFileBrowse()
 {
-  QDir pwd(m_CurrentOutputDirectory->text());
-  QFileInfo initial(pwd, m_CurrentScanFile->text());
+  QDir pwd(m_ExperimentDirectory->text());
+  QFileInfo initial(pwd, m_IntegratedScansFile->text());
 
-  QString file = QFileDialog::getSaveFileName(this, "Scan File", initial.absoluteFilePath());
+  QString file = QFileDialog::getSaveFileName(this, "Scans File", initial.absoluteFilePath());
 
   if (file != "") {
-    m_CurrentScanFile->setText(pwd.relativeFilePath(file));
+    m_IntegratedScansFile->setText(pwd.relativeFilePath(file));
   }
 }
 
@@ -241,9 +247,9 @@ void QxrdExperimentPreferencesDialog::accept()
       proc -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
     }
 
-    expt -> set_ExperimentDirectory(m_CurrentOutputDirectory -> text());
+    expt -> set_DataDirectory(m_DataDirectory -> text());
     expt -> set_LogFileName    (m_CurrentLogFile -> text());
-    expt -> set_ScanFileName    (m_CurrentScanFile -> text());
+    expt -> set_ScanFileName    (m_IntegratedScansFile -> text());
 
     if (acq) {
       acq  -> set_FileIndexWidth(m_FileIndexWidth -> value());
