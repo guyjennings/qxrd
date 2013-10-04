@@ -15,7 +15,7 @@ QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, Q
 
   setupUi(this);
 
-  m_OpenDirectly -> setChecked(m_Application->get_OpenDirectly());
+//  m_OpenDirectly -> setChecked(m_Application->get_OpenDirectly());
   m_RecentExperimentsSize -> setValue(m_Application->get_RecentExperimentsSize());
 
   int debugLevel = m_Application -> get_Debug();
@@ -62,7 +62,7 @@ void QxrdGlobalPreferencesDialog::accept()
 {
   int debugLevel = readDebugWidgets();
 
-  m_Application -> set_OpenDirectly(m_OpenDirectly->isChecked());
+//  m_Application -> set_OpenDirectly(m_OpenDirectly->isChecked());
   m_Application -> set_RecentExperimentsSize(m_RecentExperimentsSize->value());
 
   int bufferSize32 = m_ReservedMemory32 -> value();

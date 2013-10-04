@@ -937,13 +937,10 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="m_ActionNewExperiment"/>
     <addaction name="m_ActionOpenExperiment"/>
     <addaction name="m_ActionRecentExperiments"/>
     <addaction name="m_ActionSaveExperiment"/>
     <addaction name="m_ActionSaveExperimentAs"/>
-    <addaction name="m_ActionSaveExperimentCopy"/>
-    <addaction name="m_ActionCloseExperiment"/>
     <addaction name="separator"/>
     <addaction name="m_ActionLoadData"/>
     <addaction name="m_ActionSaveData"/>
@@ -1624,6 +1621,9 @@
    </property>
   </action>
   <action name="m_ActionNewExperiment">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>New Experiment...</string>
    </property>
@@ -1662,6 +1662,9 @@
    </property>
   </action>
   <action name="m_ActionCloseExperiment">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Close Experiment</string>
    </property>
@@ -1681,6 +1684,9 @@
    </property>
   </action>
   <action name="m_ActionSaveExperimentCopy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save Experiment Copy...</string>
    </property>

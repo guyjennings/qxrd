@@ -155,8 +155,8 @@ public:
   Q_PROPERTY(QString currentDirectory READ get_CurrentDirectory WRITE set_CurrentDirectory)
   QCEP_STRING_PROPERTY(CurrentDirectory)
 
-  Q_PROPERTY(bool   openDirectly  READ get_OpenDirectly WRITE set_OpenDirectly)
-  QCEP_BOOLEAN_PROPERTY(OpenDirectly)
+//  Q_PROPERTY(bool   openDirectly  READ get_OpenDirectly WRITE set_OpenDirectly)
+//  QCEP_BOOLEAN_PROPERTY(OpenDirectly)
 
   Q_PROPERTY(int    debug         READ get_Debug WRITE set_Debug)
   QCEP_INTEGER_PROPERTY(Debug)

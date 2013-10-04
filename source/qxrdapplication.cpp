@@ -104,7 +104,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_RecentExperimentsSize(m_Saver, this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember"),
   m_CurrentExperiment(m_Saver, this, "currentExperiment", "", "Current Experiment"),
   m_CurrentDirectory(m_Saver, this, "currentDirectory", QDir::homePath(), "Current Directory"),
-  m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
+//  m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
   m_Debug(m_Saver, this,"debug", 0, "Debug Level"),
   m_FreshStart(QxrdSettingsSaverPtr(), this,"freshStart", 0, "Do a Fresh Start"),
   m_FileBrowserLimit(m_Saver, this, "fileBrowserLimit", 1000, "Max Number of Files in Browser Windows (0 = unlimited)"),
@@ -254,7 +254,7 @@ bool QxrdApplication::init(int &argc, char **argv)
     editGlobalPreferences();
   }
 
-  if (get_OpenDirectly() && (get_CurrentExperiment().length()>0)) {
+  if (/*get_OpenDirectly() &&*/ (get_CurrentExperiment().length()>0)) {
     openExperiment(get_CurrentExperiment());
   } else {
     openWelcomeWindow();

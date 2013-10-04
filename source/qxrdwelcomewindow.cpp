@@ -44,7 +44,7 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   connect(ui->m_OpenExistingExperiment, SIGNAL(clicked()), ui->m_ActionOpenExperiment, SLOT(trigger()));
 //  connect(ui->m_OpenExistingExperiment, SIGNAL(clicked()), this, SLOT(openMostRecent()));
 
-  app->prop_OpenDirectly()->linkTo(ui->m_AutoOpenRecent);
+//  app->prop_OpenDirectly()->linkTo(ui->m_AutoOpenRecent);
 
 //  m_SignalMapper = new QSignalMapper(this);
 

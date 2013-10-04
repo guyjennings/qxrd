@@ -25,7 +25,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>897</width>
+         <width>847</width>
          <height>501</height>
         </rect>
        </property>
@@ -57,6 +57,9 @@
            </item>
            <item row="1" column="1">
             <widget class="QCommandLinkButton" name="m_NewPerkinElmerAnalysis">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="font">
               <font>
                <pointsize>14</pointsize>
@@ -79,6 +82,9 @@
            </item>
            <item row="2" column="0">
             <widget class="QCommandLinkButton" name="m_NewPilatusAcquisition">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="font">
               <font>
                <pointsize>14</pointsize>
@@ -101,6 +107,9 @@
            </item>
            <item row="2" column="1">
             <widget class="QCommandLinkButton" name="m_NewPilatusAnalysis">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="font">
               <font>
                <pointsize>14</pointsize>
@@ -123,6 +132,9 @@
            </item>
            <item row="3" column="0">
             <widget class="QCommandLinkButton" name="m_NewSimulatedAcquisition">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="font">
               <font>
                <pointsize>14</pointsize>
@@ -189,8 +201,14 @@
            </item>
            <item row="4" column="1">
             <widget class="QCheckBox" name="m_AutoOpenRecent">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Automatically open most recent experiment on startup</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>

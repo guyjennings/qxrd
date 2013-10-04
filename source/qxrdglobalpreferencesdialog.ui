@@ -24,6 +24,9 @@
        <string>Startup</string>
       </attribute>
       <widget class="QCheckBox" name="m_OpenDirectly">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>30</x>
