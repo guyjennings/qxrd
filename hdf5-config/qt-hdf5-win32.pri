@@ -1,13 +1,6 @@
-message(hdf5 PWD = $${PWD})
+message(win32 hdf5 PWD = $${PWD})
 
-macx {
+win32 {
   HDF5BASE = $${PWD}/../hdf5-1.8.11/src/
   HDF5CONF = $${PWD}/../hdf5-config/win32/
-
-  INCLUDEPATH += $${HDF5BASE} $${HDF5CONF}
-
-  HEADERS +=
-
-  SOURCES +=
-
 }
