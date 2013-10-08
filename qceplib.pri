@@ -2,15 +2,14 @@ message(qceplib PWD = $${PWD})
 
 macx {
   include("$${PWD}/tiffconfig/qt-libtiff-macx.pri")
-  include("$${PWD}/hdf5-config/qt-hdf5.pri")
-  include("$${PWD}/nexus-config/qt-nexus-macx.pri")
 } else:win32 {
   include("$${PWD}/tiffconfig/qt-libtiff-win32.pri")
-  include("$${PWD}/hdf5-config/qt-hdf5.pri")
-  include("$${PWD}/nexus-config/qt-nexus-win32.pri")
 } else {
   LIBS += -ltiff -lhdf5 -lnexus
 }
+
+include("$${PWD}/hdf5-config/qt-hdf5.pri")
+include("$${PWD}/nexus-config/qt-nexus.pri")
 
 INCLUDEPATH += $${PWD}
 
