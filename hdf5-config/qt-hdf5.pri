@@ -1,14 +1,18 @@
 message(hdf5 PWD = $${PWD})
 
 macx {
-  include("$${PWD}/qt-hdf5-macx.pri")
+  HDF5BASE = $${PWD}/../hdf5-1.8.11/src/
+  HDF5CONF = $${PWD}/../hdf5-config/macx/
+
+  LIBS += -lz
+} else:win32 {
+  HDF5BASE = $${PWD}/../hdf5-1.8.11/src/
+  HDF5CONF = $${PWD}/../hdf5-config/win32/
+} else:unix {
+  LIBS += -lhdf5 -lz
 }
 
-win32 {
-  include("$${PWD}/qt-hdf5-win32.pri")
-}
-
-#macx:win32 {
+macx:win32 {
   INCLUDEPATH += $${HDF5BASE} $${HDF5CONF}
 
   HEADERS += \
@@ -371,4 +375,4 @@ win32 {
     $${HDF5BASE}/H5timer.c \
     $${HDF5BASE}/H5trace.c
 
-#}
+}
