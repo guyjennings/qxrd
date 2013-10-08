@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#afc9cc08161449fd9f9c3e90b93200f25" title="Get the resultant file produced after the validation procedure has been performed." alt="" coords="271,5,481,46"/>
+<area shape="rect" id="node5" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a1d5c17b10b7a29e80ffd362517faafd9" title="If a node has been validated then we can indicate the fact with a boolean flag." alt="" coords="257,70,495,111"/>
+</map>

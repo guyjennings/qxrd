@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$napif_8f.html#a7a2816a060118c0c3290a096ae8e8d0a" title="Convert FORTRAN string STRING into NULL terminated C string ISTRING." alt="" coords="190,5,301,32"/>
+<area shape="rect" id="node7" href="$napif_8f.html#a956461257bff8b20fb1ba3728429c1dd" title="Convert NULL terminated C string ISTRING to FORTRAN string STRING." alt="" coords="189,56,301,83"/>
+<area shape="rect" id="node5" href="$napif_8f.html#a548d20fb7ff3aa16f23cc0808b84822e" title="Return length of a string, ignoring trailing blanks." alt="" coords="349,5,416,32"/>
+</map>

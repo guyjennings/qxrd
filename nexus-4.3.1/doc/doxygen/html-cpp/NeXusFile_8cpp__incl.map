@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node13" href="$NeXusFile_8hpp.html" title="Definition of the NeXus C++ API." alt="" coords="518,80,628,107"/>
+<area shape="rect" id="node31" href="$NeXusException_8hpp.html" title="Header for a base NeXus::Exception." alt="" coords="698,80,851,107"/>
+<area shape="rect" id="node25" href="$NeXusStream_8hpp.html" title="Header for IOStream like interface to NeXus files." alt="" coords="583,155,721,181"/>
+</map>

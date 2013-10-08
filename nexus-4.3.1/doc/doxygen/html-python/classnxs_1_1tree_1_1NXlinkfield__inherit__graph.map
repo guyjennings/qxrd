@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classnxs_1_1tree_1_1NXlink.html" title="Class for NeXus linked objects." alt="" coords="5,440,123,605"/>
+<area shape="rect" id="node4" href="$classnxs_1_1tree_1_1NXobject.html" title="Abstract base class for elements in NeXus files." alt="" coords="67,6,212,333"/>
+<area shape="rect" id="node6" href="$classnxs_1_1tree_1_1NXfield.html" title="A NeXus data field." alt="" coords="147,381,284,664"/>
+</map>

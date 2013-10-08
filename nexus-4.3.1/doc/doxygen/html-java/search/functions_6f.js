@@ -1,0 +1,9 @@
+var searchData=
+[
+  ['opendata',['opendata',['../classorg_1_1nexusformat_1_1NexusFile.html#aafd6a59baac6691a0e7fdc3e47597649',1,'org.nexusformat.NexusFile.opendata()'],['../interfaceorg_1_1nexusformat_1_1NeXusFileInterface.html#ae610267f6563fc9c53a1f9166fdfa604',1,'org.nexusformat.NeXusFileInterface.opendata()']]],
+  ['opengroup',['opengroup',['../classorg_1_1nexusformat_1_1NexusFile.html#a593d2de8731f85f82e3fd9db51f51884',1,'org.nexusformat.NexusFile.opengroup()'],['../interfaceorg_1_1nexusformat_1_1NeXusFileInterface.html#ac4d0db455c396b8c26d6d2cfa8a3dba7',1,'org.nexusformat.NeXusFileInterface.opengroup()']]],
+  ['opengrouppath',['opengrouppath',['../classorg_1_1nexusformat_1_1NexusFile.html#afe6c93bca1c3245dd45decf37176c522',1,'org.nexusformat.NexusFile.opengrouppath()'],['../interfaceorg_1_1nexusformat_1_1NeXusFileInterface.html#ac638405d9001b76408ccf480d0c7bdc9',1,'org.nexusformat.NeXusFileInterface.opengrouppath()']]],
+  ['openpath',['openpath',['../classorg_1_1nexusformat_1_1NexusFile.html#a5f26fc4c676ea9b4f71399fd6e5de75d',1,'org.nexusformat.NexusFile.openpath()'],['../interfaceorg_1_1nexusformat_1_1NeXusFileInterface.html#a140f6c3275203517b967b08359c117f2',1,'org.nexusformat.NeXusFileInterface.openpath()']]],
+  ['opensourcepath',['opensourcepath',['../classorg_1_1nexusformat_1_1NexusFile.html#a4c10f2f7a84990e602e5b1fd97cf493f',1,'org.nexusformat.NexusFile.opensourcepath()'],['../interfaceorg_1_1nexusformat_1_1NeXusFileInterface.html#a01016ab7dadae1602556d4d8b7c7cd49',1,'org.nexusformat.NeXusFileInterface.opensourcepath()']]],
+  ['outofmemory',['outOfMemory',['../hdfexceptionImp_8c.html#ad822f51e829e76855d9c61cb54b52416',1,'outOfMemory(JNIEnv *env, char *functName):&#160;hdfexceptionImp.c'],['../hdfexceptionImp_8h.html#ad822f51e829e76855d9c61cb54b52416',1,'outOfMemory(JNIEnv *env, char *functName):&#160;hdfexceptionImp.c']]]
+];

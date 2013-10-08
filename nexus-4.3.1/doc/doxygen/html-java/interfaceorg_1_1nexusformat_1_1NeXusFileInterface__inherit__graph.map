@@ -1,0 +1,3 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classorg_1_1nexusformat_1_1NexusFile.html" title="{org.nexusformat.NexusFile\n|+ NXACC_READ\l+ NXACC_RDWR\l+ NXACC_CREATE\l+ NXACC_CREATE4\l+ NXACC_CREATE5\l+ NXACC_CREATEXML\l+ NXACC_NOSTRIP\l+ NX_UNLIMITED\l+ NX_FLOAT32\l+ NX_FLOAT64\land 15 more...\l# handle\l# MAXNAMELEN\l|+ NexusFile()\l+ flush()\l+ close()\l+ finalize()\l+ makegroup()\l+ opengroup()\l+ openpath()\l+ opengrouppath()\l+ getpath()\l+ closegroup()\land 31 more...\l~ [static initializer]()\l# init()\l# close()\l# nxflush()\l# nxmakegroup()\l# nxopengroup()\l# nxopenpath()\l# nxopengrouppath()\l# nxclosegroup()\l# nxgetpath()\l# nxmakedata()\land 31 more...\l}" alt="" coords="5,293,197,869"/>
+</map>

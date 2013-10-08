@@ -1,0 +1,20 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classnxmodule.html#a2f1c8389155d50bf94789e70419adb87" title="nxmodule::nxclosedata" alt="" coords="252,5,423,32"/>
+<area shape="rect" id="node5" href="$classnxmodule.html#af60b2e496fcac681892a6778a7e2434e" title="nxmodule::nxclosegroup" alt="" coords="248,56,427,83"/>
+<area shape="rect" id="node7" href="$classnxmodule.html#a4f6fd172d720bc604f5dafdaacfcf0ec" title="nxmodule::nxerror" alt="" coords="739,183,877,209"/>
+<area shape="rect" id="node9" href="$classnxmodule.html#a7d0d9b4d7131bd5ca62de4e871b9f5aa" title="nxmodule::nxgetdataid" alt="" coords="253,309,422,336"/>
+<area shape="rect" id="node11" href="$classnxmodule.html#a84218ab1dfa3bd70d1354c6eb391a1b3" title="nxmodule::nxgetgroupid" alt="" coords="249,360,426,387"/>
+<area shape="rect" id="node13" href="$classnxmodule.html#affdb15338ec54df898b42f28cbf65d55" title="nxmodule::nxgetgroupinfo" alt="" coords="475,259,664,285"/>
+<area shape="rect" id="node17" href="$classnxmodule.html#a2a13974218311ec25043e513ed4f9e6f" title="nxmodule::nxgetinfo" alt="" coords="261,411,413,437"/>
+<area shape="rect" id="node21" href="$classnxmodule.html#a8ae33d07ff0a76309e8d62c3c7279592" title="nxmodule::nxgroupdir" alt="" coords="489,107,650,133"/>
+<area shape="rect" id="node29" href="$classnxmodule.html#a04c6bbc664e7f43a709dac821cbc682c" title="nxmodule::nxmakedata" alt="" coords="251,461,424,488"/>
+<area shape="rect" id="node33" href="$classnxmodule.html#a7d84949863278f52fa0a0e838094895d" title="nxmodule::nxopendata" alt="" coords="253,512,422,539"/>
+<area shape="rect" id="node36" href="$classnxmodule.html#a53ebefdd87926c40196d5509628d7dab" title="nxmodule::nxopengroup" alt="" coords="249,563,426,589"/>
+<area shape="rect" id="node39" href="$classnxmodule.html#a05efffd6f389ab9cded0832ba7b54b48" title="nxmodule::nxsameid" alt="" coords="260,613,415,640"/>
+<area shape="rect" id="node41" href="$classnxumodule.html#a76dade80178353a24a09b6f5549a7942" title="nxumodule::nxufinddata" alt="" coords="249,208,425,235"/>
+<area shape="rect" id="node15" href="$classnxmodule.html#a2ab369d463b21212ca4b6f9a690aa509" title="nxmodule::nxfstring" alt="" coords="953,208,1101,235"/>
+<area shape="rect" id="node19" href="$classnxmodule.html#a3d1bdd083236ffe7248665dc165a8427" title="nxmodule::nxreverse" alt="" coords="491,411,647,437"/>
+<area shape="rect" id="node24" href="$classnxmodule.html#a5a51ae7a8598af0c39d0b70fe907fb65" title="nxmodule::nxgetnextentry" alt="" coords="713,132,903,159"/>
+<area shape="rect" id="node27" href="$classnxmodule.html#a71de78f6e484add19586ee4cd47ac5ab" title="nxmodule::nxinitgroupdir" alt="" coords="718,81,898,108"/>
+<area shape="rect" id="node31" href="$classnxmodule.html#a834aa399088d7ebb7e741531c7b32edd" title="nxmodule::nxcstring" alt="" coords="494,512,645,539"/>
+</map>

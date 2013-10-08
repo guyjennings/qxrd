@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classnxs_1_1tree_1_1NXobject.html#ada8d95234a1fc65efc8ed28bec50c19d" title="Returns True if the object has been created in a NeXus file." alt="" coords="216,5,384,32"/>
+<area shape="rect" id="node5" href="$classnxs_1_1tree_1_1NXobject.html#ae32bb31f24133f3b9224312a2439a00f" title="Returns True if the object has been saved to a file." alt="" coords="211,56,389,83"/>
+</map>

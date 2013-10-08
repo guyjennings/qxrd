@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1filter_1_1ExtensionFilter.html" title="org.nexusformat.nxvalidate.filter.\lExtensionFilter" alt="" coords="5,103,237,145"/>
+<area shape="rect" id="node3" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1filter_1_1NeXusFilter.html" title="org.nexusformat.nxvalidate.filter.\lNeXusFilter" alt="" coords="285,5,517,46"/>
+<area shape="rect" id="node5" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1filter_1_1NXDLfilter.html" title="org.nexusformat.nxvalidate.filter.\lNXDLfilter" alt="" coords="285,70,517,111"/>
+<area shape="rect" id="node7" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1filter_1_1SchematronFilter.html" title="org.nexusformat.nxvalidate.filter.\lSchematronFilter" alt="" coords="285,135,517,177"/>
+<area shape="rect" id="node9" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1filter_1_1XmlFilter.html" title="org.nexusformat.nxvalidate.filter.\lXmlFilter" alt="" coords="285,201,517,242"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classNeXus_1_1File.html#ac9ef7c4009f8585c1a40c9b88e1c96b9" title="Create a new group." alt="" coords="231,31,406,57"/>
+<area shape="rect" id="node11" href="$classNeXus_1_1Stream_1_1ObjectWithAttr.html#ac6889845f79c8aa8f17197335507d56f" title="NeXus::Stream::ObjectWith\lAttr::writeToFile" alt="" coords="221,82,416,123"/>
+<area shape="rect" id="node5" href="c-api.tag$group__c__group.html#ga35de508f85ba74c955ff1bb13d793b4c" title="NXmakegroup" alt="" coords="493,5,606,32"/>
+<area shape="rect" id="node7" href="$classNeXus_1_1File.html#a74e98b7804b789f2eb7aea506c36bcd6" title="Open an existing group." alt="" coords="464,56,635,83"/>
+<area shape="rect" id="node9" href="c-api.tag$group__c__group.html#ga893fe70fe57383b4e4ca44605d35602d" title="NXopengroup" alt="" coords="683,56,792,83"/>
+</map>

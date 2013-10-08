@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classnxs_1_1napi_1_1NeXus.html#ae85d1ff827996f393b4f124d68747b2a" title="Return file location as string filename(path)" alt="" coords="464,24,613,50"/>
+<area shape="rect" id="node5" href="$classnxs_1_1napi_1_1NeXus.html#a365403e655483810bc379258d6e7392a" title="Build space to collect a nexus data element." alt="" coords="229,24,411,50"/>
+<area shape="rect" id="node7" href="$classnxs_1_1napi_1_1NeXus.html#a038609f898065f8f2df6b67f68db67c9" title="Returns the tuple dimensions,type for the currently open dataset." alt="" coords="225,74,415,101"/>
+</map>

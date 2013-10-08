@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classnxs_1_1tree_1_1NeXusTree.html#af2b2b4f12e32d7698da6b1cfdead726a" title="Read the currently open group and return it as an NXgroup." alt="" coords="269,5,419,46"/>
+<area shape="rect" id="node5" href="$classnxs_1_1napi_1_1NeXus.html#a2c1dcf5da147786debb4d1180fdf4068" title="Close the NeXus file associated with handle." alt="" coords="265,71,423,97"/>
+<area shape="rect" id="node7" href="$classnxs_1_1napi_1_1NeXus.html#af4b4e0015635c2b13f469dcddef37869" title="Opens the NeXus file handle if it is not already open." alt="" coords="266,121,422,148"/>
+<area shape="rect" id="node9" href="$classnxs_1_1napi_1_1NeXus.html#a7e08df736627f29e425d7cbd16bdd0a6" title="Open a particular group &#39;/path/to/group&#39;." alt="" coords="251,172,437,199"/>
+<area shape="rect" id="node11" href="$classnxs_1_1napi_1_1NeXus.html#a467ec1dec4712021f6fff3ca730277a6" title="Return the nxclass of the supplied name." alt="" coords="729,96,935,123"/>
+<area shape="rect" id="node13" href="$classnxs_1_1napi_1_1NeXus.html#ac208e5cc711cffd829e6cfa7dcbe9fbc" title="helper function: open relative path and maybe data" alt="" coords="487,96,679,123"/>
+<area shape="rect" id="node15" href="$classnxs_1_1napi_1_1NeXus.html#a854f801ec161e38373398ea340b56d2a" title="Close the currently open data set." alt="" coords="489,197,676,224"/>
+<area shape="rect" id="node19" href="$classnxs_1_1napi_1_1NeXus.html#ae0ca129c145a1e4ed56183ef647a385b" title="Close the currently open group." alt="" coords="485,248,680,275"/>
+<area shape="rect" id="node22" href="$classnxs_1_1napi_1_1NeXus.html#a185a188039622280e6de6ba5a33a9c98" title="Open the named data set within the current group." alt="" coords="490,299,675,325"/>
+<area shape="rect" id="node25" href="$classnxs_1_1napi_1_1NeXus.html#a36f167ccb2b65869f8e9ee209a2d69cb" title="Open the group nxclass:name." alt="" coords="486,147,679,173"/>
+<area shape="rect" id="node17" href="$classnxs_1_1napi_1_1NeXus.html#ae85d1ff827996f393b4f124d68747b2a" title="Return file location as string filename(path)" alt="" coords="757,223,907,249"/>
+</map>

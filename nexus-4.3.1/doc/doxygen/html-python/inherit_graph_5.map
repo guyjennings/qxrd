@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classnxs_1_1tree_1_1NXobject.html" title="Abstract base class for elements in NeXus files." alt="" coords="6,56,141,83"/>
+<area shape="rect" id="node3" href="$classnxs_1_1tree_1_1NXfield.html" title="A NeXus data field." alt="" coords="195,5,317,32"/>
+<area shape="rect" id="node7" href="$classnxs_1_1tree_1_1NXgroup.html" title="A NeXus group object." alt="" coords="189,107,323,133"/>
+<area shape="rect" id="node21" href="$classnxs_1_1tree_1_1NXlink.html" title="Class for NeXus linked objects." alt="" coords="197,56,315,83"/>
+<area shape="rect" id="node5" href="$classnxs_1_1tree_1_1NXlinkfield.html" title="Class for a NeXus linked field." alt="" coords="377,5,519,32"/>
+<area shape="rect" id="node9" href="$classnxs_1_1tree_1_1NXdata.html" title="NXdata group." alt="" coords="385,107,511,133"/>
+<area shape="rect" id="node13" href="$classnxs_1_1tree_1_1NXentry.html" title="NXentry group." alt="" coords="384,157,512,184"/>
+<area shape="rect" id="node17" href="$classnxs_1_1tree_1_1NXlinkgroup.html" title="Class for a NeXus linked group." alt="" coords="371,56,525,83"/>
+<area shape="rect" id="node19" href="$classnxs_1_1tree_1_1NXlog.html" title="NXlog group." alt="" coords="391,208,505,235"/>
+<area shape="rect" id="node11" href="$classnxs_1_1tree_1_1NXmonitor.html" title="NXmonitor group." alt="" coords="576,107,723,133"/>
+<area shape="rect" id="node15" href="$classnxs_1_1tree_1_1NXsubentry.html" title="NXsubentry group." alt="" coords="573,157,725,184"/>
+</map>

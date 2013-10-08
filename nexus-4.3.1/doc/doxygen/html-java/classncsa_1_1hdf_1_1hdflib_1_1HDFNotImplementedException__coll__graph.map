@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$classncsa_1_1hdf_1_1hdflib_1_1HDFJavaException.html" title="{ncsa.hdf.hdflib.HDFJavaException\n|~ msg\l|+ HDFJavaException()\l+ HDFJavaException()\l+ getMessage()\l}" alt="" coords="15,235,247,341"/>
+<area shape="rect" id="node4" href="$classncsa_1_1hdf_1_1hdflib_1_1HDFException.html" title="{ncsa.hdf.hdflib.HDFException\n|+ OutOfMemoryMessage\l+ HDFExceptionMessage\l+ HDFMessage\l~ HDFerror\l~ msg\l|+ HDFException()\l+ HDFException()\l+ HDFException()\l+ getMessage()\l}" alt="" coords="27,6,233,186"/>
+</map>

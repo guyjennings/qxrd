@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classnxs_1_1tree_1_1NeXusTree.html#a79b17a3d97585150549efebf13bb505b" title="Write the given group structure, including the data." alt="" coords="255,5,404,46"/>
+<area shape="rect" id="node5" href="$classnxs_1_1tree_1_1NeXusTree.html#aecbfc392cee66245ab687df469e9e9b1" title="Create links within the NeXus file." alt="" coords="255,70,404,111"/>
+<area shape="rect" id="node7" href="$classnxs_1_1napi_1_1NeXus.html#a2c1dcf5da147786debb4d1180fdf4068" title="Close the NeXus file associated with handle." alt="" coords="251,136,408,163"/>
+<area shape="rect" id="node9" href="$classnxs_1_1napi_1_1NeXus.html#af4b4e0015635c2b13f469dcddef37869" title="Opens the NeXus file handle if it is not already open." alt="" coords="251,187,407,213"/>
+</map>

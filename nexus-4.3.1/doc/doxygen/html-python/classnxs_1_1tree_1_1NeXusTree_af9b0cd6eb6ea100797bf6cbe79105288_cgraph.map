@@ -1,0 +1,39 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classnxs_1_1tree_1_1NeXusTree.html#a9fa26697e52ffab5bf12d1352725634b" title="nxs.tree.NeXusTree.\l_readchildren" alt="" coords="281,5,431,46"/>
+<area shape="rect" id="node5" href="$classnxs_1_1tree_1_1NeXusTree.html#af4fef0210ae34cf4e37e8788aca4a1fa" title="Read a data object and return it as an NXfield or NXlink." alt="" coords="281,70,431,111"/>
+<area shape="rect" id="node7" href="$classnxs_1_1tree_1_1NeXusTree.html#af2b2b4f12e32d7698da6b1cfdead726a" title="Read the currently open group and return it as an NXgroup." alt="" coords="281,135,431,177"/>
+<area shape="rect" id="node9" href="$classnxs_1_1tree_1_1NeXusTree.html#a66205ca79e09825d30d91d93fbae1d21" title="Convert linked objects into direct references." alt="" coords="281,201,431,242"/>
+<area shape="rect" id="node11" href="$classnxs_1_1tree_1_1NeXusTree.html#aa4f3fc26ea288201f4570ee99b041919" title="Return the attributes for the currently open group/data." alt="" coords="281,266,431,307"/>
+<area shape="rect" id="node13" href="$classnxs_1_1tree_1_1NeXusTree.html#a140891160a6b608f74281d0683e5ccd7" title="Write the given data to a file." alt="" coords="281,331,431,373"/>
+<area shape="rect" id="node15" href="$classnxs_1_1tree_1_1NeXusTree.html#a79b17a3d97585150549efebf13bb505b" title="Write the given group structure, including the data." alt="" coords="281,397,431,438"/>
+<area shape="rect" id="node17" href="$classnxs_1_1napi_1_1NeXus.html#a854f801ec161e38373398ea340b56d2a" title="Close the currently open data set." alt="" coords="519,1020,705,1047"/>
+<area shape="rect" id="node21" href="$classnxs_1_1napi_1_1NeXus.html#ae0ca129c145a1e4ed56183ef647a385b" title="Close the currently open group." alt="" coords="515,1172,709,1199"/>
+<area shape="rect" id="node24" href="$classnxs_1_1napi_1_1NeXus.html#a2b9bf0c481bade8bc69628b5ac22bbe5" title="Create a data element of the given dimensions and type." alt="" coords="499,817,725,844"/>
+<area shape="rect" id="node27" href="$classnxs_1_1napi_1_1NeXus.html#a09a9cfa5656b5ea5eb193ccbb167c99e" title="Returns the value of the named attribute." alt="" coords="793,260,961,287"/>
+<area shape="rect" id="node32" href="$classnxs_1_1napi_1_1NeXus.html#a34e5a0e5a56899a39e5f6bd9b0919819" title="Returns a dicitonary of the attributes on the current node." alt="" coords="269,564,443,591"/>
+<area shape="rect" id="node46" href="$classnxs_1_1napi_1_1NeXus.html#a0b02ea770282daa9b914fbf464e6e46c" title="Return the data." alt="" coords="525,665,699,692"/>
+<area shape="rect" id="node50" href="$classnxs_1_1napi_1_1NeXus.html#a6b1ed2867a01884d5396bfb521aeab81" title="Returns the tuple dimensions,type for the currently open dataset." alt="" coords="793,767,961,793"/>
+<area shape="rect" id="node53" href="$classnxs_1_1napi_1_1NeXus.html#acc7bbd0e8c17a8bddc0c25af981bb210" title="Return the id of the current data so we can link to it later." alt="" coords="784,817,971,844"/>
+<area shape="rect" id="node56" href="$classnxs_1_1napi_1_1NeXus.html#ae8e0c8c6e3cc1a20912618966cc47139" title="Return the id of the current group so we can link to it later." alt="" coords="515,919,709,945"/>
+<area shape="rect" id="node59" href="$classnxs_1_1napi_1_1NeXus.html#a11e60e219c617291837fe0ac977fb75d" title="Query the currently open group returning the tuple numentries, name, nxclass." alt="" coords="775,1223,980,1249"/>
+<area shape="rect" id="node63" href="$classnxs_1_1napi_1_1NeXus.html#a8c548adb0ddbc4021b53bae60a236de9" title="Return the next entry in the group as name,nxclass tuple." alt="" coords="509,1324,715,1351"/>
+<area shape="rect" id="node66" href="$classnxs_1_1napi_1_1NeXus.html#a0a45509d58e0e3e714042cfc8c2d6dbd" title="Create a data element of the given type and shape." alt="" coords="261,868,451,895"/>
+<area shape="rect" id="node70" href="$classnxs_1_1napi_1_1NeXus.html#aa95e871eaf56911c7e316dc55e4a6d58" title="Create the group nxclass:name." alt="" coords="779,1375,976,1401"/>
+<area shape="rect" id="node73" href="$classnxs_1_1napi_1_1NeXus.html#a5223aba8d6eb48fc135204e379379136" title="Link the previously captured group/data ID into the currently open group." alt="" coords="521,1425,703,1452"/>
+<area shape="rect" id="node76" href="$classnxs_1_1napi_1_1NeXus.html#af4b4e0015635c2b13f469dcddef37869" title="Opens the NeXus file handle if it is not already open." alt="" coords="278,1172,434,1199"/>
+<area shape="rect" id="node78" href="$classnxs_1_1napi_1_1NeXus.html#a185a188039622280e6de6ba5a33a9c98" title="Open the named data set within the current group." alt="" coords="519,1273,705,1300"/>
+<area shape="rect" id="node81" href="$classnxs_1_1napi_1_1NeXus.html#a36f167ccb2b65869f8e9ee209a2d69cb" title="Open the group nxclass:name." alt="" coords="515,969,709,996"/>
+<area shape="rect" id="node86" href="$classnxs_1_1napi_1_1NeXus.html#a7e08df736627f29e425d7cbd16bdd0a6" title="Open a particular group &#39;/path/to/group&#39;." alt="" coords="263,1071,449,1097"/>
+<area shape="rect" id="node95" href="$classnxs_1_1napi_1_1NeXus.html#ab4fcbd60c4d8a317d8570559302ad0ff" title="Saves the named attribute." alt="" coords="793,311,961,337"/>
+<area shape="rect" id="node98" href="$classnxs_1_1napi_1_1NeXus.html#a4788b7da0ebc19db424d0944b3715904" title="Write data into the currently open data block." alt="" coords="525,615,699,641"/>
+<area shape="rect" id="node19" href="$classnxs_1_1napi_1_1NeXus.html#ae85d1ff827996f393b4f124d68747b2a" title="Return file location as string filename(path)" alt="" coords="1045,868,1195,895"/>
+<area shape="rect" id="node30" href="$classnxs_1_1napi_1_1NeXus.html#a365403e655483810bc379258d6e7392a" title="Build space to collect a nexus data element." alt="" coords="1029,463,1211,489"/>
+<area shape="rect" id="node34" href="$classnxs_1_1napi_1_1NeXus.html#a3f312107d346641e14ea539ce40ed7c0" title="Iterate over attributes." alt="" coords="535,564,689,591"/>
+<area shape="rect" id="node37" href="$classnxs_1_1napi_1_1NeXus.html#aac4c7fb3faad6844403d6118bd19066e" title="Returns the number of attributes for the currently open group/data object." alt="" coords="782,361,973,388"/>
+<area shape="rect" id="node40" href="$classnxs_1_1napi_1_1NeXus.html#a74418151d3764df2d65598335e6fadd3" title="Returns the name, length, and data type for the next attribute." alt="" coords="779,412,975,439"/>
+<area shape="rect" id="node43" href="$classnxs_1_1napi_1_1NeXus.html#a073632e2483daec35a2c7f668f3f4d26" title="Reset the getnextattr list to the first attribute." alt="" coords="786,463,969,489"/>
+<area shape="rect" id="node83" href="$classnxs_1_1napi_1_1NeXus.html#a467ec1dec4712021f6fff3ca730277a6" title="Return the nxclass of the supplied name." alt="" coords="774,1071,981,1097"/>
+<area shape="rect" id="node89" href="$classnxs_1_1napi_1_1NeXus.html#ac208e5cc711cffd829e6cfa7dcbe9fbc" title="helper function: open relative path and maybe data" alt="" coords="516,1121,708,1148"/>
+<area shape="rect" id="node101" href="$classnxs_1_1napi_1_1NeXus.html#a3ee409e8b54cd3ddecbf69dbd01398fa" title="Convert an input array to a C pointer to a dense array." alt="" coords="792,564,963,591"/>
+<area shape="rect" id="node103" href="$classnxs_1_1napi_1_1NeXus.html#a038609f898065f8f2df6b67f68db67c9" title="Returns the tuple dimensions,type for the currently open dataset." alt="" coords="782,615,973,641"/>
+</map>

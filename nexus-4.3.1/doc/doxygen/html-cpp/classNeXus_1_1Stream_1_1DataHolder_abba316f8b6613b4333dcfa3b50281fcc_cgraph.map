@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classNeXus_1_1File.html#afbdc86cc3b5cb7c32b690cb85b850200" title="Close the currently open data." alt="" coords="253,5,416,32"/>
+<area shape="rect" id="node7" href="$classNeXus_1_1File.html#a62652a37483fcde76a6f048bf99cae85" title="Put the currently open data in the supplied pointer." alt="" coords="259,56,410,83"/>
+<area shape="rect" id="node11" href="$classNeXus_1_1File.html#a6495b9dece53360c455772b357b782b3" title="NeXus::File::openData" alt="" coords="253,107,416,133"/>
+<area shape="rect" id="node5" href="c-api.tag$group__c__readwrite.html#ga4020c5577e109cb4ce5d882691be5ee5" title="NXclosedata" alt="" coords="465,5,567,32"/>
+<area shape="rect" id="node9" href="c-api.tag$group__c__readwrite.html#gaf6cb2eb0ddebb3a3f632f8288f43dea0" title="NXgetdata" alt="" coords="471,56,561,83"/>
+<area shape="rect" id="node13" href="c-api.tag$group__c__readwrite.html#gab34bc6ab4c08020ed15bf74e1434915a" title="NXopendata" alt="" coords="465,107,567,133"/>
+</map>

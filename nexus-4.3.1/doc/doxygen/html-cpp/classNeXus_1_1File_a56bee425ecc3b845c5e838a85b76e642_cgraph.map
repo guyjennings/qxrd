@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classNeXus_1_1File.html#a0e8f6d8e00150ce875ea43deda1cb89d" title="Get the value of a string attribute." alt="" coords="197,5,360,32"/>
+<area shape="rect" id="node5" href="$classNeXus_1_1File.html#a80c9fe9a29b429dd161451f0fe1f4343" title="Get the value of the attribute specified by the AttrInfo supplied." alt="" coords="408,5,552,32"/>
+<area shape="rect" id="node7" href="c-api.tag$group__c__readwrite.html#gaced243ab1332cb1588db17384b04f07c" title="NXgetattr" alt="" coords="601,5,685,32"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1CheckNexusFileType.html#a7c468ebcf5385939a500bed034c41433" title="Checks to see if a file is a HDF4 file and returns true if it is." alt="" coords="305,5,530,46"/>
+<area shape="rect" id="node5" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1CheckNexusFileType.html#a2990a11276c59c1c859b176e32b3af68" title="Checks to see if a file is a HDF5 file and returns true if it is." alt="" coords="305,70,530,111"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classnxs_1_1napi_1_1NeXus.html#a11e60e219c617291837fe0ac977fb75d" title="Query the currently open group returning the tuple numentries, name, nxclass." alt="" coords="223,56,428,83"/>
+<area shape="rect" id="node7" href="$classnxs_1_1napi_1_1NeXus.html#a8c548adb0ddbc4021b53bae60a236de9" title="Return the next entry in the group as name,nxclass tuple." alt="" coords="222,107,429,133"/>
+<area shape="rect" id="node10" href="$classnxs_1_1napi_1_1NeXus.html#a337dec00d3dd06a0cdaf956ed173e470" title="Reset getnextentry to return the first entry in the group." alt="" coords="227,5,423,32"/>
+<area shape="rect" id="node13" href="$classnxs_1_1napi_1_1NeXus.html#a185a188039622280e6de6ba5a33a9c98" title="Open the named data set within the current group." alt="" coords="482,157,667,184"/>
+<area shape="rect" id="node16" href="$classnxs_1_1napi_1_1NeXus.html#a36f167ccb2b65869f8e9ee209a2d69cb" title="Open the group nxclass:name." alt="" coords="478,360,671,387"/>
+<area shape="rect" id="node21" href="$classnxs_1_1napi_1_1NeXus.html#a7e08df736627f29e425d7cbd16bdd0a6" title="Open a particular group &#39;/path/to/group&#39;." alt="" coords="233,259,418,285"/>
+<area shape="rect" id="node5" href="$classnxs_1_1napi_1_1NeXus.html#ae85d1ff827996f393b4f124d68747b2a" title="Return file location as string filename(path)" alt="" coords="749,157,899,184"/>
+<area shape="rect" id="node18" href="$classnxs_1_1napi_1_1NeXus.html#a467ec1dec4712021f6fff3ca730277a6" title="Return the nxclass of the supplied name." alt="" coords="721,385,927,412"/>
+<area shape="rect" id="node23" href="$classnxs_1_1napi_1_1NeXus.html#ac208e5cc711cffd829e6cfa7dcbe9fbc" title="helper function: open relative path and maybe data" alt="" coords="479,259,671,285"/>
+<area shape="rect" id="node25" href="$classnxs_1_1napi_1_1NeXus.html#a854f801ec161e38373398ea340b56d2a" title="Close the currently open data set." alt="" coords="481,208,668,235"/>
+<area shape="rect" id="node28" href="$classnxs_1_1napi_1_1NeXus.html#ae0ca129c145a1e4ed56183ef647a385b" title="Close the currently open group." alt="" coords="477,309,672,336"/>
+</map>

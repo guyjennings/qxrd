@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node8" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXschematron.html" title="{org.nexusformat.nxvalidate.\lNXschematron\n||+ NXschematron()\l+ TransformoMatic()\l+ TransformoMatic()\l+ TransformoMatic()\l+ main()\l~ validate()\l~ validate()\l}" alt="" coords="350,94,551,274"/>
+<area shape="rect" id="node18" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXconvert.html" title="{org.nexusformat.nxvalidate.\lNXconvert\n||+ NXconvert()\l+ convert()\l+ main()\l}" alt="" coords="1050,123,1251,245"/>
+<area shape="rect" id="node24" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXvalidate.html" title="{org.nexusformat.nxvalidate.\lNXvalidate\n|~ VERSION\l|+ getReports()\l+ getFilenames()\l+ setFilenames()\l+ setNXSFile()\l+ getSchematron()\l+ setSchematron()\l+ isKeepTemp()\l+ setKeepTemp()\l+ isConvertNxs()\l+ setConvertNxs()\l+ getVerbose()\l+ setVerbose()\l+ getReduced()\l+ setReduced()\l+ getVersion()\l+ main()\l~ NXvalidate()\l~ parseArgs()\l~ process()\l}" alt="" coords="1426,6,1627,362"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classNeXus_1_1Stream_1_1ISerialisable.html" title="interface implemented by all serialisable NeXus components" alt="" coords="5,77,208,104"/>
+<area shape="rect" id="node3" href="$classNeXus_1_1Stream_1_1Attr.html" title="Serialisable attribute." alt="" coords="290,27,441,53"/>
+<area shape="rect" id="node5" href="$classNeXus_1_1Stream_1_1HolderBase.html" title="Base class for serialisable named and typed parameter." alt="" coords="265,77,466,104"/>
+<area shape="rect" id="node11" href="$classNeXus_1_1Stream_1_1ObjectWithAttr.html" title="Serialisable NeXus class with associated attributes." alt="" coords="256,136,475,163"/>
+<area shape="rect" id="node7" href="$classNeXus_1_1Stream_1_1AttrHolder.html" title="Serialisable NeXus attribute." alt="" coords="526,5,719,46"/>
+<area shape="rect" id="node9" href="$classNeXus_1_1Stream_1_1DataHolder.html" title="Serialisable NeXus data." alt="" coords="523,70,723,111"/>
+<area shape="rect" id="node13" href="$classNeXus_1_1Stream_1_1Data.html" title="Serialisable data object that contains attributes." alt="" coords="543,136,702,163"/>
+<area shape="rect" id="node15" href="$classNeXus_1_1Stream_1_1Group.html" title="Serialisable NeXus group object." alt="" coords="539,187,706,213"/>
+</map>

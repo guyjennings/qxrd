@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classnxs_1_1tree_1_1NXfield.html#abe9a801d1af6409e22943e3fcd7fa126" title="Return a slab from the data array." alt="" coords="217,5,364,32"/>
+<area shape="rect" id="node5" href="$classnxs_1_1tree_1_1NXfield.html#ad0c0dd3033a83d2ac70100c744e87d35" title="Put a slab into the data array." alt="" coords="217,56,364,83"/>
+<area shape="rect" id="node11" href="$classnxs_1_1tree_1_1NXfield.html#a58aa9ab7b0028fd4d18b1636605a45a2" title="Rereads the data from the file." alt="" coords="205,107,376,133"/>
+<area shape="rect" id="node7" href="$classnxs_1_1tree_1_1NXfield.html#a9930672b6117996eb399d80ef42d059f" title="Read the NXfield, including attributes, from the NeXus file." alt="" coords="424,56,579,83"/>
+<area shape="rect" id="node9" href="$classnxs_1_1tree_1_1NXobject.html#ab464f4c3de642913d5f8b5fb2c79ab7b" title="nxs.tree.NXobject.\l_setattrs" alt="" coords="627,49,765,90"/>
+</map>

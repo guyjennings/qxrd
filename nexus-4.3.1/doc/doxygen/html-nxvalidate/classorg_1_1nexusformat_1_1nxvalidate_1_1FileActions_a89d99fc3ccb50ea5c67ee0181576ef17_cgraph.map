@@ -1,0 +1,14 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXconvert.html#a6bc02736ae8f61ab7b6175aea66fc8a7" title="org.nexusformat.nxvalidate.\lNXconvert.convert" alt="" coords="267,5,469,46"/>
+<area shape="rect" id="node7" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a989dbb62b12b0d276054d938632ef1f3" title="org.nexusformat.nxvalidate.\lNXNodeMapper.insert" alt="" coords="267,70,469,111"/>
+<area shape="rect" id="node19" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a37f4cf7b8dabd0776cc78aa399eb6df9" title="Set the NXDL file belonging to the root node." alt="" coords="267,135,469,177"/>
+<area shape="rect" id="node21" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#ada0772bc7d6ef59184534ba18d037e6a" title="Initially the Nexus file is converted to a reduced (all data removed) XML document via the Nexus conv..." alt="" coords="256,201,480,242"/>
+<area shape="rect" id="node23" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#af20ee4f89aa5bd7cbc4c8fb7a796a8b8" title="Set the resultant file produced after NXConvert has been run on the NXS file." alt="" coords="259,266,477,307"/>
+<area shape="rect" id="node25" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#af4b948d2e8af2000bb994c87564d0d12" title="Set the root node that this node belongs to." alt="" coords="267,331,469,373"/>
+<area shape="rect" id="node5" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1StreamGobbler.html#a4131578c6fe4f10f1bbe9e3005c38753" title="org.nexusformat.nxvalidate.\lStreamGobbler.getOutput" alt="" coords="541,5,742,46"/>
+<area shape="rect" id="node9" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a1996f86b6c76633e3b22d77ebad3bfb7" title="org.nexusformat.nxvalidate.\lNXNodeMapper.NXNodeMapper" alt="" coords="529,70,754,111"/>
+<area shape="rect" id="node17" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a05090f076723f48bc5b4799cd22a4e64" title="Check to see if this node is the root node." alt="" coords="541,135,742,177"/>
+<area shape="rect" id="node11" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a9e09af7f9bccd3f601b581d2a74ab002" title="Check to see if this node is a document, i.e the list of nodes directly under the root node that are ..." alt="" coords="803,5,1005,46"/>
+<area shape="rect" id="node13" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a28eb1f113c7ae2257c4713e295f3e9e1" title="org.nexusformat.nxvalidate.\lNXNodeMapper.isLeaf" alt="" coords="803,70,1005,111"/>
+<area shape="rect" id="node15" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a099456744fde634998693962b1812881" title="org.nexusformat.nxvalidate.\lNXNodeMapper.children" alt="" coords="803,135,1005,177"/>
+</map>

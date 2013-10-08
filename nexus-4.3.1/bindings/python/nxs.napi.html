@@ -1,0 +1,651 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module napi</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>napi</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/tmp/nexus-20432/bindings/python/nxs/napi.py">/tmp/nexus-20432/bindings/python/nxs/napi.py</a></font></td></tr></table>
+    <p><tt>@package&nbsp;nxs.napi<br>
+Wrapper&nbsp;for&nbsp;the&nbsp;<a href="#NeXus">NeXus</a>&nbsp;shared&nbsp;library.<br>
+&nbsp;<br>
+Use&nbsp;this&nbsp;interface&nbsp;when&nbsp;converting&nbsp;code&nbsp;from&nbsp;other&nbsp;languages&nbsp;which<br>
+do&nbsp;not&nbsp;support&nbsp;the&nbsp;natural&nbsp;view&nbsp;of&nbsp;the&nbsp;hierarchy.<br>
+&nbsp;<br>
+Library&nbsp;Location<br>
+================<br>
+&nbsp;<br>
+This&nbsp;wrapper&nbsp;needs&nbsp;the&nbsp;location&nbsp;of&nbsp;the&nbsp;libNeXus&nbsp;precompiled&nbsp;binary.&nbsp;It<br>
+looks&nbsp;in&nbsp;the&nbsp;following&nbsp;places&nbsp;in&nbsp;order::<br>
+&nbsp;<br>
+@verbatim<br>
+&nbsp;&nbsp;&nbsp;os.environ['NEXUSLIB']&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;All<br>
+&nbsp;&nbsp;&nbsp;directory&nbsp;containing&nbsp;nxs.py&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;All<br>
+&nbsp;&nbsp;&nbsp;os.environ['NEXUSDIR']\bin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Windows<br>
+&nbsp;&nbsp;&nbsp;os.environ['LD_LIBRARY_PATH']&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Unix<br>
+&nbsp;&nbsp;&nbsp;os.environ['DYLD_LIBRARY_PATH']&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Darwin<br>
+&nbsp;&nbsp;&nbsp;PREFIX/lib&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Unix&nbsp;and&nbsp;Darwin<br>
+&nbsp;&nbsp;&nbsp;/usr/local/lib&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Unix&nbsp;and&nbsp;Darwin<br>
+&nbsp;&nbsp;&nbsp;/usr/lib&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Unix&nbsp;and&nbsp;Darwin<br>
+@endverbatim<br>
+&nbsp;<br>
+-&nbsp;On&nbsp;Windows&nbsp;it&nbsp;looks&nbsp;for&nbsp;one&nbsp;of&nbsp;libNeXus.dll&nbsp;or&nbsp;libNeXus-0.dll.<br>
+-&nbsp;On&nbsp;OS&nbsp;X&nbsp;it&nbsp;looks&nbsp;for&nbsp;libNeXus.0.dylib<br>
+-&nbsp;On&nbsp;Unix&nbsp;it&nbsp;looks&nbsp;for&nbsp;libNeXus.so.0<br>
+-&nbsp;NEXUSDIR&nbsp;defaults&nbsp;to&nbsp;'C:\Program&nbsp;Files\<a href="#NeXus">NeXus</a>&nbsp;Data&nbsp;Format'.<br>
+-&nbsp;PREFIX&nbsp;defaults&nbsp;to&nbsp;/usr/local,&nbsp;but&nbsp;is&nbsp;replaced&nbsp;by&nbsp;the&nbsp;value&nbsp;of&nbsp;--prefix&nbsp;during&nbsp;configure.<br>
+&nbsp;<br>
+The&nbsp;import&nbsp;will&nbsp;raise&nbsp;an&nbsp;OSError&nbsp;exception&nbsp;if&nbsp;the&nbsp;library&nbsp;wasn't&nbsp;found<br>
+or&nbsp;couldn't&nbsp;be&nbsp;loaded.&nbsp;&nbsp;Note&nbsp;that&nbsp;on&nbsp;Windows&nbsp;in&nbsp;particular&nbsp;this&nbsp;may&nbsp;be<br>
+because&nbsp;the&nbsp;supporting&nbsp;HDF5&nbsp;dlls&nbsp;were&nbsp;not&nbsp;available&nbsp;in&nbsp;the&nbsp;usual&nbsp;places.<br>
+&nbsp;<br>
+If&nbsp;you&nbsp;are&nbsp;extracting&nbsp;the&nbsp;nexus&nbsp;library&nbsp;from&nbsp;a&nbsp;bundle&nbsp;at&nbsp;runtime,&nbsp;set<br>
+os.environ['NEXUSLIB']&nbsp;to&nbsp;the&nbsp;path&nbsp;where&nbsp;it&nbsp;is&nbsp;extracted&nbsp;before&nbsp;the<br>
+first&nbsp;import&nbsp;of&nbsp;nxs.<br>
+&nbsp;<br>
+Example<br>
+=======<br>
+@code<br>
+&nbsp;&nbsp;import&nbsp;nxs<br>
+&nbsp;&nbsp;file&nbsp;=&nbsp;nxs.<a href="#-open">open</a>('filename.nxs','rw')<br>
+&nbsp;&nbsp;file.opengroup('entry1')<br>
+&nbsp;&nbsp;file.opendata('definition')<br>
+&nbsp;&nbsp;print&nbsp;file.getdata()<br>
+&nbsp;&nbsp;file.close()<br>
+@endcode<br>
+&nbsp;<br>
+&nbsp;&nbsp;See&nbsp;@see&nbsp;nxstest.py&nbsp;for&nbsp;a&nbsp;more&nbsp;complete&nbsp;example.<br>
+&nbsp;<br>
+Interface<br>
+=========<br>
+&nbsp;<br>
+When&nbsp;converting&nbsp;code&nbsp;to&nbsp;python&nbsp;from&nbsp;other&nbsp;languages&nbsp;you&nbsp;do&nbsp;not<br>
+necessarily&nbsp;want&nbsp;to&nbsp;redo&nbsp;the&nbsp;file&nbsp;handling&nbsp;code.&nbsp;&nbsp;The&nbsp;nxs<br>
+provides&nbsp;an&nbsp;interface&nbsp;which&nbsp;more&nbsp;closely&nbsp;follows&nbsp;the<br>
+<a href="#NeXus">NeXus</a>&nbsp;application&nbsp;programming&nbsp;interface&nbsp;(NAPI_).<br>
+&nbsp;<br>
+This&nbsp;wrapper&nbsp;differs&nbsp;from&nbsp;NAPI&nbsp;in&nbsp;several&nbsp;respects::<br>
+&nbsp;<br>
+&nbsp;&nbsp;-&nbsp;Data&nbsp;values&nbsp;are&nbsp;loaded/stored&nbsp;directly&nbsp;from&nbsp;numpy&nbsp;arrays.<br>
+&nbsp;&nbsp;-&nbsp;Return&nbsp;codes&nbsp;are&nbsp;turned&nbsp;into&nbsp;exceptions.<br>
+&nbsp;&nbsp;-&nbsp;The&nbsp;file&nbsp;handle&nbsp;is&nbsp;stored&nbsp;in&nbsp;a&nbsp;file&nbsp;<a href="__builtin__.html#object">object</a><br>
+&nbsp;&nbsp;-&nbsp;Constants&nbsp;are&nbsp;handled&nbsp;somewhat&nbsp;differently&nbsp;(see&nbsp;below)<br>
+&nbsp;&nbsp;-&nbsp;Type&nbsp;checking&nbsp;on&nbsp;data/parameter&nbsp;storage<br>
+&nbsp;&nbsp;-&nbsp;Adds&nbsp;iterators&nbsp;file.entries()&nbsp;and&nbsp;file.attrs()<br>
+&nbsp;&nbsp;-&nbsp;Adds&nbsp;link()&nbsp;function&nbsp;to&nbsp;return&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;linked&nbsp;to&nbsp;group,&nbsp;if&nbsp;any<br>
+&nbsp;&nbsp;-&nbsp;NXmalloc/NXfree&nbsp;are&nbsp;not&nbsp;needed.<br>
+&nbsp;<br>
+File&nbsp;open&nbsp;modes&nbsp;can&nbsp;be&nbsp;constants&nbsp;or&nbsp;strings::<br>
+&nbsp;<br>
+@verbatim<br>
+&nbsp;nxs.ACC_READ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'r'<br>
+&nbsp;nxs.ACC_RDWR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'rw'<br>
+&nbsp;nxs.ACC_CREATE&nbsp;&nbsp;&nbsp;&nbsp;'w'<br>
+&nbsp;nxs.ACC_CREATE4&nbsp;&nbsp;&nbsp;'w4'<br>
+&nbsp;nxs.ACC_CREATE5&nbsp;&nbsp;&nbsp;'w5'<br>
+&nbsp;nxs.ACC_CREATEXML&nbsp;'wx'<br>
+@endverbatim<br>
+&nbsp;<br>
+Dimension&nbsp;constants::<br>
+&nbsp;<br>
+&nbsp;&nbsp;-&nbsp;nxs.UNLIMITED&nbsp;&nbsp;-&nbsp;for&nbsp;the&nbsp;extensible&nbsp;data&nbsp;dimension<br>
+&nbsp;&nbsp;-&nbsp;nxs.MAXRANK&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;for&nbsp;the&nbsp;number&nbsp;of&nbsp;possible&nbsp;dimensions<br>
+&nbsp;<br>
+Data&nbsp;types&nbsp;are&nbsp;strings&nbsp;corresponding&nbsp;to&nbsp;the&nbsp;numpy&nbsp;data&nbsp;types::<br>
+&nbsp;<br>
+&nbsp;&nbsp;'float32'&nbsp;'float64'<br>
+&nbsp;&nbsp;'int8'&nbsp;'int16'&nbsp;'int32'&nbsp;'int64'<br>
+&nbsp;&nbsp;'uint8'&nbsp;'uint16'&nbsp;'uint32'&nbsp;'uint64'<br>
+&nbsp;<br>
+&nbsp;&nbsp;Use&nbsp;'char'&nbsp;for&nbsp;string&nbsp;data.<br>
+&nbsp;<br>
+You&nbsp;can&nbsp;use&nbsp;the&nbsp;numpy&nbsp;A.dtype&nbsp;attribute&nbsp;for&nbsp;the&nbsp;type&nbsp;of&nbsp;array&nbsp;A.<br>
+&nbsp;<br>
+Dimensions&nbsp;are&nbsp;lists&nbsp;of&nbsp;integers&nbsp;or&nbsp;numpy&nbsp;arrays.&nbsp;&nbsp;You&nbsp;can&nbsp;use&nbsp;the<br>
+numpy&nbsp;A.shape&nbsp;attribute&nbsp;for&nbsp;the&nbsp;dimensions&nbsp;of&nbsp;array&nbsp;A.<br>
+&nbsp;<br>
+Compression&nbsp;codes&nbsp;are::<br>
+&nbsp;<br>
+&nbsp;'none'&nbsp;'lzw'&nbsp;'rle'&nbsp;'huffman'<br>
+&nbsp;<br>
+&nbsp;&nbsp;As&nbsp;of&nbsp;this&nbsp;writing&nbsp;<a href="#NeXus">NeXus</a>&nbsp;only&nbsp;supports&nbsp;'none'&nbsp;and&nbsp;'lzw'.<br>
+&nbsp;<br>
+Miscellaneous&nbsp;constants::<br>
+&nbsp;<br>
+&nbsp;&nbsp;-&nbsp;nxs.MAXNAMELEN&nbsp;&nbsp;-&nbsp;names&nbsp;must&nbsp;be&nbsp;shorter&nbsp;than&nbsp;this<br>
+&nbsp;&nbsp;-&nbsp;nxs.MAXPATHLEN&nbsp;&nbsp;-&nbsp;total&nbsp;path&nbsp;length&nbsp;must&nbsp;be&nbsp;shorter&nbsp;than&nbsp;this<br>
+&nbsp;&nbsp;-&nbsp;nxs.H4SKIP&nbsp;-&nbsp;class&nbsp;names&nbsp;that&nbsp;may&nbsp;appear&nbsp;in&nbsp;HDF4&nbsp;files&nbsp;but&nbsp;can&nbsp;be&nbsp;ignored<br>
+&nbsp;<br>
+Caveats<br>
+=======<br>
+&nbsp;<br>
+@todo&nbsp;NOSTRIP&nbsp;constant&nbsp;is&nbsp;probably&nbsp;not&nbsp;handled&nbsp;properly,<br>
+@todo&nbsp;Embedded&nbsp;nulls&nbsp;in&nbsp;strings&nbsp;is&nbsp;not&nbsp;supported<br>
+&nbsp;<br>
+@warning&nbsp;&nbsp;We&nbsp;have&nbsp;a&nbsp;memory&nbsp;leak.&nbsp;&nbsp;Calling&nbsp;open/close&nbsp;costs&nbsp;about&nbsp;90k&nbsp;a&nbsp;pair.<br>
+This&nbsp;is&nbsp;an&nbsp;eigenbug:<br>
+&nbsp;-&nbsp;if&nbsp;I&nbsp;test&nbsp;ctypes&nbsp;on&nbsp;a&nbsp;simple&nbsp;library&nbsp;it&nbsp;does&nbsp;not&nbsp;leak<br>
+&nbsp;-&nbsp;if&nbsp;I&nbsp;use&nbsp;the&nbsp;leak_test1&nbsp;code&nbsp;in&nbsp;the&nbsp;nexus&nbsp;distribution&nbsp;it&nbsp;doesn't&nbsp;leak<br>
+&nbsp;-&nbsp;if&nbsp;I&nbsp;remove&nbsp;the&nbsp;open/close&nbsp;call&nbsp;in&nbsp;the&nbsp;wrapper&nbsp;it&nbsp;doesn't&nbsp;leak.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="ctypes.html">ctypes</a><br>
+</td><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="napi.html#NeXus">NeXus</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="exceptions.html#Exception">exceptions.Exception</a>(<a href="exceptions.html#BaseException">exceptions.BaseException</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="napi.html#NeXusError">NeXusError</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="NeXus">class <strong>NeXus</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="NeXus-__del__"><strong>__del__</strong></a>(self)</dt><dd><tt>Be&nbsp;sure&nbsp;to&nbsp;close&nbsp;the&nbsp;file&nbsp;before&nbsp;deleting&nbsp;the&nbsp;last&nbsp;reference.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-__init__"><strong>__init__</strong></a>(self, filename, mode<font color="#909090">='r'</font>)</dt><dd><tt>Open&nbsp;the&nbsp;<a href="#NeXus">NeXus</a>&nbsp;file&nbsp;returning&nbsp;a&nbsp;handle.<br>
+&nbsp;<br>
+mode&nbsp;can&nbsp;be&nbsp;one&nbsp;of&nbsp;the&nbsp;following:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nxs.ACC_READ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'r'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open&nbsp;a&nbsp;file&nbsp;read-only<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nxs.ACC_RDWR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'rw'&nbsp;&nbsp;&nbsp;&nbsp;open&nbsp;a&nbsp;file&nbsp;read/write<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nxs.ACC_CREATE&nbsp;&nbsp;&nbsp;&nbsp;'w'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open&nbsp;a&nbsp;file&nbsp;write<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nxs.ACC_CREATE4&nbsp;&nbsp;&nbsp;'w4'&nbsp;&nbsp;&nbsp;&nbsp;open&nbsp;a&nbsp;Nexus&nbsp;file&nbsp;with&nbsp;HDF4<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nxs.ACC_CREATE5&nbsp;&nbsp;&nbsp;'w5'&nbsp;&nbsp;&nbsp;&nbsp;open&nbsp;a&nbsp;Nexus&nbsp;file&nbsp;with&nbsp;HDF5<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nxs.ACC_CREATEXML&nbsp;'wx'&nbsp;&nbsp;&nbsp;&nbsp;open&nbsp;a&nbsp;Nexus&nbsp;file&nbsp;with&nbsp;XML<br>
+&nbsp;<br>
+Raises&nbsp;ValueError&nbsp;if&nbsp;the&nbsp;open&nbsp;mode&nbsp;is&nbsp;invalid.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;the&nbsp;file&nbsp;could&nbsp;not&nbsp;be&nbsp;opened,&nbsp;with&nbsp;the<br>
+filename&nbsp;as&nbsp;part&nbsp;of&nbsp;the&nbsp;error&nbsp;message.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXopen(filename,mode,&amp;handle)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="#NeXus">NeXus</a>&nbsp;file&nbsp;handle.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-attrs"><strong>attrs</strong></a>(self)</dt><dd><tt>Iterate&nbsp;over&nbsp;attributes.<br>
+&nbsp;<br>
+for&nbsp;name,value&nbsp;in&nbsp;file.<a href="#NeXus-attrs">attrs</a>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;process(name,value)<br>
+&nbsp;<br>
+This&nbsp;automatically&nbsp;reads&nbsp;the&nbsp;attributes&nbsp;of&nbsp;the&nbsp;group/data.&nbsp;&nbsp;Do&nbsp;not<br>
+change&nbsp;the&nbsp;active&nbsp;group/data&nbsp;while&nbsp;processing&nbsp;the&nbsp;list.<br>
+&nbsp;<br>
+This&nbsp;does&nbsp;not&nbsp;correspond&nbsp;to&nbsp;an&nbsp;existing&nbsp;<a href="#NeXus">NeXus</a>&nbsp;API&nbsp;function,&nbsp;but<br>
+combines&nbsp;the&nbsp;work&nbsp;of&nbsp;attrinfo/initattrdir/getnextattr/getattr.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-close"><strong>close</strong></a>(self)</dt><dd><tt>Close&nbsp;the&nbsp;<a href="#NeXus">NeXus</a>&nbsp;file&nbsp;associated&nbsp;with&nbsp;handle.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;file&nbsp;could&nbsp;not&nbsp;be&nbsp;closed.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXclose(&amp;handle)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-closedata"><strong>closedata</strong></a>(self)</dt><dd><tt>Close&nbsp;the&nbsp;currently&nbsp;open&nbsp;data&nbsp;set.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;this&nbsp;fails&nbsp;(e.g.,&nbsp;because&nbsp;no<br>
+dataset&nbsp;is&nbsp;open).<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXclosedata(handle)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-closegroup"><strong>closegroup</strong></a>(self)</dt><dd><tt>Close&nbsp;the&nbsp;currently&nbsp;open&nbsp;group.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;the&nbsp;group&nbsp;could&nbsp;not&nbsp;be&nbsp;closed.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXclosegroup(handle)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-compmakedata"><strong>compmakedata</strong></a>(self, name, dtype<font color="#909090">=None</font>, shape<font color="#909090">=None</font>, mode<font color="#909090">='lzw'</font>, chunks<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;data&nbsp;element&nbsp;of&nbsp;the&nbsp;given&nbsp;dimensions&nbsp;and&nbsp;type.&nbsp;&nbsp;See<br>
+getinfo&nbsp;for&nbsp;details&nbsp;on&nbsp;types.&nbsp;&nbsp;Compression&nbsp;mode&nbsp;is&nbsp;one&nbsp;of<br>
+'none',&nbsp;'lzw',&nbsp;'rle'&nbsp;or&nbsp;'huffman'.&nbsp;&nbsp;chunks&nbsp;gives&nbsp;the&nbsp;alignment<br>
+of&nbsp;the&nbsp;compressed&nbsp;chunks&nbsp;in&nbsp;the&nbsp;data&nbsp;file.&nbsp;&nbsp;There&nbsp;should&nbsp;be&nbsp;one<br>
+chunk&nbsp;size&nbsp;for&nbsp;each&nbsp;dimension&nbsp;in&nbsp;the&nbsp;data.<br>
+&nbsp;<br>
+Defaults&nbsp;to&nbsp;mode='lzw'&nbsp;with&nbsp;chunk&nbsp;size&nbsp;set&nbsp;to&nbsp;the&nbsp;length&nbsp;of&nbsp;the<br>
+fastest&nbsp;varying&nbsp;dimension.<br>
+&nbsp;<br>
+Raises&nbsp;ValueError&nbsp;if&nbsp;it&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXmakedata(handle,name,type,rank,dims).</tt></dd></dl>
+
+<dl><dt><a name="NeXus-entries"><strong>entries</strong></a>(self)</dt><dd><tt>Iterator&nbsp;of&nbsp;entries.<br>
+&nbsp;<br>
+for&nbsp;name,nxclass&nbsp;in&nbsp;nxs.<a href="#NeXus-entries">entries</a>():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;process(name,nxclass)<br>
+&nbsp;<br>
+This&nbsp;automatically&nbsp;opens&nbsp;the&nbsp;corresponding&nbsp;group/data&nbsp;for&nbsp;you,<br>
+and&nbsp;closes&nbsp;it&nbsp;when&nbsp;you&nbsp;are&nbsp;done.&nbsp;&nbsp;Do&nbsp;not&nbsp;rely&nbsp;on&nbsp;any&nbsp;paths<br>
+remaining&nbsp;open&nbsp;between&nbsp;entries&nbsp;as&nbsp;we&nbsp;restore&nbsp;the&nbsp;current<br>
+path&nbsp;each&nbsp;time.<br>
+&nbsp;<br>
+This&nbsp;does&nbsp;not&nbsp;correspond&nbsp;to&nbsp;an&nbsp;existing&nbsp;<a href="#NeXus">NeXus</a>&nbsp;API&nbsp;function,<br>
+but&nbsp;instead&nbsp;combines&nbsp;the&nbsp;work&nbsp;of&nbsp;initgroupdir/getnextentry<br>
+and&nbsp;open/close&nbsp;on&nbsp;data&nbsp;and&nbsp;group.&nbsp;&nbsp;Entries&nbsp;in&nbsp;nxs.H4SKIP&nbsp;are<br>
+ignored.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-flush"><strong>flush</strong></a>(self)</dt><dd><tt>Flush&nbsp;all&nbsp;data&nbsp;to&nbsp;the&nbsp;<a href="#NeXus">NeXus</a>&nbsp;file.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXflush(&amp;handle)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getattr"><strong>getattr</strong></a>(self, name, length, dtype)</dt><dd><tt>Returns&nbsp;the&nbsp;value&nbsp;of&nbsp;the&nbsp;named&nbsp;attribute.&nbsp;&nbsp;Requires&nbsp;length&nbsp;and<br>
+data&nbsp;type&nbsp;from&nbsp;getnextattr&nbsp;to&nbsp;allocate&nbsp;the&nbsp;appropriate&nbsp;amount&nbsp;of<br>
+space&nbsp;for&nbsp;the&nbsp;attribute.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXgetattr(handle,name,data,&amp;length,&amp;storage)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getattrinfo"><strong>getattrinfo</strong></a>(self)</dt><dd><tt>Returns&nbsp;the&nbsp;number&nbsp;of&nbsp;attributes&nbsp;for&nbsp;the&nbsp;currently&nbsp;open<br>
+group/data&nbsp;<a href="__builtin__.html#object">object</a>.&nbsp;&nbsp;Do&nbsp;not&nbsp;call&nbsp;<a href="#NeXus-getnextattr">getnextattr</a>()&nbsp;more&nbsp;than<br>
+this&nbsp;number&nbsp;of&nbsp;times.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXgetattrinfo(handl,&nbsp;&amp;n)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getattrs"><strong>getattrs</strong></a>(self)</dt><dd><tt>Returns&nbsp;a&nbsp;dicitonary&nbsp;of&nbsp;the&nbsp;attributes&nbsp;on&nbsp;the&nbsp;current&nbsp;node.<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;a&nbsp;second&nbsp;form&nbsp;of&nbsp;<a href="#NeXus-attrs">attrs</a>(self).</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getdata"><strong>getdata</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;data.&nbsp;&nbsp;If&nbsp;data&nbsp;is&nbsp;a&nbsp;string&nbsp;(1-D&nbsp;char&nbsp;array),&nbsp;a&nbsp;python<br>
+string&nbsp;is&nbsp;returned.&nbsp;&nbsp;If&nbsp;data&nbsp;is&nbsp;a&nbsp;scalar&nbsp;(1-D&nbsp;numeric&nbsp;array&nbsp;of<br>
+length&nbsp;1),&nbsp;a&nbsp;python&nbsp;scalar&nbsp;is&nbsp;returned.&nbsp;&nbsp;If&nbsp;data&nbsp;is&nbsp;a&nbsp;string&nbsp;<br>
+array,&nbsp;a&nbsp;numpy&nbsp;array&nbsp;of&nbsp;type&nbsp;'S#'&nbsp;where&nbsp;#&nbsp;is&nbsp;the&nbsp;maximum&nbsp;string<br>
+length&nbsp;is&nbsp;returned.&nbsp;&nbsp;If&nbsp;data&nbsp;is&nbsp;a&nbsp;numeric&nbsp;array,&nbsp;a&nbsp;numpy&nbsp;array<br>
+is&nbsp;returned.<br>
+&nbsp;<br>
+Raises&nbsp;ValueError&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXgetdata(handle,&nbsp;data)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getdataID"><strong>getdataID</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;id&nbsp;of&nbsp;the&nbsp;current&nbsp;data&nbsp;so&nbsp;we&nbsp;can&nbsp;link&nbsp;to&nbsp;it&nbsp;later.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a><br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXgetdataID(handle,&nbsp;&amp;ID)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getentries"><strong>getentries</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;dictionary&nbsp;of&nbsp;the&nbsp;groups[name]=type&nbsp;below&nbsp;the<br>
+existing&nbsp;open&nbsp;one.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;this&nbsp;fails.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getgroupID"><strong>getgroupID</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;id&nbsp;of&nbsp;the&nbsp;current&nbsp;group&nbsp;so&nbsp;we&nbsp;can&nbsp;link&nbsp;to&nbsp;it&nbsp;later.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a><br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXgetgroupID(handle,&nbsp;&amp;ID)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getgroupinfo"><strong>getgroupinfo</strong></a>(self)</dt><dd><tt>Query&nbsp;the&nbsp;currently&nbsp;open&nbsp;group&nbsp;returning&nbsp;the&nbsp;tuple<br>
+numentries,&nbsp;name,&nbsp;nxclass.<br>
+&nbsp;<br>
+Raises&nbsp;ValueError&nbsp;if&nbsp;the&nbsp;group&nbsp;could&nbsp;not&nbsp;be&nbsp;opened.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXgetgroupinfo(handle)<br>
+&nbsp;<br>
+Note:&nbsp;corrects&nbsp;error&nbsp;in&nbsp;HDF5&nbsp;where&nbsp;getgroupinfo&nbsp;returns&nbsp;the&nbsp;entire<br>
+path&nbsp;rather&nbsp;than&nbsp;the&nbsp;group&nbsp;name.&nbsp;&nbsp;Use&nbsp;the&nbsp;path&nbsp;attribute&nbsp;to&nbsp;get<br>
+a&nbsp;sensible&nbsp;value&nbsp;of&nbsp;path.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getinfo"><strong>getinfo</strong></a>(self)</dt><dd><tt>Returns&nbsp;the&nbsp;tuple&nbsp;dimensions,type&nbsp;for&nbsp;the&nbsp;currently&nbsp;open&nbsp;dataset.<br>
+Dimensions&nbsp;is&nbsp;an&nbsp;integer&nbsp;array&nbsp;whose&nbsp;length&nbsp;corresponds&nbsp;to&nbsp;the&nbsp;rank<br>
+of&nbsp;the&nbsp;dataset&nbsp;and&nbsp;whose&nbsp;elements&nbsp;are&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;individual<br>
+dimensions.&nbsp;&nbsp;Storage&nbsp;type&nbsp;is&nbsp;returned&nbsp;as&nbsp;a&nbsp;string,&nbsp;with&nbsp;'char'&nbsp;for<br>
+a&nbsp;stored&nbsp;string,&nbsp;'[u]int[8|16|32]'&nbsp;for&nbsp;various&nbsp;integer&nbsp;values&nbsp;or<br>
+'float[32|64]'&nbsp;for&nbsp;floating&nbsp;point&nbsp;values.&nbsp;&nbsp;No&nbsp;support&nbsp;for<br>
+complex&nbsp;values.<br>
+&nbsp;<br>
+Unlike&nbsp;<a href="#NeXus-getrawinfo">getrawinfo</a>(),&nbsp;the&nbsp;length&nbsp;of&nbsp;the&nbsp;stored&nbsp;string&nbsp;is<br>
+returned&nbsp;rather&nbsp;than&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;string&nbsp;storage&nbsp;area.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;this&nbsp;is&nbsp;the&nbsp;recommended&nbsp;way&nbsp;to&nbsp;establish&nbsp;if&nbsp;you&nbsp;have<br>
+a&nbsp;dataset&nbsp;open.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXgetinfo(handle,&nbsp;&amp;rank,&nbsp;dims,&nbsp;&amp;storage),<br>
+but&nbsp;with&nbsp;storage&nbsp;converted&nbsp;from&nbsp;HDF&nbsp;values&nbsp;to&nbsp;numpy&nbsp;compatible<br>
+strings,&nbsp;and&nbsp;rank&nbsp;implicit&nbsp;in&nbsp;the&nbsp;length&nbsp;of&nbsp;the&nbsp;returned&nbsp;dimensions.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getnextattr"><strong>getnextattr</strong></a>(self)</dt><dd><tt>Returns&nbsp;the&nbsp;name,&nbsp;length,&nbsp;and&nbsp;data&nbsp;type&nbsp;for&nbsp;the&nbsp;next&nbsp;attribute.<br>
+Call&nbsp;getattrinfo&nbsp;to&nbsp;determine&nbsp;the&nbsp;number&nbsp;of&nbsp;attributes&nbsp;before<br>
+calling&nbsp;getnextattr.&nbsp;Data&nbsp;type&nbsp;is&nbsp;returned&nbsp;as&nbsp;a&nbsp;string.&nbsp;&nbsp;See<br>
+getinfo&nbsp;for&nbsp;details.&nbsp;&nbsp;Length&nbsp;is&nbsp;the&nbsp;number&nbsp;of&nbsp;elements&nbsp;in&nbsp;the<br>
+attribute.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;<a href="#NeXus">NeXus</a>&nbsp;returns&nbsp;ERROR&nbsp;or&nbsp;EOD.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXgetnextattr(handle,name,&amp;length,&amp;storage)<br>
+but&nbsp;with&nbsp;storage&nbsp;converted&nbsp;from&nbsp;HDF&nbsp;values&nbsp;to&nbsp;numpy&nbsp;compatible<br>
+strings.<br>
+&nbsp;<br>
+Note:&nbsp;<a href="#NeXus">NeXus</a>&nbsp;API&nbsp;documentation&nbsp;seems&nbsp;to&nbsp;say&nbsp;that&nbsp;length&nbsp;is&nbsp;the&nbsp;number<br>
+of&nbsp;bytes&nbsp;required&nbsp;to&nbsp;store&nbsp;the&nbsp;entire&nbsp;attribute.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getnextentry"><strong>getnextentry</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;next&nbsp;entry&nbsp;in&nbsp;the&nbsp;group&nbsp;as&nbsp;name,nxclass&nbsp;tuple.&nbsp;If<br>
+end&nbsp;of&nbsp;data&nbsp;is&nbsp;reached&nbsp;this&nbsp;returns&nbsp;the&nbsp;tuple&nbsp;(None,&nbsp;None)<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXgetnextentry(handle,name,nxclass,&amp;storage).<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;doesn't&nbsp;return&nbsp;the&nbsp;storage&nbsp;class&nbsp;for&nbsp;data&nbsp;entries<br>
+since&nbsp;getinfo&nbsp;returns&nbsp;shape&nbsp;and&nbsp;storage,&nbsp;both&nbsp;of&nbsp;which&nbsp;are&nbsp;required<br>
+to&nbsp;read&nbsp;the&nbsp;data.<br>
+&nbsp;<br>
+Note&nbsp;that&nbsp;HDF4&nbsp;files&nbsp;can&nbsp;have&nbsp;entries&nbsp;in&nbsp;the&nbsp;file&nbsp;with&nbsp;classes<br>
+that&nbsp;don't&nbsp;need&nbsp;to&nbsp;be&nbsp;processed.&nbsp;&nbsp;If&nbsp;the&nbsp;file&nbsp;follows&nbsp;the&nbsp;standard<br>
+<a href="#NeXus">NeXus</a>&nbsp;DTDs&nbsp;then&nbsp;skip&nbsp;any&nbsp;entry&nbsp;for&nbsp;which&nbsp;nxclass.startswith('NX')&nbsp;<br>
+is&nbsp;False.&nbsp;&nbsp;For&nbsp;non-conforming&nbsp;files,&nbsp;skip&nbsp;those&nbsp;entries&nbsp;with&nbsp;<br>
+nxclass&nbsp;in&nbsp;nxs.H4SKIP.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getrawinfo"><strong>getrawinfo</strong></a>(self)</dt><dd><tt>Returns&nbsp;the&nbsp;tuple&nbsp;dimensions,type&nbsp;for&nbsp;the&nbsp;currently&nbsp;open&nbsp;dataset.<br>
+Dimensions&nbsp;is&nbsp;an&nbsp;integer&nbsp;array&nbsp;whose&nbsp;length&nbsp;corresponds&nbsp;to&nbsp;the&nbsp;rank<br>
+of&nbsp;the&nbsp;dataset&nbsp;and&nbsp;whose&nbsp;elements&nbsp;are&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;individual<br>
+dimensions.&nbsp;&nbsp;Storage&nbsp;type&nbsp;is&nbsp;returned&nbsp;as&nbsp;a&nbsp;string,&nbsp;with&nbsp;'char'&nbsp;for<br>
+a&nbsp;stored&nbsp;string,&nbsp;'[u]int[8|16|32]'&nbsp;for&nbsp;various&nbsp;integer&nbsp;values&nbsp;or<br>
+'float[32|64]'&nbsp;for&nbsp;floating&nbsp;point&nbsp;values.&nbsp;&nbsp;No&nbsp;support&nbsp;for<br>
+complex&nbsp;values.<br>
+&nbsp;<br>
+Unlike&nbsp;<a href="#NeXus-getinfo">getinfo</a>(),&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;string&nbsp;storage&nbsp;area&nbsp;is<br>
+returned&nbsp;rather&nbsp;than&nbsp;the&nbsp;length&nbsp;of&nbsp;the&nbsp;stored&nbsp;string.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXgetrawinfo(handle,&nbsp;&amp;rank,&nbsp;dims,&nbsp;&amp;storage),<br>
+but&nbsp;with&nbsp;storage&nbsp;converted&nbsp;from&nbsp;HDF&nbsp;values&nbsp;to&nbsp;numpy&nbsp;compatible<br>
+strings,&nbsp;and&nbsp;rank&nbsp;implicit&nbsp;in&nbsp;the&nbsp;length&nbsp;of&nbsp;the&nbsp;returned&nbsp;dimensions.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-getslab"><strong>getslab</strong></a>(self, slab_offset, slab_shape)</dt><dd><tt>Get&nbsp;a&nbsp;slab&nbsp;from&nbsp;the&nbsp;data&nbsp;array.<br>
+&nbsp;<br>
+Offsets&nbsp;are&nbsp;0-origin.&nbsp;&nbsp;Shape&nbsp;can&nbsp;be&nbsp;inferred&nbsp;from&nbsp;the&nbsp;data.<br>
+Offset&nbsp;and&nbsp;shape&nbsp;must&nbsp;each&nbsp;have&nbsp;one&nbsp;entry&nbsp;per&nbsp;dimension.<br>
+&nbsp;<br>
+Raises&nbsp;ValueError&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXgetslab(handle,data,offset,shape)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-initattrdir"><strong>initattrdir</strong></a>(self)</dt><dd><tt>Reset&nbsp;the&nbsp;getnextattr&nbsp;list&nbsp;to&nbsp;the&nbsp;first&nbsp;attribute.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXinitattrdir(handle)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-initgroupdir"><strong>initgroupdir</strong></a>(self)</dt><dd><tt>Reset&nbsp;getnextentry&nbsp;to&nbsp;return&nbsp;the&nbsp;first&nbsp;entry&nbsp;in&nbsp;the&nbsp;group.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXinitgroupdir(handle)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-inquirefile"><strong>inquirefile</strong></a>(self, maxnamelen<font color="#909090">=1024</font>)</dt><dd><tt>Return&nbsp;the&nbsp;filename&nbsp;for&nbsp;the&nbsp;current&nbsp;file.&nbsp;&nbsp;This&nbsp;may&nbsp;be&nbsp;different<br>
+from&nbsp;the&nbsp;file&nbsp;that&nbsp;was&nbsp;opened&nbsp;(file.filename)&nbsp;if&nbsp;the&nbsp;current<br>
+group&nbsp;is&nbsp;an&nbsp;external&nbsp;link&nbsp;to&nbsp;another&nbsp;file.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXinquirefile(&amp;handle,file,len)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-isexternalgroup"><strong>isexternalgroup</strong></a>(self, name, nxclass, maxnamelen<font color="#909090">=1024</font>)</dt><dd><tt>Return&nbsp;the&nbsp;filename&nbsp;for&nbsp;the&nbsp;external&nbsp;link&nbsp;if&nbsp;there&nbsp;is&nbsp;one,<br>
+otherwise&nbsp;return&nbsp;None.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXisexternalgroup(&amp;handle,name,nxclass,file,len)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-link"><strong>link</strong></a>(self)</dt><dd><tt>Returns&nbsp;the&nbsp;item&nbsp;which&nbsp;the&nbsp;current&nbsp;item&nbsp;links&nbsp;to,&nbsp;or&nbsp;None&nbsp;if&nbsp;the<br>
+current&nbsp;item&nbsp;is&nbsp;not&nbsp;linked.&nbsp;&nbsp;This&nbsp;is&nbsp;equivalent&nbsp;to&nbsp;scanning&nbsp;the<br>
+attributes&nbsp;for&nbsp;target&nbsp;and&nbsp;returning&nbsp;it&nbsp;if&nbsp;target&nbsp;is&nbsp;not&nbsp;equal<br>
+to&nbsp;self.<br>
+&nbsp;<br>
+This&nbsp;does&nbsp;not&nbsp;correspond&nbsp;to&nbsp;an&nbsp;existing&nbsp;<a href="#NeXus">NeXus</a>&nbsp;API&nbsp;function,&nbsp;but<br>
+combines&nbsp;the&nbsp;work&nbsp;of&nbsp;attrinfo/initattrdir/getnextattr/getattr.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-linkexternal"><strong>linkexternal</strong></a>(self, name, nxclass, url)</dt><dd><tt>Return&nbsp;the&nbsp;filename&nbsp;for&nbsp;the&nbsp;external&nbsp;link&nbsp;if&nbsp;there&nbsp;is&nbsp;one,<br>
+otherwise&nbsp;return&nbsp;None.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;link&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXisexternalgroup(&amp;handle,name,nxclass,file,len)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-makedata"><strong>makedata</strong></a>(self, name, dtype<font color="#909090">=None</font>, shape<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;data&nbsp;element&nbsp;of&nbsp;the&nbsp;given&nbsp;type&nbsp;and&nbsp;shape.&nbsp;&nbsp;See&nbsp;getinfo<br>
+for&nbsp;details&nbsp;on&nbsp;types.&nbsp;&nbsp;This&nbsp;does&nbsp;not&nbsp;open&nbsp;the&nbsp;data&nbsp;for&nbsp;writing.<br>
+&nbsp;<br>
+Set&nbsp;the&nbsp;first&nbsp;dimension&nbsp;to&nbsp;nxs.UNLIMITED,&nbsp;for&nbsp;extensible&nbsp;data&nbsp;sets,<br>
+and&nbsp;use&nbsp;putslab&nbsp;to&nbsp;write&nbsp;individual&nbsp;slabs.<br>
+&nbsp;<br>
+Raises&nbsp;ValueError&nbsp;if&nbsp;it&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXmakedata(handle,name,type,rank,dims)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-makegroup"><strong>makegroup</strong></a>(self, name, nxclass)</dt><dd><tt>Create&nbsp;the&nbsp;group&nbsp;nxclass:name.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;the&nbsp;group&nbsp;could&nbsp;not&nbsp;be&nbsp;created.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXmakegroup(handle,&nbsp;name,&nbsp;nxclass)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-makelink"><strong>makelink</strong></a>(self, ID)</dt><dd><tt>Link&nbsp;the&nbsp;previously&nbsp;captured&nbsp;group/data&nbsp;ID&nbsp;into&nbsp;the&nbsp;currently<br>
+open&nbsp;group.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a><br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXmakelink(handle,&nbsp;&amp;ID)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-makenamedlink"><strong>makenamedlink</strong></a>(self, name, ID)</dt><dd><tt>Link&nbsp;the&nbsp;previously&nbsp;captured&nbsp;group/data&nbsp;ID&nbsp;into&nbsp;the&nbsp;currently<br>
+open&nbsp;group,&nbsp;but&nbsp;under&nbsp;a&nbsp;different&nbsp;name.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a><br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXmakenamedlink(handle,name,&amp;ID)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-open"><strong>open</strong></a>(self)</dt><dd><tt>Opens&nbsp;the&nbsp;<a href="#NeXus">NeXus</a>&nbsp;file&nbsp;handle&nbsp;if&nbsp;it&nbsp;is&nbsp;not&nbsp;already&nbsp;open.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;the&nbsp;file&nbsp;could&nbsp;not&nbsp;be&nbsp;opened.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXopen(filename,mode,&amp;handle)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-opendata"><strong>opendata</strong></a>(self, name)</dt><dd><tt>Open&nbsp;the&nbsp;named&nbsp;data&nbsp;set&nbsp;within&nbsp;the&nbsp;current&nbsp;group.<br>
+&nbsp;<br>
+Raises&nbsp;ValueError&nbsp;if&nbsp;could&nbsp;not&nbsp;open&nbsp;the&nbsp;dataset.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXopendata(handle,&nbsp;name)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-opengroup"><strong>opengroup</strong></a>(self, name, nxclass<font color="#909090">=None</font>)</dt><dd><tt>Open&nbsp;the&nbsp;group&nbsp;nxclass:name.&nbsp;If&nbsp;the&nbsp;nxclass&nbsp;is&nbsp;not&nbsp;specified<br>
+this&nbsp;will&nbsp;search&nbsp;for&nbsp;it.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;the&nbsp;group&nbsp;could&nbsp;not&nbsp;be&nbsp;opened.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXopengroup(handle,&nbsp;name,&nbsp;nxclass)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-opengrouppath"><strong>opengrouppath</strong></a>(self, path)</dt><dd><tt>Open&nbsp;a&nbsp;particular&nbsp;group&nbsp;'/path/to/group',&nbsp;or&nbsp;the&nbsp;dataset&nbsp;containing<br>
+the&nbsp;group&nbsp;if&nbsp;the&nbsp;path&nbsp;refers&nbsp;to&nbsp;a&nbsp;dataset.&nbsp;&nbsp;Paths&nbsp;can&nbsp;be&nbsp;relative&nbsp;to<br>
+the&nbsp;currently&nbsp;open&nbsp;group.<br>
+&nbsp;<br>
+Raises&nbsp;ValueError.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXopengrouppath(handle,&nbsp;path)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-openpath"><strong>openpath</strong></a>(self, path)</dt><dd><tt>Open&nbsp;a&nbsp;particular&nbsp;group&nbsp;'/path/to/group'.&nbsp;&nbsp;Paths&nbsp;can&nbsp;be<br>
+absolute&nbsp;or&nbsp;relative&nbsp;to&nbsp;the&nbsp;currently&nbsp;open&nbsp;group.&nbsp;&nbsp;If&nbsp;openpath<br>
+fails,&nbsp;then&nbsp;currently&nbsp;open&nbsp;path&nbsp;may&nbsp;not&nbsp;be&nbsp;different&nbsp;from&nbsp;the<br>
+starting&nbsp;path.&nbsp;For&nbsp;better&nbsp;performation&nbsp;the&nbsp;types&nbsp;can&nbsp;be<br>
+specified&nbsp;as&nbsp;well&nbsp;using&nbsp;'/path:type1/to:type2/group:type3'<br>
+which&nbsp;will&nbsp;prevent&nbsp;searching&nbsp;the&nbsp;file&nbsp;for&nbsp;the&nbsp;types&nbsp;associated<br>
+with&nbsp;the&nbsp;supplied&nbsp;names.<br>
+&nbsp;<br>
+Raises&nbsp;ValueError.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXopenpath(handle,&nbsp;path)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-opensourcegroup"><strong>opensourcegroup</strong></a>(self)</dt><dd><tt>If&nbsp;the&nbsp;current&nbsp;node&nbsp;is&nbsp;a&nbsp;linked&nbsp;to&nbsp;another&nbsp;group&nbsp;or&nbsp;data,&nbsp;then<br>
+open&nbsp;the&nbsp;group&nbsp;or&nbsp;data&nbsp;that&nbsp;it&nbsp;is&nbsp;linked&nbsp;to.<br>
+&nbsp;<br>
+Note:&nbsp;it&nbsp;is&nbsp;unclear&nbsp;how&nbsp;can&nbsp;we&nbsp;tell&nbsp;if&nbsp;we&nbsp;are&nbsp;linked,&nbsp;other&nbsp;than<br>
+perhaps&nbsp;the&nbsp;existence&nbsp;of&nbsp;a&nbsp;'target'&nbsp;attribute&nbsp;in&nbsp;the&nbsp;current&nbsp;item.<br>
+&nbsp;<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXopensourcegroup(handle)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-putattr"><strong>putattr</strong></a>(self, name, value, dtype<font color="#909090">=None</font>)</dt><dd><tt>Saves&nbsp;the&nbsp;named&nbsp;attribute.&nbsp;&nbsp;The&nbsp;attribute&nbsp;value&nbsp;is&nbsp;a&nbsp;string<br>
+or&nbsp;a&nbsp;scalar.<br>
+&nbsp;<br>
+Raises&nbsp;TypeError&nbsp;if&nbsp;the&nbsp;value&nbsp;type&nbsp;is&nbsp;incorrect.<br>
+Raises&nbsp;<a href="#NeXusError">NeXusError</a>&nbsp;if&nbsp;the&nbsp;attribute&nbsp;could&nbsp;not&nbsp;be&nbsp;saved.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXputattr(handle,name,data,length,storage)<br>
+&nbsp;<br>
+Note&nbsp;length&nbsp;is&nbsp;the&nbsp;number&nbsp;of&nbsp;elements&nbsp;to&nbsp;write&nbsp;rather<br>
+than&nbsp;the&nbsp;number&nbsp;of&nbsp;bytes&nbsp;to&nbsp;write.</tt></dd></dl>
+
+<dl><dt><a name="NeXus-putdata"><strong>putdata</strong></a>(self, data)</dt><dd><tt>Write&nbsp;data&nbsp;into&nbsp;the&nbsp;currently&nbsp;open&nbsp;data&nbsp;block.<br>
+&nbsp;<br>
+Raises&nbsp;ValueError&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXputdata(handle,&nbsp;data)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-putslab"><strong>putslab</strong></a>(self, data, slab_offset, slab_shape)</dt><dd><tt>Put&nbsp;a&nbsp;slab&nbsp;into&nbsp;the&nbsp;data&nbsp;array.<br>
+&nbsp;<br>
+Offsets&nbsp;are&nbsp;0-origin.&nbsp;&nbsp;Shape&nbsp;can&nbsp;be&nbsp;inferred&nbsp;from&nbsp;the&nbsp;data.<br>
+Offset&nbsp;and&nbsp;shape&nbsp;must&nbsp;each&nbsp;have&nbsp;one&nbsp;entry&nbsp;per&nbsp;dimension.<br>
+&nbsp;<br>
+Raises&nbsp;ValueError&nbsp;if&nbsp;this&nbsp;fails.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXputslab(handle,data,offset,shape)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-sameID"><strong>sameID</strong></a>(self, ID1, ID2)</dt><dd><tt>Return&nbsp;True&nbsp;of&nbsp;ID1&nbsp;and&nbsp;ID2&nbsp;point&nbsp;to&nbsp;the&nbsp;same&nbsp;group/data.<br>
+&nbsp;<br>
+This&nbsp;should&nbsp;not&nbsp;raise&nbsp;any&nbsp;errors.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXsameID(handle,&amp;ID1,&amp;ID2)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-setnumberformat"><strong>setnumberformat</strong></a>(self, type, format)</dt><dd><tt>Set&nbsp;the&nbsp;output&nbsp;format&nbsp;for&nbsp;the&nbsp;numbers&nbsp;of&nbsp;the&nbsp;given&nbsp;type&nbsp;(only<br>
+applies&nbsp;to&nbsp;XML).<br>
+&nbsp;<br>
+Raises&nbsp;ValueError&nbsp;if&nbsp;the&nbsp;number&nbsp;format&nbsp;is&nbsp;incorrect.<br>
+&nbsp;<br>
+Corresponds&nbsp;to&nbsp;NXsetnumberformat(&amp;handle,type,format)</tt></dd></dl>
+
+<dl><dt><a name="NeXus-show"><strong>show</strong></a>(self, path<font color="#909090">=None</font>, indent<font color="#909090">=0</font>)</dt><dd><tt>Print&nbsp;the&nbsp;structure&nbsp;of&nbsp;a&nbsp;<a href="#NeXus">NeXus</a>&nbsp;file&nbsp;from&nbsp;the&nbsp;current&nbsp;node.<br>
+&nbsp;<br>
+TODO:&nbsp;Break&nbsp;this&nbsp;into&nbsp;a&nbsp;tree&nbsp;walker&nbsp;and&nbsp;a&nbsp;visitor.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>longpath</strong></dt>
+<dd><tt>Unix-style&nbsp;path&nbsp;including&nbsp;nxclass&nbsp;to&nbsp;the&nbsp;node</tt></dd>
+</dl>
+<dl><dt><strong>path</strong></dt>
+<dd><tt>Unix-style&nbsp;path&nbsp;to&nbsp;node</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="NeXusError">class <strong>NeXusError</strong></a>(<a href="exceptions.html#Exception">exceptions.Exception</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#NeXus">NeXus</a>&nbsp;Error<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="napi.html#NeXusError">NeXusError</a></dd>
+<dd><a href="exceptions.html#Exception">exceptions.Exception</a></dd>
+<dd><a href="exceptions.html#BaseException">exceptions.BaseException</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception</a>:<br>
+<dl><dt><a name="NeXusError-__init__"><strong>__init__</strong></a>(...)</dt><dd><tt>x.<a href="#NeXusError-__init__">__init__</a>(...)&nbsp;initializes&nbsp;x;&nbsp;see&nbsp;help(type(x))&nbsp;for&nbsp;signature</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="exceptions.html#Exception">exceptions.Exception</a>:<br>
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#NeXusError-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+<hr>
+Methods inherited from <a href="exceptions.html#BaseException">exceptions.BaseException</a>:<br>
+<dl><dt><a name="NeXusError-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#NeXusError-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="NeXusError-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#NeXusError-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="NeXusError-__getitem__"><strong>__getitem__</strong></a>(...)</dt><dd><tt>x.<a href="#NeXusError-__getitem__">__getitem__</a>(y)&nbsp;&lt;==&gt;&nbsp;x[y]</tt></dd></dl>
+
+<dl><dt><a name="NeXusError-__getslice__"><strong>__getslice__</strong></a>(...)</dt><dd><tt>x.<a href="#NeXusError-__getslice__">__getslice__</a>(i,&nbsp;j)&nbsp;&lt;==&gt;&nbsp;x[i:j]<br>
+&nbsp;<br>
+Use&nbsp;of&nbsp;negative&nbsp;indices&nbsp;is&nbsp;not&nbsp;supported.</tt></dd></dl>
+
+<dl><dt><a name="NeXusError-__reduce__"><strong>__reduce__</strong></a>(...)</dt></dl>
+
+<dl><dt><a name="NeXusError-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#NeXusError-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="NeXusError-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#NeXusError-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="NeXusError-__setstate__"><strong>__setstate__</strong></a>(...)</dt></dl>
+
+<dl><dt><a name="NeXusError-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#NeXusError-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<dl><dt><a name="NeXusError-__unicode__"><strong>__unicode__</strong></a>(...)</dt></dl>
+
+<hr>
+Data descriptors inherited from <a href="exceptions.html#BaseException">exceptions.BaseException</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+</dl>
+<dl><dt><strong>args</strong></dt>
+</dl>
+<dl><dt><strong>message</strong></dt>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-open"><strong>open</strong></a>(filename, mode<font color="#909090">='r'</font>)</dt><dd><tt>Returns&nbsp;a&nbsp;<a href="#NeXus">NeXus</a>&nbsp;file&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>H4SKIP</strong> = ['CDF0.0', '_HDF_CHK_TBL_', 'Attr0.0', 'RIG0.0', 'RI0.0', 'RIATTR0.0N', 'RIATTR0.0C']<br>
+<strong>MAXNAMELEN</strong> = 64<br>
+<strong>MAXPATHLEN</strong> = 1024<br>
+<strong>MAXRANK</strong> = 32<br>
+<strong>UNLIMITED</strong> = -1<br>
+<strong>__all__</strong> = ['UNLIMITED', 'MAXRANK', 'MAXNAMELEN', 'MAXPATHLEN', 'H4SKIP', 'NeXus', 'NeXusError', 'open']<br>
+<strong>__id__</strong> = '$ID$'</td></tr></table>
+</body></html>

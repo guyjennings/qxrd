@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#ac65840865961c8d8f9b4fabdb287e173" title="Each node of the reduced XML document may have attributes associated with it, this method provides a ..." alt="" coords="529,5,753,46"/>
+<area shape="rect" id="node7" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#afa8ab14f08e68096be843321f1fe9713" title="If a node in the reduced XML document fails one of the schematron tests then the node can be marked a..." alt="" coords="272,73,477,114"/>
+<area shape="rect" id="node12" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a0b766800ae535a5363633eeeb80f98c9" title="Each node of the reduced XML document may have a value associated with it." alt="" coords="541,135,742,177"/>
+<area shape="rect" id="node15" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a1d5488d86cd3398cba786675eaa653b7" title="If a node in the reduced XML document fails one of the schematron report tests then the node can be m..." alt="" coords="269,193,480,234"/>
+<area shape="rect" id="node20" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a9ab1444aa93ce5d95a25c4322f67f1cc" title="org.nexusformat.nxvalidate.\lNXNodeMapper.toString" alt="" coords="274,258,475,299"/>
+<area shape="rect" id="node5" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a05090f076723f48bc5b4799cd22a4e64" title="Check to see if this node is the root node." alt="" coords="803,103,1005,145"/>
+<area shape="rect" id="node9" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a2f8e1f41adaff6464c8b1c6d27644aba" title="A convenience method to force the checking if a node is bad (failed schematron tests)." alt="" coords="531,70,752,111"/>
+<area shape="rect" id="node17" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a4e3cc9a251a23c91ce57641a0d056b1b" title="A convenience method to force the checking if a node has warnings ." alt="" coords="528,201,755,242"/>
+</map>

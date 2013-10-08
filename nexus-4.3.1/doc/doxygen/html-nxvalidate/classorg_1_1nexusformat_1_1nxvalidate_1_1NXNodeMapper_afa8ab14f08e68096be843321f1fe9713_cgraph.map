@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a2f8e1f41adaff6464c8b1c6d27644aba" title="A convenience method to force the checking if a node is bad (failed schematron tests)." alt="" coords="259,5,480,46"/>
+<area shape="rect" id="node5" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a05090f076723f48bc5b4799cd22a4e64" title="Check to see if this node is the root node." alt="" coords="529,5,730,46"/>
+</map>

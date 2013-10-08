@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classNeXus_1_1File.html#afbdc86cc3b5cb7c32b690cb85b850200" title="Close the currently open data." alt="" coords="276,5,439,32"/>
+<area shape="rect" id="node7" href="$classNeXus_1_1File.html#ad5506dc8e99c0fb2b033d6f7b8e072de" title="Close the currently open group." alt="" coords="272,56,443,83"/>
+<area shape="rect" id="node11" href="$classNeXus_1_1File.html#ae0f4b2b955ec990100d2a4c59983408c" title="This function checksi if we are in an open dataset." alt="" coords="259,107,455,133"/>
+<area shape="rect" id="node5" href="c-api.tag$group__c__readwrite.html#ga4020c5577e109cb4ce5d882691be5ee5" title="NXclosedata" alt="" coords="509,5,611,32"/>
+<area shape="rect" id="node9" href="c-api.tag$group__c__group.html#ga90b46dc464fc56ac6c2a360e2120f1bd" title="NXclosegroup" alt="" coords="505,56,615,83"/>
+<area shape="rect" id="node13" href="c-api.tag$group__c__linking.html#ga84f5fb042ff616e0d5122d16c7914d83" title="NXgetdataID" alt="" coords="509,107,611,133"/>
+</map>

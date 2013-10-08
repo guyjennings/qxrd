@@ -1,0 +1,8 @@
+NeXus test programs and files
+--------------------------------
+
+Test executables are installed to /usr/local/nexus/tests and
+program source code to /usr/local/nexus/examples
+
+--
+$Id: README.tests 480 2005-06-07 12:52:55Z faa59 $

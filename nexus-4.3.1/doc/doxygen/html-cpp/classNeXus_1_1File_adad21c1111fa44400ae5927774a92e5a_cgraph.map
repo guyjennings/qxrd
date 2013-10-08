@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classNeXus_1_1File.html#afbdc86cc3b5cb7c32b690cb85b850200" title="Close the currently open data." alt="" coords="217,12,380,39"/>
+<area shape="rect" id="node7" href="$classNeXus_1_1File.html#a9c9b02a95b17b0131a44a34c1a61d23b" title="NeXus::File::getStrData" alt="" coords="213,69,384,96"/>
+<area shape="rect" id="node14" href="$classNeXus_1_1File.html#a6495b9dece53360c455772b357b782b3" title="NeXus::File::openData" alt="" coords="217,132,380,159"/>
+<area shape="rect" id="node5" href="c-api.tag$group__c__readwrite.html#ga4020c5577e109cb4ce5d882691be5ee5" title="NXclosedata" alt="" coords="457,5,559,32"/>
+<area shape="rect" id="node9" href="$classNeXus_1_1File.html#af2a084a6f02b7be093a579b95923cb1f" title="Allocate memory and return the data as a vector." alt="" coords="433,56,583,83"/>
+<area shape="rect" id="node11" href="$classNeXus_1_1File.html#a3fbc6e4d022674eb4c0cda5dffc223cd" title="NeXus::File::getInfo" alt="" coords="633,81,775,108"/>
+<area shape="rect" id="node16" href="c-api.tag$group__c__readwrite.html#gab34bc6ab4c08020ed15bf74e1434915a" title="NXopendata" alt="" coords="457,157,559,184"/>
+</map>

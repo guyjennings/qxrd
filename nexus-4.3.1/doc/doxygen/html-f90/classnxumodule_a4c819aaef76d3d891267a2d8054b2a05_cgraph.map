@@ -1,0 +1,15 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classnxmodule.html#a4f6fd172d720bc604f5dafdaacfcf0ec" title="nxmodule::nxerror" alt="" coords="717,230,856,257"/>
+<area shape="rect" id="node5" href="$classnxmodule.html#a2a13974218311ec25043e513ed4f9e6f" title="nxmodule::nxgetinfo" alt="" coords="252,53,404,80"/>
+<area shape="rect" id="node9" href="$classnxmodule.html#a5a51ae7a8598af0c39d0b70fe907fb65" title="nxmodule::nxgetnextentry" alt="" coords="691,92,882,118"/>
+<area shape="rect" id="node13" href="$classnxmodule.html#a71de78f6e484add19586ee4cd47ac5ab" title="nxmodule::nxinitgroupdir" alt="" coords="238,154,418,181"/>
+<area shape="rect" id="node15" href="$classnxmodule.html#a7d84949863278f52fa0a0e838094895d" title="nxmodule::nxopendata" alt="" coords="243,205,413,232"/>
+<area shape="rect" id="node19" href="$classnxumodule.html#aa65257a2bad3d902569b524a9003cc17" title="nxumodule::nxufindattr" alt="" coords="243,256,413,282"/>
+<area shape="rect" id="node7" href="$classnxmodule.html#a3d1bdd083236ffe7248665dc165a8427" title="nxmodule::nxreverse" alt="" coords="477,53,633,80"/>
+<area shape="rect" id="node11" href="$classnxmodule.html#a2ab369d463b21212ca4b6f9a690aa509" title="nxmodule::nxfstring" alt="" coords="931,186,1079,213"/>
+<area shape="rect" id="node17" href="$classnxmodule.html#a834aa399088d7ebb7e741531c7b32edd" title="nxmodule::nxcstring" alt="" coords="479,154,630,181"/>
+<area shape="rect" id="node21" href="$classnxmodule.html#ae106f09889041368ba29e003ca4d183a" title="nxmodule::nxattrdir" alt="" coords="481,306,628,333"/>
+<area shape="rect" id="node30" href="$classnxmodule.html#a66c1757f373920e0e79c3c864486a77b" title="nxmodule::nxgetattrinfo" alt="" coords="467,205,642,232"/>
+<area shape="rect" id="node24" href="$classnxmodule.html#a6f2fa61a6321680c807e3654836fee3f" title="nxmodule::nxgetnextattr" alt="" coords="697,281,877,308"/>
+<area shape="rect" id="node27" href="$classnxmodule.html#a513cebe82e676f2ae6f4f822ce9bb0e9" title="nxmodule::nxinitattrdir" alt="" coords="703,332,870,358"/>
+</map>

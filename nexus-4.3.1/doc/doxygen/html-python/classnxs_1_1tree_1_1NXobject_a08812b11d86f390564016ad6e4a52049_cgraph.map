@@ -1,0 +1,16 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classnxs_1_1tree_1_1NXobject.html#a252ea12c88e91e7c9b55cd555b1bec20" title="nxs.tree.NXobject.\l_str_attrs" alt="" coords="207,5,345,46"/>
+<area shape="rect" id="node5" href="$classnxs_1_1tree_1_1NXobject.html#a7b4f4373ff537fe2499dc4e0f988a2d8" title="nxs.tree.NXobject.\l_str_name" alt="" coords="207,70,345,111"/>
+<area shape="rect" id="node7" href="$classnxs_1_1napi_1_1NeXus.html#a59836f91ab410de1beca80de6d2068da" title="Iterator of entries." alt="" coords="192,136,360,163"/>
+<area shape="rect" id="node9" href="$classnxs_1_1napi_1_1NeXus.html#a11e60e219c617291837fe0ac977fb75d" title="Query the currently open group returning the tuple numentries, name, nxclass." alt="" coords="409,60,615,87"/>
+<area shape="rect" id="node13" href="$classnxs_1_1napi_1_1NeXus.html#a8c548adb0ddbc4021b53bae60a236de9" title="Return the next entry in the group as name,nxclass tuple." alt="" coords="409,111,615,137"/>
+<area shape="rect" id="node16" href="$classnxs_1_1napi_1_1NeXus.html#a337dec00d3dd06a0cdaf956ed173e470" title="Reset getnextentry to return the first entry in the group." alt="" coords="414,9,610,36"/>
+<area shape="rect" id="node19" href="$classnxs_1_1napi_1_1NeXus.html#a185a188039622280e6de6ba5a33a9c98" title="Open the named data set within the current group." alt="" coords="669,161,854,188"/>
+<area shape="rect" id="node22" href="$classnxs_1_1napi_1_1NeXus.html#a36f167ccb2b65869f8e9ee209a2d69cb" title="Open the group nxclass:name." alt="" coords="665,364,858,391"/>
+<area shape="rect" id="node27" href="$classnxs_1_1napi_1_1NeXus.html#a7e08df736627f29e425d7cbd16bdd0a6" title="Open a particular group &#39;/path/to/group&#39;." alt="" coords="419,263,605,289"/>
+<area shape="rect" id="node11" href="$classnxs_1_1napi_1_1NeXus.html#ae85d1ff827996f393b4f124d68747b2a" title="Return file location as string filename(path)" alt="" coords="936,161,1085,188"/>
+<area shape="rect" id="node24" href="$classnxs_1_1napi_1_1NeXus.html#a467ec1dec4712021f6fff3ca730277a6" title="Return the nxclass of the supplied name." alt="" coords="907,389,1114,416"/>
+<area shape="rect" id="node30" href="$classnxs_1_1napi_1_1NeXus.html#ac208e5cc711cffd829e6cfa7dcbe9fbc" title="helper function: open relative path and maybe data" alt="" coords="665,263,857,289"/>
+<area shape="rect" id="node32" href="$classnxs_1_1napi_1_1NeXus.html#a854f801ec161e38373398ea340b56d2a" title="Close the currently open data set." alt="" coords="668,212,855,239"/>
+<area shape="rect" id="node35" href="$classnxs_1_1napi_1_1NeXus.html#ae0ca129c145a1e4ed56183ef647a385b" title="Close the currently open group." alt="" coords="664,313,859,340"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a28e8e4ece560197b12d202ab624d4e23" title="org.nexusformat.nxvalidate.\lNXNodeMapper.getChildAt" alt="" coords="263,92,465,134"/>
+<area shape="rect" id="node5" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a05090f076723f48bc5b4799cd22a4e64" title="Check to see if this node is the root node." alt="" coords="533,27,734,68"/>
+<area shape="rect" id="node7" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a1996f86b6c76633e3b22d77ebad3bfb7" title="org.nexusformat.nxvalidate.\lNXNodeMapper.NXNodeMapper" alt="" coords="521,122,746,163"/>
+<area shape="rect" id="node15" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a296f1055e284ee0d0e1136c108f49715" title="org.nexusformat.nxvalidate.\lNXNodeMapper.getChildCount" alt="" coords="257,27,471,68"/>
+<area shape="rect" id="node9" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a099456744fde634998693962b1812881" title="org.nexusformat.nxvalidate.\lNXNodeMapper.children" alt="" coords="795,56,997,98"/>
+<area shape="rect" id="node11" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a9e09af7f9bccd3f601b581d2a74ab002" title="Check to see if this node is a document, i.e the list of nodes directly under the root node that are ..." alt="" coords="795,122,997,163"/>
+<area shape="rect" id="node13" href="$classorg_1_1nexusformat_1_1nxvalidate_1_1NXNodeMapper.html#a28eb1f113c7ae2257c4713e295f3e9e1" title="org.nexusformat.nxvalidate.\lNXNodeMapper.isLeaf" alt="" coords="795,187,997,228"/>
+</map>
