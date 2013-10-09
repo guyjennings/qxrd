@@ -7,7 +7,13 @@ macx {
   LIBS += -lz
 } else:win32 {
   HDF5BASE = $${PWD}/../hdf5-1.8.11/src/
-  HDF5CONF = $${PWD}/../hdf5-config/win32/
+  contains(QMAKE_TARGET.arch, x86_64):{
+    message(64 bit build)
+    HDF5CONF = $${PWD}/../hdf5-config/win64/
+  } else {
+    message(32 bit build)
+    HDF5CONF = $${PWD}/../hdf5-config/win32/
+  }
 } else:unix {
   LIBS += -lhdf5 -lz
 }
@@ -15,8 +21,9 @@ macx {
 macx|win32 {
   INCLUDEPATH += $${HDF5BASE} $${HDF5CONF}
 
+macx: HEADERS += $${HDF5CONF}/H5config.h
+
   HEADERS += \
-    $${HDF5CONF}/H5config.h \
     $${HDF5CONF}/H5pubconf.h \
     $${HDF5BASE}/H5ACpkg.h \
     $${HDF5BASE}/H5ACprivate.h \
