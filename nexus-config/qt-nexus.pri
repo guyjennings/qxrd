@@ -11,7 +11,7 @@ macx {
 } else {
 }
 
-macx:win32 {
+macx|win32 {
   INCLUDEPATH += $${NEXUSHDR} $${NEXUSCONF}
 
   HEADERS +=

@@ -12,7 +12,7 @@ macx {
   LIBS += -lhdf5 -lz
 }
 
-macx:win32 {
+macx|win32 {
   INCLUDEPATH += $${HDF5BASE} $${HDF5CONF}
 
   HEADERS += \
