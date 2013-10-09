@@ -14,7 +14,17 @@ macx {
 macx|win32 {
   INCLUDEPATH += $${NEXUSHDR} $${NEXUSCONF}
 
-  HEADERS +=
+  DEFINES += HAVE_CONFIG_H=1
+  DEFINES += HAVE_HDF5
 
-  SOURCES +=
+  HEADERS += \
+    $${NEXUSCONF}/nxconfig.h
+
+  SOURCES += \
+    $${NEXUSSRC}/napi5.c \
+    $${NEXUSSRC}/napi.c \
+    $${NEXUSSRC}/napiu.c \
+    $${NEXUSSRC}/nxdataset.c \
+    $${NEXUSSRC}/nxstack.c \
+    $${NEXUSSRC}/stptok.c
 }

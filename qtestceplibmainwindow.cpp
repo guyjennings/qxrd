@@ -4,6 +4,8 @@
 #include "qcepmutexlocker.h"
 #include "qcepimagedataformattiff.h"
 #include "qcepimagedata.h"
+#include "hdf5.h"
+#include "napi.h"
 
 QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -27,6 +29,8 @@ QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   connect(ui->m_ActionReadSettings, SIGNAL(triggered()), this, SLOT(doReadSettings()));
   connect(ui->m_ActionWriteSettings, SIGNAL(triggered()), this, SLOT(doWriteSettings()));
   connect(ui->m_ActionLoadTIFFImage, SIGNAL(triggered()), this, SLOT(doLoadTIFFImage()));
+  connect(ui->m_ActionTestHDF, SIGNAL(triggered()), this, SLOT(doTestHDF5Library()));
+  connect(ui->m_ActionTestNexus, SIGNAL(triggered()), this, SLOT(doTestNexusLibrary()));
 }
 
 QtestceplibMainWindow::~QtestceplibMainWindow()
@@ -34,7 +38,7 @@ QtestceplibMainWindow::~QtestceplibMainWindow()
   delete ui;
 }
 
-QString defPath;
+QString defPath, defHDFPath, defNexusPath;
 
 void QtestceplibMainWindow::doReadSettings()
 {
@@ -105,5 +109,36 @@ void QtestceplibMainWindow::doLoadTIFFImage()
     QcepImageData<double> *img = new QcepImageData<double>(QcepSettingsSaverWPtr(), 1024,1024);
 
     fmt.loadFile(theFile, img);
+  }
+}
+
+void QtestceplibMainWindow::doTestHDF5Library()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+        this, "Read HDF5 File...", defHDFPath);
+
+  if (theFile.length()) {
+    hid_t file, data;
+
+    file = H5Fopen(qPrintable(theFile), H5F_ACC_RDONLY, H5P_DEFAULT);
+    H5Fclose(file);
+
+    defHDFPath=theFile;
+  }
+}
+
+void QtestceplibMainWindow::doTestNexusLibrary()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+        this, "Read Nexus File...", defNexusPath);
+
+  if (theFile.length()) {
+    NXhandle nxHandle;
+
+    NXopen(qPrintable(theFile), NXACC_READ, &nxHandle);
+
+    NXclose(&nxHandle);
+
+    defNexusPath=theFile;
   }
 }

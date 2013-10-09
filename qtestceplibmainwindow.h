@@ -33,6 +33,10 @@ public slots:
 
   void doLoadTIFFImage();
 
+  void doTestHDF5Library();
+
+  void doTestNexusLibrary();
+
 private:
   Ui::QtestceplibMainWindow *ui;
   mutable QMutex m_Mutex;
