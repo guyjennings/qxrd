@@ -34,6 +34,7 @@ public slots:
   void doLoadTIFFImage();
 
   void doTestHDF5Library();
+  void doTestHDF5SlabOutput();
 
   void doTestNexusLibrary();
 

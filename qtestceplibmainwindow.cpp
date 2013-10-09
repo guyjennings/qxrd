@@ -30,6 +30,7 @@ QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   connect(ui->m_ActionWriteSettings, SIGNAL(triggered()), this, SLOT(doWriteSettings()));
   connect(ui->m_ActionLoadTIFFImage, SIGNAL(triggered()), this, SLOT(doLoadTIFFImage()));
   connect(ui->m_ActionTestHDF, SIGNAL(triggered()), this, SLOT(doTestHDF5Library()));
+  connect(ui->m_ActionTestHDFSlab, SIGNAL(triggered()), this, SLOT(doTestHDF5SlabOutput()));
   connect(ui->m_ActionTestNexus, SIGNAL(triggered()), this, SLOT(doTestNexusLibrary()));
 }
 
@@ -124,6 +125,74 @@ void QtestceplibMainWindow::doTestHDF5Library()
     H5Fclose(file);
 
     defHDFPath=theFile;
+  }
+}
+
+void QtestceplibMainWindow::doTestHDF5SlabOutput()
+{
+  QString theFile = QFileDialog::getSaveFileName(
+        this, "Save HDF Slab file...", defHDFPath);
+
+  if (theFile.length()) {
+    const int BIGDIM = 128;
+    const int CHKDIM = 32;
+
+    hid_t file_id, dataset_id, dataspace_id, memspace_id;
+
+    file_id = H5Fcreate(qPrintable(theFile), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+
+    hsize_t dims[3], count[3], offset[3], stride[3], block[3];
+
+    dims[0] = BIGDIM;
+    dims[1] = BIGDIM;
+    dims[2] = BIGDIM;
+
+    dataspace_id = H5Screate_simple(3, dims, NULL);
+
+    dataset_id = H5Dcreate(file_id, "data", H5T_NATIVE_FLOAT, dataspace_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+    count[0] = CHKDIM;
+    count[1] = CHKDIM;
+    count[2] = CHKDIM;
+
+    stride[0] = 1;
+    stride[1] = 1;
+    stride[2] = 1;
+
+    block[0] = 1;
+    block[1] = 1;
+    block[2] = 1;
+
+    float chk[CHKDIM][CHKDIM][CHKDIM];
+
+    memspace_id = H5Screate_simple(3, count, NULL);
+
+    for (int k=0; k<(BIGDIM/CHKDIM); k++) {
+      for (int j=0; j<(BIGDIM/CHKDIM); j++) {
+        for (int i=0; i<(BIGDIM/CHKDIM); i++) {
+
+          for (int ck=0; ck<CHKDIM; ck++) {
+            for (int cj=0; cj<CHKDIM; cj++) {
+              for (int ci=0; ci<CHKDIM; ci++) {
+                chk[ck][cj][ci] = i*CHKDIM+ci;
+              }
+            }
+          }
+
+          offset[0] = k*32;
+          offset[1] = j*32;
+          offset[2] = i*32;
+
+          fprintf(stderr, "Offset %d,%d,%d\n", offset[0], offset[1], offset[2]);
+
+          H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, offset, stride, count, block);
+
+          H5Dwrite(dataset_id, H5T_NATIVE_FLOAT, memspace_id, dataspace_id, H5P_DEFAULT, chk);
+        }
+      }
+    }
+
+    H5Fclose(file_id);
   }
 }
 
