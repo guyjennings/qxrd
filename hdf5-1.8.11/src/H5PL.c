@@ -50,7 +50,7 @@
 #define H5PL_HANDLE HINSTANCE
 
 /* Get a handle to a plugin library.  Windows: TEXT macro handles Unicode strings */
-#define H5PL_OPEN_DLIB(S) LoadLibraryEx(TEXT(S), NULL, LOAD_WITH_ALTERED_SEARCH_PATH)
+#define H5PL_OPEN_DLIB(S) LoadLibraryEx(S, NULL, LOAD_WITH_ALTERED_SEARCH_PATH)
 
 /* Get the address of a symbol in dynamic library */
 #define H5PL_GET_LIB_FUNC(H,N) GetProcAddress(H,N)
