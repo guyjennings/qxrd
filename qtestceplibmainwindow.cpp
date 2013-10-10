@@ -165,6 +165,8 @@ void QtestceplibMainWindow::doTestHDF5SlabOutput()
 
     float chk[CHKDIM][CHKDIM][CHKDIM];
 
+    float value = 0;
+
     memspace_id = H5Screate_simple(3, count, NULL);
 
     for (int k=0; k<(BIGDIM/CHKDIM); k++) {
@@ -174,20 +176,22 @@ void QtestceplibMainWindow::doTestHDF5SlabOutput()
           for (int ck=0; ck<CHKDIM; ck++) {
             for (int cj=0; cj<CHKDIM; cj++) {
               for (int ci=0; ci<CHKDIM; ci++) {
-                chk[ck][cj][ci] = i*CHKDIM+ci;
+                chk[ck][cj][ci] = value;
               }
             }
           }
 
-          offset[0] = k*32;
+          offset[0] = i*32;
           offset[1] = j*32;
-          offset[2] = i*32;
+          offset[2] = k*32;
 
           fprintf(stderr, "Offset %d,%d,%d\n", offset[0], offset[1], offset[2]);
 
           H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, offset, stride, count, block);
 
           H5Dwrite(dataset_id, H5T_NATIVE_FLOAT, memspace_id, dataspace_id, H5P_DEFAULT, chk);
+
+          value += 1;
         }
       }
     }
