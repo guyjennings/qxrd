@@ -5,7 +5,7 @@ macx {
 } else:win32 {
   include("$${PWD}/tiffconfig/qt-libtiff-win32.pri")
 } else {
-  LIBS += -ltiff -lhdf5 -lnexus
+  LIBS += -ltiff
 }
 
 include("$${PWD}/hdf5-config/qt-hdf5.pri")

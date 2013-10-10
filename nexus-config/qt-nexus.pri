@@ -9,6 +9,7 @@ macx {
   NEXUSHDR  = $${PWD}/../nexus-4.3.1/include/
   NEXUSCONF = $${PWD}/../nexus-4.3.1/Windows_extra/include/
 } else {
+  LIBS += -lNeXus
 }
 
 macx|win32 {
