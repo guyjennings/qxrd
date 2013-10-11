@@ -1,18 +1,18 @@
 message(hdf5 PWD = $${PWD})
 
 macx {
-  HDF5BASE = $${PWD}/../hdf5-1.8.11/src/
-  HDF5CONF = $${PWD}/../hdf5-config/macx/
+  HDF5BASE = $${PWD}/hdf5-1.8.11/src/
+  HDF5CONF = $${PWD}/hdf5-config/macx/
 
   LIBS += -lz
 } else:win32 {
-  HDF5BASE = $${PWD}/../hdf5-1.8.11/src/
+  HDF5BASE = $${PWD}/hdf5-1.8.11/src/
   contains(QMAKE_TARGET.arch, x86_64):{
     message(64 bit build)
-    HDF5CONF = $${PWD}/../hdf5-config/win64/
+    HDF5CONF = $${PWD}/hdf5-config/win64/
   } else {
     message(32 bit build)
-    HDF5CONF = $${PWD}/../hdf5-config/win32/
+    HDF5CONF = $${PWD}/hdf5-config/win32/
   }
 } else:unix {
   LIBS += -lhdf5 -lz

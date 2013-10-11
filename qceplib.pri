@@ -8,9 +8,6 @@ macx {
   LIBS += -ltiff
 }
 
-include("$${PWD}/hdf5-config/qt-hdf5.pri")
-include("$${PWD}/nexus-config/qt-nexus.pri")
-
 INCLUDEPATH += $${PWD}
 
 SOURCES += \

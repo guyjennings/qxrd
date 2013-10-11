@@ -8,6 +8,8 @@ TEMPLATE = app
 QCEPLIB = ./
 
 include("qceplib.pri")
+include("qt-hdf5.pri")
+include("qt-nexus.pri")
 
 SOURCES += \
     qtestceplibmainwindow.cpp \
