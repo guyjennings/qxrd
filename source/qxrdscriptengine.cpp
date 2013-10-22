@@ -1228,6 +1228,20 @@ QScriptValue QxrdScriptEngine::mapUserFunctionFunc(QScriptContext *context, QScr
   return engine->toScriptValue(0);
 }
 
+QCEP_DOC_FUNCTION(
+    "timeStamp",
+    "timeStamp()",
+    "Returns system time as seconds since unix epoch",
+    ""
+    )
+
+QScriptValue QxrdScriptEngine::timeStampFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  double val = QDateTime::currentMSecsSinceEpoch()/1000.0;
+
+  return engine->toScriptValue(val);
+}
+
 QCEP_DOC_OBJECT(
     "JSON",
     "Qt Built-in JSON Parser"
@@ -1395,6 +1409,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
   globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
   globalObject().setProperty("mapUserFunction", newFunction(mapUserFunctionFunc, 1));
+  globalObject().setProperty("timeStamp", newFunction(timeStampFunc, 1));
 
   if (app) {
     QObject *plugin = dynamic_cast<QObject*>(app->nidaqPlugin().data());
