@@ -34,6 +34,7 @@ QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int
     m_PhaseNumber(saver, this, "phaseNumber", -1, "Image Phase Number"),
     m_NPhases(saver, this, "nPhases", -1, "Number of Image Phases"),
     m_DateTime(saver, this, "dateTime", QDateTime::currentDateTime(), "Image Creation Date and Time"),
+    m_TimeStamp(saver, this, "timeStamp", QDateTime::currentMSecsSinceEpoch()/1000.0, "Image creation time (secs after UNIX epoch)"),
     m_HBinning(saver, this, "hBinning", 1, "Image Horizontal Binning Factor"),
     m_VBinning(saver, this, "vBinning", 1, "Image Vertical Binning Factor"),
     m_CameraGain(saver, this, "cameraGain", 0, "Image Detector Gain"),

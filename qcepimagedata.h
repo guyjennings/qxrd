@@ -75,6 +75,9 @@ public:
   Q_PROPERTY(QString dateString READ get_DateString WRITE set_DateString)
   //  QCEP_STRING_PROPERTY(DateString)
 
+  Q_PROPERTY(double timeStamp READ get_TimeStamp WRITE set_TimeStamp)
+  QCEP_DOUBLE_PROPERTY(TimeStamp)
+
   Q_PROPERTY(int hBinning READ get_HBinning WRITE set_HBinning)
   QCEP_INTEGER_PROPERTY(HBinning)
 
