@@ -510,13 +510,17 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
 
     QFileInfo finfo(fileName);
 
+    QDateTime now = QDateTime::currentDateTime();
+    double msec = now.toMSecsSinceEpoch()/1000.0;
+
     proc -> set_QxrdVersion(get_QxrdVersion());
     proc -> set_QtVersion(get_QtVersion());
     proc -> set_FileBase(fileBase);
     proc -> set_FileName(fileName);
     proc -> set_Title(finfo.fileName());
     proc -> set_ExposureTime(get_ExposureTime());
-    proc -> set_DateTime(QDateTime::currentDateTime());
+    proc -> set_DateTime(now);
+    proc -> set_TimeStamp(msec);
     proc -> set_HBinning(1);
     proc -> set_VBinning(1);
     proc -> set_CameraGain(get_CameraGain());
