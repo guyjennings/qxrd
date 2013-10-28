@@ -18,7 +18,7 @@ void QxrdImageData<T>::saveMetaData(QxrdExperimentWPtr expt)
 template <typename T>
 void QxrdImageData<T>::saveMetaData(QString name, QxrdExperimentWPtr expt)
 {
-//  printf("QcepImageDataBase::saveMetaData for file %s\n", qPrintable(name));
+//  g_Application->printMessage(tr("QxrdImageData::saveMetaData for file %1").arg(name));
 
   QTime tic;
   tic.start();
@@ -30,7 +30,7 @@ void QxrdImageData<T>::saveMetaData(QString name, QxrdExperimentWPtr expt)
 
     QSettings settings(name+".metadata", QSettings::IniFormat);
 
-    QcepProperty::writeSettings(this, &QcepImageDataBase::staticMetaObject/*metaObject()*/, "metadata", &settings);
+    QcepProperty::writeSettings(this, &QcepImageDataBase::staticMetaObject/*metaObject()*/, "metadata", &settings, true);
 
     settings.beginWriteArray("normalization");
     QcepDoubleList norm = QcepImageDataBase::get_Normalization();
