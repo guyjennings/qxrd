@@ -511,7 +511,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     QFileInfo finfo(fileName);
 
     QDateTime now = QDateTime::currentDateTime();
-    double msec = now.toMSecsSinceEpoch()/1000.0;
+    double msec = QcepImageDataBase::secondsSinceEpoch();
 
     proc -> set_QxrdVersion(get_QxrdVersion());
     proc -> set_QtVersion(get_QtVersion());

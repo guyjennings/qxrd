@@ -1237,7 +1237,7 @@ QCEP_DOC_FUNCTION(
 
 QScriptValue QxrdScriptEngine::timeStampFunc(QScriptContext *context, QScriptEngine *engine)
 {
-  double val = QDateTime::currentMSecsSinceEpoch()/1000.0;
+  double val = QcepImageDataBase::secondsSinceEpoch();
 
   return engine->toScriptValue(val);
 }
