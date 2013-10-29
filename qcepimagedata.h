@@ -161,6 +161,8 @@ public:
 
   void setDefaultFileName(QString path);
 
+  static double secondsSinceEpoch();
+
   enum {
     UndefinedData,
     Raw16Data,
