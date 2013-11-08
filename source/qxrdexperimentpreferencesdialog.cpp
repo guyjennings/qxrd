@@ -13,7 +13,7 @@
 #include <QGridLayout>
 #include "qcepdebug.h"
 
-QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentWPtr exptw, QWidget *parent) :
+QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentWPtr exptw, QWidget *parent, int initialPage) :
   QDialog(parent),
   m_Experiment(exptw)
 {
@@ -22,6 +22,10 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
   }
 
   setupUi(this);
+
+  if (initialPage >= 0) {
+    m_PreferencesPanes->setCurrentIndex(initialPage);
+  }
 
   QxrdExperimentPtr expt(m_Experiment);
 
@@ -34,7 +38,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     QxrdDataProcessorPtr proc = expt->dataProcessor();
     //  QxrdAllocator *alloc = g_Application->allocator();
 
-//    int detectorType = expt -> get_DetectorType();
+    int detectorType = expt -> get_DetectorType();
     //  int processorType = m_Experiment -> get_ProcessorType();
 
     int runSpecServer = 0;
@@ -57,12 +61,14 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
       simpleServerPort = ssrv -> get_SimpleServerPort();
     }
 
-    //  QStringList detectorTypes = QxrdAcquisitionThread::detectorTypeNames();
+    QStringList detectorTypes = QxrdDetectorThread::detectorTypeNames();
 
-    //  m_DetectorTypeCombo -> addItems(detectorTypes);
-    //  m_DetectorTypeCombo -> setCurrentIndex(detectorType);
+    m_DetectorType -> addItems(detectorTypes);
+    m_DetectorType -> setCurrentIndex(detectorType);
 
-//    connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
+    m_DetectorNumber -> setValue(expt->get_DetectorNumber());
+
+    //    connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
     m_ExperimentDirectory -> setText(expt->get_ExperimentDirectory());
 
     connect(m_CurrentLogFileBrowse, SIGNAL(clicked()), this, SLOT(currentLogFileBrowse()));
@@ -228,6 +234,9 @@ void QxrdExperimentPreferencesDialog::accept()
     QxrdDataProcessorPtr proc = expt->dataProcessor();
     QxrdServerPtr srv(expt -> specServer());
     QxrdSimpleServerPtr ssrv(expt -> simpleServer());
+
+    expt->set_DetectorType(m_DetectorType->currentIndex());
+    expt->set_DetectorNumber(m_DetectorNumber->value());
 
     if (srv) {
       srv -> set_RunSpecServer(runSpecServer);

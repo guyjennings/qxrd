@@ -54,6 +54,7 @@ public slots:
   void saveExperimentCopy();
   void saveExperimentAs();
   void doEditPreferences();
+  void doEditDetectorPreferences();
   void doSaveData();
   void doLoadData();
   void doSaveDark();

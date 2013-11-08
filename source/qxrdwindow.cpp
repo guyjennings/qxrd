@@ -1021,7 +1021,16 @@ void QxrdWindow::doEditPreferences()
 {
   GUI_THREAD_CHECK;
 
-  QxrdExperimentPreferencesDialog prefs(m_Experiment, this);
+  QxrdExperimentPreferencesDialog prefs(m_Experiment, this, 1);
+
+  prefs.exec();
+}
+
+void QxrdWindow::doEditDetectorPreferences()
+{
+  GUI_THREAD_CHECK;
+
+  QxrdExperimentPreferencesDialog prefs(m_Experiment, this, 0);
 
   prefs.exec();
 }

@@ -80,6 +80,20 @@ QString QxrdDetectorThread::detectorTypeName(int detectorType)
   return res;
 }
 
+QStringList QxrdDetectorThread::detectorTypeNames()
+{
+  QStringList res;
+
+  res.append(detectorTypeName(NoDetector));
+  res.append(detectorTypeName(SimulatedDetector));
+  res.append(detectorTypeName(PerkinElmerDetector));
+  res.append(detectorTypeName(PilatusDetector));
+  res.append(detectorTypeName(EpicsAreaDetector));
+  res.append(detectorTypeName(FileWatcherDetector));
+
+  return res;
+}
+
 void QxrdDetectorThread::run()
 {
   QxrdDetectorPtr p;

@@ -27,6 +27,7 @@ public:
   } DetectorType;
 
   static QString detectorTypeName(int detectorType);
+  static QStringList detectorTypeNames();
 
 signals:
 

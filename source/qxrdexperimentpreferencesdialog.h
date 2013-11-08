@@ -14,7 +14,7 @@
 class QxrdExperimentPreferencesDialog : public QDialog, public Ui::QxrdExperimentPreferencesDialog {
   Q_OBJECT
 public:
-  QxrdExperimentPreferencesDialog(QxrdExperimentWPtr exptw, QWidget *parent = 0);
+  QxrdExperimentPreferencesDialog(QxrdExperimentWPtr exptw, QWidget *parent = 0, int initialPage = -1);
   ~QxrdExperimentPreferencesDialog();
 
 public slots:

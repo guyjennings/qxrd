@@ -170,6 +170,12 @@
         </item>
         <item row="0" column="2">
          <widget class="QSpinBox" name="m_DetectorNumber">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="buttonSymbols">
+           <enum>QAbstractSpinBox::NoButtons</enum>
+          </property>
           <property name="specialValueText">
            <string>Default</string>
           </property>
@@ -922,6 +928,18 @@ Can only be changed by saving a new experiment</string>
           </property>
           <property name="text">
            <string>Browse...</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="m_DetectorOptionsButton">
+          <property name="toolTip">
+           <string>Acquisition options, such as
+Location(s) where data files are saved
+</string>
+          </property>
+          <property name="text">
+           <string>Detector Options...</string>
           </property>
          </widget>
         </item>
