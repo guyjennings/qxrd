@@ -1,6 +1,14 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.9.17 - Nov 8 2013
+Fixed problems with saving user defined properties in acquired images
+
+Added a timeStamp property to acquired images - number of seconds since unix epoch,
+with msec resolution if supported by OS
+
+Can change the detector type for an experiment from the preferences dialog
+
 ## v0.9.16 - Oct 4 2013
 The application will now always re-open the most recent experiment when restarted
 
