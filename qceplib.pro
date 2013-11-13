@@ -1,5 +1,5 @@
 CONFIG   += qt
-QT       += core gui script network
+QT       += core gui script network opengl svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -7,6 +7,7 @@ TARGET = qceplib
 TEMPLATE = app
 QCEPLIB = ./
 
+include("qwt-6.1.pri")
 include("qceplib.pri")
 include("qt-hdf5.pri")
 include("qt-nexus.pri")
@@ -16,7 +17,8 @@ SOURCES += \
     qtestceplibmain.cpp
 
 OTHER_FILES += \
-    qceplib.pri
+    qceplib.pri \
+    qwt-6.1.pri
 
 win32 {
 #    RC_FILE = qxrd.rc
