@@ -32,6 +32,7 @@ win32 {
         $${TIFFBASE}/tif_fax3.c \
         $${TIFFBASE}/tif_fax3sm.c \
         $${TIFFBASE}/tif_flush.c \
+        $${TIFFBASE}/tif_getimage.c \
         $${TIFFBASE}/tif_jpeg.c \
         $${TIFFBASE}/tif_luv.c \
         $${TIFFBASE}/tif_lzw.c \
