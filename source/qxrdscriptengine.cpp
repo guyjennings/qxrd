@@ -282,7 +282,7 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
     QxrdExperimentPtr expt(eng->experiment());
 
     if (expt) {
-      expt->printMessage(msg);
+      expt->printLine(msg);
     }
   }
 

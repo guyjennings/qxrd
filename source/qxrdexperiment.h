@@ -104,6 +104,7 @@ public slots:
   void criticalMessage(QString msg);
   void statusMessage(QString msg);
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void printLine(QString msg);
 
   void saveExperiment();
 

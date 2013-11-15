@@ -405,6 +405,15 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts)
   }
 }
 
+void QxrdExperiment::printLine(QString msg)
+{
+  QxrdWindowPtr win = m_Window;
+
+  if (win) {
+    win->displayMessage(msg);
+  }
+}
+
 QxrdWindowPtr QxrdExperiment::window()
 {
   return m_Window;
