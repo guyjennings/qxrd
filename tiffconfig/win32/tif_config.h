@@ -249,7 +249,11 @@
 #define TIFF_SSIZE_FORMAT "%lld"
 
 /* Signed size type */
+#ifdef _WIN64
 #define TIFF_SSIZE_T signed long long
+#else
+#define TIFF_SSIZE_T signed long
+#endif
 
 /* Unsigned 16-bit type */
 #define TIFF_UINT16_T unsigned short
