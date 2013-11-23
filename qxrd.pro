@@ -11,6 +11,7 @@ include("qxrd.platform.pri")
 message(Version = $${VERSION})
 message(Host Arch = $${QMAKE_HOST.arch})
 message(Target = $${TARGET})
+message(QT Version $$[QT_VERSION])
 
 DISTFILES += source plugins
 

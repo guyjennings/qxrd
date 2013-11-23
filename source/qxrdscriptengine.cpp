@@ -263,7 +263,7 @@ QCEP_DOC_FUNCTION(
     "</code>"
     )
 
-QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine *engine, void */*u*/)
+QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine *engine, void * /*u*/)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
@@ -560,7 +560,7 @@ QCEP_DOC_FUNCTION(
     "and then the most recent acquired images are written to disk, along with a number of post-trigger images</p>"
     )
 
-QScriptValue QxrdScriptEngine::triggerFunc(QScriptContext */*context*/, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::triggerFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 

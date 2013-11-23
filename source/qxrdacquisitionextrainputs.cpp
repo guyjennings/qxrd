@@ -129,7 +129,7 @@ void QxrdAcquisitionExtraInputs::statusMessage(QString msg, QDateTime /*ts*/)
   }
 }
 
-void QxrdAcquisitionExtraInputs::prepareForAcquisition(QxrdAcquisitionParameterPack */*parms*/)
+void QxrdAcquisitionExtraInputs::prepareForAcquisition(QxrdAcquisitionParameterPack * /*parms*/)
 {
   if (!get_Enabled()) {
     initialize();

@@ -95,36 +95,16 @@ DISTFILES += qxrd.dox \
     tiffconfig/win32/tiffconf.h \
     tiffconfig/macx/tif_config.h \
     tiffconfig/macx/tiffconf.h
-win32:include("../qt-libtiff-win32.pri")
-macx:include("../qt-libtiff-macx.pri")
 include("../qwt-5.2.pri")
 #include("../qceplib.pri")
 include("qxrd.levmar.pri")
+include(submodules/qceplib/qceplib.pri)
 
 INCLUDEPATH += submodules/qceplib
 
 # include("qxrd-cuda.pri")
-HEADERS += submodules/qceplib/spec_server.h \
+HEADERS += \
     submodules/qceplib/qspecserver.h \
-    submodules/qceplib/qcepmacros.h \
-    submodules/qceplib/qcepproperty.h \
-    submodules/qceplib/qcepproperty-ptr.h \
-    submodules/qceplib/qcepsettingssaver.h \
-    submodules/qceplib/qcepsettingssaver-ptr.h \
-    submodules/qceplib/qcepmutexlocker.h \
-    submodules/qceplib/qcepimagedata.h \
-    submodules/qceplib/qcepimagedata-ptr.h \
-    submodules/qceplib/qcepimagedataformat.h \
-    submodules/qceplib/qcepimagedataformat-ptr.h \
-    submodules/qceplib/qcepimagedataformattiff.h \
-    submodules/qceplib/qcepimagedataformatmar345.h \
-    submodules/qceplib/qcepimagedataformatfactory.h \
-    submodules/qceplib/qcepimagedataformatfactory-ptr.h \
-    submodules/qceplib/qcepdocumentationdictionary.h \
-    submodules/qceplib/qcepdebug.h \
-    submodules/qceplib/qceppropertyvalue.h \
-    submodules/qceplib/qcepvector3d.h \
-    submodules/qceplib/qcepmatrix3x3.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
     qxrddetector.h \
@@ -140,20 +120,8 @@ HEADERS += submodules/qceplib/spec_server.h \
     qxrdobjectnamer.h \
     qxrduserscriptdialog.h
 
-SOURCES += submodules/qceplib/qspecserver.cpp \
-    submodules/qceplib/qcepproperty.cpp \
-    submodules/qceplib/qcepsettingssaver.cpp \
-    submodules/qceplib/qcepmutexlocker.cpp \
-    submodules/qceplib/qcepimagedata.cpp \
-    submodules/qceplib/qcepimagedataformat.cpp \
-    submodules/qceplib/qcepimagedataformattiff.cpp \
-    submodules/qceplib/qcepimagedataformatmar345.cpp \
-    submodules/qceplib/qcepimagedataformatfactory.cpp \
-    submodules/qceplib/qcepdocumentationdictionary.cpp \
-    submodules/qceplib/qcepdebug.cpp \
-    submodules/qceplib/qceppropertyvalue.cpp \
-    submodules/qceplib/qcepvector3d.cpp \
-    submodules/qceplib/qcepmatrix3x3.cpp \
+SOURCES += \
+    submodules/qceplib/qspecserver.cpp \
     qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
     qxrddetector.cpp \
@@ -556,54 +524,30 @@ win32 { # Copy QT Libraries into app directory
     }
   }
 
-  CONFIG(debug, debug|release) {
-    QMAKE_EXTRA_TARGETS += QtCored4
-    PRE_TARGETDEPS      += ../QtCored4.dll
-    QtCored4.target      = ../QtCored4.dll
-    QtCored4.depends     = $${LIBDIR}/QtCored4.dll
-    QtCored4.commands    = $(COPY_FILE) $${LIBDIR_WIN}\\QtCored4.dll ..\\QtCored4.dll
+  isEqual(QT_MAJOR_VERSION, 5) {
+    CONFIG(debug, debug|release) {
+      libs = Qt5Cored Qt5Networkd Qt5Guid Qt5Scriptd
+    } else {
+      libs = Qt5Core Qt5Network Qt5Gui Qt5Script
+    }
+  }
 
-    QMAKE_EXTRA_TARGETS += QtNetworkd4
-    PRE_TARGETDEPS   += ../QtNetworkd4.dll
-    QtNetworkd4.target   = ../QtNetworkd4.dll
-    QtNetworkd4.depends  = $${LIBDIR}/QtNetworkd4.dll
-    QtNetworkd4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtNetworkd4.dll ..\\QtNetworkd4.dll
+  isEqual(QT_MAJOR_VERSION, 4) {
+    CONFIG(debug, debug|release) {
+      libs = QtCored4 QtNetworkd4 QtGuid4 QtScriptd4
+    } else {
+      libs = QtCore4 QtNetwork4 QtGui4 QtScript4
+    }
+  }
 
-    QMAKE_EXTRA_TARGETS += QtGuid4
-    PRE_TARGETDEPS   += ../QtGuid4.dll
-    QtGuid4.target   = ../QtGuid4.dll
-    QtGuid4.depends  = $${LIBDIR}/QtGuid4.dll
-    QtGuid4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtGuid4.dll ..\\QtGuid4.dll
+  QMAKE_EXTRA_TARGETS += qtlibs
+  PRE_TARGETDEPS      += qtlibs
+  qtlibs.target       += qtlibs
 
-    QMAKE_EXTRA_TARGETS += QtScriptd4
-    PRE_TARGETDEPS   += ../QtScriptd4.dll
-    QtScriptd4.target   = ../QtScriptd4.dll
-    QtScriptd4.depends  = $${LIBDIR}/QtScriptd4.dll
-    QtScriptd4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtScriptd4.dll ..\\QtScriptd4.dll
-  } else {
-    QMAKE_EXTRA_TARGETS += QtCore4
-    PRE_TARGETDEPS   += ../QtCore4.dll
-    QtCore4.target   = ../QtCore4.dll
-    QtCore4.depends  = $${LIBDIR}/QtCore4.dll
-    QtCore4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtCore4.dll ..\\QtCore4.dll
-
-    QMAKE_EXTRA_TARGETS += QtNetwork4
-    PRE_TARGETDEPS   += ../QtNetwork4.dll
-    QtNetwork4.target   = ../QtNetwork4.dll
-    QtNetwork4.depends  = $${LIBDIR}/QtNetwork4.dll
-    QtNetwork4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtNetwork4.dll ..\\QtNetwork4.dll
-
-    QMAKE_EXTRA_TARGETS += QtGui4
-    PRE_TARGETDEPS   += ../QtGui4.dll
-    QtGui4.target   = ../QtGui4.dll
-    QtGui4.depends  = $${LIBDIR}/QtGui4.dll
-    QtGui4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtGui4.dll ..\\QtGui4.dll
-
-    QMAKE_EXTRA_TARGETS += QtScript4
-    PRE_TARGETDEPS   += ../QtScript4.dll
-    QtScript4.target   = ../QtScript4.dll
-    QtScript4.depends  = $${LIBDIR}/QtScript4.dll
-    QtScript4.commands = $(COPY_FILE) $${LIBDIR_WIN}\\QtScript4.dll ..\\QtScript4.dll
+  for(lib, libs) {
+    message(Copying $${lib})
+    qtlibs.depends    += $${LIBDIR_WIN}\\$${lib}.dll
+    qtlibs.commands   += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
   }
 
   QMAKE_DISTCLEAN += /Q ..\\*.dll
