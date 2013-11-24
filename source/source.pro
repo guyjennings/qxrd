@@ -526,9 +526,9 @@ win32 { # Copy QT Libraries into app directory
 
   isEqual(QT_MAJOR_VERSION, 5) {
     CONFIG(debug, debug|release) {
-      libs = Qt5Cored Qt5Networkd Qt5Guid Qt5Scriptd
+      libs = Qt5Cored Qt5Networkd Qt5Guid Qt5Scriptd Qt5Widgetsd
     } else {
-      libs = Qt5Core Qt5Network Qt5Gui Qt5Script
+      libs = Qt5Core Qt5Network Qt5Gui Qt5Script Qt5Widgets
     }
   }
 
