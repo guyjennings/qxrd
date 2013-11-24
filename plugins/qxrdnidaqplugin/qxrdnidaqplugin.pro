@@ -18,3 +18,6 @@ HEADERS += \
 
 SOURCES += \
     qxrdnidaqplugin.cpp
+
+OTHER_FILES += \
+    nidaq.json
