@@ -356,56 +356,73 @@ void QxrdApplication::loadPlugins()
 #endif
 
   foreach (QDir pluginsDir, pluginsDirList) {
+    if (qcepDebug(DEBUG_PLUGINS)) {
+      printf("Looking for plugins in directory %s\n", qPrintable(pluginsDir.absolutePath()));
+    }
+
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
-      QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
-      QObject *plugin = loader.instance();
-      if (plugin) {
-        QString pluginName = "";
+      if (qcepDebug(DEBUG_PLUGINS)) {
+        printf("Looking for plugin in file %s\n", qPrintable(fileName));
+      }
 
-        QxrdDetectorPluginInterface* detector = qobject_cast<QxrdDetectorPluginInterface*>(plugin);
+      if (QLibrary::isLibrary(pluginsDir.absoluteFilePath(fileName))) {
+        QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+        QObject *plugin = loader.instance();
+        if (plugin) {
+          QString pluginName = "";
 
-        if (detector) {
-          pluginName = detector -> name();
-        }
+          QxrdDetectorPluginInterface* detector = qobject_cast<QxrdDetectorPluginInterface*>(plugin);
 
-        QxrdProcessorInterface* processor = qobject_cast<QxrdProcessorInterface*>(plugin);
+          if (detector) {
+            pluginName = detector -> name();
+          }
 
-        if (processor) {
-          pluginName = processor -> name();
-        }
+          QxrdProcessorInterface* processor = qobject_cast<QxrdProcessorInterface*>(plugin);
+
+          if (processor) {
+            pluginName = processor -> name();
+          }
 
 #ifdef HAVE_PERKIN_ELMER
-        QxrdPerkinElmerPluginInterface *perkinElmer = qobject_cast<QxrdPerkinElmerPluginInterface*>(plugin);
+          QxrdPerkinElmerPluginInterface *perkinElmer = qobject_cast<QxrdPerkinElmerPluginInterface*>(plugin);
 
-        if (perkinElmer) {
-          pluginName = perkinElmer -> name();
+          if (perkinElmer) {
+            pluginName = perkinElmer -> name();
 
-          m_PerkinElmerPluginInterface = QxrdPerkinElmerPluginInterfacePtr(perkinElmer);
-        }
+            m_PerkinElmerPluginInterface = QxrdPerkinElmerPluginInterfacePtr(perkinElmer);
+          }
 #endif
 
-        QxrdNIDAQPluginInterface *nidaq = qobject_cast<QxrdNIDAQPluginInterface*>(plugin);
+          QxrdNIDAQPluginInterface *nidaq = qobject_cast<QxrdNIDAQPluginInterface*>(plugin);
 
-        if (nidaq) {
-          pluginName = nidaq -> name();
+          if (nidaq) {
+            pluginName = nidaq -> name();
 
-          m_NIDAQPluginInterface = QxrdNIDAQPluginInterfacePtr(nidaq);
-          m_NIDAQPluginInterface -> setErrorOutput(this);
+            m_NIDAQPluginInterface = QxrdNIDAQPluginInterfacePtr(nidaq);
+            m_NIDAQPluginInterface -> setErrorOutput(this);
+          }
+
+          splashMessage(tr("Loaded plugin \"%1\"").arg(pluginName));
+
+          printMessage(tr("Loaded plugin \"%1\" from %2")
+                       .arg(pluginName)
+                       .arg(pluginsDir.absoluteFilePath(fileName)));
+        } else {
+          if (qcepDebug(DEBUG_PLUGINS)) {
+            printf("Failed to load plugin from %s : %s\n", qPrintable(fileName), qPrintable(loader.errorString()));
+          }
+
+          if (QLibrary::isLibrary(pluginsDir.absoluteFilePath(fileName))) {
+            QString msg = tr("Failed to load plugin %1 : %2")
+                .arg(pluginsDir.absoluteFilePath(fileName))
+                .arg(loader.errorString());
+            splashMessage(msg);
+            printMessage(msg);
+          }
         }
-
-        splashMessage(tr("Loaded plugin \"%1\"").arg(pluginName));
-
-        printMessage(tr("Loaded plugin \"%1\" from %2")
-                                    .arg(pluginName)
-                                    .arg(pluginsDir.absoluteFilePath(fileName)));
       } else {
-
-        if (QLibrary::isLibrary(pluginsDir.absoluteFilePath(fileName))) {
-          QString msg = tr("Failed to load plugin %1 : %2")
-              .arg(pluginsDir.absoluteFilePath(fileName))
-              .arg(loader.errorString());
-          splashMessage(msg);
-          printMessage(msg);
+        if (qcepDebug(DEBUG_PLUGINS)) {
+          printf("File %s is not a library\n", qPrintable(fileName));
         }
       }
     }
