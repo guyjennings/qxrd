@@ -55,6 +55,10 @@
 #include <QUrl>
 #include <QCoreApplication>
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5,0,0))
+#include <QJsonObject>
+#endif
+
 QxrdApplication *g_Application = NULL;
 
 int eventCounter;
@@ -368,6 +372,16 @@ void QxrdApplication::loadPlugins()
 
       if (QLibrary::isLibrary(fullPath)) {
         QPluginLoader loader(fullPath);
+
+        QJsonObject meta = loader.metaData();
+
+        if (qcepDebug(DEBUG_PLUGINS)) {
+          printf("Plugin metadata for %s\n", qPrintable(fullPath));
+          foreach(QString key, meta.keys()) {
+            printf("Key %s = %s\n", qPrintable(key), qPrintable(meta.value(key).toString()));
+          }
+        }
+
         QObject *plugin = loader.instance();
         if (plugin) {
           if (qcepDebug(DEBUG_PLUGINS)) {
