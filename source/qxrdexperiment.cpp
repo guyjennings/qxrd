@@ -76,9 +76,10 @@ QxrdExperiment::QxrdExperiment(
   }
 }
 
-void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *settings)
+void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings)
 {
   m_ExperimentThread = expthrd;
+  m_Experiment       = exp;
 
   QxrdApplicationPtr app(m_Application);
 
@@ -97,7 +98,7 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
 
     m_DataProcessorThread = QxrdDataProcessorThreadPtr(
           new QxrdDataProcessorThread(m_SettingsSaver,
-                                      QxrdExperimentWPtr(this),
+                                      m_Experiment,
                                       QxrdAcquisitionPtr(),
                                       app->allocator(),
                                       m_FileSaver));
@@ -109,14 +110,14 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
 
     if (saver) {
       saver -> setProcessor(m_DataProcessor);
-      saver -> setExperiment(this);
+      saver -> setExperiment(m_Experiment);
     }
 
     splashMessage("Initializing Data Acquisition");
 
     m_AcquisitionThread = QxrdAcquisitionThreadPtr(
           new QxrdAcquisitionThread(m_SettingsSaver,
-                                    QxrdExperimentWPtr(this),
+                                    m_Experiment,
                                     m_DataProcessor,
                                     app->allocator(),
                                     get_DetectorType()));
@@ -145,7 +146,7 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
     splashMessage("Starting SPEC Server");
 
     m_ServerThread = QxrdServerThreadPtr(
-          new QxrdServerThread(m_SettingsSaver, this, "qxrd"));
+          new QxrdServerThread(m_SettingsSaver, m_Experiment, "qxrd"));
     m_ServerThread -> setObjectName("server");
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
@@ -153,13 +154,13 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QSettings *set
     splashMessage("Starting Simple Socket Server");
 
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(
-          new QxrdSimpleServerThread(m_SettingsSaver, this, "simpleserver"));
+          new QxrdSimpleServerThread(m_SettingsSaver, m_Experiment, "simpleserver"));
     m_SimpleServerThread -> setObjectName("smpsrv");
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
 
     m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
-          new QxrdScriptEngineThread(m_Application, this));
+          new QxrdScriptEngineThread(m_Application, m_Experiment));
     m_ScriptEngineThread -> setObjectName("script");
     m_ScriptEngineThread -> start();
     m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
@@ -279,46 +280,45 @@ void QxrdExperiment::openWindows()
     m_Window = QxrdWindowPtr(
           new QxrdWindow(m_WindowSettings,
                          m_Application,
-                         this,
+                         m_Experiment,
                          m_Acquisition,
                          m_DataProcessor,
                          app->allocator(),
                          NULL));
 
-    QxrdWindowPtr win = m_Window;
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdAcquisitionPtr acq(m_Acquisition);
     QxrdScriptEnginePtr eng(m_ScriptEngine);
 
-    if (win) {
-      win -> initialize();
+    if (m_Window) {
+      m_Window -> initialize(m_Window);
 
       if (proc) {
-        proc -> setWindow(win);
+        proc -> setWindow(m_Window);
       }
 
       if (acq) {
-        acq -> setWindow(win);
+        acq -> setWindow(m_Window);
       }
 
       if (eng) {
-        eng -> setWindow(win);
+        eng -> setWindow(m_Window);
       }
 
-      win -> onAcquisitionInit();
+      m_Window -> onAcquisitionInit();
 
       if (eng) {
-        connect(win.data(),   SIGNAL(executeCommand(QString)),
+        connect(m_Window.data(),   SIGNAL(executeCommand(QString)),
                 eng.data(),   SLOT(evaluateAppCommand(QString)));
 
         connect(eng.data(),   SIGNAL(appResultAvailable(QScriptValue)),
-                win.data(),   SLOT(finishedCommand(QScriptValue)));
+                m_Window.data(),   SLOT(finishedCommand(QScriptValue)));
       }
 
       readInitialLogFile();
 
-      if (win && app && app->get_GuiWanted()) {
-        win -> show();
+      if (m_Window && app && app->get_GuiWanted()) {
+        m_Window -> show();
       }
     }
   }
@@ -890,7 +890,7 @@ void QxrdExperiment::onDetectorTypeChanged()
   m_Detector       = QxrdDetectorPtr();
   m_DetectorThread = QxrdDetectorThreadPtr();
 
-  m_DetectorThread = QxrdDetectorThreadPtr(new QxrdDetectorThread(this, m_Acquisition));
+  m_DetectorThread = QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Experiment, m_Acquisition));
   m_DetectorThread -> start();
 
   if (m_DetectorThread) {

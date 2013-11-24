@@ -22,7 +22,7 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
 
   connect(m_AddChannel, SIGNAL(clicked()), this, SLOT(addChannel()));
   connect(m_RemoveChannel, SIGNAL(clicked()), this, SLOT(removeChannel()));
-  connect(m_TestReadout, SIGNAL(clicked()), this, SLOT(initializeReadout()));
+  connect(m_TestReadout, SIGNAL(clicked()), this, SLOT(initiateReadout()));
 
   QxrdAcquisitionPtr acqp(m_Acquisition);
 
@@ -366,12 +366,12 @@ void QxrdAcquisitionExtraInputsDialog::removeChannel()
   }
 }
 
-void QxrdAcquisitionExtraInputsDialog::initializeReadout()
+void QxrdAcquisitionExtraInputsDialog::initiateReadout()
 {
   QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
   if (xtra) {
-    xtra->initialize();
+    xtra->initiate();
   }
 }
 

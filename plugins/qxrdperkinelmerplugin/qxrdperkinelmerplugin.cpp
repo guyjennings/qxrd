@@ -159,6 +159,9 @@ UINT QxrdPerkinElmerPlugin::Acquisition_GetHwHeaderInfoEx(
   return ::Acquisition_GetHwHeaderInfoEx(hAcqDesc, pInfo, pInfoEx);
 }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#else
 Q_EXPORT_PLUGIN2(qxrdperkinelmerplugin, QxrdPerkinElmerPlugin)
+#endif
 
 #endif // HAVE_PERKIN_ELMER

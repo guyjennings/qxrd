@@ -22,7 +22,7 @@ private slots:
   void updateUi();
   void addChannel();
   void removeChannel();
-  void initializeReadout();
+  void initiateReadout();
   void updateWaveforms();
 
 private:

@@ -47,7 +47,7 @@ public:
   QxrdExperiment(QString path, QxrdApplicationWPtr app);
   //  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
   virtual ~QxrdExperiment();
-  void initialize(QxrdExperimentThreadWPtr expthrd, QSettings *settings);
+  void initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
 
   void openWindows();
 
@@ -132,6 +132,7 @@ private:
   QxrdObjectNamer                 m_ObjectNamer;
   QxrdApplicationWPtr             m_Application;
   QxrdExperimentThreadWPtr        m_ExperimentThread;
+  QxrdExperimentWPtr              m_Experiment;
   QxrdSettingsSaverPtr            m_SettingsSaver;
 
 private:

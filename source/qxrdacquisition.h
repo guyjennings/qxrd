@@ -106,7 +106,7 @@ public:
                   QxrdDataProcessorWPtr proc,
                   QxrdAllocatorWPtr allocator);
   ~QxrdAcquisition();
-  void initialize();
+  void initialize(QxrdAcquisitionWPtr acq);
 
   void setWindow(QxrdWindowWPtr win);
   void setDetector(QxrdDetectorWPtr det);
@@ -329,6 +329,7 @@ public:
 private:
   mutable QMutex                m_Mutex;
 
+  QxrdAcquisitionWPtr             m_Acquisition;
   QxrdSynchronizedAcquisitionPtr  m_SynchronizedAcquisition;
   QxrdAcquisitionExtraInputsPtr   m_AcquisitionExtraInputs;
 

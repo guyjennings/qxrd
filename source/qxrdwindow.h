@@ -46,8 +46,9 @@ public:
              QxrdDataProcessorWPtr procw,
              QxrdAllocatorWPtr allocw,
              QWidget *parent);
-  void initialize();
   virtual ~QxrdWindow();
+  void initialize(QxrdWindowWPtr win);
+
   void onAcquisitionInit();
 
 public slots:
@@ -146,6 +147,7 @@ private:
 
 private:
   QxrdObjectNamer                        m_ObjectNamer;
+  QxrdWindowWPtr                         m_Window;
   mutable QMutex                         m_Mutex;
   QxrdWindowSettingsWPtr                 m_WindowSettings;
   QxrdApplicationWPtr                    m_Application;

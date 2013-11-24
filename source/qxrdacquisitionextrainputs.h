@@ -23,6 +23,7 @@ public:
   explicit QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver,
                                       QxrdExperimentWPtr    doc,
                                       QxrdAcquisitionWPtr   acq);
+  void initialize(QxrdAcquisitionExtraInputsWPtr extra);
   virtual ~QxrdAcquisitionExtraInputs();
 
 public:
@@ -41,8 +42,8 @@ signals:
 
 public slots:
   void prepareForAcquisition(QxrdAcquisitionParameterPack *parms);
-  void initialize();
-  void reinitialize();
+  void initiate();
+  void reinitiate();
   void acquire();
   void logToImage(QxrdInt16ImageDataPtr img);
   void finish();
@@ -85,6 +86,7 @@ private:
   mutable QMutex              m_Mutex;
   QxrdExperimentWPtr          m_Experiment;
   QxrdAcquisitionWPtr         m_Acquisition;
+  QxrdAcquisitionExtraInputsWPtr m_ExtraInputs;
   QxrdSettingsSaverWPtr       m_Saver;
   QVector<QxrdAcquisitionExtraInputsChannelPtr> m_Channels;
   QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;

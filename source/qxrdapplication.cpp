@@ -2,6 +2,7 @@
 
 #include "qxrddebug.h"
 #include "qxrdapplication.h"
+#include "qxrdapplication-ptr.h"
 #include "qxrdwelcomewindow.h"
 #include "qxrdwindow.h"
 #include "qxrdserverthread.h"
@@ -136,8 +137,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   g_Application = this;
 }
 
-bool QxrdApplication::init(int &argc, char **argv)
+bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
 {
+  m_Application = app;
+
   connect(this, SIGNAL(aboutToQuit()), this, SLOT(finish()));
 
   connect(&m_SplashTimer, SIGNAL(timeout()), this, SLOT(hideSplash()));
@@ -761,7 +764,9 @@ void QxrdApplication::openExperiment(QString path)
   if (path.length() > 0) {
     QxrdExperimentSettings settings(path);
 
-    QxrdExperimentThreadPtr experimentThread = QxrdExperimentThread::newExperiment(path, this, &settings);
+    QxrdExperimentThreadPtr experimentThread = QxrdExperimentThread::newExperiment(path, m_Application, &settings);
+
+    QxrdExperimentPtr exp = experimentThread->experiment();
 
     printMessage("");
     printMessage(tr("===== Open Experiment %1").arg(path));
@@ -971,7 +976,9 @@ void QxrdApplication::doNewPerkinElmerAcquisition()
                                                        "QXRD Experiments (*.qxrdp)");
 
   if (newExperiment.length() >= 1) {
-    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPerkinElmerAcquisition(normalizeExperimentName(newExperiment), this);
+    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPerkinElmerAcquisition(normalizeExperimentName(newExperiment), m_Application);
+
+    docThread->init(docThread);
 
     openedExperiment(docThread);
   }
@@ -985,7 +992,9 @@ void QxrdApplication::doNewPilatusAcquisition()
                                                        "QXRD Experiments (*.qxrdp)");
 
   if (newExperiment.length() >= 1) {
-    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPilatusAcquisition(normalizeExperimentName(newExperiment), this);
+    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPilatusAcquisition(normalizeExperimentName(newExperiment), m_Application);
+
+    docThread->init(docThread);
 
     openedExperiment(docThread);
   }
@@ -999,7 +1008,9 @@ void QxrdApplication::doNewSimulatedAcquisition()
                                                        "QXRD Experiments (*.qxrdp)");
 
   if (newExperiment.length() >= 1) {
-    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentSimulatedAcquisition(normalizeExperimentName(newExperiment), this);
+    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentSimulatedAcquisition(normalizeExperimentName(newExperiment), m_Application);
+
+    docThread->init(docThread);
 
     openedExperiment(docThread);
   }
@@ -1013,7 +1024,9 @@ void QxrdApplication::doNewPerkinElmerAnalysis()
                                                        "QXRD Experiments (*.qxrdp)");
 
   if (newExperiment.length() >= 1) {
-    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPerkinElmerAnalysis(normalizeExperimentName(newExperiment), this);
+    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPerkinElmerAnalysis(normalizeExperimentName(newExperiment), m_Application);
+
+    docThread->init(docThread);
 
     openedExperiment(docThread);
   }
@@ -1027,7 +1040,9 @@ void QxrdApplication::doNewPilatusAnalysis()
                                                        "QXRD Experiments (*.qxrdp)");
 
   if (newExperiment.length() >= 1) {
-    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPilatusAnalysis(normalizeExperimentName(newExperiment), this);
+    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPilatusAnalysis(normalizeExperimentName(newExperiment), m_Application);
+
+    docThread->init(docThread);
 
     openedExperiment(docThread);
   }
@@ -1041,7 +1056,9 @@ void QxrdApplication::doNewGenericAnalysis()
                                                        "QXRD Experiments (*.qxrdp)");
 
   if (newExperiment.length() >= 1) {
-    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentGenericAnalysis(normalizeExperimentName(newExperiment), this);
+    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentGenericAnalysis(normalizeExperimentName(newExperiment), m_Application);
+
+    docThread->init(docThread);
 
     openedExperiment(docThread);
   }

@@ -29,6 +29,7 @@ class QxrdIntegrator : public QObject
 public:
   QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc);
   virtual ~QxrdIntegrator();
+  void initialize(QxrdIntegratorWPtr integrator);
 
 private:
   QxrdObjectNamer        m_ObjectNamer;
@@ -94,6 +95,7 @@ public slots:
 private:
   mutable QMutex         m_Mutex;
   QxrdExperimentWPtr     m_Experiment;
+  QxrdIntegratorWPtr     m_Integrator;
   QxrdCenterFinderWPtr   m_CenterFinder;
   QxrdAllocatorWPtr      m_Allocator;
   QxrdIntegratorCachePtr m_IntegratorCache;

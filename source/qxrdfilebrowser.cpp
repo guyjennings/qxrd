@@ -40,7 +40,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
   m_Model = QxrdFileBrowserModelPtr(
         new QxrdFileBrowserModel());
 
-  m_Model -> initialize();
+  m_Model -> initialize(m_Model);
   m_Model -> setRootPath(QDir::currentPath());
 
   m_FileBrowser -> setModel(m_Model.data());

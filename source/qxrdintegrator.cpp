@@ -50,6 +50,11 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr e
   }
 }
 
+void QxrdIntegrator::initialize(QxrdIntegratorWPtr integrator)
+{
+  m_Integrator = integrator;
+}
+
 QxrdIntegrator::~QxrdIntegrator()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -106,7 +111,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr i
       dimg->get_Height() != cache->get_NRows()) {
 
     cache = QxrdIntegratorCachePtr(
-          new QxrdIntegratorCache(m_Experiment, m_Allocator, this, m_CenterFinder));
+          new QxrdIntegratorCache(m_Experiment, m_Allocator, m_Integrator, m_CenterFinder));
 
     m_IntegratorCache = cache;
   }

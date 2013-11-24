@@ -8,7 +8,7 @@
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
-
+#include "qxrdacquisition-ptr.h"
 #include <QThreadPool>
 #include <QtConcurrentRun>
 #include <QDir>
@@ -76,8 +76,10 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
   }
 }
 
-void QxrdAcquisition::initialize()
+void QxrdAcquisition::initialize(QxrdAcquisitionWPtr acq)
 {
+  m_Acquisition = acq;
+
   connect(prop_Raw16SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
   connect(prop_Raw32SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
   connect(prop_SummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
@@ -94,8 +96,8 @@ void QxrdAcquisition::initialize()
   m_SynchronizedAcquisition = QxrdSynchronizedAcquisitionPtr(
         new QxrdSynchronizedAcquisition(m_Saver, this));
 
-  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, this));
-  m_AcquisitionExtraInputs -> initialize();
+  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, m_Acquisition));
+  m_AcquisitionExtraInputs -> initialize(m_AcquisitionExtraInputs);
 
   connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged()));
   connect(prop_BinningMode(), SIGNAL(valueChanged(int,int)), this, SLOT(onBinningModeChanged()));
@@ -596,7 +598,7 @@ QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindowWPtr win)
 
     m_ControlPanel = new QxrdAcquisitionDialog(m_Experiment,
                                                m_Window,
-                                               this,
+                                               m_Acquisition,
                                                m_DataProcessor,
                                                m_Window.data());
 

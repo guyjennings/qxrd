@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-QxrdExperimentThread::QxrdExperimentThread(QxrdExperimentKind kind, QString path, QxrdApplication *app, QSettings *settings) :
+QxrdExperimentThread::QxrdExperimentThread(QxrdExperimentKind kind, QString path, QxrdApplicationWPtr app, QSettings *settings) :
   QxrdThread(),
   m_ExperimentKind(kind),
   m_ExperimentPath(path),
@@ -26,7 +26,11 @@ QxrdExperimentThread::QxrdExperimentThread(QxrdExperimentKind kind, QString path
 QxrdExperimentThread::~QxrdExperimentThread()
 {
   if (qcepDebug(DEBUG_APP)) {
-    m_Application->printMessage("QxrdExperimentThread::~QxrdExperimentThread");
+    QxrdApplicationPtr app(m_Application);
+
+    if (app) {
+      app->printMessage("QxrdExperimentThread::~QxrdExperimentThread");
+    }
   }
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -38,7 +42,12 @@ QxrdExperimentThread::~QxrdExperimentThread()
   shutdown();
 }
 
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdApplication *app, QSettings *settings)
+void QxrdExperimentThread::init(QxrdExperimentThreadWPtr expThread)
+{
+  m_ExperimentThread = expThread;
+}
+
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
   QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(FromSettings, path, app, settings));
 
@@ -47,7 +56,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdAp
   return res;
 }
 
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAcquisition(QString path, QxrdApplication *app, QSettings *settings)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
   QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PerkinElmerAcquisition, path, app, settings));
 
@@ -56,7 +65,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAcquisitio
   return res;
 }
 
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAcquisition(QString path, QxrdApplication *app, QSettings *settings)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
   QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PilatusAcquisition, path, app, settings));
 
@@ -65,7 +74,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAcquisition(QS
   return res;
 }
 
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentSimulatedAcquisition(QString path, QxrdApplication *app, QSettings *settings)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentSimulatedAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
   QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(SimulatedAcquisition, path, app, settings));
 
@@ -74,7 +83,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentSimulatedAcquisition(
   return res;
 }
 
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAnalysis(QString path, QxrdApplication *app, QSettings *settings)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
   QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PerkinElmerAnalysis, path, app, settings));
 
@@ -83,7 +92,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAnalysis(Q
   return res;
 }
 
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAnalysis(QString path, QxrdApplication *app, QSettings *settings)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
   QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PilatusAnalysis, path, app, settings));
 
@@ -92,7 +101,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAnalysis(QStri
   return res;
 }
 
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentGenericAnalysis(QString path, QxrdApplication *app, QSettings *settings)
+QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentGenericAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
   QxrdExperimentThreadPtr res =
       QxrdExperimentThreadPtr(new QxrdExperimentThread(GenericAnalysis, path, app, settings));
@@ -172,7 +181,7 @@ void QxrdExperimentThread::run()
     }
 
     if (doc) {
-      doc -> initialize(this, m_Settings);
+      doc -> initialize(m_ExperimentThread, doc, m_Settings);
 
       m_Mutex.lock();
       m_Experiment = doc;
@@ -186,7 +195,11 @@ void QxrdExperimentThread::run()
 
   {
     if (qcepDebug(DEBUG_THREADS)) {
-      m_Application->printMessage(tr("Experiment Thread Terminated with rc %1").arg(rc));
+      QxrdApplicationPtr app(m_Application);
+
+      if (app) {
+        app->printMessage(tr("Experiment Thread Terminated with rc %1").arg(rc));
+      }
     }
   }
 }

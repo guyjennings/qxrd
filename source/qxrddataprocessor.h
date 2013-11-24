@@ -15,7 +15,10 @@ public:
                     QxrdFileSaverWPtr filesaver);
   ~QxrdDataProcessor();
 
-  void initialize();
+  void initialize(QxrdDataProcessorWPtr proc);
+
+private:
+  QxrdDataProcessorWPtr m_Processor;
 };
 
 #endif

@@ -108,8 +108,10 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   }
 }
 
-void QxrdWindow::initialize()
+void QxrdWindow::initialize(QxrdWindowWPtr win)
 {
+  m_Window = win;
+
   setupUi(this);
 
   QxrdApplicationPtr app(m_Application);
@@ -124,7 +126,7 @@ void QxrdWindow::initialize()
   QxrdDataProcessorPtr proc(m_DataProcessor);
 
   if (acq) {
-    m_AcquisitionDialog = acq -> controlPanel(this);
+    m_AcquisitionDialog = acq -> controlPanel(m_Window);
     m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
     m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
   }
@@ -172,8 +174,13 @@ void QxrdWindow::initialize()
   //         screenGeom.left(), screenGeom.top(),
   //         screenGeom.right(), screenGeom.bottom());
 
-  addDockWidget(Qt::RightDockWidgetArea, m_AcquisitionDialog);
-  addDockWidget(Qt::LeftDockWidgetArea, m_InputFileBrowser);
+  if (m_AcquisitionDialog) {
+    addDockWidget(Qt::RightDockWidgetArea, m_AcquisitionDialog);
+  }
+
+  if (m_InputFileBrowser) {
+    addDockWidget(Qt::LeftDockWidgetArea, m_InputFileBrowser);
+  }
 
   if (screenGeom.height() >= 1280) {
     splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);

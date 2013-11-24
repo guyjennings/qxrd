@@ -10,6 +10,7 @@
 
 #include "qxrdfilebrowsermodelupdaterthread-ptr.h"
 #include "qxrdfilebrowsermodelupdater-ptr.h"
+#include "qxrdfilebrowsermodel-ptr.h"
 
 class QxrdFileBrowserModel : public QAbstractTableModel
 {
@@ -18,7 +19,7 @@ class QxrdFileBrowserModel : public QAbstractTableModel
 public:
   explicit QxrdFileBrowserModel(QObject *parent=0);
   ~QxrdFileBrowserModel();
-  void initialize();
+  void initialize(QxrdFileBrowserModelWPtr model);
 
   typedef QAbstractTableModel inherited;
 
@@ -59,6 +60,7 @@ private:
 
 private:
   mutable QMutex     m_Mutex;
+  QxrdFileBrowserModelWPtr m_Model;
   QxrdFileBrowserModelUpdaterThreadPtr m_UpdaterThread;
   QxrdFileBrowserModelUpdaterPtr m_Updater;
   QString            m_RootPath;

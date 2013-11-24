@@ -32,7 +32,7 @@ public:
   QxrdApplication(int &argc, char **argv);
   virtual ~QxrdApplication();
 
-  bool init(int &argc, char **argv);
+  bool init(QxrdApplicationWPtr app, int &argc, char **argv);
 
   QxrdAllocatorWPtr allocator() const;
 
@@ -195,6 +195,7 @@ public:
   QCEP_DOUBLE_PROPERTY(LockerRate)
 
 private:
+  QxrdApplicationWPtr             m_Application;
   QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
   QList<QxrdExperimentPtr>        m_Experiments;
 

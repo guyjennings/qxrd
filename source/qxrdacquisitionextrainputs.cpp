@@ -1,5 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdacquisitionextrainputs.h"
+#include "qxrdacquisitionextrainputs-ptr.h"
 #include "qxrdacquisition.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdnidaqplugininterface.h"
@@ -38,6 +39,11 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr sav
   if (acqp) {
     connect(acqp->prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(reinitialize()));
   }
+}
+
+void QxrdAcquisitionExtraInputs::initialize(QxrdAcquisitionExtraInputsWPtr extra)
+{
+  m_ExtraInputs = extra;
 }
 
 QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
@@ -81,7 +87,7 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString secti
 
   settings->endArray();
 
-  initialize();
+  initiate();
 }
 
 void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString section)
@@ -132,11 +138,11 @@ void QxrdAcquisitionExtraInputs::statusMessage(QString msg, QDateTime /*ts*/)
 void QxrdAcquisitionExtraInputs::prepareForAcquisition(QxrdAcquisitionParameterPack * /*parms*/)
 {
   if (!get_Enabled()) {
-    initialize();
+    initiate();
   }
 }
 
-void QxrdAcquisitionExtraInputs::initialize()
+void QxrdAcquisitionExtraInputs::initiate()
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
 
@@ -183,10 +189,10 @@ void QxrdAcquisitionExtraInputs::initialize()
   }
 }
 
-void QxrdAcquisitionExtraInputs::reinitialize()
+void QxrdAcquisitionExtraInputs::reinitiate()
 {
   if (get_Enabled()) {
-    initialize();
+    initiate();
   }
 }
 
@@ -212,7 +218,7 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 
   m_Channels.insert(n,
                     QxrdAcquisitionExtraInputsChannelPtr(
-                        chan = new QxrdAcquisitionExtraInputsChannel(n, m_Saver, m_Experiment, this)));
+                        chan = new QxrdAcquisitionExtraInputsChannel(n, m_Saver, m_Experiment, m_ExtraInputs)));
 
   connect(chan, SIGNAL(reinitializeNeeded()), this, SLOT(reinitialize()));
 
