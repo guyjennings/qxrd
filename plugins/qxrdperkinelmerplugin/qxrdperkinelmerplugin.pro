@@ -16,3 +16,6 @@ HEADERS += \
 
 SOURCES += \
     qxrdperkinelmerplugin.cpp
+
+OTHER_FILES += \
+    pe.json

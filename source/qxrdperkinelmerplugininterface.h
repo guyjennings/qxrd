@@ -98,6 +98,7 @@ public:
       HACQDESC hAcqDesc, CHwHeaderInfo *pInfo, CHwHeaderInfoEx *pInfoEx) = 0;
 };
 
-Q_DECLARE_INTERFACE(QxrdPerkinElmerPluginInterface, "gov.anl.aps.cep.Qxrd.PerkinElmerInterface/1.0")
+#define PerkinElmerPluginInterface_iid "gov.anl.aps.cep.Qxrd.PerkinElmerInterface/1.0"
+Q_DECLARE_INTERFACE(QxrdPerkinElmerPluginInterface, PerkinElmerPluginInterface_iid)
 
 #endif // QXRDPERKINELMERPLUGININTERFACE_H

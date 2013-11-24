@@ -373,6 +373,7 @@ void QxrdApplication::loadPlugins()
       if (QLibrary::isLibrary(fullPath)) {
         QPluginLoader loader(fullPath);
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5,0,0))
         QJsonObject meta = loader.metaData();
 
         if (qcepDebug(DEBUG_PLUGINS)) {
@@ -381,6 +382,7 @@ void QxrdApplication::loadPlugins()
             printf("Key %s = %s\n", qPrintable(key), qPrintable(meta.value(key).toString()));
           }
         }
+#endif
 
         QObject *plugin = loader.instance();
         if (plugin) {

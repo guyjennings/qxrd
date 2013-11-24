@@ -16,7 +16,9 @@ HEADERS += \
 SOURCES += \
     qxrdcudaprocessorplugin.cpp
 
-OTHER_FILES += qxrdcudakernel.cu
+OTHER_FILES += \
+    qxrdcudakernel.cu \
+    cuda.json
 
 #CUDA_SOURCES += \
 #  qxrdcudakernel.cu

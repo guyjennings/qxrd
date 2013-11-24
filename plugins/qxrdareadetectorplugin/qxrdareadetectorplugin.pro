@@ -13,3 +13,6 @@ SOURCES += \
 
 HEADERS += \
     qxrdareadetectorplugin.h
+
+OTHER_FILES += \
+    areaDetector.json

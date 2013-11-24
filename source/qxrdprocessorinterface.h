@@ -10,6 +10,7 @@ public:
   virtual ~QxrdProcessorInterface() {}
 };
 
-Q_DECLARE_INTERFACE(QxrdProcessorInterface, "gov.anl.aps.cep.Qxrd.ProcessorInterface/1.0")
+#define QxrdProcessorInterface_iid "gov.anl.aps.cep.Qxrd.ProcessorInterface/1.0"
+Q_DECLARE_INTERFACE(QxrdProcessorInterface, QxrdProcessorInterface_iid)
 
 #endif // QXRDPROCESSORINTERFACE_H

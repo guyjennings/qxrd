@@ -13,3 +13,6 @@ HEADERS += \
 
 SOURCES += \
     qxrdpilatusplugin.cpp
+
+OTHER_FILES += \
+    pilatus.json
