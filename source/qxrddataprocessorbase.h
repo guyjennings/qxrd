@@ -230,12 +230,12 @@ public slots:
   void growMask();
   void shrinkMask();
   void maskCircle(QwtDoubleRect pt);
-  void maskPolygon(QwtArray<QwtDoublePoint> poly);
+  void maskPolygon(QVector<QPointF> poly);
 
-  void measurePolygon(QwtArray<QwtDoublePoint> poly);
-  virtual void slicePolygon(QwtArray<QwtDoublePoint> poly) = 0;
-  void printMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
-  void summarizeMeasuredPolygon(QwtArray<QwtDoublePoint> poly);
+  void measurePolygon(QVector<QPointF> poly);
+  virtual void slicePolygon(QVector<QPointF> poly) = 0;
+  void printMeasuredPolygon(QVector<QPointF> poly);
+  void summarizeMeasuredPolygon(QVector<QPointF> poly);
   virtual void integrateSaveAndDisplay() = 0;
 
   QString pwd() const;

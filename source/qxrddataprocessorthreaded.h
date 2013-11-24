@@ -53,7 +53,7 @@ public slots:
   void setFileNormalization(QString path, double v1, double v2);
   void setFileNormalization(QString path, QcepDoubleList v);
 
-  void slicePolygon(QwtArray<QwtDoublePoint> poly);
+  void slicePolygon(QVector<QPointF> poly);
   void integrateSaveAndDisplay();
 
   void fixupBadBackgroundSubtraction(QString imagePattern, int nImgExposures, QString darkPath, int nDarkExposures);

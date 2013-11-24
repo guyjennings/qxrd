@@ -72,7 +72,7 @@ signals:
 
       \param pa Selected points
     */
-    void selected(const QwtArray<QwtDoublePoint> &pa);
+    void selected(const QVector<QPointF> &pa);
 
     /*!
       A signal emitted when a point has been appended to the selection

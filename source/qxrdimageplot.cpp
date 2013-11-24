@@ -166,11 +166,11 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
       connect(m_Circles, SIGNAL(selected(QwtDoubleRect)),
               dp.data(), SLOT(maskCircle(QwtDoubleRect)));
 
-      connect(m_Polygons, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-              dp.data(), SLOT(maskPolygon(QwtArray<QwtDoublePoint>)));
+      connect(m_Polygons, SIGNAL(selected(QVector<QPointF>)),
+              dp.data(), SLOT(maskPolygon(QVector<QPointF>)));
 
-      connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-              dp.data(), SLOT(measurePolygon(QwtArray<QwtDoublePoint>)));
+      connect(m_Measurer, SIGNAL(selected(QVector<QPointF>)),
+              dp.data(), SLOT(measurePolygon(QVector<QPointF>)));
 
       //  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
     //          m_DataProcessor, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
@@ -187,8 +187,8 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
     }
   }
 
-  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-          this, SIGNAL(slicePolygon(QwtArray<QwtDoublePoint>)));
+  connect(m_Slicer, SIGNAL(selected(QVector<QPointF>)),
+          this, SIGNAL(slicePolygon(QVector<QPointF>)));
 
   connect(m_HistogramSelector, SIGNAL(selected(QwtDoubleRect)),
           this, SIGNAL(selectHistogram(QwtDoubleRect)));

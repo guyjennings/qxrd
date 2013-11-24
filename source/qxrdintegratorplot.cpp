@@ -46,8 +46,8 @@ void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessorWPtr proc)
   if (dp) {
     m_Integrator = dp -> integrator();
 
-    connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-            dp.data(), SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
+    connect(m_Measurer, SIGNAL(selected(QVector<QPointF>)),
+            dp.data(), SLOT(printMeasuredPolygon(QVector<QPointF>)));
   }
 }
 

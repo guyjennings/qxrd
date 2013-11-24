@@ -560,8 +560,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
   m_Highlighter = new QxrdHighlighter(m_ScriptEdit->document());
 
-  connect(m_ImagePlot, SIGNAL(slicePolygon(QwtArray<QwtDoublePoint>)),
-          m_SliceDialog, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
+  connect(m_ImagePlot, SIGNAL(slicePolygon(QVector<QPointF>)),
+          m_SliceDialog, SLOT(slicePolygon(QVector<QPointF>)));
 
   connect(m_ImagePlot, SIGNAL(selectHistogram(QwtDoubleRect)),
           m_HistogramDialog, SLOT(histogramSelectionChanged(QwtDoubleRect)));

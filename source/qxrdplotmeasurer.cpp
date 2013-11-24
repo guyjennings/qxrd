@@ -7,7 +7,7 @@ QxrdPlotMeasurer::QxrdPlotMeasurer(QwtPlotCanvas *canvas, QxrdPlotPtr plot)
   : QwtPlotPicker(canvas),
     m_Plot(plot)
 {
-  qRegisterMetaType< QwtArray<QwtDoublePoint> >("QwtArray<QwtDoublePoint>");
+  qRegisterMetaType< QVector<QPointF> >("QVector<QPointF>");
 
   setTrackerMode(QwtPicker::AlwaysOn);
   setSelectionFlags(QwtPicker::PolygonSelection);

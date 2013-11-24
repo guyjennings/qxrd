@@ -53,8 +53,8 @@ void QxrdCenterFinderPlot::setWindow(QxrdWindow *win)
   if (dp) {
     m_CenterFinder = dp -> centerFinder();
 
-    connect(m_Measurer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-            dp.data(), SLOT(printMeasuredPolygon(QwtArray<QwtDoublePoint>)));
+    connect(m_Measurer, SIGNAL(selected(QVector<QPointF>)),
+            dp.data(), SLOT(printMeasuredPolygon(QVector<QPointF>)));
 
     QxrdCenterFinderPtr cf(m_CenterFinder);
 

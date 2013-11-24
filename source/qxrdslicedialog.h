@@ -20,7 +20,7 @@ public:
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
 
 public slots:
-  void slicePolygon(QwtArray<QwtDoublePoint> poly);
+  void slicePolygon(QVector<QPointF> poly);
 
 private:
   void reslice();

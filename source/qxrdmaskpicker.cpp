@@ -21,7 +21,7 @@ QxrdCircularMaskPicker::QxrdCircularMaskPicker(QwtPlotCanvas *canvas, QxrdImageP
 QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
   : QxrdMaskPicker(canvas, plot)
 {
-  qRegisterMetaType< QwtArray<QwtDoublePoint> >("QwtArray<QwtDoublePoint>");
+  qRegisterMetaType< QVector<QPointF> >("QVector<QPointF>");
 
   setSelectionFlags(QwtPicker::PolygonSelection);
   setRubberBand(QwtPicker::PolygonRubberBand);

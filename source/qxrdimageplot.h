@@ -34,7 +34,7 @@ public:
   void init(QxrdImagePlotSettingsWPtr settings);
 
 signals:
-  void slicePolygon(QwtArray<QwtDoublePoint> poly);
+  void slicePolygon(QVector<QPointF> poly);
   void selectHistogram(QwtDoubleRect rect);
 
 public slots:

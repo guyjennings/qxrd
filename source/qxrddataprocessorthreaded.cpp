@@ -532,7 +532,7 @@ void QxrdDataProcessorThreaded::setFileNormalization(QString name, QList<double>
   }
 }
 
-void QxrdDataProcessorThreaded::slicePolygon(QVector<QwtDoublePoint> poly)
+void QxrdDataProcessorThreaded::slicePolygon(QVector<QPointF> poly)
 {
   QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::WaitTillAvailable, data());
 

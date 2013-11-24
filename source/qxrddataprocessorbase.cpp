@@ -1647,7 +1647,7 @@ void QxrdDataProcessorBase::maskCircle(QwtDoubleRect rect)
   }
 }
 
-void QxrdDataProcessorBase::maskPolygon(QVector<QwtDoublePoint> poly)
+void QxrdDataProcessorBase::maskPolygon(QVector<QPointF> poly)
 {
   createMaskIfNeeded();
 
@@ -1684,7 +1684,7 @@ void QxrdDataProcessorBase::maskPolygon(QVector<QwtDoublePoint> poly)
   }
 }
 
-void QxrdDataProcessorBase::measurePolygon(QVector<QwtDoublePoint> poly)
+void QxrdDataProcessorBase::measurePolygon(QVector<QPointF> poly)
 {
   foreach(QwtDoublePoint pt, poly) {
     printMessage(tr("Measure pt (%1,%2) = %3").arg(pt.x()).arg(pt.y())
@@ -1694,7 +1694,7 @@ void QxrdDataProcessorBase::measurePolygon(QVector<QwtDoublePoint> poly)
   summarizeMeasuredPolygon(poly);
 }
 
-void QxrdDataProcessorBase::printMeasuredPolygon(QVector<QwtDoublePoint> poly)
+void QxrdDataProcessorBase::printMeasuredPolygon(QVector<QPointF> poly)
 {
   foreach(QwtDoublePoint pt, poly) {
     printMessage(tr("Measure pt (%1,%2)").arg(pt.x()).arg(pt.y()));
@@ -1703,7 +1703,7 @@ void QxrdDataProcessorBase::printMeasuredPolygon(QVector<QwtDoublePoint> poly)
   summarizeMeasuredPolygon(poly);
 }
 
-void QxrdDataProcessorBase::summarizeMeasuredPolygon(QVector<QwtDoublePoint> poly)
+void QxrdDataProcessorBase::summarizeMeasuredPolygon(QVector<QPointF> poly)
 {
   if (poly.size() >= 3) {
     double x0 = poly[0].x();

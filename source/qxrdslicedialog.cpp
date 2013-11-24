@@ -30,7 +30,7 @@ void QxrdSliceDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qx
   reslice();
 }
 
-void QxrdSliceDialog::slicePolygon(QwtArray<QwtDoublePoint> poly)
+void QxrdSliceDialog::slicePolygon(QVector<QPointF> poly)
 {
   QxrdSliceDialogSettingsPtr set(m_SliceDialogSettings);
 
