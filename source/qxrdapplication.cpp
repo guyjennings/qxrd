@@ -349,11 +349,10 @@ void QxrdApplication::loadPlugins()
 
 #ifdef QXRD_PLUGIN_PATH
   pluginsDirList.append(QDir(xstr(QXRD_PLUGIN_PATH)));
-#else
+#endif
   QDir pluginsDir = QDir(qApp->applicationDirPath());
   pluginsDir.cd("plugins");
   pluginsDirList.append(pluginsDir);
-#endif
 
   foreach (QDir pluginsDir, pluginsDirList) {
     if (qcepDebug(DEBUG_PLUGINS)) {
@@ -361,14 +360,20 @@ void QxrdApplication::loadPlugins()
     }
 
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
+      QString fullPath = pluginsDir.absoluteFilePath(fileName);
+
       if (qcepDebug(DEBUG_PLUGINS)) {
-        printf("Looking for plugin in file %s\n", qPrintable(fileName));
+        printf("Looking for plugin in file %s\n", qPrintable(fullPath));
       }
 
-      if (QLibrary::isLibrary(pluginsDir.absoluteFilePath(fileName))) {
-        QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
+      if (QLibrary::isLibrary(fullPath)) {
+        QPluginLoader loader(fullPath);
         QObject *plugin = loader.instance();
         if (plugin) {
+          if (qcepDebug(DEBUG_PLUGINS)) {
+            printf("Loaded plugin from %s : type %s\n", qPrintable(fullPath), qPrintable(plugin->metaObject()->className()));
+          }
+
           QString pluginName = "";
 
           QxrdDetectorPluginInterface* detector = qobject_cast<QxrdDetectorPluginInterface*>(plugin);
