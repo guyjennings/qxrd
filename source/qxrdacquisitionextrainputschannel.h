@@ -19,7 +19,7 @@ public:
   void writeSettings(QSettings *settings, QString section);
 
 signals:
-  void reinitializeNeeded();
+  void reinitiateNeeded();
 
 public slots:
   QVector<double> readChannel();

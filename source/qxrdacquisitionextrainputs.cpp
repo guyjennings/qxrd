@@ -34,10 +34,10 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr sav
     m_NIDAQPlugin = acqp->nidaqPlugin();
   }
 
-  connect(prop_SampleRate(), SIGNAL(valueChanged(double,int)), this, SLOT(reinitialize()));
+  connect(prop_SampleRate(), SIGNAL(valueChanged(double,int)), this, SLOT(reinitiate()));
 
   if (acqp) {
-    connect(acqp->prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(reinitialize()));
+    connect(acqp->prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(reinitiate()));
   }
 }
 
@@ -220,7 +220,7 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
                     QxrdAcquisitionExtraInputsChannelPtr(
                         chan = new QxrdAcquisitionExtraInputsChannel(n, m_Saver, m_Experiment, m_ExtraInputs)));
 
-  connect(chan, SIGNAL(reinitializeNeeded()), this, SLOT(reinitialize()));
+  connect(chan, SIGNAL(reinitiateNeeded()), this, SLOT(reinitiate()));
 
   QxrdSettingsSaverPtr saver(m_Saver);
 
