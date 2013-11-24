@@ -15,12 +15,12 @@ macx{
 
 win32-msvc* {
   contains(QMAKE_HOST.arch,x86_64) {
-    QXRDSUFFIX = -msvc-x64
-    QXRDSUFFIXSTR = " (MSVC 64 bit)"
+    QXRDSUFFIX = -qt-$${QT_VERSION}-msvc-x64
+    QXRDSUFFIXSTR = " QT $${QT_VERSION} (MSVC 64 bit)"
     DEFINES += WIN64
   } else {
-    QXRDSUFFIX = -msvc-x86
-    QXRDSUFFIXSTR = " (MSVC 32 bit)"
+    QXRDSUFFIX = -qt-$${QT_VERSION}-msvc-x86
+    QXRDSUFFIXSTR = " QT $${QT_VERSION} (MSVC 32 bit)"
   }
 
   message("Visual C++ Build")
@@ -30,8 +30,8 @@ win32-msvc* {
 }
 
 win32-g++ {
-  QXRDSUFFIX = -mingw
-  QXRDSUFFIXSTR = " (MINGW 32 bit)"
+  QXRDSUFFIX = -qt-$${QT_VERSION}-mingw
+  QXRDSUFFIXSTR = " QT $${QT_VERSION} (MINGW 32 bit)"
   message("MingW g++ build")
 }
 
