@@ -1547,12 +1547,17 @@ double QxrdDataProcessorBase::estimatedProcessingTime(double estSerialTime, doub
   return estSerialTime + estParallelTime;
 }
 
-void QxrdDataProcessorBase::showMaskRange(/*double min, double max*/)
+void QxrdDataProcessorBase::showMaskRange()
 {
-  createMaskIfNeeded();
-
   double min = get_MaskMinimumValue();
   double max = get_MaskMaximumValue();
+
+  showMaskRange(min, max);
+}
+
+void QxrdDataProcessorBase::showMaskRange(double min, double max)
+{
+  createMaskIfNeeded();
 
   if (m_Data && mask()) {
     mask() -> showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
@@ -1583,12 +1588,18 @@ void QxrdDataProcessorBase::showMaskAll()
   }
 }
 
-void QxrdDataProcessorBase::hideMaskRange(/*double min, double max*/)
+void QxrdDataProcessorBase::hideMaskRange()
+{
+  double min = get_MaskMinimumValue();
+  double max = get_MaskMaximumValue();
+
+  hideMaskRange(min, max);
+}
+
+void QxrdDataProcessorBase::hideMaskRange(double min, double max)
 {
   createMaskIfNeeded();
 
-  double min = get_MaskMinimumValue();
-  double max = get_MaskMaximumValue();
 
   if (m_Data && mask()) {
     mask() -> hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);

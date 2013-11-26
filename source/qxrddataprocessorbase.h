@@ -222,8 +222,10 @@ public slots:
 public slots:
   void shutdown();
 
-  void showMaskRange(/*double min, double max*/);
-  void hideMaskRange(/*double min, double max*/);
+  void showMaskRange();
+  void hideMaskRange();
+  void showMaskRange(double min, double max);
+  void hideMaskRange(double min, double max);
   void showMaskAll();
   void hideMaskAll();
   void invertMask();
