@@ -575,6 +575,8 @@ win32 { # Make NSIS installer...
         QMAKE_POST_LINK += /DWIN64
       }
 
+      message("Generate NSIS installer for $${QXRDSUFFIXSTR}")
+
       QMAKE_POST_LINK += /DVERSION=$${VERSION}
       CONFIG(release, debug|release) {
         QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}\"
