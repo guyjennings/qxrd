@@ -77,6 +77,9 @@ public slots:
   void doAccumulateImages();
   void doIntegrateSequence();
   void doProcessSequence();
+  void doProjectAlongX();
+  void doProjectAlongY();
+  void doProjectAlongZ();
 
   void updateTitle();
   void acquireStarted();

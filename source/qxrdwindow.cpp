@@ -1514,7 +1514,49 @@ void QxrdWindow::doAccumulateImages()
                                                       "Select data files to accumulate...",
                                                       proc -> get_DataPath());
 
-    proc->accumulateImages(files);
+    QMetaObject::invokeMethod(proc.data(), "accumulateImages", Q_ARG(QStringList, files));
+  }
+}
+
+void QxrdWindow::doProjectAlongX()
+{
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    QStringList files = QFileDialog::getOpenFileNames(this,
+                                                      "Select data files to project along X...",
+                                                      proc -> get_DataPath());
+
+    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, files),
+                              Q_ARG(int, 1), Q_ARG(int, 0), Q_ARG(int, 0));
+  }
+}
+
+void QxrdWindow::doProjectAlongY()
+{
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    QStringList files = QFileDialog::getOpenFileNames(this,
+                                                      "Select data files to project along Y...",
+                                                      proc -> get_DataPath());
+
+    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, files),
+                              Q_ARG(int, 0), Q_ARG(int, 1), Q_ARG(int, 0));
+  }
+}
+
+void QxrdWindow::doProjectAlongZ()
+{
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    QStringList files = QFileDialog::getOpenFileNames(this,
+                                                      "Select data files to project along Z...",
+                                                      proc -> get_DataPath());
+
+    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, files),
+                              Q_ARG(int, 0), Q_ARG(int, 0), Q_ARG(int, 1));
   }
 }
 

@@ -368,6 +368,101 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
   }
 }
 
+void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py, int pz)
+{
+  QxrdDoubleImageDataPtr sumx, sumy, sumz;
+
+  if (px) sumx = takeNextFreeImage(0,0);
+  if (py) sumy = takeNextFreeImage(0,0);
+  if (pz) sumz = takeNextFreeImage(0,0);
+
+  int nx = 0;
+  int ny = 0;
+  int nz = names.count();
+  int first = true;
+
+  for (int i=0; i<nz; i++) {
+    QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
+    QString path = filePathInDataDirectory(names[i]);
+
+    if (img->readImage(path)) {
+      img->loadMetaData();
+
+      if (first) {
+        nx = img->get_Width();
+        ny = img->get_Height();
+
+        if (px) {
+          sumx->copyPropertiesFrom(img);
+          sumx->set_Width(nz);
+          sumx->set_Height(ny);
+          sumx->clear();
+        }
+
+        if (py) {
+          sumy->copyPropertiesFrom(img);
+          sumy->set_Width(nx);
+          sumy->set_Height(nz);
+          sumy->clear();
+        }
+
+        if (pz) {
+          sumx->copyPropertiesFrom(img);
+          sumz->set_Width(nx);
+          sumz->set_Height(ny);
+          sumz->clear();
+        }
+
+        first = false;
+      }
+
+      if (px) {
+        for (int y=0; y<ny; y++) {
+          double sum=0;
+
+          for (int x=0; x<nx; x++) {
+            sum += img->getImageData(x,y);
+          }
+
+          sumx->addValue(i,y, sum);
+        }
+      }
+
+      if (py) {
+        for (int x=0; x<nx; x++) {
+          double sum=0;
+
+          for (int y=0; y<ny; y++) {
+            sum += img->getImageData(x,y);
+          }
+
+          sumy->addValue(x,i, sum);
+        }
+      }
+
+      if (pz) {
+        for (int x=0; x<nx; x++) {
+          for (int y=0; y<ny; y++) {
+            sumz->addValue(x,y, img->getImageData(x,y));
+          }
+        }
+      }
+    }
+  }
+
+  if (px) {
+    acquiredDoubleImage(sumx, QxrdMaskDataPtr());
+  }
+
+  if (py) {
+    acquiredDoubleImage(sumy, QxrdMaskDataPtr());
+  }
+
+  if (pz) {
+    acquiredDoubleImage(sumz, QxrdMaskDataPtr());
+  }
+}
+
 void QxrdDataProcessorThreaded::integrateData(QString name)
 {
   QThread::currentThread()->setObjectName("integrateData");

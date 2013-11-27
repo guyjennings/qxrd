@@ -40,6 +40,7 @@ private slots:
 
 public slots:
   void accumulateImages(QStringList names);
+  void projectImages(QStringList names, int px, int py, int pz);
   void integrateData(QString name);
 
   void processData(QString name);

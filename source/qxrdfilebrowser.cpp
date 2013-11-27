@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMenu>
+#include <QMetaObject>
 #include "qxrdmutexlocker.h"
 #include "qxrdfilebrowsermodel.h"
 #include "qxrdfilebrowserview.h"
@@ -393,7 +394,67 @@ void QxrdFileBrowser::doAccumulate()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    proc->accumulateImages(paths);
+    QMetaObject::invokeMethod(proc.data(), "accumulateImages", Q_ARG(QStringList, paths));
+  }
+}
+
+void QxrdFileBrowser::doProjectX()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+  QStringList paths;
+
+  foreach(index, rows) {
+    if (!m_Model->isDir(index)) {
+      paths.append(m_Model->filePath(index));
+    }
+  }
+
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, paths), Q_ARG(int, 1), Q_ARG(int, 0), Q_ARG(int, 0));
+  }
+}
+
+void QxrdFileBrowser::doProjectY()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+  QStringList paths;
+
+  foreach(index, rows) {
+    if (!m_Model->isDir(index)) {
+      paths.append(m_Model->filePath(index));
+    }
+  }
+
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, paths), Q_ARG(int, 0), Q_ARG(int, 1), Q_ARG(int, 0));
+  }
+}
+
+void QxrdFileBrowser::doProjectZ()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+  QStringList paths;
+
+  foreach(index, rows) {
+    if (!m_Model->isDir(index)) {
+      paths.append(m_Model->filePath(index));
+    }
+  }
+
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, paths), Q_ARG(int, 0), Q_ARG(int, 0), Q_ARG(int, 1));
   }
 }
 
@@ -415,7 +476,9 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
     QAction *accumulate = actions->addAction("Accumulate");
     QAction *integrate = actions->addAction("Integrate");
     QAction *process = actions->addAction("Process");
-
+    QAction *projectX = actions->addAction("Project Along X");
+    QAction *projectY = actions->addAction("Project Along Y");
+    QAction *projectZ = actions->addAction("Project Along Z");
     QAction *action = actions->exec(QCursor::pos());
 
     if (action == open) {
@@ -432,6 +495,12 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
       doIntegrate();
     } else if (action == process) {
       doProcess();
+    } else if (action == projectX) {
+      doProjectX();
+    } else if (action == projectY) {
+      doProjectY();
+    } else if (action == projectZ) {
+      doProjectZ();
     }
   }
 }

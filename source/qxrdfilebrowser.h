@@ -41,6 +41,9 @@ public slots:
   void doProcess();
   void doIntegrate();
   void doAccumulate();
+  void doProjectX();
+  void doProjectY();
+  void doProjectZ();
   void onRootDirectoryChanged(QString dir);
   void mousePressed(QModelIndex index);
   void onRowCountChanged(int oldCount, int newCount);
