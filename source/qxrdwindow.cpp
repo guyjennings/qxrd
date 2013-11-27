@@ -281,6 +281,9 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   //  connect(m_ActionSetAcquireDirectory, SIGNAL(triggered()), this, SLOT(selectOutputDirectory()));
 
   connect(m_ActionAccumulateImages, SIGNAL(triggered()), this, SLOT(doAccumulateImages()));
+  connect(m_ActionProjectImagesX, SIGNAL(triggered()), this, SLOT(doProjectAlongX()));
+  connect(m_ActionProjectImagesY, SIGNAL(triggered()), this, SLOT(doProjectAlongY()));
+  connect(m_ActionProjectImagesZ, SIGNAL(triggered()), this, SLOT(doProjectAlongZ()));
   connect(m_ActionProcessData, SIGNAL(triggered()), this, SLOT(doProcessSequence()));
 
   connect(m_DisplayDialog -> m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));

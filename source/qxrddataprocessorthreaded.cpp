@@ -348,6 +348,14 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
 
       img -> loadMetaData();
 
+      int typ = img->get_DataType();
+
+      if ((typ == QxrdDoubleImageData::Raw16Data) ||
+          (typ == QxrdDoubleImageData::Raw32Data))
+      {
+        subtractDarkImage(img, darkImage());
+      }
+
       if (first) {
         summed->copyFrom(img);
         first = false;
@@ -364,7 +372,7 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
     printMessage(tr("No images were loaded"));
     statusMessage(tr("No images were loaded"));
   } else {
-    acquiredDoubleImage(summed, QxrdMaskDataPtr());
+    newData(summed, QxrdMaskDataPtr());
   }
 }
 
@@ -372,21 +380,48 @@ void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py,
 {
   QxrdDoubleImageDataPtr sumx, sumy, sumz;
 
-  if (px) sumx = takeNextFreeImage(0,0);
-  if (py) sumy = takeNextFreeImage(0,0);
-  if (pz) sumz = takeNextFreeImage(0,0);
-
   int nx = 0;
   int ny = 0;
   int nz = names.count();
   int first = true;
+
+  if (px) {
+    sumx = takeNextFreeImage(0,0);
+    printMessage(tr("Projecting %1 images onto X").arg(nz));
+  }
+
+  if (py) {
+    sumy = takeNextFreeImage(0,0);
+    printMessage(tr("Projecting %1 images onto Y").arg(nz));
+  }
+
+  if (pz) {
+    sumz = takeNextFreeImage(0,0);
+    printMessage(tr("Projecting %1 images onto Z").arg(nz));
+  }
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    expt->commenceWork(nz);
+  }
 
   for (int i=0; i<nz; i++) {
     QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
     QString path = filePathInDataDirectory(names[i]);
 
     if (img->readImage(path)) {
+      printMessage(tr("Load image from %1").arg(path));
+      statusMessage(tr("Load image from %1").arg(path));
+
       img->loadMetaData();
+      int typ = img->get_DataType();
+
+      if ((typ == QxrdDoubleImageData::Raw16Data) ||
+          (typ == QxrdDoubleImageData::Raw32Data))
+      {
+        subtractDarkImage(img, darkImage());
+      }
 
       if (first) {
         nx = img->get_Width();
@@ -394,29 +429,31 @@ void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py,
 
         if (px) {
           sumx->copyPropertiesFrom(img);
-          sumx->set_Width(nz);
-          sumx->set_Height(ny);
+          sumx->resize(nz,ny);
           sumx->clear();
+          sumx->set_SummedExposures(0);
         }
 
         if (py) {
           sumy->copyPropertiesFrom(img);
-          sumy->set_Width(nx);
-          sumy->set_Height(nz);
+          sumy->resize(nz,nx);
           sumy->clear();
+          sumy->set_SummedExposures(0);
         }
 
         if (pz) {
-          sumx->copyPropertiesFrom(img);
-          sumz->set_Width(nx);
-          sumz->set_Height(ny);
+          sumz->copyPropertiesFrom(img);
+          sumz->resize(nx,ny);
           sumz->clear();
+          sumz->set_SummedExposures(0);
         }
 
         first = false;
       }
 
       if (px) {
+        sumx->prop_SummedExposures()->incValue(1);
+
         for (int y=0; y<ny; y++) {
           double sum=0;
 
@@ -429,6 +466,8 @@ void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py,
       }
 
       if (py) {
+        sumy->prop_SummedExposures()->incValue(1);
+
         for (int x=0; x<nx; x++) {
           double sum=0;
 
@@ -436,11 +475,13 @@ void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py,
             sum += img->getImageData(x,y);
           }
 
-          sumy->addValue(x,i, sum);
+          sumy->addValue(i,x, sum);
         }
       }
 
       if (pz) {
+        sumz->prop_SummedExposures()->incValue(1);
+
         for (int x=0; x<nx; x++) {
           for (int y=0; y<ny; y++) {
             sumz->addValue(x,y, img->getImageData(x,y));
@@ -448,18 +489,26 @@ void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py,
         }
       }
     }
+
+    if (expt) {
+      expt->completeWork(1);
+    }
   }
 
   if (px) {
-    acquiredDoubleImage(sumx, QxrdMaskDataPtr());
+    newData(sumx, QxrdMaskDataPtr());
   }
 
   if (py) {
-    acquiredDoubleImage(sumy, QxrdMaskDataPtr());
+    newData(sumy, QxrdMaskDataPtr());
   }
 
   if (pz) {
-    acquiredDoubleImage(sumz, QxrdMaskDataPtr());
+    newData(sumz, QxrdMaskDataPtr());
+  }
+
+  if (expt) {
+    expt->finishedWork(nz);
   }
 }
 
