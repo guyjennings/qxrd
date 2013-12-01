@@ -111,10 +111,10 @@ QString QxrdFileSaver::uniqueFileName(QString name)
 
 #define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
 
-void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveDoubleData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveData",
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveDoubleData",
                                            Q_ARG(QString,name),
                                            Q_ARG(QxrdDoubleImageDataPtr,image),
                                            Q_ARG(QxrdMaskDataPtr,overflow),
@@ -125,7 +125,7 @@ void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMas
 
     if (image == NULL) {
       if (g_Application) {
-        g_Application->criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
+        g_Application->criticalMessage(tr("QxrdFileSaver::saveDoubleData: image == NULL"));
       }
     } else {
       int nrows = image -> get_Height();
@@ -195,36 +195,36 @@ void QxrdFileSaver::saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMas
   }
 }
 
-void QxrdFileSaver::saveData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveInt32Data(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
-      g_Application->criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
+      g_Application->criticalMessage(tr("QxrdFileSaver::saveInt32Data: image == NULL"));
     }
   } else {
-    saveRawData(name, image, overflow, canOverwrite);
+    saveRaw32Data(name, image, overflow, canOverwrite);
   }
 }
 
-void QxrdFileSaver::saveData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveInt16Data(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
-      g_Application->criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
+      g_Application->criticalMessage(tr("QxrdFileSaver::saveInt16Data: image == NULL"));
     }
   } else {
-    saveRawData(name, image, overflow, canOverwrite);
+    saveRaw16Data(name, image, overflow, canOverwrite);
   }
 }
 
-void QxrdFileSaver::saveData(QString name, QxrdMaskDataPtr image, int canOverwrite)
+void QxrdFileSaver::saveMaskData(QString name, QxrdMaskDataPtr image, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
-      g_Application->criticalMessage(tr("QxrdFileSaver::saveData: image == NULL"));
+      g_Application->criticalMessage(tr("QxrdFileSaver::saveMaskData: image == NULL"));
     }
   } else if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveData",
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveMaskData",
                                            Q_ARG(QString,name),
                                            Q_ARG(QxrdMaskDataPtr,image),
                                            Q_ARG(int,canOverwrite)))
@@ -280,14 +280,14 @@ void QxrdFileSaver::saveData(QString name, QxrdMaskDataPtr image, int canOverwri
   }
 }
 
-void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveRaw32Data(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
-      g_Application->criticalMessage(tr("QxrdFileSaver::saveRawData: image == NULL"));
+      g_Application->criticalMessage(tr("QxrdFileSaver::saveRaw32Data: image == NULL"));
     }
   } else if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRawData",
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw32Data",
                                            Q_ARG(QString,name),
                                            Q_ARG(QxrdInt32ImageDataPtr,image),
                                            Q_ARG(QxrdMaskDataPtr,overflow),
@@ -395,14 +395,14 @@ void QxrdFileSaver::saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdM
   }
 }
 
-void QxrdFileSaver::saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveRaw16Data(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
       g_Application->criticalMessage(tr("QxrdFileSaver::saveRawData: image == NULL"));
     }
   } else if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRawData",
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw16Data",
                                            Q_ARG(QString,name),
                                            Q_ARG(QxrdInt16ImageDataPtr,image),
                                            Q_ARG(QxrdMaskDataPtr,overflow),

@@ -730,7 +730,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
         QxrdFileSaverPtr saver(m_FileSaver);
 
         if (saver) {
-          saver->saveData(path, image, QxrdMaskDataPtr(), NoOverwrite);
+          saver->saveDoubleData(path, image, QxrdMaskDataPtr(), NoOverwrite);
         }
       } else {
         printMessage(tr("Failed to load image from %1").arg(path));

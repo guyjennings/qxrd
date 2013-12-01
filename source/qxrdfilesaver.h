@@ -40,12 +40,12 @@ public:
   };
 
 public slots:
-  void saveData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
-  void saveData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
-  void saveData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
-  void saveData(QString name, QxrdMaskDataPtr image, int canOverwrite);
-  void saveRawData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
-  void saveRawData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveDoubleData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveInt32Data(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveInt16Data(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveMaskData(QString name, QxrdMaskDataPtr image, int canOverwrite);
+  void saveRaw32Data(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveRaw16Data(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
   void saveTextData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
   void writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName = QString());
   void writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QString fileName = QString());

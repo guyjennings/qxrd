@@ -1093,7 +1093,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdDoubleImageData
   QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
-    f -> saveData(name, image, overflow, canOverwrite);
+    f -> saveDoubleData(name, image, overflow, canOverwrite);
   }
 }
 
@@ -1102,7 +1102,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt16ImageDataP
   QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
-    f -> saveData(name, image, overflow, canOverwrite);
+    f -> saveInt16Data(name, image, overflow, canOverwrite);
   }
 }
 
@@ -1111,7 +1111,7 @@ void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt16ImageDa
   QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
-    f -> saveRawData(name, image, overflow, canOverwrite);
+    f -> saveRaw16Data(name, image, overflow, canOverwrite);
   }
 }
 
@@ -1120,7 +1120,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QxrdInt32ImageDataP
   QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
-    f -> saveData(name, image, overflow, canOverwrite);
+    f -> saveInt32Data(name, image, overflow, canOverwrite);
   }
 }
 
@@ -1129,7 +1129,7 @@ void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QxrdInt32ImageDa
   QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
-    f -> saveRawData(name, image, overflow, canOverwrite);
+    f -> saveRaw32Data(name, image, overflow, canOverwrite);
   }
 }
 
@@ -1138,7 +1138,7 @@ void QxrdDataProcessorBase::saveNamedMaskData(QString name, QxrdMaskDataPtr imag
   QxrdFileSaverPtr f(m_FileSaver);
 
   if (f) {
-    f -> saveData(name, image, canOverwrite);
+    f -> saveMaskData(name, image, canOverwrite);
   }
 }
 
