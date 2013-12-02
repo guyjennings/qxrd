@@ -51,6 +51,8 @@ public slots:
   void reflectVertically();
   void reflectHorizontally();
 
+  void fitPeakNear(double x, double y);
+
   void processData(QString name);
   void processDataSequence(QString path, QString filter="*.tif");
   void processDataSequence(QStringList paths);

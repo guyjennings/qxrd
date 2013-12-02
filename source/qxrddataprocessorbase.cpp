@@ -514,6 +514,14 @@ void QxrdDataProcessorBase::loadData(QString name)
 
       res -> loadMetaData();
 
+      int typ = res->get_DataType();
+
+      if ((typ == QxrdDoubleImageData::Raw16Data) ||
+          (typ == QxrdDoubleImageData::Raw32Data))
+      {
+        subtractDarkImage(res, darkImage());
+      }
+
       newData(res, QxrdMaskDataPtr());
 
       set_DataPath(res -> get_FileName());

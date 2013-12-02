@@ -899,3 +899,8 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
     printMessage(tr("Failed to load Dark image from %1").arg(path));
   }
 }
+
+void QxrdDataProcessorThreaded::fitPeakNear(double x, double y)
+{
+  printMessage(tr("fit peak near (%1,%2)").arg(x).arg(y));
+}
