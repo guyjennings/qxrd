@@ -286,6 +286,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   connect(m_ActionProjectImagesX, SIGNAL(triggered()), this, SLOT(doProjectAlongX()));
   connect(m_ActionProjectImagesY, SIGNAL(triggered()), this, SLOT(doProjectAlongY()));
   connect(m_ActionProjectImagesZ, SIGNAL(triggered()), this, SLOT(doProjectAlongZ()));
+  connect(m_ActionCorrelateImage, SIGNAL(triggered()), this, SLOT(doCorrelate()));
   connect(m_ActionProcessData, SIGNAL(triggered()), this, SLOT(doProcessSequence()));
 
   connect(m_ActionReflectHorizontally, SIGNAL(triggered()), this, SLOT(doReflectHorizontally()));
@@ -1609,6 +1610,19 @@ void QxrdWindow::doProjectAlongZ()
 
     QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, files),
                               Q_ARG(int, 0), Q_ARG(int, 0), Q_ARG(int, 1));
+  }
+}
+
+void QxrdWindow::doCorrelate()
+{
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    QStringList files = QFileDialog::getOpenFileNames(this,
+                                                      "Select data files to correlate with current image...",
+                                                      proc -> get_DataPath());
+
+    QMetaObject::invokeMethod(proc.data(), "correlateImages", Q_ARG(QStringList, files));
   }
 }
 

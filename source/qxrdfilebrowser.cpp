@@ -498,6 +498,26 @@ void QxrdFileBrowser::doProjectZ()
   }
 }
 
+void QxrdFileBrowser::doCorrelate()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+  QStringList paths;
+
+  foreach(index, rows) {
+    if (!m_Model->isDir(index)) {
+      paths.append(m_Model->filePath(index));
+    }
+  }
+
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QMetaObject::invokeMethod(proc.data(), "correlateImages", Q_ARG(QStringList, paths));
+  }
+}
+
 void QxrdFileBrowser::doRefreshBrowser()
 {
   m_Model->refresh();
@@ -521,6 +541,7 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
     QAction *projectX = actions->addAction("Project Along X");
     QAction *projectY = actions->addAction("Project Along Y");
     QAction *projectZ = actions->addAction("Project Along Z");
+    QAction *correlate = actions->addAction("Correlate Images with Current Image");
     QAction *action = actions->exec(QCursor::pos());
 
     if (action == open) {
@@ -547,6 +568,8 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
       doProjectY();
     } else if (action == projectZ) {
       doProjectZ();
+    } else if (action == correlate) {
+      doCorrelate();
     }
   }
 }

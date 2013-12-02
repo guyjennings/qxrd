@@ -46,6 +46,7 @@ public slots:
   void doProjectX();
   void doProjectY();
   void doProjectZ();
+  void doCorrelate();
   void onRootDirectoryChanged(QString dir);
   void mousePressed(QModelIndex index);
   void onRowCountChanged(int oldCount, int newCount);

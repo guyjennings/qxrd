@@ -44,6 +44,9 @@ public slots:
   void subtractImages(QStringList names);
   void projectImages(QStringList names, int px, int py, int pz);
   void integrateData(QString name);
+  void correlateImages(QStringList names);
+
+  void shiftImage(int dx, int dy);
 
   void reflectVertically();
   void reflectHorizontally();

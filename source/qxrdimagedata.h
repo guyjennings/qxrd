@@ -49,6 +49,10 @@ public:
   QxrdMaskDataPtr mask() const;
   QxrdMaskDataPtr overflow() const;
 
+  double correlate(QSharedPointer< QxrdImageData<T> > image, int dx, int dy, int mx, int my);
+
+  void shiftImage(QSharedPointer< QxrdImageData<T> > image, double dx, double dy);
+
   T findMin() const;
   T findMax() const;
   double findAverage() const;

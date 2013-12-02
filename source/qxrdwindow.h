@@ -82,6 +82,7 @@ public slots:
   void doProjectAlongX();
   void doProjectAlongY();
   void doProjectAlongZ();
+  void doCorrelate();
   void doReflectVertically();
   void doReflectHorizontally();
 

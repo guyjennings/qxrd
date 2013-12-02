@@ -620,6 +620,57 @@ void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py,
   }
 }
 
+void QxrdDataProcessorThreaded::correlateImages(QStringList names)
+{
+  QxrdDoubleImageDataPtr imga = data();
+
+  foreach(QString name, names) {
+    QxrdDoubleImageDataPtr imgb = takeNextFreeImage(0,0);
+    QString path = filePathInDataDirectory(name);
+
+    if (imgb->readImage(path)) {
+      printMessage(tr("Load image from %1").arg(path));
+      statusMessage(tr("Load image from %1").arg(path));
+
+      imgb -> loadMetaData();
+
+      int typ = imgb->get_DataType();
+
+      if ((typ == QxrdDoubleImageData::Raw16Data) ||
+          (typ == QxrdDoubleImageData::Raw32Data))
+      {
+        subtractDarkImage(imgb, darkImage());
+      }
+
+      printMessage("dx\tdy\tcorr");
+
+      for (int dy = -10; dy<=10; dy++) {
+        for (int dx = -10; dx<=10; dx++) {
+          double corr = imga->correlate(imgb, dx, dy, 10, 10);
+
+          printMessage(tr("%1\t%2\t%3").arg(dx).arg(dy).arg(corr));
+        }
+      }
+    } else {
+      printMessage(tr("Couldn't load %1").arg(path));
+      statusMessage(tr("Couldn't load %1").arg(path));
+    }
+  }
+}
+
+void QxrdDataProcessorThreaded::shiftImage(int dx, int dy)
+{
+  QxrdDoubleImageDataPtr img = data();
+
+  if (img) {
+    QxrdDoubleImageDataPtr shft = takeNextFreeImage(img->get_Width(), img->get_Height());
+
+    shft->shiftImage(img, dx, dy);
+
+    newData(shft, QxrdMaskDataPtr());
+  }
+}
+
 void QxrdDataProcessorThreaded::integrateData(QString name)
 {
   QThread::currentThread()->setObjectName("integrateData");

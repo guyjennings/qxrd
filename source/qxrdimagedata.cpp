@@ -311,6 +311,40 @@ void QxrdImageData<T>::divide(QSharedPointer< QxrdImageData<T2> > image)
 }
 
 template <typename T>
+double QxrdImageData<T>::correlate(QSharedPointer<QxrdImageData<T> > image, int dx, int dy, int mx, int my)
+{
+  double sum=0;
+
+  if (image) {
+    int wd = this->get_Width();
+    int ht = this->get_Height();
+
+    for (int y=my; y<ht-my; y++) {
+      for (int x=mx; x<wd-mx; x++) {
+        sum += this->value(x,y)*image->value(x+dx,y+dy);
+      }
+    }
+  }
+
+  return sum;
+}
+
+template <typename T>
+void QxrdImageData<T>::shiftImage(QSharedPointer<QxrdImageData<T> > image, double dx, double dy)
+{
+  if (image) {
+    int wd = this->get_Width();
+    int ht = this->get_Height();
+
+    for (int y=0; y<ht; y++) {
+      for (int x=0; x<wd; x++) {
+        this->setValue(x,y, image->value(x+dx,y+dy));
+      }
+    }
+  }
+}
+
+template <typename T>
 void QxrdImageData<T>::setMask(QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
 {
   m_Mask     = mask;
