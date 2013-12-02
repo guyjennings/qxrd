@@ -40,8 +40,13 @@ private slots:
 
 public slots:
   void accumulateImages(QStringList names);
+  void addImages(QStringList names);
+  void subtractImages(QStringList names);
   void projectImages(QStringList names, int px, int py, int pz);
   void integrateData(QString name);
+
+  void reflectVertically();
+  void reflectHorizontally();
 
   void processData(QString name);
   void processDataSequence(QString path, QString filter="*.tif");

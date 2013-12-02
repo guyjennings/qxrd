@@ -398,6 +398,46 @@ void QxrdFileBrowser::doAccumulate()
   }
 }
 
+void QxrdFileBrowser::doAdd()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+  QStringList paths;
+
+  foreach(index, rows) {
+    if (!m_Model->isDir(index)) {
+      paths.append(m_Model->filePath(index));
+    }
+  }
+
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QMetaObject::invokeMethod(proc.data(), "addImages", Q_ARG(QStringList, paths));
+  }
+}
+
+void QxrdFileBrowser::doSubtract()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+  QStringList paths;
+
+  foreach(index, rows) {
+    if (!m_Model->isDir(index)) {
+      paths.append(m_Model->filePath(index));
+    }
+  }
+
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QMetaObject::invokeMethod(proc.data(), "subtractImages", Q_ARG(QStringList, paths));
+  }
+}
+
 void QxrdFileBrowser::doProjectX()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
@@ -476,6 +516,8 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
     QAction *accumulate = actions->addAction("Accumulate");
     QAction *integrate = actions->addAction("Integrate");
     QAction *process = actions->addAction("Process");
+    QAction *add = actions->addAction("Add Images to Current Image");
+    QAction *subtract = actions->addAction("Subtract Images from Current Image");
     QAction *projectX = actions->addAction("Project Along X");
     QAction *projectY = actions->addAction("Project Along Y");
     QAction *projectZ = actions->addAction("Project Along Z");
@@ -495,6 +537,10 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
       doIntegrate();
     } else if (action == process) {
       doProcess();
+    } else if (action == add) {
+      doAdd();
+    } else if (action == subtract) {
+      doSubtract();
     } else if (action == projectX) {
       doProjectX();
     } else if (action == projectY) {

@@ -376,6 +376,114 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
   }
 }
 
+void QxrdDataProcessorThreaded::addImages(QStringList names)
+{
+  QxrdDoubleImageDataPtr summed = data();
+
+  foreach(QString name, names) {
+    QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
+    QString path = filePathInDataDirectory(name);
+
+    if (img->readImage(path)) {
+      printMessage(tr("Load image from %1").arg(path));
+      statusMessage(tr("Load image from %1").arg(path));
+
+      img -> loadMetaData();
+
+      int typ = img->get_DataType();
+
+      if ((typ == QxrdDoubleImageData::Raw16Data) ||
+          (typ == QxrdDoubleImageData::Raw32Data))
+      {
+        subtractDarkImage(img, darkImage());
+      }
+
+      summed->add(img);
+    } else {
+      printMessage(tr("Couldn't load %1").arg(path));
+      statusMessage(tr("Couldn't load %1").arg(path));
+    }
+  }
+
+  newData(summed, QxrdMaskDataPtr());
+}
+
+void QxrdDataProcessorThreaded::subtractImages(QStringList names)
+{
+  QxrdDoubleImageDataPtr summed = data();
+
+  foreach(QString name, names) {
+    QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
+    QString path = filePathInDataDirectory(name);
+
+    if (img->readImage(path)) {
+      printMessage(tr("Load image from %1").arg(path));
+      statusMessage(tr("Load image from %1").arg(path));
+
+      img -> loadMetaData();
+
+      int typ = img->get_DataType();
+
+      if ((typ == QxrdDoubleImageData::Raw16Data) ||
+          (typ == QxrdDoubleImageData::Raw32Data))
+      {
+        subtractDarkImage(img, darkImage());
+      }
+
+      summed->subtract(img);
+    } else {
+      printMessage(tr("Couldn't load %1").arg(path));
+      statusMessage(tr("Couldn't load %1").arg(path));
+    }
+  }
+
+  newData(summed, QxrdMaskDataPtr());
+}
+
+void QxrdDataProcessorThreaded::reflectHorizontally()
+{
+  QxrdDoubleImageDataPtr image = data();
+
+  if (image) {
+    int wid = image->get_Width();
+    int hgt = image->get_Height();
+
+    for (int y=0; y<hgt; y++) {
+      for (int x=0; x<wid/2; x++) {
+        double val1 = image->getImageData(x,y);
+        double val2 = image->getImageData(wid-x-1, y);
+
+        image->setValue(wid-x-1, y, val1);
+        image->setValue(x,y, val2);
+      }
+    }
+  }
+
+  newData(image, QxrdMaskDataPtr());
+}
+
+void QxrdDataProcessorThreaded::reflectVertically()
+{
+  QxrdDoubleImageDataPtr image = data();
+
+  if (image) {
+    int wid = image->get_Width();
+    int hgt = image->get_Height();
+
+    for (int x=0; x<wid; x++) {
+      for (int y=0; y<hgt/2; y++) {
+        double val1 = image->getImageData(x,y);
+        double val2 = image->getImageData(x, hgt-y-1);
+
+        image->setValue(x, hgt-y-1, val1);
+        image->setValue(x,y, val2);
+      }
+    }
+  }
+
+  newData(image, QxrdMaskDataPtr());
+}
+
 void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py, int pz)
 {
   QxrdDoubleImageDataPtr sumx, sumy, sumz;

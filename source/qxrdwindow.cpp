@@ -281,10 +281,15 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   //  connect(m_ActionSetAcquireDirectory, SIGNAL(triggered()), this, SLOT(selectOutputDirectory()));
 
   connect(m_ActionAccumulateImages, SIGNAL(triggered()), this, SLOT(doAccumulateImages()));
+  connect(m_ActionAddImage, SIGNAL(triggered()), this, SLOT(doAddImages()));
+  connect(m_ActionSubtractImage, SIGNAL(triggered()), this, SLOT(doSubtractImages()));
   connect(m_ActionProjectImagesX, SIGNAL(triggered()), this, SLOT(doProjectAlongX()));
   connect(m_ActionProjectImagesY, SIGNAL(triggered()), this, SLOT(doProjectAlongY()));
   connect(m_ActionProjectImagesZ, SIGNAL(triggered()), this, SLOT(doProjectAlongZ()));
   connect(m_ActionProcessData, SIGNAL(triggered()), this, SLOT(doProcessSequence()));
+
+  connect(m_ActionReflectHorizontally, SIGNAL(triggered()), this, SLOT(doReflectHorizontally()));
+  connect(m_ActionReflectVertically, SIGNAL(triggered()), this, SLOT(doReflectVertically()));
 
   connect(m_DisplayDialog -> m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));
   connect(m_DisplayDialog -> m_Display_5pct, SIGNAL(clicked()), m_Action005Range, SIGNAL(triggered()));
@@ -1518,6 +1523,50 @@ void QxrdWindow::doAccumulateImages()
                                                       proc -> get_DataPath());
 
     QMetaObject::invokeMethod(proc.data(), "accumulateImages", Q_ARG(QStringList, files));
+  }
+}
+
+void QxrdWindow::doAddImages()
+{
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    QStringList files = QFileDialog::getOpenFileNames(this,
+                                                      "Select data file(s) to add to current...",
+                                                      proc -> get_DataPath());
+
+    QMetaObject::invokeMethod(proc.data(), "addImages", Q_ARG(QStringList, files));
+  }
+}
+
+void QxrdWindow::doSubtractImages()
+{
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    QStringList files = QFileDialog::getOpenFileNames(this,
+                                                      "Select data file(s) to subtract from current...",
+                                                      proc -> get_DataPath());
+
+    QMetaObject::invokeMethod(proc.data(), "subtractImages", Q_ARG(QStringList, files));
+  }
+}
+
+void QxrdWindow::doReflectHorizontally()
+{
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    QMetaObject::invokeMethod(proc.data(), "reflectHorizontally");
+  }
+}
+
+void QxrdWindow::doReflectVertically()
+{
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    QMetaObject::invokeMethod(proc.data(), "reflectVertically");
   }
 }
 

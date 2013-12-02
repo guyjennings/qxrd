@@ -75,11 +75,15 @@ public slots:
 //  void selectLogFile();
   void doRefineCenterTilt();
   void doAccumulateImages();
+  void doAddImages();
+  void doSubtractImages();
   void doIntegrateSequence();
   void doProcessSequence();
   void doProjectAlongX();
   void doProjectAlongY();
   void doProjectAlongZ();
+  void doReflectVertically();
+  void doReflectHorizontally();
 
   void updateTitle();
   void acquireStarted();
