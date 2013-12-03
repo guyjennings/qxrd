@@ -9,6 +9,7 @@
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdinfodialogsettings.h"
 #include "qxrdslicedialogsettings.h"
+#include "qxrdsynchronizedacquisitiondialogsettings.h"
 #include "qxrdacquisitionextrainputsdialogsettings.h"
 
 class QxrdWindowSettings : public QObject
@@ -36,6 +37,7 @@ public:
   QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
   QxrdSliceDialogSettingsWPtr                  sliceDialogSettings();
   QxrdInfoDialogSettingsWPtr                   infoDialogSettings();
+  QxrdSynchronizedAcquisitionDialogSettingsWPtr synchronizedAcquisitionDialogSettings();
   QxrdAcquisitionExtraInputsDialogSettingsWPtr acquisitionExtraInputsDialogSettings();
 signals:
   
@@ -50,6 +52,7 @@ private:
   QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;
   QxrdSliceDialogSettingsPtr                   m_SliceDialogSettings;
   QxrdInfoDialogSettingsPtr                    m_InfoDialogSettings;
+  QxrdSynchronizedAcquisitionDialogSettingsPtr m_SynchronizedAcquisitionDialogSettings;
   QxrdAcquisitionExtraInputsDialogSettingsPtr  m_AcquisitionExtraInputsDialogSettings;
 };
 

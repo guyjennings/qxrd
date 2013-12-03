@@ -20,3 +20,7 @@ void QxrdSliceDialogSettings::writeSettings(QSettings *settings, QString section
   m_SlicePlotSettings->writeSettings(settings, section+"/plot");
 }
 
+QxrdSlicePlotSettingsWPtr QxrdSliceDialogSettings::slicePlotSettings()
+{
+  return m_SlicePlotSettings;
+}

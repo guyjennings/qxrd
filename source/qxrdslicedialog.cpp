@@ -14,6 +14,12 @@ QxrdSliceDialog::QxrdSliceDialog(QxrdSliceDialogSettingsWPtr settings, QWidget *
   }
 
   setupUi(this);
+
+  QxrdSliceDialogSettingsPtr set(m_SliceDialogSettings);
+
+  if (set) {
+    m_SlicePlot->init(set->slicePlotSettings());
+  }
 }
 
 QxrdSliceDialog::~QxrdSliceDialog()

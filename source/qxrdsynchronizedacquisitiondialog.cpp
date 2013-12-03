@@ -5,8 +5,13 @@
 #include "qxrdacquisition.h"
 #include "qxrddebug.h"
 
-QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *parent, QxrdAcquisitionWPtr acqw) :
+QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(
+    QxrdSynchronizedAcquisitionDialogSettingsWPtr settings,
+    QWidget *parent,
+    QxrdAcquisitionWPtr acqw) :
+
   QDockWidget(parent),
+  m_DialogSettings(settings),
   m_Acquisition(acqw),
   m_SynchronizedAcquisition()
 {
@@ -15,6 +20,12 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(QWidget *pa
   }
 
   setupUi(this);
+
+  QxrdSynchronizedAcquisitionDialogSettingsPtr set(m_DialogSettings);
+
+  if (set) {
+    m_WaveformPlot->init(set->synchronizedAcquisitionPlotSettings());
+  }
 
   QxrdAcquisitionPtr acq(acqw);
 

@@ -15,6 +15,8 @@ QxrdWindowSettings::QxrdWindowSettings(QxrdSettingsSaverWPtr saver,
   m_HistogramDialogSettings   = QxrdHistogramDialogSettingsPtr(new QxrdHistogramDialogSettings(saver, NULL));
   m_SliceDialogSettings       = QxrdSliceDialogSettingsPtr(new QxrdSliceDialogSettings(saver, NULL));
   m_InfoDialogSettings        = QxrdInfoDialogSettingsPtr(new QxrdInfoDialogSettings(saver, NULL));
+  m_SynchronizedAcquisitionDialogSettings = QxrdSynchronizedAcquisitionDialogSettingsPtr(
+        new QxrdSynchronizedAcquisitionDialogSettings(saver, NULL));
   m_AcquisitionExtraInputsDialogSettings = QxrdAcquisitionExtraInputsDialogSettingsPtr(
         new QxrdAcquisitionExtraInputsDialogSettings(saver, NULL));
 }
@@ -32,6 +34,8 @@ void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
     m_HistogramDialogSettings->readSettings(settings, section+"/histogramDialog");
     m_SliceDialogSettings->readSettings(settings, section+"/sliceDialog");
     m_InfoDialogSettings->readSettings(settings, section+"/imageInfoDialog");
+    m_SynchronizedAcquisitionDialogSettings->readSettings(settings, section+"/syncAcqDialog");
+    m_AcquisitionExtraInputsDialogSettings->readSettings(settings, section+"/extraInputsDialog");
   }
 }
 
@@ -50,6 +54,8 @@ void QxrdWindowSettings::writeSettings(QSettings *settings, QString section)
     m_HistogramDialogSettings->writeSettings(settings, section+"/histogramDialog");
     m_SliceDialogSettings->writeSettings(settings, section+"/sliceDialog");
     m_InfoDialogSettings->writeSettings(settings, section+"/imageInfoDialog");
+    m_AcquisitionExtraInputsDialogSettings->writeSettings(settings, section+"/extraInputsDialog");
+    m_SynchronizedAcquisitionDialogSettings->writeSettings(settings, section+"/syncAcqDialog");
     m_AcquisitionExtraInputsDialogSettings->writeSettings(settings, section+"/extraInputsDialog");
   }
 }
@@ -92,6 +98,11 @@ QxrdHistogramDialogSettingsWPtr QxrdWindowSettings::histogramDialogSettings()
 QxrdInfoDialogSettingsWPtr QxrdWindowSettings::infoDialogSettings()
 {
   return m_InfoDialogSettings;
+}
+
+QxrdSynchronizedAcquisitionDialogSettingsWPtr QxrdWindowSettings::synchronizedAcquisitionDialogSettings()
+{
+  return m_SynchronizedAcquisitionDialogSettings;
 }
 
 QxrdAcquisitionExtraInputsDialogSettingsWPtr QxrdWindowSettings::acquisitionExtraInputsDialogSettings()

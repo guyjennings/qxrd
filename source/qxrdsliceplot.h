@@ -2,6 +2,7 @@
 #define QXRDSLICEPLOT_H
 
 #include "qxrdplot.h"
+#include "qxrdplotsettings.h"
 
 class QxrdSlicePlot : public QxrdPlot
 {

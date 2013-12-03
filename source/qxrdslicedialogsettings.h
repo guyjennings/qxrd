@@ -20,6 +20,8 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
+  QxrdSlicePlotSettingsWPtr slicePlotSettings();
+
 signals:
   
 public slots:

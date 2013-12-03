@@ -921,7 +921,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QAction *adjAllPoints    = plotMenu.addAction(tr("Auto adjust position of all points"));
           QAction *delPoint        = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
           QAction *deleteAllPoints = plotMenu.addAction("Delete all Points");
-          QAction *fitPeakNear     = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2)").arg(x).arg(y));
+          QAction *fitPeakNear     = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
 
           QAction *action = plotMenu.exec(event->globalPos());
 
@@ -938,7 +938,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           } else if (action == deleteAllPoints) {
             cf->deletePowderPoints();
           } else if (action == fitPeakNear) {
-            dp->fitPeakNear(x,y);
+            cf->fitPeakNear(x,y);
           }
         }
       }

@@ -118,7 +118,9 @@ HEADERS += \
     qxrdacquisitionextrainputsdialogsettings.h \
     qxrdhelpbrowser.h \
     qxrdobjectnamer.h \
-    qxrduserscriptdialog.h
+    qxrduserscriptdialog.h \
+    qxrdsynchronizedacquisitiondialogsettings.h \
+    qxrdsynchronizedacquisitionplotsettings.h
 
 SOURCES += \
     submodules/qceplib/qspecserver.cpp \
@@ -132,7 +134,9 @@ SOURCES += \
     qxrdacquisitionextrainputsdialogsettings.cpp \
     qxrdhelpbrowser.cpp \
     qxrdobjectnamer.cpp \
-    qxrduserscriptdialog.cpp
+    qxrduserscriptdialog.cpp \
+    qxrdsynchronizedacquisitiondialogsettings.cpp \
+    qxrdsynchronizedacquisitionplotsettings.cpp
 
 OTHER_FILES += testImage.js
 

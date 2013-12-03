@@ -127,7 +127,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
   if (acq) {
     m_AcquisitionDialog = acq -> controlPanel(m_Window);
-    m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(this, m_Acquisition);
+    m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(set->synchronizedAcquisitionDialogSettings(), this, m_Acquisition);
     m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
   }
 

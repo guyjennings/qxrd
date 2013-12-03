@@ -24,7 +24,7 @@
  <customwidgets>
   <customwidget>
    <class>QxrdSlicePlot</class>
-   <extends>QWidget</extends>
+   <extends>QwtPlot</extends>
    <header>qxrdsliceplot.h</header>
    <container>1</container>
   </customwidget>
