@@ -911,8 +911,12 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
           QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);
 
-          double x = xMap.invTransform(event->x());
-          double y = yMap.invTransform(event->y());
+          QWidget *canv = canvas();
+
+          QPoint evlocal = canv->mapFromParent(event->pos());
+
+          double x = xMap.invTransform(evlocal.x());
+          double y = yMap.invTransform(evlocal.y());
 
           QwtDoublePoint nearest = cf->nearestPowderPoint(x, y);
 
