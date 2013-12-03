@@ -36,6 +36,15 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_EnableUserAbsorption(saver, this, "enableUserAbsorption", 0, "Apply user-defined geometry function in integration"),
     m_UserAbsorptionScript(saver, this, "userAbsorptionScript", defaultUserAbsorptionScript(), "Script to define user defined absorption functions"),
     m_UserAbsorptionFunction(saver, this, "userAbsorptionFunction", "userAbsorb1", "Name of user defined absorption function"),
+    m_PeakRadius(saver, this, "peakRadius", 2.0, "Radius of fitted peak"),
+    m_PeakFitRadius(saver, this, "peakFitRadius", 10, "Half size of fitted area for peak fitting"),
+    m_PeakHeight(saver, this, "peakHeight", 100.0, "Height of fitted peak"),
+    m_PeakCenterX(saver, this, "peakCenterX", 0, "X Center of fitted peak"),
+    m_PeakCenterY(saver, this, "peakCenterY", 0, "Y Center of fitted peak"),
+    m_PeakBackground(saver, this, "peakBackground", 0, "Background Height of fitted peak"),
+    m_PeakBackgroundX(saver, this, "peakBackgroundX", 0, "X Slope of Background"),
+    m_PeakBackgroundY(saver, this, "peakBackgroundY", 0, "Y Slope of Background"),
+    m_PeakFitDebug(saver, this, "peakFitDebug", 0, "Debug Print for peak fitting"),
     m_Experiment(expt)
 {
   qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
@@ -377,6 +386,112 @@ void QxrdCenterFinder::adjustPointNear(double x, double y)
     pts[nearest] = val;
 
     set_MarkedPoints(pts);
+  }
+}
+
+static int firstFit=0;
+
+void QxrdCenterFinder::evaluatePeakFit(double *parm, double *xv, int /*np*/, int nx)
+{
+  QcepPolygon pts = get_MarkedPoints();
+
+  double cx = parm[0];
+  double cy = parm[1];
+  double r  = parm[2];
+  double ht = parm[3];
+  double bg = parm[4];
+  double bx = parm[5];
+  double by = parm[6];
+
+  double cx0 = get_PeakCenterX();
+  double cy0 = get_PeakCenterY();
+  double rr0 = get_PeakFitRadius();
+
+  int n = get_PeakFitRadius()*2+1;
+  int x0 = cx0 - rr0;
+  int y0 = cy0 - rr0;
+  int nn = n*n;
+  int i=0;
+
+  for (int y=y0; y<y0+n; y++) {
+    for (int x=x0; x<x0+n; x++) {
+      double d = imageValue(x,y);
+
+      double dx = x-cx;
+      double dy = y-cy;
+      double pk = bg + dx*bx + dy*by + ht*exp(-((dx*dx+dy*dy)/(2.0*r*r)));
+
+      xv[i++] = pk - d;
+
+      if (firstFit) {
+        printMessage(tr("%1\t%2\t%3\t%4\t%5").arg(x).arg(y).arg(pk).arg(d).arg(pk-d));
+      }
+    }
+
+    if (firstFit) {
+      printMessage("\n");
+    }
+  }
+
+  if (firstFit) {
+    firstFit--;
+  }
+}
+
+static void fitPeak(double *p, double *hx, int m,int n, void *adata)
+{
+  QxrdCenterFinder *cf = (QxrdCenterFinder*) adata;
+
+  if (cf) {
+    cf->evaluatePeakFit(p, hx, m, n);
+  }
+}
+
+void QxrdCenterFinder::fitPeakNear()
+{
+  fitPeakNear(get_PeakCenterX(), get_PeakCenterY());
+}
+
+void QxrdCenterFinder::fitPeakNear(double x, double y)
+{
+  printMessage(tr("fit peak near [%1,%2]").arg(x).arg(y));
+
+  set_PeakCenterX(x);
+  set_PeakCenterY(y);
+
+  double parms[7];
+
+  parms[0] = x;
+  parms[1] = y;
+  parms[2] = get_PeakRadius();
+  parms[3] = get_PeakHeight();
+  parms[4] = get_PeakBackground();
+  parms[5] = get_PeakBackgroundX();
+  parms[6] = get_PeakBackgroundY();
+
+  double info[LM_INFO_SZ];
+
+  int n = get_PeakFitRadius()*2+1;
+
+  firstFit = get_PeakFitDebug();
+
+  int niter = dlevmar_dif(fitPeak, parms, NULL, 7, n*n, 100, NULL, info, NULL, NULL, this);
+
+  if (niter >= 0) {
+    printMessage(tr("Fitting succeeded after %1 iterations").arg(niter));
+    for (int i=0; i<7; i++) {
+      printMessage(tr("Parameter[%1] = %2").arg(i).arg(parms[i]));
+    }
+
+    set_PeakCenterX(parms[0]);
+    set_PeakCenterY(parms[1]);
+    set_PeakRadius(parms[2]);
+    set_PeakHeight(parms[3]);
+    set_PeakBackground(parms[4]);
+    set_PeakBackgroundX(parms[5]);
+    set_PeakBackgroundY(parms[6]);
+  } else {
+    printMessage(tr("Fitting Failed"));
   }
 }
 

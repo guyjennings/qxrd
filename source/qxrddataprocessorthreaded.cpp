@@ -902,5 +902,9 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
 
 void QxrdDataProcessorThreaded::fitPeakNear(double x, double y)
 {
-  printMessage(tr("fit peak near (%1,%2)").arg(x).arg(y));
+  QxrdCenterFinderPtr cf(centerFinder());
+
+  if (cf) {
+    cf->fitPeakNear(x,y);
+  }
 }

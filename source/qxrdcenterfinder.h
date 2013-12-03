@@ -102,6 +102,33 @@ public:
   Q_PROPERTY(QString userAbsorptionFunction READ get_UserAbsorptionFunction WRITE set_UserAbsorptionFunction)
   QCEP_STRING_PROPERTY(UserAbsorptionFunction)
 
+  Q_PROPERTY(double peakRadius READ get_PeakRadius WRITE set_PeakRadius)
+  QCEP_DOUBLE_PROPERTY(PeakRadius)
+
+  Q_PROPERTY(double peakFitRadius READ get_PeakFitRadius WRITE set_PeakFitRadius)
+  QCEP_DOUBLE_PROPERTY(PeakFitRadius)
+
+  Q_PROPERTY(double peakHeight READ get_PeakHeight WRITE set_PeakHeight)
+  QCEP_DOUBLE_PROPERTY(PeakHeight)
+
+  Q_PROPERTY(double peakCenterX READ get_PeakCenterX WRITE set_PeakCenterX)
+  QCEP_DOUBLE_PROPERTY(PeakCenterX)
+
+  Q_PROPERTY(double peakCenterY READ get_PeakCenterY WRITE set_PeakCenterY)
+  QCEP_DOUBLE_PROPERTY(PeakCenterY)
+
+  Q_PROPERTY(double peakBackground READ get_PeakBackground WRITE set_PeakBackground)
+  QCEP_DOUBLE_PROPERTY(PeakBackground)
+
+  Q_PROPERTY(double peakBackgroundX READ get_PeakBackgroundX WRITE set_PeakBackgroundX)
+  QCEP_DOUBLE_PROPERTY(PeakBackgroundX)
+
+  Q_PROPERTY(double peakBackgroundY READ get_PeakBackgroundY WRITE set_PeakBackgroundY)
+  QCEP_DOUBLE_PROPERTY(PeakBackgroundY)
+
+  Q_PROPERTY(int peakFitDebug READ get_PeakFitDebug WRITE set_PeakFitDebug)
+  QCEP_INTEGER_PROPERTY(PeakFitDebug)
+
 public:
   enum {
     UserAbsorptionNone = 0,
@@ -154,6 +181,8 @@ public slots:
   QwtDoublePoint adjustPoint(int i);
   void adjustPointNear(double x, double y);
   void adjustAllPoints();
+  void fitPeakNear(double x, double y);
+  void fitPeakNear();
 
   QString defaultUserGeometryScript();
   QString defaultUserAbsorptionScript();
@@ -178,6 +207,7 @@ public:
   double imageValue(double x, double y);
 
   void evaluateFit(double *parm, double *x, int np, int nx);
+  void evaluatePeakFit(double *parm, double *x, int np, int nx);
 
 //signals:
 ////  void centerChanged(double cx, double cy);
