@@ -11,6 +11,11 @@ include("qwt-6.1.pri")
 include("qceplib.pri")
 include("qt-hdf5.pri")
 
+MOC_DIR = moc
+UI_DIR = ui
+OBJECTS_DIR = obj
+RCC_DIR = rcc
+
 macx:win32 {
   include("qt-nexus.pri")
   DEFINES += HAVE_NEXUS

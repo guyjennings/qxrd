@@ -310,7 +310,7 @@ void QtestceplibMainWindow::doTestCBFLibrary()
 
     printMessage(tr("Image Dimensions [%1,%2]").arg(dimension[0]).arg(dimension[1]));
 
-    fclose(f);
+//    fclose(f);
 
     defCBFPath=theFile;
   }
