@@ -7,7 +7,7 @@ macx {
   LIBS += -lz
 } else:win32 {
   HDF5BASE = $${PWD}/hdf5-1.8.11/src/
-  contains(QMAKE_TARGET.arch, x86_64):{
+  contains(QMAKE_TARGET.arch, x86_64) {
     message(64 bit build)
     HDF5CONF = $${PWD}/hdf5-config/win64/
   } else {

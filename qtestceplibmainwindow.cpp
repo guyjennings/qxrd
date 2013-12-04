@@ -6,6 +6,7 @@
 #include "qcepimagedata.h"
 #include "hdf5.h"
 #include "napi.h"
+#include "cbf.h"
 
 QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -32,6 +33,7 @@ QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   connect(ui->m_ActionTestHDF, SIGNAL(triggered()), this, SLOT(doTestHDF5Library()));
   connect(ui->m_ActionTestHDFSlab, SIGNAL(triggered()), this, SLOT(doTestHDF5SlabOutput()));
   connect(ui->m_ActionTestNexus, SIGNAL(triggered()), this, SLOT(doTestNexusLibrary()));
+  connect(ui->m_ActionTestCBF, SIGNAL(triggered()), this, SLOT(doTestCBFLibrary()));
 }
 
 QtestceplibMainWindow::~QtestceplibMainWindow()
@@ -39,7 +41,12 @@ QtestceplibMainWindow::~QtestceplibMainWindow()
   delete ui;
 }
 
-QString defPath, defHDFPath, defNexusPath;
+void QtestceplibMainWindow::printMessage(QString msg)
+{
+  ui->m_Messages->appendPlainText(msg);
+}
+
+QString defPath, defHDFPath, defNexusPath, defCBFPath;
 
 void QtestceplibMainWindow::doReadSettings()
 {
@@ -213,5 +220,92 @@ void QtestceplibMainWindow::doTestNexusLibrary()
     NXclose(&nxHandle);
 
     defNexusPath=theFile;
+  }
+}
+
+int QtestceplibMainWindow::cbfCheck(int status,const char *file, int line)
+{
+  if (status != 0) {
+    printMessage(tr("CBF Library error %1 in %2:line %3").arg(status).arg(file).arg(line));
+  }
+
+  return status;
+}
+
+#define CBF_CHECK(a) cbfCheck(a, __FILE__, __LINE__)
+
+void QtestceplibMainWindow::doTestCBFLibrary()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+        this, "Read CBF File...", defCBFPath);
+
+  if (theFile.length()) {
+    FILE *f;
+    cbf_handle ch;
+    int status;
+    unsigned int m;
+    char *array_id;
+    int i, index, dimension[2], precedence[2];
+    const char *direction[2];
+
+    printMessage(tr("cbf test on file %1").arg(theFile));
+
+    f = fopen(qPrintable(theFile), "rb");
+
+    cbf_make_handle(&ch);
+
+    status = CBF_CHECK(cbf_read_widefile(ch, f, MSG_DIGEST));
+    printMessage(tr("read_widefile (%1)").arg(status));
+
+    status = CBF_CHECK(cbf_count_datablocks(ch, &m));
+    printMessage(tr("count_dbs (%1) = %2").arg(status).arg(m));
+
+    status = CBF_CHECK(cbf_rewind_datablock(ch));
+
+    if (cbf_find_category(ch, "diffrn_frame_data") !=0 ) {
+      status = CBF_CHECK(cbf_find_category(ch, "diffrn_data_frame"));
+    }
+
+    status = CBF_CHECK(cbf_find_column(ch, "array_id"));
+
+    status = CBF_CHECK(cbf_rewind_row(ch));
+
+    status = CBF_CHECK(cbf_get_value(ch, (const char **) &array_id));
+
+    status = CBF_CHECK(cbf_find_category(ch, "array_structure_list"));
+
+    status = CBF_CHECK(cbf_rewind_row(ch));
+
+    status = CBF_CHECK(cbf_find_column(ch, "array_id"));
+
+    dimension[0] = dimension[1] = 0;
+
+    while (cbf_find_nextrow(ch, array_id) == 0) {
+      status = CBF_CHECK(cbf_find_column(ch, "index"));
+      status = CBF_CHECK(cbf_get_integervalue(ch, &index));
+
+      i = index;
+
+      status = CBF_CHECK(cbf_find_column(ch, "precedence"));
+      status = CBF_CHECK(cbf_get_integervalue(ch, &index));
+
+      if (index >= 1 && index <= 2) {
+        precedence[i-1] = index;
+
+        status = CBF_CHECK(cbf_find_column(ch, "dimension"));
+        status = CBF_CHECK(cbf_get_integervalue(ch, &dimension[i-1]));
+
+        status = CBF_CHECK(cbf_find_column(ch, "direction"));
+        status = CBF_CHECK(cbf_get_value(ch, &direction[i-1]));
+
+        status = CBF_CHECK(cbf_find_column(ch, "array_id"));
+      }
+    }
+
+    printMessage(tr("Image Dimensions [%1,%2]").arg(dimension[0]).arg(dimension[1]));
+
+    fclose(f);
+
+    defCBFPath=theFile;
   }
 }

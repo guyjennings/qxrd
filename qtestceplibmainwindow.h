@@ -38,6 +38,11 @@ public slots:
 
   void doTestNexusLibrary();
 
+  void doTestCBFLibrary();
+  int cbfCheck(int status,const char *file, int line);
+
+  void printMessage(QString msg);
+
 private:
   Ui::QtestceplibMainWindow *ui;
   mutable QMutex m_Mutex;

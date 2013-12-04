@@ -13,7 +13,17 @@
   <property name="windowTitle">
    <string>Test ceplib</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QPlainTextEdit" name="m_Messages">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -33,6 +43,7 @@
     <addaction name="m_ActionTestHDF"/>
     <addaction name="m_ActionTestNexus"/>
     <addaction name="m_ActionTestHDFSlab"/>
+    <addaction name="m_ActionTestCBF"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -71,6 +82,11 @@
   <action name="m_ActionTestHDFSlab">
    <property name="text">
     <string>Test HDF Slab Output</string>
+   </property>
+  </action>
+  <action name="m_ActionTestCBF">
+   <property name="text">
+    <string>Test CBF Load Image...</string>
    </property>
   </action>
  </widget>
