@@ -668,7 +668,11 @@ void QxrdApplication::doAboutQxrd()
 #endif
 
 #ifdef Q_CC_GNU
+#ifdef Q_CC_CLANG
+  about += " clang";
+#else
   about += " gcc";
+#endif
 #endif
 
 #ifdef QT_NO_DEBUG
