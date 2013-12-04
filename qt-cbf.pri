@@ -17,6 +17,7 @@ macx {
 
   DEFINES += CBF_NO_REGEX
 } else:unix {
+  INCLUDEPATH += /usr/include/cbf/
   LIBS += -lcbf
 }
 

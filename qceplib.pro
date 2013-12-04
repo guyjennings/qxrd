@@ -10,7 +10,12 @@ QCEPLIB = ./
 include("qwt-6.1.pri")
 include("qceplib.pri")
 include("qt-hdf5.pri")
-include("qt-nexus.pri")
+
+macx:win32 {
+  include("qt-nexus.pri")
+  DEFINES += HAVE_NEXUS
+}
+
 include("qt-cbf.pri")
 
 SOURCES += \
