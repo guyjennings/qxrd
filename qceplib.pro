@@ -11,6 +11,7 @@ include("qwt-6.1.pri")
 include("qceplib.pri")
 include("qt-hdf5.pri")
 include("qt-nexus.pri")
+include("qt-cbf.pri")
 
 SOURCES += \
     qtestceplibmainwindow.cpp \
@@ -18,7 +19,10 @@ SOURCES += \
 
 OTHER_FILES += \
     qceplib.pri \
-    qwt-6.1.pri
+    qwt-6.1.pri \
+    qt-hdf5.pri \
+    qt-nexus.pri \
+    qt-cbf.pri
 
 win32 {
 #    RC_FILE = qxrd.rc
