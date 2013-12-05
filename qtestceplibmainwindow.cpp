@@ -352,7 +352,6 @@ void QtestceplibMainWindow::doTestCBFLibrary()
 
     printMessage(tr("Image Dimensions [%1,%2]").arg(dimension[0]).arg(dimension[1]));
 
-<<<<<<< HEAD
     status = CBF_CHECK(cbf_rewind_datablock(ch));
 
     if (CBF_CHECK(cbf_find_tag(ch, "_array_data.data")) == 0) {
@@ -397,8 +396,6 @@ void QtestceplibMainWindow::doTestCBFLibrary()
       delete [] array;
     }
 
-=======
->>>>>>> 74c125de8f3d6f552d01a13f55525839d7888ecc
 //    fclose(f);
 
     defCBFPath=theFile;
