@@ -3,10 +3,17 @@
 #include <QFileDialog>
 #include "qcepmutexlocker.h"
 #include "qcepimagedataformattiff.h"
+#include "qcepimagedataformatcbf.h"
 #include "qcepimagedata.h"
 #include "hdf5.h"
 #include "napi.h"
 #include "cbf.h"
+
+static QcepImageDataFormatTiff<quint16> rawfmt("raw");
+static QcepImageDataFormatTiff<quint32> raw2fmt("raw2");
+static QcepImageDataFormatTiff<short> maskfmt("mask");
+static QcepImageDataFormatTiff<double> dblfmt("double");
+static QcepImageDataFormatCBF<double> dblcbf("dblcbf");
 
 QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -29,7 +36,9 @@ QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
 
   connect(ui->m_ActionReadSettings, SIGNAL(triggered()), this, SLOT(doReadSettings()));
   connect(ui->m_ActionWriteSettings, SIGNAL(triggered()), this, SLOT(doWriteSettings()));
+  connect(ui->m_ActionLoadImage, SIGNAL(triggered()), this, SLOT(doLoadImage()));
   connect(ui->m_ActionLoadTIFFImage, SIGNAL(triggered()), this, SLOT(doLoadTIFFImage()));
+  connect(ui->m_ActionLoadCBFImage, SIGNAL(triggered()), this, SLOT(doLoadCBFImage()));
   connect(ui->m_ActionTestHDF, SIGNAL(triggered()), this, SLOT(doTestHDF5Library()));
   connect(ui->m_ActionTestHDFSlab, SIGNAL(triggered()), this, SLOT(doTestHDF5SlabOutput()));
   connect(ui->m_ActionTestNexus, SIGNAL(triggered()), this, SLOT(doTestNexusLibrary()));
@@ -106,6 +115,25 @@ void QtestceplibMainWindow::writeSettings(QSettings *settings)
   QcepProperty::writeSettings(this, "qtestceplib", settings);
 }
 
+void QtestceplibMainWindow::doLoadImage()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+        this, "Read Image from...", defPath);
+
+  if (theFile.length()) {
+    QcepImageData<double> *img = new QcepImageData<double>(QcepSettingsSaverWPtr(), 1024,1024);
+
+    if (img->readImage(theFile)) {
+      img->loadMetaData();
+
+      printMessage(tr("Loaded image from %1").arg(theFile));
+      printMessage(tr(" width %1, height %2").arg(img->get_Width()).arg(img->get_Height()));
+    } else {
+      printMessage(tr("Image load failed from %1").arg(theFile));
+    }
+  }
+}
+
 void QtestceplibMainWindow::doLoadTIFFImage()
 {
   QString theFile = QFileDialog::getOpenFileName(
@@ -113,6 +141,20 @@ void QtestceplibMainWindow::doLoadTIFFImage()
 
   if (theFile.length()) {
     QcepImageDataFormatTiff<double> fmt("tiff");
+
+    QcepImageData<double> *img = new QcepImageData<double>(QcepSettingsSaverWPtr(), 1024,1024);
+
+    fmt.loadFile(theFile, img);
+  }
+}
+
+void QtestceplibMainWindow::doLoadCBFImage()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+        this, "Read CBF Image from...", defPath);
+
+  if (theFile.length()) {
+    QcepImageDataFormatCBF<double> fmt("cbf");
 
     QcepImageData<double> *img = new QcepImageData<double>(QcepSettingsSaverWPtr(), 1024,1024);
 
@@ -304,8 +346,53 @@ void QtestceplibMainWindow::doTestCBFLibrary()
 
     printMessage(tr("Image Dimensions [%1,%2]").arg(dimension[0]).arg(dimension[1]));
 
-    fclose(f);
+    status = CBF_CHECK(cbf_rewind_datablock(ch));
+
+    if (CBF_CHECK(cbf_find_tag(ch, "_array_data.data")) == 0) {
+      qint32 *array;
+      int binary_id, elsigned, elunsigned;
+      size_t elements,elements_read, elsize;
+      int minelement, maxelement;
+      unsigned int cifcompression;
+      int realarray;
+      const char *byteorder;
+      size_t dim1, dim2, dim3, padding;
+
+      status = CBF_CHECK(cbf_get_integerarrayparameters_wdims_fs(
+                                                   ch, &cifcompression,
+                                                   &binary_id, &elsize, &elsigned, &elunsigned,
+                                                   &elements, &minelement, &maxelement,
+                                                   &byteorder, &dim1, &dim2, &dim3, &padding));
+
+      printMessage(tr("elsize %1, dim1 %2, dim2 %3, dim3 %4").arg(elsize).arg(dim1).arg(dim2).arg(dim3));
+
+      array = new qint32[dim1*dim2];
+
+      if (status == 0) {
+        status = CBF_CHECK(cbf_get_integerarray(ch, &binary_id,
+                                                array,
+                                                sizeof(qint32), 1, elements, &elements_read));
+
+        if (status == 0) {
+          printMessage(tr("%1 elements read").arg(elements_read));
+
+          for (int y=0; y<10; y++) {
+            QString msg="[";
+            for (int x=0; x<9; x++) {
+              msg += tr("%1, ").arg(array[y*dim1+x]);
+            }
+            msg += tr("%1]").arg(array[y*dim1+9]);
+            printMessage(msg);
+          }
+        }
+      }
+
+      delete [] array;
+    }
+
+//    fclose(f);
 
     defCBFPath=theFile;
   }
 }
+

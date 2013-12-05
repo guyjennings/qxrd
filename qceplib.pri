@@ -26,6 +26,7 @@ SOURCES += \
   $${PWD}/qcepimagedataformat.cpp \
   $${PWD}/qcepimagedataformattiff.cpp \
   $${PWD}/qcepimagedataformatmar345.cpp \
+  $${PWD}/qcepimagedataformatcbf.cpp \
   $${PWD}/qcepobjectnamer.cpp \
 #  $${PWD}/qspecserver.cpp
   $${PWD}/qceppropertyvalue.cpp \
@@ -52,6 +53,7 @@ HEADERS += \
   $${PWD}/qcepimagedataformattiff.h \
   $${PWD}/qcepimagedataformatmar345.h \
   $${PWD}/qcepimagedataformatmar345-ptr.h \
+  $${PWD}/qcepimagedataformatcbf.h \
   $${PWD}/qcepobjectnamer.h \
 #  $${PWD}/qspecserver.h \
 #  $${PWD}/spec_server.h

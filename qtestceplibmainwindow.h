@@ -31,7 +31,9 @@ public slots:
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
 
+  void doLoadImage();
   void doLoadTIFFImage();
+  void doLoadCBFImage();
 
   void doTestHDF5Library();
   void doTestHDF5SlabOutput();
