@@ -11,7 +11,6 @@ include("qwt-6.1.pri")
 include("qceplib.pri")
 include("qt-hdf5.pri")
 include("qt-nexus.pri")
-include("qt-cbf.pri")
 
 SOURCES += \
     qtestceplibmainwindow.cpp \

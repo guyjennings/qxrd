@@ -8,6 +8,8 @@ macx {
   LIBS += -ltiff
 }
 
+include("qt-cbf.pri")
+
 INCLUDEPATH += $${PWD}
 
 SOURCES += \
