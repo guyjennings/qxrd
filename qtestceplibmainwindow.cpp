@@ -6,7 +6,11 @@
 #include "qcepimagedataformatcbf.h"
 #include "qcepimagedata.h"
 #include "hdf5.h"
+
+#ifdef HAVE_NEXUS
 #include "napi.h"
+#endif
+
 #include "cbf.h"
 
 static QcepImageDataFormatTiff<quint16> rawfmt("raw");
@@ -251,6 +255,7 @@ void QtestceplibMainWindow::doTestHDF5SlabOutput()
 
 void QtestceplibMainWindow::doTestNexusLibrary()
 {
+#ifdef HAVE_NEXUS
   QString theFile = QFileDialog::getOpenFileName(
         this, "Read Nexus File...", defNexusPath);
 
@@ -263,6 +268,7 @@ void QtestceplibMainWindow::doTestNexusLibrary()
 
     defNexusPath=theFile;
   }
+#endif
 }
 
 int QtestceplibMainWindow::cbfCheck(int status,const char *file, int line)
@@ -346,6 +352,7 @@ void QtestceplibMainWindow::doTestCBFLibrary()
 
     printMessage(tr("Image Dimensions [%1,%2]").arg(dimension[0]).arg(dimension[1]));
 
+<<<<<<< HEAD
     status = CBF_CHECK(cbf_rewind_datablock(ch));
 
     if (CBF_CHECK(cbf_find_tag(ch, "_array_data.data")) == 0) {
@@ -390,6 +397,8 @@ void QtestceplibMainWindow::doTestCBFLibrary()
       delete [] array;
     }
 
+=======
+>>>>>>> 74c125de8f3d6f552d01a13f55525839d7888ecc
 //    fclose(f);
 
     defCBFPath=theFile;

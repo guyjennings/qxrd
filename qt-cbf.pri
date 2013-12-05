@@ -16,7 +16,9 @@ macx {
   }
 
   DEFINES += CBF_NO_REGEX
+#  DEFINES += CBF_USE_ULP
 } else:unix {
+  INCLUDEPATH += /usr/include/cbf/
   LIBS += -lcbf
 }
 
@@ -36,8 +38,6 @@ macx|win32 {
     $${CBFINCL}/cbf_copy.h \
     $${CBFINCL}/cbf_file.h \
     $${CBFINCL}/cbf_getopt.h \
-    $${CBFINCL}/cbf_hdf5.h \
-    $${CBFINCL}/cbf_hdf5_filter.h \
     $${CBFINCL}/cbf_lex.h \
     $${CBFINCL}/cbf_nibble_offset.h \
     $${CBFINCL}/cbf_packed.h \
@@ -53,7 +53,6 @@ macx|win32 {
     $${CBFINCL}/cbf_write.h \
     $${CBFINCL}/cbf_write_binary.h \
     $${CBFINCL}/cbf_ws.h \
-    $${CBFINCL}/cbff.h \
     $${CBFINCL}/global.h \
     $${CBFINCL}/md5.h
 
@@ -70,8 +69,6 @@ macx|win32 {
     $${CBFBASE}/cbf_copy.c \
     $${CBFBASE}/cbf_file.c \
     $${CBFBASE}/cbf_getopt.c \
-    $${CBFBASE}/cbf_hdf5.c \
-    $${CBFBASE}/cbf_hdf5_filter.c \
     $${CBFBASE}/cbf_lex.c \
     $${CBFBASE}/cbf_nibble_offset.c \
     $${CBFBASE}/cbf_packed.c \
@@ -87,8 +84,19 @@ macx|win32 {
     $${CBFBASE}/cbf_write.c \
     $${CBFBASE}/cbf_write_binary.c \
     $${CBFBASE}/cbf_ws.c \
-    $${CBFBASE}/cbff.c \
     $${CBFBASE}/md5c.c
 
 
+}
+
+macx {
+  HEADERS += \
+    $${CBFINCL}/cbf_hdf5.h \
+    $${CBFINCL}/cbf_hdf5_filter.h \
+    $${CBFINCL}/cbff.h
+
+  SOURCES += \
+    $${CBFBASE}/cbf_hdf5.c \
+    $${CBFBASE}/cbf_hdf5_filter.c \
+    $${CBFBASE}/cbff.c
 }
