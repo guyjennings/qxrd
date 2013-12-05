@@ -99,6 +99,7 @@ include("../qwt-5.2.pri")
 #include("../qceplib.pri")
 include("qxrd.levmar.pri")
 include(submodules/qceplib/qceplib.pri)
+include(submodules/qceplib/qt-hdf5.pri)
 
 INCLUDEPATH += submodules/qceplib
 
@@ -120,7 +121,8 @@ HEADERS += \
     qxrdobjectnamer.h \
     qxrduserscriptdialog.h \
     qxrdsynchronizedacquisitiondialogsettings.h \
-    qxrdsynchronizedacquisitionplotsettings.h
+    qxrdsynchronizedacquisitionplotsettings.h \
+    qxrdimagedataformatcbf.h
 
 SOURCES += \
     submodules/qceplib/qspecserver.cpp \
@@ -136,7 +138,8 @@ SOURCES += \
     qxrdobjectnamer.cpp \
     qxrduserscriptdialog.cpp \
     qxrdsynchronizedacquisitiondialogsettings.cpp \
-    qxrdsynchronizedacquisitionplotsettings.cpp
+    qxrdsynchronizedacquisitionplotsettings.cpp \
+    qxrdimagedataformatcbf.cpp
 
 OTHER_FILES += testImage.js
 
