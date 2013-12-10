@@ -21,15 +21,15 @@ QcepImageDataFormat<T>* QcepImageDataFormatCBF<T>::canLoadFile(QString path)
   QcepImageDataFormat<T>* res = NULL;
 
   if (file) {
-    cbf_handle ch;
+    char header[60];
 
-    cbf_make_handle(&ch);
-
-    if (cbf_read_widefile(ch, file, MSG_DIGEST) == 0) {
-      res = this;
+    if (fread(&header, 60, sizeof(char), file)) {
+      if (strncmp(header, "###CBF: VERSION", 15) == 0) {
+        res = this;
+      }
     }
 
-    cbf_free_handle(ch);
+    fclose(file);
   }
 
   return res;
