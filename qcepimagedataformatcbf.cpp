@@ -101,6 +101,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatCBF<T>::loadFile(QString path, QcepIm
 template <typename T>
 QcepImageDataFormat<T>* QcepImageDataFormatCBF<T>::saveFile(QString path, QcepImageData<T> *img, int canOverwrite)
 {
+  return NULL;
 }
 
 template class QcepImageDataFormatCBF<unsigned short>;
