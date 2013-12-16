@@ -8,7 +8,8 @@ class QcepPropertyValue
 {
 public:
   explicit QcepPropertyValue(QObject *parent = 0);
-  
+  virtual ~QcepPropertyValue();
+
 signals:
   
 public slots:

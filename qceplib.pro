@@ -1,7 +1,7 @@
 CONFIG   += qt
-QT       += core gui script network opengl svg
+QT       += core gui script network opengl svg concurrent
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = qceplib
 TEMPLATE = app
