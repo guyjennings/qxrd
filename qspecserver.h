@@ -50,6 +50,7 @@ private:
   quint32 swapUInt32(quint32 val);
   qint32 condSwapInt32(qint32 val);
   quint32 condSwapUInt32(quint32 val);
+  void init_svr_head(struct svr_head *h);
 
 protected:
   virtual QVariant readProperty(QString name);

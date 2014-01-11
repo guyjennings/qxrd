@@ -18,6 +18,9 @@ QSpecServer::QSpecServer(QcepExperimentWPtr doc, QString name)
     m_Socket(NULL),
     m_ReplyHeadSent(0)
 {
+  init_svr_head(&m_Packet);
+  init_svr_head(&m_Reply);
+
   connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));
 }
 
@@ -567,7 +570,8 @@ void QSpecServer::handle_hello()
   m_Reply.cmd = condSwapInt32(SV_HELLO_REPLY);
   m_Reply.type= condSwapInt32(SV_STRING);
 
-  strcpy((char*) &m_Reply.name, qPrintable(m_ServerName));
+  strncpy((char*) &m_Reply.name, qPrintable(m_ServerName), sizeof(m_Reply.name)-1);
+
   m_ReplyData.append(m_ServerName);
   m_ReplyData.append('\0');
   m_Reply.len = condSwapInt32(m_ReplyData.size());
@@ -752,4 +756,25 @@ void QSpecServer::replyFromError(QScriptValue value)
 QVariant QSpecServer::readProperty(QString /*name*/)
 {
   return QVariant();
+}
+
+void QSpecServer::init_svr_head(svr_head *h)
+{
+  if (h) {
+    h->magic = SV_SPEC_MAGIC;
+    h->vers  = 4;
+    h->size  = 0;
+    h->sn    = 0;
+    h->sec   = 0;
+    h->usec  = 0;
+
+    h->cmd   = 0;
+    h->type  = SV_ERROR;
+    h->rows  = 0;
+    h->cols  = 0;
+    h->len   = 0;
+    h->err   = 0;
+    h->flags = 0;
+    strncpy(h->name, "", 2);
+  }
 }
