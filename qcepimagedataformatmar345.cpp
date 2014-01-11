@@ -155,7 +155,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::readMar345Header(FILE *fil
 
   while (fgets(buf, 64, file)) {
     fpos += 64;
-    fseek(file, fpos, SEEK_SET);
+    int res = fseek(file, fpos, SEEK_SET);
 
     if (strstr(buf, "END OF HEADER")) {
       break;
@@ -172,11 +172,16 @@ QcepImageDataFormat<T>* QcepImageDataFormatMar345<T>::readMar345Header(FILE *fil
 
   if (n32) {
 //     printf("%d overflow pixels\n", n32);
+    int res;
 
     if (mar345) {
-      fseek(file, 4096, SEEK_SET);
+      res = fseek(file, 4096, SEEK_SET);
     } else {
-      fseek(file, 2*nx, SEEK_SET);
+      res = fseek(file, 2*nx, SEEK_SET);
+    }
+
+    if (res < 0) {
+      printf("ERROR> Cannot seek when reading MAR345 file\n");
     }
 
     T *p = img->data();

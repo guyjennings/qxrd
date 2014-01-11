@@ -23,7 +23,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatCBF<T>::canLoadFile(QString path)
   if (file) {
     char header[60];
 
-    if (fread(&header, 60, sizeof(char), file)) {
+    if (fread(&header, 60, sizeof(char), file) >= (15*sizeof(char))) {
       if (strncmp(header, "###CBF: VERSION", 15) == 0) {
         res = this;
       }

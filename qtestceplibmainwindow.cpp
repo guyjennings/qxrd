@@ -238,7 +238,7 @@ void QtestceplibMainWindow::doTestHDF5SlabOutput()
           offset[1] = j*32;
           offset[2] = k*32;
 
-          fprintf(stderr, "Offset %d,%d,%d\n", offset[0], offset[1], offset[2]);
+          fprintf(stderr, "Offset %ld,%ld,%ld\n", (long) offset[0], (long) offset[1], (long) offset[2]);
 
           H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, offset, stride, count, block);
 
