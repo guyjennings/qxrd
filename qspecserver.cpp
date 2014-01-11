@@ -1,17 +1,17 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "qxrddebug.h"
+#include "qcepdebug.h"
 #include "qspecserver.h"
-#include "qxrdserverthread.h"
+//#include "qxrdserverthread.h"
 #include <QTcpSocket>
 #include <QTextStream>
 #include <QVariant>
 #include <QDateTime>
 #include <QTime>
 
-#include "qxrdexperiment.h"
+#include "qcepexperiment.h"
 
-QSpecServer::QSpecServer(QxrdExperimentWPtr doc, QString name)
+QSpecServer::QSpecServer(QcepExperimentWPtr doc, QString name)
   : QTcpServer(NULL),
     m_Experiment(doc),
     m_ServerName(name),
@@ -40,7 +40,7 @@ QSpecServer::startServer(QHostAddress a, int p)
   }
 
   if (!listen(a, p)) {
-    QxrdExperimentPtr exp(m_Experiment);
+    QcepExperimentPtr exp(m_Experiment);
 
     if (exp) {
       exp->criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy of qxrd running already?")
@@ -60,7 +60,7 @@ QSpecServer::stopServer()
 void
 QSpecServer::printMessage(QString msg, QDateTime ts)
 {
-  QxrdExperimentPtr exp(m_Experiment);
+  QcepExperimentPtr exp(m_Experiment);
 
   if (exp) {
     exp->printMessage(msg, ts);

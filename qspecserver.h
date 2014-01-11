@@ -14,7 +14,7 @@
 #include <QDateTime>
 #include <QTcpSocket>
 
-#include "qxrdexperiment-ptr.h"
+#include "qcepexperiment-ptr.h"
 
 /**
   QSpecServer implements a remote control interface to the
@@ -26,7 +26,7 @@ class QSpecServer : public QTcpServer
   Q_OBJECT
 
 public:
-  QSpecServer(QxrdExperimentWPtr doc, QString name);
+  QSpecServer(QcepExperimentWPtr doc, QString name);
   virtual ~QSpecServer();
 
 public:
@@ -76,7 +76,7 @@ protected:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 private:
-  QxrdExperimentWPtr   m_Experiment;
+  QcepExperimentWPtr   m_Experiment;
   QString              m_ServerName;
   QTcpSocket          *m_Socket;
   int                  m_SwapBytes;

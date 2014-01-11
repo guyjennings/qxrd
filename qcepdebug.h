@@ -15,7 +15,8 @@ enum {
   DEBUG_CONSTRUCTORS       = (DEBUG_DISPLAY<<1),
   DEBUG_IMAGE_CONSTRUCTORS = (DEBUG_CONSTRUCTORS<<1),
   DEBUG_LOCKING            = (DEBUG_IMAGE_CONSTRUCTORS<<1),
-  LAST_CEP_DEBUG           = DEBUG_LOCKING
+  DEBUG_SERVER             = (DEBUG_LOCKING<<1),
+  LAST_CEP_DEBUG           = DEBUG_SERVER
 };
 
 class QcepDebugDictionary : public QObject {
