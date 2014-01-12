@@ -16,6 +16,7 @@ QSpecServer::QSpecServer(QcepExperimentWPtr doc, QString name)
     m_Experiment(doc),
     m_ServerName(name),
     m_Socket(NULL),
+    m_SwapBytes(0),
     m_ReplyHeadSent(0)
 {
   init_svr_head(&m_Packet);
