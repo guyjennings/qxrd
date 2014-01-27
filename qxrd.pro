@@ -77,8 +77,8 @@ tarball.commands += \
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/source/tiff-3.8.2/libtiff/*.{c,h,def} \
                       -t $${TARGET}-$${VERSION}/source/tiff-3.8.2/libtiff &&
-tarball.commands += \
-        $(COPY_FILE)  $${PWD}/source/submodules/qceplib/*.{cpp,h} \
+tarball.commands += \ 
+        $(COPY_FILE)  $${PWD}/source/submodules/qceplib/*.{pro,pri,cpp,h} \
                       -t $${TARGET}-$${VERSION}/source/submodules/qceplib &&
 tarball.commands += \
         $(COPY_FILE)  $${PWD}/plugins/plugins.pro \
