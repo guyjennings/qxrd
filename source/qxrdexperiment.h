@@ -38,8 +38,9 @@
 #include "qxrdobjectnamer.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdintegrator-ptr.h"
+#include "qcepexperiment.h"
 
-class QxrdExperiment : public QObject
+class QxrdExperiment : public QcepExperiment
 {
   Q_OBJECT
 

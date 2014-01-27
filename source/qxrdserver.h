@@ -5,6 +5,7 @@
 #include "qcepproperty.h"
 #include "qspecserver.h"
 #include "qxrdsettingssaver-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 class QxrdServer : public QSpecServer
 {

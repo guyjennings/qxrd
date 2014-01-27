@@ -8,6 +8,7 @@
 #include "qxrdapplication.h"
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdsettingssaver.h"
+#include "qxrdexperiment.h"
 
 QxrdServer::QxrdServer(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
   QSpecServer(doc, name),

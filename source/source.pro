@@ -105,7 +105,7 @@ INCLUDEPATH += submodules/qceplib
 
 # include("qxrd-cuda.pri")
 HEADERS += \
-    submodules/qceplib/qspecserver.h \
+#    submodules/qceplib/qspecserver.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
     qxrddetector.h \
@@ -125,7 +125,7 @@ HEADERS += \
     qxrdimagedataformatcbf.h
 
 SOURCES += \
-    submodules/qceplib/qspecserver.cpp \
+#    submodules/qceplib/qspecserver.cpp \
     qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
     qxrddetector.cpp \

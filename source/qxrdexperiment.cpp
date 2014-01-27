@@ -30,7 +30,7 @@
 QxrdExperiment::QxrdExperiment(
     QString path,
     QxrdApplicationWPtr app) :
-  QObject(NULL),
+  QcepExperiment(NULL),
   m_ObjectNamer(this, "experiment"),
   m_Application(app),
   m_ExperimentThread(),
