@@ -21,6 +21,8 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  desktop-file-utils qt4 >= %{qtversion}, qt4-x11 qt4-devel 
 BuildRequires:  libtiff-devel
+BuildRequires:  CBFlib-devel
+BuildRequires:  hdf5-devel
 #BuildRequires:  epics-base-devel, epics-base, acqiris
 Requires:       qt4 >= %{qtversion}, qt4-x11, libtiff
 #Requires:       epics-base, acqiris
