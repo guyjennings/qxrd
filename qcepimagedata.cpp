@@ -618,7 +618,7 @@ void QcepImageData<T>::subtractDark(const QSharedPointer< QcepImageData<T2> > da
   //             nres, ndrk, npixels, ratio);
 
   double *result = this->data();
-  double *dk     = dark->data();
+  T2     *dk     = dark->data();
   double avgraw  = 0;
   //      double avgdark = 0;
 
@@ -640,3 +640,9 @@ template class QcepImageData<short>;
 template class QcepImageData<unsigned int>;
 template class QcepImageData<int>;
 template class QcepImageData<double>;
+
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<unsigned short> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<short> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<unsigned int> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<int> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<double> > dark);
