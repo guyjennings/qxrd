@@ -115,6 +115,8 @@ public:
   QCEP_BOOLEAN_PROPERTY(Used)
 
   public slots:
+    void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+
     virtual double getImageData(int x, int y) const = 0;
     virtual QVector<double> getImageData(int x0, int y0, int x1, int y1) const = 0;
 
@@ -206,6 +208,9 @@ public:
 
 //  template <typename T2>
 //  void copyImage(QSharedPointer< QcepImageData<T2> > dest);
+
+  template <typename T2>
+  void subtractDark(const QSharedPointer< QcepImageData<T2> > dark);
 
   void calculateRange();
   void calculateRangeInCircle();

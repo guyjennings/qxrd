@@ -77,6 +77,17 @@ QcepImageDataBase::~QcepImageDataBase()
   //  allocCount--;
 }
 
+void QcepImageDataBase::printMessage(QString msg, QDateTime ts)
+{
+  QcepSettingsSaverPtr s(m_Saver);
+
+  if (s) {
+    s->printMessage(msg, ts);
+  } else {
+    printf(qPrintable(msg));
+  }
+}
+
 double QcepImageDataBase::secondsSinceEpoch()
 {
 #if QT_VERSION >= 0x040700
@@ -289,13 +300,9 @@ QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, int width, int heig
     m_Default(def)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    QcepSettingsSaverPtr s(m_Saver);
-
-    if (s) {
-      s->printMessage(tr("QcepImageData<%1>::QcepImageData %2")
+    printMessage(tr("QcepImageData<%1>::QcepImageData %2")
                                 .arg(typeid(T).name())
                                 .HEXARG(this));
-    }
   }
 
   if (def) {
@@ -307,13 +314,9 @@ template <typename T>
 QcepImageData<T>::~QcepImageData()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    QcepSettingsSaverPtr s(m_Saver);
-
-    if (s) {
-      s->printMessage(tr("QcepImageData<%1>::~QcepImageData %2")
+    printMessage(tr("QcepImageData<%1>::~QcepImageData %2")
                       .arg(typeid(T).name())
                       .HEXARG(this));
-    }
   }
 }
 
@@ -569,6 +572,67 @@ bool QcepImageData<T>::readImage(QString path)
   } else {
     return false;
   }
+}
+
+template <typename T>
+template <typename T2>
+void QcepImageData<T>::subtractDark(const QSharedPointer< QcepImageData<T2> > dark)
+{
+  //  if (get_PerformDarkSubtraction()) {
+  if (dark->get_ExposureTime() != this->get_ExposureTime()) {
+    printMessage("Exposure times of acquired data and dark image are different, skipping");
+    return;
+  }
+
+  if (dark->get_Width() != this->get_Width() ||
+      dark->get_Height() != this->get_Height()) {
+    printMessage("Dimensions of acquired data and dark image are different, skipping");
+    return;
+  }
+
+  if (dark->get_CameraGain() != this->get_CameraGain()) {
+    printMessage("Gains of acquired data and dark image are different, skipping");
+    return;
+  }
+
+  //    if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
+  //          image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
+  //      printMessage("Acquired data is not a raw image, skipping background subtraction");
+  //      return;
+  //    }
+
+  QcepMutexLocker lock1(__FILE__, __LINE__, dark->mutex());
+  QcepMutexLocker lock2(__FILE__, __LINE__, this->mutex());
+
+  int height = this->get_Height();
+  int width  = this->get_Width();
+  int nres = this -> get_SummedExposures();
+  int ndrk = dark -> get_SummedExposures();
+  int npixels = width*height;
+
+  if (nres <= 0) nres = 1;
+
+  double ratio = ((double) nres)/((double) ndrk);
+
+  //      printf("Dark subtraction nres=%d, ndrk=%d, npixels=%d, ratio=%g\n",
+  //             nres, ndrk, npixels, ratio);
+
+  double *result = this->data();
+  double *dk     = dark->data();
+  double avgraw  = 0;
+  //      double avgdark = 0;
+
+  for (int i=0; i<npixels; i++) {
+    //        avgdark  += dk[i];
+    avgraw   += result[i];
+    result[i] = result[i]-ratio*dk[i];
+  }
+
+  //      set_AverageDark(avgdark/npixels/ndrk);
+//  set_AverageRaw(avgraw/npixels/nres);
+//  set_Average(get_AverageRaw() - get_AverageDark());
+
+  this -> set_DataType(SubtractedData);
 }
 
 template class QcepImageData<unsigned short>;
