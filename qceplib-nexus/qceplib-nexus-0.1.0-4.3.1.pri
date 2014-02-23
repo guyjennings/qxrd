@@ -9,23 +9,23 @@ macx {
   NEXUSHDR  = $${PWD}/nexus-4.3.1/include/
   NEXUSCONF = $${PWD}/nexus-4.3.1/Windows_extra/include/
 } else {
-  LIBS += -lNeXus
+  NEXUSSRC  = $${PWD}/nexus-4.3.1/src/
+  NEXUSHDR  = $${PWD}/nexus-4.3.1/include/
+  NEXUSCONF = $${PWD}/nexus-config/linux/
 }
 
-macx|win32 {
-  INCLUDEPATH += $${NEXUSHDR} $${NEXUSCONF}
+INCLUDEPATH += $${NEXUSHDR} $${NEXUSCONF}
 
-  DEFINES += HAVE_CONFIG_H=1
-  DEFINES += HAVE_HDF5
+DEFINES += HAVE_CONFIG_H=1
+DEFINES += HAVE_HDF5
 
-  HEADERS += \
+HEADERS += \
     $${NEXUSCONF}/nxconfig.h
 
-  SOURCES += \
+SOURCES += \
     $${NEXUSSRC}/napi5.c \
     $${NEXUSSRC}/napi.c \
     $${NEXUSSRC}/napiu.c \
     $${NEXUSSRC}/nxdataset.c \
     $${NEXUSSRC}/nxstack.c \
     $${NEXUSSRC}/stptok.c
-}

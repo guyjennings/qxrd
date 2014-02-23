@@ -211,7 +211,7 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
 {
   settings->setValue(name, v);
 
-  QVariant::Type typeId = v.type();
+//  QVariant::Type typeId = v.type();
   QString typeName = v.typeName();
 
   if (m_CustomSavers.contains(typeName)) {

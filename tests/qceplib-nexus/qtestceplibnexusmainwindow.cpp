@@ -5,9 +5,7 @@
 #include "qcepimagedata.h"
 #include "hdf5.h"
 
-#ifdef HAVE_NEXUS
 #include "napi.h"
-#endif
 
 QtestceplibNexusMainWindow::QtestceplibNexusMainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -214,7 +212,6 @@ void QtestceplibNexusMainWindow::doTestHDF5SlabOutput()
 
 void QtestceplibNexusMainWindow::doTestNexusLibrary()
 {
-#ifdef HAVE_NEXUS
   QString theFile = QFileDialog::getOpenFileName(
         this, "Read Nexus File...", defNexusPath);
 
@@ -227,5 +224,4 @@ void QtestceplibNexusMainWindow::doTestNexusLibrary()
 
     defNexusPath=theFile;
   }
-#endif
 }
