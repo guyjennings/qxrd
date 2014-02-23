@@ -5,6 +5,8 @@
 
 #include "qcepimagedataformat.h"
 
+#include <tiffio.h>
+
 template <typename T>
 class QcepImageDataFormatTiff : public QcepImageDataFormat<T>
 {
@@ -18,6 +20,9 @@ public:
   QcepImageDataFormatBase::Priority priority() const;
 
 private:
+  void setTiffMetaData(TIFF *tif, QcepImageData<T> *img);
+  void getTiffMetaData(TIFF *tif, QcepImageData<T> *img);
+
   T unpackSignedBitField(void *buffer, int bitsPerSample, int x, int fillOrder);
   T unpackUnsignedBitField(void *buffer, int bitsPerSample, int x, int fillOrder);
 };

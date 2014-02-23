@@ -1,5 +1,5 @@
-#ifndef QTESTCEPLIBMAINWINDOW_H
-#define QTESTCEPLIBMAINWINDOW_H
+#ifndef QTESTCEPLIBCOMBINEDMAINWINDOW_H
+#define QTESTCEPLIBCOMBINEDMAINWINDOW_H
 
 #include <QMainWindow>
 #include "qcepproperty.h"
@@ -7,16 +7,16 @@
 #include "qcepmatrix3x3property.h"
 
 namespace Ui {
-  class QtestceplibMainWindow;
+  class QtestceplibCombinedMainWindow;
 }
 
-class QtestceplibMainWindow : public QMainWindow
+class QtestceplibCombinedMainWindow : public QMainWindow
 {
   Q_OBJECT
   
 public:
-  explicit QtestceplibMainWindow(QWidget *parent = 0);
-  ~QtestceplibMainWindow();
+  explicit QtestceplibCombinedMainWindow(QWidget *parent = 0);
+  ~QtestceplibCombinedMainWindow();
   
 public slots:
   void doReadSettings();
@@ -46,7 +46,7 @@ public slots:
   void printMessage(QString msg);
 
 private:
-  Ui::QtestceplibMainWindow *ui;
+  Ui::QtestceplibCombinedMainWindow *ui;
   mutable QMutex m_Mutex;
 
 public:
@@ -75,4 +75,4 @@ public:
   QCEP_MATRIX3X3_PROPERTY(Mat3x3PropB)
 };
 
-#endif // QTESTCEPLIBMAINWINDOW_H
+#endif // QTESTCEPLIBCOMBINEDMAINWINDOW_H

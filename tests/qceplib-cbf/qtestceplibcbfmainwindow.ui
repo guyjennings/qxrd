@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QtestceplibCbfMainWindow</class>
+ <widget class="QMainWindow" name="QtestceplibCbfMainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Test ceplib CBF</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QPlainTextEdit" name="m_Messages">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="m_ActionReadSettings"/>
+    <addaction name="m_ActionWriteSettings"/>
+    <addaction name="m_ActionLoadImage"/>
+    <addaction name="m_ActionLoadCBFImage"/>
+    <addaction name="m_ActionTestCBF"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="m_ActionReadSettings">
+   <property name="text">
+    <string>Read Settings...</string>
+   </property>
+   <property name="toolTip">
+    <string>Read Settings</string>
+   </property>
+  </action>
+  <action name="m_ActionWriteSettings">
+   <property name="text">
+    <string>Write Settings...</string>
+   </property>
+   <property name="toolTip">
+    <string>Write Settings</string>
+   </property>
+  </action>
+  <action name="m_ActionTestCBF">
+   <property name="text">
+    <string>Test CBF Load Image...</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadImage">
+   <property name="text">
+    <string>Load Image...</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadCBFImage">
+   <property name="text">
+    <string>Load CBF Image...</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

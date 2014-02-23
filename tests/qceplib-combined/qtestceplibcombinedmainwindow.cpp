@@ -1,5 +1,5 @@
-#include "qtestceplibmainwindow.h"
-#include "ui_qtestceplibmainwindow.h"
+#include "qtestceplibcombinedmainwindow.h"
+#include "ui_qtestceplibcombinedmainwindow.h"
 #include <QFileDialog>
 #include "qcepmutexlocker.h"
 #include "qcepimagedataformattiff.h"
@@ -19,9 +19,9 @@ static QcepImageDataFormatTiff<short> maskfmt("mask");
 static QcepImageDataFormatTiff<double> dblfmt("double");
 static QcepImageDataFormatCBF<double> dblcbf("dblcbf");
 
-QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
+QtestceplibCombinedMainWindow::QtestceplibCombinedMainWindow(QWidget *parent) :
   QMainWindow(parent),
-  ui(new Ui::QtestceplibMainWindow),
+  ui(new Ui::QtestceplibCombinedMainWindow),
   m_Mutex(QMutex::Recursive),
   m_IntProp(QcepSettingsSaverWPtr(), this, "intProp", 42, "Integer Property"),
   m_DblProp(QcepSettingsSaverWPtr(), this, "dblProp", 42.0, "Double Property"),
@@ -49,19 +49,19 @@ QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   connect(ui->m_ActionTestCBF, SIGNAL(triggered()), this, SLOT(doTestCBFLibrary()));
 }
 
-QtestceplibMainWindow::~QtestceplibMainWindow()
+QtestceplibCombinedMainWindow::~QtestceplibCombinedMainWindow()
 {
   delete ui;
 }
 
-void QtestceplibMainWindow::printMessage(QString msg)
+void QtestceplibCombinedMainWindow::printMessage(QString msg)
 {
   ui->m_Messages->appendPlainText(msg);
 }
 
 QString defPath, defHDFPath, defNexusPath, defCBFPath;
 
-void QtestceplibMainWindow::doReadSettings()
+void QtestceplibCombinedMainWindow::doReadSettings()
 {
   QString theFile = QFileDialog::getOpenFileName(
         this, "Read Settings from...", defPath);
@@ -72,7 +72,7 @@ void QtestceplibMainWindow::doReadSettings()
   }
 }
 
-void QtestceplibMainWindow::doWriteSettings()
+void QtestceplibCombinedMainWindow::doWriteSettings()
 {
   QString theFile = QFileDialog::getSaveFileName(
         this, "Write Settings in...", defPath);
@@ -83,43 +83,43 @@ void QtestceplibMainWindow::doWriteSettings()
   }
 }
 
-void QtestceplibMainWindow::readSettings()
+void QtestceplibCombinedMainWindow::readSettings()
 {
 }
 
-void QtestceplibMainWindow::writeSettings()
+void QtestceplibCombinedMainWindow::writeSettings()
 {
 }
 
-void QtestceplibMainWindow::readSettings(QString filePath)
+void QtestceplibCombinedMainWindow::readSettings(QString filePath)
 {
   QSettings settings(filePath, QSettings::IniFormat);
 
   readSettings(&settings);
 }
 
-void QtestceplibMainWindow::writeSettings(QString filePath)
+void QtestceplibCombinedMainWindow::writeSettings(QString filePath)
 {
   QSettings settings(filePath, QSettings::IniFormat);
 
   writeSettings(&settings);
 }
 
-void QtestceplibMainWindow::readSettings(QSettings *settings)
+void QtestceplibCombinedMainWindow::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::readSettings(this, "qtestceplib", settings);
 }
 
-void QtestceplibMainWindow::writeSettings(QSettings *settings)
+void QtestceplibCombinedMainWindow::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, "qtestceplib", settings);
 }
 
-void QtestceplibMainWindow::doLoadImage()
+void QtestceplibCombinedMainWindow::doLoadImage()
 {
   QString theFile = QFileDialog::getOpenFileName(
         this, "Read Image from...", defPath);
@@ -138,7 +138,7 @@ void QtestceplibMainWindow::doLoadImage()
   }
 }
 
-void QtestceplibMainWindow::doLoadTIFFImage()
+void QtestceplibCombinedMainWindow::doLoadTIFFImage()
 {
   QString theFile = QFileDialog::getOpenFileName(
         this, "Read TIFF Image from...", defPath);
@@ -152,7 +152,7 @@ void QtestceplibMainWindow::doLoadTIFFImage()
   }
 }
 
-void QtestceplibMainWindow::doLoadCBFImage()
+void QtestceplibCombinedMainWindow::doLoadCBFImage()
 {
   QString theFile = QFileDialog::getOpenFileName(
         this, "Read CBF Image from...", defPath);
@@ -166,7 +166,7 @@ void QtestceplibMainWindow::doLoadCBFImage()
   }
 }
 
-void QtestceplibMainWindow::doTestHDF5Library()
+void QtestceplibCombinedMainWindow::doTestHDF5Library()
 {
   QString theFile = QFileDialog::getOpenFileName(
         this, "Read HDF5 File...", defHDFPath);
@@ -181,7 +181,7 @@ void QtestceplibMainWindow::doTestHDF5Library()
   }
 }
 
-void QtestceplibMainWindow::doTestHDF5SlabOutput()
+void QtestceplibCombinedMainWindow::doTestHDF5SlabOutput()
 {
   QString theFile = QFileDialog::getSaveFileName(
         this, "Save HDF Slab file...", defHDFPath);
@@ -253,7 +253,7 @@ void QtestceplibMainWindow::doTestHDF5SlabOutput()
   }
 }
 
-void QtestceplibMainWindow::doTestNexusLibrary()
+void QtestceplibCombinedMainWindow::doTestNexusLibrary()
 {
 #ifdef HAVE_NEXUS
   QString theFile = QFileDialog::getOpenFileName(
@@ -271,7 +271,7 @@ void QtestceplibMainWindow::doTestNexusLibrary()
 #endif
 }
 
-int QtestceplibMainWindow::cbfCheck(int status,const char *file, int line)
+int QtestceplibCombinedMainWindow::cbfCheck(int status,const char *file, int line)
 {
   if (status != 0) {
     printMessage(tr("CBF Library error %1 in %2:line %3").arg(status).arg(file).arg(line));
@@ -282,7 +282,7 @@ int QtestceplibMainWindow::cbfCheck(int status,const char *file, int line)
 
 #define CBF_CHECK(a) cbfCheck(a, __FILE__, __LINE__)
 
-void QtestceplibMainWindow::doTestCBFLibrary()
+void QtestceplibCombinedMainWindow::doTestCBFLibrary()
 {
   QString theFile = QFileDialog::getOpenFileName(
         this, "Read CBF File...", defCBFPath);

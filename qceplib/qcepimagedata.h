@@ -154,9 +154,6 @@ public:
   void copyProperties(QcepImageDataBase *dest);
   void copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src);
 
-  void setTiffMetaData(TIFF *tif);
-  void getTiffMetaData(TIFF *tif);
-
   void loadMetaData();
   void saveMetaData();
   void saveMetaData(QString name);

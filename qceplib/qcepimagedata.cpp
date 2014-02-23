@@ -176,16 +176,6 @@ void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src
   }
 }
 
-void QcepImageDataBase::setTiffMetaData(TIFF *tif)
-{
-  TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(get_FileName()));
-  TIFFSetField(tif, TIFFTAG_DATETIME, qPrintable(get_DateTime().toString("yyyy:MM:dd hh:mm:ss")));
-}
-
-void QcepImageDataBase::getTiffMetaData(TIFF * /*tif*/)
-{
-}
-
 void QcepImageDataBase::loadMetaData()
 {
 //  printf("QcepImageDataBase::loadMetaData for file %s\n", qPrintable(get_FileName()));

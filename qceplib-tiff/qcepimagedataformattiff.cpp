@@ -200,7 +200,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::loadFile(QString path, QcepI
         free(buffer);
       }
 
-      img -> getTiffMetaData(file);
+      getTiffMetaData(file, img);
 
       TIFFClose(file);
 
@@ -242,7 +242,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::saveFile(QString path, QcepI
       TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
       TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP));
 
-      img -> setTiffMetaData(tif);
+      setTiffMetaData(tif, img);
 
       QVector<float> buffvec(ncols);
       float* buffer = buffvec.data();
@@ -267,6 +267,18 @@ QcepImageDataFormat<T>* QcepImageDataFormatTiff<T>::saveFile(QString path, QcepI
   }
 
   return NULL;
+}
+
+template <typename T>
+void QcepImageDataFormatTiff<T>::setTiffMetaData(TIFF *tif, QcepImageData<T> *img)
+{
+  TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(img->get_FileName()));
+  TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(img->get_DateTime().toString("yyyy:MM:dd hh:mm:ss")));
+}
+
+template <typename T>
+void QcepImageDataFormatTiff<T>::getTiffMetaData(TIFF * /*tif*/, QcepImageData<T> * /*img*/)
+{
 }
 
 template class QcepImageDataFormatTiff<unsigned short>;
