@@ -1,5 +1,7 @@
 message(qceplib PWD = $${PWD})
 
+QT += widgets
+
 INCLUDEPATH += $${PWD}
 
 SOURCES += \

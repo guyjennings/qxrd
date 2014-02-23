@@ -3,6 +3,7 @@ TARGET   = qtestceplib-cbf
 DESTDIR  = ..
 
 include(../../qceplib.pri)
+include(../../qceplib-hdf5.pri)
 include(../../qceplib-cbf.pri)
 
 HEADERS += \

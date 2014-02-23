@@ -1,7 +1,7 @@
 #include "qcepdebug.h"
 #include "qcepimagedata.h"
 //#include "qxrdapplication.h"
-#include <tiffio.h>
+//#include <tiffio.h>
 
 #include <QSettings>
 #include <QFileInfo>
