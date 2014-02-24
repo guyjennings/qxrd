@@ -1,6 +1,8 @@
 message(qceplib-qwt PWD = $${PWD})
 
-QT += opengl printsupport svg concurrent
+greaterThan(QT_MAJOR_VERSION,4): QT += printsupport concurrent
+
+QT += opengl svg
 
 INCLUDEPATH += $${PWD}/qwt-6.1/src
 
