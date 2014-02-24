@@ -43,8 +43,6 @@
 #FORMS += \
 #    qtestceplibmainwindow.ui
 
-DEFINES += QCEPLIB_VERSION=0.1.0
-
 TEMPLATE = subdirs
 
 SUBDIRS  = tests

@@ -29,6 +29,9 @@ QtestceplibHdf5MainWindow::QtestceplibHdf5MainWindow(QWidget *parent) :
   connect(ui->m_ActionLoadImage, SIGNAL(triggered()), this, SLOT(doLoadImage()));
   connect(ui->m_ActionTestHDF, SIGNAL(triggered()), this, SLOT(doTestHDF5Library()));
   connect(ui->m_ActionTestHDFSlab, SIGNAL(triggered()), this, SLOT(doTestHDF5SlabOutput()));
+
+  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
+  ui->m_FileMenu->addAction(tr("HDF5 Version %1").arg(STR(QCEPLIB_HDF5_VERSION)));
 }
 
 QtestceplibHdf5MainWindow::~QtestceplibHdf5MainWindow()

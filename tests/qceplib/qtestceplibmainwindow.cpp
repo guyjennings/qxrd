@@ -26,6 +26,8 @@ QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   connect(ui->m_ActionReadSettings, SIGNAL(triggered()), this, SLOT(doReadSettings()));
   connect(ui->m_ActionWriteSettings, SIGNAL(triggered()), this, SLOT(doWriteSettings()));
   connect(ui->m_ActionLoadImage, SIGNAL(triggered()), this, SLOT(doLoadImage()));
+
+  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
 }
 
 QtestceplibMainWindow::~QtestceplibMainWindow()

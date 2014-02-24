@@ -36,10 +36,10 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>18</height>
+     <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
+   <widget class="QMenu" name="m_FileMenu">
     <property name="title">
      <string>File</string>
     </property>
@@ -47,7 +47,7 @@
     <addaction name="m_ActionWriteSettings"/>
     <addaction name="m_ActionLoadImage"/>
    </widget>
-   <addaction name="menuFile"/>
+   <addaction name="m_FileMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="m_ActionReadSettings">
@@ -77,6 +77,7 @@
    <class>QwtPlot</class>
    <extends>QFrame</extends>
    <header>qwt_plot.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

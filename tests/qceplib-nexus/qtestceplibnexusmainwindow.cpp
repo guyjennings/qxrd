@@ -32,6 +32,10 @@ QtestceplibNexusMainWindow::QtestceplibNexusMainWindow(QWidget *parent) :
   connect(ui->m_ActionTestHDF, SIGNAL(triggered()), this, SLOT(doTestHDF5Library()));
   connect(ui->m_ActionTestHDFSlab, SIGNAL(triggered()), this, SLOT(doTestHDF5SlabOutput()));
   connect(ui->m_ActionTestNexus, SIGNAL(triggered()), this, SLOT(doTestNexusLibrary()));
+
+  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
+  ui->m_FileMenu->addAction(tr("HDF5 Version %1").arg(STR(QCEPLIB_HDF5_VERSION)));
+  ui->m_FileMenu->addAction(tr("NeXus Version %1").arg(STR(QCEPLIB_NEXUS_VERSION)));
 }
 
 QtestceplibNexusMainWindow::~QtestceplibNexusMainWindow()

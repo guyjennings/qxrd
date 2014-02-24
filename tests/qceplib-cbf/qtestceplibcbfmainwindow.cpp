@@ -33,6 +33,9 @@ QtestceplibCbfMainWindow::QtestceplibCbfMainWindow(QWidget *parent) :
   connect(ui->m_ActionLoadImage, SIGNAL(triggered()), this, SLOT(doLoadImage()));
   connect(ui->m_ActionLoadCBFImage, SIGNAL(triggered()), this, SLOT(doLoadCBFImage()));
   connect(ui->m_ActionTestCBF, SIGNAL(triggered()), this, SLOT(doTestCBFLibrary()));
+
+  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
+  ui->m_FileMenu->addAction(tr("CBF Version %1").arg(STR(QCEPLIB_CBF_VERSION)));
 }
 
 QtestceplibCbfMainWindow::~QtestceplibCbfMainWindow()
