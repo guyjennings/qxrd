@@ -22,7 +22,6 @@
 #include <QAbstractButton>
 #include <QSettings>
 #include <QProgressBar>
-//#include <qwt_double_rect.h>
 #include <QLCDNumber>
 
 typedef void (CustomSettingsSaver)(const QVariant &val, QSettings *settings, QString name);

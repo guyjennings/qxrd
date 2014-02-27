@@ -7,9 +7,6 @@
 #include <QPointF>
 #include <QRectF>
 
-//#include "qcepdebug.h"
-//#include "qwt_double_rect.h"
-
 #define GUI_THREAD_CHECK Q_ASSERT(qApp && qApp ->thread() == QThread::currentThread())
 #define THREAD_CHECK     Q_ASSERT(QThread::currentThread() == thread())
 
