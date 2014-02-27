@@ -10,6 +10,7 @@
 #include <QSharedPointer>
 #include <QScriptEngine>
 #include <QScriptEngineDebugger>
+#include "qcepexperiment.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -39,7 +40,7 @@
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdintegrator-ptr.h"
 
-class QxrdExperiment : public QObject
+class QxrdExperiment : public QcepExperiment
 {
   Q_OBJECT
 

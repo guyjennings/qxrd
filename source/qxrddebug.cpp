@@ -16,7 +16,6 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_THREADS,      "Thread Initialization");
   setMessage(DEBUG_DELAY_ACQ,    "Delay Acquisition Startup");
   setMessage(DEBUG_BROWSER,      "File Browser Operations");
-  setMessage(DEBUG_SERVER,       "Server Commands");
   setMessage(DEBUG_ACQUIRETIME,  "Acquisition Timing Messages");
   setMessage(DEBUG_INTEGRATOR,   "Integrator Operation");
   setMessage(DEBUG_TRIGGER,      "Acquisition Triggering");

@@ -95,6 +95,7 @@ DISTFILES += qxrd.dox \
     tiffconfig/win32/tiffconf.h \
     tiffconfig/macx/tif_config.h \
     tiffconfig/macx/tiffconf.h
+
 include("../qwt-5.2.pri")
 #include("../qceplib.pri")
 include("qxrd.levmar.pri")
@@ -105,7 +106,7 @@ INCLUDEPATH += submodules/qceplib
 
 # include("qxrd-cuda.pri")
 HEADERS += \
-    submodules/qceplib/qspecserver.h \
+#    submodules/qceplib/qspecserver.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
     qxrddetector.h \
@@ -125,7 +126,7 @@ HEADERS += \
     qxrdimagedataformatcbf.h
 
 SOURCES += \
-    submodules/qceplib/qspecserver.cpp \
+#    submodules/qceplib/qspecserver.cpp \
     qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
     qxrddetector.cpp \
