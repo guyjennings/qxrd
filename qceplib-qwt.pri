@@ -1,3 +1,5 @@
-DEFINES += QCEPLIB_QWT_VERSION=\"6.1.0\"
+QCEPLIB_QWT_VERSION = "6.1.0"
 
-include(qceplib-qwt/qceplib-qwt-0.1.0-6.1.0.pri)
+DEFINES += QCEPLIB_QWT_VERSION=\"$${QCEPLIB_QWT_VERSION}\"
+
+include(qceplib-qwt/qceplib-qwt-$${QCEPLIB_QWT_VERSION}.pri)

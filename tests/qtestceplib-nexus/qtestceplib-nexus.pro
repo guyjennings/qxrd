@@ -1,8 +1,8 @@
 TEMPLATE = app
 TARGET   = qtestceplib-nexus
-DESTDIR  = ..
+DESTDIR  = ../bin/
 
-include(../../qceplib.pri)
+include(../../qceplib-base.pri)
 include(../../qceplib-hdf5.pri)
 include(../../qceplib-nexus.pri)
 

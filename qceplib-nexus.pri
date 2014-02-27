@@ -1,3 +1,6 @@
-DEFINES += QCEPLIB_NEXUS_VERSION=\"4.3.1\"
+QCEPLIB_NEXUS_VERSION = "4.3.1"
 
-include(qceplib-nexus/qceplib-nexus-0.1.0-4.3.1.pri)
+DEFINES += QCEPLIB_NEXUS_VERSION=\"$${QCEPLIB_NEXUS_VERSION}\"
+
+include(qceplib-nexus/qceplib-nexus-$${QCEPLIB_NEXUS_VERSION}.pri)
+

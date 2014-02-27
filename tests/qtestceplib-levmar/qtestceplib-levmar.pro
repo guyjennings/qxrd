@@ -1,8 +1,8 @@
 TEMPLATE = app
 TARGET   = qtestceplib-levmar
-DESTDIR  = ..
+DESTDIR  = ../bin/
 
-include(../../qceplib.pri)
+include(../../qceplib-base.pri)
 include(../../qceplib-levmar.pri)
 
 HEADERS += \

@@ -1,13 +1,15 @@
 TARGET  = qceplib
 
-VERSION = 0.1.1
+include(qceplib-version.pri)
+
+VERSION = $${QCEPLIB_VERSION}
 
 TEMPLATE = subdirs
 
 SUBDIRS  = tests
 
 OTHER_FILES += \
-    qceplib.pri \
+    qceplib-base.pri \
     qceplib-cbf.pri \
     qceplib-mar345.pri \
     qceplib-specserver.pri \

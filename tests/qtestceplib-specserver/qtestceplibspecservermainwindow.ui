@@ -30,7 +30,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -40,12 +40,6 @@
     <addaction name="m_ActionReadSettings"/>
     <addaction name="m_ActionWriteSettings"/>
     <addaction name="m_ActionLoadImage"/>
-    <addaction name="m_ActionLoadTIFFImage"/>
-    <addaction name="m_ActionLoadCBFImage"/>
-    <addaction name="m_ActionTestHDF"/>
-    <addaction name="m_ActionTestNexus"/>
-    <addaction name="m_ActionTestHDFSlab"/>
-    <addaction name="m_ActionTestCBF"/>
    </widget>
    <addaction name="m_FileMenu"/>
   </widget>
@@ -66,39 +60,9 @@
     <string>Write Settings</string>
    </property>
   </action>
-  <action name="m_ActionLoadTIFFImage">
-   <property name="text">
-    <string>Load TIFF Image...</string>
-   </property>
-  </action>
-  <action name="m_ActionTestHDF">
-   <property name="text">
-    <string>Test HDF Library</string>
-   </property>
-  </action>
-  <action name="m_ActionTestNexus">
-   <property name="text">
-    <string>Test Nexus Library</string>
-   </property>
-  </action>
-  <action name="m_ActionTestHDFSlab">
-   <property name="text">
-    <string>Test HDF Slab Output</string>
-   </property>
-  </action>
-  <action name="m_ActionTestCBF">
-   <property name="text">
-    <string>Test CBF Load Image...</string>
-   </property>
-  </action>
   <action name="m_ActionLoadImage">
    <property name="text">
     <string>Load Image...</string>
-   </property>
-  </action>
-  <action name="m_ActionLoadCBFImage">
-   <property name="text">
-    <string>Load CBF Image...</string>
    </property>
   </action>
  </widget>

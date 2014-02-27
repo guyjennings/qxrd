@@ -1,4 +1,4 @@
-message(qceplib PWD = $${PWD})
+message(qceplib PWD = $${PWD} VERSION = $${VERSION})
 
 greaterThan(QT_MAJOR_VERSION,4): QT += widgets
 

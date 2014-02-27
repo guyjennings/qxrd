@@ -1,14 +1,14 @@
 TEMPLATE = subdirs
 
 SUBDIRS = \
-    qceplib \
-    qceplib-cbf \
-    qceplib-combined \
-    qceplib-hdf5 \
-    qceplib-mar345 \
-    qceplib-nexus \
-    qceplib-qwt \
-    qceplib-specserver \
-    qceplib-tiff \
-    qceplib-levmar
+    qtestceplib-base \
+    qtestceplib-cbf \
+    qtestceplib-combined \
+    qtestceplib-hdf5 \
+    qtestceplib-mar345 \
+    qtestceplib-nexus \
+    qtestceplib-qwt \
+    qtestceplib-specserver \
+    qtestceplib-tiff \
+    qtestceplib-levmar
 

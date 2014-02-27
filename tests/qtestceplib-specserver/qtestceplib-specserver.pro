@@ -1,8 +1,8 @@
 TEMPLATE = app
 TARGET   = qtestceplib-specserver
-DESTDIR  = ..
+DESTDIR  = ../bin/
 
-include(../../qceplib.pri)
+include(../../qceplib-base.pri)
 include(../../qceplib-specserver.pri)
 
 HEADERS += \

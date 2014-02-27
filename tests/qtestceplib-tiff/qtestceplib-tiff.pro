@@ -1,8 +1,8 @@
 TEMPLATE = app
 TARGET   = qtestceplib-tiff
-DESTDIR  = ..
+DESTDIR  = ../bin/
 
-include(../../qceplib.pri)
+include(../../qceplib-base.pri)
 include(../../qceplib-tiff.pri)
 
 HEADERS += \

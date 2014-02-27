@@ -1,8 +1,8 @@
 TEMPLATE = app
 TARGET   = qtestceplib-qwt
-DESTDIR  = ..
+DESTDIR  = ../bin/
 
-include(../../qceplib.pri)
+include(../../qceplib-base.pri)
 include(../../qceplib-qwt.pri)
 
 HEADERS += \

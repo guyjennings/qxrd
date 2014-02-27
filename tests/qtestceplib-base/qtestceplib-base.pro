@@ -1,8 +1,8 @@
 TEMPLATE = app
-TARGET   = qtestceplib
-DESTDIR  = ..
+TARGET   = qtestceplib-base
+DESTDIR  = ../bin/
 
-include(../../qceplib.pri)
+include(../../qceplib-base.pri)
 
 HEADERS += \
     qtestceplibmainwindow.h
