@@ -1,7 +1,7 @@
 #include "qxrdpowderfitidentifypage.h"
 #include "qwt_symbol.h"
-#include "qwt_double_rect.h"
 #include "qwt_plot_marker.h"
+#include "qwt_picker_machine.h"
 #include "levmar.h"
 #include "qxrdringsetsampleddata.h"
 #include "qxrdringsampleddata.h"
@@ -26,9 +26,9 @@ QxrdPowderFitIdentifyPage::QxrdPowderFitIdentifyPage(QxrdSettingsSaverWPtr saver
   m_Picker = new QwtPlotPicker(m_ImagePlot->canvas());
   m_Picker -> setEnabled(true);
   m_Picker -> setTrackerMode(QwtPicker::AlwaysOn);
-  m_Picker -> setSelectionFlags(QwtPicker::PointSelection);
+  m_Picker -> setStateMachine(new QwtPickerDragPointMachine());
 
-  connect(m_Picker, SIGNAL(selected(QwtDoublePoint)), this, SLOT(pointClicked(QwtDoublePoint)));
+  connect(m_Picker, SIGNAL(selected(QPointF)), this, SLOT(pointClicked(QPointF)));
   connect(m_IdNextRingButton, SIGNAL(clicked()), this, SLOT(selectNextRing()));
   connect(m_IdPrevRingButton, SIGNAL(clicked()), this, SLOT(selectPrevRing()));
   connect(m_IdAddRingButton, SIGNAL(clicked()), this, SLOT(appendRing()));
@@ -49,7 +49,7 @@ void QxrdPowderFitIdentifyPage::selectIdentifyPage()
 
     if (p) {
       for (int j=0; j<p->count(); j++) {
-        QwtDoublePoint pt = p->point(j);
+        QPointF pt = p->point(j);
         appendGraphMarker(i, pt);
       }
     }
@@ -58,7 +58,7 @@ void QxrdPowderFitIdentifyPage::selectIdentifyPage()
   m_ImagePlot -> replot();
 }
 
-void QxrdPowderFitIdentifyPage::pointClicked(QwtDoublePoint pt)
+void QxrdPowderFitIdentifyPage::pointClicked(QPointF pt)
 {
   appendOutputString(tr("Point Clicked (%1, %2)").arg(pt.x()).arg(pt.y()));
 
@@ -102,7 +102,7 @@ void QxrdPowderFitIdentifyPage::selectPrevRing()
   selectRing(get_IdCurrentRing() - 1);
 }
 
-void QxrdPowderFitIdentifyPage::appendPoint(QwtDoublePoint pt)
+void QxrdPowderFitIdentifyPage::appendPoint(QPointF pt)
 {
   QxrdRingSampledDataPtr p = m_SampledData -> ring(get_IdCurrentRing());
 
@@ -145,7 +145,7 @@ void QxrdPowderFitIdentifyPage::idPerformFit()
 
     if (p) {
       for (int j=0; j<p->count(); j++) {
-        QwtDoublePoint pt = p->point(j);
+        QPointF pt = p->point(j);
         appendOutputString(tr("%1\t%2\t%3").arg(i).arg(pt.x()).arg(pt.y()));
       }
     }
@@ -230,7 +230,7 @@ void QxrdPowderFitIdentifyPage::evaluateFit(double *parm, double *x, int np, int
 
       if (p) {
         for (int j=0; j<p->count(); j++) {
-          QwtDoublePoint pt = p->point(j);
+          QPointF pt = p->point(j);
 
           double dy = pt.y()-cy;
           double dx = pt.x()-cx;

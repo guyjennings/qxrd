@@ -12,7 +12,7 @@ class QxrdPlotImage : public QwtPlotRasterItem
 public:
   QxrdPlotImage(const QString &title = "", QxrdDoubleImageDataPtr data = QxrdDoubleImageDataPtr(NULL), QxrdMaskDataPtr mask = QxrdMaskDataPtr(NULL));
 
-  QImage renderImage (const QwtScaleMap &xMap, const QwtScaleMap &yMap, const QwtDoubleRect &area) const;
+  QImage renderImage (const QwtScaleMap &xMap, const QwtScaleMap &yMap, const QRectF &area) const;
 
 private:
   QxrdDoubleImageDataPtr m_Data;

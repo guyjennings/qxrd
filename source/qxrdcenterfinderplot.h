@@ -29,7 +29,7 @@ public slots:
   void onCenterXChanged(double cx);
   void onCenterYChanged(double cy);
   void onCenterChanged(double cx, double cy);
-  void onCenterChanged(QwtDoublePoint c);
+  void onCenterChanged(QPointF c);
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image);
   void onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
 

@@ -62,10 +62,10 @@ void QxrdSliceDialog::reslice()
     QcepPolygon poly = set->get_SlicePolygon();
 
     if (poly.size() >= 2) {
-      QwtDoublePoint p0 = poly[0];
+      QPointF p0 = poly[0];
 
       for (int i=1; i<poly.size(); i++) {
-        QwtDoublePoint p1 = poly[i];
+        QPointF p1 = poly[i];
         double dx = p1.x() - p0.x();
         double dy = p1.y() - p0.y();
         length += sqrt(dx*dx + dy*dy);
@@ -79,7 +79,7 @@ void QxrdSliceDialog::reslice()
       title += tr(" [%1,%2]").arg(p0.x()).arg(p0.y());
 
       for (int i=1; i<poly.size(); i++) {
-        QwtDoublePoint p1 = poly[i];
+        QPointF p1 = poly[i];
         double dx = p1.x() - p0.x();
         double dy = p1.y() - p0.y();
         double len = sqrt(dx*dx + dy*dy);
@@ -105,12 +105,12 @@ void QxrdSliceDialog::reslice()
         title += "-";
       }
 
-      QwtDoublePoint p1 = poly.last();
+      QPointF p1 = poly.last();
       title += tr("[%1,%2]").arg(p1.x()).arg(p1.y());
 
       QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_SlicePlot, title);
 
-      pc->setData(xp, yp);
+      pc->setSamples(xp, yp);
 
       pc->attach(m_SlicePlot);
 

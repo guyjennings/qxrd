@@ -68,17 +68,17 @@ void QxrdPowderFitWidget::removeGraphMarkers()
   m_ImagePlot -> replot();
 }
 
-void QxrdPowderFitWidget::appendGraphMarker(int n, QwtDoublePoint pt)
+void QxrdPowderFitWidget::appendGraphMarker(int n, QPointF pt)
 {
   QwtPlotMarker *marker = new QwtPlotMarker();
   marker -> setValue(pt);
-  QwtSymbol symb;
+  QwtSymbol *symb = new QwtSymbol();
 
-  symb.setStyle(m_SymbolStyles[n % m_SymbolStyles.count()]);
+  symb->setStyle(m_SymbolStyles[n % m_SymbolStyles.count()]);
 
-  symb.setPen(QPen(Qt::red));
-  symb.setBrush(QBrush(Qt::red));
-  symb.setSize(5,5);
+  symb->setPen(QPen(Qt::red));
+  symb->setBrush(QBrush(Qt::red));
+  symb->setSize(5,5);
 
   marker -> setSymbol(symb);
 

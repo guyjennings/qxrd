@@ -1,29 +1,30 @@
 #include "qxrdmaskpicker.h"
 #include "qxrdimageplot.h"
 #include "qxrdrasterdata.h"
+#include "qwt_picker_machine.h"
 
-QxrdMaskPicker::QxrdMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
+QxrdMaskPicker::QxrdMaskPicker(QWidget *canvas, QxrdImagePlot *plot)
   : QxrdImagePlotMeasurer(canvas, plot),
     m_Plot(plot)
 {
   setTrackerMode(QwtPicker::AlwaysOn);
 }
 
-QxrdCircularMaskPicker::QxrdCircularMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
+QxrdCircularMaskPicker::QxrdCircularMaskPicker(QWidget *canvas, QxrdImagePlot *plot)
   : QxrdMaskPicker(canvas, plot)
 {
-  qRegisterMetaType<QwtDoubleRect>("QwtDoubleRect");
+  qRegisterMetaType<QRectF>("QRectF");
 
-  setSelectionFlags(QwtPicker::RectSelection | QwtPicker::CenterToRadius );
+  setStateMachine(new QwtPickerDragRectMachine());
   setRubberBand(QwtPicker::EllipseRubberBand);
 }
 
-QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot)
+QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QWidget *canvas, QxrdImagePlot *plot)
   : QxrdMaskPicker(canvas, plot)
 {
   qRegisterMetaType< QVector<QPointF> >("QVector<QPointF>");
 
-  setSelectionFlags(QwtPicker::PolygonSelection);
+  setStateMachine(new QwtPickerPolygonMachine());
   setRubberBand(QwtPicker::PolygonRubberBand);
 }
 

@@ -4,7 +4,6 @@
 #include <QDialog>
 #include <QVector>
 #include "ui_qxrdpowderfitwidget.h"
-#include "qwt_double_rect.h"
 #include "qwt_symbol.h"
 #include "qxrddataprocessor-ptr.h"
 
@@ -25,7 +24,7 @@ public slots:
 
   void appendOutputString(QString msg);
   void removeGraphMarkers();
-  void appendGraphMarker(int n, QwtDoublePoint pt);
+  void appendGraphMarker(int n, QPointF pt);
 
 protected:
 

@@ -16,9 +16,8 @@
 #include <qwt_legend.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_scale_widget.h>
-#include <qwt_double_range.h>
 #include <qwt_symbol.h>
-
+#include <qwt_picker_machine.h>
 #include <QTime>
 #include <QMenu>
 #include <QContextMenuEvent>
@@ -64,7 +63,7 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   delete m_Zoomer;
 
   m_Zoomer = new QxrdImagePlotZoomer(canvas(), this);
-  m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
+  m_Zoomer -> setStateMachine(new QwtPickerDragRectMachine());
   m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
   m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
 
@@ -88,7 +87,7 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   m_HistogramSelector -> setEnabled(false);
 
   m_Legend -> setFrameStyle(QFrame::Box|QFrame::Sunken);
-  m_Legend -> setItemMode(QwtLegend::CheckableItem);
+  m_Legend -> setDefaultItemMode(QwtLegendData::Checkable);
 
   insertLegend(m_Legend, QwtPlot::BottomLegend);
 
@@ -160,11 +159,11 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
     QxrdCenterFinderPtr cf(dp->centerFinder());
 
     if (cf) {
-      connect(m_CenterFinderPicker, SIGNAL(selected(QwtDoublePoint)),
-              cf.data(), SLOT(onCenterChanged(QwtDoublePoint)));
+      connect(m_CenterFinderPicker, SIGNAL(selected(QPointF)),
+              cf.data(), SLOT(onCenterChanged(QPointF)));
 
-      connect(m_Circles, SIGNAL(selected(QwtDoubleRect)),
-              dp.data(), SLOT(maskCircle(QwtDoubleRect)));
+      connect(m_Circles, SIGNAL(selected(QRectF)),
+              dp.data(), SLOT(maskCircle(QRectF)));
 
       connect(m_Polygons, SIGNAL(selected(QVector<QPointF>)),
               dp.data(), SLOT(maskPolygon(QVector<QPointF>)));
@@ -172,13 +171,13 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
       connect(m_Measurer, SIGNAL(selected(QVector<QPointF>)),
               dp.data(), SLOT(measurePolygon(QVector<QPointF>)));
 
-      //  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-    //          m_DataProcessor, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
+      //  connect(m_Slicer, SIGNAL(selected(QVector<QPointF>)),
+    //          m_DataProcessor, SLOT(slicePolygon(QVector<QPointF>)));
 
-      connect(m_PowderPointPicker, SIGNAL(selected(QwtDoublePoint)),
-              cf.data(), SLOT(onPointSelected(QwtDoublePoint)));
+      connect(m_PowderPointPicker, SIGNAL(selected(QPointF)),
+              cf.data(), SLOT(onPointSelected(QPointF)));
 
-      onCenterChanged(QwtDoublePoint(cf->get_CenterX(), cf->get_CenterY()));
+      onCenterChanged(QPointF(cf->get_CenterX(), cf->get_CenterY()));
 
       connect(cf->prop_MarkedPoints(), SIGNAL(valueChanged(QcepPolygon,int)),
               this, SLOT(onMarkedPointsChanged()));
@@ -190,8 +189,8 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
   connect(m_Slicer, SIGNAL(selected(QVector<QPointF>)),
           this, SIGNAL(slicePolygon(QVector<QPointF>)));
 
-  connect(m_HistogramSelector, SIGNAL(selected(QwtDoubleRect)),
-          this, SIGNAL(selectHistogram(QwtDoubleRect)));
+  connect(m_HistogramSelector, SIGNAL(selected(QRectF)),
+          this, SIGNAL(selectHistogram(QRectF)));
 }
 
 QxrdDataProcessorWPtr QxrdImagePlot::processor() const
@@ -256,7 +255,7 @@ void QxrdImagePlot::recalculateDisplayedRange()
       mindis = minv+del*set->get_DisplayMinimumPct()/100.0;
       maxdis = minv+del*set->get_DisplayMaximumPct()/100.0;
     } else if (set->get_DisplayScalingMode() == PercentileMode) {
-      QwtDoubleInterval range = m_DataRaster.percentileRange(set->get_DisplayMinimumPctle(), set->get_DisplayMaximumPctle());
+      QwtInterval range = m_DataRaster.percentileRange(set->get_DisplayMinimumPctle(), set->get_DisplayMaximumPctle());
 
       mindis = range.minValue();
       maxdis = range.maxValue();
@@ -273,7 +272,7 @@ void QxrdImagePlot::recalculateDisplayedRange()
 
 void QxrdImagePlot::replotImage()
 {
-  m_DataImage -> setData(m_DataRaster);
+  m_DataImage -> setSamples(m_DataRaster);
 
   m_DataImage -> invalidateCache();
   m_DataImage -> itemChanged();
@@ -332,10 +331,12 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
   m_MaskColorMap.setColorInterval(pen.color(), QColor(0,0,0,0));
 
   foreach (QwtPlotMarker *m, m_PowderPointMarkers) {
-    QwtSymbol sym = m->symbol();
+    const QwtSymbol *oldsym = m->symbol();
 
-    sym.setPen(pen);
-    sym.setBrush(QBrush(pen.color()));
+    QwtSymbol *sym = new QwtSymbol(oldsym->style(),oldsym->brush(),oldsym->pen(),oldsym->size());
+
+    sym->setPen(pen);
+    sym->setBrush(QBrush(pen.color()));
 
     m->setSymbol(sym);
   }
@@ -703,7 +704,7 @@ void QxrdImagePlot::onCenterYChanged(double cy)
   replot();
 }
 
-void QxrdImagePlot::onCenterChanged(QwtDoublePoint c)
+void QxrdImagePlot::onCenterChanged(QPointF c)
 {
   m_CenterMarker -> setValue(c);
   replot();
@@ -815,7 +816,7 @@ void QxrdImagePlot::replot()
   //  g_Application->printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
 }
 
-QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
+QwtText QxrdImagePlot::trackerText(const QPointF &pos)
 {
   const QxrdRasterData *ras = this->raster();
 
@@ -872,7 +873,7 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
     res += tr(", Chi %1").arg(chi);
 
     if (m_PowderPointPicker -> isEnabled()) {
-      QwtDoublePoint rpt = ras->optimizePeakPosition(pos);
+      QPointF rpt = ras->optimizePeakPosition(pos);
       res += tr("\nPtx %1, Pty %2").arg(rpt.x()).arg(rpt.y());
     }
   }
@@ -918,7 +919,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           double x = xMap.invTransform(evlocal.x());
           double y = yMap.invTransform(evlocal.y());
 
-          QwtDoublePoint nearest = cf->nearestPowderPoint(x, y);
+          QPointF nearest = cf->nearestPowderPoint(x, y);
 
           QAction *fitCircle       = plotMenu.addAction("Fit Center from Points on Circle");
           QAction *adjPoint        = plotMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
@@ -973,14 +974,14 @@ void QxrdImagePlot::displayPowderMarkers()
     if (cf) {
       QcepPolygon poly = cf->get_MarkedPoints();
 
-      foreach(QwtDoublePoint pt, poly) {
+      foreach(QPointF pt, poly) {
         QwtPlotMarker *marker = new QwtPlotMarker();
-        QwtSymbol symb;
+        QwtSymbol *symb = new QwtSymbol();
 
-        symb.setStyle(QwtSymbol::Ellipse);
-        symb.setSize(5, 5);
-        symb.setPen(QPen(Qt::red));
-        symb.setBrush(QBrush(Qt::red));
+        symb->setStyle(QwtSymbol::Ellipse);
+        symb->setSize(5, 5);
+        symb->setPen(QPen(Qt::red));
+        symb->setBrush(QBrush(Qt::red));
 
         marker->setSymbol(symb);
         marker->setValue(pt);

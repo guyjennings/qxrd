@@ -75,10 +75,10 @@ void QwtPlotPiecewiseCurve::draw(QPainter *painter,
 
 // This overload is needed when using autoscale. It is a slow implementation:
 // it might be worth to cache valid data ranges.
-QwtDoubleRect QwtPlotPiecewiseCurve::boundingRect() const
+QRectF QwtPlotPiecewiseCurve::boundingRect() const
 {
   if (dataSize() <= 0) {
-    return QwtDoubleRect(1.0, 1.0, 2.0, 2.0); // Empty data.
+    return QRectF(1.0, 1.0, 2.0, 2.0); // Empty data.
   }
 
   int first = 0;
@@ -87,7 +87,7 @@ QwtDoubleRect QwtPlotPiecewiseCurve::boundingRect() const
   }
 
   if (first == dataSize()) {
-    return QwtDoubleRect(1.0, 1.0, 2.0, 2.0); // Empty data.
+    return QRectF(1.0, 1.0, 2.0, 2.0); // Empty data.
   }
 
   double minX, maxX, minY, maxY;
@@ -109,5 +109,5 @@ QwtDoubleRect QwtPlotPiecewiseCurve::boundingRect() const
     }
   }
 
-  return QwtDoubleRect(minX, minY, maxX - minX, maxY - minY);
+  return QRectF(minX, minY, maxX - minX, maxY - minY);
 }

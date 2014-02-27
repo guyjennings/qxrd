@@ -6,7 +6,6 @@
 #include <QObject>
 #include <QPen>
 #include "qcepproperty.h"
-#include <qwt_double_rect.h>
 #include "qxrddetectorgeometry.h"
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdobjectnamer.h"
@@ -141,8 +140,8 @@ public:
 //public slots:
 //  void onCenterXChanged(double cx);
 //  void onCenterYChanged(double cy);
-//  void onCenterChanged(QwtDoublePoint pt);
-//  void onCenterChanged(QwtDoublePoint pt);
+//  void onCenterChanged(QPointF pt);
+//  void onCenterChanged(QPointF pt);
 //  void onCenterStepChanged(double stp);
 
 signals:
@@ -151,34 +150,34 @@ signals:
 public slots:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
-  void onCenterChanged(QwtDoublePoint pt);
-  void onPointSelected(QwtDoublePoint pt);
+  void onCenterChanged(QPointF pt);
+  void onPointSelected(QPointF pt);
 
   double getTTH(double x, double y) const;
-  double getTTH(QwtDoublePoint pt) const;
+  double getTTH(QPointF pt) const;
 
   double getQ(double x, double y) const;
-  double getQ(QwtDoublePoint pt) const;
+  double getQ(QPointF pt) const;
 
   double getR(double x, double y) const;
-  double getR(QwtDoublePoint pt) const;
+  double getR(QPointF pt) const;
 
   double getChi(double x, double y) const;
-  double getChi(QwtDoublePoint pt) const;
+  double getChi(QPointF pt) const;
 
   double getDist(double x, double y) const;
-  double getDist(QwtDoublePoint pt) const;
+  double getDist(QPointF pt) const;
 
   void fitPowderCircle();
   void deletePowderPointNear(double x, double y);
   void deletePowderPoints();
 
-  QwtDoublePoint powderPoint(int i);
+  QPointF powderPoint(int i);
   int nearestPowderPointIndex(double x, double y);
-  QwtDoublePoint nearestPowderPoint(double x, double y);
+  QPointF nearestPowderPoint(double x, double y);
 
-  QwtDoublePoint adjustPoint(QwtDoublePoint pt);
-  QwtDoublePoint adjustPoint(int i);
+  QPointF adjustPoint(QPointF pt);
+  QPointF adjustPoint(int i);
   void adjustPointNear(double x, double y);
   void adjustAllPoints();
   void fitPeakNear(double x, double y);

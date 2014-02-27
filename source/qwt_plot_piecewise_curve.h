@@ -27,7 +27,7 @@ public:
   explicit QwtPlotPiecewiseCurve(QxrdPlot *plot, const QwtText &title);
   explicit QwtPlotPiecewiseCurve(QxrdPlot *plot, const QString &title);
 
-  virtual QwtDoubleRect boundingRect() const;
+  virtual QRectF boundingRect() const;
 
   virtual void draw(QPainter *p,
                     const QwtScaleMap &xMap, const QwtScaleMap &yMap,

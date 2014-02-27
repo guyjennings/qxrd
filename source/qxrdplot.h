@@ -7,6 +7,7 @@
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
 #include <qwt_plot_magnifier.h>
+#include <qwt_legend.h>
 #include "qxrdplotmeasurer-ptr.h"
 #include "qxrdplotsettings.h"
 
@@ -24,7 +25,7 @@ public:
 //  virtual void setSaver(QxrdSettingsSaverPtr saver);
 
   void setPlotCurveStyle(int index, QwtPlotCurve *curve);
-  virtual QwtText trackerText(const QwtDoublePoint &pos);
+  virtual QwtText trackerText(const QPointF &pos);
 
   void contextMenuEvent(QContextMenuEvent *event);
   void updateZoomer();

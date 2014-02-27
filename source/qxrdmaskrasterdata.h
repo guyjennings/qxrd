@@ -13,7 +13,7 @@ public:
 
 public:
   double value(double x, double y) const;
-  QwtDoubleInterval range() const;
+  QwtInterval range() const;
 
   QxrdMaskRasterData* copy() const;
 

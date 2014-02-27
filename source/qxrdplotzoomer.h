@@ -10,10 +10,10 @@ class QxrdPlotZoomer : public QwtPlotZoomer
   Q_OBJECT
 
 public:
-  QxrdPlotZoomer(QwtPlotCanvas *canvas, QxrdPlot *plot);
+  QxrdPlotZoomer(QWidget *canvas, QxrdPlot *plot);
 
 public:
-  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
+  virtual QwtText trackerText(const QPointF &pos) const;
 
 private:
   QxrdPlot *m_Plot;
@@ -24,7 +24,7 @@ class QxrdImagePlotZoomer : public QxrdPlotZoomer
   Q_OBJECT
 
 public:
-  QxrdImagePlotZoomer(QwtPlotCanvas *canvas, QxrdImagePlot *plot);
+  QxrdImagePlotZoomer(QWidget *canvas, QxrdImagePlot *plot);
 
 private:
   QxrdImagePlot *m_ImagePlot;

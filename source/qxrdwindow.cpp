@@ -24,7 +24,6 @@
 #include "qxrdallocator.h"
 #include "qxrdpowderfitdialog.h"
 #include "qxrdimagedisplaywidget.h"
-#include "qwt_array.h"
 #include "qxrdsynchronizedacquisitiondialog.h"
 #include "qxrdcorrectiondialog.h"
 #include "qxrdslicedialog.h"
@@ -572,8 +571,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   connect(m_ImagePlot, SIGNAL(slicePolygon(QVector<QPointF>)),
           m_SliceDialog, SLOT(slicePolygon(QVector<QPointF>)));
 
-  connect(m_ImagePlot, SIGNAL(selectHistogram(QwtDoubleRect)),
-          m_HistogramDialog, SLOT(histogramSelectionChanged(QwtDoubleRect)));
+  connect(m_ImagePlot, SIGNAL(selectHistogram(QRectF)),
+          m_HistogramDialog, SLOT(histogramSelectionChanged(QRectF)));
 
   if (app) {
     m_Messages -> document() -> setMaximumBlockCount(app->get_MessageWindowLines());

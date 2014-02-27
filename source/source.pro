@@ -96,13 +96,14 @@ DISTFILES += qxrd.dox \
     tiffconfig/macx/tif_config.h \
     tiffconfig/macx/tiffconf.h
 
-include("../qwt-5.2.pri")
-#include("../qceplib.pri")
-include("qxrd.levmar.pri")
-include(submodules/qceplib/qceplib.pri)
-include(submodules/qceplib/qt-hdf5.pri)
-
-INCLUDEPATH += submodules/qceplib
+include(submodules/qceplib/qceplib-base.pri)
+include(submodules/qceplib/qceplib-qwt.pri)
+include(submodules/qceplib/qceplib-mar345.pri)
+include(submodules/qceplib/qceplib-cbf.pri)
+include(submodules/qceplib/qceplib-tiff.pri)
+include(submodules/qceplib/qceplib-levmar.pri)
+include(submodules/qceplib/qceplib-hdf5.pri)
+include(submodules/qceplib/qceplib-specserver.pri)
 
 # include("qxrd-cuda.pri")
 HEADERS += \

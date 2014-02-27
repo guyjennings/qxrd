@@ -7,7 +7,7 @@ class QxrdHistogramSelector : public QxrdPlotMeasurer
 {
     Q_OBJECT
 public:
-    explicit QxrdHistogramSelector(QwtPlotCanvas *canvas, QxrdPlot *plot);
+    explicit QxrdHistogramSelector(QWidget *canvas, QxrdPlot *plot);
 
 signals:
 

@@ -11,10 +11,10 @@ class QxrdMaskColorMap : public QwtLinearColorMap
   QxrdMaskColorMap(const QColor &deselcol, const QColor &selcol);
   QxrdMaskColorMap();
 
-  QxrdMaskColorMap* copy() const;
+//  QxrdMaskColorMap* copy() const;
 
-  QRgb rgb(const QwtDoubleInterval &inter, double value) const;
-  unsigned char colorIndex(const QwtDoubleInterval &inter, double value) const;
+  QRgb rgb(const QwtInterval &inter, double value) const;
+  unsigned char colorIndex(const QwtInterval &inter, double value) const;
 
  private:
   QRgb  m_DeselectedColor;

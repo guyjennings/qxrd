@@ -47,7 +47,7 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_PeakFitDebug(saver, this, "peakFitDebug", 0, "Debug Print for peak fitting"),
     m_Experiment(expt)
 {
-  qRegisterMetaType<QwtDoublePoint>("QwtDoublePoint");
+  qRegisterMetaType<QPointF>("QPointF");
 
 //  m_CenterX.setDebug(true);
 //  m_CenterY.setDebug(true);
@@ -89,13 +89,13 @@ void QxrdCenterFinder::readSettings(QSettings *settings, QString section)
   QcepProperty::readSettings(this, &staticMetaObject, section, settings);
 }
 
-void QxrdCenterFinder::onCenterChanged(QwtDoublePoint pt)
+void QxrdCenterFinder::onCenterChanged(QPointF pt)
 {
   set_CenterX(pt.x());
   set_CenterY(pt.y());
 }
 
-double QxrdCenterFinder::getTTH(QwtDoublePoint pt) const
+double QxrdCenterFinder::getTTH(QPointF pt) const
 {
   return getTTH(pt.x(), pt.y());
 }
@@ -116,7 +116,7 @@ double QxrdCenterFinder::getTTH(double x, double y) const
   }
 }
 
-double QxrdCenterFinder::getQ(QwtDoublePoint pt) const
+double QxrdCenterFinder::getQ(QPointF pt) const
 {
   return getQ(pt.x(), pt.y());
 }
@@ -144,7 +144,7 @@ double QxrdCenterFinder::getQ(double x, double y) const
   return q;
 }
 
-double QxrdCenterFinder::getChi(QwtDoublePoint pt) const
+double QxrdCenterFinder::getChi(QPointF pt) const
 {
   return getChi(pt.x(), pt.y());
 }
@@ -172,7 +172,7 @@ double QxrdCenterFinder::getChi(double x, double y) const
   return chi;
 }
 
-double QxrdCenterFinder::getDist(QwtDoublePoint pt) const
+double QxrdCenterFinder::getDist(QPointF pt) const
 {
   return getDist(pt.x(), pt.y());
 }
@@ -184,7 +184,7 @@ double QxrdCenterFinder::getDist(double x, double y) const
   return get_DetectorDistance()/cos(tth*M_PI/180.0);
 }
 
-double QxrdCenterFinder::getR(QwtDoublePoint pt) const
+double QxrdCenterFinder::getR(QPointF pt) const
 {
   return getR(pt.x(), pt.y());
 }
@@ -197,7 +197,7 @@ double QxrdCenterFinder::getR(double x, double y) const
   return r;
 }
 
-void QxrdCenterFinder::onPointSelected(QwtDoublePoint pt)
+void QxrdCenterFinder::onPointSelected(QPointF pt)
 {
   if (get_AdjustMarkedPoints()) {
     pt = adjustPoint(pt);
@@ -214,7 +214,7 @@ void QxrdCenterFinder::evaluateFit(double *parm, double *x, int /*np*/, int nx)
   double r  = parm[2];
 
   for (int i=0; i<nx; i++) {
-    QwtDoublePoint pt = pts.value(i);
+    QPointF pt = pts.value(i);
     double rcalc = sqrt(pow(pt.x() - cx, 2) + pow(pt.y() - cy, 2));
     x[i] = rcalc - r;
   }
@@ -298,7 +298,7 @@ void QxrdCenterFinder::fitPowderCircle()
   }
 }
 
-QwtDoublePoint QxrdCenterFinder::powderPoint(int i)
+QPointF QxrdCenterFinder::powderPoint(int i)
 {
   return get_MarkedPoints().value(i);
 }
@@ -310,7 +310,7 @@ int QxrdCenterFinder::nearestPowderPointIndex(double x, double y)
   QcepPolygon pts = get_MarkedPoints();
 
   for (int i=0; i<pts.count(); i++) {
-    QwtDoublePoint pt = pts.value(i);
+    QPointF pt = pts.value(i);
     double dist = sqrt(pow(x-pt.x(), 2) + pow(y-pt.y(), 2));
 
     if (nearest == -1 || dist < nearestDist) {
@@ -322,7 +322,7 @@ int QxrdCenterFinder::nearestPowderPointIndex(double x, double y)
   return nearest;
 }
 
-QwtDoublePoint QxrdCenterFinder::nearestPowderPoint(double x, double y)
+QPointF QxrdCenterFinder::nearestPowderPoint(double x, double y)
 {
   return get_MarkedPoints().value(nearestPowderPointIndex(x,y));
 }
@@ -345,7 +345,7 @@ void QxrdCenterFinder::deletePowderPoints()
   m_MarkedPoints.clear();
 }
 
-QwtDoublePoint QxrdCenterFinder::adjustPoint(QwtDoublePoint pt)
+QPointF QxrdCenterFinder::adjustPoint(QPointF pt)
 {
   double x0=pt.x(), y0=pt.y();
   int rad = get_AdjustmentRadius();
@@ -363,13 +363,13 @@ QwtDoublePoint QxrdCenterFinder::adjustPoint(QwtDoublePoint pt)
   }
 
   if (sum != 0) {
-    return QwtDoublePoint(sumx/sum, sumy/sum);
+    return QPointF(sumx/sum, sumy/sum);
   } else {
     return pt;
   }
 }
 
-QwtDoublePoint QxrdCenterFinder::adjustPoint(int i)
+QPointF QxrdCenterFinder::adjustPoint(int i)
 {
   return adjustPoint(powderPoint(i));
 }
@@ -381,7 +381,7 @@ void QxrdCenterFinder::adjustPointNear(double x, double y)
   if (nearest >= 0) {
     QcepPolygon pts = get_MarkedPoints();
 
-    QwtDoublePoint val = adjustPoint(pts[nearest]);
+    QPointF val = adjustPoint(pts[nearest]);
 
     pts[nearest] = val;
 
@@ -508,14 +508,14 @@ void QxrdCenterFinder::adjustAllPoints()
 
 double QxrdCenterFinder::getPowderPointX(int i)
 {
-  QwtDoublePoint res = get_MarkedPoints().value(i);
+  QPointF res = get_MarkedPoints().value(i);
 
   return res.x();
 }
 
 double QxrdCenterFinder::getPowderPointY(int i)
 {
-  QwtDoublePoint res = get_MarkedPoints().value(i);
+  QPointF res = get_MarkedPoints().value(i);
 
   return res.y();
 }
@@ -525,9 +525,9 @@ void QxrdCenterFinder::setPowderPoint(int i, double x, double y)
   QcepPolygon pts = get_MarkedPoints();
 
   if (i>=0 && i<pts.count()) {
-    pts[i] = QwtDoublePoint(x,y);
+    pts[i] = QPointF(x,y);
   } else {
-    pts.append(QwtDoublePoint(x,y));
+    pts.append(QPointF(x,y));
   }
 
   set_MarkedPoints(pts);

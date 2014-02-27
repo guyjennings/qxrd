@@ -3,8 +3,8 @@
 #include "qxrdapplication.h"
 #include <QString>
 
-QxrdRasterData::QxrdRasterData(QxrdDoubleImageDataPtr img, int interp, QxrdMaskDataPtr mask, QwtDoubleInterval range)
-  : QwtRasterData(QwtDoubleRect(0,0,(img?img->get_Width():0),(img?img->get_Height():0))),
+QxrdRasterData::QxrdRasterData(QxrdDoubleImageDataPtr img, int interp, QxrdMaskDataPtr mask, QwtInterval range)
+  : QwtRasterData(/*QRectF(0,0,(img?img->get_Width():0),(img?img->get_Height():0))*/),
     m_Data(img),
     m_Mask(mask),
     m_NRows((img ? img->get_Height(): 0)),
@@ -80,14 +80,14 @@ QxrdRasterData* QxrdRasterData::copy() const
   }
 }
 
-QwtDoubleInterval QxrdRasterData::range() const
+QwtInterval QxrdRasterData::range() const
 {
   return m_Range;
 }
 
 void QxrdRasterData::setDisplayedRange(double min, double max)
 {
-  m_Range = QwtDoubleInterval(min, max);
+  m_Range = QwtInterval(min, max);
 }
 
 double QxrdRasterData::minValue()
@@ -174,9 +174,9 @@ double QxrdRasterData::maxValue()
   }
 }
 
-QwtDoubleInterval QxrdRasterData::percentileRange(double lowpct, double highpct)
+QwtInterval QxrdRasterData::percentileRange(double lowpct, double highpct)
 {
-  QwtDoubleInterval res;
+  QwtInterval res;
 
   if (m_Data) {
     const int histSize = 65536;
@@ -304,7 +304,7 @@ int QxrdRasterData::height() const
   return m_NRows;
 }
 
-QwtDoublePoint QxrdRasterData::optimizePeakPosition(QwtDoublePoint pt) const
+QPointF QxrdRasterData::optimizePeakPosition(QPointF pt) const
 {
   int rad = 10;
   int ix = pt.x();
@@ -327,5 +327,5 @@ QwtDoublePoint QxrdRasterData::optimizePeakPosition(QwtDoublePoint pt) const
     }
   }
 
-  return QwtDoublePoint(maxx, maxy);
+  return QPointF(maxx, maxy);
 }

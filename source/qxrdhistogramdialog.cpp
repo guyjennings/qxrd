@@ -35,7 +35,7 @@ void QxrdHistogramDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image
   recalculateHistogram();
 }
 
-void QxrdHistogramDialog::histogramSelectionChanged(QwtDoubleRect rect)
+void QxrdHistogramDialog::histogramSelectionChanged(QRectF rect)
 {
   QxrdHistogramDialogSettingsPtr set(m_HistogramDialogSettings);
 

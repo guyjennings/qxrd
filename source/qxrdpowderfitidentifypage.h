@@ -18,14 +18,14 @@ public:
 
 public slots:
   void selectIdentifyPage();
-  void pointClicked(QwtDoublePoint pt);
+  void pointClicked(QPointF pt);
 
   void appendRing();
   void removeRing();
   void selectRing(int n);
   void selectNextRing();
   void selectPrevRing();
-  void appendPoint(QwtDoublePoint pt);
+  void appendPoint(QPointF pt);
   void idPerformFit();
 
 public:

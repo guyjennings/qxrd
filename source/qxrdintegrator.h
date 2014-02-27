@@ -9,7 +9,6 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdintegrateddata-ptr.h"
-#include <qwt_double_rect.h>
 #include "qxrdintegratorcache.h"
 #include "qxrdintegratorcache-ptr.h"
 #include "qxrdsettingssaver-ptr.h"
@@ -63,7 +62,7 @@ public:
   };
 
   double XValue(double x, double y) const;
-  double XValue(QwtDoublePoint pt) const;
+  double XValue(QPointF pt) const;
   double XValue(double x, double y,
                 int xUnits, QxrdCenterFinderPtr cf,
                 double xc, double yc,
@@ -81,7 +80,7 @@ public slots:
 //  QxrdIntegratedDataPtr integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int oversample, int normalize);
 
   QxrdIntegratedDataPtr sliceLine(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, double x0, double y0, double x1, double y1, double width);
-  QxrdIntegratedDataPtr slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QwtArray<QwtDoublePoint> poly, double width);
+  QxrdIntegratedDataPtr slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QVector<QPointF> poly, double width);
 
   void integrateVsR();
   void integrateVsQ();

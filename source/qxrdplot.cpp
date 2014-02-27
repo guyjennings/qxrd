@@ -7,6 +7,7 @@
 #include <qwt_plot_magnifier.h>
 #include <qwt_symbol.h>
 #include <qwt_legend.h>
+#include <qwt_picker_machine.h>
 #include "qxrdplotmeasurer.h"
 #include "qxrdplotzoomer.h"
 #include <stdio.h>
@@ -40,7 +41,7 @@ void QxrdPlot::init(QxrdPlotSettingsWPtr settings)
   setCanvasBackground(QColor(Qt::white));
 
   m_Zoomer = new QxrdPlotZoomer(canvas(), this);
-  m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
+  m_Zoomer -> setStateMachine(new QwtPickerDragRectMachine());
   m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
   m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
 
@@ -52,7 +53,7 @@ void QxrdPlot::init(QxrdPlotSettingsWPtr settings)
   m_Zoomer -> setEnabled(true);
 
   m_Legend = new QwtLegend(this);
-  m_Legend -> setItemMode(QwtLegend::CheckableItem);
+  m_Legend -> setDefaultItemMode(QwtLegendData::Checkable);
 
   m_Panner = new QwtPlotPanner(canvas());
   m_Panner -> setEnabled(true);
@@ -98,7 +99,7 @@ void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
   int styleIndex = (index / (nColors * nSymbols)) % nStyles;
 
   QPen pen;
-  QwtSymbol symb;
+  QwtSymbol *symb = new QwtSymbol();
   QBrush brush;
 
   switch (colorIndex) {
@@ -149,22 +150,22 @@ void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
     break;
   }
 
-  symb.setPen(pen);
-  symb.setBrush(QBrush(pen.color()));
-  symb.setSize(5,5);
+  symb->setPen(pen);
+  symb->setBrush(QBrush(pen.color()));
+  symb->setSize(5,5);
 
   switch (symbolIndex) {
   case 0:
-    symb.setStyle(QwtSymbol::Ellipse);
+    symb->setStyle(QwtSymbol::Ellipse);
     break;
   case 1:
-    symb.setStyle(QwtSymbol::Rect);
+    symb->setStyle(QwtSymbol::Rect);
     break;
   case 2:
-    symb.setStyle(QwtSymbol::XCross);
+    symb->setStyle(QwtSymbol::XCross);
     break;
   case 3:
-    symb.setStyle(QwtSymbol::Cross);
+    symb->setStyle(QwtSymbol::Cross);
     break;
   }
 
@@ -232,17 +233,18 @@ void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
 
     if (pc) {
       QPen pen = pc->pen();
-      QwtSymbol symb = pc->symbol();
+      const QwtSymbol *oldsym = pc->symbol();
+      QwtSymbol *sym = new QwtSymbol(oldsym->style(), oldsym->brush(), oldsym->pen(), oldsym->size());
 
       if (checked) {
         pen.setWidth(3);
-        symb.setSize(9,9);
+        sym->setSize(9,9);
       } else {
         pen.setWidth(1);
-        symb.setSize(5,5);
+        sym->setSize(5,5);
       }
       pc->setPen(pen);
-      pc->setSymbol(symb);
+      pc->setSymbol(sym);
     }
 
     replot();
@@ -275,7 +277,7 @@ void QxrdPlot::setLogAxis(int axis, int isLog)
     m_IsLog[axis] = isLog;
 
     if (isLog) {
-      setAxisScaleEngine(axis, new QwtLog10ScaleEngine);
+      setAxisScaleEngine(axis, new QwtLogScaleEngine);
     } else {
       setAxisScaleEngine(axis, new QwtLinearScaleEngine);
     }
@@ -319,7 +321,7 @@ int QxrdPlot::logAxis(int axis)
   return m_IsLog[axis];
 }
 
-QwtText QxrdPlot::trackerText(const QwtDoublePoint &pos)
+QwtText QxrdPlot::trackerText(const QPointF &pos)
 {
   QxrdPlotSettingsPtr set(m_PlotSettings);
 

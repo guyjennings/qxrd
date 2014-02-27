@@ -7,7 +7,6 @@
 #include "qxrdimagedata-ptr.h"
 #include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
-#include "qwt_double_rect.h"
 #include "qxrdhistogramdialogsettings.h"
 
 class QxrdHistogramDialog : public QDockWidget, public Ui::QxrdHistogramDialog
@@ -21,7 +20,7 @@ public:
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
 
 public slots:
-  void histogramSelectionChanged(QwtDoubleRect rect);
+  void histogramSelectionChanged(QRectF rect);
 
 private:
   void recalculateHistogram();

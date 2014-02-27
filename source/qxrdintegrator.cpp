@@ -119,7 +119,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr i
   return cache->performIntegration(integ, dimg, mask, true);
 }
 
-double QxrdIntegrator::XValue(QwtDoublePoint pt) const
+double QxrdIntegrator::XValue(QPointF pt) const
 {
   return XValue(pt.x(), pt.y());
 }
@@ -203,9 +203,9 @@ QString QxrdIntegrator::XLabel() const
 QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, double x0, double y0, double x1, double y1, double width)
 {
   try {
-    QwtArray<QwtDoublePoint> poly;
-    poly.append(QwtDoublePoint(x0,y0));
-    poly.append(QwtDoublePoint(x1,y1));
+    QVector<QPointF> poly;
+    poly.append(QPointF(x0,y0));
+    poly.append(QPointF(x1,y1));
 
     return slicePolygon(integ, image, poly, width);
   }
@@ -221,7 +221,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdIntegratedDataPtr integ, Qxr
   return QxrdIntegratedDataPtr();
 }
 
-QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QwtArray<QwtDoublePoint> poly, double /*width*/)
+QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QVector<QPointF> poly, double /*width*/)
 {
   QThread::currentThread()->setObjectName("slicePolygon");
 
@@ -229,10 +229,10 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdIntegratedDataPtr integ, 
     double length = 0;
 
     if (poly.size() >= 2) {
-      QwtDoublePoint p0 = poly[0];
+      QPointF p0 = poly[0];
 
       for (int i=1; i<poly.size(); i++) {
-        QwtDoublePoint p1 = poly[i];
+        QPointF p1 = poly[i];
         double dx = p1.x() - p0.x();
         double dy = p1.y() - p0.y();
         length += sqrt(dx*dx + dy*dy);
@@ -247,7 +247,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdIntegratedDataPtr integ, 
       integ -> resize(0);
 
       for (int i=1; i<poly.size(); i++) {
-        QwtDoublePoint p1 = poly[i];
+        QPointF p1 = poly[i];
         double dx = p1.x() - p0.x();
         double dy = p1.y() - p0.y();
         double len = sqrt(dx*dx + dy*dy);

@@ -4,7 +4,6 @@
 #include "qxrdplot.h"
 
 #include <qwt_color_map.h>
-#include <qwt_array.h>
 #include <qwt_plot_rescaler.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_plot_marker.h>
@@ -35,7 +34,7 @@ public:
 
 signals:
   void slicePolygon(QVector<QPointF> poly);
-  void selectHistogram(QwtDoubleRect rect);
+  void selectHistogram(QRectF rect);
 
 public slots:
   void set005Range();
@@ -70,7 +69,7 @@ public slots:
   void onDarkImageAvailable(QxrdDoubleImageDataPtr image);
   void onCenterXChanged(double cx);
   void onCenterYChanged(double cy);
-  void onCenterChanged(QwtDoublePoint c);
+  void onCenterChanged(QPointF c);
   void onMarkedPointsChanged();
 
   void enableZooming();
@@ -102,7 +101,7 @@ public:
 
   void replot();
 
-  virtual QwtText trackerText(const QwtDoublePoint &pos);
+  virtual QwtText trackerText(const QPointF &pos);
 
   void contextMenuEvent(QContextMenuEvent *event);
 

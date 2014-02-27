@@ -29,7 +29,7 @@ void QxrdRingSampledData::writeSettings(QSettings *settings, QString section)
     settings->beginWriteArray(section+"/rings", count());
 
     for (int i=0; i<count(); i++) {
-      QwtDoublePoint pt = point(i);
+      QPointF pt = point(i);
 
       settings->setArrayIndex(i);
       settings->setValue("x", pt.x());
@@ -54,7 +54,7 @@ void QxrdRingSampledData::readSettings(QSettings *settings, QString section)
     for (int i=0; i<sz; i++) {
       settings->setArrayIndex(i);
 
-      QwtDoublePoint pt(settings->value("x").toDouble(), settings->value("y").toDouble());
+      QPointF pt(settings->value("x").toDouble(), settings->value("y").toDouble());
 
       append(pt);
     }
@@ -63,7 +63,7 @@ void QxrdRingSampledData::readSettings(QSettings *settings, QString section)
   }
 }
 
-void QxrdRingSampledData::append(QwtDoublePoint pt)
+void QxrdRingSampledData::append(QPointF pt)
 {
   m_Points.append(pt);
 }
@@ -78,7 +78,7 @@ void QxrdRingSampledData::clear()
   m_Points.clear();
 }
 
-void QxrdRingSampledData::setPoint(int n, QwtDoublePoint pt)
+void QxrdRingSampledData::setPoint(int n, QPointF pt)
 {
   m_Points.replace(n, pt);
 }
@@ -88,7 +88,7 @@ int  QxrdRingSampledData::count() const
   return m_Points.count();
 }
 
-QwtDoublePoint QxrdRingSampledData::point(int n) const
+QPointF QxrdRingSampledData::point(int n) const
 {
   return m_Points.value(n);
 }

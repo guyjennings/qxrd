@@ -5,7 +5,6 @@
 #include <QMutex>
 #include "qcepmacros.h"
 #include <QSharedPointer>
-#include "qwt_double_rect.h"
 #include <QScriptEngine>
 #include <QSettings>
 
@@ -18,12 +17,12 @@ public:
 signals:
 
 public slots:
-  void append(QwtDoublePoint pt);
+  void append(QPointF pt);
   void remove(int n);
   void clear();
-  void setPoint(int n, QwtDoublePoint pt);
+  void setPoint(int n, QPointF pt);
   int  count() const;
-  QwtDoublePoint point(int n) const;
+  QPointF point(int n) const;
 
 public:
   void readSettings(QSettings *settings, QString section);
@@ -32,7 +31,7 @@ public:
 private:
   mutable QMutex         m_Mutex;
 
-  QVector<QwtDoublePoint> m_Points;
+  QVector<QPointF> m_Points;
 };
 
 //typedef QSharedPointer<QxrdRingSampledData> QxrdRingSampledDataPtr;

@@ -1647,7 +1647,7 @@ void QxrdDataProcessorBase::shrinkMask()
   }
 }
 
-void QxrdDataProcessorBase::maskCircle(QwtDoubleRect rect)
+void QxrdDataProcessorBase::maskCircle(QRectF rect)
 { 
   createMaskIfNeeded();
 
@@ -1680,7 +1680,7 @@ void QxrdDataProcessorBase::maskPolygon(QVector<QPointF> poly)
     QPainter polyPainter(&polyImage);
     QPolygonF polygon;
 
-    foreach(QwtDoublePoint pt, poly) {
+    foreach(QPointF pt, poly) {
       polygon.append(pt);
     }
 
@@ -1705,7 +1705,7 @@ void QxrdDataProcessorBase::maskPolygon(QVector<QPointF> poly)
 
 void QxrdDataProcessorBase::measurePolygon(QVector<QPointF> poly)
 {
-  foreach(QwtDoublePoint pt, poly) {
+  foreach(QPointF pt, poly) {
     printMessage(tr("Measure pt (%1,%2) = %3").arg(pt.x()).arg(pt.y())
                       .arg(m_Data -> value(pt.x(),pt.y())));
   }
@@ -1715,7 +1715,7 @@ void QxrdDataProcessorBase::measurePolygon(QVector<QPointF> poly)
 
 void QxrdDataProcessorBase::printMeasuredPolygon(QVector<QPointF> poly)
 {
-  foreach(QwtDoublePoint pt, poly) {
+  foreach(QPointF pt, poly) {
     printMessage(tr("Measure pt (%1,%2)").arg(pt.x()).arg(pt.y()));
   }
 

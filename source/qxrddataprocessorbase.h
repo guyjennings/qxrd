@@ -20,7 +20,6 @@
 #include "qxrdringsetfitparameters-ptr.h"
 #include "qxrdringsetsampleddata-ptr.h"
 #include "qxrdfilesaver-ptr.h"
-#include <qwt_double_rect.h>
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdallocator-ptr.h"
 #include "qxrdgeneratetestimage-ptr.h"
@@ -231,7 +230,7 @@ public slots:
   void invertMask();
   void growMask();
   void shrinkMask();
-  void maskCircle(QwtDoubleRect pt);
+  void maskCircle(QRectF pt);
   void maskPolygon(QVector<QPointF> poly);
 
   void measurePolygon(QVector<QPointF> poly);
