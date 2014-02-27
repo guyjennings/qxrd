@@ -10,6 +10,7 @@ include(../../qceplib-nexus.pri)
 include(../../qceplib-qwt.pri)
 include(../../qceplib-specserver.pri)
 include(../../qceplib-tiff.pri)
+include(../../qceplib-levmar.pri)
 
 HEADERS += \
     qtestceplibcombinedmainwindow.h
