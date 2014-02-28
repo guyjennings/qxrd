@@ -1,4 +1,4 @@
-message(qceplib-mar345 PWD = $${PWD})
+message(qceplib-mar345 PWD = $${PWD} QCEPLIB_MAR345_VERSION = $${QCEPLIB_MAR345_VERSION})
 
 INCLUDEPATH += $${PWD}
 

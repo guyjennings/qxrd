@@ -1,4 +1,4 @@
-message(qceplib-tiff PWD = $${PWD})
+message(qceplib-tiff PWD = $${PWD} QCEPLIB_TIFF_VERSION = $${QCEPLIB_TIFF_VERSION})
 
 macx {
   include("$${PWD}/tiffconfig/qt-libtiff-macx.pri")

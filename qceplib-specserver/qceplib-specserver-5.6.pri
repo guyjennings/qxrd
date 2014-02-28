@@ -1,4 +1,4 @@
-message(qceplib-specserver PWD = $${PWD})
+message(qceplib-specserver PWD = $${PWD} QCEPLIB_SPECSERVER_VERSION = $${QCEPLIB_SPECSERVER_VERSION})
 
 QT += network script
 

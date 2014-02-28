@@ -1,4 +1,4 @@
-message(qceplib-levmar PWD = $${PWD})
+message(qceplib-levmar PWD = $${PWD} QCEPLIB_LEVMAR_VERSION = $${QCEPLIB_LEVMAR_VERSION})
 
 INCLUDEPATH += $${PWD}/levmar-2.6
 

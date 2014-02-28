@@ -1,4 +1,4 @@
-message(qceplib-cbf PWD = $${PWD})
+message(qceplib-cbf PWD = $${PWD} QCEPLIB_CBF_VERSION = $${QCEPLIB_CBF_VERSION})
 
 INCLUDEPATH += $${PWD}
 

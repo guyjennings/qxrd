@@ -1,4 +1,4 @@
-message(qceplib-nexus PWD = $${PWD})
+message(qceplib-nexus PWD = $${PWD} QCEPLIB_NEXUS_VERSION = $${QCEPLIB_NEXUS_VERSION})
 
 macx {
   NEXUSSRC  = $${PWD}/nexus-4.3.1/src/

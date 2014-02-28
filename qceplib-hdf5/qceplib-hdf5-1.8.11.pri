@@ -1,4 +1,4 @@
-message(qceplib-hdf5 PWD = $${PWD})
+message(qceplib-hdf5 PWD = $${PWD} QCEPLIB_HDF5_VERSION = $${QCEPLIB_HDF5_VERSION})
 
 macx {
   HDF5BASE = $${PWD}/hdf5-1.8.11/src/

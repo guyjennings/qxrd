@@ -1,4 +1,4 @@
-message(qceplib-qwt PWD = $${PWD})
+message(qceplib-qwt PWD = $${PWD} QCEPLIB_QWT_VERSION = $${QCEPLIB_QWT_VERSION})
 
 greaterThan(QT_MAJOR_VERSION,4): QT += printsupport concurrent
 
