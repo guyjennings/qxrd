@@ -47,9 +47,9 @@ bool QwtPlotPiecewiseCurve::ignorePoint(double x, double y) const
 }
 
 // This is a slow implementation: it might be worth to cache valid data ranges.
-void QwtPlotPiecewiseCurve::draw(QPainter *painter,
+void QwtPlotPiecewiseCurve::drawSeries(QPainter *painter,
                                  const QwtScaleMap &xMap, const QwtScaleMap &yMap,
-                                 int from, int to) const
+                                 const QRectF &canvasRect, int from, int to) const
 {
   if (to < 0) {
     to = dataSize() - 1;
@@ -68,7 +68,7 @@ void QwtPlotPiecewiseCurve::draw(QPainter *painter,
     }
 
     if (first <= to) {
-      QwtPlotCurve::draw(painter, xMap, yMap, first, last - 1);
+      QwtPlotCurve::drawSeries(painter, xMap, yMap, canvasRect, first, last - 1);
     }
   }
 }
@@ -110,4 +110,18 @@ QRectF QwtPlotPiecewiseCurve::boundingRect() const
   }
 
   return QRectF(minX, minY, maxX - minX, maxY - minY);
+}
+
+double QwtPlotPiecewiseCurve::x(int n) const
+{
+  QPointF s = sample(n);
+
+  return s.x();
+}
+
+double QwtPlotPiecewiseCurve::y(int n) const
+{
+  QPointF s = sample(n);
+
+  return s.y();
 }

@@ -215,18 +215,20 @@ void QxrdPlot::enableMeasuring()
   m_Measurer -> setEnabled(true);
 }
 
-void QxrdPlot::onLegendClicked(QwtPlotItem *item)
+void QxrdPlot::onLegendClicked(const QVariant &itemInfo, int index)
 {
   if (g_Application) {
-    g_Application->printMessage(tr("QxrdPlot::onLegendClicked(%1)").arg(item->title().text()));
+    g_Application->printMessage(tr("QxrdPlot::onLegendClicked(%1,%2)").arg(itemInfo.toString()).arg(index));
   }
 }
 
-void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
+void QxrdPlot::onLegendChecked(const QVariant &itemInfo, bool on, int index)
 {
   if (g_Application) {
-    g_Application->printMessage(tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
+    g_Application->printMessage(tr("QxrdPlot::onLegendChecked(%1,%2,%3)").arg(itemInfo.toString()).arg(on).arg(index));
   }
+
+  QwtPlotItem *item = infoToItem(itemInfo);
 
   if (item) {
     QwtPlotCurve *pc = dynamic_cast<QwtPlotCurve*>(item);
@@ -236,7 +238,7 @@ void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
       const QwtSymbol *oldsym = pc->symbol();
       QwtSymbol *sym = new QwtSymbol(oldsym->style(), oldsym->brush(), oldsym->pen(), oldsym->size());
 
-      if (checked) {
+      if (on) {
         pen.setWidth(3);
         sym->setSize(9,9);
       } else {

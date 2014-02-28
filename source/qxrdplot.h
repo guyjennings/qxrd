@@ -38,8 +38,8 @@ public slots:
   void enableZooming();
   void enableMeasuring();
 
-  void onLegendClicked(QwtPlotItem *item);
-  void onLegendChecked(QwtPlotItem *item, bool checked);
+  void onLegendClicked(const QVariant &itemInfo, int index);
+  void onLegendChecked(const QVariant &itemInfo, bool on, int index);
 
   void setXAxisLog(bool isLog);
   void setYAxisLog(bool isLog);

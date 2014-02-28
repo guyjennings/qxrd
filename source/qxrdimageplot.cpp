@@ -244,7 +244,7 @@ void QxrdImagePlot::recalculateDisplayedRange()
 {
   QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
-  if (set) {
+  if (set && m_DataRaster) {
     double mindis, maxdis;
 
     if (set->get_DisplayScalingMode() == PercentageMode) {
@@ -289,7 +289,10 @@ void QxrdImagePlot::onInterpolateChanged(bool interp)
 {
   //  printf("QxrdImagePlot::onInterpolateChanged(%d)\n", interp);
 
-  m_DataRaster->setInterpolate(interp);
+  if (m_DataRaster) {
+    m_DataRaster->setInterpolate(interp);
+
+  }
 
   replotImage();
 }
@@ -640,7 +643,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
     if (overflow == NULL) {
       setImage(data);
     } else {
-      setOverflows(overflow);
+      setOverflows(new QxrdMaskRasterData(overflow));
       setImage(data);
     }
 

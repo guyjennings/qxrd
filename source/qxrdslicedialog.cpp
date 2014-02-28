@@ -49,7 +49,8 @@ void QxrdSliceDialog::slicePolygon(QVector<QPointF> poly)
 
 void QxrdSliceDialog::reslice()
 {
-  m_SlicePlot->clear();
+  m_SlicePlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+  m_SlicePlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
 
   QxrdSliceDialogSettingsPtr set(m_SliceDialogSettings);
 
