@@ -4,6 +4,7 @@
 #include <qwt_plot_curve.h>
 #include <QMetaMethod>
 #include <qwt_legend.h>
+#include <qwt_legend_label.h>
 #include <stdio.h>
 //#include <QTime>
 #include "qxrddataprocessor.h"
@@ -98,7 +99,7 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
       proc -> updateEstimatedTime(proc -> prop_DisplayIntegratedDataTime(), tic.restart());
     }
 
-    QWidget *legend = m_Legend->find(pc);
+    QWidget *legend = m_Legend->legendWidget(itemToInfo(pc));
 
     if (legend) {
       legend->setToolTip(tooltip);
@@ -127,10 +128,10 @@ void QxrdIntegratorPlot::clearSelectedCurves()
   foreach(QwtPlotItem* item, itemList()) {
     QwtPlotCurve *pc = dynamic_cast<QwtPlotCurve*>(item);
     if (pc) {
-      QWidget *wid = m_Legend->find(pc);
+      QWidget *wid = m_Legend->legendWidget(itemToInfo(pc));
 
       if (wid) {
-        QwtLegendItem *itm = qobject_cast<QwtLegendItem*>(wid);
+        QwtLegendLabel *itm = qobject_cast<QwtLegendLabel*>(wid);
 
         if (itm) {
           if (itm->isChecked()) {

@@ -149,7 +149,8 @@ void QxrdFileSaver::saveDoubleData(QString name, QxrdDoubleImageDataPtr image, Q
         TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
         TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP));
 
-        image -> setTiffMetaData(tif);
+        TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
+        TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
 
         QVector<float> buffvec(ncols);
         float* buffer = buffvec.data();
@@ -251,7 +252,8 @@ void QxrdFileSaver::saveMaskData(QString name, QxrdMaskDataPtr image, int canOve
       TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8));
       TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
 
-      image -> setTiffMetaData(tif);
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
 
       QVector<quint8> buffvec(ncols);
       quint8* buffer = buffvec.data();
@@ -327,7 +329,8 @@ void QxrdFileSaver::saveRaw32Data(QString name, QxrdInt32ImageDataPtr image, Qxr
 
       TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
 
-      image -> setTiffMetaData(tif);
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
 
       if (nsum == 0) {
         QVector<quint8> buffvec(ncols);
@@ -433,7 +436,8 @@ void QxrdFileSaver::saveRaw16Data(QString name, QxrdInt16ImageDataPtr image, Qxr
       TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16));
       TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
 
-      image -> setTiffMetaData(tif);
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
 
       QVector<quint16> buffvec(ncols);
       quint16* buffer = buffvec.data();

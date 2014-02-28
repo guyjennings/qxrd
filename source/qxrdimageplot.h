@@ -107,9 +107,9 @@ public:
 
 private:
   void replotImage();
-  void setImage(QxrdRasterData data);
-  void setMask(QxrdMaskRasterData data);
-  void setOverflows(QxrdMaskRasterData overflow);
+  void setImage(QxrdRasterData *data);
+  void setMask(QxrdMaskRasterData *data);
+  void setOverflows(QxrdMaskRasterData *overflow);
 
   void colorMapStart(QColor startColor, QColor endColor);
   void colorMapRange(double value1, QColor color1, double value2, QColor color2);
@@ -138,20 +138,20 @@ private:
   QxrdMaskDataPtr            m_Mask;
   QxrdMaskDataPtr            m_Overflow;
 
-  QxrdRasterData             m_DataRaster;
-  QxrdMaskRasterData         m_MaskRaster;
-  QxrdMaskRasterData         m_OverflowRaster;
+  QxrdRasterData            *m_DataRaster;
+  QxrdMaskRasterData        *m_MaskRaster;
+  QxrdMaskRasterData        *m_OverflowRaster;
 
   QwtPlotSpectrogram        *m_DataImage;
   QwtPlotSpectrogram        *m_MaskImage;
   QwtPlotSpectrogram        *m_OverflowImage;
 //  QxrdPlotImagePtr           m_PlotImage;
-  QwtLinearColorMap          m_ColorMap;
+  QwtLinearColorMap         *m_ColorMap;
 
-  QxrdMaskColorMap           m_MaskColorMap;
+  QxrdMaskColorMap          *m_MaskColorMap;
   int                        m_MaskAlpha;
 
-  QxrdMaskColorMap           m_OverflowColorMap;
+  QxrdMaskColorMap          *m_OverflowColorMap;
   int                        m_OverflowAlpha;
 
   QxrdDataProcessorWPtr      m_DataProcessor;

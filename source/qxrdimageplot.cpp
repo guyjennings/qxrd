@@ -36,10 +36,10 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_DataImage(NULL),
     m_MaskImage(NULL),
     m_OverflowImage(NULL),
-    m_ColorMap(Qt::black, Qt::white),
-    m_MaskColorMap(Qt::red, QColor(0,0,0,0)),
+    m_ColorMap(new QwtLinearColorMap(Qt::black, Qt::white)),
+    m_MaskColorMap(new QxrdMaskColorMap(Qt::red, QColor(0,0,0,0))),
     m_MaskAlpha(80),
-    m_OverflowColorMap(QColor(0,0,0,0), Qt::green),
+    m_OverflowColorMap(new QxrdMaskColorMap(QColor(0,0,0,0), Qt::green)),
     m_OverflowAlpha(256),
     m_DataProcessor(),
     m_CenterFinderPicker(NULL),
@@ -248,14 +248,14 @@ void QxrdImagePlot::recalculateDisplayedRange()
     double mindis, maxdis;
 
     if (set->get_DisplayScalingMode() == PercentageMode) {
-      double minv = m_DataRaster.minValue();
-      double maxv = m_DataRaster.maxValue();
+      double minv = m_DataRaster->minValue();
+      double maxv = m_DataRaster->maxValue();
       double del = maxv-minv;
 
       mindis = minv+del*set->get_DisplayMinimumPct()/100.0;
       maxdis = minv+del*set->get_DisplayMaximumPct()/100.0;
     } else if (set->get_DisplayScalingMode() == PercentileMode) {
-      QwtInterval range = m_DataRaster.percentileRange(set->get_DisplayMinimumPctle(), set->get_DisplayMaximumPctle());
+      QwtInterval range = m_DataRaster->percentileRange(set->get_DisplayMinimumPctle(), set->get_DisplayMaximumPctle());
 
       mindis = range.minValue();
       maxdis = range.maxValue();
@@ -264,7 +264,7 @@ void QxrdImagePlot::recalculateDisplayedRange()
       maxdis = set->get_DisplayMaximumVal();
     }
 
-    m_DataRaster.setDisplayedRange(mindis, maxdis);
+    m_DataRaster->setDisplayedRange(mindis, maxdis);
 
     replotImage();
   }
@@ -272,7 +272,7 @@ void QxrdImagePlot::recalculateDisplayedRange()
 
 void QxrdImagePlot::replotImage()
 {
-  m_DataImage -> setSamples(m_DataRaster);
+  m_DataImage -> setData(m_DataRaster);
 
   m_DataImage -> invalidateCache();
   m_DataImage -> itemChanged();
@@ -289,7 +289,7 @@ void QxrdImagePlot::onInterpolateChanged(bool interp)
 {
   //  printf("QxrdImagePlot::onInterpolateChanged(%d)\n", interp);
 
-  m_DataRaster.setInterpolate(interp);
+  m_DataRaster->setInterpolate(interp);
 
   replotImage();
 }
@@ -328,7 +328,7 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
     m_CenterMarker -> setLinePen(pen);
   }
 
-  m_MaskColorMap.setColorInterval(pen.color(), QColor(0,0,0,0));
+  m_MaskColorMap->setColorInterval(pen.color(), QColor(0,0,0,0));
 
   foreach (QwtPlotMarker *m, m_PowderPointMarkers) {
     const QwtSymbol *oldsym = m->symbol();
@@ -344,7 +344,7 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
 
 void QxrdImagePlot::colorMapStart(QColor startColor, QColor endColor)
 {
-  m_ColorMap.setColorInterval(startColor, endColor);
+  m_ColorMap->setColorInterval(startColor, endColor);
 }
 
 void QxrdImagePlot::colorMapRange(double value1, QColor color1, double value2, QColor color2)
@@ -368,10 +368,10 @@ void QxrdImagePlot::colorMapRange(double value1, QColor color1, double value2, Q
 
       QColor col = QColor::fromRgbF(r1 + (r2-r1)*interp, g1 + (g2 - g1)*interp, b1 + (b2 - b1)*interp);
 
-      m_ColorMap.addColorStop(val, col);
+      m_ColorMap->addColorStop(val, col);
     }
   } else {
-    m_ColorMap.addColorStop(value1, color1);
+    m_ColorMap->addColorStop(value1, color1);
   }
 }
 
@@ -585,7 +585,7 @@ void QxrdImagePlot::changedColorMap()
   replotImage();
 }
 
-void QxrdImagePlot::setImage(QxrdRasterData data)
+void QxrdImagePlot::setImage(QxrdRasterData *data)
 {
   m_DataRaster = data;
 
@@ -596,7 +596,7 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
   recalculateDisplayedRange();
 }
 
-void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
+void QxrdImagePlot::setMask(QxrdMaskRasterData *mask)
 {
   m_MaskRaster = mask;
 
@@ -607,7 +607,7 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
   replot();
 }
 
-void QxrdImagePlot::setOverflows(QxrdMaskRasterData overflow)
+void QxrdImagePlot::setOverflows(QxrdMaskRasterData *overflow)
 {
   m_OverflowRaster = overflow;
 
@@ -630,12 +630,12 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
     m_Overflow = overflow;
 
     if (!image ||
-        image->get_Width() != m_DataRaster.width() ||
-        image->get_Height() != m_DataRaster.height()) {
+        image->get_Width() != m_DataRaster->width() ||
+        image->get_Height() != m_DataRaster->height()) {
       m_FirstTime = true;
     }
 
-    QxrdRasterData data(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
+    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
 
     if (overflow == NULL) {
       setImage(data);
@@ -667,13 +667,13 @@ void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMas
     m_Mask = mask;
 
     if (!image ||
-        image->get_Width() != m_DataRaster.width() ||
-        image->get_Height() != m_DataRaster.height()) {
+        image->get_Width() != m_DataRaster->width() ||
+        image->get_Height() != m_DataRaster->height()) {
       m_FirstTime = true;
     }
 
-    QxrdRasterData data(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
-    QxrdMaskRasterData msk(mask, false);
+    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
+    QxrdMaskRasterData *msk = new QxrdMaskRasterData(mask, false);
 
     setImage(data);
     setMask(msk);
@@ -712,22 +712,22 @@ void QxrdImagePlot::onCenterChanged(QPointF c)
 
 const QxrdRasterData* QxrdImagePlot::raster() const
 {
-  return &m_DataRaster;
+  return m_DataRaster;
 }
 
 QxrdRasterData* QxrdImagePlot::raster()
 {
-  return &m_DataRaster;
+  return m_DataRaster;
 }
 
 const QxrdMaskRasterData* QxrdImagePlot::maskRaster() const
 {
-  return &m_MaskRaster;
+  return m_MaskRaster;
 }
 
 QxrdMaskRasterData* QxrdImagePlot::maskRaster()
 {
-  return &m_MaskRaster;
+  return m_MaskRaster;
 }
 
 void QxrdImagePlot::disablePickers()
@@ -845,8 +845,8 @@ QwtText QxrdImagePlot::trackerText(const QPointF &pos)
     }
   }
 
-  if (m_MaskRaster.data()) {
-    double mask = m_MaskRaster.value(pos.x(),pos.y());
+  if (m_MaskRaster->data()) {
+    double mask = m_MaskRaster->value(pos.x(),pos.y());
     res += tr(", %1").arg(mask);
 
     if (set) {
