@@ -1,3 +1,5 @@
-DEFINES += QCEPLIB_CBF_VERSION=\"0.9.3.3\"
+QCEPLIB_CBF_VERSION = "0.9.3.3"
 
-include(qceplib-cbf/qceplib-cbf-0.1.0-0.9.3.3.pri)
+DEFINES += QCEPLIB_CBF_VERSION=\"$${QCEPLIB_CBF_VERSION}\"
+
+include(qceplib-cbf/qceplib-cbf-$${QCEPLIB_CBF_VERSION}.pri)
