@@ -12,7 +12,7 @@ class QxrdPlotMeasurer : public QwtPlotPicker
 public:
   QxrdPlotMeasurer(QWidget *canvas, QxrdPlotPtr plot);
 
-  virtual QwtText trackerText(const QPointF &pos) const;
+  virtual QwtText trackerTextF(const QPointF &pos) const;
 
 private:
   QxrdPlotPtr m_Plot;

@@ -822,7 +822,7 @@ void QxrdImagePlot::replot()
   //  g_Application->printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
 }
 
-QwtText QxrdImagePlot::trackerText(const QPointF &pos)
+QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
 {
   const QxrdRasterData *ras = this->raster();
 

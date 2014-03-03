@@ -101,7 +101,7 @@ public:
 
   void replot();
 
-  virtual QwtText trackerText(const QPointF &pos);
+  virtual QwtText trackerTextF(const QPointF &pos);
 
   void contextMenuEvent(QContextMenuEvent *event);
 

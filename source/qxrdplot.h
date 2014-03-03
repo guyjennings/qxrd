@@ -25,7 +25,7 @@ public:
 //  virtual void setSaver(QxrdSettingsSaverPtr saver);
 
   void setPlotCurveStyle(int index, QwtPlotCurve *curve);
-  virtual QwtText trackerText(const QPointF &pos);
+  virtual QwtText trackerTextF(const QPointF &pos);
 
   void contextMenuEvent(QContextMenuEvent *event);
   void updateZoomer();

@@ -13,7 +13,7 @@ public:
   QxrdPlotZoomer(QWidget *canvas, QxrdPlot *plot);
 
 public:
-  virtual QwtText trackerText(const QPointF &pos) const;
+  virtual QwtText trackerTextF(const QPointF &pos) const;
 
 private:
   QxrdPlot *m_Plot;

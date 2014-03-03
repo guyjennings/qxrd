@@ -15,7 +15,7 @@ QxrdPlotMeasurer::QxrdPlotMeasurer(QWidget *canvas, QxrdPlotPtr plot)
   setRubberBand(QwtPicker::PolygonRubberBand);
 }
 
-QwtText QxrdPlotMeasurer::trackerText(const QPointF &pos) const
+QwtText QxrdPlotMeasurer::trackerTextF(const QPointF &pos) const
 {
-  return (m_Plot ? m_Plot->trackerText(pos) : tr("%1, %2").arg(pos.x()).arg(pos.y()));
+  return (m_Plot ? m_Plot->trackerTextF(pos) : tr("%1, %2").arg(pos.x()).arg(pos.y()));
 }

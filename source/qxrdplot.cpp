@@ -323,7 +323,7 @@ int QxrdPlot::logAxis(int axis)
   return m_IsLog[axis];
 }
 
-QwtText QxrdPlot::trackerText(const QPointF &pos)
+QwtText QxrdPlot::trackerTextF(const QPointF &pos)
 {
   QxrdPlotSettingsPtr set(m_PlotSettings);
 
