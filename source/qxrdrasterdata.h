@@ -45,7 +45,7 @@ private:
   QxrdMaskDataPtr        m_Mask;
   int                    m_NRows;
   int                    m_NCols;
-  QwtInterval      m_Range;
+  QwtInterval            m_Range;
   int                    m_Interpolate;
 };
 

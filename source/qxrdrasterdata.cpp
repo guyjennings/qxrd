@@ -18,6 +18,10 @@ QxrdRasterData::QxrdRasterData(QxrdDoubleImageDataPtr img, int interp, QxrdMaskD
                         .HEXARG(img.data()).arg(interp).HEXARG(mask.data()).HEXARG(this));
     }
   }
+
+  setInterval(Qt::XAxis, QwtInterval(0.0, m_NCols));
+  setInterval(Qt::YAxis, QwtInterval(0.0, m_NCols));
+  setInterval(Qt::ZAxis, range);
 }
 
 void QxrdRasterData::setInterpolate(int interp)
