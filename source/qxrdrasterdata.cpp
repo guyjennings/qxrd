@@ -92,6 +92,8 @@ QwtInterval QxrdRasterData::range() const
 void QxrdRasterData::setDisplayedRange(double min, double max)
 {
   m_Range = QwtInterval(min, max);
+
+  setInterval(Qt::ZAxis, m_Range);
 }
 
 double QxrdRasterData::minValue()
