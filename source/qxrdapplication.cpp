@@ -682,7 +682,14 @@ void QxrdApplication::doAboutQxrd()
 #endif
 
   about += tr("Qt Version %1\n").arg(qVersion());
-  about += tr("QWT Version %1").arg(QWT_VERSION_STR);
+  about += tr("Qceplib Version %1\n").arg(STR(QCEPLIB_VERSION));
+  about += tr("QWT Version %1\n").arg(STR(QCEPLIB_QWT_VERSION));
+  about += tr("Mar345 Version %1\n").arg(STR(QCEPLIB_MAR345_VERSION));
+  about += tr("CBF Version %1\n").arg(STR(QCEPLIB_CBF_VERSION));
+  about += tr("TIFF Version %1\n").arg(STR(QCEPLIB_TIFF_VERSION));
+  about += tr("LevMar Version %1\n").arg(STR(QCEPLIB_LEVMAR_VERSION));
+  about += tr("HDF5 Version %1\n").arg(STR(QCEPLIB_HDF5_VERSION));
+  about += tr("Spec Server Version %1\n").arg(STR(QCEPLIB_SPECSERVER_VERSION));
 
   QMessageBox::about(NULL, "QXRD", about);
 }
