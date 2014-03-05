@@ -27,6 +27,7 @@ win32-msvc* {
   QMAKE_CXXFLAGS += /Zi
   QMAKE_CFLAGS += /Zi
   QMAKE_LFLAGS += /DEBUG /FIXED:no
+  DEFINES += NOMINMAX
 }
 
 win32-g++ {
