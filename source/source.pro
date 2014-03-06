@@ -504,6 +504,7 @@ contains(DEFINES,HAVE_PERKIN_ELMER) {
 
 OTHER_FILES += qxrd.rc \
     qxrd.nsi \
+    qxrd-qt5.nsi \
     qxrd-cuda.pri \
     HeaderTemplates.txt
 
@@ -513,56 +514,90 @@ win32 { # Copy QT Libraries into app directory
   LIBDIR = $$[QT_INSTALL_BINS]
   LIBDIR_WIN = $${replace(LIBDIR, /, \\)}
 
-  win32-g++ {
-    exists($${LIBDIR}/libgcc_s_dw2-1.dll) {
-      message("MINGW found in $${LIBDIR}/libgcc_s_dw2-1.dll")
-      QMAKE_EXTRA_TARGETS += libgcc
-      PRE_TARGETDEPS   += ../libgcc_s_dw2-1.dll
-      libgcc.target   = ../libgcc_s_dw2-1.dll
-      libgcc.depends  = $${LIBDIR}/libgcc_s_dw2-1.dll
-      libgcc.commands = $(COPY_FILE) $${LIBDIR_WIN}\\libgcc_s_dw2-1.dll ..\\libgcc_s_dw2-1.dll
-    }
-
-    exists($${LIBDIR}/mingwm10.dll) {
-      message("MINGW found in $${LIBDIR}/mingwm10.dll")
-      QMAKE_EXTRA_TARGETS += mingwm10
-      PRE_TARGETDEPS   += ../mingwm10.dll
-      mingwm10.target   = ../mingwm10.dll
-      mingwm10.depends  = $${LIBDIR}/QtCored4.dll
-      mingwm10.commands = $(COPY_FILE) $${LIBDIR_WIN}\\mingwm10.dll ..\\mingwm10.dll
-    }
-  }
+  QMAKE_EXTRA_TARGETS += qtlibs
 
   isEqual(QT_MAJOR_VERSION, 5) {
     CONFIG(debug, debug|release) {
-      libs = Qt5Cored Qt5Networkd Qt5Guid Qt5Scriptd Qt5Widgetsd
+      libs =  Qt5Cored \
+              Qt5Networkd \
+              Qt5Guid \
+              Qt5Scriptd \
+              Qt5Widgetsd \
+              Qt5Svgd \
+              Qt5OpenGLd \
+              Qt5PrintSupportd \
+              icudt51 \
+              icuin51 \
+              icuuc51 \
+              libEGLd \
+              libGLESv2d
+      platform = qwindowsd
     } else {
-      libs = Qt5Core Qt5Network Qt5Gui Qt5Script Qt5Widgets
+      libs =  Qt5Core \
+              Qt5Network \
+              Qt5Gui \
+              Qt5Script \
+              Qt5Widgets \
+              Qt5Svg \
+              Qt5OpenGL \
+              Qt5PrintSupport \
+              icudt51 \
+              icuin51 \
+              icuuc51 \
+              libEGL \
+              libGLESv2
+      platform = qwindows
     }
+
+    QMAKE_EXTRA_TARGETS += qtplatformdir
+    qtplatformdir.target = ../platforms
+    qtplatformdir.commands = $(MKDIR) ..\\platforms
+
+    QMAKE_EXTRA_TARGETS += qtplatform
+    qtplatform.target   = ../platforms/$${platform}.dll
+    qtplatform.depends  = qtplatformdir $${LIBDIR_WIN}/../plugins/platforms/$${platform}.dll
+    qtplatform.commands +=
+    qtplatform.commands += $(COPY_FILE) $${LIBDIR_WIN}\\..\\plugins\\platforms\\$${platform}.dll ..\\platforms\\$${platform}.dll
+
+    qtlibs.depends += qtplatform
+
+    for(lib, libs) {
+      !build_pass:message(Target $${lib})
+      QMAKE_EXTRA_TARGETS += $${lib}
+      $${lib}.target      = ../$${lib}.dll
+      $${lib}.depends    += $${LIBDIR}/$${lib}.dll
+      $${lib}.commands   += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
+
+      qtlibs.depends     += $${lib}
+    }
+
+    QMAKE_CLEAN += ../platforms/*
+    QMAKE_CLEAN += ../platforms
   }
 
   isEqual(QT_MAJOR_VERSION, 4) {
     CONFIG(debug, debug|release) {
-      libs = QtCored4 QtNetworkd4 QtGuid4 QtScriptd4
+      libs = QtCored4 QtNetworkd4 QtGuid4 QtScriptd4 QtOpenGLd4 QtSvgd4
     } else {
-      libs = QtCore4 QtNetwork4 QtGui4 QtScript4
+      libs = QtCore4 QtNetwork4 QtGui4 QtScript4 QtOpenGL4 QtSvg4
+    }
+
+    for(lib, libs) {
+      !build_pass:message(Target $${lib})
+
+      qtlibs.depends     += $${LIBDIR}/$${lib}.dll
+      qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
     }
   }
 
-  QMAKE_EXTRA_TARGETS += qtlibs
-  PRE_TARGETDEPS      += qtlibs
-  qtlibs.target       += qtlibs
+  QMAKE_CLEAN += ../*.dll
+  QMAKE_CLEAN += ../plugins/*
+  QMAKE_CLEAN += ../plugins
 
-  for(lib, libs) {
-    message(Copying $${lib})
-    qtlibs.depends    += $${LIBDIR_WIN}\\$${lib}.dll
-    qtlibs.commands   += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
-  }
-
-  QMAKE_DISTCLEAN += /Q ..\\*.dll
-  QMAKE_DISTCLEAN += ..\\plugins\\*
-  QMAKE_DISTCLEAN += ..\\plugins
+  PRE_TARGETDEPS  += qtlibs
 }
+
+TARGET.depends += qtlibs
 
 win32 { # Make NSIS installer...
 #  CONFIG(release, debug|release) {
@@ -596,7 +631,11 @@ win32 { # Make NSIS installer...
       }
       QMAKE_POST_LINK += /DAPPDIR=\"$${OUT_PWD_WIN}\\..\\.\"
 
-      QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd.nsi\"
+      isEqual(QT_MAJOR_VERSION, 4) {
+        QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd.nsi\"
+      } else {
+        QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd-qt5.nsi\"
+      }
     }
 #  }
 }
