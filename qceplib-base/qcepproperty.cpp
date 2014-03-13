@@ -491,7 +491,8 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
 
       int metaindex = meta->indexOfProperty(qPrintable(key));
 
-      if (metaindex >= 0) {
+      if (metaindex == 0) { // objectName is ignored on reading
+      } else if (metaindex > 0) {
         QMetaProperty metaproperty = meta->property(metaindex);
 
         if (metaproperty.isStored()) {
@@ -547,7 +548,8 @@ void QcepProperty::readSettings(QObject *object, QString groupName, QSettings *s
 
       int metaindex = meta->indexOfProperty(qPrintable(key));
 
-      if (metaindex >= 0) {
+      if (metaindex == 0) { // objectName is ignored on reading
+      } else if (metaindex > 0) {
         QMetaProperty metaproperty = meta->property(metaindex);
 
         if (metaproperty.isStored()) {
