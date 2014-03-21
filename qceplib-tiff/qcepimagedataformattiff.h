@@ -1,5 +1,5 @@
-#ifndef QCEPIMAGEDATAFORMATTIF_H
-#define QCEPIMAGEDATAFORATTIFF_H
+#ifndef QCEPIMAGEDATAFORMATTIFF_H
+#define QCEPIMAGEDATAFORMATTIFF_H
 
 #include "qcepmacros.h"
 
@@ -29,4 +29,5 @@ private:
 
 extern void qceptiff_warningHandler(const char *module, const char *fmt, va_list ap);
 
-#endif
+#endif /* QCEPIMAGEDATAFORMATTIFF_H */
+

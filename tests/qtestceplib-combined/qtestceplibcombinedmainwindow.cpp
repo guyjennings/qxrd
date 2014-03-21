@@ -181,7 +181,7 @@ void QtestceplibCombinedMainWindow::doTestHDF5Library()
         this, "Read HDF5 File...", defHDFPath);
 
   if (theFile.length()) {
-    hid_t file, data;
+    hid_t file/*, data*/;
 
     file = H5Fopen(qPrintable(theFile), H5F_ACC_RDONLY, H5P_DEFAULT);
     H5Fclose(file);
@@ -369,7 +369,7 @@ void QtestceplibCombinedMainWindow::doTestCBFLibrary()
       size_t elements,elements_read, elsize;
       int minelement, maxelement;
       unsigned int cifcompression;
-      int realarray;
+//      int realarray;
       const char *byteorder;
       size_t dim1, dim2, dim3, padding;
 
