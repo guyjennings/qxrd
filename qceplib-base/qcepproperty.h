@@ -824,6 +824,40 @@ QcepIntListProperty *prop_##propname() { \
 private: \
 QcepIntListProperty m_##propname;
 
+#define QCEP_INTEGER_VECTOR_PROPERTY(propname) \
+public: \
+QcepIntVector get_##propname() const \
+{ \
+  return m_##propname.value(); \
+} \
+\
+void set_##propname(QcepIntVector val) \
+{ \
+  m_##propname.setValue(val); \
+} \
+\
+QcepIntVector def_##propname() const \
+{ \
+  return m_##propname.defaultValue(); \
+} \
+\
+void setdef_##propname(QcepIntVector val) \
+{ \
+  m_##propname.setDefaultValue(val); \
+} \
+\
+void reset_##propname() \
+{ \
+  m_##propname.resetValue(); \
+} \
+\
+QcepIntVectorProperty *prop_##propname() { \
+  return &m_##propname; \
+} \
+\
+private: \
+QcepIntVectorProperty m_##propname;
+
 #define QCEP_STRING_LIST_PROPERTY(propname) \
 public: \
 QStringList get_##propname() const \
