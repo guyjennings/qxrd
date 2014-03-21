@@ -403,6 +403,32 @@ private:
   QcepIntList m_Value;
 };
 
+class QcepIntVectorProperty : public QcepProperty {
+  Q_OBJECT
+public:
+  QcepIntVectorProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntVector value, QString toolTip);
+
+  QcepIntVector value() const;
+  QcepIntVector defaultValue() const;
+  QString toString(const QcepIntVector &list);
+
+public slots:
+  void setValue(QcepIntVector val, int index);
+  void setValue(QcepIntVector val);
+  void incValue(QcepIntVector step);
+  void setDefaultValue(QcepIntVector val);
+  void resetValue();
+  void clear();
+  void appendValue(int val);
+
+signals:
+  void valueChanged(QcepIntVector val, int index);
+
+private:
+  QcepIntVector m_Default;
+  QcepIntVector m_Value;
+};
+
 class QcepStringListProperty : public QcepProperty {
   Q_OBJECT
 public:

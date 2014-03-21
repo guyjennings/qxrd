@@ -1718,7 +1718,7 @@ void QcepDoubleVectorProperty::incValue(QcepDoubleVector step)
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
-    printMessage(tr("%1: QcepDoubleVectorProperty::incValue(QcepDoubleList %2...)")
+    printMessage(tr("%1: QcepDoubleVectorProperty::incValue(QcepDoubleVector %2...)")
                  .arg(name()).arg(step.value(0)));
   }
 
@@ -1945,6 +1945,141 @@ void QcepIntListProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
     printMessage(tr("%1: QcepIntListProperty::resetValue").arg(name()));
+  }
+
+  setValue(defaultValue());
+}
+
+QcepIntVectorProperty::QcepIntVectorProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepIntVector value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
+    m_Default(value),
+    m_Value(value)
+{
+}
+
+QcepIntVector QcepIntVectorProperty::value() const
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  return m_Value;
+}
+
+QcepIntVector QcepIntVectorProperty::defaultValue() const
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  return m_Default;
+}
+
+void QcepIntVectorProperty::setValue(QcepIntVector val, int index)
+{
+  if (debug()) {
+    printMessage(tr("%1 QcepIntVectorProperty::setValue(QcepIntVector %2, int %3) [%4]")
+                 .arg(name()).arg(toString(val)).arg(index).arg(this->index()));
+  }
+
+  if (index == this->index()) {
+    setValue(val);
+  }
+}
+
+void QcepIntVectorProperty::incValue(QcepIntVector step)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
+    printMessage(tr("%1: QcepIntVectorProperty::incValue(QcepIntVector %2...)")
+                 .arg(name()).arg(step.value(0)));
+  }
+
+  for (int i=0; i<m_Value.count(); i++) {
+    m_Value[i] += step.value(i);
+  }
+
+  QcepSettingsSaverPtr saver(m_Saver);
+
+  if (saver) {
+    saver->changed(this);
+  }
+
+  emit valueChanged(m_Value, incIndex(1));
+}
+
+void QcepIntVectorProperty::clear()
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  setValue(QcepIntVector());
+}
+
+void QcepIntVectorProperty::appendValue(int val)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepIntVector list = value();
+  list.append(val);
+
+  setValue(list);
+}
+
+QString QcepIntVectorProperty::toString(const QcepIntVector &val)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QString res = "[";
+  int ct = val.count();
+
+  for (int i=0; i<ct; i++) {
+    if (i<(ct-1)) {
+      res += tr("%1, ").arg(val[i]);
+    } else {
+      res += tr("%1").arg(val[i]);
+    }
+  }
+
+  res += "]";
+
+  return res;
+}
+
+void QcepIntVectorProperty::setValue(QcepIntVector val)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printMessage(tr("%1 QcepIntVectorProperty::setValue(QcepIntVector %2)")
+                 .arg(name()).arg(toString(val)));
+  }
+
+  if (val != m_Value) {
+    if (debug()) {
+      printMessage(tr("%1: QcepIntVectorProperty::setValue(QcepIntVector %2) [%3]")
+                   .arg(name()).arg(toString(val)).arg(index()));
+    }
+
+    m_Value = val;
+
+    QcepSettingsSaverPtr saver(m_Saver);
+
+    if (saver) {
+      saver->changed(this);
+    }
+
+    emit valueChanged(m_Value, incIndex(1));
+  }
+}
+
+void QcepIntVectorProperty::setDefaultValue(QcepIntVector val)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  m_Default = val;
+}
+
+void QcepIntVectorProperty::resetValue()
+{
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printMessage(tr("%1: QcepIntVectorProperty::resetValue").arg(name()));
   }
 
   setValue(defaultValue());
