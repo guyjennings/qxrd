@@ -16,37 +16,25 @@ macx {
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent
 
-# POST_TARGETDEPS += install
-#target.path = ../app
-INSTALLS += target
-CONFIG += qt #profile
+CONFIG += qt
+
 QT += network \
     script \
     scripttools
-macx:#CONFIG += x86
-else:unix {
+
+unix {
     message(Version = $${VERSION})
     message(Plugin path = $${QXRD_PLUGIN_PATH})
 }
+
 DEFINES += QXRD_VERSION=\"$$VERSION\"
+
 !isEmpty(QXRD_PLUGIN_PATH):DEFINES += QXRD_PLUGIN_PATH=\"$$QXRD_PLUGIN_PATH\"
+
 *g++* { 
     QMAKE_CXXFLAGS += -g
     QMAKE_CFLAGS += -g
     QMAKE_LFLAGS += -g
-}
-vectorize { 
-    QMAKE_CXXFLAGS += -msse2 \
-        -ftree-vectorize \
-        -ftree-vectorizer-verbose=5
-    QMAKE_CFLAGS += -msse2 \
-        -ftree-vectorize \
-        -ftree-vectorizer-verbose=5
-}
-profile { 
-    QMAKE_CXXFLAGS += -pg
-    QMAKE_CFLAGS += -pg
-    QMAKE_LFLAGS += -pg
 }
 
 MOC_DIR = moc
@@ -62,7 +50,6 @@ RESOURCES += qxrdresources.qrc
 
 INCLUDEPATH += qceplib
 
-# RESOURCES.depends += help/*.html
 OTHER_FILES += help/qxrdhelptext.html \
     help/qxrdhelpscript.html \
     help/qxrdhelpscriptfunctions.html \
@@ -105,9 +92,7 @@ include(submodules/qceplib/qceplib-levmar.pri)
 include(submodules/qceplib/qceplib-hdf5.pri)
 include(submodules/qceplib/qceplib-specserver.pri)
 
-# include("qxrd-cuda.pri")
 HEADERS += \
-#    submodules/qceplib/qspecserver.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
     qxrddetector.h \
@@ -127,7 +112,6 @@ HEADERS += \
     qxrdimagedataformatcbf.h
 
 SOURCES += \
-#    submodules/qceplib/qspecserver.cpp \
     qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
     qxrddetector.cpp \
@@ -468,6 +452,7 @@ SOURCES += qxrd.cpp \
     qxrdinfodialogsettings.cpp \
     qxrdcenterfinderplotsettings.cpp \
     qxrdsliceplotsettings.cpp
+
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
@@ -488,6 +473,7 @@ FORMS = qxrdwindow.ui \
     qxrdacquisitiondialog.ui \
     qxrdacquisitionextrainputsdialog.ui \
     qxrduserscriptdialog.ui
+
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 
@@ -508,9 +494,8 @@ OTHER_FILES += qxrd.rc \
     qxrd-cuda.pri \
     HeaderTemplates.txt
 
-win32 { # Copy QT Libraries into app directory
-#  PRE_TARGETDEPS += app
-#  QMAKE_EXTRA_TARGETS += app
+win32 {
+# Copy QT Libraries into app directory
   LIBDIR = $$[QT_INSTALL_BINS]
   LIBDIR_WIN = $${replace(LIBDIR, /, \\)}
 
@@ -551,13 +536,12 @@ win32 { # Copy QT Libraries into app directory
 
     QMAKE_EXTRA_TARGETS += qtplatformdir
     qtplatformdir.target = ../platforms
-    qtplatformdir.commands = $(MKDIR) ..\\platforms
+    qtplatformdir.commands = if not exist ..\\platforms $(MKDIR) ..\\platforms
 
     QMAKE_EXTRA_TARGETS += qtplatform
     qtplatform.target   = ../platforms/$${platform}.dll
     qtplatform.depends  = qtplatformdir $${LIBDIR_WIN}/../plugins/platforms/$${platform}.dll
-    qtplatform.commands +=
-    qtplatform.commands += $(COPY_FILE) $${LIBDIR_WIN}\\..\\plugins\\platforms\\$${platform}.dll ..\\platforms\\$${platform}.dll
+    qtplatform.commands += $(COPY_FILE) /Y $${LIBDIR_WIN}\\..\\plugins\\platforms\\$${platform}.dll ..\\platforms\\$${platform}.dll
 
     qtlibs.depends += qtplatform
 
@@ -566,9 +550,11 @@ win32 { # Copy QT Libraries into app directory
       QMAKE_EXTRA_TARGETS += $${lib}
       $${lib}.target      = ../$${lib}.dll
       $${lib}.depends    += $${LIBDIR}/$${lib}.dll
-      $${lib}.commands   += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
+      $${lib}.commands   += $(COPY_FILE) /Y $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
 
-      qtlibs.depends     += $${lib}
+#      qtlibs.depends     += $${lib}
+#      qtlibs.depends     += $${LIBDIR}/$${lib}.dll
+#      qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
     }
 
     QMAKE_CLEAN += ../platforms/*
@@ -600,7 +586,6 @@ win32 { # Copy QT Libraries into app directory
 TARGET.depends += qtlibs
 
 win32 { # Make NSIS installer...
-#  CONFIG(release, debug|release) {
     OUT_PWD_WIN = $${replace(OUT_PWD, /, \\)}
     PWD_WIN = $${replace(PWD, /, \\)}
 
@@ -637,12 +622,7 @@ win32 { # Make NSIS installer...
         QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd-qt5.nsi\"
       }
     }
-#  }
 }
-
-#for(m, QT) {
-#  message("In source.pro QT contains $${m}")
-#}
 
 
 
