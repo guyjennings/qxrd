@@ -84,7 +84,7 @@ void QcepImageDataBase::printMessage(QString msg, QDateTime ts)
   if (s) {
     s->printMessage(msg, ts);
   } else {
-    printf(qPrintable(msg));
+    printf("%s\n", qPrintable(msg));
   }
 }
 
