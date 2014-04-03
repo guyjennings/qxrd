@@ -1,0 +1,5 @@
+QCEPLIB_SZLIB_VERSION = "2.1"
+
+DEFINES += QCEPLIB_SZLIB_VERSION=\"$${QCEPLIB_SZLIB_VERSION}\"
+
+include(qceplib-szlib/qceplib-szlib-$${QCEPLIB_SZLIB_VERSION}.pri)
