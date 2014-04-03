@@ -3,6 +3,8 @@ TARGET   = qtestceplib-combined
 DESTDIR  = ../bin/
 
 include(../../qceplib-base.pri)
+include(../../qceplib-szlib.pri)
+include(../../qceplib-zlib.pri)
 include(../../qceplib-hdf5.pri)
 include(../../qceplib-cbf.pri)
 include(../../qceplib-mar345.pri)
