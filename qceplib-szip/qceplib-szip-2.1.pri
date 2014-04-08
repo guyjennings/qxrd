@@ -1,4 +1,4 @@
-message(qceplib-zlib PWD = $${PWD} QCEPLIB_SZLIB_VERSION = $${QCEPLIB_SZLIB_VERSION})
+message(qceplib-szip PWD = $${PWD} QCEPLIB_SZIP_VERSION = $${QCEPLIB_SZIP_VERSION})
 
 INCLUDEPATH += $${PWD}
 
