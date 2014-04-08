@@ -1,6 +1,5 @@
 message(qceplib-hdf5 PWD = $${PWD} QCEPLIB_HDF5_VERSION = $${QCEPLIB_HDF5_VERSION})
 
-message(QMAKE_HOST.arch = $${QMAKE_HOST.arch})
 linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
 linux-g++-32:QMAKE_TARGET.arch = x86
 linux-g++-64:QMAKE_TARGET.arch = x86_64
