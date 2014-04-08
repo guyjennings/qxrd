@@ -1,6 +1,45 @@
 message(qceplib-szip PWD = $${PWD} QCEPLIB_SZIP_VERSION = $${QCEPLIB_SZIP_VERSION})
 
-INCLUDEPATH += $${PWD}
+linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
+linux-g++-32:QMAKE_TARGET.arch = x86
+linux-g++-64:QMAKE_TARGET.arch = x86_64
+macx-*-32:QMAKE_TARGET.arch = x86
+
+SZIPBASE = $${PWD}/szip-$${QCEPLIB_SZIP_VERSION}/src/
+
+macx {
+  SZIPCONF = $${PWD}/szip-config/macx/
+} else:unix {
+  contains(QMAKE_TARGET.arch, x86_64) {
+    message(64 bit build)
+    SZIPCONF = $${PWD}/szip-config/lin64/
+  } else {
+    message(32 bit build)
+    SZIPCONF = $${PWD}/szip-config/lin32/
+  }
+} else:win32 {
+  contains(QMAKE_TARGET.arch, x86_64) {
+    message(64 bit build)
+    SZIPCONF = $${PWD}/szip-config/win64/
+  } else {
+    message(32 bit build)
+    SZIPCONF = $${PWD}/szip-config/win32/
+  }
+}
+
+INCLUDEPATH += $${SZIPCONF} $${SZIPBASE}
+
+HEADERS += \
+  $${SZIPCONF}/SZconfig.h \
+  $${SZIPBASE}/rice.h \
+  $${SZIPBASE}/ricehdf.h \
+  $${SZIPBASE}/szip_adpt.h \
+  $${SZIPBASE}/szlib.h
+
+SOURCES += \
+  $${SZIPBASE}/encoding.c \
+  $${SZIPBASE}/rice.c \
+  $${SZIPBASE}/sz_api.c
 
 #macx {
 #  CBFBASE = $${PWD}/CBFlib-0.9.3.3/src/

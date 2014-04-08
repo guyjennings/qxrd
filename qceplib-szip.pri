@@ -2,4 +2,4 @@ QCEPLIB_SZIP_VERSION = "2.1"
 
 DEFINES += QCEPLIB_SZIP_VERSION=\"$${QCEPLIB_SZIP_VERSION}\"
 
-include(qceplib-szlib/qceplib-szip-$${QCEPLIB_SZIP_VERSION}.pri)
+include(qceplib-szip/qceplib-szip-$${QCEPLIB_SZIP_VERSION}.pri)
