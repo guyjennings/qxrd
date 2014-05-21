@@ -688,6 +688,8 @@ void QxrdApplication::doAboutQxrd()
   about += tr("CBF Version %1\n").arg(STR(QCEPLIB_CBF_VERSION));
   about += tr("TIFF Version %1\n").arg(STR(QCEPLIB_TIFF_VERSION));
   about += tr("LevMar Version %1\n").arg(STR(QCEPLIB_LEVMAR_VERSION));
+  about += tr("ZLIB Version %1\n").arg(STR(QCEPLIB_ZLIB_VERSION));
+  about += tr("SZIP Version %1\n").arg(STR(QCEPLIB_SZIP_VERSION));
   about += tr("HDF5 Version %1\n").arg(STR(QCEPLIB_HDF5_VERSION));
   about += tr("Spec Server Version %1\n").arg(STR(QCEPLIB_SPECSERVER_VERSION));
 
