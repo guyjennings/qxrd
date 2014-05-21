@@ -1,6 +1,17 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.1 - May 21 2014
+First release in 0.11.x series ...
+
+Major changes to use current versions of qceplib 0.1.4, qwt 6.1 and qt 5.x
+
+Still problems with qt 5.x builds so still include qt 4.8.5 build
+
+Minor updates:
+
+Various changes related to saving integrated data
+
 ## v0.9.17 - Nov 8 2013
 Fixed problems with saving user defined properties in acquired images
 
