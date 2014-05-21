@@ -591,8 +591,15 @@ void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QSt
     QFileInfo fi(fileName);
 
     QString fileBase = fi.completeBaseName();
+    QString extension = ".avg";
 
-    QString name = QDir(dir).filePath(fileBase+".avg");
+    QxrdExperimentPtr exp(m_Experiment);
+
+    if (exp) {
+      extension = exp->get_ScanFileExtension();
+    }
+
+    QString name = QDir(dir).filePath(fileBase+extension);
 
     name = uniqueFileName(name);
 
@@ -657,8 +664,31 @@ void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, Q
     const double *x = data->x();
     const double *y = data->y();
 
-    for (int i=0; i<n; i++) {
-      fprintf(logFile, "%g %g\n", x[i], y[i]);
+    int negh = 0;
+    QxrdExperimentPtr exp(m_Experiment);
+
+    if (exp) {
+      negh = exp->get_ScanDataNegative();
+    }
+
+    if (negh == 0) {
+      for (int i=0; i<n; i++) {
+        fprintf(logFile, "%E %E\n", x[i], y[i]);
+      }
+    } else if (negh == 1) {
+      for (int i=0; i<n; i++) {
+        if (y[i] >= 0) {
+          fprintf(logFile, "%E %E\n", x[i], y[i]);
+        } else {
+          fprintf(logFile, "%E %E\n", x[i], 0);
+        }
+      }
+    } else {
+      for (int i=0; i<n; i++) {
+        if (y[i] >= 0) {
+          fprintf(logFile, "%E %E\n", x[i], y[i]);
+        }
+      }
     }
 
     fflush(logFile);

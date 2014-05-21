@@ -80,6 +80,10 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     connect(m_IntegratedScansFileBrowse, SIGNAL(clicked()), this, SLOT(integratedScansFileBrowse()));
     m_IntegratedScansFile -> setText(expt->get_ScanFileName());
 
+    m_ScanFileExtension -> setText(expt->get_ScanFileExtension());
+
+    m_ScanDataNegative -> setCurrentIndex(expt->get_ScanDataNegative());
+
     if (proc) {
       connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
       m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
@@ -269,6 +273,8 @@ void QxrdExperimentPreferencesDialog::accept()
     expt -> set_DataDirectory(m_DataDirectory -> text());
     expt -> set_LogFileName    (m_CurrentLogFile -> text());
     expt -> set_ScanFileName    (m_IntegratedScansFile -> text());
+    expt -> set_ScanFileExtension(m_ScanFileExtension->text());
+    expt -> set_ScanDataNegative(m_ScanDataNegative->currentIndex());
 
     if (acq) {
       acq  -> set_FileIndexWidth(m_FileIndexWidth -> value());

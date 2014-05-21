@@ -188,6 +188,12 @@ public:  // Properties
   Q_PROPERTY(QString scanFileName     READ get_ScanFileName WRITE set_ScanFileName)
   QCEP_STRING_PROPERTY(ScanFileName)
 
+  Q_PROPERTY(QString scanFileExtension     READ get_ScanFileExtension WRITE set_ScanFileExtension)
+  QCEP_STRING_PROPERTY(ScanFileExtension)
+
+  Q_PROPERTY(int     scanDataNegative      READ get_ScanDataNegative WRITE set_ScanDataNegative)
+  QCEP_INTEGER_PROPERTY(ScanDataNegative)
+
   Q_PROPERTY(int    detectorType  READ get_DetectorType WRITE set_DetectorType)
   QCEP_INTEGER_PROPERTY(DetectorType)
 

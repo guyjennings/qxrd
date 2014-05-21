@@ -62,6 +62,8 @@ QxrdExperiment::QxrdExperiment(
   m_DataDirectory(m_SettingsSaver, this, "dataDirectory", defaultDataDirectory(path), "Saved Data Directory"),
   m_LogFileName(m_SettingsSaver, this, "logFileName", defaultLogName(path), "Log File Name"),
   m_ScanFileName(m_SettingsSaver, this, "scanFileName", defaultScanName(path), "Scan File Name"),
+  m_ScanFileExtension(m_SettingsSaver, this, "scanFileExtension", ".avg", "Scan File Extension"),
+  m_ScanDataNegative(m_SettingsSaver, this, "scanDataNegative", 0, "Scan Data Negative Value Handling"),
   m_DetectorType(m_SettingsSaver, this, "detectorType", 0, "Detector Type"),
   m_DetectorTypeName(QxrdSettingsSaverPtr(), this,"detectorTypeName", QxrdDetectorThread::detectorTypeName(get_DetectorType()), "Name of Detector Type"),
   m_DetectorNumber(m_SettingsSaver, this, "detectorNumber", 0, "Detector Number"),
