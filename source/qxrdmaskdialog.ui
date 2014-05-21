@@ -253,6 +253,9 @@ Current Mask</string>
           <property name="toolTip">
            <string>Minimum value for masking range</string>
           </property>
+          <property name="decimals">
+           <number>5</number>
+          </property>
           <property name="minimum">
            <double>-1000000000.000000000000000</double>
           </property>
@@ -335,6 +338,9 @@ Current Mask</string>
          <widget class="QDoubleSpinBox" name="m_MaskMaximum">
           <property name="toolTip">
            <string>Maximum value for masking range</string>
+          </property>
+          <property name="decimals">
+           <number>5</number>
           </property>
           <property name="minimum">
            <double>-1000000000.000000000000000</double>

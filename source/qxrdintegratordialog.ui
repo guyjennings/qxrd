@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>293</width>
+    <width>297</width>
     <height>271</height>
    </rect>
   </property>
@@ -21,7 +21,16 @@
     </sizepolicy>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <property name="margin">
+    <property name="leftMargin">
+     <number>5</number>
+    </property>
+    <property name="topMargin">
+     <number>5</number>
+    </property>
+    <property name="rightMargin">
+     <number>5</number>
+    </property>
+    <property name="bottomMargin">
      <number>5</number>
     </property>
     <property name="spacing">
@@ -165,6 +174,9 @@ property integrator.integrationXUnits</string>
        <string>Start value for integration
 script property integrator.integrationMinimum</string>
       </property>
+      <property name="decimals">
+       <number>5</number>
+      </property>
       <property name="maximum">
        <double>10000.000000000000000</double>
       </property>
@@ -175,6 +187,9 @@ script property integrator.integrationMinimum</string>
       <property name="toolTip">
        <string>Ending value for integration range
 script property integrator.integrationMaximum</string>
+      </property>
+      <property name="decimals">
+       <number>5</number>
       </property>
       <property name="maximum">
        <double>10000.000000000000000</double>

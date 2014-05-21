@@ -51,6 +51,9 @@ Script property: synchronization.syncAcquisitionMinimum</string>
       <property name="keyboardTracking">
        <bool>false</bool>
       </property>
+      <property name="decimals">
+       <number>5</number>
+      </property>
      </widget>
     </item>
     <item row="8" column="2">
@@ -72,6 +75,9 @@ Script Property synchronization.syncAcquisitionPhaseShift</string>
       </property>
       <property name="suffix">
        <string> deg</string>
+      </property>
+      <property name="decimals">
+       <number>5</number>
       </property>
       <property name="minimum">
        <double>-360.000000000000000</double>
@@ -97,6 +103,9 @@ Script property: synchronization.syncAcquisitionMaximum</string>
       <property name="keyboardTracking">
        <bool>false</bool>
       </property>
+      <property name="decimals">
+       <number>5</number>
+      </property>
      </widget>
     </item>
     <item row="6" column="3">
@@ -107,6 +116,9 @@ Script property: synchronization.syncAcquisitionSymmetry</string>
       </property>
       <property name="keyboardTracking">
        <bool>false</bool>
+      </property>
+      <property name="decimals">
+       <number>5</number>
       </property>
      </widget>
     </item>
