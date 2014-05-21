@@ -44,7 +44,7 @@ void QxrdUserScriptDialog::onButtonClicked(QAbstractButton* button)
 {
   QDialogButtonBox::ButtonRole role = ui->m_ButtonBar->buttonRole(button);
 
-  printf("Button %p, role %d\n", button, role);
+//  printf("Button %p, role %d\n", button, role);
 
   if (role == QDialogButtonBox::ResetRole) {
     ui->m_ScriptEditor->setText(m_Default);
