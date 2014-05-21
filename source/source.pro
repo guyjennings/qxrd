@@ -549,14 +549,14 @@ win32 {
 
     for(lib, libs) {
       !build_pass:message(Target $${lib})
-      QMAKE_EXTRA_TARGETS += $${lib}
-      $${lib}.target      = ../$${lib}.dll
-      $${lib}.depends    += $${LIBDIR}/$${lib}.dll
-      $${lib}.commands   += $(COPY_FILE) /Y $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
+#      QMAKE_EXTRA_TARGETS += $${lib}
+#      $${lib}.target      = ../$${lib}.dll
+#      $${lib}.depends    += $${LIBDIR}/$${lib}.dll
+#      $${lib}.commands   += $(COPY_FILE) /Y $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
 
 #      qtlibs.depends     += $${lib}
-#      qtlibs.depends     += $${LIBDIR}/$${lib}.dll
-#      qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
+      qtlibs.depends     += $${LIBDIR}/$${lib}.dll
+      qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
     }
 
     QMAKE_CLEAN += ../platforms/*
