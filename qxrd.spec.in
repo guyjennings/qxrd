@@ -20,9 +20,9 @@ Source0:        http://www.bessrc.aps.anl.gov/software/qxrd/%{name}-%{version}.t
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  desktop-file-utils qt4 >= %{qtversion}, qt4-x11 qt4-devel 
-BuildRequires:  libtiff-devel
+BuildRequires:  libtiff-devel, CBFlib-devel
 #BuildRequires:  epics-base-devel, epics-base, acqiris
-Requires:       qt4 >= %{qtversion}, qt4-x11, libtiff
+Requires:       qt4 >= %{qtversion}, qt4-x11, libtiff, CBFlib
 #Requires:       epics-base, acqiris
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
@@ -34,7 +34,7 @@ qxrd is a readout and control program for perkin elmer x ray detector
 %setup -n %{name}-%{version}
 
 %build
-/usr/bin/qmake-qt4 %{name}.pro -o Makefile "QXRD_PLUGINS_DIR=%{_libdir}/%{name}-%{version}"
+/usr/bin/qmake-qt4 %{name}.pro -recursive "QXRD_PLUGINS_DIR=%{_libdir}/%{name}-%{version}"
 make clean
 make %{?_smp_mflags}
 
