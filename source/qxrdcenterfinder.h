@@ -195,6 +195,8 @@ public slots:
   int          countPowderPoints();
   void         setPowderPoint(int i, QScriptValue val);
 
+  void zapPixel(int x, int y);
+
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);
 //  void setPen(const QPen &pen);

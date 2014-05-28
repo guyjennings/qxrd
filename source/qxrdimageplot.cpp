@@ -933,6 +933,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QAction *delPoint        = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
           QAction *deleteAllPoints = plotMenu.addAction("Delete all Points");
           QAction *fitPeakNear     = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *zapPixel        = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
 
           QAction *action = plotMenu.exec(event->globalPos());
 
@@ -950,6 +951,8 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             cf->deletePowderPoints();
           } else if (action == fitPeakNear) {
             cf->fitPeakNear(x,y);
+          } else if (action == zapPixel) {
+            cf->zapPixel(qRound(x),qRound(y));
           }
         }
       }
