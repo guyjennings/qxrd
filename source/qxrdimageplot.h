@@ -87,6 +87,8 @@ public slots:
   void enableContextMenu();
   void disableContextMenu();
 
+  void zapPixel(int x, int y);
+
 public:
   QxrdImagePlotSettingsWPtr imagePlotSettings();
 

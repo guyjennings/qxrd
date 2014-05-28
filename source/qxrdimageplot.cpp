@@ -952,7 +952,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           } else if (action == fitPeakNear) {
             cf->fitPeakNear(x,y);
           } else if (action == zapPixel) {
-            cf->zapPixel(qRound(x),qRound(y));
+            this->zapPixel(qRound(x),qRound(y));
           }
         }
       }
@@ -962,6 +962,26 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
   } else {
     event->accept();
   }
+}
+
+void QxrdImagePlot::zapPixel(int x, int y)
+{
+  double sum = 0;
+  int    npx = 0;
+
+  for (int ix = x-1; ix <= x+1; ix++) {
+    for (int iy = y-1; iy <= y+1; iy++) {
+      sum += m_Data->value(ix, iy);
+      npx += 1;
+    }
+  }
+
+  sum -= m_Data->value(x,y);
+  npx -= 1;
+
+  m_Data->setValue(x,y, sum/npx);
+
+  replot();
 }
 
 void QxrdImagePlot::onMarkedPointsChanged()
