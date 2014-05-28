@@ -371,6 +371,14 @@ void QcepImageData<T>::fill(T val)
   m_Image.fill(val);
 }
 
+template <typename T>
+void QcepImageData<T>::setImageData(int x, int y, double v)
+{
+  if (x >= 0 && x < get_Width() && y >= 0 && y < get_Height()) {
+    m_Image[(get_Height()-y-1)*get_Width()+x] = v;
+  }
+}
+
 //template <typename T>
 //template <typename T2>
 //void QcepImageData<T>::copyImage(QSharedPointer< QcepImageData<T2> > dest)

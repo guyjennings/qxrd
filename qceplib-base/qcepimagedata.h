@@ -114,11 +114,12 @@ public:
   Q_PROPERTY(bool used READ get_Used WRITE set_Used)
   QCEP_BOOLEAN_PROPERTY(Used)
 
-  public slots:
-    void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+public slots:
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
-    virtual double getImageData(int x, int y) const = 0;
-    virtual QVector<double> getImageData(int x0, int y0, int x1, int y1) const = 0;
+  virtual double getImageData(int x, int y) const = 0;
+  virtual QVector<double> getImageData(int x0, int y0, int x1, int y1) const = 0;
+  virtual void setImageData(int x, int y, double v) = 0;
 
 public:
 //  int get_Width() const
@@ -202,6 +203,7 @@ public:
 
   double getImageData(int x, int y) const;
   QVector<double> getImageData(int x0, int y0, int x1, int y1) const;
+  void setImageData(int x, int y, double v);
 
 //  template <typename T2>
 //  void copyImage(QSharedPointer< QcepImageData<T2> > dest);
