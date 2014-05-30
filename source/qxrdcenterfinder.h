@@ -171,6 +171,7 @@ public slots:
   void fitPowderCircle();
   void deletePowderPointNear(double x, double y);
   void deletePowderPoints();
+  void appendPowderPoint(double x, double y);
 
   QPointF powderPoint(int i);
   int nearestPowderPointIndex(double x, double y);
@@ -180,8 +181,9 @@ public slots:
   QPointF adjustPoint(int i);
   void adjustPointNear(double x, double y);
   void adjustAllPoints();
-  void fitPeakNear(double x, double y);
-  void fitPeakNear();
+  bool fitPeakNear(double x, double y);
+  bool fitPeakNear();
+
 
   QString defaultUserGeometryScript();
   QString defaultUserAbsorptionScript();

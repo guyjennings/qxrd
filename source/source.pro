@@ -72,7 +72,8 @@ OTHER_FILES += help/qxrdhelptext.html \
     unsubtractDark.js \
     qxrdexampleusergeometry.js \
     qxrdexampleuserabsorption.js \
-    help/qxrdhelpuserfunctions.html
+    help/qxrdhelpuserfunctions.html \
+    calgrid.js
 DISTFILES += qxrd.dox \
     download/index.php \
     images/*.* \

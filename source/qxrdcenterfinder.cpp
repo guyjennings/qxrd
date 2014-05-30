@@ -340,6 +340,11 @@ void QxrdCenterFinder::deletePowderPointNear(double x, double y)
   }
 }
 
+void QxrdCenterFinder::appendPowderPoint(double x, double y)
+{
+  m_MarkedPoints.appendValue(QPointF(x,y));
+}
+
 void QxrdCenterFinder::deletePowderPoints()
 {
   m_MarkedPoints.clear();
@@ -447,12 +452,12 @@ static void fitPeak(double *p, double *hx, int m,int n, void *adata)
   }
 }
 
-void QxrdCenterFinder::fitPeakNear()
+bool QxrdCenterFinder::fitPeakNear()
 {
-  fitPeakNear(get_PeakCenterX(), get_PeakCenterY());
+  return fitPeakNear(get_PeakCenterX(), get_PeakCenterY());
 }
 
-void QxrdCenterFinder::fitPeakNear(double x, double y)
+bool QxrdCenterFinder::fitPeakNear(double x, double y)
 {
   printMessage(tr("fit peak near [%1,%2]").arg(x).arg(y));
 
@@ -490,8 +495,12 @@ void QxrdCenterFinder::fitPeakNear(double x, double y)
     set_PeakBackground(parms[4]);
     set_PeakBackgroundX(parms[5]);
     set_PeakBackgroundY(parms[6]);
+
+    return true;
   } else {
     printMessage(tr("Fitting Failed"));
+
+    return false;
   }
 }
 

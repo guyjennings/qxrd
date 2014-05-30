@@ -950,7 +950,9 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           } else if (action == deleteAllPoints) {
             cf->deletePowderPoints();
           } else if (action == fitPeakNear) {
-            cf->fitPeakNear(x,y);
+            if (cf->fitPeakNear(x,y)) {
+              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
+            }
           } else if (action == zapPixel) {
             this->zapPixel(qRound(x),qRound(y));
           }
