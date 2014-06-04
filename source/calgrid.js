@@ -3,23 +3,76 @@
   */
 
 var grid;
-var x0 = 58.6275;
-var y0 = 45.2048;
+//var x0 = 59.4838917636;
+//var y0 = 46.0376164063;
 var nx = 39;
 var ny = 39;
-var dxx = (1984.96 - x0)/38.0;
-var dxy = (54.9697 - y0)/38.0;
-var dyx = (50.1158 - x0)/38.0;
-var dyy = (1971.85 - y0)/38.0;
+//var dxx = 50.6669752504;
+//var dxy = 0.2394249314;
+//var dyx = -0.2309734292;
+//var dyy = 50.6682539949;
 
-function calgrid()
+function initGrid()
+{
+  if (centering.countPowderPoints() >= 3) {
+    x0 = centering.getPowderPointX(0);
+    y0 = centering.getPowderPointY(0);
+
+    dxx = centering.getPowderPointX(1)-x0;
+    dxy = centering.getPowderPointY(1)-y0;
+
+    dyx = centering.getPowderPointX(2)-x0;
+    dyy = centering.getPowderPointY(2)-y0;
+  }
+}
+
+function refineAxes()
+{
+  j = 0;
+  for (i=2; i<=nx; i++) {
+    x = x0 + i*dxx + j*dyx;
+    y = y0 + i*dxy + j*dyy;
+
+    if (centering.fitPeakNear(x,y)) {
+      if (centering.peakHeight > 200) {
+        xx = centering.peakCenterX;
+        yy = centering.peakCenterY;
+        if (Math.sqrt(Math.pow(xx-x,2)+Math.pow(yy-y,2)) < 5) {
+          dxx = (xx-x0)/i;
+          dxy = (yy-y0)/i;
+          centering.appendPowderPoint(xx,yy);
+        }
+      }
+    }
+  }
+
+  i = 0;
+  for (j=2; j<=ny; j++) {
+    x = x0 + i*dxx + j*dyx;
+    y = y0 + i*dxy + j*dyy;
+
+    if (centering.fitPeakNear(x,y)) {
+      if (centering.peakHeight > 200) {
+        xx = centering.peakCenterX;
+        yy = centering.peakCenterY;
+        if (Math.sqrt(Math.pow(xx-x,2)+Math.pow(yy-y,2)) < 5) {
+          dyx = (xx-x0)/j;
+          dyy = (yy-y0)/j;
+          centering.appendPowderPoint(xx,yy);
+        }
+      }
+    }
+  }
+}
+
+function calGrid()
 {
   grid = [];
 
   centering.deletePowderPoints();
 
   for (j=0; j<=ny; j++) {
-    for (i=0; i<=ny; i++) {
+    for (i=0; i<=nx; i++) {
       x = x0 + i*dxx + j*dyx;
       y = y0 + i*dxy + j*dyy;
 
@@ -29,14 +82,20 @@ function calgrid()
       centering.peakBackgroundY = 0;
 
       if (centering.fitPeakNear(x,y)) {
-        centering.appendPowderPoint(centering.peakCenterX,centering.peakCenterY);
-        grid.push([i,j,centering.peakCenterX,centering.peakCenterY]);
+        if (centering.peakHeight > 200) {
+          xx = centering.peakCenterX;
+          yy = centering.peakCenterY;
+          if (Math.sqrt(Math.pow(xx-x,2)+Math.pow(yy-y,2)) < 5) {
+            centering.appendPowderPoint(xx,yy);
+            grid.push([i,j,xx,yy]);
+          }
+        }
       }
     }
   }
 }
 
-function dumpgrid()
+function dumpGrid()
 {
   for(p in grid) {
     pt = grid[p]
@@ -46,6 +105,6 @@ function dumpgrid()
     y = pt[3];
     xx = x0 + i*dxx + j*dyx;
     yy = y0 + i*dxy + j*dyy;
-    printMessage(i,j,xx,yy,x-xx,y-yy);
+    printMessage(i,j,xx,yy,x,y,x-xx,y-yy);
   }
 }
