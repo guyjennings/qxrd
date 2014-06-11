@@ -16,6 +16,8 @@ class QxrdCircularMaskPicker : public QxrdMaskPicker
 {
 public:
   QxrdCircularMaskPicker(QWidget *canvas, QxrdImagePlot *plot);
+
+  QPolygon adjustedPoints(const QPolygon &points) const;
 };
 
 class QxrdPolygonalMaskPicker : public QxrdMaskPicker

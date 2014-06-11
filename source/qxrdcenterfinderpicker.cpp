@@ -9,6 +9,6 @@ QxrdCenterFinderPicker::QxrdCenterFinderPicker(QxrdImagePlot *plot)
     m_Plot(plot)
 {
   setTrackerMode(QwtPicker::AlwaysOn);
-  setStateMachine(new QwtPickerClickPointMachine());
+  setStateMachine(new QwtPickerDragPointMachine());
   setRubberBand(QwtPicker::CrossRubberBand);
 }
