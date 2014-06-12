@@ -47,10 +47,24 @@
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QDoubleSpinBox" name="m_DistortionP0X"/>
+     <widget class="QDoubleSpinBox" name="m_DistortionP0X">
+      <property name="minimum">
+       <double>-10000.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10000.000000000000000</double>
+      </property>
+     </widget>
     </item>
     <item row="3" column="2">
-     <widget class="QDoubleSpinBox" name="m_DistortionP0Y"/>
+     <widget class="QDoubleSpinBox" name="m_DistortionP0Y">
+      <property name="minimum">
+       <double>-10000.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10000.000000000000000</double>
+      </property>
+     </widget>
     </item>
     <item row="4" column="0">
      <widget class="QLabel" name="label_4">
@@ -60,10 +74,24 @@
      </widget>
     </item>
     <item row="4" column="1">
-     <widget class="QDoubleSpinBox" name="m_DistortionP1X"/>
+     <widget class="QDoubleSpinBox" name="m_DistortionP1X">
+      <property name="minimum">
+       <double>-10000.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10000.000000000000000</double>
+      </property>
+     </widget>
     </item>
     <item row="4" column="2">
-     <widget class="QDoubleSpinBox" name="m_DistortionP1Y"/>
+     <widget class="QDoubleSpinBox" name="m_DistortionP1Y">
+      <property name="minimum">
+       <double>-10000.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10000.000000000000000</double>
+      </property>
+     </widget>
     </item>
     <item row="5" column="0">
      <widget class="QLabel" name="label_5">
@@ -73,10 +101,24 @@
      </widget>
     </item>
     <item row="5" column="1">
-     <widget class="QDoubleSpinBox" name="m_DistortionP2X"/>
+     <widget class="QDoubleSpinBox" name="m_DistortionP2X">
+      <property name="minimum">
+       <double>-10000.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10000.000000000000000</double>
+      </property>
+     </widget>
     </item>
     <item row="5" column="2">
-     <widget class="QDoubleSpinBox" name="m_DistortionP2Y"/>
+     <widget class="QDoubleSpinBox" name="m_DistortionP2Y">
+      <property name="minimum">
+       <double>-10000.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>10000.000000000000000</double>
+      </property>
+     </widget>
     </item>
     <item row="6" column="2">
      <spacer name="verticalSpacer">
