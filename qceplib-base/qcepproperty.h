@@ -485,19 +485,46 @@ public:
 
   QPointF value() const;
   QPointF defaultValue() const;
+  double subValue(int axis) const;
+
+  void linkTo(QDoubleSpinBox *xSpinBox, QDoubleSpinBox *ySpinBox);
+  void linkTo(int axis, QDoubleSpinBox *spinBox);
 
 public slots:
   void setValue(QPointF val, int index);
   void setValue(QPointF val);
   void setDefaultValue(QPointF val);
   void resetValue();
+  void setSubValue(int axis, double value, int index);
+  void setSubValue(int axis, double value);
 
 signals:
   void valueChanged(QPointF val, int index);
+  void subValueChanged(int axis, double val, int index);
 
 private:
   QPointF m_Default;
   QPointF m_Value;
+};
+
+class QcepDoublePointPropertyDoubleSpinBoxHelper : public QObject {
+  Q_OBJECT
+
+public:
+  QcepDoublePointPropertyDoubleSpinBoxHelper(QDoubleSpinBox *spinBox, QcepDoublePointProperty *property, int axis);
+  void connect();
+
+public slots:
+  void setSubValue(int axis, double value, int index);
+  void setValue(double value);
+
+signals:
+  void subValueChanged(int axis, double value, int index);
+
+private:
+  QDoubleSpinBox             *m_DoubleSpinBox;
+  QcepDoublePointProperty    *m_Property;
+  int                         m_Axis;
 };
 
 class QcepDoubleRectProperty : public QcepProperty {

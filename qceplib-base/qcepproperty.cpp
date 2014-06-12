@@ -2322,6 +2322,17 @@ QPointF QcepDoublePointProperty::defaultValue() const
   return m_Default;
 }
 
+double QcepDoublePointProperty::subValue(int axis) const
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (axis == 0) {
+    return m_Value.x();
+  } else {
+    return m_Value.y();
+  }
+}
+
 void QcepDoublePointProperty::setValue(QPointF val, int index)
 {
   if (debug()) {
@@ -2344,9 +2355,19 @@ void QcepDoublePointProperty::setValue(QPointF val)
   }
 
   if (val != m_Value) {
+    int newIndex = incIndex(1);
+
     if (debug()) {
       printMessage(tr("%1: QcepDoublePointProperty::setValue(QPointF(%2,%3)) [%4]")
                    .arg(name()).arg(val.x()).arg(val.y()).arg(index()));
+    }
+
+    if (val.x() != m_Value.x()) {
+      emit subValueChanged(0, val.x(), newIndex);
+    }
+
+    if (val.y() != m_Value.y()) {
+      emit subValueChanged(1, val.y(), newIndex);
     }
 
     m_Value = val;
@@ -2357,7 +2378,41 @@ void QcepDoublePointProperty::setValue(QPointF val)
       saver->changed(this);
     }
 
-    emit valueChanged(m_Value, incIndex(1));
+    emit valueChanged(m_Value, newIndex);
+  }
+}
+
+void QcepDoublePointProperty::setSubValue(int axis, double value, int index)
+{
+  if (index == this->index()) {
+    setSubValue(axis, value);
+  }
+}
+
+void QcepDoublePointProperty::setSubValue(int axis, double value)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (axis == 0) {
+    if (value != m_Value.x())  {
+      int newIndex = incIndex(1);
+
+      emit subValueChanged(0, value, newIndex);
+
+      m_Value.setX(value);
+
+      emit valueChanged(m_Value, newIndex);
+    }
+  } else {
+    if (value != m_Value.y())  {
+      int newIndex = incIndex(1);
+
+      emit subValueChanged(1, value, newIndex);
+
+      m_Value.setY(value);
+
+      emit valueChanged(m_Value, newIndex);
+    }
   }
 }
 
@@ -2377,6 +2432,75 @@ void QcepDoublePointProperty::resetValue()
   }
 
   setValue(defaultValue());
+}
+
+void QcepDoublePointProperty::linkTo(QDoubleSpinBox *xSpinBox, QDoubleSpinBox *ySpinBox)
+{
+  if (xSpinBox) {
+    linkTo(0, xSpinBox);
+  }
+
+  if (ySpinBox) {
+    linkTo(1, ySpinBox);
+  }
+}
+
+void QcepDoublePointProperty::linkTo(int axis, QDoubleSpinBox *spinBox)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepDoublePointPropertyDoubleSpinBoxHelper *helper
+      = new QcepDoublePointPropertyDoubleSpinBoxHelper(spinBox, this, axis);
+
+  helper->moveToThread(spinBox->thread());
+  helper->connect();
+
+  spinBox -> setValue(subValue(axis));
+  spinBox -> setKeyboardTracking(false);
+
+  setWidgetToolTip(spinBox);
+
+  connect(this, SIGNAL(subValueChanged(int,double,int)), helper, SLOT(setSubValue(int,double,int)));
+  connect(helper, SIGNAL(subValueChanged(int,double,int)), this, SLOT(setSubValue(int,double,int)));
+}
+
+QcepDoublePointPropertyDoubleSpinBoxHelper::QcepDoublePointPropertyDoubleSpinBoxHelper
+  (QDoubleSpinBox *spinBox, QcepDoublePointProperty *property, int axis)
+  : QObject(spinBox),
+    m_DoubleSpinBox(spinBox),
+    m_Property(property),
+    m_Axis(axis)
+{
+}
+
+void QcepDoublePointPropertyDoubleSpinBoxHelper::connect()
+{
+  CONNECT_CHECK(QObject::connect(m_DoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(setValue(double)), Qt::DirectConnection));
+}
+
+void QcepDoublePointPropertyDoubleSpinBoxHelper::setSubValue(int axis, double value, int index)
+{
+  if (m_Property->index() == index) {
+    if (m_Axis == axis) {
+      if (m_DoubleSpinBox->value() != value) {
+        bool block = m_DoubleSpinBox->blockSignals(true);
+        m_DoubleSpinBox->setValue(value);
+        m_DoubleSpinBox->blockSignals(block);
+      }
+    }
+  }
+}
+
+void QcepDoublePointPropertyDoubleSpinBoxHelper::setValue(double value)
+{
+  emit subValueChanged(m_Axis, value, m_Property->incIndex(1));
+}
+
+QcepDoubleRectProperty::QcepDoubleRectProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QRectF value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
+    m_Default(value),
+    m_Value(value)
+{
 }
 
 QcepDoubleRectProperty::QcepDoubleRectProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QRectF value, QString toolTip)
