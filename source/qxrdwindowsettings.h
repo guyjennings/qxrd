@@ -11,6 +11,8 @@
 #include "qxrdslicedialogsettings.h"
 #include "qxrdsynchronizedacquisitiondialogsettings.h"
 #include "qxrdacquisitionextrainputsdialogsettings.h"
+#include "qxrddistortioncorrectiondialogsettings.h"
+#include "qxrddistortioncorrectionplotsettings.h"
 
 class QxrdWindowSettings : public QObject
 {
@@ -39,6 +41,8 @@ public:
   QxrdInfoDialogSettingsWPtr                   infoDialogSettings();
   QxrdSynchronizedAcquisitionDialogSettingsWPtr synchronizedAcquisitionDialogSettings();
   QxrdAcquisitionExtraInputsDialogSettingsWPtr acquisitionExtraInputsDialogSettings();
+  QxrdDistortionCorrectionDialogSettingsWPtr   distortionCorrectionDialogSettings();
+  QxrdDistortionCorrectionPlotSettingsWPtr     distortionCorrectionPlotSettings();
 signals:
   
 public slots:
@@ -54,6 +58,8 @@ private:
   QxrdInfoDialogSettingsPtr                    m_InfoDialogSettings;
   QxrdSynchronizedAcquisitionDialogSettingsPtr m_SynchronizedAcquisitionDialogSettings;
   QxrdAcquisitionExtraInputsDialogSettingsPtr  m_AcquisitionExtraInputsDialogSettings;
+  QxrdDistortionCorrectionDialogSettingsPtr    m_DistortionCorrectionDialogSettings;
+  QxrdDistortionCorrectionPlotSettingsPtr      m_DistortionCorrectionPlotSettings;
 };
 
 typedef QSharedPointer<QxrdWindowSettings> QxrdWindowSettingsPtr;

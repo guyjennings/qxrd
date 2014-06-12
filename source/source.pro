@@ -114,7 +114,11 @@ HEADERS += \
     qxrdsynchronizedacquisitionplotsettings.h \
     qxrdimagedataformatcbf.h \
     qxrddistortioncorrection.h \
-    qxrddistortioncorrection-ptr.h
+    qxrddistortioncorrection-ptr.h \
+    qxrddistortioncorrectiondialog.h \
+    qxrddistortioncorrectiondialogsettings.h \
+    qxrddistortioncorrectionplot.h \
+    qxrddistortioncorrectionplotsettings.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -131,7 +135,11 @@ SOURCES += \
     qxrdsynchronizedacquisitiondialogsettings.cpp \
     qxrdsynchronizedacquisitionplotsettings.cpp \
     qxrdimagedataformatcbf.cpp \
-    qxrddistortioncorrection.cpp
+    qxrddistortioncorrection.cpp \
+    qxrddistortioncorrectiondialog.cpp \
+    qxrddistortioncorrectiondialogsettings.cpp \
+    qxrddistortioncorrectionplot.cpp \
+    qxrddistortioncorrectionplotsettings.cpp
 
 OTHER_FILES += testImage.js
 
@@ -478,7 +486,8 @@ FORMS = qxrdwindow.ui \
     qxrdwelcomerecentitem.ui \
     qxrdacquisitiondialog.ui \
     qxrdacquisitionextrainputsdialog.ui \
-    qxrduserscriptdialog.ui
+    qxrduserscriptdialog.ui \
+    qxrddistortioncorrectiondialog.ui
 
 macx:
 else:unix:LIBS += -ltiff

@@ -19,6 +19,10 @@ QxrdWindowSettings::QxrdWindowSettings(QxrdSettingsSaverWPtr saver,
         new QxrdSynchronizedAcquisitionDialogSettings(saver, NULL));
   m_AcquisitionExtraInputsDialogSettings = QxrdAcquisitionExtraInputsDialogSettingsPtr(
         new QxrdAcquisitionExtraInputsDialogSettings(saver, NULL));
+  m_DistortionCorrectionDialogSettings = QxrdDistortionCorrectionDialogSettingsPtr(
+        new QxrdDistortionCorrectionDialogSettings(saver, NULL));
+  m_DistortionCorrectionPlotSettings = QxrdDistortionCorrectionPlotSettingsPtr(
+        new QxrdDistortionCorrectionPlotSettings(saver, NULL));
 }
 
 void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
@@ -36,6 +40,8 @@ void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
     m_InfoDialogSettings->readSettings(settings, section+"/imageInfoDialog");
     m_SynchronizedAcquisitionDialogSettings->readSettings(settings, section+"/syncAcqDialog");
     m_AcquisitionExtraInputsDialogSettings->readSettings(settings, section+"/extraInputsDialog");
+    m_DistortionCorrectionDialogSettings->readSettings(settings, section+"/distortionCorrectionDialog");
+    m_DistortionCorrectionPlotSettings->readSettings(settings, section+"/distortionCorrectionPlot");
   }
 }
 
@@ -57,6 +63,8 @@ void QxrdWindowSettings::writeSettings(QSettings *settings, QString section)
     m_AcquisitionExtraInputsDialogSettings->writeSettings(settings, section+"/extraInputsDialog");
     m_SynchronizedAcquisitionDialogSettings->writeSettings(settings, section+"/syncAcqDialog");
     m_AcquisitionExtraInputsDialogSettings->writeSettings(settings, section+"/extraInputsDialog");
+    m_DistortionCorrectionDialogSettings->writeSettings(settings, section+"/distortionCorrectionDialog");
+    m_DistortionCorrectionPlotSettings->writeSettings(settings, section+"/distortionCorrectionPlot");
   }
 }
 
@@ -108,4 +116,14 @@ QxrdSynchronizedAcquisitionDialogSettingsWPtr QxrdWindowSettings::synchronizedAc
 QxrdAcquisitionExtraInputsDialogSettingsWPtr QxrdWindowSettings::acquisitionExtraInputsDialogSettings()
 {
   return m_AcquisitionExtraInputsDialogSettings;
+}
+
+QxrdDistortionCorrectionDialogSettingsWPtr QxrdWindowSettings::distortionCorrectionDialogSettings()
+{
+  return m_DistortionCorrectionDialogSettings;
+}
+
+QxrdDistortionCorrectionPlotSettingsWPtr QxrdWindowSettings::distortionCorrectionPlotSettings()
+{
+  return m_DistortionCorrectionPlotSettings;
 }

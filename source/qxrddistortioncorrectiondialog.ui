@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QxrdDistortionCorrectionDialog</class>
+ <widget class="QDockWidget" name="QxrdDistortionCorrectionDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Distortion</string>
+  </property>
+  <widget class="QWidget" name="dockWidgetContents">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>40</y>
+      <width>134</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Distortion Correction</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

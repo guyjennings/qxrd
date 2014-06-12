@@ -20,7 +20,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTabWidget" name="m_XRDTabWidget">
+      <widget class="QTabWidget" name="m_DistortionCorrectionPage">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>3</horstretch>
@@ -766,6 +766,137 @@
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="tab_6">
+        <attribute name="title">
+         <string>Distortion</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QToolButton" name="m_DistortionCorrectionZoomInButton">
+           <property name="toolTip">
+            <string>Zoom In</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <property name="autoExclusive">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" rowspan="5">
+          <widget class="QxrdDistortionCorrectionPlot" name="m_DistortionCorrectionPlot" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QToolButton" name="m_DistortionCorrectionZoomOutButton">
+           <property name="toolTip">
+            <string>Zoom Out</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QToolButton" name="m_DistortionCorrectionZoomAllButton">
+           <property name="toolTip">
+            <string>Auto Scale</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QToolButton" name="m_DistortionCorrectionMeasureButton">
+           <property name="toolTip">
+            <string>Measure Distances</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoExclusive">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>false</bool>
+           </property>
+           <property name="arrowType">
+            <enum>Qt::NoArrow</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <spacer name="verticalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>421</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
          <string>Messages</string>
@@ -966,7 +1097,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -1838,9 +1969,15 @@
    <extends>QTextBrowser</extends>
    <header>qxrdhelpbrowser.h</header>
   </customwidget>
+  <customwidget>
+   <class>QxrdDistortionCorrectionPlot</class>
+   <extends>QWidget</extends>
+   <header>qxrddistortioncorrectionplot.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>m_XRDTabWidget</tabstop>
+  <tabstop>m_DistortionCorrectionPage</tabstop>
   <tabstop>m_ImageZoomInButton</tabstop>
   <tabstop>m_ImageZoomOutButton</tabstop>
   <tabstop>m_ImageZoomAllButton</tabstop>
