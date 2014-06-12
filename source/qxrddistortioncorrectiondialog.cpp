@@ -1,6 +1,7 @@
 #include "qxrddistortioncorrectiondialog.h"
 #include "ui_qxrddistortioncorrectiondialog.h"
 #include "qxrddebug.h"
+#include "qxrddistortioncorrection.h"
 
 QxrdDistortionCorrectionDialog::QxrdDistortionCorrectionDialog(QxrdDistortionCorrectionPtr dis, QWidget *parent) :
   QDockWidget(parent),
@@ -11,6 +12,9 @@ QxrdDistortionCorrectionDialog::QxrdDistortionCorrectionDialog(QxrdDistortionCor
   }
 
   setupUi(this);
+
+  m_DistortionCorrection->prop_DistortionImagePath()->linkTo(m_DistortionCalibrationPath);
+//  m_DistortionCorrection->prop_DistortionP0()->linkTo();
 }
 
 void QxrdDistortionCorrectionDialog::init(QxrdDistortionCorrectionDialogSettingsWPtr settings)
