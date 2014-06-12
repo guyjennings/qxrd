@@ -129,6 +129,8 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_RefinedRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver));
   m_InitialRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(saver));
   m_RefinedRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(saver));
+
+  m_DistortionCorrection = QxrdDistortionCorrectionPtr(new QxrdDistortionCorrection(saver, m_Experiment));
 }
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()
@@ -199,6 +201,7 @@ void QxrdDataProcessorBase::writeSettings(QSettings *settings, QString section)
   m_RefinedRingSetFitParameters -> writeSettings(settings, section+"/refinedFit");
   m_InitialRingSetData -> writeSettings(settings, section+"/initialData");
   m_RefinedRingSetData -> writeSettings(settings, section+"/refinedData");
+  m_DistortionCorrection -> writeSettings(settings, section+"/distortion");
 }
 
 void QxrdDataProcessorBase::readSettings(QSettings *settings, QString section)
@@ -213,6 +216,7 @@ void QxrdDataProcessorBase::readSettings(QSettings *settings, QString section)
   m_RefinedRingSetFitParameters -> readSettings(settings, section+"/refinedFit");
   m_InitialRingSetData -> readSettings(settings, section+"/initialData");
   m_RefinedRingSetData -> readSettings(settings, section+"/refinedData");
+  m_DistortionCorrection -> readSettings(settings, section+"/distortion");
 }
 
 void QxrdDataProcessorBase::printMessage(QString msg, QDateTime ts) const
@@ -1889,6 +1893,15 @@ QxrdRingSetSampledDataPtr QxrdDataProcessorBase::refinedRingSetData() const
   }
 
   return m_RefinedRingSetData;
+}
+
+QxrdDistortionCorrectionPtr QxrdDataProcessorBase::distortionCorrection() const
+{
+  if (m_DistortionCorrection == NULL) {
+    printMessage("Problem QxrdDataProcessorBase::distortion == NULL");
+  }
+
+  return m_DistortionCorrection;
 }
 
 void QxrdDataProcessorBase::newImage(int ncols, int nrows)

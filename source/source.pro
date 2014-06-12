@@ -112,7 +112,9 @@ HEADERS += \
     qxrduserscriptdialog.h \
     qxrdsynchronizedacquisitiondialogsettings.h \
     qxrdsynchronizedacquisitionplotsettings.h \
-    qxrdimagedataformatcbf.h
+    qxrdimagedataformatcbf.h \
+    qxrddistortioncorrection.h \
+    qxrddistortioncorrection-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -128,7 +130,8 @@ SOURCES += \
     qxrduserscriptdialog.cpp \
     qxrdsynchronizedacquisitiondialogsettings.cpp \
     qxrdsynchronizedacquisitionplotsettings.cpp \
-    qxrdimagedataformatcbf.cpp
+    qxrdimagedataformatcbf.cpp \
+    qxrddistortioncorrection.cpp
 
 OTHER_FILES += testImage.js
 

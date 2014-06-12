@@ -31,6 +31,8 @@
 #include "qxrdacquisition-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrdobjectnamer.h"
+#include "qxrddistortioncorrection-ptr.h"
+#include "qxrddistortioncorrection.h"
 
 class QxrdDataProcessorBase : public QObject
 {
@@ -357,6 +359,8 @@ public:
 
   QxrdGenerateTestImageWPtr generateTestImage() const;
 
+  QxrdDistortionCorrectionPtr distortionCorrection() const;
+
   void newMask();
 
   void updateEstimatedTime(QcepDoubleProperty *prop, int msec);
@@ -442,6 +446,8 @@ protected:
   QxrdGenerateTestImagePtr m_GenerateTestImage;
 
   QxrdIntegratedDataPtr m_OutputScan;
+
+  QxrdDistortionCorrectionPtr m_DistortionCorrection;
 };
 
 #endif
