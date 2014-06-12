@@ -2503,13 +2503,6 @@ QcepDoubleRectProperty::QcepDoubleRectProperty(QcepSettingsSaverWPtr saver, QObj
 {
 }
 
-QcepDoubleRectProperty::QcepDoubleRectProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QRectF value, QString toolTip)
-  : QcepProperty(saver, parent, name, toolTip),
-    m_Default(value),
-    m_Value(value)
-{
-}
-
 QRectF QcepDoubleRectProperty::value() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
