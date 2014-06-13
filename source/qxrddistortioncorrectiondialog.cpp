@@ -2,6 +2,7 @@
 #include "ui_qxrddistortioncorrectiondialog.h"
 #include "qxrddebug.h"
 #include "qxrddistortioncorrection.h"
+#include <stdio.h>
 
 QxrdDistortionCorrectionDialog::QxrdDistortionCorrectionDialog(QxrdDistortionCorrectionPtr dis, QWidget *parent) :
   QDockWidget(parent),
