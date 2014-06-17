@@ -32,6 +32,7 @@ public:
 
 public slots:
   void autoScale();
+  void printGraph();
   void zoomIn();
   void zoomOut();
 

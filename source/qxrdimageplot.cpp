@@ -906,6 +906,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
       QMenu plotMenu(NULL, NULL);
 
       QAction *auSc = plotMenu.addAction("Autoscale");
+      QAction *prGr = plotMenu.addAction("Print Graph...");
 
       plotMenu.addSeparator();
 
@@ -939,6 +940,8 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 
           if (action == auSc) {
             autoScale();
+          } else if (action == prGr) {
+            printGraph();
           } else if (action == fitCircle) {
             cf->fitPowderCircle();
           } else if (action == adjPoint) {

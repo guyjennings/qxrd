@@ -283,6 +283,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   connect(m_ActionSaveGainMap, SIGNAL(triggered()), this, SLOT(doSaveGainMap()));
   connect(m_ActionClearGainMap, SIGNAL(triggered()), this, SLOT(doClearGainMap()));
 
+  connect(m_ActionPrintImage, SIGNAL(triggered()), m_ImagePlot, SLOT(printGraph()));
+
   //  connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
   //  connect(m_ActionSetAcquireDirectory, SIGNAL(triggered()), this, SLOT(selectOutputDirectory()));
 

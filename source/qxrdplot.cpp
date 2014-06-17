@@ -15,6 +15,9 @@
 #include <QMenu>
 #include <QContextMenuEvent>
 #include "qxrdapplication.h"
+#include <QPrinter>
+#include <QPrintDialog>
+#include <qwt_plot_renderer.h>
 
 QxrdPlot::QxrdPlot(QWidget *parent)
   : QwtPlot(parent),
@@ -184,6 +187,49 @@ void QxrdPlot::autoScale()
 //  replot();
 }
 
+void QxrdPlot::printGraph()
+{
+  QPrinter printer( QPrinter::HighResolution );
+
+  QString docName = this->title().text();
+  if ( !docName.isEmpty() )
+  {
+    docName.replace ( QRegExp ( QString::fromLatin1 ( "\n" ) ), tr ( " -- " ) );
+    printer.setDocName ( docName );
+  }
+
+//  printer.setCreator( "Bode example" );
+  printer.setOrientation( QPrinter::Landscape );
+
+  QPrintDialog dialog( &printer );
+
+  if ( dialog.exec() ) {
+    QwtPlotRenderer renderer;
+
+    if ( printer.colorMode() == QPrinter::GrayScale ) {
+      renderer.setDiscardFlag( QwtPlotRenderer::DiscardBackground );
+      renderer.setDiscardFlag( QwtPlotRenderer::DiscardCanvasBackground );
+      renderer.setDiscardFlag( QwtPlotRenderer::DiscardCanvasFrame );
+//      renderer.setLayoutFlag( QwtPlotRenderer::FrameWithScales );
+    }
+
+    double gw = this->width();
+    double gh = this->height();
+    double pw = printer.width();
+    double ph = printer.height();
+    double scal = qMin( pw/gw, ph/gh);
+
+    pw = gw*scal;
+    ph = gh*scal;
+
+    QRectF rect(0,0, pw,ph);
+
+    QPainter p(&printer);
+
+    renderer.render( this, &p, rect);
+  }
+}
+
 void QxrdPlot::zoomIn()
 {
   m_Zoomer -> zoom(1);
@@ -295,6 +341,7 @@ void QxrdPlot::contextMenuEvent(QContextMenuEvent *event)
   QAction *xLog = plotMenu.addAction("Log X Axis");
   QAction *yLog = plotMenu.addAction("Log Y Axis");
   QAction *auSc = plotMenu.addAction("Autoscale");
+  QAction *prGr = plotMenu.addAction("Print Graph...");
 
   QxrdPlotSettingsPtr set(m_PlotSettings);
 
@@ -312,6 +359,8 @@ void QxrdPlot::contextMenuEvent(QContextMenuEvent *event)
       set->toggle_YAxisLog();
     } else if (action == auSc) {
       autoScale();
+    } else if (action == prGr) {
+      printGraph();
     }
   }
 

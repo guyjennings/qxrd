@@ -1111,6 +1111,7 @@
     <addaction name="separator"/>
     <addaction name="m_ActionLoadData"/>
     <addaction name="m_ActionSaveData"/>
+    <addaction name="m_ActionPrintImage"/>
     <addaction name="separator"/>
     <addaction name="m_ActionLoadDark"/>
     <addaction name="m_ActionSaveDark"/>
@@ -1945,6 +1946,11 @@
   <action name="m_ActionCorrelateImage">
    <property name="text">
     <string>Correlate Image with current...</string>
+   </property>
+  </action>
+  <action name="m_ActionPrintImage">
+   <property name="text">
+    <string>Print Image Graph...</string>
    </property>
   </action>
  </widget>
