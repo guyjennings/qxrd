@@ -23,6 +23,10 @@ function initGrid()
 
     dyx = centering.getPowderPointX(2)-x0;
     dyy = centering.getPowderPointY(2)-y0;
+
+    print("x0 = ",  x0,  " y0 = ", y0);
+    print("dxx = ", dxx, " dxy = ", dxy);
+    print("dyx = ", dyx, " dyy = ", dyy);
   }
 }
 
