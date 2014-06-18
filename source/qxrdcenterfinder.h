@@ -181,7 +181,7 @@ public slots:
   QPointF adjustPoint(int i);
   void adjustPointNear(double x, double y);
   void adjustAllPoints();
-  bool fitPeakNear(double x, double y);
+  bool fitPeakNear(double x, double y, int nitermax=200);
   bool fitPeakNear();
 
 

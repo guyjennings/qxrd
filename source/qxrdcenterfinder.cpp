@@ -457,7 +457,7 @@ bool QxrdCenterFinder::fitPeakNear()
   return fitPeakNear(get_PeakCenterX(), get_PeakCenterY());
 }
 
-bool QxrdCenterFinder::fitPeakNear(double x, double y)
+bool QxrdCenterFinder::fitPeakNear(double x, double y, int nitermax)
 {
   printMessage(tr("fit peak near [%1,%2]").arg(x).arg(y));
 
@@ -469,7 +469,7 @@ bool QxrdCenterFinder::fitPeakNear(double x, double y)
   parms[0] = x;
   parms[1] = y;
   parms[2] = get_PeakRadius();
-  parms[3] = get_PeakHeight();
+  parms[3] = imageValue(x,y);
   parms[4] = get_PeakBackground();
   parms[5] = get_PeakBackgroundX();
   parms[6] = get_PeakBackgroundY();
@@ -480,13 +480,17 @@ bool QxrdCenterFinder::fitPeakNear(double x, double y)
 
   firstFit = get_PeakFitDebug();
 
-  int niter = dlevmar_dif(fitPeak, parms, NULL, 7, n*n, 100, NULL, info, NULL, NULL, this);
+  int niter = dlevmar_dif(fitPeak, parms, NULL, 7, n*n, nitermax, NULL, info, NULL, NULL, this);
 
   if (niter >= 0) {
     printMessage(tr("Fitting succeeded after %1 iterations").arg(niter));
-    for (int i=0; i<7; i++) {
-      printMessage(tr("Parameter[%1] = %2").arg(i).arg(parms[i]));
-    }
+    printMessage(tr("Parameter[x] = %1").arg(parms[0]));
+    printMessage(tr("Parameter[y] = %1").arg(parms[1]));
+    printMessage(tr("Parameter[pkrad] = %1").arg(parms[2]));
+    printMessage(tr("Parameter[pkhgt] = %1").arg(parms[3]));
+    printMessage(tr("Parameter[bkgd] = %1").arg(parms[4]));
+    printMessage(tr("Parameter[bgdx] = %1").arg(parms[5]));
+    printMessage(tr("Parameter[bgdy] = %1").arg(parms[6]));
 
     set_PeakCenterX(parms[0]);
     set_PeakCenterY(parms[1]);
