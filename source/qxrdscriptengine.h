@@ -7,6 +7,7 @@
 #include <QDateTime>
 #include <QMutex>
 #include <QRegExp>
+#include <QPointF>
 
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -103,6 +104,9 @@ private:
 
   QString tableHeader();
   QString tableFooter();
+
+  static QScriptValue QPointFToScriptValue(QScriptEngine *engine, const QPointF &in);
+  static void         QPointFFromScriptValue(const QScriptValue &object, QPointF &pt);
 
 private:
   mutable QMutex         m_Mutex;

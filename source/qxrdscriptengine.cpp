@@ -1347,6 +1347,7 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterMetaType(this, ::QxrdRingFitToScriptValue, ::QxrdRingFitFromScriptValue);
   qScriptRegisterMetaType(this, ::QxrdRingSampledDataToScriptValue, ::QxrdRingSampledDataFromScriptValue);
   //  qScriptRegisterMetaType(this, ::QxrdRingSampledDataPtrToScriptValue, ::QxrdRingSampledDataPtrFromScriptValue);
+  qScriptRegisterMetaType(this, QxrdScriptEngine::QPointFToScriptValue, QxrdScriptEngine::QPointFFromScriptValue);
 
   qScriptRegisterSequenceMetaType< QList<int> >(this);
   qScriptRegisterSequenceMetaType< QList<bool> >(this);
@@ -1496,8 +1497,8 @@ void QxrdScriptEngine::initialize()
         globalObject().setProperty("testImage",       newQObject(gti.data()));
       }
 
-      QCEP_DOC_OBJECT("distortionCorrection", "Detector distortion correction");
-      globalObject().setProperty("distortionCorrection",     newQObject(dp->distortionCorrection().data()));
+      QCEP_DOC_OBJECT("distortion", "Detector distortion correction");
+      globalObject().setProperty("distortion",     newQObject(dp->distortionCorrection().data()));
     }
   }
 }
@@ -1832,4 +1833,20 @@ QByteArray QxrdScriptEngine::helpText(QString item)
 void QxrdScriptEngine::dumpLocks()
 {
   QcepMutexLocker::dumpLocks();
+}
+
+QScriptValue QxrdScriptEngine::QPointFToScriptValue(QScriptEngine *engine, const QPointF &in)
+{
+  QScriptValue obj = engine->newArray(2);
+
+  obj.setProperty(0, in.x());
+  obj.setProperty(1, in.y());
+
+  return obj;
+}
+
+void         QxrdScriptEngine::QPointFFromScriptValue(const QScriptValue &object, QPointF &pt)
+{
+  pt.setX(object.property(0).toNumber());
+  pt.setY(object.property(1).toNumber());
 }
