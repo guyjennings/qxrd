@@ -22,20 +22,68 @@ public:
   Q_PROPERTY(QString distortionImagePath READ get_DistortionImagePath WRITE set_DistortionImagePath)
   QCEP_STRING_PROPERTY(DistortionImagePath)
 
-  Q_PROPERTY(QPointF distortionP0 READ get_DistortionP0 WRITE set_DistortionP0)
-  QCEP_DOUBLE_POINT_PROPERTY(DistortionP0)
+  Q_PROPERTY(QPointF p0 READ get_P0 WRITE set_P0)
+  QCEP_DOUBLE_POINT_PROPERTY(P0)
 
-  Q_PROPERTY(QPointF distortionP1 READ get_DistortionP1 WRITE set_DistortionP1)
-  QCEP_DOUBLE_POINT_PROPERTY(DistortionP1)
+  Q_PROPERTY(QPointF p1 READ get_P1 WRITE set_P1)
+  QCEP_DOUBLE_POINT_PROPERTY(P1)
 
-  Q_PROPERTY(QPointF distortionP2 READ get_DistortionP2 WRITE set_DistortionP2)
-  QCEP_DOUBLE_POINT_PROPERTY(DistortionP2)
+  Q_PROPERTY(QPointF p2 READ get_P2 WRITE set_P2)
+  QCEP_DOUBLE_POINT_PROPERTY(P2)
 
-signals:
+  Q_PROPERTY(int n1 READ get_N1 WRITE set_N1)
+  QCEP_INTEGER_PROPERTY(N1)
+
+  Q_PROPERTY(int n2 READ get_N2 WRITE set_N2)
+  QCEP_INTEGER_PROPERTY(N2)
+
+  Q_PROPERTY(QPointF f0 READ get_F0 WRITE set_F0)
+  QCEP_DOUBLE_POINT_PROPERTY(F0)
+
+  Q_PROPERTY(QPointF f1 READ get_F1 WRITE set_F1)
+  QCEP_DOUBLE_POINT_PROPERTY(F1)
+
+  Q_PROPERTY(QPointF f2 READ get_F2 WRITE set_F2)
+  QCEP_DOUBLE_POINT_PROPERTY(F2)
+
+  Q_PROPERTY(QVector<int> iVals READ get_IVals WRITE set_IVals)
+  QCEP_INTEGER_VECTOR_PROPERTY(IVals)
+
+  Q_PROPERTY(QVector<int> jVals READ get_JVals WRITE set_JVals)
+  QCEP_INTEGER_VECTOR_PROPERTY(JVals)
+
+  Q_PROPERTY(QVector<double> xVals READ get_XVals WRITE set_XVals)
+  QCEP_DOUBLE_VECTOR_PROPERTY(XVals)
+
+  Q_PROPERTY(QVector<double> yVals READ get_YVals WRITE set_YVals)
+  QCEP_DOUBLE_VECTOR_PROPERTY(YVals)
+
+  Q_PROPERTY(double wMin READ get_WMin WRITE set_WMin)
+  QCEP_DOUBLE_PROPERTY(WMin)
+
+  Q_PROPERTY(double wMax READ get_WMax WRITE set_WMax)
+  QCEP_DOUBLE_PROPERTY(WMax)
+
+  Q_PROPERTY(double wNom READ get_WNom WRITE set_WNom)
+  QCEP_DOUBLE_PROPERTY(WNom)
+
+  Q_PROPERTY(double ratMin READ get_RatMin WRITE set_RatMin)
+  QCEP_DOUBLE_PROPERTY(RatMin)
+
+  Q_PROPERTY(double hgtMin READ get_HgtMin WRITE set_HgtMin)
+  QCEP_DOUBLE_PROPERTY(HgtMin)
+
+  Q_PROPERTY(QPointF distMax READ get_DistMax WRITE set_DistMax)
+  QCEP_DOUBLE_POINT_PROPERTY(DistMax)
+
+  signals:
 
 public slots:
   QPointF transform(QPointF pt);
   QPointF inverse(QPointF pt);
+
+  void clearGridPoints();
+  void appendGridPoint(int i, int j, double x, double y);
 
 public:
   void readSettings(QSettings *settings, QString section);

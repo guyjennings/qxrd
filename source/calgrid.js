@@ -3,67 +3,90 @@
   */
 
 var grid;
-//var x0 = 59.4838917636;
-//var y0 = 46.0376164063;
-var nx = 39;
-var ny = 39;
-//var dxx = 50.6669752504;
-//var dxy = 0.2394249314;
-//var dyx = -0.2309734292;
-//var dyy = 50.6682539949;
 
 function initGrid()
 {
-  if (centering.countPowderPoints() >= 3) {
-    x0 = centering.getPowderPointX(0);
-    y0 = centering.getPowderPointY(0);
+//  if (centering.countPowderPoints() >= 3) {
+//    x0 = centering.getPowderPointX(0);
+//    y0 = centering.getPowderPointY(0);
 
-    dxx = centering.getPowderPointX(1)-x0;
-    dxy = centering.getPowderPointY(1)-y0;
+//    dxx = centering.getPowderPointX(1)-x0;
+//    dxy = centering.getPowderPointY(1)-y0;
 
-    dyx = centering.getPowderPointX(2)-x0;
-    dyy = centering.getPowderPointY(2)-y0;
+//    dyx = centering.getPowderPointX(2)-x0;
+//    dyy = centering.getPowderPointY(2)-y0;
+
+//    distortion.p0 = [x0, y0];
+//    distortion.p1 = [x0+dxx, y0+dxy];
+//    distortion.p2 = [x0+dyx, y0+dyy];
+    x0 = distortion.p0[0];
+    y0 = distortion.p0[1];
+    dxx = distortion.p1[0]-x0;
+    dxy = distortion.p1[1]-y0;
+    dyx = distortion.p2[0]-x0;
+    dyy = distortion.p2[1]-y0;
 
     print("x0 = ",  x0,  " y0 = ", y0);
     print("dxx = ", dxx, " dxy = ", dxy);
     print("dyx = ", dyx, " dyy = ", dyy);
+//  }
+}
+
+function goodPeak(x,y)
+{
+  var dx = Math.abs(centering.peakCenterX - x);
+  var dy = Math.abs(centering.peakCenterY - y);
+  var ht = centering.peakHeight;
+  var rt = ht/centering.peakBackground;
+  var wd = centering.peakWidth;
+
+  if ((wd > distortion.wMin) &&
+      (wd < distortion.wMax) &&
+      (ht > distortion.hgtMin) &&
+      (rt > distortion.ratMin) &&
+      (dx < distortion.distMax[0]) &&
+      (dy < distortion.distMax[1])) {
+    return true;
+  } else {
+    return false;
   }
 }
 
 function refineAxes()
 {
   j = 0;
+  nx = distortion.n1;
+  maxx = distortion.distMax[0];
+  maxy = distortion.distMax[1];
+  hgtm = distortion.hgtMin;
+  ratm = distortion.ratMin;
+
   for (i=2; i<=nx; i++) {
     x = x0 + i*dxx + j*dyx;
     y = y0 + i*dxy + j*dyy;
+    centering.peakRadius = distortion.wNom;
 
     if (centering.fitPeakNear(x,y)) {
-      if (centering.peakHeight > 200) {
+      if (goodPeak(x,y)) {
         xx = centering.peakCenterX;
         yy = centering.peakCenterY;
-        if (Math.sqrt(Math.pow(xx-x,2)+Math.pow(yy-y,2)) < 5) {
-          dxx = (xx-x0)/i;
-          dxy = (yy-y0)/i;
-          centering.appendPowderPoint(xx,yy);
-        }
+        centering.appendPowderPoint(xx,yy);
       }
     }
   }
 
   i = 0;
+  ny = distortion.n2;
   for (j=2; j<=ny; j++) {
     x = x0 + i*dxx + j*dyx;
     y = y0 + i*dxy + j*dyy;
+    centering.peakRadius = distortion.wNom;
 
     if (centering.fitPeakNear(x,y)) {
-      if (centering.peakHeight > 200) {
+      if (goodPeak(x,y)) {
         xx = centering.peakCenterX;
         yy = centering.peakCenterY;
-        if (Math.sqrt(Math.pow(xx-x,2)+Math.pow(yy-y,2)) < 5) {
-          dyx = (xx-x0)/j;
-          dyy = (yy-y0)/j;
-          centering.appendPowderPoint(xx,yy);
-        }
+        centering.appendPowderPoint(xx,yy);
       }
     }
   }
@@ -72,27 +95,29 @@ function refineAxes()
 function calGrid()
 {
   grid = [];
+  nx = distortion.n1;
+  ny = distortion.n2;
 
   centering.deletePowderPoints();
+  distortion.clearGridPoints();
 
   for (j=0; j<=ny; j++) {
     for (i=0; i<=nx; i++) {
       x = x0 + i*dxx + j*dyx;
       y = y0 + i*dxy + j*dyy;
 
-      centering.peakRadius = 2;
+      centering.peakRadius = distortion.wNom;
       centering.peakBackground = 1500;
       centering.peakBackgroundX = 0;
       centering.peakBackgroundY = 0;
 
       if (centering.fitPeakNear(x,y)) {
-        if (centering.peakHeight > 200) {
+        if (goodPeak(x,y)) {
           xx = centering.peakCenterX;
           yy = centering.peakCenterY;
-          if (Math.sqrt(Math.pow(xx-x,2)+Math.pow(yy-y,2)) < 5) {
-            centering.appendPowderPoint(xx,yy);
-            grid.push([i,j,xx,yy]);
-          }
+          centering.appendPowderPoint(xx,yy);
+          grid.push([i,j,xx,yy]);
+          distortion.appendGridPoint(i,j,xx,yy);
         }
       }
     }
