@@ -46,17 +46,29 @@ public:
   Q_PROPERTY(QPointF f2 READ get_F2 WRITE set_F2)
   QCEP_DOUBLE_POINT_PROPERTY(F2)
 
-  Q_PROPERTY(QVector<int> iVals READ get_IVals WRITE set_IVals)
+  Q_PROPERTY(QcepIntVector iVals READ get_IVals WRITE set_IVals)
   QCEP_INTEGER_VECTOR_PROPERTY(IVals)
 
-  Q_PROPERTY(QVector<int> jVals READ get_JVals WRITE set_JVals)
+  Q_PROPERTY(QcepIntVector jVals READ get_JVals WRITE set_JVals)
   QCEP_INTEGER_VECTOR_PROPERTY(JVals)
 
-  Q_PROPERTY(QVector<double> xVals READ get_XVals WRITE set_XVals)
+  Q_PROPERTY(QcepDoubleVector xVals READ get_XVals WRITE set_XVals)
   QCEP_DOUBLE_VECTOR_PROPERTY(XVals)
 
-  Q_PROPERTY(QVector<double> yVals READ get_YVals WRITE set_YVals)
+  Q_PROPERTY(QcepDoubleVector yVals READ get_YVals WRITE set_YVals)
   QCEP_DOUBLE_VECTOR_PROPERTY(YVals)
+
+  Q_PROPERTY(QcepDoubleVector fxVals READ get_FXVals WRITE set_FXVals)
+  QCEP_DOUBLE_VECTOR_PROPERTY(FXVals)
+
+  Q_PROPERTY(QcepDoubleVector fyVals READ get_FYVals WRITE set_FYVals)
+  QCEP_DOUBLE_VECTOR_PROPERTY(FYVals)
+
+  Q_PROPERTY(QcepDoubleVector dxVals READ get_DXVals WRITE set_DXVals)
+  QCEP_DOUBLE_VECTOR_PROPERTY(DXVals)
+
+  Q_PROPERTY(QcepDoubleVector dyVals READ get_DYVals WRITE set_DYVals)
+  QCEP_DOUBLE_VECTOR_PROPERTY(DYVals)
 
   Q_PROPERTY(double wMin READ get_WMin WRITE set_WMin)
   QCEP_DOUBLE_PROPERTY(WMin)

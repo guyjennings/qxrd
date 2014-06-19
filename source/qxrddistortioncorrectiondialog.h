@@ -15,6 +15,11 @@ public:
   virtual ~QxrdDistortionCorrectionDialog();
   void init(QxrdDistortionCorrectionDialogSettingsWPtr settings);
 
+public slots:
+  void updateGridTable();
+
+private slots:
+
 private:
   QxrdDistortionCorrectionPtr         m_DistortionCorrection;
 };

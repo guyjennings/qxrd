@@ -459,8 +459,6 @@ bool QxrdCenterFinder::fitPeakNear()
 
 bool QxrdCenterFinder::fitPeakNear(double x, double y, int nitermax)
 {
-  printMessage(tr("fit peak near [%1,%2]").arg(x).arg(y));
-
   set_PeakCenterX(x);
   set_PeakCenterY(y);
 
@@ -483,14 +481,16 @@ bool QxrdCenterFinder::fitPeakNear(double x, double y, int nitermax)
   int niter = dlevmar_dif(fitPeak, parms, NULL, 7, n*n, nitermax, NULL, info, NULL, NULL, this);
 
   if (niter >= 0) {
-    printMessage(tr("Fitting succeeded after %1 iterations").arg(niter));
-    printMessage(tr("Parameter[x] = %1").arg(parms[0]));
-    printMessage(tr("Parameter[y] = %1").arg(parms[1]));
-    printMessage(tr("Parameter[pkrad] = %1").arg(parms[2]));
-    printMessage(tr("Parameter[pkhgt] = %1").arg(parms[3]));
-    printMessage(tr("Parameter[bkgd] = %1").arg(parms[4]));
-    printMessage(tr("Parameter[bgdx] = %1").arg(parms[5]));
-    printMessage(tr("Parameter[bgdy] = %1").arg(parms[6]));
+    QString msg = tr("fit peak nr [%1,%2]\t").arg(x).arg(y);
+    msg += tr("OK %1 iter:\t").arg(niter);
+    msg += tr("Pos: [%1,%2]\t").arg(parms[0]).arg(parms[1]);
+    msg += tr("Wid: %1\t").arg(fabs(parms[2]));
+    msg += tr("Ht: %1\t").arg(parms[3]);
+    msg += tr("Bkd: %1\t").arg(parms[4]);
+    msg += tr("Bkx: %1\t").arg(parms[5]);
+    msg += tr("Bky: %1").arg(parms[6]);
+
+    printMessage(msg);
 
     set_PeakCenterX(parms[0]);
     set_PeakCenterY(parms[1]);

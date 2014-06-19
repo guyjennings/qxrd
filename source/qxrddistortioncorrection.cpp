@@ -14,10 +14,14 @@ QxrdDistortionCorrection::QxrdDistortionCorrection(QxrdSettingsSaverWPtr saver, 
     m_F0(saver, this, "f0", QPointF(100,100), "Fitted Origin of distortion image grid"),
     m_F1(saver, this, "f1", QPointF(200,100), "Fitted 1st X Position on distortion grid"),
     m_F2(saver, this, "f2", QPointF(100,200), "Fitted 1st Y Position on distortion grid"),
-    m_IVals(saver, this, "iVals", QVector<int>(), "Grid point i indices"),
-    m_JVals(saver, this, "jVals", QVector<int>(), "Grid point j indices"),
-    m_XVals(saver, this, "xVals", QVector<double>(), "Grid point x coords"),
-    m_YVals(saver, this, "yVals", QVector<double>(), "Grid point y coords"),
+    m_IVals(saver, this, "iVals", QcepIntVector(), "Grid point i indices"),
+    m_JVals(saver, this, "jVals", QcepIntVector(), "Grid point j indices"),
+    m_XVals(saver, this, "xVals", QcepDoubleVector(), "Grid point x coords"),
+    m_YVals(saver, this, "yVals", QcepDoubleVector(), "Grid point y coords"),
+    m_FXVals(saver, this, "fxVals", QcepDoubleVector(), "Fitted x coords"),
+    m_FYVals(saver, this, "fyVals", QcepDoubleVector(), "Fitted y coords"),
+    m_DXVals(saver, this, "dxVals", QcepDoubleVector(), "Delta x coords"),
+    m_DYVals(saver, this, "dyVals", QcepDoubleVector(), "Delta y coords"),
     m_WMin(saver, this, "wMin", 1, "Minimum acceptable grid peak width (pixels)"),
     m_WMax(saver, this, "wMax", 4, "Maximum acceptable grid peak width (pixels)"),
     m_WNom(saver, this, "wNom", 2, "Nominal initial grid peak width (pixels)"),
@@ -58,6 +62,10 @@ void QxrdDistortionCorrection::clearGridPoints()
   prop_JVals()->clear();
   prop_XVals()->clear();
   prop_YVals()->clear();
+  prop_FXVals()->clear();
+  prop_FYVals()->clear();
+  prop_DXVals()->clear();
+  prop_DYVals()->clear();
 }
 
 void QxrdDistortionCorrection::appendGridPoint(int i, int j, double x, double y)
@@ -66,4 +74,8 @@ void QxrdDistortionCorrection::appendGridPoint(int i, int j, double x, double y)
   prop_JVals()->appendValue(j);
   prop_XVals()->appendValue(x);
   prop_YVals()->appendValue(y);
+  prop_FXVals()->appendValue(0);
+  prop_FYVals()->appendValue(0);
+  prop_DXVals()->appendValue(0);
+  prop_DYVals()->appendValue(0);
 }

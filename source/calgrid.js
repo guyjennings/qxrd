@@ -34,60 +34,67 @@ function initGrid()
 
 function goodPeak(x,y)
 {
-  var dx = Math.abs(centering.peakCenterX - x);
-  var dy = Math.abs(centering.peakCenterY - y);
-  var ht = centering.peakHeight;
-  var rt = ht/centering.peakBackground;
-  var wd = centering.peakWidth;
+  centering.peakCenterX = x;
+  centering.peakCenterY = y;
+  centering.peakBackground = 1000;
+  centering.peakWidth = distortion.wNom;
+  centering.peakHeight = 10000;
+  centering.peakBackgroundX = 0;
+  centering.peakBackgroundY = 0;
 
-  if ((wd > distortion.wMin) &&
-      (wd < distortion.wMax) &&
-      (ht > distortion.hgtMin) &&
-      (rt > distortion.ratMin) &&
-      (dx < distortion.distMax[0]) &&
-      (dy < distortion.distMax[1])) {
-    return true;
-  } else {
-    return false;
+  if (centering.fitPeakNear(x,y,500)) {
+    var dx = Math.abs(centering.peakCenterX - x);
+    var dy = Math.abs(centering.peakCenterY - y);
+    var ht = centering.peakHeight;
+    var rt = ht/centering.peakBackground;
+    var wd = centering.peakWidth;
+
+    if ((wd > distortion.wMin) &&
+        (wd < distortion.wMax) &&
+        (ht > distortion.hgtMin) &&
+        (rt > distortion.ratMin) &&
+        (dx < distortion.distMax[0]) &&
+        (dy < distortion.distMax[1])) {
+      return true;
+    }
   }
+
+  return false;
 }
 
 function refineAxes()
 {
+  centering.deletePowderPoints();
+  centering.appendPowderPoint(x0,y0);
+
   j = 0;
   nx = distortion.n1;
-  maxx = distortion.distMax[0];
-  maxy = distortion.distMax[1];
-  hgtm = distortion.hgtMin;
-  ratm = distortion.ratMin;
 
-  for (i=2; i<=nx; i++) {
+  for (i=1; i<=nx; i++) {
     x = x0 + i*dxx + j*dyx;
     y = y0 + i*dxy + j*dyy;
-    centering.peakRadius = distortion.wNom;
 
-    if (centering.fitPeakNear(x,y)) {
-      if (goodPeak(x,y)) {
-        xx = centering.peakCenterX;
-        yy = centering.peakCenterY;
-        centering.appendPowderPoint(xx,yy);
-      }
+    if (goodPeak(x,y)) {
+      xx = centering.peakCenterX;
+      yy = centering.peakCenterY;
+      centering.appendPowderPoint(xx,yy);
+      dxx = (xx - x0)/i;
+      dxy = (yy - y0)/i;
     }
   }
 
   i = 0;
   ny = distortion.n2;
-  for (j=2; j<=ny; j++) {
+  for (j=1; j<=ny; j++) {
     x = x0 + i*dxx + j*dyx;
     y = y0 + i*dxy + j*dyy;
-    centering.peakRadius = distortion.wNom;
 
-    if (centering.fitPeakNear(x,y)) {
-      if (goodPeak(x,y)) {
-        xx = centering.peakCenterX;
-        yy = centering.peakCenterY;
-        centering.appendPowderPoint(xx,yy);
-      }
+    if (goodPeak(x,y)) {
+      xx = centering.peakCenterX;
+      yy = centering.peakCenterY;
+      centering.appendPowderPoint(xx,yy);
+      dyx = (xx - x0)/j;
+      dyy = (yy - y0)/j;
     }
   }
 }
@@ -106,19 +113,12 @@ function calGrid()
       x = x0 + i*dxx + j*dyx;
       y = y0 + i*dxy + j*dyy;
 
-      centering.peakRadius = distortion.wNom;
-      centering.peakBackground = 1500;
-      centering.peakBackgroundX = 0;
-      centering.peakBackgroundY = 0;
-
-      if (centering.fitPeakNear(x,y)) {
-        if (goodPeak(x,y)) {
-          xx = centering.peakCenterX;
-          yy = centering.peakCenterY;
-          centering.appendPowderPoint(xx,yy);
-          grid.push([i,j,xx,yy]);
-          distortion.appendGridPoint(i,j,xx,yy);
-        }
+      if (goodPeak(x,y)) {
+        xx = centering.peakCenterX;
+        yy = centering.peakCenterY;
+        centering.appendPowderPoint(xx,yy);
+        grid.push([i,j,xx,yy]);
+        distortion.appendGridPoint(i,j,xx,yy);
       }
     }
   }
