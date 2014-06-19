@@ -9,13 +9,14 @@ class QxrdResponseTimer : public QObject
 {
     Q_OBJECT
 public:
-    explicit QxrdResponseTimer(int interval, QObject *parent = 0);
+    explicit QxrdResponseTimer(int interval, int allowance, QObject *parent = 0);
 
 public slots:
   void onTimeout();
 
 private:
   int    m_ResponseInterval;
+  int    m_ResponseAllowance;
   QTimer m_ResponseTimer;
   QTime  m_ResponseTime;
 };

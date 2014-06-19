@@ -255,7 +255,7 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
 
   printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
-  m_ResponseTimer = new QxrdResponseTimer(1000, this);
+  m_ResponseTimer = new QxrdResponseTimer(30000, 5000, this);
 
   if (get_FreshStart()) {
     editGlobalPreferences();
