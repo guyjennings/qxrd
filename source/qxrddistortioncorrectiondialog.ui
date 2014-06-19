@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QToolBox" name="toolBox">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page_2">
        <property name="geometry">
@@ -30,7 +30,7 @@
         </rect>
        </property>
        <attribute name="label">
-        <string>Calibration Points</string>
+        <string>Calibration Spot Parameters</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
@@ -184,88 +184,6 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page">
-       <attribute name="label">
-        <string>Calibration Grid Coords</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0" colspan="2">
-         <widget class="QTableWidget" name="m_DistortionGridTable">
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-          <property name="gridStyle">
-           <enum>Qt::DotLine</enum>
-          </property>
-          <column>
-           <property name="text">
-            <string>i</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>j</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>x</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>y</string>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>fit x</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>fit y</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>dx</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>dy</string>
-           </property>
-          </column>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="1">
-         <widget class="QPushButton" name="m_UpdateGridButton">
-          <property name="text">
-           <string>Update</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="page_3">
        <property name="geometry">
         <rect>
@@ -276,7 +194,7 @@
         </rect>
        </property>
        <attribute name="label">
-        <string>Fit Parameters</string>
+        <string>Spot Fit Parameters</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_5">
         <item row="0" column="0">
@@ -434,6 +352,88 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="page">
+       <attribute name="label">
+        <string>Calibration Grid Coords</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0" colspan="2">
+         <widget class="QTableWidget" name="m_DistortionGridTable">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="gridStyle">
+           <enum>Qt::DotLine</enum>
+          </property>
+          <column>
+           <property name="text">
+            <string>i</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>j</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>x</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>y</string>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>fit x</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>fit y</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>dx</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>dy</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="m_UpdateGridButton">
+          <property name="text">
+           <string>Update</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="page_4">
        <property name="geometry">
         <rect>
@@ -447,15 +447,60 @@
         <string>Fitting Results</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>F0:</string>
+        <item row="4" column="0" colspan="3">
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>548</width>
+            <height>359</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="2">
+         <widget class="QDoubleSpinBox" name="m_DistortionF2Y">
+          <property name="decimals">
+           <number>5</number>
+          </property>
+          <property name="minimum">
+           <double>-10000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>10000.000000000000000</double>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QDoubleSpinBox" name="m_DistortionF0X">
+        <item row="2" column="1">
+         <widget class="QDoubleSpinBox" name="m_DistortionF2X">
+          <property name="decimals">
+           <number>5</number>
+          </property>
+          <property name="minimum">
+           <double>-10000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>10000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QDoubleSpinBox" name="m_DistortionF1Y">
+          <property name="decimals">
+           <number>5</number>
+          </property>
+          <property name="minimum">
+           <double>-10000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>10000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QDoubleSpinBox" name="m_DistortionF1X">
           <property name="decimals">
            <number>5</number>
           </property>
@@ -487,8 +532,8 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QDoubleSpinBox" name="m_DistortionF1X">
+        <item row="0" column="1">
+         <widget class="QDoubleSpinBox" name="m_DistortionF0X">
           <property name="decimals">
            <number>5</number>
           </property>
@@ -500,16 +545,10 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QDoubleSpinBox" name="m_DistortionF1Y">
-          <property name="decimals">
-           <number>5</number>
-          </property>
-          <property name="minimum">
-           <double>-10000.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>10000.000000000000000</double>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>F0:</string>
           </property>
          </widget>
         </item>
@@ -520,44 +559,12 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QDoubleSpinBox" name="m_DistortionF2X">
-          <property name="decimals">
-           <number>5</number>
-          </property>
-          <property name="minimum">
-           <double>-10000.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>10000.000000000000000</double>
+        <item row="3" column="2">
+         <widget class="QPushButton" name="m_FitGridButton">
+          <property name="text">
+           <string>Fit Rectangular Grid</string>
           </property>
          </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QDoubleSpinBox" name="m_DistortionF2Y">
-          <property name="decimals">
-           <number>5</number>
-          </property>
-          <property name="minimum">
-           <double>-10000.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>10000.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" colspan="3">
-         <spacer name="verticalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>548</width>
-            <height>359</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>

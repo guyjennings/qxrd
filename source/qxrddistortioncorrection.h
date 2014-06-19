@@ -96,10 +96,12 @@ public slots:
 
   void clearGridPoints();
   void appendGridPoint(int i, int j, double x, double y);
+  void fitCalibrationGrid();
 
 public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
+  void evaluateFitGrid(double parms[], double hx[], int m, int n);
 
 private:
   mutable QMutex             m_Mutex;

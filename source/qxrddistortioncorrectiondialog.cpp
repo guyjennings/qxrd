@@ -32,6 +32,7 @@ QxrdDistortionCorrectionDialog::QxrdDistortionCorrectionDialog(QxrdDistortionCor
   m_DistortionCorrection->prop_DistMax()->linkTo(m_DistortionDistMaxX, m_DistortionDistMaxY);
 
   connect(m_UpdateGridButton, SIGNAL(clicked()), this, SLOT(updateGridTable()));
+  connect(m_FitGridButton,    SIGNAL(clicked()), m_DistortionCorrection.data(), SLOT(fitCalibrationGrid()));
 }
 
 void QxrdDistortionCorrectionDialog::init(QxrdDistortionCorrectionDialogSettingsWPtr settings)

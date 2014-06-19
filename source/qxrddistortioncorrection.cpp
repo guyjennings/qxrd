@@ -1,6 +1,8 @@
 #include "qxrddistortioncorrection.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdsettingssaver.h"
+#include "levmar.h"
+#include <math.h>
 
 QxrdDistortionCorrection::QxrdDistortionCorrection(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt)
   : QObject(),
@@ -78,4 +80,59 @@ void QxrdDistortionCorrection::appendGridPoint(int i, int j, double x, double y)
   prop_FYVals()->appendValue(0);
   prop_DXVals()->appendValue(0);
   prop_DYVals()->appendValue(0);
+}
+
+void QxrdDistortionCorrection::evaluateFitGrid(double parms[], double hx[], int m, int n)
+{
+  double p0x = parms[0];
+  double p0y = parms[1];
+  double dxx = parms[2]-p0x;
+  double dxy = parms[3]-p0y;
+  double dyx = parms[4]-p0x;
+  double dyy = parms[5]-p0y;
+
+  for (int i=0; i<n; i++) {
+    int ii = get_IVals()[i];
+    int jj = get_JVals()[i];
+    double fx = p0x + ii*dxx + jj*dyx;
+    double fy = p0y + ii*dxy + jj*dyy;
+
+    double dx = fx - get_XVals()[i];
+    double dy = fy - get_YVals()[i];
+
+    hx[i] = sqrt(dx*dx + dy*dy);
+  }
+}
+
+static void fitGrid(double parms[], double hx[], int m, int n, void *adata)
+{
+  QxrdDistortionCorrection *dc = (QxrdDistortionCorrection*) adata;
+
+  if (dc) {
+    dc->evaluateFitGrid(parms, hx, m, n);
+  }
+}
+
+void QxrdDistortionCorrection::fitCalibrationGrid()
+{
+  double parms[6];
+
+  parms[0] = get_P0().x();
+  parms[1] = get_P0().y();
+  parms[2] = get_P1().x();
+  parms[3] = get_P1().y();
+  parms[4] = get_P2().x();
+  parms[5] = get_P2().y();
+
+  double info[LM_INFO_SZ];
+
+  int ndata = get_IVals().count();
+
+  int niter = dlevmar_dif(fitGrid, parms, NULL, 6, ndata, 300, NULL, info, NULL, NULL, this);
+
+  if (niter >= 0) {
+    set_F0(QPointF(parms[0], parms[1]));
+    set_F1(QPointF(parms[2], parms[3]));
+    set_F2(QPointF(parms[4], parms[5]));
+  }
 }
