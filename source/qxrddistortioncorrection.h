@@ -97,6 +97,8 @@ public slots:
   void clearGridPoints();
   void appendGridPoint(int i, int j, double x, double y);
   void fitCalibrationGrid();
+  void evalCalibrationGrid();
+  void dumpCalibrationGrid(QString path);
 
 public:
   void readSettings(QSettings *settings, QString section);

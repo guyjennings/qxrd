@@ -3,6 +3,7 @@
 #include "qxrdsettingssaver.h"
 #include "levmar.h"
 #include <math.h>
+#include "qxrdexperiment.h"
 
 QxrdDistortionCorrection::QxrdDistortionCorrection(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt)
   : QObject(),
@@ -76,10 +77,10 @@ void QxrdDistortionCorrection::appendGridPoint(int i, int j, double x, double y)
   prop_JVals()->appendValue(j);
   prop_XVals()->appendValue(x);
   prop_YVals()->appendValue(y);
-  prop_FXVals()->appendValue(0);
-  prop_FYVals()->appendValue(0);
-  prop_DXVals()->appendValue(0);
-  prop_DYVals()->appendValue(0);
+//  prop_FXVals()->appendValue(0);
+//  prop_FYVals()->appendValue(0);
+//  prop_DXVals()->appendValue(0);
+//  prop_DYVals()->appendValue(0);
 }
 
 void QxrdDistortionCorrection::evaluateFitGrid(double parms[], double hx[], int m, int n)
@@ -134,5 +135,55 @@ void QxrdDistortionCorrection::fitCalibrationGrid()
     set_F0(QPointF(parms[0], parms[1]));
     set_F1(QPointF(parms[2], parms[3]));
     set_F2(QPointF(parms[4], parms[5]));
+  }
+}
+
+void QxrdDistortionCorrection::evalCalibrationGrid()
+{
+  double p0x = get_F0().x();
+  double p0y = get_F0().y();
+  double dxx = get_F1().x() - p0x;
+  double dxy = get_F1().y() - p0y;
+  double dyx = get_F2().x() - p0x;
+  double dyy = get_F2().y() - p0y;
+
+  int n = get_IVals().count();
+
+  for (int i=0; i<n; i++) {
+    int ii = get_IVals()[i];
+    int jj = get_JVals()[i];
+    double fx = p0x + ii*dxx + jj*dyx;
+    double fy = p0y + ii*dxy + jj*dyy;
+
+    double dx = fx - get_XVals()[i];
+    double dy = fy - get_YVals()[i];
+
+    prop_FXVals()->appendValue(fx);
+    prop_FYVals()->appendValue(fy);
+    prop_DXVals()->appendValue(dx);
+    prop_DYVals()->appendValue(dy);
+  }
+}
+
+void QxrdDistortionCorrection::dumpCalibrationGrid(QString path)
+{
+  int n = get_IVals().count();
+
+  QxrdExperimentPtr exp(m_Experiment);
+
+  FILE *f = fopen(qPrintable(path), "a+");
+
+  if (f) {
+    fprintf(f, "i\tj\tx\ty\tfx\tfy\tdx\tdy\n");
+
+    for (int i=0; i<n; i++) {
+      fprintf(f, "%d\t%d\t%g\t%g\t%g\t%g\t%g\t%g\n",
+                     get_IVals()[i], get_JVals()[i],
+                     get_XVals()[i], get_YVals()[i],
+                     get_FXVals()[i], get_FYVals()[i],
+                     get_DXVals()[i], get_DYVals()[i]);
+    }
+
+    fclose(f);
   }
 }

@@ -4,6 +4,22 @@
 
 var grid;
 
+function initGridFromPowder()
+{
+  x0 = centering.getPowderPointX(0);
+  y0 = centering.getPowderPointY(0);
+
+  dxx = centering.getPowderPointX(1)-x0;
+  dxy = centering.getPowderPointY(1)-y0;
+
+  dyx = centering.getPowderPointX(2)-x0;
+  dyy = centering.getPowderPointY(2)-y0;
+
+  distortion.p0 = [x0, y0];
+  distortion.p1 = [x0+dxx, y0+dxy];
+  distortion.p2 = [x0+dyx, y0+dyy];
+}
+
 function initGrid()
 {
 //  if (centering.countPowderPoints() >= 3) {
