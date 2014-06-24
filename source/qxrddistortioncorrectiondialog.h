@@ -5,23 +5,26 @@
 #include "qxrddistortioncorrection-ptr.h"
 #include "ui_qxrddistortioncorrectiondialog.h"
 #include "qxrddistortioncorrectiondialogsettings.h"
+#include "qxrdwindow-ptr.h"
 
 class QxrdDistortionCorrectionDialog : public QDockWidget, public Ui::QxrdDistortionCorrectionDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdDistortionCorrectionDialog(QxrdDistortionCorrectionPtr dis, QWidget *parent = 0);
+  explicit QxrdDistortionCorrectionDialog(QxrdDistortionCorrectionPtr dis, QxrdWindowPtr parent);
   virtual ~QxrdDistortionCorrectionDialog();
   void init(QxrdDistortionCorrectionDialogSettingsWPtr settings);
 
 public slots:
   void updateGridTable();
+  void updateDistortionGraph();
 
 private slots:
 
 private:
-  QxrdDistortionCorrectionPtr         m_DistortionCorrection;
+  QxrdWindowWPtr                      m_Window;
+  QxrdDistortionCorrectionWPtr        m_DistortionCorrection;
 };
 
 #endif // QXRDDISTORTIONCORRECTIONDIALOG_H

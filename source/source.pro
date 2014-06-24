@@ -118,7 +118,10 @@ HEADERS += \
     qxrddistortioncorrectiondialog.h \
     qxrddistortioncorrectiondialogsettings.h \
     qxrddistortioncorrectionplot.h \
-    qxrddistortioncorrectionplotsettings.h
+    qxrddistortioncorrectionplotsettings.h \
+    qxrdplotvectorfieldcurve.h \
+    qxrdpoint4d.h \
+    qxrdplotvectorfielddata.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -139,7 +142,10 @@ SOURCES += \
     qxrddistortioncorrectiondialog.cpp \
     qxrddistortioncorrectiondialogsettings.cpp \
     qxrddistortioncorrectionplot.cpp \
-    qxrddistortioncorrectionplotsettings.cpp
+    qxrddistortioncorrectionplotsettings.cpp \
+    qxrdplotvectorfieldcurve.cpp \
+    qxrdpoint4d.cpp \
+    qxrdplotvectorfielddata.cpp
 
 OTHER_FILES += testImage.js
 

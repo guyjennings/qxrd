@@ -135,7 +135,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
   if (proc) {
     m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());
-    m_DistortionCorrectionDialog = new QxrdDistortionCorrectionDialog(proc->distortionCorrection(), this);
+    m_DistortionCorrectionDialog = new QxrdDistortionCorrectionDialog(proc->distortionCorrection(), m_Window);
   }
 
   if (proc) {
