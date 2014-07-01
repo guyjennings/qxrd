@@ -851,7 +851,7 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
     }
   }
 
-  if (m_MaskRaster->data()) {
+  if (m_MaskRaster && m_MaskRaster->data()) {
     double mask = m_MaskRaster->value(pos.x(),pos.y());
     res += tr(", %1").arg(mask);
 

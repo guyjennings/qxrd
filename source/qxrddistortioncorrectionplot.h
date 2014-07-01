@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 
-#include "qxrdplot.h"
+#include "qxrdimageplot.h"
 
 #include "qxrdobjectnamer.h"
 #include "qxrddataprocessor-ptr.h"
@@ -11,12 +11,12 @@
 #include "qxrddistortioncorrection-ptr.h"
 #include "qxrdwindow-ptr.h"
 
-class QxrdDistortionCorrectionPlot : public QxrdPlot
+class QxrdDistortionCorrectionPlot : public QxrdImagePlot
 {
   Q_OBJECT
 public:
   explicit QxrdDistortionCorrectionPlot(QWidget *parent = 0);
-  void init(QxrdPlotSettingsWPtr settings);
+  void init(QxrdImagePlotSettingsWPtr settings);
   void setWindow(QxrdWindow *win);
 
 signals:
@@ -26,7 +26,7 @@ public slots:
 private:
   QxrdObjectNamer               m_ObjectNamer;
   QxrdWindow                   *m_Window;
-  QxrdDataProcessorWPtr         m_DataProcessor;
+//  QxrdDataProcessorWPtr         m_DataProcessor;
   QxrdDistortionCorrectionWPtr  m_DistortionCorrection;
   bool                          m_FirstTime;
 };

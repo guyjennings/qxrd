@@ -378,6 +378,11 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(autoScale()));
   connect(m_IntegratorMeasureButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableMeasuring()));
 
+  connect(m_DistortionCorrectionZoomInButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(enableZooming()));
+  connect(m_DistortionCorrectionZoomOutButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(zoomOut()));
+  connect(m_DistortionCorrectionZoomAllButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(autoScale()));
+  connect(m_DistortionCorrectionMeasureButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(enableMeasuring()));
+
   connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
   connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
 
@@ -534,6 +539,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   }
 
   m_ImagePlot -> setProcessor(m_DataProcessor);
+  m_DistortionCorrectionPlot -> setWindow(this);
   m_CenterFinderPlot -> setWindow(this);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 

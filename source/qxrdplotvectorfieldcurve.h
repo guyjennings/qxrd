@@ -17,6 +17,13 @@ public:
                   const QwtScaleMap &yMap,
                   const QRectF &canvasRect,
                   int from, int to) const;
+
+  QRectF boundingRect() const;
+
+  QRectF dataRect() const;
+
+private:
+  void init();
 };
 
 #endif // QXRDPLOTVECTORFIELDCURVE_H

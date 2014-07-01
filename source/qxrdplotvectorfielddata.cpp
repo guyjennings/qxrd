@@ -20,8 +20,8 @@ QRectF QxrdPlotVectorFieldData::boundingRect() const
       QxrdPoint4D pt = d_samples[i];
       double x0 = pt.x(),
              y0 = pt.y();
-      double x1 = x0 = pt.z(),
-             y1 = y0 + pt.y();
+      double x1 = x0 + pt.z(),
+             y1 = y0 + pt.t();
 
       if (i==0) {
         minx = qMin(x0, x1);
