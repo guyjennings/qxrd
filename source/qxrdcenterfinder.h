@@ -125,6 +125,12 @@ public:
   Q_PROPERTY(double peakBackgroundY READ get_PeakBackgroundY WRITE set_PeakBackgroundY)
   QCEP_DOUBLE_PROPERTY(PeakBackgroundY)
 
+  Q_PROPERTY(double peakAzimuth READ get_PeakAzimuth WRITE set_PeakAzimuth)
+  QCEP_DOUBLE_PROPERTY(PeakAzimuth)
+
+  Q_PROPERTY(double peakPixelRadius READ get_PeakPixelRadius WRITE set_PeakPixelRadius)
+  QCEP_DOUBLE_PROPERTY(PeakPixelRadius)
+
   Q_PROPERTY(int peakFitDebug READ get_PeakFitDebug WRITE set_PeakFitDebug)
   QCEP_INTEGER_PROPERTY(PeakFitDebug)
 
@@ -184,6 +190,7 @@ public slots:
   bool fitPeakNear(double x, double y, int nitermax=200);
   bool fitPeakNear();
 
+  bool fitRingNear(double x, double y, double step=0, int nitermax=200);
 
   QString defaultUserGeometryScript();
   QString defaultUserAbsorptionScript();
@@ -209,6 +216,7 @@ public:
 
   void evaluateFit(double *parm, double *x, int np, int nx);
   void evaluatePeakFit(double *parm, double *x, int np, int nx);
+  void evaluateRingFit(double *parm, double *x, int np, int nx);
 
 //signals:
 ////  void centerChanged(double cx, double cy);

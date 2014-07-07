@@ -934,6 +934,9 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QAction *delPoint        = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
           QAction *deleteAllPoints = plotMenu.addAction("Delete all Points");
           QAction *fitPeakNear     = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *fitRingNear     = plotMenu.addAction(tr("Fit Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *fitRingPositive = plotMenu.addAction(tr("Fit Diffracted Ring next point positive"));
+          QAction *fitRingNegative = plotMenu.addAction(tr("Fit Diffracted Ring next point negative"));
           QAction *zapPixel        = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
 
           QAction *action = plotMenu.exec(event->globalPos());
@@ -954,6 +957,18 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             cf->deletePowderPoints();
           } else if (action == fitPeakNear) {
             if (cf->fitPeakNear(x,y)) {
+              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
+            }
+          } else if (action == fitRingNear) {
+            if (cf->fitRingNear(x,y)) {
+              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
+            }
+          } else if (action == fitRingPositive) {
+            if (cf->fitRingNear(cf->get_PeakCenterX(),cf->get_PeakCenterY(),5.0)) {
+              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
+            }
+          } else if (action == fitRingNegative) {
+            if (cf->fitRingNear(cf->get_PeakCenterX(),cf->get_PeakCenterY(),-5.0)) {
               cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
             }
           } else if (action == zapPixel) {

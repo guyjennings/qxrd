@@ -44,6 +44,8 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_PeakBackground(saver, this, "peakBackground", 0, "Background Height of fitted peak"),
     m_PeakBackgroundX(saver, this, "peakBackgroundX", 0, "X Slope of Background"),
     m_PeakBackgroundY(saver, this, "peakBackgroundY", 0, "Y Slope of Background"),
+    m_PeakAzimuth(saver, this, "peakAzimuth", 0, "Azimuthal angle of fitted ring sample"),
+    m_PeakPixelRadius(saver, this, "peakPixelRadius", 0, "Radius of fitted ring sample"),
     m_PeakFitDebug(saver, this, "peakFitDebug", 0, "Debug Print for peak fitting"),
     m_Experiment(expt)
 {
@@ -398,8 +400,6 @@ static int firstFit=0;
 
 void QxrdCenterFinder::evaluatePeakFit(double *parm, double *xv, int /*np*/, int nx)
 {
-  QcepPolygon pts = get_MarkedPoints();
-
   double cx = parm[0];
   double cy = parm[1];
   double r  = parm[2];
@@ -499,6 +499,138 @@ bool QxrdCenterFinder::fitPeakNear(double x, double y, int nitermax)
     set_PeakBackground(parms[4]);
     set_PeakBackgroundX(parms[5]);
     set_PeakBackgroundY(parms[6]);
+
+    return true;
+  } else {
+    printMessage(tr("Fitting Failed"));
+
+    return false;
+  }
+}
+
+void QxrdCenterFinder::evaluateRingFit(double *parm, double *xv, int /*np*/, int nx)
+{
+  double pr = parm[0];
+  double r  = parm[1];
+  double ht = parm[2];
+  double bg = parm[3];
+  double bx = parm[4];
+  double by = parm[5];
+
+  double az  = get_PeakAzimuth();
+  double cx0 = get_PeakCenterX();
+  double cy0 = get_PeakCenterY();
+  double rr0 = get_PeakFitRadius();
+  double crx = get_CenterX();
+  double cry = get_CenterY();
+
+  int n = get_PeakFitRadius()*2+1;
+  int x0 = cx0 - rr0;
+  int y0 = cy0 - rr0;
+  int nn = n*n;
+  int i=0;
+
+  double cx  = crx + pr*cos(az);
+  double cy  = cry + pr*sin(az);
+
+  double dx0 = cx - crx;
+  double dy0 = cy - cry;
+  double r0  = sqrt(dx0*dx0+dy0*dy0);
+
+  for (int y=y0; y<y0+n; y++) {
+    for (int x=x0; x<x0+n; x++) {
+      double d = imageValue(x,y);
+
+      double dx = x-cx;
+      double dy = y-cy;
+      double dx1 = x - crx;
+      double dy1 = y - cry;
+      double r1 = sqrt(dx1*dx1+dy1*dy1);
+      double dr = r1-r0;
+      double pk = bg + dx*bx + dy*by + ht*exp(-((dr*dr)/(2.0*r*r)));
+
+      xv[i++] = pk - d;
+
+      if (firstFit) {
+        printMessage(tr("%1\t%2\t%3\t%4\t%5").arg(x).arg(y).arg(pk).arg(d).arg(pk-d));
+      }
+    }
+
+    if (firstFit) {
+      printMessage("\n");
+    }
+  }
+
+  if (firstFit) {
+    firstFit--;
+  }
+}
+
+static void fitRing(double *p, double *hx, int m,int n, void *adata)
+{
+  QxrdCenterFinder *cf = (QxrdCenterFinder*) adata;
+
+  if (cf) {
+    cf->evaluateRingFit(p, hx, m, n);
+  }
+}
+
+bool QxrdCenterFinder::fitRingNear(double x, double y, double step, int nitermax)
+{
+  double x0 = get_CenterX();
+  double y0 = get_CenterY();
+  double dx = x - x0;
+  double dy = y - y0;
+  double r  = sqrt(dx*dx + dy*dy);
+  double th = atan2(dy, dx);
+  double t1 = th + step/r;
+  double x1 = x0 + r*cos(t1);
+  double y1 = y0 + r*sin(t1);
+
+  set_PeakAzimuth(t1);
+  set_PeakPixelRadius(r);
+  set_PeakCenterX(x1);
+  set_PeakCenterY(y1);
+
+  double parms[6];
+
+  parms[0] = r;
+  parms[1] = get_PeakRadius();
+  parms[2] = imageValue(x,y);
+  parms[3] = get_PeakBackground();
+  parms[4] = get_PeakBackgroundX();
+  parms[5] = get_PeakBackgroundY();
+
+  double info[LM_INFO_SZ];
+
+  int n = get_PeakFitRadius()*2+1;
+
+  firstFit = get_PeakFitDebug();
+
+  int niter = dlevmar_dif(fitRing, parms, NULL, 6, n*n, nitermax, NULL, info, NULL, NULL, this);
+
+  if (niter >= 0) {
+    QString msg = tr("fit ring nr [%1,%2]\t").arg(x1).arg(y1);
+    msg += tr("OK %1 iter:\t").arg(niter);
+    msg += tr("Pos: [%1,%2]\t").arg(parms[0]).arg(parms[1]);
+    msg += tr("Wid: %1\t").arg(fabs(parms[2]));
+    msg += tr("Ht: %1\t").arg(parms[3]);
+    msg += tr("Bkd: %1\t").arg(parms[4]);
+    msg += tr("Bkx: %1\t").arg(parms[5]);
+    msg += tr("Bky: %1").arg(parms[6]);
+
+    printMessage(msg);
+
+    double nr = parms[0];
+
+    set_PeakPixelRadius(nr);
+    set_PeakCenterX(x0 + nr*cos(t1));
+    set_PeakCenterY(y0 + nr*sin(t1));
+    set_PeakRadius(parms[1]);
+    set_PeakHeight(parms[2]);
+    set_PeakBackground(parms[3]);
+    set_PeakBackgroundX(parms[4]);
+    set_PeakBackgroundY(parms[5]);
 
     return true;
   } else {
