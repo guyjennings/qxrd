@@ -596,7 +596,7 @@ bool QxrdCenterFinder::fitRingNear(double x, double y, double step, int nitermax
 
   parms[0] = r;
   parms[1] = get_PeakRadius();
-  parms[2] = imageValue(x,y);
+  parms[2] = get_PeakHeight();
   parms[3] = get_PeakBackground();
   parms[4] = get_PeakBackgroundX();
   parms[5] = get_PeakBackgroundY();
@@ -612,12 +612,12 @@ bool QxrdCenterFinder::fitRingNear(double x, double y, double step, int nitermax
   if (niter >= 0) {
     QString msg = tr("fit ring nr [%1,%2]\t").arg(x1).arg(y1);
     msg += tr("OK %1 iter:\t").arg(niter);
-    msg += tr("Pos: [%1,%2]\t").arg(parms[0]).arg(parms[1]);
-    msg += tr("Wid: %1\t").arg(fabs(parms[2]));
-    msg += tr("Ht: %1\t").arg(parms[3]);
-    msg += tr("Bkd: %1\t").arg(parms[4]);
-    msg += tr("Bkx: %1\t").arg(parms[5]);
-    msg += tr("Bky: %1").arg(parms[6]);
+    msg += tr("Rad: %1\t").arg(parms[0]);
+    msg += tr("Wid: %1\t").arg(fabs(parms[1]));
+    msg += tr("Ht: %1\t").arg(parms[2]);
+    msg += tr("Bkd: %1\t").arg(parms[3]);
+    msg += tr("Bkx: %1\t").arg(parms[4]);
+    msg += tr("Bky: %1").arg(parms[5]);
 
     printMessage(msg);
 
@@ -637,6 +637,61 @@ bool QxrdCenterFinder::fitRingNear(double x, double y, double step, int nitermax
     printMessage(tr("Fitting Failed"));
 
     return false;
+  }
+}
+
+bool QxrdCenterFinder::fitRingNear(double x, double y)
+{
+  set_PeakHeight(imageValue(x,y)-get_PeakBackground());
+
+  return fitRingNear(x, y, 0.0);
+}
+
+bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step, int nitermax)
+{
+  double x=x0, y=y0, x1, y1;
+  double xc  = get_CenterX();
+  double yc  = get_CenterY();
+  double az  = atan2(y-yc, x-xc);
+  double az0 = az;
+  double r0  = sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc));
+  double ast = step/r0;
+  double dr  = get_PeakFitRadius();
+  double pkht = get_PeakHeight();
+
+  while (true) {
+    double r  = sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc));
+
+    double bkgd = imageValue(xc+(r+dr)*sin(az), yc+(r+dr)*cos(az));
+
+    set_PeakBackground(bkgd);
+    set_PeakBackgroundX(0);
+    set_PeakBackgroundY(0);
+    set_PeakRadius(2.0);
+    set_PeakHeight(imageValue(x,y) - get_PeakBackground());
+
+    if (fitRingNear(x,y, 0.0, nitermax)) {
+
+      x = get_PeakCenterX();
+      y = get_PeakCenterY();
+
+      if ((get_PeakHeight() > (pkht*0.25)) &&
+          (fabs(get_PeakRadius()) < 10.0)){
+        appendPowderPoint(x, y);
+        r = sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc));
+      }
+    }
+
+    az += ast;
+
+    if (step > 0) {
+      if ((az-az0+ast) >= 2*M_PI) return true;
+    } else {
+      if ((az-az0+ast) <= 2*M_PI) return true;
+    }
+
+    x = xc + r*cos(az);
+    y = yc + r*sin(az);
   }
 }
 

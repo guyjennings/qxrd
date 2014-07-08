@@ -928,16 +928,17 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 
           QPointF nearest = cf->nearestPowderPoint(x, y);
 
-          QAction *fitCircle       = plotMenu.addAction("Fit Center from Points on Circle");
-          QAction *adjPoint        = plotMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
-          QAction *adjAllPoints    = plotMenu.addAction(tr("Auto adjust position of all points"));
-          QAction *delPoint        = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
-          QAction *deleteAllPoints = plotMenu.addAction("Delete all Points");
-          QAction *fitPeakNear     = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
-          QAction *fitRingNear     = plotMenu.addAction(tr("Fit Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
-          QAction *fitRingPositive = plotMenu.addAction(tr("Fit Diffracted Ring next point positive"));
-          QAction *fitRingNegative = plotMenu.addAction(tr("Fit Diffracted Ring next point negative"));
-          QAction *zapPixel        = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
+          QAction *fitCircle        = plotMenu.addAction("Fit Center from Points on Circle");
+          QAction *adjPoint         = plotMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
+          QAction *adjAllPoints     = plotMenu.addAction(tr("Auto adjust position of all points"));
+          QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
+          QAction *deleteAllPoints  = plotMenu.addAction("Delete all Points");
+          QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *fitRingNear      = plotMenu.addAction(tr("Fit Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *fitRingClockwise = plotMenu.addAction(tr("Fit Diffracted Ring starting at (%1,%2) [%3,%4] then trace clockwise").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *fitRingAntiClockwise
+                                    = plotMenu.addAction(tr("Fit Diffracted Ring starting at (%1,%2) [%3,%4] then trace anticlockwise").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *zapPixel         = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
 
           QAction *action = plotMenu.exec(event->globalPos());
 
@@ -963,12 +964,12 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             if (cf->fitRingNear(x,y)) {
               cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
             }
-          } else if (action == fitRingPositive) {
-            if (cf->fitRingNear(cf->get_PeakCenterX(),cf->get_PeakCenterY(),5.0)) {
+          } else if (action == fitRingClockwise) {
+            if (cf->traceRingNear(cf->get_PeakCenterX(),cf->get_PeakCenterY(), 25.0)) {
               cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
             }
-          } else if (action == fitRingNegative) {
-            if (cf->fitRingNear(cf->get_PeakCenterX(),cf->get_PeakCenterY(),-5.0)) {
+          } else if (action == fitRingAntiClockwise) {
+            if (cf->traceRingNear(cf->get_PeakCenterX(),cf->get_PeakCenterY(), -25.0)) {
               cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
             }
           } else if (action == zapPixel) {
