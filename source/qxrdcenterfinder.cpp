@@ -687,7 +687,7 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step, int nite
     if (step > 0) {
       if ((az-az0+ast) >= 2*M_PI) return true;
     } else {
-      if ((az-az0+ast) <= 2*M_PI) return true;
+      if ((az-az0+ast) <= -2*M_PI) return true;
     }
 
     x = xc + r*cos(az);
