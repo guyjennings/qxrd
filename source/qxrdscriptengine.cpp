@@ -36,7 +36,8 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr e
     m_Experiment(exp),
     m_Acquisition(),
     m_DataProcessor(),
-    m_Window()
+    m_Window(),
+    m_ScriptOutput(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngine::QxrdScriptEngine(%p)\n", this);
@@ -47,6 +48,10 @@ QxrdScriptEngine::~QxrdScriptEngine()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngine::~QxrdScriptEngine(%p)\n", this);
+  }
+
+  if (m_ScriptOutput) {
+    fclose(m_ScriptOutput);
   }
 }
 
@@ -284,6 +289,82 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
     if (expt) {
       expt->printLine(msg);
     }
+  }
+
+  return QScriptValue(engine, 1);
+}
+
+QCEP_DOC_FUNCTION(
+    "fopen",
+    "fopen(fileName)",
+    "Open a script output file",
+    "<p>The fileName given is opened as the current output file ussed by fprint</p>\n"
+    "<p>Only one script output file may be open at a time</p>\n"
+    )
+
+QScriptValue QxrdScriptEngine::fopenFunc(QScriptContext *context, QScriptEngine *engine, void * /*u*/)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    int nArgs = context->argumentCount();
+
+    if (nArgs >= 1) {
+      eng -> openScriptOutput(context -> argument(0).toString());
+    }
+  }
+
+  return QScriptValue(engine, 1);
+}
+
+QCEP_DOC_FUNCTION(
+    "fprint",
+    "fprint([value]...)",
+    "Print values to the script output file",
+    "<p>The values of the arguments are catenated into a single string which is "
+    "printed to the script output file</p>\n"
+    "<p>The following is a typical use: print out the names and values of the "
+    "elements of an object:</p>\n"
+    "<code>"
+    "for(i in acquisition) fprint(i, acquisition[i])"
+    "</code>"
+    )
+
+QScriptValue QxrdScriptEngine::fprintFunc(QScriptContext *context, QScriptEngine *engine, void * /*u*/)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    int nArgs = context->argumentCount();
+    QString msg;
+
+    for (int i=0; i<nArgs; i++) {
+      if (i != 0) {
+        msg += " ";
+      }
+
+      msg += context -> argument(i).toString();
+    }
+
+    eng -> writeScriptOutput(msg);
+  }
+
+  return QScriptValue(engine, 1);
+}
+
+QCEP_DOC_FUNCTION(
+    "fclose",
+    "fclose()",
+    "Closes the script output file",
+    "<p>Note that only one script output file may be open at a time</p>\n"
+    )
+
+QScriptValue QxrdScriptEngine::fcloseFunc(QScriptContext *context, QScriptEngine *engine, void * /*u*/)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    eng -> closeScriptOutput();
   }
 
   return QScriptValue(engine, 1);
@@ -1398,6 +1479,9 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("outputDirectory", newFunction(outputDirectoryFunc, 1));
   globalObject().setProperty("fileIndex", newFunction(fileIndexFunc, 1));
   globalObject().setProperty("print", newFunction(printFunc, NULL));
+  globalObject().setProperty("fopen", newFunction(fopenFunc, NULL));
+  globalObject().setProperty("fprint", newFunction(fprintFunc, NULL));
+  globalObject().setProperty("fclose", newFunction(fcloseFunc, NULL));
   globalObject().setProperty("printMessage", newFunction(printFunc, NULL));
   globalObject().setProperty("data", newFunction(dataFunc));
   globalObject().setProperty("dark", newFunction(darkFunc));
@@ -1849,4 +1933,26 @@ void         QxrdScriptEngine::QPointFFromScriptValue(const QScriptValue &object
 {
   pt.setX(object.property(0).toNumber());
   pt.setY(object.property(1).toNumber());
+}
+
+void QxrdScriptEngine::openScriptOutput(const QString& fileName)
+{
+  closeScriptOutput();
+
+  m_ScriptOutput = fopen(qPrintable(fileName), "a+");
+}
+
+void QxrdScriptEngine::writeScriptOutput(const QString& outputLine)
+{
+  if (m_ScriptOutput) {
+    fputs(qPrintable(outputLine), m_ScriptOutput);
+  }
+}
+
+void QxrdScriptEngine::closeScriptOutput()
+{
+  if (m_ScriptOutput) {
+    fclose(m_ScriptOutput);
+    m_ScriptOutput = NULL;
+  }
 }
