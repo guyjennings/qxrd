@@ -584,6 +584,10 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
   m_Highlighter = new QxrdHighlighter(m_ScriptEdit->document());
 
+  if (expt) {
+    expt->prop_DefaultScript()->linkTo(m_ScriptEdit);
+  }
+
   connect(m_ImagePlot, SIGNAL(slicePolygon(QVector<QPointF>)),
           m_SliceDialog, SLOT(slicePolygon(QVector<QPointF>)));
 

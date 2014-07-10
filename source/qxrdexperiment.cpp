@@ -71,7 +71,9 @@ QxrdExperiment::QxrdExperiment(
   m_DefaultLayout(QxrdSettingsSaverWPtr(), this,"defaultLayout",0, "Default Layout Used?"),
   m_WorkCompleted(QxrdSettingsSaverWPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
   m_WorkTarget(QxrdSettingsSaverWPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
-  m_CompletionPercentage(QxrdSettingsSaverWPtr(), this, "completionPercentage", 0, "Percentage of Work Completed")
+  m_CompletionPercentage(QxrdSettingsSaverWPtr(), this, "completionPercentage", 0, "Percentage of Work Completed"),
+  m_DefaultScript(m_SettingsSaver, this, "defaultScript", "", "Default script for experiment"),
+  m_ExtraScriptFiles(m_SettingsSaver, this, "extraScriptFiles", QStringList(), "Additional script files for experiment")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::QxrdExperiment(%p)\n", this);

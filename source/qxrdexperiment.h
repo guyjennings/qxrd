@@ -217,6 +217,12 @@ public:  // Properties
 
   Q_PROPERTY(int    completionPercentage READ get_CompletionPercentage WRITE set_CompletionPercentage STORED false)
   QCEP_INTEGER_PROPERTY(CompletionPercentage)
+
+  Q_PROPERTY(QString defaultScript READ get_DefaultScript WRITE set_DefaultScript)
+  QCEP_STRING_PROPERTY(DefaultScript)
+
+  Q_PROPERTY(QStringList extraScriptFiles READ get_ExtraScriptFiles WRITE set_ExtraScriptFiles)
+  QCEP_STRING_LIST_PROPERTY(ExtraScriptFiles)
 };
 
 //typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
