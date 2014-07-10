@@ -9,7 +9,6 @@ QxrdUserScriptDialog::QxrdUserScriptDialog(QString title, QxrdExperimentWPtr exp
 {
   ui->setupUi(this);
 
-  m_Highlighter = new QxrdHighlighter(ui->m_ScriptEditor->document());
   m_Default = def;
 
   setWindowTitle(title);

@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QAbstractButton>
-#include "qxrdhighlighter.h"
 #include "qxrdexperiment-ptr.h"
 
 namespace Ui {
@@ -33,7 +32,6 @@ protected:
 private:
   QxrdExperimentWPtr m_Experiment;
   Ui::QxrdUserScriptDialog *ui;
-  QxrdHighlighter *m_Highlighter;
   QString m_Default;
 };
 
