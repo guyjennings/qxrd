@@ -20,8 +20,11 @@ remote-controlled via a socket interface, or directly from SPEC
 
 int main(int argc, char *argv[])
 {
-  printf("App starts\n");
   g_DebugLevel = QSharedPointer<QxrdDebugDictionary>(new QxrdDebugDictionary());
+
+  if (qcepDebug(DEBUG_APP)) {
+    printf("App starts\n");
+  }
 
   QxrdApplicationPtr app = QxrdApplicationPtr(
         new QxrdApplication(argc, argv));
@@ -40,5 +43,10 @@ int main(int argc, char *argv[])
       while(1) {}
     }
   }
+
+  if (qcepDebug(DEBUG_APP)) {
+    printf("App finishes\n");
+  }
+
   return res;
 }

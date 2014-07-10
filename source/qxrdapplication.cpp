@@ -134,9 +134,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_SettingsMutex(),
   m_LastLockerCount(0)
 {
-#ifndef QT_NO_DEBUG
-  printf("QxrdApplication::QxrdApplication(%p)\n", this);
-#endif
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdApplication::QxrdApplication(%p)\n", this);
+  }
 
   g_Application = this;
 }
@@ -275,10 +275,6 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
 QxrdApplication::~QxrdApplication()
 {
   m_Saver->performSave();
-
-  if (qcepDebug(DEBUG_APP)) {
-    printMessage("QxrdApplication::~QxrdApplication");
-  }
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdApplication::~QxrdApplication(%p)\n", this);
