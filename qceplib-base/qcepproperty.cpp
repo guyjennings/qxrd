@@ -1448,7 +1448,7 @@ QcepStringPropertyTextEditHelper::QcepStringPropertyTextEditHelper(QTextEdit *te
 
 void QcepStringPropertyTextEditHelper::connect()
 {
-  CONNECT_CHECK(QObject::connect(m_TextEdit, SIGNAL(textEdited()), this, SLOT(setText()), Qt::DirectConnection));
+  CONNECT_CHECK(QObject::connect(m_TextEdit, SIGNAL(textChanged()), this, SLOT(setText()), Qt::DirectConnection));
 }
 
 void QcepStringPropertyTextEditHelper::setText(QString value, int index)

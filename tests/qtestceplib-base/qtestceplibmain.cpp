@@ -12,6 +12,8 @@ int main(int argc, char *argv[])
 
   g_DebugLevel = QSharedPointer<QcepDebugDictionary>(new QcepDebugDictionary());
 
+  g_DebugLevel->setDebugLevel(DEBUG_PROPERTIES);
+
   QcepProperty::registerMetaTypes();
   QcepVector3DProperty::registerMetaTypes();
   QcepMatrix3x3Property::registerMetaTypes();
