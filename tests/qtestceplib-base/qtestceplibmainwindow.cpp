@@ -28,6 +28,8 @@ QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   connect(ui->m_ActionLoadImage, SIGNAL(triggered()), this, SLOT(doLoadImage()));
 
   ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
+
+  prop_StrProp()->linkTo(ui->m_TextEdit);
 }
 
 QtestceplibMainWindow::~QtestceplibMainWindow()

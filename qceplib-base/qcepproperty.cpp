@@ -1374,6 +1374,27 @@ void QcepStringProperty::linkTo(QLCDNumber *number)
   connect(this, SIGNAL(valueChanged(QString,int)), number, SLOT(display(QString)));
 }
 
+void QcepStringProperty::linkTo(QTextEdit *textEdit)
+{
+  if (qcepDebug(DEBUG_PROPERTIES || debug())) {
+    printMessage(tr("%1: QcepStringProperty::linkTo(QTextEdit *%2)")
+                 .arg(name()).HEXARG(textEdit));
+  }
+
+  QcepStringPropertyTextEditHelper *helper
+      = new QcepStringPropertyTextEditHelper(textEdit, this);
+
+  helper -> moveToThread(textEdit->thread());
+  helper -> connect();
+
+  textEdit -> setText(value());
+
+  setWidgetToolTip(textEdit);
+
+  connect(this,   SIGNAL(valueChanged(QString, int)), helper, SLOT(setText(QString, int)));
+  connect(helper, SIGNAL(textEdited(QString, int)),   this,   SLOT(setValue(QString, int)));
+}
+
 QcepStringPropertyLineEditHelper::QcepStringPropertyLineEditHelper(QLineEdit *lineEdit, QcepStringProperty *property)
   : QObject(lineEdit),
     m_LineEdit(lineEdit),
@@ -1412,6 +1433,52 @@ void QcepStringPropertyLineEditHelper::setText(QString value)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
     m_Property->printMessage(tr("%1: QcepStringPropertyLineEditHelper::setText(QString \"%2\")")
+                 .arg(m_Property->name()).arg(value));
+  }
+
+  emit textEdited(value, m_Property->incIndex(1));
+}
+
+QcepStringPropertyTextEditHelper::QcepStringPropertyTextEditHelper(QTextEdit *textEdit, QcepStringProperty *property)
+  : QObject(textEdit),
+    m_TextEdit(textEdit),
+    m_Property(property)
+{
+}
+
+void QcepStringPropertyTextEditHelper::connect()
+{
+  CONNECT_CHECK(QObject::connect(m_TextEdit, SIGNAL(textEdited()), this, SLOT(setText()), Qt::DirectConnection));
+}
+
+void QcepStringPropertyTextEditHelper::setText(QString value, int index)
+{
+  if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+    m_Property->printMessage(tr("%1: QcepStringPropertyTextEditHelper::setText(QString \"%2\", int %3) [%4,%5]")
+                 .arg(m_Property->name()).arg(value).arg(index)
+                 .arg(m_Property->index()).arg(m_TextEdit->toPlainText()));
+  }
+
+  if (m_Property->index() == index) {
+    if (m_TextEdit->toPlainText() != value) {
+      if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+        m_Property->printMessage(tr("%1: QcepStringPropertyTextEditHelper textEdit %2 set to %3")
+                     .arg(m_Property->name()).arg(m_TextEdit->objectName()).arg(value));
+      }
+
+      bool block = m_TextEdit->blockSignals(true);
+      m_TextEdit->setText(value);
+      m_TextEdit->blockSignals(block);
+    }
+  }
+}
+
+void QcepStringPropertyTextEditHelper::setText()
+{
+  QString value = m_TextEdit->toPlainText();
+
+  if (qcepDebug(DEBUG_PROPERTIES) || m_Property->debug()) {
+    m_Property->printMessage(tr("%1: QcepStringPropertyTextEditHelper::setText(QString \"%2\")")
                  .arg(m_Property->name()).arg(value));
   }
 

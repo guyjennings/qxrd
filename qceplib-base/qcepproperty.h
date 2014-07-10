@@ -23,6 +23,7 @@
 #include <QSettings>
 #include <QProgressBar>
 #include <QLCDNumber>
+#include <QTextEdit>
 
 typedef void (CustomSettingsSaver)(const QVariant &val, QSettings *settings, QString name);
 
@@ -249,6 +250,7 @@ public:
   void linkTo(QLineEdit *lineEdit);
   void linkTo(QLabel    *label);
   void linkTo(QLCDNumber *number);
+  void linkTo(QTextEdit *number);
 
 public slots:
   void setValue(QString val, int index);
@@ -299,6 +301,25 @@ signals:
 
 private:
   QLineEdit          *m_LineEdit;
+  QcepStringProperty *m_Property;
+};
+
+class QcepStringPropertyTextEditHelper : public QObject {
+  Q_OBJECT
+
+public:
+  QcepStringPropertyTextEditHelper(QTextEdit *textEdit, QcepStringProperty *property);
+  void connect();
+
+public slots:
+  void setText(QString value, int index);
+  void setText();
+
+signals:
+  void textEdited(QString value, int index);
+
+private:
+  QTextEdit          *m_TextEdit;
   QcepStringProperty *m_Property;
 };
 
