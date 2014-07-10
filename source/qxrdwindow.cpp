@@ -29,6 +29,7 @@
 #include "qxrdslicedialog.h"
 #include "qxrdhistogramdialog.h"
 #include "qxrdinfodialog.h"
+#include "qxrdscriptdialog.h"
 #include "qxrdhighlighter.h"
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdacquisitionextrainputsdialog.h"
@@ -83,6 +84,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_SliceDialog(NULL),
     m_HistogramDialog(NULL),
     m_ImageInfoDialog(NULL),
+    m_ScriptDialog(NULL),
     m_DistortionCorrectionDialog(NULL),
     m_Progress(NULL),
     m_AllocationStatus(NULL),
@@ -153,6 +155,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   if (expt && set) {
     m_InputFileBrowser   = new QxrdInputFileBrowser(set->inputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
     m_OutputFileBrowser  = new QxrdOutputFileBrowser(set->outputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
+    m_ScriptDialog       = new QxrdScriptDialog(set->scriptDialogSettings(), m_Experiment, this);
   }
 
   if (set) {
@@ -194,6 +197,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
     tabifyDockWidget(m_SliceDialog, m_ImageInfoDialog);
+    tabifyDockWidget(m_ImageInfoDialog, m_ScriptDialog);
 
     tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
@@ -208,6 +212,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
     tabifyDockWidget(m_SliceDialog, m_ImageInfoDialog);
+    tabifyDockWidget(m_ImageInfoDialog, m_ScriptDialog);
 
     tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
@@ -230,7 +235,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     tabifyDockWidget(m_OutputFileBrowser, m_SliceDialog);
     tabifyDockWidget(m_SliceDialog, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_ImageInfoDialog);
-    tabifyDockWidget(m_ImageInfoDialog, m_DistortionCorrectionDialog);
+    tabifyDockWidget(m_ImageInfoDialog, m_ScriptDialog);
+    tabifyDockWidget(m_ScriptDialog, m_DistortionCorrectionDialog);
 
     if (screenGeom.height() < 1000) {
       //      shrinkObject(this);
@@ -581,12 +587,13 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   m_WindowsMenu -> addAction(m_SliceDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_HistogramDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_ImageInfoDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_ScriptDialog -> toggleViewAction());
 
   m_Highlighter = new QxrdHighlighter(m_ScriptEdit->document());
 
-  if (expt) {
-    expt->prop_DefaultScript()->linkTo(m_ScriptEdit);
-  }
+//  if (expt) {
+//    expt->prop_DefaultScript()->linkTo(m_ScriptEdit);
+//  }
 
   connect(m_ImagePlot, SIGNAL(slicePolygon(QVector<QPointF>)),
           m_SliceDialog, SLOT(slicePolygon(QVector<QPointF>)));

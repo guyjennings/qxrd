@@ -23,6 +23,7 @@
 #include "qxrdslicedialog.h"
 #include "qxrdhistogramdialog.h"
 #include "qxrdinfodialog.h"
+#include "qxrdscriptdialog.h"
 #include "qxrdpowderfitdialog.h"
 #include "qxrdimagedisplaywidget.h"
 #include "qxrdhighlighter.h"
@@ -178,6 +179,7 @@ private:
   QxrdSliceDialog                       *m_SliceDialog;
   QxrdHistogramDialog                   *m_HistogramDialog;
   QxrdInfoDialog                        *m_ImageInfoDialog;
+  QxrdScriptDialog                      *m_ScriptDialog;
   QPointer<QxrdPowderFitDialog>          m_PowderFitDialog;
   QxrdDistortionCorrectionDialog        *m_DistortionCorrectionDialog;
   QVector<double>                        m_Exposures;

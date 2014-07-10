@@ -8,6 +8,7 @@
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdinfodialogsettings.h"
+#include "qxrdscriptdialogsettings.h"
 #include "qxrdslicedialogsettings.h"
 #include "qxrdsynchronizedacquisitiondialogsettings.h"
 #include "qxrdacquisitionextrainputsdialogsettings.h"
@@ -39,6 +40,7 @@ public:
   QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
   QxrdSliceDialogSettingsWPtr                  sliceDialogSettings();
   QxrdInfoDialogSettingsWPtr                   infoDialogSettings();
+  QxrdScriptDialogSettingsWPtr                 scriptDialogSettings();
   QxrdSynchronizedAcquisitionDialogSettingsWPtr synchronizedAcquisitionDialogSettings();
   QxrdAcquisitionExtraInputsDialogSettingsWPtr acquisitionExtraInputsDialogSettings();
   QxrdDistortionCorrectionDialogSettingsWPtr   distortionCorrectionDialogSettings();
@@ -56,6 +58,7 @@ private:
   QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;
   QxrdSliceDialogSettingsPtr                   m_SliceDialogSettings;
   QxrdInfoDialogSettingsPtr                    m_InfoDialogSettings;
+  QxrdScriptDialogSettingsPtr                  m_ScriptDialogSettings;
   QxrdSynchronizedAcquisitionDialogSettingsPtr m_SynchronizedAcquisitionDialogSettings;
   QxrdAcquisitionExtraInputsDialogSettingsPtr  m_AcquisitionExtraInputsDialogSettings;
   QxrdDistortionCorrectionDialogSettingsPtr    m_DistortionCorrectionDialogSettings;

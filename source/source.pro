@@ -122,7 +122,9 @@ HEADERS += \
     qxrddistortioncorrectionplotsettings.h \
     qxrdplotvectorfieldcurve.h \
     qxrdpoint4d.h \
-    qxrdplotvectorfielddata.h
+    qxrdplotvectorfielddata.h \
+    qxrdscriptdialog.h \
+    qxrdscriptdialogsettings.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -146,7 +148,9 @@ SOURCES += \
     qxrddistortioncorrectionplotsettings.cpp \
     qxrdplotvectorfieldcurve.cpp \
     qxrdpoint4d.cpp \
-    qxrdplotvectorfielddata.cpp
+    qxrdplotvectorfielddata.cpp \
+    qxrdscriptdialog.cpp \
+    qxrdscriptdialogsettings.cpp
 
 OTHER_FILES += testImage.js
 
@@ -494,7 +498,8 @@ FORMS = qxrdwindow.ui \
     qxrdacquisitiondialog.ui \
     qxrdacquisitionextrainputsdialog.ui \
     qxrduserscriptdialog.ui \
-    qxrddistortioncorrectiondialog.ui
+    qxrddistortioncorrectiondialog.ui \
+    qxrdscriptdialog.ui
 
 macx:
 else:unix:LIBS += -ltiff
