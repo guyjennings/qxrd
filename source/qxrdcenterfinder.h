@@ -220,6 +220,8 @@ public:
   void evaluatePeakFit(double *parm, double *x, int np, int nx);
   void evaluateRingFit(double *parm, double *x, int np, int nx);
 
+  QxrdExperimentWPtr experiment() const;
+
 //signals:
 ////  void centerChanged(double cx, double cy);
 //

@@ -77,6 +77,11 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
   connect(prop_UserAbsorptionFunction(), SIGNAL(valueChanged(QString,int)), this, SIGNAL(parameterChanged()));
 }
 
+QxrdExperimentWPtr QxrdCenterFinder::experiment() const
+{
+  return m_Experiment;
+}
+
 void QxrdCenterFinder::writeSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);

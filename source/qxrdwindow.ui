@@ -950,7 +950,7 @@
              </sizepolicy>
             </property>
             <property name="title">
-             <string>Script</string>
+             <string>Command</string>
             </property>
             <layout class="QGridLayout" name="gridLayout">
              <item row="0" column="0" colspan="5">
@@ -999,7 +999,7 @@
              <item row="1" column="2">
               <widget class="QPushButton" name="m_ExecuteScriptButton">
                <property name="text">
-                <string>Execute Script</string>
+                <string>Execute Command</string>
                </property>
               </widget>
              </item>

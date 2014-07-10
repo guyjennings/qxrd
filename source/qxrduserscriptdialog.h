@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QAbstractButton>
 #include "qxrdhighlighter.h"
+#include "qxrdexperiment-ptr.h"
 
 namespace Ui {
 class QxrdUserScriptDialog;
@@ -14,7 +15,11 @@ class QxrdUserScriptDialog : public QDialog
   Q_OBJECT
   
 public:
-  explicit QxrdUserScriptDialog(QString title, QString editable, QString def, QWidget *parent = 0);
+  explicit QxrdUserScriptDialog(QString title,
+                                QxrdExperimentWPtr experiment,
+                                QString editable,
+                                QString def,
+                                QWidget *parent = 0);
   ~QxrdUserScriptDialog();
   
   QString userScript();
@@ -26,6 +31,7 @@ protected:
   void changeEvent(QEvent *e);
   
 private:
+  QxrdExperimentWPtr m_Experiment;
   Ui::QxrdUserScriptDialog *ui;
   QxrdHighlighter *m_Highlighter;
   QString m_Default;

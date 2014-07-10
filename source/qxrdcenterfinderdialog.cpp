@@ -137,7 +137,10 @@ void QxrdCenterFinderDialog::centerMoveLeft()
 void QxrdCenterFinderDialog::editUserAbsorption()
 {
   if (m_EditUserAbsorption == NULL) {
-    m_EditUserAbsorption = new QxrdUserScriptDialog("Edit User Absorption Script", m_CenterFinder -> get_UserAbsorptionScript(), m_CenterFinder -> defaultUserAbsorptionScript());
+    m_EditUserAbsorption = new QxrdUserScriptDialog("Edit User Absorption Script",
+                                                    m_CenterFinder -> experiment(),
+                                                    m_CenterFinder -> get_UserAbsorptionScript(),
+                                                    m_CenterFinder -> defaultUserAbsorptionScript());
 
     connect(m_EditUserAbsorption, SIGNAL(accepted()), this, SLOT(onEditedUserAbsorption()));
   }
@@ -148,7 +151,10 @@ void QxrdCenterFinderDialog::editUserAbsorption()
 void QxrdCenterFinderDialog::editUserGeometry()
 {
   if (m_EditUserGeometry == NULL) {
-    m_EditUserGeometry = new QxrdUserScriptDialog("Edit User Geometry Script", m_CenterFinder -> get_UserGeometryScript(), m_CenterFinder -> defaultUserGeometryScript());
+    m_EditUserGeometry = new QxrdUserScriptDialog("Edit User Geometry Script",
+                                                  m_CenterFinder -> experiment(),
+                                                  m_CenterFinder -> get_UserGeometryScript(),
+                                                  m_CenterFinder -> defaultUserGeometryScript());
 
     connect(m_EditUserGeometry, SIGNAL(accepted()), this, SLOT(onEditedUserGeometry()));
   }

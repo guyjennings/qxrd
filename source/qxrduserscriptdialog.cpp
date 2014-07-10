@@ -2,8 +2,9 @@
 #include "ui_qxrduserscriptdialog.h"
 #include <stdio.h>
 
-QxrdUserScriptDialog::QxrdUserScriptDialog(QString title, QString editable, QString def, QWidget *parent) :
+QxrdUserScriptDialog::QxrdUserScriptDialog(QString title, QxrdExperimentWPtr experiment, QString editable, QString def, QWidget *parent) :
   QDialog(parent),
+  m_Experiment(experiment),
   ui(new Ui::QxrdUserScriptDialog)
 {
   ui->setupUi(this);
@@ -14,6 +15,7 @@ QxrdUserScriptDialog::QxrdUserScriptDialog(QString title, QString editable, QStr
   setWindowTitle(title);
 
   ui->m_ScriptEditor->setText(editable);
+  ui->m_ScriptEditor->setExperiment(m_Experiment);
 
   connect(ui->m_ButtonBar, SIGNAL(clicked(QAbstractButton *)), this, SLOT(onButtonClicked(QAbstractButton*)));
 }
