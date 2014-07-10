@@ -26,7 +26,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
-         <widget class="QTextEdit" name="m_DefaultScript">
+         <widget class="QxrdScriptEditWidget" name="m_DefaultScript">
           <property name="lineWrapMode">
            <enum>QTextEdit::NoWrap</enum>
           </property>
@@ -39,6 +39,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QxrdScriptEditWidget</class>
+   <extends>QTextEdit</extends>
+   <header>qxrdscripteditwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

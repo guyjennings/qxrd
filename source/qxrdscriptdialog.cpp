@@ -6,8 +6,7 @@
 QxrdScriptDialog::QxrdScriptDialog(QxrdScriptDialogSettingsWPtr settings, QxrdExperimentWPtr experiment, QWidget *parent) :
   QDockWidget(parent),
   m_ScriptDialogSettings(settings),
-  m_Experiment(experiment),
-  m_Highlighter(NULL)
+  m_Experiment(experiment)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptDialog::QxrdScriptDialog(%p)\n", this);
@@ -15,11 +14,11 @@ QxrdScriptDialog::QxrdScriptDialog(QxrdScriptDialogSettingsWPtr settings, QxrdEx
 
   setupUi(this);
 
-  m_Highlighter = new QxrdHighlighter(m_DefaultScript->document());
-
   QxrdExperimentPtr expt(experiment);
 
   if (expt) {
+    m_DefaultScript->setExperiment(expt);
+
     expt->prop_DefaultScript()->linkTo(m_DefaultScript);
   }
 }

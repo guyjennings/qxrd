@@ -124,7 +124,8 @@ HEADERS += \
     qxrdpoint4d.h \
     qxrdplotvectorfielddata.h \
     qxrdscriptdialog.h \
-    qxrdscriptdialogsettings.h
+    qxrdscriptdialogsettings.h \
+    qxrdscripteditwidget.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -150,7 +151,8 @@ SOURCES += \
     qxrdpoint4d.cpp \
     qxrdplotvectorfielddata.cpp \
     qxrdscriptdialog.cpp \
-    qxrdscriptdialogsettings.cpp
+    qxrdscriptdialogsettings.cpp \
+    qxrdscripteditwidget.cpp
 
 OTHER_FILES += testImage.js
 
