@@ -188,10 +188,9 @@ public slots:
   void adjustPointNear(double x, double y);
   void adjustAllPoints();
   bool fitPeakNear(double x, double y, int nitermax=200);
-  bool fitPeakNear();
+//  bool fitPeakNear();
 
-  bool fitRingNear(double x, double y);
-  bool fitRingNear(double x, double y, double step, int nitermax=200);
+  bool fitRingNear(double x0, double y0, int nitermax=200);
   bool traceRingNear(double x0, double y0, double step=25.0, int nitermax=200);
 
   QString defaultUserGeometryScript();

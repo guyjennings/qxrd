@@ -457,25 +457,33 @@ static void fitPeak(double *p, double *hx, int m,int n, void *adata)
   }
 }
 
-bool QxrdCenterFinder::fitPeakNear()
-{
-  return fitPeakNear(get_PeakCenterX(), get_PeakCenterY());
-}
+//bool QxrdCenterFinder::fitPeakNear()
+//{
+//  return fitPeakNear(get_PeakCenterX(), get_PeakCenterY());
+//}
 
 bool QxrdCenterFinder::fitPeakNear(double x, double y, int nitermax)
 {
   set_PeakCenterX(x);
   set_PeakCenterY(y);
 
+  double dr = get_PeakFitRadius();
+
+  double bkgd = ( imageValue(x+dr, y) +
+                  imageValue(x, y+dr) +
+                  imageValue(x-dr, y) +
+                  imageValue(x, y-dr) )/4.0;
+  double pkht = imageValue(x,y) - bkgd;
+
   double parms[7];
 
   parms[0] = x;
   parms[1] = y;
-  parms[2] = get_PeakRadius();
-  parms[3] = imageValue(x,y);
-  parms[4] = get_PeakBackground();
-  parms[5] = get_PeakBackgroundX();
-  parms[6] = get_PeakBackgroundY();
+  parms[2] = 2.0;
+  parms[3] = pkht;
+  parms[4] = bkgd;
+  parms[5] = 0;
+  parms[6] = 0;
 
   double info[LM_INFO_SZ];
 
@@ -580,31 +588,34 @@ static void fitRing(double *p, double *hx, int m,int n, void *adata)
   }
 }
 
-bool QxrdCenterFinder::fitRingNear(double x, double y, double step, int nitermax)
+bool QxrdCenterFinder::fitRingNear(double x0, double y0, int nitermax)
 {
-  double x0 = get_CenterX();
-  double y0 = get_CenterY();
-  double dx = x - x0;
-  double dy = y - y0;
-  double r  = sqrt(dx*dx + dy*dy);
-  double th = atan2(dy, dx);
-  double t1 = th + step/r;
-  double x1 = x0 + r*cos(t1);
-  double y1 = y0 + r*sin(t1);
+  double xc = get_CenterX();
+  double yc = get_CenterY();
+  double dx = x0 - xc;
+  double dy = y0 - yc;
+  double r  = sqrt(dx*dx+dy*dy);
+  double az = atan2(dy,dx);
+  double dr = get_PeakFitRadius();
 
-  set_PeakAzimuth(t1);
+  set_PeakAzimuth(az);
   set_PeakPixelRadius(r);
-  set_PeakCenterX(x1);
-  set_PeakCenterY(y1);
+  set_PeakCenterX(x0);
+  set_PeakCenterY(y0);
+
+  double bkgd = ( imageValue(xc+(r+dr)*cos(az), yc+(r+dr)*sin(az))
+                 +imageValue(xc+(r-dr)*cos(az), yc+(r-dr)*sin(az)))/2.0;
+
+  double pkht = imageValue(x0,y0) - bkgd;
 
   double parms[6];
 
   parms[0] = r;
-  parms[1] = get_PeakRadius();
-  parms[2] = get_PeakHeight();
-  parms[3] = get_PeakBackground();
-  parms[4] = get_PeakBackgroundX();
-  parms[5] = get_PeakBackgroundY();
+  parms[1] = 2.0;
+  parms[2] = pkht;
+  parms[3] = bkgd;
+  parms[4] = 0;
+  parms[5] = 0;
 
   double info[LM_INFO_SZ];
 
@@ -615,7 +626,7 @@ bool QxrdCenterFinder::fitRingNear(double x, double y, double step, int nitermax
   int niter = dlevmar_dif(fitRing, parms, NULL, 6, n*n, nitermax, NULL, info, NULL, NULL, this);
 
   if (niter >= 0) {
-    QString msg = tr("fit ring nr [%1,%2]\t").arg(x1).arg(y1);
+    QString msg = tr("fit ring nr [%1,%2]\t").arg(x0).arg(y0);
     msg += tr("OK %1 iter:\t").arg(niter);
     msg += tr("Rad: %1\t").arg(parms[0]);
     msg += tr("Wid: %1\t").arg(fabs(parms[1]));
@@ -629,8 +640,8 @@ bool QxrdCenterFinder::fitRingNear(double x, double y, double step, int nitermax
     double nr = parms[0];
 
     set_PeakPixelRadius(nr);
-    set_PeakCenterX(x0 + nr*cos(t1));
-    set_PeakCenterY(y0 + nr*sin(t1));
+    set_PeakCenterX(xc + nr*cos(az));
+    set_PeakCenterY(yc + nr*sin(az));
     set_PeakRadius(parms[1]);
     set_PeakHeight(parms[2]);
     set_PeakBackground(parms[3]);
@@ -645,37 +656,26 @@ bool QxrdCenterFinder::fitRingNear(double x, double y, double step, int nitermax
   }
 }
 
-bool QxrdCenterFinder::fitRingNear(double x, double y)
-{
-  set_PeakHeight(imageValue(x,y)-get_PeakBackground());
-
-  return fitRingNear(x, y, 0.0);
-}
-
 bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step, int nitermax)
 {
-  double x=x0, y=y0, x1, y1;
+  double x=x0, y=y0;
   double xc  = get_CenterX();
   double yc  = get_CenterY();
-  double az  = atan2(y-yc, x-xc);
+  double dx  = x0-xc;
+  double dy  = y0-yc;
+  double az  = atan2(dy, dx);
   double az0 = az;
-  double r0  = sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc));
-  double ast = step/r0;
+  double r   = sqrt(dx*dx + dy*dy);
+  double ast = step/r;
   double dr  = get_PeakFitRadius();
-  double pkht = get_PeakHeight();
+
+  double bkgd = ( imageValue(xc+(r+dr)*cos(az), yc+(r+dr)*sin(az))
+                 +imageValue(xc+(r-dr)*cos(az), yc+(r-dr)*sin(az)))/2.0;
+
+  double pkht = imageValue(x0,y0) - bkgd;
 
   while (true) {
-    double r  = sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc));
-
-    double bkgd = imageValue(xc+(r+dr)*sin(az), yc+(r+dr)*cos(az));
-
-    set_PeakBackground(bkgd);
-    set_PeakBackgroundX(0);
-    set_PeakBackgroundY(0);
-    set_PeakRadius(2.0);
-    set_PeakHeight(imageValue(x,y) - get_PeakBackground());
-
-    if (fitRingNear(x,y, 0.0, nitermax)) {
+    if (fitRingNear(x,y, nitermax)) {
 
       x = get_PeakCenterX();
       y = get_PeakCenterY();
@@ -690,9 +690,9 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step, int nite
     az += ast;
 
     if (step > 0) {
-      if ((az-az0+ast) >= 2*M_PI) return true;
+      if ((az-az0) >= 2*M_PI) return true;
     } else {
-      if ((az-az0+ast) <= -2*M_PI) return true;
+      if ((az-az0) <= -2*M_PI) return true;
     }
 
     x = xc + r*cos(az);

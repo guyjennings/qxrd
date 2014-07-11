@@ -935,9 +935,9 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QAction *deleteAllPoints  = plotMenu.addAction("Delete all Points");
           QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *fitRingNear      = plotMenu.addAction(tr("Fit Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
-          QAction *fitRingClockwise = plotMenu.addAction(tr("Fit Diffracted Ring starting at (%1,%2) [%3,%4] then trace clockwise").arg(x).arg(y).arg(event->x()).arg(event->y()));
-          QAction *fitRingAntiClockwise
-                                    = plotMenu.addAction(tr("Fit Diffracted Ring starting at (%1,%2) [%3,%4] then trace anticlockwise").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *traceRingClockwise = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+//          QAction *fitRingAntiClockwise
+//                                    = plotMenu.addAction(tr("Fit Diffracted Ring starting at (%1,%2) [%3,%4] then trace anticlockwise").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *zapPixel         = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
 
           QAction *action = plotMenu.exec(event->globalPos());
@@ -964,14 +964,14 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             if (cf->fitRingNear(x,y)) {
               cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
             }
-          } else if (action == fitRingClockwise) {
-            if (cf->traceRingNear(cf->get_PeakCenterX(),cf->get_PeakCenterY(), 25.0)) {
+          } else if (action == traceRingClockwise) {
+            if (cf->traceRingNear(x,y, 25.0)) {
               cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
             }
-          } else if (action == fitRingAntiClockwise) {
-            if (cf->traceRingNear(cf->get_PeakCenterX(),cf->get_PeakCenterY(), -25.0)) {
-              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
-            }
+//          } else if (action == fitRingAntiClockwise) {
+//            if (cf->traceRingNear(x,y, -25.0)) {
+//              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
+//            }
           } else if (action == zapPixel) {
             this->zapPixel(qRound(x),qRound(y));
           }
