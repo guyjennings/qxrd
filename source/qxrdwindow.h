@@ -129,6 +129,7 @@ private slots:
   void onUpdateIntervalMsecChanged(int newVal);
   void populateExperimentsMenu();
   void populateRecentExperimentsMenu();
+  void plotPowderRingRadii();
 
 public:
   void possiblyClose();

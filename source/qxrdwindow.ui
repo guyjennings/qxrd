@@ -1195,6 +1195,8 @@
     <addaction name="m_ActionMoveCenterDown"/>
     <addaction name="m_ActionMoveCenterLeft"/>
     <addaction name="m_ActionMoveCenterRight"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionPlotPowderRingPoints"/>
    </widget>
    <widget class="QMenu" name="m_OperationsMenu">
     <property name="title">
@@ -1951,6 +1953,14 @@
   <action name="m_ActionPrintImage">
    <property name="text">
     <string>Print Image Graph...</string>
+   </property>
+  </action>
+  <action name="m_ActionPlotPowderRingPoints">
+   <property name="text">
+    <string>Plot Powder Ring Radii</string>
+   </property>
+   <property name="toolTip">
+    <string>Plot Powder Ring Radii</string>
    </property>
   </action>
  </widget>

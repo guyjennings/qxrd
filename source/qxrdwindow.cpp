@@ -339,6 +339,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     }
   }
 
+  connect(m_ActionPlotPowderRingPoints, SIGNAL(triggered()), this, SLOT(plotPowderRingRadii()));
+
   m_AcquisitionDialog->setupAcquireMenu(m_AcquireMenu);
 
   m_AcquisitionDialog->acquisitionReady();
@@ -1731,4 +1733,46 @@ void QxrdWindow::onMessageWindowLinesChanged(int newVal)
 void QxrdWindow::onUpdateIntervalMsecChanged(int newVal)
 {
   m_UpdateTimer.setInterval(newVal);
+}
+
+void QxrdWindow::plotPowderRingRadii()
+{
+  QxrdExperimentPtr   expt(m_Experiment);
+
+  if (expt) {
+    QxrdCenterFinderPtr cf(expt->centerFinder());
+
+    if (cf) {
+      int npts = cf->countPowderPoints();
+
+      QVector<double> x(npts), y(npts);
+
+      for (int i=0; i<npts; i++) {
+        QPointF pt = cf->powderPoint(i);
+
+        x[i] = cf->getChi(pt.x(), pt.y());
+        y[i] = cf->getR  (pt.x(), pt.y());
+      }
+
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
+
+      QwtPlotCurve* pc = new QwtPlotCurve("Powder Ring Radii");
+
+      pc->setSamples(x, y);
+
+      QPen   pen(Qt::red);
+      QBrush brush(Qt::red);
+
+      QwtSymbol *a = new QwtSymbol(QwtSymbol::Rect, brush, pen, QSize(3,3));
+
+      pc->setStyle(QwtPlotCurve::NoCurve);
+      pc->setSymbol(a);
+
+      pc->attach(m_DistortionCorrectionPlot);
+
+//      m_DistortionCorrectionPlot->autoScale();
+      m_DistortionCorrectionPlot->replot();
+    }
+  }
 }
