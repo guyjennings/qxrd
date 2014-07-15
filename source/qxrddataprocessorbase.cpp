@@ -17,9 +17,6 @@
 #include "qxrdgeneratetestimage.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
-#include "qxrdringsetsampleddata.h"
-#include "qxrdringsetfitparameters.h"
-#include "qxrdringfitparameters.h"
 
 #include <QTime>
 #include <QPainter>
@@ -105,10 +102,6 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_AcquiredCount(0),
   m_CenterFinder(NULL),
   m_Integrator(NULL),
-  m_InitialRingSetFitParameters(NULL),
-  m_RefinedRingSetFitParameters(NULL),
-  m_InitialRingSetData(NULL),
-  m_RefinedRingSetData(NULL),
   m_GenerateTestImage(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -125,10 +118,6 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_Integrator->initialize(m_Integrator);
 
   m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(saver, m_Allocator));
-  m_InitialRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver));
-  m_RefinedRingSetFitParameters = QxrdRingSetFitParametersPtr(new QxrdRingSetFitParameters(saver));
-  m_InitialRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(saver));
-  m_RefinedRingSetData = QxrdRingSetSampledDataPtr(new QxrdRingSetSampledData(saver));
 
   m_DistortionCorrection = QxrdDistortionCorrectionPtr(new QxrdDistortionCorrection(saver, m_Experiment));
 }
@@ -197,10 +186,6 @@ void QxrdDataProcessorBase::writeSettings(QSettings *settings, QString section)
 
   m_CenterFinder -> writeSettings(settings, section+"/centerfinder");
   m_Integrator   -> writeSettings(settings, section+"/integrator");
-  m_InitialRingSetFitParameters -> writeSettings(settings, section+"/initialFit");
-  m_RefinedRingSetFitParameters -> writeSettings(settings, section+"/refinedFit");
-  m_InitialRingSetData -> writeSettings(settings, section+"/initialData");
-  m_RefinedRingSetData -> writeSettings(settings, section+"/refinedData");
   m_DistortionCorrection -> writeSettings(settings, section+"/distortion");
 }
 
@@ -212,10 +197,6 @@ void QxrdDataProcessorBase::readSettings(QSettings *settings, QString section)
 
   m_CenterFinder -> readSettings(settings, section+"/centerfinder");
   m_Integrator   -> readSettings(settings, section+"/integrator");
-  m_InitialRingSetFitParameters -> readSettings(settings, section+"/initialFit");
-  m_RefinedRingSetFitParameters -> readSettings(settings, section+"/refinedFit");
-  m_InitialRingSetData -> readSettings(settings, section+"/initialData");
-  m_RefinedRingSetData -> readSettings(settings, section+"/refinedData");
   m_DistortionCorrection -> readSettings(settings, section+"/distortion");
 }
 
@@ -1857,42 +1838,6 @@ QxrdIntegratorPtr QxrdDataProcessorBase::integrator() const
   }
 
   return m_Integrator;
-}
-
-QxrdRingSetFitParametersPtr QxrdDataProcessorBase::initialRingSetFitParameters() const
-{
-  if (m_InitialRingSetFitParameters == NULL) {
-    printMessage("Problem QxrdDataProcessorBase::initialRingSetFitParameters == NULL");
-  }
-
-  return m_InitialRingSetFitParameters;
-}
-
-QxrdRingSetSampledDataPtr QxrdDataProcessorBase::initialRingSetData() const
-{
-  if (m_InitialRingSetData == NULL) {
-    printMessage("Problem QxrdDataProcessorBase::initialRingSetData == NULL");
-  }
-
-  return m_InitialRingSetData;
-}
-
-QxrdRingSetFitParametersPtr QxrdDataProcessorBase::refinedRingSetFitParameters() const
-{
-  if (m_RefinedRingSetFitParameters == NULL) {
-    printMessage("Problem QxrdDataProcessorBase::refinedRingSetFitParameters == NULL");
-  }
-
-  return m_RefinedRingSetFitParameters;
-}
-
-QxrdRingSetSampledDataPtr QxrdDataProcessorBase::refinedRingSetData() const
-{
-  if (m_RefinedRingSetData == NULL) {
-    printMessage("Problem QxrdDataProcessorBase::refinedRingSetData == NULL");
-  }
-
-  return m_RefinedRingSetData;
 }
 
 QxrdDistortionCorrectionPtr QxrdDataProcessorBase::distortionCorrection() const

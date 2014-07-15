@@ -17,8 +17,6 @@
 #include "qxrdmaskstack-ptr.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdintegrateddata-ptr.h"
-#include "qxrdringsetfitparameters-ptr.h"
-#include "qxrdringsetsampleddata-ptr.h"
 #include "qxrdfilesaver-ptr.h"
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdallocator-ptr.h"
@@ -352,10 +350,6 @@ public:
 
   QxrdCenterFinderPtr    centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
-  QxrdRingSetFitParametersPtr initialRingSetFitParameters() const;
-  QxrdRingSetSampledDataPtr   initialRingSetData() const;
-  QxrdRingSetFitParametersPtr refinedRingSetFitParameters() const;
-  QxrdRingSetSampledDataPtr   refinedRingSetData() const;
 
   QxrdGenerateTestImageWPtr generateTestImage() const;
 
@@ -436,12 +430,6 @@ protected:
 
   QxrdCenterFinderPtr    m_CenterFinder;
   QxrdIntegratorPtr      m_Integrator;
-
-  QxrdRingSetFitParametersPtr m_InitialRingSetFitParameters;
-  QxrdRingSetFitParametersPtr m_RefinedRingSetFitParameters;
-
-  QxrdRingSetSampledDataPtr m_InitialRingSetData;
-  QxrdRingSetSampledDataPtr m_RefinedRingSetData;
 
   QxrdGenerateTestImagePtr m_GenerateTestImage;
 
