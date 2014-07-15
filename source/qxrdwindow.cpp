@@ -22,7 +22,6 @@
 #include "qxrdimagecalculator.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdallocator.h"
-#include "qxrdpowderfitdialog.h"
 #include "qxrdimagedisplaywidget.h"
 #include "qxrdsynchronizedacquisitiondialog.h"
 #include "qxrdcorrectiondialog.h"
@@ -1538,8 +1537,6 @@ void QxrdWindow::allocatedMemoryChanged()
 
 void QxrdWindow::doRefineCenterTilt()
 {
-  m_PowderFitDialog = new QxrdPowderFitDialog(QxrdSettingsSaverWPtr(), m_DataProcessor, this);
-  m_PowderFitDialog -> exec();
 }
 
 void QxrdWindow::doAccumulateImages()

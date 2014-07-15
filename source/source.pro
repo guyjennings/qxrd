@@ -248,30 +248,10 @@ HEADERS += TODO.h \
     qxrdgeneratetestimage-ptr.h \
     qxrdfitparameter.h \
     qxrdfitparameter-ptr.h \
-    qxrdringfitparameters.h \
-    qxrdringfitparameters-ptr.h \
-    qxrdringsetfitparameters.h \
-    qxrdringsetfitparameters-ptr.h \
-    qxrdringsampleddata.h \
-    qxrdringsampleddata-ptr.h \
-    qxrdringsetsampleddata.h \
-    qxrdringsetsampleddata-ptr.h \
-    qxrdringsetresampler.h \
-    qxrdringsetfitrefiner.h \
-    qxrdringfitrefiner.h \
-    qxrdringresampler.h \
-    qxrdresampler.h \
-    qxrdfitrefiner.h \
     qxrdsimpleserver.h \
     qxrdsimpleserver-ptr.h \
     qxrdsimpleserverthread.h \
     qxrdsimpleserverthread-ptr.h \
-    qxrdpowderfitwidget.h \
-    qxrdpowderfitimageplot.h \
-    qxrdpowderfitidentifypage.h \
-    qxrdpowderfitrefinepage.h \
-    qxrdpowderfitresultspage.h \
-    qxrdpowderfitdialog.h \
     qxrdcenterstepspinner.h \
     qxrdsettingssaver.h \
     qxrdsettingssaver-ptr.h \
@@ -407,24 +387,8 @@ SOURCES += qxrd.cpp \
     qxrddetectorgeometry.cpp \
     qxrdgeneratetestimage.cpp \
     qxrdfitparameter.cpp \
-    qxrdringfitparameters.cpp \
-    qxrdringsetfitparameters.cpp \
-    qxrdringsampleddata.cpp \
-    qxrdringsetsampleddata.cpp \
-    qxrdringsetresampler.cpp \
-    qxrdringsetfitrefiner.cpp \
-    qxrdringfitrefiner.cpp \
-    qxrdringresampler.cpp \
-    qxrdresampler.cpp \
-    qxrdfitrefiner.cpp \
     qxrdsimpleserver.cpp \
     qxrdsimpleserverthread.cpp \
-    qxrdpowderfitwidget.cpp \
-    qxrdpowderfitimageplot.cpp \
-    qxrdpowderfitidentifypage.cpp \
-    qxrdpowderfitrefinepage.cpp \
-    qxrdpowderfitresultspage.cpp \
-    qxrdpowderfitdialog.cpp \
     qxrdcenterstepspinner.cpp \
     qxrdsettingssaver.cpp \
     qxrdplotimage.cpp \
@@ -486,7 +450,6 @@ FORMS = qxrdwindow.ui \
     qxrdfilebrowser.ui \
     qxrdimagecalculator.ui \
     qxrdexperimentpreferencesdialog.ui \
-    qxrdpowderfitwidget.ui \
     qxrdmaskdialog.ui \
     qxrdsynchronizedacquisitiondialog.ui \
     qxrddisplaydialog.ui \

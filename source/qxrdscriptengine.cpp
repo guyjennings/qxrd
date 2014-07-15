@@ -10,10 +10,6 @@
 #include "qxrdintegrator.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdgeneratetestimage.h"
-#include "qxrdringfitparameters.h"
-#include "qxrdringsetfitparameters.h"
-#include "qxrdringsampleddata.h"
-#include "qxrdringsetsampleddata.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdacquisitionextrainputs.h"
@@ -1425,9 +1421,6 @@ QCEP_DOC_FUNCTION(
 
 void QxrdScriptEngine::initialize()
 {
-  qScriptRegisterMetaType(this, ::QxrdRingFitToScriptValue, ::QxrdRingFitFromScriptValue);
-  qScriptRegisterMetaType(this, ::QxrdRingSampledDataToScriptValue, ::QxrdRingSampledDataFromScriptValue);
-  //  qScriptRegisterMetaType(this, ::QxrdRingSampledDataPtrToScriptValue, ::QxrdRingSampledDataPtrFromScriptValue);
   qScriptRegisterMetaType(this, QxrdScriptEngine::QPointFToScriptValue, QxrdScriptEngine::QPointFFromScriptValue);
 
   qScriptRegisterSequenceMetaType< QList<int> >(this);
@@ -1561,18 +1554,6 @@ void QxrdScriptEngine::initialize()
 
       QCEP_DOC_OBJECT("integrator", "Image Circular Integration Options");
       globalObject().setProperty("integrator",      newQObject(dp->integrator().data()));
-
-      QCEP_DOC_OBJECT("initialFit", "Initial Powder Ring Fitting Parameters");
-      globalObject().setProperty("initialFit",      newQObject(dp->initialRingSetFitParameters().data()));
-
-      QCEP_DOC_OBJECT("refinedFit", "Refined Powder Ring Fitting Parameters");
-      globalObject().setProperty("refinedFit",      newQObject(dp->refinedRingSetFitParameters().data()));
-
-      QCEP_DOC_OBJECT("initialData", "Initial Powder Ring Fitting Data");
-      globalObject().setProperty("initialData",     newQObject(dp->initialRingSetData().data()));
-
-      QCEP_DOC_OBJECT("refinedData", "Refined Power Ring Fitting Data");
-      globalObject().setProperty("refinedData",     newQObject(dp->refinedRingSetData().data()));
 
       QxrdGenerateTestImagePtr gti(dp->generateTestImage());
 
