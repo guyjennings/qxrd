@@ -3,6 +3,7 @@
 #include "qxrdsettingssaver.h"
 #include "levmar.h"
 #include <math.h>
+#include <stdio.h>
 #include "qxrdexperiment.h"
 
 QxrdDistortionCorrection::QxrdDistortionCorrection(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt)

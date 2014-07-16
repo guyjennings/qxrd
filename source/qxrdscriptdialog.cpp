@@ -2,6 +2,7 @@
 #include "qxrdscriptdialog.h"
 #include "ui_qxrdscriptdialog.h"
 #include "qxrdexperiment.h"
+#include <stdio.h>
 
 QxrdScriptDialog::QxrdScriptDialog(QxrdScriptDialogSettingsWPtr settings, QxrdExperimentWPtr experiment, QWidget *parent) :
   QDockWidget(parent),
