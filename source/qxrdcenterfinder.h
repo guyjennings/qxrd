@@ -134,6 +134,15 @@ public:
   Q_PROPERTY(int peakFitDebug READ get_PeakFitDebug WRITE set_PeakFitDebug)
   QCEP_INTEGER_PROPERTY(PeakFitDebug)
 
+  Q_PROPERTY(QcepDoubleVector ringAngles READ get_RingAngles WRITE set_RingAngles)
+  QCEP_DOUBLE_VECTOR_PROPERTY(RingAngles)
+
+  Q_PROPERTY(double ringAngleTolerance READ get_RingAngleTolerance WRITE set_RingAngleTolerance)
+  QCEP_DOUBLE_PROPERTY(RingAngleTolerance)
+
+  Q_PROPERTY(int powderFitOptions READ get_PowderFitOptions WRITE set_PowderFitOptions)
+  QCEP_INTEGER_PROPERTY(PowderFitOptions)
+
 public:
   enum {
     UserAbsorptionNone = 0,
@@ -205,6 +214,9 @@ public slots:
   int          countPowderPoints();
   void         setPowderPoint(int i, QScriptValue val);
 
+  void undoRefinePowderFitParameters();
+  void refinePowderFitParameters();
+
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);
 //  void setPen(const QPen &pen);
@@ -218,8 +230,11 @@ public:
   void evaluateFit(double *parm, double *x, int np, int nx);
   void evaluatePeakFit(double *parm, double *x, int np, int nx);
   void evaluateRingFit(double *parm, double *x, int np, int nx);
+  void evaluatePowderFit(double *parm, double *x, int np, int nx);
 
   QxrdExperimentWPtr experiment() const;
+
+  static QString levmarFailureReason(int n);
 
 //signals:
 ////  void centerChanged(double cx, double cy);
