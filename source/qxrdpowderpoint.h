@@ -22,6 +22,14 @@ public:
   double& x() { return m_X; }
   double& y() { return m_Y; }
 
+  bool operator == (const QxrdPowderPoint &pt) const;
+  bool operator != (const QxrdPowderPoint &pt) const;
+
+  void setSettingsValue(QSettings *settings, QString name);
+  static void customSaver(const QVariant &val, QSettings *settings, QString name);
+
+  QString toString();
+
 protected:
   int m_N1;
   int m_N2;

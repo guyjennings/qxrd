@@ -14,7 +14,7 @@ public:
   QxrdPowderPoint value() const;
   QxrdPowderPoint defaultValue() const;
   QString toString(const QxrdPowderPoint& pt);
-  int subValue(int axis) const;
+  double subValue(int axis) const;
 
   static void registerMetaTypes();
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdPowderPoint &pt);
@@ -44,11 +44,11 @@ private:
   QxrdPowderPoint m_Value;
 };
 
-class QxrdPowderPointSpinBoxHelper : public QObject {
+class QxrdPowderPointPropertySpinBoxHelper : public QObject {
   Q_OBJECT
 
 public:
-  QxrdPowderPointSpinBoxHelper(QSpinBox *spinBox, QxrdPowderPointProperty *property, int axis);
+  QxrdPowderPointPropertySpinBoxHelper(QSpinBox *spinBox, QxrdPowderPointProperty *property, int axis);
   void connect();
 
 public slots:
@@ -64,22 +64,22 @@ private:
   int                         m_Axis;
 };
 
-class QxrdPowderPointDoubleSpinBoxHelper : public QObject {
+class QxrdPowderPointPropertyDoubleSpinBoxHelper : public QObject {
   Q_OBJECT
 
 public:
-  QxrdPowderPointDoubleSpinBoxHelper(QDoubleSpinBox *spinBox, QxrdPowderPointProperty *property, int axis);
+  QxrdPowderPointPropertyDoubleSpinBoxHelper(QDoubleSpinBox *spinBox, QxrdPowderPointProperty *property, int axis);
   void connect();
 
 public slots:
   void setSubValue(int axis, double value, int index);
-  void setValue(int value);
+  void setValue(double value);
 
 signals:
   void subValueChanged(int axis, double value, int index);
 
 private:
-  QDoubleSpinBox             *m_SpinBox;
+  QDoubleSpinBox             *m_DoubleSpinBox;
   QxrdPowderPointProperty    *m_Property;
   int                         m_Axis;
 };

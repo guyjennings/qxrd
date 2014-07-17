@@ -15,3 +15,13 @@ QxrdPowderPoint::QxrdPowderPoint() :
   m_Y(0.0)
 {
 }
+
+bool QxrdPowderPoint::operator == (const QxrdPowderPoint &pt) const
+{
+  return n1()==pt.n1() && n2()==pt.n2() && x()==pt.x() && y()==pt.y();
+}
+
+bool QxrdPowderPoint::operator != (const QxrdPowderPoint &pt) const
+{
+  return n1()!=pt.n1() || n2()!=pt.n2() || x()!=pt.x() || y()!=pt.y();
+}
