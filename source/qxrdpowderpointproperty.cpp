@@ -242,10 +242,10 @@ QScriptValue QxrdPowderPointProperty::toScriptValue(QScriptEngine *engine, const
 
 void QxrdPowderPointProperty::fromScriptValue(const QScriptValue &obj, QxrdPowderPoint &pt)
 {
-  pt.n1() = (int) obj.property(0).toInteger();
-  pt.n2() = (int) obj.property(1).toInteger();
-  pt.x() = obj.property(2).toNumber();
-  pt.y() = obj.property(3).toNumber();
+  pt.n1() = obj.property(0).toInteger();
+  pt.n2() = obj.property(1).toInteger();
+  pt.x()  = obj.property(2).toNumber();
+  pt.y()  = obj.property(3).toNumber();
 }
 
 void QxrdPowderPointProperty::linkTo(QSpinBox *n1SpinBox,
@@ -374,6 +374,169 @@ void QxrdPowderPointPropertyDoubleSpinBoxHelper::setSubValue(int axis, double va
 void QxrdPowderPointPropertyDoubleSpinBoxHelper::setValue(double value)
 {
   emit subValueChanged(m_Axis, value, m_Property->incIndex(1));
+}
+
+QxrdPowderPointVectorProperty::QxrdPowderPointVectorProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QxrdPowderPointVector value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
+    m_Default(value),
+    m_Value(value)
+{
+}
+
+QxrdPowderPointVector QxrdPowderPointVectorProperty::value() const
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  return m_Value;
+}
+
+QxrdPowderPointVector QxrdPowderPointVectorProperty::defaultValue() const
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  return m_Default;
+}
+
+void QxrdPowderPointVectorProperty::setValue(QxrdPowderPointVector val, int index)
+{
+  if (debug()) {
+    printMessage(tr("%1 QxrdPowderPointVectorProperty::setValue(QxrdPowderPointVector %2, int %3) [%4]")
+                 .arg(name()).arg(toString(val)).arg(index).arg(this->index()));
+  }
+
+  if (index == this->index()) {
+    setValue(val);
+  }
+}
+
+void QxrdPowderPointVectorProperty::clear()
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  setValue(QxrdPowderPointVector());
+}
+
+void QxrdPowderPointVectorProperty::appendValue(QxrdPowderPoint val)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QxrdPowderPointVector list = value();
+  list.append(val);
+
+  setValue(list);
+}
+
+QString QxrdPowderPointVectorProperty::toString(const QxrdPowderPointVector &val)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QString res = "[";
+  int ct = val.count();
+
+  for (int i=0; i<ct; i++) {
+    if (i<(ct-1)) {
+      res += tr("%1, ").arg(val[i].toString());
+    } else {
+      res += tr("%1").arg(val[i].toString());
+    }
+  }
+
+  res += "]";
+
+  return res;
+}
+
+void QxrdPowderPointVectorProperty::setValue(QxrdPowderPointVector val)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printMessage(tr("%1 QxrdPowderPointVectorProperty::setValue(QxrdPowderPointVector %2)")
+                 .arg(name()).arg(toString(val)));
+  }
+
+  if (val != m_Value) {
+    if (debug()) {
+      printMessage(tr("%1: QxrdPowderPointVectorProperty::setValue(QxrdPowderPointVector %2) [%3]")
+                   .arg(name()).arg(toString(val)).arg(index()));
+    }
+
+    m_Value = val;
+
+    QcepSettingsSaverPtr saver(m_Saver);
+
+    if (saver) {
+      saver->changed(this);
+    }
+
+    emit valueChanged(m_Value, incIndex(1));
+  }
+}
+
+void QxrdPowderPointVectorProperty::setDefaultValue(QxrdPowderPointVector val)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  m_Default = val;
+}
+
+void QxrdPowderPointVectorProperty::resetValue()
+{
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printMessage(tr("%1: QxrdPowderPointVectorProperty::resetValue").arg(name()));
+  }
+
+  setValue(defaultValue());
+}
+
+void QxrdPowderPointVectorProperty::registerMetaTypes()
+{
+  qRegisterMetaType< QxrdPowderPointVector >("QxrdPowderPointVector");
+
+  qRegisterMetaTypeStreamOperators< QxrdPowderPointVector >("QxrdPowderPointVector");
+
+  registerCustomSaver("QxrdPowderPointVector", QxrdPowderPointVector::customSaver);
+}
+
+QScriptValue QxrdPowderPointVectorProperty::toScriptValue(QScriptEngine *engine,
+                                                          const QxrdPowderPointVector &vec)
+{
+  int n = vec.count();
+
+  QScriptValue res = engine->newArray(n);
+
+  for (int i=0; i<n; i++) {
+    const QxrdPowderPoint &pt = vec.at(i);
+    QScriptValue obj = engine->newArray(4);
+
+    obj.setProperty(0, pt.n1());
+    obj.setProperty(1, pt.n2());
+    obj.setProperty(2, pt.x());
+    obj.setProperty(3, pt.y());
+
+    res.setProperty(i, obj);
+  }
+
+  return res;
+}
+
+void QxrdPowderPointVectorProperty::fromScriptValue(const QScriptValue &obj,
+                                                    QxrdPowderPointVector &vec)
+{
+  int n=obj.property("length").toInteger();
+
+  vec.resize(n);
+
+  for (int i=0; i<n; i++) {
+    QScriptValue pt = obj.property(i);
+
+    if (pt.isValid()) {
+      vec[i].n1() = pt.property(0).toInteger();
+      vec[i].n2() = pt.property(1).toInteger();
+      vec[i].x()  = pt.property(2).toNumber();
+      vec[i].y()  = pt.property(3).toNumber();
+    }
+  }
 }
 
 #ifndef QT_NO_DATASTREAM

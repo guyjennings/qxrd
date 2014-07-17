@@ -147,6 +147,9 @@ public:
   Q_PROPERTY(QxrdPowderPoint powderPoint READ get_PowderPoint WRITE set_PowderPoint)
   QXRD_POWDERPOINT_PROPERTY(PowderPoint)
 
+  Q_PROPERTY(QxrdPowderPointVector powderPointVector READ get_PowderPointVector WRITE set_PowderPointVector)
+  QXRD_POWDERPOINTVECTOR_PROPERTY(PowderPointVector)
+
 public:
   enum {
     UserAbsorptionNone = 0,

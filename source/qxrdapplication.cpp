@@ -142,6 +142,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
 
   QcepProperty::registerMetaTypes();
   QxrdPowderPointProperty::registerMetaTypes();
+  QxrdPowderPointVectorProperty::registerMetaTypes();
 }
 
 bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)

@@ -4,6 +4,7 @@
 #include <QSettings>
 #include <QString>
 #include <QScriptable>
+#include <QVector>
 
 class QxrdPowderPoint
 {
@@ -29,7 +30,7 @@ public:
   void setSettingsValue(QSettings *settings, QString name);
   static void customSaver(const QVariant &val, QSettings *settings, QString name);
 
-  QString toString();
+  QString toString() const;
 
 protected:
   int m_N1;
@@ -38,6 +39,17 @@ protected:
   double m_Y;
 };
 
+class QxrdPowderPointVector : public QVector<QxrdPowderPoint>
+{
+public:
+
+  void setSettingsValue(QSettings *settings, QString name);
+  static void customSaver(const QVariant &val, QSettings *settings, QString name);
+
+  QString toString() const;
+};
+
 Q_DECLARE_METATYPE(QxrdPowderPoint)
+Q_DECLARE_METATYPE(QxrdPowderPointVector)
 
 #endif // QXRDPOWDERPOINT_H

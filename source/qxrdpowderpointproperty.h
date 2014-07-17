@@ -84,6 +84,39 @@ private:
   int                         m_Axis;
 };
 
+class QxrdPowderPointVectorProperty : public QcepProperty {
+  Q_OBJECT
+public:
+  QxrdPowderPointVectorProperty(QcepSettingsSaverWPtr saver,
+                                QObject *parent,
+                                const char *name,
+                                QxrdPowderPointVector value,
+                                QString toolTip);
+
+  QxrdPowderPointVector value() const;
+  QxrdPowderPointVector defaultValue() const;
+  QString toString(const QxrdPowderPointVector &vec);
+
+  static void registerMetaTypes();
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdPowderPointVector &vec);
+  static void fromScriptValue(const QScriptValue &obj, QxrdPowderPointVector &vec);
+
+public slots:
+  void setValue(QxrdPowderPointVector val, int index);
+  void setValue(QxrdPowderPointVector val);
+  void setDefaultValue(QxrdPowderPointVector val);
+  void resetValue();
+  void clear();
+  void appendValue(QxrdPowderPoint val);
+
+signals:
+  void valueChanged(QxrdPowderPointVector val, int index);
+
+private:
+  QxrdPowderPointVector m_Default;
+  QxrdPowderPointVector m_Value;
+};
+
 #define QXRD_POWDERPOINT_PROPERTY(propname) \
 public: \
   QxrdPowderPoint get_##propname() const \
@@ -117,6 +150,40 @@ QxrdPowderPointProperty *prop_##propname() { \
   \
 private: \
 QxrdPowderPointProperty m_##propname;
+
+#define QXRD_POWDERPOINTVECTOR_PROPERTY(propname) \
+public: \
+  QxrdPowderPointVector get_##propname() const \
+{ \
+  return m_##propname.value(); \
+} \
+  \
+  void set_##propname(QxrdPowderPointVector val) \
+{ \
+  m_##propname.setValue(val); \
+} \
+  \
+  QxrdPowderPointVector def_##propname() const \
+{ \
+  return m_##propname.defaultValue(); \
+} \
+  \
+  void setdef_##propname(QxrdPowderPointVector val) \
+{ \
+  m_##propname.setDefaultValue(val); \
+} \
+  \
+  void reset_##propname() \
+{ \
+  m_##propname.resetValue(); \
+} \
+  \
+QxrdPowderPointVectorProperty *prop_##propname() { \
+  return &m_##propname; \
+} \
+  \
+private: \
+QxrdPowderPointVectorProperty m_##propname;
 
 #ifndef QT_NO_DATASTREAM
 
