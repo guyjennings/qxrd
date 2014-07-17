@@ -5,6 +5,7 @@
 #include "qcepproperty.h"
 #include "qcepvector3dproperty.h"
 #include "qcepmatrix3x3property.h"
+#include "qtestimagedata.h"
 
 namespace Ui {
   class QtestceplibMainWindow;
@@ -32,12 +33,16 @@ public slots:
   void writeSettings(QSettings *settings);
 
   void doLoadImage();
+  void doSaveImage();
+  void doNewImage();
 
   void printMessage(QString msg);
 
 private:
   Ui::QtestceplibMainWindow *ui;
   mutable QMutex m_Mutex;
+
+  QTestImageData *m_ImageData;
 
 public:
   Q_PROPERTY(int intProp READ get_IntProp WRITE set_IntProp)

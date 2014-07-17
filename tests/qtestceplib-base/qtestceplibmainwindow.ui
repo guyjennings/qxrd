@@ -45,7 +45,10 @@
     </property>
     <addaction name="m_ActionReadSettings"/>
     <addaction name="m_ActionWriteSettings"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionNewImage"/>
     <addaction name="m_ActionLoadImage"/>
+    <addaction name="m_ActionSaveImage"/>
    </widget>
    <addaction name="m_FileMenu"/>
   </widget>
@@ -69,6 +72,22 @@
   <action name="m_ActionLoadImage">
    <property name="text">
     <string>Load Image...</string>
+   </property>
+  </action>
+  <action name="m_ActionSaveImage">
+   <property name="text">
+    <string>Save Image...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Image</string>
+   </property>
+  </action>
+  <action name="m_ActionNewImage">
+   <property name="text">
+    <string>New Image</string>
+   </property>
+   <property name="toolTip">
+    <string>New Image</string>
    </property>
   </action>
  </widget>

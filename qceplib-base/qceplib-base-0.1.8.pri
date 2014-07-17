@@ -24,7 +24,8 @@ SOURCES += \
   $${PWD}/qcepexperiment.cpp \
   $${PWD}/qceppropertyvalue.cpp \
   $${PWD}/qcepmatrix3x3.cpp \
-  $${PWD}/qcepvector3d.cpp
+  $${PWD}/qcepvector3d.cpp \
+    ../../qceplib-base/qcepobject.cpp
 
 HEADERS += \
   $${PWD}/qcepdebug.h \
@@ -48,4 +49,5 @@ HEADERS += \
   $${PWD}/qcepexperiment-ptr.h \
   $${PWD}/qceppropertyvalue.h \
   $${PWD}/qcepmatrix3x3.h \
-  $${PWD}/qcepvector3d.h
+  $${PWD}/qcepvector3d.h \
+    ../../qceplib-base/qcepobject.h

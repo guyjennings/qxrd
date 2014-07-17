@@ -2,12 +2,13 @@
 #include "ui_qtestceplibmainwindow.h"
 #include <QFileDialog>
 #include "qcepmutexlocker.h"
-#include "qcepimagedata.h"
+#include "qtestimagedata.h"
 
 QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::QtestceplibMainWindow),
   m_Mutex(QMutex::Recursive),
+  m_ImageData(NULL),
   m_IntProp(QcepSettingsSaverWPtr(), this, "intProp", 42, "Integer Property"),
   m_DblProp(QcepSettingsSaverWPtr(), this, "dblProp", 42.0, "Double Property"),
   m_StrProp(QcepSettingsSaverWPtr(), this, "strProp", "42", "String Property"),
@@ -26,6 +27,8 @@ QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
   connect(ui->m_ActionReadSettings, SIGNAL(triggered()), this, SLOT(doReadSettings()));
   connect(ui->m_ActionWriteSettings, SIGNAL(triggered()), this, SLOT(doWriteSettings()));
   connect(ui->m_ActionLoadImage, SIGNAL(triggered()), this, SLOT(doLoadImage()));
+  connect(ui->m_ActionNewImage, SIGNAL(triggered()), this, SLOT(doNewImage()));
+  connect(ui->m_ActionSaveImage, SIGNAL(triggered()), this, SLOT(doSaveImage()));
 
   ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
 
@@ -102,22 +105,60 @@ void QtestceplibMainWindow::writeSettings(QSettings *settings)
   QcepProperty::writeSettings(this, "qtestceplib", settings);
 }
 
+void QtestceplibMainWindow::doNewImage()
+{
+  if (m_ImageData) {
+    delete m_ImageData;
+
+    m_ImageData = NULL;
+  }
+
+  m_ImageData = new QTestImageData(QcepSettingsSaverWPtr(), 1024,1024);
+
+  printMessage("New image created");
+}
+
 void QtestceplibMainWindow::doLoadImage()
 {
   QString theFile = QFileDialog::getOpenFileName(
         this, "Read Image from...", defPath);
 
   if (theFile.length()) {
-    QcepImageData<double> *img = new QcepImageData<double>(QcepSettingsSaverWPtr(), 1024,1024);
+    QTestImageData *img = new QTestImageData(QcepSettingsSaverWPtr(), 1024,1024);
 
     if (img->readImage(theFile)) {
       img->loadMetaData();
 
       printMessage(tr("Loaded image from %1").arg(theFile));
       printMessage(tr(" width %1, height %2").arg(img->get_Width()).arg(img->get_Height()));
+
+      if (m_ImageData) {
+        delete m_ImageData;
+
+        m_ImageData = NULL;
+      }
+
+      m_ImageData = img;
     } else {
       printMessage(tr("Image load failed from %1").arg(theFile));
     }
   }
 }
 
+void QtestceplibMainWindow::doSaveImage()
+{
+  if (m_ImageData) {
+    QString theFile = QFileDialog::getSaveFileName(
+          this, "Save image file to", defPath);
+
+    if (theFile.length()) {
+      if (m_ImageData->writeImage(theFile)) {
+        m_ImageData->saveMetaData();
+
+        printMessage(tr("Saved image to %1").arg(theFile));
+      }
+    }
+  } else {
+    printMessage("No image data to save");
+  }
+}

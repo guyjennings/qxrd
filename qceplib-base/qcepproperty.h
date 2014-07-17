@@ -32,6 +32,8 @@ class QcepProperty : public QObject {
 public:
   QcepProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QString toolTip);
 
+  virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime());
+
   QString name() const;
   void setName(QString name);
 
@@ -58,8 +60,6 @@ public:
   static void writeSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic = false);
   static void readSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic = false);
 //  static void dumpMetaData(const QMetaObject *meta);
-
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
   static void registerCustomSaver(QString typeName, CustomSettingsSaver *saver);
 
