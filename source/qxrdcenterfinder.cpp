@@ -865,7 +865,7 @@ void QxrdCenterFinder::refinePowderFitParameters()
   int nMarked = get_MarkedPoints().count();
   int nRings  = get_RingAngles().count();
 
-  double parms[6+nRings];
+  QVector<double> parms(6+nRings);
   int np=0;
 
   parms[0] = get_CenterX();
@@ -888,7 +888,7 @@ void QxrdCenterFinder::refinePowderFitParameters()
 
   double info[LM_INFO_SZ];
 
-  int niter = dlevmar_dif(fitPowderFit, parms, NULL, np, nMarked, 200, NULL, info, NULL, NULL, this);
+  int niter = dlevmar_dif(fitPowderFit, parms.data(), NULL, np, nMarked, 200, NULL, info, NULL, NULL, this);
 
   int update = false;
   QString message;

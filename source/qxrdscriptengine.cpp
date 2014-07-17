@@ -1438,7 +1438,7 @@ void QxrdScriptEngine::initialize()
                           QxrdPowderPointProperty::toScriptValue,
                           QxrdPowderPointProperty::fromScriptValue);
 
-  qScriptRegisterSequenceMetaType< QVector<QxrdPowderPoint> >(this);
+//  qScriptRegisterSequenceMetaType< QVector<QxrdPowderPoint> >(this);
   qScriptRegisterMetaType(this,
                           QxrdPowderPointVectorProperty::toScriptValue,
                           QxrdPowderPointVectorProperty::fromScriptValue);
