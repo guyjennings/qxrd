@@ -312,6 +312,38 @@ void QxrdPowderPointProperty::linkTo(int axis, QDoubleSpinBox *spinBox)
   }
 }
 
+QxrdPowderPointPropertySpinBoxHelper::QxrdPowderPointPropertySpinBoxHelper
+  (QSpinBox *spinBox, QxrdPowderPointProperty *property, int axis)
+  : QObject(spinBox),
+    m_SpinBox(spinBox),
+    m_Property(property),
+    m_Axis(axis)
+{
+}
+
+void QxrdPowderPointPropertySpinBoxHelper::connect()
+{
+  CONNECT_CHECK(QObject::connect(m_SpinBox, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)), Qt::DirectConnection));
+}
+
+void QxrdPowderPointPropertySpinBoxHelper::setSubValue(int axis, int value, int index)
+{
+  if (m_Property->index() == index) {
+    if (m_Axis == axis) {
+      if (m_SpinBox->value() != value) {
+        bool block = m_SpinBox->blockSignals(true);
+        m_SpinBox->setValue(value);
+        m_SpinBox->blockSignals(block);
+      }
+    }
+  }
+}
+
+void QxrdPowderPointPropertySpinBoxHelper::setValue(int value)
+{
+  emit subValueChanged(m_Axis, value, m_Property->incIndex(1));
+}
+
 QxrdPowderPointPropertyDoubleSpinBoxHelper::QxrdPowderPointPropertyDoubleSpinBoxHelper
   (QDoubleSpinBox *spinBox, QxrdPowderPointProperty *property, int axis)
   : QObject(spinBox),

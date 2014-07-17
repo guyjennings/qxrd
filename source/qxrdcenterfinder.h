@@ -14,6 +14,7 @@
 #include "qxrdimagedata.h"
 #include "qxrdexperiment-ptr.h"
 #include <QScriptValue>
+#include "qxrdpowderpointproperty.h"
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
 {
@@ -142,6 +143,9 @@ public:
 
   Q_PROPERTY(int powderFitOptions READ get_PowderFitOptions WRITE set_PowderFitOptions)
   QCEP_INTEGER_PROPERTY(PowderFitOptions)
+
+  Q_PROPERTY(QxrdPowderPoint powderPoint READ get_PowderPoint WRITE set_PowderPoint)
+  QXRD_POWDERPOINT_PROPERTY(PowderPoint)
 
 public:
   enum {

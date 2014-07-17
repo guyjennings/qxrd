@@ -50,6 +50,7 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_RingAngles(saver, this, "ringAngles", QcepDoubleVector(), "Diffraction ring angles"),
     m_RingAngleTolerance(saver, this, "ringAngleToleance", 0.1, "Diffraction ring angle tolerance"),
     m_PowderFitOptions(saver, this, "powderFitOptions", 0, "Powder fitting options"),
+    m_PowderPoint(saver, this, "powderPoint", QxrdPowderPoint(1,2,3,4), "Powder Point"),
     m_Experiment(expt)
 {
   qRegisterMetaType<QPointF>("QPointF");

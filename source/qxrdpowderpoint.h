@@ -9,6 +9,7 @@ class QxrdPowderPoint
 {
 public:
   QxrdPowderPoint(int n1, int n2, double x, double y);
+  QxrdPowderPoint(const QxrdPowderPoint& pt);
   QxrdPowderPoint();
 
 public:
@@ -36,5 +37,7 @@ protected:
   double m_X;
   double m_Y;
 };
+
+Q_DECLARE_METATYPE(QxrdPowderPoint)
 
 #endif // QXRDPOWDERPOINT_H

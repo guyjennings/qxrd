@@ -1434,6 +1434,8 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterSequenceMetaType< QVector<QString> >(this);
   //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
 
+  qScriptRegisterMetaType(this, QxrdPowderPointProperty::toScriptValue, QxrdPowderPointProperty::fromScriptValue);
+
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
