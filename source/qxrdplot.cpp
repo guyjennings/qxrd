@@ -89,6 +89,11 @@ void QxrdPlot::init(QxrdPlotSettingsWPtr settings)
     setX2AxisLog(set->get_X2AxisLog());
     setY2AxisLog(set->get_Y2AxisLog());
   }
+
+  if (m_Legend) {
+    connect(m_Legend, SIGNAL(clicked(const QVariant &,int)),      this, SLOT(onLegendClicked(const QVariant&, int)));
+    connect(m_Legend, SIGNAL(checked(const QVariant &,bool,int)), this, SLOT(onLegendChecked(const QVariant&, bool, int)));
+  }
 }
 
 void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)

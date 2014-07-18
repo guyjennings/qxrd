@@ -1740,33 +1740,45 @@ void QxrdWindow::plotPowderRingRadii()
     QxrdCenterFinderPtr cf(expt->centerFinder());
 
     if (cf) {
-      int npts = cf->countPowderPoints();
-
-      QVector<double> x(npts), y(npts);
-
-      for (int i=0; i<npts; i++) {
-        QPointF pt = cf->powderPoint(i);
-
-        x[i] = cf->getChi(pt.x(), pt.y());
-        y[i] = cf->getR  (pt.x(), pt.y());
-      }
-
       m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
       m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
 
-      QwtPlotCurve* pc = new QwtPlotCurve("Powder Ring Radii");
+      int nrgs = cf->countPowderRings();
+      int npts = cf->countPowderRingPoints();
 
-      pc->setSamples(x, y);
+      for (int r=0; r<nrgs; r++) {
+        QVector<double> x, y;
 
-      QPen   pen(Qt::red);
-      QBrush brush(Qt::red);
+        for (int i=0; i<npts; i++) {
+          QxrdPowderPoint pt = cf->powderRingPoint(i);
 
-      QwtSymbol *a = new QwtSymbol(QwtSymbol::Rect, brush, pen, QSize(3,3));
+          if (pt.n1() == r && pt.n2()) {
+            x.append(cf->getChi(pt.x(), pt.y()));
+            y.append(cf->getR  (pt.x(), pt.y()));
+          }
+        }
 
-      pc->setStyle(QwtPlotCurve::NoCurve);
-      pc->setSymbol(a);
+        double sum = 0;
+        int n = y.count();
+        for (int i=0; i<n; i++) {
+          sum += y[i];
+        }
 
-      pc->attach(m_DistortionCorrectionPlot);
+        double avg = sum/(double)n;
+        for (int i=0; i<n; i++) {
+          y[i] -= avg;
+        }
+
+        QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring %1").arg(r));
+
+        m_DistortionCorrectionPlot->setPlotCurveStyle(r, pc);
+
+        pc->setSamples(x, y);
+
+        pc->setStyle(QwtPlotCurve::NoCurve);
+
+        pc->attach(m_DistortionCorrectionPlot);
+      }
 
 //      m_DistortionCorrectionPlot->autoScale();
       m_DistortionCorrectionPlot->replot();

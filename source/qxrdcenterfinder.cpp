@@ -52,6 +52,7 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_PowderFitOptions(saver, this, "powderFitOptions", 0, "Powder fitting options"),
     m_PowderPoint(saver, this, "powderPoint", QxrdPowderPoint(1,2,3,4), "Powder Point"),
     m_PowderPointVector(saver, this, "powderPointVector", QxrdPowderPointVector(), "Powder Point Vector"),
+    m_RingIndex(saver, this, "ringIndex", 0, "Fitted Powder Ring Index"),
     m_Experiment(expt)
 {
   qRegisterMetaType<QPointF>("QPointF");
@@ -364,6 +365,8 @@ void QxrdCenterFinder::appendPowderPoint(double x, double y)
 void QxrdCenterFinder::deletePowderPoints()
 {
   m_MarkedPoints.clear();
+
+  set_RingIndex(0);
 }
 
 QPointF QxrdCenterFinder::adjustPoint(QPointF pt)
@@ -471,7 +474,7 @@ static void fitPeak(double *p, double *hx, int m,int n, void *adata)
 //  return fitPeakNear(get_PeakCenterX(), get_PeakCenterY());
 //}
 
-bool QxrdCenterFinder::fitPeakNear(double x, double y, int nitermax)
+bool QxrdCenterFinder::fitPeakNear(double x, double y, bool prt, int nitermax)
 {
   set_PeakCenterX(x);
   set_PeakCenterY(y);
@@ -512,7 +515,9 @@ bool QxrdCenterFinder::fitPeakNear(double x, double y, int nitermax)
     msg += tr("Bkx: %1\t").arg(parms[5]);
     msg += tr("Bky: %1").arg(parms[6]);
 
-    printMessage(msg);
+    if (prt) {
+      printMessage(msg);
+    }
 
     set_PeakCenterX(parms[0]);
     set_PeakCenterY(parms[1]);
@@ -524,7 +529,9 @@ bool QxrdCenterFinder::fitPeakNear(double x, double y, int nitermax)
 
     return true;
   } else {
-    printMessage(tr("Fitting Failed"));
+    if (prt) {
+      printMessage(tr("Fitting Failed"));
+    }
 
     return false;
   }
@@ -597,7 +604,7 @@ static void fitRing(double *p, double *hx, int m,int n, void *adata)
   }
 }
 
-bool QxrdCenterFinder::fitRingNear(double x0, double y0, int nitermax)
+bool QxrdCenterFinder::fitRingNear(double x0, double y0, bool prt, int nitermax)
 {
   double xc = get_CenterX();
   double yc = get_CenterY();
@@ -644,7 +651,9 @@ bool QxrdCenterFinder::fitRingNear(double x0, double y0, int nitermax)
     msg += tr("Bkx: %1\t").arg(parms[4]);
     msg += tr("Bky: %1").arg(parms[5]);
 
-    printMessage(msg);
+    if (prt) {
+      printMessage(msg);
+    }
 
     double nr = parms[0];
 
@@ -659,7 +668,9 @@ bool QxrdCenterFinder::fitRingNear(double x0, double y0, int nitermax)
 
     return true;
   } else {
-    printMessage(tr("Fitting Failed"));
+    if (prt) {
+      printMessage(tr("Fitting Failed"));
+    }
 
     return false;
   }
@@ -683,29 +694,63 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step, int nite
 
   double pkht = imageValue(x0,y0) - bkgd;
 
+  int    width = 0, height = 0;
+
+  if (m_Data) {
+    width = m_Data->get_Width()+1;
+    height = m_Data->get_Height()+1;
+  }
+
   while (true) {
-    if (fitRingNear(x,y, nitermax)) {
+    if (x >= 0 && y >= 0 && x <= width && y <= width) {
+      if (fitRingNear(x,y, false, nitermax)) {
 
-      x = get_PeakCenterX();
-      y = get_PeakCenterY();
+        x = get_PeakCenterX();
+        y = get_PeakCenterY();
 
-      if ((get_PeakHeight() > (pkht*0.25)) &&
-          (fabs(get_PeakRadius()) < 10.0)){
-        appendPowderPoint(x, y);
-        r = sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc));
+        if ((get_PeakHeight() > (pkht*0.25)) &&
+            (fabs(get_PeakRadius()) < 10.0)){
+          m_RingPowderPoints.append(QxrdPowderPoint(get_RingIndex(), 1, x, y));
+          r = sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc));
+        } else {
+          m_RingPowderPoints.append(QxrdPowderPoint(get_RingIndex(), 0, x, y));
+        }
       }
     }
 
     az += ast;
 
     if (step > 0) {
-      if ((az-az0) >= 2*M_PI) return true;
+      if ((az-az0) >= 2*M_PI) break;
     } else {
-      if ((az-az0) <= -2*M_PI) return true;
+      if ((az-az0) <= -2*M_PI) break;
     }
 
     x = xc + r*cos(az);
     y = yc + r*sin(az);
+  }
+
+  int npts = 0;
+  int nok  = 0;
+
+  for(int i=0; i<m_RingPowderPoints.count(); i++) {
+    QxrdPowderPoint pt = m_RingPowderPoints[i];
+
+    if (pt.n1() == get_RingIndex()) {
+      npts += 1;
+      if (pt.n2()) {
+        nok += 1;
+        appendPowderPoint(pt.x(), pt.y());
+      }
+    }
+  }
+
+  if (npts) {
+    printMessage(tr("%1/%2 fitted points").arg(nok).arg(npts));
+
+    if (nok) {
+      prop_RingIndex()->incValue(1);
+    }
   }
 }
 
@@ -980,4 +1025,31 @@ QString QxrdCenterFinder::levmarFailureReason(int n)
   default:
     return "Unknown reason for failure";
   }
+}
+
+int QxrdCenterFinder::countPowderRings() const
+{
+  int max = 0;
+
+  int n = m_RingPowderPoints.count();
+
+  for (int i=0; i<n; i++) {
+    QxrdPowderPoint pt = m_RingPowderPoints.value(i);
+
+    if (pt.n2() && pt.n1()>max) {
+      max = pt.n1();
+    }
+  }
+
+  return max;
+}
+
+int QxrdCenterFinder::countPowderRingPoints() const
+{
+  return m_RingPowderPoints.count();
+}
+
+QxrdPowderPoint QxrdCenterFinder::powderRingPoint(int i) const
+{
+  return m_RingPowderPoints.value(i);
 }

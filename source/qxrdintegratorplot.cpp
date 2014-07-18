@@ -32,9 +32,6 @@ void QxrdIntegratorPlot::init(QxrdPlotSettingsWPtr settings)
 
   if (m_Legend) {
     insertLegend(m_Legend, QwtPlot::BottomLegend);
-
-    connect(m_Legend, SIGNAL(clicked(const QVariant &,int)),      this, SLOT(onLegendClicked(const QVariant&, int)));
-    connect(m_Legend, SIGNAL(checked(const QVariant &,bool,int)), this, SLOT(onLegendChecked(const QVariant&, bool, int)));
   }
 }
 

@@ -150,6 +150,9 @@ public:
   Q_PROPERTY(QxrdPowderPointVector powderPointVector READ get_PowderPointVector WRITE set_PowderPointVector)
   QXRD_POWDERPOINTVECTOR_PROPERTY(PowderPointVector)
 
+  Q_PROPERTY(int ringIndex READ get_RingIndex WRITE set_RingIndex)
+  QCEP_INTEGER_PROPERTY(RingIndex)
+
 public:
   enum {
     UserAbsorptionNone = 0,
@@ -203,10 +206,10 @@ public slots:
   QPointF adjustPoint(int i);
   void adjustPointNear(double x, double y);
   void adjustAllPoints();
-  bool fitPeakNear(double x, double y, int nitermax=200);
+  bool fitPeakNear(double x, double y, bool prt=true, int nitermax=200);
 //  bool fitPeakNear();
 
-  bool fitRingNear(double x0, double y0, int nitermax=200);
+  bool fitRingNear(double x0, double y0, bool prt=true, int nitermax=200);
   bool traceRingNear(double x0, double y0, double step=25.0, int nitermax=200);
 
   QString defaultUserGeometryScript();
@@ -223,6 +226,10 @@ public slots:
 
   void undoRefinePowderFitParameters();
   void refinePowderFitParameters();
+
+  int countPowderRings() const;
+  int countPowderRingPoints() const;
+  QxrdPowderPoint powderRingPoint(int i) const;
 
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);
@@ -253,6 +260,8 @@ private:
   mutable QMutex             m_Mutex;
   QxrdExperimentWPtr         m_Experiment;
   QxrdDoubleImageDataPtr     m_Data;
+
+  QxrdPowderPointVector      m_RingPowderPoints;
 };
 
 #endif // QXRDCENTERFINDER_H
