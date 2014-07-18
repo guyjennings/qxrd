@@ -11,12 +11,12 @@
 #include "qxrddistortioncorrection-ptr.h"
 #include "qxrdwindow-ptr.h"
 
-class QxrdDistortionCorrectionPlot : public QxrdImagePlot
+class QxrdDistortionCorrectionPlot : public QxrdPlot
 {
   Q_OBJECT
 public:
   explicit QxrdDistortionCorrectionPlot(QWidget *parent = 0);
-  void init(QxrdImagePlotSettingsWPtr settings);
+  void init(QxrdPlotSettingsWPtr settings);
   void setWindow(QxrdWindow *win);
 
 signals:
@@ -26,7 +26,7 @@ public slots:
 private:
   QxrdObjectNamer               m_ObjectNamer;
   QxrdWindow                   *m_Window;
-//  QxrdDataProcessorWPtr         m_DataProcessor;
+  QxrdDataProcessorWPtr         m_DataProcessor;
   QxrdDistortionCorrectionWPtr  m_DistortionCorrection;
   bool                          m_FirstTime;
 };
