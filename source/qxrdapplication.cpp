@@ -139,6 +139,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   }
 
   g_Application = this;
+
+  QcepProperty::registerMetaTypes();
+  QxrdPowderPointProperty::registerMetaTypes();
+  QxrdPowderPointVectorProperty::registerMetaTypes();
 }
 
 bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
@@ -243,8 +247,6 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
   printMessage(tr("Home Path: %1").arg(QDir::homePath()));
   printMessage(tr("Current Path: %1").arg(QDir::currentPath()));
   printMessage(tr("Root Path %1").arg(QDir::rootPath()));
-
-  QcepProperty::registerMetaTypes();
 
   setupTiffHandlers();
 

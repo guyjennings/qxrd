@@ -125,7 +125,9 @@ HEADERS += \
     qxrdplotvectorfielddata.h \
     qxrdscriptdialog.h \
     qxrdscriptdialogsettings.h \
-    qxrdscripteditwidget.h
+    qxrdscripteditwidget.h \
+    qxrdpowderpoint.h \
+    qxrdpowderpointproperty.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -152,7 +154,9 @@ SOURCES += \
     qxrdplotvectorfielddata.cpp \
     qxrdscriptdialog.cpp \
     qxrdscriptdialogsettings.cpp \
-    qxrdscripteditwidget.cpp
+    qxrdscripteditwidget.cpp \
+    qxrdpowderpoint.cpp \
+    qxrdpowderpointproperty.cpp
 
 OTHER_FILES += testImage.js
 

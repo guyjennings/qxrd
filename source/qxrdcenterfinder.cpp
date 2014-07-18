@@ -47,9 +47,18 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_PeakAzimuth(saver, this, "peakAzimuth", 0, "Azimuthal angle of fitted ring sample"),
     m_PeakPixelRadius(saver, this, "peakPixelRadius", 0, "Radius of fitted ring sample"),
     m_PeakFitDebug(saver, this, "peakFitDebug", 0, "Debug Print for peak fitting"),
+    m_RingAngles(saver, this, "ringAngles", QcepDoubleVector(), "Diffraction ring angles"),
+    m_RingAngleTolerance(saver, this, "ringAngleToleance", 0.1, "Diffraction ring angle tolerance"),
+    m_PowderFitOptions(saver, this, "powderFitOptions", 0, "Powder fitting options"),
+    m_PowderPoint(saver, this, "powderPoint", QxrdPowderPoint(1,2,3,4), "Powder Point"),
+    m_PowderPointVector(saver, this, "powderPointVector", QxrdPowderPointVector(), "Powder Point Vector"),
     m_Experiment(expt)
 {
   qRegisterMetaType<QPointF>("QPointF");
+
+  m_PowderPointVector.appendValue(QxrdPowderPoint(1,2,3,4));
+  m_PowderPointVector.appendValue(QxrdPowderPoint(5,6,7,8));
+  m_PowderPointVector.appendValue(QxrdPowderPoint(9,10,11,12));
 
 //  m_CenterX.setDebug(true);
 //  m_CenterY.setDebug(true);
@@ -835,5 +844,140 @@ QString QxrdCenterFinder::defaultUserAbsorptionScript()
     return def.readAll();
   } else {
     return "Couldn't open resource file";
+  }
+}
+
+void QxrdCenterFinder::undoRefinePowderFitParameters()
+{
+}
+
+void QxrdCenterFinder::evaluatePowderFit(double *parm, double *x, int np, int nx)
+{
+}
+
+static void fitPowderFit(double *p, double *x, int np, int nx, void *data)
+{
+}
+
+void QxrdCenterFinder::refinePowderFitParameters()
+{
+  int options = get_PowderFitOptions();
+  int nMarked = get_MarkedPoints().count();
+  int nRings  = get_RingAngles().count();
+
+  QVector<double> parms(6+nRings);
+  int np=0;
+
+  parms[0] = get_CenterX();
+  parms[1] = get_CenterY();
+  parms[2] = get_DetectorTilt();
+  parms[3] = get_TiltPlaneRotation();
+
+  if (options == 0) { // Keep energy and angles fixed, fit distance
+    parms[4] = get_DetectorDistance();
+    np = 5;
+  } else if (options == 1) { // Keep distance and angles fixed, fit energy
+    parms[4] = get_Energy();
+    np = 5;
+  } else if (options == 2) { // Keep distance and energy fixed, fit angles
+    for (int i=0; i<nRings; i++) {
+      parms[4+i] = get_RingAngles()[i];
+    }
+    np = 4+nRings;
+  }
+
+  double info[LM_INFO_SZ];
+
+  int niter = dlevmar_dif(fitPowderFit, parms.data(), NULL, np, nMarked, 200, NULL, info, NULL, NULL, this);
+
+  int update = false;
+  QString message;
+  if (niter >= 0) {
+    message.append(tr("Fitting succeeded after %1 iterations\n").arg(niter));
+    message.append(tr("New Center = [%1,%2]").arg(parms[0]).arg(parms[1]));
+    message.append(tr("Tilt Angle %1, Tilt Plane Rotation %2\n").arg(parms[2]).arg(parms[3]));
+
+    if (options == 0) {
+      message.append(tr("Detector Distance %1\n").arg(parms[4]));
+    } else if (options == 1) {
+      message.append(tr("Energy %1\n").arg(parms[4]));
+    } else if (options == 3) {
+      for (int i=0; i<nRings; i++) {
+        message.append(tr("Ring %1: Angle %2").arg(i).arg(parms[4+i]));
+      }
+    }
+  } else {
+    message.append(tr("dlevmar_dif failed: reason = %1, %2").arg(info[6]).arg(levmarFailureReason(info[6])));
+  }
+
+  printMessage(message);
+
+//  if (g_Application->get_GuiWanted()) {
+//    if (niter >= 0) {
+//      message.append("Do you want to update the calibration factors?");
+
+//      if (QMessageBox::question(NULL, "Update calibration?", message, QMessageBox::Ok | QMessageBox::No, QMessageBox::No) == QMessageBox::Ok) {
+//        update = true;
+//      }
+//    } else {
+//      QMessageBox::information(NULL, "Fitting Failed", message);
+//    }
+//  }
+
+  if (update) {
+    set_CenterX(parms[0]);
+    set_CenterY(parms[1]);
+    set_DetectorTilt(parms[2]);
+    set_TiltPlaneRotation(parms[3]);
+
+    if (options == 0) {
+      set_DetectorDistance(parms[4]);
+    } else if (options == 1) {
+      set_Energy(parms[4]);
+    } else if (options == 2) {
+      QcepDoubleVector angles;
+
+      for (int i=0; i<nRings; i++) {
+        angles.append(parms[4+i]);
+      }
+
+      set_RingAngles(angles);
+    }
+  }
+}
+
+QString QxrdCenterFinder::levmarFailureReason(int n)
+{
+  switch (n) {
+  case 1:
+    return "Stopped by Small Gradient";
+    break;
+
+  case 2:
+    return "Stopped by Small Dp";
+    break;
+
+  case 3:
+    return "Stopped by iteration limit";
+    break;
+
+  case 4:
+    return "Stopped by singular matrix";
+    break;
+
+  case 5:
+    return "No further error reduction possible";
+    break;
+
+  case 6:
+    return "Stopped by small ||e||^2";
+    break;
+
+  case 7:
+    return "Stopped by invalid (i.e. NaN or Inf) function values";
+    break;
+
+  default:
+    return "Unknown reason for failure";
   }
 }
