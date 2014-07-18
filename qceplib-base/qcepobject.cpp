@@ -1,6 +1,7 @@
 #include "qcepobject.h"
 #include "qcepproperty.h"
 #include <QMetaProperty>
+#include <stdio.h>
 
 QcepObject::QcepObject(QString name, QObject *parent) :
   QObject(parent),
