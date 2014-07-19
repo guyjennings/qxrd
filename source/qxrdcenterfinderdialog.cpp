@@ -28,8 +28,11 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   m_CenterFinder -> prop_CenterStep() -> linkTo(m_CenterStep);
   m_CenterFinder -> prop_ImplementTilt() -> linkTo(m_ImplementTilt);
   m_CenterFinder -> prop_DetectorDistance() -> linkTo(m_DetectorDistance);
+  m_CenterFinder -> prop_DetectorDistanceStep() -> linkTo(m_DetectorDistanceStep);
   m_CenterFinder -> prop_DetectorTilt() -> linkTo(m_DetectorTilt);
+  m_CenterFinder -> prop_DetectorTiltStep() -> linkTo(m_DetectorTiltStep);
   m_CenterFinder -> prop_TiltPlaneRotation() -> linkTo(m_TiltPlaneRotation);
+  m_CenterFinder -> prop_TiltPlaneRotationStep() -> linkTo(m_TiltPlaneRotationStep);
   m_CenterFinder -> prop_DetectorXPixelSize() -> linkTo(m_DetectorXPixelSize);
   m_CenterFinder -> prop_DetectorYPixelSize() -> linkTo(m_DetectorYPixelSize);
   m_CenterFinder -> prop_Energy() -> linkTo(m_Energy);
@@ -54,6 +57,11 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   onImplementTiltChanged(m_CenterFinder -> get_ImplementTilt());
   onEnablePolarizationChanged(m_CenterFinder -> get_EnablePolarizationCorrections());
   onEnableAbsorptionChanged(m_CenterFinder -> get_EnableAbsorptionCorrections());
+
+  connect(m_CenterFinder->prop_CenterStep(),            SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
+  connect(m_CenterFinder->prop_DetectorDistanceStep(),  SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
+  connect(m_CenterFinder->prop_DetectorTiltStep(),      SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
+  connect(m_CenterFinder->prop_TiltPlaneRotationStep(), SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
 }
 
 QxrdCenterFinderDialog::~QxrdCenterFinderDialog()
@@ -61,6 +69,14 @@ QxrdCenterFinderDialog::~QxrdCenterFinderDialog()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdCenterFinderDialog::~QxrdCenterFinderDialog(%p)\n", this);
   }
+}
+
+void QxrdCenterFinderDialog::onStepSizesChanged()
+{
+  m_CenterX           -> setSingleStep(m_CenterStep->value());
+  m_DetectorDistance  -> setSingleStep(m_DetectorDistanceStep->value());
+  m_DetectorTilt      -> setSingleStep(m_DetectorTiltStep->value());
+  m_TiltPlaneRotation -> setSingleStep(m_TiltPlaneRotationStep->value());
 }
 
 void QxrdCenterFinderDialog::onImplementTiltChanged(bool imp)

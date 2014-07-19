@@ -33,7 +33,6 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_IntegrationXUnits(QxrdIntegrator::IntegrateTTH),
   m_CenterX(0),
   m_CenterY(0),
-  m_CenterStep(1),
   m_DetectorXPixelSize(200),
   m_DetectorYPixelSize(200),
   m_DetectorDistance(1000),

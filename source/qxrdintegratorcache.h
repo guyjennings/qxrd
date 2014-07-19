@@ -44,7 +44,6 @@ private:
   int    m_IntegrationXUnits;
   double m_CenterX;
   double m_CenterY;
-  double m_CenterStep;
   double m_DetectorXPixelSize;
   double m_DetectorYPixelSize;
   double m_DetectorDistance;

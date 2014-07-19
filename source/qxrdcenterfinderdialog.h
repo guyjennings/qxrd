@@ -25,6 +25,7 @@ public slots:
   void centerMoveDownLeft();
   void centerMoveLeft();
 
+  void onStepSizesChanged();
   void onCenterChanged(double cx, double cy);
   void onImplementTiltChanged(bool imp);
   void onEnablePolarizationChanged(bool pol);

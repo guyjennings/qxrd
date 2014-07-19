@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>540</width>
-    <height>569</height>
+    <width>606</width>
+    <height>632</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,156 +23,7 @@
    <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="1">
-       <widget class="QLabel" name="label_14">
-        <property name="text">
-         <string>X Center:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLabel" name="label_15">
-        <property name="text">
-         <string>Y Center:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="label_16">
-        <property name="text">
-         <string>Step Size:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QDoubleSpinBox" name="m_CenterY">
-        <property name="toolTip">
-         <string>Y Center in Pixels
-script property centering.centerY</string>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="minimum">
-         <double>-10000.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>10000.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QxrdCenterStepSpinner" name="m_CenterStep">
-        <property name="toolTip">
-         <string>Step Size for Center moves
-script property centering.centerStep</string>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QDoubleSpinBox" name="m_TiltPlaneRotation">
-        <property name="toolTip">
-         <string>Rotation of tilt plane (deg) 0=horizontal
-script property centering.tiltPlaneRotation</string>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="minimum">
-         <double>-90.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>360.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QDoubleSpinBox" name="m_CenterX">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>X Center in pixels
-script property centering.centerX</string>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="minimum">
-         <double>-10000.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>10000.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QLabel" name="label_18">
-        <property name="text">
-         <string>Tilt Angle</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QLabel" name="label_19">
-        <property name="text">
-         <string>Tilt Plane Rotation</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1" colspan="2">
-       <widget class="QCheckBox" name="m_ImplementTilt">
-        <property name="toolTip">
-         <string>Enable Advanced Tilt Geometry?
-script property centering.implementTilt</string>
-        </property>
-        <property name="text">
-         <string>Implement Tilt</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QDoubleSpinBox" name="m_DetectorTilt">
-        <property name="toolTip">
-         <string>Tilt angle of detector plane (deg)
-script property centering.detectorTiltTilt</string>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="minimum">
-         <double>-90.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>90.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>0.100000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" rowspan="7">
+      <item row="0" column="0" rowspan="9">
        <widget class="QWidget" name="widget" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -378,7 +229,7 @@ center in the right direction</string>
         </layout>
        </widget>
       </item>
-      <item row="6" column="1" colspan="2">
+      <item row="8" column="1" colspan="2">
        <spacer name="verticalSpacer_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -391,10 +242,238 @@ center in the right direction</string>
         </property>
        </spacer>
       </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>Y Center:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QDoubleSpinBox" name="m_CenterY">
+        <property name="toolTip">
+         <string>Y Center in Pixels</string>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="minimum">
+         <double>-10000.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>10000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>X Center:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QxrdCenterStepSpinner" name="m_CenterStep">
+        <property name="toolTip">
+         <string>Step Size for Center moves</string>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>Step Size:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QDoubleSpinBox" name="m_CenterX">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>X Center in pixels</string>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="minimum">
+         <double>-10000.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>10000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QDoubleSpinBox" name="m_TiltPlaneRotation">
+        <property name="toolTip">
+         <string>Rotation of tilt plane (deg) 0=horizontal</string>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="minimum">
+         <double>-90.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>360.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLabel" name="label_19">
+        <property name="text">
+         <string>Tilt Plane Rotation</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>Tilt Angle</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QDoubleSpinBox" name="m_DetectorTilt">
+        <property name="toolTip">
+         <string>Tilt angle of detector plane (deg)</string>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="minimum">
+         <double>-90.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>90.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.100000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" colspan="2">
+       <widget class="QCheckBox" name="m_ImplementTilt">
+        <property name="toolTip">
+         <string>Enable Advanced Tilt Geometry?</string>
+        </property>
+        <property name="text">
+         <string>Implement Tilt</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QxrdCenterStepSpinner" name="m_DetectorTiltStep">
+        <property name="toolTip">
+         <string>Step Size for Tilt Angle Changes</string>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>10.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLabel" name="label_31">
+        <property name="text">
+         <string>Tilt Angle Step</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QLabel" name="label_32">
+        <property name="text">
+         <string>Tilt Rotation Step</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="2">
+       <widget class="QxrdCenterStepSpinner" name="m_TiltPlaneRotationStep">
+        <property name="toolTip">
+         <string>Step Size for Tilt Plane Rotation Changes</string>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>10.000000000000000</double>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item row="1" column="0">
      <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>Detector Distance</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="m_DetectorYPixelSize">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Detector Y Pixel Size (micrometer)</string>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>10000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_21">
+        <property name="text">
+         <string>Y Pixel Size:</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_20">
         <property name="text">
@@ -411,8 +490,7 @@ center in the right direction</string>
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>Detector X Pixel Size (micrometer)
-script property centering.detectorXPixelSize</string>
+         <string>Detector X Pixel Size (micrometer)</string>
         </property>
         <property name="keyboardTracking">
          <bool>false</bool>
@@ -422,39 +500,6 @@ script property centering.detectorXPixelSize</string>
         </property>
         <property name="maximum">
          <double>10000.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="label_22">
-        <property name="text">
-         <string>Photon Energy(eV)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QDoubleSpinBox" name="m_Energy">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Photon Energy (eV)
-script property centering.energy</string>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <double>1000000.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>100.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -500,13 +545,6 @@ intensity *= pow(distance/m_DetectorDistance, 2)/cos(tth);</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="3">
-       <widget class="QPushButton" name="m_UserGeometryEdit">
-        <property name="text">
-         <string>Edit...</string>
-        </property>
-       </widget>
-      </item>
       <item row="5" column="0" colspan="2">
        <widget class="QCheckBox" name="m_EnablePolarization">
         <property name="toolTip">
@@ -523,6 +561,13 @@ intensity /= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
        <widget class="QLabel" name="label_24">
         <property name="text">
          <string>Polarization Factor</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QPushButton" name="m_UserGeometryEdit">
+        <property name="text">
+         <string>Edit...</string>
         </property>
        </widget>
       </item>
@@ -601,13 +646,6 @@ intensity *=
         </property>
        </widget>
       </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="label_29">
-        <property name="text">
-         <string>User Absorption Kind</string>
-        </property>
-       </widget>
-      </item>
       <item row="7" column="1" colspan="3">
        <widget class="QComboBox" name="m_EnableUserAbsorption">
         <item>
@@ -635,6 +673,13 @@ intensity *=
           <string>A function of q,chi</string>
          </property>
         </item>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_29">
+        <property name="text">
+         <string>User Absorption Kind</string>
+        </property>
        </widget>
       </item>
       <item row="8" column="0">
@@ -685,43 +730,6 @@ intensity *=
         </item>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_21">
-        <property name="text">
-         <string>Y Pixel Size:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="m_DetectorYPixelSize">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>1</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Detector Y Pixel Size (micrometer)
-script property centering.detectorYPixelSize</string>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <double>10000.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_17">
-        <property name="text">
-         <string>Detector Distance</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="3">
        <widget class="QDoubleSpinBox" name="m_DetectorDistance">
         <property name="sizePolicy">
@@ -731,8 +739,7 @@ script property centering.detectorYPixelSize</string>
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>Sample-Detector Distance (mm)
-script property centering.detectorDistance</string>
+         <string>Sample-Detector Distance (mm)</string>
         </property>
         <property name="keyboardTracking">
          <bool>false</bool>
@@ -742,6 +749,61 @@ script property centering.detectorDistance</string>
         </property>
         <property name="maximum">
          <double>10000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLabel" name="label_22">
+        <property name="text">
+         <string>Photon Energy(eV)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QDoubleSpinBox" name="m_Energy">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Photon Energy (eV)</string>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>1000000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QxrdCenterStepSpinner" name="m_DetectorDistanceStep">
+        <property name="toolTip">
+         <string>Step Size for Distance Changes</string>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_33">
+        <property name="text">
+         <string>Detector Distance Step</string>
         </property>
        </widget>
       </item>

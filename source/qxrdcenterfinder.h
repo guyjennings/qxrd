@@ -45,6 +45,9 @@ public:
   Q_PROPERTY(double detectorDistance READ get_DetectorDistance WRITE set_DetectorDistance)
   QCEP_DOUBLE_PROPERTY(DetectorDistance)
 
+  Q_PROPERTY(double detectorDistanceStep READ get_DetectorDistanceStep WRITE set_DetectorDistanceStep)
+  QCEP_DOUBLE_PROPERTY(DetectorDistanceStep)
+
   Q_PROPERTY(double energy READ get_Energy WRITE set_Energy)
   QCEP_DOUBLE_PROPERTY(Energy)
 
@@ -54,8 +57,14 @@ public:
   Q_PROPERTY(double detectorTilt READ get_DetectorTilt WRITE set_DetectorTilt)
   QCEP_DOUBLE_PROPERTY(DetectorTilt)
 
+  Q_PROPERTY(double detectorTiltStep READ get_DetectorTiltStep WRITE set_DetectorTiltStep)
+  QCEP_DOUBLE_PROPERTY(DetectorTiltStep)
+
   Q_PROPERTY(double tiltPlaneRotation READ get_TiltPlaneRotation WRITE set_TiltPlaneRotation)
   QCEP_DOUBLE_PROPERTY(TiltPlaneRotation)
+
+  Q_PROPERTY(double tiltPlaneRotationStep READ get_TiltPlaneRotationStep WRITE set_TiltPlaneRotationStep)
+  QCEP_DOUBLE_PROPERTY(TiltPlaneRotationStep)
 
   Q_PROPERTY(bool   enableGeometricCorrections READ get_EnableGeometricCorrections WRITE set_EnableGeometricCorrections)
   QCEP_BOOLEAN_PROPERTY(EnableGeometricCorrections)
