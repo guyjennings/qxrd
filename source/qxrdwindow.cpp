@@ -1758,15 +1758,17 @@ void QxrdWindow::plotPowderRingRadii()
           }
         }
 
-        double sum = 0;
-        int n = y.count();
-        for (int i=0; i<n; i++) {
-          sum += y[i];
-        }
+        if (cf->get_SubtractRingAverages()) {
+          double sum = 0;
+          int n = y.count();
+          for (int i=0; i<n; i++) {
+            sum += y[i];
+          }
 
-        double avg = sum/(double)n;
-        for (int i=0; i<n; i++) {
-          y[i] -= avg;
+          double avg = sum/(double)n;
+          for (int i=0; i<n; i++) {
+            y[i] -= avg;
+          }
         }
 
         QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring %1").arg(r));
