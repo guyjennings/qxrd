@@ -783,6 +783,8 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step, int nite
       prop_RingIndex()->incValue(1);
     }
   }
+
+  return nok;
 }
 
 QxrdRingFitResult::QxrdRingFitResult(QxrdCenterFinder *cf, double tth, double chi, double pkht, double bkgd) :
@@ -859,6 +861,8 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step, 
   QFuture<void> fitDone = QtConcurrent::map(fits, &QxrdRingFitResult::fitRingPoint);
 
   fitDone.waitForFinished();
+
+  return true;
 }
 
 void QxrdCenterFinder::adjustAllPoints()

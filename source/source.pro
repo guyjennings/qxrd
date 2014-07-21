@@ -507,6 +507,7 @@ win32 {
               Qt5Svgd \
               Qt5OpenGLd \
               Qt5PrintSupportd \
+              Qt5Concurrentd \
               icudt51 \
               icuin51 \
               icuuc51 \
@@ -522,6 +523,7 @@ win32 {
               Qt5Svg \
               Qt5OpenGL \
               Qt5PrintSupport \
+              Qt5Concurrent \
               icudt51 \
               icuin51 \
               icuuc51 \
