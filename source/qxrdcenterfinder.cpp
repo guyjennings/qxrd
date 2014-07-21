@@ -785,32 +785,40 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step, int nite
   }
 }
 
-QxrdRingFitResult::QxrdRingFitResult(QxrdCenterFinder *cf, double tth, double chi) :
+QxrdRingFitResult::QxrdRingFitResult(QxrdCenterFinder *cf, double tth, double chi, double pkht, double bkgd) :
   m_CenterFinder(cf),
-  m_InitialTTH(tth),
-  m_InitialChi(chi)
+  m_TTH(tth),
+  m_Chi(chi),
+  m_Pkht(pkht),
+  m_Bkgd(bkgd)
 {
 }
 
 QxrdRingFitResult::QxrdRingFitResult() :
   m_CenterFinder(NULL),
-  m_InitialTTH(0.0),
-  m_InitialChi(0.0)
+  m_TTH(0.0),
+  m_Chi(0.0),
+  m_Pkht(0.0),
+  m_Bkgd(0.0)
 {
 }
 
 QxrdRingFitResult::QxrdRingFitResult(const QxrdRingFitResult &cpy) :
   m_CenterFinder(cpy.cf()),
-  m_InitialTTH(cpy.tth()),
-  m_InitialChi(cpy.chi())
+  m_TTH(cpy.tth()),
+  m_Chi(cpy.chi()),
+  m_Pkht(cpy.pkht()),
+  m_Bkgd(cpy.bkgd())
 {
 }
 
 void QxrdRingFitResult::fitRingPoint()
 {
-  if (cf()) {
-    cf() -> printMessage(QObject::tr("Fitting tth: %1, chi: %2").arg(tth()).arg(chi()));
+  if (m_CenterFinder) {
+    m_CenterFinder -> printMessage(QObject::tr("Fitting tth: %1, chi: %2").arg(tth()).arg(chi()));
   }
+
+  QPointF xy = m_CenterFinder->getXY(tth(), chi());
 }
 
 bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step, int nitermax)
@@ -845,7 +853,7 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step, 
   QVector<QxrdRingFitResult> fits;
 
   for (int i=0; i<nsteps; i++) {
-    fits.append(QxrdRingFitResult(this, tth, (double)i*ast));
+    fits.append(QxrdRingFitResult(this, tth, (double)i*ast, pkht, bkgd));
   }
 
   QFuture<void> fitDone = QtConcurrent::map(fits, &QxrdRingFitResult::fitRingPoint);

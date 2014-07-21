@@ -20,20 +20,24 @@ class QxrdCenterFinder;
 
 class QxrdRingFitResult {
 public:
-  QxrdRingFitResult(QxrdCenterFinder* cf, double tth, double chi);
+  QxrdRingFitResult(QxrdCenterFinder* cf, double tth, double chi, double pkht, double bkgd);
   QxrdRingFitResult(const QxrdRingFitResult &cpy);
   QxrdRingFitResult();
 
   void fitRingPoint();
 
   QxrdCenterFinder *cf() const { return m_CenterFinder; }
-  double           tth() const { return m_InitialTTH; }
-  double           chi() const { return m_InitialChi; }
+  double           tth() const { return m_TTH; }
+  double           chi() const { return m_Chi; }
+  double           pkht() const { return m_Pkht; }
+  double           bkgd() const { return m_Bkgd; }
 
 private:
   QxrdCenterFinder *m_CenterFinder;
-  double            m_InitialTTH;
-  double            m_InitialChi;
+  double            m_TTH;
+  double            m_Chi;
+  double            m_Pkht;
+  double            m_Bkgd;
 };
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
