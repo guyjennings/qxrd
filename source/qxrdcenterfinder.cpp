@@ -56,6 +56,7 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_PowderPoint(saver, this, "powderPoint", QxrdPowderPoint(1,2,3,4), "Powder Point"),
     m_PowderPointVector(saver, this, "powderPointVector", QxrdPowderPointVector(), "Powder Point Vector"),
     m_RingIndex(saver, this, "ringIndex", 0, "Fitted Powder Ring Index"),
+    m_SubtractRingAverages(saver, this, "subtractRingAverages", false, "Plot deviations of each ring from average"),
     m_Experiment(expt)
 {
   qRegisterMetaType<QPointF>("QPointF");
@@ -122,10 +123,10 @@ double QxrdCenterFinder::getTTH(QPointF pt) const
 
 double QxrdCenterFinder::getTTH(double x, double y) const
 {
-  double beta = get_DetectorTilt()*M_PI/180.0;
-  double rot  = get_TiltPlaneRotation()*M_PI/180.0;
-
   if (get_ImplementTilt()) {
+    double beta = get_DetectorTilt()*M_PI/180.0;
+    double rot  = get_TiltPlaneRotation()*M_PI/180.0;
+
     return getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(),
                        x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
                        cos(beta), sin(beta), cos(rot), sin(rot));
@@ -134,6 +135,32 @@ double QxrdCenterFinder::getTTH(double x, double y) const
                        x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
                        1.0, 0.0, 1.0, 0.0);
   }
+}
+
+QPointF QxrdCenterFinder::getXY(double tth, double chi)
+{
+  double x,y;
+  double beta = get_DetectorTilt()*M_PI/180.0;
+  double rot  = get_TiltPlaneRotation()*M_PI/180.0;
+
+  if (get_ImplementTilt()) {
+
+    QxrdDetectorGeometry::getXY(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+          get_Energy(),
+          convertTwoThetaToQ(tth, convertEnergyToWavelength(get_Energy())), chi,
+          get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+          rot, cos(beta), sin(beta), 1.0, 0.0, cos(rot), sin(rot),
+          &x, &y);
+  } else {
+    QxrdDetectorGeometry::getXY(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+          get_Energy(),
+          convertTwoThetaToQ(tth, convertEnergyToWavelength(get_Energy())), chi,
+          get_DetectorXPixelSize(), get_DetectorYPixelSize(),
+          rot, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0,
+          &x, &y);
+  }
+
+  return QPointF(x,y);
 }
 
 double QxrdCenterFinder::getQ(QPointF pt) const

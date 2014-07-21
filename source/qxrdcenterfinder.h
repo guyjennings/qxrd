@@ -162,6 +162,9 @@ public:
   Q_PROPERTY(int ringIndex READ get_RingIndex WRITE set_RingIndex)
   QCEP_INTEGER_PROPERTY(RingIndex)
 
+  Q_PROPERTY(bool subtractRingAverages READ get_SubtractRingAverages WRITE set_SubtractRingAverages)
+  QCEP_BOOLEAN_PROPERTY(SubtractRingAverages)
+
 public:
   enum {
     UserAbsorptionNone = 0,
@@ -201,6 +204,8 @@ public slots:
 
   double getDist(double x, double y) const;
   double getDist(QPointF pt) const;
+
+  QPointF getXY(double tth, double chi);
 
   void fitPowderCircle();
   void deletePowderPointNear(double x, double y);
