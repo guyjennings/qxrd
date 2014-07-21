@@ -7,6 +7,7 @@
 #include "levmar.h"
 #include <QMessageBox>
 #include "qxrdapplication.h"
+#include <QtConcurrentMap>
 
 QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt)
   : QxrdDetectorGeometry(),
@@ -782,6 +783,74 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step, int nite
       prop_RingIndex()->incValue(1);
     }
   }
+}
+
+QxrdRingFitResult::QxrdRingFitResult(QxrdCenterFinder *cf, double tth, double chi) :
+  m_CenterFinder(cf),
+  m_InitialTTH(tth),
+  m_InitialChi(chi)
+{
+}
+
+QxrdRingFitResult::QxrdRingFitResult() :
+  m_CenterFinder(NULL),
+  m_InitialTTH(0.0),
+  m_InitialChi(0.0)
+{
+}
+
+QxrdRingFitResult::QxrdRingFitResult(const QxrdRingFitResult &cpy) :
+  m_CenterFinder(cpy.cf()),
+  m_InitialTTH(cpy.tth()),
+  m_InitialChi(cpy.chi())
+{
+}
+
+void QxrdRingFitResult::fitRingPoint()
+{
+  if (cf()) {
+    cf() -> printMessage(QObject::tr("Fitting tth: %1, chi: %2").arg(tth()).arg(chi()));
+  }
+}
+
+bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step, int nitermax)
+{
+  double x=x0, y=y0;
+  double xc  = get_CenterX();
+  double yc  = get_CenterY();
+  double dx  = x0-xc;
+  double dy  = y0-yc;
+  double az  = atan2(dy, dx);
+  double az0 = az;
+  double r   = sqrt(dx*dx + dy*dy);
+  double ast = step/r;
+  double dr  = get_PeakFitRadius();
+
+  double tth = getTTH(x0, y0);
+
+  double bkgd = ( imageValue(xc+(r+dr)*cos(az), yc+(r+dr)*sin(az))
+                 +imageValue(xc+(r-dr)*cos(az), yc+(r-dr)*sin(az)))/2.0;
+
+  double pkht = imageValue(x0,y0) - bkgd;
+
+  int    width = 0, height = 0;
+
+  if (m_Data) {
+    width = m_Data->get_Width()+1;
+    height = m_Data->get_Height()+1;
+  }
+
+  int nsteps = (int) ((2.0*M_PI)/ast);
+
+  QVector<QxrdRingFitResult> fits;
+
+  for (int i=0; i<nsteps; i++) {
+    fits.append(QxrdRingFitResult(this, tth, (double)i*ast));
+  }
+
+  QFuture<void> fitDone = QtConcurrent::map(fits, &QxrdRingFitResult::fitRingPoint);
+
+  fitDone.waitForFinished();
 }
 
 void QxrdCenterFinder::adjustAllPoints()

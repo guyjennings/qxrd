@@ -936,8 +936,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *fitRingNear      = plotMenu.addAction(tr("Fit Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *traceRingClockwise = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
-//          QAction *fitRingAntiClockwise
-//                                    = plotMenu.addAction(tr("Fit Diffracted Ring starting at (%1,%2) [%3,%4] then trace anticlockwise").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *traceRingParallel = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4] in parallel").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *zapPixel         = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
 
           QAction *action = plotMenu.exec(event->globalPos());
@@ -966,6 +965,10 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             }
           } else if (action == traceRingClockwise) {
             if (cf->traceRingNear(x,y, 25.0)) {
+              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
+            }
+          } else if (action == traceRingParallel) {
+            if (cf->traceRingNearParallel(x,y, 25.0)) {
               cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
             }
 //          } else if (action == fitRingAntiClockwise) {

@@ -16,6 +16,26 @@
 #include <QScriptValue>
 #include "qxrdpowderpointproperty.h"
 
+class QxrdCenterFinder;
+
+class QxrdRingFitResult {
+public:
+  QxrdRingFitResult(QxrdCenterFinder* cf, double tth, double chi);
+  QxrdRingFitResult(const QxrdRingFitResult &cpy);
+  QxrdRingFitResult();
+
+  void fitRingPoint();
+
+  QxrdCenterFinder *cf() const { return m_CenterFinder; }
+  double           tth() const { return m_InitialTTH; }
+  double           chi() const { return m_InitialChi; }
+
+private:
+  QxrdCenterFinder *m_CenterFinder;
+  double            m_InitialTTH;
+  double            m_InitialChi;
+};
+
 class QxrdCenterFinder : public QxrdDetectorGeometry
 {
   Q_OBJECT
@@ -225,6 +245,7 @@ public slots:
 
   bool fitRingNear(double x0, double y0, bool prt=true, int nitermax=200);
   bool traceRingNear(double x0, double y0, double step=25.0, int nitermax=200);
+  bool traceRingNearParallel(double x0, double y0, double step=25.0, int nitermax=200);
 
   QString defaultUserGeometryScript();
   QString defaultUserAbsorptionScript();
@@ -244,6 +265,9 @@ public slots:
   int countPowderRings() const;
   int countPowderRingPoints() const;
   QxrdPowderPoint powderRingPoint(int i) const;
+
+private:
+  void fitRingPoint(QxrdRingFitResult &fit);
 
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);
@@ -277,5 +301,6 @@ private:
 
   QxrdPowderPointVector      m_RingPowderPoints;
 };
+
 
 #endif // QXRDCENTERFINDER_H
