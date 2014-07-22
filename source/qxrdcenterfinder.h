@@ -20,7 +20,7 @@ class QxrdCenterFinder;
 
 class QxrdRingFitResult {
 public:
-  QxrdRingFitResult(QxrdCenterFinder* cf, double tth, double chi, double pkht, double bkgd);
+  QxrdRingFitResult(QxrdCenterFinder* cf, int index, double tth, double chi, double pkht, double bkgd);
 //  QxrdRingFitResult(const QxrdRingFitResult &cpy);
   QxrdRingFitResult();
 
@@ -37,6 +37,7 @@ public:
   };
 
   QxrdCenterFinder *cf() const { return m_CenterFinder; }
+  int              index() const { return m_Index; }
   double           tth() const { return m_TTH; }
   double           chi() const { return m_Chi; }
   double           pkht() const { return m_Pkht; }
@@ -44,9 +45,15 @@ public:
   FitResult        reason() const { return m_Reason; }
   double           fittedX() const { return m_FittedX; }
   double           fittedY() const { return m_FittedY; }
+  double           fittedWidth() const { return m_FittedWidth; }
+  double           fittedHeight() const { return m_FittedHeight; }
+  double           fittedBkgd() const { return m_FittedBkgd; }
+  double           fittedBkgdX() const { return m_FittedBkgdX; }
+  double           fittedBkgdY() const { return m_FittedBkgdY; }
 
 private:
   QxrdCenterFinder *m_CenterFinder;
+  int               m_Index;
   double            m_TTH;
   double            m_Chi;
   double            m_Pkht;
