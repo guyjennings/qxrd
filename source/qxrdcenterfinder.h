@@ -21,10 +21,11 @@ class QxrdCenterFinder;
 class QxrdRingFitResult {
 public:
   QxrdRingFitResult(QxrdCenterFinder* cf, double tth, double chi, double pkht, double bkgd);
-  QxrdRingFitResult(const QxrdRingFitResult &cpy);
+//  QxrdRingFitResult(const QxrdRingFitResult &cpy);
   QxrdRingFitResult();
 
   void fitRingPoint();
+  void evaluateRingFit(double *parm, double *x, int np, int nx);
 
   QxrdCenterFinder *cf() const { return m_CenterFinder; }
   double           tth() const { return m_TTH; }
@@ -32,12 +33,28 @@ public:
   double           pkht() const { return m_Pkht; }
   double           bkgd() const { return m_Bkgd; }
 
+  enum FitResult {
+    NoResult,
+    OutsideData,
+    Succesful,
+    BadWidth,
+    BadPosition,
+    BadHeight
+  };
+
 private:
   QxrdCenterFinder *m_CenterFinder;
   double            m_TTH;
   double            m_Chi;
   double            m_Pkht;
   double            m_Bkgd;
+  FitResult         m_Reason;
+  double            m_FittedTTH;
+  double            m_FittedWidth;
+  double            m_FittedHeight;
+  double            m_FittedBkgd;
+  double            m_FittedBkgdX;
+  double            m_FittedBkgdY;
 };
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
@@ -168,6 +185,9 @@ public:
   Q_PROPERTY(int peakFitDebug READ get_PeakFitDebug WRITE set_PeakFitDebug)
   QCEP_INTEGER_PROPERTY(PeakFitDebug)
 
+  Q_PROPERTY(int peakFitIterations READ get_PeakFitIterations WRITE set_PeakFitIterations)
+  QCEP_INTEGER_PROPERTY(PeakFitIterations)
+
   Q_PROPERTY(QcepDoubleVector ringAngles READ get_RingAngles WRITE set_RingAngles)
   QCEP_DOUBLE_VECTOR_PROPERTY(RingAngles)
 
@@ -289,6 +309,7 @@ public:
   void evaluatePowderFit(double *parm, double *x, int np, int nx);
 
   QxrdExperimentWPtr experiment() const;
+  QxrdDoubleImageDataPtr data() const;
 
   static QString levmarFailureReason(int n);
 
