@@ -964,17 +964,15 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
               cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
             }
           } else if (action == traceRingClockwise) {
-            if (cf->traceRingNear(x,y, 25.0)) {
-              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
-            }
+            QMetaObject::invokeMethod(cf.data(), "traceRingNear",
+                                      Q_ARG(double,x),
+                                      Q_ARG(double,y),
+                                      Q_ARG(double,25.0));
           } else if (action == traceRingParallel) {
-            if (cf->traceRingNearParallel(x,y, 25.0)) {
-              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
-            }
-//          } else if (action == fitRingAntiClockwise) {
-//            if (cf->traceRingNear(x,y, -25.0)) {
-//              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
-//            }
+            QMetaObject::invokeMethod(cf.data(), "traceRingNearParallel",
+                                      Q_ARG(double,x),
+                                      Q_ARG(double,y),
+                                      Q_ARG(double,25.0));
           } else if (action == zapPixel) {
             this->zapPixel(qRound(x),qRound(y));
           }

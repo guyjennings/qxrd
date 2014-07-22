@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include "qxrdapplication.h"
 #include <QtConcurrentMap>
+#include "qxrddebug.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER
@@ -808,7 +809,8 @@ QxrdRingFitResult::QxrdRingFitResult(QxrdCenterFinder *cf, double tth, double ch
   m_Pkht(pkht),
   m_Bkgd(bkgd),
   m_Reason(NoResult),
-  m_FittedTTH(0.0),
+  m_FittedX(0.0),
+  m_FittedY(0.0),
   m_FittedWidth(0.0),
   m_FittedHeight(0.0),
   m_FittedBkgd(0.0),
@@ -824,7 +826,8 @@ QxrdRingFitResult::QxrdRingFitResult() :
   m_Pkht(0.0),
   m_Bkgd(0.0),
   m_Reason(NoResult),
-  m_FittedTTH(0.0),
+  m_FittedX(0.0),
+  m_FittedY(0.0),
   m_FittedWidth(0.0),
   m_FittedHeight(0.0),
   m_FittedBkgd(0.0),
@@ -851,19 +854,67 @@ static void fitRingParallel(double *p, double *hx, int m, int n, void *adata)
   }
 }
 
-void QxrdRingFitResult::evaluateRingFit(double *parm, double *x, int np, int nx)
+void QxrdRingFitResult::evaluateRingFit(double *parm, double *xv, int np, int nx)
 {
   if (m_CenterFinder) {
-    m_CenterFinder->printMessage("Fitting");
+//    m_CenterFinder->printMessage("Fitting");
+
+    if (np!=6) {
+      m_CenterFinder->printMessage("Wrong number of parameters");
+    } else {
+      double pr = parm[0];
+      double r  = parm[1];
+      double ht = parm[2];
+      double bg = parm[3];
+      double bx = parm[4];
+      double by = parm[5];
+
+      double az  = m_Chi;
+      QPointF xy = m_CenterFinder->getXY(m_TTH*180.0/M_PI, m_Chi*180.0/M_PI);
+      double cx0 = xy.x();
+      double cy0 = xy.y();
+      double rr0 = m_CenterFinder->get_PeakFitRadius();
+      double crx = m_CenterFinder->get_CenterX();
+      double cry = m_CenterFinder->get_CenterY();
+
+      int n = m_CenterFinder->get_PeakFitRadius()*2+1;
+      int x0 = cx0 - rr0;
+      int y0 = cy0 - rr0;
+      int nn = n*n;
+      int i=0;
+
+      double cx  = crx + pr*cos(az);
+      double cy  = cry + pr*sin(az);
+
+      double dx0 = cx - crx;
+      double dy0 = cy - cry;
+      double r0  = sqrt(dx0*dx0+dy0*dy0);
+
+      for (int y=y0; y<y0+n; y++) {
+        for (int x=x0; x<x0+n; x++) {
+          double d = m_CenterFinder->imageValue(x,y);
+
+          double dx = x-cx;
+          double dy = y-cy;
+          double dx1 = x - crx;
+          double dy1 = y - cry;
+          double r1 = sqrt(dx1*dx1+dy1*dy1);
+          double dr = r1-r0;
+          double pk = bg + dx*bx + dy*by + ht*exp(-((dr*dr)/(2.0*r*r)));
+
+          xv[i++] = pk - d;
+        }
+      }
+    }
   }
 }
 
 void QxrdRingFitResult::fitRingPoint()
 {
   if (m_CenterFinder) {
-    m_CenterFinder -> printMessage(QObject::tr("Fitting tth: %1, chi: %2").arg(tth()).arg(chi()));
+//    m_CenterFinder -> printMessage(QObject::tr("Fitting tth: %1, chi: %2").arg(tth()).arg(chi()));
 
-    QPointF xy = m_CenterFinder->getXY(tth(), chi());
+    QPointF xy = m_CenterFinder->getXY(m_TTH*180.0/M_PI, m_Chi*180.0/M_PI);
     double x = xy.x(), y=xy.y();
 
     int    width = 0, height = 0;
@@ -877,8 +928,10 @@ void QxrdRingFitResult::fitRingPoint()
       if (x<0 || x>width || y<0 || y>height) {
         m_Reason = OutsideData;
       } else {
-        double chi = m_CenterFinder->getChi(x, y);
-        double r   = m_CenterFinder->getR(x, y);
+        double chi = m_Chi;
+        double cx = m_CenterFinder->get_CenterX();
+        double cy = m_CenterFinder->get_CenterY();
+        double r   = sqrt((x-cx)*(x-cx) + (y-cy)*(y-cy));
         double dr  = m_CenterFinder->get_PeakFitRadius();
         double bkgd = ( m_CenterFinder->imageValue(x+dr*cos(chi), y+dr*sin(chi))
                        +m_CenterFinder->imageValue(x-dr*cos(chi), y-dr*sin(chi)))/2.0;
@@ -901,6 +954,17 @@ void QxrdRingFitResult::fitRingPoint()
                                 parms, NULL, 6, n*n,
                                 m_CenterFinder->get_PeakFitIterations(),
                                 NULL, info, NULL, NULL, this);
+
+        if (niter > 0) {
+          m_Reason = Successful;
+          m_FittedX = cx + parms[0]*cos(chi);
+          m_FittedY = cy + parms[0]*sin(chi);
+          m_FittedWidth = parms[1];
+          m_FittedHeight = parms[2];
+          m_FittedBkgd   = parms[3];
+          m_FittedBkgdX  = parms[4];
+          m_FittedBkgdY  = parms[5];
+        }
       }
     }
   }
@@ -927,19 +991,27 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step, 
   for (int i=0; i<nsteps; i++) {
     double chi = ast*i*180.0/M_PI;
 
-    fits.append(QxrdRingFitResult(this, tth, chi, pkht, bkgd));
+    fits.append(QxrdRingFitResult(this, tth*M_PI/180.0, chi, pkht, bkgd));
   }
 
-  QFuture<void> fitDone = QtConcurrent::map(fits, &QxrdRingFitResult::fitRingPoint);
+  if (qcepDebug(DEBUG_NOPARALLEL)) {
+    for (int i=0; i<nsteps; i++) {
+      fits[i].fitRingPoint();
+    }
+  } else {
+    QFuture<void> fitDone = QtConcurrent::map(fits, &QxrdRingFitResult::fitRingPoint);
 
-  fitDone.waitForFinished();
+    fitDone.waitForFinished();
+  }
 
   for (int i=0; i<nsteps; i++) {
     QxrdRingFitResult &r = fits[i];
 
-    QPointF xy = getXY(r.tth(), r.chi());
+//    QPointF xy = getXY(r.tth(), r.chi());
 
-    appendPowderPoint(xy.x(), xy.y());
+    if (r.reason() == QxrdRingFitResult::Successful) {
+      appendPowderPoint(r.fittedX(), r.fittedY());
+    }
   }
 
   return true;

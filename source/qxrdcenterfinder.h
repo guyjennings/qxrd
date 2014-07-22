@@ -25,22 +25,25 @@ public:
   QxrdRingFitResult();
 
   void fitRingPoint();
-  void evaluateRingFit(double *parm, double *x, int np, int nx);
+  void evaluateRingFit(double *parm, double *xv, int np, int nx);
+
+  enum FitResult {
+    NoResult,
+    OutsideData,
+    Successful,
+    BadWidth,
+    BadPosition,
+    BadHeight
+  };
 
   QxrdCenterFinder *cf() const { return m_CenterFinder; }
   double           tth() const { return m_TTH; }
   double           chi() const { return m_Chi; }
   double           pkht() const { return m_Pkht; }
   double           bkgd() const { return m_Bkgd; }
-
-  enum FitResult {
-    NoResult,
-    OutsideData,
-    Succesful,
-    BadWidth,
-    BadPosition,
-    BadHeight
-  };
+  FitResult        reason() const { return m_Reason; }
+  double           fittedX() const { return m_FittedX; }
+  double           fittedY() const { return m_FittedY; }
 
 private:
   QxrdCenterFinder *m_CenterFinder;
@@ -49,7 +52,8 @@ private:
   double            m_Pkht;
   double            m_Bkgd;
   FitResult         m_Reason;
-  double            m_FittedTTH;
+  double            m_FittedX;
+  double            m_FittedY;
   double            m_FittedWidth;
   double            m_FittedHeight;
   double            m_FittedBkgd;

@@ -22,4 +22,6 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_EXTRAINPUTS,  "Extra Inputs");
   setMessage(DEBUG_LOGSCRIPTS,   "Log Script Commands");
   setMessage(DEBUG_PLUGINS,      "Plugin Loading");
+  setMessage(DEBUG_FITTING,      "Curve Fitting");
+  setMessage(DEBUG_NOPARALLEL,   "Serialize Various Algorithms");
 }
