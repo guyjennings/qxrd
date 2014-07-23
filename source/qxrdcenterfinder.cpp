@@ -1035,25 +1035,47 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step, 
     fitDone.waitForFinished();
   }
 
+  int sums[6];
+
+  for (int i=0; i<6; i++) {
+    sums[i]=0;
+  }
+
   for (int i=0; i<nsteps; i++) {
     QxrdRingFitResult &r = fits[i];
 
 //    QPointF xy = getXY(r.tth(), r.chi());
 
     if (qcepDebug(DEBUG_FITTING)) {
-      printMessage(tr("Fitted %1 : x %2, y %3, w %4, ht %5, bk %6, bkx %7, bky %8")
+      printMessage(tr("Fitted %1 : x %2, y %3, w %4, ht %5, bk %6, bkx %7, bky %8, rzn %9")
                    .arg(i).arg(fits[i].fittedX()).arg(fits[i].fittedY())
                    .arg(fits[i].fittedWidth()).arg(fits[i].fittedHeight())
-                   .arg(fits[i].fittedBkgd()).arg(fits[i].fittedBkgdX()).arg(fits[i].fittedBkgdY()));
-      printMessage(tr("tth %1, chi %2")
-                   .arg(getTTH(fits[i].fittedX(), fits[i].fittedY()))
-                   .arg(getChi(fits[i].fittedX(), fits[i].fittedY())));
+                   .arg(fits[i].fittedBkgd()).arg(fits[i].fittedBkgdX()).arg(fits[i].fittedBkgdY())
+                   .arg(fits[i].reason()));
+//      printMessage(tr("tth %1, chi %2")
+//                   .arg(getTTH(fits[i].fittedX(), fits[i].fittedY()))
+//                   .arg(getChi(fits[i].fittedX(), fits[i].fittedY())));
+    }
+
+    int rz = r.reason();
+    if (rz>=0 && rz<6) {
+      sums[rz]++;
     }
 
     if (r.reason() == QxrdRingFitResult::Successful) {
       appendPowderPoint(r.fittedX(), r.fittedY());
     }
   }
+
+  printMessage(tr("Fitted %1/%2 : NR %3, OR %4, BdW %5, BdP %6, BdH %7")
+      .arg(sums[QxrdRingFitResult::Successful])
+      .arg(nsteps)
+      .arg(sums[QxrdRingFitResult::NoResult])
+      .arg(sums[QxrdRingFitResult::OutsideData])
+      .arg(sums[QxrdRingFitResult::BadWidth])
+      .arg(sums[QxrdRingFitResult::BadPosition])
+      .arg(sums[QxrdRingFitResult::BadHeight])
+      );
 
   return true;
 }
