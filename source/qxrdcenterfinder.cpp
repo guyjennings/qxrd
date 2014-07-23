@@ -68,6 +68,10 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_PowderPointVector(saver, this, "powderPointVector", QxrdPowderPointVector(), "Powder Point Vector"),
     m_RingIndex(saver, this, "ringIndex", 0, "Fitted Powder Ring Index"),
     m_SubtractRingAverages(saver, this, "subtractRingAverages", false, "Plot deviations of each ring from average"),
+    m_FittedWidthMin(saver, this, "fittedWidthMin", 0.5, "Minimum acceptable fitted width (pixels)"),
+    m_FittedWidthMax(saver, this, "fittedWidthMax", 3.0, "Maximum acceptable fitted width (pixels)"),
+    m_FittedHeightMinRatio(saver, this, "fittedHeightMinRatio", 0.25, "Minimum acceptable peak height ratio"),
+    m_FittedPositionMaxDistance(saver, this, "fittedPositionMaxDistance", 2.0, "Maximum acceptable fitted position shift (pixels)"),
     m_Experiment(expt)
 {
   qRegisterMetaType<QPointF>("QPointF");
@@ -802,11 +806,11 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step, int nite
   return nok;
 }
 
-QxrdRingFitResult::QxrdRingFitResult(QxrdCenterFinder *cf, int index, double tth, double chi, double pkht, double bkgd) :
+QxrdRingFitResult::QxrdRingFitResult(QxrdCenterFinder *cf, int index, double x0, double y0, double pkht, double bkgd) :
   m_CenterFinder(cf),
   m_Index(index),
-  m_TTH(tth),
-  m_Chi(chi),
+  m_X0(x0),
+  m_Y0(y0),
   m_Pkht(pkht),
   m_Bkgd(bkgd),
   m_Reason(NoResult),
@@ -823,8 +827,8 @@ QxrdRingFitResult::QxrdRingFitResult(QxrdCenterFinder *cf, int index, double tth
 QxrdRingFitResult::QxrdRingFitResult() :
   m_CenterFinder(NULL),
   m_Index(0),
-  m_TTH(0.0),
-  m_Chi(0.0),
+  m_X0(0.0),
+  m_Y0(0.0),
   m_Pkht(0.0),
   m_Bkgd(0.0),
   m_Reason(NoResult),
@@ -865,31 +869,30 @@ void QxrdRingFitResult::evaluateRingFit(double *parm, double *xv, int np, int nx
       m_CenterFinder->printMessage("Wrong number of parameters");
     } else {
       double pr = parm[0];
-      double r  = parm[1];
+      double wd = parm[1];
       double ht = parm[2];
       double bg = parm[3];
       double bx = parm[4];
       double by = parm[5];
 
-      double chiRad  = m_Chi*M_PI/180.0;
-      QPointF xy = m_CenterFinder->getXY(m_TTH, m_Chi);
-      double cx0 = xy.x();
-      double cy0 = xy.y();
-      double rr0 = m_CenterFinder->get_PeakFitRadius();
-      double crx = m_CenterFinder->get_CenterX();
-      double cry = m_CenterFinder->get_CenterY();
+      double dr = m_CenterFinder->get_PeakFitRadius();
+      double xc = m_CenterFinder->get_CenterX();
+      double yc = m_CenterFinder->get_CenterY();
+      double cx0 = m_X0;
+      double cy0 = m_Y0;
+      double az = atan2(cy0-yc, cx0-xc);
 
-      int n = m_CenterFinder->get_PeakFitRadius()*2+1;
-      int x0 = cx0 - rr0;
-      int y0 = cy0 - rr0;
+      int n = dr*2+1;
+      int x0 = cx0 - dr;
+      int y0 = cy0 - dr;
       int nn = n*n;
       int i=0;
 
-      double cx  = crx + pr*cos(chiRad);
-      double cy  = cry + pr*sin(chiRad);
+      double cx  = xc + pr*cos(az);
+      double cy  = yc + pr*sin(az);
 
-      double dx0 = cx - crx;
-      double dy0 = cy - cry;
+      double dx0 = cx - xc;
+      double dy0 = cy - yc;
       double r0  = sqrt(dx0*dx0+dy0*dy0);
 
       for (int y=y0; y<y0+n; y++) {
@@ -898,11 +901,11 @@ void QxrdRingFitResult::evaluateRingFit(double *parm, double *xv, int np, int nx
 
           double dx = x-cx;
           double dy = y-cy;
-          double dx1 = x - crx;
-          double dy1 = y - cry;
+          double dx1 = x - xc;
+          double dy1 = y - yc;
           double r1 = sqrt(dx1*dx1+dy1*dy1);
           double dr = r1-r0;
-          double pk = bg + dx*bx + dy*by + ht*exp(-((dr*dr)/(2.0*r*r)));
+          double pk = bg + dx*bx + dy*by + ht*exp(-((dr*dr)/(2.0*wd*wd)));
 
           xv[i++] = pk - d;
         }
@@ -915,12 +918,11 @@ void QxrdRingFitResult::fitRingPoint()
 {
   if (m_CenterFinder) {
 
-    QPointF xy = m_CenterFinder->getXY(m_TTH, m_Chi);
-    double x = xy.x(), y=xy.y();
+    double x = m_X0, y = m_Y0;
 
     if (qcepDebug(DEBUG_FITTING)) {
-      m_CenterFinder -> printMessage(QObject::tr("Fitting i: %1 tth: %2, chi: %3, x: %4, y: %5")
-                                     .arg(index()).arg(tth()).arg(chi()).arg(x).arg(y));
+      m_CenterFinder -> printMessage(QObject::tr("Fitting i: %1, x0: %2, y0: %3")
+                                     .arg(index()).arg(m_X0).arg(m_Y0));
     }
 
     int    width = 0, height = 0;
@@ -934,14 +936,15 @@ void QxrdRingFitResult::fitRingPoint()
       if (x<0 || x>width || y<0 || y>height) {
         m_Reason = OutsideData;
       } else {
-        double chi = m_Chi;
-        double chiRad = chi*M_PI/180.0;
-        double cx = m_CenterFinder->get_CenterX();
-        double cy = m_CenterFinder->get_CenterY();
-        double r   = sqrt((x-cx)*(x-cx) + (y-cy)*(y-cy));
+        double xc = m_CenterFinder->get_CenterX();
+        double yc = m_CenterFinder->get_CenterY();
+        double dx = x - xc;
+        double dy = y - yc;
+        double r  = sqrt(dx*dx + dy*dy);
+        double chi = atan2(dy, dx);
         double dr  = m_CenterFinder->get_PeakFitRadius();
-        double bkgd = ( m_CenterFinder->imageValue(x+dr*cos(chiRad), y+dr*sin(chiRad))
-                       +m_CenterFinder->imageValue(x-dr*cos(chiRad), y-dr*sin(chiRad)))/2.0;
+        double bkgd = ( m_CenterFinder->imageValue(xc+(r+dr)*cos(chi), yc+(r+dr)*sin(chi))
+                       +m_CenterFinder->imageValue(xc+(r-dr)*cos(chi), yc+(r-dr)*sin(chi)))/2.0;
         double pkht = m_CenterFinder->imageValue(x,y) - bkgd;
 
         double parms[6];
@@ -963,14 +966,27 @@ void QxrdRingFitResult::fitRingPoint()
                                 NULL, info, NULL, NULL, this);
 
         if (niter > 0) {
-          m_Reason = Successful;
-          m_FittedX = cx + parms[0]*cos(chiRad);
-          m_FittedY = cy + parms[0]*sin(chiRad);
-          m_FittedWidth = parms[1];
+          m_Reason       = Successful;
+          m_FittedX      = xc + parms[0]*cos(chi);
+          m_FittedY      = yc + parms[0]*sin(chi);
+          m_FittedWidth  = parms[1];
           m_FittedHeight = parms[2];
           m_FittedBkgd   = parms[3];
           m_FittedBkgdX  = parms[4];
           m_FittedBkgdY  = parms[5];
+
+          double dx = m_FittedX - m_X0;
+          double dy = m_FittedY - m_Y0;
+          double dr = sqrt(dx*dx + dy*dy);
+
+          if ((fabs(m_FittedWidth)<m_CenterFinder->get_FittedWidthMin()) ||
+              (fabs(m_FittedWidth)>m_CenterFinder->get_FittedWidthMax())) {
+            m_Reason = BadWidth;
+          } else if ((m_FittedHeight/m_Pkht)<m_CenterFinder->get_FittedHeightMinRatio()) {
+            m_Reason = BadHeight;
+          } else if (dr>m_CenterFinder->get_FittedPositionMaxDistance()) {
+            m_Reason = BadPosition;
+          }
         }
       }
     }
@@ -979,15 +995,17 @@ void QxrdRingFitResult::fitRingPoint()
 
 bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step, int nitermax)
 {
+  double xc  = get_CenterX();
+  double yc  = get_CenterY();
+  double dx  = x0-xc;
+  double dy  = y0-yc;
   double dr  = get_PeakFitRadius();
-  double r   = getR(x0,y0)/(get_DetectorXPixelSize()/1000.0);
+  double r   = sqrt(dx*dx+dy*dy);
+  double az  = atan2(dy, dx);
   double ast = step/r;
 
-  double tth = getTTH(x0, y0);
-  double chi = getChi(x0, y0);
-  double chirad = chi*M_PI/180.0;
-  double bkgd = ( imageValue(x0+dr*cos(chirad), y0+dr*sin(chirad))
-                 +imageValue(x0-dr*cos(chirad), y0-dr*sin(chirad)))/2.0;
+  double bkgd = ( imageValue(xc+(r+dr)*cos(az), yc+(r+dr)*sin(az))
+                 +imageValue(xc+(r-dr)*cos(az), yc+(r-dr)*sin(az)))/2.0;
 
   double pkht = imageValue(x0,y0) - bkgd;
 
@@ -995,13 +1013,15 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step, 
 
   QVector<QxrdRingFitResult> fits;
 
+  double tth = getTTH(x0, y0);
   for (int i=0; i<nsteps; i++) {
     double chi = ast*i*180.0/M_PI;
+    QPointF xy  = getXY(tth, chi);
 
-    fits.append(QxrdRingFitResult(this, i, tth, chi, pkht, bkgd));
+    fits.append(QxrdRingFitResult(this, i, xy.x(), xy.y(), pkht, bkgd));
 
     if (qcepDebug(DEBUG_FITTING)) {
-      printMessage(tr("Fitting %1 : tth %2, chi %3").arg(i).arg(fits[i].tth()).arg(fits[i].chi()));
+      printMessage(tr("Fitting i: %1, x0: %2, y0: %3").arg(i).arg(fits[i].x0()).arg(fits[i].y0()));
     }
   }
 

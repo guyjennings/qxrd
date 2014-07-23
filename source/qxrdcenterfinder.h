@@ -20,7 +20,7 @@ class QxrdCenterFinder;
 
 class QxrdRingFitResult {
 public:
-  QxrdRingFitResult(QxrdCenterFinder* cf, int index, double tth, double chi, double pkht, double bkgd);
+  QxrdRingFitResult(QxrdCenterFinder* cf, int index, double x0, double y0, double pkht, double bkgd);
 //  QxrdRingFitResult(const QxrdRingFitResult &cpy);
   QxrdRingFitResult();
 
@@ -38,8 +38,8 @@ public:
 
   QxrdCenterFinder *cf() const { return m_CenterFinder; }
   int              index() const { return m_Index; }
-  double           tth() const { return m_TTH; }
-  double           chi() const { return m_Chi; }
+  double           x0() const { return m_X0; }
+  double           y0() const { return m_Y0; }
   double           pkht() const { return m_Pkht; }
   double           bkgd() const { return m_Bkgd; }
   FitResult        reason() const { return m_Reason; }
@@ -54,8 +54,8 @@ public:
 private:
   QxrdCenterFinder *m_CenterFinder;
   int               m_Index;
-  double            m_TTH;
-  double            m_Chi;
+  double            m_X0;
+  double            m_Y0;
   double            m_Pkht;
   double            m_Bkgd;
   FitResult         m_Reason;
@@ -219,6 +219,18 @@ public:
 
   Q_PROPERTY(bool subtractRingAverages READ get_SubtractRingAverages WRITE set_SubtractRingAverages)
   QCEP_BOOLEAN_PROPERTY(SubtractRingAverages)
+
+  Q_PROPERTY(double fittedWidthMin READ get_FittedWidthMin WRITE set_FittedWidthMin)
+  QCEP_DOUBLE_PROPERTY(FittedWidthMin)
+
+  Q_PROPERTY(double fittedWidthMax READ get_FittedWidthMax WRITE set_FittedWidthMax)
+  QCEP_DOUBLE_PROPERTY(FittedWidthMax)
+
+  Q_PROPERTY(double fittedHeightMinRatio READ get_FittedHeightMinRatio WRITE set_FittedHeightMinRatio)
+  QCEP_DOUBLE_PROPERTY(FittedHeightMinRatio)
+
+  Q_PROPERTY(double fittedPositionMaxDistance READ get_FittedPositionMaxDistance WRITE set_FittedPositionMaxDistance)
+  QCEP_DOUBLE_PROPERTY(FittedPositionMaxDistance)
 
 public:
   enum {
