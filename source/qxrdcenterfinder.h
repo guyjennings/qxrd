@@ -43,6 +43,7 @@ public:
   double           pkht() const { return m_Pkht; }
   double           bkgd() const { return m_Bkgd; }
   FitResult        reason() const { return m_Reason; }
+  QString          reasonString() const;
   double           fittedX() const { return m_FittedX; }
   double           fittedY() const { return m_FittedY; }
   double           fittedWidth() const { return m_FittedWidth; }
@@ -193,8 +194,8 @@ public:
   Q_PROPERTY(double peakPixelRadius READ get_PeakPixelRadius WRITE set_PeakPixelRadius)
   QCEP_DOUBLE_PROPERTY(PeakPixelRadius)
 
-  Q_PROPERTY(int peakFitDebug READ get_PeakFitDebug WRITE set_PeakFitDebug)
-  QCEP_INTEGER_PROPERTY(PeakFitDebug)
+  Q_PROPERTY(bool peakFitDebug READ get_PeakFitDebug WRITE set_PeakFitDebug)
+  QCEP_BOOLEAN_PROPERTY(PeakFitDebug)
 
   Q_PROPERTY(int peakFitIterations READ get_PeakFitIterations WRITE set_PeakFitIterations)
   QCEP_INTEGER_PROPERTY(PeakFitIterations)
@@ -287,12 +288,12 @@ public slots:
   QPointF adjustPoint(int i);
   void adjustPointNear(double x, double y);
   void adjustAllPoints();
-  bool fitPeakNear(double x, double y, bool prt=true, int nitermax=200);
+  bool fitPeakNear(double x, double y);
 //  bool fitPeakNear();
 
-  bool fitRingNear(double x0, double y0, bool prt=true, int nitermax=200);
-  bool traceRingNear(double x0, double y0, double step=25.0, int nitermax=200);
-  bool traceRingNearParallel(double x0, double y0, double step=25.0, int nitermax=200);
+  bool fitRingNear(double x0, double y0);
+  bool traceRingNear(double x0, double y0, double step=25.0);
+  bool traceRingNearParallel(double x0, double y0, double step=25.0);
 
   QString defaultUserGeometryScript();
   QString defaultUserAbsorptionScript();
