@@ -36,6 +36,17 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   m_CenterFinder -> prop_DetectorXPixelSize() -> linkTo(m_DetectorXPixelSize);
   m_CenterFinder -> prop_DetectorYPixelSize() -> linkTo(m_DetectorYPixelSize);
   m_CenterFinder -> prop_Energy() -> linkTo(m_Energy);
+
+  m_CenterFinder -> prop_PeakFitRadius() -> linkTo(m_PeakFitRadius);
+  m_CenterFinder -> prop_PeakFitDebug() -> linkTo(m_PeakFitDebug);
+  m_CenterFinder -> prop_PeakFitIterations() -> linkTo(m_PeakFitIterations);
+  m_CenterFinder -> prop_RingIndex() -> linkTo(m_RingIndex);
+  m_CenterFinder -> prop_SubtractRingAverages() -> linkTo(m_SubtractRingAverages);
+  m_CenterFinder -> prop_FittedWidthMin() -> linkTo(m_FittedWidthMin);
+  m_CenterFinder -> prop_FittedWidthMax() -> linkTo(m_FittedWidthMax);
+  m_CenterFinder -> prop_FittedHeightMinRatio() -> linkTo(m_FittedHeightMinRatio);
+  m_CenterFinder -> prop_FittedPositionMaxDistance() -> linkTo(m_FittedPositionMaxDistance);
+
   m_CenterFinder -> prop_EnableGeometricCorrections() -> linkTo(m_EnableGeometry);
   m_CenterFinder -> prop_EnablePolarizationCorrections() -> linkTo(m_EnablePolarization);
   m_CenterFinder -> prop_Polarization() -> linkTo(m_Polarization);
