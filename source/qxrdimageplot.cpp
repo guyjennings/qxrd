@@ -124,6 +124,7 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   setGrayscale();
 
   if (set) {
+    connect(m_Zoomer, SIGNAL(zoomed(QRectF)), this, SLOT(onImageScaleChanged()));
     connect(set->prop_ImageShown(), SIGNAL(valueChanged(bool,int)), this, SLOT(changeImageShown(bool)));
     connect(set->prop_MaskShown(), SIGNAL(valueChanged(bool,int)), this, SLOT(changeMaskShown(bool)));
     connect(set->prop_OverflowShown(), SIGNAL(valueChanged(bool,int)), this, SLOT(changeOverflowShown(bool)));
@@ -150,6 +151,8 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   }
 
   enableZooming();
+
+  onImageScaleChanged();
 }
 
 void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
@@ -600,6 +603,8 @@ void QxrdImagePlot::setImage(QxrdRasterData *data)
   m_DataImage -> itemChanged();
 
   recalculateDisplayedRange();
+
+  onImageScaleChanged();
 }
 
 void QxrdImagePlot::setMask(QxrdMaskRasterData *mask)
@@ -714,6 +719,13 @@ void QxrdImagePlot::onCenterChanged(QPointF c)
 {
   m_CenterMarker -> setValue(c);
   replot();
+}
+
+void QxrdImagePlot::onImageScaleChanged()
+{
+  if (m_Rescaler && m_Rescaler->isEnabled()) {
+    m_Rescaler->rescale();
+  }
 }
 
 const QxrdRasterData* QxrdImagePlot::raster() const

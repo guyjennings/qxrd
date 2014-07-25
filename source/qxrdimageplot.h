@@ -71,6 +71,7 @@ public slots:
   void onCenterYChanged(double cy);
   void onCenterChanged(QPointF c);
   void onMarkedPointsChanged();
+  void onImageScaleChanged();
 
   void enableZooming();
   void enableCentering();
