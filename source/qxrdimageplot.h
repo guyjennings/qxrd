@@ -31,12 +31,14 @@ class QxrdImagePlot : public QxrdPlot
 public:
   QxrdImagePlot(QWidget *parent = 0);
   void init(QxrdImagePlotSettingsWPtr settings);
+  typedef QxrdPlot inherited;
 
 signals:
   void slicePolygon(QVector<QPointF> poly);
   void selectHistogram(QRectF rect);
 
 public slots:
+  void autoScale();
   void set005Range();
   void set010Range();
   void set100Range();

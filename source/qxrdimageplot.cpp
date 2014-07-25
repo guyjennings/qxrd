@@ -209,6 +209,13 @@ QxrdImagePlotSettingsWPtr QxrdImagePlot::imagePlotSettings()
   return m_ImagePlotSettings;
 }
 
+void QxrdImagePlot::autoScale()
+{
+  inherited::autoScale();
+
+  onImageScaleChanged();
+}
+
 void QxrdImagePlot::setAutoRange()
 {
   if (g_Application) {
@@ -310,6 +317,8 @@ void QxrdImagePlot::onMaintainAspectChanged(bool interp)
   if (m_Rescaler) {
     m_Rescaler -> setEnabled(interp);
   }
+
+  onImageScaleChanged();
 
   replotImage();
 }

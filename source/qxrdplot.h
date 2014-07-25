@@ -31,7 +31,7 @@ public:
   void updateZoomer();
 
 public slots:
-  void autoScale();
+  virtual void autoScale();
   void printGraph();
   void zoomIn();
   void zoomOut();
