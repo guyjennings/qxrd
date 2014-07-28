@@ -73,6 +73,8 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   connect(m_CenterFinder->prop_DetectorDistanceStep(),  SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
   connect(m_CenterFinder->prop_DetectorTiltStep(),      SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
   connect(m_CenterFinder->prop_TiltPlaneRotationStep(), SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
+
+  onStepSizesChanged();
 }
 
 QxrdCenterFinderDialog::~QxrdCenterFinderDialog()
@@ -85,6 +87,7 @@ QxrdCenterFinderDialog::~QxrdCenterFinderDialog()
 void QxrdCenterFinderDialog::onStepSizesChanged()
 {
   m_CenterX           -> setSingleStep(m_CenterStep->value());
+  m_CenterY           -> setSingleStep(m_CenterStep->value());
   m_DetectorDistance  -> setSingleStep(m_DetectorDistanceStep->value());
   m_DetectorTilt      -> setSingleStep(m_DetectorTiltStep->value());
   m_TiltPlaneRotation -> setSingleStep(m_TiltPlaneRotationStep->value());
@@ -92,9 +95,11 @@ void QxrdCenterFinderDialog::onStepSizesChanged()
 
 void QxrdCenterFinderDialog::onImplementTiltChanged(bool imp)
 {
-  m_DetectorDistance  -> setEnabled(true /*imp*/);
-  m_DetectorTilt      -> setEnabled(imp);
-  m_TiltPlaneRotation -> setEnabled(imp);
+//  m_DetectorDistance  -> setEnabled(true /*imp*/);
+  m_DetectorTilt          -> setEnabled(imp);
+  m_DetectorTiltStep      -> setEnabled(imp);
+  m_TiltPlaneRotation     -> setEnabled(imp);
+  m_TiltPlaneRotationStep -> setEnabled(imp);
 }
 
 void QxrdCenterFinderDialog::onEnablePolarizationChanged(bool pol)
