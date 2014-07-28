@@ -49,16 +49,14 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_EnableUserAbsorption(saver, this, "enableUserAbsorption", 0, "Apply user-defined geometry function in integration"),
     m_UserAbsorptionScript(saver, this, "userAbsorptionScript", defaultUserAbsorptionScript(), "Script to define user defined absorption functions"),
     m_UserAbsorptionFunction(saver, this, "userAbsorptionFunction", "userAbsorb1", "Name of user defined absorption function"),
-    m_PeakRadius(saver, this, "peakRadius", 2.0, "Radius of fitted peak"),
     m_PeakFitRadius(saver, this, "peakFitRadius", 10, "Half size of fitted area for peak fitting"),
     m_PeakHeight(saver, this, "peakHeight", 100.0, "Height of fitted peak"),
     m_PeakCenterX(saver, this, "peakCenterX", 0, "X Center of fitted peak"),
     m_PeakCenterY(saver, this, "peakCenterY", 0, "Y Center of fitted peak"),
+    m_PeakWidth(saver, this, "peakWidth", 2.0, "Width of fitted peak"),
     m_PeakBackground(saver, this, "peakBackground", 0, "Background Height of fitted peak"),
     m_PeakBackgroundX(saver, this, "peakBackgroundX", 0, "X Slope of Background"),
     m_PeakBackgroundY(saver, this, "peakBackgroundY", 0, "Y Slope of Background"),
-    m_PeakAzimuth(saver, this, "peakAzimuth", 0, "Azimuthal angle of fitted ring sample"),
-    m_PeakPixelRadius(saver, this, "peakPixelRadius", 0, "Radius of fitted ring sample"),
     m_PeakFitDebug(saver, this, "peakFitDebug", false, "Debug Print for peak fitting"),
     m_PeakFitIterations(saver, this, "peakFitIterations", 200, "Max Iterations during fitting"),
     m_RingAngles(saver, this, "ringAngles", QcepDoubleVector(), "Diffraction ring angles"),
@@ -550,7 +548,7 @@ bool QxrdCenterFinder::fitPeakNear(double x, double y)
 
     set_PeakCenterX(parms[0]);
     set_PeakCenterY(parms[1]);
-    set_PeakRadius(parms[2]);
+    set_PeakWidth(parms[2]);
     set_PeakHeight(parms[3]);
     set_PeakBackground(parms[4]);
     set_PeakBackgroundX(parms[5]);
@@ -564,61 +562,6 @@ bool QxrdCenterFinder::fitPeakNear(double x, double y)
   }
 }
 
-void QxrdCenterFinder::evaluateRingFit(double *parm, double *xv, int /*np*/, int nx)
-{
-  double pr = parm[0];
-  double wd = parm[1];
-  double ht = parm[2];
-  double bg = parm[3];
-  double bx = parm[4];
-  double by = parm[5];
-
-  double az  = get_PeakAzimuth();
-  double cx0 = get_PeakCenterX();
-  double cy0 = get_PeakCenterY();
-  double rr0 = get_PeakFitRadius();
-  double crx = get_CenterX();
-  double cry = get_CenterY();
-
-  int n = get_PeakFitRadius()*2+1;
-  int x0 = cx0 - rr0;
-  int y0 = cy0 - rr0;
-  int nn = n*n;
-  int i=0;
-
-  double cx  = crx + pr*cos(az);
-  double cy  = cry + pr*sin(az);
-
-  double dx0 = cx - crx;
-  double dy0 = cy - cry;
-  double r0  = sqrt(dx0*dx0+dy0*dy0);
-
-  for (int y=y0; y<y0+n; y++) {
-    for (int x=x0; x<x0+n; x++) {
-      double d = imageValue(x,y);
-
-      double dx = x-cx;
-      double dy = y-cy;
-      double dx1 = x - crx;
-      double dy1 = y - cry;
-      double r1 = sqrt(dx1*dx1+dy1*dy1);
-      double dr = r1-r0;
-      double pk = bg + dx*bx + dy*by + ht*exp(-((dr*dr)/(2.0*wd*wd)));
-
-      xv[i++] = pk - d;
-    }
-  }
-}
-
-static void fitRing(double *p, double *hx, int m,int n, void *adata)
-{
-  QxrdCenterFinder *cf = (QxrdCenterFinder*) adata;
-
-  if (cf) {
-    cf->evaluateRingFit(p, hx, m, n);
-  }
-}
-
 bool QxrdCenterFinder::fitRingNear(double x0, double y0)
 {
   printMessage(tr("centering.fitRingNear(%1,%2)").arg(x0).arg(y0));
@@ -626,61 +569,16 @@ bool QxrdCenterFinder::fitRingNear(double x0, double y0)
   QxrdRingFitResult fit(this, 0, x0, y0, 0, 0);
   fit.fitRingPoint();
 
-  double xc = get_CenterX();
-  double yc = get_CenterY();
-  double dx = x0 - xc;
-  double dy = y0 - yc;
-  double r  = sqrt(dx*dx+dy*dy);
-  double az = atan2(dy,dx);
-  double dr = get_PeakFitRadius();
+  if (fit.reason() == QxrdRingFitResult::Successful) {
+    set_PeakCenterX(fit.fittedX());
+    set_PeakCenterY(fit.fittedY());
+    set_PeakWidth(fit.fittedWidth());
+    set_PeakHeight(fit.fittedHeight());
+    set_PeakBackground(fit.fittedBkgd());
+    set_PeakBackgroundX(fit.fittedBkgdX());
+    set_PeakBackgroundY(fit.fittedBkgdY());
 
-  set_PeakAzimuth(az);
-  set_PeakPixelRadius(r);
-  set_PeakCenterX(x0);
-  set_PeakCenterY(y0);
-
-  double bkgd = ( imageValue(xc+(r+dr)*cos(az), yc+(r+dr)*sin(az))
-                 +imageValue(xc+(r-dr)*cos(az), yc+(r-dr)*sin(az)))/2.0;
-
-  double pkht = imageValue(x0,y0) - bkgd;
-
-  double parms[6];
-
-  parms[0] = r;
-  parms[1] = 2.0;
-  parms[2] = pkht;
-  parms[3] = bkgd;
-  parms[4] = 0;
-  parms[5] = 0;
-
-  double info[LM_INFO_SZ];
-
-  int n = get_PeakFitRadius()*2+1;
-
-  int niter = dlevmar_dif(fitRing, parms, NULL, 6, n*n, get_PeakFitIterations(), NULL, info, NULL, NULL, this);
-
-  if (niter >= 0) {
-    QString msg = tr("fit ring nr [%1,%2]\t").arg(x0).arg(y0);
-    msg += tr("OK %1 iter:\t").arg(niter);
-    msg += tr("Rad: %1\t").arg(parms[0]);
-    msg += tr("Wid: %1\t").arg(fabs(parms[1]));
-    msg += tr("Ht: %1\t").arg(parms[2]);
-    msg += tr("Bkd: %1\t").arg(parms[3]);
-    msg += tr("Bkx: %1\t").arg(parms[4]);
-    msg += tr("Bky: %1").arg(parms[5]);
-
-    printMessage(msg);
-
-    double nr = parms[0];
-
-    set_PeakPixelRadius(nr);
-    set_PeakCenterX(xc + nr*cos(az));
-    set_PeakCenterY(yc + nr*sin(az));
-    set_PeakRadius(parms[1]);
-    set_PeakHeight(parms[2]);
-    set_PeakBackground(parms[3]);
-    set_PeakBackgroundX(parms[4]);
-    set_PeakBackgroundY(parms[5]);
+    appendPowderPoint(fit.fittedX(), fit.fittedY());
 
     return true;
   } else {
@@ -725,10 +623,13 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
     height = m_Data->get_Height()+1;
   }
 
+  QVector<QxrdRingFitResult> fits;
+
   while (true) {
     if (x >= 0 && y >= 0 && x <= width && y <= width) {
       QxrdRingFitResult fit(this, 0, x, y, pkht, bkgd);
       fit.fitRingPoint();
+      fits.append(fit);
 
       if (qcepDebug(DEBUG_FITTING) || get_PeakFitDebug()) {
         printMessage(tr("Fit Ring Near: az: %1, x: %2, y: %3, nx: %4, ny: %5, wd: %6, ht: %7, rz: %8")
@@ -741,10 +642,10 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
       y = fit.fittedY();
 
       if (fit.reason()==QxrdRingFitResult::Successful) {
-        m_RingPowderPoints.append(QxrdPowderPoint(get_RingIndex(), 1, x, y));
+//        m_RingPowderPoints.append(QxrdPowderPoint(get_RingIndex(), 1, x, y));
         r = sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc));
       } else {
-        m_RingPowderPoints.append(QxrdPowderPoint(get_RingIndex(), 0, x, y));
+//        m_RingPowderPoints.append(QxrdPowderPoint(get_RingIndex(), 0, x, y));
       }
     }
 
@@ -760,18 +661,15 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
     y = yc + r*sin(az);
   }
 
-  int npts = 0;
+  int npts = fits.count();
   int nok  = 0;
 
-  for(int i=0; i<m_RingPowderPoints.count(); i++) {
-    QxrdPowderPoint pt = m_RingPowderPoints[i];
+  for(int i=0; i<fits.count(); i++) {
+    QxrdRingFitResult &fit = fits[i];
 
-    if (pt.n1() == get_RingIndex()) {
-      npts += 1;
-      if (pt.n2()) {
-        nok += 1;
-        appendPowderPoint(pt.x(), pt.y());
-      }
+    if (fit.reason() == QxrdRingFitResult::Successful) {
+      nok += 1;
+      appendPowderPoint(fit.fittedX(), fit.fittedY());
     }
   }
 

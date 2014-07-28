@@ -977,13 +977,13 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           } else if (action == deleteAllPoints) {
             cf->deletePowderPoints();
           } else if (action == fitPeakNear) {
-            if (cf->fitPeakNear(x,y)) {
-              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
-            }
+            QMetaObject::invokeMethod(cf.data(), "fitPeakNear",
+                                      Q_ARG(double,x),
+                                      Q_ARG(double,y));
           } else if (action == fitRingNear) {
-            if (cf->fitRingNear(x,y)) {
-              cf->appendPowderPoint(cf->get_PeakCenterX(), cf->get_PeakCenterY());
-            }
+            QMetaObject::invokeMethod(cf.data(), "fitRingNear",
+                                      Q_ARG(double,x),
+                                      Q_ARG(double,y));
           } else if (action == traceRingClockwise) {
             QMetaObject::invokeMethod(cf.data(), "traceRingNear",
                                       Q_ARG(double,x),

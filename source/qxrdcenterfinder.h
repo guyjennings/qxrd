@@ -164,9 +164,6 @@ public:
   Q_PROPERTY(QString userAbsorptionFunction READ get_UserAbsorptionFunction WRITE set_UserAbsorptionFunction)
   QCEP_STRING_PROPERTY(UserAbsorptionFunction)
 
-  Q_PROPERTY(double peakRadius READ get_PeakRadius WRITE set_PeakRadius)
-  QCEP_DOUBLE_PROPERTY(PeakRadius)
-
   Q_PROPERTY(double peakFitRadius READ get_PeakFitRadius WRITE set_PeakFitRadius)
   QCEP_DOUBLE_PROPERTY(PeakFitRadius)
 
@@ -179,6 +176,9 @@ public:
   Q_PROPERTY(double peakCenterY READ get_PeakCenterY WRITE set_PeakCenterY)
   QCEP_DOUBLE_PROPERTY(PeakCenterY)
 
+  Q_PROPERTY(double peakWidth READ get_PeakWidth WRITE set_PeakWidth)
+  QCEP_DOUBLE_PROPERTY(PeakWidth)
+
   Q_PROPERTY(double peakBackground READ get_PeakBackground WRITE set_PeakBackground)
   QCEP_DOUBLE_PROPERTY(PeakBackground)
 
@@ -187,12 +187,6 @@ public:
 
   Q_PROPERTY(double peakBackgroundY READ get_PeakBackgroundY WRITE set_PeakBackgroundY)
   QCEP_DOUBLE_PROPERTY(PeakBackgroundY)
-
-  Q_PROPERTY(double peakAzimuth READ get_PeakAzimuth WRITE set_PeakAzimuth)
-  QCEP_DOUBLE_PROPERTY(PeakAzimuth)
-
-  Q_PROPERTY(double peakPixelRadius READ get_PeakPixelRadius WRITE set_PeakPixelRadius)
-  QCEP_DOUBLE_PROPERTY(PeakPixelRadius)
 
   Q_PROPERTY(bool peakFitDebug READ get_PeakFitDebug WRITE set_PeakFitDebug)
   QCEP_BOOLEAN_PROPERTY(PeakFitDebug)
@@ -314,9 +308,6 @@ public slots:
   int countPowderRingPoints() const;
   QxrdPowderPoint powderRingPoint(int i) const;
 
-private:
-  void fitRingPoint(QxrdRingFitResult &fit);
-
 public:
 //  void setEnabled(bool imgenabled, bool cntrenabled);
 //  void setPen(const QPen &pen);
@@ -329,7 +320,6 @@ public:
 
   void evaluateFit(double *parm, double *x, int np, int nx);
   void evaluatePeakFit(double *parm, double *x, int np, int nx);
-  void evaluateRingFit(double *parm, double *x, int np, int nx);
   void evaluatePowderFit(double *parm, double *x, int np, int nx);
 
   QxrdExperimentWPtr experiment() const;
