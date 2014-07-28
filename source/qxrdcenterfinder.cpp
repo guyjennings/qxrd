@@ -708,6 +708,11 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
   QxrdRingFitResult fit(this, 0, x0, y0, 0, 0);
   fit.fitRingPoint();
 
+  printMessage(tr("Initial fit: az: %1, x: %2, y: %3, nx: %4, ny: %5, wd: %6, ht: %7, rz: %8")
+               .arg(az).arg(x).arg(y).arg(fit.fittedX()).arg(fit.fittedY())
+               .arg(fit.fittedWidth()).arg(fit.fittedHeight())
+               .arg(fit.reasonString()));
+
   double bkgd = ( imageValue(xc+(r+dr)*cos(az), yc+(r+dr)*sin(az))
                  +imageValue(xc+(r-dr)*cos(az), yc+(r-dr)*sin(az)))/2.0;
 
@@ -728,7 +733,7 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
       if (qcepDebug(DEBUG_FITTING) || get_PeakFitDebug()) {
         printMessage(tr("Fit Ring Near: az: %1, x: %2, y: %3, nx: %4, ny: %5, wd: %6, ht: %7, rz: %8")
                      .arg(az).arg(x).arg(y).arg(fit.fittedX()).arg(fit.fittedY())
-                     .arg(get_PeakRadius()).arg(get_PeakHeight())
+                     .arg(fit.fittedWidth()).arg(fit.fittedHeight())
                      .arg(fit.reasonString()));
       }
 
@@ -1063,13 +1068,13 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
 
     if (qcepDebug(DEBUG_FITTING) || get_PeakFitDebug()) {
       printMessage(tr("Fitted %1 : x %2, y %3, w %4, ht %5, bk %6, bkx %7, bky %8, rzn %9")
-                   .arg(i).arg(fits[i].fittedX()).arg(fits[i].fittedY())
-                   .arg(fits[i].fittedWidth()).arg(fits[i].fittedHeight())
-                   .arg(fits[i].fittedBkgd()).arg(fits[i].fittedBkgdX()).arg(fits[i].fittedBkgdY())
-                   .arg(fits[i].reasonString()));
+                   .arg(i).arg(r.fittedX()).arg(r.fittedY())
+                   .arg(r.fittedWidth()).arg(r.fittedHeight())
+                   .arg(r.fittedBkgd()).arg(r.fittedBkgdX()).arg(r.fittedBkgdY())
+                   .arg(r.reasonString()));
 //      printMessage(tr("tth %1, chi %2")
-//                   .arg(getTTH(fits[i].fittedX(), fits[i].fittedY()))
-//                   .arg(getChi(fits[i].fittedX(), fits[i].fittedY())));
+//                   .arg(getTTH(r.fittedX(), r.fittedY()))
+//                   .arg(getChi(r.fittedX(), r.fittedY())));
     }
 
     int rz = r.reason();
