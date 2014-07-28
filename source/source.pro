@@ -127,7 +127,10 @@ HEADERS += \
     qxrdscriptdialogsettings.h \
     qxrdscripteditwidget.h \
     qxrdpowderpoint.h \
-    qxrdpowderpointproperty.h
+    qxrdpowderpointproperty.h \
+    qxrdfitter.h \
+    qxrdfitterpeakpoint.h \
+    qxrdfitterringpoint.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -156,7 +159,10 @@ SOURCES += \
     qxrdscriptdialogsettings.cpp \
     qxrdscripteditwidget.cpp \
     qxrdpowderpoint.cpp \
-    qxrdpowderpointproperty.cpp
+    qxrdpowderpointproperty.cpp \
+    qxrdfitter.cpp \
+    qxrdfitterpeakpoint.cpp \
+    qxrdfitterringpoint.cpp
 
 OTHER_FILES += testImage.js
 
