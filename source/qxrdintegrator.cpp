@@ -27,6 +27,17 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr e
     m_IntegrationMinimum(saver, this, "integrationMinimum", 0, "Integration Minimum"),
     m_IntegrationMaximum(saver, this, "integrationMaximum", 100000, "Integration Maximum"),
     m_IntegrationXUnits(saver, this, "integrationXUnits", IntegrateTTH, "X Units for Integration (0 = TTH, 1 = Q, 2 = R)"),
+    m_EnableGeometricCorrections(saver, this, "enableGeometricCorrections", false, "Enable Geometric Corrections (tilt and distance) in Integration"),
+    m_EnablePolarizationCorrections(saver, this, "enablePolarizationCorrections", false, "Enable Polarization Corrections in Integration"),
+    m_Polarization(saver, this, "polarization", 1.0, "Beam Polarization Factor"),
+    m_EnableAbsorptionCorrections(saver, this, "enableAbsorptionCorrections", false, "Enable Absorption Correction in Integration"),
+    m_AttenuationLength(saver, this, "attenuationLength", 0, "Attenuation Length (mm)"),
+    m_EnableUserGeometry(saver, this, "enableUserGeometry", 0, "Apply user-defined geometry function in integration"),
+    m_UserGeometryScript(saver, this, "userGeometryScript", defaultUserGeometryScript(), "Script to define user defined geometry functions"),
+    m_UserGeometryFunction(saver, this, "userGeometryFunction", "userGeometry", "Name of user defined geometry function"),
+    m_EnableUserAbsorption(saver, this, "enableUserAbsorption", 0, "Apply user-defined geometry function in integration"),
+    m_UserAbsorptionScript(saver, this, "userAbsorptionScript", defaultUserAbsorptionScript(), "Script to define user defined absorption functions"),
+    m_UserAbsorptionFunction(saver, this, "userAbsorptionFunction", "userAbsorb1", "Name of user defined absorption function"),
     m_Experiment(exp),
     m_CenterFinder(cfw),
     m_Allocator(alloc),
@@ -42,6 +53,20 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr e
   connect(this->prop_IntegrationMinimum(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
   connect(this->prop_IntegrationMaximum(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
   connect(this->prop_IntegrationXUnits(),  SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
+
+  connect(prop_EnableGeometricCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_EnablePolarizationCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_Polarization(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_EnableAbsorptionCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_AttenuationLength(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+
+  connect(prop_EnableUserGeometry(), SIGNAL(valueChanged(int,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_UserGeometryScript(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_UserGeometryFunction(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()));
+
+  connect(prop_EnableUserAbsorption(), SIGNAL(valueChanged(int,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_UserAbsorptionScript(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_UserAbsorptionFunction(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()));
 
   QxrdCenterFinderPtr cf(m_CenterFinder);
 
@@ -71,6 +96,11 @@ QxrdDataProcessorWPtr QxrdIntegrator::dataProcessor() const
   } else {
     return QxrdDataProcessorWPtr();
   }
+}
+
+QxrdExperimentWPtr QxrdIntegrator::experiment() const
+{
+  return m_Experiment;
 }
 
 void QxrdIntegrator::writeSettings(QSettings *settings, QString section)
@@ -311,3 +341,26 @@ QxrdDoubleImageDataPtr QxrdIntegrator::cachedIntensity()
     return QxrdDoubleImageDataPtr();
   }
 }
+
+QString QxrdIntegrator::defaultUserGeometryScript()
+{
+  QFile def(":/qxrdexampleusergeometry.js");
+
+  if (def.open(QFile::ReadOnly)) {
+    return def.readAll();
+  } else {
+    return "Couldn't open resource file";
+  }
+}
+
+QString QxrdIntegrator::defaultUserAbsorptionScript()
+{
+  QFile def(":/qxrdexampleuserabsorption.js");
+
+  if (def.open(QFile::ReadOnly)) {
+    return def.readAll();
+  } else {
+    return "Couldn't open resource file";
+  }
+}
+

@@ -36,19 +36,8 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_DetectorTiltStep(saver, this, "detectorTiltStep", 0.1, "Tilt Angle Step(deg)"),
     m_TiltPlaneRotation(saver, this, "tiltPlaneRotation", 90, "Tilt Plane Rotation (deg)"),
     m_TiltPlaneRotationStep(saver, this, "tiltPlaneRotationStep", 10, "Tilt Plane Rotation Step (deg)"),
-    m_EnableGeometricCorrections(saver, this, "enableGeometricCorrections", false, "Enable Geometric Corrections (tilt and distance) in Integration"),
-    m_EnablePolarizationCorrections(saver, this, "enablePolarizationCorrections", false, "Enable Polarization Corrections in Integration"),
-    m_Polarization(saver, this, "polarization", 1.0, "Beam Polarization Factor"),
-    m_EnableAbsorptionCorrections(saver, this, "enableAbsorptionCorrections", false, "Enable Absorption Correction in Integration"),
-    m_AttenuationLength(saver, this, "attenuationLength", 0, "Attenuation Length (mm)"),
     m_MarkedPoints(saver, this, "markedPoints", QcepPolygon(), "Marker Points"),
     m_RingRadius(saver, this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
-    m_EnableUserGeometry(saver, this, "enableUserGeometry", 0, "Apply user-defined geometry function in integration"),
-    m_UserGeometryScript(saver, this, "userGeometryScript", defaultUserGeometryScript(), "Script to define user defined geometry functions"),
-    m_UserGeometryFunction(saver, this, "userGeometryFunction", "userGeometry", "Name of user defined geometry function"),
-    m_EnableUserAbsorption(saver, this, "enableUserAbsorption", 0, "Apply user-defined geometry function in integration"),
-    m_UserAbsorptionScript(saver, this, "userAbsorptionScript", defaultUserAbsorptionScript(), "Script to define user defined absorption functions"),
-    m_UserAbsorptionFunction(saver, this, "userAbsorptionFunction", "userAbsorb1", "Name of user defined absorption function"),
     m_PeakFitRadius(saver, this, "peakFitRadius", 10, "Half size of fitted area for peak fitting"),
     m_PeakHeight(saver, this, "peakHeight", 100.0, "Height of fitted peak"),
     m_PeakCenterX(saver, this, "peakCenterX", 0, "X Center of fitted peak"),
@@ -89,19 +78,6 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
   connect(prop_ImplementTilt(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
   connect(prop_DetectorTilt(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
   connect(prop_TiltPlaneRotation(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
-  connect(prop_EnableGeometricCorrections(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
-  connect(prop_EnablePolarizationCorrections(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
-  connect(prop_Polarization(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
-  connect(prop_EnableAbsorptionCorrections(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()));
-  connect(prop_AttenuationLength(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()));
-
-  connect(prop_EnableUserGeometry(), SIGNAL(valueChanged(int,int)), this, SIGNAL(parameterChanged()));
-  connect(prop_UserGeometryScript(), SIGNAL(valueChanged(QString,int)), this, SIGNAL(parameterChanged()));
-  connect(prop_UserGeometryFunction(), SIGNAL(valueChanged(QString,int)), this, SIGNAL(parameterChanged()));
-
-  connect(prop_EnableUserAbsorption(), SIGNAL(valueChanged(int,int)), this, SIGNAL(parameterChanged()));
-  connect(prop_UserAbsorptionScript(), SIGNAL(valueChanged(QString,int)), this, SIGNAL(parameterChanged()));
-  connect(prop_UserAbsorptionFunction(), SIGNAL(valueChanged(QString,int)), this, SIGNAL(parameterChanged()));
 }
 
 QxrdExperimentWPtr QxrdCenterFinder::experiment() const
@@ -774,28 +750,6 @@ double QxrdCenterFinder::imageValue(double x, double y)
     return m_Data->value(x,y);
   } else {
     return 0;
-  }
-}
-
-QString QxrdCenterFinder::defaultUserGeometryScript()
-{
-  QFile def(":/qxrdexampleusergeometry.js");
-
-  if (def.open(QFile::ReadOnly)) {
-    return def.readAll();
-  } else {
-    return "Couldn't open resource file";
-  }
-}
-
-QString QxrdCenterFinder::defaultUserAbsorptionScript()
-{
-  QFile def(":/qxrdexampleuserabsorption.js");
-
-  if (def.open(QFile::ReadOnly)) {
-    return def.readAll();
-  } else {
-    return "Couldn't open resource file";
   }
 }
 

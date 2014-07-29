@@ -66,44 +66,11 @@ public:
   Q_PROPERTY(double tiltPlaneRotationStep READ get_TiltPlaneRotationStep WRITE set_TiltPlaneRotationStep)
   QCEP_DOUBLE_PROPERTY(TiltPlaneRotationStep)
 
-  Q_PROPERTY(bool   enableGeometricCorrections READ get_EnableGeometricCorrections WRITE set_EnableGeometricCorrections)
-  QCEP_BOOLEAN_PROPERTY(EnableGeometricCorrections)
-
-  Q_PROPERTY(bool   enablePolarizationCorrections READ get_EnablePolarizationCorrections WRITE set_EnablePolarizationCorrections)
-  QCEP_BOOLEAN_PROPERTY(EnablePolarizationCorrections)
-
-  Q_PROPERTY(double polarization READ get_Polarization WRITE set_Polarization)
-  QCEP_DOUBLE_PROPERTY(Polarization)
-
-  Q_PROPERTY(bool   enableAbsorptionCorrections READ get_EnableAbsorptionCorrections WRITE set_EnableAbsorptionCorrections)
-  QCEP_BOOLEAN_PROPERTY(EnableAbsorptionCorrections)
-
-  Q_PROPERTY(double attenuationLength READ get_AttenuationLength WRITE set_AttenuationLength)
-  QCEP_DOUBLE_PROPERTY(AttenuationLength)
-
   Q_PROPERTY(QcepPolygon markedPoints READ get_MarkedPoints WRITE set_MarkedPoints)
   QCEP_POLYGON_PROPERTY(MarkedPoints)
 
   Q_PROPERTY(double ringRadius READ get_RingRadius WRITE set_RingRadius)
   QCEP_DOUBLE_PROPERTY(RingRadius)
-
-  Q_PROPERTY(int    enableUserGeometry READ get_EnableUserGeometry WRITE set_EnableUserGeometry)
-  QCEP_INTEGER_PROPERTY(EnableUserGeometry)
-
-  Q_PROPERTY(QString userGeometryScript READ get_UserGeometryScript WRITE set_UserGeometryScript)
-  QCEP_STRING_PROPERTY(UserGeometryScript)
-
-  Q_PROPERTY(QString userGeometryFunction READ get_UserGeometryFunction WRITE set_UserGeometryFunction)
-  QCEP_STRING_PROPERTY(UserGeometryFunction)
-
-  Q_PROPERTY(int     enableUserAbsorption READ get_EnableUserAbsorption WRITE set_EnableUserAbsorption)
-  QCEP_INTEGER_PROPERTY(EnableUserAbsorption)
-
-  Q_PROPERTY(QString userAbsorptionScript READ get_UserAbsorptionScript WRITE set_UserAbsorptionScript)
-  QCEP_STRING_PROPERTY(UserAbsorptionScript)
-
-  Q_PROPERTY(QString userAbsorptionFunction READ get_UserAbsorptionFunction WRITE set_UserAbsorptionFunction)
-  QCEP_STRING_PROPERTY(UserAbsorptionFunction)
 
   Q_PROPERTY(double peakFitRadius READ get_PeakFitRadius WRITE set_PeakFitRadius)
   QCEP_DOUBLE_PROPERTY(PeakFitRadius)
@@ -224,9 +191,6 @@ public slots:
   bool fitRingNear(double x0, double y0);
   bool traceRingNear(double x0, double y0, double step=25.0);
   bool traceRingNearParallel(double x0, double y0, double step=25.0);
-
-  QString defaultUserGeometryScript();
-  QString defaultUserAbsorptionScript();
 
   double getPowderPointX(int i);
   double getPowderPointY(int i);

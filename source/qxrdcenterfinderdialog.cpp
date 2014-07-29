@@ -47,27 +47,9 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   m_CenterFinder -> prop_FittedHeightMinRatio() -> linkTo(m_FittedHeightMinRatio);
   m_CenterFinder -> prop_FittedPositionMaxDistance() -> linkTo(m_FittedPositionMaxDistance);
 
-  m_CenterFinder -> prop_EnableGeometricCorrections() -> linkTo(m_EnableGeometry);
-  m_CenterFinder -> prop_EnablePolarizationCorrections() -> linkTo(m_EnablePolarization);
-  m_CenterFinder -> prop_Polarization() -> linkTo(m_Polarization);
-  m_CenterFinder -> prop_EnableAbsorptionCorrections() -> linkTo(m_EnableAbsorption);
-  m_CenterFinder -> prop_AttenuationLength() -> linkTo(m_AttenuationLength);
-
-  m_CenterFinder -> prop_EnableUserAbsorption() -> linkTo(m_EnableUserAbsorption);
-  m_CenterFinder -> prop_UserAbsorptionFunction() -> linkTo(m_UserAbsorptionFunction);
-  connect(m_UserAbsorptionEdit, SIGNAL(clicked()), this, SLOT(editUserAbsorption()));
-
-  m_CenterFinder -> prop_EnableUserGeometry() -> linkTo(m_EnableUserGeometry);
-  m_CenterFinder -> prop_UserGeometryFunction() -> linkTo(m_UserGeometryFunction);
-  connect(m_UserGeometryEdit, SIGNAL(clicked()), this, SLOT(editUserGeometry()));
-
   connect(m_CenterFinder -> prop_ImplementTilt(), SIGNAL(valueChanged(bool,int)), this, SLOT(onImplementTiltChanged(bool)));
-  connect(m_CenterFinder -> prop_EnablePolarizationCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onEnablePolarizationChanged(bool)));
-  connect(m_CenterFinder -> prop_EnableAbsorptionCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onEnableAbsorptionChanged(bool)));
 
   onImplementTiltChanged(m_CenterFinder -> get_ImplementTilt());
-  onEnablePolarizationChanged(m_CenterFinder -> get_EnablePolarizationCorrections());
-  onEnableAbsorptionChanged(m_CenterFinder -> get_EnableAbsorptionCorrections());
 
   connect(m_CenterFinder->prop_CenterStep(),            SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
   connect(m_CenterFinder->prop_DetectorDistanceStep(),  SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
@@ -100,16 +82,6 @@ void QxrdCenterFinderDialog::onImplementTiltChanged(bool imp)
   m_DetectorTiltStep      -> setEnabled(imp);
   m_TiltPlaneRotation     -> setEnabled(imp);
   m_TiltPlaneRotationStep -> setEnabled(imp);
-}
-
-void QxrdCenterFinderDialog::onEnablePolarizationChanged(bool pol)
-{
-  m_Polarization      -> setEnabled(pol);
-}
-
-void QxrdCenterFinderDialog::onEnableAbsorptionChanged(bool absn)
-{
-  m_AttenuationLength -> setEnabled(absn);
 }
 
 void QxrdCenterFinderDialog::onCenterChanged(double cx, double cy)
@@ -166,48 +138,3 @@ void QxrdCenterFinderDialog::centerMoveLeft()
   moveCenter(-1,0);
 }
 
-void QxrdCenterFinderDialog::editUserAbsorption()
-{
-  if (m_EditUserAbsorption == NULL) {
-    m_EditUserAbsorption = new QxrdUserScriptDialog("Edit User Absorption Script",
-                                                    m_CenterFinder -> experiment(),
-                                                    m_CenterFinder -> get_UserAbsorptionScript(),
-                                                    m_CenterFinder -> defaultUserAbsorptionScript());
-
-    connect(m_EditUserAbsorption, SIGNAL(accepted()), this, SLOT(onEditedUserAbsorption()));
-  }
-
-  m_EditUserAbsorption -> show();
-}
-
-void QxrdCenterFinderDialog::editUserGeometry()
-{
-  if (m_EditUserGeometry == NULL) {
-    m_EditUserGeometry = new QxrdUserScriptDialog("Edit User Geometry Script",
-                                                  m_CenterFinder -> experiment(),
-                                                  m_CenterFinder -> get_UserGeometryScript(),
-                                                  m_CenterFinder -> defaultUserGeometryScript());
-
-    connect(m_EditUserGeometry, SIGNAL(accepted()), this, SLOT(onEditedUserGeometry()));
-  }
-
-  m_EditUserGeometry -> show();
-}
-
-void QxrdCenterFinderDialog::onEditedUserAbsorption()
-{
-  if (m_EditUserAbsorption && m_CenterFinder) {
-    QString script = m_EditUserAbsorption->userScript();
-
-    m_CenterFinder -> set_UserAbsorptionScript(script);
-  }
-}
-
-void QxrdCenterFinderDialog::onEditedUserGeometry()
-{
-  if (m_EditUserGeometry && m_CenterFinder) {
-    QString script = m_EditUserGeometry->userScript();
-
-    m_CenterFinder -> set_UserGeometryScript(script);
-  }
-}

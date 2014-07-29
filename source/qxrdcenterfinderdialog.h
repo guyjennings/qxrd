@@ -4,8 +4,6 @@
 #include <QDockWidget>
 #include "ui_qxrdcenterfinderdialog.h"
 #include "qxrdcenterfinder-ptr.h"
-#include "qxrduserscriptdialog.h"
-#include <QPointer>
 
 class QxrdCenterFinderDialog : public QDockWidget, public Ui::QxrdCenterFinderDialog
 {
@@ -28,21 +26,12 @@ public slots:
   void onStepSizesChanged();
   void onCenterChanged(double cx, double cy);
   void onImplementTiltChanged(bool imp);
-  void onEnablePolarizationChanged(bool pol);
-  void onEnableAbsorptionChanged(bool absn);
-
-  void editUserGeometry();
-  void editUserAbsorption();
-  void onEditedUserGeometry();
-  void onEditedUserAbsorption();
 
 private:
   void moveCenter(int dx, int dy);
 
 private:
   QxrdCenterFinderPtr m_CenterFinder;
-  QPointer<QxrdUserScriptDialog> m_EditUserAbsorption;
-  QPointer<QxrdUserScriptDialog> m_EditUserGeometry;
 };
 
 #endif // QXRDCENTERFINDERDIALOG_H
