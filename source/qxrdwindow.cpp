@@ -333,7 +333,6 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
     if (cf) {
       connect(m_ActionFindBeamCenter, SIGNAL(triggered()), cf.data(), SLOT(fitPowderCircle()), Qt::DirectConnection);
-      connect(m_ActionAutoAdjustMarkers, SIGNAL(triggered()), cf.data(), SLOT(adjustAllPoints()), Qt::DirectConnection);
       connect(m_ActionClearMarkers, SIGNAL(triggered()), cf.data(), SLOT(deletePowderPoints()), Qt::DirectConnection);
     }
   }

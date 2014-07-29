@@ -950,8 +950,6 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QPointF nearest = cf->nearestPowderPoint(x, y);
 
           QAction *fitCircle        = plotMenu.addAction("Fit Center from Points on Circle");
-          QAction *adjPoint         = plotMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
-          QAction *adjAllPoints     = plotMenu.addAction(tr("Auto adjust position of all points"));
           QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
           QAction *deleteAllPoints  = plotMenu.addAction("Delete all Points");
           QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
@@ -968,10 +966,6 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             printGraph();
           } else if (action == fitCircle) {
             cf->fitPowderCircle();
-          } else if (action == adjPoint) {
-            cf->adjustPointNear(x,y);
-          } else if (action == adjAllPoints) {
-            cf->adjustAllPoints();
           } else if (action == delPoint) {
             cf->deletePowderPointNear(x,y);
           } else if (action == deleteAllPoints) {

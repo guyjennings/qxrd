@@ -1188,7 +1188,6 @@
     </property>
     <addaction name="m_ActionRefineCenterTilt"/>
     <addaction name="m_ActionFindBeamCenter"/>
-    <addaction name="m_ActionAutoAdjustMarkers"/>
     <addaction name="m_ActionClearMarkers"/>
     <addaction name="separator"/>
     <addaction name="m_ActionMoveCenterUp"/>
@@ -1888,11 +1887,6 @@
    </property>
    <property name="toolTip">
     <string>Find the beam center from marked points</string>
-   </property>
-  </action>
-  <action name="m_ActionAutoAdjustMarkers">
-   <property name="text">
-    <string>Auto Adjust Markers</string>
    </property>
   </action>
   <action name="m_ActionClearMarkers">

@@ -87,12 +87,6 @@ public:
   Q_PROPERTY(double ringRadius READ get_RingRadius WRITE set_RingRadius)
   QCEP_DOUBLE_PROPERTY(RingRadius)
 
-  Q_PROPERTY(bool adjustMarkedPoints READ get_AdjustMarkedPoints WRITE set_AdjustMarkedPoints)
-  QCEP_BOOLEAN_PROPERTY(AdjustMarkedPoints)
-
-  Q_PROPERTY(double adjustmentRadius READ get_AdjustmentRadius WRITE set_AdjustmentRadius)
-  QCEP_DOUBLE_PROPERTY(AdjustmentRadius)
-
   Q_PROPERTY(int    enableUserGeometry READ get_EnableUserGeometry WRITE set_EnableUserGeometry)
   QCEP_INTEGER_PROPERTY(EnableUserGeometry)
 
@@ -226,13 +220,7 @@ public slots:
   int nearestPowderPointIndex(double x, double y);
   QPointF nearestPowderPoint(double x, double y);
 
-  QPointF adjustPoint(QPointF pt);
-  QPointF adjustPoint(int i);
-  void adjustPointNear(double x, double y);
-  void adjustAllPoints();
   bool fitPeakNear(double x, double y);
-//  bool fitPeakNear();
-
   bool fitRingNear(double x0, double y0);
   bool traceRingNear(double x0, double y0, double step=25.0);
   bool traceRingNearParallel(double x0, double y0, double step=25.0);
@@ -257,9 +245,6 @@ public slots:
   QxrdPowderPoint powderRingPoint(int i) const;
 
 public:
-//  void setEnabled(bool imgenabled, bool cntrenabled);
-//  void setPen(const QPen &pen);
-
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
@@ -267,7 +252,6 @@ public:
   double imageValue(double x, double y);
 
   void evaluateFit(double *parm, double *x, int np, int nx);
-//  void evaluatePeakFit(double *parm, double *x, int np, int nx);
   void evaluatePowderFit(double *parm, double *x, int np, int nx);
 
   QxrdExperimentWPtr experiment() const;
@@ -275,12 +259,6 @@ public:
 
   static QString levmarFailureReason(int n);
 
-//signals:
-////  void centerChanged(double cx, double cy);
-//
-//private:
-////
-//
 private:
   mutable QMutex             m_Mutex;
   QxrdExperimentWPtr         m_Experiment;

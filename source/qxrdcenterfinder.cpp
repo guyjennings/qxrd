@@ -43,8 +43,6 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_AttenuationLength(saver, this, "attenuationLength", 0, "Attenuation Length (mm)"),
     m_MarkedPoints(saver, this, "markedPoints", QcepPolygon(), "Marker Points"),
     m_RingRadius(saver, this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
-    m_AdjustMarkedPoints(saver, this, "adjustMarkedPoints", true, "Auto-adjust position of entered points"),
-    m_AdjustmentRadius(saver, this, "adjustmentRadius", 3.0, "Size of search region for marker auto adjustment"),
     m_EnableUserGeometry(saver, this, "enableUserGeometry", 0, "Apply user-defined geometry function in integration"),
     m_UserGeometryScript(saver, this, "userGeometryScript", defaultUserGeometryScript(), "Script to define user defined geometry functions"),
     m_UserGeometryFunction(saver, this, "userGeometryFunction", "userGeometry", "Name of user defined geometry function"),
@@ -266,11 +264,7 @@ double QxrdCenterFinder::getR(double x, double y) const
 
 void QxrdCenterFinder::onPointSelected(QPointF pt)
 {
-  if (get_AdjustMarkedPoints()) {
-    pt = adjustPoint(pt);
-  }
-
-  m_MarkedPoints.appendValue(pt);
+  fitPeakNear(pt.x(), pt.y());
 }
 
 void QxrdCenterFinder::evaluateFit(double *parm, double *x, int /*np*/, int nx)
@@ -426,50 +420,6 @@ void QxrdCenterFinder::deletePowderPoints()
   m_MarkedPoints.clear();
 
   set_RingIndex(0);
-}
-
-QPointF QxrdCenterFinder::adjustPoint(QPointF pt)
-{
-  double x0=pt.x(), y0=pt.y();
-  int rad = get_AdjustmentRadius();
-  double sum=0, sumx=0, sumy=0;
-
-  for (int iy=-rad; iy<=rad; iy++) {
-    double y=y0+iy;
-    for (int ix=-rad; ix<=rad; ix++) {
-      double x=x0+ix;
-      double val = imageValue(x,y);
-      sum += val;
-      sumx += val*x;
-      sumy += val*y;
-    }
-  }
-
-  if (sum != 0) {
-    return QPointF(sumx/sum, sumy/sum);
-  } else {
-    return pt;
-  }
-}
-
-QPointF QxrdCenterFinder::adjustPoint(int i)
-{
-  return adjustPoint(powderPoint(i));
-}
-
-void QxrdCenterFinder::adjustPointNear(double x, double y)
-{
-  int nearest = nearestPowderPointIndex(x, y);
-
-  if (nearest >= 0) {
-    QcepPolygon pts = get_MarkedPoints();
-
-    QPointF val = adjustPoint(pts[nearest]);
-
-    pts[nearest] = val;
-
-    set_MarkedPoints(pts);
-  }
 }
 
 bool QxrdCenterFinder::fitPeakNear(double x, double y)
@@ -681,8 +631,6 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
   for (int i=0; i<nsteps; i++) {
     QxrdFitterRingPoint &r = fits[i];
 
-//    QPointF xy = getXY(r.tth(), r.chi());
-
     if (qcepDebug(DEBUG_FITTING) || get_PeakFitDebug()) {
       printMessage(tr("Fitted %1 : x %2, y %3, w %4, ht %5, bk %6, bkx %7, bky %8, rzn %9")
                    .arg(i).arg(r.fittedX()).arg(r.fittedY())
@@ -722,17 +670,6 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
   }
 
   return true;
-}
-
-void QxrdCenterFinder::adjustAllPoints()
-{
-  QcepPolygon pts = get_MarkedPoints();
-
-  for (int i=0; i<pts.count(); i++) {
-    pts[i] = adjustPoint(pts[i]);
-  }
-
-  set_MarkedPoints(pts);
 }
 
 double QxrdCenterFinder::getPowderPointX(int i)
