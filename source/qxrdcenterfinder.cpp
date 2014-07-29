@@ -36,7 +36,8 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_DetectorTiltStep(saver, this, "detectorTiltStep", 0.1, "Tilt Angle Step(deg)"),
     m_TiltPlaneRotation(saver, this, "tiltPlaneRotation", 90, "Tilt Plane Rotation (deg)"),
     m_TiltPlaneRotationStep(saver, this, "tiltPlaneRotationStep", 10, "Tilt Plane Rotation Step (deg)"),
-    m_MarkedPoints(saver, this, "markedPoints", QcepPolygon(), "Marker Points"),
+//    m_MarkedPoints(saver, this, "markedPoints", QcepPolygon(), "Marker Points"),
+    m_MarkedPoints(saver, this, "markedPoints", QxrdPowderPointVector(), "Marker Points"),
     m_RingRadius(saver, this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
     m_PeakFitRadius(saver, this, "peakFitRadius", 10, "Half size of fitted area for peak fitting"),
     m_PeakHeight(saver, this, "peakHeight", 100.0, "Height of fitted peak"),
@@ -51,8 +52,8 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_RingAngles(saver, this, "ringAngles", QcepDoubleVector(), "Diffraction ring angles"),
     m_RingAngleTolerance(saver, this, "ringAngleToleance", 0.1, "Diffraction ring angle tolerance"),
     m_PowderFitOptions(saver, this, "powderFitOptions", 0, "Powder fitting options"),
-    m_PowderPoint(saver, this, "powderPoint", QxrdPowderPoint(1,2,3,4), "Powder Point"),
-    m_PowderPointVector(saver, this, "powderPointVector", QxrdPowderPointVector(), "Powder Point Vector"),
+//    m_PowderPoint(saver, this, "powderPoint", QxrdPowderPoint(1,2,3,4), "Powder Point"),
+//    m_PowderPointVector(saver, this, "powderPointVector", QxrdPowderPointVector(), "Powder Point Vector"),
     m_RingIndex(saver, this, "ringIndex", 0, "Fitted Powder Ring Index"),
     m_SubtractRingAverages(saver, this, "subtractRingAverages", false, "Plot deviations of each ring from average"),
     m_FittedWidthMin(saver, this, "fittedWidthMin", 0.5, "Minimum acceptable fitted width (pixels)"),
@@ -63,9 +64,9 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
 {
   qRegisterMetaType<QPointF>("QPointF");
 
-  m_PowderPointVector.appendValue(QxrdPowderPoint(1,2,3,4));
-  m_PowderPointVector.appendValue(QxrdPowderPoint(5,6,7,8));
-  m_PowderPointVector.appendValue(QxrdPowderPoint(9,10,11,12));
+//  m_PowderPointVector.appendValue(QxrdPowderPoint(1,2,3,4));
+//  m_PowderPointVector.appendValue(QxrdPowderPoint(5,6,7,8));
+//  m_PowderPointVector.appendValue(QxrdPowderPoint(9,10,11,12));
 
 //  m_CenterX.setDebug(true);
 //  m_CenterY.setDebug(true);
@@ -245,13 +246,13 @@ void QxrdCenterFinder::onPointSelected(QPointF pt)
 
 void QxrdCenterFinder::evaluateFit(double *parm, double *x, int /*np*/, int nx)
 {
-  QcepPolygon pts = get_MarkedPoints();
+  QxrdPowderPointVector pts = get_MarkedPoints();
   double cx = parm[0];
   double cy = parm[1];
   double r  = parm[2];
 
   for (int i=0; i<nx; i++) {
-    QPointF pt = pts.value(i);
+    QxrdPowderPoint pt = pts.value(i);
     double rcalc = sqrt(pow(pt.x() - cx, 2) + pow(pt.y() - cy, 2));
     x[i] = rcalc - r;
   }
@@ -344,7 +345,7 @@ void QxrdCenterFinder::fitPowderCircle()
   }
 }
 
-QPointF QxrdCenterFinder::powderPoint(int i)
+QxrdPowderPoint QxrdCenterFinder::powderPoint(int i)
 {
   return get_MarkedPoints().value(i);
 }
@@ -353,10 +354,10 @@ int QxrdCenterFinder::nearestPowderPointIndex(double x, double y)
 {
   int nearest = -1;
   double nearestDist;
-  QcepPolygon pts = get_MarkedPoints();
+  QxrdPowderPointVector pts = get_MarkedPoints();
 
   for (int i=0; i<pts.count(); i++) {
-    QPointF pt = pts.value(i);
+    QxrdPowderPoint pt = pts.value(i);
     double dist = sqrt(pow(x-pt.x(), 2) + pow(y-pt.y(), 2));
 
     if (nearest == -1 || dist < nearestDist) {
@@ -368,7 +369,7 @@ int QxrdCenterFinder::nearestPowderPointIndex(double x, double y)
   return nearest;
 }
 
-QPointF QxrdCenterFinder::nearestPowderPoint(double x, double y)
+QxrdPowderPoint QxrdCenterFinder::nearestPowderPoint(double x, double y)
 {
   return get_MarkedPoints().value(nearestPowderPointIndex(x,y));
 }
@@ -378,7 +379,7 @@ void QxrdCenterFinder::deletePowderPointNear(double x, double y)
   int nearest = nearestPowderPointIndex(x, y);
 
   if (nearest >= 0) {
-    QcepPolygon pts = get_MarkedPoints();
+    QxrdPowderPointVector pts = get_MarkedPoints();
 
     pts.remove(nearest);
 
@@ -388,7 +389,7 @@ void QxrdCenterFinder::deletePowderPointNear(double x, double y)
 
 void QxrdCenterFinder::appendPowderPoint(double x, double y)
 {
-  m_MarkedPoints.appendValue(QPointF(x,y));
+  m_MarkedPoints.appendValue(QxrdPowderPoint(get_RingIndex(), 0, x,y));
 }
 
 void QxrdCenterFinder::deletePowderPoints()
@@ -648,28 +649,42 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
   return true;
 }
 
+int QxrdCenterFinder::getPowderPointN1(int i)
+{
+  QxrdPowderPoint res = get_MarkedPoints().value(i);
+
+  return res.n1();
+}
+
+int QxrdCenterFinder::getPowderPointN2(int i)
+{
+  QxrdPowderPoint res = get_MarkedPoints().value(i);
+
+  return res.n2();
+}
+
 double QxrdCenterFinder::getPowderPointX(int i)
 {
-  QPointF res = get_MarkedPoints().value(i);
+  QxrdPowderPoint res = get_MarkedPoints().value(i);
 
   return res.x();
 }
 
 double QxrdCenterFinder::getPowderPointY(int i)
 {
-  QPointF res = get_MarkedPoints().value(i);
+  QxrdPowderPoint res = get_MarkedPoints().value(i);
 
   return res.y();
 }
 
-void QxrdCenterFinder::setPowderPoint(int i, double x, double y)
+void QxrdCenterFinder::setPowderPoint(int i, int n1, int n2, double x, double y)
 {
-  QcepPolygon pts = get_MarkedPoints();
+  QxrdPowderPointVector pts = get_MarkedPoints();
 
   if (i>=0 && i<pts.count()) {
-    pts[i] = QPointF(x,y);
+    pts[i] = QxrdPowderPoint(n1,n2,x,y);
   } else {
-    pts.append(QPointF(x,y));
+    pts.append(QxrdPowderPoint(n1,n2,x,y));
   }
 
   set_MarkedPoints(pts);
@@ -705,13 +720,15 @@ QScriptValue QxrdCenterFinder::getPowderPoints()
     QxrdScriptEnginePtr eng(exp->scriptEngine());
 
     if (eng) {
-      QcepPolygon pts = get_MarkedPoints();
+      QxrdPowderPointVector pts = get_MarkedPoints();
 
       QScriptValue val = eng->newArray();
 
       for (int i=0; i<pts.count(); i++) {
         QScriptValue item = eng->newObject();
 
+        item.setProperty("n1", pts[i].n1());
+        item.setProperty("n2", pts[i].n2());
         item.setProperty("x", pts[i].x());
         item.setProperty("y", pts[i].y());
 
@@ -732,10 +749,12 @@ int          QxrdCenterFinder::countPowderPoints()
 
 void         QxrdCenterFinder::setPowderPoint(int i, QScriptValue val)
 {
+  int   n1 = val.property("n1").toInteger();
+  int   n2 = val.property("n2").toInteger();
   double x = val.property("x").toNumber();
   double y = val.property("y").toNumber();
 
-  setPowderPoint(i, x, y);
+  setPowderPoint(i, n1, n2, x, y);
 }
 
 
@@ -890,27 +909,29 @@ QString QxrdCenterFinder::levmarFailureReason(int n)
 
 int QxrdCenterFinder::countPowderRings() const
 {
-  int max = 0;
+  int max = -1;
 
-  int n = m_RingPowderPoints.count();
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
+  int n = pts.count();
 
   for (int i=0; i<n; i++) {
-    QxrdPowderPoint pt = m_RingPowderPoints.value(i);
+    QxrdPowderPoint pt = pts.value(i);
 
-    if (pt.n2() && pt.n1()>max) {
+    if (pt.n1()>max) {
       max = pt.n1();
     }
   }
 
-  return max;
+  return max+1;
 }
 
 int QxrdCenterFinder::countPowderRingPoints() const
 {
-  return m_RingPowderPoints.count();
+  return get_MarkedPoints().count();
 }
 
 QxrdPowderPoint QxrdCenterFinder::powderRingPoint(int i) const
 {
-  return m_RingPowderPoints.value(i);
+  return get_MarkedPoints().value(i);
 }

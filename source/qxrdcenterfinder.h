@@ -66,8 +66,8 @@ public:
   Q_PROPERTY(double tiltPlaneRotationStep READ get_TiltPlaneRotationStep WRITE set_TiltPlaneRotationStep)
   QCEP_DOUBLE_PROPERTY(TiltPlaneRotationStep)
 
-  Q_PROPERTY(QcepPolygon markedPoints READ get_MarkedPoints WRITE set_MarkedPoints)
-  QCEP_POLYGON_PROPERTY(MarkedPoints)
+  Q_PROPERTY(QxrdPowderPointVector markedPoints READ get_MarkedPoints WRITE set_MarkedPoints)
+  QXRD_POWDERPOINTVECTOR_PROPERTY(MarkedPoints)
 
   Q_PROPERTY(double ringRadius READ get_RingRadius WRITE set_RingRadius)
   QCEP_DOUBLE_PROPERTY(RingRadius)
@@ -110,12 +110,6 @@ public:
 
   Q_PROPERTY(int powderFitOptions READ get_PowderFitOptions WRITE set_PowderFitOptions)
   QCEP_INTEGER_PROPERTY(PowderFitOptions)
-
-  Q_PROPERTY(QxrdPowderPoint powderPoint READ get_PowderPoint WRITE set_PowderPoint)
-  QXRD_POWDERPOINT_PROPERTY(PowderPoint)
-
-  Q_PROPERTY(QxrdPowderPointVector powderPointVector READ get_PowderPointVector WRITE set_PowderPointVector)
-  QXRD_POWDERPOINTVECTOR_PROPERTY(PowderPointVector)
 
   Q_PROPERTY(int ringIndex READ get_RingIndex WRITE set_RingIndex)
   QCEP_INTEGER_PROPERTY(RingIndex)
@@ -183,18 +177,20 @@ public slots:
   void deletePowderPoints();
   void appendPowderPoint(double x, double y);
 
-  QPointF powderPoint(int i);
+  QxrdPowderPoint powderPoint(int i);
   int nearestPowderPointIndex(double x, double y);
-  QPointF nearestPowderPoint(double x, double y);
+  QxrdPowderPoint nearestPowderPoint(double x, double y);
 
   bool fitPeakNear(double x, double y);
   bool fitRingNear(double x0, double y0);
   bool traceRingNear(double x0, double y0, double step=25.0);
   bool traceRingNearParallel(double x0, double y0, double step=25.0);
 
+  int    getPowderPointN1(int i);
+  int    getPowderPointN2(int i);
   double getPowderPointX(int i);
   double getPowderPointY(int i);
-  void   setPowderPoint(int i, double x, double y);
+  void   setPowderPoint(int i, int n1, int n2, double x, double y);
 
   QScriptValue getPowderPoint(int i);
   QScriptValue getPowderPoints();
@@ -227,8 +223,6 @@ private:
   mutable QMutex             m_Mutex;
   QxrdExperimentWPtr         m_Experiment;
   QxrdDoubleImageDataPtr     m_Data;
-
-  QxrdPowderPointVector      m_RingPowderPoints;
 };
 
 

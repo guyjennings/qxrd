@@ -185,7 +185,7 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
 
       onCenterChanged(QPointF(cf->get_CenterX(), cf->get_CenterY()));
 
-      connect(cf->prop_MarkedPoints(), SIGNAL(valueChanged(QcepPolygon,int)),
+      connect(cf->prop_MarkedPoints(), SIGNAL(valueChanged(QxrdPowderPointVector,int)),
               this, SLOT(onMarkedPointsChanged()));
 
       onMarkedPointsChanged();
@@ -947,7 +947,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           double x = xMap.invTransform(evlocal.x());
           double y = yMap.invTransform(evlocal.y());
 
-          QPointF nearest = cf->nearestPowderPoint(x, y);
+          QxrdPowderPoint nearest = cf->nearestPowderPoint(x, y);
 
           QAction *fitCircle        = plotMenu.addAction("Fit Center from Points on Circle");
           QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
@@ -1038,9 +1038,9 @@ void QxrdImagePlot::displayPowderMarkers()
     QxrdCenterFinderPtr cf(dp->centerFinder());
 
     if (cf) {
-      QcepPolygon poly = cf->get_MarkedPoints();
+      QxrdPowderPointVector poly = cf->get_MarkedPoints();
 
-      foreach(QPointF pt, poly) {
+      foreach(QxrdPowderPoint pt, poly) {
         QwtPlotMarker *marker = new QwtPlotMarker();
         QwtSymbol *symb = new QwtSymbol();
 
@@ -1050,7 +1050,7 @@ void QxrdImagePlot::displayPowderMarkers()
         symb->setBrush(QBrush(Qt::red));
 
         marker->setSymbol(symb);
-        marker->setValue(pt);
+        marker->setValue(QPointF(pt.x(), pt.y()));
 
         m_PowderPointMarkers.append(marker);
 

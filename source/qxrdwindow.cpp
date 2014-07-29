@@ -1752,7 +1752,7 @@ void QxrdWindow::plotPowderRingRadii()
         for (int i=0; i<npts; i++) {
           QxrdPowderPoint pt = cf->powderRingPoint(i);
 
-          if (pt.n1() == r && pt.n2()) {
+          if (pt.n1() == r) {
             x.append(cf->getChi(pt.x(), pt.y()));
             y.append(cf->getR  (pt.x(), pt.y()));
           }
