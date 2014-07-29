@@ -195,6 +195,7 @@ signals:
 
 public slots:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
   void onCenterChanged(QPointF pt);
   void onPointSelected(QPointF pt);

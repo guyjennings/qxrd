@@ -305,6 +305,15 @@ void QxrdCenterFinder::printMessage(QString msg, QDateTime ts)
   }
 }
 
+void QxrdCenterFinder::statusMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    exp->statusMessage(msg);
+  }
+}
+
 void QxrdCenterFinder::fitPowderCircle()
 {
   if (get_MarkedPoints().count() <= 3) {
@@ -601,7 +610,10 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
   }
 
   if (npts) {
-    printMessage(tr("%1/%2 fitted points").arg(nok).arg(npts));
+    QString msg(tr("centering.traceRingNear : %1/%2 fitted points").arg(nok).arg(npts));
+
+    printMessage(msg);
+    statusMessage(msg);
 
     if (nok) {
       prop_RingIndex()->incValue(1);
@@ -692,7 +704,7 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
     }
   }
 
-  printMessage(tr("Fitted %1/%2 : NR %3, OR %4, BdW %5, BdP %6, BdH %7")
+  QString msg(tr("centering.traceRingNearParallel : Fitted %1/%2 : NR %3, OR %4, BdW %5, BdP %6, BdH %7")
       .arg(sums[QxrdFitter::Successful])
       .arg(nsteps)
       .arg(sums[QxrdFitter::NoResult])
@@ -701,6 +713,9 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
       .arg(sums[QxrdFitter::BadPosition])
       .arg(sums[QxrdFitter::BadHeight])
       );
+
+  printMessage(msg);
+  statusMessage(msg);
 
   if (sums[QxrdFitter::Successful]) {
     prop_RingIndex()->incValue(1);
