@@ -287,17 +287,27 @@ void QxrdPlot::onLegendChecked(const QVariant &itemInfo, bool on, int index)
     if (pc) {
       QPen pen = pc->pen();
       const QwtSymbol *oldsym = pc->symbol();
-      QwtSymbol *sym = new QwtSymbol(oldsym->style(), oldsym->brush(), oldsym->pen(), oldsym->size());
+      QwtSymbol *sym = NULL;
+
+      if (oldsym) {
+       sym = new QwtSymbol(oldsym->style(), oldsym->brush(), oldsym->pen(), oldsym->size());
+      }
 
       if (on) {
         pen.setWidth(3);
-        sym->setSize(9,9);
+        if (sym) {
+          sym->setSize(9,9);
+        }
       } else {
         pen.setWidth(1);
-        sym->setSize(5,5);
+        if (sym) {
+          sym->setSize(5,5);
+        }
       }
       pc->setPen(pen);
-      pc->setSymbol(sym);
+      if (sym) {
+        pc->setSymbol(sym);
+      }
     }
 
     replot();
