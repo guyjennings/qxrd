@@ -348,16 +348,16 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
 
   m_MaskColorMap->setColorInterval(pen.color(), QColor(0,0,0,0));
 
-  foreach (QwtPlotMarker *m, m_PowderPointMarkers) {
-    const QwtSymbol *oldsym = m->symbol();
+//  foreach (QwtPlotMarker *m, m_PowderPointMarkers) {
+//    const QwtSymbol *oldsym = m->symbol();
 
-    QwtSymbol *sym = new QwtSymbol(oldsym->style(),oldsym->brush(),oldsym->pen(),oldsym->size());
+//    QwtSymbol *sym = new QwtSymbol(oldsym->style(),oldsym->brush(),oldsym->pen(),oldsym->size());
 
-    sym->setPen(pen);
-    sym->setBrush(QBrush(pen.color()));
+//    sym->setPen(pen);
+//    sym->setBrush(QBrush(pen.color()));
 
-    m->setSymbol(sym);
-  }
+//    m->setSymbol(sym);
+//  }
 }
 
 void QxrdImagePlot::colorMapStart(QColor startColor, QColor endColor)
@@ -949,8 +949,9 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 
           QxrdPowderPoint nearest = cf->nearestPowderPoint(x, y);
 
-          QAction *fitCircle        = plotMenu.addAction("Fit Center from Points on Circle");
+          QAction *fitCircle        = plotMenu.addAction(tr("Fit Center from Points on Ring %1").arg(nearest.n1()));
           QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
+          QAction *delRing          = plotMenu.addAction(tr("Delete all points in ring %1").arg(nearest.n1()));
           QAction *deleteAllPoints  = plotMenu.addAction("Delete all Points");
           QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *fitRingNear      = plotMenu.addAction(tr("Fit Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
@@ -965,9 +966,11 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           } else if (action == prGr) {
             printGraph();
           } else if (action == fitCircle) {
-            cf->fitPowderCircle();
+            cf->fitPowderCircle(nearest.n1());
           } else if (action == delPoint) {
             cf->deletePowderPointNear(x,y);
+          } else if (action == delRing) {
+            cf->deletePowderRing(nearest.n1());
           } else if (action == deleteAllPoints) {
             cf->deletePowderPoints();
           } else if (action == fitPeakNear) {
@@ -1038,23 +1041,29 @@ void QxrdImagePlot::displayPowderMarkers()
     QxrdCenterFinderPtr cf(dp->centerFinder());
 
     if (cf) {
-      QxrdPowderPointVector poly = cf->get_MarkedPoints();
+      int nrgs = cf->countPowderRings();
+      int npts = cf->countPowderRingPoints();
 
-      foreach(QxrdPowderPoint pt, poly) {
-        QwtPlotMarker *marker = new QwtPlotMarker();
-        QwtSymbol *symb = new QwtSymbol();
+      for (int r=0; r<nrgs; r++) {
+        QVector<double> x,y;
 
-        symb->setStyle(QwtSymbol::Ellipse);
-        symb->setSize(5, 5);
-        symb->setPen(QPen(Qt::red));
-        symb->setBrush(QBrush(Qt::red));
+        for (int i=0; i<npts; i++) {
+          QxrdPowderPoint pt = cf->powderRingPoint(i);
 
-        marker->setSymbol(symb);
-        marker->setValue(QPointF(pt.x(), pt.y()));
+          if (pt.n1() == r) {
+            x.append(pt.x());
+            y.append(pt.y());
+          }
+        }
 
-        m_PowderPointMarkers.append(marker);
+        QwtPlotCurve *pc = new QwtPlotCurve(tr("Ring %1").arg(r));
 
-        marker->attach(this);
+        setPlotCurveStyle(r, pc);
+        pc -> setSamples(x, y);
+        pc -> setStyle(QwtPlotCurve::NoCurve);
+        pc -> attach(this);
+
+        m_PowderPointCurves.append(pc);
       }
     }
   }
@@ -1062,11 +1071,11 @@ void QxrdImagePlot::displayPowderMarkers()
 
 void QxrdImagePlot::clearPowderMarkers()
 {
-  foreach(QwtPlotMarker *marker, m_PowderPointMarkers) {
-    marker->detach();
-    delete marker;
+  foreach(QwtPlotCurve *curve, m_PowderPointCurves) {
+    curve->detach();
+    delete curve;
   }
 
-  m_PowderPointMarkers.clear();
+  m_PowderPointCurves.clear();
 }
 

@@ -172,9 +172,10 @@ public slots:
 
   QPointF getXY(double tth, double chi);
 
-  void fitPowderCircle();
+  void fitPowderCircle(int n);
   void deletePowderPointNear(double x, double y);
   void deletePowderPoints();
+  void deletePowderRing(int n);
   void appendPowderPoint(double x, double y);
 
   QxrdPowderPoint powderPoint(int i);
@@ -194,7 +195,6 @@ public slots:
 
   QScriptValue getPowderPoint(int i);
   QScriptValue getPowderPoints();
-  int          countPowderPoints();
   void         setPowderPoint(int i, QScriptValue val);
 
   void undoRefinePowderFitParameters();
@@ -223,6 +223,7 @@ private:
   mutable QMutex             m_Mutex;
   QxrdExperimentWPtr         m_Experiment;
   QxrdDoubleImageDataPtr     m_Data;
+  int                        m_CenterFitRingNumber;
 };
 
 

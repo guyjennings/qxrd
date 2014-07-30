@@ -251,10 +251,17 @@ void QxrdCenterFinder::evaluateFit(double *parm, double *x, int /*np*/, int nx)
   double cy = parm[1];
   double r  = parm[2];
 
-  for (int i=0; i<nx; i++) {
-    QxrdPowderPoint pt = pts.value(i);
-    double rcalc = sqrt(pow(pt.x() - cx, 2) + pow(pt.y() - cy, 2));
-    x[i] = rcalc - r;
+  int npt=0;
+
+  foreach(QxrdPowderPoint pt, pts) {
+    if (pt.n1() == m_CenterFitRingNumber) {
+      double rcalc = sqrt(pow(pt.x() - cx, 2) + pow(pt.y() - cy, 2));
+      x[npt++] = rcalc - r;
+    }
+  }
+
+  if (npt != nx) {
+    printMessage(tr("Anomaly in QxrdCenterFinder::evaluateFit npt[%1] != nx[%2]").arg(npt).arg(nx));
   }
 }
 
@@ -285,10 +292,24 @@ void QxrdCenterFinder::statusMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdCenterFinder::fitPowderCircle()
+void QxrdCenterFinder::fitPowderCircle(int n)
 {
-  if (get_MarkedPoints().count() <= 3) {
-    QString message = "You must mark at least three points on a powder ring before you can fit the center";
+  m_CenterFitRingNumber = n;
+
+  double parms[3];
+  int npts = countPowderRingPoints();
+  int nptsr = 0;
+
+  for (int i=0; i<npts; i++) {
+    QxrdPowderPoint pt = powderRingPoint(i);
+
+    if (pt.n1() == n) {
+      nptsr++;
+    }
+  }
+
+  if (nptsr <= 3) {
+    QString message = "You must mark at least four points on a powder ring before you can fit the center";
 
     if (g_Application->get_GuiWanted()) {
       QMessageBox::information(NULL, "Fitting Failed", message);
@@ -299,25 +320,24 @@ void QxrdCenterFinder::fitPowderCircle()
     return;
   }
 
-  double parms[3];
-  QcepDoubleVector vals(get_MarkedPoints().count());
-
   parms[0] = get_CenterX();
   parms[1] = get_CenterY();
   parms[2] = get_RingRadius();
 
   double info[LM_INFO_SZ];
 
-  int niter = dlevmar_dif(fitCenter, parms, NULL, 3, vals.count(), 100, NULL, info, NULL, NULL, this);
+  int niter = dlevmar_dif(fitCenter, parms, NULL, 3, nptsr, 100, NULL, info, NULL, NULL, this);
 
   int update = false;
   QString message;
 
   if (niter >= 0) {
     message.append(tr("Fitting Succeeded after %1 iterations\n").arg(niter));
-
+    message.append(tr("Old Center = [%1,%2]").arg(get_CenterX()).arg(get_CenterY()));
     message.append(tr("New Center = [%1,%2], New Radius = %3\n").arg(parms[0]).arg(parms[1]).arg(parms[2]));
-
+    double dx = parms[0]-get_CenterX();
+    double dy = parms[1]-get_CenterY();
+    message.append(tr("Moved by [%1,%2] = %3").arg(dx).arg(dy).arg(sqrt(dx*dx + dy*dy)));
   } else {
     message.append(tr("dlevmar_dif failed: reason = %1").arg(info[6]));
   }
@@ -390,6 +410,23 @@ void QxrdCenterFinder::deletePowderPointNear(double x, double y)
 void QxrdCenterFinder::appendPowderPoint(double x, double y)
 {
   m_MarkedPoints.appendValue(QxrdPowderPoint(get_RingIndex(), 0, x,y));
+}
+
+void QxrdCenterFinder::deletePowderRing(int n)
+{
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
+  QxrdPowderPointVector res;
+
+  foreach (QxrdPowderPoint pt, pts) {
+    if (pt.n1() < n) {
+      res.append(pt);
+    } else if (pt.n1() > n) {
+      res.append(QxrdPowderPoint(pt.n1()-1, pt.n2(), pt.x(), pt.y()));
+    }
+  }
+
+  set_MarkedPoints(res);
 }
 
 void QxrdCenterFinder::deletePowderPoints()
@@ -742,11 +779,6 @@ QScriptValue QxrdCenterFinder::getPowderPoints()
   return QScriptValue();
 }
 
-int          QxrdCenterFinder::countPowderPoints()
-{
-  return get_MarkedPoints().count();
-}
-
 void         QxrdCenterFinder::setPowderPoint(int i, QScriptValue val)
 {
   int   n1 = val.property("n1").toInteger();
@@ -923,7 +955,11 @@ int QxrdCenterFinder::countPowderRings() const
     }
   }
 
-  return max+1;
+  if (max>1000) {
+    return 1000;
+  } else {
+    return max+1;
+  }
 }
 
 int QxrdCenterFinder::countPowderRingPoints() const

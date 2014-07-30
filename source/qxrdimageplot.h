@@ -168,7 +168,7 @@ private:
   QxrdMaskPicker            *m_Polygons;
 
   QxrdPowderPointPicker     *m_PowderPointPicker;
-  QVector<QwtPlotMarker*>    m_PowderPointMarkers;
+  QVector<QwtPlotCurve*>     m_PowderPointCurves;
 
 //  QPen                       m_Pen;
   bool                       m_FirstTime;
