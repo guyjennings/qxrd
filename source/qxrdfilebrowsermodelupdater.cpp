@@ -15,7 +15,7 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr
   m_FileSystemWatcher(NULL),
   m_UpdateNeeded(1),
   m_UpdateTimer(),
-  m_UpdateInterval(5000),
+  m_UpdateInterval(1000),
   m_PreviousUpdate(QDateTime::currentDateTime()),
   m_GenerateUpdates(true)
 {

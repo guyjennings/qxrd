@@ -98,7 +98,7 @@ void QxrdPlot::init(QxrdPlotSettingsWPtr settings)
 
 void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
 {
-  const int nColors = 10;
+  const int nColors = 9;
   const int nSymbols = 4;
   const int nStyles = 3;
 
@@ -112,35 +112,35 @@ void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
 
   switch (colorIndex) {
   case 0:
-    pen = QPen(Qt::black);
-    break;
-  case 1:
     pen = QPen(Qt::red);
     break;
-  case 2:
+  case 1:
     pen = QPen(Qt::green);
     break;
-  case 3:
+  case 2:
     pen = QPen(Qt::blue);
     break;
-  case 4:
+  case 3:
     pen = QPen(Qt::cyan);
     break;
-  case 5:
+  case 4:
     pen = QPen(Qt::magenta);
     break;
-  case 6:
+  case 5:
     pen = QPen(Qt::darkRed);
     break;
-  case 7:
+  case 6:
     pen = QPen(Qt::darkGreen);
     break;
-  case 8:
+  case 7:
     pen = QPen(Qt::darkBlue);
     break;
-  case 9:
+  case 8:
     pen = QPen(Qt::darkYellow);
     break;
+//  case 9:
+//    pen = QPen(Qt::darkYellow);
+//    break;
   }
 
   switch (styleIndex) {
