@@ -8,13 +8,16 @@
 #include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
 #include "qxrdhistogramdialogsettings.h"
+#include "qxrdexperiment-ptr.h"
 
 class QxrdHistogramDialog : public QDockWidget, public Ui::QxrdHistogramDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr settings, QWidget *parent);
+  explicit QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr settings,
+                               QxrdExperimentWPtr expt,
+                               QWidget *parent);
   virtual ~QxrdHistogramDialog();
 
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
@@ -26,6 +29,7 @@ private:
   void recalculateHistogram();
 
 private:
+  QxrdExperimentWPtr              m_Experiment;
   QxrdHistogramDialogSettingsWPtr m_HistogramDialogSettings;
   QxrdDoubleImageDataPtr          m_Image;
 };

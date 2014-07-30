@@ -4,9 +4,13 @@
 #include "qxrdsettingssaver.h"
 #include "qxrddebug.h"
 #include "qwt_plot_piecewise_curve.h"
+#include "qxrdexperiment.h"
 
-QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr settings, QWidget *parent) :
+QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr settings,
+                                         QxrdExperimentWPtr expt,
+                                         QWidget *parent) :
   QDockWidget(parent),
+  m_Experiment(expt),
   m_HistogramDialogSettings(settings)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -52,6 +56,9 @@ void QxrdHistogramDialog::recalculateHistogram()
   QxrdHistogramDialogSettingsPtr set(m_HistogramDialogSettings);
 
   if (set && m_Image) {
+    QTime tic;
+    tic.start();
+
     QRectF rect = set->get_HistogramRect();
 
     int nsum = m_Image->get_SummedExposures();
@@ -76,9 +83,11 @@ void QxrdHistogramDialog::recalculateHistogram()
     int width = m_Image->get_Width();
     int height= m_Image->get_Height();
 
+    double *data = m_Image->data();
+
     for (int i=0; i<width; i++) {
       for (int j=0; j<height; j++) {
-        double v = m_Image->value(i,j);
+        double v = *data++;
 
         int n;
 
@@ -103,6 +112,7 @@ void QxrdHistogramDialog::recalculateHistogram()
     QwtPlotPiecewiseCurve *pc0 = new QwtPlotPiecewiseCurve(m_HistogramPlot, "Entire Image");
 
     pc0->setSamples(x0, h0);
+    pc0->setPen(QPen(Qt::red));
 
     pc0->attach(m_HistogramPlot);
 
@@ -112,9 +122,16 @@ void QxrdHistogramDialog::recalculateHistogram()
                                                            .arg(rect.right()).arg(rect.top()));
 
     pc1->setSamples(x0, h1);
+    pc1->setPen(QPen(Qt::darkRed));
 
     pc1->attach(m_HistogramPlot);
 
     m_HistogramPlot->replot();
+
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt) {
+      expt -> printMessage(tr("Histogram of data took %1 msec").arg(tic.elapsed()));
+    }
   }
 }

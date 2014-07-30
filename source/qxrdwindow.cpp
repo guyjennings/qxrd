@@ -159,7 +159,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
   if (set) {
     m_SliceDialog        = new QxrdSliceDialog(set->sliceDialogSettings(), this);
-    m_HistogramDialog    = new QxrdHistogramDialog(set->histogramDialogSettings(), this);
+    m_HistogramDialog    = new QxrdHistogramDialog(set->histogramDialogSettings(), m_Experiment, this);
     m_ImageInfoDialog    = new QxrdInfoDialog(set->infoDialogSettings(), this);
   }
 

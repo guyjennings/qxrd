@@ -333,13 +333,13 @@ void QxrdCenterFinder::fitPowderCircle(int n)
 
   if (niter >= 0) {
     message.append(tr("Fitting Succeeded after %1 iterations\n").arg(niter));
-    message.append(tr("Old Center = [%1,%2]").arg(get_CenterX()).arg(get_CenterY()));
+    message.append(tr("Old Center = [%1,%2]\n").arg(get_CenterX()).arg(get_CenterY()));
     message.append(tr("New Center = [%1,%2], New Radius = %3\n").arg(parms[0]).arg(parms[1]).arg(parms[2]));
     double dx = parms[0]-get_CenterX();
     double dy = parms[1]-get_CenterY();
-    message.append(tr("Moved by [%1,%2] = %3").arg(dx).arg(dy).arg(sqrt(dx*dx + dy*dy)));
+    message.append(tr("Moved by [%1,%2] = %3\n").arg(dx).arg(dy).arg(sqrt(dx*dx + dy*dy)));
   } else {
-    message.append(tr("dlevmar_dif failed: reason = %1").arg(info[6]));
+    message.append(tr("dlevmar_dif failed: reason = %1\n").arg(info[6]));
   }
 
   printMessage(message);
