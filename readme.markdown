@@ -1,6 +1,15 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.3 - Jul 31 2014
+Implemented histogram window
+
+Extensive rework of powder ring and peak fitting code
+
+Some work on a distortion calibration from grid mask images
+
+Script Editor window added
+
 ## v0.11.1 - May 21 2014
 First release in 0.11.x series ...
 
