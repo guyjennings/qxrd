@@ -1778,11 +1778,12 @@ void QxrdWindow::plotPowderRingRadii()
 
         m_DistortionCorrectionPlot->setPlotCurveStyle(r, pc);
 
-        pc->setSamples(x, y);
+        pc -> setSamples(x, y);
 
-        pc->setStyle(QwtPlotCurve::NoCurve);
+        pc -> setStyle(QwtPlotCurve::NoCurve);
+        pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
 
-        pc->attach(m_DistortionCorrectionPlot);
+        pc -> attach(m_DistortionCorrectionPlot);
       }
 
 //      m_DistortionCorrectionPlot->autoScale();

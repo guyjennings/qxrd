@@ -115,6 +115,7 @@ public slots:
   void updateCompletionPercentage(int, int);
 
   void dump();
+  QColor pickColor(QColor start=QColor(Qt::white));
 
 private slots:
   void onDetectorTypeChanged();

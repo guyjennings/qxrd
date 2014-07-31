@@ -26,6 +26,7 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdacquisition-ptr.h"
 #include <QHostInfo>
+#include <QColorDialog>
 
 QxrdExperiment::QxrdExperiment(
     QString path,
@@ -928,4 +929,11 @@ void QxrdExperiment::dump()
   dumpObjectInfo();
   dumpObjectTree();
   printf("Dumped\n");
+}
+
+QColor QxrdExperiment::pickColor(QColor start)
+{
+  QColor res =  QColorDialog::getColor(start);
+
+  return res;
 }

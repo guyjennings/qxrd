@@ -953,6 +953,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
           QAction *delRing          = plotMenu.addAction(tr("Delete all points in ring %1").arg(nearest.n1()));
           QAction *deleteAllPoints  = plotMenu.addAction("Delete all Points");
+          QAction *normalizeRings   = plotMenu.addAction("Normalize Powder Rings");
           QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *fitRingNear      = plotMenu.addAction(tr("Fit Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *traceRingClockwise = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
@@ -973,6 +974,8 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             cf->deletePowderRing(nearest.n1());
           } else if (action == deleteAllPoints) {
             cf->deletePowderPoints();
+          } else if (action == normalizeRings) {
+            cf->normalizePowderRings();
           } else if (action == fitPeakNear) {
             QMetaObject::invokeMethod(cf.data(), "fitPeakNear",
                                       Q_ARG(double,x),
@@ -1062,11 +1065,14 @@ void QxrdImagePlot::displayPowderMarkers()
           setPlotCurveStyle(r, pc);
           pc -> setSamples(x, y);
           pc -> setStyle(QwtPlotCurve::NoCurve);
+          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
           pc -> attach(this);
 
           m_PowderPointCurves.append(pc);
         }
       }
+
+      replot();
     }
   }
 }

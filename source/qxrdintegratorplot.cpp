@@ -88,6 +88,8 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
     pc -> setSamples(data->x(), data->y(), data->size());
     setPlotCurveStyle(m_PlotIndex, pc);
     pc -> attach(this);
+    pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+    pc -> setLegendAttribute(QwtPlotCurve::LegendShowLine, true);
 
     updateZoomer();
 

@@ -98,7 +98,7 @@ void QxrdPlot::init(QxrdPlotSettingsWPtr settings)
 
 void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
 {
-  const int nColors = 9;
+  const int nColors = 10;
   const int nSymbols = 4;
   const int nStyles = 3;
 
@@ -112,35 +112,35 @@ void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
 
   switch (colorIndex) {
   case 0:
-    pen = QPen(Qt::red);
+    pen = QPen(QColor(255,0,0)); // red
     break;
   case 1:
-    pen = QPen(Qt::green);
+    pen = QPen(QColor(255,170,0)); // Orange
     break;
   case 2:
-    pen = QPen(Qt::blue);
+    pen = QPen(QColor(255,232,137)); // Yellow
     break;
   case 3:
-    pen = QPen(Qt::cyan);
+    pen = QPen(QColor(0,255,0)); // Green
     break;
   case 4:
-    pen = QPen(Qt::magenta);
+    pen = QPen(QColor(0,170,0)); // Dk green
     break;
   case 5:
-    pen = QPen(Qt::darkRed);
+    pen = QPen(QColor(0,255,255)); // Cyan
     break;
   case 6:
-    pen = QPen(Qt::darkGreen);
+    pen = QPen(QColor(0,170,255)); // Sea blue
     break;
   case 7:
-    pen = QPen(Qt::darkBlue);
+    pen = QPen(QColor(0,0,255)); // Blue
     break;
   case 8:
-    pen = QPen(Qt::darkYellow);
+    pen = QPen(QColor(145,0,255)); // Violet
     break;
-//  case 9:
-//    pen = QPen(Qt::darkYellow);
-//    break;
+  case 9:
+    pen = QPen(QColor(255,0,255)); // Magenta
+    break;
   }
 
   switch (styleIndex) {
@@ -170,10 +170,10 @@ void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
     symb->setStyle(QwtSymbol::Rect);
     break;
   case 2:
-    symb->setStyle(QwtSymbol::XCross);
+    symb->setStyle(QwtSymbol::Triangle);
     break;
   case 3:
-    symb->setStyle(QwtSymbol::Cross);
+    symb->setStyle(QwtSymbol::DTriangle);
     break;
   }
 
