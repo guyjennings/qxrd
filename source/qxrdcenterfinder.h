@@ -177,6 +177,7 @@ public slots:
   void deletePowderPoints();
   void deletePowderRing(int n);
   void appendPowderPoint(double x, double y);
+  void normalizePowderRings();
 
   QxrdPowderPoint powderPoint(int i);
   int nearestPowderPointIndex(double x, double y);

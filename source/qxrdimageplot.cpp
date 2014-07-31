@@ -1056,14 +1056,16 @@ void QxrdImagePlot::displayPowderMarkers()
           }
         }
 
-        QwtPlotCurve *pc = new QwtPlotCurve(tr("Ring %1").arg(r));
+        if (x.count() > 0) {
+          QwtPlotCurve *pc = new QwtPlotCurve(tr("Ring %1").arg(r));
 
-        setPlotCurveStyle(r, pc);
-        pc -> setSamples(x, y);
-        pc -> setStyle(QwtPlotCurve::NoCurve);
-        pc -> attach(this);
+          setPlotCurveStyle(r, pc);
+          pc -> setSamples(x, y);
+          pc -> setStyle(QwtPlotCurve::NoCurve);
+          pc -> attach(this);
 
-        m_PowderPointCurves.append(pc);
+          m_PowderPointCurves.append(pc);
+        }
       }
     }
   }

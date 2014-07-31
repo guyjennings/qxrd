@@ -11,6 +11,7 @@
 #include "qxrddebug.h"
 #include "qxrdfitterpeakpoint.h"
 #include "qxrdfitterringpoint.h"
+#include <QVector>
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER
@@ -436,6 +437,65 @@ void QxrdCenterFinder::deletePowderPoints()
   set_RingIndex(0);
 }
 
+void QxrdCenterFinder::normalizePowderRings()
+{
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
+  double maxR = 0;
+
+  foreach(QxrdPowderPoint pt, pts) {
+    double r = getR(pt.x(), pt.y());
+
+    if (r > maxR) {
+      maxR = r;
+    }
+  }
+
+  if (maxR > 0 && maxR < 10000) {
+    int nbins = (int) maxR + 5;
+    QVector<int> npts(nbins);
+
+    npts.fill(0);
+
+    foreach(QxrdPowderPoint pt, pts) {
+      double r = getR(pt.x(), pt.y());
+      npts[(int) r] ++;
+    }
+
+    int ringIndex = 0;
+
+    for (int i=0; i<nbins-1; i++) {
+      if (npts[i] > 0) {
+        if (npts[i+1] == 0) {
+          npts[i] = ringIndex++;
+        } else {
+          npts[i] = ringIndex;
+        }
+      }
+    }
+
+    for (int i=0; i<nbins; i++) {
+      if (npts[i] > 0) {
+        printMessage(tr("i: %1, r: %2").arg(i).arg(npts[i]));
+      }
+    }
+
+    int n = pts.count();
+
+    for (int i=0; i<n; i++) {
+      QxrdPowderPoint &pt = pts[i];
+
+      double r = getR(pt.x(), pt.y());
+      int idx = npts[(int) r];
+
+      pt.n1() = idx;
+    }
+
+    set_MarkedPoints(pts);
+    set_RingIndex(ringIndex);
+  }
+}
+
 bool QxrdCenterFinder::fitPeakNear(double x, double y)
 {
   printMessage(tr("centering.fitPeakNear(%1,%2)").arg(x).arg(y));
@@ -564,12 +624,14 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
   int npts = fits.count();
   int nok  = 0;
 
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
   for(int i=0; i<fits.count(); i++) {
     QxrdFitterRingPoint &fit = fits[i];
 
     if (fit.reason() == QxrdFitter::Successful) {
       nok += 1;
-      appendPowderPoint(fit.fittedX(), fit.fittedY());
+      pts.append(QxrdPowderPoint(get_RingIndex(), 0, fit.fittedX(), fit.fittedY()));
     }
   }
 
@@ -581,6 +643,7 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
 
     if (nok) {
       prop_RingIndex()->incValue(1);
+      set_MarkedPoints(pts);
     }
   }
 
@@ -642,6 +705,8 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
     sums[i]=0;
   }
 
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
   for (int i=0; i<nsteps; i++) {
     QxrdFitterRingPoint &r = fits[i];
 
@@ -662,7 +727,7 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
     }
 
     if (r.reason() == QxrdFitter::Successful) {
-      appendPowderPoint(r.fittedX(), r.fittedY());
+      pts.append(QxrdPowderPoint(get_RingIndex(), 0, r.fittedX(), r.fittedY()));
     }
   }
 
@@ -681,6 +746,7 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
 
   if (sums[QxrdFitter::Successful]) {
     prop_RingIndex()->incValue(1);
+    set_MarkedPoints(pts);
   }
 
   return true;
