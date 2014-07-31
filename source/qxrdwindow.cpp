@@ -488,6 +488,9 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     acq -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
     acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
     acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
+
+    connect(acq->prop_OverflowLevel(), SIGNAL(valueChanged(int,int)),
+            m_HistogramDialog, SLOT(updateHistogramNeeded()));
   }
 
   if (expt) {

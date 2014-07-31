@@ -24,6 +24,7 @@ public:
 
 public slots:
   void histogramSelectionChanged(QRectF rect);
+  void updateHistogramNeeded();
 
 private:
   void recalculateHistogram();
