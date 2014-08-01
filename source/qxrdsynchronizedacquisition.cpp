@@ -18,6 +18,7 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdSettingsSaverPtr sa
   m_SyncAcquisitionMaximum(saver, this,"syncAcquisitionMaximum", 5.0, "Synchronized Acquisition Maximum (in Volts)"),
   m_SyncAcquisitionSymmetry(saver, this,"syncAcquisitionSymmetry", 0.0, "Synchronized Acquisition Symmetry (0 = symmetric)"),
   m_SyncAcquisitionPhaseShift(saver, this,"syncAcquisitionPhaseShift", 0.0, "Synchronized Acquisition Phase Shift (deg)"),
+  m_SyncAcquisitionManualValue(saver, this,"syncAcquisitionManualValue", 0.0, "Manual Output Voltage (in Volts)"),
   m_Acquisition(acq),
   m_AcquisitionParms(NULL),
   m_NIDAQPlugin(NULL),
@@ -192,6 +193,18 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
       }
 //      printf("elapsed[%d] %d msec\n", currentPhase, tick.restart());
     }
+  }
+}
+
+void QxrdSynchronizedAcquisition::setManualOutput()
+{
+  if (m_Acquisition && m_NIDAQPlugin) {
+    m_Acquisition->printMessage(tr("Manually Setting %1/%2 to %3")
+                                .arg(get_SyncAcquisitionOutputDevice())
+                                .arg(get_SyncAcquisitionOutputChannel())
+                                .arg(get_SyncAcquisitionManualValue()));
+
+    m_NIDAQPlugin->setAnalogOutput(get_SyncAcquisitionOutputChannel(), get_SyncAcquisitionManualValue());
   }
 }
 

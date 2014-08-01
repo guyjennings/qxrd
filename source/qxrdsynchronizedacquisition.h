@@ -62,9 +62,13 @@ public:
   Q_PROPERTY(double syncAcquisitionPhaseShift READ get_SyncAcquisitionPhaseShift WRITE set_SyncAcquisitionPhaseShift)
   QCEP_DOUBLE_PROPERTY(SyncAcquisitionPhaseShift)
 
+  Q_PROPERTY(double syncAcquisitionManualValue READ get_SyncAcquisitionManualValue WRITE set_SyncAcquisitionManualValue)
+  QCEP_DOUBLE_PROPERTY(SyncAcquisitionManualValue)
+
 signals:
 
 public slots:
+  void setManualOutput();
 
 public:
   void prepareForAcquisition(QxrdAcquisitionParameterPack *parms);

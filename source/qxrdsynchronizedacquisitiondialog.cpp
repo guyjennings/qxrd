@@ -98,6 +98,8 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(
       connect(sync -> prop_SyncAcquisitionMaximum(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
       connect(sync -> prop_SyncAcquisitionSymmetry(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
       connect(sync -> prop_SyncAcquisitionPhaseShift(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
+
+      connect(m_ManualOutput, SIGNAL(clicked()), sync.data(), SLOT(setManualOutput()));
     }
 
     connect(acq->prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
