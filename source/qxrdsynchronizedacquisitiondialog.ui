@@ -200,6 +200,13 @@ Script property: synchronization.syncAcquisitionMaximum</string>
       </property>
      </widget>
     </item>
+    <item row="9" column="3">
+     <widget class="QPushButton" name="m_ManualTrigger">
+      <property name="text">
+       <string>Trigger</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>

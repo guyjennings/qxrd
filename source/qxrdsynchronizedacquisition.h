@@ -69,6 +69,7 @@ signals:
 
 public slots:
   void setManualOutput();
+  void triggerOnce();
 
 public:
   void prepareForAcquisition(QxrdAcquisitionParameterPack *parms);

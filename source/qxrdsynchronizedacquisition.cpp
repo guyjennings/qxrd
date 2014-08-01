@@ -199,12 +199,22 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
 void QxrdSynchronizedAcquisition::setManualOutput()
 {
   if (m_Acquisition && m_NIDAQPlugin) {
-    m_Acquisition->printMessage(tr("Manually Setting %1/%2 to %3")
-                                .arg(get_SyncAcquisitionOutputDevice())
-                                .arg(get_SyncAcquisitionOutputChannel())
+    QString fullChannel = get_SyncAcquisitionOutputChannel();
+
+    m_Acquisition->printMessage(tr("Manually Setting %1 to %2 V")
+                                .arg(fullChannel)
                                 .arg(get_SyncAcquisitionManualValue()));
 
-    m_NIDAQPlugin->setAnalogOutput(get_SyncAcquisitionOutputChannel(), get_SyncAcquisitionManualValue());
+    m_NIDAQPlugin->setAnalogOutput(fullChannel, get_SyncAcquisitionManualValue());
+  }
+}
+
+void QxrdSynchronizedAcquisition::triggerOnce()
+{
+  if (m_Acquisition && m_NIDAQPlugin) {
+    QxrdAcquisitionParameterPack parms = m_Acquisition->acquisitionParameterPack();
+    prepareForAcquisition(&parms);
+    m_NIDAQPlugin->triggerAnalogWaveform();
   }
 }
 
