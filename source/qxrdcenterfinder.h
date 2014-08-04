@@ -203,7 +203,9 @@ public slots:
 
   int countPowderRings() const;
   int countPowderRingPoints() const;
+  int countPowderRingPoints(int r) const;
   QxrdPowderPoint powderRingPoint(int i) const;
+  QxrdPowderPoint powderRingPoint(int r, int i) const;
 
 public:
   void readSettings(QSettings *settings, QString section);

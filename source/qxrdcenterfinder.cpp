@@ -1033,7 +1033,41 @@ int QxrdCenterFinder::countPowderRingPoints() const
   return get_MarkedPoints().count();
 }
 
+int QxrdCenterFinder::countPowderRingPoints(int r) const
+{
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
+  int sum = 0;
+
+  foreach (QxrdPowderPoint pt, pts) {
+    if (pt.n1() == r || r < 0) {
+      sum += 1;
+    }
+  }
+
+  return sum;
+}
+
 QxrdPowderPoint QxrdCenterFinder::powderRingPoint(int i) const
 {
   return get_MarkedPoints().value(i);
+}
+
+QxrdPowderPoint QxrdCenterFinder::powderRingPoint(int r, int i) const
+{
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
+  int sum = 0;
+
+  foreach (QxrdPowderPoint pt, pts) {
+    if (pt.n1() == r || r < 0) {
+      if (sum == i) {
+        return pt;
+      } else {
+        sum += 1;
+      }
+    }
+  }
+
+  return QxrdPowderPoint();
 }
