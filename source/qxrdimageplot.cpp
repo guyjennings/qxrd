@@ -896,6 +896,13 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
       set->set_QMouse(q);
     }
 
+    double r = centerFinder->getR(pos);
+    res += tr(", R %1").arg(r);
+
+    if (set) {
+      set->set_RMouse(r);
+    }
+
     double chi = centerFinder->getChi(pos);
     res += tr(", Chi %1").arg(chi);
 

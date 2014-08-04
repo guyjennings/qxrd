@@ -64,6 +64,9 @@ public:
   Q_PROPERTY(double qMouse READ get_QMouse WRITE set_QMouse STORED false)
   QCEP_DOUBLE_PROPERTY(QMouse)
 
+  Q_PROPERTY(double rMouse READ get_RMouse WRITE set_RMouse STORED false)
+  QCEP_DOUBLE_PROPERTY(RMouse)
+
   Q_PROPERTY(double valMouse READ get_ValMouse WRITE set_ValMouse STORED false)
   QCEP_DOUBLE_PROPERTY(ValMouse)
 

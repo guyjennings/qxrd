@@ -445,6 +445,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
       ps->prop_ValMouse()->linkTo(m_ValMouse);
       ps->prop_TTHMouse()->linkTo(m_TTHMouse);
       ps->prop_QMouse()->linkTo(m_QMouse);
+      ps->prop_RMouse()->linkTo(m_RMouse);
     }
   }
 

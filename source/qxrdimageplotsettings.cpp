@@ -20,6 +20,7 @@ QxrdImagePlotSettings::QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObjec
   m_MaintainAspectRatio(saver, this, "maintainAspectRatio", 1, "Maintain Equal Scaling in X and Y"),
   m_TTHMouse(QxrdSettingsSaverWPtr(), this,"tthMouse",0, "2 Theta at Mouse"),
   m_QMouse(QxrdSettingsSaverWPtr(), this,"qMouse",0, "Q at Mouse"),
+  m_RMouse(QxrdSettingsSaverWPtr(), this,"rMouse",0, "R at Mouse"),
   m_ValMouse(QxrdSettingsSaverWPtr(), this,"valMouse",0, "Image Value at Mouse"),
   m_MaskMouse(QxrdSettingsSaverWPtr(), this,"maskMouse",0, "Mask Value at Mouse")
 {

@@ -59,16 +59,7 @@
          <item row="0" column="0">
           <widget class="QWidget" name="widget" native="true">
            <layout class="QGridLayout" name="gridLayout_10">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
+            <property name="margin">
              <number>2</number>
             </property>
             <property name="spacing">
@@ -356,42 +347,19 @@
          <item row="1" column="1">
           <widget class="QWidget" name="widget_4" native="true">
            <layout class="QGridLayout" name="gridLayout_16">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
             <property name="horizontalSpacing">
              <number>10</number>
             </property>
             <property name="verticalSpacing">
              <number>2</number>
             </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label">
+            <property name="margin">
+             <number>2</number>
+            </property>
+            <item row="0" column="11">
+             <widget class="QLabel" name="label_6">
               <property name="text">
-               <string>X:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="m_XMouse">
-              <property name="text">
-               <string>0</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="5">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>V:</string>
+               <string>R:</string>
               </property>
              </widget>
             </item>
@@ -430,7 +398,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="11">
+            <item row="0" column="13">
              <spacer name="horizontalSpacer_3">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -457,6 +425,34 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>X:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="m_XMouse">
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="5">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>V:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="12">
+             <widget class="QLabel" name="m_RMouse">
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -470,16 +466,7 @@
          <item row="0" column="0">
           <widget class="QWidget" name="widget_2" native="true">
            <layout class="QGridLayout" name="gridLayout_11">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
+            <property name="margin">
              <number>2</number>
             </property>
             <property name="spacing">
@@ -622,16 +609,7 @@
          <item row="0" column="0">
           <widget class="QWidget" name="widget_3" native="true">
            <layout class="QGridLayout" name="gridLayout_12">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
+            <property name="margin">
              <number>2</number>
             </property>
             <property name="spacing">
@@ -1097,7 +1075,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
