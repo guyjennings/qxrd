@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>464</width>
-    <height>619</height>
+    <height>651</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -195,6 +195,9 @@ Script property: synchronization.syncAcquisitionMaximum</string>
     </item>
     <item row="9" column="2">
      <widget class="QPushButton" name="m_ManualOutput">
+      <property name="toolTip">
+       <string>Manually Set Output Voltage</string>
+      </property>
       <property name="text">
        <string>Set Output</string>
       </property>
@@ -202,6 +205,9 @@ Script property: synchronization.syncAcquisitionMaximum</string>
     </item>
     <item row="9" column="3">
      <widget class="QPushButton" name="m_ManualTrigger">
+      <property name="toolTip">
+       <string>Manually trigger the output waveform generator</string>
+      </property>
       <property name="text">
        <string>Trigger</string>
       </property>

@@ -130,7 +130,10 @@ HEADERS += \
     qxrdpowderpointproperty.h \
     qxrdfitter.h \
     qxrdfitterpeakpoint.h \
-    qxrdfitterringpoint.h
+    qxrdfitterringpoint.h \
+    qxrdfitterpeakorring.h \
+    qxrdfitterringcircle.h \
+    qxrdfitterringellipse.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -162,7 +165,10 @@ SOURCES += \
     qxrdpowderpointproperty.cpp \
     qxrdfitter.cpp \
     qxrdfitterpeakpoint.cpp \
-    qxrdfitterringpoint.cpp
+    qxrdfitterringpoint.cpp \
+    qxrdfitterpeakorring.cpp \
+    qxrdfitterringcircle.cpp \
+    qxrdfitterringellipse.cpp
 
 OTHER_FILES += testImage.js
 
