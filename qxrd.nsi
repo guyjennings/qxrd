@@ -62,8 +62,8 @@ Section "Extract qxrd"
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\qxrd.exe"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\QXRD${PREFIXSTR} ${VERSION} (Fresh Start).lnk" "$INSTDIR\qxrd.exe" "-fresh"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\ QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\qxrd.exe"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Fresh Start QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\qxrd.exe" "-fresh"
   CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Uninstall QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\uninstall.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 
@@ -82,8 +82,8 @@ Section "Uninstall"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
   Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Uninstall QXRD${PREFIXSTR} ${VERSION}.lnk"
-  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\QXRD${PREFIXSTR} ${VERSION}.lnk"
-  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\QXRD${PREFIXSTR} ${VERSION} (Fresh Start).lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\ QXRD${PREFIXSTR} ${VERSION}.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Fresh Start QXRD${PREFIXSTR} ${VERSION}.lnk"
   RMDir "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
