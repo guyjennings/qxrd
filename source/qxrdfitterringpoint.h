@@ -1,9 +1,9 @@
 #ifndef QXRDFITTERRINGPOINT_H
 #define QXRDFITTERRINGPOINT_H
 
-#include "qxrdfitter.h"
+#include "qxrdfitterpeakorring.h"
 
-class QxrdFitterRingPoint : public QxrdFitter
+class QxrdFitterRingPoint : public QxrdFitterPeakOrRing
 {
 public:
   QxrdFitterRingPoint(QxrdCenterFinder* cf, int index, double x0, double y0, double pkht, double bkgd);

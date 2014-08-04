@@ -12,12 +12,12 @@
 # endif /* LINSOLVERS_RETAIN_MEMORY */
 
 QxrdFitterPeakPoint::QxrdFitterPeakPoint(QxrdCenterFinder *cf, int index, double x0, double y0, double pkht, double bkgd) :
-  QxrdFitter(cf, index, x0, y0, pkht, bkgd)
+  QxrdFitterPeakOrRing(cf, index, x0, y0, pkht, bkgd)
 {
 }
 
 QxrdFitterPeakPoint::QxrdFitterPeakPoint() :
-  QxrdFitter()
+  QxrdFitterPeakOrRing()
 {
 }
 
