@@ -11,9 +11,11 @@
 #  endif /* _MSC_VER */
 # endif /* LINSOLVERS_RETAIN_MEMORY */
 
-QxrdFitterRingEllipse::QxrdFitterRingEllipse(QxrdCenterFinder *cf, int ringIndex) :
+QxrdFitterRingEllipse::QxrdFitterRingEllipse(QxrdCenterFinder *cf, int ringIndex, double x0, double y0) :
   QxrdFitter(cf),
   m_RingIndex(ringIndex),
+  m_X0(x0),
+  m_Y0(y0),
   m_FittedX(0),
   m_FittedY(0),
   m_FittedA(0),
@@ -25,6 +27,8 @@ QxrdFitterRingEllipse::QxrdFitterRingEllipse(QxrdCenterFinder *cf, int ringIndex
 QxrdFitterRingEllipse::QxrdFitterRingEllipse() :
   QxrdFitter(NULL),
   m_RingIndex(0),
+  m_X0(0),
+  m_Y0(0),
   m_FittedX(0),
   m_FittedY(0),
   m_FittedA(0),
@@ -46,32 +50,48 @@ void QxrdFitterRingEllipse::evaluate(double *parm, double *xv, int np, int nx)
 {
 }
 
-void QxrdFitterRingEllipse::fit()
+int QxrdFitterRingEllipse::fit()
 {
-  double parms[5];
-  double info[LM_INFO_SZ];
+  int niter = -1;
 
-  parms[0] = 0;
-  parms[1] = 0;
-  parms[2] = 100;
-  parms[3] = 100;
-  parms[4] = 0;
+  if (m_CenterFinder) {
+    int npts  = m_CenterFinder->countPowderRingPoints(m_RingIndex);
+    double rsum = 0;
 
-  int npts  = m_CenterFinder->countPowderRingPoints(m_RingIndex);
+    for (int i=0; i<npts; i++) {
+      QxrdPowderPoint pt = m_CenterFinder->powderRingPoint(m_RingIndex, i);
 
-  int niter = dlevmar_dif(QxrdFitterRingEllipse::staticEvaluate,
-                          parms, NULL, 5, npts,
-                          m_CenterFinder->get_PeakFitIterations(),
-                          NULL, info, NULL, NULL, this);
+      double dx = pt.x() - m_X0;
+      double dy = pt.y() - m_Y0;
 
-  if (niter > 0) {
-    m_Reason    = Successful;
-    m_FittedX   = parms[0];
-    m_FittedY   = parms[1];
-    m_FittedA   = parms[2];
-    m_FittedB   = parms[3];
-    m_FittedRot = parms[4];
-  } else {
-    m_Reason    = NoResult;
+      rsum += sqrt(dx*dx + dy*dy);
+    }
+
+    double parms[5];
+    double info[LM_INFO_SZ];
+
+    parms[0] = m_X0;
+    parms[1] = m_Y0;
+    parms[2] = rsum/npts;
+    parms[3] = rsum/npts;
+    parms[4] = 0;
+
+    niter = dlevmar_dif(QxrdFitterRingEllipse::staticEvaluate,
+                        parms, NULL, 5, npts,
+                        m_CenterFinder->get_PeakFitIterations(),
+                        NULL, info, NULL, NULL, this);
+
+    if (niter > 0) {
+      m_Reason    = Successful;
+      m_FittedX   = parms[0];
+      m_FittedY   = parms[1];
+      m_FittedA   = parms[2];
+      m_FittedB   = parms[3];
+      m_FittedRot = parms[4];
+    } else {
+      m_Reason    = NoResult;
+    }
   }
+
+  return niter;
 }

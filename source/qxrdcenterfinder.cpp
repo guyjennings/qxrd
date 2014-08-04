@@ -11,6 +11,8 @@
 #include "qxrddebug.h"
 #include "qxrdfitterpeakpoint.h"
 #include "qxrdfitterringpoint.h"
+#include "qxrdfitterringcircle.h"
+#include "qxrdfitterringellipse.h"
 #include <QVector>
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
@@ -297,7 +299,6 @@ void QxrdCenterFinder::fitPowderCircle(int n)
 {
   m_CenterFitRingNumber = n;
 
-  double parms[3];
   int npts = countPowderRingPoints();
   int nptsr = 0;
 
@@ -321,6 +322,7 @@ void QxrdCenterFinder::fitPowderCircle(int n)
     return;
   }
 
+  double parms[3];
   parms[0] = get_CenterX();
   parms[1] = get_CenterY();
   parms[2] = get_RingRadius();
@@ -364,6 +366,53 @@ void QxrdCenterFinder::fitPowderCircle(int n)
     set_CenterY(parms[1]);
     set_RingRadius(parms[2]);
   }
+}
+
+void QxrdCenterFinder::fitPowderCircle2(int n)
+{
+  QxrdFitterRingCircle fitter(this, n, get_CenterX(), get_CenterY());
+
+  int niter = fitter.fit();
+
+  int update = false;
+  QString message;
+
+  if (fitter.reason() == QxrdFitter::Successful) {
+    message.append(tr("Fitting Succeeded after %1 iterations\n").arg(niter));
+    message.append(tr("Old Center = [%1,%2]\n").arg(get_CenterX()).arg(get_CenterY()));
+    message.append(tr("New Center = [%1,%2], New Radius = %3\n").arg(fitter.fittedX()).arg(fitter.fittedY()).arg(fitter.fittedR()));
+    double dx = fitter.fittedX() - get_CenterX();
+    double dy = fitter.fittedY() - get_CenterY();
+    message.append(tr("Moved by [%1,%2] = %3\n").arg(dx).arg(dy).arg(sqrt(dx*dx + dy*dy)));
+  } else {
+    message.append(tr("fitting failed: reason = %1\n").arg(fitter.reasonString()));
+  }
+
+  printMessage(message);
+
+  if (g_Application->get_GuiWanted()) {
+    if (niter >= 0) {
+      message.append(tr("Do you want to update the beam centering parameters?"));
+
+      if (QMessageBox::question(NULL, "Update Fitted Center?", message, QMessageBox::Ok | QMessageBox::No, QMessageBox::Ok) == QMessageBox::Ok) {
+        update = true;
+      }
+    } else {
+      QMessageBox::information(NULL, "Fitting Failed", message);
+    }
+  } else if (niter >= 0){
+    update = true;
+  }
+
+  if (update) {
+    set_CenterX(fitter.fittedX());
+    set_CenterY(fitter.fittedY());
+    set_RingRadius(fitter.fittedR());
+  }
+}
+
+void QxrdCenterFinder::fitPowderEllipse(int n)
+{
 }
 
 QxrdPowderPoint QxrdCenterFinder::powderPoint(int i)

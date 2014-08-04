@@ -84,8 +84,10 @@ void QxrdFitterRingPoint::evaluate(double *parm, double *xv, int np, int nx)
   }
 }
 
-void QxrdFitterRingPoint::fit()
+int QxrdFitterRingPoint::fit()
 {
+  int niter = -1;
+
   if (m_CenterFinder) {
 
     double x = m_X0, y = m_Y0;
@@ -130,7 +132,7 @@ void QxrdFitterRingPoint::fit()
 
         int n = m_CenterFinder->get_PeakFitRadius()*2+1;
 
-        int niter = dlevmar_dif(QxrdFitterRingPoint::staticEvaluate,
+        niter = dlevmar_dif(QxrdFitterRingPoint::staticEvaluate,
                                 parms, NULL, 6, n*n,
                                 m_CenterFinder->get_PeakFitIterations(),
                                 NULL, info, NULL, NULL, this);
@@ -161,5 +163,7 @@ void QxrdFitterRingPoint::fit()
       }
     }
   }
+
+  return niter;
 }
 

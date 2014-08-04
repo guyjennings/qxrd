@@ -9,7 +9,7 @@ public:
   QxrdFitterPeakPoint(QxrdCenterFinder* cf, int index, double x0, double y0, double pkht, double bkgd);
   QxrdFitterPeakPoint();
 
-  void fit();
+  int fit();
 
 private:
   static void staticEvaluate(double *parm, double *xv, int np, int nx, void *adata);

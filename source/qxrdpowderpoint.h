@@ -30,6 +30,8 @@ public:
   void setSettingsValue(QSettings *settings, QString name);
   static void customSaver(const QVariant &val, QSettings *settings, QString name);
 
+  bool isValid() const;
+
   QString toString() const;
 
 protected:

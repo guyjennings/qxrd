@@ -71,8 +71,10 @@ void QxrdFitterPeakPoint::evaluate(double *parm, double *xv, int np, int nx)
   }
 }
 
-void QxrdFitterPeakPoint::fit()
+int QxrdFitterPeakPoint::fit()
 {
+  int niter = -1;
+
   if (m_CenterFinder) {
 
     double x = m_X0, y = m_Y0;
@@ -115,10 +117,10 @@ void QxrdFitterPeakPoint::fit()
 
         int n = m_CenterFinder->get_PeakFitRadius()*2+1;
 
-        int niter = dlevmar_dif(QxrdFitterPeakPoint::staticEvaluate,
-                                parms, NULL, 7, n*n,
-                                m_CenterFinder->get_PeakFitIterations(),
-                                NULL, info, NULL, NULL, this);
+        niter = dlevmar_dif(QxrdFitterPeakPoint::staticEvaluate,
+                            parms, NULL, 7, n*n,
+                            m_CenterFinder->get_PeakFitIterations(),
+                            NULL, info, NULL, NULL, this);
 
         if (niter > 0) {
           m_Reason       = Successful;
@@ -146,5 +148,7 @@ void QxrdFitterPeakPoint::fit()
       }
     }
   }
+
+  return niter;
 }
 

@@ -950,10 +950,12 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QxrdPowderPoint nearest = cf->nearestPowderPoint(x, y);
 
           QAction *fitCircle        = plotMenu.addAction(tr("Fit Center from Points on Ring %1").arg(nearest.n1()));
+          QAction *fitCircle2       = plotMenu.addAction(tr("Fit Circle from Points on Ring %1").arg(nearest.n1()));
+          QAction *fitEllipse       = plotMenu.addAction(tr("Fit Ellipse from Points on Ring %1").arg(nearest.n1()));
           QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
           QAction *delRing          = plotMenu.addAction(tr("Delete all points in ring %1").arg(nearest.n1()));
-          QAction *deleteAllPoints  = plotMenu.addAction("Delete all Points");
-          QAction *normalizeRings   = plotMenu.addAction("Normalize Powder Rings");
+          QAction *deleteAllPoints  = plotMenu.addAction(tr("Delete all Points"));
+          QAction *normalizeRings   = plotMenu.addAction(tr("Normalize Powder Rings"));
           QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *fitRingNear      = plotMenu.addAction(tr("Fit Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *traceRingClockwise = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
@@ -968,6 +970,10 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             printGraph();
           } else if (action == fitCircle) {
             cf->fitPowderCircle(nearest.n1());
+          } else if (action == fitCircle2) {
+            cf->fitPowderCircle2(nearest.n1());
+          } else if (action == fitEllipse) {
+            cf->fitPowderEllipse(nearest.n1());
           } else if (action == delPoint) {
             cf->deletePowderPointNear(x,y);
           } else if (action == delRing) {

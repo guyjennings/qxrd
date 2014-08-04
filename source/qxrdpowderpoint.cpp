@@ -18,11 +18,16 @@ QxrdPowderPoint::QxrdPowderPoint(const QxrdPowderPoint &pt) :
 }
 
 QxrdPowderPoint::QxrdPowderPoint() :
-  m_N1(0),
-  m_N2(0),
+  m_N1(-1),
+  m_N2(-1),
   m_X(0.0),
   m_Y(0.0)
 {
+}
+
+bool QxrdPowderPoint::isValid() const
+{
+  return (m_N1 >= 0 && m_N2 >= 0);
 }
 
 bool QxrdPowderPoint::operator == (const QxrdPowderPoint &pt) const

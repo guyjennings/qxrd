@@ -18,7 +18,7 @@ public:
     BadHeight
   };
 
-  virtual void     fit() = 0;
+  virtual int     fit() = 0;
 
   QxrdCenterFinder *cf() const { return m_CenterFinder; }
   FitResult        reason() const { return m_Reason; }

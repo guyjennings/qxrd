@@ -9,7 +9,7 @@ public:
   QxrdFitterRingPoint(QxrdCenterFinder* cf, int index, double x0, double y0, double pkht, double bkgd);
   QxrdFitterRingPoint();
 
-  void fit();
+  int fit();
 
 private:
   static void staticEvaluate(double *parm, double *xv, int np, int nx, void *adata);

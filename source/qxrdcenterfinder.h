@@ -173,6 +173,8 @@ public slots:
   QPointF getXY(double tth, double chi);
 
   void fitPowderCircle(int n=0);
+  void fitPowderCircle2(int n=0);
+  void fitPowderEllipse(int n=0);
   void deletePowderPointNear(double x, double y);
   void deletePowderPoints();
   void deletePowderRing(int n);
