@@ -1,4 +1,5 @@
 #include "qxrdfitterpeakorring.h"
+#include "qxrdcenterfinder.h"
 
 QxrdFitterPeakOrRing::QxrdFitterPeakOrRing(QxrdCenterFinder *cf, int index, double x0, double y0, double pkht, double bkgd) :
   QxrdFitter(cf),
@@ -32,4 +33,28 @@ QxrdFitterPeakOrRing::QxrdFitterPeakOrRing() :
   m_FittedBkgdX(0.0),
   m_FittedBkgdY(0.0)
 {
+}
+
+double QxrdFitterPeakOrRing::fittedR() const
+{
+  if (m_CenterFinder) {
+    double dx = m_FittedX - m_CenterFinder->get_CenterX();
+    double dy = m_FittedY - m_CenterFinder->get_CenterY();
+
+    return sqrt(dx*dx + dy*dy);
+  } else {
+    return 0;
+  }
+}
+
+double QxrdFitterPeakOrRing::fittedAz() const
+{
+  if (m_CenterFinder) {
+    double dx = m_FittedX - m_CenterFinder->get_CenterX();
+    double dy = m_FittedY - m_CenterFinder->get_CenterY();
+
+    return atan2(dy,dx);
+  } else {
+    return 0;
+  }
 }

@@ -9,7 +9,7 @@ class QxrdPowderPointProperty : public QcepProperty
   Q_OBJECT
 public:
   explicit QxrdPowderPointProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QxrdPowderPoint value, QString toolTip);
-  explicit QxrdPowderPointProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, int n1, int n2, double x, double y, QString toolTip);
+  explicit QxrdPowderPointProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, int n1, int n2, double x, double y, double r1, double r2, double az, QString toolTip);
 
   QxrdPowderPoint value() const;
   QxrdPowderPoint defaultValue() const;
@@ -20,7 +20,7 @@ public:
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdPowderPoint &pt);
   static void fromScriptValue(const QScriptValue &obj, QxrdPowderPoint &pt);
 
-  void linkTo(QSpinBox *n1SpinBox, QSpinBox *n2SpinBox, QDoubleSpinBox *xSpinBox, QDoubleSpinBox *ySpinBox);
+  void linkTo(QSpinBox *n1SpinBox, QSpinBox *n2SpinBox, QDoubleSpinBox *xSpinBox, QDoubleSpinBox *ySpinBox, QDoubleSpinBox *r1SpinBox, QDoubleSpinBox *r2SpinBox, QDoubleSpinBox *azSpinBox);
   void linkTo(int axis, QSpinBox *spinBox);
   void linkTo(int axis, QDoubleSpinBox *spinBox);
 

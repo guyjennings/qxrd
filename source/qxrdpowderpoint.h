@@ -9,7 +9,7 @@
 class QxrdPowderPoint
 {
 public:
-  QxrdPowderPoint(int n1, int n2, double x, double y);
+  QxrdPowderPoint(int n1, int n2, double x, double y, double r1, double r2, double az);
   QxrdPowderPoint(const QxrdPowderPoint& pt);
   QxrdPowderPoint();
 
@@ -18,11 +18,17 @@ public:
   int n2() const { return m_N2; }
   double x() const { return m_X; }
   double y() const { return m_Y; }
+  double r1() const { return m_R1; }
+  double r2() const { return m_R2; }
+  double az() const { return m_Az; }
 
   int& n1() { return m_N1; }
   int& n2() { return m_N2; }
   double& x() { return m_X; }
   double& y() { return m_Y; }
+  double& r1() { return m_R1; }
+  double& r2() { return m_R2; }
+  double& az() { return m_Az; }
 
   bool operator == (const QxrdPowderPoint &pt) const;
   bool operator != (const QxrdPowderPoint &pt) const;
@@ -39,6 +45,9 @@ protected:
   int m_N2;
   double m_X;
   double m_Y;
+  double m_R1;
+  double m_R2;
+  double m_Az;
 };
 
 class QxrdPowderPointVector : public QVector<QxrdPowderPoint>

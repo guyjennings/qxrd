@@ -208,7 +208,7 @@ public slots:
   int    getPowderPointN2(int i);
   double getPowderPointX(int i);
   double getPowderPointY(int i);
-  void   setPowderPoint(int i, int n1, int n2, double x, double y);
+  void   setPowderPoint(int i, int n1, int n2, double x, double y, double r1, double r2, double az);
 
   QScriptValue getPowderPoint(int i);
   QScriptValue getPowderPoints();

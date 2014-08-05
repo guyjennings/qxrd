@@ -21,6 +21,8 @@ public:
   double           fittedBkgd() const { return m_FittedBkgd; }
   double           fittedBkgdX() const { return m_FittedBkgdX; }
   double           fittedBkgdY() const { return m_FittedBkgdY; }
+  double           fittedR() const;
+  double           fittedAz() const;
 
 protected:
   int               m_Index;
@@ -35,6 +37,8 @@ protected:
   double            m_FittedBkgd;
   double            m_FittedBkgdX;
   double            m_FittedBkgdY;
+  double            m_FittedR;
+  double            m_FittedAz;
 };
 
 #endif // QXRDFITTERPEAKORRING_H

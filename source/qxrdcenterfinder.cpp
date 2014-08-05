@@ -495,7 +495,7 @@ void QxrdCenterFinder::fitPowderEllipses()
     }
 
     if (r.reason() == QxrdFitter::Successful) {
-      pts.append(QxrdPowderPoint(i, 0, r.fittedX(), r.fittedY()));
+      pts.append(QxrdPowderPoint(i, 0, r.fittedX(), r.fittedY(), r.fittedA(), r.fittedB(), r.fittedRot()));
     }
   }
 
@@ -546,7 +546,7 @@ void QxrdCenterFinder::deletePowderPointNear(double x, double y)
 
 void QxrdCenterFinder::appendPowderPoint(double x, double y)
 {
-  m_MarkedPoints.appendValue(QxrdPowderPoint(get_RingIndex(), 0, x,y));
+  m_MarkedPoints.appendValue(QxrdPowderPoint(get_RingIndex(), 0, x,y, 0,0,0));
 }
 
 void QxrdCenterFinder::deletePowderRing(int n)
@@ -559,7 +559,7 @@ void QxrdCenterFinder::deletePowderRing(int n)
     if (pt.n1() < n) {
       res.append(pt);
     } else if (pt.n1() > n) {
-      res.append(QxrdPowderPoint(pt.n1()-1, pt.n2(), pt.x(), pt.y()));
+      res.append(QxrdPowderPoint(pt.n1()-1, pt.n2(), pt.x(), pt.y(), pt.r1(), pt.r2(), pt.az()));
     }
   }
 
@@ -767,7 +767,7 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
 
     if (fit.reason() == QxrdFitter::Successful) {
       nok += 1;
-      pts.append(QxrdPowderPoint(get_RingIndex(), 0, fit.fittedX(), fit.fittedY()));
+      pts.append(QxrdPowderPoint(get_RingIndex(), 0, fit.fittedX(), fit.fittedY(), fit.fittedR(), fit.fittedR(), fit.fittedAz()));
     }
   }
 
@@ -863,7 +863,7 @@ bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
     }
 
     if (r.reason() == QxrdFitter::Successful) {
-      pts.append(QxrdPowderPoint(get_RingIndex(), 0, r.fittedX(), r.fittedY()));
+      pts.append(QxrdPowderPoint(get_RingIndex(), 0, r.fittedX(), r.fittedY(), r.fittedR(), r.fittedR(), r.fittedAz()));
     }
   }
 
@@ -916,14 +916,14 @@ double QxrdCenterFinder::getPowderPointY(int i)
   return res.y();
 }
 
-void QxrdCenterFinder::setPowderPoint(int i, int n1, int n2, double x, double y)
+void QxrdCenterFinder::setPowderPoint(int i, int n1, int n2, double x, double y, double r1, double r2, double az)
 {
   QxrdPowderPointVector pts = get_MarkedPoints();
 
   if (i>=0 && i<pts.count()) {
-    pts[i] = QxrdPowderPoint(n1,n2,x,y);
+    pts[i] = QxrdPowderPoint(n1,n2,x,y,r1,r2,az);
   } else {
-    pts.append(QxrdPowderPoint(n1,n2,x,y));
+    pts.append(QxrdPowderPoint(n1,n2,x,y,r1,r2,az));
   }
 
   set_MarkedPoints(pts);
@@ -935,13 +935,20 @@ QScriptValue QxrdCenterFinder::getPowderPoint(int i)
 
   if (exp) {
     QxrdScriptEnginePtr eng(exp->scriptEngine());
+    QxrdPowderPointVector pts = get_MarkedPoints();
 
     if (eng) {
       if (i>=0 && i<get_MarkedPoints().count()) {
         QScriptValue val = eng->newObject();
 
-        val.setProperty("x", getPowderPointX(i));
-        val.setProperty("y", getPowderPointY(i));
+        QxrdPowderPoint &pt = pts[i];
+        val.setProperty("n1", pt.n1());
+        val.setProperty("n2", pt.n2());
+        val.setProperty("x",  pt.x());
+        val.setProperty("y",  pt.y());
+        val.setProperty("r1", pt.r1());
+        val.setProperty("r2", pt.r2());
+        val.setProperty("az", pt.az());
 
         return val;
       }
@@ -966,10 +973,14 @@ QScriptValue QxrdCenterFinder::getPowderPoints()
       for (int i=0; i<pts.count(); i++) {
         QScriptValue item = eng->newObject();
 
-        item.setProperty("n1", pts[i].n1());
-        item.setProperty("n2", pts[i].n2());
-        item.setProperty("x", pts[i].x());
-        item.setProperty("y", pts[i].y());
+        QxrdPowderPoint &pt = pts[i];
+        item.setProperty("n1", pt.n1());
+        item.setProperty("n2", pt.n2());
+        item.setProperty("x", pt.x());
+        item.setProperty("y", pt.y());
+        item.setProperty("r1", pt.r1());
+        item.setProperty("r2", pt.r2());
+        item.setProperty("az", pt.az());
 
         val.setProperty(tr("%1").arg(i), item);
       }
@@ -987,8 +998,11 @@ void         QxrdCenterFinder::setPowderPoint(int i, QScriptValue val)
   int   n2 = val.property("n2").toInteger();
   double x = val.property("x").toNumber();
   double y = val.property("y").toNumber();
+  double r1 = val.property("r1").toNumber();
+  double r2 = val.property("r2").toNumber();
+  double az = val.property("az").toNumber();
 
-  setPowderPoint(i, n1, n2, x, y);
+  setPowderPoint(i, n1, n2, x, y, r1, r2, az);
 }
 
 

@@ -1,11 +1,14 @@
 #include "qxrdpowderpoint.h"
 #include <QString>
 
-QxrdPowderPoint::QxrdPowderPoint(int n1, int n2, double x, double y) :
+QxrdPowderPoint::QxrdPowderPoint(int n1, int n2, double x, double y, double r1, double r2, double az) :
   m_N1(n1),
   m_N2(n2),
   m_X(x),
-  m_Y(y)
+  m_Y(y),
+  m_R1(r1),
+  m_R2(r2),
+  m_Az(az)
 {
 }
 
@@ -13,7 +16,10 @@ QxrdPowderPoint::QxrdPowderPoint(const QxrdPowderPoint &pt) :
   m_N1(pt.n1()),
   m_N2(pt.n2()),
   m_X(pt.x()),
-  m_Y(pt.y())
+  m_Y(pt.y()),
+  m_R1(pt.r1()),
+  m_R2(pt.r2()),
+  m_Az(pt.az())
 {
 }
 
@@ -21,7 +27,10 @@ QxrdPowderPoint::QxrdPowderPoint() :
   m_N1(-1),
   m_N2(-1),
   m_X(0.0),
-  m_Y(0.0)
+  m_Y(0.0),
+  m_R1(0.0),
+  m_R2(0.0),
+  m_Az(0.0)
 {
 }
 
@@ -32,12 +41,12 @@ bool QxrdPowderPoint::isValid() const
 
 bool QxrdPowderPoint::operator == (const QxrdPowderPoint &pt) const
 {
-  return n1()==pt.n1() && n2()==pt.n2() && x()==pt.x() && y()==pt.y();
+  return n1()==pt.n1() && n2()==pt.n2() && x()==pt.x() && y()==pt.y() && r1()==pt.r1() && r2() == pt.r2() && az()==pt.az();
 }
 
 bool QxrdPowderPoint::operator != (const QxrdPowderPoint &pt) const
 {
-  return n1()!=pt.n1() || n2()!=pt.n2() || x()!=pt.x() || y()!=pt.y();
+  return n1()!=pt.n1() || n2()!=pt.n2() || x()!=pt.x() || y()!=pt.y() || r1()!=pt.r1() || r2() != pt.r2() || az()!=pt.az();
 }
 
 void QxrdPowderPoint::setSettingsValue(QSettings *settings, QString name)
@@ -48,6 +57,9 @@ void QxrdPowderPoint::setSettingsValue(QSettings *settings, QString name)
   settings->setValue("n2", n2());
   settings->setValue("x", x());
   settings->setValue("y", y());
+  settings->setValue("r1", r1());
+  settings->setValue("r2", r2());
+  settings->setValue("az", az());
 
   settings->endGroup();
 }
@@ -61,7 +73,7 @@ void QxrdPowderPoint::customSaver(const QVariant &val, QSettings *settings, QStr
 
 QString QxrdPowderPoint::toString() const
 {
-  return QObject::tr("[%1, %2, %3, %4]").arg(n1()).arg(n2()).arg(x()).arg(y());
+  return QObject::tr("[%1, %2, %3, %4, %5, %6, %7]").arg(n1()).arg(n2()).arg(x()).arg(y()).arg(r1()).arg(r2()).arg(az());
 }
 
 void QxrdPowderPointVector::setSettingsValue(QSettings *settings, QString name)
@@ -75,6 +87,9 @@ void QxrdPowderPointVector::setSettingsValue(QSettings *settings, QString name)
     settings->setValue("n2", pt.n2());
     settings->setValue("x", pt.x());
     settings->setValue("y", pt.y());
+    settings->setValue("r1", pt.r1());
+    settings->setValue("r2", pt.r2());
+    settings->setValue("az", pt.az());
   }
 
   settings->endArray();
