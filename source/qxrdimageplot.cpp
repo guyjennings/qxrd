@@ -79,6 +79,7 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
 
   m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::xBottom, QwtPlotRescaler::Expanding);
   m_Rescaler -> setEnabled(true);
+  m_Rescaler -> setExpandingDirection(QwtPlotRescaler::ExpandBoth);
 
   m_Slicer = new QxrdPlotSlicer(canvas(), this);
   m_Slicer -> setEnabled(false);
