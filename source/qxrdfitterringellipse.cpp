@@ -48,6 +48,33 @@ void QxrdFitterRingEllipse::staticEvaluate(double *p, double *hx, int m, int n, 
 
 void QxrdFitterRingEllipse::evaluate(double *parm, double *xv, int np, int nx)
 {
+  if (m_CenterFinder) {
+    double cx = parm[0];
+    double cy = parm[1];
+    double a  = parm[2];
+    double b  = parm[3];
+    double az = parm[4];
+
+    double cosaz = cos(az);
+    double sinaz = sin(az);
+
+    for (int i=0; i<nx; i++) {
+      QxrdPowderPoint pt = m_CenterFinder->powderRingPoint(m_RingIndex, i);
+
+      double ptaz = atan2(pt.y() - cy, pt.x() - cx) - az;
+
+      double x = cx + a*cos(ptaz);
+      double y = cy + b*sin(ptaz);
+
+      double xp = x*cosaz - y*sinaz;
+      double yp = x*sinaz + y*cosaz;
+
+      double dx = xp - pt.x();
+      double dy = yp - pt.y();
+
+      xv[i] = sqrt(dx*dx + dy*dy);
+    }
+  }
 }
 
 int QxrdFitterRingEllipse::fit()

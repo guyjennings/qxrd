@@ -41,7 +41,11 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_TiltPlaneRotationStep(saver, this, "tiltPlaneRotationStep", 10, "Tilt Plane Rotation Step (deg)"),
 //    m_MarkedPoints(saver, this, "markedPoints", QcepPolygon(), "Marker Points"),
     m_MarkedPoints(saver, this, "markedPoints", QxrdPowderPointVector(), "Marker Points"),
+    m_FittedRings(saver, this, "fittedRings", QxrdPowderPointVector(), "Fitted Powder Rings"),
     m_RingRadius(saver, this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
+    m_RingRadiusA(saver, this, "ringRadiusA", 0.0, "Estimated Powder Ellipse Major Axis Radius"),
+    m_RingRadiusB(saver, this, "ringRadiusB", 0.0, "Estimated Powder Ellipse Minor Axis Radius"),
+    m_RingRotation(saver, this, "ringRotation", 0.0, "Estimated Powder Ellipse Major Axis Rotation"),
     m_PeakFitRadius(saver, this, "peakFitRadius", 10, "Half size of fitted area for peak fitting"),
     m_PeakHeight(saver, this, "peakHeight", 100.0, "Height of fitted peak"),
     m_PeakCenterX(saver, this, "peakCenterX", 0, "X Center of fitted peak"),
@@ -378,14 +382,14 @@ void QxrdCenterFinder::fitPowderCircle2(int n)
   QString message;
 
   if (fitter.reason() == QxrdFitter::Successful) {
-    message.append(tr("Fitting Succeeded after %1 iterations\n").arg(niter));
+    message.append(tr("Circle Fitting Succeeded after %1 iterations\n").arg(niter));
     message.append(tr("Old Center = [%1,%2]\n").arg(get_CenterX()).arg(get_CenterY()));
     message.append(tr("New Center = [%1,%2], New Radius = %3\n").arg(fitter.fittedX()).arg(fitter.fittedY()).arg(fitter.fittedR()));
     double dx = fitter.fittedX() - get_CenterX();
     double dy = fitter.fittedY() - get_CenterY();
     message.append(tr("Moved by [%1,%2] = %3\n").arg(dx).arg(dy).arg(sqrt(dx*dx + dy*dy)));
   } else {
-    message.append(tr("fitting failed: reason = %1\n").arg(fitter.reasonString()));
+    message.append(tr("Circle Fitting Failed: Reason = %1\n").arg(fitter.reasonString()));
   }
 
   printMessage(message);
@@ -413,6 +417,89 @@ void QxrdCenterFinder::fitPowderCircle2(int n)
 
 void QxrdCenterFinder::fitPowderEllipse(int n)
 {
+  QxrdFitterRingEllipse fitter(this, n, get_CenterX(), get_CenterY());
+
+  int niter = fitter.fit();
+
+  int update = false;
+  QString message;
+
+  if (fitter.reason() == QxrdFitter::Successful) {
+    message.append(tr("Ellipse Fitting Succeeded after %1 iterations\n").arg(niter));
+    message.append(tr("Old Center = [%1,%2]\n").arg(get_CenterX()).arg(get_CenterY()));
+    message.append(tr("New Center = [%1,%2], New Radii = %3,%4\n")
+                   .arg(fitter.fittedX()).arg(fitter.fittedY()).arg(fitter.fittedA()).arg(fitter.fittedB()));
+    message.append(tr("Major Axis rotation = %1 deg\n").arg(fitter.fittedRot()*180.0/M_PI));
+
+    double dx = fitter.fittedX() - get_CenterX();
+    double dy = fitter.fittedY() - get_CenterY();
+    message.append(tr("Moved by [%1,%2] = %3\n").arg(dx).arg(dy).arg(sqrt(dx*dx + dy*dy)));
+  } else {
+    message.append(tr("Ellipse Fitting Failed: Reason = %1\n").arg(fitter.reasonString()));
+  }
+
+  printMessage(message);
+
+  if (g_Application->get_GuiWanted()) {
+    if (fitter.reason() == QxrdFitter::Successful) {
+      message.append(tr("Do you want to update the beam centering parameters?"));
+      if (QMessageBox::question(NULL, "Update Fitted Center?", message, QMessageBox::Ok | QMessageBox::No, QMessageBox::Ok) == QMessageBox::Ok) {
+        update = true;
+      }
+    } else {
+      QMessageBox::information(NULL, "Fitting Failed", message);
+    }
+  } else if (niter >= 0){
+    update = true;
+  }
+
+  if (update) {
+    set_CenterX(fitter.fittedX());
+    set_CenterY(fitter.fittedY());
+    set_RingRadiusA(fitter.fittedA());
+    set_RingRadiusB(fitter.fittedB());
+    set_RingRotation(fitter.fittedRot());
+  }
+}
+
+void QxrdCenterFinder::fitPowderEllipses()
+{
+  int nrings = countPowderRings();
+
+  QVector<QxrdFitterRingEllipse> fits;
+
+  for (int i=0; i<nrings; i++) {
+    fits.append(QxrdFitterRingEllipse(this, i, get_CenterX(), get_CenterY()));
+  }
+
+  if (qcepDebug(DEBUG_NOPARALLEL)) {
+    for (int i=0; i<nrings; i++) {
+      fits[i].fit();
+    }
+  } else {
+    QFuture<void> fitDone = QtConcurrent::map(fits, &QxrdFitterRingEllipse::fit);
+
+    fitDone.waitForFinished();
+  }
+
+  QxrdPowderPointVector pts;
+
+  for (int i=0; i<nrings; i++) {
+    QxrdFitterRingEllipse &r = fits[i];
+
+    if (qcepDebug(DEBUG_FITTING) || get_PeakFitDebug()) {
+      printMessage(tr("Fitted Ring %1: x: %2, y: %3, a: %4, b: %5, rot: %6, rzn: %7")
+                   .arg(i).arg(r.fittedX()).arg(r.fittedY())
+                   .arg(r.fittedA()).arg(r.fittedB()).arg(r.fittedRot())
+                   .arg(r.reasonString()));
+    }
+
+    if (r.reason() == QxrdFitter::Successful) {
+      pts.append(QxrdPowderPoint(i, 0, r.fittedX(), r.fittedY()));
+    }
+  }
+
+  set_FittedRings(pts);
 }
 
 QxrdPowderPoint QxrdCenterFinder::powderPoint(int i)

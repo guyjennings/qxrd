@@ -69,8 +69,20 @@ public:
   Q_PROPERTY(QxrdPowderPointVector markedPoints READ get_MarkedPoints WRITE set_MarkedPoints)
   QXRD_POWDERPOINTVECTOR_PROPERTY(MarkedPoints)
 
+  Q_PROPERTY(QxrdPowderPointVector fittedRings READ get_FittedRings WRITE set_FittedRings)
+  QXRD_POWDERPOINTVECTOR_PROPERTY(FittedRings)
+
   Q_PROPERTY(double ringRadius READ get_RingRadius WRITE set_RingRadius)
   QCEP_DOUBLE_PROPERTY(RingRadius)
+
+  Q_PROPERTY(double ringRadiusA READ get_RingRadiusA WRITE set_RingRadiusA)
+  QCEP_DOUBLE_PROPERTY(RingRadiusA)
+
+  Q_PROPERTY(double ringRadiusB READ get_RingRadiusB WRITE set_RingRadiusB)
+  QCEP_DOUBLE_PROPERTY(RingRadiusB)
+
+  Q_PROPERTY(double ringRotation READ get_RingRotation WRITE set_RingRotation)
+  QCEP_DOUBLE_PROPERTY(RingRotation)
 
   Q_PROPERTY(double peakFitRadius READ get_PeakFitRadius WRITE set_PeakFitRadius)
   QCEP_DOUBLE_PROPERTY(PeakFitRadius)
@@ -175,6 +187,8 @@ public slots:
   void fitPowderCircle(int n=0);
   void fitPowderCircle2(int n=0);
   void fitPowderEllipse(int n=0);
+  void fitPowderEllipses();
+
   void deletePowderPointNear(double x, double y);
   void deletePowderPoints();
   void deletePowderRing(int n);

@@ -338,6 +338,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   }
 
   connect(m_ActionPlotPowderRingPoints, SIGNAL(triggered()), this, SLOT(plotPowderRingRadii()));
+  connect(m_ActionPlotPowderRingCenters, SIGNAL(triggered()), this, SLOT(plotPowderRingCenters()));
 
   m_AcquisitionDialog->setupAcquireMenu(m_AcquireMenu);
 
@@ -1788,6 +1789,42 @@ void QxrdWindow::plotPowderRingRadii()
       }
 
 //      m_DistortionCorrectionPlot->autoScale();
+      m_DistortionCorrectionPlot->replot();
+    }
+  }
+}
+
+void QxrdWindow::plotPowderRingCenters()
+{
+  QxrdExperimentPtr   expt(m_Experiment);
+
+  if (expt) {
+    QxrdCenterFinderPtr cf(expt->centerFinder());
+
+    if (cf) {
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
+
+      QxrdPowderPointVector pts = cf->get_FittedRings();
+      int npts = pts.count();
+
+      QVector<double> x, y;
+
+      for (int i=0; i<npts; i++) {
+        QxrdPowderPoint &pt = pts[i];
+        x.append(pt.x());
+        y.append(pt.y());
+      }
+
+      QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring Centers"));
+
+      m_DistortionCorrectionPlot->setPlotCurveStyle(0, pc);
+
+      pc -> setSamples(x, y);
+
+      pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+      pc -> attach(m_DistortionCorrectionPlot);
+
       m_DistortionCorrectionPlot->replot();
     }
   }
