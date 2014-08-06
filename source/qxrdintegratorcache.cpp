@@ -59,6 +59,7 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_SinRot(0),
   m_EnableUserGeometry(0),
   m_EnableUserAbsorption(0),
+  m_ScalingFactor(1.0),
   m_CacheFillLevel(-1),
   m_CacheFullLevel(-1),
   m_Experiment(exp),
@@ -91,6 +92,8 @@ QxrdIntegratorCache::QxrdIntegratorCache(
     m_EnableUserAbsorption   = m_Integrator->get_EnableUserAbsorption();
     m_UserAbsorptionScript   = m_Integrator->get_UserAbsorptionScript();
     m_UserAbsorptionFunction = m_Integrator->get_UserAbsorptionFunction();
+
+    m_ScalingFactor          = m_Integrator->get_ScalingFactor();
   }
 
   if (m_CenterFinder) {
@@ -530,9 +533,9 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
             double xv = rMin + (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
 
             if (normalize) {
-              integ -> append(xv, normVal*integral[ir]/sv);
+              integ -> append(xv, m_ScalingFactor*normVal*integral[ir]/sv);
             } else {
-              integ -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+              integ -> append(xv, m_ScalingFactor*normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
             }
           }
         }

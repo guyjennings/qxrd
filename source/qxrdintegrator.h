@@ -85,6 +85,9 @@ public:
   Q_PROPERTY(QString userAbsorptionFunction READ get_UserAbsorptionFunction WRITE set_UserAbsorptionFunction)
   QCEP_STRING_PROPERTY(UserAbsorptionFunction)
 
+  Q_PROPERTY(double scalingFactor READ get_ScalingFactor WRITE set_ScalingFactor)
+  QCEP_DOUBLE_PROPERTY(ScalingFactor)
+
 public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

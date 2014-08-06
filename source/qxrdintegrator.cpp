@@ -38,6 +38,7 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr e
     m_EnableUserAbsorption(saver, this, "enableUserAbsorption", 0, "Apply user-defined geometry function in integration"),
     m_UserAbsorptionScript(saver, this, "userAbsorptionScript", defaultUserAbsorptionScript(), "Script to define user defined absorption functions"),
     m_UserAbsorptionFunction(saver, this, "userAbsorptionFunction", "userAbsorb1", "Name of user defined absorption function"),
+    m_ScalingFactor(saver, this, "scalingFactor", 1.0, "Scaling factor for integrated intensity"),
     m_Experiment(exp),
     m_CenterFinder(cfw),
     m_Allocator(alloc),
@@ -67,6 +68,8 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr e
   connect(prop_EnableUserAbsorption(), SIGNAL(valueChanged(int,int)), this, SLOT(onIntegrationParametersChanged()));
   connect(prop_UserAbsorptionScript(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()));
   connect(prop_UserAbsorptionFunction(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()));
+
+  connect(prop_ScalingFactor(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
 
   QxrdCenterFinderPtr cf(m_CenterFinder);
 

@@ -74,6 +74,7 @@ private:
   int    m_EnableUserAbsorption;
   QString m_UserAbsorptionScript;
   QString m_UserAbsorptionFunction;
+  double m_ScalingFactor;
 
 public:
     QxrdIntegratedDataPtr performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int normalize);
