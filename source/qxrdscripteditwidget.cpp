@@ -21,6 +21,10 @@ void QxrdScriptEditWidget::contextMenuEvent(QContextMenuEvent * event)
 
   QString sel = textCursor().selectedText();
 
+  if (sel.length() > 50) {
+    sel = sel.left(48)+"...";
+  }
+
   menu->addAction(tr("Evaluate %1").arg(sel), this, SLOT(executeSelectedText()));
   menu->exec(event->globalPos());
 
@@ -30,6 +34,10 @@ void QxrdScriptEditWidget::contextMenuEvent(QContextMenuEvent * event)
 void QxrdScriptEditWidget::executeSelectedText()
 {
   QString sel = textCursor().selectedText();
+
+  if (sel.length() == 0) {
+    sel = this->toPlainText();
+  }
 
   QxrdExperimentPtr expt(m_Experiment);
 
