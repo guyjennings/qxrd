@@ -1741,6 +1741,10 @@ void QxrdDataProcessorBase::summarizeMeasuredPolygon(QVector<QPointF> poly)
 
 QxrdDoubleImageDataPtr QxrdDataProcessorBase::data() const
 {
+//  if (qcepDebug(DEBUG_INTEGRATOR)) {
+//    printMessage(tr("processor.data() == %1").arg((long) m_Data.data()));
+//  }
+
   return m_Data;
 }
 

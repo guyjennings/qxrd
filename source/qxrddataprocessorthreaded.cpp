@@ -848,6 +848,11 @@ void QxrdDataProcessorThreaded::slicePolygon(QVector<QPointF> poly)
 
 void QxrdDataProcessorThreaded::integrateSaveAndDisplay()
 {
+  if (qcepDebug(DEBUG_INTEGRATOR)) {
+    printMessage(tr("processor.integrateSaveAndDisplay: %1, %2, %3")
+                 .arg(data()->get_FileName()).arg(m_CenterFinder->get_CenterX()).arg(m_CenterFinder->get_CenterY()));
+  }
+
   QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::WaitTillAvailable, data());
 
   m_IntegratedData.enqueue(

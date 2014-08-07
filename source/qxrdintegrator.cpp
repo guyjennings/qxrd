@@ -48,33 +48,33 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr e
     printf("QxrdIntegrator::QxrdIntegrator(%p)\n", this);
   }
 
-  connect(this->prop_Oversample(),         SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
-  connect(this->prop_IntegrationStep(),    SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(this->prop_IntegrationNSteps(),  SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
-  connect(this->prop_IntegrationMinimum(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(this->prop_IntegrationMaximum(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(this->prop_IntegrationXUnits(),  SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()));
+  connect(this->prop_Oversample(),         SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(this->prop_IntegrationStep(),    SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(this->prop_IntegrationNSteps(),  SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(this->prop_IntegrationMinimum(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(this->prop_IntegrationMaximum(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(this->prop_IntegrationXUnits(),  SIGNAL(valueChanged(int,int)),    this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
 
-  connect(prop_EnableGeometricCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(prop_EnablePolarizationCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(prop_Polarization(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(prop_EnableAbsorptionCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(prop_AttenuationLength(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_EnableGeometricCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(prop_EnablePolarizationCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(prop_Polarization(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(prop_EnableAbsorptionCorrections(), SIGNAL(valueChanged(bool,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(prop_AttenuationLength(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
 
-  connect(prop_EnableUserGeometry(), SIGNAL(valueChanged(int,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(prop_UserGeometryScript(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(prop_UserGeometryFunction(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_EnableUserGeometry(), SIGNAL(valueChanged(int,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(prop_UserGeometryScript(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(prop_UserGeometryFunction(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
 
-  connect(prop_EnableUserAbsorption(), SIGNAL(valueChanged(int,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(prop_UserAbsorptionScript(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()));
-  connect(prop_UserAbsorptionFunction(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_EnableUserAbsorption(), SIGNAL(valueChanged(int,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(prop_UserAbsorptionScript(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(prop_UserAbsorptionFunction(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
 
-  connect(prop_ScalingFactor(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()));
+  connect(prop_ScalingFactor(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
 
   QxrdCenterFinderPtr cf(m_CenterFinder);
 
   if (cf) {
-    connect(cf.data(), SIGNAL(parameterChanged()), this, SLOT(onIntegrationParametersChanged()));
+    connect(cf.data(), SIGNAL(parameterChanged()), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
   }
 }
 
@@ -135,6 +135,15 @@ void QxrdIntegrator::onIntegrationParametersChanged()
 
 QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
 {
+  if (qcepDebug(DEBUG_INTEGRATOR)) {
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt) {
+      expt->printMessage(tr("QxrdIntegrator::performIntegration(\"%1\",%2,%3)")
+                         .arg(dimg->get_FileName()));
+    }
+  }
+
   QThread::currentThread()->setObjectName("performIntegration");
 
   QxrdIntegratorCachePtr cache = m_IntegratorCache;
