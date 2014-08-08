@@ -113,7 +113,15 @@ void QxrdHistogramDialog::recalculateHistogram()
           } else if (v>max) {
             n=nbins-1;
           } else {
-            n=nbins*(v-min)/(max-min);
+            n=(nbins-1)*(v-min)/(max-min);
+          }
+
+          if (n<0) {
+            n=0;
+          }
+
+          if (n>=nbins) {
+            n=nbins-1;
           }
 
           h0[n]++;
