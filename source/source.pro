@@ -74,7 +74,8 @@ OTHER_FILES += help/qxrdhelptext.html \
     qxrdexampleuserabsorption.js \
     help/qxrdhelpuserfunctions.html \
     calgrid.js \
-    findring.js
+    findring.js \
+    dumpRings.js
 DISTFILES += qxrd.dox \
     download/index.php \
     images/*.* \
