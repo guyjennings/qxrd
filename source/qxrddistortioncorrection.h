@@ -6,6 +6,7 @@
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdimagedata-ptr.h"
+#include "qxrdimagedata.h"
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdobjectnamer.h"
 
