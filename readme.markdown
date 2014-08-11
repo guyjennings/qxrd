@@ -1,6 +1,13 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.4 - Aug 11 2014
+More work on fitting - ellipse fitting added
+
+MINGW builds work again
+
+Manual control of output voltage in sync acq dialog
+
 ## v0.11.3 - Jul 31 2014
 Implemented histogram window
 
