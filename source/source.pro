@@ -92,9 +92,9 @@ include(submodules/qceplib/qceplib-mar345.pri)
 include(submodules/qceplib/qceplib-cbf.pri)
 include(submodules/qceplib/qceplib-tiff.pri)
 include(submodules/qceplib/qceplib-levmar.pri)
-include(submodules/qceplib/qceplib-szip.pri)
-include(submodules/qceplib/qceplib-zlib.pri)
-include(submodules/qceplib/qceplib-hdf5.pri)
+#include(submodules/qceplib/qceplib-szip.pri)
+#include(submodules/qceplib/qceplib-zlib.pri)
+#include(submodules/qceplib/qceplib-hdf5.pri)
 include(submodules/qceplib/qceplib-specserver.pri)
 
 HEADERS += \
@@ -507,6 +507,12 @@ win32 {
 # Copy QT Libraries into app directory
   LIBDIR = $$[QT_INSTALL_BINS]
   LIBDIR_WIN = $${replace(LIBDIR, /, \\)}
+  LIBDIR_MINGW = $${replace(LIBDIR, \\\\, /)}
+
+  message(Libdir: $${LIBDIR})
+  message(Libdir_win: $${LIBDIR_WIN})
+  message(Libdir_mingw: $${LIBDIR_MINGW})
+  message($${replace(LIBDIR, \\\\, /)})
 
   QMAKE_EXTRA_TARGETS += qtlibs
 
@@ -545,27 +551,33 @@ win32 {
       platform = qwindows
     }
 
+    win32-g++ {
+      libs += libgcc_s_dw2-1 libwinpthread-1 libstdc++-6
+    }
+
     QMAKE_EXTRA_TARGETS += qtplatformdir
     qtplatformdir.target = ../platforms
     qtplatformdir.commands = if not exist ..\\platforms $(MKDIR) ..\\platforms
 
     QMAKE_EXTRA_TARGETS += qtplatform
     qtplatform.target   = ../platforms/$${platform}.dll
-    qtplatform.depends  = qtplatformdir $${LIBDIR_WIN}/../plugins/platforms/$${platform}.dll
-    qtplatform.commands += $(COPY_FILE) /Y $${LIBDIR_WIN}\\..\\plugins\\platforms\\$${platform}.dll ..\\platforms\\$${platform}.dll
+    qtplatform.depends  = qtplatformdir $${LIBDIR}/../plugins/platforms/$${platform}.dll
+    win32-g++ {
+      qtplatform.commands += $(COPY_FILE) $${LIBDIR_MINGW}/../plugins/platforms/$${platform}.dll ../platforms/$${platform}.dll
+    } else {
+      qtplatform.commands += $(COPY_FILE) /Y $${LIBDIR_WIN}\\..\\plugins\\platforms\\$${platform}.dll ..\\platforms\\$${platform}.dll
+    }
 
     qtlibs.depends += qtplatform
 
     for(lib, libs) {
       !build_pass:message(Target $${lib})
-#      QMAKE_EXTRA_TARGETS += $${lib}
-#      $${lib}.target      = ../$${lib}.dll
-#      $${lib}.depends    += $${LIBDIR}/$${lib}.dll
-#      $${lib}.commands   += $(COPY_FILE) /Y $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
-
-#      qtlibs.depends     += $${lib}
       qtlibs.depends     += $${LIBDIR}/$${lib}.dll
-      qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
+      win32-g++ {
+        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_MINGW}/$${lib}.dll ../$${lib}.dll &
+      } else {
+        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
+      }
     }
 
     QMAKE_CLEAN += ../platforms/*
@@ -579,11 +591,19 @@ win32 {
       libs = QtCore4 QtNetwork4 QtGui4 QtScript4 QtOpenGL4 QtSvg4
     }
 
+    win32-g++ {
+      libs += libgcc_s_dw2-1 libwinpthread-1 libstdc++-6
+    }
+
     for(lib, libs) {
       !build_pass:message(Target $${lib})
 
       qtlibs.depends     += $${LIBDIR}/$${lib}.dll
-      qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
+      win32-g++ {
+        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_MINGW}/$${lib}.dll ../$${lib}.dll &
+      } else {
+        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
+      }
     }
   }
 
@@ -601,38 +621,60 @@ win32 { # Make NSIS installer...
     PWD_WIN = $${replace(PWD, /, \\)}
 
     exists("c:/Program Files/NSIS/makensis.exe") {
-      QMAKE_POST_LINK = "\"c:\\Program Files\\NSIS\\makensis.exe\"" /V4
+      win32-g++ {
+        QMAKE_POST_LINK = "\"c:/Program Files/NSIS/makensis.exe\"" //V4
+      } else {
+        QMAKE_POST_LINK = "\"c:\\Program Files\\NSIS\\makensis.exe\"" /V4
+      }
       message("NSIS found in Program Files")
     }
 
     exists("c:/Program Files (x86)/NSIS/makensis.exe") {
-      QMAKE_POST_LINK = "\"c:\\Program Files (x86)\\NSIS\\makensis.exe\"" /V4
+      win32-g++ {
+        QMAKE_POST_LINK = "\"c:/Program Files (x86)/NSIS/makensis.exe\"" //V4
+      } else {
+        QMAKE_POST_LINK = "\"c:\\Program Files (x86)\\NSIS\\makensis.exe\"" /V4
+      }
       message("NSIS found in Program Files (x86)")
     }
 
     !isEmpty(QMAKE_POST_LINK) {
       contains(QMAKE_HOST.arch,x86_64) {
-        QMAKE_POST_LINK += /DWIN64
+        win32-g++ {
+          QMAKE_POST_LINK += //DWIN64
+        } else {
+          QMAKE_POST_LINK += /DWIN64
+        }
       }
 
       message("Generate NSIS installer for $${QXRDSUFFIXSTR}")
 
-      QMAKE_POST_LINK += /DVERSION=$${VERSION}
-      CONFIG(release, debug|release) {
-        QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}\"
-        QMAKE_POST_LINK += /DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+      win32-g++ {
+        QMAKE_POST_LINK += //DVERSION=$${VERSION} //DAPPDIR=\"$${OUT_PWD_WIN}\\..\\.\"
       } else {
-        QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}-dbg\"
-        QMAKE_POST_LINK += /DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
+        QMAKE_POST_LINK += /DVERSION=$${VERSION} /DAPPDIR=\"$${OUT_PWD_WIN}\\..\\.\"
       }
-      QMAKE_POST_LINK += /DAPPDIR=\"$${OUT_PWD_WIN}\\..\\.\"
+
+      CONFIG(release, debug|release) {
+        win32-g++ {
+          QMAKE_POST_LINK += //DPREFIX=\"$${QXRDSUFFIX}\" //DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+        } else {
+          QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}\" /DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+        }
+      } else {
+        win32-g++ {
+          QMAKE_POST_LINK += //DPREFIX=\"$${QXRDSUFFIX}-dbg\" //DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
+        } else {
+          QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}-dbg\" /DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
+        }
+      }
 
       isEqual(QT_MAJOR_VERSION, 4) {
         QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd.nsi\"
       } else {
         QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd-qt5.nsi\"
       }
-    }
+   }
 }
 
 
