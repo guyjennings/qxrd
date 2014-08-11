@@ -14,13 +14,13 @@
 
 Name "QXRD"
 
-OutFile "${APPDIR}\qxrd-setup${PREFIX}-${VERSION}.exe"
+OutFile "${APPDIR}\qxrd-setup-${VERSION}${PREFIX}.exe"
 !ifdef WIN64
-InstallDir "$PROGRAMFILES64\qxrd\qxrd${PREFIX}-${VERSION}"
+InstallDir "$PROGRAMFILES64\qxrd\qxrd-${VERSION}${PREFIX}"
 !else
-InstallDir "$PROGRAMFILES\qxrd\qxrd${PREFIX}-${VERSION}"
+InstallDir "$PROGRAMFILES\qxrd\qxrd-${VERSION}${PREFIX}"
 !endif
-;InstallDirRegKey HKLM "Software\qxrd\qxrd${PREFIX}-${VERSION}" "install_dir"
+;InstallDirRegKey HKLM "Software\qxrd\qxrd-${VERSION}${PREFIX}" "install_dir"
 RequestExecutionLevel admin
 
 Var StartMenuFolder
@@ -60,20 +60,20 @@ Section "Extract qxrd"
 
   SetOutPath "$INSTDIR"
 
-;  WriteRegStr HKLM "Software\qxrd\qxrd${PREFIX}-${VERSION}" "install_dir" $INSTDIR
+;  WriteRegStr HKLM "Software\qxrd\qxrd-${VERSION}${PREFIX}" "install_dir" $INSTDIR
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-  CreateDirectory "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\ QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\qxrd.exe"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Fresh Start QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\qxrd.exe" "-fresh"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Uninstall QXRD${PREFIXSTR} ${VERSION}.lnk" "$INSTDIR\uninstall.exe"
+  CreateDirectory "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\ QXRD ${VERSION} ${PREFIXSTR}.lnk" "$INSTDIR\qxrd.exe"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Fresh Start.lnk" "$INSTDIR\qxrd.exe" "-fresh"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\qxrd${PREFIX}-${VERSION}" \
-                 "DisplayName" "QXRD${PREFIX}-${VERSION} -- Data Acquisition for Perkin-Elmer XRD Detectors"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\qxrd${PREFIX}-${VERSION}" \
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QXRD ${VERSION} ${PREFIXSTR}" \
+                 "DisplayName" "QXRD ${VERSION} ${PREFIXSTR} -- Data Acquisition for Perkin-Elmer XRD Detectors"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QXRD ${VERSION} ${PREFIXSTR}" \
                  "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
 SectionEnd
 
@@ -87,10 +87,10 @@ Section "Uninstall"
   Delete "$INSTDIR\qxrd.exe"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
-  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\Uninstall QXRD${PREFIXSTR} ${VERSION}.lnk"
-  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}\ QXRD${PREFIXSTR} ${VERSION}.lnk"
-  Delete "$SMPROGRAMS\$StartMenuFolder\Fresh Start QXRD${PREFIX}-${VERSION}\QXRD${PREFIXSTR} ${VERSION}.lnk"
-  RMDir "$SMPROGRAMS\$StartMenuFolder\QXRD${PREFIX}-${VERSION}"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\ QXRD ${VERSION} ${PREFIXSTR}.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Fresh Start.lnk"
+  RMDir "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
 ;  DeleteRegKey /ifempty HKLM "Software\qxrd\qxrd${PREFIX}-${VERSION}"
@@ -98,5 +98,5 @@ Section "Uninstall"
   Delete "$INSTDIR\uninstall.exe"
   RMDir  "$INSTDIR"
 
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\qxrd${PREFIX}-${VERSION}"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QXRD ${VERSION} ${PREFIXSTR}"
 SectionEnd
