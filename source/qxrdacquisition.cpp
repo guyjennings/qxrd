@@ -59,6 +59,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
     m_DroppedFrames(QxrdSettingsSaverPtr(), this,"droppedFrames",0, "Number of Dropped Frames"),
     m_LiveViewAtIdle(saver, this, "liveViewAtIdle", false, "Live View during Idle"),
     m_AcquisitionCancelsLiveView(saver, this, "acquisitionCancelsLiveView", true, "Acquisition operations cancel live view"),
+    m_RetryDropped(saver, this, "retryDropped", false, "Automatically retry dropped frames during acquisition"),
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL),
     m_AcquisitionExtraInputs(NULL),
@@ -399,13 +400,12 @@ void QxrdAcquisition::indicateDroppedFrame(int n)
   }
 }
 
-template <typename T>
-void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow)
+void QxrdAcquisition::accumulateAcquiredImage(QxrdInt16ImageDataPtr image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow)
 {
   if (image && accum && overflow) {
     long nPixels = get_NRows()*get_NCols();
     int ovflwlvl = get_OverflowLevel();
-    T* src = image->data();
+    quint16* src = image->data();
     quint32* dst = accum->data();
     short int* ovf = overflow->data();
     int nsummed = accum->get_SummedExposures();
@@ -416,7 +416,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
       }
 
       for (long i=0; i<nPixels; i++) {
-        T val = *src++;
+        quint16 val = *src++;
 
         if (val>ovflwlvl) {
           *ovf++ = 1;
@@ -436,7 +436,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> >
       }
 
       for (long i=0; i<nPixels; i++) {
-        T val = *src++;
+        quint16 val = *src++;
 
         if (val>ovflwlvl) {
           *ovf++ += 1;
@@ -739,7 +739,8 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
       ovf[p][0] = novf;
 
       if (nres == NULL || novf == NULL) {
-        indicateDroppedFrame(0);
+        printMessage("Dropped frame allocation...");
+        indicateDroppedFrame(i);
       }
       //      res[p][0] -> clear();
       //      ovf[p][0] -> clear();
@@ -771,7 +772,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
 
     if (cancelling()) goto cancel;
 
-    for (int s=0; s<nsummed; s++) {
+    for (int s=0; s<nsummed;) {
       for (int p=0; p<nphases; p++) {
         if (res[p][0]) {
           emit acquiredFrame(res[p][0]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, postTrigger);
@@ -782,7 +783,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
         if (img && res[p][0] && ovf[p][0]) {
           accumulateAcquiredImage(img, res[p][0], ovf[p][0]);
         } else if (!cancelling()){
-          indicateDroppedFrame(0);
+          indicateDroppedFrame(i);
         }
 
         if (qcepDebug(DEBUG_ACQUIRETIME)) {
@@ -796,6 +797,31 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
         }
 
         if (cancelling()) goto saveCancel;
+      }
+
+      if (get_RetryDropped()) {
+        int minSum = nsummed;
+
+        for (int p=0; p<nphases; p++) {
+          if (res[p][0]) {
+            int ns = res[p][0]->get_SummedExposures();
+
+            if (ns < minSum) {
+              minSum = ns;
+            }
+          }
+        }
+
+        printMessage(tr("i = %1, Minsum = %2, s = %3").arg(i).arg(minSum).arg(s));
+
+        if (minSum == nsummed) {
+          printMessage("No acquired images allocated");
+          s = s+1;
+        } else {
+          s = minSum+1;
+        }
+      } else {
+        s = s+1;
       }
     }
 
@@ -932,6 +958,12 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
       } else {
         goto cancel;
       }
+    }
+
+    if (get_RetryDropped()) {
+      i = res->get_SummedExposures() + 1;
+    } else{
+      i = i+1;
     }
   }
 

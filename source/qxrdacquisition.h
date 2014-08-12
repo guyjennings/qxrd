@@ -200,8 +200,7 @@ private:
   virtual void stopIdling();
   virtual void startIdling();
 
-  template <typename T>
-  void accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
+  void accumulateAcquiredImage(QxrdInt16ImageDataPtr image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
 
   void processImage(const QxrdProcessArgs &args);
   void processImage        (QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
@@ -325,6 +324,9 @@ public:
 
   Q_PROPERTY(bool     acquisitionCancelsLiveView READ get_AcquisitionCancelsLiveView WRITE set_AcquisitionCancelsLiveView)
   QCEP_BOOLEAN_PROPERTY(AcquisitionCancelsLiveView)
+
+  Q_PROPERTY(bool     retryDropped READ get_RetryDropped WRITE set_RetryDropped)
+  QCEP_BOOLEAN_PROPERTY(RetryDropped)
 
 private:
   mutable QMutex                m_Mutex;
