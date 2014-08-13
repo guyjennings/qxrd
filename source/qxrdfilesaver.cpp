@@ -307,6 +307,10 @@ void QxrdFileSaver::saveRaw32Data(QString name, QxrdInt32ImageDataPtr image, Qxr
       name = uniqueFileName(name);
     }
 
+    if (g_Application) {
+      g_Application->printMessage(tr("Starting to save %1, fileIndex = %2").arg(name).arg(image->get_ImageNumber()));
+    }
+
     TIFF* tif = TIFFOpen(qPrintable(name),"w");
     int res = 1;
 
