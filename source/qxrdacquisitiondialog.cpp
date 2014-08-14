@@ -89,6 +89,7 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     procp -> prop_Average()                -> linkTo(this -> m_AverageDisplay);
     procp -> prop_CorrectionQueueLength()  -> linkTo(this -> m_CorrectionBacklog);
     procp -> prop_IntegrationQueueLength() -> linkTo(this -> m_IntegrationBacklog);
+    procp -> prop_SaverQueueLength()       -> linkTo(this -> m_SaverBacklog);
   }
 
   QxrdWindowPtr wp = m_Window;

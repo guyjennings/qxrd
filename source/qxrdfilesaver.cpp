@@ -67,6 +67,24 @@ QxrdAcquisitionWPtr QxrdFileSaver::acquisition() const
   return m_Acquisition;
 }
 
+void QxrdFileSaver::incBacklog()
+{
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc -> prop_SaverQueueLength()->incValue(1);
+  }
+}
+
+void QxrdFileSaver::decBacklog()
+{
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc -> prop_SaverQueueLength()->incValue(-1);
+  }
+}
+
 void QxrdFileSaver::mkPath(QString filePath)
 {
   QFileInfo f(filePath);
@@ -113,87 +131,93 @@ QString QxrdFileSaver::uniqueFileName(QString name)
 
 void QxrdFileSaver::saveDoubleData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
-  if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveDoubleData",
-                                           Q_ARG(QString,name),
-                                           Q_ARG(QxrdDoubleImageDataPtr,image),
-                                           Q_ARG(QxrdMaskDataPtr,overflow),
-                                           Q_ARG(int,canOverwrite)))
+  incBacklog();
+
+  INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveDoubleDataPrivate",
+                                         Qt::QueuedConnection,
+                                         Q_ARG(QString,name),
+                                         Q_ARG(QxrdDoubleImageDataPtr,image),
+                                         Q_ARG(QxrdMaskDataPtr,overflow),
+                                         Q_ARG(int,canOverwrite)));
+}
+
+void QxrdFileSaver::saveDoubleDataPrivate(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+{
+  if (image == NULL) {
+    if (g_Application) {
+      g_Application->criticalMessage(tr("QxrdFileSaver::saveDoubleData: image == NULL"));
+    }
   } else {
     QTime tic;
     tic.start();
 
-    if (image == NULL) {
-      if (g_Application) {
-        g_Application->criticalMessage(tr("QxrdFileSaver::saveDoubleData: image == NULL"));
+    int nrows = image -> get_Height();
+    int ncols = image -> get_Width();
+
+    mkPath(name);
+
+    if (canOverwrite == NoOverwrite) {
+      name = uniqueFileName(name);
+    }
+
+    TIFF* tif = TIFFOpen(qPrintable(name),"w");
+    int res = 1;
+
+    if (tif) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP));
+
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
+
+      QVector<float> buffvec(ncols);
+      float* buffer = buffvec.data();
+
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = image->value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
+
+      TIFFClose(tif);
+
+      image -> set_FileName(name);
+      image -> set_ImageSaved(true);
+
+      image -> saveMetaData(m_Experiment);
+
+      QxrdDataProcessorPtr proc(m_Processor);
+
+      if (proc) {
+        if (proc->get_SaveOverflowFiles()) {
+          saveOverflowData(name, overflow);
+        }
+
+        proc -> updateEstimatedTime(proc -> prop_SaveSubtractedTime(), tic.elapsed());
+        proc -> set_FileName(name);
+
+        if (g_Application) {
+          g_Application->printMessage(tr("Saved subtracted data in file \"%1\" after %2 msec").
+                                      arg(name).arg(tic.restart()));
+        }
       }
     } else {
-      int nrows = image -> get_Height();
-      int ncols = image -> get_Width();
+      res = 0;
+    }
 
-      mkPath(name);
-
-      if (canOverwrite == NoOverwrite) {
-        name = uniqueFileName(name);
-      }
-
-      TIFF* tif = TIFFOpen(qPrintable(name),"w");
-      int res = 1;
-
-      if (tif) {
-        TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
-        TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
-        TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
-
-        TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
-        TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
-        TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP));
-
-        TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
-        TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
-
-        QVector<float> buffvec(ncols);
-        float* buffer = buffvec.data();
-
-        for (int y=0; y<nrows; y++) {
-          for (int x=0; x<ncols; x++) {
-            buffer[x] = image->value(x,y);
-          }
-
-          TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
-        }
-
-        TIFFClose(tif);
-
-        image -> set_FileName(name);
-        image -> set_ImageSaved(true);
-
-        image -> saveMetaData(m_Experiment);
-
-        QxrdDataProcessorPtr proc(m_Processor);
-
-        if (proc) {
-          if (proc->get_SaveOverflowFiles()) {
-            saveOverflowData(name, overflow);
-          }
-
-          proc -> updateEstimatedTime(proc -> prop_SaveSubtractedTime(), tic.elapsed());
-          proc -> set_FileName(name);
-
-          if (g_Application) {
-            g_Application->printMessage(tr("Saved subtracted data in file \"%1\" after %2 msec").
-                              arg(name).arg(tic.restart()));
-          }
-        }
-      } else {
-        res = 0;
-      }
-
-      if (g_Application && res == 0) {
-        g_Application->printMessage("Error saving file");
-      }
+    if (g_Application && res == 0) {
+      g_Application->printMessage("Error saving file");
     }
   }
+
+  decBacklog();
 }
 
 void QxrdFileSaver::saveInt32Data(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
@@ -220,15 +244,21 @@ void QxrdFileSaver::saveInt16Data(QString name, QxrdInt16ImageDataPtr image, Qxr
 
 void QxrdFileSaver::saveMaskData(QString name, QxrdMaskDataPtr image, int canOverwrite)
 {
+  incBacklog();
+
+  INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveMaskDataPrivate",
+                                         Qt::QueuedConnection,
+                                         Q_ARG(QString,name),
+                                         Q_ARG(QxrdMaskDataPtr,image),
+                                         Q_ARG(int,canOverwrite)));
+}
+
+void QxrdFileSaver::saveMaskDataPrivate(QString name, QxrdMaskDataPtr image, int canOverwrite)
+{
   if (image == NULL) {
     if (g_Application) {
       g_Application->criticalMessage(tr("QxrdFileSaver::saveMaskData: image == NULL"));
     }
-  } else if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveMaskData",
-                                           Q_ARG(QString,name),
-                                           Q_ARG(QxrdMaskDataPtr,image),
-                                           Q_ARG(int,canOverwrite)))
   } else {
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
@@ -280,20 +310,28 @@ void QxrdFileSaver::saveMaskData(QString name, QxrdMaskDataPtr image, int canOve
       g_Application->printMessage("Error saving file");
     }
   }
+
+  decBacklog();
 }
 
 void QxrdFileSaver::saveRaw32Data(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+{
+  incBacklog();
+
+  INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw32DataPrivate",
+                                         Qt::QueuedConnection,
+                                         Q_ARG(QString,name),
+                                         Q_ARG(QxrdInt32ImageDataPtr,image),
+                                         Q_ARG(QxrdMaskDataPtr,overflow),
+                                         Q_ARG(int,canOverwrite)));
+}
+
+void QxrdFileSaver::saveRaw32DataPrivate(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
       g_Application->criticalMessage(tr("QxrdFileSaver::saveRaw32Data: image == NULL"));
     }
-  } else if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw32Data",
-                                           Q_ARG(QString,name),
-                                           Q_ARG(QxrdInt32ImageDataPtr,image),
-                                           Q_ARG(QxrdMaskDataPtr,overflow),
-                                           Q_ARG(int,canOverwrite)))
   } else {
     QTime tic;
     tic.start();
@@ -389,7 +427,7 @@ void QxrdFileSaver::saveRaw32Data(QString name, QxrdInt32ImageDataPtr image, Qxr
 
         if (g_Application) {
           g_Application->printMessage(tr("Saved 32 bit data in file \"%1\" after %2 msec").
-                            arg(name).arg(tic.restart()));
+                                      arg(name).arg(tic.restart()));
         }
       }
     } else {
@@ -400,20 +438,28 @@ void QxrdFileSaver::saveRaw32Data(QString name, QxrdInt32ImageDataPtr image, Qxr
       g_Application->printMessage("Error saving file");
     }
   }
+
+  decBacklog();
 }
 
 void QxrdFileSaver::saveRaw16Data(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
+  incBacklog();
+
+  INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw16DataPrivate",
+                                         Qt::QueuedConnection,
+                                         Q_ARG(QString,name),
+                                         Q_ARG(QxrdInt16ImageDataPtr,image),
+                                         Q_ARG(QxrdMaskDataPtr,overflow),
+                                         Q_ARG(int,canOverwrite)))
+}
+
+void QxrdFileSaver::saveRaw16DataPrivate(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+{
   if (image == NULL) {
     if (g_Application) {
-      g_Application->criticalMessage(tr("QxrdFileSaver::saveRawData: image == NULL"));
+      g_Application->criticalMessage(tr("QxrdFileSaver::saveRaw16Data: image == NULL"));
     }
-  } else if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw16Data",
-                                           Q_ARG(QString,name),
-                                           Q_ARG(QxrdInt16ImageDataPtr,image),
-                                           Q_ARG(QxrdMaskDataPtr,overflow),
-                                           Q_ARG(int,canOverwrite)))
   } else {
     QTime tic;
     tic.start();
@@ -474,7 +520,7 @@ void QxrdFileSaver::saveRaw16Data(QString name, QxrdInt16ImageDataPtr image, Qxr
 
         if (g_Application) {
           g_Application->printMessage(tr("Saved 16 bit data in file \"%1\" after %2 msec").
-                            arg(name).arg(tic.restart()));
+                                      arg(name).arg(tic.restart()));
         }
       }
     } else {
@@ -485,20 +531,28 @@ void QxrdFileSaver::saveRaw16Data(QString name, QxrdInt16ImageDataPtr image, Qxr
       g_Application->printMessage("Error saving file");
     }
   }
+
+  decBacklog();
 }
 
 void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+{
+  incBacklog();
+
+  INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveTextDataPrivate",
+                                         Qt::QueuedConnection,
+                                         Q_ARG(QString,name),
+                                         Q_ARG(QxrdDoubleImageDataPtr,image),
+                                         Q_ARG(QxrdMaskDataPtr,overflow),
+                                         Q_ARG(int,canOverwrite)))
+}
+
+void QxrdFileSaver::saveTextDataPrivate(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
       g_Application->criticalMessage(tr("QxrdFileSaver::saveTextData: image == NULL"));
     }
-  } else if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveTextData",
-                                           Q_ARG(QString,name),
-                                           Q_ARG(QxrdDoubleImageDataPtr,image),
-                                           Q_ARG(QxrdMaskDataPtr,overflow),
-                                           Q_ARG(int,canOverwrite)))
   } else {
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
@@ -564,19 +618,27 @@ void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, Qxr
       proc -> set_FileName(name);
     }
   }
+
+  decBacklog();
 }
 
 void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QString fileName)
+{
+  incBacklog();
+
+  INVOKE_CHECK(QMetaObject::invokeMethod(this, "writeOutputScanPrivate",
+                                         Qt::QueuedConnection,
+                                         Q_ARG(QString,dir),
+                                         Q_ARG(QxrdIntegratedDataPtr,data),
+                                         Q_ARG(QString,fileName)));
+}
+
+void QxrdFileSaver::writeOutputScanPrivate(QString dir, QxrdIntegratedDataPtr data, QString fileName)
 {
   if (data == NULL) {
     if (g_Application) {
       g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: data == NULL"));
     }
-  } else if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "writeOutputScan",
-                                           Q_ARG(QString,dir),
-                                           Q_ARG(QxrdIntegratedDataPtr,data),
-                                           Q_ARG(QString,fileName)))
   } else {
     mkPath(dir);
 
@@ -623,19 +685,27 @@ void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QSt
       }
     }
   }
+
+  decBacklog();
 }
 
 void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName)
+{
+  incBacklog();
+
+  INVOKE_CHECK(QMetaObject::invokeMethod(this, "writeOutputScanPrivate",
+                                         Qt::QueuedConnection,
+                                         Q_ARG(FILE*, logFile),
+                                         Q_ARG(QxrdIntegratedDataPtr,data),
+                                         Q_ARG(QString,fileName)))
+}
+
+void QxrdFileSaver::writeOutputScanPrivate(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName)
 {
   if (data == NULL) {
     if (g_Application) {
       g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: data == NULL"));
     }
-  } else if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "writeOutputScan",
-                                           Q_ARG(FILE*, logFile),
-                                           Q_ARG(QxrdIntegratedDataPtr,data),
-                                           Q_ARG(QString,fileName)))
   } else if (logFile) {
     QTime tic;
     tic.start();
@@ -703,6 +773,8 @@ void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, Q
       proc -> updateEstimatedTime(proc -> prop_SaveIntegratedDataTime(), tic.restart());
     }
   }
+
+  decBacklog();
 }
 
 void QxrdFileSaver::saveOverflowData(QString name, QxrdMaskDataPtr overflow)

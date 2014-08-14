@@ -151,16 +151,6 @@ Can only be changed by saving a new experiment</string>
           </property>
          </widget>
         </item>
-        <item row="24" column="2">
-         <widget class="QLabel" name="label_26">
-          <property name="text">
-           <string>Integration Backlog</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
         <item row="5" column="3">
          <widget class="QPushButton" name="m_BrowseScanFileButton">
           <property name="toolTip">
@@ -171,7 +161,7 @@ Can only be changed by saving a new experiment</string>
           </property>
          </widget>
         </item>
-        <item row="25" column="0" colspan="4">
+        <item row="26" column="0" colspan="4">
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -790,26 +780,6 @@ Location(s) where data files are saved
           </property>
          </widget>
         </item>
-        <item row="24" column="3">
-         <widget class="QLabel" name="m_IntegrationBacklog">
-          <property name="toolTip">
-           <string>Number of frames still to be integrated</string>
-          </property>
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="23" column="1">
-         <widget class="QLabel" name="m_DroppedFrames">
-          <property name="toolTip">
-           <string>Count of dropped frames</string>
-          </property>
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
         <item row="11" column="0">
          <widget class="QLabel" name="label_15">
           <property name="text">
@@ -892,35 +862,6 @@ Script Function: fileindex()</string>
           </property>
          </widget>
         </item>
-        <item row="23" column="3">
-         <widget class="QPushButton" name="m_ClearDroppedButton">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>1</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip">
-           <string>Clear dropped frames counter</string>
-          </property>
-          <property name="text">
-           <string>Clear Dropped</string>
-          </property>
-         </widget>
-        </item>
-        <item row="23" column="0">
-         <widget class="QLabel" name="label_23">
-          <property name="text">
-           <string>Dropped Frames</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
         <item row="10" column="1" colspan="3">
          <widget class="QLineEdit" name="m_UserComment3">
           <property name="sizePolicy">
@@ -956,6 +897,85 @@ Script Property: &quot;acquisition.userComment3&quot;
          <widget class="QCheckBox" name="m_RetryDropped">
           <property name="text">
            <string>Retry Dropped Frames Automatically</string>
+          </property>
+         </widget>
+        </item>
+        <item row="23" column="2">
+         <widget class="QLabel" name="label_23">
+          <property name="text">
+           <string>Dropped Frames</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="24" column="3">
+         <widget class="QPushButton" name="m_ClearDroppedButton">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>1</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Clear dropped frames counter</string>
+          </property>
+          <property name="text">
+           <string>Clear Dropped</string>
+          </property>
+         </widget>
+        </item>
+        <item row="23" column="3">
+         <widget class="QLabel" name="m_DroppedFrames">
+          <property name="toolTip">
+           <string>Count of dropped frames</string>
+          </property>
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="25" column="0">
+         <widget class="QLabel" name="label_26">
+          <property name="text">
+           <string>Integration Backlog</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="23" column="0">
+         <widget class="QLabel" name="label_28">
+          <property name="text">
+           <string>File Saving Backlog</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="23" column="1">
+         <widget class="QLabel" name="m_SaverBacklog">
+          <property name="toolTip">
+           <string>Number of frames still to be corrected</string>
+          </property>
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="25" column="1">
+         <widget class="QLabel" name="m_IntegrationBacklog">
+          <property name="toolTip">
+           <string>Number of frames still to be integrated</string>
+          </property>
+          <property name="text">
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>

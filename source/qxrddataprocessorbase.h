@@ -204,6 +204,9 @@ public:
   Q_PROPERTY(int integrationQueueLength READ get_IntegrationQueueLength WRITE set_IntegrationQueueLength STORED false)
   QCEP_INTEGER_PROPERTY(IntegrationQueueLength)
 
+  Q_PROPERTY(int saverQueueLength READ get_SaverQueueLength WRITE set_SaverQueueLength STORED false)
+  QCEP_INTEGER_PROPERTY(SaverQueueLength)
+
 public:
   enum {
     NoOverwrite,

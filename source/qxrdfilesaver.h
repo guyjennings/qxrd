@@ -50,12 +50,24 @@ public slots:
   void writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName = QString());
   void writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QString fileName = QString());
 
+private slots:
+  void saveDoubleDataPrivate(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveMaskDataPrivate(QString name, QxrdMaskDataPtr image, int canOverwrite);
+  void saveRaw32DataPrivate(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveRaw16DataPrivate(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void saveTextDataPrivate(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite);
+  void writeOutputScanPrivate(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName = QString());
+  void writeOutputScanPrivate(QString dir, QxrdIntegratedDataPtr data, QString fileName = QString());
+
 private:
   void mkPath(QString filePath);
   QString uniqueFileName(QString name);
   QxrdAcquisitionWPtr acquisition() const;
   QxrdExperimentWPtr experiment() const;
   void saveOverflowData(QString name, QxrdMaskDataPtr overflow);
+
+  void incBacklog();
+  void decBacklog();
 
 private:
   QxrdExperimentWPtr    m_Experiment;
