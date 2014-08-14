@@ -588,6 +588,10 @@ void QcepProperty::printMessage(QString msg, QDateTime ts)
 
   if (saver) {
     saver->printMessage(msg, ts);
+  } else if (m_Parent) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(m_Parent, "printMessage",
+                                           Q_ARG(QString, msg),
+                                           Q_ARG(QDateTime, QDateTime::currentDateTime())));
   } else {
     printf("%s\n", qPrintable(msg));
   }
@@ -896,7 +900,7 @@ void QcepIntProperty::incValue(int step)
   }
 
   if (step) {
-    int newVal = m_Value.fetchAndAddOrdered(step);
+    m_Value.fetchAndAddOrdered(step);
 
     QcepSettingsSaverPtr saver(m_Saver);
 
@@ -904,8 +908,8 @@ void QcepIntProperty::incValue(int step)
       saver->changed(this);
     }
 
-    emit valueChanged(newVal, incIndex(1));
-    emit valueChanged(tr("%1").arg(newVal));
+    emit valueChanged(value(), incIndex(1));
+    emit valueChanged(tr("%1").arg(value()));
   }
 }
 
