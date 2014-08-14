@@ -39,16 +39,16 @@
  * Bellow, an attempt is made to issue a warning if this option is turned on and OpenMP
  * is being used (note that this will work only if omp.h is included before levmar.h)
  */
-#define LINSOLVERS_RETAIN_MEMORY
-#if (defined(_OPENMP))
-# ifdef LINSOLVERS_RETAIN_MEMORY
-#  ifdef _MSC_VER
-#  pragma message("LINSOLVERS_RETAIN_MEMORY is not safe in a multithreaded environment and should be turned off!")
-#  else
-#  warning LINSOLVERS_RETAIN_MEMORY is not safe in a multithreaded environment and should be turned off!
-#  endif /* _MSC_VER */
-# endif /* LINSOLVERS_RETAIN_MEMORY */
-#endif /* _OPENMP */
+//#define LINSOLVERS_RETAIN_MEMORY
+//#if (defined(_OPENMP))
+//# ifdef LINSOLVERS_RETAIN_MEMORY
+//#  ifdef _MSC_VER
+//#  pragma message("LINSOLVERS_RETAIN_MEMORY is not safe in a multithreaded environment and should be turned off!")
+//#  else
+//#  warning LINSOLVERS_RETAIN_MEMORY is not safe in a multithreaded environment and should be turned off!
+//#  endif /* _MSC_VER */
+//# endif /* LINSOLVERS_RETAIN_MEMORY */
+//#endif /* _OPENMP */
 
 /* specifies whether double precision routines will be compiled or not */
 #define LM_DBL_PREC
