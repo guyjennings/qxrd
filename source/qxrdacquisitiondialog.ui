@@ -429,7 +429,7 @@ Raw: &lt;pattern&gt;-&lt;nnnnn&gt;-&lt;ppp&gt;.raw.tif</string>
 (relative to data directory)</string>
           </property>
           <property name="readOnly">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -542,7 +542,7 @@ Script Property: &quot;acquisition.userComment2&quot;
 </string>
           </property>
           <property name="readOnly">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -661,7 +661,7 @@ Script Function: postTriggerFiles()</string>
 </string>
           </property>
           <property name="readOnly">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>

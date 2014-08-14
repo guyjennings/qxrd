@@ -66,7 +66,6 @@ public:
   QxrdSimpleServerThreadWPtr simpleServerThread();
 
   FILE* logFile();
-  void newLogFile(QString path);
 
   FILE* scanFile();
   void newScanFile(QString path);
@@ -75,6 +74,8 @@ public:
   QxrdScriptEngineWPtr scriptEngine();
 
 public slots:
+  void newLogFile(QString path);
+  void openNewLogFile();
 
   void executeCommand(QString cmd);
 

@@ -520,6 +520,20 @@ void QxrdExperiment::newLogFile(QString path)
   openLogFile();
 }
 
+void QxrdExperiment::openNewLogFile()
+{
+  {
+    QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
+
+    if (m_LogFile) {
+      fclose(m_LogFile);
+      m_LogFile = NULL;
+    }
+  }
+
+  openLogFile();
+}
+
 void QxrdExperiment::openLogFile()
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);

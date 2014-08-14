@@ -81,6 +81,8 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     exp  -> prop_ScanFileName() -> linkTo(this -> m_ScanFileName);
     exp  -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
     exp  -> prop_DetectorNumber() -> linkTo(this -> m_DetectorNumber);
+
+    connect(m_LogFileName, SIGNAL(editingFinished()), exp, SLOT(openNewLogFile()));
   }
 
   QxrdDataProcessorPtr procp(m_DataProcessor);

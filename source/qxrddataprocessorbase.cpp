@@ -516,6 +516,8 @@ void QxrdDataProcessorBase::loadData(QString name)
       newData(res, QxrdMaskDataPtr());
 
       set_DataPath(res -> get_FileName());
+
+      printMessage(tr("Loaded data from %1").arg(path));
     }
   }
 }
@@ -557,6 +559,8 @@ void QxrdDataProcessorBase::loadDark(QString name)
       newDarkImage(res);
 
       set_DarkImagePath(res -> get_FileName());
+
+      printMessage(tr("Loaded Dark Image from %1").arg(path));
     } else {
       printMessage(tr("loadDark(%1) failed").arg(name));
     }
@@ -1066,6 +1070,8 @@ void QxrdDataProcessorBase::loadMask(QString name)
     newMask();
 
     set_MaskPath(mask() -> get_FileName());
+
+    printMessage(tr("Loaded Mask from %1").arg(path));
   }
 }
 
