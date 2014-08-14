@@ -58,6 +58,7 @@ private:
   double m_AttenuationLength;
   int    m_NRows;
   int    m_NCols;
+  int    m_NPix;
   double m_RStep;
   double m_RMin;
   double m_RMax;

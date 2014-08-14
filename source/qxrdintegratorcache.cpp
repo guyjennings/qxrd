@@ -47,6 +47,7 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_AttenuationLength(0.0),
   m_NRows(-1),
   m_NCols(-1),
+  m_NPix(-1),
   m_RStep(0),
   m_RMin(0),
   m_RMax(0),
@@ -337,6 +338,9 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
       m_NRows = dimg->get_Height();
       m_NCols = dimg->get_Width();
+      m_NPix  = m_NRows*m_NCols*m_Oversample*m_Oversample;
+
+      m_CacheFullLevel.fetchAndStoreOrdered(m_NPix);
 
       QcepDoubleList norm = dimg->get_Normalization();
 
@@ -356,10 +360,6 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 //        double cx = m_CenterX;
 //        double cy = m_CenterY;
 
-        int nRows = m_NRows;
-        int nCols = m_NCols;
-        int nPix  = nRows*nCols*m_Oversample*m_Oversample;
-
         m_CachedBinNumbers =  QxrdAllocator::newInt32Image(m_Allocator,
                                                            QxrdAllocator::AlwaysAllocate,
                                                            m_NCols*m_Oversample,
@@ -374,8 +374,6 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           m_CachedBinNumbers -> clear();
           m_CachedNormalization -> clear();
 
-          m_CacheFullLevel.fetchAndStoreOrdered(nPix);
-
           if (m_EnableUserGeometry || m_EnableUserAbsorption) {
             grabScriptEngine();
           }
@@ -383,8 +381,8 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           double rMin=0, rMax=0;
           bool first = true;
 
-          for (int y = 0; y < nRows; y++) {
-            for (int x = 0; x < nCols; x++) {
+          for (int y = 0; y < m_NRows; y++) {
+            for (int x = 0; x < m_NCols; x++) {
               for (int oversampley = 0; oversampley < noversample; oversampley++) {
                 double yy = y+oversampley*oversampleStep+halfOversampleStep;
                 int iy = y*noversample+oversampley;
@@ -436,8 +434,8 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           m_RMin = rMin;
           m_RMax = rMax;
 
-          for (int y = 0; y < nRows; y++) {
-            for (int x = 0; x < nCols; x++) {
+          for (int y = 0; y < m_NRows; y++) {
+            for (int x = 0; x < m_NCols; x++) {
               for (int oversampley = 0; oversampley < noversample; oversampley++) {
                 double yy = y+oversampley*oversampleStep+halfOversampleStep;
                 int iy = y*noversample+oversampley;
@@ -466,7 +464,7 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
             }
           }
 
-          m_CacheFillLevel.fetchAndStoreOrdered(nPix);
+          m_CacheFillLevel.fetchAndStoreOrdered(m_NPix);
 
           if (m_EnableUserGeometry || m_EnableUserAbsorption) {
             releaseScriptEngine();
@@ -488,7 +486,11 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
         QThreadAccess::msleep(100);
       }
 
-      if (m_CacheFillLevel.fetchAndAddOrdered(0) == m_CacheFullLevel.fetchAndAddOrdered(0)) {
+      if (m_CacheFillLevel.fetchAndAddOrdered(0) != m_CacheFullLevel.fetchAndAddOrdered(0)) {
+        expt->printMessage(tr("QxrdIntegratorCache::performIntegration - anomalous cache [%1,%2]")
+                           .arg(m_CacheFillLevel.fetchAndAddOrdered(0))
+                           .arg(m_CacheFullLevel.fetchAndAddOrdered(0)));
+      } else {
         if (qcepDebug(DEBUG_INTEGRATOR)) {
           expt->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
         }

@@ -775,7 +775,7 @@ void QxrdDetectorPerkinElmer::onEndFrameCallback()
 
       //    printf("m_PerkinElmer->Acquisition_GetActFrame took %d msec\n", tic.restart());
 
-      int counter = m_Counter.fetchAndAddOrdered(1);
+      int counter = m_Counter.fetchAndAddOrdered(1) + 1;
 
       //    printf("m_Counter.fetchAndAddOrdered took %d msec\n", tic.restart());
 

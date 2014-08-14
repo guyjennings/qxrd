@@ -1797,12 +1797,12 @@ QxrdMaskDataPtr QxrdDataProcessorBase::overflow() const
 
 int QxrdDataProcessorBase::incrementAcquiredCount()
 {
-  return m_AcquiredCount.fetchAndAddOrdered(+1);
+  return m_AcquiredCount.fetchAndAddOrdered(+1) + 1;
 }
 
 int QxrdDataProcessorBase::decrementAcquiredCount()
 {
-  int res = m_AcquiredCount.fetchAndAddOrdered(-1);
+  int res = m_AcquiredCount.fetchAndAddOrdered(-1) - 1;
 
   if (res == 0) {
     m_ProcessWaiting.wakeAll();
