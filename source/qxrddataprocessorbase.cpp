@@ -105,6 +105,10 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_Integrator(NULL),
   m_GenerateTestImage(NULL)
 {
+//  m_SaverQueueLength.setDebug(1);
+//  m_IntegrationQueueLength.setDebug(1);
+//  m_CorrectionQueueLength.setDebug(1);
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDataProcessorBase::QxrdDataProcessorBase(%p)\n", this);
   }
@@ -121,6 +125,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(saver, m_Allocator));
 
   m_DistortionCorrection = QxrdDistortionCorrectionPtr(new QxrdDistortionCorrection(saver, m_Experiment));
+
 }
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()

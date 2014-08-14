@@ -640,14 +640,13 @@ void QxrdFileSaver::writeOutputScanPrivate(QString dir, QxrdIntegratedDataPtr da
       g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: data == NULL"));
     }
   } else {
-    mkPath(dir);
-
     if (fileName.isNull()) {
       QxrdDoubleImageDataPtr image = data -> get_Image();
       if (image == NULL) {
         if (g_Application) {
           g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
         }
+        decBacklog();
         return;
       }
 
@@ -667,22 +666,26 @@ void QxrdFileSaver::writeOutputScanPrivate(QString dir, QxrdIntegratedDataPtr da
 
     QString name = QDir(dir).filePath(fileBase+extension);
 
+    mkPath(name);
+
     name = uniqueFileName(name);
 
     FILE *f = fopen(qPrintable(name),"a");
 
     if (f == NULL) {
       if (g_Application) {
-        g_Application->criticalMessage(tr("Couldn't open file %1").arg(name));
+        g_Application->printMessage(tr("Couldn't open file %1").arg(name));
       }
     } else {
-      writeOutputScan(f, data, fileName);
+      writeOutputScanPrivate(f, data, fileName);
 
       fclose(f);
 
       if (g_Application) {
         g_Application->printMessage(tr("Integrated data saved in %1").arg(name));
       }
+
+      return;
     }
   }
 
@@ -754,7 +757,7 @@ void QxrdFileSaver::writeOutputScanPrivate(FILE* logFile, QxrdIntegratedDataPtr 
         if (y[i] >= 0) {
           fprintf(logFile, "%E %E\n", x[i], y[i]);
         } else {
-          fprintf(logFile, "%E %E\n", x[i], 0);
+          fprintf(logFile, "%E %E\n", x[i], 0.0);
         }
       }
     } else {

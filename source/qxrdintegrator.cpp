@@ -139,7 +139,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr i
     QxrdExperimentPtr expt(m_Experiment);
 
     if (expt) {
-      expt->printMessage(tr("QxrdIntegrator::performIntegration(\"%1\",%2,%3)")
+      expt->printMessage(tr("QxrdIntegrator::performIntegration(\"%1\")")
                          .arg(dimg->get_FileName()));
     }
   }
