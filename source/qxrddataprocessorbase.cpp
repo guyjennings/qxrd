@@ -1271,8 +1271,8 @@ QxrdDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage(
     }
 
     if (qcepDebug(DEBUG_PROCESS)) {
-      printMessage(tr("Processing Image \"%1\", count %2")
-                   .arg(processed->get_FileName()).arg(getAcquiredCount()));
+      printMessage(tr("Processing Image \"%1\", image number %2, count %3")
+                   .arg(processed->get_FileName()).arg(processed->get_ImageNumber()).arg(getAcquiredCount()));
     }
 
     if (get_PerformDarkSubtraction()) {

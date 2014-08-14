@@ -704,19 +704,19 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
     res[p].resize(preTrigger+1);
     ovf[p].resize(preTrigger+1);
 
-    for (int t=0; t<=preTrigger; t++) {
-      res[p][t] = QxrdAllocator::newInt32Image(m_Allocator,
-                                               QxrdAllocator::AllocateFromReserve,
-                                               get_NCols(), get_NRows());
-      ovf[p][t] = QxrdAllocator::newMask(m_Allocator,
-                                         QxrdAllocator::AllocateFromReserve,
-                                         get_NCols(), get_NRows(), 0);
+//    for (int t=0; t<=preTrigger; t++) {
+//      res[p][t] = QxrdAllocator::newInt32Image(m_Allocator,
+//                                               QxrdAllocator::AllocateFromReserve,
+//                                               get_NCols(), get_NRows());
+//      ovf[p][t] = QxrdAllocator::newMask(m_Allocator,
+//                                         QxrdAllocator::AllocateFromReserve,
+//                                         get_NCols(), get_NRows(), 0);
 
-      if (res[p][t]==NULL || ovf[p][t]==NULL) {
-        criticalMessage("Insufficient memory for acquisition operation");
-        goto cancel;
-      }
-    }
+//      if (res[p][t]==NULL || ovf[p][t]==NULL) {
+//        criticalMessage("Insufficient memory for acquisition operation");
+//        goto cancel;
+//      }
+//    }
   }
 
   for (int i=0; i<skipBefore; i++) {
@@ -808,6 +808,8 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
           if (novf == NULL) {
             printMessage("Dropped frame allocation...");
             indicateDroppedFrame(i);
+          } else {
+            printMessage(tr("Newly allocated mask number %1").arg(novf->get_ImageNumber()));
           }
 
           if (novf) ovf[p][0] -> set_SummedExposures(0);
@@ -839,7 +841,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
       }
 
       if (get_RetryDropped()) {
-        int minSum = nsummed;
+        int minSum = nsummed+10;
 
         for (int p=0; p<nphases; p++) {
           if (res[p][0]) {
@@ -848,16 +850,18 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
             if (ns < minSum) {
               minSum = ns;
             }
+          } else {
+            minSum = 0;
           }
         }
 
-        printMessage(tr("i = %1, Minsum = %2, s = %3").arg(i).arg(minSum).arg(s));
+        printMessage(tr("i = %1, Minsum = %2, s = %3, nsummed = %4").arg(i).arg(minSum).arg(s).arg(nsummed));
 
-        if (minSum == nsummed) {
+        if (minSum == nsummed+10) {
           printMessage("No acquired images allocated");
-          s = s+1;
+//          s = s+1;
         } else {
-          s = minSum+1;
+          s = minSum;
         }
       } else {
         s = s+1;
@@ -892,9 +896,7 @@ saveCancel:
       nPreTriggered = 0;
 
       for (int p=0; p<nphases; p++) {
-        if (res[p][0] && ovf[p][0]) {
-          processAcquiredImage(fileBase, fileIndex, p, nphases, true, res[p][0], ovf[p][0]);
-        }
+        processAcquiredImage(fileBase, fileIndex, p, nphases, true, res[p][0], ovf[p][0]);
 
         if (qcepDebug(DEBUG_ACQUIRETIME)) {
           printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
@@ -906,14 +908,16 @@ saveCancel:
                        );
         }
 
+        res[p][0] = QxrdInt32ImageDataPtr();
+        ovf[p][0] = QxrdMaskDataPtr();
       }
       fileIndex++;
       set_FileIndex(fileIndex);
     } else {
       nPreTriggered++;
       for (int p=0; p<nphases; p++) {
-        res[p].push_front(QxrdInt32ImageDataPtr(NULL));
-        ovf[p].push_front(QxrdMaskDataPtr(NULL));
+        res[p].push_front(QxrdInt32ImageDataPtr());
+        ovf[p].push_front(QxrdMaskDataPtr());
         res[p].pop_back();
         ovf[p].pop_back();
       }
