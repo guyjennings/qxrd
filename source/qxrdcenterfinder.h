@@ -223,6 +223,10 @@ public slots:
   QxrdPowderPoint powderRingPoint(int i) const;
   QxrdPowderPoint powderRingPoint(int r, int i) const;
 
+  double powderRingAverageR(int r) const;
+  double powderRingAverageTTH(int r) const;
+  double powderRingAverageQ(int r) const;
+
 public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

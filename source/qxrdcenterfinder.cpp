@@ -1221,3 +1221,51 @@ QxrdPowderPoint QxrdCenterFinder::powderRingPoint(int r, int i) const
 
   return QxrdPowderPoint();
 }
+
+double QxrdCenterFinder::powderRingAverageR(int r) const
+{
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
+  double sum = 0, npts = 0;
+
+  foreach (QxrdPowderPoint pt, pts) {
+    if (pt.n1() == r) {
+      npts += 1;
+      sum  += getR(pt.x(), pt.y());
+    }
+  }
+
+  return sum/npts;
+}
+
+double QxrdCenterFinder::powderRingAverageQ(int r) const
+{
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
+  double sum = 0, npts = 0;
+
+  foreach (QxrdPowderPoint pt, pts) {
+    if (pt.n1() == r) {
+      npts += 1;
+      sum  += getQ(pt.x(), pt.y());
+    }
+  }
+
+  return sum/npts;
+}
+
+double QxrdCenterFinder::powderRingAverageTTH(int r) const
+{
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
+  double sum = 0, npts = 0;
+
+  foreach (QxrdPowderPoint pt, pts) {
+    if (pt.n1() == r) {
+      npts += 1;
+      sum  += getTTH(pt.x(), pt.y());
+    }
+  }
+
+  return sum/npts;
+}
