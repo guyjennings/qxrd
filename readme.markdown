@@ -1,6 +1,17 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.5 - Aug 20 2014
+Improved memory handling during acquisition - should drop fewer frames
+
+Added optional automatic retry mode for acquisition - dropped frames will be repeated automatically
+during acquisition.   Note that will affect acquisition timing.
+
+Added a saver backlog counter to go with the processing and integration backlog counters already provided. The
+backlog counters should now count down to zero properly as well.
+
+Tidied up powder ring fitting routines and removed some redundant duplications.
+
 ## v0.11.4 - Aug 11 2014
 More work on fitting - ellipse fitting added
 
