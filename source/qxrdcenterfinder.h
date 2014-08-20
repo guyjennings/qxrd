@@ -184,7 +184,7 @@ public slots:
 
   QPointF getXY(double tth, double chi);
 
-  void fitPowderCircle(int n=0);
+//  void fitPowderCircle(int n=0);
   void fitPowderCircle2(int n=0);
   void fitPowderEllipse(int n=0);
   void fitPowderEllipses();
@@ -202,7 +202,7 @@ public slots:
   bool fitPeakNear(double x, double y);
   bool fitRingNear(double x0, double y0);
   bool traceRingNear(double x0, double y0, double step=25.0);
-  bool traceRingNearParallel(double x0, double y0, double step=25.0);
+//  bool traceRingNearParallel(double x0, double y0, double step=25.0);
 
   int    getPowderPointN1(int i);
   int    getPowderPointN2(int i);
@@ -214,8 +214,8 @@ public slots:
   QScriptValue getPowderPoints();
   void         setPowderPoint(int i, QScriptValue val);
 
-  void undoRefinePowderFitParameters();
-  void refinePowderFitParameters();
+//  void undoRefinePowderFitParameters();
+//  void refinePowderFitParameters();
 
   int countPowderRings() const;
   int countPowderRingPoints() const;
@@ -234,8 +234,8 @@ public:
   void setData(QxrdDoubleImageDataPtr data);
   double imageValue(double x, double y);
 
-  void evaluateFit(double *parm, double *x, int np, int nx);
-  void evaluatePowderFit(double *parm, double *x, int np, int nx);
+//  void evaluateFit(double *parm, double *x, int np, int nx);
+//  void evaluatePowderFit(double *parm, double *x, int np, int nx);
 
   QxrdExperimentWPtr experiment() const;
   QxrdDoubleImageDataPtr data() const;

@@ -957,18 +957,18 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 
           QxrdPowderPoint nearest = cf->nearestPowderPoint(x, y);
 
-          QAction *fitCircle        = plotMenu.addAction(tr("Fit Center from Points on Ring %1").arg(nearest.n1()));
-          QAction *fitCircle2       = plotMenu.addAction(tr("Fit Circle from Points on Ring %1").arg(nearest.n1()));
+//          QAction *fitCircle        = plotMenu.addAction(tr("Fit Center from Points on Ring %1").arg(nearest.n1()));
+          QAction *fitCircle2       = plotMenu.addAction(tr("Fit Circle Center from Points on Ring %1").arg(nearest.n1()));
           QAction *fitEllipse       = plotMenu.addAction(tr("Fit Ellipse from Points on Ring %1").arg(nearest.n1()));
           QAction *fitEllipses      = plotMenu.addAction(tr("Fit Ellipses to all powder rings"));
           QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
-          QAction *delRing          = plotMenu.addAction(tr("Delete all points in ring %1").arg(nearest.n1()));
-          QAction *deleteAllPoints  = plotMenu.addAction(tr("Delete all Points"));
+          QAction *delRing          = plotMenu.addAction(tr("Delete Ring %1").arg(nearest.n1()));
+          QAction *deleteAllPoints  = plotMenu.addAction(tr("Delete all Rings"));
           QAction *normalizeRings   = plotMenu.addAction(tr("Normalize Powder Rings"));
           QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
-          QAction *fitRingNear      = plotMenu.addAction(tr("Fit Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *fitRingNear      = plotMenu.addAction(tr("Fit Point on Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *traceRingClockwise = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
-          QAction *traceRingParallel = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4] in parallel").arg(x).arg(y).arg(event->x()).arg(event->y()));
+//          QAction *traceRingParallel = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4] in parallel").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *zapPixel         = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
 
           QAction *action = plotMenu.exec(event->globalPos());
@@ -977,8 +977,8 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             autoScale();
           } else if (action == prGr) {
             printGraph();
-          } else if (action == fitCircle) {
-            cf->fitPowderCircle(nearest.n1());
+//          } else if (action == fitCircle) {
+//            cf->fitPowderCircle(nearest.n1());
           } else if (action == fitCircle2) {
             cf->fitPowderCircle2(nearest.n1());
           } else if (action == fitEllipse) {
@@ -1006,11 +1006,11 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
                                       Q_ARG(double,x),
                                       Q_ARG(double,y),
                                       Q_ARG(double,25.0));
-          } else if (action == traceRingParallel) {
-            QMetaObject::invokeMethod(cf.data(), "traceRingNearParallel",
-                                      Q_ARG(double,x),
-                                      Q_ARG(double,y),
-                                      Q_ARG(double,25.0));
+//          } else if (action == traceRingParallel) {
+//            QMetaObject::invokeMethod(cf.data(), "traceRingNearParallel",
+//                                      Q_ARG(double,x),
+//                                      Q_ARG(double,y),
+//                                      Q_ARG(double,25.0));
           } else if (action == zapPixel) {
             this->zapPixel(qRound(x),qRound(y));
           }
