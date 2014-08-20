@@ -184,8 +184,7 @@ public slots:
 
   QPointF getXY(double tth, double chi);
 
-//  void fitPowderCircle(int n=0);
-  void fitPowderCircle2(int n=0);
+  void fitPowderCircle(int n=0);
   void fitPowderEllipse(int n=0);
   void fitPowderEllipses();
 
@@ -214,9 +213,6 @@ public slots:
   QScriptValue getPowderPoints();
   void         setPowderPoint(int i, QScriptValue val);
 
-//  void undoRefinePowderFitParameters();
-//  void refinePowderFitParameters();
-
   int countPowderRings() const;
   int countPowderRingPoints() const;
   int countPowderRingPoints(int r) const;
@@ -233,9 +229,6 @@ public:
 
   void setData(QxrdDoubleImageDataPtr data);
   double imageValue(double x, double y);
-
-//  void evaluateFit(double *parm, double *x, int np, int nx);
-//  void evaluatePowderFit(double *parm, double *x, int np, int nx);
 
   QxrdExperimentWPtr experiment() const;
   QxrdDoubleImageDataPtr data() const;

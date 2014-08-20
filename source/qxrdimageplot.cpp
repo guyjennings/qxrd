@@ -957,8 +957,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 
           QxrdPowderPoint nearest = cf->nearestPowderPoint(x, y);
 
-//          QAction *fitCircle        = plotMenu.addAction(tr("Fit Center from Points on Ring %1").arg(nearest.n1()));
-          QAction *fitCircle2       = plotMenu.addAction(tr("Fit Circle Center from Points on Ring %1").arg(nearest.n1()));
+          QAction *fitCircle        = plotMenu.addAction(tr("Fit Circle Center from Points on Ring %1").arg(nearest.n1()));
           QAction *fitEllipse       = plotMenu.addAction(tr("Fit Ellipse from Points on Ring %1").arg(nearest.n1()));
           QAction *fitEllipses      = plotMenu.addAction(tr("Fit Ellipses to all powder rings"));
           QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
@@ -977,10 +976,8 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             autoScale();
           } else if (action == prGr) {
             printGraph();
-//          } else if (action == fitCircle) {
-//            cf->fitPowderCircle(nearest.n1());
-          } else if (action == fitCircle2) {
-            cf->fitPowderCircle2(nearest.n1());
+          } else if (action == fitCircle) {
+            cf->fitPowderCircle(nearest.n1());
           } else if (action == fitEllipse) {
             cf->fitPowderEllipse(nearest.n1());
           } else if (action == fitEllipses) {

@@ -39,7 +39,6 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_DetectorTiltStep(saver, this, "detectorTiltStep", 0.1, "Tilt Angle Step(deg)"),
     m_TiltPlaneRotation(saver, this, "tiltPlaneRotation", 90, "Tilt Plane Rotation (deg)"),
     m_TiltPlaneRotationStep(saver, this, "tiltPlaneRotationStep", 10, "Tilt Plane Rotation Step (deg)"),
-//    m_MarkedPoints(saver, this, "markedPoints", QcepPolygon(), "Marker Points"),
     m_MarkedPoints(saver, this, "markedPoints", QxrdPowderPointVector(), "Marker Points"),
     m_FittedRings(saver, this, "fittedRings", QxrdPowderPointVector(), "Fitted Powder Rings"),
     m_RingRadius(saver, this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
@@ -59,8 +58,6 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_RingAngles(saver, this, "ringAngles", QcepDoubleVector(), "Diffraction ring angles"),
     m_RingAngleTolerance(saver, this, "ringAngleToleance", 0.1, "Diffraction ring angle tolerance"),
     m_PowderFitOptions(saver, this, "powderFitOptions", 0, "Powder fitting options"),
-//    m_PowderPoint(saver, this, "powderPoint", QxrdPowderPoint(1,2,3,4), "Powder Point"),
-//    m_PowderPointVector(saver, this, "powderPointVector", QxrdPowderPointVector(), "Powder Point Vector"),
     m_RingIndex(saver, this, "ringIndex", 0, "Fitted Powder Ring Index"),
     m_SubtractRingAverages(saver, this, "subtractRingAverages", false, "Plot deviations of each ring from average"),
     m_FittedWidthMin(saver, this, "fittedWidthMin", 0.5, "Minimum acceptable fitted width (pixels)"),
@@ -70,10 +67,6 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_Experiment(expt)
 {
   qRegisterMetaType<QPointF>("QPointF");
-
-//  m_PowderPointVector.appendValue(QxrdPowderPoint(1,2,3,4));
-//  m_PowderPointVector.appendValue(QxrdPowderPoint(5,6,7,8));
-//  m_PowderPointVector.appendValue(QxrdPowderPoint(9,10,11,12));
 
 //  m_CenterX.setDebug(true);
 //  m_CenterY.setDebug(true);
@@ -251,36 +244,6 @@ void QxrdCenterFinder::onPointSelected(QPointF pt)
   fitPeakNear(pt.x(), pt.y());
 }
 
-//void QxrdCenterFinder::evaluateFit(double *parm, double *x, int /*np*/, int nx)
-//{
-//  QxrdPowderPointVector pts = get_MarkedPoints();
-//  double cx = parm[0];
-//  double cy = parm[1];
-//  double r  = parm[2];
-
-//  int npt=0;
-
-//  foreach(QxrdPowderPoint pt, pts) {
-//    if (pt.n1() == m_CenterFitRingNumber) {
-//      double rcalc = sqrt(pow(pt.x() - cx, 2) + pow(pt.y() - cy, 2));
-//      x[npt++] = rcalc - r;
-//    }
-//  }
-
-//  if (npt != nx) {
-//    printMessage(tr("Anomaly in QxrdCenterFinder::evaluateFit npt[%1] != nx[%2]").arg(npt).arg(nx));
-//  }
-//}
-
-//static void fitCenter(double *p, double *hx, int m,int n, void *adata)
-//{
-//  QxrdCenterFinder *cf = (QxrdCenterFinder*) adata;
-
-//  if (cf) {
-//    cf->evaluateFit(p, hx, m, n);
-//  }
-//}
-
 void QxrdCenterFinder::printMessage(QString msg, QDateTime ts)
 {
   QxrdExperimentPtr exp(m_Experiment);
@@ -299,80 +262,7 @@ void QxrdCenterFinder::statusMessage(QString msg, QDateTime ts)
   }
 }
 
-//void QxrdCenterFinder::fitPowderCircle(int n)
-//{
-//  m_CenterFitRingNumber = n;
-
-//  int npts = countPowderRingPoints();
-//  int nptsr = 0;
-
-//  for (int i=0; i<npts; i++) {
-//    QxrdPowderPoint pt = powderRingPoint(i);
-
-//    if (pt.n1() == n) {
-//      nptsr++;
-//    }
-//  }
-
-//  if (nptsr <= 3) {
-//    QString message = "You must mark at least four points on a powder ring before you can fit the center";
-
-//    if (g_Application->get_GuiWanted()) {
-//      QMessageBox::information(NULL, "Fitting Failed", message);
-//    } else {
-//      printMessage(message);
-//    }
-
-//    return;
-//  }
-
-//  double parms[3];
-//  parms[0] = get_CenterX();
-//  parms[1] = get_CenterY();
-//  parms[2] = get_RingRadius();
-
-//  double info[LM_INFO_SZ];
-
-//  int niter = dlevmar_dif(fitCenter, parms, NULL, 3, nptsr, 100, NULL, info, NULL, NULL, this);
-
-//  int update = false;
-//  QString message;
-
-//  if (niter >= 0) {
-//    message.append(tr("Fitting Succeeded after %1 iterations\n").arg(niter));
-//    message.append(tr("Old Center = [%1,%2]\n").arg(get_CenterX()).arg(get_CenterY()));
-//    message.append(tr("New Center = [%1,%2], New Radius = %3\n").arg(parms[0]).arg(parms[1]).arg(parms[2]));
-//    double dx = parms[0]-get_CenterX();
-//    double dy = parms[1]-get_CenterY();
-//    message.append(tr("Moved by [%1,%2] = %3\n").arg(dx).arg(dy).arg(sqrt(dx*dx + dy*dy)));
-//  } else {
-//    message.append(tr("dlevmar_dif failed: reason = %1\n").arg(info[6]));
-//  }
-
-//  printMessage(message);
-
-//  if (g_Application->get_GuiWanted()) {
-//    if (niter >= 0) {
-//      message.append(tr("Do you want to update the beam centering parameters?"));
-
-//      if (QMessageBox::question(NULL, "Update Fitted Center?", message, QMessageBox::Ok | QMessageBox::No, QMessageBox::Ok) == QMessageBox::Ok) {
-//        update = true;
-//      }
-//    } else {
-//      QMessageBox::information(NULL, "Fitting Failed", message);
-//    }
-//  } else if (niter >= 0){
-//    update = true;
-//  }
-
-//  if (update) {
-//    set_CenterX(parms[0]);
-//    set_CenterY(parms[1]);
-//    set_RingRadius(parms[2]);
-//  }
-//}
-
-void QxrdCenterFinder::fitPowderCircle2(int n)
+void QxrdCenterFinder::fitPowderCircle(int n)
 {
   QxrdFitterRingCircle fitter(this, n, get_CenterX(), get_CenterY());
 
@@ -738,10 +628,7 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
       y = fit.fittedY();
 
       if (fit.reason()==QxrdFitter::Successful) {
-//        m_RingPowderPoints.append(QxrdPowderPoint(get_RingIndex(), 1, x, y));
         r = sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc));
-      } else {
-//        m_RingPowderPoints.append(QxrdPowderPoint(get_RingIndex(), 0, x, y));
       }
     }
 
@@ -1019,105 +906,6 @@ double QxrdCenterFinder::imageValue(double x, double y)
     return 0;
   }
 }
-
-//void QxrdCenterFinder::undoRefinePowderFitParameters()
-//{
-//}
-
-//void QxrdCenterFinder::evaluatePowderFit(double *parm, double *x, int np, int nx)
-//{
-//}
-
-//static void fitPowderFit(double *p, double *x, int np, int nx, void *data)
-//{
-//}
-
-//void QxrdCenterFinder::refinePowderFitParameters()
-//{
-//  int options = get_PowderFitOptions();
-//  int nMarked = get_MarkedPoints().count();
-//  int nRings  = get_RingAngles().count();
-
-//  QVector<double> parms(6+nRings);
-//  int np=0;
-
-//  parms[0] = get_CenterX();
-//  parms[1] = get_CenterY();
-//  parms[2] = get_DetectorTilt();
-//  parms[3] = get_TiltPlaneRotation();
-
-//  if (options == 0) { // Keep energy and angles fixed, fit distance
-//    parms[4] = get_DetectorDistance();
-//    np = 5;
-//  } else if (options == 1) { // Keep distance and angles fixed, fit energy
-//    parms[4] = get_Energy();
-//    np = 5;
-//  } else if (options == 2) { // Keep distance and energy fixed, fit angles
-//    for (int i=0; i<nRings; i++) {
-//      parms[4+i] = get_RingAngles()[i];
-//    }
-//    np = 4+nRings;
-//  }
-
-//  double info[LM_INFO_SZ];
-
-//  int niter = dlevmar_dif(fitPowderFit, parms.data(), NULL, np, nMarked, 200, NULL, info, NULL, NULL, this);
-
-//  int update = false;
-//  QString message;
-//  if (niter >= 0) {
-//    message.append(tr("Fitting succeeded after %1 iterations\n").arg(niter));
-//    message.append(tr("New Center = [%1,%2]").arg(parms[0]).arg(parms[1]));
-//    message.append(tr("Tilt Angle %1, Tilt Plane Rotation %2\n").arg(parms[2]).arg(parms[3]));
-
-//    if (options == 0) {
-//      message.append(tr("Detector Distance %1\n").arg(parms[4]));
-//    } else if (options == 1) {
-//      message.append(tr("Energy %1\n").arg(parms[4]));
-//    } else if (options == 3) {
-//      for (int i=0; i<nRings; i++) {
-//        message.append(tr("Ring %1: Angle %2").arg(i).arg(parms[4+i]));
-//      }
-//    }
-//  } else {
-//    message.append(tr("dlevmar_dif failed: reason = %1, %2").arg(info[6]).arg(levmarFailureReason(info[6])));
-//  }
-
-//  printMessage(message);
-
-////  if (g_Application->get_GuiWanted()) {
-////    if (niter >= 0) {
-////      message.append("Do you want to update the calibration factors?");
-
-////      if (QMessageBox::question(NULL, "Update calibration?", message, QMessageBox::Ok | QMessageBox::No, QMessageBox::No) == QMessageBox::Ok) {
-////        update = true;
-////      }
-////    } else {
-////      QMessageBox::information(NULL, "Fitting Failed", message);
-////    }
-////  }
-
-//  if (update) {
-//    set_CenterX(parms[0]);
-//    set_CenterY(parms[1]);
-//    set_DetectorTilt(parms[2]);
-//    set_TiltPlaneRotation(parms[3]);
-
-//    if (options == 0) {
-//      set_DetectorDistance(parms[4]);
-//    } else if (options == 1) {
-//      set_Energy(parms[4]);
-//    } else if (options == 2) {
-//      QcepDoubleVector angles;
-
-//      for (int i=0; i<nRings; i++) {
-//        angles.append(parms[4+i]);
-//      }
-
-//      set_RingAngles(angles);
-//    }
-//  }
-//}
 
 QString QxrdCenterFinder::levmarFailureReason(int n)
 {
