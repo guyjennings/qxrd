@@ -45,6 +45,7 @@ dox.commands = ( cat $${PWD}/Doxyfile ; \
                  echo "INPUT+=\"$${PWD}\"/source/" ; \
                  echo "INPUT+=\"$${PWD}\"/source/submodules/" ; \
                  echo "INPUT+=\"$${PWD}\"/source/submodules/qceplib/" ; \
+                 echo "INPUT+=\"$${PWD}\"/source/submodules/qceplib/qceplib-base/" ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/" ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/qxrdareadetectorplugin/" ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/qxrdperkinelmerplugin/" ; \
