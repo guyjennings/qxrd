@@ -1,17 +1,7 @@
 Name:		qxrd
-Version: 0.9.2
+Version:
 Release:        1%{?dist}
 Summary:        qxrd - a readout and control program for perkin elmer x ray detector
-
-%if 0%{?fedora} >= 8
-%define qtversion 4.3.4
-%else
-%if 0%{?fedora} >= 7
-%define qtversion 4.3.3
-%else
-%define qtversion 4.3.2
-%endif
-%endif
 
 Group:       	Applications/Engineering   
 License:        GPL
@@ -19,11 +9,12 @@ URL:            http://www.bessrc.aps.anl.gov/software/qxrd/index.html
 Source0:        http://www.bessrc.aps.anl.gov/software/qxrd/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  desktop-file-utils qt4 >= %{qtversion}, qt4-x11 qt4-devel 
+BuildRequires:  desktop-file-utils
+#BuildRequires:  qt4, qt4-x11 qt4-devel
+BuildRequires:  qt5-qtbase-devel, qt5-qtscript-devel, qt5-qtwebkit-devel
 BuildRequires:  libtiff-devel, CBFlib-devel
-#BuildRequires:  epics-base-devel, epics-base, acqiris
-Requires:       qt4 >= %{qtversion}, qt4-x11, libtiff, CBFlib
-#Requires:       epics-base, acqiris
+#Requires:       qt4, qt4-x11, libtiff, CBFlib
+Requires:       qt5-base, qt5-qtscript, qt5-qtwebkit
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 
@@ -34,7 +25,8 @@ qxrd is a readout and control program for perkin elmer x ray detector
 %setup -n %{name}-%{version}
 
 %build
-/usr/bin/qmake-qt4 %{name}.pro -recursive "QXRD_PLUGINS_DIR=%{_libdir}/%{name}-%{version}"
+#/usr/bin/qmake-qt4 %{name}.pro -recursive "QXRD_PLUGINS_DIR=%{_libdir}/%{name}-%{version}"
+/usr/bin/qmake-qt5 %{name}.pro -recursive "QXRD_PLUGINS_DIR=%{_libdir}/%{name}-%{version}"
 make clean
 make %{?_smp_mflags}
 

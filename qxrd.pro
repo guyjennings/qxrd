@@ -19,7 +19,7 @@ message(QT Version $$[QT_VERSION])
 
 DISTFILES += source plugins
 
-OTHER_FILES += qxrd.nsi qxrd-qt5.nsi qxrd.dox Doxyfile qxrd.spec qxrd.desktop readme.markdown
+OTHER_FILES += qxrd.nsi qxrd-qt5.nsi qxrd.dox Doxyfile qxrd.spec.in qxrd.desktop readme.markdown
 
 QMAKE_EXTRA_TARGETS += tarball
 
