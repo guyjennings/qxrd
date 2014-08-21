@@ -14,7 +14,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  qt5-qtbase-devel, qt5-qtscript-devel, qt5-qtwebkit-devel, qt5-qtsvg-devel
 BuildRequires:  libtiff-devel, CBFlib-devel
 #Requires:       qt4, qt4-x11, libtiff, CBFlib
-Requires:       qt5-base, qt5-qtscript, qt5-qtwebkit, qt5-qtsvg
+Requires:       qt5-qtbase, qt5-qtscript, qt5-qtwebkit, qt5-qtsvg
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 
