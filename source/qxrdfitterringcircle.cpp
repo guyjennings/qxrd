@@ -42,7 +42,7 @@ void QxrdFitterRingCircle::staticEvaluate(double *p, double *hx, int m, int n, v
   }
 }
 
-void QxrdFitterRingCircle::evaluate(double *parm, double *xv, int np, int nx)
+void QxrdFitterRingCircle::evaluate(double *parm, double *xv, int /*np*/, int nx)
 {
   if (m_CenterFinder) {
     double cx = parm[0];

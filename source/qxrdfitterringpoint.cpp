@@ -30,7 +30,7 @@ void QxrdFitterRingPoint::staticEvaluate(double *p, double *hx, int m, int n, vo
   }
 }
 
-void QxrdFitterRingPoint::evaluate(double *parm, double *xv, int np, int nx)
+void QxrdFitterRingPoint::evaluate(double *parm, double *xv, int np, int /*nx*/)
 {
   if (m_CenterFinder) {
 //    m_CenterFinder->printMessage("Fitting");
@@ -55,7 +55,7 @@ void QxrdFitterRingPoint::evaluate(double *parm, double *xv, int np, int nx)
       int n = dr*2+1;
       int x0 = cx0 - dr;
       int y0 = cy0 - dr;
-      int nn = n*n;
+//      int nn = n*n;
       int i=0;
 
       double cx  = xc + pr*cos(az);

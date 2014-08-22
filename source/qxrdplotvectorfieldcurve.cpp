@@ -16,7 +16,7 @@ void QxrdPlotVectorFieldCurve::drawSeries
   (QPainter *painter,
    const QwtScaleMap &xMap,
    const QwtScaleMap &yMap,
-   const QRectF &canvasRect,
+   const QRectF &/*canvasRect*/,
    int from, int to) const
 {
   if (to < 0) {

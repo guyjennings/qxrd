@@ -784,7 +784,7 @@ QString QxrdExperiment::defaultExperimentName(QString path)
   }
 }
 
-QString QxrdExperiment::defaultDataDirectory(QString path)
+QString QxrdExperiment::defaultDataDirectory(QString /*path*/)
 {
   return "";
 }

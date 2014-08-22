@@ -46,7 +46,7 @@ void QxrdFitterRingEllipse::staticEvaluate(double *p, double *hx, int m, int n, 
   }
 }
 
-void QxrdFitterRingEllipse::evaluate(double *parm, double *xv, int np, int nx)
+void QxrdFitterRingEllipse::evaluate(double *parm, double *xv, int /*np*/, int nx)
 {
   if (m_CenterFinder) {
     double cx = parm[0];

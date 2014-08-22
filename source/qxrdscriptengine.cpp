@@ -355,7 +355,7 @@ QCEP_DOC_FUNCTION(
     "<p>Note that only one script output file may be open at a time</p>\n"
     )
 
-QScriptValue QxrdScriptEngine::fcloseFunc(QScriptContext *context, QScriptEngine *engine, void * /*u*/)
+QScriptValue QxrdScriptEngine::fcloseFunc(QScriptContext * /*context*/, QScriptEngine *engine, void * /*u*/)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
@@ -1312,7 +1312,7 @@ QCEP_DOC_FUNCTION(
     ""
     )
 
-QScriptValue QxrdScriptEngine::timeStampFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::timeStampFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   double val = QcepImageDataBase::secondsSinceEpoch();
 

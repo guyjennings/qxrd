@@ -81,7 +81,7 @@ QRectF QwtPlotPiecewiseCurve::boundingRect() const
     return QRectF(1.0, 1.0, 2.0, 2.0); // Empty data.
   }
 
-  int first = 0;
+  size_t first = 0;
   while (first < dataSize() && ignorePoint(x(first),y(first))) {
     ++first;
   }
@@ -93,7 +93,7 @@ QRectF QwtPlotPiecewiseCurve::boundingRect() const
   double minX, maxX, minY, maxY;
   minX = maxX = x(first);
   minY = maxY = y(first);
-  for (int i = first + 1; i < dataSize(); ++i) {
+  for (size_t i = first + 1; i < dataSize(); ++i) {
     const double xv = x(i);
     const double yv = y(i);
 

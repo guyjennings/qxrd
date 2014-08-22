@@ -253,7 +253,7 @@ void QxrdCenterFinder::printMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdCenterFinder::statusMessage(QString msg, QDateTime ts)
+void QxrdCenterFinder::statusMessage(QString msg, QDateTime /*ts*/)
 {
   QxrdExperimentPtr exp(m_Experiment);
 
@@ -612,7 +612,7 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
   QVector<QxrdFitterRingPoint> fits;
 
   while (true) {
-    if (x >= 0 && y >= 0 && x <= width && y <= width) {
+    if (x >= 0 && y >= 0 && x <= width && y <= height) {
       QxrdFitterRingPoint fit(this, 0, x, y, pkht, bkgd);
       fit.fit();
       fits.append(fit);

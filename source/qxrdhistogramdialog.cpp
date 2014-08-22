@@ -91,7 +91,7 @@ void QxrdHistogramDialog::recalculateHistogram()
       QcepDoubleVector x0(nbins), h0(nbins), h1(nbins);
 
       for (int i=0; i<nbins; i++) {
-        double x = min+i*(max-min)/1000.0;
+//        double x = min+i*(max-min)/1000.0;
         x0[i] = i*100.0/(double)nbins;
         h0[i] = 0;
         h1[i] = 0;

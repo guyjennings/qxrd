@@ -30,7 +30,7 @@ void QxrdFitterPeakPoint::staticEvaluate(double *p, double *hx, int m, int n, vo
   }
 }
 
-void QxrdFitterPeakPoint::evaluate(double *parm, double *xv, int np, int nx)
+void QxrdFitterPeakPoint::evaluate(double *parm, double *xv, int np, int /*nx*/)
 {
   if (m_CenterFinder) {
 //    m_CenterFinder->printMessage("Fitting");
@@ -53,7 +53,7 @@ void QxrdFitterPeakPoint::evaluate(double *parm, double *xv, int np, int nx)
       int n = rr0*2+1;
       int x0 = cx0 - rr0;
       int y0 = cy0 - rr0;
-      int nn = n*n;
+//      int nn = n*n;
       int i=0;
 
       for (int y=y0; y<y0+n; y++) {

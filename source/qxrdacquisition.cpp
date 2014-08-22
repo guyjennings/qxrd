@@ -479,7 +479,7 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int fileIndex, int
 void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   if (image) {
-    int w=image->get_Width(), h=image->get_Height();
+//    int w=image->get_Width(), h=image->get_Height();
 
 //    QxrdInt32ImageDataPtr proc = QxrdAllocator::newInt32Image(m_Allocator, QxrdAllocator::AllocateFromReserve, w,h);
 //    QxrdMaskDataPtr ovf = QxrdAllocator::newMask(m_Allocator, QxrdAllocator::AllocateFromReserve, w,h, 0);
