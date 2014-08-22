@@ -27,12 +27,12 @@ void QxrdFileBrowserView::paintEvent(QPaintEvent *event)
   }
 }
 
-void	QxrdFileBrowserView::dataChanged ( const QModelIndex & topLeft, const QModelIndex & bottomRight )
+void	QxrdFileBrowserView::dataChanged (const QModelIndex & topLeft, const QModelIndex & bottomRight , const QVector<int> &roles)
 {
   QTime tic;
   tic.start();
 
-  inherited::dataChanged(topLeft,bottomRight);
+  inherited::dataChanged(topLeft,bottomRight,roles);
 
   int elapsed = tic.elapsed();
 

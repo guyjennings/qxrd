@@ -19,7 +19,7 @@ protected:
   void paintEvent(QPaintEvent *event);
 
 public:
-  virtual void	dataChanged ( const QModelIndex & topLeft, const QModelIndex & bottomRight );
+  virtual void	dataChanged ( const QModelIndex & topLeft, const QModelIndex & bottomRight, const QVector<int> &roles = QVector<int>() );
   virtual QModelIndex	indexAt ( const QPoint & point ) const;
   virtual void	keyboardSearch ( const QString & search );
   virtual void	reset ();
