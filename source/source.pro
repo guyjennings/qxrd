@@ -530,13 +530,13 @@ win32 {
               Qt5Svgd \
               Qt5OpenGLd \
               Qt5PrintSupportd \
-              Qt5Concurrentd \
-              icudt51 \
-              icuin51 \
-              icuuc51 \
-              libEGLd \
-              libGLESv2d
+              Qt5Concurrentd
+
       platform = qwindowsd
+
+      win32-msvc* {
+        libs += libEGLd libGLESv2d
+      }
     } else {
       libs =  Qt5Core \
               Qt5Network \
@@ -546,22 +546,31 @@ win32 {
               Qt5Svg \
               Qt5OpenGL \
               Qt5PrintSupport \
-              Qt5Concurrent \
-              icudt51 \
-              icuin51 \
-              icuuc51 \
-              libEGL \
-              libGLESv2
+              Qt5Concurrent
+
       platform = qwindows
+
+      win32-msvc* {
+        libs += libEGL libGLESv2
+      }
     }
 
-    win32-g++ {
-      libs += libgcc_s_dw2-1 libwinpthread-1 libstdc++-6
+    win32-msvc2013 {
+      libs += icudt52 icuin52 icuuc52
+    } else:win32-msvc* {
+      libs += icudt51 icuin51 icuuc51
+    } else:win32-g++ {
+      libs += libgcc_s_dw2-1 libwinpthread-1 libstdc++-6 icudt52 icuin52 icuuc52
     }
 
     QMAKE_EXTRA_TARGETS += qtplatformdir
     qtplatformdir.target = ../platforms
-    qtplatformdir.commands = if not exist ..\\platforms $(MKDIR) ..\\platforms
+
+    win32-msvc* {
+      qtplatformdir.commands = if not exist ..\\platforms $(MKDIR) ..\\platforms
+    } else:win32-g++ {
+      qtplatformdir.commands = $(MKDIR) -p ../platforms
+    }
 
     QMAKE_EXTRA_TARGETS += qtplatform
     qtplatform.target   = ../platforms/$${platform}.dll
