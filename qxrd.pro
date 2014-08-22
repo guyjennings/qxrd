@@ -102,3 +102,14 @@ website.commands += && \
 #for(m, QT) {
 #  message("QT contains $${m}")
 #}
+
+macx {
+  QMAKE_EXTRA_TARGETS += dmg
+
+  dmg.depends  = $${TARGET}.app
+  dmg.commands = $$[QT_INSTALL_BINS]/macdeployqt $${TARGET}.app -dmg && \
+                 rm -rf $${TARGET}-$${VERSION}.dmg && \
+                 mv $${TARGET}.dmg $${TARGET}-$${VERSION}.dmg
+}
+
+
