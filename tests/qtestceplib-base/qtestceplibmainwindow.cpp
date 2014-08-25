@@ -40,7 +40,7 @@ QtestceplibMainWindow::~QtestceplibMainWindow()
   delete ui;
 }
 
-void QtestceplibMainWindow::printMessage(QString msg)
+void QtestceplibMainWindow::printMessage(QString msg, QDateTime ts)
 {
   ui->m_Messages->appendPlainText(msg);
 }

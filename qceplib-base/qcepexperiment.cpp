@@ -1,6 +1,6 @@
 #include "qcepexperiment.h"
 
-QcepExperiment::QcepExperiment(QObject *parent) :
-  QObject(parent)
+QcepExperiment::QcepExperiment(QString name, QObject *parent) :
+  QcepObject(name, parent)
 {
 }

@@ -36,7 +36,7 @@ public slots:
   void doSaveImage();
   void doNewImage();
 
-  void printMessage(QString msg);
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 private:
   Ui::QtestceplibMainWindow *ui;
