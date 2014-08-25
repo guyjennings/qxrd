@@ -438,6 +438,11 @@ void QxrdCenterFinder::appendPowderPoint(double x, double y)
   m_MarkedPoints.appendValue(QxrdPowderPoint(get_RingIndex(), 0, x,y, 0,0,0));
 }
 
+void QxrdCenterFinder::appendPowderPoint(int n1, int n2, double x, double y, double r1, double r2, double az)
+{
+  m_MarkedPoints.appendValue(QxrdPowderPoint(n1,n2, x, y, r1, r2, az));
+}
+
 void QxrdCenterFinder::deletePowderRing(int n)
 {
   QxrdPowderPointVector pts = get_MarkedPoints();
