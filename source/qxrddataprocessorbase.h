@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 
-#include <QObject>
+#include "qcepobject.h"
 //#include <QReadWriteLock>
 //#include <QAtomicInt>
 #include <QWaitCondition>
@@ -28,11 +28,10 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdwindow-ptr.h"
-#include "qxrdobjectnamer.h"
 #include "qxrddistortioncorrection-ptr.h"
 #include "qxrddistortioncorrection.h"
 
-class QxrdDataProcessorBase : public QObject
+class QxrdDataProcessorBase : public QcepObject
 {
   Q_OBJECT
 
@@ -43,9 +42,6 @@ public:
                         QxrdAllocatorWPtr allocator,
                         QxrdFileSaverWPtr filesaver);
   virtual ~QxrdDataProcessorBase();
-
-private:
-  QxrdObjectNamer m_ObjectNamer;
 
 public:
 //  Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory)

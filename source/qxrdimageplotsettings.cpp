@@ -2,8 +2,7 @@
 #include "qxrdsettingssaver.h"
 
 QxrdImagePlotSettings::QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent) :
-  QxrdPlotSettings(saver, parent),
-  m_ObjectNamer(this, "imageGraph"),
+  QxrdPlotSettings("imageGraph", saver, parent),
   m_DisplayMinimumPctle(saver, this, "displayMinimumPctle", 0, "Minimum Displayed Value (as a percentile)"),
   m_DisplayMaximumPctle(saver, this, "displayMaximumPctle", 100, "Maximum Displayed Value (as a percentile)"),
   m_DisplayMinimumPct(saver, this, "displayMinimumPct", 0, "Minimum Displayed Value (as % of data range)"),

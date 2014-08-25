@@ -15,7 +15,6 @@
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   : QxrdPlot(parent),
-    m_ObjectNamer(this, "integratorGraph"),
     m_DataProcessor(),
     m_Integrator(),
     m_PlotIndex(0),

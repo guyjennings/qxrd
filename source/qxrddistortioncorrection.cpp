@@ -7,8 +7,7 @@
 #include "qxrdexperiment.h"
 
 QxrdDistortionCorrection::QxrdDistortionCorrection(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt)
-  : QObject(),
-    m_ObjectNamer(this, "distortion"),
+  : QcepObject("distortion", NULL),
     m_DistortionImagePath(saver, this, "distortionImagePath", "", "File path for distortion calibration image"),
     m_P0(saver, this, "p0", QPointF(100,100), "Origin of distortion image grid"),
     m_P1(saver, this, "p1", QPointF(200,100), "1st X Position on distortion grid"),

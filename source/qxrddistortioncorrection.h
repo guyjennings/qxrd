@@ -2,22 +2,18 @@
 #define QXRDDISTORTIONCORRECTION_H
 
 #include "qcepmacros.h"
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdimagedata-ptr.h"
 #include "qxrdimagedata.h"
 #include "qxrdsettingssaver-ptr.h"
-#include "qxrdobjectnamer.h"
 
-class QxrdDistortionCorrection : public QObject
+class QxrdDistortionCorrection : public QcepObject
 {
   Q_OBJECT
 public:
   explicit QxrdDistortionCorrection(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt);
-
-private:
-  QxrdObjectNamer       m_ObjectNamer;
 
 public:
   Q_PROPERTY(QString distortionImagePath READ get_DistortionImagePath WRITE set_DistortionImagePath)

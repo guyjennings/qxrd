@@ -7,7 +7,6 @@
 #include "qxrddataprocessor.h"
 #include "qxrdplot.h"
 #include "qxrdintegrator.h"
-#include "qxrdobjectnamer.h"
 
 class QxrdIntegratorPlot : public QxrdPlot
 {
@@ -25,7 +24,6 @@ public slots:
   void clearSelectedCurves();
 
 private:
-  QxrdObjectNamer       m_ObjectNamer;
   QxrdDataProcessorWPtr m_DataProcessor;
   QxrdIntegratorWPtr    m_Integrator;
   int                   m_PlotIndex;

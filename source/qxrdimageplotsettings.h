@@ -4,7 +4,6 @@
 #include <QObject>
 #include "qcepproperty.h"
 #include "qxrdplotsettings.h"
-#include "qxrdobjectnamer.h"
 
 class QxrdImagePlotSettings : public QxrdPlotSettings
 {
@@ -12,9 +11,6 @@ class QxrdImagePlotSettings : public QxrdPlotSettings
 public:
   explicit QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
   
-private:
-  QxrdObjectNamer m_ObjectNamer;
-
 public:
   Q_PROPERTY(double displayMinimumPctle     READ get_DisplayMinimumPctle WRITE set_DisplayMinimumPctle)
   QCEP_DOUBLE_PROPERTY(DisplayMinimumPctle)

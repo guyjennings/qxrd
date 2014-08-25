@@ -114,7 +114,6 @@ HEADERS += \
     qxrdacquisitiondialog-ptr.h \
     qxrdacquisitionextrainputsdialogsettings.h \
     qxrdhelpbrowser.h \
-    qxrdobjectnamer.h \
     qxrduserscriptdialog.h \
     qxrdsynchronizedacquisitiondialogsettings.h \
     qxrdsynchronizedacquisitionplotsettings.h \
@@ -150,7 +149,6 @@ SOURCES += \
     qxrddetectorfilewatcher.cpp \
     qxrdacquisitionextrainputsdialogsettings.cpp \
     qxrdhelpbrowser.cpp \
-    qxrdobjectnamer.cpp \
     qxrduserscriptdialog.cpp \
     qxrdsynchronizedacquisitiondialogsettings.cpp \
     qxrdsynchronizedacquisitionplotsettings.cpp \

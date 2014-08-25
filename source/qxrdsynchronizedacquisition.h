@@ -1,24 +1,20 @@
 #ifndef QXRDSYNCHRONIZEDACQUISITION_H
 #define QXRDSYNCHRONIZEDACQUISITION_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include <QVector>
 #include <QMutex>
 #include "qcepproperty.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdacquisition-ptr.h"
-#include "qxrdobjectnamer.h"
 #include "qxrdsettingssaver-ptr.h"
 
-class QxrdSynchronizedAcquisition : public QObject
+class QxrdSynchronizedAcquisition : public QcepObject
 {
   Q_OBJECT
 public:
   explicit QxrdSynchronizedAcquisition(QxrdSettingsSaverPtr saver, QxrdAcquisition *acq);
-
-private:
-  QxrdObjectNamer m_ObjectNamer;
 
 public:
   Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode)

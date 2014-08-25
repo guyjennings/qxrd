@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepproperty.h"
 
 #include "qxrdexperiment-ptr.h"
@@ -19,9 +19,8 @@
 #include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
 #include "qxrddataprocessor-ptr.h"
-#include "qxrdobjectnamer.h"
 
-class QxrdIntegrator : public QObject
+class QxrdIntegrator : public QcepObject
 {
   Q_OBJECT
 
@@ -29,9 +28,6 @@ public:
   QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc);
   virtual ~QxrdIntegrator();
   void initialize(QxrdIntegratorWPtr integrator);
-
-private:
-  QxrdObjectNamer        m_ObjectNamer;
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)

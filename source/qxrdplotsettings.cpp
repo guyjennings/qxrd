@@ -1,8 +1,8 @@
 #include "qxrdplotsettings.h"
 #include "qxrdsettingssaver.h"
 
-QxrdPlotSettings::QxrdPlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent) :
-  QObject(parent),
+QxrdPlotSettings::QxrdPlotSettings(QString name, QxrdSettingsSaverWPtr saver, QObject *parent) :
+  QcepObject(name, parent),
   m_XMouse(QxrdSettingsSaverWPtr(), this,"xMouse",0, "X Position of Mouse"),
   m_YMouse(QxrdSettingsSaverWPtr(), this,"yMouse",0, "Y Position of Mouse"),
   m_XAxisLog(saver, this,"xAxisLog",0, "Logarithmic X Axis?"),

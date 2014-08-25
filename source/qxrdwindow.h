@@ -33,7 +33,7 @@
 #include "qxrdsynchronizedacquisitiondialog-ptr.h"
 #include "qxrdacquisitionextrainputsdialog-ptr.h"
 #include "qxrdwindowsettings.h"
-#include "qxrdobjectnamer.h"
+#include "qcepobjectnamer.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -157,7 +157,7 @@ private:
   void setupRecentExperimentsMenu(QAction *action);
 
 private:
-  QxrdObjectNamer                        m_ObjectNamer;
+  QcepObjectNamer                        m_ObjectNamer;
   QxrdWindowWPtr                         m_Window;
   mutable QMutex                         m_Mutex;
   QxrdWindowSettingsWPtr                 m_WindowSettings;

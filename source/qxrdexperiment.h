@@ -36,7 +36,6 @@
 #include "qxrddetectorthread-ptr.h"
 #include "qxrddetector.h"
 #include "qxrddetector-ptr.h"
-#include "qxrdobjectnamer.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdintegrator-ptr.h"
 
@@ -132,7 +131,6 @@ public:
   void openScanFile();
 
 private:
-  QxrdObjectNamer                 m_ObjectNamer;
   QxrdApplicationWPtr             m_Application;
   QxrdExperimentThreadWPtr        m_ExperimentThread;
   QxrdExperimentWPtr              m_Experiment;

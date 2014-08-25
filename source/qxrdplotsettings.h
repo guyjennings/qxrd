@@ -1,15 +1,15 @@
 #ifndef QXRDPLOTSETTINGS_H
 #define QXRDPLOTSETTINGS_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdsettingssaver-ptr.h"
 
-class QxrdPlotSettings : public QObject
+class QxrdPlotSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdPlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdPlotSettings(QString name, QxrdSettingsSaverWPtr saver, QObject *parent);
   
   Q_PROPERTY(double xMouse READ get_XMouse WRITE set_XMouse STORED false)
   QCEP_DOUBLE_PROPERTY(XMouse)

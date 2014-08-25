@@ -1,11 +1,11 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTSDIALOGSETTINGS_H
 #define QXRDACQUISITIONEXTRAINPUTSDIALOGSETTINGS_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdplotsettings.h"
 
-class QxrdAcquisitionExtraInputsDialogSettings : public QObject
+class QxrdAcquisitionExtraInputsDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:

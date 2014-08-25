@@ -5,7 +5,7 @@
 
 #include "qxrdimageplot.h"
 
-#include "qxrdobjectnamer.h"
+#include "qcepobjectnamer.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrddataprocessor.h"
 #include "qxrddistortioncorrection-ptr.h"
@@ -24,7 +24,7 @@ signals:
 public slots:
 
 private:
-  QxrdObjectNamer               m_ObjectNamer;
+  QcepObjectNamer               m_ObjectNamer;
   QxrdWindow                   *m_Window;
   QxrdDataProcessorWPtr         m_DataProcessor;
   QxrdDistortionCorrectionWPtr  m_DistortionCorrection;

@@ -10,8 +10,7 @@
 
 QxrdAllocator::QxrdAllocator
 (QcepSettingsSaverPtr saver)
-  : QObject(NULL),
-    m_ObjectNamer(this, "allocator"),
+  : QcepObject("allocator", NULL),
     m_AllocatedMemory(0),
     m_AllocatedMemoryMB(0),
     m_Max(saver, this, "max", 800, "Maximum Image Memory (MB)"),

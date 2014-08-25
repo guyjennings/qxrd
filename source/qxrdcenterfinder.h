@@ -8,7 +8,6 @@
 #include "qcepproperty.h"
 #include "qxrddetectorgeometry.h"
 #include "qxrdsettingssaver-ptr.h"
-#include "qxrdobjectnamer.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdimagedata-ptr.h"
 #include "qxrdimagedata.h"
@@ -22,9 +21,6 @@ class QxrdCenterFinder : public QxrdDetectorGeometry
 
 public:
   QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt);
-
-private:
-  QxrdObjectNamer       m_ObjectNamer;
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)

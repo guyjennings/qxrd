@@ -19,8 +19,7 @@
 #include <cmath>
 
 QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc)
-  : QObject(NULL),
-    m_ObjectNamer(this, "integrator"),
+  : QcepObject("integrator", NULL),
     m_Oversample(saver, this, "oversample", 1, "Oversampling for Integration"),
     m_IntegrationStep(saver, this, "integrationStep", 0.001, "Integration Step Size"),
     m_IntegrationNSteps(saver, this, "integrationNSteps", 0, "Integration Number of Steps"),

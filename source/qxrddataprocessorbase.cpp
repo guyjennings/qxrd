@@ -30,8 +30,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     QxrdAllocatorWPtr allocator,
     QxrdFileSaverWPtr filesaver) :
 
-  QObject(NULL),
-  m_ObjectNamer(this, "processor"),
+  QcepObject("processor", NULL),
   //    m_ProcessorType(this,"processorType",0),
   //    m_ProcessorTypeName(this,"processorTypeName","processorType"),
 //  m_OutputDirectory(saver, this,"outputDirectory", ""),

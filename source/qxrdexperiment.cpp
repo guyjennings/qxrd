@@ -31,8 +31,7 @@
 QxrdExperiment::QxrdExperiment(
     QString path,
     QxrdApplicationWPtr app) :
-  QcepExperiment(NULL),
-  m_ObjectNamer(this, "experiment"),
+  QcepExperiment("experiment", NULL),
   m_Application(app),
   m_ExperimentThread(),
   m_SettingsSaver(new QxrdSettingsSaver(this)),

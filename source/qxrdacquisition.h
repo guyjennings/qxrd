@@ -2,6 +2,7 @@
 #define QXRDACQUISITION_H
 
 #include "qcepmacros.h"
+#include "qcepobject.h"
 
 #include <QObject>
 #include <QMutex>
@@ -28,7 +29,6 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
-#include "qxrdobjectnamer.h"
 
 class QxrdAcquisitionParameterPack
 {
@@ -96,7 +96,7 @@ public:
   QxrdMaskDataPtr       m_Overflow;
 };
 
-class QxrdAcquisition : public QObject
+class QxrdAcquisition : public QcepObject
 {
   Q_OBJECT
 
@@ -210,7 +210,6 @@ private:
   int cancelling();
 
 private:
-  QxrdObjectNamer               m_ObjectNamer;
   QxrdSettingsSaverWPtr         m_Saver;
 
 public:
