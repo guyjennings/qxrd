@@ -32,16 +32,7 @@
          </sizepolicy>
         </property>
         <layout class="QGridLayout" name="gridLayout_8">
-         <property name="leftMargin">
-          <number>5</number>
-         </property>
-         <property name="topMargin">
-          <number>5</number>
-         </property>
-         <property name="rightMargin">
-          <number>5</number>
-         </property>
-         <property name="bottomMargin">
+         <property name="margin">
           <number>5</number>
          </property>
          <property name="spacing">
@@ -438,10 +429,10 @@ center in the right direction</string>
     </item>
     <item row="1" column="0">
      <layout class="QGridLayout" name="gridLayout">
-      <item row="5" column="3">
-       <widget class="QxrdCenterStepSpinner" name="m_FittedWidthMax">
+      <item row="1" column="3">
+       <widget class="QxrdCenterStepSpinner" name="m_DetectorDistanceStep">
         <property name="toolTip">
-         <string/>
+         <string>Step Size for Distance Changes</string>
         </property>
         <property name="keyboardTracking">
          <bool>false</bool>
@@ -461,13 +452,6 @@ center in the right direction</string>
        <widget class="QLabel" name="label_33">
         <property name="text">
          <string>Detector Distance Step</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QLabel" name="label_37">
-        <property name="text">
-         <string>Fitted Width Max:</string>
         </property>
        </widget>
       </item>
@@ -500,22 +484,6 @@ center in the right direction</string>
         </property>
         <property name="singleStep">
          <double>100.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="QxrdCenterStepSpinner" name="m_FittedWidthMin">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -577,22 +545,6 @@ center in the right direction</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="3">
-       <widget class="QxrdCenterStepSpinner" name="m_DetectorDistanceStep">
-        <property name="toolTip">
-         <string>Step Size for Distance Changes</string>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
-        </property>
-       </widget>
-      </item>
       <item row="7" column="0" colspan="2">
        <widget class="QCheckBox" name="m_SubtractRingAverages">
         <property name="toolTip">
@@ -610,75 +562,13 @@ center in the right direction</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="2">
-       <widget class="QLabel" name="label_38">
-        <property name="text">
-         <string>Fitted Height Min Ratio:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="3">
-       <widget class="QxrdCenterStepSpinner" name="m_FittedPositionMaxDistance">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QxrdCenterStepSpinner" name="m_PeakFitRadius">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
-        </property>
-       </widget>
-      </item>
       <item row="6" column="1">
        <widget class="QSpinBox" name="m_PeakFitIterations"/>
-      </item>
-      <item row="3" column="2">
-       <widget class="QLabel" name="label_40">
-        <property name="text">
-         <string>Peak Fit Radius</string>
-        </property>
-       </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_20">
         <property name="text">
          <string>X Pixel Size:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="3">
-       <widget class="QxrdCenterStepSpinner" name="m_FittedHeightMinRatio">
-        <property name="toolTip">
-         <string/>
-        </property>
-        <property name="keyboardTracking">
-         <bool>false</bool>
-        </property>
-        <property name="decimals">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -699,20 +589,6 @@ center in the right direction</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="2">
-       <widget class="QLabel" name="label_36">
-        <property name="text">
-         <string>Fitted Width Min:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="2">
-       <widget class="QLabel" name="label_39">
-        <property name="text">
-         <string>Fitted Position Max Dst:</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QDoubleSpinBox" name="m_DetectorYPixelSize">
         <property name="sizePolicy">
@@ -729,6 +605,141 @@ center in the right direction</string>
         </property>
         <property name="decimals">
          <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>10000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLabel" name="label_40">
+        <property name="text">
+         <string>Peak Fit Radius</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QxrdCenterStepSpinner" name="m_PeakFitRadius">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLabel" name="label_36">
+        <property name="text">
+         <string>Fitted Width Min:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QxrdCenterStepSpinner" name="m_FittedWidthMin">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLabel" name="label_37">
+        <property name="text">
+         <string>Fitted Width Max:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QxrdCenterStepSpinner" name="m_FittedWidthMax">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2">
+       <widget class="QLabel" name="label_38">
+        <property name="text">
+         <string>Fitted Height Min Ratio:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="3">
+       <widget class="QxrdCenterStepSpinner" name="m_FittedHeightMinRatio">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QLabel" name="label_39">
+        <property name="text">
+         <string>Fitted Position Max Dst:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="3">
+       <widget class="QxrdCenterStepSpinner" name="m_FittedPositionMaxDistance">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="keyboardTracking">
+         <bool>false</bool>
+        </property>
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="2">
+       <widget class="QLabel" name="label_41">
+        <property name="text">
+         <string>Ring plot displacement:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="3">
+       <widget class="QDoubleSpinBox" name="m_RingAverageDisplacement">
+        <property name="decimals">
+         <number>5</number>
+        </property>
+        <property name="minimum">
+         <double>-10000.000000000000000</double>
         </property>
         <property name="maximum">
          <double>10000.000000000000000</double>

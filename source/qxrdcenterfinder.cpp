@@ -59,6 +59,7 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_PowderFitOptions(saver, this, "powderFitOptions", 0, "Powder fitting options"),
     m_RingIndex(saver, this, "ringIndex", 0, "Fitted Powder Ring Index"),
     m_SubtractRingAverages(saver, this, "subtractRingAverages", false, "Plot deviations of each ring from average"),
+    m_RingAverageDisplacement(saver, this, "ringAvergaeDisplacement", 0.0, "Extra displacement between curves in ring radius plot"),
     m_FittedWidthMin(saver, this, "fittedWidthMin", 0.5, "Minimum acceptable fitted width (pixels)"),
     m_FittedWidthMax(saver, this, "fittedWidthMax", 3.0, "Maximum acceptable fitted width (pixels)"),
     m_FittedHeightMinRatio(saver, this, "fittedHeightMinRatio", 0.25, "Minimum acceptable peak height ratio"),

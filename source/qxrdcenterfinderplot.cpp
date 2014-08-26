@@ -134,7 +134,7 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
         QPen pen;
 
-        for (double ang=0; ang<2*M_PI; ang+=M_PI/12) {
+        for (double ang=0; ang<2*M_PI; ang+=M_PI/36) {
           double x = cx, y = cy;
           double dx = cos(ang);
           double dy = sin(ang);

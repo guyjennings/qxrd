@@ -125,6 +125,9 @@ public:
   Q_PROPERTY(bool subtractRingAverages READ get_SubtractRingAverages WRITE set_SubtractRingAverages)
   QCEP_BOOLEAN_PROPERTY(SubtractRingAverages)
 
+  Q_PROPERTY(double ringAverageDisplacement READ get_RingAverageDisplacement WRITE set_RingAverageDisplacement)
+  QCEP_DOUBLE_PROPERTY(RingAverageDisplacement)
+
   Q_PROPERTY(double fittedWidthMin READ get_FittedWidthMin WRITE set_FittedWidthMin)
   QCEP_DOUBLE_PROPERTY(FittedWidthMin)
 

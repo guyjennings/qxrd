@@ -42,6 +42,7 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   m_CenterFinder -> prop_PeakFitIterations() -> linkTo(m_PeakFitIterations);
   m_CenterFinder -> prop_RingIndex() -> linkTo(m_RingIndex);
   m_CenterFinder -> prop_SubtractRingAverages() -> linkTo(m_SubtractRingAverages);
+  m_CenterFinder -> prop_RingAverageDisplacement() -> linkTo(m_RingAverageDisplacement);
   m_CenterFinder -> prop_FittedWidthMin() -> linkTo(m_FittedWidthMin);
   m_CenterFinder -> prop_FittedWidthMax() -> linkTo(m_FittedWidthMax);
   m_CenterFinder -> prop_FittedHeightMinRatio() -> linkTo(m_FittedHeightMinRatio);

@@ -1770,9 +1770,15 @@ void QxrdWindow::plotPowderRingRadii()
             sum += y[i];
           }
 
-          double avg = sum/(double)n;
+          double avg = sum/(double)n - cf->get_RingAverageDisplacement()*r;
           for (int i=0; i<n; i++) {
             y[i] -= avg;
+          }
+        } else {
+          double d = cf->get_RingAverageDisplacement()*r;
+          int n=y.count();
+          for (int i=0; i<n; i++) {
+            y[i] += d;
           }
         }
 
