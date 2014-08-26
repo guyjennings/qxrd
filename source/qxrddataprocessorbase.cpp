@@ -269,6 +269,11 @@ QString QxrdDataProcessorBase::dataDirectory() const
   }
 }
 
+QString QxrdDataProcessorBase::filePathInDarkOutputDirectory(QString name) const
+{
+  return QDir(darkOutputDirectory()).filePath(name);
+}
+
 QString QxrdDataProcessorBase::darkOutputDirectory() const
 {
   if (get_SaveDarkInSubdirectory()) {
@@ -276,6 +281,11 @@ QString QxrdDataProcessorBase::darkOutputDirectory() const
   } else {
     return dataDirectory();
   }
+}
+
+QString QxrdDataProcessorBase::filePathInRawOutputDirectory(QString name) const
+{
+  return QDir(rawOutputDirectory()).filePath(name);
 }
 
 QString QxrdDataProcessorBase::rawOutputDirectory() const
@@ -287,6 +297,11 @@ QString QxrdDataProcessorBase::rawOutputDirectory() const
   }
 }
 
+QString QxrdDataProcessorBase::filePathInSubtractedOutputDirectory(QString name) const
+{
+  return QDir(subtractedOutputDirectory()).filePath(name);
+}
+
 QString QxrdDataProcessorBase::subtractedOutputDirectory() const
 {
   if (get_SaveSubtractedInSubdirectory()) {
@@ -294,6 +309,11 @@ QString QxrdDataProcessorBase::subtractedOutputDirectory() const
   } else {
     return dataDirectory();
   }
+}
+
+QString QxrdDataProcessorBase::filePathInIntegratedOutputDirectory(QString name) const
+{
+  return QDir(integratedOutputDirectory()).filePath(name);
 }
 
 QString QxrdDataProcessorBase::integratedOutputDirectory() const

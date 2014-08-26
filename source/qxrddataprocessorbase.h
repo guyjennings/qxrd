@@ -312,10 +312,13 @@ public slots:
 
   QStringList integrateRectangle(int x0, int y0, int x1, int y1);
 
-public:
   QString existingOutputDirectory(QString dir, QString subdir) const;
   QString filePathInExperimentDirectory(QString name) const;
   QString filePathInDataDirectory(QString name) const;
+  QString filePathInDarkOutputDirectory(QString name) const;
+  QString filePathInRawOutputDirectory(QString name) const;
+  QString filePathInSubtractedOutputDirectory(QString name) const;
+  QString filePathInIntegratedOutputDirectory(QString name) const;
   QString experimentDirectory() const;
   QString dataDirectory() const;
   QString darkOutputDirectory() const;
@@ -323,6 +326,7 @@ public:
   QString subtractedOutputDirectory() const;
   QString integratedOutputDirectory() const;
 
+public:
   void loadDefaultImages();
 
   QxrdDoubleImageDataPtr takeNextFreeImage(int width, int height);
