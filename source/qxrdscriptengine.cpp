@@ -367,6 +367,30 @@ QScriptValue QxrdScriptEngine::fcloseFunc(QScriptContext * /*context*/, QScriptE
 }
 
 QCEP_DOC_FUNCTION(
+    "fdelete",
+    "fdelete(path)",
+    "Deletes a file",
+    "<p>If the file does not exist no error occurs</p>"
+    )
+
+QScriptValue QxrdScriptEngine::fdeleteFunc(QScriptContext * context, QScriptEngine *engine, void * /*u*/)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  bool res = false;
+
+  if (eng) {
+    QString path = context -> argument(0).toString();
+
+    if (path.length() > 0) {
+      res = QFile::remove(path);
+    }
+  }
+
+  return QScriptValue(engine, res);
+}
+
+QCEP_DOC_FUNCTION(
     "acquire",
 
     "acquire([fileName[, exposure[, summedExposures[, postTriggerFiles[, preTriggerFiles[, nPhases]]]]]])",
@@ -1482,6 +1506,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("fileIndex", newFunction(fileIndexFunc, 1));
   globalObject().setProperty("print", newFunction(printFunc, NULL));
   globalObject().setProperty("fopen", newFunction(fopenFunc, NULL));
+  globalObject().setProperty("fdelete", newFunction(fdeleteFunc, NULL));
   globalObject().setProperty("fprint", newFunction(fprintFunc, NULL));
   globalObject().setProperty("fclose", newFunction(fcloseFunc, NULL));
   globalObject().setProperty("printMessage", newFunction(printFunc, NULL));

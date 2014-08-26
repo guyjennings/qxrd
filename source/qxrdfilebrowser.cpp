@@ -518,6 +518,26 @@ void QxrdFileBrowser::doCorrelate()
   }
 }
 
+void QxrdFileBrowser::doEvaluate()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+  QStringList paths;
+
+  foreach(index, rows) {
+    if (!m_Model->isDir(index)) {
+      paths.append(m_Model->filePath(index));
+    }
+  }
+
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    QMetaObject::invokeMethod(exp.data(), "evaluateScriptFiles", Q_ARG(QStringList, paths));
+  }
+}
+
 void QxrdFileBrowser::doRefreshBrowser()
 {
   m_Model->refresh();
@@ -542,6 +562,8 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
     QAction *projectY = actions->addAction("Project Along Y");
     QAction *projectZ = actions->addAction("Project Along Z");
     QAction *correlate = actions->addAction("Correlate Images with Current Image");
+    QAction *evaluate = actions->addAction("Evaluate scripts");
+
     QAction *action = actions->exec(QCursor::pos());
 
     if (action == open) {
@@ -570,6 +592,8 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
       doProjectZ();
     } else if (action == correlate) {
       doCorrelate();
+    } else  if (action == evaluate) {
+      doEvaluate();
     }
   }
 }

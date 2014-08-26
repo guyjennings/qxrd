@@ -117,6 +117,9 @@ public slots:
   void dump();
   QColor pickColor(QColor start=QColor(Qt::white));
 
+  void evaluateScriptFiles(QStringList files);
+  void evaluateScriptFile(QString path);
+
 private slots:
   void onDetectorTypeChanged();
 

@@ -76,6 +76,7 @@ private slots:
 private:
   static QScriptValue printFunc(QScriptContext *context, QScriptEngine *engine, void *u);
   static QScriptValue fopenFunc(QScriptContext *context, QScriptEngine *engine, void *u);
+  static QScriptValue fdeleteFunc(QScriptContext *context, QScriptEngine *engine, void *u);
   static QScriptValue fprintFunc(QScriptContext *context, QScriptEngine *engine, void *u);
   static QScriptValue fcloseFunc(QScriptContext *context, QScriptEngine *engine, void *u);
   static QScriptValue acquireFunc(QScriptContext *context, QScriptEngine *engine);

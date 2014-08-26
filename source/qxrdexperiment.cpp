@@ -952,3 +952,19 @@ QColor QxrdExperiment::pickColor(QColor start)
 
   return res;
 }
+
+void QxrdExperiment::evaluateScriptFiles(QStringList files)
+{
+  foreach(QString file, files) {
+    evaluateScriptFile(file);
+  }
+}
+
+void QxrdExperiment::evaluateScriptFile(QString path)
+{
+  QxrdScriptEnginePtr eng(m_ScriptEngine);
+
+  if (eng) {
+    eng->loadScript(path);
+  }
+}
