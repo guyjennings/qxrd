@@ -40,6 +40,11 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_TiltPlaneRotationStep(saver, this, "tiltPlaneRotationStep", 10, "Tilt Plane Rotation Step (deg)"),
     m_MarkedPoints(saver, this, "markedPoints", QxrdPowderPointVector(), "Marker Points"),
     m_FittedRings(saver, this, "fittedRings", QxrdPowderPointVector(), "Fitted Powder Rings"),
+    m_CalibrantName(saver, this, "calibrantName", "NAC", "Calibrant Name"),
+    m_CalibrantLattice(saver, this, "calibrantLattice", 10.251437, "Calibrant Lattice Constant (Angstrom)"),
+    m_CalibrantLatticeLimit(saver, this, "calibrantLatticeLimit", 5, "Calibrant Lattice Limit"),
+    m_CalibrantSymmetry(saver, this, "calibrantSymmetry", 1, "Calibrant Symmetry [0=Cubic,1=BCC,2=FCC]"),
+    m_CalibrantDSpacings(saver, this, "calibrantDSpacings", QxrdPowderPointVector(), "Calibrant D Spacings"),
     m_RingRadius(saver, this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
     m_RingRadiusA(saver, this, "ringRadiusA", 0.0, "Estimated Powder Ellipse Major Axis Radius"),
     m_RingRadiusB(saver, this, "ringRadiusB", 0.0, "Estimated Powder Ellipse Minor Axis Radius"),
@@ -385,7 +390,7 @@ void QxrdCenterFinder::fitPowderEllipses()
     }
 
     if (r.reason() == QxrdFitter::Successful) {
-      pts.append(QxrdPowderPoint(i, 0, r.fittedX(), r.fittedY(), r.fittedA(), r.fittedB(), r.fittedRot()));
+      pts.append(QxrdPowderPoint(i, 0, 0, r.fittedX(), r.fittedY(), r.fittedA(), r.fittedB(), r.fittedRot()));
     }
   }
 
@@ -436,12 +441,12 @@ void QxrdCenterFinder::deletePowderPointNear(double x, double y)
 
 void QxrdCenterFinder::appendPowderPoint(double x, double y)
 {
-  m_MarkedPoints.appendValue(QxrdPowderPoint(get_RingIndex(), 0, x,y, 0,0,0));
+  m_MarkedPoints.appendValue(QxrdPowderPoint(get_RingIndex(), 0, 0, x,y, 0,0,0));
 }
 
-void QxrdCenterFinder::appendPowderPoint(int n1, int n2, double x, double y, double r1, double r2, double az)
+void QxrdCenterFinder::appendPowderPoint(int n1, int n2, int n3, double x, double y, double r1, double r2, double az)
 {
-  m_MarkedPoints.appendValue(QxrdPowderPoint(n1,n2, x, y, r1, r2, az));
+  m_MarkedPoints.appendValue(QxrdPowderPoint(n1,n2,n3, x, y, r1, r2, az));
 }
 
 void QxrdCenterFinder::deletePowderRing(int n)
@@ -454,7 +459,7 @@ void QxrdCenterFinder::deletePowderRing(int n)
     if (pt.n1() < n) {
       res.append(pt);
     } else if (pt.n1() > n) {
-      res.append(QxrdPowderPoint(pt.n1()-1, pt.n2(), pt.x(), pt.y(), pt.r1(), pt.r2(), pt.az()));
+      res.append(QxrdPowderPoint(pt.n1()-1, pt.n2(), pt.n3(), pt.x(), pt.y(), pt.r1(), pt.r2(), pt.az()));
     }
   }
 
@@ -659,7 +664,7 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
 
     if (fit.reason() == QxrdFitter::Successful) {
       nok += 1;
-      pts.append(QxrdPowderPoint(get_RingIndex(), 0, fit.fittedX(), fit.fittedY(), fit.fittedR(), fit.fittedR(), fit.fittedAz()));
+      pts.append(QxrdPowderPoint(get_RingIndex(), 0, 0, fit.fittedX(), fit.fittedY(), fit.fittedR(), fit.fittedR(), fit.fittedAz()));
     }
   }
 
@@ -808,14 +813,14 @@ double QxrdCenterFinder::getPowderPointY(int i)
   return res.y();
 }
 
-void QxrdCenterFinder::setPowderPoint(int i, int n1, int n2, double x, double y, double r1, double r2, double az)
+void QxrdCenterFinder::setPowderPoint(int i, int n1, int n2, int n3, double x, double y, double r1, double r2, double az)
 {
   QxrdPowderPointVector pts = get_MarkedPoints();
 
   if (i>=0 && i<pts.count()) {
-    pts[i] = QxrdPowderPoint(n1,n2,x,y,r1,r2,az);
+    pts[i] = QxrdPowderPoint(n1,n2,n3,x,y,r1,r2,az);
   } else {
-    pts.append(QxrdPowderPoint(n1,n2,x,y,r1,r2,az));
+    pts.append(QxrdPowderPoint(n1,n2,n3,x,y,r1,r2,az));
   }
 
   set_MarkedPoints(pts);
@@ -888,13 +893,14 @@ void         QxrdCenterFinder::setPowderPoint(int i, QScriptValue val)
 {
   int   n1 = val.property("n1").toInteger();
   int   n2 = val.property("n2").toInteger();
+  int   n3 = val.property("n3").toInteger();
   double x = val.property("x").toNumber();
   double y = val.property("y").toNumber();
   double r1 = val.property("r1").toNumber();
   double r2 = val.property("r2").toNumber();
   double az = val.property("az").toNumber();
 
-  setPowderPoint(i, n1, n2, x, y, r1, r2, az);
+  setPowderPoint(i, n1, n2, n3, x, y, r1, r2, az);
 }
 
 
@@ -1061,4 +1067,79 @@ double QxrdCenterFinder::powderRingAverageTTH(int r) const
   }
 
   return sum/npts;
+}
+
+class QuadInt {
+public:
+  QuadInt(int n=0, int h=-1, int k=-1, int l=-1) : m_N(n), m_H(h), m_K(k), m_L(l) {}
+
+  int & n() { return m_N; }
+  int & h() { return m_H; }
+  int & k() { return m_K; }
+  int & l() { return m_L; }
+
+private:
+  int m_N;
+  int m_H;
+  int m_K;
+  int m_L;
+};
+
+void QxrdCenterFinder::updateCalibrantDSpacings()
+{
+  double a = get_CalibrantLattice();
+  int m = get_CalibrantLatticeLimit();
+  int s = get_CalibrantSymmetry();
+  double lambda = 12398.4187/get_Energy();
+
+  QVector<QuadInt> ex(3*m*m);
+
+  for (int h=1; h<=3*m*m; h++) {
+    for (int k=0; k<=h; k++) {
+      for (int l=0; l<=k; l++) {
+        int r = h*h+k*k+l*l;
+
+        if (r < 3*m*m) {
+          bool ok=false;
+
+          switch (s) {
+          case 0:  // Simple cubic - all OK
+            ok = true;
+            break;
+
+          case 1:  // BCC h+k+l even
+            ok = ((h + k + l) % 2) == 0;
+            break;
+
+          case 2:  // FCC h,k,l all even or all odd
+            int n = h%2 + k%2 + l%2;
+            ok = (n==0) || (n==3);
+            break;
+          }
+
+          if (ok) {
+            if (ex[r].n() == 0) {
+              ex[r] = QuadInt(r, h,k,l);
+            } else {
+              ex[r].n()++;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  QxrdPowderPointVector pts;
+
+  for (int i=1; i<3*m*m; i++) {
+    QuadInt e = ex[i];
+    if (e.n() > 0) {
+      double d = a/sqrt(i);
+      double tth = 2.0*asin(lambda/(2.0*d))*180.0/M_PI;
+
+      pts.append(QxrdPowderPoint(e.h(), e.k(), e.l(), d, tth, 0, 0, 0));
+    }
+  }
+
+  set_CalibrantDSpacings(pts);
 }

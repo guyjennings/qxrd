@@ -15,11 +15,11 @@ QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSettingsSaverWPtr saver, QO
 QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSettingsSaverWPtr saver,
                                                  QObject *parent,
                                                  const char *name,
-                                                 int n1, int n2, double x, double y, double r1, double r2, double az,
+                                                 int n1, int n2, int n3, double x, double y, double r1, double r2, double az,
                                                  QString toolTip) :
   QcepProperty(saver, parent, name, toolTip),
-  m_Default(QxrdPowderPoint(n1,n2,x,y,r1,r2,az)),
-  m_Value(QxrdPowderPoint(n1,n2,x,y,r1,r2,az))
+  m_Default(QxrdPowderPoint(n1,n2,n3,x,y,r1,r2,az)),
+  m_Value(QxrdPowderPoint(n1,n2,n3,x,y,r1,r2,az))
 {
 }
 
@@ -60,18 +60,21 @@ double QxrdPowderPointProperty::subValue(int axis) const
     res = m_Value.n2();
     break;
   case 2:
-    res = m_Value.x();
+    res = m_Value.n3();
     break;
   case 3:
-    res = m_Value.y();
+    res = m_Value.x();
     break;
   case 4:
-    res = m_Value.r1();
+    res = m_Value.y();
     break;
   case 5:
-    res = m_Value.r2();
+    res = m_Value.r1();
     break;
   case 6:
+    res = m_Value.r2();
+    break;
+  case 7:
     res = m_Value.az();
     break;
   }
@@ -133,6 +136,18 @@ void QxrdPowderPointProperty::setSubValue(int axis, int value)
       emit valueChanged(m_Value, newIndex);
     }
     break;
+
+  case 2:
+    if (value != m_Value.n3()) {
+      int newIndex = incIndex(1);
+
+      emit subValueChanged(axis, value, newIndex);
+
+      m_Value.n3() = value;
+
+      emit valueChanged(m_Value, newIndex);
+    }
+    break;
   }
 }
 
@@ -141,7 +156,7 @@ void QxrdPowderPointProperty::setSubValue(int axis, double value)
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   switch (axis) {
-  case 2:
+  case 3:
     if (value != m_Value.x()) {
       int newIndex = incIndex(1);
 
@@ -153,7 +168,7 @@ void QxrdPowderPointProperty::setSubValue(int axis, double value)
     }
     break;
 
-  case 3:
+  case 4:
     if (value != m_Value.y()) {
       int newIndex = incIndex(1);
 
@@ -165,7 +180,7 @@ void QxrdPowderPointProperty::setSubValue(int axis, double value)
     }
     break;
 
-  case 4:
+  case 5:
     if (value != m_Value.r1()) {
       int newIndex = incIndex(1);
 
@@ -177,7 +192,7 @@ void QxrdPowderPointProperty::setSubValue(int axis, double value)
     }
     break;
 
-  case 5:
+  case 6:
     if (value != m_Value.r2()) {
       int newIndex = incIndex(1);
 
@@ -189,7 +204,7 @@ void QxrdPowderPointProperty::setSubValue(int axis, double value)
     }
     break;
 
-  case 6:
+  case 7:
     if (value != m_Value.az()) {
       int newIndex = incIndex(1);
 
@@ -207,7 +222,7 @@ QString QxrdPowderPointProperty::toString(const QxrdPowderPoint &val)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QString res = tr("[ %1 %2 %3 %4 %5 %6 %7 ]").arg(val.n1()).arg(val.n2()).arg(val.x()).arg(val.y()).arg(val.r1()).arg(val.r2()).arg(val.az());
+  QString res = tr("[ %1 %2 %3 %4 %5 %6 %7 %8 ]").arg(val.n1()).arg(val.n2()).arg(val.n3()).arg(val.x()).arg(val.y()).arg(val.r1()).arg(val.r2()).arg(val.az());
 
   return res;
 }
@@ -237,24 +252,28 @@ void QxrdPowderPointProperty::setValue(QxrdPowderPoint val)
       emit subValueChanged(1, val.n2(), newIndex);
     }
 
+    if (val.n3() != m_Value.n3()) {
+      emit subValueChanged(2, val.n3(), newIndex);
+    }
+
     if (val.x() != m_Value.x()) {
-      emit subValueChanged(2, val.x(), newIndex);
+      emit subValueChanged(3, val.x(), newIndex);
     }
 
     if (val.y() != m_Value.y()) {
-      emit subValueChanged(3, val.y(), newIndex);
+      emit subValueChanged(4, val.y(), newIndex);
     }
 
     if (val.r1() != m_Value.r1()) {
-      emit subValueChanged(4, val.r1(), newIndex);
+      emit subValueChanged(5, val.r1(), newIndex);
     }
 
     if (val.r2() != m_Value.r2()) {
-      emit subValueChanged(5, val.r2(), newIndex);
+      emit subValueChanged(6, val.r2(), newIndex);
     }
 
     if (val.az() != m_Value.az()) {
-      emit subValueChanged(6, val.az(), newIndex);
+      emit subValueChanged(7, val.az(), newIndex);
     }
 
     m_Value = val;
@@ -287,32 +306,35 @@ void QxrdPowderPointProperty::resetValue()
 
 QScriptValue QxrdPowderPointProperty::toScriptValue(QScriptEngine *engine, const QxrdPowderPoint &pt)
 {
-  QScriptValue obj = engine->newArray(4);
+  QScriptValue obj = engine->newObject();
 
-  obj.setProperty(0, pt.n1());
-  obj.setProperty(1, pt.n2());
-  obj.setProperty(2, pt.x());
-  obj.setProperty(3, pt.y());
-  obj.setProperty(4, pt.r1());
-  obj.setProperty(5, pt.r2());
-  obj.setProperty(6, pt.az());
+  obj.setProperty("n1", pt.n1());
+  obj.setProperty("n2", pt.n2());
+  obj.setProperty("n3", pt.n3());
+  obj.setProperty("x",  pt.x());
+  obj.setProperty("y",  pt.y());
+  obj.setProperty("r1", pt.r1());
+  obj.setProperty("r2", pt.r2());
+  obj.setProperty("az", pt.az());
 
   return obj;
 }
 
 void QxrdPowderPointProperty::fromScriptValue(const QScriptValue &obj, QxrdPowderPoint &pt)
 {
-  pt.n1() = obj.property(0).toInteger();
-  pt.n2() = obj.property(1).toInteger();
-  pt.x()  = obj.property(2).toNumber();
-  pt.y()  = obj.property(3).toNumber();
-  pt.r1() = obj.property(4).toNumber();
-  pt.r2() = obj.property(5).toNumber();
-  pt.az() = obj.property(6).toNumber();
+  pt.n1() = obj.property("n1").toInteger();
+  pt.n2() = obj.property("n2").toInteger();
+  pt.n3() = obj.property("n3").toInteger();
+  pt.x()  = obj.property("x").toNumber();
+  pt.y()  = obj.property("y").toNumber();
+  pt.r1() = obj.property("r1").toNumber();
+  pt.r2() = obj.property("r2").toNumber();
+  pt.az() = obj.property("az").toNumber();
 }
 
 void QxrdPowderPointProperty::linkTo(QSpinBox *n1SpinBox,
                                      QSpinBox *n2SpinBox,
+                                     QSpinBox *n3SpinBox,
                                      QDoubleSpinBox *xSpinBox,
                                      QDoubleSpinBox *ySpinBox,
                                      QDoubleSpinBox *r1SpinBox,
@@ -327,24 +349,28 @@ void QxrdPowderPointProperty::linkTo(QSpinBox *n1SpinBox,
     linkTo(1, n2SpinBox);
   }
 
+  if (n3SpinBox) {
+    linkTo(2, n3SpinBox);
+  }
+
   if (xSpinBox) {
-    linkTo(2, xSpinBox);
+    linkTo(3, xSpinBox);
   }
 
   if (ySpinBox) {
-    linkTo(3, ySpinBox);
+    linkTo(4, ySpinBox);
   }
 
   if (r1SpinBox) {
-    linkTo(4, r1SpinBox);
+    linkTo(5, r1SpinBox);
   }
 
   if (r2SpinBox) {
-    linkTo(5, r2SpinBox);
+    linkTo(6, r2SpinBox);
   }
 
   if (azSpinBox) {
-    linkTo(6, azSpinBox);
+    linkTo(7, azSpinBox);
   }
 }
 
@@ -352,7 +378,7 @@ void QxrdPowderPointProperty::linkTo(int axis, QSpinBox *spinBox)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  if (axis==0 || axis==1) {
+  if (axis>=0 && axis<=2) {
     QxrdPowderPointPropertySpinBoxHelper *helper
         = new QxrdPowderPointPropertySpinBoxHelper(spinBox, this, axis);
 
@@ -373,7 +399,7 @@ void QxrdPowderPointProperty::linkTo(int axis, QDoubleSpinBox *spinBox)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  if (axis>=2 && axis<=6) {
+  if (axis>=3 && axis<=7) {
     QxrdPowderPointPropertyDoubleSpinBoxHelper *helper
         = new QxrdPowderPointPropertyDoubleSpinBoxHelper(spinBox, this, axis);
 
@@ -513,7 +539,7 @@ QString QxrdPowderPointVectorProperty::toString(const QxrdPowderPointVector &val
 
   for (int i=0; i<ct; i++) {
     if (i<(ct-1)) {
-      res += tr("%1, ").arg(val[i].toString());
+      res += tr("%1,\n").arg(val[i].toString());
     } else {
       res += tr("%1").arg(val[i].toString());
     }
@@ -585,15 +611,16 @@ QScriptValue QxrdPowderPointVectorProperty::toScriptValue(QScriptEngine *engine,
 
   for (int i=0; i<n; i++) {
     const QxrdPowderPoint &pt = vec.at(i);
-    QScriptValue obj = engine->newArray(4);
+    QScriptValue obj = engine->newObject();
 
-    obj.setProperty(0, pt.n1());
-    obj.setProperty(1, pt.n2());
-    obj.setProperty(2, pt.x());
-    obj.setProperty(3, pt.y());
-    obj.setProperty(4, pt.r1());
-    obj.setProperty(5, pt.r2());
-    obj.setProperty(6, pt.az());
+    obj.setProperty("n1", pt.n1());
+    obj.setProperty("n2", pt.n2());
+    obj.setProperty("n3", pt.n3());
+    obj.setProperty("x", pt.x());
+    obj.setProperty("y", pt.y());
+    obj.setProperty("r1", pt.r1());
+    obj.setProperty("r2", pt.r2());
+    obj.setProperty("az", pt.az());
 
     res.setProperty(i, obj);
   }
@@ -612,13 +639,14 @@ void QxrdPowderPointVectorProperty::fromScriptValue(const QScriptValue &obj,
     QScriptValue pt = obj.property(i);
 
     if (pt.isValid()) {
-      vec[i].n1() = pt.property(0).toInteger();
-      vec[i].n2() = pt.property(1).toInteger();
-      vec[i].x()  = pt.property(2).toNumber();
-      vec[i].y()  = pt.property(3).toNumber();
-      vec[i].r1() = pt.property(4).toNumber();
-      vec[i].r2() = pt.property(5).toNumber();
-      vec[i].az() = pt.property(6).toNumber();
+      vec[i].n1() = pt.property("n1").toInteger();
+      vec[i].n2() = pt.property("n2").toInteger();
+      vec[i].n3() = pt.property("n3").toInteger();
+      vec[i].x()  = pt.property("x").toNumber();
+      vec[i].y()  = pt.property("y").toNumber();
+      vec[i].r1() = pt.property("r1").toNumber();
+      vec[i].r2() = pt.property("r2").toNumber();
+      vec[i].az() = pt.property("az").toNumber();
     }
   }
 }
@@ -627,14 +655,14 @@ void QxrdPowderPointVectorProperty::fromScriptValue(const QScriptValue &obj,
 
 QDataStream &operator<<(QDataStream &stream, const QxrdPowderPoint &pt)
 {
-  stream << pt.n1() << pt.n2() << pt.x() << pt.y() << pt.r1() << pt.r2() << pt.az();
+  stream << pt.n1() << pt.n2() << pt.n3() << pt.x() << pt.y() << pt.r1() << pt.r2() << pt.az();
 
   return stream;
 }
 
 QDataStream &operator>>(QDataStream &stream, QxrdPowderPoint &pt)
 {
-  stream >> pt.n1() >> pt.n2() >> pt.x() >> pt.y() >> pt.r1() >> pt.r2() >> pt.az();
+  stream >> pt.n1() >> pt.n2() >> pt.n3()>> pt.x() >> pt.y() >> pt.r1() >> pt.r2() >> pt.az();
 
   return stream;
 }

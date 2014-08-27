@@ -68,6 +68,21 @@ public:
   Q_PROPERTY(QxrdPowderPointVector fittedRings READ get_FittedRings WRITE set_FittedRings)
   QXRD_POWDERPOINTVECTOR_PROPERTY(FittedRings)
 
+  Q_PROPERTY(QString calibrantName READ get_CalibrantName WRITE set_CalibrantName)
+  QCEP_STRING_PROPERTY(CalibrantName)
+
+  Q_PROPERTY(double calibrantLattice READ get_CalibrantLattice WRITE set_CalibrantLattice)
+  QCEP_DOUBLE_PROPERTY(CalibrantLattice)
+
+  Q_PROPERTY(int calibrantLatticeLimit READ get_CalibrantLatticeLimit WRITE set_CalibrantLatticeLimit)
+  QCEP_INTEGER_PROPERTY(CalibrantLatticeLimit)
+
+  Q_PROPERTY(int calibrantSymmetry READ get_CalibrantSymmetry WRITE set_CalibrantSymmetry)
+  QCEP_INTEGER_PROPERTY(CalibrantSymmetry)
+
+  Q_PROPERTY(QxrdPowderPointVector calibrantDSpacings READ get_CalibrantDSpacings WRITE set_CalibrantDSpacings)
+  QXRD_POWDERPOINTVECTOR_PROPERTY(CalibrantDSpacings)
+
   Q_PROPERTY(double ringRadius READ get_RingRadius WRITE set_RingRadius)
   QCEP_DOUBLE_PROPERTY(RingRadius)
 
@@ -191,7 +206,7 @@ public slots:
   void deletePowderPoints();
   void deletePowderRing(int n);
   void appendPowderPoint(double x, double y);
-  void appendPowderPoint(int n1, int n2, double x, double y, double r1=0, double r2=0, double az=0);
+  void appendPowderPoint(int n1, int n2, int n3, double x, double y, double r1=0, double r2=0, double az=0);
   void normalizePowderRings();
 
   QxrdPowderPoint powderPoint(int i);
@@ -207,7 +222,7 @@ public slots:
   int    getPowderPointN2(int i);
   double getPowderPointX(int i);
   double getPowderPointY(int i);
-  void   setPowderPoint(int i, int n1, int n2, double x, double y, double r1, double r2, double az);
+  void   setPowderPoint(int i, int n1, int n2, int n3, double x, double y, double r1, double r2, double az);
 
   QScriptValue getPowderPoint(int i);
   QScriptValue getPowderPoints();
@@ -222,6 +237,8 @@ public slots:
   double powderRingAverageR(int r) const;
   double powderRingAverageTTH(int r) const;
   double powderRingAverageQ(int r) const;
+
+  void updateCalibrantDSpacings();
 
 public:
   void readSettings(QSettings *settings, QString section);
