@@ -683,6 +683,12 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
   return nok;
 }
 
+bool QxrdCenterFinder::missingRingNear(double x, double y)
+{
+  appendPowderPoint(get_RingIndex(), -1, 0, x, y, getR(x,y), getR(x,y), getChi(x,y));
+  prop_RingIndex()->incValue(1);
+}
+
 //bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
 //{
 //  printMessage(tr("centering.traceRingNearParallel(%1,%2,%3)")
@@ -1142,4 +1148,26 @@ void QxrdCenterFinder::updateCalibrantDSpacings()
   }
 
   set_CalibrantDSpacings(pts);
+}
+
+double QxrdCenterFinder::calibrantDSpacing(int n)
+{
+  QxrdPowderPointVector ds = get_CalibrantDSpacings();
+
+  if (n>=0 && n<ds.count()) {
+    return ds[n].x();
+  } else {
+    return 0;
+  }
+}
+
+double QxrdCenterFinder::calibrantTTH(int n)
+{
+  QxrdPowderPointVector ds = get_CalibrantDSpacings();
+
+  if (n>=0 && n<ds.count()) {
+    return ds[n].y();
+  } else {
+    return 0;
+  }
 }

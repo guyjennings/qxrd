@@ -1174,6 +1174,7 @@
     <addaction name="m_ActionMoveCenterRight"/>
     <addaction name="separator"/>
     <addaction name="m_ActionPlotPowderRingPoints"/>
+    <addaction name="m_ActionPlotPowderRingTwoTheta"/>
     <addaction name="m_ActionPlotPowderRingCenters"/>
    </widget>
    <widget class="QMenu" name="m_OperationsMenu">
@@ -1942,6 +1943,14 @@
    </property>
    <property name="toolTip">
     <string>Plot Powder Ring Centers</string>
+   </property>
+  </action>
+  <action name="m_ActionPlotPowderRingTwoTheta">
+   <property name="text">
+    <string>Plot Powder Ring 2 Theta</string>
+   </property>
+   <property name="toolTip">
+    <string>Plot Powder Ring 2 Theta</string>
    </property>
   </action>
  </widget>

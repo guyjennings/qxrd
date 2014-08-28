@@ -967,7 +967,8 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *fitRingNear      = plotMenu.addAction(tr("Fit Point on Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *traceRingClockwise = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
-//          QAction *traceRingParallel = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4] in parallel").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *missingRing      = plotMenu.addAction(tr("Missing Diffracted Ring near (%1,%2)").arg(x).arg(y));
+          //          QAction *traceRingParallel = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4] in parallel").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *zapPixel         = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
 
           QAction *action = plotMenu.exec(event->globalPos());
@@ -1003,6 +1004,11 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
                                       Q_ARG(double,x),
                                       Q_ARG(double,y),
                                       Q_ARG(double,25.0));
+          } else if (action == missingRing) {
+            cf->missingRingNear(x,y);
+//            QMetaObject::invokeMethod((cf.data(), "missingRingNear",
+//                                       Q_ARG(double,x),
+//                                       Q_ARG(double,y));
 //          } else if (action == traceRingParallel) {
 //            QMetaObject::invokeMethod(cf.data(), "traceRingNearParallel",
 //                                      Q_ARG(double,x),

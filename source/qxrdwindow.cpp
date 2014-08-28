@@ -338,6 +338,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   }
 
   connect(m_ActionPlotPowderRingPoints, SIGNAL(triggered()), this, SLOT(plotPowderRingRadii()));
+  connect(m_ActionPlotPowderRingTwoTheta, SIGNAL(triggered()), this, SLOT(plotPowderRingTwoTheta()));
   connect(m_ActionPlotPowderRingCenters, SIGNAL(triggered()), this, SLOT(plotPowderRingCenters()));
 
   m_AcquisitionDialog->setupAcquireMenu(m_AcquireMenu);
@@ -1757,7 +1758,7 @@ void QxrdWindow::plotPowderRingRadii()
         for (int i=0; i<npts; i++) {
           QxrdPowderPoint pt = cf->powderRingPoint(i);
 
-          if (pt.n1() == r) {
+          if (pt.n1() == r && pt.n2() == 0) {
             x.append(cf->getChi(pt.x(), pt.y()));
             y.append(cf->getR  (pt.x(), pt.y()));
           }
@@ -1774,24 +1775,108 @@ void QxrdWindow::plotPowderRingRadii()
           for (int i=0; i<n; i++) {
             y[i] -= avg;
           }
-        } else {
-          double d = cf->get_RingAverageDisplacement()*r;
-          int n=y.count();
-          for (int i=0; i<n; i++) {
-            y[i] += d;
+//        } else {
+//          double d = cf->get_RingAverageDisplacement()*r;
+//          int n=y.count();
+//          for (int i=0; i<n; i++) {
+//            y[i] += d;
+//          }
+        }
+
+        if (x.count() > 0) {
+          QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring %1").arg(r));
+
+          m_DistortionCorrectionPlot->setPlotCurveStyle(r, pc);
+
+          pc -> setSamples(x, y);
+
+          pc -> setStyle(QwtPlotCurve::NoCurve);
+          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+
+          pc -> attach(m_DistortionCorrectionPlot);
+        }
+      }
+
+//      m_DistortionCorrectionPlot->autoScale();
+      m_DistortionCorrectionPlot->replot();
+    }
+  }
+}
+
+void QxrdWindow::plotPowderRingTwoTheta()
+{
+  QxrdExperimentPtr   expt(m_Experiment);
+
+  if (expt) {
+    QxrdCenterFinderPtr cf(expt->centerFinder());
+
+    if (cf) {
+      cf->updateCalibrantDSpacings();
+
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
+
+      int nrgs = cf->countPowderRings();
+      int npts = cf->countPowderRingPoints();
+
+      for (int r=0; r<nrgs; r++) {
+        QVector<double> x, y;
+
+        for (int i=0; i<npts; i++) {
+          QxrdPowderPoint pt = cf->powderRingPoint(i);
+
+          if (pt.n1() == r && pt.n2() == 0) {
+            x.append(cf->getChi(pt.x(), pt.y()));
+            y.append(cf->getTTH(pt.x(), pt.y()));
           }
         }
 
-        QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring %1").arg(r));
+        double avg=0;
 
-        m_DistortionCorrectionPlot->setPlotCurveStyle(r, pc);
+        double calTTH = cf->calibrantTTH(r);
 
-        pc -> setSamples(x, y);
+        if (cf->get_SubtractRingAverages()) {
+          int n = y.count();
+          //          double sum = 0;
+//          for (int i=0; i<n; i++) {
+//            sum += y[i];
+//          }
 
-        pc -> setStyle(QwtPlotCurve::NoCurve);
-        pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+          avg = calTTH - cf->get_RingAverageDisplacement()*r;
+          for (int i=0; i<n; i++) {
+            y[i] -= avg;
+          }
+//        } else {
+//          double d = cf->get_RingAverageDisplacement()*r;
+//          int n=y.count();
+//          for (int i=0; i<n; i++) {
+//            y[i] += d;
+//          }
+        }
 
-        pc -> attach(m_DistortionCorrectionPlot);
+        if (x.count() >= 0) {
+          QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring %1").arg(r));
+
+          m_DistortionCorrectionPlot->setPlotCurveStyle(r, pc);
+
+          pc -> setSamples(x, y);
+
+          pc -> setStyle(QwtPlotCurve::NoCurve);
+          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+
+          pc -> attach(m_DistortionCorrectionPlot);
+
+          if (calTTH > 0) {
+            QwtPlotCurve* tth = new QwtPlotCurve(tr("Cal %1").arg(r));
+            QVector<double> x1,y1;
+            x1.append(0); y1.append(calTTH - avg);
+            x1.append(360); y1.append(calTTH - avg);
+            m_DistortionCorrectionPlot->setPlotCurveStyle(r, tth);
+            tth -> setSamples(x1,y1);
+            tth -> setSymbol(NULL);
+            tth -> attach(m_DistortionCorrectionPlot);
+          }
+        }
       }
 
 //      m_DistortionCorrectionPlot->autoScale();

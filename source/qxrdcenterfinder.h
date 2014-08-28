@@ -217,6 +217,7 @@ public slots:
   bool fitRingNear(double x0, double y0);
   bool traceRingNear(double x0, double y0, double step=25.0);
 //  bool traceRingNearParallel(double x0, double y0, double step=25.0);
+  bool missingRingNear(double x, double y);
 
   int    getPowderPointN1(int i);
   int    getPowderPointN2(int i);
@@ -239,6 +240,8 @@ public slots:
   double powderRingAverageQ(int r) const;
 
   void updateCalibrantDSpacings();
+  double calibrantDSpacing(int n);
+  double calibrantTTH(int n);
 
 public:
   void readSettings(QSettings *settings, QString section);

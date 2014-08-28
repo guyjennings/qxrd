@@ -129,6 +129,7 @@ private slots:
   void populateExperimentsMenu();
   void populateRecentExperimentsMenu();
   void plotPowderRingRadii();
+  void plotPowderRingTwoTheta();
   void plotPowderRingCenters();
 
 public:
