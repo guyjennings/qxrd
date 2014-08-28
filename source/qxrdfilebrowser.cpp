@@ -518,23 +518,23 @@ void QxrdFileBrowser::doCorrelate()
   }
 }
 
-void QxrdFileBrowser::doEvaluate()
+void QxrdFileBrowser::doEvaluate(QString filePath)
 {
-  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
-  QModelIndexList rows = sel->selectedRows();
-  QModelIndex index;
-  QStringList paths;
+//  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+//  QModelIndexList rows = sel->selectedRows();
+//  QModelIndex index;
+//  QStringList paths;
 
-  foreach(index, rows) {
-    if (!m_Model->isDir(index)) {
-      paths.append(m_Model->filePath(index));
-    }
-  }
+//  foreach(index, rows) {
+//    if (!m_Model->isDir(index)) {
+//      paths.append(m_Model->filePath(index));
+//    }
+//  }
 
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    QMetaObject::invokeMethod(exp.data(), "evaluateScriptFiles", Q_ARG(QStringList, paths));
+    INVOKE_CHECK(QMetaObject::invokeMethod(exp.data(), "evaluateScriptFile", Q_ARG(QString, filePath)));
   }
 }
 
@@ -543,10 +543,12 @@ void QxrdFileBrowser::doRefreshBrowser()
   m_Model->refresh();
 }
 
-void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
+void QxrdFileBrowser::mousePressed(QModelIndex index)
 {
   if (QApplication::mouseButtons() & Qt::RightButton) {
     //    g_Application->printMessage("Right mouse pressed");
+
+    QString filePath = m_Model->filePath(index);
 
     QMenu *actions = new QMenu(this);
     QAction *open = actions->addAction("Open");
@@ -593,7 +595,7 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
     } else if (action == correlate) {
       doCorrelate();
     } else  if (action == evaluate) {
-      doEvaluate();
+      doEvaluate(filePath);
     }
   }
 }

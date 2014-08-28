@@ -145,7 +145,24 @@ void QxrdScriptEngine::loadScript(QString path)
       QTextStream scriptStream(&scriptFile);
       QString script = scriptStream.readAll();
 
-      QScriptEngine::evaluate(script, path);
+      QScriptValue res = QScriptEngine::evaluate(script, path);
+
+      QxrdExperimentPtr expt(experiment());
+
+      if (expt) {
+        if (hasUncaughtException()) {
+          expt->printLine(tr("Script error, file %1, line %2 : %3")
+                       .arg(path).arg(uncaughtExceptionLineNumber()).arg(uncaughtExceptionString()));
+
+          QStringList bt = uncaughtExceptionBacktrace();
+
+          foreach (QString s, bt) {
+            expt->printLine(s);
+          }
+        } else {
+          expt->printLine(tr("= %1").arg(res.toString()));
+        }
+      }
     }
   }
 }

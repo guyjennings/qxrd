@@ -965,6 +965,8 @@ void QxrdExperiment::evaluateScriptFile(QString path)
   QxrdScriptEnginePtr eng(m_ScriptEngine);
 
   if (eng) {
+    printMessage(tr("Loading script %1").arg(path));
+
     eng->loadScript(path);
   }
 }
