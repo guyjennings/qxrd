@@ -1,6 +1,15 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.6 - Sep 2 2014
+Added simple calibrant diffraction angle calculation routines
+
+Plot of fitted ring TTH and calibrant TTH vs azimuth
+
+Added file access scripting commands
+
+Preferred qt version is now qt5 for all platforms
+
 ## v0.11.5 - Aug 20 2014
 Improved memory handling during acquisition - should drop fewer frames
 
