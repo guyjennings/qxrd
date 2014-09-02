@@ -687,6 +687,8 @@ bool QxrdCenterFinder::missingRingNear(double x, double y)
 {
   appendPowderPoint(get_RingIndex(), -1, 0, x, y, getR(x,y), getR(x,y), getChi(x,y));
   prop_RingIndex()->incValue(1);
+
+  return true;
 }
 
 //bool QxrdCenterFinder::traceRingNearParallel(double x0, double y0, double step)
