@@ -39,20 +39,12 @@ void QcepObject::printMessage(QString msg, QDateTime dt)
 
 void QcepObject::writeSettings(QSettings *set, QString section, bool includeDynamic)
 {
-  const QMetaObject *meta = metaObject();
-
-  while (meta) {
-    QcepProperty::writeSettings(this, meta, section, set, includeDynamic);
-
-    meta = meta->superClass();
-
-    if (meta == &QObject::staticMetaObject) break;
-  }
+  QcepProperty::writeSettings(this, set, section);
 }
 
 void QcepObject::readSettings(QSettings *set, QString section, bool includeDynamic)
 {
-  QcepProperty::readSettings(this, metaObject(), section, set, includeDynamic);
+  QcepProperty::readSettings(this, set, section);
 }
 
 QString QcepObject::addSlashes(QString str)

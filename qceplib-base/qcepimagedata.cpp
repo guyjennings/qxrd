@@ -188,7 +188,7 @@ void QcepImageDataBase::loadMetaData()
 
     QSettings settings(get_FileName()+".metadata", QSettings::IniFormat);
 
-    QcepProperty::readSettings(this, "metadata", &settings, true);
+    QcepProperty::readSettings(this, &settings, "metadata");
   }
 //
 //  printf("QcepImageDataBase::loadMetaData for file %s took %d msec\n",  qPrintable(get_FileName()), tic.elapsed());
@@ -213,7 +213,7 @@ void QcepImageDataBase::saveMetaData(QString name)
 
     QSettings settings(name+".metadata", QSettings::IniFormat);
 
-    QcepProperty::writeSettings(this, "metadata", &settings, true);
+    QcepProperty::writeSettings(this, &settings, "metadata");
 
     settings.beginWriteArray("normalization");
     QcepDoubleList norm = get_Normalization();
