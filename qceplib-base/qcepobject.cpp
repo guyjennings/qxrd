@@ -27,7 +27,7 @@ void QcepObject::printLine(QString line)
   }
 }
 
-void QcepObject::printMessage(QString msg, QDateTime dt)
+void QcepObject::printMessage(QString msg, QDateTime dt) const
 {
   if (parent()) {
     QMetaObject::invokeMethod( parent(), "printMessage", Q_ARG(QString, msg), Q_ARG(QDateTime, dt));
@@ -37,7 +37,7 @@ void QcepObject::printMessage(QString msg, QDateTime dt)
   }
 }
 
-void QcepObject::criticalMessage(QString msg, QDateTime dt)
+void QcepObject::criticalMessage(QString msg, QDateTime dt) const
 {
   if (parent()) {
     QMetaObject::invokeMethod( parent(), "criticalMessage", Q_ARG(QString, msg), Q_ARG(QDateTime, dt));
@@ -47,7 +47,7 @@ void QcepObject::criticalMessage(QString msg, QDateTime dt)
   }
 }
 
-void QcepObject::statusMessage(QString msg, QDateTime dt)
+void QcepObject::statusMessage(QString msg, QDateTime dt) const
 {
   if (parent()) {
     QMetaObject::invokeMethod( parent(), "statusMessage", Q_ARG(QString, msg), Q_ARG(QDateTime, dt));

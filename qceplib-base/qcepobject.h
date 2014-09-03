@@ -16,9 +16,9 @@ signals:
 
 public slots:
   virtual void printLine(QString line);
-  virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime());
-  virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
+  virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
   virtual QString settingsScript();
   QString scriptValueLiteral(QVariant v);
