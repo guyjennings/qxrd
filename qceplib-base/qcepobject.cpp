@@ -37,12 +37,32 @@ void QcepObject::printMessage(QString msg, QDateTime dt)
   }
 }
 
-void QcepObject::writeSettings(QSettings *set, QString section, bool includeDynamic)
+void QcepObject::criticalMessage(QString msg, QDateTime dt)
+{
+  if (parent()) {
+    QMetaObject::invokeMethod( parent(), "criticalMessage", Q_ARG(QString, msg), Q_ARG(QDateTime, dt));
+  } else {
+    printf("MESSAGE: %s %s\n",
+           qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+  }
+}
+
+void QcepObject::statusMessage(QString msg, QDateTime dt)
+{
+  if (parent()) {
+    QMetaObject::invokeMethod( parent(), "statusMessage", Q_ARG(QString, msg), Q_ARG(QDateTime, dt));
+  } else {
+    printf("MESSAGE: %s %s\n",
+           qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+  }
+}
+
+void QcepObject::writeSettings(QSettings *set, QString section)
 {
   QcepProperty::writeSettings(this, set, section);
 }
 
-void QcepObject::readSettings(QSettings *set, QString section, bool includeDynamic)
+void QcepObject::readSettings(QSettings *set, QString section)
 {
   QcepProperty::readSettings(this, set, section);
 }

@@ -17,13 +17,15 @@ signals:
 public slots:
   virtual void printLine(QString line);
   virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime());
+  virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
   virtual QString settingsScript();
   QString scriptValueLiteral(QVariant v);
 
 public:
-  virtual void writeSettings(QSettings *set, QString section, bool includeDynamic = false);
-  virtual void readSettings(QSettings *set, QString section, bool includeDynamic = false);
+  virtual void writeSettings(QSettings *set, QString section);
+  virtual void readSettings(QSettings *set, QString section);
 
   QString get_Name() const;
   void    set_Name(QString name);

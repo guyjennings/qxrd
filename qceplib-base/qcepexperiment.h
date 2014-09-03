@@ -14,8 +14,8 @@ signals:
 
 public slots:
 
-  virtual void criticalMessage(QString msg) = 0;
-  virtual void statusMessage(QString msg) = 0;
+//  virtual void criticalMessage(QString msg) = 0;
+//  virtual void statusMessage(QString msg) = 0;
 //  virtual void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) = 0;
 };
 
