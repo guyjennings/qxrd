@@ -22,8 +22,8 @@ public slots:
   QString scriptValueLiteral(QVariant v);
 
 public:
-  virtual void writeSettings(QSettings *set, QString section);
-  virtual void readSettings(QSettings *set, QString section);
+  virtual void writeSettings(QSettings *set, QString section, bool includeDynamic = false);
+  virtual void readSettings(QSettings *set, QString section, bool includeDynamic = false);
 
   QString get_Name() const;
   void    set_Name(QString name);
