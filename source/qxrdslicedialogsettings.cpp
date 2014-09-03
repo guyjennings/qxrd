@@ -10,13 +10,13 @@ QxrdSliceDialogSettings::QxrdSliceDialogSettings(QxrdSettingsSaverWPtr saver, QO
 
 void QxrdSliceDialogSettings::readSettings(QSettings *settings, QString section)
 {
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::readSettings(this, settings, section);
   m_SlicePlotSettings->readSettings(settings, section+"/plot");
 }
 
 void QxrdSliceDialogSettings::writeSettings(QSettings *settings, QString section)
 {
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::writeSettings(this, settings, section);
   m_SlicePlotSettings->writeSettings(settings, section+"/plot");
 }
 

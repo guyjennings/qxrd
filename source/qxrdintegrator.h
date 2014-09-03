@@ -85,8 +85,6 @@ public:
   QCEP_DOUBLE_PROPERTY(ScalingFactor)
 
 public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
   QxrdDataProcessorWPtr dataProcessor() const;
   QxrdExperimentWPtr experiment() const;
 

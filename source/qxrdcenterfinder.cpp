@@ -100,14 +100,14 @@ void QxrdCenterFinder::writeSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QxrdDetectorGeometry::writeSettings(settings, section);
 }
 
 void QxrdCenterFinder::readSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QxrdDetectorGeometry::readSettings(settings, section);
 }
 
 void QxrdCenterFinder::onCenterChanged(QPointF pt)
@@ -249,7 +249,7 @@ void QxrdCenterFinder::onPointSelected(QPointF pt)
   fitPeakNear(pt.x(), pt.y());
 }
 
-void QxrdCenterFinder::printMessage(QString msg, QDateTime ts)
+void QxrdCenterFinder::printMessage(QString msg, QDateTime ts) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 
@@ -258,12 +258,12 @@ void QxrdCenterFinder::printMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdCenterFinder::statusMessage(QString msg, QDateTime /*ts*/)
+void QxrdCenterFinder::statusMessage(QString msg, QDateTime ts) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    exp->statusMessage(msg);
+    exp->statusMessage(msg, ts);
   }
 }
 

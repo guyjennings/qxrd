@@ -560,12 +560,12 @@ void QxrdApplication::readSettings()
 
   QxrdGlobalSettings settings(this);
 
-  readSettings(&settings);
+  readSettings(&settings, "application");
 }
 
-void QxrdApplication::readSettings(QSettings *settings)
+void QxrdApplication::readSettings(QSettings *settings, QString section)
 {
-  QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
+  QcepProperty::readSettings(this, settings, section);
 
   if (m_Allocator) {
     m_Allocator->readSettings(settings, "allocator");
@@ -578,12 +578,12 @@ void QxrdApplication::writeSettings()
 
   QxrdGlobalSettings settings(this);
 
-  writeSettings(&settings);
+  writeSettings(&settings, "application");
 }
 
-void QxrdApplication::writeSettings(QSettings *settings)
+void QxrdApplication::writeSettings(QSettings *settings, QString section)
 {
-  QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
+  QcepProperty::writeSettings(this, settings, section);
 
   if (m_Allocator) {
     m_Allocator->writeSettings(settings, "allocator");
@@ -604,7 +604,7 @@ void QxrdApplication::loadPreferences(QString path)
 {
   QxrdGlobalSettings settings(path, QSettings::IniFormat);
 
-  readSettings(&settings);
+  readSettings(&settings, "application");
 }
 
 void QxrdApplication::doSavePreferences()
@@ -624,7 +624,7 @@ void QxrdApplication::savePreferences(QString path)
   {
     QxrdGlobalSettings settings(path+".new", QSettings::IniFormat);
 
-    writeSettings(&settings);
+    writeSettings(&settings, "application");
   }
 
   QFile::remove(path+".bak");

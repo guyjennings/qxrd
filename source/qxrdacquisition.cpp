@@ -190,7 +190,7 @@ void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
     m_AcquisitionExtraInputs->writeSettings(settings, section+"/extrainputs");
   }
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings, true);
+  QcepObject::writeSettings(settings, section);
 }
 
 void QxrdAcquisition::readSettings(QSettings *settings, QString section)
@@ -205,7 +205,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
     m_AcquisitionExtraInputs->readSettings(settings, section+"/extrainputs");
   }
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings, true);
+  QcepObject::readSettings(settings, section);
 }
 
 void QxrdAcquisition::setWindow(QxrdWindowWPtr win)
@@ -218,7 +218,7 @@ void QxrdAcquisition::setDetector(QxrdDetectorWPtr det)
   m_Detector = det;
 }
 
-void QxrdAcquisition::printMessage(QString msg, QDateTime ts)
+void QxrdAcquisition::printMessage(QString msg, QDateTime ts) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 
@@ -227,21 +227,21 @@ void QxrdAcquisition::printMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdAcquisition::criticalMessage(QString msg, QDateTime /*ts*/)
+void QxrdAcquisition::criticalMessage(QString msg, QDateTime ts) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    exp->criticalMessage(msg);
+    exp->criticalMessage(msg, ts);
   }
 }
 
-void QxrdAcquisition::statusMessage(QString msg, QDateTime /*ts*/)
+void QxrdAcquisition::statusMessage(QString msg, QDateTime ts) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    exp->statusMessage(msg);
+    exp->statusMessage(msg, ts);
   }
 }
 

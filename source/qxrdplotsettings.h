@@ -29,10 +29,6 @@ public:
   Q_PROPERTY(bool y2AxisLog READ get_Y2AxisLog WRITE set_Y2AxisLog)
   QCEP_BOOLEAN_PROPERTY(Y2AxisLog)
 
-public:
-  virtual void readSettings(QSettings *settings, QString section);
-  virtual void writeSettings(QSettings *settings, QString section);
-
 signals:
   
 public slots:

@@ -186,8 +186,7 @@ void QxrdDataProcessorBase::writeSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
-  QcepProperty::writeSettings(this, staticMetaObject.superClass(), section, settings);
+  QcepObject::writeSettings(settings, section);
 
   m_CenterFinder -> writeSettings(settings, section+"/centerfinder");
   m_Integrator   -> writeSettings(settings, section+"/integrator");
@@ -198,7 +197,7 @@ void QxrdDataProcessorBase::readSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepObject::readSettings(settings, section);
 
   m_CenterFinder -> readSettings(settings, section+"/centerfinder");
   m_Integrator   -> readSettings(settings, section+"/integrator");
@@ -214,21 +213,21 @@ void QxrdDataProcessorBase::printMessage(QString msg, QDateTime ts) const
   }
 }
 
-void QxrdDataProcessorBase::criticalMessage(QString msg, QDateTime /*ts*/) const
+void QxrdDataProcessorBase::criticalMessage(QString msg, QDateTime ts) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    exp->criticalMessage(msg);
+    exp->criticalMessage(msg, ts);
   }
 }
 
-void QxrdDataProcessorBase::statusMessage(QString msg, QDateTime /*ts*/) const
+void QxrdDataProcessorBase::statusMessage(QString msg, QDateTime ts) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    exp->statusMessage(msg);
+    exp->statusMessage(msg, ts);
   }
 }
 

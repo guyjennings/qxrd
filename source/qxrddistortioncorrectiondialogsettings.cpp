@@ -8,10 +8,10 @@ QxrdDistortionCorrectionDialogSettings::QxrdDistortionCorrectionDialogSettings(Q
 
 void QxrdDistortionCorrectionDialogSettings::readSettings(QSettings *settings, QString section)
 {
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::readSettings(this, settings, section);
 }
 
 void QxrdDistortionCorrectionDialogSettings::writeSettings(QSettings *settings, QString section)
 {
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::writeSettings(this, settings, section);
 }

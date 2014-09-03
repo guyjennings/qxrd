@@ -35,14 +35,14 @@ QxrdSimpleServer::~QxrdSimpleServer()
 
 void QxrdSimpleServer::readSettings(QSettings *settings, QString section)
 {
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::readSettings(this, settings, section);
 
   runModeChanged();
 }
 
 void QxrdSimpleServer::writeSettings(QSettings *settings, QString section)
 {
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::writeSettings(this, settings, section);
 }
 
 void QxrdSimpleServer::runModeChanged()

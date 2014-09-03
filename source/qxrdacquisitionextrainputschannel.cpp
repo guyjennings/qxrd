@@ -42,14 +42,14 @@ void QxrdAcquisitionExtraInputsChannel::readSettings(QSettings *settings, QStrin
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepObject::readSettings(settings, section);
 }
 
 void QxrdAcquisitionExtraInputsChannel::writeSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepObject::writeSettings(settings, section);
 }
 
 QVector<double> QxrdAcquisitionExtraInputsChannel::readChannel()

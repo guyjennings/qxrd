@@ -35,20 +35,6 @@ QxrdDistortionCorrection::QxrdDistortionCorrection(QxrdSettingsSaverWPtr saver, 
 {
 }
 
-void QxrdDistortionCorrection::writeSettings(QSettings *settings, QString section)
-{
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
-}
-
-void QxrdDistortionCorrection::readSettings(QSettings *settings, QString section)
-{
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
-}
-
 QPointF QxrdDistortionCorrection::transform(QPointF pt)
 {
   return pt;

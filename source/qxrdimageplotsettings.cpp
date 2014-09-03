@@ -24,18 +24,3 @@ QxrdImagePlotSettings::QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObjec
   m_MaskMouse(QxrdSettingsSaverWPtr(), this,"maskMouse",0, "Mask Value at Mouse")
 {
 }
-
-void QxrdImagePlotSettings::readSettings(QSettings *settings, QString section)
-{
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
-
-  QxrdPlotSettings::readSettings(settings, section);
-}
-
-void QxrdImagePlotSettings::writeSettings(QSettings *settings, QString section)
-{
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
-
-  QxrdPlotSettings::writeSettings(settings, section);
-}
-

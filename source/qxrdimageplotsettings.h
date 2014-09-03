@@ -69,10 +69,6 @@ public:
   Q_PROPERTY(double maskMouse READ get_MaskMouse WRITE set_MaskMouse STORED false)
   QCEP_DOUBLE_PROPERTY(MaskMouse)
 
-public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
-
 signals:
   
 public slots:

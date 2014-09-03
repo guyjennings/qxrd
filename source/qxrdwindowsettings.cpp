@@ -29,7 +29,7 @@ QxrdWindowSettings::QxrdWindowSettings(QxrdSettingsSaverWPtr saver,
 void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
 {
   if (settings) {
-    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::readSettings(this, settings, section);
 
     m_ImagePlotSettings->readSettings(settings, section+"/plot");
     m_CenterFinderPlotSettings->readSettings(settings, section+"/centerFinderPlot");
@@ -52,7 +52,7 @@ void QxrdWindowSettings::writeSettings(QSettings *settings, QString section)
   //    printf("QxrdWindow::writeSettings\n");
 
   if (settings) {
-    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::writeSettings(this, settings, section);
 
     m_ImagePlotSettings->writeSettings(settings, section+"/plot");
     m_CenterFinderPlotSettings->writeSettings(settings, section+"/centerFinderPlot");

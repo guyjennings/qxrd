@@ -199,7 +199,7 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
 
     splashMessage("Loading Preferences");
 
-    readSettings(settings);
+    readSettings(settings, "experiment");
 
     splashMessage("Loading Background Images");
 
@@ -366,7 +366,7 @@ void QxrdExperiment::splashMessage(QString msg)
   }
 }
 
-void QxrdExperiment::criticalMessage(QString msg)
+void QxrdExperiment::criticalMessage(QString msg, QDateTime ts) const
 {
   QxrdApplicationPtr app(m_Application);
   QxrdWindowPtr      win(m_Window);
@@ -380,7 +380,7 @@ void QxrdExperiment::criticalMessage(QString msg)
   }
 }
 
-void QxrdExperiment::statusMessage(QString msg)
+void QxrdExperiment::statusMessage(QString msg, QDateTime ts) const
 {
   QxrdApplicationPtr app(m_Application);
   QxrdWindowPtr      win(m_Window);
@@ -394,7 +394,7 @@ void QxrdExperiment::statusMessage(QString msg)
   }
 }
 
-void QxrdExperiment::printMessage(QString msg, QDateTime ts)
+void QxrdExperiment::printMessage(QString msg, QDateTime ts) const
 {
   if (qcepDebug(DEBUG_NOMESSAGES)) {
   } else {
@@ -519,7 +519,7 @@ void QxrdExperiment::newLogFile(QString path)
   openLogFile();
 }
 
-void QxrdExperiment::openNewLogFile()
+void QxrdExperiment::openNewLogFile() const
 {
   {
     QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
@@ -533,7 +533,7 @@ void QxrdExperiment::openNewLogFile()
   openLogFile();
 }
 
-void QxrdExperiment::openLogFile()
+void QxrdExperiment::openLogFile() const
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
@@ -576,7 +576,7 @@ FILE* QxrdExperiment::logFile()
   return m_LogFile;
 }
 
-void QxrdExperiment::logMessage(QString msg)
+void QxrdExperiment::logMessage(QString msg) const
 {
   openLogFile();
 
@@ -588,7 +588,7 @@ void QxrdExperiment::logMessage(QString msg)
   }
 }
 
-void QxrdExperiment::closeLogFile()
+void QxrdExperiment::closeLogFile() const
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
@@ -657,18 +657,18 @@ void QxrdExperiment::readSettings()
   if (docPath.length()>0) {
     QSettings settings(docPath, QSettings::IniFormat);
 
-    readSettings(&settings);
+    readSettings(&settings, "experiment");
   } else {
     QxrdExperimentSettings settings;
 
-    readSettings(&settings);
+    readSettings(&settings, "experiment");
   }
 }
 
-void QxrdExperiment::readSettings(QSettings *settings)
+void QxrdExperiment::readSettings(QSettings *settings, QString section)
 {
   if (settings) {
-    QcepProperty::readSettings(this, &staticMetaObject, "experiment", settings);
+    QcepExperiment::readSettings(settings, section);
 
     QxrdAcquisitionPtr acq(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
@@ -709,7 +709,7 @@ void QxrdExperiment::writeSettings()
     {
       QSettings settings(docPath+".new", QSettings::IniFormat);
 
-      writeSettings(&settings);
+      writeSettings(&settings, "experiment");
     }
 
     QFile::remove(docPath+".bak");
@@ -718,14 +718,14 @@ void QxrdExperiment::writeSettings()
   } else {
     QxrdExperimentSettings settings;
 
-    writeSettings(&settings);
+    writeSettings(&settings, "experiment");
   }
 }
 
-void QxrdExperiment::writeSettings(QSettings *settings)
+void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 {
   if (settings) {
-    QcepProperty::writeSettings(this, &staticMetaObject, "experiment", settings);
+    QcepExperiment::writeSettings(settings, section);
 
     QxrdAcquisitionPtr acq(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
@@ -752,7 +752,7 @@ void QxrdExperiment::writeSettings(QSettings *settings)
   }
 }
 
-QString QxrdExperiment::defaultExperimentDirectory(QString path)
+QString QxrdExperiment::defaultExperimentDirectory(QString path) const
 {
   QFileInfo info(path);
 
@@ -761,7 +761,7 @@ QString QxrdExperiment::defaultExperimentDirectory(QString path)
   return directory;
 }
 
-QString QxrdExperiment::defaultExperimentFileName(QString path)
+QString QxrdExperiment::defaultExperimentFileName(QString path) const
 {
   QFileInfo info(path);
 
@@ -772,7 +772,7 @@ QString QxrdExperiment::defaultExperimentFileName(QString path)
   }
 }
 
-QString QxrdExperiment::defaultExperimentName(QString path)
+QString QxrdExperiment::defaultExperimentName(QString path) const
 {
   QFileInfo info(path);
 
@@ -783,22 +783,22 @@ QString QxrdExperiment::defaultExperimentName(QString path)
   }
 }
 
-QString QxrdExperiment::defaultDataDirectory(QString /*path*/)
+QString QxrdExperiment::defaultDataDirectory(QString /*path*/) const
 {
   return "";
 }
 
-QString QxrdExperiment::defaultLogName(QString path)
+QString QxrdExperiment::defaultLogName(QString path) const
 {
   return defaultExperimentName(path)+".log";
 }
 
-QString QxrdExperiment::defaultScanName(QString path)
+QString QxrdExperiment::defaultScanName(QString path) const
 {
   return defaultExperimentName(path)+".scans";
 }
 
-QString QxrdExperiment::experimentFilePath()
+QString QxrdExperiment::experimentFilePath() const
 {
   QDir dir(get_ExperimentDirectory());
 
@@ -832,14 +832,14 @@ void QxrdExperiment::setExperimentFilePath(QString path)
   newScanFile(get_ScanFileName());
 }
 
-QString QxrdExperiment::logFilePath()
+QString QxrdExperiment::logFilePath() const
 {
   QDir dir(get_ExperimentDirectory());
 
   return dir.filePath(get_LogFileName());
 }
 
-QString QxrdExperiment::scanFilePath()
+QString QxrdExperiment::scanFilePath() const
 {
   QDir dir(get_ExperimentDirectory());
 
@@ -857,7 +857,7 @@ void QxrdExperiment::saveExperimentAs(QString path)
 
   setExperimentFilePath(path);
 
-  writeSettings(&settings);
+  writeSettings(&settings, "experiment");
 }
 
 void QxrdExperiment::saveExperimentCopyAs(QString path)
@@ -866,7 +866,7 @@ void QxrdExperiment::saveExperimentCopyAs(QString path)
 
   QxrdExperimentSettings settings(path);
 
-  writeSettings(&settings);
+  writeSettings(&settings, "experiment");
 
 //  QxrdExperiment *exp = new QxrdExperiment(path, m_Application, &settings);
 

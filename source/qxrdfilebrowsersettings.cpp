@@ -12,11 +12,11 @@ QxrdFileBrowserSettings::QxrdFileBrowserSettings(QxrdSettingsSaverWPtr saver, QO
 
 void QxrdFileBrowserSettings::writeSettings(QSettings *settings, QString section)
 {
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::writeSettings(this, settings, section);
 }
 
 void QxrdFileBrowserSettings::readSettings(QSettings *settings, QString section)
 {
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::readSettings(this, settings, section);
 }
 

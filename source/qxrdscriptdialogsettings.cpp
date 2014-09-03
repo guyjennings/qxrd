@@ -8,11 +8,11 @@ QxrdScriptDialogSettings::QxrdScriptDialogSettings(QxrdSettingsSaverWPtr /*saver
 
 void QxrdScriptDialogSettings::readSettings(QSettings *settings, QString section)
 {
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::readSettings(this, settings, section);
 }
 
 void QxrdScriptDialogSettings::writeSettings(QSettings *settings, QString section)
 {
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::writeSettings(this, settings, section);
 }
 

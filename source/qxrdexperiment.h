@@ -74,20 +74,20 @@ public:
 
 public slots:
   void newLogFile(QString path);
-  void openNewLogFile();
+  void openNewLogFile() const;
 
   void executeCommand(QString cmd);
 
-  QString defaultExperimentDirectory(QString path);
-  QString defaultExperimentFileName(QString path);
-  QString defaultExperimentName(QString path);
-  QString defaultDataDirectory(QString path);
-  QString defaultLogName(QString path);
-  QString defaultScanName(QString path);
+  QString defaultExperimentDirectory(QString path) const;
+  QString defaultExperimentFileName(QString path) const;
+  QString defaultExperimentName(QString path) const;
+  QString defaultDataDirectory(QString path) const;
+  QString defaultLogName(QString path) const;
+  QString defaultScanName(QString path) const;
 
-  QString experimentFilePath();
-  QString logFilePath();
-  QString scanFilePath();
+  QString experimentFilePath() const;
+  QString logFilePath() const;
+  QString scanFilePath() const;
 
   void setExperimentFilePath(QString path);
 
@@ -97,14 +97,14 @@ public slots:
   void readSettings();
   void writeSettings();
 
-  void readSettings(QSettings *settings);
-  void writeSettings(QSettings *settings);
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
-  void logMessage(QString msg);
+  void logMessage(QString msg) const;
   void splashMessage(QString msg);
-  void criticalMessage(QString msg);
-  void statusMessage(QString msg);
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   void printLine(QString msg);
 
   void saveExperiment();
@@ -124,8 +124,8 @@ private slots:
   void onDetectorTypeChanged();
 
 private:
-  void closeLogFile();
-  void openLogFile();
+  void closeLogFile() const;
+  void openLogFile() const;
   void readInitialLogFile();
 
   void closeScanFile();
@@ -158,8 +158,8 @@ private:
   QxrdScriptEngineWPtr            m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
-  QMutex                          m_LogFileMutex;
-  FILE                           *m_LogFile;
+  mutable QMutex                  m_LogFileMutex;
+  mutable FILE                   *m_LogFile;
 
   QMutex                          m_ScanFileMutex;
   FILE                           *m_ScanFile;

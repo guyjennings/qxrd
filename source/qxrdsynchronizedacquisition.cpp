@@ -217,20 +217,6 @@ void QxrdSynchronizedAcquisition::triggerOnce()
   }
 }
 
-void QxrdSynchronizedAcquisition::readSettings(QSettings *settings, QString section)
-{
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
-}
-
-void QxrdSynchronizedAcquisition::writeSettings(QSettings *settings, QString section)
-{
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
-}
-
 QVector<double>  QxrdSynchronizedAcquisition::outputTimes()
 {
   return m_OutputTimes;

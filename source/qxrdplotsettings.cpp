@@ -11,14 +11,3 @@ QxrdPlotSettings::QxrdPlotSettings(QString name, QxrdSettingsSaverWPtr saver, QO
   m_Y2AxisLog(saver, this,"y2AxisLog",0, "Logarithmic 2nd Y Axis?")
 {
 }
-
-void QxrdPlotSettings::readSettings(QSettings *settings, QString section)
-{
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
-}
-
-void QxrdPlotSettings::writeSettings(QSettings *settings, QString section)
-{
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
-}
-

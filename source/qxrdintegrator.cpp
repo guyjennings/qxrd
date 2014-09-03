@@ -105,20 +105,6 @@ QxrdExperimentWPtr QxrdIntegrator::experiment() const
   return m_Experiment;
 }
 
-void QxrdIntegrator::writeSettings(QSettings *settings, QString section)
-{
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
-}
-
-void QxrdIntegrator::readSettings(QSettings *settings, QString section)
-{
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
-}
-
 void QxrdIntegrator::onIntegrationParametersChanged()
 {
   if (qcepDebug(DEBUG_INTEGRATOR)) {
