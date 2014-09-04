@@ -153,7 +153,9 @@ void QxrdHistogramDialog::recalculateHistogram()
 
       m_HistogramPlot->replot();
 
-      expt -> printMessage(tr("Histogram of data took %1 msec").arg(tic.elapsed()));
+      if (qcepDebug(DEBUG_HISTOGRAM)) {
+        expt -> printMessage(tr("Histogram of data took %1 msec").arg(tic.elapsed()));
+      }
     }
   }
 }
