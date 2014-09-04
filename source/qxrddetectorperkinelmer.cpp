@@ -640,6 +640,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
       //    acquiredFrameAvailable(image);
 
       if (image) {
+        image->set_ImageSequenceNumber(counter1);
         image->set_ImageNumber(n1);
       }
 
