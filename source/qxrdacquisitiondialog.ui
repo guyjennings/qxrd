@@ -191,13 +191,6 @@ Can only be changed by saving a new experiment</string>
           </property>
          </widget>
         </item>
-        <item row="20" column="2" colspan="2">
-         <widget class="QCheckBox" name="m_AcquisitionCancelsLiveView">
-          <property name="text">
-           <string>Acquisition Cancels Live View</string>
-          </property>
-         </widget>
-        </item>
         <item row="15" column="3">
          <widget class="QSpinBox" name="m_SkippedExposures">
           <property name="sizePolicy">
@@ -430,13 +423,6 @@ Raw: &lt;pattern&gt;-&lt;nnnnn&gt;-&lt;ppp&gt;.raw.tif</string>
           </property>
           <property name="readOnly">
            <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="20" column="1">
-         <widget class="QCheckBox" name="m_LiveViewAtIdle">
-          <property name="text">
-           <string>Live View at Idle</string>
           </property>
          </widget>
         </item>
@@ -893,13 +879,6 @@ Script Property: &quot;acquisition.userComment3&quot;
           </property>
          </widget>
         </item>
-        <item row="19" column="2" colspan="2">
-         <widget class="QCheckBox" name="m_RetryDropped">
-          <property name="text">
-           <string>Retry Dropped Frames Automatically</string>
-          </property>
-         </widget>
-        </item>
         <item row="23" column="2">
          <widget class="QLabel" name="label_23">
           <property name="text">
@@ -976,6 +955,27 @@ Script Property: &quot;acquisition.userComment3&quot;
           </property>
           <property name="text">
            <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="20" column="0">
+         <widget class="QCheckBox" name="m_LiveViewAtIdle">
+          <property name="text">
+           <string>Live View at Idle</string>
+          </property>
+         </widget>
+        </item>
+        <item row="20" column="1">
+         <widget class="QCheckBox" name="m_AcquisitionCancelsLiveView">
+          <property name="text">
+           <string>Acquisition Cancels Live View</string>
+          </property>
+         </widget>
+        </item>
+        <item row="20" column="2" colspan="2">
+         <widget class="QCheckBox" name="m_RetryDropped">
+          <property name="text">
+           <string>Retry Dropped Frames Automatically</string>
           </property>
          </widget>
         </item>
