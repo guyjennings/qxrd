@@ -429,6 +429,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QxrdInt16ImageDataPtr image, QxrdI
       accum->set_Normalization(image->get_Normalization());
       accum->set_ExtraInputs(image->get_ExtraInputs());
       accum->set_SummedExposures(1);
+      accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
         printMessage(tr("Frame %1 summed").arg(nsummed));
@@ -449,6 +450,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QxrdInt16ImageDataPtr image, QxrdI
       accum->prop_Normalization()   -> incValue(image->get_Normalization());
       accum->prop_ExtraInputs()     -> incValue(image->get_ExtraInputs());
       accum->prop_SummedExposures() -> incValue(1);
+      accum->prop_ImageSequenceNumber() -> incValue(image->get_ImageSequenceNumber());
     }
   }
 }
