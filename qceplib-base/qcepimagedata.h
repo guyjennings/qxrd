@@ -60,6 +60,9 @@ public:
   Q_PROPERTY(int summedExposures READ get_SummedExposures WRITE set_SummedExposures)
   QCEP_INTEGER_PROPERTY(SummedExposures)
 
+  Q_PROPERTY(int imageSequenceNumber READ get_ImageSequenceNumber WRITE set_ImageSequenceNumber)
+  QCEP_INTEGER_PROPERTY(ImageSequenceNumber)
+
   Q_PROPERTY(int imageNumber READ get_ImageNumber WRITE set_ImageNumber)
   QCEP_INTEGER_PROPERTY(ImageNumber)
 
