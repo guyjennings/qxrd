@@ -639,7 +639,12 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
 
       //    acquiredFrameAvailable(image);
 
+      if (image) {
+        image->set_ImageNumber(n1);
+      }
+
       acq->enqueueAcquiredFrame(image);
+
       //    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "acquiredFrameAvailable", Qt::QueuedConnection,
       //                                           Q_ARG(QxrdInt16ImageDataPtr, image), Q_ARG(int,counter)));
 
