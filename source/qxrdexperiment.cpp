@@ -55,9 +55,9 @@ QxrdExperiment::QxrdExperiment(
   m_ExperimentFileMutex(),
 
   m_ExperimentKind(m_SettingsSaver, this, "experimentKind", -1, "Kind of Experiment"),
-  m_ExperimentDirectory(m_SettingsSaver, this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
-  m_ExperimentFileName(m_SettingsSaver, this, "experimentFileName", defaultExperimentFileName(path), "Experiment File"),
-  m_ExperimentName(m_SettingsSaver, this, "experimentName", defaultExperimentName(path), "Experiment Name"),
+  m_ExperimentDirectory(QxrdSettingsSaverPtr()/*m_SettingsSaver*/, this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
+  m_ExperimentFileName(QxrdSettingsSaverPtr()/*m_SettingsSaver*/, this, "experimentFileName", defaultExperimentFileName(path), "Experiment File"),
+  m_ExperimentName(QxrdSettingsSaverPtr()/*m_SettingsSaver*/, this, "experimentName", defaultExperimentName(path), "Experiment Name"),
   m_ExperimentDescription(m_SettingsSaver, this, "experimentDescription", "", "Experiment Description"),
   m_DataDirectory(m_SettingsSaver, this, "dataDirectory", defaultDataDirectory(path), "Saved Data Directory"),
   m_LogFileName(m_SettingsSaver, this, "logFileName", defaultLogName(path), "Log File Name"),
@@ -555,18 +555,20 @@ void QxrdExperiment::readInitialLogFile()
 
   FILE *logFile = fopen(qPrintable(logFilePath()), "r");
 
-  fseek(logFile, -10000, SEEK_END);
+  if (logFile) {
+    fseek(logFile, -10000, SEEK_END);
 
-  char buff[10001];
-  fgets(buff, 10000, logFile);
-
-  while (!feof(logFile)) {
+    char buff[10001];
     fgets(buff, 10000, logFile);
 
-    m_Window->initialLogEntry(buff);
-  }
+    while (!feof(logFile)) {
+      fgets(buff, 10000, logFile);
 
-  fclose(logFile);
+      m_Window->initialLogEntry(buff);
+    }
+
+    fclose(logFile);
+  }
 }
 
 FILE* QxrdExperiment::logFile()

@@ -170,13 +170,13 @@ public:  // Properties
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
   QCEP_INTEGER_PROPERTY(ExperimentKind)
 
-  Q_PROPERTY(QString experimentDirectory     READ get_ExperimentDirectory WRITE set_ExperimentDirectory)
+  Q_PROPERTY(QString experimentDirectory     READ get_ExperimentDirectory WRITE set_ExperimentDirectory STORED false)
   QCEP_STRING_PROPERTY(ExperimentDirectory)
 
-  Q_PROPERTY(QString experimentFileName     READ get_ExperimentFileName WRITE set_ExperimentFileName)
+  Q_PROPERTY(QString experimentFileName     READ get_ExperimentFileName WRITE set_ExperimentFileName STORED false)
   QCEP_STRING_PROPERTY(ExperimentFileName)
 
-  Q_PROPERTY(QString experimentName     READ get_ExperimentName WRITE set_ExperimentName)
+  Q_PROPERTY(QString experimentName     READ get_ExperimentName WRITE set_ExperimentName STORED false)
   QCEP_STRING_PROPERTY(ExperimentName)
 
   Q_PROPERTY(QString experimentDescription     READ get_ExperimentDescription WRITE set_ExperimentDescription)
