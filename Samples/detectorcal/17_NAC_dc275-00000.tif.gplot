@@ -1,0 +1,7 @@
+fit a0+a2*x**2+a4*x**4+a6*x**6 "17_NAC_dc275-00000.tif.disp" using 4:6 via a0,a2,a4,a6
+
+plot "17_NAC_dc275-00000.tif.disp" using 4:6, a0+a2*x**2+a4*x**4+a6*x**6
+
+fit a0+a2*x**2+a4*x**4+a6*x**6 "17_NAC_dc275-00000.tif.disp" using 4:7 via a0,a2,a4,a6
+
+plot "17_NAC_dc275-00000.tif.disp" using 4:7, a0+a2*x**2+a4*x**4+a6*x**6
