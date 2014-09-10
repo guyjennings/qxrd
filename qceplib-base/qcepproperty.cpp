@@ -391,7 +391,7 @@ void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString s
   if (settings && object) {
     const QMetaObject *meta = object->metaObject();
     int count  = meta->propertyCount();
-    int offset = QObject::staticMetaObject.propertyOffset();
+    int offset = QObject::staticMetaObject.propertyCount();
 
     settings->beginGroup(section);
 
