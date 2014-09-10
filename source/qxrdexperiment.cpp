@@ -73,7 +73,9 @@ QxrdExperiment::QxrdExperiment(
   m_WorkTarget(QxrdSettingsSaverWPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
   m_CompletionPercentage(QxrdSettingsSaverWPtr(), this, "completionPercentage", 0, "Percentage of Work Completed"),
   m_DefaultScript(m_SettingsSaver, this, "defaultScript", "", "Default script for experiment"),
-  m_ExtraScriptFiles(m_SettingsSaver, this, "extraScriptFiles", QStringList(), "Additional script files for experiment")
+  m_ExtraScriptFiles(m_SettingsSaver, this, "extraScriptFiles", QStringList(), "Additional script files for experiment"),
+  m_FontSize(m_SettingsSaver, this, "fontSize", -1, "Suggested font size"),
+  m_Spacing(m_SettingsSaver, this, "spacing", -1, "Suggested widget spacing")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::QxrdExperiment(%p)\n", this);

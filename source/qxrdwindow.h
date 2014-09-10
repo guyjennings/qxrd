@@ -95,6 +95,8 @@ public slots:
   void crashProgram();
   void testWidget();
   void shrinkPanels(int fontSize, int spacing);
+  void setFontSize(int fontSize);
+  void setSpacing(int spacing);
 
   void executeScript();
   void finishedCommand(QScriptValue result);
@@ -104,12 +106,13 @@ public slots:
 
   void doTest();
 
-  QString timeStamp();
+  QString timeStamp() const;
   void warningMessage(QString msg);
   void displayMessage(QString msg);
   void displayStatusMessage(QString msg);
   void displayCriticalMessage(QString msg);
   void initialLogEntry(QString aline);
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 //  void selectOutputDirectory();
   void clearStatusMessage();
@@ -154,7 +157,7 @@ public:
 private:
   void shrinkDockWidget(QDockWidget *dockWidget, int fontSize, int spacing);
   void shrinkObject(QObject *obj, int fontSize, int spacing);
-
+  void setObjectSpacing(QObject *obj, int spacing);
   void setupRecentExperimentsMenu(QAction *action);
 
 private:

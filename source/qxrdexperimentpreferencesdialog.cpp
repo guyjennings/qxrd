@@ -124,6 +124,9 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
       m_FilePhaseWidth -> setValue(acq->get_FilePhaseWidth());
       m_FileOverflowWidth -> setValue(acq->get_FileOverflowWidth());
     }
+
+    m_FontSize -> setValue(expt->get_FontSize());
+    m_Spacing  -> setValue(expt->get_Spacing());
   }
 }
 
@@ -281,6 +284,9 @@ void QxrdExperimentPreferencesDialog::accept()
       acq  -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
       acq  -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
     }
+
+    expt -> set_FontSize(m_FontSize -> value());
+    expt -> set_Spacing(m_Spacing -> value());
   }
 
   QDialog::accept();

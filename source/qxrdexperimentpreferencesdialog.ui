@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>503</width>
-    <height>745</height>
+    <width>597</width>
+    <height>760</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Qxrd Preferences</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QFormLayout" name="formLayout_2">
    <item row="0" column="0">
     <widget class="QTabWidget" name="m_PreferencesPanes">
      <property name="currentIndex">
@@ -461,6 +461,69 @@ Change only by saving a new experiment</string>
           <size>
            <width>20</width>
            <height>134</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_5">
+      <attribute name="title">
+       <string>Display</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Preferred Font Size:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="m_FontSize">
+         <property name="specialValueText">
+          <string>Default</string>
+         </property>
+         <property name="suffix">
+          <string/>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Preferred Widget Spacing:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="m_Spacing">
+         <property name="specialValueText">
+          <string>Default</string>
+         </property>
+         <property name="suffix">
+          <string/>
+         </property>
+         <property name="minimum">
+          <number>-1</number>
+         </property>
+         <property name="value">
+          <number>-1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>524</width>
+           <height>576</height>
           </size>
          </property>
         </spacer>
