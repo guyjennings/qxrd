@@ -994,7 +994,7 @@ QScriptValue QxrdScriptEngine::dataFunc(QScriptContext * /*context*/, QScriptEng
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
-      return engine -> newQObject(proc -> data().data());
+      return engine -> newQObject(proc -> data().data(),QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
     }
   }
 
