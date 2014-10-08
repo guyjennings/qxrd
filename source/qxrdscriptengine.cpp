@@ -1021,7 +1021,7 @@ QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEng
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
-      return engine -> newQObject(proc -> darkImage().data());
+      return engine -> newQObject(proc -> darkImage().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
     }
   }
 
@@ -1044,7 +1044,7 @@ QScriptValue QxrdScriptEngine::maskFunc(QScriptContext * /*context*/, QScriptEng
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
-      return engine -> newQObject(proc -> mask().data());
+      return engine -> newQObject(proc -> mask().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
     }
   }
 
@@ -1070,7 +1070,7 @@ QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScrip
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
-      return engine -> newQObject(proc -> overflow().data());
+      return engine -> newQObject(proc -> overflow().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
     }
   }
 
@@ -1095,7 +1095,7 @@ QScriptValue QxrdScriptEngine::liveDataFunc(QScriptContext * /*context*/, QScrip
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
-      return engine -> newQObject(proc -> liveData().data());
+      return engine -> newQObject(proc -> liveData().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
     }
   }
 
