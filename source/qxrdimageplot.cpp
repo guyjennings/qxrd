@@ -77,7 +77,7 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
 
   m_Zoomer -> setEnabled(true);
 
-  m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::xBottom, QwtPlotRescaler::Expanding);
+  m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::yLeft, QwtPlotRescaler::Expanding);
   m_Rescaler -> setEnabled(true);
   m_Rescaler -> setExpandingDirection(QwtPlotRescaler::ExpandBoth);
 
