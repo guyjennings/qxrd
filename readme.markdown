@@ -1,6 +1,11 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.7 - Oct 10 2014
+Added user interface to display shrinking routines
+
+Fixed problems displaying pilatus images
+
 ## v0.11.6 - Sep 2 2014
 Added simple calibrant diffraction angle calculation routines
 
