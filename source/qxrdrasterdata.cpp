@@ -20,7 +20,7 @@ QxrdRasterData::QxrdRasterData(QxrdDoubleImageDataPtr img, int interp, QxrdMaskD
   }
 
   setInterval(Qt::XAxis, QwtInterval(0.0, m_NCols));
-  setInterval(Qt::YAxis, QwtInterval(0.0, m_NCols));
+  setInterval(Qt::YAxis, QwtInterval(0.0, m_NRows));
   setInterval(Qt::ZAxis, range);
 }
 
