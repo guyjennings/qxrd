@@ -1096,13 +1096,15 @@ private:
 void QxrdCenterFinder::updateCalibrantDSpacings()
 {
   double a = get_CalibrantLattice();
-  int m = get_CalibrantLatticeLimit();
+//  int m = get_CalibrantLatticeLimit();
   int s = get_CalibrantSymmetry();
   double lambda = 12398.4187/get_Energy();
 
   int mmax = 2.0*a/lambda + 1;
 
-  printMessage(tr("mmax = %1").arg(mmax));
+  if (qcepDebug(DEBUG_CALIBRANT)) {
+    printMessage(tr("mmax = %1").arg(mmax));
+  }
 
   QVector<QuadInt> ex(mmax*mmax);
 
@@ -1143,7 +1145,7 @@ void QxrdCenterFinder::updateCalibrantDSpacings()
 
   QxrdPowderPointVector pts;
 
-  for (int i=1; i<3*m*m; i++) {
+  for (int i=1; i<mmax*mmax; i++) {
     QuadInt e = ex[i];
     if (e.n() > 0) {
       double d = a/sqrt(i);
