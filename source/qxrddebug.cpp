@@ -25,4 +25,5 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_FITTING,      "Curve Fitting");
   setMessage(DEBUG_NOPARALLEL,   "Serialize Various Algorithms");
   setMessage(DEBUG_HISTOGRAM,    "Debug Histogramming");
+  setMessage(DEBUG_CALIBRANT,    "Powder Calibrant Calculations");
 }
