@@ -1100,14 +1100,18 @@ void QxrdCenterFinder::updateCalibrantDSpacings()
   int s = get_CalibrantSymmetry();
   double lambda = 12398.4187/get_Energy();
 
-  QVector<QuadInt> ex(3*m*m);
+  int mmax = 2.0*a/lambda + 1;
 
-  for (int h=1; h<=3*m*m; h++) {
+  printMessage(tr("mmax = %1").arg(mmax));
+
+  QVector<QuadInt> ex(mmax*mmax);
+
+  for (int h=1; h<=mmax; h++) {
     for (int k=0; k<=h; k++) {
       for (int l=0; l<=k; l++) {
         int r = h*h+k*k+l*l;
 
-        if (r < 3*m*m) {
+        if (r < mmax*mmax) {
           bool ok=false;
 
           switch (s) {
@@ -1127,10 +1131,10 @@ void QxrdCenterFinder::updateCalibrantDSpacings()
 
           if (ok) {
             if (ex[r].n() == 0) {
-              ex[r] = QuadInt(r, h,k,l);
+              ex[r] = QuadInt(1, h,k,l);
             } else {
               ex[r].n()++;
-            }
+            }            
           }
         }
       }
@@ -1145,7 +1149,13 @@ void QxrdCenterFinder::updateCalibrantDSpacings()
       double d = a/sqrt(i);
       double tth = 2.0*asin(lambda/(2.0*d))*180.0/M_PI;
 
-      pts.append(QxrdPowderPoint(e.h(), e.k(), e.l(), d, tth, 0, 0, 0));
+      if (tth <= 180) {
+        pts.append(QxrdPowderPoint(e.h(), e.k(), e.l(), d, tth, 0, 0, 0));
+
+        if (qcepDebug(DEBUG_CALIBRANT)) {
+          printMessage(tr("%1(%2): [%3,%4,%5], d:%6, tth:%7").arg(i).arg(e.n()).arg(e.h()).arg(e.k()).arg(e.l()).arg(d).arg(tth));
+        }
+      }
     }
   }
 
