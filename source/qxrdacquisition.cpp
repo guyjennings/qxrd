@@ -493,7 +493,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
 //    proc->copyFrom(image);
 //    overflow->copyMaskTo(ovf);
 
-    if (qcepDebug(DEBUG_ACQUIRE + DEBUG_ACQUIRETIME)) {
+    if (qcepDebug(DEBUG_ACQUIRE) || qcepDebug(DEBUG_ACQUIRETIME)) {
       printMessage(tr("processAcquiredImage(%1,%2) %3 summed exposures")
                    .arg(fileIndex).arg(phase).arg(image->get_SummedExposures()));
     }
@@ -503,7 +503,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
 
     getFileBaseAndName(filePattern, fileIndex, phase, nPhases, fileBase, fileName);
 
-    if (qcepDebug(DEBUG_ACQUIRE + DEBUG_ACQUIRETIME)) {
+    if (qcepDebug(DEBUG_ACQUIRE) || qcepDebug(DEBUG_ACQUIRETIME)) {
       printMessage(tr("Fn: %1, Fi: %2, Phs: %3")
                    .arg(fileName).arg(fileIndex).arg(phase));
     }
@@ -539,7 +539,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     copyDynamicProperties(image.data());
 
     if (nPhases == 0) {
-      if (qcepDebug(DEBUG_ACQUIRE + DEBUG_ACQUIRETIME)) {
+      if (qcepDebug(DEBUG_ACQUIRE) || qcepDebug(DEBUG_ACQUIRETIME)) {
         printMessage(tr("32 bit Dark Image acquired"));
       }
 
@@ -547,7 +547,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
       image -> set_PhaseNumber(-1);
       image -> set_NPhases(0);
     } else {
-      if (qcepDebug(DEBUG_ACQUIRE + DEBUG_ACQUIRETIME)) {
+      if (qcepDebug(DEBUG_ACQUIRE) || qcepDebug(DEBUG_ACQUIRETIME)) {
         printMessage(tr("32 bit Image %1 acquired").arg(fileIndex));
       }
 

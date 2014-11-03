@@ -68,7 +68,7 @@ QxrdImageData<T>::QxrdImageData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr a
     m_Mask(NULL),
     m_Overflow(NULL)
 {
-  if (g_Application && qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
+  if (g_Application && (qcepDebug(DEBUG_QUEUES) || qcepDebug(DEBUG_IMAGES))) {
     int count = m_ObjectCounter.value();
 
     g_Application->printMessage(QObject::tr("QxrdImageData<%1>::QxrdImageData(%2,%3,%4) %5[%6] thr%7")
@@ -84,7 +84,7 @@ QxrdImageData<T>::QxrdImageData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr a
 template <typename T>
 QxrdImageData<T>::~QxrdImageData()
 {
-  if (g_Application && qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
+  if (g_Application && (qcepDebug(DEBUG_QUEUES) || qcepDebug(DEBUG_IMAGES))) {
     int count = m_ObjectCounter.value();
 
     g_Application->printMessage(QObject::tr("QxrdImageData<%1>::~QxrdImageData %2[%3], thr%4, cthr%5 titl:%6")
