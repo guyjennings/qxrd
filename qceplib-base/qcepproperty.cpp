@@ -402,7 +402,7 @@ void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString s
         const char *name = metaproperty.name();
         QVariant value = object -> property(name);
 
-        if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+        if (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES)) {
           QString msg = tr("Save %1/%2 = %3 [%4]")
               .arg(section).arg(name)
               .arg(value.toString()).arg(value.typeName());
@@ -441,7 +441,7 @@ void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QStri
         const char *name = metaproperty.name();
         QVariant value = object -> property(name);
 
-        if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+        if (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES)) {
           QString msg = tr("Save %1/%2 = %3 [%4]")
               .arg(groupName).arg(name)
               .arg(value.toString()).arg(value.typeName());
@@ -484,7 +484,7 @@ void QcepProperty::writeSettings(QObject *object, QString groupName, QSettings *
         const char *name = metaproperty.name();
         QVariant value = object -> property(name);
 
-        if (qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+        if (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES)) {
           QString msg = tr("Save %1/%2 = %3 [%4]")
               .arg(groupName).arg(name)
               .arg(value.toString()).arg(value.typeName());
@@ -519,7 +519,7 @@ void QcepProperty::readSettings(QObject *object, QSettings *settings, QString se
     QStringList keys = settings->childKeys();
 
     foreach (QString key, keys) {
-      if (object && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+      if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
         QString msg = tr("Load %1/%2 = %3 [%4]")
             .arg(section).arg(key)
             .arg(settings->value(key).toString())
@@ -539,7 +539,7 @@ void QcepProperty::readSettings(QObject *object, QSettings *settings, QString se
         if (metaproperty.isStored()) {
           object -> setProperty(qPrintable(key), settings->value(key));
         } else {
-          if (object && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+          if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
             QString msg = tr("property %1 of %2 not stored").arg(key)
                 .arg(meta -> className());
 
@@ -565,7 +565,7 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
     QStringList keys = settings->childKeys();
 
     foreach (QString key, keys) {
-      if (object && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+      if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
         QString msg = tr("Load %1/%2 = %3 [%4]")
             .arg(groupName).arg(key)
             .arg(settings->value(key).toString())
@@ -585,7 +585,7 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
         if (metaproperty.isStored()) {
           object -> setProperty(qPrintable(key), settings->value(key));
         } else {
-          if (object && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+          if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
             QString msg = tr("property %1 of %2 not stored").arg(key)
                 .arg(meta -> className());
 
@@ -597,7 +597,7 @@ void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QStrin
       } else {
         if (includeDynamic) {
           object -> setProperty(qPrintable(key), settings->value(key));
-        } else if (object && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+        } else if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
           QString msg = tr("property %1 of %2 does not exist")
               .arg(key).arg(meta -> className());
 
@@ -622,7 +622,7 @@ void QcepProperty::readSettings(QObject *object, QString groupName, QSettings *s
     QStringList keys = settings->childKeys();
 
     foreach (QString key, keys) {
-      if (object && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+      if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
         QString msg = tr("Load %1/%2 = %3 [%4]")
             .arg(groupName).arg(key)
             .arg(settings->value(key).toString())
@@ -642,7 +642,7 @@ void QcepProperty::readSettings(QObject *object, QString groupName, QSettings *s
         if (metaproperty.isStored()) {
           object -> setProperty(qPrintable(key), settings->value(key));
         } else {
-          if (object && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+          if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
             QString msg = tr("property %1 of %2 not stored").arg(key)
                 .arg(meta -> className());
 
@@ -654,7 +654,7 @@ void QcepProperty::readSettings(QObject *object, QString groupName, QSettings *s
       } else {
         if (includeDynamic) {
           object -> setProperty(qPrintable(key), settings->value(key));
-        } else if (object && qcepDebug(DEBUG_PREFS | DEBUG_PROPERTIES)) {
+        } else if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
           QString msg = tr("property %1 of %2 does not exist")
               .arg(key).arg(meta -> className());
 
