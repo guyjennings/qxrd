@@ -25,16 +25,16 @@ int qcepDebug(int cond)
 
     return 0;
   } else {
-    return g_DebugLevel->debugLevel() & cond;
+    return g_DebugLevel->debugLevel() & ((qint64) 1 << cond);
   }
 }
 
-int QcepDebugDictionary::debugLevel() const
+qint64 QcepDebugDictionary::debugLevel() const
 {
   return m_DebugLevel;
 }
 
-void QcepDebugDictionary::setDebugLevel(int level)
+void QcepDebugDictionary::setDebugLevel(qint64 level)
 {
   m_DebugLevel = level;
 }
