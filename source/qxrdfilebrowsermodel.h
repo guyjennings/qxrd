@@ -7,6 +7,7 @@
 #include <QStringList>
 #include <QDateTime>
 #include <QMutex>
+#include <QTimer>
 
 #include "qxrdfilebrowsermodelupdaterthread-ptr.h"
 #include "qxrdfilebrowsermodelupdater-ptr.h"
@@ -71,10 +72,11 @@ private:
   Qt::SortOrder      m_SortOrder;
   int                m_Limit;
   int                m_TrueSize;
-  int                m_HighlightOnTime;
-  int                m_HighlightFadeTime;
+  double             m_HighlightOnTime;
+  double             m_HighlightFadeTime;
   int                m_HighlightSaturation;
   int                m_HighlightHue;
+  QTimer            *m_Timer;
 };
 
 #endif // QXRDFILEBROWSERMODEL_H
