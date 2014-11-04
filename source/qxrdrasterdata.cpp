@@ -201,14 +201,17 @@ QwtInterval QxrdRasterData::percentileRange(double lowpct, double highpct)
     if (m_Mask == NULL) {
       for (int i=0; i<npixels; i++) {
         double val = data[i];
-        if (first) {
-          minVal = val;
-          maxVal = val;
-          first = 0;
-        } else if (val>maxVal) {
-          maxVal = val;
-        } else if (val<minVal) {
-          minVal = val;
+
+        if (val==val) {
+          if (first) {
+            minVal = val;
+            maxVal = val;
+            first = 0;
+          } else if (val>maxVal) {
+            maxVal = val;
+          } else if (val<minVal) {
+            minVal = val;
+          }
         }
       }
 
@@ -216,17 +219,19 @@ QwtInterval QxrdRasterData::percentileRange(double lowpct, double highpct)
         histStep = (maxVal - minVal + 2)/histSize;
         for (int i=0; i<npixels; i++) {
           double val = data[i];
-          double bin = (val - minVal)/histStep;
+          if (val==val) {
+            double bin = (val - minVal)/histStep;
 
-          if (bin < 0) {
-            nBelow += 1;
-          } else if (bin > histSize) {
-            nAbove += 1;
-          } else {
-            histogram[((int)bin)] += 1;
+            if (bin < 0) {
+              nBelow += 1;
+            } else if (bin > histSize) {
+              nAbove += 1;
+            } else {
+              histogram[((int)bin)] += 1;
+            }
+
+            nTotal += 1;
           }
-
-          nTotal += 1;
         }
       }
     } else {

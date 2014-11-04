@@ -96,6 +96,33 @@ QxrdDoubleImageDataPtr QxrdCenterFinder::data() const
   return m_Data;
 }
 
+QxrdDoubleImageDataPtr QxrdCenterFinder::newData()
+{
+  int wd, ht;
+
+  if (m_Data) {
+    wd = m_Data->get_Width();
+    ht = m_Data->get_Height();
+  } else {
+    wd = 2048;
+    ht = 2048;
+  }
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDataProcessorPtr proc(expt->dataProcessor());
+
+    if (proc) {
+      QxrdDoubleImageDataPtr res = proc->takeNextFreeImage(wd,ht);
+
+      return res;
+    }
+  }
+
+  return QxrdDoubleImageDataPtr();
+}
+
 void QxrdCenterFinder::writeSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -1184,4 +1211,63 @@ double QxrdCenterFinder::calibrantTTH(int n)
   } else {
     return 0;
   }
+}
+
+void QxrdCenterFinder::calculateCalibration()
+{
+  printMessage("Calculate Calibration from Powder Rings");
+
+  /*
+  fprint("N\tX\tY\tR\tPsi\tDisp\tDispAvg\tTTH\tTTHAvg\tTTHNOM\tDSPC\n")
+  var n = centering.countPowderRingPoints()
+  for (i =0; i<n; i++) {
+    var pt = centering.getPowderPoint(i)
+    var r = centering.getR(pt.x, pt.y)
+    var psi = centering.getChi(pt.x, pt.y)
+    var tth = centering.getTTH(pt.x, pt.y)
+    var tthnom = centering.calibrantTTH(pt.n1)
+    var dspc = centering.calibrantDSpacing(pt.n1)
+    var disp = centering.detectorDistance*(Math.tan(tth*Math.PI/180.0)/Math.tan(tthnom*Math.PI/180.0)-1.0)
+    var dispAvg = centering.detectorDistance*(Math.tan(tthAvg[pt.n1]*Math.PI/180.0)/Math.tan(tthnom*Math.PI/180.0)-1.0)
+
+    if (!isNaN(tthnom) && !isNaN(tth)) {
+      fprint(pt.n1, "\t", pt.x, "\t", pt.y, "\t", r, "\t", psi, "\t", disp, "\t", dispAvg, "\t", tth, "\t", tthAvg[pt.n1], "\t", tthnom, "\t", dspc, "\n")
+    }
+  }
+  */
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDataProcessorPtr proc(expt->dataProcessor());
+
+    if (proc) {
+      int n = countPowderRingPoints();
+
+      QxrdDoubleImageDataPtr res = newData();
+
+      res->fill(nan(""));
+
+      for (int i=0; i<n; i++) {
+        QxrdPowderPoint pt = powderPoint(i);
+        double r = getR(pt.x(), pt.y());
+        double psi = getChi(pt.x(), pt.y());
+        double tth = getTTH(pt.x(), pt.y());
+        double tthNom = calibrantTTH(pt.n1());
+        double dspc = calibrantDSpacing(pt.n1());
+        double disp = get_DetectorDistance()*(tan(tth*M_PI/180.0)/tan(tthNom*M_PI/180.0)-1.0);
+
+        printMessage(tr("Pt: %1, x: %2, y: %3, disp: %4").arg(i).arg(pt.x()).arg(pt.y()).arg(disp));
+
+        res->setValue(pt.x(), pt.y(), disp);
+      }
+
+      proc->newData(res, QxrdMaskDataPtr());
+    }
+  }
+}
+
+void QxrdCenterFinder::interpolateCalibration()
+{
+  printMessage("Interpolate Calibration");
 }

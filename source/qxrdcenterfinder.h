@@ -243,6 +243,9 @@ public slots:
   double calibrantDSpacing(int n);
   double calibrantTTH(int n);
 
+  void calculateCalibration();
+  void interpolateCalibration();
+
 public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
@@ -252,6 +255,7 @@ public:
 
   QxrdExperimentWPtr experiment() const;
   QxrdDoubleImageDataPtr data() const;
+  QxrdDoubleImageDataPtr newData();
 
   static QString levmarFailureReason(int n);
 
