@@ -521,7 +521,7 @@ void QxrdDataProcessorBase::loadData(QString name)
 
       //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-      res -> loadMetaData();
+      res -> loadMetaData(experiment());
 
       int typ = res->get_DataType();
 
@@ -1854,6 +1854,15 @@ int QxrdDataProcessorBase::status(double time)
   } else {
     return 0;
   }
+}
+
+QxrdExperimentPtr QxrdDataProcessorBase::experiment() const
+{
+  if (m_Experiment == NULL) {
+    printMessage("Problem: QxrdDataProcessorBase::experiment == NULL");
+  }
+
+  return m_Experiment;
 }
 
 QxrdCenterFinderPtr QxrdDataProcessorBase::centerFinder() const

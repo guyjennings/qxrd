@@ -351,6 +351,7 @@ public:
 
   QxrdMaskStackPtr       maskStack();
 
+  QxrdExperimentPtr      experiment() const;
   QxrdCenterFinderPtr    centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
 
