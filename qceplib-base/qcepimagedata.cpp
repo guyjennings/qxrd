@@ -469,14 +469,16 @@ void QcepImageData<T>::calculateRange()
   for (int i = 0; i<total; i++) {
     T val = img[i];
 
-    if (first) {
-      m_MaxValue = val;
-      m_MinValue = val;
-      first = false;
-    } else if (val > m_MaxValue) {
-      m_MaxValue = val;
-    } else if (val < m_MinValue) {
-      m_MinValue = val;
+    if (val == val) { // NaN test...
+      if (first) {
+        m_MaxValue = val;
+        m_MinValue = val;
+        first = false;
+      } else if (val > m_MaxValue) {
+        m_MaxValue = val;
+      } else if (val < m_MinValue) {
+        m_MinValue = val;
+      }
     }
   }
 }
@@ -500,14 +502,16 @@ void QcepImageData<T>::calculateRangeInCircle()
     for (int x=x0; x<x1; x++) {
       T val = value(x,y);
 
-      if (first) {
-        m_MinValue = val;
-        m_MaxValue = val;
-        first = false;
-      } else if (val > m_MaxValue) {
-        m_MaxValue = val;
-      } else if (val < m_MinValue) {
-        m_MinValue = val;
+      if (val == val) { // NaN test...
+        if (first) {
+          m_MinValue = val;
+          m_MaxValue = val;
+          first = false;
+        } else if (val > m_MaxValue) {
+          m_MaxValue = val;
+        } else if (val < m_MinValue) {
+          m_MinValue = val;
+        }
       }
     }
   }
