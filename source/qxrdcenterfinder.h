@@ -244,7 +244,7 @@ public slots:
   double calibrantTTH(int n);
 
   void calculateCalibration();
-  void interpolateCalibration();
+  void interpolateCalibration(int niter=20);
 
 public:
   void readSettings(QSettings *settings, QString section);

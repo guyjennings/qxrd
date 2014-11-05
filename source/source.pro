@@ -342,7 +342,8 @@ HEADERS += TODO.h \
     qxrdhistogramplotsettings.h \
     qxrdinfodialogsettings.h \
     qxrdcenterfinderplotsettings.h \
-    qxrdsliceplotsettings.h
+    qxrdsliceplotsettings.h \
+    VoronoiDiagramGenerator.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -461,7 +462,8 @@ SOURCES += qxrd.cpp \
     qxrdhistogramplotsettings.cpp \
     qxrdinfodialogsettings.cpp \
     qxrdcenterfinderplotsettings.cpp \
-    qxrdsliceplotsettings.cpp
+    qxrdsliceplotsettings.cpp \
+    VoronoiDiagramGenerator.cpp
 
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \

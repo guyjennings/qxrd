@@ -1267,7 +1267,88 @@ void QxrdCenterFinder::calculateCalibration()
   }
 }
 
-void QxrdCenterFinder::interpolateCalibration()
+void QxrdCenterFinder::interpolateCalibration(int niter)
 {
   printMessage("Interpolate Calibration");
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDataProcessorPtr proc(expt->dataProcessor());
+
+    if (proc) {
+      QxrdDoubleImageDataPtr d = data();
+      QxrdDoubleImageDataPtr a = newData();
+      QxrdDoubleImageDataPtr b = newData();
+
+      int wd = d->get_Width();
+      int ht = d->get_Height();
+
+      a->fill(0);
+      b->fill(0);
+
+      for (int iter=0; iter<niter; iter++) {
+        for (int y=0; y<ht; y++) {
+          for (int x=0; x<ht; x++) {
+            double vd = d->getImageData(x,y);
+            if (vd == vd) { // NaN detection...
+              b->setImageData(x,y,vd);
+            } else {
+              double v0 = a->getImageData(x-1,y);
+              double v1 = a->getImageData(x+1,y);
+              double v2 = a->getImageData(x,y-1);
+              double v3 = a->getImageData(x,y+1);
+
+              double sum=0;
+              double n=0;
+
+              if (v0==v0) {
+                sum += v0; n += 1;
+              }
+
+              if (v1==v1) {
+                sum += v1; n += 1;
+              }
+
+              if (v2==v2) {
+                sum += v2; n += 1;
+              }
+
+              if (v3==v3) {
+                sum += v3; n += 1;
+              }
+
+              if (n>=1) {
+                b->setImageData(x,y,sum/n);
+              } else {
+                b->setImageData(x,y,0);
+              }
+            }
+          }
+        }
+
+        double diff = 0;
+        double n = 0;
+
+        for (int y=0; y<ht; y++) {
+          for (int x=0; x<ht; x++) {
+            double va = a->getImageData(x,y);
+            double vb = b->getImageData(x,y);
+
+            if (va==va && vb==vb) {
+              diff += (va-vb)*(va-vb);
+              n    += 1;
+            }
+          }
+        }
+
+        printMessage(tr("Iteration %1, diff %2").arg(iter).arg(diff/n));
+
+        QxrdDoubleImageDataPtr t = a;
+        a = b;
+        b = t;
+      }
+
+      proc->newData(b, QxrdMaskDataPtr());
+    }
+  }
 }
