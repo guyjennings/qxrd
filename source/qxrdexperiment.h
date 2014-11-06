@@ -203,8 +203,14 @@ public:  // Properties
   Q_PROPERTY(QString detectorTypeName READ get_DetectorTypeName WRITE set_DetectorTypeName STORED false)
   QCEP_STRING_PROPERTY(DetectorTypeName)
 
+  Q_PROPERTY(int    detectorSubType  READ get_DetectorSubType WRITE set_DetectorSubType)
+  QCEP_INTEGER_PROPERTY(DetectorSubType)
+
   Q_PROPERTY(int    detectorNumber  READ get_DetectorNumber WRITE set_DetectorNumber)
   QCEP_INTEGER_PROPERTY(DetectorNumber)
+
+  Q_PROPERTY(QString    detectorAddress  READ get_DetectorAddress WRITE set_DetectorAddress)
+  QCEP_STRING_PROPERTY(DetectorAddress)
 
   Q_PROPERTY(int    processorType READ get_ProcessorType WRITE set_ProcessorType)
   QCEP_INTEGER_PROPERTY(ProcessorType)

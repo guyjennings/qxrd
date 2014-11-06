@@ -62,6 +62,16 @@ int QxrdDetectorPerkinElmer::detectorType() const
   return QxrdDetectorThread::PerkinElmerDetector;
 }
 
+int QxrdDetectorPerkinElmer::detectorSubType() const
+{
+  return m_SubType;
+}
+
+QString QxrdDetectorPerkinElmer::detectorAddress() const
+{
+  return m_Address;
+}
+
 void QxrdDetectorPerkinElmer::printMessage(QString msg, QDateTime ts)
 {
   QxrdExperimentPtr exp(m_Experiment);
@@ -89,6 +99,251 @@ void QxrdDetectorPerkinElmer::statusMessage(QString msg, QDateTime ts)
   }
 }
 
+QString QxrdDetectorPerkinElmer::acquisitionErrorString(int n)
+{
+  QString res = "No Error";
+
+  switch (n) {
+  case HIS_ALL_OK:
+    res = "HIS_ALL_OK";
+    break;
+
+  case HIS_ERROR_MEMORY:
+    res = "HIS_ERROR_MEMORY";
+    break;
+
+  case HIS_ERROR_BOARDINIT:
+    res = "HIS_ERROR_BOARDINIT";
+    break;
+
+  case HIS_ERROR_NOCAMERA:
+    res = "HIS_ERROR_NOCAMERA";
+    break;
+
+  case HIS_ERROR_CORRBUFFER_INCOMPATIBLE:
+    res = "HIS_ERROR_CORRBUFFER_INCOMPATIBLE";
+    break;
+
+  case HIS_ERROR_ACQ_ALREADY_RUNNING:
+    res = "HIS_ERROR_ACQ_ALREADY_RUNNING";
+    break;
+
+  case HIS_ERROR_TIMEOUT:
+    res = "HIS_ERROR_TIMEOUT";
+    break;
+
+  case HIS_ERROR_INVALIDACQDESC:
+    res = "HIS_ERROR_INVALIDACQDESC";
+    break;
+
+  case HIS_ERROR_VXDNOTFOUND:
+    res = "HIS_ERROR_VXDNOTFOUND";
+    break;
+
+  case HIS_ERROR_VXDNOTOPEN:
+    res = "HIS_ERROR_VXDNOTOPEN";
+    break;
+
+  case HIS_ERROR_VXDUNKNOWNERROR:
+    res = "HIS_ERROR_VXDUNKNOWNERROR";
+    break;
+
+  case HIS_ERROR_VXDGETDMAADR:
+    res = "HIS_ERROR_VXDGETDMAADR";
+    break;
+
+  case HIS_ERROR_ACQABORT:
+    res = "HIS_ERROR_ACQABORT";
+    break;
+
+  case HIS_ERROR_ACQUISITION:
+    res = "HIS_ERROR_ACQUISITION";
+    break;
+
+  case HIS_ERROR_VXD_REGISTER_IRQ:
+    res = "HIS_ERROR_VXD_REGISTER_IRQ";
+    break;
+
+  case HIS_ERROR_VXD_REGISTER_STATADR:
+    res = "HIS_ERROR_MEMORY";
+    break;
+
+  case HIS_ERROR_GETOSVERSION:
+    res = "HIS_ERROR_GETOSVERSION";
+    break;
+
+  case HIS_ERROR_SETFRMSYNC:
+    res = "HIS_ERROR_SETFRMSYNC";
+    break;
+
+  case HIS_ERROR_SETFRMSYNCMODE:
+    res = "HIS_ERROR_SETFRMSYNCMODE";
+    break;
+
+  case HIS_ERROR_SETTIMERSYNC:
+    res = "HIS_ERROR_SETTIMERSYNC";
+    break;
+
+  case HIS_ERROR_INVALID_FUNC_CALL:
+    res = "HIS_ERROR_INVALID_FUNC_CALL";
+    break;
+
+  case HIS_ERROR_ABORTCURRFRAME:
+    res = "HIS_ERROR_ABORTCURRFRAME";
+    break;
+
+  case HIS_ERROR_GETHWHEADERINFO:
+    res = "HIS_ERROR_GETHWHEADERINFO";
+    break;
+
+  case HIS_ERROR_HWHEADER_INV:
+    res = "HIS_ERROR_HWHEADER_INV";
+    break;
+
+  case HIS_ERROR_SETLINETRIG_MODE:
+    res = "HIS_ERROR_SETLINETRIG_MODE";
+    break;
+
+  case HIS_ERROR_WRITE_DATA:
+    res = "HIS_ERROR_WRITE_DATA";
+    break;
+
+  case HIS_ERROR_READ_DATA:
+    res = "HIS_ERROR_READ_DATA";
+    break;
+
+  case HIS_ERROR_SETBAUDRATE:
+    res = "HIS_ERROR_SETBAUDRATE";
+    break;
+
+  case HIS_ERROR_NODESC_AVAILABLE:
+    res = "HIS_ERROR_NODESC_AVAILABLE";
+    break;
+
+  case HIS_ERROR_BUFFERSPACE_NOT_SUFF:
+    res = "HIS_ERROR_BUFFERSPACE_NOT_SUFF";
+    break;
+
+  case HIS_ERROR_SETCAMERAMODE:
+    res = "HIS_ERROR_SETCAMERAMODE";
+    break;
+
+  case HIS_ERROR_FRAME_INV:
+    res = "HIS_ERROR_FRAME_INV";
+    break;
+
+  case HIS_ERROR_SLOW_SYSTEM:
+    res = "HIS_ERROR_SLOW_SYSTEM";
+    break;
+
+  case HIS_ERROR_GET_NUM_BOARDS:
+    res = "HIS_ERROR_GET_NUM_BOARDS";
+    break;
+
+  case HIS_ERROR_HW_ALREADY_OPEN_BY_ANOTHER_PROCESS:
+    res = "HIS_ERROR_HW_ALREADY_OPEN_BY_ANOTHER_PROCESS";
+    break;
+
+  case HIS_ERROR_CREATE_MEMORYMAPPING:
+    res = "HIS_ERROR_CREATE_MEMORYMAPPING";
+    break;
+
+  case HIS_ERROR_VXD_REGISTER_DMA_ADDRESS:
+    res = "HIS_ERROR_VXD_REGISTER_DMA_ADDRESS";
+    break;
+
+  case HIS_ERROR_VXD_REGISTER_STAT_ADDR:
+    res = "HIS_ERROR_VXD_REGISTER_STAT_ADDR";
+    break;
+
+  case HIS_ERROR_VXD_UNMASK_IRQ:
+    res = "HIS_ERROR_VXD_UNMASK_IRQ";
+    break;
+
+  case HIS_ERROR_LOADDRIVER:
+    res = "HIS_ERROR_LOADDRIVER";
+    break;
+
+  case HIS_ERROR_FUNC_NOTIMPL:
+    res = "HIS_ERROR_FUNC_NOTIMPL";
+    break;
+
+  case HIS_ERROR_MEMORY_MAPPING:
+    res = "HIS_ERROR_MEMORY_MAPPING";
+    break;
+
+  case HIS_ERROR_CREATE_MUTEX:
+    res = "HIS_ERROR_CREATE_MUTEX";
+    break;
+
+  case HIS_ERROR_ACQ:
+    res = "HIS_ERROR_ACQ";
+    break;
+
+  case HIS_ERROR_DESC_NOT_LOCAL:
+    res = "HIS_ERROR_DESC_NOT_LOCAL";
+    break;
+
+  case HIS_ERROR_INVALID_PARAM:
+    res = "HIS_ERROR_INVALID_PARAM";
+    break;
+
+  case HIS_ERROR_ABORT:
+    res = "HIS_ERROR_ABORT";
+    break;
+
+  case HIS_ERROR_WRONGBOARDSELECT:
+    res = "HIS_ERROR_WRONGBOARDSELECT";
+    break;
+
+  case HIS_ERROR_WRONG_CAMERA_MODE:
+    res = "HIS_ERROR_WRONG_CAMERA_MODE";
+    break;
+
+  case HIS_ERROR_AVERAGED_LOST:
+    res = "HIS_ERROR_AVERAGED_LOST";
+    break;
+
+  case HIS_ERROR_BAD_SORTING_PARAM:
+    res = "HIS_ERROR_BAD_SORTING_PARAM";
+    break;
+
+  case HIS_ERROR_UNKNOWN_IP_MAC_NAME:
+    res = "HIS_ERROR_UNKNOWN_IP_MAC_NAME";
+    break;
+
+  case HIS_ERROR_NO_BOARD_IN_SUBNET:
+    res = "HIS_ERROR_NO_BOARD_IN_SUBNET";
+    break;
+
+  case HIS_ERROR_UNABLE_TO_OPEN_BOARD:
+    res = "HIS_ERROR_UNABLE_TO_OPEN_BOARD";
+    break;
+
+  case HIS_ERROR_UNABLE_TO_CLOSE_BOARD:
+    res = "HIS_ERROR_UNABLE_TO_CLOSE_BOARD";
+    break;
+
+  case HIS_ERROR_UNABLE_TO_ACCESS_DETECTOR_FLASH:
+    res = "HIS_ERROR_UNABLE_TO_ACCESS_DETECTOR_FLASH";
+    break;
+
+  case HIS_ERROR_HEADER_TIMEOUT:
+    res = "HIS_ERROR_HEADER_TIMEOUT";
+    break;
+
+  case HIS_ERROR_NO_PING_ACK:
+    res = "HIS_ERROR_NO_PING_ACK";
+    break;
+
+  case HIS_ERROR_NR_OF_BOARDS_CHANGED:
+    res = "HIS_ERROR_NR_OF_BOARDS_CHANGED";
+    break;
+  }
+
+  return res;
+}
+
 void QxrdDetectorPerkinElmer::acquisitionError(const char *fn, int ln, int n)
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
@@ -97,7 +352,8 @@ void QxrdDetectorPerkinElmer::acquisitionError(const char *fn, int ln, int n)
     acq -> cancel();
   }
 
-  criticalMessage(tr("Acquisition Error %1 at line %2 in file %3").arg(n).arg(ln).arg(fn));
+  criticalMessage(tr("Acquisition Error %1 [%2] at line %3 in file %4")
+                  .arg(n).arg(acquisitionErrorString(n)).arg(ln).arg(fn));
 }
 
 bool QxrdDetectorPerkinElmer::checkPluginAvailable()
@@ -151,6 +407,8 @@ void QxrdDetectorPerkinElmer::initialize()
     int nRet = HIS_ALL_OK;
     UINT nSensors;
     BOOL bEnableIRQ = true;
+    BOOL bSelfInit = true;
+    BOOL bAlwaysOpen = true;
     ACQDESCPOS Pos = 0;
     UINT nChannelType;
     int nChannelNr;
@@ -160,44 +418,94 @@ void QxrdDetectorPerkinElmer::initialize()
 
     QxrdExperimentPtr exp(m_Experiment);
 
-    int detNum  = 0;
-
     if (exp) {
-      detNum = exp->get_DetectorNumber();
+      m_DetectorNumber = exp->get_DetectorNumber();
+      m_SubType        = exp->get_DetectorSubType();
+      m_Address        = exp->get_DetectorAddress();
     }
 
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
 
-    if (plugin) {
-      nRet = plugin->Acquisition_EnumSensors(&nSensors, bEnableIRQ, FALSE);
-    }
+    switch (m_SubType) {
+    case QxrdDetectorThread::PCI_SubType:
+      {
+        printMessage("Initialising PCI/PCIe Perkin Elmer Detector");
 
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("Acquisition_EnumSensors = %1").arg(nRet));
-    }
+        if (plugin) {
+          nRet = plugin->Acquisition_EnumSensors(&nSensors, bEnableIRQ, FALSE);
+        }
 
-    if (nRet != HIS_ALL_OK) {
-      acquisitionInitError(nRet);
-      return;
-    }
+        if (qcepDebug(DEBUG_PERKINELMER)) {
+          printMessage(tr("Acquisition_EnumSensors = %1").arg(nRet));
+        }
 
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("Number of sensors = %1").arg(nSensors));
-    }
+        if (nRet != HIS_ALL_OK) {
+          acquisitionInitError(__FILE__, __LINE__, nRet);
+          return;
+        }
 
-    if (detNum == 0 && nSensors != 1) {
-      acquisitionNSensorsError(nRet);
-      return;
-    } else if (detNum < 0 || detNum > nSensors) {
-      acquisitionNSensorsError(nRet);
-      return;
-    }
+        if (qcepDebug(DEBUG_PERKINELMER)) {
+          printMessage(tr("Number of sensors = %1").arg(nSensors));
+        }
 
-    for (int i=1; i<=(detNum?detNum:1); i++) {
-      if (plugin && (nRet = plugin->Acquisition_GetNextSensor(&Pos, &m_AcqDesc))!=HIS_ALL_OK) {
-        acquisitionNSensorsError(nRet);
-        return;
+        if (m_DetectorNumber == 0 && nSensors != 1) {
+          acquisitionNSensorsError(__FILE__, __LINE__, nRet);
+          return;
+        } else if (m_DetectorNumber < 0 || m_DetectorNumber > nSensors) {
+          acquisitionNSensorsError(__FILE__, __LINE__, nRet);
+          return;
+        }
+
+        for (int i=1; i<=(m_DetectorNumber?m_DetectorNumber:1); i++) {
+          if (plugin && (nRet = plugin->Acquisition_GetNextSensor(&Pos, &m_AcqDesc))!=HIS_ALL_OK) {
+            acquisitionNSensorsError(__FILE__, __LINE__, nRet);
+            return;
+          }
+        }
       }
+      break;
+
+    case QxrdDetectorThread::GBIF_IP_SubType:
+    case QxrdDetectorThread::GBIF_MAC_SubType:
+    case QxrdDetectorThread::GBIF_Name_SubType:
+      {
+        printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at %1").arg(m_Address));
+
+        if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
+                                                            1024, 1024, bSelfInit,
+                                                            bAlwaysOpen, 1,
+                                                            (GBIF_STRING_DATATYPE*) qPrintable(m_Address))) != HIS_ALL_OK) {
+          acquisitionInitError(__FILE__, __LINE__, nRet);
+          return;
+        }
+      }
+      break;
+
+    case QxrdDetectorThread::GBIF_Scan_SubType:
+      {
+        printMessage("Searching for Perkin Elmer Detectors on the network");
+
+        long nBoards=0;
+
+        if (plugin && (nRet = plugin->Acquisition_GbIF_GetDeviceCnt(&nBoards)) != HIS_ALL_OK) {
+          acquisitionNSensorsError(__FILE__, __LINE__, nRet);
+          return;
+        }
+
+        QVector<GBIF_DEVICE_PARAM> devs(nBoards);
+
+        if (plugin && (nRet = plugin->Acquisition_GbIF_GetDeviceList(devs.data(), nBoards))) {
+          acquisitionNSensorsError(__FILE__, __LINE__, nRet);
+          return;
+        }
+
+        printMessage(tr("Found %1 Detectors").arg(nBoards));
+
+        if (m_DetectorNumber <= nBoards) {
+          int n = (m_DetectorNumber?m_DetectorNumber:1);
+        }
+      }
+      break;
     }
 
     if (plugin && (nRet = plugin->Acquisition_GetCommChannel(m_AcqDesc, &nChannelType, &nChannelNr))!=HIS_ALL_OK) {
@@ -654,16 +962,16 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
   }
 }
 
-void QxrdDetectorPerkinElmer::acquisitionInitError(int n)
+void QxrdDetectorPerkinElmer::acquisitionInitError(const char *fn, int ln, int n)
 {
-  acquisitionError(__FILE__, __LINE__, n);
+  acquisitionError(fn, ln, n);
 
   criticalMessage("Detector Initialization Failed");
 }
 
-void QxrdDetectorPerkinElmer::acquisitionNSensorsError(int n)
+void QxrdDetectorPerkinElmer::acquisitionNSensorsError(const char *fn, int ln, int n)
 {
-  acquisitionError(__FILE__, __LINE__, n);
+  acquisitionError(fn, ln, n);
 
   criticalMessage("Detector Initialization Failed");
 }

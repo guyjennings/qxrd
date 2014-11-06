@@ -159,6 +159,33 @@ UINT QxrdPerkinElmerPlugin::Acquisition_GetHwHeaderInfoEx(
   return ::Acquisition_GetHwHeaderInfoEx(hAcqDesc, pInfo, pInfoEx);
 }
 
+UINT QxrdPerkinElmerPlugin::Acquisition_GbIF_Init(
+    HACQDESC *phAcqDesc, int nChannelNr, BOOL bEnableIRQ, UINT uiRows, UINT uiColumns,
+    BOOL bSelfInit, BOOL bAlwaysOpen, long lInitType, GBIF_STRING_DATATYPE* cAddress)
+{
+  return ::Acquisition_GbIF_Init(phAcqDesc, nChannelNr, bEnableIRQ,
+                                 uiRows, uiColumns, bSelfInit, bAlwaysOpen,
+                                 lInitType, cAddress);
+}
+
+UINT QxrdPerkinElmerPlugin::Acquisition_GbIF_GetDeviceList(
+    GBIF_DEVICE_PARAM* pGBIF_DEVICE_PARAM, int nDeviceCnt)
+{
+  return ::Acquisition_GbIF_GetDeviceList(pGBIF_DEVICE_PARAM, nDeviceCnt);
+}
+
+UINT QxrdPerkinElmerPlugin::Acquisition_GbIF_GetDevice(
+    GBIF_STRING_DATATYPE* ucAddress, DWORD dwAddressType, GBIF_DEVICE_PARAM* pDevice)
+{
+  return ::Acquisition_GbIF_GetDevice(ucAddress, dwAddressType, pDevice);
+}
+
+UINT QxrdPerkinElmerPlugin::Acquisition_GbIF_GetDeviceCnt(
+    long* plNrOfboards)
+{
+  return ::Acquisition_GbIF_GetDeviceCnt(plNrOfboards);
+}
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #else
 Q_EXPORT_PLUGIN2(qxrdperkinelmerplugin, QxrdPerkinElmerPlugin)

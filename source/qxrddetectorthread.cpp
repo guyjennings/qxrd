@@ -94,6 +94,48 @@ QStringList QxrdDetectorThread::detectorTypeNames()
   return res;
 }
 
+QString QxrdDetectorThread::detectorSubTypeName(int detectorSubType)
+{
+  QString res = "unknown";
+
+  switch (detectorSubType) {
+  case PCI_SubType:
+    res = "PCI/PCIe Interface";
+    break;
+
+  case GBIF_IP_SubType:
+    res = "Gigabit Ethernet by IP Address";
+    break;
+
+  case GBIF_MAC_SubType:
+    res = "Gigabit Ethernet by MAC Address";
+    break;
+
+  case GBIF_Name_SubType:
+    res = "Gigabit Ethernet by device name";
+    break;
+
+  case GBIF_Scan_SubType:
+    res = "Gigabit Ethernet by Auto Scan";
+    break;
+  }
+
+  return res;
+}
+
+QStringList QxrdDetectorThread::detectorSubTypeNames()
+{
+  QStringList res;
+
+  res.append(detectorSubTypeName(PCI_SubType));
+  res.append(detectorSubTypeName(GBIF_IP_SubType));
+  res.append(detectorSubTypeName(GBIF_MAC_SubType));
+  res.append(detectorSubTypeName(GBIF_Name_SubType));
+  res.append(detectorSubTypeName(GBIF_Scan_SubType));
+
+  return res;
+}
+
 void QxrdDetectorThread::run()
 {
   QxrdDetectorPtr p;

@@ -67,6 +67,8 @@ QxrdExperiment::QxrdExperiment(
   m_DetectorType(m_SettingsSaver, this, "detectorType", 0, "Detector Type"),
   m_DetectorTypeName(QxrdSettingsSaverPtr(), this,"detectorTypeName", QxrdDetectorThread::detectorTypeName(get_DetectorType()), "Name of Detector Type"),
   m_DetectorNumber(m_SettingsSaver, this, "detectorNumber", 0, "Detector Number"),
+  m_DetectorSubType(m_SettingsSaver, this, "detectorSubType", 0, "Detector Sub Type"),
+  m_DetectorAddress(m_SettingsSaver, this, "detectorAddress", "", "Detector Address"),
   m_ProcessorType(m_SettingsSaver, this,"processorType", 0, "Data Processor Type"),
   m_DefaultLayout(QxrdSettingsSaverWPtr(), this,"defaultLayout",0, "Default Layout Used?"),
   m_WorkCompleted(QxrdSettingsSaverWPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
@@ -263,10 +265,12 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
     printMessage(tr("Running on host %1").arg(QHostInfo::localHostName()));
     printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 
-    connect(prop_WorkCompleted(), SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
-    connect(prop_WorkTarget(),    SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
-    connect(prop_DetectorType(),  SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
-    connect(prop_DetectorNumber(),SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
+    connect(prop_WorkCompleted(),   SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
+    connect(prop_WorkTarget(),      SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
+    connect(prop_DetectorType(),    SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
+    connect(prop_DetectorSubType(), SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
+    connect(prop_DetectorNumber(),  SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
+    connect(prop_DetectorAddress(), SIGNAL(valueChanged(QString,int)), this, SLOT(onDetectorTypeChanged()));
 
     m_SettingsSaver->start();
 
@@ -932,7 +936,9 @@ void QxrdExperiment::onDetectorTypeChanged()
 
   if (det) {
     set_DetectorType(det->detectorType());
+    set_DetectorSubType(det->detectorSubType());
     set_DetectorTypeName(det->detectorTypeName());
+    set_DetectorAddress(det->detectorAddress());
 
     QxrdAcquisitionPtr acq(m_Acquisition);
 
