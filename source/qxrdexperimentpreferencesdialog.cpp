@@ -39,6 +39,8 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     //  QxrdAllocator *alloc = g_Application->allocator();
 
     int detectorType = expt -> get_DetectorType();
+    int detectorSubType = expt -> get_DetectorSubType();
+
     //  int processorType = m_Experiment -> get_ProcessorType();
 
     int runSpecServer = 0;
@@ -62,11 +64,16 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     }
 
     QStringList detectorTypes = QxrdDetectorThread::detectorTypeNames();
+    QStringList detectorSubTypes = QxrdDetectorThread::detectorSubTypeNames();
 
     m_DetectorType -> addItems(detectorTypes);
     m_DetectorType -> setCurrentIndex(detectorType);
 
+    m_DetectorSubType -> addItems(detectorSubTypes);
+    m_DetectorSubType -> setCurrentIndex(detectorSubType);
+
     m_DetectorNumber -> setValue(expt->get_DetectorNumber());
+    m_DetectorAddress -> setText(expt->get_DetectorAddress());
 
     //    connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
     m_ExperimentDirectory -> setText(expt->get_ExperimentDirectory());
@@ -243,7 +250,9 @@ void QxrdExperimentPreferencesDialog::accept()
     QxrdSimpleServerPtr ssrv(expt -> simpleServer());
 
     expt->set_DetectorType(m_DetectorType->currentIndex());
+    expt->set_DetectorSubType(m_DetectorSubType->currentIndex());
     expt->set_DetectorNumber(m_DetectorNumber->value());
+    expt->set_DetectorAddress(m_DetectorAddress->text());
 
     if (srv) {
       srv -> set_RunSpecServer(runSpecServer);

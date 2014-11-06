@@ -30,6 +30,16 @@ QString QxrdDetector::detectorTypeName() const
   return QxrdDetectorThread::detectorTypeName(detectorType());
 }
 
+int QxrdDetector::detectorSubType() const
+{
+  return QxrdDetectorThread::PCI_SubType;
+}
+
+QString QxrdDetector::detectorAddress() const
+{
+  return "";
+}
+
 void QxrdDetector::initialize()
 {
 }

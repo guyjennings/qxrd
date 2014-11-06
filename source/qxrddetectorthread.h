@@ -26,8 +26,19 @@ public:
     FileWatcherDetector
   } DetectorType;
 
+  typedef enum {
+    PCI_SubType,
+    GBIF_IP_SubType,
+    GBIF_MAC_SubType,
+    GBIF_Name_SubType,
+    GBIF_Scan_SubType
+  } DetectorSubType;
+
   static QString detectorTypeName(int detectorType);
   static QStringList detectorTypeNames();
+
+  static QString detectorSubTypeName(int detectorSubType);
+  static QStringList detectorSubTypeNames();
 
 signals:
 
