@@ -1407,7 +1407,7 @@ void QxrdCenterFinder::generateDelaunay()
   }
 }
 
-static int XYZCompare(void *v1,void *v2)
+static int XYZCompare(const void *v1, const void *v2)
 {
    XYZ *p1,*p2;
    p1 = (XYZ*) v1;
@@ -1443,7 +1443,10 @@ void QxrdCenterFinder::generateDelaunay2()
 
       QVector<ITRIANGLE> tris(n*3);
 
-      qsort((void*) verts.data(), n, sizeof(XYZ), XYZCompare);
+      qsort((void*) verts.data(),
+            n,
+            sizeof(XYZ),
+            &XYZCompare);
 
       int ntri = 0;
 
@@ -1451,9 +1454,17 @@ void QxrdCenterFinder::generateDelaunay2()
 
       printMessage(tr("Formed %1 triangles").arg(ntri));
 
-      for (i=0; i<qMin(100,ntri); i++) {
-        printMessage(tr("%1: [%2,%3,%4]")
-                     .arg(i).arg(tris[i].p1).arg(tris[i].p2).arg(tris[i].p3));
+      for (int i=0; i<qMin(100,ntri); i++) {
+        int p1 = tris[i].p1;
+        int p2 = tris[i].p2;
+        int p3 = tris[i].p3;
+
+        printMessage(tr("%1: (%2,%3) - (%4,%5) - (%6,%7)")
+                     .arg(i)
+                     .arg(verts[p1].x).arg(verts[p1].y)
+                     .arg(verts[p2].x).arg(verts[p2].y)
+                     .arg(verts[p3].x).arg(verts[p3].y)
+                     );
       }
     }
   }

@@ -1,3 +1,9 @@
+#include <stdlib.h>
+
+#define FALSE 0
+#define TRUE  1
+#define EPSILON 1e-10
+
 typedef struct {
    int p1,p2,p3;
 } ITRIANGLE;
@@ -54,7 +60,7 @@ int Triangulate(int nv,XYZ *pxyz,ITRIANGLE *v,int *ntri)
    }
 
    /* Allocate memory for the edge list */
-   if ((edges = malloc(emax*(long)sizeof(EDGE))) == NULL) {
+   if ((edges = malloc(emax*(long)sizeof(IEDGE))) == NULL) {
       status = 2;
       goto skip;
    }
@@ -132,7 +138,7 @@ int Triangulate(int nv,XYZ *pxyz,ITRIANGLE *v,int *ntri)
             /* Check that we haven't exceeded the edge list size */
             if (nedge+3 >= emax) {
                emax += 100;
-               if ((edges = realloc(edges,emax*(long)sizeof(EDGE))) == NULL) {
+               if ((edges = realloc(edges,emax*(long)sizeof(IEDGE))) == NULL) {
                   status = 3;
                   goto skip;
                }
