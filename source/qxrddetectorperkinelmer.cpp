@@ -352,6 +352,9 @@ void QxrdDetectorPerkinElmer::acquisitionError(const char *fn, int ln, int n)
     acq -> cancel();
   }
 
+  printMessage(tr("Acquisition Error %1 [%2] at line %3 in file %4")
+               .arg(n).arg(acquisitionErrorString(n)).arg(ln).arg(fn));
+
   criticalMessage(tr("Acquisition Error %1 [%2] at line %3 in file %4")
                   .arg(n).arg(acquisitionErrorString(n)).arg(ln).arg(fn));
 }
@@ -466,14 +469,40 @@ void QxrdDetectorPerkinElmer::initialize()
       break;
 
     case QxrdDetectorThread::GBIF_IP_SubType:
-    case QxrdDetectorThread::GBIF_MAC_SubType:
-    case QxrdDetectorThread::GBIF_Name_SubType:
       {
-        printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at %1").arg(m_Address));
+        printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at IP Address %1").arg(m_Address));
 
         if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
                                                             1024, 1024, bSelfInit,
                                                             bAlwaysOpen, 1,
+                                                            (GBIF_STRING_DATATYPE*) qPrintable(m_Address))) != HIS_ALL_OK) {
+          acquisitionInitError(__FILE__, __LINE__, nRet);
+          return;
+        }
+      }
+      break;
+
+    case QxrdDetectorThread::GBIF_MAC_SubType:
+      {
+        printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at MAC address %1").arg(m_Address));
+
+        if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
+                                                            1024, 1024, bSelfInit,
+                                                            bAlwaysOpen, 2,
+                                                            (GBIF_STRING_DATATYPE*) qPrintable(m_Address))) != HIS_ALL_OK) {
+          acquisitionInitError(__FILE__, __LINE__, nRet);
+          return;
+        }
+      }
+      break;
+
+    case QxrdDetectorThread::GBIF_Name_SubType:
+      {
+        printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at device name %1").arg(m_Address));
+
+        if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
+                                                            1024, 1024, bSelfInit,
+                                                            bAlwaysOpen, 3,
                                                             (GBIF_STRING_DATATYPE*) qPrintable(m_Address))) != HIS_ALL_OK) {
           acquisitionInitError(__FILE__, __LINE__, nRet);
           return;
@@ -501,8 +530,30 @@ void QxrdDetectorPerkinElmer::initialize()
 
         printMessage(tr("Found %1 Detectors").arg(nBoards));
 
-        if (m_DetectorNumber <= nBoards) {
+        if (nBoards == 0) {
+          criticalMessage("No detectors found");
+          return;
+        }
+
+        for (int i=0; i<nBoards; i++) {
+          printMessage(tr("Device %1: %2 found at IP: %3, MAC: %4, Name: %5")
+                       .arg(i+1)
+                       .arg(devs[i].cModelName)
+                       .arg((char*)(devs[i].ucIP))
+                       .arg((char*)(devs[i].ucMacAddress))
+                       .arg(devs[i].cDeviceName));
+        }
+
+        if (m_DetectorNumber >= 0 && m_DetectorNumber <= nBoards) {
           int n = (m_DetectorNumber?m_DetectorNumber:1);
+
+          if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
+                                                              1024, 1024, bSelfInit,
+                                                              bAlwaysOpen, 1,
+                                                              devs[n-1].ucIP)) != HIS_ALL_OK) {
+            acquisitionInitError(__FILE__, __LINE__, nRet);
+            return;
+          }
         }
       }
       break;
