@@ -215,7 +215,7 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
     QDir::setCurrent(QDir::homePath());
 #endif
 
-    printMessage(tr("------- Starting new experiment -------"));
+    printMessage(tr("------- Starting new session -------"));
     printMessage(tr("Experiment name: %1").arg(get_ExperimentName()));
     printMessage(tr("Experiment Directory: %1").arg(get_ExperimentDirectory()));
     printMessage(tr("Stored in file: %1").arg(get_ExperimentFileName()));
