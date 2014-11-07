@@ -26,7 +26,7 @@ email: shaneosullivan1@gmail.com
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../logger/Logger.h"
+//#include "../logger/Logger.h"
 
 
 #ifndef NULL
@@ -159,14 +159,14 @@ public:
 	void resetDelaunayEdgesIterator()
 	{
 		iteratorDelaunayEdges = delaunayEdges;
-		LOG<<"resetDelaunayEdgesIterator set iteratorDelaunayEdges = "<<iteratorDelaunayEdges;
+//		LOG<<"resetDelaunayEdgesIterator set iteratorDelaunayEdges = "<<iteratorDelaunayEdges;
 	}
 
 	bool getNextDelaunay(float& x1, float& y1, float& x2, float& y2)
 	{
 		if(iteratorDelaunayEdges == 0)
 		{
-			LOG<<"iteratorDelaunayEdges = 0, returning false";
+//			LOG<<"iteratorDelaunayEdges = 0, returning false";
 			return false;
 		}
 		x1 = iteratorDelaunayEdges->x1;
@@ -176,7 +176,7 @@ public:
 
 		iteratorDelaunayEdges = iteratorDelaunayEdges->next;
 
-		LOG<<"getNextDelaunay returned the edge ("<<x1<<","<<y1<<") -> ("<<x2<<","<<y2<<")";
+//		LOG<<"getNextDelaunay returned the edge ("<<x1<<","<<y1<<") -> ("<<x2<<","<<y2<<")";
 
 		return true;
 	}
@@ -241,7 +241,7 @@ private:
 	void		PQdelete(struct Halfedge *he);
 	bool		ELinitialize();
 	void		ELinsert(struct	Halfedge *lb, struct Halfedge *newHe);
-	struct Halfedge * VoronoiDiagramGenerator::ELgethash(int b);
+        struct Halfedge */* VoronoiDiagramGenerator::*/ELgethash(int b);
 	struct Halfedge *ELleft(struct Halfedge *he);
 	struct Site *leftreg(struct Halfedge *he);
 	void		out_site(struct Site *s);
@@ -330,7 +330,7 @@ private:
 
 	float		minDistanceBetweenSites;
 
-	DEF_LOG
+//	DEF_LOG
 	
 };
 

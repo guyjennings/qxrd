@@ -245,6 +245,7 @@ public slots:
 
   void calculateCalibration();
   void interpolateCalibration(int niter=20);
+  void generateDelaunay();
 
 public:
   void readSettings(QSettings *settings, QString section);

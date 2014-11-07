@@ -14,6 +14,7 @@
 #include "qxrdfitterringcircle.h"
 #include "qxrdfitterringellipse.h"
 #include <QVector>
+#include "VoronoiDiagramGenerator.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER
@@ -1250,16 +1251,18 @@ void QxrdCenterFinder::calculateCalibration()
 
       for (int i=0; i<n; i++) {
         QxrdPowderPoint pt = powderPoint(i);
-        double r = getR(pt.x(), pt.y());
-        double psi = getChi(pt.x(), pt.y());
-        double tth = getTTH(pt.x(), pt.y());
-        double tthNom = calibrantTTH(pt.n1());
-        double dspc = calibrantDSpacing(pt.n1());
-        double disp = get_DetectorDistance()*(tan(tth*M_PI/180.0)/tan(tthNom*M_PI/180.0)-1.0);
+        if (pt.isValid()) {
+          double r = getR(pt.x(), pt.y());
+          double psi = getChi(pt.x(), pt.y());
+          double tth = getTTH(pt.x(), pt.y());
+          double tthNom = calibrantTTH(pt.n1());
+          double dspc = calibrantDSpacing(pt.n1());
+          double disp = get_DetectorDistance()*(tan(tth*M_PI/180.0)/tan(tthNom*M_PI/180.0)-1.0);
 
-        printMessage(tr("Pt: %1, x: %2, y: %3, disp: %4").arg(i).arg(pt.x()).arg(pt.y()).arg(disp));
+//          printMessage(tr("Pt: %1, x: %2, y: %3, disp: %4").arg(i).arg(pt.x()).arg(pt.y()).arg(disp));
 
-        res->setValue(pt.x(), pt.y(), disp);
+          res->setValue(pt.x(), pt.y(), disp);
+        }
       }
 
       proc->newData(res, QxrdMaskDataPtr());
@@ -1349,6 +1352,56 @@ void QxrdCenterFinder::interpolateCalibration(int niter)
       }
 
       proc->newData(b, QxrdMaskDataPtr());
+    }
+  }
+}
+
+void QxrdCenterFinder::generateDelaunay()
+{
+  printMessage("Generate Delaunay Triangulation");
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDataProcessorPtr proc(expt->dataProcessor());
+
+    if (proc) {
+      int n = countPowderRingPoints();
+
+      QVector<float> x,y;
+
+      for (int i=0; i<n; i++) {
+        QxrdPowderPoint pt = powderPoint(i);
+
+        if (pt.isValid()) {
+          x.append(pt.x());
+          y.append(pt.y());
+        }
+      }
+
+      VoronoiDiagramGenerator generator;
+
+      generator.setGenerateDelaunay(true);
+
+      generator.generateVoronoi(x.data(), y.data(), x.count(),
+                                0, 2048, 0, 2048, 1);
+
+      printMessage(tr("generatorFinished, %1 points").arg(x.count()));
+
+      generator.resetDelaunayEdgesIterator();
+
+      float x1, x2, y1, y2;
+      int i=0;
+
+      while(generator.getNextDelaunay(x1, y1, x2, y2)) {
+        i++;
+        if (i<900) {
+          printMessage(tr("Edge %1: (%2,%3) -> (%4,%5)").arg(i).arg(x1).arg(y1).arg(x2).arg(y2));
+        } else if (i == 900) {
+          printMessage("...");
+        }
+      }
+
+      printMessage(tr("%1 edges").arg(i));
     }
   }
 }
