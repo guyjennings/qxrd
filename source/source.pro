@@ -137,7 +137,8 @@ HEADERS += \
     qxrdfitterringpoint.h \
     qxrdfitterpeakorring.h \
     qxrdfitterringcircle.h \
-    qxrdfitterringellipse.h
+    qxrdfitterringellipse.h \
+    triangulate.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -343,7 +344,8 @@ HEADERS += TODO.h \
     qxrdinfodialogsettings.h \
     qxrdcenterfinderplotsettings.h \
     qxrdsliceplotsettings.h \
-    VoronoiDiagramGenerator.h
+    VoronoiDiagramGenerator.h \
+    triangulate.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -463,7 +465,8 @@ SOURCES += qxrd.cpp \
     qxrdinfodialogsettings.cpp \
     qxrdcenterfinderplotsettings.cpp \
     qxrdsliceplotsettings.cpp \
-    VoronoiDiagramGenerator.cpp
+    VoronoiDiagramGenerator.cpp \
+    triangulate.c
 
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \

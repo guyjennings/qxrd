@@ -15,6 +15,7 @@
 #include "qxrdfitterringellipse.h"
 #include <QVector>
 #include "VoronoiDiagramGenerator.h"
+#include "triangulate.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER
@@ -1402,6 +1403,58 @@ void QxrdCenterFinder::generateDelaunay()
       }
 
       printMessage(tr("%1 edges").arg(i));
+    }
+  }
+}
+
+static int XYZCompare(void *v1,void *v2)
+{
+   XYZ *p1,*p2;
+   p1 = (XYZ*) v1;
+   p2 = (XYZ*) v2;
+   if (p1->x < p2->x)
+      return(-1);
+   else if (p1->x > p2->x)
+      return(1);
+   else
+      return(0);
+}
+
+void QxrdCenterFinder::generateDelaunay2()
+{
+  printMessage("Generate Delaunay Triangulation (v2)");
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDataProcessorPtr proc(expt->dataProcessor());
+
+    if (proc) {
+      int n = countPowderRingPoints();
+
+      QVector<XYZ> verts(n+3);
+
+      for (int i=0; i<n; i++) {
+        QxrdPowderPoint pt = powderPoint(i);
+
+        verts[i].x = pt.x();
+        verts[i].y = pt.y();
+        verts[i].z = 0;
+      }
+
+      QVector<ITRIANGLE> tris(n*3);
+
+      qsort((void*) verts.data(), n, sizeof(XYZ), XYZCompare);
+
+      int ntri = 0;
+
+      Triangulate(n, verts.data(), tris.data(), &ntri);
+
+      printMessage(tr("Formed %1 triangles").arg(ntri));
+
+      for (i=0; i<qMin(100,ntri); i++) {
+        printMessage(tr("%1: [%2,%3,%4]")
+                     .arg(i).arg(tris[i].p1).arg(tris[i].p2).arg(tris[i].p3));
+      }
     }
   }
 }
