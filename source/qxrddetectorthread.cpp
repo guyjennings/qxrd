@@ -154,28 +154,33 @@ void QxrdDetectorThread::run()
     if (expt) {
       switch(expt->get_DetectorType()) {
       case SimulatedDetector:
+        setObjectName("simulatedDetector");
         p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment, m_Acquisition));
         break;
 
 #ifdef HAVE_PERKIN_ELMER
       case PerkinElmerDetector:
+        setObjectName("perkinElmerDetector");
         p = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Experiment, m_Acquisition));
         break;
 #endif
 
 #ifdef HAVE_PILATUS
       case PilatusDetector:
+        setObjectName("pilatusDetector");
         p = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Experiment, m_Acquisition));
         break;
 #endif
 
 #ifdef HAVE_AREADETECTOR
       case EpicsAreaDetector:
+        setObjectName("epicsAreaDetector");
         p = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Experiment, m_Acquisition));
         break;
 #endif
 
       case FileWatcherDetector:
+        setObjectName("fileWatcherDetector");
         p = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Experiment, m_Acquisition));
         break;
       }
