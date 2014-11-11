@@ -344,7 +344,6 @@ HEADERS += TODO.h \
     qxrdinfodialogsettings.h \
     qxrdcenterfinderplotsettings.h \
     qxrdsliceplotsettings.h \
-    VoronoiDiagramGenerator.h \
     triangulate.h
 
 SOURCES += qxrd.cpp \
@@ -465,7 +464,6 @@ SOURCES += qxrd.cpp \
     qxrdinfodialogsettings.cpp \
     qxrdcenterfinderplotsettings.cpp \
     qxrdsliceplotsettings.cpp \
-    VoronoiDiagramGenerator.cpp \
     triangulate.c
 
 FORMS = qxrdwindow.ui \

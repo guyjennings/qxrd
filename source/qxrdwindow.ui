@@ -1214,7 +1214,6 @@
     <addaction name="m_ActionPlotPowderRingCenters"/>
     <addaction name="separator"/>
     <addaction name="m_ActionCalculateCalibrationPowder"/>
-    <addaction name="m_ActionInterpolateCalibrationImage"/>
    </widget>
    <widget class="QMenu" name="m_OperationsMenu">
     <property name="title">
@@ -1995,11 +1994,6 @@
   <action name="m_ActionCalculateCalibrationPowder">
    <property name="text">
     <string>Calculate Calibration from Powder Rings</string>
-   </property>
-  </action>
-  <action name="m_ActionInterpolateCalibrationImage">
-   <property name="text">
-    <string>Interpolate Calibration Image</string>
    </property>
   </action>
  </widget>

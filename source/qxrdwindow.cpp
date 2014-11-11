@@ -351,7 +351,6 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
       connect(m_ActionFindBeamCenter, SIGNAL(triggered()), cf.data(), SLOT(fitPowderCircle()), Qt::DirectConnection);
       connect(m_ActionClearMarkers, SIGNAL(triggered()), cf.data(), SLOT(deletePowderPoints()), Qt::DirectConnection);
       connect(m_ActionCalculateCalibrationPowder, SIGNAL(triggered()), cf.data(), SLOT(calculateCalibration()));
-      connect(m_ActionInterpolateCalibrationImage, SIGNAL(triggered()), cf.data(), SLOT(interpolateCalibration()));
     }
   }
 
