@@ -14,7 +14,6 @@
 #include "qxrdfitterringcircle.h"
 #include "qxrdfitterringellipse.h"
 #include <QVector>
-#include "VoronoiDiagramGenerator.h"
 #include "triangulate.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
