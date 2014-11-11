@@ -410,6 +410,10 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts) const
 
     message = message.replace("\n", " : ");
 
+#ifndef QT_NO_DEBUG
+    printf("%s\n", qPrintable(message));
+#endif
+
     logMessage(message);
 
     QxrdWindowPtr win = m_Window;
@@ -426,6 +430,10 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts) const
 
 void QxrdExperiment::printLine(QString msg)
 {
+#ifndef QT_NO_DEBUG
+    printf("%s\n", qPrintable(msg));
+#endif
+
   QxrdWindowPtr win = m_Window;
 
   if (win) {
