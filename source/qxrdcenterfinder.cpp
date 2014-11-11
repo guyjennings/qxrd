@@ -1229,7 +1229,7 @@ static int XYZCompare(const void *v1, const void *v2)
 
 void QxrdCenterFinder::calculateCalibration()
 {
-  printMessage("Generate Delaunay Triangulation (v2)");
+  printMessage("centering.calculateCalibration()");
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
@@ -1238,19 +1238,71 @@ void QxrdCenterFinder::calculateCalibration()
     if (proc) {
       int n = countPowderRingPoints();
 
-      QVector<XYZ> verts(n+3);
+      int nless5 = 0;
+      int nless1 = 0;
+      int nlessp1 = 0;
+
+      for (int i=0; i<n; i++) {
+        QxrdPowderPoint pt1 = powderPoint(i);
+
+        if (pt1.isValid()) {
+          for (int j=i+1; j<n; j++) {
+            QxrdPowderPoint pt2 = powderPoint(j);
+
+            if (pt2.isValid()) {
+              double dx = pt1.x() - pt2.x();
+              double dy = pt1.y() - pt2.y();
+
+              double r2 = dx*dx + dy*dy;
+
+              if (r2 < 25) {
+                nless5 += 1;
+
+                if (r2 < 1) {
+                  nless1 += 1;
+
+                  printMessage(tr("pts %1 (%2,%3) and %4 (%5,%6) are close %7")
+                               .arg(i).arg(pt1.x()).arg(pt1.y())
+                               .arg(j).arg(pt2.x()).arg(pt2.y())
+                               .arg(sqrt(r2)));
+
+                  if (r2 < 0.01) {
+                    nlessp1 += 1;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      printMessage(tr("Checking for dups in powder points %1<5, %2<1, %3<0.1").arg(nless5).arg(nless1).arg(nlessp1));
+
+      QVector<XYZ> verts;
 
       for (int i=0; i<n; i++) {
         QxrdPowderPoint pt = powderPoint(i);
 
-        double tth = getTTH(pt.x(), pt.y());
-        double tthNom = calibrantTTH(pt.n1());
-        double disp = get_DetectorDistance()*(tan(tth*M_PI/180.0)/tan(tthNom*M_PI/180.0)-1.0);
+        if (pt.isValid()) {
+          double tth = getTTH(pt.x(), pt.y());
+          double tthNom = calibrantTTH(pt.n1());
+          double disp = get_DetectorDistance()*(tan(tth*M_PI/180.0)/tan(tthNom*M_PI/180.0)-1.0);
 
-        verts[i].x = pt.x();
-        verts[i].y = pt.y();
-        verts[i].z = disp;
+          XYZ p;
+          p.x = pt.x();
+          p.y = pt.y();
+          p.z = disp;
+          verts.append(p);
+        }
       }
+
+      XYZ p = {0,0,0};
+
+      n = verts.count();
+
+      verts.append(p);
+      verts.append(p);
+      verts.append(p);
 
       QVector<ITRIANGLE> tris(n*3);
 
@@ -1267,6 +1319,48 @@ void QxrdCenterFinder::calculateCalibration()
 
       QxrdDoubleImageDataPtr res = newData();
       res -> fill(nan(""));
+
+//      int nInMulti = 0;
+
+//      for (double y=0; y<2048; y++) {
+//        for (double x=0; x<2048; x++) {
+//          int nInside = 0;
+//          for (int i=0; i<ntri; i++) {
+//            int p1 = tris[i].p1;
+//            int p2 = tris[i].p2;
+//            int p3 = tris[i].p3;
+
+//            double x1 = verts[p1].x;
+//            double x2 = verts[p2].x;
+//            double x3 = verts[p3].x;
+//            double y1 = verts[p1].y;
+//            double y2 = verts[p2].y;
+//            double y3 = verts[p3].y;
+//            double z1 = verts[p1].z;
+//            double z2 = verts[p2].z;
+//            double z3 = verts[p3].z;
+
+//            double detT = (y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3);
+//            double l1 = ((y2 - y3)*(x - x3) + (x3 - x2)*(y - y3))/detT;
+//            double l2 = ((y3 - y1)*(x - x3) + (x1 - x3)*(y - y3))/detT;
+//            double l3 = 1 - l1 - l2;
+
+//            if (0 < l1 && l1 < 1.0 &&
+//                0 < l2 && l2 < 1.0 &&
+//                0 < l3 && l3 < 1.0) {
+//              nInside += 1;
+//            }
+//          }
+
+//          if (nInside > 1) {
+//            nInMulti += 1;
+//          }
+//        }
+//      }
+
+//      printMessage(tr("%1 points in multiple triangles").arg(nInMulti));
+
+      int ndup = 0, nMsg = 0;
 
       for (int i=0; i<ntri; i++) {
         int p1 = tris[i].p1;
@@ -1297,24 +1391,47 @@ void QxrdCenterFinder::calculateCalibration()
 
         double detT = (y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3);
 
+        int ndupt = 0;
+        int nptst = 0;
+
         for (double y=minY; y<=maxY; y++) {
           for (double x=minX; x<=maxX; x++) {
             double l1 = ((y2 - y3)*(x - x3) + (x3 - x2)*(y - y3))/detT;
             double l2 = ((y3 - y1)*(x - x3) + (x1 - x3)*(y - y3))/detT;
             double l3 = 1 - l1 - l2;
 
-            if (0 <= l1 && l1 <= 1.0 &&
-                0 <= l2 && l2 <= 1.0 &&
-                0 <= l3 && l3 <= 1.0) {
+            if (0 < l1 && l1 < 1.0 &&
+                0 < l2 && l2 < 1.0 &&
+                0 < l3 && l3 < 1.0) {
               double z = l1*z1 + l2*z2 + l3*z3;
 
-              res -> setValue((int) x, (int) y, z);
+              double val = res->getImageData(x,y);
+
+              if (val == val) {
+                ndup += 1;
+                ndupt += 1;
+                res -> setImageData(x,y, i);
+              } else {
+                res -> setImageData(x,y, z);
+              }
+
+              nptst += 1;
             }
           }
         }
 
-        proc->newData(res, QxrdMaskDataPtr());
+        if (ndupt > 0 && nMsg++ < 50) {
+          printMessage(tr("Triangle %1 : (%2,%3) - (%4,%5) - (%6,%7) : %8/%9 dups")
+                       .arg(i)
+                       .arg(verts[p1].x).arg(verts[p1].y)
+                       .arg(verts[p2].x).arg(verts[p2].y)
+                       .arg(verts[p3].x).arg(verts[p3].y)
+                       .arg(ndupt).arg(nptst));
+        }
       }
+
+      printMessage(tr("%1 duplicated points").arg(ndup));
+      proc->newData(res, QxrdMaskDataPtr());
     }
   }
 }
