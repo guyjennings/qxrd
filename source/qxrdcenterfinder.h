@@ -205,6 +205,8 @@ public slots:
   void deletePowderPointNear(double x, double y);
   void deletePowderPoints();
   void deletePowderRing(int n);
+  void disablePowderRing(int n);
+  void enablePowderRing(int n);
   void appendPowderPoint(double x, double y);
   void appendPowderPoint(int n1, int n2, int n3, double x, double y, double r1=0, double r2=0, double az=0);
   void normalizePowderRings();

@@ -963,6 +963,8 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
           QAction *delRing          = plotMenu.addAction(tr("Delete Ring %1").arg(nearest.n1()));
           QAction *deleteAllPoints  = plotMenu.addAction(tr("Delete all Rings"));
+          QAction *disableRing      = plotMenu.addAction(tr("Disable Ring %1").arg(nearest.n1()));
+          QAction *enableRing       = plotMenu.addAction(tr("Enable Ring %1").arg(nearest.n1()));
           QAction *normalizeRings   = plotMenu.addAction(tr("Normalize Powder Rings"));
           QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
           QAction *fitRingNear      = plotMenu.addAction(tr("Fit Point on Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
@@ -989,6 +991,10 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             cf->deletePowderRing(nearest.n1());
           } else if (action == deleteAllPoints) {
             cf->deletePowderPoints();
+          } else if (action == enableRing) {
+            cf->enablePowderRing(nearest.n1());
+          } else if (action == disableRing) {
+            cf->disablePowderRing(nearest.n1());
           } else if (action == normalizeRings) {
             cf->normalizePowderRings();
           } else if (action == fitPeakNear) {

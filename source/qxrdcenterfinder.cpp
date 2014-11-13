@@ -495,6 +495,41 @@ void QxrdCenterFinder::deletePowderRing(int n)
   set_MarkedPoints(res);
 }
 
+void QxrdCenterFinder::disablePowderRing(int n)
+{
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
+  int np = 0;
+
+  for (int i=0; i<pts.count(); i++) {
+    if (pts[i].n1() == n) {
+      pts[i].n2() = -1;
+      np++;
+    }
+  }
+
+  printMessage(tr("Disabled %1 points in ring %2").arg(np).arg(n));
+
+  set_MarkedPoints(pts);
+}
+
+void QxrdCenterFinder::enablePowderRing(int n)
+{
+  QxrdPowderPointVector pts = get_MarkedPoints();
+
+  int np=0;
+
+  for (int i=0; i<pts.count(); i++) {
+    if (pts[i].n1() == n) {
+      pts[i].n2() = np++;
+    }
+  }
+
+  printMessage(tr("Enabled %1 points in ring %2").arg(np).arg(n));
+
+  set_MarkedPoints(pts);
+}
+
 void QxrdCenterFinder::deletePowderPoints()
 {
   m_MarkedPoints.clear();
@@ -539,11 +574,11 @@ void QxrdCenterFinder::normalizePowderRings()
       }
     }
 
-    for (int i=0; i<nbins; i++) {
-      if (npts[i] > 0) {
-        printMessage(tr("i: %1, r: %2").arg(i).arg(npts[i]));
-      }
-    }
+//    for (int i=0; i<nbins; i++) {
+//      if (npts[i] > 0) {
+//        printMessage(tr("i: %1, r: %2").arg(i).arg(npts[i]));
+//      }
+//    }
 
     int n = pts.count();
 
