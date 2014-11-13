@@ -1227,6 +1227,16 @@ static int XYZCompare(const void *v1, const void *v2)
       return(0);
 }
 
+static int compareXYX(const XYZ& a, const XYZ& b)
+{
+  return a.x < b.x;
+}
+
+static int differentVertices(const XYZ& a, const XYZ& b)
+{
+  return (a.x != b.x) || (a.y != b.y);
+}
+
 void QxrdCenterFinder::calculateCalibration()
 {
   printMessage("centering.calculateCalibration()");
@@ -1236,51 +1246,11 @@ void QxrdCenterFinder::calculateCalibration()
     QxrdDataProcessorPtr proc(expt->dataProcessor());
 
     if (proc) {
-      int n = countPowderRingPoints();
-
-      int nless5 = 0;
-      int nless1 = 0;
-      int nlessp1 = 0;
-
-      for (int i=0; i<n; i++) {
-        QxrdPowderPoint pt1 = powderPoint(i);
-
-        if (pt1.isValid()) {
-          for (int j=i+1; j<n; j++) {
-            QxrdPowderPoint pt2 = powderPoint(j);
-
-            if (pt2.isValid()) {
-              double dx = pt1.x() - pt2.x();
-              double dy = pt1.y() - pt2.y();
-
-              double r2 = dx*dx + dy*dy;
-
-              if (r2 < 25) {
-                nless5 += 1;
-
-                if (r2 < 1) {
-                  nless1 += 1;
-
-                  printMessage(tr("pts %1 (%2,%3) and %4 (%5,%6) are close %7")
-                               .arg(i).arg(pt1.x()).arg(pt1.y())
-                               .arg(j).arg(pt2.x()).arg(pt2.y())
-                               .arg(sqrt(r2)));
-
-                  if (r2 < 0.01) {
-                    nlessp1 += 1;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-
-      printMessage(tr("Checking for dups in powder points %1<5, %2<1, %3<0.1").arg(nless5).arg(nless1).arg(nlessp1));
+      int np = countPowderRingPoints();
 
       QVector<XYZ> verts;
 
-      for (int i=0; i<n; i++) {
+      for (int i=0; i<np; i++) {
         QxrdPowderPoint pt = powderPoint(i);
 
         if (pt.isValid()) {
@@ -1298,67 +1268,40 @@ void QxrdCenterFinder::calculateCalibration()
 
       XYZ p = {0,0,0};
 
-      n = verts.count();
+      std::sort(verts.begin(), verts.end(), compareXYX);
 
-      verts.append(p);
-      verts.append(p);
-      verts.append(p);
+      int n = verts.count();
+
+      QVector<XYZ> uniq;
+
+      for (int i=0; i<n; i++) {
+        if (i==0 || differentVertices(verts[i], verts[i-1])) {
+          uniq.append(verts[i]);
+        }
+      }
+
+      int drop = verts.count() - uniq.count();
+
+      if (drop > 0) {
+        printMessage(tr("Dropped %1 duplicated vertices").arg(drop));
+      }
+
+      n = uniq.count();
+
+      uniq.append(p);
+      uniq.append(p);
+      uniq.append(p);
 
       QVector<ITRIANGLE> tris(n*3);
 
-      qsort((void*) verts.data(),
-            n,
-            sizeof(XYZ),
-            &XYZCompare);
-
       int ntri = 0;
 
-      Triangulate(n, verts.data(), tris.data(), &ntri);
+      Triangulate(n, uniq.data(), tris.data(), &ntri);
 
       printMessage(tr("Formed %1 triangles").arg(ntri));
 
       QxrdDoubleImageDataPtr res = newData();
       res -> fill(nan(""));
-
-//      int nInMulti = 0;
-
-//      for (double y=0; y<2048; y++) {
-//        for (double x=0; x<2048; x++) {
-//          int nInside = 0;
-//          for (int i=0; i<ntri; i++) {
-//            int p1 = tris[i].p1;
-//            int p2 = tris[i].p2;
-//            int p3 = tris[i].p3;
-
-//            double x1 = verts[p1].x;
-//            double x2 = verts[p2].x;
-//            double x3 = verts[p3].x;
-//            double y1 = verts[p1].y;
-//            double y2 = verts[p2].y;
-//            double y3 = verts[p3].y;
-//            double z1 = verts[p1].z;
-//            double z2 = verts[p2].z;
-//            double z3 = verts[p3].z;
-
-//            double detT = (y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3);
-//            double l1 = ((y2 - y3)*(x - x3) + (x3 - x2)*(y - y3))/detT;
-//            double l2 = ((y3 - y1)*(x - x3) + (x1 - x3)*(y - y3))/detT;
-//            double l3 = 1 - l1 - l2;
-
-//            if (0 < l1 && l1 < 1.0 &&
-//                0 < l2 && l2 < 1.0 &&
-//                0 < l3 && l3 < 1.0) {
-//              nInside += 1;
-//            }
-//          }
-
-//          if (nInside > 1) {
-//            nInMulti += 1;
-//          }
-//        }
-//      }
-
-//      printMessage(tr("%1 points in multiple triangles").arg(nInMulti));
 
       int ndup = 0, nMsg = 0;
 
@@ -1367,27 +1310,27 @@ void QxrdCenterFinder::calculateCalibration()
         int p2 = tris[i].p2;
         int p3 = tris[i].p3;
 
-//        printMessage(tr("%1: (%2,%3) - (%4,%5) - (%6,%7)")
-//                     .arg(i)
-//                     .arg(verts[p1].x).arg(verts[p1].y)
-//                     .arg(verts[p2].x).arg(verts[p2].y)
-//                     .arg(verts[p3].x).arg(verts[p3].y)
-//                     );
+        //        printMessage(tr("%1: (%2,%3) - (%4,%5) - (%6,%7)")
+        //                     .arg(i)
+        //                     .arg(uniq[p1].x).arg(uniq[p1].y)
+        //                     .arg(uniq[p2].x).arg(uniq[p2].y)
+        //                     .arg(uniq[p3].x).arg(uniq[p3].y)
+        //                     );
 
-        double x1 = verts[p1].x;
-        double x2 = verts[p2].x;
-        double x3 = verts[p3].x;
-        double y1 = verts[p1].y;
-        double y2 = verts[p2].y;
-        double y3 = verts[p3].y;
-        double z1 = verts[p1].z;
-        double z2 = verts[p2].z;
-        double z3 = verts[p3].z;
+        double x1 = uniq[p1].x;
+        double x2 = uniq[p2].x;
+        double x3 = uniq[p3].x;
+        double y1 = uniq[p1].y;
+        double y2 = uniq[p2].y;
+        double y3 = uniq[p3].y;
+        double z1 = uniq[p1].z;
+        double z2 = uniq[p2].z;
+        double z3 = uniq[p3].z;
 
-        double minX = floor(qMin(qMin(x1,x2),x3));
-        double maxX = ceil(qMax(qMax(x1,x2),x3));
-        double minY = floor(qMin(qMin(y1,y2),y3));
-        double maxY = ceil(qMax(qMax(y1,y2),y3));
+        double minX = qMax((double) 0,floor(qMin(qMin(x1,x2),x3)));
+        double maxX = qMin((double) res->get_Width(),ceil(qMax(qMax(x1,x2),x3)));
+        double minY = qMax((double) 0,floor(qMin(qMin(y1,y2),y3)));
+        double maxY = qMin((double) res->get_Height(),ceil(qMax(qMax(y1,y2),y3)));
 
         double detT = (y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3);
 
@@ -1423,14 +1366,39 @@ void QxrdCenterFinder::calculateCalibration()
         if (ndupt > 0 && nMsg++ < 50) {
           printMessage(tr("Triangle %1 : (%2,%3) - (%4,%5) - (%6,%7) : %8/%9 dups")
                        .arg(i)
-                       .arg(verts[p1].x).arg(verts[p1].y)
-                       .arg(verts[p2].x).arg(verts[p2].y)
-                       .arg(verts[p3].x).arg(verts[p3].y)
+                       .arg(uniq[p1].x).arg(uniq[p1].y)
+                       .arg(uniq[p2].x).arg(uniq[p2].y)
+                       .arg(uniq[p3].x).arg(uniq[p3].y)
                        .arg(ndupt).arg(nptst));
         }
       }
 
-      printMessage(tr("%1 duplicated points").arg(ndup));
+      int wd = res->get_Width();
+      int ht = res->get_Height();
+
+      int nunset = 0;
+
+      for (int y=0; y<ht; y++) {
+        for (int x=0; x<wd; x++) {
+          double val = res->getImageData(x,y);
+
+          if (val!=val) {
+            nunset += 1;
+          }
+        }
+      }
+
+      for (int y=0; y<ht; y+=ht-1) {
+        for (int x=0; x<wd; x+=wd-1) {
+          double val = res->getImageData(x,y);
+
+          if (val!=val) {
+            printMessage(tr("[%1,%2] unset").arg(x).arg(y));
+          }
+        }
+      }
+
+      printMessage(tr("%1 duplicated points, %2 unset pixels").arg(ndup).arg(nunset));
       proc->newData(res, QxrdMaskDataPtr());
     }
   }
