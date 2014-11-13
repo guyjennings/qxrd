@@ -15,6 +15,7 @@
 #include "qxrdfitterringellipse.h"
 #include <QVector>
 #include "triangulate.h"
+#include "qxrdplanefitter.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER
@@ -1237,6 +1238,14 @@ static int differentVertices(const XYZ& a, const XYZ& b)
   return (a.x != b.x) || (a.y != b.y);
 }
 
+static int nearby(double x1, double y1, double x2, double y2)
+{
+  double dx = x1 - x2;
+  double dy = y1 - y2;
+
+  return sqrt(dx*dx + dy*dy) < 100;
+}
+
 void QxrdCenterFinder::calculateCalibration()
 {
   printMessage("centering.calculateCalibration()");
@@ -1246,6 +1255,14 @@ void QxrdCenterFinder::calculateCalibration()
     QxrdDataProcessorPtr proc(expt->dataProcessor());
 
     if (proc) {
+      QxrdDoubleImageDataPtr res = newData();
+      res -> fill(nan(""));
+
+      int wd = res->get_Width();
+      int ht = res->get_Height();
+
+      QxrdPlaneFitter f00, f01, f10, f11;
+
       int np = countPowderRingPoints();
 
       QVector<XYZ> verts;
@@ -1254,17 +1271,42 @@ void QxrdCenterFinder::calculateCalibration()
         QxrdPowderPoint pt = powderPoint(i);
 
         if (pt.isValid()) {
-          double tth = getTTH(pt.x(), pt.y());
+          double x = pt.x();
+          double y = pt.y();
+          double tth = getTTH(x, y);
           double tthNom = calibrantTTH(pt.n1());
           double disp = get_DetectorDistance()*(tan(tth*M_PI/180.0)/tan(tthNom*M_PI/180.0)-1.0);
 
           XYZ p;
-          p.x = pt.x();
-          p.y = pt.y();
+          p.x = x;
+          p.y = y;
           p.z = disp;
           verts.append(p);
+
+          if (nearby(x,y,0,0)) {
+            f00.addPoint(x,y,disp);
+          }
+
+          if (nearby(x,y,0,ht)) {
+            f01.addPoint(x,y,disp);
+          }
+
+          if (nearby(x,y,wd,0)) {
+            f10.addPoint(x,y,disp);
+          }
+
+          if (nearby(x,y,wd,ht)) {
+            f11.addPoint(x,y,disp);
+          }
         }
       }
+
+      XYZ pc;
+
+      pc.x = 0;  pc.y = 0;  pc.z = f00.value(0,0);   verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
+      pc.x = 0;  pc.y = ht; pc.z = f01.value(0,ht);  verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
+      pc.x = wd; pc.y = 0;  pc.z = f10.value(wd,0);  verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
+      pc.x = wd; pc.y = ht; pc.z = f11.value(wd,ht); verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
 
       XYZ p = {0,0,0};
 
@@ -1300,9 +1342,6 @@ void QxrdCenterFinder::calculateCalibration()
 
       printMessage(tr("Formed %1 triangles").arg(ntri));
 
-      QxrdDoubleImageDataPtr res = newData();
-      res -> fill(nan(""));
-
       int ndup = 0, nMsg = 0;
 
       for (int i=0; i<ntri; i++) {
@@ -1328,9 +1367,9 @@ void QxrdCenterFinder::calculateCalibration()
         double z3 = uniq[p3].z;
 
         double minX = qMax((double) 0,floor(qMin(qMin(x1,x2),x3)));
-        double maxX = qMin((double) res->get_Width(),ceil(qMax(qMax(x1,x2),x3)));
+        double maxX = qMin((double) wd,ceil(qMax(qMax(x1,x2),x3)));
         double minY = qMax((double) 0,floor(qMin(qMin(y1,y2),y3)));
-        double maxY = qMin((double) res->get_Height(),ceil(qMax(qMax(y1,y2),y3)));
+        double maxY = qMin((double) ht,ceil(qMax(qMax(y1,y2),y3)));
 
         double detT = (y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3);
 
@@ -1372,9 +1411,6 @@ void QxrdCenterFinder::calculateCalibration()
                        .arg(ndupt).arg(nptst));
         }
       }
-
-      int wd = res->get_Width();
-      int ht = res->get_Height();
 
       int nunset = 0;
 

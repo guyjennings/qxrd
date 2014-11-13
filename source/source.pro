@@ -138,7 +138,8 @@ HEADERS += \
     qxrdfitterpeakorring.h \
     qxrdfitterringcircle.h \
     qxrdfitterringellipse.h \
-    triangulate.h
+    triangulate.h \
+    qxrdplanefitter.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -172,7 +173,8 @@ SOURCES += \
     qxrdfitterringpoint.cpp \
     qxrdfitterpeakorring.cpp \
     qxrdfitterringcircle.cpp \
-    qxrdfitterringellipse.cpp
+    qxrdfitterringellipse.cpp \
+    qxrdplanefitter.cpp
 
 OTHER_FILES += testImage.js
 
