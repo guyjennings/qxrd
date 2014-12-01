@@ -984,9 +984,9 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
     }
 
     if (get_RetryDropped()) {
-      i = res->get_SummedExposures() + 1;
-    } else{
-      i = i+1;
+      i = res->get_SummedExposures() /*+ 1*/;
+//    } else{
+//      i = i+1;
     }
   }
 
