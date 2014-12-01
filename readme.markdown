@@ -1,6 +1,13 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.8 - Dec 1 2014
+Fixed problems with dark acquisition summed frames parameter
+
+Added delaunay triangulation routines to interpolate calibration images
+
+Improvements to file modification highlighting in file browser
+
 ## v0.11.7 - Oct 10 2014
 Added user interface to display shrinking routines
 
