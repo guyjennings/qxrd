@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>503</width>
-    <height>745</height>
+    <width>597</width>
+    <height>760</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Qxrd Preferences</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QFormLayout" name="formLayout_2">
    <item row="0" column="0">
     <widget class="QTabWidget" name="m_PreferencesPanes">
      <property name="currentIndex">
@@ -34,17 +34,17 @@
        <item row="0" column="1">
         <widget class="QComboBox" name="m_DetectorType"/>
        </item>
-       <item row="1" column="0">
+       <item row="2" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
           <string>Detector Number:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="2" column="1">
         <widget class="QSpinBox" name="m_DetectorNumber"/>
        </item>
-       <item row="2" column="0" colspan="2">
+       <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -57,6 +57,26 @@
          </property>
         </spacer>
        </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>Detector SubType:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="m_DetectorSubType"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_14">
+         <property name="text">
+          <string>Detector Address:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="m_DetectorAddress"/>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
@@ -64,104 +84,10 @@
        <string>Saving</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7">
-       <item row="9" column="0" colspan="4">
-        <widget class="QLineEdit" name="m_SaveDarkSubdir"/>
-       </item>
-       <item row="13" column="4">
-        <widget class="QPushButton" name="m_IntegratedScansFileBrowse">
-         <property name="text">
-          <string>Browse...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Experiment dir:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="23" column="1">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>108</width>
-           <height>139</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="12" column="0" colspan="4">
-        <widget class="QCheckBox" name="m_SaveIntegratedInLogFile">
-         <property name="text">
-          <string>Save Integrated Data in Scans File?</string>
-         </property>
-        </widget>
-       </item>
-       <item row="19" column="0" colspan="5">
-        <widget class="QCheckBox" name="m_SaveOverflowFiles">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string>Save info about overflowed pixels in .overflow file</string>
-         </property>
-         <property name="text">
-          <string>Save Overflow Pixel Information?</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="20" column="0" colspan="4">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Width of file index field in saved file names</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_10">
-         <property name="text">
-          <string>log file:</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1" colspan="3">
         <widget class="QLineEdit" name="m_CurrentLogFile">
          <property name="toolTip">
           <string>Log file path (relative to experiment dir)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="20" column="4">
-        <widget class="QSpinBox" name="m_FileIndexWidth">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>20</number>
-         </property>
-        </widget>
-       </item>
-       <item row="22" column="4">
-        <widget class="QSpinBox" name="m_FileOverflowWidth">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>20</number>
-         </property>
-        </widget>
-       </item>
-       <item row="22" column="0" colspan="4">
-        <widget class="QLabel" name="label_12">
-         <property name="text">
-          <string>Width of 'overflow' field in saved file names</string>
          </property>
         </widget>
        </item>
@@ -172,53 +98,22 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="4">
-        <widget class="QPushButton" name="m_CurrentLogFileBrowse">
-         <property name="toolTip">
-          <string>Select new log file</string>
-         </property>
+       <item row="26" column="0" colspan="4">
+        <widget class="QLabel" name="label_12">
          <property name="text">
-          <string>Browse...</string>
+          <string>Width of 'overflow' field in saved file names</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1" colspan="3">
-        <widget class="QLineEdit" name="m_DataDirectory">
-         <property name="toolTip">
-          <string>Directory where data files are saved 
-(relative to experiment dir)</string>
-         </property>
-         <property name="readOnly">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="16" column="0" colspan="4">
-        <widget class="QLineEdit" name="m_SaveIntegratedSubdir"/>
-       </item>
-       <item row="6" column="4">
-        <widget class="QPushButton" name="m_SaveRawBrowse">
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_10">
          <property name="text">
-          <string>Browse...</string>
+          <string>log file:</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="0" colspan="2">
-        <widget class="QCheckBox" name="m_SaveSubtractedInSubdir">
-         <property name="text">
-          <string>Save Subtracted Data in Subdirectory?</string>
-         </property>
-        </widget>
-       </item>
-       <item row="21" column="0" colspan="4">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>Width of 'phase' field in saved file names</string>
-         </property>
-        </widget>
-       </item>
-       <item row="21" column="4">
-        <widget class="QSpinBox" name="m_FilePhaseWidth">
+       <item row="26" column="4">
+        <widget class="QSpinBox" name="m_FileOverflowWidth">
          <property name="minimum">
           <number>1</number>
          </property>
@@ -227,13 +122,23 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="4">
-        <widget class="QPushButton" name="m_DataDirectoryBrowse">
-         <property name="toolTip">
-          <string>Select new data directory</string>
+       <item row="24" column="4">
+        <widget class="QSpinBox" name="m_FileIndexWidth">
+         <property name="minimum">
+          <number>1</number>
          </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="2" colspan="3">
+        <widget class="QLineEdit" name="m_ScanFileExtension"/>
+       </item>
+       <item row="18" column="0" colspan="2">
+        <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>Browse...</string>
+          <string>File extension for integrated data</string>
          </property>
         </widget>
        </item>
@@ -246,13 +151,6 @@
        </item>
        <item row="6" column="0" colspan="4">
         <widget class="QLineEdit" name="m_SaveRawSubdir"/>
-       </item>
-       <item row="16" column="4">
-        <widget class="QPushButton" name="m_SaveIntegratedBrowse">
-         <property name="text">
-          <string>Browse...</string>
-         </property>
-        </widget>
        </item>
        <item row="11" column="0" colspan="4">
         <widget class="QLineEdit" name="m_SaveSubtractedSubdir"/>
@@ -299,13 +197,13 @@
          </property>
         </widget>
        </item>
-       <item row="17" column="0" colspan="5">
+       <item row="21" column="0" colspan="5">
         <widget class="QCheckBox" name="m_AccumulateIntegrated2D">
          <property name="enabled">
           <bool>false</bool>
          </property>
          <property name="text">
-          <string>Accumulated Integrated Data into 2-D Dataset?</string>
+          <string>Accumulate Integrated Data into 2-D Dataset?</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -322,6 +220,164 @@ Change only by saving a new experiment</string>
           <bool>true</bool>
          </property>
         </widget>
+       </item>
+       <item row="19" column="0" colspan="2">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>For Negative intensities in integrated data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="19" column="2" colspan="3">
+        <widget class="QComboBox" name="m_ScanDataNegative">
+         <item>
+          <property name="text">
+           <string>Save Negative values unchanged</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Save Negative values as zero</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Omit Negative values</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="24" column="0" colspan="4">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Width of file index field in saved file names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="25" column="4">
+        <widget class="QSpinBox" name="m_FilePhaseWidth">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="4">
+        <widget class="QPushButton" name="m_DataDirectoryBrowse">
+         <property name="toolTip">
+          <string>Select new data directory</string>
+         </property>
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="25" column="0" colspan="4">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Width of 'phase' field in saved file names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="4">
+        <widget class="QPushButton" name="m_SaveRawBrowse">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0" colspan="2">
+        <widget class="QCheckBox" name="m_SaveSubtractedInSubdir">
+         <property name="text">
+          <string>Save Subtracted Data in Subdirectory?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="4">
+        <widget class="QLineEdit" name="m_SaveDarkSubdir"/>
+       </item>
+       <item row="12" column="0" colspan="4">
+        <widget class="QCheckBox" name="m_SaveIntegratedInLogFile">
+         <property name="text">
+          <string>Save Integrated Data in Scans File?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="4">
+        <widget class="QPushButton" name="m_IntegratedScansFileBrowse">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Experiment dir:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="27" column="1">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>108</width>
+           <height>139</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="23" column="0" colspan="5">
+        <widget class="QCheckBox" name="m_SaveOverflowFiles">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string>Save info about overflowed pixels in .overflow file</string>
+         </property>
+         <property name="text">
+          <string>Save Overflow Pixel Information?</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="3">
+        <widget class="QLineEdit" name="m_DataDirectory">
+         <property name="toolTip">
+          <string>Directory where data files are saved 
+(relative to experiment dir)</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QPushButton" name="m_CurrentLogFileBrowse">
+         <property name="toolTip">
+          <string>Select new log file</string>
+         </property>
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="4">
+        <widget class="QPushButton" name="m_SaveIntegratedBrowse">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0" colspan="4">
+        <widget class="QLineEdit" name="m_SaveIntegratedSubdir"/>
        </item>
       </layout>
      </widget>
@@ -425,6 +481,69 @@ Change only by saving a new experiment</string>
           <size>
            <width>20</width>
            <height>134</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_5">
+      <attribute name="title">
+       <string>Display</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Preferred Font Size:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="m_FontSize">
+         <property name="specialValueText">
+          <string>Default</string>
+         </property>
+         <property name="suffix">
+          <string/>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Preferred Widget Spacing:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="m_Spacing">
+         <property name="specialValueText">
+          <string>Default</string>
+         </property>
+         <property name="suffix">
+          <string/>
+         </property>
+         <property name="minimum">
+          <number>-1</number>
+         </property>
+         <property name="value">
+          <number>-1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>524</width>
+           <height>576</height>
           </size>
          </property>
         </spacer>

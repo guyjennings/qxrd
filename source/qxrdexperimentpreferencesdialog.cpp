@@ -39,6 +39,8 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     //  QxrdAllocator *alloc = g_Application->allocator();
 
     int detectorType = expt -> get_DetectorType();
+    int detectorSubType = expt -> get_DetectorSubType();
+
     //  int processorType = m_Experiment -> get_ProcessorType();
 
     int runSpecServer = 0;
@@ -62,11 +64,16 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     }
 
     QStringList detectorTypes = QxrdDetectorThread::detectorTypeNames();
+    QStringList detectorSubTypes = QxrdDetectorThread::detectorSubTypeNames();
 
     m_DetectorType -> addItems(detectorTypes);
     m_DetectorType -> setCurrentIndex(detectorType);
 
+    m_DetectorSubType -> addItems(detectorSubTypes);
+    m_DetectorSubType -> setCurrentIndex(detectorSubType);
+
     m_DetectorNumber -> setValue(expt->get_DetectorNumber());
+    m_DetectorAddress -> setText(expt->get_DetectorAddress());
 
     //    connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
     m_ExperimentDirectory -> setText(expt->get_ExperimentDirectory());
@@ -79,6 +86,10 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
 
     connect(m_IntegratedScansFileBrowse, SIGNAL(clicked()), this, SLOT(integratedScansFileBrowse()));
     m_IntegratedScansFile -> setText(expt->get_ScanFileName());
+
+    m_ScanFileExtension -> setText(expt->get_ScanFileExtension());
+
+    m_ScanDataNegative -> setCurrentIndex(expt->get_ScanDataNegative());
 
     if (proc) {
       connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
@@ -120,6 +131,9 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
       m_FilePhaseWidth -> setValue(acq->get_FilePhaseWidth());
       m_FileOverflowWidth -> setValue(acq->get_FileOverflowWidth());
     }
+
+    m_FontSize -> setValue(expt->get_FontSize());
+    m_Spacing  -> setValue(expt->get_Spacing());
   }
 }
 
@@ -236,7 +250,9 @@ void QxrdExperimentPreferencesDialog::accept()
     QxrdSimpleServerPtr ssrv(expt -> simpleServer());
 
     expt->set_DetectorType(m_DetectorType->currentIndex());
+    expt->set_DetectorSubType(m_DetectorSubType->currentIndex());
     expt->set_DetectorNumber(m_DetectorNumber->value());
+    expt->set_DetectorAddress(m_DetectorAddress->text());
 
     if (srv) {
       srv -> set_RunSpecServer(runSpecServer);
@@ -269,12 +285,17 @@ void QxrdExperimentPreferencesDialog::accept()
     expt -> set_DataDirectory(m_DataDirectory -> text());
     expt -> set_LogFileName    (m_CurrentLogFile -> text());
     expt -> set_ScanFileName    (m_IntegratedScansFile -> text());
+    expt -> set_ScanFileExtension(m_ScanFileExtension->text());
+    expt -> set_ScanDataNegative(m_ScanDataNegative->currentIndex());
 
     if (acq) {
       acq  -> set_FileIndexWidth(m_FileIndexWidth -> value());
       acq  -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
       acq  -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
     }
+
+    expt -> set_FontSize(m_FontSize -> value());
+    expt -> set_Spacing(m_Spacing -> value());
   }
 
   QDialog::accept();

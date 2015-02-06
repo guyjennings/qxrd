@@ -1,15 +1,15 @@
 #ifndef QXRDPLOTSETTINGS_H
 #define QXRDPLOTSETTINGS_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdsettingssaver-ptr.h"
 
-class QxrdPlotSettings : public QObject
+class QxrdPlotSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdPlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdPlotSettings(QString name, QxrdSettingsSaverWPtr saver, QObject *parent);
   
   Q_PROPERTY(double xMouse READ get_XMouse WRITE set_XMouse STORED false)
   QCEP_DOUBLE_PROPERTY(XMouse)
@@ -28,10 +28,6 @@ public:
 
   Q_PROPERTY(bool y2AxisLog READ get_Y2AxisLog WRITE set_Y2AxisLog)
   QCEP_BOOLEAN_PROPERTY(Y2AxisLog)
-
-public:
-  virtual void readSettings(QSettings *settings, QString section);
-  virtual void writeSettings(QSettings *settings, QString section);
 
 signals:
   

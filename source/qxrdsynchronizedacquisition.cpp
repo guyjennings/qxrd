@@ -6,8 +6,7 @@
 #include "qxrdsettingssaver.h"
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdSettingsSaverPtr saver, QxrdAcquisition *acq) :
-  QObject(),
-  m_ObjectNamer(this, "synchronization"),
+  QcepObject("synchronization", NULL),
   m_SyncAcquisitionMode(saver, this,"syncAcquisitionMode", 0, "Synchronized Acquisition Mode (0 = None, 1 = Stepped, 2 = Continuous)"),
   m_SyncAcquisitionWaveform(saver, this,"syncAcquisitionWaveform", 0,
                             "Synchronized Acquisition Waveform (0 = Square, 1 = Sine, 2 = Triangle, 3 = Sawtooth, 4 = Bipolar Triangle)"),
@@ -18,6 +17,7 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdSettingsSaverPtr sa
   m_SyncAcquisitionMaximum(saver, this,"syncAcquisitionMaximum", 5.0, "Synchronized Acquisition Maximum (in Volts)"),
   m_SyncAcquisitionSymmetry(saver, this,"syncAcquisitionSymmetry", 0.0, "Synchronized Acquisition Symmetry (0 = symmetric)"),
   m_SyncAcquisitionPhaseShift(saver, this,"syncAcquisitionPhaseShift", 0.0, "Synchronized Acquisition Phase Shift (deg)"),
+  m_SyncAcquisitionManualValue(saver, this,"syncAcquisitionManualValue", 0.0, "Manual Output Voltage (in Volts)"),
   m_Acquisition(acq),
   m_AcquisitionParms(NULL),
   m_NIDAQPlugin(NULL),
@@ -195,18 +195,26 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
   }
 }
 
-void QxrdSynchronizedAcquisition::readSettings(QSettings *settings, QString section)
+void QxrdSynchronizedAcquisition::setManualOutput()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  if (m_Acquisition && m_NIDAQPlugin) {
+    QString fullChannel = get_SyncAcquisitionOutputChannel();
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+    m_Acquisition->printMessage(tr("Manually Setting %1 to %2 V")
+                                .arg(fullChannel)
+                                .arg(get_SyncAcquisitionManualValue()));
+
+    m_NIDAQPlugin->setAnalogOutput(fullChannel, get_SyncAcquisitionManualValue());
+  }
 }
 
-void QxrdSynchronizedAcquisition::writeSettings(QSettings *settings, QString section)
+void QxrdSynchronizedAcquisition::triggerOnce()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  if (m_Acquisition && m_NIDAQPlugin) {
+    QxrdAcquisitionParameterPack parms = m_Acquisition->acquisitionParameterPack();
+    prepareForAcquisition(&parms);
+    m_NIDAQPlugin->triggerAnalogWaveform();
+  }
 }
 
 QVector<double>  QxrdSynchronizedAcquisition::outputTimes()

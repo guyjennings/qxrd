@@ -16,37 +16,25 @@ macx {
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent
 
-# POST_TARGETDEPS += install
-#target.path = ../app
-INSTALLS += target
-CONFIG += qt #profile
+CONFIG += qt
+
 QT += network \
     script \
     scripttools
-macx:#CONFIG += x86
-else:unix {
+
+unix {
     message(Version = $${VERSION})
     message(Plugin path = $${QXRD_PLUGIN_PATH})
 }
+
 DEFINES += QXRD_VERSION=\"$$VERSION\"
+
 !isEmpty(QXRD_PLUGIN_PATH):DEFINES += QXRD_PLUGIN_PATH=\"$$QXRD_PLUGIN_PATH\"
+
 *g++* { 
     QMAKE_CXXFLAGS += -g
     QMAKE_CFLAGS += -g
     QMAKE_LFLAGS += -g
-}
-vectorize { 
-    QMAKE_CXXFLAGS += -msse2 \
-        -ftree-vectorize \
-        -ftree-vectorizer-verbose=5
-    QMAKE_CFLAGS += -msse2 \
-        -ftree-vectorize \
-        -ftree-vectorizer-verbose=5
-}
-profile { 
-    QMAKE_CXXFLAGS += -pg
-    QMAKE_CFLAGS += -pg
-    QMAKE_LFLAGS += -pg
 }
 
 MOC_DIR = moc
@@ -62,7 +50,6 @@ RESOURCES += qxrdresources.qrc
 
 INCLUDEPATH += qceplib
 
-# RESOURCES.depends += help/*.html
 OTHER_FILES += help/qxrdhelptext.html \
     help/qxrdhelpscript.html \
     help/qxrdhelpscriptfunctions.html \
@@ -85,7 +72,10 @@ OTHER_FILES += help/qxrdhelptext.html \
     unsubtractDark.js \
     qxrdexampleusergeometry.js \
     qxrdexampleuserabsorption.js \
-    help/qxrdhelpuserfunctions.html
+    help/qxrdhelpuserfunctions.html \
+    calgrid.js \
+    findring.js \
+    dumpRings.js
 DISTFILES += qxrd.dox \
     download/index.php \
     images/*.* \
@@ -95,17 +85,23 @@ DISTFILES += qxrd.dox \
     tiffconfig/win32/tiffconf.h \
     tiffconfig/macx/tif_config.h \
     tiffconfig/macx/tiffconf.h
-include("../qwt-5.2.pri")
-#include("../qceplib.pri")
-include("qxrd.levmar.pri")
-include(submodules/qceplib/qceplib.pri)
-include(submodules/qceplib/qt-hdf5.pri)
 
-INCLUDEPATH += submodules/qceplib
+include(submodules/qceplib/qceplib-base.pri)
+include(submodules/qceplib/qceplib-qwt.pri)
+include(submodules/qceplib/qceplib-mar345.pri)
+include(submodules/qceplib/qceplib-cbf.pri)
+include(submodules/qceplib/qceplib-tiff.pri)
+include(submodules/qceplib/qceplib-levmar.pri)
 
-# include("qxrd-cuda.pri")
+macx {
+include(submodules/qceplib/qceplib-szip.pri)
+include(submodules/qceplib/qceplib-zlib.pri)
+include(submodules/qceplib/qceplib-hdf5.pri)
+}
+
+include(submodules/qceplib/qceplib-specserver.pri)
+
 HEADERS += \
-#    submodules/qceplib/qspecserver.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
     qxrddetector.h \
@@ -118,14 +114,34 @@ HEADERS += \
     qxrdacquisitiondialog-ptr.h \
     qxrdacquisitionextrainputsdialogsettings.h \
     qxrdhelpbrowser.h \
-    qxrdobjectnamer.h \
     qxrduserscriptdialog.h \
     qxrdsynchronizedacquisitiondialogsettings.h \
     qxrdsynchronizedacquisitionplotsettings.h \
-    qxrdimagedataformatcbf.h
+    qxrdimagedataformatcbf.h \
+    qxrddistortioncorrection.h \
+    qxrddistortioncorrection-ptr.h \
+    qxrddistortioncorrectiondialog.h \
+    qxrddistortioncorrectiondialogsettings.h \
+    qxrddistortioncorrectionplot.h \
+    qxrddistortioncorrectionplotsettings.h \
+    qxrdplotvectorfieldcurve.h \
+    qxrdpoint4d.h \
+    qxrdplotvectorfielddata.h \
+    qxrdscriptdialog.h \
+    qxrdscriptdialogsettings.h \
+    qxrdscripteditwidget.h \
+    qxrdpowderpoint.h \
+    qxrdpowderpointproperty.h \
+    qxrdfitter.h \
+    qxrdfitterpeakpoint.h \
+    qxrdfitterringpoint.h \
+    qxrdfitterpeakorring.h \
+    qxrdfitterringcircle.h \
+    qxrdfitterringellipse.h \
+    triangulate.h \
+    qxrdplanefitter.h
 
 SOURCES += \
-#    submodules/qceplib/qspecserver.cpp \
     qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
     qxrddetector.cpp \
@@ -135,11 +151,30 @@ SOURCES += \
     qxrddetectorfilewatcher.cpp \
     qxrdacquisitionextrainputsdialogsettings.cpp \
     qxrdhelpbrowser.cpp \
-    qxrdobjectnamer.cpp \
     qxrduserscriptdialog.cpp \
     qxrdsynchronizedacquisitiondialogsettings.cpp \
     qxrdsynchronizedacquisitionplotsettings.cpp \
-    qxrdimagedataformatcbf.cpp
+    qxrdimagedataformatcbf.cpp \
+    qxrddistortioncorrection.cpp \
+    qxrddistortioncorrectiondialog.cpp \
+    qxrddistortioncorrectiondialogsettings.cpp \
+    qxrddistortioncorrectionplot.cpp \
+    qxrddistortioncorrectionplotsettings.cpp \
+    qxrdplotvectorfieldcurve.cpp \
+    qxrdpoint4d.cpp \
+    qxrdplotvectorfielddata.cpp \
+    qxrdscriptdialog.cpp \
+    qxrdscriptdialogsettings.cpp \
+    qxrdscripteditwidget.cpp \
+    qxrdpowderpoint.cpp \
+    qxrdpowderpointproperty.cpp \
+    qxrdfitter.cpp \
+    qxrdfitterpeakpoint.cpp \
+    qxrdfitterringpoint.cpp \
+    qxrdfitterpeakorring.cpp \
+    qxrdfitterringcircle.cpp \
+    qxrdfitterringellipse.cpp \
+    qxrdplanefitter.cpp
 
 OTHER_FILES += testImage.js
 
@@ -235,30 +270,10 @@ HEADERS += TODO.h \
     qxrdgeneratetestimage-ptr.h \
     qxrdfitparameter.h \
     qxrdfitparameter-ptr.h \
-    qxrdringfitparameters.h \
-    qxrdringfitparameters-ptr.h \
-    qxrdringsetfitparameters.h \
-    qxrdringsetfitparameters-ptr.h \
-    qxrdringsampleddata.h \
-    qxrdringsampleddata-ptr.h \
-    qxrdringsetsampleddata.h \
-    qxrdringsetsampleddata-ptr.h \
-    qxrdringsetresampler.h \
-    qxrdringsetfitrefiner.h \
-    qxrdringfitrefiner.h \
-    qxrdringresampler.h \
-    qxrdresampler.h \
-    qxrdfitrefiner.h \
     qxrdsimpleserver.h \
     qxrdsimpleserver-ptr.h \
     qxrdsimpleserverthread.h \
     qxrdsimpleserverthread-ptr.h \
-    qxrdpowderfitwidget.h \
-    qxrdpowderfitimageplot.h \
-    qxrdpowderfitidentifypage.h \
-    qxrdpowderfitrefinepage.h \
-    qxrdpowderfitresultspage.h \
-    qxrdpowderfitdialog.h \
     qxrdcenterstepspinner.h \
     qxrdsettingssaver.h \
     qxrdsettingssaver-ptr.h \
@@ -330,7 +345,8 @@ HEADERS += TODO.h \
     qxrdhistogramplotsettings.h \
     qxrdinfodialogsettings.h \
     qxrdcenterfinderplotsettings.h \
-    qxrdsliceplotsettings.h
+    qxrdsliceplotsettings.h \
+    triangulate.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -394,24 +410,8 @@ SOURCES += qxrd.cpp \
     qxrddetectorgeometry.cpp \
     qxrdgeneratetestimage.cpp \
     qxrdfitparameter.cpp \
-    qxrdringfitparameters.cpp \
-    qxrdringsetfitparameters.cpp \
-    qxrdringsampleddata.cpp \
-    qxrdringsetsampleddata.cpp \
-    qxrdringsetresampler.cpp \
-    qxrdringsetfitrefiner.cpp \
-    qxrdringfitrefiner.cpp \
-    qxrdringresampler.cpp \
-    qxrdresampler.cpp \
-    qxrdfitrefiner.cpp \
     qxrdsimpleserver.cpp \
     qxrdsimpleserverthread.cpp \
-    qxrdpowderfitwidget.cpp \
-    qxrdpowderfitimageplot.cpp \
-    qxrdpowderfitidentifypage.cpp \
-    qxrdpowderfitrefinepage.cpp \
-    qxrdpowderfitresultspage.cpp \
-    qxrdpowderfitdialog.cpp \
     qxrdcenterstepspinner.cpp \
     qxrdsettingssaver.cpp \
     qxrdplotimage.cpp \
@@ -465,14 +465,15 @@ SOURCES += qxrd.cpp \
     qxrdhistogramplotsettings.cpp \
     qxrdinfodialogsettings.cpp \
     qxrdcenterfinderplotsettings.cpp \
-    qxrdsliceplotsettings.cpp
+    qxrdsliceplotsettings.cpp \
+    triangulate.c
+
 FORMS = qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
     qxrdfilebrowser.ui \
     qxrdimagecalculator.ui \
     qxrdexperimentpreferencesdialog.ui \
-    qxrdpowderfitwidget.ui \
     qxrdmaskdialog.ui \
     qxrdsynchronizedacquisitiondialog.ui \
     qxrddisplaydialog.ui \
@@ -485,7 +486,10 @@ FORMS = qxrdwindow.ui \
     qxrdwelcomerecentitem.ui \
     qxrdacquisitiondialog.ui \
     qxrdacquisitionextrainputsdialog.ui \
-    qxrduserscriptdialog.ui
+    qxrduserscriptdialog.ui \
+    qxrddistortioncorrectiondialog.ui \
+    qxrdscriptdialog.ui
+
 macx:
 else:unix:LIBS += -ltiff
 else:win32 { 
@@ -502,110 +506,192 @@ contains(DEFINES,HAVE_PERKIN_ELMER) {
 
 OTHER_FILES += qxrd.rc \
     qxrd.nsi \
+    qxrd-qt5.nsi \
     qxrd-cuda.pri \
     HeaderTemplates.txt
 
-win32 { # Copy QT Libraries into app directory
-#  PRE_TARGETDEPS += app
-#  QMAKE_EXTRA_TARGETS += app
+win32 {
+# Copy QT Libraries into app directory
   LIBDIR = $$[QT_INSTALL_BINS]
   LIBDIR_WIN = $${replace(LIBDIR, /, \\)}
+  LIBDIR_MINGW = $${replace(LIBDIR, \\\\, /)}
 
-  win32-g++ {
-    exists($${LIBDIR}/libgcc_s_dw2-1.dll) {
-      message("MINGW found in $${LIBDIR}/libgcc_s_dw2-1.dll")
-      QMAKE_EXTRA_TARGETS += libgcc
-      PRE_TARGETDEPS   += ../libgcc_s_dw2-1.dll
-      libgcc.target   = ../libgcc_s_dw2-1.dll
-      libgcc.depends  = $${LIBDIR}/libgcc_s_dw2-1.dll
-      libgcc.commands = $(COPY_FILE) $${LIBDIR_WIN}\\libgcc_s_dw2-1.dll ..\\libgcc_s_dw2-1.dll
-    }
+  message(Libdir: $${LIBDIR})
+  message(Libdir_win: $${LIBDIR_WIN})
+  message(Libdir_mingw: $${LIBDIR_MINGW})
+  message($${replace(LIBDIR, \\\\, /)})
 
-    exists($${LIBDIR}/mingwm10.dll) {
-      message("MINGW found in $${LIBDIR}/mingwm10.dll")
-      QMAKE_EXTRA_TARGETS += mingwm10
-      PRE_TARGETDEPS   += ../mingwm10.dll
-      mingwm10.target   = ../mingwm10.dll
-      mingwm10.depends  = $${LIBDIR}/QtCored4.dll
-      mingwm10.commands = $(COPY_FILE) $${LIBDIR_WIN}\\mingwm10.dll ..\\mingwm10.dll
-    }
-  }
+  QMAKE_EXTRA_TARGETS += qtlibs
 
   isEqual(QT_MAJOR_VERSION, 5) {
     CONFIG(debug, debug|release) {
-      libs = Qt5Cored Qt5Networkd Qt5Guid Qt5Scriptd Qt5Widgetsd
+      libs =  Qt5Cored \
+              Qt5Networkd \
+              Qt5Guid \
+              Qt5Scriptd \
+              Qt5Widgetsd \
+              Qt5Svgd \
+              Qt5OpenGLd \
+              Qt5PrintSupportd \
+              Qt5Concurrentd
+
+      platform = qwindowsd
+
+      win32-msvc* {
+        libs += libEGLd libGLESv2d
+      }
     } else {
-      libs = Qt5Core Qt5Network Qt5Gui Qt5Script Qt5Widgets
+      libs =  Qt5Core \
+              Qt5Network \
+              Qt5Gui \
+              Qt5Script \
+              Qt5Widgets \
+              Qt5Svg \
+              Qt5OpenGL \
+              Qt5PrintSupport \
+              Qt5Concurrent
+
+      platform = qwindows
+
+      win32-msvc* {
+        libs += libEGL libGLESv2
+      }
     }
+
+    win32-msvc2013 {
+      libs += icudt52 icuin52 icuuc52
+    } else:win32-msvc* {
+      libs += icudt51 icuin51 icuuc51
+    } else:win32-g++ {
+      libs += libgcc_s_dw2-1 libwinpthread-1 libstdc++-6 icudt52 icuin52 icuuc52
+    }
+
+    QMAKE_EXTRA_TARGETS += qtplatformdir
+    qtplatformdir.target = ../platforms
+
+    win32-msvc* {
+      qtplatformdir.commands = if not exist ..\\platforms $(MKDIR) ..\\platforms
+    } else:win32-g++ {
+      qtplatformdir.commands = $(MKDIR) -p ../platforms
+    }
+
+    QMAKE_EXTRA_TARGETS += qtplatform
+    qtplatform.target   = ../platforms/$${platform}.dll
+    qtplatform.depends  = qtplatformdir $${LIBDIR}/../plugins/platforms/$${platform}.dll
+    win32-g++ {
+      qtplatform.commands += $(COPY_FILE) $${LIBDIR_MINGW}/../plugins/platforms/$${platform}.dll ../platforms/$${platform}.dll
+    } else {
+      qtplatform.commands += $(COPY_FILE) /Y $${LIBDIR_WIN}\\..\\plugins\\platforms\\$${platform}.dll ..\\platforms\\$${platform}.dll
+    }
+
+    qtlibs.depends += qtplatform
+
+    for(lib, libs) {
+      !build_pass:message(Target $${lib})
+      qtlibs.depends     += $${LIBDIR}/$${lib}.dll
+      win32-g++ {
+        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_MINGW}/$${lib}.dll ../$${lib}.dll &
+      } else {
+        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
+      }
+    }
+
+    QMAKE_CLEAN += ../platforms/*
+    QMAKE_CLEAN += ../platforms
   }
 
   isEqual(QT_MAJOR_VERSION, 4) {
     CONFIG(debug, debug|release) {
-      libs = QtCored4 QtNetworkd4 QtGuid4 QtScriptd4
+      libs = QtCored4 QtNetworkd4 QtGuid4 QtScriptd4 QtOpenGLd4 QtSvgd4
     } else {
-      libs = QtCore4 QtNetwork4 QtGui4 QtScript4
+      libs = QtCore4 QtNetwork4 QtGui4 QtScript4 QtOpenGL4 QtSvg4
+    }
+
+    win32-g++ {
+      libs += libgcc_s_dw2-1 libwinpthread-1 libstdc++-6
+    }
+
+    for(lib, libs) {
+      !build_pass:message(Target $${lib})
+
+      qtlibs.depends     += $${LIBDIR}/$${lib}.dll
+      win32-g++ {
+        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_MINGW}/$${lib}.dll ../$${lib}.dll &
+      } else {
+        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
+      }
     }
   }
 
-  QMAKE_EXTRA_TARGETS += qtlibs
-  PRE_TARGETDEPS      += qtlibs
-  qtlibs.target       += qtlibs
+  QMAKE_CLEAN += ../*.dll
+  QMAKE_CLEAN += ../plugins/*
+  QMAKE_CLEAN += ../plugins
 
-  for(lib, libs) {
-    message(Copying $${lib})
-    qtlibs.depends    += $${LIBDIR_WIN}\\$${lib}.dll
-    qtlibs.commands   += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
-  }
-
-  QMAKE_DISTCLEAN += /Q ..\\*.dll
-  QMAKE_DISTCLEAN += ..\\plugins\\*
-  QMAKE_DISTCLEAN += ..\\plugins
+  PRE_TARGETDEPS  += qtlibs
 }
 
+TARGET.depends += qtlibs
+
 win32 { # Make NSIS installer...
-#  CONFIG(release, debug|release) {
     OUT_PWD_WIN = $${replace(OUT_PWD, /, \\)}
     PWD_WIN = $${replace(PWD, /, \\)}
 
     exists("c:/Program Files/NSIS/makensis.exe") {
-      QMAKE_POST_LINK = "\"c:\\Program Files\\NSIS\\makensis.exe\"" /V4
+      win32-g++ {
+        QMAKE_POST_LINK = "\"c:/Program Files/NSIS/makensis.exe\"" //V4
+      } else {
+        QMAKE_POST_LINK = "\"c:\\Program Files\\NSIS\\makensis.exe\"" /V4
+      }
       message("NSIS found in Program Files")
     }
 
     exists("c:/Program Files (x86)/NSIS/makensis.exe") {
-      QMAKE_POST_LINK = "\"c:\\Program Files (x86)\\NSIS\\makensis.exe\"" /V4
+      win32-g++ {
+        QMAKE_POST_LINK = "\"c:/Program Files (x86)/NSIS/makensis.exe\"" //V4
+      } else {
+        QMAKE_POST_LINK = "\"c:\\Program Files (x86)\\NSIS\\makensis.exe\"" /V4
+      }
       message("NSIS found in Program Files (x86)")
     }
 
     !isEmpty(QMAKE_POST_LINK) {
       contains(QMAKE_HOST.arch,x86_64) {
-        QMAKE_POST_LINK += /DWIN64
+        win32-g++ {
+          QMAKE_POST_LINK += //DWIN64
+        } else {
+          QMAKE_POST_LINK += /DWIN64
+        }
       }
 
       message("Generate NSIS installer for $${QXRDSUFFIXSTR}")
 
-      QMAKE_POST_LINK += /DVERSION=$${VERSION}
-      CONFIG(release, debug|release) {
-        QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}\"
-        QMAKE_POST_LINK += /DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+      win32-g++ {
+        QMAKE_POST_LINK += //DVERSION=$${VERSION} //DAPPDIR=\"$${OUT_PWD_WIN}\\..\\.\"
       } else {
-        QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}-dbg\"
-        QMAKE_POST_LINK += /DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
+        QMAKE_POST_LINK += /DVERSION=$${VERSION} /DAPPDIR=\"$${OUT_PWD_WIN}\\..\\.\"
       }
-      QMAKE_POST_LINK += /DAPPDIR=\"$${OUT_PWD_WIN}\\..\\.\"
 
-      QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd.nsi\"
-    }
-#  }
+      CONFIG(release, debug|release) {
+        win32-g++ {
+          QMAKE_POST_LINK += //DPREFIX=\"$${QXRDSUFFIX}\" //DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+        } else {
+          QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}\" /DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+        }
+      } else {
+        win32-g++ {
+          QMAKE_POST_LINK += //DPREFIX=\"$${QXRDSUFFIX}-dbg\" //DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
+        } else {
+          QMAKE_POST_LINK += /DPREFIX=\"$${QXRDSUFFIX}-dbg\" /DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
+        }
+      }
+
+      isEqual(QT_MAJOR_VERSION, 4) {
+        QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd.nsi\"
+      } else {
+        QMAKE_POST_LINK += \"$${PWD_WIN}\\..\\qxrd-qt5.nsi\"
+      }
+   }
 }
-
-#for(m, QT) {
-#  message("In source.pro QT contains $${m}")
-#}
-
-
-
-
 
 
 

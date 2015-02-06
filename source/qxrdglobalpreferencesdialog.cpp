@@ -87,15 +87,16 @@ void QxrdGlobalPreferencesDialog::accept()
   QDialog::accept();
 }
 
-void QxrdGlobalPreferencesDialog::setupDebugWidgets(int dbg)
+void QxrdGlobalPreferencesDialog::setupDebugWidgets(qint64 dbg)
 {
   if (g_DebugLevel == NULL) {
     printf("g_DebugLevel == NULL in QxrdGlobalPreferencesDialog::setupDebugWidgets\n");
   } else {
     QGridLayout *grid = new QGridLayout(m_DebugWidgets);
 
-    for (int mask=1; mask; mask <<= 1) {
-      QString msg = g_DebugLevel->message(mask);
+    for (int i=0; i<64; i++) {
+      qint64 mask=((qint64)1)<<i;
+      QString msg = g_DebugLevel->message(i);
 
       if (msg.length() > 0) {
         QCheckBox *cb = new QCheckBox(msg);
@@ -122,7 +123,7 @@ void QxrdGlobalPreferencesDialog::setupDebugWidgets(int dbg)
   }
 }
 
-int QxrdGlobalPreferencesDialog::readDebugWidgets()
+qint64 QxrdGlobalPreferencesDialog::readDebugWidgets()
 {
   int mask = 1;
   int newDbg = 0;

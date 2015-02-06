@@ -65,6 +65,7 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
 
     acq -> prop_LiveViewAtIdle() -> linkTo(this -> m_LiveViewAtIdle);
     acq -> prop_AcquisitionCancelsLiveView() -> linkTo(this -> m_AcquisitionCancelsLiveView);
+    acq -> prop_RetryDropped() -> linkTo(this -> m_RetryDropped);
   } else {
     printf("acq == NULL in QxrdAcquisitionDialog::QxrdAcquisitionDialog");
   }
@@ -80,6 +81,8 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     exp  -> prop_ScanFileName() -> linkTo(this -> m_ScanFileName);
     exp  -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
     exp  -> prop_DetectorNumber() -> linkTo(this -> m_DetectorNumber);
+
+    connect(m_LogFileName, SIGNAL(editingFinished()), exp, SLOT(openNewLogFile()));
   }
 
   QxrdDataProcessorPtr procp(m_DataProcessor);
@@ -88,6 +91,7 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     procp -> prop_Average()                -> linkTo(this -> m_AverageDisplay);
     procp -> prop_CorrectionQueueLength()  -> linkTo(this -> m_CorrectionBacklog);
     procp -> prop_IntegrationQueueLength() -> linkTo(this -> m_IntegrationBacklog);
+    procp -> prop_SaverQueueLength()       -> linkTo(this -> m_SaverBacklog);
   }
 
   QxrdWindowPtr wp = m_Window;

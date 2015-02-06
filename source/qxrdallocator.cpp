@@ -10,8 +10,7 @@
 
 QxrdAllocator::QxrdAllocator
 (QcepSettingsSaverPtr saver)
-  : QObject(NULL),
-    m_ObjectNamer(this, "allocator"),
+  : QcepObject("allocator", NULL),
     m_AllocatedMemory(0),
     m_AllocatedMemoryMB(0),
     m_Max(saver, this, "max", 800, "Maximum Image Memory (MB)"),
@@ -56,14 +55,14 @@ void QxrdAllocator::writeSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepObject::writeSettings(settings, section);
 }
 
 void QxrdAllocator::readSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepObject::readSettings(settings, section);
 
   if (get_TotalBufferSizeMB32() > 100000000) {
     set_TotalBufferSizeMB32(get_TotalBufferSizeMB32()/MegaBytes);

@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include "qxrdapplication.h"
 
-QxrdResponseTimer::QxrdResponseTimer(int interval,  QObject *parent) :
+QxrdResponseTimer::QxrdResponseTimer(int interval, int allowance,  QObject *parent) :
   QObject(parent),
-  m_ResponseInterval(interval)
+  m_ResponseInterval(interval),
+  m_ResponseAllowance(allowance)
 {
   connect(&m_ResponseTimer, SIGNAL(timeout()), this, SLOT(onTimeout()));
 
@@ -16,7 +17,7 @@ void QxrdResponseTimer::onTimeout()
 {
   int elapsedTime = m_ResponseTime.restart();
 
-  if (g_Application && abs(elapsedTime-m_ResponseInterval) > 1000) {
+  if (g_Application && abs(elapsedTime-m_ResponseInterval) > m_ResponseAllowance) {
     g_Application->printMessage(tr("Excessive response time %1").arg(elapsedTime-m_ResponseInterval));
   }
 }

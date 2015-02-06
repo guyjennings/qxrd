@@ -518,15 +518,37 @@ void QxrdFileBrowser::doCorrelate()
   }
 }
 
+void QxrdFileBrowser::doEvaluate(QString filePath)
+{
+//  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+//  QModelIndexList rows = sel->selectedRows();
+//  QModelIndex index;
+//  QStringList paths;
+
+//  foreach(index, rows) {
+//    if (!m_Model->isDir(index)) {
+//      paths.append(m_Model->filePath(index));
+//    }
+//  }
+
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(exp.data(), "evaluateScriptFile", Q_ARG(QString, filePath)));
+  }
+}
+
 void QxrdFileBrowser::doRefreshBrowser()
 {
   m_Model->refresh();
 }
 
-void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
+void QxrdFileBrowser::mousePressed(QModelIndex index)
 {
   if (QApplication::mouseButtons() & Qt::RightButton) {
     //    g_Application->printMessage("Right mouse pressed");
+
+    QString filePath = m_Model->filePath(index);
 
     QMenu *actions = new QMenu(this);
     QAction *open = actions->addAction("Open");
@@ -542,6 +564,8 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
     QAction *projectY = actions->addAction("Project Along Y");
     QAction *projectZ = actions->addAction("Project Along Z");
     QAction *correlate = actions->addAction("Correlate Images with Current Image");
+    QAction *evaluate = actions->addAction("Evaluate scripts");
+
     QAction *action = actions->exec(QCursor::pos());
 
     if (action == open) {
@@ -570,6 +594,8 @@ void QxrdFileBrowser::mousePressed(QModelIndex /*index*/)
       doProjectZ();
     } else if (action == correlate) {
       doCorrelate();
+    } else  if (action == evaluate) {
+      doEvaluate(filePath);
     }
   }
 }

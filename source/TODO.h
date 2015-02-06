@@ -664,11 +664,11 @@ always saved.
 Add a status function which waits until sufficient
 pre-trigger files have been acquired.
 
--------------------------------------------------------
+//-------------------------------------------------------
 
-Start thinking about how to synchronise acquisition with
-external processes - possible support for running a
-National Instruments MIO card in sync with acquisition
+//Start thinking about how to synchronise acquisition with
+//external processes - possible support for running a
+//National Instruments MIO card in sync with acquisition
 
 //-------------------------------------------------------
 
@@ -712,6 +712,14 @@ Crashes on exit from PE acquisition
 //May crash on exit if live view active
 
 //Fixed by improving memory allocation tracking by using more QSharedPointers
+
+-------------------------------------------------------
+
+Mouse click behavior for pickers needs to be reviewed/modified - esp. polygon pickers
+
+-------------------------------------------------------
+
+Investigate display update behaviour when scaling parameters changed
 
 -------------------------------------------------------
 

@@ -286,6 +286,31 @@ Error:
   return;
 }
 
+void QxrdNIDAQPlugin::setAnalogOutput(QString channelName, double value)
+{
+  QMutexLocker lock(&m_Mutex);
+
+  int error;
+
+  if (m_AOTaskHandle) {
+    DAQmxStopTask(m_AOTaskHandle);
+    DAQmxClearTask(m_AOTaskHandle);
+    m_AOTaskHandle = 0;
+  }
+
+  DAQmxErrChk(DAQmxCreateTask("qxrd-analog-out", &m_AOTaskHandle));
+  DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle,
+                                        qPrintable(channelName),
+                                        NULL,
+                                        -10.0, 10.0,
+                                        DAQmx_Val_Volts, NULL));
+
+  DAQmxErrChk(DAQmxWriteAnalogScalarF64(m_AOTaskHandle, true, 10.0, value, NULL));
+
+Error:
+  return;
+}
+
 void   QxrdNIDAQPlugin::setAnalogWaveform(QString chan, double rate, double wfm[], int size)
 {
   QMutexLocker lock(&m_Mutex);
@@ -341,6 +366,18 @@ void QxrdNIDAQPlugin::triggerAnalogWaveform()
     DAQmxErrChk(
           DAQmxStartTask(m_AOTaskHandle)
           );
+  }
+
+Error:
+  return;
+}
+
+void QxrdNIDAQPlugin::setAnalogOutput(double value)
+{
+  int error;
+
+  if (m_AOTaskHandle) {
+    DAQmxErrChk(DAQmxWriteAnalogScalarF64(m_AOTaskHandle, true, 10.0, value, NULL));
   }
 
 Error:
@@ -857,24 +894,6 @@ Error:
   DAQmxClearTask(task);
 
   return res;
-}
-
-void QxrdNIDAQPlugin::setAnalogOutput(QString channelName, double value)
-{
-  TaskHandle task = 0;
-  int error;
-
-  DAQmxErrChk(DAQmxCreateTask("qxrd-analog-out", &task));
-  DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle,
-                                        qPrintable(channelName),
-                                        NULL,
-                                        -10.0, 10.0,
-                                        DAQmx_Val_Volts, NULL));
-
-  DAQmxErrChk(DAQmxWriteAnalogScalarF64(task, true, 10.0, value, NULL));
-
-Error:
-  DAQmxClearTask(task);
 }
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))

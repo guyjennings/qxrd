@@ -6,9 +6,9 @@
 class QxrdPlotSlicer : public QxrdImagePlotMeasurer
 {
 public:
-  QxrdPlotSlicer(QwtPlotCanvas *canvas, QxrdImagePlot *plot);
+  QxrdPlotSlicer(QWidget *canvas, QxrdImagePlot *plot);
 
-//  virtual QwtText trackerText(const QwtDoublePoint &pos) const;
+//  virtual QwtText trackerTextF(const QPointF &pos) const;
 
 private:
   QxrdImagePlot *m_Plot;

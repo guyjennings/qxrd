@@ -4,7 +4,6 @@
 #include <QObject>
 #include "qcepproperty.h"
 #include "qxrdplotsettings.h"
-#include "qxrdobjectnamer.h"
 
 class QxrdImagePlotSettings : public QxrdPlotSettings
 {
@@ -12,9 +11,6 @@ class QxrdImagePlotSettings : public QxrdPlotSettings
 public:
   explicit QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
   
-private:
-  QxrdObjectNamer m_ObjectNamer;
-
 public:
   Q_PROPERTY(double displayMinimumPctle     READ get_DisplayMinimumPctle WRITE set_DisplayMinimumPctle)
   QCEP_DOUBLE_PROPERTY(DisplayMinimumPctle)
@@ -64,15 +60,14 @@ public:
   Q_PROPERTY(double qMouse READ get_QMouse WRITE set_QMouse STORED false)
   QCEP_DOUBLE_PROPERTY(QMouse)
 
+  Q_PROPERTY(double rMouse READ get_RMouse WRITE set_RMouse STORED false)
+  QCEP_DOUBLE_PROPERTY(RMouse)
+
   Q_PROPERTY(double valMouse READ get_ValMouse WRITE set_ValMouse STORED false)
   QCEP_DOUBLE_PROPERTY(ValMouse)
 
   Q_PROPERTY(double maskMouse READ get_MaskMouse WRITE set_MaskMouse STORED false)
   QCEP_DOUBLE_PROPERTY(MaskMouse)
-
-public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
 
 signals:
   

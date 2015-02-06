@@ -1,21 +1,21 @@
 #include "qxrdacquisitionextrainputsdialogsettings.h"
 
 QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettings(QxrdSettingsSaverWPtr saver, QObject *parent) :
-  QObject(parent)
+  QcepObject("extraInputsDialog", parent)
 {
-  m_AcquisitionExtraInputsPlotSettings = QxrdPlotSettingsPtr(new QxrdPlotSettings(saver, parent));
+  m_AcquisitionExtraInputsPlotSettings = QxrdPlotSettingsPtr(new QxrdPlotSettings("extraInputsPlot", saver, parent));
 }
 
 void QxrdAcquisitionExtraInputsDialogSettings::readSettings(QSettings *settings, QString section)
 {
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::readSettings(this, settings, section);
 
   m_AcquisitionExtraInputsPlotSettings->readSettings(settings, section+"/plot");
 }
 
 void QxrdAcquisitionExtraInputsDialogSettings::writeSettings(QSettings *settings, QString section)
 {
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::writeSettings(this, settings, section);
 
   m_AcquisitionExtraInputsPlotSettings->writeSettings(settings, section+"/plot");
 }

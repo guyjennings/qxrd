@@ -134,11 +134,15 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_SettingsMutex(),
   m_LastLockerCount(0)
 {
-#ifndef QT_NO_DEBUG
-  printf("QxrdApplication::QxrdApplication(%p)\n", this);
-#endif
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdApplication::QxrdApplication(%p)\n", this);
+  }
 
   g_Application = this;
+
+  QcepProperty::registerMetaTypes();
+  QxrdPowderPointProperty::registerMetaTypes();
+  QxrdPowderPointVectorProperty::registerMetaTypes();
 }
 
 bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
@@ -244,8 +248,6 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
   printMessage(tr("Current Path: %1").arg(QDir::currentPath()));
   printMessage(tr("Root Path %1").arg(QDir::rootPath()));
 
-  QcepProperty::registerMetaTypes();
-
   setupTiffHandlers();
 
   QThread::currentThread()->setObjectName("app");
@@ -255,7 +257,7 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
 
   printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
-  m_ResponseTimer = new QxrdResponseTimer(1000, this);
+//  m_ResponseTimer = new QxrdResponseTimer(30000, 5000, this);
 
   if (get_FreshStart()) {
     editGlobalPreferences();
@@ -275,10 +277,6 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
 QxrdApplication::~QxrdApplication()
 {
   m_Saver->performSave();
-
-  if (qcepDebug(DEBUG_APP)) {
-    printMessage("QxrdApplication::~QxrdApplication");
-  }
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdApplication::~QxrdApplication(%p)\n", this);
@@ -562,12 +560,12 @@ void QxrdApplication::readSettings()
 
   QxrdGlobalSettings settings(this);
 
-  readSettings(&settings);
+  readSettings(&settings, "application");
 }
 
-void QxrdApplication::readSettings(QSettings *settings)
+void QxrdApplication::readSettings(QSettings *settings, QString section)
 {
-  QcepProperty::readSettings(this, &staticMetaObject, "application", settings);
+  QcepProperty::readSettings(this, settings, section);
 
   if (m_Allocator) {
     m_Allocator->readSettings(settings, "allocator");
@@ -580,12 +578,12 @@ void QxrdApplication::writeSettings()
 
   QxrdGlobalSettings settings(this);
 
-  writeSettings(&settings);
+  writeSettings(&settings, "application");
 }
 
-void QxrdApplication::writeSettings(QSettings *settings)
+void QxrdApplication::writeSettings(QSettings *settings, QString section)
 {
-  QcepProperty::writeSettings(this, &staticMetaObject, "application", settings);
+  QcepProperty::writeSettings(this, settings, section);
 
   if (m_Allocator) {
     m_Allocator->writeSettings(settings, "allocator");
@@ -606,7 +604,7 @@ void QxrdApplication::loadPreferences(QString path)
 {
   QxrdGlobalSettings settings(path, QSettings::IniFormat);
 
-  readSettings(&settings);
+  readSettings(&settings, "application");
 }
 
 void QxrdApplication::doSavePreferences()
@@ -626,7 +624,7 @@ void QxrdApplication::savePreferences(QString path)
   {
     QxrdGlobalSettings settings(path+".new", QSettings::IniFormat);
 
-    writeSettings(&settings);
+    writeSettings(&settings, "application");
   }
 
   QFile::remove(path+".bak");
@@ -682,7 +680,24 @@ void QxrdApplication::doAboutQxrd()
 #endif
 
   about += tr("Qt Version %1\n").arg(qVersion());
-  about += tr("QWT Version %1").arg(QWT_VERSION_STR);
+  about += tr("Qceplib Version %1\n").arg(STR(QCEPLIB_VERSION));
+  about += tr("QWT Version %1\n").arg(STR(QCEPLIB_QWT_VERSION));
+  about += tr("Mar345 Version %1\n").arg(STR(QCEPLIB_MAR345_VERSION));
+  about += tr("CBF Version %1\n").arg(STR(QCEPLIB_CBF_VERSION));
+  about += tr("TIFF Version %1\n").arg(STR(QCEPLIB_TIFF_VERSION));
+  about += tr("LevMar Version %1\n").arg(STR(QCEPLIB_LEVMAR_VERSION));
+#ifdef QCEPLIB_ZLIB_VERSION
+  about += tr("ZLIB Version %1\n").arg(STR(QCEPLIB_ZLIB_VERSION));
+#endif
+
+#ifdef QCEPLIB_SZIP_VERSION
+  about += tr("SZIP Version %1\n").arg(STR(QCEPLIB_SZIP_VERSION));
+#endif
+
+#ifdef QCEPLIB_HDF5_VERSION
+  about += tr("HDF5 Version %1\n").arg(STR(QCEPLIB_HDF5_VERSION));
+#endif
+  about += tr("Spec Server Version %1\n").arg(STR(QCEPLIB_SPECSERVER_VERSION));
 
   QMessageBox::about(NULL, "QXRD", about);
 }

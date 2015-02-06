@@ -18,6 +18,8 @@ public:
   virtual void initialize();
   virtual int detectorType() const;
   virtual QString detectorTypeName() const;
+  virtual int detectorSubType() const;
+  virtual QString detectorAddress() const;
 
 signals:
 

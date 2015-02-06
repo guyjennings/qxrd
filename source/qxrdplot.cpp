@@ -7,6 +7,7 @@
 #include <qwt_plot_magnifier.h>
 #include <qwt_symbol.h>
 #include <qwt_legend.h>
+#include <qwt_picker_machine.h>
 #include "qxrdplotmeasurer.h"
 #include "qxrdplotzoomer.h"
 #include <stdio.h>
@@ -14,6 +15,9 @@
 #include <QMenu>
 #include <QContextMenuEvent>
 #include "qxrdapplication.h"
+#include <QPrinter>
+#include <QPrintDialog>
+#include <qwt_plot_renderer.h>
 
 QxrdPlot::QxrdPlot(QWidget *parent)
   : QwtPlot(parent),
@@ -40,7 +44,7 @@ void QxrdPlot::init(QxrdPlotSettingsWPtr settings)
   setCanvasBackground(QColor(Qt::white));
 
   m_Zoomer = new QxrdPlotZoomer(canvas(), this);
-  m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
+  m_Zoomer -> setStateMachine(new QwtPickerDragRectMachine());
   m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
   m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
 
@@ -52,7 +56,7 @@ void QxrdPlot::init(QxrdPlotSettingsWPtr settings)
   m_Zoomer -> setEnabled(true);
 
   m_Legend = new QwtLegend(this);
-  m_Legend -> setItemMode(QwtLegend::CheckableItem);
+  m_Legend -> setDefaultItemMode(QwtLegendData::Checkable);
 
   m_Panner = new QwtPlotPanner(canvas());
   m_Panner -> setEnabled(true);
@@ -85,6 +89,11 @@ void QxrdPlot::init(QxrdPlotSettingsWPtr settings)
     setX2AxisLog(set->get_X2AxisLog());
     setY2AxisLog(set->get_Y2AxisLog());
   }
+
+  if (m_Legend) {
+    connect(m_Legend, SIGNAL(clicked(const QVariant &,int)),      this, SLOT(onLegendClicked(const QVariant&, int)));
+    connect(m_Legend, SIGNAL(checked(const QVariant &,bool,int)), this, SLOT(onLegendChecked(const QVariant&, bool, int)));
+  }
 }
 
 void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
@@ -98,39 +107,39 @@ void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
   int styleIndex = (index / (nColors * nSymbols)) % nStyles;
 
   QPen pen;
-  QwtSymbol symb;
+  QwtSymbol *symb = new QwtSymbol();
   QBrush brush;
 
   switch (colorIndex) {
   case 0:
-    pen = QPen(Qt::black);
+    pen = QPen(QColor(255,0,0)); // red
     break;
   case 1:
-    pen = QPen(Qt::red);
+    pen = QPen(QColor(255,170,0)); // Orange
     break;
   case 2:
-    pen = QPen(Qt::green);
+    pen = QPen(QColor(255,232,137)); // Yellow
     break;
   case 3:
-    pen = QPen(Qt::blue);
+    pen = QPen(QColor(0,255,0)); // Green
     break;
   case 4:
-    pen = QPen(Qt::cyan);
+    pen = QPen(QColor(0,170,0)); // Dk green
     break;
   case 5:
-    pen = QPen(Qt::magenta);
+    pen = QPen(QColor(0,255,255)); // Cyan
     break;
   case 6:
-    pen = QPen(Qt::darkRed);
+    pen = QPen(QColor(0,170,255)); // Sea blue
     break;
   case 7:
-    pen = QPen(Qt::darkGreen);
+    pen = QPen(QColor(0,0,255)); // Blue
     break;
   case 8:
-    pen = QPen(Qt::darkBlue);
+    pen = QPen(QColor(145,0,255)); // Violet
     break;
   case 9:
-    pen = QPen(Qt::darkYellow);
+    pen = QPen(QColor(255,0,255)); // Magenta
     break;
   }
 
@@ -149,22 +158,22 @@ void QxrdPlot::setPlotCurveStyle(int index, QwtPlotCurve *curve)
     break;
   }
 
-  symb.setPen(pen);
-  symb.setBrush(QBrush(pen.color()));
-  symb.setSize(5,5);
+  symb->setPen(pen);
+  symb->setBrush(QBrush(pen.color()));
+  symb->setSize(5,5);
 
   switch (symbolIndex) {
   case 0:
-    symb.setStyle(QwtSymbol::Ellipse);
+    symb->setStyle(QwtSymbol::Ellipse);
     break;
   case 1:
-    symb.setStyle(QwtSymbol::Rect);
+    symb->setStyle(QwtSymbol::Rect);
     break;
   case 2:
-    symb.setStyle(QwtSymbol::XCross);
+    symb->setStyle(QwtSymbol::Triangle);
     break;
   case 3:
-    symb.setStyle(QwtSymbol::Cross);
+    symb->setStyle(QwtSymbol::DTriangle);
     break;
   }
 
@@ -181,6 +190,49 @@ void QxrdPlot::autoScale()
 
 //
 //  replot();
+}
+
+void QxrdPlot::printGraph()
+{
+  QPrinter printer( QPrinter::HighResolution );
+
+  QString docName = this->title().text();
+  if ( !docName.isEmpty() )
+  {
+    docName.replace ( QRegExp ( QString::fromLatin1 ( "\n" ) ), tr ( " -- " ) );
+    printer.setDocName ( docName );
+  }
+
+//  printer.setCreator( "Bode example" );
+  printer.setOrientation( QPrinter::Landscape );
+
+  QPrintDialog dialog( &printer );
+
+  if ( dialog.exec() ) {
+    QwtPlotRenderer renderer;
+
+    if ( printer.colorMode() == QPrinter::GrayScale ) {
+      renderer.setDiscardFlag( QwtPlotRenderer::DiscardBackground );
+      renderer.setDiscardFlag( QwtPlotRenderer::DiscardCanvasBackground );
+      renderer.setDiscardFlag( QwtPlotRenderer::DiscardCanvasFrame );
+//      renderer.setLayoutFlag( QwtPlotRenderer::FrameWithScales );
+    }
+
+    double gw = this->width();
+    double gh = this->height();
+    double pw = printer.width();
+    double ph = printer.height();
+    double scal = qMin( pw/gw, ph/gh);
+
+    pw = gw*scal;
+    ph = gh*scal;
+
+    QRectF rect(0,0, pw,ph);
+
+    QPainter p(&printer);
+
+    renderer.render( this, &p, rect);
+  }
 }
 
 void QxrdPlot::zoomIn()
@@ -214,35 +266,48 @@ void QxrdPlot::enableMeasuring()
   m_Measurer -> setEnabled(true);
 }
 
-void QxrdPlot::onLegendClicked(QwtPlotItem *item)
+void QxrdPlot::onLegendClicked(const QVariant &itemInfo, int index)
 {
   if (g_Application) {
-    g_Application->printMessage(tr("QxrdPlot::onLegendClicked(%1)").arg(item->title().text()));
+    g_Application->printMessage(tr("QxrdPlot::onLegendClicked(%1,%2)").arg(itemInfo.toString()).arg(index));
   }
 }
 
-void QxrdPlot::onLegendChecked(QwtPlotItem *item, bool checked)
+void QxrdPlot::onLegendChecked(const QVariant &itemInfo, bool on, int index)
 {
   if (g_Application) {
-    g_Application->printMessage(tr("QxrdPlot::onLegendChecked(%1,%2)").arg(item->title().text()).arg(checked));
+    g_Application->printMessage(tr("QxrdPlot::onLegendChecked(%1,%2,%3)").arg(itemInfo.toString()).arg(on).arg(index));
   }
+
+  QwtPlotItem *item = infoToItem(itemInfo);
 
   if (item) {
     QwtPlotCurve *pc = dynamic_cast<QwtPlotCurve*>(item);
 
     if (pc) {
       QPen pen = pc->pen();
-      QwtSymbol symb = pc->symbol();
+      const QwtSymbol *oldsym = pc->symbol();
+      QwtSymbol *sym = NULL;
 
-      if (checked) {
+      if (oldsym) {
+       sym = new QwtSymbol(oldsym->style(), oldsym->brush(), oldsym->pen(), oldsym->size());
+      }
+
+      if (on) {
         pen.setWidth(3);
-        symb.setSize(9,9);
+        if (sym) {
+          sym->setSize(9,9);
+        }
       } else {
         pen.setWidth(1);
-        symb.setSize(5,5);
+        if (sym) {
+          sym->setSize(5,5);
+        }
       }
       pc->setPen(pen);
-      pc->setSymbol(symb);
+      if (sym) {
+        pc->setSymbol(sym);
+      }
     }
 
     replot();
@@ -275,7 +340,7 @@ void QxrdPlot::setLogAxis(int axis, int isLog)
     m_IsLog[axis] = isLog;
 
     if (isLog) {
-      setAxisScaleEngine(axis, new QwtLog10ScaleEngine);
+      setAxisScaleEngine(axis, new QwtLogScaleEngine);
     } else {
       setAxisScaleEngine(axis, new QwtLinearScaleEngine);
     }
@@ -291,6 +356,7 @@ void QxrdPlot::contextMenuEvent(QContextMenuEvent *event)
   QAction *xLog = plotMenu.addAction("Log X Axis");
   QAction *yLog = plotMenu.addAction("Log Y Axis");
   QAction *auSc = plotMenu.addAction("Autoscale");
+  QAction *prGr = plotMenu.addAction("Print Graph...");
 
   QxrdPlotSettingsPtr set(m_PlotSettings);
 
@@ -308,6 +374,8 @@ void QxrdPlot::contextMenuEvent(QContextMenuEvent *event)
       set->toggle_YAxisLog();
     } else if (action == auSc) {
       autoScale();
+    } else if (action == prGr) {
+      printGraph();
     }
   }
 
@@ -319,7 +387,7 @@ int QxrdPlot::logAxis(int axis)
   return m_IsLog[axis];
 }
 
-QwtText QxrdPlot::trackerText(const QwtDoublePoint &pos)
+QwtText QxrdPlot::trackerTextF(const QPointF &pos)
 {
   QxrdPlotSettingsPtr set(m_PlotSettings);
 

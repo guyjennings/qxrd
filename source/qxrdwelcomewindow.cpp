@@ -165,7 +165,7 @@ void QxrdWelcomeWindow::readSettings(QSettings *settings, QString section)
       restoreState(winstate,1);
     }
 
-    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::readSettings(this, settings, section);
   }
 }
 
@@ -175,7 +175,7 @@ void QxrdWelcomeWindow::writeSettings(QSettings *settings, QString section)
     settings->setValue(section+"-geometry", saveGeometry());
     settings->setValue(section+"-state", saveState(1));
 
-    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::writeSettings(this, settings, section);
   }
 }
 

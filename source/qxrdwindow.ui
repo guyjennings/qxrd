@@ -20,7 +20,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTabWidget" name="m_XRDTabWidget">
+      <widget class="QTabWidget" name="m_DistortionCorrectionPage">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>3</horstretch>
@@ -374,24 +374,10 @@
             <property name="verticalSpacing">
              <number>2</number>
             </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label">
+            <item row="0" column="11">
+             <widget class="QLabel" name="label_6">
               <property name="text">
-               <string>X:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="m_XMouse">
-              <property name="text">
-               <string>0</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="5">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>V:</string>
+               <string>R:</string>
               </property>
              </widget>
             </item>
@@ -430,7 +416,7 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="11">
+            <item row="0" column="13">
              <spacer name="horizontalSpacer_3">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -452,6 +438,34 @@
             </item>
             <item row="0" column="10">
              <widget class="QLabel" name="m_QMouse">
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>X:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="m_XMouse">
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="5">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>V:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="12">
+             <widget class="QLabel" name="m_RMouse">
               <property name="text">
                <string>0</string>
               </property>
@@ -766,6 +780,137 @@
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="tab_6">
+        <attribute name="title">
+         <string>Distortion</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QToolButton" name="m_DistortionCorrectionZoomInButton">
+           <property name="toolTip">
+            <string>Zoom In</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <property name="autoExclusive">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" rowspan="5">
+          <widget class="QxrdDistortionCorrectionPlot" name="m_DistortionCorrectionPlot" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QToolButton" name="m_DistortionCorrectionZoomOutButton">
+           <property name="toolTip">
+            <string>Zoom Out</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QToolButton" name="m_DistortionCorrectionZoomAllButton">
+           <property name="toolTip">
+            <string>Auto Scale</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QToolButton" name="m_DistortionCorrectionMeasureButton">
+           <property name="toolTip">
+            <string>Measure Distances</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoExclusive">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>false</bool>
+           </property>
+           <property name="arrowType">
+            <enum>Qt::NoArrow</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <spacer name="verticalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>421</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
          <string>Messages</string>
@@ -819,7 +964,7 @@
              </sizepolicy>
             </property>
             <property name="title">
-             <string>Script</string>
+             <string>Command</string>
             </property>
             <layout class="QGridLayout" name="gridLayout">
              <item row="0" column="0" colspan="5">
@@ -868,7 +1013,7 @@
              <item row="1" column="2">
               <widget class="QPushButton" name="m_ExecuteScriptButton">
                <property name="text">
-                <string>Execute Script</string>
+                <string>Execute Command</string>
                </property>
               </widget>
              </item>
@@ -980,6 +1125,7 @@
     <addaction name="separator"/>
     <addaction name="m_ActionLoadData"/>
     <addaction name="m_ActionSaveData"/>
+    <addaction name="m_ActionPrintImage"/>
     <addaction name="separator"/>
     <addaction name="m_ActionLoadDark"/>
     <addaction name="m_ActionSaveDark"/>
@@ -1056,13 +1202,18 @@
     </property>
     <addaction name="m_ActionRefineCenterTilt"/>
     <addaction name="m_ActionFindBeamCenter"/>
-    <addaction name="m_ActionAutoAdjustMarkers"/>
     <addaction name="m_ActionClearMarkers"/>
     <addaction name="separator"/>
     <addaction name="m_ActionMoveCenterUp"/>
     <addaction name="m_ActionMoveCenterDown"/>
     <addaction name="m_ActionMoveCenterLeft"/>
     <addaction name="m_ActionMoveCenterRight"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionPlotPowderRingPoints"/>
+    <addaction name="m_ActionPlotPowderRingTwoTheta"/>
+    <addaction name="m_ActionPlotPowderRingCenters"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionCalculateCalibrationPowder"/>
    </widget>
    <widget class="QMenu" name="m_OperationsMenu">
     <property name="title">
@@ -1756,11 +1907,6 @@
     <string>Find the beam center from marked points</string>
    </property>
   </action>
-  <action name="m_ActionAutoAdjustMarkers">
-   <property name="text">
-    <string>Auto Adjust Markers</string>
-   </property>
-  </action>
   <action name="m_ActionClearMarkers">
    <property name="text">
     <string>Clear Markers</string>
@@ -1816,6 +1962,40 @@
     <string>Correlate Image with current...</string>
    </property>
   </action>
+  <action name="m_ActionPrintImage">
+   <property name="text">
+    <string>Print Image Graph...</string>
+   </property>
+  </action>
+  <action name="m_ActionPlotPowderRingPoints">
+   <property name="text">
+    <string>Plot Powder Ring Radii</string>
+   </property>
+   <property name="toolTip">
+    <string>Plot Powder Ring Radii</string>
+   </property>
+  </action>
+  <action name="m_ActionPlotPowderRingCenters">
+   <property name="text">
+    <string>Plot Powder Ring Centers</string>
+   </property>
+   <property name="toolTip">
+    <string>Plot Powder Ring Centers</string>
+   </property>
+  </action>
+  <action name="m_ActionPlotPowderRingTwoTheta">
+   <property name="text">
+    <string>Plot Powder Ring 2 Theta</string>
+   </property>
+   <property name="toolTip">
+    <string>Plot Powder Ring 2 Theta</string>
+   </property>
+  </action>
+  <action name="m_ActionCalculateCalibrationPowder">
+   <property name="text">
+    <string>Calculate Calibration from Powder Rings</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1838,9 +2018,15 @@
    <extends>QTextBrowser</extends>
    <header>qxrdhelpbrowser.h</header>
   </customwidget>
+  <customwidget>
+   <class>QxrdDistortionCorrectionPlot</class>
+   <extends>QWidget</extends>
+   <header>qxrddistortioncorrectionplot.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>m_XRDTabWidget</tabstop>
+  <tabstop>m_DistortionCorrectionPage</tabstop>
   <tabstop>m_ImageZoomInButton</tabstop>
   <tabstop>m_ImageZoomOutButton</tabstop>
   <tabstop>m_ImageZoomAllButton</tabstop>

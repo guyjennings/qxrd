@@ -5,8 +5,8 @@
 #include <cmath>
 #include "math.h"
 
-QxrdDetectorGeometry::QxrdDetectorGeometry() :
-    QObject(NULL)
+QxrdDetectorGeometry::QxrdDetectorGeometry(QString name, QObject *parent) :
+    QcepObject(name, parent)
 {
 }
 

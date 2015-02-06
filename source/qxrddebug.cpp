@@ -16,11 +16,14 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_THREADS,      "Thread Initialization");
   setMessage(DEBUG_DELAY_ACQ,    "Delay Acquisition Startup");
   setMessage(DEBUG_BROWSER,      "File Browser Operations");
-//  setMessage(DEBUG_SERVER,       "Server Commands");
   setMessage(DEBUG_ACQUIRETIME,  "Acquisition Timing Messages");
   setMessage(DEBUG_INTEGRATOR,   "Integrator Operation");
   setMessage(DEBUG_TRIGGER,      "Acquisition Triggering");
   setMessage(DEBUG_EXTRAINPUTS,  "Extra Inputs");
   setMessage(DEBUG_LOGSCRIPTS,   "Log Script Commands");
   setMessage(DEBUG_PLUGINS,      "Plugin Loading");
+  setMessage(DEBUG_FITTING,      "Curve Fitting");
+  setMessage(DEBUG_NOPARALLEL,   "Serialize Various Algorithms");
+  setMessage(DEBUG_HISTOGRAM,    "Debug Histogramming");
+  setMessage(DEBUG_CALIBRANT,    "Powder Calibrant Calculations");
 }

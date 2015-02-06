@@ -20,8 +20,8 @@ QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   m_SortOrder(Qt::AscendingOrder),
   m_Limit(1000),
   m_TrueSize(0),
-  m_HighlightOnTime(5),
-  m_HighlightFadeTime(25),
+  m_HighlightOnTime(0.5),
+  m_HighlightFadeTime(1.5),
   m_HighlightSaturation(200),
   m_HighlightHue(116)
 {
@@ -126,12 +126,16 @@ QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
       //  } else if (role == Qt::SizeHintRole) {
       //    return QSize(80,10);
   } else if (role == Qt::BackgroundRole) {
-    int lastMod = info.lastModified().secsTo(QDateTime::currentDateTime());
+    double lastMod = info.lastModified().msecsTo(QDateTime::currentDateTime())/1000.0;
 
     if (lastMod > (m_HighlightOnTime+m_HighlightFadeTime)) {
       return QColor(Qt::white);
-    } else {
-      m_Updater -> needUpdate();
+    } else if (info.exists()){
+      QxrdFileBrowserModel *model = const_cast<QxrdFileBrowserModel*>(this);
+      emit model->dataChanged(index, index);
+//      printf("Data %d changed after %g\n", index.row(), lastMod);
+
+//      m_Updater -> needUpdate();
 
       if (lastMod > m_HighlightOnTime) {
         double fade = lastMod - m_HighlightOnTime;

@@ -33,7 +33,6 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_IntegrationXUnits(QxrdIntegrator::IntegrateTTH),
   m_CenterX(0),
   m_CenterY(0),
-  m_CenterStep(1),
   m_DetectorXPixelSize(200),
   m_DetectorYPixelSize(200),
   m_DetectorDistance(1000),
@@ -48,6 +47,7 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_AttenuationLength(0.0),
   m_NRows(-1),
   m_NCols(-1),
+  m_NPix(-1),
   m_RStep(0),
   m_RMin(0),
   m_RMax(0),
@@ -60,6 +60,7 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_SinRot(0),
   m_EnableUserGeometry(0),
   m_EnableUserAbsorption(0),
+  m_ScalingFactor(1.0),
   m_CacheFillLevel(-1),
   m_CacheFullLevel(-1),
   m_Experiment(exp),
@@ -78,6 +79,22 @@ QxrdIntegratorCache::QxrdIntegratorCache(
     m_IntegrationMinimum = m_Integrator->get_IntegrationMinimum();
     m_IntegrationMaximum = m_Integrator->get_IntegrationMaximum();
     m_IntegrationXUnits  = m_Integrator->get_IntegrationXUnits();
+
+    m_EnableGeometry     = m_Integrator->get_EnableGeometricCorrections();
+    m_EnablePolarization = m_Integrator->get_EnablePolarizationCorrections();
+    m_Polarization       = m_Integrator->get_Polarization();
+    m_EnableAbsorption   = m_Integrator->get_EnableAbsorptionCorrections();
+    m_AttenuationLength  = m_Integrator->get_AttenuationLength();
+
+    m_EnableUserGeometry     = m_Integrator->get_EnableUserGeometry();
+    m_UserGeometryScript     = m_Integrator->get_UserGeometryScript();
+    m_UserGeometryFunction   = m_Integrator->get_UserGeometryFunction();
+
+    m_EnableUserAbsorption   = m_Integrator->get_EnableUserAbsorption();
+    m_UserAbsorptionScript   = m_Integrator->get_UserAbsorptionScript();
+    m_UserAbsorptionFunction = m_Integrator->get_UserAbsorptionFunction();
+
+    m_ScalingFactor          = m_Integrator->get_ScalingFactor();
   }
 
   if (m_CenterFinder) {
@@ -90,19 +107,6 @@ QxrdIntegratorCache::QxrdIntegratorCache(
     m_ImplementTilt      = m_CenterFinder->get_ImplementTilt();
     m_DetectorTilt       = m_CenterFinder->get_DetectorTilt();
     m_TiltPlaneRotation  = m_CenterFinder->get_TiltPlaneRotation();
-    m_EnableGeometry     = m_CenterFinder->get_EnableGeometricCorrections();
-    m_EnablePolarization = m_CenterFinder->get_EnablePolarizationCorrections();
-    m_Polarization       = m_CenterFinder->get_Polarization();
-    m_EnableAbsorption   = m_CenterFinder->get_EnableAbsorptionCorrections();
-    m_AttenuationLength  = m_CenterFinder->get_AttenuationLength();
-
-    m_EnableUserGeometry     = m_CenterFinder->get_EnableUserGeometry();
-    m_UserGeometryScript     = m_CenterFinder->get_UserGeometryScript();
-    m_UserGeometryFunction   = m_CenterFinder->get_UserGeometryFunction();
-
-    m_EnableUserAbsorption   = m_CenterFinder->get_EnableUserAbsorption();
-    m_UserAbsorptionScript   = m_CenterFinder->get_UserAbsorptionScript();
-    m_UserAbsorptionFunction = m_CenterFinder->get_UserAbsorptionFunction();
   }
 }
 
@@ -334,6 +338,9 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
       m_NRows = dimg->get_Height();
       m_NCols = dimg->get_Width();
+      m_NPix  = m_NRows*m_NCols*m_Oversample*m_Oversample;
+
+      m_CacheFullLevel.fetchAndStoreOrdered(m_NPix);
 
       QcepDoubleList norm = dimg->get_Normalization();
 
@@ -353,10 +360,6 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 //        double cx = m_CenterX;
 //        double cy = m_CenterY;
 
-        int nRows = m_NRows;
-        int nCols = m_NCols;
-        int nPix  = nRows*nCols*m_Oversample*m_Oversample;
-
         m_CachedBinNumbers =  QxrdAllocator::newInt32Image(m_Allocator,
                                                            QxrdAllocator::AlwaysAllocate,
                                                            m_NCols*m_Oversample,
@@ -371,8 +374,6 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           m_CachedBinNumbers -> clear();
           m_CachedNormalization -> clear();
 
-          m_CacheFullLevel.fetchAndStoreOrdered(nPix);
-
           if (m_EnableUserGeometry || m_EnableUserAbsorption) {
             grabScriptEngine();
           }
@@ -380,8 +381,8 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           double rMin=0, rMax=0;
           bool first = true;
 
-          for (int y = 0; y < nRows; y++) {
-            for (int x = 0; x < nCols; x++) {
+          for (int y = 0; y < m_NRows; y++) {
+            for (int x = 0; x < m_NCols; x++) {
               for (int oversampley = 0; oversampley < noversample; oversampley++) {
                 double yy = y+oversampley*oversampleStep+halfOversampleStep;
                 int iy = y*noversample+oversampley;
@@ -433,8 +434,8 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           m_RMin = rMin;
           m_RMax = rMax;
 
-          for (int y = 0; y < nRows; y++) {
-            for (int x = 0; x < nCols; x++) {
+          for (int y = 0; y < m_NRows; y++) {
+            for (int x = 0; x < m_NCols; x++) {
               for (int oversampley = 0; oversampley < noversample; oversampley++) {
                 double yy = y+oversampley*oversampleStep+halfOversampleStep;
                 int iy = y*noversample+oversampley;
@@ -463,7 +464,7 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
             }
           }
 
-          m_CacheFillLevel.fetchAndStoreOrdered(nPix);
+          m_CacheFillLevel.fetchAndStoreOrdered(m_NPix);
 
           if (m_EnableUserGeometry || m_EnableUserAbsorption) {
             releaseScriptEngine();
@@ -485,7 +486,11 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
         QThreadAccess::msleep(100);
       }
 
-      if (m_CacheFillLevel.fetchAndAddOrdered(0) == m_CacheFullLevel.fetchAndAddOrdered(0)) {
+      if (m_CacheFillLevel.fetchAndAddOrdered(0) != m_CacheFullLevel.fetchAndAddOrdered(0)) {
+        expt->printMessage(tr("QxrdIntegratorCache::performIntegration - anomalous cache [%1,%2]")
+                           .arg(m_CacheFillLevel.fetchAndAddOrdered(0))
+                           .arg(m_CacheFullLevel.fetchAndAddOrdered(0)));
+      } else {
         if (qcepDebug(DEBUG_INTEGRATOR)) {
           expt->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
         }
@@ -530,9 +535,9 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
             double xv = rMin + (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
 
             if (normalize) {
-              integ -> append(xv, normVal*integral[ir]/sv);
+              integ -> append(xv, m_ScalingFactor*normVal*integral[ir]/sv);
             } else {
-              integ -> append(xv, normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+              integ -> append(xv, m_ScalingFactor*normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
             }
           }
         }

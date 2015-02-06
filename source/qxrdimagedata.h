@@ -64,6 +64,9 @@ public:
   void saveMetaData(QxrdExperimentWPtr expt);
   void saveMetaData(QString name, QxrdExperimentWPtr expt);
 
+  void loadMetaData(QxrdExperimentWPtr expt = QxrdExperimentWPtr());
+  void loadMetaData(QString name, QxrdExperimentWPtr expt);
+
 protected:
   QxrdImageDataObjectCounter m_ObjectCounter; /* global counter to track allocation of QxrdImageData objects */
   QxrdMaskDataPtr            m_Mask;

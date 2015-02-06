@@ -15,7 +15,6 @@
 #include "qxrddataprocessor.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdplotmeasurer.h"
-#include "qwt_double_rect.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdapplication.h"
 
@@ -109,7 +108,7 @@ void QxrdCenterFinderPlot::onCenterYChanged(double cy)
   }
 }
 
-void QxrdCenterFinderPlot::onCenterChanged(QwtDoublePoint c)
+void QxrdCenterFinderPlot::onCenterChanged(QPointF c)
 {
   onCenterChanged(c.x(), c.y());
 }
@@ -130,11 +129,12 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
         int len = (int) sqrt((double)(width*width+height*height));
 
-        clear();
+        detachItems(QwtPlotItem::Rtti_PlotCurve);
+        detachItems(QwtPlotItem::Rtti_PlotMarker);
 
         QPen pen;
 
-        for (double ang=0; ang<2*M_PI; ang+=M_PI/12) {
+        for (double ang=0; ang<2*M_PI; ang+=M_PI/36) {
           double x = cx, y = cy;
           double dx = cos(ang);
           double dy = sin(ang);
@@ -224,14 +224,15 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
           QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(this,QString("%1").arg(180*(ang)/M_PI));
 
-          pc->setData(m_XData, m_YData);
+          pc->setSamples(m_XData, m_YData);
           //    pc->setStyle(QwtPlotCurve::Dots);
           pen.setColor(QColor::fromHsv((int) angdeg, 255, 255));
 
-          QwtSymbol s;
-          s.setStyle(QwtSymbol::Rect);
-          s.setSize(3,3);
-          s.setPen(pen);
+          QwtSymbol *s = new QwtSymbol();
+
+          s->setStyle(QwtSymbol::Rect);
+          s->setSize(3,3);
+          s->setPen(pen);
 
           pc->setSymbol(s);
           pc->setPen(pen);

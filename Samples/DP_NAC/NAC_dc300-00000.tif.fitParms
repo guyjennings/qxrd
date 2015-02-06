@@ -1,0 +1,7 @@
+# fitting settings for  NAC_dc300-00000.tif 
+centering.centerX =  1034.8586633968055 
+centering.centerY =  1020.7409507855424 
+centering.detectorDistance =  300 
+centering.detectorTilt =  -0.16 
+centering.tiltPlaneRotation =  90 
+centering.energy =  20000 

@@ -2,6 +2,7 @@
 #define QXRDACQUISITION_H
 
 #include "qcepmacros.h"
+#include "qcepobject.h"
 
 #include <QObject>
 #include <QMutex>
@@ -28,7 +29,6 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
-#include "qxrdobjectnamer.h"
 
 class QxrdAcquisitionParameterPack
 {
@@ -96,7 +96,7 @@ public:
   QxrdMaskDataPtr       m_Overflow;
 };
 
-class QxrdAcquisition : public QObject
+class QxrdAcquisition : public QcepObject
 {
   Q_OBJECT
 
@@ -118,9 +118,9 @@ public slots:
   void dynamicProperties();
   void updateSaveTimes();
 
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
   void acquire();
   void acquireDark();
@@ -200,8 +200,7 @@ private:
   virtual void stopIdling();
   virtual void startIdling();
 
-  template <typename T>
-  void accumulateAcquiredImage(QSharedPointer< QxrdImageData<T> > image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
+  void accumulateAcquiredImage(QxrdInt16ImageDataPtr image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
 
   void processImage(const QxrdProcessArgs &args);
   void processImage        (QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
@@ -211,7 +210,6 @@ private:
   int cancelling();
 
 private:
-  QxrdObjectNamer               m_ObjectNamer;
   QxrdSettingsSaverWPtr         m_Saver;
 
 public:
@@ -325,6 +323,9 @@ public:
 
   Q_PROPERTY(bool     acquisitionCancelsLiveView READ get_AcquisitionCancelsLiveView WRITE set_AcquisitionCancelsLiveView)
   QCEP_BOOLEAN_PROPERTY(AcquisitionCancelsLiveView)
+
+  Q_PROPERTY(bool     retryDropped READ get_RetryDropped WRITE set_RetryDropped)
+  QCEP_BOOLEAN_PROPERTY(RetryDropped)
 
 private:
   mutable QMutex                m_Mutex;

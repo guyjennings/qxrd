@@ -94,6 +94,48 @@ QStringList QxrdDetectorThread::detectorTypeNames()
   return res;
 }
 
+QString QxrdDetectorThread::detectorSubTypeName(int detectorSubType)
+{
+  QString res = "unknown";
+
+  switch (detectorSubType) {
+  case PCI_SubType:
+    res = "PCI/PCIe Interface";
+    break;
+
+  case GBIF_IP_SubType:
+    res = "Gigabit Ethernet by IP Address";
+    break;
+
+  case GBIF_MAC_SubType:
+    res = "Gigabit Ethernet by MAC Address";
+    break;
+
+  case GBIF_Name_SubType:
+    res = "Gigabit Ethernet by device name";
+    break;
+
+  case GBIF_Scan_SubType:
+    res = "Gigabit Ethernet by Auto Scan";
+    break;
+  }
+
+  return res;
+}
+
+QStringList QxrdDetectorThread::detectorSubTypeNames()
+{
+  QStringList res;
+
+  res.append(detectorSubTypeName(PCI_SubType));
+  res.append(detectorSubTypeName(GBIF_IP_SubType));
+  res.append(detectorSubTypeName(GBIF_MAC_SubType));
+  res.append(detectorSubTypeName(GBIF_Name_SubType));
+  res.append(detectorSubTypeName(GBIF_Scan_SubType));
+
+  return res;
+}
+
 void QxrdDetectorThread::run()
 {
   QxrdDetectorPtr p;
@@ -112,28 +154,33 @@ void QxrdDetectorThread::run()
     if (expt) {
       switch(expt->get_DetectorType()) {
       case SimulatedDetector:
+        setObjectName("simulatedDetector");
         p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment, m_Acquisition));
         break;
 
 #ifdef HAVE_PERKIN_ELMER
       case PerkinElmerDetector:
+        setObjectName("perkinElmerDetector");
         p = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Experiment, m_Acquisition));
         break;
 #endif
 
 #ifdef HAVE_PILATUS
       case PilatusDetector:
+        setObjectName("pilatusDetector");
         p = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Experiment, m_Acquisition));
         break;
 #endif
 
 #ifdef HAVE_AREADETECTOR
       case EpicsAreaDetector:
+        setObjectName("epicsAreaDetector");
         p = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Experiment, m_Acquisition));
         break;
 #endif
 
       case FileWatcherDetector:
+        setObjectName("fileWatcherDetector");
         p = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Experiment, m_Acquisition));
         break;
       }

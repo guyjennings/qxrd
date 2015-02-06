@@ -17,7 +17,6 @@
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsettingssaver.h"
-#include "qxrdobjectnamer.h"
 #include "qxrdsplashscreen-ptr.h"
 
 #ifdef HAVE_PERKIN_ELMER
@@ -102,8 +101,8 @@ public slots:
 
   void readSettings();
   void writeSettings();
-  void readSettings(QSettings *settings);
-  void writeSettings(QSettings *settings);
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
   void doSavePreferences();
   void doLoadPreferences();
@@ -139,7 +138,7 @@ private:
   void setupTiffHandlers();
 
 private:
-  QxrdObjectNamer      m_ObjectNamer;
+  QcepObjectNamer      m_ObjectNamer;
   QxrdSettingsSaverPtr m_Saver;
 
 public:

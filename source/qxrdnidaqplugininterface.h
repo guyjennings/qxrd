@@ -33,6 +33,7 @@ public:
 
   virtual double getAnalogInput(QString channelName) = 0;
   virtual void setAnalogOutput(QString channelName, double value) = 0;
+  virtual void setAnalogOutput(double value) = 0;
 
   virtual int prepareContinuousInput(double sampleRate,
                                      double acquireDelay,

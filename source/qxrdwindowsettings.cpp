@@ -9,22 +9,27 @@ QxrdWindowSettings::QxrdWindowSettings(QxrdSettingsSaverWPtr saver,
 {
   m_ImagePlotSettings         = QxrdImagePlotSettingsPtr(new QxrdImagePlotSettings(saver, NULL));
   m_CenterFinderPlotSettings  = QxrdCenterFinderPlotSettingsPtr(new QxrdCenterFinderPlotSettings(saver, NULL));
-  m_IntegratorPlotSettings    = QxrdPlotSettingsPtr(new QxrdPlotSettings(saver, NULL));
+  m_IntegratorPlotSettings    = QxrdPlotSettingsPtr(new QxrdPlotSettings("integratorPlot", saver, NULL));
   m_InputFileBrowserSettings  = QxrdFileBrowserSettingsPtr(new QxrdFileBrowserSettings(saver, NULL));
   m_OutputFileBrowserSettings = QxrdFileBrowserSettingsPtr(new QxrdFileBrowserSettings(saver, NULL));
   m_HistogramDialogSettings   = QxrdHistogramDialogSettingsPtr(new QxrdHistogramDialogSettings(saver, NULL));
   m_SliceDialogSettings       = QxrdSliceDialogSettingsPtr(new QxrdSliceDialogSettings(saver, NULL));
   m_InfoDialogSettings        = QxrdInfoDialogSettingsPtr(new QxrdInfoDialogSettings(saver, NULL));
+  m_ScriptDialogSettings      = QxrdScriptDialogSettingsPtr(new QxrdScriptDialogSettings(saver, NULL));
   m_SynchronizedAcquisitionDialogSettings = QxrdSynchronizedAcquisitionDialogSettingsPtr(
         new QxrdSynchronizedAcquisitionDialogSettings(saver, NULL));
   m_AcquisitionExtraInputsDialogSettings = QxrdAcquisitionExtraInputsDialogSettingsPtr(
         new QxrdAcquisitionExtraInputsDialogSettings(saver, NULL));
+  m_DistortionCorrectionDialogSettings = QxrdDistortionCorrectionDialogSettingsPtr(
+        new QxrdDistortionCorrectionDialogSettings(saver, NULL));
+  m_DistortionCorrectionPlotSettings = QxrdDistortionCorrectionPlotSettingsPtr(
+        new QxrdDistortionCorrectionPlotSettings(saver, NULL));
 }
 
 void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
 {
   if (settings) {
-    QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::readSettings(this, settings, section);
 
     m_ImagePlotSettings->readSettings(settings, section+"/plot");
     m_CenterFinderPlotSettings->readSettings(settings, section+"/centerFinderPlot");
@@ -34,8 +39,11 @@ void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
     m_HistogramDialogSettings->readSettings(settings, section+"/histogramDialog");
     m_SliceDialogSettings->readSettings(settings, section+"/sliceDialog");
     m_InfoDialogSettings->readSettings(settings, section+"/imageInfoDialog");
+    m_ScriptDialogSettings->readSettings(settings, section+"/scriptDialog");
     m_SynchronizedAcquisitionDialogSettings->readSettings(settings, section+"/syncAcqDialog");
     m_AcquisitionExtraInputsDialogSettings->readSettings(settings, section+"/extraInputsDialog");
+    m_DistortionCorrectionDialogSettings->readSettings(settings, section+"/distortionCorrectionDialog");
+    m_DistortionCorrectionPlotSettings->readSettings(settings, section+"/distortionCorrectionPlot");
   }
 }
 
@@ -44,7 +52,7 @@ void QxrdWindowSettings::writeSettings(QSettings *settings, QString section)
   //    printf("QxrdWindow::writeSettings\n");
 
   if (settings) {
-    QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+    QcepProperty::writeSettings(this, settings, section);
 
     m_ImagePlotSettings->writeSettings(settings, section+"/plot");
     m_CenterFinderPlotSettings->writeSettings(settings, section+"/centerFinderPlot");
@@ -54,9 +62,12 @@ void QxrdWindowSettings::writeSettings(QSettings *settings, QString section)
     m_HistogramDialogSettings->writeSettings(settings, section+"/histogramDialog");
     m_SliceDialogSettings->writeSettings(settings, section+"/sliceDialog");
     m_InfoDialogSettings->writeSettings(settings, section+"/imageInfoDialog");
+    m_ScriptDialogSettings->writeSettings(settings, section+"/scriptDialog");
     m_AcquisitionExtraInputsDialogSettings->writeSettings(settings, section+"/extraInputsDialog");
     m_SynchronizedAcquisitionDialogSettings->writeSettings(settings, section+"/syncAcqDialog");
     m_AcquisitionExtraInputsDialogSettings->writeSettings(settings, section+"/extraInputsDialog");
+    m_DistortionCorrectionDialogSettings->writeSettings(settings, section+"/distortionCorrectionDialog");
+    m_DistortionCorrectionPlotSettings->writeSettings(settings, section+"/distortionCorrectionPlot");
   }
 }
 
@@ -100,6 +111,11 @@ QxrdInfoDialogSettingsWPtr QxrdWindowSettings::infoDialogSettings()
   return m_InfoDialogSettings;
 }
 
+QxrdScriptDialogSettingsWPtr QxrdWindowSettings::scriptDialogSettings()
+{
+  return m_ScriptDialogSettings;
+}
+
 QxrdSynchronizedAcquisitionDialogSettingsWPtr QxrdWindowSettings::synchronizedAcquisitionDialogSettings()
 {
   return m_SynchronizedAcquisitionDialogSettings;
@@ -108,4 +124,14 @@ QxrdSynchronizedAcquisitionDialogSettingsWPtr QxrdWindowSettings::synchronizedAc
 QxrdAcquisitionExtraInputsDialogSettingsWPtr QxrdWindowSettings::acquisitionExtraInputsDialogSettings()
 {
   return m_AcquisitionExtraInputsDialogSettings;
+}
+
+QxrdDistortionCorrectionDialogSettingsWPtr QxrdWindowSettings::distortionCorrectionDialogSettings()
+{
+  return m_DistortionCorrectionDialogSettings;
+}
+
+QxrdDistortionCorrectionPlotSettingsWPtr QxrdWindowSettings::distortionCorrectionPlotSettings()
+{
+  return m_DistortionCorrectionPlotSettings;
 }

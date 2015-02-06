@@ -21,6 +21,8 @@ public:
   virtual ~QxrdDetectorPerkinElmer();
   int detectorType() const;
   int detectorNumber() const;
+  int detectorSubType() const;
+  QString detectorAddress() const;
 
 private slots:
   void onExposureTimeChanged();
@@ -33,6 +35,8 @@ public slots:
   void onEndFrameCallback();
 
   void dumpHeaderInfo();
+
+  QString acquisitionErrorString(int n);
 
 protected:
   void beginAcquisition();
@@ -51,11 +55,13 @@ private:
   void setupCameraBinningModeMenu(QComboBox *cb, int initialBinning);
   bool checkPluginAvailable();
 
-  void acquisitionInitError(int n);
-  void acquisitionNSensorsError(int n);
+  void acquisitionInitError(const char *fn, int ln, int n);
+  void acquisitionNSensorsError(const char *fn, int ln, int n);
 
 private:
   mutable QMutex         m_Mutex;
+  int                    m_SubType;
+  QString                m_Address;
   int                    m_BufferSize;
   int                    m_BufferIndex;
   QVector<quint16>       m_Buffer;

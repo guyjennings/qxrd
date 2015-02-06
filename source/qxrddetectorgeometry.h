@@ -3,13 +3,13 @@
 
 #include "qcepmacros.h"
 
-#include <QObject>
+#include "qcepobject.h"
 
-class QxrdDetectorGeometry : public QObject
+class QxrdDetectorGeometry : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorGeometry();
+  explicit QxrdDetectorGeometry(QString name, QObject *parent);
 
 public slots:
   static double convertEnergyToWavelength(double energy);

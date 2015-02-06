@@ -2,6 +2,7 @@
 #define QXRDALLOCATOR_H
 
 #include "qcepmacros.h"
+#include "qcepobject.h"
 
 #include <QMutex>
 #include <QTimer>
@@ -14,9 +15,8 @@
 #include "qxrdimagedata-ptr.h"
 #include "qxrdintegrateddata-ptr.h"
 #include "qxrdmaskdata-ptr.h"
-#include "qxrdobjectnamer.h"
 
-class QxrdAllocator : public QObject
+class QxrdAllocator : public QcepObject
 {
   Q_OBJECT
 
@@ -91,7 +91,6 @@ private:
 
 
 private:
-  QxrdObjectNamer       m_ObjectNamer;
   QMutex                m_Mutex;
   QTimer                m_Timer;
   quint64               m_AllocatedMemory;

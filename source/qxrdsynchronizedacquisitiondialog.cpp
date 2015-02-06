@@ -88,7 +88,8 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(
       sync -> prop_SyncAcquisitionMinimum()       -> linkTo(m_SyncAcqMinimum);
       sync -> prop_SyncAcquisitionMaximum()       -> linkTo(m_SyncAcqMaximum);
       sync -> prop_SyncAcquisitionSymmetry()      -> linkTo(m_SyncAcqSymmetry);
-      sync -> prop_SyncAcquisitionPhaseShift()      -> linkTo(m_SyncAcqPhaseShift);
+      sync -> prop_SyncAcquisitionPhaseShift()    -> linkTo(m_SyncAcqPhaseShift);
+      sync -> prop_SyncAcquisitionManualValue()   -> linkTo(m_ManualOutputVolts);
 
       connect(sync -> prop_SyncAcquisitionOutputDevice(), SIGNAL(valueChanged(QString,int)), this, SLOT(deviceChanged()));
       connect(sync -> prop_SyncAcquisitionOutputChannel(), SIGNAL(valueChanged(QString,int)), this, SLOT(waveformChanged()));
@@ -98,6 +99,9 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(
       connect(sync -> prop_SyncAcquisitionMaximum(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
       connect(sync -> prop_SyncAcquisitionSymmetry(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
       connect(sync -> prop_SyncAcquisitionPhaseShift(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
+
+      connect(m_ManualOutput, SIGNAL(clicked()), sync.data(), SLOT(setManualOutput()));
+      connect(m_ManualTrigger, SIGNAL(clicked()), sync.data(), SLOT(triggerOnce()));
     }
 
     connect(acq->prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(waveformChanged()));
@@ -158,12 +162,13 @@ void QxrdSynchronizedAcquisitionDialog::waveformChanged()
     QxrdAcquisitionParameterPack parms = acq->acquisitionParameterPack();
     sync->prepareForAcquisition(&parms);
 
-    m_WaveformPlot->clear();
+    m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+    m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
 
     if (sync -> get_SyncAcquisitionMode() && (parms.nphases()>=2)) {
       QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_WaveformPlot, "Output Waveform");
 
-      pc->setData(sync->outputTimes(), sync->outputVoltage());
+      pc->setSamples(sync->outputTimes(), sync->outputVoltage());
 
       pc->attach(m_WaveformPlot);
     }

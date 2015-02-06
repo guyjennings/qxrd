@@ -138,7 +138,7 @@ bool QxrdMaskStackModel::setData ( const QModelIndex & index, const QVariant & v
           return true;
         }
 
-        if ((role == Qt::CheckStateRole)) {
+        if (role == Qt::CheckStateRole) {
           if (p) {
             p->set_Used(!(p->get_Used()));
           }

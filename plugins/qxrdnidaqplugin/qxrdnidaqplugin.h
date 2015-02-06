@@ -53,6 +53,7 @@ public slots:
 
   double getAnalogInput(QString channelName);
   void   setAnalogOutput(QString channelName, double value);
+  void   setAnalogOutput(double value);
 
   virtual int prepareContinuousInput(double sampleRate,
                                      double acquireDelay,

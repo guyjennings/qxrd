@@ -7,6 +7,7 @@
 #include <QDateTime>
 #include <QMutex>
 #include <QRegExp>
+#include <QPointF>
 
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -65,11 +66,19 @@ public slots:
 //  QScriptValue newQxrdObject(QObject *object, QString objectName);
 //  QScriptValue newQxrdFunction(FunctionSignature fun, QString objectName);
 
+  void openScriptOutput(const QString& fileName);
+  void writeScriptOutput(const QString& outputLine);
+  void closeScriptOutput();
+
 private slots:
   void              evaluateScript(int src, QString cmd);
 
 private:
   static QScriptValue printFunc(QScriptContext *context, QScriptEngine *engine, void *u);
+  static QScriptValue fopenFunc(QScriptContext *context, QScriptEngine *engine, void *u);
+  static QScriptValue fdeleteFunc(QScriptContext *context, QScriptEngine *engine, void *u);
+  static QScriptValue fprintFunc(QScriptContext *context, QScriptEngine *engine, void *u);
+  static QScriptValue fcloseFunc(QScriptContext *context, QScriptEngine *engine, void *u);
   static QScriptValue acquireFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue acquireDarkFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue statusFunc(QScriptContext *context, QScriptEngine *engine);
@@ -104,6 +113,9 @@ private:
   QString tableHeader();
   QString tableFooter();
 
+  static QScriptValue QPointFToScriptValue(QScriptEngine *engine, const QPointF &in);
+  static void         QPointFFromScriptValue(const QScriptValue &object, QPointF &pt);
+
 private:
   mutable QMutex         m_Mutex;
   QxrdApplicationWPtr    m_Application;
@@ -111,6 +123,7 @@ private:
   QxrdAcquisitionWPtr    m_Acquisition;
   QxrdDataProcessorWPtr  m_DataProcessor;
   QxrdWindowWPtr         m_Window;
+  FILE                  *m_ScriptOutput;
 };
 
 #endif // QXRDSCRIPTENGINE_H

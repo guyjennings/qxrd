@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
-    <height>247</height>
+    <width>368</width>
+    <height>280</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,6 +15,9 @@
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="3" column="3">
+     <widget class="QComboBox" name="m_SyncAcqOutChan"/>
+    </item>
     <item row="0" column="0" colspan="4">
      <widget class="QLabel" name="label">
       <property name="text">
@@ -39,7 +42,7 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="0" colspan="4">
+    <item row="11" column="0" colspan="4">
      <widget class="QxrdSynchronizedAcquisitionPlot" name="m_WaveformPlot"/>
     </item>
     <item row="6" column="1">
@@ -50,6 +53,12 @@ Script property: synchronization.syncAcquisitionMinimum</string>
       </property>
       <property name="keyboardTracking">
        <bool>false</bool>
+      </property>
+      <property name="decimals">
+       <number>5</number>
+      </property>
+      <property name="minimum">
+       <double>-99.000000000000000</double>
       </property>
      </widget>
     </item>
@@ -72,6 +81,9 @@ Script Property synchronization.syncAcquisitionPhaseShift</string>
       </property>
       <property name="suffix">
        <string> deg</string>
+      </property>
+      <property name="decimals">
+       <number>5</number>
       </property>
       <property name="minimum">
        <double>-360.000000000000000</double>
@@ -97,6 +109,12 @@ Script property: synchronization.syncAcquisitionMaximum</string>
       <property name="keyboardTracking">
        <bool>false</bool>
       </property>
+      <property name="decimals">
+       <number>5</number>
+      </property>
+      <property name="minimum">
+       <double>-99.000000000000000</double>
+      </property>
      </widget>
     </item>
     <item row="6" column="3">
@@ -107,6 +125,9 @@ Script property: synchronization.syncAcquisitionSymmetry</string>
       </property>
       <property name="keyboardTracking">
        <bool>false</bool>
+      </property>
+      <property name="decimals">
+       <number>5</number>
       </property>
      </widget>
     </item>
@@ -141,13 +162,54 @@ Script property: synchronization.syncAcquisitionSymmetry</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="3">
-     <widget class="QComboBox" name="m_SyncAcqOutChan"/>
-    </item>
     <item row="3" column="2">
      <widget class="QLabel" name="label_8">
       <property name="text">
        <string>Output Chan</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>Manual Output V</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QDoubleSpinBox" name="m_ManualOutputVolts">
+      <property name="toolTip">
+       <string>Output voltage at waveform maximum: range -10V .. 10V
+Script property: synchronization.syncAcquisitionMaximum</string>
+      </property>
+      <property name="keyboardTracking">
+       <bool>false</bool>
+      </property>
+      <property name="decimals">
+       <number>5</number>
+      </property>
+      <property name="minimum">
+       <double>-99.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="2">
+     <widget class="QPushButton" name="m_ManualOutput">
+      <property name="toolTip">
+       <string>Manually Set Output Voltage</string>
+      </property>
+      <property name="text">
+       <string>Set Output</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="3">
+     <widget class="QPushButton" name="m_ManualTrigger">
+      <property name="toolTip">
+       <string>Manually trigger the output waveform generator</string>
+      </property>
+      <property name="text">
+       <string>Trigger</string>
       </property>
      </widget>
     </item>

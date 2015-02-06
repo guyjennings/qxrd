@@ -1,7 +1,7 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTS_H
 #define QXRDACQUISITIONEXTRAINPUTS_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -12,11 +12,10 @@
 #include "qxrdimagedata-ptr.h"
 #include "qxrdacquisitionextrainputschannel.h"
 #include "qxrdacquisitionextrainputschannel-ptr.h"
-#include "qxrdobjectnamer.h"
 #include <QSettings>
 #include <QMutex>
 
-class QxrdAcquisitionExtraInputs : public QObject
+class QxrdAcquisitionExtraInputs : public QcepObject
 {
   Q_OBJECT
 public:
@@ -33,9 +32,9 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
 signals:
   void newDataAvailable();
@@ -59,9 +58,6 @@ public slots:
   double          sumChannel(int ch);
   QVector<QxrdAcquisitionExtraInputsChannelPtr> channels() const;
   QxrdAcquisitionExtraInputsChannelPtr channel(int chan) const;
-
-private:
-  QxrdObjectNamer m_ObjectNamer;
 
 public:
   Q_PROPERTY(bool enabled READ get_Enabled WRITE set_Enabled STORED false)

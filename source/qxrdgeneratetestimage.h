@@ -3,17 +3,16 @@
 
 #include "qcepmacros.h"
 
-#include <QObject>
+#include "qcepobject.h"
 
 #include "qcepproperty.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdallocator-ptr.h"
 #include "qxrddetectorgeometry-ptr.h"
 #include "qxrddetectorgeometry.h"
-#include "qxrdobjectnamer.h"
 #include "qxrdsettingssaver-ptr.h"
 
-class QxrdGenerateTestImage : public QObject
+class QxrdGenerateTestImage : public QcepObject
 {
   Q_OBJECT
 public:
@@ -38,8 +37,6 @@ public:
   void setProcessor(QxrdDataProcessorWPtr proc);
 
 private:
-  QxrdObjectNamer         m_ObjectNamer;
-
   QxrdDataProcessorWPtr   m_Processor;
   QxrdAllocatorWPtr       m_Allocator;
   QxrdDetectorGeometryPtr m_Geometry;

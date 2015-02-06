@@ -2,7 +2,7 @@
 #define QXRDCENTERFINDERPLOT_H
 
 #include "qcepmacros.h"
-
+#include "qcepobjectnamer.h"
 #include "qxrdplot.h"
 
 #include "qxrdimagedata.h"
@@ -12,7 +12,6 @@
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdwindow-ptr.h"
-#include "qxrdobjectnamer.h"
 
 class QxrdCenterFinderPlot : public QxrdPlot
 {
@@ -29,12 +28,12 @@ public slots:
   void onCenterXChanged(double cx);
   void onCenterYChanged(double cy);
   void onCenterChanged(double cx, double cy);
-  void onCenterChanged(QwtDoublePoint c);
+  void onCenterChanged(QPointF c);
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image);
   void onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
 
 private:
-  QxrdObjectNamer       m_ObjectNamer;
+  QcepObjectNamer       m_ObjectNamer;
   QVector<double>       m_XData, m_YData;
   QxrdWindow           *m_Window;
   QxrdDataProcessorWPtr m_DataProcessor;

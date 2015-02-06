@@ -21,8 +21,8 @@ protected:
   void changeEvent(QEvent *e);
 
 private:
-  void setupDebugWidgets(int dbg);
-  int readDebugWidgets();
+  void setupDebugWidgets(qint64 dbg);
+  qint64 readDebugWidgets();
 
 private:
   QxrdApplication                 *m_Application;

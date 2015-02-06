@@ -3,13 +3,12 @@
 
 #include "qcepmacros.h"
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepproperty.h"
 
 #include "qxrdexperiment-ptr.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdintegrateddata-ptr.h"
-#include <qwt_double_rect.h>
 #include "qxrdintegratorcache.h"
 #include "qxrdintegratorcache-ptr.h"
 #include "qxrdsettingssaver-ptr.h"
@@ -20,9 +19,8 @@
 #include "qxrdmaskdata.h"
 #include "qxrdmaskdata-ptr.h"
 #include "qxrddataprocessor-ptr.h"
-#include "qxrdobjectnamer.h"
 
-class QxrdIntegrator : public QObject
+class QxrdIntegrator : public QcepObject
 {
   Q_OBJECT
 
@@ -30,9 +28,6 @@ public:
   QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc);
   virtual ~QxrdIntegrator();
   void initialize(QxrdIntegratorWPtr integrator);
-
-private:
-  QxrdObjectNamer        m_ObjectNamer;
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
@@ -53,17 +48,52 @@ public:
   Q_PROPERTY(int integrationXUnits READ get_IntegrationXUnits WRITE set_IntegrationXUnits)
   QCEP_INTEGER_PROPERTY(IntegrationXUnits)
 
+  Q_PROPERTY(bool   enableGeometricCorrections READ get_EnableGeometricCorrections WRITE set_EnableGeometricCorrections)
+  QCEP_BOOLEAN_PROPERTY(EnableGeometricCorrections)
+
+  Q_PROPERTY(bool   enablePolarizationCorrections READ get_EnablePolarizationCorrections WRITE set_EnablePolarizationCorrections)
+  QCEP_BOOLEAN_PROPERTY(EnablePolarizationCorrections)
+
+  Q_PROPERTY(double polarization READ get_Polarization WRITE set_Polarization)
+  QCEP_DOUBLE_PROPERTY(Polarization)
+
+  Q_PROPERTY(bool   enableAbsorptionCorrections READ get_EnableAbsorptionCorrections WRITE set_EnableAbsorptionCorrections)
+  QCEP_BOOLEAN_PROPERTY(EnableAbsorptionCorrections)
+
+  Q_PROPERTY(double attenuationLength READ get_AttenuationLength WRITE set_AttenuationLength)
+  QCEP_DOUBLE_PROPERTY(AttenuationLength)
+
+  Q_PROPERTY(int    enableUserGeometry READ get_EnableUserGeometry WRITE set_EnableUserGeometry)
+  QCEP_INTEGER_PROPERTY(EnableUserGeometry)
+
+  Q_PROPERTY(QString userGeometryScript READ get_UserGeometryScript WRITE set_UserGeometryScript)
+  QCEP_STRING_PROPERTY(UserGeometryScript)
+
+  Q_PROPERTY(QString userGeometryFunction READ get_UserGeometryFunction WRITE set_UserGeometryFunction)
+  QCEP_STRING_PROPERTY(UserGeometryFunction)
+
+  Q_PROPERTY(int     enableUserAbsorption READ get_EnableUserAbsorption WRITE set_EnableUserAbsorption)
+  QCEP_INTEGER_PROPERTY(EnableUserAbsorption)
+
+  Q_PROPERTY(QString userAbsorptionScript READ get_UserAbsorptionScript WRITE set_UserAbsorptionScript)
+  QCEP_STRING_PROPERTY(UserAbsorptionScript)
+
+  Q_PROPERTY(QString userAbsorptionFunction READ get_UserAbsorptionFunction WRITE set_UserAbsorptionFunction)
+  QCEP_STRING_PROPERTY(UserAbsorptionFunction)
+
+  Q_PROPERTY(double scalingFactor READ get_ScalingFactor WRITE set_ScalingFactor)
+  QCEP_DOUBLE_PROPERTY(ScalingFactor)
+
 public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
   QxrdDataProcessorWPtr dataProcessor() const;
+  QxrdExperimentWPtr experiment() const;
 
   enum {
     IntegrateTTH, IntegrateQ, IntegrateR
   };
 
   double XValue(double x, double y) const;
-  double XValue(QwtDoublePoint pt) const;
+  double XValue(QPointF pt) const;
   double XValue(double x, double y,
                 int xUnits, QxrdCenterFinderPtr cf,
                 double xc, double yc,
@@ -81,7 +111,7 @@ public slots:
 //  QxrdIntegratedDataPtr integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int oversample, int normalize);
 
   QxrdIntegratedDataPtr sliceLine(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, double x0, double y0, double x1, double y1, double width);
-  QxrdIntegratedDataPtr slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QwtArray<QwtDoublePoint> poly, double width);
+  QxrdIntegratedDataPtr slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QVector<QPointF> poly, double width);
 
   void integrateVsR();
   void integrateVsQ();
@@ -91,6 +121,9 @@ public slots:
 
   QxrdInt32ImageDataPtr  cachedGeometry();
   QxrdDoubleImageDataPtr cachedIntensity();
+
+  QString defaultUserGeometryScript();
+  QString defaultUserAbsorptionScript();
 
 private:
   mutable QMutex         m_Mutex;

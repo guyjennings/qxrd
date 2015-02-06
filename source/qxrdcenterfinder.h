@@ -6,15 +6,14 @@
 #include <QObject>
 #include <QPen>
 #include "qcepproperty.h"
-#include <qwt_double_rect.h>
 #include "qxrddetectorgeometry.h"
 #include "qxrdsettingssaver-ptr.h"
-#include "qxrdobjectnamer.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdimagedata-ptr.h"
 #include "qxrdimagedata.h"
 #include "qxrdexperiment-ptr.h"
 #include <QScriptValue>
+#include "qxrdpowderpointproperty.h"
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
 {
@@ -22,9 +21,6 @@ class QxrdCenterFinder : public QxrdDetectorGeometry
 
 public:
   QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt);
-
-private:
-  QxrdObjectNamer       m_ObjectNamer;
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
@@ -45,6 +41,9 @@ public:
   Q_PROPERTY(double detectorDistance READ get_DetectorDistance WRITE set_DetectorDistance)
   QCEP_DOUBLE_PROPERTY(DetectorDistance)
 
+  Q_PROPERTY(double detectorDistanceStep READ get_DetectorDistanceStep WRITE set_DetectorDistanceStep)
+  QCEP_DOUBLE_PROPERTY(DetectorDistanceStep)
+
   Q_PROPERTY(double energy READ get_Energy WRITE set_Energy)
   QCEP_DOUBLE_PROPERTY(Energy)
 
@@ -54,56 +53,47 @@ public:
   Q_PROPERTY(double detectorTilt READ get_DetectorTilt WRITE set_DetectorTilt)
   QCEP_DOUBLE_PROPERTY(DetectorTilt)
 
+  Q_PROPERTY(double detectorTiltStep READ get_DetectorTiltStep WRITE set_DetectorTiltStep)
+  QCEP_DOUBLE_PROPERTY(DetectorTiltStep)
+
   Q_PROPERTY(double tiltPlaneRotation READ get_TiltPlaneRotation WRITE set_TiltPlaneRotation)
   QCEP_DOUBLE_PROPERTY(TiltPlaneRotation)
 
-  Q_PROPERTY(bool   enableGeometricCorrections READ get_EnableGeometricCorrections WRITE set_EnableGeometricCorrections)
-  QCEP_BOOLEAN_PROPERTY(EnableGeometricCorrections)
+  Q_PROPERTY(double tiltPlaneRotationStep READ get_TiltPlaneRotationStep WRITE set_TiltPlaneRotationStep)
+  QCEP_DOUBLE_PROPERTY(TiltPlaneRotationStep)
 
-  Q_PROPERTY(bool   enablePolarizationCorrections READ get_EnablePolarizationCorrections WRITE set_EnablePolarizationCorrections)
-  QCEP_BOOLEAN_PROPERTY(EnablePolarizationCorrections)
+  Q_PROPERTY(QxrdPowderPointVector markedPoints READ get_MarkedPoints WRITE set_MarkedPoints)
+  QXRD_POWDERPOINTVECTOR_PROPERTY(MarkedPoints)
 
-  Q_PROPERTY(double polarization READ get_Polarization WRITE set_Polarization)
-  QCEP_DOUBLE_PROPERTY(Polarization)
+  Q_PROPERTY(QxrdPowderPointVector fittedRings READ get_FittedRings WRITE set_FittedRings)
+  QXRD_POWDERPOINTVECTOR_PROPERTY(FittedRings)
 
-  Q_PROPERTY(bool   enableAbsorptionCorrections READ get_EnableAbsorptionCorrections WRITE set_EnableAbsorptionCorrections)
-  QCEP_BOOLEAN_PROPERTY(EnableAbsorptionCorrections)
+  Q_PROPERTY(QString calibrantName READ get_CalibrantName WRITE set_CalibrantName)
+  QCEP_STRING_PROPERTY(CalibrantName)
 
-  Q_PROPERTY(double attenuationLength READ get_AttenuationLength WRITE set_AttenuationLength)
-  QCEP_DOUBLE_PROPERTY(AttenuationLength)
+  Q_PROPERTY(double calibrantLattice READ get_CalibrantLattice WRITE set_CalibrantLattice)
+  QCEP_DOUBLE_PROPERTY(CalibrantLattice)
 
-  Q_PROPERTY(QcepPolygon markedPoints READ get_MarkedPoints WRITE set_MarkedPoints)
-  QCEP_POLYGON_PROPERTY(MarkedPoints)
+  Q_PROPERTY(int calibrantLatticeLimit READ get_CalibrantLatticeLimit WRITE set_CalibrantLatticeLimit)
+  QCEP_INTEGER_PROPERTY(CalibrantLatticeLimit)
+
+  Q_PROPERTY(int calibrantSymmetry READ get_CalibrantSymmetry WRITE set_CalibrantSymmetry)
+  QCEP_INTEGER_PROPERTY(CalibrantSymmetry)
+
+  Q_PROPERTY(QxrdPowderPointVector calibrantDSpacings READ get_CalibrantDSpacings WRITE set_CalibrantDSpacings)
+  QXRD_POWDERPOINTVECTOR_PROPERTY(CalibrantDSpacings)
 
   Q_PROPERTY(double ringRadius READ get_RingRadius WRITE set_RingRadius)
   QCEP_DOUBLE_PROPERTY(RingRadius)
 
-  Q_PROPERTY(bool adjustMarkedPoints READ get_AdjustMarkedPoints WRITE set_AdjustMarkedPoints)
-  QCEP_BOOLEAN_PROPERTY(AdjustMarkedPoints)
+  Q_PROPERTY(double ringRadiusA READ get_RingRadiusA WRITE set_RingRadiusA)
+  QCEP_DOUBLE_PROPERTY(RingRadiusA)
 
-  Q_PROPERTY(double adjustmentRadius READ get_AdjustmentRadius WRITE set_AdjustmentRadius)
-  QCEP_DOUBLE_PROPERTY(AdjustmentRadius)
+  Q_PROPERTY(double ringRadiusB READ get_RingRadiusB WRITE set_RingRadiusB)
+  QCEP_DOUBLE_PROPERTY(RingRadiusB)
 
-  Q_PROPERTY(int    enableUserGeometry READ get_EnableUserGeometry WRITE set_EnableUserGeometry)
-  QCEP_INTEGER_PROPERTY(EnableUserGeometry)
-
-  Q_PROPERTY(QString userGeometryScript READ get_UserGeometryScript WRITE set_UserGeometryScript)
-  QCEP_STRING_PROPERTY(UserGeometryScript)
-
-  Q_PROPERTY(QString userGeometryFunction READ get_UserGeometryFunction WRITE set_UserGeometryFunction)
-  QCEP_STRING_PROPERTY(UserGeometryFunction)
-
-  Q_PROPERTY(int     enableUserAbsorption READ get_EnableUserAbsorption WRITE set_EnableUserAbsorption)
-  QCEP_INTEGER_PROPERTY(EnableUserAbsorption)
-
-  Q_PROPERTY(QString userAbsorptionScript READ get_UserAbsorptionScript WRITE set_UserAbsorptionScript)
-  QCEP_STRING_PROPERTY(UserAbsorptionScript)
-
-  Q_PROPERTY(QString userAbsorptionFunction READ get_UserAbsorptionFunction WRITE set_UserAbsorptionFunction)
-  QCEP_STRING_PROPERTY(UserAbsorptionFunction)
-
-  Q_PROPERTY(double peakRadius READ get_PeakRadius WRITE set_PeakRadius)
-  QCEP_DOUBLE_PROPERTY(PeakRadius)
+  Q_PROPERTY(double ringRotation READ get_RingRotation WRITE set_RingRotation)
+  QCEP_DOUBLE_PROPERTY(RingRotation)
 
   Q_PROPERTY(double peakFitRadius READ get_PeakFitRadius WRITE set_PeakFitRadius)
   QCEP_DOUBLE_PROPERTY(PeakFitRadius)
@@ -117,6 +107,9 @@ public:
   Q_PROPERTY(double peakCenterY READ get_PeakCenterY WRITE set_PeakCenterY)
   QCEP_DOUBLE_PROPERTY(PeakCenterY)
 
+  Q_PROPERTY(double peakWidth READ get_PeakWidth WRITE set_PeakWidth)
+  QCEP_DOUBLE_PROPERTY(PeakWidth)
+
   Q_PROPERTY(double peakBackground READ get_PeakBackground WRITE set_PeakBackground)
   QCEP_DOUBLE_PROPERTY(PeakBackground)
 
@@ -126,8 +119,41 @@ public:
   Q_PROPERTY(double peakBackgroundY READ get_PeakBackgroundY WRITE set_PeakBackgroundY)
   QCEP_DOUBLE_PROPERTY(PeakBackgroundY)
 
-  Q_PROPERTY(int peakFitDebug READ get_PeakFitDebug WRITE set_PeakFitDebug)
-  QCEP_INTEGER_PROPERTY(PeakFitDebug)
+  Q_PROPERTY(bool peakFitDebug READ get_PeakFitDebug WRITE set_PeakFitDebug)
+  QCEP_BOOLEAN_PROPERTY(PeakFitDebug)
+
+  Q_PROPERTY(int peakFitIterations READ get_PeakFitIterations WRITE set_PeakFitIterations)
+  QCEP_INTEGER_PROPERTY(PeakFitIterations)
+
+  Q_PROPERTY(QcepDoubleVector ringAngles READ get_RingAngles WRITE set_RingAngles)
+  QCEP_DOUBLE_VECTOR_PROPERTY(RingAngles)
+
+  Q_PROPERTY(double ringAngleTolerance READ get_RingAngleTolerance WRITE set_RingAngleTolerance)
+  QCEP_DOUBLE_PROPERTY(RingAngleTolerance)
+
+  Q_PROPERTY(int powderFitOptions READ get_PowderFitOptions WRITE set_PowderFitOptions)
+  QCEP_INTEGER_PROPERTY(PowderFitOptions)
+
+  Q_PROPERTY(int ringIndex READ get_RingIndex WRITE set_RingIndex)
+  QCEP_INTEGER_PROPERTY(RingIndex)
+
+  Q_PROPERTY(bool subtractRingAverages READ get_SubtractRingAverages WRITE set_SubtractRingAverages)
+  QCEP_BOOLEAN_PROPERTY(SubtractRingAverages)
+
+  Q_PROPERTY(double ringAverageDisplacement READ get_RingAverageDisplacement WRITE set_RingAverageDisplacement)
+  QCEP_DOUBLE_PROPERTY(RingAverageDisplacement)
+
+  Q_PROPERTY(double fittedWidthMin READ get_FittedWidthMin WRITE set_FittedWidthMin)
+  QCEP_DOUBLE_PROPERTY(FittedWidthMin)
+
+  Q_PROPERTY(double fittedWidthMax READ get_FittedWidthMax WRITE set_FittedWidthMax)
+  QCEP_DOUBLE_PROPERTY(FittedWidthMax)
+
+  Q_PROPERTY(double fittedHeightMinRatio READ get_FittedHeightMinRatio WRITE set_FittedHeightMinRatio)
+  QCEP_DOUBLE_PROPERTY(FittedHeightMinRatio)
+
+  Q_PROPERTY(double fittedPositionMaxDistance READ get_FittedPositionMaxDistance WRITE set_FittedPositionMaxDistance)
+  QCEP_DOUBLE_PROPERTY(FittedPositionMaxDistance)
 
 public:
   enum {
@@ -141,84 +167,105 @@ public:
 //public slots:
 //  void onCenterXChanged(double cx);
 //  void onCenterYChanged(double cy);
-//  void onCenterChanged(QwtDoublePoint pt);
-//  void onCenterChanged(QwtDoublePoint pt);
+//  void onCenterChanged(QPointF pt);
+//  void onCenterChanged(QPointF pt);
 //  void onCenterStepChanged(double stp);
 
 signals:
   void parameterChanged();
 
 public slots:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
-  void onCenterChanged(QwtDoublePoint pt);
-  void onPointSelected(QwtDoublePoint pt);
+  void onCenterChanged(QPointF pt);
+  void onPointSelected(QPointF pt);
 
   double getTTH(double x, double y) const;
-  double getTTH(QwtDoublePoint pt) const;
+  double getTTH(QPointF pt) const;
 
   double getQ(double x, double y) const;
-  double getQ(QwtDoublePoint pt) const;
+  double getQ(QPointF pt) const;
 
   double getR(double x, double y) const;
-  double getR(QwtDoublePoint pt) const;
+  double getR(QPointF pt) const;
 
   double getChi(double x, double y) const;
-  double getChi(QwtDoublePoint pt) const;
+  double getChi(QPointF pt) const;
 
   double getDist(double x, double y) const;
-  double getDist(QwtDoublePoint pt) const;
+  double getDist(QPointF pt) const;
 
-  void fitPowderCircle();
+  QPointF getXY(double tth, double chi);
+
+  void fitPowderCircle(int n=0);
+  void fitPowderEllipse(int n=0);
+  void fitPowderEllipses();
+
   void deletePowderPointNear(double x, double y);
   void deletePowderPoints();
+  void deletePowderRing(int n);
+  void disablePowderRing(int n);
+  void enablePowderRing(int n);
+  void appendPowderPoint(double x, double y);
+  void appendPowderPoint(int n1, int n2, int n3, double x, double y, double r1=0, double r2=0, double az=0);
+  void normalizePowderRings();
 
-  QwtDoublePoint powderPoint(int i);
+  QxrdPowderPoint powderPoint(int i);
   int nearestPowderPointIndex(double x, double y);
-  QwtDoublePoint nearestPowderPoint(double x, double y);
+  QxrdPowderPoint nearestPowderPoint(double x, double y);
 
-  QwtDoublePoint adjustPoint(QwtDoublePoint pt);
-  QwtDoublePoint adjustPoint(int i);
-  void adjustPointNear(double x, double y);
-  void adjustAllPoints();
-  void fitPeakNear(double x, double y);
-  void fitPeakNear();
+  bool fitPeakNear(double x, double y);
+  bool fitRingNear(double x0, double y0);
+  bool traceRingNear(double x0, double y0, double step=25.0);
+//  bool traceRingNearParallel(double x0, double y0, double step=25.0);
+  bool missingRingNear(double x, double y);
 
-  QString defaultUserGeometryScript();
-  QString defaultUserAbsorptionScript();
-
+  int    getPowderPointN1(int i);
+  int    getPowderPointN2(int i);
   double getPowderPointX(int i);
   double getPowderPointY(int i);
-  void   setPowderPoint(int i, double x, double y);
+  void   setPowderPoint(int i, int n1, int n2, int n3, double x, double y, double r1, double r2, double az);
 
   QScriptValue getPowderPoint(int i);
   QScriptValue getPowderPoints();
-  int          countPowderPoints();
   void         setPowderPoint(int i, QScriptValue val);
 
-public:
-//  void setEnabled(bool imgenabled, bool cntrenabled);
-//  void setPen(const QPen &pen);
+  int countPowderRings() const;
+  int countPowderRingPoints() const;
+  int countPowderRingPoints(int r) const;
+  QxrdPowderPoint powderRingPoint(int i) const;
+  QxrdPowderPoint powderRingPoint(int r, int i) const;
 
+  double powderRingAverageR(int r) const;
+  double powderRingAverageTTH(int r) const;
+  double powderRingAverageQ(int r) const;
+
+  void updateCalibrantDSpacings();
+  double calibrantDSpacing(int n);
+  double calibrantTTH(int n);
+
+  void calculateCalibration();
+
+public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
   void setData(QxrdDoubleImageDataPtr data);
   double imageValue(double x, double y);
 
-  void evaluateFit(double *parm, double *x, int np, int nx);
-  void evaluatePeakFit(double *parm, double *x, int np, int nx);
+  QxrdExperimentWPtr experiment() const;
+  QxrdDoubleImageDataPtr data() const;
+  QxrdDoubleImageDataPtr newData();
 
-//signals:
-////  void centerChanged(double cx, double cy);
-//
-//private:
-////
-//
+  static QString levmarFailureReason(int n);
+
 private:
   mutable QMutex             m_Mutex;
   QxrdExperimentWPtr         m_Experiment;
   QxrdDoubleImageDataPtr     m_Data;
+  int                        m_CenterFitRingNumber;
 };
+
 
 #endif // QXRDCENTERFINDER_H

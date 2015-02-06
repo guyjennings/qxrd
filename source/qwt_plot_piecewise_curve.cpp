@@ -47,9 +47,9 @@ bool QwtPlotPiecewiseCurve::ignorePoint(double x, double y) const
 }
 
 // This is a slow implementation: it might be worth to cache valid data ranges.
-void QwtPlotPiecewiseCurve::draw(QPainter *painter,
+void QwtPlotPiecewiseCurve::drawSeries(QPainter *painter,
                                  const QwtScaleMap &xMap, const QwtScaleMap &yMap,
-                                 int from, int to) const
+                                 const QRectF &canvasRect, int from, int to) const
 {
   if (to < 0) {
     to = dataSize() - 1;
@@ -68,32 +68,32 @@ void QwtPlotPiecewiseCurve::draw(QPainter *painter,
     }
 
     if (first <= to) {
-      QwtPlotCurve::draw(painter, xMap, yMap, first, last - 1);
+      QwtPlotCurve::drawSeries(painter, xMap, yMap, canvasRect, first, last - 1);
     }
   }
 }
 
 // This overload is needed when using autoscale. It is a slow implementation:
 // it might be worth to cache valid data ranges.
-QwtDoubleRect QwtPlotPiecewiseCurve::boundingRect() const
+QRectF QwtPlotPiecewiseCurve::boundingRect() const
 {
   if (dataSize() <= 0) {
-    return QwtDoubleRect(1.0, 1.0, 2.0, 2.0); // Empty data.
+    return QRectF(1.0, 1.0, 2.0, 2.0); // Empty data.
   }
 
-  int first = 0;
+  size_t first = 0;
   while (first < dataSize() && ignorePoint(x(first),y(first))) {
     ++first;
   }
 
   if (first == dataSize()) {
-    return QwtDoubleRect(1.0, 1.0, 2.0, 2.0); // Empty data.
+    return QRectF(1.0, 1.0, 2.0, 2.0); // Empty data.
   }
 
   double minX, maxX, minY, maxY;
   minX = maxX = x(first);
   minY = maxY = y(first);
-  for (int i = first + 1; i < dataSize(); ++i) {
+  for (size_t i = first + 1; i < dataSize(); ++i) {
     const double xv = x(i);
     const double yv = y(i);
 
@@ -109,5 +109,19 @@ QwtDoubleRect QwtPlotPiecewiseCurve::boundingRect() const
     }
   }
 
-  return QwtDoubleRect(minX, minY, maxX - minX, maxY - minY);
+  return QRectF(minX, minY, maxX - minX, maxY - minY);
+}
+
+double QwtPlotPiecewiseCurve::x(int n) const
+{
+  QPointF s = sample(n);
+
+  return s.x();
+}
+
+double QwtPlotPiecewiseCurve::y(int n) const
+{
+  QPointF s = sample(n);
+
+  return s.y();
 }

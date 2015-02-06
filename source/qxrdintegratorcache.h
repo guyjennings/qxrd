@@ -44,7 +44,6 @@ private:
   int    m_IntegrationXUnits;
   double m_CenterX;
   double m_CenterY;
-  double m_CenterStep;
   double m_DetectorXPixelSize;
   double m_DetectorYPixelSize;
   double m_DetectorDistance;
@@ -59,6 +58,7 @@ private:
   double m_AttenuationLength;
   int    m_NRows;
   int    m_NCols;
+  int    m_NPix;
   double m_RStep;
   double m_RMin;
   double m_RMax;
@@ -75,6 +75,7 @@ private:
   int    m_EnableUserAbsorption;
   QString m_UserAbsorptionScript;
   QString m_UserAbsorptionFunction;
+  double m_ScalingFactor;
 
 public:
     QxrdIntegratedDataPtr performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int normalize);

@@ -59,7 +59,7 @@ void QxrdAcquisitionExtraInputsPlot::setNChannels(int nch)
       QPen pen(m_Colors[i % m_Colors.count()]);
       QBrush brush(m_Colors[i % m_Colors.count()]);
 
-      QwtSymbol a(QwtSymbol::Rect, brush, pen, QSize(3,3));
+      QwtSymbol *a = new QwtSymbol(QwtSymbol::Rect, brush, pen, QSize(3,3));
 
       pc->setStyle(QwtPlotCurve::NoCurve);
       pc->setSymbol(a);
@@ -74,12 +74,12 @@ void QxrdAcquisitionExtraInputsPlot::plotChannel(int ch, int i0, int i1, QcepDou
   QwtPlotCurve *pc = m_RawData.value(ch);
 
   if (pc) {
-    pc -> setData(x, y);
+    pc -> setSamples(x, y);
   }
 
   QwtPlotCurve *pc2 = m_Selections.value(ch);
 
   if (pc2) {
-    pc2->setData(x.mid(i0, i1-i0), y.mid(i0, i1-i0));
+    pc2->setSamples(x.mid(i0, i1-i0), y.mid(i0, i1-i0));
   }
 }

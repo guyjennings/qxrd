@@ -6,8 +6,7 @@
 
 QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
     int chnum, QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra) :
-  QObject(),
-  m_ObjectNamer(this, tr("extraChannel(%1)").arg(chnum)),
+  QcepObject(tr("extraChannel(%1)").arg(chnum), NULL),
   m_ChannelNumber(QxrdSettingsSaverPtr(), this, "channelNumber", chnum, "Extra Input Channel Number"),
   m_Enabled(saver, this, "enabled", 1, "Enabled?"),
   m_Plotted(saver, this, "plotted", 1, "Plotted?"),
@@ -43,14 +42,14 @@ void QxrdAcquisitionExtraInputsChannel::readSettings(QSettings *settings, QStrin
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepObject::readSettings(settings, section);
 }
 
 void QxrdAcquisitionExtraInputsChannel::writeSettings(QSettings *settings, QString section)
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepObject::writeSettings(settings, section);
 }
 
 QVector<double> QxrdAcquisitionExtraInputsChannel::readChannel()

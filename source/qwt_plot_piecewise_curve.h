@@ -27,15 +27,17 @@ public:
   explicit QwtPlotPiecewiseCurve(QxrdPlot *plot, const QwtText &title);
   explicit QwtPlotPiecewiseCurve(QxrdPlot *plot, const QString &title);
 
-  virtual QwtDoubleRect boundingRect() const;
+  virtual QRectF boundingRect() const;
 
-  virtual void draw(QPainter *p,
-                    const QwtScaleMap &xMap, const QwtScaleMap &yMap,
+  virtual void drawSeries(QPainter *p,
+                    const QwtScaleMap &xMap, const QwtScaleMap &yMap, const QRectF &canvasRect,
                     int from, int to) const;
 
 private:
   static bool isNaN(double x);
   bool ignorePoint(double x, double y) const;
+  double x(int n) const;
+  double y(int n) const;
   QxrdPlot *m_Plot;
 };
 

@@ -5,7 +5,7 @@
 #include "qxrdapplication.h"
 
 QxrdMaskRasterData::QxrdMaskRasterData(QxrdMaskDataPtr mask, int interp)
-  : QwtRasterData(QwtDoubleRect(0,0,(mask?mask->get_Width():0),(mask?mask->get_Height():0))),
+  : QwtRasterData(),
     m_Mask(mask),
     m_Interpolate(interp)
 {
@@ -13,6 +13,10 @@ QxrdMaskRasterData::QxrdMaskRasterData(QxrdMaskDataPtr mask, int interp)
     g_Application->printMessage(QObject::tr("QxrdMaskRasterData::QxrdMaskRasterData(%1,%2) [%3]")
                                 .HEXARG(mask.data()).arg(interp).HEXARG(this));
   }
+
+  setInterval(Qt::XAxis, QwtInterval(0, (mask?mask->get_Width():0)));
+  setInterval(Qt::YAxis, QwtInterval(0, (mask?mask->get_Height():0)));
+  setInterval(Qt::ZAxis, range());
 }
 
 //QxrdMaskRasterData::QxrdMaskRasterData()
@@ -60,9 +64,9 @@ short int *QxrdMaskRasterData::data() const
   }
 }
 
-QwtDoubleInterval QxrdMaskRasterData::range() const
+QwtInterval QxrdMaskRasterData::range() const
 {
-  return QwtDoubleInterval(0.0, 3.0);
+  return QwtInterval(0.0, 3.0);
 }
 
 QxrdMaskRasterData* QxrdMaskRasterData::copy() const

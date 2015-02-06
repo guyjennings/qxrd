@@ -6,7 +6,7 @@
 class QxrdMaskPicker : public QxrdImagePlotMeasurer
 {
 public:
-  QxrdMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot);
+  QxrdMaskPicker(QWidget *canvas, QxrdImagePlot *plot);
 
 protected:
   QxrdImagePlot *m_Plot;
@@ -15,13 +15,15 @@ protected:
 class QxrdCircularMaskPicker : public QxrdMaskPicker
 {
 public:
-  QxrdCircularMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot);
+  QxrdCircularMaskPicker(QWidget *canvas, QxrdImagePlot *plot);
+
+  QPolygon adjustedPoints(const QPolygon &points) const;
 };
 
 class QxrdPolygonalMaskPicker : public QxrdMaskPicker
 {
 public:
-  QxrdPolygonalMaskPicker(QwtPlotCanvas *canvas, QxrdImagePlot *plot);
+  QxrdPolygonalMaskPicker(QWidget *canvas, QxrdImagePlot *plot);
 
 protected:
   void append(const QPoint &pt);

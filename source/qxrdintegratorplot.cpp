@@ -4,7 +4,7 @@
 #include <qwt_plot_curve.h>
 #include <QMetaMethod>
 #include <qwt_legend.h>
-#include <qwt_legend_item.h>
+#include <qwt_legend_label.h>
 #include <stdio.h>
 //#include <QTime>
 #include "qxrddataprocessor.h"
@@ -15,7 +15,6 @@
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   : QxrdPlot(parent),
-    m_ObjectNamer(this, "integratorGraph"),
     m_DataProcessor(),
     m_Integrator(),
     m_PlotIndex(0),
@@ -24,8 +23,6 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
 
-  connect(this, SIGNAL(legendClicked(QwtPlotItem*)), this, SLOT(onLegendClicked(QwtPlotItem*)));
-  connect(this, SIGNAL(legendChecked(QwtPlotItem*,bool)), this, SLOT(onLegendChecked(QwtPlotItem*,bool)));
 }
 
 void QxrdIntegratorPlot::init(QxrdPlotSettingsWPtr settings)
@@ -87,9 +84,11 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
     }
 
     QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(this, title/*tr("Plot %1").arg(m_PlotIndex)*/);
-    pc -> setData(data->x(), data->y(), data->size());
+    pc -> setSamples(data->x(), data->y(), data->size());
     setPlotCurveStyle(m_PlotIndex, pc);
     pc -> attach(this);
+    pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+    pc -> setLegendAttribute(QwtPlotCurve::LegendShowLine, true);
 
     updateZoomer();
 
@@ -99,7 +98,7 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
       proc -> updateEstimatedTime(proc -> prop_DisplayIntegratedDataTime(), tic.restart());
     }
 
-    QWidget *legend = m_Legend->find(pc);
+    QWidget *legend = m_Legend->legendWidget(itemToInfo(pc));
 
     if (legend) {
       legend->setToolTip(tooltip);
@@ -115,7 +114,9 @@ void QxrdIntegratorPlot::clearGraph()
 {
   m_PlotIndex = 0;
 
-  clear();
+  detachItems(QwtPlotItem::Rtti_PlotCurve);
+  detachItems(QwtPlotItem::Rtti_PlotMarker);
+
   replot();
 }
 
@@ -126,10 +127,10 @@ void QxrdIntegratorPlot::clearSelectedCurves()
   foreach(QwtPlotItem* item, itemList()) {
     QwtPlotCurve *pc = dynamic_cast<QwtPlotCurve*>(item);
     if (pc) {
-      QWidget *wid = m_Legend->find(pc);
+      QWidget *wid = m_Legend->legendWidget(itemToInfo(pc));
 
       if (wid) {
-        QwtLegendItem *itm = qobject_cast<QwtLegendItem*>(wid);
+        QwtLegendLabel *itm = qobject_cast<QwtLegendLabel*>(wid);
 
         if (itm) {
           if (itm->isChecked()) {

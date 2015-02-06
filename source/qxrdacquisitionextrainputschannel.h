@@ -1,15 +1,14 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTSCHANNEL_H
 #define QXRDACQUISITIONEXTRAINPUTSCHANNEL_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
-#include "qxrdobjectnamer.h"
 #include "qxrdsettingssaver-ptr.h"
 
-class QxrdAcquisitionExtraInputsChannel : public QObject
+class QxrdAcquisitionExtraInputsChannel : public QcepObject
 {
   Q_OBJECT
 public:
@@ -32,9 +31,6 @@ public slots:
   int             endIndex();
   bool            evaluateTrigger();
   bool            evalTrig(int polarity, bool edgeTrig);
-
-private:
-  QxrdObjectNamer m_ObjectNamer;
 
 public:
   enum {

@@ -10,8 +10,7 @@
 #include <QTimer>
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
-  QObject(),
-  m_ObjectNamer(this, "extraInputs"),
+  QcepObject("extraInputs", NULL),
   m_Enabled(QxrdSettingsSaverPtr(), this, "enabled", 0, "Extra Inputs Enabled?"),
   m_Skipping(QxrdSettingsSaverPtr(), this, "skipping", 0, "Skipping initial readout?"),
   m_SampleRate(saver, this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
@@ -67,7 +66,7 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString secti
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepObject::readSettings(settings, section);
 
   int n = settings->beginReadArray(section+"/channels");
 
@@ -94,7 +93,7 @@ void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString sect
 {
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepObject::writeSettings(settings, section);
 
   settings->beginWriteArray(section+"/channels");
 
@@ -108,7 +107,7 @@ void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString sect
   settings->endArray();
 }
 
-void QxrdAcquisitionExtraInputs::printMessage(QString msg, QDateTime ts)
+void QxrdAcquisitionExtraInputs::printMessage(QString msg, QDateTime ts) const
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
 
@@ -117,21 +116,21 @@ void QxrdAcquisitionExtraInputs::printMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdAcquisitionExtraInputs::criticalMessage(QString msg, QDateTime /*ts*/)
+void QxrdAcquisitionExtraInputs::criticalMessage(QString msg, QDateTime ts) const
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
 
   if (acq) {
-    acq->criticalMessage(msg);
+    acq->criticalMessage(msg, ts);
   }
 }
 
-void QxrdAcquisitionExtraInputs::statusMessage(QString msg, QDateTime /*ts*/)
+void QxrdAcquisitionExtraInputs::statusMessage(QString msg, QDateTime ts) const
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
 
   if (acq) {
-    acq->statusMessage(msg);
+    acq->statusMessage(msg, ts);
   }
 }
 

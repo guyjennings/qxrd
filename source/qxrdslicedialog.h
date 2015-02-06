@@ -5,7 +5,6 @@
 #include "qxrdplot.h"
 #include "ui_qxrdslicedialog.h"
 #include "qxrdimagedata.h"
-#include "qwt_array.h"
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdslicedialogsettings.h"
 

@@ -96,6 +96,19 @@ public:
 
   virtual UINT Acquisition_GetHwHeaderInfoEx(
       HACQDESC hAcqDesc, CHwHeaderInfo *pInfo, CHwHeaderInfoEx *pInfoEx) = 0;
+
+  virtual UINT Acquisition_GbIF_Init(
+      HACQDESC *phAcqDesc, int nChannelNr, BOOL bEnableIRQ, UINT uiRows, UINT uiColumns,
+      BOOL bSelfInit, BOOL bAlwaysOpen, long lInitType, GBIF_STRING_DATATYPE* cAddress) = 0;
+
+  virtual UINT Acquisition_GbIF_GetDeviceList(
+      GBIF_DEVICE_PARAM* pGBIF_DEVICE_PARAM, int nDeviceCnt) = 0;
+
+  virtual UINT Acquisition_GbIF_GetDevice(
+      GBIF_STRING_DATATYPE* ucAddress, DWORD dwAddressType, GBIF_DEVICE_PARAM* pDevice) = 0;
+
+  virtual UINT Acquisition_GbIF_GetDeviceCnt(
+      long* plNrOfboards) = 0;
 };
 
 #define PerkinElmerPluginInterface_iid "gov.anl.aps.cep.Qxrd.PerkinElmerInterface/1.0"

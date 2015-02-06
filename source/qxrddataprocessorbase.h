@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 
-#include <QObject>
+#include "qcepobject.h"
 //#include <QReadWriteLock>
 //#include <QAtomicInt>
 #include <QWaitCondition>
@@ -17,10 +17,7 @@
 #include "qxrdmaskstack-ptr.h"
 #include "qxrdintegrateddata.h"
 #include "qxrdintegrateddata-ptr.h"
-#include "qxrdringsetfitparameters-ptr.h"
-#include "qxrdringsetsampleddata-ptr.h"
 #include "qxrdfilesaver-ptr.h"
-#include <qwt_double_rect.h>
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdallocator-ptr.h"
 #include "qxrdgeneratetestimage-ptr.h"
@@ -31,9 +28,10 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdwindow-ptr.h"
-#include "qxrdobjectnamer.h"
+#include "qxrddistortioncorrection-ptr.h"
+#include "qxrddistortioncorrection.h"
 
-class QxrdDataProcessorBase : public QObject
+class QxrdDataProcessorBase : public QcepObject
 {
   Q_OBJECT
 
@@ -44,9 +42,6 @@ public:
                         QxrdAllocatorWPtr allocator,
                         QxrdFileSaverWPtr filesaver);
   virtual ~QxrdDataProcessorBase();
-
-private:
-  QxrdObjectNamer m_ObjectNamer;
 
 public:
 //  Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory)
@@ -205,6 +200,9 @@ public:
   Q_PROPERTY(int integrationQueueLength READ get_IntegrationQueueLength WRITE set_IntegrationQueueLength STORED false)
   QCEP_INTEGER_PROPERTY(IntegrationQueueLength)
 
+  Q_PROPERTY(int saverQueueLength READ get_SaverQueueLength WRITE set_SaverQueueLength STORED false)
+  QCEP_INTEGER_PROPERTY(SaverQueueLength)
+
 public:
   enum {
     NoOverwrite,
@@ -231,7 +229,7 @@ public slots:
   void invertMask();
   void growMask();
   void shrinkMask();
-  void maskCircle(QwtDoubleRect pt);
+  void maskCircle(QRectF pt);
   void maskPolygon(QVector<QPointF> poly);
 
   void measurePolygon(QVector<QPointF> poly);
@@ -314,10 +312,13 @@ public slots:
 
   QStringList integrateRectangle(int x0, int y0, int x1, int y1);
 
-public:
   QString existingOutputDirectory(QString dir, QString subdir) const;
   QString filePathInExperimentDirectory(QString name) const;
   QString filePathInDataDirectory(QString name) const;
+  QString filePathInDarkOutputDirectory(QString name) const;
+  QString filePathInRawOutputDirectory(QString name) const;
+  QString filePathInSubtractedOutputDirectory(QString name) const;
+  QString filePathInIntegratedOutputDirectory(QString name) const;
   QString experimentDirectory() const;
   QString dataDirectory() const;
   QString darkOutputDirectory() const;
@@ -325,6 +326,7 @@ public:
   QString subtractedOutputDirectory() const;
   QString integratedOutputDirectory() const;
 
+public:
   void loadDefaultImages();
 
   QxrdDoubleImageDataPtr takeNextFreeImage(int width, int height);
@@ -349,14 +351,13 @@ public:
 
   QxrdMaskStackPtr       maskStack();
 
+  QxrdExperimentPtr      experiment() const;
   QxrdCenterFinderPtr    centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
-  QxrdRingSetFitParametersPtr initialRingSetFitParameters() const;
-  QxrdRingSetSampledDataPtr   initialRingSetData() const;
-  QxrdRingSetFitParametersPtr refinedRingSetFitParameters() const;
-  QxrdRingSetSampledDataPtr   refinedRingSetData() const;
 
   QxrdGenerateTestImageWPtr generateTestImage() const;
+
+  QxrdDistortionCorrectionPtr distortionCorrection() const;
 
   void newMask();
 
@@ -434,15 +435,11 @@ protected:
   QxrdCenterFinderPtr    m_CenterFinder;
   QxrdIntegratorPtr      m_Integrator;
 
-  QxrdRingSetFitParametersPtr m_InitialRingSetFitParameters;
-  QxrdRingSetFitParametersPtr m_RefinedRingSetFitParameters;
-
-  QxrdRingSetSampledDataPtr m_InitialRingSetData;
-  QxrdRingSetSampledDataPtr m_RefinedRingSetData;
-
   QxrdGenerateTestImagePtr m_GenerateTestImage;
 
   QxrdIntegratedDataPtr m_OutputScan;
+
+  QxrdDistortionCorrectionPtr m_DistortionCorrection;
 };
 
 #endif

@@ -23,16 +23,17 @@
 #include "qxrdslicedialog.h"
 #include "qxrdhistogramdialog.h"
 #include "qxrdinfodialog.h"
-#include "qxrdpowderfitdialog.h"
+#include "qxrdscriptdialog.h"
 #include "qxrdimagedisplaywidget.h"
 #include "qxrdhighlighter.h"
 #include "qxrdmaskdialog.h"
+#include "qxrddistortioncorrectiondialog.h"
 
 #include "qxrdexperiment-ptr.h"
 #include "qxrdsynchronizedacquisitiondialog-ptr.h"
 #include "qxrdacquisitionextrainputsdialog-ptr.h"
 #include "qxrdwindowsettings.h"
-#include "qxrdobjectnamer.h"
+#include "qcepobjectnamer.h"
 
 class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
 {
@@ -94,6 +95,8 @@ public slots:
   void crashProgram();
   void testWidget();
   void shrinkPanels(int fontSize, int spacing);
+  void setFontSize(int fontSize);
+  void setSpacing(int spacing);
 
   void executeScript();
   void finishedCommand(QScriptValue result);
@@ -103,12 +106,13 @@ public slots:
 
   void doTest();
 
-  QString timeStamp();
+  QString timeStamp() const;
   void warningMessage(QString msg);
   void displayMessage(QString msg);
   void displayStatusMessage(QString msg);
   void displayCriticalMessage(QString msg);
   void initialLogEntry(QString aline);
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 //  void selectOutputDirectory();
   void clearStatusMessage();
@@ -127,6 +131,9 @@ private slots:
   void onUpdateIntervalMsecChanged(int newVal);
   void populateExperimentsMenu();
   void populateRecentExperimentsMenu();
+  void plotPowderRingRadii();
+  void plotPowderRingTwoTheta();
+  void plotPowderRingCenters();
 
 public:
   void possiblyClose();
@@ -150,11 +157,11 @@ public:
 private:
   void shrinkDockWidget(QDockWidget *dockWidget, int fontSize, int spacing);
   void shrinkObject(QObject *obj, int fontSize, int spacing);
-
+  void setObjectSpacing(QObject *obj, int spacing);
   void setupRecentExperimentsMenu(QAction *action);
 
 private:
-  QxrdObjectNamer                        m_ObjectNamer;
+  QcepObjectNamer                        m_ObjectNamer;
   QxrdWindowWPtr                         m_Window;
   mutable QMutex                         m_Mutex;
   QxrdWindowSettingsWPtr                 m_WindowSettings;
@@ -177,7 +184,8 @@ private:
   QxrdSliceDialog                       *m_SliceDialog;
   QxrdHistogramDialog                   *m_HistogramDialog;
   QxrdInfoDialog                        *m_ImageInfoDialog;
-  QPointer<QxrdPowderFitDialog>          m_PowderFitDialog;
+  QxrdScriptDialog                      *m_ScriptDialog;
+  QxrdDistortionCorrectionDialog        *m_DistortionCorrectionDialog;
   QVector<double>                        m_Exposures;
   QProgressBar                          *m_Progress;
   QLabel                                *m_StatusMsg;

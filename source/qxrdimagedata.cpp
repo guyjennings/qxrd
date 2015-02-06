@@ -10,6 +10,39 @@
 #include "qxrdintegrator.h"
 
 template <typename T>
+QxrdImageData<T>::QxrdImageData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr allocator, int typ, int width, int height, T def)
+  : QcepImageData<T>(saver, width, height, def),
+    m_ObjectCounter(allocator, typ),
+    m_Mask(NULL),
+    m_Overflow(NULL)
+{
+  if (g_Application && (qcepDebug(DEBUG_QUEUES) || qcepDebug(DEBUG_IMAGES))) {
+    int count = m_ObjectCounter.value();
+
+    g_Application->printMessage(QObject::tr("QxrdImageData<%1>::QxrdImageData(%2,%3,%4) %5[%6] thr%7")
+                      .arg(typeid(T).name())
+                      .HEXARG(allocator.data())
+                      .arg(width).arg(height)
+                      .HEXARG(this).arg(count).HEXARG(QThread::currentThread()));
+  }
+
+  m_ObjectCounter.allocate(sizeof(T), width, height);
+}
+
+template <typename T>
+QxrdImageData<T>::~QxrdImageData()
+{
+  if (g_Application && (qcepDebug(DEBUG_QUEUES) || qcepDebug(DEBUG_IMAGES))) {
+    int count = m_ObjectCounter.value();
+
+    g_Application->printMessage(QObject::tr("QxrdImageData<%1>::~QxrdImageData %2[%3], thr%4, cthr%5 titl:%6")
+                      .arg(typeid(T).name())
+                      .HEXARG(this).arg(count).HEXARG(QThread::currentThread()).HEXARG(this->thread()).arg(this->get_Title()));
+  }
+}
+
+
+template <typename T>
 void QxrdImageData<T>::saveMetaData(QxrdExperimentWPtr expt)
 {
   saveMetaData(QcepImageDataBase::get_FileName(), expt);
@@ -62,37 +95,56 @@ void QxrdImageData<T>::saveMetaData(QString name, QxrdExperimentWPtr expt)
 }
 
 template <typename T>
-QxrdImageData<T>::QxrdImageData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr allocator, int typ, int width, int height, T def)
-  : QcepImageData<T>(saver, width, height, def),
-    m_ObjectCounter(allocator, typ),
-    m_Mask(NULL),
-    m_Overflow(NULL)
+void QxrdImageData<T>::loadMetaData(QxrdExperimentWPtr expt)
 {
-  if (g_Application && qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
-    int count = m_ObjectCounter.value();
-
-    g_Application->printMessage(QObject::tr("QxrdImageData<%1>::QxrdImageData(%2,%3,%4) %5[%6] thr%7")
-                      .arg(typeid(T).name())
-                      .HEXARG(allocator.data())
-                      .arg(width).arg(height)
-                      .HEXARG(this).arg(count).HEXARG(QThread::currentThread()));
-  }
-
-  m_ObjectCounter.allocate(sizeof(T), width, height);
+  loadMetaData(QcepImageDataBase::get_FileName(), expt);
 }
 
 template <typename T>
-QxrdImageData<T>::~QxrdImageData()
+void QxrdImageData<T>::loadMetaData(QString name, QxrdExperimentWPtr expt)
 {
-  if (g_Application && qcepDebug(DEBUG_QUEUES + DEBUG_IMAGES)) {
-    int count = m_ObjectCounter.value();
+//  g_Application->printMessage(tr("QxrdImageData::loadMetaData for file %1").arg(name));
 
-    g_Application->printMessage(QObject::tr("QxrdImageData<%1>::~QxrdImageData %2[%3], thr%4, cthr%5 titl:%6")
-                      .arg(typeid(T).name())
-                      .HEXARG(this).arg(count).HEXARG(QThread::currentThread()).HEXARG(this->thread()).arg(this->get_Title()));
+  QTime tic;
+  tic.start();
+
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, QcepImageDataBase::mutex());
+
+    QSettings settings(name+".metadata", QSettings::IniFormat);
+
+    QcepProperty::readSettings(this, &settings, "metadata");
+
+    int n = settings.beginReadArray("normalization");
+    QcepDoubleList norm;
+
+    for (int i=0; i<n; i++) {
+      settings.setArrayIndex(i);
+      norm.append(settings.value("val").toDouble());
+    }
+    settings.endArray();
+
+    QcepImageDataBase::set_Normalization(norm);
+
+    QxrdExperimentPtr exper(expt);
+
+    if (exper) {
+      QxrdCenterFinderPtr cf = exper->centerFinder();
+
+      if (cf) {
+        cf->readSettings(&settings, "centerfinder");
+      }
+
+      QxrdIntegratorPtr integ = exper->integrator();
+
+      if (integ) {
+        integ->readSettings(&settings, "integrator");
+      }
+    }
   }
+//
+//  printf("QcepImageDataBase::loadMetaData for file %s took %d msec\n",  qPrintable(name), tic.elapsed());
 }
-
 
 template <typename T>
 QString QxrdImageData<T>::rawFileName()

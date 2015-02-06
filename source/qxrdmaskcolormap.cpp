@@ -14,16 +14,16 @@ QxrdMaskColorMap::QxrdMaskColorMap()
 {
 }
 
-QxrdMaskColorMap* QxrdMaskColorMap::copy() const
-{
-  QxrdMaskColorMap *map = new QxrdMaskColorMap();
+//QxrdMaskColorMap* QxrdMaskColorMap::copy() const
+//{
+//  QxrdMaskColorMap *map = new QxrdMaskColorMap();
 
-  *map = *this;
+//  *map = *this;
 
-  return map;
-}
+//  return map;
+//}
 
-QRgb QxrdMaskColorMap::rgb(const QwtDoubleInterval &/*inter*/, double value) const
+QRgb QxrdMaskColorMap::rgb(const QwtInterval &/*inter*/, double value) const
 {
   if (value > 0.5) {
     return m_SelectedColor;
@@ -47,7 +47,7 @@ QRgb QxrdMaskColorMap::rgb(const QwtDoubleInterval &/*inter*/, double value) con
   //  return qRgba(255,0,0, v);
 }
 
-unsigned char QxrdMaskColorMap::colorIndex(const QwtDoubleInterval &/*inter*/, double /*value*/) const
+unsigned char QxrdMaskColorMap::colorIndex(const QwtInterval &/*inter*/, double /*value*/) const
 {
   return 0;
 }

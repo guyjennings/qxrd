@@ -10,10 +10,6 @@
 #include "qxrdintegrator.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdgeneratetestimage.h"
-#include "qxrdringfitparameters.h"
-#include "qxrdringsetfitparameters.h"
-#include "qxrdringsampleddata.h"
-#include "qxrdringsetsampleddata.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdacquisitionextrainputs.h"
@@ -36,7 +32,8 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr e
     m_Experiment(exp),
     m_Acquisition(),
     m_DataProcessor(),
-    m_Window()
+    m_Window(),
+    m_ScriptOutput(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngine::QxrdScriptEngine(%p)\n", this);
@@ -47,6 +44,10 @@ QxrdScriptEngine::~QxrdScriptEngine()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngine::~QxrdScriptEngine(%p)\n", this);
+  }
+
+  if (m_ScriptOutput) {
+    fclose(m_ScriptOutput);
   }
 }
 
@@ -144,7 +145,24 @@ void QxrdScriptEngine::loadScript(QString path)
       QTextStream scriptStream(&scriptFile);
       QString script = scriptStream.readAll();
 
-      QScriptEngine::evaluate(script, path);
+      QScriptValue res = QScriptEngine::evaluate(script, path);
+
+      QxrdExperimentPtr expt(experiment());
+
+      if (expt) {
+        if (hasUncaughtException()) {
+          expt->printLine(tr("Script error, file %1, line %2 : %3")
+                       .arg(path).arg(uncaughtExceptionLineNumber()).arg(uncaughtExceptionString()));
+
+          QStringList bt = uncaughtExceptionBacktrace();
+
+          foreach (QString s, bt) {
+            expt->printLine(s);
+          }
+        } else {
+          expt->printLine(tr("= %1").arg(res.toString()));
+        }
+      }
     }
   }
 }
@@ -287,6 +305,106 @@ QScriptValue QxrdScriptEngine::printFunc(QScriptContext *context, QScriptEngine 
   }
 
   return QScriptValue(engine, 1);
+}
+
+QCEP_DOC_FUNCTION(
+    "fopen",
+    "fopen(fileName)",
+    "Open a script output file",
+    "<p>The fileName given is opened as the current output file ussed by fprint</p>\n"
+    "<p>Only one script output file may be open at a time</p>\n"
+    )
+
+QScriptValue QxrdScriptEngine::fopenFunc(QScriptContext *context, QScriptEngine *engine, void * /*u*/)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    int nArgs = context->argumentCount();
+
+    if (nArgs >= 1) {
+      eng -> openScriptOutput(context -> argument(0).toString());
+    }
+  }
+
+  return QScriptValue(engine, 1);
+}
+
+QCEP_DOC_FUNCTION(
+    "fprint",
+    "fprint([value]...)",
+    "Print values to the script output file",
+    "<p>The values of the arguments are catenated into a single string which is "
+    "printed to the script output file</p>\n"
+    "<p>The following is a typical use: print out the names and values of the "
+    "elements of an object:</p>\n"
+    "<code>"
+    "for(i in acquisition) fprint(i, acquisition[i])"
+    "</code>"
+    )
+
+QScriptValue QxrdScriptEngine::fprintFunc(QScriptContext *context, QScriptEngine *engine, void * /*u*/)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    int nArgs = context->argumentCount();
+    QString msg;
+
+    for (int i=0; i<nArgs; i++) {
+      if (i != 0) {
+        msg += " ";
+      }
+
+      msg += context -> argument(i).toString();
+    }
+
+    eng -> writeScriptOutput(msg);
+  }
+
+  return QScriptValue(engine, 1);
+}
+
+QCEP_DOC_FUNCTION(
+    "fclose",
+    "fclose()",
+    "Closes the script output file",
+    "<p>Note that only one script output file may be open at a time</p>\n"
+    )
+
+QScriptValue QxrdScriptEngine::fcloseFunc(QScriptContext * /*context*/, QScriptEngine *engine, void * /*u*/)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    eng -> closeScriptOutput();
+  }
+
+  return QScriptValue(engine, 1);
+}
+
+QCEP_DOC_FUNCTION(
+    "fdelete",
+    "fdelete(path)",
+    "Deletes a file",
+    "<p>If the file does not exist no error occurs</p>"
+    )
+
+QScriptValue QxrdScriptEngine::fdeleteFunc(QScriptContext * context, QScriptEngine *engine, void * /*u*/)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  bool res = false;
+
+  if (eng) {
+    QString path = context -> argument(0).toString();
+
+    if (path.length() > 0) {
+      res = QFile::remove(path);
+    }
+  }
+
+  return QScriptValue(engine, res);
 }
 
 QCEP_DOC_FUNCTION(
@@ -876,7 +994,7 @@ QScriptValue QxrdScriptEngine::dataFunc(QScriptContext * /*context*/, QScriptEng
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
-      return engine -> newQObject(proc -> data().data());
+      return engine -> newQObject(proc -> data().data(),QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
     }
   }
 
@@ -903,7 +1021,7 @@ QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEng
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
-      return engine -> newQObject(proc -> darkImage().data());
+      return engine -> newQObject(proc -> darkImage().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
     }
   }
 
@@ -926,7 +1044,7 @@ QScriptValue QxrdScriptEngine::maskFunc(QScriptContext * /*context*/, QScriptEng
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
-      return engine -> newQObject(proc -> mask().data());
+      return engine -> newQObject(proc -> mask().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
     }
   }
 
@@ -952,7 +1070,7 @@ QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScrip
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
-      return engine -> newQObject(proc -> overflow().data());
+      return engine -> newQObject(proc -> overflow().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
     }
   }
 
@@ -977,7 +1095,7 @@ QScriptValue QxrdScriptEngine::liveDataFunc(QScriptContext * /*context*/, QScrip
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
-      return engine -> newQObject(proc -> liveData().data());
+      return engine -> newQObject(proc -> liveData().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
     }
   }
 
@@ -1235,7 +1353,7 @@ QCEP_DOC_FUNCTION(
     ""
     )
 
-QScriptValue QxrdScriptEngine::timeStampFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::timeStampFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
   double val = QcepImageDataBase::secondsSinceEpoch();
 
@@ -1344,9 +1462,7 @@ QCEP_DOC_FUNCTION(
 
 void QxrdScriptEngine::initialize()
 {
-  qScriptRegisterMetaType(this, ::QxrdRingFitToScriptValue, ::QxrdRingFitFromScriptValue);
-  qScriptRegisterMetaType(this, ::QxrdRingSampledDataToScriptValue, ::QxrdRingSampledDataFromScriptValue);
-  //  qScriptRegisterMetaType(this, ::QxrdRingSampledDataPtrToScriptValue, ::QxrdRingSampledDataPtrFromScriptValue);
+  qScriptRegisterMetaType(this, QxrdScriptEngine::QPointFToScriptValue, QxrdScriptEngine::QPointFFromScriptValue);
 
   qScriptRegisterSequenceMetaType< QList<int> >(this);
   qScriptRegisterSequenceMetaType< QList<bool> >(this);
@@ -1358,6 +1474,15 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterSequenceMetaType< QVector<double> >(this);
   qScriptRegisterSequenceMetaType< QVector<QString> >(this);
   //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
+
+  qScriptRegisterMetaType(this,
+                          QxrdPowderPointProperty::toScriptValue,
+                          QxrdPowderPointProperty::fromScriptValue);
+
+//  qScriptRegisterSequenceMetaType< QVector<QxrdPowderPoint> >(this);
+  qScriptRegisterMetaType(this,
+                          QxrdPowderPointVectorProperty::toScriptValue,
+                          QxrdPowderPointVectorProperty::fromScriptValue);
 
   QxrdApplicationPtr app(m_Application);
 
@@ -1397,6 +1522,10 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("outputDirectory", newFunction(outputDirectoryFunc, 1));
   globalObject().setProperty("fileIndex", newFunction(fileIndexFunc, 1));
   globalObject().setProperty("print", newFunction(printFunc, NULL));
+  globalObject().setProperty("fopen", newFunction(fopenFunc, NULL));
+  globalObject().setProperty("fdelete", newFunction(fdeleteFunc, NULL));
+  globalObject().setProperty("fprint", newFunction(fprintFunc, NULL));
+  globalObject().setProperty("fclose", newFunction(fcloseFunc, NULL));
   globalObject().setProperty("printMessage", newFunction(printFunc, NULL));
   globalObject().setProperty("data", newFunction(dataFunc));
   globalObject().setProperty("dark", newFunction(darkFunc));
@@ -1477,24 +1606,15 @@ void QxrdScriptEngine::initialize()
       QCEP_DOC_OBJECT("integrator", "Image Circular Integration Options");
       globalObject().setProperty("integrator",      newQObject(dp->integrator().data()));
 
-      QCEP_DOC_OBJECT("initialFit", "Initial Powder Ring Fitting Parameters");
-      globalObject().setProperty("initialFit",      newQObject(dp->initialRingSetFitParameters().data()));
-
-      QCEP_DOC_OBJECT("refinedFit", "Refined Powder Ring Fitting Parameters");
-      globalObject().setProperty("refinedFit",      newQObject(dp->refinedRingSetFitParameters().data()));
-
-      QCEP_DOC_OBJECT("initialData", "Initial Powder Ring Fitting Data");
-      globalObject().setProperty("initialData",     newQObject(dp->initialRingSetData().data()));
-
-      QCEP_DOC_OBJECT("refinedData", "Refined Power Ring Fitting Data");
-      globalObject().setProperty("refinedData",     newQObject(dp->refinedRingSetData().data()));
-
       QxrdGenerateTestImagePtr gti(dp->generateTestImage());
 
       if (gti) {
         QCEP_DOC_OBJECT("testImage", "Object for generating test images");
         globalObject().setProperty("testImage",       newQObject(gti.data()));
       }
+
+      QCEP_DOC_OBJECT("distortion", "Detector distortion correction");
+      globalObject().setProperty("distortion",     newQObject(dp->distortionCorrection().data()));
     }
   }
 }
@@ -1829,4 +1949,42 @@ QByteArray QxrdScriptEngine::helpText(QString item)
 void QxrdScriptEngine::dumpLocks()
 {
   QcepMutexLocker::dumpLocks();
+}
+
+QScriptValue QxrdScriptEngine::QPointFToScriptValue(QScriptEngine *engine, const QPointF &in)
+{
+  QScriptValue obj = engine->newArray(2);
+
+  obj.setProperty(0, in.x());
+  obj.setProperty(1, in.y());
+
+  return obj;
+}
+
+void         QxrdScriptEngine::QPointFFromScriptValue(const QScriptValue &object, QPointF &pt)
+{
+  pt.setX(object.property(0).toNumber());
+  pt.setY(object.property(1).toNumber());
+}
+
+void QxrdScriptEngine::openScriptOutput(const QString& fileName)
+{
+  closeScriptOutput();
+
+  m_ScriptOutput = fopen(qPrintable(fileName), "a+");
+}
+
+void QxrdScriptEngine::writeScriptOutput(const QString& outputLine)
+{
+  if (m_ScriptOutput) {
+    fputs(qPrintable(outputLine), m_ScriptOutput);
+  }
+}
+
+void QxrdScriptEngine::closeScriptOutput()
+{
+  if (m_ScriptOutput) {
+    fclose(m_ScriptOutput);
+    m_ScriptOutput = NULL;
+  }
 }

@@ -10,11 +10,10 @@
 #include "qxrdsettingssaver.h"
 
 QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr alloc) :
-  QObject(NULL),
-  m_ObjectNamer(this, "testImage"),
+  QcepObject("testImage", NULL),
   m_Processor(),
   m_Allocator(alloc),
-  m_Geometry(new QxrdDetectorGeometry()),
+  m_Geometry(new QxrdDetectorGeometry("testGeometry", NULL)),
   m_NRows(saver, this, "nRows", 2048, "Number of Rows"),
   m_NCols(saver, this, "nCols", 2048, "Number of Cols"),
   m_CenterX(saver, this, "centerX", 1024, "X Center"),

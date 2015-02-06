@@ -8,6 +8,7 @@
 #include "qxrdapplication.h"
 #include "qxrdsettingssaver-ptr.h"
 #include "qxrdsettingssaver.h"
+#include "qcepexperiment.h"
 #include "qxrdexperiment.h"
 
 QxrdServer::QxrdServer(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
@@ -32,14 +33,14 @@ QxrdServer::~QxrdServer()
 
 void QxrdServer::readSettings(QSettings *settings, QString section)
 {
-  QcepProperty::readSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::readSettings(this, settings, section);
 
   runModeChanged();
 }
 
 void QxrdServer::writeSettings(QSettings *settings, QString section)
 {
-  QcepProperty::writeSettings(this, &staticMetaObject, section, settings);
+  QcepProperty::writeSettings(this, settings, section);
 }
 
 void QxrdServer::runModeChanged()

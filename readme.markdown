@@ -1,6 +1,58 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.7 - Oct 10 2014
+Added user interface to display shrinking routines
+
+Fixed problems displaying pilatus images
+
+## v0.11.6 - Sep 2 2014
+Added simple calibrant diffraction angle calculation routines
+
+Plot of fitted ring TTH and calibrant TTH vs azimuth
+
+Added file access scripting commands
+
+Preferred qt version is now qt5 for all platforms
+
+## v0.11.5 - Aug 20 2014
+Improved memory handling during acquisition - should drop fewer frames
+
+Added optional automatic retry mode for acquisition - dropped frames will be repeated automatically
+during acquisition.   Note that will affect acquisition timing.
+
+Added a saver backlog counter to go with the processing and integration backlog counters already provided. The
+backlog counters should now count down to zero properly as well.
+
+Tidied up powder ring fitting routines and removed some redundant duplications.
+
+## v0.11.4 - Aug 11 2014
+More work on fitting - ellipse fitting added
+
+MINGW builds work again
+
+Manual control of output voltage in sync acq dialog
+
+## v0.11.3 - Jul 31 2014
+Implemented histogram window
+
+Extensive rework of powder ring and peak fitting code
+
+Some work on a distortion calibration from grid mask images
+
+Script Editor window added
+
+## v0.11.1 - May 21 2014
+First release in 0.11.x series ...
+
+Major changes to use current versions of qceplib 0.1.4, qwt 6.1 and qt 5.x
+
+Still problems with qt 5.x builds so still include qt 4.8.5 build
+
+Minor updates:
+
+Various changes related to saving integrated data
+
 ## v0.9.17 - Nov 8 2013
 Fixed problems with saving user defined properties in acquired images
 

@@ -16,9 +16,8 @@
 #include <qwt_legend.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_scale_widget.h>
-#include <qwt_double_range.h>
 #include <qwt_symbol.h>
-
+#include <qwt_picker_machine.h>
 #include <QTime>
 #include <QMenu>
 #include <QContextMenuEvent>
@@ -34,13 +33,16 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Data(NULL),
     m_Mask(NULL),
     m_Overflow(NULL),
+    m_DataRaster(NULL),
+    m_MaskRaster(NULL),
+    m_OverflowRaster(NULL),
     m_DataImage(NULL),
     m_MaskImage(NULL),
     m_OverflowImage(NULL),
-    m_ColorMap(Qt::black, Qt::white),
-    m_MaskColorMap(Qt::red, QColor(0,0,0,0)),
+    m_ColorMap(new QwtLinearColorMap(Qt::black, Qt::white)),
+    m_MaskColorMap(new QxrdMaskColorMap(Qt::red, QColor(0,0,0,0))),
     m_MaskAlpha(80),
-    m_OverflowColorMap(QColor(0,0,0,0), Qt::green),
+    m_OverflowColorMap(new QxrdMaskColorMap(QColor(0,0,0,0), Qt::green)),
     m_OverflowAlpha(256),
     m_DataProcessor(),
     m_CenterFinderPicker(NULL),
@@ -64,7 +66,7 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   delete m_Zoomer;
 
   m_Zoomer = new QxrdImagePlotZoomer(canvas(), this);
-  m_Zoomer -> setSelectionFlags(QwtPicker::DragSelection | QwtPicker::CornerToCorner);
+  m_Zoomer -> setStateMachine(new QwtPickerDragRectMachine());
   m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
   m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
 
@@ -75,8 +77,9 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
 
   m_Zoomer -> setEnabled(true);
 
-  m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::xBottom, QwtPlotRescaler::Expanding);
+  m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::yLeft, QwtPlotRescaler::Expanding);
   m_Rescaler -> setEnabled(true);
+  m_Rescaler -> setExpandingDirection(QwtPlotRescaler::ExpandBoth);
 
   m_Slicer = new QxrdPlotSlicer(canvas(), this);
   m_Slicer -> setEnabled(false);
@@ -88,7 +91,7 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   m_HistogramSelector -> setEnabled(false);
 
   m_Legend -> setFrameStyle(QFrame::Box|QFrame::Sunken);
-  m_Legend -> setItemMode(QwtLegend::CheckableItem);
+  m_Legend -> setDefaultItemMode(QwtLegendData::Checkable);
 
   insertLegend(m_Legend, QwtPlot::BottomLegend);
 
@@ -122,6 +125,7 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   setGrayscale();
 
   if (set) {
+    connect(m_Zoomer, SIGNAL(zoomed(QRectF)), this, SLOT(onImageScaleChanged()));
     connect(set->prop_ImageShown(), SIGNAL(valueChanged(bool,int)), this, SLOT(changeImageShown(bool)));
     connect(set->prop_MaskShown(), SIGNAL(valueChanged(bool,int)), this, SLOT(changeMaskShown(bool)));
     connect(set->prop_OverflowShown(), SIGNAL(valueChanged(bool,int)), this, SLOT(changeOverflowShown(bool)));
@@ -148,6 +152,8 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   }
 
   enableZooming();
+
+  onImageScaleChanged();
 }
 
 void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
@@ -160,11 +166,11 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
     QxrdCenterFinderPtr cf(dp->centerFinder());
 
     if (cf) {
-      connect(m_CenterFinderPicker, SIGNAL(selected(QwtDoublePoint)),
-              cf.data(), SLOT(onCenterChanged(QwtDoublePoint)));
+      connect(m_CenterFinderPicker, SIGNAL(selected(QPointF)),
+              cf.data(), SLOT(onCenterChanged(QPointF)));
 
-      connect(m_Circles, SIGNAL(selected(QwtDoubleRect)),
-              dp.data(), SLOT(maskCircle(QwtDoubleRect)));
+      connect(m_Circles, SIGNAL(selected(QRectF)),
+              dp.data(), SLOT(maskCircle(QRectF)));
 
       connect(m_Polygons, SIGNAL(selected(QVector<QPointF>)),
               dp.data(), SLOT(maskPolygon(QVector<QPointF>)));
@@ -172,15 +178,15 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
       connect(m_Measurer, SIGNAL(selected(QVector<QPointF>)),
               dp.data(), SLOT(measurePolygon(QVector<QPointF>)));
 
-      //  connect(m_Slicer, SIGNAL(selected(QwtArray<QwtDoublePoint>)),
-    //          m_DataProcessor, SLOT(slicePolygon(QwtArray<QwtDoublePoint>)));
+      //  connect(m_Slicer, SIGNAL(selected(QVector<QPointF>)),
+    //          m_DataProcessor, SLOT(slicePolygon(QVector<QPointF>)));
 
-      connect(m_PowderPointPicker, SIGNAL(selected(QwtDoublePoint)),
-              cf.data(), SLOT(onPointSelected(QwtDoublePoint)));
+      connect(m_PowderPointPicker, SIGNAL(selected(QPointF)),
+              cf.data(), SLOT(onPointSelected(QPointF)));
 
-      onCenterChanged(QwtDoublePoint(cf->get_CenterX(), cf->get_CenterY()));
+      onCenterChanged(QPointF(cf->get_CenterX(), cf->get_CenterY()));
 
-      connect(cf->prop_MarkedPoints(), SIGNAL(valueChanged(QcepPolygon,int)),
+      connect(cf->prop_MarkedPoints(), SIGNAL(valueChanged(QxrdPowderPointVector,int)),
               this, SLOT(onMarkedPointsChanged()));
 
       onMarkedPointsChanged();
@@ -190,8 +196,8 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
   connect(m_Slicer, SIGNAL(selected(QVector<QPointF>)),
           this, SIGNAL(slicePolygon(QVector<QPointF>)));
 
-  connect(m_HistogramSelector, SIGNAL(selected(QwtDoubleRect)),
-          this, SIGNAL(selectHistogram(QwtDoubleRect)));
+  connect(m_HistogramSelector, SIGNAL(selected(QRectF)),
+          this, SIGNAL(selectHistogram(QRectF)));
 }
 
 QxrdDataProcessorWPtr QxrdImagePlot::processor() const
@@ -202,6 +208,13 @@ QxrdDataProcessorWPtr QxrdImagePlot::processor() const
 QxrdImagePlotSettingsWPtr QxrdImagePlot::imagePlotSettings()
 {
   return m_ImagePlotSettings;
+}
+
+void QxrdImagePlot::autoScale()
+{
+  inherited::autoScale();
+
+  onImageScaleChanged();
 }
 
 void QxrdImagePlot::setAutoRange()
@@ -245,18 +258,18 @@ void QxrdImagePlot::recalculateDisplayedRange()
 {
   QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
-  if (set) {
+  if (set && m_DataRaster) {
     double mindis, maxdis;
 
     if (set->get_DisplayScalingMode() == PercentageMode) {
-      double minv = m_DataRaster.minValue();
-      double maxv = m_DataRaster.maxValue();
+      double minv = m_DataRaster->minValue();
+      double maxv = m_DataRaster->maxValue();
       double del = maxv-minv;
 
       mindis = minv+del*set->get_DisplayMinimumPct()/100.0;
       maxdis = minv+del*set->get_DisplayMaximumPct()/100.0;
     } else if (set->get_DisplayScalingMode() == PercentileMode) {
-      QwtDoubleInterval range = m_DataRaster.percentileRange(set->get_DisplayMinimumPctle(), set->get_DisplayMaximumPctle());
+      QwtInterval range = m_DataRaster->percentileRange(set->get_DisplayMinimumPctle(), set->get_DisplayMaximumPctle());
 
       mindis = range.minValue();
       maxdis = range.maxValue();
@@ -265,7 +278,7 @@ void QxrdImagePlot::recalculateDisplayedRange()
       maxdis = set->get_DisplayMaximumVal();
     }
 
-    m_DataRaster.setDisplayedRange(mindis, maxdis);
+    m_DataRaster->setDisplayedRange(mindis, maxdis);
 
     replotImage();
   }
@@ -290,7 +303,10 @@ void QxrdImagePlot::onInterpolateChanged(bool interp)
 {
   //  printf("QxrdImagePlot::onInterpolateChanged(%d)\n", interp);
 
-  m_DataRaster.setInterpolate(interp);
+  if (m_DataRaster) {
+    m_DataRaster->setInterpolate(interp);
+
+  }
 
   replotImage();
 }
@@ -302,6 +318,8 @@ void QxrdImagePlot::onMaintainAspectChanged(bool interp)
   if (m_Rescaler) {
     m_Rescaler -> setEnabled(interp);
   }
+
+  onImageScaleChanged();
 
   replotImage();
 }
@@ -329,21 +347,23 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
     m_CenterMarker -> setLinePen(pen);
   }
 
-  m_MaskColorMap.setColorInterval(pen.color(), QColor(0,0,0,0));
+  m_MaskColorMap->setColorInterval(pen.color(), QColor(0,0,0,0));
 
-  foreach (QwtPlotMarker *m, m_PowderPointMarkers) {
-    QwtSymbol sym = m->symbol();
+//  foreach (QwtPlotMarker *m, m_PowderPointMarkers) {
+//    const QwtSymbol *oldsym = m->symbol();
 
-    sym.setPen(pen);
-    sym.setBrush(QBrush(pen.color()));
+//    QwtSymbol *sym = new QwtSymbol(oldsym->style(),oldsym->brush(),oldsym->pen(),oldsym->size());
 
-    m->setSymbol(sym);
-  }
+//    sym->setPen(pen);
+//    sym->setBrush(QBrush(pen.color()));
+
+//    m->setSymbol(sym);
+//  }
 }
 
 void QxrdImagePlot::colorMapStart(QColor startColor, QColor endColor)
 {
-  m_ColorMap.setColorInterval(startColor, endColor);
+  m_ColorMap->setColorInterval(startColor, endColor);
 }
 
 void QxrdImagePlot::colorMapRange(double value1, QColor color1, double value2, QColor color2)
@@ -367,10 +387,10 @@ void QxrdImagePlot::colorMapRange(double value1, QColor color1, double value2, Q
 
       QColor col = QColor::fromRgbF(r1 + (r2-r1)*interp, g1 + (g2 - g1)*interp, b1 + (b2 - b1)*interp);
 
-      m_ColorMap.addColorStop(val, col);
+      m_ColorMap->addColorStop(val, col);
     }
   } else {
-    m_ColorMap.addColorStop(value1, color1);
+    m_ColorMap->addColorStop(value1, color1);
   }
 }
 
@@ -584,7 +604,7 @@ void QxrdImagePlot::changedColorMap()
   replotImage();
 }
 
-void QxrdImagePlot::setImage(QxrdRasterData data)
+void QxrdImagePlot::setImage(QxrdRasterData *data)
 {
   m_DataRaster = data;
 
@@ -593,9 +613,11 @@ void QxrdImagePlot::setImage(QxrdRasterData data)
   m_DataImage -> itemChanged();
 
   recalculateDisplayedRange();
+
+  onImageScaleChanged();
 }
 
-void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
+void QxrdImagePlot::setMask(QxrdMaskRasterData *mask)
 {
   m_MaskRaster = mask;
 
@@ -606,7 +628,7 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData mask)
   replot();
 }
 
-void QxrdImagePlot::setOverflows(QxrdMaskRasterData overflow)
+void QxrdImagePlot::setOverflows(QxrdMaskRasterData *overflow)
 {
   m_OverflowRaster = overflow;
 
@@ -629,17 +651,17 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
     m_Overflow = overflow;
 
     if (!image ||
-        image->get_Width() != m_DataRaster.width() ||
-        image->get_Height() != m_DataRaster.height()) {
+        image->get_Width() != m_DataRaster->width() ||
+        image->get_Height() != m_DataRaster->height()) {
       m_FirstTime = true;
     }
 
-    QxrdRasterData data(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
+    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
 
     if (overflow == NULL) {
       setImage(data);
     } else {
-      setOverflows(overflow);
+      setOverflows(new QxrdMaskRasterData(overflow));
       setImage(data);
     }
 
@@ -666,13 +688,13 @@ void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMas
     m_Mask = mask;
 
     if (!image ||
-        image->get_Width() != m_DataRaster.width() ||
-        image->get_Height() != m_DataRaster.height()) {
+        image->get_Width() != m_DataRaster->width() ||
+        image->get_Height() != m_DataRaster->height()) {
       m_FirstTime = true;
     }
 
-    QxrdRasterData data(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
-    QxrdMaskRasterData msk(mask, false);
+    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
+    QxrdMaskRasterData *msk = new QxrdMaskRasterData(mask, false);
 
     setImage(data);
     setMask(msk);
@@ -703,30 +725,37 @@ void QxrdImagePlot::onCenterYChanged(double cy)
   replot();
 }
 
-void QxrdImagePlot::onCenterChanged(QwtDoublePoint c)
+void QxrdImagePlot::onCenterChanged(QPointF c)
 {
   m_CenterMarker -> setValue(c);
   replot();
 }
 
+void QxrdImagePlot::onImageScaleChanged()
+{
+  if (m_Rescaler && m_Rescaler->isEnabled()) {
+    m_Rescaler->rescale();
+  }
+}
+
 const QxrdRasterData* QxrdImagePlot::raster() const
 {
-  return &m_DataRaster;
+  return m_DataRaster;
 }
 
 QxrdRasterData* QxrdImagePlot::raster()
 {
-  return &m_DataRaster;
+  return m_DataRaster;
 }
 
 const QxrdMaskRasterData* QxrdImagePlot::maskRaster() const
 {
-  return &m_MaskRaster;
+  return m_MaskRaster;
 }
 
 QxrdMaskRasterData* QxrdImagePlot::maskRaster()
 {
-  return &m_MaskRaster;
+  return m_MaskRaster;
 }
 
 void QxrdImagePlot::disablePickers()
@@ -815,7 +844,7 @@ void QxrdImagePlot::replot()
   //  g_Application->printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
 }
 
-QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
+QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
 {
   const QxrdRasterData *ras = this->raster();
 
@@ -844,8 +873,8 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
     }
   }
 
-  if (m_MaskRaster.data()) {
-    double mask = m_MaskRaster.value(pos.x(),pos.y());
+  if (m_MaskRaster && m_MaskRaster->data()) {
+    double mask = m_MaskRaster->value(pos.x(),pos.y());
     res += tr(", %1").arg(mask);
 
     if (set) {
@@ -868,11 +897,18 @@ QwtText QxrdImagePlot::trackerText(const QwtDoublePoint &pos)
       set->set_QMouse(q);
     }
 
+    double r = centerFinder->getR(pos);
+    res += tr(", R %1").arg(r);
+
+    if (set) {
+      set->set_RMouse(r);
+    }
+
     double chi = centerFinder->getChi(pos);
     res += tr(", Chi %1").arg(chi);
 
     if (m_PowderPointPicker -> isEnabled()) {
-      QwtDoublePoint rpt = ras->optimizePeakPosition(pos);
+      QPointF rpt = ras->optimizePeakPosition(pos);
       res += tr("\nPtx %1, Pty %2").arg(rpt.x()).arg(rpt.y());
     }
   }
@@ -899,6 +935,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
       QMenu plotMenu(NULL, NULL);
 
       QAction *auSc = plotMenu.addAction("Autoscale");
+      QAction *prGr = plotMenu.addAction("Print Graph...");
 
       plotMenu.addSeparator();
 
@@ -918,31 +955,73 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           double x = xMap.invTransform(evlocal.x());
           double y = yMap.invTransform(evlocal.y());
 
-          QwtDoublePoint nearest = cf->nearestPowderPoint(x, y);
+          QxrdPowderPoint nearest = cf->nearestPowderPoint(x, y);
 
-          QAction *fitCircle       = plotMenu.addAction("Fit Center from Points on Circle");
-          QAction *adjPoint        = plotMenu.addAction(tr("Auto adjust position of point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
-          QAction *adjAllPoints    = plotMenu.addAction(tr("Auto adjust position of all points"));
-          QAction *delPoint        = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
-          QAction *deleteAllPoints = plotMenu.addAction("Delete all Points");
-          QAction *fitPeakNear     = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *fitCircle        = plotMenu.addAction(tr("Fit Circle Center from Points on Ring %1").arg(nearest.n1()));
+          QAction *fitEllipse       = plotMenu.addAction(tr("Fit Ellipse from Points on Ring %1").arg(nearest.n1()));
+          QAction *fitEllipses      = plotMenu.addAction(tr("Fit Ellipses to all powder rings"));
+          QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
+          QAction *delRing          = plotMenu.addAction(tr("Delete Ring %1").arg(nearest.n1()));
+          QAction *deleteAllPoints  = plotMenu.addAction(tr("Delete all Rings"));
+          QAction *disableRing      = plotMenu.addAction(tr("Disable Ring %1").arg(nearest.n1()));
+          QAction *enableRing       = plotMenu.addAction(tr("Enable Ring %1").arg(nearest.n1()));
+          QAction *normalizeRings   = plotMenu.addAction(tr("Normalize Powder Rings"));
+          QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *fitRingNear      = plotMenu.addAction(tr("Fit Point on Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *traceRingClockwise = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *missingRing      = plotMenu.addAction(tr("Missing Diffracted Ring near (%1,%2)").arg(x).arg(y));
+          //          QAction *traceRingParallel = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4] in parallel").arg(x).arg(y).arg(event->x()).arg(event->y()));
+          QAction *zapPixel         = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
 
           QAction *action = plotMenu.exec(event->globalPos());
 
           if (action == auSc) {
             autoScale();
+          } else if (action == prGr) {
+            printGraph();
           } else if (action == fitCircle) {
-            cf->fitPowderCircle();
-          } else if (action == adjPoint) {
-            cf->adjustPointNear(x,y);
-          } else if (action == adjAllPoints) {
-            cf->adjustAllPoints();
+            cf->fitPowderCircle(nearest.n1());
+          } else if (action == fitEllipse) {
+            cf->fitPowderEllipse(nearest.n1());
+          } else if (action == fitEllipses) {
+            cf->fitPowderEllipses();
           } else if (action == delPoint) {
             cf->deletePowderPointNear(x,y);
+          } else if (action == delRing) {
+            cf->deletePowderRing(nearest.n1());
           } else if (action == deleteAllPoints) {
             cf->deletePowderPoints();
+          } else if (action == enableRing) {
+            cf->enablePowderRing(nearest.n1());
+          } else if (action == disableRing) {
+            cf->disablePowderRing(nearest.n1());
+          } else if (action == normalizeRings) {
+            cf->normalizePowderRings();
           } else if (action == fitPeakNear) {
-            cf->fitPeakNear(x,y);
+            QMetaObject::invokeMethod(cf.data(), "fitPeakNear",
+                                      Q_ARG(double,x),
+                                      Q_ARG(double,y));
+          } else if (action == fitRingNear) {
+            QMetaObject::invokeMethod(cf.data(), "fitRingNear",
+                                      Q_ARG(double,x),
+                                      Q_ARG(double,y));
+          } else if (action == traceRingClockwise) {
+            QMetaObject::invokeMethod(cf.data(), "traceRingNear",
+                                      Q_ARG(double,x),
+                                      Q_ARG(double,y),
+                                      Q_ARG(double,25.0));
+          } else if (action == missingRing) {
+            cf->missingRingNear(x,y);
+//            QMetaObject::invokeMethod((cf.data(), "missingRingNear",
+//                                       Q_ARG(double,x),
+//                                       Q_ARG(double,y));
+//          } else if (action == traceRingParallel) {
+//            QMetaObject::invokeMethod(cf.data(), "traceRingNearParallel",
+//                                      Q_ARG(double,x),
+//                                      Q_ARG(double,y),
+//                                      Q_ARG(double,25.0));
+          } else if (action == zapPixel) {
+            this->zapPixel(qRound(x),qRound(y));
           }
         }
       }
@@ -952,6 +1031,26 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
   } else {
     event->accept();
   }
+}
+
+void QxrdImagePlot::zapPixel(int x, int y)
+{
+  double sum = 0;
+  int    npx = 0;
+
+  for (int ix = x-1; ix <= x+1; ix++) {
+    for (int iy = y-1; iy <= y+1; iy++) {
+      sum += m_Data->value(ix, iy);
+      npx += 1;
+    }
+  }
+
+  sum -= m_Data->value(x,y);
+  npx -= 1;
+
+  m_Data->setValue(x,y, sum/npx);
+
+  replot();
 }
 
 void QxrdImagePlot::onMarkedPointsChanged()
@@ -971,35 +1070,46 @@ void QxrdImagePlot::displayPowderMarkers()
     QxrdCenterFinderPtr cf(dp->centerFinder());
 
     if (cf) {
-      QcepPolygon poly = cf->get_MarkedPoints();
+      int nrgs = cf->countPowderRings();
+      int npts = cf->countPowderRingPoints();
 
-      foreach(QwtDoublePoint pt, poly) {
-        QwtPlotMarker *marker = new QwtPlotMarker();
-        QwtSymbol symb;
+      for (int r=0; r<nrgs; r++) {
+        QVector<double> x,y;
 
-        symb.setStyle(QwtSymbol::Ellipse);
-        symb.setSize(5, 5);
-        symb.setPen(QPen(Qt::red));
-        symb.setBrush(QBrush(Qt::red));
+        for (int i=0; i<npts; i++) {
+          QxrdPowderPoint pt = cf->powderRingPoint(i);
 
-        marker->setSymbol(symb);
-        marker->setValue(pt);
+          if (pt.n1() == r) {
+            x.append(pt.x());
+            y.append(pt.y());
+          }
+        }
 
-        m_PowderPointMarkers.append(marker);
+        if (x.count() > 0) {
+          QwtPlotCurve *pc = new QwtPlotCurve(tr("Ring %1").arg(r));
 
-        marker->attach(this);
+          setPlotCurveStyle(r, pc);
+          pc -> setSamples(x, y);
+          pc -> setStyle(QwtPlotCurve::NoCurve);
+          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+          pc -> attach(this);
+
+          m_PowderPointCurves.append(pc);
+        }
       }
+
+      replot();
     }
   }
 }
 
 void QxrdImagePlot::clearPowderMarkers()
 {
-  foreach(QwtPlotMarker *marker, m_PowderPointMarkers) {
-    marker->detach();
-    delete marker;
+  foreach(QwtPlotCurve *curve, m_PowderPointCurves) {
+    curve->detach();
+    delete curve;
   }
 
-  m_PowderPointMarkers.clear();
+  m_PowderPointCurves.clear();
 }
 

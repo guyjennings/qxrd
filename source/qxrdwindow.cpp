@@ -22,14 +22,13 @@
 #include "qxrdimagecalculator.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdallocator.h"
-#include "qxrdpowderfitdialog.h"
 #include "qxrdimagedisplaywidget.h"
-#include "qwt_array.h"
 #include "qxrdsynchronizedacquisitiondialog.h"
 #include "qxrdcorrectiondialog.h"
 #include "qxrdslicedialog.h"
 #include "qxrdhistogramdialog.h"
 #include "qxrdinfodialog.h"
+#include "qxrdscriptdialog.h"
 #include "qxrdhighlighter.h"
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdacquisitionextrainputsdialog.h"
@@ -84,6 +83,8 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_SliceDialog(NULL),
     m_HistogramDialog(NULL),
     m_ImageInfoDialog(NULL),
+    m_ScriptDialog(NULL),
+    m_DistortionCorrectionDialog(NULL),
     m_Progress(NULL),
     m_AllocationStatus(NULL),
     m_Data(NULL),
@@ -135,6 +136,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
   if (proc) {
     m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());
+    m_DistortionCorrectionDialog = new QxrdDistortionCorrectionDialog(proc->distortionCorrection(), m_Window);
   }
 
   if (proc) {
@@ -152,11 +154,12 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   if (expt && set) {
     m_InputFileBrowser   = new QxrdInputFileBrowser(set->inputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
     m_OutputFileBrowser  = new QxrdOutputFileBrowser(set->outputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
+    m_ScriptDialog       = new QxrdScriptDialog(set->scriptDialogSettings(), m_Experiment, this);
   }
 
   if (set) {
     m_SliceDialog        = new QxrdSliceDialog(set->sliceDialogSettings(), this);
-    m_HistogramDialog    = new QxrdHistogramDialog(set->histogramDialogSettings(), this);
+    m_HistogramDialog    = new QxrdHistogramDialog(set->histogramDialogSettings(), m_Experiment, this);
     m_ImageInfoDialog    = new QxrdInfoDialog(set->infoDialogSettings(), this);
   }
 
@@ -164,6 +167,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     m_ImagePlot        -> init(set->imagePlotSettings());
     m_CenterFinderPlot -> init(set->centerFinderPlotSettings());
     m_IntegratorPlot   -> init(set->integratorPlotSettings());
+    m_DistortionCorrectionDialog -> init(set->distortionCorrectionDialogSettings());
+    m_DistortionCorrectionPlot -> init(set->distortionCorrectionPlotSettings());
   }
 
   QDesktopWidget *dw = QApplication::desktop();
@@ -191,11 +196,13 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
     tabifyDockWidget(m_SliceDialog, m_ImageInfoDialog);
+    tabifyDockWidget(m_ImageInfoDialog, m_ScriptDialog);
 
     tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
     tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
+    tabifyDockWidget(m_HistogramDialog, m_DistortionCorrectionDialog);
   } else if (screenGeom.height() >= 1000) {
     splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
 
@@ -204,12 +211,14 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
     tabifyDockWidget(m_SliceDialog, m_ImageInfoDialog);
+    tabifyDockWidget(m_ImageInfoDialog, m_ScriptDialog);
 
     tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
     tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
+    tabifyDockWidget(m_IntegratorDialog, m_DistortionCorrectionDialog);
   } else {
     tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
@@ -225,11 +234,29 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     tabifyDockWidget(m_OutputFileBrowser, m_SliceDialog);
     tabifyDockWidget(m_SliceDialog, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_ImageInfoDialog);
+    tabifyDockWidget(m_ImageInfoDialog, m_ScriptDialog);
+    tabifyDockWidget(m_ScriptDialog, m_DistortionCorrectionDialog);
 
     if (screenGeom.height() < 1000) {
       //      shrinkObject(this);
       shrinkPanels(6,1);
     }
+  }
+
+  if (expt) {
+    int fs = expt->get_FontSize();
+    int sp = expt->get_Spacing();
+
+    if (fs > 0) {
+      setFontSize(fs);
+    }
+
+    if (sp >= 0) {
+      setSpacing(sp);
+    }
+
+    connect(expt->prop_FontSize(), SIGNAL(valueChanged(int,int)), this, SLOT(setFontSize(int)));
+    connect(expt->prop_Spacing(), SIGNAL(valueChanged(int,int)), this, SLOT(setSpacing(int)));
   }
 
   //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
@@ -277,6 +304,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   connect(m_ActionSaveGainMap, SIGNAL(triggered()), this, SLOT(doSaveGainMap()));
   connect(m_ActionClearGainMap, SIGNAL(triggered()), this, SLOT(doClearGainMap()));
 
+  connect(m_ActionPrintImage, SIGNAL(triggered()), m_ImagePlot, SLOT(printGraph()));
+
   //  connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
   //  connect(m_ActionSetAcquireDirectory, SIGNAL(triggered()), this, SLOT(selectOutputDirectory()));
 
@@ -320,10 +349,14 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
     if (cf) {
       connect(m_ActionFindBeamCenter, SIGNAL(triggered()), cf.data(), SLOT(fitPowderCircle()), Qt::DirectConnection);
-      connect(m_ActionAutoAdjustMarkers, SIGNAL(triggered()), cf.data(), SLOT(adjustAllPoints()), Qt::DirectConnection);
       connect(m_ActionClearMarkers, SIGNAL(triggered()), cf.data(), SLOT(deletePowderPoints()), Qt::DirectConnection);
+      connect(m_ActionCalculateCalibrationPowder, SIGNAL(triggered()), cf.data(), SLOT(calculateCalibration()));
     }
   }
+
+  connect(m_ActionPlotPowderRingPoints, SIGNAL(triggered()), this, SLOT(plotPowderRingRadii()));
+  connect(m_ActionPlotPowderRingTwoTheta, SIGNAL(triggered()), this, SLOT(plotPowderRingTwoTheta()));
+  connect(m_ActionPlotPowderRingCenters, SIGNAL(triggered()), this, SLOT(plotPowderRingCenters()));
 
   m_AcquisitionDialog->setupAcquireMenu(m_AcquireMenu);
 
@@ -369,6 +402,11 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   connect(m_IntegratorZoomOutButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(zoomOut()));
   connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(autoScale()));
   connect(m_IntegratorMeasureButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableMeasuring()));
+
+  connect(m_DistortionCorrectionZoomInButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(enableZooming()));
+  connect(m_DistortionCorrectionZoomOutButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(zoomOut()));
+  connect(m_DistortionCorrectionZoomAllButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(autoScale()));
+  connect(m_DistortionCorrectionMeasureButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(enableMeasuring()));
 
   connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
   connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
@@ -426,6 +464,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
       ps->prop_ValMouse()->linkTo(m_ValMouse);
       ps->prop_TTHMouse()->linkTo(m_TTHMouse);
       ps->prop_QMouse()->linkTo(m_QMouse);
+      ps->prop_RMouse()->linkTo(m_RMouse);
     }
   }
 
@@ -469,6 +508,9 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     acq -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
     acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
     acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
+
+    connect(acq->prop_OverflowLevel(), SIGNAL(valueChanged(int,int)),
+            m_HistogramDialog, SLOT(updateHistogramNeeded()));
   }
 
   if (expt) {
@@ -513,6 +555,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
       ps -> prop_DisplayScalingMode() -> linkTo(m_DisplayDialog->m_DisplayScalingMode);
 
       connect(ps -> prop_DisplayScalingMode(), SIGNAL(valueChanged(int,int)), m_DisplayDialog->m_DisplayParmsStack, SLOT(setCurrentIndex(int)));
+      m_DisplayDialog->m_DisplayParmsStack->setCurrentIndex(ps->get_DisplayScalingMode());
 
       ps -> prop_DisplayColorMap() -> linkTo(m_DisplayDialog->m_DisplayColorMap);
 
@@ -526,6 +569,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   }
 
   m_ImagePlot -> setProcessor(m_DataProcessor);
+  m_DistortionCorrectionPlot -> setWindow(this);
   m_CenterFinderPlot -> setWindow(this);
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
@@ -560,20 +604,26 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   m_WindowsMenu -> addAction(m_SynchronizedAcquisitionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_DisplayDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_DistortionCorrectionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_MaskDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CorrectionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_SliceDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_HistogramDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_ImageInfoDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_ScriptDialog -> toggleViewAction());
 
   m_Highlighter = new QxrdHighlighter(m_ScriptEdit->document());
+
+//  if (expt) {
+//    expt->prop_DefaultScript()->linkTo(m_ScriptEdit);
+//  }
 
   connect(m_ImagePlot, SIGNAL(slicePolygon(QVector<QPointF>)),
           m_SliceDialog, SLOT(slicePolygon(QVector<QPointF>)));
 
-  connect(m_ImagePlot, SIGNAL(selectHistogram(QwtDoubleRect)),
-          m_HistogramDialog, SLOT(histogramSelectionChanged(QwtDoubleRect)));
+  connect(m_ImagePlot, SIGNAL(selectHistogram(QRectF)),
+          m_HistogramDialog, SLOT(histogramSelectionChanged(QRectF)));
 
   if (app) {
     m_Messages -> document() -> setMaximumBlockCount(app->get_MessageWindowLines());
@@ -640,17 +690,80 @@ void QxrdWindow::updateTitle()
   }
 }
 
-void QxrdWindow::shrinkPanels(int fontSize, int spacing)
+void QxrdWindow::setFontSize(int fontSize)
 {
   if (QThread::currentThread()==thread()) {
-    shrinkObject(this, fontSize, spacing);
+    if (fontSize > 0) {
+      QFont f = font();
+
+      f.setPointSize(fontSize);
+
+      setFont(f);
+    } else {
+      QFont f = QApplication::font(this);
+      setFont(f);
+    }
   } else {
     INVOKE_CHECK(QMetaObject::invokeMethod(this,
-                                           "shrinkPanels",
+                                           "setFontSize",
                                            Qt::QueuedConnection,
-                                           Q_ARG(int, fontSize),
+                                           Q_ARG(int, fontSize)));
+  }
+}
+
+void QxrdWindow::setSpacing(int spacing)
+{
+  if (QThread::currentThread()==thread()) {
+    setObjectSpacing(this, spacing);
+  } else {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                           "setSpacing",
+                                           Qt::QueuedConnection,
                                            Q_ARG(int, spacing)));
   }
+}
+
+void QxrdWindow::setObjectSpacing(QObject *obj, int spacing)
+{
+  QLayout *ly = qobject_cast<QLayout*>(obj);
+
+  if (ly) {
+    ly->setContentsMargins(spacing, spacing, spacing, spacing);
+
+    QGridLayout *gl = qobject_cast<QGridLayout*>(ly);
+
+    if (gl) {
+      gl->setHorizontalSpacing(spacing);
+      gl->setVerticalSpacing(spacing);
+    }
+  }
+
+//  QTableView *tv = qobject_cast<QTableView*>(obj);
+
+//  if (tv) {
+//    tv->setStyleSheet(tr("QTableWidget::item { padding: %1px }").arg(spacing));
+//  }
+
+  foreach(QObject* chobj, obj->children()) {
+    if (chobj) {
+      setObjectSpacing(chobj, spacing);
+    }
+  }
+}
+
+void QxrdWindow::shrinkPanels(int fontSize, int spacing)
+{
+//  if (QThread::currentThread()==thread()) {
+//    shrinkObject(this, fontSize, spacing);
+//  } else {
+//    INVOKE_CHECK(QMetaObject::invokeMethod(this,
+//                                           "shrinkPanels",
+//                                           Qt::QueuedConnection,
+//                                           Q_ARG(int, fontSize),
+//                                           Q_ARG(int, spacing)));
+//  }
+  setFontSize(fontSize);
+  setSpacing(spacing);
 }
 
 void QxrdWindow::shrinkDockWidget(QDockWidget *dw, int fontSize, int spacing)
@@ -665,24 +778,120 @@ void QxrdWindow::shrinkObject(QObject *obj, int fontSize, int spacing)
 
     QWidget *wid = qobject_cast<QWidget*>(obj);
 
+    QVariant fsz = obj->property("defaultFontSize");
+    QVariant mrga = obj->property("defaultAMargins");
+    QVariant mrgb = obj->property("defaultBMargins");
+
+    if (qcepDebug(DEBUG_WINDOW)) {
+      printMessage(tr("QxrdWindow::shrinkObject(\"%1\",%2)").arg(obj->objectName()).HEXARG(obj));
+      printMessage(tr("Default Font Size %1, Margins A [%2,%3], B [%4,%5]").arg(fsz.toInt())
+        .arg(mrga.toPoint().x()).arg(mrga.toPoint().y())
+        .arg(mrgb.toPoint().x()).arg(mrgb.toPoint().y()));
+    }
+
     if (wid) {
-      QFont f = wid->font();
-      /*if (f.pointSize() > fontSize)*/ f.setPointSize(fontSize);
-      wid->setFont(f);
-      wid->setContentsMargins(spacing, spacing, spacing, spacing);
+      int sz = wid->font().pointSize();
+
+      int left, top, right, bottom;
+      wid->getContentsMargins(&left, &top, &right, &bottom);
+
+      if (qcepDebug(DEBUG_WINDOW)) {
+        printMessage(tr("Existing Font Size %1, Margins A [%2,%3], B [%4,%5]").arg(sz).arg(left).arg(top).arg(right).arg(bottom));
+      }
+
+      if (!fsz.isValid()) {
+        wid->setProperty("defaultFontSize", sz);
+        fsz = wid->property("defaultFontSize");
+      }
+
+      if (!mrga.isValid()) {
+        wid->setProperty("defaultAMargins", QPoint(left, top));
+        mrga = wid->property("defaultAMargins");
+      }
+
+      if (!mrgb.isValid()) {
+        wid->setProperty("defaultBMargins", QPoint(right, bottom));
+        mrgb = wid->property("defaultBMargins");
+      }
+
+      if (fontSize >= 0) {
+        QFont f = wid->font();
+        f.setPointSize(fontSize);
+        wid->setFont(f);
+      } else {
+        QFont f = wid->font();
+        f.setPointSize(fsz.toInt());
+        wid->setFont(f);
+      }
+
+      if (spacing >= 0) {
+        wid->setContentsMargins(spacing, spacing, spacing, spacing);
+      } else {
+        QPoint ma = mrga.toPoint();
+        QPoint mb = mrgb.toPoint();
+
+        if (!ma.isNull() && !mb.isNull()) {
+          wid->setContentsMargins(ma.x(), ma.y(), mb.x(), mb.y());
+        }
+      }
+    }
+
+    if (qcepDebug(DEBUG_WINDOW)) {
+      printMessage(tr("Default Font Size %1, Margins A [%2,%3], B [%4,%5]").arg(fsz.toInt())
+        .arg(mrga.toPoint().x()).arg(mrga.toPoint().y())
+        .arg(mrgb.toPoint().x()).arg(mrgb.toPoint().y()));
     }
 
     QLayout *ly = qobject_cast<QLayout*>(obj);
 
     if (ly) {
-      ly->setContentsMargins(spacing, spacing, spacing, spacing);
+      if (spacing >= 0) {
+        ly->setContentsMargins(spacing, spacing, spacing, spacing);
+      } else {
+        QPoint ma = mrga.toPoint();
+        QPoint mb = mrgb.toPoint();
+
+        if (!ma.isNull() && !mb.isNull()) {
+          ly->setContentsMargins(ma.x(), ma.y(), mb.x(), mb.y());
+        }
+      }
 
       QGridLayout *gl = qobject_cast<QGridLayout*>(ly);
 
       if (gl) {
-        gl->setContentsMargins(spacing, spacing, spacing, spacing);
-        gl->setHorizontalSpacing(spacing);
-        gl->setVerticalSpacing(spacing);
+//        gl->setContentsMargins(spacing, spacing, spacing, spacing);
+        QVariant spc = gl->property("defaultSpacing");
+
+        if (qcepDebug(DEBUG_WINDOW)) {
+          printMessage(tr("Default spacing [%1,%2]").arg(spc.toPoint().x()).arg(spc.toPoint().y()));
+        }
+
+        if (!spc.isValid()) {
+          int hs = gl->horizontalSpacing();
+          int vs = gl->verticalSpacing();
+
+          if (qcepDebug(DEBUG_WINDOW)) {
+            printMessage(tr("Existing spacing [%1,%2]").arg(hs).arg(vs));
+          }
+
+          gl->setProperty("defaultSpacing", QPoint(hs,vs));
+          spc = gl->property("defaultSpacing");
+        }
+
+        if (spacing >= 0) {
+          gl->setHorizontalSpacing(spacing);
+          gl->setVerticalSpacing(spacing);
+        } else {
+          QPoint sp = spc.toPoint();
+          if (!sp.isNull()) {
+            gl->setHorizontalSpacing(sp.x());
+            gl->setVerticalSpacing(sp.y());
+          }
+        }
+
+        if (qcepDebug(DEBUG_WINDOW)) {
+          printMessage(tr("Default spacing [%1,%2]").arg(spc.toPoint().x()).arg(spc.toPoint().y()));
+        }
       }
     }
 
@@ -798,9 +1007,20 @@ void QxrdWindow::populateRecentExperimentsMenu()
   }
 }
 
-QString QxrdWindow::timeStamp()
+QString QxrdWindow::timeStamp() const
 {
   return QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ");
+}
+
+void QxrdWindow::printMessage(QString msg, QDateTime ts)
+{
+  QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+
+      QThread::currentThread()->objectName()+": "+
+      msg.trimmed();
+
+  message = message.replace("\n", " : ");
+
+  displayMessage(message);
 }
 
 void QxrdWindow::warningMessage(QString msg)
@@ -1510,8 +1730,6 @@ void QxrdWindow::allocatedMemoryChanged()
 
 void QxrdWindow::doRefineCenterTilt()
 {
-  m_PowderFitDialog = new QxrdPowderFitDialog(QxrdSettingsSaverWPtr(), m_DataProcessor, this);
-  m_PowderFitDialog -> exec();
 }
 
 void QxrdWindow::doAccumulateImages()
@@ -1705,4 +1923,187 @@ void QxrdWindow::onMessageWindowLinesChanged(int newVal)
 void QxrdWindow::onUpdateIntervalMsecChanged(int newVal)
 {
   m_UpdateTimer.setInterval(newVal);
+}
+
+void QxrdWindow::plotPowderRingRadii()
+{
+  QxrdExperimentPtr   expt(m_Experiment);
+
+  if (expt) {
+    QxrdCenterFinderPtr cf(expt->centerFinder());
+
+    if (cf) {
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
+
+      int nrgs = cf->countPowderRings();
+      int npts = cf->countPowderRingPoints();
+
+      for (int r=0; r<nrgs; r++) {
+        QVector<double> x, y;
+
+        for (int i=0; i<npts; i++) {
+          QxrdPowderPoint pt = cf->powderRingPoint(i);
+
+          if (pt.n1() == r && pt.n2() == 0) {
+            x.append(cf->getChi(pt.x(), pt.y()));
+            y.append(cf->getR  (pt.x(), pt.y()));
+          }
+        }
+
+        if (cf->get_SubtractRingAverages()) {
+          double sum = 0;
+          int n = y.count();
+          for (int i=0; i<n; i++) {
+            sum += y[i];
+          }
+
+          double avg = sum/(double)n - cf->get_RingAverageDisplacement()*r;
+          for (int i=0; i<n; i++) {
+            y[i] -= avg;
+          }
+//        } else {
+//          double d = cf->get_RingAverageDisplacement()*r;
+//          int n=y.count();
+//          for (int i=0; i<n; i++) {
+//            y[i] += d;
+//          }
+        }
+
+        if (x.count() > 0) {
+          QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring %1").arg(r));
+
+          m_DistortionCorrectionPlot->setPlotCurveStyle(r, pc);
+
+          pc -> setSamples(x, y);
+
+          pc -> setStyle(QwtPlotCurve::NoCurve);
+          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+
+          pc -> attach(m_DistortionCorrectionPlot);
+        }
+      }
+
+//      m_DistortionCorrectionPlot->autoScale();
+      m_DistortionCorrectionPlot->replot();
+    }
+  }
+}
+
+void QxrdWindow::plotPowderRingTwoTheta()
+{
+  QxrdExperimentPtr   expt(m_Experiment);
+
+  if (expt) {
+    QxrdCenterFinderPtr cf(expt->centerFinder());
+
+    if (cf) {
+      cf->updateCalibrantDSpacings();
+
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
+
+      int nrgs = cf->countPowderRings();
+      int npts = cf->countPowderRingPoints();
+
+      for (int r=0; r<nrgs; r++) {
+        QVector<double> x, y;
+
+        for (int i=0; i<npts; i++) {
+          QxrdPowderPoint pt = cf->powderRingPoint(i);
+
+          if (pt.n1() == r && pt.n2() == 0) {
+            x.append(cf->getChi(pt.x(), pt.y()));
+            y.append(cf->getTTH(pt.x(), pt.y()));
+          }
+        }
+
+        double avg=0;
+
+        double calTTH = cf->calibrantTTH(r);
+
+        if (cf->get_SubtractRingAverages()) {
+          int n = y.count();
+          //          double sum = 0;
+//          for (int i=0; i<n; i++) {
+//            sum += y[i];
+//          }
+
+          avg = calTTH - cf->get_RingAverageDisplacement()*r;
+          for (int i=0; i<n; i++) {
+            y[i] -= avg;
+          }
+//        } else {
+//          double d = cf->get_RingAverageDisplacement()*r;
+//          int n=y.count();
+//          for (int i=0; i<n; i++) {
+//            y[i] += d;
+//          }
+        }
+
+        if (x.count() >= 0) {
+          QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring %1").arg(r));
+
+          m_DistortionCorrectionPlot->setPlotCurveStyle(r, pc);
+
+          pc -> setSamples(x, y);
+
+          pc -> setStyle(QwtPlotCurve::NoCurve);
+          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+
+          pc -> attach(m_DistortionCorrectionPlot);
+
+          if (calTTH > 0) {
+            QwtPlotCurve* tth = new QwtPlotCurve(tr("Cal %1").arg(r));
+            QVector<double> x1,y1;
+            x1.append(0); y1.append(calTTH - avg);
+            x1.append(360); y1.append(calTTH - avg);
+            m_DistortionCorrectionPlot->setPlotCurveStyle(r, tth);
+            tth -> setSamples(x1,y1);
+            tth -> setSymbol(NULL);
+            tth -> attach(m_DistortionCorrectionPlot);
+          }
+        }
+      }
+
+//      m_DistortionCorrectionPlot->autoScale();
+      m_DistortionCorrectionPlot->replot();
+    }
+  }
+}
+
+void QxrdWindow::plotPowderRingCenters()
+{
+  QxrdExperimentPtr   expt(m_Experiment);
+
+  if (expt) {
+    QxrdCenterFinderPtr cf(expt->centerFinder());
+
+    if (cf) {
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
+
+      QxrdPowderPointVector pts = cf->get_FittedRings();
+      int npts = pts.count();
+
+      QVector<double> x, y;
+
+      for (int i=0; i<npts; i++) {
+        QxrdPowderPoint &pt = pts[i];
+        x.append(pt.x());
+        y.append(pt.y());
+      }
+
+      QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring Centers"));
+
+      m_DistortionCorrectionPlot->setPlotCurveStyle(0, pc);
+
+      pc -> setSamples(x, y);
+
+      pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+      pc -> attach(m_DistortionCorrectionPlot);
+
+      m_DistortionCorrectionPlot->replot();
+    }
+  }
 }
