@@ -70,7 +70,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
     symm = -1.0;
   }
 
-  if (nphases <= 1) {
+  if (nphases <= 0) {
     m_SyncMode = 0;
   } else if (m_SyncMode) {
 
@@ -178,7 +178,7 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
       int inGroup = (frameNumber-skipBefore) % perGroup;
       int phase = inGroup % nPhases;
 
-      if (nPhases > 1) {
+      if (nPhases > 0) {
         if ((frameNumber >= skipBefore) && (frameNumber < (nGroups*perGroup-skipBetween+skipBefore))) {
           if (inGroup < nPhases*nSummed) {
             if (phase == 0) {

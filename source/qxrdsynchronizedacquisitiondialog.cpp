@@ -165,7 +165,7 @@ void QxrdSynchronizedAcquisitionDialog::waveformChanged()
     m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
     m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
 
-    if (sync -> get_SyncAcquisitionMode() && (parms.nphases()>=2)) {
+    if (sync -> get_SyncAcquisitionMode() && (parms.nphases()>=1)) {
       QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_WaveformPlot, "Output Waveform");
 
       pc->setSamples(sync->outputTimes(), sync->outputVoltage());
