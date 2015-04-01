@@ -1,6 +1,13 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.10 - Apr 01 2015
+Output synchronization waveform available for nPhases==1 as well
+
+## v0.11.8 - Dec 12 2014
+Work on delaunay triangulation routines for powder calibration
+Work on calibrant peak calculations
+
 ## v0.11.7 - Oct 10 2014
 Added user interface to display shrinking routines
 
