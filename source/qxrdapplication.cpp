@@ -80,6 +80,13 @@ static bool myEventFilter(void *message, long *result)
 QTimer eventCounterTimer;
 #endif
 
+void doDeleteLater(QObject *object)
+{
+  if (object) {
+    object->deleteLater();
+  }
+}
+
 void QxrdApplication::processEventCounter()
 {
   if (qcepDebug(DEBUG_APP)) {
@@ -104,7 +111,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   QApplication(argc, argv),
   m_ObjectNamer(this, "application"),
   m_Saver(QxrdSettingsSaverPtr(
-            new QxrdSettingsSaver(this))),
+            new QxrdSettingsSaver(this), doDeleteLater)),
   m_RecentExperiments(m_Saver, this, "recentExperiments", QStringList(), "Recent Experiments"),
   m_RecentExperimentsSize(m_Saver, this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember"),
   m_CurrentExperiment(m_Saver, this, "currentExperiment", "", "Current Experiment"),
@@ -239,7 +246,7 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
   }
 
   m_AllocatorThread = QxrdAllocatorThreadPtr(
-        new QxrdAllocatorThread(m_Saver));
+        new QxrdAllocatorThread(m_Saver), doDeleteLater);
   m_AllocatorThread -> setObjectName("alloc");
   m_AllocatorThread -> start();
   m_Allocator = m_AllocatorThread -> allocator();
