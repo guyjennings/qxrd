@@ -44,7 +44,6 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWP
     m_FittedRings(saver, this, "fittedRings", QxrdPowderPointVector(), "Fitted Powder Rings"),
     m_CalibrantName(saver, this, "calibrantName", "NAC", "Calibrant Name"),
     m_CalibrantLattice(saver, this, "calibrantLattice", 10.251437, "Calibrant Lattice Constant (Angstrom)"),
-    m_CalibrantLatticeLimit(saver, this, "calibrantLatticeLimit", 5, "Calibrant Lattice Limit"),
     m_CalibrantSymmetry(saver, this, "calibrantSymmetry", 1, "Calibrant Symmetry [0=Cubic,1=BCC,2=FCC]"),
     m_CalibrantDSpacings(saver, this, "calibrantDSpacings", QxrdPowderPointVector(), "Calibrant D Spacings"),
     m_RingRadius(saver, this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
@@ -1160,7 +1159,6 @@ private:
 void QxrdCenterFinder::updateCalibrantDSpacings()
 {
   double a = get_CalibrantLattice();
-//  int m = get_CalibrantLatticeLimit();
   int s = get_CalibrantSymmetry();
   double lambda = 12398.4187/get_Energy();
 

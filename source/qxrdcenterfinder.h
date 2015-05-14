@@ -74,9 +74,6 @@ public:
   Q_PROPERTY(double calibrantLattice READ get_CalibrantLattice WRITE set_CalibrantLattice)
   QCEP_DOUBLE_PROPERTY(CalibrantLattice)
 
-  Q_PROPERTY(int calibrantLatticeLimit READ get_CalibrantLatticeLimit WRITE set_CalibrantLatticeLimit)
-  QCEP_INTEGER_PROPERTY(CalibrantLatticeLimit)
-
   Q_PROPERTY(int calibrantSymmetry READ get_CalibrantSymmetry WRITE set_CalibrantSymmetry)
   QCEP_INTEGER_PROPERTY(CalibrantSymmetry)
 

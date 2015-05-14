@@ -38,6 +38,7 @@
 #include "qxrddetector-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdintegrator-ptr.h"
+#include "qxrdcalibrantlibrary-ptr.h"
 #include "qcepexperiment.h"
 
 class QxrdExperiment : public QcepExperiment
@@ -64,6 +65,7 @@ public:
   QxrdServerThreadWPtr specServerThread();
   QxrdSimpleServerWPtr simpleServer();
   QxrdSimpleServerThreadWPtr simpleServerThread();
+  QxrdCalibrantLibraryWPtr calibrantLibrary() const;
 
   FILE* logFile();
 
@@ -149,6 +151,7 @@ private:
   QxrdSimpleServerWPtr            m_SimpleServer;
   QxrdDataProcessorThreadPtr      m_DataProcessorThread;
   QxrdDataProcessorWPtr           m_DataProcessor;
+  QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
   QxrdAcquisitionThreadPtr        m_AcquisitionThread;
   QxrdAcquisitionWPtr             m_Acquisition;
   QxrdDetectorThreadPtr           m_DetectorThread;

@@ -7,6 +7,8 @@
 #include "qxrdacquisition.h"
 #include "qxrdcenterfinder.h"
 #include "qxrddataprocessor.h"
+#include "qxrdcalibrantlibrary.h"
+#include "qxrdcalibrant.h"
 #include "qxrdintegrator.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdgeneratetestimage.h"
@@ -1484,6 +1486,11 @@ void QxrdScriptEngine::initialize()
                           QxrdPowderPointVectorProperty::toScriptValue,
                           QxrdPowderPointVectorProperty::fromScriptValue);
 
+  qRegisterMetaType<QxrdCalibrantWPtr>("QxrdCalibrantWPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdCalibrant::toScriptValue,
+                          QxrdCalibrant::fromScriptValue);
+
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
@@ -1615,6 +1622,13 @@ void QxrdScriptEngine::initialize()
 
       QCEP_DOC_OBJECT("distortion", "Detector distortion correction");
       globalObject().setProperty("distortion",     newQObject(dp->distortionCorrection().data()));
+    }
+
+    QxrdCalibrantLibraryPtr cals(expt->calibrantLibrary());
+
+    if (cals) {
+      QCEP_DOC_OBJECT("calibrants", "Calibrant Library");
+      globalObject().setProperty("calibrants", newQObject(cals.data()));
     }
   }
 }

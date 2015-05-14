@@ -6,6 +6,7 @@
 #include "qxrdapplication.h"
 #include "qxrddataprocessorthread.h"
 #include "qxrddataprocessor.h"
+#include "qxrdcalibrantlibrary.h"
 #include "qxrdwindow.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
@@ -132,6 +133,11 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
     m_AcquisitionThread -> setObjectName("acqu");
     m_AcquisitionThread -> start();
     m_Acquisition = m_AcquisitionThread -> acquisition();
+
+    m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
+          new QxrdCalibrantLibrary(m_SettingsSaver, m_Experiment));
+
+    m_CalibrantLibrary -> initialize(m_CalibrantLibrary);
 
     QxrdDataProcessorPtr proc(m_DataProcessor);
 
@@ -481,6 +487,11 @@ QxrdDataProcessorWPtr QxrdExperiment::dataProcessor() const
   return m_DataProcessor;
 }
 
+QxrdCalibrantLibraryWPtr QxrdExperiment::calibrantLibrary() const
+{
+  return m_CalibrantLibrary;
+}
+
 QxrdCenterFinderWPtr QxrdExperiment::centerFinder() const
 {
   QxrdDataProcessorPtr dp(m_DataProcessor);
@@ -701,6 +712,10 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
       proc -> readSettings(settings, "processor");
     }
 
+    if (m_CalibrantLibrary) {
+      m_CalibrantLibrary->readSettings(settings, "calibrantLibrary");
+    }
+
     if (srv) {
       srv  -> readSettings(settings, "specserver");
     }
@@ -756,6 +771,10 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 
     if (proc) {
       proc -> writeSettings(settings, "processor");
+    }
+
+    if (m_CalibrantLibrary) {
+      m_CalibrantLibrary->writeSettings(settings, "calibrantLibrary");
     }
 
     if (srv) {
