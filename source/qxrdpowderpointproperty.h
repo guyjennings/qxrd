@@ -16,10 +16,6 @@ public:
   QString toString(const QxrdPowderPoint& pt);
   double subValue(int axis) const;
 
-  static void registerMetaTypes();
-  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdPowderPoint &pt);
-  static void fromScriptValue(const QScriptValue &obj, QxrdPowderPoint &pt);
-
   void linkTo(QSpinBox *n1SpinBox, QSpinBox *n2SpinBox, QSpinBox *n3SpinBox, QDoubleSpinBox *xSpinBox, QDoubleSpinBox *ySpinBox, QDoubleSpinBox *r1SpinBox, QDoubleSpinBox *r2SpinBox, QDoubleSpinBox *azSpinBox);
   void linkTo(int axis, QSpinBox *spinBox);
   void linkTo(int axis, QDoubleSpinBox *spinBox);
@@ -96,10 +92,6 @@ public:
   QxrdPowderPointVector value() const;
   QxrdPowderPointVector defaultValue() const;
   QString toString(const QxrdPowderPointVector &vec);
-
-  static void registerMetaTypes();
-  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdPowderPointVector &vec);
-  static void fromScriptValue(const QScriptValue &obj, QxrdPowderPointVector &vec);
 
 public slots:
   void setValue(QxrdPowderPointVector val, int index);
@@ -184,12 +176,5 @@ QxrdPowderPointVectorProperty *prop_##propname() { \
   \
 private: \
 QxrdPowderPointVectorProperty m_##propname;
-
-#ifndef QT_NO_DATASTREAM
-
-extern QDataStream &operator<<(QDataStream &stream, const QxrdPowderPoint &pt);
-extern QDataStream &operator>>(QDataStream &stream, QxrdPowderPoint &pt);
-
-#endif
 
 #endif // QXRDPOWDERPOINTPROPERTY_H

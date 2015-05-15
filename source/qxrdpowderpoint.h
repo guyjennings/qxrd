@@ -42,6 +42,10 @@ public:
 
   QString toString() const;
 
+  static void registerMetaTypes();
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdPowderPoint &pt);
+  static void fromScriptValue(const QScriptValue &obj, QxrdPowderPoint &pt);
+
 protected:
   int m_N1;
   int m_N2;
@@ -53,6 +57,15 @@ protected:
   double m_Az;
 };
 
+Q_DECLARE_METATYPE(QxrdPowderPoint)
+
+#ifndef QT_NO_DATASTREAM
+
+extern QDataStream &operator<<(QDataStream &stream, const QxrdPowderPoint &pt);
+extern QDataStream &operator>>(QDataStream &stream, QxrdPowderPoint &pt);
+
+#endif
+
 class QxrdPowderPointVector : public QVector<QxrdPowderPoint>
 {
 public:
@@ -61,9 +74,12 @@ public:
   static void customSaver(const QVariant &val, QSettings *settings, QString name);
 
   QString toString() const;
+
+  static void registerMetaTypes();
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdPowderPointVector &vec);
+  static void fromScriptValue(const QScriptValue &obj, QxrdPowderPointVector &vec);
 };
 
-Q_DECLARE_METATYPE(QxrdPowderPoint)
 Q_DECLARE_METATYPE(QxrdPowderPointVector)
 
 #endif // QXRDPOWDERPOINT_H

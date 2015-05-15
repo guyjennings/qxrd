@@ -38,6 +38,8 @@
 #include "qxrdsplashscreen.h"
 #include "qxrdsplashscreen-ptr.h"
 #include "qxrdmutexlocker.h"
+#include "qxrdcalibrant.h"
+#include "qxrdcalibrantlibrary.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -148,8 +150,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   g_Application = this;
 
   QcepProperty::registerMetaTypes();
-  QxrdPowderPointProperty::registerMetaTypes();
-  QxrdPowderPointVectorProperty::registerMetaTypes();
+  QxrdPowderPoint::registerMetaTypes();
+  QxrdPowderPointVector::registerMetaTypes();
+  QxrdCalibrantDSpacing::registerMetaTypes();
+  QxrdCalibrantDSpacingVector::registerMetaTypes();
 }
 
 bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)

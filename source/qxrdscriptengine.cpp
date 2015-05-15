@@ -1477,19 +1477,33 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterSequenceMetaType< QVector<QString> >(this);
   //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
 
+//  qScriptRegisterMetaType(this,
+//                          QxrdPowderPointProperty::toScriptValue,
+//                          QxrdPowderPointProperty::fromScriptValue);
+
+  qRegisterMetaType<QxrdPowderPoint>("QxrdPowderPoint");
   qScriptRegisterMetaType(this,
-                          QxrdPowderPointProperty::toScriptValue,
-                          QxrdPowderPointProperty::fromScriptValue);
+                          QxrdPowderPoint::toScriptValue,
+                          QxrdPowderPoint::fromScriptValue);
 
 //  qScriptRegisterSequenceMetaType< QVector<QxrdPowderPoint> >(this);
   qScriptRegisterMetaType(this,
-                          QxrdPowderPointVectorProperty::toScriptValue,
-                          QxrdPowderPointVectorProperty::fromScriptValue);
+                          QxrdPowderPointVector::toScriptValue,
+                          QxrdPowderPointVector::fromScriptValue);
 
   qRegisterMetaType<QxrdCalibrantWPtr>("QxrdCalibrantWPtr");
   qScriptRegisterMetaType(this,
                           QxrdCalibrant::toScriptValue,
                           QxrdCalibrant::fromScriptValue);
+
+  qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
+  qScriptRegisterMetaType(this,
+                          QxrdCalibrantDSpacing::toScriptValue,
+                          QxrdCalibrantDSpacing::fromScriptValue);
+
+  qScriptRegisterMetaType(this,
+                          QxrdCalibrantDSpacingVector::toScriptValue,
+                          QxrdCalibrantDSpacingVector::fromScriptValue);
 
   QxrdApplicationPtr app(m_Application);
 

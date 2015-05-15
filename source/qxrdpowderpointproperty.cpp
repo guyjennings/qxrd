@@ -23,15 +23,6 @@ QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSettingsSaverWPtr saver,
 {
 }
 
-void QxrdPowderPointProperty::registerMetaTypes()
-{
-  qRegisterMetaType< QxrdPowderPoint >("QxrdPowderPoint");
-
-  qRegisterMetaTypeStreamOperators< QxrdPowderPoint >("QxrdPowderPoint");
-
-  registerCustomSaver("QxrdPowderPoint", QxrdPowderPoint::customSaver);
-}
-
 QxrdPowderPoint QxrdPowderPointProperty::value() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -304,34 +295,6 @@ void QxrdPowderPointProperty::resetValue()
   setValue(defaultValue());
 }
 
-QScriptValue QxrdPowderPointProperty::toScriptValue(QScriptEngine *engine, const QxrdPowderPoint &pt)
-{
-  QScriptValue obj = engine->newObject();
-
-  obj.setProperty("n1", pt.n1());
-  obj.setProperty("n2", pt.n2());
-  obj.setProperty("n3", pt.n3());
-  obj.setProperty("x",  pt.x());
-  obj.setProperty("y",  pt.y());
-  obj.setProperty("r1", pt.r1());
-  obj.setProperty("r2", pt.r2());
-  obj.setProperty("az", pt.az());
-
-  return obj;
-}
-
-void QxrdPowderPointProperty::fromScriptValue(const QScriptValue &obj, QxrdPowderPoint &pt)
-{
-  pt.n1() = obj.property("n1").toInteger();
-  pt.n2() = obj.property("n2").toInteger();
-  pt.n3() = obj.property("n3").toInteger();
-  pt.x()  = obj.property("x").toNumber();
-  pt.y()  = obj.property("y").toNumber();
-  pt.r1() = obj.property("r1").toNumber();
-  pt.r2() = obj.property("r2").toNumber();
-  pt.az() = obj.property("az").toNumber();
-}
-
 void QxrdPowderPointProperty::linkTo(QSpinBox *n1SpinBox,
                                      QSpinBox *n2SpinBox,
                                      QSpinBox *n3SpinBox,
@@ -592,79 +555,3 @@ void QxrdPowderPointVectorProperty::resetValue()
 
   setValue(defaultValue());
 }
-
-void QxrdPowderPointVectorProperty::registerMetaTypes()
-{
-  qRegisterMetaType< QxrdPowderPointVector >("QxrdPowderPointVector");
-
-  qRegisterMetaTypeStreamOperators< QxrdPowderPointVector >("QxrdPowderPointVector");
-
-  registerCustomSaver("QxrdPowderPointVector", QxrdPowderPointVector::customSaver);
-}
-
-QScriptValue QxrdPowderPointVectorProperty::toScriptValue(QScriptEngine *engine,
-                                                          const QxrdPowderPointVector &vec)
-{
-  int n = vec.count();
-
-  QScriptValue res = engine->newArray(n);
-
-  for (int i=0; i<n; i++) {
-    const QxrdPowderPoint &pt = vec.at(i);
-    QScriptValue obj = engine->newObject();
-
-    obj.setProperty("n1", pt.n1());
-    obj.setProperty("n2", pt.n2());
-    obj.setProperty("n3", pt.n3());
-    obj.setProperty("x", pt.x());
-    obj.setProperty("y", pt.y());
-    obj.setProperty("r1", pt.r1());
-    obj.setProperty("r2", pt.r2());
-    obj.setProperty("az", pt.az());
-
-    res.setProperty(i, obj);
-  }
-
-  return res;
-}
-
-void QxrdPowderPointVectorProperty::fromScriptValue(const QScriptValue &obj,
-                                                    QxrdPowderPointVector &vec)
-{
-  int n=obj.property("length").toInteger();
-
-  vec.resize(n);
-
-  for (int i=0; i<n; i++) {
-    QScriptValue pt = obj.property(i);
-
-    if (pt.isValid()) {
-      vec[i].n1() = pt.property("n1").toInteger();
-      vec[i].n2() = pt.property("n2").toInteger();
-      vec[i].n3() = pt.property("n3").toInteger();
-      vec[i].x()  = pt.property("x").toNumber();
-      vec[i].y()  = pt.property("y").toNumber();
-      vec[i].r1() = pt.property("r1").toNumber();
-      vec[i].r2() = pt.property("r2").toNumber();
-      vec[i].az() = pt.property("az").toNumber();
-    }
-  }
-}
-
-#ifndef QT_NO_DATASTREAM
-
-QDataStream &operator<<(QDataStream &stream, const QxrdPowderPoint &pt)
-{
-  stream << pt.n1() << pt.n2() << pt.n3() << pt.x() << pt.y() << pt.r1() << pt.r2() << pt.az();
-
-  return stream;
-}
-
-QDataStream &operator>>(QDataStream &stream, QxrdPowderPoint &pt)
-{
-  stream >> pt.n1() >> pt.n2() >> pt.n3()>> pt.x() >> pt.y() >> pt.r1() >> pt.r2() >> pt.az();
-
-  return stream;
-}
-
-#endif
