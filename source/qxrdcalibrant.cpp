@@ -164,7 +164,7 @@ QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsCubic(double energy)
       double d = a/sqrt(i);
       double tth = 2.0*asin(lambda/(2.0*d))*180.0/M_PI;
 
-      if (tth <= 180) {
+      if (tth <= 90) {
         pts.append(QxrdCalibrantDSpacing(e.h(), e.k(), e.l(), d, tth));
 
         if (qcepDebug(DEBUG_CALIBRANT)) {
@@ -210,13 +210,14 @@ QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsHexagonal(double energy)
           break;
         case Hexagonal:
           ok = true;
+          break;
         }
 
         if (ok) {
           double d = 1.0/sqrt((4.0/3.0)*(h*h + h*k + k*k)/(a*a) + (l*l)/(c*c));
           double tth = 2.0*asin(lambda/(2.0*d))*180.0/M_PI;
 
-          if (tth < 180) {
+          if (tth < 90) {
             pts.insertUnique(h,k,l,d,tth);
           }
         }

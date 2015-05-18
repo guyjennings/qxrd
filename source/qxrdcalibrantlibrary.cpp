@@ -178,7 +178,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
       res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, m_CalibrantLibrary));
       res->set_Name("CeO2");
       res->set_Description("Cerium(IV) dioxide");
-      res->set_Symmetry(QxrdCalibrant::SimpleCubic);
+      res->set_Symmetry(QxrdCalibrant::FaceCenteredCubic);
       res->set_A(5.41165);
       res->set_B(5.41165);
       res->set_C(5.41165);
