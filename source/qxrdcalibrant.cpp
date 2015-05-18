@@ -28,6 +28,11 @@ QxrdCalibrant::~QxrdCalibrant()
 
 }
 
+bool QxrdCalibrant::isLocked()
+{
+  return (get_Flags() && 1) == 0;
+}
+
 QScriptValue QxrdCalibrant::toScriptValue(QScriptEngine *engine, const QxrdCalibrantWPtr &cal)
 {
   return engine->newQObject(cal.data());
@@ -74,6 +79,10 @@ QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacings(double energy)
   case FaceCenteredCubic:
   case DiamondCubic:
     return dSpacingsCubic(energy);
+
+  case Hexagonal:
+  case RHexagonal:
+    return dSpacingsHexagonal(energy);
 
   default:
     return QxrdCalibrantDSpacingVector();
@@ -164,6 +173,58 @@ QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsCubic(double energy)
       }
     }
   }
+
+  return pts;
+}
+
+bool lessThan(const QxrdCalibrantDSpacing &d1, const QxrdCalibrantDSpacing&d2)
+{
+  return d1.tth() < d2.tth();
+}
+
+QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsHexagonal(double energy)
+{
+  int    s = get_Symmetry();
+  double a = get_A();
+  double c = get_C();
+
+  double lambda = (energy>100 ? 12398.4187/energy : energy);
+
+  int hkmax = 2.0*a/lambda + 1;
+  int lmax  = 2.0*c/lambda + 1;
+
+//  if (qcepDebug(DEBUG_CALIBRANT)) {
+//    printMessage(tr("mmax = %1").arg(mmax));
+//  }
+
+  QxrdCalibrantDSpacingVector pts;
+
+  for (int h=0; h<=hkmax; h++) {
+    for (int k=0; k<=hkmax; k++) {
+      for (int l=0; l<=lmax; l++) {
+        int ok = false;
+
+        switch (s) {
+        case RHexagonal:
+          ok = ((-h+k+l)%3 != 0);
+          break;
+        case Hexagonal:
+          ok = true;
+        }
+
+        if (ok) {
+          double d = 1.0/sqrt((4.0/3.0)*(h*h + h*k + k*k)/(a*a) + (l*l)/(c*c));
+          double tth = 2.0*asin(lambda/(2.0*d))*180.0/M_PI;
+
+          if (tth < 180) {
+            pts.insertUnique(h,k,l,d,tth);
+          }
+        }
+      }
+    }
+  }
+
+  qSort(pts.begin(), pts.end(), lessThan);
 
   return pts;
 }
@@ -375,4 +436,15 @@ void QxrdCalibrantDSpacingVector::fromScriptValue(const QScriptValue &obj,
       vec[i].tth() = pt.property("tth").toNumber();
     }
   }
+}
+
+void QxrdCalibrantDSpacingVector::insertUnique(int h, int k, int l, double d, double tth)
+{
+  int n = count();
+
+  for (int i=0; i<n; i++) {
+    if (d == value(i).d()) return;
+  }
+
+  append(QxrdCalibrantDSpacing(h,k,l,d,tth));
 }

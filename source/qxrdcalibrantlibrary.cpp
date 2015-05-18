@@ -118,7 +118,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
       res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, m_CalibrantLibrary));
       res->set_Name("Al2O3");
       res->set_Description("Alumina Powder");
-      res->set_Symmetry(QxrdCalibrant::Hexagonal);
+      res->set_Symmetry(QxrdCalibrant::RHexagonal);
       res->set_A(4.7590914);
       res->set_B(4.7590914);
       res->set_C(12.991779);
@@ -163,7 +163,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
       res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, m_CalibrantLibrary));
       res->set_Name("ZnO");
       res->set_Description("Zinc oxide");
-      res->set_Symmetry(QxrdCalibrant::Hexagonal);
+      res->set_Symmetry(QxrdCalibrant::RHexagonal);
       res->set_A(3.24989);
       res->set_B(3.24989);
       res->set_C(5.20653);
@@ -193,7 +193,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
       res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, m_CalibrantLibrary));
       res->set_Name("Cr2O3");
       res->set_Description("Chromium oxide");
-      res->set_Symmetry(QxrdCalibrant::Hexagonal);
+      res->set_Symmetry(QxrdCalibrant::RHexagonal);
       res->set_A(4.95898);
       res->set_B(4.95898);
       res->set_C(13.5959);

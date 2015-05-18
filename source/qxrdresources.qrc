@@ -102,5 +102,6 @@
         <file>qxrdexampleusergeometry.js</file>
         <file>help/qxrdhelpuserfunctions.html</file>
         <file>help/images/script-editor.png</file>
+        <file>images/lock-16x16.png</file>
     </qresource>
 </RCC>

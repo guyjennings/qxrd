@@ -28,19 +28,21 @@ public slots:
 public:
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdCalibrantWPtr &cal);
   static void fromScriptValue(const QScriptValue &obj, QxrdCalibrantWPtr &cal);
+  bool isLocked();
 
   typedef enum  {
-    Triclinic,
-    SimpleMonoclinic,
-    BaseCenteredMonoclinic,
-    SimpleOrthorhombic,
-    BaseCenteredOrthorhombic,
-    BodyCenteredOrthorhombic,
-    FaceCenteredOrthorhombic,
-    Rhombohedral,
-    SimpleTetragonal,
-    BodyCenterdTetragonal,
+//    Triclinic,
+//    SimpleMonoclinic,
+//    BaseCenteredMonoclinic,
+//    SimpleOrthorhombic,
+//    BaseCenteredOrthorhombic,
+//    BodyCenteredOrthorhombic,
+//    FaceCenteredOrthorhombic,
+//    Rhombohedral,
+//    SimpleTetragonal,
+//    BodyCenterdTetragonal,
     Hexagonal,
+    RHexagonal,
     SimpleCubic,
     BodyCenteredCubic,
     FaceCenteredCubic,
@@ -49,6 +51,7 @@ public:
 
 private:
   QxrdCalibrantDSpacingVector dSpacingsCubic(double energy);
+  QxrdCalibrantDSpacingVector dSpacingsHexagonal(double energy);
 
 public:
   Q_PROPERTY(QString description READ get_Description WRITE set_Description)
@@ -148,6 +151,8 @@ public:
   static void registerMetaTypes();
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdCalibrantDSpacingVector &vec);
   static void fromScriptValue(const QScriptValue &obj, QxrdCalibrantDSpacingVector &vec);
+
+  void insertUnique(int h, int k, int l, double d, double tth);
 };
 
 Q_DECLARE_METATYPE(QxrdCalibrantDSpacingVector)

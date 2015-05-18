@@ -143,7 +143,12 @@ HEADERS += \
     qxrdcalibrant.h \
     qxrdcalibrantlibrary.h \
     qxrdcalibrant-ptr.h \
-    qxrdcalibrantlibrary-ptr.h
+    qxrdcalibrantlibrary-ptr.h \
+    qxrdcalibrantdialog.h \
+    qxrdcalibrantlibrarymodel.h \
+    qxrdcalibrantdspacingsmodel.h \
+    qxrdcalibrantdspacingsmodel-ptr.h \
+    qxrdcalibrantlibrarymodel-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -180,7 +185,10 @@ SOURCES += \
     qxrdfitterringellipse.cpp \
     qxrdplanefitter.cpp \
     qxrdcalibrant.cpp \
-    qxrdcalibrantlibrary.cpp
+    qxrdcalibrantlibrary.cpp \
+    qxrdcalibrantdialog.cpp \
+    qxrdcalibrantlibrarymodel.cpp \
+    qxrdcalibrantdspacingsmodel.cpp
 
 OTHER_FILES += testImage.js
 
@@ -494,7 +502,8 @@ FORMS = qxrdwindow.ui \
     qxrdacquisitionextrainputsdialog.ui \
     qxrduserscriptdialog.ui \
     qxrddistortioncorrectiondialog.ui \
-    qxrdscriptdialog.ui
+    qxrdscriptdialog.ui \
+    qxrdcalibrantdialog.ui
 
 macx:
 else:unix:LIBS += -ltiff

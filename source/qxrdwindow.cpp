@@ -77,6 +77,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_MaskDialog(NULL),
     m_CorrectionDialog(NULL),
     m_IntegratorDialog(NULL),
+    m_CalibrantDialog(NULL),
     m_Calculator(NULL),
     m_InputFileBrowser(NULL),
     m_OutputFileBrowser(NULL),
@@ -151,6 +152,14 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     m_IntegratorDialog   = new QxrdIntegratorDialog(proc -> integrator());
   }
 
+  if (expt && proc) {
+    QxrdCalibrantLibraryPtr cal(expt->calibrantLibrary());
+
+    if (cal) {
+      m_CalibrantDialog = new QxrdCalibrantDialog(cal, proc -> centerFinder(), this);
+    }
+  }
+
   if (expt && set) {
     m_InputFileBrowser   = new QxrdInputFileBrowser(set->inputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
     m_OutputFileBrowser  = new QxrdOutputFileBrowser(set->outputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
@@ -200,7 +209,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
     tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
-    tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
+    tabifyDockWidget(m_CorrectionDialog, m_CalibrantDialog);
+    tabifyDockWidget(m_CalibrantDialog, m_OutputFileBrowser);
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_DistortionCorrectionDialog);
   } else if (screenGeom.height() >= 1000) {
@@ -215,7 +225,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
     tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
-    tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
+    tabifyDockWidget(m_CorrectionDialog, m_CalibrantDialog);
+    tabifyDockWidget(m_CalibrantDialog, m_OutputFileBrowser);
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
     tabifyDockWidget(m_IntegratorDialog, m_DistortionCorrectionDialog);
@@ -229,7 +240,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
     tabifyDockWidget(m_DisplayDialog, m_MaskDialog);
     tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
-    tabifyDockWidget(m_CorrectionDialog, m_OutputFileBrowser);
+    tabifyDockWidget(m_CorrectionDialog, m_CalibrantDialog);
+    tabifyDockWidget(m_CalibrantDialog, m_OutputFileBrowser);
 
     tabifyDockWidget(m_OutputFileBrowser, m_SliceDialog);
     tabifyDockWidget(m_SliceDialog, m_HistogramDialog);
@@ -606,6 +618,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_DistortionCorrectionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_MaskDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_CalibrantDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CorrectionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_SliceDialog -> toggleViewAction());
