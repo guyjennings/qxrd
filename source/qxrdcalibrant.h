@@ -92,7 +92,7 @@ Q_DECLARE_METATYPE(QxrdCalibrantWPtr)
 class QxrdCalibrantDSpacing
 {
 public:
-  QxrdCalibrantDSpacing(int h, int k, int l, double d, double tth);
+  QxrdCalibrantDSpacing(int h, int k, int l, int n, double d, double tth);
   QxrdCalibrantDSpacing(const QxrdCalibrantDSpacing& spc);
   QxrdCalibrantDSpacing();
 
@@ -100,12 +100,14 @@ public:
   int     h() const { return m_H; }
   int     k() const { return m_K; }
   int     l() const { return m_L; }
+  int     n() const { return m_N; }
   double  d() const { return m_D; }
   double  tth() const { return m_TTH; }
 
   int&    h() { return m_H; }
   int&    k() { return m_K; }
   int&    l() { return m_L; }
+  int&    n() { return m_N; }
   double& d() { return m_D; }
   double& tth() { return m_TTH; }
 
@@ -127,6 +129,7 @@ private:
   int m_H;
   int m_K;
   int m_L;
+  int m_N;
   double m_D;
   double m_TTH;
 };

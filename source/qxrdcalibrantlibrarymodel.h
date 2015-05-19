@@ -21,6 +21,7 @@ public:
   enum {
     FlagsColumn,
     NameColumn,
+    SymmetryColumn,
     DescriptionColumn,
     NumColumns
   };

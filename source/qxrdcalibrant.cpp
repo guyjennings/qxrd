@@ -49,7 +49,7 @@ void QxrdCalibrant::fromScriptValue(const QScriptValue &obj, QxrdCalibrantWPtr &
 
 QxrdCalibrantDSpacing QxrdCalibrant::dSpacing(int h, int k, int l)
 {
-  return QxrdCalibrantDSpacing(h,k,l, sqrt(h*h + k*k + l*l), 0);
+  return QxrdCalibrantDSpacing(h,k,l, 1, sqrt(h*h + k*k + l*l), 0);
 }
 
 class QxrdCalibrantQuadInt {
@@ -165,7 +165,7 @@ QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsCubic(double energy)
       double tth = 2.0*asin(lambda/(2.0*d))*180.0/M_PI;
 
       if (tth <= 90) {
-        pts.append(QxrdCalibrantDSpacing(e.h(), e.k(), e.l(), d, tth));
+        pts.append(QxrdCalibrantDSpacing(e.h(), e.k(), e.l(), e.n(), d, tth));
 
         if (qcepDebug(DEBUG_CALIBRANT)) {
           printMessage(tr("%1(%2): [%3,%4,%5], d:%6, tth:%7").arg(i).arg(e.n()).arg(e.h()).arg(e.k()).arg(e.l()).arg(d).arg(tth));
@@ -199,26 +199,39 @@ QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsHexagonal(double energy)
 
   QxrdCalibrantDSpacingVector pts;
 
-  for (int h=0; h<=hkmax; h++) {
-    for (int k=0; k<=hkmax; k++) {
-      for (int l=0; l<=lmax; l++) {
-        int ok = false;
+  int lmin = 0;
+  if (s == RHexagonal) {
+    lmin = -lmax;
+  }
 
-        switch (s) {
-        case RHexagonal:
-          ok = ((-h+k+l)%3 != 0);
-          break;
-        case Hexagonal:
-          ok = true;
-          break;
-        }
+  for (int l=lmin; l<=lmax+1; l++) {
+    for (int k=0; k<=hkmax+1; k++) {
 
-        if (ok) {
-          double d = 1.0/sqrt((4.0/3.0)*(h*h + h*k + k*k)/(a*a) + (l*l)/(c*c));
-          double tth = 2.0*asin(lambda/(2.0*d))*180.0/M_PI;
+      int hmin=k;
+      if (l<0) {
+        hmin += 1;
+      }
 
-          if (tth < 90) {
-            pts.insertUnique(h,k,l,d,tth);
+      for (int h=hmin; h<=hkmax+1; h++) {
+        if (h || k || l) {
+          int ok = false;
+
+          switch (s) {
+          case RHexagonal:
+            ok = ((-h+k+l)%3 == 0);
+            break;
+          case Hexagonal:
+            ok = true;
+            break;
+          }
+
+          if (ok) {
+            double d = 1.0/sqrt((4.0/3.0)*(h*h + h*k + k*k)/(a*a) + (l*l)/(c*c));
+            double tth = 2.0*asin(lambda/(2.0*d))*180.0/M_PI;
+
+            if (tth < 90) {
+              pts.insertUnique(h,k,l,d,tth);
+            }
           }
         }
       }
@@ -230,10 +243,11 @@ QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsHexagonal(double energy)
   return pts;
 }
 
-QxrdCalibrantDSpacing::QxrdCalibrantDSpacing(int h, int k, int l, double d, double tth) :
+QxrdCalibrantDSpacing::QxrdCalibrantDSpacing(int h, int k, int l, int n, double d, double tth) :
   m_H(h),
   m_K(k),
   m_L(l),
+  m_N(n),
   m_D(d),
   m_TTH(tth)
 {
@@ -243,6 +257,7 @@ QxrdCalibrantDSpacing::QxrdCalibrantDSpacing(const QxrdCalibrantDSpacing &spc) :
   m_H(spc.h()),
   m_K(spc.k()),
   m_L(spc.l()),
+  m_N(spc.n()),
   m_D(spc.d()),
   m_TTH(spc.tth())
 {
@@ -252,6 +267,7 @@ QxrdCalibrantDSpacing::QxrdCalibrantDSpacing() :
   m_H(0),
   m_K(0),
   m_L(0),
+  m_N(0),
   m_D(0),
   m_TTH(0)
 {
@@ -259,7 +275,7 @@ QxrdCalibrantDSpacing::QxrdCalibrantDSpacing() :
 
 bool QxrdCalibrantDSpacing::isValid() const
 {
-  return (m_H != 0 || m_K != 0 || m_L != 0) && (m_D > 0.0) && (m_TTH > 0.0);
+  return (m_H != 0 || m_K != 0 || m_L != 0) && (m_N >= 0) && (m_D > 0.0) && (m_TTH > 0.0);
 }
 
 bool QxrdCalibrantDSpacing::operator == ( const QxrdCalibrantDSpacing &spc) const
@@ -278,6 +294,7 @@ void QxrdCalibrantDSpacing::setSettingsValue(QSettings *settings, QString name)
   settings->setValue("h", h());
   settings->setValue("k", k());
   settings->setValue("l", l());
+  settings->setValue("n", n());
   settings->setValue("d", d());
   settings->setValue("tth", tth());
   settings->endGroup();
@@ -293,7 +310,7 @@ void QxrdCalibrantDSpacing::customSaver(const QVariant &val, QSettings *settings
 
 QString QxrdCalibrantDSpacing::toString() const
 {
-  return QObject::tr("{h:%1, k:%2, l:%3, d:%4, tth:%5}").arg(h()).arg(k()).arg(l()).arg(d()).arg(tth());
+  return QObject::tr("{h:%1, k:%2, l:%3, n:%4, d:%5, tth:%6}").arg(h()).arg(k()).arg(l()).arg(n()).arg(d()).arg(tth());
 }
 
 void QxrdCalibrantDSpacing::registerMetaTypes()
@@ -312,6 +329,7 @@ QScriptValue QxrdCalibrantDSpacing::toScriptValue(QScriptEngine *engine, const Q
   obj.setProperty("h", spc.h());
   obj.setProperty("k", spc.k());
   obj.setProperty("l", spc.l());
+  obj.setProperty("n", spc.n());
   obj.setProperty("d", spc.d());
   obj.setProperty("tth", spc.tth());
 
@@ -323,6 +341,7 @@ void QxrdCalibrantDSpacing::fromScriptValue(const QScriptValue &obj, QxrdCalibra
   spc.h() = obj.property("h").toInteger();
   spc.k() = obj.property("k").toInteger();
   spc.l() = obj.property("l").toInteger();
+  spc.n() = obj.property("n").toInteger();
   spc.d() = obj.property("d").toNumber();
   spc.tth() = obj.property("tth").toNumber();
 }
@@ -331,14 +350,14 @@ void QxrdCalibrantDSpacing::fromScriptValue(const QScriptValue &obj, QxrdCalibra
 
 QDataStream &operator<<(QDataStream &stream, const QxrdCalibrantDSpacing &pt)
 {
-  stream << pt.h() << pt.k() << pt.l() << pt.d() << pt.tth();
+  stream << pt.h() << pt.k() << pt.l() << pt.n() << pt.d() << pt.tth();
 
   return stream;
 }
 
 QDataStream &operator>>(QDataStream &stream, QxrdCalibrantDSpacing &pt)
 {
-  stream >> pt.h() >> pt.k() >> pt.l() >> pt.d() >> pt.tth();
+  stream >> pt.h() >> pt.k() >> pt.l() >> pt.n() >> pt.d() >> pt.tth();
 
   return stream;
 }
@@ -444,8 +463,16 @@ void QxrdCalibrantDSpacingVector::insertUnique(int h, int k, int l, double d, do
   int n = count();
 
   for (int i=0; i<n; i++) {
-    if (d == value(i).d()) return;
+    QxrdCalibrantDSpacing s = value(i);
+
+    if (d == s.d()) {
+      s.n() = s.n()+1;
+
+      replace(i, s);
+
+      return;
+    }
   }
 
-  append(QxrdCalibrantDSpacing(h,k,l,d,tth));
+  append(QxrdCalibrantDSpacing(h,k,l,1,d,tth));
 }

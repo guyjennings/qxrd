@@ -53,8 +53,34 @@ QVariant QxrdCalibrantLibraryModel::data (const QModelIndex & index, int role) c
     } else if (col == NameColumn) {
       if (role == Qt::DisplayRole) {
         return cal->get_Name();
-//      } else if (role == Qt::SizeHintRole) {
-//        return QSize(120,20);
+      }
+    } else if (col == SymmetryColumn) {
+      if (role == Qt::DisplayRole) {
+        switch (cal->get_Symmetry()) {
+        case QxrdCalibrant::Hexagonal:
+          return "Hexagonal";
+          break;
+
+        case QxrdCalibrant::RHexagonal:
+          return "R-Hexagonal";
+          break;
+
+        case QxrdCalibrant::SimpleCubic:
+          return "Cubic";
+          break;
+
+        case QxrdCalibrant::BodyCenteredCubic:
+          return "BCC";
+          break;
+
+        case QxrdCalibrant::FaceCenteredCubic:
+          return "FCC";
+          break;
+
+        case QxrdCalibrant::DiamondCubic:
+          return "Diamond";
+          break;
+        }
       }
     } else if (col == DescriptionColumn) {
       if (role == Qt::DisplayRole) {
@@ -74,33 +100,28 @@ QVariant QxrdCalibrantLibraryModel::headerData ( int section, Qt::Orientation or
     return QVariant();
   } else {
     if (orientation==Qt::Horizontal) {
-      switch (section) {
-      case FlagsColumn:
-        if (role==Qt::DisplayRole) {
+      if (role==Qt::DisplayRole) {
+        switch (section) {
+        case FlagsColumn:
           return "F";
-//        } else if (role == Qt::SizeHintRole) {
-//          return 50 /*QSize(20,20)*/;
-        }
+          break;
 
-      case NameColumn:
-        if (role==Qt::DisplayRole) {
+        case SymmetryColumn:
+          return "Symm";
+          break;
+
+        case NameColumn:
           return "Name";
-//        } else if (role == Qt::SizeHintRole) {
-//          return 120 /*QSize(120,20)*/;
-        }
+          break;
 
-      case DescriptionColumn:
-        if (role==Qt::DisplayRole) {
+        case DescriptionColumn:
           return "Description";
-//        } else if (role == Qt::SizeHintRole) {
-//          return 120 /*QSize(120,20)*/;
+          break;
         }
       }
     } else if (orientation==Qt::Vertical) {
       if (role==Qt::DisplayRole) {
         return section;
-//      } else if (role == Qt::SizeHintRole) {
-//        return 20 /*QSize(50,20)*/;
       }
     }
   }

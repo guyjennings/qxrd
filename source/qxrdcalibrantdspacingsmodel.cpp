@@ -54,6 +54,9 @@ QVariant QxrdCalibrantDSpacingsModel::headerData ( int section, Qt::Orientation 
       case LColumn:
         return "L";
 
+      case NColumn:
+        return "N";
+
       case DColumn:
         return "D (Angst)";
 
@@ -99,6 +102,10 @@ QVariant QxrdCalibrantDSpacingsModel::data (const QModelIndex & index, int role)
 
         if (col == LColumn) {
           return spc.l();
+        }
+
+        if (col == NColumn) {
+          return spc.n();
         }
 
         if (col == DColumn) {

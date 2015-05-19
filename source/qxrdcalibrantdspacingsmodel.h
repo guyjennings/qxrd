@@ -24,6 +24,7 @@ public:
     HColumn,
     KColumn,
     LColumn,
+    NColumn,
     DColumn,
     TTHColumn,
     NumColumns
