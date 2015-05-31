@@ -574,7 +574,7 @@ win32 {
     }
 
     win32-msvc2013 {
-      libs += icudt52 icuin52 icuuc52
+      libs += icudt53 icuin53 icuuc53
     } else:win32-msvc* {
       libs += icudt51 icuin51 icuuc51
     } else:win32-g++ {
@@ -647,7 +647,8 @@ win32 {
 
 TARGET.depends += qtlibs
 
-win32 { # Make NSIS installer...
+never {
+# win32 { # Make NSIS installer...
     OUT_PWD_WIN = $${replace(OUT_PWD, /, \\)}
     PWD_WIN = $${replace(PWD, /, \\)}
 
