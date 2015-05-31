@@ -3,8 +3,11 @@
 #include "qxrdsettingssaver.h"
 #include "qxrdexperiment.h"
 #include <QScriptEngine>
-#include <math.h>
 #include "qxrddebug.h"
+
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <math.h>
 
 QxrdCalibrant::QxrdCalibrant(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib)
   : QcepObject("calibrant", NULL),
