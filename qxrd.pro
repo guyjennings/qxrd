@@ -5,6 +5,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 TEMPLATE = subdirs
 
 SUBDIRS = plugins source
+
 #SUBDIRS = plugins
 
 CONFIG += ordered
@@ -16,6 +17,10 @@ message(Version = $${VERSION})
 message(Host Arch = $${QMAKE_HOST.arch})
 message(Target = $${TARGET})
 message(QT Version $$[QT_VERSION])
+
+win32 {
+ include(nsis.pri)
+}
 
 DISTFILES += source plugins
 
