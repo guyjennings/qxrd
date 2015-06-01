@@ -4,9 +4,19 @@ QMAKE_EXTRA_TARGETS += nsis
 OUT_PWD_WIN = $${replace(OUT_PWD, /, \\)}
 PWD_WIN = $${replace(PWD, /, \\)}
 
-nsis.depends += FORCE
+setup.depends += qxrd.exe
 
-INSTALLS += nsis
+CONFIG(release, debug|release) {
+  setup.target   = qxrd-setup-$${VERSION}$${QXRDSUFFIX}.exe
+} else {
+  setup.target   = qxrd-setup-$${VERSION}$${QXRDSUFFIX}-dbg.exe
+}
+
+#INSTALLS += nsis.target
+
+nsis.depends += $${setup.target}
+
+QMAKE_EXTRA_TARGETS += setup
 
 win32-g++ {
   exists("c:/Program Files/NSIS/makensis.exe") {
@@ -17,27 +27,27 @@ win32-g++ {
   }
 
   !isEmpty(NSIS) {
-    nsis.commands = $${NSIS}
+    setup.commands = $${NSIS}
     message("Generate NSIS installer for $${QXRDSUFFIXSTR}")
 
     contains(QMAKE_HOST.arch,x86_64) {
-      nsis.commands += //DWIN64
+      setup.commands += //DWIN64
     }
 
-    nsis.commands += //DVERSION=$${VERSION} //DAPPDIR=\"$${OUT_PWD_WIN}\\.\"
+    setup.commands += //DVERSION=$${VERSION} //DAPPDIR=\"$${OUT_PWD_WIN}\\.\"
 
     CONFIG(release, debug|release) {
-      nsis.commands += //DPREFIX=\"$${QXRDSUFFIX}\" //DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+      setup.commands += //DPREFIX=\"$${QXRDSUFFIX}\" //DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
     } else {
-      nsis.commands += //DPREFIX=\"$${QXRDSUFFIX}-dbg\" //DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
+      setup.commands += //DPREFIX=\"$${QXRDSUFFIX}-dbg\" //DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
     }
 
     isEqual(QT_MAJOR_VERSION, 4) {
-      nsis.commands += \"$${PWD_WIN}\\qxrd.nsi\"
-      nsis.depends  += $${PWD}/qxrd.nsi
+      setup.commands += \"$${PWD_WIN}\\qxrd.nsi\"
+      setup.depends  += $${PWD}/qxrd.nsi
     } else {
-      nsis.commands += \"$${PWD_WIN}\\qxrd-qt5.nsi\"
-      nsis.depends  += $${PWD}/qxrd-qt5.nsi
+      setup.commands += \"$${PWD_WIN}\\qxrd-qt5.nsi\"
+      setup.depends  += $${PWD}/qxrd-qt5.nsi
     }
   }
 }
@@ -51,27 +61,27 @@ win32-msvc* {
   }
 
   !isEmpty(NSIS) {
-    nsis.commands = $${NSIS}
+    setup.commands = $${NSIS}
     message("Generate NSIS installer for $${QXRDSUFFIXSTR}")
 
     contains(QMAKE_HOST.arch,x86_64) {
-      nsis.commands += /DWIN64
+      setup.commands += /DWIN64
     }
 
-    nsis.commands += /DVERSION=$${VERSION} /DAPPDIR=\"$${OUT_PWD_WIN}\\.\"
+    setup.commands += /DVERSION=$${VERSION} /DAPPDIR=\"$${OUT_PWD_WIN}\\.\"
 
     CONFIG(release, debug|release) {
-      nsis.commands += /DPREFIX=\"$${QXRDSUFFIX}\" /DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
+      setup.commands += /DPREFIX=\"$${QXRDSUFFIX}\" /DPREFIXSTR=\"$${QXRDSUFFIXSTR}\"
     } else {
-      nsis.commands += /DPREFIX=\"$${QXRDSUFFIX}-dbg\" /DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
+      setup.commands += /DPREFIX=\"$${QXRDSUFFIX}-dbg\" /DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
     }
 
     isEqual(QT_MAJOR_VERSION, 4) {
-      nsis.commands += \"$${PWD_WIN}\\qxrd.nsi\"
-      nsis.depends  += $${PWD}/qxrd.nsi
+      setup.commands += \"$${PWD_WIN}\\qxrd.nsi\"
+      setup.depends  += $${PWD}/qxrd.nsi
     } else {
-      nsis.commands += \"$${PWD_WIN}\\qxrd-qt5.nsi\"
-      nsis.depends  += $${PWD}/qxrd-qt5.nsi
+      setup.commands += \"$${PWD_WIN}\\qxrd-qt5.nsi\"
+      setup.depends  += $${PWD}/qxrd-qt5.nsi
     }
   }
 }
