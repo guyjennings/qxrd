@@ -68,6 +68,8 @@ QVariant QxrdFileBrowserModel::headerData
   } else {
     return inherited::headerData(section, orientation, role);
   }
+
+  return QVariant();
 }
 
 QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const

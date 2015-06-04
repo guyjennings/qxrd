@@ -110,6 +110,12 @@ private:
   static QScriptValue mapUserFunctionFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue timeStampFunc(QScriptContext *context, QScriptEngine *engine);
 
+  static QScriptValue dataObjectFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue dataGroupFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue dataArrayFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue dataColumnFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue dataColumnScanFunc(QScriptContext *context, QScriptEngine *engine);
+
   QString tableHeader();
   QString tableFooter();
 

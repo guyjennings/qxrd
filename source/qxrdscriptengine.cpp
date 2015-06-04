@@ -19,6 +19,15 @@
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"
 #include "qcepdocumentationdictionary.h"
+#include "qcepdataset.h"
+#include "qcepdatagroup.h"
+#include "qcepdatagroup-ptr.h"
+#include "qcepdataarray.h"
+#include "qcepdataarray-ptr.h"
+#include "qcepdatacolumn.h"
+#include "qcepdatacolumn-ptr.h"
+#include "qcepdatacolumnscan.h"
+#include "qcepdatacolumnscan-ptr.h"
 
 #include <QThread>
 #include <QDir>
@@ -1362,6 +1371,140 @@ QScriptValue QxrdScriptEngine::timeStampFunc(QScriptContext * /*context*/, QScri
   return engine->toScriptValue(val);
 }
 
+QCEP_DOC_FUNCTION(
+    "dataObject",
+    "dataObject(name)",
+    "Creates a new named data object",
+    ""
+    )
+
+QScriptValue QxrdScriptEngine::dataObjectFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdExperimentPtr expt = eng->experiment();
+
+    if (expt) {
+      QString name = context->argument(0).toString();
+
+      return engine->newQObject(new QcepDataObject(name/*, expt.data()*/));
+    }
+  }
+
+  return QScriptValue();
+}
+
+QCEP_DOC_FUNCTION(
+    "dataGroup",
+    "dataGroup(name)",
+    "Creates a new named data group",
+    ""
+    )
+
+QScriptValue QxrdScriptEngine::dataGroupFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdExperimentPtr expt = eng->experiment();
+
+    if (expt) {
+      QString name = context->argument(0).toString();
+
+      return engine->newQObject(new QcepDataGroup(name/*, expt.data()*/));
+    }
+  }
+
+  return QScriptValue();
+}
+
+QCEP_DOC_FUNCTION(
+    "dataArray",
+    "dataArray(name,dim1 .. dimn)",
+    "Creates a new named n-dimensional data array",
+    ""
+    )
+
+QScriptValue QxrdScriptEngine::dataArrayFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdExperimentPtr expt = eng->experiment();
+
+    if (expt) {
+      QString name = context->argument(0).toString();
+
+      QVector<int> dims;
+
+      for (int i=1; i<context->argumentCount(); i++) {
+        dims.append(context->argument(i).toInteger());
+      }
+
+      return engine->newQObject(new QcepDataArray(name, dims/*, expt.data()*/));
+    }
+  }
+
+  return QScriptValue();
+}
+
+QCEP_DOC_FUNCTION(
+    "dataColumn",
+    "dataColumn(name, npts)",
+    "Creates a new named data column",
+    ""
+    )
+
+QScriptValue QxrdScriptEngine::dataColumnFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdExperimentPtr expt = eng->experiment();
+
+    if (expt) {
+      QString name = context->argument(0).toString();
+      int     npts = context->argument(1).toInteger();
+
+      return engine->newQObject(new QcepDataColumn(name, npts/*, expt.data()*/));
+    }
+  }
+
+  return QScriptValue();
+}
+
+QCEP_DOC_FUNCTION(
+    "dataColumnScan",
+    "dataColumnScan(name, npts, col1name .. colnname)",
+    "Creates a new named data column scan",
+    ""
+    )
+
+QScriptValue QxrdScriptEngine::dataColumnScanFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdExperimentPtr expt = eng->experiment();
+
+    if (expt) {
+      QString name = context->argument(0).toString();
+      int     npts = context->argument(1).toInteger();
+
+      QStringList cols;
+
+      for (int i=2; i<context->argumentCount(); i++) {
+        cols.append(context->argument(i).toString());
+      }
+
+      return engine->newQObject(new QcepDataColumnScan(name, cols, npts/*, expt.data()*/));
+    }
+  }
+
+  return QScriptValue();
+}
+
 QCEP_DOC_OBJECT(
     "JSON",
     "Qt Built-in JSON Parser"
@@ -1496,6 +1639,31 @@ void QxrdScriptEngine::initialize()
                           QxrdCalibrant::toScriptValue,
                           QxrdCalibrant::fromScriptValue);
 
+  qRegisterMetaType<QcepDataObjectWPtr>("QcepDataObjectPtr");
+  qScriptRegisterMetaType(this,
+                          QcepDataObject::toScriptValue,
+                          QcepDataObject::fromScriptValue);
+
+  qRegisterMetaType<QcepDataGroupWPtr>("QcepDataGroupPtr");
+  qScriptRegisterMetaType(this,
+                          QcepDataGroup::toScriptValue,
+                          QcepDataGroup::fromScriptValue);
+
+  qRegisterMetaType<QcepDataArrayWPtr>("QcepDataArrayPtr");
+  qScriptRegisterMetaType(this,
+                          QcepDataArray::toScriptValue,
+                          QcepDataArray::fromScriptValue);
+
+  qRegisterMetaType<QcepDataColumnWPtr>("QcepDataColumnPtr");
+  qScriptRegisterMetaType(this,
+                          QcepDataColumn::toScriptValue,
+                          QcepDataColumn::fromScriptValue);
+
+  qRegisterMetaType<QcepDataColumnScanWPtr>("QcepDataColumnScanPtr");
+  qScriptRegisterMetaType(this,
+                          QcepDataColumnScan::toScriptValue,
+                          QcepDataColumnScan::fromScriptValue);
+
   qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
   qScriptRegisterMetaType(this,
                           QxrdCalibrantDSpacing::toScriptValue,
@@ -1560,6 +1728,12 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
   globalObject().setProperty("mapUserFunction", newFunction(mapUserFunctionFunc, 1));
   globalObject().setProperty("timeStamp", newFunction(timeStampFunc, 1));
+
+  globalObject().setProperty("dataObject", newFunction(dataObjectFunc));
+  globalObject().setProperty("dataGroup", newFunction(dataGroupFunc));
+  globalObject().setProperty("dataArray", newFunction(dataArrayFunc));
+  globalObject().setProperty("dataColumn", newFunction(dataColumnFunc));
+  globalObject().setProperty("dataColumnScan", newFunction(dataColumnScanFunc));
 
   if (app) {
     QObject *plugin = dynamic_cast<QObject*>(app->nidaqPlugin().data());
@@ -1643,6 +1817,12 @@ void QxrdScriptEngine::initialize()
     if (cals) {
       QCEP_DOC_OBJECT("calibrants", "Calibrant Library");
       globalObject().setProperty("calibrants", newQObject(cals.data()));
+    }
+
+    QcepDatasetPtr ds = expt->dataset();
+
+    if (ds) {
+      globalObject().setProperty("dataset", newQObject(ds.data()));
     }
   }
 }

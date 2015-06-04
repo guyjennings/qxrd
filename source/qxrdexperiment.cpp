@@ -26,6 +26,8 @@
 #include "qxrddetectorthread.h"
 #include "qxrdmutexlocker.h"
 #include "qxrdacquisition-ptr.h"
+#include "qcepdataset.h"
+#include "qcepdatagroup-ptr.h"
 #include <QHostInfo>
 #include <QColorDialog>
 
@@ -154,6 +156,12 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
     if (acq) {
       acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
+
+    m_Dataset = QcepDatasetPtr(new QcepDataset("dataset", this));
+
+    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup("group1", this)));
+    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup("group2", this)));
+    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup("group3", this)));
 
     m_WindowSettings = QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL));
 
@@ -490,6 +498,11 @@ QxrdDataProcessorWPtr QxrdExperiment::dataProcessor() const
 QxrdCalibrantLibraryWPtr QxrdExperiment::calibrantLibrary() const
 {
   return m_CalibrantLibrary;
+}
+
+QcepDatasetWPtr QxrdExperiment::dataset() const
+{
+  return m_Dataset;
 }
 
 QxrdCenterFinderWPtr QxrdExperiment::centerFinder() const

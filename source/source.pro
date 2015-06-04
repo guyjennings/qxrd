@@ -148,7 +148,19 @@ HEADERS += \
     qxrdcalibrantlibrarymodel.h \
     qxrdcalibrantdspacingsmodel.h \
     qxrdcalibrantdspacingsmodel-ptr.h \
-    qxrdcalibrantlibrarymodel-ptr.h
+    qxrdcalibrantlibrarymodel-ptr.h \
+    qcepdataobject.h \
+    qcepdatagroup.h \
+    qcepdataarray.h \
+    qcepdatacolumnscan.h \
+    qcepdatacolumn.h \
+    qcepdataarray-ptr.h \
+    qcepdatacolumn-ptr.h \
+    qcepdatacolumnscan-ptr.h \
+    qcepdatagroup-ptr.h \
+    qcepdataobject-ptr.h \
+    qcepdataset.h \
+    qcepdataset-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -188,7 +200,13 @@ SOURCES += \
     qxrdcalibrantlibrary.cpp \
     qxrdcalibrantdialog.cpp \
     qxrdcalibrantlibrarymodel.cpp \
-    qxrdcalibrantdspacingsmodel.cpp
+    qxrdcalibrantdspacingsmodel.cpp \
+    qcepdataobject.cpp \
+    qcepdatagroup.cpp \
+    qcepdataarray.cpp \
+    qcepdatacolumnscan.cpp \
+    qcepdatacolumn.cpp \
+    qcepdataset.cpp
 
 OTHER_FILES += testImage.js
 
