@@ -16,7 +16,7 @@ class QcepDataColumn : public QcepDataObject, public QVector<double>
   Q_OBJECT
 
 public:
-  QcepDataColumn(QString name, int npts, QObject *parent = 0);
+  QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QObject *parent = 0);
 
 private:
   int m_NPoints;

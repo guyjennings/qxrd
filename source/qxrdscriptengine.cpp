@@ -1388,7 +1388,7 @@ QScriptValue QxrdScriptEngine::dataObjectFunc(QScriptContext *context, QScriptEn
     if (expt) {
       QString name = context->argument(0).toString();
 
-      return engine->newQObject(new QcepDataObject(name/*, expt.data()*/));
+      return engine->newQObject(new QcepDataObject(QcepSettingsSaverWPtr(), name/*, expt.data()*/));
     }
   }
 
@@ -1412,7 +1412,7 @@ QScriptValue QxrdScriptEngine::dataGroupFunc(QScriptContext *context, QScriptEng
     if (expt) {
       QString name = context->argument(0).toString();
 
-      return engine->newQObject(new QcepDataGroup(name/*, expt.data()*/));
+      return engine->newQObject(new QcepDataGroup(QcepSettingsSaverWPtr(), name/*, expt.data()*/));
     }
   }
 
@@ -1442,7 +1442,7 @@ QScriptValue QxrdScriptEngine::dataArrayFunc(QScriptContext *context, QScriptEng
         dims.append(context->argument(i).toInteger());
       }
 
-      return engine->newQObject(new QcepDataArray(name, dims/*, expt.data()*/));
+      return engine->newQObject(new QcepDataArray(QcepSettingsSaverWPtr(), name, dims/*, expt.data()*/));
     }
   }
 
@@ -1467,7 +1467,7 @@ QScriptValue QxrdScriptEngine::dataColumnFunc(QScriptContext *context, QScriptEn
       QString name = context->argument(0).toString();
       int     npts = context->argument(1).toInteger();
 
-      return engine->newQObject(new QcepDataColumn(name, npts/*, expt.data()*/));
+      return engine->newQObject(new QcepDataColumn(QcepSettingsSaverWPtr(), name, npts/*, expt.data()*/));
     }
   }
 
@@ -1498,7 +1498,7 @@ QScriptValue QxrdScriptEngine::dataColumnScanFunc(QScriptContext *context, QScri
         cols.append(context->argument(i).toString());
       }
 
-      return engine->newQObject(new QcepDataColumnScan(name, cols, npts/*, expt.data()*/));
+      return engine->newQObject(new QcepDataColumnScan(QcepSettingsSaverWPtr(), name, cols, npts/*, expt.data()*/));
     }
   }
 
@@ -1609,6 +1609,16 @@ void QxrdScriptEngine::initialize()
 {
   qScriptRegisterMetaType(this, QxrdScriptEngine::QPointFToScriptValue, QxrdScriptEngine::QPointFFromScriptValue);
 
+  qRegisterMetaType< QVector<int> >("QVector<int>");
+  qRegisterMetaType< QVector<bool> >("QVector<bool>");
+  qRegisterMetaType< QVector<double> >("QVector<double>");
+  qRegisterMetaType< QVector<QString> >("QVector<QString>");
+
+//  qRegisterMetaType< QList<int> >("QList<int>");
+//  qRegisterMetaType< QList<bool> >("QList<bool>");
+//  qRegisterMetaType< QList<double> >("QList<double>");
+  qRegisterMetaType< QList<QString> >("QList<QString>");
+
   qScriptRegisterSequenceMetaType< QList<int> >(this);
   qScriptRegisterSequenceMetaType< QList<bool> >(this);
   qScriptRegisterSequenceMetaType< QList<double> >(this);
@@ -1639,22 +1649,22 @@ void QxrdScriptEngine::initialize()
                           QxrdCalibrant::toScriptValue,
                           QxrdCalibrant::fromScriptValue);
 
-  qRegisterMetaType<QcepDataObjectWPtr>("QcepDataObjectPtr");
+  qRegisterMetaType<QcepDataObjectPtr>("QcepDataObjectPtr");
   qScriptRegisterMetaType(this,
                           QcepDataObject::toScriptValue,
                           QcepDataObject::fromScriptValue);
 
-  qRegisterMetaType<QcepDataGroupWPtr>("QcepDataGroupPtr");
+  qRegisterMetaType<QcepDataGroupPtr>("QcepDataGroupPtr");
   qScriptRegisterMetaType(this,
                           QcepDataGroup::toScriptValue,
                           QcepDataGroup::fromScriptValue);
 
-  qRegisterMetaType<QcepDataArrayWPtr>("QcepDataArrayPtr");
+  qRegisterMetaType<QcepDataArrayPtr>("QcepDataArrayPtr");
   qScriptRegisterMetaType(this,
                           QcepDataArray::toScriptValue,
                           QcepDataArray::fromScriptValue);
 
-  qRegisterMetaType<QcepDataColumnWPtr>("QcepDataColumnPtr");
+  qRegisterMetaType<QcepDataColumnPtr>("QcepDataColumnPtr");
   qScriptRegisterMetaType(this,
                           QcepDataColumn::toScriptValue,
                           QcepDataColumn::fromScriptValue);

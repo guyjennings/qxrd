@@ -12,12 +12,12 @@ class QcepDataGroup : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepDataGroup(QString name, QObject *parent = 0);
+  QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QObject *parent = 0);
 
 public slots:
   QcepDataObjectPtr item(int n);
   QcepDataObjectPtr item(QString nm);
-  int                nitems();
+  int                count();
 
   void append(QcepDataObjectPtr obj);
   void remove(QcepDataObjectPtr obj);

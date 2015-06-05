@@ -157,11 +157,11 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
       acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
-    m_Dataset = QcepDatasetPtr(new QcepDataset("dataset", this));
+    m_Dataset = QcepDatasetPtr(new QcepDataset(m_SettingsSaver, "dataset", this));
 
-    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup("group1", this)));
-    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup("group2", this)));
-    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup("group3", this)));
+    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group1", this)));
+    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group2", this)));
+    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group3", this)));
 
     m_WindowSettings = QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL));
 

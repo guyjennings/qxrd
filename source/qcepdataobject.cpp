@@ -1,10 +1,17 @@
 #include "qcepdataobject.h"
 #include <QScriptEngine>
 
-QcepDataObject::QcepDataObject(QString name, QObject *parent) :
-  QcepObject(name, parent)
+QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name, QObject *parent) :
+  QcepObject(name, parent),
+  m_Type(saver, this, "type", "object", "Data object type"),
+  m_Saver(saver)
 {
+  set_Type("object");
+}
 
+QcepSettingsSaverWPtr QcepDataObject::saver()
+{
+  return m_Saver;
 }
 
 QScriptValue QcepDataObject::toScriptValue(QScriptEngine *engine, const QcepDataObjectPtr &data)

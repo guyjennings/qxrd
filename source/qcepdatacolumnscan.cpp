@@ -2,12 +2,14 @@
 #include "qcepdatacolumn.h"
 #include "qcepdatacolumn-ptr.h"
 
-QcepDataColumnScan::QcepDataColumnScan(QString name, QStringList cols, int npts, QObject *parent) :
-  QcepDataGroup(name, parent)
+QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QStringList cols, int npts, QObject *parent) :
+  QcepDataGroup(sav, name, parent)
 {
+  set_Type("columnscan");
+
   foreach (QString col, cols) {
     append(QcepDataColumnPtr(
-             new QcepDataColumn(col, npts, parent)));
+             new QcepDataColumn(saver(), col, npts, parent)));
   }
 }
 

@@ -1,10 +1,10 @@
 #include "qcepdatagroup.h"
 #include <QScriptEngine>
 
-QcepDataGroup::QcepDataGroup(QString name, QObject *parent) :
-  QcepDataObject(name, parent)
+QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QObject *parent) :
+  QcepDataObject(saver, name, parent)
 {
-
+  set_Type("group");
 }
 
 QcepDataObjectPtr QcepDataGroup::item(int n)
@@ -23,7 +23,7 @@ QcepDataObjectPtr QcepDataGroup::item(QString nm)
   return QcepDataObjectPtr();
 }
 
-int QcepDataGroup::nitems()
+int QcepDataGroup::count()
 {
   return m_Objects.count();
 }

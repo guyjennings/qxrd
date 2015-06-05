@@ -9,7 +9,7 @@ class QcepDataset : public QcepDataGroup
   Q_OBJECT
 
 public:
-  QcepDataset(QString name, QObject *parent = 0);
+  QcepDataset(QcepSettingsSaverWPtr saver, QString name, QObject *parent = 0);
 
 public slots:
   void addGroup(QString path);
