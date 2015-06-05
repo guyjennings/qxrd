@@ -5,6 +5,7 @@
 #include <QVector>
 #include "qcepdataobject.h"
 #include "qcepdataobject-ptr.h"
+#include "qcepdatagroup-ptr.h"
 
 class QcepDataGroup : public QcepDataObject
 {
@@ -20,6 +21,10 @@ public slots:
 
   void append(QcepDataObjectPtr obj);
   void remove(QcepDataObjectPtr obj);
+
+public:
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data);
+  static void fromScriptValue(const QScriptValue &obj, QcepDataGroupPtr &data);
 
 private:
   QVector<QcepDataObjectPtr> m_Objects;
