@@ -33,7 +33,7 @@ QxrdCalibrant::~QxrdCalibrant()
 
 bool QxrdCalibrant::isLocked()
 {
-  return (get_Flags() && 1) == 0;
+  return (get_Flags() & 1) == 0;
 }
 
 QScriptValue QxrdCalibrant::toScriptValue(QScriptEngine *engine, const QxrdCalibrantWPtr &cal)
@@ -43,11 +43,15 @@ QScriptValue QxrdCalibrant::toScriptValue(QScriptEngine *engine, const QxrdCalib
 
 void QxrdCalibrant::fromScriptValue(const QScriptValue &obj, QxrdCalibrantWPtr &cal)
 {
-//  QxrdExperimentPtr exp(m_Experiment);
+  QObject *qobj = obj.toQObject();
 
-//  if (exp) {
-//    exp->printMessage("QxrdCalibrant::fromScriptValue not yet written")
-//  }
+  if (qobj) {
+    QxrdCalibrant *qcal = qobject_cast<QxrdCalibrant*>(qobj);
+
+    if (qcal) {
+      cal = QxrdCalibrantPtr(qcal);
+    }
+  }
 }
 
 QxrdCalibrantDSpacing QxrdCalibrant::dSpacing(int h, int k, int l)
