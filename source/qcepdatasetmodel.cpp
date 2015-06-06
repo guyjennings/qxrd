@@ -26,15 +26,21 @@ QModelIndex QcepDatasetModel::index(int row, int column, const QModelIndex &pare
 {
   if (!hasIndex(row, column, parent)) {
     return QModelIndex();
+  }
+
+  QcepDataObjectPtr parentItem;
+
+  if (!parent.isValid()) {
+    parentItem = m_Dataset;
   } else {
-    QcepDataObjectPtr parentItem = indexedObject(parent);
+    parentItem = indexedObject(parent);
+  }
 
-    if (parentItem) {
-      QcepDataObjectPtr childItem = parentItem->item(row);
+  if (parentItem) {
+    QcepDataObjectPtr childItem = parentItem->item(row);
 
-      if (childItem) {
-        return createIndex(row, column, childItem.data());
-      }
+    if (childItem) {
+      return createIndex(row, column, childItem.data());
     }
   }
 
@@ -45,18 +51,18 @@ QModelIndex QcepDatasetModel::parent(const QModelIndex &index) const
 {
   if (!index.isValid()) {
     return QModelIndex();
-  } else {
-    QcepDataObjectPtr childItem = indexedObject(index);
+  }
 
-    if (childItem) {
-      QcepDataObjectPtr parentItem = childItem->parentItem();
+  QcepDataObjectPtr childItem = indexedObject(index);
 
-      if (parentItem) {
-        if (parentItem == m_Dataset) {
-          return QModelIndex();
-        } else {
-          return createIndex(parentItem->indexInParent(), 0, parentItem.data());
-        }
+  if (childItem) {
+    QcepDataObjectPtr parentItem = childItem->parentItem();
+
+    if (parentItem) {
+      if (parentItem == m_Dataset) {
+        return QModelIndex();
+      } else {
+        return createIndex(parentItem->indexInParent(), 0, parentItem.data());
       }
     }
   }
@@ -79,7 +85,9 @@ int QcepDatasetModel::rowCount(const QModelIndex &parent) const
   }
 
   if (parentItem) {
-    return parentItem->count();
+    int nrows = parentItem->count();
+
+    return nrows;
   }
 
   return 0;
@@ -96,7 +104,9 @@ int QcepDatasetModel::columnCount(const QModelIndex &parent) const
   }
 
   if (parentItem) {
-    return parentItem->columnCount();
+    int ncols = parentItem->columnCount();
+
+    return ncols;
   }
 
   return 0;
