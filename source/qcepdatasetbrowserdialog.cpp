@@ -1,14 +1,22 @@
 #include "qcepdatasetbrowserdialog.h"
 #include "ui_qcepdatasetbrowserdialog.h"
+#include "qcepdataset.h"
+#include "qcepdatasetmodel.h"
 
-QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::QcepDatasetBrowserDialog)
+QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QcepDatasetPtr ds, QWidget *parent) :
+  QDockWidget(parent),
+  m_Dataset(ds)
 {
-  ui->setupUi(this);
+  setupUi(this);
+
+  if (m_Dataset) {
+    m_DatasetModel = QcepDatasetModelPtr(
+          new QcepDatasetModel(m_Dataset));
+
+    m_DatasetBrowserView -> setModel(m_DatasetModel.data());
+  }
 }
 
 QcepDatasetBrowserDialog::~QcepDatasetBrowserDialog()
 {
-  delete ui;
 }

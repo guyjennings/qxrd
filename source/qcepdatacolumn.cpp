@@ -1,6 +1,6 @@
 #include "qcepdatacolumn.h"
 
-QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QObject *parent) :
+QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QcepDataObjectWPtr parent) :
   QcepDataObject(saver, name, parent),
   m_NPoints(npts)
 {

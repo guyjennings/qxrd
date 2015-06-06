@@ -2,7 +2,7 @@
 #include "qcepdatacolumn.h"
 #include "qcepdatacolumn-ptr.h"
 
-QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QStringList cols, int npts, QObject *parent) :
+QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QStringList cols, int npts, QcepDataObjectWPtr parent) :
   QcepDataGroup(sav, name, parent)
 {
   set_Type("columnscan");

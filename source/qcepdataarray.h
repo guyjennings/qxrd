@@ -10,7 +10,10 @@ class QcepDataArray : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims, QObject *parent = 0);
+  QcepDataArray(QcepSettingsSaverWPtr saver,
+                QString name,
+                QVector<int> dims,
+                QcepDataObjectWPtr parent = QcepDataObjectWPtr());
 
 public slots:
   QVector<int>    dimensions();

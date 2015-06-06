@@ -160,7 +160,10 @@ HEADERS += \
     qcepdatagroup-ptr.h \
     qcepdataobject-ptr.h \
     qcepdataset.h \
-    qcepdataset-ptr.h
+    qcepdataset-ptr.h \
+    qcepdatasetmodel.h \
+    qcepdatasetbrowserdialog.h \
+    qcepdatasetmodel-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -206,7 +209,9 @@ SOURCES += \
     qcepdataarray.cpp \
     qcepdatacolumnscan.cpp \
     qcepdatacolumn.cpp \
-    qcepdataset.cpp
+    qcepdataset.cpp \
+    qcepdatasetmodel.cpp \
+    qcepdatasetbrowserdialog.cpp
 
 OTHER_FILES += testImage.js
 
@@ -521,7 +526,8 @@ FORMS = qxrdwindow.ui \
     qxrduserscriptdialog.ui \
     qxrddistortioncorrectiondialog.ui \
     qxrdscriptdialog.ui \
-    qxrdcalibrantdialog.ui
+    qxrdcalibrantdialog.ui \
+    qcepdatasetbrowserdialog.ui
 
 macx:
 else:unix:LIBS += -ltiff

@@ -1,6 +1,6 @@
 #include "qcepdataarray.h"
 
-QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims, QObject *parent) :
+QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims, QcepDataObjectWPtr parent) :
   QcepDataObject(saver, name, parent),
   m_Dimensions(dims)
 {

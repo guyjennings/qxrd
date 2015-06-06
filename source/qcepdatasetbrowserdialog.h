@@ -1,22 +1,23 @@
 #ifndef QCEPDATASETBROWSERDIALOG_H
 #define QCEPDATASETBROWSERDIALOG_H
 
-#include <QWidget>
+#include <QDockWidget>
+#include "ui_qcepdatasetbrowserdialog.h"
+#include "qcepdataset.h"
+#include "qcepdataset-ptr.h"
+#include "qcepdatasetmodel-ptr.h"
 
-namespace Ui {
-  class QcepDatasetBrowserDialog;
-}
-
-class QcepDatasetBrowserDialog : public QWidget
+class QcepDatasetBrowserDialog : public QDockWidget, public Ui::QcepDatasetBrowserDialog
 {
   Q_OBJECT
 
 public:
-  explicit QcepDatasetBrowserDialog(QWidget *parent = 0);
-  ~QcepDatasetBrowserDialog();
+  explicit QcepDatasetBrowserDialog(QcepDatasetPtr ds, QWidget *parent = 0);
+  virtual ~QcepDatasetBrowserDialog();
 
 private:
-  Ui::QcepDatasetBrowserDialog *ui;
+  QcepDatasetPtr      m_Dataset;
+  QcepDatasetModelPtr m_DatasetModel;
 };
 
 #endif // QCEPDATASETBROWSERDIALOG_H

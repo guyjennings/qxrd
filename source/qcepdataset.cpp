@@ -8,7 +8,7 @@
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumnscan-ptr.h"
 
-QcepDataset::QcepDataset(QcepSettingsSaverWPtr saver, QString name, QObject *parent) :
+QcepDataset::QcepDataset(QcepSettingsSaverWPtr saver, QString name, QcepDataObjectWPtr parent) :
   QcepDataGroup(saver, name, parent)
 {
   set_Type("dataset");
@@ -19,6 +19,8 @@ void QcepDataset::addGroup(QString path)
   QcepDataGroupPtr group(new QcepDataGroup(saver(), path));
 
   append(group);
+
+  emit dataObjectChanged();
 }
 
 void QcepDataset::addArray(QString path, QVector<int> dims)
@@ -26,6 +28,8 @@ void QcepDataset::addArray(QString path, QVector<int> dims)
   QcepDataArrayPtr array(new QcepDataArray(saver(), path, dims));
 
   append(array);
+
+  emit dataObjectChanged();
 }
 
 void QcepDataset::addColumn(QString path, int nrows)
@@ -33,6 +37,8 @@ void QcepDataset::addColumn(QString path, int nrows)
   QcepDataColumnPtr column(new QcepDataColumn(saver(), path, nrows));
 
   append(column);
+
+  emit dataObjectChanged();
 }
 
 void QcepDataset::addColumnScan(QString path, int nrow, QStringList cols)
@@ -40,4 +46,6 @@ void QcepDataset::addColumnScan(QString path, int nrow, QStringList cols)
   QcepDataColumnScanPtr scan(new QcepDataColumnScan(saver(), path, cols, nrow));
 
   append(scan);
+
+  emit dataObjectChanged();
 }

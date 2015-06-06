@@ -1,18 +1,18 @@
 #include "qcepdatagroup.h"
 #include <QScriptEngine>
 
-QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QObject *parent) :
+QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepDataObjectWPtr parent) :
   QcepDataObject(saver, name, parent)
 {
   set_Type("group");
 }
 
-QcepDataObjectPtr QcepDataGroup::item(int n)
+QcepDataObjectPtr QcepDataGroup::item(int n) const
 {
   return m_Objects.value(n);
 }
 
-QcepDataObjectPtr QcepDataGroup::item(QString nm)
+QcepDataObjectPtr QcepDataGroup::item(QString nm) const
 {
   foreach(QcepDataObjectPtr p, m_Objects) {
     if (p && (p->get_Name() == nm)) {
@@ -23,7 +23,7 @@ QcepDataObjectPtr QcepDataGroup::item(QString nm)
   return QcepDataObjectPtr();
 }
 
-int QcepDataGroup::count()
+int QcepDataGroup::count() const
 {
   return m_Objects.count();
 }
@@ -32,6 +32,8 @@ void QcepDataGroup::append(QcepDataObjectPtr obj)
 {
   if (obj) {
     m_Objects.append(obj);
+
+    emit dataObjectChanged();
   }
 }
 
@@ -41,6 +43,8 @@ void QcepDataGroup::remove(QcepDataObjectPtr obj)
 
   if (n >= 0) {
     m_Objects.remove(n);
+
+    emit dataObjectChanged();
   }
 }
 

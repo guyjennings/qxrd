@@ -9,7 +9,11 @@ class QcepDataColumnScan : public QcepDataGroup
   Q_OBJECT
 
 public:
-  QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QStringList cols, int npts, QObject *parent = 0);
+  QcepDataColumnScan(QcepSettingsSaverWPtr sav,
+                     QString name,
+                     QStringList cols,
+                     int npts,
+                     QcepDataObjectWPtr parent = QcepDataObjectWPtr());
 };
 
 #endif // QCEPDATACOLUMNSCAN_H
