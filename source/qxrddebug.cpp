@@ -26,4 +26,5 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_NOPARALLEL,   "Serialize Various Algorithms");
   setMessage(DEBUG_HISTOGRAM,    "Debug Histogramming");
   setMessage(DEBUG_CALIBRANT,    "Powder Calibrant Calculations");
+  setMessage(DEBUG_DATABROWSER,  "Data Browser Operations");
 }
