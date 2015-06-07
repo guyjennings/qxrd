@@ -18,7 +18,7 @@ QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, Q
 //  m_OpenDirectly -> setChecked(m_Application->get_OpenDirectly());
   m_RecentExperimentsSize -> setValue(m_Application->get_RecentExperimentsSize());
 
-  int debugLevel = m_Application -> get_Debug();
+  qint64 debugLevel = m_Application -> get_Debug();
 
   QxrdAllocatorPtr alloc(m_Application->allocator());
 
@@ -60,7 +60,7 @@ void QxrdGlobalPreferencesDialog::changeEvent(QEvent *e)
 
 void QxrdGlobalPreferencesDialog::accept()
 {
-  int debugLevel = readDebugWidgets();
+  qint64 debugLevel = readDebugWidgets();
 
 //  m_Application -> set_OpenDirectly(m_OpenDirectly->isChecked());
   m_Application -> set_RecentExperimentsSize(m_RecentExperimentsSize->value());
@@ -125,8 +125,8 @@ void QxrdGlobalPreferencesDialog::setupDebugWidgets(qint64 dbg)
 
 qint64 QxrdGlobalPreferencesDialog::readDebugWidgets()
 {
-  int mask = 1;
-  int newDbg = 0;
+  qint64 mask = 1;
+  qint64 newDbg = 0;
   int ndebug = m_DebugWidgetList.count();
 
   for (int i=0; i<ndebug; i++) {

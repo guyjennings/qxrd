@@ -212,7 +212,7 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
   printMessage("QWT Version " QWT_VERSION_STR);
   printMessage(tr("QT Version %1").arg(qVersion()));
 
-  connect(prop_Debug(), SIGNAL(valueChanged(int,int)), this, SLOT(debugChanged(int)));
+  connect(prop_Debug(), SIGNAL(valueChanged(qint64,int)), this, SLOT(debugChanged(qint64)));
   readSettings();
 
   for (int i=1; i<argc; i++) {
@@ -725,7 +725,7 @@ void QxrdApplication::editGlobalPreferences()
   prefs.exec();
 }
 
-void QxrdApplication::debugChanged(int newValue)
+void QxrdApplication::debugChanged(qint64 newValue)
 {
   if (g_DebugLevel) {
     printMessage(tr("Debug level changed from %1 to %2").arg(g_DebugLevel->debugLevel()).arg(newValue));
