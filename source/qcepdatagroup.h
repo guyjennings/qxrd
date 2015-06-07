@@ -22,6 +22,11 @@ public slots:
   void append(QcepDataObjectPtr obj);
   void remove(QcepDataObjectPtr obj);
 
+  void addGroup(QString path);
+  void addArray(QString path, QVector<int> dims);
+  void addColumn(QString path, int nrow);
+  void addColumnScan(QString path, int nrow, QStringList cols);
+
 public:
   static QScriptValue toScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data);
   static void fromScriptValue(const QScriptValue &obj, QcepDataGroupPtr &data);

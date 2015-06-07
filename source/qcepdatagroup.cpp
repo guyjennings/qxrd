@@ -1,10 +1,18 @@
 #include "qcepdatagroup.h"
 #include <QScriptEngine>
+#include "qcepdataarray.h"
+#include "qcepdataarray-ptr.h"
+#include "qcepdatagroup.h"
+#include "qcepdatagroup-ptr.h"
+#include "qcepdatacolumn.h"
+#include "qcepdatacolumn-ptr.h"
+#include "qcepdatacolumnscan.h"
+#include "qcepdatacolumnscan-ptr.h"
 
 QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepDataObjectWPtr parent) :
   QcepDataObject(saver, name, parent)
 {
-  set_Type("group");
+  set_Type("Data Group");
 }
 
 QcepDataObjectPtr QcepDataGroup::item(int n) const
@@ -32,6 +40,8 @@ void QcepDataGroup::append(QcepDataObjectPtr obj)
 {
   if (obj) {
     m_Objects.append(obj);
+
+    connect(obj.data(), SIGNAL(dataObjectChanged()), this, SIGNAL(dataObjectChanged()));
 
     emit dataObjectChanged();
   }
@@ -64,4 +74,40 @@ void QcepDataGroup::fromScriptValue(const QScriptValue &obj, QcepDataGroupPtr &d
       data = QcepDataGroupPtr(qdobj);
     }
   }
+}
+
+void QcepDataGroup::addGroup(QString path)
+{
+  QcepDataGroupPtr group(new QcepDataGroup(saver(), path));
+
+  append(group);
+
+  emit dataObjectChanged();
+}
+
+void QcepDataGroup::addArray(QString path, QVector<int> dims)
+{
+  QcepDataArrayPtr array(new QcepDataArray(saver(), path, dims));
+
+  append(array);
+
+  emit dataObjectChanged();
+}
+
+void QcepDataGroup::addColumn(QString path, int nrows)
+{
+  QcepDataColumnPtr column(new QcepDataColumn(saver(), path, nrows));
+
+  append(column);
+
+  emit dataObjectChanged();
+}
+
+void QcepDataGroup::addColumnScan(QString path, int nrow, QStringList cols)
+{
+  QcepDataColumnScanPtr scan(new QcepDataColumnScan(saver(), path, cols, nrow));
+
+  append(scan);
+
+  emit dataObjectChanged();
 }
