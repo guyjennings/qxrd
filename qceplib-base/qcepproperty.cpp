@@ -2825,3 +2825,104 @@ void QcepPolygonProperty::resetValue()
   setValue(defaultValue());
 }
 
+QcepInt64Property::QcepInt64Property(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, qint64 value, QString toolTip)
+  : QcepProperty(saver, parent, name, toolTip),
+    m_Default(value),
+    m_Value(value)
+{
+}
+
+qint64 QcepInt64Property::value() const
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  return m_Value;
+}
+
+qint64 QcepInt64Property::defaultValue() const
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  return m_Default;
+}
+
+void QcepInt64Property::setValue(qint64 val, int index)
+{
+  if (debug()) {
+    printMessage(tr("%1 QcepInt64Property::setValue(qint64 %2, int %3) [%4]")
+                 .arg(name()).arg(val).arg(index).arg(this->index()));
+  }
+
+  if (index == this->index()) {
+    setValue(val);
+  }
+}
+
+void QcepInt64Property::setValue(qint64 val)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (qcepDebug(DEBUG_PROPERTIES)) {
+    printMessage(tr("%1: QcepInt64Property::setValue(qint64 %2)")
+                 .arg(name()).arg(val));
+  }
+
+  if (val != m_Value) {
+    if (debug()) {
+      printMessage(tr("%1: QcepInt64Property::setValue(qint64 %2) [%3]")
+                   .arg(name()).arg(val).arg(index()));
+    }
+
+    m_Value = val;
+
+    QcepSettingsSaverPtr saver(m_Saver);
+
+    if (saver) {
+      saver->changed(this);
+    }
+
+    emit valueChanged(val, incIndex(1));
+    emit valueChanged(tr("%1").arg(val));
+  }
+}
+
+void QcepInt64Property::incValue(qint64 step)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
+    printMessage(tr("%1: QcepInt64Property::incValue(qint64 %2)")
+                 .arg(name()).arg(step));
+  }
+
+  if (step) {
+    m_Value += step;
+
+    QcepSettingsSaverPtr saver(m_Saver);
+
+    if (saver) {
+      saver->changed(this);
+    }
+
+    emit valueChanged(value(), incIndex(1));
+    emit valueChanged(tr("%1").arg(value()));
+  }
+}
+
+void QcepInt64Property::setDefaultValue(qint64 val)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  m_Default = val;
+}
+
+void QcepInt64Property::resetValue()
+{
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
+    printMessage(tr("%1: QcepInt64Property::resetValue").arg(name()));
+  }
+
+  setValue(defaultValue());
+}
+
+

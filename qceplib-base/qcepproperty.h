@@ -596,6 +596,36 @@ private:
   QcepPolygon m_Value;
 };
 
+class QcepInt64Property : public QcepProperty {
+  Q_OBJECT
+public:
+  QcepInt64Property(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, qint64 value, QString toolTip);
+
+  qint64 value() const;
+  qint64 defaultValue() const;
+
+//  void linkTo(QSpinBox *spinBox);
+//  void linkTo(QComboBox *comboBox);
+//  void linkTo(QLabel *label);
+//  void linkTo(QProgressBar *progress);
+//  void linkTo(QLCDNumber *number);
+
+public slots:
+  void setValue(qint64 val, int index);
+  void setValue(qint64 val);
+  void incValue(qint64 step);
+  void setDefaultValue(qint64 val);
+  void resetValue();
+
+signals:
+  void valueChanged(qint64 val, int index);
+  void valueChanged(QString val);
+
+private:
+  qint64  m_Default;
+  qint64  m_Value;
+};
+
 #define QCEP_DOUBLE_PROPERTY(propname) \
 public: \
 double get_##propname() const \
@@ -1077,5 +1107,39 @@ QcepPolygonProperty *prop_##propname() { \
 \
 private: \
 QcepPolygonProperty m_##propname;
+
+#define QCEP_INTEGER64_PROPERTY(propname) \
+public: \
+qint64 get_##propname() const \
+{ \
+  return m_##propname.value(); \
+} \
+\
+void set_##propname(qint64 val) \
+{ \
+  m_##propname.setValue(val); \
+} \
+\
+qint64 def_##propname() const \
+{ \
+  return m_##propname.defaultValue(); \
+} \
+\
+void setdef_##propname(qint64 val) \
+{ \
+  m_##propname.setDefaultValue(val); \
+} \
+\
+void reset_##propname() \
+{ \
+  m_##propname.resetValue(); \
+} \
+\
+QcepInt64Property *prop_##propname() { \
+  return &m_##propname; \
+} \
+\
+private: \
+QcepInt64Property m_##propname;
 
 #endif // QCEPPROPERTY_H
