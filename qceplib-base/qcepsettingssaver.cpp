@@ -58,7 +58,7 @@ void QcepSettingsSaver::performSave()
   }
 }
 
-void QcepSettingsSaver::changed(QcepProperty */*prop*/)
+void QcepSettingsSaver::changed(QcepProperty * /*prop*/)
 {
   m_ChangeCount.fetchAndAddOrdered(1);
 }
