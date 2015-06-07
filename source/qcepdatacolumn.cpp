@@ -4,8 +4,10 @@ QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int np
   QcepDataObject(saver, name, parent),
   m_NPoints(npts)
 {
-  set_Type("column");
+  set_Type("Data Column");
 
   resize(m_NPoints);
+
+  set_Description(tr("%1 rows").arg(m_NPoints));
 }
 

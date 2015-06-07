@@ -14,6 +14,12 @@ public:
                      QStringList cols,
                      int npts,
                      QcepDataObjectWPtr parent = QcepDataObjectWPtr());
+
+  typedef QcepDataGroup inherited;
+
+public:
+  Q_PROPERTY(int numPoints READ get_NumPoints WRITE set_NumPoints)
+  QCEP_INTEGER_PROPERTY(NumPoints)
 };
 
 #endif // QCEPDATACOLUMNSCAN_H

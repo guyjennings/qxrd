@@ -4,13 +4,25 @@ QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<
   QcepDataObject(saver, name, parent),
   m_Dimensions(dims)
 {
-  set_Type("array");
+  set_Type("Data Array");
 
   int prod = 1;
 
-  foreach (int d, dims) {
-    prod *= d;
+  QString desc = "[";
+
+  for (int i=0; i<dims.count(); i++) {
+    prod *= dims[i];
+
+    if (i!=0) {
+      desc += ", ";
+    }
+
+    desc += tr("%1").arg(dims[i]);
   }
+
+  desc += "]";
+
+  set_Description(desc);
 
   m_Data.resize(prod);
 }

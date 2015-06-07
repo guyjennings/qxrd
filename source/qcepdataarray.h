@@ -14,6 +14,7 @@ public:
                 QString name,
                 QVector<int> dims,
                 QcepDataObjectWPtr parent = QcepDataObjectWPtr());
+  typedef QcepDataObject inherited;
 
 public slots:
   QVector<int>    dimensions();
