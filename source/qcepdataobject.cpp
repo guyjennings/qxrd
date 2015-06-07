@@ -6,7 +6,8 @@ QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name, QcepDa
   QcepObject(name, NULL),
   m_Parent(parent),
   m_Saver(saver),
-  m_Type(saver, this, "type", "object", "Data object type")
+  m_Type(saver, this, "type", "object", "Data object type"),
+  m_Description(saver, this, "description", "", "Data object description")
 {
   set_Type("object");
 }
@@ -76,7 +77,7 @@ int QcepDataObject::indexInParent() const
 
 int QcepDataObject::columnCount() const
 {
-  return 2;
+  return 3;
 }
 
 QVariant QcepDataObject::columnData(int col) const
@@ -86,6 +87,6 @@ QVariant QcepDataObject::columnData(int col) const
   } else if (col == 1) {
     return get_Type();
   } else {
-    return QVariant();
+    return get_Description();
   }
 }

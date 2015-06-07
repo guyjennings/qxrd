@@ -40,6 +40,9 @@ private:
 public:
   Q_PROPERTY(QString type READ get_Type WRITE set_Type)
   QCEP_STRING_PROPERTY(Type)
+
+  Q_PROPERTY(QString description READ get_Description WRITE set_Description)
+  QCEP_STRING_PROPERTY(Description)
 };
 
 #endif // QCEPDATAOBJECT_H
