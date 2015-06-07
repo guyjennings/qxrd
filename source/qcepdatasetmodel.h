@@ -20,7 +20,13 @@ public:
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-  QcepDataObjectPtr indexedObject(const QModelIndex& index) const;
+  QcepDataObject *indexedObject(const QModelIndex& index) const;
+
+private slots:
+  void onDataObjectChanged();
+
+private:
+  QString indexDescription(const QModelIndex& index) const;
 
 private:
   QcepDatasetPtr m_Dataset;
