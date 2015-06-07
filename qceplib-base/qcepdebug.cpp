@@ -18,14 +18,18 @@ QcepDebugDictionary::QcepDebugDictionary() :
   setMessage(DEBUG_SERVER,       "Server Commands");
 }
 
-int qcepDebug(int cond)
+qint64 qcepDebug(int cond)
 {
   if (g_DebugLevel == NULL) {
     printf("No Debug Dictionary Allocated\n");
 
     return 0;
   } else {
-    return g_DebugLevel->debugLevel() & ((qint64) 1 << cond);
+    qint64 mask = 1;
+
+    mask <<= cond;
+
+    return g_DebugLevel->debugLevel() & (mask);
   }
 }
 

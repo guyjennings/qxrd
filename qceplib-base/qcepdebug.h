@@ -38,7 +38,7 @@ private:
   QMap<int, QString> m_Messages;
 };
 
-extern int qcepDebug(int cond);
+extern qint64 qcepDebug(int cond);
 
 extern QSharedPointer<QcepDebugDictionary> g_DebugLevel;
 
