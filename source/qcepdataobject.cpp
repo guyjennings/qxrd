@@ -4,7 +4,7 @@
 
 QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name, QcepDataObjectWPtr parent) :
   QcepObject(name, NULL),
-  m_Parent(parent),
+  m_Parent(parent.data()),
   m_Saver(saver),
   m_Type(saver, this, "type", "object", "Data object type"),
   m_Description(saver, this, "description", "", "Data object description")
@@ -50,18 +50,23 @@ QcepDataObjectPtr QcepDataObject::item(QString nm) const
   return QcepDataObjectPtr();
 }
 
-QcepDataObjectPtr QcepDataObject::parentItem() const
+QcepDataObject *QcepDataObject::parentItem() const
 {
   return m_Parent;
 }
 
+void QcepDataObject::setParentItem(QcepDataObject *parent)
+{
+  m_Parent = parent;
+}
+
 int QcepDataObject::indexInParent() const
 {
-  QcepDataObjectPtr parent = m_Parent;
+  QcepDataObject *parent = m_Parent;
 
   if (parent) {
-    QcepDataGroupPtr parentGroup = QcepDataGroupPtr(
-          qobject_cast<QcepDataGroup*>(parent.data()));
+    QcepDataGroup *parentGroup =
+          qobject_cast<QcepDataGroup*>(parent);
 
     if (parentGroup) {
       for (int i=0; i<parentGroup->count(); i++) {

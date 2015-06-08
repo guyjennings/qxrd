@@ -93,7 +93,7 @@ QModelIndex QcepDatasetModel::parent(const QModelIndex &index) const
 //      printf("of object %s\n", qPrintable(childItem->get_Name()));
 //    }
 
-    QcepDataObject *parentItem = childItem->parentItem().data();
+    QcepDataObject *parentItem = childItem->parentItem();
 
     if (parentItem) {
       if (parentItem != m_Dataset.data()) {
@@ -125,6 +125,8 @@ int QcepDatasetModel::rowCount(const QModelIndex &parent) const
       int nrows = parentItem->count();
 
       res = nrows;
+    } else {
+      res = m_Dataset->count();
     }
   }
 
@@ -150,6 +152,8 @@ int QcepDatasetModel::columnCount(const QModelIndex &parent) const
     int ncols = parentItem->columnCount();
 
     res = ncols;
+  } else {
+    res = m_Dataset->columnCount();
   }
 
   if (qcepDebug(DEBUG_DATABROWSER)) {

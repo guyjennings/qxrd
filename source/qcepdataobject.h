@@ -25,7 +25,8 @@ public:
   virtual int count() const;
   virtual QcepDataObjectPtr item(int n) const;
   virtual QcepDataObjectPtr item(QString nm) const;
-  virtual QcepDataObjectPtr parentItem() const;
+  virtual QcepDataObject *parentItem() const;
+  virtual void setParentItem(QcepDataObject *parent);
   virtual int indexInParent() const;
   virtual int columnCount() const;
   virtual QVariant columnData(int col) const;
@@ -34,7 +35,7 @@ public:
   static void fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr &data);
 
 private:
-  QcepDataObjectWPtr m_Parent;
+  QcepDataObject *m_Parent;
   QcepSettingsSaverWPtr m_Saver;
 
 public:

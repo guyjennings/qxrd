@@ -41,6 +41,8 @@ void QcepDataGroup::append(QcepDataObjectPtr obj)
   if (obj) {
     m_Objects.append(obj);
 
+    obj -> setParentItem(this);
+
     connect(obj.data(), SIGNAL(dataObjectChanged()), this, SIGNAL(dataObjectChanged()));
 
     emit dataObjectChanged();
