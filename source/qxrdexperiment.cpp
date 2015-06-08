@@ -28,6 +28,9 @@
 #include "qxrdacquisition-ptr.h"
 #include "qcepdataset.h"
 #include "qcepdatagroup-ptr.h"
+#include "qcepdatacolumnscan-ptr.h"
+#include "qcepdatacolumnscan.h"
+
 #include <QHostInfo>
 #include <QColorDialog>
 
@@ -159,9 +162,27 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
 
     m_Dataset = QcepDatasetPtr(new QcepDataset(m_SettingsSaver, "dataset", QcepDatasetPtr()));
 
-    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group1", m_Dataset)));
-    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group2", m_Dataset)));
-    m_Dataset->append(QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group3", m_Dataset)));
+    QcepDataGroupPtr group1 = QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group1", m_Dataset));
+    QcepDataGroupPtr group2 = QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group2", m_Dataset));
+    QcepDataGroupPtr group3 = QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group3", m_Dataset));
+
+    m_Dataset->append(group1);
+    m_Dataset->append(group2);
+    m_Dataset->append(group3);
+
+    QStringList cols;
+    cols << "x" << "y" << "z" << "v" << "sdev";
+
+    QcepDataColumnScanPtr scan1 = QcepDataColumnScanPtr(
+          new QcepDataColumnScan(m_SettingsSaver, "scan1", cols, 1000, group1));
+    QcepDataColumnScanPtr scan2 = QcepDataColumnScanPtr(
+          new QcepDataColumnScan(m_SettingsSaver, "scan2", cols, 1000, group1));
+    QcepDataColumnScanPtr scan3 = QcepDataColumnScanPtr(
+          new QcepDataColumnScan(m_SettingsSaver, "scan3", cols, 1000, group1));
+
+    group1->append(scan1);
+    group1->append(scan2);
+    group1->append(scan3);
 
     m_WindowSettings = QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL));
 
