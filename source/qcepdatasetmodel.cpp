@@ -3,6 +3,7 @@
 #include "qcepdataobject-ptr.h"
 #include "qcepdataset.h"
 #include "qxrddebug.h"
+#include <QMimeData>
 
 QcepDatasetModel::QcepDatasetModel(QcepDatasetPtr ds) :
   m_Dataset(ds)
@@ -189,6 +190,47 @@ QVariant QcepDatasetModel::data(const QModelIndex &index, int role) const
   }
 
   return res;
+}
+
+Qt::ItemFlags QcepDatasetModel::flags(const QModelIndex &index) const
+{
+  if (!index.isValid())
+      return Qt::ItemIsEnabled;
+
+  return QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
+}
+
+QStringList QcepDatasetModel::mimeTypes() const
+{
+//  if (qcepDebug(DEBUG_DRAGDROP)) {
+    printf("QcepDatasetModel::mimeTypes\n");
+//  }
+
+  QStringList types;
+  types << "application/vnd.text.list";
+//  types << "text/plain";
+  return types;
+}
+
+QMimeData  *QcepDatasetModel::mimeData(const QModelIndexList &indexes) const
+{
+  QMimeData *mimeData = new QMimeData();
+  QString textData;
+
+  foreach (const QModelIndex &index, indexes) {
+      if (index.isValid()) {
+          QString text = data(index, Qt::DisplayRole).toString();
+          textData += text;
+      }
+  }
+
+  if (qcepDebug(DEBUG_DRAGDROP)) {
+    printf("QcepDatasetModel::mimeData = %s\n", qPrintable(textData));
+  }
+
+  mimeData->setText(textData);
+//  mimeData->setData("text/plain", encodedData);
+  return mimeData;
 }
 
 QString QcepDatasetModel::indexDescription(const QModelIndex &index) const

@@ -19,8 +19,12 @@ public:
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  Qt::ItemFlags flags(const QModelIndex &index) const;
 
   QcepDataObject *indexedObject(const QModelIndex& index) const;
+
+  QStringList mimeTypes() const;
+  QMimeData  *mimeData(const QModelIndexList &indexes) const;
 
 private slots:
   void onDataObjectChanged();
