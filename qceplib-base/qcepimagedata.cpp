@@ -53,6 +53,9 @@ QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int
     m_Mutex(QMutex::Recursive),
     m_Saver(saver)
 {
+  set_Type("Image");
+  set_Description(tr("[%1 x %2] elements").arg(width).arg(height));
+
   if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
     printf("QcepImageDataBase::QcepImageDataBase(%p)\n", this);
 //    QcepSettingsSaverPtr s(m_Saver);
@@ -534,6 +537,7 @@ void QcepImageData<T>::resize(int width, int height)
 {
   set_Width(width);
   set_Height(height);
+  set_Description(tr("[%1 x %2] elements").arg(width).arg(height));
 
   m_Image.resize(width*height);
 }
