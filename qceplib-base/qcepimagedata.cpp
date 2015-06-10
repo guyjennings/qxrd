@@ -113,6 +113,8 @@ QMutex *QcepImageDataBase::mutex()
 
 void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 {
+  dest -> set_Type(get_Type());
+  dest -> set_Description(get_Description());
   dest -> set_QxrdVersion(get_QxrdVersion());
   dest -> set_QtVersion(get_QtVersion());
   dest -> set_DataType(get_DataType());
@@ -149,6 +151,8 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 
 void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src)
 {
+  set_Type(src -> get_Type());
+  set_Description(src -> get_Description());
   set_QxrdVersion(src -> get_QxrdVersion());
   set_QtVersion(src->get_QtVersion());
   set_DataType(src -> get_DataType());
@@ -537,6 +541,7 @@ void QcepImageData<T>::resize(int width, int height)
 {
   set_Width(width);
   set_Height(height);
+
   set_Description(tr("[%1 x %2] elements").arg(width).arg(height));
 
   m_Image.resize(width*height);
