@@ -56,7 +56,7 @@ public:
 
   QxrdExperimentThreadWPtr experimentThread();
 
-  QxrdAcquisitionThreadPtr acquisitionThread();
+//  QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionWPtr acquisition() const;
   QxrdWindowPtr window();
   QxrdDataProcessorWPtr dataProcessor() const;
@@ -151,17 +151,20 @@ private:
   QxrdServerWPtr                  m_Server;
   QxrdSimpleServerThreadPtr       m_SimpleServerThread;
   QxrdSimpleServerWPtr            m_SimpleServer;
-  QxrdDataProcessorThreadPtr      m_DataProcessorThread;
-  QxrdDataProcessorWPtr           m_DataProcessor;
+//  QxrdDataProcessorThreadPtr      m_DataProcessorThread;
+//  QxrdDataProcessorWPtr           m_DataProcessor;
+  QxrdDataProcessorPtr            m_DataProcessor;
   QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
-  QxrdAcquisitionThreadPtr        m_AcquisitionThread;
-  QxrdAcquisitionWPtr             m_Acquisition;
+//  QxrdAcquisitionThreadPtr        m_AcquisitionThread;
+//  QxrdAcquisitionWPtr             m_Acquisition;
+  QxrdAcquisitionPtr              m_Acquisition;
   QxrdDetectorThreadPtr           m_DetectorThread;
   QxrdDetectorWPtr                m_Detector;
   QxrdFileSaverThreadPtr          m_FileSaverThread;
   QxrdFileSaverWPtr               m_FileSaver;
-  QxrdScriptEngineThreadPtr       m_ScriptEngineThread;
-  QxrdScriptEngineWPtr            m_ScriptEngine;
+//  QxrdScriptEngineThreadPtr       m_ScriptEngineThread;
+//  QxrdScriptEngineWPtr            m_ScriptEngine;
+  QxrdScriptEnginePtr             m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
   QcepDatasetPtr                  m_Dataset;

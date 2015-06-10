@@ -47,13 +47,13 @@ QxrdExperiment::QxrdExperiment(
   m_Server(),
   m_SimpleServerThread(NULL),
   m_SimpleServer(),
-  m_DataProcessorThread(NULL),
+//  m_DataProcessorThread(NULL),
   m_DataProcessor(),
-  m_AcquisitionThread(NULL),
+//  m_AcquisitionThread(NULL),
   m_Acquisition(),
   m_FileSaverThread(NULL),
   m_FileSaver(),
-  m_ScriptEngineThread(NULL),
+//  m_ScriptEngineThread(NULL),
   m_ScriptEngine(),
   m_ScriptEngineDebugger(NULL),
   m_LogFile(NULL),
@@ -110,15 +110,23 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
 
     splashMessage("Initializing Data Processing");
 
-    m_DataProcessorThread = QxrdDataProcessorThreadPtr(
-          new QxrdDataProcessorThread(m_SettingsSaver,
-                                      m_Experiment,
-                                      QxrdAcquisitionPtr(),
-                                      app->allocator(),
-                                      m_FileSaver));
-    m_DataProcessorThread -> setObjectName("proc");
-    m_DataProcessorThread -> start();
-    m_DataProcessor = m_DataProcessorThread -> dataProcessor();
+//    m_DataProcessorThread = QxrdDataProcessorThreadPtr(
+//          new QxrdDataProcessorThread(m_SettingsSaver,
+//                                      m_Experiment,
+//                                      QxrdAcquisitionPtr(),
+//                                      app->allocator(),
+//                                      m_FileSaver));
+//    m_DataProcessorThread -> setObjectName("proc");
+//    m_DataProcessorThread -> start();
+//    m_DataProcessor = m_DataProcessorThread -> dataProcessor();
+
+    m_DataProcessor = QxrdDataProcessorPtr(
+          new QxrdDataProcessor(m_SettingsSaver,
+                                m_Experiment,
+                                QxrdAcquisitionPtr(),
+                                app->allocator(),
+                                m_FileSaver));
+    m_DataProcessor -> initialize(m_DataProcessor);
 
     QxrdFileSaverPtr saver(m_FileSaver);
 
@@ -129,15 +137,23 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
 
     splashMessage("Initializing Data Acquisition");
 
-    m_AcquisitionThread = QxrdAcquisitionThreadPtr(
-          new QxrdAcquisitionThread(m_SettingsSaver,
-                                    m_Experiment,
-                                    m_DataProcessor,
-                                    app->allocator(),
-                                    get_DetectorType()));
-    m_AcquisitionThread -> setObjectName("acqu");
-    m_AcquisitionThread -> start();
-    m_Acquisition = m_AcquisitionThread -> acquisition();
+//    m_AcquisitionThread = QxrdAcquisitionThreadPtr(
+//          new QxrdAcquisitionThread(m_SettingsSaver,
+//                                    m_Experiment,
+//                                    m_DataProcessor,
+//                                    app->allocator(),
+//                                    get_DetectorType()));
+//    m_AcquisitionThread -> setObjectName("acqu");
+//    m_AcquisitionThread -> start();
+//    m_Acquisition = m_AcquisitionThread -> acquisition();
+
+    m_Acquisition = QxrdAcquisitionPtr(
+          new QxrdAcquisition(m_SettingsSaver,
+                              m_Experiment,
+                              m_DataProcessor,
+                              app->allocator()));
+
+    m_Acquisition -> initialize(m_Acquisition);
 
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
           new QxrdCalibrantLibrary(m_SettingsSaver, m_Experiment));
@@ -202,12 +218,15 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
 
-    m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
-          new QxrdScriptEngineThread(m_Application, m_Experiment));
-    m_ScriptEngineThread -> setObjectName("script");
-    m_ScriptEngineThread -> start();
-    m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
+//    m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
+//          new QxrdScriptEngineThread(m_Application, m_Experiment));
+//    m_ScriptEngineThread -> setObjectName("script");
+//    m_ScriptEngineThread -> start();
+//    m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
 
+    m_ScriptEngine = QxrdScriptEnginePtr(
+          new QxrdScriptEngine(app, m_Experiment));
+    m_ScriptEngine -> initialize();
 
     QxrdServerPtr srv(m_Server);
     QxrdScriptEnginePtr eng(m_ScriptEngine);
@@ -481,10 +500,10 @@ QxrdWindowPtr QxrdExperiment::window()
   return m_Window;
 }
 
-QxrdAcquisitionThreadPtr QxrdExperiment::acquisitionThread()
-{
-  return m_AcquisitionThread;
-}
+//QxrdAcquisitionThreadPtr QxrdExperiment::acquisitionThread()
+//{
+//  return m_AcquisitionThread;
+//}
 
 QxrdAcquisitionWPtr QxrdExperiment::acquisition() const
 {
