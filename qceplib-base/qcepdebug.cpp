@@ -16,6 +16,8 @@ QcepDebugDictionary::QcepDebugDictionary() :
   setMessage(DEBUG_IMAGE_CONSTRUCTORS, "Image Object Constructors/Destructors");
   setMessage(DEBUG_LOCKING,    "Debug Mutex Lock Operations");
   setMessage(DEBUG_SERVER,       "Server Commands");
+  setMessage(DEBUG_DATABROWSER,  "Data Browser Operations");
+  setMessage(DEBUG_DRAGDROP,     "Drag and Drop Operations");
 }
 
 qint64 qcepDebug(int cond)

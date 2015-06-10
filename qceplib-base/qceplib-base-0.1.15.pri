@@ -4,6 +4,8 @@ greaterThan(QT_MAJOR_VERSION,4): QT += widgets concurrent
 
 CONFIG += qt
 
+QT += script
+
 INCLUDEPATH += $${PWD}
 
 SOURCES += \
@@ -25,7 +27,14 @@ SOURCES += \
   $${PWD}/qceppropertyvalue.cpp \
   $${PWD}/qcepmatrix3x3.cpp \
   $${PWD}/qcepvector3d.cpp \
-  $${PWD}/qcepobject.cpp
+  $${PWD}/qcepobject.cpp \
+  $${PWD}/qcepdataobject.cpp \
+  $${PWD}/qcepdatagroup.cpp \
+  $${PWD}/qcepdataarray.cpp \
+  $${PWD}/qcepdatacolumnscan.cpp \
+  $${PWD}/qcepdatacolumn.cpp \
+  $${PWD}/qcepdataset.cpp \
+  $${PWD}/qcepdatasetmodel.cpp
 
 HEADERS += \
   $${PWD}/qcepdebug.h \
@@ -50,4 +59,18 @@ HEADERS += \
   $${PWD}/qceppropertyvalue.h \
   $${PWD}/qcepmatrix3x3.h \
   $${PWD}/qcepvector3d.h \
-  $${PWD}/qcepobject.h
+  $${PWD}/qcepobject.h \
+  $${PWD}/qcepdataobject.h \
+  $${PWD}/qcepdatagroup.h \
+  $${PWD}/qcepdataarray.h \
+  $${PWD}/qcepdatacolumnscan.h \
+  $${PWD}/qcepdatacolumn.h \
+  $${PWD}/qcepdataarray-ptr.h \
+  $${PWD}/qcepdatacolumn-ptr.h \
+  $${PWD}/qcepdatacolumnscan-ptr.h \
+  $${PWD}/qcepdatagroup-ptr.h \
+  $${PWD}/qcepdataobject-ptr.h \
+  $${PWD}/qcepdataset.h \
+  $${PWD}/qcepdataset-ptr.h \
+  $${PWD}/qcepdatasetmodel.h \
+  $${PWD}/qcepdatasetmodel-ptr.h
