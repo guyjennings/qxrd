@@ -11,13 +11,14 @@
 #include <math.h>
 #include <stdio.h>
 
+#include "qcepdataobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 //#include "qxrdexperiment-ptr.h"
 
 typedef struct tiff TIFF;
 
-class QcepImageDataBase : public QObject
+class QcepImageDataBase : public QcepDataObject
 {
   Q_OBJECT
 
@@ -118,7 +119,7 @@ public:
   QCEP_BOOLEAN_PROPERTY(Used)
 
 public slots:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
   virtual double getImageData(int x, int y) const = 0;
   virtual QVector<double> getImageData(int x0, int y0, int x1, int y1) const = 0;

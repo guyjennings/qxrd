@@ -1,4 +1,5 @@
 #include "qcepdebug.h"
+#include "qcepdataobject.h"
 #include "qcepimagedata.h"
 //#include "qxrdapplication.h"
 //#include <tiffio.h>
@@ -18,7 +19,7 @@
 QAtomicInt allocCount = 0;
 
 QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height)
-  : QObject(),
+  : QcepDataObject(saver, tr("image"), QcepDataObjectWPtr()),
     m_Width(saver, this, "width", width, "Image Width"),
     m_Height(saver, this, "height", height, "Image Height"),
     m_QxrdVersion(saver, this,"qxrdVersion", "Unknown", "QXRD Version Number"),
@@ -78,7 +79,7 @@ QcepImageDataBase::~QcepImageDataBase()
   //  allocCount--;
 }
 
-void QcepImageDataBase::printMessage(QString msg, QDateTime ts)
+void QcepImageDataBase::printMessage(QString msg, QDateTime ts) const
 {
   QcepSettingsSaverPtr s(m_Saver);
 
