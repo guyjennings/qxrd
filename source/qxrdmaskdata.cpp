@@ -7,6 +7,8 @@ QxrdMaskData::QxrdMaskData(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr alloca
     m_ObjectCounter(allocator, typ)
 {
   m_ObjectCounter.allocate(sizeof(short), width, height);
+
+  set_Type("Mask Data");
 }
 
 QxrdMaskData::~QxrdMaskData()

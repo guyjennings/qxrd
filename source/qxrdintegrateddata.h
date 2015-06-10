@@ -10,7 +10,7 @@
 #include "qxrdallocator-ptr.h"
 #include "qxrdsettingssaver-ptr.h"
 
-class QxrdIntegratedData : public QObject
+class QxrdIntegratedData : public QcepDataObject
 {
   Q_OBJECT
 

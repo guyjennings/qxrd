@@ -5,7 +5,7 @@ QxrdIntegratedData::QxrdIntegratedData(QxrdSettingsSaverWPtr saver,
                                        QxrdAllocatorWPtr alloc,
                                        QxrdDoubleImageDataPtr image,
                                        int typ, int maxSize, QObject *parent) :
-  QObject(parent),
+  QcepDataObject(saver, "Integrated", QcepDataObjectWPtr()),
   m_Title(saver, this, "title", "", "Integrated Data Title"),
   m_ObjectCounter(alloc, typ),
   m_Image(image),
@@ -19,6 +19,9 @@ QxrdIntegratedData::QxrdIntegratedData(QxrdSettingsSaverWPtr saver,
   m_XUnitsLabel("TTH"),
   m_Oversample(1)
 {
+  set_Type("Integrated Data");
+  set_Description("0 Rows");
+
   m_ObjectCounter.allocate(sizeof(double), 2, m_MaxSize);
 }
 
@@ -39,6 +42,8 @@ void QxrdIntegratedData::resize(int n)
   }
 
   m_Size = n;
+
+  set_Description(tr("%1 Rows").arg(m_Size));
 }
 
 int QxrdIntegratedData::size() const
