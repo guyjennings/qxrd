@@ -4,6 +4,7 @@
 #include "qcepdataset.h"
 #include "qcepdebug.h"
 #include <QMimeData>
+#include <stdio.h>
 
 QcepDatasetModel::QcepDatasetModel(QcepDatasetPtr ds) :
   m_Dataset(ds)
