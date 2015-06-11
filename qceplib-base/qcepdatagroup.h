@@ -27,10 +27,6 @@ public slots:
   void addColumn(QString path, int nrow);
   void addColumnScan(QString path, int nrow, QStringList cols);
 
-public:
-  static QScriptValue toScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data);
-  static void fromScriptValue(const QScriptValue &obj, QcepDataGroupPtr &data);
-
 private:
   QVector<QcepDataObjectPtr> m_Objects;
 };

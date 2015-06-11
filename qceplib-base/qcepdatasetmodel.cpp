@@ -11,9 +11,9 @@ QcepDatasetModel::QcepDatasetModel(QcepDatasetPtr ds) :
   connect(ds.data(), SIGNAL(dataObjectChanged()), this, SLOT(onDataObjectChanged()));
 }
 
-QcepDataObject* QcepDatasetModel::indexedObject(const QModelIndex &index) const
+QcepDataObjectPtr QcepDatasetModel::indexedObject(const QModelIndex &index) const
 {
-  QcepDataObject *res = NULL;
+  QcepDataObjectPtr res;
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
     printf("QcepDatasetModel::indexedObject(%s)\n", qPrintable(indexDescription(index)));
@@ -27,10 +27,10 @@ QcepDataObject* QcepDatasetModel::indexedObject(const QModelIndex &index) const
 //        printf("of object %s\n", qPrintable(obj->get_Name()));
 //      }
 
-      res = obj;
+      res = obj->sharedFromThis();
     }
-  } else {
-    res = NULL;
+//  } else {
+//    res = NULL;
   }
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
@@ -55,17 +55,17 @@ QModelIndex QcepDatasetModel::index(int row, int column, const QModelIndex &pare
   }
 
 //  if (hasIndex(row, column, parent)) {
-  QcepDataObject* parentItem = indexedObject(parent);
+  QcepDataObjectPtr parentItem = indexedObject(parent);
 
   if (!parentItem) {
-    parentItem = m_Dataset.data();
+    parentItem = m_Dataset;
   }
 
   if (parentItem) {
-    QcepDataObject* childItem = parentItem->item(row).data();
+    QcepDataObjectPtr childItem = parentItem->item(row);
 
     if (childItem) {
-      res = createIndex(row, column, childItem);
+      res = createIndex(row, column, childItem.data());
     }
   }
   //  }
@@ -87,18 +87,18 @@ QModelIndex QcepDatasetModel::parent(const QModelIndex &index) const
     printf("QseDatasetModel::parent(%s)\n", qPrintable(indexDescription(index)));
   }
 
-  QcepDataObject* childItem = indexedObject(index);
+  QcepDataObjectPtr childItem = indexedObject(index);
 
   if (childItem) {
 //    if (qcepDebug(DEBUG_DATABROWSER)) {
 //      printf("of object %s\n", qPrintable(childItem->get_Name()));
 //    }
 
-    QcepDataObject *parentItem = childItem->parentItem();
+    QcepDataObjectPtr parentItem = childItem->parentItem();
 
     if (parentItem) {
       if (parentItem != m_Dataset.data()) {
-        res = createIndex(parentItem->indexInParent(), 0, parentItem);
+        res = createIndex(parentItem->indexInParent(), 0, parentItem.data());
       }
     }
   }
@@ -120,7 +120,7 @@ int QcepDatasetModel::rowCount(const QModelIndex &parent) const
   }
 
   if (parent.column() <= 0) {
-    QcepDataObject* parentItem = indexedObject(parent);
+    QcepDataObjectPtr parentItem = indexedObject(parent);
 
     if (parentItem) {
       int nrows = parentItem->count();
@@ -147,7 +147,7 @@ int QcepDatasetModel::columnCount(const QModelIndex &parent) const
     printf("QseDatasetModel::columnCount(%s)\n", qPrintable(indexDescription(parent)));
   }
 
-  QcepDataObject* parentItem = indexedObject(parent);
+  QcepDataObjectPtr parentItem = indexedObject(parent);
 
   if (parentItem) {
     int ncols = parentItem->columnCount();
@@ -177,7 +177,7 @@ QVariant QcepDatasetModel::data(const QModelIndex &index, int role) const
     res = QVariant();
   }  else if (role == Qt::DisplayRole) {
 
-    QcepDataObject* object = indexedObject(index);
+    QcepDataObjectPtr object = indexedObject(index);
 
     if (object) {
       res = object->columnData(index.column());

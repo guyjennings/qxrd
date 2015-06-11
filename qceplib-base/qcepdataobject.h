@@ -7,7 +7,7 @@
 #include <QScriptValue>
 #include "qcepproperty.h"
 
-class QcepDataObject : public QcepObject
+class QcepDataObject : public QcepObject, public QEnableSharedFromThis<QcepDataObject>
 {
   Q_OBJECT
 
@@ -25,8 +25,8 @@ public:
   virtual int count() const;
   virtual QcepDataObjectPtr item(int n) const;
   virtual QcepDataObjectPtr item(QString nm) const;
-  virtual QcepDataObject *parentItem() const;
-  virtual void setParentItem(QcepDataObject *parent);
+  virtual QcepDataObjectPtr parentItem() const;
+  virtual void setParentItem(QcepDataObjectWPtr parent);
   virtual int indexInParent() const;
   virtual int columnCount() const;
   virtual QVariant columnData(int col) const;
@@ -35,7 +35,7 @@ public:
   static void fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr &data);
 
 private:
-  QcepDataObject *m_Parent;
+  QcepDataObjectWPtr    m_Parent;
   QcepSettingsSaverWPtr m_Saver;
 
 public:

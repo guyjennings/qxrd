@@ -4,7 +4,7 @@
 
 QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name, QcepDataObjectWPtr parent) :
   QcepObject(name, NULL),
-  m_Parent(parent.data()),
+  m_Parent(parent),
   m_Saver(saver),
   m_Type(saver, this, "type", "object", "Data object type"),
   m_Description(saver, this, "description", "", "Data object description")
@@ -30,7 +30,7 @@ void QcepDataObject::fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr 
     QcepDataObject *qdobj = qobject_cast<QcepDataObject*>(qobj);
 
     if (qdobj) {
-      data = QcepDataObjectPtr(qdobj);
+      data = qdobj->sharedFromThis();
     }
   }
 }
@@ -50,23 +50,23 @@ QcepDataObjectPtr QcepDataObject::item(QString nm) const
   return QcepDataObjectPtr();
 }
 
-QcepDataObject *QcepDataObject::parentItem() const
+QcepDataObjectPtr QcepDataObject::parentItem() const
 {
   return m_Parent;
 }
 
-void QcepDataObject::setParentItem(QcepDataObject *parent)
+void QcepDataObject::setParentItem(QcepDataObjectWPtr parent)
 {
   m_Parent = parent;
 }
 
 int QcepDataObject::indexInParent() const
 {
-  QcepDataObject *parent = m_Parent;
+  QcepDataObjectPtr parent = m_Parent;
 
   if (parent) {
     QcepDataGroup *parentGroup =
-          qobject_cast<QcepDataGroup*>(parent);
+          qobject_cast<QcepDataGroup*>(parent.data());
 
     if (parentGroup) {
       for (int i=0; i<parentGroup->count(); i++) {

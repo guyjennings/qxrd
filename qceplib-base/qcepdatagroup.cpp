@@ -41,7 +41,7 @@ void QcepDataGroup::append(QcepDataObjectPtr obj)
   if (obj) {
     m_Objects.append(obj);
 
-    obj -> setParentItem(this);
+    obj -> setParentItem(sharedFromThis());
 
     connect(obj.data(), SIGNAL(dataObjectChanged()), this, SIGNAL(dataObjectChanged()));
 
@@ -57,24 +57,6 @@ void QcepDataGroup::remove(QcepDataObjectPtr obj)
     m_Objects.remove(n);
 
     emit dataObjectChanged();
-  }
-}
-
-QScriptValue QcepDataGroup::toScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data)
-{
-  return engine->newQObject(data.data());
-}
-
-void QcepDataGroup::fromScriptValue(const QScriptValue &obj, QcepDataGroupPtr &data)
-{
-  QObject *qobj = obj.toQObject();
-
-  if (qobj) {
-    QcepDataGroup *qdobj = qobject_cast<QcepDataGroup*>(qobj);
-
-    if (qdobj) {
-      data = QcepDataGroupPtr(qdobj);
-    }
   }
 }
 
