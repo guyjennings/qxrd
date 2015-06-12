@@ -1,15 +1,22 @@
 #include "qcepdataobject.h"
 #include <QScriptEngine>
 #include "qcepdatagroup.h"
+#include <stdio.h>
 
-QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name, QcepDataObjectWPtr parent) :
+QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name) :
   QcepObject(name, NULL),
-  m_Parent(parent),
   m_Saver(saver),
   m_Type(saver, this, "type", "object", "Data object type"),
   m_Description(saver, this, "description", "", "Data object description")
 {
   set_Type("object");
+}
+
+QcepDataObjectPtr QcepDataObject::newDataObject(QcepSettingsSaverWPtr saver, QString name)
+{
+  QcepDataObjectPtr res(new QcepDataObject(saver, name));
+
+  return res;
 }
 
 QcepSettingsSaverWPtr QcepDataObject::saver()
@@ -30,7 +37,13 @@ void QcepDataObject::fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr 
     QcepDataObject *qdobj = qobject_cast<QcepDataObject*>(qobj);
 
     if (qdobj) {
-      data = qdobj->sharedFromThis();
+      QcepDataObjectPtr p = qdobj->sharedFromThis();
+
+      if (p) {
+        data = p;
+      } else {
+        printf("QcepDataObject::fromScriptValue returns NULL\n");
+      }
     }
   }
 }

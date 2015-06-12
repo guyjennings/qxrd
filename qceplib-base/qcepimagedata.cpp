@@ -19,7 +19,7 @@
 QAtomicInt allocCount = 0;
 
 QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height)
-  : QcepDataObject(saver, tr("image"), QcepDataObjectWPtr()),
+  : QcepDataObject(saver, tr("image")),
     m_Width(saver, this, "width", width, "Image Width"),
     m_Height(saver, this, "height", height, "Image Height"),
     m_QxrdVersion(saver, this,"qxrdVersion", "Unknown", "QXRD Version Number"),

@@ -5,6 +5,7 @@
 #include <QVector>
 #include "qcepdataobject.h"
 #include "qcepdataobject-ptr.h"
+#include "qcepdatacolumn-ptr.h"
 
 /*
 
@@ -19,8 +20,11 @@ class QcepDataColumn : public QcepDataObject, public QVector<double>
 public:
   QcepDataColumn(QcepSettingsSaverWPtr saver,
                  QString name,
-                 int npts,
-                 QcepDataObjectWPtr parent = QcepDataObjectWPtr());
+                 int npts);
+
+  static QcepDataColumnPtr newDataColumn(QcepSettingsSaverWPtr saver,
+                                         QString name,
+                                         int npts);
 
 private:
   int m_NPoints;

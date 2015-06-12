@@ -12,7 +12,9 @@ class QcepDataGroup : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepDataObjectWPtr parent = QcepDataObjectWPtr());
+  QcepDataGroup(QcepSettingsSaverWPtr saver, QString name);
+
+  static QcepDataGroupPtr newDataGroup(QcepSettingsSaverWPtr saver, QString name);
 
 public slots:
   QcepDataObjectPtr item(int n) const;

@@ -9,10 +9,17 @@
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumnscan-ptr.h"
 
-QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepDataObjectWPtr parent) :
-  QcepDataObject(saver, name, parent)
+QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name) :
+  QcepDataObject(saver, name)
 {
   set_Type("Data Group");
+}
+
+QcepDataGroupPtr QcepDataGroup::newDataGroup(QcepSettingsSaverWPtr saver, QString name)
+{
+  QcepDataGroupPtr res(new QcepDataGroup(saver, name));
+
+  return res;
 }
 
 QcepDataObjectPtr QcepDataGroup::item(int n) const
@@ -89,7 +96,7 @@ void QcepDataGroup::addColumn(QString path, int nrows)
 
 void QcepDataGroup::addColumnScan(QString path, int nrow, QStringList cols)
 {
-  QcepDataColumnScanPtr scan(new QcepDataColumnScan(saver(), path, cols, nrow));
+  QcepDataColumnScanPtr scan(QcepDataColumnScan::newDataColumnScan(saver(), path, cols, nrow));
 
   append(scan);
 

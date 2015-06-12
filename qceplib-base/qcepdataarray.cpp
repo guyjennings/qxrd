@@ -1,7 +1,7 @@
 #include "qcepdataarray.h"
 
-QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims, QcepDataObjectWPtr parent) :
-  QcepDataObject(saver, name, parent),
+QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims) :
+  QcepDataObject(saver, name),
   m_Dimensions(dims)
 {
   set_Type("Data Array");
@@ -25,6 +25,13 @@ QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<
   set_Description(desc);
 
   m_Data.resize(prod);
+}
+
+QcepDataArrayPtr QcepDataArray::newDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims)
+{
+  QcepDataArrayPtr res(new QcepDataArray(saver, name, dims));
+
+  return res;
 }
 
 QVector<int> QcepDataArray::dimensions()

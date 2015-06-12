@@ -18,7 +18,7 @@ enum {
   DEBUG_SERVER             = (DEBUG_LOCKING + 1),
   DEBUG_DATABROWSER        = (DEBUG_SERVER + 1),
   DEBUG_DRAGDROP           = (DEBUG_DATABROWSER + 1),
-  LAST_CEP_DEBUG           = DEBUG_SERVER
+  LAST_CEP_DEBUG           = DEBUG_DRAGDROP
 };
 
 class QcepDebugDictionary : public QObject {
