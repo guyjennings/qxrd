@@ -27,9 +27,9 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdacquisition-ptr.h"
 #include "qcepdataset.h"
-#include "qcepdatagroup-ptr.h"
-#include "qcepdatacolumnscan-ptr.h"
+#include "qcepdatagroup.h"
 #include "qcepdatacolumnscan.h"
+#include "qcepdatacolumn.h"
 
 #include <QHostInfo>
 #include <QColorDialog>
@@ -176,11 +176,11 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
       acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
-    m_Dataset = QcepDatasetPtr(new QcepDataset(m_SettingsSaver, "dataset", QcepDatasetPtr()));
+    m_Dataset = QcepDatasetPtr(new QcepDataset(m_SettingsSaver, "dataset"));
 
-    QcepDataGroupPtr group1 = QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group1", m_Dataset));
-    QcepDataGroupPtr group2 = QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group2", m_Dataset));
-    QcepDataGroupPtr group3 = QcepDataGroupPtr(new QcepDataGroup(m_SettingsSaver, "group3", m_Dataset));
+    QcepDataGroupPtr group1 = QcepDataGroup::newDataGroup(m_SettingsSaver, "group1");
+    QcepDataGroupPtr group2 = QcepDataGroup::newDataGroup(m_SettingsSaver, "group2");
+    QcepDataGroupPtr group3 = QcepDataGroup::newDataGroup(m_SettingsSaver, "group3");
 
     m_Dataset->append(group1);
     m_Dataset->append(group2);
@@ -189,12 +189,21 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
     QStringList cols;
     cols << "x" << "y" << "z" << "v" << "sdev";
 
-    QcepDataColumnScanPtr scan1 = QcepDataColumnScanPtr(
-          new QcepDataColumnScan(m_SettingsSaver, "scan1", cols, 1000, group1));
-    QcepDataColumnScanPtr scan2 = QcepDataColumnScanPtr(
-          new QcepDataColumnScan(m_SettingsSaver, "scan2", cols, 1000, group1));
-    QcepDataColumnScanPtr scan3 = QcepDataColumnScanPtr(
-          new QcepDataColumnScan(m_SettingsSaver, "scan3", cols, 1000, group1));
+    QcepDataColumnScanPtr scan1 = QcepDataColumnScan::newDataColumnScan(m_SettingsSaver, "scan1", cols, 1000);
+    QcepDataColumnScanPtr scan2 = QcepDataColumnScan::newDataColumnScan(m_SettingsSaver, "scan2", cols, 1000);
+    QcepDataColumnScanPtr scan3 = QcepDataColumnScan::newDataColumnScan(m_SettingsSaver, "scan3", cols, 1000);
+
+    QcepDataColumnPtr col1 = QcepDataColumn::newDataColumn(m_SettingsSaver, "x", 1000);
+    QcepDataColumnPtr col2 = QcepDataColumn::newDataColumn(m_SettingsSaver, "y", 1000);
+    QcepDataColumnPtr col3 = QcepDataColumn::newDataColumn(m_SettingsSaver, "z", 1000);
+    QcepDataColumnPtr col4 = QcepDataColumn::newDataColumn(m_SettingsSaver, "v", 1000);
+    QcepDataColumnPtr col5 = QcepDataColumn::newDataColumn(m_SettingsSaver, "sdev", 1000);
+
+    group2->append(col1);
+    group2->append(col2);
+    group2->append(col3);
+    group2->append(col4);
+    group2->append(col5);
 
     group1->append(scan1);
     group1->append(scan2);

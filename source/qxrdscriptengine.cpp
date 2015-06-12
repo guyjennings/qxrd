@@ -1498,7 +1498,7 @@ QScriptValue QxrdScriptEngine::dataColumnScanFunc(QScriptContext *context, QScri
         cols.append(context->argument(i).toString());
       }
 
-      return engine->newQObject(new QcepDataColumnScan(QcepSettingsSaverWPtr(), name, cols, npts/*, expt.data()*/));
+      return engine->newQObject(new QcepDataColumnScan(QcepSettingsSaverWPtr(), name/*, cols, npts*//*, expt.data()*/));
     }
   }
 
@@ -1654,25 +1654,25 @@ void QxrdScriptEngine::initialize()
                           QcepDataObject::toScriptValue,
                           QcepDataObject::fromScriptValue);
 
-//  qRegisterMetaType<QcepDataGroupPtr>("QcepDataGroupPtr");
-//  qScriptRegisterMetaType(this,
-//                          QcepDataGroup::toScriptValue,
-//                          QcepDataGroup::fromScriptValue);
+  qRegisterMetaType<QcepDataGroupPtr>("QcepDataGroupPtr");
+  qScriptRegisterMetaType(this,
+                          QcepDataObject::toScriptValue,
+                          QcepDataObject::fromScriptValue);
 
-//  qRegisterMetaType<QcepDataArrayPtr>("QcepDataArrayPtr");
-//  qScriptRegisterMetaType(this,
-//                          QcepDataArray::toScriptValue,
-//                          QcepDataArray::fromScriptValue);
+  qRegisterMetaType<QcepDataArrayPtr>("QcepDataArrayPtr");
+  qScriptRegisterMetaType(this,
+                          QcepDataObject::toScriptValue,
+                          QcepDataObject::fromScriptValue);
 
-//  qRegisterMetaType<QcepDataColumnPtr>("QcepDataColumnPtr");
-//  qScriptRegisterMetaType(this,
-//                          QcepDataColumn::toScriptValue,
-//                          QcepDataColumn::fromScriptValue);
+  qRegisterMetaType<QcepDataColumnPtr>("QcepDataColumnPtr");
+  qScriptRegisterMetaType(this,
+                          QcepDataObject::toScriptValue,
+                          QcepDataObject::fromScriptValue);
 
-//  qRegisterMetaType<QcepDataColumnScanWPtr>("QcepDataColumnScanPtr");
-//  qScriptRegisterMetaType(this,
-//                          QcepDataColumnScan::toScriptValue,
-//                          QcepDataColumnScan::fromScriptValue);
+  qRegisterMetaType<QcepDataColumnScanWPtr>("QcepDataColumnScanPtr");
+  qScriptRegisterMetaType(this,
+                          QcepDataObject::toScriptValue,
+                          QcepDataObject::fromScriptValue);
 
   qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
   qScriptRegisterMetaType(this,
