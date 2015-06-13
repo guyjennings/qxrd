@@ -1996,6 +1996,9 @@ QString QxrdScriptEngine::documentationText(QString item)
 #else
           const char* methodSig = meta->method(i).signature();
 #endif
+          const char* returnType = meta->method(i).typeName();
+          QByteArray  methodName = meta->method(i).name();
+
           QMetaMethod::MethodType methodType = meta->method(i).methodType();
 
           if ((i%2)) {
@@ -2003,7 +2006,24 @@ QString QxrdScriptEngine::documentationText(QString item)
           } else {
             res.append(tr("<tr bgcolor=\"white\">\n"));
           }
-          res.append(tr("<td><i>%1</i></td>\n").arg(prefix+methodSig));
+
+          QList<QByteArray> parameterTypes = meta->method(i).parameterTypes();
+          QList<QByteArray> parameterNames = meta->method(i).parameterNames();
+
+          QString parameterPack = "";
+
+          for (int i=0; i<parameterTypes.count(); i++) {
+            if (i!=0) {
+              parameterPack += ", ";
+            }
+            parameterPack += parameterTypes.value(i) + " " + parameterNames.value(i);
+          }
+
+          res.append(tr("<td><i>%1 %2%3(%4)</i></td>\n")
+                     .arg(returnType)
+                     .arg(QString(prefix))
+                     .arg(QString(methodName))
+                     .arg(parameterPack));
 
           QString proto = QcepDocumentationDictionary::get_Proto(methodSig);
           QString doc   = QcepDocumentationDictionary::get_Doc(methodSig);
