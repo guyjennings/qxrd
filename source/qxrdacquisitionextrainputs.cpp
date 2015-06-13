@@ -81,7 +81,11 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString secti
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
 
-    m_Channels[i]->readSettings(settings, "");
+    QxrdAcquisitionExtraInputsChannelPtr chan = channel(i);
+
+    if (chan) {
+      chan->readSettings(settings, "");
+    }
   }
 
   settings->endArray();
@@ -101,7 +105,11 @@ void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString sect
 
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
-    m_Channels[i]->writeSettings(settings, "");
+    QxrdAcquisitionExtraInputsChannelPtr chan = channel(i);
+
+    if (chan) {
+      chan->writeSettings(settings, "");
+    }
   }
 
   settings->endArray();
@@ -150,7 +158,7 @@ void QxrdAcquisitionExtraInputs::initiate()
     QVector<double> channelMinimum, channelMaximum;
 
     foreach (QxrdAcquisitionExtraInputsChannelPtr chanp, m_Channels) {
-      if (chanp->get_Enabled()) {
+      if (chanp && chanp->get_Enabled()) {
         QString channame = chanp->get_ChannelName();
         double chanmin = chanp->get_Min();
         double chanmax = chanp->get_Max();
@@ -250,7 +258,7 @@ void QxrdAcquisitionExtraInputs::acquire()
       }
 
       foreach (QxrdAcquisitionExtraInputsChannelPtr chanp, m_Channels) {
-        if (chanp->get_Enabled()) {
+        if (chanp && chanp->get_Enabled()) {
           chanp -> set_Value(
                 chanp -> evaluateChannel());
 
@@ -288,9 +296,9 @@ QcepDoubleList QxrdAcquisitionExtraInputs::evaluateChannels()
   QcepDoubleList res;
 
   for(int i=0; i<m_Channels.count(); i++) {
-    QxrdAcquisitionExtraInputsChannelPtr chanp = m_Channels[i];
+    QxrdAcquisitionExtraInputsChannelPtr chanp = channel(i);
 
-    if (chanp->get_Enabled()) {
+    if (chanp && chanp->get_Enabled()) {
       double val = chanp->evaluateChannel();
 
       if (qcepDebug(DEBUG_EXTRAINPUTS)) {
@@ -306,7 +314,7 @@ QcepDoubleList QxrdAcquisitionExtraInputs::evaluateChannels()
 
 double QxrdAcquisitionExtraInputs::evaluateChannel(int ch)
 {
-  QxrdAcquisitionExtraInputsChannelPtr chanp = m_Channels.value(ch);
+  QxrdAcquisitionExtraInputsChannelPtr chanp = channel(ch);
 
   if (chanp) {
     return chanp->evaluateChannel();
@@ -317,7 +325,7 @@ double QxrdAcquisitionExtraInputs::evaluateChannel(int ch)
 
 QVector<double> QxrdAcquisitionExtraInputs::readXChannel()
 {
-  QxrdAcquisitionExtraInputsChannelPtr chanp = m_Channels.value(0);
+  QxrdAcquisitionExtraInputsChannelPtr chanp = channel(0);
 
   if (chanp) {
     QVector<double> res(chanp->readChannel().count());
@@ -336,7 +344,7 @@ QVector<double> QxrdAcquisitionExtraInputs::readXChannel()
 
 QVector<double> QxrdAcquisitionExtraInputs::readChannel(int ch)
 {
-  QxrdAcquisitionExtraInputsChannelPtr chanp = m_Channels.value(ch);
+  QxrdAcquisitionExtraInputsChannelPtr chanp = channel(ch);
 
   if (chanp) {
     return chanp->readChannel();
@@ -347,7 +355,7 @@ QVector<double> QxrdAcquisitionExtraInputs::readChannel(int ch)
 
 double QxrdAcquisitionExtraInputs::averageChannel(int ch)
 {
-  QxrdAcquisitionExtraInputsChannelPtr chanp = m_Channels.value(ch);
+  QxrdAcquisitionExtraInputsChannelPtr chanp = channel(ch);
 
   if (chanp) {
     return chanp->averageChannel();
