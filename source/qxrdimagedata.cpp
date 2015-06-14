@@ -522,6 +522,34 @@ void QxrdImageData<T>::correctBadBackgroundSubtraction(QxrdDoubleImageDataPtr da
   this->set_SummedExposures(nImgExposures);
 }
 
+template <typename T>
+QScriptValue QxrdImageData<T>::toScriptValue(QScriptEngine *engine, const QSharedPointer< QxrdImageData<T> > &data)
+{
+  return engine->newQObject(data.data());
+}
+
+template <typename T>
+void QxrdImageData<T>::fromScriptValue(const QScriptValue &obj, QSharedPointer<QxrdImageData<T> > &data)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QcepDataObject *qdobj = qobject_cast<QcepDataObject*>(qobj);
+
+    if (qdobj) {
+      QcepDataObjectPtr p = qdobj->sharedFromThis();
+
+      if (p) {
+        QSharedPointer<QxrdImageData<T> > cs = qSharedPointerCast< QxrdImageData<T> >(p);
+
+        if (cs) {
+          data = cs;
+        }
+      }
+    }
+  }
+}
+
 template class QxrdImageData<unsigned short>;
 template class QxrdImageData<short>;
 template class QxrdImageData<unsigned int>;

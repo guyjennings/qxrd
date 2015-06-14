@@ -12,6 +12,7 @@
 #include "qxrdmaskdata-ptr.h"
 #include "qxrdimagedata-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include "qxrdimagedata-ptr.h"
 
 template <typename T>
 class QxrdImageData : public QcepImageData<T>
@@ -67,10 +68,26 @@ public:
   void loadMetaData(QxrdExperimentWPtr expt = QxrdExperimentWPtr());
   void loadMetaData(QString name, QxrdExperimentWPtr expt);
 
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QSharedPointer< QxrdImageData<T> > &data);
+  static void fromScriptValue(const QScriptValue &obj, QSharedPointer< QxrdImageData<T> > &data);
+
 protected:
   QxrdImageDataObjectCounter m_ObjectCounter; /* global counter to track allocation of QxrdImageData objects */
   QxrdMaskDataPtr            m_Mask;
   QxrdMaskDataPtr            m_Overflow;
 };
+
+//QScriptValue toInt16ImageScriptValue(QScriptEngine *engine, const QxrdInt16ImageDataPtr &data);
+//void fromInt16ImageScriptValue(const QScriptValue &obj, QxrdInt16ImageDataPtr &data);
+
+//QScriptValue toInt32ImageScriptValue(QScriptEngine *engine, const QxrdInt32ImageDataPtr &data);
+//void fromInt32ImageScriptValue(const QScriptValue &obj, QxrdInt32ImageDataPtr &data);
+
+//QScriptValue toDoubleImageScriptValue(QScriptEngine *engine, const QxrdDoubleImageDataPtr &data);
+//void fromDoubleImageScriptValue(const QScriptValue &obj, QxrdDoubleImageDataPtr &data);
+
+Q_DECLARE_METATYPE(QxrdInt16ImageDataPtr)
+Q_DECLARE_METATYPE(QxrdInt32ImageDataPtr)
+Q_DECLARE_METATYPE(QxrdDoubleImageDataPtr)
 
 #endif
