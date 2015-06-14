@@ -1656,33 +1656,48 @@ void QxrdScriptEngine::initialize()
 
   qRegisterMetaType<QcepDataGroupPtr>("QcepDataGroupPtr");
   qScriptRegisterMetaType(this,
-                          QcepDataObject::toScriptValue,
-                          QcepDataObject::fromScriptValue);
+                          QcepDataGroup::toGroupScriptValue,
+                          QcepDataGroup::fromGroupScriptValue);
 
   qRegisterMetaType<QcepDataArrayPtr>("QcepDataArrayPtr");
   qScriptRegisterMetaType(this,
-                          QcepDataObject::toScriptValue,
-                          QcepDataObject::fromScriptValue);
+                          QcepDataArray::toArrayScriptValue,
+                          QcepDataArray::fromArrayScriptValue);
 
   qRegisterMetaType<QcepDataColumnPtr>("QcepDataColumnPtr");
   qScriptRegisterMetaType(this,
-                          QcepDataObject::toScriptValue,
-                          QcepDataObject::fromScriptValue);
+                          QcepDataColumn::toColumnScriptValue,
+                          QcepDataColumn::fromColumnScriptValue);
 
   qRegisterMetaType<QxrdIntegratedDataPtr>("QxrdIntegratedDataPtr");
   qScriptRegisterMetaType(this,
-                          QcepDataObject::toScriptValue,
-                          QcepDataObject::fromScriptValue);
+                          QxrdIntegratedData::toIntegratedDataScriptValue,
+                          QxrdIntegratedData::fromIntegratedDataScriptValue);
 
-  qRegisterMetaType<QcepDataColumnScanWPtr>("QcepDataColumnScanPtr");
+  qRegisterMetaType<QcepDataColumnScanPtr>("QcepDataColumnScanPtr");
   qScriptRegisterMetaType(this,
-                          QcepDataObject::toScriptValue,
-                          QcepDataObject::fromScriptValue);
+                          QcepDataColumnScan::toColumnScanScriptValue,
+                          QcepDataColumnScan::fromColumnScanScriptValue);
 
   qRegisterMetaType<QxrdDoubleImageDataPtr>("QxrdDoubleImageDataPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdDoubleImageData::toScriptValue,
+                          QxrdDoubleImageData::fromScriptValue);
+
   qRegisterMetaType<QxrdInt16ImageDataPtr>("QxrdInt16ImageDataPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdInt16ImageData::toScriptValue,
+                          QxrdInt16ImageData::fromScriptValue);
+
   qRegisterMetaType<QxrdInt32ImageDataPtr>("QxrdInt32ImageDataPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdInt32ImageData::toScriptValue,
+                          QxrdInt32ImageData::fromScriptValue);
+
   qRegisterMetaType<QxrdMaskDataPtr>("QxrdMaskDataPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdMaskData::toScriptValue,
+                          QxrdMaskData::fromScriptValue);
 
   qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
   qScriptRegisterSequenceMetaType<QxrdCalibrantDSpacingVector>(this);

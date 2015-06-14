@@ -68,5 +68,6 @@ private:
   QxrdImageDataObjectCounter m_ObjectCounter;
 };
 
+Q_DECLARE_METATYPE(QxrdMaskDataPtr)
 
 #endif // QXRDMASKDATA_H
