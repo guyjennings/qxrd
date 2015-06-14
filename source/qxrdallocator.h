@@ -32,7 +32,7 @@ public slots:
   QxrdInt32ImageDataPtr newInt32Image(int width, int height);
   QxrdDoubleImageDataPtr newDoubleImage(int width, int height);
   QxrdMaskDataPtr       newMask(int width, int height);
-  QxrdIntegratedDataPtr newIntegratedData();
+  QxrdIntegratedDataPtr newIntegratedData(QxrdDoubleImageDataPtr image);
 
 public:
   enum {

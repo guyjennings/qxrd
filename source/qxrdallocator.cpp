@@ -295,9 +295,9 @@ QxrdMaskDataPtr       QxrdAllocator::newMask(int width, int height)
   return QxrdAllocator::newMask(sharedFromThis(), WaitTillAvailable, width, height);
 }
 
-QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData()
+QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(QxrdDoubleImageDataPtr image)
 {
-  return QxrdAllocator::newIntegratedData(sharedFromThis(), WaitTillAvailable, QxrdDoubleImageDataPtr());
+  return QxrdAllocator::newIntegratedData(sharedFromThis(), WaitTillAvailable, image);
 }
 
 void QxrdAllocator::allocate(int typ, int sz, int width, int height)
