@@ -108,6 +108,8 @@ public:
 
 public slots:
   QxrdIntegratedDataPtr performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask);
+  QxrdIntegratedDataPtr performIntegration(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask = QxrdMaskDataPtr());
+
 //  QxrdIntegratedDataPtr integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int oversample, int normalize);
 
   QxrdIntegratedDataPtr sliceLine(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, double x0, double y0, double x1, double y1, double width);
@@ -127,6 +129,7 @@ public slots:
 
 private:
   mutable QMutex         m_Mutex;
+  QxrdSettingsSaverWPtr  m_Saver;
   QxrdExperimentWPtr     m_Experiment;
   QxrdIntegratorWPtr     m_Integrator;
   QxrdCenterFinderWPtr   m_CenterFinder;

@@ -9,6 +9,7 @@
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qxrdintegratorcache.h"
+#include "qxrdallocator.h"
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -20,6 +21,7 @@
 
 QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc)
   : QcepObject("integrator", NULL),
+    m_Saver(saver),
     m_Oversample(saver, this, "oversample", 1, "Oversampling for Integration"),
     m_IntegrationStep(saver, this, "integrationStep", 0.001, "Integration Step Size"),
     m_IntegrationNSteps(saver, this, "integrationNSteps", 0, "Integration Number of Steps"),
@@ -116,6 +118,21 @@ void QxrdIntegrator::onIntegrationParametersChanged()
   }
 
   m_IntegratorCache = QxrdIntegratorCachePtr();
+}
+
+QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
+{
+  QxrdAllocatorPtr alloc(m_Allocator);
+
+  if (alloc) {
+    QxrdIntegratedDataPtr res = alloc->newIntegratedData(dimg);
+
+    if (res) {
+      return performIntegration(res, dimg, mask);
+    }
+  }
+
+  return QxrdIntegratedDataPtr();
 }
 
 QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
