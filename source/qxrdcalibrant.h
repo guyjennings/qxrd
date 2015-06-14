@@ -152,8 +152,8 @@ public:
   QString toString() const;
 
   static void registerMetaTypes();
-  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdCalibrantDSpacingVector &vec);
-  static void fromScriptValue(const QScriptValue &obj, QxrdCalibrantDSpacingVector &vec);
+//  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdCalibrantDSpacingVector &vec);
+//  static void fromScriptValue(const QScriptValue &obj, QxrdCalibrantDSpacingVector &vec);
 
   void insertUnique(int h, int k, int l, double d, double tth);
 };

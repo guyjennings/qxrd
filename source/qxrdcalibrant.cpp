@@ -422,48 +422,48 @@ void QxrdCalibrantDSpacingVector::registerMetaTypes()
   QcepProperty::registerCustomSaver("QxrdCalibrantDSpacingVector", QxrdCalibrantDSpacingVector::customSaver);
 }
 
-QScriptValue QxrdCalibrantDSpacingVector::toScriptValue(QScriptEngine *engine,
-                                                          const QxrdCalibrantDSpacingVector &vec)
-{
-  int n = vec.count();
+//QScriptValue QxrdCalibrantDSpacingVector::toScriptValue(QScriptEngine *engine,
+//                                                          const QxrdCalibrantDSpacingVector &vec)
+//{
+//  int n = vec.count();
 
-  QScriptValue res = engine->newArray(n);
+//  QScriptValue res = engine->newArray(n);
 
-  for (int i=0; i<n; i++) {
-    const QxrdCalibrantDSpacing &pt = vec.at(i);
-    QScriptValue obj = engine->newObject();
+//  for (int i=0; i<n; i++) {
+//    const QxrdCalibrantDSpacing &pt = vec.at(i);
+//    QScriptValue obj = engine->newObject();
 
-    obj.setProperty("h", pt.h());
-    obj.setProperty("k", pt.k());
-    obj.setProperty("l", pt.l());
-    obj.setProperty("d", pt.d());
-    obj.setProperty("tth", pt.tth());
+//    obj.setProperty("h", pt.h());
+//    obj.setProperty("k", pt.k());
+//    obj.setProperty("l", pt.l());
+//    obj.setProperty("d", pt.d());
+//    obj.setProperty("tth", pt.tth());
 
-    res.setProperty(i, obj);
-  }
+//    res.setProperty(i, obj);
+//  }
 
-  return res;
-}
+//  return res;
+//}
 
-void QxrdCalibrantDSpacingVector::fromScriptValue(const QScriptValue &obj,
-                                                    QxrdCalibrantDSpacingVector &vec)
-{
-  int n=obj.property("length").toInteger();
+//void QxrdCalibrantDSpacingVector::fromScriptValue(const QScriptValue &obj,
+//                                                    QxrdCalibrantDSpacingVector &vec)
+//{
+//  int n=obj.property("length").toInteger();
 
-  vec.resize(n);
+//  vec.resize(n);
 
-  for (int i=0; i<n; i++) {
-    QScriptValue pt = obj.property(i);
+//  for (int i=0; i<n; i++) {
+//    QScriptValue pt = obj.property(i);
 
-    if (pt.isValid()) {
-      vec[i].h() = pt.property("h").toInteger();
-      vec[i].k() = pt.property("k").toInteger();
-      vec[i].l() = pt.property("l").toInteger();
-      vec[i].d() = pt.property("d").toNumber();
-      vec[i].tth() = pt.property("tth").toNumber();
-    }
-  }
-}
+//    if (pt.isValid()) {
+//      vec[i].h() = pt.property("h").toInteger();
+//      vec[i].k() = pt.property("k").toInteger();
+//      vec[i].l() = pt.property("l").toInteger();
+//      vec[i].d() = pt.property("d").toNumber();
+//      vec[i].tth() = pt.property("tth").toNumber();
+//    }
+//  }
+//}
 
 void QxrdCalibrantDSpacingVector::insertUnique(int h, int k, int l, double d, double tth)
 {
