@@ -23,6 +23,9 @@ public:
 signals:
   void dataObjectChanged();
 
+public slots:
+  QString metaTypeName(int id);
+
 public:
   virtual int count() const;
   virtual QcepDataObjectPtr item(int n) const;

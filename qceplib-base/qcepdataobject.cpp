@@ -108,3 +108,8 @@ QVariant QcepDataObject::columnData(int col) const
     return get_Description();
   }
 }
+
+QString QcepDataObject::metaTypeName(int id)
+{
+  return QMetaType::typeName(id);
+}
