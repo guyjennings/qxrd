@@ -9,6 +9,7 @@
 #include "qxrdimagedata-ptr.h"
 #include "qxrdallocator-ptr.h"
 #include "qxrdsettingssaver-ptr.h"
+#include "qxrdintegrateddata-ptr.h"
 
 class QxrdIntegratedData : public QcepDataObject
 {
@@ -42,6 +43,9 @@ public:
 
   int allocatedMemoryMB();
 
+  static QScriptValue toIntegratedDataScriptValue(QScriptEngine *engine, const QxrdIntegratedDataPtr &data);
+  static void fromIntegratedDataScriptValue(const QScriptValue &obj, QxrdIntegratedDataPtr &data);
+
   Q_PROPERTY(QString title READ get_Title WRITE set_Title STORED false)
   QCEP_STRING_PROPERTY(Title)
 
@@ -57,5 +61,7 @@ private:
   QString                    m_XUnitsLabel;
   int                        m_Oversample;
 };
+
+Q_DECLARE_METATYPE(QxrdIntegratedDataPtr)
 
 #endif // QXRDINTEGRATEDDATA_H

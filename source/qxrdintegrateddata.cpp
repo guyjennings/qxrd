@@ -1,5 +1,6 @@
 #include "qxrdintegrateddata.h"
 #include "qxrdsettingssaver.h"
+#include <QScriptEngine>
 
 QxrdIntegratedData::QxrdIntegratedData(QxrdSettingsSaverWPtr saver,
                                        QxrdAllocatorWPtr alloc,
@@ -118,4 +119,30 @@ void QxrdIntegratedData::set_Oversample(int ovs)
 int QxrdIntegratedData::allocatedMemoryMB()
 {
   return m_ObjectCounter.allocatedMemoryMB();
+}
+
+QScriptValue QxrdIntegratedData::toIntegratedDataScriptValue(QScriptEngine *engine, const QxrdIntegratedDataPtr &data)
+{
+  return engine->newQObject(data.data());
+}
+
+void QxrdIntegratedData::fromIntegratedDataScriptValue(const QScriptValue &obj, QxrdIntegratedDataPtr &data)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QxrdIntegratedData *qdobj = qobject_cast<QxrdIntegratedData*>(qobj);
+
+    if (qdobj) {
+      QcepDataObjectPtr p = qdobj->sharedFromThis();
+
+      if (p) {
+        QxrdIntegratedDataPtr cs = qSharedPointerCast<QxrdIntegratedData>(p);
+
+        if (cs) {
+          data = cs;
+        }
+      }
+    }
+  }
 }
