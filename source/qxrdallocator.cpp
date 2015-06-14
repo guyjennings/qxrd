@@ -275,6 +275,31 @@ void QxrdAllocator::newDoubleImageAndIntegratedData(QxrdAllocatorWPtr allocw,
   }
 }
 
+QxrdInt16ImageDataPtr QxrdAllocator::newInt16Image(int width, int height)
+{
+  return QxrdAllocator::newInt16Image(sharedFromThis(), WaitTillAvailable, width, height);
+}
+
+QxrdInt32ImageDataPtr QxrdAllocator::newInt32Image(int width, int height)
+{
+  return QxrdAllocator::newInt32Image(sharedFromThis(), WaitTillAvailable, width, height);
+}
+
+QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage(int width, int height)
+{
+  return QxrdAllocator::newDoubleImage(sharedFromThis(), WaitTillAvailable, width, height);
+}
+
+QxrdMaskDataPtr       QxrdAllocator::newMask(int width, int height)
+{
+  return QxrdAllocator::newMask(sharedFromThis(), WaitTillAvailable, width, height);
+}
+
+QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData()
+{
+  return QxrdAllocator::newIntegratedData(sharedFromThis(), WaitTillAvailable, QxrdDoubleImageDataPtr());
+}
+
 void QxrdAllocator::allocate(int typ, int sz, int width, int height)
 {
   allocate(typ, (quint64) sz*width*height);

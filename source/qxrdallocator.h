@@ -16,7 +16,7 @@
 #include "qxrdintegrateddata-ptr.h"
 #include "qxrdmaskdata-ptr.h"
 
-class QxrdAllocator : public QcepObject
+class QxrdAllocator : public QcepObject, public QEnableSharedFromThis<QxrdAllocator>
 {
   Q_OBJECT
 
@@ -26,6 +26,13 @@ public:
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
+
+public slots:
+  QxrdInt16ImageDataPtr newInt16Image(int width, int height);
+  QxrdInt32ImageDataPtr newInt32Image(int width, int height);
+  QxrdDoubleImageDataPtr newDoubleImage(int width, int height);
+  QxrdMaskDataPtr       newMask(int width, int height);
+  QxrdIntegratedDataPtr newIntegratedData();
 
 public:
   enum {
