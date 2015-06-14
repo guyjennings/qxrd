@@ -1669,19 +1669,31 @@ void QxrdScriptEngine::initialize()
                           QcepDataObject::toScriptValue,
                           QcepDataObject::fromScriptValue);
 
+  qRegisterMetaType<QxrdIntegratedDataPtr>("QxrdIntegratedDataPtr");
+  qScriptRegisterMetaType(this,
+                          QcepDataObject::toScriptValue,
+                          QcepDataObject::fromScriptValue);
+
   qRegisterMetaType<QcepDataColumnScanWPtr>("QcepDataColumnScanPtr");
   qScriptRegisterMetaType(this,
                           QcepDataObject::toScriptValue,
                           QcepDataObject::fromScriptValue);
 
+  qRegisterMetaType<QxrdDoubleImageDataPtr>("QxrdDoubleImageDataPtr");
+  qRegisterMetaType<QxrdInt16ImageDataPtr>("QxrdInt16ImageDataPtr");
+  qRegisterMetaType<QxrdInt32ImageDataPtr>("QxrdInt32ImageDataPtr");
+  qRegisterMetaType<QxrdMaskDataPtr>("QxrdMaskDataPtr");
+
   qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
+  qScriptRegisterSequenceMetaType<QxrdCalibrantDSpacingVector>(this);
+
   qScriptRegisterMetaType(this,
                           QxrdCalibrantDSpacing::toScriptValue,
                           QxrdCalibrantDSpacing::fromScriptValue);
 
-  qScriptRegisterMetaType(this,
-                          QxrdCalibrantDSpacingVector::toScriptValue,
-                          QxrdCalibrantDSpacingVector::fromScriptValue);
+//  qScriptRegisterMetaType(this,
+//                          QxrdCalibrantDSpacingVector::toScriptValue,
+//                          QxrdCalibrantDSpacingVector::fromScriptValue);
 
   QxrdApplicationPtr app(m_Application);
 
@@ -2019,11 +2031,19 @@ QString QxrdScriptEngine::documentationText(QString item)
             parameterPack += parameterTypes.value(i) + " " + parameterNames.value(i);
           }
 
-          res.append(tr("<td><i>%1 %2%3(%4)</i></td>\n")
-                     .arg(returnType)
-                     .arg(QString(prefix))
-                     .arg(QString(methodName))
-                     .arg(parameterPack));
+          QString prototype = tr("%1 %2%3(%4)")
+              .arg(returnType)
+              .arg(QString(prefix))
+              .arg(QString(methodName))
+              .arg(parameterPack);
+
+          prototype.replace(QString("&"), QString("&amp;"));
+          prototype.replace(QString("\""), QString("&quot;"));
+          prototype.replace(QString("'"), QString("&#039;"));
+          prototype.replace(QString("<"), QString("&lt;"));
+          prototype.replace(QString(">"), QString("&gt;"));
+
+          res.append(tr("<td><i>%1</i></td>\n").arg(prototype));
 
           QString proto = QcepDocumentationDictionary::get_Proto(methodSig);
           QString doc   = QcepDocumentationDictionary::get_Doc(methodSig);
