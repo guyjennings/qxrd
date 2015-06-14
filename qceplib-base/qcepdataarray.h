@@ -20,6 +20,9 @@ public:
                                        QString name,
                                        QVector<int> dims);
 
+  static QScriptValue toArrayScriptValue(QScriptEngine *engine, const QcepDataArrayPtr &data);
+  static void fromArrayScriptValue(const QScriptValue &obj, QcepDataArrayPtr &data);
+
 public slots:
   QVector<int>    dimensions();
   QVector<double> vectorData();

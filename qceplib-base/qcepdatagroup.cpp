@@ -102,3 +102,74 @@ void QcepDataGroup::addColumnScan(QString path, int nrow, QStringList cols)
 
   emit dataObjectChanged();
 }
+
+QcepDataGroupPtr QcepDataGroup::newGroup(QString path)
+{
+  QcepDataGroupPtr group(new QcepDataGroup(saver(), path));
+
+  append(group);
+
+  emit dataObjectChanged();
+
+  return group;
+}
+
+QcepDataArrayPtr QcepDataGroup::newArray(QString path, QVector<int> dims)
+{
+  QcepDataArrayPtr array(new QcepDataArray(saver(), path, dims));
+
+  append(array);
+
+  emit dataObjectChanged();
+
+  return array;
+}
+
+QcepDataColumnPtr QcepDataGroup::newColumn(QString path, int nrows)
+{
+  QcepDataColumnPtr column(new QcepDataColumn(saver(), path, nrows));
+
+  append(column);
+
+  emit dataObjectChanged();
+
+  return column;
+}
+
+QcepDataColumnScanPtr QcepDataGroup::newColumnScan(QString path, int nrow, QStringList cols)
+{
+  QcepDataColumnScanPtr scan(QcepDataColumnScan::newDataColumnScan(saver(), path, cols, nrow));
+
+  append(scan);
+
+  emit dataObjectChanged();
+
+  return scan;
+}
+
+QScriptValue QcepDataGroup::toGroupScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data)
+{
+  return engine->newQObject(data.data());
+}
+
+void QcepDataGroup::fromGroupScriptValue(const QScriptValue &obj, QcepDataGroupPtr &data)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QcepDataGroup *qdobj = qobject_cast<QcepDataGroup*>(qobj);
+
+    if (qdobj) {
+      QcepDataObjectPtr p = qdobj->sharedFromThis();
+
+      if (p) {
+        QcepDataGroupPtr cs = qSharedPointerCast<QcepDataGroup>(p);
+
+        if (cs) {
+          data = cs;
+        }
+      }
+    }
+  }
+}
+

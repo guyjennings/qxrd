@@ -1,4 +1,5 @@
 #include "qcepdataarray.h"
+#include <QScriptEngine>
 
 QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims) :
   QcepDataObject(saver, name),
@@ -42,4 +43,30 @@ QVector<int> QcepDataArray::dimensions()
 QVector<double> QcepDataArray::vectorData()
 {
   return m_Data;
+}
+
+QScriptValue QcepDataArray::toArrayScriptValue(QScriptEngine *engine, const QcepDataArrayPtr &data)
+{
+  return engine->newQObject(data.data());
+}
+
+void QcepDataArray::fromArrayScriptValue(const QScriptValue &obj, QcepDataArrayPtr &data)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QcepDataArray *qdobj = qobject_cast<QcepDataArray*>(qobj);
+
+    if (qdobj) {
+      QcepDataObjectPtr p = qdobj->sharedFromThis();
+
+      if (p) {
+        QcepDataArrayPtr cs = qSharedPointerCast<QcepDataArray>(p);
+
+        if (cs) {
+          data = cs;
+        }
+      }
+    }
+  }
 }

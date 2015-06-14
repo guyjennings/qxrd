@@ -19,6 +19,9 @@ public:
                                                  QStringList cols,
                                                  int npts);
 
+  static QScriptValue toColumnScanScriptValue(QScriptEngine *engine, const QcepDataColumnScanPtr &data);
+  static void fromColumnScanScriptValue(const QScriptValue &obj, QcepDataColumnScanPtr &data);
+
 public:
   Q_PROPERTY(int numPoints READ get_NumPoints WRITE set_NumPoints)
   QCEP_INTEGER_PROPERTY(NumPoints)

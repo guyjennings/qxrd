@@ -6,6 +6,9 @@
 #include "qcepdataobject.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepdatagroup-ptr.h"
+#include "qcepdataarray-ptr.h"
+#include "qcepdatacolumn-ptr.h"
+#include "qcepdatacolumnscan-ptr.h"
 
 class QcepDataGroup : public QcepDataObject
 {
@@ -28,6 +31,14 @@ public slots:
   void addArray(QString path, QVector<int> dims);
   void addColumn(QString path, int nrow);
   void addColumnScan(QString path, int nrow, QStringList cols);
+
+  QcepDataGroupPtr newGroup(QString path);
+  QcepDataArrayPtr newArray(QString path, QVector<int> dims);
+  QcepDataColumnPtr newColumn(QString path, int nrow);
+  QcepDataColumnScanPtr newColumnScan(QString path, int nrow, QStringList cols);
+
+  static QScriptValue toGroupScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data);
+  static void fromGroupScriptValue(const QScriptValue &obj, QcepDataGroupPtr &data);
 
 private:
   QVector<QcepDataObjectPtr> m_Objects;

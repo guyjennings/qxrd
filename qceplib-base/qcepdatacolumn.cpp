@@ -1,4 +1,5 @@
 #include "qcepdatacolumn.h"
+#include <QScriptEngine>
 
 QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts) :
   QcepDataObject(saver, name),
@@ -16,4 +17,30 @@ QcepDataColumnPtr QcepDataColumn::newDataColumn(QcepSettingsSaverWPtr saver, QSt
   QcepDataColumnPtr res(new QcepDataColumn(saver, name, npts));
 
   return res;
+}
+
+QScriptValue QcepDataColumn::toColumnScriptValue(QScriptEngine *engine, const QcepDataColumnPtr &data)
+{
+  return engine->newQObject(data.data());
+}
+
+void QcepDataColumn::fromColumnScriptValue(const QScriptValue &obj, QcepDataColumnPtr &data)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QcepDataColumn *qdobj = qobject_cast<QcepDataColumn*>(qobj);
+
+    if (qdobj) {
+      QcepDataObjectPtr p = qdobj->sharedFromThis();
+
+      if (p) {
+        QcepDataColumnPtr cs = qSharedPointerCast<QcepDataColumn>(p);
+
+        if (cs) {
+          data = cs;
+        }
+      }
+    }
+  }
 }

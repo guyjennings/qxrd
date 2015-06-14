@@ -1,6 +1,7 @@
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumn.h"
 #include "qcepdatacolumn-ptr.h"
+#include <QScriptEngine>
 
 QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name) :
   QcepDataGroup(sav, name),
@@ -22,3 +23,30 @@ QcepDataColumnScanPtr QcepDataColumnScan::newDataColumnScan(QcepSettingsSaverWPt
 
   return res;
 }
+
+QScriptValue QcepDataColumnScan::toColumnScanScriptValue(QScriptEngine *engine, const QcepDataColumnScanPtr &data)
+{
+  return engine->newQObject(data.data());
+}
+
+void QcepDataColumnScan::fromColumnScanScriptValue(const QScriptValue &obj, QcepDataColumnScanPtr &data)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QcepDataColumnScan *qdobj = qobject_cast<QcepDataColumnScan*>(qobj);
+
+    if (qdobj) {
+      QcepDataObjectPtr p = qdobj->sharedFromThis();
+
+      if (p) {
+        QcepDataColumnScanPtr cs = qSharedPointerCast<QcepDataColumnScan>(p);
+
+        if (cs) {
+          data = cs;
+        }
+      }
+    }
+  }
+}
+

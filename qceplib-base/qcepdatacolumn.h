@@ -26,6 +26,9 @@ public:
                                          QString name,
                                          int npts);
 
+  static QScriptValue toColumnScriptValue(QScriptEngine *engine, const QcepDataColumnPtr &data);
+  static void fromColumnScriptValue(const QScriptValue &obj, QcepDataColumnPtr &data);
+
 private:
   int m_NPoints;
 };
