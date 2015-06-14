@@ -326,6 +326,14 @@ public slots:
   QString subtractedOutputDirectory() const;
   QString integratedOutputDirectory() const;
 
+  QxrdDoubleImageDataPtr data() const;
+  QxrdDoubleImageDataPtr darkImage() const;
+  QxrdDoubleImageDataPtr gainMap() const;
+  QxrdDoubleImageDataPtr badPixels() const;
+  QxrdDoubleImageDataPtr liveData() const;
+  QxrdMaskDataPtr        mask() const;
+  QxrdMaskDataPtr        overflow() const;
+
 public:
   void loadDefaultImages();
 
@@ -339,13 +347,6 @@ public:
 
 //  QxrdSettingsSaver     *saver();
 
-  QxrdDoubleImageDataPtr data() const;
-  QxrdDoubleImageDataPtr darkImage() const;
-  QxrdDoubleImageDataPtr gainMap() const;
-  QxrdDoubleImageDataPtr badPixels() const;
-  QxrdDoubleImageDataPtr liveData() const;
-  QxrdMaskDataPtr        mask() const;
-  QxrdMaskDataPtr        overflow() const;
 
   void createMaskIfNeeded();
 
