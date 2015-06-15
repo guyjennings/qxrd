@@ -8,6 +8,8 @@
 #include "qcepdatacolumn-ptr.h"
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumnscan-ptr.h"
+#include <QFileInfo>
+#include <QDir>
 
 QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name) :
   QcepDataObject(saver, name)
@@ -22,19 +24,36 @@ QcepDataGroupPtr QcepDataGroup::newDataGroup(QcepSettingsSaverWPtr saver, QStrin
   return res;
 }
 
-QcepDataObjectPtr QcepDataGroup::item(int n) const
+QcepDataObjectPtr QcepDataGroup::item(int n)
 {
   return m_Objects.value(n);
 }
 
-QcepDataObjectPtr QcepDataGroup::item(QString nm) const
+QcepDataObjectPtr QcepDataGroup::item(QString nm)
 {
-  foreach(QcepDataObjectPtr p, m_Objects) {
-    if (p && (p->get_Name() == nm)) {
-      return p;
+  QFileInfo info(nm);
+
+  if (info.isRoot()) {
+    return rootItem();
+  } else if (info.fileName() == nm) {
+    foreach(QcepDataObjectPtr p, m_Objects) {
+      if (p && (p->get_Name() == nm)) {
+        return p;
+      }
+    }
+  } else {
+    QDir dir = info.dir();
+
+    QcepDataObjectPtr obj = item(dir.path());
+
+    if (obj) {
+      QcepDataGroupPtr grp = qSharedPointerCast<QcepDataGroup>(obj);
+
+      if (grp) {
+        return grp->item(info.fileName());
+      }
     }
   }
-
   return QcepDataObjectPtr();
 }
 
@@ -43,16 +62,61 @@ int QcepDataGroup::count() const
   return m_Objects.count();
 }
 
+QcepDataGroupPtr QcepDataGroup::containingGroup(QString path)
+{
+  QFileInfo info(path);
+
+  if (info.isAbsolute()) {
+    if (parentItem()) {
+      return rootItem()->containingGroup(path);
+    } else {
+      QcepDataObjectPtr obj = referencedObject(path);
+
+      return qSharedPointerCast<QcepDataGroup>(obj);
+    }
+  } else {
+    QcepDataObjectPtr obj = item(path);
+
+    return qSharedPointerCast<QcepDataGroup>(obj);
+  }
+}
+
+QcepDataObjectPtr QcepDataGroup::referencedObject(QString path)
+{
+  QFileInfo info(path);
+
+  if (info.isAbsolute()) {
+    return rootItem()->item(path);
+  } else {
+    return item(path);
+  }
+}
+
 void QcepDataGroup::append(QcepDataObjectPtr obj)
 {
   if (obj) {
     m_Objects.append(obj);
 
-    obj -> setParentItem(sharedFromThis());
+    QcepDataGroupPtr me = qSharedPointerCast<QcepDataGroup>(sharedFromThis());
+
+    if (me) {
+      obj -> setParentItem(me);
+    } else {
+      printf("Can't cast to QcepDataGroupPtr");
+    }
 
     connect(obj.data(), SIGNAL(dataObjectChanged()), this, SIGNAL(dataObjectChanged()));
 
     emit dataObjectChanged();
+  }
+}
+
+void QcepDataGroup::append(QString path, QcepDataObjectPtr obj)
+{
+  QcepDataGroupPtr group = containingGroup(path);
+
+  if (group) {
+    group->append(obj);
   }
 }
 
@@ -65,6 +129,13 @@ void QcepDataGroup::remove(QcepDataObjectPtr obj)
 
     emit dataObjectChanged();
   }
+}
+
+void QcepDataGroup::remove(QString path)
+{
+  QcepDataObjectPtr obj = referencedObject(path);
+
+  remove(obj);
 }
 
 void QcepDataGroup::addGroup(QString path)

@@ -4,6 +4,7 @@
 #include <QObject>
 #include "qcepobject.h"
 #include "qcepdataobject-ptr.h"
+#include "qcepdatagroup-ptr.h"
 #include <QScriptValue>
 #include "qcepproperty.h"
 
@@ -24,14 +25,16 @@ signals:
   void dataObjectChanged();
 
 public slots:
-  QString metaTypeName(int id);
+  QString metaTypeName(int id) const;
+  QString pathName() const;
+  QcepDataGroupPtr rootItem();
+  virtual QcepDataGroupPtr parentItem() const;
 
 public:
   virtual int count() const;
-  virtual QcepDataObjectPtr item(int n) const;
-  virtual QcepDataObjectPtr item(QString nm) const;
-  virtual QcepDataObjectPtr parentItem() const;
-  virtual void setParentItem(QcepDataObjectWPtr parent);
+  virtual QcepDataObjectPtr item(int n);
+  virtual QcepDataObjectPtr item(QString nm);
+  virtual void setParentItem(QcepDataGroupWPtr parent);
   virtual int indexInParent() const;
   virtual int columnCount() const;
   virtual QVariant columnData(int col) const;
@@ -40,7 +43,7 @@ public:
   static void fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr &data);
 
 private:
-  QcepDataObjectWPtr    m_Parent;
+  QcepDataGroupWPtr     m_Parent;
   QcepSettingsSaverWPtr m_Saver;
 
 public:

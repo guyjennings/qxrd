@@ -20,12 +20,14 @@ public:
   static QcepDataGroupPtr newDataGroup(QcepSettingsSaverWPtr saver, QString name);
 
 public slots:
-  QcepDataObjectPtr item(int n) const;
-  QcepDataObjectPtr item(QString nm) const;
+  QcepDataObjectPtr item(int n);
+  QcepDataObjectPtr item(QString nm);
   int                count() const;
 
   void append(QcepDataObjectPtr obj);
+  void append(QString path, QcepDataObjectPtr obj);
   void remove(QcepDataObjectPtr obj);
+  void remove(QString path);
 
   void addGroup(QString path);
   void addArray(QString path, QVector<int> dims);
@@ -39,6 +41,9 @@ public slots:
 
   static QScriptValue toGroupScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data);
   static void fromGroupScriptValue(const QScriptValue &obj, QcepDataGroupPtr &data);
+
+  QcepDataGroupPtr containingGroup(QString path);
+  QcepDataObjectPtr referencedObject(QString path);
 
 private:
   QVector<QcepDataObjectPtr> m_Objects;

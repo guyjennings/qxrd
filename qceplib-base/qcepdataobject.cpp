@@ -12,6 +12,15 @@ QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name) :
   set_Type("object");
 }
 
+QString QcepDataObject::pathName() const
+{
+  if (parentItem()) {
+    return parentItem()->pathName()+"/"+get_Name();
+  } else {
+    return get_Name();
+  }
+}
+
 QcepDataObjectPtr QcepDataObject::newDataObject(QcepSettingsSaverWPtr saver, QString name)
 {
   QcepDataObjectPtr res(new QcepDataObject(saver, name));
@@ -53,22 +62,35 @@ int QcepDataObject::count() const
   return 0;
 }
 
-QcepDataObjectPtr QcepDataObject::item(int n) const
+QcepDataObjectPtr QcepDataObject::item(int n)
 {
   return QcepDataObjectPtr();
 }
 
-QcepDataObjectPtr QcepDataObject::item(QString nm) const
+QcepDataObjectPtr QcepDataObject::item(QString nm)
 {
   return QcepDataObjectPtr();
 }
 
-QcepDataObjectPtr QcepDataObject::parentItem() const
+QcepDataGroupPtr QcepDataObject::parentItem() const
 {
   return m_Parent;
 }
 
-void QcepDataObject::setParentItem(QcepDataObjectWPtr parent)
+QcepDataGroupPtr QcepDataObject::rootItem()
+{
+  QcepDataGroupPtr parent(m_Parent);
+
+  if (parent) {
+    return parent->rootItem();
+  } else {
+    QcepDataObjectPtr obj = sharedFromThis();
+
+    return qSharedPointerCast<QcepDataGroup>(obj);
+  }
+}
+
+void QcepDataObject::setParentItem(QcepDataGroupWPtr parent)
 {
   m_Parent = parent;
 }
@@ -109,7 +131,7 @@ QVariant QcepDataObject::columnData(int col) const
   }
 }
 
-QString QcepDataObject::metaTypeName(int id)
+QString QcepDataObject::metaTypeName(int id) const
 {
   return QMetaType::typeName(id);
 }
