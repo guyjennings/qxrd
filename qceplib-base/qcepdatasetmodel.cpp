@@ -180,12 +180,18 @@ QVariant QcepDatasetModel::data(const QModelIndex &index, int role) const
 
   if (!index.isValid()) {
     res = QVariant();
-  }  else if (role == Qt::DisplayRole) {
+  }  else {
 
     QcepDataObjectPtr object = indexedObject(index);
 
     if (object) {
-      res = object->columnData(index.column());
+      if (role == Qt::DisplayRole) {
+        res = object->columnData(index.column());
+      } else if (role == Qt::ToolTipRole) {
+        res = object->pathName() + "\n" +
+            object->columnData(1).toString() + "\n" +
+            object->columnData(2).toString();
+      }
     }
   }
 
