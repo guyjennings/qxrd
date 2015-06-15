@@ -21,13 +21,17 @@ QxrdIntegratedData::QxrdIntegratedData(QxrdSettingsSaverWPtr saver,
   m_Oversample(1)
 {
   set_Type("Integrated Data");
-  set_Description("0 Rows");
 
   m_ObjectCounter.allocate(sizeof(double), 2, m_MaxSize);
 }
 
 QxrdIntegratedData::~QxrdIntegratedData()
 {
+}
+
+QString QxrdIntegratedData::description() const
+{
+  return tr("%1 Rows").arg(m_Size);
 }
 
 void QxrdIntegratedData::resize(int n)
@@ -43,8 +47,6 @@ void QxrdIntegratedData::resize(int n)
   }
 
   m_Size = n;
-
-  set_Description(tr("%1 Rows").arg(m_Size));
 }
 
 int QxrdIntegratedData::size() const

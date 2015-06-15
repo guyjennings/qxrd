@@ -22,6 +22,10 @@ public:
                               int typ, int maxSize, QObject *parent = 0);
   ~QxrdIntegratedData();
 
+public slots:
+  virtual QString description() const;
+
+public:
   void resize(int n);
   int size() const;
   void append(double x, double y);
