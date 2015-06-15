@@ -22,6 +22,10 @@ public:
                  QString name,
                  int npts);
 
+public slots:
+  virtual QString description() const;
+
+public:
   static QcepDataColumnPtr newDataColumn(QcepSettingsSaverWPtr saver,
                                          QString name,
                                          int npts);

@@ -6,10 +6,15 @@
 QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name) :
   QcepObject(name, NULL),
   m_Saver(saver),
-  m_Type(saver, this, "type", "object", "Data object type"),
-  m_Description(saver, this, "description", "", "Data object description")
+  m_Type(saver, this, "type", "object", "Data object type")/*,
+  m_Description(saver, this, "description", "", "Data object description")*/
 {
   set_Type("object");
+}
+
+QString QcepDataObject::description() const
+{
+  return "";
 }
 
 QString QcepDataObject::pathName() const
@@ -127,7 +132,7 @@ QVariant QcepDataObject::columnData(int col) const
   } else if (col == 1) {
     return get_Type();
   } else {
-    return get_Description();
+    return QVariant(description());
   }
 }
 

@@ -119,6 +119,7 @@ public:
   QCEP_BOOLEAN_PROPERTY(Used)
 
 public slots:
+  virtual QString description() const;
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
   virtual double getImageData(int x, int y) const = 0;

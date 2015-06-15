@@ -17,6 +17,11 @@ QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name) :
   set_Type("Data Group");
 }
 
+QString QcepDataGroup::description() const
+{
+  return tr("%1 Items").arg(count());
+}
+
 QcepDataGroupPtr QcepDataGroup::newDataGroup(QcepSettingsSaverWPtr saver, QString name)
 {
   QcepDataGroupPtr res(new QcepDataGroup(saver, name));
@@ -135,7 +140,13 @@ void QcepDataGroup::remove(QString path)
 {
   QcepDataObjectPtr obj = referencedObject(path);
 
-  remove(obj);
+  if (obj) {
+    QcepDataGroupPtr parent = obj->parentItem();
+
+    if (parent) {
+      parent->remove(obj);
+    }
+  }
 }
 
 void QcepDataGroup::addGroup(QString path)

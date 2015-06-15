@@ -25,6 +25,7 @@ signals:
   void dataObjectChanged();
 
 public slots:
+  virtual QString description() const;
   QString metaTypeName(int id) const;
   QString pathName() const;
   QcepDataGroupPtr rootItem();
@@ -50,8 +51,8 @@ public:
   Q_PROPERTY(QString type READ get_Type WRITE set_Type)
   QCEP_STRING_PROPERTY(Type)
 
-  Q_PROPERTY(QString description READ get_Description WRITE set_Description)
-  QCEP_STRING_PROPERTY(Description)
+//  Q_PROPERTY(QString description READ get_Description WRITE set_Description)
+//  QCEP_STRING_PROPERTY(Description)
 };
 
 #endif // QCEPDATAOBJECT_H

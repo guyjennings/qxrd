@@ -9,6 +9,9 @@ class QcepDataColumnScan : public QcepDataGroup
 {
   Q_OBJECT
 
+public slots:
+  virtual QString description() const;
+
 public:
   QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name);
 

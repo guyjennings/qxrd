@@ -24,6 +24,8 @@ public:
   static void fromArrayScriptValue(const QScriptValue &obj, QcepDataArrayPtr &data);
 
 public slots:
+  virtual QString description() const;
+
   QVector<int>    dimensions();
   QVector<double> vectorData();
 

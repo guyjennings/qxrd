@@ -19,9 +19,13 @@ QcepDataColumnScanPtr QcepDataColumnScan::newDataColumnScan(QcepSettingsSaverWPt
   }
 
   res -> set_NumPoints(npts);
-  res -> set_Description(tr("%1 rows x %2 cols").arg(npts).arg(cols.count()));
 
   return res;
+}
+
+QString QcepDataColumnScan::description() const
+{
+  return tr("%1 rows x %2 cols").arg(get_NumPoints()).arg(count());
 }
 
 QScriptValue QcepDataColumnScan::toColumnScanScriptValue(QScriptEngine *engine, const QcepDataColumnScanPtr &data)

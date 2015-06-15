@@ -8,24 +8,28 @@ QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<
   set_Type("Data Array");
 
   int prod = 1;
+  for (int i=0; i<m_Dimensions.count(); i++) {
+    prod *= m_Dimensions[i];
+  }
 
+  m_Data.resize(prod);
+}
+
+QString QcepDataArray::description() const
+{
   QString desc = "[";
 
-  for (int i=0; i<dims.count(); i++) {
-    prod *= dims[i];
-
+  for (int i=0; i<m_Dimensions.count(); i++) {
     if (i!=0) {
       desc += ", ";
     }
 
-    desc += tr("%1").arg(dims[i]);
+    desc += tr("%1").arg(m_Dimensions[i]);
   }
 
   desc += "]";
 
-  set_Description(desc);
-
-  m_Data.resize(prod);
+  return desc;
 }
 
 QcepDataArrayPtr QcepDataArray::newDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims)

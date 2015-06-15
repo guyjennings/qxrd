@@ -20,6 +20,8 @@ public:
   static QcepDataGroupPtr newDataGroup(QcepSettingsSaverWPtr saver, QString name);
 
 public slots:
+  virtual QString description() const;
+
   QcepDataObjectPtr item(int n);
   QcepDataObjectPtr item(QString nm);
   int                count() const;
