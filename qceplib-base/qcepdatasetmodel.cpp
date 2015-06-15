@@ -170,6 +170,26 @@ int QcepDatasetModel::columnCount(const QModelIndex &parent) const
   return res;
 }
 
+QVariant QcepDatasetModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+  if (orientation==Qt::Horizontal) {
+    if (role==Qt::DisplayRole) {
+      switch (section) {
+      case 0:
+        return "Name";
+
+      case 1:
+        return "Type";
+
+      case 2:
+        return "Description";
+      }
+    }
+  }
+
+  return QVariant();
+}
+
 QVariant QcepDatasetModel::data(const QModelIndex &index, int role) const
 {
   QVariant res = QVariant();
