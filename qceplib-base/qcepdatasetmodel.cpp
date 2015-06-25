@@ -98,7 +98,7 @@ QModelIndex QcepDatasetModel::parent(const QModelIndex &index) const
     QcepDataObjectPtr parentItem = childItem->parentItem();
 
     if (parentItem) {
-      if (parentItem != m_Dataset.data()) {
+      if (parentItem != m_Dataset) {
         res = createIndex(parentItem->indexInParent(), 0, parentItem.data());
       }
     }
