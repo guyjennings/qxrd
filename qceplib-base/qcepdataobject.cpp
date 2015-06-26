@@ -1,15 +1,36 @@
 #include "qcepdataobject.h"
 #include <QScriptEngine>
 #include "qcepdatagroup.h"
+#include <stdio.h>
 
-QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name, QcepDataObjectWPtr parent) :
+QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name) :
   QcepObject(name, NULL),
-  m_Parent(parent),
   m_Saver(saver),
-  m_Type(saver, this, "type", "object", "Data object type"),
-  m_Description(saver, this, "description", "", "Data object description")
+  m_Type(saver, this, "type", "object", "Data object type")/*,
+  m_Description(saver, this, "description", "", "Data object description")*/
 {
   set_Type("object");
+}
+
+QString QcepDataObject::description() const
+{
+  return "";
+}
+
+QString QcepDataObject::pathName() const
+{
+  if (parentItem()) {
+    return parentItem()->pathName()+"/"+get_Name();
+  } else {
+    return get_Name();
+  }
+}
+
+QcepDataObjectPtr QcepDataObject::newDataObject(QcepSettingsSaverWPtr saver, QString name)
+{
+  QcepDataObjectPtr res(new QcepDataObject(saver, name));
+
+  return res;
 }
 
 QcepSettingsSaverWPtr QcepDataObject::saver()
@@ -30,7 +51,13 @@ void QcepDataObject::fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr 
     QcepDataObject *qdobj = qobject_cast<QcepDataObject*>(qobj);
 
     if (qdobj) {
-      data = qdobj->sharedFromThis();
+      QcepDataObjectPtr p = qdobj->sharedFromThis();
+
+      if (p) {
+        data = p;
+      } else {
+        printf("QcepDataObject::fromScriptValue returns NULL\n");
+      }
     }
   }
 }
@@ -40,22 +67,35 @@ int QcepDataObject::count() const
   return 0;
 }
 
-QcepDataObjectPtr QcepDataObject::item(int n) const
+QcepDataObjectPtr QcepDataObject::item(int n)
 {
   return QcepDataObjectPtr();
 }
 
-QcepDataObjectPtr QcepDataObject::item(QString nm) const
+QcepDataObjectPtr QcepDataObject::item(QString nm)
 {
   return QcepDataObjectPtr();
 }
 
-QcepDataObjectPtr QcepDataObject::parentItem() const
+QcepDataGroupPtr QcepDataObject::parentItem() const
 {
   return m_Parent;
 }
 
-void QcepDataObject::setParentItem(QcepDataObjectWPtr parent)
+QcepDataGroupPtr QcepDataObject::rootItem()
+{
+  QcepDataGroupPtr parent(m_Parent);
+
+  if (parent) {
+    return parent->rootItem();
+  } else {
+    QcepDataObjectPtr obj = sharedFromThis();
+
+    return qSharedPointerCast<QcepDataGroup>(obj);
+  }
+}
+
+void QcepDataObject::setParentItem(QcepDataGroupWPtr parent)
 {
   m_Parent = parent;
 }
@@ -92,6 +132,11 @@ QVariant QcepDataObject::columnData(int col) const
   } else if (col == 1) {
     return get_Type();
   } else {
-    return get_Description();
+    return QVariant(description());
   }
+}
+
+QString QcepDataObject::metaTypeName(int id) const
+{
+  return QMetaType::typeName(id);
 }

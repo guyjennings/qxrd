@@ -5,6 +5,7 @@
 #include <QVector>
 #include "qcepdataobject.h"
 #include "qcepdataobject-ptr.h"
+#include "qcepdatacolumn-ptr.h"
 
 /*
 
@@ -19,8 +20,18 @@ class QcepDataColumn : public QcepDataObject, public QVector<double>
 public:
   QcepDataColumn(QcepSettingsSaverWPtr saver,
                  QString name,
-                 int npts,
-                 QcepDataObjectWPtr parent = QcepDataObjectWPtr());
+                 int npts);
+
+public slots:
+  virtual QString description() const;
+
+public:
+  static QcepDataColumnPtr newDataColumn(QcepSettingsSaverWPtr saver,
+                                         QString name,
+                                         int npts);
+
+  static QScriptValue toColumnScriptValue(QScriptEngine *engine, const QcepDataColumnPtr &data);
+  static void fromColumnScriptValue(const QScriptValue &obj, QcepDataColumnPtr &data);
 
 private:
   int m_NPoints;

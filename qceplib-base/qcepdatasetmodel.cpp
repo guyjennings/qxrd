@@ -29,6 +29,10 @@ QcepDataObjectPtr QcepDatasetModel::indexedObject(const QModelIndex &index) cons
 //      }
 
       res = obj->sharedFromThis();
+
+      if (!res) {
+        printf("QcepDatasetModel::indexedObject returns NULL\n");
+      }
     }
 //  } else {
 //    res = NULL;
@@ -85,7 +89,7 @@ QModelIndex QcepDatasetModel::parent(const QModelIndex &index) const
   QModelIndex res = QModelIndex();
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
-    printf("QseDatasetModel::parent(%s)\n", qPrintable(indexDescription(index)));
+    printf("QcepDatasetModel::parent(%s)\n", qPrintable(indexDescription(index)));
   }
 
   QcepDataObjectPtr childItem = indexedObject(index);
@@ -105,7 +109,7 @@ QModelIndex QcepDatasetModel::parent(const QModelIndex &index) const
   }
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
-    printf("QseDatasetModel::parent(%s)", qPrintable(indexDescription(index)));
+    printf("QcepDatasetModel::parent(%s)", qPrintable(indexDescription(index)));
     printf(" = (%s)\n", qPrintable(indexDescription(res)));
   }
 
@@ -117,7 +121,7 @@ int QcepDatasetModel::rowCount(const QModelIndex &parent) const
   int res = 0;
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
-    printf("QseDatasetModel::rowCount(%s)\n", qPrintable(indexDescription(parent)));
+    printf("QcepDatasetModel::rowCount(%s)\n", qPrintable(indexDescription(parent)));
   }
 
   if (parent.column() <= 0) {
@@ -133,7 +137,7 @@ int QcepDatasetModel::rowCount(const QModelIndex &parent) const
   }
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
-    printf("QseDatasetModel::rowCount(%s)", qPrintable(indexDescription(parent)));
+    printf("QcepDatasetModel::rowCount(%s)", qPrintable(indexDescription(parent)));
     printf(" = %d\n", res);
   }
 
@@ -145,7 +149,7 @@ int QcepDatasetModel::columnCount(const QModelIndex &parent) const
   int res = 0;
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
-    printf("QseDatasetModel::columnCount(%s)\n", qPrintable(indexDescription(parent)));
+    printf("QcepDatasetModel::columnCount(%s)\n", qPrintable(indexDescription(parent)));
   }
 
   QcepDataObjectPtr parentItem = indexedObject(parent);
@@ -159,11 +163,31 @@ int QcepDatasetModel::columnCount(const QModelIndex &parent) const
   }
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
-    printf("QseDatasetModel::columnCount(%s)", qPrintable(indexDescription(parent)));
+    printf("QcepDatasetModel::columnCount(%s)", qPrintable(indexDescription(parent)));
     printf(" = %d\n", res);
   }
 
   return res;
+}
+
+QVariant QcepDatasetModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+  if (orientation==Qt::Horizontal) {
+    if (role==Qt::DisplayRole) {
+      switch (section) {
+      case 0:
+        return "Name";
+
+      case 1:
+        return "Type";
+
+      case 2:
+        return "Description";
+      }
+    }
+  }
+
+  return QVariant();
 }
 
 QVariant QcepDatasetModel::data(const QModelIndex &index, int role) const
@@ -171,22 +195,28 @@ QVariant QcepDatasetModel::data(const QModelIndex &index, int role) const
   QVariant res = QVariant();
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
-    printf("QseDatasetModel::data(%s,%d)\n", qPrintable(indexDescription(index)), role);
+    printf("QcepDatasetModel::data(%s,%d)\n", qPrintable(indexDescription(index)), role);
   }
 
   if (!index.isValid()) {
     res = QVariant();
-  }  else if (role == Qt::DisplayRole) {
+  }  else {
 
     QcepDataObjectPtr object = indexedObject(index);
 
     if (object) {
-      res = object->columnData(index.column());
+      if (role == Qt::DisplayRole) {
+        res = object->columnData(index.column());
+      } else if (role == Qt::ToolTipRole) {
+        res = object->pathName() + "\n" +
+            object->columnData(1).toString() + "\n" +
+            object->columnData(2).toString();
+      }
     }
   }
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
-    printf("QseDatasetModel::data(%s,%d)", qPrintable(indexDescription(index)), role);
+    printf("QcepDatasetModel::data(%s,%d)", qPrintable(indexDescription(index)), role);
     printf(" = %s\n", qPrintable(res.toString()));
   }
 

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "qcepdataobject.h"
+#include "qcepdataarray-ptr.h"
 #include <QVector>
 
 class QcepDataArray : public QcepDataObject
@@ -12,11 +13,19 @@ class QcepDataArray : public QcepDataObject
 public:
   QcepDataArray(QcepSettingsSaverWPtr saver,
                 QString name,
-                QVector<int> dims,
-                QcepDataObjectWPtr parent = QcepDataObjectWPtr());
+                QVector<int> dims);
   typedef QcepDataObject inherited;
 
+  static QcepDataArrayPtr newDataArray(QcepSettingsSaverWPtr saver,
+                                       QString name,
+                                       QVector<int> dims);
+
+  static QScriptValue toArrayScriptValue(QScriptEngine *engine, const QcepDataArrayPtr &data);
+  static void fromArrayScriptValue(const QScriptValue &obj, QcepDataArrayPtr &data);
+
 public slots:
+  virtual QString description() const;
+
   QVector<int>    dimensions();
   QVector<double> vectorData();
 

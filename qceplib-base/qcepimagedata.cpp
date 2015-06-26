@@ -19,7 +19,7 @@
 QAtomicInt allocCount = 0;
 
 QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height)
-  : QcepDataObject(saver, tr("image"), QcepDataObjectWPtr()),
+  : QcepDataObject(saver, tr("image")),
     m_Width(saver, this, "width", width, "Image Width"),
     m_Height(saver, this, "height", height, "Image Height"),
     m_QxrdVersion(saver, this,"qxrdVersion", "Unknown", "QXRD Version Number"),
@@ -54,7 +54,6 @@ QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int
     m_Saver(saver)
 {
   set_Type("Image");
-  set_Description(tr("[%1 x %2] elements").arg(width).arg(height));
 
   if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
     printf("QcepImageDataBase::QcepImageDataBase(%p)\n", this);
@@ -80,6 +79,11 @@ QcepImageDataBase::~QcepImageDataBase()
   }
 
   //  allocCount--;
+}
+
+QString QcepImageDataBase::description() const
+{
+  return tr("[%1 x %2] elements").arg(get_Width()).arg(get_Height());
 }
 
 void QcepImageDataBase::printMessage(QString msg, QDateTime ts) const
@@ -114,7 +118,6 @@ QMutex *QcepImageDataBase::mutex()
 void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 {
   dest -> set_Type(get_Type());
-  dest -> set_Description(get_Description());
   dest -> set_QxrdVersion(get_QxrdVersion());
   dest -> set_QtVersion(get_QtVersion());
   dest -> set_DataType(get_DataType());
@@ -152,7 +155,6 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src)
 {
   set_Type(src -> get_Type());
-  set_Description(src -> get_Description());
   set_QxrdVersion(src -> get_QxrdVersion());
   set_QtVersion(src->get_QtVersion());
   set_DataType(src -> get_DataType());
@@ -541,8 +543,6 @@ void QcepImageData<T>::resize(int width, int height)
 {
   set_Width(width);
   set_Height(height);
-
-  set_Description(tr("[%1 x %2] elements").arg(width).arg(height));
 
   m_Image.resize(width*height);
 }
