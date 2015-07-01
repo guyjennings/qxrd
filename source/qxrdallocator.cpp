@@ -188,6 +188,21 @@ QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage(QxrdAllocatorWPtr allocw, A
   return QxrdDoubleImageDataPtr(NULL);
 }
 
+QxrdDoubleImageDataPtr QxrdAllocator::newDoubleImage(QString name, int width, int height)
+{
+  QxrdDoubleImageDataPtr img;
+
+  if (g_Application) {
+   img = newDoubleImage(g_Application->allocator(), QxrdAllocator::NullIfNotAvailable, width, height);
+
+   if (img) {
+     img->set_Name(name);
+   }
+  }
+
+  return img;
+}
+
 QxrdMaskDataPtr QxrdAllocator::newMask(QxrdAllocatorWPtr allocw, AllocationStrategy strat, int width, int height, int def)
 {
   QxrdAllocatorPtr alloc(allocw);
@@ -244,6 +259,23 @@ QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(QxrdAllocatorWPtr allocw,
   }
 
   return QxrdIntegratedDataPtr(NULL);
+}
+
+QxrdIntegratedDataPtr QxrdAllocator::newIntegratedData(QString name, int size)
+{
+  QxrdIntegratedDataPtr integ;
+
+  if (g_Application) {
+    integ = newIntegratedData(g_Application->allocator(), QxrdAllocator::NullIfNotAvailable, QxrdDoubleImageDataPtr());
+
+    if (integ) {
+      integ->set_Name(name);
+
+      integ->resize(size);
+    }
+  }
+
+  return integ;
 }
 
 void QxrdAllocator::newDoubleImageAndIntegratedData(QxrdAllocatorWPtr allocw,

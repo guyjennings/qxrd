@@ -42,6 +42,9 @@ public:
   const double* x() const;
   const double* y() const;
 
+  double x(int i) const;
+  double y(int i) const;
+
   double cx() const;
   double cy() const;
 

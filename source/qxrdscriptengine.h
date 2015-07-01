@@ -115,6 +115,7 @@ private:
   static QScriptValue dataArrayFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue dataColumnFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue dataColumnScanFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue dataImageFunc(QScriptContext *context, QScriptEngine *engine);
 
   QString tableHeader();
   QString tableFooter();

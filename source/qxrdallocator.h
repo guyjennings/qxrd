@@ -56,6 +56,9 @@ public:
   static QxrdMaskDataPtr newMask(QxrdAllocatorWPtr allocw, AllocationStrategy strat, int width, int height, int def=1);
   static QxrdIntegratedDataPtr newIntegratedData(QxrdAllocatorWPtr allocw, AllocationStrategy strat, QxrdDoubleImageDataPtr image);
 
+  static QxrdDoubleImageDataPtr newDoubleImage(QString name, int width, int height);
+  static QxrdIntegratedDataPtr  newIntegratedData(QString name, int size);
+
   static void newDoubleImageAndIntegratedData(QxrdAllocatorWPtr allocw,
                                               AllocationStrategy strat,
                                        int width, int height,

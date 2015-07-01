@@ -64,6 +64,16 @@ const double* QxrdIntegratedData::y() const
   return m_Y.data();
 }
 
+double QxrdIntegratedData::x(int i) const
+{
+  return m_X.value(i);
+}
+
+double QxrdIntegratedData::y(int i) const
+{
+  return m_Y.value(i);
+}
+
 void QxrdIntegratedData::set_Center(double cx, double cy)
 {
   m_cx = cx;

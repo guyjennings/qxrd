@@ -10,6 +10,7 @@
 #include "qxrdexperiment.h"
 #include "qxrdintegratorcache.h"
 #include "qxrdallocator.h"
+#include "qxrddataset.h"
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -378,3 +379,41 @@ QString QxrdIntegrator::defaultUserAbsorptionScript()
   }
 }
 
+void QxrdIntegrator::appendIntegration(QString resPath, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
+{
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDatasetPtr ds = expt->dataset();
+
+    if (ds) {
+      QxrdDoubleImageDataPtr data = ds->image(resPath);
+
+      if (data) {
+        appendIntegration(data, dimg, mask);
+      }
+    }
+  }
+}
+
+void QxrdIntegrator::appendIntegration(QxrdDoubleImageDataPtr res, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
+{
+  QxrdIntegratedDataPtr integ = performIntegration(dimg, mask);
+
+  appendIntegration(res, integ);
+}
+
+void QxrdIntegrator::appendIntegration(QxrdDoubleImageDataPtr res, QxrdIntegratedDataPtr integ)
+{
+  if (res && integ) {
+    int width = res->get_Width();
+    int ht    = res->get_Height();
+    int npts  = integ->size();
+
+    res->resize(npts, ht+1);
+
+    for (int i=0; i<npts; i++) {
+      res->setValue(i, ht, integ->y(i));
+    }
+  }
+}

@@ -149,7 +149,9 @@ HEADERS += \
     qxrdcalibrantdspacingsmodel.h \
     qxrdcalibrantdspacingsmodel-ptr.h \
     qxrdcalibrantlibrarymodel-ptr.h \
-    qcepdatasetbrowserdialog.h
+    qcepdatasetbrowserdialog.h \
+    qxrddataset.h \
+    qxrddataset-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -190,7 +192,8 @@ SOURCES += \
     qxrdcalibrantdialog.cpp \
     qxrdcalibrantlibrarymodel.cpp \
     qxrdcalibrantdspacingsmodel.cpp \
-    qcepdatasetbrowserdialog.cpp
+    qcepdatasetbrowserdialog.cpp \
+    qxrddataset.cpp
 
 OTHER_FILES += testImage.js
 

@@ -32,6 +32,7 @@
 #include "qxrdhighlighter.h"
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdacquisitionextrainputsdialog.h"
+#include "qxrddataset.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -162,7 +163,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   }
 
   if (expt) {
-    QcepDatasetPtr ds = expt->dataset();
+    QxrdDatasetPtr ds = expt->dataset();
 
     if (ds) {
       m_DatasetBrowserDialog = new QcepDatasetBrowserDialog(ds, this);

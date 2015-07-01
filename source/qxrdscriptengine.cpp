@@ -19,7 +19,7 @@
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"
 #include "qcepdocumentationdictionary.h"
-#include "qcepdataset.h"
+#include "qxrddataset.h"
 #include "qcepdatagroup.h"
 #include "qcepdatagroup-ptr.h"
 #include "qcepdataarray.h"
@@ -1505,6 +1505,41 @@ QScriptValue QxrdScriptEngine::dataColumnScanFunc(QScriptContext *context, QScri
   return QScriptValue();
 }
 
+QCEP_DOC_FUNCTION(
+    "dataImage",
+    "dataImage(name, width, height)",
+    "Creates a new named data image",
+    ""
+    )
+
+QScriptValue QxrdScriptEngine::dataImageFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdExperimentPtr expt = eng->experiment();
+    QxrdApplicationPtr app(eng->application());
+
+    if (expt && app) {
+      QString name   = context->argument(0).toString();
+      int     width  = context->argument(1).toInteger();
+      int     height = context->argument(2).toInteger();
+
+      QxrdDatasetPtr ds = expt->dataset();
+
+      if (ds) {
+        QxrdDoubleImageDataPtr img = QxrdAllocator::newDoubleImage(app->allocator(), QxrdAllocator::WaitTillAvailable, width, height);
+
+        ds->append(name, img);
+
+        return engine->newQObject(img.data());
+      }
+    }
+  }
+
+  return QScriptValue();
+}
+
 QCEP_DOC_OBJECT(
     "JSON",
     "Qt Built-in JSON Parser"
@@ -1771,6 +1806,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("dataArray", newFunction(dataArrayFunc));
   globalObject().setProperty("dataColumn", newFunction(dataColumnFunc));
   globalObject().setProperty("dataColumnScan", newFunction(dataColumnScanFunc));
+  globalObject().setProperty("dataImage", newFunction(dataImageFunc));
 
   if (app) {
     QObject *plugin = dynamic_cast<QObject*>(app->nidaqPlugin().data());
@@ -1856,7 +1892,7 @@ void QxrdScriptEngine::initialize()
       globalObject().setProperty("calibrants", newQObject(cals.data()));
     }
 
-    QcepDatasetPtr ds = expt->dataset();
+    QxrdDatasetPtr ds = expt->dataset();
 
     if (ds) {
       globalObject().setProperty("dataset", newQObject(ds.data()));
