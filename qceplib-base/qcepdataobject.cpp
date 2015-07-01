@@ -10,6 +10,10 @@ QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name) :
   m_Description(saver, this, "description", "", "Data object description")*/
 {
   set_Type("object");
+
+  if (name.contains("/")) {
+    printMessage(tr("object %1 name contains \"/\"").arg(name));
+  }
 }
 
 QString QcepDataObject::description() const
