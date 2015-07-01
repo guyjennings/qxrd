@@ -363,6 +363,8 @@ public:
   void newMask();
 
   void updateEstimatedTime(QcepDoubleProperty *prop, int msec);
+
+public slots:
   void newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
 
 protected:
