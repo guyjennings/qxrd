@@ -24,6 +24,12 @@ public slots:
 
   QcepDataObjectPtr item(int n);
   QcepDataObjectPtr item(QString nm);
+
+  QcepDataGroupPtr  group(QString path);
+  QcepDataArrayPtr  array(QString path);
+  QcepDataColumnPtr column(QString path);
+  QcepDataColumnScanPtr columnScan(QString path);
+
   int                count() const;
 
   void append(QcepDataObjectPtr obj);
@@ -31,10 +37,7 @@ public slots:
   void remove(QcepDataObjectPtr obj);
   void remove(QString path);
 
-  void addGroup(QString path);
-  void addArray(QString path, QVector<int> dims);
-  void addColumn(QString path, int nrow);
-  void addColumnScan(QString path, int nrow, QStringList cols);
+  QcepDataGroupPtr createGroup(QString path);
 
   QcepDataGroupPtr newGroup(QString path);
   QcepDataArrayPtr newArray(QString path, QVector<int> dims);
@@ -43,6 +46,9 @@ public slots:
 
   static QScriptValue toGroupScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data);
   static void fromGroupScriptValue(const QScriptValue &obj, QcepDataGroupPtr &data);
+
+  QString directoryName(QString path);
+  QString object(QString path);
 
   QcepDataGroupPtr containingGroup(QString path);
   QcepDataObjectPtr referencedObject(QString path);
