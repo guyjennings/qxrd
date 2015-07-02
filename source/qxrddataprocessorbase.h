@@ -137,6 +137,12 @@ public:
   Q_PROPERTY(QString saveIntegratedSubdirectory READ get_SaveIntegratedSubdirectory WRITE set_SaveIntegratedSubdirectory)
   QCEP_STRING_PROPERTY(SaveIntegratedSubdirectory)
 
+  Q_PROPERTY(bool accumulateIntegrated2D READ get_AccumulateIntegrated2D WRITE set_AccumulateIntegrated2D)
+  QCEP_BOOLEAN_PROPERTY(AccumulateIntegrated2D)
+
+  Q_PROPERTY(QString accumulateIntegratedName READ get_AccumulateIntegratedName WRITE set_AccumulateIntegratedName)
+  QCEP_STRING_PROPERTY(AccumulateIntegratedName)
+
   Q_PROPERTY(double performDarkSubtractionTime READ get_PerformDarkSubtractionTime WRITE set_PerformDarkSubtractionTime)
   QCEP_DOUBLE_PROPERTY(PerformDarkSubtractionTime)
 

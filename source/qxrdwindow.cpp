@@ -565,6 +565,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     proc -> prop_SaveIntegratedData() -> linkTo(m_CorrectionDialog->m_SaveIntegratedData);
     proc -> prop_SaveIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_SaveIntegratedDataTime);
     proc -> prop_SaveIntegratedInSeparateFiles() -> linkTo(m_CorrectionDialog->m_SaveIntegratedInSeparateFiles);
+    proc -> prop_AccumulateIntegrated2D() ->linkTo(m_CorrectionDialog->m_AccumulateIntegrated2D);
+    proc -> prop_AccumulateIntegratedName() -> linkTo(m_CorrectionDialog->m_AccumulateIntegratedName);
     proc -> prop_EstimatedProcessingTime() -> linkTo(m_CorrectionDialog->m_EstimatedProcessingTime);
   }
 

@@ -379,6 +379,29 @@ QString QxrdIntegrator::defaultUserAbsorptionScript()
   }
 }
 
+void QxrdIntegrator::appendIntegration(QString resPath, QxrdIntegratedDataPtr integ)
+{
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDatasetPtr ds = expt->dataset();
+
+    if (ds) {
+      QxrdDoubleImageDataPtr data = ds->image(resPath);
+
+      if (!data) {
+        data = ds->newImage(resPath);
+      }
+
+      if (data) {
+        appendIntegration(data, integ);
+      } else {
+        printMessage(tr("Unable to accumulate integrated data into %1").arg(resPath));
+      }
+    }
+  }
+}
+
 void QxrdIntegrator::appendIntegration(QString resPath, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
 {
   QxrdExperimentPtr expt(m_Experiment);

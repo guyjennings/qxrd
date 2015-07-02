@@ -110,6 +110,9 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
       m_SaveIntegratedInSubdir  -> setChecked(proc->get_SaveIntegratedInSubdirectory());
       m_SaveIntegratedSubdir    -> setText  (proc->get_SaveIntegratedSubdirectory());
 
+      m_AccumulateIntegrated2D -> setChecked(proc->get_AccumulateIntegrated2D());
+      m_AccumulateIntegratedName ->setText(proc->get_AccumulateIntegratedName());
+
       m_SaveOverflowFiles -> setChecked(proc->get_SaveOverflowFiles());
     }
 
@@ -278,6 +281,9 @@ void QxrdExperimentPreferencesDialog::accept()
       proc -> set_SaveIntegratedInSeparateFiles(m_SaveIntegratedInSeparateFiles -> isChecked());
       proc -> set_SaveIntegratedInSubdirectory (m_SaveIntegratedInSubdir  -> isChecked());
       proc -> set_SaveIntegratedSubdirectory   (m_SaveIntegratedSubdir    -> text());
+
+      proc -> set_AccumulateIntegrated2D(m_AccumulateIntegrated2D -> isChecked());
+      proc -> set_AccumulateIntegratedName(m_AccumulateIntegratedName -> text());
 
       proc -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
     }

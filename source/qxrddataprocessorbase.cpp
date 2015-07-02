@@ -64,6 +64,8 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_SaveIntegratedInSeparateFiles(saver, this,"saveIntegratedInSeparateFiles",0, "Save Integrated in Separate Files?"),
   m_SaveIntegratedInSubdirectory(saver, this,"saveIntegratedInSubdirectory",0, "Save Integrated in Subdirectory?"),
   m_SaveIntegratedSubdirectory(saver, this,"saveIntegratedSubdirectory","", "Integrated Subdirectory"),
+  m_AccumulateIntegrated2D(saver, this, "accumulateIntegrated2D", 0, "Accumulate integrated data in 2-d dataset"),
+  m_AccumulateIntegratedName(saver, this, "accumulateIntegratedName", "/accumulated/2d-data", "Dataset to accumulate to"),
   m_PerformDarkSubtractionTime(saver, this, "performDarkSubtractionTime", 0.01, "Avg Time to Perform Dark Subtraction (in sec)"),
   m_PerformBadPixelsTime(saver, this, "performBadPixelsTime", 0.01, "Avg Time to Perform Bad Pixel Correction (in sec)"),
   m_PerformGainCorrectionTime(saver, this, "performGainCorrectionTime", 0.01, "Avg Time to Perform Gain Correction (in sec)"),

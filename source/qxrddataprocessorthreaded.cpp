@@ -277,6 +277,10 @@ void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
   if (integ) {
     writeOutputScan(integ);
     displayIntegratedData(integ);
+
+    if (get_AccumulateIntegrated2D()) {
+      m_Integrator -> appendIntegration(get_AccumulateIntegratedName(), integ);
+    }
   }
 }
 

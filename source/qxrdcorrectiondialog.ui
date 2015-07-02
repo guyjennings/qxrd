@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>371</width>
-    <height>495</height>
+    <width>498</width>
+    <height>622</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Correction</string>
+   <string>&amp;Correction</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <property name="sizePolicy">
@@ -21,117 +21,40 @@
     </sizepolicy>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <widget class="QCheckBox" name="m_SaveRaw">
+    <item row="7" column="1">
+     <widget class="QDoubleSpinBox" name="m_SaveAsTextTime">
+      <property name="frame">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+      <property name="suffix">
+       <string> s</string>
+      </property>
+      <property name="decimals">
+       <number>3</number>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QCheckBox" name="m_PerformIntegration">
       <property name="toolTip">
-       <string>Save 'raw' images (before dark subtraction), as well</string>
+       <string>Perform angular integration as each image is taken</string>
       </property>
       <property name="text">
-       <string>Save 'raw' images</string>
+       <string>Perform Integration</string>
       </property>
      </widget>
     </item>
     <item row="1" column="1">
      <widget class="QDoubleSpinBox" name="m_SaveRawTime">
-      <property name="frame">
-       <bool>false</bool>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="buttonSymbols">
-       <enum>QAbstractSpinBox::NoButtons</enum>
-      </property>
-      <property name="suffix">
-       <string> s</string>
-      </property>
-      <property name="decimals">
-       <number>3</number>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QCheckBox" name="m_PerformDark">
-      <property name="toolTip">
-       <string>Do dark subtraction as images are taken</string>
-      </property>
-      <property name="text">
-       <string>Perform Dark Subtraction </string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QDoubleSpinBox" name="m_PerformDarkTime">
-      <property name="frame">
-       <bool>false</bool>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="buttonSymbols">
-       <enum>QAbstractSpinBox::NoButtons</enum>
-      </property>
-      <property name="suffix">
-       <string> s</string>
-      </property>
-      <property name="decimals">
-       <number>3</number>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QCheckBox" name="m_SaveDark">
-      <property name="toolTip">
-       <string>Save 'dark' images</string>
-      </property>
-      <property name="text">
-       <string>Save 'dark' images</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QDoubleSpinBox" name="m_SaveDarkTime">
-      <property name="frame">
-       <bool>false</bool>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="buttonSymbols">
-       <enum>QAbstractSpinBox::NoButtons</enum>
-      </property>
-      <property name="suffix">
-       <string> s</string>
-      </property>
-      <property name="decimals">
-       <number>3</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QCheckBox" name="m_PerformBadPixels">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="toolTip">
-       <string>Do Bad Pixel Correction</string>
-      </property>
-      <property name="text">
-       <string>Perform Bad Pixel Correction</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QDoubleSpinBox" name="m_PerformBadPixelsTime">
       <property name="frame">
        <bool>false</bool>
       </property>
@@ -165,8 +88,18 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QDoubleSpinBox" name="m_PerformGainCorrectionTime">
+    <item row="0" column="1">
+     <widget class="QPushButton" name="m_CorrectionOptionsButton">
+      <property name="text">
+       <string>More Options....</string>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="1">
+     <widget class="QDoubleSpinBox" name="m_EstimatedProcessingTime">
+      <property name="toolTip">
+       <string>Estimated processing time</string>
+      </property>
       <property name="frame">
        <bool>false</bool>
       </property>
@@ -184,115 +117,6 @@
       </property>
       <property name="decimals">
        <number>3</number>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0">
-     <widget class="QCheckBox" name="m_SaveSubtracted">
-      <property name="toolTip">
-       <string>Save subtracted images as they are taken</string>
-      </property>
-      <property name="text">
-       <string>Save 'subtracted' images</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
-     <widget class="QDoubleSpinBox" name="m_SaveSubtractedTime">
-      <property name="frame">
-       <bool>false</bool>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="buttonSymbols">
-       <enum>QAbstractSpinBox::NoButtons</enum>
-      </property>
-      <property name="suffix">
-       <string> s</string>
-      </property>
-      <property name="decimals">
-       <number>3</number>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="0">
-     <widget class="QCheckBox" name="m_SaveAsText">
-      <property name="toolTip">
-       <string>Save subtracted images as they are taken</string>
-      </property>
-      <property name="text">
-       <string>Save images as text</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QDoubleSpinBox" name="m_SaveAsTextTime">
-      <property name="frame">
-       <bool>false</bool>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="buttonSymbols">
-       <enum>QAbstractSpinBox::NoButtons</enum>
-      </property>
-      <property name="suffix">
-       <string> s</string>
-      </property>
-      <property name="decimals">
-       <number>3</number>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0">
-     <widget class="QCheckBox" name="m_PerformIntegration">
-      <property name="toolTip">
-       <string>Perform angular integration as each image is taken</string>
-      </property>
-      <property name="text">
-       <string>Perform Integration</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="1">
-     <widget class="QDoubleSpinBox" name="m_PerformIntegrationTime">
-      <property name="frame">
-       <bool>false</bool>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-      <property name="buttonSymbols">
-       <enum>QAbstractSpinBox::NoButtons</enum>
-      </property>
-      <property name="suffix">
-       <string> s</string>
-      </property>
-      <property name="decimals">
-       <number>3</number>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="0">
-     <widget class="QCheckBox" name="m_DisplayIntegratedData">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="toolTip">
-       <string>Add integrated data to graph as it is calculated</string>
-      </property>
-      <property name="text">
-       <string>Display integrated data</string>
       </property>
      </widget>
     </item>
@@ -318,21 +142,149 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="0">
-     <widget class="QCheckBox" name="m_SaveIntegratedData">
+    <item row="1" column="0">
+     <widget class="QCheckBox" name="m_SaveRaw">
+      <property name="toolTip">
+       <string>Save 'raw' images (before dark subtraction), as well</string>
+      </property>
+      <property name="text">
+       <string>Save 'raw' images</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QDoubleSpinBox" name="m_PerformIntegrationTime">
+      <property name="frame">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+      <property name="suffix">
+       <string> s</string>
+      </property>
+      <property name="decimals">
+       <number>3</number>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="0" colspan="2">
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>238</width>
+        <height>47</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="2" column="1">
+     <widget class="QDoubleSpinBox" name="m_PerformDarkTime">
+      <property name="frame">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+      <property name="suffix">
+       <string> s</string>
+      </property>
+      <property name="decimals">
+       <number>3</number>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QCheckBox" name="m_PerformBadPixels">
       <property name="enabled">
        <bool>true</bool>
       </property>
       <property name="toolTip">
-       <string>Save each integration as it is calculated</string>
+       <string>Do Bad Pixel Correction</string>
       </property>
       <property name="text">
-       <string>Save Integrated Data in Scan File</string>
+       <string>Perform Bad Pixel Correction</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QCheckBox" name="m_SaveAsText">
+      <property name="toolTip">
+       <string>Save subtracted images as they are taken</string>
+      </property>
+      <property name="text">
+       <string>Save images as text</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QDoubleSpinBox" name="m_PerformGainCorrectionTime">
+      <property name="frame">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+      <property name="suffix">
+       <string> s</string>
+      </property>
+      <property name="decimals">
+       <number>3</number>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="0">
+     <widget class="QLabel" name="label_16">
+      <property name="text">
+       <string>Estimated time per image</string>
       </property>
      </widget>
     </item>
     <item row="10" column="1">
      <widget class="QDoubleSpinBox" name="m_SaveIntegratedDataTime">
+      <property name="frame">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+      <property name="suffix">
+       <string> s</string>
+      </property>
+      <property name="decimals">
+       <number>3</number>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QDoubleSpinBox" name="m_PerformBadPixelsTime">
       <property name="frame">
        <bool>false</bool>
       </property>
@@ -366,18 +318,8 @@
       </property>
      </widget>
     </item>
-    <item row="12" column="0">
-     <widget class="QLabel" name="label_16">
-      <property name="text">
-       <string>Estimated time per image</string>
-      </property>
-     </widget>
-    </item>
-    <item row="12" column="1">
-     <widget class="QDoubleSpinBox" name="m_EstimatedProcessingTime">
-      <property name="toolTip">
-       <string>Estimated processing time</string>
-      </property>
+    <item row="6" column="1">
+     <widget class="QDoubleSpinBox" name="m_SaveSubtractedTime">
       <property name="frame">
        <bool>false</bool>
       </property>
@@ -398,23 +340,101 @@
       </property>
      </widget>
     </item>
-    <item row="13" column="0" colspan="2">
-     <spacer name="verticalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
+    <item row="9" column="0">
+     <widget class="QCheckBox" name="m_DisplayIntegratedData">
+      <property name="enabled">
+       <bool>true</bool>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>238</width>
-        <height>47</height>
-       </size>
+      <property name="toolTip">
+       <string>Add integrated data to graph as it is calculated</string>
       </property>
-     </spacer>
-    </item>
-    <item row="0" column="1">
-     <widget class="QPushButton" name="m_CorrectionOptionsButton">
       <property name="text">
-       <string>More Options....</string>
+       <string>Display integrated data</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QCheckBox" name="m_SaveIntegratedData">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="toolTip">
+       <string>Save each integration as it is calculated</string>
+      </property>
+      <property name="text">
+       <string>Save Integrated Data in Scan File</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QCheckBox" name="m_SaveDark">
+      <property name="toolTip">
+       <string>Save 'dark' images</string>
+      </property>
+      <property name="text">
+       <string>Save 'dark' images</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QCheckBox" name="m_SaveSubtracted">
+      <property name="toolTip">
+       <string>Save subtracted images as they are taken</string>
+      </property>
+      <property name="text">
+       <string>Save 'subtracted' images</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QDoubleSpinBox" name="m_SaveDarkTime">
+      <property name="frame">
+       <bool>false</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="buttonSymbols">
+       <enum>QAbstractSpinBox::NoButtons</enum>
+      </property>
+      <property name="suffix">
+       <string> s</string>
+      </property>
+      <property name="decimals">
+       <number>3</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QCheckBox" name="m_PerformDark">
+      <property name="toolTip">
+       <string>Do dark subtraction as images are taken</string>
+      </property>
+      <property name="text">
+       <string>Perform Dark Subtraction </string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="0">
+     <widget class="QCheckBox" name="m_AccumulateIntegrated2D">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="toolTip">
+       <string>Save each integration in a separate file as it is calculated</string>
+      </property>
+      <property name="text">
+       <string>Accumulate Integrated Data into 2-D dataset</string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="1">
+     <widget class="QLabel" name="m_AccumulateIntegratedName">
+      <property name="text">
+       <string>TextLabel</string>
       </property>
      </widget>
     </item>
