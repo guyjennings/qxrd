@@ -25,9 +25,12 @@ public:
 public slots:
   virtual QString description() const;
 
-public:
+  double x(int i) const;
+  double y(int i) const;
   void resize(int n);
   int size() const;
+
+public:
   void append(double x, double y);
   void set_Center(double cx, double cy);
   void set_Image(QxrdDoubleImageDataPtr image);
@@ -41,9 +44,6 @@ public:
 
   const double* x() const;
   const double* y() const;
-
-  double x(int i) const;
-  double y(int i) const;
 
   double cx() const;
   double cy() const;
