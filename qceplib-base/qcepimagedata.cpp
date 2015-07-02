@@ -541,10 +541,27 @@ void QcepImageData<T>::dumpPixels(int x0, int y0, int x1, int y1)
 template <typename T>
 void QcepImageData<T>::resize(int width, int height)
 {
+  QcepImageData<T> temp(QcepSettingsSaverPtr(), get_Width(), get_Height());
+
+  int oldwidth = get_Width();
+  int oldheight= get_Height();
+
+  for (int y=0; y<oldheight; y++) {
+    for (int x=0; x<oldwidth; x++) {
+      temp.setValue(x, y, value(x,y));
+    }
+  }
+
   set_Width(width);
   set_Height(height);
 
   m_Image.resize(width*height);
+
+  for (int y=0; y<height; y++) {
+    for (int x=0; x<width; x++) {
+      setValue(x, y, temp.value(x,y));
+    }
+  }
 }
 
 template <typename T>
