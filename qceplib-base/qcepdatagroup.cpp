@@ -40,6 +40,8 @@ QcepDataObjectPtr QcepDataGroup::item(QString nm)
 
   if (info.isRoot()) {
     return rootItem();
+  } else if (nm == ".") {
+    return sharedFromThis();
   } else if (info.fileName() == nm) {
     foreach(QcepDataObjectPtr p, m_Objects) {
       if (p && (p->get_Name() == nm)) {
