@@ -23,10 +23,16 @@ QString QcepDataObject::description() const
 
 QString QcepDataObject::pathName() const
 {
+  QString suffix="";
+
+  if (qobject_cast<const QcepDataGroup*>(this)) {
+    suffix = "/";
+  }
+
   if (parentItem()) {
-    return parentItem()->pathName()+"/"+get_Name();
+    return parentItem()->pathName()+get_Name()+suffix;
   } else {
-    return get_Name();
+    return "/";
   }
 }
 
