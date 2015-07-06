@@ -34,12 +34,15 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
 
   QModelIndex index = m_DatasetBrowserView->indexAt(pt);
 
+  QcepDataObject *obj = static_cast<QcepDataObject*>(index.internalPointer());
+
   QMenu menu(NULL, NULL);
 
-  QAction *a1 = menu.addAction(tr("Open [%1,%2] in graph window")
-                               .arg(index.row()).arg(index.column()));
-  QAction *a2 = menu.addAction(tr("Open [%1,%2] in spreadsheet window")
-                               .arg(index.row()).arg(index.column()));
+  QString name = (obj ? obj->pathName() : "");
+
+  QAction *a1 = menu.addAction(tr("Open %1 in graph window").arg(name));
+  QAction *a2 = menu.addAction(tr("Open %1 in spreadsheet window").arg(name));
+  QAction *a3 = menu.addAction(tr("%1 properties").arg(name));
 
   QAction *action = menu.exec(mapToGlobal(pt));
 
@@ -47,6 +50,8 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
     openGraph(index);
   } else if (action == a2) {
     openSpreadsheet(index);
+  } else if (action == a3) {
+    openProperties(index);
   }
 }
 
@@ -70,5 +75,14 @@ void QcepDatasetBrowserDialog::openSpreadsheet(const QModelIndex &idx)
 
   if (obj) {
     printf("openSpreadsheet(%s)\n", qPrintable(obj->pathName()));
+  }
+}
+
+void QcepDatasetBrowserDialog::openProperties(const QModelIndex &idx)
+{
+  QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
+
+  if (obj) {
+    printf("openProperties(%s)\n", qPrintable(obj->pathName()));
   }
 }

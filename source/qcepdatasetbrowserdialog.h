@@ -21,6 +21,7 @@ private slots:
 
   void openGraph(const QModelIndex &idx);
   void openSpreadsheet(const QModelIndex &idx);
+  void openProperties(const QModelIndex &idx);
 
 private:
   QcepDatasetPtr      m_Dataset;
