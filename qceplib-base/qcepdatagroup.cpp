@@ -54,7 +54,7 @@ QcepDataObjectPtr QcepDataGroup::item(QString nm)
     QcepDataObjectPtr obj = item(dir.path());
 
     if (obj) {
-      QcepDataGroupPtr grp = qSharedPointerCast<QcepDataGroup>(obj);
+      QcepDataGroupPtr grp = qSharedPointerDynamicCast<QcepDataGroup>(obj);
 
       if (grp) {
         return grp->item(info.fileName());
@@ -73,28 +73,28 @@ QcepDataGroupPtr  QcepDataGroup::group(QString path)
 {
   QcepDataObjectPtr obj = item(path);
 
-  return qSharedPointerCast<QcepDataGroup>(obj);
+  return qSharedPointerDynamicCast<QcepDataGroup>(obj);
 }
 
 QcepDataArrayPtr  QcepDataGroup::array(QString path)
 {
   QcepDataObjectPtr obj = item(path);
 
-  return qSharedPointerCast<QcepDataArray>(obj);
+  return qSharedPointerDynamicCast<QcepDataArray>(obj);
 }
 
 QcepDataColumnPtr QcepDataGroup::column(QString path)
 {
   QcepDataObjectPtr obj = item(path);
 
-  return qSharedPointerCast<QcepDataColumn>(obj);
+  return qSharedPointerDynamicCast<QcepDataColumn>(obj);
 }
 
 QcepDataColumnScanPtr QcepDataGroup::columnScan(QString path)
 {
   QcepDataObjectPtr obj = item(path);
 
-  return qSharedPointerCast<QcepDataColumnScan>(obj);
+  return qSharedPointerDynamicCast<QcepDataColumnScan>(obj);
 }
 
 QString QcepDataGroup::directoryName(QString path)
@@ -125,12 +125,12 @@ QcepDataGroupPtr QcepDataGroup::containingGroup(QString path)
     } else {
       QcepDataObjectPtr obj = referencedObject(path);
 
-      return qSharedPointerCast<QcepDataGroup>(obj);
+      return qSharedPointerDynamicCast<QcepDataGroup>(obj);
     }
   } else {
     QcepDataObjectPtr obj = item(path);
 
-    return qSharedPointerCast<QcepDataGroup>(obj);
+    return qSharedPointerDynamicCast<QcepDataGroup>(obj);
   }
 }
 
@@ -150,7 +150,7 @@ void QcepDataGroup::append(QcepDataObjectPtr obj)
   if (obj) {
     m_Objects.append(obj);
 
-    QcepDataGroupPtr me = qSharedPointerCast<QcepDataGroup>(sharedFromThis());
+    QcepDataGroupPtr me = qSharedPointerDynamicCast<QcepDataGroup>(sharedFromThis());
 
     if (me) {
       obj -> setParentItem(me);
@@ -320,7 +320,7 @@ void QcepDataGroup::fromGroupScriptValue(const QScriptValue &obj, QcepDataGroupP
       QcepDataObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
-        QcepDataGroupPtr cs = qSharedPointerCast<QcepDataGroup>(p);
+        QcepDataGroupPtr cs = qSharedPointerDynamicCast<QcepDataGroup>(p);
 
         if (cs) {
           data = cs;

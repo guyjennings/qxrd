@@ -101,7 +101,7 @@ QcepDataGroupPtr QcepDataObject::rootItem()
   } else {
     QcepDataObjectPtr obj = sharedFromThis();
 
-    return qSharedPointerCast<QcepDataGroup>(obj);
+    return qSharedPointerDynamicCast<QcepDataGroup>(obj);
   }
 }
 

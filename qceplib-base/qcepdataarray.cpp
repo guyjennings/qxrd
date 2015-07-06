@@ -65,7 +65,7 @@ void QcepDataArray::fromArrayScriptValue(const QScriptValue &obj, QcepDataArrayP
       QcepDataObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
-        QcepDataArrayPtr cs = qSharedPointerCast<QcepDataArray>(p);
+        QcepDataArrayPtr cs = qSharedPointerDynamicCast<QcepDataArray>(p);
 
         if (cs) {
           data = cs;

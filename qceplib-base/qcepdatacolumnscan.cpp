@@ -44,7 +44,7 @@ void QcepDataColumnScan::fromColumnScanScriptValue(const QScriptValue &obj, Qcep
       QcepDataObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
-        QcepDataColumnScanPtr cs = qSharedPointerCast<QcepDataColumnScan>(p);
+        QcepDataColumnScanPtr cs = qSharedPointerDynamicCast<QcepDataColumnScan>(p);
 
         if (cs) {
           data = cs;
@@ -54,3 +54,19 @@ void QcepDataColumnScan::fromColumnScanScriptValue(const QScriptValue &obj, Qcep
   }
 }
 
+QcepDataColumnPtr QcepDataColumnScan::column(int n)
+{
+  QcepDataObjectPtr obj = item(n);
+
+  return qSharedPointerDynamicCast<QcepDataColumn>(obj);
+}
+
+int QcepDataColumnScan::scanColumnCount() const
+{
+  return count();
+}
+
+int QcepDataColumnScan::scanRowCount() const
+{
+  return get_NumPoints();
+}

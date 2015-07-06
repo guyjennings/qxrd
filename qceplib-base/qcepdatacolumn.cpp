@@ -38,7 +38,7 @@ void QcepDataColumn::fromColumnScriptValue(const QScriptValue &obj, QcepDataColu
       QcepDataObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
-        QcepDataColumnPtr cs = qSharedPointerCast<QcepDataColumn>(p);
+        QcepDataColumnPtr cs = qSharedPointerDynamicCast<QcepDataColumn>(p);
 
         if (cs) {
           data = cs;
@@ -46,4 +46,9 @@ void QcepDataColumn::fromColumnScriptValue(const QScriptValue &obj, QcepDataColu
       }
     }
   }
+}
+
+int QcepDataColumn::count() const
+{
+  return QVector<double>::count();
 }

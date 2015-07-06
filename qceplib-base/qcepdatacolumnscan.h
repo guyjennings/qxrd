@@ -11,6 +11,9 @@ class QcepDataColumnScan : public QcepDataGroup
 
 public slots:
   virtual QString description() const;
+  QcepDataColumnPtr column(int n);
+  int scanRowCount() const;
+  int scanColumnCount() const;
 
 public:
   QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name);
@@ -21,6 +24,7 @@ public:
                                                  QString name,
                                                  QStringList cols,
                                                  int npts);
+
 
   static QScriptValue toColumnScanScriptValue(QScriptEngine *engine, const QcepDataColumnScanPtr &data);
   static void fromColumnScanScriptValue(const QScriptValue &obj, QcepDataColumnScanPtr &data);

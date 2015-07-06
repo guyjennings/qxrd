@@ -24,6 +24,7 @@ public:
 
 public slots:
   virtual QString description() const;
+  virtual int count() const;
 
 public:
   static QcepDataColumnPtr newDataColumn(QcepSettingsSaverWPtr saver,
