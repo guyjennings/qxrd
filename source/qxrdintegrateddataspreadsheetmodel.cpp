@@ -50,4 +50,6 @@ QVariant QxrdIntegratedDataSpreadsheetModel::headerData(int section, Qt::Orienta
       res = section;
     }
   }
+
+  return res;
 }
