@@ -166,7 +166,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     QxrdDatasetPtr ds = expt->dataset();
 
     if (ds) {
-      m_DatasetBrowserDialog = new QcepDatasetBrowserDialog(ds, this);
+      m_DatasetBrowserDialog = new QcepDatasetBrowserDialog(expt, ds, this);
     }
   }
 

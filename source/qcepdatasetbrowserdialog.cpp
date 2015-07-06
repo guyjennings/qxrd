@@ -4,9 +4,15 @@
 #include "qcepdatasetmodel.h"
 #include <QMenu>
 #include <stdio.h>
+#include "qxrdexperiment.h"
+#include "qxrddataobjectgraphwindow.h"
+#include "qxrddataobjectpropertieswindow.h"
+#include "qxrddataobjectspreadsheetwindow.h"
+#include "qxrdwindow.h"
 
-QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QcepDatasetPtr ds, QWidget *parent) :
+QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QxrdExperimentWPtr expt, QcepDatasetPtr ds, QWidget *parent) :
   QDockWidget(parent),
+  m_Experiment(expt),
   m_Dataset(ds)
 {
   setupUi(this);
@@ -63,26 +69,41 @@ void QcepDatasetBrowserDialog::onDoubleClicked(QModelIndex idx)
 void QcepDatasetBrowserDialog::openGraph(const QModelIndex &idx)
 {
   QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
+  QxrdExperimentPtr expt(m_Experiment);
 
-  if (obj) {
-    printf("openGraph(%s)\n", qPrintable(obj->pathName()));
+  if (obj && expt) {
+    QxrdDataObjectGraphWindow *gw = new QxrdDataObjectGraphWindow(expt,
+                                                                  obj->sharedFromThis(),
+                                                                  expt->window().data());
+
+    gw->show();
   }
 }
 
 void QcepDatasetBrowserDialog::openSpreadsheet(const QModelIndex &idx)
 {
   QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
+  QxrdExperimentPtr expt(m_Experiment);
 
-  if (obj) {
-    printf("openSpreadsheet(%s)\n", qPrintable(obj->pathName()));
+  if (obj && expt) {
+    QxrdDataObjectSpreadsheetWindow *sw = new QxrdDataObjectSpreadsheetWindow(expt,
+                                                                              obj->sharedFromThis(),
+                                                                              expt->window().data());
+
+    sw->show();
   }
 }
 
 void QcepDatasetBrowserDialog::openProperties(const QModelIndex &idx)
 {
   QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
+  QxrdExperimentPtr expt(m_Experiment);
 
-  if (obj) {
-    printf("openProperties(%s)\n", qPrintable(obj->pathName()));
+  if (obj && expt) {
+    QxrdDataObjectPropertiesWindow *pw = new QxrdDataObjectPropertiesWindow(expt,
+                                                                            obj->sharedFromThis(),
+                                                                            expt->window().data());
+
+    pw->show();
   }
 }

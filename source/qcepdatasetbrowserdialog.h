@@ -6,13 +6,14 @@
 #include "qcepdataset.h"
 #include "qcepdataset-ptr.h"
 #include "qcepdatasetmodel-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 class QcepDatasetBrowserDialog : public QDockWidget, public Ui::QcepDatasetBrowserDialog
 {
   Q_OBJECT
 
 public:
-  explicit QcepDatasetBrowserDialog(QcepDatasetPtr ds, QWidget *parent = 0);
+  explicit QcepDatasetBrowserDialog(QxrdExperimentWPtr expt, QcepDatasetPtr ds, QWidget *parent = 0);
   virtual ~QcepDatasetBrowserDialog();
 
 private slots:
@@ -24,6 +25,7 @@ private slots:
   void openProperties(const QModelIndex &idx);
 
 private:
+  QxrdExperimentWPtr  m_Experiment;
   QcepDatasetPtr      m_Dataset;
   QcepDatasetModelPtr m_DatasetModel;
 };

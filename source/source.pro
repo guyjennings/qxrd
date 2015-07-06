@@ -151,7 +151,10 @@ HEADERS += \
     qxrdcalibrantlibrarymodel-ptr.h \
     qcepdatasetbrowserdialog.h \
     qxrddataset.h \
-    qxrddataset-ptr.h
+    qxrddataset-ptr.h \
+    qxrddataobjectgraphwindow.h \
+    qxrddataobjectspreadsheetwindow.h \
+    qxrddataobjectpropertieswindow.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -193,7 +196,10 @@ SOURCES += \
     qxrdcalibrantlibrarymodel.cpp \
     qxrdcalibrantdspacingsmodel.cpp \
     qcepdatasetbrowserdialog.cpp \
-    qxrddataset.cpp
+    qxrddataset.cpp \
+    qxrddataobjectgraphwindow.cpp \
+    qxrddataobjectspreadsheetwindow.cpp \
+    qxrddataobjectpropertieswindow.cpp
 
 OTHER_FILES += testImage.js
 
@@ -509,7 +515,10 @@ FORMS = qxrdwindow.ui \
     qxrddistortioncorrectiondialog.ui \
     qxrdscriptdialog.ui \
     qxrdcalibrantdialog.ui \
-    qcepdatasetbrowserdialog.ui
+    qcepdatasetbrowserdialog.ui \
+    qxrddataobjectgraphwindow.ui \
+    qxrddataobjectspreadsheetwindow.ui \
+    qxrddataobjectpropertieswindow.ui
 
 macx:
 else:unix:LIBS += -ltiff
