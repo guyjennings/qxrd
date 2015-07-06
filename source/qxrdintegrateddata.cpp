@@ -149,7 +149,7 @@ void QxrdIntegratedData::fromIntegratedDataScriptValue(const QScriptValue &obj, 
       QcepDataObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
-        QxrdIntegratedDataPtr cs = qSharedPointerCast<QxrdIntegratedData>(p);
+        QxrdIntegratedDataPtr cs = qSharedPointerDynamicCast<QxrdIntegratedData>(p);
 
         if (cs) {
           data = cs;

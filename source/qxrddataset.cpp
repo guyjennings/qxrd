@@ -12,7 +12,7 @@ QxrdDoubleImageDataPtr QxrdDataset::image(QString path)
 {
   QcepDataObjectPtr obj = item(path);
 
-  return qSharedPointerCast<QxrdDoubleImageData>(obj);
+  return qSharedPointerDynamicCast<QxrdDoubleImageData>(obj);
 }
 
 QxrdDoubleImageDataPtr QxrdDataset::newImage(QString path, int width, int height)
@@ -38,7 +38,7 @@ QxrdIntegratedDataPtr QxrdDataset::integratedData(QString path)
 {
   QcepDataObjectPtr obj = item(path);
 
-  return qSharedPointerCast<QxrdIntegratedData>(obj);
+  return qSharedPointerDynamicCast<QxrdIntegratedData>(obj);
 }
 
 QxrdIntegratedDataPtr QxrdDataset::newIntegratedData(QString path, int sz)

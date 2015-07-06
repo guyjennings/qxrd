@@ -540,7 +540,7 @@ void QxrdImageData<T>::fromScriptValue(const QScriptValue &obj, QSharedPointer<Q
       QcepDataObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
-        QSharedPointer<QxrdImageData<T> > cs = qSharedPointerCast< QxrdImageData<T> >(p);
+        QSharedPointer<QxrdImageData<T> > cs = qSharedPointerDynamicCast< QxrdImageData<T> >(p);
 
         if (cs) {
           data = cs;

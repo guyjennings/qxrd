@@ -74,7 +74,7 @@ void QcepDatasetBrowserDialog::openGraph(const QModelIndex &idx)
   if (obj && expt) {
     QxrdDataObjectGraphWindow *gw = new QxrdDataObjectGraphWindow(expt,
                                                                   obj->sharedFromThis(),
-                                                                  expt->window().data());
+                                                                  NULL /*expt->window().data()*/);
 
     gw->show();
   }
@@ -88,7 +88,7 @@ void QcepDatasetBrowserDialog::openSpreadsheet(const QModelIndex &idx)
   if (obj && expt) {
     QxrdDataObjectSpreadsheetWindow *sw = new QxrdDataObjectSpreadsheetWindow(expt,
                                                                               obj->sharedFromThis(),
-                                                                              expt->window().data());
+                                                                              NULL /*expt->window().data()*/);
 
     sw->show();
   }
@@ -102,7 +102,7 @@ void QcepDatasetBrowserDialog::openProperties(const QModelIndex &idx)
   if (obj && expt) {
     QxrdDataObjectPropertiesWindow *pw = new QxrdDataObjectPropertiesWindow(expt,
                                                                             obj->sharedFromThis(),
-                                                                            expt->window().data());
+                                                                            NULL /*expt->window().data()*/);
 
     pw->show();
   }

@@ -154,7 +154,12 @@ HEADERS += \
     qxrddataset-ptr.h \
     qxrddataobjectgraphwindow.h \
     qxrddataobjectspreadsheetwindow.h \
-    qxrddataobjectpropertieswindow.h
+    qxrddataobjectpropertieswindow.h \
+    qxrdimagedataspreadsheetmodel.h \
+    qxrdintegrateddataspreadsheetmodel.h \
+    qcepdataarrayspreadsheetmodel.h \
+    qcepdatacolumnspreadsheetmodel.h \
+    qcepdatacolumnscanspreadsheetmodel.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -199,7 +204,12 @@ SOURCES += \
     qxrddataset.cpp \
     qxrddataobjectgraphwindow.cpp \
     qxrddataobjectspreadsheetwindow.cpp \
-    qxrddataobjectpropertieswindow.cpp
+    qxrddataobjectpropertieswindow.cpp \
+    qxrdimagedataspreadsheetmodel.cpp \
+    qxrdintegrateddataspreadsheetmodel.cpp \
+    qcepdataarrayspreadsheetmodel.cpp \
+    qcepdatacolumnspreadsheetmodel.cpp \
+    qcepdatacolumnscanspreadsheetmodel.cpp
 
 OTHER_FILES += testImage.js
 

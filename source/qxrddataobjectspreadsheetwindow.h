@@ -22,8 +22,9 @@ signals:
 public slots:
 
 private:
-  QxrdExperimentWPtr  m_Experiment;
-  QcepDataObjectPtr   m_Object;
+  QxrdExperimentWPtr                  m_Experiment;
+  QcepDataObjectPtr                   m_Object;
+  QSharedPointer<QAbstractTableModel> m_Model;
 };
 
 #endif // QXRDDATAOBJECTSPREADSHEETWINDOW_H
