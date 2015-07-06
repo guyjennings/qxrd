@@ -15,6 +15,13 @@ public:
   explicit QcepDatasetBrowserDialog(QcepDatasetPtr ds, QWidget *parent = 0);
   virtual ~QcepDatasetBrowserDialog();
 
+private slots:
+  void onCustomContextMenuRequested(QPoint pt);
+  void onDoubleClicked(QModelIndex idx);
+
+  void openGraph(const QModelIndex &idx);
+  void openSpreadsheet(const QModelIndex &idx);
+
 private:
   QcepDatasetPtr      m_Dataset;
   QcepDatasetModelPtr m_DatasetModel;
