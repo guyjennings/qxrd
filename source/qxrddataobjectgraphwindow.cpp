@@ -79,14 +79,14 @@ void QxrdDataObjectGraphWindow::setGraphMode(int mode)
 
         m_Controller->activate();
 
-        m_PlottingMode = mode;
+        m_PlottingMode = ImagePlot;
       } else if (mode == HistogramPlot) {
         m_Controller = QSharedPointer<QxrdImageHistogramGraphController>(
               new QxrdImageHistogramGraphController(this, mode, m_Object));
 
         m_Controller->activate();
 
-        m_PlottingMode = mode;
+        m_PlottingMode = HistogramPlot;
       } else if (mode == HorizontalSlice || mode == VerticalSlice) {
         m_Controller = QSharedPointer<QxrdImageSliceGraphController>(
               new QxrdImageSliceGraphController(this, mode, m_Object));
@@ -104,7 +104,7 @@ void QxrdDataObjectGraphWindow::setGraphMode(int mode)
 
         m_Controller->activate();
 
-        m_PlottingMode = mode;
+        m_PlottingMode = ScatterPlot;
       }
     }
 
@@ -155,6 +155,12 @@ void QxrdDataObjectGraphWindow::changeGraphMode(int idx)
     m_PlotModeSelector->clear();
 
     setGraphMode(newMode);
+  } else {
+    int oldIdx = m_PlotModeSelector->findData(m_PlottingMode);
+
+    if (oldIdx >= 0) {
+      m_PlotModeSelector->setCurrentIndex(oldIdx);
+    }
   }
 
   m_PlotModeSelector->blockSignals(b);

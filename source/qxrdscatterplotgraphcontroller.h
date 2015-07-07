@@ -9,6 +9,9 @@ class QxrdScatterPlotGraphController : public QxrdDataObjectGraphController
 
 public:
   QxrdScatterPlotGraphController(QxrdDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object);
+
+  virtual ~QxrdScatterPlotGraphController();
+  virtual void activate();
 };
 
 #endif // QXRDSCATTERPLOTGRAPHCONTROLLER_H
