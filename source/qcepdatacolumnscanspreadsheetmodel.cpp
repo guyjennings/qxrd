@@ -11,12 +11,12 @@ QcepDataColumnScanSpreadsheetModel::QcepDataColumnScanSpreadsheetModel
 
 int QcepDataColumnScanSpreadsheetModel::rowCount(const QModelIndex &parent) const
 {
-  return m_Scan->scanRowCount();
+  return m_Scan->rowCount();
 }
 
 int QcepDataColumnScanSpreadsheetModel::columnCount(const QModelIndex &parent) const
 {
-  return m_Scan->scanColumnCount();
+  return m_Scan->columnCount();
 }
 
 QVariant QcepDataColumnScanSpreadsheetModel::data(const QModelIndex &index, int role) const

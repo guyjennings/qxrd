@@ -11,7 +11,7 @@ QcepDataColumnSpreadsheetModel::QcepDataColumnSpreadsheetModel
 int QcepDataColumnSpreadsheetModel::rowCount(const QModelIndex &parent) const
 {
   if (m_Column) {
-    return m_Column->count();
+    return m_Column->rowCount();
   } else {
     return 0;
   }
