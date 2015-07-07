@@ -22,6 +22,10 @@
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepdatacolumnscanspreadsheetmodel.h"
 
+#include "qcepdatagroup.h"
+#include "qcepdatagroup-ptr.h"
+#include "qcepdatagroupspreadsheetmodel.h"
+
 QxrdDataObjectSpreadsheetWindow::QxrdDataObjectSpreadsheetWindow(
     QxrdExperimentWPtr expt, QcepDataObjectPtr obj, QWidget *parent) :
   QMainWindow(parent),
@@ -76,6 +80,13 @@ QxrdDataObjectSpreadsheetWindow::QxrdDataObjectSpreadsheetWindow(
           if (scan) {
             m_Model = QSharedPointer<QAbstractTableModel>(
                   new QcepDataColumnScanSpreadsheetModel(scan));
+          } else {
+            QcepDataGroupPtr group = qSharedPointerDynamicCast<QcepDataGroup>(m_Object);
+
+            if (group) {
+              m_Model = QSharedPointer<QAbstractTableModel>(
+                    new QcepDataGroupSpreadsheetModel(group));
+            }
           }
         }
       }

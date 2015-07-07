@@ -159,7 +159,8 @@ HEADERS += \
     qxrdintegrateddataspreadsheetmodel.h \
     qcepdataarrayspreadsheetmodel.h \
     qcepdatacolumnspreadsheetmodel.h \
-    qcepdatacolumnscanspreadsheetmodel.h
+    qcepdatacolumnscanspreadsheetmodel.h \
+    qcepdatagroupspreadsheetmodel.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -209,7 +210,8 @@ SOURCES += \
     qxrdintegrateddataspreadsheetmodel.cpp \
     qcepdataarrayspreadsheetmodel.cpp \
     qcepdatacolumnspreadsheetmodel.cpp \
-    qcepdatacolumnscanspreadsheetmodel.cpp
+    qcepdatacolumnscanspreadsheetmodel.cpp \
+    qcepdatagroupspreadsheetmodel.cpp
 
 OTHER_FILES += testImage.js
 
