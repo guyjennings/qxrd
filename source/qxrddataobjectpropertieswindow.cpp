@@ -1,6 +1,7 @@
 #include "qxrddataobjectpropertieswindow.h"
 #include "qxrdexperiment.h"
 #include "qcepdataobject.h"
+#include "qcepdataobjectpropertiesmodel.h"
 
 QxrdDataObjectPropertiesWindow::QxrdDataObjectPropertiesWindow
   (QxrdExperimentWPtr expt, QcepDataObjectPtr obj, QWidget *parent) :
@@ -21,6 +22,13 @@ QxrdDataObjectPropertiesWindow::QxrdDataObjectPropertiesWindow
                    .arg(m_Object->pathName()));
   } else {
     setWindowTitle("Unknown Properties");
+  }
+
+  m_Model = QSharedPointer<QAbstractTableModel>(
+        new QcepDataObjectPropertiesModel(m_Object));
+
+  if (m_Model) {
+    m_TableView->setModel(m_Model.data());
   }
 }
 

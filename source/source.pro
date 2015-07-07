@@ -160,7 +160,8 @@ HEADERS += \
     qcepdataarrayspreadsheetmodel.h \
     qcepdatacolumnspreadsheetmodel.h \
     qcepdatacolumnscanspreadsheetmodel.h \
-    qcepdatagroupspreadsheetmodel.h
+    qcepdatagroupspreadsheetmodel.h \
+    qcepdataobjectpropertiesmodel.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -211,7 +212,8 @@ SOURCES += \
     qcepdataarrayspreadsheetmodel.cpp \
     qcepdatacolumnspreadsheetmodel.cpp \
     qcepdatacolumnscanspreadsheetmodel.cpp \
-    qcepdatagroupspreadsheetmodel.cpp
+    qcepdatagroupspreadsheetmodel.cpp \
+    qcepdataobjectpropertiesmodel.cpp
 
 OTHER_FILES += testImage.js
 
