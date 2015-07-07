@@ -2,9 +2,9 @@
 #define QCEPDATAGROUPSPREADSHEETMODEL_H
 
 #include "qcepdatagroup-ptr.h"
-#include <QAbstractTableModel>
+#include "qcepspreadsheetmodel.h"
 
-class QcepDataGroupSpreadsheetModel : public QAbstractTableModel
+class QcepDataGroupSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
   QcepDataGroupSpreadsheetModel(QcepDataGroupPtr group);

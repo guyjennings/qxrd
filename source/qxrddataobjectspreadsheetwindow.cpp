@@ -51,40 +51,40 @@ QxrdDataObjectSpreadsheetWindow::QxrdDataObjectSpreadsheetWindow(
   QSharedPointer<QcepImageDataBase> data = qSharedPointerDynamicCast<QcepImageDataBase>(m_Object);
 
   if (data) {
-    m_Model = QSharedPointer<QAbstractTableModel>(
+    m_Model = QSharedPointer<QcepSpreadsheetModel>(
           new QxrdImageDataSpreadsheetModel(data));
   } else {
 
     QxrdIntegratedDataPtr integ = qSharedPointerDynamicCast<QxrdIntegratedData>(m_Object);
 
     if (integ) {
-      m_Model = QSharedPointer<QAbstractTableModel>(
+      m_Model = QSharedPointer<QcepSpreadsheetModel>(
             new QxrdIntegratedDataSpreadsheetModel(integ));
     } else {
 
       QcepDataArrayPtr array = qSharedPointerDynamicCast<QcepDataArray>(m_Object);
 
       if (array) {
-        m_Model = QSharedPointer<QAbstractTableModel>(
+        m_Model = QSharedPointer<QcepSpreadsheetModel>(
               new QcepDataArraySpreadsheetModel(array));
       } else {
 
         QcepDataColumnPtr col = qSharedPointerDynamicCast<QcepDataColumn>(m_Object);
 
         if (col) {
-          m_Model = QSharedPointer<QAbstractTableModel>(
+          m_Model = QSharedPointer<QcepSpreadsheetModel>(
                 new QcepDataColumnSpreadsheetModel(col));
         } else {
           QcepDataColumnScanPtr scan = qSharedPointerDynamicCast<QcepDataColumnScan>(m_Object);
 
           if (scan) {
-            m_Model = QSharedPointer<QAbstractTableModel>(
+            m_Model = QSharedPointer<QcepSpreadsheetModel>(
                   new QcepDataColumnScanSpreadsheetModel(scan));
           } else {
             QcepDataGroupPtr group = qSharedPointerDynamicCast<QcepDataGroup>(m_Object);
 
             if (group) {
-              m_Model = QSharedPointer<QAbstractTableModel>(
+              m_Model = QSharedPointer<QcepSpreadsheetModel>(
                     new QcepDataGroupSpreadsheetModel(group));
             }
           }
@@ -93,8 +93,14 @@ QxrdDataObjectSpreadsheetWindow::QxrdDataObjectSpreadsheetWindow(
     }
   }
 
+  m_TableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
   if (m_Model) {
     m_TableView->setModel(m_Model.data());
+  }
+
+  if (m_Object && m_Model) {
+    connect(m_Object.data(), SIGNAL(dataObjectChanged()), m_Model.data(), SLOT(onDataObjectChanged()));
   }
 }
 

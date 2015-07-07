@@ -2,9 +2,9 @@
 #define QXRDINTEGRATEDDATASPREADSHEETMODEL_H
 
 #include "qxrdintegrateddata-ptr.h"
-#include <QAbstractTableModel>
+#include "qcepspreadsheetmodel.h"
 
-class QxrdIntegratedDataSpreadsheetModel : public QAbstractTableModel
+class QxrdIntegratedDataSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
   QxrdIntegratedDataSpreadsheetModel(QxrdIntegratedDataPtr integ);

@@ -2,9 +2,9 @@
 #define QCEPDATAARRAYSPREADSHEETMODEL_H
 
 #include "qcepdataarray-ptr.h"
-#include <QAbstractTableModel>
+#include "qcepspreadsheetmodel.h"
 
-class QcepDataArraySpreadsheetModel : public QAbstractTableModel
+class QcepDataArraySpreadsheetModel : public QcepSpreadsheetModel
 {
   Q_OBJECT
 

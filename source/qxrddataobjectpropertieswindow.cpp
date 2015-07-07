@@ -24,11 +24,19 @@ QxrdDataObjectPropertiesWindow::QxrdDataObjectPropertiesWindow
     setWindowTitle("Unknown Properties");
   }
 
-  m_Model = QSharedPointer<QAbstractTableModel>(
+  m_Model = QSharedPointer<QcepPropertiesModel>(
         new QcepDataObjectPropertiesModel(m_Object));
+
+  m_TableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  m_TableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
   if (m_Model) {
     m_TableView->setModel(m_Model.data());
+  }
+
+  if (m_Object && m_Model) {
+    connect(m_Object.data(), SIGNAL(dataObjectChanged()),
+            m_Model.data(), SLOT(onDataObjectChanged()));
   }
 }
 

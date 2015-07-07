@@ -16,7 +16,14 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QTableView" name="m_TableView"/>
+     <widget class="QTableView" name="m_TableView">
+      <property name="textElideMode">
+       <enum>Qt::ElideNone</enum>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::DotLine</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

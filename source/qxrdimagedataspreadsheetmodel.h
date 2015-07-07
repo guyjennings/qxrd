@@ -3,9 +3,9 @@
 
 #include "qcepimagedata.h"
 
-#include <QAbstractTableModel>
+#include "qcepspreadsheetmodel.h"
 
-class QxrdImageDataSpreadsheetModel : public QAbstractTableModel
+class QxrdImageDataSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
   QxrdImageDataSpreadsheetModel(QSharedPointer< QcepImageDataBase > img);

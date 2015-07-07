@@ -2,9 +2,9 @@
 #define QCEPDATAOBJECTPROPERTIESMODEL_H
 
 #include "qcepdataobject-ptr.h"
-#include <QAbstractTableModel>
+#include "qceppropertiesmodel.h"
 
-class QcepDataObjectPropertiesModel : public QAbstractTableModel
+class QcepDataObjectPropertiesModel : public QcepPropertiesModel
 {
 public:
   QcepDataObjectPropertiesModel(QcepDataObjectPtr obj);

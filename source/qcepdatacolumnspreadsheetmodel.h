@@ -2,9 +2,9 @@
 #define QCEPDATACOLUMNSPREADSHEETMODEL_H
 
 #include "qcepdatacolumn-ptr.h"
-#include <QAbstractTableModel>
+#include "qcepspreadsheetmodel.h"
 
-class QcepDataColumnSpreadsheetModel : public QAbstractTableModel
+class QcepDataColumnSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
   QcepDataColumnSpreadsheetModel(QcepDataColumnPtr col);

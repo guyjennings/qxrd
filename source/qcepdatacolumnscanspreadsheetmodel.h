@@ -2,9 +2,9 @@
 #define QCEPDATACOLUMNSCANSPREADSHEETMODEL_H
 
 #include "qcepdatacolumnscan-ptr.h"
-#include <QAbstractTableModel>
+#include "qcepspreadsheetmodel.h"
 
-class QcepDataColumnScanSpreadsheetModel : public QAbstractTableModel
+class QcepDataColumnScanSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
   QcepDataColumnScanSpreadsheetModel(QcepDataColumnScanPtr scan);

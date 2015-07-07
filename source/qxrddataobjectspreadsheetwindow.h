@@ -7,6 +7,7 @@
 #include "ui_qxrddataobjectspreadsheetwindow.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepdataobject-ptr.h"
+#include "qcepspreadsheetmodel.h"
 
 class QxrdDataObjectSpreadsheetWindow : public QMainWindow, public Ui::QxrdDataObjectSpreadsheetWindow
 {
@@ -22,9 +23,9 @@ signals:
 public slots:
 
 private:
-  QxrdExperimentWPtr                  m_Experiment;
-  QcepDataObjectPtr                   m_Object;
-  QSharedPointer<QAbstractTableModel> m_Model;
+  QxrdExperimentWPtr                   m_Experiment;
+  QcepDataObjectPtr                    m_Object;
+  QSharedPointer<QcepSpreadsheetModel> m_Model;
 };
 
 #endif // QXRDDATAOBJECTSPREADSHEETWINDOW_H

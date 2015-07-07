@@ -7,6 +7,7 @@
 #include "ui_qxrddataobjectpropertieswindow.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepdataobject-ptr.h"
+#include "qceppropertiesmodel.h"
 
 class QxrdDataObjectPropertiesWindow : public QMainWindow, public Ui::QxrdDataObjectPropertiesWindow
 {
@@ -24,7 +25,7 @@ public slots:
 private:
   QxrdExperimentWPtr                  m_Experiment;
   QcepDataObjectPtr                   m_Object;
-  QSharedPointer<QAbstractTableModel> m_Model;
+  QSharedPointer<QcepPropertiesModel> m_Model;
 };
 
 #endif // QXRDDATAOBJECTPROPERTIESWINDOW_H
