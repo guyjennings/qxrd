@@ -27,6 +27,7 @@ QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QxrdExperimentWPtr expt, Qcep
     connect(m_DatasetBrowserView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClicked(QModelIndex)));
 
     m_DatasetBrowserView -> setContextMenuPolicy(Qt::CustomContextMenu);
+    m_DatasetBrowserView -> header() -> setSectionResizeMode(QHeaderView::Stretch);
   }
 }
 
