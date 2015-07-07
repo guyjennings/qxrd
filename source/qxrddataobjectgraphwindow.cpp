@@ -2,11 +2,37 @@
 #include "qxrdexperiment.h"
 #include "qcepdataobject.h"
 
+#include "qxrdimagedata.h"
+#include "qxrdimagedata-ptr.h"
+
+#include "qxrdintegrateddata-ptr.h"
+#include "qxrdintegrateddata.h"
+
+#include "qcepdataarray.h"
+#include "qcepdataarray-ptr.h"
+
+#include "qcepdatacolumn.h"
+#include "qcepdatacolumn-ptr.h"
+
+#include "qcepdatacolumnscan.h"
+#include "qcepdatacolumnscan-ptr.h"
+
+#include "qcepdatagroup.h"
+#include "qcepdatagroup-ptr.h"
+
+#include "qxrdimagedatagraphcontroller.h"
+#include "qxrdscatterplotgraphcontroller.h"
+#include "qxrdimagehistogramgraphcontroller.h"
+#include "qxrdimageslicegraphcontroller.h"
+
+#include <QMessageBox>
+
 QxrdDataObjectGraphWindow::QxrdDataObjectGraphWindow(
     QxrdExperimentWPtr expt, QcepDataObjectPtr obj, QWidget *parent) :
   QMainWindow(parent),
   m_Experiment(expt),
-  m_Object(obj)
+  m_Object(obj),
+  m_PlottingMode(NoPlot)
 {
   setupUi(this);
 
@@ -22,5 +48,114 @@ QxrdDataObjectGraphWindow::QxrdDataObjectGraphWindow(
   } else {
     setWindowTitle("Unknown Graph");
   }
+
+  m_PlotModeSelector->clear();
+
+  setGraphMode(DefaultPlot);
+
+  connect(m_PlotModeSelector, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(changeGraphMode(int)));
 }
 
+void QxrdDataObjectGraphWindow::setGraphMode(int mode)
+{
+  if (mode != m_PlottingMode) {
+    QSharedPointer<QcepImageDataBase> image = qSharedPointerDynamicCast<QcepImageDataBase>(m_Object);
+    QxrdIntegratedDataPtr             integ = qSharedPointerDynamicCast<QxrdIntegratedData>(m_Object);
+    QcepDataArrayPtr                  array = qSharedPointerDynamicCast<QcepDataArray>(m_Object);
+    QcepDataColumnPtr                 col   = qSharedPointerDynamicCast<QcepDataColumn>(m_Object);
+    QcepDataColumnScanPtr             scan  = qSharedPointerDynamicCast<QcepDataColumnScan>(m_Object);
+    QcepDataGroupPtr                  group = qSharedPointerDynamicCast<QcepDataGroup>(m_Object);
+
+    if (image || array) {
+      allowGraphMode(ImagePlot);
+      allowGraphMode(HistogramPlot);
+      allowGraphMode(HorizontalSlice);
+      allowGraphMode(VerticalSlice);
+
+      if (mode == DefaultPlot || mode == ImagePlot) {
+        m_Controller = QSharedPointer<QxrdImageDataGraphController>(
+              new QxrdImageDataGraphController(this, mode, m_Object));
+
+        m_Controller->activate();
+
+        m_PlottingMode = mode;
+      } else if (mode == HistogramPlot) {
+        m_Controller = QSharedPointer<QxrdImageHistogramGraphController>(
+              new QxrdImageHistogramGraphController(this, mode, m_Object));
+
+        m_Controller->activate();
+
+        m_PlottingMode = mode;
+      } else if (mode == HorizontalSlice || mode == VerticalSlice) {
+        m_Controller = QSharedPointer<QxrdImageSliceGraphController>(
+              new QxrdImageSliceGraphController(this, mode, m_Object));
+
+        m_Controller->activate();
+
+        m_PlottingMode = mode;
+      }
+    } else if (integ || col || scan || group) {
+      allowGraphMode(ScatterPlot);
+
+      if (mode == DefaultPlot || mode == ScatterPlot) {
+        m_Controller = QSharedPointer<QxrdScatterPlotGraphController> (
+              new QxrdScatterPlotGraphController(this, mode, m_Object));
+
+        m_Controller->activate();
+
+        m_PlottingMode = mode;
+      }
+    }
+
+    int idx = m_PlotModeSelector->findData(mode);
+
+    if (idx >= 0) {
+      m_PlotModeSelector->setCurrentIndex(idx);
+    }
+  }
+}
+
+void QxrdDataObjectGraphWindow::allowGraphMode(int mode)
+{
+  switch (mode) {
+  case ImagePlot:
+    m_PlotModeSelector->addItem("2-D Image Plot", ImagePlot);
+    break;
+
+  case ScatterPlot:
+    m_PlotModeSelector->addItem("Scatter Plot", ScatterPlot);
+    break;
+
+  case HistogramPlot:
+    m_PlotModeSelector->addItem("Histogram of Image", HistogramPlot);
+    break;
+
+  case HorizontalSlice:
+    m_PlotModeSelector->addItem("Horizontal Slices", HorizontalSlice);
+    break;
+
+  case VerticalSlice:
+    m_PlotModeSelector->addItem("Vertical Slices", VerticalSlice);
+    break;
+  }
+}
+void QxrdDataObjectGraphWindow::changeGraphMode(int idx)
+{
+  QString newName = m_PlotModeSelector->itemText(idx);
+  int     newMode = m_PlotModeSelector->itemData(idx).toInt();
+
+  bool b = m_PlotModeSelector->blockSignals(true);
+
+  if (QMessageBox::question(this,
+                            tr("Change Plotting Mode?"),
+                            tr("Do you want to change the plotting mode to %1").arg(newName),
+                            QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+
+    m_PlotModeSelector->clear();
+
+    setGraphMode(newMode);
+  }
+
+  m_PlotModeSelector->blockSignals(b);
+}

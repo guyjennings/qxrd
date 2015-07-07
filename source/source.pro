@@ -161,7 +161,15 @@ HEADERS += \
     qcepdatacolumnspreadsheetmodel.h \
     qcepdatacolumnscanspreadsheetmodel.h \
     qcepdatagroupspreadsheetmodel.h \
-    qcepdataobjectpropertiesmodel.h
+    qcepdataobjectpropertiesmodel.h \
+    qcepspreadsheetmodel.h \
+    qceppropertiesmodel.h \
+    qxrddataobjectgraphcontroller.h \
+    qxrdimagedatagraphcontroller.h \
+    qxrdscatterplotgraphcontroller.h \
+    qxrdimagehistogramgraphcontroller.h \
+    qxrdimageslicegraphcontroller.h \
+    qxrddataobjectgraphcontroller-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -213,7 +221,14 @@ SOURCES += \
     qcepdatacolumnspreadsheetmodel.cpp \
     qcepdatacolumnscanspreadsheetmodel.cpp \
     qcepdatagroupspreadsheetmodel.cpp \
-    qcepdataobjectpropertiesmodel.cpp
+    qcepdataobjectpropertiesmodel.cpp \
+    qcepspreadsheetmodel.cpp \
+    qceppropertiesmodel.cpp \
+    qxrddataobjectgraphcontroller.cpp \
+    qxrdimagedatagraphcontroller.cpp \
+    qxrdscatterplotgraphcontroller.cpp \
+    qxrdimagehistogramgraphcontroller.cpp \
+    qxrdimageslicegraphcontroller.cpp
 
 OTHER_FILES += testImage.js
 

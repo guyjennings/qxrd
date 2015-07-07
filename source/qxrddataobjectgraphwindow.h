@@ -7,6 +7,7 @@
 #include "ui_qxrddataobjectgraphwindow.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepdataobject-ptr.h"
+#include "qxrddataobjectgraphcontroller-ptr.h"
 
 class QxrdDataObjectGraphWindow : public QMainWindow, public Ui::QxrdDataObjectGraphWindow
 {
@@ -21,9 +22,26 @@ signals:
 
 public slots:
 
+private slots:
+  void setGraphMode(int mode);
+  void allowGraphMode(int mode);
+  void changeGraphMode(int idx);
+
 private:
-  QxrdExperimentWPtr  m_Experiment;
-  QcepDataObjectPtr   m_Object;
+  QxrdExperimentWPtr                            m_Experiment;
+  QcepDataObjectPtr                             m_Object;
+  int                                           m_PlottingMode;
+  QSharedPointer<QxrdDataObjectGraphController> m_Controller;
+
+  enum {
+    NoPlot,
+    DefaultPlot,
+    ScatterPlot,
+    ImagePlot,
+    HistogramPlot,
+    HorizontalSlice,
+    VerticalSlice
+  };
 };
 
 #endif // QXRDDATAOBJECTGRAPHWINDOW_H
