@@ -32,11 +32,12 @@ public slots:
   virtual QcepDataGroupPtr parentItem() const;
 
 public:
-  virtual int count() const;
+  virtual int childCount() const;
   virtual QcepDataObjectPtr item(int n);
   virtual QcepDataObjectPtr item(QString nm);
   virtual void setParentItem(QcepDataGroupWPtr parent);
   virtual int indexInParent() const;
+  virtual int rowCount() const;
   virtual int columnCount() const;
   virtual QVariant columnData(int col) const;
 

@@ -19,7 +19,7 @@ QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name) :
 
 QString QcepDataGroup::description() const
 {
-  return tr("%1 Items").arg(count());
+  return tr("%1 Items").arg(childCount());
 }
 
 QcepDataGroupPtr QcepDataGroup::newDataGroup(QcepSettingsSaverWPtr saver, QString name)
@@ -64,7 +64,7 @@ QcepDataObjectPtr QcepDataGroup::item(QString nm)
   return QcepDataObjectPtr();
 }
 
-int QcepDataGroup::count() const
+int QcepDataGroup::childCount() const
 {
   return m_Objects.count();
 }

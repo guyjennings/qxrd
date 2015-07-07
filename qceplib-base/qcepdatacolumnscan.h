@@ -12,8 +12,8 @@ class QcepDataColumnScan : public QcepDataGroup
 public slots:
   virtual QString description() const;
   QcepDataColumnPtr column(int n);
-  int scanRowCount() const;
-  int scanColumnCount() const;
+  int rowCount() const;
+  int columnCount() const;
 
 public:
   QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name);

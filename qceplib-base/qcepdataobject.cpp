@@ -72,7 +72,17 @@ void QcepDataObject::fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr 
   }
 }
 
-int QcepDataObject::count() const
+int QcepDataObject::childCount() const
+{
+  return 0;
+}
+
+int QcepDataObject::rowCount() const
+{
+  return 0;
+}
+
+int QcepDataObject::columnCount() const
 {
   return 0;
 }
@@ -119,7 +129,7 @@ int QcepDataObject::indexInParent() const
           qobject_cast<QcepDataGroup*>(parent.data());
 
     if (parentGroup) {
-      for (int i=0; i<parentGroup->count(); i++) {
+      for (int i=0; i<parentGroup->childCount(); i++) {
         if (parentGroup->item(i).data() == this) {
           return i;
         }
@@ -128,11 +138,6 @@ int QcepDataObject::indexInParent() const
   }
 
   return 0;
-}
-
-int QcepDataObject::columnCount() const
-{
-  return 3;
 }
 
 QVariant QcepDataObject::columnData(int col) const

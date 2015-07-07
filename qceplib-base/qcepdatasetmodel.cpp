@@ -128,11 +128,11 @@ int QcepDatasetModel::rowCount(const QModelIndex &parent) const
     QcepDataObjectPtr parentItem = indexedObject(parent);
 
     if (parentItem) {
-      int nrows = parentItem->count();
+      int nrows = parentItem->childCount();
 
       res = nrows;
     } else {
-      res = m_Dataset->count();
+      res = m_Dataset->childCount();
     }
   }
 
@@ -155,11 +155,9 @@ int QcepDatasetModel::columnCount(const QModelIndex &parent) const
   QcepDataObjectPtr parentItem = indexedObject(parent);
 
   if (parentItem) {
-    int ncols = parentItem->columnCount();
-
-    res = ncols;
+    res = 3;
   } else {
-    res = m_Dataset->columnCount();
+    res = 3;
   }
 
   if (qcepDebug(DEBUG_DATABROWSER)) {

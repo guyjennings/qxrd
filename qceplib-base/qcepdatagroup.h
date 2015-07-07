@@ -30,7 +30,7 @@ public slots:
   QcepDataColumnPtr column(QString path);
   QcepDataColumnScanPtr columnScan(QString path);
 
-  int                count() const;
+  int                childCount() const;
 
   void append(QcepDataObjectPtr obj);
   void append(QString path, QcepDataObjectPtr obj);

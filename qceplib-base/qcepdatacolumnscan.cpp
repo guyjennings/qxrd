@@ -25,7 +25,7 @@ QcepDataColumnScanPtr QcepDataColumnScan::newDataColumnScan(QcepSettingsSaverWPt
 
 QString QcepDataColumnScan::description() const
 {
-  return tr("%1 rows x %2 cols").arg(get_NumPoints()).arg(count());
+  return tr("%1 rows x %2 cols").arg(rowCount()).arg(columnCount());
 }
 
 QScriptValue QcepDataColumnScan::toColumnScanScriptValue(QScriptEngine *engine, const QcepDataColumnScanPtr &data)
@@ -61,12 +61,12 @@ QcepDataColumnPtr QcepDataColumnScan::column(int n)
   return qSharedPointerDynamicCast<QcepDataColumn>(obj);
 }
 
-int QcepDataColumnScan::scanColumnCount() const
+int QcepDataColumnScan::columnCount() const
 {
-  return count();
+  return childCount();
 }
 
-int QcepDataColumnScan::scanRowCount() const
+int QcepDataColumnScan::rowCount() const
 {
   return get_NumPoints();
 }

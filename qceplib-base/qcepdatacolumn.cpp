@@ -48,7 +48,12 @@ void QcepDataColumn::fromColumnScriptValue(const QScriptValue &obj, QcepDataColu
   }
 }
 
-int QcepDataColumn::count() const
+int QcepDataColumn::columnCount() const
+{
+  return 1;
+}
+
+int QcepDataColumn::rowCount() const
 {
   return QVector<double>::count();
 }
