@@ -438,5 +438,7 @@ void QxrdIntegrator::appendIntegration(QxrdDoubleImageDataPtr res, QxrdIntegrate
     for (int i=0; i<npts; i++) {
       res->setValue(i, ht, integ->y(i));
     }
+
+    emit res->dataObjectChanged();
   }
 }
