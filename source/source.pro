@@ -169,7 +169,12 @@ HEADERS += \
     qxrdscatterplotgraphcontroller.h \
     qxrdimagehistogramgraphcontroller.h \
     qxrdimageslicegraphcontroller.h \
-    qxrddataobjectgraphcontroller-ptr.h
+    qxrddataobjectgraphcontroller-ptr.h \
+    qxrdimageslicegraphcontrols.h \
+    qxrdscatterplotgraphcontrols.h \
+    qxrdimagedatagraphcontrols.h \
+    qxrdimagehistogramgraphcontrols.h \
+    qxrdgraphcontrolswidget.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -228,7 +233,12 @@ SOURCES += \
     qxrdimagedatagraphcontroller.cpp \
     qxrdscatterplotgraphcontroller.cpp \
     qxrdimagehistogramgraphcontroller.cpp \
-    qxrdimageslicegraphcontroller.cpp
+    qxrdimageslicegraphcontroller.cpp \
+    qxrdimageslicegraphcontrols.cpp \
+    qxrdscatterplotgraphcontrols.cpp \
+    qxrdimagedatagraphcontrols.cpp \
+    qxrdimagehistogramgraphcontrols.cpp \
+    qxrdgraphcontrolswidget.cpp
 
 OTHER_FILES += testImage.js
 
@@ -547,7 +557,11 @@ FORMS = qxrdwindow.ui \
     qcepdatasetbrowserdialog.ui \
     qxrddataobjectgraphwindow.ui \
     qxrddataobjectspreadsheetwindow.ui \
-    qxrddataobjectpropertieswindow.ui
+    qxrddataobjectpropertieswindow.ui \
+    qxrdimageslicegraphcontrols.ui \
+    qxrdscatterplotgraphcontrols.ui \
+    qxrdimagedatagraphcontrols.ui \
+    qxrdimagehistogramgraphcontrols.ui
 
 macx:
 else:unix:LIBS += -ltiff

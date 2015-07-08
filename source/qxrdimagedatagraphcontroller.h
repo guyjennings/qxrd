@@ -12,6 +12,9 @@ public:
 
   virtual ~QxrdImageDataGraphController();
   virtual void activate();
+
+public slots:
+  virtual void updateDisplay();
 };
 
 #endif // QXRDIMAGEDATAGRAPHCONTROLLER_H

@@ -12,6 +12,9 @@ public:
 
   virtual ~QxrdImageSliceGraphController();
   virtual void activate();
+
+public slots:
+  virtual void updateDisplay();
 };
 
 #endif // QXRDIMAGESLICEGRAPHCONTROLLER_H

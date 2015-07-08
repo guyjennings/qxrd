@@ -18,6 +18,7 @@ public:
 signals:
 
 public slots:
+  virtual void updateDisplay();
 
 protected:
   QxrdDataObjectGraphWindow *m_Window;

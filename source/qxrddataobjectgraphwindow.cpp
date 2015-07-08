@@ -33,7 +33,40 @@ QxrdDataObjectGraphWindow::QxrdDataObjectGraphWindow(
   QMainWindow(parent),
   m_Experiment(expt),
   m_Object(obj),
-  m_PlottingMode(NoPlot)
+  m_PlottingMode(NoPlot),
+  m_SettingsSaver(new QxrdSettingsSaver(this)),
+  m_ColorMap     (m_SettingsSaver, this, "colorMap",      0,     "Image Color Map Index"),
+  m_ScalingMode  (m_SettingsSaver, this, "scalingMode",   0,     "Image Scaling Mode"),
+  m_MinimumPct   (m_SettingsSaver, this, "minimumPct",    0,     "Image Display Minimum %"),
+  m_MaximumPct   (m_SettingsSaver, this, "maximumPct",    100,   "Image Display Maximum %"),
+  m_MinimumPctle (m_SettingsSaver, this, "minimumPctle",  0,     "Image Display Minimum Percentile"),
+  m_MaximumPctle (m_SettingsSaver, this, "maximumPctle",  99,    "Image Display Maximum Percentile"),
+  m_MinimumVal   (m_SettingsSaver, this, "minimumVal",    0,     "Image Display Minimum Value"),
+  m_MaximumVal   (m_SettingsSaver, this, "maximumVal",    10000, "Image Display Maximum Value"),
+  m_HistFullVis  (m_SettingsSaver, this, "histFullVis",   true,  "Full Image Histogram Visible?"),
+  m_HistAVis     (m_SettingsSaver, this, "histAVis",      false, "Histogram A Visible?"),
+  m_HistBVis     (m_SettingsSaver, this, "histBVis",      false, "Histogram B Visible?"),
+  m_HistCVis     (m_SettingsSaver, this, "histCVis",      false, "Histogram C Visible"),
+  m_HistALeft    (m_SettingsSaver, this, "histALeft",     10,    "Histogram A Left"),
+  m_HistATop     (m_SettingsSaver, this, "histATop",      10,    "Histogram A Top"),
+  m_HistARight   (m_SettingsSaver, this, "histARight",    20,    "Histogram A Right"),
+  m_HistABottom  (m_SettingsSaver, this, "histABottom",   20,    "Histogram A Bottom"),
+  m_HistBLeft    (m_SettingsSaver, this, "histBLeft",     30,    "Histogram B Left"),
+  m_HistBTop     (m_SettingsSaver, this, "histBTop",      30,    "Histogram B Top"),
+  m_HistBRight   (m_SettingsSaver, this, "histBRight",    40,    "Histogram B Right"),
+  m_HistBBottom  (m_SettingsSaver, this, "histBBottom",   40,    "Histogram B Bottom"),
+  m_HistCLeft    (m_SettingsSaver, this, "histCLeft",     50,    "Histogram B Left"),
+  m_HistCTop     (m_SettingsSaver, this, "histCTop",      50,    "Histogram B Top"),
+  m_HistCRight   (m_SettingsSaver, this, "histCRight",    60,    "Histogram B Right"),
+  m_HistCBottom  (m_SettingsSaver, this, "histCBottom",   60,    "Histogram B Bottom"),
+  m_SliceHStart  (m_SettingsSaver, this, "sliceHStart",   10,    "Horizontal Slice Start"),
+  m_SliceHSummed (m_SettingsSaver, this, "sliceHSummed",  1,     "Horizontal Slice Summed"),
+  m_SliceHSkipped(m_SettingsSaver, this, "sliceHSkipped", 0,     "Horizontal Slice Skipped"),
+  m_SliceHRepeats(m_SettingsSaver, this, "sliceHRepeats", 1,     "Horizontal Slice Repeats"),
+  m_SliceVStart  (m_SettingsSaver, this, "sliceVStart",   10,    "Vertical Slice Start"),
+  m_SliceVSummed (m_SettingsSaver, this, "sliceVSummed",  1,     "Vertical Slice Summed"),
+  m_SliceVSkipped(m_SettingsSaver, this, "sliceVSkipped", 0,     "Vertical Slice Skipped"),
+  m_SliceVRepeats(m_SettingsSaver, this, "sliceVRepeats", 1,     "Vertical Slice Repeats")
 {
   setupUi(this);
 
@@ -58,6 +91,12 @@ QxrdDataObjectGraphWindow::QxrdDataObjectGraphWindow(
           this, SLOT(changeGraphMode(int)));
 
   setAttribute(Qt::WA_DeleteOnClose, true);
+
+  if (m_Object) {
+    connect(m_Object.data(), SIGNAL(dataObjectChanged()), this, SLOT(updateDisplay()));
+
+    updateDisplay();
+  }
 }
 
 void QxrdDataObjectGraphWindow::setGraphMode(int mode)
@@ -158,6 +197,8 @@ void QxrdDataObjectGraphWindow::changeGraphMode(int idx)
     m_PlotModeSelector->clear();
 
     setGraphMode(newMode);
+
+    updateDisplay();
   } else {
     int oldIdx = m_PlotModeSelector->findData(m_PlottingMode);
 
@@ -194,4 +235,11 @@ int QxrdDataObjectGraphWindow::controllerRow() const
 int QxrdDataObjectGraphWindow::controllerColumn() const
 {
   return 2;
+}
+
+void QxrdDataObjectGraphWindow::updateDisplay()
+{
+  if (m_Controller) {
+    m_Controller->updateDisplay();
+  }
 }

@@ -16,3 +16,7 @@ QxrdDataObjectGraphController::~QxrdDataObjectGraphController()
 void QxrdDataObjectGraphController::activate()
 {
 }
+
+void QxrdDataObjectGraphController::updateDisplay()
+{
+}

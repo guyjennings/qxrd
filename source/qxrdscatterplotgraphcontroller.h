@@ -12,6 +12,9 @@ public:
 
   virtual ~QxrdScatterPlotGraphController();
   virtual void activate();
+
+public slots:
+  virtual void updateDisplay();
 };
 
 #endif // QXRDSCATTERPLOTGRAPHCONTROLLER_H
