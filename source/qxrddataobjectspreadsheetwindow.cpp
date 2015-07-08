@@ -1,6 +1,8 @@
 #include "qxrddataobjectspreadsheetwindow.h"
 #include "qxrdexperiment.h"
 #include "qcepdataobject.h"
+#include <QCloseEvent>
+#include <QMessageBox>
 
 #include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
@@ -102,5 +104,23 @@ QxrdDataObjectSpreadsheetWindow::QxrdDataObjectSpreadsheetWindow(
   if (m_Object && m_Model) {
     connect(m_Object.data(), SIGNAL(dataObjectChanged()), m_Model.data(), SLOT(onDataObjectChanged()));
   }
+
+  setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
+void QxrdDataObjectSpreadsheetWindow::closeEvent ( QCloseEvent * event )
+{
+  if (wantToClose()) {
+    event -> accept();
+  } else {
+    event -> ignore();
+  }
+}
+
+bool QxrdDataObjectSpreadsheetWindow::wantToClose()
+{
+  return QMessageBox::question(this, tr("Really Close?"),
+                               tr("Do you really want to close the window %1 ?")
+                               .arg(windowTitle()),
+                               QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
+}

@@ -18,6 +18,9 @@ public:
       QcepDataObjectPtr  obj,
       QWidget *parent = 0);
 
+  void closeEvent (QCloseEvent * event);
+  bool wantToClose();
+
 signals:
 
 public slots:

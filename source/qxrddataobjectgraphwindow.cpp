@@ -2,6 +2,9 @@
 #include "qxrdexperiment.h"
 #include "qcepdataobject.h"
 
+#include <QCloseEvent>
+#include <QMessageBox>
+
 #include "qxrdimagedata.h"
 #include "qxrdimagedata-ptr.h"
 
@@ -24,8 +27,6 @@
 #include "qxrdscatterplotgraphcontroller.h"
 #include "qxrdimagehistogramgraphcontroller.h"
 #include "qxrdimageslicegraphcontroller.h"
-
-#include <QMessageBox>
 
 QxrdDataObjectGraphWindow::QxrdDataObjectGraphWindow(
     QxrdExperimentWPtr expt, QcepDataObjectPtr obj, QWidget *parent) :
@@ -55,6 +56,8 @@ QxrdDataObjectGraphWindow::QxrdDataObjectGraphWindow(
 
   connect(m_PlotModeSelector, SIGNAL(currentIndexChanged(int)),
           this, SLOT(changeGraphMode(int)));
+
+  setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
 void QxrdDataObjectGraphWindow::setGraphMode(int mode)
@@ -164,4 +167,31 @@ void QxrdDataObjectGraphWindow::changeGraphMode(int idx)
   }
 
   m_PlotModeSelector->blockSignals(b);
+}
+
+void QxrdDataObjectGraphWindow::closeEvent ( QCloseEvent * event )
+{
+  if (wantToClose()) {
+    event -> accept();
+  } else {
+    event -> ignore();
+  }
+}
+
+bool QxrdDataObjectGraphWindow::wantToClose()
+{
+  return QMessageBox::question(this, tr("Really Close?"),
+                               tr("Do you really want to close the window %1 ?")
+                               .arg(windowTitle()),
+                               QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
+}
+
+int QxrdDataObjectGraphWindow::controllerRow() const
+{
+  return 1;
+}
+
+int QxrdDataObjectGraphWindow::controllerColumn() const
+{
+  return 2;
 }

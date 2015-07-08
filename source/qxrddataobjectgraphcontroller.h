@@ -23,6 +23,7 @@ protected:
   QxrdDataObjectGraphWindow *m_Window;
   int                        m_Mode;
   QcepDataObjectPtr          m_Object;
+  QWidget                   *m_Widget;
 };
 
 #endif // QXRDDATAOBJECTGRAPHCONTROLLER_H

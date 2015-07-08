@@ -3,6 +3,9 @@
 #include "qcepdataobject.h"
 #include "qcepdataobjectpropertiesmodel.h"
 
+#include <QCloseEvent>
+#include <QMessageBox>
+
 QxrdDataObjectPropertiesWindow::QxrdDataObjectPropertiesWindow
   (QxrdExperimentWPtr expt, QcepDataObjectPtr obj, QWidget *parent) :
   QMainWindow(parent),
@@ -38,5 +41,24 @@ QxrdDataObjectPropertiesWindow::QxrdDataObjectPropertiesWindow
     connect(m_Object.data(), SIGNAL(dataObjectChanged()),
             m_Model.data(), SLOT(onDataObjectChanged()));
   }
+
+  setAttribute(Qt::WA_DeleteOnClose, true);
+}
+
+void QxrdDataObjectPropertiesWindow::closeEvent ( QCloseEvent * event )
+{
+  if (wantToClose()) {
+    event -> accept();
+  } else {
+    event -> ignore();
+  }
+}
+
+bool QxrdDataObjectPropertiesWindow::wantToClose()
+{
+  return QMessageBox::question(this, tr("Really Close?"),
+                               tr("Do you really want to close the window %1 ?")
+                               .arg(windowTitle()),
+                               QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 

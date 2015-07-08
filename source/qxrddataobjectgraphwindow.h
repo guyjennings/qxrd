@@ -18,9 +18,17 @@ public:
       QcepDataObjectPtr  obj,
       QWidget *parent = 0);
 
+  void closeEvent (QCloseEvent * event);
+  bool wantToClose();
+
+  int controllerRow() const;
+  int controllerColumn() const;
+
 signals:
 
 public slots:
+
+protected:
 
 private slots:
   void setGraphMode(int mode);
