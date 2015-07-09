@@ -555,6 +555,40 @@ void QxrdDataProcessorBase::saveData(QString name, int canOverwrite)
   }
 }
 
+void QxrdDataProcessorBase::saveData(QcepDataObjectPtr object, QString name, int canOverwrite)
+{
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveData",
+                                           Qt::BlockingQueuedConnection,
+                                           Q_ARG(QcepDataObjectPtr, object),
+                                           Q_ARG(QString, name), Q_ARG(int, canOverwrite)))
+  } else {
+    QString path = filePathInDataDirectory(name);
+
+    QxrdDoubleImageDataPtr image = qSharedPointerDynamicCast<QxrdDoubleImageData>(object);
+
+    if (image) {
+      saveNamedImageData(path, image, QxrdMaskDataPtr(), canOverwrite);
+    } else {
+      printMessage(tr("Don't know how to save %1").arg(object->pathName()));
+    }
+  }
+}
+
+//void QxrdDataProcessorBase::saveData(QxrdDoubleImageDataPtr data, QString name, int canOverwrite)
+//{
+//  if (QThread::currentThread() != thread()) {
+//    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveData",
+//                                           Qt::BlockingQueuedConnection,
+//                                           Q_ARG(QxrdDoubleImageDataPtr, data),
+//                                           Q_ARG(QString, name), Q_ARG(int, canOverwrite)))
+//  } else {
+//    QString path = filePathInDataDirectory(name);
+
+//    saveNamedImageData(path, data, QxrdMaskDataPtr(), canOverwrite);
+//  }
+//}
+
 void QxrdDataProcessorBase::loadDark(QString name)
 {
   if (QThread::currentThread() != thread()) {

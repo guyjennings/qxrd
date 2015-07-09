@@ -251,6 +251,9 @@ public slots:
 
   void loadData(QString name);
   void saveData(QString name, int canOverwrite=NoOverwrite);
+  void saveData(QcepDataObjectPtr object, QString name, int canOverwrite=NoOverwrite);
+//  void saveData(QxrdDoubleImageDataPtr data, QString name, int canOverwrite=NoOverwrite);
+
   void loadDark(QString name);
   void saveDark(QString name, int canOverwrite=NoOverwrite);
   void loadMask(QString name);

@@ -444,6 +444,31 @@ void QxrdDataProcessorThreaded::subtractImages(QStringList names)
   newData(summed, QxrdMaskDataPtr());
 }
 
+void QxrdDataProcessorThreaded::integrateAndAccumulate(QStringList names)
+{
+  int nImages   = names.count();
+  m_Integrator -> prepareAccumulator(get_AccumulateIntegratedName(), nImages);
+
+  foreach(QString name, names) {
+    QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
+    QString path = filePathInDataDirectory(name);
+
+    if (img->readImage(path)) {
+      printMessage(tr("Load image from %1").arg(path));
+      statusMessage(tr("Load image from %1").arg(path));
+
+      img -> loadMetaData();
+
+      m_Integrator -> appendIntegration(get_AccumulateIntegratedName(), img, mask());
+    } else {
+      printMessage(tr("Couldn't load %1").arg(path));
+      statusMessage(tr("Couldn't load %1").arg(path));
+    }
+  }
+
+  m_Integrator -> completeAccumulator(get_AccumulateIntegratedName());
+}
+
 void QxrdDataProcessorThreaded::reflectHorizontally()
 {
   QxrdDoubleImageDataPtr image = data();

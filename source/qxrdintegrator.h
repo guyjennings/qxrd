@@ -107,6 +107,9 @@ public:
   QString XLabel() const;
 
 public slots:
+  void                  prepareAccumulator(QString resPath, int nImages);
+  void                  completeAccumulator(QString path);
+
   void                  appendIntegration(QString resPath, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask = QxrdMaskDataPtr());
   void                  appendIntegration(QString resPath, QxrdIntegratedDataPtr integ);
   void                  appendIntegration(QxrdDoubleImageDataPtr res, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask = QxrdMaskDataPtr());

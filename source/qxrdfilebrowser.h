@@ -41,6 +41,7 @@ public slots:
   void doProcess();
   void doIntegrate();
   void doAccumulate();
+  void doIntegrateAndAccumulate();
   void doAdd();
   void doSubtract();
   void doProjectX();

@@ -412,6 +412,10 @@ void QxrdIntegrator::appendIntegration(QString resPath, QxrdDoubleImageDataPtr d
     if (ds) {
       QxrdDoubleImageDataPtr data = ds->image(resPath);
 
+      if (!data) {
+        data = ds->newImage(resPath);
+      }
+
       if (data) {
         appendIntegration(data, dimg, mask);
       }
@@ -441,4 +445,29 @@ void QxrdIntegrator::appendIntegration(QxrdDoubleImageDataPtr res, QxrdIntegrate
 
     emit res->dataObjectChanged();
   }
+}
+
+void QxrdIntegrator::prepareAccumulator(QString resPath, int nImages)
+{
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDatasetPtr ds = expt->dataset();
+
+    if (ds) {
+      QxrdDoubleImageDataPtr data = ds->image(resPath);
+
+      if (!data) {
+        data = ds->newImage(resPath);
+      }
+
+      if (data) {
+        data->resize(0, 0);
+      }
+    }
+  }
+}
+
+void QxrdIntegrator::completeAccumulator(QString path)
+{
 }

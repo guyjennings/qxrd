@@ -398,6 +398,26 @@ void QxrdFileBrowser::doAccumulate()
   }
 }
 
+void QxrdFileBrowser::doIntegrateAndAccumulate()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+  QStringList paths;
+
+  foreach(index, rows) {
+    if (!m_Model->isDir(index)) {
+      paths.append(m_Model->filePath(index));
+    }
+  }
+
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QMetaObject::invokeMethod(proc.data(), "integrateAndAccumulate", Q_ARG(QStringList, paths));
+  }
+}
+
 void QxrdFileBrowser::doAdd()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
@@ -557,6 +577,7 @@ void QxrdFileBrowser::mousePressed(QModelIndex index)
     QAction *openGainMap = actions->addAction("Open as Gain Map");
     QAction *accumulate = actions->addAction("Accumulate");
     QAction *integrate = actions->addAction("Integrate");
+    QAction *integAccum = actions->addAction("Integrate and accumulate");
     QAction *process = actions->addAction("Process");
     QAction *add = actions->addAction("Add Images to Current Image");
     QAction *subtract = actions->addAction("Subtract Images from Current Image");
@@ -580,6 +601,8 @@ void QxrdFileBrowser::mousePressed(QModelIndex index)
       doAccumulate();
     } else if (action == integrate) {
       doIntegrate();
+    } else if (action == integAccum) {
+      doIntegrateAndAccumulate();
     } else if (action == process) {
       doProcess();
     } else if (action == add) {
