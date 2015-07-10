@@ -286,3 +286,95 @@ void QcepDatasetModel::onDataObjectChanged()
   beginResetModel();
   endResetModel();
 }
+
+QcepDataObjectPtr      QcepDatasetModel::item(const QModelIndex &index)
+{
+  printf("QcepDatasetModel::item([%d,%d])\n", index.row(), index.column());
+
+  return QcepDataObjectPtr();
+}
+
+QcepDataObjectPtr      QcepDatasetModel::item(QString path)
+{
+  return m_Dataset->item(path);
+}
+
+QcepDataGroupPtr       QcepDatasetModel::group(const QModelIndex &index)
+{
+}
+
+QcepDataGroupPtr       QcepDatasetModel::group(QString path)
+{
+  return m_Dataset->group(path);
+}
+
+QcepDataGroupPtr       QcepDatasetModel::newGroup(QString path)
+{
+}
+
+QcepDataArrayPtr       QcepDatasetModel::array(const QModelIndex &index)
+{
+}
+
+QcepDataArrayPtr       QcepDatasetModel::array(QString path)
+{
+  return m_Dataset->array(path);
+}
+
+QcepDataArrayPtr       QcepDatasetModel::newArray(QString path, QVector<int> dims)
+{
+}
+
+QcepDataColumnPtr      QcepDatasetModel::column(const QModelIndex &index)
+{
+}
+
+QcepDataColumnPtr      QcepDatasetModel::column(QString path)
+{
+  return m_Dataset->column(path);
+}
+
+QcepDataColumnPtr      QcepDatasetModel::newColumn(QString path, int nRows)
+{
+}
+
+QcepDataColumnScanPtr  QcepDatasetModel::columnScan(const QModelIndex &index)
+{
+}
+
+QcepDataColumnScanPtr  QcepDatasetModel::columnScan(QString path)
+{
+  return m_Dataset->columnScan(path);
+}
+
+QcepDataColumnScanPtr  QcepDatasetModel::newColumnScan(QString path, int nRows, QStringList cols)
+{
+}
+
+QxrdDoubleImageDataPtr QcepDatasetModel::image(const QModelIndex &index)
+{
+}
+
+QxrdDoubleImageDataPtr QcepDatasetModel::image(QString path)
+{
+}
+
+QxrdDoubleImageDataPtr QcepDatasetModel::newImage(QString path)
+{
+}
+
+void                   QcepDatasetModel::append(const QModelIndex &index, QcepDataObjectPtr obj)
+{
+}
+
+void                   QcepDatasetModel::append(QString path, QcepDataObjectPtr obj)
+{
+}
+
+void                   QcepDatasetModel::remove(const QModelIndex &index)
+{
+}
+
+void                   QcepDatasetModel::remove(QString path)
+{
+}

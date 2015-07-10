@@ -1,10 +1,21 @@
 #ifndef QCEPDATASETMODEL_H
 #define QCEPDATASETMODEL_H
 
-#include <QObject>
 #include <QAbstractItemModel>
 #include "qcepdataset-ptr.h"
+#include "qcepdataset.h"
 #include "qcepdataobject-ptr.h"
+#include "qcepdataobject.h"
+#include "qcepdatagroup-ptr.h"
+#include "qcepdatagroup.h"
+#include "qcepdataarray-ptr.h"
+#include "qcepdataarray.h"
+#include "qcepdatacolumn-ptr.h"
+#include "qcepdatacolumn.h"
+#include "qcepdatacolumnscan-ptr.h"
+#include "qcepdatacolumnscan.h"
+#include "qxrdimagedata-ptr.h"
+#include "qxrdimagedata.h"
 
 class QcepDatasetModel : public QAbstractItemModel
 {
@@ -27,6 +38,35 @@ public:
 
   QStringList mimeTypes() const;
   QMimeData  *mimeData(const QModelIndexList &indexes) const;
+
+public slots:
+  QcepDataObjectPtr      item(const QModelIndex &index);
+  QcepDataObjectPtr      item(QString path);
+
+  QcepDataGroupPtr       group(const QModelIndex &index);
+  QcepDataGroupPtr       group(QString path);
+  QcepDataGroupPtr       newGroup(QString path);
+
+  QcepDataArrayPtr       array(const QModelIndex &index);
+  QcepDataArrayPtr       array(QString path);
+  QcepDataArrayPtr       newArray(QString path, QVector<int> dims);
+
+  QcepDataColumnPtr      column(const QModelIndex &index);
+  QcepDataColumnPtr      column(QString path);
+  QcepDataColumnPtr      newColumn(QString path, int nRows);
+
+  QcepDataColumnScanPtr  columnScan(const QModelIndex &index);
+  QcepDataColumnScanPtr  columnScan(QString path);
+  QcepDataColumnScanPtr  newColumnScan(QString path, int nRows, QStringList cols);
+
+  QxrdDoubleImageDataPtr image(const QModelIndex &index);
+  QxrdDoubleImageDataPtr image(QString path);
+  QxrdDoubleImageDataPtr newImage(QString path);
+
+  void                   append(const QModelIndex &index, QcepDataObjectPtr obj);
+  void                   append(QString path, QcepDataObjectPtr obj);
+  void                   remove(const QModelIndex &index);
+  void                   remove(QString path);
 
 private slots:
   void onDataObjectChanged();
