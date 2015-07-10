@@ -174,7 +174,12 @@ HEADERS += \
     qxrdscatterplotgraphcontrols.h \
     qxrdimagedatagraphcontrols.h \
     qxrdimagehistogramgraphcontrols.h \
-    qxrdgraphcontrolswidget.h
+    qxrdgraphcontrolswidget.h \
+    qcepnewdatagroupdialog.h \
+    qcepnewdatacolumndialog.h \
+    qcepnewcolumnscandialog.h \
+    qxrdnewimagedialog.h \
+    qcepnewdataarraydialog.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -238,7 +243,12 @@ SOURCES += \
     qxrdscatterplotgraphcontrols.cpp \
     qxrdimagedatagraphcontrols.cpp \
     qxrdimagehistogramgraphcontrols.cpp \
-    qxrdgraphcontrolswidget.cpp
+    qxrdgraphcontrolswidget.cpp \
+    qcepnewdatagroupdialog.cpp \
+    qcepnewdatacolumndialog.cpp \
+    qcepnewcolumnscandialog.cpp \
+    qxrdnewimagedialog.cpp \
+    qcepnewdataarraydialog.cpp
 
 OTHER_FILES += testImage.js
 
@@ -561,7 +571,12 @@ FORMS = qxrdwindow.ui \
     qxrdimageslicegraphcontrols.ui \
     qxrdscatterplotgraphcontrols.ui \
     qxrdimagedatagraphcontrols.ui \
-    qxrdimagehistogramgraphcontrols.ui
+    qxrdimagehistogramgraphcontrols.ui \
+    qcepnewdatagroupdialog.ui \
+    qcepnewdatacolumndialog.ui \
+    qcepnewcolumnscandialog.ui \
+    qxrdnewimagedialog.ui \
+    qcepnewdataarraydialog.ui
 
 macx:
 else:unix:LIBS += -ltiff

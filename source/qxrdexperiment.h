@@ -41,6 +41,7 @@
 #include "qxrdcalibrantlibrary-ptr.h"
 #include "qcepexperiment.h"
 #include "qxrddataset-ptr.h"
+#include "qcepdatasetmodel-ptr.h"
 
 class QxrdExperiment : public QcepExperiment
 {
@@ -67,7 +68,7 @@ public:
   QxrdSimpleServerWPtr simpleServer();
   QxrdSimpleServerThreadWPtr simpleServerThread();
   QxrdCalibrantLibraryWPtr calibrantLibrary() const;
-  QxrdDatasetWPtr dataset() const;
+  QcepDatasetModelPtr dataset() const;
 
   FILE* logFile();
 
@@ -168,7 +169,7 @@ private:
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
   QxrdDatasetPtr                  m_Dataset;
-
+  QcepDatasetModelPtr             m_DatasetModel;
   mutable QMutex                  m_LogFileMutex;
   mutable FILE                   *m_LogFile;
 

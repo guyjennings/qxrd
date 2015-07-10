@@ -11,6 +11,7 @@
 #include "qxrdintegratorcache.h"
 #include "qxrdallocator.h"
 #include "qxrddataset.h"
+#include "qcepdatasetmodel.h"
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -384,7 +385,7 @@ void QxrdIntegrator::appendIntegration(QString resPath, QxrdIntegratedDataPtr in
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdDatasetPtr ds = expt->dataset();
+    QcepDatasetModelPtr ds = expt->dataset();
 
     if (ds) {
       QxrdDoubleImageDataPtr data = ds->image(resPath);
@@ -407,7 +408,7 @@ void QxrdIntegrator::appendIntegration(QString resPath, QxrdDoubleImageDataPtr d
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdDatasetPtr ds = expt->dataset();
+    QcepDatasetModelPtr ds = expt->dataset();
 
     if (ds) {
       QxrdDoubleImageDataPtr data = ds->image(resPath);
@@ -452,7 +453,7 @@ void QxrdIntegrator::prepareAccumulator(QString resPath, int nImages)
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdDatasetPtr ds = expt->dataset();
+    QcepDatasetModelPtr ds = expt->dataset();
 
     if (ds) {
       QxrdDoubleImageDataPtr data = ds->image(resPath);

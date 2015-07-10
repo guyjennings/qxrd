@@ -28,6 +28,7 @@
 #include "qcepdatacolumn-ptr.h"
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumnscan-ptr.h"
+#include "qcepdatasetmodel.h"
 
 #include <QThread>
 #include <QDir>
@@ -1525,7 +1526,7 @@ QScriptValue QxrdScriptEngine::dataImageFunc(QScriptContext *context, QScriptEng
       int     width  = context->argument(1).toInteger();
       int     height = context->argument(2).toInteger();
 
-      QxrdDatasetPtr ds = expt->dataset();
+      QcepDatasetModelPtr ds = expt->dataset();
 
       if (ds) {
         QxrdDoubleImageDataPtr img = QxrdAllocator::newDoubleImage(app->allocator(), QxrdAllocator::WaitTillAvailable, width, height);
@@ -1892,7 +1893,7 @@ void QxrdScriptEngine::initialize()
       globalObject().setProperty("calibrants", newQObject(cals.data()));
     }
 
-    QxrdDatasetPtr ds = expt->dataset();
+    QcepDatasetModelPtr ds = expt->dataset();
 
     if (ds) {
       globalObject().setProperty("dataset", newQObject(ds.data()));

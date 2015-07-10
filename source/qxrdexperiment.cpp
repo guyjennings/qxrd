@@ -27,6 +27,7 @@
 #include "qxrdmutexlocker.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrddataset.h"
+#include "qcepdatasetmodel.h"
 #include "qcepdatagroup.h"
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumn.h"
@@ -208,6 +209,8 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
     group1->append(scan1);
     group1->append(scan2);
     group1->append(scan3);
+
+    m_DatasetModel = QcepDatasetModelPtr(new QcepDatasetModel(m_Dataset));
 
     m_WindowSettings = QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL));
 
@@ -549,9 +552,9 @@ QxrdCalibrantLibraryWPtr QxrdExperiment::calibrantLibrary() const
   return m_CalibrantLibrary;
 }
 
-QxrdDatasetWPtr QxrdExperiment::dataset() const
+QcepDatasetModelPtr QxrdExperiment::dataset() const
 {
-  return m_Dataset;
+  return m_DatasetModel;
 }
 
 QxrdCenterFinderWPtr QxrdExperiment::centerFinder() const
