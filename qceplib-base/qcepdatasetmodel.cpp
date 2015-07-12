@@ -223,10 +223,13 @@ QVariant QcepDatasetModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags QcepDatasetModel::flags(const QModelIndex &index) const
 {
-  if (!index.isValid())
-      return Qt::ItemIsEnabled;
+  Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index);
 
-  return QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
+  if (index.isValid()) {
+    return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+  } else {
+    return defaultFlags | Qt::ItemIsDropEnabled;
+  }
 }
 
 QStringList QcepDatasetModel::mimeTypes() const
@@ -281,6 +284,33 @@ QString QcepDatasetModel::indexDescription(const QModelIndex &index) const
   return tr("(%1,%2,null)").arg(index.row()).arg(index.column());
 }
 
+bool QcepDatasetModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+  printf("QcepDatasetModel::insertRows(row:%d, count:%d, parent:%s)\n", row, count, qPrintable(indexDescription(parent)));
+
+  return QAbstractItemModel::insertRows(row, count, parent);
+}
+
+bool QcepDatasetModel::moveRows
+  (const QModelIndex &sourceParent, int sourceRow, int count,
+   const QModelIndex &destinationParent, int destinationChild)
+{
+  printf("QAbstractItemModel::moveRows(sourceParent:%s, sourceRow:%d, count:%d,\n"
+         "                             destinationParent:%s, destinationChild:%d)\n",
+         qPrintable(indexDescription(sourceParent)), sourceRow, count,
+         qPrintable(indexDescription(destinationParent)), destinationChild);
+
+  return QAbstractItemModel::moveRows(sourceParent, sourceRow, count,
+                                      destinationParent, destinationChild);
+}
+
+bool QcepDatasetModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+  printf("QcepDatasetModel::removeRows(row:%d, count:%d, parent:%s)\n", row, count, qPrintable(indexDescription(parent)));
+
+  return QAbstractItemModel::removeRows(row, count, parent);
+}
+
 void QcepDatasetModel::onDataObjectChanged()
 {
   beginResetModel();
@@ -310,6 +340,7 @@ QcepDataGroupPtr       QcepDatasetModel::group(QString path)
 
 QcepDataGroupPtr       QcepDatasetModel::newGroup(QString path)
 {
+  return m_Dataset->newGroup(path);
 }
 
 QcepDataArrayPtr       QcepDatasetModel::array(const QModelIndex &index)
@@ -323,6 +354,7 @@ QcepDataArrayPtr       QcepDatasetModel::array(QString path)
 
 QcepDataArrayPtr       QcepDatasetModel::newArray(QString path, QVector<int> dims)
 {
+  return m_Dataset->newArray(path, dims);
 }
 
 QcepDataColumnPtr      QcepDatasetModel::column(const QModelIndex &index)
@@ -336,6 +368,7 @@ QcepDataColumnPtr      QcepDatasetModel::column(QString path)
 
 QcepDataColumnPtr      QcepDatasetModel::newColumn(QString path, int nRows)
 {
+  return m_Dataset->newColumn(path, nRows);
 }
 
 QcepDataColumnScanPtr  QcepDatasetModel::columnScan(const QModelIndex &index)
@@ -349,18 +382,21 @@ QcepDataColumnScanPtr  QcepDatasetModel::columnScan(QString path)
 
 QcepDataColumnScanPtr  QcepDatasetModel::newColumnScan(QString path, int nRows, QStringList cols)
 {
+  return m_Dataset->newColumnScan(path, nRows, cols);
 }
 
-QxrdDoubleImageDataPtr QcepDatasetModel::image(const QModelIndex &index)
+QcepDoubleImageDataPtr QcepDatasetModel::image(const QModelIndex &index)
 {
 }
 
-QxrdDoubleImageDataPtr QcepDatasetModel::image(QString path)
+QcepDoubleImageDataPtr QcepDatasetModel::image(QString path)
 {
+  return m_Dataset->image(path);
 }
 
-QxrdDoubleImageDataPtr QcepDatasetModel::newImage(QString path)
+QcepDoubleImageDataPtr QcepDatasetModel::newImage(QString path, int width, int height)
 {
+  return m_Dataset->newImage(path, width, height);
 }
 
 void                   QcepDatasetModel::append(const QModelIndex &index, QcepDataObjectPtr obj)

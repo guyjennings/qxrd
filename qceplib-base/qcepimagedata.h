@@ -14,7 +14,9 @@
 #include "qcepdataobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
-//#include "qxrdexperiment-ptr.h"
+#include "qcepexperiment-ptr.h"
+#include "qcepmaskdata-ptr.h"
+#include "qcepimagedata-ptr.h"
 
 typedef struct tiff TIFF;
 
@@ -31,12 +33,6 @@ public:
 
   Q_PROPERTY(int height READ get_Height WRITE set_Height)
   QCEP_INTEGER_PROPERTY(Height)
-
-  Q_PROPERTY(QString qxrdVersion READ get_QxrdVersion WRITE set_QxrdVersion)
-  QCEP_STRING_PROPERTY(QxrdVersion)
-
-  Q_PROPERTY(QString qtVersion READ get_QtVersion WRITE set_QtVersion)
-  QCEP_STRING_PROPERTY(QtVersion)
 
   Q_PROPERTY(int dataType READ get_DataType WRITE set_DataType)
   QCEP_INTEGER_PROPERTY(DataType)
@@ -204,6 +200,11 @@ public:
   virtual ~QcepImageData();
 
 public:
+  static QSharedPointer< QcepImageData<T> > newImage(QcepSettingsSaverWPtr saver,
+                                                     QString name,
+                                                     int width,
+                                                     int height);
+
   bool readImage(QString filename);
 
   void resize(int width, int height);
@@ -214,9 +215,6 @@ public:
   void setImageData(int x, int y, double v);
 
 public:
-//  template <typename T2>
-//  void copyImage(QSharedPointer< QcepImageData<T2> > dest);
-
   template <typename T2>
   void subtractDark(const QSharedPointer< QcepImageData<T2> > dark);
 
@@ -244,11 +242,54 @@ public:
   T defaultValue() const;
   void setDefaultValue(T def);
 
+  QString rawFileName();
+
+  template <typename T2>
+  void copyImage(QSharedPointer< QcepImageData<T2> > dest);
+
+  template <typename T2>
+      void copyFrom(const QSharedPointer< QcepImageData<T2> > img);
+
+  template <typename T2>
+  void accumulateImage(QSharedPointer< QcepImageData<T2> > image);
+
+  template <typename T2>
+  void add(QSharedPointer< QcepImageData<T2> > image);
+
+  template <typename T2>
+  void subtract(QSharedPointer< QcepImageData<T2> > image);
+
+  template <typename T2>
+  void multiply(QSharedPointer< QcepImageData<T2> > image);
+
+  template <typename T2>
+  void divide(QSharedPointer< QcepImageData<T2> > image);
+
+  void setMask(QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepMaskDataPtr mask() const;
+  QcepMaskDataPtr overflow() const;
+
+  double correlate(QSharedPointer< QcepImageData<T> > image, int dx, int dy, int mx, int my);
+
+  void shiftImage(QSharedPointer< QcepImageData<T> > image, double dx, double dy);
+
+  T findMin() const;
+  T findMax() const;
+  double findAverage() const;
+
+  void correctBadBackgroundSubtraction(QcepDoubleImageDataPtr dark, int nImgExposures, int nDarkExposures);
+
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QSharedPointer< QcepImageData<T> > &data);
+  static void fromScriptValue(const QScriptValue &obj, QSharedPointer< QcepImageData<T> > &data);
+
 protected:
   QVector<T> m_Image;
   T m_MinValue;
   T m_MaxValue;
   T m_Default;
+
+  QcepMaskDataPtr            m_Mask;
+  QcepMaskDataPtr            m_Overflow;
 };
 
 #endif

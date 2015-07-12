@@ -14,8 +14,8 @@
 #include "qcepdatacolumn.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepdatacolumnscan.h"
-#include "qxrdimagedata-ptr.h"
-#include "qxrdimagedata.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepimagedata.h"
 
 class QcepDatasetModel : public QAbstractItemModel
 {
@@ -24,7 +24,7 @@ class QcepDatasetModel : public QAbstractItemModel
 public:
   QcepDatasetModel(QcepDatasetPtr ds);
 
-public:
+public slots:
   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   QModelIndex parent(const QModelIndex &index) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -39,6 +39,10 @@ public:
   QStringList mimeTypes() const;
   QMimeData  *mimeData(const QModelIndexList &indexes) const;
 
+  bool insertRows(int row, int count, const QModelIndex &parent);
+  bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
+  bool removeRows(int row, int count, const QModelIndex &parent);
+
 public slots:
   QcepDataObjectPtr      item(const QModelIndex &index);
   QcepDataObjectPtr      item(QString path);
@@ -49,19 +53,20 @@ public slots:
 
   QcepDataArrayPtr       array(const QModelIndex &index);
   QcepDataArrayPtr       array(QString path);
-  QcepDataArrayPtr       newArray(QString path, QVector<int> dims);
+  QcepDataArrayPtr       newArray(QString path, QVector<int> dims = QVector<int>());
 
   QcepDataColumnPtr      column(const QModelIndex &index);
   QcepDataColumnPtr      column(QString path);
-  QcepDataColumnPtr      newColumn(QString path, int nRows);
+  QcepDataColumnPtr      newColumn(QString path, int nRows=0);
 
   QcepDataColumnScanPtr  columnScan(const QModelIndex &index);
   QcepDataColumnScanPtr  columnScan(QString path);
-  QcepDataColumnScanPtr  newColumnScan(QString path, int nRows, QStringList cols);
+  QcepDataColumnScanPtr  newColumnScan(QString path,
+                                       int nRows=0, QStringList cols=QStringList());
 
-  QxrdDoubleImageDataPtr image(const QModelIndex &index);
-  QxrdDoubleImageDataPtr image(QString path);
-  QxrdDoubleImageDataPtr newImage(QString path);
+  QcepDoubleImageDataPtr image(const QModelIndex &index);
+  QcepDoubleImageDataPtr image(QString path);
+  QcepDoubleImageDataPtr newImage(QString path, int width=0, int height=0);
 
   void                   append(const QModelIndex &index, QcepDataObjectPtr obj);
   void                   append(QString path, QcepDataObjectPtr obj);

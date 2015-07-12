@@ -70,4 +70,4 @@ extern QcepDocumentationDictionary *gDocumentationDirectory;
 #define QCEP_DOC_FUNCTION(name, proto, doc, longDoc) \
   static QcepDocumentationForFunction TOKENPASTE(a__, __LINE__) (name, proto, doc, longDoc);
 
-#endif // QXRDDOCUMENTATIONDICTIONARY_H
+#endif // QCEPDOCUMENTATIONDICTIONARY_H

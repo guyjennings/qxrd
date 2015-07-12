@@ -2,17 +2,25 @@
 #include <QScriptEngine>
 #include "qcepdatagroup.h"
 #include <stdio.h>
+#include "qcepapplication.h"
 
 QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name) :
   QcepObject(name, NULL),
   m_Saver(saver),
-  m_Type(saver, this, "type", "object", "Data object type")/*,
-  m_Description(saver, this, "description", "", "Data object description")*/
+  m_Type(saver,        this, "type", "object", "Data object type"),
+  m_Creator(saver,     this, "creator", "Unknown", "QXRD Version Number"),
+  m_Version(saver,     this, "version", "Unknown", "QXRD Version Number"),
+  m_QtVersion(saver,   this, "qtVersion", QT_VERSION_STR, "QT Version Number"),
+  m_Description(saver, this, "description", "", "Object Description")
 {
   set_Type("object");
 
   if (name.contains("/")) {
     printMessage(tr("object %1 name contains \"/\"").arg(name));
+  }
+
+  if (g_Application) {
+    g_Application->setDefaultObjectData(this);
   }
 }
 

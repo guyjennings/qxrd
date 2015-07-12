@@ -13,6 +13,9 @@ QcepDebugDictionary::QcepDebugDictionary() :
   setMessage(DEBUG_PREFS,      "Settings/Prefs Operations");
   setMessage(DEBUG_DISPLAY,    "Display Operations");
   setMessage(DEBUG_CONSTRUCTORS, "Object Constructors/Destructors");
+  setMessage(DEBUG_ALLOCATOR,    "Memory Allocation");
+  setMessage(DEBUG_THREADS,      "Thread Initialization");
+  setMessage(DEBUG_QUEUES,       "Queue Operations");
   setMessage(DEBUG_IMAGE_CONSTRUCTORS, "Image Object Constructors/Destructors");
   setMessage(DEBUG_LOCKING,    "Debug Mutex Lock Operations");
   setMessage(DEBUG_SERVER,       "Server Commands");

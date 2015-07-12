@@ -52,8 +52,17 @@ public:
   Q_PROPERTY(QString type READ get_Type WRITE set_Type)
   QCEP_STRING_PROPERTY(Type)
 
-//  Q_PROPERTY(QString description READ get_Description WRITE set_Description)
-//  QCEP_STRING_PROPERTY(Description)
+  Q_PROPERTY(QString creator READ get_Creator WRITE set_Creator)
+  QCEP_STRING_PROPERTY(Creator)
+
+  Q_PROPERTY(QString version READ get_Version WRITE set_Version)
+  QCEP_STRING_PROPERTY(Version)
+
+  Q_PROPERTY(QString qtVersion READ get_QtVersion WRITE set_QtVersion)
+  QCEP_STRING_PROPERTY(QtVersion)
+
+  Q_PROPERTY(QString description READ get_Description WRITE set_Description)
+  QCEP_STRING_PROPERTY(Description)
 };
 
 #endif // QCEPDATAOBJECT_H

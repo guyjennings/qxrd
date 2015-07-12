@@ -1,13 +1,11 @@
 #include "qcepdatagroup.h"
 #include <QScriptEngine>
 #include "qcepdataarray.h"
-#include "qcepdataarray-ptr.h"
 #include "qcepdatagroup.h"
-#include "qcepdatagroup-ptr.h"
 #include "qcepdatacolumn.h"
-#include "qcepdatacolumn-ptr.h"
 #include "qcepdatacolumnscan.h"
-#include "qcepdatacolumnscan-ptr.h"
+#include "qcepimagedata.h"
+
 #include <QFileInfo>
 #include <QDir>
 
@@ -96,6 +94,14 @@ QcepDataColumnScanPtr QcepDataGroup::columnScan(QString path)
 
   return qSharedPointerDynamicCast<QcepDataColumnScan>(obj);
 }
+
+QcepDoubleImageDataPtr QcepDataGroup::image(QString path)
+{
+  QcepDataObjectPtr obj = item(path);
+
+  return qSharedPointerDynamicCast<QcepDoubleImageData>(obj);
+}
+
 
 QString QcepDataGroup::directoryName(QString path)
 {
@@ -302,6 +308,25 @@ QcepDataColumnScanPtr QcepDataGroup::newColumnScan(QString path, int nrow, QStri
   }
 
   return QcepDataColumnScanPtr();
+}
+
+QcepDoubleImageDataPtr QcepDataGroup::newImage(QString path, int width, int height)
+{
+  QcepDataGroupPtr group = createGroup(directoryName(path));
+
+  if (group) {
+    QcepDoubleImageDataPtr image(QcepDoubleImageData::newImage(saver(), object(path), width, height));
+
+    if (image) {
+      group->append(image);
+
+      emit dataObjectChanged();
+
+      return image;
+    }
+  }
+
+  return QcepDoubleImageDataPtr();
 }
 
 QScriptValue QcepDataGroup::toGroupScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data)
