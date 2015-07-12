@@ -2,7 +2,7 @@
 #include "qxrdglobalpreferencesdialog.h"
 #include "ui_qxrdglobalpreferencesdialog.h"
 #include "qxrdapplication.h"
-#include "qxrdallocator.h"
+#include "qcepallocator.h"
 #include <stdio.h>
 
 QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, QWidget *parent) :
@@ -20,7 +20,7 @@ QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, Q
 
   qint64 debugLevel = m_Application -> get_Debug();
 
-  QxrdAllocatorPtr alloc(m_Application->allocator());
+  QcepAllocatorPtr alloc(m_Application->allocator());
 
   if (alloc) {
     m_ReservedMemory32 -> setRange(500, 3000);
@@ -72,7 +72,7 @@ void QxrdGlobalPreferencesDialog::accept()
 
   m_Application -> set_Debug(debugLevel);
 
-  QxrdAllocatorPtr alloc(m_Application->allocator());
+  QcepAllocatorPtr alloc(m_Application->allocator());
 
   if (alloc) {
     alloc         -> set_TotalBufferSizeMB32(bufferSize32);

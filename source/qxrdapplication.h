@@ -4,11 +4,11 @@
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 
-#include <QApplication>
+#include "qcepapplication.h"
 #include <QSettings>
 #include "qxrdresponsetimer.h"
-#include "qxrdallocatorthread-ptr.h"
-#include "qxrdallocator-ptr.h"
+#include "qcepallocatorthread-ptr.h"
+#include "qcepallocator-ptr.h"
 #include "qxrdexperiment.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdexperimentthread.h"
@@ -16,8 +16,9 @@
 #include "qxrdwelcomewindow-ptr.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdnidaqplugininterface-ptr.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 #include "qxrdsplashscreen-ptr.h"
+#include "qcepdataobject-ptr.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface-ptr.h"
@@ -25,7 +26,7 @@
 
 extern void doDeleteLater(QObject *object);
 
-class QxrdApplication : public QApplication
+class QxrdApplication : public QcepApplication
 {
   Q_OBJECT
 
@@ -35,7 +36,7 @@ public:
 
   bool init(QxrdApplicationWPtr app, int &argc, char **argv);
 
-  QxrdAllocatorWPtr allocator() const;
+  QcepAllocatorWPtr allocator() const;
 
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterfacePtr perkinElmerPlugin();
@@ -127,6 +128,8 @@ public slots:
 
   void lockerTimerElapsed();
 
+  virtual void setDefaultObjectData(QcepDataObject *obj);
+
 public:
   bool wantToQuit();
 
@@ -141,7 +144,7 @@ private:
 
 private:
   QcepObjectNamer      m_ObjectNamer;
-  QxrdSettingsSaverPtr m_Saver;
+  QcepSettingsSaverPtr m_Saver;
 
 public:
   Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)
@@ -204,8 +207,8 @@ private:
   QxrdSplashScreenPtr             m_Splash;
 
   QxrdWelcomeWindowPtr            m_WelcomeWindow;
-  QxrdAllocatorThreadPtr          m_AllocatorThread;
-  QxrdAllocatorPtr                m_Allocator;
+  QcepAllocatorThreadPtr          m_AllocatorThread;
+  QcepAllocatorPtr                m_Allocator;
   QxrdNIDAQPluginInterfacePtr     m_NIDAQPluginInterface;
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterfacePtr m_PerkinElmerPluginInterface;
@@ -218,7 +221,5 @@ private:
   QTime                           m_LastLockerTime;
   int                             m_LastLockerCount;
 };
-
-extern QxrdApplication *g_Application;
 
 #endif

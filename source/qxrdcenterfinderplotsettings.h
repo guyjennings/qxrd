@@ -8,7 +8,7 @@ class QxrdCenterFinderPlotSettings : public QxrdPlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdCenterFinderPlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdCenterFinderPlotSettings(QcepSettingsSaverWPtr saver, QObject *parent);
   
 signals:
   

@@ -8,13 +8,13 @@
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdacquisition-ptr.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 
 class QxrdSynchronizedAcquisition : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSynchronizedAcquisition(QxrdSettingsSaverPtr saver, QxrdAcquisition *acq);
+  explicit QxrdSynchronizedAcquisition(QcepSettingsSaverPtr saver, QxrdAcquisition *acq);
 
 public:
   Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode)

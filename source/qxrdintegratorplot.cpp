@@ -10,7 +10,7 @@
 #include "qxrddataprocessor.h"
 #include "qxrdintegrator.h"
 #include "qxrdplotmeasurer.h"
-#include "qxrdintegrateddata.h"
+#include "qcepintegrateddata.h"
 #include "qwt_plot_piecewise_curve.h"
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
@@ -48,7 +48,7 @@ void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessorWPtr proc)
   }
 }
 
-void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
+void QxrdIntegratorPlot::onNewIntegrationAvailable(QcepIntegratedDataPtr data)
 {
 
 //  printf("New integration available, %d, %d points\n", x.size(), y.size());
@@ -67,7 +67,7 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QxrdIntegratedDataPtr data)
 
     setAxisTitle(QwtPlot::xBottom, m_XUnitsLabel);
 
-    QxrdDoubleImageDataPtr img(data->get_Image());
+    QcepDoubleImageDataPtr img(data->get_Image());
 
     QString title = (img ? img -> get_Title() : "");
     QString tooltip;

@@ -4,8 +4,8 @@
 #include <QDockWidget>
 #include "qxrdplot.h"
 #include "ui_qxrdslicedialog.h"
-#include "qxrdimagedata.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepimagedata.h"
+#include "qcepsettingssaver-ptr.h"
 #include "qxrdslicedialogsettings.h"
 
 class QxrdSliceDialog : public QDockWidget, public Ui::QxrdSliceDialog
@@ -16,7 +16,7 @@ public:
   explicit QxrdSliceDialog(QxrdSliceDialogSettingsWPtr settings, QWidget *parent);
   virtual ~QxrdSliceDialog();
 
-  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
+  void onProcessedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
 
 public slots:
   void slicePolygon(QVector<QPointF> poly);
@@ -26,7 +26,7 @@ private:
 
 private:
   QxrdSliceDialogSettingsWPtr m_SliceDialogSettings;
-  QxrdDoubleImageDataPtr      m_Image;
+  QcepDoubleImageDataPtr      m_Image;
 };
 
 #endif // QXRDSLICEDIALOG_H

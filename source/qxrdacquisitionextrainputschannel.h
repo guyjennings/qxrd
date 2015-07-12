@@ -6,13 +6,13 @@
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 
 class QxrdAcquisitionExtraInputsChannel : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdAcquisitionExtraInputsChannel(int chnum, QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra);
+  explicit QxrdAcquisitionExtraInputsChannel(int chnum, QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra);
   
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

@@ -2,9 +2,9 @@
 #define QXRDDATAPROCESSORTHREAD_H
 
 #include "qxrdthread.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdallocator-ptr.h"
+#include "qcepallocator-ptr.h"
 #include "qxrdfilesaver-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrddataprocessor-ptr.h"
@@ -15,10 +15,10 @@ class QxrdDataProcessorThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdDataProcessorThread(QxrdSettingsSaverWPtr saver,
+  QxrdDataProcessorThread(QcepSettingsSaverWPtr saver,
                           QxrdExperimentWPtr doc,
                           QxrdAcquisitionWPtr acq,
-                          QxrdAllocatorWPtr allocator,
+                          QcepAllocatorWPtr allocator,
                           QxrdFileSaverWPtr filesaver);
 
   ~QxrdDataProcessorThread();
@@ -33,11 +33,11 @@ protected:
   void run();
 
 private:
-  QxrdAllocatorWPtr       m_Allocator;
+  QcepAllocatorWPtr       m_Allocator;
   QxrdFileSaverWPtr       m_FileSaver;
   QxrdAcquisitionWPtr     m_Acquisition;
   QxrdExperimentWPtr      m_Experiment;
-  QxrdSettingsSaverWPtr   m_Saver;
+  QcepSettingsSaverWPtr   m_Saver;
   QxrdDataProcessorPtr    m_DataProcessor;
 };
 

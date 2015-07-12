@@ -1,6 +1,6 @@
 #include "qxrdcenterfinderplot.h"
-#include "qxrdimagedata.h"
-#include "qxrdmaskdata.h"
+#include "qcepimagedata.h"
+#include "qcepmaskdata.h"
 
 #include <QPen>
 #include <qwt_plot_curve.h>
@@ -72,7 +72,7 @@ void QxrdCenterFinderPlot::onParameterChanged()
   }
 }
 
-void QxrdCenterFinderPlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr /*image*/)
+void QxrdCenterFinderPlot::onProcessedImageAvailable(QcepDoubleImageDataPtr /*image*/)
 {
   QxrdCenterFinderPtr cf(m_CenterFinder);
 
@@ -81,7 +81,7 @@ void QxrdCenterFinderPlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr /*im
   }
 }
 
-void QxrdCenterFinderPlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
+void QxrdCenterFinderPlot::onMaskedImageAvailable(QcepDoubleImageDataPtr /*image*/, QcepMaskDataPtr /*mask*/)
 {
   QxrdCenterFinderPtr cf(m_CenterFinder);
 
@@ -120,8 +120,8 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
   if (wp && cf) {
     try {
-      QxrdDoubleImageDataPtr img = wp -> data();
-      QxrdMaskDataPtr mask = wp -> mask();
+      QcepDoubleImageDataPtr img = wp -> data();
+      QcepMaskDataPtr mask = wp -> mask();
 
       if (img /* && mask*/) {
         int width =img->get_Width();

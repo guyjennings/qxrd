@@ -3,7 +3,7 @@
 #include "qxrdapplication.h"
 #include <QString>
 
-QxrdRasterData::QxrdRasterData(QxrdDoubleImageDataPtr img, int interp, QxrdMaskDataPtr mask, QwtInterval range)
+QxrdRasterData::QxrdRasterData(QcepDoubleImageDataPtr img, int interp, QcepMaskDataPtr mask, QwtInterval range)
   : QwtRasterData(/*QRectF(0,0,(img?img->get_Width():0),(img?img->get_Height():0))*/),
     m_Data(img),
     m_Mask(mask),

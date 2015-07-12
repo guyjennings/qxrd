@@ -1,11 +1,11 @@
 #ifndef QXRDSETTINGSSAVER_PTR_H
 #define QXRDSETTINGSSAVER_PTR_H
 
-#include <QSharedPointer>
+//#include <QSharedPointer>
 
-class QxrdSettingsSaver;
+//class QcepSettingsSaver;
 
-typedef QSharedPointer<QxrdSettingsSaver> QxrdSettingsSaverPtr;
-typedef QWeakPointer<QxrdSettingsSaver> QxrdSettingsSaverWPtr;
+//typedef QSharedPointer<QcepSettingsSaver> QcepSettingsSaverPtr;
+//typedef QWeakPointer<QcepSettingsSaver> QcepSettingsSaverWPtr;
 
 #endif // QXRDSETTINGSSAVER_PTR_H

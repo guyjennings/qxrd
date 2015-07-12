@@ -7,17 +7,16 @@
 
 #include "qcepproperty.h"
 #include "qxrddataprocessor-ptr.h"
-#include "qxrdallocator-ptr.h"
+#include "qcepallocator-ptr.h"
 #include "qxrddetectorgeometry-ptr.h"
 #include "qxrddetectorgeometry.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 
 class QxrdGenerateTestImage : public QcepObject
 {
   Q_OBJECT
 public:
-  QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver,
-                        QxrdAllocatorWPtr alloc);
+  QxrdGenerateTestImage(QcepSettingsSaverWPtr saver);
 
 public slots:
   void setDimension(int nc, int nr);
@@ -38,7 +37,6 @@ public:
 
 private:
   QxrdDataProcessorWPtr   m_Processor;
-  QxrdAllocatorWPtr       m_Allocator;
   QxrdDetectorGeometryPtr m_Geometry;
 
 public:

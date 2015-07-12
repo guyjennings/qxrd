@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include "qcepdataset.h"
-#include "qxrdimagedata-ptr.h"
-#include "qxrdintegrateddata-ptr.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepintegrateddata-ptr.h"
 
 class QxrdDataset : public QcepDataset
 {
@@ -14,11 +14,11 @@ public:
   QxrdDataset(QcepSettingsSaverWPtr saver, QString name);
 
 public slots:
-  QxrdDoubleImageDataPtr image(QString path);
-  QxrdDoubleImageDataPtr newImage(QString path, int width=0, int height=0);
+  QcepDoubleImageDataPtr image(QString path);
+  QcepDoubleImageDataPtr newImage(QString path, int width=0, int height=0);
 
-  QxrdIntegratedDataPtr  integratedData(QString path);
-  QxrdIntegratedDataPtr  newIntegratedData(QString path, int sz=0);
+  QcepIntegratedDataPtr  integratedData(QString path);
+  QcepIntegratedDataPtr  newIntegratedData(QString path, int sz=0);
 };
 
 #endif // QXRDDATASET_H

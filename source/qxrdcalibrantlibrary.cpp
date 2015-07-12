@@ -1,8 +1,8 @@
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdcalibrant.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
-QxrdCalibrantLibrary::QxrdCalibrantLibrary(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp)
+QxrdCalibrantLibrary::QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp)
   : QcepObject("calibrantlibrary", NULL),
     m_Saver(saver),
     m_Experiment(exp)
@@ -31,7 +31,7 @@ QxrdCalibrantLibraryWPtr QxrdCalibrantLibrary::calibrantLibraryPtr() const
 
 void QxrdCalibrantLibrary::readSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepObject::readSettings(settings, section);
 
@@ -57,7 +57,7 @@ void QxrdCalibrantLibrary::readSettings(QSettings *settings, QString section)
 
 void QxrdCalibrantLibrary::writeSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepObject::writeSettings(settings, section);
 

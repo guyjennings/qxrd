@@ -8,10 +8,10 @@ class QxrdDataProcessor : public QxrdDataProcessorThreaded
   Q_OBJECT
 
 public:
-  QxrdDataProcessor(QxrdSettingsSaverWPtr saver,
+  QxrdDataProcessor(QcepSettingsSaverWPtr saver,
                     QxrdExperimentWPtr doc,
                     QxrdAcquisitionWPtr acq,
-                    QxrdAllocatorWPtr allocator,
+                    QcepAllocatorWPtr allocator,
                     QxrdFileSaverWPtr filesaver);
   ~QxrdDataProcessor();
 

@@ -1,27 +1,25 @@
 #include "qxrddebug.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 #include "qxrddataprocessorthreaded.h"
 #include "qxrdintegrator.h"
 #include "qxrdcenterfinder.h"
-#include "qxrdimagedata.h"
-#include "qxrdallocator.h"
+#include "qcepimagedata.h"
+#include "qcepallocator.h"
 #include "qxrdfilesaverthread.h"
 #include "qxrdfilesaver.h"
 #include "qxrdapplication.h"
 #include "qxrdroidata.h"
-#include "qxrdintegrateddata.h"
+#include "qcepintegrateddata.h"
 #include "qxrdhistogramdata.h"
 #include "qxrdexperiment.h"
 #include <QtConcurrentRun>
 #include <QDirIterator>
 
-QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(
-    QxrdSettingsSaverWPtr saver,
+QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QcepSettingsSaverWPtr saver,
     QxrdExperimentWPtr    doc,
     QxrdAcquisitionWPtr   acq,
-    QxrdAllocatorWPtr allocator,
     QxrdFileSaverWPtr filesaver)
-  : QxrdDataProcessorBase(saver, doc, acq, allocator, filesaver),
+  : QxrdDataProcessorBase(saver, doc, acq, filesaver),
     m_CorrectedImages(prop_CorrectionQueueLength()),
     m_IntegratedData(prop_IntegrationQueueLength())
 {
@@ -42,9 +40,9 @@ void QxrdDataProcessorThreaded::beginAcquisition(int /*isDark*/)
 {
 }
 
-void QxrdDataProcessorThreaded::idleInt16Image(QxrdInt16ImageDataPtr image, bool liveView)
+void QxrdDataProcessorThreaded::idleInt16Image(QcepInt16ImageDataPtr image, bool liveView)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, image->mutex());
+  QcepMutexLocker lock(__FILE__, __LINE__, image->mutex());
   int height = image->get_Height();
   int width  = image->get_Width();
   int nres = image-> get_SummedExposures();
@@ -65,41 +63,41 @@ void QxrdDataProcessorThreaded::idleInt16Image(QxrdInt16ImageDataPtr image, bool
       printMessage("Image Live View");
     }
 
-    QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
-    QxrdDoubleImageDataPtr dark      = darkImage();
+    QcepDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
+    QcepDoubleImageDataPtr dark      = darkImage();
 
     corrected->copyFrom(image);
     subtractDarkImage(corrected, dark);
 
-    newData(corrected, QxrdMaskDataPtr());
+    newData(corrected, QcepMaskDataPtr());
 
     m_LiveData = corrected;
   }
 }
 
-void QxrdDataProcessorThreaded::acquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow)
+void QxrdDataProcessorThreaded::acquiredInt16Image(QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow)
 {
-  QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
+  QcepDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
 
   m_CorrectedImages.enqueue(QtConcurrent::run(this,
                                               &QxrdDataProcessorThreaded::correctInt16Image,
                                               corrected, image, darkImage(), mask(), overflow));
 }
 
-void QxrdDataProcessorThreaded::acquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
+void QxrdDataProcessorThreaded::acquiredInt32Image(QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
 {
-  QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
+  QcepDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
 
   m_CorrectedImages.enqueue(QtConcurrent::run(this,
                                               &QxrdDataProcessorThreaded::correctInt32Image,
                                               corrected, image, darkImage(), mask(), overflow));
 }
 
-void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
+void QxrdDataProcessorThreaded::acquiredDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow)
 {
-  QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
+  QcepDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
 
-  typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QxrdMaskDataPtr);
+  typedef QcepDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepMaskDataPtr, QcepMaskDataPtr);
   MFType p = &QxrdDataProcessorThreaded::correctDoubleImage;
 
   m_CorrectedImages.enqueue(QtConcurrent::run(this,
@@ -107,11 +105,11 @@ void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image
                                               corrected, image, darkImage(), mask(), overflow));
 }
 
-void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, QList<double> v)
+void QxrdDataProcessorThreaded::acquiredDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, QList<double> v)
 {
-  QxrdDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
+  QcepDoubleImageDataPtr corrected = takeNextFreeImage(image->get_Width(), image->get_Height());
 
-  typedef QxrdDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdDoubleImageDataPtr, QxrdMaskDataPtr, QList<double>);
+  typedef QcepDoubleImageDataPtr (QxrdDataProcessorThreaded::*MFType)(QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepMaskDataPtr, QList<double>);
   MFType p = &QxrdDataProcessorThreaded::correctDoubleImage;
 
   m_CorrectedImages.enqueue(QtConcurrent::run(this,
@@ -119,8 +117,8 @@ void QxrdDataProcessorThreaded::acquiredDoubleImage(QxrdDoubleImageDataPtr image
                                               corrected, image, darkImage(), overflow, v));
 }
 
-QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
-    (QxrdDoubleImageDataPtr corrected, QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
+QcepDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
+    (QcepDoubleImageDataPtr corrected, QcepInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow)
 {
   QThread::currentThread()->setObjectName("correctInt16Image");
 
@@ -141,11 +139,11 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
     }
   }
 
-  return QxrdDoubleImageDataPtr();
+  return QcepDoubleImageDataPtr();
 }
 
-QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
-    (QxrdDoubleImageDataPtr corrected, QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
+QcepDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
+    (QcepDoubleImageDataPtr corrected, QcepInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow)
 {
   QThread::currentThread()->setObjectName("correctInt32Image");
 
@@ -167,11 +165,11 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
     }
   }
 
-  return QxrdDoubleImageDataPtr();
+  return QcepDoubleImageDataPtr();
 }
 
-QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
-    (QxrdDoubleImageDataPtr corrected, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow)
+QcepDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
+    (QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow)
 {
   QThread::currentThread()->setObjectName("correctDoubleImage");
 
@@ -193,11 +191,11 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
     }
   }
 
-  return QxrdDoubleImageDataPtr();
+  return QcepDoubleImageDataPtr();
 }
 
-QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
-    (QxrdDoubleImageDataPtr corrected, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr overflow, QcepDoubleList v)
+QcepDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
+    (QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr overflow, QcepDoubleList v)
 {
   QThread::currentThread()->setObjectName("correctDoubleImage");
 
@@ -219,14 +217,14 @@ QxrdDoubleImageDataPtr QxrdDataProcessorThreaded::correctDoubleImage
     }
   }
 
-  return QxrdDoubleImageDataPtr();
+  return QcepDoubleImageDataPtr();
 }
 
 void QxrdDataProcessorThreaded::onCorrectedImageAvailable()
 {
-  QxrdDoubleImageDataPtr img = m_CorrectedImages.dequeue();
-  QxrdMaskDataPtr mask = (img ? img->mask() : QxrdMaskDataPtr());
-  QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::AlwaysAllocate, img);
+  QcepDoubleImageDataPtr img = m_CorrectedImages.dequeue();
+  QcepMaskDataPtr mask = (img ? img->mask() : QcepMaskDataPtr());
+  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, img);
 
   if (img) {
     m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessorThreaded::integrateImage,
@@ -243,8 +241,8 @@ void QxrdDataProcessorThreaded::onCorrectedImageAvailable()
   }
 }
 
-QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
-    (QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double /*cx*/, double /*cy*/)
+QcepIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
+    (QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr image, QcepMaskDataPtr mask, double /*cx*/, double /*cy*/)
 {
   QThread::currentThread()->setObjectName("integrateImage");
 
@@ -263,7 +261,7 @@ QxrdIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
     return integ;
   }
 
-  return QxrdIntegratedDataPtr();
+  return QcepIntegratedDataPtr();
 }
 
 void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
@@ -272,7 +270,7 @@ void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
     printMessage(tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
   }
 
-  QxrdIntegratedDataPtr integ = m_IntegratedData.dequeue();
+  QcepIntegratedDataPtr integ = m_IntegratedData.dequeue();
 
   if (integ) {
     writeOutputScan(integ);
@@ -285,7 +283,7 @@ void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
 }
 
 QxrdROIDataPtr QxrdDataProcessorThreaded::calculateROI
-    (QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
+    (QcepDoubleImageDataPtr /*image*/, QcepMaskDataPtr /*mask*/)
 {
   QThread::currentThread()->setObjectName("calculateROI");
 
@@ -306,7 +304,7 @@ void QxrdDataProcessorThreaded::onROIDataAvailable()
 }
 
 QxrdHistogramDataPtr QxrdDataProcessorThreaded::calculateHistogram
-    (QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
+    (QcepDoubleImageDataPtr /*image*/, QcepMaskDataPtr /*mask*/)
 {
   QThread::currentThread()->setObjectName("calculateHistogram");
 
@@ -339,11 +337,11 @@ double QxrdDataProcessorThreaded::estimatedProcessingTime(double estSerialTime, 
 
 void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
 {
-  QxrdDoubleImageDataPtr summed = takeNextFreeImage(0,0);
+  QcepDoubleImageDataPtr summed = takeNextFreeImage(0,0);
   int first = true;
 
   foreach(QString name, names) {
-    QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
+    QcepDoubleImageDataPtr img = takeNextFreeImage(0,0);
     QString path = filePathInDataDirectory(name);
 
     if (img->readImage(path)) {
@@ -354,8 +352,8 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
 
       int typ = img->get_DataType();
 
-      if ((typ == QxrdDoubleImageData::Raw16Data) ||
-          (typ == QxrdDoubleImageData::Raw32Data))
+      if ((typ == QcepDoubleImageData::Raw16Data) ||
+          (typ == QcepDoubleImageData::Raw32Data))
       {
         subtractDarkImage(img, darkImage());
       }
@@ -376,16 +374,16 @@ void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
     printMessage(tr("No images were loaded"));
     statusMessage(tr("No images were loaded"));
   } else {
-    newData(summed, QxrdMaskDataPtr());
+    newData(summed, QcepMaskDataPtr());
   }
 }
 
 void QxrdDataProcessorThreaded::addImages(QStringList names)
 {
-  QxrdDoubleImageDataPtr summed = data();
+  QcepDoubleImageDataPtr summed = data();
 
   foreach(QString name, names) {
-    QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
+    QcepDoubleImageDataPtr img = takeNextFreeImage(0,0);
     QString path = filePathInDataDirectory(name);
 
     if (img->readImage(path)) {
@@ -396,8 +394,8 @@ void QxrdDataProcessorThreaded::addImages(QStringList names)
 
       int typ = img->get_DataType();
 
-      if ((typ == QxrdDoubleImageData::Raw16Data) ||
-          (typ == QxrdDoubleImageData::Raw32Data))
+      if ((typ == QcepDoubleImageData::Raw16Data) ||
+          (typ == QcepDoubleImageData::Raw32Data))
       {
         subtractDarkImage(img, darkImage());
       }
@@ -409,15 +407,15 @@ void QxrdDataProcessorThreaded::addImages(QStringList names)
     }
   }
 
-  newData(summed, QxrdMaskDataPtr());
+  newData(summed, QcepMaskDataPtr());
 }
 
 void QxrdDataProcessorThreaded::subtractImages(QStringList names)
 {
-  QxrdDoubleImageDataPtr summed = data();
+  QcepDoubleImageDataPtr summed = data();
 
   foreach(QString name, names) {
-    QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
+    QcepDoubleImageDataPtr img = takeNextFreeImage(0,0);
     QString path = filePathInDataDirectory(name);
 
     if (img->readImage(path)) {
@@ -428,8 +426,8 @@ void QxrdDataProcessorThreaded::subtractImages(QStringList names)
 
       int typ = img->get_DataType();
 
-      if ((typ == QxrdDoubleImageData::Raw16Data) ||
-          (typ == QxrdDoubleImageData::Raw32Data))
+      if ((typ == QcepDoubleImageData::Raw16Data) ||
+          (typ == QcepDoubleImageData::Raw32Data))
       {
         subtractDarkImage(img, darkImage());
       }
@@ -441,7 +439,7 @@ void QxrdDataProcessorThreaded::subtractImages(QStringList names)
     }
   }
 
-  newData(summed, QxrdMaskDataPtr());
+  newData(summed, QcepMaskDataPtr());
 }
 
 void QxrdDataProcessorThreaded::integrateAndAccumulate(QStringList names)
@@ -450,7 +448,7 @@ void QxrdDataProcessorThreaded::integrateAndAccumulate(QStringList names)
   m_Integrator -> prepareAccumulator(get_AccumulateIntegratedName(), nImages);
 
   foreach(QString name, names) {
-    QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
+    QcepDoubleImageDataPtr img = takeNextFreeImage(0,0);
     QString path = filePathInDataDirectory(name);
 
     if (img->readImage(path)) {
@@ -471,7 +469,7 @@ void QxrdDataProcessorThreaded::integrateAndAccumulate(QStringList names)
 
 void QxrdDataProcessorThreaded::reflectHorizontally()
 {
-  QxrdDoubleImageDataPtr image = data();
+  QcepDoubleImageDataPtr image = data();
 
   if (image) {
     int wid = image->get_Width();
@@ -488,12 +486,12 @@ void QxrdDataProcessorThreaded::reflectHorizontally()
     }
   }
 
-  newData(image, QxrdMaskDataPtr());
+  newData(image, QcepMaskDataPtr());
 }
 
 void QxrdDataProcessorThreaded::reflectVertically()
 {
-  QxrdDoubleImageDataPtr image = data();
+  QcepDoubleImageDataPtr image = data();
 
   if (image) {
     int wid = image->get_Width();
@@ -510,12 +508,12 @@ void QxrdDataProcessorThreaded::reflectVertically()
     }
   }
 
-  newData(image, QxrdMaskDataPtr());
+  newData(image, QcepMaskDataPtr());
 }
 
 void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py, int pz)
 {
-  QxrdDoubleImageDataPtr sumx, sumy, sumz;
+  QcepDoubleImageDataPtr sumx, sumy, sumz;
 
   int nx = 0;
   int ny = 0;
@@ -544,7 +542,7 @@ void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py,
   }
 
   for (int i=0; i<nz; i++) {
-    QxrdDoubleImageDataPtr img = takeNextFreeImage(0,0);
+    QcepDoubleImageDataPtr img = takeNextFreeImage(0,0);
     QString path = filePathInDataDirectory(names[i]);
 
     if (img->readImage(path)) {
@@ -554,8 +552,8 @@ void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py,
       img->loadMetaData();
       int typ = img->get_DataType();
 
-      if ((typ == QxrdDoubleImageData::Raw16Data) ||
-          (typ == QxrdDoubleImageData::Raw32Data))
+      if ((typ == QcepDoubleImageData::Raw16Data) ||
+          (typ == QcepDoubleImageData::Raw32Data))
       {
         subtractDarkImage(img, darkImage());
       }
@@ -633,15 +631,15 @@ void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py,
   }
 
   if (px) {
-    newData(sumx, QxrdMaskDataPtr());
+    newData(sumx, QcepMaskDataPtr());
   }
 
   if (py) {
-    newData(sumy, QxrdMaskDataPtr());
+    newData(sumy, QcepMaskDataPtr());
   }
 
   if (pz) {
-    newData(sumz, QxrdMaskDataPtr());
+    newData(sumz, QcepMaskDataPtr());
   }
 
   if (expt) {
@@ -651,10 +649,10 @@ void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py,
 
 void QxrdDataProcessorThreaded::correlateImages(QStringList names)
 {
-  QxrdDoubleImageDataPtr imga = data();
+  QcepDoubleImageDataPtr imga = data();
 
   foreach(QString name, names) {
-    QxrdDoubleImageDataPtr imgb = takeNextFreeImage(0,0);
+    QcepDoubleImageDataPtr imgb = takeNextFreeImage(0,0);
     QString path = filePathInDataDirectory(name);
 
     if (imgb->readImage(path)) {
@@ -665,8 +663,8 @@ void QxrdDataProcessorThreaded::correlateImages(QStringList names)
 
       int typ = imgb->get_DataType();
 
-      if ((typ == QxrdDoubleImageData::Raw16Data) ||
-          (typ == QxrdDoubleImageData::Raw32Data))
+      if ((typ == QcepDoubleImageData::Raw16Data) ||
+          (typ == QcepDoubleImageData::Raw32Data))
       {
         subtractDarkImage(imgb, darkImage());
       }
@@ -689,14 +687,14 @@ void QxrdDataProcessorThreaded::correlateImages(QStringList names)
 
 void QxrdDataProcessorThreaded::shiftImage(int dx, int dy)
 {
-  QxrdDoubleImageDataPtr img = data();
+  QcepDoubleImageDataPtr img = data();
 
   if (img) {
-    QxrdDoubleImageDataPtr shft = takeNextFreeImage(img->get_Width(), img->get_Height());
+    QcepDoubleImageDataPtr shft = takeNextFreeImage(img->get_Width(), img->get_Height());
 
     shft->shiftImage(img, dx, dy);
 
-    newData(shft, QxrdMaskDataPtr());
+    newData(shft, QcepMaskDataPtr());
   }
 }
 
@@ -704,10 +702,10 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
 {
   QThread::currentThread()->setObjectName("integrateData");
 
-  QxrdDoubleImageDataPtr img;
-  QxrdIntegratedDataPtr  result;
+  QcepDoubleImageDataPtr img;
+  QcepIntegratedDataPtr  result;
 
-  QxrdAllocator::newDoubleImageAndIntegratedData(m_Allocator, QxrdAllocator::AlwaysAllocate, 0,0, img, result);
+  QcepAllocator::newDoubleImageAndIntegratedData(QcepAllocator::AlwaysAllocate, 0,0, img, result);
 
   QString path = filePathInDataDirectory(name);
 
@@ -732,7 +730,7 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
 
 void QxrdDataProcessorThreaded::processData(QString name)
 {
-  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
+  QcepDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
   QString path = filePathInDataDirectory(name);
 
@@ -744,7 +742,7 @@ void QxrdDataProcessorThreaded::processData(QString name)
 
     res -> loadMetaData();
 
-    acquiredDoubleImage(res, /*darkImage(), mask(),*/ QxrdMaskDataPtr());
+    acquiredDoubleImage(res, /*darkImage(), mask(),*/ QcepMaskDataPtr());
 
     set_DataPath(res -> get_FileName());
   } else {
@@ -808,7 +806,7 @@ void QxrdDataProcessorThreaded::processNormalizedFile(QString path, double v1, d
 
 void QxrdDataProcessorThreaded::processNormalizedFile(QString name, QList<double> v)
 {
-  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
+  QcepDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
   QString path = filePathInDataDirectory(name);
 
@@ -817,9 +815,9 @@ void QxrdDataProcessorThreaded::processNormalizedFile(QString name, QList<double
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
     res -> loadMetaData();
-    res -> setMask(mask(), QxrdMaskDataPtr());
+    res -> setMask(mask(), QcepMaskDataPtr());
 
-    acquiredDoubleImage(res, /*darkImage(), mask(),*/ QxrdMaskDataPtr(), v);
+    acquiredDoubleImage(res, /*darkImage(), mask(),*/ QcepMaskDataPtr(), v);
 
     set_DataPath(res -> get_FileName());
   } else {
@@ -845,7 +843,7 @@ void QxrdDataProcessorThreaded::setFileNormalization(QString path, double v1, do
 
 void QxrdDataProcessorThreaded::setFileNormalization(QString name, QList<double> v)
 {
-  QxrdDoubleImageDataPtr res = takeNextFreeImage(0,0);
+  QcepDoubleImageDataPtr res = takeNextFreeImage(0,0);
 
   QString path = filePathInDataDirectory(name);
 
@@ -856,9 +854,9 @@ void QxrdDataProcessorThreaded::setFileNormalization(QString name, QList<double>
     QxrdExperimentPtr exp(m_Experiment);
 
     res -> loadMetaData();
-    res -> setMask(mask(), QxrdMaskDataPtr());
+    res -> setMask(mask(), QcepMaskDataPtr());
     res -> set_Normalization(v);
-    res -> saveMetaData(name, exp);
+    res -> saveMetaData(name);
   } else {
     printMessage(tr("Couldn't load %1").arg(path));
   }
@@ -866,7 +864,7 @@ void QxrdDataProcessorThreaded::setFileNormalization(QString name, QList<double>
 
 void QxrdDataProcessorThreaded::slicePolygon(QVector<QPointF> poly)
 {
-  QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::WaitTillAvailable, data());
+  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::WaitTillAvailable, data());
 
   m_IntegratedData.enqueue(
       QtConcurrent::run(m_Integrator.data(),
@@ -882,7 +880,7 @@ void QxrdDataProcessorThreaded::integrateSaveAndDisplay()
                  .arg(data()->get_FileName()).arg(m_CenterFinder->get_CenterX()).arg(m_CenterFinder->get_CenterY()));
   }
 
-  QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(m_Allocator, QxrdAllocator::WaitTillAvailable, data());
+  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::WaitTillAvailable, data());
 
   m_IntegratedData.enqueue(
       QtConcurrent::run(m_Integrator.data(),
@@ -895,7 +893,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
 {
   QDirIterator imagePaths(dataDirectory(), QStringList(imagePattern));
 
-  QxrdDoubleImageDataPtr dark = takeNextFreeImage(0,0);
+  QcepDoubleImageDataPtr dark = takeNextFreeImage(0,0);
   QString path = filePathInDataDirectory(darkPath);
 
   if (dark->readImage(path)) {
@@ -909,7 +907,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
       QString imagePath=imagePaths.next();
 
       QString path = filePathInDataDirectory(imagePath);
-      QxrdDoubleImageDataPtr image = takeNextFreeImage(0,0);
+      QcepDoubleImageDataPtr image = takeNextFreeImage(0,0);
 
       if (image->readImage(path)) {
         image->loadMetaData();
@@ -923,7 +921,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
         QxrdFileSaverPtr saver(m_FileSaver);
 
         if (saver) {
-          saver->saveDoubleData(path, image, QxrdMaskDataPtr(), NoOverwrite);
+          saver->saveDoubleData(path, image, QcepMaskDataPtr(), NoOverwrite);
         }
       } else {
         printMessage(tr("Failed to load image from %1").arg(path));

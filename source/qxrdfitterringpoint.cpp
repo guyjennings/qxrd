@@ -99,7 +99,7 @@ int QxrdFitterRingPoint::fit()
 
     int    width = 0, height = 0;
 
-    QxrdDoubleImageDataPtr data(m_CenterFinder->data());
+    QcepDoubleImageDataPtr data(m_CenterFinder->data());
 
     if (data) {
       width  = data -> get_Width()+1;

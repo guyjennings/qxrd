@@ -3,11 +3,11 @@
 
 #include "qxrdfilesaver.h"
 #include "qxrdacquisition.h"
-#include "qxrdintegrateddata.h"
+#include "qcepintegrateddata.h"
 #include "qxrdapplication.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
-QxrdFileSaverThread::QxrdFileSaverThread(QxrdAllocatorWPtr allocator)
+QxrdFileSaverThread::QxrdFileSaverThread(QcepAllocatorWPtr allocator)
   : QxrdThread(),
     m_FileSaver(),
     m_Allocator()
@@ -16,11 +16,11 @@ QxrdFileSaverThread::QxrdFileSaverThread(QxrdAllocatorWPtr allocator)
     printf("QxrdFileSaverThread::QxrdFileSaverThread(%p)\n", this);
   }
 
-  qRegisterMetaType<QxrdDoubleImageDataPtr>("QxrdDoubleImageDataPtr");
-  qRegisterMetaType<QxrdInt32ImageDataPtr>("QxrdInt32ImageDataPtr");
-  qRegisterMetaType<QxrdInt16ImageDataPtr>("QxrdInt16ImageDataPtr");
-  qRegisterMetaType<QxrdMaskDataPtr>("QxrdMaskDataPtr");
-  qRegisterMetaType<QxrdIntegratedDataPtr>("QxrdIntegratedDataPtr");
+  qRegisterMetaType<QcepDoubleImageDataPtr>("QcepDoubleImageDataPtr");
+  qRegisterMetaType<QcepInt32ImageDataPtr>("QcepInt32ImageDataPtr");
+  qRegisterMetaType<QcepInt16ImageDataPtr>("QcepInt16ImageDataPtr");
+  qRegisterMetaType<QcepMaskDataPtr>("QcepMaskDataPtr");
+  qRegisterMetaType<QcepIntegratedDataPtr>("QcepIntegratedDataPtr");
   qRegisterMetaType<FILE*>("FILE*");
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
@@ -66,7 +66,7 @@ QxrdFileSaverPtr QxrdFileSaverThread::fileSaver() const
 {
   while (isRunning()) {
     {
-      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
       if (m_FileSaver) return m_FileSaver;
     }

@@ -1,7 +1,7 @@
 #include "qxrddebug.h"
 #include "qxrddetectorthread.h"
 #include "qxrdapplication.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrddetectorperkinelmer.h"
@@ -220,7 +220,7 @@ QxrdDetectorPtr QxrdDetectorThread::detector() const
 {
   while (isRunning()) {
     {
-      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
       if (m_Detector) return m_Detector;
     }

@@ -7,7 +7,7 @@ class QxrdSynchronizedAcquisitionPlotSettings : public QxrdPlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdSynchronizedAcquisitionPlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent = 0);
+  explicit QxrdSynchronizedAcquisitionPlotSettings(QcepSettingsSaverWPtr saver, QObject *parent = 0);
 
 signals:
 

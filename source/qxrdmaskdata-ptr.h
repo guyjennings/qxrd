@@ -1,10 +1,10 @@
-#ifndef QXRDMASKDATA_PTR_H
-#define QXRDMASKDATA_PTR_H
+#ifndef QcepMaskData_PTR_H
+#define QcepMaskData_PTR_H
 
-#include <QSharedPointer>
+//#include <QSharedPointer>
 
-class QxrdMaskData;
+//class QcepMaskData;
 
-typedef QSharedPointer<QxrdMaskData> QxrdMaskDataPtr;
+//typedef QSharedPointer<QcepMaskData> QcepMaskDataPtr;
 
-#endif // QXRDMASKDATA_H
+#endif // QcepMaskData_H

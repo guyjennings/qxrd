@@ -7,17 +7,17 @@
 #include "qcepproperty.h"
 
 #include "qxrdexperiment-ptr.h"
-#include "qxrdintegrateddata.h"
-#include "qxrdintegrateddata-ptr.h"
+#include "qcepintegrateddata.h"
+#include "qcepintegrateddata-ptr.h"
 #include "qxrdintegratorcache.h"
 #include "qxrdintegratorcache-ptr.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
-#include "qxrdallocator-ptr.h"
-#include "qxrdimagedata.h"
-#include "qxrdimagedata-ptr.h"
-#include "qxrdmaskdata.h"
-#include "qxrdmaskdata-ptr.h"
+#include "qcepallocator-ptr.h"
+#include "qcepimagedata.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata.h"
+#include "qcepmaskdata-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 
 class QxrdIntegrator : public QcepObject
@@ -25,7 +25,7 @@ class QxrdIntegrator : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc);
+  QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw);
   virtual ~QxrdIntegrator();
   void initialize(QxrdIntegratorWPtr integrator);
 
@@ -110,17 +110,17 @@ public slots:
   void                  prepareAccumulator(QString resPath, int nImages);
   void                  completeAccumulator(QString path);
 
-  void                  appendIntegration(QString resPath, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask = QxrdMaskDataPtr());
-  void                  appendIntegration(QString resPath, QxrdIntegratedDataPtr integ);
-  void                  appendIntegration(QxrdDoubleImageDataPtr res, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask = QxrdMaskDataPtr());
-  void                  appendIntegration(QxrdDoubleImageDataPtr res, QxrdIntegratedDataPtr integ);
-  QxrdIntegratedDataPtr performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask);
-  QxrdIntegratedDataPtr performIntegration(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask = QxrdMaskDataPtr());
+  void                  appendIntegration(QString resPath, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask = QcepMaskDataPtr());
+  void                  appendIntegration(QString resPath, QcepIntegratedDataPtr integ);
+  void                  appendIntegration(QcepDoubleImageDataPtr res, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask = QcepMaskDataPtr());
+  void                  appendIntegration(QcepDoubleImageDataPtr res, QcepIntegratedDataPtr integ);
+  QcepIntegratedDataPtr performIntegration(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask);
+  QcepIntegratedDataPtr performIntegration(QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask = QcepMaskDataPtr());
 
-//  QxrdIntegratedDataPtr integrate(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int oversample, int normalize);
+//  QcepIntegratedDataPtr integrate(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask, int oversample, int normalize);
 
-  QxrdIntegratedDataPtr sliceLine(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, double x0, double y0, double x1, double y1, double width);
-  QxrdIntegratedDataPtr slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QVector<QPointF> poly, double width);
+  QcepIntegratedDataPtr sliceLine(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, double x0, double y0, double x1, double y1, double width);
+  QcepIntegratedDataPtr slicePolygon(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, QVector<QPointF> poly, double width);
 
   void integrateVsR();
   void integrateVsQ();
@@ -128,19 +128,18 @@ public slots:
 
   void onIntegrationParametersChanged();
 
-  QxrdInt32ImageDataPtr  cachedGeometry();
-  QxrdDoubleImageDataPtr cachedIntensity();
+  QcepInt32ImageDataPtr  cachedGeometry();
+  QcepDoubleImageDataPtr cachedIntensity();
 
   QString defaultUserGeometryScript();
   QString defaultUserAbsorptionScript();
 
 private:
   mutable QMutex         m_Mutex;
-  QxrdSettingsSaverWPtr  m_Saver;
+  QcepSettingsSaverWPtr  m_Saver;
   QxrdExperimentWPtr     m_Experiment;
   QxrdIntegratorWPtr     m_Integrator;
   QxrdCenterFinderWPtr   m_CenterFinder;
-  QxrdAllocatorWPtr      m_Allocator;
   QxrdIntegratorCachePtr m_IntegratorCache;
 };
 

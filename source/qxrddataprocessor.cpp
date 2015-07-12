@@ -2,10 +2,10 @@
 #include <QtConcurrentRun>
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
-#include "qxrdimagedata.h"
+#include "qcepimagedata.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdintegrator.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 #include "qxrdgeneratetestimage.h"
 
 #include "tiffio.h"
@@ -16,12 +16,12 @@
 #include <math.h>
 
 QxrdDataProcessor::QxrdDataProcessor
-    (QxrdSettingsSaverWPtr saver,
+    (QcepSettingsSaverWPtr saver,
      QxrdExperimentWPtr doc,
      QxrdAcquisitionWPtr acq,
-     QxrdAllocatorWPtr allocator,
+     QcepAllocatorWPtr allocator,
      QxrdFileSaverWPtr filesaver)
-  : QxrdDataProcessorThreaded(saver, doc, acq, allocator, filesaver)
+  : QxrdDataProcessorThreaded(saver, doc, acq, filesaver)
 {
 }
 

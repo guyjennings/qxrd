@@ -4,7 +4,7 @@
 #include "qxrdacquisitionthread.h"
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
-#include "qxrdallocator.h"
+#include "qcepallocator.h"
 #include "qxrdexperiment.h"
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"
@@ -36,7 +36,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
 
     QxrdAcquisitionPtr acq = expt -> acquisition();
     QxrdDataProcessorPtr proc = expt->dataProcessor();
-    //  QxrdAllocator *alloc = g_Application->allocator();
+    //  QcepAllocator *alloc = g_Application->allocator();
 
     int detectorType = expt -> get_DetectorType();
     int detectorSubType = expt -> get_DetectorSubType();

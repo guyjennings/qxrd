@@ -639,7 +639,7 @@ void QxrdImagePlot::setOverflows(QxrdMaskRasterData *overflow)
   replot();
 }
 
-void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
+void QxrdImagePlot::onProcessedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow)
 {
   QTime tic;
   tic.start();
@@ -656,7 +656,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
       m_FirstTime = true;
     }
 
-    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
+    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QcepMaskDataPtr(NULL));
 
     if (overflow == NULL) {
       setImage(data);
@@ -679,7 +679,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
   }
 }
 
-void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)
+void QxrdImagePlot::onMaskedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask)
 {
   QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
@@ -693,7 +693,7 @@ void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMas
       m_FirstTime = true;
     }
 
-    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
+    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QcepMaskDataPtr(NULL));
     QxrdMaskRasterData *msk = new QxrdMaskRasterData(mask, false);
 
     setImage(data);
@@ -709,7 +709,7 @@ void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMas
   }
 }
 
-void QxrdImagePlot::onDarkImageAvailable(QxrdDoubleImageDataPtr /*image*/)
+void QxrdImagePlot::onDarkImageAvailable(QcepDoubleImageDataPtr /*image*/)
 {
 }
 

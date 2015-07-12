@@ -6,13 +6,12 @@
 
 #include "qxrddataprocessor.h"
 #include "qxrddetectorgeometry.h"
-#include "qxrdallocator.h"
-#include "qxrdsettingssaver.h"
+#include "qcepallocator.h"
+#include "qcepsettingssaver.h"
 
-QxrdGenerateTestImage::QxrdGenerateTestImage(QxrdSettingsSaverWPtr saver, QxrdAllocatorWPtr alloc) :
+QxrdGenerateTestImage::QxrdGenerateTestImage(QcepSettingsSaverWPtr saver) :
   QcepObject("testImage", NULL),
   m_Processor(),
-  m_Allocator(alloc),
   m_Geometry(new QxrdDetectorGeometry("testGeometry", NULL)),
   m_NRows(saver, this, "nRows", 2048, "Number of Rows"),
   m_NCols(saver, this, "nCols", 2048, "Number of Cols"),
@@ -91,9 +90,8 @@ void QxrdGenerateTestImage::appendRing(double tth, double intensity, double widt
 
 void QxrdGenerateTestImage::generateImage()
 {
-  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(QxrdSettingsSaverPtr(),
-                                                                              m_Allocator,
-                                                                              QxrdAllocator::AllocateDouble,
+  QcepDoubleImageDataPtr img = QcepDoubleImageDataPtr(new QcepDoubleImageData(QcepSettingsSaverPtr(),
+                                                                              QcepAllocator::AllocateDouble,
                                                                               get_NCols(),
                                                                               get_NRows()));
 
@@ -154,17 +152,13 @@ void QxrdGenerateTestImage::generateImage()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    proc -> newData(img, QxrdMaskDataPtr());
+    proc -> newData(img, QcepMaskDataPtr());
   }
 }
 
 void QxrdGenerateTestImage::generateTTHImage()
 {
-  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(QxrdSettingsSaverPtr(),
-                                                                              m_Allocator,
-                                                                              QxrdAllocator::AllocateDouble,
-                                                                              get_NCols(),
-                                                                              get_NRows()));
+  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, get_NCols(), get_NRows());
 
   img->clear();
 
@@ -203,17 +197,13 @@ void QxrdGenerateTestImage::generateTTHImage()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    proc -> newData(img, QxrdMaskDataPtr());
+    proc -> newData(img, QcepMaskDataPtr());
   }
 }
 
 void QxrdGenerateTestImage::generateChiImage()
 {
-  QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(new QxrdDoubleImageData(QxrdSettingsSaverPtr(),
-                                                                              m_Allocator,
-                                                                              QxrdAllocator::AllocateDouble,
-                                                                              get_NCols(),
-                                                                              get_NRows()));
+  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, get_NCols(), get_NRows());
 
   img->clear();
 
@@ -252,6 +242,6 @@ void QxrdGenerateTestImage::generateChiImage()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    proc -> newData(img, QxrdMaskDataPtr());
+    proc -> newData(img, QcepMaskDataPtr());
   }
 }

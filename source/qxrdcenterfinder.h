@@ -7,10 +7,10 @@
 #include <QPen>
 #include "qcepproperty.h"
 #include "qxrddetectorgeometry.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 #include "qxrddataprocessor-ptr.h"
-#include "qxrdimagedata-ptr.h"
-#include "qxrdimagedata.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepimagedata.h"
 #include "qxrdexperiment-ptr.h"
 #include <QScriptValue>
 #include "qxrdpowderpointproperty.h"
@@ -20,7 +20,7 @@ class QxrdCenterFinder : public QxrdDetectorGeometry
   Q_OBJECT
 
 public:
-  QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt);
+  QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt);
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
@@ -248,19 +248,19 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
-  void setData(QxrdDoubleImageDataPtr data);
+  void setData(QcepDoubleImageDataPtr data);
   double imageValue(double x, double y);
 
   QxrdExperimentWPtr experiment() const;
-  QxrdDoubleImageDataPtr data() const;
-  QxrdDoubleImageDataPtr newData();
+  QcepDoubleImageDataPtr data() const;
+  QcepDoubleImageDataPtr newData();
 
   static QString levmarFailureReason(int n);
 
 private:
   mutable QMutex             m_Mutex;
   QxrdExperimentWPtr         m_Experiment;
-  QxrdDoubleImageDataPtr     m_Data;
+  QcepDoubleImageDataPtr     m_Data;
   int                        m_CenterFitRingNumber;
 };
 

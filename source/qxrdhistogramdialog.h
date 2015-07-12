@@ -3,10 +3,10 @@
 
 #include <QDockWidget>
 #include "ui_qxrdhistogramdialog.h"
-#include "qxrdimagedata.h"
-#include "qxrdimagedata-ptr.h"
-#include "qxrdmaskdata.h"
-#include "qxrdmaskdata-ptr.h"
+#include "qcepimagedata.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata.h"
+#include "qcepmaskdata-ptr.h"
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdexperiment-ptr.h"
 
@@ -20,7 +20,7 @@ public:
                                QWidget *parent);
   virtual ~QxrdHistogramDialog();
 
-  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
+  void onProcessedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
 
 public slots:
   void histogramSelectionChanged(QRectF rect);
@@ -32,7 +32,7 @@ private:
 private:
   QxrdExperimentWPtr              m_Experiment;
   QxrdHistogramDialogSettingsWPtr m_HistogramDialogSettings;
-  QxrdDoubleImageDataPtr          m_Image;
+  QcepDoubleImageDataPtr          m_Image;
 };
 
 #endif // QXRDHISTOGRAMDIALOG_H

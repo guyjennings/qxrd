@@ -3,9 +3,9 @@
 #include "qxrdsimpleserverthread.h"
 #include "qxrdexperiment.h"
 #include "qxrdapplication.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
-QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
+QxrdSimpleServerThread::QxrdSimpleServerThread(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
   m_Saver(saver),
   m_Experiment(doc),
   m_Name(name),
@@ -30,7 +30,7 @@ QxrdSimpleServerPtr QxrdSimpleServerThread::server() const
 {
   while (isRunning()) {
     {
-      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
       if (m_Server) return m_Server;
     }

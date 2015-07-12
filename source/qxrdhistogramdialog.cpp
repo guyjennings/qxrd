@@ -1,7 +1,7 @@
 #include "qxrdhistogramdialog.h"
 #include "ui_qxrdhistogramdialog.h"
 #include <QSettings>
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 #include "qxrddebug.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdexperiment.h"
@@ -34,7 +34,7 @@ QxrdHistogramDialog::~QxrdHistogramDialog()
   }
 }
 
-void QxrdHistogramDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr /*overflow*/)
+void QxrdHistogramDialog::onProcessedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr /*overflow*/)
 {
   m_Image = image;
 

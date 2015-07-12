@@ -1,13 +1,13 @@
 #include "qxrdacquisitionextrainputschannel.h"
 #include "qxrdacquisitionextrainputs.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 #include "qxrdnidaqplugininterface.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 
 QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
-    int chnum, QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra) :
+    int chnum, QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra) :
   QcepObject(tr("extraChannel(%1)").arg(chnum), NULL),
-  m_ChannelNumber(QxrdSettingsSaverPtr(), this, "channelNumber", chnum, "Extra Input Channel Number"),
+  m_ChannelNumber(QcepSettingsSaverPtr(), this, "channelNumber", chnum, "Extra Input Channel Number"),
   m_Enabled(saver, this, "enabled", 1, "Enabled?"),
   m_Plotted(saver, this, "plotted", 1, "Plotted?"),
   m_ChannelName(saver, this, "channelName", "", "NIDAQ name of channel"),
@@ -23,12 +23,12 @@ QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
   m_TriggerMode(saver, this, "triggerMode", 0, "Trigger Mode (0 = None, 1 = +Edge, 2 = -Edge, 3 = +Level, 4 = -Level)"),
   m_TriggerLevel(saver, this, "triggerLevel", 0.0, "Trigger Level (in Volts)"),
   m_TriggerHysteresis(saver, this, "triggerHysteresis", 0.0, "Trigger Hysteresis (in Volts)"),
-  m_PhysicalChannel(QxrdSettingsSaverPtr(), this, "physicalChannel", 0, "Physical Channel Number"),
-  m_Value(QxrdSettingsSaverWPtr(), this, "value", 0.0, "Current Value of Channel"),
-  m_Triggered(QxrdSettingsSaverWPtr(), this, "triggered", 0, "Was channel triggered?"),
-  m_NLow(QxrdSettingsSaverWPtr(), this, "nLow", 0, "Number of untriggered data points"),
-  m_NHigh(QxrdSettingsSaverWPtr(), this, "nHigh", 0, "Number of triggered data points"),
-  m_Waveform(QxrdSettingsSaverWPtr(), this, "waveform", QcepDoubleVector(), "Waveform on Channel"),
+  m_PhysicalChannel(QcepSettingsSaverPtr(), this, "physicalChannel", 0, "Physical Channel Number"),
+  m_Value(QcepSettingsSaverWPtr(), this, "value", 0.0, "Current Value of Channel"),
+  m_Triggered(QcepSettingsSaverWPtr(), this, "triggered", 0, "Was channel triggered?"),
+  m_NLow(QcepSettingsSaverWPtr(), this, "nLow", 0, "Number of untriggered data points"),
+  m_NHigh(QcepSettingsSaverWPtr(), this, "nHigh", 0, "Number of triggered data points"),
+  m_Waveform(QcepSettingsSaverWPtr(), this, "waveform", QcepDoubleVector(), "Waveform on Channel"),
   m_Experiment(doc),
   m_ExtraInputs(xtra)
 {
@@ -40,14 +40,14 @@ QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
 
 void QxrdAcquisitionExtraInputsChannel::readSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepObject::readSettings(settings, section);
 }
 
 void QxrdAcquisitionExtraInputsChannel::writeSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepObject::writeSettings(settings, section);
 }

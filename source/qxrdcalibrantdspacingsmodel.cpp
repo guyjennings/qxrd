@@ -118,7 +118,7 @@ QVariant QxrdCalibrantDSpacingsModel::data (const QModelIndex & index, int role)
       }
     }
   }
-//  QxrdMaskDataPtr p = m_MaskStack->at(index.row());
+//  QcepMaskDataPtr p = m_MaskStack->at(index.row());
 
 //  if (p) {
 //

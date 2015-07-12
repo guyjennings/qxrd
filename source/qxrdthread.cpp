@@ -1,7 +1,5 @@
 #include "qxrdthread.h"
 
-QxrdThread::QxrdThread(QObject *parent) :
-  QThread(parent),
-  m_Mutex(QMutex::Recursive)
+QxrdThread::QxrdThread(QObject *parent) : QcepThread(parent)
 {
 }

@@ -3,13 +3,13 @@
 
 #include "qcepobject.h"
 #include "qcepproperty.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdnidaqplugininterface.h"
-#include "qxrdimagedata.h"
-#include "qxrdimagedata-ptr.h"
+#include "qcepimagedata.h"
+#include "qcepimagedata-ptr.h"
 #include "qxrdacquisitionextrainputschannel.h"
 #include "qxrdacquisitionextrainputschannel-ptr.h"
 #include <QSettings>
@@ -19,7 +19,7 @@ class QxrdAcquisitionExtraInputs : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver,
+  explicit QxrdAcquisitionExtraInputs(QcepSettingsSaverWPtr saver,
                                       QxrdExperimentWPtr    doc,
                                       QxrdAcquisitionWPtr   acq);
   void initialize(QxrdAcquisitionExtraInputsWPtr extra);
@@ -44,7 +44,7 @@ public slots:
   void initiate();
   void reinitiate();
   void acquire();
-  void logToImage(QxrdInt16ImageDataPtr img);
+  void logToImage(QcepInt16ImageDataPtr img);
   void finish();
   void timerDone();
   void appendChannel(int ch = -1);
@@ -83,7 +83,7 @@ private:
   QxrdExperimentWPtr          m_Experiment;
   QxrdAcquisitionWPtr         m_Acquisition;
   QxrdAcquisitionExtraInputsWPtr m_ExtraInputs;
-  QxrdSettingsSaverWPtr       m_Saver;
+  QcepSettingsSaverWPtr       m_Saver;
   QVector<QxrdAcquisitionExtraInputsChannelPtr> m_Channels;
   QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
   QVector< QVector<double> >  m_ChannelData;

@@ -7,7 +7,7 @@
 #include "qxrdexperimentpilatusanalysis.h"
 #include "qxrdexperimentsimulatedacquisition.h"
 #include "qxrdexperimentgenericanalysis.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
 #include <stdio.h>
 
@@ -115,7 +115,7 @@ QxrdExperimentPtr QxrdExperimentThread::experiment()
 {
   while (isRunning()) {
     {
-      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
       if (m_Experiment) return m_Experiment;
     }

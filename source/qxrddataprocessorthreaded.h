@@ -5,32 +5,31 @@
 
 #include "qxrddataprocessorbase.h"
 #include "qxrdresultserializer.h"
-#include "qxrdintegrateddata-ptr.h"
+#include "qcepintegrateddata-ptr.h"
 #include "qxrdroidata.h"
 #include "qxrdroidata-ptr.h"
 #include "qxrdhistogramdata.h"
 #include "qxrdhistogramdata-ptr.h"
-#include "qxrdimagedata.h"
-#include "qxrdimagedata-ptr.h"
+#include "qcepimagedata.h"
+#include "qcepimagedata-ptr.h"
 
 class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
 {
   Q_OBJECT
 public:
-  QxrdDataProcessorThreaded(QxrdSettingsSaverWPtr saver,
+  QxrdDataProcessorThreaded(QcepSettingsSaverWPtr saver,
                             QxrdExperimentWPtr doc,
                             QxrdAcquisitionWPtr acq,
-                            QxrdAllocatorWPtr allocator,
                             QxrdFileSaverWPtr filesaver);
   virtual ~QxrdDataProcessorThreaded();
 
 public:
   void beginAcquisition(int isDark);
-  void idleInt16Image(QxrdInt16ImageDataPtr image, bool liveView);
-  void acquiredInt16Image(QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow);
-  void acquiredInt32Image(QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
-  void acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
-  void acquiredDoubleImage(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, QcepDoubleList v);
+  void idleInt16Image(QcepInt16ImageDataPtr image, bool liveView);
+  void acquiredInt16Image(QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow);
+  void acquiredInt32Image(QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+  void acquiredDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
+  void acquiredDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, QcepDoubleList v);
 
 private slots:
   void onCorrectedImageAvailable();
@@ -72,17 +71,17 @@ public slots:
   void fixupBadBackgroundSubtraction(QString imagePattern, int nImgExposures, QString darkPath, int nDarkExposures);
 
 private:
-  QxrdDoubleImageDataPtr correctInt16Image(QxrdDoubleImageDataPtr corrected, QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
-  QxrdDoubleImageDataPtr correctInt32Image(QxrdDoubleImageDataPtr corrected, QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
-  QxrdDoubleImageDataPtr correctDoubleImage(QxrdDoubleImageDataPtr corrected, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
-  QxrdDoubleImageDataPtr correctDoubleImage(QxrdDoubleImageDataPtr corrected, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr overflow, QcepDoubleList v);
-  QxrdIntegratedDataPtr  integrateImage(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask, double cx, double cy);
-  QxrdROIDataPtr         calculateROI(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
-  QxrdHistogramDataPtr   calculateHistogram(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
+  QcepDoubleImageDataPtr correctInt16Image(QcepDoubleImageDataPtr corrected, QcepInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepDoubleImageDataPtr correctInt32Image(QcepDoubleImageDataPtr corrected, QcepInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepDoubleImageDataPtr correctDoubleImage(QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepDoubleImageDataPtr correctDoubleImage(QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr overflow, QcepDoubleList v);
+  QcepIntegratedDataPtr  integrateImage(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr image, QcepMaskDataPtr mask, double cx, double cy);
+  QxrdROIDataPtr         calculateROI(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask);
+  QxrdHistogramDataPtr   calculateHistogram(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask);
 
 private:
-  QxrdResultSerializer<QxrdDoubleImageDataPtr>  m_CorrectedImages;
-  QxrdResultSerializer<QxrdIntegratedDataPtr>   m_IntegratedData;
+  QxrdResultSerializer<QcepDoubleImageDataPtr>  m_CorrectedImages;
+  QxrdResultSerializer<QcepIntegratedDataPtr>   m_IntegratedData;
   QxrdResultSerializer<QxrdROIDataPtr>          m_ROIData;
   QxrdResultSerializer<QxrdHistogramDataPtr>    m_HistogramData;
 

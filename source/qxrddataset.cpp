@@ -1,26 +1,26 @@
 #include "qxrddataset.h"
-#include "qxrdimagedata.h"
-#include "qxrdintegrateddata.h"
-#include "qxrdallocator.h"
+#include "qcepimagedata.h"
+#include "qcepintegrateddata.h"
+#include "qcepallocator.h"
 
 QxrdDataset::QxrdDataset(QcepSettingsSaverWPtr saver, QString name) :
   QcepDataset(saver, name)
 {
 }
 
-QxrdDoubleImageDataPtr QxrdDataset::image(QString path)
+QcepDoubleImageDataPtr QxrdDataset::image(QString path)
 {
   QcepDataObjectPtr obj = item(path);
 
-  return qSharedPointerDynamicCast<QxrdDoubleImageData>(obj);
+  return qSharedPointerDynamicCast<QcepDoubleImageData>(obj);
 }
 
-QxrdDoubleImageDataPtr QxrdDataset::newImage(QString path, int width, int height)
+QcepDoubleImageDataPtr QxrdDataset::newImage(QString path, int width, int height)
 {
   QcepDataGroupPtr group = createGroup(directoryName(path));
 
   if (group) {
-    QxrdDoubleImageDataPtr img = QxrdAllocator::newDoubleImage(object(path), width, height);
+    QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(object(path), width, height);
 
     if (img) {
       group->append(img);
@@ -31,22 +31,22 @@ QxrdDoubleImageDataPtr QxrdDataset::newImage(QString path, int width, int height
     }
   }
 
-  return QxrdDoubleImageDataPtr();
+  return QcepDoubleImageDataPtr();
 }
 
-QxrdIntegratedDataPtr QxrdDataset::integratedData(QString path)
+QcepIntegratedDataPtr QxrdDataset::integratedData(QString path)
 {
   QcepDataObjectPtr obj = item(path);
 
-  return qSharedPointerDynamicCast<QxrdIntegratedData>(obj);
+  return qSharedPointerDynamicCast<QcepIntegratedData>(obj);
 }
 
-QxrdIntegratedDataPtr QxrdDataset::newIntegratedData(QString path, int sz)
+QcepIntegratedDataPtr QxrdDataset::newIntegratedData(QString path, int sz)
 {
   QcepDataGroupPtr group = createGroup(directoryName(path));
 
   if (group) {
-    QxrdIntegratedDataPtr integ = QxrdAllocator::newIntegratedData(object(path), sz);
+    QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(object(path), sz);
 
     if (integ) {
       group->append(integ);
@@ -57,5 +57,5 @@ QxrdIntegratedDataPtr QxrdDataset::newIntegratedData(QString path, int sz)
     }
   }
 
-  return QxrdIntegratedDataPtr();
+  return QcepIntegratedDataPtr();
 }

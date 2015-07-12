@@ -1,6 +1,6 @@
 #include "qxrdmaskstackmodel.h"
 #include "qxrdmaskstack.h"
-#include "qxrdmaskdata.h"
+#include "qcepmaskdata.h"
 
 QxrdMaskStackModel::QxrdMaskStackModel(QxrdMaskStackPtr masks) :
     m_MaskStack(masks)
@@ -32,7 +32,7 @@ QVariant QxrdMaskStackModel::data (const QModelIndex & index, int role) const
     return QVariant();
   }
 
-  QxrdMaskDataPtr p = m_MaskStack->at(index.row());
+  QcepMaskDataPtr p = m_MaskStack->at(index.row());
 
   if (p) {
     int col = index.column();
@@ -126,7 +126,7 @@ bool QxrdMaskStackModel::setData ( const QModelIndex & index, const QVariant & v
   if (columnCount() == 1) {
     if (index.column() == 0) {
       if ((index.row() >= 0) && (index.row() < m_MaskStack->count())) {
-        QxrdMaskDataPtr p = m_MaskStack->at(index.row());
+        QcepMaskDataPtr p = m_MaskStack->at(index.row());
 
         if ((role == Qt::EditRole || role == Qt::DisplayRole)) {
           if (p) {
@@ -151,7 +151,7 @@ bool QxrdMaskStackModel::setData ( const QModelIndex & index, const QVariant & v
     }
   } else {
     if ((index.row() >= 0) && (index.row() < m_MaskStack->count())) {
-      QxrdMaskDataPtr p = m_MaskStack->at(index.row());
+      QcepMaskDataPtr p = m_MaskStack->at(index.row());
 
       if (index.column() == TitleColumn && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         if (p) {

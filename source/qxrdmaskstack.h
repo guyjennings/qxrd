@@ -4,10 +4,10 @@
 #include <QStack>
 #include <QModelIndexList>
 
-#include "qxrdmaskdata-ptr.h"
-#include "qxrdimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
+#include "qcepimagedata-ptr.h"
 
-class QxrdMaskStack : public QObject, public QStack<QxrdMaskDataPtr>
+class QxrdMaskStack : public QObject, public QStack<QcepMaskDataPtr>
 {
   Q_OBJECT
 
@@ -17,7 +17,7 @@ public:
   void changed();
   static QString stackLevelName(int n);
 
-  QxrdMaskDataPtr mask(QModelIndex m);
+  QcepMaskDataPtr mask(QModelIndex m);
 
   void newMask();
   void enableMasks(QModelIndexList sel);
@@ -33,7 +33,7 @@ public:
     IncludeOutside
   } QxrdThresholdMode;
 
-  void thresholdMasks(QModelIndexList sel, QxrdThresholdMode mode, double low, double high, QxrdDoubleImageData *data);
+  void thresholdMasks(QModelIndexList sel, QxrdThresholdMode mode, double low, double high, QcepDoubleImageData *data);
 
 signals:
   void maskChanged();

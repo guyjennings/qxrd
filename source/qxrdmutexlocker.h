@@ -1,12 +1,12 @@
 #ifndef QXRDMUTEXLOCKER_H
 #define QXRDMUTEXLOCKER_H
 
-#include "qcepmutexlocker.h"
+//#include "qcepmutexlocker.h"
 
-class QxrdMutexLocker : public QcepMutexLocker
-{
-public:
-  QxrdMutexLocker(const char *file, int line, QMutex * mutex);
-};
+//class QcepMutexLocker : public QcepMutexLocker
+//{
+//public:
+//  QcepMutexLocker(const char *file, int line, QMutex * mutex);
+//};
 
 #endif // QXRDMUTEXLOCKER_H

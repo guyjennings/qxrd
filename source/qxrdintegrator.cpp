@@ -1,27 +1,27 @@
 #include "qxrddebug.h"
 #include "qxrdintegrator.h"
 #include "qxrddataprocessor.h"
-#include "qxrdimagedata.h"
-#include "qxrdmaskdata.h"
+#include "qcepimagedata.h"
+#include "qcepmaskdata.h"
 #include "qxrdcenterfinder.h"
-#include "qxrdintegrateddata.h"
-#include "qxrdallocator.h"
+#include "qcepintegrateddata.h"
+#include "qcepallocator.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qxrdintegratorcache.h"
-#include "qxrdallocator.h"
+#include "qcepallocator.h"
 #include "qxrddataset.h"
 #include "qcepdatasetmodel.h"
 
 #include <QTime>
 #include <QtConcurrentRun>
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
 #define _USE_MATH_DEFINES
 
 #include <cmath>
 
-QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw, QxrdAllocatorWPtr alloc)
+QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw)
   : QcepObject("integrator", NULL),
     m_Saver(saver),
     m_Oversample(saver, this, "oversample", 1, "Oversampling for Integration"),
@@ -44,7 +44,6 @@ QxrdIntegrator::QxrdIntegrator(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr e
     m_ScalingFactor(saver, this, "scalingFactor", 1.0, "Scaling factor for integrated intensity"),
     m_Experiment(exp),
     m_CenterFinder(cfw),
-    m_Allocator(alloc),
     m_IntegratorCache()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -122,22 +121,18 @@ void QxrdIntegrator::onIntegrationParametersChanged()
   m_IntegratorCache = QxrdIntegratorCachePtr();
 }
 
-QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
+QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask)
 {
-  QxrdAllocatorPtr alloc(m_Allocator);
+  QcepIntegratedDataPtr res = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, dimg);
 
-  if (alloc) {
-    QxrdIntegratedDataPtr res = alloc->newIntegratedData(dimg);
-
-    if (res) {
-      return performIntegration(res, dimg, mask);
-    }
+  if (res) {
+    return performIntegration(res, dimg, mask);
+  } else {
+    return res;
   }
-
-  return QxrdIntegratedDataPtr();
 }
 
-QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
+QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask)
 {
   if (qcepDebug(DEBUG_INTEGRATOR)) {
     QxrdExperimentPtr expt(m_Experiment);
@@ -157,7 +152,7 @@ QxrdIntegratedDataPtr QxrdIntegrator::performIntegration(QxrdIntegratedDataPtr i
       dimg->get_Height() != cache->get_NRows()) {
 
     cache = QxrdIntegratorCachePtr(
-          new QxrdIntegratorCache(m_Experiment, m_Allocator, m_Integrator, m_CenterFinder));
+          new QxrdIntegratorCache(m_Experiment, m_Integrator, m_CenterFinder));
 
     m_IntegratorCache = cache;
   }
@@ -246,7 +241,7 @@ QString QxrdIntegrator::XLabel() const
   return label;
 }
 
-QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, double x0, double y0, double x1, double y1, double width)
+QcepIntegratedDataPtr QxrdIntegrator::sliceLine(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr image, double x0, double y0, double x1, double y1, double width)
 {
   try {
     QVector<QPointF> poly;
@@ -264,10 +259,10 @@ QxrdIntegratedDataPtr QxrdIntegrator::sliceLine(QxrdIntegratedDataPtr integ, Qxr
     }
   }
 
-  return QxrdIntegratedDataPtr();
+  return QcepIntegratedDataPtr();
 }
 
-QxrdIntegratedDataPtr QxrdIntegrator::slicePolygon(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr image, QVector<QPointF> poly, double /*width*/)
+QcepIntegratedDataPtr QxrdIntegrator::slicePolygon(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr image, QVector<QPointF> poly, double /*width*/)
 {
   QThread::currentThread()->setObjectName("slicePolygon");
 
@@ -340,21 +335,21 @@ void QxrdIntegrator::integrateVsTTH()
   set_IntegrationXUnits(IntegrateTTH);
 }
 
-QxrdInt32ImageDataPtr QxrdIntegrator::cachedGeometry()
+QcepInt32ImageDataPtr QxrdIntegrator::cachedGeometry()
 {
   if (m_IntegratorCache) {
     return m_IntegratorCache->cachedGeometry();
   } else {
-    return QxrdInt32ImageDataPtr();
+    return QcepInt32ImageDataPtr();
   }
 }
 
-QxrdDoubleImageDataPtr QxrdIntegrator::cachedIntensity()
+QcepDoubleImageDataPtr QxrdIntegrator::cachedIntensity()
 {
   if (m_IntegratorCache) {
     return m_IntegratorCache->cachedIntensity();
   } else {
-    return QxrdDoubleImageDataPtr();
+    return QcepDoubleImageDataPtr();
   }
 }
 
@@ -380,7 +375,7 @@ QString QxrdIntegrator::defaultUserAbsorptionScript()
   }
 }
 
-void QxrdIntegrator::appendIntegration(QString resPath, QxrdIntegratedDataPtr integ)
+void QxrdIntegrator::appendIntegration(QString resPath, QcepIntegratedDataPtr integ)
 {
   QxrdExperimentPtr expt(m_Experiment);
 
@@ -388,7 +383,7 @@ void QxrdIntegrator::appendIntegration(QString resPath, QxrdIntegratedDataPtr in
     QcepDatasetModelPtr ds = expt->dataset();
 
     if (ds) {
-      QxrdDoubleImageDataPtr data = ds->image(resPath);
+      QcepDoubleImageDataPtr data = ds->image(resPath);
 
       if (!data) {
         data = ds->newImage(resPath);
@@ -403,7 +398,7 @@ void QxrdIntegrator::appendIntegration(QString resPath, QxrdIntegratedDataPtr in
   }
 }
 
-void QxrdIntegrator::appendIntegration(QString resPath, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
+void QxrdIntegrator::appendIntegration(QString resPath, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask)
 {
   QxrdExperimentPtr expt(m_Experiment);
 
@@ -411,7 +406,7 @@ void QxrdIntegrator::appendIntegration(QString resPath, QxrdDoubleImageDataPtr d
     QcepDatasetModelPtr ds = expt->dataset();
 
     if (ds) {
-      QxrdDoubleImageDataPtr data = ds->image(resPath);
+      QcepDoubleImageDataPtr data = ds->image(resPath);
 
       if (!data) {
         data = ds->newImage(resPath);
@@ -424,14 +419,14 @@ void QxrdIntegrator::appendIntegration(QString resPath, QxrdDoubleImageDataPtr d
   }
 }
 
-void QxrdIntegrator::appendIntegration(QxrdDoubleImageDataPtr res, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask)
+void QxrdIntegrator::appendIntegration(QcepDoubleImageDataPtr res, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask)
 {
-  QxrdIntegratedDataPtr integ = performIntegration(dimg, mask);
+  QcepIntegratedDataPtr integ = performIntegration(dimg, mask);
 
   appendIntegration(res, integ);
 }
 
-void QxrdIntegrator::appendIntegration(QxrdDoubleImageDataPtr res, QxrdIntegratedDataPtr integ)
+void QxrdIntegrator::appendIntegration(QcepDoubleImageDataPtr res, QcepIntegratedDataPtr integ)
 {
   if (res && integ) {
     int width = res->get_Width();
@@ -456,7 +451,7 @@ void QxrdIntegrator::prepareAccumulator(QString resPath, int nImages)
     QcepDatasetModelPtr ds = expt->dataset();
 
     if (ds) {
-      QxrdDoubleImageDataPtr data = ds->image(resPath);
+      QcepDoubleImageDataPtr data = ds->image(resPath);
 
       if (!data) {
         data = ds->newImage(resPath);

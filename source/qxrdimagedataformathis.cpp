@@ -1,10 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "qxrdimagedataformathis.h"
-#include "qxrdimagedata.h"
-#include "qxrdmaskdata.h"
+#include "qcepimagedata.h"
+#include "qcepmaskdata.h"
 #include <QFileInfo>
-#include "qxrdimagedata-ptr.h"
+#include "qcepimagedata-ptr.h"
 
 static QxrdImageDataFormatHis fmt;
 

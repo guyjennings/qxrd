@@ -6,12 +6,12 @@
 #include <QFileInfo>
 #include <QMenu>
 #include <QMetaObject>
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 #include "qxrdfilebrowsermodel.h"
 #include "qxrdfilebrowserview.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 
 QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
                                  int isOutput,

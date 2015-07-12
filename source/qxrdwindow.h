@@ -9,7 +9,7 @@
 
 #include "ui_qxrdwindow.h"
 
-#include "qxrdallocator.h"
+#include "qcepallocator.h"
 #include "qxrdscriptengine.h"
 #include "qxrdacquisitiondialog.h"
 
@@ -47,7 +47,7 @@ public:
              QxrdExperimentWPtr docw,
              QxrdAcquisitionWPtr acqw,
              QxrdDataProcessorWPtr procw,
-             QxrdAllocatorWPtr allocw,
+             QcepAllocatorWPtr allocw,
              QWidget *parent);
   virtual ~QxrdWindow();
   void initialize(QxrdWindowWPtr win);
@@ -144,11 +144,11 @@ public:
 
   QxrdDataProcessorWPtr dataProcessor() const;
 
-  void newDataAvailable(QxrdDoubleImageDataPtr img, QxrdMaskDataPtr overflow);
-  void newMaskAvailable(QxrdMaskDataPtr img);
+  void newDataAvailable(QcepDoubleImageDataPtr img, QcepMaskDataPtr overflow);
+  void newMaskAvailable(QcepMaskDataPtr img);
 
-  QxrdDoubleImageDataPtr data();
-  QxrdMaskDataPtr mask();
+  QcepDoubleImageDataPtr data();
+  QcepMaskDataPtr mask();
 
   QxrdAcquisitionWPtr acquisition() const;
 
@@ -171,7 +171,7 @@ private:
   QxrdExperimentWPtr                     m_Experiment;
   QxrdAcquisitionWPtr                    m_Acquisition;
   QxrdDataProcessorWPtr                  m_DataProcessor;
-  QxrdAllocatorWPtr                      m_Allocator;
+  QcepAllocatorWPtr                      m_Allocator;
   QxrdAcquisitionDialog                 *m_AcquisitionDialog;
   QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
   QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;
@@ -197,14 +197,14 @@ private:
   QTimer                                 m_StatusTimer;
   QTimer                                 m_UpdateTimer;
 
-  QxrdDoubleImageDataPtr                 m_Data;
-  QxrdMaskDataPtr                        m_Overflow;
-  QxrdDoubleImageDataPtr                 m_NewData;
-  QxrdMaskDataPtr                        m_NewOverflow;
+  QcepDoubleImageDataPtr                 m_Data;
+  QcepMaskDataPtr                        m_Overflow;
+  QcepDoubleImageDataPtr                 m_NewData;
+  QcepMaskDataPtr                        m_NewOverflow;
   QAtomicInt                             m_NewDataAvailable;
 
-  QxrdMaskDataPtr                        m_Mask;
-  QxrdMaskDataPtr                        m_NewMask;
+  QcepMaskDataPtr                        m_Mask;
+  QcepMaskDataPtr                        m_NewMask;
   QAtomicInt                             m_NewMaskAvailable;
 
   QxrdImageDisplayWidget                *m_ImageDisplay;

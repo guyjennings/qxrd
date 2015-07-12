@@ -3,7 +3,7 @@
 
 #include "qxrdscriptengine.h"
 #include "qxrdapplication.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
 #include <stdio.h>
 
@@ -38,7 +38,7 @@ QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const
 {
   while (isRunning()) {
     {
-      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
       if (m_ScriptEngine) return m_ScriptEngine;
     }

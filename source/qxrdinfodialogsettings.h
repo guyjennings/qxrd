@@ -3,13 +3,13 @@
 
 #include <QObject>
 #include "qcepproperty.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 
 class QxrdInfoDialogSettings : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdInfoDialogSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdInfoDialogSettings(QcepSettingsSaverWPtr saver, QObject *parent);
   
 public:
   void readSettings(QSettings *settings, QString section);

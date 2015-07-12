@@ -1,12 +1,12 @@
 #include "qxrddistortioncorrection.h"
-#include "qxrdmutexlocker.h"
-#include "qxrdsettingssaver.h"
+#include "qcepmutexlocker.h"
+#include "qcepsettingssaver.h"
 #include "levmar.h"
 #include <math.h>
 #include <stdio.h>
 #include "qxrdexperiment.h"
 
-QxrdDistortionCorrection::QxrdDistortionCorrection(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt)
+QxrdDistortionCorrection::QxrdDistortionCorrection(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt)
   : QcepObject("distortion", NULL),
     m_DistortionImagePath(saver, this, "distortionImagePath", "", "File path for distortion calibration image"),
     m_P0(saver, this, "p0", QPointF(100,100), "Origin of distortion image grid"),

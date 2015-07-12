@@ -6,10 +6,10 @@
 #include <QObject>
 #include "qcepproperty.h"
 
-#include "qxrdimagedata-ptr.h"
-#include "qxrdmaskdata-ptr.h"
-#include "qxrdintegrateddata-ptr.h"
-#include "qxrdallocator-ptr.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
+#include "qcepintegrateddata-ptr.h"
+#include "qcepallocator-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdintegrator-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
@@ -21,7 +21,6 @@ class QxrdIntegratorCache : public QObject
   Q_OBJECT
 public:
   QxrdIntegratorCache(QxrdExperimentWPtr exp,
-                      QxrdAllocatorWPtr alloc,
                       QxrdIntegratorWPtr integ,
                       QxrdCenterFinderWPtr cf);
   virtual ~QxrdIntegratorCache();
@@ -32,8 +31,8 @@ public:
   void grabScriptEngine();
   void releaseScriptEngine();
 
-  QxrdInt32ImageDataPtr  cachedGeometry();
-  QxrdDoubleImageDataPtr cachedIntensity();
+  QcepInt32ImageDataPtr  cachedGeometry();
+  QcepDoubleImageDataPtr cachedIntensity();
 
 private:
   int    m_Oversample;
@@ -78,7 +77,7 @@ private:
   double m_ScalingFactor;
 
 public:
-    QxrdIntegratedDataPtr performIntegration(QxrdIntegratedDataPtr integ, QxrdDoubleImageDataPtr dimg, QxrdMaskDataPtr mask, int normalize);
+    QcepIntegratedDataPtr performIntegration(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask, int normalize);
 
 private:
   double getTTH(double x, double y);
@@ -93,10 +92,9 @@ private:
 private:
   QAtomicInt             m_CacheFillLevel;
   QAtomicInt             m_CacheFullLevel;
-  QxrdInt32ImageDataPtr  m_CachedBinNumbers;
-  QxrdDoubleImageDataPtr m_CachedNormalization;
+  QcepInt32ImageDataPtr  m_CachedBinNumbers;
+  QcepDoubleImageDataPtr m_CachedNormalization;
   QxrdExperimentWPtr     m_Experiment;
-  QxrdAllocatorWPtr      m_Allocator;
   QxrdIntegratorPtr      m_Integrator;
   QxrdCenterFinderPtr    m_CenterFinder;
   QxrdScriptEnginePtr    m_ScriptEngine;

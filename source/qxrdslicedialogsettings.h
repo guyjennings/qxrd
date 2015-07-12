@@ -4,13 +4,13 @@
 #include <QObject>
 #include "qcepproperty.h"
 #include "qxrdsliceplotsettings.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 
 class QxrdSliceDialogSettings : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSliceDialogSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdSliceDialogSettings(QcepSettingsSaverWPtr saver, QObject *parent);
   
 public:
   Q_PROPERTY(QcepPolygon slicePolygon READ get_SlicePolygon WRITE set_SlicePolygon)

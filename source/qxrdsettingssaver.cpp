@@ -1,22 +1,22 @@
-#include "qxrddebug.h"
-#include "qcepmacros.h"
-#include "qxrdsettingssaver.h"
-#include "qcepproperty.h"
-#include "qxrdapplication.h"
-#include <stdio.h>
-#include "qxrdmutexlocker.h"
+//#include "qxrddebug.h"
+//#include "qcepmacros.h"
+//#include "qcepsettingssaver.h"
+//#include "qcepproperty.h"
+//#include "qxrdapplication.h"
+//#include <stdio.h>
+//#include "qcepmutexlocker.h"
 
-QxrdSettingsSaver::QxrdSettingsSaver(QObject *owner) :
-  QcepSettingsSaver(owner)
-{
-  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdSettingsSaver::QxrdSettingsSaver(%p)\n", this);
-  }
-}
+//QcepSettingsSaver::QcepSettingsSaver(QObject *owner) :
+//  QcepSettingsSaver(owner)
+//{
+//  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+//    printf("QcepSettingsSaver::QcepSettingsSaver(%p)\n", this);
+//  }
+//}
 
-QxrdSettingsSaver::~QxrdSettingsSaver()
-{
-  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdSettingsSaver::~QxrdSettingsSaver(%p)\n", this);
-  }
-}
+//QcepSettingsSaver::~QcepSettingsSaver()
+//{
+//  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+//    printf("QcepSettingsSaver::~QcepSettingsSaver(%p)\n", this);
+//  }
+//}

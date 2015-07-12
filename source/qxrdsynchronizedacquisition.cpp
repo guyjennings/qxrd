@@ -1,11 +1,11 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaqplugininterface.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 #include "qxrdacquisition.h"
 #include "qwt_math.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 
-QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdSettingsSaverPtr saver, QxrdAcquisition *acq) :
+QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QcepSettingsSaverPtr saver, QxrdAcquisition *acq) :
   QcepObject("synchronization", NULL),
   m_SyncAcquisitionMode(saver, this,"syncAcquisitionMode", 0, "Synchronized Acquisition Mode (0 = None, 1 = Stepped, 2 = Continuous)"),
   m_SyncAcquisitionWaveform(saver, this,"syncAcquisitionWaveform", 0,

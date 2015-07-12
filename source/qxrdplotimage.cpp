@@ -1,7 +1,7 @@
 #include "qxrdplotimage.h"
-#include "qxrdimagedata.h"
+#include "qcepimagedata.h"
 
-QxrdPlotImage::QxrdPlotImage(const QString &title, QxrdDoubleImageDataPtr data, QxrdMaskDataPtr mask) :
+QxrdPlotImage::QxrdPlotImage(const QString &title, QcepDoubleImageDataPtr data, QcepMaskDataPtr mask) :
     QwtPlotRasterItem(title),
     m_Data(data),
     m_Mask(mask)

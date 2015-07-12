@@ -1,7 +1,7 @@
 #include "qxrddetectorsimulated.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
-#include "qxrdallocator.h"
+#include "qcepallocator.h"
 #include "qxrddebug.h"
 
 #include <stdio.h>
@@ -190,8 +190,7 @@ void QxrdDetectorSimulated::onTimerTimeout()
     int nRows = acq->get_NRows();
     int nCols = acq->get_NCols();
 
-    QxrdInt16ImageDataPtr image = QxrdAllocator::newInt16Image(acq->allocator(),
-                                                               QxrdAllocator::AllocateFromReserve,
+    QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(QcepAllocator::AllocateFromReserve,
                                                                nCols, nRows);
     int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
     int frame = frameCounter % 8;

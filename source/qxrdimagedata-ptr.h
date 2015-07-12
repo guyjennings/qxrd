@@ -1,20 +1,20 @@
 #ifndef QXRDIMAGEDATA_PTR_H
 #define QXRDIMAGEDATA_PTR_H
 
-#include <QSharedPointer>
+//#include <QSharedPointer>
 
-template <typename T> class QxrdImageData;
+//template <typename T> class QxrdImageData;
 
-typedef QxrdImageData<quint16> QxrdInt16ImageData;
-typedef QxrdImageData<quint32> QxrdInt32ImageData;
-typedef QxrdImageData<double>  QxrdDoubleImageData;
+//typedef QxrdImageData<quint16> QcepInt16ImageData;
+//typedef QxrdImageData<quint32> QcepInt32ImageData;
+//typedef QxrdImageData<double>  QcepDoubleImageData;
 
-typedef QSharedPointer<QxrdInt16ImageData> QxrdInt16ImageDataPtr;
-typedef QSharedPointer<QxrdInt32ImageData> QxrdInt32ImageDataPtr;
-typedef QSharedPointer<QxrdDoubleImageData> QxrdDoubleImageDataPtr;
+//typedef QSharedPointer<QcepInt16ImageData> QcepInt16ImageDataPtr;
+//typedef QSharedPointer<QcepInt32ImageData> QcepInt32ImageDataPtr;
+//typedef QSharedPointer<QcepDoubleImageData> QcepDoubleImageDataPtr;
 
-typedef QWeakPointer<QxrdInt16ImageData> QxrdInt16ImageDataWPtr;
-typedef QWeakPointer<QxrdInt32ImageData> QxrdInt32ImageDataWPtr;
-typedef QWeakPointer<QxrdDoubleImageData> QxrdDoubleImageDataWPtr;
+//typedef QWeakPointer<QcepInt16ImageData> QcepInt16ImageDataWPtr;
+//typedef QWeakPointer<QcepInt32ImageData> QcepInt32ImageDataWPtr;
+//typedef QWeakPointer<QcepDoubleImageData> QcepDoubleImageDataWPtr;
 
 #endif

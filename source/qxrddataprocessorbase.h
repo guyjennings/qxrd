@@ -10,16 +10,15 @@
 //#include <QStack>
 
 #include "qcepproperty.h"
-#include "qxrdimagequeue.h"
-#include "qxrdimagedata-ptr.h"
-#include "qxrdmaskdata-ptr.h"
+#include "qcepimagequeue.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
 #include "qxrdmaskstack.h"
 #include "qxrdmaskstack-ptr.h"
-#include "qxrdintegrateddata.h"
-#include "qxrdintegrateddata-ptr.h"
+#include "qcepintegrateddata.h"
+#include "qcepintegrateddata-ptr.h"
 #include "qxrdfilesaver-ptr.h"
-#include "qxrdsettingssaver-ptr.h"
-#include "qxrdallocator-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 #include "qxrdgeneratetestimage-ptr.h"
 #include "qxrdintegrator-ptr.h"
 #include "qxrdintegrator.h"
@@ -36,10 +35,9 @@ class QxrdDataProcessorBase : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdDataProcessorBase(QxrdSettingsSaverWPtr saver,
+  QxrdDataProcessorBase(QcepSettingsSaverWPtr saver,
                         QxrdExperimentWPtr doc,
                         QxrdAcquisitionWPtr acq,
-                        QxrdAllocatorWPtr allocator,
                         QxrdFileSaverWPtr filesaver);
   virtual ~QxrdDataProcessorBase();
 
@@ -216,7 +214,7 @@ public:
   };
 
 signals:
-  void newIntegrationAvailable(QxrdIntegratedDataPtr data);
+  void newIntegrationAvailable(QcepIntegratedDataPtr data);
 
 public slots:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
@@ -252,7 +250,7 @@ public slots:
   void loadData(QString name);
   void saveData(QString name, int canOverwrite=NoOverwrite);
   void saveData(QcepDataObjectPtr object, QString name, int canOverwrite=NoOverwrite);
-//  void saveData(QxrdDoubleImageDataPtr data, QString name, int canOverwrite=NoOverwrite);
+//  void saveData(QcepDoubleImageDataPtr data, QString name, int canOverwrite=NoOverwrite);
 
   void loadDark(QString name);
   void saveDark(QString name, int canOverwrite=NoOverwrite);
@@ -277,7 +275,7 @@ public slots:
   int  maskStackSize();
   int  maskStackPosition(int pos);
   void newMaskStack();
-  void pushMaskStack(QxrdMaskDataPtr mask = QxrdMaskDataPtr());
+  void pushMaskStack(QcepMaskDataPtr mask = QcepMaskDataPtr());
   void popMaskStack(int amount=1);
   void clearMaskStack();
   void clearMaskStackTop();
@@ -311,8 +309,8 @@ public slots:
   void calculateROI();
   void calculateHistogram();
 
-  void displayIntegratedData(QxrdIntegratedDataPtr d);
-  void writeOutputScan(QxrdIntegratedDataPtr d);
+  void displayIntegratedData(QcepIntegratedDataPtr d);
+  void writeOutputScan(QcepIntegratedDataPtr d);
 
   void newOutputScan(QString title);
   void appendToOutputScan(double x, double y);
@@ -335,18 +333,18 @@ public slots:
   QString subtractedOutputDirectory() const;
   QString integratedOutputDirectory() const;
 
-  QxrdDoubleImageDataPtr data() const;
-  QxrdDoubleImageDataPtr darkImage() const;
-  QxrdDoubleImageDataPtr gainMap() const;
-  QxrdDoubleImageDataPtr badPixels() const;
-  QxrdDoubleImageDataPtr liveData() const;
-  QxrdMaskDataPtr        mask() const;
-  QxrdMaskDataPtr        overflow() const;
+  QcepDoubleImageDataPtr data() const;
+  QcepDoubleImageDataPtr darkImage() const;
+  QcepDoubleImageDataPtr gainMap() const;
+  QcepDoubleImageDataPtr badPixels() const;
+  QcepDoubleImageDataPtr liveData() const;
+  QcepMaskDataPtr        mask() const;
+  QcepMaskDataPtr        overflow() const;
 
 public:
   void loadDefaultImages();
 
-  QxrdDoubleImageDataPtr takeNextFreeImage(int width, int height);
+  QcepDoubleImageDataPtr takeNextFreeImage(int width, int height);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
@@ -354,7 +352,7 @@ public:
   void setAcquisition(QxrdAcquisitionWPtr acq);
   void setWindow(QxrdWindowWPtr win);
 
-//  QxrdSettingsSaver     *saver();
+//  QcepSettingsSaver     *saver();
 
 
   void createMaskIfNeeded();
@@ -374,35 +372,35 @@ public:
   void updateEstimatedTime(QcepDoubleProperty *prop, int msec);
 
 public slots:
-  void newData(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
+  void newData(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
 
 protected:
-  void saveNamedImageData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
-  void saveNamedImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
-  void saveNamedImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
-  void saveNamedRawImageData(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
-  void saveNamedRawImageData(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
-  void saveNamedMaskData(QString name, QxrdMaskDataPtr mask, int canOverwrite=NoOverwrite);
-  void saveNamedImageDataAsText(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+  void saveNamedImageData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+  void saveNamedImageData(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+  void saveNamedImageData(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+  void saveNamedRawImageData(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+  void saveNamedRawImageData(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+  void saveNamedMaskData(QString name, QcepMaskDataPtr mask, int canOverwrite=NoOverwrite);
+  void saveNamedImageDataAsText(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
   void writeOutputScan(QVector<double> x, QVector<double> y);
 
-  QxrdDoubleImageDataPtr processAcquiredInt16Image(QxrdDoubleImageDataPtr processed, QxrdInt16ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
-  QxrdDoubleImageDataPtr processAcquiredInt32Image(QxrdDoubleImageDataPtr processed, QxrdInt32ImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
-  QxrdDoubleImageDataPtr processAcquiredDoubleImage(QxrdDoubleImageDataPtr processed, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow);
-  QxrdDoubleImageDataPtr processAcquiredDoubleImage(QxrdDoubleImageDataPtr processed, QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark, QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v);
+  QcepDoubleImageDataPtr processAcquiredInt16Image(QcepDoubleImageDataPtr processed, QcepInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepDoubleImageDataPtr processAcquiredInt32Image(QcepDoubleImageDataPtr processed, QcepInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow, QcepDoubleList v);
 
-  QxrdDoubleImageDataPtr processAcquiredImage(QxrdDoubleImageDataPtr processed, QxrdDoubleImageDataPtr dimg, QxrdDoubleImageDataPtr dark,
-                                              QxrdMaskDataPtr mask, QxrdMaskDataPtr overflow, QcepDoubleList v=QcepDoubleList());
+  QcepDoubleImageDataPtr processAcquiredImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr dimg, QcepDoubleImageDataPtr dark,
+                                              QcepMaskDataPtr mask, QcepMaskDataPtr overflow, QcepDoubleList v=QcepDoubleList());
 
-  void newDarkImage(QxrdInt16ImageDataPtr image);
-  void newDarkImage(QxrdInt32ImageDataPtr image);
+  void newDarkImage(QcepInt16ImageDataPtr image);
+  void newDarkImage(QcepInt32ImageDataPtr image);
 
   double estimatedProcessingTime(double estSerTime, double estParallelTime);
 
 protected:
-  void newDarkImage(QxrdDoubleImageDataPtr image);
-  void newBadPixelsImage(QxrdDoubleImageDataPtr image);
-  void newGainMapImage(QxrdDoubleImageDataPtr image);
+  void newDarkImage(QcepDoubleImageDataPtr image);
+  void newBadPixelsImage(QcepDoubleImageDataPtr image);
+  void newGainMapImage(QcepDoubleImageDataPtr image);
 
   int newMaskWidth() const;
   int newMaskHeight() const;
@@ -412,11 +410,11 @@ protected:
   int decrementAcquiredCount();
   int getAcquiredCount();
 
-  void subtractDarkImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark);
-  void unsubtractDarkImage(QxrdDoubleImageDataPtr image, QxrdDoubleImageDataPtr dark);
-  void correctBadPixels(QxrdDoubleImageDataPtr image);
-  void correctImageGains(QxrdDoubleImageDataPtr image);
-  void performImageCorrections(QxrdDoubleImageDataPtr image);
+  void subtractDarkImage(QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark);
+  void unsubtractDarkImage(QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark);
+  void correctBadPixels(QcepDoubleImageDataPtr image);
+  void correctImageGains(QcepDoubleImageDataPtr image);
+  void performImageCorrections(QcepDoubleImageDataPtr image);
 
 
 private:
@@ -424,21 +422,20 @@ private:
 
 protected:
   QxrdExperimentWPtr     m_Experiment;
-  QxrdSettingsSaverWPtr  m_Saver;
+  QcepSettingsSaverWPtr  m_Saver;
   QxrdWindowWPtr         m_Window;
-  QxrdAllocatorWPtr      m_Allocator;
   QxrdFileSaverWPtr      m_FileSaver;
   QxrdAcquisitionWPtr    m_Acquisition;
   QWaitCondition         m_ProcessWaiting;
-  QxrdInt16ImageQueue    m_AcquiredInt16Images;
-  QxrdInt32ImageQueue    m_AcquiredInt32Images;
-  QxrdDoubleImageDataPtr m_Data;
-  QxrdDoubleImageDataPtr m_DarkFrame;
-  QxrdDoubleImageDataPtr m_BadPixels;
-  QxrdDoubleImageDataPtr m_GainMap;
-  QxrdDoubleImageDataPtr m_LiveData;
-//  QxrdMaskDataPtr        m_Mask;
-  QxrdMaskDataPtr        m_Overflow;
+  QcepInt16ImageQueue    m_AcquiredInt16Images;
+  QcepInt32ImageQueue    m_AcquiredInt32Images;
+  QcepDoubleImageDataPtr m_Data;
+  QcepDoubleImageDataPtr m_DarkFrame;
+  QcepDoubleImageDataPtr m_BadPixels;
+  QcepDoubleImageDataPtr m_GainMap;
+  QcepDoubleImageDataPtr m_LiveData;
+//  QcepMaskDataPtr        m_Mask;
+  QcepMaskDataPtr        m_Overflow;
 
   QxrdMaskStack          m_Masks;
 
@@ -449,7 +446,7 @@ protected:
 
   QxrdGenerateTestImagePtr m_GenerateTestImage;
 
-  QxrdIntegratedDataPtr m_OutputScan;
+  QcepIntegratedDataPtr m_OutputScan;
 
   QxrdDistortionCorrectionPtr m_DistortionCorrection;
 };

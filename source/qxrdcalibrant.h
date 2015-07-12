@@ -5,7 +5,7 @@
 #include "qcepobject.h"
 #include "qxrdcalibrantlibrary-ptr.h"
 #include "qcepproperty.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdcalibrant-ptr.h"
 #include <qscriptengine.h>
@@ -18,7 +18,7 @@ class QxrdCalibrant : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdCalibrant(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib);
+  QxrdCalibrant(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib);
   ~QxrdCalibrant();
 
 public slots:

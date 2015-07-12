@@ -1,7 +1,7 @@
 #include "qxrdimageplotsettings.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 
-QxrdImagePlotSettings::QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObject *parent) :
+QxrdImagePlotSettings::QxrdImagePlotSettings(QcepSettingsSaverWPtr saver, QObject *parent) :
   QxrdPlotSettings("imageGraph", saver, parent),
   m_DisplayMinimumPctle(saver, this, "displayMinimumPctle", 0, "Minimum Displayed Value (as a percentile)"),
   m_DisplayMaximumPctle(saver, this, "displayMaximumPctle", 100, "Maximum Displayed Value (as a percentile)"),
@@ -17,10 +17,10 @@ QxrdImagePlotSettings::QxrdImagePlotSettings(QxrdSettingsSaverWPtr saver, QObjec
   m_OverflowShown(saver, this, "overflowShown", 0, "Overflow Shown?"),
   m_InterpolatePixels(saver, this, "interpolatePixels", 1, "Interpolated Pixel Display?"),
   m_MaintainAspectRatio(saver, this, "maintainAspectRatio", 1, "Maintain Equal Scaling in X and Y"),
-  m_TTHMouse(QxrdSettingsSaverWPtr(), this,"tthMouse",0, "2 Theta at Mouse"),
-  m_QMouse(QxrdSettingsSaverWPtr(), this,"qMouse",0, "Q at Mouse"),
-  m_RMouse(QxrdSettingsSaverWPtr(), this,"rMouse",0, "R at Mouse"),
-  m_ValMouse(QxrdSettingsSaverWPtr(), this,"valMouse",0, "Image Value at Mouse"),
-  m_MaskMouse(QxrdSettingsSaverWPtr(), this,"maskMouse",0, "Mask Value at Mouse")
+  m_TTHMouse(QcepSettingsSaverWPtr(), this,"tthMouse",0, "2 Theta at Mouse"),
+  m_QMouse(QcepSettingsSaverWPtr(), this,"qMouse",0, "Q at Mouse"),
+  m_RMouse(QcepSettingsSaverWPtr(), this,"rMouse",0, "R at Mouse"),
+  m_ValMouse(QcepSettingsSaverWPtr(), this,"valMouse",0, "Image Value at Mouse"),
+  m_MaskMouse(QcepSettingsSaverWPtr(), this,"maskMouse",0, "Mask Value at Mouse")
 {
 }

@@ -4,7 +4,7 @@
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 #include "qspecserver.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
 class QxrdServer : public QSpecServer
@@ -12,7 +12,7 @@ class QxrdServer : public QSpecServer
   Q_OBJECT
 
 public:
-  QxrdServer(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name);
+  QxrdServer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name);
   virtual ~QxrdServer();
 
   virtual void readSettings(QSettings *settings, QString section);

@@ -1,5 +1,5 @@
 #include "qxrdresultserializer.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
 QxrdResultSerializerBase::QxrdResultSerializerBase(QObject *parent) :
     QObject(parent)
@@ -22,7 +22,7 @@ QxrdResultSerializer<T>::QxrdResultSerializer(QcepIntProperty *ctr, QObject *par
 template <typename T>
 void QxrdResultSerializer<T>::enqueue(QFuture<T> future)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Results.enqueue(future);
 
@@ -36,7 +36,7 @@ void QxrdResultSerializer<T>::enqueue(QFuture<T> future)
 template <typename T>
 T QxrdResultSerializer<T>::dequeue()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_Results.size() > 0) {
     QFuture<T> val = m_Results.dequeue();
@@ -62,21 +62,21 @@ T QxrdResultSerializer<T>::dequeue()
 template <typename T>
 int QxrdResultSerializer<T>::count() const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_Results.size();
 }
 
-#include "qxrdimagedata.h"
-#include "qxrdimagedata-ptr.h"
-#include "qxrdintegrateddata.h"
-#include "qxrdintegrateddata-ptr.h"
+#include "qcepimagedata.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepintegrateddata.h"
+#include "qcepintegrateddata-ptr.h"
 #include "qxrdroidata.h"
 #include "qxrdroidata-ptr.h"
 #include "qxrdhistogramdata.h"
 #include "qxrdhistogramdata-ptr.h"
 
-template class QxrdResultSerializer<QxrdDoubleImageDataPtr>;
-template class QxrdResultSerializer<QxrdIntegratedDataPtr>;
+template class QxrdResultSerializer<QcepDoubleImageDataPtr>;
+template class QxrdResultSerializer<QcepIntegratedDataPtr>;
 template class QxrdResultSerializer<QxrdROIDataPtr>;
 template class QxrdResultSerializer<QxrdHistogramDataPtr>;

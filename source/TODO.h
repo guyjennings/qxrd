@@ -672,7 +672,7 @@ pre-trigger files have been acquired.
 
 //-------------------------------------------------------
 
-//Metadata is not saved for QxrdDoubleImageData, because
+//Metadata is not saved for QcepDoubleImageData, because
 //the metadata saving stuff doesn't know about inheritance
 
 //Changed QcepImageData::writeSettings to use staticMetaObject

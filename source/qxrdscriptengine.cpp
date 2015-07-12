@@ -10,12 +10,12 @@
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdcalibrant.h"
 #include "qxrdintegrator.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 #include "qxrdgeneratetestimage.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdacquisitionextrainputs.h"
-#include "qxrdallocator.h"
+#include "qcepallocator.h"
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"
 #include "qcepdocumentationdictionary.h"
@@ -121,7 +121,7 @@ void QxrdScriptEngine::unlock()
 
 void QxrdScriptEngine::evaluateAppCommand(QString expr)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   //  printf("QxrdScriptingEngine::evaluateAppCommand(%s)\n", qPrintable(expr));
 
@@ -130,7 +130,7 @@ void QxrdScriptEngine::evaluateAppCommand(QString expr)
 
 void QxrdScriptEngine::evaluateSimpleServerCommand(QString expr)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   //  printf("QxrdScriptingEngine::evaluateServerCommand(%s)\n", qPrintable(expr));
 
@@ -139,7 +139,7 @@ void QxrdScriptEngine::evaluateSimpleServerCommand(QString expr)
 
 void QxrdScriptEngine::evaluateSpecCommand(QString expr)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   //  printf("QxrdScriptingEngine::evaluateSpecCommand(%s)\n", qPrintable(expr));
 
@@ -261,21 +261,21 @@ void QxrdScriptEngine::cancelCommand()
 
 bool QxrdScriptEngine::hasUncaughtException() const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return QScriptEngine::hasUncaughtException();
 }
 
 int  QxrdScriptEngine::uncaughtExceptionLineNumber() const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return QScriptEngine::uncaughtExceptionLineNumber();
 }
 
 QString QxrdScriptEngine::uncaughtExceptionString() const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return uncaughtException().toString();
 }
@@ -1329,7 +1329,7 @@ QScriptValue QxrdScriptEngine::mapUserFunctionFunc(QScriptContext *context, QScr
   if (eng) {
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
-    QxrdDoubleImageDataPtr d = proc->data();
+    QcepDoubleImageDataPtr d = proc->data();
 
     if (d) {
       int ht = d->get_Height();
@@ -1349,7 +1349,7 @@ QScriptValue QxrdScriptEngine::mapUserFunctionFunc(QScriptContext *context, QScr
             }
           }
 
-          proc->newData(d, QxrdMaskDataPtr());
+          proc->newData(d, QcepMaskDataPtr());
         }
       }
     }
@@ -1529,7 +1529,7 @@ QScriptValue QxrdScriptEngine::dataImageFunc(QScriptContext *context, QScriptEng
       QcepDatasetModelPtr ds = expt->dataset();
 
       if (ds) {
-        QxrdDoubleImageDataPtr img = QxrdAllocator::newDoubleImage(app->allocator(), QxrdAllocator::WaitTillAvailable, width, height);
+        QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(QcepAllocator::WaitTillAvailable, width, height);
 
         ds->append(name, img);
 
@@ -1705,35 +1705,35 @@ void QxrdScriptEngine::initialize()
                           QcepDataColumn::toColumnScriptValue,
                           QcepDataColumn::fromColumnScriptValue);
 
-  qRegisterMetaType<QxrdIntegratedDataPtr>("QxrdIntegratedDataPtr");
+  qRegisterMetaType<QcepIntegratedDataPtr>("QcepIntegratedDataPtr");
   qScriptRegisterMetaType(this,
-                          QxrdIntegratedData::toIntegratedDataScriptValue,
-                          QxrdIntegratedData::fromIntegratedDataScriptValue);
+                          QcepIntegratedData::toIntegratedDataScriptValue,
+                          QcepIntegratedData::fromIntegratedDataScriptValue);
 
   qRegisterMetaType<QcepDataColumnScanPtr>("QcepDataColumnScanPtr");
   qScriptRegisterMetaType(this,
                           QcepDataColumnScan::toColumnScanScriptValue,
                           QcepDataColumnScan::fromColumnScanScriptValue);
 
-  qRegisterMetaType<QxrdDoubleImageDataPtr>("QxrdDoubleImageDataPtr");
+  qRegisterMetaType<QcepDoubleImageDataPtr>("QcepDoubleImageDataPtr");
   qScriptRegisterMetaType(this,
-                          QxrdDoubleImageData::toScriptValue,
-                          QxrdDoubleImageData::fromScriptValue);
+                          QcepDoubleImageData::toScriptValue,
+                          QcepDoubleImageData::fromScriptValue);
 
-  qRegisterMetaType<QxrdInt16ImageDataPtr>("QxrdInt16ImageDataPtr");
+  qRegisterMetaType<QcepInt16ImageDataPtr>("QcepInt16ImageDataPtr");
   qScriptRegisterMetaType(this,
-                          QxrdInt16ImageData::toScriptValue,
-                          QxrdInt16ImageData::fromScriptValue);
+                          QcepInt16ImageData::toScriptValue,
+                          QcepInt16ImageData::fromScriptValue);
 
-  qRegisterMetaType<QxrdInt32ImageDataPtr>("QxrdInt32ImageDataPtr");
+  qRegisterMetaType<QcepInt32ImageDataPtr>("QcepInt32ImageDataPtr");
   qScriptRegisterMetaType(this,
-                          QxrdInt32ImageData::toScriptValue,
-                          QxrdInt32ImageData::fromScriptValue);
+                          QcepInt32ImageData::toScriptValue,
+                          QcepInt32ImageData::fromScriptValue);
 
-  qRegisterMetaType<QxrdMaskDataPtr>("QxrdMaskDataPtr");
+  qRegisterMetaType<QcepMaskDataPtr>("QcepMaskDataPtr");
   qScriptRegisterMetaType(this,
-                          QxrdMaskData::toScriptValue,
-                          QxrdMaskData::fromScriptValue);
+                          QcepMaskData::toScriptValue,
+                          QcepMaskData::fromScriptValue);
 
   qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
   qScriptRegisterSequenceMetaType<QxrdCalibrantDSpacingVector>(this);
@@ -1752,7 +1752,7 @@ void QxrdScriptEngine::initialize()
     QCEP_DOC_OBJECT("application", "The QXRD Application Object");
     globalObject().setProperty("application", newQObject(app.data()));
 
-    QxrdAllocatorPtr alloc(app->allocator());
+    QcepAllocatorPtr alloc(app->allocator());
 
     if (alloc) {
       QCEP_DOC_OBJECT("allocator", "The QXRD Memory Allocator");

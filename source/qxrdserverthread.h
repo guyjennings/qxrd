@@ -7,14 +7,14 @@
 
 #include "qxrdexperiment-ptr.h"
 #include "qxrdserver-ptr.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 
 class QxrdServerThread : public QxrdThread
 {
   Q_OBJECT
 
 public:
-  QxrdServerThread(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name);
+  QxrdServerThread(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name);
   ~QxrdServerThread();
 
   QxrdServerPtr server() const;
@@ -29,7 +29,7 @@ protected:
   void run();
 
 private:
-  QxrdSettingsSaverWPtr m_Saver;
+  QcepSettingsSaverWPtr m_Saver;
   QxrdExperimentWPtr    m_Experiment;
   QString               m_Name;
   QxrdServerPtr         m_Server;

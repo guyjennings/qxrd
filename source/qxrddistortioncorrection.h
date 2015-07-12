@@ -5,15 +5,15 @@
 #include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdimagedata-ptr.h"
-#include "qxrdimagedata.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepimagedata.h"
+#include "qcepsettingssaver-ptr.h"
 
 class QxrdDistortionCorrection : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdDistortionCorrection(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt);
+  explicit QxrdDistortionCorrection(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt);
 
 public:
   Q_PROPERTY(QString distortionImagePath READ get_DistortionImagePath WRITE set_DistortionImagePath)
@@ -103,7 +103,7 @@ public:
 private:
   mutable QMutex             m_Mutex;
   QxrdExperimentWPtr         m_Experiment;
-  QxrdDoubleImageDataPtr     m_Data;
+  QcepDoubleImageDataPtr     m_Data;
 };
 
 #endif // QXRDDISTORTIONCORRECTION_H

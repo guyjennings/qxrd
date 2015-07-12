@@ -14,8 +14,8 @@
 #include "qxrdintegrator.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
-#include "qxrdallocatorthread.h"
-#include "qxrdallocator.h"
+#include "qcepallocatorthread.h"
+#include "qcepallocator.h"
 #include "qxrdfilesaverthread.h"
 #include "qxrdfilesaver.h"
 #include "qxrdscriptenginethread.h"
@@ -34,10 +34,10 @@
 #include "qxrdexperimentpilatusacquisition.h"
 #include "qxrdexperimentpilatusanalysis.h"
 #include "qxrdexperimentsettings.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 #include "qxrdsplashscreen.h"
 #include "qxrdsplashscreen-ptr.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 #include "qxrdcalibrant.h"
 #include "qxrdcalibrantlibrary.h"
 
@@ -60,8 +60,6 @@
 #if (QT_VERSION >= QT_VERSION_CHECK(5,0,0))
 #include <QJsonObject>
 #endif
-
-QxrdApplication *g_Application = NULL;
 
 int eventCounter;
 
@@ -110,27 +108,27 @@ QStringList QxrdApplication::makeStringListFromArgs(int argc, char **argv)
 }
 
 QxrdApplication::QxrdApplication(int &argc, char **argv) :
-  QApplication(argc, argv),
+  QcepApplication(argc, argv),
   m_ObjectNamer(this, "application"),
-  m_Saver(QxrdSettingsSaverPtr(
-            new QxrdSettingsSaver(this), doDeleteLater)),
+  m_Saver(QcepSettingsSaverPtr(
+            new QcepSettingsSaver(this), doDeleteLater)),
   m_RecentExperiments(m_Saver, this, "recentExperiments", QStringList(), "Recent Experiments"),
   m_RecentExperimentsSize(m_Saver, this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember"),
   m_CurrentExperiment(m_Saver, this, "currentExperiment", "", "Current Experiment"),
   m_CurrentDirectory(m_Saver, this, "currentDirectory", QDir::homePath(), "Current Directory"),
 //  m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
   m_Debug(m_Saver, this,"debug", 0, "Debug Level"),
-  m_FreshStart(QxrdSettingsSaverPtr(), this,"freshStart", 0, "Do a Fresh Start"),
+  m_FreshStart(QcepSettingsSaverPtr(), this,"freshStart", 0, "Do a Fresh Start"),
   m_FileBrowserLimit(m_Saver, this, "fileBrowserLimit", 1000, "Max Number of Files in Browser Windows (0 = unlimited)"),
   m_MessageWindowLines(m_Saver, this, "messageWindowLines", 1000, "Number of Lines in Message Window (0 = unlimited)"),
   m_UpdateIntervalMsec(m_Saver, this, "updateIntervalMsec", 1000, "Time Intervale for Updates (in msec)"),
-  m_Argc(QxrdSettingsSaverPtr(), this, "argc", argc, "Number of Command Line Arguments"),
-  m_Argv(QxrdSettingsSaverPtr(), this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
-  m_GuiWanted(QxrdSettingsSaverPtr(), this, "guiWanted", 1, "GUI Wanted?"),
-  m_CmdList(QxrdSettingsSaverPtr(), this, "cmdList", QStringList(), "Commands to Execute"),
-  m_FileList(QxrdSettingsSaverPtr(), this, "fileList", QStringList(), "Files to Process"),
-  m_LockerCount(QxrdSettingsSaverPtr(), this, "lockerCount", 0, "Number of mutex locks taken"),
-  m_LockerRate(QxrdSettingsSaverPtr(), this, "lockerRate", 0, "Mutex Locking Rate"),
+  m_Argc(QcepSettingsSaverPtr(), this, "argc", argc, "Number of Command Line Arguments"),
+  m_Argv(QcepSettingsSaverPtr(), this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
+  m_GuiWanted(QcepSettingsSaverPtr(), this, "guiWanted", 1, "GUI Wanted?"),
+  m_CmdList(QcepSettingsSaverPtr(), this, "cmdList", QStringList(), "Commands to Execute"),
+  m_FileList(QcepSettingsSaverPtr(), this, "fileList", QStringList(), "Files to Process"),
+  m_LockerCount(QcepSettingsSaverPtr(), this, "lockerCount", 0, "Number of mutex locks taken"),
+  m_LockerRate(QcepSettingsSaverPtr(), this, "lockerRate", 0, "Mutex Locking Rate"),
   m_Splash(NULL),
   m_WelcomeWindow(NULL),
   m_AllocatorThread(NULL),
@@ -146,8 +144,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdApplication::QxrdApplication(%p)\n", this);
   }
-
-  g_Application = this;
 
   QcepProperty::registerMetaTypes();
   QxrdPowderPoint::registerMetaTypes();
@@ -249,8 +245,8 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
     }
   }
 
-  m_AllocatorThread = QxrdAllocatorThreadPtr(
-        new QxrdAllocatorThread(m_Saver), doDeleteLater);
+  m_AllocatorThread = QcepAllocatorThreadPtr(
+        new QcepAllocatorThread(m_Saver), doDeleteLater);
   m_AllocatorThread -> setObjectName("alloc");
   m_AllocatorThread -> start();
   m_Allocator = m_AllocatorThread -> allocator();
@@ -305,7 +301,7 @@ void QxrdApplication::finish()
   m_ExperimentThreads.clear();
   m_Experiments.clear();
 
-  m_AllocatorThread = QxrdAllocatorThreadPtr();
+  m_AllocatorThread = QcepAllocatorThreadPtr();
 }
 
 void QxrdApplication::openWelcomeWindow()
@@ -567,7 +563,7 @@ QString QxrdApplication::rootPath()
 
 void QxrdApplication::readSettings()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
 
   QxrdGlobalSettings settings(this);
 
@@ -585,7 +581,7 @@ void QxrdApplication::readSettings(QSettings *settings, QString section)
 
 void QxrdApplication::writeSettings()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
 
   QxrdGlobalSettings settings(this);
 
@@ -657,7 +653,7 @@ bool QxrdApplication::wantToQuit()
                                QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
-QxrdAllocatorWPtr QxrdApplication::allocator() const
+QcepAllocatorWPtr QxrdApplication::allocator() const
 {
   return m_Allocator;
 }
@@ -749,8 +745,10 @@ static void qxrdTIFFErrorHandler(const char* module, const char* fmt, va_list ap
 
   vsnprintf(msg, sizeof(msg), fmt, ap);
 
-  if (g_Application) {
-    g_Application -> tiffError(module, msg);
+  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+
+  if (app) {
+    app -> tiffError(module, msg);
   }
 }
 
@@ -764,15 +762,19 @@ void QxrdApplication::setupTiffHandlers()
 
 void QxrdApplication::tiffWarning(const char *module, const char *msg)
 {
-  if (g_Application) {
-    g_Application->criticalMessage(tr("TIFF Warning from %1 : %2").arg(module).arg(msg));
+  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+
+  if (app) {
+    app->criticalMessage(tr("TIFF Warning from %1 : %2").arg(module).arg(msg));
   }
 }
 
 void QxrdApplication::tiffError(const char *module, const char *msg)
 {
-  if (g_Application) {
-    g_Application->criticalMessage(tr("TIFF Error from %1 : %2").arg(module).arg(msg));
+  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+
+  if (app) {
+    app->criticalMessage(tr("TIFF Error from %1 : %2").arg(module).arg(msg));
   }
 }
 
@@ -790,6 +792,15 @@ bool QxrdApplication::event(QEvent *ev)
   }
 
   return res;
+}
+
+void QxrdApplication::setDefaultObjectData(QcepDataObject *obj)
+{
+  if (obj) {
+    obj->set_Creator("QXRD");
+    obj->set_Version(STR(QXRD_VERSION));
+    obj->set_QtVersion(QT_VERSION_STR);
+  }
 }
 
 void QxrdApplication::readDefaultSettings()

@@ -2,20 +2,20 @@
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qxrdacquisition.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 #include "qxrdnidaqplugininterface.h"
-#include "qxrdimagedata.h"
-#include "qxrdsettingssaver.h"
+#include "qcepimagedata.h"
+#include "qcepsettingssaver.h"
 #include "qxrdacquisitionextrainputschannel.h"
 #include <QTimer>
 
-QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
+QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
   QcepObject("extraInputs", NULL),
-  m_Enabled(QxrdSettingsSaverPtr(), this, "enabled", 0, "Extra Inputs Enabled?"),
-  m_Skipping(QxrdSettingsSaverPtr(), this, "skipping", 0, "Skipping initial readout?"),
+  m_Enabled(QcepSettingsSaverPtr(), this, "enabled", 0, "Extra Inputs Enabled?"),
+  m_Skipping(QcepSettingsSaverPtr(), this, "skipping", 0, "Skipping initial readout?"),
   m_SampleRate(saver, this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
   m_AcquireDelay(saver, this, "acquireDelay", 0.107, "Delay between exposure end and Image available in QXRD"),
-  m_ExposureTime(QxrdSettingsSaverPtr(), this, "exposureTime", 0.107, "Exposure time (in seconds)"),
+  m_ExposureTime(QcepSettingsSaverPtr(), this, "exposureTime", 0.107, "Exposure time (in seconds)"),
   m_DeviceName(saver, this, "deviceName", "", "NI-DAQ Device Name"),
   m_Experiment(doc),
   m_Acquisition(acq),
@@ -64,7 +64,7 @@ QxrdNIDAQPluginInterfacePtr QxrdAcquisitionExtraInputs::nidaqPlugin() const
 
 void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepObject::readSettings(settings, section);
 
@@ -95,7 +95,7 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString secti
 
 void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepObject::writeSettings(settings, section);
 
@@ -229,7 +229,7 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 
   connect(chan, SIGNAL(reinitiateNeeded()), this, SLOT(reinitiate()));
 
-  QxrdSettingsSaverPtr saver(m_Saver);
+  QcepSettingsSaverPtr saver(m_Saver);
 
   if (saver) {
       saver->changed();
@@ -240,7 +240,7 @@ void QxrdAcquisitionExtraInputs::removeChannel(int ch)
 {
   m_Channels.remove((ch < 0 ? m_Channels.size()-1 : ch));
 
-  QxrdSettingsSaverPtr saver(m_Saver);
+  QcepSettingsSaverPtr saver(m_Saver);
 
   if (saver) {
       saver->changed();
@@ -273,7 +273,7 @@ void QxrdAcquisitionExtraInputs::acquire()
   }
 }
 
-void QxrdAcquisitionExtraInputs::logToImage(QxrdInt16ImageDataPtr img)
+void QxrdAcquisitionExtraInputs::logToImage(QcepInt16ImageDataPtr img)
 {
   if (get_Enabled() && img) {
     img->set_ExtraInputs(evaluateChannels());

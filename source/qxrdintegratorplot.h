@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 
-#include "qxrdintegrateddata.h"
+#include "qcepintegrateddata.h"
 #include "qxrddataprocessor.h"
 #include "qxrdplot.h"
 #include "qxrdintegrator.h"
@@ -19,7 +19,7 @@ public:
   void setDataProcessor(QxrdDataProcessorWPtr proc);
 
 public slots:
-  void onNewIntegrationAvailable(QxrdIntegratedDataPtr data);
+  void onNewIntegrationAvailable(QcepIntegratedDataPtr data);
   void clearGraph();
   void clearSelectedCurves();
 

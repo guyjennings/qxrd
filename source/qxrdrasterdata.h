@@ -4,17 +4,17 @@
 #include "qcepmacros.h"
 
 #include <qwt_raster_data.h>
-#include "qxrdimagedata.h"
-#include "qxrdmaskdata.h"
+#include "qcepimagedata.h"
+#include "qcepmaskdata.h"
 
 class QxrdRasterData : public QwtRasterData
 {
 //  Q_OBJECT
 
 public:
-  QxrdRasterData(QxrdDoubleImageDataPtr img = QxrdDoubleImageDataPtr(),
+  QxrdRasterData(QcepDoubleImageDataPtr img = QcepDoubleImageDataPtr(),
                  int interp = 1,
-                 QxrdMaskDataPtr msk = QxrdMaskDataPtr(),
+                 QcepMaskDataPtr msk = QcepMaskDataPtr(),
                  QwtInterval range = QwtInterval(0,40000));
 
 public:
@@ -34,15 +34,15 @@ public:
   int width() const;
   int height() const;
 
-  const QxrdDoubleImageDataPtr data() const { return m_Data; }
-  const QxrdMaskDataPtr mask() const { return m_Mask; }
+  const QcepDoubleImageDataPtr data() const { return m_Data; }
+  const QcepMaskDataPtr mask() const { return m_Mask; }
   int interp() const          { return m_Interpolate; }
 
   QPointF optimizePeakPosition(QPointF pt) const;
 
 private:
-  QxrdDoubleImageDataPtr m_Data;
-  QxrdMaskDataPtr        m_Mask;
+  QcepDoubleImageDataPtr m_Data;
+  QcepMaskDataPtr        m_Mask;
   int                    m_NRows;
   int                    m_NCols;
   QwtInterval            m_Range;

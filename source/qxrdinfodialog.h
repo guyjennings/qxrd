@@ -3,8 +3,8 @@
 
 #include <QDockWidget>
 #include "ui_qxrdinfodialog.h"
-#include "qxrdimagedata-ptr.h"
-#include "qxrdmaskdata-ptr.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
 #include "qxrdinfodialogsettings.h"
 
 class QxrdInfoDialog : public QDockWidget, public Ui::QxrdInfoDialog
@@ -15,7 +15,7 @@ public:
   explicit QxrdInfoDialog(QxrdInfoDialogSettingsWPtr settings, QWidget *parent);
   virtual ~QxrdInfoDialog();
 
-  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
+  void onProcessedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
 
 private:
   QxrdInfoDialogSettingsWPtr m_InfoDialogSettings;

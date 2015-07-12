@@ -8,13 +8,13 @@
 
 #include "qxrdexperiment-ptr.h"
 #include "qcepproperty.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 
 class QxrdSimpleServer : public QTcpServer
 {
   Q_OBJECT
 public:
-  QxrdSimpleServer(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name);
+  QxrdSimpleServer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name);
   virtual ~QxrdSimpleServer();
 
   Q_PROPERTY(int    runSimpleServer    READ get_RunSimpleServer WRITE set_RunSimpleServer)

@@ -6,10 +6,10 @@
 #include <QVector>
 #include <QRgb>
 
-#include "qxrdimagedata.h"
-#include "qxrdimagedata-ptr.h"
-#include "qxrdmaskdata.h"
-#include "qxrdmaskdata-ptr.h"
+#include "qcepimagedata.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata.h"
+#include "qcepmaskdata-ptr.h"
 #include "qxrdapplication-ptr.h"
 
 class QxrdImageDisplayWidget : public QWidget
@@ -26,18 +26,18 @@ public:
   static QxrdImageDisplayWidget* insertNew(QxrdApplication *app, QTabWidget *tw);
 
 public slots:
-  void updateImage(QxrdDoubleImageDataPtr img,
-                   QxrdMaskDataPtr        ovflow = QxrdMaskDataPtr(),
-                   QxrdMaskDataPtr        mask = QxrdMaskDataPtr());
+  void updateImage(QcepDoubleImageDataPtr img,
+                   QcepMaskDataPtr        ovflow = QcepMaskDataPtr(),
+                   QcepMaskDataPtr        mask = QcepMaskDataPtr());
   void setGrayscale();
 
 private:
   void rebuildImage();
 
 private:
-  QxrdDoubleImageDataPtr   m_Data;
-  QxrdMaskDataPtr          m_Mask;
-  QxrdMaskDataPtr          m_Overflow;
+  QcepDoubleImageDataPtr   m_Data;
+  QcepMaskDataPtr          m_Mask;
+  QcepMaskDataPtr          m_Overflow;
 
   QImage                   m_DataImage;
 

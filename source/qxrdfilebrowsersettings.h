@@ -3,13 +3,13 @@
 
 #include <QObject>
 #include "qcepproperty.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 
 class QxrdFileBrowserSettings : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdFileBrowserSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdFileBrowserSettings(QcepSettingsSaverWPtr saver, QObject *parent);
   
 public:
   Q_PROPERTY(int browserFilter READ get_BrowserFilter WRITE set_BrowserFilter)

@@ -31,7 +31,7 @@
 #include "qxrdscriptengine-ptr.h"
 #include "qxrdscriptenginethread.h"
 #include "qxrdscriptenginethread-ptr.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 #include "qxrddetectorthread.h"
 #include "qxrddetectorthread-ptr.h"
 #include "qxrddetector.h"
@@ -75,7 +75,7 @@ public:
   FILE* scanFile();
   void newScanFile(QString path);
 
-  QxrdSettingsSaverPtr settingsSaver();
+//  QcepSettingsSaverPtr settingsSaver();
   QxrdScriptEngineWPtr scriptEngine();
 
 public slots:
@@ -84,9 +84,6 @@ public slots:
 
   void executeCommand(QString cmd);
 
-  QString defaultExperimentDirectory(QString path) const;
-  QString defaultExperimentFileName(QString path) const;
-  QString defaultExperimentName(QString path) const;
   QString defaultDataDirectory(QString path) const;
   QString defaultLogName(QString path) const;
   QString defaultScanName(QString path) const;
@@ -143,7 +140,6 @@ private:
   QxrdApplicationWPtr             m_Application;
   QxrdExperimentThreadWPtr        m_ExperimentThread;
   QxrdExperimentWPtr              m_Experiment;
-  QxrdSettingsSaverPtr            m_SettingsSaver;
 
 private:
   QxrdWindowSettingsPtr           m_WindowSettings;
@@ -179,21 +175,6 @@ private:
   QMutex                          m_ExperimentFileMutex;
 
 public:  // Properties
-  Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
-  QCEP_INTEGER_PROPERTY(ExperimentKind)
-
-  Q_PROPERTY(QString experimentDirectory     READ get_ExperimentDirectory WRITE set_ExperimentDirectory STORED false)
-  QCEP_STRING_PROPERTY(ExperimentDirectory)
-
-  Q_PROPERTY(QString experimentFileName     READ get_ExperimentFileName WRITE set_ExperimentFileName STORED false)
-  QCEP_STRING_PROPERTY(ExperimentFileName)
-
-  Q_PROPERTY(QString experimentName     READ get_ExperimentName WRITE set_ExperimentName STORED false)
-  QCEP_STRING_PROPERTY(ExperimentName)
-
-  Q_PROPERTY(QString experimentDescription     READ get_ExperimentDescription WRITE set_ExperimentDescription)
-  QCEP_STRING_PROPERTY(ExperimentDescription)
-
   Q_PROPERTY(QString dataDirectory     READ get_DataDirectory WRITE set_DataDirectory)
   QCEP_STRING_PROPERTY(DataDirectory)
 

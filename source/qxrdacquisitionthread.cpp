@@ -5,7 +5,7 @@
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
 #include <QFuture>
 #include <QVariant>
@@ -13,10 +13,10 @@
 
 //static int g_DetectorType = -1;
 
-QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdSettingsSaverWPtr saver,
+QxrdAcquisitionThread::QxrdAcquisitionThread(QcepSettingsSaverWPtr saver,
                                              QxrdExperimentWPtr doc,
                                              QxrdDataProcessorWPtr proc,
-                                             QxrdAllocatorWPtr allocator,
+                                             QcepAllocatorWPtr allocator,
                                              int detectorType)
   : QxrdThread(),
     m_Saver(saver),
@@ -82,7 +82,7 @@ QxrdAcquisitionPtr QxrdAcquisitionThread::acquisition() const
 {
   while (isRunning()) {
     {
-      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
       if (m_Acquisition) return m_Acquisition;
     }

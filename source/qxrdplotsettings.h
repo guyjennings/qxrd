@@ -3,13 +3,13 @@
 
 #include "qcepobject.h"
 #include "qcepproperty.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 
 class QxrdPlotSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdPlotSettings(QString name, QxrdSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdPlotSettings(QString name, QcepSettingsSaverWPtr saver, QObject *parent);
   
   Q_PROPERTY(double xMouse READ get_XMouse WRITE set_XMouse STORED false)
   QCEP_DOUBLE_PROPERTY(XMouse)

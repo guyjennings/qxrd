@@ -4,12 +4,12 @@
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
-QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdSettingsSaverWPtr saver,
+QxrdDataProcessorThread::QxrdDataProcessorThread(QcepSettingsSaverWPtr saver,
                                                  QxrdExperimentWPtr doc,
                                                  QxrdAcquisitionWPtr acq,
-                                                 QxrdAllocatorWPtr allocator,
+                                                 QcepAllocatorWPtr allocator,
                                                  QxrdFileSaverWPtr filesaver)
   : QxrdThread(),
     m_Allocator(allocator),
@@ -73,7 +73,7 @@ QxrdDataProcessorPtr QxrdDataProcessorThread::dataProcessor() const
 {
   while (isRunning()) {
     {
-      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
       if (m_DataProcessor) return m_DataProcessor;
     }

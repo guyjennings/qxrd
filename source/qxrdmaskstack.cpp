@@ -1,7 +1,7 @@
 #include "qxrdmaskstack.h"
-#include "qxrdmaskdata.h"
+#include "qcepmaskdata.h"
 
-QxrdMaskStack::QxrdMaskStack() : QStack<QxrdMaskDataPtr>()
+QxrdMaskStack::QxrdMaskStack() : QStack<QcepMaskDataPtr>()
 {
 }
 
@@ -15,12 +15,12 @@ QString QxrdMaskStack::stackLevelName(int n)
   return tr("XYZTabcdefghijklmnopqrstuvwxyz").at(n);
 }
 
-QxrdMaskDataPtr QxrdMaskStack::mask(QModelIndex m)
+QcepMaskDataPtr QxrdMaskStack::mask(QModelIndex m)
 {
   if (m.column() == 0 && m.row() >= 0 && m.row() < count()) {
     return at(m.row());
   } else {
-    return QxrdMaskDataPtr();
+    return QcepMaskDataPtr();
   }
 }
 
@@ -32,7 +32,7 @@ void QxrdMaskStack::newMask()
 void QxrdMaskStack::enableMasks(QModelIndexList sel)
 {
   foreach (QModelIndex m, sel) {
-    QxrdMaskDataPtr data = mask(m);
+    QcepMaskDataPtr data = mask(m);
 
     if (data) {
       data->set_Used(true);
@@ -45,7 +45,7 @@ void QxrdMaskStack::enableMasks(QModelIndexList sel)
 void QxrdMaskStack::disableMasks(QModelIndexList sel)
 {
   foreach (QModelIndex m, sel) {
-    QxrdMaskDataPtr data = mask(m);
+    QcepMaskDataPtr data = mask(m);
 
     if (data) {
       data->set_Used(false);

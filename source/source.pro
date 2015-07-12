@@ -149,37 +149,8 @@ HEADERS += \
     qxrdcalibrantdspacingsmodel.h \
     qxrdcalibrantdspacingsmodel-ptr.h \
     qxrdcalibrantlibrarymodel-ptr.h \
-    qcepdatasetbrowserdialog.h \
     qxrddataset.h \
-    qxrddataset-ptr.h \
-    qxrddataobjectgraphwindow.h \
-    qxrddataobjectspreadsheetwindow.h \
-    qxrddataobjectpropertieswindow.h \
-    qxrdimagedataspreadsheetmodel.h \
-    qxrdintegrateddataspreadsheetmodel.h \
-    qcepdataarrayspreadsheetmodel.h \
-    qcepdatacolumnspreadsheetmodel.h \
-    qcepdatacolumnscanspreadsheetmodel.h \
-    qcepdatagroupspreadsheetmodel.h \
-    qcepdataobjectpropertiesmodel.h \
-    qcepspreadsheetmodel.h \
-    qceppropertiesmodel.h \
-    qxrddataobjectgraphcontroller.h \
-    qxrdimagedatagraphcontroller.h \
-    qxrdscatterplotgraphcontroller.h \
-    qxrdimagehistogramgraphcontroller.h \
-    qxrdimageslicegraphcontroller.h \
-    qxrddataobjectgraphcontroller-ptr.h \
-    qxrdimageslicegraphcontrols.h \
-    qxrdscatterplotgraphcontrols.h \
-    qxrdimagedatagraphcontrols.h \
-    qxrdimagehistogramgraphcontrols.h \
-    qxrdgraphcontrolswidget.h \
-    qcepnewdatagroupdialog.h \
-    qcepnewdatacolumndialog.h \
-    qcepnewcolumnscandialog.h \
-    qxrdnewimagedialog.h \
-    qcepnewdataarraydialog.h
+    qxrddataset-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -220,35 +191,7 @@ SOURCES += \
     qxrdcalibrantdialog.cpp \
     qxrdcalibrantlibrarymodel.cpp \
     qxrdcalibrantdspacingsmodel.cpp \
-    qcepdatasetbrowserdialog.cpp \
-    qxrddataset.cpp \
-    qxrddataobjectgraphwindow.cpp \
-    qxrddataobjectspreadsheetwindow.cpp \
-    qxrddataobjectpropertieswindow.cpp \
-    qxrdimagedataspreadsheetmodel.cpp \
-    qxrdintegrateddataspreadsheetmodel.cpp \
-    qcepdataarrayspreadsheetmodel.cpp \
-    qcepdatacolumnspreadsheetmodel.cpp \
-    qcepdatacolumnscanspreadsheetmodel.cpp \
-    qcepdatagroupspreadsheetmodel.cpp \
-    qcepdataobjectpropertiesmodel.cpp \
-    qcepspreadsheetmodel.cpp \
-    qceppropertiesmodel.cpp \
-    qxrddataobjectgraphcontroller.cpp \
-    qxrdimagedatagraphcontroller.cpp \
-    qxrdscatterplotgraphcontroller.cpp \
-    qxrdimagehistogramgraphcontroller.cpp \
-    qxrdimageslicegraphcontroller.cpp \
-    qxrdimageslicegraphcontrols.cpp \
-    qxrdscatterplotgraphcontrols.cpp \
-    qxrdimagedatagraphcontrols.cpp \
-    qxrdimagehistogramgraphcontrols.cpp \
-    qxrdgraphcontrolswidget.cpp \
-    qcepnewdatagroupdialog.cpp \
-    qcepnewdatacolumndialog.cpp \
-    qcepnewcolumnscandialog.cpp \
-    qxrdnewimagedialog.cpp \
-    qcepnewdataarraydialog.cpp
+    qxrddataset.cpp
 
 OTHER_FILES += testImage.js
 
@@ -257,9 +200,6 @@ HEADERS += TODO.h \
     qxrdapplication-ptr.h \
     qxrdglobalsettings.h \
     qxrdexperimentsettings.h \
-    qxrdimagedata.h \
-    qxrdimagedata-ptr.h \
-    qxrdimagequeue.h \
     qxrdimagedataformathis.h \
     qxrdimagedataformattiff.h \
     qxrdimagedataformatmar345.h \
@@ -275,9 +215,6 @@ HEADERS += TODO.h \
     qxrddataprocessor-ptr.h \
     qxrddataprocessorbase.h \
     qxrddataprocessorthreaded.h \
-    qxrdallocatorthread.h \
-    qxrdallocator.h \
-    qxrdallocator-ptr.h \
     qxrdfilesaverthread.h \
     qxrdfilesaverthread-ptr.h \
     qxrdfilesaver.h \
@@ -315,18 +252,12 @@ HEADERS += TODO.h \
     qxrdscriptenginethread-ptr.h \
     qxrdmaskpicker.h \
     qxrdmaskpicker-ptr.h \
-    qxrdmaskdata.h \
-    qxrdmaskdata-ptr.h \
     qxrdimageplotmeasurer.h \
     qxrdimageplotmeasurer-ptr.h \
     qxrdfilebrowser.h \
     qxrdimagecalculator.h \
-    qxrdmutexlocker.h \
     qxrdexperimentpreferencesdialog.h \
     qxrdsharedpointer.h \
-    qxrdintegrateddata.h \
-    qxrdintegrateddata-ptr.h \
-    qxrdintegrateddataqueue.h \
     qxrdresultserializer.h \
     qxrdroidata.h \
     qxrdroidata-ptr.h \
@@ -349,8 +280,6 @@ HEADERS += TODO.h \
     qxrdsimpleserverthread.h \
     qxrdsimpleserverthread-ptr.h \
     qxrdcenterstepspinner.h \
-    qxrdsettingssaver.h \
-    qxrdsettingssaver-ptr.h \
     qxrdplotimage.h \
     qxrdplotimage-ptr.h \
     qxrdimagedisplaywidget.h \
@@ -378,7 +307,6 @@ HEADERS += TODO.h \
     qxrdsliceplot.h \
     qxrdhistogramselector.h \
     qxrdresponsetimer.h \
-    qxrdimagedataobjectcounter.h \
     qxrdthread.h \
     qxrdsynchronizedacquisitionplot.h \
     qxrdhighlighter.h \
@@ -426,8 +354,6 @@ SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
     qxrdglobalsettings.cpp \
     qxrdexperimentsettings.cpp \
-    qxrdimagedata.cpp \
-    qxrdimagequeue.cpp \
     qxrdimagedataformathis.cpp \
     qxrdimagedataformattiff.cpp \
     qxrdimagedataformatmar345.cpp \
@@ -438,8 +364,6 @@ SOURCES += qxrd.cpp \
     qxrddataprocessor.cpp \
     qxrddataprocessorbase.cpp \
     qxrddataprocessorthreaded.cpp \
-    qxrdallocatorthread.cpp \
-    qxrdallocator.cpp \
     qxrdfilesaverthread.cpp \
     qxrdfilesaver.cpp \
     qxrdcenterfinder.cpp \
@@ -464,15 +388,12 @@ SOURCES += qxrd.cpp \
     qxrdscriptenginethread.cpp \
     qxrddataprocessorthread.cpp \
     qxrdmaskpicker.cpp \
-    qxrdmaskdata.cpp \
     qxrdimageplotmeasurer.cpp \
     qxrdfilebrowser.cpp \
     qxrdimagecalculator.cpp \
     qxrdmutexlocker.cpp \
     qxrdexperimentpreferencesdialog.cpp \
     qxrdsharedpointer.cpp \
-    qxrdintegrateddata.cpp \
-    qxrdintegrateddataqueue.cpp \
     qxrdresultserializer.cpp \
     qxrdroidata.cpp \
     qxrdhistogramdata.cpp \
@@ -487,7 +408,6 @@ SOURCES += qxrd.cpp \
     qxrdsimpleserver.cpp \
     qxrdsimpleserverthread.cpp \
     qxrdcenterstepspinner.cpp \
-    qxrdsettingssaver.cpp \
     qxrdplotimage.cpp \
     qxrdimagedisplaywidget.cpp \
     qwt_plot_piecewise_curve.cpp \
@@ -508,7 +428,6 @@ SOURCES += qxrd.cpp \
     qxrdsliceplot.cpp \
     qxrdhistogramselector.cpp \
     qxrdresponsetimer.cpp \
-    qxrdimagedataobjectcounter.cpp \
     qxrdthread.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
     qxrdhighlighter.cpp \
@@ -542,7 +461,7 @@ SOURCES += qxrd.cpp \
     qxrdsliceplotsettings.cpp \
     triangulate.c
 
-FORMS = qxrdwindow.ui \
+FORMS += qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
     qxrdfilebrowser.ui \
@@ -563,20 +482,7 @@ FORMS = qxrdwindow.ui \
     qxrduserscriptdialog.ui \
     qxrddistortioncorrectiondialog.ui \
     qxrdscriptdialog.ui \
-    qxrdcalibrantdialog.ui \
-    qcepdatasetbrowserdialog.ui \
-    qxrddataobjectgraphwindow.ui \
-    qxrddataobjectspreadsheetwindow.ui \
-    qxrddataobjectpropertieswindow.ui \
-    qxrdimageslicegraphcontrols.ui \
-    qxrdscatterplotgraphcontrols.ui \
-    qxrdimagedatagraphcontrols.ui \
-    qxrdimagehistogramgraphcontrols.ui \
-    qcepnewdatagroupdialog.ui \
-    qcepnewdatacolumndialog.ui \
-    qcepnewcolumnscandialog.ui \
-    qxrdnewimagedialog.ui \
-    qcepnewdataarraydialog.ui
+    qxrdcalibrantdialog.ui
 
 macx:
 else:unix:LIBS += -ltiff

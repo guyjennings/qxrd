@@ -19,7 +19,7 @@ class QxrdWindowSettings : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdWindowSettings(QxrdSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdWindowSettings(QcepSettingsSaverWPtr saver, QObject *parent);
   
 public:
   Q_PROPERTY(QByteArray windowGeometry READ get_WindowGeometry WRITE set_WindowGeometry)

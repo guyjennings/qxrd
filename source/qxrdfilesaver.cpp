@@ -5,7 +5,7 @@
 #include "qxrdacquisition.h"
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
-#include "qxrdintegrateddata.h"
+#include "qcepintegrateddata.h"
 #include "qxrdexperiment.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdintegrator.h"
@@ -15,7 +15,7 @@
 #include "tiffio.h"
 
 QxrdFileSaver::QxrdFileSaver
-(QxrdAllocatorWPtr allocator)
+(QcepAllocatorWPtr allocator)
   : QObject(NULL),
     m_Experiment(),
     m_Processor(),
@@ -129,19 +129,19 @@ QString QxrdFileSaver::uniqueFileName(QString name)
 
 #define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
 
-void QxrdFileSaver::saveDoubleData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveDoubleData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   incBacklog();
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveDoubleDataPrivate",
                                          Qt::QueuedConnection,
                                          Q_ARG(QString,name),
-                                         Q_ARG(QxrdDoubleImageDataPtr,image),
-                                         Q_ARG(QxrdMaskDataPtr,overflow),
+                                         Q_ARG(QcepDoubleImageDataPtr,image),
+                                         Q_ARG(QcepMaskDataPtr,overflow),
                                          Q_ARG(int,canOverwrite)));
 }
 
-void QxrdFileSaver::saveDoubleDataPrivate(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveDoubleDataPrivate(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
@@ -191,7 +191,7 @@ void QxrdFileSaver::saveDoubleDataPrivate(QString name, QxrdDoubleImageDataPtr i
       image -> set_FileName(name);
       image -> set_ImageSaved(true);
 
-      image -> saveMetaData(m_Experiment);
+      image -> saveMetaData();
 
       QxrdDataProcessorPtr proc(m_Processor);
 
@@ -220,7 +220,7 @@ void QxrdFileSaver::saveDoubleDataPrivate(QString name, QxrdDoubleImageDataPtr i
   decBacklog();
 }
 
-void QxrdFileSaver::saveInt32Data(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveInt32Data(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
@@ -231,7 +231,7 @@ void QxrdFileSaver::saveInt32Data(QString name, QxrdInt32ImageDataPtr image, Qxr
   }
 }
 
-void QxrdFileSaver::saveInt16Data(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveInt16Data(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
@@ -242,18 +242,18 @@ void QxrdFileSaver::saveInt16Data(QString name, QxrdInt16ImageDataPtr image, Qxr
   }
 }
 
-void QxrdFileSaver::saveMaskData(QString name, QxrdMaskDataPtr image, int canOverwrite)
+void QxrdFileSaver::saveMaskData(QString name, QcepMaskDataPtr image, int canOverwrite)
 {
   incBacklog();
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveMaskDataPrivate",
                                          Qt::QueuedConnection,
                                          Q_ARG(QString,name),
-                                         Q_ARG(QxrdMaskDataPtr,image),
+                                         Q_ARG(QcepMaskDataPtr,image),
                                          Q_ARG(int,canOverwrite)));
 }
 
-void QxrdFileSaver::saveMaskDataPrivate(QString name, QxrdMaskDataPtr image, int canOverwrite)
+void QxrdFileSaver::saveMaskDataPrivate(QString name, QcepMaskDataPtr image, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
@@ -314,19 +314,19 @@ void QxrdFileSaver::saveMaskDataPrivate(QString name, QxrdMaskDataPtr image, int
   decBacklog();
 }
 
-void QxrdFileSaver::saveRaw32Data(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveRaw32Data(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   incBacklog();
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw32DataPrivate",
                                          Qt::QueuedConnection,
                                          Q_ARG(QString,name),
-                                         Q_ARG(QxrdInt32ImageDataPtr,image),
-                                         Q_ARG(QxrdMaskDataPtr,overflow),
+                                         Q_ARG(QcepInt32ImageDataPtr,image),
+                                         Q_ARG(QcepMaskDataPtr,overflow),
                                          Q_ARG(int,canOverwrite)));
 }
 
-void QxrdFileSaver::saveRaw32DataPrivate(QString name, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
@@ -412,7 +412,7 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QxrdInt32ImageDataPtr ima
       TIFFClose(tif);
 
       image -> set_ImageSaved(true);
-      image -> saveMetaData(name, m_Experiment);
+      image -> saveMetaData(name);
 
       QxrdDataProcessorPtr proc(m_Processor);
       QxrdAcquisitionPtr acq(m_Acquisition);
@@ -442,19 +442,19 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QxrdInt32ImageDataPtr ima
   decBacklog();
 }
 
-void QxrdFileSaver::saveRaw16Data(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveRaw16Data(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   incBacklog();
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw16DataPrivate",
                                          Qt::QueuedConnection,
                                          Q_ARG(QString,name),
-                                         Q_ARG(QxrdInt16ImageDataPtr,image),
-                                         Q_ARG(QxrdMaskDataPtr,overflow),
+                                         Q_ARG(QcepInt16ImageDataPtr,image),
+                                         Q_ARG(QcepMaskDataPtr,overflow),
                                          Q_ARG(int,canOverwrite)))
 }
 
-void QxrdFileSaver::saveRaw16DataPrivate(QString name, QxrdInt16ImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveRaw16DataPrivate(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
@@ -505,7 +505,7 @@ void QxrdFileSaver::saveRaw16DataPrivate(QString name, QxrdInt16ImageDataPtr ima
       image -> set_FileName(name);
       image -> set_ImageSaved(true);
 
-      image -> saveMetaData(name, m_Experiment);
+      image -> saveMetaData(name);
 
       QxrdDataProcessorPtr proc(m_Processor);
       QxrdAcquisitionPtr acq(m_Acquisition);
@@ -535,19 +535,19 @@ void QxrdFileSaver::saveRaw16DataPrivate(QString name, QxrdInt16ImageDataPtr ima
   decBacklog();
 }
 
-void QxrdFileSaver::saveTextData(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveTextData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   incBacklog();
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveTextDataPrivate",
                                          Qt::QueuedConnection,
                                          Q_ARG(QString,name),
-                                         Q_ARG(QxrdDoubleImageDataPtr,image),
-                                         Q_ARG(QxrdMaskDataPtr,overflow),
+                                         Q_ARG(QcepDoubleImageDataPtr,image),
+                                         Q_ARG(QcepMaskDataPtr,overflow),
                                          Q_ARG(int,canOverwrite)))
 }
 
-void QxrdFileSaver::saveTextDataPrivate(QString name, QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveTextDataPrivate(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
@@ -608,7 +608,7 @@ void QxrdFileSaver::saveTextDataPrivate(QString name, QxrdDoubleImageDataPtr ima
     image -> set_FileName(name);
     image -> set_ImageSaved(true);
 
-    image -> saveMetaData(m_Experiment);
+    image -> saveMetaData();
 
     if (proc) {
       if (proc->get_SaveOverflowFiles()) {
@@ -622,18 +622,18 @@ void QxrdFileSaver::saveTextDataPrivate(QString name, QxrdDoubleImageDataPtr ima
   decBacklog();
 }
 
-void QxrdFileSaver::writeOutputScan(QString dir, QxrdIntegratedDataPtr data, QString fileName)
+void QxrdFileSaver::writeOutputScan(QString dir, QcepIntegratedDataPtr data, QString fileName)
 {
   incBacklog();
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "writeOutputScanPrivate",
                                          Qt::QueuedConnection,
                                          Q_ARG(QString,dir),
-                                         Q_ARG(QxrdIntegratedDataPtr,data),
+                                         Q_ARG(QcepIntegratedDataPtr,data),
                                          Q_ARG(QString,fileName)));
 }
 
-void QxrdFileSaver::writeOutputScanPrivate(QString dir, QxrdIntegratedDataPtr data, QString fileName)
+void QxrdFileSaver::writeOutputScanPrivate(QString dir, QcepIntegratedDataPtr data, QString fileName)
 {
   if (data == NULL) {
     if (g_Application) {
@@ -641,7 +641,7 @@ void QxrdFileSaver::writeOutputScanPrivate(QString dir, QxrdIntegratedDataPtr da
     }
   } else {
     if (fileName.isNull()) {
-      QxrdDoubleImageDataPtr image = data -> get_Image();
+      QcepDoubleImageDataPtr image = data -> get_Image();
       if (image == NULL) {
         if (g_Application) {
           g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
@@ -692,18 +692,18 @@ void QxrdFileSaver::writeOutputScanPrivate(QString dir, QxrdIntegratedDataPtr da
   decBacklog();
 }
 
-void QxrdFileSaver::writeOutputScan(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName)
+void QxrdFileSaver::writeOutputScan(FILE* logFile, QcepIntegratedDataPtr data, QString fileName)
 {
   incBacklog();
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "writeOutputScanPrivate",
                                          Qt::QueuedConnection,
                                          Q_ARG(FILE*, logFile),
-                                         Q_ARG(QxrdIntegratedDataPtr,data),
+                                         Q_ARG(QcepIntegratedDataPtr,data),
                                          Q_ARG(QString,fileName)))
 }
 
-void QxrdFileSaver::writeOutputScanPrivate(FILE* logFile, QxrdIntegratedDataPtr data, QString fileName)
+void QxrdFileSaver::writeOutputScanPrivate(FILE* logFile, QcepIntegratedDataPtr data, QString fileName)
 {
   if (data == NULL) {
     if (g_Application) {
@@ -715,7 +715,7 @@ void QxrdFileSaver::writeOutputScanPrivate(FILE* logFile, QxrdIntegratedDataPtr 
     int imageNumber = 0;
 
     if (fileName.isNull()) {
-      QxrdDoubleImageDataPtr image = data -> get_Image();
+      QcepDoubleImageDataPtr image = data -> get_Image();
       if (image == NULL) {
         if (g_Application) {
           g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
@@ -780,7 +780,7 @@ void QxrdFileSaver::writeOutputScanPrivate(FILE* logFile, QxrdIntegratedDataPtr 
   decBacklog();
 }
 
-void QxrdFileSaver::saveOverflowData(QString name, QxrdMaskDataPtr overflow)
+void QxrdFileSaver::saveOverflowData(QString name, QcepMaskDataPtr overflow)
 {
   if (overflow) {
     QString ovfname = name+".overflow";

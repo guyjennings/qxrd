@@ -20,17 +20,18 @@
 #include "qxrdexperimentsettings.h"
 #include <QFileDialog>
 #include "qxrdfilesaverthread.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 #include "qxrdfilesaver.h"
 #include "qxrdexperimentthread.h"
 #include "qxrddetectorthread.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrddataset.h"
 #include "qcepdatasetmodel.h"
 #include "qcepdatagroup.h"
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumn.h"
+#include "qcepsettingssaver.h"
 
 #include <QHostInfo>
 #include <QColorDialog>
@@ -38,10 +39,9 @@
 QxrdExperiment::QxrdExperiment(
     QString path,
     QxrdApplicationWPtr app) :
-  QcepExperiment("experiment", NULL),
+  QcepExperiment(path, "experiment", NULL),
   m_Application(app),
   m_ExperimentThread(),
-  m_SettingsSaver(new QxrdSettingsSaver(this)),
   m_WindowSettings(NULL),
   m_Window(),
   m_ServerThread(NULL),
@@ -61,26 +61,21 @@ QxrdExperiment::QxrdExperiment(
   m_ScanFile(NULL),
   m_ExperimentFileMutex(),
 
-  m_ExperimentKind(m_SettingsSaver, this, "experimentKind", -1, "Kind of Experiment"),
-  m_ExperimentDirectory(QxrdSettingsSaverPtr()/*m_SettingsSaver*/, this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
-  m_ExperimentFileName(QxrdSettingsSaverPtr()/*m_SettingsSaver*/, this, "experimentFileName", defaultExperimentFileName(path), "Experiment File"),
-  m_ExperimentName(QxrdSettingsSaverPtr()/*m_SettingsSaver*/, this, "experimentName", defaultExperimentName(path), "Experiment Name"),
-  m_ExperimentDescription(m_SettingsSaver, this, "experimentDescription", "", "Experiment Description"),
   m_DataDirectory(m_SettingsSaver, this, "dataDirectory", defaultDataDirectory(path), "Saved Data Directory"),
   m_LogFileName(m_SettingsSaver, this, "logFileName", defaultLogName(path), "Log File Name"),
   m_ScanFileName(m_SettingsSaver, this, "scanFileName", defaultScanName(path), "Scan File Name"),
   m_ScanFileExtension(m_SettingsSaver, this, "scanFileExtension", ".avg", "Scan File Extension"),
   m_ScanDataNegative(m_SettingsSaver, this, "scanDataNegative", 0, "Scan Data Negative Value Handling"),
   m_DetectorType(m_SettingsSaver, this, "detectorType", 0, "Detector Type"),
-  m_DetectorTypeName(QxrdSettingsSaverPtr(), this,"detectorTypeName", QxrdDetectorThread::detectorTypeName(get_DetectorType()), "Name of Detector Type"),
+  m_DetectorTypeName(QcepSettingsSaverPtr(), this,"detectorTypeName", QxrdDetectorThread::detectorTypeName(get_DetectorType()), "Name of Detector Type"),
   m_DetectorNumber(m_SettingsSaver, this, "detectorNumber", 0, "Detector Number"),
   m_DetectorSubType(m_SettingsSaver, this, "detectorSubType", 0, "Detector Sub Type"),
   m_DetectorAddress(m_SettingsSaver, this, "detectorAddress", "", "Detector Address"),
   m_ProcessorType(m_SettingsSaver, this,"processorType", 0, "Data Processor Type"),
-  m_DefaultLayout(QxrdSettingsSaverWPtr(), this,"defaultLayout",0, "Default Layout Used?"),
-  m_WorkCompleted(QxrdSettingsSaverWPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
-  m_WorkTarget(QxrdSettingsSaverWPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
-  m_CompletionPercentage(QxrdSettingsSaverWPtr(), this, "completionPercentage", 0, "Percentage of Work Completed"),
+  m_DefaultLayout(QcepSettingsSaverWPtr(), this,"defaultLayout",0, "Default Layout Used?"),
+  m_WorkCompleted(QcepSettingsSaverWPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
+  m_WorkTarget(QcepSettingsSaverWPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
+  m_CompletionPercentage(QcepSettingsSaverWPtr(), this, "completionPercentage", 0, "Percentage of Work Completed"),
   m_DefaultScript(m_SettingsSaver, this, "defaultScript", "", "Default script for experiment"),
   m_ExtraScriptFiles(m_SettingsSaver, this, "extraScriptFiles", QStringList(), "Additional script files for experiment"),
   m_FontSize(m_SettingsSaver, this, "fontSize", -1, "Suggested font size"),
@@ -349,10 +344,10 @@ QxrdExperimentThreadWPtr QxrdExperiment::experimentThread()
   return m_ExperimentThread;
 }
 
-QxrdSettingsSaverPtr QxrdExperiment::settingsSaver()
-{
-  return m_SettingsSaver;
-}
+//QcepSettingsSaverPtr QxrdExperiment::settingsSaver()
+//{
+//  return m_SettingsSaver;
+//}
 
 void QxrdExperiment::openWindows()
 {
@@ -596,7 +591,7 @@ void QxrdExperiment::executeCommand(QString cmd)
 void QxrdExperiment::newLogFile(QString path)
 {
   {
-    QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
     if (m_LogFile) {
       fclose(m_LogFile);
@@ -612,7 +607,7 @@ void QxrdExperiment::newLogFile(QString path)
 void QxrdExperiment::openNewLogFile() const
 {
   {
-    QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
     if (m_LogFile) {
       fclose(m_LogFile);
@@ -625,7 +620,7 @@ void QxrdExperiment::openNewLogFile() const
 
 void QxrdExperiment::openLogFile() const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   if (m_LogFile == NULL) {
     m_LogFile = fopen(qPrintable(logFilePath()), "a");
@@ -641,7 +636,7 @@ void QxrdExperiment::openLogFile() const
 
 void QxrdExperiment::readInitialLogFile()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   FILE *logFile = fopen(qPrintable(logFilePath()), "r");
 
@@ -663,7 +658,7 @@ void QxrdExperiment::readInitialLogFile()
 
 FILE* QxrdExperiment::logFile()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   return m_LogFile;
 }
@@ -672,7 +667,7 @@ void QxrdExperiment::logMessage(QString msg) const
 {
   openLogFile();
 
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   if (m_LogFile) {
     fprintf(m_LogFile, "#CX %s\n", qPrintable(msg));
@@ -682,7 +677,7 @@ void QxrdExperiment::logMessage(QString msg) const
 
 void QxrdExperiment::closeLogFile() const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
   if (m_LogFile) {
     fprintf(m_LogFile, "#CX %s ------- shutdown --------\n",
@@ -696,7 +691,7 @@ void QxrdExperiment::closeLogFile() const
 void QxrdExperiment::newScanFile(QString path)
 {
   {
-    QxrdMutexLocker lock(__FILE__, __LINE__, &m_ScanFileMutex);
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_ScanFileMutex);
 
     if (m_ScanFile) {
       fclose(m_ScanFile);
@@ -711,7 +706,7 @@ void QxrdExperiment::newScanFile(QString path)
 
 void QxrdExperiment::openScanFile()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_ScanFileMutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_ScanFileMutex);
 
   if (m_ScanFile == NULL) {
     m_ScanFile = fopen(qPrintable(scanFilePath()), "a");
@@ -732,7 +727,7 @@ FILE* QxrdExperiment::scanFile()
 
 void QxrdExperiment::closeScanFile()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_ScanFileMutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_ScanFileMutex);
 
   if (m_ScanFile) {
     fclose(m_ScanFile);
@@ -742,7 +737,7 @@ void QxrdExperiment::closeScanFile()
 
 void QxrdExperiment::readSettings()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_ExperimentFileMutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_ExperimentFileMutex);
 
   QString docPath = experimentFilePath();
 
@@ -795,7 +790,7 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
 
 void QxrdExperiment::writeSettings()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_ExperimentFileMutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_ExperimentFileMutex);
 
   QString docPath = experimentFilePath();
 
@@ -849,37 +844,6 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
     if (ssrv) {
       ssrv -> writeSettings(settings, "simpleserver");
     }
-  }
-}
-
-QString QxrdExperiment::defaultExperimentDirectory(QString path) const
-{
-  QFileInfo info(path);
-
-  QString directory = info.dir().canonicalPath();
-
-  return directory;
-}
-
-QString QxrdExperiment::defaultExperimentFileName(QString path) const
-{
-  QFileInfo info(path);
-
-  if (info.suffix() == "qxrdp") {
-    return info.fileName();
-  } else {
-    return info.fileName()+".qxrdp";
-  }
-}
-
-QString QxrdExperiment::defaultExperimentName(QString path) const
-{
-  QFileInfo info(path);
-
-  if (info.suffix() == "qxrdp") {
-    return info.completeBaseName();
-  } else {
-    return info.fileName();
   }
 }
 

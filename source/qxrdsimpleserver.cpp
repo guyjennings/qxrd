@@ -7,7 +7,7 @@
 #include "qxrdexperiment.h"
 #include <QScriptValueIterator>
 
-QxrdSimpleServer::QxrdSimpleServer(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
+QxrdSimpleServer::QxrdSimpleServer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
   QTcpServer(NULL),
   m_RunSimpleServer(saver, this,"runSimpleServer", 1, "Run Simple Socket Server?"),
   m_SimpleServerPort(saver, this,"simpleServerPort", 1234, "Port for Simple Socket Server"),

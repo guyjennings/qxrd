@@ -1,7 +1,7 @@
 #include "qxrdwindowsettings.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 
-QxrdWindowSettings::QxrdWindowSettings(QxrdSettingsSaverWPtr saver,
+QxrdWindowSettings::QxrdWindowSettings(QcepSettingsSaverWPtr saver,
                                        QObject *parent) :
   QObject(parent),
   m_WindowGeometry(saver, this, "windowGeometry", QByteArray(), "Window Geometry Settings"),

@@ -7,8 +7,8 @@
 #include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
 #include "qxrdimageplot.h"
-#include "qxrdimagedata.h"
-#include "qxrdmaskdata.h"
+#include "qcepimagedata.h"
+#include "qcepmaskdata.h"
 #include "qxrddataprocessor.h"
 #include "qxrdcenterfinderdialog.h"
 #include "qxrdcenterfinder.h"
@@ -20,8 +20,8 @@
 #include "qxrdscriptengine.h"
 #include "qxrdfilebrowser.h"
 #include "qxrdimagecalculator.h"
-#include "qxrdmutexlocker.h"
-#include "qxrdallocator.h"
+#include "qcepmutexlocker.h"
+#include "qcepallocator.h"
 #include "qxrdimagedisplaywidget.h"
 #include "qxrdsynchronizedacquisitiondialog.h"
 #include "qxrdcorrectiondialog.h"
@@ -59,7 +59,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
                        QxrdExperimentWPtr docw,
                        QxrdAcquisitionWPtr acqw,
                        QxrdDataProcessorWPtr procw,
-                       QxrdAllocatorWPtr allocw,
+                       QcepAllocatorWPtr allocw,
                        QWidget *parent)
   : QMainWindow(parent),
     m_ObjectNamer(this, "window"),
@@ -616,11 +616,11 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     connect(proc -> centerFinder() -> prop_CenterY(), SIGNAL(valueChanged(double,int)),
             m_CenterFinderPlot, SLOT(onCenterYChanged(double)));
 
-    connect(proc.data(), SIGNAL(newIntegrationAvailable(QxrdIntegratedDataPtr)),
-            m_IntegratorPlot, SLOT(onNewIntegrationAvailable(QxrdIntegratedDataPtr)));
+    connect(proc.data(), SIGNAL(newIntegrationAvailable(QcepIntegratedDataPtr)),
+            m_IntegratorPlot, SLOT(onNewIntegrationAvailable(QcepIntegratedDataPtr)));
   }
 
-  QxrdAllocatorPtr alloc(m_Allocator);
+  QcepAllocatorPtr alloc(m_Allocator);
 
   if (alloc) {
     connect(alloc -> prop_Allocated(), SIGNAL(valueChanged(int,int)), this, SLOT(allocatedMemoryChanged()));
@@ -1199,12 +1199,12 @@ void QxrdWindow::clearStatusMessage()
   m_StatusMsg -> setText("");
 }
 
-void QxrdWindow::newDataAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
+void QxrdWindow::newDataAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow)
 {
-  //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
+  //  QcepMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
 
   //  image -> copyImage(m_NewData);
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_NewData = image;
   m_NewOverflow = overflow;
@@ -1214,12 +1214,12 @@ void QxrdWindow::newDataAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr 
   //  INVOKE_CHECK(QMetaObject::invokeMethod(this, "newData", Qt::QueuedConnection));
 }
 
-void QxrdWindow::newMaskAvailable(QxrdMaskDataPtr mask)
+void QxrdWindow::newMaskAvailable(QcepMaskDataPtr mask)
 {
-  //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewMaskMutex);
+  //  QcepMutexLocker lock(__FILE__, __LINE__, &m_NewMaskMutex);
 
   //  mask -> copyMaskTo(m_NewMask);
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_NewMask = mask;
   m_NewMaskAvailable.fetchAndAddOrdered(1);
@@ -1231,17 +1231,17 @@ void QxrdWindow::newData()
 {
   captureSize();
 
-  //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
+  //  QcepMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
 
   if (m_NewDataAvailable.fetchAndStoreOrdered(0)) {
-    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-    //    QxrdDoubleImageDataPtr tmp = m_Data;
+    //    QcepDoubleImageDataPtr tmp = m_Data;
     m_Data = m_NewData;
-    m_NewData = QxrdDoubleImageDataPtr(NULL);
+    m_NewData = QcepDoubleImageDataPtr(NULL);
 
     m_Overflow = m_NewOverflow;
-    m_NewOverflow = QxrdMaskDataPtr(NULL);
+    m_NewOverflow = QcepMaskDataPtr(NULL);
 
     m_ImagePlot        -> onProcessedImageAvailable(m_Data, m_Overflow);
     m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
@@ -1266,21 +1266,21 @@ void QxrdWindow::newData()
 
 void QxrdWindow::newMask()
 {
-  //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewMaskMutex);
+  //  QcepMutexLocker lock(__FILE__, __LINE__, &m_NewMaskMutex);
 
   if (m_NewMaskAvailable.fetchAndAddOrdered(0)) {
-    QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-    //    QxrdMaskDataPtr tmp = m_Mask;
+    //    QcepMaskDataPtr tmp = m_Mask;
     m_Mask = m_NewMask;
-    m_NewMask = QxrdMaskDataPtr(NULL);
+    m_NewMask = QcepMaskDataPtr(NULL);
     m_NewMaskAvailable.fetchAndStoreOrdered(0);
 
     m_ImagePlot        -> onMaskedImageAvailable(m_Data, m_Mask);
     m_CenterFinderPlot -> onMaskedImageAvailable(m_Data, m_Mask);
 
     if (m_ImageDisplay) {
-      m_ImageDisplay->updateImage(QxrdDoubleImageDataPtr(), QxrdMaskDataPtr(), m_Mask);
+      m_ImageDisplay->updateImage(QcepDoubleImageDataPtr(), QcepMaskDataPtr(), m_Mask);
     }
   }
 }
@@ -1737,19 +1737,19 @@ QxrdAcquisitionWPtr QxrdWindow::acquisition() const
   return m_Acquisition;
 }
 
-QxrdDoubleImageDataPtr QxrdWindow::data()
+QcepDoubleImageDataPtr QxrdWindow::data()
 {
   return m_Data;
 }
 
-QxrdMaskDataPtr QxrdWindow::mask()
+QcepMaskDataPtr QxrdWindow::mask()
 {
   return m_Mask;
 }
 
 void QxrdWindow::allocatedMemoryChanged()
 {
-  QxrdAllocatorPtr allocator(m_Allocator);
+  QcepAllocatorPtr allocator(m_Allocator);
 
   if (allocator) {
     int alloc = allocator -> get_Allocated();

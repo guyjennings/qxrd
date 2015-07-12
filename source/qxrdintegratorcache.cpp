@@ -1,14 +1,14 @@
 #include "qxrddebug.h"
 #include "qxrdintegratorcache.h"
 #include "qxrdintegrator.h"
-#include "qxrdimagedata.h"
-#include "qxrdmaskdata.h"
-#include "qxrdintegrateddata.h"
+#include "qcepimagedata.h"
+#include "qcepmaskdata.h"
+#include "qcepintegrateddata.h"
 #include "qxrddetectorgeometry.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qcepdebug.h"
-#include "qxrdallocator.h"
+#include "qcepallocator.h"
 #include "qxrdintegrator.h"
 #include "qxrdcenterfinder.h"
 
@@ -19,9 +19,7 @@
 #include <cmath>
 #include "math.h"
 
-QxrdIntegratorCache::QxrdIntegratorCache(
-    QxrdExperimentWPtr exp,
-    QxrdAllocatorWPtr alloc,
+QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperimentWPtr exp,
     QxrdIntegratorWPtr integ,
     QxrdCenterFinderWPtr cf) :
   QObject(),
@@ -64,7 +62,6 @@ QxrdIntegratorCache::QxrdIntegratorCache(
   m_CacheFillLevel(-1),
   m_CacheFullLevel(-1),
   m_Experiment(exp),
-  m_Allocator(alloc),
   m_Integrator(integ),
   m_CenterFinder(cf)
 {
@@ -315,10 +312,10 @@ QString QxrdIntegratorCache::XLabel() const
   return label;
 }
 
-QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
-  QxrdIntegratedDataPtr integ,
-  QxrdDoubleImageDataPtr dimg,
-  QxrdMaskDataPtr mask,
+QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
+  QcepIntegratedDataPtr integ,
+  QcepDoubleImageDataPtr dimg,
+  QcepMaskDataPtr mask,
   int normalize)
 {
   QTime tic;
@@ -360,13 +357,11 @@ QxrdIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 //        double cx = m_CenterX;
 //        double cy = m_CenterY;
 
-        m_CachedBinNumbers =  QxrdAllocator::newInt32Image(m_Allocator,
-                                                           QxrdAllocator::AlwaysAllocate,
+        m_CachedBinNumbers =  QcepAllocator::newInt32Image(QcepAllocator::AlwaysAllocate,
                                                            m_NCols*m_Oversample,
                                                            m_NRows*m_Oversample);
 
-        m_CachedNormalization = QxrdAllocator::newDoubleImage(m_Allocator,
-                                                              QxrdAllocator::AlwaysAllocate,
+        m_CachedNormalization = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
                                                               m_NCols*m_Oversample,
                                                               m_NRows*m_Oversample);
 
@@ -630,12 +625,12 @@ void QxrdIntegratorCache::releaseScriptEngine()
   }
 }
 
-QxrdInt32ImageDataPtr QxrdIntegratorCache::cachedGeometry()
+QcepInt32ImageDataPtr QxrdIntegratorCache::cachedGeometry()
 {
   return m_CachedBinNumbers;
 }
 
-QxrdDoubleImageDataPtr QxrdIntegratorCache::cachedIntensity()
+QcepDoubleImageDataPtr QxrdIntegratorCache::cachedIntensity()
 {
   return m_CachedNormalization;
 }

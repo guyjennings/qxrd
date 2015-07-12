@@ -3,7 +3,7 @@
 #include "qxrdcenterfinderpicker.h"
 #include "qxrdwindow.h"
 #include <qwt_plot_marker.h>
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 #include "levmar.h"
 #include <QMessageBox>
 #include "qxrdapplication.h"
@@ -25,7 +25,7 @@
 #  endif /* _MSC_VER */
 # endif /* LINSOLVERS_RETAIN_MEMORY */
 
-QxrdCenterFinder::QxrdCenterFinder(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr expt)
+QxrdCenterFinder::QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt)
   : QxrdDetectorGeometry("centering", NULL),
     m_CenterX(saver, this, "centerX", 0, "X Center"),
     m_CenterY(saver, this, "centerY", 0, "Y Center"),
@@ -92,12 +92,12 @@ QxrdExperimentWPtr QxrdCenterFinder::experiment() const
   return m_Experiment;
 }
 
-QxrdDoubleImageDataPtr QxrdCenterFinder::data() const
+QcepDoubleImageDataPtr QxrdCenterFinder::data() const
 {
   return m_Data;
 }
 
-QxrdDoubleImageDataPtr QxrdCenterFinder::newData()
+QcepDoubleImageDataPtr QxrdCenterFinder::newData()
 {
   int wd, ht;
 
@@ -115,25 +115,25 @@ QxrdDoubleImageDataPtr QxrdCenterFinder::newData()
     QxrdDataProcessorPtr proc(expt->dataProcessor());
 
     if (proc) {
-      QxrdDoubleImageDataPtr res = proc->takeNextFreeImage(wd,ht);
+      QcepDoubleImageDataPtr res = proc->takeNextFreeImage(wd,ht);
 
       return res;
     }
   }
 
-  return QxrdDoubleImageDataPtr();
+  return QcepDoubleImageDataPtr();
 }
 
 void QxrdCenterFinder::writeSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QxrdDetectorGeometry::writeSettings(settings, section);
 }
 
 void QxrdCenterFinder::readSettings(QSettings *settings, QString section)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QxrdDetectorGeometry::readSettings(settings, section);
 }
@@ -317,7 +317,9 @@ void QxrdCenterFinder::fitPowderCircle(int n)
 
   printMessage(message);
 
-  if (g_Application->get_GuiWanted()) {
+  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+
+  if (app && app->get_GuiWanted()) {
     if (niter >= 0) {
       message.append(tr("Do you want to update the beam centering parameters?"));
 
@@ -363,7 +365,9 @@ void QxrdCenterFinder::fitPowderEllipse(int n)
 
   printMessage(message);
 
-  if (g_Application->get_GuiWanted()) {
+  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+
+  if (app && app->get_GuiWanted()) {
     if (fitter.reason() == QxrdFitter::Successful) {
       message.append(tr("Do you want to update the beam centering parameters?"));
       if (QMessageBox::question(NULL, "Update Fitted Center?", message, QMessageBox::Ok | QMessageBox::No, QMessageBox::Ok) == QMessageBox::Ok) {
@@ -975,7 +979,7 @@ void         QxrdCenterFinder::setPowderPoint(int i, QScriptValue val)
 }
 
 
-void QxrdCenterFinder::setData(QxrdDoubleImageDataPtr data)
+void QxrdCenterFinder::setData(QcepDoubleImageDataPtr data)
 {
   m_Data = data;
 }
@@ -1288,7 +1292,7 @@ void QxrdCenterFinder::calculateCalibration()
     QxrdDataProcessorPtr proc(expt->dataProcessor());
 
     if (proc) {
-      QxrdDoubleImageDataPtr res = newData();
+      QcepDoubleImageDataPtr res = newData();
       res -> fill(nan(""));
 
       int wd = res->get_Width();
@@ -1468,7 +1472,7 @@ void QxrdCenterFinder::calculateCalibration()
       }
 
       printMessage(tr("%1 duplicated points, %2 unset pixels").arg(ndup).arg(nunset));
-      proc->newData(res, QxrdMaskDataPtr());
+      proc->newData(res, QcepMaskDataPtr());
     }
   }
 }

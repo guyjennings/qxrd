@@ -1,8 +1,8 @@
 #include "qxrdinfodialog.h"
 #include "ui_qxrdinfodialog.h"
 #include "qcepproperty.h"
-#include "qxrdsettingssaver.h"
-#include "qxrdimagedata.h"
+#include "qcepsettingssaver.h"
+#include "qcepimagedata.h"
 #include "qxrddebug.h"
 
 QxrdInfoDialog::QxrdInfoDialog(QxrdInfoDialogSettingsWPtr settings, QWidget *parent) :
@@ -23,7 +23,7 @@ QxrdInfoDialog::~QxrdInfoDialog()
   }
 }
 
-void QxrdInfoDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr /*overflow*/)
+void QxrdInfoDialog::onProcessedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr /*overflow*/)
 {
   m_InfoText->clear();
 
@@ -37,7 +37,7 @@ void QxrdInfoDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxr
     m_InfoText->append(tr("User Comment 3 %1").arg(image->get_UserComment3()));
     m_InfoText->append(tr("User Comment 4 %1").arg(image->get_UserComment4()));
     m_InfoText->append(tr("Acquired at %1").arg(image->get_DateString()));
-    m_InfoText->append(tr("Acquired with QXRD Version %1").arg(image->get_QxrdVersion()));
+    m_InfoText->append(tr("Acquired with %1 Version %2").arg(image->get_Creator()).arg(image->get_Version()));
     m_InfoText->append(tr("Acquired with Qt Version %1").arg(image->get_QtVersion()));
     m_InfoText->append(tr("Data type %1 (%2)").arg(image->get_DataType()).arg(image->get_DataTypeName()));
     m_InfoText->append(tr("Dimensions %1 x %2").arg(image->get_Width()).arg(image->get_Height()));

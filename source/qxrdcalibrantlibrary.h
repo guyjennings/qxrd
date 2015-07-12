@@ -5,7 +5,7 @@
 #include "qcepobject.h"
 #include "qxrdcalibrant-ptr.h"
 #include "qcepproperty.h"
-#include "qxrdsettingssaver-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdcalibrantlibrary-ptr.h"
 
@@ -14,7 +14,7 @@ class QxrdCalibrantLibrary : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdCalibrantLibrary(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp);
+  QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp);
   ~QxrdCalibrantLibrary();
   void initialize(QxrdCalibrantLibraryWPtr lib);
   QxrdCalibrantLibraryWPtr calibrantLibraryPtr() const;
@@ -37,7 +37,7 @@ public:
 
 private:
   mutable QMutex            m_Mutex;
-  QxrdSettingsSaverWPtr     m_Saver;
+  QcepSettingsSaverWPtr     m_Saver;
   QxrdExperimentWPtr        m_Experiment;
   QxrdCalibrantLibraryWPtr  m_CalibrantLibrary;
   QVector<QxrdCalibrantPtr> m_Calibrants;

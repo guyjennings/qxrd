@@ -416,8 +416,10 @@ void QxrdFileBrowserModelUpdater::updateContents()
 
   int limit = 10000;
 
-  if (g_Application) {
-    limit = g_Application->get_FileBrowserLimit();
+  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+
+  if (app) {
+    limit = app->get_FileBrowserLimit();
   }
 
   int trueSize = m_Files.count();

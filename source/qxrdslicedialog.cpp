@@ -2,7 +2,7 @@
 #include "ui_qxrdslicedialog.h"
 #include "qwt_plot_piecewise_curve.h"
 #include <QSettings>
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 #include "qxrddebug.h"
 
 QxrdSliceDialog::QxrdSliceDialog(QxrdSliceDialogSettingsWPtr settings, QWidget *parent) :
@@ -29,7 +29,7 @@ QxrdSliceDialog::~QxrdSliceDialog()
   }
 }
 
-void QxrdSliceDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr /*overflow*/)
+void QxrdSliceDialog::onProcessedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr /*overflow*/)
 {
   m_Image = image;
 

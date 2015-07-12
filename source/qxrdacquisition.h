@@ -18,7 +18,7 @@
 #endif
 
 #include "qxrdrasterdata.h"
-#include "qxrdimagequeue.h"
+#include "qcepimagequeue.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitiondialog-ptr.h"
@@ -29,6 +29,8 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
+#include "qcepallocator-ptr.h"
+#include "qcepsettingssaver-ptr.h"
 
 class QxrdAcquisitionParameterPack
 {
@@ -77,7 +79,7 @@ private:
 
 class QxrdProcessArgs {
 public:
-  QxrdProcessArgs(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow)
+  QxrdProcessArgs(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
     : m_FilePattern(filePattern),
       m_FileIndex(fileIndex),
       m_Phase(phase),
@@ -92,8 +94,8 @@ public:
   int                   m_Phase;
   int                   m_NPhases;
   bool                  m_Trig;
-  QxrdInt32ImageDataPtr m_Image;
-  QxrdMaskDataPtr       m_Overflow;
+  QcepInt32ImageDataPtr m_Image;
+  QcepMaskDataPtr       m_Overflow;
 };
 
 class QxrdAcquisition : public QcepObject
@@ -101,10 +103,10 @@ class QxrdAcquisition : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdAcquisition(QxrdSettingsSaverWPtr saver,
+  QxrdAcquisition(QcepSettingsSaverWPtr saver,
                   QxrdExperimentWPtr doc,
                   QxrdDataProcessorWPtr proc,
-                  QxrdAllocatorWPtr allocator);
+                  QcepAllocatorWPtr allocator);
   ~QxrdAcquisition();
   void initialize(QxrdAcquisitionWPtr acq);
 
@@ -144,7 +146,7 @@ public slots:
   void doAcquireDark(QxrdDarkAcquisitionParameterPack parms);
 
 public:
-  void enqueueAcquiredFrame(QxrdInt16ImageDataPtr img);
+  void enqueueAcquiredFrame(QcepInt16ImageDataPtr img);
 
 signals:
   void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
@@ -165,7 +167,7 @@ public:
 
   void indicateDroppedFrame(int n);
   virtual QxrdAcquisitionDialogPtr controlPanel(QxrdWindowWPtr win);
-  QxrdAllocatorWPtr allocator() const;
+  QcepAllocatorWPtr allocator() const;
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
   QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;
@@ -193,24 +195,24 @@ protected slots:
 private:
   enum { MegaBytes = 0x100000 };
 
-  QxrdInt16ImageDataPtr acquireFrame(double exposure);
-  QxrdInt16ImageDataPtr acquireFrameIfAvailable(double exposure);
+  QcepInt16ImageDataPtr acquireFrame(double exposure);
+  QcepInt16ImageDataPtr acquireFrameIfAvailable(double exposure);
   void flushImageQueue();
 
   virtual void stopIdling();
   virtual void startIdling();
 
-  void accumulateAcquiredImage(QxrdInt16ImageDataPtr image, QxrdInt32ImageDataPtr accum, QxrdMaskDataPtr overflow);
+  void accumulateAcquiredImage(QcepInt16ImageDataPtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
 
   void processImage(const QxrdProcessArgs &args);
-  void processImage        (QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
-  void processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
-  void processDarkImage    (QString filePattern, int fileIndex,                                    QxrdInt32ImageDataPtr image, QxrdMaskDataPtr overflow);
+  void processImage        (QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+  void processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+  void processDarkImage    (QString filePattern, int fileIndex,                                    QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
 
   int cancelling();
 
 private:
-  QxrdSettingsSaverWPtr         m_Saver;
+  QcepSettingsSaverWPtr         m_Saver;
 
 public:
   Q_PROPERTY(QString qxrdVersion READ get_QxrdVersion STORED false)
@@ -336,7 +338,7 @@ private:
 
   QxrdExperimentWPtr     m_Experiment;
   QxrdWindowWPtr         m_Window;
-  QxrdAllocatorWPtr      m_Allocator;
+  QcepAllocatorWPtr      m_Allocator;
   QxrdDataProcessorWPtr  m_DataProcessor;
   QxrdDetectorWPtr       m_Detector;
 
@@ -344,7 +346,7 @@ private:
   QWaitCondition         m_StatusWaiting;
 
   QSemaphore             m_NAcquiredImages;
-  QxrdInt16ImageQueue    m_AcquiredImages;
+  QcepInt16ImageQueue    m_AcquiredImages;
 
   QxrdAcquisitionDialogPtr m_ControlPanel;
 

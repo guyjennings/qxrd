@@ -6,12 +6,12 @@
 #include <QScriptEngine>
 #include <QThread>
 #include "qxrdapplication.h"
-#include "qxrdsettingssaver-ptr.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver-ptr.h"
+#include "qcepsettingssaver.h"
 #include "qcepexperiment.h"
 #include "qxrdexperiment.h"
 
-QxrdServer::QxrdServer(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
+QxrdServer::QxrdServer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
   QSpecServer(doc, name),
   m_RunSpecServer(saver, this,"runSpecServer", 1, "Run SPEC Server?"),
   m_SpecServerPort(saver, this,"specServerPort", -1, "Port for SPEC Server")

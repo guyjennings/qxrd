@@ -1,6 +1,6 @@
 #include "qxrdcalibrant.h"
 #include "qxrdcalibrantlibrary.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 #include "qxrdexperiment.h"
 #include <QScriptEngine>
 #include "qxrddebug.h"
@@ -9,7 +9,7 @@
 #include <cmath>
 #include <math.h>
 
-QxrdCalibrant::QxrdCalibrant(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib)
+QxrdCalibrant::QxrdCalibrant(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib)
   : QcepObject("calibrant", NULL),
     m_Description(saver, this, "description", "Description", "Calibrant Description"),
     m_Flags(saver, this, "flags", 0, "Calibrant flags"),

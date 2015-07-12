@@ -22,7 +22,7 @@ public:
   void init(QxrdPlotSettingsWPtr settings);
 
 public:
-//  virtual void setSaver(QxrdSettingsSaverPtr saver);
+//  virtual void setSaver(QcepSettingsSaverPtr saver);
 
   void setPlotCurveStyle(int index, QwtPlotCurve *curve);
   virtual QwtText trackerTextF(const QPointF &pos);

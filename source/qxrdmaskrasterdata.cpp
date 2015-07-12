@@ -4,7 +4,7 @@
 #include "qxrdrasterdata.h"
 #include "qxrdapplication.h"
 
-QxrdMaskRasterData::QxrdMaskRasterData(QxrdMaskDataPtr mask, int interp)
+QxrdMaskRasterData::QxrdMaskRasterData(QcepMaskDataPtr mask, int interp)
   : QwtRasterData(),
     m_Mask(mask),
     m_Interpolate(interp)

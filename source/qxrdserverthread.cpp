@@ -6,9 +6,9 @@
 #include <QDateTime>
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
-QxrdServerThread::QxrdServerThread(QxrdSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
+QxrdServerThread::QxrdServerThread(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
   m_Saver(saver),
   m_Experiment(doc),
   m_Name(name),
@@ -32,7 +32,7 @@ QxrdServerPtr QxrdServerThread::server() const
 {
   while (isRunning()) {
     {
-      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
       if (m_Server) return m_Server;
     }

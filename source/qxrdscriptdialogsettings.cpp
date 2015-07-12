@@ -1,7 +1,7 @@
 #include "qxrdscriptdialogsettings.h"
-#include "qxrdsettingssaver.h"
+#include "qcepsettingssaver.h"
 
-QxrdScriptDialogSettings::QxrdScriptDialogSettings(QxrdSettingsSaverWPtr /*saver*/, QObject *parent) :
+QxrdScriptDialogSettings::QxrdScriptDialogSettings(QcepSettingsSaverWPtr /*saver*/, QObject *parent) :
   QObject(parent)
 {
 }

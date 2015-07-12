@@ -3,7 +3,7 @@
 #include "qxrdfilebrowsermodel.h"
 #include "qxrdfilebrowsermodelupdater.h"
 #include "qxrdapplication.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
 QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread() :
   QxrdThread(),
@@ -58,7 +58,7 @@ QxrdFileBrowserModelUpdaterPtr QxrdFileBrowserModelUpdaterThread::updater() cons
 {
   while (isRunning()) {
     {
-      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
       if (m_Updater) return m_Updater;
     }

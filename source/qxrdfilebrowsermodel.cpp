@@ -9,7 +9,7 @@
 #include "qxrdapplication.h"
 #include "qxrdfilebrowsermodelupdater.h"
 #include "qxrdfilebrowsermodelupdaterthread.h"
-#include "qxrdmutexlocker.h"
+#include "qcepmutexlocker.h"
 
 QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   QAbstractTableModel(parent),
@@ -49,7 +49,7 @@ void QxrdFileBrowserModel::initialize(QxrdFileBrowserModelWPtr model)
 QVariant QxrdFileBrowserModel::headerData
   (int section, Qt::Orientation orientation, int role) const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
     switch (section) {
@@ -74,7 +74,7 @@ QVariant QxrdFileBrowserModel::headerData
 
 QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QModelIndex index = idx;
   QFileInfo info = fileInfo(index);
@@ -159,7 +159,7 @@ int	QxrdFileBrowserModel::columnCount ( const QModelIndex & /*parent*/ ) const
 
 int	QxrdFileBrowserModel::rowCount ( const QModelIndex & /*parent*/ ) const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (m_Limit > 0) {
     return m_DirList.count() + m_Limit + 1;
@@ -170,7 +170,7 @@ int	QxrdFileBrowserModel::rowCount ( const QModelIndex & /*parent*/ ) const
 
 void QxrdFileBrowserModel::setNameFilters(QStringList filters)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_NameFilters = filters;
 
@@ -183,7 +183,7 @@ void QxrdFileBrowserModel::setNameFilterDisables(bool /*disables*/)
 
 QFileInfo QxrdFileBrowserModel::fileInfo(const QModelIndex &index) const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   int n = index.row();
   QFileInfo info;
@@ -205,21 +205,21 @@ QFileInfo QxrdFileBrowserModel::fileInfo(const QModelIndex &index) const
 
 QString QxrdFileBrowserModel::fileName(const QModelIndex &index) const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return fileInfo(index).fileName();
 }
 
 QString QxrdFileBrowserModel::filePath(const QModelIndex &index) const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return fileInfo(index).filePath();
 }
 
 void QxrdFileBrowserModel::setRootPath(QString path)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_RootPath = path;
 
@@ -230,49 +230,49 @@ void QxrdFileBrowserModel::setRootPath(QString path)
 
 QStringList QxrdFileBrowserModel::nameFilters() const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_NameFilters;
 }
 
 int QxrdFileBrowserModel::sortedColumn() const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_SortedColumn;
 }
 
 Qt::SortOrder QxrdFileBrowserModel::sortOrder() const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_SortOrder;
 }
 
 void QxrdFileBrowserModel::refresh()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   updateModel();
 }
 
 void QxrdFileBrowserModel::updateModel()
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Updater->needUpdate();
 }
 
 bool QxrdFileBrowserModel::isDir(const QModelIndex &index) const
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return fileInfo(index).isDir();
 }
 
 void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if ((m_SortedColumn != column) || (m_SortOrder != order)) {
     m_SortedColumn = column;
@@ -284,7 +284,7 @@ void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
 
 void QxrdFileBrowserModel::newDataAvailable(QVector<QFileInfo> dirs, QVector<QFileInfo> files, int limit, int trueSize)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   beginResetModel();
 
@@ -311,7 +311,7 @@ void QxrdFileBrowserModel::updatedFile(QFileInfo file)
 
 void QxrdFileBrowserModel::generateFileUpdates(int doIt)
 {
-  QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_Updater->generateFileUpdates(doIt);
 }

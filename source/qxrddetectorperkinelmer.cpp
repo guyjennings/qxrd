@@ -3,8 +3,8 @@
 #include "qxrdapplication.h"
 #include "qxrdperkinelmerplugininterface.h"
 #include "qxrdacquisition.h"
-#include "qxrdallocator.h"
-#include "qxrdmutexlocker.h"
+#include "qcepallocator.h"
+#include "qcepmutexlocker.h"
 
 //static QxrdDetectorPerkinElmer *g_Detector = NULL;
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
@@ -903,8 +903,8 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
     QxrdAcquisitionPtr acq(m_Acquisition);
 
     if (plugin && acq) {
-      QxrdInt16ImageDataPtr image = QxrdAllocator::newInt16Image(acq->allocator(),
-                                                                 QxrdAllocator::AllocateFromReserve,
+      QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(acq->allocator(),
+                                                                 QcepAllocator::AllocateFromReserve,
                                                                  acq->get_NCols(), acq->get_NRows());
 
       //    printf("allocator took %d msec\n", tic.restart());
@@ -914,7 +914,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
                      .arg(counter).arg(n1).arg(n2));
       }
 
-      QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
       //  if (get_Cancelling()) {
       //    set_Cancelling(false);
@@ -1006,7 +1006,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
       acq->enqueueAcquiredFrame(image);
 
       //    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "acquiredFrameAvailable", Qt::QueuedConnection,
-      //                                           Q_ARG(QxrdInt16ImageDataPtr, image), Q_ARG(int,counter)));
+      //                                           Q_ARG(QcepInt16ImageDataPtr, image), Q_ARG(int,counter)));
 
       //    printf("Invoke took %d msec\n", tic.restart());
     }

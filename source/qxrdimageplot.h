@@ -18,8 +18,8 @@
 #include "qxrdcenterfinderpicker-ptr.h"
 #include "qxrdmaskpicker-ptr.h"
 #include "qxrddataprocessor-ptr.h"
-#include "qxrdimagedata-ptr.h"
-#include "qxrdmaskdata-ptr.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
 #include "qxrdimageplotsettings.h"
 #include "qcepobjectnamer.h"
 #include "qxrdpowderpointpicker.h"
@@ -66,9 +66,9 @@ public slots:
   void onInterpolateChanged(bool interp);
   void onMaintainAspectChanged(bool interp);
 
-  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
-  void onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
-  void onDarkImageAvailable(QxrdDoubleImageDataPtr image);
+  void onProcessedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
+  void onMaskedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask);
+  void onDarkImageAvailable(QcepDoubleImageDataPtr image);
   void onCenterXChanged(double cx);
   void onCenterYChanged(double cy);
   void onCenterChanged(QPointF c);
@@ -139,9 +139,9 @@ private:
   QxrdHistogramSelector     *m_HistogramSelector;
 //  QwtLegendPtr               m_Legend;
 
-  QxrdDoubleImageDataPtr     m_Data;
-  QxrdMaskDataPtr            m_Mask;
-  QxrdMaskDataPtr            m_Overflow;
+  QcepDoubleImageDataPtr     m_Data;
+  QcepMaskDataPtr            m_Mask;
+  QcepMaskDataPtr            m_Overflow;
 
   QxrdRasterData            *m_DataRaster;
   QxrdMaskRasterData        *m_MaskRaster;

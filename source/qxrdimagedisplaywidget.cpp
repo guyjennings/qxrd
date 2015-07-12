@@ -4,7 +4,7 @@
 #include <QScrollArea>
 #include <QPaintEvent>
 #include "qxrdapplication.h"
-#include "qxrdimagedata.h"
+#include "qcepimagedata.h"
 
 QxrdImageDisplayWidget::QxrdImageDisplayWidget(QWidget *parent) :
     QWidget(parent),
@@ -58,9 +58,9 @@ void QxrdImageDisplayWidget::paintEvent(QPaintEvent *event)
 }
 
 void QxrdImageDisplayWidget::updateImage
-    (QxrdDoubleImageDataPtr img,
-     QxrdMaskDataPtr        ovflow,
-     QxrdMaskDataPtr        mask)
+    (QcepDoubleImageDataPtr img,
+     QcepMaskDataPtr        ovflow,
+     QcepMaskDataPtr        mask)
 {
   QTime tic;
   tic.start();
