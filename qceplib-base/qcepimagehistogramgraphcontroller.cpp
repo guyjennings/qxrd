@@ -11,22 +11,14 @@ QcepImageHistogramGraphController::QcepImageHistogramGraphController(QcepDataObj
 
 QcepImageHistogramGraphController::~QcepImageHistogramGraphController()
 {
-  printf("Deactivate QcepImageHistogramGraphController\n");
-
-  m_Window->m_GridLayout->removeWidget(m_Widget);
-
   delete(m_Widget);
 }
 
 void QcepImageHistogramGraphController::activate()
 {
-  printf("Activate QcepImageHistogramGraphController\n");
-
   m_Widget = new QcepImageHistogramGraphControls(m_Window, m_Mode, m_Object);
 
-  m_Window->m_GridLayout->addWidget(m_Widget,
-                                    m_Window->controllerRow(),
-                                    m_Window->controllerColumn());
+  m_Window->m_Splitter->addWidget(m_Widget);
 
   QcepDataObjectGraphController::activate();
 }

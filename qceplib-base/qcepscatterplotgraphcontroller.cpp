@@ -11,22 +11,14 @@ QcepScatterPlotGraphController::QcepScatterPlotGraphController(QcepDataObjectGra
 
 QcepScatterPlotGraphController::~QcepScatterPlotGraphController()
 {
-  printf("Deactivate QcepScatterPlotGraphController\n");
-
-  m_Window->m_GridLayout->removeWidget(m_Widget);
-
   delete(m_Widget);
 }
 
 void QcepScatterPlotGraphController::activate()
 {
-  printf("Activate QcepScatterPlotGraphController\n");
-
   m_Widget = new QcepScatterPlotGraphControls(m_Window, m_Mode, m_Object);
 
-  m_Window->m_GridLayout->addWidget(m_Widget,
-                                    m_Window->controllerRow(),
-                                    m_Window->controllerColumn());
+  m_Window->m_Splitter->addWidget(m_Widget);
 
   QcepDataObjectGraphController::activate();
 }
