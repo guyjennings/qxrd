@@ -174,6 +174,17 @@ void QxrdExperiment::initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperiment
 
     m_Dataset = QxrdDatasetPtr(new QxrdDataset(m_SettingsSaver, ""));
 
+//    if (proc) {
+//      QcepDataGroupPtr acquired = QcepDataGroup::newDataGroup(m_SettingsSaver, "acquired");
+
+//      acquired->append(proc->data());
+//      acquired->append(proc->darkImage());
+//      acquired->append(proc->mask());
+//      acquired->append(proc->overflow());
+
+//      m_Dataset->append(acquired);
+//    }
+
     QcepDataGroupPtr group1 = QcepDataGroup::newDataGroup(m_SettingsSaver, "group1");
     QcepDataGroupPtr group2 = QcepDataGroup::newDataGroup(m_SettingsSaver, "group2");
     QcepDataGroupPtr group3 = QcepDataGroup::newDataGroup(m_SettingsSaver, "group3");
