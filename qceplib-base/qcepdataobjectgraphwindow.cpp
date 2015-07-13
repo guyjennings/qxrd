@@ -25,6 +25,8 @@
 #include "qcepdatagroup.h"
 #include "qcepdatagroup-ptr.h"
 
+#include "qcepplotsettings.h"
+
 #include "qcepimagedatagraphcontroller.h"
 #include "qcepscatterplotgraphcontroller.h"
 #include "qcepimagehistogramgraphcontroller.h"
@@ -37,6 +39,7 @@ QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(
   m_Object(obj),
   m_PlottingMode(NoPlot),
   m_SettingsSaver(new QcepSettingsSaver(this)),
+  m_PlotSettings(new QcepPlotSettings("plotSettings", m_SettingsSaver, NULL)),
   m_ColorMap     (m_SettingsSaver, this, "colorMap",      0,     "Image Color Map Index"),
   m_ScalingMode  (m_SettingsSaver, this, "scalingMode",   0,     "Image Scaling Mode"),
   m_MinimumPct   (m_SettingsSaver, this, "minimumPct",    0,     "Image Display Minimum %"),
@@ -85,12 +88,21 @@ QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(
     setWindowTitle("Unknown Graph");
   }
 
+  m_ImagePlot->init(m_PlotSettings);
+
   m_PlotModeSelector->clear();
 
   setGraphMode(DefaultPlot);
 
   connect(m_PlotModeSelector, SIGNAL(currentIndexChanged(int)),
           this, SLOT(changeGraphMode(int)));
+
+  connect(m_ImageZoomInButton, SIGNAL(clicked(bool)), m_ImagePlot, SLOT(enableZooming()));
+  connect(m_ImageZoomOutButton, SIGNAL(clicked(bool)), m_ImagePlot, SLOT(zoomOut()));
+  connect(m_ImageZoomAllButton, SIGNAL(clicked(bool)), m_ImagePlot, SLOT(autoScale()));
+  connect(m_ImageMeasureButton, SIGNAL(clicked(bool)), m_ImagePlot, SLOT(enableMeasuring()));
+
+  m_ImagePlot->enableZooming();
 
   setAttribute(Qt::WA_DeleteOnClose, true);
 
@@ -213,6 +225,11 @@ void QcepDataObjectGraphWindow::changeGraphMode(int idx)
   m_PlotModeSelector->blockSignals(b);
 }
 
+int QcepDataObjectGraphWindow::currentGraphMode()
+{
+  return m_PlottingMode;
+}
+
 void QcepDataObjectGraphWindow::closeEvent ( QCloseEvent * event )
 {
   if (wantToClose()) {
@@ -244,5 +261,17 @@ void QcepDataObjectGraphWindow::updateDisplay()
 {
   if (m_Controller) {
     m_Controller->updateDisplay();
+  }
+}
+
+void QcepDataObjectGraphWindow::clearPlot()
+{
+  m_ImagePlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+}
+
+void QcepDataObjectGraphWindow::appendCurve(QwtPlotCurve *curve)
+{
+  if (curve) {
+    curve->attach(m_ImagePlot);
   }
 }

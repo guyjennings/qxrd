@@ -71,7 +71,11 @@ SOURCES += \
   $${PWD}/qcepimageslicegraphcontroller.cpp \
   $${PWD}/qcepimageslicegraphcontrols.cpp \
   $${PWD}/qcepimagehistogramgraphcontroller.cpp \
-  $${PWD}/qcepimagehistogramgraphcontrols.cpp
+  $${PWD}/qcepimagehistogramgraphcontrols.cpp \
+    $$PWD/qcepplot.cpp \
+    $$PWD/qcepplotsettings.cpp \
+    $$PWD/qcepplotmeasurer.cpp \
+    $$PWD/qcepplotzoomer.cpp
 
 HEADERS += \
   $${PWD}/qcepdebug.h \
@@ -154,7 +158,14 @@ HEADERS += \
   $${PWD}/qcepimagehistogramgraphcontrols.h \
   $${PWD}/qcepimageslicegraphcontroller.h \
   $${PWD}/qcepimageslicegraphcontrols.h \
-  $${PWD}/qcepscatterplotgraphcontroller.h
+  $${PWD}/qcepscatterplotgraphcontroller.h \
+    $$PWD/qcepplot.h \
+    $$PWD/qcepplotsettings.h \
+    $$PWD/qcepplotsettings-ptr.h \
+    $$PWD/qcepplotmeasurer.h \
+    $$PWD/qcepplotmeasurer-ptr.h \
+    $$PWD/qcepplot-ptr.h \
+    $$PWD/qcepplotzoomer.h
 
 FORMS += \
   $${PWD}/qcepdatasetbrowserdialog.ui \

@@ -188,7 +188,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QwtPlot" name="m_ImagePlot" native="true">
+      <widget class="QcepPlot" name="m_ImagePlot" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>2</horstretch>
@@ -332,9 +332,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QwtPlot</class>
+   <class>QcepPlot</class>
    <extends>QWidget</extends>
-   <header>qwt_plot.h</header>
+   <header>qcepplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

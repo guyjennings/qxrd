@@ -10,6 +10,7 @@
 #include "qcepdataobjectgraphcontroller-ptr.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qcepproperty.h"
+#include "qwt_plot_curve.h"
 
 class QcepDataObjectGraphWindow : public QMainWindow, public Ui::QcepDataObjectGraphWindow
 {
@@ -25,6 +26,10 @@ public:
 
   int controllerRow() const;
   int controllerColumn() const;
+
+  int currentGraphMode();
+  void clearPlot();
+  void appendCurve(QwtPlotCurve *curve);
 
 signals:
 
@@ -44,6 +49,7 @@ private:
   int                                           m_PlottingMode;
   QcepDataObjectGraphControllerPtr              m_Controller;
   QcepSettingsSaverPtr                          m_SettingsSaver;
+  QcepPlotSettingsPtr                           m_PlotSettings;
 
 public:
   enum {
