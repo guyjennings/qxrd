@@ -3,15 +3,15 @@
 
 #include "qcepmacros.h"
 
-#include "qxrdplot.h"
+#include "qcepplot.h"
 #include "qwt_plot_curve.h"
 
-class QxrdAcquisitionExtraInputsPlot : public QxrdPlot
+class QxrdAcquisitionExtraInputsPlot : public QcepPlot
 {
   Q_OBJECT
 public:
   explicit QxrdAcquisitionExtraInputsPlot(QWidget *parent = 0);
-  void init(QxrdPlotSettingsWPtr settings);
+  void init(QcepPlotSettingsWPtr settings);
 
 signals:
   

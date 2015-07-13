@@ -8,20 +8,21 @@
  *****************************************************************************/
 
 #include "qwt_plot_piecewise_curve.h"
-#include "qxrdplot.h"
+
+#include "qcepplot.h"
 
 QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(): QwtPlotCurve(),
     m_Plot(NULL)
 {
 }
 
-QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(QxrdPlot *plot, const QwtText &title):
+QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(QcepPlot *plot, const QwtText &title):
     QwtPlotCurve(title),
     m_Plot(plot)
 {
 }
 
-QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(QxrdPlot *plot, const QString &title):
+QwtPlotPiecewiseCurve::QwtPlotPiecewiseCurve(QcepPlot *plot, const QString &title):
     QwtPlotCurve(title),
     m_Plot(plot)
 {

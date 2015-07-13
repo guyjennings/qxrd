@@ -34,7 +34,7 @@ public:
 
   QxrdImagePlotSettingsWPtr                    imagePlotSettings();
   QxrdCenterFinderPlotSettingsWPtr             centerFinderPlotSettings();
-  QxrdPlotSettingsWPtr                         integratorPlotSettings();
+  QcepPlotSettingsWPtr                         integratorPlotSettings();
   QxrdFileBrowserSettingsWPtr                  inputFileBrowserSettings();
   QxrdFileBrowserSettingsWPtr                  outputFileBrowserSettings();
   QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
@@ -52,7 +52,7 @@ public slots:
 private:
   QxrdImagePlotSettingsPtr                     m_ImagePlotSettings;
   QxrdCenterFinderPlotSettingsPtr              m_CenterFinderPlotSettings;
-  QxrdPlotSettingsPtr                          m_IntegratorPlotSettings;
+  QcepPlotSettingsPtr                          m_IntegratorPlotSettings;
   QxrdFileBrowserSettingsPtr                   m_InputFileBrowserSettings;
   QxrdFileBrowserSettingsPtr                   m_OutputFileBrowserSettings;
   QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;

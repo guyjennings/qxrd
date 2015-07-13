@@ -1,13 +1,13 @@
 #include "qxrdhistogramplot.h"
 
 QxrdHistogramPlot::QxrdHistogramPlot(QWidget *parent) :
-    QxrdPlot(parent)
+    QcepPlot(parent)
 {
 }
 
 void QxrdHistogramPlot::init(QxrdHistogramPlotSettingsWPtr settings)
 {
-  QxrdPlot::init(settings);
+  QcepPlot::init(settings);
 
   insertLegend(m_Legend, QwtPlot::BottomLegend);
   setAxisTitle(QwtPlot::yLeft, "# Pixels");

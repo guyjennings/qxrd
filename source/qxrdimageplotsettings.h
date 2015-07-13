@@ -3,9 +3,9 @@
 
 #include <QObject>
 #include "qcepproperty.h"
-#include "qxrdplotsettings.h"
+#include "qcepplotsettings.h"
 
-class QxrdImagePlotSettings : public QxrdPlotSettings
+class QxrdImagePlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

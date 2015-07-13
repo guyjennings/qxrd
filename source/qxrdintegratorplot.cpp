@@ -1,20 +1,24 @@
 #include "qxrdintegratorplot.h"
 
+#include <stdio.h>
+
+#include <QMetaMethod>
+//#include <QTime>
+
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_curve.h>
-#include <QMetaMethod>
 #include <qwt_legend.h>
 #include <qwt_legend_label.h>
-#include <stdio.h>
-//#include <QTime>
+
+#include "qcepplotmeasurer.h"
+#include "qcepintegrateddata.h"
+
 #include "qxrddataprocessor.h"
 #include "qxrdintegrator.h"
-#include "qxrdplotmeasurer.h"
-#include "qcepintegrateddata.h"
 #include "qwt_plot_piecewise_curve.h"
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
-  : QxrdPlot(parent),
+  : QcepPlot(parent),
     m_DataProcessor(),
     m_Integrator(),
     m_PlotIndex(0),
@@ -25,9 +29,9 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
 
 }
 
-void QxrdIntegratorPlot::init(QxrdPlotSettingsWPtr settings)
+void QxrdIntegratorPlot::init(QcepPlotSettingsWPtr settings)
 {
-  QxrdPlot::init(settings);
+  QcepPlot::init(settings);
 
   if (m_Legend) {
     insertLegend(m_Legend, QwtPlot::BottomLegend);

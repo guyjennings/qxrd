@@ -2,21 +2,20 @@
 #define QXRDDISTORTIONCORRECTIONPLOT_H
 
 #include "qcepmacros.h"
-
-#include "qxrdimageplot.h"
-
+#include "qcepplot.h"
 #include "qcepobjectnamer.h"
+
 #include "qxrddataprocessor-ptr.h"
 #include "qxrddataprocessor.h"
 #include "qxrddistortioncorrection-ptr.h"
 #include "qxrdwindow-ptr.h"
 
-class QxrdDistortionCorrectionPlot : public QxrdPlot
+class QxrdDistortionCorrectionPlot : public QcepPlot
 {
   Q_OBJECT
 public:
   explicit QxrdDistortionCorrectionPlot(QWidget *parent = 0);
-  void init(QxrdPlotSettingsWPtr settings);
+  void init(QcepPlotSettingsWPtr settings);
   void setWindow(QxrdWindow *win);
 
 signals:

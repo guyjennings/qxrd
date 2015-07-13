@@ -1,9 +1,9 @@
 #include "qxrddebug.h"
 #include "qxrdimageplot.h"
 #include "qxrdrasterdata.h"
-#include "qxrdplotzoomer.h"
 #include "qxrdplotslicer.h"
 #include "qxrdimageplotmeasurer.h"
+#include "qxrdimageplotzoomer.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdcenterfinderpicker.h"
 #include "qxrddataprocessor.h"
@@ -23,7 +23,7 @@
 #include <QContextMenuEvent>
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
-  : QxrdPlot(parent),
+  : QcepPlot(parent),
     m_ObjectNamer(this, "imageGraph"),
     m_ImagePlotSettings(),
     m_Rescaler(NULL),
@@ -57,7 +57,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 
 void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
 {
-  QxrdPlot::init(settings);
+  QcepPlot::init(settings);
 
   m_ImagePlotSettings = settings;
 
@@ -212,7 +212,7 @@ QxrdImagePlotSettingsWPtr QxrdImagePlot::imagePlotSettings()
 
 void QxrdImagePlot::autoScale()
 {
-  inherited::autoScale();
+  QcepPlot::autoScale();
 
   onImageScaleChanged();
 }
@@ -839,7 +839,7 @@ void QxrdImagePlot::replot()
   //  QTime tic;
   //  tic.start();
 
-  QxrdPlot::replot();
+  QcepPlot::replot();
 
   //  g_Application->printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
 }

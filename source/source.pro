@@ -150,7 +150,8 @@ HEADERS += \
     qxrdcalibrantdspacingsmodel-ptr.h \
     qxrdcalibrantlibrarymodel-ptr.h \
     qxrddataset.h \
-    qxrddataset-ptr.h
+    qxrddataset-ptr.h \
+    qxrdimageplotzoomer.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -191,7 +192,8 @@ SOURCES += \
     qxrdcalibrantdialog.cpp \
     qxrdcalibrantlibrarymodel.cpp \
     qxrdcalibrantdspacingsmodel.cpp \
-    qxrddataset.cpp
+    qxrddataset.cpp \
+    qxrdimageplotzoomer.cpp
 
 OTHER_FILES += testImage.js
 

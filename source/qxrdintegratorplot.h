@@ -2,19 +2,19 @@
 #define QXRDINTEGRATORPLOT_H
 
 #include "qcepmacros.h"
+#include "qcepplot.h"
+#include "qcepintegrateddata-ptr.h"
 
-#include "qcepintegrateddata.h"
 #include "qxrddataprocessor.h"
-#include "qxrdplot.h"
 #include "qxrdintegrator.h"
 
-class QxrdIntegratorPlot : public QxrdPlot
+class QxrdIntegratorPlot : public QcepPlot
 {
   Q_OBJECT
 
 public:
   QxrdIntegratorPlot(QWidget *parent=0);
-  void init(QxrdPlotSettingsWPtr settings);
+  void init(QcepPlotSettingsWPtr settings);
 
   void setDataProcessor(QxrdDataProcessorWPtr proc);
 

@@ -1,15 +1,15 @@
 #ifndef QXRDSLICEPLOT_H
 #define QXRDSLICEPLOT_H
 
-#include "qxrdplot.h"
-#include "qxrdplotsettings.h"
+#include "qcepplot.h"
+#include "qcepplotsettings-ptr.h"
 
-class QxrdSlicePlot : public QxrdPlot
+class QxrdSlicePlot : public QcepPlot
 {
   Q_OBJECT
 public:
   explicit QxrdSlicePlot(QWidget *parent = 0);
-  void init(QxrdPlotSettingsWPtr settings);
+  void init(QcepPlotSettingsWPtr settings);
 
 signals:
 

@@ -1,9 +1,10 @@
 #include "qxrdacquisitionextrainputsdialogsettings.h"
+#include "qcepplotsettings.h"
 
 QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettings(QcepSettingsSaverWPtr saver, QObject *parent) :
   QcepObject("extraInputsDialog", parent)
 {
-  m_AcquisitionExtraInputsPlotSettings = QxrdPlotSettingsPtr(new QxrdPlotSettings("extraInputsPlot", saver, parent));
+  m_AcquisitionExtraInputsPlotSettings = QcepPlotSettingsPtr(new QcepPlotSettings("extraInputsPlot", saver, parent));
 }
 
 void QxrdAcquisitionExtraInputsDialogSettings::readSettings(QSettings *settings, QString section)
@@ -20,7 +21,7 @@ void QxrdAcquisitionExtraInputsDialogSettings::writeSettings(QSettings *settings
   m_AcquisitionExtraInputsPlotSettings->writeSettings(settings, section+"/plot");
 }
 
-QxrdPlotSettingsWPtr QxrdAcquisitionExtraInputsDialogSettings::plotSettings() const
+QcepPlotSettingsWPtr QxrdAcquisitionExtraInputsDialogSettings::plotSettings() const
 {
   return m_AcquisitionExtraInputsPlotSettings;
 }

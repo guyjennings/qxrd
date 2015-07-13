@@ -19,7 +19,7 @@
 #include "qxrdapplication.h"
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
-  : QxrdPlot(parent),
+  : QcepPlot(parent),
     m_ObjectNamer(this, "centeringGraph"),
     m_Window(),
     m_DataProcessor(),
@@ -28,9 +28,9 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
 {
 }
 
-void QxrdCenterFinderPlot::init(QxrdPlotSettingsWPtr settings)
+void QxrdCenterFinderPlot::init(QcepPlotSettingsWPtr settings)
 {
-  QxrdPlot::init(settings);
+  QcepPlot::init(settings);
 
   if (m_Legend) {
     insertLegend(m_Legend, QwtPlot::RightLegend);

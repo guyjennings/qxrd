@@ -3,7 +3,7 @@
 
 #include "qcepobject.h"
 #include "qcepproperty.h"
-#include "qxrdplotsettings.h"
+#include "qcepplotsettings-ptr.h"
 
 class QxrdAcquisitionExtraInputsDialogSettings : public QcepObject
 {
@@ -15,14 +15,14 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
-  QxrdPlotSettingsWPtr plotSettings() const;
+  QcepPlotSettingsWPtr plotSettings() const;
 
 signals:
   
 public slots:
 
 private:
-  QxrdPlotSettingsPtr m_AcquisitionExtraInputsPlotSettings;
+  QcepPlotSettingsPtr m_AcquisitionExtraInputsPlotSettings;
 };
 
 typedef QSharedPointer<QxrdAcquisitionExtraInputsDialogSettings> QxrdAcquisitionExtraInputsDialogSettingsPtr;

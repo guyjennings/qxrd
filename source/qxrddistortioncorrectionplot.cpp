@@ -2,7 +2,7 @@
 #include "qxrdwindow.h"
 
 QxrdDistortionCorrectionPlot::QxrdDistortionCorrectionPlot(QWidget *parent) :
-  QxrdPlot(parent),
+  QcepPlot(parent),
   m_ObjectNamer(this, "distortionCorrectionPlot"),
   m_Window(),
   m_DataProcessor(),
@@ -11,9 +11,9 @@ QxrdDistortionCorrectionPlot::QxrdDistortionCorrectionPlot(QWidget *parent) :
 {
 }
 
-void QxrdDistortionCorrectionPlot::init(QxrdPlotSettingsWPtr settings)
+void QxrdDistortionCorrectionPlot::init(QcepPlotSettingsWPtr settings)
 {
-  QxrdPlot::init(settings);
+  QcepPlot::init(settings);
 
   if (m_Legend) {
     insertLegend(m_Legend, QwtPlot::RightLegend);

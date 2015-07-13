@@ -1,13 +1,13 @@
 #include "qxrdsynchronizedacquisitionplot.h"
 
 QxrdSynchronizedAcquisitionPlot::QxrdSynchronizedAcquisitionPlot(QWidget *parent) :
-    QxrdPlot(parent)
+    QcepPlot(parent)
 {
 }
 
 void QxrdSynchronizedAcquisitionPlot::init(QxrdSynchronizedAcquisitionPlotSettingsWPtr settings)
 {
-  QxrdPlot::init(settings);
+  QcepPlot::init(settings);
 
   insertLegend(m_Legend, QwtPlot::BottomLegend);
 }

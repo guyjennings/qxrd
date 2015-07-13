@@ -3,23 +3,23 @@
 
 #include "qcepmacros.h"
 #include "qcepobjectnamer.h"
-#include "qxrdplot.h"
-
+#include "qcepplot.h"
 #include "qcepimagedata.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata.h"
 #include "qcepmaskdata-ptr.h"
+
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdwindow-ptr.h"
 
-class QxrdCenterFinderPlot : public QxrdPlot
+class QxrdCenterFinderPlot : public QcepPlot
 {
   Q_OBJECT
 
 public:
   QxrdCenterFinderPlot(QWidget *parent=0);
-  void init(QxrdPlotSettingsWPtr settings);
+  void init(QcepPlotSettingsWPtr settings);
 
   void setWindow(QxrdWindow *win);
 

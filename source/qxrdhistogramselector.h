@@ -1,13 +1,13 @@
 #ifndef QXRDHISTOGRAMSELECTOR_H
 #define QXRDHISTOGRAMSELECTOR_H
 
-#include "qxrdplotmeasurer.h"
+#include "qcepplotmeasurer.h"
 
-class QxrdHistogramSelector : public QxrdPlotMeasurer
+class QxrdHistogramSelector : public QcepPlotMeasurer
 {
     Q_OBJECT
 public:
-    explicit QxrdHistogramSelector(QWidget *canvas, QxrdPlot *plot);
+    explicit QxrdHistogramSelector(QWidget *canvas, QcepPlot *plot);
 
 signals:
 

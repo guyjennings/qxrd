@@ -1,12 +1,17 @@
 #ifndef QXRDIMAGEPLOT_H
 #define QXRDIMAGEPLOT_H
 
-#include "qxrdplot.h"
+#include "qcepplot.h"
 
 #include <qwt_color_map.h>
 #include <qwt_plot_rescaler.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_plot_marker.h>
+
+#include "qcepobjectnamer.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
+
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
@@ -18,20 +23,16 @@
 #include "qxrdcenterfinderpicker-ptr.h"
 #include "qxrdmaskpicker-ptr.h"
 #include "qxrddataprocessor-ptr.h"
-#include "qcepimagedata-ptr.h"
-#include "qcepmaskdata-ptr.h"
 #include "qxrdimageplotsettings.h"
-#include "qcepobjectnamer.h"
 #include "qxrdpowderpointpicker.h"
 
-class QxrdImagePlot : public QxrdPlot
+class QxrdImagePlot : public QcepPlot
 {
   Q_OBJECT
 
 public:
   QxrdImagePlot(QWidget *parent = 0);
   void init(QxrdImagePlotSettingsWPtr settings);
-  typedef QxrdPlot inherited;
 
 signals:
   void slicePolygon(QVector<QPointF> poly);

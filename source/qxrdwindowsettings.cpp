@@ -9,7 +9,7 @@ QxrdWindowSettings::QxrdWindowSettings(QcepSettingsSaverWPtr saver,
 {
   m_ImagePlotSettings         = QxrdImagePlotSettingsPtr(new QxrdImagePlotSettings(saver, NULL));
   m_CenterFinderPlotSettings  = QxrdCenterFinderPlotSettingsPtr(new QxrdCenterFinderPlotSettings(saver, NULL));
-  m_IntegratorPlotSettings    = QxrdPlotSettingsPtr(new QxrdPlotSettings("integratorPlot", saver, NULL));
+  m_IntegratorPlotSettings    = QcepPlotSettingsPtr(new QcepPlotSettings("integratorPlot", saver, NULL));
   m_InputFileBrowserSettings  = QxrdFileBrowserSettingsPtr(new QxrdFileBrowserSettings(saver, NULL));
   m_OutputFileBrowserSettings = QxrdFileBrowserSettingsPtr(new QxrdFileBrowserSettings(saver, NULL));
   m_HistogramDialogSettings   = QxrdHistogramDialogSettingsPtr(new QxrdHistogramDialogSettings(saver, NULL));
@@ -81,7 +81,7 @@ QxrdCenterFinderPlotSettingsWPtr QxrdWindowSettings::centerFinderPlotSettings()
   return m_CenterFinderPlotSettings;
 }
 
-QxrdPlotSettingsWPtr QxrdWindowSettings::integratorPlotSettings()
+QcepPlotSettingsWPtr QxrdWindowSettings::integratorPlotSettings()
 {
   return m_IntegratorPlotSettings;
 }

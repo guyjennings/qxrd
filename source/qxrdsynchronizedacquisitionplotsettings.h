@@ -1,9 +1,9 @@
 #ifndef QXRDSYNCHRONIZEDACQUISITIONPLOTSETTINGS_H
 #define QXRDSYNCHRONIZEDACQUISITIONPLOTSETTINGS_H
 
-#include "qxrdplotsettings.h"
+#include "qcepplotsettings.h"
 
-class QxrdSynchronizedAcquisitionPlotSettings : public QxrdPlotSettings
+class QxrdSynchronizedAcquisitionPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

@@ -1,13 +1,13 @@
 #include "qxrdsliceplot.h"
 
 QxrdSlicePlot::QxrdSlicePlot(QWidget *parent) :
-    QxrdPlot(parent)
+    QcepPlot(parent)
 {
 }
 
-void QxrdSlicePlot::init(QxrdPlotSettingsWPtr settings)
+void QxrdSlicePlot::init(QcepPlotSettingsWPtr settings)
 {
-  QxrdPlot::init(settings);
+  QcepPlot::init(settings);
 
   if (m_Legend) {
     insertLegend(m_Legend, QwtPlot::BottomLegend);

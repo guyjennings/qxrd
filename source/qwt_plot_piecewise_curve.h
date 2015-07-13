@@ -12,7 +12,7 @@
 
 #include "qwt_plot_curve.h"
 
-#include "qxrdplot-ptr.h"
+#include "qcepplot-ptr.h"
 
 /*!
   \brief A class which draws piecewise curves
@@ -24,8 +24,8 @@ class QWT_EXPORT QwtPlotPiecewiseCurve: public QwtPlotCurve
 {
 public:
   explicit QwtPlotPiecewiseCurve();
-  explicit QwtPlotPiecewiseCurve(QxrdPlot *plot, const QwtText &title);
-  explicit QwtPlotPiecewiseCurve(QxrdPlot *plot, const QString &title);
+  explicit QwtPlotPiecewiseCurve(QcepPlot *plot, const QwtText &title);
+  explicit QwtPlotPiecewiseCurve(QcepPlot *plot, const QString &title);
 
   virtual QRectF boundingRect() const;
 
@@ -38,7 +38,7 @@ private:
   bool ignorePoint(double x, double y) const;
   double x(int n) const;
   double y(int n) const;
-  QxrdPlot *m_Plot;
+  QcepPlot *m_Plot;
 };
 
 #endif

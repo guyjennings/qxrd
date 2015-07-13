@@ -1,8 +1,4 @@
-#ifndef QXRDPLOTMEASURER_PTR_H
-#define QXRDPLOTMEASURER_PTR_H
+//#ifndef QXRDPLOTMEASURER_PTR_H
+//#define QXRDPLOTMEASURER_PTR_H
 
-class QxrdPlotMeasurer;
-
-typedef QxrdPlotMeasurer *QxrdPlotMeasurerPtr;
-
-#endif // QXRDPLOTMEASURER_PTR_H
+//#endif // QXRDPLOTMEASURER_PTR_H

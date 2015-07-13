@@ -2,7 +2,7 @@
 #include "qwt_symbol.h"
 
 QxrdAcquisitionExtraInputsPlot::QxrdAcquisitionExtraInputsPlot(QWidget *parent) :
-  QxrdPlot(parent)
+  QcepPlot(parent)
 {
   m_Colors << Qt::black
            << QColor(170,110,40)
@@ -15,9 +15,9 @@ QxrdAcquisitionExtraInputsPlot::QxrdAcquisitionExtraInputsPlot(QWidget *parent) 
            << Qt::gray;
 }
 
-void QxrdAcquisitionExtraInputsPlot::init(QxrdPlotSettingsWPtr settings)
+void QxrdAcquisitionExtraInputsPlot::init(QcepPlotSettingsWPtr settings)
 {
-  QxrdPlot::init(settings);
+  QcepPlot::init(settings);
 
   if (m_Legend) {
     insertLegend(m_Legend, QwtPlot::BottomLegend);

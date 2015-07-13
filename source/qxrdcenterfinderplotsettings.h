@@ -2,9 +2,9 @@
 #define QXRDCENTERFINDERPLOTSETTINGS_H
 
 #include <QObject>
-#include "qxrdplotsettings.h"
+#include "qcepplotsettings.h"
 
-class QxrdCenterFinderPlotSettings : public QxrdPlotSettings
+class QxrdCenterFinderPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

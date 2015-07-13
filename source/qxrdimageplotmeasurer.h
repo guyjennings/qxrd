@@ -1,11 +1,10 @@
 #ifndef QXRDIMAGEPLOTMEASURER_H
 #define QXRDIMAGEPLOTMEASURER_H
 
-#include "qxrdplotmeasurer.h"
-
+#include "qcepplotmeasurer.h"
 #include "qxrdimageplot-ptr.h"
 
-class QxrdImagePlotMeasurer : public QxrdPlotMeasurer
+class QxrdImagePlotMeasurer : public QcepPlotMeasurer
 {
   Q_OBJECT
 
