@@ -1,10 +1,18 @@
-message(qceplib PWD = $${PWD} QCEPLIB_VERSION = $${QCEPLIB_VERSION})
+message("qceplib-base PWD = $${PWD} QCEPLIB_VERSION = $${QCEPLIB_VERSION}")
 
-greaterThan(QT_MAJOR_VERSION,4): QT += widgets concurrent
+greaterThan(QT_MAJOR_VERSION,4) {
+  QT += widgets concurrent
+}
 
 CONFIG += qt
 
 QT += script
+
+contains (DEFINES,HAVE_QWT) {
+ message(qceplib-base wants qwt)
+} else {
+ message(qceplib-base no qwt)
+}
 
 INCLUDEPATH += $${PWD}
 
@@ -36,7 +44,6 @@ SOURCES += \
   $${PWD}/qcepdatacolumn.cpp \
   $${PWD}/qcepdataset.cpp \
   $${PWD}/qcepdatasetmodel.cpp \
-  $${PWD}/qcepdatasetbrowserdialog.cpp \
   $${PWD}/qcepdataarrayspreadsheetmodel.cpp \
   $${PWD}/qcepdatacolumnspreadsheetmodel.cpp \
   $${PWD}/qcepdatacolumnscanspreadsheetmodel.cpp \
@@ -44,11 +51,6 @@ SOURCES += \
   $${PWD}/qcepdataobjectpropertiesmodel.cpp \
   $${PWD}/qcepspreadsheetmodel.cpp \
   $${PWD}/qceppropertiesmodel.cpp  \
-  $${PWD}/qcepnewdatagroupdialog.cpp \
-  $${PWD}/qcepnewdatacolumndialog.cpp \
-  $${PWD}/qcepnewcolumnscandialog.cpp \
-  $${PWD}/qcepnewimagedialog.cpp \
-  $${PWD}/qcepnewdataarraydialog.cpp \
   $${PWD}/qcepintegrateddata.cpp \
   $${PWD}/qcepintegrateddataqueue.cpp \
   $${PWD}/qcepintegrateddataspreadsheetmodel.cpp \
@@ -58,24 +60,36 @@ SOURCES += \
   $${PWD}/qcepthread.cpp \
   $${PWD}/qcepallocatorthread.cpp \
   $${PWD}/qcepimagedataobjectcounter.cpp \
-  $${PWD}/qcepimagedatagraphcontrols.cpp \
-  $${PWD}/qcepgraphcontrolswidget.cpp \
+  $${PWD}/qcepimagedataspreadsheetmodel.cpp \
+  $${PWD}/qcepnewdatagroupdialog.cpp \
+  $${PWD}/qcepnewdatacolumndialog.cpp \
+  $${PWD}/qcepnewcolumnscandialog.cpp \
+  $${PWD}/qcepnewimagedialog.cpp \
+  $${PWD}/qcepnewdataarraydialog.cpp \
+  $${PWD}/qcepdataobjectpropertieswindow.cpp \
+  $${PWD}/qcepdataobjectspreadsheetwindow.cpp
+
+
+contains (DEFINES, HAVE_QWT) {
+ SOURCES += \
+  $${PWD}/qcepdatasetbrowserdialog.cpp \
   $${PWD}/qcepdataobjectgraphcontroller.cpp \
   $${PWD}/qcepdataobjectgraphwindow.cpp \
-  $${PWD}/qcepdataobjectpropertieswindow.cpp \
-  $${PWD}/qcepdataobjectspreadsheetwindow.cpp \
   $${PWD}/qcepscatterplotgraphcontrols.cpp \
   $${PWD}/qcepscatterplotgraphcontroller.cpp \
   $${PWD}/qcepimagedatagraphcontroller.cpp \
-  $${PWD}/qcepimagedataspreadsheetmodel.cpp \
+  $${PWD}/qcepimagedatagraphcontrols.cpp \
   $${PWD}/qcepimageslicegraphcontroller.cpp \
   $${PWD}/qcepimageslicegraphcontrols.cpp \
   $${PWD}/qcepimagehistogramgraphcontroller.cpp \
   $${PWD}/qcepimagehistogramgraphcontrols.cpp \
-    $$PWD/qcepplot.cpp \
-    $$PWD/qcepplotsettings.cpp \
-    $$PWD/qcepplotmeasurer.cpp \
-    $$PWD/qcepplotzoomer.cpp
+  $${PWD}/qcepgraphcontrolswidget.cpp \
+  $${PWD}/qcepplot.cpp \
+  $${PWD}/qcepplotsettings.cpp \
+  $${PWD}/qcepplotmeasurer.cpp \
+  $${PWD}/qcepplotzoomer.cpp
+}
+
 
 HEADERS += \
   $${PWD}/qcepdebug.h \
@@ -116,7 +130,6 @@ HEADERS += \
   $${PWD}/qcepdataset-ptr.h \
   $${PWD}/qcepdatasetmodel.h \
   $${PWD}/qcepdatasetmodel-ptr.h \
-  $${PWD}/qcepdatasetbrowserdialog.h \
   $${PWD}/qcepdataarrayspreadsheetmodel.h \
   $${PWD}/qcepdatacolumnspreadsheetmodel.h \
   $${PWD}/qcepdatacolumnscanspreadsheetmodel.h \
@@ -125,11 +138,6 @@ HEADERS += \
   $${PWD}/qcepdataobjectpropertiesmodel.h \
   $${PWD}/qcepspreadsheetmodel.h \
   $${PWD}/qceppropertiesmodel.h \
-  $${PWD}/qcepnewdatagroupdialog.h \
-  $${PWD}/qcepnewdatacolumndialog.h \
-  $${PWD}/qcepnewcolumnscandialog.h \
-  $${PWD}/qcepnewimagedialog.h \
-  $${PWD}/qcepnewdataarraydialog.h \
   $${PWD}/qcepmaskdata.h \
   $${PWD}/qcepmaskdata-ptr.h \
   $${PWD}/qcepallocator.h \
@@ -144,43 +152,58 @@ HEADERS += \
   $${PWD}/qcepallocatorthread-ptr.h \
   $${PWD}/qcepallocatorthread-ptr.h \
   $${PWD}/qcepimagedataobjectcounter.h \
+  $${PWD}/qcepimagedataspreadsheetmodel.h \
+  $${PWD}/qcepnewdatagroupdialog.h \
+  $${PWD}/qcepnewdatacolumndialog.h \
+  $${PWD}/qcepnewcolumnscandialog.h \
+  $${PWD}/qcepnewimagedialog.h \
+  $${PWD}/qcepnewdataarraydialog.h \
+  $${PWD}/qcepdataobjectpropertieswindow.h \
+  $${PWD}/qcepdataobjectspreadsheetwindow.h
+
+
+contains (DEFINES, HAVE_QWT) {
+ HEADERS += \
+  $${PWD}/qcepdatasetbrowserdialog.h \
   $${PWD}/qcepdataobjectgraphcontroller-ptr.h \
   $${PWD}/qcepdataobjectgraphcontroller.h \
   $${PWD}/qcepdataobjectgraphwindow.h \
-  $${PWD}/qcepdataobjectpropertieswindow.h \
-  $${PWD}/qcepdataobjectspreadsheetwindow.h \
-  $${PWD}/qcepgraphcontrolswidget.h \
   $${PWD}/qcepscatterplotgraphcontrols.h \
-  $${PWD}/qcepimagedatagraphcontrols.h \
+  $${PWD}/qcepscatterplotgraphcontroller.h \
   $${PWD}/qcepimagedatagraphcontroller.h \
-  $${PWD}/qcepimagedataspreadsheetmodel.h \
+  $${PWD}/qcepimagedatagraphcontrols.h \
   $${PWD}/qcepimagehistogramgraphcontroller.h \
   $${PWD}/qcepimagehistogramgraphcontrols.h \
   $${PWD}/qcepimageslicegraphcontroller.h \
   $${PWD}/qcepimageslicegraphcontrols.h \
-  $${PWD}/qcepscatterplotgraphcontroller.h \
-    $$PWD/qcepplot.h \
-    $$PWD/qcepplotsettings.h \
-    $$PWD/qcepplotsettings-ptr.h \
-    $$PWD/qcepplotmeasurer.h \
-    $$PWD/qcepplotmeasurer-ptr.h \
-    $$PWD/qcepplot-ptr.h \
-    $$PWD/qcepplotzoomer.h
+  $${PWD}/qcepgraphcontrolswidget.h \
+  $${PWD}/qcepplot-ptr.h \
+  $${PWD}/qcepplot.h \
+  $${PWD}/qcepplotsettings-ptr.h \
+  $${PWD}/qcepplotsettings.h \
+  $${PWD}/qcepplotmeasurer-ptr.h \
+  $${PWD}/qcepplotmeasurer.h \
+  $${PWD}/qcepplotzoomer.h
+}
 
 FORMS += \
-  $${PWD}/qcepdatasetbrowserdialog.ui \
   $${PWD}/qcepnewdatagroupdialog.ui \
   $${PWD}/qcepnewdatacolumndialog.ui \
   $${PWD}/qcepnewcolumnscandialog.ui \
   $${PWD}/qcepnewimagedialog.ui \
   $${PWD}/qcepnewdataarraydialog.ui \
-  $${PWD}/qcepdataobjectgraphwindow.ui \
   $${PWD}/qcepdataobjectpropertieswindow.ui \
-  $${PWD}/qcepdataobjectspreadsheetwindow.ui \
+  $${PWD}/qcepdataobjectspreadsheetwindow.ui
+
+contains(DEFINES, HAVE_QWT) {
+ FORMS += \
+  $${PWD}/qcepdatasetbrowserdialog.ui \
+  $${PWD}/qcepdataobjectgraphwindow.ui \
   $${PWD}/qcepscatterplotgraphcontrols.ui \
   $${PWD}/qcepimagedatagraphcontrols.ui \
   $${PWD}/qcepimagehistogramgraphcontrols.ui \
   $${PWD}/qcepimageslicegraphcontrols.ui
+}
 
 RESOURCES += \
-    $$PWD/qcepresources.qrc
+  $${PWD}/qcepresources.qrc
