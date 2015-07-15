@@ -417,6 +417,8 @@ void QxrdExperiment::openWindows()
 
 QxrdExperiment::~QxrdExperiment()
 {
+  printf("Deleting experiment\n");
+
   QxrdApplicationPtr app(m_Application);
 
   if (app && qcepDebug(DEBUG_APP)) {

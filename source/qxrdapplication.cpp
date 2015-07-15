@@ -283,6 +283,8 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
 
 QxrdApplication::~QxrdApplication()
 {
+  printf("Deleting application\n");
+
   m_Saver->performSave();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -481,11 +483,11 @@ void QxrdApplication::splashMessage(QString msg)
 
 void QxrdApplication::hideSplash()
 {
-  GUI_THREAD_CHECK;
+//  GUI_THREAD_CHECK;
 
-  if (m_Splash) {
-    m_Splash -> hide();
-  }
+//  if (m_Splash) {
+//    m_Splash -> hide();
+//  }
 }
 
 void QxrdApplication::logMessage(QString /*msg*/)

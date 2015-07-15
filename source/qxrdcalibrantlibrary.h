@@ -15,7 +15,7 @@ class QxrdCalibrantLibrary : public QcepObject
 
 public:
   QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp);
-  ~QxrdCalibrantLibrary();
+  virtual ~QxrdCalibrantLibrary();
   void initialize(QxrdCalibrantLibraryWPtr lib);
   QxrdCalibrantLibraryWPtr calibrantLibraryPtr() const;
 

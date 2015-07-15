@@ -1,6 +1,7 @@
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdcalibrant.h"
 #include "qcepmutexlocker.h"
+#include <stdio.h>
 
 QxrdCalibrantLibrary::QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp)
   : QcepObject("calibrantlibrary", NULL),
@@ -11,6 +12,7 @@ QxrdCalibrantLibrary::QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExpe
 
 QxrdCalibrantLibrary::~QxrdCalibrantLibrary()
 {
+  printf("Deleting calibrant library\n");
 }
 
 void QxrdCalibrantLibrary::initialize(QxrdCalibrantLibraryWPtr lib)

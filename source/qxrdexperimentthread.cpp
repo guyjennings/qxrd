@@ -49,7 +49,7 @@ void QxrdExperimentThread::init(QxrdExperimentThreadWPtr expThread)
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(FromSettings, path, app, settings), doDeleteLater);
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(FromSettings, path, app, settings)/*, doDeleteLater*/);
 
   res->start();
 
@@ -58,7 +58,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdAp
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PerkinElmerAcquisition, path, app, settings), doDeleteLater);
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PerkinElmerAcquisition, path, app, settings)/*, doDeleteLater*/);
 
   res->start();
 
@@ -67,7 +67,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAcquisitio
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PilatusAcquisition, path, app, settings), doDeleteLater);
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PilatusAcquisition, path, app, settings)/*, doDeleteLater*/);
 
   res->start();
 
@@ -76,7 +76,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAcquisition(QS
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentSimulatedAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(SimulatedAcquisition, path, app, settings), doDeleteLater);
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(SimulatedAcquisition, path, app, settings)/*, doDeleteLater*/);
 
   res->start();
 
@@ -85,7 +85,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentSimulatedAcquisition(
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PerkinElmerAnalysis, path, app, settings), doDeleteLater);
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PerkinElmerAnalysis, path, app, settings)/*, doDeleteLater*/);
 
   res->start();
 
@@ -94,7 +94,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAnalysis(Q
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PilatusAnalysis, path, app, settings), doDeleteLater);
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PilatusAnalysis, path, app, settings)/*, doDeleteLater*/);
 
   res->start();
 
@@ -104,7 +104,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAnalysis(QStri
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentGenericAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
   QxrdExperimentThreadPtr res =
-      QxrdExperimentThreadPtr(new QxrdExperimentThread(GenericAnalysis, path, app, settings), doDeleteLater);
+      QxrdExperimentThreadPtr(new QxrdExperimentThread(GenericAnalysis, path, app, settings)/*, doDeleteLater*/);
 
   res->start();
 
