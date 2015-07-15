@@ -86,8 +86,8 @@ DISTFILES += qxrd.dox \
     tiffconfig/macx/tif_config.h \
     tiffconfig/macx/tiffconf.h
 
-include(submodules/qceplib/qceplib-base.pri)
 include(submodules/qceplib/qceplib-qwt.pri)
+include(submodules/qceplib/qceplib-base.pri)
 include(submodules/qceplib/qceplib-mar345.pri)
 include(submodules/qceplib/qceplib-cbf.pri)
 include(submodules/qceplib/qceplib-tiff.pri)
