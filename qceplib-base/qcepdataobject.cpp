@@ -3,6 +3,10 @@
 #include "qcepdatagroup.h"
 #include <stdio.h>
 #include "qcepapplication.h"
+#include <QAtomicInteger>
+
+static QAtomicInt s_ObjectAllocateCount(0);
+static QAtomicInt s_ObjectDeleteCount(0);
 
 QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name) :
   QcepObject(name, NULL),
@@ -13,6 +17,8 @@ QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name) :
   m_QtVersion(saver,   this, "qtVersion", QT_VERSION_STR, "QT Version Number"),
   m_Description(saver, this, "description", "", "Object Description")
 {
+  s_ObjectAllocateCount.fetchAndAddOrdered(1);
+
   set_Type("object");
 
   if (name.contains("/")) {
@@ -22,6 +28,23 @@ QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name) :
   if (g_Application) {
     g_Application->setDefaultObjectData(this);
   }
+}
+
+QcepDataObject::~QcepDataObject()
+{
+  s_ObjectDeleteCount.fetchAndAddOrdered(1);
+}
+
+int QcepDataObject::allocatedObjects()
+{
+  int n = s_ObjectAllocateCount.load();
+  int d = s_ObjectDeleteCount.load();
+
+  printf("%d data objects allocated\n", n);
+  printf("%d data objects released\n", d);
+  printf("%d data objects still allocated\n", n-d);
+
+  return n-d;
 }
 
 QString QcepDataObject::description() const

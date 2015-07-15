@@ -11,6 +11,9 @@ class QcepObject : public QObject
   Q_OBJECT
 public:
   explicit QcepObject(QString name, QObject *parent = 0);
+  virtual ~QcepObject();
+
+  static int allocatedObjects();
 
 signals:
 
