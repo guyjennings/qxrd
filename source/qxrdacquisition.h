@@ -98,7 +98,7 @@ public:
   QcepMaskDataPtr       m_Overflow;
 };
 
-class QxrdAcquisition : public QcepObject
+class QxrdAcquisition : public QcepObject, public QEnableSharedFromThis<QxrdAcquisition>
 {
   Q_OBJECT
 
@@ -142,8 +142,8 @@ public slots:
 
   void onBufferSizeChanged(int newMB);
 
-  void doAcquire    (QxrdAcquisitionParameterPack parms);
-  void doAcquireDark(QxrdDarkAcquisitionParameterPack parms);
+  void doAcquire    (QxrdAcquisitionParameterPackWPtr parms);
+  void doAcquireDark(QxrdDarkAcquisitionParameterPackWPtr parms);
 
 public:
   void enqueueAcquiredFrame(QcepInt16ImageDataPtr img);
@@ -175,8 +175,8 @@ public:
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
   QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;
 
-  QxrdAcquisitionParameterPack acquisitionParameterPack();
-  QxrdDarkAcquisitionParameterPack darkAcquisitionParameterPack();
+  QxrdAcquisitionParameterPackPtr acquisitionParameterPack();
+  QxrdDarkAcquisitionParameterPackPtr darkAcquisitionParameterPack();
 
 protected:
   void acquisition(int isDark);

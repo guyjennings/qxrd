@@ -95,9 +95,8 @@ private:
   QcepInt32ImageDataPtr  m_CachedBinNumbers;
   QcepDoubleImageDataPtr m_CachedNormalization;
   QxrdExperimentWPtr     m_Experiment;
-  QxrdIntegratorPtr      m_Integrator;
-  QxrdCenterFinderPtr    m_CenterFinder;
-  QxrdScriptEnginePtr    m_ScriptEngine;
+  QxrdIntegratorWPtr     m_Integrator;
+  QxrdCenterFinderWPtr   m_CenterFinder;
   QScriptValue           m_UserGeometryFunctionValue;
   QScriptValue           m_UserAbsorptionFunctionValue;
 };

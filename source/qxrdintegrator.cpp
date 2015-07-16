@@ -80,11 +80,6 @@ QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr e
   }
 }
 
-void QxrdIntegrator::initialize(QxrdIntegratorWPtr integrator)
-{
-  m_Integrator = integrator;
-}
-
 QxrdIntegrator::~QxrdIntegrator()
 {
   printf("Deleting integrator\n");
@@ -154,7 +149,7 @@ QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepIntegratedDataPtr i
       dimg->get_Height() != cache->get_NRows()) {
 
     cache = QxrdIntegratorCachePtr(
-          new QxrdIntegratorCache(m_Experiment, m_Integrator, m_CenterFinder));
+          new QxrdIntegratorCache(m_Experiment, sharedFromThis(), m_CenterFinder));
 
     m_IntegratorCache = cache;
   }

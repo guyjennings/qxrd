@@ -40,7 +40,7 @@ signals:
   void newDataAvailable();
 
 public slots:
-  void prepareForAcquisition(QxrdAcquisitionParameterPack *parms);
+  void prepareForAcquisition(QxrdAcquisitionParameterPackWPtr parms);
   void initiate();
   void reinitiate();
   void acquire();

@@ -119,7 +119,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(saver, m_Experiment));
   m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(saver, m_Experiment, m_CenterFinder));
 
-  m_Integrator->initialize(m_Integrator);
+//  m_Integrator->initialize(m_Integrator);
 
   m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(saver));
 

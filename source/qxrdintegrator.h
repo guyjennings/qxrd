@@ -20,14 +20,13 @@
 #include "qcepmaskdata-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 
-class QxrdIntegrator : public QcepObject
+class QxrdIntegrator : public QcepObject, public QEnableSharedFromThis<QxrdIntegrator>
 {
   Q_OBJECT
 
 public:
   QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw);
   virtual ~QxrdIntegrator();
-  void initialize(QxrdIntegratorWPtr integrator);
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
@@ -138,12 +137,8 @@ private:
   mutable QMutex         m_Mutex;
   QcepSettingsSaverWPtr  m_Saver;
   QxrdExperimentWPtr     m_Experiment;
-  QxrdIntegratorWPtr     m_Integrator;
   QxrdCenterFinderWPtr   m_CenterFinder;
   QxrdIntegratorCachePtr m_IntegratorCache;
 };
-
-typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
-typedef QWeakPointer<QxrdIntegrator> QxrdIntegratorWPtr;
 
 #endif // QXRDINTEGRATOR_H

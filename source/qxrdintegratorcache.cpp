@@ -69,41 +69,45 @@ QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperimentWPtr exp,
     printf("QxrdIntegratorCache::QxrdIntegratorCache(%p)\n", this);
   }
 
-  if (m_Integrator) {
-    m_Oversample         = m_Integrator->get_Oversample();
-    m_IntegrationStep    = m_Integrator->get_IntegrationStep();
-    m_IntegrationNSteps  = m_Integrator->get_IntegrationNSteps();
-    m_IntegrationMinimum = m_Integrator->get_IntegrationMinimum();
-    m_IntegrationMaximum = m_Integrator->get_IntegrationMaximum();
-    m_IntegrationXUnits  = m_Integrator->get_IntegrationXUnits();
+  QxrdIntegratorPtr integp(m_Integrator);
 
-    m_EnableGeometry     = m_Integrator->get_EnableGeometricCorrections();
-    m_EnablePolarization = m_Integrator->get_EnablePolarizationCorrections();
-    m_Polarization       = m_Integrator->get_Polarization();
-    m_EnableAbsorption   = m_Integrator->get_EnableAbsorptionCorrections();
-    m_AttenuationLength  = m_Integrator->get_AttenuationLength();
+  if (integp) {
+    m_Oversample         = integp->get_Oversample();
+    m_IntegrationStep    = integp->get_IntegrationStep();
+    m_IntegrationNSteps  = integp->get_IntegrationNSteps();
+    m_IntegrationMinimum = integp->get_IntegrationMinimum();
+    m_IntegrationMaximum = integp->get_IntegrationMaximum();
+    m_IntegrationXUnits  = integp->get_IntegrationXUnits();
 
-    m_EnableUserGeometry     = m_Integrator->get_EnableUserGeometry();
-    m_UserGeometryScript     = m_Integrator->get_UserGeometryScript();
-    m_UserGeometryFunction   = m_Integrator->get_UserGeometryFunction();
+    m_EnableGeometry     = integp->get_EnableGeometricCorrections();
+    m_EnablePolarization = integp->get_EnablePolarizationCorrections();
+    m_Polarization       = integp->get_Polarization();
+    m_EnableAbsorption   = integp->get_EnableAbsorptionCorrections();
+    m_AttenuationLength  = integp->get_AttenuationLength();
 
-    m_EnableUserAbsorption   = m_Integrator->get_EnableUserAbsorption();
-    m_UserAbsorptionScript   = m_Integrator->get_UserAbsorptionScript();
-    m_UserAbsorptionFunction = m_Integrator->get_UserAbsorptionFunction();
+    m_EnableUserGeometry     = integp->get_EnableUserGeometry();
+    m_UserGeometryScript     = integp->get_UserGeometryScript();
+    m_UserGeometryFunction   = integp->get_UserGeometryFunction();
 
-    m_ScalingFactor          = m_Integrator->get_ScalingFactor();
+    m_EnableUserAbsorption   = integp->get_EnableUserAbsorption();
+    m_UserAbsorptionScript   = integp->get_UserAbsorptionScript();
+    m_UserAbsorptionFunction = integp->get_UserAbsorptionFunction();
+
+    m_ScalingFactor          = integp->get_ScalingFactor();
   }
 
-  if (m_CenterFinder) {
-    m_CenterX            = m_CenterFinder->get_CenterX();
-    m_CenterY            = m_CenterFinder->get_CenterY();
-    m_DetectorXPixelSize = m_CenterFinder->get_DetectorXPixelSize();
-    m_DetectorYPixelSize = m_CenterFinder->get_DetectorYPixelSize();
-    m_DetectorDistance   = m_CenterFinder->get_DetectorDistance();
-    m_Energy             = m_CenterFinder->get_Energy();
-    m_ImplementTilt      = m_CenterFinder->get_ImplementTilt();
-    m_DetectorTilt       = m_CenterFinder->get_DetectorTilt();
-    m_TiltPlaneRotation  = m_CenterFinder->get_TiltPlaneRotation();
+  QxrdCenterFinderPtr cfp(m_CenterFinder);
+
+  if (cfp) {
+    m_CenterX            = cfp->get_CenterX();
+    m_CenterY            = cfp->get_CenterY();
+    m_DetectorXPixelSize = cfp->get_DetectorXPixelSize();
+    m_DetectorYPixelSize = cfp->get_DetectorYPixelSize();
+    m_DetectorDistance   = cfp->get_DetectorDistance();
+    m_Energy             = cfp->get_Energy();
+    m_ImplementTilt      = cfp->get_ImplementTilt();
+    m_DetectorTilt       = cfp->get_DetectorTilt();
+    m_TiltPlaneRotation  = cfp->get_TiltPlaneRotation();
   }
 }
 
@@ -558,21 +562,21 @@ void QxrdIntegratorCache::grabScriptEngine()
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    m_ScriptEngine = exp->scriptEngine();
+    QxrdScriptEnginePtr engine = exp->scriptEngine();
 
-    if (m_ScriptEngine) {
-      m_ScriptEngine->lock();
+    if (engine) {
+      engine->lock();
 
       m_UserGeometryFunctionValue = QScriptValue();
       m_UserAbsorptionFunctionValue = QScriptValue();
 
       if (m_EnableUserGeometry) {
-        m_ScriptEngine->evaluate(m_UserGeometryScript);
+        engine->evaluate(m_UserGeometryScript);
 
-        m_UserGeometryFunctionValue = m_ScriptEngine->evaluate(m_UserGeometryFunction);
+        m_UserGeometryFunctionValue = engine->evaluate(m_UserGeometryFunction);
 
         if (!m_UserGeometryFunctionValue.isFunction()) {
-          m_UserGeometryFunctionValue = m_ScriptEngine->globalObject().property(m_UserGeometryFunctionValue.toString());
+          m_UserGeometryFunctionValue = engine->globalObject().property(m_UserGeometryFunctionValue.toString());
         }
 
         if (m_UserGeometryFunctionValue.isFunction()) {
@@ -583,12 +587,12 @@ void QxrdIntegratorCache::grabScriptEngine()
       }
 
       if (m_EnableUserAbsorption) {
-        m_ScriptEngine->evaluate(m_UserAbsorptionScript);
+        engine->evaluate(m_UserAbsorptionScript);
 
-        m_UserAbsorptionFunctionValue = m_ScriptEngine->evaluate(m_UserAbsorptionFunction);
+        m_UserAbsorptionFunctionValue = engine->evaluate(m_UserAbsorptionFunction);
 
         if (!m_UserAbsorptionFunctionValue.isFunction()) {
-          m_UserAbsorptionFunctionValue = m_ScriptEngine->globalObject().property(m_UserAbsorptionFunctionValue.toString());
+          m_UserAbsorptionFunctionValue = engine->globalObject().property(m_UserAbsorptionFunctionValue.toString());
         }
 
         if (m_UserAbsorptionFunctionValue.isFunction()) {
@@ -609,10 +613,10 @@ void QxrdIntegratorCache::releaseScriptEngine()
   m_UserAbsorptionFunctionValue = QScriptValue();
 
   if (exp) {
-    m_ScriptEngine = exp->scriptEngine();
+    QxrdScriptEnginePtr engine = exp->scriptEngine();
 
-    if (m_ScriptEngine) {
-      m_ScriptEngine->unlock();
+    if (engine) {
+      engine->unlock();
 
       if (m_EnableUserGeometry) {
         exp->printMessage(tr("User Geometry Function Completed"));

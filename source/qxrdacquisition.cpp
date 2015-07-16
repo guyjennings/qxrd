@@ -94,7 +94,7 @@ void QxrdAcquisition::initialize(QxrdAcquisitionWPtr acq)
   }
 
   m_SynchronizedAcquisition = QxrdSynchronizedAcquisitionPtr(
-        new QxrdSynchronizedAcquisition(m_Saver, this));
+        new QxrdSynchronizedAcquisition(m_Saver, sharedFromThis()));
 
   m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, m_Acquisition));
   m_AcquisitionExtraInputs -> initialize(m_AcquisitionExtraInputs);
@@ -271,16 +271,7 @@ void QxrdAcquisition::acquire()
       statusMessage("Starting acquisition");
       emit acquireStarted();
 
-      QxrdAcquisitionParameterPack params(get_FilePattern(),
-                                          get_ExposureTime(),
-                                          get_SummedExposures(),
-                                          get_PreTriggerFiles(),
-                                          get_PostTriggerFiles(),
-                                          get_PhasesInGroup(),
-                                          get_SkippedExposuresAtStart(),
-                                          get_SkippedExposures());
-
-      QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquire, params);
+      QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquire, acquisitionParameterPack());
 
       m_Watcher.setFuture(res);
     } else {
@@ -289,24 +280,26 @@ void QxrdAcquisition::acquire()
   }
 }
 
-QxrdAcquisitionParameterPack QxrdAcquisition::acquisitionParameterPack()
+QxrdAcquisitionParameterPackPtr QxrdAcquisition::acquisitionParameterPack()
 {
-  return QxrdAcquisitionParameterPack (get_FilePattern(),
-                                       get_ExposureTime(),
-                                       get_SummedExposures(),
-                                       get_PreTriggerFiles(),
-                                       get_PostTriggerFiles(),
-                                       get_PhasesInGroup(),
-                                       get_SkippedExposuresAtStart(),
-                                       get_SkippedExposures());
+  return QxrdAcquisitionParameterPackPtr(
+        new QxrdAcquisitionParameterPack (get_FilePattern(),
+                                          get_ExposureTime(),
+                                          get_SummedExposures(),
+                                          get_PreTriggerFiles(),
+                                          get_PostTriggerFiles(),
+                                          get_PhasesInGroup(),
+                                          get_SkippedExposuresAtStart(),
+                                          get_SkippedExposures()));
 }
 
-QxrdDarkAcquisitionParameterPack QxrdAcquisition::darkAcquisitionParameterPack()
+QxrdDarkAcquisitionParameterPackPtr QxrdAcquisition::darkAcquisitionParameterPack()
 {
-  return QxrdDarkAcquisitionParameterPack(get_FilePattern(),
+  return QxrdDarkAcquisitionParameterPackPtr(
+        new QxrdDarkAcquisitionParameterPack(get_FilePattern(),
                                           get_ExposureTime(),
                                           get_DarkSummedExposures(),
-                                          get_SkippedExposuresAtStart());
+                                          get_SkippedExposuresAtStart()));
 
 }
 
@@ -322,12 +315,7 @@ void QxrdAcquisition::acquireDark()
       statusMessage("Starting dark acquisition");
       emit acquireStarted();
 
-      QxrdDarkAcquisitionParameterPack params(get_FilePattern(),
-                                              get_ExposureTime(),
-                                              get_DarkSummedExposures(),
-                                              get_SkippedExposuresAtStart());
-
-      QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquireDark, params);
+      QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquireDark, darkAcquisitionParameterPack());
 
       m_Watcher.setFuture(res);
     } else {
@@ -657,345 +645,353 @@ int QxrdAcquisition::cancelling()
   return res;
 }
 
-void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPack parms)
+void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPackWPtr parms)
 {
-  QTime acqTimer;
-  acqTimer.start();
+  QxrdAcquisitionParameterPackPtr parmsp (parms);
 
-  QThread::currentThread()->setObjectName("doAcquire");
+  if (parmsp) {
+    QTime acqTimer;
+    acqTimer.start();
 
-  stopIdling();
+    QThread::currentThread()->setObjectName("doAcquire");
 
-  QString fileBase = parms.fileBase();
-  int fileIndex = get_FileIndex();
-  double exposure = parms.exposure();
-  int nsummed = parms.nsummed();
-  int preTrigger = parms.preTrigger();
-  int postTrigger = parms.postTrigger();
-  int nphases = parms.nphases();
-  int skipBefore = parms.skipBefore();
+    stopIdling();
 
-  if (skipBefore <= 0) {
-    if (get_LastAcquired() != 1) {
-      skipBefore = 1;
-    }
-  }
+    QString fileBase = parmsp->fileBase();
+    int fileIndex = get_FileIndex();
+    double exposure = parmsp->exposure();
+    int nsummed = parmsp->nsummed();
+    int preTrigger = parmsp->preTrigger();
+    int postTrigger = parmsp->postTrigger();
+    int nphases = parmsp->nphases();
+    int skipBefore = parmsp->skipBefore();
 
-  set_LastAcquired(1);
-
-  int skipBetween = parms.skipBetween();
-  int nPreTriggered = 0;
-
-  if (preTrigger <= 0) {
-    set_Triggered(true);
-  }
-
-  if (synchronizedAcquisition()) {
-    synchronizedAcquisition()->prepareForAcquisition(&parms);
-  }
-
-  if (acquisitionExtraInputs()) {
-    acquisitionExtraInputs()->prepareForAcquisition(&parms);
-  }
-
-  QVector<QVector<QcepInt32ImageDataPtr> >res(nphases);
-  QVector<QVector<QcepMaskDataPtr> >      ovf(nphases);
-
-  printMessage(tr("acquire(\"%1\", %2, %3, %4, %5, %6) // fileIndex = %7")
-               .arg(fileBase).arg(exposure).arg(nsummed).arg(postTrigger).arg(preTrigger).arg(nphases).arg(fileIndex));
-
-  for (int p=0; p<nphases; p++) {
-    res[p].resize(preTrigger+1);
-    ovf[p].resize(preTrigger+1);
-  }
-
-  for (int i=0; i<skipBefore; i++) {
-    if (cancelling()) goto cancel;
-    if (qcepDebug(DEBUG_ACQUIRETIME)) {
-      printMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
-    }
-    acquireFrame(exposure);
-  }
-
-  for (int i=0; i<postTrigger; i += (get_Triggered() ? 1:0)) {
-    if (cancelling()) goto cancel;
-
-    if (i != 0) {
-      for (int k=0; k<skipBetween; k++) {
-        if (cancelling()) goto cancel;
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
-        }
-        acquireFrame(exposure);
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Frame after %1 msec").arg(acqTimer.restart()));
-        }
+    if (skipBefore <= 0) {
+      if (get_LastAcquired() != 1) {
+        skipBefore = 1;
       }
     }
 
-    if (cancelling()) goto cancel;
+    set_LastAcquired(1);
 
-    for (int s=0; s<nsummed;) {
-      for (int p=0; p<nphases; p++) {
-        if (res[p][0] == NULL) {
+    int skipBetween = parmsp->skipBetween();
+    int nPreTriggered = 0;
 
-          QcepInt32ImageDataPtr nres = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
-                                                                    get_NCols(), get_NRows());
-          res[p][0] = nres;
+    if (preTrigger <= 0) {
+      set_Triggered(true);
+    }
 
-          if (nres == NULL) {
-            if (qcepDebug(DEBUG_ACQUIRETIME)) {
-              printMessage("Dropped frame allocation...");
-            }
-            indicateDroppedFrame(i);
-          } else {
-            QString fb, fn;
-            if (qcepDebug(DEBUG_ACQUIRETIME)) {
-              printMessage(tr("Newly allocated image number %1").arg(nres->get_ImageNumber()));
-            }
+    if (synchronizedAcquisition()) {
+      synchronizedAcquisition()->prepareForAcquisition(parms);
+    }
 
-            nres -> set_SummedExposures(0);
+    if (acquisitionExtraInputs()) {
+      acquisitionExtraInputs()->prepareForAcquisition(parms);
+    }
 
-            getFileBaseAndName(fileBase, fileIndex+i, p, nphases, fb, fn);
+    QVector<QVector<QcepInt32ImageDataPtr> >res(nphases);
+    QVector<QVector<QcepMaskDataPtr> >      ovf(nphases);
 
-            nres -> set_FileBase(fb);
-            nres -> set_FileName(fn);
-          }
-        }
+    printMessage(tr("acquire(\"%1\", %2, %3, %4, %5, %6) // fileIndex = %7")
+                 .arg(fileBase).arg(exposure).arg(nsummed).arg(postTrigger).arg(preTrigger).arg(nphases).arg(fileIndex));
 
-        if (ovf[p][0] == NULL) {
-          QcepMaskDataPtr novf = QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
-                                                        get_NCols(), get_NRows(), 0);
-          ovf[p][0] = novf;
+    for (int p=0; p<nphases; p++) {
+      res[p].resize(preTrigger+1);
+      ovf[p].resize(preTrigger+1);
+    }
 
-          if (novf == NULL) {
-            if (qcepDebug(DEBUG_ACQUIRETIME)) {
-              printMessage("Dropped mask frame allocation...");
-            }
-            indicateDroppedFrame(i);
-          } else {
-            if (qcepDebug(DEBUG_ACQUIRETIME)) {
-              printMessage(tr("Newly allocated mask number %1").arg(novf->get_ImageNumber()));
-            }
-          }
-
-          if (novf) ovf[p][0] -> set_SummedExposures(0);
-        }
-
-        if (res[p][0]) {
-          emit acquiredFrame(res[p][0]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, postTrigger);
-        }
-
-        QcepInt16ImageDataPtr img = acquireFrame(exposure);
-
-        if (img && res[p][0] && ovf[p][0]) {
-          accumulateAcquiredImage(img, res[p][0], ovf[p][0]);
-        } else if (!cancelling()){
-          indicateDroppedFrame(i);
-        }
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("accumulateAcquiredImage %1 msec idx:%2 post:%3 sum: %4 ph:%5")
-                       .arg(acqTimer.restart())
-                       .arg(fileIndex)
-                       .arg(i)
-                       .arg(s)
-                       .arg(p)
-                       );
-        }
-
-        if (cancelling()) goto saveCancel;
+    for (int i=0; i<skipBefore; i++) {
+      if (cancelling()) goto cancel;
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
       }
+      acquireFrame(exposure);
+    }
 
-      if (get_RetryDropped()) {
-        int minSum = nsummed+10;
+    for (int i=0; i<postTrigger; i += (get_Triggered() ? 1:0)) {
+      if (cancelling()) goto cancel;
 
-        for (int p=0; p<nphases; p++) {
-          if (res[p][0]) {
-            int ns = res[p][0]->get_SummedExposures();
-
-            if (ns < minSum) {
-              minSum = ns;
-            }
-          } else {
-            minSum = 0;
-          }
-        }
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("i = %1, Minsum = %2, s = %3, nsummed = %4").arg(i).arg(minSum).arg(s).arg(nsummed));
-        }
-
-        if (minSum == nsummed+10) {
+      if (i != 0) {
+        for (int k=0; k<skipBetween; k++) {
+          if (cancelling()) goto cancel;
           if (qcepDebug(DEBUG_ACQUIRETIME)) {
-            printMessage("No acquired images allocated");
+            printMessage(tr("Skipping %1 of %2").arg(k+1).arg(skipBetween));
           }
-//          s = s+1;
-        } else {
-          s = minSum;
+          acquireFrame(exposure);
+
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("Frame after %1 msec").arg(acqTimer.restart()));
+          }
         }
-      } else {
-        s = s+1;
       }
-    }
+
+      if (cancelling()) goto cancel;
+
+      for (int s=0; s<nsummed;) {
+        for (int p=0; p<nphases; p++) {
+          if (res[p][0] == NULL) {
+
+            QcepInt32ImageDataPtr nres = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
+                                                                      get_NCols(), get_NRows());
+            res[p][0] = nres;
+
+            if (nres == NULL) {
+              if (qcepDebug(DEBUG_ACQUIRETIME)) {
+                printMessage("Dropped frame allocation...");
+              }
+              indicateDroppedFrame(i);
+            } else {
+              QString fb, fn;
+              if (qcepDebug(DEBUG_ACQUIRETIME)) {
+                printMessage(tr("Newly allocated image number %1").arg(nres->get_ImageNumber()));
+              }
+
+              nres -> set_SummedExposures(0);
+
+              getFileBaseAndName(fileBase, fileIndex+i, p, nphases, fb, fn);
+
+              nres -> set_FileBase(fb);
+              nres -> set_FileName(fn);
+            }
+          }
+
+          if (ovf[p][0] == NULL) {
+            QcepMaskDataPtr novf = QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
+                                                          get_NCols(), get_NRows(), 0);
+            ovf[p][0] = novf;
+
+            if (novf == NULL) {
+              if (qcepDebug(DEBUG_ACQUIRETIME)) {
+                printMessage("Dropped mask frame allocation...");
+              }
+              indicateDroppedFrame(i);
+            } else {
+              if (qcepDebug(DEBUG_ACQUIRETIME)) {
+                printMessage(tr("Newly allocated mask number %1").arg(novf->get_ImageNumber()));
+              }
+            }
+
+            if (novf) ovf[p][0] -> set_SummedExposures(0);
+          }
+
+          if (res[p][0]) {
+            emit acquiredFrame(res[p][0]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, postTrigger);
+          }
+
+          QcepInt16ImageDataPtr img = acquireFrame(exposure);
+
+          if (img && res[p][0] && ovf[p][0]) {
+            accumulateAcquiredImage(img, res[p][0], ovf[p][0]);
+          } else if (!cancelling()){
+            indicateDroppedFrame(i);
+          }
+
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("accumulateAcquiredImage %1 msec idx:%2 post:%3 sum: %4 ph:%5")
+                         .arg(acqTimer.restart())
+                         .arg(fileIndex)
+                         .arg(i)
+                         .arg(s)
+                         .arg(p)
+                         );
+          }
+
+          if (cancelling()) goto saveCancel;
+        }
+
+        if (get_RetryDropped()) {
+          int minSum = nsummed+10;
+
+          for (int p=0; p<nphases; p++) {
+            if (res[p][0]) {
+              int ns = res[p][0]->get_SummedExposures();
+
+              if (ns < minSum) {
+                minSum = ns;
+              }
+            } else {
+              minSum = 0;
+            }
+          }
+
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("i = %1, Minsum = %2, s = %3, nsummed = %4").arg(i).arg(minSum).arg(s).arg(nsummed));
+          }
+
+          if (minSum == nsummed+10) {
+            if (qcepDebug(DEBUG_ACQUIRETIME)) {
+              printMessage("No acquired images allocated");
+            }
+            //          s = s+1;
+          } else {
+            s = minSum;
+          }
+        } else {
+          s = s+1;
+        }
+      }
 
 saveCancel:
-    if (get_Triggered()) {
-      int nPre = qMin(preTrigger, nPreTriggered);
+      if (get_Triggered()) {
+        int nPre = qMin(preTrigger, nPreTriggered);
 
-      for (int ii=nPre; ii >= 1; ii--) {
+        for (int ii=nPre; ii >= 1; ii--) {
+          for (int p=0; p<nphases; p++) {
+            processAcquiredImage(fileBase, fileIndex, p, nphases, false, res[p][ii], ovf[p][ii]);
+
+            if (qcepDebug(DEBUG_ACQUIRETIME)) {
+              printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
+                           .arg(__LINE__)
+                           .arg(acqTimer.restart())
+                           .arg(fileIndex)
+                           .arg(ii)
+                           .arg(p)
+                           );
+            }
+
+            res[p].pop_back();
+            ovf[p].pop_back();
+          }
+          fileIndex++;
+          set_FileIndex(fileIndex);
+        }
+
+        nPreTriggered = 0;
+
         for (int p=0; p<nphases; p++) {
-          processAcquiredImage(fileBase, fileIndex, p, nphases, false, res[p][ii], ovf[p][ii]);
+          processAcquiredImage(fileBase, fileIndex, p, nphases, true, res[p][0], ovf[p][0]);
 
           if (qcepDebug(DEBUG_ACQUIRETIME)) {
             printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
                          .arg(__LINE__)
                          .arg(acqTimer.restart())
                          .arg(fileIndex)
-                         .arg(ii)
+                         .arg(i)
                          .arg(p)
                          );
           }
 
-          res[p].pop_back();
-          ovf[p].pop_back();
+          res[p][0] = QcepInt32ImageDataPtr();
+          ovf[p][0] = QcepMaskDataPtr();
         }
         fileIndex++;
         set_FileIndex(fileIndex);
-      }
-
-      nPreTriggered = 0;
-
-      for (int p=0; p<nphases; p++) {
-        processAcquiredImage(fileBase, fileIndex, p, nphases, true, res[p][0], ovf[p][0]);
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
-                       .arg(__LINE__)
-                       .arg(acqTimer.restart())
-                       .arg(fileIndex)
-                       .arg(i)
-                       .arg(p)
-                       );
+      } else {
+        nPreTriggered++;
+        for (int p=0; p<nphases; p++) {
+          res[p].push_front(QcepInt32ImageDataPtr());
+          ovf[p].push_front(QcepMaskDataPtr());
+          res[p].pop_back();
+          ovf[p].pop_back();
         }
-
-        res[p][0] = QcepInt32ImageDataPtr();
-        ovf[p][0] = QcepMaskDataPtr();
-      }
-      fileIndex++;
-      set_FileIndex(fileIndex);
-    } else {
-      nPreTriggered++;
-      for (int p=0; p<nphases; p++) {
-        res[p].push_front(QcepInt32ImageDataPtr());
-        ovf[p].push_front(QcepMaskDataPtr());
-        res[p].pop_back();
-        ovf[p].pop_back();
       }
     }
-  }
 
-  statusMessage(tr("Acquisition complete"));
-  printMessage(tr("Acquisition complete"));
+    statusMessage(tr("Acquisition complete"));
+    printMessage(tr("Acquisition complete"));
 
 cancel:
-  if (synchronizedAcquisition()) {
-    synchronizedAcquisition()->finishedAcquisition();
-  }
+    if (synchronizedAcquisition()) {
+      synchronizedAcquisition()->finishedAcquisition();
+    }
 
-  startIdling();
+    startIdling();
+  }
 }
 
-void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPack parms)
+void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPackWPtr parms)
 {
-  QThread::currentThread()->setObjectName("doAcquireDark");
+  QxrdDarkAcquisitionParameterPackPtr parmsp(parms);
 
-  stopIdling();
+  if (parmsp) {
+    QThread::currentThread()->setObjectName("doAcquireDark");
 
-  QString fileBase = parms.fileBase();
-  int fileIndex = get_FileIndex();
-  double exposure = parms.exposure();
-  int nsummed = parms.nsummed();
-  int skipBefore = parms.skipBefore();
+    stopIdling();
 
-  if (skipBefore <= 0) {
-    if (get_LastAcquired() != -1) {
-      skipBefore = 1;
-    }
-  }
+    QString fileBase = parmsp->fileBase();
+    int fileIndex = get_FileIndex();
+    double exposure = parmsp->exposure();
+    int nsummed = parmsp->nsummed();
+    int skipBefore = parmsp->skipBefore();
 
-  set_LastAcquired(-1);
-
-  printMessage(tr("acquireDark(\"%1\", %2, %3) // fileIndex = %4")
-               .arg(fileBase).arg(exposure).arg(nsummed).arg(fileIndex));
-
-  if (synchronizedAcquisition()) {
-    synchronizedAcquisition()->prepareForDarkAcquisition(&parms);
-  }
-
-  QcepInt32ImageDataPtr res = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
-                                                           get_NCols(), get_NRows());
-  QcepMaskDataPtr overflow  = QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
-                                                     get_NCols(), get_NRows(),0);
-  QString fb, fn;
-
-  if (res == NULL || overflow == NULL) {
-    criticalMessage("Insufficient memory for acquisition operation");
-    goto cancel;
-  }
-
-  getFileBaseAndName(fileBase, fileIndex, -1, 1, fb, fn);
-
-  res -> set_FileBase(fb);
-  res -> set_FileName(fn);
-
-  for (int i=0; i<skipBefore; i++) {
-    if (cancelling()) goto cancel;
-
-    if (qcepDebug(DEBUG_ACQUIRETIME)) {
-      printMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
-    }
-
-    acquireFrame(exposure);
-  }
-
-  for (int i=0; i<nsummed; i++) {
-    if (cancelling()) goto cancel;
-
-    emit acquiredFrame(res->get_FileBase(), fileIndex, 0, 1, i, nsummed, 0, 1);
-
-    QcepInt16ImageDataPtr img = acquireFrame(exposure);
-
-    if (img) {
-      accumulateAcquiredImage(img, res, overflow);
-    } else {
-      if (!cancelling()){
-        indicateDroppedFrame(0);
-      } else {
-        goto cancel;
+    if (skipBefore <= 0) {
+      if (get_LastAcquired() != -1) {
+        skipBefore = 1;
       }
     }
 
-    if (get_RetryDropped()) {
-      i = res->get_SummedExposures() + 1;
-    } else{
-      i = i+1;
+    set_LastAcquired(-1);
+
+    printMessage(tr("acquireDark(\"%1\", %2, %3) // fileIndex = %4")
+                 .arg(fileBase).arg(exposure).arg(nsummed).arg(fileIndex));
+
+    if (synchronizedAcquisition()) {
+      synchronizedAcquisition()->prepareForDarkAcquisition(parms);
     }
-  }
 
-//saveCancel:
-  processDarkImage(fileBase, fileIndex, res, overflow);
+    QcepInt32ImageDataPtr res = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
+                                                             get_NCols(), get_NRows());
+    QcepMaskDataPtr overflow  = QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
+                                                       get_NCols(), get_NRows(),0);
+    QString fb, fn;
 
-  statusMessage(tr("Acquisition complete"));
-  printMessage(tr("Acquisition complete"));
+    if (res == NULL || overflow == NULL) {
+      criticalMessage("Insufficient memory for acquisition operation");
+      goto cancel;
+    }
+
+    getFileBaseAndName(fileBase, fileIndex, -1, 1, fb, fn);
+
+    res -> set_FileBase(fb);
+    res -> set_FileName(fn);
+
+    for (int i=0; i<skipBefore; i++) {
+      if (cancelling()) goto cancel;
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
+      }
+
+      acquireFrame(exposure);
+    }
+
+    for (int i=0; i<nsummed; i++) {
+      if (cancelling()) goto cancel;
+
+      emit acquiredFrame(res->get_FileBase(), fileIndex, 0, 1, i, nsummed, 0, 1);
+
+      QcepInt16ImageDataPtr img = acquireFrame(exposure);
+
+      if (img) {
+        accumulateAcquiredImage(img, res, overflow);
+      } else {
+        if (!cancelling()){
+          indicateDroppedFrame(0);
+        } else {
+          goto cancel;
+        }
+      }
+
+      if (get_RetryDropped()) {
+        i = res->get_SummedExposures() + 1;
+      } else{
+        i = i+1;
+      }
+    }
+
+    //saveCancel:
+    processDarkImage(fileBase, fileIndex, res, overflow);
+
+    statusMessage(tr("Acquisition complete"));
+    printMessage(tr("Acquisition complete"));
 
 cancel:
-  if (synchronizedAcquisition()) {
-    synchronizedAcquisition()->finishedAcquisition();
-  }
+    if (synchronizedAcquisition()) {
+      synchronizedAcquisition()->finishedAcquisition();
+    }
 
-  startIdling();
+    startIdling();
+  }
 }
 
 void QxrdAcquisition::stopIdling()

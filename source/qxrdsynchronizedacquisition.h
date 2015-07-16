@@ -14,7 +14,7 @@ class QxrdSynchronizedAcquisition : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSynchronizedAcquisition(QcepSettingsSaverPtr saver, QxrdAcquisition *acq);
+  explicit QxrdSynchronizedAcquisition(QcepSettingsSaverWPtr saver, QxrdAcquisitionWPtr acq);
 
 public:
   Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode)
@@ -68,21 +68,21 @@ public slots:
   void triggerOnce();
 
 public:
-  void prepareForAcquisition(QxrdAcquisitionParameterPack *parms);
-  void prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPack *parms);
+  void prepareForAcquisition(QxrdAcquisitionParameterPackWPtr parms);
+  void prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPackWPtr parms);
   void finishedAcquisition();
   void acquiredFrameAvailable(int currentPhase);
-  void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
-  QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;
+  void setNIDAQPlugin(QxrdNIDAQPluginInterfaceWPtr nidaqPlugin);
+  QxrdNIDAQPluginInterfaceWPtr nidaqPlugin() const;
 
   QVector<double>  outputTimes();
   QVector<double>  outputVoltage();
 
 private:
   mutable QMutex              m_Mutex;
-  QxrdAcquisition            *m_Acquisition;
-  QxrdAcquisitionParameterPack *m_AcquisitionParms;
-  QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
+  QxrdAcquisitionWPtr         m_Acquisition;
+  QxrdAcquisitionParameterPackWPtr m_AcquisitionParms;
+  QxrdNIDAQPluginInterfaceWPtr m_NIDAQPlugin;
   int                         m_SyncMode;
   QVector<double>             m_OutputTimes;
   QVector<double>             m_OutputVoltage;
