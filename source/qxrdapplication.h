@@ -24,8 +24,6 @@
 #include "qxrdperkinelmerplugininterface-ptr.h"
 #endif
 
-extern void doDeleteLater(QObject *object);
-
 class QxrdApplication : public QcepApplication
 {
   Q_OBJECT

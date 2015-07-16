@@ -87,6 +87,11 @@ QxrdCenterFinder::QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWP
   connect(prop_TiltPlaneRotation(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()), Qt::DirectConnection);
 }
 
+QxrdCenterFinder::~QxrdCenterFinder()
+{
+  printf("Deleting center finder\n");
+}
+
 QxrdExperimentWPtr QxrdCenterFinder::experiment() const
 {
   return m_Experiment;

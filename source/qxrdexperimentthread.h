@@ -10,7 +10,7 @@
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
 
-class QxrdExperimentThread : public QxrdThread
+class QxrdExperimentThread : public QxrdThread, public QEnableSharedFromThis<QxrdExperimentThread>
 {
   Q_OBJECT
 public:

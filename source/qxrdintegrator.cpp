@@ -87,6 +87,8 @@ void QxrdIntegrator::initialize(QxrdIntegratorWPtr integrator)
 
 QxrdIntegrator::~QxrdIntegrator()
 {
+  printf("Deleting integrator\n");
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdIntegrator::~QxrdIntegrator(%p)\n", this);
   }

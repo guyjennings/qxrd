@@ -7,7 +7,7 @@ class QxrdExperimentGenericAnalysis : public QxrdExperiment
 {
   Q_OBJECT
 public:
-  explicit QxrdExperimentGenericAnalysis(QString path, QxrdApplicationWPtr app);
+  explicit QxrdExperimentGenericAnalysis(QxrdExperimentThreadWPtr expthrd, QString path, QxrdApplicationWPtr app);
 
 signals:
 

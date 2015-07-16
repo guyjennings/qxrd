@@ -7,7 +7,7 @@ class QxrdExperimentPilatusAnalysis : public QxrdExperiment
 {
   Q_OBJECT
 public:
-  explicit QxrdExperimentPilatusAnalysis(QString path, QxrdApplicationWPtr app);
+  explicit QxrdExperimentPilatusAnalysis(QxrdExperimentThreadWPtr expthrd, QString path, QxrdApplicationWPtr app);
 
 signals:
 

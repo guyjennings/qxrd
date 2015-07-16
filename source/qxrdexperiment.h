@@ -43,15 +43,14 @@
 #include "qxrddataset-ptr.h"
 #include "qcepdatasetmodel-ptr.h"
 
-class QxrdExperiment : public QcepExperiment
+class QxrdExperiment : public QcepExperiment, public QEnableSharedFromThis<QxrdExperiment>
 {
   Q_OBJECT
 
 public:
-  QxrdExperiment(QString path, QxrdApplicationWPtr app);
-  //  virtual bool init(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
+  QxrdExperiment(QxrdExperimentThreadWPtr expthrd, QString path, QxrdApplicationWPtr app);
   virtual ~QxrdExperiment();
-  void initialize(QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp, QSettings *settings);
+  void initialize(QSettings *settings);
 
   void openWindows();
 
@@ -139,7 +138,7 @@ public:
 private:
   QxrdApplicationWPtr             m_Application;
   QxrdExperimentThreadWPtr        m_ExperimentThread;
-  QxrdExperimentWPtr              m_Experiment;
+//  QxrdExperimentWPtr              m_Experiment;
 
 private:
   QxrdWindowSettingsPtr           m_WindowSettings;

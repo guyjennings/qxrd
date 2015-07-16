@@ -21,6 +21,7 @@ class QxrdCenterFinder : public QxrdDetectorGeometry
 
 public:
   QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt);
+  virtual ~QxrdCenterFinder();
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
