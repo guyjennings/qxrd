@@ -1,13 +1,12 @@
 #include "qcepintegrateddata.h"
 #include "qcepsettingssaver.h"
+#include "qcepallocator.h"
 #include <QScriptEngine>
 
 QcepIntegratedData::QcepIntegratedData(QcepSettingsSaverWPtr saver,
-                                       QcepDoubleImageDataPtr image,
-                                       int typ, int maxSize, QObject *parent) :
-  QcepDataObject(saver, "Integrated"),
+                                       QcepDoubleImageDataPtr image, int maxSize, QObject *parent) :
+  QcepDataObject(saver, "Integrated", 2*maxSize*sizeof(double)),
   m_Title(saver, this, "title", "", "Integrated Data Title"),
-  m_ObjectCounter(/*alloc*/ QcepAllocatorWPtr(), typ),
   m_Image(image),
   m_MaxSize(maxSize),
   m_Size(0),
@@ -21,11 +20,12 @@ QcepIntegratedData::QcepIntegratedData(QcepSettingsSaverWPtr saver,
 {
   set_Type("Integrated Data");
 
-  m_ObjectCounter.allocate(sizeof(double), 2, m_MaxSize);
+  QcepAllocator::allocate(sizeof(double), 2, m_MaxSize);
 }
 
 QcepIntegratedData::~QcepIntegratedData()
 {
+  QcepAllocator::deallocate(sizeof(double), 2, m_MaxSize);
 }
 
 QString QcepIntegratedData::description() const
@@ -40,7 +40,9 @@ void QcepIntegratedData::resize(int n)
     m_X.resize(newSize);
     m_Y.resize(newSize);
 
-    m_ObjectCounter.allocate(sizeof(double), 2, newSize-m_MaxSize);
+    QcepAllocator::allocate(sizeof(double), 2, newSize-m_MaxSize);
+
+    set_ByteSize(2*newSize*sizeof(double));
 
     m_MaxSize = newSize;
   }
@@ -125,11 +127,6 @@ int QcepIntegratedData::get_Oversample() const
 void QcepIntegratedData::set_Oversample(int ovs)
 {
   m_Oversample = ovs;
-}
-
-int QcepIntegratedData::allocatedMemoryMB()
-{
-  return m_ObjectCounter.allocatedMemoryMB();
 }
 
 QScriptValue QcepIntegratedData::toIntegratedDataScriptValue(QScriptEngine *engine, const QcepIntegratedDataPtr &data)

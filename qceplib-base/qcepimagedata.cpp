@@ -2,6 +2,7 @@
 #include "qcepdataobject.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
+#include "qcepallocator.h"
 
 #include <QSettings>
 #include <QFileInfo>
@@ -16,8 +17,8 @@
 
 QAtomicInt allocCount = 0;
 
-QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height)
-  : QcepDataObject(saver, tr("image")),
+QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height, int size)
+  : QcepDataObject(saver, tr("image"), size),
     m_Width(saver, this, "width", width, "Image Width"),
     m_Height(saver, this, "height", height, "Image Height"),
     m_DataType(saver, this, "dataType", UndefinedData, "Data Type of Image"),
@@ -53,13 +54,9 @@ QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int
 
   if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
     printf("QcepImageDataBase::QcepImageDataBase(%p)\n", this);
-//    QcepSettingsSaverPtr s(m_Saver);
-
-//    if (s) {
-//      s->printMessage(tr("QcepImageDataBase::QcepImageDataBase %1[%2]")
-//                      .HEXARG(this).arg(m_ImageCounter));
-//    }
   }
+
+  QcepAllocator::allocate(size);
 }
 
 QcepImageDataBase::~QcepImageDataBase()
@@ -74,7 +71,7 @@ QcepImageDataBase::~QcepImageDataBase()
 //    }
   }
 
-  //  allocCount--;
+  QcepAllocator::deallocate(get_ByteSize());
 }
 
 QString QcepImageDataBase::description() const
@@ -286,7 +283,7 @@ QString QcepImageDataBase::get_DataTypeName() const
 
 template <typename T>
 QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, int width, int height, T def)
-  : QcepImageDataBase(saver, width, height),
+  : QcepImageDataBase(saver, width, height, width*height*sizeof(T)),
     //    m_Image(width*height, def),
     m_Image(width*height),
     m_MinValue(0),
@@ -546,6 +543,10 @@ void QcepImageData<T>::resize(int width, int height)
       setValue(x, y, temp.value(x,y));
     }
   }
+
+  set_ByteSize(width*height*sizeof(T));
+
+  QcepAllocator::allocate((width*height - oldwidth*oldheight)*sizeof(T));
 }
 
 template <typename T>

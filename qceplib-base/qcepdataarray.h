@@ -14,7 +14,7 @@ public:
   QcepDataArray(QcepSettingsSaverWPtr saver,
                 QString name,
                 QVector<int> dims);
-  typedef QcepDataObject inherited;
+  virtual ~QcepDataArray();
 
   static QcepDataArrayPtr newDataArray(QcepSettingsSaverWPtr saver,
                                        QString name,

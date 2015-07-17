@@ -1,13 +1,21 @@
 #include "qcepdatacolumn.h"
+#include "qcepallocator.h"
 #include <QScriptEngine>
 
 QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts) :
-  QcepDataObject(saver, name),
+  QcepDataObject(saver, name, npts*sizeof(double)),
   m_NPoints(npts)
 {
   set_Type("Data Column");
 
   resize(m_NPoints);
+
+  QcepAllocator::allocate(npts*sizeof(double));
+}
+
+QcepDataColumn::~QcepDataColumn()
+{
+  QcepAllocator::deallocate(m_NPoints*sizeof(double));
 }
 
 QString QcepDataColumn::description() const

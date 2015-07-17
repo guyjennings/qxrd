@@ -8,10 +8,11 @@
 static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
 
-QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name) :
+QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name, int byteSize) :
   QcepObject(name, NULL),
   m_Saver(saver),
   m_Type(saver,        this, "type", "object", "Data object type"),
+  m_ByteSize(QcepSettingsSaverWPtr(), this, "size", byteSize, "Object Size"),
   m_Creator(saver,     this, "creator", "Unknown", "QXRD Version Number"),
   m_Version(saver,     this, "version", "Unknown", "QXRD Version Number"),
   m_QtVersion(saver,   this, "qtVersion", QT_VERSION_STR, "QT Version Number"),
@@ -67,7 +68,7 @@ QString QcepDataObject::pathName() const
 
 QcepDataObjectPtr QcepDataObject::newDataObject(QcepSettingsSaverWPtr saver, QString name)
 {
-  QcepDataObjectPtr res(new QcepDataObject(saver, name));
+  QcepDataObjectPtr res(new QcepDataObject(saver, name, 0));
 
   return res;
 }

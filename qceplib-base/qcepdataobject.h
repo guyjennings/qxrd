@@ -14,7 +14,8 @@ class QcepDataObject : public QcepObject, public QEnableSharedFromThis<QcepDataO
 
 public:
   QcepDataObject(QcepSettingsSaverWPtr saver,
-                 QString name);
+                 QString name,
+                 int byteSize);
   virtual ~QcepDataObject();
 
   QcepSettingsSaverWPtr saver();
@@ -55,6 +56,9 @@ private:
 public:
   Q_PROPERTY(QString type READ get_Type WRITE set_Type)
   QCEP_STRING_PROPERTY(Type)
+
+  Q_PROPERTY(quint64 byteSize READ get_ByteSize WRITE set_ByteSize STORED false)
+  QCEP_INTEGER64_PROPERTY(ByteSize)
 
   Q_PROPERTY(QString creator READ get_Creator WRITE set_Creator)
   QCEP_STRING_PROPERTY(Creator)

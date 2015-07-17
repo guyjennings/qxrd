@@ -15,7 +15,7 @@ class QcepIntegratedData : public QcepDataObject
 public:
   explicit QcepIntegratedData(QcepSettingsSaverWPtr saver,
                               QcepDoubleImageDataPtr data,
-                              int typ, int maxSize, QObject *parent = 0);
+                              int maxSize, QObject *parent = 0);
   ~QcepIntegratedData();
 
 public slots:
@@ -44,8 +44,6 @@ public:
   double cx() const;
   double cy() const;
 
-  int allocatedMemoryMB();
-
   static QScriptValue toIntegratedDataScriptValue(QScriptEngine *engine, const QcepIntegratedDataPtr &data);
   static void fromIntegratedDataScriptValue(const QScriptValue &obj, QcepIntegratedDataPtr &data);
 
@@ -53,7 +51,6 @@ public:
   QCEP_STRING_PROPERTY(Title)
 
 private:
-  QcepImageDataObjectCounter m_ObjectCounter;
   QcepDoubleImageDataPtr     m_Image;
   int                        m_MaxSize;
   int                        m_Size;

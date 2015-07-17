@@ -25,7 +25,7 @@ class QcepImageDataBase : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height);
+  QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height, int size);
   virtual ~QcepImageDataBase();
 
   Q_PROPERTY(int width READ get_Width WRITE set_Width)

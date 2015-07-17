@@ -59,7 +59,6 @@ SOURCES += \
   $${PWD}/qcepapplication.cpp \
   $${PWD}/qcepthread.cpp \
   $${PWD}/qcepallocatorthread.cpp \
-  $${PWD}/qcepimagedataobjectcounter.cpp \
   $${PWD}/qcepimagedataspreadsheetmodel.cpp \
   $${PWD}/qcepnewdatagroupdialog.cpp \
   $${PWD}/qcepnewdatacolumndialog.cpp \
@@ -151,7 +150,6 @@ HEADERS += \
   $${PWD}/qcepallocatorthread.h \
   $${PWD}/qcepallocatorthread-ptr.h \
   $${PWD}/qcepallocatorthread-ptr.h \
-  $${PWD}/qcepimagedataobjectcounter.h \
   $${PWD}/qcepimagedataspreadsheetmodel.h \
   $${PWD}/qcepnewdatagroupdialog.h \
   $${PWD}/qcepnewdatacolumndialog.h \
