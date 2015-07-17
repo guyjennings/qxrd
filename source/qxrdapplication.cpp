@@ -276,7 +276,9 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
 
 QxrdApplication::~QxrdApplication()
 {
+#ifndef QT_NO_DEBUG
   printf("Deleting application\n");
+#endif
 
   m_Saver->performSave();
 

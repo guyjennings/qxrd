@@ -694,7 +694,9 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
 QxrdWindow::~QxrdWindow()
 {
+#ifndef QT_NO_DEBUG
   printf("Deleting window\n");
+#endif
 
   QxrdApplicationPtr app(m_Application);
 

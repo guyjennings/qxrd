@@ -47,6 +47,10 @@ void QxrdAcquisitionExtraInputs::initialize(QxrdAcquisitionExtraInputsWPtr extra
 
 QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
 {
+#ifndef QT_NO_DEBUG
+  printf("Deleting acquisition extra inputs\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs(%p)\n", this);
   }

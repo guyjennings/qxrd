@@ -15,6 +15,7 @@ class QxrdSynchronizedAcquisition : public QcepObject
   Q_OBJECT
 public:
   explicit QxrdSynchronizedAcquisition(QcepSettingsSaverWPtr saver, QxrdAcquisitionWPtr acq);
+  virtual ~QxrdSynchronizedAcquisition();
 
 public:
   Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode)

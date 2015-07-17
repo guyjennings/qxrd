@@ -48,7 +48,7 @@ void QxrdAcquisitionThread::run()
   int rc = -1;
 
   if (acq) {
-    acq -> initialize(acq);
+    acq -> initialize();
 
     m_Mutex.lock();
     m_Acquisition = acq;

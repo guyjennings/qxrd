@@ -55,8 +55,36 @@ int main(int argc, char *argv[])
     printf("App finishes\n");
   }
 
-  printf("%d objects allocated at finish\n",      QcepObject::allocatedObjects());
-  printf("%d data objects allocated at finish\n", QcepDataObject::allocatedObjects());
+  int nObjAlloc = QcepObject::allocatedObjects();
+  int nObjDeleted = QcepObject::deletedObjects();
+
+  int nDataAlloc = QcepDataObject::allocatedObjects();
+  int nDataDeleted = QcepDataObject::deletedObjects();
+
+#ifdef QT_NO_DEBUG
+  bool printIt = nObjAlloc != nObjDeleted || nDataAlloc != nDataDeleted;
+#else
+  bool printIt = true;
+#endif
+
+  if (printIt) {
+    printf("%d objects allocated\n", nObjAlloc);
+    printf("%d objects deleted\n",   nObjDeleted);
+    printf("%d objects leaked\n",    nObjAlloc - nObjDeleted);
+
+    printf("%d data objects allocated\n", nObjAlloc);
+    printf("%d data objects deleted\n",   nObjDeleted);
+    printf("%d data objects leaked\n",    nObjAlloc - nObjDeleted);
+  }
+
+#ifndef QT_NO_DEBUG
+  if (nObjAlloc != nObjDeleted) {
+    int i=0;
+    foreach(QcepObject* obj, QcepObject::allocatedObjectsSet()) {
+      printf("%d : %s\n", i++, qPrintable(obj->objectName()));
+    }
+  }
+#endif
 
   return res;
 }

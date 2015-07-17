@@ -149,7 +149,7 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
                               m_DataProcessor,
                               app->allocator()));
 
-    m_Acquisition -> initialize(m_Acquisition);
+    m_Acquisition -> initialize();
 
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
           new QxrdCalibrantLibrary(m_SettingsSaver, sharedFromThis()));
@@ -412,7 +412,9 @@ void QxrdExperiment::openWindows()
 
 QxrdExperiment::~QxrdExperiment()
 {
+#ifndef QT_NO_DEBUG
   printf("Deleting experiment\n");
+#endif
 
   QxrdApplicationPtr app(m_Application);
 

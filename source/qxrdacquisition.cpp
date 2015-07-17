@@ -76,10 +76,8 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
   }
 }
 
-void QxrdAcquisition::initialize(QxrdAcquisitionWPtr acq)
+void QxrdAcquisition::initialize()
 {
-  m_Acquisition = acq;
-
   connect(prop_Raw16SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
   connect(prop_Raw32SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
   connect(prop_SummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
@@ -96,7 +94,7 @@ void QxrdAcquisition::initialize(QxrdAcquisitionWPtr acq)
   m_SynchronizedAcquisition = QxrdSynchronizedAcquisitionPtr(
         new QxrdSynchronizedAcquisition(m_Saver, sharedFromThis()));
 
-  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, m_Acquisition));
+  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, sharedFromThis()));
   m_AcquisitionExtraInputs -> initialize(m_AcquisitionExtraInputs);
 
   connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged()));
@@ -121,6 +119,10 @@ void QxrdAcquisition::initialize(QxrdAcquisitionWPtr acq)
 
 QxrdAcquisition::~QxrdAcquisition()
 {
+#ifndef QT_NO_DEBUG
+  printf("Deleting acquisition\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisition::~QxrdAcquisition(%p)\n", this);
   }
@@ -593,7 +595,7 @@ QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindowWPtr win)
 
     m_ControlPanel = new QxrdAcquisitionDialog(m_Experiment,
                                                m_Window,
-                                               m_Acquisition,
+                                               sharedFromThis(),
                                                m_DataProcessor,
                                                m_Window.data());
 

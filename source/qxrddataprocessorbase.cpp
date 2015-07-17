@@ -129,6 +129,10 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()
 {
+#ifndef QT_NO_DEBUG
+  printf("Deleting processor\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDataProcessorBase::~QxrdDataProcessorBase(%p)\n", this);
   }

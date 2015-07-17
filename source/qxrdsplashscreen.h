@@ -5,9 +5,10 @@
 
 class QxrdSplashScreen : public QSplashScreen
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    explicit QxrdSplashScreen(QWidget *parent);
+  explicit QxrdSplashScreen(QWidget *parent);
+  virtual ~QxrdSplashScreen();
 
 signals:
 

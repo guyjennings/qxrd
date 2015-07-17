@@ -23,6 +23,13 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QcepSettingsSaverWPtr s
 {
 }
 
+QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting synchronized acquisition\n");
+#endif
+}
+
 void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfaceWPtr nidaqPlugin)
 {
   m_NIDAQPlugin = nidaqPlugin;

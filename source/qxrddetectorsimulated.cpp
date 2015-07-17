@@ -19,6 +19,10 @@ QxrdDetectorSimulated::QxrdDetectorSimulated(QxrdExperimentWPtr expt, QxrdAcquis
 
 QxrdDetectorSimulated::~QxrdDetectorSimulated()
 {
+#ifndef QT_NO_DEBUG
+  printf("Deleting simulated detector\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorSimulated::~QxrdDetectorSimulated(%p)\n", this);
   }

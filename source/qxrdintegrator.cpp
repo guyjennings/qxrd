@@ -82,7 +82,9 @@ QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr e
 
 QxrdIntegrator::~QxrdIntegrator()
 {
+#ifndef QT_NO_DEBUG
   printf("Deleting integrator\n");
+#endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdIntegrator::~QxrdIntegrator(%p)\n", this);

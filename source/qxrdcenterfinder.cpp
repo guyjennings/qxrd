@@ -89,7 +89,9 @@ QxrdCenterFinder::QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWP
 
 QxrdCenterFinder::~QxrdCenterFinder()
 {
+#ifndef QT_NO_DEBUG
   printf("Deleting center finder\n");
+#endif
 }
 
 QxrdExperimentWPtr QxrdCenterFinder::experiment() const

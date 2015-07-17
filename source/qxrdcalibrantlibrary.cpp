@@ -12,7 +12,9 @@ QxrdCalibrantLibrary::QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExpe
 
 QxrdCalibrantLibrary::~QxrdCalibrantLibrary()
 {
+#ifndef QT_NO_DEBUG
   printf("Deleting calibrant library\n");
+#endif
 }
 
 void QxrdCalibrantLibrary::initialize(QxrdCalibrantLibraryWPtr lib)
