@@ -46,6 +46,7 @@ public:
   static void fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr &data);
 
   static int allocatedObjects();
+  static int deletedObjects();
 
 private:
   QcepDataGroupWPtr     m_Parent;

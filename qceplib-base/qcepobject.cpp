@@ -4,11 +4,14 @@
 #include <stdio.h>
 #include <QAtomicInt>
 #include <QSet>
+#include <QThread>
 
 static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
 
+#ifndef QT_NO_DEBUG
 static QSet<QcepObject*> s_Allocated;
+#endif
 
 QcepObject::QcepObject(QString name, QObject *parent) :
   QObject(parent),
@@ -24,6 +27,18 @@ QcepObject::QcepObject(QString name, QObject *parent) :
 
 QcepObject::~QcepObject()
 {
+#ifndef QT_NO_DEBUG
+  QThread *currTh = QThread::currentThread();
+  QThread *objTh  = thread();
+
+  if (currTh != objTh) {
+    printf("Deleting object from different thread %s (%s, %s)\n",
+           qPrintable(objectName()),
+           qPrintable(currTh ? currTh->objectName() : "null"),
+           qPrintable(objTh ? objTh->objectName() : "null"));
+  }
+#endif
+
   s_ObjectDeleteCount.fetchAndAddOrdered(1);
 
 #ifndef QT_NO_DEBUG
@@ -33,23 +48,20 @@ QcepObject::~QcepObject()
 
 int QcepObject::allocatedObjects()
 {
-  int n = s_ObjectAllocateCount.load();
-  int d = s_ObjectDeleteCount.load();
+  return s_ObjectAllocateCount.load();
+}
 
-  printf("%d objects allocated\n", n);
-  printf("%d objects released\n", d);
-  printf("%d objects still allocated\n", n-d);
+int QcepObject::deletedObjects()
+{
+  return s_ObjectDeleteCount.load();
+}
 
 #ifndef QT_NO_DEBUG
-  int i=0;
-
-  foreach (QcepObject *obj, s_Allocated) {
-    printf("%d : %s\n", i++, qPrintable(obj->objectName()));
-  }
-#endif
-
-  return n-d;
+QSet<QcepObject*> QcepObject::allocatedObjectsSet()
+{
+  return s_Allocated;
 }
+#endif
 
 void QcepObject::set_Name(QString name)
 {

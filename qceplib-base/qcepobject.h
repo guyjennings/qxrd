@@ -5,6 +5,7 @@
 #include <QSettings>
 #include "qcepobjectnamer.h"
 #include <QDateTime>
+#include <QSet>
 
 class QcepObject : public QObject
 {
@@ -14,6 +15,11 @@ public:
   virtual ~QcepObject();
 
   static int allocatedObjects();
+  static int deletedObjects();
+
+#ifndef QT_NO_DEBUG
+  static QSet<QcepObject*> allocatedObjectsSet();
+#endif
 
 signals:
 

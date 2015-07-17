@@ -37,14 +37,12 @@ QcepDataObject::~QcepDataObject()
 
 int QcepDataObject::allocatedObjects()
 {
-  int n = s_ObjectAllocateCount.load();
-  int d = s_ObjectDeleteCount.load();
+  return s_ObjectAllocateCount.load();
+}
 
-  printf("%d data objects allocated\n", n);
-  printf("%d data objects released\n", d);
-  printf("%d data objects still allocated\n", n-d);
-
-  return n-d;
+int QcepDataObject::deletedObjects()
+{
+  return s_ObjectDeleteCount.load();
 }
 
 QString QcepDataObject::description() const
