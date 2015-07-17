@@ -54,7 +54,6 @@ public:
   int integratedSizeMB(int nrows);
 
   double allocatedMemoryMB();
-  double allocatedMemory();
   double maximumMemoryMB();
   double maximumMemory();
 
@@ -67,6 +66,8 @@ public:
 
   static void allocate(quint64 amt);
   static void deallocate(quint64 amt);
+
+  static quint64 allocatedMemory();
 
 protected:
   void allocateBytes(quint64 amt);
@@ -81,7 +82,6 @@ private:
 private:
   QMutex                m_Mutex;
   QTimer                m_Timer;
-  quint64               m_AllocatedMemory;
   QAtomicInt            m_AllocatedMemoryMB;
 
 public:

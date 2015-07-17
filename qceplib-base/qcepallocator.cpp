@@ -9,12 +9,12 @@
 #include "qcepthread.h"
 
 static QcepAllocator *g_Allocator = NULL;
+static quint64        g_AllocatedMemory = 0;
 
 QcepAllocator::QcepAllocator
 (QcepSettingsSaverPtr saver)
   : QcepObject("allocator", NULL),
     m_Mutex(QMutex::Recursive),
-    m_AllocatedMemory(0),
     m_AllocatedMemoryMB(0),
     m_Max(saver, this, "max", 800, "Maximum Image Memory (MB)"),
     m_TotalBufferSizeMB32(saver, this,"totalBufferSizeMB32", 800, "Maximum Image Memory in 32 bit system (MB)"),
@@ -22,7 +22,11 @@ QcepAllocator::QcepAllocator
     m_Reserve(saver, this,"reserve",100, "Extra Reserved Memory (MB)"),
     m_Allocated(QcepSettingsSaverPtr(), this, "allocated", 0, "Allocated Memory (MB)")
 {
-  g_Allocator = this;
+  if (g_Allocator) {
+    printf("Only one allocator can be created\n");
+  } else {
+    g_Allocator = this;
+  }
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QcepAllocator::QcepAllocator(%p)\n", this);
@@ -41,6 +45,12 @@ QcepAllocator::QcepAllocator
 
 QcepAllocator::~QcepAllocator()
 {
+#ifndef QT_NO_DEBUG
+  printf("Deleting allocator\n");
+#endif
+
+  g_Allocator = NULL;
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QcepAllocator::~QcepAllocator(%p)\n", this);
   }
@@ -298,9 +308,9 @@ void QcepAllocator::allocateBytes(quint64 amt)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  m_AllocatedMemory += amt;
+  g_AllocatedMemory += amt;
 
-  m_AllocatedMemoryMB.fetchAndStoreOrdered(m_AllocatedMemory/MegaBytes);
+  m_AllocatedMemoryMB.fetchAndStoreOrdered(g_AllocatedMemory/MegaBytes);
 }
 
 /* static */
@@ -323,9 +333,9 @@ void QcepAllocator::deallocateBytes(quint64 amt)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  m_AllocatedMemory -= amt;
+  g_AllocatedMemory -= amt;
 
-  m_AllocatedMemoryMB.fetchAndStoreOrdered(m_AllocatedMemory/MegaBytes);
+  m_AllocatedMemoryMB.fetchAndStoreOrdered(g_AllocatedMemory/MegaBytes);
 }
 
 int QcepAllocator::int16SizeMB(int width, int height)
@@ -363,9 +373,9 @@ double QcepAllocator::allocatedMemoryMB()
   return m_AllocatedMemoryMB.fetchAndAddOrdered(0);
 }
 
-double QcepAllocator::allocatedMemory()
+quint64 QcepAllocator::allocatedMemory()
 {
-  return m_AllocatedMemoryMB.fetchAndAddOrdered(0)*MegaBytes;
+  return g_AllocatedMemory;
 }
 
 double QcepAllocator::maximumMemoryMB()
