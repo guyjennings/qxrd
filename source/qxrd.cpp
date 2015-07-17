@@ -61,8 +61,10 @@ int main(int argc, char *argv[])
   int nDataAlloc = QcepDataObject::allocatedObjects();
   int nDataDeleted = QcepDataObject::deletedObjects();
 
+  quint64 allocated = QcepAllocator::allocatedMemory();
+
 #ifdef QT_NO_DEBUG
-  bool printIt = nObjAlloc != nObjDeleted || nDataAlloc != nDataDeleted;
+  bool printIt = (nObjAlloc != nObjDeleted) || (nDataAlloc != nDataDeleted) || (allocated != 0);
 #else
   bool printIt = true;
 #endif
@@ -72,9 +74,11 @@ int main(int argc, char *argv[])
     printf("%d objects deleted\n",   nObjDeleted);
     printf("%d objects leaked\n",    nObjAlloc - nObjDeleted);
 
-    printf("%d data objects allocated\n", nObjAlloc);
-    printf("%d data objects deleted\n",   nObjDeleted);
-    printf("%d data objects leaked\n",    nObjAlloc - nObjDeleted);
+    printf("%d data objects allocated\n", nDataAlloc);
+    printf("%d data objects deleted\n",   nDataDeleted);
+    printf("%d data objects leaked\n",    nDataAlloc - nDataDeleted);
+
+    printf("%Ld bytes still allocated\n", allocated);
   }
 
 #ifndef QT_NO_DEBUG
