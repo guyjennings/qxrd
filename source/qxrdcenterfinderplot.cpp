@@ -14,7 +14,7 @@
 #include "qxrdwindow.h"
 #include "qxrddataprocessor.h"
 #include "qxrdcenterfinder.h"
-#include "qxrdplotmeasurer.h"
+#include "qcepplotmeasurer.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdapplication.h"
 

@@ -2,7 +2,7 @@
 #include "qxrdimageplot.h"
 
 QxrdImagePlotZoomer::QxrdImagePlotZoomer(QWidget *canvas, QxrdImagePlot *plot)
-  : QxrdPlotZoomer(canvas, plot),
+  : QcepPlotZoomer(canvas, plot),
     m_ImagePlot(plot)
 {
 }

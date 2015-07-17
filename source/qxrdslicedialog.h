@@ -2,7 +2,7 @@
 #define QXRDSLICEDIALOG_H
 
 #include <QDockWidget>
-#include "qxrdplot.h"
+#include "qcepplot.h"
 #include "ui_qxrdslicedialog.h"
 #include "qcepimagedata.h"
 #include "qcepsettingssaver-ptr.h"

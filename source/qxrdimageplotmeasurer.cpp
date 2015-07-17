@@ -1,6 +1,6 @@
 #include "qxrdimageplotmeasurer.h"
 
-#include "qxrdplotmeasurer.h"
+#include "qcepplotmeasurer.h"
 #include "qxrdrasterdata.h"
 #include "qxrdimageplot.h"
 #include "qxrdcenterfinder.h"

@@ -16,7 +16,7 @@
 #include "qxrdcenterfinder.h"
 #include "qxrdintegratordialog.h"
 #include "qxrdintegrator.h"
-#include "qxrdplotzoomer.h"
+#include "qcepplotzoomer.h"
 #include "qxrdscriptengine.h"
 #include "qxrdfilebrowser.h"
 #include "qxrdimagecalculator.h"

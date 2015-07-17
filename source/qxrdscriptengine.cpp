@@ -1389,7 +1389,7 @@ QScriptValue QxrdScriptEngine::dataObjectFunc(QScriptContext *context, QScriptEn
     if (expt) {
       QString name = context->argument(0).toString();
 
-      return engine->newQObject(new QcepDataObject(QcepSettingsSaverWPtr(), name/*, expt.data()*/));
+      return engine->newQObject(new QcepDataObject(QcepSettingsSaverWPtr(), name, 0));
     }
   }
 
@@ -1413,7 +1413,7 @@ QScriptValue QxrdScriptEngine::dataGroupFunc(QScriptContext *context, QScriptEng
     if (expt) {
       QString name = context->argument(0).toString();
 
-      return engine->newQObject(new QcepDataGroup(QcepSettingsSaverWPtr(), name/*, expt.data()*/));
+      return engine->newQObject(new QcepDataGroup(QcepSettingsSaverWPtr(), name));
     }
   }
 
@@ -1443,7 +1443,7 @@ QScriptValue QxrdScriptEngine::dataArrayFunc(QScriptContext *context, QScriptEng
         dims.append(context->argument(i).toInteger());
       }
 
-      return engine->newQObject(new QcepDataArray(QcepSettingsSaverWPtr(), name, dims/*, expt.data()*/));
+      return engine->newQObject(new QcepDataArray(QcepSettingsSaverWPtr(), name, dims));
     }
   }
 
@@ -1468,7 +1468,7 @@ QScriptValue QxrdScriptEngine::dataColumnFunc(QScriptContext *context, QScriptEn
       QString name = context->argument(0).toString();
       int     npts = context->argument(1).toInteger();
 
-      return engine->newQObject(new QcepDataColumn(QcepSettingsSaverWPtr(), name, npts/*, expt.data()*/));
+      return engine->newQObject(new QcepDataColumn(QcepSettingsSaverWPtr(), name, npts));
     }
   }
 
@@ -1499,7 +1499,7 @@ QScriptValue QxrdScriptEngine::dataColumnScanFunc(QScriptContext *context, QScri
         cols.append(context->argument(i).toString());
       }
 
-      return engine->newQObject(new QcepDataColumnScan(QcepSettingsSaverWPtr(), name/*, cols, npts*//*, expt.data()*/));
+      return engine->newQObject(new QcepDataColumnScan(QcepSettingsSaverWPtr(), name));
     }
   }
 

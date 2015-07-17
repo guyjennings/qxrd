@@ -1,10 +1,10 @@
 #ifndef QXRDIMAGEPLOTZOOMER_H
 #define QXRDIMAGEPLOTZOOMER_H
 
-#include "qxrdplotzoomer.h"
+#include "qcepplotzoomer.h"
 #include "qxrdimageplot.h"
 
-class QxrdImagePlotZoomer : public QxrdPlotZoomer
+class QxrdImagePlotZoomer : public QcepPlotZoomer
 {
   Q_OBJECT
 

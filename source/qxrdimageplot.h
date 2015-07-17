@@ -16,7 +16,6 @@
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
 #include "qxrdmaskcolormap.h"
-#include "qxrdplotimage-ptr.h"
 #include "qxrdhistogramselector-ptr.h"
 #include "qxrdplotslicer-ptr.h"
 #include "qxrdimageplotmeasurer-ptr.h"
@@ -151,7 +150,6 @@ private:
   QwtPlotSpectrogram        *m_DataImage;
   QwtPlotSpectrogram        *m_MaskImage;
   QwtPlotSpectrogram        *m_OverflowImage;
-//  QxrdPlotImagePtr           m_PlotImage;
   QwtLinearColorMap         *m_ColorMap;
 
   QxrdMaskColorMap          *m_MaskColorMap;

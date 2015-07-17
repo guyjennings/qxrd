@@ -91,7 +91,6 @@ void QxrdGenerateTestImage::appendRing(double tth, double intensity, double widt
 void QxrdGenerateTestImage::generateImage()
 {
   QcepDoubleImageDataPtr img = QcepDoubleImageDataPtr(new QcepDoubleImageData(QcepSettingsSaverPtr(),
-                                                                              QcepAllocator::AllocateDouble,
                                                                               get_NCols(),
                                                                               get_NRows()));
 

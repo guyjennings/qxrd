@@ -232,7 +232,6 @@ HEADERS += TODO.h \
     qxrdintegratorplot.h \
     qxrdintegratordialog.h \
     qxrdimageplot.h \
-    qxrdplotzoomer.h \
     qxrdserver.h \
     qxrdserver-ptr.h \
     qxrdserverthread.h \
@@ -242,12 +241,8 @@ HEADERS += TODO.h \
     qxrdacquisition.h \
     qxrdacquisition-ptr.h \
     qxrdacquisitiondialog.h \
-    qxrdplot.h \
-    qxrdplot-ptr.h \
     qxrdplotslicer.h \
     qxrdplotslicer-ptr.h \
-    qxrdplotmeasurer.h \
-    qxrdplotmeasurer-ptr.h \
     qxrdscriptengine.h \
     qxrdscriptengine-ptr.h \
     qxrdscriptenginethread.h \
@@ -282,8 +277,6 @@ HEADERS += TODO.h \
     qxrdsimpleserverthread.h \
     qxrdsimpleserverthread-ptr.h \
     qxrdcenterstepspinner.h \
-    qxrdplotimage.h \
-    qxrdplotimage-ptr.h \
     qxrdimagedisplaywidget.h \
     qwt_plot_piecewise_curve.h \
     qxrdmaskdialog.h \
@@ -342,7 +335,6 @@ HEADERS += TODO.h \
     qxrdacquisitionextrainputschannel-ptr.h \
     qxrdwindowsettings.h \
     qxrdslicedialogsettings.h \
-    qxrdplotsettings.h \
     qxrdimageplotsettings.h \
     qxrdfilebrowsersettings.h \
     qxrdhistogramdialogsettings.h \
@@ -377,15 +369,12 @@ SOURCES += qxrd.cpp \
     qxrdintegratorplot.cpp \
     qxrdintegratordialog.cpp \
     qxrdimageplot.cpp \
-    qxrdplotzoomer.cpp \
     qxrdserver.cpp \
     qxrdserverthread.cpp \
     qxrdacquisitionthread.cpp \
     qxrdacquisition.cpp \
     qxrdacquisitiondialog.cpp \
-    qxrdplot.cpp \
     qxrdplotslicer.cpp \
-    qxrdplotmeasurer.cpp \
     qxrdscriptengine.cpp \
     qxrdscriptenginethread.cpp \
     qxrddataprocessorthread.cpp \
@@ -410,7 +399,6 @@ SOURCES += qxrd.cpp \
     qxrdsimpleserver.cpp \
     qxrdsimpleserverthread.cpp \
     qxrdcenterstepspinner.cpp \
-    qxrdplotimage.cpp \
     qxrdimagedisplaywidget.cpp \
     qwt_plot_piecewise_curve.cpp \
     qxrdmaskdialog.cpp \
@@ -453,7 +441,6 @@ SOURCES += qxrd.cpp \
     qxrdacquisitionextrainputschannel.cpp \
     qxrdwindowsettings.cpp \
     qxrdslicedialogsettings.cpp \
-    qxrdplotsettings.cpp \
     qxrdimageplotsettings.cpp \
     qxrdfilebrowsersettings.cpp \
     qxrdhistogramdialogsettings.cpp \
