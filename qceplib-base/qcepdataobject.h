@@ -34,6 +34,11 @@ public slots:
   virtual QcepDataGroupPtr parentItem() const;
 
 public:
+  typedef enum {
+    NoOverwrite,
+    CanOverwrite
+  } Overwrite;
+
   virtual int childCount() const;
   virtual QcepDataObjectPtr item(int n);
   virtual QcepDataObjectPtr item(QString nm);
@@ -48,6 +53,12 @@ public:
 
   static int allocatedObjects();
   static int deletedObjects();
+
+  virtual void saveData(QString name, Overwrite canOverwrite=NoOverwrite);
+
+protected:
+  void mkPath(QString filePath);
+  QString uniqueFileName(QString name);
 
 private:
   QcepDataGroupWPtr     m_Parent;
@@ -71,6 +82,12 @@ public:
 
   Q_PROPERTY(QString description READ get_Description WRITE set_Description)
   QCEP_STRING_PROPERTY(Description)
+
+  Q_PROPERTY(QString fileName READ get_FileName WRITE set_FileName)
+  QCEP_STRING_PROPERTY(FileName)
+
+  Q_PROPERTY(int objectSaved READ get_ObjectSaved WRITE set_ObjectSaved)
+  QCEP_INTEGER_PROPERTY(ObjectSaved)
 };
 
 #endif // QCEPDATAOBJECT_H

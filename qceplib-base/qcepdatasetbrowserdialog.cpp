@@ -15,6 +15,7 @@
 #include "qcepnewdataarraydialog.h"
 #include "qcepnewdatacolumndialog.h"
 #include "qcepnewimagedialog.h"
+#include <QFileDialog>
 
 QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QcepExperimentWPtr expt, QcepDatasetModelPtr ds, QWidget *parent) :
   QDockWidget(parent),
@@ -233,6 +234,12 @@ void QcepDatasetBrowserDialog::readData(const QModelIndex &idx)
 void QcepDatasetBrowserDialog::saveData(const QModelIndex &idx)
 {
   QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
+
+  QString theFile = QFileDialog::getSaveFileName(this, "Save data in", obj->get_FileName());
+
+  if (theFile.length()) {
+    obj -> saveData(theFile, QcepDataObject::CanOverwrite);
+  }
 }
 
 void QcepDatasetBrowserDialog::deleteData(const QModelIndex &idx)

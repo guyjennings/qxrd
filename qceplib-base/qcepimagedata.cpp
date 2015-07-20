@@ -15,6 +15,8 @@
 #include "qcepmutexlocker.h"
 #include "qcepsettingssaver.h"
 
+#include "tiffio.h"
+
 QAtomicInt allocCount = 0;
 
 QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height, int size)
@@ -23,7 +25,6 @@ QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int
     m_Height(saver, this, "height", height, "Image Height"),
     m_DataType(saver, this, "dataType", UndefinedData, "Data Type of Image"),
     m_FileBase(saver, this, "fileBase", "", "File Base of Image"),
-    m_FileName(saver, this, "fileName", "", "File Name of Image"),
     m_Title(saver, this, "title", "", "Title of Image"),
     m_ReadoutMode(saver, this, "readoutMode", 0, "Image Readout Mode"),
     m_ExposureTime(saver, this, "exposureTime", 0, "Image Exposure Time"),
@@ -42,7 +43,6 @@ QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int
     m_UserComment2(saver, this,"userComment2","", "User Comment 2"),
     m_UserComment3(saver, this,"userComment3","", "User Comment 3"),
     m_UserComment4(saver, this,"userComment4","", "User Comment 4"),
-    m_ImageSaved(saver, this,"imageSaved",0, "Image is Saved?"),
     m_Normalization(saver, this, "normalization", QcepDoubleList(), "Normalization Values"),
     m_ExtraInputs(saver, this, "extraInputs", QcepDoubleList(), "Extra Input Values"),
     m_Used(saver, this, "used", true, "Image Used?"),
@@ -134,7 +134,7 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
   dest -> set_UserComment2(get_UserComment2());
   dest -> set_UserComment3(get_UserComment3());
   dest -> set_UserComment4(get_UserComment4());
-  dest -> set_ImageSaved(get_ImageSaved());
+  dest -> set_ObjectSaved(get_ObjectSaved());
   dest -> set_Normalization(get_Normalization());
   dest -> set_ExtraInputs(get_ExtraInputs());
   dest -> set_Used(get_Used());
@@ -172,7 +172,7 @@ void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src
   set_UserComment2(src -> get_UserComment2());
   set_UserComment3(src -> get_UserComment3());
   set_UserComment4(src -> get_UserComment4());
-  set_ImageSaved(src -> get_ImageSaved());
+  set_ObjectSaved(src -> get_ObjectSaved());
   set_Normalization(src -> get_Normalization());
   set_ExtraInputs(src -> get_ExtraInputs());
   set_Used(src -> get_Used());
@@ -582,7 +582,7 @@ bool QcepImageData<T>::readImage(QString path)
       set_FileBase(fileBase);
       set_Title(fileBase);
       set_FileName(path);
-      set_ImageSaved(true);
+      set_ObjectSaved(true);
     }
 
     return res;
@@ -1047,6 +1047,136 @@ void QcepImageData<T>::fromScriptValue(const QScriptValue &obj, QSharedPointer<Q
         }
       }
     }
+  }
+}
+
+#define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
+
+template <>
+void QcepImageData<double>::saveData(QString name, Overwrite canOverwrite)
+{
+  int nrows = get_Height();
+  int ncols = get_Width();
+
+  mkPath(name);
+
+  if (canOverwrite == NoOverwrite) {
+    name = uniqueFileName(name);
+  }
+
+  TIFF* tif = TIFFOpen(qPrintable(name),"w");
+  int res = 1;
+
+  if (tif) {
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(get_FileName())));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
+
+    QVector<float> buffvec(ncols);
+    float* buffer = buffvec.data();
+
+    for (int y=0; y<nrows; y++) {
+      for (int x=0; x<ncols; x++) {
+        buffer[x] = value(x,y);
+      }
+
+      TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+    }
+
+    TIFFClose(tif);
+
+    set_FileName(name);
+    set_ObjectSaved(true);
+
+    saveMetaData();
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::saveData(QString name, Overwrite canOverwrite)
+{
+  int nrows = get_Height();
+  int ncols = get_Width();
+
+  mkPath(name);
+
+  if (canOverwrite == NoOverwrite) {
+    name = uniqueFileName(name);
+  }
+
+  TIFF* tif = TIFFOpen(qPrintable(name),"w");
+  int res = 1;
+
+  if (tif) {
+    int nsum = get_SummedExposures();
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+
+    if (nsum == 0) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8));
+    } else if (nsum == 1) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16));
+    } else {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+    }
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(get_FileName())));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
+
+    if (nsum == 0) {
+      QVector<quint8> buffvec(ncols);
+      quint8* buffer = buffvec.data();
+
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
+    } else if (nsum == 1) {
+      QVector<quint16> buffvec(ncols);
+      quint16* buffer = buffvec.data();
+
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
+    } else {
+      QVector<quint32> buffvec(ncols);
+      quint32* buffer = buffvec.data();
+
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
+    }
+
+    TIFFClose(tif);
+
+    set_FileName(name);
+    set_ObjectSaved(true);
+
+    saveMetaData();
   }
 }
 

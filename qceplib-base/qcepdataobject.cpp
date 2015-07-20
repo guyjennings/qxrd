@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "qcepapplication.h"
 #include <QAtomicInteger>
+#include <QFileInfo>
+#include <QDir>
 
 static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
@@ -16,7 +18,9 @@ QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name, int by
   m_Creator(saver,     this, "creator", "Unknown", "QXRD Version Number"),
   m_Version(saver,     this, "version", "Unknown", "QXRD Version Number"),
   m_QtVersion(saver,   this, "qtVersion", QT_VERSION_STR, "QT Version Number"),
-  m_Description(saver, this, "description", "", "Object Description")
+  m_Description(saver, this, "description", "", "Object Description"),
+  m_FileName(saver,    this, "fileName", "", "File Name of Image"),
+  m_ObjectSaved(saver, this, "objectSaved",0, "Object is Saved?")
 {
   s_ObjectAllocateCount.fetchAndAddOrdered(1);
 
@@ -64,6 +68,50 @@ QString QcepDataObject::pathName() const
   } else {
     return "/";
   }
+}
+
+void QcepDataObject::mkPath(QString filePath)
+{
+  QFileInfo f(filePath);
+  QDir dir = f.dir();
+
+  if (!dir.exists()) {
+    dir.mkpath(dir.absolutePath());
+  }
+}
+
+QString QcepDataObject::uniqueFileName(QString name)
+{
+  QFileInfo f(name);
+
+  if (f.exists()) {
+    QDir dir = f.dir();
+    QString base = f.baseName();
+    QString suff = f.completeSuffix();
+
+//    QxrdAcquisitionPtr acq(acquisition());
+
+    int width = 5;
+
+//    if (acq) {
+//      width = acq->get_FileOverflowWidth();
+//    }
+
+    for (int i=1; ; i++) {
+      QString newname = dir.filePath(base+QString().sprintf("-%0*d.",width,i)+suff);
+      QFileInfo f(newname);
+
+      if (!f.exists()) {
+        return newname;
+      }
+    }
+  } else {
+    return name;
+  }
+}
+
+void QcepDataObject::saveData(QString name, Overwrite canOverwrite)
+{
 }
 
 QcepDataObjectPtr QcepDataObject::newDataObject(QcepSettingsSaverWPtr saver, QString name)
