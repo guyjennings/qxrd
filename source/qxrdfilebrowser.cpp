@@ -398,6 +398,15 @@ void QxrdFileBrowser::doAccumulate()
   }
 }
 
+void QxrdFileBrowser::doClearAccumulator()
+{
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QMetaObject::invokeMethod(proc.data(), "clearAccumulator");
+  }
+}
+
 void QxrdFileBrowser::doIntegrateAndAccumulate()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
@@ -415,6 +424,30 @@ void QxrdFileBrowser::doIntegrateAndAccumulate()
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "integrateAndAccumulate", Q_ARG(QStringList, paths));
+  }
+}
+
+void QxrdFileBrowser::doSaveAccumulator()
+{
+  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+  QModelIndexList rows = sel->selectedRows();
+  QModelIndex index;
+  QString path;
+
+  if (rows.count() >= 1) {
+    path = m_Model->filePath(rows.first());
+  } else {
+    path = m_Model->rootPath();
+  }
+
+  QString file = QFileDialog::getSaveFileName(this, "Save accumulated data in...", path);
+
+  if (file.length() > 0) {
+    QxrdDataProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      QMetaObject::invokeMethod(proc.data(), "saveAccumulator", Q_ARG(QString, file));
+    }
   }
 }
 
@@ -577,7 +610,9 @@ void QxrdFileBrowser::mousePressed(QModelIndex index)
     QAction *openGainMap = actions->addAction("Open as Gain Map");
     QAction *accumulate = actions->addAction("Accumulate");
     QAction *integrate = actions->addAction("Integrate");
+    QAction *clearAccum = actions->addAction("Clear accumulator");
     QAction *integAccum = actions->addAction("Integrate and accumulate");
+    QAction *saveAccum = actions->addAction("Save accumulator in...");
     QAction *process = actions->addAction("Process");
     QAction *add = actions->addAction("Add Images to Current Image");
     QAction *subtract = actions->addAction("Subtract Images from Current Image");
@@ -601,8 +636,12 @@ void QxrdFileBrowser::mousePressed(QModelIndex index)
       doAccumulate();
     } else if (action == integrate) {
       doIntegrate();
+    } else if (action == clearAccum) {
+      doClearAccumulator();
     } else if (action == integAccum) {
       doIntegrateAndAccumulate();
+    } else if (action == saveAccum) {
+      doSaveAccumulator();
     } else if (action == process) {
       doProcess();
     } else if (action == add) {

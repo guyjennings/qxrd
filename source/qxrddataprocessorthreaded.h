@@ -45,7 +45,9 @@ public slots:
   void integrateData(QString name);
   void correlateImages(QStringList names);
 
+  void clearAccumulator();
   void integrateAndAccumulate(QStringList names);
+  void saveAccumulator(QString path);
 
   void shiftImage(int dx, int dy);
 

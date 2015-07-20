@@ -442,7 +442,7 @@ void QxrdIntegrator::appendIntegration(QcepDoubleImageDataPtr res, QcepIntegrate
   }
 }
 
-void QxrdIntegrator::prepareAccumulator(QString resPath, int nImages)
+void QxrdIntegrator::clearAccumulator(QString resPath)
 {
   QxrdExperimentPtr expt(m_Experiment);
 
@@ -463,6 +463,40 @@ void QxrdIntegrator::prepareAccumulator(QString resPath, int nImages)
   }
 }
 
+void QxrdIntegrator::prepareAccumulator(QString resPath, int nImages)
+{
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QcepDatasetModelPtr ds = expt->dataset();
+
+    if (ds) {
+      QcepDoubleImageDataPtr data = ds->image(resPath);
+
+      if (!data) {
+        data = ds->newImage(resPath);
+      }
+    }
+  }
+}
+
 void QxrdIntegrator::completeAccumulator(QString path)
 {
+}
+
+void QxrdIntegrator::saveAccumulator(QString resPath, QString fileName)
+{
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QcepDatasetModelPtr ds = expt->dataset();
+
+    if (ds) {
+      QcepDoubleImageDataPtr data = ds->image(resPath);
+
+      if (data) {
+        data -> saveData(fileName);
+      }
+    }
+  }
 }

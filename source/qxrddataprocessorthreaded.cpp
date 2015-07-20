@@ -442,6 +442,11 @@ void QxrdDataProcessorThreaded::subtractImages(QStringList names)
   newData(summed, QcepMaskDataPtr());
 }
 
+void QxrdDataProcessorThreaded::clearAccumulator()
+{
+  m_Integrator -> clearAccumulator(get_AccumulateIntegratedName());
+}
+
 void QxrdDataProcessorThreaded::integrateAndAccumulate(QStringList names)
 {
   int nImages   = names.count();
@@ -465,6 +470,11 @@ void QxrdDataProcessorThreaded::integrateAndAccumulate(QStringList names)
   }
 
   m_Integrator -> completeAccumulator(get_AccumulateIntegratedName());
+}
+
+void QxrdDataProcessorThreaded::saveAccumulator(QString path)
+{
+  m_Integrator -> saveAccumulator(get_AccumulateIntegratedName(), path);
 }
 
 void QxrdDataProcessorThreaded::reflectHorizontally()

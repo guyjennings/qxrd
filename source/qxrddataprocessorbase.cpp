@@ -1244,7 +1244,7 @@ QcepDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image(
 
   if (img) {
     if (get_SaveRawImages()) {
-      if (img->get_ImageSaved()) {
+      if (img->get_ObjectSaved()) {
         printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
       } else {
         saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessorBase::NoOverwrite);
@@ -1276,7 +1276,7 @@ QcepDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image(
 
   if (img) {
     if (get_SaveRawImages()) {
-      if (img->get_ImageSaved()) {
+      if (img->get_ObjectSaved()) {
         printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
       } else {
         saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessorBase::NoOverwrite);
@@ -1342,7 +1342,7 @@ QcepDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage(
 
     if (get_PerformDarkSubtraction()) {
       subtractDarkImage(processed, dark);
-      processed -> set_ImageSaved(false);
+      processed -> set_ObjectSaved(false);
 
       int subTime = tic.restart();
 
@@ -1355,7 +1355,7 @@ QcepDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage(
 
     if (get_PerformBadPixels()) {
       correctBadPixels(processed);
-      processed -> set_ImageSaved(false);
+      processed -> set_ObjectSaved(false);
 
       int badPxlTime = tic.restart();
 
@@ -1368,7 +1368,7 @@ QcepDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage(
 
     if (get_PerformGainCorrection()) {
       correctImageGains(processed);
-      processed -> set_ImageSaved(false);
+      processed -> set_ObjectSaved(false);
 
       int gainTime = tic.restart();
 
@@ -1380,7 +1380,7 @@ QcepDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredImage(
     }
 
     if (get_SaveSubtracted()) {
-      if (processed->get_ImageSaved()) {
+      if (processed->get_ObjectSaved()) {
         printMessage(tr("Image \"%1\" is already saved").arg(processed->rawFileName()));
       } else {
         saveNamedImageData(QDir(subtractedOutputDirectory()).filePath(processed->get_FileBase()), processed, overflow);

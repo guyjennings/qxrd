@@ -106,8 +106,10 @@ public:
   QString XLabel() const;
 
 public slots:
+  void                  clearAccumulator(QString resPath);
   void                  prepareAccumulator(QString resPath, int nImages);
   void                  completeAccumulator(QString path);
+  void                  saveAccumulator(QString resPath, QString fileName);
 
   void                  appendIntegration(QString resPath, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask = QcepMaskDataPtr());
   void                  appendIntegration(QString resPath, QcepIntegratedDataPtr integ);

@@ -36,6 +36,7 @@ public:
   QString filePath(const QModelIndex &index) const;
 
   void setRootPath(QString path);
+  QString rootPath() const;
 
   bool isDir(const QModelIndex &index) const;
 

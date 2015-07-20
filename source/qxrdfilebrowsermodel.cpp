@@ -228,6 +228,13 @@ void QxrdFileBrowserModel::setRootPath(QString path)
   emit rootChanged(m_RootPath);
 }
 
+QString QxrdFileBrowserModel::rootPath() const
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  return m_RootPath;
+}
+
 QStringList QxrdFileBrowserModel::nameFilters() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);

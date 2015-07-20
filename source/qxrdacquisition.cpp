@@ -520,7 +520,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     image -> set_UserComment2(get_UserComment2());
     image -> set_UserComment3(get_UserComment3());
     image -> set_UserComment4(get_UserComment4());
-    image -> set_ImageSaved(false);
+    image -> set_ObjectSaved(false);
     image -> set_Triggered(trig);
     image -> set_Normalization(get_Normalization());
 
@@ -1031,7 +1031,7 @@ void QxrdAcquisition::onIdleTimeout()
       res -> set_UserComment2(get_UserComment2());
       res -> set_UserComment3(get_UserComment3());
       res -> set_UserComment4(get_UserComment4());
-      res -> set_ImageSaved(false);
+      res -> set_ObjectSaved(false);
 
       proc->idleInt16Image(res, this->get_LiveViewAtIdle());
     }
