@@ -2,7 +2,7 @@
 #include "qcepintegrateddata.h"
 
 QcepIntegratedDataSpreadsheetModel::QcepIntegratedDataSpreadsheetModel
-  (QcepIntegratedDataPtr integ)
+  (QcepIntegratedDataWPtr integ)
   : m_Integrated(integ)
 {
 
@@ -10,7 +10,13 @@ QcepIntegratedDataSpreadsheetModel::QcepIntegratedDataSpreadsheetModel
 
 int QcepIntegratedDataSpreadsheetModel::rowCount(const QModelIndex &parent) const
 {
-  return m_Integrated->size();
+  QcepIntegratedDataPtr integ(m_Integrated);
+
+  if (integ) {
+    return integ->size();
+  } else {
+    return 0;
+  }
 }
 
 int QcepIntegratedDataSpreadsheetModel::columnCount(const QModelIndex &parent) const
@@ -24,10 +30,14 @@ QVariant QcepIntegratedDataSpreadsheetModel::data(const QModelIndex &index, int 
 
   if (role == Qt::DisplayRole) {
     if (index.isValid()) {
-      if (index.column() == 0) {
-        res = m_Integrated->x(index.row());
-      } else if (index.column() == 1) {
-        res = m_Integrated->y(index.row());
+      QcepIntegratedDataPtr integ(m_Integrated);
+
+      if (integ) {
+        if (index.column() == 0) {
+          res = integ->x(index.row());
+        } else if (index.column() == 1) {
+          res = integ->y(index.row());
+        }
       }
     }
   }

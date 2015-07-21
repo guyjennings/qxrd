@@ -1,10 +1,10 @@
 #ifndef QCEPDATAOBJECTGRAPHWINDOW_H
 #define QCEPDATAOBJECTGRAPHWINDOW_H
 
-#include <QMainWindow>
 #include <QObject>
 #include <QWidget>
 #include "ui_qcepdataobjectgraphwindow.h"
+#include "qcepdataobjectwindow.h"
 #include "qcepexperiment-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepdataobjectgraphcontroller-ptr.h"
@@ -12,13 +12,13 @@
 #include "qcepproperty.h"
 #include "qwt_plot_curve.h"
 
-class QcepDataObjectGraphWindow : public QMainWindow, public Ui::QcepDataObjectGraphWindow
+class QcepDataObjectGraphWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectGraphWindow
 {
   Q_OBJECT
 public:
   explicit QcepDataObjectGraphWindow(
       QcepExperimentWPtr expt,
-      QcepDataObjectPtr  obj,
+      QcepDataObjectWPtr  obj,
       QWidget *parent = 0);
   virtual ~QcepDataObjectGraphWindow();
 
@@ -46,11 +46,11 @@ private slots:
 
 private:
   QcepExperimentWPtr                            m_Experiment;
-  QcepDataObjectPtr                             m_Object;
+  QcepDataObjectWPtr                            m_Object;
   int                                           m_PlottingMode;
   QcepDataObjectGraphControllerPtr              m_Controller;
   QcepSettingsSaverPtr                          m_SettingsSaver;
-  QcepPlotSettingsPtr                           m_PlotSettings;
+//  QcepPlotSettingsPtr                           m_PlotSettings;
 
 public:
   enum {

@@ -73,7 +73,7 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
   QAction *sv = menu.addAction(tr("Save %1 as ...").arg(name));
   QAction *og = menu.addAction(tr("Open %1 in graph window").arg(name));
   QAction *os = menu.addAction(tr("Open %1 in spreadsheet window").arg(name));
-  QAction *op = menu.addAction(tr("%1 properties").arg(name));
+  QAction *op = menu.addAction(tr("Open %1 in properties window").arg(name));
   QAction *dl = menu.addAction(tr("Delete %1").arg(name));
 
   ng->setEnabled(grp != NULL && scn == NULL);

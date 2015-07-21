@@ -10,7 +10,7 @@ class QcepImageDataGraphControls : public QcepGraphControlsWidget, public Ui::Qc
   Q_OBJECT
 
 public:
-  explicit QcepImageDataGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object);
+  explicit QcepImageDataGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object);
   ~QcepImageDataGraphControls();
 
 protected:

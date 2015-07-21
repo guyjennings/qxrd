@@ -6,7 +6,6 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qcepintegrateddata-ptr.h"
-#include "qcepimagedataobjectcounter.h"
 
 class QcepIntegratedData : public QcepDataObject
 {

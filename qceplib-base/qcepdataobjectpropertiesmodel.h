@@ -7,7 +7,7 @@
 class QcepDataObjectPropertiesModel : public QcepPropertiesModel
 {
 public:
-  QcepDataObjectPropertiesModel(QcepDataObjectPtr obj);
+  QcepDataObjectPropertiesModel(QcepDataObjectWPtr obj);
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -19,7 +19,7 @@ private:
   int dynamicPropertyCount() const;
 
 private:
-  QcepDataObjectPtr m_Object;
+  QcepDataObjectWPtr m_Object;
 };
 
 #endif // QCEPDATAOBJECTPROPERTIESMODEL_H

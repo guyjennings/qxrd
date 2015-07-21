@@ -3,7 +3,7 @@
 #include "qcepdataobjectgraphwindow.h"
 #include "qcepscatterplotgraphcontrols.h"
 
-QcepScatterPlotGraphController::QcepScatterPlotGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object)
+QcepScatterPlotGraphController::QcepScatterPlotGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object)
   : QcepDataObjectGraphController(window, mode, object)
 {
 
