@@ -113,6 +113,13 @@ QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(
   }
 }
 
+QcepDataObjectGraphWindow::~QcepDataObjectGraphWindow()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting Graph Window\n");
+#endif
+}
+
 void QcepDataObjectGraphWindow::setGraphMode(int mode)
 {
   if (mode != m_PlottingMode) {

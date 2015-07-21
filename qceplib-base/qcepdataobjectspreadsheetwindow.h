@@ -17,6 +17,7 @@ public:
       QcepExperimentWPtr expt,
       QcepDataObjectPtr  obj,
       QWidget *parent = 0);
+  virtual ~QcepDataObjectSpreadsheetWindow();
 
   void closeEvent (QCloseEvent * event);
   bool wantToClose();

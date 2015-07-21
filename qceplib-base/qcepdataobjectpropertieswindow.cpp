@@ -45,6 +45,13 @@ QcepDataObjectPropertiesWindow::QcepDataObjectPropertiesWindow
   setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
+QcepDataObjectPropertiesWindow::~QcepDataObjectPropertiesWindow()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting Properties Window\n");
+#endif
+}
+
 void QcepDataObjectPropertiesWindow::closeEvent ( QCloseEvent * event )
 {
   if (wantToClose()) {

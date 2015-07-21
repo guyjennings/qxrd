@@ -107,6 +107,13 @@ QcepDataObjectSpreadsheetWindow::QcepDataObjectSpreadsheetWindow(QcepExperimentW
   setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
+QcepDataObjectSpreadsheetWindow::~QcepDataObjectSpreadsheetWindow()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting Spreadsheet Window\n");
+#endif
+}
+
 void QcepDataObjectSpreadsheetWindow::closeEvent ( QCloseEvent * event )
 {
   if (wantToClose()) {

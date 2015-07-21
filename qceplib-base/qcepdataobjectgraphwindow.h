@@ -20,6 +20,7 @@ public:
       QcepExperimentWPtr expt,
       QcepDataObjectPtr  obj,
       QWidget *parent = 0);
+  virtual ~QcepDataObjectGraphWindow();
 
   void closeEvent (QCloseEvent * event);
   bool wantToClose();
