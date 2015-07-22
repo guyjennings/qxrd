@@ -9,6 +9,7 @@
 #include <QDir>
 #include <QScriptEngine>
 #include <typeinfo>
+#include <QMetaProperty>
 
 #include "qcepimagedataformat.h"
 #include "qcepimagedataformatfactory.h"
@@ -279,6 +280,40 @@ QString QcepImageDataBase::get_DataTypeName() const
   case BadPixelsData:
     return "Bad Pixel Data";
   }
+}
+
+QString QcepImageDataBase::fileFormatFilterString()
+{
+  return fileFormatTIFF() + ";;" +
+      fileFormatTabDelimited() + ";;" +
+      fileFormatTransposedTabDelimited() + ";;" +
+      fileFormatCSV() + ";;" +
+      fileFormatTransposedCSV();
+}
+
+QString QcepImageDataBase::fileFormatTIFF()
+{
+  return "TIFF (*.tif, *.tiff)";
+}
+
+QString QcepImageDataBase::fileFormatTabDelimited()
+{
+  return "Tab delimited (*.txt.*.dat)";
+}
+
+QString QcepImageDataBase::fileFormatTransposedTabDelimited()
+{
+  return "Transposed Tab delimited (*.txt,*.dat)";
+}
+
+QString QcepImageDataBase::fileFormatCSV()
+{
+  return "CSV (*.csv)";
+}
+
+QString QcepImageDataBase::fileFormatTransposedCSV()
+{
+  return "Transposed CSV (*.csv)";
 }
 
 template <typename T>
@@ -1053,16 +1088,10 @@ void QcepImageData<T>::fromScriptValue(const QScriptValue &obj, QSharedPointer<Q
 #define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
 
 template <>
-void QcepImageData<double>::saveData(QString name, Overwrite canOverwrite)
+void QcepImageData<double>::saveTIFFData(QString name)
 {
   int nrows = get_Height();
   int ncols = get_Width();
-
-  mkPath(name);
-
-  if (canOverwrite == NoOverwrite) {
-    name = uniqueFileName(name);
-  }
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
   int res = 1;
@@ -1100,16 +1129,10 @@ void QcepImageData<double>::saveData(QString name, Overwrite canOverwrite)
 }
 
 template <typename T>
-void QcepImageData<T>::saveData(QString name, Overwrite canOverwrite)
+void QcepImageData<T>::saveTIFFData(QString name)
 {
   int nrows = get_Height();
   int ncols = get_Width();
-
-  mkPath(name);
-
-  if (canOverwrite == NoOverwrite) {
-    name = uniqueFileName(name);
-  }
 
   TIFF* tif = TIFFOpen(qPrintable(name),"w");
   int res = 1;
@@ -1177,6 +1200,83 @@ void QcepImageData<T>::saveData(QString name, Overwrite canOverwrite)
     set_ObjectSaved(true);
 
     saveMetaData();
+  }
+}
+
+void QcepImageDataBase::saveTextData(QString name, QString sep, bool transp)
+{
+  FILE *f = fopen(qPrintable(name), "w+");
+
+  if (f) {
+    const QMetaObject *meta = metaObject();
+
+    int count = meta->propertyCount();
+    int offset = QObject::staticMetaObject.propertyOffset();
+
+    for (int i=offset; i<count; i++) {
+      QMetaProperty metaproperty = meta->property(i);
+      const char *name = metaproperty.name();
+      QVariant value = property(name);
+
+      fprintf(f, "#%s = %s\n", name, qPrintable(value.toString()));
+    }
+
+    foreach (QByteArray name, dynamicPropertyNames()) {
+      QVariant value = property(name);
+
+      fprintf(f, "#%s = %s\n", name.data(), qPrintable(value.toString()));
+    }
+
+    int nrows = get_Height();
+    int ncols = get_Width();
+
+    if (transp == false) {
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          if (x == 0) {
+            fprintf(f, "%g", getImageData(x,y));
+          } else {
+            fprintf(f, "%s%g", qPrintable(sep), getImageData(x,y));
+          }
+        }
+        fprintf(f, "\n");
+      }
+    } else { // Transposed
+      for (int y=0; y<ncols; y++) {
+        for (int x=0; x<nrows; x++) {
+          if (x == 0) {
+            fprintf(f, "%g", getImageData(y,x));
+          } else {
+            fprintf(f, "%s%g", qPrintable(sep), getImageData(y,x));
+          }
+        }
+        fprintf(f, "\n");
+      }
+    }
+
+    fclose(f);
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::saveData(QString &name, QString filter, Overwrite canOverwrite)
+{
+  mkPath(name);
+
+  if (canOverwrite == NoOverwrite) {
+    name = uniqueFileName(name);
+  }
+
+  if (filter == fileFormatTIFF()) {
+    saveTIFFData(name);
+  } else if (filter == fileFormatTabDelimited()) {
+    saveTextData(name, "\t", false);
+  } else if (filter == fileFormatTransposedTabDelimited()) {
+    saveTextData(name, "\t", true);
+  } else if (filter == fileFormatCSV()) {
+    saveTextData(name, ", ", false);
+  } else if (filter == fileFormatTransposedCSV()) {
+    saveTextData(name, ", ", true);
   }
 }
 

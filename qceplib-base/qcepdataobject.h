@@ -48,13 +48,15 @@ public:
   virtual int columnCount() const;
   virtual QVariant columnData(int col) const;
 
+  virtual QString fileFormatFilterString();
+
   static QScriptValue toScriptValue(QScriptEngine *engine, const QcepDataObjectPtr &data);
   static void fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr &data);
 
   static int allocatedObjects();
   static int deletedObjects();
 
-  virtual void saveData(QString name, Overwrite canOverwrite=NoOverwrite);
+  virtual void saveData(QString &name, QString filter, Overwrite canOverwrite=NoOverwrite);
 
 protected:
   void mkPath(QString filePath);

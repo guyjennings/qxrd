@@ -235,10 +235,15 @@ void QcepDatasetBrowserDialog::saveData(const QModelIndex &idx)
 {
   QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
 
-  QString theFile = QFileDialog::getSaveFileName(this, "Save data in", obj->get_FileName());
+  if (obj) {
+    static QString selectedFilter;
+    QString theFile = QFileDialog::getSaveFileName(this,
+                                                   "Save data in", obj->get_FileName(),
+                                                   obj->fileFormatFilterString(), &selectedFilter);
 
-  if (theFile.length()) {
-    obj -> saveData(theFile, QcepDataObject::CanOverwrite);
+    if (theFile.length()) {
+      obj -> saveData(theFile, selectedFilter, QcepDataObject::CanOverwrite);
+    }
   }
 }
 

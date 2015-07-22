@@ -156,8 +156,16 @@ public:
   void loadMetaData();
   void saveMetaData();
   void saveMetaData(QString name);
+  void saveTextData(QString name, QString sep, bool transp=false);
 
   void setDefaultFileName(QString path);
+
+  virtual QString fileFormatFilterString();
+  QString fileFormatTIFF();
+  QString fileFormatTabDelimited();
+  QString fileFormatTransposedTabDelimited();
+  QString fileFormatCSV();
+  QString fileFormatTransposedCSV();
 
   static double secondsSinceEpoch();
 
@@ -208,7 +216,8 @@ public:
   QVector<double> getImageData(int x0, int y0, int x1, int y1) const;
   void setImageData(int x, int y, double v);
 
-  virtual void saveData(QString name, Overwrite canOverwrite=NoOverwrite);
+  virtual void saveData(QString &name, QString filter, Overwrite canOverwrite=NoOverwrite);
+  void saveTIFFData(QString name);
 
 public:
   template <typename T2>

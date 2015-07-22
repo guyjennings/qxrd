@@ -110,7 +110,7 @@ QString QcepDataObject::uniqueFileName(QString name)
   }
 }
 
-void QcepDataObject::saveData(QString name, Overwrite canOverwrite)
+void QcepDataObject::saveData(QString &name, QString filter, Overwrite canOverwrite)
 {
 }
 
@@ -232,4 +232,9 @@ QVariant QcepDataObject::columnData(int col) const
 QString QcepDataObject::metaTypeName(int id) const
 {
   return QMetaType::typeName(id);
+}
+
+QString QcepDataObject::fileFormatFilterString()
+{
+  return "Text (*.txt)";
 }
