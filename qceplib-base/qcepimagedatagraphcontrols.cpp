@@ -2,7 +2,7 @@
 #include "ui_qcepimagedatagraphcontrols.h"
 #include "qcepdataobjectgraphwindow.h"
 
-QcepImageDataGraphControls::QcepImageDataGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object) :
+QcepImageDataGraphControls::QcepImageDataGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object) :
   QcepGraphControlsWidget(window, mode, object)
 {
   setupUi(this);

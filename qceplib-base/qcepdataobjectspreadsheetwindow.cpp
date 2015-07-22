@@ -28,8 +28,8 @@
 #include "qcepdatagroup-ptr.h"
 #include "qcepdatagroupspreadsheetmodel.h"
 
-QcepDataObjectSpreadsheetWindow::QcepDataObjectSpreadsheetWindow(QcepExperimentWPtr expt, QcepDataObjectPtr obj, QWidget *parent) :
-  QMainWindow(parent),
+QcepDataObjectSpreadsheetWindow::QcepDataObjectSpreadsheetWindow(QcepExperimentWPtr expt, QcepDataObjectWPtr obj, QWidget *parent) :
+  QcepDataObjectWindow(parent),
   m_Experiment(expt),
   m_Object(obj),
   m_Model()
@@ -37,56 +37,59 @@ QcepDataObjectSpreadsheetWindow::QcepDataObjectSpreadsheetWindow(QcepExperimentW
   setupUi(this);
 
   QcepExperimentPtr e(m_Experiment);
+  QcepDataObjectPtr objp(m_Object);
 
-  if (m_Object && e) {
+  if (objp && e) {
     setWindowTitle(tr("%1 Data from %2")
-                   .arg(m_Object->pathName())
+                   .arg(objp->pathName())
                    .arg(e->get_ExperimentName()));
-  } else if (m_Object) {
+  } else if (objp) {
     setWindowTitle(tr("%1 Data")
-                   .arg(m_Object->pathName()));
+                   .arg(objp->pathName()));
   } else {
     setWindowTitle("Unknown Data");
   }
 
-  QSharedPointer<QcepImageDataBase> data = qSharedPointerDynamicCast<QcepImageDataBase>(m_Object);
+  if (objp) {
+    QSharedPointer<QcepImageDataBase> data = qSharedPointerDynamicCast<QcepImageDataBase>(objp);
 
-  if (data) {
-    m_Model = QSharedPointer<QcepSpreadsheetModel>(
-          new QcepImageDataSpreadsheetModel(data));
-  } else {
-
-    QcepIntegratedDataPtr integ = qSharedPointerDynamicCast<QcepIntegratedData>(m_Object);
-
-    if (integ) {
+    if (data) {
       m_Model = QSharedPointer<QcepSpreadsheetModel>(
-            new QcepIntegratedDataSpreadsheetModel(integ));
+            new QcepImageDataSpreadsheetModel(data));
     } else {
 
-      QcepDataArrayPtr array = qSharedPointerDynamicCast<QcepDataArray>(m_Object);
+      QcepIntegratedDataPtr integ = qSharedPointerDynamicCast<QcepIntegratedData>(m_Object);
 
-      if (array) {
+      if (integ) {
         m_Model = QSharedPointer<QcepSpreadsheetModel>(
-              new QcepDataArraySpreadsheetModel(array));
+              new QcepIntegratedDataSpreadsheetModel(integ));
       } else {
 
-        QcepDataColumnPtr col = qSharedPointerDynamicCast<QcepDataColumn>(m_Object);
+        QcepDataArrayPtr array = qSharedPointerDynamicCast<QcepDataArray>(m_Object);
 
-        if (col) {
+        if (array) {
           m_Model = QSharedPointer<QcepSpreadsheetModel>(
-                new QcepDataColumnSpreadsheetModel(col));
+                new QcepDataArraySpreadsheetModel(array));
         } else {
-          QcepDataColumnScanPtr scan = qSharedPointerDynamicCast<QcepDataColumnScan>(m_Object);
 
-          if (scan) {
+          QcepDataColumnPtr col = qSharedPointerDynamicCast<QcepDataColumn>(m_Object);
+
+          if (col) {
             m_Model = QSharedPointer<QcepSpreadsheetModel>(
-                  new QcepDataColumnScanSpreadsheetModel(scan));
+                  new QcepDataColumnSpreadsheetModel(col));
           } else {
-            QcepDataGroupPtr group = qSharedPointerDynamicCast<QcepDataGroup>(m_Object);
+            QcepDataColumnScanPtr scan = qSharedPointerDynamicCast<QcepDataColumnScan>(m_Object);
 
-            if (group) {
+            if (scan) {
               m_Model = QSharedPointer<QcepSpreadsheetModel>(
-                    new QcepDataGroupSpreadsheetModel(group));
+                    new QcepDataColumnScanSpreadsheetModel(scan));
+            } else {
+              QcepDataGroupPtr group = qSharedPointerDynamicCast<QcepDataGroup>(m_Object);
+
+              if (group) {
+                m_Model = QSharedPointer<QcepSpreadsheetModel>(
+                      new QcepDataGroupSpreadsheetModel(group));
+              }
             }
           }
         }
@@ -100,11 +103,18 @@ QcepDataObjectSpreadsheetWindow::QcepDataObjectSpreadsheetWindow(QcepExperimentW
     m_TableView->setModel(m_Model.data());
   }
 
-  if (m_Object && m_Model) {
-    connect(m_Object.data(), SIGNAL(dataObjectChanged()), m_Model.data(), SLOT(onDataObjectChanged()));
+  if (objp && m_Model) {
+    connect(objp.data(), SIGNAL(dataObjectChanged()), m_Model.data(), SLOT(onDataObjectChanged()));
   }
 
   setAttribute(Qt::WA_DeleteOnClose, true);
+}
+
+QcepDataObjectSpreadsheetWindow::~QcepDataObjectSpreadsheetWindow()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting Spreadsheet Window\n");
+#endif
 }
 
 void QcepDataObjectSpreadsheetWindow::closeEvent ( QCloseEvent * event )

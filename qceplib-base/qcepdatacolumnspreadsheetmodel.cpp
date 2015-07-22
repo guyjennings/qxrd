@@ -2,7 +2,7 @@
 #include "qcepdatacolumn.h"
 
 QcepDataColumnSpreadsheetModel::QcepDataColumnSpreadsheetModel
-  (QcepDataColumnPtr col)
+  (QcepDataColumnWPtr col)
   : m_Column(col)
 {
 
@@ -10,8 +10,10 @@ QcepDataColumnSpreadsheetModel::QcepDataColumnSpreadsheetModel
 
 int QcepDataColumnSpreadsheetModel::rowCount(const QModelIndex &parent) const
 {
-  if (m_Column) {
-    return m_Column->rowCount();
+  QcepDataColumnPtr col(m_Column);
+
+  if (col) {
+    return col->rowCount();
   } else {
     return 0;
   }
@@ -29,7 +31,11 @@ QVariant QcepDataColumnSpreadsheetModel::data(const QModelIndex &index, int role
   if (role == Qt::DisplayRole) {
     if (index.isValid()) {
       if (index.column() == 0) {
-        res = m_Column->value(index.row());
+        QcepDataColumnPtr col(m_Column);
+
+        if (col) {
+          res = col->value(index.row());
+        }
       }
     }
   }
@@ -45,7 +51,11 @@ QVariant QcepDataColumnSpreadsheetModel::headerData(int section, Qt::Orientation
     if (role == Qt::DisplayRole) {
       if (orientation == Qt::Horizontal) {
         if (section == 0) {
-          res = m_Column->get_Name();
+          QcepDataColumnPtr col(m_Column);
+
+          if (col) {
+            res = col->get_Name();
+          }
         }
       } else {
         res = section;

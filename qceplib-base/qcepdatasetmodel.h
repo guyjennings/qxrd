@@ -22,7 +22,7 @@ class QcepDatasetModel : public QAbstractItemModel
   Q_OBJECT
 
 public:
-  QcepDatasetModel(QcepDatasetPtr ds);
+  QcepDatasetModel(QcepDatasetWPtr ds);
 
 public slots:
   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
@@ -80,7 +80,7 @@ private:
   QString indexDescription(const QModelIndex& index) const;
 
 private:
-  QcepDatasetPtr m_Dataset;
+  QcepDatasetWPtr m_Dataset;
 };
 
 #endif // QCEPDATASETMODEL_H

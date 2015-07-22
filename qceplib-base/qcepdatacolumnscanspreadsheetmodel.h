@@ -7,7 +7,7 @@
 class QcepDataColumnScanSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
-  QcepDataColumnScanSpreadsheetModel(QcepDataColumnScanPtr scan);
+  QcepDataColumnScanSpreadsheetModel(QcepDataColumnScanWPtr scan);
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -15,7 +15,7 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 private:
-  QcepDataColumnScanPtr m_Scan;
+  QcepDataColumnScanWPtr m_Scan;
 };
 
 #endif // QCEPDATACOLUMNSCANSPREADSHEETMODEL_H

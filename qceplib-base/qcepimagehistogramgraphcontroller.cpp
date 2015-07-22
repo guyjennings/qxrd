@@ -3,7 +3,7 @@
 #include "qcepdataobjectgraphwindow.h"
 #include "qcepimagehistogramgraphcontrols.h"
 
-QcepImageHistogramGraphController::QcepImageHistogramGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object)
+QcepImageHistogramGraphController::QcepImageHistogramGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object)
   : QcepDataObjectGraphController(window, mode, object)
 {
 

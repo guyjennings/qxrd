@@ -66,7 +66,8 @@ SOURCES += \
   $${PWD}/qcepnewimagedialog.cpp \
   $${PWD}/qcepnewdataarraydialog.cpp \
   $${PWD}/qcepdataobjectpropertieswindow.cpp \
-  $${PWD}/qcepdataobjectspreadsheetwindow.cpp
+  $${PWD}/qcepdataobjectspreadsheetwindow.cpp \
+    $$PWD/qcepdataobjectwindow.cpp
 
 
 contains (DEFINES, HAVE_QWT) {
@@ -157,7 +158,8 @@ HEADERS += \
   $${PWD}/qcepnewimagedialog.h \
   $${PWD}/qcepnewdataarraydialog.h \
   $${PWD}/qcepdataobjectpropertieswindow.h \
-  $${PWD}/qcepdataobjectspreadsheetwindow.h
+  $${PWD}/qcepdataobjectspreadsheetwindow.h \
+    $$PWD/qcepdataobjectwindow.h
 
 
 contains (DEFINES, HAVE_QWT) {

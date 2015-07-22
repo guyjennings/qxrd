@@ -8,7 +8,7 @@ class QcepImageSliceGraphController : public QcepDataObjectGraphController
   Q_OBJECT
 
 public:
-  QcepImageSliceGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object);
+  QcepImageSliceGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object);
 
   virtual ~QcepImageSliceGraphController();
   virtual void activate();

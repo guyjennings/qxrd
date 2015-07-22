@@ -7,7 +7,7 @@
 class QcepIntegratedDataSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
-  QcepIntegratedDataSpreadsheetModel(QcepIntegratedDataPtr integ);
+  QcepIntegratedDataSpreadsheetModel(QcepIntegratedDataWPtr integ);
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -15,7 +15,7 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 private:
-  QcepIntegratedDataPtr m_Integrated;
+  QcepIntegratedDataWPtr m_Integrated;
 };
 
 #endif // QCEPINTEGRATEDDATASPREADSHEETMODEL_H

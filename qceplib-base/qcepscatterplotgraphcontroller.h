@@ -8,7 +8,7 @@ class QcepScatterPlotGraphController : public QcepDataObjectGraphController
   Q_OBJECT
 
 public:
-  QcepScatterPlotGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object);
+  QcepScatterPlotGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object);
 
   virtual ~QcepScatterPlotGraphController();
   virtual void activate();

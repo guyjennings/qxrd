@@ -2,7 +2,7 @@
 #include "qcepdataarray.h"
 
 QcepDataArraySpreadsheetModel::QcepDataArraySpreadsheetModel
-  (QcepDataArrayPtr array)
+  (QcepDataArrayWPtr array)
   : m_Array(array)
 {
 
@@ -10,16 +10,28 @@ QcepDataArraySpreadsheetModel::QcepDataArraySpreadsheetModel
 
 int QcepDataArraySpreadsheetModel::rowCount(const QModelIndex &parent) const
 {
-  QVector<int> dims = m_Array->dimensions();
+  QcepDataArrayPtr array(m_Array);
 
-  return dims.value(0);
+  if (array) {
+    QVector<int> dims = array->dimensions();
+
+    return dims.value(0);
+  } else {
+    return 0;
+  }
 }
 
 int QcepDataArraySpreadsheetModel::columnCount(const QModelIndex &parent) const
 {
-  QVector<int> dims = m_Array->dimensions();
+  QcepDataArrayPtr array(m_Array);
 
-  return dims.value(1);
+  if (array) {
+    QVector<int> dims = array->dimensions();
+
+    return dims.value(1);
+  } else {
+    return 0;
+  }
 }
 
 QVariant QcepDataArraySpreadsheetModel::data(const QModelIndex &index, int role) const

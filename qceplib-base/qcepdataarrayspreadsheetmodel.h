@@ -9,14 +9,14 @@ class QcepDataArraySpreadsheetModel : public QcepSpreadsheetModel
   Q_OBJECT
 
 public:
-  QcepDataArraySpreadsheetModel(QcepDataArrayPtr array);
+  QcepDataArraySpreadsheetModel(QcepDataArrayWPtr array);
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
 private:
-  QcepDataArrayPtr m_Array;
+  QcepDataArrayWPtr m_Array;
 };
 
 #endif // QCEPDATAARRAYSPREADSHEETMODEL_H

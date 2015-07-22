@@ -3,7 +3,7 @@
 #include "qcepdataobjectgraphwindow.h"
 #include "qcepimagedata.h"
 
-QcepImageSliceGraphControls::QcepImageSliceGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object) :
+QcepImageSliceGraphControls::QcepImageSliceGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object) :
   QcepGraphControlsWidget(window, mode, object)
 {
   setupUi(this);

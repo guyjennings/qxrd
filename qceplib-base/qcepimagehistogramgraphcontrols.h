@@ -9,7 +9,7 @@ class QcepImageHistogramGraphControls : public QcepGraphControlsWidget, public U
   Q_OBJECT
 
 public:
-  explicit QcepImageHistogramGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object);
+  explicit QcepImageHistogramGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object);
   ~QcepImageHistogramGraphControls();
 
 protected:

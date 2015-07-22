@@ -2,7 +2,7 @@
 #include <QModelIndex>
 
 QcepImageDataSpreadsheetModel::QcepImageDataSpreadsheetModel
-  (QSharedPointer<QcepImageDataBase> img)
+  (QWeakPointer<QcepImageDataBase> img)
   : m_Image(img)
 {
 
@@ -10,12 +10,24 @@ QcepImageDataSpreadsheetModel::QcepImageDataSpreadsheetModel
 
 int QcepImageDataSpreadsheetModel::rowCount(const QModelIndex &parent) const
 {
-  return m_Image->get_Height();
+  QSharedPointer<QcepImageDataBase> img(m_Image);
+
+  if (img) {
+    return img->get_Height();
+  } else {
+    return 0;
+  }
 }
 
 int QcepImageDataSpreadsheetModel::columnCount(const QModelIndex &parent) const
 {
-  return m_Image->get_Width();
+  QSharedPointer<QcepImageDataBase> img(m_Image);
+
+  if (img) {
+    return img->get_Width();
+  } else {
+    return 0;
+  }
 }
 
 QVariant QcepImageDataSpreadsheetModel::data(const QModelIndex &index, int role) const
@@ -25,8 +37,12 @@ QVariant QcepImageDataSpreadsheetModel::data(const QModelIndex &index, int role)
   if (!index.isValid()) {
     res = QVariant();
   } else if (role == Qt::DisplayRole) {
-    double v = m_Image->getImageData(index.column(), index.row());
-    res = v;
+    QSharedPointer<QcepImageDataBase> img(m_Image);
+
+    if (img) {
+      double v = img->getImageData(index.column(), index.row());
+      res = v;
+    }
   }
 
   return res;
