@@ -93,7 +93,7 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   m_Legend -> setFrameStyle(QFrame::Box|QFrame::Sunken);
   m_Legend -> setDefaultItemMode(QwtLegendData::Checkable);
 
-  insertLegend(m_Legend, QwtPlot::BottomLegend);
+//  insertLegend(m_Legend, QwtPlot::BottomLegend);
 
   m_DataImage = new QwtPlotSpectrogram();
   m_DataImage -> attach(this);
