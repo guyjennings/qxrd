@@ -75,6 +75,9 @@ private:
   QString m_UserAbsorptionScript;
   QString m_UserAbsorptionFunction;
   double m_ScalingFactor;
+  bool   m_SelfNormalization;
+  double m_SelfNormalizationMinimum;
+  double m_SelfNormalizationMaximum;
 
 public:
     QcepIntegratedDataPtr performIntegration(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask, int normalize);

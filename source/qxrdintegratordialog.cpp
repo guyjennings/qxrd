@@ -26,6 +26,10 @@ QxrdIntegratorDialog::QxrdIntegratorDialog(QxrdIntegratorWPtr integw, QWidget *p
     integ -> prop_IntegrationMaximum() -> linkTo(m_IntegratorMaximum);
     integ -> prop_IntegrationXUnits()  -> linkTo(m_IntegratorXUnits);
 
+    integ -> prop_SelfNormalization()  -> linkTo(m_EnableSelfNormalization);
+    integ -> prop_SelfNormalizationMinimum() -> linkTo(m_SelfNormalizationMinimum);
+    integ -> prop_SelfNormalizationMaximum() -> linkTo(m_SelfNormalizationMaximum);
+
     integ -> prop_EnableGeometricCorrections() -> linkTo(m_EnableGeometry);
     integ -> prop_EnablePolarizationCorrections() -> linkTo(m_EnablePolarization);
     integ -> prop_Polarization() -> linkTo(m_Polarization);

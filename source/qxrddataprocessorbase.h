@@ -141,6 +141,15 @@ public:
   Q_PROPERTY(QString accumulateIntegratedName READ get_AccumulateIntegratedName WRITE set_AccumulateIntegratedName)
   QCEP_STRING_PROPERTY(AccumulateIntegratedName)
 
+  Q_PROPERTY(QString accumulateIntegratedDirectory READ get_AccumulateIntegratedDirectory WRITE set_AccumulateIntegratedDirectory)
+  QCEP_STRING_PROPERTY(AccumulateIntegratedDirectory)
+
+  Q_PROPERTY(QString accumulateIntegratedFileName READ get_AccumulateIntegratedFileName WRITE set_AccumulateIntegratedFileName)
+  QCEP_STRING_PROPERTY(AccumulateIntegratedFileName)
+
+  Q_PROPERTY(QString accumulateIntegratedFormat READ get_AccumulateIntegratedFormat WRITE set_AccumulateIntegratedFormat)
+  QCEP_STRING_PROPERTY(AccumulateIntegratedFormat)
+
   Q_PROPERTY(double performDarkSubtractionTime READ get_PerformDarkSubtractionTime WRITE set_PerformDarkSubtractionTime)
   QCEP_DOUBLE_PROPERTY(PerformDarkSubtractionTime)
 

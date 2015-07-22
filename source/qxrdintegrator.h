@@ -83,6 +83,15 @@ public:
   Q_PROPERTY(double scalingFactor READ get_ScalingFactor WRITE set_ScalingFactor)
   QCEP_DOUBLE_PROPERTY(ScalingFactor)
 
+  Q_PROPERTY(bool selfNormalization READ get_SelfNormalization WRITE set_SelfNormalization)
+  QCEP_BOOLEAN_PROPERTY(SelfNormalization)
+
+  Q_PROPERTY(double selfNormalizationMinimum READ get_SelfNormalizationMinimum WRITE set_SelfNormalizationMinimum)
+  QCEP_DOUBLE_PROPERTY(SelfNormalizationMinimum)
+
+  Q_PROPERTY(double selfNormalizationMaximum READ get_SelfNormalizationMaximum WRITE set_SelfNormalizationMaximum)
+  QCEP_DOUBLE_PROPERTY(SelfNormalizationMaximum)
+
 public:
   QxrdDataProcessorWPtr dataProcessor() const;
   QxrdExperimentWPtr experiment() const;
@@ -109,7 +118,7 @@ public slots:
   void                  clearAccumulator(QString resPath);
   void                  prepareAccumulator(QString resPath, int nImages);
   void                  completeAccumulator(QString path);
-  void                  saveAccumulator(QString resPath, QString fileName);
+  void                  saveAccumulator(QString resPath, QString &fileName, QString filter);
 
   void                  appendIntegration(QString resPath, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask = QcepMaskDataPtr());
   void                  appendIntegration(QString resPath, QcepIntegratedDataPtr integ);

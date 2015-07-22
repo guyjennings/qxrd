@@ -94,6 +94,10 @@ QxrdIntegratorCache::QxrdIntegratorCache(QxrdExperimentWPtr exp,
     m_UserAbsorptionFunction = integp->get_UserAbsorptionFunction();
 
     m_ScalingFactor          = integp->get_ScalingFactor();
+
+    m_SelfNormalization      = integp->get_SelfNormalization();
+    m_SelfNormalizationMinimum = integp->get_SelfNormalizationMinimum();
+    m_SelfNormalizationMaximum = integp->get_SelfNormalizationMaximum();
   }
 
   QxrdCenterFinderPtr cfp(m_CenterFinder);
@@ -524,6 +528,29 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           }
         }
 
+        double scalingFactor = m_ScalingFactor;
+
+        if (m_SelfNormalization) {
+          double nsum = 0, ninteg = 0;
+
+          for(int ir=0; ir<nRange; ir++) {
+            int sv = sumvalue[ir];
+
+            if (sv > 0) {
+              double xv = rMin + (ir+0.5)*rStep;
+
+              if (xv >= m_SelfNormalizationMinimum && xv < m_SelfNormalizationMaximum) {
+                nsum   += sv;
+                ninteg += integral[ir];
+              }
+            }
+          }
+
+          if ((nsum > 0) && (ninteg != 0)) {
+            scalingFactor = m_ScalingFactor * nsum / ninteg;
+          }
+        }
+
         integ -> resize(0);
         integ -> set_Center(m_CenterX, m_CenterY);
 
@@ -534,9 +561,9 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
             double xv = rMin + (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
 
             if (normalize) {
-              integ -> append(xv, m_ScalingFactor*normVal*integral[ir]/sv);
+              integ -> append(xv, scalingFactor*normVal*integral[ir]/sv);
             } else {
-              integ -> append(xv, m_ScalingFactor*normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+              integ -> append(xv, scalingFactor*normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
             }
           }
         }

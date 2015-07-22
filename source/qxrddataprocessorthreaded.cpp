@@ -472,9 +472,9 @@ void QxrdDataProcessorThreaded::integrateAndAccumulate(QStringList names)
   m_Integrator -> completeAccumulator(get_AccumulateIntegratedName());
 }
 
-void QxrdDataProcessorThreaded::saveAccumulator(QString path)
+void QxrdDataProcessorThreaded::saveAccumulator(QString &path, QString filter)
 {
-  m_Integrator -> saveAccumulator(get_AccumulateIntegratedName(), path);
+  m_Integrator -> saveAccumulator(get_AccumulateIntegratedName(), path, filter);
 }
 
 void QxrdDataProcessorThreaded::reflectHorizontally()

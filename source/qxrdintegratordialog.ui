@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>495</width>
-    <height>503</height>
+    <width>622</width>
+    <height>611</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Integrate</string>
+   <string>&amp;Integrate</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <property name="sizePolicy">
@@ -21,62 +21,6 @@
     </sizepolicy>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="8" column="0" colspan="4">
-     <widget class="QCheckBox" name="m_EnableGeometry">
-      <property name="toolTip">
-       <string>Enable geometry corrections during integration
-intensity *= pow(distance/m_DetectorDistance, 2)/cos(tth);</string>
-      </property>
-      <property name="text">
-       <string>Enable Geometry Corrections </string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1" colspan="3">
-     <widget class="QDoubleSpinBox" name="m_IntegratorMaximum">
-      <property name="toolTip">
-       <string>Ending value for integration range
-script property integrator.integrationMaximum</string>
-      </property>
-      <property name="decimals">
-       <number>5</number>
-      </property>
-      <property name="maximum">
-       <double>10000.000000000000000</double>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="3">
-     <widget class="QPushButton" name="m_UserGeometryEdit">
-      <property name="text">
-       <string>Edit...</string>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="1" colspan="3">
-     <widget class="QComboBox" name="m_EnableUserGeometry">
-      <item>
-       <property name="text">
-        <string>None</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>User Defined Geometry</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Oversampling Factor</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="1" colspan="3">
      <widget class="QSpinBox" name="m_OversampleFactor">
       <property name="toolTip">
@@ -174,16 +118,6 @@ script property integrator.integrationNSteps</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>Integration Minimum</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
     <item row="4" column="1" colspan="3">
      <widget class="QDoubleSpinBox" name="m_IntegratorMinimum">
       <property name="toolTip">
@@ -198,6 +132,33 @@ script property integrator.integrationMinimum</string>
       </property>
      </widget>
     </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Integration Minimum</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0">
+     <widget class="QPushButton" name="m_ClearGraphButton">
+      <property name="toolTip">
+       <string>Clear all curves from integrated data graph</string>
+      </property>
+      <property name="text">
+       <string>Clear All Curves</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLabel" name="label_30">
+      <property name="text">
+       <string>User Geometry Kind</string>
+      </property>
+     </widget>
+    </item>
     <item row="5" column="0">
      <widget class="QLabel" name="label_5">
       <property name="text">
@@ -208,45 +169,28 @@ script property integrator.integrationMinimum</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="0">
-     <widget class="QPushButton" name="m_ClearGraphButton">
-      <property name="toolTip">
-       <string>Clear all curves from integrated data graph</string>
-      </property>
-      <property name="text">
-       <string>Clear All Curves</string>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="0">
-     <widget class="QLabel" name="label_30">
-      <property name="text">
-       <string>User Geometry Kind</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="0">
+    <item row="12" column="0">
      <widget class="QLabel" name="label_25">
       <property name="text">
        <string>User Geometry Func</string>
       </property>
      </widget>
     </item>
-    <item row="10" column="2">
+    <item row="12" column="2">
      <widget class="QLabel" name="label_27">
       <property name="text">
        <string>User Geometry Script</string>
       </property>
      </widget>
     </item>
-    <item row="13" column="0">
+    <item row="15" column="0">
      <widget class="QLabel" name="label_29">
       <property name="text">
        <string>User Absorption Kind</string>
       </property>
      </widget>
     </item>
-    <item row="14" column="0">
+    <item row="16" column="0">
      <widget class="QLabel" name="label_26">
       <property name="text">
        <string>User Absorption Func</string>
@@ -256,7 +200,24 @@ script property integrator.integrationMinimum</string>
       </property>
      </widget>
     </item>
-    <item row="15" column="0" colspan="5">
+    <item row="9" column="1">
+     <widget class="QPushButton" name="m_IntegrateButton">
+      <property name="text">
+       <string>Integrate</string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="1">
+     <widget class="QLineEdit" name="m_UserGeometryFunction">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item row="17" column="0" colspan="5">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -269,24 +230,7 @@ script property integrator.integrationMinimum</string>
       </property>
      </spacer>
     </item>
-    <item row="7" column="1">
-     <widget class="QPushButton" name="m_IntegrateButton">
-      <property name="text">
-       <string>Integrate</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="1">
-     <widget class="QLineEdit" name="m_UserGeometryFunction">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-        <horstretch>1</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="2">
+    <item row="9" column="2">
      <widget class="QPushButton" name="m_ClearSelectedGraphButton">
       <property name="toolTip">
        <string>Clear selected curves from integrated data graph
@@ -297,7 +241,7 @@ script property integrator.integrationMinimum</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="3">
+    <item row="9" column="3">
      <widget class="QPushButton" name="m_IntegrateOptionsButton">
       <property name="toolTip">
        <string>More intergration options</string>
@@ -307,7 +251,7 @@ script property integrator.integrationMinimum</string>
       </property>
      </widget>
     </item>
-    <item row="11" column="0" colspan="2">
+    <item row="13" column="0" colspan="2">
      <widget class="QCheckBox" name="m_EnablePolarization">
       <property name="toolTip">
        <string>Enable polarization correction during integration:
@@ -319,7 +263,7 @@ intensity /= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
       </property>
      </widget>
     </item>
-    <item row="12" column="0" colspan="2">
+    <item row="14" column="0" colspan="2">
      <widget class="QCheckBox" name="m_EnableAbsorption">
       <property name="toolTip">
        <string>Enable absorption correction during integration
@@ -331,7 +275,7 @@ intensity *=
       </property>
      </widget>
     </item>
-    <item row="13" column="1" colspan="3">
+    <item row="15" column="1" colspan="3">
      <widget class="QComboBox" name="m_EnableUserAbsorption">
       <item>
        <property name="text">
@@ -360,7 +304,7 @@ intensity *=
       </item>
      </widget>
     </item>
-    <item row="14" column="1">
+    <item row="16" column="1">
      <widget class="QLineEdit" name="m_UserAbsorptionFunction">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -370,35 +314,35 @@ intensity *=
       </property>
      </widget>
     </item>
-    <item row="14" column="2">
+    <item row="16" column="2">
      <widget class="QLabel" name="label_28">
       <property name="text">
        <string>User Absorption Script</string>
       </property>
      </widget>
     </item>
-    <item row="14" column="3">
-     <widget class="QPushButton" name="m_UserAbsorptionEdit">
-      <property name="text">
-       <string>Edit...</string>
-      </property>
-     </widget>
-    </item>
-    <item row="11" column="2">
+    <item row="13" column="2">
      <widget class="QLabel" name="label_24">
       <property name="text">
        <string>Polarization Factor</string>
       </property>
      </widget>
     </item>
-    <item row="12" column="2">
+    <item row="16" column="3">
+     <widget class="QPushButton" name="m_UserAbsorptionEdit">
+      <property name="text">
+       <string>Edit...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="2">
      <widget class="QLabel" name="label_23">
       <property name="text">
        <string>Attenuation Length</string>
       </property>
      </widget>
     </item>
-    <item row="11" column="3">
+    <item row="13" column="3">
      <widget class="QDoubleSpinBox" name="m_Polarization">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -426,7 +370,7 @@ intensity *=
       </property>
      </widget>
     </item>
-    <item row="12" column="3">
+    <item row="14" column="3">
      <widget class="QDoubleSpinBox" name="m_AttenuationLength">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -451,6 +395,122 @@ intensity *=
       </property>
       <property name="value">
        <double>1000.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0" colspan="4">
+     <widget class="QCheckBox" name="m_EnableGeometry">
+      <property name="toolTip">
+       <string>Enable geometry corrections during integration
+intensity *= pow(distance/m_DetectorDistance, 2)/cos(tth);</string>
+      </property>
+      <property name="text">
+       <string>Enable Geometry Corrections </string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1" colspan="3">
+     <widget class="QDoubleSpinBox" name="m_IntegratorMaximum">
+      <property name="toolTip">
+       <string>Ending value for integration range
+script property integrator.integrationMaximum</string>
+      </property>
+      <property name="decimals">
+       <number>5</number>
+      </property>
+      <property name="maximum">
+       <double>10000.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="3">
+     <widget class="QPushButton" name="m_UserGeometryEdit">
+      <property name="text">
+       <string>Edit...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1" colspan="3">
+     <widget class="QComboBox" name="m_EnableUserGeometry">
+      <item>
+       <property name="text">
+        <string>None</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>User Defined Geometry</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Oversampling Factor</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Self Normalization Minimum</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Self Normalization Maximum</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1" colspan="3">
+     <widget class="QDoubleSpinBox" name="m_SelfNormalizationMinimum">
+      <property name="toolTip">
+       <string>Start value for integration
+script property integrator.integrationMinimum</string>
+      </property>
+      <property name="decimals">
+       <number>5</number>
+      </property>
+      <property name="maximum">
+       <double>10000.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1" colspan="3">
+     <widget class="QDoubleSpinBox" name="m_SelfNormalizationMaximum">
+      <property name="toolTip">
+       <string>Start value for integration
+script property integrator.integrationMinimum</string>
+      </property>
+      <property name="decimals">
+       <number>5</number>
+      </property>
+      <property name="maximum">
+       <double>10000.000000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="4">
+     <widget class="QCheckBox" name="m_EnableSelfNormalization">
+      <property name="toolTip">
+       <string>Enable polarization correction during integration:
+intensity /= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
+                   (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth/2),2)));</string>
+      </property>
+      <property name="text">
+       <string>Enable Self Normalization </string>
       </property>
      </widget>
     </item>

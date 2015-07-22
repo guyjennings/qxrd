@@ -12,6 +12,7 @@
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qcepsettingssaver.h"
+#include "qcepdatasetmodel.h"
 
 QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
                                  int isOutput,
@@ -429,24 +430,49 @@ void QxrdFileBrowser::doIntegrateAndAccumulate()
 
 void QxrdFileBrowser::doSaveAccumulator()
 {
-  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
-  QModelIndexList rows = sel->selectedRows();
-  QModelIndex index;
-  QString path;
+//  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
+//  QModelIndexList rows = sel->selectedRows();
+//  QModelIndex index;
+//  QString path;
 
-  if (rows.count() >= 1) {
-    path = m_Model->filePath(rows.first());
-  } else {
-    path = m_Model->rootPath();
-  }
+//  if (rows.count() >= 1) {
+//    path = m_Model->filePath(rows.first());
+//  } else {
+//    path = m_Model->rootPath();
+//  }
 
-  QString file = QFileDialog::getSaveFileName(this, "Save accumulated data in...", path);
+  QxrdExperimentPtr expt(m_Experiment);
+  QxrdDataProcessorPtr proc(m_Processor);
 
-  if (file.length() > 0) {
-    QxrdDataProcessorPtr proc(m_Processor);
+  if (expt && proc) {
+    QcepDatasetModelPtr ds(expt->dataset());
 
-    if (proc) {
-      QMetaObject::invokeMethod(proc.data(), "saveAccumulator", Q_ARG(QString, file));
+    if (ds) {
+      QcepDataObjectPtr obj = ds->item(proc->get_AccumulateIntegratedName());
+      if (obj) {
+        QString selectedFilter = proc->get_AccumulateIntegratedFormat();
+        QString path = proc->get_AccumulateIntegratedDirectory() + "/" +
+            proc->get_AccumulateIntegratedFileName();
+
+        QString file = QFileDialog::getSaveFileName(this,
+                                                    "Save accumulated data in...", path,
+                                                    obj->fileFormatFilterString(), &selectedFilter);
+
+        if (file.length() > 0) {
+          proc -> saveAccumulator(file, selectedFilter);
+
+          proc -> set_AccumulateIntegratedFormat(selectedFilter);
+
+          QFileInfo finfo(file);
+
+          proc -> set_AccumulateIntegratedDirectory(finfo.dir().absolutePath());
+          proc -> set_AccumulateIntegratedFileName(finfo.fileName());
+
+          QString message = tr("Accumulator saved in %1, Format %2").arg(file).arg(selectedFilter);
+          expt -> statusMessage(message);
+          expt -> printMessage(message);
+        }
+      }
     }
   }
 }

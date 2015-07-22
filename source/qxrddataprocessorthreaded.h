@@ -47,7 +47,7 @@ public slots:
 
   void clearAccumulator();
   void integrateAndAccumulate(QStringList names);
-  void saveAccumulator(QString path);
+  void saveAccumulator(QString &path, QString filter);
 
   void shiftImage(int dx, int dy);
 

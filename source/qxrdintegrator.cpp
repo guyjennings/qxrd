@@ -42,6 +42,9 @@ QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr e
     m_UserAbsorptionScript(saver, this, "userAbsorptionScript", defaultUserAbsorptionScript(), "Script to define user defined absorption functions"),
     m_UserAbsorptionFunction(saver, this, "userAbsorptionFunction", "userAbsorb1", "Name of user defined absorption function"),
     m_ScalingFactor(saver, this, "scalingFactor", 1.0, "Scaling factor for integrated intensity"),
+    m_SelfNormalization(saver, this, "selfNormalization", false, "Normalize result based on average value within specified range"),
+    m_SelfNormalizationMinimum(saver, this, "selfNormalizationMinimum", 0, "Self Normalization Range Minimum"),
+    m_SelfNormalizationMaximum(saver, this, "selfNormalizationMaximum", 0, "Self Normalization Range Maximum"),
     m_Experiment(exp),
     m_CenterFinder(cfw),
     m_IntegratorCache()
@@ -72,6 +75,9 @@ QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr e
   connect(prop_UserAbsorptionFunction(), SIGNAL(valueChanged(QString,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
 
   connect(prop_ScalingFactor(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(prop_SelfNormalization(), SIGNAL(valueChanged(bool,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(prop_SelfNormalizationMinimum(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
+  connect(prop_SelfNormalizationMaximum(), SIGNAL(valueChanged(double,int)), this, SLOT(onIntegrationParametersChanged()), Qt::DirectConnection);
 
   QxrdCenterFinderPtr cf(m_CenterFinder);
 
@@ -484,7 +490,7 @@ void QxrdIntegrator::completeAccumulator(QString path)
 {
 }
 
-void QxrdIntegrator::saveAccumulator(QString resPath, QString fileName)
+void QxrdIntegrator::saveAccumulator(QString resPath, QString &fileName, QString filter)
 {
   QxrdExperimentPtr expt(m_Experiment);
 
@@ -495,7 +501,7 @@ void QxrdIntegrator::saveAccumulator(QString resPath, QString fileName)
       QcepDoubleImageDataPtr data = ds->image(resPath);
 
       if (data) {
-        data -> saveData(fileName);
+        data -> saveData(fileName, filter);
       }
     }
   }
