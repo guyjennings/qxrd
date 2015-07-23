@@ -379,7 +379,7 @@ void QxrdFileBrowser::doIntegrate()
   }
 }
 
-void QxrdFileBrowser::doAccumulate()
+void QxrdFileBrowser::doSumImages()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -395,7 +395,7 @@ void QxrdFileBrowser::doAccumulate()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "accumulateImages", Q_ARG(QStringList, paths));
+    QMetaObject::invokeMethod(proc.data(), "sumImages", Q_ARG(QStringList, paths));
   }
 }
 
@@ -630,17 +630,18 @@ void QxrdFileBrowser::mousePressed(QModelIndex index)
     QString filePath = m_Model->filePath(index);
 
     QMenu *actions = new QMenu(this);
+    QAction *title = actions->addAction("File operations...");
     QAction *open = actions->addAction("Open");
     QAction *openDark = actions->addAction("Open as Dark Image");
     QAction *openMask = actions->addAction("Open as Mask");
     QAction *openGainMap = actions->addAction("Open as Gain Map");
-    QAction *accumulate = actions->addAction("Accumulate");
     QAction *integrate = actions->addAction("Integrate");
     QAction *clearAccum = actions->addAction("Clear accumulator");
     QAction *integAccum = actions->addAction("Integrate and accumulate");
     QAction *saveAccum = actions->addAction("Save accumulator in...");
     QAction *process = actions->addAction("Process");
-    QAction *add = actions->addAction("Add Images to Current Image");
+    QAction *sumImages = actions->addAction("Sum Images to make new Current Image");
+    QAction *add       = actions->addAction("Add Images to existing Current Image");
     QAction *subtract = actions->addAction("Subtract Images from Current Image");
     QAction *projectX = actions->addAction("Project Along X");
     QAction *projectY = actions->addAction("Project Along Y");
@@ -648,7 +649,9 @@ void QxrdFileBrowser::mousePressed(QModelIndex index)
     QAction *correlate = actions->addAction("Correlate Images with Current Image");
     QAction *evaluate = actions->addAction("Evaluate scripts");
 
-    QAction *action = actions->exec(QCursor::pos());
+    title->setDisabled(true);
+
+    QAction *action = actions->exec(QCursor::pos(), title);
 
     if (action == open) {
       doOpen();
@@ -658,8 +661,8 @@ void QxrdFileBrowser::mousePressed(QModelIndex index)
       doOpenMask();
     } else if (action == openGainMap) {
       doOpenGainMap();
-    } else if (action == accumulate) {
-      doAccumulate();
+    } else if (action == sumImages) {
+      doSumImages();
     } else if (action == integrate) {
       doIntegrate();
     } else if (action == clearAccum) {
