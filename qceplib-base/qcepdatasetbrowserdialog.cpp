@@ -55,6 +55,10 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
 
   QString name = (obj ? obj->pathName() : "");
 
+  QAction *tt = menu.addAction("Data operations...");
+
+  tt->setDisabled(true);
+
   QMenu   *nm = menu.addMenu("Create New");
   QAction *ng = nm->addAction(tr("New Group in %1").arg(name));
 
@@ -65,7 +69,7 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
   } else {
     nc = nm->addAction(tr("Insert Data Column after %1").arg(name));
   }
-                   ;
+
   QAction *ns = nm->addAction(tr("New Column Scan in %1").arg(name));
   QAction *ni = nm->addAction(tr("New Image in %1").arg(name));
   QAction *na = nm->addAction(tr("New Array in %1").arg(name));
@@ -91,7 +95,7 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
   rd->setEnabled(grp != NULL);
 
 
-  QAction *action = menu.exec(mapToGlobal(pt));
+  QAction *action = menu.exec(QCursor::pos(), tt);
 
   if (action == ng) {
     newGroup(index);
