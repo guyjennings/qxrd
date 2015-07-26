@@ -30,8 +30,9 @@ public:
   virtual ~QSpecServer();
 
 public:
-  void startServer(QHostAddress a, int p=-1);
+  void startServer(QHostAddress a, int pmin=-1, int pmax=-1);
   void stopServer();
+  int  port();
 
 public slots:
   void openNewConnection();
@@ -80,6 +81,7 @@ private:
   QcepExperimentWPtr   m_Experiment;
   QString              m_ServerName;
   QTcpSocket          *m_Socket;
+  int                  m_Port;
   int                  m_SwapBytes;
   struct svr_head      m_Packet;
   QByteArray           m_Data;

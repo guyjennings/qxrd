@@ -31,7 +31,7 @@ QSpecServer::~QSpecServer()
 }
 
 void
-QSpecServer::startServer(QHostAddress a, int p)
+QSpecServer::startServer(QHostAddress a, int pmin, int pmax)
 {
   setMaxPendingConnections(1);
 
@@ -39,16 +39,33 @@ QSpecServer::startServer(QHostAddress a, int p)
     close();
   }
 
-  if (p < 0) {
-    p = 6510;
+  if (pmin < 0) {
+    pmin = 6510;
+
+    if (pmax < 0) {
+      pmax = 6530;
+    }
+  } else {
+    if (pmax < 0) {
+      pmax = pmin;
+    }
   }
 
-  if (!listen(a, p)) {
+  for (int p=pmin; p<=pmax; p++) {
     QcepExperimentPtr exp(m_Experiment);
 
-    if (exp) {
-      exp->criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy of qxrd running already?")
+    if (exp && listen(a, p)) {
+      exp->printMessage(tr("Started SPEC Server on address %1 port %2")
+                        .arg(a.toString()).arg(p));
+
+      m_Port = p;
+
+      break;
+    } else {
+      exp->criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy running already?")
                            .arg(a.toString()).arg(p));
+
+      m_Port = -1;
     }
   }
 }
@@ -59,6 +76,12 @@ QSpecServer::stopServer()
   if (isListening()) {
     close();
   }
+}
+
+int
+QSpecServer::port()
+{
+  return m_Port;
 }
 
 void
