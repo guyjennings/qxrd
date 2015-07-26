@@ -10,7 +10,7 @@
 #include <QDir>
 
 QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name) :
-  QcepDataObject(saver, name)
+  QcepDataObject(saver, name, 0)
 {
   set_Type("Data Group");
 }

@@ -15,6 +15,7 @@
 #include "qcepnewdataarraydialog.h"
 #include "qcepnewdatacolumndialog.h"
 #include "qcepnewimagedialog.h"
+#include <QFileDialog>
 
 QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QcepExperimentWPtr expt, QcepDatasetModelPtr ds, QWidget *parent) :
   QDockWidget(parent),
@@ -54,6 +55,10 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
 
   QString name = (obj ? obj->pathName() : "");
 
+  QAction *tt = menu.addAction("Data operations...");
+
+  tt->setDisabled(true);
+
   QMenu   *nm = menu.addMenu("Create New");
   QAction *ng = nm->addAction(tr("New Group in %1").arg(name));
 
@@ -64,7 +69,7 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
   } else {
     nc = nm->addAction(tr("Insert Data Column after %1").arg(name));
   }
-                   ;
+
   QAction *ns = nm->addAction(tr("New Column Scan in %1").arg(name));
   QAction *ni = nm->addAction(tr("New Image in %1").arg(name));
   QAction *na = nm->addAction(tr("New Array in %1").arg(name));
@@ -72,7 +77,7 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
   QAction *sv = menu.addAction(tr("Save %1 as ...").arg(name));
   QAction *og = menu.addAction(tr("Open %1 in graph window").arg(name));
   QAction *os = menu.addAction(tr("Open %1 in spreadsheet window").arg(name));
-  QAction *op = menu.addAction(tr("%1 properties").arg(name));
+  QAction *op = menu.addAction(tr("Open %1 in properties window").arg(name));
   QAction *dl = menu.addAction(tr("Delete %1").arg(name));
 
   ng->setEnabled(grp != NULL && scn == NULL);
@@ -90,7 +95,7 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
   rd->setEnabled(grp != NULL);
 
 
-  QAction *action = menu.exec(mapToGlobal(pt));
+  QAction *action = menu.exec(QCursor::pos(), tt);
 
   if (action == ng) {
     newGroup(index);
@@ -233,6 +238,17 @@ void QcepDatasetBrowserDialog::readData(const QModelIndex &idx)
 void QcepDatasetBrowserDialog::saveData(const QModelIndex &idx)
 {
   QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
+
+  if (obj) {
+    static QString selectedFilter;
+    QString theFile = QFileDialog::getSaveFileName(this,
+                                                   "Save data in", obj->get_FileName(),
+                                                   obj->fileFormatFilterString(), &selectedFilter);
+
+    if (theFile.length()) {
+      obj -> saveData(theFile, selectedFilter, QcepDataObject::CanOverwrite);
+    }
+  }
 }
 
 void QcepDatasetBrowserDialog::deleteData(const QModelIndex &idx)

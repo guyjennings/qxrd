@@ -1,12 +1,11 @@
 #include "qcepdataobjectgraphcontroller.h"
 
-QcepDataObjectGraphController::QcepDataObjectGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object) :
+QcepDataObjectGraphController::QcepDataObjectGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object) :
   m_Window(window),
   m_Mode(mode),
   m_Object(object),
   m_Widget(NULL)
 {
-
 }
 
 QcepDataObjectGraphController::~QcepDataObjectGraphController()

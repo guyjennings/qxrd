@@ -86,7 +86,11 @@ void QcepPlot::init(QcepPlotSettingsWPtr settings)
     setY2AxisLog(set->get_Y2AxisLog());
 
     if (m_Legend) {
-      insertLegend(m_Legend, (QwtPlot::LegendPosition) set->get_LegendPosition());
+      int legendPos = set->get_LegendPosition();
+
+      if (legendPos >= 0) {
+        insertLegend(m_Legend, (QwtPlot::LegendPosition) legendPos);
+      }
     }
   }
 
@@ -268,16 +272,16 @@ void QcepPlot::enableMeasuring()
 
 void QcepPlot::onLegendClicked(const QVariant &itemInfo, int index)
 {
-  if (g_Application) {
-    g_Application->printMessage(tr("QxrdPlot::onLegendClicked(%1,%2)").arg(itemInfo.toString()).arg(index));
-  }
+//  if (g_Application) {
+//    g_Application->printMessage(tr("QxrdPlot::onLegendClicked(%1,%2)").arg(itemInfo.toString()).arg(index));
+//  }
 }
 
 void QcepPlot::onLegendChecked(const QVariant &itemInfo, bool on, int index)
 {
-  if (g_Application) {
-    g_Application->printMessage(tr("QxrdPlot::onLegendChecked(%1,%2,%3)").arg(itemInfo.toString()).arg(on).arg(index));
-  }
+//  if (g_Application) {
+//    g_Application->printMessage(tr("QxrdPlot::onLegendChecked(%1,%2,%3)").arg(itemInfo.toString()).arg(on).arg(index));
+//  }
 
   QwtPlotItem *item = infoToItem(itemInfo);
 

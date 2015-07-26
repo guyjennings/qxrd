@@ -2,27 +2,30 @@
 #include "qcepdataobject.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
+#include "qcepallocator.h"
 
 #include <QSettings>
 #include <QFileInfo>
 #include <QDir>
 #include <QScriptEngine>
 #include <typeinfo>
+#include <QMetaProperty>
 
 #include "qcepimagedataformat.h"
 #include "qcepimagedataformatfactory.h"
 #include "qcepmutexlocker.h"
 #include "qcepsettingssaver.h"
 
+#include "tiffio.h"
+
 QAtomicInt allocCount = 0;
 
-QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height)
-  : QcepDataObject(saver, tr("image")),
+QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height, int size)
+  : QcepDataObject(saver, tr("image"), size),
     m_Width(saver, this, "width", width, "Image Width"),
     m_Height(saver, this, "height", height, "Image Height"),
     m_DataType(saver, this, "dataType", UndefinedData, "Data Type of Image"),
     m_FileBase(saver, this, "fileBase", "", "File Base of Image"),
-    m_FileName(saver, this, "fileName", "", "File Name of Image"),
     m_Title(saver, this, "title", "", "Title of Image"),
     m_ReadoutMode(saver, this, "readoutMode", 0, "Image Readout Mode"),
     m_ExposureTime(saver, this, "exposureTime", 0, "Image Exposure Time"),
@@ -41,7 +44,6 @@ QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int
     m_UserComment2(saver, this,"userComment2","", "User Comment 2"),
     m_UserComment3(saver, this,"userComment3","", "User Comment 3"),
     m_UserComment4(saver, this,"userComment4","", "User Comment 4"),
-    m_ImageSaved(saver, this,"imageSaved",0, "Image is Saved?"),
     m_Normalization(saver, this, "normalization", QcepDoubleList(), "Normalization Values"),
     m_ExtraInputs(saver, this, "extraInputs", QcepDoubleList(), "Extra Input Values"),
     m_Used(saver, this, "used", true, "Image Used?"),
@@ -53,13 +55,9 @@ QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int
 
   if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
     printf("QcepImageDataBase::QcepImageDataBase(%p)\n", this);
-//    QcepSettingsSaverPtr s(m_Saver);
-
-//    if (s) {
-//      s->printMessage(tr("QcepImageDataBase::QcepImageDataBase %1[%2]")
-//                      .HEXARG(this).arg(m_ImageCounter));
-//    }
   }
+
+  QcepAllocator::allocate(size);
 }
 
 QcepImageDataBase::~QcepImageDataBase()
@@ -74,7 +72,7 @@ QcepImageDataBase::~QcepImageDataBase()
 //    }
   }
 
-  //  allocCount--;
+  QcepAllocator::deallocate(get_ByteSize());
 }
 
 QString QcepImageDataBase::description() const
@@ -137,7 +135,7 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
   dest -> set_UserComment2(get_UserComment2());
   dest -> set_UserComment3(get_UserComment3());
   dest -> set_UserComment4(get_UserComment4());
-  dest -> set_ImageSaved(get_ImageSaved());
+  dest -> set_ObjectSaved(get_ObjectSaved());
   dest -> set_Normalization(get_Normalization());
   dest -> set_ExtraInputs(get_ExtraInputs());
   dest -> set_Used(get_Used());
@@ -175,7 +173,7 @@ void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src
   set_UserComment2(src -> get_UserComment2());
   set_UserComment3(src -> get_UserComment3());
   set_UserComment4(src -> get_UserComment4());
-  set_ImageSaved(src -> get_ImageSaved());
+  set_ObjectSaved(src -> get_ObjectSaved());
   set_Normalization(src -> get_Normalization());
   set_ExtraInputs(src -> get_ExtraInputs());
   set_Used(src -> get_Used());
@@ -284,9 +282,43 @@ QString QcepImageDataBase::get_DataTypeName() const
   }
 }
 
+QString QcepImageDataBase::fileFormatFilterString()
+{
+  return fileFormatTIFF() + ";;" +
+      fileFormatTabDelimited() + ";;" +
+      fileFormatTransposedTabDelimited() + ";;" +
+      fileFormatCSV() + ";;" +
+      fileFormatTransposedCSV();
+}
+
+QString QcepImageDataBase::fileFormatTIFF()
+{
+  return "TIFF (*.tif, *.tiff)";
+}
+
+QString QcepImageDataBase::fileFormatTabDelimited()
+{
+  return "Tab delimited (*.txt.*.dat)";
+}
+
+QString QcepImageDataBase::fileFormatTransposedTabDelimited()
+{
+  return "Transposed Tab delimited (*.txt,*.dat)";
+}
+
+QString QcepImageDataBase::fileFormatCSV()
+{
+  return "CSV (*.csv)";
+}
+
+QString QcepImageDataBase::fileFormatTransposedCSV()
+{
+  return "Transposed CSV (*.csv)";
+}
+
 template <typename T>
 QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, int width, int height, T def)
-  : QcepImageDataBase(saver, width, height),
+  : QcepImageDataBase(saver, width, height, width*height*sizeof(T)),
     //    m_Image(width*height, def),
     m_Image(width*height),
     m_MinValue(0),
@@ -546,6 +578,10 @@ void QcepImageData<T>::resize(int width, int height)
       setValue(x, y, temp.value(x,y));
     }
   }
+
+  set_ByteSize(width*height*sizeof(T));
+
+  QcepAllocator::allocate((width*height - oldwidth*oldheight)*sizeof(T));
 }
 
 template <typename T>
@@ -581,7 +617,7 @@ bool QcepImageData<T>::readImage(QString path)
       set_FileBase(fileBase);
       set_Title(fileBase);
       set_FileName(path);
-      set_ImageSaved(true);
+      set_ObjectSaved(true);
     }
 
     return res;
@@ -1046,6 +1082,201 @@ void QcepImageData<T>::fromScriptValue(const QScriptValue &obj, QSharedPointer<Q
         }
       }
     }
+  }
+}
+
+#define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
+
+template <>
+void QcepImageData<double>::saveTIFFData(QString name)
+{
+  int nrows = get_Height();
+  int ncols = get_Width();
+
+  TIFF* tif = TIFFOpen(qPrintable(name),"w");
+  int res = 1;
+
+  if (tif) {
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(get_FileName())));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
+
+    QVector<float> buffvec(ncols);
+    float* buffer = buffvec.data();
+
+    for (int y=0; y<nrows; y++) {
+      for (int x=0; x<ncols; x++) {
+        buffer[x] = value(x,y);
+      }
+
+      TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+    }
+
+    TIFFClose(tif);
+
+    set_FileName(name);
+    set_ObjectSaved(true);
+
+    saveMetaData();
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::saveTIFFData(QString name)
+{
+  int nrows = get_Height();
+  int ncols = get_Width();
+
+  TIFF* tif = TIFFOpen(qPrintable(name),"w");
+  int res = 1;
+
+  if (tif) {
+    int nsum = get_SummedExposures();
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+
+    if (nsum == 0) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8));
+    } else if (nsum == 1) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16));
+    } else {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+    }
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(get_FileName())));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
+
+    if (nsum == 0) {
+      QVector<quint8> buffvec(ncols);
+      quint8* buffer = buffvec.data();
+
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
+    } else if (nsum == 1) {
+      QVector<quint16> buffvec(ncols);
+      quint16* buffer = buffvec.data();
+
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
+    } else {
+      QVector<quint32> buffvec(ncols);
+      quint32* buffer = buffvec.data();
+
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
+    }
+
+    TIFFClose(tif);
+
+    set_FileName(name);
+    set_ObjectSaved(true);
+
+    saveMetaData();
+  }
+}
+
+void QcepImageDataBase::saveTextData(QString name, QString sep, bool transp)
+{
+  FILE *f = fopen(qPrintable(name), "w+");
+
+  if (f) {
+    const QMetaObject *meta = metaObject();
+
+    int count = meta->propertyCount();
+    int offset = QObject::staticMetaObject.propertyOffset();
+
+    for (int i=offset; i<count; i++) {
+      QMetaProperty metaproperty = meta->property(i);
+      const char *name = metaproperty.name();
+      QVariant value = property(name);
+
+      fprintf(f, "#%s = %s\n", name, qPrintable(value.toString()));
+    }
+
+    foreach (QByteArray name, dynamicPropertyNames()) {
+      QVariant value = property(name);
+
+      fprintf(f, "#%s = %s\n", name.data(), qPrintable(value.toString()));
+    }
+
+    int nrows = get_Height();
+    int ncols = get_Width();
+
+    if (transp == false) {
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          if (x == 0) {
+            fprintf(f, "%g", getImageData(x,y));
+          } else {
+            fprintf(f, "%s%g", qPrintable(sep), getImageData(x,y));
+          }
+        }
+        fprintf(f, "\n");
+      }
+    } else { // Transposed
+      for (int y=0; y<ncols; y++) {
+        for (int x=0; x<nrows; x++) {
+          if (x == 0) {
+            fprintf(f, "%g", getImageData(y,x));
+          } else {
+            fprintf(f, "%s%g", qPrintable(sep), getImageData(y,x));
+          }
+        }
+        fprintf(f, "\n");
+      }
+    }
+
+    fclose(f);
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::saveData(QString &name, QString filter, Overwrite canOverwrite)
+{
+  mkPath(name);
+
+  if (canOverwrite == NoOverwrite) {
+    name = uniqueFileName(name);
+  }
+
+  if (filter == fileFormatTIFF()) {
+    saveTIFFData(name);
+  } else if (filter == fileFormatTabDelimited()) {
+    saveTextData(name, "\t", false);
+  } else if (filter == fileFormatTransposedTabDelimited()) {
+    saveTextData(name, "\t", true);
+  } else if (filter == fileFormatCSV()) {
+    saveTextData(name, ", ", false);
+  } else if (filter == fileFormatTransposedCSV()) {
+    saveTextData(name, ", ", true);
   }
 }
 

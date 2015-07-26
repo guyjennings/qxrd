@@ -1,8 +1,9 @@
 #include "qcepdataarray.h"
 #include <QScriptEngine>
+#include "qcepallocator.h"
 
 QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims) :
-  QcepDataObject(saver, name),
+  QcepDataObject(saver, name, 0),
   m_Dimensions(dims)
 {
   set_Type("Data Array");
@@ -13,6 +14,15 @@ QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<
   }
 
   m_Data.resize(prod);
+
+  set_ByteSize(prod);
+
+  QcepAllocator::allocate(get_ByteSize());
+}
+
+QcepDataArray::~QcepDataArray()
+{
+  QcepAllocator::deallocate(get_ByteSize());
 }
 
 QString QcepDataArray::description() const

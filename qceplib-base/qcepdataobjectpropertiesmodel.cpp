@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QMetaProperty>
 
-QcepDataObjectPropertiesModel::QcepDataObjectPropertiesModel(QcepDataObjectPtr obj) :
+QcepDataObjectPropertiesModel::QcepDataObjectPropertiesModel(QcepDataObjectWPtr obj) :
   m_Object(obj)
 {
 
@@ -24,6 +24,7 @@ QVariant QcepDataObjectPropertiesModel::data(const QModelIndex &index, int role)
   QVariant res = QVariant();
   int pc = propertyCount();
   int dpc = dynamicPropertyCount();
+  QcepDataObjectPtr obj(m_Object);
 
   if (role == Qt::DisplayRole) {
     if (index.isValid()) {
@@ -36,11 +37,13 @@ QVariant QcepDataObjectPropertiesModel::data(const QModelIndex &index, int role)
           res = "Properties";
         }
       } else if (r < (pc+1)) {
-        QMetaProperty mp = m_Object->metaObject()->property(r-1);
-        if (c == 0) {
-          res = mp.name();
-        } else if (c == 1) {
-          res = m_Object->property(mp.name());
+        if (obj) {
+          QMetaProperty mp = obj->metaObject()->property(r-1);
+          if (c == 0) {
+            res = mp.name();
+          } else if (c == 1) {
+            res = obj->property(mp.name());
+          }
         }
       } else if (r == (pc+1)) {
         if (c == 0) {
@@ -50,12 +53,14 @@ QVariant QcepDataObjectPropertiesModel::data(const QModelIndex &index, int role)
         }
       } else {
         int idx = r - pc - 2;
-        QString name = m_Object->dynamicPropertyNames().value(idx);
+        if (obj) {
+          QString name = obj->dynamicPropertyNames().value(idx);
 
-        if (c == 0) {
-          res = name;
-        } else if (c == 1) {
-          res = m_Object->property(qPrintable(name));
+          if (c == 0) {
+            res = name;
+          } else if (c == 1) {
+            res = obj->property(qPrintable(name));
+          }
         }
       }
     }
@@ -96,10 +101,22 @@ QVariant QcepDataObjectPropertiesModel::headerData(int section, Qt::Orientation 
 
 int QcepDataObjectPropertiesModel::propertyCount() const
 {
-  return m_Object->metaObject()->propertyCount();
+  QcepDataObjectPtr obj(m_Object);
+
+  if (obj) {
+    return obj->metaObject()->propertyCount();
+  } else {
+    return 0;
+  }
 }
 
 int QcepDataObjectPropertiesModel::dynamicPropertyCount() const
 {
-  return m_Object->dynamicPropertyNames().count();
+  QcepDataObjectPtr obj(m_Object);
+
+  if (obj) {
+    return obj->dynamicPropertyNames().count();
+  } else {
+    return 0;
+  }
 }

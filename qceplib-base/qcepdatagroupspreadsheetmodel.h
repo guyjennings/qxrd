@@ -7,7 +7,7 @@
 class QcepDataGroupSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
-  QcepDataGroupSpreadsheetModel(QcepDataGroupPtr group);
+  QcepDataGroupSpreadsheetModel(QcepDataGroupWPtr group);
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -15,7 +15,7 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 private:
-  QcepDataGroupPtr m_Group;
+  QcepDataGroupWPtr m_Group;
 };
 
 #endif // QCEPDATAGROUPSPREADSHEETMODEL_H

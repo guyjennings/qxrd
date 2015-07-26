@@ -1,7 +1,7 @@
 #include "qcepdatagroupspreadsheetmodel.h"
 #include "qcepdatagroup.h"
 
-QcepDataGroupSpreadsheetModel::QcepDataGroupSpreadsheetModel(QcepDataGroupPtr group) :
+QcepDataGroupSpreadsheetModel::QcepDataGroupSpreadsheetModel(QcepDataGroupWPtr group) :
   m_Group(group)
 {
 
@@ -9,7 +9,13 @@ QcepDataGroupSpreadsheetModel::QcepDataGroupSpreadsheetModel(QcepDataGroupPtr gr
 
 int QcepDataGroupSpreadsheetModel::rowCount(const QModelIndex &parent) const
 {
-  return m_Group->childCount();
+  QcepDataGroupPtr grp(m_Group);
+
+  if (grp) {
+    return grp->childCount();
+  } else {
+    return 0;
+  }
 }
 
 int QcepDataGroupSpreadsheetModel::columnCount(const QModelIndex &parent) const
@@ -23,10 +29,14 @@ QVariant QcepDataGroupSpreadsheetModel::data(const QModelIndex &index, int role)
 
   if (role == Qt::DisplayRole) {
     if (index.isValid()) {
-      QcepDataObjectPtr obj = m_Group->item(index.row());
+      QcepDataGroupPtr grp(m_Group);
 
-      if (obj) {
-        res = obj->columnData(index.column());
+      if (grp) {
+        QcepDataObjectPtr obj = grp->item(index.row());
+
+        if (obj) {
+          res = obj->columnData(index.column());
+        }
       }
     }
   }

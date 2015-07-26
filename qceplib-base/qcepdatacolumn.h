@@ -21,6 +21,7 @@ public:
   QcepDataColumn(QcepSettingsSaverWPtr saver,
                  QString name,
                  int npts);
+  virtual ~QcepDataColumn();
 
 public slots:
   virtual QString description() const;

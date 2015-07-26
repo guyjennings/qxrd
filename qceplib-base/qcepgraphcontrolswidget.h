@@ -10,7 +10,7 @@ class QcepGraphControlsWidget : public QWidget
 {
   Q_OBJECT
 public:
-  explicit QcepGraphControlsWidget(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object);
+  explicit QcepGraphControlsWidget(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object);
 
 signals:
 
@@ -19,7 +19,7 @@ public slots:
 protected:
   QcepDataObjectGraphWindow  *m_Window;
   int                         m_Mode;
-  QcepDataObjectPtr           m_Object;
+  QcepDataObjectWPtr          m_Object;
 };
 
 #endif // QCEPGRAPHCONTROLSWIDGET_H

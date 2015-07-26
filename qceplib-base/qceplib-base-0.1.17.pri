@@ -59,7 +59,6 @@ SOURCES += \
   $${PWD}/qcepapplication.cpp \
   $${PWD}/qcepthread.cpp \
   $${PWD}/qcepallocatorthread.cpp \
-  $${PWD}/qcepimagedataobjectcounter.cpp \
   $${PWD}/qcepimagedataspreadsheetmodel.cpp \
   $${PWD}/qcepnewdatagroupdialog.cpp \
   $${PWD}/qcepnewdatacolumndialog.cpp \
@@ -68,7 +67,8 @@ SOURCES += \
   $${PWD}/qcepnewdataarraydialog.cpp \
   $${PWD}/qcepdataobjectpropertieswindow.cpp \
   $${PWD}/qcepdataobjectspreadsheetwindow.cpp \
-  $${PWD}/qcepscriptengine.cpp
+  $${PWD}/qcepscriptengine.cpp \
+  $${PWD}/qcepdataobjectwindow.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -151,7 +151,6 @@ HEADERS += \
   $${PWD}/qcepallocatorthread.h \
   $${PWD}/qcepallocatorthread-ptr.h \
   $${PWD}/qcepallocatorthread-ptr.h \
-  $${PWD}/qcepimagedataobjectcounter.h \
   $${PWD}/qcepimagedataspreadsheetmodel.h \
   $${PWD}/qcepnewdatagroupdialog.h \
   $${PWD}/qcepnewdatacolumndialog.h \
@@ -162,8 +161,8 @@ HEADERS += \
   $${PWD}/qcepdataobjectspreadsheetwindow.h \
   $${PWD}/qcepobject-ptr.h \
   $${PWD}/qcepscriptengine.h \
-  $${PWD}/qcepscriptengine-ptr.h
-
+  $${PWD}/qcepscriptengine-ptr.h \
+  $${PWD}/qcepdataobjectwindow.h
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \

@@ -5,7 +5,7 @@
 #include "qcepimagedata.h"
 #include "qcepimagedata-ptr.h"
 
-QcepImageSliceGraphController::QcepImageSliceGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object)
+QcepImageSliceGraphController::QcepImageSliceGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object)
   : QcepDataObjectGraphController(window, mode, object)
 {
 

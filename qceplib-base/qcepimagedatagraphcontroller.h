@@ -8,7 +8,7 @@ class QcepImageDataGraphController : public QcepDataObjectGraphController
   Q_OBJECT
 
 public:
-  QcepImageDataGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object);
+  QcepImageDataGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object);
 
   virtual ~QcepImageDataGraphController();
   virtual void activate();

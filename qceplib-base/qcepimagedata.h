@@ -25,7 +25,7 @@ class QcepImageDataBase : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height);
+  QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height, int size);
   virtual ~QcepImageDataBase();
 
   Q_PROPERTY(int width READ get_Width WRITE set_Width)
@@ -41,9 +41,6 @@ public:
 
   Q_PROPERTY(QString fileBase READ get_FileBase WRITE set_FileBase)
   QCEP_STRING_PROPERTY(FileBase)
-
-  Q_PROPERTY(QString fileName READ get_FileName WRITE set_FileName)
-  QCEP_STRING_PROPERTY(FileName)
 
   Q_PROPERTY(QString title READ get_Title WRITE set_Title)
   QCEP_STRING_PROPERTY(Title)
@@ -102,9 +99,6 @@ public:
   Q_PROPERTY(QString userComment4 READ get_UserComment4 WRITE set_UserComment4)
   QCEP_STRING_PROPERTY(UserComment4)
 
-  Q_PROPERTY(int imageSaved READ get_ImageSaved WRITE set_ImageSaved)
-  QCEP_INTEGER_PROPERTY(ImageSaved)
-
   Q_PROPERTY(QcepDoubleList normalization READ get_Normalization WRITE set_Normalization)
   QCEP_DOUBLE_LIST_PROPERTY(Normalization)
 
@@ -162,8 +156,16 @@ public:
   void loadMetaData();
   void saveMetaData();
   void saveMetaData(QString name);
+  void saveTextData(QString name, QString sep, bool transp=false);
 
   void setDefaultFileName(QString path);
+
+  virtual QString fileFormatFilterString();
+  QString fileFormatTIFF();
+  QString fileFormatTabDelimited();
+  QString fileFormatTransposedTabDelimited();
+  QString fileFormatCSV();
+  QString fileFormatTransposedCSV();
 
   static double secondsSinceEpoch();
 
@@ -213,6 +215,9 @@ public:
   double getImageData(int x, int y) const;
   QVector<double> getImageData(int x0, int y0, int x1, int y1) const;
   void setImageData(int x, int y, double v);
+
+  virtual void saveData(QString &name, QString filter, Overwrite canOverwrite=NoOverwrite);
+  void saveTIFFData(QString name);
 
 public:
   template <typename T2>

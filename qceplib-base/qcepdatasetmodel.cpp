@@ -6,7 +6,7 @@
 #include <QMimeData>
 #include <stdio.h>
 
-QcepDatasetModel::QcepDatasetModel(QcepDatasetPtr ds) :
+QcepDatasetModel::QcepDatasetModel(QcepDatasetWPtr ds) :
   m_Dataset(ds)
 {
   connect(ds.data(), SIGNAL(dataObjectChanged()), this, SLOT(onDataObjectChanged()));
@@ -132,7 +132,11 @@ int QcepDatasetModel::rowCount(const QModelIndex &parent) const
 
       res = nrows;
     } else {
-      res = m_Dataset->childCount();
+      QcepDatasetPtr ds(m_Dataset);
+
+      if (ds) {
+        res = ds->childCount();
+      }
     }
   }
 
@@ -275,9 +279,15 @@ QString QcepDatasetModel::indexDescription(const QModelIndex &index) const
           .arg(index.row()).arg(index.column())
           .arg(obj->get_Name());
     } else {
-      return tr("(%1,%2,\"%3\")")
-          .arg(index.row()).arg(index.column())
-          .arg(m_Dataset->get_Name());
+      QcepDatasetPtr ds(m_Dataset);
+
+      if (ds) {
+        return tr("(%1,%2,\"%3\")")
+            .arg(index.row()).arg(index.column())
+            .arg(ds->get_Name());
+      } else {
+        return "";
+      }
     }
   }
 
@@ -326,7 +336,13 @@ QcepDataObjectPtr      QcepDatasetModel::item(const QModelIndex &index)
 
 QcepDataObjectPtr      QcepDatasetModel::item(QString path)
 {
-  return m_Dataset->item(path);
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->item(path);
+  } else {
+    return QcepDataObjectPtr();
+  }
 }
 
 QcepDataGroupPtr       QcepDatasetModel::group(const QModelIndex &index)
@@ -335,12 +351,24 @@ QcepDataGroupPtr       QcepDatasetModel::group(const QModelIndex &index)
 
 QcepDataGroupPtr       QcepDatasetModel::group(QString path)
 {
-  return m_Dataset->group(path);
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->group(path);
+  } else {
+    return QcepDataGroupPtr();
+  }
 }
 
 QcepDataGroupPtr       QcepDatasetModel::newGroup(QString path)
 {
-  return m_Dataset->newGroup(path);
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->newGroup(path);
+  } else {
+    return QcepDataGroupPtr();
+  }
 }
 
 QcepDataArrayPtr       QcepDatasetModel::array(const QModelIndex &index)
@@ -349,12 +377,24 @@ QcepDataArrayPtr       QcepDatasetModel::array(const QModelIndex &index)
 
 QcepDataArrayPtr       QcepDatasetModel::array(QString path)
 {
-  return m_Dataset->array(path);
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->array(path);
+  } else {
+    return QcepDataArrayPtr();
+  }
 }
 
 QcepDataArrayPtr       QcepDatasetModel::newArray(QString path, QVector<int> dims)
 {
-  return m_Dataset->newArray(path, dims);
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->newArray(path, dims);
+  } else {
+    return QcepDataArrayPtr();
+  }
 }
 
 QcepDataColumnPtr      QcepDatasetModel::column(const QModelIndex &index)
@@ -363,12 +403,24 @@ QcepDataColumnPtr      QcepDatasetModel::column(const QModelIndex &index)
 
 QcepDataColumnPtr      QcepDatasetModel::column(QString path)
 {
-  return m_Dataset->column(path);
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->column(path);
+  } else {
+    return QcepDataColumnPtr();
+  }
 }
 
 QcepDataColumnPtr      QcepDatasetModel::newColumn(QString path, int nRows)
 {
-  return m_Dataset->newColumn(path, nRows);
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->newColumn(path, nRows);
+  } else {
+    return QcepDataColumnPtr();
+  }
 }
 
 QcepDataColumnScanPtr  QcepDatasetModel::columnScan(const QModelIndex &index)
@@ -377,12 +429,24 @@ QcepDataColumnScanPtr  QcepDatasetModel::columnScan(const QModelIndex &index)
 
 QcepDataColumnScanPtr  QcepDatasetModel::columnScan(QString path)
 {
-  return m_Dataset->columnScan(path);
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->columnScan(path);
+  } else {
+    return QcepDataColumnScanPtr();
+  }
 }
 
 QcepDataColumnScanPtr  QcepDatasetModel::newColumnScan(QString path, int nRows, QStringList cols)
 {
-  return m_Dataset->newColumnScan(path, nRows, cols);
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->newColumnScan(path, nRows, cols);
+  } else {
+    return QcepDataColumnScanPtr();
+  }
 }
 
 QcepDoubleImageDataPtr QcepDatasetModel::image(const QModelIndex &index)
@@ -391,12 +455,24 @@ QcepDoubleImageDataPtr QcepDatasetModel::image(const QModelIndex &index)
 
 QcepDoubleImageDataPtr QcepDatasetModel::image(QString path)
 {
-  return m_Dataset->image(path);
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->image(path);
+  } else {
+    return QcepDoubleImageDataPtr();
+  }
 }
 
 QcepDoubleImageDataPtr QcepDatasetModel::newImage(QString path, int width, int height)
 {
-  return m_Dataset->newImage(path, width, height);
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->newImage(path, width, height);
+  } else {
+    return QcepDoubleImageDataPtr();
+  }
 }
 
 void                   QcepDatasetModel::append(const QModelIndex &index, QcepDataObjectPtr obj)

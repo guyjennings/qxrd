@@ -10,7 +10,7 @@ class QcepDataObjectGraphController : public QObject
 {
   Q_OBJECT
 public:
-  explicit QcepDataObjectGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object);
+  explicit QcepDataObjectGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object);
 
   virtual ~QcepDataObjectGraphController();
   virtual void activate();
@@ -23,7 +23,7 @@ public slots:
 protected:
   QcepDataObjectGraphWindow *m_Window;
   int                        m_Mode;
-  QcepDataObjectPtr          m_Object;
+  QcepDataObjectWPtr         m_Object;
   QWidget                   *m_Widget;
 };
 

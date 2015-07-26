@@ -14,7 +14,8 @@ class QcepDataObject : public QcepObject, public QEnableSharedFromThis<QcepDataO
 
 public:
   QcepDataObject(QcepSettingsSaverWPtr saver,
-                 QString name);
+                 QString name,
+                 int byteSize);
   virtual ~QcepDataObject();
 
   QcepSettingsSaverWPtr saver();
@@ -33,6 +34,11 @@ public slots:
   virtual QcepDataGroupPtr parentItem() const;
 
 public:
+  typedef enum {
+    NoOverwrite,
+    CanOverwrite
+  } Overwrite;
+
   virtual int childCount() const;
   virtual QcepDataObjectPtr item(int n);
   virtual QcepDataObjectPtr item(QString nm);
@@ -42,10 +48,19 @@ public:
   virtual int columnCount() const;
   virtual QVariant columnData(int col) const;
 
+  virtual QString fileFormatFilterString();
+
   static QScriptValue toScriptValue(QScriptEngine *engine, const QcepDataObjectPtr &data);
   static void fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr &data);
 
   static int allocatedObjects();
+  static int deletedObjects();
+
+  virtual void saveData(QString &name, QString filter, Overwrite canOverwrite=NoOverwrite);
+
+protected:
+  void mkPath(QString filePath);
+  QString uniqueFileName(QString name);
 
 private:
   QcepDataGroupWPtr     m_Parent;
@@ -54,6 +69,9 @@ private:
 public:
   Q_PROPERTY(QString type READ get_Type WRITE set_Type)
   QCEP_STRING_PROPERTY(Type)
+
+  Q_PROPERTY(quint64 byteSize READ get_ByteSize WRITE set_ByteSize STORED false)
+  QCEP_INTEGER64_PROPERTY(ByteSize)
 
   Q_PROPERTY(QString creator READ get_Creator WRITE set_Creator)
   QCEP_STRING_PROPERTY(Creator)
@@ -66,6 +84,12 @@ public:
 
   Q_PROPERTY(QString description READ get_Description WRITE set_Description)
   QCEP_STRING_PROPERTY(Description)
+
+  Q_PROPERTY(QString fileName READ get_FileName WRITE set_FileName)
+  QCEP_STRING_PROPERTY(FileName)
+
+  Q_PROPERTY(int objectSaved READ get_ObjectSaved WRITE set_ObjectSaved)
+  QCEP_INTEGER_PROPERTY(ObjectSaved)
 };
 
 #endif // QCEPDATAOBJECT_H

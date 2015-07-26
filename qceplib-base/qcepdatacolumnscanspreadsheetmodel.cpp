@@ -3,7 +3,7 @@
 #include "qcepdatacolumn.h"
 
 QcepDataColumnScanSpreadsheetModel::QcepDataColumnScanSpreadsheetModel
-  (QcepDataColumnScanPtr scan) :
+  (QcepDataColumnScanWPtr scan) :
   m_Scan(scan)
 {
 
@@ -11,12 +11,24 @@ QcepDataColumnScanSpreadsheetModel::QcepDataColumnScanSpreadsheetModel
 
 int QcepDataColumnScanSpreadsheetModel::rowCount(const QModelIndex &parent) const
 {
-  return m_Scan->rowCount();
+  QcepDataColumnScanPtr scan(m_Scan);
+
+  if (scan) {
+    return scan->rowCount();
+  } else {
+    return 0;
+  }
 }
 
 int QcepDataColumnScanSpreadsheetModel::columnCount(const QModelIndex &parent) const
 {
-  return m_Scan->columnCount();
+  QcepDataColumnScanPtr scan(m_Scan);
+
+  if (scan) {
+    return scan->columnCount();
+  } else {
+    return 0;
+  }
 }
 
 QVariant QcepDataColumnScanSpreadsheetModel::data(const QModelIndex &index, int role) const
@@ -25,10 +37,14 @@ QVariant QcepDataColumnScanSpreadsheetModel::data(const QModelIndex &index, int 
 
   if (role == Qt::DisplayRole) {
     if (index.isValid()) {
-      QcepDataColumnPtr col = m_Scan->column(index.column());
+      QcepDataColumnScanPtr scan(m_Scan);
 
-      if (col) {
-        return col->value(index.row());
+      if (scan) {
+        QcepDataColumnPtr col = scan->column(index.column());
+
+        if (col) {
+          return col->value(index.row());
+        }
       }
     }
   }
@@ -42,10 +58,14 @@ QVariant QcepDataColumnScanSpreadsheetModel::headerData(int section, Qt::Orienta
 
   if (role == Qt::DisplayRole) {
     if (orientation==Qt::Horizontal) {
-      QcepDataColumnPtr col = m_Scan->column(section);
+      QcepDataColumnScanPtr scan(m_Scan);
 
-      if (col) {
-        res = col->get_Name();
+      if (scan) {
+        QcepDataColumnPtr col = scan->column(section);
+
+        if (col) {
+          res = col->get_Name();
+        }
       }
     } else {
       res = section;

@@ -32,14 +32,13 @@
 #include "qcepimagehistogramgraphcontroller.h"
 #include "qcepimageslicegraphcontroller.h"
 
-QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(
-    QcepExperimentWPtr expt, QcepDataObjectPtr obj, QWidget *parent) :
-  QMainWindow(parent),
+QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(QcepExperimentWPtr expt, QcepDataObjectWPtr obj, QWidget *parent) :
+  QcepDataObjectWindow(parent),
   m_Experiment(expt),
   m_Object(obj),
   m_PlottingMode(NoPlot),
   m_SettingsSaver(new QcepSettingsSaver(this)),
-  m_PlotSettings(new QcepPlotSettings("plotSettings", m_SettingsSaver, NULL)),
+//  m_PlotSettings(new QcepPlotSettings("plotSettings", m_SettingsSaver, NULL)),
   m_ColorMap     (m_SettingsSaver, this, "colorMap",      0,     "Image Color Map Index"),
   m_ScalingMode  (m_SettingsSaver, this, "scalingMode",   0,     "Image Scaling Mode"),
   m_MinimumPct   (m_SettingsSaver, this, "minimumPct",    0,     "Image Display Minimum %"),
@@ -76,19 +75,21 @@ QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(
   setupUi(this);
 
   QcepExperimentPtr e(m_Experiment);
+  QcepDataObjectPtr objp(m_Object);
 
-  if (m_Object && expt) {
+  if (objp && expt) {
     setWindowTitle(tr("%1 Graph from %2")
-                   .arg(m_Object->pathName())
+                   .arg(objp->pathName())
                    .arg(e->get_ExperimentName()));
-  } else if (m_Object) {
+  } else if (objp) {
     setWindowTitle(tr("%1 Graph")
-                   .arg(m_Object->pathName()));
+                   .arg(objp->pathName()));
   } else {
     setWindowTitle("Unknown Graph");
   }
 
-  m_ImagePlot->init(m_PlotSettings);
+  QcepPlotSettingsPtr settings(new QcepPlotSettings("plotSettings", m_SettingsSaver, NULL));
+  m_ImagePlot->init(settings);
 
   m_PlotModeSelector->clear();
 
@@ -106,11 +107,18 @@ QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(
 
   setAttribute(Qt::WA_DeleteOnClose, true);
 
-  if (m_Object) {
-    connect(m_Object.data(), SIGNAL(dataObjectChanged()), this, SLOT(updateDisplay()));
+  if (objp) {
+    connect(objp.data(), SIGNAL(dataObjectChanged()), this, SLOT(updateDisplay()));
 
     updateDisplay();
   }
+}
+
+QcepDataObjectGraphWindow::~QcepDataObjectGraphWindow()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting Graph Window\n");
+#endif
 }
 
 void QcepDataObjectGraphWindow::setGraphMode(int mode)

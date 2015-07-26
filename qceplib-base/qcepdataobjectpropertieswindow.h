@@ -1,22 +1,23 @@
 #ifndef QCEPDATAOBJECTPROPERTIESWINDOW_H
 #define QCEPDATAOBJECTPROPERTIESWINDOW_H
 
-#include <QMainWindow>
 #include <QObject>
 #include <QWidget>
 #include "ui_qcepdataobjectpropertieswindow.h"
+#include "qcepdataobjectwindow.h"
 #include "qcepexperiment-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qceppropertiesmodel.h"
 
-class QcepDataObjectPropertiesWindow : public QMainWindow, public Ui::QcepDataObjectPropertiesWindow
+class QcepDataObjectPropertiesWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectPropertiesWindow
 {
   Q_OBJECT
 public:
   explicit QcepDataObjectPropertiesWindow(
       QcepExperimentWPtr expt,
-      QcepDataObjectPtr  obj,
+      QcepDataObjectWPtr  obj,
       QWidget *parent = 0);
+  virtual ~QcepDataObjectPropertiesWindow();
 
   void closeEvent (QCloseEvent * event);
   bool wantToClose();
@@ -27,7 +28,7 @@ public slots:
 
 private:
   QcepExperimentWPtr                  m_Experiment;
-  QcepDataObjectPtr                   m_Object;
+  QcepDataObjectWPtr                  m_Object;
   QSharedPointer<QcepPropertiesModel> m_Model;
 };
 

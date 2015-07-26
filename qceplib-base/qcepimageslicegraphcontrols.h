@@ -9,7 +9,7 @@ class QcepImageSliceGraphControls : public QcepGraphControlsWidget, public Ui::Q
   Q_OBJECT
 
 public:
-  explicit QcepImageSliceGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object);
+  explicit QcepImageSliceGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object);
   ~QcepImageSliceGraphControls();
 
 protected:

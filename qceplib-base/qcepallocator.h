@@ -25,23 +25,7 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
-public slots:
-  void report();
-
 public:
-  QcepInt16ImageDataPtr newInt16Image(int width, int height);
-  QcepInt32ImageDataPtr newInt32Image(int width, int height);
-  QcepDoubleImageDataPtr newDoubleImage(int width, int height);
-  QcepMaskDataPtr       newMask(int width, int height);
-  QcepIntegratedDataPtr newIntegratedData(QcepDoubleImageDataPtr image);
-
-  enum {
-    AllocateInt16      = 0,
-    AllocateInt32      = 1,
-    AllocateDouble     = 2,
-    AllocateMask       = 3,
-    AllocateIntegrated = 4
-  };
 
   enum AllocationStrategy {
     WaitTillAvailable,
@@ -70,7 +54,6 @@ public:
   int integratedSizeMB(int nrows);
 
   double allocatedMemoryMB();
-  double allocatedMemory();
   double maximumMemoryMB();
   double maximumMemory();
 
@@ -78,10 +61,17 @@ public:
 
   QMutex *mutex();
 
-  void allocate(int typ, int sz, int width, int height);
-  void allocate(int typ, quint64 amt);
-  void deallocate(int typ, int sz, int width, int height);
-  void deallocate(int typ, quint64 amt);
+  static void allocate(int sz, int width, int height);
+  static void deallocate(int sz, int width, int height);
+
+  static void allocate(quint64 amt);
+  static void deallocate(quint64 amt);
+
+  static quint64 allocatedMemory();
+
+protected:
+  void allocateBytes(quint64 amt);
+  void deallocateBytes(quint64 amt);
 
 private slots:
   void allocatorHeartbeat();
@@ -92,7 +82,6 @@ private:
 private:
   QMutex                m_Mutex;
   QTimer                m_Timer;
-  quint64               m_AllocatedMemory;
   QAtomicInt            m_AllocatedMemoryMB;
 
 public:
@@ -112,24 +101,6 @@ public:
 
   Q_PROPERTY(int     allocated        READ get_Allocated   WRITE set_Allocated STORED false)
   QCEP_INTEGER_PROPERTY(Allocated)
-
-  Q_PROPERTY(int     queuedDelete      READ get_QueuedDelete WRITE set_QueuedDelete STORED false)
-  QCEP_INTEGER_PROPERTY(QueuedDelete)
-
-  Q_PROPERTY(int     nAllocatedInt16   READ get_NAllocatedInt16 WRITE set_NAllocatedInt16 STORED false)
-  QCEP_INTEGER_PROPERTY(NAllocatedInt16)
-
-  Q_PROPERTY(int     nAllocatedInt32   READ get_NAllocatedInt32 WRITE set_NAllocatedInt32 STORED false)
-  QCEP_INTEGER_PROPERTY(NAllocatedInt32)
-
-  Q_PROPERTY(int     nAllocatedDouble   READ get_NAllocatedDouble WRITE set_NAllocatedDouble STORED false)
-  QCEP_INTEGER_PROPERTY(NAllocatedDouble)
-
-  Q_PROPERTY(int     nAllocatedMask   READ get_NAllocatedMask WRITE set_NAllocatedMask STORED false)
-  QCEP_INTEGER_PROPERTY(NAllocatedMask)
-
-  Q_PROPERTY(int     nAllocatedIntegrated   READ get_NAllocatedIntegrated WRITE set_NAllocatedIntegrated STORED false)
-  QCEP_INTEGER_PROPERTY(NAllocatedIntegrated)
 };
 
 #endif // QCEPALLOCATOR_H

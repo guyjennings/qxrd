@@ -9,25 +9,24 @@
 #include "qcepthread.h"
 
 static QcepAllocator *g_Allocator = NULL;
+static quint64        g_AllocatedMemory = 0;
 
 QcepAllocator::QcepAllocator
 (QcepSettingsSaverPtr saver)
   : QcepObject("allocator", NULL),
-    m_AllocatedMemory(0),
+    m_Mutex(QMutex::Recursive),
     m_AllocatedMemoryMB(0),
     m_Max(saver, this, "max", 800, "Maximum Image Memory (MB)"),
     m_TotalBufferSizeMB32(saver, this,"totalBufferSizeMB32", 800, "Maximum Image Memory in 32 bit system (MB)"),
     m_TotalBufferSizeMB64(saver, this,"totalBufferSizeMB64", 2000,"Maximum Image Memory in 64 bit system (MB)"),
     m_Reserve(saver, this,"reserve",100, "Extra Reserved Memory (MB)"),
-    m_Allocated(QcepSettingsSaverPtr(), this, "allocated", 0, "Allocated Memory (MB)"),
-    m_QueuedDelete(QcepSettingsSaverPtr(), this, "queuedDelete", 0, "Queued Delete?"),
-    m_NAllocatedInt16(QcepSettingsSaverPtr(), this, "nAllocatedInt16", 0, "Number of 16 bit images allocated"),
-    m_NAllocatedInt32(QcepSettingsSaverPtr(), this, "nAllocatedInt32", 0, "Number of 32 bit images allocated"),
-    m_NAllocatedDouble(QcepSettingsSaverPtr(), this, "nAllocatedDouble", 0, "Number of double images allocated"),
-    m_NAllocatedMask(QcepSettingsSaverPtr(), this, "nAllocatedMask", 0, "Number of mask images allocated"),
-    m_NAllocatedIntegrated(QcepSettingsSaverPtr(), this, "nAllocatedIntegrated", 0, "Number of integrated data sets allocated")
+    m_Allocated(QcepSettingsSaverPtr(), this, "allocated", 0, "Allocated Memory (MB)")
 {
-  g_Allocator = this;
+  if (g_Allocator) {
+    printf("Only one allocator can be created\n");
+  } else {
+    g_Allocator = this;
+  }
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QcepAllocator::QcepAllocator(%p)\n", this);
@@ -46,6 +45,12 @@ QcepAllocator::QcepAllocator
 
 QcepAllocator::~QcepAllocator()
 {
+#ifndef QT_NO_DEBUG
+  printf("Deleting allocator\n");
+#endif
+
+  g_Allocator = NULL;
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QcepAllocator::~QcepAllocator(%p)\n", this);
   }
@@ -119,8 +124,6 @@ QcepInt16ImageDataPtr QcepAllocator::newInt16Image(AllocationStrategy strat, int
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->int16SizeMB(width, height))) {
       QcepInt16ImageDataPtr res(new QcepInt16ImageData(QcepSettingsSaverPtr(), width, height));
 
-//      res->moveToThread(g_Allocator->thread());
-
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newInt16Image() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
       }
@@ -144,8 +147,6 @@ QcepInt32ImageDataPtr QcepAllocator::newInt32Image(AllocationStrategy strat, int
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->int32SizeMB(width, height))) {
       QcepInt32ImageDataPtr res(new QcepInt32ImageData(QcepSettingsSaverPtr(), width, height));
 
-//      res->moveToThread(g_Allocator->thread());
-
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newInt32Image() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
       }
@@ -168,8 +169,6 @@ QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(AllocationStrategy strat, i
 
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->doubleSizeMB(width, height))) {
       QcepDoubleImageDataPtr res(new QcepDoubleImageData(QcepSettingsSaverPtr(), width, height));
-
-//      res->moveToThread(g_Allocator->thread());
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newDoubleImage() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
@@ -209,8 +208,6 @@ QcepMaskDataPtr QcepAllocator::newMask(AllocationStrategy strat, int width, int 
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->maskSizeMB(width, height))) {
       QcepMaskDataPtr res(new QcepMaskData(QcepSettingsSaverPtr(), width, height, def));
 
-//      res->moveToThread(g_Allocator->thread());
-
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newMask() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
       }
@@ -234,10 +231,7 @@ QcepIntegratedDataPtr QcepAllocator::newIntegratedData(AllocationStrategy strat,
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->integratedSizeMB(10000))) {
       QcepIntegratedDataPtr res(new QcepIntegratedData(QcepSettingsSaverPtr(),
                                                        data,
-                                                       AllocateIntegrated,
                                                        10000));
-
-//      res->moveToThread(g_Allocator->thread());
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newIntegratedData() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
@@ -280,10 +274,7 @@ void QcepAllocator::newDoubleImageAndIntegratedData(QcepAllocator::AllocationStr
 
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->doubleSizeMB(width, height) + g_Allocator->integratedSizeMB(10000))) {
       img = QcepDoubleImageDataPtr(new QcepDoubleImageData(QcepSettingsSaverPtr(), width, height));
-      integ = QcepIntegratedDataPtr(new QcepIntegratedData(QcepSettingsSaverPtr(), img, AllocateIntegrated, 10000));
-
-//      img->moveToThread(g_Allocator->thread());
-//      integ->moveToThread(g_Allocator->thread());
+      integ = QcepIntegratedDataPtr(new QcepIntegratedData(QcepSettingsSaverPtr(), img, 10000));
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newDoubleImageAndIntegratedData() succeeded [%1] [%2] [%3]")
@@ -297,186 +288,55 @@ void QcepAllocator::newDoubleImageAndIntegratedData(QcepAllocator::AllocationStr
   }
 }
 
-QcepInt16ImageDataPtr QcepAllocator::newInt16Image(int width, int height)
+/* static */
+void QcepAllocator::allocate(int sz, int width, int height)
 {
-  return QcepAllocator::newInt16Image(WaitTillAvailable, width, height);
-}
-
-QcepInt32ImageDataPtr QcepAllocator::newInt32Image(int width, int height)
-{
-  return QcepAllocator::newInt32Image(WaitTillAvailable, width, height);
-}
-
-QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(int width, int height)
-{
-  return QcepAllocator::newDoubleImage(WaitTillAvailable, width, height);
-}
-
-QcepMaskDataPtr       QcepAllocator::newMask(int width, int height)
-{
-  return QcepAllocator::newMask(WaitTillAvailable, width, height);
-}
-
-QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QcepDoubleImageDataPtr image)
-{
-  return QcepAllocator::newIntegratedData(WaitTillAvailable, image);
-}
-
-void QcepAllocator::allocate(int typ, int sz, int width, int height)
-{
-  allocate(typ, (quint64) sz*width*height);
-}
-
-void QcepAllocator::allocate(int typ, quint64 amt)
-{
-  //  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  m_AllocatedMemory += amt;
-
-  m_AllocatedMemoryMB.fetchAndStoreOrdered(m_AllocatedMemory/MegaBytes);
-
-  switch (typ) {
-  case AllocateInt16:
-    m_NAllocatedInt16.incValue(1);
-    break;
-  case AllocateInt32:
-    m_NAllocatedInt32.incValue(1);
-    break;
-  case AllocateDouble:
-    m_NAllocatedDouble.incValue(1);
-    break;
-  case AllocateMask:
-    m_NAllocatedMask.incValue(1);
-    break;
-  case AllocateIntegrated:
-    m_NAllocatedIntegrated.incValue(1);
-    break;
+  if (g_Allocator) {
+    g_Allocator -> allocate((quint64) sz*width*height);
   }
 }
 
-void QcepAllocator::deallocate(int typ, int sz, int width, int height)
+/* static */
+void QcepAllocator::allocate(quint64 amt)
 {
-  deallocate(typ, (quint64) sz*width*height);
-}
-
-void QcepAllocator::deallocate(int typ, quint64 amt)
-{
-  //  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  m_AllocatedMemory -= amt;
-
-  m_AllocatedMemoryMB.fetchAndStoreOrdered(m_AllocatedMemory/MegaBytes);
-
-  switch (typ) {
-  case AllocateInt16:
-    m_NAllocatedInt16.incValue(-1);
-    break;
-  case AllocateInt32:
-    m_NAllocatedInt32.incValue(-1);
-    break;
-  case AllocateDouble:
-    m_NAllocatedDouble.incValue(-1);
-    break;
-  case AllocateMask:
-    m_NAllocatedMask.incValue(-1);
-    break;
-  case AllocateIntegrated:
-    m_NAllocatedIntegrated.incValue(-1);
-    break;
+  if (g_Allocator) {
+    g_Allocator -> allocateBytes(amt);
   }
 }
 
-//static int g_QueuedDelete = 0;
+void QcepAllocator::allocateBytes(quint64 amt)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-//void QcepAllocator::maskDeleter(QcepMaskData *mask)
-//{
-//  //    delete mask;
-//  if (g_QueuedDelete) {
-//    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-//      g_Application->printMessage(tr("QcepAllocator::maskDeleter deleteLater %1 [%2]").HEXARG(mask).arg(mask->allocatedMemoryMB()));
-//    }
+  g_AllocatedMemory += amt;
 
-//    mask->deleteLater();
-//  } else {
-//    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-//      g_Application->printMessage(tr("QcepAllocator::maskDeleter delete %1 [%2]").HEXARG(mask).arg(mask->allocatedMemoryMB()));
-//    }
+  m_AllocatedMemoryMB.fetchAndStoreOrdered(g_AllocatedMemory/MegaBytes);
+}
 
-//    delete mask;
-//  }
-//}
+/* static */
+void QcepAllocator::deallocate(int sz, int width, int height)
+{
+  if (g_Allocator) {
+    g_Allocator -> deallocate((quint64) sz*width*height);
+  }
+}
 
-//void QcepAllocator::int16Deleter(QcepInt16ImageData *img)
-//{
-//  //    delete img;
-//  if (g_QueuedDelete) {
-//    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-//      g_Application->printMessage(tr("QcepAllocator::int16Deleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-//    }
+/* static */
+void QcepAllocator::deallocate(quint64 amt)
+{
+  if (g_Allocator) {
+    g_Allocator -> deallocateBytes(amt);
+  }
+}
 
-//    img->deleteLater();
-//  } else {
-//    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-//      g_Application->printMessage(tr("QcepAllocator::int16Deleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-//    }
+void QcepAllocator::deallocateBytes(quint64 amt)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-//    delete img;
-//  }
-//}
+  g_AllocatedMemory -= amt;
 
-//void QcepAllocator::int32Deleter(QcepInt32ImageData *img)
-//{
-//  //    delete img;
-//  if (g_QueuedDelete) {
-//    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-//      g_Application->printMessage(tr("QcepAllocator::int32Deleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-//    }
-
-//    img->deleteLater();
-//  } else {
-//    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-//      g_Application->printMessage(tr("QcepAllocator::int32Deleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-//    }
-
-//    delete img;
-//  }
-//}
-
-//void QcepAllocator::doubleDeleter(QcepDoubleImageData *img)
-//{
-//  //    delete img;
-//  if (g_QueuedDelete) {
-//    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-//      g_Application->printMessage(tr("QcepAllocator::doubleDeleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-//    }
-
-//    img->deleteLater();
-//  } else {
-//    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-//      g_Application->printMessage(tr("QcepAllocator::doubleDeleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-//    }
-
-//    delete img;
-//  }
-//}
-
-//void QcepAllocator::integratedDeleter(QcepIntegratedData *img)
-//{
-//  //    delete img;
-//  if (g_QueuedDelete) {
-//    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-//      g_Application->printMessage(tr("QcepAllocator::integratedDeleter deleteLater %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-//    }
-
-//    img->deleteLater();
-//  } else {
-//    if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-//      g_Application->printMessage(tr("QcepAllocator::integratedDeleter delete %1 [%2]").HEXARG(img).arg(img->allocatedMemoryMB()));
-//    }
-
-//    delete img;
-//  }
-//}
+  m_AllocatedMemoryMB.fetchAndStoreOrdered(g_AllocatedMemory/MegaBytes);
+}
 
 int QcepAllocator::int16SizeMB(int width, int height)
 {
@@ -513,9 +373,9 @@ double QcepAllocator::allocatedMemoryMB()
   return m_AllocatedMemoryMB.fetchAndAddOrdered(0);
 }
 
-double QcepAllocator::allocatedMemory()
+quint64 QcepAllocator::allocatedMemory()
 {
-  return m_AllocatedMemoryMB.fetchAndAddOrdered(0)*MegaBytes;
+  return g_AllocatedMemory;
 }
 
 double QcepAllocator::maximumMemoryMB()
@@ -531,17 +391,4 @@ double QcepAllocator::maximumMemory()
 void QcepAllocator::changedSizeMB(int newMB)
 {
   set_Max(newMB);
-}
-
-void QcepAllocator::report()
-{
-  if (g_Application) {
-    g_Application->printMessage(tr("Allocator: %1 i16, %2 i32, %3 dbl, %4 msk, %5 integ")
-                      .arg(get_NAllocatedInt16())
-                      .arg(get_NAllocatedInt32())
-                      .arg(get_NAllocatedDouble())
-                      .arg(get_NAllocatedMask())
-                      .arg(get_NAllocatedIntegrated())
-                      );
-  }
 }

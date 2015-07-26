@@ -7,28 +7,31 @@
 #include <QMessageBox>
 
 QcepDataObjectPropertiesWindow::QcepDataObjectPropertiesWindow
-  (QcepExperimentWPtr expt, QcepDataObjectPtr obj, QWidget *parent) :
-  QMainWindow(parent),
+  (QcepExperimentWPtr expt, QcepDataObjectWPtr obj, QWidget *parent) :
+  QcepDataObjectWindow(parent),
   m_Experiment(expt),
   m_Object(obj)
 {
   setupUi(this);
 
   QcepExperimentPtr e(m_Experiment);
+  QcepDataObjectPtr objp(m_Object);
 
-  if (m_Object && e) {
+  if (objp && e) {
     setWindowTitle(tr("%1 Properties from %2")
-                   .arg(m_Object->pathName())
+                   .arg(objp->pathName())
                    .arg(e->get_ExperimentName()));
-  } else if (m_Object) {
+  } else if (objp) {
     setWindowTitle(tr("%1 Properties")
-                   .arg(m_Object->pathName()));
+                   .arg(objp->pathName()));
   } else {
     setWindowTitle("Unknown Properties");
   }
 
-  m_Model = QSharedPointer<QcepPropertiesModel>(
-        new QcepDataObjectPropertiesModel(m_Object));
+  if (objp) {
+    m_Model = QSharedPointer<QcepPropertiesModel>(
+          new QcepDataObjectPropertiesModel(m_Object));
+  }
 
   m_TableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
   m_TableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -37,12 +40,19 @@ QcepDataObjectPropertiesWindow::QcepDataObjectPropertiesWindow
     m_TableView->setModel(m_Model.data());
   }
 
-  if (m_Object && m_Model) {
-    connect(m_Object.data(), SIGNAL(dataObjectChanged()),
+  if (objp && m_Model) {
+    connect(objp.data(), SIGNAL(dataObjectChanged()),
             m_Model.data(), SLOT(onDataObjectChanged()));
   }
 
   setAttribute(Qt::WA_DeleteOnClose, true);
+}
+
+QcepDataObjectPropertiesWindow::~QcepDataObjectPropertiesWindow()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting Properties Window\n");
+#endif
 }
 
 void QcepDataObjectPropertiesWindow::closeEvent ( QCloseEvent * event )

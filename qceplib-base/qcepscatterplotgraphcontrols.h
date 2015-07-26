@@ -9,7 +9,7 @@ class QcepScatterPlotGraphControls : public QcepGraphControlsWidget, public Ui::
   Q_OBJECT
 
 public:
-  explicit QcepScatterPlotGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectPtr object);
+  explicit QcepScatterPlotGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object);
   ~QcepScatterPlotGraphControls();
 
 protected:
