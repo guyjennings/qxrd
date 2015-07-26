@@ -15,6 +15,7 @@ class QcepDataObject : public QcepObject, public QEnableSharedFromThis<QcepDataO
 public:
   QcepDataObject(QcepSettingsSaverWPtr saver,
                  QString name);
+  virtual ~QcepDataObject();
 
   QcepSettingsSaverWPtr saver();
 
@@ -43,6 +44,8 @@ public:
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QcepDataObjectPtr &data);
   static void fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr &data);
+
+  static int allocatedObjects();
 
 private:
   QcepDataGroupWPtr     m_Parent;
