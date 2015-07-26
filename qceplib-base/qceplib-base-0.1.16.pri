@@ -67,8 +67,8 @@ SOURCES += \
   $${PWD}/qcepnewimagedialog.cpp \
   $${PWD}/qcepnewdataarraydialog.cpp \
   $${PWD}/qcepdataobjectpropertieswindow.cpp \
-  $${PWD}/qcepdataobjectspreadsheetwindow.cpp
-
+  $${PWD}/qcepdataobjectspreadsheetwindow.cpp \
+  $${PWD}/qcepscriptengine.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -159,7 +159,10 @@ HEADERS += \
   $${PWD}/qcepnewimagedialog.h \
   $${PWD}/qcepnewdataarraydialog.h \
   $${PWD}/qcepdataobjectpropertieswindow.h \
-  $${PWD}/qcepdataobjectspreadsheetwindow.h
+  $${PWD}/qcepdataobjectspreadsheetwindow.h \
+  $${PWD}/qcepobject-ptr.h \
+  $${PWD}/qcepscriptengine.h \
+  $${PWD}/qcepscriptengine-ptr.h
 
 
 contains (DEFINES, HAVE_QWT) {
