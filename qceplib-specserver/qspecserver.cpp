@@ -8,14 +8,17 @@
 #include <QVariant>
 #include <QDateTime>
 #include <QTime>
-
+#include <QNetworkInterface>
+#include <QHostInfo>
 #include "qcepexperiment.h"
 
-QSpecServer::QSpecServer(QcepExperimentWPtr doc, QString name)
+QSpecServer::QSpecServer(QcepObjectWPtr owner, QString name)
   : QTcpServer(NULL),
-    m_Experiment(doc),
+    m_Owner(owner),
     m_ServerName(name),
     m_Socket(NULL),
+    m_Address(QHostAddress::Any),
+    m_Port(-1),
     m_SwapBytes(0),
     m_ReplyHeadSent(0)
 {
@@ -52,20 +55,28 @@ QSpecServer::startServer(QHostAddress a, int pmin, int pmax)
   }
 
   for (int p=pmin; p<=pmax; p++) {
-    QcepExperimentPtr exp(m_Experiment);
+    if (listen(a, p)) {
+      printMessage(tr("Started SPEC Server on address %1 port %2")
+                   .arg(a.toString()).arg(p));
 
-    if (exp && listen(a, p)) {
-      exp->printMessage(tr("Started SPEC Server on address %1 port %2")
-                        .arg(a.toString()).arg(p));
-
+      m_Address = a;
       m_Port = p;
+
+      reportServerAddress();
 
       break;
     } else {
-      exp->criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy running already?")
-                           .arg(a.toString()).arg(p));
-
       m_Port = -1;
+    }
+  }
+
+  if (m_Port == -1) {
+    if (pmin == pmax) {
+      printMessage(tr("Failed to bind to address %1 port %2\nIs there another copy running already?")
+                   .arg(a.toString()).arg(pmin));
+    } else {
+      printMessage(tr("Could not find unused port on address %1 between %2 and %3\nAre there other copies running already?")
+                   .arg(a.toString()).arg(pmin).arg(pmax));
     }
   }
 }
@@ -85,12 +96,43 @@ QSpecServer::port()
 }
 
 void
+QSpecServer::reportServerAddress()
+{
+  if (m_Port >= 0) {
+    QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
+
+    foreach (QNetworkInterface interface, interfaces) {
+      if (interface.flags().testFlag(QNetworkInterface::IsRunning) &&
+          interface.flags().testFlag(QNetworkInterface::IsUp) &&
+          !interface.flags().testFlag(QNetworkInterface::IsLoopBack)) {
+
+        QList<QNetworkAddressEntry> addresses = interface.addressEntries();
+
+        foreach (QNetworkAddressEntry address, addresses) {
+          QString addr = address.ip().toString();
+
+          QHostInfo hinfo = QHostInfo::fromName(addr);
+
+          addr = hinfo.hostName();
+
+          if (address.ip().protocol() == QAbstractSocket::IPv4Protocol) {
+            printMessage(tr("Access at \"%1:%2\" or \"%3:%4\"")
+                              .arg(addr).arg(m_Port)
+                              .arg(addr).arg(m_ServerName));
+          }
+        }
+      }
+    }
+  }
+}
+
+void
 QSpecServer::printMessage(QString msg, QDateTime ts)
 {
-  QcepExperimentPtr exp(m_Experiment);
+  QcepObjectPtr owner(m_Owner);
 
-  if (exp) {
-    exp->printMessage(msg, ts);
+  if (owner) {
+    owner->printMessage(msg, ts);
   }
 }
 
@@ -106,18 +148,6 @@ QSpecServer::openNewConnection()
 {
   m_Socket = nextPendingConnection();
 
-//  {
-//    QxrdExperimentPtr expt(m_Experiment);
-
-//    if (expt) {
-//      QxrdServerThreadPtr tp(expt->specServerThread());
-
-//      if (tp) {
-//        m_Socket -> moveToThread(tp.data());
-//      }
-//    }
-//  }
-
   if (qcepDebug(DEBUG_SERVER)) {
     printMessage(tr("LowDelayOption = %1").arg(m_Socket->socketOption(QAbstractSocket::LowDelayOption).toString()));
   }
@@ -128,9 +158,6 @@ QSpecServer::openNewConnection()
     printMessage(tr("LowDelayOption = %1").arg(m_Socket->socketOption(QAbstractSocket::LowDelayOption).toString()));
   }
 
-//  connect(m_Socket, SIGNAL(disconnected()),
-//	  m_Socket, SLOT(deleteLater()));
-
   connect(m_Socket, SIGNAL(readyRead()),
       this,     SLOT(clientRead()));
 
@@ -138,9 +165,6 @@ QSpecServer::openNewConnection()
     printMessage(QString("New connection from %1")
                                 .arg(m_Socket->peerAddress().toString()) );
   }
-
-//  connect(m_Socket, SIGNAL(disconnected()),
-//	  this,     SLOT(connectionClosed()));
 }
 
 void
@@ -256,13 +280,6 @@ QSpecServer::interpretPacket()
   if (qcepDebug(DEBUG_SERVER)) {
     printMessage(tr("QSpecServer::interpretPacket start"));
   }
-
-//   printMessage(tr("Packet received: magic %1, version %2, size %3")
-// 		     .arg(m_Packet.magic).arg(m_Packet.vers).arg(m_Packet.size));
-//   printMessage(tr("Packet sn %1, sec %2, usec %3")
-// 		     .arg(m_Packet.sn).arg(m_Packet.sec).arg(m_Packet.usec));
-//   printMessage(tr("Packet cmd %1, type %2, rows %3, cols %4, len %5")
-// 		     .arg(m_Packet.cmd).arg(m_Packet.type).arg(m_Packet.rows).arg(m_Packet.cols).arg(m_Packet.len));
 
   switch (m_Packet.cmd) {
   case SV_CLOSE:
