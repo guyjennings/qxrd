@@ -711,6 +711,11 @@ void QxrdApplication::doOpenQXRDWebPage()
   QDesktopServices::openUrl(QUrl("http://qxrd.sourceforge.net/"));
 }
 
+void QxrdApplication::doOpenURL(QString url)
+{
+  QDesktopServices::openUrl(QUrl(url));
+}
+
 void QxrdApplication::editGlobalPreferences()
 {
   QxrdGlobalPreferencesDialog prefs(this);

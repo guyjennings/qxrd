@@ -95,6 +95,7 @@ public slots:
 
   void doAboutQxrd();
   void doOpenQXRDWebPage();
+  void doOpenURL(QString url);
 
   void possiblyQuit();
   void editGlobalPreferences();
