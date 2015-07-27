@@ -24,8 +24,7 @@
     <item row="0" column="1" colspan="3">
      <widget class="QSpinBox" name="m_OversampleFactor">
       <property name="toolTip">
-       <string>Specify oversampling factor for angular integration
-script property integrator.oversample</string>
+       <string>Specify oversampling factor for angular integration</string>
       </property>
       <property name="specialValueText">
        <string>No oversampling</string>
@@ -51,8 +50,7 @@ script property integrator.oversample</string>
     <item row="1" column="1" colspan="3">
      <widget class="QComboBox" name="m_IntegratorXUnits">
       <property name="toolTip">
-       <string>Choose X units for integration
-property integrator.integrationXUnits</string>
+       <string>Choose X units for integration</string>
       </property>
       <item>
        <property name="text">
@@ -85,8 +83,7 @@ property integrator.integrationXUnits</string>
      <widget class="QxrdCenterStepSpinner" name="m_IntegratorStepSize">
       <property name="toolTip">
        <string>step size for integration
-if ==  0, use fixed number of steps instead
-script property integrator.integrationStep</string>
+if ==  0, use fixed number of steps instead</string>
       </property>
       <property name="specialValueText">
        <string>Use fixed number of steps</string>
@@ -107,8 +104,7 @@ script property integrator.integrationStep</string>
      <widget class="QSpinBox" name="m_IntegratorNSteps">
       <property name="toolTip">
        <string>Number of steps for integration
-if == 0, use step size instead
-script property integrator.integrationNSteps</string>
+if == 0, use step size instead</string>
       </property>
       <property name="specialValueText">
        <string>Use fixed step size</string>
@@ -121,8 +117,7 @@ script property integrator.integrationNSteps</string>
     <item row="4" column="1" colspan="3">
      <widget class="QDoubleSpinBox" name="m_IntegratorMinimum">
       <property name="toolTip">
-       <string>Start value for integration
-script property integrator.integrationMinimum</string>
+       <string>Start value for integration</string>
       </property>
       <property name="decimals">
        <number>5</number>
@@ -412,8 +407,7 @@ intensity *= pow(distance/m_DetectorDistance, 2)/cos(tth);</string>
     <item row="5" column="1" colspan="3">
      <widget class="QDoubleSpinBox" name="m_IntegratorMaximum">
       <property name="toolTip">
-       <string>Ending value for integration range
-script property integrator.integrationMaximum</string>
+       <string>Ending value for integration range</string>
       </property>
       <property name="decimals">
        <number>5</number>
@@ -477,8 +471,7 @@ script property integrator.integrationMaximum</string>
     <item row="7" column="1" colspan="3">
      <widget class="QDoubleSpinBox" name="m_SelfNormalizationMinimum">
       <property name="toolTip">
-       <string>Start value for integration
-script property integrator.integrationMinimum</string>
+       <string>Start value for self normalization range</string>
       </property>
       <property name="decimals">
        <number>5</number>
@@ -491,8 +484,7 @@ script property integrator.integrationMinimum</string>
     <item row="8" column="1" colspan="3">
      <widget class="QDoubleSpinBox" name="m_SelfNormalizationMaximum">
       <property name="toolTip">
-       <string>Start value for integration
-script property integrator.integrationMinimum</string>
+       <string>End value for self normalization</string>
       </property>
       <property name="decimals">
        <number>5</number>
@@ -505,9 +497,7 @@ script property integrator.integrationMinimum</string>
     <item row="6" column="0" colspan="4">
      <widget class="QCheckBox" name="m_EnableSelfNormalization">
       <property name="toolTip">
-       <string>Enable polarization correction during integration:
-intensity /= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
-                   (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth/2),2)));</string>
+       <string>Normalize integrated curves so that the average value in the self normalization range is 1</string>
       </property>
       <property name="text">
        <string>Enable Self Normalization </string>

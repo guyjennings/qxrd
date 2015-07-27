@@ -38,7 +38,7 @@ private slots:
   void onHistogramDataAvailable();
 
 public slots:
-  void accumulateImages(QStringList names);
+  void sumImages(QStringList names);
   void addImages(QStringList names);
   void subtractImages(QStringList names);
   void projectImages(QStringList names, int px, int py, int pz);

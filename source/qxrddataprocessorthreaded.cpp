@@ -335,7 +335,7 @@ double QxrdDataProcessorThreaded::estimatedProcessingTime(double estSerialTime, 
   }
 }
 
-void QxrdDataProcessorThreaded::accumulateImages(QStringList names)
+void QxrdDataProcessorThreaded::sumImages(QStringList names)
 {
   QcepDoubleImageDataPtr summed = takeNextFreeImage(0,0);
   int first = true;

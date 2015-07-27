@@ -40,7 +40,7 @@ public slots:
   void doOpenGainMap();
   void doProcess();
   void doIntegrate();
-  void doAccumulate();
+  void doSumImages();
   void doClearAccumulator();
   void doIntegrateAndAccumulate();
   void doSaveAccumulator();
