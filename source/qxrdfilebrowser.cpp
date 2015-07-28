@@ -75,7 +75,7 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
   connect(m_OpenButton, SIGNAL(clicked()), this, SLOT(doOpen()));
   connect(m_ProcessButton, SIGNAL(clicked()), this, SLOT(doProcess()));
   connect(m_IntegrateButton, SIGNAL(clicked()), this, SLOT(doIntegrate()));
-  connect(m_AccumulateButton, SIGNAL(clicked()), this, SLOT(doAccumulate()));
+  connect(m_AccumulateButton, &QPushButton::clicked, this, &QxrdFileBrowser::doSumImages);
 
   QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
 
