@@ -3,11 +3,12 @@
 
 #include <QObject>
 #include <QScriptValue>
-#include <QScriptEngine>
 #include <QDateTime>
 #include <QMutex>
 #include <QRegExp>
 #include <QPointF>
+
+#include "qcepscriptengine.h"
 
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -15,7 +16,7 @@
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdwindow-ptr.h"
 
-class QxrdScriptEngine : public QScriptEngine
+class QxrdScriptEngine : public QcepScriptEngine
 {
   Q_OBJECT
 
@@ -52,19 +53,10 @@ public:
 
   void setWindow(QxrdWindowWPtr win);
 
-  QString documentationLink(QString base, QString subItem);
-  QByteArray helpText(QString item);
-
 public slots:
-  QString documentationText(QString item);
-  QString documentationText(QRegExp pattern);
-
   static QString convertToString(QScriptValue result);
 
   void dumpLocks();
-
-//  QScriptValue newQxrdObject(QObject *object, QString objectName);
-//  QScriptValue newQxrdFunction(FunctionSignature fun, QString objectName);
 
   void openScriptOutput(const QString& fileName);
   void writeScriptOutput(const QString& outputLine);
@@ -116,9 +108,6 @@ private:
   static QScriptValue dataColumnFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue dataColumnScanFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue dataImageFunc(QScriptContext *context, QScriptEngine *engine);
-
-  QString tableHeader();
-  QString tableFooter();
 
   static QScriptValue QPointFToScriptValue(QScriptEngine *engine, const QPointF &in);
   static void         QPointFFromScriptValue(const QScriptValue &object, QPointF &pt);
