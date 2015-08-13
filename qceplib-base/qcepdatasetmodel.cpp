@@ -347,6 +347,7 @@ QcepDataObjectPtr      QcepDatasetModel::item(QString path)
 
 QcepDataGroupPtr       QcepDatasetModel::group(const QModelIndex &index)
 {
+  return QcepDataGroupPtr();
 }
 
 QcepDataGroupPtr       QcepDatasetModel::group(QString path)
@@ -373,6 +374,7 @@ QcepDataGroupPtr       QcepDatasetModel::newGroup(QString path)
 
 QcepDataArrayPtr       QcepDatasetModel::array(const QModelIndex &index)
 {
+  return QcepDataArrayPtr();
 }
 
 QcepDataArrayPtr       QcepDatasetModel::array(QString path)
@@ -399,6 +401,7 @@ QcepDataArrayPtr       QcepDatasetModel::newArray(QString path, QVector<int> dim
 
 QcepDataColumnPtr      QcepDatasetModel::column(const QModelIndex &index)
 {
+  return QcepDataColumnPtr();
 }
 
 QcepDataColumnPtr      QcepDatasetModel::column(QString path)
@@ -425,6 +428,7 @@ QcepDataColumnPtr      QcepDatasetModel::newColumn(QString path, int nRows)
 
 QcepDataColumnScanPtr  QcepDatasetModel::columnScan(const QModelIndex &index)
 {
+  return QcepDataColumnScanPtr();
 }
 
 QcepDataColumnScanPtr  QcepDatasetModel::columnScan(QString path)
@@ -451,6 +455,7 @@ QcepDataColumnScanPtr  QcepDatasetModel::newColumnScan(QString path, int nRows, 
 
 QcepDoubleImageDataPtr QcepDatasetModel::image(const QModelIndex &index)
 {
+  return QcepDoubleImageDataPtr();
 }
 
 QcepDoubleImageDataPtr QcepDatasetModel::image(QString path)
