@@ -102,7 +102,7 @@ public slots:
 
 signals:
   void valueChanged(double val, int index);
-  void valueChanged(QString val);
+  void stringValueChanged(QString val);
 
 private:
   double m_Default;
@@ -151,7 +151,7 @@ public slots:
 
 signals:
   void valueChanged(int val, int index);
-  void valueChanged(QString val);
+  void stringValueChanged(QString val);
 
 private:
   QAtomicInt  m_Default;
@@ -619,7 +619,7 @@ public slots:
 
 signals:
   void valueChanged(qint64 val, int index);
-  void valueChanged(QString val);
+  void stringValueChanged(QString val);
 
 private:
   qint64  m_Default;

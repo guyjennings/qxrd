@@ -766,7 +766,7 @@ void QcepDoubleProperty::setValue(double val)
     }
 
     emit valueChanged(value(), incIndex(1));
-    emit valueChanged(tr("%1").arg(value()));
+    emit stringValueChanged(tr("%1").arg(value()));
   }
 }
 
@@ -789,7 +789,7 @@ void QcepDoubleProperty::incValue(double step)
     }
 
     emit valueChanged(value(), incIndex(1));
-    emit valueChanged(tr("%1").arg(value()));
+    emit stringValueChanged(tr("%1").arg(value()));
   }
 }
 
@@ -843,7 +843,7 @@ void QcepDoubleProperty::linkTo(QLabel *label)
 
   setWidgetToolTip(label);
 
-  connect(this, SIGNAL(valueChanged(QString)), label, SLOT(setText(QString)));
+  connect(this, SIGNAL(stringValueChanged(QString)), label, SLOT(setText(QString)));
 }
 
 void QcepDoubleProperty::linkTo(QProgressBar *progress)
@@ -975,7 +975,7 @@ void QcepIntProperty::setValue(int val)
     }
 
     emit valueChanged(val, incIndex(1));
-    emit valueChanged(tr("%1").arg(val));
+    emit stringValueChanged(tr("%1").arg(val));
   }
 }
 
@@ -996,7 +996,7 @@ void QcepIntProperty::incValue(int step)
     }
 
     emit valueChanged(value(), incIndex(1));
-    emit valueChanged(tr("%1").arg(value()));
+    emit stringValueChanged(tr("%1").arg(value()));
   }
 }
 
@@ -1064,7 +1064,7 @@ void QcepIntProperty::linkTo(QLabel *label)
 
     setWidgetToolTip(label);
 
-    connect(this, SIGNAL(valueChanged(QString)), label, SLOT(setText(QString)));
+    connect(this, SIGNAL(stringValueChanged(QString)), label, SLOT(setText(QString)));
   }
 }
 
@@ -2882,7 +2882,7 @@ void QcepInt64Property::setValue(qint64 val)
     }
 
     emit valueChanged(val, incIndex(1));
-    emit valueChanged(tr("%1").arg(val));
+    emit stringValueChanged(tr("%1").arg(val));
   }
 }
 
@@ -2905,7 +2905,7 @@ void QcepInt64Property::incValue(qint64 step)
     }
 
     emit valueChanged(value(), incIndex(1));
-    emit valueChanged(tr("%1").arg(value()));
+    emit stringValueChanged(tr("%1").arg(value()));
   }
 }
 
