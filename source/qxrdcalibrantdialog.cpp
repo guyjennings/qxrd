@@ -39,7 +39,7 @@ QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdCalibrantLibraryPtr cal, QxrdCenter
 #endif
   }
 
-  connect(m_CalibrantTableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(onLibrarySelectionChanged(QItemSelection,QItemSelection)));
+  connect(m_CalibrantTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &QxrdCalibrantDialog::onLibrarySelectionChanged);
 }
 
 QxrdCalibrantDialog::~QxrdCalibrantDialog()

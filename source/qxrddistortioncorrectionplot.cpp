@@ -34,14 +34,5 @@ void QxrdDistortionCorrectionPlot::setWindow(QxrdWindow *win)
 
   if (dp) {
     m_DistortionCorrection = dp -> distortionCorrection();
-
-//    connect(m_Measurer, SIGNAL(selected(QVector<QPointF>)),
-//            dp.data(), SLOT(printMeasuredPolygon(QVector<QPointF>)));
-
-//    QxrdCenterFinderPtr cf(m_CenterFinder);
-
-//    if (cf) {
-//      connect(cf.data(), SIGNAL(parameterChanged()), this, SLOT(onParameterChanged()));
-//    }
   }
 }

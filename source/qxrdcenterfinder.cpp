@@ -77,14 +77,14 @@ QxrdCenterFinder::QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWP
 //  m_CenterX.setDebug(true);
 //  m_CenterY.setDebug(true);
 
-  connect(prop_CenterX(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()), Qt::DirectConnection);
-  connect(prop_CenterY(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()), Qt::DirectConnection);
-  connect(prop_DetectorXPixelSize(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()), Qt::DirectConnection);
-  connect(prop_DetectorYPixelSize(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()), Qt::DirectConnection);
-  connect(prop_DetectorDistance(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()), Qt::DirectConnection);
-  connect(prop_ImplementTilt(), SIGNAL(valueChanged(bool,int)), this, SIGNAL(parameterChanged()), Qt::DirectConnection);
-  connect(prop_DetectorTilt(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()), Qt::DirectConnection);
-  connect(prop_TiltPlaneRotation(), SIGNAL(valueChanged(double,int)), this, SIGNAL(parameterChanged()), Qt::DirectConnection);
+  connect(prop_CenterX(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
+  connect(prop_CenterY(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
+  connect(prop_DetectorXPixelSize(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
+  connect(prop_DetectorYPixelSize(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
+  connect(prop_DetectorDistance(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
+  connect(prop_ImplementTilt(), &QcepBoolProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
+  connect(prop_DetectorTilt(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
+  connect(prop_TiltPlaneRotation(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
 }
 
 QxrdCenterFinder::~QxrdCenterFinder()

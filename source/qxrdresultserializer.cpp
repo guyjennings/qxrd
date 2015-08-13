@@ -16,7 +16,7 @@ QxrdResultSerializer<T>::QxrdResultSerializer(QcepIntProperty *ctr, QObject *par
  : QxrdResultSerializerBase(parent),
    m_Counter(ctr)
 {
-  connect(&m_Watcher, SIGNAL(finished()), this, SIGNAL(resultAvailable()));
+  connect(&m_Watcher, &QFutureWatcherBase::finished, this, &QxrdResultSerializerBase::resultAvailable);
 }
 
 template <typename T>

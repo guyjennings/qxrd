@@ -91,7 +91,7 @@ public slots:
 
   void updateTitle();
   void acquireStarted();
-  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
+  void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
   void acquireComplete();
 
   void crashProgram();

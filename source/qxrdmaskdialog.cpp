@@ -18,31 +18,28 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
 
   setupUi(this);
 
-  connect(m_HideMaskAll, SIGNAL(clicked()), this, SLOT(doHideMaskAll()));
-  connect(m_ShowMaskAll, SIGNAL(clicked()), this, SLOT(doShowMaskAll()));
-  connect(m_HideMaskRange, SIGNAL(clicked()), this, SLOT(doHideMaskRange()));
-  connect(m_ShowMaskRange, SIGNAL(clicked()), this, SLOT(doShowMaskRange()));
-  connect(m_InvertMask, SIGNAL(clicked()), this, SLOT(doInvertMask()));
-  connect(m_GrowMask, SIGNAL(clicked()), this, SLOT(doGrowMask()));
-  connect(m_ShrinkMask, SIGNAL(clicked()), this, SLOT(doShrinkMask()));
-  connect(m_AndMask, SIGNAL(clicked()), this, SLOT(doAndMask()));
-  connect(m_OrMask, SIGNAL(clicked()), this, SLOT(doOrMask()));
-  connect(m_XorMask, SIGNAL(clicked()), this, SLOT(doXorMask()));
-  connect(m_AndNotMask, SIGNAL(clicked()), this, SLOT(doAndNotMask()));
-  connect(m_OrNotMask, SIGNAL(clicked()), this, SLOT(doOrNotMask()));
-  connect(m_XorNotMask, SIGNAL(clicked()), this, SLOT(doXorNotMask()));
-  connect(m_ExchangeMask, SIGNAL(clicked()), this, SLOT(doExchangeMask()));
-  connect(m_RollUpMask, SIGNAL(clicked()), this, SLOT(doRollUpMask()));
-  connect(m_RollDownMask, SIGNAL(clicked()), this, SLOT(doRollDownMask()));
-  connect(m_RollMask, SIGNAL(clicked()), this, SLOT(doRollMask()));
-  connect(m_NewMask, SIGNAL(clicked()), this, SLOT(doNewMask()));
-  connect(m_PushMask, SIGNAL(clicked()), this, SLOT(doPushMask()));
-  connect(m_ClearMask, SIGNAL(clicked()), this, SLOT(doClearMask()));
-  connect(m_ClearMaskTop, SIGNAL(clicked()), this, SLOT(doClearMaskTop()));
-  connect(m_UndoMask, SIGNAL(clicked()), this, SLOT(doUndoMask()));
-
-//  connect(m_MaskCirclesRadio, SIGNAL(clicked()), win->m_ImageMaskCirclesButton, SLOT(click()));
-//  connect(m_MaskPolygonsRadio, SIGNAL(clicked()), win->m_ImageMaskPolygonsButton, SLOT(click()));
+  connect(m_HideMaskAll, &QAbstractButton::clicked, this, &QxrdMaskDialog::doHideMaskAll);
+  connect(m_ShowMaskAll, &QAbstractButton::clicked, this, &QxrdMaskDialog::doShowMaskAll);
+  connect(m_HideMaskRange, &QAbstractButton::clicked, this, &QxrdMaskDialog::doHideMaskRange);
+  connect(m_ShowMaskRange, &QAbstractButton::clicked, this, &QxrdMaskDialog::doShowMaskRange);
+  connect(m_InvertMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doInvertMask);
+  connect(m_GrowMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doGrowMask);
+  connect(m_ShrinkMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doShrinkMask);
+  connect(m_AndMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doAndMask);
+  connect(m_OrMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doOrMask);
+  connect(m_XorMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doXorMask);
+  connect(m_AndNotMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doAndNotMask);
+  connect(m_OrNotMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doOrNotMask);
+  connect(m_XorNotMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doXorNotMask);
+  connect(m_ExchangeMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doExchangeMask);
+  connect(m_RollUpMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doRollUpMask);
+  connect(m_RollDownMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doRollDownMask);
+  connect(m_RollMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doRollMask);
+  connect(m_NewMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doNewMask);
+  connect(m_PushMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doPushMask);
+  connect(m_ClearMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doClearMask);
+  connect(m_ClearMaskTop, &QAbstractButton::clicked, this, &QxrdMaskDialog::doClearMaskTop);
+  connect(m_UndoMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doUndoMask);
 
   QxrdDataProcessorPtr proc(m_Processor);
 

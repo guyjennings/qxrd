@@ -256,21 +256,21 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
 //    }
 
     if (srv && eng) {
-      connect(srv.data(),   SIGNAL(executeCommand(QString)),
-              eng.data(),   SLOT(evaluateSpecCommand(QString)));
+      connect(srv.data(),   &QSpecServer::executeCommand,
+              eng.data(),   &QxrdScriptEngine::evaluateSpecCommand);
 
-      connect(eng.data(),   SIGNAL(specResultAvailable(QScriptValue)),
-              srv.data(),   SLOT(finishedCommand(QScriptValue)));
+      connect(eng.data(),   &QxrdScriptEngine::specResultAvailable,
+              srv.data(),   &QSpecServer::finishedCommand);
     }
 
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
     if (ssrv && eng) {
-      connect(ssrv.data(),  SIGNAL(executeCommand(QString)),
-              eng.data(),   SLOT(evaluateSimpleServerCommand(QString)));
+      connect(ssrv.data(),  &QxrdSimpleServer::executeCommand,
+              eng.data(),   &QxrdScriptEngine::evaluateSimpleServerCommand);
 
-      connect(eng.data(),   SIGNAL(simpleServerResultAvailable(QScriptValue)),
-              ssrv.data(),  SLOT(finishedCommand(QScriptValue)));
+      connect(eng.data(),   &QxrdScriptEngine::simpleServerResultAvailable,
+              ssrv.data(),  &QxrdSimpleServer::finishedCommand);
     }
 
     splashMessage("Loading Preferences");
@@ -337,12 +337,12 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
     printMessage(tr("Running on host %1").arg(QHostInfo::localHostName()));
     printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 
-    connect(prop_WorkCompleted(),   SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
-    connect(prop_WorkTarget(),      SIGNAL(valueChanged(int,int)), this, SLOT(updateCompletionPercentage(int,int)));
-    connect(prop_DetectorType(),    SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
-    connect(prop_DetectorSubType(), SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
-    connect(prop_DetectorNumber(),  SIGNAL(valueChanged(int,int)), this, SLOT(onDetectorTypeChanged()));
-    connect(prop_DetectorAddress(), SIGNAL(valueChanged(QString,int)), this, SLOT(onDetectorTypeChanged()));
+    connect(prop_WorkCompleted(),   &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage);
+    connect(prop_WorkTarget(),      &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage);
+    connect(prop_DetectorType(),    &QcepIntProperty::valueChanged, this, &QxrdExperiment::onDetectorTypeChanged);
+    connect(prop_DetectorSubType(), &QcepIntProperty::valueChanged, this, &QxrdExperiment::onDetectorTypeChanged);
+    connect(prop_DetectorNumber(),  &QcepIntProperty::valueChanged, this, &QxrdExperiment::onDetectorTypeChanged);
+    connect(prop_DetectorAddress(), &QcepStringProperty::valueChanged, this, &QxrdExperiment::onDetectorTypeChanged);
 
     m_SettingsSaver->start();
 
@@ -394,11 +394,11 @@ void QxrdExperiment::openWindows()
       m_Window -> onAcquisitionInit();
 
       if (eng) {
-        connect(m_Window.data(),   SIGNAL(executeCommand(QString)),
-                eng.data(),   SLOT(evaluateAppCommand(QString)));
+        connect(m_Window.data(),   &QxrdWindow::executeCommand,
+                eng.data(),   &QxrdScriptEngine::evaluateAppCommand);
 
-        connect(eng.data(),   SIGNAL(appResultAvailable(QScriptValue)),
-                m_Window.data(),   SLOT(finishedCommand(QScriptValue)));
+        connect(eng.data(),   &QxrdScriptEngine::appResultAvailable,
+                m_Window.data(),   &QxrdWindow::finishedCommand);
       }
 
       readInitialLogFile();

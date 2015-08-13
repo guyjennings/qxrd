@@ -283,205 +283,200 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
       setSpacing(sp);
     }
 
-    connect(expt->prop_FontSize(), SIGNAL(valueChanged(int,int)), this, SLOT(setFontSize(int)));
-    connect(expt->prop_Spacing(), SIGNAL(valueChanged(int,int)), this, SLOT(setSpacing(int)));
+    connect(expt->prop_FontSize(), &QcepIntProperty::valueChanged, this, &QxrdWindow::setFontSize);
+    connect(expt->prop_Spacing(), &QcepIntProperty::valueChanged, this, &QxrdWindow::setSpacing);
   }
 
   //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
   //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
 
-  connect(m_ExecuteScriptButton, SIGNAL(clicked()), m_ActionExecuteScript, SIGNAL(triggered()));
-  connect(m_ActionExecuteScript, SIGNAL(triggered()), this, SLOT(executeScript()));
-  connect(m_CancelScriptButton, SIGNAL(clicked()), m_ActionCancelScript, SIGNAL(triggered()));
-  connect(m_ActionCancelScript, SIGNAL(triggered()), this, SLOT(cancelScript()));
-  connect(m_LoadScriptButton, SIGNAL(clicked()), m_ActionLoadScript, SIGNAL(triggered()));
-  connect(m_ActionLoadScript, SIGNAL(triggered()), this, SLOT(doLoadScript()));
+  connect(m_ExecuteScriptButton, &QAbstractButton::clicked, m_ActionExecuteScript, &QAction::triggered);
+  connect(m_ActionExecuteScript, &QAction::triggered, this, &QxrdWindow::executeScript);
+  connect(m_CancelScriptButton, &QAbstractButton::clicked, m_ActionCancelScript, &QAction::triggered);
+  connect(m_ActionCancelScript, &QAction::triggered, this, &QxrdWindow::cancelScript);
+  connect(m_LoadScriptButton, &QAbstractButton::clicked, m_ActionLoadScript, &QAction::triggered);
+  connect(m_ActionLoadScript, &QAction::triggered, this, &QxrdWindow::doLoadScript);
 
   if (app) {
-    connect(m_ActionAutoScale, SIGNAL(triggered()), m_ImagePlot, SLOT(autoScale()));
-    connect(m_ActionQuit, SIGNAL(triggered()), app.data(), SLOT(possiblyQuit()));
-    connect(m_ActionGlobalPreferences, SIGNAL(triggered()), app.data(), SLOT(editGlobalPreferences()));
-    connect(m_ActionExperimentPreferences, SIGNAL(triggered()), this, SLOT(doEditPreferences()));
-    connect(m_ActionLoadPreferences, SIGNAL(triggered()), app.data(), SLOT(doLoadPreferences()));
-    connect(m_ActionSavePreferences, SIGNAL(triggered()), app.data(), SLOT(doSavePreferences()));
+    connect(m_ActionAutoScale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::autoScale);
+    connect(m_ActionQuit, &QAction::triggered, app.data(), &QxrdApplication::possiblyQuit);
+    connect(m_ActionGlobalPreferences, &QAction::triggered, app.data(), &QxrdApplication::editGlobalPreferences);
+    connect(m_ActionExperimentPreferences, &QAction::triggered, this, &QxrdWindow::doEditPreferences);
+    connect(m_ActionLoadPreferences, &QAction::triggered, app.data(), &QxrdApplication::doLoadPreferences);
+    connect(m_ActionSavePreferences, &QAction::triggered, app.data(), &QxrdApplication::doSavePreferences);
 
-    connect(m_ActionNewExperiment, SIGNAL(triggered()), app.data(), SLOT(chooseNewExperiment()));
-    connect(m_ActionOpenExperiment, SIGNAL(triggered()), app.data(), SLOT(chooseExistingExperiment()));
-    connect(m_ActionCloseExperiment, SIGNAL(triggered()), this, SLOT(close()));
+    connect(m_ActionNewExperiment, &QAction::triggered, app.data(), &QxrdApplication::chooseNewExperiment);
+    connect(m_ActionOpenExperiment, &QAction::triggered, app.data(), &QxrdApplication::chooseExistingExperiment);
+    connect(m_ActionCloseExperiment, &QAction::triggered, this, &QWidget::close);
   }
 
   if (expt) {
-    connect(m_ActionSaveExperiment, SIGNAL(triggered()), expt.data(), SLOT(saveExperiment()));
+    connect(m_ActionSaveExperiment, &QAction::triggered, expt.data(), &QxrdExperiment::saveExperiment);
   }
 
-  connect(m_ActionSaveExperimentAs, SIGNAL(triggered()), this, SLOT(saveExperimentAs()));
-  connect(m_ActionSaveExperimentCopy, SIGNAL(triggered()), this, SLOT(saveExperimentCopy()));
+  connect(m_ActionSaveExperimentAs, &QAction::triggered, this, &QxrdWindow::saveExperimentAs);
+  connect(m_ActionSaveExperimentCopy, &QAction::triggered, this, &QxrdWindow::saveExperimentCopy);
 
-  connect(m_ExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateExperimentsMenu()));
+  connect(m_ExperimentsMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateExperimentsMenu);
   setupRecentExperimentsMenu(m_ActionRecentExperiments);
 
-  connect(m_ActionLoadData, SIGNAL(triggered()), this, SLOT(doLoadData()));
-  connect(m_ActionSaveData, SIGNAL(triggered()), this, SLOT(doSaveData()));
-  connect(m_ActionLoadDark, SIGNAL(triggered()), this, SLOT(doLoadDark()));
-  connect(m_ActionSaveDark, SIGNAL(triggered()), this, SLOT(doSaveDark()));
-  connect(m_ActionClearDark, SIGNAL(triggered()), this, SLOT(doClearDark()));
-  connect(m_ActionLoadMask, SIGNAL(triggered()), this, SLOT(doLoadMask()));
-  connect(m_ActionSaveMask, SIGNAL(triggered()), this, SLOT(doSaveMask()));
-  connect(m_ActionClearMask, SIGNAL(triggered()), this, SLOT(doClearMask()));
-  connect(m_ActionLoadGainMap, SIGNAL(triggered()), this, SLOT(doLoadGainMap()));
-  connect(m_ActionSaveGainMap, SIGNAL(triggered()), this, SLOT(doSaveGainMap()));
-  connect(m_ActionClearGainMap, SIGNAL(triggered()), this, SLOT(doClearGainMap()));
+  connect(m_ActionLoadData, &QAction::triggered, this, &QxrdWindow::doLoadData);
+  connect(m_ActionSaveData, &QAction::triggered, this, &QxrdWindow::doSaveData);
+  connect(m_ActionLoadDark, &QAction::triggered, this, &QxrdWindow::doLoadDark);
+  connect(m_ActionSaveDark, &QAction::triggered, this, &QxrdWindow::doSaveDark);
+  connect(m_ActionClearDark, &QAction::triggered, this, &QxrdWindow::doClearDark);
+  connect(m_ActionLoadMask, &QAction::triggered, this, &QxrdWindow::doLoadMask);
+  connect(m_ActionSaveMask, &QAction::triggered, this, &QxrdWindow::doSaveMask);
+  connect(m_ActionClearMask, &QAction::triggered, this, &QxrdWindow::doClearMask);
+  connect(m_ActionLoadGainMap, &QAction::triggered, this, &QxrdWindow::doLoadGainMap);
+  connect(m_ActionSaveGainMap, &QAction::triggered, this, &QxrdWindow::doSaveGainMap);
+  connect(m_ActionClearGainMap, &QAction::triggered, this, &QxrdWindow::doClearGainMap);
 
-  connect(m_ActionPrintImage, SIGNAL(triggered()), m_ImagePlot, SLOT(printGraph()));
+  connect(m_ActionPrintImage, &QAction::triggered, m_ImagePlot, &QcepPlot::printGraph);
 
-  //  connect(m_ActionSelectLogFile, SIGNAL(triggered()), this, SLOT(selectLogFile()));
-  //  connect(m_ActionSetAcquireDirectory, SIGNAL(triggered()), this, SLOT(selectOutputDirectory()));
+  connect(m_ActionAccumulateImages, &QAction::triggered, this, &QxrdWindow::doAccumulateImages);
+  connect(m_ActionAddImage, &QAction::triggered, this, &QxrdWindow::doAddImages);
+  connect(m_ActionSubtractImage, &QAction::triggered, this, &QxrdWindow::doSubtractImages);
+  connect(m_ActionProjectImagesX, &QAction::triggered, this, &QxrdWindow::doProjectAlongX);
+  connect(m_ActionProjectImagesY, &QAction::triggered, this, &QxrdWindow::doProjectAlongY);
+  connect(m_ActionProjectImagesZ, &QAction::triggered, this, &QxrdWindow::doProjectAlongZ);
+  connect(m_ActionCorrelateImage, &QAction::triggered, this, &QxrdWindow::doCorrelate);
+  connect(m_ActionProcessData, &QAction::triggered, this, &QxrdWindow::doProcessSequence);
 
-  connect(m_ActionAccumulateImages, SIGNAL(triggered()), this, SLOT(doAccumulateImages()));
-  connect(m_ActionAddImage, SIGNAL(triggered()), this, SLOT(doAddImages()));
-  connect(m_ActionSubtractImage, SIGNAL(triggered()), this, SLOT(doSubtractImages()));
-  connect(m_ActionProjectImagesX, SIGNAL(triggered()), this, SLOT(doProjectAlongX()));
-  connect(m_ActionProjectImagesY, SIGNAL(triggered()), this, SLOT(doProjectAlongY()));
-  connect(m_ActionProjectImagesZ, SIGNAL(triggered()), this, SLOT(doProjectAlongZ()));
-  connect(m_ActionCorrelateImage, SIGNAL(triggered()), this, SLOT(doCorrelate()));
-  connect(m_ActionProcessData, SIGNAL(triggered()), this, SLOT(doProcessSequence()));
+  connect(m_ActionReflectHorizontally, &QAction::triggered, this, &QxrdWindow::doReflectHorizontally);
+  connect(m_ActionReflectVertically, &QAction::triggered, this, &QxrdWindow::doReflectVertically);
 
-  connect(m_ActionReflectHorizontally, SIGNAL(triggered()), this, SLOT(doReflectHorizontally()));
-  connect(m_ActionReflectVertically, SIGNAL(triggered()), this, SLOT(doReflectVertically()));
+  connect(m_DisplayDialog -> m_AutoRange, &QAbstractButton::clicked, m_ActionAutoRange, &QAction::triggered);
+  connect(m_DisplayDialog -> m_Display_5pct, &QAbstractButton::clicked, m_Action005Range, &QAction::triggered);
+  connect(m_DisplayDialog -> m_Display_10pct, &QAbstractButton::clicked, m_Action010Range, &QAction::triggered);
+  connect(m_DisplayDialog -> m_Display_100pct, &QAbstractButton::clicked, m_Action100Range, &QAction::triggered);
 
-  connect(m_DisplayDialog -> m_AutoRange, SIGNAL(clicked()), m_ActionAutoRange, SIGNAL(triggered()));
-  connect(m_DisplayDialog -> m_Display_5pct, SIGNAL(clicked()), m_Action005Range, SIGNAL(triggered()));
-  connect(m_DisplayDialog -> m_Display_10pct, SIGNAL(clicked()), m_Action010Range, SIGNAL(triggered()));
-  connect(m_DisplayDialog -> m_Display_100pct, SIGNAL(clicked()), m_Action100Range, SIGNAL(triggered()));
+  connect(m_Action005Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set005Range);
+  connect(m_Action010Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set010Range);
+  connect(m_Action100Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set100Range);
+  connect(m_ActionAutoRange, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setAutoRange);
 
-  connect(m_Action005Range, SIGNAL(triggered()), m_ImagePlot, SLOT(set005Range()));
-  connect(m_Action010Range, SIGNAL(triggered()), m_ImagePlot, SLOT(set010Range()));
-  connect(m_Action100Range, SIGNAL(triggered()), m_ImagePlot, SLOT(set100Range()));
-  connect(m_ActionAutoRange, SIGNAL(triggered()), m_ImagePlot, SLOT(setAutoRange()));
+  connect(m_ActionGrayscale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setGrayscale);
+  connect(m_ActionInverseGrayscale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setInverseGrayscale);
+  connect(m_ActionEarthTones, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setEarthTones);
+  connect(m_ActionSpectrum, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setSpectrum);
+  connect(m_ActionFire, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setFire);
+  connect(m_ActionIce, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setIce);
 
-  connect(m_ActionGrayscale, SIGNAL(triggered()), m_ImagePlot, SLOT(setGrayscale()));
-  connect(m_ActionInverseGrayscale, SIGNAL(triggered()), m_ImagePlot, SLOT(setInverseGrayscale()));
-  connect(m_ActionEarthTones, SIGNAL(triggered()), m_ImagePlot, SLOT(setEarthTones()));
-  connect(m_ActionSpectrum, SIGNAL(triggered()), m_ImagePlot, SLOT(setSpectrum()));
-  connect(m_ActionFire, SIGNAL(triggered()), m_ImagePlot, SLOT(setFire()));
-  connect(m_ActionIce, SIGNAL(triggered()), m_ImagePlot, SLOT(setIce()));
-
-  connect(m_ActionRefineCenterTilt, SIGNAL(triggered()), this, SLOT(doRefineCenterTilt()));
-  connect(m_ActionMoveCenterUp, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveUp()));
-  connect(m_ActionMoveCenterDown, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveDown()));
-  connect(m_ActionMoveCenterLeft, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveLeft()));
-  connect(m_ActionMoveCenterRight, SIGNAL(triggered()), m_CenterFinderDialog, SLOT(centerMoveRight()));
+  connect(m_ActionRefineCenterTilt, &QAction::triggered, this, &QxrdWindow::doRefineCenterTilt);
+  connect(m_ActionMoveCenterUp, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveUp);
+  connect(m_ActionMoveCenterDown, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveDown);
+  connect(m_ActionMoveCenterLeft, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveLeft);
+  connect(m_ActionMoveCenterRight, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveRight);
 
   if (proc) {
     QxrdCenterFinderPtr cf(proc->centerFinder());
 
     if (cf) {
-      connect(m_ActionFindBeamCenter, SIGNAL(triggered()), cf.data(), SLOT(fitPowderCircle()), Qt::DirectConnection);
-      connect(m_ActionClearMarkers, SIGNAL(triggered()), cf.data(), SLOT(deletePowderPoints()), Qt::DirectConnection);
-      connect(m_ActionCalculateCalibrationPowder, SIGNAL(triggered()), cf.data(), SLOT(calculateCalibration()));
+      connect(m_ActionFindBeamCenter, &QAction::triggered, cf.data(), &QxrdCenterFinder::fitPowderCircle, Qt::DirectConnection);
+      connect(m_ActionClearMarkers, &QAction::triggered, cf.data(), &QxrdCenterFinder::deletePowderPoints, Qt::DirectConnection);
+      connect(m_ActionCalculateCalibrationPowder, &QAction::triggered, cf.data(), &QxrdCenterFinder::calculateCalibration);
     }
   }
 
-  connect(m_ActionPlotPowderRingPoints, SIGNAL(triggered()), this, SLOT(plotPowderRingRadii()));
-  connect(m_ActionPlotPowderRingTwoTheta, SIGNAL(triggered()), this, SLOT(plotPowderRingTwoTheta()));
-  connect(m_ActionPlotPowderRingCenters, SIGNAL(triggered()), this, SLOT(plotPowderRingCenters()));
+  connect(m_ActionPlotPowderRingPoints, &QAction::triggered, this, &QxrdWindow::plotPowderRingRadii);
+  connect(m_ActionPlotPowderRingTwoTheta, &QAction::triggered, this, &QxrdWindow::plotPowderRingTwoTheta);
+  connect(m_ActionPlotPowderRingCenters, &QAction::triggered, this, &QxrdWindow::plotPowderRingCenters);
 
   m_AcquisitionDialog->setupAcquireMenu(m_AcquireMenu);
 
   m_AcquisitionDialog->acquisitionReady();
 
-  connect(m_ActionShowImage, SIGNAL(triggered()), m_ImagePlot, SLOT(toggleShowImage()));
-  connect(m_ActionShowMask, SIGNAL(triggered()), m_ImagePlot, SLOT(toggleShowMask()));
-  connect(m_ActionShowOverflow, SIGNAL(triggered()), m_ImagePlot, SLOT(toggleShowOverflow()));
+  connect(m_ActionShowImage, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowImage);
+  connect(m_ActionShowMask, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowMask);
+  connect(m_ActionShowOverflow, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowOverflow);
 
   if (proc) {
-    connect(m_ActionShowMaskRange, SIGNAL(triggered()), proc.data(), SLOT(showMaskRange()));
-    connect(m_ActionHideMaskRange, SIGNAL(triggered()), proc.data(), SLOT(hideMaskRange()));
-    connect(m_ActionShowMaskAll, SIGNAL(triggered()), proc.data(), SLOT(showMaskAll()));
-    connect(m_ActionHideMaskAll, SIGNAL(triggered()), proc.data(), SLOT(hideMaskAll()));
-    connect(m_ActionInvertMask, SIGNAL(triggered()), proc.data(), SLOT(invertMask()));
-    connect(m_ActionMaskCircles, SIGNAL(triggered()), m_ImageMaskCirclesButton, SLOT(click()));
-    connect(m_ActionMaskPolygons, SIGNAL(triggered()), m_ImageMaskPolygonsButton, SLOT(click()));
+    connect(m_ActionShowMaskRange, &QAction::triggered, proc.data(), (void (QxrdDataProcessorBase::*)()) &QxrdDataProcessorBase::showMaskRange);
+    connect(m_ActionHideMaskRange, &QAction::triggered, proc.data(), (void (QxrdDataProcessorBase::*)()) &QxrdDataProcessorBase::hideMaskRange);
+    connect(m_ActionShowMaskAll, &QAction::triggered, proc.data(), &QxrdDataProcessorBase::showMaskAll);
+    connect(m_ActionHideMaskAll, &QAction::triggered, proc.data(), &QxrdDataProcessorBase::hideMaskAll);
+    connect(m_ActionInvertMask, &QAction::triggered, proc.data(), &QxrdDataProcessorBase::invertMask);
+    connect(m_ActionMaskCircles, &QAction::triggered, m_ImageMaskCirclesButton, &QAbstractButton::click);
+    connect(m_ActionMaskPolygons, &QAction::triggered, m_ImageMaskPolygonsButton, &QAbstractButton::click);
 
-    connect(m_ActionROICalculate, SIGNAL(triggered()), proc.data(), SLOT(calculateROI()));
-    connect(m_ActionHistogramCalculate, SIGNAL(triggered()), proc.data(), SLOT(calculateHistogram()));
+    connect(m_ActionROICalculate, &QAction::triggered, proc.data(), &QxrdDataProcessorBase::calculateROI);
+    connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdDataProcessorBase::calculateHistogram);
   }
 
-  connect(m_ActionTest, SIGNAL(triggered()), this, SLOT(doTest()));
-  connect(m_ActionCrashProgram, SIGNAL(triggered()), this, SLOT(crashProgram()));
+  connect(m_ActionTest, &QAction::triggered, this, &QxrdWindow::doTest);
+  connect(m_ActionCrashProgram, &QAction::triggered, this, &QxrdWindow::crashProgram);
 
-  connect(m_ImageZoomInButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableZooming()));
-  connect(m_ImageZoomOutButton, SIGNAL(clicked()), m_ImagePlot, SLOT(zoomOut()));
-  connect(m_ImageZoomAllButton, SIGNAL(clicked()), m_ImagePlot, SLOT(autoScale()));
-  connect(m_ImageSetCenterButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableCentering()));
-  connect(m_ImageSliceButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableSlicing()));
-  connect(m_ImageMeasureButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableMeasuring()));
-  connect(m_ImageHistogramButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableHistograms()));
-  connect(m_ImageMaskCirclesButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableMaskCircles()));
-  connect(m_ImageMaskPolygonsButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enableMaskPolygons()));
-  connect(m_ImagePowderPointsButton, SIGNAL(clicked()), m_ImagePlot, SLOT(enablePowderPoints()));
+  connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableZooming);
+  connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_ImagePlot, &QcepPlot::zoomOut);
+  connect(m_ImageZoomAllButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::autoScale);
+  connect(m_ImageSetCenterButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableCentering);
+  connect(m_ImageSliceButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableSlicing);
+  connect(m_ImageMeasureButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMeasuring);
+  connect(m_ImageHistogramButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableHistograms);
+  connect(m_ImageMaskCirclesButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMaskCircles);
+  connect(m_ImageMaskPolygonsButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMaskPolygons);
+  connect(m_ImagePowderPointsButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enablePowderPoints);
 
-  connect(m_CenteringZoomInButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(enableZooming()));
-  connect(m_CenteringZoomOutButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(zoomOut()));
-  connect(m_CenteringZoomAllButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(autoScale()));
-  connect(m_CenteringMeasureButton, SIGNAL(clicked()), m_CenterFinderPlot, SLOT(enableMeasuring()));
+  connect(m_CenteringZoomInButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::enableZooming);
+  connect(m_CenteringZoomOutButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::zoomOut);
+  connect(m_CenteringZoomAllButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::autoScale);
+  connect(m_CenteringMeasureButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::enableMeasuring);
 
-  connect(m_IntegratorZoomInButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableZooming()));
-  connect(m_IntegratorZoomOutButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(zoomOut()));
-  connect(m_IntegratorZoomAllButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(autoScale()));
-  connect(m_IntegratorMeasureButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(enableMeasuring()));
+  connect(m_IntegratorZoomInButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::enableZooming);
+  connect(m_IntegratorZoomOutButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::zoomOut);
+  connect(m_IntegratorZoomAllButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::autoScale);
+  connect(m_IntegratorMeasureButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::enableMeasuring);
 
-  connect(m_DistortionCorrectionZoomInButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(enableZooming()));
-  connect(m_DistortionCorrectionZoomOutButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(zoomOut()));
-  connect(m_DistortionCorrectionZoomAllButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(autoScale()));
-  connect(m_DistortionCorrectionMeasureButton, SIGNAL(clicked()), m_DistortionCorrectionPlot, SLOT(enableMeasuring()));
+  connect(m_DistortionCorrectionZoomInButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::enableZooming);
+  connect(m_DistortionCorrectionZoomOutButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::zoomOut);
+  connect(m_DistortionCorrectionZoomAllButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::autoScale);
+  connect(m_DistortionCorrectionMeasureButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::enableMeasuring);
 
-  connect(m_DisplayDialog -> m_DisplayOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
-  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
+  connect(m_DisplayDialog -> m_DisplayOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
+  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
 
   if (app) {
-    connect(m_ActionAboutQXRD, SIGNAL(triggered()), app.data(), SLOT(doAboutQxrd()));
-    connect(m_ActionOpenQXRDWebPage, SIGNAL(triggered()), app.data(), SLOT(doOpenQXRDWebPage()));
+    connect(m_ActionAboutQXRD, &QAction::triggered, app.data(), &QxrdApplication::doAboutQxrd);
+    connect(m_ActionOpenQXRDWebPage, &QAction::triggered, app.data(), &QxrdApplication::doOpenQXRDWebPage);
   }
 
-  connect(m_HelpHomeButton, SIGNAL(clicked()), m_HelpBrowser, SLOT(home()));
-  connect(m_HelpForwardButton, SIGNAL(clicked()), m_HelpBrowser, SLOT(forward()));
-  connect(m_HelpBackButton, SIGNAL(clicked()), m_HelpBrowser, SLOT(backward()));
+  connect(m_HelpHomeButton, &QAbstractButton::clicked, m_HelpBrowser, &QTextBrowser::home);
+  connect(m_HelpForwardButton, &QAbstractButton::clicked, m_HelpBrowser, &QTextBrowser::forward);
+  connect(m_HelpBackButton, &QAbstractButton::clicked, m_HelpBrowser, &QTextBrowser::backward);
 
-  connect(m_HelpBrowser, SIGNAL(forwardAvailable(bool)), m_HelpForwardButton, SLOT(setEnabled(bool)));
-  connect(m_HelpBrowser, SIGNAL(backwardAvailable(bool)), m_HelpBackButton, SLOT(setEnabled(bool)));
+  connect(m_HelpBrowser, &QTextBrowser::forwardAvailable, m_HelpForwardButton, &QWidget::setEnabled);
+  connect(m_HelpBrowser, &QTextBrowser::backwardAvailable, m_HelpBackButton, &QWidget::setEnabled);
 
   m_HelpBrowser->init(m_Experiment);
 
-  connect(&m_UpdateTimer, SIGNAL(timeout()), this, SLOT(newData()));
+  connect(&m_UpdateTimer, &QTimer::timeout, this, &QxrdWindow::newData);
 
-  connect(m_ActionIntegrate, SIGNAL(triggered()), this, SLOT(doIntegrateSequence()));
-  connect(m_ActionIntegrateCurrent, SIGNAL(triggered()),
-          m_DataProcessor.data(), SLOT(integrateSaveAndDisplay()));
-  connect(m_ActionIntegrateInputImages, SIGNAL(triggered()),
-          m_InputFileBrowser, SLOT(doIntegrate()));
+  connect(m_ActionIntegrate, &QAction::triggered, this, &QxrdWindow::doIntegrateSequence);
+  connect(m_ActionIntegrateCurrent, &QAction::triggered,
+          m_DataProcessor.data(), &QxrdDataProcessorThreaded::integrateSaveAndDisplay);
+  connect(m_ActionIntegrateInputImages, &QAction::triggered,
+          m_InputFileBrowser, &QxrdFileBrowser::doIntegrate);
 
-  connect(m_IntegratorDialog -> m_ClearGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearGraph()));
-  connect(m_IntegratorDialog -> m_ClearSelectedGraphButton, SIGNAL(clicked()), m_IntegratorPlot, SLOT(clearSelectedCurves()));
-  connect(m_ActionClearIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearGraph()));
-  connect(m_ActionClearSelectedIntegratedData, SIGNAL(triggered()), m_IntegratorPlot, SLOT(clearSelectedCurves()));
+  connect(m_IntegratorDialog -> m_ClearGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
+  connect(m_IntegratorDialog -> m_ClearSelectedGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
+  connect(m_ActionClearIntegratedData, &QAction::triggered, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
+  connect(m_ActionClearSelectedIntegratedData, &QAction::triggered, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
 
-  connect(m_ActionSaveCachedGeometry, SIGNAL(triggered()), this, SLOT(doSaveCachedGeometry()));
-  connect(m_ActionSaveCachedIntensity, SIGNAL(triggered()), this, SLOT(doSaveCachedIntensity()));
+  connect(m_ActionSaveCachedGeometry, &QAction::triggered, this, &QxrdWindow::doSaveCachedGeometry);
+  connect(m_ActionSaveCachedIntensity, &QAction::triggered, this, &QxrdWindow::doSaveCachedIntensity);
 
-  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, SIGNAL(clicked()), this, SLOT(doEditPreferences()));
+  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
 
   if (proc) {
-    connect(proc->integrator()->prop_IntegrationXUnits(), SIGNAL(valueChanged(int,int)),
-            this, SLOT(integrationXUnitsChanged(int)));
+    connect(proc->integrator()->prop_IntegrationXUnits(), &QcepIntProperty::valueChanged,
+            this, &QxrdWindow::integrationXUnitsChanged);
     integrationXUnitsChanged(proc->integrator()->get_IntegrationXUnits());
 
-    connect(m_ActionIntegrateVsR,   SIGNAL(triggered()), proc->integrator().data(), SLOT(integrateVsR()));
-    connect(m_ActionIntegrateVsQ,   SIGNAL(triggered()), proc->integrator().data(), SLOT(integrateVsQ()));
-    connect(m_ActionIntegrateVsTTH, SIGNAL(triggered()), proc->integrator().data(), SLOT(integrateVsTTH()));
+    connect(m_ActionIntegrateVsR,   &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsR);
+    connect(m_ActionIntegrateVsQ,   &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsQ);
+    connect(m_ActionIntegrateVsTTH, &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsTTH);
   }
-
-  //  connect(m_SaveDarkOptions, SIGNAL(clicked()), this, SLOT(doProcessorOptionsDialog()));
 
   if (set) {
     QxrdImagePlotSettingsPtr ps(set->imagePlotSettings());
@@ -525,20 +520,20 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     app->criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
   }
 
-  connect(m_Acquisition.data(), SIGNAL(acquireStarted()),
-          this,                 SLOT(acquireStarted()));
-  connect(m_Acquisition.data(), SIGNAL(acquiredFrame(QString,int,int,int,int,int,int,int)),
-          this,                 SLOT(acquiredFrame(QString,int,int,int,int,int,int,int)));
-  connect(m_Acquisition.data(), SIGNAL(acquireComplete()),
-          this,                 SLOT(acquireComplete()));
+  connect(m_Acquisition.data(), &QxrdAcquisition::acquireStarted,
+          this,                 &QxrdWindow::acquireStarted);
+  connect(m_Acquisition.data(), SIGNAL(acquiredFrame(QString,int,int,int,int,int,int)),
+          this,                 SLOT(acquiredFrame(QString,int,int,int,int,int,int)));
+  connect(m_Acquisition.data(), &QxrdAcquisition::acquireComplete,
+          this,                 &QxrdWindow::acquireComplete);
 
   if (acq) {
     acq -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
     acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
     acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
 
-    connect(acq->prop_OverflowLevel(), SIGNAL(valueChanged(int,int)),
-            m_HistogramDialog, SLOT(updateHistogramNeeded()));
+    connect(acq->prop_OverflowLevel(), &QcepIntProperty::valueChanged,
+            m_HistogramDialog, &QxrdHistogramDialog::updateHistogramNeeded);
   }
 
   if (expt) {
@@ -584,7 +579,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
       ps -> prop_DisplayLog() -> linkTo(m_DisplayDialog->m_DisplayImageLog);
       ps -> prop_DisplayScalingMode() -> linkTo(m_DisplayDialog->m_DisplayScalingMode);
 
-      connect(ps -> prop_DisplayScalingMode(), SIGNAL(valueChanged(int,int)), m_DisplayDialog->m_DisplayParmsStack, SLOT(setCurrentIndex(int)));
+      connect(ps -> prop_DisplayScalingMode(), &QcepIntProperty::valueChanged, m_DisplayDialog->m_DisplayParmsStack, &QStackedWidget::setCurrentIndex);
       m_DisplayDialog->m_DisplayParmsStack->setCurrentIndex(ps->get_DisplayScalingMode());
 
       ps -> prop_DisplayColorMap() -> linkTo(m_DisplayDialog->m_DisplayColorMap);
@@ -604,27 +599,27 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
   if (proc) {
-    connect(proc -> centerFinder() -> prop_CenterX(), SIGNAL(valueChanged(double,int)),
-            m_ImagePlot, SLOT(onCenterXChanged(double)));
+    connect(proc -> centerFinder() -> prop_CenterX(), &QcepDoubleProperty::valueChanged,
+            m_ImagePlot, &QxrdImagePlot::onCenterXChanged);
 
-    connect(proc -> centerFinder() -> prop_CenterY(), SIGNAL(valueChanged(double,int)),
-            m_ImagePlot, SLOT(onCenterYChanged(double)));
+    connect(proc -> centerFinder() -> prop_CenterY(), &QcepDoubleProperty::valueChanged,
+            m_ImagePlot, &QxrdImagePlot::onCenterYChanged);
 
-    connect(proc -> centerFinder() -> prop_CenterX(), SIGNAL(valueChanged(double,int)),
-            m_CenterFinderPlot, SLOT(onCenterXChanged(double)));
+    connect(proc -> centerFinder() -> prop_CenterX(), &QcepDoubleProperty::valueChanged,
+            m_CenterFinderPlot, &QxrdCenterFinderPlot::onCenterXChanged);
 
-    connect(proc -> centerFinder() -> prop_CenterY(), SIGNAL(valueChanged(double,int)),
-            m_CenterFinderPlot, SLOT(onCenterYChanged(double)));
+    connect(proc -> centerFinder() -> prop_CenterY(), &QcepDoubleProperty::valueChanged,
+            m_CenterFinderPlot, &QxrdCenterFinderPlot::onCenterYChanged);
 
-    connect(proc.data(), SIGNAL(newIntegrationAvailable(QcepIntegratedDataPtr)),
-            m_IntegratorPlot, SLOT(onNewIntegrationAvailable(QcepIntegratedDataPtr)));
+    connect(proc.data(), &QxrdDataProcessorBase::newIntegrationAvailable,
+            m_IntegratorPlot, &QxrdIntegratorPlot::onNewIntegrationAvailable);
   }
 
   QcepAllocatorPtr alloc(m_Allocator);
 
   if (alloc) {
-    connect(alloc -> prop_Allocated(), SIGNAL(valueChanged(int,int)), this, SLOT(allocatedMemoryChanged()));
-    connect(alloc -> prop_Max(), SIGNAL(valueChanged(int,int)), this, SLOT(allocatedMemoryChanged()));
+    connect(alloc -> prop_Allocated(), &QcepIntProperty::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
+    connect(alloc -> prop_Max(), &QcepIntProperty::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
   }
 
   m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
@@ -651,17 +646,17 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 //    expt->prop_DefaultScript()->linkTo(m_ScriptEdit);
 //  }
 
-  connect(m_ImagePlot, SIGNAL(slicePolygon(QVector<QPointF>)),
-          m_SliceDialog, SLOT(slicePolygon(QVector<QPointF>)));
+  connect(m_ImagePlot, &QxrdImagePlot::slicePolygon,
+          m_SliceDialog, &QxrdSliceDialog::slicePolygon);
 
-  connect(m_ImagePlot, SIGNAL(selectHistogram(QRectF)),
-          m_HistogramDialog, SLOT(histogramSelectionChanged(QRectF)));
+  connect(m_ImagePlot, &QxrdImagePlot::selectHistogram,
+          m_HistogramDialog, &QxrdHistogramDialog::histogramSelectionChanged);
 
   if (app) {
     m_Messages -> document() -> setMaximumBlockCount(app->get_MessageWindowLines());
 
-    connect(app->prop_MessageWindowLines(), SIGNAL(valueChanged(int,int)), this, SLOT(onMessageWindowLinesChanged(int)));
-    connect(app->prop_UpdateIntervalMsec(), SIGNAL(valueChanged(int,int)), this, SLOT(onUpdateIntervalMsecChanged(int)));
+    connect(app->prop_MessageWindowLines(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onMessageWindowLinesChanged);
+    connect(app->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onUpdateIntervalMsecChanged);
   }
 
 #ifdef QT_NO_DEBUG
@@ -986,7 +981,7 @@ void QxrdWindow::setupRecentExperimentsMenu(QAction *action)
 
   action->setMenu(m_RecentExperimentsMenu);
 
-  connect(m_RecentExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateRecentExperimentsMenu()));
+  connect(m_RecentExperimentsMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateRecentExperimentsMenu);
 }
 
 void QxrdWindow::populateExperimentsMenu()
@@ -1008,10 +1003,10 @@ void QxrdWindow::populateExperimentsMenu()
 
         QAction *action = new QAction(path, m_ExperimentsMenu);
         QSignalMapper *mapper = new QSignalMapper(action);
-        connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
+        connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
         mapper->setMapping(action, path);
 
-        connect(mapper, SIGNAL(mapped(const QString &)), app.data(), SLOT(activateExperiment(QString)));
+        connect(mapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped, app.data(), &QxrdApplication::activateExperiment);
 
         m_ExperimentsMenu -> addAction(action);
       }
@@ -1033,10 +1028,10 @@ void QxrdWindow::populateRecentExperimentsMenu()
     foreach (QString exp, recent) {
       QAction *action = new QAction(exp, m_RecentExperimentsMenu);
       QSignalMapper *mapper = new QSignalMapper(action);
-      connect(action, SIGNAL(triggered()), mapper, SLOT(map()));
+      connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
       mapper->setMapping(action, exp);
 
-      connect(mapper, SIGNAL(mapped(const QString &)), app.data(), SLOT(openRecentExperiment(QString)));
+      connect(mapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped, app.data(), &QxrdApplication::openRecentExperiment);
 
       m_RecentExperimentsMenu -> addAction(action);
     }
@@ -1131,7 +1126,7 @@ void QxrdWindow::acquireComplete()
 }
 
 void QxrdWindow::acquiredFrame(
-    QString fileName, int /*fileIndex*/, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup)
+    QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup)
 {
   //   printf("QxrdWindow::acquiredFrame(\"%s\",%d,%d,%d,%d,%d)\n",
   // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);

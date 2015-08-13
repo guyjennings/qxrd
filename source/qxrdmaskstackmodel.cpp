@@ -5,7 +5,7 @@
 QxrdMaskStackModel::QxrdMaskStackModel(QxrdMaskStackPtr masks) :
     m_MaskStack(masks)
 {
-  connect(masks, SIGNAL(maskChanged()), this, SLOT(onMaskChanged()));
+  connect(masks, &QxrdMaskStack::maskChanged, this, &QxrdMaskStackModel::onMaskChanged);
 }
 
 int QxrdMaskStackModel::rowCount (const QModelIndex & parent) const

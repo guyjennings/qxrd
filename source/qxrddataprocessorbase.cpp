@@ -150,30 +150,30 @@ void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionWPtr acq)
 {
   m_Acquisition = acq;
 
-  connect(prop_SaveRawImages(), SIGNAL(valueChanged(bool,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_PerformDarkSubtraction(), SIGNAL(valueChanged(bool,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_PerformBadPixels(), SIGNAL(valueChanged(bool,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_PerformGainCorrection(), SIGNAL(valueChanged(bool,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_SaveSubtracted(), SIGNAL(valueChanged(bool,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_SaveAsText(), SIGNAL(valueChanged(bool,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_PerformIntegration(), SIGNAL(valueChanged(bool,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_DisplayIntegratedData(), SIGNAL(valueChanged(bool,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_SaveIntegratedData(), SIGNAL(valueChanged(bool,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_PerformDarkSubtractionTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_PerformBadPixelsTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_PerformGainCorrectionTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_SaveSubtractedTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_SaveAsTextTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_PerformIntegrationTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_DisplayIntegratedDataTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
-  connect(prop_SaveIntegratedDataTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
+  connect(prop_SaveRawImages(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_PerformDarkSubtraction(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_PerformBadPixels(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_PerformGainCorrection(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_SaveSubtracted(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_SaveAsText(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_PerformIntegration(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_DisplayIntegratedData(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_SaveIntegratedData(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_PerformDarkSubtractionTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_PerformBadPixelsTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_PerformGainCorrectionTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_SaveSubtractedTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_SaveAsTextTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_PerformIntegrationTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_DisplayIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+  connect(prop_SaveIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
 
   QxrdAcquisitionPtr acqp(m_Acquisition);
 
   if (acqp) {
-    connect(acqp -> prop_SummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateEstimatedProcessingTime()));
-    connect(acqp -> prop_Raw16SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
-    connect(acqp -> prop_Raw32SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateEstimatedProcessingTime()));
+    connect(acqp -> prop_SummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+    connect(acqp -> prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
+    connect(acqp -> prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
   }
 }
 

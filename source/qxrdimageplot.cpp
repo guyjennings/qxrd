@@ -125,21 +125,21 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   setGrayscale();
 
   if (set) {
-    connect(m_Zoomer, SIGNAL(zoomed(QRectF)), this, SLOT(onImageScaleChanged()));
-    connect(set->prop_ImageShown(), SIGNAL(valueChanged(bool,int)), this, SLOT(changeImageShown(bool)));
-    connect(set->prop_MaskShown(), SIGNAL(valueChanged(bool,int)), this, SLOT(changeMaskShown(bool)));
-    connect(set->prop_OverflowShown(), SIGNAL(valueChanged(bool,int)), this, SLOT(changeOverflowShown(bool)));
-    connect(set->prop_DisplayMinimumPct(), SIGNAL(valueChanged(double,int)), this, SLOT(recalculateDisplayedRange()));
-    connect(set->prop_DisplayMaximumPct(), SIGNAL(valueChanged(double,int)), this, SLOT(recalculateDisplayedRange()));
-    connect(set->prop_DisplayMinimumVal(), SIGNAL(valueChanged(double,int)), this, SLOT(recalculateDisplayedRange()));
-    connect(set->prop_DisplayMaximumVal(), SIGNAL(valueChanged(double,int)), this, SLOT(recalculateDisplayedRange()));
-    connect(set->prop_DisplayMinimumPctle(), SIGNAL(valueChanged(double,int)), this, SLOT(recalculateDisplayedRange()));
-    connect(set->prop_DisplayMaximumPctle(), SIGNAL(valueChanged(double,int)), this, SLOT(recalculateDisplayedRange()));
-    connect(set->prop_DisplayScalingMode(), SIGNAL(valueChanged(int,int)), this, SLOT(recalculateDisplayedRange()));
-    connect(set->prop_InterpolatePixels(), SIGNAL(valueChanged(bool,int)), this, SLOT(onInterpolateChanged(bool)));
-    connect(set->prop_MaintainAspectRatio(), SIGNAL(valueChanged(bool,int)), this, SLOT(onMaintainAspectChanged(bool)));
-    connect(set->prop_DisplayColorMap(), SIGNAL(valueChanged(int,int)), this, SLOT(setColorMap(int)));
-    connect(set->prop_DisplayLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(redoColorMap()));
+    connect(m_Zoomer, &QwtPlotZoomer::zoomed, this, &QxrdImagePlot::onImageScaleChanged);
+    connect(set->prop_ImageShown(), &QcepBoolProperty::valueChanged, this, &QxrdImagePlot::changeImageShown);
+    connect(set->prop_MaskShown(), &QcepBoolProperty::valueChanged, this, &QxrdImagePlot::changeMaskShown);
+    connect(set->prop_OverflowShown(), &QcepBoolProperty::valueChanged, this, &QxrdImagePlot::changeOverflowShown);
+    connect(set->prop_DisplayMinimumPct(), &QcepDoubleProperty::valueChanged, this, &QxrdImagePlot::recalculateDisplayedRange);
+    connect(set->prop_DisplayMaximumPct(), &QcepDoubleProperty::valueChanged, this, &QxrdImagePlot::recalculateDisplayedRange);
+    connect(set->prop_DisplayMinimumVal(), &QcepDoubleProperty::valueChanged, this, &QxrdImagePlot::recalculateDisplayedRange);
+    connect(set->prop_DisplayMaximumVal(), &QcepDoubleProperty::valueChanged, this, &QxrdImagePlot::recalculateDisplayedRange);
+    connect(set->prop_DisplayMinimumPctle(), &QcepDoubleProperty::valueChanged, this, &QxrdImagePlot::recalculateDisplayedRange);
+    connect(set->prop_DisplayMaximumPctle(), &QcepDoubleProperty::valueChanged, this, &QxrdImagePlot::recalculateDisplayedRange);
+    connect(set->prop_DisplayScalingMode(), &QcepIntProperty::valueChanged, this, &QxrdImagePlot::recalculateDisplayedRange);
+    connect(set->prop_InterpolatePixels(), &QcepBoolProperty::valueChanged, this, &QxrdImagePlot::onInterpolateChanged);
+    connect(set->prop_MaintainAspectRatio(), &QcepBoolProperty::valueChanged, this, &QxrdImagePlot::onMaintainAspectChanged);
+    connect(set->prop_DisplayColorMap(), &QcepIntProperty::valueChanged, this, &QxrdImagePlot::setColorMap);
+    connect(set->prop_DisplayLog(), &QcepBoolProperty::valueChanged, this, &QxrdImagePlot::redoColorMap);
 
     changeImageShown(set->get_ImageShown());
     changeMaskShown(set->get_MaskShown());
@@ -166,38 +166,35 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
     QxrdCenterFinderPtr cf(dp->centerFinder());
 
     if (cf) {
-      connect(m_CenterFinderPicker, SIGNAL(selected(QPointF)),
-              cf.data(), SLOT(onCenterChanged(QPointF)));
+      connect(m_CenterFinderPicker, (void (QcepPlotMeasurer::*)( const QPointF &)) &QwtPlotPicker::selected,
+              cf.data(), &QxrdCenterFinder::onCenterChanged);
 
-      connect(m_Circles, SIGNAL(selected(QRectF)),
-              dp.data(), SLOT(maskCircle(QRectF)));
+      connect(m_Circles, (void (QcepPlotMeasurer::*)( const QRectF &)) &QwtPlotPicker::selected,
+              dp.data(), &QxrdDataProcessorBase::maskCircle);
 
-      connect(m_Polygons, SIGNAL(selected(QVector<QPointF>)),
-              dp.data(), SLOT(maskPolygon(QVector<QPointF>)));
+      connect(m_Polygons, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
+              dp.data(), &QxrdDataProcessorBase::maskPolygon);
 
-      connect(m_Measurer, SIGNAL(selected(QVector<QPointF>)),
-              dp.data(), SLOT(measurePolygon(QVector<QPointF>)));
+      connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
+              dp.data(), &QxrdDataProcessorBase::measurePolygon);
 
-      //  connect(m_Slicer, SIGNAL(selected(QVector<QPointF>)),
-    //          m_DataProcessor, SLOT(slicePolygon(QVector<QPointF>)));
-
-      connect(m_PowderPointPicker, SIGNAL(selected(QPointF)),
-              cf.data(), SLOT(onPointSelected(QPointF)));
+      connect(m_PowderPointPicker, (void (QcepPlotMeasurer::*)( const QPointF &)) &QwtPlotPicker::selected,
+              cf.data(), &QxrdCenterFinder::onPointSelected);
 
       onCenterChanged(QPointF(cf->get_CenterX(), cf->get_CenterY()));
 
-      connect(cf->prop_MarkedPoints(), SIGNAL(valueChanged(QxrdPowderPointVector,int)),
-              this, SLOT(onMarkedPointsChanged()));
+      connect(cf->prop_MarkedPoints(), &QxrdPowderPointVectorProperty::valueChanged,
+              this, &QxrdImagePlot::onMarkedPointsChanged);
 
       onMarkedPointsChanged();
     }
   }
 
-  connect(m_Slicer, SIGNAL(selected(QVector<QPointF>)),
-          this, SIGNAL(slicePolygon(QVector<QPointF>)));
+  connect(m_Slicer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
+          this, &QxrdImagePlot::slicePolygon);
 
-  connect(m_HistogramSelector, SIGNAL(selected(QRectF)),
-          this, SIGNAL(selectHistogram(QRectF)));
+  connect(m_HistogramSelector, (void (QcepPlotMeasurer::*)( const QRectF &)) &QwtPlotPicker::selected,
+          this, &QxrdImagePlot::selectHistogram);
 }
 
 QxrdDataProcessorWPtr QxrdImagePlot::processor() const

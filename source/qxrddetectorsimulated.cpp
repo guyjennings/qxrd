@@ -14,7 +14,7 @@ QxrdDetectorSimulated::QxrdDetectorSimulated(QxrdExperimentWPtr expt, QxrdAcquis
     printf("QxrdDetectorSimulated::QxrdDetectorSimulated(%p)\n", this);
   }
 
-  connect(&m_Timer, SIGNAL(timeout()), this, SLOT(onTimerTimeout()));
+  connect(&m_Timer, &QTimer::timeout, this, &QxrdDetectorSimulated::onTimerTimeout);
 }
 
 QxrdDetectorSimulated::~QxrdDetectorSimulated()

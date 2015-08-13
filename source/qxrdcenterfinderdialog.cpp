@@ -14,14 +14,14 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
 
   setupUi(this);
 
-  connect(m_CenterMoveUpLeft,    SIGNAL(clicked()), this, SLOT(centerMoveUpLeft()));
-  connect(m_CenterMoveUp,        SIGNAL(clicked()), this, SLOT(centerMoveUp()));
-  connect(m_CenterMoveUpRight,   SIGNAL(clicked()), this, SLOT(centerMoveUpRight()));
-  connect(m_CenterMoveRight,     SIGNAL(clicked()), this, SLOT(centerMoveRight()));
-  connect(m_CenterMoveDownRight, SIGNAL(clicked()), this, SLOT(centerMoveDownRight()));
-  connect(m_CenterMoveDown,      SIGNAL(clicked()), this, SLOT(centerMoveDown()));
-  connect(m_CenterMoveDownLeft,  SIGNAL(clicked()), this, SLOT(centerMoveDownLeft()));
-  connect(m_CenterMoveLeft,      SIGNAL(clicked()), this, SLOT(centerMoveLeft()));
+  connect(m_CenterMoveUpLeft,    &QAbstractButton::clicked, this, &QxrdCenterFinderDialog::centerMoveUpLeft);
+  connect(m_CenterMoveUp,        &QAbstractButton::clicked, this, &QxrdCenterFinderDialog::centerMoveUp);
+  connect(m_CenterMoveUpRight,   &QAbstractButton::clicked, this, &QxrdCenterFinderDialog::centerMoveUpRight);
+  connect(m_CenterMoveRight,     &QAbstractButton::clicked, this, &QxrdCenterFinderDialog::centerMoveRight);
+  connect(m_CenterMoveDownRight, &QAbstractButton::clicked, this, &QxrdCenterFinderDialog::centerMoveDownRight);
+  connect(m_CenterMoveDown,      &QAbstractButton::clicked, this, &QxrdCenterFinderDialog::centerMoveDown);
+  connect(m_CenterMoveDownLeft,  &QAbstractButton::clicked, this, &QxrdCenterFinderDialog::centerMoveDownLeft);
+  connect(m_CenterMoveLeft,      &QAbstractButton::clicked, this, &QxrdCenterFinderDialog::centerMoveLeft);
 
   m_CenterFinder -> prop_CenterX() -> linkTo(m_CenterX);
   m_CenterFinder -> prop_CenterY() -> linkTo(m_CenterY);
@@ -48,14 +48,14 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   m_CenterFinder -> prop_FittedHeightMinRatio() -> linkTo(m_FittedHeightMinRatio);
   m_CenterFinder -> prop_FittedPositionMaxDistance() -> linkTo(m_FittedPositionMaxDistance);
 
-  connect(m_CenterFinder -> prop_ImplementTilt(), SIGNAL(valueChanged(bool,int)), this, SLOT(onImplementTiltChanged(bool)));
+  connect(m_CenterFinder -> prop_ImplementTilt(), &QcepBoolProperty::valueChanged, this, &QxrdCenterFinderDialog::onImplementTiltChanged);
 
   onImplementTiltChanged(m_CenterFinder -> get_ImplementTilt());
 
-  connect(m_CenterFinder->prop_CenterStep(),            SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
-  connect(m_CenterFinder->prop_DetectorDistanceStep(),  SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
-  connect(m_CenterFinder->prop_DetectorTiltStep(),      SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
-  connect(m_CenterFinder->prop_TiltPlaneRotationStep(), SIGNAL(valueChanged(double,int)), this, SLOT(onStepSizesChanged()));
+  connect(m_CenterFinder->prop_CenterStep(),            &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinderDialog::onStepSizesChanged);
+  connect(m_CenterFinder->prop_DetectorDistanceStep(),  &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinderDialog::onStepSizesChanged);
+  connect(m_CenterFinder->prop_DetectorTiltStep(),      &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinderDialog::onStepSizesChanged);
+  connect(m_CenterFinder->prop_TiltPlaneRotationStep(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinderDialog::onStepSizesChanged);
 
   onStepSizesChanged();
 }

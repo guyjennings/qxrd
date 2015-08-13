@@ -20,9 +20,9 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
 
   setupUi(this);
 
-  connect(m_AddChannel, SIGNAL(clicked()), this, SLOT(addChannel()));
-  connect(m_RemoveChannel, SIGNAL(clicked()), this, SLOT(removeChannel()));
-  connect(m_TestReadout, SIGNAL(clicked()), this, SLOT(initiateReadout()));
+  connect(m_AddChannel, &QAbstractButton::clicked, this, &QxrdAcquisitionExtraInputsDialog::addChannel);
+  connect(m_RemoveChannel, &QAbstractButton::clicked, this, &QxrdAcquisitionExtraInputsDialog::removeChannel);
+  connect(m_TestReadout, &QAbstractButton::clicked, this, &QxrdAcquisitionExtraInputsDialog::initiateReadout);
 
   QxrdAcquisitionPtr acqp(m_Acquisition);
 
@@ -57,8 +57,11 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
         xtra->prop_AcquireDelay()->linkTo(m_AcquisitionDelay);
         xtra->prop_DeviceName()->linkTo(m_AcquisitionDevice);
 
-        connect(xtra->prop_DeviceName(), SIGNAL(valueChanged(QString,int)), this, SLOT(updateUi()));
-        connect(xtra.data(), SIGNAL(newDataAvailable()), this, SLOT(updateWaveforms()));
+        connect(xtra->prop_DeviceName(), &QcepStringProperty::valueChanged,
+                this, &QxrdAcquisitionExtraInputsDialog::updateUi);
+
+        connect(xtra.data(), &QxrdAcquisitionExtraInputs::newDataAvailable,
+                this, &QxrdAcquisitionExtraInputsDialog::updateWaveforms);
       }
     }
   }

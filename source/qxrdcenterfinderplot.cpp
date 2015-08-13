@@ -52,13 +52,13 @@ void QxrdCenterFinderPlot::setWindow(QxrdWindow *win)
   if (dp) {
     m_CenterFinder = dp -> centerFinder();
 
-    connect(m_Measurer, SIGNAL(selected(QVector<QPointF>)),
-            dp.data(), SLOT(printMeasuredPolygon(QVector<QPointF>)));
+    connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QcepPlotMeasurer::selected,
+            dp.data(),  &QxrdDataProcessor::printMeasuredPolygon);
 
     QxrdCenterFinderPtr cf(m_CenterFinder);
 
     if (cf) {
-      connect(cf.data(), SIGNAL(parameterChanged()), this, SLOT(onParameterChanged()));
+      connect(cf.data(), &QxrdCenterFinder::parameterChanged, this, &QxrdCenterFinderPlot::onParameterChanged);
     }
   }
 }

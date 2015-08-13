@@ -61,38 +61,36 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
   m_Model -> setNameFilters(QStringList("*.tif"));
   m_Model -> setNameFilterDisables(false);
 
-  connect(m_Model.data(), SIGNAL(modelReset()), this, SLOT(onModelReset()));
-  connect(m_Model.data(), SIGNAL(fileUpdated(QFileInfo)), this, SLOT(onFileUpdated(QFileInfo)));
+  connect(m_Model.data(), &QAbstractItemModel::modelReset, this, &QxrdFileBrowser::onModelReset);
+  connect(m_Model.data(), &QxrdFileBrowserModel::fileUpdated, this, &QxrdFileBrowser::onFileUpdated);
 
-  //  connect(m_FilterChoices, SIGNAL(currentIndexChanged(int)), this, SLOT(onFilterChanged(int)));
-  //  connect(m_FileSelector,  SIGNAL(textChanged(QString)), this, SLOT(onSelectorChanged(QString)));
-  connect(m_PrevDirectoryButton, SIGNAL(clicked()), this, SLOT(doPreviousDirectory()));
-  connect(m_UpDirectoryButton, SIGNAL(clicked()), this, SLOT(doUpDirectory()));
-  connect(m_ChangeDirectoryButton, SIGNAL(clicked()), this, SLOT(doChangeDirectory()));
-  connect(m_HomeDirectoryButton, SIGNAL(clicked()), this, SLOT(doHomeDirectory()));
-  connect(m_AcquisitionDirectoryButton, SIGNAL(clicked()), this, SLOT(doAcquisitionDirectory()));
-  connect(m_RefreshButton, SIGNAL(clicked()), this, SLOT(doRefreshBrowser()));
-  connect(m_OpenButton, SIGNAL(clicked()), this, SLOT(doOpen()));
-  connect(m_ProcessButton, SIGNAL(clicked()), this, SLOT(doProcess()));
-  connect(m_IntegrateButton, SIGNAL(clicked()), this, SLOT(doIntegrate()));
+  connect(m_PrevDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowser::doPreviousDirectory);
+  connect(m_UpDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowser::doUpDirectory);
+  connect(m_ChangeDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowser::doChangeDirectory);
+  connect(m_HomeDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowser::doHomeDirectory);
+  connect(m_AcquisitionDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowser::doAcquisitionDirectory);
+  connect(m_RefreshButton, &QAbstractButton::clicked, this, &QxrdFileBrowser::doRefreshBrowser);
+  connect(m_OpenButton, &QAbstractButton::clicked, this, &QxrdFileBrowser::doOpen);
+  connect(m_ProcessButton, &QAbstractButton::clicked, this, &QxrdFileBrowser::doProcess);
+  connect(m_IntegrateButton, &QAbstractButton::clicked, this, &QxrdFileBrowser::doIntegrate);
   connect(m_AccumulateButton, &QPushButton::clicked, this, &QxrdFileBrowser::doSumImages);
 
   QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
 
   if (set) {
-    connect(set -> prop_RootDirectory(), SIGNAL(valueChanged(QString,int)), this, SLOT(onRootDirectoryChanged(QString)));
-    connect(set -> prop_BrowserFilter(), SIGNAL(valueChanged(int,int)), this, SLOT(onFilterChanged(int)));
-    connect(set -> prop_BrowserSelector(), SIGNAL(valueChanged(QString,int)), this, SLOT(onSelectorChanged(QString)));
+    connect(set -> prop_RootDirectory(), &QcepStringProperty::valueChanged, this, &QxrdFileBrowser::onRootDirectoryChanged);
+    connect(set -> prop_BrowserFilter(), &QcepIntProperty::valueChanged, this, &QxrdFileBrowser::onFilterChanged);
+    connect(set -> prop_BrowserSelector(), &QcepStringProperty::valueChanged, this, &QxrdFileBrowser::onSelectorChanged);
 
     onRootDirectoryChanged(set->get_RootDirectory());
     onFilterChanged(set->get_BrowserFilter());
     onSelectorChanged(set->get_BrowserSelector());
   }
 
-  connect(m_FileBrowser, SIGNAL(pressed(QModelIndex)), this, SLOT(mousePressed(QModelIndex)));
-  connect(m_FileBrowser, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(doubleClicked(QModelIndex)));
+  connect(m_FileBrowser, &QAbstractItemView::pressed, this, &QxrdFileBrowser::mousePressed);
+  connect(m_FileBrowser, &QAbstractItemView::doubleClicked, this, &QxrdFileBrowser::doubleClicked);
 
-  connect(m_RootDirectoryCombo, SIGNAL(activated(int)), this, SLOT(doSelectComboItem(int)));
+  connect(m_RootDirectoryCombo, (void (QComboBox::*)(int)) &QComboBox::activated, this, &QxrdFileBrowser::doSelectComboItem);
 
   if (set) {
     set->prop_BrowserFilter() -> linkTo(m_FilterChoices);
@@ -146,15 +144,15 @@ void QxrdFileBrowser::onFilterChanged(int newfilter)
   }
 }
 
-void QxrdFileBrowser::onSelectorChanged(QString str, const QModelIndex &parent)
+void QxrdFileBrowser::onSelectorChanged(QString str)
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QRegExp pattern(str, Qt::CaseSensitive, QRegExp::Wildcard);
 
-  int rows = m_Model -> rowCount(parent);
+  int rows = m_Model -> rowCount(QModelIndex());
 
   for (int i=0; i<rows; i++) {
-    QModelIndex index = m_Model -> index(i, 0, parent);
+    QModelIndex index = m_Model -> index(i, 0, QModelIndex());
 
     QString path = m_Model->fileName(index);
     //    g_Application->printMessage(tr("Testing %1").arg(path));
