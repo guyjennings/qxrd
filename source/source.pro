@@ -151,7 +151,10 @@ HEADERS += \
     qxrdcalibrantlibrarymodel-ptr.h \
     qxrddataset.h \
     qxrddataset-ptr.h \
-    qxrdimageplotzoomer.h
+    qxrdimageplotzoomer.h \
+    qxrdacquisitionwindow.h \
+    qxrdacquisitionwindow-ptr.h \
+    qxrdmainwindow.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -193,7 +196,9 @@ SOURCES += \
     qxrdcalibrantlibrarymodel.cpp \
     qxrdcalibrantdspacingsmodel.cpp \
     qxrddataset.cpp \
-    qxrdimageplotzoomer.cpp
+    qxrdimageplotzoomer.cpp \
+    qxrdacquisitionwindow.cpp \
+    qxrdmainwindow.cpp
 
 OTHER_FILES += testImage.js
 
@@ -471,7 +476,8 @@ FORMS += qxrdwindow.ui \
     qxrduserscriptdialog.ui \
     qxrddistortioncorrectiondialog.ui \
     qxrdscriptdialog.ui \
-    qxrdcalibrantdialog.ui
+    qxrdcalibrantdialog.ui \
+    qxrdacquisitionwindow.ui
 
 macx:
 else:unix:LIBS += -ltiff
