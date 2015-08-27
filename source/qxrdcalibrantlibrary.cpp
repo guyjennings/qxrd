@@ -94,7 +94,7 @@ void QxrdCalibrantLibrary::appendCalibrant(QxrdCalibrantPtr cal)
 
 int QxrdCalibrantLibrary::numberStandardCalibrants()
 {
-  return 9;
+  return 8;
 }
 
 QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
@@ -207,30 +207,15 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
     }
     break;
 
-  case 7: // Alumina
+  case 7: // Germanium Powder
     {
       res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, m_CalibrantLibrary));
-      res->set_Name("Al2O3");
-      res->set_Description("Alumina Powder (Hexagonal)");
-      res->set_Symmetry(QxrdCalibrant::Hexagonal);
-      res->set_A(4.7590914);
-      res->set_B(4.7590914);
-      res->set_C(12.991779);
-      res->set_Alpha(90);
-      res->set_Beta(90);
-      res->set_Gamma(120);
-    }
-    break;
-
-  case 8: // Silicon Powder
-    {
-      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, m_CalibrantLibrary));
-      res->set_Name("Si");
-      res->set_Description("Silicon Powder (FCC)");
-      res->set_Symmetry(QxrdCalibrant::FaceCenteredCubic);
-      res->set_A(5.43123);
-      res->set_B(5.43123);
-      res->set_C(5.43123);
+      res->set_Name("Ge");
+      res->set_Description("Germanium Powder");
+      res->set_Symmetry(QxrdCalibrant::DiamondCubic);
+      res->set_A(5.65754);
+      res->set_B(5.65754);
+      res->set_C(5.65754);
       res->set_Alpha(90);
       res->set_Beta(90);
       res->set_Gamma(90);
