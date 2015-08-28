@@ -51,8 +51,8 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
   m_FileBrowser -> resizeRowsToContents();
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-  m_FileBrowser->horizontalHeader()->sectionResizeMode(QHeaderView::ResizeToContents);
-  m_FileBrowser->verticalHeader()->sectionResizeMode(QHeaderView::ResizeToContents);
+  m_FileBrowser->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  m_FileBrowser->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 #else
   m_FileBrowser->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
   m_FileBrowser->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
