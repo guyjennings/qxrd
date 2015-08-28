@@ -30,6 +30,9 @@
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
        </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::AdjustToContents</enum>
+       </property>
        <property name="selectionMode">
         <enum>QAbstractItemView::SingleSelection</enum>
        </property>
@@ -51,6 +54,9 @@
       <widget class="QTableView" name="m_CalibrantDSpacingsView">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::AdjustToContents</enum>
        </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
