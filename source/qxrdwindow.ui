@@ -83,7 +83,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -112,7 +112,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -145,7 +145,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -217,7 +217,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -508,7 +508,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -537,7 +537,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -570,7 +570,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -590,7 +590,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -660,7 +660,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -689,7 +689,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -722,7 +722,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -742,7 +742,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -794,7 +794,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="qxrdresources.qrc">
+            <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
              <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
            </property>
            <property name="iconSize">
@@ -833,7 +833,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="qxrdresources.qrc">
+            <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
              <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
            </property>
            <property name="iconSize">
@@ -853,7 +853,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="qxrdresources.qrc">
+            <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
              <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
            </property>
            <property name="iconSize">
@@ -873,7 +873,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="qxrdresources.qrc">
+            <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
              <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
            </property>
            <property name="iconSize">
@@ -1111,12 +1111,12 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
     <property name="title">
-     <string>File</string>
+     <string>Fi&amp;le</string>
     </property>
     <addaction name="m_ActionOpenExperiment"/>
     <addaction name="m_ActionRecentExperiments"/>
@@ -1152,8 +1152,9 @@
    </widget>
    <widget class="QMenu" name="m_AcquireMenu">
     <property name="title">
-     <string>Acquire</string>
+     <string>Ac&amp;quire</string>
     </property>
+    <addaction name="m_ActionOpenDetectorControlWindow"/>
    </widget>
    <widget class="QMenu" name="m_DisplayMenu">
     <property name="title">
@@ -1198,7 +1199,7 @@
    </widget>
    <widget class="QMenu" name="m_CalibrationMenu">
     <property name="title">
-     <string>Centering</string>
+     <string>&amp;Centering</string>
     </property>
     <addaction name="m_ActionRefineCenterTilt"/>
     <addaction name="m_ActionFindBeamCenter"/>
@@ -1221,7 +1222,7 @@
     </property>
     <widget class="QMenu" name="m_IntegrateVsMenu">
      <property name="title">
-      <string>Integrate vs...</string>
+      <string>Integrate &amp;vs...</string>
      </property>
      <addaction name="m_ActionIntegrateVsR"/>
      <addaction name="m_ActionIntegrateVsQ"/>
@@ -1259,7 +1260,7 @@
    </widget>
    <widget class="QMenu" name="m_ExperimentsMenu">
     <property name="title">
-     <string>Experiments</string>
+     <string>E&amp;xperiments</string>
     </property>
    </widget>
    <addaction name="m_FileMenu"/>
@@ -1277,7 +1278,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="m_ActionQuit">
    <property name="text">
-    <string>Quit</string>
+    <string>&amp;Quit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -1285,7 +1286,7 @@
   </action>
   <action name="m_ActionExperimentPreferences">
    <property name="text">
-    <string>Experiment Preferences...</string>
+    <string>&amp;Experiment Preferences...</string>
    </property>
    <property name="toolTip">
     <string>Experiment Preferences</string>
@@ -1293,7 +1294,7 @@
   </action>
   <action name="m_ActionAutoScale">
    <property name="text">
-    <string>AutoScale</string>
+    <string>&amp;AutoScale</string>
    </property>
   </action>
   <action name="m_ActionLoadData">
@@ -1302,7 +1303,7 @@
      <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
    </property>
    <property name="text">
-    <string>Load Data...</string>
+    <string>&amp;Load Data...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -1310,7 +1311,7 @@
   </action>
   <action name="m_ActionSaveData">
    <property name="text">
-    <string>Save Data...</string>
+    <string>Save &amp;Data...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -1318,7 +1319,7 @@
   </action>
   <action name="m_ActionExecuteScript">
    <property name="text">
-    <string>Execute Script</string>
+    <string>&amp;Execute Script</string>
    </property>
    <property name="toolTip">
     <string>Execute Script</string>
@@ -1326,12 +1327,12 @@
   </action>
   <action name="m_ActionGrayscale">
    <property name="text">
-    <string>Grayscale</string>
+    <string>&amp;Grayscale</string>
    </property>
   </action>
   <action name="m_ActionInverseGrayscale">
    <property name="text">
-    <string>Inverse Grayscale</string>
+    <string>&amp;Inverse Grayscale</string>
    </property>
    <property name="toolTip">
     <string>Inverse Grayscale</string>
@@ -1339,37 +1340,37 @@
   </action>
   <action name="m_ActionEarthTones">
    <property name="text">
-    <string>Earth Tones</string>
+    <string>&amp;Earth Tones</string>
    </property>
   </action>
   <action name="m_ActionSpectrum">
    <property name="text">
-    <string>Spectrum</string>
+    <string>&amp;Spectrum</string>
    </property>
   </action>
   <action name="m_ActionFire">
    <property name="text">
-    <string>Fire</string>
+    <string>&amp;Fire</string>
    </property>
   </action>
   <action name="m_Action010Range">
    <property name="text">
-    <string>10 % Range</string>
+    <string>&amp;10 % Range</string>
    </property>
   </action>
   <action name="m_Action005Range">
    <property name="text">
-    <string>5 % Range</string>
+    <string>&amp;5 % Range</string>
    </property>
   </action>
   <action name="m_Action100Range">
    <property name="text">
-    <string>100% Range</string>
+    <string>100% &amp;Range</string>
    </property>
   </action>
   <action name="m_ActionIce">
    <property name="text">
-    <string>Ice</string>
+    <string>I&amp;ce</string>
    </property>
    <property name="toolTip">
     <string>Select 'icy' color palette</string>
@@ -1391,7 +1392,7 @@
   </action>
   <action name="m_ActionTest">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
      <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
    </property>
    <property name="text">
@@ -1403,7 +1404,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Image</string>
+    <string>S&amp;how Image</string>
    </property>
   </action>
   <action name="m_ActionShowMask">
@@ -1411,7 +1412,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Mask</string>
+    <string>Show &amp;Mask</string>
    </property>
   </action>
   <action name="m_ActionShowMaskRange">
@@ -1505,7 +1506,7 @@
      <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
    </property>
    <property name="text">
-    <string>Load Dark Data...</string>
+    <string>Load Dar&amp;k Data...</string>
    </property>
    <property name="toolTip">
     <string>Load Dark Data</string>
@@ -1531,7 +1532,7 @@
      <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
    </property>
    <property name="text">
-    <string>Load Mask...</string>
+    <string>Load &amp;Mask...</string>
    </property>
    <property name="toolTip">
     <string>Load Mask</string>
@@ -1561,27 +1562,27 @@
   </action>
   <action name="m_ActionAboutQXRD">
    <property name="text">
-    <string>About QXRD</string>
+    <string>&amp;About QXRD</string>
    </property>
   </action>
   <action name="m_ActionOpenQXRDWebPage">
    <property name="text">
-    <string>Open QXRD web page</string>
+    <string>&amp;Open QXRD web page</string>
    </property>
   </action>
   <action name="m_ActionROICalculate">
    <property name="text">
-    <string>ROI Calculate</string>
+    <string>&amp;ROI Calculate</string>
    </property>
   </action>
   <action name="m_ActionHistogramCalculate">
    <property name="text">
-    <string>Histogram Calculate</string>
+    <string>&amp;Histogram Calculate</string>
    </property>
   </action>
   <action name="m_ActionRefineCenterTilt">
    <property name="text">
-    <string>Refine Center and Tilt...</string>
+    <string>&amp;Refine Center and Tilt...</string>
    </property>
   </action>
   <action name="m_ActionShowOverflow">
@@ -1589,7 +1590,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Overflow</string>
+    <string>Show &amp;Overflow</string>
    </property>
    <property name="toolTip">
     <string>Show Overflow</string>
@@ -1597,7 +1598,7 @@
   </action>
   <action name="m_ActionIntegrate">
    <property name="text">
-    <string>Integrate Data Files...</string>
+    <string>Integrate Data &amp;Files...</string>
    </property>
    <property name="toolTip">
     <string>Integrate a sequence of files</string>
@@ -1605,7 +1606,7 @@
   </action>
   <action name="m_ActionProcessData">
    <property name="text">
-    <string>Process Data Files...</string>
+    <string>Process &amp;Data Files...</string>
    </property>
    <property name="toolTip">
     <string>Process a sequence of data files</string>
@@ -1621,7 +1622,7 @@
   </action>
   <action name="m_ActionAccumulateImages">
    <property name="text">
-    <string>Accumulate (sum) Images...</string>
+    <string>&amp;Accumulate (sum) Images...</string>
    </property>
    <property name="toolTip">
     <string>Load a selection of images and add them all together</string>
@@ -1645,7 +1646,7 @@
   </action>
   <action name="m_ActionCrashProgram">
    <property name="text">
-    <string>Crash Program</string>
+    <string>&amp;Crash Program</string>
    </property>
    <property name="toolTip">
     <string>Crash Program (for debugging purposes)</string>
@@ -1657,7 +1658,7 @@
      <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
    </property>
    <property name="text">
-    <string>Load Gain Map (Flat Field)...</string>
+    <string>Load Gain Map (&amp;Flat Field)...</string>
    </property>
    <property name="toolTip">
     <string>Load Gain Map (Flat Field) Image</string>
@@ -1665,7 +1666,7 @@
   </action>
   <action name="m_ActionSaveGainMap">
    <property name="text">
-    <string>Save Gain Map (Flat Field)...</string>
+    <string>Save Ga&amp;in Map (Flat Field)...</string>
    </property>
    <property name="toolTip">
     <string>Save Gain Map (Flat Field) Image</string>
@@ -1677,7 +1678,7 @@
      <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
    </property>
    <property name="text">
-    <string>Clear Gain Map (Flat Field)...</string>
+    <string>Clear Gai&amp;n Map (Flat Field)...</string>
    </property>
    <property name="toolTip">
     <string>Remove Gain Map (Flat Field) Image</string>
@@ -1701,7 +1702,7 @@
      <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
    </property>
    <property name="text">
-    <string>Clear Dark Data...</string>
+    <string>&amp;Clear Dark Data...</string>
    </property>
    <property name="toolTip">
     <string>Clear Dark Data</string>
@@ -1712,7 +1713,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Integrate vs Radius</string>
+    <string>&amp;Integrate vs Radius</string>
    </property>
    <property name="toolTip">
     <string>Integrate vs Radius</string>
@@ -1723,7 +1724,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Integrate vs Q</string>
+    <string>Integrate &amp;vs Q</string>
    </property>
    <property name="toolTip">
     <string>Integrate vs Q</string>
@@ -1734,7 +1735,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Integrate vs 2 Theta</string>
+    <string>Integrate vs &amp;2 Theta</string>
    </property>
    <property name="toolTip">
     <string>Integrate vs 2 Theta</string>
@@ -1742,7 +1743,7 @@
   </action>
   <action name="m_ActionMoveCenterUp">
    <property name="text">
-    <string>Move Center Up</string>
+    <string>&amp;Move Center Up</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Up</string>
@@ -1750,7 +1751,7 @@
   </action>
   <action name="m_ActionMoveCenterDown">
    <property name="text">
-    <string>Move Center Down</string>
+    <string>Move Center &amp;Down</string>
    </property>
    <property name="toolTip">
     <string>Move Center Down</string>
@@ -1761,7 +1762,7 @@
   </action>
   <action name="m_ActionMoveCenterLeft">
    <property name="text">
-    <string>Move Center Left</string>
+    <string>Move Center &amp;Left</string>
    </property>
    <property name="toolTip">
     <string>Move Center Left</string>
@@ -1772,7 +1773,7 @@
   </action>
   <action name="m_ActionMoveCenterRight">
    <property name="text">
-    <string>Move Center Right</string>
+    <string>M&amp;ove Center Right</string>
    </property>
    <property name="toolTip">
     <string>Move Center Right</string>
@@ -1783,12 +1784,12 @@
   </action>
   <action name="m_ActionClearIntegratedData">
    <property name="text">
-    <string>Clear Integrated Data</string>
+    <string>C&amp;lear Integrated Data</string>
    </property>
   </action>
   <action name="m_ActionClearSelectedIntegratedData">
    <property name="text">
-    <string>Clear Selected Integrated Data</string>
+    <string>Clear Selected Inte&amp;grated Data</string>
    </property>
   </action>
   <action name="m_ActionSetAcquireDirectory">
@@ -1798,12 +1799,12 @@
   </action>
   <action name="m_ActionIntegrateCurrent">
    <property name="text">
-    <string>Integrate current image</string>
+    <string>&amp;Integrate current image</string>
    </property>
   </action>
   <action name="m_ActionIntegrateInputImages">
    <property name="text">
-    <string>Integrate selected input images</string>
+    <string>I&amp;ntegrate selected input images</string>
    </property>
    <property name="toolTip">
     <string>Integrate selected input images</string>
@@ -1811,7 +1812,7 @@
   </action>
   <action name="m_ActionLoadScript">
    <property name="text">
-    <string>Load Script...</string>
+    <string>&amp;Load Script...</string>
    </property>
    <property name="toolTip">
     <string>Load Script from File</string>
@@ -1833,7 +1834,7 @@
   </action>
   <action name="m_ActionOpenExperiment">
    <property name="text">
-    <string>Open Experiment...</string>
+    <string>&amp;Open Experiment...</string>
    </property>
    <property name="toolTip">
     <string>Open an existing experiment...</string>
@@ -1844,7 +1845,7 @@
   </action>
   <action name="m_ActionRecentExperiments">
    <property name="text">
-    <string>Recent Experiments</string>
+    <string>&amp;Recent Experiments</string>
    </property>
    <property name="toolTip">
     <string>Reopen a recent experiment...</string>
@@ -1852,7 +1853,7 @@
   </action>
   <action name="m_ActionGlobalPreferences">
    <property name="text">
-    <string>Global Preferences...</string>
+    <string>&amp;Global Preferences...</string>
    </property>
    <property name="toolTip">
     <string>Edir Global Preferences</string>
@@ -1874,7 +1875,7 @@
   </action>
   <action name="m_ActionSaveExperiment">
    <property name="text">
-    <string>Save Experiment</string>
+    <string>&amp;Save Experiment</string>
    </property>
    <property name="toolTip">
     <string>Save Experiment</string>
@@ -1893,7 +1894,7 @@
   </action>
   <action name="m_ActionSaveExperimentAs">
    <property name="text">
-    <string>Save Experiment As...</string>
+    <string>Sa&amp;ve Experiment As...</string>
    </property>
    <property name="toolTip">
     <string>Save Experiment As...</string>
@@ -1901,7 +1902,7 @@
   </action>
   <action name="m_ActionFindBeamCenter">
    <property name="text">
-    <string>Find Beam Center...</string>
+    <string>&amp;Find Beam Center...</string>
    </property>
    <property name="toolTip">
     <string>Find the beam center from marked points</string>
@@ -1909,67 +1910,67 @@
   </action>
   <action name="m_ActionClearMarkers">
    <property name="text">
-    <string>Clear Markers</string>
+    <string>&amp;Clear Markers</string>
    </property>
   </action>
   <action name="m_ActionSaveCachedGeometry">
    <property name="text">
-    <string>Save Cached Geometry File...</string>
+    <string>&amp;Save Cached Geometry File...</string>
    </property>
   </action>
   <action name="m_ActionSaveCachedIntensity">
    <property name="text">
-    <string>Save Cached Intensity File...</string>
+    <string>Save Cac&amp;hed Intensity File...</string>
    </property>
   </action>
   <action name="m_ActionProjectImagesX">
    <property name="text">
-    <string>Project Images along X</string>
+    <string>&amp;Project Images along X</string>
    </property>
   </action>
   <action name="m_ActionProjectImagesY">
    <property name="text">
-    <string>Project Images along Y</string>
+    <string>Project Images along &amp;Y</string>
    </property>
   </action>
   <action name="m_ActionProjectImagesZ">
    <property name="text">
-    <string>Project Images along Z</string>
+    <string>Project Images along &amp;Z</string>
    </property>
   </action>
   <action name="m_ActionAddImage">
    <property name="text">
-    <string>Add Image(s) to current...</string>
+    <string>Add I&amp;mage(s) to current...</string>
    </property>
   </action>
   <action name="m_ActionSubtractImage">
    <property name="text">
-    <string>Subtract Image(s) from current...</string>
+    <string>S&amp;ubtract Image(s) from current...</string>
    </property>
   </action>
   <action name="m_ActionReflectHorizontally">
    <property name="text">
-    <string>Reflect Image Horizontally</string>
+    <string>&amp;Reflect Image Horizontally</string>
    </property>
   </action>
   <action name="m_ActionReflectVertically">
    <property name="text">
-    <string>Reflect Image Vertically</string>
+    <string>R&amp;eflect Image Vertically</string>
    </property>
   </action>
   <action name="m_ActionCorrelateImage">
    <property name="text">
-    <string>Correlate Image with current...</string>
+    <string>&amp;Correlate Image with current...</string>
    </property>
   </action>
   <action name="m_ActionPrintImage">
    <property name="text">
-    <string>Print Image Graph...</string>
+    <string>&amp;Print Image Graph...</string>
    </property>
   </action>
   <action name="m_ActionPlotPowderRingPoints">
    <property name="text">
-    <string>Plot Powder Ring Radii</string>
+    <string>&amp;Plot Powder Ring Radii</string>
    </property>
    <property name="toolTip">
     <string>Plot Powder Ring Radii</string>
@@ -1977,7 +1978,7 @@
   </action>
   <action name="m_ActionPlotPowderRingCenters">
    <property name="text">
-    <string>Plot Powder Ring Centers</string>
+    <string>Plot Po&amp;wder Ring Centers</string>
    </property>
    <property name="toolTip">
     <string>Plot Powder Ring Centers</string>
@@ -1985,7 +1986,7 @@
   </action>
   <action name="m_ActionPlotPowderRingTwoTheta">
    <property name="text">
-    <string>Plot Powder Ring 2 Theta</string>
+    <string>Plot Powder Ring &amp;2 Theta</string>
    </property>
    <property name="toolTip">
     <string>Plot Powder Ring 2 Theta</string>
@@ -1993,7 +1994,12 @@
   </action>
   <action name="m_ActionCalculateCalibrationPowder">
    <property name="text">
-    <string>Calculate Calibration from Powder Rings</string>
+    <string>Calc&amp;ulate Calibration from Powder Rings</string>
+   </property>
+  </action>
+  <action name="m_ActionOpenDetectorControlWindow">
+   <property name="text">
+    <string>Open Detector Control Window...</string>
    </property>
   </action>
  </widget>
@@ -2048,6 +2054,7 @@
   <tabstop>m_IntegratorZoomInButton</tabstop>
  </tabstops>
  <resources>
+  <include location="submodules/qceplib/qceplib-base/qcepresources.qrc"/>
   <include location="qxrdresources.qrc"/>
  </resources>
  <connections/>
