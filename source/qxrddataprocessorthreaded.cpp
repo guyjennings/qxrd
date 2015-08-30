@@ -23,10 +23,10 @@ QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QcepSettingsSaverWPtr saver
     m_CorrectedImages(prop_CorrectionQueueLength()),
     m_IntegratedData(prop_IntegrationQueueLength())
 {
-  connect(&m_CorrectedImages, SIGNAL(resultAvailable()), this, SLOT(onCorrectedImageAvailable()));
-  connect(&m_IntegratedData,  SIGNAL(resultAvailable()), this, SLOT(onIntegratedDataAvailable()));
-  connect(&m_ROIData,         SIGNAL(resultAvailable()), this, SLOT(onROIDataAvailable()));
-  connect(&m_HistogramData,   SIGNAL(resultAvailable()), this, SLOT(onHistogramDataAvailable()));
+  connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessorThreaded::onCorrectedImageAvailable);
+  connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessorThreaded::onIntegratedDataAvailable);
+  connect(&m_ROIData,         &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessorThreaded::onROIDataAvailable);
+  connect(&m_HistogramData,   &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessorThreaded::onHistogramDataAvailable);
 
 //  prop_CorrectionQueueLength()->setDebug(true);
 //  prop_IntegrationQueueLength()->setDebug(true);

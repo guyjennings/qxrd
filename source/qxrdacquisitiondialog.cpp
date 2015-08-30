@@ -24,25 +24,23 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
   if (acqp) {
     QxrdAcquisition *acq = acqp.data();
 
-    connect(m_ActionAcquire, SIGNAL(triggered()), this, SLOT(doAcquire()));
-    connect(m_ActionCancel, SIGNAL(triggered()), this, SLOT(doCancel()));
-    connect(m_ActionAcquireDark, SIGNAL(triggered()), this, SLOT(doAcquireDark()));
-    //  connect(m_ActionCancelDark, SIGNAL(triggered()), this, SLOT(doCancelDark()));
-    connect(m_ActionTrigger, SIGNAL(triggered()), acq, SLOT(trigger()));
+    connect(m_ActionAcquire, &QAction::triggered, this, &QxrdAcquisitionDialog::doAcquire);
+    connect(m_ActionCancel, &QAction::triggered, this, &QxrdAcquisitionDialog::doCancel);
+    connect(m_ActionAcquireDark, &QAction::triggered, this, &QxrdAcquisitionDialog::doAcquireDark);
+    connect(m_ActionTrigger, &QAction::triggered, acq, &QxrdAcquisition::trigger);
 
-//    connect(m_BrowseDirectoryButton, SIGNAL(clicked()), this, SLOT(browseOutputDirectory()));
-    connect(m_BrowseLogFileButton, SIGNAL(clicked()), this, SLOT(browseLogFile()));
-    connect(m_BrowseScanFileButton, SIGNAL(clicked()), this, SLOT(browseScanFile()));
+    connect(m_BrowseLogFileButton, &QAbstractButton::clicked, this, &QxrdAcquisitionDialog::browseLogFile);
+    connect(m_BrowseScanFileButton, &QAbstractButton::clicked, this, &QxrdAcquisitionDialog::browseScanFile);
 
-    connect(m_AcquireButton, SIGNAL(clicked()), m_ActionAcquire, SIGNAL(triggered()));
-    connect(m_CancelButton, SIGNAL(clicked()), m_ActionCancel, SIGNAL(triggered()));
-    connect(m_TriggerButton, SIGNAL(clicked()), m_ActionTrigger, SIGNAL(triggered()));
-    connect(m_DarkAcquireButton, SIGNAL(clicked()), m_ActionAcquireDark, SIGNAL(triggered()));
+    connect(m_AcquireButton, &QAbstractButton::clicked, m_ActionAcquire, &QAction::triggered);
+    connect(m_CancelButton, &QAbstractButton::clicked, m_ActionCancel, &QAction::triggered);
+    connect(m_TriggerButton, &QAbstractButton::clicked, m_ActionTrigger, &QAction::triggered);
+    connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered);
 
-    connect(m_ClearDroppedButton, SIGNAL(clicked()), acq, SLOT(clearDropped()));
+    connect(m_ClearDroppedButton, &QAbstractButton::clicked, acq, &QxrdAcquisition::clearDropped);
 
-    connect(acq, SIGNAL(acquireStarted()), this, SLOT(acquireStarted()));
-    connect(acq, SIGNAL(acquireComplete()), this, SLOT(acquireComplete()));
+    connect(acq, &QxrdAcquisition::acquireStarted, this, &QxrdAcquisitionDialog::acquireStarted);
+    connect(acq, &QxrdAcquisition::acquireComplete, this, &QxrdAcquisitionDialog::acquireComplete);
 
     acq -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
     acq -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
@@ -82,7 +80,7 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     exp  -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
     exp  -> prop_DetectorNumber() -> linkTo(this -> m_DetectorNumber);
 
-    connect(m_LogFileName, SIGNAL(editingFinished()), exp, SLOT(openNewLogFile()));
+    connect(m_LogFileName, &QLineEdit::editingFinished, exp, &QxrdExperiment::openNewLogFile);
   }
 
   QxrdDataProcessorPtr procp(m_DataProcessor);
@@ -97,8 +95,8 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
   QxrdWindowPtr wp = m_Window;
 
   if (wp) {
-    connect(m_DetectorOptionsButton, SIGNAL(clicked()), wp.data(), SLOT(doEditDetectorPreferences()));
-    connect(m_AcquireOptionsButton, SIGNAL(clicked()), wp.data(), SLOT(doEditPreferences()));
+    connect(m_DetectorOptionsButton, &QAbstractButton::clicked, wp.data(), &QxrdWindow::doEditDetectorPreferences);
+    connect(m_AcquireOptionsButton, &QAbstractButton::clicked, wp.data(), &QxrdWindow::doEditPreferences);
   }
 }
 

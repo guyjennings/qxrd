@@ -29,8 +29,6 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
 
   QxrdExperimentPtr expt(m_Experiment);
 
-//  connect(m_DetectorTypeCombo, SIGNAL(currentIndexChanged(int)), m_DetectorPrefsStack, SLOT(setCurrentIndex(int)));
-
   if (expt) {
     setWindowTitle(expt->experimentFilePath() + " Preferences");
 
@@ -75,16 +73,15 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     m_DetectorNumber -> setValue(expt->get_DetectorNumber());
     m_DetectorAddress -> setText(expt->get_DetectorAddress());
 
-    //    connect(m_CurrentOutputBrowse, SIGNAL(clicked()), this, SLOT(currentOutputBrowse()));
     m_ExperimentDirectory -> setText(expt->get_ExperimentDirectory());
 
-    connect(m_CurrentLogFileBrowse, SIGNAL(clicked()), this, SLOT(currentLogFileBrowse()));
+    connect(m_CurrentLogFileBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::currentLogFileBrowse);
     m_CurrentLogFile -> setText(expt->get_LogFileName());
 
-    connect(m_DataDirectoryBrowse, SIGNAL(clicked()), this, SLOT(dataDirectoryBrowse()));
+    connect(m_DataDirectoryBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::dataDirectoryBrowse);
     m_DataDirectory -> setText(expt->get_DataDirectory());
 
-    connect(m_IntegratedScansFileBrowse, SIGNAL(clicked()), this, SLOT(integratedScansFileBrowse()));
+    connect(m_IntegratedScansFileBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::integratedScansFileBrowse);
     m_IntegratedScansFile -> setText(expt->get_ScanFileName());
 
     m_ScanFileExtension -> setText(expt->get_ScanFileExtension());
@@ -92,19 +89,19 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     m_ScanDataNegative -> setCurrentIndex(expt->get_ScanDataNegative());
 
     if (proc) {
-      connect(m_SaveRawBrowse, SIGNAL(clicked()), this, SLOT(saveRawBrowse()));
+      connect(m_SaveRawBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveRawBrowse);
       m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
       m_SaveRawSubdir    -> setText  (proc->get_SaveRawSubdirectory());
 
-      connect(m_SaveDarkBrowse, SIGNAL(clicked()), this, SLOT(saveDarkBrowse()));
+      connect(m_SaveDarkBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveDarkBrowse);
       m_SaveDarkInSubdir  -> setChecked(proc->get_SaveDarkInSubdirectory());
       m_SaveDarkSubdir    -> setText  (proc->get_SaveDarkSubdirectory());
 
-      connect(m_SaveSubtractedBrowse, SIGNAL(clicked()), this, SLOT(saveSubtractedBrowse()));
+      connect(m_SaveSubtractedBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveSubtractedBrowse);
       m_SaveSubtractedInSubdir  -> setChecked(proc->get_SaveSubtractedInSubdirectory());
       m_SaveSubtractedSubdir    -> setText  (proc->get_SaveSubtractedSubdirectory());
 
-      connect(m_SaveIntegratedBrowse, SIGNAL(clicked()), this, SLOT(saveIntegratedBrowse()));
+      connect(m_SaveIntegratedBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveIntegratedBrowse);
       m_SaveIntegratedInLogFile  -> setChecked(proc->get_SaveIntegratedData());
       m_SaveIntegratedInSeparateFiles  -> setChecked(proc->get_SaveIntegratedInSeparateFiles());
       m_SaveIntegratedInSubdir  -> setChecked(proc->get_SaveIntegratedInSubdirectory());

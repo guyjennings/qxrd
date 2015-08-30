@@ -5,6 +5,9 @@
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdcalibrant.h"
 #include "qxrdcenterfinder.h"
+#include <QMenu>
+#include <QAction>
+#include <QClipboard>
 
 QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdCalibrantLibraryPtr cal, QxrdCenterFinderWPtr cf, QWidget *parent) :
   QDockWidget(parent),
@@ -27,10 +30,10 @@ QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdCalibrantLibraryPtr cal, QxrdCenter
     m_CalibrantDSpacingsView->horizontalHeader()->setStretchLastSection(true);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-  m_CalibrantTableView->horizontalHeader()->sectionResizeMode(QHeaderView::ResizeToContents);
-  m_CalibrantTableView->verticalHeader()->sectionResizeMode(QHeaderView::ResizeToContents);
-  m_CalibrantDSpacingsView->horizontalHeader()->sectionResizeMode(QHeaderView::ResizeToContents);
-  m_CalibrantDSpacingsView->verticalHeader()->sectionResizeMode(QHeaderView::ResizeToContents);
+  m_CalibrantTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  m_CalibrantTableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  m_CalibrantDSpacingsView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  m_CalibrantDSpacingsView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 #else
   m_CalibrantTableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
   m_CalibrantTableView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
@@ -39,7 +42,9 @@ QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdCalibrantLibraryPtr cal, QxrdCenter
 #endif
   }
 
-  connect(m_CalibrantTableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(onLibrarySelectionChanged(QItemSelection,QItemSelection)));
+  connect(m_CalibrantTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &QxrdCalibrantDialog::onLibrarySelectionChanged);
+  connect(m_CalibrantTableView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantDialog::calibrantTableContextMenu);
+  connect(m_CalibrantDSpacingsView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantDialog::calibrantDSpacingsContextMenu);
 }
 
 QxrdCalibrantDialog::~QxrdCalibrantDialog()
@@ -68,5 +73,89 @@ void QxrdCalibrantDialog::onLibrarySelectionChanged(const QItemSelection &select
 
 //      m_CalibrantLibrary->printMessage(tr("%1 diffraction peaks").arg(m_CalibrantDSpacingsVector.count()));
     }
+  }
+}
+
+void QxrdCalibrantDialog::calibrantTableContextMenu(const QPoint &pos)
+{
+  QModelIndex index  = m_CalibrantTableView->indexAt(pos);
+  QMenu      *menu   = new QMenu(this);
+  QAction    *copy   = menu->addAction("Copy");
+  QAction    *chosen = menu->exec(m_CalibrantTableView->viewport()->mapToGlobal(pos));
+
+  if (chosen == copy) {
+    doCopyFromTable(m_CalibrantTableView);
+  }
+}
+
+void QxrdCalibrantDialog::calibrantDSpacingsContextMenu(const QPoint &pos)
+{
+  QModelIndex index  = m_CalibrantDSpacingsView->indexAt(pos);
+  QMenu      *menu   = new QMenu(this);
+  QAction    *copy   = menu->addAction("Copy");
+  QAction    *chosen = menu->exec(m_CalibrantDSpacingsView->viewport()->mapToGlobal(pos));
+
+  if (chosen == copy) {
+    doCopyFromTable(m_CalibrantDSpacingsView);
+  }
+}
+
+void QxrdCalibrantDialog::doCopyFromTable(QTableView *table)
+{
+  QAbstractItemModel *model     = table->model();
+  QItemSelectionModel *selected = table->selectionModel();
+
+  int nRows = model->rowCount();
+  int nCols = model->columnCount();
+
+  int firstRowSel = -1, lastRowSel = -1;
+  int firstColSel = -1, lastColSel = -1;
+
+  for (int row = 0; row<nRows; row++) {
+    for (int col = 0; col<nCols; col++) {
+      if (selected->isSelected(model->index(row, col))) {
+        if (firstRowSel == -1 || firstRowSel > row) {
+          firstRowSel = row;
+        }
+
+        if (firstColSel == -1 || firstColSel > col) {
+          firstColSel = col;
+        }
+
+        if (lastRowSel == -1 || lastRowSel < row) {
+          lastRowSel = row;
+        }
+
+        if (lastColSel == -1 || lastColSel < col) {
+          lastColSel = col;
+        }
+      }
+    }
+  }
+
+  if (firstRowSel >= 0 && lastRowSel >= 0 && firstColSel >= 0 && lastColSel >= 0) {
+    QString result;
+
+    for (int row = firstRowSel; row <= lastRowSel; row++) {
+      for (int col = firstColSel; col <= lastColSel; col++) {
+        if (col != firstColSel) {
+          if (selected->columnIntersectsSelection(col,QModelIndex())) {
+            result.append("\t");
+          }
+        }
+
+        if (selected->isSelected(model->index(row,col))) {
+          result.append(model->data(model->index(row,col)).toString());
+        }
+      }
+
+      result.append("\n");
+    }
+
+    QClipboard *clip = QApplication::clipboard();
+
+    clip->setText(result);
+  } else {
+    printf("No cells selected\n");
   }
 }

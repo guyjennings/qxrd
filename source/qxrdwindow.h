@@ -9,6 +9,7 @@
 
 #include "ui_qxrdwindow.h"
 
+#include "qxrdmainwindow.h"
 #include "qcepallocator.h"
 #include "qxrdscriptengine.h"
 #include "qxrdacquisitiondialog.h"
@@ -37,7 +38,7 @@
 #include "qxrdwindowsettings.h"
 #include "qcepobjectnamer.h"
 
-class QxrdWindow : public QMainWindow, public Ui::QxrdWindow
+class QxrdWindow : public QxrdMainWindow, public Ui::QxrdWindow
 {
   Q_OBJECT
 
@@ -88,17 +89,15 @@ public slots:
   void doCorrelate();
   void doReflectVertically();
   void doReflectHorizontally();
+  void doOpenAcquisitionWindow();
 
   void updateTitle();
   void acquireStarted();
-  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
+  void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
   void acquireComplete();
 
   void crashProgram();
   void testWidget();
-  void shrinkPanels(int fontSize, int spacing);
-  void setFontSize(int fontSize);
-  void setSpacing(int spacing);
 
   void executeScript();
   void finishedCommand(QScriptValue result);
@@ -138,8 +137,6 @@ private slots:
   void plotPowderRingCenters();
 
 public:
-  void possiblyClose();
-  bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
   QxrdDataProcessorWPtr dataProcessor() const;
@@ -157,9 +154,6 @@ public:
   void moveEvent(QMoveEvent *);
 
 private:
-  void shrinkDockWidget(QDockWidget *dockWidget, int fontSize, int spacing);
-  void shrinkObject(QObject *obj, int fontSize, int spacing);
-  void setObjectSpacing(QObject *obj, int spacing);
   void setupRecentExperimentsMenu(QAction *action);
 
 private:

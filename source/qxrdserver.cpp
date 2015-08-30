@@ -20,8 +20,8 @@ QxrdServer::QxrdServer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QStr
     printf("QxrdServer::QxrdServer(%p)\n", this);
   }
 
-  connect(prop_RunSpecServer(), SIGNAL(valueChanged(int,int)), this, SLOT(runModeChanged()));
-  connect(prop_SpecServerPort(), SIGNAL(valueChanged(int,int)), this, SLOT(serverPortChanged()));
+  connect(prop_RunSpecServer(), &QcepIntProperty::valueChanged, this, &QxrdServer::runModeChanged);
+  connect(prop_SpecServerPort(), &QcepIntProperty::valueChanged, this, &QxrdServer::serverPortChanged);
 }
 
 QxrdServer::~QxrdServer()

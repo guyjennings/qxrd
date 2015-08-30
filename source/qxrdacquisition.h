@@ -149,7 +149,7 @@ public:
   void enqueueAcquiredFrame(QcepInt16ImageDataPtr img);
 
 signals:
-  void acquiredFrame(QString fileName, int index, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
+  void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
   void acquireStarted();
   void acquireComplete();
 

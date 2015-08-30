@@ -78,10 +78,10 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
 
 void QxrdAcquisition::initialize()
 {
-  connect(prop_Raw16SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
-  connect(prop_Raw32SaveTime(), SIGNAL(valueChanged(double,int)), this, SLOT(updateSaveTimes()));
-  connect(prop_SummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
-  connect(prop_DarkSummedExposures(), SIGNAL(valueChanged(int,int)), this, SLOT(updateSaveTimes()));
+  connect(prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
+  connect(prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
+  connect(prop_SummedExposures(), &QcepIntProperty::valueChanged,  this, &QxrdAcquisition::updateSaveTimes);
+  connect(prop_DarkSummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
 
 //  m_FileIndex.setDebug(1);
 
@@ -97,22 +97,29 @@ void QxrdAcquisition::initialize()
   m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, sharedFromThis()));
   m_AcquisitionExtraInputs -> initialize(m_AcquisitionExtraInputs);
 
-  connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged()));
-  connect(prop_BinningMode(), SIGNAL(valueChanged(int,int)), this, SLOT(onBinningModeChanged()));
-  connect(prop_CameraGain(), SIGNAL(valueChanged(int,int)), this, SLOT(onCameraGainChanged()));
+  connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
+          this, &QxrdAcquisition::onExposureTimeChanged);
+
+  connect(prop_BinningMode(), &QcepIntProperty::valueChanged,
+          this, &QxrdAcquisition::onBinningModeChanged);
+
+  connect(prop_CameraGain(), &QcepIntProperty::valueChanged,
+          this, &QxrdAcquisition::onCameraGainChanged);
 
   if (alloc) {
     if (sizeof(void*) == 4) {
-      connect(alloc->prop_TotalBufferSizeMB32(), SIGNAL(valueChanged(int,int)), this, SLOT(onBufferSizeChanged(int)));
+      connect(alloc->prop_TotalBufferSizeMB32(), &QcepIntProperty::valueChanged,
+              this, &QxrdAcquisition::onBufferSizeChanged);
       onBufferSizeChanged(alloc->get_TotalBufferSizeMB32());
     } else {
-      connect(alloc->prop_TotalBufferSizeMB64(), SIGNAL(valueChanged(int,int)), this, SLOT(onBufferSizeChanged(int)));
+      connect(alloc->prop_TotalBufferSizeMB64(), &QcepIntProperty::valueChanged,
+              this, &QxrdAcquisition::onBufferSizeChanged);
       onBufferSizeChanged(alloc->get_TotalBufferSizeMB64());
     }
   }
 
-  connect(&m_Watcher, SIGNAL(finished()), this, SLOT(onAcquireComplete()));
-  connect(&m_IdleTimer, SIGNAL(timeout()), this, SLOT(onIdleTimeout()));
+  connect(&m_Watcher, &QFutureWatcherBase::finished, this, &QxrdAcquisition::onAcquireComplete);
+  connect(&m_IdleTimer, &QTimer::timeout, this, &QxrdAcquisition::onIdleTimeout);
 
   m_IdleTimer.start(1000);
 }
@@ -777,7 +784,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPackWPtr parms)
           }
 
           if (res[p][0]) {
-            emit acquiredFrame(res[p][0]->get_FileBase(), fileIndex+i, p, nphases, s, nsummed, i, postTrigger);
+            emit acquiredFrame(res[p][0]->get_FileBase(), p, nphases, s, nsummed, i, postTrigger);
           }
 
           QcepInt16ImageDataPtr img = acquireFrame(exposure);
@@ -960,7 +967,7 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPackWPtr parms)
     for (int i=0; i<nsummed; i++) {
       if (cancelling()) goto cancel;
 
-      emit acquiredFrame(res->get_FileBase(), fileIndex, 0, 1, i, nsummed, 0, 1);
+      emit acquiredFrame(res->get_FileBase(), 0, 1, i, nsummed, 0, 1);
 
       QcepInt16ImageDataPtr img = acquireFrame(exposure);
 

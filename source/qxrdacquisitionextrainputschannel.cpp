@@ -32,10 +32,17 @@ QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
   m_Experiment(doc),
   m_ExtraInputs(xtra)
 {
-  connect(prop_ChannelName(), SIGNAL(valueChanged(QString,int)), this, SIGNAL(reinitiateNeeded()));
-  connect(prop_Min(),         SIGNAL(valueChanged(double,int)),  this, SIGNAL(reinitiateNeeded()));
-  connect(prop_Max(),         SIGNAL(valueChanged(double,int)),  this, SIGNAL(reinitiateNeeded()));
-  connect(prop_Enabled(),     SIGNAL(valueChanged(bool,int)),    this, SIGNAL(reinitiateNeeded()));
+  connect(prop_ChannelName(), &QcepStringProperty::valueChanged,
+          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
+
+  connect(prop_Min(),         &QcepDoubleProperty::valueChanged,
+          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
+
+  connect(prop_Max(),         &QcepDoubleProperty::valueChanged,
+          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
+
+  connect(prop_Enabled(),     &QcepBoolProperty::valueChanged,
+          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
 }
 
 void QxrdAcquisitionExtraInputsChannel::readSettings(QSettings *settings, QString section)

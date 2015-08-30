@@ -35,11 +35,11 @@ QxrdDistortionCorrectionDialog::QxrdDistortionCorrectionDialog(QxrdDistortionCor
     dis->prop_HgtMin()->linkTo(m_DistortionHgtMin);
     dis->prop_DistMax()->linkTo(m_DistortionDistMaxX, m_DistortionDistMaxY);
 
-    connect(m_FitGridButton,     SIGNAL(clicked()), dis.data(), SLOT(fitCalibrationGrid()));
+    connect(m_FitGridButton,     &QAbstractButton::clicked, dis.data(), &QxrdDistortionCorrection::fitCalibrationGrid);
   }
 
-  connect(m_UpdateGridButton,  SIGNAL(clicked()), this, SLOT(updateGridTable()));
-  connect(m_UpdateGraphButton, SIGNAL(clicked()), this, SLOT(updateDistortionGraph()));
+  connect(m_UpdateGridButton,  &QAbstractButton::clicked, this, &QxrdDistortionCorrectionDialog::updateGridTable);
+  connect(m_UpdateGraphButton, &QAbstractButton::clicked, this, &QxrdDistortionCorrectionDialog::updateDistortionGraph);
 }
 
 void QxrdDistortionCorrectionDialog::init(QxrdDistortionCorrectionDialogSettingsWPtr settings)

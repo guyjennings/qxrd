@@ -7,7 +7,7 @@ QxrdResponseTimer::QxrdResponseTimer(int interval, int allowance,  QObject *pare
   m_ResponseInterval(interval),
   m_ResponseAllowance(allowance)
 {
-  connect(&m_ResponseTimer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+  connect(&m_ResponseTimer, &QTimer::timeout, this, &QxrdResponseTimer::onTimeout);
 
   m_ResponseTime.start();
   m_ResponseTimer.start(m_ResponseInterval);

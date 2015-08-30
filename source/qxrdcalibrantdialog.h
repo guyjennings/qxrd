@@ -21,6 +21,12 @@ public:
 public slots:
   void onLibrarySelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
+  void calibrantTableContextMenu(const QPoint &pos);
+  void calibrantDSpacingsContextMenu(const QPoint &pos);
+
+private:
+  void doCopyFromTable(QTableView *table);
+
 private:
   QxrdCalibrantLibraryPtr m_CalibrantLibrary;
   QxrdCalibrantLibraryModelPtr m_CalibrantLibraryModel;

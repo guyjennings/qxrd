@@ -23,32 +23,28 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
 
   statusBar() -> addPermanentWidget(m_StatusMsg);
 
-  connect(&m_StatusTimer, SIGNAL(timeout()), this, SLOT(clearStatusMessage()));
+  connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdWelcomeWindow::clearStatusMessage);
 
-  connect(ui->m_ActionEditApplicationPreferences, SIGNAL(triggered()), m_Application, SLOT(editGlobalPreferences()));
-  connect(ui->m_ActionNewPerkinElmerAcquisition, SIGNAL(triggered()), m_Application, SLOT(doNewPerkinElmerAcquisition()));
-  connect(ui->m_ActionNewPilatusAcquisition, SIGNAL(triggered()), m_Application, SLOT(doNewPilatusAcquisition()));
-  connect(ui->m_ActionNewSimulatedAcquisition, SIGNAL(triggered()), m_Application, SLOT(doNewSimulatedAcquisition()));
-  connect(ui->m_ActionNewPerkinElmerAnalysis, SIGNAL(triggered()), m_Application, SLOT(doNewPerkinElmerAnalysis()));
-  connect(ui->m_ActionNewPilatusAnalysis, SIGNAL(triggered()), m_Application, SLOT(doNewPilatusAnalysis()));
-  connect(ui->m_ActionNewGenericAnalysis, SIGNAL(triggered()), m_Application, SLOT(doNewGenericAnalysis()));
-  connect(ui->m_ActionOpenExperiment, SIGNAL(triggered()), m_Application, SLOT(chooseExistingExperiment()));
-  connect(ui->m_ActionExitApplication, SIGNAL(triggered()), m_Application, SLOT(possiblyQuit()));
+  connect(ui->m_ActionEditApplicationPreferences, &QAction::triggered, m_Application, &QxrdApplication::editGlobalPreferences);
+  connect(ui->m_ActionNewPerkinElmerAcquisition, &QAction::triggered, m_Application, &QxrdApplication::doNewPerkinElmerAcquisition);
+  connect(ui->m_ActionNewPilatusAcquisition, &QAction::triggered, m_Application, &QxrdApplication::doNewPilatusAcquisition);
+  connect(ui->m_ActionNewSimulatedAcquisition, &QAction::triggered, m_Application, &QxrdApplication::doNewSimulatedAcquisition);
+  connect(ui->m_ActionNewPerkinElmerAnalysis, &QAction::triggered, m_Application, &QxrdApplication::doNewPerkinElmerAnalysis);
+  connect(ui->m_ActionNewPilatusAnalysis, &QAction::triggered, m_Application, &QxrdApplication::doNewPilatusAnalysis);
+  connect(ui->m_ActionNewGenericAnalysis, &QAction::triggered, m_Application, &QxrdApplication::doNewGenericAnalysis);
+  connect(ui->m_ActionOpenExperiment, &QAction::triggered, m_Application, &QxrdApplication::chooseExistingExperiment);
+  connect(ui->m_ActionExitApplication, &QAction::triggered, m_Application, &QxrdApplication::possiblyQuit);
 
-  connect(ui->m_NewPerkinElmerAcquisition, SIGNAL(clicked()), ui->m_ActionNewPerkinElmerAcquisition, SLOT(trigger()));
-  connect(ui->m_NewPilatusAcquisition, SIGNAL(clicked()), ui->m_ActionNewPilatusAcquisition, SLOT(trigger()));
-  connect(ui->m_NewSimulatedAcquisition, SIGNAL(clicked()), ui->m_ActionNewSimulatedAcquisition, SLOT(trigger()));
-  connect(ui->m_NewPerkinElmerAnalysis, SIGNAL(clicked()), ui->m_ActionNewPerkinElmerAnalysis, SLOT(trigger()));
-  connect(ui->m_NewPilatusAnalysis, SIGNAL(clicked()), ui->m_ActionNewPilatusAnalysis, SLOT(trigger()));
-  connect(ui->m_NewGenericAnalysis, SIGNAL(clicked()), ui->m_ActionNewGenericAnalysis, SLOT(trigger()));
-  connect(ui->m_OpenExistingExperiment, SIGNAL(clicked()), ui->m_ActionOpenExperiment, SLOT(trigger()));
-//  connect(ui->m_OpenExistingExperiment, SIGNAL(clicked()), this, SLOT(openMostRecent()));
+  connect(ui->m_NewPerkinElmerAcquisition, &QAbstractButton::clicked, ui->m_ActionNewPerkinElmerAcquisition, &QAction::trigger);
+  connect(ui->m_NewPilatusAcquisition, &QAbstractButton::clicked, ui->m_ActionNewPilatusAcquisition, &QAction::trigger);
+  connect(ui->m_NewSimulatedAcquisition, &QAbstractButton::clicked, ui->m_ActionNewSimulatedAcquisition, &QAction::trigger);
+  connect(ui->m_NewPerkinElmerAnalysis, &QAbstractButton::clicked, ui->m_ActionNewPerkinElmerAnalysis, &QAction::trigger);
+  connect(ui->m_NewPilatusAnalysis, &QAbstractButton::clicked, ui->m_ActionNewPilatusAnalysis, &QAction::trigger);
+  connect(ui->m_NewGenericAnalysis, &QAbstractButton::clicked, ui->m_ActionNewGenericAnalysis, &QAction::trigger);
+  connect(ui->m_OpenExistingExperiment, &QAbstractButton::clicked, ui->m_ActionOpenExperiment, &QAction::trigger);
 
-//  app->prop_OpenDirectly()->linkTo(ui->m_AutoOpenRecent);
-
-//  m_SignalMapper = new QSignalMapper(this);
-
-  connect(&m_SignalMapper, SIGNAL(mapped(QString)), m_Application, SLOT(openRecentExperiment(QString)));
+  connect(&m_SignalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped,
+          m_Application, &QxrdApplication::openRecentExperiment);
 
   QStringList recents = m_Application->get_RecentExperiments();
 
@@ -82,7 +78,7 @@ void QxrdWelcomeWindow::setupRecentExperimentsMenu(QAction *action)
 
   action->setMenu(m_RecentExperimentsMenu);
 
-  connect(m_RecentExperimentsMenu, SIGNAL(aboutToShow()), this, SLOT(populateRecentExperimentsMenu()));
+  connect(m_RecentExperimentsMenu, &QMenu::aboutToShow, this, &QxrdWelcomeWindow::populateRecentExperimentsMenu);
 }
 
 void QxrdWelcomeWindow::populateRecentExperimentsMenu()
@@ -97,7 +93,7 @@ void QxrdWelcomeWindow::populateRecentExperimentsMenu()
 //    printf("Recent experiment: %s\n", qPrintable(exp));
 
     QAction *action = new QAction(exp, m_RecentExperimentsMenu);
-    connect(action, SIGNAL(triggered()), &m_SignalMapper, SLOT(map()));
+    connect(action, &QAction::triggered, &m_SignalMapper, (void (QSignalMapper::*) ()) &QSignalMapper::map);
     m_SignalMapper.setMapping(action, exp);
 
     m_RecentExperimentsMenu -> addAction(action);
@@ -112,19 +108,9 @@ void QxrdWelcomeWindow::appendRecentExperiment(QString title)
 
   ui->m_GridLayout->addWidget(item, m_InsertRow++, 0, 1, 2);
 
-  connect(item, SIGNAL(clicked()), &m_SignalMapper, SLOT(map()));
+  connect(item, &QAbstractButton::clicked, &m_SignalMapper, (void (QSignalMapper::*) ()) &QSignalMapper::map);
 
   m_SignalMapper.setMapping(item, title);
-
-//  QAction *recentAction = new QAction(this);
-
-//  recentAction->setText(title);
-
-//  ui->m_OpenRecentExperimentMenu -> addAction(recentAction);
-
-//  m_SignalMapper->setMapping(recentAction, title);
-
-//  connect(recentAction, SIGNAL(triggered()), m_SignalMapper, SLOT(map()));
 }
 
 void QxrdWelcomeWindow::closeEvent ( QCloseEvent * event )

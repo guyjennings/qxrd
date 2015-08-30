@@ -26,12 +26,12 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr
   m_FileSystemWatcher = new QFileSystemWatcher(this);
   //  m_FileSystemWatcher->setObjectName(QLatin1String("_qt_autotest_force_engine_poller"));
 
-  connect(m_BrowserModel.data(), SIGNAL(rootChanged(const QString&)),
-          this,                  SLOT(changeRoot(const QString&)));
-  connect(m_FileSystemWatcher,   SIGNAL(directoryChanged(const QString&)),
-          this,                  SLOT(changeContents(const QString&)), Qt::DirectConnection);
-  connect(&m_UpdateTimer,        SIGNAL(timeout()),
-          this,                  SLOT(updateTimeout()));
+  connect(m_BrowserModel.data(), &QxrdFileBrowserModel::rootChanged,
+          this,                  &QxrdFileBrowserModelUpdater::changeRoot);
+  connect(m_FileSystemWatcher,   &QFileSystemWatcher::directoryChanged,
+          this,                  &QxrdFileBrowserModelUpdater::changeContents, Qt::DirectConnection);
+  connect(&m_UpdateTimer,        &QTimer::timeout,
+          this,                  &QxrdFileBrowserModelUpdater::updateTimeout);
 
   m_UpdateTimer.setSingleShot(true);
   m_UpdateTimer.start(m_UpdateInterval);

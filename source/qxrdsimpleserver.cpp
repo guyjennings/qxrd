@@ -18,10 +18,10 @@ QxrdSimpleServer::QxrdSimpleServer(QcepSettingsSaverWPtr saver, QxrdExperimentWP
     printf("QxrdSimpleServer::QxrdSimpleServer(%p)\n", this);
   }
 
-  connect(prop_RunSimpleServer(), SIGNAL(valueChanged(int,int)), this, SLOT(runModeChanged()));
-  connect(prop_SimpleServerPort(), SIGNAL(valueChanged(int,int)), this, SLOT(serverPortChanged()));
+  connect(prop_RunSimpleServer(), &QcepIntProperty::valueChanged, this, &QxrdSimpleServer::runModeChanged);
+  connect(prop_SimpleServerPort(), &QcepIntProperty::valueChanged, this, &QxrdSimpleServer::serverPortChanged);
 
-  connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));
+  connect(this, &QTcpServer::newConnection, this, &QxrdSimpleServer::openNewConnection);
 }
 
 QxrdSimpleServer::~QxrdSimpleServer()
@@ -118,26 +118,11 @@ void QxrdSimpleServer::openNewConnection()
 {
   m_Socket = nextPendingConnection();
 
-//  connect(m_Socket, SIGNAL(disconnected()), m_Socket, SLOT(deleteLater()));
-  connect(m_Socket, SIGNAL(readyRead()), this,     SLOT(clientRead()));
+  connect(m_Socket, &QIODevice::readyRead, this,     &QxrdSimpleServer::clientRead);
 
   if (qcepDebug(DEBUG_SERVER)) {
     printMessage(tr("New connection from %1").arg(m_Socket->peerAddress().toString()) );
   }
-
-//  connect(m_Socket, SIGNAL(disconnected()), this,     SLOT(connectionClosed()));
-
-//  {
-//    QxrdExperimentPtr expt(m_Experiment);
-
-//    if (expt) {
-//      QxrdSimpleServerThreadPtr tp(expt->simpleServerThread());
-
-//      if (tp) {
-//        m_Socket -> moveToThread(tp.data());
-//      }
-//    }
-//  }
 }
 
 void QxrdSimpleServer::connectionClosed()

@@ -16,7 +16,7 @@ QxrdUserScriptDialog::QxrdUserScriptDialog(QString title, QxrdExperimentWPtr exp
   ui->m_ScriptEditor->setText(editable);
   ui->m_ScriptEditor->setExperiment(m_Experiment);
 
-  connect(ui->m_ButtonBar, SIGNAL(clicked(QAbstractButton *)), this, SLOT(onButtonClicked(QAbstractButton*)));
+  connect(ui->m_ButtonBar, &QDialogButtonBox::clicked, this, &QxrdUserScriptDialog::onButtonClicked);
 }
 
 QxrdUserScriptDialog::~QxrdUserScriptDialog()

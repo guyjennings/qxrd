@@ -149,29 +149,20 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
 {
   m_Application = app;
 
-  connect(this, SIGNAL(aboutToQuit()), this, SLOT(finish()));
+  connect(this, &QCoreApplication::aboutToQuit, this, &QxrdApplication::finish);
 
-  connect(&m_SplashTimer, SIGNAL(timeout()), this, SLOT(hideSplash()));
+  connect(&m_SplashTimer, &QTimer::timeout, this, &QxrdApplication::hideSplash);
 
-  connect(&m_LockerTimer, SIGNAL(timeout()), this, SLOT(lockerTimerElapsed()));
+  connect(&m_LockerTimer, &QTimer::timeout, this, &QxrdApplication::lockerTimerElapsed);
 
   m_LastLockerTime.start();
   m_LockerTimer.start(5000);
 
   QDir::setCurrent(QDir::homePath());
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-  oldEventFilter = setEventFilter(myEventFilter);
-
-  connect(&eventCounterTimer, SIGNAL(timeout()), this, SLOT(processEventCounter()));
-  eventCounterTimer.start(10000);
-#endif
-
   setOrganizationName("cep");
   setOrganizationDomain("xray.aps.anl.gov");
   setApplicationName("qxrd");
-
-
 
   printMessage("------ Starting QXRD Application ------");
 
@@ -201,7 +192,8 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
   printMessage("QWT Version " QWT_VERSION_STR);
   printMessage(tr("QT Version %1").arg(qVersion()));
 
-  connect(prop_Debug(), SIGNAL(valueChanged(qint64,int)), this, SLOT(debugChanged(qint64)));
+  connect(prop_Debug(), &QcepInt64Property::valueChanged,
+          this, &QxrdApplication::debugChanged);
   readSettings();
 
   for (int i=1; i<argc; i++) {

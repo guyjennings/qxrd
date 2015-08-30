@@ -353,8 +353,10 @@ void QxrdPowderPointProperty::linkTo(int axis, QSpinBox *spinBox)
 
     setWidgetToolTip(spinBox);
 
-    connect(this, SIGNAL(subValueChanged(int,int,int)), helper, SLOT(setSubValue(int,int,int)));
-    connect(helper, SIGNAL(subValueChanged(int,int,int)), this, SLOT(setSubValue(int,int,int)));
+    connect(this, (void (QxrdPowderPointProperty::*)(int, int, int)) &QxrdPowderPointProperty::subValueChanged,
+            helper, &QxrdPowderPointPropertySpinBoxHelper::setSubValue);
+    connect(helper, &QxrdPowderPointPropertySpinBoxHelper::subValueChanged,
+            this, (void (QxrdPowderPointProperty::*)(int, int, int)) &QxrdPowderPointProperty::setSubValue);
   }
 }
 
@@ -374,8 +376,10 @@ void QxrdPowderPointProperty::linkTo(int axis, QDoubleSpinBox *spinBox)
 
     setWidgetToolTip(spinBox);
 
-    connect(this, SIGNAL(subValueChanged(int,double,int)), helper, SLOT(setSubValue(int,double,int)));
-    connect(helper, SIGNAL(subValueChanged(int,double,int)), this, SLOT(setSubValue(int,double,int)));
+    connect(this, (void (QxrdPowderPointProperty::*)(int, double, int)) &QxrdPowderPointProperty::subValueChanged,
+            helper, &QxrdPowderPointPropertyDoubleSpinBoxHelper::setSubValue);
+    connect(helper, &QxrdPowderPointPropertyDoubleSpinBoxHelper::subValueChanged,
+            this, (void (QxrdPowderPointProperty::*)(int, double, int)) &QxrdPowderPointProperty::setSubValue);
   }
 }
 
@@ -390,7 +394,8 @@ QxrdPowderPointPropertySpinBoxHelper::QxrdPowderPointPropertySpinBoxHelper
 
 void QxrdPowderPointPropertySpinBoxHelper::connect()
 {
-  CONNECT_CHECK(QObject::connect(m_SpinBox, SIGNAL(valueChanged(int)), this, SLOT(setValue(int)), Qt::DirectConnection));
+  CONNECT_CHECK(QObject::connect(m_SpinBox, (void (QSpinBox::*)(int)) &QSpinBox::valueChanged,
+                                 this, &QxrdPowderPointPropertySpinBoxHelper::setValue, Qt::DirectConnection));
 }
 
 void QxrdPowderPointPropertySpinBoxHelper::setSubValue(int axis, int value, int index)
@@ -422,7 +427,8 @@ QxrdPowderPointPropertyDoubleSpinBoxHelper::QxrdPowderPointPropertyDoubleSpinBox
 
 void QxrdPowderPointPropertyDoubleSpinBoxHelper::connect()
 {
-  CONNECT_CHECK(QObject::connect(m_DoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(setValue(double)), Qt::DirectConnection));
+  CONNECT_CHECK(QObject::connect(m_DoubleSpinBox, (void (QDoubleSpinBox::*)(double)) &QDoubleSpinBox::valueChanged,
+                                 this, &QxrdPowderPointPropertyDoubleSpinBoxHelper::setValue, Qt::DirectConnection));
 }
 
 void QxrdPowderPointPropertyDoubleSpinBoxHelper::setSubValue(int axis, double value, int index)
