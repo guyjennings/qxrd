@@ -1,0 +1,11 @@
+#ifndef QXRDDARKACQUISITIONPARAMETERPACKPTR_H
+#define QXRDDARKACQUISITIONPARAMETERPACKPTR_H
+
+#include <QSharedPointer>
+
+class QxrdDarkAcquisitionParameterPack;
+typedef QSharedPointer<QxrdDarkAcquisitionParameterPack> QxrdDarkAcquisitionParameterPackPtr;
+typedef QWeakPointer<QxrdDarkAcquisitionParameterPack> QxrdDarkAcquisitionParameterPackWPtr;
+
+#endif // QXRDDARKACQUISITIONPARAMETERPACKPTR_H
+

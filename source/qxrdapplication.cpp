@@ -314,10 +314,10 @@ void QxrdApplication::closeWelcomeWindow()
   }
 }
 
-QWidget* QxrdApplication::window()
-{
-  return m_WelcomeWindow;
-}
+//QWidget* QxrdApplication::window()
+//{
+//  return m_WelcomeWindow;
+//}
 
 //QxrdApplicationPtr QxrdApplication::application()
 //{
@@ -463,18 +463,18 @@ void QxrdApplication::splashMessage(QString msg)
       m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
       processEvents();
 
-      m_SplashTimer.start(3000);
+      m_SplashTimer.start(5000);
     }
   }
 }
 
 void QxrdApplication::hideSplash()
 {
-//  GUI_THREAD_CHECK;
+  GUI_THREAD_CHECK;
 
-//  if (m_Splash) {
-//    m_Splash -> hide();
-//  }
+  if (m_Splash) {
+    m_Splash -> hide();
+  }
 }
 
 void QxrdApplication::logMessage(QString /*msg*/)
@@ -483,8 +483,8 @@ void QxrdApplication::logMessage(QString /*msg*/)
 
 void QxrdApplication::warningMessage(QString msg, QDateTime /*ts*/)
 {
-  if (window()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(window(), "warningMessage", Qt::BlockingQueuedConnection, Q_ARG(QString, msg)));
+  if (experiment(0)) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "warningMessage", Qt::BlockingQueuedConnection, Q_ARG(QString, msg)));
   }
 }
 
@@ -516,8 +516,8 @@ void QxrdApplication::statusMessage(QString msg, QDateTime ts)
 
     logMessage(message);
 
-    if (window()) {
-      INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+    if (experiment(0)) {
+      INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "statusMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
     }
   }
 }
@@ -530,8 +530,8 @@ void QxrdApplication::criticalMessage(QString msg, QDateTime ts)
 
   logMessage(message);
 
-  if (window()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(window(), "displayMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+  if (experiment(0)) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "criticalMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
   }
 }
 

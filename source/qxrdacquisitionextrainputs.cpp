@@ -7,6 +7,7 @@
 #include "qcepimagedata.h"
 #include "qcepsettingssaver.h"
 #include "qxrdacquisitionextrainputschannel.h"
+#include "qxrdacquisitionparameterpack.h"
 #include <QTimer>
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :

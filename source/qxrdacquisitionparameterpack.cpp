@@ -1,0 +1,2 @@
+#include "qxrdacquisitionparameterpack.h"
+

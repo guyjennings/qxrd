@@ -14,6 +14,7 @@
 #include "qxrdacquisitionextrainputschannel-ptr.h"
 #include <QSettings>
 #include <QMutex>
+#include "qxrdacquisitionparameterpack-ptr.h"
 
 class QxrdAcquisitionExtraInputs : public QcepObject
 {

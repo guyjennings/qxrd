@@ -31,72 +31,9 @@
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qcepallocator-ptr.h"
 #include "qcepsettingssaver-ptr.h"
-
-class QxrdAcquisitionParameterPack
-{
-public:
-  QxrdAcquisitionParameterPack(QString fileBase, double exposure, int nsummed, int preTrigger, int postTrigger, int nphases, int skipBefore, int skipBetween)
-    : m_FileBase(fileBase), m_Exposure(exposure), m_NSummed(nsummed), m_PreTrigger(preTrigger), m_PostTrigger(postTrigger),
-      m_NPhases(nphases), m_SkipBefore(skipBefore), m_SkipBetween(skipBetween) {}
-
-  QString fileBase() { return m_FileBase; }
-  double  exposure() { return m_Exposure; }
-  int     nsummed()  { return m_NSummed; }
-  int     preTrigger()   { return m_PreTrigger; }
-  int     postTrigger()   { return m_PostTrigger; }
-  int     nphases()  { return m_NPhases; }
-  int     skipBefore() { return m_SkipBefore; }
-  int     skipBetween() { return m_SkipBetween; }
-
-private:
-  QString m_FileBase;
-  double  m_Exposure;
-  int     m_NSummed;
-  int     m_PreTrigger;
-  int     m_PostTrigger;
-  int     m_NPhases;
-  int     m_SkipBefore;
-  int     m_SkipBetween;
-};
-
-class QxrdDarkAcquisitionParameterPack
-{
-public:
-  QxrdDarkAcquisitionParameterPack(QString fileBase, double exposure, int nsummed, int skipBefore)
-    : m_FileBase(fileBase), m_Exposure(exposure), m_NSummed(nsummed), m_SkipBefore(skipBefore) {}
-
-  QString fileBase() { return m_FileBase; }
-  double  exposure() { return m_Exposure; }
-  int     nsummed()  { return m_NSummed; }
-  int     skipBefore() { return m_SkipBefore; }
-
-private:
-  QString m_FileBase;
-  double  m_Exposure;
-  int     m_NSummed;
-  int     m_SkipBefore;
-};
-
-class QxrdProcessArgs {
-public:
-  QxrdProcessArgs(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
-    : m_FilePattern(filePattern),
-      m_FileIndex(fileIndex),
-      m_Phase(phase),
-      m_NPhases(nPhases),
-      m_Trig(trig),
-      m_Image(image),
-      m_Overflow(overflow) {}
-
-public:
-  QString               m_FilePattern;
-  int                   m_FileIndex;
-  int                   m_Phase;
-  int                   m_NPhases;
-  bool                  m_Trig;
-  QcepInt32ImageDataPtr m_Image;
-  QcepMaskDataPtr       m_Overflow;
-};
+#include "qxrdacquisitionparameterpack-ptr.h"
+#include "qxrddarkacquisitionparameterpack-ptr.h"
+#include "qxrdprocessargs-ptr.h"
 
 class QxrdAcquisition : public QcepObject, public QEnableSharedFromThis<QxrdAcquisition>
 {
@@ -111,7 +48,6 @@ public:
   void initialize();
 
   void setWindow(QxrdWindowWPtr win);
-  void setDetector(QxrdDetectorWPtr det);
 
 public slots:
   void propertyList();
@@ -136,14 +72,14 @@ public slots:
 
   int acquisitionStatus(double time);
 
-  void onExposureTimeChanged();
-  void onBinningModeChanged();
-  void onCameraGainChanged();
-
   void onBufferSizeChanged(int newMB);
 
   void doAcquire    (QxrdAcquisitionParameterPackWPtr parms);
   void doAcquireDark(QxrdDarkAcquisitionParameterPackWPtr parms);
+
+  virtual void onExposureTimeChanged() = 0;
+  virtual void onBinningModeChanged() = 0;
+  virtual void onCameraGainChanged() = 0;
 
 public:
   void enqueueAcquiredFrame(QcepInt16ImageDataPtr img);
@@ -154,16 +90,20 @@ signals:
   void acquireComplete();
 
 public:
+  virtual void beginAcquisition() = 0;
+  virtual void endAcquisition() = 0;
+  virtual void shutdownAcquisition() = 0;
+
+  virtual void setupExposureMenu(QDoubleSpinBox *cb) = 0;
+  virtual void setupCameraGainMenu(QComboBox *cb) = 0;
+  virtual void setupCameraBinningModeMenu(QComboBox *cb) = 0;
+
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
   void copyDynamicProperties(QObject *dest);
 
   int currentPhase(int frameNumber);
-
-  void setupExposureMenu(QDoubleSpinBox *cb);
-  void setupCameraGainMenu(QComboBox *cb);
-  void setupCameraBinningModeMenu(QComboBox *cb);
 
   void indicateDroppedFrame(int n);
   virtual QxrdAcquisitionDialogPtr controlPanel(QxrdWindowWPtr win);
@@ -181,10 +121,6 @@ public:
 protected:
   void acquisition(int isDark);
   void copyParameters(int isDark);
-
-  void beginAcquisition();
-  void endAcquisition();
-  void shutdownAcquisition();
 
   void getFileBaseAndName(QString filePattern, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
@@ -339,7 +275,6 @@ private:
   QxrdWindowWPtr         m_Window;
   QcepAllocatorWPtr      m_Allocator;
   QxrdDataProcessorWPtr  m_DataProcessor;
-  QxrdDetectorWPtr       m_Detector;
 
   QMutex                 m_Acquiring;
   QWaitCondition         m_StatusWaiting;

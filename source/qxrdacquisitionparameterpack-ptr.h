@@ -1,0 +1,11 @@
+#ifndef QXRDACQUISITIONPARAMETERPACKPTR_H
+#define QXRDACQUISITIONPARAMETERPACKPTR_H
+
+#include <QSharedPointer>
+
+class QxrdAcquisitionParameterPack;
+typedef QSharedPointer<QxrdAcquisitionParameterPack> QxrdAcquisitionParameterPackPtr;
+typedef QWeakPointer<QxrdAcquisitionParameterPack> QxrdAcquisitionParameterPackWPtr;
+
+#endif // QXRDACQUISITIONPARAMETERPACKPTR_H
+

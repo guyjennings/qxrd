@@ -9,6 +9,8 @@
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdacquisition-ptr.h"
 #include "qcepsettingssaver-ptr.h"
+#include "qxrdacquisitionparameterpack-ptr.h"
+#include "qxrddarkacquisitionparameterpack-ptr.h"
 
 class QxrdSynchronizedAcquisition : public QcepObject
 {

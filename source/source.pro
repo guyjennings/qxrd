@@ -154,7 +154,17 @@ HEADERS += \
     qxrdimageplotzoomer.h \
     qxrdacquisitionwindow.h \
     qxrdacquisitionwindow-ptr.h \
-    qxrdmainwindow.h
+    qxrdmainwindow.h \
+    qxrdsingleacquisition.h \
+    qxrdmultipleacquisition.h \
+    qxrdacquisitionparameterpack.h \
+    qxrddarkacquisitionparameterpack.h \
+    qxrdprocessargs.h \
+    qxrdacquisitionparameterpack-ptr.h \
+    qxrddarkacquisitionparameterpack-ptr.h \
+    qxrdprocessargs-ptr.h \
+    qxrdsingleacquisition-ptr.h \
+    qxrdmultipleacquisition-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -198,7 +208,12 @@ SOURCES += \
     qxrddataset.cpp \
     qxrdimageplotzoomer.cpp \
     qxrdacquisitionwindow.cpp \
-    qxrdmainwindow.cpp
+    qxrdmainwindow.cpp \
+    qxrdsingleacquisition.cpp \
+    qxrdmultipleacquisition.cpp \
+    qxrdacquisitionparameterpack.cpp \
+    qxrddarkacquisitionparameterpack.cpp \
+    qxrdprocessargs.cpp
 
 OTHER_FILES += testImage.js
 

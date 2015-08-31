@@ -7,16 +7,4 @@ class QxrdAcquisition;
 typedef QSharedPointer<QxrdAcquisition> QxrdAcquisitionPtr;
 typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
 
-class QxrdAcquisitionParameterPack;
-typedef QSharedPointer<QxrdAcquisitionParameterPack> QxrdAcquisitionParameterPackPtr;
-typedef QWeakPointer<QxrdAcquisitionParameterPack> QxrdAcquisitionParameterPackWPtr;
-
-class QxrdDarkAcquisitionParameterPack;
-typedef QSharedPointer<QxrdDarkAcquisitionParameterPack> QxrdDarkAcquisitionParameterPackPtr;
-typedef QWeakPointer<QxrdDarkAcquisitionParameterPack> QxrdDarkAcquisitionParameterPackWPtr;
-
-class QxrdProcessArgs;
-typedef QSharedPointer<QxrdProcessArgs> QxrdProcessArgsPtr;
-typedef QWeakPointer<QxrdProcessArgs> QxrdProcessArgsWPtr;
-
 #endif
